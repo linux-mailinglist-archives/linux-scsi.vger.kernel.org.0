@@ -2,111 +2,131 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7EB785C2E
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Aug 2023 17:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4BB785BC2
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Aug 2023 17:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237267AbjHWPeW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Aug 2023 11:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
+        id S236859AbjHWPRi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Aug 2023 11:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233602AbjHWPeV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Aug 2023 11:34:21 -0400
-X-Greylist: delayed 910 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Aug 2023 08:34:16 PDT
-Received: from mail.parlimen.gov.my (mail.parlimen.gov.my [58.26.67.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 428B9E59
-        for <linux-scsi@vger.kernel.org>; Wed, 23 Aug 2023 08:34:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; d=parlimen.gov.my; s=key01; c=relaxed/simple;
-        q=dns/txt; i=@parlimen.gov.my; t=1692803864; x=2556717464;
-        h=From:Sender:Reply-To:Subject:Date:Message-Id:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DZK/hUNZcQiWd+YDahnFB82lNq4aIorj2cbUs+jPCnw=;
-        b=YOsWOjwpBw0J5lv1Kg+GR0UVhSaLSSoc7qP19wtRpYz9egKUm2HjYMe/45sKnVZE
-        SGke/K9dMCoZ0NWZ8tlxC4wT51w330ztwO94Qzn+S0dNivOqSOMU2S+75fI20wNC
-        hS0Qk1L0FdnaiL914cmxL6suZ2f04CIM7jkyVwbBZIVdMQS+fkn6hG2ZxLe1B89U
-        F2M09WilJkG8Eiazgspa60iYgOeVxGz1VvwoC/e/knw5yQeijvdDUg6Onk6TEv7h
-        OZviui/+BxPbgEMu1IXPbHebmTAqxSRUm7veqFxty+M5CKEQ7QQeW0XmfP+oS5uc
-        7EdSl4ZhwnfzzQBX9DWsww==;
-X-AuditID: 0a0a1e06-e16c770000004717-8c-64e6231878ac
-Received: from pmail.parlimen.gov.my (Unknown_Domain [10.0.10.134])
-        by mail.parlimen.gov.my (Parlimen Mail Filtering) with SMTP id 94.40.18199.81326E46; Wed, 23 Aug 2023 23:17:44 +0800 (+08)
-Received: from localhost (localhost [127.0.0.1])
-        by pmail.parlimen.gov.my (Postfix) with ESMTP id 46F601C5BED9;
-        Wed, 23 Aug 2023 23:17:28 +0800 (+08)
-Received: from pmail.parlimen.gov.my ([127.0.0.1])
-        by localhost (pmail.parlimen.gov.my [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Bcd0gdTcBzJ9; Wed, 23 Aug 2023 23:17:27 +0800 (+08)
-Received: from localhost (localhost [127.0.0.1])
-        by pmail.parlimen.gov.my (Postfix) with ESMTP id 245EB1C5ABCA;
-        Wed, 23 Aug 2023 23:04:15 +0800 (+08)
-X-Virus-Scanned: amavisd-new at pmail.parlimen.gov.my
-Received: from pmail.parlimen.gov.my ([127.0.0.1])
-        by localhost (pmail.parlimen.gov.my [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id v8m_duzucM-s; Wed, 23 Aug 2023 23:04:15 +0800 (+08)
-Received: from [10.18.0.17] (unknown [45.87.214.118])
-        by pmail.parlimen.gov.my (Postfix) with ESMTPSA id 5E4A81C553AF;
-        Wed, 23 Aug 2023 22:41:37 +0800 (+08)
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S236635AbjHWPRf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Aug 2023 11:17:35 -0400
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB38FE7B;
+        Wed, 23 Aug 2023 08:17:08 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-68a5457b930so2274862b3a.2;
+        Wed, 23 Aug 2023 08:17:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692803750; x=1693408550;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zODWKjFLTG3KmUmUSCQMpsPng8pgZqpf54yZxjbJeIM=;
+        b=Mbvia6qOwvJMIc84ucyrorABNwIaVgU7xgFquIfaU1P0V4BiFSf1RGYaQbBbNWEAUD
+         /jpGJicYQ9mqdget5pA8lFwZFjPvsebpNB+Uli6vN1UUGZ5vaAUFgwgxREgFNX0tpkFK
+         HdtXi/ayQI6/K02iBf1jJG/vE49Ag9TvyW58yfcDyK+63MigH20l46tEDyvDMW/x32/e
+         Vu3yCWrF8JYIDN2yCMA/d3xIStEO35c3Gk5u7+IXyoyAteMCVG/ImCTQ7pSWERLksHVy
+         N5z/dMJkJHXRULkJAHz2nrXcUAeO63iRSIANdXYxg00T3otlErAaggYm6Z351ifpozuC
+         u9hg==
+X-Gm-Message-State: AOJu0YzfkRAK1LnTWfULv0AVZxdLD2TQkCyygcnMh66k0lAy6vzhF+cA
+        T/J6Jjo9Ejw5m/SArnK5zq4=
+X-Google-Smtp-Source: AGHT+IEn9RxZPIi/WKzeL2IegtOWXt2Mn6gK9OOAe4ovitiHA04S28ASCgRbLGZCBJ5jxFFtvK946g==
+X-Received: by 2002:a05:6a20:548f:b0:137:23f1:4281 with SMTP id i15-20020a056a20548f00b0013723f14281mr12825204pzk.12.1692803749675;
+        Wed, 23 Aug 2023 08:15:49 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:ecb6:e8b9:f433:b4b4? ([2620:15c:211:201:ecb6:e8b9:f433:b4b4])
+        by smtp.gmail.com with ESMTPSA id f21-20020a170902e99500b001b896686c78sm11068708plb.66.2023.08.23.08.15.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Aug 2023 08:15:48 -0700 (PDT)
+Message-ID: <078d2954-f4af-6678-29ce-d8f65ff1397a@acm.org>
+Date:   Wed, 23 Aug 2023 08:15:47 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re:
-To:     Recipients <fazlimr@parlimen.gov.my>
-From:   "Ge. Capital Finance" <fazlimr@parlimen.gov.my>
-Date:   Wed, 23 Aug 2023 13:41:39 -0100
-Reply-To: info@gecapitalfinace.com
-X-Antivirus: Avast (VPS 230823-2, 23/8/2023), Outbound message
-X-Antivirus-Status: Clean
-Message-Id: <20230823144138.5E4A81C553AF@pmail.parlimen.gov.my>
-X-Brightmail-Tracker: H4sIAAAAAAAAA11UeVATZxztlw3JEti6BpCPqAhRrJWKx3islXq1jjujdexYp63agUhWEggh
-        zYHgdEaUogIDNRwC4RAhRcGLekIVQURBh0ZUpKkoaMQUEAQBwQpCd5OAof/tvvf9fu+9b98s
-        ivA7nQSoVK6mlHKRTMjhsXkf8Q7MgzPN4gVF+S7EmbwaLmF6fhAQmQn9HKLkygqiq38jceFe
-        LCDiBxpYRHQ5Qrx8oyEKSy45EIe7EllEfd0FDpF6u4JLXDM1OBBZOU9ZxEDvcRbR+6gWIRL+
-        KuUQ0X8vIBLvjLJXu5KD7UUcsvCBAZDvDuQgZPKzTWRxdokDWaZ7wiUPHFlKFlxtZ5EPm4xc
-        8nRTswN5P24umV5TwSZPDfc4kP8+1rLItEoDm7xzPJu7mb+N5y+mZNIISjl/ZSBPkmj+UdGD
-        RA5Va7nRQIfEA0cU4othy/V3rHjAQ/l4JYBnors5DMHHMwHMTfKxEjcAfHjmPcf6QhNdLfe4
-        1vEl8EH3JWCdoE8dKV9kPZQHYN/NPjZDILgfNKalWtZi+GR4O7PVhvvCwmMvaR8o/TwbvolX
-        M7AL7gz7bmktR1zxObAtzWDR4tBa+zIeWbTYuA+8mpZtcyqE3foym5+VMOZ5Csv67AFbm1KA
-        VXYVfPOPiX0YuOrsHOnsHOnsHOk+OMoD7GLgogoL9lOIlDJpGCX3Cw6P8AuLOgeYdvA8OaUg
-        JrrTrwqwUFAFQlGW0A37eoZZzP94Z7g4SiJSSQKUGhmlErpi+71oGBuHd2pkoUIBZvamUZdx
-        VE7tVskoNd1AoSfmbDCJ+e7jnEqjUkiDpOEaVYBGKasCEEXotf7f04cwsShqD6UMt4pVgako
-        W+iOmd1axXw8WKSmQilKQSnH2Dg6IF7/57NegDf09O5nCdjycDklhBjFmJmspIKpyF1SmXps
-        gl5VPviCXmXPWPxPx0Km0SNT7Am7CN6Yqol2J7Cn/5+ChTpWgWDUmY4S7cnckEohClNJg23S
-        LpgfY8p5DLXIemACBuSPgXaS07FPGmnJKWPURLk7QAvQy2UV5Qj6/uJQBYLmZo1UIHxLfoE7
-        VojTW3FmVKKRj8cXTMFWMTEm2RGMDcE0bBmDu9nhH5wIvDAnPX3/HnbsRDPMD2bed40RHSCB
-        bg+d1I1piDP9//kQn4+tYZI62UBLeogts3wnG2YXfhrmy4R3szET5Rb9BlCAlyIwJf2sA9zf
-        k+IIkx63OcK6hhJnWJ3YgsOsnsuuMCWh1hVmJL3ygK+flM2Cufk1s2BFov4zWJOWuhC+bU1b
-        Co3DhQRs/OX4cqjLa/sc5ja2r4CPjK+/hBfuxn8FT/w+tA4e6T+0HhYcSt4Km3M7foBvH98I
-        gMaRk4HQmBsjgtr0o0HQdKsqCA6PmkJg36tbYbA/s0gBRzJqFB10G1h0G+Yw7cdUapHavg2v
-        75uYNthQWxteMCB/DJzQhoH7ljbYqIk3IohmSaJqqnYKPQOLX9U1nafqvZIl3vnyg+/q6tqH
-        a/VemTcPym+YM6p5/l+kXyQbdwSv8T83GrGpf36g9ljvlthPT42GVj7x3FvQXuC2+/ySfq6k
-        sjjG60THrqOdxpkz9D3ZWHPGtUni7aUv+yKWGKTdke9z+nYIppafyvFyimzu7Nw8UDu5f8Pg
-        CrF/YpzsXMi2Id/1qduKtpu9pSmh19nLMyq3uJe2F51fuqnAs2c137A31m8wz6CPe+qriDEH
-        ICH64ZD6xRv/cP2ps4EdU/DtWcpnz5W8X0eS14au/aYNCbqbmf/zVAPQpm/wWWfcJ6iOHeJk
-        +W49XbHXkB568oGmi5/Qop0tZKskooVzEaVK9B8OU+Q+/wYAAA==
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_50,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.1
+Subject: Re: [PATCH v11 04/16] scsi: core: Introduce a mechanism for
+ reordering requests in the error handler
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Hannes Reinecke <hare@suse.de>, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Ming Lei <ming.lei@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+References: <20230822191822.337080-1-bvanassche@acm.org>
+ <20230822191822.337080-5-bvanassche@acm.org>
+ <3562fc36-4bc2-b4fb-a2ad-1e310baf1b47@suse.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <3562fc36-4bc2-b4fb-a2ad-1e310baf1b47@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello
+On 8/22/23 23:26, Hannes Reinecke wrote:
+> On 8/22/23 21:16, Bart Van Assche wrote:
+>> +/*
+>> + * Comparison function that allows to sort SCSI commands by ULD driver.
+>> + */
+>> +static int scsi_cmp_uld(void *priv, const struct list_head *_a,
+>> +            const struct list_head *_b)
+>> +{
+>> +    struct scsi_cmnd *a = list_entry(_a, typeof(*a), eh_entry);
+>> +    struct scsi_cmnd *b = list_entry(_b, typeof(*b), eh_entry);
+>> +
+>> +    /* See also the comment above the list_sort() definition. */
+>> +    return scsi_cmd_to_driver(a) > scsi_cmd_to_driver(b);
+> 
+> I have to agree with Christoph here.
+> Comparing LBA numbers at the SCSI level is really the wrong place.
+> SCSI commands might be anything, and quite some of these commands don't
+> even have LBA numbers. So trying to order them will be pointless.
+> 
+> The reordering mechanism really has to go into the block layer, with
+> the driver failing the request and the block layer resubmitting in-order.
 
-Sind Sie an einer finanziellen Unterst=FCtzung f=FCr den gesch=E4ftlichen o=
-der privaten Bedarf f=FCr nur 2 Prozent Zinssatz interessiert? Bitte kontak=
-tieren Sie uns jetzt =FCber: info@gecapitalfinace.com
+Hi Hannes,
 
-Are you interested in financial assistance for business or personal use for=
- just 2 percent interest rate? Kindly contact us now via: info@gecapitalfin=
-ace.com
+Please take another look at patches 04/16 and 05/16. As one can see no
+LBA numbers are being compared in the SCSI core - comparing LBA numbers
+happens in the sd (SCSI disk) driver. The code that you replied to
+compares ULD pointers, a well-defined concept in the SCSI core.
 
-Regard
-Susan
-Address: 800 Long Ridge Road
-Stamford,CT 06902 United States
-Phone Number: +1 7033898593
+Your request to move the functionality from patches 04/16 and 05/16 into
+the block layer would involve the following:
+* Report the unaligned write errors (because a write did not happen at the
+   write pointer) to the block layer (BLK_STS_WP_MISMATCH?).
+* Introduce a mechanism in the block layer for postponing error handling
+   until all outstanding commands have failed. The approach from the SCSI
+   core (tracking the number of failed and the number of busy commands
+   and only waking up the error handler after these counters are equal)
+   would be unacceptable because of the runtime overhead this mechanism
+   would introduce in the block layer hot path. Additionally, I strongly
+   doubt that it is possible to introduce any mechanism for postponing
+   error handling in the block layer without introducing additional
+   overhead in the hot path.
+* Christoph's opinion is that NVMe software should use zone append
+   (REQ_OP_ZONE_APPEND) instead of regular writes (REQ_OP_WRITE) when
+   writing to a zoned namespace. So the SCSI subsystem would be the only
+   user of the new mechanism introduced in the block layer. The reason we
+   chose REQ_OP_WRITE for zoned UFS devices is because the SCSI standard
+   does not support a zone append command and introducing a zone append
+   command in the SCSI standards is not something that can be realized in
+   time for the first generation of zoned UFS devices.
+
+Because I assume that both Jens and Christoph disagree strongly with your
+request: I have no plans to move the code for sorting zoned writes into
+the block layer core.
+
+Jens and Christoph, please correct me if I misunderstood something.
+
+Thanks,
+
+Bart.
