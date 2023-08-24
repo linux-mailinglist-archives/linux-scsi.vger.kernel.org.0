@@ -2,101 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0187874B4
-	for <lists+linux-scsi@lfdr.de>; Thu, 24 Aug 2023 17:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B5E7874D9
+	for <lists+linux-scsi@lfdr.de>; Thu, 24 Aug 2023 18:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242226AbjHXP4x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 24 Aug 2023 11:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
+        id S242359AbjHXQFZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 24 Aug 2023 12:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242340AbjHXP4c (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Aug 2023 11:56:32 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D6A19BC
-        for <linux-scsi@vger.kernel.org>; Thu, 24 Aug 2023 08:56:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1692892590; x=1724428590;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yckjuTI6g/0qFmUZljdiDbgrs4ONJaZhAwi7JditnY0=;
-  b=SX9liX8rRW43Uy5TbgRu0HqRpmVfqSrUEmXxLaFVJc6MBOnOZxfmhzlv
-   0Kb8JJ0DvnJ7naO9sfNxI6ctmUVi/6yqOfkVV3PXoS+1ldcYBER3cSA9Q
-   iNCAMqsZ3UmT7che22Z8U+RiHB4D8QkyvNP46aRXLpY8IZSrFeegs5/9B
-   TJfPD3sNRALjzXIsbTOBhZEF9n3wMKWgW6/E4MhzRW3gOo4xERClTyrty
-   2Cipz/yY4RkAPai7dphUJpJCmMgMdi4PLZOkGpJtnjG3RsIDWFbiO0dEL
-   Eqbich2toA6362/+CMrUcjYpxIo7ZjLEdGyTwQdpESfA3F3NgUYM2NzM1
-   g==;
-X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="1149068"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Aug 2023 08:56:30 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 24 Aug 2023 08:56:19 -0700
-Received: from brunhilda.pdev.net (10.10.85.11) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Thu, 24 Aug 2023 08:56:18 -0700
-From:   Don Brace <don.brace@microchip.com>
-To:     <don.brace@microchip.com>, <Kevin.Barnett@microchip.com>,
-        <scott.teel@microchip.com>, <Justin.Lindley@microchip.com>,
-        <scott.benesh@microchip.com>, <gerry.morong@microchip.com>,
-        <mahesh.rajashekhara@microchip.com>, <mike.mcgowen@microchip.com>,
-        <murthy.bhat@microchip.com>, <kumar.meiyappan@microchip.com>,
-        <jeremy.reeves@microchip.com>, <david.strahan@microchip.com>,
-        <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
-        <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
-CC:     <linux-scsi@vger.kernel.org>
-Subject: [PATCH v2 8/8] smartpqi: change driver version to 2.1.24-046
-Date:   Thu, 24 Aug 2023 10:58:12 -0500
-Message-ID: <20230824155812.789913-9-don.brace@microchip.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230824155812.789913-1-don.brace@microchip.com>
-References: <20230824155812.789913-1-don.brace@microchip.com>
+        with ESMTP id S242358AbjHXQFV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Aug 2023 12:05:21 -0400
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444E5E50;
+        Thu, 24 Aug 2023 09:05:19 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1bd9b4f8e0eso565455ad.1;
+        Thu, 24 Aug 2023 09:05:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692893118; x=1693497918;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=38+OtvkyXnf02zDocHJo+dRMRYtmgN/w6d9FbovXz0c=;
+        b=RNKlUY6E6PULzluDZ1OzI2/XISp2dUFGNWsrzQKK66iyvI5yJHvfRr6XM0NPD/apjm
+         /oDtYV2EGAIwPnLzudVqMdFUvg2RImqbF2y5nZvhTczFCMr6n0n0h5/x2Zfl/HzNBUol
+         JJoO9pNxTb+Sh4e+hJqFnQNpREgt+Y0w1tz1Jf4w4jS9ROmJu4FkvX4OOjQaoPr+PAv3
+         5eqIHwV6ZRQ02x7tHWn8oymIZ+JXUV9p2qC3m9o+7wozq+hqUVxasRE3fLuVw7sZa5/b
+         Ld/ENEqq+v/qADmbyA+7GZwcXCf+kg3ffWQmSId6/6MpT61J/6JNFJUhELqpiYjxQP8E
+         oAIg==
+X-Gm-Message-State: AOJu0Yw36WzhJgc+qfqYEuv83AnSM2Jv+EtNx0i1Q/4VifFy1rSaO0bz
+        j0e4owXRrN2MLr1eY5W+PlA=
+X-Google-Smtp-Source: AGHT+IGFZyIMWAR17FuYTBBNUHXr5hZUbuVvgP5+5UZeQl9/aCg1amnMgQfWRiFYUZabX2tqcLQJQw==
+X-Received: by 2002:a17:903:1248:b0:1bd:c7e2:462 with SMTP id u8-20020a170903124800b001bdc7e20462mr14292507plh.11.1692893118435;
+        Thu, 24 Aug 2023 09:05:18 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:e6ec:4683:972:2d78? ([2620:15c:211:201:e6ec:4683:972:2d78])
+        by smtp.gmail.com with ESMTPSA id e3-20020a170902744300b001b8c689060dsm12922251plt.28.2023.08.24.09.05.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Aug 2023 09:05:17 -0700 (PDT)
+Message-ID: <55e63dc7-a523-3a58-ea35-f1ce34d9c50f@acm.org>
+Date:   Thu, 24 Aug 2023 09:05:16 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.1
+Subject: Re: [bug report] blktests srp/002 hang
+Content-Language: en-US
+To:     Bernard Metzler <BMT@zurich.ibm.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Cc:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+References: <dsg6rd66tyiei32zaxs6ddv5ebefr5vtxjwz6d2ewqrcwisogl@ge7jzan7dg5u>
+ <0c5c732c-283c-b29a-0ac2-c32211fc7e17@gmail.com>
+ <yewvcfcketee5qduraajra2g37t2mpxdlmj7aqny3umf7mkavk@wsm5forumsou>
+ <8be8f611-e413-9584-7c2e-2c1abf4147be@acm.org>
+ <27e31e00-74a3-6209-5ad5-1783d6e67a0d@gmail.com>
+ <SN7PR15MB57550E846867D9A74F00DC47991DA@SN7PR15MB5755.namprd15.prod.outlook.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <SN7PR15MB57550E846867D9A74F00DC47991DA@SN7PR15MB5755.namprd15.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Reviewed-by: Gerry Morong <gerry.morong@microchip.com>
-Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
-Reviewed-by: Scott Teel <scott.teel@microchip.com>
-Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
-Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
-Signed-off-by: Don Brace <don.brace@microchip.com>
----
- drivers/scsi/smartpqi/smartpqi_init.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On 8/24/23 08:35, Bernard Metzler wrote:
+> I spent some time testing the srp/002 blktest with siw, still
+> trying to get it hanging.
+> Looking closer into the logs: While most of the time RDMA CM
+> connection setup works, I also see some connection rejects being
+> created by the passive ULP side during setup:
+> 
+> [16848.757937] scsi host11: ib_srp: REJ received
+> [16848.757939] scsi host11:   REJ reason 0xffffff98
+> 
+> This does not affect the overall success of the current test
+> run, other connect attempts succeed etc. Is that connection
+> rejection intended behavior of the test?
 
-diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index e288ba9af1a7..9ec018259860 100644
---- a/drivers/scsi/smartpqi/smartpqi_init.c
-+++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -33,11 +33,11 @@
- #define BUILD_TIMESTAMP
- #endif
- 
--#define DRIVER_VERSION		"2.1.22-040"
-+#define DRIVER_VERSION		"2.1.24-046"
- #define DRIVER_MAJOR		2
- #define DRIVER_MINOR		1
--#define DRIVER_RELEASE		22
--#define DRIVER_REVISION		40
-+#define DRIVER_RELEASE		24
-+#define DRIVER_REVISION		46
- 
- #define DRIVER_NAME		"Microchip SmartPQI Driver (v" \
- 				DRIVER_VERSION BUILD_TIMESTAMP ")"
--- 
-2.42.0
+Hi Bernard,
 
+In the logs I see that the SRP initiator (ib_srp) may try to log in before
+the SRP target driver (ib_srpt) has finished associating with the configured
+RDMA ports. I think this is why REJ messages appear in the logs. The retry
+loop in the test script should be sufficient to deal with this.
+
+Bart.
