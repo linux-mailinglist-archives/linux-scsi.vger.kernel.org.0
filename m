@@ -2,57 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E70E787CE4
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Aug 2023 03:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CD3787CF1
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Aug 2023 03:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239476AbjHYBOE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 24 Aug 2023 21:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
+        id S239548AbjHYBOH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 24 Aug 2023 21:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237437AbjHYBNu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Aug 2023 21:13:50 -0400
+        with ESMTP id S237643AbjHYBNv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Aug 2023 21:13:51 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF641BF1
-        for <linux-scsi@vger.kernel.org>; Thu, 24 Aug 2023 18:13:48 -0700 (PDT)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37OJEVqD022022;
-        Fri, 25 Aug 2023 01:13:41 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C831BFF
+        for <linux-scsi@vger.kernel.org>; Thu, 24 Aug 2023 18:13:49 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37OJEYM3017766;
+        Fri, 25 Aug 2023 01:13:42 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-03-30;
- bh=DeZdOPYmhZH4UF2plKjQnlsNJHGTI0zOMYdwWCerHyo=;
- b=dviJlM1cQ3kMIatN4V8SVYFsOCaq8SmrSpYA15RalTNUX3UZyTTMGY9dfOMQ1A634pO6
- 0xGb0YyAbiu86rLp+P2SX/5YxQzktkPMK0U8dUQ2Wx4lVg2qJyVkptWRI62h0zPAc5Av
- 106W+HI/NLQVVcO3KaBoOAl0ia8OM6zC/6sdTOfIWdrKxqKiYKchPBf001TlfjIqBBto
- 0TdXr2sXpvJgmeEYmdKZ5S/PZiwt02/ysC2pNv/ndmdkSNUmJ2C78Q8YcHSkNEuyaz7w
- NO7BOYZMNnEyGjVnRAc4QP94XDKAXph/CTsLwdX0U14jGcg05ew66wCsvuM0ighIp9fX Ew== 
+ bh=zMh7LYs5NEf3Ua8+9CslDsMkMfDxr7yIZB2WI08oWXY=;
+ b=4Xg4W9Khrruo09KkfQZXJzll33tzEdulKG3U5B0fpPXZuXG3b0gcejcvGb2COF/yIApC
+ I3BvCw3OEAXpgwlEyoPSxAahEaGXbJ9hZfm2GN80dk4mEcdW3sv1Yg+XReYDybJfWIDA
+ 7UeuuKnbyNqju1EOoQTy0CCUmiZk907T9llXWj/3ElXo03GpL8TknCf/jaG+VnG9G15O
+ jgAF1R84ispUH3R0bOAUwIcK/GQ/+Kbhovjb7KCeRVpT/NPavetoXQUjYt951DUAMgPi
+ MBOluqoLYIYtv361qPd7ch/OU0h7z9Zb+Nylg7L/t4Q2ehEQsxQMf8OaT926/nST6uS1 ng== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3sn1yu5htr-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3sn1yvwfud-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 25 Aug 2023 01:13:41 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 37ONtSVs036111;
-        Fri, 25 Aug 2023 01:13:40 GMT
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 37P03oRZ035625;
+        Fri, 25 Aug 2023 01:13:41 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3sn1ywqfmh-1
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3sn1ywqfmu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Aug 2023 01:13:40 +0000
+        Fri, 25 Aug 2023 01:13:41 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 37P1DVEI019787;
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 37P1DVEJ019787;
         Fri, 25 Aug 2023 01:13:40 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3sn1ywqf8n-13;
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3sn1ywqf8n-14;
         Fri, 25 Aug 2023 01:13:40 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     jejb@linux.ibm.com, Xiang Yang <xiangyang3@huawei.com>
+To:     john.g.garry@oracle.com, yanaijie@huawei.com, jejb@linux.ibm.com,
+        Yue Haibing <yuehaibing@huawei.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org
-Subject: Re: [PATCH -next] scsi: arcmsr: Add __init and __exit for arcmsr_module_{init,exit}
-Date:   Thu, 24 Aug 2023 21:12:59 -0400
-Message-Id: <169292577125.789945.16016677536430672572.b4-ty@oracle.com>
+Subject: Re: [PATCH -next] scsi: libsas: Remove unused declarations
+Date:   Thu, 24 Aug 2023 21:13:00 -0400
+Message-Id: <169292577123.789945.9214401828004734428.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230804022913.1917023-1-xiangyang3@huawei.com>
-References: <20230804022913.1917023-1-xiangyang3@huawei.com>
+In-Reply-To: <20230809132249.37948-1-yuehaibing@huawei.com>
+References: <20230809132249.37948-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,11 +61,11 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-08-25_01,2023-08-24_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
- malwarescore=0 spamscore=0 phishscore=0 mlxlogscore=813 adultscore=0
+ malwarescore=0 spamscore=0 phishscore=0 mlxlogscore=736 adultscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2308100000 definitions=main-2308250009
-X-Proofpoint-GUID: KShgTCJh-emPnnGYGiCEDXG30w6kUXDB
-X-Proofpoint-ORIG-GUID: KShgTCJh-emPnnGYGiCEDXG30w6kUXDB
+X-Proofpoint-GUID: Lvj5k0dUXvM5piRqTKRs71xvgmc0ntJI
+X-Proofpoint-ORIG-GUID: Lvj5k0dUXvM5piRqTKRs71xvgmc0ntJI
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
@@ -75,16 +76,19 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 04 Aug 2023 10:29:13 +0800, Xiang Yang wrote:
+On Wed, 09 Aug 2023 21:22:49 +0800, Yue Haibing wrote:
 
-> Add __init and __exit for arcmsr_module_{init,exit}
+> Commit 042ebd293b86 ("scsi: libsas: kill useless ha_event and do some cleanup")
+> removed sas_hae_reset() but not its declaration.
+> Commit 2908d778ab3e ("[SCSI] aic94xx: new driver") declared but never implemented
+> other functions.
 > 
 > 
 
 Applied to 6.6/scsi-queue, thanks!
 
-[1/1] scsi: arcmsr: Add __init and __exit for arcmsr_module_{init,exit}
-      https://git.kernel.org/mkp/scsi/c/e9b525b6ccbf
+[1/1] scsi: libsas: Remove unused declarations
+      https://git.kernel.org/mkp/scsi/c/2fcd1e2b648f
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
