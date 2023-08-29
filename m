@@ -2,84 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431F678C30B
-	for <lists+linux-scsi@lfdr.de>; Tue, 29 Aug 2023 13:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F6F78C5AB
+	for <lists+linux-scsi@lfdr.de>; Tue, 29 Aug 2023 15:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235309AbjH2LDi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 29 Aug 2023 07:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
+        id S236280AbjH2Nd7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 29 Aug 2023 09:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235370AbjH2LDP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 29 Aug 2023 07:03:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E8DCDA;
-        Tue, 29 Aug 2023 04:03:00 -0700 (PDT)
+        with ESMTP id S236243AbjH2Ndi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 29 Aug 2023 09:33:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02B61BF;
+        Tue, 29 Aug 2023 06:33:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54FF9654FA;
-        Tue, 29 Aug 2023 11:03:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A91DC433C8;
-        Tue, 29 Aug 2023 11:02:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22C9F6578D;
+        Tue, 29 Aug 2023 13:33:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A61C433D9;
+        Tue, 29 Aug 2023 13:33:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693306979;
-        bh=U8tO0dLFljDnktuq80r4afitP93wv2ZaRihVU0Qyu2I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Zpf44oWH5Z2L6QhPNIGp7PeBhJpnP4KfVurKgcL9DEj/BIRmEq8ijJzbb6q5k8Ovs
-         9bWmbNzBkJw5MyDAxRy27lwjHGda6NbScABpEWJtXeah3765gQ9TUqIkk0ScRRsr4B
-         pgJc/+HtIStX4e0zZcs6Mgm/y0cAQCiR+vX0i9HUCQ2jW21Dvj1m5KvDe2xJG8sZD9
-         7J/ySnM4IatjDikdEeiDLegDHPGVAKFz5CZJOY4FIoLRlouJhKb12RDwuxVPSp/21Q
-         Im6ZTKLVuSh6T0hvwNEhJP5WmzsfCpgy49EfIICESoo8yOH/FPp5HVYEAtlfB2KJ19
-         jLNduaFs+ry8A==
-Date:   Tue, 29 Aug 2023 13:02:47 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
-        Alasdair Kergon <agk@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Kleikamp <shaggy@kernel.org>,
-        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        jfs-discussion@lists.sourceforge.net,
-        Joern Engel <joern@lazybastard.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-xfs@vger.kernel.org,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Song Liu <song@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v3 0/29] block: Make blkdev_get_by_*() return handle
-Message-ID: <20230829-stark-trapez-2251bf78c6a9@brauner>
-References: <20230818123232.2269-1-jack@suse.cz>
- <20230825-hubraum-gedreht-8c5c4db9330a@brauner>
- <20230828170744.iifdmaw732cfiauf@quack3>
+        s=k20201202; t=1693315984;
+        bh=GM5kCi6zFtOcw/ODtRD9HVHErXRL8msZw4ri9PR/9nA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GpxODjVZFtxFdB+WCgnlZawzZwFEEArcF1y+SmzI3vaVemDHdvSsCfI9+/u5lRUie
+         hk5ft3XlgpAtbJTvukT9Ydgvvw9LpAuKeFQqVLYyEfdT+bn4CmiRNH266ddbkS0+pb
+         LlVXGtGyITsr66RnE//bilKkBzigZnlobkj3jBim0fXFMoJjuOcoi9vIkj0thiNTjC
+         7O0efVUmEXc53NyG2f5hfwhelDYyK6FuVRVehZjY0UukSCsbXZ3eoxYxYOr9PPgIZg
+         m6h6U0n9jHsYIbieWR+Y93ncs2r+TOafSXRx/d8rSo7DMdqpk8X6hgRCNi2C2c9RGv
+         +c85pR6zoCTWg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Sagar Biradar <sagar.biradar@microchip.com>,
+        Gilbert Wu <gilbert.wu@microchip.com>,
+        Sagar Biradar <Sagar.Biradar@microchip.com>,
+        John Garry <john.g.garry@oracle.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, aacraid@microsemi.com,
+        jejb@linux.ibm.com, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 10/15] scsi: aacraid: Reply queue mapping to CPUs based on IRQ affinity
+Date:   Tue, 29 Aug 2023 09:32:40 -0400
+Message-Id: <20230829133245.520176-10-sashal@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230829133245.520176-1-sashal@kernel.org>
+References: <20230829133245.520176-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230828170744.iifdmaw732cfiauf@quack3>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.1.49
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,9 +61,156 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> replacement) I think we can go ahead with the series as is. As you said
-> there will be some conflicts in btrfs and I've learned about f2fs conflicts
-> as well so I can rebase & repost the series on top of rc1 to make life
-> easier for you.
+From: Sagar Biradar <sagar.biradar@microchip.com>
 
-That is be much appreciated. Thank you!
+[ Upstream commit 9dc704dcc09eae7d21b5da0615eb2ed79278f63e ]
+
+Fix the I/O hang that arises because of the MSIx vector not having a mapped
+online CPU upon receiving completion.
+
+SCSI cmds take the blk_mq route, which is setup during init. Reserved cmds
+fetch the vector_no from mq_map after init is complete. Before init, they
+have to use 0 - as per the norm.
+
+Reviewed-by: Gilbert Wu <gilbert.wu@microchip.com>
+Signed-off-by: Sagar Biradar <Sagar.Biradar@microchip.com>
+Reviewed-by: John Garry <john.g.garry@oracle.com>
+Link: https://lore.kernel.org/r/20230519230834.27436-1-sagar.biradar@microchip.com
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/aacraid/aacraid.h |  1 +
+ drivers/scsi/aacraid/commsup.c |  6 +++++-
+ drivers/scsi/aacraid/linit.c   | 14 ++++++++++++++
+ drivers/scsi/aacraid/src.c     | 25 +++++++++++++++++++++++--
+ 4 files changed, 43 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
+index 5e115e8b2ba46..7c6efde75da66 100644
+--- a/drivers/scsi/aacraid/aacraid.h
++++ b/drivers/scsi/aacraid/aacraid.h
+@@ -1678,6 +1678,7 @@ struct aac_dev
+ 	u32			handle_pci_error;
+ 	bool			init_reset;
+ 	u8			soft_reset_support;
++	u8			use_map_queue;
+ };
+ 
+ #define aac_adapter_interrupt(dev) \
+diff --git a/drivers/scsi/aacraid/commsup.c b/drivers/scsi/aacraid/commsup.c
+index deb32c9f4b3e6..3f062e4013ab6 100644
+--- a/drivers/scsi/aacraid/commsup.c
++++ b/drivers/scsi/aacraid/commsup.c
+@@ -223,8 +223,12 @@ int aac_fib_setup(struct aac_dev * dev)
+ struct fib *aac_fib_alloc_tag(struct aac_dev *dev, struct scsi_cmnd *scmd)
+ {
+ 	struct fib *fibptr;
++	u32 blk_tag;
++	int i;
+ 
+-	fibptr = &dev->fibs[scsi_cmd_to_rq(scmd)->tag];
++	blk_tag = blk_mq_unique_tag(scsi_cmd_to_rq(scmd));
++	i = blk_mq_unique_tag_to_tag(blk_tag);
++	fibptr = &dev->fibs[i];
+ 	/*
+ 	 *	Null out fields that depend on being zero at the start of
+ 	 *	each I/O
+diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
+index 5ba5c18b77b46..bff49b8ab057d 100644
+--- a/drivers/scsi/aacraid/linit.c
++++ b/drivers/scsi/aacraid/linit.c
+@@ -19,6 +19,7 @@
+ 
+ #include <linux/compat.h>
+ #include <linux/blkdev.h>
++#include <linux/blk-mq-pci.h>
+ #include <linux/completion.h>
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+@@ -505,6 +506,15 @@ static int aac_slave_configure(struct scsi_device *sdev)
+ 	return 0;
+ }
+ 
++static void aac_map_queues(struct Scsi_Host *shost)
++{
++	struct aac_dev *aac = (struct aac_dev *)shost->hostdata;
++
++	blk_mq_pci_map_queues(&shost->tag_set.map[HCTX_TYPE_DEFAULT],
++			      aac->pdev, 0);
++	aac->use_map_queue = true;
++}
++
+ /**
+  *	aac_change_queue_depth		-	alter queue depths
+  *	@sdev:	SCSI device we are considering
+@@ -1489,6 +1499,7 @@ static struct scsi_host_template aac_driver_template = {
+ 	.bios_param			= aac_biosparm,
+ 	.shost_groups			= aac_host_groups,
+ 	.slave_configure		= aac_slave_configure,
++	.map_queues			= aac_map_queues,
+ 	.change_queue_depth		= aac_change_queue_depth,
+ 	.sdev_groups			= aac_dev_groups,
+ 	.eh_abort_handler		= aac_eh_abort,
+@@ -1776,6 +1787,8 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	shost->max_lun = AAC_MAX_LUN;
+ 
+ 	pci_set_drvdata(pdev, shost);
++	shost->nr_hw_queues = aac->max_msix;
++	shost->host_tagset = 1;
+ 
+ 	error = scsi_add_host(shost, &pdev->dev);
+ 	if (error)
+@@ -1908,6 +1921,7 @@ static void aac_remove_one(struct pci_dev *pdev)
+ 	struct aac_dev *aac = (struct aac_dev *)shost->hostdata;
+ 
+ 	aac_cancel_rescan_worker(aac);
++	aac->use_map_queue = false;
+ 	scsi_remove_host(shost);
+ 
+ 	__aac_shutdown(aac);
+diff --git a/drivers/scsi/aacraid/src.c b/drivers/scsi/aacraid/src.c
+index 11ef58204e96f..61949f3741886 100644
+--- a/drivers/scsi/aacraid/src.c
++++ b/drivers/scsi/aacraid/src.c
+@@ -493,6 +493,10 @@ static int aac_src_deliver_message(struct fib *fib)
+ #endif
+ 
+ 	u16 vector_no;
++	struct scsi_cmnd *scmd;
++	u32 blk_tag;
++	struct Scsi_Host *shost = dev->scsi_host_ptr;
++	struct blk_mq_queue_map *qmap;
+ 
+ 	atomic_inc(&q->numpending);
+ 
+@@ -505,8 +509,25 @@ static int aac_src_deliver_message(struct fib *fib)
+ 		if ((dev->comm_interface == AAC_COMM_MESSAGE_TYPE3)
+ 			&& dev->sa_firmware)
+ 			vector_no = aac_get_vector(dev);
+-		else
+-			vector_no = fib->vector_no;
++		else {
++			if (!fib->vector_no || !fib->callback_data) {
++				if (shost && dev->use_map_queue) {
++					qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
++					vector_no = qmap->mq_map[raw_smp_processor_id()];
++				}
++				/*
++				 *	We hardcode the vector_no for
++				 *	reserved commands as a valid shost is
++				 *	absent during the init
++				 */
++				else
++					vector_no = 0;
++			} else {
++				scmd = (struct scsi_cmnd *)fib->callback_data;
++				blk_tag = blk_mq_unique_tag(scsi_cmd_to_rq(scmd));
++				vector_no = blk_mq_unique_tag_to_hwq(blk_tag);
++			}
++		}
+ 
+ 		if (native_hba) {
+ 			if (fib->flags & FIB_CONTEXT_FLAG_NATIVE_HBA_TMF) {
+-- 
+2.40.1
+
