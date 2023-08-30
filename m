@@ -2,126 +2,149 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53C578DAF1
-	for <lists+linux-scsi@lfdr.de>; Wed, 30 Aug 2023 20:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D6978DAFF
+	for <lists+linux-scsi@lfdr.de>; Wed, 30 Aug 2023 20:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236611AbjH3SiK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 30 Aug 2023 14:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
+        id S238613AbjH3SiQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 30 Aug 2023 14:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242980AbjH3KAQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 30 Aug 2023 06:00:16 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72791B3
-        for <linux-scsi@vger.kernel.org>; Wed, 30 Aug 2023 03:00:11 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-50078e52537so8372943e87.1
-        for <linux-scsi@vger.kernel.org>; Wed, 30 Aug 2023 03:00:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693389610; x=1693994410; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3xTYLzShSJrMNa33kOQFBwQyF7CcLinjfIsI73sj6mA=;
-        b=NhZVFfnZrY4lUb7uBX51m41Wvv2oL8ZuKoDEcP347ewa3qI6U3GfIJLNtwr1jVDnFF
-         E8lUHrzatV/ve4JM0dKcLqAecCAs5+WAqyHS2B7NvhP9SiFZ7NcAlhvLKCwR3dPK4peX
-         TqkxTDhY4a4C8qfmbfhvHnmBjmEqsTbwHicf/TKHh4gVQcBvV8us5V4Japo+tMnEembw
-         VA2Pqny78q90kCaoC5xTx1Ia3W3ZfN2VAUcINRg1t3c60ailf1WO6eH0c2MyAYRThFIG
-         U6juh+WNxwBT+Cdt4v521GRG9jB3fiVvoiT6YQchcO1Hd+1hD/KtZ0b1oEY6xPboByFA
-         7HPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693389610; x=1693994410;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3xTYLzShSJrMNa33kOQFBwQyF7CcLinjfIsI73sj6mA=;
-        b=Rt4Z6rGWfN/P1mjkMnYnFFSN+nlEDtVuHFDmf8r7UvXuSc3ySqHp0B3YRkcGfDuLPe
-         ExMDdvizLqtJZf1YjBTIeVItbSyrZx7tLDUYrOiT0FlVZRBSCxwNtjhlXc2/anQ4GD1f
-         pTz1u5YNEiA15A7scivDQ9C3dVWDQI7891w60G9t82lhq6RJdQRf/RZGKb/GQyXO1p+9
-         H4RKK/PscQLBN7Ie35W9s7akNrXNIq+vR1ra9w4FHvXoA2NFVwkGRVxoHe3EDZp0oO8W
-         2qAHv2z4NJiy40eS0Df3g6nzWss6lwSA8OW000HZ94LdKeJ/Ly7T4EFhhOQY095S9y5I
-         K5ng==
-X-Gm-Message-State: AOJu0YxapaASF/3OecV/IaUoSLQnJN1PGCSKELckUa8JFRm+sq5U60vo
-        jtZqBBHTKDLTQBbSB/QlohdZDQ==
-X-Google-Smtp-Source: AGHT+IHCaFP31zkAGHF02AmzezLz996huf1FhuxFlQEm+QFgPfp9jCQOyRrIpXdq64Q6sPBPvdP6GQ==
-X-Received: by 2002:a05:6512:2088:b0:500:7881:7b2f with SMTP id t8-20020a056512208800b0050078817b2fmr1125481lfr.54.1693389609676;
-        Wed, 30 Aug 2023 03:00:09 -0700 (PDT)
-Received: from [192.168.86.24] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id dk24-20020a170906f0d800b0099ddc81903asm7030466ejb.221.2023.08.30.03.00.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 03:00:08 -0700 (PDT)
-Message-ID: <2230571a-114c-0d03-d02a-fa08c2a8d483@linaro.org>
-Date:   Wed, 30 Aug 2023 11:00:07 +0100
+        with ESMTP id S244286AbjH3Mws (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 30 Aug 2023 08:52:48 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD2E132;
+        Wed, 30 Aug 2023 05:52:44 -0700 (PDT)
+Received: from kwepemm600012.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RbPJ560kqzLpBF;
+        Wed, 30 Aug 2023 20:49:25 +0800 (CST)
+Received: from [10.174.178.220] (10.174.178.220) by
+ kwepemm600012.china.huawei.com (7.193.23.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Wed, 30 Aug 2023 20:52:37 +0800
+Message-ID: <3fc45984-46f9-dec2-ecce-68d6897874a9@huawei.com>
+Date:   Wed, 30 Aug 2023 20:52:36 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 00/10] Hardware wrapped key support for qcom ice and
- ufs
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] scsi:libsas: Simplify sas_queue_reset and remove unused
+ code
 Content-Language: en-US
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Gaurav Kashyap <quic_gaurkash@quicinc.com>,
-        linux-scsi@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, omprsing@qti.qualcomm.com,
-        quic_psodagud@quicinc.com, avmenon@quicinc.com,
-        abel.vesa@linaro.org, quic_spuppala@quicinc.com
-References: <20230719170423.220033-1-quic_gaurkash@quicinc.com>
- <f4b5512b-9922-1511-fc22-f14d25e2426a@linaro.org>
- <20230825210727.GA1366@sol.localdomain>
- <f63ce281-1434-f86f-3f4e-e1958a684bbd@linaro.org>
- <20230829181223.GA2066264@google.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230829181223.GA2066264@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     John Garry <john.g.garry@oracle.com>,
+        Jason Yan <yanaijie@huawei.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <louhongxiang@huawei.com>
+References: <20230729102451.2452826-1-haowenchao2@huawei.com>
+From:   "haowenchao (C)" <haowenchao2@huawei.com>
+In-Reply-To: <20230729102451.2452826-1-haowenchao2@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.220]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600012.china.huawei.com (7.193.23.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Eric,
-
-On 29/08/2023 19:12, Eric Biggers wrote:
+On 2023/7/29 18:24, Wenchao Hao wrote:
+> sas_queue_reset is always called with param "wait" set to 0, so
+> remove it from this function's param list. And remove unused
+> function sas_wait_eh.
 > 
->>> They're also being documented by Qualcomm.  So, as this patchset does, they can
->>> be used by Linux in the implementation of new ioctls which provide a vendor
->>> independent interface to HW-wrapped key generation, import, and conversion.
->>>
->>> I think the new approach is the only one that is viable outside the Android
->>> context.  As such, I don't think anyone has any plan to upstream support for
->>> HW-wrapped keys for older Qualcomm SoCs that lack the new interface.
->> AFAIU, There are other downstream Qualcomm LE platforms that use wrapped key
->> support with the older interface.
->> What happens to them whey then upgrade the kernel?
->>
->> Does TA interface still continue to work with the changes that went into
->> common drivers (ufs/sd)?
-> This is a strange line of questioning for upstream review, as this feature does
-> not exist upstream.  This is the first time it will be supported by upstream
-> Linux, ever.  Adding support for this feature does not break anything.
-These are not unusual questions, what am trying to understand here is 
-below questions for better context, big picture and review/test. At the 
-end of the day we all want to get these features available in upstream.
 
-1. How backward compatibility of this wrapped key support. I guess the 
-answer is NO.
+Ping...
 
-2. secondly reasons behind this change. Am still not really convinced 
-with the current technical reasoning to shift from TA based approach to 
-this. But I guess this is all done to dump the closed source userspace 
-thingy. Am hoping that this can be made available to other older SoCs at 
-some point in time.
-
-3. We are adding these apis/callbacks in common code without doing any 
-compatible or SoC checks. Is this going to be a issue if someone tries 
-fscrypt?
-
---srini
-
+> Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
+> ---
+>   drivers/scsi/libsas/sas_scsi_host.c | 41 +++--------------------------
+>   1 file changed, 3 insertions(+), 38 deletions(-)
 > 
-> Downstream users who implemented a less well designed version of this feature
-> can continue to use their existing code.
+> diff --git a/drivers/scsi/libsas/sas_scsi_host.c b/drivers/scsi/libsas/sas_scsi_host.c
+> index 94c5f14f3c16..3f01e77eaee3 100644
+> --- a/drivers/scsi/libsas/sas_scsi_host.c
+> +++ b/drivers/scsi/libsas/sas_scsi_host.c
+> @@ -387,37 +387,7 @@ struct sas_phy *sas_get_local_phy(struct domain_device *dev)
+>   }
+>   EXPORT_SYMBOL_GPL(sas_get_local_phy);
+>   
+> -static void sas_wait_eh(struct domain_device *dev)
+> -{
+> -	struct sas_ha_struct *ha = dev->port->ha;
+> -	DEFINE_WAIT(wait);
+> -
+> -	if (dev_is_sata(dev)) {
+> -		ata_port_wait_eh(dev->sata_dev.ap);
+> -		return;
+> -	}
+> - retry:
+> -	spin_lock_irq(&ha->lock);
+> -
+> -	while (test_bit(SAS_DEV_EH_PENDING, &dev->state)) {
+> -		prepare_to_wait(&ha->eh_wait_q, &wait, TASK_UNINTERRUPTIBLE);
+> -		spin_unlock_irq(&ha->lock);
+> -		schedule();
+> -		spin_lock_irq(&ha->lock);
+> -	}
+> -	finish_wait(&ha->eh_wait_q, &wait);
+> -
+> -	spin_unlock_irq(&ha->lock);
+> -
+> -	/* make sure SCSI EH is complete */
+> -	if (scsi_host_in_recovery(ha->core.shost)) {
+> -		msleep(10);
+> -		goto retry;
+> -	}
+> -}
+> -
+> -static int sas_queue_reset(struct domain_device *dev, int reset_type,
+> -			   u64 lun, int wait)
+> +static int sas_queue_reset(struct domain_device *dev, int reset_type, u64 lun)
+>   {
+>   	struct sas_ha_struct *ha = dev->port->ha;
+>   	int scheduled = 0, tries = 100;
+> @@ -425,8 +395,6 @@ static int sas_queue_reset(struct domain_device *dev, int reset_type,
+>   	/* ata: promote lun reset to bus reset */
+>   	if (dev_is_sata(dev)) {
+>   		sas_ata_schedule_reset(dev);
+> -		if (wait)
+> -			sas_ata_wait_eh(dev);
+>   		return SUCCESS;
+>   	}
+>   
+> @@ -444,9 +412,6 @@ static int sas_queue_reset(struct domain_device *dev, int reset_type,
+>   		}
+>   		spin_unlock_irq(&ha->lock);
+>   
+> -		if (wait)
+> -			sas_wait_eh(dev);
+> -
+>   		if (scheduled)
+>   			return SUCCESS;
+>   	}
+> @@ -499,7 +464,7 @@ int sas_eh_device_reset_handler(struct scsi_cmnd *cmd)
+>   	struct sas_internal *i = to_sas_internal(host->transportt);
+>   
+>   	if (current != host->ehandler)
+> -		return sas_queue_reset(dev, SAS_DEV_LU_RESET, cmd->device->lun, 0);
+> +		return sas_queue_reset(dev, SAS_DEV_LU_RESET, cmd->device->lun);
+>   
+>   	int_to_scsilun(cmd->device->lun, &lun);
+>   
+> @@ -522,7 +487,7 @@ int sas_eh_target_reset_handler(struct scsi_cmnd *cmd)
+>   	struct sas_internal *i = to_sas_internal(host->transportt);
+>   
+>   	if (current != host->ehandler)
+> -		return sas_queue_reset(dev, SAS_DEV_RESET, 0, 0);
+> +		return sas_queue_reset(dev, SAS_DEV_RESET, 0);
+>   
+>   	if (!i->dft->lldd_I_T_nexus_reset)
+>   		return FAILED;
+
