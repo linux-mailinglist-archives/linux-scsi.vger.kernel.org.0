@@ -2,79 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADEF78E09D
-	for <lists+linux-scsi@lfdr.de>; Wed, 30 Aug 2023 22:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C9B78DF45
+	for <lists+linux-scsi@lfdr.de>; Wed, 30 Aug 2023 22:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236892AbjH3U1w (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 30 Aug 2023 16:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
+        id S238701AbjH3UEI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 30 Aug 2023 16:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237957AbjH3U1l (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 30 Aug 2023 16:27:41 -0400
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F454B17
-        for <linux-scsi@vger.kernel.org>; Wed, 30 Aug 2023 13:25:01 -0700 (PDT)
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-34cacab5e34so648895ab.0
-        for <linux-scsi@vger.kernel.org>; Wed, 30 Aug 2023 13:25:01 -0700 (PDT)
+        with ESMTP id S240241AbjH3UD4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 30 Aug 2023 16:03:56 -0400
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0904251550
+        for <linux-scsi@vger.kernel.org>; Wed, 30 Aug 2023 12:44:34 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1c1ff5b741cso194865ad.2
+        for <linux-scsi@vger.kernel.org>; Wed, 30 Aug 2023 12:44:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693427019; x=1694031819;
+        d=1e100.net; s=20221208; t=1693424606; x=1694029406;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pu+v5TcyzpQLtUTlfHhtPfmsTcuZLW0rXfwL8u5p7aU=;
-        b=ROROTTiyxkem3QxxOMmhLRsJoLIFne7br09sh+fbuGXLiefQmT6+o0vmuDINAyx83e
-         JG4klslesAJv/jix3Us5ij+Xx88Z2f9mfKJPaLWwaVMXMLA8z89UuSvHIDLV86K6ox4K
-         kusfqpJX1yLttlxtBvD/5+05nfLeE+ElMiCQgb1QBsqYI2v+q+08Spmkmqx7md+jN5yi
-         mJHLcfD4Qr0Mm61YCYWCABSE/+zKBjQle2uBjgHNQwcS1AYamikAVEmJoxDgHKZZWr6r
-         OUC+ET1/swP5f1QZG+NacoChfWaE4bBZ+jwjpnHIaHuQ8Bo/ooJddWRipQu5gxWmvdjN
-         4UNQ==
-X-Gm-Message-State: AOJu0YzRY9UWgXxFWaugQEy5PmQquIuyzSYs0CLlp1ZMJ0UDeRq8zLaB
-        9xAgD2jIN+zlJ1MNndj4GMkHtmU8Vw8=
-X-Google-Smtp-Source: AGHT+IFSVljawPLxfiOGWs3tuZoCeomEGtwAcIarN3V/KEUAA8oEDaI18lulp3iPv7mcjjE/JJk9cA==
-X-Received: by 2002:a05:6a20:4281:b0:14b:8023:33cb with SMTP id o1-20020a056a20428100b0014b802333cbmr4045233pzj.11.1693424470787;
-        Wed, 30 Aug 2023 12:41:10 -0700 (PDT)
+        bh=7GpDWXjt97ECSFVXng+31f5cy+/s0jhYwD4ACEqG5Q0=;
+        b=lUguMu9/gOh5zoByrSiodmaqzn+eyZF3K8AA9YlQssL5BzIOLfNY+kEGBzlNgSQYJ4
+         Ih1//TuSugSP60IZQFoFGlpSeHZChEieGr3xcLclFkYv+Ia4wziS9bw6rgCZfXPQGGdO
+         jcWWCxPJCq2ZoKyyRE2UoNWzGIhpLkvtYfRbLtREkcbqGfW/JpBR1BkYYY+Dnjp7a4gS
+         InlGqWgP+JEdS9O/5/Gmxdpvf4zbqIAS/01ezK/AUjEmI6lMC434VtC56PDr+vmIqycN
+         eYhTHGupEgxyx/AekIkUGjn5Q+RWOjd9KGINwfCUFsAf5kOIaL6o0uup4N1mdfhsNle0
+         fZvg==
+X-Gm-Message-State: AOJu0Yy9O5ULH+cqAXYbx0nA/29uItc3lUoK31tpCJWV3Q6WYXakAciE
+        NkEc/daK29njXCpds+bq8D8=
+X-Google-Smtp-Source: AGHT+IHahRuD5OROFWtT3YiHqTTv9IwkQK2/Yrp6PejQKzKB4OlP1bvL8YrgOT3dru6EWV3llnHLPQ==
+X-Received: by 2002:a17:902:d505:b0:1b8:971c:b7b7 with SMTP id b5-20020a170902d50500b001b8971cb7b7mr3730445plg.56.1693424606385;
+        Wed, 30 Aug 2023 12:43:26 -0700 (PDT)
 Received: from [172.20.4.71] ([208.98.210.70])
-        by smtp.gmail.com with ESMTPSA id i25-20020a633c59000000b0055bf13811f5sm10542568pgn.15.2023.08.30.12.41.09
+        by smtp.gmail.com with ESMTPSA id f4-20020a17090274c400b001b891259eddsm11427279plt.197.2023.08.30.12.43.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 12:41:10 -0700 (PDT)
-Message-ID: <884c6a53-cdef-4a38-a2b0-a40d46cd9d88@acm.org>
-Date:   Wed, 30 Aug 2023 12:41:09 -0700
+        Wed, 30 Aug 2023 12:43:25 -0700 (PDT)
+Message-ID: <822010a3-aeb1-4ef1-a2fa-ea100c33b3f2@acm.org>
+Date:   Wed, 30 Aug 2023 12:43:24 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/3] ufs: core: fix abnormal scale up after scale down
+Subject: Re: [PATCH v1 2/3] ufs: core: fix abnormal scale up after last cmd
+ finish
 Content-Language: en-US
-To:     peter.wang@mediatek.com, stanley.chu@mediatek.com,
-        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        avri.altman@wdc.com, alim.akhtar@samsung.com, jejb@linux.ibm.com
-Cc:     wsd_upstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
-        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
-        jiajie.hao@mediatek.com, powen.kao@mediatek.com,
-        qilin.tan@mediatek.com, lin.gui@mediatek.com,
-        tun-yu.yu@mediatek.com, eddie.huang@mediatek.com,
-        naomi.chu@mediatek.com
+To:     =?UTF-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= 
+        <peter.wang@mediatek.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        =?UTF-8?B?U3RhbmxleSBDaHUgKOacseWOn+mZnik=?= 
+        <stanley.chu@mediatek.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>
+Cc:     "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?SmlhamllIEhhbyAo6YOd5Yqg6IqCKQ==?= 
+        <jiajie.hao@mediatek.com>,
+        =?UTF-8?B?Q0MgQ2hvdSAo5ZGo5b+X5p2wKQ==?= <cc.chou@mediatek.com>,
+        =?UTF-8?B?RWRkaWUgSHVhbmcgKOm7g+aZuuWCkSk=?= 
+        <eddie.huang@mediatek.com>,
+        =?UTF-8?B?QWxpY2UgQ2hhbyAo6LaZ54+u5Z2HKQ==?= 
+        <Alice.Chao@mediatek.com>,
+        wsd_upstream <wsd_upstream@mediatek.com>,
+        =?UTF-8?B?TGluIEd1aSAo5qGC5p6X?= =?UTF-8?Q?=29?= 
+        <Lin.Gui@mediatek.com>,
+        =?UTF-8?B?Q2h1bi1IdW5nIFd1ICjlt6vpp7/lro8p?= 
+        <Chun-hung.Wu@mediatek.com>,
+        =?UTF-8?B?VHVuLXl1IFl1ICjmuLjmlabogb8p?= <Tun-yu.Yu@mediatek.com>,
+        =?UTF-8?B?Q2hhb3RpYW4gSmluZyAo5LqV5pyd5aSpKQ==?= 
+        <Chaotian.Jing@mediatek.com>,
+        =?UTF-8?B?UG93ZW4gS2FvICjpq5jkvK/mlocp?= <Powen.Kao@mediatek.com>,
+        =?UTF-8?B?TmFvbWkgQ2h1ICjmnLHoqaDnlLAp?= <Naomi.Chu@mediatek.com>,
+        =?UTF-8?B?UWlsaW4gVGFuICjosK3pupLpup8p?= <Qilin.Tan@mediatek.com>
 References: <20230823092948.22734-1-peter.wang@mediatek.com>
- <20230823092948.22734-4-peter.wang@mediatek.com>
+ <20230823092948.22734-3-peter.wang@mediatek.com>
+ <468fb5a4-32d5-42a7-b00f-115044954125@acm.org>
+ <3d3ef797414961e2eb6bc9d6dbfd45a32e7381eb.camel@mediatek.com>
 From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230823092948.22734-4-peter.wang@mediatek.com>
+In-Reply-To: <3d3ef797414961e2eb6bc9d6dbfd45a32e7381eb.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/23/23 02:29, peter.wang@mediatek.com wrote:
-> When no active_reqs, devfreq_monitor(Thread A) will suspend clock scaling.
-> But it may have racing with clk_scaling.suspend_work(Thread B) and
-> actually not suspend clock scaling(requue after suspend).
-> Next time after polling_ms, devfreq_monitor read
-> clk_scaling.window_start_t = 0 then scale up clock abnormal.
+On 8/29/23 20:00, Peter Wang (王信友) wrote:
+> Second __ufshcd_suspend_clkscaling is called from ufs wl suspend, which no on-going cmd.
+> 
+> So, it should be not a problem. (cmd finish suspend clock scaling racing with new cmd start busy)
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+This patch inlines one of the two __ufshcd_suspend_clkscaling() calls.
+I think it would be better if both calls are inlined.
 
+Thanks,
+
+Bart.
