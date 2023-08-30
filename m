@@ -2,124 +2,149 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0927078DB07
-	for <lists+linux-scsi@lfdr.de>; Wed, 30 Aug 2023 20:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542E378DAEA
+	for <lists+linux-scsi@lfdr.de>; Wed, 30 Aug 2023 20:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238638AbjH3SiW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 30 Aug 2023 14:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
+        id S232634AbjH3SiH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 30 Aug 2023 14:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242235AbjH3HcZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 30 Aug 2023 03:32:25 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CEBCC9;
-        Wed, 30 Aug 2023 00:32:22 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-ccc462deca6so4940684276.0;
-        Wed, 30 Aug 2023 00:32:22 -0700 (PDT)
+        with ESMTP id S242294AbjH3HwT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 30 Aug 2023 03:52:19 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C019C12D;
+        Wed, 30 Aug 2023 00:52:16 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1c0c6d4d650so41550665ad.0;
+        Wed, 30 Aug 2023 00:52:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693381936; x=1693986736; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:mime-version:user-agent:date
+         :message-id:from:cc:references:to:subject:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XTX3Lx7+PX0ytopG3z19Vhc/qw7Mn3Qfeg0mDBlt8ZE=;
+        b=DsgewdZz6kJikm5ycudx4PauNd/3IqsslTznftlUAplnzX+ECkjNTNgH2L/swmfVxD
+         od6jY99awebFvSDqQVoLZcuRt2zWAyoqX82nnEvdI3ay2nBvEg+Ch4SLJaQdRz1iXE3A
+         D26Vhz9KoMbVizglPLzC3B8cVw0ILd67gwg51QWTkalkdDOvfBvuvStwKVI9ujQBXgOr
+         4X1r+42MOrpfr/AA1aed05JyQKWWuc2FiZzfMcFwPxP2ttqvyFLKRwMLvQcb9UcjtMBQ
+         7HtNnX18PZQKcRZF65mBVguk2LcJ5j97mssiDbIZBe+7Otvfi22W18vbcfCMOb6hpXLg
+         WwXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693380741; x=1693985541;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4YiMzLoE5Q+zRkThtoGKTqX07/QOz8BBNWArS9Mxfso=;
-        b=MbQqBm3emLZILLL1ySORtOLgjT4ACijvvI2Iiy877jatwsrrkimgou9UhKSYMuru8X
-         Q1GR18rAJ1A/BO+qmmrcTbEmSlaLgepa2H6VyrxqEhVfi/F8GI/0JXL8Vp7xazhRNtML
-         CDBjdsRVgRCkWH98N1cmOHB7cDOtLXwxMbLVRxmriwSvZen88aI0xCTs1Rt7DRnGqLeF
-         ZJc6tbvGkkWqlIO7cWaC70+2wScdTwCcVzGEfgi1n9csoq6lsQ2ESBtN3iPQwkDztj0X
-         5N9jtpyQQBkKnGdmPZhlrMd0kednn8eyUo4gUkKXIGhfi577SHnn5oqizgIBAl/e7n+X
-         72sg==
-X-Gm-Message-State: AOJu0Yw3U82WHyW5+EL+v7fKlWwkdpmRE+DyAs0FLXvNN2kvHcTqQYHK
-        g/ru8svkXxVthV920Om15YgNlbQPNoe28g==
-X-Google-Smtp-Source: AGHT+IH6AmQBL5iWQ+fuCTxyeAZAdGuPRN1lJglwtUleIWj6uDIY9UEUBHtWLygPmv5kVe3RRcemMg==
-X-Received: by 2002:a25:768e:0:b0:d47:8db3:8bc8 with SMTP id r136-20020a25768e000000b00d478db38bc8mr1458958ybc.21.1693380741059;
-        Wed, 30 Aug 2023 00:32:21 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id i17-20020a25f211000000b00d712798a09bsm2473700ybe.64.2023.08.30.00.32.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 00:32:20 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-5925e580f12so60165327b3.3;
-        Wed, 30 Aug 2023 00:32:20 -0700 (PDT)
-X-Received: by 2002:a25:5f4d:0:b0:d16:4c3c:b5fb with SMTP id
- h13-20020a255f4d000000b00d164c3cb5fbmr1219242ybm.51.1693380740357; Wed, 30
- Aug 2023 00:32:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230829214517.14448-1-schmitzmic@gmail.com> <4a7d0dda-c24f-4875-892f-c8c5ef700882@app.fastmail.com>
+        d=1e100.net; s=20221208; t=1693381936; x=1693986736;
+        h=content-transfer-encoding:in-reply-to:mime-version:user-agent:date
+         :message-id:from:cc:references:to:subject:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XTX3Lx7+PX0ytopG3z19Vhc/qw7Mn3Qfeg0mDBlt8ZE=;
+        b=fOLWQSG7HwtXL12wfoWLm32juTrXCX6sZR337ff+v5jNfiaL8dDEbEEwpj3olQq+i3
+         IiK7Q1lwCvuJh5sEr1FjTgUT6DheBunDeF57U2aUrFSaMU6LK2LolpgKM2x+/HFLs4q7
+         xQcXchAJyn/FNW1gN8orpzwGaROOeLnQ8OqQYfYnJ4A7JxOVUEsK9gFp9QH8xezq+8Bz
+         1ee+PcebMNbs6anIG4y9xw7SOCr8E4avPuAC7h3ukGWbdY2bb5wIBs27Zb6Lp+bntkn/
+         T5h1P2zem3fclIb8sRSPd/MrrfBJcGosWoxGv7X+/0Zj8WR2rwE1NOrmmnqk6Fe82oJZ
+         JF/A==
+X-Gm-Message-State: AOJu0YzRlvFvUv55CudEXYKdOzIS7nPUbz5c534701a4DB3NRahCaFq/
+        tUM5uQPQpBBm6Xgkjjtx37LcKHlhFPo=
+X-Google-Smtp-Source: AGHT+IFIXxpvzcf2OM8MkqNkmkUIfW4fd7TzDUgWlO1sxkPeB58yZIh+PdWue0wKWJrFt6pLEE9zOw==
+X-Received: by 2002:a17:902:ce8f:b0:1b8:aee8:a21c with SMTP id f15-20020a170902ce8f00b001b8aee8a21cmr1795151plg.31.1693381935764;
+        Wed, 30 Aug 2023 00:52:15 -0700 (PDT)
+Received: from [10.1.1.24] (125-236-136-221-fibre.sparkbb.co.nz. [125.236.136.221])
+        by smtp.gmail.com with ESMTPSA id z11-20020a170903018b00b001b89b7e208fsm10569639plg.88.2023.08.30.00.52.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 30 Aug 2023 00:52:15 -0700 (PDT)
+Subject: Re: [PATCH] scsi: gvp11: add module parameter for DMA transfer bit
+ mask
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20230829214517.14448-1-schmitzmic@gmail.com>
+ <4a7d0dda-c24f-4875-892f-c8c5ef700882@app.fastmail.com>
  <ab78a254-ee6a-a2f1-c3cd-3b608e0c9e60@gmail.com>
-In-Reply-To: <ab78a254-ee6a-a2f1-c3cd-3b608e0c9e60@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 30 Aug 2023 09:32:08 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU-VmQcH+envdwFpRmMF2RpdZb3FE60u1RPROXwWzsbMw@mail.gmail.com>
-Message-ID: <CAMuHMdU-VmQcH+envdwFpRmMF2RpdZb3FE60u1RPROXwWzsbMw@mail.gmail.com>
-Subject: Re: [PATCH] scsi: gvp11: add module parameter for DMA transfer bit mask
-To:     Michael Schmitz <schmitzmic@gmail.com>
+ <CAMuHMdU-VmQcH+envdwFpRmMF2RpdZb3FE60u1RPROXwWzsbMw@mail.gmail.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, linux-m68k@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <b4e22628-9e5f-c635-93a2-7b24d546afed@gmail.com>
+Date:   Wed, 30 Aug 2023 19:52:09 +1200
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <CAMuHMdU-VmQcH+envdwFpRmMF2RpdZb3FE60u1RPROXwWzsbMw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Michael,
+Hi Geert
 
-On Wed, Aug 30, 2023 at 12:26 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
-> On 30/08/23 10:05, Arnd Bergmann wrote:
-> > On Tue, Aug 29, 2023, at 17:45, Michael Schmitz wrote:
-> >> SCSI boards on Amiga. There now is no way to set a non-default
-> >> DMA mask on these boards.
-> > It might help to mention here in which cases the default mask
-> > is actually wrong.
+Am 30.08.2023 um 19:32 schrieb Geert Uytterhoeven:
+> Hi Michael,
 >
-> All I have is:
+> On Wed, Aug 30, 2023 at 12:26 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
+>> On 30/08/23 10:05, Arnd Bergmann wrote:
+>>> On Tue, Aug 29, 2023, at 17:45, Michael Schmitz wrote:
+>>>> SCSI boards on Amiga. There now is no way to set a non-default
+>>>> DMA mask on these boards.
+>>> It might help to mention here in which cases the default mask
+>>> is actually wrong.
+>>
+>> All I have is:
+>>
+>> Probably it's needed on A2000 with an accelerator card and GVP II SCSI,
+>> to prevent DMA to RAM banks that do not support fast DMA cycles.
+>>
+>> from Geert's reply. I can add that. It just did sound a shade
+>> speculative...
 >
-> Probably it's needed on A2000 with an accelerator card and GVP II SCSI,
-> to prevent DMA to RAM banks that do not support fast DMA cycles.
+> Apparently gvp11_setup() became unused in 2.3.13pre2 (in 1999), when all
+> *_setup() functions were removed from init/main.c, and some of them were
+> reimplemented using __setup() in the driver sources where they belonged.
+
+But that wasn't done for gvp11_setup() ...
+
+>>>> +module_param(gvp11_xfer_mask,  int, 0444);
+>>>> +MODULE_PARM_DESC(gvp11_xfer_mask, "DMA mask (0xff000000 == 24 bit DMA)");
+>>>> +
+>>> I think the comment is the wrong way round, it should be
+>>> 0x00ffffff in this case, which also matches the default
+>>> mask for ZORRO_PROD_GVP_SERIES_II, in the match table:
+>>>
+>>> static struct zorro_device_id gvp11_zorro_tbl[] = {
+>>>          { ZORRO_PROD_GVP_COMBO_030_R3_SCSI,     ~0x00ffffff },
+>>>          { ZORRO_PROD_GVP_SERIES_II,             ~0x00ffffff },
+>>>          { ZORRO_PROD_GVP_GFORCE_030_SCSI,       ~0x01ffffff },
+>>>          { ZORRO_PROD_GVP_A530_SCSI,             ~0x01ffffff },
+>>>          { ZORRO_PROD_GVP_COMBO_030_R4_SCSI,     ~0x01ffffff },
+>>>          { ZORRO_PROD_GVP_A1291,                 ~0x07ffffff },
+>>>          { ZORRO_PROD_GVP_GFORCE_040_SCSI_1,     ~0x07ffffff },
+>>>          { 0 }
+>>> };
 >
-> from Geert's reply. I can add that. It just did sound a shade
-> speculative...
+> The default masks above were added (in some other form) in 2.1.91pre1
+> (in 1998).  Before, people had to use gvp11_setup() to do that.
 
-Apparently gvp11_setup() became unused in 2.3.13pre2 (in 1999), when all
-*_setup() functions were removed from init/main.c, and some of them were
-reimplemented using __setup() in the driver sources where they belonged.
+... because gvp11_setup() was already obsolete.
 
-> >> +module_param(gvp11_xfer_mask,  int, 0444);
-> >> +MODULE_PARM_DESC(gvp11_xfer_mask, "DMA mask (0xff000000 == 24 bit DMA)");
-> >> +
-> > I think the comment is the wrong way round, it should be
-> > 0x00ffffff in this case, which also matches the default
-> > mask for ZORRO_PROD_GVP_SERIES_II, in the match table:
-> >
-> > static struct zorro_device_id gvp11_zorro_tbl[] = {
-> >          { ZORRO_PROD_GVP_COMBO_030_R3_SCSI,     ~0x00ffffff },
-> >          { ZORRO_PROD_GVP_SERIES_II,             ~0x00ffffff },
-> >          { ZORRO_PROD_GVP_GFORCE_030_SCSI,       ~0x01ffffff },
-> >          { ZORRO_PROD_GVP_A530_SCSI,             ~0x01ffffff },
-> >          { ZORRO_PROD_GVP_COMBO_030_R4_SCSI,     ~0x01ffffff },
-> >          { ZORRO_PROD_GVP_A1291,                 ~0x07ffffff },
-> >          { ZORRO_PROD_GVP_GFORCE_040_SCSI_1,     ~0x07ffffff },
-> >          { 0 }
-> > };
+Thanks for dredging up that bit of history!
 
-The default masks above were added (in some other form) in 2.1.91pre1
-(in 1998).  Before, people had to use gvp11_setup() to do that.
+> So I think it is safe to assume there is no longer a need to configure
+> this manually.
 
-So I think it is safe to assume there is no longer a need to configure
-this manually.
+I'll take your word for that. No need to apply this patch, then!
 
-Gr{oetje,eeting}s,
+(Apologies for the noise, Arnd ...)
 
-                        Geert
+Cheers,
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+	Michael
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+
+
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
