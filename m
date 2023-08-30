@@ -2,118 +2,166 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68F078DB04
-	for <lists+linux-scsi@lfdr.de>; Wed, 30 Aug 2023 20:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7ED678DAF7
+	for <lists+linux-scsi@lfdr.de>; Wed, 30 Aug 2023 20:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237666AbjH3SiT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 30 Aug 2023 14:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
+        id S238027AbjH3SiO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 30 Aug 2023 14:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244484AbjH3NOW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 30 Aug 2023 09:14:22 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9DA137
-        for <linux-scsi@vger.kernel.org>; Wed, 30 Aug 2023 06:14:11 -0700 (PDT)
-X-UUID: 18d4833a473711eeb20a276fd37b9834-20230830
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=wFdRmdpCsZ45j7y1oLGMF8enjtWZ4nVcCl66VJ08MF4=;
-        b=AcgEO7r5wXlwCKO2F9LEocZMAxRs65127Z2ZIJXp+hdpymBzh2LtgMNxwenMyDnfyrIa3PPAJEuQj18DprI+gWLcinmh2Q4myKUs1JiEunaAQ47fUmFvTiNb2AT8PL9wKQjzLVfpre4PIMYonMCuHGg9Ho/qb51Yci/xA02Smk4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.31,REQID:e4236f58-8831-4ad0-86c3-526a705c2c53,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:0ad78a4,CLOUDID:6d1e1fef-9a6e-4c39-b73e-f2bc08ca3dc5,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
-        NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: 18d4833a473711eeb20a276fd37b9834-20230830
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <peter.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1139075060; Wed, 30 Aug 2023 21:14:06 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 30 Aug 2023 21:14:04 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 30 Aug 2023 21:14:04 +0800
-From:   <peter.wang@mediatek.com>
-To:     <stanley.chu@mediatek.com>, <linux-scsi@vger.kernel.org>,
-        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
-        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
-CC:     <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
-        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <powen.kao@mediatek.com>, <qilin.tan@mediatek.com>,
-        <lin.gui@mediatek.com>, <tun-yu.yu@mediatek.com>,
-        <eddie.huang@mediatek.com>, <naomi.chu@mediatek.com>
-Subject: [PATCH v1] ufs: core: fix runtime pm with uic error(NON_FATAL) hang
-Date:   Wed, 30 Aug 2023 21:14:03 +0800
-Message-ID: <20230830131403.14193-1-peter.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        with ESMTP id S245603AbjH3PkM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 30 Aug 2023 11:40:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78CA122
+        for <linux-scsi@vger.kernel.org>; Wed, 30 Aug 2023 08:40:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8A4632184D;
+        Wed, 30 Aug 2023 15:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1693410007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+EZtLZVfROJEjOqLL0PBCzbAq8vbRSHlU8SCbSJGe/A=;
+        b=EHIAHbK5ZH/WtbztoUhEL5ZUq9iq1Cz+xMmE7vELe6A7c6WlBC8T/1tAAXJErPq6QjCNsi
+        r+DKWm/wFJ7Nv5boHRlBBcI0oR9wJ4r0TwxVfOw0Cy9Ho1AMNWEoDKYHptZLdaEQZ+DWWI
+        FzF7zSkVT8qXRsHGOsC94uflcgTfrqI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 19DC613441;
+        Wed, 30 Aug 2023 15:40:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Eg3HBNdi72TvNAAAMHmgww
+        (envelope-from <mwilck@suse.com>); Wed, 30 Aug 2023 15:40:07 +0000
+Message-ID: <c5716074eb67693570b7eadac47561f6c601aa7b.camel@suse.com>
+Subject: Re: [PATCH] scsi: core: Remove ACTION_RETRY since it is redundant
+From:   Martin Wilck <mwilck@suse.com>
+To:     Brian Bunker <brian@purestorage.com>, linux-scsi@vger.kernel.org
+Cc:     Krishna Kant <krishna.kant@purestorage.com>,
+        Seamus Connor <sconnor@purestorage.com>
+Date:   Wed, 30 Aug 2023 17:40:06 +0200
+In-Reply-To: <20220901214749.18875-1-brian@purestorage.com>
+References: <20220901214749.18875-1-brian@purestorage.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Peter Wang <peter.wang@mediatek.com>
+On Thu, 2022-09-01 at 14:47 -0700, Brian Bunker wrote:
+> The case of ACTION_RETRY in scsi_io_completion_action does nothing
+> different than ACTION_DELAYED_RETRY, and by name gives the idea
+> that it does.
+>=20
+> Following ACTION_RETRY:
+> __scsi_queue_insert(cmd, SCSI_MLQUEUE_EH_RETRY, false);
+>=20
+> Following ACTION_DELAYED_RETRY:
+> __scsi_queue_insert(cmd, SCSI_MLQUEUE_DEVICE_BUSY, false);
+>=20
+> Then __scsi_queue_insert calls scsi_set_blocked(cmd, reason) where
+> both of the reasons set by ACTION_RETRY and ACTION_DELAYED_RETRY
+> fall into the same case.
+>=20
+> =A0=A0=A0 case SCSI_MLQUEUE_DEVICE_BUSY:
+> =A0=A0=A0 case SCSI_MLQUEUE_EH_RETRY:
+> =A0=A0=A0=A0=A0=A0=A0 atomic_set(&device->device_blocked,
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 device->max_device_blocked);
+> =A0=A0=A0=A0=A0=A0=A0 break;
+>=20
+> Acked-by: Krishna Kant <krishna.kant@purestorage.com>
+> Acked-by: Seamus Connor <sconnor@purestorage.com>
+> Signed-off-by: Brian Bunker <brian@purestorage.com>
 
-When uic error (NON_FATAL) happen in runtime pm flow, ufshcd_err_handler
-stuck in ufshcd_rpm_get_sync, but runtime pm(suspend or resume) stuck in
-send SSU(sleep or active) which always get SCSI_MLQUEUE_HOST_BUSY.
+I like this, but I would suggest to keep ACTION_RETRY and ditch
+ACTION_DELAYED_RETRY instead. The retry isn't delayed in the usual
+sense of the word (which would imply some sort of time interval). We
+just wait for the device_blocked counter to go to zero.
 
-This patch try to solve this deadlock:
-1. Return error to break runtime suspend let err handler going, same as
-   UFSHCD_STATE_EH_SCHEDULED_FATAL do.
-2. Try do recovery if SSU(active) fail when resume, prevent resume
-   return fail which casue IO hang.
+Thanks,
+Martin
 
-Signed-off-by: Peter Wang <peter.wang@mediatek.com>
----
- drivers/ufs/core/ufshcd.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 129446775796..bc30a0842277 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -2863,6 +2863,14 @@ static int ufshcd_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 		 * being issued in that case.
- 		 */
- 		if (ufshcd_eh_in_progress(hba)) {
-+			/* Same as UFSHCD_STATE_EH_SCHEDULED_FATAL */
-+			if (hba->pm_op_in_progress) {
-+				hba->force_reset = true;
-+				set_host_byte(cmd, DID_BAD_TARGET);
-+				scsi_done(cmd);
-+				goto out;
-+			}
-+
- 			err = SCSI_MLQUEUE_HOST_BUSY;
- 			goto out;
- 		}
-@@ -9784,6 +9792,9 @@ static int __ufshcd_wl_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- 
- 	if (!ufshcd_is_ufs_dev_active(hba)) {
- 		ret = ufshcd_set_dev_pwr_mode(hba, UFS_ACTIVE_PWR_MODE);
-+		/* Try prevent return error, else IO hang */
-+		if (ret)
-+			ret = ufshcd_link_recovery(hba);
- 		if (ret)
- 			goto set_old_link_state;
- 		ufshcd_set_timestamp_attr(hba);
--- 
-2.18.0
+> ---
+> =A0drivers/scsi/scsi_lib.c | 10 +++-------
+> =A01 file changed, 3 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> index ef08029a0079..d85d72bc01f2 100644
+> --- a/drivers/scsi/scsi_lib.c
+> +++ b/drivers/scsi/scsi_lib.c
+> @@ -687,7 +687,7 @@ static void scsi_io_completion_action(struct
+> scsi_cmnd *cmd, int result)
+> =A0=A0=A0=A0=A0=A0=A0=A0struct request *req =3D scsi_cmd_to_rq(cmd);
+> =A0=A0=A0=A0=A0=A0=A0=A0int level =3D 0;
+> =A0=A0=A0=A0=A0=A0=A0=A0enum {ACTION_FAIL, ACTION_REPREP, ACTION_DELAYED_=
+REPREP,
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ACTION_RETRY, ACTION_DELAYED_RETRY}=
+ action;
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ACTION_DELAYED_RETRY} action;
+> =A0=A0=A0=A0=A0=A0=A0=A0struct scsi_sense_hdr sshdr;
+> =A0=A0=A0=A0=A0=A0=A0=A0bool sense_valid;
+> =A0=A0=A0=A0=A0=A0=A0=A0bool sense_current =3D true;=A0=A0=A0=A0=A0 /* fa=
+lse implies "deferred
+> sense" */
+> @@ -704,7 +704,7 @@ static void scsi_io_completion_action(struct
+> scsi_cmnd *cmd, int result)
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * reasons.=A0 Just retry=
+ the command and see what
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * happens.
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 */
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0action =3D ACTION_RETRY;
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0action =3D ACTION_DELAYED_R=
+ETRY;
+> =A0=A0=A0=A0=A0=A0=A0=A0} else if (sense_valid && sense_current) {
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0switch (sshdr.sense_key) =
+{
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0case UNIT_ATTENTION:
+> @@ -720,7 +720,7 @@ static void scsi_io_completion_action(struct
+> scsi_cmnd *cmd, int result)
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0 * media change, so we just retry the
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0 * command and see what happens.
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0 */
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0action =3D ACTION_RETRY;
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0action =3D ACTION_DELAYED_RETRY;
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0}
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0b=
+reak;
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0case ILLEGAL_REQUEST:
+> @@ -841,10 +841,6 @@ static void scsi_io_completion_action(struct
+> scsi_cmnd *cmd, int result)
+> =A0=A0=A0=A0=A0=A0=A0=A0case ACTION_DELAYED_REPREP:
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0scsi_mq_requeue_cmd(cmd,
+> ALUA_TRANSITION_REPREP_DELAY);
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0break;
+> -=A0=A0=A0=A0=A0=A0=A0case ACTION_RETRY:
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0/* Retry the same command i=
+mmediately */
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0__scsi_queue_insert(cmd, SC=
+SI_MLQUEUE_EH_RETRY,
+> false);
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0break;
+> =A0=A0=A0=A0=A0=A0=A0=A0case ACTION_DELAYED_RETRY:
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0/* Retry the same command=
+ after a delay */
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0__scsi_queue_insert(cmd, =
+SCSI_MLQUEUE_DEVICE_BUSY,
+> false);
 
