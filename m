@@ -2,81 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA31A78DFA0
-	for <lists+linux-scsi@lfdr.de>; Wed, 30 Aug 2023 22:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 113EF78E093
+	for <lists+linux-scsi@lfdr.de>; Wed, 30 Aug 2023 22:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235190AbjH3UCm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 30 Aug 2023 16:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41432 "EHLO
+        id S236675AbjH3U0Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 30 Aug 2023 16:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240271AbjH3UCT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 30 Aug 2023 16:02:19 -0400
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B255583;
-        Wed, 30 Aug 2023 12:40:19 -0700 (PDT)
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-56c250ff3d3so867397a12.1;
-        Wed, 30 Aug 2023 12:40:19 -0700 (PDT)
+        with ESMTP id S239077AbjH3U0K (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 30 Aug 2023 16:26:10 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC52ECD21
+        for <linux-scsi@vger.kernel.org>; Wed, 30 Aug 2023 12:53:13 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1bf078d5f33so211665ad.3
+        for <linux-scsi@vger.kernel.org>; Wed, 30 Aug 2023 12:53:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693424337; x=1694029137;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1693424822; x=1694029622;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CR9I2i6YoovH+Nf5pBi25Hodk4wassi7ylHcTtnLMW8=;
-        b=VnxkcJRINgm84OD1hwa2gbqnqBeT0L28grUSdXktN+yZRjiJvLREqo9z7yaNsbMiFV
-         swYAB7ckiXpssPNrMi6Com9Rf8NrS830HGburcdiS9tAILqzTaPI+7DH5Cstxsbcz003
-         vKnZ5vjZwm657FcwildornPwGyLjhDumV4+wfYFf51rV1Beq1/rS8toFzSAHjo1r7fLt
-         FQDD+Bfi76vQhIeelZFPxvo4MbYCs6jveAGBOnBviSpwTDOXqs25A4A1Nnn95yXGD0lE
-         Eged4qRrWRltdB/55UV4bRfxOR20ayLiLaHp/M5D8jTCQf8XLCJj4LCFMc/91GtR7ij3
-         IHlg==
-X-Gm-Message-State: AOJu0YyReSMJnjG0sDOwJ9DwYYmfpHlAdkXzRToLfJwijNqaKW6sF4D9
-        Tij5hC8DPOnoeB+NZMxTJlY=
-X-Google-Smtp-Source: AGHT+IEMkD7LBhPJ9+HJdISFd6EY9ZjdLrfOHZ66KaPMe+Pg928eKQNzSoNyCNP742Z4ijtOKNh1pw==
-X-Received: by 2002:a17:90a:8b18:b0:268:b54:7c13 with SMTP id y24-20020a17090a8b1800b002680b547c13mr915163pjn.9.1693424337129;
-        Wed, 30 Aug 2023 12:38:57 -0700 (PDT)
+        bh=Q7uxS6jFbfP3ewnHJ55rgEk1lcD4TZvwx/MvbvZ9/xs=;
+        b=YgCLE1R4s2pOMSf3QG+MpjwtTLk1Lg5j5MtSGMgzwlPMk4DFMuk/YauD4hC8z3hKbm
+         u+0Ez+2pavUcdxbtfg10VGrzEP8jili1QtvbexqiP8wENZMhfeMOxsxo1NE5cpDDHvlW
+         IgEijs3NrjXhAD2feFX28bdgYo7xXuz550FbZrNuRQtODwTcrMZBc1aekLj2Hacu4RZa
+         4u+uFeKDiyjlW5IpZkylp7O9TuYT4X5GEV0vpnUMjtUqih6BtBescatRtQZOdGNuJQbj
+         pV1J1b4P7fzrS8c9ZftlXZAi/mCaNqQm9kT9c+Lz48f986LR5y2orQ3nG19KT0MlbPq4
+         otUQ==
+X-Gm-Message-State: AOJu0Yz+bZQJsPAY1H7YruqM7dalbBcsFhbMWpLf6IemT6XRlBfn9CNS
+        ajxiesmg3hr4gf4OfeZtTN4d0Rmm2Og=
+X-Google-Smtp-Source: AGHT+IFzfrpd0+O4IZE90kBv0R8G1oWwBoCEhJ57vyOKcHcq8Wll43vHKGECUr55ZT76Ox9+eyURhQ==
+X-Received: by 2002:a05:6830:1dad:b0:6b8:8f20:4cbc with SMTP id z13-20020a0568301dad00b006b88f204cbcmr3250425oti.13.1693424400868;
+        Wed, 30 Aug 2023 12:40:00 -0700 (PDT)
 Received: from [172.20.4.71] ([208.98.210.70])
-        by smtp.gmail.com with ESMTPSA id i25-20020a633c59000000b0055bf13811f5sm10542568pgn.15.2023.08.30.12.38.56
+        by smtp.gmail.com with ESMTPSA id i25-20020a633c59000000b0055bf13811f5sm10542568pgn.15.2023.08.30.12.39.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 12:38:56 -0700 (PDT)
-Message-ID: <fd3f2d60-a0e4-4acf-ba1c-3506bc002f94@acm.org>
-Date:   Wed, 30 Aug 2023 12:38:56 -0700
+        Wed, 30 Aug 2023 12:40:00 -0700 (PDT)
+Message-ID: <e2e7ad5b-a588-4c2c-8335-97d8e6b87368@acm.org>
+Date:   Wed, 30 Aug 2023 12:39:59 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From:   Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH -next] scsi: fnic: Remove unused function
- fnic_scsi_host_start/end_tag()
-To:     Yang Li <yang.lee@linux.alibaba.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, satishkh@cisco.com, sebaddel@cisco.com,
-        kartilak@cisco.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230829010222.33393-1-yang.lee@linux.alibaba.com>
+Subject: Re: [PATCH v1 1/3] ufs: core: only suspend clock scaling if scale
+ down
 Content-Language: en-US
-In-Reply-To: <20230829010222.33393-1-yang.lee@linux.alibaba.com>
+To:     peter.wang@mediatek.com, stanley.chu@mediatek.com,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        avri.altman@wdc.com, alim.akhtar@samsung.com, jejb@linux.ibm.com
+Cc:     wsd_upstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
+        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
+        jiajie.hao@mediatek.com, powen.kao@mediatek.com,
+        qilin.tan@mediatek.com, lin.gui@mediatek.com,
+        tun-yu.yu@mediatek.com, eddie.huang@mediatek.com,
+        naomi.chu@mediatek.com
+References: <20230823092948.22734-1-peter.wang@mediatek.com>
+ <20230823092948.22734-2-peter.wang@mediatek.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230823092948.22734-2-peter.wang@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/28/23 18:02, Yang Li wrote:
-> The function fnic_scsi_host_start_tag() and fnic_scsi_host_end_tag()
-> are not used anywhere, so remove them.
+On 8/23/23 02:29, peter.wang@mediatek.com wrote:
+> If clock scale up and suspend clock scaling, ufs will keep high
+> performance/power mode but no read/write requests on going.
+> It is logic wrong and have power concern.
 
-Are you sure? I think the following output shows that these are being
-used:
-
-$ git grep -nHEw 'fnic_scsi_host_(start|end)_tag'
-drivers/scsi/fnic/fnic_scsi.c:2171: * fnic_scsi_host_start_tag
-drivers/scsi/fnic/fnic_scsi.c:2175:fnic_scsi_host_start_tag(struct fnic *fnic, struct scsi_cmnd *sc)
-drivers/scsi/fnic/fnic_scsi.c:2192: * fnic_scsi_host_end_tag
-drivers/scsi/fnic/fnic_scsi.c:2193: * frees tag allocated by fnic_scsi_host_start_tag.
-drivers/scsi/fnic/fnic_scsi.c:2196:fnic_scsi_host_end_tag(struct fnic *fnic, struct scsi_cmnd *sc)
-drivers/scsi/fnic/fnic_scsi.c:2262:		tag = fnic_scsi_host_start_tag(fnic, sc);
-drivers/scsi/fnic/fnic_scsi.c:2439:		fnic_scsi_host_end_tag(fnic, sc);
-
-Bart.
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
