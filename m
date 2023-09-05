@@ -2,178 +2,163 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E30F79261F
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Sep 2023 18:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C38A7925B2
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Sep 2023 18:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236064AbjIEQGQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Sep 2023 12:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
+        id S237976AbjIEQFT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Sep 2023 12:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343933AbjIEC5a (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Sep 2023 22:57:30 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA37CCB;
-        Mon,  4 Sep 2023 19:57:25 -0700 (PDT)
-Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Rfqp021wczNnB3;
-        Tue,  5 Sep 2023 10:53:44 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Tue, 5 Sep 2023 10:57:23 +0800
-From:   Xingui Yang <yangxingui@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <john.g.garry@oracle.com>, <damien.lemoal@opensource.wdc.com>
-CC:     <andriy.shevchenko@linux.intel.com>, <akpm@linux-foundation.org>,
-        <viro@zeniv.linux.org.uk>, <himanshu.madhani@cavium.com>,
-        <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <uma.shankar@intel.com>, <anshuman.gupta@intel.com>,
-        <animesh.manna@intel.com>, <linux-usb@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
-        <prime.zeng@hisilicon.com>, <kangfenglong@huawei.com>,
-        <chenxiang66@hisilicon.com>
-Subject: [PATCH v6 3/3] scsi: qla2xxx: Use DEFINE_SHOW_STORE_ATTRIBUTE() helper for debugfs
-Date:   Tue, 5 Sep 2023 02:48:35 +0000
-Message-ID: <20230905024835.43219-4-yangxingui@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230905024835.43219-1-yangxingui@huawei.com>
-References: <20230905024835.43219-1-yangxingui@huawei.com>
+        with ESMTP id S1350510AbjIEFEI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Sep 2023 01:04:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFFFCC5
+        for <linux-scsi@vger.kernel.org>; Mon,  4 Sep 2023 22:03:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1693890189;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QF++iXxEZpFrQCnUt3ZrjX7wcQsJCw0Lcgs8IhL6Xus=;
+        b=A9MmwfG5tdrl+fR56NHgsk3QBgp3NsartWRthBTENO+D912ARdcGoIaF1ciLoRhUSSOO/x
+        arO2kP072ljyc8myQCP81rzY4TkojiBIcp+VIGSg7+wKJrhzvGtiNq1uo/ij4xl1NDxQ0d
+        VXMTwloDa4LtTMqh7HmxJLesTz0dwtg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-625-4rUGPEBPMYipOttOl5wP7g-1; Tue, 05 Sep 2023 01:03:06 -0400
+X-MC-Unique: 4rUGPEBPMYipOttOl5wP7g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B587B1817904;
+        Tue,  5 Sep 2023 05:03:05 +0000 (UTC)
+Received: from localhost (unknown [10.72.113.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B496340C6CCC;
+        Tue,  5 Sep 2023 05:03:04 +0000 (UTC)
+Date:   Tue, 5 Sep 2023 13:03:01 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Hari Bathini <hbathini@linux.ibm.com>, mpe@ellerman.id.au
+Cc:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Pingfan Liu <piliu@redhat.com>, Dave Young <dyoung@redhat.com>,
+        npiggin@gmail.com, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        Wen Xiong <wenxiong@linux.ibm.com>, kexec@lists.infradead.org,
+        Keith Busch <kbusch@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        Christoph Hellwig <hch@lst.de>,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>
+Subject: Re: [PATCH V3 01/14] blk-mq: add blk_mq_max_nr_hw_queues()
+Message-ID: <ZPa2hbRQUdFRNqr9@MiWiFi-R3L-srv>
+References: <20230808104239.146085-1-ming.lei@redhat.com>
+ <20230808104239.146085-2-ming.lei@redhat.com>
+ <20230809134401.GA31852@lst.de>
+ <ZNQqt1C0pXspGl3d@fedora>
+ <ZNQ64xhCIBU6XM/5@MiWiFi-R3L-srv>
+ <ZNRGNsRzEJfzUEzH@fedora>
+ <ZNRTGrRuwf69EgnE@MiWiFi-R3L-srv>
+ <772c4140-3035-16d8-0253-f5893c3698e2@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500012.china.huawei.com (7.185.36.89)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <772c4140-3035-16d8-0253-f5893c3698e2@linux.ibm.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_NONE,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use DEFINE_SHOW_STORE_ATTRIBUTE() helper for read-write file to reduce some
-duplicated code.
+Hi Hari, Michael
 
-Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
-Co-developed-by: Xingui Yang <yangxingui@huawei.com>
-Signed-off-by: Xingui Yang <yangxingui@huawei.com>
----
- drivers/scsi/qla2xxx/qla_dfs.c | 59 ++++------------------------------
- 1 file changed, 7 insertions(+), 52 deletions(-)
+On 08/11/23 at 01:23pm, Hari Bathini wrote:
+> 
+> 
+> On 10/08/23 8:31 am, Baoquan He wrote:
+> > On 08/10/23 at 10:06am, Ming Lei wrote:
+> > > On Thu, Aug 10, 2023 at 09:18:27AM +0800, Baoquan He wrote:
+> > > > On 08/10/23 at 08:09am, Ming Lei wrote:
+> > > > > On Wed, Aug 09, 2023 at 03:44:01PM +0200, Christoph Hellwig wrote:
+> > > > > > I'm starting to sound like a broken record, but we can't just do random
+> > > > > > is_kdump checks, and it's not going to get better by resending it again and
+> > > > > > again.  If kdump kernels limit the number of possible CPUs, it needs to
+> > > > > > reflected in cpu_possible_map and we need to use that information.
+> > > > > > 
+> > > > > 
+> > > > > Can you look at previous kdump/arch guys' comment about kdump usage &
+> > > > > num_possible_cpus?
+> > > > > 
+> > > > >      https://lore.kernel.org/linux-block/CAF+s44RuqswbosY9kMDx35crviQnxOeuvgNsuE75Bb0Y2Jg2uw@mail.gmail.com/
+> > > > >      https://lore.kernel.org/linux-block/ZKz912KyFQ7q9qwL@MiWiFi-R3L-srv/
+> > > > > 
+> > > > > The point is that kdump kernels does not limit the number of possible CPUs.
+> > > > > 
+> > > > > 1) some archs support 'nr_cpus=1' for kdump kernel, which is fine, since
+> > > > > num_possible_cpus becomes 1.
+> > > > 
+> > > > Yes, "nr_cpus=" is strongly suggested in kdump kernel because "nr_cpus="
+> > > > limits the possible cpu numbers, while "maxcpuss=" only limits the cpu
+> > > > number which can be brought up during bootup. We noticed this diference
+> > > > because a large number of possible cpus will cost more memory in kdump
+> > > > kernel. e.g percpu initialization, even though kdump kernel have set
+> > > > "maxcpus=1".
+> > > > 
+> > > > Currently x86 and arm64 all support "nr_cpus=". Pingfan ever spent much
+> > > > effort to make patches to add "nr_cpus=" support to ppc64, seems ppc64
+> > > > dev and maintainers do not care about it. Finally the patches are not
+> > > > accepted, and the work is not continued.
+> > > > 
+> > > > Now, I am wondering what is the barrier to add "nr_cpus=" to power ach.
+> > > > Can we reconsider adding 'nr_cpus=' to power arch since real issue
+> > > > occurred in kdump kernel?
+> > > 
+> > > If 'nr_cpus=' can be supported on ppc64, this patchset isn't needed.
+> > > 
+> > > > 
+> > > > As for this patchset, it can be accpeted so that no failure in kdump
+> > > > kernel is seen on ARCHes w/o "nr_cpus=" support? My personal opinion.
+> > > 
+> > > IMO 'nr_cpus=' support should be preferred, given it is annoying to
+> > > maintain two kinds of implementation for kdump kernel from driver
+> > > viewpoint. I guess kdump things can be simplified too with supporting
+> > > 'nr_cpus=' only.
+> > 
+> > Yes, 'nr_cpus=' is ideal. Not sure if there's some underlying concerns so
+> > that power people decided to not support it.
+> 
+> Though "nr_cpus=1" is an ideal solution, maintainer was not happy with
+> the patch as the code changes have impact for regular boot path and
+> it is likely to cause breakages. So, even if "nr_cpus=1" support for
+> ppc64 is revived, the change is going to take time to be accepted
+> upstream.
 
-diff --git a/drivers/scsi/qla2xxx/qla_dfs.c b/drivers/scsi/qla2xxx/qla_dfs.c
-index f060e593685d..debb14d71e8a 100644
---- a/drivers/scsi/qla2xxx/qla_dfs.c
-+++ b/drivers/scsi/qla2xxx/qla_dfs.c
-@@ -528,51 +528,22 @@ qla_dfs_naqp_show(struct seq_file *s, void *unused)
-  *
-  * Example for creating "TEST" sysfs file:
-  * 1. struct qla_hw_data { ... struct dentry *dfs_TEST; }
-- * 2. QLA_DFS_SETUP_RD(TEST, scsi_qla_host_t);
-+ * 2. QLA_DFS_SETUP_RD(TEST);
-  * 3. In qla2x00_dfs_setup():
-  * QLA_DFS_CREATE_FILE(ha, TEST, 0600, ha->dfs_dir, vha);
-  * 4. In qla2x00_dfs_remove():
-  * QLA_DFS_REMOVE_FILE(ha, TEST);
-  */
--#define QLA_DFS_SETUP_RD(_name, _ctx_struct)				\
--static int								\
--qla_dfs_##_name##_open(struct inode *inode, struct file *file)		\
--{									\
--	_ctx_struct *__ctx = inode->i_private;				\
--									\
--	return single_open(file, qla_dfs_##_name##_show, __ctx);	\
--}									\
--									\
--static const struct file_operations qla_dfs_##_name##_ops = {		\
--	.open           = qla_dfs_##_name##_open,			\
--	.read           = seq_read,					\
--	.llseek         = seq_lseek,					\
--	.release        = single_release,				\
--};
-+#define QLA_DFS_SETUP_RD(_name)	DEFINE_SHOW_ATTRIBUTE(qla_dfs_##_name)
- 
--#define QLA_DFS_SETUP_RW(_name, _ctx_struct)				\
--static int								\
--qla_dfs_##_name##_open(struct inode *inode, struct file *file)		\
--{									\
--	_ctx_struct *__ctx = inode->i_private;				\
--									\
--	return single_open(file, qla_dfs_##_name##_show, __ctx);	\
--}									\
--									\
--static const struct file_operations qla_dfs_##_name##_ops = {		\
--	.open           = qla_dfs_##_name##_open,			\
--	.read           = seq_read,					\
--	.llseek         = seq_lseek,					\
--	.release        = single_release,				\
--	.write		= qla_dfs_##_name##_write,			\
--};
-+#define QLA_DFS_SETUP_RW(_name)	DEFINE_SHOW_STORE_ATTRIBUTE(qla_dfs_##_name)
- 
- #define QLA_DFS_ROOT_CREATE_FILE(_name, _perm, _ctx)			\
- 	do {								\
- 		if (!qla_dfs_##_name)					\
- 			qla_dfs_##_name = debugfs_create_file(#_name,	\
- 					_perm, qla2x00_dfs_root, _ctx,	\
--					&qla_dfs_##_name##_ops);	\
-+					&qla_dfs_##_name##_fops);	\
- 	} while (0)
- 
- #define QLA_DFS_ROOT_REMOVE_FILE(_name)					\
-@@ -587,7 +558,7 @@ static const struct file_operations qla_dfs_##_name##_ops = {		\
- 	do {								\
- 		(_struct)->dfs_##_name = debugfs_create_file(#_name,	\
- 					_perm, _parent, _ctx,		\
--					&qla_dfs_##_name##_ops)		\
-+					&qla_dfs_##_name##_fops)	\
- 	} while (0)
- 
- #define QLA_DFS_REMOVE_FILE(_struct, _name)				\
-@@ -598,14 +569,6 @@ static const struct file_operations qla_dfs_##_name##_ops = {		\
- 		}							\
- 	} while (0)
- 
--static int
--qla_dfs_naqp_open(struct inode *inode, struct file *file)
--{
--	struct scsi_qla_host *vha = inode->i_private;
--
--	return single_open(file, qla_dfs_naqp_show, vha);
--}
--
- static ssize_t
- qla_dfs_naqp_write(struct file *file, const char __user *buffer,
-     size_t count, loff_t *pos)
-@@ -653,15 +616,7 @@ qla_dfs_naqp_write(struct file *file, const char __user *buffer,
- 	kfree(buf);
- 	return rc;
- }
--
--static const struct file_operations dfs_naqp_ops = {
--	.open		= qla_dfs_naqp_open,
--	.read		= seq_read,
--	.llseek		= seq_lseek,
--	.release	= single_release,
--	.write		= qla_dfs_naqp_write,
--};
--
-+QLA_DFS_SETUP_RW(naqp);
- 
- int
- qla2x00_dfs_setup(scsi_qla_host_t *vha)
-@@ -707,7 +662,7 @@ qla2x00_dfs_setup(scsi_qla_host_t *vha)
- 
- 	if (IS_QLA27XX(ha) || IS_QLA83XX(ha) || IS_QLA28XX(ha)) {
- 		ha->tgt.dfs_naqp = debugfs_create_file("naqp",
--		    0400, ha->dfs_dir, vha, &dfs_naqp_ops);
-+		    0400, ha->dfs_dir, vha, &qla_dfs_naqp_fops);
- 		if (!ha->tgt.dfs_naqp) {
- 			ql_log(ql_log_warn, vha, 0xd011,
- 			       "Unable to create debugFS naqp node.\n");
--- 
-2.17.1
+I talked to pingfan recently, he said he posted patches to add 'nr_cpus='
+support in powerpc in order to reduce memory amount for kdump kernel.
+His patches were rejected by maintainer because maintainer thought the
+reason is not sufficient. So up to now, in architectures fedora/RHEL
+supports to provide default crashkernel reservation value, powerpc costs
+most. Now with this emerging issue, can we reconsider supporting
+'nr_cpus=' in powerpc?
+
+> 
+> Also, I see is_kdump_kernel() being used irrespective of "nr_cpus=1"
+> support for other optimizations in the driver for the special dump
+> capture environment kdump is.
+> 
+> If there is no other downside for driver code, to use is_kdump_kernel(),
+> other than the maintainability aspect, I think the above changes are
+> worth considering.
+
+Hi Hari,
+
+By the way, will you use the ppc specific is_kdump_kernel() and
+is_crashdump_kernel() in your patches to fix this issue?
+
+Thanks
+Baoquan
 
