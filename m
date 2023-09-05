@@ -2,163 +2,306 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C38A7925B2
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Sep 2023 18:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD8E79256B
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Sep 2023 18:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237976AbjIEQFT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Sep 2023 12:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
+        id S238553AbjIEQG0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Sep 2023 12:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350510AbjIEFEI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Sep 2023 01:04:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFFFCC5
-        for <linux-scsi@vger.kernel.org>; Mon,  4 Sep 2023 22:03:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1693890189;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QF++iXxEZpFrQCnUt3ZrjX7wcQsJCw0Lcgs8IhL6Xus=;
-        b=A9MmwfG5tdrl+fR56NHgsk3QBgp3NsartWRthBTENO+D912ARdcGoIaF1ciLoRhUSSOO/x
-        arO2kP072ljyc8myQCP81rzY4TkojiBIcp+VIGSg7+wKJrhzvGtiNq1uo/ij4xl1NDxQ0d
-        VXMTwloDa4LtTMqh7HmxJLesTz0dwtg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-4rUGPEBPMYipOttOl5wP7g-1; Tue, 05 Sep 2023 01:03:06 -0400
-X-MC-Unique: 4rUGPEBPMYipOttOl5wP7g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S1351425AbjIEFUf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Sep 2023 01:20:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0512184;
+        Mon,  4 Sep 2023 22:20:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B587B1817904;
-        Tue,  5 Sep 2023 05:03:05 +0000 (UTC)
-Received: from localhost (unknown [10.72.113.126])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B496340C6CCC;
-        Tue,  5 Sep 2023 05:03:04 +0000 (UTC)
-Date:   Tue, 5 Sep 2023 13:03:01 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Hari Bathini <hbathini@linux.ibm.com>, mpe@ellerman.id.au
-Cc:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Pingfan Liu <piliu@redhat.com>, Dave Young <dyoung@redhat.com>,
-        npiggin@gmail.com, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        Wen Xiong <wenxiong@linux.ibm.com>, kexec@lists.infradead.org,
-        Keith Busch <kbusch@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        Christoph Hellwig <hch@lst.de>,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>
-Subject: Re: [PATCH V3 01/14] blk-mq: add blk_mq_max_nr_hw_queues()
-Message-ID: <ZPa2hbRQUdFRNqr9@MiWiFi-R3L-srv>
-References: <20230808104239.146085-1-ming.lei@redhat.com>
- <20230808104239.146085-2-ming.lei@redhat.com>
- <20230809134401.GA31852@lst.de>
- <ZNQqt1C0pXspGl3d@fedora>
- <ZNQ64xhCIBU6XM/5@MiWiFi-R3L-srv>
- <ZNRGNsRzEJfzUEzH@fedora>
- <ZNRTGrRuwf69EgnE@MiWiFi-R3L-srv>
- <772c4140-3035-16d8-0253-f5893c3698e2@linux.ibm.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67259B8109E;
+        Tue,  5 Sep 2023 05:20:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD10C433C7;
+        Tue,  5 Sep 2023 05:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693891226;
+        bh=f5WOGsoXqWS1m124AKwJbahncSQbHKdoPW6lNrOmqK0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fMmAgWLMEGrofS7H0q4grbWH9cGRJvIPuUBqqWaeful6OyuhpyAybGY9kwPC5o3jI
+         E8izU50R6q5RVlKXvJome/boc18c6Il3mb0ltN8c/5DQXC8l9ccIpva5/HFChkg6T5
+         qJ50OTc7I9ECId3UX3wv52y1/J4weEPIKDnUI/C5wpyDxLwiCrCfahbMj4Mk26OrQk
+         mlUij4td6u8Sxswv4dfQXm4cDDzuLUX42UJLm5SzMayspYDD5MbNEUhBpvK5Fe3KIN
+         xRLy8hfQOCdxp3fXiZlfhFLLPPTErDkfS2FjKtmXxA9Svh90KMs2mhheCE9oUuxBUD
+         qUwcTBuS0SGbg==
+Message-ID: <83ebb54c-a114-7cd9-4eb4-b9860f1afd26@kernel.org>
+Date:   Tue, 5 Sep 2023 14:20:23 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <772c4140-3035-16d8-0253-f5893c3698e2@linux.ibm.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_NONE,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] ata,scsi: do not issue START STOP UNIT on resume
+Content-Language: en-US
+To:     "Vivi, Rodrigo" <rodrigo.vivi@intel.com>
+Cc:     "regressions@leemhuis.info" <regressions@leemhuis.info>,
+        "dalzot@gmail.com" <dalzot@gmail.com>,
+        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "paula@soe.ucsc.edu" <paula@soe.ucsc.edu>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
+References: <20230731003956.572414-1-dlemoal@kernel.org>
+ <ZOehTysWO+U3mVvK@rdvivi-mobl4>
+ <40adc06d-0835-2786-0bfb-83239f546d92@kernel.org>
+ <ZOjgJl4nlieu3+kL@rdvivi-mobl4>
+ <ccf3d87c-6517-6f01-a32a-4c98b841c7d4@kernel.org>
+ <ZO+/Rz4Q5+qvj5Bs@intel.com>
+ <289a94c6-a437-626f-c7c4-f0d3aa8c2b79@kernel.org>
+ <9e09411348ae7469b4a9a7d076a8c42f84d12823.camel@intel.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <9e09411348ae7469b4a9a7d076a8c42f84d12823.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Hari, Michael
-
-On 08/11/23 at 01:23pm, Hari Bathini wrote:
+On 8/31/23 10:48, Vivi, Rodrigo wrote:
+> On Thu, 2023-08-31 at 09:32 +0900, Damien Le Moal wrote:
+>> On 8/31/23 07:14, Rodrigo Vivi wrote:
+>>> On Tue, Aug 29, 2023 at 03:17:38PM +0900, Damien Le Moal wrote:
+>>>> On 8/26/23 02:09, Rodrigo Vivi wrote:
+>>>>>>> So, maybe we have some kind of disks/configuration out
+>>>>>>> there where this
+>>>>>>> start upon resume is needed? Maybe it is just a matter of
+>>>>>>> timming to
+>>>>>>> ensure some firmware underneath is up and back to life?
+>>>>>>
+>>>>>> I do not think so. Suspend will issue a start stop unit
+>>>>>> command to put the drive
+>>>>>> to sleep and resume will reset the port (which should wake up
+>>>>>> the drive) and
+>>>>>> then issue an IDENTIFY command (which will also wake up the
+>>>>>> drive) and other
+>>>>>> read logs etc to rescan the drive.
+>>>>>> In both cases, if the commands do not complete, we would see
+>>>>>> errors/timeout and
+>>>>>> likely port reset/drive gone events. So I think this is
+>>>>>> likely another subtle
+>>>>>> race between scsi suspend and ata suspend that is causing a
+>>>>>> deadlock.
+>>>>>>
+>>>>>> The main issue I think is that there is no direct ancestry
+>>>>>> between the ata port
+>>>>>> (device) and scsi device, so the change to scsi async pm ops
+>>>>>> made a mess of the
+>>>>>> suspend/resume operations ordering. For suspend, scsi device
+>>>>>> (child of ata port)
+>>>>>> should be first, then ata port device (parent). For resume,
+>>>>>> the reverse order is
+>>>>>> needed. PM normally ensures that parent/child ordering, but
+>>>>>> we lack that
+>>>>>> parent/child relationship. I am working on fixing that but it
+>>>>>> is very slow
+>>>>>> progress because I have been so far enable to recreate any of
+>>>>>> the issues that
+>>>>>> have been reported. I am patching "blind"...
+>>>>>
+>>>>> I believe your suspicious makes sense. And on these lines, that
+>>>>> patch you
+>>>>> attached earlier would fix that. However my initial tries of
+>>>>> that didn't
+>>>>> help. I'm going to run more tests and get back to you.
+>>>>
+>>>> Rodrigo,
+>>>>
+>>>> I pushed the resume-v2 branch to libata tree:
+>>>>
+>>>> git@gitolite.kernel.org:pub/scm/linux/kernel/git/dlemoal/libata
+>>>> (or
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.gi
+>>>> t)
+>>>>
+>>>> This branch adds 13 patches on top of 6.5.0 to cleanup libata
+>>>> suspend/resume and
+>>>> other device shutdown issues. The first 4 patches are the main
+>>>> ones to fix
+>>>> suspend resume. I tested that on 2 different machines with
+>>>> different drives and
+>>>> with qemu. All seems fine.
+>>>>
+>>>> Could you try to run this through your CI ? I am very interested
+>>>> in seeing if it
+>>>> survives your suspend/resume tests.
+>>>
+>>> well, in the end this didn't affect the CI machinery as I was
+>>> afraid.
+>>> it is only in my local DG2.
+>>>
+>>> https://intel-gfx-ci.01.org/tree/intel-xe/bat-
+>>> all.html?testfilter=suspend
+>>> (bat-dg2-oem2 one)
+>>>
+>>> I just got these 13 patches and applied to my branch and tested it
+>>> again
+>>> and it still *fails* for me.
+>>
+>> That is annoying... But I think the messages give us a hint as to
+>> what is going
+>> on. See below.
+>>
+>>>
+>>> [   79.648328] [IGT] kms_pipe_crc_basic: finished subtest pipe-A-
+>>> DP-2, SUCCESS
+>>> [   79.657353] [IGT] kms_pipe_crc_basic: starting dynamic subtest
+>>> pipe-B-DP-2
+>>> [   80.375042] PM: suspend entry (deep)
+>>> [   80.380799] Filesystems sync: 0.002 seconds
+>>> [   80.386476] Freezing user space processes
+>>> [   80.392286] Freezing user space processes completed (elapsed
+>>> 0.001 seconds)
+>>> [   80.399294] OOM killer disabled.
+>>> [   80.402536] Freezing remaining freezable tasks
+>>> [   80.408335] Freezing remaining freezable tasks completed
+>>> (elapsed 0.001 seconds)
+>>> [   80.439372] sd 5:0:0:0: [sdb] Synchronizing SCSI cache
+>>> [   80.439716] serial 00:01: disabled
+>>> [   80.448011] sd 4:0:0:0: [sda] Synchronizing SCSI cache
+>>> [   80.448014] sd 7:0:0:0: [sdc] Synchronizing SCSI cache
+>>> [   80.453600] ata6.00: Entering standby power mode
+>>
+>> This is sd 5:0:0:0. All good, ordered properly with the
+>> "Synchronizing SCSI cache".
+>>
+>>> [   80.464217] ata5.00: Entering standby power mode
+>>
+>> Same here for sd 4:0:0:0.
+>>
+>>> [   80.812294] ata8: SATA link up 6.0 Gbps (SStatus 133 SControl
+>>> 300)
+>>> [   80.818520] ata8.00: Entering active power mode
+>>> [   80.842989] ata8.00: configured for UDMA/133
+>>
+>> Arg ! sd 7:0:0:0 is resuming ! But the above "Synchronizing SCSI
+>> cache" tells
+>> us that it was suspending and libata EH did not yet put that drive to
+>> standby...
+>>
+>>> [   80.847660] ata8.00: Entering standby power mode
+>>
+>> ... which happens here. So it looks like libata EH had both the
+>> suspend and
+>> resume requests at the same time, which is totally weird.
 > 
+> although it looks weird, it totally matches the 'use case'.
+> I mean, if I suspend, resume, and wait a bit before suspend and resume
+> again, it will work 100% of the time.
+> The issue is really only when another suspend comes right after the
+> resume, in a loop without any wait.
 > 
-> On 10/08/23 8:31 am, Baoquan He wrote:
-> > On 08/10/23 at 10:06am, Ming Lei wrote:
-> > > On Thu, Aug 10, 2023 at 09:18:27AM +0800, Baoquan He wrote:
-> > > > On 08/10/23 at 08:09am, Ming Lei wrote:
-> > > > > On Wed, Aug 09, 2023 at 03:44:01PM +0200, Christoph Hellwig wrote:
-> > > > > > I'm starting to sound like a broken record, but we can't just do random
-> > > > > > is_kdump checks, and it's not going to get better by resending it again and
-> > > > > > again.  If kdump kernels limit the number of possible CPUs, it needs to
-> > > > > > reflected in cpu_possible_map and we need to use that information.
-> > > > > > 
-> > > > > 
-> > > > > Can you look at previous kdump/arch guys' comment about kdump usage &
-> > > > > num_possible_cpus?
-> > > > > 
-> > > > >      https://lore.kernel.org/linux-block/CAF+s44RuqswbosY9kMDx35crviQnxOeuvgNsuE75Bb0Y2Jg2uw@mail.gmail.com/
-> > > > >      https://lore.kernel.org/linux-block/ZKz912KyFQ7q9qwL@MiWiFi-R3L-srv/
-> > > > > 
-> > > > > The point is that kdump kernels does not limit the number of possible CPUs.
-> > > > > 
-> > > > > 1) some archs support 'nr_cpus=1' for kdump kernel, which is fine, since
-> > > > > num_possible_cpus becomes 1.
-> > > > 
-> > > > Yes, "nr_cpus=" is strongly suggested in kdump kernel because "nr_cpus="
-> > > > limits the possible cpu numbers, while "maxcpuss=" only limits the cpu
-> > > > number which can be brought up during bootup. We noticed this diference
-> > > > because a large number of possible cpus will cost more memory in kdump
-> > > > kernel. e.g percpu initialization, even though kdump kernel have set
-> > > > "maxcpus=1".
-> > > > 
-> > > > Currently x86 and arm64 all support "nr_cpus=". Pingfan ever spent much
-> > > > effort to make patches to add "nr_cpus=" support to ppc64, seems ppc64
-> > > > dev and maintainers do not care about it. Finally the patches are not
-> > > > accepted, and the work is not continued.
-> > > > 
-> > > > Now, I am wondering what is the barrier to add "nr_cpus=" to power ach.
-> > > > Can we reconsider adding 'nr_cpus=' to power arch since real issue
-> > > > occurred in kdump kernel?
-> > > 
-> > > If 'nr_cpus=' can be supported on ppc64, this patchset isn't needed.
-> > > 
-> > > > 
-> > > > As for this patchset, it can be accpeted so that no failure in kdump
-> > > > kernel is seen on ARCHes w/o "nr_cpus=" support? My personal opinion.
-> > > 
-> > > IMO 'nr_cpus=' support should be preferred, given it is annoying to
-> > > maintain two kinds of implementation for kdump kernel from driver
-> > > viewpoint. I guess kdump things can be simplified too with supporting
-> > > 'nr_cpus=' only.
-> > 
-> > Yes, 'nr_cpus=' is ideal. Not sure if there's some underlying concerns so
-> > that power people decided to not support it.
+>>
+>>> [   81.119426] xe 0000:03:00.0: [drm] GT0: suspended
+>>> [   81.800508] PM: suspend of devices complete after 1367.829 msecs
+>>> [   81.806661] PM: start suspend of devices complete after 1390.859
+>>> msecs
+>>> [   81.813244] PM: suspend devices took 1.398 seconds
+>>> [   81.820101] PM: late suspend of devices complete after 2.036
+>>> msecs
+>>
+>> ...and PM suspend completes here. Resume "starts" now (but clearly it
+>> started
+>> earlier already given that sd 7:0:0:0 was reactivated.
 > 
-> Though "nr_cpus=1" is an ideal solution, maintainer was not happy with
-> the patch as the code changes have impact for regular boot path and
-> it is likely to cause breakages. So, even if "nr_cpus=1" support for
-> ppc64 is revived, the change is going to take time to be accepted
-> upstream.
-
-I talked to pingfan recently, he said he posted patches to add 'nr_cpus='
-support in powerpc in order to reduce memory amount for kdump kernel.
-His patches were rejected by maintainer because maintainer thought the
-reason is not sufficient. So up to now, in architectures fedora/RHEL
-supports to provide default crashkernel reservation value, powerpc costs
-most. Now with this emerging issue, can we reconsider supporting
-'nr_cpus=' in powerpc?
-
+> that is weird.
 > 
-> Also, I see is_kdump_kernel() being used irrespective of "nr_cpus=1"
-> support for other optimizations in the driver for the special dump
-> capture environment kdump is.
+>>
+>>> �[   82.403857] serial 00:01: activated
+>>> [   82.489612] nvme nvme0: 16/0/0 default/read/poll queues
+>>> [   82.563318] r8169 0000:07:00.0 enp7s0: Link is Down
+>>> [   82.581444] xe REG[0x223a8-0x223af]: allow read access
+>>> [   82.586704] xe REG[0x1c03a8-0x1c03af]: allow read access
+>>> [   82.592071] xe REG[0x1d03a8-0x1d03af]: allow read access
+>>> [   82.597423] xe REG[0x1c83a8-0x1c83af]: allow read access
+>>> [   82.602765] xe REG[0x1d83a8-0x1d83af]: allow read access
+>>> [   82.608113] xe REG[0x1a3a8-0x1a3af]: allow read access
+>>> [   82.613281] xe REG[0x1c3a8-0x1c3af]: allow read access
+>>> [   82.618454] xe REG[0x1e3a8-0x1e3af]: allow read access
+>>> [   82.623634] xe REG[0x263a8-0x263af]: allow read access
+>>> [   82.628816] xe 0000:03:00.0: [drm] GT0: resumed
+>>> [   82.728005] ata7: SATA link down (SStatus 4 SControl 300)
+>>> [   82.733531] ata5: SATA link up 6.0 Gbps (SStatus 133 SControl
+>>> 300)
+>>> [   82.739773] ata5.00: Entering active power mode
+>>> [   82.744398] ata6: SATA link up 6.0 Gbps (SStatus 133 SControl
+>>> 300)
+>>> [   82.750618] ata6.00: Entering active power mode
+>>> [   82.755961] ata5.00: configured for UDMA/133
+>>> [   82.760479] ata5.00: Enabling discard_zeroes_data
+>>> [   82.836266] ata6.00: configured for UDMA/133
+>>> [   84.460081] ata8: SATA link up 6.0 Gbps (SStatus 133 SControl
+>>> 300)
+>>> [   84.466354] ata8.00: Entering active power mode
+>>> [   84.497256] ata8.00: configured for UDMA/133
+>>> ...
+>>
+>> And this looks all normal, the drives have all been transitioned to
+>> active
+>> power mode as expected. And yet, your system is stuck after this,
+>> right ?
 > 
-> If there is no other downside for driver code, to use is_kdump_kernel(),
-> other than the maintainability aspect, I think the above changes are
-> worth considering.
+> yes
 
-Hi Hari,
+I think I have now figured it out, and fixed. I could reliably recreate the same
+hang both with qemu using a failed suspend (using a device not supporting
+suspend) and real hardware with a short rtc wake.
 
-By the way, will you use the ppc specific is_kdump_kernel() and
-is_crashdump_kernel() in your patches to fix this issue?
+It turns out that the root cause of the hang is ata_scsi_dev_rescan(), which is
+scheduled asynchronously from PM context on resume. With quick suspend after a
+resume, suspend may win the race against that ata_scsi_dev_rescan() task
+execution and we endup calling scsi_rescan_device() on a suspended device,
+causing that function to wait with the device_lock() held, which causes PM to
+deadlock when it needs to resume the scsi device. The recent commit 6aa0365a3c85
+("ata: libata-scsi: Avoid deadlock on rescan after device resume") was intended
+to fix that, but it did so less than ideally and the fix has a race on the scsi
+power state check, thus not always preventing the resume hang.
 
-Thanks
-Baoquan
+I pushed a new patch series that goes on top of 6.5.0: resume-v3 branch in the
+libata tree:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git
+
+This works very well for me. Using this script on real hardware:
+
+for (( i=0; i<20; i++ )); do
+	echo "+2" > /sys/class/rtc/rtc0/wakealarm
+	echo mem > /sys/power/state
+done
+
+The system repeatedly suspends and resumes and comes back OK. Of note is that if
+I set the delay to +1 second, then I sometime do not see the system resume and
+the script stops. But using wakeup-on-lan (wol command) from another machine to
+wake it up, the machine resumes normally and continues executing the script. So
+it seems that setting the rtc alarm unreasonably early result in it being lost
+and the system suspending wating to be woken up.
+
+I also tested this in qemu. As mentioned before, I cannot get rtc alarm to wake
+up the VM guest though. However, using a virtio device that does not support
+suspend, resume strats in the middle of the suspend operation due to the suspend
+error reported by that device. And it turns out that systemd really insists on
+suspending the system despite the error, so when running "systemctl suspend" I
+see a retry for suspend right after the first failed one. That is enough to
+trigger the issue without the patches.
+
+Please test !
+
+Thanks.
+
+-- 
+Damien Le Moal
+Western Digital Research
 
