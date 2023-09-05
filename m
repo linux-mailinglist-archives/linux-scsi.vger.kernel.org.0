@@ -2,60 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743087927B6
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Sep 2023 18:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7955E79275F
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Sep 2023 18:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233382AbjIEQF0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Sep 2023 12:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
+        id S236691AbjIEQFx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Sep 2023 12:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354242AbjIEKTA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Sep 2023 06:19:00 -0400
+        with ESMTP id S1354241AbjIEKS7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Sep 2023 06:18:59 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8E918D
-        for <linux-scsi@vger.kernel.org>; Tue,  5 Sep 2023 03:18:57 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3853OxC8024407;
-        Tue, 5 Sep 2023 10:18:50 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9499A18D;
+        Tue,  5 Sep 2023 03:18:55 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3853OFjQ023612;
+        Tue, 5 Sep 2023 10:18:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-03-30;
- bh=wJ5b2TiYPo9yu2X9Lcwjdeb9+G7zTWdGA+TRaWadVKI=;
- b=oGzTarSfonvd+mU98wSBYGSURF8jUShWYdVV5FIEzXYrPOlVLzUumkgf1RlvirjJprIo
- Jbw+DJH5asUbxSXJb1QLRytTH/ak8lHbl6uckhu3u5XUmjbr94Wd+geoxCUdPfluN0qD
- nbvOZQtwXs92UI9VYE6FtvcwvxhSFG6sGcJ3Khd2H7pmknJLYDYJV9ftY5enYsoxZMTt
- Wv2T1bfKb+S4dWgysmNgwF+4FgNHguXL0CYQ68qhD4Xu9A7WQiEfI6V3kKEang9BNCBZ
- 9ZokaE8H1tzDIZIgfCzp1Orkn3LA7XOy4nvA7GAp1ZJdtKrJlKv1iaLIP40UTyraUQ7d vA== 
+ bh=3PSbr7PxvuHc44jNSRQy1RWbVgyf5JrcACIDlRAzgvQ=;
+ b=YlzVOhp+er44xs16fv6vOo9l+KxUjuD6QvLFp63lrRrW+O0N4YIyQey3ir0yDzRPp0uR
+ VHvKsRx0itupQzHmJZb1aEBQw0BmU9Dar6e8dy+ZdhKUg5zEMMer0ZeMLXffcCIOYCbI
+ jcWUG0IPukLbpyrP6NQ/vDopX5Q+zvDnYwL0vaXC+ELj4StJ4ycPInUFQdV+en5oD+Dl
+ eaHrKJWKJKu/p1GiRFCPLVGzo3PP4gCmMWzLkKkS7vO5RlLDpg+0uYRpS4wFb2ELsQdl
+ Tqf3CUYCJwbPbiDakGojfxH99UKDjmGccdFiFGgE2Gc1w64LJrWX/N9mSA2XUhuxLSqz /A== 
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3suvntvvup-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3suufdmwxr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 05 Sep 2023 10:18:50 +0000
+        Tue, 05 Sep 2023 10:18:52 +0000
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3859Ba3M029057;
-        Tue, 5 Sep 2023 10:18:49 GMT
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3859of7B029094;
+        Tue, 5 Sep 2023 10:18:51 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3suug4j8bg-1
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3suug4j8by-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 05 Sep 2023 10:18:49 +0000
+        Tue, 05 Sep 2023 10:18:51 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 385AIlOX032271;
-        Tue, 5 Sep 2023 10:18:49 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 385AIlOZ032271;
+        Tue, 5 Sep 2023 10:18:50 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3suug4j85n-2;
-        Tue, 05 Sep 2023 10:18:49 +0000
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3suug4j85n-3;
+        Tue, 05 Sep 2023 10:18:50 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Bart Van Assche <bvanassche@acm.org>
+To:     Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Avri Altman <avri.altman@wdc.com>
-Subject: Re: [PATCH] scsi: ufs: Fix the build for the old ARM OABI
-Date:   Tue,  5 Sep 2023 06:18:25 -0400
-Message-Id: <169390541191.1533355.3501860660032738921.b4-ty@oracle.com>
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] scsi: qla2xxx: Fix spelling mistake "tranport" -> "transport"
+Date:   Tue,  5 Sep 2023 06:18:26 -0400
+Message-Id: <169390541186.1533355.10096498850574984132.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230829163547.1200183-1-bvanassche@acm.org>
-References: <20230829163547.1200183-1-bvanassche@acm.org>
+In-Reply-To: <20230828213101.758609-1-colin.i.king@gmail.com>
+References: <20230828213101.758609-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,11 +63,11 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-09-05_08,2023-08-31_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 suspectscore=0
- bulkscore=0 mlxlogscore=558 malwarescore=0 phishscore=0 adultscore=0
+ bulkscore=0 mlxlogscore=917 malwarescore=0 phishscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
  definitions=main-2309050092
-X-Proofpoint-ORIG-GUID: GzxHq6FDG2mfh8Ez_pC9wOi2liRG6h1g
-X-Proofpoint-GUID: GzxHq6FDG2mfh8Ez_pC9wOi2liRG6h1g
+X-Proofpoint-ORIG-GUID: K-y-bxADK3NXz5VkW8Gydb3NsyLpgRx8
+X-Proofpoint-GUID: K-y-bxADK3NXz5VkW8Gydb3NsyLpgRx8
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
@@ -78,18 +78,16 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 29 Aug 2023 09:35:42 -0700, Bart Van Assche wrote:
+On Mon, 28 Aug 2023 22:31:01 +0100, Colin Ian King wrote:
 
-> All structs and unions are word aligned when using the OABI. Mark the union
-> in struct utp_upiu_header as packed to prevent that the compiler inserts
-> padding bytes.
+> There is a spelling mistake in a ql_dbg message. Fix it.
 > 
 > 
 
 Applied to 6.6/scsi-queue, thanks!
 
-[1/1] scsi: ufs: Fix the build for the old ARM OABI
-      https://git.kernel.org/mkp/scsi/c/d0bac0ec89d6
+[1/1] scsi: qla2xxx: Fix spelling mistake "tranport" -> "transport"
+      https://git.kernel.org/mkp/scsi/c/7a5dee9b72e9
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
