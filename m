@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 043767994F9
-	for <lists+linux-scsi@lfdr.de>; Sat,  9 Sep 2023 02:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3214B7994E5
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 Sep 2023 02:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346212AbjIIAo2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Sep 2023 20:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        id S1344145AbjIIAnw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Sep 2023 20:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238714AbjIIAno (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Sep 2023 20:43:44 -0400
+        with ESMTP id S1346036AbjIIAnV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Sep 2023 20:43:21 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB32C2D7E;
-        Fri,  8 Sep 2023 17:41:14 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A1BFC433B6;
-        Sat,  9 Sep 2023 00:40:04 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712A9273B;
+        Fri,  8 Sep 2023 17:40:43 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54ABDC43140;
+        Sat,  9 Sep 2023 00:40:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694220005;
+        s=k20201202; t=1694220037;
         bh=suV9ORvsUVvFdWwogADjnpo7gXYEUh5IQeD4DHpalKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e5Lxbx5z/ukBxbCn9/w2ZtL7zHk+AHnxdDOo0Svuh7r+ky4wdR36YyE1varH7xTF3
-         ick4FTs6OF+ACYEdVrlrjw4ie/mPHcK2S8gT/2/3hMZB20v4IJUj0GwPuBi8wGaeo3
-         6h4Jhfm9yaaIOM3511c+xv2L3p+/Y0FeXewCG+V8fB/Fr231AAXClpeH10mCM7kNmB
-         7zwUetU6Jq2QOFkq8zGbQvoPLUoI4pfobCKCBZ3BfZZ63txd5eG/dVnQ0o5Qty8Nht
-         soII/cwsEtEedkALPeeYvn62H/D2bPuSIJTSu0vWRK4HdRNSKR6PoUila8rSP6D9xC
-         DtbZg1OcwxV8w==
+        b=o00IvZSq0LqVFW+Tp8tMfhb8sbsl5SM4xXXFfpd2O7F1ut19Tpi0I7Xo+ZHGfMAan
+         kAy159yKQXZjxVgVGu/Mx26U9msD2mo3+1NEeIF4q8eUyEl2vK/mfENs2OccvKRccP
+         Nwt9XrCrQy2Nmd/jrdguYO2X/fyvwq/mc1nHKTEXHQIgG/i3BfWOe3KKvDBiDjYmGI
+         oRWdHlrQ4HFUnoymdGUk9AdAIlOXwu5lG16OujIJs+mCaQy3b6bIW0mt4ui6gvBvPG
+         49vB4yX78ehr2cdLqmP0Imw3vrEGmaka1KuxQWxyC4EWaXxjQKv6CghQ55OmvP8BOf
+         f7z46OcQfWzlQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Konstantin Shelekhin <k.shelekhin@yadro.com>,
@@ -33,16 +33,16 @@ Cc:     Konstantin Shelekhin <k.shelekhin@yadro.com>,
         Sasha Levin <sashal@kernel.org>, mlombard@redhat.com,
         michael.christie@oracle.com, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 11/16] scsi: target: iscsi: Fix buffer overflow in lio_target_nacl_info_show()
-Date:   Fri,  8 Sep 2023 20:39:36 -0400
-Message-Id: <20230909003941.3580631-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 10/14] scsi: target: iscsi: Fix buffer overflow in lio_target_nacl_info_show()
+Date:   Fri,  8 Sep 2023 20:40:10 -0400
+Message-Id: <20230909004015.3580832-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230909003941.3580631-1-sashal@kernel.org>
-References: <20230909003941.3580631-1-sashal@kernel.org>
+In-Reply-To: <20230909004015.3580832-1-sashal@kernel.org>
+References: <20230909004015.3580832-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.194
+X-stable-base: Linux 5.4.256
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
