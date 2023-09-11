@@ -2,123 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458A979BD69
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 02:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BF579BF4C
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 02:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237039AbjIKUu4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Sep 2023 16:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
+        id S236777AbjIKUuv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Sep 2023 16:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236982AbjIKLsW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 07:48:22 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564EDCDD;
-        Mon, 11 Sep 2023 04:48:18 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A7BCC433CB;
-        Mon, 11 Sep 2023 11:48:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694432897;
-        bh=Ka8kxyqihersE36rdzLjT/pV65yW2aDcxlKjtq+pLA0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MtAtZOrGGcZUa38EeLQZ1SAz27ziuqGgb5GAYyV1SdPhDiihIQbhPoiT9HLvPcJZT
-         Y0IJ6cUuwaW0yoCfH3GiYOmG1KvLKQhyDT8La6ZHciZaaH1s/aAuaGbCZbcR8e9TZa
-         RIY09wf9CQeiY76W1iZzlqbBykGP/YLeRKNxplI1vgN3bebwbkCET9NHTb+UOtczgo
-         lI7zRH3qANlVODl7j5TfNeHsQrkh0FxP99m/3NdJ214/JBTbiYj9BUzYZEE5MdGeVY
-         JjFJ/7gKbjgptCWyzN3txkvZJ2IGyujxxD3+V6N9T8M3P40gP7l0I3xH0dTASiL3Aq
-         U0NIZgwg9pWug==
-Message-ID: <f56e4e80-1905-0dcd-fb59-aaba7a9f8adb@kernel.org>
-Date:   Mon, 11 Sep 2023 20:48:14 +0900
+        with ESMTP id S237222AbjIKMPl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 08:15:41 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40FFCEB;
+        Mon, 11 Sep 2023 05:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694434537; x=1725970537;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Iz/TfyVmyYapPX4+HPuAdQeqqvO4j5VMykMoNAn7m90=;
+  b=fyT8/svE9J9rmAYFmQZkpPGNAK6F8/XQhAkOM1C34UNAj4xGWJie6sb9
+   4+0A2E+R1H2PrvimTxR5LoeYY+DUwC0ILRVQvbjbXF3LMHfuGmFjiVX0E
+   +bnuQTIzuZlECgPYWJW4Sf+3c0ZEmKi5IdKVIKHL1PXTykRU/Nm0eGg7L
+   FlQgZqnz7l9m03YTJEItsc9LA/SWeBtT62yIUAAhHzQbCnjmqCGLLy5mJ
+   7LsVj8Yq6nzSVEYI3YyRC02EptG2noeKaPVY3TTb5OnKG5CfMZI95VJkn
+   OtmOHGG9fUb/qAavR1S7qz5ONFH2kSpHXFfoKTeH3Jap7ExGJ/fT37BMZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="381863579"
+X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
+   d="scan'208";a="381863579"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 05:15:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="746383365"
+X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
+   d="scan'208";a="746383365"
+Received: from mzarkov-mobl3.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.36.200])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 05:15:34 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Bradley Grove <linuxdrivers@attotech.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 7/8] scsi: esas2r: Use FIELD_GET() to extract Link Width
+Date:   Mon, 11 Sep 2023 15:15:00 +0300
+Message-Id: <20230911121501.21910-8-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230911121501.21910-1-ilpo.jarvinen@linux.intel.com>
+References: <20230911121501.21910-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 03/19] ata: libata-scsi: link ata port and scsi device
-To:     John Garry <john.g.garry@oracle.com>,
-        Hannes Reinecke <hare@suse.de>, linux-ide@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Paul Ausbeck <paula@soe.ucsc.edu>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Joe Breuer <linux-kernel@jmbreuer.net>
-References: <20230911040217.253905-1-dlemoal@kernel.org>
- <20230911040217.253905-4-dlemoal@kernel.org>
- <e8ca70d1-9c88-4a80-83e4-a65f4bbe6b72@suse.de>
- <8874a3d5-355e-c354-fd85-0dfa7ab77b54@kernel.org>
- <5825b4b9-0bc8-4c27-d576-070c7113e1f8@oracle.com>
-Content-Language: en-US
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <5825b4b9-0bc8-4c27-d576-070c7113e1f8@oracle.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/11/23 19:38, John Garry wrote:
-> On 11/09/2023 07:48, Damien Le Moal wrote:
->>>>   #define ATA_BASE_SHT(drv_name)                    \
->>> I do understand the rationale here, as the relationship between ata port and
->>> scsi devices are blurred. Question is: blurred by what?
->>> Is it the libata/SAS duality where SCSI devices will have a different
->>> ancestry for libata and libsas?
->>> If so, why don't we need the 'link' mechanism for SAS?
->>> Or is it something else?
->> On scsi, ancestry from Scsi_Host is clear: host->target->device->disk.
->> For ATA, it is also clear: port->link->device
->>
->> The relationship is that ata port has its own Scsi_Host, but no "family"
->> relationship here. They are just "friends", so scsi disk and ata_port have no
->> direct ancestry. Adding the link creates that.
->>
->> libsas does not need the link because it does its own PM management of the
->> ports, not relying on PM to order things.
->>
-> 
-> For hisi_sas v3, RPM is supported and a link was required to be added in 
-> that driver between the sdev and those host controller device - see 
-> 16fd4a7c59. And that is for a similar reason here. I see that we already 
-> have an ancestry for libata between ata_dev -> ata_link -> ata_port -> 
-> ata_host dev, so it seems reasonable to add ata_dev  <-> sdev dependency 
-> here.
+Use FIELD_GET() to extract PCIe Negotiated and Maximum Link Width fields
+instead of custom masking and shifting.
 
-libata creates a link between ata_port and sdev. This is not very natural, but
-as I said in the cover letter, the power management model is weird as everything
-is per port, even if a port has multiple devices. Nevertheless, I tried to apply
-the same for libsas but failed: if I add the link creation in the slave_alloc
-method, I fail to get the scsi disks to show up (no /dev/sdX device files). Not
-sure why. That was with my pm8001 adapter, which is the only libsas one I have.
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/scsi/esas2r/esas2r_ioctl.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Side note: having an ata_debug (ata equivalent of scsi_debug) driver that could
-act as a pure libata driver or as a libsas adapter would really be awesome for
-this kind of tests :)
-
-> I think that this should really be added for all libsas drivers which 
-> support RPM - pm8001 is missing, IIRC.
-
-Will try again tomorrow looking at hisi driver for inspiration. The other thing
-I need to better understand is how the suspend & resume operations of libsas get
-triggered. For suspend, it is easy-ish, but for resume, it seems to be tightly
-coupled with discovery, so the the adapter resume (scsi host class resume ?).
-If that is the case, then that is done *before* the scsi_dev resume because of
-the existing device link dependencies. So I am not yet entirely convinced that
-adding a link between ata_port and sdev will serve any purpose now that the
-asynchronous libata resume is fixed and synchronized with the scsi disk
-resume... Will dig further.
-
-That said, it may be good to move libsas suspend/resume fixes to another patch
-series. There is an outstanding regression/problem for pure libata devices that
-this series fixes. So would like to get the fixes patches in Linus tree ASAP.
-
-Cheers.
-
+diff --git a/drivers/scsi/esas2r/esas2r_ioctl.c b/drivers/scsi/esas2r/esas2r_ioctl.c
+index 055d2e87a2c8..3252780fd099 100644
+--- a/drivers/scsi/esas2r/esas2r_ioctl.c
++++ b/drivers/scsi/esas2r/esas2r_ioctl.c
+@@ -41,6 +41,8 @@
+  * USA.
+  */
+ 
++#include <linux/bitfield.h>
++
+ #include "esas2r.h"
+ 
+ /*
+@@ -797,11 +799,9 @@ static int hba_ioctl_callback(struct esas2r_adapter *a,
+ 			gai->pci.link_speed_max =
+ 				(u8)(caps & PCI_EXP_LNKCAP_SLS);
+ 			gai->pci.link_width_curr =
+-				(u8)((stat & PCI_EXP_LNKSTA_NLW)
+-				     >> PCI_EXP_LNKSTA_NLW_SHIFT);
++				(u8)FIELD_GET(PCI_EXP_LNKSTA_NLW, stat);
+ 			gai->pci.link_width_max =
+-				(u8)((caps & PCI_EXP_LNKCAP_MLW)
+-				     >> 4);
++				(u8)FIELD_GET(PCI_EXP_LNKCAP_MLW, caps);
+ 		}
+ 
+ 		gai->pci.msi_vector_cnt = 1;
 -- 
-Damien Le Moal
-Western Digital Research
+2.30.2
 
