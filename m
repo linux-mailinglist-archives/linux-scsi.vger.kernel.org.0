@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F0C79C3E1
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 05:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0680E79C2F6
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 04:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241432AbjILDQc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Sep 2023 23:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40682 "EHLO
+        id S238446AbjILCci (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Sep 2023 22:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242472AbjILDQA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 23:16:00 -0400
+        with ESMTP id S238449AbjILCcV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 22:32:21 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B487018B8A1
-        for <linux-scsi@vger.kernel.org>; Mon, 11 Sep 2023 18:57:25 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E05C116B8;
-        Mon, 11 Sep 2023 23:27:51 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E6032C36
+        for <linux-scsi@vger.kernel.org>; Mon, 11 Sep 2023 18:57:26 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E18A4C116C8;
+        Mon, 11 Sep 2023 23:27:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694474872;
-        bh=Z0yOyGyoYmQ2eQcz1Dx4wu6/vjDINYDTQx+tvjz0Tc8=;
+        s=k20201202; t=1694474873;
+        bh=mvsERvQcfR1QvuRqnqjM+akGSnRTUuk4knhVacMeTGk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BXXIMOiyfV/8FIs8zYsR3AyrWbiUM2iIiIgksr1wX55ZZKCAiNczujSQfF3PNuqzJ
-         IQYxZfT3yI9Nv0VdckPJBITuuXbb2SDKmNF1VIC14r/MC85mcvTXR2CImN6ij8jVdo
-         V/1/Wcg5AIOQAwmTVrhrz6EOszgaItmGSIkwz2pdmTcl9qgPQ1ijdxHDW3QbXqMshL
-         OY/Qht7HHvwlatuQos5MuUY57eyDXf4GIYXo2HPA2U7GkPLN+QyrgyYu0PdDFuD8YT
-         tXtb78gnfe/V2X4LgvDv3Kt6e1GF39Sb3epJcbbHb5sV4rQh9+hdezhcpILYuCgk37
-         L9q84RxpxVbiQ==
+        b=CPpCVRRsuFI/HQstkyysqijEA2N6dNcfvWBO8Ziz1tUcf/rfwilywV5wHL4mRgjNm
+         zbFHn36s2bE5u3gokpFdwaoyrd/s4604l9yNVbn0WnGs9c9pS5ZGTniU6BtFpsiw+A
+         LIWmt57k1oggChghHYb8d2NitP/FRbMTfQa4FROMez2hiM1oLA4YXxCXv3ZkUWEVT2
+         wd1Tb3D41QlNimE/CZQ3n6luIaLvb3U68qH/nGSxQ5FsCbBhfDG9RhzqaIODJprSIS
+         EKpNTnfr23qwbTfhjaefowqBPR7RbmjKaM0o0xRlMHK23zefIGG9S7ZgIEE3YjWuEw
+         ahCKfih3+13Lw==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org
 Cc:     Jack Wang <jinpu.wang@ionos.com>
-Subject: [PATCH v2 06/10] scsi: pm8001: Simplify pm8001_chip_interrupt_enable/disable()
-Date:   Tue, 12 Sep 2023 08:27:41 +0900
-Message-ID: <20230911232745.325149-7-dlemoal@kernel.org>
+Subject: [PATCH v2 07/10] scsi: pm8001: Remove pm80xx_chip_intx_interrupt_enable/disable()
+Date:   Tue, 12 Sep 2023 08:27:42 +0900
+Message-ID: <20230911232745.325149-8-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230911232745.325149-1-dlemoal@kernel.org>
 References: <20230911232745.325149-1-dlemoal@kernel.org>
@@ -42,117 +42,74 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-pm8001_chip_msix_interrupt_enable() and
-pm8001_chip_msix_interrupt_disable() are always cold with the vector
-argument equal to 0. This allows simplifying the code for these
-functions. With this change, the functions are simple enough and can be
-removed by open coding them directly in pm8001_chip_interrupt_enable()
-and pm8001_chip_interrupt_disable(). Also do the same for the functions
-pm8001_chip_intx_interrupt_enable() and
-pm8001_chip_intx_interrupt_disable() and remove these functions.
+Remove the functions pm80xx_chip_intx_interrupt_enable() and
+pm80xx_chip_intx_interrupt_disable() and open code them respectively in
+pm80xx_chip_interrupt_enable() and pm80xx_chip_interrupt_disable().
 
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 Acked-by: Jack Wang <jinpu.wang@ionos.com>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 69 +++-----------------------------
- 1 file changed, 6 insertions(+), 63 deletions(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 31 +++++--------------------------
+ 1 file changed, 5 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index 33053db5a713..ef62afc425fc 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -1180,65 +1180,6 @@ void pm8001_chip_iounmap(struct pm8001_hba_info *pm8001_ha)
- 	}
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index f6857632dc7c..b2749cfbbef1 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -1714,27 +1714,6 @@ static void pm80xx_hw_chip_rst(struct pm8001_hba_info *pm8001_ha)
+ 	pm8001_dbg(pm8001_ha, INIT, "chip reset finished\n");
  }
  
--#ifndef PM8001_USE_MSIX
 -/**
-- * pm8001_chip_intx_interrupt_enable - enable PM8001 chip interrupt
+- * pm80xx_chip_intx_interrupt_enable - enable PM8001 chip interrupt
 - * @pm8001_ha: our hba card information
 - */
 -static void
--pm8001_chip_intx_interrupt_enable(struct pm8001_hba_info *pm8001_ha)
+-pm80xx_chip_intx_interrupt_enable(struct pm8001_hba_info *pm8001_ha)
 -{
 -	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, ODMR_CLEAR_ALL);
 -	pm8001_cw32(pm8001_ha, 0, MSGU_ODCR, ODCR_CLEAR_ALL);
 -}
 -
 -/**
-- * pm8001_chip_intx_interrupt_disable - disable PM8001 chip interrupt
+- * pm80xx_chip_intx_interrupt_disable - disable PM8001 chip interrupt
 - * @pm8001_ha: our hba card information
 - */
 -static void
--pm8001_chip_intx_interrupt_disable(struct pm8001_hba_info *pm8001_ha)
+-pm80xx_chip_intx_interrupt_disable(struct pm8001_hba_info *pm8001_ha)
 -{
--	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, ODMR_MASK_ALL);
+-	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR, ODMR_MASK_ALL);
 -}
--
--#else
--
--/**
-- * pm8001_chip_msix_interrupt_enable - enable PM8001 chip interrupt
-- * @pm8001_ha: our hba card information
-- * @int_vec_idx: interrupt number to enable
-- */
--static void
--pm8001_chip_msix_interrupt_enable(struct pm8001_hba_info *pm8001_ha,
--	u32 int_vec_idx)
--{
--	u32 msi_index;
--	u32 value;
--	msi_index = int_vec_idx * MSIX_TABLE_ELEMENT_SIZE;
--	msi_index += MSIX_TABLE_BASE;
--	pm8001_cw32(pm8001_ha, 0, msi_index, MSIX_INTERRUPT_ENABLE);
--	value = (1 << int_vec_idx);
--	pm8001_cw32(pm8001_ha, 0,  MSGU_ODCR, value);
--
--}
--
--/**
-- * pm8001_chip_msix_interrupt_disable - disable PM8001 chip interrupt
-- * @pm8001_ha: our hba card information
-- * @int_vec_idx: interrupt number to disable
-- */
--static void
--pm8001_chip_msix_interrupt_disable(struct pm8001_hba_info *pm8001_ha,
--	u32 int_vec_idx)
--{
--	u32 msi_index;
--	msi_index = int_vec_idx * MSIX_TABLE_ELEMENT_SIZE;
--	msi_index += MSIX_TABLE_BASE;
--	pm8001_cw32(pm8001_ha, 0,  msi_index, MSIX_INTERRUPT_DISABLE);
--}
--#endif
 -
  /**
-  * pm8001_chip_interrupt_enable - enable PM8001 chip interrupt
+  * pm80xx_chip_interrupt_enable - enable PM8001 chip interrupt
   * @pm8001_ha: our hba card information
-@@ -1248,9 +1189,11 @@ static void
- pm8001_chip_interrupt_enable(struct pm8001_hba_info *pm8001_ha, u8 vec)
- {
- #ifdef PM8001_USE_MSIX
--	pm8001_chip_msix_interrupt_enable(pm8001_ha, 0);
-+	pm8001_cw32(pm8001_ha, 0, MSIX_TABLE_BASE, MSIX_INTERRUPT_ENABLE);
-+	pm8001_cw32(pm8001_ha, 0,  MSGU_ODCR, 1);
- #else
--	pm8001_chip_intx_interrupt_enable(pm8001_ha);
+@@ -1749,10 +1728,10 @@ pm80xx_chip_interrupt_enable(struct pm8001_hba_info *pm8001_ha, u8 vec)
+ 	else
+ 		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR_U,
+ 			    1U << (vec - 32));
+-	return;
++#else
 +	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, ODMR_CLEAR_ALL);
 +	pm8001_cw32(pm8001_ha, 0, MSGU_ODCR, ODCR_CLEAR_ALL);
  #endif
+-	pm80xx_chip_intx_interrupt_enable(pm8001_ha);
+-
  }
  
-@@ -1263,9 +1206,9 @@ static void
- pm8001_chip_interrupt_disable(struct pm8001_hba_info *pm8001_ha, u8 vec)
- {
- #ifdef PM8001_USE_MSIX
--	pm8001_chip_msix_interrupt_disable(pm8001_ha, 0);
-+	pm8001_cw32(pm8001_ha, 0, MSIX_TABLE_BASE, MSIX_INTERRUPT_DISABLE);
- #else
--	pm8001_chip_intx_interrupt_disable(pm8001_ha);
-+	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, ODMR_MASK_ALL);
+ /**
+@@ -1773,9 +1752,9 @@ pm80xx_chip_interrupt_disable(struct pm8001_hba_info *pm8001_ha, u8 vec)
+ 	else
+ 		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_U,
+ 			    1U << (vec - 32));
+-	return;
++#else
++	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR, ODMR_MASK_ALL);
  #endif
+-	pm80xx_chip_intx_interrupt_disable(pm8001_ha);
  }
  
+ /**
 -- 
 2.41.0
 
