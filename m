@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A3B79C2F4
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 04:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CBD79C3E2
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 05:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238255AbjILCch (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Sep 2023 22:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
+        id S241910AbjILDQd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Sep 2023 23:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238453AbjILCcV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 22:32:21 -0400
+        with ESMTP id S242470AbjILDQA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 23:16:00 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC68318D037
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6C6181789
         for <linux-scsi@vger.kernel.org>; Mon, 11 Sep 2023 18:57:26 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8A28C116C9;
-        Mon, 11 Sep 2023 23:27:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3CABC116CA;
+        Mon, 11 Sep 2023 23:27:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694474875;
-        bh=RxFOS1R+mU+js/wUwssZJgj2vghEhSeZFwMq5huCkKg=;
+        s=k20201202; t=1694474876;
+        bh=gKbOAeAnoyieGSBvizJ7kLdrnOFfUIGkIm/CyS3tPJs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZNeMVvHxQwMQVZ7J9FkwTgvnYxemaoPP5RZniyP2g6VaDwzk2WHIg21urn4bKlyxc
-         NpPQ7nyBy1ffDx5cdmEJu5OqZKCbp61k/AJf+T+Fh8c3o2KL7eRLDeTcfysTsHIBph
-         5RYyts3P7dFXnYDhTQK2SeK9QynESrj/gvO+BGlLcS+pn8PA/JBWDHqtZ/bTu/CvDh
-         dGVzeZjeW9VbLbTAwQMGihHpNv1LR3Qnp+3g039qIV7yWHGCwnl3sOWINbJz4rdmVZ
-         viZhFUy9G3AhmjWM/W8QPEK6ZlPyJbcB4i285fwqBwccUPNTbDeVm7BXl8k/ZgAf7O
-         tnbrJqKPoiqBw==
+        b=SOYH+XY/8W3Gq8vyJwOl4C6jtLIfFS0+Vl4w46hAAZpF5Igq6t3Vjz9zenpPay1XC
+         VaNtKOof7fHG/Ye7lqIDJy3EY43ibc5agq+3mLR4RI0SlSA1/cdDHy8Hz6AjXA/JZ6
+         S+QuqaBBwqH8pyZkMv0y5esF2mDz2zTBBxsxuqignWNxQXMlfB0dCGulmXnxsZki9I
+         Ray0Pzp8qLBNyOKZFo0d7kUL1safuyRMOLkKQdpOEsbK5YCiIWMUh0Hdt9RxOUMzSt
+         /AA6IM9ihZMByFFzYVbhgaJ1BajzMUCbUYV4k+VHZtlJDKwF5zgd50MCH5szp0cfB9
+         cY4I1+bAwL0GA==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org
 Cc:     Jack Wang <jinpu.wang@ionos.com>
-Subject: [PATCH v2 09/10] scsi: pm8001: Remove PM8001_USE_TASKLET
-Date:   Tue, 12 Sep 2023 08:27:44 +0900
-Message-ID: <20230911232745.325149-10-dlemoal@kernel.org>
+Subject: [PATCH v2 10/10] scsi: pm8001: Remove PM8001_READ_VPD
+Date:   Tue, 12 Sep 2023 08:27:45 +0900
+Message-ID: <20230911232745.325149-11-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230911232745.325149-1-dlemoal@kernel.org>
 References: <20230911232745.325149-1-dlemoal@kernel.org>
@@ -42,146 +42,131 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Remove the macro PM8001_USE_TASKLET used to conditionally use tasklets
-for MSIX interrupts handling and replace it with the boolean module
-parameter pm8001_use_tasklet. This parameter defaults to true and can be
-true only if pm8001_use_msix is also true.
+Remove the macro PM8001_READ_VPD used to define if a controller WWN
+should be retrieved from the device. Instead, define the better named
+boolean module parameter "read_wwn" to control this.
 
-Code conditionnaly defined with PM8001_USE_TASKLET is modified to
-instead use the parameter pm8001_use_tasklet.
+The code to set a fixed address for a phy device address when read_wwn
+is set to false is simplified and fixed to avoid sparse warnings.
 
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
-Acked-by: Jack Wang <jinpu.wang@ionos.com>
 ---
- drivers/scsi/pm8001/pm8001_init.c | 40 ++++++++++++++++---------------
- drivers/scsi/pm8001/pm8001_sas.h  |  3 ---
- 2 files changed, 21 insertions(+), 22 deletions(-)
+ drivers/scsi/pm8001/pm8001_init.c | 50 +++++++++++++++++--------------
+ drivers/scsi/pm8001/pm8001_sas.h  |  3 --
+ 2 files changed, 28 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
-index 8e59d0d46cd3..78c22421d6fe 100644
+index 78c22421d6fe..ed6b7d954dda 100644
 --- a/drivers/scsi/pm8001/pm8001_init.c
 +++ b/drivers/scsi/pm8001/pm8001_init.c
-@@ -60,6 +60,10 @@ bool pm8001_use_msix = true;
- module_param_named(use_msix, pm8001_use_msix, bool, 0444);
+@@ -64,6 +64,10 @@ static bool pm8001_use_tasklet = true;
+ module_param_named(use_tasklet, pm8001_use_tasklet, bool, 0444);
  MODULE_PARM_DESC(zoned, "Use MSIX interrupts. Default: true");
  
-+static bool pm8001_use_tasklet = true;
-+module_param_named(use_tasklet, pm8001_use_tasklet, bool, 0444);
-+MODULE_PARM_DESC(zoned, "Use MSIX interrupts. Default: true");
++static bool pm8001_read_wwn = true;
++module_param_named(read_wwn, pm8001_read_wwn, bool, 0444);
++MODULE_PARM_DESC(zoned, "Get WWN from the controller. Default: true");
 +
  static struct scsi_transport_template *pm8001_stt;
  static int pm8001_init_ccb_tag(struct pm8001_hba_info *);
  
-@@ -204,8 +208,6 @@ static void pm8001_free(struct pm8001_hba_info *pm8001_ha)
- 	kfree(pm8001_ha);
- }
- 
--#ifdef PM8001_USE_TASKLET
--
- /**
-  * pm8001_tasklet() - tasklet for 64 msi-x interrupt handler
-  * @opaque: the passed general host adapter struct
-@@ -213,13 +215,12 @@ static void pm8001_free(struct pm8001_hba_info *pm8001_ha)
+@@ -683,19 +687,30 @@ static void  pm8001_post_sas_ha_init(struct Scsi_Host *shost,
   */
- static void pm8001_tasklet(unsigned long opaque)
+ static int pm8001_init_sas_add(struct pm8001_hba_info *pm8001_ha)
  {
--	struct pm8001_hba_info *pm8001_ha;
--	struct isr_param *irq_vector;
-+	struct isr_param *irq_vector = (struct isr_param *)opaque;
-+	struct pm8001_hba_info *pm8001_ha = irq_vector->drv_inst;
+-	u8 i, j;
+-	u8 sas_add[8];
+-#ifdef PM8001_READ_VPD
+-	/* For new SPC controllers WWN is stored in flash vpd
+-	*  For SPC/SPCve controllers WWN is stored in EEPROM
+-	*  For Older SPC WWN is stored in NVMD
+-	*/
+ 	DECLARE_COMPLETION_ONSTACK(completion);
+ 	struct pm8001_ioctl_payload payload;
++	unsigned long time_remaining;
++	u8 sas_add[8];
+ 	u16 deviceid;
+ 	int rc;
+-	unsigned long time_remaining;
++	u8 i, j;
 +
-+	if (WARN_ON_ONCE(!pm8001_ha))
-+		return;
- 
--	irq_vector = (struct isr_param *)opaque;
--	pm8001_ha = irq_vector->drv_inst;
--	if (unlikely(!pm8001_ha))
--		BUG_ON(1);
- 	PM8001_CHIP_DISP->isr(pm8001_ha, irq_vector->irq_id);
- }
- 
-@@ -227,6 +228,9 @@ static void pm8001_init_tasklet(struct pm8001_hba_info *pm8001_ha)
- {
- 	int i;
- 
-+	if (!pm8001_use_tasklet)
-+		return;
++	if (!pm8001_read_wwn) {
++		__be64 dev_sas_addr = cpu_to_be64(0x50010c600047f9d0ULL);
 +
- 	/*  Tasklet for non msi-x interrupt handler */
- 	if ((!pm8001_ha->pdev->msix_cap || !pci_msi_enabled()) ||
- 	    (pm8001_ha->chip_id == chip_8001)) {
-@@ -243,6 +247,9 @@ static void pm8001_kill_tasklet(struct pm8001_hba_info *pm8001_ha)
- {
- 	int i;
++		for (i = 0; i < pm8001_ha->chip->n_phy; i++)
++			memcpy(&pm8001_ha->phy[i].dev_sas_addr, &dev_sas_addr,
++			       SAS_ADDR_SIZE);
++		memcpy(pm8001_ha->sas_addr, &pm8001_ha->phy[0].dev_sas_addr,
++		       SAS_ADDR_SIZE);
++		return 0;
++	}
  
-+	if (!pm8001_use_tasklet)
-+		return;
-+
- 	/* For non-msix and msix interrupts */
- 	if ((!pm8001_ha->pdev->msix_cap || !pci_msi_enabled()) ||
- 	    (pm8001_ha->chip_id == chip_8001)) {
-@@ -254,13 +261,6 @@ static void pm8001_kill_tasklet(struct pm8001_hba_info *pm8001_ha)
- 		tasklet_kill(&pm8001_ha->tasklet[i]);
- }
- 
++	/*
++	 * For new SPC controllers WWN is stored in flash vpd. For SPC/SPCve
++	 * controllers WWN is stored in EEPROM. And for Older SPC WWN is stored
++	 * in NVMD.
++	 */
+ 	if (PM8001_CHIP_DISP->fatal_errors(pm8001_ha)) {
+ 		pm8001_dbg(pm8001_ha, FAIL, "controller is in fatal error state\n");
+ 		return -EIO;
+@@ -769,16 +784,7 @@ static int pm8001_init_sas_add(struct pm8001_hba_info *pm8001_ha)
+ 			   pm8001_ha->phy[i].dev_sas_addr);
+ 	}
+ 	kfree(payload.func_specific);
 -#else
--
--static void pm8001_init_tasklet(struct pm8001_hba_info *pm8001_ha) {}
--static void pm8001_kill_tasklet(struct pm8001_hba_info *pm8001_ha) {}
--
+-	for (i = 0; i < pm8001_ha->chip->n_phy; i++) {
+-		pm8001_ha->phy[i].dev_sas_addr = 0x50010c600047f9d0ULL;
+-		pm8001_ha->phy[i].dev_sas_addr =
+-			cpu_to_be64((u64)
+-				(*(u64 *)&pm8001_ha->phy[i].dev_sas_addr));
+-	}
+-	memcpy(pm8001_ha->sas_addr, &pm8001_ha->phy[0].dev_sas_addr,
+-		SAS_ADDR_SIZE);
 -#endif
--
- static irqreturn_t pm8001_handle_irq(struct pm8001_hba_info *pm8001_ha,
- 				     int irq)
- {
-@@ -270,12 +270,11 @@ static irqreturn_t pm8001_handle_irq(struct pm8001_hba_info *pm8001_ha,
- 	if (!PM8001_CHIP_DISP->is_our_interrupt(pm8001_ha))
- 		return IRQ_NONE;
- 
--#ifdef PM8001_USE_TASKLET
-+	if (!pm8001_use_tasklet)
-+		return PM8001_CHIP_DISP->isr(pm8001_ha, irq);
 +
- 	tasklet_schedule(&pm8001_ha->tasklet[irq]);
- 	return IRQ_HANDLED;
--#else
--	return PM8001_CHIP_DISP->isr(pm8001_ha, irq);
--#endif
+ 	return 0;
  }
  
- /**
-@@ -1538,6 +1537,9 @@ static int __init pm8001_init(void)
+@@ -788,13 +794,13 @@ static int pm8001_init_sas_add(struct pm8001_hba_info *pm8001_ha)
+  */
+ static int pm8001_get_phy_settings_info(struct pm8001_hba_info *pm8001_ha)
  {
- 	int rc = -ENOMEM;
+-
+-#ifdef PM8001_READ_VPD
+-	/*OPTION ROM FLASH read for the SPC cards */
+ 	DECLARE_COMPLETION_ONSTACK(completion);
+ 	struct pm8001_ioctl_payload payload;
+ 	int rc;
  
-+	if (pm8001_use_tasklet && !pm8001_use_msix)
-+		pm8001_use_tasklet = false;
++	if (!pm8001_read_wwn)
++		return 0;
 +
- 	pm8001_wq = alloc_workqueue("pm80xx", 0, 0);
- 	if (!pm8001_wq)
- 		goto err;
+ 	pm8001_ha->nvmd_completion = &completion;
+ 	/* SAS ADDRESS read from flash / EEPROM */
+ 	payload.minor_function = 6;
+@@ -813,7 +819,7 @@ static int pm8001_get_phy_settings_info(struct pm8001_hba_info *pm8001_ha)
+ 	wait_for_completion(&completion);
+ 	pm8001_set_phy_profile(pm8001_ha, sizeof(u8), payload.func_specific);
+ 	kfree(payload.func_specific);
+-#endif
++
+ 	return 0;
+ }
+ 
 diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm8001_sas.h
-index 612856b09187..e14c6668b0d3 100644
+index e14c6668b0d3..3ccb7371902f 100644
 --- a/drivers/scsi/pm8001/pm8001_sas.h
 +++ b/drivers/scsi/pm8001/pm8001_sas.h
-@@ -85,7 +85,6 @@ do {									\
+@@ -85,9 +85,6 @@ do {									\
  
  extern bool pm8001_use_msix;
  
--#define PM8001_USE_TASKLET
- #define PM8001_READ_VPD
- 
- 
-@@ -526,9 +525,7 @@ struct pm8001_hba_info {
- 	int			number_of_intr;/*will be used in remove()*/
- 	char			intr_drvname[PM8001_MAX_MSIX_VEC]
- 				[PM8001_NAME_LENGTH+1+3+1];
--#ifdef PM8001_USE_TASKLET
- 	struct tasklet_struct	tasklet[PM8001_MAX_MSIX_VEC];
--#endif
- 	u32			logging_level;
- 	u32			link_rate;
- 	u32			fw_status;
+-#define PM8001_READ_VPD
+-
+-
+ #define IS_SPCV_12G(dev)	((dev->device == 0X8074)		\
+ 				|| (dev->device == 0X8076)		\
+ 				|| (dev->device == 0X8077)		\
 -- 
 2.41.0
 
