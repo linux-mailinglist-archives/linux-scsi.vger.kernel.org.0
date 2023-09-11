@@ -2,107 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56F979AEC6
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 01:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5913D79B2FE
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 01:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237480AbjIKUvc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Sep 2023 16:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
+        id S236197AbjIKUvM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Sep 2023 16:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243296AbjIKREB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 13:04:01 -0400
+        with ESMTP id S243294AbjIKRD6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 13:03:58 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5525D127
-        for <linux-scsi@vger.kernel.org>; Mon, 11 Sep 2023 10:03:57 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38BGBSOR014108
-        for <linux-scsi@vger.kernel.org>; Mon, 11 Sep 2023 10:03:57 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E893127
+        for <linux-scsi@vger.kernel.org>; Mon, 11 Sep 2023 10:03:54 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38BGBJ1L013538
+        for <linux-scsi@vger.kernel.org>; Mon, 11 Sep 2023 10:03:53 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=s2048-2021-q4;
- bh=IOfpg9M/fCGwTTFuxVnywFTA6v0U0gh5rH/kKV1P8s4=;
- b=SXRxde8T4J0/rydpEZ6UouKmXXw5uba0hD9rTxnMjfmQo4s0SOZuZJgiT8nlZckioOO4
- TKT5IiMUQKZ28Mz+FPlO5zqLyaRfprL1T3/EgWNmDxBVCQhDv0cuXy6K7UK1INDoFyXX
- H41NIdmqG0PW6ku3SIKg4JnQ6E9PxhthzGDmpbZd+bLjHyZCfuPdjB/0Lv8d57eZ5tZ6
- jnZohuGOoNefPWqSARrGKjToulvwdwwZRBIMIWpa87AwX1e9nPMr+zv1aMM5Pd1Rwp+7
- GFY8oeSx9KadoWee2tNPFhvYbG1CbLdvmx0UEq4pC+1Z6ZC5rD/AlHleD42uQotI0od5 QA== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3t21k6k5ep-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=V3jmQO6lm/Fik2gbNmDLJuXzSPZHZ8U9ZHR6J/IYPsk=;
+ b=W5faw5A/XAF2wiYgzjERaokzBiqIBkPSszG4K8s8IdXSqNeR3ld19iet1Su9UfSC0keZ
+ Xm0VSLzeQCuKsLZfLo99sYjuCpxySLDgoDIEtTsBNdP1TaIZbTNoBL/BE0FjF26WHt8D
+ 7FKNqwTbzo0ApuljFhrN7kU0DOrfua8Pq9JkuVo3BGW/1sirJbKx2apFKumhBRGJAJ7w
+ izYng4ZtJ4fSTKBda3/kwlVzPQSVqeSJ2AAubPWTIJR/Onv3rE6vybgv2Nat/uXMgXPj
+ NQ9ekI/ZMOgRqGXIZb9X5N2xYTPGAawr1frvJ6mTxUKR47QO5NOQmq7BA3dt+bfmErJY Pw== 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3t21ju33qv-15
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Mon, 11 Sep 2023 10:03:57 -0700
-Received: from twshared8019.08.ash9.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+        for <linux-scsi@vger.kernel.org>; Mon, 11 Sep 2023 10:03:53 -0700
+Received: from twshared2388.07.ash9.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 11 Sep 2023 10:03:55 -0700
+ 15.1.2507.23; Mon, 11 Sep 2023 10:03:52 -0700
 Received: by devvm715.rva0.facebook.com (Postfix, from userid 240176)
-        id 84487292AEF67; Mon, 11 Sep 2023 10:03:46 -0700 (PDT)
+        id 04794292AEF84; Mon, 11 Sep 2023 10:03:48 -0700 (PDT)
 From:   Michal Grzedzicki <mge@meta.com>
 To:     Michal Grzedzicki <mge@meta.com>
 CC:     <jinpu.wang@cloud.ionos.com>, <jejb@linux.ibm.com>,
         <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/2] pm80xx: Use phy specific sas address when sending PHY_START command
-Date:   Mon, 11 Sep 2023 10:03:39 -0700
-Message-ID: <20230911170340.699533-1-mge@meta.com>
+Subject: [PATCH 2/2] pm80xx: Avoid leaking tags when processing OPC_INB_SET_CONTROLLER_CONFIG command
+Date:   Mon, 11 Sep 2023 10:03:40 -0700
+Message-ID: <20230911170340.699533-2-mge@meta.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230911170340.699533-1-mge@meta.com>
+References: <20230911170340.699533-1-mge@meta.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: fAge_Qm95GqQ-tv0ADr9mDOJ9ipbczI5
-X-Proofpoint-ORIG-GUID: fAge_Qm95GqQ-tv0ADr9mDOJ9ipbczI5
+X-Proofpoint-ORIG-GUID: Q5VFq9h5Rd-GomgehAfRO9ZHoktTVN-N
+X-Proofpoint-GUID: Q5VFq9h5Rd-GomgehAfRO9ZHoktTVN-N
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-09-11_12,2023-09-05_01,2023-05-22_02
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Some cards have more than one sas addresses. Using incorrect
-address causes communication issues with some devices like expanders.
+Tags allocated for OPC_INB_SET_CONTROLLER_CONFIG command need to be freed
+when we receive the response.
 
 Signed-off-by: Michal Grzedzicki <mge@meta.com>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 2 +-
- drivers/scsi/pm8001/pm80xx_hwi.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm800=
-1_hwi.c
-index 33053db5a713..90069c7b1642 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -4180,7 +4180,7 @@ pm8001_chip_phy_start_req(struct pm8001_hba_info *p=
-m8001_ha, u8 phy_id)
- 	payload.sas_identify.dev_type =3D SAS_END_DEVICE;
- 	payload.sas_identify.initiator_bits =3D SAS_PROTOCOL_ALL;
- 	memcpy(payload.sas_identify.sas_addr,
--		pm8001_ha->sas_addr, SAS_ADDR_SIZE);
-+		&pm8001_ha->phy[phy_id].dev_sas_addr, SAS_ADDR_SIZE);
- 	payload.sas_identify.phy_id =3D phy_id;
-=20
- 	return pm8001_mpi_build_cmd(pm8001_ha, 0, opcode, &payload,
 diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80x=
 x_hwi.c
-index f6857632dc7c..1b2c40b1381c 100644
+index 1b2c40b1381c..3afd9443c425 100644
 --- a/drivers/scsi/pm8001/pm80xx_hwi.c
 +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -4671,7 +4671,7 @@ pm80xx_chip_phy_start_req(struct pm8001_hba_info *p=
-m8001_ha, u8 phy_id)
- 	payload.sas_identify.dev_type =3D SAS_END_DEVICE;
- 	payload.sas_identify.initiator_bits =3D SAS_PROTOCOL_ALL;
- 	memcpy(payload.sas_identify.sas_addr,
--	  &pm8001_ha->sas_addr, SAS_ADDR_SIZE);
-+		&pm8001_ha->phy[phy_id].dev_sas_addr, SAS_ADDR_SIZE);
- 	payload.sas_identify.phy_id =3D phy_id;
+@@ -3671,10 +3671,12 @@ static int mpi_set_controller_config_resp(struct =
+pm8001_hba_info *pm8001_ha,
+ 			(struct set_ctrl_cfg_resp *)(piomb + 4);
+ 	u32 status =3D le32_to_cpu(pPayload->status);
+ 	u32 err_qlfr_pgcd =3D le32_to_cpu(pPayload->err_qlfr_pgcd);
++	u32 tag =3D le32_to_cpu(pPayload->tag);
 =20
- 	return pm8001_mpi_build_cmd(pm8001_ha, 0, opcode, &payload,
+ 	pm8001_dbg(pm8001_ha, MSG,
+ 		   "SET CONTROLLER RESP: status 0x%x qlfr_pgcd 0x%x\n",
+ 		   status, err_qlfr_pgcd);
++	pm8001_tag_free(pm8001_ha, tag);
+=20
+ 	return 0;
+ }
 --=20
 2.34.1
 
