@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A022779A210
-	for <lists+linux-scsi@lfdr.de>; Mon, 11 Sep 2023 06:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A156979A214
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 Sep 2023 06:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233595AbjIKECq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Sep 2023 00:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
+        id S233603AbjIKECt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Sep 2023 00:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbjIKECi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 00:02:38 -0400
+        with ESMTP id S233550AbjIKECk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 00:02:40 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F9AD2;
-        Sun, 10 Sep 2023 21:02:34 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A87C433C9;
-        Mon, 11 Sep 2023 04:02:32 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3722BEB;
+        Sun, 10 Sep 2023 21:02:36 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77851C433C8;
+        Mon, 11 Sep 2023 04:02:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694404954;
-        bh=pk3mewJpWExrKyWLQE9wo66o0OVhniKxzuiOqrDYPbQ=;
+        s=k20201202; t=1694404955;
+        bh=h2ErpV5hxv4e2S3b6dE5mfTOjMOUkzKdPn7zOqdj27s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vGeVIB4nlnifw7z3bAFKu5M4i8j1C8+19FuCZBKY1ETajPoxMBZT5vzIFnnsxpV2f
-         0DJTvrbmaa1WXZeg0kn6gZat9P173uPpLdv+K/tEvOw8qe62Os/FK4RhrCFgLnapKq
-         OizECdbF+F65a6a8JgaDNWSu6surOCha9gfAtk5DZALFvsi/XHazUQF1HdGiK1ndS3
-         stpz+9XblyeG87yKM2bMZNZALyR04lYfyvivndDz9u/psQHcQovkqrWj8R5RSkYk3v
-         up9isQKP9hjPeYxzBmTsf8VV8ZChoBDlL8sWOFfJkgia22bxCfS10get941OrWOInU
-         +Iy43s/8qNeEQ==
+        b=qzNW6VGQnfu9rOAe5/l59M/iq8hnlmMnFF/Fjx7G1z16Zoqql314h3j8MWnUd0P5d
+         UP2nKS8RVrRFLTfz3HxUGD0ZmeOU4jts6ri5A73xXb2gpD5JQ49/Otzl9GEprkCuRK
+         Z7XZ2/9UTCidkmRsXWFE+gc82rm1tsB8ZcVluQcYCVaVuKdPcjy8UcBHmBFgX+widm
+         uRzlcrqYir1xpBA975GWWe4QNObbkqevQQAAnf7iC0xnZ3ViTr9xMZyNaJfeevBZa/
+         R5fXYP5au9YxM6CVlWn/KhvjEyYFIIlhykCrlnPJIGdm+EIsSxaTZnJK9XQHarM15b
+         NO8xw/eQoAkxw==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     linux-ide@vger.kernel.org
 Cc:     linux-scsi@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc:     linux-scsi@vger.kernel.org,
         Paul Ausbeck <paula@soe.ucsc.edu>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Joe Breuer <linux-kernel@jmbreuer.net>
-Subject: [PATCH 07/19] scsi: sd: Do not issue commands to suspended disks on remove
-Date:   Mon, 11 Sep 2023 13:02:05 +0900
-Message-ID: <20230911040217.253905-8-dlemoal@kernel.org>
+Subject: [PATCH 08/19] scsi: Remove scsi device no_start_on_resume flag
+Date:   Mon, 11 Sep 2023 13:02:06 +0900
+Message-ID: <20230911040217.253905-9-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230911040217.253905-1-dlemoal@kernel.org>
 References: <20230911040217.253905-1-dlemoal@kernel.org>
@@ -53,37 +53,45 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If an error occurs when resuming a host adapter before the devices
-attached to the adapter are resumed, the adapter low level driver may
-remove the scsi host, resulting in a call to sd_remove() for the
-disks of the host. However, since this function calls sd_shutdown(),
-a synchronize cache command and a start stop unit may be issued with the
-drive still sleeping and the HBA non-functional. This causes PM resume
-to hang, forcing a reset of the machine to recover.
+The scsi device flag no_start_on_resume is not set by any scsi low
+level driver. Remove it.
 
-Fix this by checking a device host state in sd_shutdown() and by
-returning early doing nothing if the host state is not SHOST_RUNNING.
-
-Cc: stable@vger.kernel.org
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 ---
- drivers/scsi/sd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/sd.c          | 7 ++-----
+ include/scsi/scsi_device.h | 1 -
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index c92a317ba547..a415abb721d3 100644
+index a415abb721d3..b9504bb3cf4d 100644
 --- a/drivers/scsi/sd.c
 +++ b/drivers/scsi/sd.c
-@@ -3763,7 +3763,8 @@ static void sd_shutdown(struct device *dev)
- 	if (!sdkp)
- 		return;         /* this can happen */
+@@ -3846,11 +3846,8 @@ static int sd_resume(struct device *dev)
+ 	if (!sdkp->device->manage_start_stop)
+ 		return 0;
  
--	if (pm_runtime_suspended(dev))
-+	if (pm_runtime_suspended(dev) ||
-+	    sdkp->device->host->shost_state != SHOST_RUNNING)
- 		return;
- 
- 	if (sdkp->WCE && sdkp->media_present) {
+-	if (!sdkp->device->no_start_on_resume) {
+-		sd_printk(KERN_NOTICE, sdkp, "Starting disk\n");
+-		ret = sd_start_stop_device(sdkp, 1);
+-	}
+-
++	sd_printk(KERN_NOTICE, sdkp, "Starting disk\n");
++	ret = sd_start_stop_device(sdkp, 1);
+ 	if (!ret)
+ 		opal_unlock_from_suspend(sdkp->opal_dev);
+ 	return ret;
+diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
+index b9230b6add04..75b2235b99e2 100644
+--- a/include/scsi/scsi_device.h
++++ b/include/scsi/scsi_device.h
+@@ -194,7 +194,6 @@ struct scsi_device {
+ 	unsigned no_start_on_add:1;	/* do not issue start on add */
+ 	unsigned allow_restart:1; /* issue START_UNIT in error handler */
+ 	unsigned manage_start_stop:1;	/* Let HLD (sd) manage start/stop */
+-	unsigned no_start_on_resume:1; /* Do not issue START_STOP_UNIT on resume */
+ 	unsigned start_stop_pwr_cond:1;	/* Set power cond. in START_STOP_UNIT */
+ 	unsigned no_uld_attach:1; /* disable connecting to upper level drivers */
+ 	unsigned select_no_atn:1;
 -- 
 2.41.0
 
