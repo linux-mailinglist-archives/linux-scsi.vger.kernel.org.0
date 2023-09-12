@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6366579C220
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 04:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE4079C23B
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 04:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236180AbjILCHp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Sep 2023 22:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        id S236722AbjILCIC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Sep 2023 22:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237210AbjILCCC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 22:02:02 -0400
+        with ESMTP id S237192AbjILCCB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 22:02:01 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838841A4BCB;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5699A1A39B6;
         Mon, 11 Sep 2023 18:32:26 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE6CFC32791;
-        Tue, 12 Sep 2023 00:57:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 647B8C32794;
+        Tue, 12 Sep 2023 00:57:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694480227;
-        bh=44l0Mp8cg8u5dMXZhVw61tV4c5nbQZJ+oJw++vvJt+A=;
+        s=k20201202; t=1694480228;
+        bh=rdBLpZr0nte9cBd9BX1sL7lfQw3Y7w0fgD+Dbtdw+H0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=omJcYTSHdDWHGBcu7bJ1/f+ab5Eb908etpse/yre3YdYBQs7fN2eWJ9tMB0jr3XiN
-         fwjlfiCEK/5KYWGlNIcPsJleedkh33vT7x+VAxQp40ozdKOnU+R5UUPGiX/TLuRgId
-         pRZu5cfzjIfhaPJlkkejHZvtEteZZbfTgTjphpuCHjht1fu73oan8WPCQs/zUpgX4K
-         V3hHUABfCC5WrBD9YFe/1UmghLKt9/5LbPcpxrGtjyhp5/e5fnLzU25l7/A9Fb9GNY
-         dsyO3BOs+TEeVxFG59ONtr805M/7AMQhfczlrb3DBLxDibF3TtvixEk6F5F64tHj6J
-         Yl/LglI4I+AMQ==
+        b=EWa8BEgsBswvonlZxZjVc/6V6Nwuz1bAvQGQy3r4sSKqUWSVoA2bIEX2aVO1yFw2K
+         lA7h7eIoP2W8gWGh5xK5UI/l3onF/JKbmRcG1+M8g83zUDdNVPRw5SqmMUMHbsvwDp
+         SOZqNss3BGOeB08bzpgrJ+cNYSc2UzJY+xlA2Rp6T87S8nKih1s7WUH6oaMIOHDZS6
+         SofDU81SkKzvibuYw5m8r5sVwPhdZw8mnq3hMW9HzXN+zio1p3erYbUVB4XaVSkUlF
+         p9YeZFZg5OXaNdSlK7ls5OwxkZjiTR6Ri9yLUGzNqeXutWIB5bDAzxJCQ3LkRA5c6T
+         HVGnYB0qh83bQ==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     linux-ide@vger.kernel.org
 Cc:     linux-scsi@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc:     linux-scsi@vger.kernel.org,
         Paul Ausbeck <paula@soe.ucsc.edu>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Joe Breuer <linux-kernel@jmbreuer.net>
-Subject: [PATCH v2 06/21] ata: libata-core: Do not register PM operations for SAS ports
-Date:   Tue, 12 Sep 2023 09:56:40 +0900
-Message-ID: <20230912005655.368075-7-dlemoal@kernel.org>
+Subject: [PATCH v2 07/21] scsi: sd: Do not issue commands to suspended disks on remove
+Date:   Tue, 12 Sep 2023 09:56:41 +0900
+Message-ID: <20230912005655.368075-8-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230912005655.368075-1-dlemoal@kernel.org>
 References: <20230912005655.368075-1-dlemoal@kernel.org>
@@ -47,80 +47,38 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-libsas does its own domain based power management of ports. For such
-ports, libata should not use a device type defining power management
-operations as executing these operations for suspend/resume in addition
-to libsas calls to ata_sas_port_suspend() and ata_sas_port_resume() is
-not necessary (and likely dangerous to do, even though problems are not
-seen currently).
+If an error occurs when resuming a host adapter before the devices
+attached to the adapter are resumed, the adapter low level driver may
+remove the scsi host, resulting in a call to sd_remove() for the
+disks of the host. However, since this function calls sd_shutdown(),
+a synchronize cache command and a start stop unit may be issued with the
+drive still sleeping and the HBA non-functional. This causes PM resume
+to hang, forcing a reset of the machine to recover.
 
-Introduce the new ata_port_sas_type device_type for ports managed by
-libsas. This new device type is used in ata_tport_add() and is defined
-without power management operations.
+Fix this by checking a device host state in sd_shutdown() and by
+returning early doing nothing if the host state is not SHOST_RUNNING.
 
-Fixes: 2fcbdcb4c802 ("[SCSI] libata: export ata_port suspend/resume infrastructure for sas")
 Cc: stable@vger.kernel.org
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/ata/libata-core.c      | 2 +-
- drivers/ata/libata-transport.c | 9 ++++++++-
- drivers/ata/libata.h           | 2 ++
- 3 files changed, 11 insertions(+), 2 deletions(-)
+ drivers/scsi/sd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index 0479493e54bd..18b2a0da9e54 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -5339,7 +5339,7 @@ EXPORT_SYMBOL_GPL(ata_host_resume);
- #endif
+diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+index c92a317ba547..a415abb721d3 100644
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -3763,7 +3763,8 @@ static void sd_shutdown(struct device *dev)
+ 	if (!sdkp)
+ 		return;         /* this can happen */
  
- const struct device_type ata_port_type = {
--	.name = "ata_port",
-+	.name = ATA_PORT_TYPE_NAME,
- #ifdef CONFIG_PM
- 	.pm = &ata_port_pm_ops,
- #endif
-diff --git a/drivers/ata/libata-transport.c b/drivers/ata/libata-transport.c
-index e4fb9d1b9b39..3e49a877500e 100644
---- a/drivers/ata/libata-transport.c
-+++ b/drivers/ata/libata-transport.c
-@@ -266,6 +266,10 @@ void ata_tport_delete(struct ata_port *ap)
- 	put_device(dev);
- }
+-	if (pm_runtime_suspended(dev))
++	if (pm_runtime_suspended(dev) ||
++	    sdkp->device->host->shost_state != SHOST_RUNNING)
+ 		return;
  
-+static const struct device_type ata_port_sas_type = {
-+	.name = ATA_PORT_TYPE_NAME,
-+};
-+
- /** ata_tport_add - initialize a transport ATA port structure
-  *
-  * @parent:	parent device
-@@ -283,7 +287,10 @@ int ata_tport_add(struct device *parent,
- 	struct device *dev = &ap->tdev;
- 
- 	device_initialize(dev);
--	dev->type = &ata_port_type;
-+	if (ap->flags & ATA_FLAG_SAS_HOST)
-+		dev->type = &ata_port_sas_type;
-+	else
-+		dev->type = &ata_port_type;
- 
- 	dev->parent = parent;
- 	ata_host_get(ap->host);
-diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
-index a5ee06f0234a..c57e094c3af9 100644
---- a/drivers/ata/libata.h
-+++ b/drivers/ata/libata.h
-@@ -30,6 +30,8 @@ enum {
- 	ATA_DNXFER_QUIET	= (1 << 31),
- };
- 
-+#define ATA_PORT_TYPE_NAME	"ata_port"
-+
- extern atomic_t ata_print_id;
- extern int atapi_passthru16;
- extern int libata_fua;
+ 	if (sdkp->WCE && sdkp->media_present) {
 -- 
 2.41.0
 
