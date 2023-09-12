@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F418E79C231
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 04:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC3579C23C
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 04:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236569AbjILCHz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Sep 2023 22:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
+        id S236796AbjILCID (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Sep 2023 22:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237143AbjILCCA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 22:02:00 -0400
+        with ESMTP id S237185AbjILCCB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 22:02:01 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1288A1A39AB;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB021A39B1;
         Mon, 11 Sep 2023 18:32:26 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0FA4C32795;
-        Tue, 12 Sep 2023 00:57:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 472D3C32792;
+        Tue, 12 Sep 2023 00:57:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694480230;
-        bh=bZtz9eMunPYWyuJnAS6FDFwvUGsPWddjqUEoOdDemZA=;
+        s=k20201202; t=1694480231;
+        bh=MfRxqf5qd0k2HWByAexvYZRKz0nTGETK00h5j7Ux85E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UR5Ysn1j1SeRQWeP6zPDRpcP2ZyID6a0TWdI/SJK/iLr6fK2r2jOeZUJbgAH/vsNX
-         +NUnAL7ZnPhq+rYvtlvME/LKsGgCfZMjnVay3h1RiCdho7tjciREtWDYihMv8njLOz
-         5ZPcBdHU6vRdQFKDFQ9bH/Jv3W4uNSM30GZzakltZ/4whGgUW9413I+RCEIGwjVTZH
-         KfJeNtNyHMEKPGCUy4sdTuD8NF+O0BfKNZkBNuFq8NKv5I6MgGq3QHx6ybecM3kFSH
-         Yd6yzrdl7SDhY/EF0X+UHEJse+j/zLEuBLVM3xNqxSOtKA+i6RZn5VhMhp+dAacykN
-         K6UT6ee0SG7Og==
+        b=IDz+GMF7HPrwmgbRvbitrhLqyLNw5LWZq5s6qP8vVA1YFrpiquhBfw/71luzbGHgH
+         gpb8lE/inpaCyNNrjDTCrzqqA6TTVzhbDgSQjqSjjM2z/PosfdjmGNoj6VNJ94aC5s
+         mSUvFXkgWQtx6wsq42TvbFVrT2pyD54wH6U6489kPevN+9XO/spv4FCQHgL5MuMyEA
+         whIigfwSVDPpWpWxlM1qQ4znpzuT36h10lk6WXaZTGzyHTHhJKJuDm9SjTr8Sby2Of
+         1OAKKJ3pJ+p2DPvvAZCFYXGlyXKcxowNqLfMGc1+T61L5tjn0pD62tZmQDyeYxcC6y
+         m7tK8ya9i3jIg==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     linux-ide@vger.kernel.org
 Cc:     linux-scsi@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc:     linux-scsi@vger.kernel.org,
         Paul Ausbeck <paula@soe.ucsc.edu>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Joe Breuer <linux-kernel@jmbreuer.net>
-Subject: [PATCH v2 08/21] ata: libata-core: Fix compilation warning in ata_dev_config_ncq()
-Date:   Tue, 12 Sep 2023 09:56:42 +0900
-Message-ID: <20230912005655.368075-9-dlemoal@kernel.org>
+Subject: [PATCH v2 09/21] ata: libata-eh: Fix compilation warning in ata_eh_link_report()
+Date:   Tue, 12 Sep 2023 09:56:43 +0900
+Message-ID: <20230912005655.368075-10-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230912005655.368075-1-dlemoal@kernel.org>
 References: <20230912005655.368075-1-dlemoal@kernel.org>
@@ -48,47 +48,42 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The 24 bytes length allocated to the ncq_desc string in
-ata_dev_config_lba() for ata_dev_config_ncq() to use is too short,
-causing the following gcc compilation warnings when compiling with W=1:
+The 6 bytes length of the tries_buf string in ata_eh_link_report() is
+too short and results in a gcc compilation warning with W-!:
 
-drivers/ata/libata-core.c: In function ‘ata_dev_configure’:
-drivers/ata/libata-core.c:2378:56: warning: ‘%d’ directive output may be truncated writing between 1 and 2 bytes into a region of size between 1 and 11 [-Wformat-truncation=]
- 2378 |                 snprintf(desc, desc_sz, "NCQ (depth %d/%d)%s", hdepth,
-      |                                                        ^~
-In function ‘ata_dev_config_ncq’,
-    inlined from ‘ata_dev_config_lba’ at drivers/ata/libata-core.c:2649:8,
-    inlined from ‘ata_dev_configure’ at drivers/ata/libata-core.c:2952:9:
-drivers/ata/libata-core.c:2378:41: note: directive argument in the range [1, 32]
- 2378 |                 snprintf(desc, desc_sz, "NCQ (depth %d/%d)%s", hdepth,
-      |                                         ^~~~~~~~~~~~~~~~~~~~~
-drivers/ata/libata-core.c:2378:17: note: ‘snprintf’ output between 16 and 31 bytes into a destination of size 24
- 2378 |                 snprintf(desc, desc_sz, "NCQ (depth %d/%d)%s", hdepth,
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 2379 |                         ddepth, aa_desc);
-      |                         ~~~~~~~~~~~~~~~~
+drivers/ata/libata-eh.c: In function ‘ata_eh_link_report’:
+drivers/ata/libata-eh.c:2371:59: warning: ‘%d’ directive output may be truncated writing between 1 and 11 bytes into a region of size 4 [-Wformat-truncation=]
+ 2371 |                 snprintf(tries_buf, sizeof(tries_buf), " t%d",
+      |                                                           ^~
+drivers/ata/libata-eh.c:2371:56: note: directive argument in the range [-2147483648, 4]
+ 2371 |                 snprintf(tries_buf, sizeof(tries_buf), " t%d",
+      |                                                        ^~~~~~
+drivers/ata/libata-eh.c:2371:17: note: ‘snprintf’ output between 4 and 14 bytes into a destination of size 6
+ 2371 |                 snprintf(tries_buf, sizeof(tries_buf), " t%d",
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 2372 |                          ap->eh_tries);
+      |                          ~~~~~~~~~~~~~
 
-Avoid these warnings and the potential truncation by changing the size
-of the ncq_desc string to 32 characters.
+Avoid this warning by increasing the string size to 16B.
 
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 ---
- drivers/ata/libata-core.c | 2 +-
+ drivers/ata/libata-eh.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index 18b2a0da9e54..2405ac8b53f0 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -2619,7 +2619,7 @@ static int ata_dev_config_lba(struct ata_device *dev)
- {
- 	const u16 *id = dev->id;
- 	const char *lba_desc;
--	char ncq_desc[24];
-+	char ncq_desc[32];
- 	int ret;
+diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+index 43b0a1509548..03c45630a35b 100644
+--- a/drivers/ata/libata-eh.c
++++ b/drivers/ata/libata-eh.c
+@@ -2332,7 +2332,7 @@ static void ata_eh_link_report(struct ata_link *link)
+ 	struct ata_eh_context *ehc = &link->eh_context;
+ 	struct ata_queued_cmd *qc;
+ 	const char *frozen, *desc;
+-	char tries_buf[6] = "";
++	char tries_buf[16] = "";
+ 	int tag, nr_failed = 0;
  
- 	dev->flags |= ATA_DFLAG_LBA;
+ 	if (ehc->i.flags & ATA_EHI_QUIET)
 -- 
 2.41.0
 
