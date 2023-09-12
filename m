@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE4079C23B
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 04:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F418E79C231
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 04:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236722AbjILCIC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Sep 2023 22:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S236569AbjILCHz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Sep 2023 22:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237192AbjILCCB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 22:02:01 -0400
+        with ESMTP id S237143AbjILCCA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 22:02:00 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5699A1A39B6;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1288A1A39AB;
         Mon, 11 Sep 2023 18:32:26 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 647B8C32794;
-        Tue, 12 Sep 2023 00:57:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0FA4C32795;
+        Tue, 12 Sep 2023 00:57:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694480228;
-        bh=rdBLpZr0nte9cBd9BX1sL7lfQw3Y7w0fgD+Dbtdw+H0=;
+        s=k20201202; t=1694480230;
+        bh=bZtz9eMunPYWyuJnAS6FDFwvUGsPWddjqUEoOdDemZA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EWa8BEgsBswvonlZxZjVc/6V6Nwuz1bAvQGQy3r4sSKqUWSVoA2bIEX2aVO1yFw2K
-         lA7h7eIoP2W8gWGh5xK5UI/l3onF/JKbmRcG1+M8g83zUDdNVPRw5SqmMUMHbsvwDp
-         SOZqNss3BGOeB08bzpgrJ+cNYSc2UzJY+xlA2Rp6T87S8nKih1s7WUH6oaMIOHDZS6
-         SofDU81SkKzvibuYw5m8r5sVwPhdZw8mnq3hMW9HzXN+zio1p3erYbUVB4XaVSkUlF
-         p9YeZFZg5OXaNdSlK7ls5OwxkZjiTR6Ri9yLUGzNqeXutWIB5bDAzxJCQ3LkRA5c6T
-         HVGnYB0qh83bQ==
+        b=UR5Ysn1j1SeRQWeP6zPDRpcP2ZyID6a0TWdI/SJK/iLr6fK2r2jOeZUJbgAH/vsNX
+         +NUnAL7ZnPhq+rYvtlvME/LKsGgCfZMjnVay3h1RiCdho7tjciREtWDYihMv8njLOz
+         5ZPcBdHU6vRdQFKDFQ9bH/Jv3W4uNSM30GZzakltZ/4whGgUW9413I+RCEIGwjVTZH
+         KfJeNtNyHMEKPGCUy4sdTuD8NF+O0BfKNZkBNuFq8NKv5I6MgGq3QHx6ybecM3kFSH
+         Yd6yzrdl7SDhY/EF0X+UHEJse+j/zLEuBLVM3xNqxSOtKA+i6RZn5VhMhp+dAacykN
+         K6UT6ee0SG7Og==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     linux-ide@vger.kernel.org
 Cc:     linux-scsi@vger.kernel.org,
@@ -35,50 +35,60 @@ Cc:     linux-scsi@vger.kernel.org,
         Paul Ausbeck <paula@soe.ucsc.edu>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Joe Breuer <linux-kernel@jmbreuer.net>
-Subject: [PATCH v2 07/21] scsi: sd: Do not issue commands to suspended disks on remove
-Date:   Tue, 12 Sep 2023 09:56:41 +0900
-Message-ID: <20230912005655.368075-8-dlemoal@kernel.org>
+Subject: [PATCH v2 08/21] ata: libata-core: Fix compilation warning in ata_dev_config_ncq()
+Date:   Tue, 12 Sep 2023 09:56:42 +0900
+Message-ID: <20230912005655.368075-9-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230912005655.368075-1-dlemoal@kernel.org>
 References: <20230912005655.368075-1-dlemoal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If an error occurs when resuming a host adapter before the devices
-attached to the adapter are resumed, the adapter low level driver may
-remove the scsi host, resulting in a call to sd_remove() for the
-disks of the host. However, since this function calls sd_shutdown(),
-a synchronize cache command and a start stop unit may be issued with the
-drive still sleeping and the HBA non-functional. This causes PM resume
-to hang, forcing a reset of the machine to recover.
+The 24 bytes length allocated to the ncq_desc string in
+ata_dev_config_lba() for ata_dev_config_ncq() to use is too short,
+causing the following gcc compilation warnings when compiling with W=1:
 
-Fix this by checking a device host state in sd_shutdown() and by
-returning early doing nothing if the host state is not SHOST_RUNNING.
+drivers/ata/libata-core.c: In function ‘ata_dev_configure’:
+drivers/ata/libata-core.c:2378:56: warning: ‘%d’ directive output may be truncated writing between 1 and 2 bytes into a region of size between 1 and 11 [-Wformat-truncation=]
+ 2378 |                 snprintf(desc, desc_sz, "NCQ (depth %d/%d)%s", hdepth,
+      |                                                        ^~
+In function ‘ata_dev_config_ncq’,
+    inlined from ‘ata_dev_config_lba’ at drivers/ata/libata-core.c:2649:8,
+    inlined from ‘ata_dev_configure’ at drivers/ata/libata-core.c:2952:9:
+drivers/ata/libata-core.c:2378:41: note: directive argument in the range [1, 32]
+ 2378 |                 snprintf(desc, desc_sz, "NCQ (depth %d/%d)%s", hdepth,
+      |                                         ^~~~~~~~~~~~~~~~~~~~~
+drivers/ata/libata-core.c:2378:17: note: ‘snprintf’ output between 16 and 31 bytes into a destination of size 24
+ 2378 |                 snprintf(desc, desc_sz, "NCQ (depth %d/%d)%s", hdepth,
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 2379 |                         ddepth, aa_desc);
+      |                         ~~~~~~~~~~~~~~~~
 
-Cc: stable@vger.kernel.org
+Avoid these warnings and the potential truncation by changing the size
+of the ncq_desc string to 32 characters.
+
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/sd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/ata/libata-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index c92a317ba547..a415abb721d3 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -3763,7 +3763,8 @@ static void sd_shutdown(struct device *dev)
- 	if (!sdkp)
- 		return;         /* this can happen */
+diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+index 18b2a0da9e54..2405ac8b53f0 100644
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -2619,7 +2619,7 @@ static int ata_dev_config_lba(struct ata_device *dev)
+ {
+ 	const u16 *id = dev->id;
+ 	const char *lba_desc;
+-	char ncq_desc[24];
++	char ncq_desc[32];
+ 	int ret;
  
--	if (pm_runtime_suspended(dev))
-+	if (pm_runtime_suspended(dev) ||
-+	    sdkp->device->host->shost_state != SHOST_RUNNING)
- 		return;
- 
- 	if (sdkp->WCE && sdkp->media_present) {
+ 	dev->flags |= ATA_DFLAG_LBA;
 -- 
 2.41.0
 
