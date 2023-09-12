@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F0179C39B
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 05:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5632879C380
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 05:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241577AbjILDDH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Sep 2023 23:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
+        id S241288AbjILDAY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Sep 2023 23:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241635AbjILDCm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 23:02:42 -0400
+        with ESMTP id S241068AbjILDAL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 23:00:11 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9343D1A6657;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBA81A39AA;
         Mon, 11 Sep 2023 18:32:26 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE4A8C3279D;
-        Tue, 12 Sep 2023 00:57:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 344EDC3279E;
+        Tue, 12 Sep 2023 00:57:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694480242;
-        bh=rLTABGw2P+3lAhdcqxZYbLfxgEQDV7q07O7Gd8bqHzg=;
+        s=k20201202; t=1694480244;
+        bh=RyHmMaIW31a4d+xQxAGJ7MmlzJA+9IxnDZMnTwbIx84=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=quYSDvMqGfB5cZ1JKED+yTIcC5wgNa3WQDX7BVbTBFM9AQcjUbOTqWFq2iVqanjHP
-         pFVky+8aT503G9OPZdjLYmEJgeJ/5wA0vA/mLdR0zojhBsMgE4BUlVgEss9e1T7S/s
-         LgQv9QsvMfRCDjFZalmOirMFdA2HYm9zIGiopCptEmyIjE4spvJDmLwO7kH8+Wqc3Q
-         8KWgVQVeyYbFHRSCb/Lj69ykZrVpgYUeOV7MgjBT6xntkEeRBf4belFNWSXkAzBSau
-         NIqY1Mv7FyuhlHlcKHizkf/LFXvLtQEpptwCW32N2FkuEfpVX6fzHnMPxPkcZAzekx
-         DR2HGCcDgP8ZA==
+        b=N0KIh4kBarEdhyaKiuMmbysdK2d4mzT95Il8/aK0Nuj4JgRFlbHXiU/bO142iRABT
+         5dcekb5H8CyPBDQK7Tny4UJq2Z4dEs/qATkoeV/hcGDIyVTzxkaOggrgze3ROJOG3r
+         DK3QPi4STcd9v4cEnuBoXubolPYYVWtNgRgBFn9/4luVXFs2m6GVzsaWZs+XmifSlI
+         I2uYiO19XjIt9Ds67d6KqkrWpwzwRDcEE8IBpwR6lJtuYvnLTRrQG6e2oOOHFlEof6
+         ftU4yurhLXgdr1k+7hPjTyFdnJjfVX8+7kE3ytEZKEuJti72RL4nPIFIJ18u7DE/Ts
+         Vw+e1r+9yVd3w==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     linux-ide@vger.kernel.org
 Cc:     linux-scsi@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc:     linux-scsi@vger.kernel.org,
         Paul Ausbeck <paula@soe.ucsc.edu>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Joe Breuer <linux-kernel@jmbreuer.net>
-Subject: [PATCH v2 17/21] ata: libata-core: Do not resume ports that have been runtime suspended
-Date:   Tue, 12 Sep 2023 09:56:51 +0900
-Message-ID: <20230912005655.368075-18-dlemoal@kernel.org>
+Subject: [PATCH v2 18/21] ata: libata-sata: Improve ata_sas_slave_configure()
+Date:   Tue, 12 Sep 2023 09:56:52 +0900
+Message-ID: <20230912005655.368075-19-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230912005655.368075-1-dlemoal@kernel.org>
 References: <20230912005655.368075-1-dlemoal@kernel.org>
@@ -47,35 +47,30 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The scsi disk driver does not resume disks that have been runtime
-suspended by the user. To be consistent with this behavior, do the same
-for ata ports and skip the PM request in ata_port_pm_resume() if the
-port was already runtime suspended. With this change, it is no longer
-necessary to for the PM state of the port to ACTIVE as the PM core code
-will take care of that when handling runtime resume.
+Change ata_sas_slave_configure() to return the return value of
+ata_scsi_dev_config() to ensure that any error from that function is
+propagated to libsas.
 
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/ata/libata-core.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/ata/libata-sata.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index c3adaa01cbe3..080b451e7ddd 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -5234,10 +5234,8 @@ static void ata_port_resume(struct ata_port *ap, pm_message_t mesg,
- 
- static int ata_port_pm_resume(struct device *dev)
+diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
+index 5d31c08be013..0748e9ea4f5f 100644
+--- a/drivers/ata/libata-sata.c
++++ b/drivers/ata/libata-sata.c
+@@ -1169,8 +1169,8 @@ EXPORT_SYMBOL_GPL(ata_sas_tport_delete);
+ int ata_sas_slave_configure(struct scsi_device *sdev, struct ata_port *ap)
  {
--	ata_port_resume(to_ata_port(dev), PMSG_RESUME, true);
--	pm_runtime_disable(dev);
--	pm_runtime_set_active(dev);
--	pm_runtime_enable(dev);
-+	if (!pm_runtime_suspended(dev))
-+		ata_port_resume(to_ata_port(dev), PMSG_RESUME, true);
- 	return 0;
+ 	ata_scsi_sdev_config(sdev);
+-	ata_scsi_dev_config(sdev, ap->link.device);
+-	return 0;
++
++	return ata_scsi_dev_config(sdev, ap->link.device);
  }
+ EXPORT_SYMBOL_GPL(ata_sas_slave_configure);
  
 -- 
 2.41.0
