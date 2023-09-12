@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C42A79C240
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 04:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B425E79C48F
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Sep 2023 06:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236838AbjILCIE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Sep 2023 22:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
+        id S232901AbjILELw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Sep 2023 00:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237144AbjILCCA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Sep 2023 22:02:00 -0400
+        with ESMTP id S233871AbjILELm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Sep 2023 00:11:42 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167A31A39AE;
-        Mon, 11 Sep 2023 18:32:26 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 811E4C36AE6;
-        Tue, 12 Sep 2023 00:57:27 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFF31A399C;
+        Mon, 11 Sep 2023 18:32:25 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 523EFC3279C;
+        Tue, 12 Sep 2023 00:57:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694480248;
-        bh=SUQ1ONHLZRQICe+mf6elU/cxoVog56qhZUq3IY+ouMw=;
+        s=k20201202; t=1694480241;
+        bh=HNHz/1NLQsisYVxZ4YR7OWMwK4M26w6uXl/moLQU9KA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vy/gMpafUy7Nf++ggk6vRr0IYGbu3oJNKGY13g/vA1IEog2hVwr3FQriSP8TrGuUs
-         VoUYZs7J++5RLZirz9nY/UBGr1p1zWypBaTf4K8XOQFn+/6gmfjxj1bGMKrDeH9SqI
-         WdSm1k4wLPe7onJb8jebgiwvNu74qL8E26hGlc5Xhnt3pEyNIzYPgAEhADSmpvSayV
-         j/pjrY0ExEwqZl/LILBlRB8SL0PSJXV9kWf347RmAJ1gsSRSnUcwDV3kExratUqheT
-         lIR4meqExNVh7OHEf/AcFNZxxx7xjYGSdaMSAKgWLLykQu8a2bJ+ULThdSUntWoPf+
-         hN7cTk+hgXTgw==
+        b=QcMFt/hU31LqGP3RVgyKSiEHivqhYpqweMOvB2IrBqvqIKJK+vQ0fQja9/+TLz+O+
+         6knKQG0+7j52WJBRsMpTliBQ41EJqFCfSLStLE2kozqFyKD35LSi1bCwlITWzXGMBu
+         f8E410qPxKnLhk2lx8wpLiA+7LL1dU70m5iPu/KjhoBJ/GV/Mva1TK9F6USCncYa1h
+         AbIKMSjqcpK8eX4o2NvMEkH8LgnJXYapJ9u+Y56S3pCHThXYstlh3SGXTjEKchi5aM
+         ZQpTIZjqP3x1WtwoHy153LGg1HOT5/kkAqJXy9zfh9SIwwEfmAXxxeQ817pSEAkCc+
+         oMHfZuV8CEOiw==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     linux-ide@vger.kernel.org
 Cc:     linux-scsi@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc:     linux-scsi@vger.kernel.org,
         Paul Ausbeck <paula@soe.ucsc.edu>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Joe Breuer <linux-kernel@jmbreuer.net>
-Subject: [PATCH v2 21/21] ata: libata: Cleanup inline DMA helper functions
-Date:   Tue, 12 Sep 2023 09:56:55 +0900
-Message-ID: <20230912005655.368075-22-dlemoal@kernel.org>
+Subject: [PATCH v2 16/21] ata: libata-core: skip poweroff for devices that are runtime suspended
+Date:   Tue, 12 Sep 2023 09:56:50 +0900
+Message-ID: <20230912005655.368075-17-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230912005655.368075-1-dlemoal@kernel.org>
 References: <20230912005655.368075-1-dlemoal@kernel.org>
@@ -47,52 +47,30 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Simplify the inline DMA helper functions ata_using_mwdma(),
-ata_using_udma() and ata_dma_enabled() to directly return as a boolean
-the result of their test condition.
+When powering off, there is no need to suspend a port that has already
+been runtime suspended. Skip the EH PM request in ata_port_pm_poweroff()
+in this case.
 
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 ---
- include/linux/libata.h | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+ drivers/ata/libata-core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/libata.h b/include/linux/libata.h
-index 6593c79b7290..f48fe27dae94 100644
---- a/include/linux/libata.h
-+++ b/include/linux/libata.h
-@@ -1878,23 +1878,21 @@ static inline unsigned long ata_deadline(unsigned long from_jiffies,
-    change in future hardware and specs, secondly 0xFF means 'no DMA' but is
-    > UDMA_0. Dyma ddreigiau */
+diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+index a4389dd807e5..c3adaa01cbe3 100644
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -5219,7 +5219,8 @@ static int ata_port_pm_freeze(struct device *dev)
  
--static inline int ata_using_mwdma(struct ata_device *adev)
-+static inline bool ata_using_mwdma(struct ata_device *adev)
+ static int ata_port_pm_poweroff(struct device *dev)
  {
--	if (adev->dma_mode >= XFER_MW_DMA_0 && adev->dma_mode <= XFER_MW_DMA_4)
--		return 1;
--	return 0;
-+	return adev->dma_mode >= XFER_MW_DMA_0 &&
-+		adev->dma_mode <= XFER_MW_DMA_4;
+-	ata_port_suspend(to_ata_port(dev), PMSG_HIBERNATE, false);
++	if (!pm_runtime_suspended(dev))
++		ata_port_suspend(to_ata_port(dev), PMSG_HIBERNATE, false);
+ 	return 0;
  }
  
--static inline int ata_using_udma(struct ata_device *adev)
-+static inline bool ata_using_udma(struct ata_device *adev)
- {
--	if (adev->dma_mode >= XFER_UDMA_0 && adev->dma_mode <= XFER_UDMA_7)
--		return 1;
--	return 0;
-+	return adev->dma_mode >= XFER_UDMA_0 &&
-+		adev->dma_mode <= XFER_UDMA_7;
- }
- 
--static inline int ata_dma_enabled(struct ata_device *adev)
-+static inline bool ata_dma_enabled(struct ata_device *adev)
- {
--	return (adev->dma_mode == 0xFF ? 0 : 1);
-+	return adev->dma_mode != 0xFF;
- }
- 
- /**************************************************************************
 -- 
 2.41.0
 
