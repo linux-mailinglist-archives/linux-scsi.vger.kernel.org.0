@@ -2,42 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1BE79DF5E
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Sep 2023 07:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A6279E21B
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Sep 2023 10:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235626AbjIMFQO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Sep 2023 01:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
+        id S238886AbjIMIay convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 13 Sep 2023 04:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234950AbjIMFQN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Sep 2023 01:16:13 -0400
-X-Greylist: delayed 5630 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Sep 2023 22:16:09 PDT
-Received: from ns3046726.ip-164-132-202.eu (ns3046726.ip-164-132-202.eu [164.132.202.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6C8D172D
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Sep 2023 22:16:09 -0700 (PDT)
-Received: from WIN-HM6FI4VOIEP (localhost [IPv6:::1])
-        by ns3046726.ip-164-132-202.eu (Postfix) with ESMTP id 391B64F12C
-        for <linux-scsi@vger.kernel.org>; Wed, 13 Sep 2023 02:25:13 +0200 (CEST)
-Message-ID: <04172465-45182-ac951008474537@win-hm6fi4voiep>
-Reply-To: "Schaeffler (CEO/Founder)" <info@relaiblecharity.com>
-From:   "Schaeffler (CEO/Founder)" <Funds@investcorp.com>
-To:     linux-scsi@vger.kernel.org
-Subject: Private Giveaways ltd
-Date:   Wed, 13 Sep 2023 02:24:13 +0200
+        with ESMTP id S229708AbjIMIay (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Sep 2023 04:30:54 -0400
+Received: from jamoutsourcing.in (unknown [202.149.222.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E737010C0;
+        Wed, 13 Sep 2023 01:30:49 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by jamoutsourcing.in (Postfix) with ESMTP id CA0793018CB01;
+        Wed, 13 Sep 2023 04:49:29 +0000 (UTC)
+Received: from jamoutsourcing.in ([127.0.0.1])
+        by localhost (jamoutsourcing.in [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id YFJmrcX9o7fs; Wed, 13 Sep 2023 04:49:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by jamoutsourcing.in (Postfix) with ESMTP id 2CFF5306C0B13;
+        Wed, 13 Sep 2023 04:43:46 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at jamoutsourcing.in
+Received: from jamoutsourcing.in ([127.0.0.1])
+        by localhost (jamoutsourcing.in [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 49bszqEo2_4m; Wed, 13 Sep 2023 04:43:46 +0000 (UTC)
+Received: from [185.225.73.120] (_gateway [192.168.1.1])
+        by jamoutsourcing.in (Postfix) with ESMTP id 1DC173018CB17;
+        Wed, 13 Sep 2023 04:36:54 +0000 (UTC)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Priority: 3
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: my offer
+To:     Recipients <test@test.com>
+From:   "Mr. mohd" <test@test.com>
+Date:   Tue, 12 Sep 2023 21:36:52 -0700
+Reply-To: mohamedsafiah47@gmail.com
+Message-Id: <20230913043655.1DC173018CB17@jamoutsourcing.in>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Good Day,
 
-This is the second email Notification I am emailing to you without a response from you. This is just to notify you that this email account of yours was selected randomly to receive a voluntary donation of €1.7 million from Mrs. Maria Elisabeth Schaeffler. Please email me for details now.
+Dear
+My name is Mohamed Abdul I have the capacity to inject a considerable
+amount of capital in any viable project 
+1,cell phone number what-sap
+2,full name
 
 
-Thank You.
-Mrs. Maria Elisabeth Schaeffler (CEO/Founder)
-©2023 SCHAEFFLER All Rights Reserved
-
+yours truly
+Mohamed Abdul Ahmed
