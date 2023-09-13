@@ -2,171 +2,390 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E111879F4B4
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Sep 2023 00:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F001279F584
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Sep 2023 01:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232920AbjIMWIE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Sep 2023 18:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
+        id S233145AbjIMXay (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Sep 2023 19:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbjIMWID (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Sep 2023 18:08:03 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E22B173A;
-        Wed, 13 Sep 2023 15:07:59 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ABA3C433C7;
-        Wed, 13 Sep 2023 22:07:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694642878;
-        bh=1e/Se42acMmJti+HN3eVxt9x2rw0ic65YcpeSMc4Zbo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aMl3F7xth2Kh8w6hc9Se2I0pApgEdRXKbLK1NhRIedOxIO/oXpRQUMwrGDk23WtVe
-         PKXn453J58OztswNm1W6bg8gMOSxaCdxx+ortVoXlsBxvMaW70pE4kj1qnl2jSKHqM
-         QDnK4Tfd+aLace/cZy0cHJq1tS/bhmZxliSFPzfHoQ+JuU72DLN0ierhaNCft7Bs9Z
-         wwwfIZ6X8z8q0d57Q7Fx410YB3kTjARxRDY8U4Od2+rreoALO04y0ARgidK/PpOtUZ
-         52CLnqy/vlemDtEeCy3NJgwH/u1u6+KUd8UakodVur/FdSP2cBgdtY2MHh5cufs6uY
-         aGRdcUUrkbvGw==
-Message-ID: <0f164526-d1b6-64d3-a802-aa2a6c7951ee@kernel.org>
-Date:   Thu, 14 Sep 2023 07:07:56 +0900
+        with ESMTP id S233007AbjIMXax (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Sep 2023 19:30:53 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B2EE6
+        for <linux-scsi@vger.kernel.org>; Wed, 13 Sep 2023 16:30:49 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38DNJPp3029718;
+        Wed, 13 Sep 2023 23:30:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=LCqcOd6W7BRT3NhaCyOUHCifJBX+JddBnTaNOVFKIxo=;
+ b=g/RKokVIEF6D8DXL09KXjlZZb58mN7tcmiK6iCQKLyhJYR8fE9+y8LTprqD7eTtizJif
+ H1Cg8rR1ErbMKEU7H2DQFOrEL/xSghrYdFyZLXXviZ9d1k/vB/bCGyKpol4R8HrMGV3H
+ FRasjsfeL0VbafyLystKNt28LgbuVh5k/0dzMoMD/gmLRcFzjeqh14fQjo6ASlXXzsZd
+ lyk1GtCD/O37ACgWHKbjSSaEjqvsuml1LYwiD8ZgfipdFjAgWOdrw8SDZ2LipD0+k+j6
+ bOjynXvJyEPmEyXBjGD1dAxi0nXqiR1I6vd8cTCAce23p2R5XmoFuLM693MBgJ3656bI xQ== 
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t3kfgcn20-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Sep 2023 23:30:47 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38DKgcXJ022941;
+        Wed, 13 Sep 2023 23:05:01 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3t141nxm0e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Sep 2023 23:05:01 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38DN50lp35455612
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Sep 2023 23:05:00 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2394058053;
+        Wed, 13 Sep 2023 23:05:00 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A88E658043;
+        Wed, 13 Sep 2023 23:04:59 +0000 (GMT)
+Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 13 Sep 2023 23:04:59 +0000 (GMT)
+From:   Tyrel Datwyler <tyreld@linux.ibm.com>
+To:     martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, brking@linux.ibm.com,
+        james.bottomley@hansenpartnership.com,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Brian King <brking@linux.vnet.ibm.com>
+Subject: [PATCH 01/11] ibmvfc: remove BUG_ON in the case of an empty event pool
+Date:   Wed, 13 Sep 2023 18:04:47 -0500
+Message-Id: <20230913230457.2575849-2-tyreld@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20230913230457.2575849-1-tyreld@linux.ibm.com>
+References: <20230913230457.2575849-1-tyreld@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] ata,scsi: do not issue START STOP UNIT on resume
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Paul Ausbeck <paula@soe.ucsc.edu>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        TW <dalzot@gmail.com>, regressions@lists.linux.dev,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-renesas-soc@vger.kernel.org
-References: <20230731003956.572414-1-dlemoal@kernel.org>
- <8be9c370-2f1-5815-431-f68ab868669@linux-m68k.org>
- <ffc1442b-698e-65ab-9aaf-e4ca076b697c@kernel.org>
- <CAMuHMdXK-pnzMNzbNw=zWaMbQtWtca850eYv98oUjQkypgBfwg@mail.gmail.com>
- <CAMuHMdUN5M3CkUn+HyPmgynT+9QLnE1GW_-v7gH5xOObQHfz2Q@mail.gmail.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <CAMuHMdUN5M3CkUn+HyPmgynT+9QLnE1GW_-v7gH5xOObQHfz2Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Sa2SImVmbSiElQ_sWBnHOpmP6DyXpeq8
+X-Proofpoint-ORIG-GUID: Sa2SImVmbSiElQ_sWBnHOpmP6DyXpeq8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-13_17,2023-09-13_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 bulkscore=0 adultscore=0 mlxlogscore=999 phishscore=0
+ spamscore=0 priorityscore=1501 clxscore=1015 mlxscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309130191
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/13/23 19:34, Geert Uytterhoeven wrote:
-> Hi Damien,
-> 
-> On Wed, Sep 13, 2023 at 12:21 PM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
->> On Wed, Sep 13, 2023 at 12:58 AM Damien Le Moal <dlemoal@kernel.org> wrote:
->>> On 9/13/23 02:39, Geert Uytterhoeven wrote:
->>>> On Mon, 31 Jul 2023, Damien Le Moal wrote:
->>>>> During system resume, ata_port_pm_resume() triggers ata EH to
->>>>> 1) Resume the controller
->>>>> 2) Reset and rescan the ports
->>>>> 3) Revalidate devices
->>>>> This EH execution is started asynchronously from ata_port_pm_resume(),
->>>>> which means that when sd_resume() is executed, none or only part of the
->>>>> above processing may have been executed. However, sd_resume() issues a
->>>>> START STOP UNIT to wake up the drive from sleep mode. This command is
->>>>> translated to ATA with ata_scsi_start_stop_xlat() and issued to the
->>>>> device. However, depending on the state of execution of the EH process
->>>>> and revalidation triggerred by ata_port_pm_resume(), two things may
->>>>> happen:
->>>>> 1) The START STOP UNIT fails if it is received before the controller has
->>>>>   been reenabled at the beginning of the EH execution. This is visible
->>>>>   with error messages like:
->>>>>
->>>>> ata10.00: device reported invalid CHS sector 0
->>>>> sd 9:0:0:0: [sdc] Start/Stop Unit failed: Result: hostbyte=DID_OK driverbyte=DRIVER_OK
->>>>> sd 9:0:0:0: [sdc] Sense Key : Illegal Request [current]
->>>>> sd 9:0:0:0: [sdc] Add. Sense: Unaligned write command
->>>>> sd 9:0:0:0: PM: dpm_run_callback(): scsi_bus_resume+0x0/0x90 returns -5
->>>>> sd 9:0:0:0: PM: failed to resume async: error -5
->>>>>
->>>>> 2) The START STOP UNIT command is received while the EH process is
->>>>>   on-going, which mean that it is stopped and must wait for its
->>>>>   completion, at which point the command is rather useless as the drive
->>>>>   is already fully spun up already. This case results also in a
->>>>>   significant delay in sd_resume() which is observable by users as
->>>>>   the entire system resume completion is delayed.
->>>>>
->>>>> Given that ATA devices will be woken up by libata activity on resume,
->>>>> sd_resume() has no need to issue a START STOP UNIT command, which solves
->>>>> the above mentioned problems. Do not issue this command by introducing
->>>>> the new scsi_device flag no_start_on_resume and setting this flag to 1
->>>>> in ata_scsi_dev_config(). sd_resume() is modified to issue a START STOP
->>>>> UNIT command only if this flag is not set.
->>>>>
->>>>> Reported-by: Paul Ausbeck <paula@soe.ucsc.edu>
->>>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=215880
->>>>> Fixes: a19a93e4c6a9 ("scsi: core: pm: Rely on the device driver core for async power management")
->>>>> Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
->>>>
->>>> Thanks for your patch, which is now commit 0a8589055936d8fe
->>>> ("ata,scsi: do not issue START STOP UNIT on resume") in v6.5-rc5.
->>>> Sorry for being late to the party, but this commit landed upstream
->>>> during my summer holidays, and apparently I wasn't that focussed on
->>>> noticing small behavioral changes after getting back to work...
->>>>
->>>> I noticed an oddity after s2idle or s2ram on Renesas Salvator-XS (R-Car
->>>> H3 ES2.0) with an old (spinning rust) SATA drive, and bisected it to
->>>> this commit: when accessing the drive after system resume, there is now
->>>> a delay of ca. 5s before data is returned, presumably due to starting
->>>> the drive, and having to wait for it to spin up to be able to read data.
->>>> But the good news is that the actual system resume takes less time than
->>>> before (reduced by even more than ca. 5s!), so this looks like a net
->>>> win...
->>>
->>> Thanks for the report. The delay for the first data access from user space right
->>> after resume is 100% expected, with or without this patch. The reason is that
->>> waking up the drive (spinning it up) is done asynchronously from the PM resume
->>> context, so when you get "PM suspend exit" message signaling that the system is
->>> resumed, the drive may not yet be spinning. Any access will wait for that to
->>> happen before proceeding. Depending on the drive that can take up to 10s or so.
->>
->> That does not match with what I am seeing: before this patch, there
->> was no delay on first data access from user space, as the drive is fully
->> spun up when system resume returns.
->> With this patch, system resume returns earlier, and the drive is only
->> spun up when user space starts accessing data.
->>
->> Note that I do not have any file system mounted, and use
->> "hd /dev/sda | head -70" to access the disk.
->>
->>> I am not entirely sure where the net win you see come from. But the patch you
->>> mention is in fact completely wrong and does not fix the underlying issues with
->>> ata suspend/resume and potential deadlocks in PM due to ata ports relationship
->>> with scsi devices. So I have been working on fixing this for the last 2 weeks,
->>> after another user also reported issues with the patch you mention [1].
->>>
->>> Could you try libata for-next branch on your system ? There are 7 fix patches in
->>> there that I plan to send out for 6.6-rc2 to fix the patch in question and other
->>> issues potentially causing deadlocks on resume. The patches were posted also [2].
->>>
->>> https://lore.kernel.org/linux-ide/20230912005655.368075-1-dlemoal@kernel.org/T/#t
->>
->> Unfortunately that didn't work, as /dev/sda no longer exists.
->> Will reply to the patch I bisected the issue to...
-> 
-> With libata/for-next (fa2259a59966c005 ("ata: libata: Cleanup inline
-> DMA helper functions")) and commit 99626085d036ec32 ("ata: libata-scsi:
-> link ata port and scsi device") reverted, it behaves as before (disk
-> is spun up when system resume completes, no delay when accessing the
-> disk from userspace).
+In practice the driver should never send more commands than are
+allocated to a queues event pool. In the unlikely event that this
+happens the code asserts a BUG_ON, and in the case that the kernel is
+not configured to crash on panic returns a junk event pointer from the
+empty event list causing things to spiral from there. This BUG_ON is a
+historical artifact of the ibmvfc driver first being upstreamed, and it
+is well known now that the use of BUG_ON is bad practice except in the
+most unrecoverable scenario. There is nothing about this scenario that
+prevents the driver from recovering and carrying on.
 
-I will check the ata platform driver for R-CAR. I may have overlooked something
-in that area. I tested with AHCI and libsas adapters only as I do not have ATA
-on the few ARM SBC boards I have. And I do not have an R-CAR board.
+Remove the BUG_ON in question from ibmvfc_get_event() and return a NULL
+pointer in the case of an empty event pool. Update all call sites to
+ibmvfc_get_event() to check for a NULL pointer and perfrom the
+appropriate failure or recovery action.
 
-What surprises me is that you need to revert ata: libata: Cleanup inline DMA
-helper functions". This patch has 0 functional changes and really is only a code
-cleanup... Nothing should change with it. Can you confirm that you really need
-to revert that patch to get things working again ?
+Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+Reviewed-by: Brian King <brking@linux.vnet.ibm.com>
+---
+ drivers/scsi/ibmvscsi/ibmvfc.c | 124 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 122 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
+index ce9eb00e2ca0..10435ddddfe5 100644
+--- a/drivers/scsi/ibmvscsi/ibmvfc.c
++++ b/drivers/scsi/ibmvscsi/ibmvfc.c
+@@ -1519,7 +1519,11 @@ static struct ibmvfc_event *ibmvfc_get_event(struct ibmvfc_queue *queue)
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&queue->l_lock, flags);
+-	BUG_ON(list_empty(&queue->free));
++	if (list_empty(&queue->free)) {
++		ibmvfc_log(queue->vhost, 4, "empty event pool on queue:%ld\n", queue->hwq_id);
++		spin_unlock_irqrestore(&queue->l_lock, flags);
++		return NULL;
++	}
+ 	evt = list_entry(queue->free.next, struct ibmvfc_event, queue_list);
+ 	atomic_set(&evt->free, 0);
+ 	list_del(&evt->queue_list);
+@@ -1948,9 +1952,15 @@ static int ibmvfc_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *cmnd)
+ 	if (vhost->using_channels) {
+ 		scsi_channel = hwq % vhost->scsi_scrqs.active_queues;
+ 		evt = ibmvfc_get_event(&vhost->scsi_scrqs.scrqs[scsi_channel]);
++		if (!evt)
++			return SCSI_MLQUEUE_HOST_BUSY;
++
+ 		evt->hwq = hwq % vhost->scsi_scrqs.active_queues;
+-	} else
++	} else {
+ 		evt = ibmvfc_get_event(&vhost->crq);
++		if (!evt)
++			return SCSI_MLQUEUE_HOST_BUSY;
++	}
+ 
+ 	ibmvfc_init_event(evt, ibmvfc_scsi_done, IBMVFC_CMD_FORMAT);
+ 	evt->cmnd = cmnd;
+@@ -2038,6 +2048,11 @@ static int ibmvfc_bsg_timeout(struct bsg_job *job)
+ 
+ 	vhost->aborting_passthru = 1;
+ 	evt = ibmvfc_get_event(&vhost->crq);
++	if (!evt) {
++		spin_unlock_irqrestore(vhost->host->host_lock, flags);
++		return -ENOMEM;
++	}
++
+ 	ibmvfc_init_event(evt, ibmvfc_bsg_timeout_done, IBMVFC_MAD_FORMAT);
+ 
+ 	tmf = &evt->iu.tmf;
+@@ -2096,6 +2111,10 @@ static int ibmvfc_bsg_plogi(struct ibmvfc_host *vhost, unsigned int port_id)
+ 		goto unlock_out;
+ 
+ 	evt = ibmvfc_get_event(&vhost->crq);
++	if (!evt) {
++		rc = -ENOMEM;
++		goto unlock_out;
++	}
+ 	ibmvfc_init_event(evt, ibmvfc_sync_completion, IBMVFC_MAD_FORMAT);
+ 	plogi = &evt->iu.plogi;
+ 	memset(plogi, 0, sizeof(*plogi));
+@@ -2214,6 +2233,11 @@ static int ibmvfc_bsg_request(struct bsg_job *job)
+ 	}
+ 
+ 	evt = ibmvfc_get_event(&vhost->crq);
++	if (!evt) {
++		spin_unlock_irqrestore(vhost->host->host_lock, flags);
++		rc = -ENOMEM;
++		goto out;
++	}
+ 	ibmvfc_init_event(evt, ibmvfc_sync_completion, IBMVFC_MAD_FORMAT);
+ 	mad = &evt->iu.passthru;
+ 
+@@ -2302,6 +2326,11 @@ static int ibmvfc_reset_device(struct scsi_device *sdev, int type, char *desc)
+ 		else
+ 			evt = ibmvfc_get_event(&vhost->crq);
+ 
++		if (!evt) {
++			spin_unlock_irqrestore(vhost->host->host_lock, flags);
++			return -ENOMEM;
++		}
++
+ 		ibmvfc_init_event(evt, ibmvfc_sync_completion, IBMVFC_CMD_FORMAT);
+ 		tmf = ibmvfc_init_vfc_cmd(evt, sdev);
+ 		iu = ibmvfc_get_fcp_iu(vhost, tmf);
+@@ -2505,6 +2534,8 @@ static struct ibmvfc_event *ibmvfc_init_tmf(struct ibmvfc_queue *queue,
+ 	struct ibmvfc_tmf *tmf;
+ 
+ 	evt = ibmvfc_get_event(queue);
++	if (!evt)
++		return NULL;
+ 	ibmvfc_init_event(evt, ibmvfc_sync_completion, IBMVFC_MAD_FORMAT);
+ 
+ 	tmf = &evt->iu.tmf;
+@@ -2561,6 +2592,11 @@ static int ibmvfc_cancel_all_mq(struct scsi_device *sdev, int type)
+ 
+ 		if (found_evt && vhost->logged_in) {
+ 			evt = ibmvfc_init_tmf(&queues[i], sdev, type);
++			if (!evt) {
++				spin_unlock(queues[i].q_lock);
++				spin_unlock_irqrestore(vhost->host->host_lock, flags);
++				return -ENOMEM;
++			}
+ 			evt->sync_iu = &queues[i].cancel_rsp;
+ 			ibmvfc_send_event(evt, vhost, default_timeout);
+ 			list_add_tail(&evt->cancel, &cancelq);
+@@ -2774,6 +2810,10 @@ static int ibmvfc_abort_task_set(struct scsi_device *sdev)
+ 
+ 	if (vhost->state == IBMVFC_ACTIVE) {
+ 		evt = ibmvfc_get_event(&vhost->crq);
++		if (!evt) {
++			spin_unlock_irqrestore(vhost->host->host_lock, flags);
++			return -ENOMEM;
++		}
+ 		ibmvfc_init_event(evt, ibmvfc_sync_completion, IBMVFC_CMD_FORMAT);
+ 		tmf = ibmvfc_init_vfc_cmd(evt, sdev);
+ 		iu = ibmvfc_get_fcp_iu(vhost, tmf);
+@@ -4032,6 +4072,12 @@ static void ibmvfc_tgt_send_prli(struct ibmvfc_target *tgt)
+ 
+ 	kref_get(&tgt->kref);
+ 	evt = ibmvfc_get_event(&vhost->crq);
++	if (!evt) {
++		ibmvfc_set_tgt_action(tgt, IBMVFC_TGT_ACTION_NONE);
++		kref_put(&tgt->kref, ibmvfc_release_tgt);
++		__ibmvfc_reset_host(vhost);
++		return;
++	}
+ 	vhost->discovery_threads++;
+ 	ibmvfc_init_event(evt, ibmvfc_tgt_prli_done, IBMVFC_MAD_FORMAT);
+ 	evt->tgt = tgt;
+@@ -4139,6 +4185,12 @@ static void ibmvfc_tgt_send_plogi(struct ibmvfc_target *tgt)
+ 	kref_get(&tgt->kref);
+ 	tgt->logo_rcvd = 0;
+ 	evt = ibmvfc_get_event(&vhost->crq);
++	if (!evt) {
++		ibmvfc_set_tgt_action(tgt, IBMVFC_TGT_ACTION_NONE);
++		kref_put(&tgt->kref, ibmvfc_release_tgt);
++		__ibmvfc_reset_host(vhost);
++		return;
++	}
+ 	vhost->discovery_threads++;
+ 	ibmvfc_set_tgt_action(tgt, IBMVFC_TGT_ACTION_INIT_WAIT);
+ 	ibmvfc_init_event(evt, ibmvfc_tgt_plogi_done, IBMVFC_MAD_FORMAT);
+@@ -4215,6 +4267,8 @@ static struct ibmvfc_event *__ibmvfc_tgt_get_implicit_logout_evt(struct ibmvfc_t
+ 
+ 	kref_get(&tgt->kref);
+ 	evt = ibmvfc_get_event(&vhost->crq);
++	if (!evt)
++		return NULL;
+ 	ibmvfc_init_event(evt, done, IBMVFC_MAD_FORMAT);
+ 	evt->tgt = tgt;
+ 	mad = &evt->iu.implicit_logout;
+@@ -4242,6 +4296,13 @@ static void ibmvfc_tgt_implicit_logout(struct ibmvfc_target *tgt)
+ 	vhost->discovery_threads++;
+ 	evt = __ibmvfc_tgt_get_implicit_logout_evt(tgt,
+ 						   ibmvfc_tgt_implicit_logout_done);
++	if (!evt) {
++		vhost->discovery_threads--;
++		ibmvfc_set_tgt_action(tgt, IBMVFC_TGT_ACTION_NONE);
++		kref_put(&tgt->kref, ibmvfc_release_tgt);
++		__ibmvfc_reset_host(vhost);
++		return;
++	}
+ 
+ 	ibmvfc_set_tgt_action(tgt, IBMVFC_TGT_ACTION_INIT_WAIT);
+ 	if (ibmvfc_send_event(evt, vhost, default_timeout)) {
+@@ -4381,6 +4442,12 @@ static void ibmvfc_tgt_move_login(struct ibmvfc_target *tgt)
+ 
+ 	kref_get(&tgt->kref);
+ 	evt = ibmvfc_get_event(&vhost->crq);
++	if (!evt) {
++		ibmvfc_set_tgt_action(tgt, IBMVFC_TGT_ACTION_DEL_RPORT);
++		kref_put(&tgt->kref, ibmvfc_release_tgt);
++		__ibmvfc_reset_host(vhost);
++		return;
++	}
+ 	vhost->discovery_threads++;
+ 	ibmvfc_set_tgt_action(tgt, IBMVFC_TGT_ACTION_INIT_WAIT);
+ 	ibmvfc_init_event(evt, ibmvfc_tgt_move_login_done, IBMVFC_MAD_FORMAT);
+@@ -4547,6 +4614,14 @@ static void ibmvfc_adisc_timeout(struct timer_list *t)
+ 	vhost->abort_threads++;
+ 	kref_get(&tgt->kref);
+ 	evt = ibmvfc_get_event(&vhost->crq);
++	if (!evt) {
++		tgt_err(tgt, "Failed to send cancel event for ADISC. rc=%d\n", rc);
++		vhost->abort_threads--;
++		kref_put(&tgt->kref, ibmvfc_release_tgt);
++		__ibmvfc_reset_host(vhost);
++		spin_unlock_irqrestore(vhost->host->host_lock, flags);
++		return;
++	}
+ 	ibmvfc_init_event(evt, ibmvfc_tgt_adisc_cancel_done, IBMVFC_MAD_FORMAT);
+ 
+ 	evt->tgt = tgt;
+@@ -4597,6 +4672,12 @@ static void ibmvfc_tgt_adisc(struct ibmvfc_target *tgt)
+ 
+ 	kref_get(&tgt->kref);
+ 	evt = ibmvfc_get_event(&vhost->crq);
++	if (!evt) {
++		ibmvfc_set_tgt_action(tgt, IBMVFC_TGT_ACTION_NONE);
++		kref_put(&tgt->kref, ibmvfc_release_tgt);
++		__ibmvfc_reset_host(vhost);
++		return;
++	}
+ 	vhost->discovery_threads++;
+ 	ibmvfc_init_event(evt, ibmvfc_tgt_adisc_done, IBMVFC_MAD_FORMAT);
+ 	evt->tgt = tgt;
+@@ -4700,6 +4781,12 @@ static void ibmvfc_tgt_query_target(struct ibmvfc_target *tgt)
+ 
+ 	kref_get(&tgt->kref);
+ 	evt = ibmvfc_get_event(&vhost->crq);
++	if (!evt) {
++		ibmvfc_set_tgt_action(tgt, IBMVFC_TGT_ACTION_NONE);
++		kref_put(&tgt->kref, ibmvfc_release_tgt);
++		__ibmvfc_reset_host(vhost);
++		return;
++	}
+ 	vhost->discovery_threads++;
+ 	evt->tgt = tgt;
+ 	ibmvfc_init_event(evt, ibmvfc_tgt_query_target_done, IBMVFC_MAD_FORMAT);
+@@ -4872,6 +4959,13 @@ static void ibmvfc_discover_targets(struct ibmvfc_host *vhost)
+ {
+ 	struct ibmvfc_discover_targets *mad;
+ 	struct ibmvfc_event *evt = ibmvfc_get_event(&vhost->crq);
++	int level = IBMVFC_DEFAULT_LOG_LEVEL;
++
++	if (!evt) {
++		ibmvfc_log(vhost, level, "Discover Targets failed: no available events\n");
++		ibmvfc_hard_reset_host(vhost);
++		return;
++	}
+ 
+ 	ibmvfc_init_event(evt, ibmvfc_discover_targets_done, IBMVFC_MAD_FORMAT);
+ 	mad = &evt->iu.discover_targets;
+@@ -4949,8 +5043,15 @@ static void ibmvfc_channel_setup(struct ibmvfc_host *vhost)
+ 	struct ibmvfc_scsi_channels *scrqs = &vhost->scsi_scrqs;
+ 	unsigned int num_channels =
+ 		min(vhost->client_scsi_channels, vhost->max_vios_scsi_channels);
++	int level = IBMVFC_DEFAULT_LOG_LEVEL;
+ 	int i;
+ 
++	if (!evt) {
++		ibmvfc_log(vhost, level, "Channel Setup failed: no available events\n");
++		ibmvfc_hard_reset_host(vhost);
++		return;
++	}
++
+ 	memset(setup_buf, 0, sizeof(*setup_buf));
+ 	if (num_channels == 0)
+ 		setup_buf->flags = cpu_to_be32(IBMVFC_CANCEL_CHANNELS);
+@@ -5012,6 +5113,13 @@ static void ibmvfc_channel_enquiry(struct ibmvfc_host *vhost)
+ {
+ 	struct ibmvfc_channel_enquiry *mad;
+ 	struct ibmvfc_event *evt = ibmvfc_get_event(&vhost->crq);
++	int level = IBMVFC_DEFAULT_LOG_LEVEL;
++
++	if (!evt) {
++		ibmvfc_log(vhost, level, "Channel Enquiry failed: no available events\n");
++		ibmvfc_hard_reset_host(vhost);
++		return;
++	}
+ 
+ 	ibmvfc_init_event(evt, ibmvfc_channel_enquiry_done, IBMVFC_MAD_FORMAT);
+ 	mad = &evt->iu.channel_enquiry;
+@@ -5134,6 +5242,12 @@ static void ibmvfc_npiv_login(struct ibmvfc_host *vhost)
+ 	struct ibmvfc_npiv_login_mad *mad;
+ 	struct ibmvfc_event *evt = ibmvfc_get_event(&vhost->crq);
+ 
++	if (!evt) {
++		ibmvfc_dbg(vhost, "NPIV Login failed: no available events\n");
++		ibmvfc_hard_reset_host(vhost);
++		return;
++	}
++
+ 	ibmvfc_gather_partition_info(vhost);
+ 	ibmvfc_set_login_info(vhost);
+ 	ibmvfc_init_event(evt, ibmvfc_npiv_login_done, IBMVFC_MAD_FORMAT);
+@@ -5198,6 +5312,12 @@ static void ibmvfc_npiv_logout(struct ibmvfc_host *vhost)
+ 	struct ibmvfc_event *evt;
+ 
+ 	evt = ibmvfc_get_event(&vhost->crq);
++	if (!evt) {
++		ibmvfc_dbg(vhost, "NPIV Logout failed: no available events\n");
++		ibmvfc_hard_reset_host(vhost);
++		return;
++	}
++
+ 	ibmvfc_init_event(evt, ibmvfc_npiv_logout_done, IBMVFC_MAD_FORMAT);
+ 
+ 	mad = &evt->iu.npiv_logout;
 -- 
-Damien Le Moal
-Western Digital Research
+2.31.1
 
