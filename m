@@ -2,139 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1AD379F603
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Sep 2023 02:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7662A79F5DD
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Sep 2023 02:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjINAyD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Sep 2023 20:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S232885AbjINA33 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Sep 2023 20:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233248AbjIMXbM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Sep 2023 19:31:12 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A05EE41
-        for <linux-scsi@vger.kernel.org>; Wed, 13 Sep 2023 16:31:06 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38DN87ZY030585;
-        Wed, 13 Sep 2023 23:31:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=niacoBGWpBB1nkAeF1ys1ymNNwpY9/FTBISrR+D+PjM=;
- b=WsfVTRzANCxAfsCUyPNRf+gJkgCYysOYiCGrf2EgYbZ3T8vCKmGW63VVmpU3G2mxrBIO
- CVq9B5aFJV6iJBoRv1bOpmbXQQMx15ipuOZ3WOQC2oZ7/EcIywpSx1HhyJaL0d0l6M0Q
- 15p5ZhJDRY11aDqseMv6TezaQF9+zDLgj/NXkIzVzi5PKzCZntbu1EWAkbYIrddnbFTh
- A0wofRiaGAU4a8R8F8MiXYwaGH7w8gVh1cWFZAeZAYh4v4EIvOBImB+B/IKsBMiDi3qE
- IuyD26t80MOEFpCiQuZ1J6rzDeUiTxb31ZRUWd6rPMWMQJL9G5TiBNO+vVjbNJfYCS7z IA== 
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t3kpfn4u2-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Sep 2023 23:31:02 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38DLbA8e002410;
-        Wed, 13 Sep 2023 23:05:04 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t158ke7dc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Sep 2023 23:05:04 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38DN53Sw61800722
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Sep 2023 23:05:03 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 797F058061;
-        Wed, 13 Sep 2023 23:05:03 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0C17F58059;
-        Wed, 13 Sep 2023 23:05:03 +0000 (GMT)
-Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 13 Sep 2023 23:05:02 +0000 (GMT)
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-To:     martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, brking@linux.ibm.com,
-        james.bottomley@hansenpartnership.com,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Brian King <brking@linux.vnet.ibm.com>
-Subject: [PATCH 06/11] ibmvfc: rename ibmvfc_scsi_channels to ibmvfc_channels
-Date:   Wed, 13 Sep 2023 18:04:52 -0500
-Message-Id: <20230913230457.2575849-7-tyreld@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230913230457.2575849-1-tyreld@linux.ibm.com>
-References: <20230913230457.2575849-1-tyreld@linux.ibm.com>
+        with ESMTP id S229485AbjINA32 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Sep 2023 20:29:28 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D73C1720;
+        Wed, 13 Sep 2023 17:29:25 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89DBFC433C8;
+        Thu, 14 Sep 2023 00:29:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694651364;
+        bh=u75AjhzI2I2y64qVe0s0JRA14+U1Zh/SSzRPBRMoxkE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ru7wNoyMU+gUN8+MNpfgqzeLwwBQWG5zJ/jRhAG/Tejq+ypoHXrFVFN7MkIkkE5JP
+         d+wyXQZo2TR1szLBvu59jdN2t9tQzPTRYi/PYwS08ewyJq6YXlw413QPuB0plgh0MY
+         eGhNd3Jfhf7J5fvx6JAd+bUkXuPk4vdVFAUtTu76VsJl+1lDE3bUDvILcsN6WEU9t2
+         1AnphfEuIeGoEOk6dFHydJofY8euGuTdyixGc+3BekBGOr+W3PQ2DfS+lgaz2vqbTf
+         xrQV9dWl4ty3+vQrY1OyJMooNnFzHwUBpjG09ejiAzafeH76/BA2AI7WsOlAok3QLc
+         EBfMhmSHZBICw==
+Message-ID: <7471ad70-e72c-473c-3c50-7e52b6bad69b@kernel.org>
+Date:   Thu, 14 Sep 2023 09:29:22 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: N37pkN84sGZ8k7aGyWlBgwC6MzaFoolW
-X-Proofpoint-ORIG-GUID: N37pkN84sGZ8k7aGyWlBgwC6MzaFoolW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-13_17,2023-09-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- phishscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 clxscore=1015 adultscore=0 impostorscore=0
- mlxlogscore=740 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309130191
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 07/19] scsi: sd: Do not issue commands to suspended disks
+ on remove
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>, linux-ide@vger.kernel.org
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Paul Ausbeck <paula@soe.ucsc.edu>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Joe Breuer <linux-kernel@jmbreuer.net>
+References: <20230911040217.253905-1-dlemoal@kernel.org>
+ <20230911040217.253905-8-dlemoal@kernel.org>
+ <c3a4ccb9-2e4d-906c-3c8f-1985a2d444a8@acm.org>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <c3a4ccb9-2e4d-906c-3c8f-1985a2d444a8@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There is nothing scsi specific about the ibmvfc_scsi_channels struct. It
-is meant to encapsulate a set of channels regardless of protocol.
+On 9/14/23 05:50, Bart Van Assche wrote:
+> On 9/10/23 21:02, Damien Le Moal wrote:
+>> If an error occurs when resuming a host adapter before the devices
+>> attached to the adapter are resumed, the adapter low level driver may
+>> remove the scsi host, resulting in a call to sd_remove() for the
+>> disks of the host. However, since this function calls sd_shutdown(),
+>> a synchronize cache command and a start stop unit may be issued with the
+>> drive still sleeping and the HBA non-functional. This causes PM resume
+>> to hang, forcing a reset of the machine to recover.
+>>
+>> Fix this by checking a device host state in sd_shutdown() and by
+>> returning early doing nothing if the host state is not SHOST_RUNNING.
+>>
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
+>> ---
+>>   drivers/scsi/sd.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+>> index c92a317ba547..a415abb721d3 100644
+>> --- a/drivers/scsi/sd.c
+>> +++ b/drivers/scsi/sd.c
+>> @@ -3763,7 +3763,8 @@ static void sd_shutdown(struct device *dev)
+>>   	if (!sdkp)
+>>   		return;         /* this can happen */
+>>   
+>> -	if (pm_runtime_suspended(dev))
+>> +	if (pm_runtime_suspended(dev) ||
+>> +	    sdkp->device->host->shost_state != SHOST_RUNNING)
+>>   		return;
+>>   
+>>   	if (sdkp->WCE && sdkp->media_present) {
+> 
+> Why to test the host state instead of dev->power.runtime_status? I don't
+> think that it is safe to skip shutdown if the error handler is active.
+> If the error handler can recover the device a SYNCHRONIZE CACHE command
+> should be submitted.
 
-Remove _scsi from the struct name to reflect this genric nature.
+But there is no synchronization with EH that I can see anyway. At least for
+sd_remove(), I would assume that this is called only once the device references
+were all dropped, so presumably EH is not doing anything with the drive when
+that happen, no ?
 
-Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
-Reviewed-by: Brian King <brking@linux.vnet.ibm.com>
----
- drivers/scsi/ibmvscsi/ibmvfc.c | 4 ++--
- drivers/scsi/ibmvscsi/ibmvfc.h | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+In any case, looking at dev->power.runtime_status is not correct as this is set
+to RPM_ACTIVE when the device is suspended through system suspend. We could
+replace the test "sdkp->device->host->shost_state != SHOST_RUNNING" with
+"dev->power.is_suspended", as that indicates true (1) for a suspended device.
+However, I really do not like that as that is a PM internal field and should not
+be accessing it directly. The PM code comments say as much. Any better idea ?
 
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index a2f6a9ba5955..b03b68b3b1b6 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -5013,7 +5013,7 @@ static void ibmvfc_channel_setup_done(struct ibmvfc_event *evt)
- {
- 	struct ibmvfc_host *vhost = evt->vhost;
- 	struct ibmvfc_channel_setup *setup = vhost->channel_setup_buf;
--	struct ibmvfc_scsi_channels *scrqs = &vhost->scsi_scrqs;
-+	struct ibmvfc_channels *scrqs = &vhost->scsi_scrqs;
- 	u32 mad_status = be16_to_cpu(evt->xfer_iu->channel_setup.common.status);
- 	int level = IBMVFC_DEFAULT_LOG_LEVEL;
- 	int flags, active_queues, i;
-@@ -5064,7 +5064,7 @@ static void ibmvfc_channel_setup(struct ibmvfc_host *vhost)
- 	struct ibmvfc_channel_setup_mad *mad;
- 	struct ibmvfc_channel_setup *setup_buf = vhost->channel_setup_buf;
- 	struct ibmvfc_event *evt = ibmvfc_get_reserved_event(&vhost->crq);
--	struct ibmvfc_scsi_channels *scrqs = &vhost->scsi_scrqs;
-+	struct ibmvfc_channels *scrqs = &vhost->scsi_scrqs;
- 	unsigned int num_channels =
- 		min(vhost->client_scsi_channels, vhost->max_vios_scsi_channels);
- 	int level = IBMVFC_DEFAULT_LOG_LEVEL;
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.h b/drivers/scsi/ibmvscsi/ibmvfc.h
-index 8ae52c239009..d88a528b8cc1 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.h
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.h
-@@ -815,7 +815,7 @@ struct ibmvfc_queue {
- 	char name[32];
- };
- 
--struct ibmvfc_scsi_channels {
-+struct ibmvfc_channels {
- 	struct ibmvfc_queue *scrqs;
- 	unsigned int active_queues;
- };
-@@ -866,7 +866,7 @@ struct ibmvfc_host {
- 	mempool_t *tgt_pool;
- 	struct ibmvfc_queue crq;
- 	struct ibmvfc_queue async_crq;
--	struct ibmvfc_scsi_channels scsi_scrqs;
-+	struct ibmvfc_channels scsi_scrqs;
- 	struct ibmvfc_npiv_login login_info;
- 	union ibmvfc_npiv_login_data *login_buf;
- 	dma_addr_t login_buf_dma;
+
 -- 
-2.31.1
+Damien Le Moal
+Western Digital Research
 
