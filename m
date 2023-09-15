@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9947A189F
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Sep 2023 10:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAE57A18BC
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Sep 2023 10:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232987AbjIOIZL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 15 Sep 2023 04:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38910 "EHLO
+        id S233199AbjIOI1A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 15 Sep 2023 04:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232873AbjIOIZK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Sep 2023 04:25:10 -0400
+        with ESMTP id S233117AbjIOI0t (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Sep 2023 04:26:49 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547AE3AB7;
-        Fri, 15 Sep 2023 01:23:47 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E53D4C43397;
-        Fri, 15 Sep 2023 08:15:30 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284672D7E;
+        Fri, 15 Sep 2023 01:25:21 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6553C433AB;
+        Fri, 15 Sep 2023 08:15:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694765732;
-        bh=Rjmy6H7vMZEpzGgQrIn37F8mFUqbq5OVbs7tVk9/yf0=;
+        s=k20201202; t=1694765734;
+        bh=NmbYysMpdoTzQVRd2rI1yE6V1sWwMMvr3LB8iDhwBnc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aIz2bhCF1kUW1bCuezh7TEtxUYrPxYPNbkfGGh1YyYhqaF8wj6IHDVrm3VKyd6RY0
-         xahSbOIuUSdbqOVP9Rs/H2aVk4ypPvPYiXiKGOHtxTim6UPjNpmlGF+sqIIUT1WWI5
-         +kE/yPfakMOE+iI8o0G/9ot+lY94Nv36hC/A4m8LoyYxue8Z2UgNs04lq8sGWgiUZk
-         r52o+NV2V0EoL3NMOhrf+bd4WeegvvRL1JmTBv3sLdVYW5JAQWP0qk+TEBj4tJqI4J
-         VpeO1no8XSIN5chQhnzDJm9yUko7ccH9i7k5YmcMFp+lgFXfrko1GthRSrmtztxBOk
-         QrGl/Hd4eJL7w==
+        b=B+rrcoHfcDmjiwyhqTRyFMBqcZ0lVKVtBxY9xWod5D4d/LkPF2zHvYKBejuAUGmNQ
+         jwQKxFcHRey62pXJdrsKTlAu1sgD/Prpl7kM1m91jpfk3xhlWECDybjpvq6eGILYQ1
+         Ju6xXucd6OQRTakFhDpCVztSBU8OHoEEM60HmEIGqya9Pdq6fzZnelBhjjRydUNqzK
+         NWEn9bUcEdL4n73330XIbRx9YAuxTnUYjMW63DN3FUV7FnDcsz8r6K8bhQC23f4jXS
+         dAE4oDH3ZAbcHd4K+LqbfnzJNrh5eEwOByhYtok7OiY/vu4Yf4q7jp5m7Q0JRDALja
+         m5vFkICODlyew==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     linux-ide@vger.kernel.org
 Cc:     linux-scsi@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc:     linux-scsi@vger.kernel.org,
         Joe Breuer <linux-kernel@jmbreuer.net>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Chia-Lin Kao <acelan.kao@canonical.com>
-Subject: [PATCH v3 12/23] scsi: Remove scsi device no_start_on_resume flag
-Date:   Fri, 15 Sep 2023 17:14:56 +0900
-Message-ID: <20230915081507.761711-13-dlemoal@kernel.org>
+Subject: [PATCH v3 13/23] ata: libata-scsi: Cleanup ata_scsi_start_stop_xlat()
+Date:   Fri, 15 Sep 2023 17:14:57 +0900
+Message-ID: <20230915081507.761711-14-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230915081507.761711-1-dlemoal@kernel.org>
 References: <20230915081507.761711-1-dlemoal@kernel.org>
@@ -55,48 +55,218 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The scsi device flag no_start_on_resume is not set by any scsi low
-level driver. Remove it. This reverts the changes introduced by commit
-0a8589055936 ("ata,scsi: do not issue START STOP UNIT on resume").
+Now that libata does its own internal device power mode management
+through libata EH, the scsi disk driver will not issue START STOP UNIT
+commands anymore. We can receive this command only from user passthrough
+operations. So there is no need to consider the system state and ATA
+port flags for suspend to translate the command.
+
+Since setting up the taskfile for the verify and standby
+immediate commands is the same as done in ata_dev_power_set_active()
+and ata_dev_power_set_standby(), factor out this code into the helper
+function ata_dev_power_init_tf() to simplify ata_scsi_start_stop_xlat()
+as well as ata_dev_power_set_active() and ata_dev_power_set_standby().
 
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 ---
- drivers/scsi/sd.c          | 7 ++-----
- include/scsi/scsi_device.h | 1 -
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ drivers/ata/libata-core.c | 55 +++++++++++++++++++++++----------------
+ drivers/ata/libata-scsi.c | 53 +++++++------------------------------
+ drivers/ata/libata.h      |  2 ++
+ 3 files changed, 44 insertions(+), 66 deletions(-)
 
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index d86306d42445..49e9b4ce2e33 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -3886,11 +3886,8 @@ static int sd_resume(struct device *dev, bool runtime)
- 	if (!sd_do_start_stop(sdkp->device, runtime))
- 		return 0;
+diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+index 2405ac8b53f0..8d1949302a8a 100644
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -1972,6 +1972,35 @@ int ata_dev_read_id(struct ata_device *dev, unsigned int *p_class,
+ 	return rc;
+ }
  
--	if (!sdkp->device->no_start_on_resume) {
--		sd_printk(KERN_NOTICE, sdkp, "Starting disk\n");
--		ret = sd_start_stop_device(sdkp, 1);
++bool ata_dev_power_init_tf(struct ata_device *dev, struct ata_taskfile *tf,
++			   bool set_active)
++{
++	/* Only applies to ATA and ZAC devices */
++	if (dev->class != ATA_DEV_ATA && dev->class != ATA_DEV_ZAC)
++		return false;
++
++	ata_tf_init(dev, tf);
++	tf->flags |= ATA_TFLAG_DEVICE | ATA_TFLAG_ISADDR;
++	tf->protocol = ATA_PROT_NODATA;
++
++	if (set_active) {
++		/* VERIFY for 1 sector at lba=0 */
++		tf->command = ATA_CMD_VERIFY;
++		tf->nsect = 1;
++		if (dev->flags & ATA_DFLAG_LBA) {
++			tf->flags |= ATA_TFLAG_LBA;
++			tf->device |= ATA_LBA;
++		} else {
++			/* CHS */
++			tf->lbal = 0x1; /* sect */
++		}
++	} else {
++		tf->command = ATA_CMD_STANDBYNOW1;
++	}
++
++	return true;
++}
++
+ /**
+  *	ata_dev_power_set_standby - Set a device power mode to standby
+  *	@dev: target device
+@@ -1988,10 +2017,6 @@ void ata_dev_power_set_standby(struct ata_device *dev)
+ 	struct ata_taskfile tf;
+ 	unsigned int err_mask;
+ 
+-	/* Issue STANDBY IMMEDIATE command only if supported by the device */
+-	if (dev->class != ATA_DEV_ATA && dev->class != ATA_DEV_ZAC)
+-		return;
+-
+ 	/*
+ 	 * Some odd clown BIOSes issue spindown on power off (ACPI S4 or S5)
+ 	 * causing some drives to spin up and down again. For these, do nothing
+@@ -2005,10 +2030,9 @@ void ata_dev_power_set_standby(struct ata_device *dev)
+ 	    system_entering_hibernation())
+ 		return;
+ 
+-	ata_tf_init(dev, &tf);
+-	tf.flags |= ATA_TFLAG_DEVICE | ATA_TFLAG_ISADDR;
+-	tf.protocol = ATA_PROT_NODATA;
+-	tf.command = ATA_CMD_STANDBYNOW1;
++	/* Issue STANDBY IMMEDIATE command only if supported by the device */
++	if (!ata_dev_power_init_tf(dev, &tf, false))
++		return;
+ 
+ 	ata_dev_notice(dev, "Entering standby power mode\n");
+ 
+@@ -2038,22 +2062,9 @@ void ata_dev_power_set_active(struct ata_device *dev)
+ 	 * Issue READ VERIFY SECTORS command for 1 sector at lba=0 only
+ 	 * if supported by the device.
+ 	 */
+-	if (dev->class != ATA_DEV_ATA && dev->class != ATA_DEV_ZAC)
++	if (!ata_dev_power_init_tf(dev, &tf, true))
+ 		return;
+ 
+-	ata_tf_init(dev, &tf);
+-	tf.flags |= ATA_TFLAG_DEVICE | ATA_TFLAG_ISADDR;
+-	tf.protocol = ATA_PROT_NODATA;
+-	tf.command = ATA_CMD_VERIFY;
+-	tf.nsect = 1;
+-	if (dev->flags & ATA_DFLAG_LBA) {
+-		tf.flags |= ATA_TFLAG_LBA;
+-		tf.device |= ATA_LBA;
+-	} else {
+-		/* CHS */
+-		tf.lbal = 0x1; /* sect */
 -	}
 -
-+	sd_printk(KERN_NOTICE, sdkp, "Starting disk\n");
-+	ret = sd_start_stop_device(sdkp, 1);
- 	if (!ret)
- 		opal_unlock_from_suspend(sdkp->opal_dev);
- 	return ret;
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index b7df1e6da969..8db0c88cf48e 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -195,7 +195,6 @@ struct scsi_device {
- 	unsigned allow_restart:1; /* issue START_UNIT in error handler */
- 	unsigned manage_system_start_stop:1; /* Let HLD (sd) manage system start/stop */
- 	unsigned manage_runtime_start_stop:1; /* Let HLD (sd) manage runtime start/stop */
--	unsigned no_start_on_resume:1; /* Do not issue START_STOP_UNIT on resume */
- 	unsigned start_stop_pwr_cond:1;	/* Set power cond. in START_STOP_UNIT */
- 	unsigned no_uld_attach:1; /* disable connecting to upper level drivers */
- 	unsigned select_no_atn:1;
+ 	ata_dev_notice(dev, "Entering active power mode\n");
+ 
+ 	err_mask = ata_exec_internal(dev, &tf, NULL, DMA_NONE, NULL, 0, 0);
+diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+index 6297f8c16a13..767e78fb9003 100644
+--- a/drivers/ata/libata-scsi.c
++++ b/drivers/ata/libata-scsi.c
+@@ -1206,7 +1206,6 @@ EXPORT_SYMBOL_GPL(ata_scsi_slave_destroy);
+ static unsigned int ata_scsi_start_stop_xlat(struct ata_queued_cmd *qc)
+ {
+ 	struct scsi_cmnd *scmd = qc->scsicmd;
+-	struct ata_taskfile *tf = &qc->tf;
+ 	const u8 *cdb = scmd->cmnd;
+ 	u16 fp;
+ 	u8 bp = 0xff;
+@@ -1216,54 +1215,24 @@ static unsigned int ata_scsi_start_stop_xlat(struct ata_queued_cmd *qc)
+ 		goto invalid_fld;
+ 	}
+ 
+-	tf->flags |= ATA_TFLAG_DEVICE | ATA_TFLAG_ISADDR;
+-	tf->protocol = ATA_PROT_NODATA;
+-	if (cdb[1] & 0x1) {
+-		;	/* ignore IMMED bit, violates sat-r05 */
+-	}
++	/* LOEJ bit set not supported */
+ 	if (cdb[4] & 0x2) {
+ 		fp = 4;
+ 		bp = 1;
+-		goto invalid_fld;       /* LOEJ bit set not supported */
++		goto invalid_fld;
+ 	}
++
++	/* Power conditions not supported */
+ 	if (((cdb[4] >> 4) & 0xf) != 0) {
+ 		fp = 4;
+ 		bp = 3;
+-		goto invalid_fld;       /* power conditions not supported */
++		goto invalid_fld;
+ 	}
+ 
+-	if (cdb[4] & 0x1) {
+-		tf->nsect = 1;  /* 1 sector, lba=0 */
+-
+-		if (qc->dev->flags & ATA_DFLAG_LBA) {
+-			tf->flags |= ATA_TFLAG_LBA;
+-
+-			tf->lbah = 0x0;
+-			tf->lbam = 0x0;
+-			tf->lbal = 0x0;
+-			tf->device |= ATA_LBA;
+-		} else {
+-			/* CHS */
+-			tf->lbal = 0x1; /* sect */
+-			tf->lbam = 0x0; /* cyl low */
+-			tf->lbah = 0x0; /* cyl high */
+-		}
+-
+-		tf->command = ATA_CMD_VERIFY;   /* READ VERIFY */
+-	} else {
+-		/* Some odd clown BIOSen issue spindown on power off (ACPI S4
+-		 * or S5) causing some drives to spin up and down again.
+-		 */
+-		if ((qc->ap->flags & ATA_FLAG_NO_POWEROFF_SPINDOWN) &&
+-		    system_state == SYSTEM_POWER_OFF)
+-			goto skip;
+-
+-		if ((qc->ap->flags & ATA_FLAG_NO_HIBERNATE_SPINDOWN) &&
+-		    system_entering_hibernation())
+-			goto skip;
+-
+-		/* Issue ATA STANDBY IMMEDIATE command */
+-		tf->command = ATA_CMD_STANDBYNOW1;
++	/* Ignore IMMED bit (cdb[1] & 0x1), violates sat-r05 */
++	if (!ata_dev_power_init_tf(qc->dev, &qc->tf, cdb[4] & 0x1)) {
++		ata_scsi_set_sense(qc->dev, scmd, ABORTED_COMMAND, 0, 0);
++		return 1;
+ 	}
+ 
+ 	/*
+@@ -1278,12 +1247,8 @@ static unsigned int ata_scsi_start_stop_xlat(struct ata_queued_cmd *qc)
+  invalid_fld:
+ 	ata_scsi_set_invalid_field(qc->dev, scmd, fp, bp);
+ 	return 1;
+- skip:
+-	scmd->result = SAM_STAT_GOOD;
+-	return 1;
+ }
+ 
+-
+ /**
+  *	ata_scsi_flush_xlat - Translate SCSI SYNCHRONIZE CACHE command
+  *	@qc: Storage for translated ATA taskfile
+diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
+index c57e094c3af9..af0e718f2b72 100644
+--- a/drivers/ata/libata.h
++++ b/drivers/ata/libata.h
+@@ -62,6 +62,8 @@ extern int ata_dev_reread_id(struct ata_device *dev, unsigned int readid_flags);
+ extern int ata_dev_revalidate(struct ata_device *dev, unsigned int new_class,
+ 			      unsigned int readid_flags);
+ extern int ata_dev_configure(struct ata_device *dev);
++extern bool ata_dev_power_init_tf(struct ata_device *dev,
++				  struct ata_taskfile *tf, bool set_active);
+ extern void ata_dev_power_set_standby(struct ata_device *dev);
+ extern void ata_dev_power_set_active(struct ata_device *dev);
+ extern int sata_down_spd_limit(struct ata_link *link, u32 spd_limit);
 -- 
 2.41.0
 
