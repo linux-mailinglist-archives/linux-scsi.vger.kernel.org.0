@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA687A18BF
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Sep 2023 10:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E047A18B9
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Sep 2023 10:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbjIOI1T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 15 Sep 2023 04:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
+        id S233141AbjIOI05 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 15 Sep 2023 04:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233255AbjIOI1O (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Sep 2023 04:27:14 -0400
+        with ESMTP id S233116AbjIOI0t (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Sep 2023 04:26:49 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFC03ABA;
-        Fri, 15 Sep 2023 01:25:49 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0499C433B9;
-        Fri, 15 Sep 2023 08:15:39 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CAF3AA5;
+        Fri, 15 Sep 2023 01:25:20 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C32BAC433B8;
+        Fri, 15 Sep 2023 08:15:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694765741;
-        bh=LE4iH3AHIqlDXMEXWQkzC0CG96IX1D3ZEf3pbwhWkpw=;
+        s=k20201202; t=1694765743;
+        bh=0GOi0mloXAEJIC+S6NGXQSMf1o5GU58qEdFx1YeNYX0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VasldwvkKi3pzaf13CnMRSjzqh/mrg8qHQ55PeUf+fz/oyuI4sLjBTUBFR8vRP6q9
-         4h+BD3N7gNC66f5jvZynF3Bsj+MVwTbsScglEdSUVfh/oxat6qrgU+otmLi4JJZL4J
-         5i1uRQZ0LGM08USpmalylzkIgKnKRGsjUQY0QofNqzEud1/sT+EOCYO5fxObOeOqV2
-         OAFAmrCzzEqkCqwfdF9ht+qs2/N/2518/Y3UtJ5XFUZgXrwdsusKhi3oj4tcmwjWR0
-         z3c6zAhsVHM+YFbIJKvpur/CRZyRXgHvSs0KGJlsYqVM74+MzTdlztqMB+Lt201LEl
-         d2KSv7YYszRSA==
+        b=WdmunzguMNXTPhYSlEoHlAMqPrzwRKDNUeWTiYFWy2kNbvyZ/dG7YWWNv/YaV9PcZ
+         Kde3++KNSfxVoZICOYJ3KBkSjKRejHslgiLy2TgqX3p48esXDSWNcgAgVOHSHu7h2y
+         OHOJ5mALKtqjhIfZ1UM1ncsV1oCleoUYQkIdVjoDlcBiRCS6pSOjiZEyFb6wky94fi
+         yLxK4DiNHTk3gtao1FT+uPdPcO/16kq0w9LNRHzAopkqvMXqGxbGG4QWVXnusX2Ve5
+         rJPEB0a/z3i/Vg7Cf2M/5tiCZsb/WCEqv+VGZVogkmggYndRrLZtLTf4rkXk56csfq
+         8ZlikM/8czz2A==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     linux-ide@vger.kernel.org
 Cc:     linux-scsi@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc:     linux-scsi@vger.kernel.org,
         Joe Breuer <linux-kernel@jmbreuer.net>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Chia-Lin Kao <acelan.kao@canonical.com>
-Subject: [PATCH v3 17/23] ata: libata-core: Remove ata_port_resume_async()
-Date:   Fri, 15 Sep 2023 17:15:01 +0900
-Message-ID: <20230915081507.761711-18-dlemoal@kernel.org>
+Subject: [PATCH v3 18/23] ata: libata-core: Do not poweroff runtime suspended ports
+Date:   Fri, 15 Sep 2023 17:15:02 +0900
+Message-ID: <20230915081507.761711-19-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230915081507.761711-1-dlemoal@kernel.org>
 References: <20230915081507.761711-1-dlemoal@kernel.org>
@@ -55,70 +55,30 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Remove ata_port_resume_async() and replace it with a modified
-ata_port_resume() taking an additional bool argument indicating if
-ata EH resume operation should be executed synchronously or
-asynchronously. With this change, the variable ata_port_resume_ehi is
-not longer necessary and its value (ATA_EHI_XXX flags) passed directly
-to ata_port_request_pm().
+When powering off, there is no need to suspend a port that has already
+been runtime suspended. Skip the EH PM request in ata_port_pm_poweroff()
+in this case.
 
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 ---
- drivers/ata/libata-core.c | 21 ++++++++-------------
- 1 file changed, 8 insertions(+), 13 deletions(-)
+ drivers/ata/libata-core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index cdfe71ae6a6c..a4389dd807e5 100644
+index a4389dd807e5..c3adaa01cbe3 100644
 --- a/drivers/ata/libata-core.c
 +++ b/drivers/ata/libata-core.c
-@@ -5223,22 +5223,17 @@ static int ata_port_pm_poweroff(struct device *dev)
+@@ -5219,7 +5219,8 @@ static int ata_port_pm_freeze(struct device *dev)
+ 
+ static int ata_port_pm_poweroff(struct device *dev)
+ {
+-	ata_port_suspend(to_ata_port(dev), PMSG_HIBERNATE, false);
++	if (!pm_runtime_suspended(dev))
++		ata_port_suspend(to_ata_port(dev), PMSG_HIBERNATE, false);
  	return 0;
  }
- 
--static const unsigned int ata_port_resume_ehi = ATA_EHI_NO_AUTOPSY
--						| ATA_EHI_QUIET;
--
--static void ata_port_resume(struct ata_port *ap, pm_message_t mesg)
-+static void ata_port_resume(struct ata_port *ap, pm_message_t mesg,
-+			    bool async)
- {
--	ata_port_request_pm(ap, mesg, ATA_EH_RESET, ata_port_resume_ehi, false);
--}
--
--static void ata_port_resume_async(struct ata_port *ap, pm_message_t mesg)
--{
--	ata_port_request_pm(ap, mesg, ATA_EH_RESET, ata_port_resume_ehi, true);
-+	ata_port_request_pm(ap, mesg, ATA_EH_RESET,
-+			    ATA_EHI_NO_AUTOPSY | ATA_EHI_QUIET,
-+			    async);
- }
- 
- static int ata_port_pm_resume(struct device *dev)
- {
--	ata_port_resume_async(to_ata_port(dev), PMSG_RESUME);
-+	ata_port_resume(to_ata_port(dev), PMSG_RESUME, true);
- 	pm_runtime_disable(dev);
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
-@@ -5277,7 +5272,7 @@ static int ata_port_runtime_suspend(struct device *dev)
- 
- static int ata_port_runtime_resume(struct device *dev)
- {
--	ata_port_resume(to_ata_port(dev), PMSG_AUTO_RESUME);
-+	ata_port_resume(to_ata_port(dev), PMSG_AUTO_RESUME, false);
- 	return 0;
- }
- 
-@@ -5307,7 +5302,7 @@ EXPORT_SYMBOL_GPL(ata_sas_port_suspend);
- 
- void ata_sas_port_resume(struct ata_port *ap)
- {
--	ata_port_resume_async(ap, PMSG_RESUME);
-+	ata_port_resume(ap, PMSG_RESUME, true);
- }
- EXPORT_SYMBOL_GPL(ata_sas_port_resume);
  
 -- 
 2.41.0
