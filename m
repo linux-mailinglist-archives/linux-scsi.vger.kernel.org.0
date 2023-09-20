@@ -2,67 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193407A76F3
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Sep 2023 11:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A6F7A7A01
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Sep 2023 13:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233970AbjITJMt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Sep 2023 05:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
+        id S234401AbjITLGa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Sep 2023 07:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233766AbjITJMo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 Sep 2023 05:12:44 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5057683;
-        Wed, 20 Sep 2023 02:12:37 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1bf7a6509deso49511045ad.3;
-        Wed, 20 Sep 2023 02:12:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695201157; x=1695805957; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9RDULjoQzHjU0PTxlc2WdDnc+PjIGpAs5L7B9DlE1S8=;
-        b=joVd7PI6EwxWeGhUZuaj58hCTKw6OecX+5EkDdFVRDHqAadvu9uafwaDgEa6VD/E91
-         5Nf/bBRSGRIYiq7ADaO93Enfx0xCNDzZEnolc2kXIP0zJ4dLa/LTCnJaOLVz9qtTlJ/y
-         L+CaerHZqUGxlPWdSd9Hn+yRtpPs+VlhGT/F1VH0NN5iAWwg/wvQxOmsOMciFWxrlLlJ
-         30eDEqTf2bqnFEk/SPMg40YPxoTnjkgF6i7yESSPG4N8Lf+J2GCD8m/3Ejb7w3C+TSOj
-         SH43Q6ozfjh4YVvDLjMhTdo26/TzhAYdcYLWnYrRGtjGLbEr2JEJ8bVnNIfld6zx8XYh
-         y9QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695201157; x=1695805957;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9RDULjoQzHjU0PTxlc2WdDnc+PjIGpAs5L7B9DlE1S8=;
-        b=MQ5XfMsj7hXjfYpBomKukGr1pLCB5NTRJYJDynpmnSDhsZnpaoYNtw1xMUDu7o+Y6N
-         a0UZmaoLVcNaIdpwLShC/sUf3oYw1rzcmDYDlsyZgHM72KaoVVXyFWZd+/4x5Si138jh
-         JVnLoJybbBm6aKeXHl1pKUEHY8KV7dZzFZNPfrMrZb6IkaAkEGOhtA0juBHyaOkr2D0q
-         qKE24S1i9bjEW7IO1tRnpbCsPICzSVk+DH+KuD331sSuJR5nsXDZ81ENVJeBH65eMBnd
-         XctboCQB5IRQGH4QY5HqOm5B6YfjQ0uxByjNWUO5w1jFh883kT1YRDtr88ufJPhTp57T
-         XlGQ==
-X-Gm-Message-State: AOJu0Yw7qI0pbKg26q4ih/FF5s3IOAitMd157h5xgaT97qrb5ek5qvEe
-        414XlJb2IvKXJhBcgXaAHLc=
-X-Google-Smtp-Source: AGHT+IH97MOvSyHSZv1yM6IYJs13VxkUpK8BAynmgGvotJS2mQ/lL7rqPZeXmBguHmAGzRIJfDcVTg==
-X-Received: by 2002:a17:903:124d:b0:1c5:6691:4978 with SMTP id u13-20020a170903124d00b001c566914978mr2154400plh.37.1695201156730;
-        Wed, 20 Sep 2023 02:12:36 -0700 (PDT)
-Received: from mason-virtual-machine.localdomain ([43.224.245.242])
-        by smtp.gmail.com with ESMTPSA id c21-20020a170902c1d500b001bb8895848bsm5247792plc.71.2023.09.20.02.12.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Sep 2023 02:12:36 -0700 (PDT)
-From:   Zhang Hui <masonzhang.xiaomi@gmail.com>
-X-Google-Original-From: Zhang Hui <zhanghui31@xiaomi.com>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stanley.chu@mediatek.com, peng.zhou@mediatek.com,
-        yujiaochen@xiaomi.com, yudongbin@xiaomi.com, zhanghui31@xiaomi.com
-Subject: [PATCH] scsi: ufs: core: Do not access null point in ufshpb_remove
-Date:   Wed, 20 Sep 2023 17:12:26 +0800
-Message-Id: <20230920091226.55663-1-zhanghui31@xiaomi.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S234339AbjITKTi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 Sep 2023 06:19:38 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD0D110;
+        Wed, 20 Sep 2023 03:19:30 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B3A0C433C8;
+        Wed, 20 Sep 2023 10:19:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695205169;
+        bh=OjA7iTECs8f9+839G62xTmbLSGvLzLZmyK1Rhd04rVI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q/c412THfLmc6qea7o9R/VfTdCcbfi8mZ0ttkYhqouACRznUQ57Hgkrh50E+LknXY
+         MsvMbvVdu3CI0iswDjXXT1cE9xD7hw1r7DxwXZHkSCJZ4kkdAMhcTnA8c9iiYaPvFI
+         qxp/Dq5zi8dMXWFL9cqQ7Yh8HtihnHVlOT/w5qdkxQyyaOcMIThvdICKC3l/yruyC/
+         CvnUUY2ViVFNbMN6npMy68oMuxuFq2CEXdjLOYboGmqqXb8QnduuJitRCizNUqQ9MJ
+         1sIT5v+0WLYUzck3AAyVe5MrZ2tHlbHP/3po/cyjALIIIIU4MRASh6jiTa0i16OC6q
+         KaiBFXp2gFQHA==
+Date:   Wed, 20 Sep 2023 12:19:23 +0200
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Can Guo <quic_cang@quicinc.com>, quic_nguyenb@quicinc.com,
+        quic_nitirawa@quicinc.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>
+Subject: Re: [PATCH 4/6] phy: qualcomm: phy-qcom-qmp-ufs: Move data structs
+ and setting tables to header
+Message-ID: <20230920101923.GG4732@thinkpad>
+References: <1694411968-14413-1-git-send-email-quic_cang@quicinc.com>
+ <1694411968-14413-5-git-send-email-quic_cang@quicinc.com>
+ <CAA8EJpoWnXeJKPB04kJW6Qo7ifAnt1u2ZSiq+W2HWOez=hi5gA@mail.gmail.com>
+ <20230919121524.GD4732@thinkpad>
+ <CAA8EJpoqRBxS7HJrFdRAvv677hKJw+d_K+fN_4ABDrj+68r28w@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <CAA8EJpoqRBxS7HJrFdRAvv677hKJw+d_K+fN_4ABDrj+68r28w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,36 +63,64 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: zhanghui <zhanghui31@xiaomi.com>
+On Wed, Sep 20, 2023 at 01:30:21AM +0300, Dmitry Baryshkov wrote:
+> On Tue, 19 Sept 2023 at 15:15, Manivannan Sadhasivam <mani@kernel.org> wrote:
+> >
+> > On Thu, Sep 14, 2023 at 03:28:59PM +0300, Dmitry Baryshkov wrote:
+> > > On Mon, 11 Sept 2023 at 09:01, Can Guo <quic_cang@quicinc.com> wrote:
+> > > >
+> > > > To make the code more readable, move the data structs and PHY settting
+> > > > tables to a header file, namely the phy-qcom-qmp-ufs.h.
+> > > >
+> > > > Signed-off-by: Can Guo <quic_cang@quicinc.com>
+> > > > ---
+> > > >  drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 802 +------------------------------
+> > > >  drivers/phy/qualcomm/phy-qcom-qmp-ufs.h | 805 ++++++++++++++++++++++++++++++++
+> > > >  2 files changed, 806 insertions(+), 801 deletions(-)
+> > > >  create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-ufs.h
+> > >
+> > > Is there any reason to do so? Other than just moving stuff around, it
+> > > doesn't give us anything. This header will not be shared with any
+> > > other driver. Just moving data tables to the header (ugh, static data
+> > > in the header) doesn't make code more readable.
+> > >
+> >
+> > I think the motive here is to move the static tables to one file and have the
+> > rest of the code in another. Because, the static tables itself occupy 1.2k LoC
+> > now and it is going to grow. So let's keep them in a single file to avoid mixing
+> > it with rest of the driver code.
+> 
+> My 2c is that this is mostly useless. The headers are for sharing, not
+> for moving the data out of the .c files. Not to mention that the
+> driver code comes after the tables.
+> I'd really suggest starting such a move with separating common parts
+> of all the QMP drivers.
+> 
 
-If hpb is not enabled or not allowed, some points will not be allocated in
-init flow, so access them will trigger KE in ufshpb remove flow.
+Makes sense.
 
-Call trace in rmmod ko:
-destroy_workqueue+0x1c/0x234
-ufshpb_remove+0x40/0x50
-ufshcd_remove+0x3c/0xd0
-...
+Can, please propose a separate series if you want to pursue the effort.
+Also, I'd say that instead of moving the tables to a header (which defeats the
+purpose of the header), the tables can be moved to a separate .c file. Like,
 
-Signed-off-by: zhanghui <zhanghui31@xiaomi.com>
----
- drivers/ufs/core/ufshpb.c | 3 +++
- 1 file changed, 3 insertions(+)
+phy-qcom-qmp-ufs-tables.c
+phy-qcom-qmp-ufs.c
 
-diff --git a/drivers/ufs/core/ufshpb.c b/drivers/ufs/core/ufshpb.c
-index 255f8b38d0c2..fa345e161cb8 100644
---- a/drivers/ufs/core/ufshpb.c
-+++ b/drivers/ufs/core/ufshpb.c
-@@ -2656,6 +2656,9 @@ void ufshpb_init(struct ufs_hba *hba)
- 
- void ufshpb_remove(struct ufs_hba *hba)
- {
-+	if (!ufshpb_is_allowed(hba) || !hba->dev_info.hpb_enabled)
-+		return;
-+
- 	mempool_destroy(ufshpb_page_pool);
- 	mempool_destroy(ufshpb_mctx_pool);
- 	kmem_cache_destroy(ufshpb_mctx_cache);
+Btw, why do we have "phy-qcom" prefix inside drivers/phy/qualcomm/?
+
+- Mani
+
+> >
+> > - Mani
+> >
+> > > If you really would like to clean up the QMP drivers, please consider
+> > > splitting _common_ parts. But at this point I highly doubt that it is
+> > > possible in a useful way.
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry
+
 -- 
-2.34.1
-
+மணிவண்ணன் சதாசிவம்
