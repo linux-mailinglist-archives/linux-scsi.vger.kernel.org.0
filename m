@@ -2,106 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF427A8439
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Sep 2023 15:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B0E7A877C
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Sep 2023 16:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236548AbjITN4u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Sep 2023 09:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
+        id S236661AbjITOqK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Sep 2023 10:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236640AbjITNzk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 Sep 2023 09:55:40 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D82114;
-        Wed, 20 Sep 2023 06:55:25 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 938FEC433CA;
-        Wed, 20 Sep 2023 13:55:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695218125;
-        bh=WK/2A0ewF8j13oI/kvyKqoOEir7SlKyfYbQHVhJLiH4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MDg/X96PTVZPnJnJ4ftVP73S6M0i37k2MMd+InlPCnc9jMLkAfPwlOSvpVxTdeb2J
-         pgHAJOukjZqADIQ+7tIGHt5MoTh/OvY9S0PmagYeMRHiUO4Kpsqkb/Oe1fI4GQS0Lm
-         aPzWAf+gLHWzSyR2CFvjTz+cOLh0574vtGwMecFwJLj+NgKWBIEoLy2lmgo1af/DEe
-         Y+4cw8oh8dXMyRKBNsP1frA9cVHeYm27bOriEoUp8xhPcPQZG6+XrbBx13oYtxqtnf
-         HZZk9jfFhvdiMf5gaVrS76zfMk1w4i8frxQLDfhzuq7zFPxJn3hEJHwEnNesaAihVn
-         E54N1wlxXjhxg==
-From:   Damien Le Moal <dlemoal@kernel.org>
-To:     linux-ide@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Paul Ausbeck <paula@soe.ucsc.edu>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chia-Lin Kao <acelan.kao@canonical.com>
-Subject: [PATCH v4 23/23] ata: libata: Cleanup inline DMA helper functions
-Date:   Wed, 20 Sep 2023 22:54:39 +0900
-Message-ID: <20230920135439.929695-24-dlemoal@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230920135439.929695-1-dlemoal@kernel.org>
-References: <20230920135439.929695-1-dlemoal@kernel.org>
+        with ESMTP id S236384AbjITOqH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 Sep 2023 10:46:07 -0400
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1362E1996;
+        Wed, 20 Sep 2023 07:38:55 -0700 (PDT)
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-68fb6fd2836so6351593b3a.0;
+        Wed, 20 Sep 2023 07:38:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695220693; x=1695825493;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wsiOE3sViWDOZyKIgjf60eL0/VIA+MntKbdNkIr6/zE=;
+        b=YBMUrBNZIEzJVDwkekCpedgTwFp7gRJEaLhPXeHbbfdsdRcx+idX7C6clA5KeZWIjC
+         IoiwXWT77GXkLOOwnS/btwYX7ZpO4SWsl6EEvCrAKilpi/DiMzG47bYAMxHmDjmt9oJP
+         hh2EN2MWYssqmFnCihwS5Ew+WbTdFwf7AwxWAOANnRnjsGOspNCMx6QFnZkhYdKpz4k9
+         9ZsyzowsAHGdJLpREzfk4XBNdZSh83XK2kyW3ESpOhGN62GbJ4ftXBvlIjUezgRUAa41
+         yL57A116jKxGUj9kjb/A8oqumtOAvX+pmPq2JWZtaiQu8fdV57bEe3ECU5+tn60Gb7cK
+         BL2w==
+X-Gm-Message-State: AOJu0YxIjUjo5//fy9+05z0NkzFZIKNmsH3F023wi5IMn1rYqo5t6WRF
+        BxySFLi+btEWW/5F6t6UY0tTkk+0Dy0=
+X-Google-Smtp-Source: AGHT+IGjEtftlqB0LLmXFgjmJ3akbl0aPACEmLvM5aMb3hhiy69dDS5Db9HczLRrW8o3/3S2Y48SjQ==
+X-Received: by 2002:a05:6a20:1386:b0:157:b7d3:2bcb with SMTP id hn6-20020a056a20138600b00157b7d32bcbmr2265909pzc.27.1695220693045;
+        Wed, 20 Sep 2023 07:38:13 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:b0c6:e5b6:49ef:e0bd? ([2620:15c:211:201:b0c6:e5b6:49ef:e0bd])
+        by smtp.gmail.com with ESMTPSA id je20-20020a170903265400b001bf044dc1a6sm11587565plb.39.2023.09.20.07.38.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Sep 2023 07:38:12 -0700 (PDT)
+Message-ID: <a9b436bb-ccc2-4089-aaea-0e3f3f61fcc2@acm.org>
+Date:   Wed, 20 Sep 2023 07:38:09 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] scsi: ufs: core: Do not access null point in
+ ufshpb_remove
+Content-Language: en-US
+To:     Zhang Hui <masonzhang.xiaomi@gmail.com>, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stanley.chu@mediatek.com, peng.zhou@mediatek.com,
+        yujiaochen@xiaomi.com, yudongbin@xiaomi.com, zhanghui31@xiaomi.com
+References: <20230920091226.55663-1-zhanghui31@xiaomi.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230920091226.55663-1-zhanghui31@xiaomi.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Simplify the inline DMA helper functions ata_using_mwdma(),
-ata_using_udma() and ata_dma_enabled() to directly return as a boolean
-the result of their test condition.
+On 9/20/23 02:12, Zhang Hui wrote:
+> If hpb is not enabled or not allowed, some points will not be
+> allocated in init flow, so access them will trigger KE in ufshpb
+> remove flow.
 
-Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
----
- include/linux/libata.h | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+Since the HPB code has been removed from the kernel, I don't think that
+this patch applies. Please always start from the latest kernel version
+when preparing patches.
 
-diff --git a/include/linux/libata.h b/include/linux/libata.h
-index 00b4a2b7819a..3c0fd04b0035 100644
---- a/include/linux/libata.h
-+++ b/include/linux/libata.h
-@@ -1881,23 +1881,21 @@ static inline unsigned long ata_deadline(unsigned long from_jiffies,
-    change in future hardware and specs, secondly 0xFF means 'no DMA' but is
-    > UDMA_0. Dyma ddreigiau */
- 
--static inline int ata_using_mwdma(struct ata_device *adev)
-+static inline bool ata_using_mwdma(struct ata_device *adev)
- {
--	if (adev->dma_mode >= XFER_MW_DMA_0 && adev->dma_mode <= XFER_MW_DMA_4)
--		return 1;
--	return 0;
-+	return adev->dma_mode >= XFER_MW_DMA_0 &&
-+		adev->dma_mode <= XFER_MW_DMA_4;
- }
- 
--static inline int ata_using_udma(struct ata_device *adev)
-+static inline bool ata_using_udma(struct ata_device *adev)
- {
--	if (adev->dma_mode >= XFER_UDMA_0 && adev->dma_mode <= XFER_UDMA_7)
--		return 1;
--	return 0;
-+	return adev->dma_mode >= XFER_UDMA_0 &&
-+		adev->dma_mode <= XFER_UDMA_7;
- }
- 
--static inline int ata_dma_enabled(struct ata_device *adev)
-+static inline bool ata_dma_enabled(struct ata_device *adev)
- {
--	return (adev->dma_mode == 0xFF ? 0 : 1);
-+	return adev->dma_mode != 0xFF;
- }
- 
- /**************************************************************************
--- 
-2.41.0
+Thanks,
+
+Bart.
 
