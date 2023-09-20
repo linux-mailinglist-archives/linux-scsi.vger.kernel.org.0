@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755CA7A8425
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Sep 2023 15:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D037A8430
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Sep 2023 15:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236617AbjITN4M (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Sep 2023 09:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
+        id S236635AbjITN4R (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Sep 2023 09:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236632AbjITNzk (ORCPT
+        with ESMTP id S236633AbjITNzk (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 Sep 2023 09:55:40 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E096BF2;
-        Wed, 20 Sep 2023 06:55:19 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02E1C43391;
-        Wed, 20 Sep 2023 13:55:17 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18D0102;
+        Wed, 20 Sep 2023 06:55:21 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3B17C433CA;
+        Wed, 20 Sep 2023 13:55:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695218119;
-        bh=lmI/yQR3mXjTNExyBjMUNn39lcUmMCzc9DGZmawQH6U=;
+        s=k20201202; t=1695218121;
+        bh=QR1FPDCpadwYIq8XjwF9AmIVt+FdgGuwR2Y++wP+wOM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JpbQtQgmZNdIFLR1rn4IeYtRyHwBevQCcwh2WAZw5JmmEjUrFAdRW2yMPT8IMOOC0
-         saCbElmebUl5SJpERXrXTNOa8dzULaDE+YVBOoEhGv7rLl9oZifbIYZr0N/Np25S5z
-         Pkx+G312q56ogw8gUvNNXR4vBa1zp97auDOtA0kCDWApJDnlX9IUdjgwZcJKAryMEV
-         CgqSrIQZ+6L3cXfgPTW6B0jYdUInskdsTgUILGKYE8XQAJLftYeHpVh8SZjG6W/YGl
-         QDZYs3M0iJ5R/e4wzmlc6qVTpAG6Uc0EIfq974GR3jGaoz7i+8FSkL7iVS0GBIy3U8
-         r+yGKzyVJJEPA==
+        b=TZVhSJyKpUZj/8fcN4rhZT4eikPCJOqp52QCmTpSBBikA+ahUvpe7oiqzZoxHwJBV
+         KDv1AheK0NOV0RXI4PUADAdpikJAjIAfB/3ygq0hWdWYmFXwg/FUmT2u84y5PWpq86
+         Eqvz0YOSQLS0A+tenCwj01BHTm8RH9MbpaEV0yeLXdXNz7K0xlUYxKCgRC7rJ7Kv/K
+         9yMbf+LHhCbLEbxsZ6+08etOT902qwTdhHrWkWBbtQvitTE4ZGvkaYrJPMitRzwhsE
+         uqmETkRCv4BuAUHdLgA/scfCXoAiH0WW+I+en5KDlh36SLTwA8p1dbG+0xWL0tB990
+         oZZBwFQdEATSA==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     linux-ide@vger.kernel.org
 Cc:     linux-scsi@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc:     linux-scsi@vger.kernel.org,
         Joe Breuer <linux-kernel@jmbreuer.net>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Chia-Lin Kao <acelan.kao@canonical.com>
-Subject: [PATCH v4 20/23] ata: libata-sata: Improve ata_sas_slave_configure()
-Date:   Wed, 20 Sep 2023 22:54:36 +0900
-Message-ID: <20230920135439.929695-21-dlemoal@kernel.org>
+Subject: [PATCH v4 21/23] ata: libata-eh: Improve reset error messages
+Date:   Wed, 20 Sep 2023 22:54:37 +0900
+Message-ID: <20230920135439.929695-22-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230920135439.929695-1-dlemoal@kernel.org>
 References: <20230920135439.929695-1-dlemoal@kernel.org>
@@ -55,33 +55,54 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Change ata_sas_slave_configure() to return the return value of
-ata_scsi_dev_config() to ensure that any error from that function is
-propagated to libsas.
+Some drives are really slow to spinup on resume, resulting is a very
+slow response to COMRESET and to error messages such as:
+
+ata1: COMRESET failed (errno=-16)
+ata1: link is slow to respond, please be patient (ready=0)
+ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+ata1.00: configured for UDMA/133
+
+Given that the slowness of the response is indicated with the message
+"link is slow to respond..." and that resets are retried until the
+device is detected as online after up to 1min (ata_eh_reset_timeouts),
+there is no point in printing the "COMRESET failed" error message. Let's
+not scare the user with non fatal errors and only warn about reset
+failures in ata_eh_reset() when all reset retries have been exhausted.
 
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: John Garry <john.g.garry@oracle.com>
 Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 ---
- drivers/ata/libata-sata.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/ata/libata-eh.c   | 2 ++
+ drivers/ata/libata-sata.c | 1 -
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+index 5686353e442c..67387d602735 100644
+--- a/drivers/ata/libata-eh.c
++++ b/drivers/ata/libata-eh.c
+@@ -2909,6 +2909,8 @@ int ata_eh_reset(struct ata_link *link, int classify,
+ 		 */
+ 		if (ata_is_host_link(link))
+ 			ata_eh_thaw_port(ap);
++		ata_link_warn(link, "%s failed\n",
++			      reset == hardreset ? "hardreset" : "softreset");
+ 		goto out;
+ 	}
+ 
 diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
-index a701e1538482..83a9497e48e1 100644
+index 83a9497e48e1..b6656c287175 100644
 --- a/drivers/ata/libata-sata.c
 +++ b/drivers/ata/libata-sata.c
-@@ -1182,8 +1182,8 @@ EXPORT_SYMBOL_GPL(ata_sas_tport_delete);
- int ata_sas_slave_configure(struct scsi_device *sdev, struct ata_port *ap)
- {
- 	ata_scsi_sdev_config(sdev);
--	ata_scsi_dev_config(sdev, ap->link.device);
--	return 0;
-+
-+	return ata_scsi_dev_config(sdev, ap->link.device);
+@@ -621,7 +621,6 @@ int sata_link_hardreset(struct ata_link *link, const unsigned int *timing,
+ 		/* online is set iff link is online && reset succeeded */
+ 		if (online)
+ 			*online = false;
+-		ata_link_err(link, "COMRESET failed (errno=%d)\n", rc);
+ 	}
+ 	return rc;
  }
- EXPORT_SYMBOL_GPL(ata_sas_slave_configure);
- 
 -- 
 2.41.0
 
