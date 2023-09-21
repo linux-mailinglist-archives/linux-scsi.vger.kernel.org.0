@@ -2,102 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA347AA45B
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Sep 2023 00:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1197AA530
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Sep 2023 00:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232976AbjIUWG5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Sep 2023 18:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
+        id S229865AbjIUWkc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Sep 2023 18:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232947AbjIUWGi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 18:06:38 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB3FB058A;
-        Thu, 21 Sep 2023 11:08:23 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 874CEC433C8;
-        Thu, 21 Sep 2023 18:08:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695319703;
-        bh=l887FWy982+b8+dc5o3XhtTTM99Br2AApyXv7V0jC3U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T5SKkJs29gGux657up+KDjbWaq8Kiu59yyLjTmp4x5aHwgqqNd1EmlXrQbytCm4FR
-         DlBicEjNqxGhRv4NcELziR03kv59oh49tC06b8eh3yk/z3oKbxAcK+86mE36OI+Azl
-         I+fh4Of7inyZO3AQDPe4GN6lX53oOOLUf7b6Yb+nsMdDttipUp2vAcwDpnXDkMKFVE
-         7lU1TdQnxH/RRR8FZX92r5WADEdIuoI8Wbq/dNfdYhC3jSNaj8iWV8cJm4RvjKzTAE
-         8s2HdGsy1dqyM83qrJ7VuIrFqmgX5IoBXYsveSj5F3DsZlG/wRjNYVnSgSAo6lfBR/
-         qwziMMw8bssIw==
-From:   Damien Le Moal <dlemoal@kernel.org>
-To:     linux-ide@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Paul Ausbeck <paula@soe.ucsc.edu>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chia-Lin Kao <acelan.kao@canonical.com>
-Subject: [PATCH v5 12/23] scsi: Remove scsi device no_start_on_resume flag
-Date:   Fri, 22 Sep 2023 03:07:47 +0900
-Message-ID: <20230921180758.955317-13-dlemoal@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230921180758.955317-1-dlemoal@kernel.org>
-References: <20230921180758.955317-1-dlemoal@kernel.org>
+        with ESMTP id S232238AbjIUWkZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 18:40:25 -0400
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D7B3C22;
+        Thu, 21 Sep 2023 13:11:05 -0700 (PDT)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1c1ff5b741cso12529355ad.2;
+        Thu, 21 Sep 2023 13:11:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695327065; x=1695931865;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AqLUJredNWFn6UV9EpZQHzPOud7X+d09rY2QfVP8FfM=;
+        b=hB++SQVsehyjfHesltdoKUlix0BRL+fSqltcUJUpDSz0hE4z2v3h17Yn7tT5cr6eA4
+         fuxNjGLSy15TF9h0wRHOCgBrbR3VARg4ovhRmzamN9unix/8twLGHTd9GHnI7N/6WovJ
+         UnqaY+TPIyI6Xcnq5IMeiNQVQP6CDlH9CcGNvMy8sNMClDxphv4nOrJ6Jt2YFavfOJ8Z
+         UJskvTvezFck9oe5WxqPB35kkemR6pAYN/PeiJrRAbZ+O8UbkN8Fl1/RjLvWki88AIXw
+         jhfjlr6uaP3kfYE1KkZamw8j1iHv9cgta24m/z7pOq3HB6cNv2fKt3Tvg5AugJ9Q2ZED
+         Nzow==
+X-Gm-Message-State: AOJu0YxBLOJG1vJoR1s1nW2IErM/uppeLm8s2GLWT0YTmGH7jkAS4yZy
+        kXre58vLoAksw15UZAOLYZc=
+X-Google-Smtp-Source: AGHT+IE4uBXaKeNClIyeQxDM3JodKlX79G3w3w9XgQ/pS0vx9mNOOgruGpeL+ibjNdK7nkmnSAy4Ag==
+X-Received: by 2002:a17:902:82c3:b0:1c3:f745:1cd5 with SMTP id u3-20020a17090282c300b001c3f7451cd5mr6113963plz.34.1695327065034;
+        Thu, 21 Sep 2023 13:11:05 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:6903:9a1f:51f3:593e? ([2620:15c:211:201:6903:9a1f:51f3:593e])
+        by smtp.gmail.com with ESMTPSA id a7-20020a170902ecc700b001b87bedcc6fsm1922245plh.93.2023.09.21.13.11.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Sep 2023 13:11:03 -0700 (PDT)
+Message-ID: <e547d35e-856b-4d0e-a77d-7f37fad3dde5@acm.org>
+Date:   Thu, 21 Sep 2023 13:11:02 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/13] Pass data temperature information to zoned UFS
+ devices
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Niklas Cassel <Niklas.Cassel@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>, Bean Huo <huobean@gmail.com>,
+        Bean Huo <beanhuo@iokpp.de>, Avri Altman <avri.altman@wdc.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Luca Porzio <lporzio@micron.com>
+References: <20230920191442.3701673-1-bvanassche@acm.org>
+ <ZQtHwsNvS1wYDKfG@casper.infradead.org>
+ <1522d8ec-6b15-45d5-b6d9-517337e2c8cf@acm.org> <ZQv07Mg7qIXayHlf@x1-carbon>
+ <8781636a-57ac-4dbd-8ec6-b49c10c81345@acm.org>
+ <ZQyZEqXJymyFWlKV@casper.infradead.org>
+ <4cacae64-6a11-41ab-9bec-f8915da00106@acm.org>
+ <ZQydeSIoHHJDQjHW@casper.infradead.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <ZQydeSIoHHJDQjHW@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The scsi device flag no_start_on_resume is not set by any scsi low
-level driver. Remove it. This reverts the changes introduced by commit
-0a8589055936 ("ata,scsi: do not issue START STOP UNIT on resume").
+On 9/21/23 12:46, Matthew Wilcox wrote:
+> If vendor support already exists, then why did you dodge the question
+> asking for quantified data that I asked earlier?  And can we have that
+> data now?
 
-Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/scsi/sd.c          | 7 ++-----
- include/scsi/scsi_device.h | 1 -
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ From Rho, Eunhee, Kanchan Joshi, Seung-Uk Shin, Nitesh Jagadeesh 
+Shetty, Jooyoung Hwang, Sangyeun Cho, Daniel DG Lee, and Jaeheon Jeong. 
+"{FStream}: Managing Flash Streams in the File System." In 16th USENIX 
+Conference on File and Storage Technologies (FAST 18), pp. 257-264. 
+2018: "Experimental results show that FStream enhances the filebench 
+performance by 5%∼35% and reduces WAF (Write Amplification Factor) by 
+7%∼46%. For a NoSQL database benchmark, performance is improved by up to 
+38% and WAF is reduced by up to 81%." Please note that these results are 
+for ext4 instead of F2FS. The benefit for F2FS is probably smaller since 
+F2FS is optimized for NAND flash media.
 
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index d86306d42445..49e9b4ce2e33 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -3886,11 +3886,8 @@ static int sd_resume(struct device *dev, bool runtime)
- 	if (!sd_do_start_stop(sdkp->device, runtime))
- 		return 0;
- 
--	if (!sdkp->device->no_start_on_resume) {
--		sd_printk(KERN_NOTICE, sdkp, "Starting disk\n");
--		ret = sd_start_stop_device(sdkp, 1);
--	}
--
-+	sd_printk(KERN_NOTICE, sdkp, "Starting disk\n");
-+	ret = sd_start_stop_device(sdkp, 1);
- 	if (!ret)
- 		opal_unlock_from_suspend(sdkp->opal_dev);
- 	return ret;
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index b7df1e6da969..8db0c88cf48e 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -195,7 +195,6 @@ struct scsi_device {
- 	unsigned allow_restart:1; /* issue START_UNIT in error handler */
- 	unsigned manage_system_start_stop:1; /* Let HLD (sd) manage system start/stop */
- 	unsigned manage_runtime_start_stop:1; /* Let HLD (sd) manage runtime start/stop */
--	unsigned no_start_on_resume:1; /* Do not issue START_STOP_UNIT on resume */
- 	unsigned start_stop_pwr_cond:1;	/* Set power cond. in START_STOP_UNIT */
- 	unsigned no_uld_attach:1; /* disable connecting to upper level drivers */
- 	unsigned select_no_atn:1;
--- 
-2.41.0
+I have Cc-ed open source contributors from multiple UFS vendors on this 
+email and I hope that they can share performance numbers for F2FS.
+
+Thanks,
+
+Bart.
 
