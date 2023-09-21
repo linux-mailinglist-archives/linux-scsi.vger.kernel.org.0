@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4E87AA158
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 23:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672C77AA1B2
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 23:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232391AbjIUVBH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Sep 2023 17:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
+        id S232409AbjIUVFw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Sep 2023 17:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232388AbjIUVAi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 17:00:38 -0400
+        with ESMTP id S232717AbjIUVEt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 17:04:49 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4B4B013B;
-        Thu, 21 Sep 2023 11:08:21 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABF5AC433C7;
-        Thu, 21 Sep 2023 18:08:19 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC870B0591;
+        Thu, 21 Sep 2023 11:08:26 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32187C433C7;
+        Thu, 21 Sep 2023 18:08:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695319701;
-        bh=ClHV0GWD00piISaODu4sGP0323PoYQkSONnwrIEED3c=;
+        s=k20201202; t=1695319706;
+        bh=ppb7nxzr/j9CNCzkeE3W0KsRJrVXxnoD+Up1RAuza+I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D/4m0YuJBPPFYUdeJtHh/aEjYUxsdkrgWC6pOvORsEyYKRtEzUsg630cML+0DfJiZ
-         uobOXEI0BzOLCHeIbSQtAddiEiSOFJAADLfu14XFjBq4Djyx1sESG0WunfKM4dQ6tf
-         S4x+fyQSfYpltPHpWvf+/GK6s/fX1XGfG/6aqzfu0q47mA9rGstxaPnIpYyXW3FErb
-         igpw38ZYBTgkyG6btB5TZNGhc/PDdc1vTfYK4j5JjyK3nZ4WNpWIKOx4hVkuIPZmcm
-         ysMtNFujoRhikavfVM/ZxuPnQKjRGQzobJGfOcVesKnkhfSkYwLm9/Y9pYcEGGZJGo
-         YaO/orFEihKFw==
+        b=IrY86cpwVSG71w6rJlFX7+17Tx57L9IoKXlOE6xkd1VLa9lz/ZJy0fiqm6wSnq8JE
+         SHIG2g0s/qSTKEv0xx9xZkZTrHSo2m67nkAy0Ed2k0mck/k4krtJOEwhBstH/gWdeX
+         MkHZ78OVoCv1spCGQVvJ1J06QyFqrZ+qcEsq7x6silvPuhiCgbbH5iT0ANRdTSpJmg
+         nv1CF35iGsco3jWfsTJGuMgTvjrXHn/v40Vxx7ejR/wlFUWNQWM46oPVyyY/KSWk8q
+         frdEQAiEguP+Gys25Ce2iwfID7Sjz6txPKyocYxObsE+XUbW5aSuivdhtRO82/G4hG
+         Jd1G9G8IPitmg==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     linux-ide@vger.kernel.org
 Cc:     linux-scsi@vger.kernel.org,
@@ -37,14 +37,13 @@ Cc:     linux-scsi@vger.kernel.org,
         Joe Breuer <linux-kernel@jmbreuer.net>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Chia-Lin Kao <acelan.kao@canonical.com>
-Subject: [PATCH v5 11/23] ata: libata-eh: Fix compilation warning in ata_eh_link_report()
-Date:   Fri, 22 Sep 2023 03:07:46 +0900
-Message-ID: <20230921180758.955317-12-dlemoal@kernel.org>
+Subject: [PATCH v5 14/23] ata: libata-core: Synchronize ata_port_detach() with hotplug
+Date:   Fri, 22 Sep 2023 03:07:49 +0900
+Message-ID: <20230921180758.955317-15-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230921180758.955317-1-dlemoal@kernel.org>
 References: <20230921180758.955317-1-dlemoal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -56,44 +55,46 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The 6 bytes length of the tries_buf string in ata_eh_link_report() is
-too short and results in a gcc compilation warning with W-!:
-
-drivers/ata/libata-eh.c: In function ‘ata_eh_link_report’:
-drivers/ata/libata-eh.c:2371:59: warning: ‘%d’ directive output may be truncated writing between 1 and 11 bytes into a region of size 4 [-Wformat-truncation=]
- 2371 |                 snprintf(tries_buf, sizeof(tries_buf), " t%d",
-      |                                                           ^~
-drivers/ata/libata-eh.c:2371:56: note: directive argument in the range [-2147483648, 4]
- 2371 |                 snprintf(tries_buf, sizeof(tries_buf), " t%d",
-      |                                                        ^~~~~~
-drivers/ata/libata-eh.c:2371:17: note: ‘snprintf’ output between 4 and 14 bytes into a destination of size 6
- 2371 |                 snprintf(tries_buf, sizeof(tries_buf), " t%d",
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 2372 |                          ap->eh_tries);
-      |                          ~~~~~~~~~~~~~
-
-Avoid this warning by increasing the string size to 16B.
+The call to async_synchronize_cookie() to synchronize a port removal
+and hotplug probe is done in ata_host_detach() right before calling
+ata_port_detach(). Move this call at the beginning of ata_port_detach()
+to ensure that this operation is always synchronized with probe.
 
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
+Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/ata/libata-eh.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/ata/libata-core.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
-index b1b2c276371e..5686353e442c 100644
---- a/drivers/ata/libata-eh.c
-+++ b/drivers/ata/libata-eh.c
-@@ -2332,7 +2332,7 @@ static void ata_eh_link_report(struct ata_link *link)
- 	struct ata_eh_context *ehc = &link->eh_context;
- 	struct ata_queued_cmd *qc;
- 	const char *frozen, *desc;
--	char tries_buf[6] = "";
-+	char tries_buf[16] = "";
- 	int tag, nr_failed = 0;
+diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+index 8e326a445765..de661780a31e 100644
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -6065,6 +6065,9 @@ static void ata_port_detach(struct ata_port *ap)
+ 	struct ata_link *link;
+ 	struct ata_device *dev;
  
- 	if (ehc->i.flags & ATA_EHI_QUIET)
++	/* Ensure ata_port probe has completed */
++	async_synchronize_cookie(ap->cookie + 1);
++
+ 	/* Wait for any ongoing EH */
+ 	ata_port_wait_eh(ap);
+ 
+@@ -6129,11 +6132,8 @@ void ata_host_detach(struct ata_host *host)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < host->n_ports; i++) {
+-		/* Ensure ata_port probe has completed */
+-		async_synchronize_cookie(host->ports[i]->cookie + 1);
++	for (i = 0; i < host->n_ports; i++)
+ 		ata_port_detach(host->ports[i]);
+-	}
+ 
+ 	/* the host is dead now, dissociate ACPI */
+ 	ata_acpi_dissociate(host);
 -- 
 2.41.0
 
