@@ -2,54 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1A17AA0B6
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 22:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEB87A9F9D
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 22:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbjIUUrW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Sep 2023 16:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
+        id S231672AbjIUUZ3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Sep 2023 16:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232260AbjIUUrH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 16:47:07 -0400
+        with ESMTP id S232256AbjIUUZK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 16:25:10 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D3E81FFE;
-        Thu, 21 Sep 2023 10:36:34 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72AB3C433C9;
-        Thu, 21 Sep 2023 17:30:28 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0967C70F;
+        Thu, 21 Sep 2023 10:36:36 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E66FC433CB;
+        Thu, 21 Sep 2023 17:30:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695317428;
-        bh=eddwPnBiRc58KTRuW67Y0mwiLdLjVpwMPN9Kc012Nrw=;
+        s=k20201202; t=1695317449;
+        bh=rQwERv8dKdHwaDi6a6xwWVgsYnuXNpiaD5h0nk6TXPE=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VZPkzXOBkkwCrPZl25Ie63srC1FMRQKxkcufqIYEeB85XeRwGdbUsEyEr0hbwD0iY
-         zSleFI7GLIGdBAzuGA2d/LseoUGALHkssv34NuiVCskS7GiHMNCgDfpSXwLbNNiuj8
-         h1CAkJqV5Nr3x99ygJCNTOwpfIcj/PlTIfewo5C7cL5Zl6W03vZ52IFr96L6lSF0++
-         3K899oqJtuXpNdytOsHZxURD5gbe+8G7+aEoc1xBtP1kCS714xsbfE47/O16FNN/ix
-         Scb0D0VWATW4VYytWBzRsuAfNkxKrdhCIoIT0JLcCs6yh4SAWz6245apdUnvelUu68
-         Jwb2YRX0Z2uSg==
-Message-ID: <2699e173-7fb5-59f5-c87c-32988c8cc90e@kernel.org>
-Date:   Thu, 21 Sep 2023 10:30:27 -0700
+        b=XwlaN4iHuACVwgxmz4s4/3/dBUtKzE/tr1p9MAXauBwFp9MRMDcgfGvfW8nb+J/5J
+         +dVSeJWDGE7VzdUzgKGi5kKf2BU9t8RQ1JXei8jdx1QhbyCmTFhNeBEnQn6olNIY3u
+         NwFAYc8WgxwtnWgkwlWmSkiBAjbMXO4BkrIUUZXSXQfVTi9MxPsbDUYjn6XFZMui48
+         awna9/CoIgFbsljjhJKSGuabbJiQvUPnNOtDwNrhNHth9Gjgc/1bqP/nu7WQvKzKla
+         1UHy3IXBOiESNkRpshB1dv6IWVD2M68W3tTMBU768Wf6/xC5P5hzIU8V29u2EizDMG
+         soFb23gvh04Iw==
+Message-ID: <f122b793-cd19-24d6-4898-982702554f2c@kernel.org>
+Date:   Thu, 21 Sep 2023 10:30:48 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.15.1
-Subject: Re: [PATCH v4 03/23] ata: libata-scsi: link ata port and scsi device
+Subject: Re: [PATCH v4 00/23] Fix libata suspend/resume handling and code
+ cleanup
 Content-Language: en-US
-To:     John Garry <john.g.garry@oracle.com>, linux-ide@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org,
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
+        John Garry <john.g.garry@oracle.com>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         Paul Ausbeck <paula@soe.ucsc.edu>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Joe Breuer <linux-kernel@jmbreuer.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chia-Lin Kao <acelan.kao@canonical.com>
+        Chia-Lin Kao <acelan.kao@canonical.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 References: <20230920135439.929695-1-dlemoal@kernel.org>
- <20230920135439.929695-4-dlemoal@kernel.org>
- <906621de-eba1-5a1c-dd26-c3030ad7b983@oracle.com>
+ <CAMuHMdWHXC=qPTcLS9VeqfFy7Js84pd84oZqqWdd7E+bAHrcqw@mail.gmail.com>
+ <CAMuHMdXeeDNjwErH7HfCtnxSYF2o-6ZnkDuOe8u_mX14WKqqBQ@mail.gmail.com>
 From:   Damien Le Moal <dlemoal@kernel.org>
 Organization: Western Digital Research
-In-Reply-To: <906621de-eba1-5a1c-dd26-c3030ad7b983@oracle.com>
+In-Reply-To: <CAMuHMdXeeDNjwErH7HfCtnxSYF2o-6ZnkDuOe8u_mX14WKqqBQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -60,61 +62,47 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2023/09/21 7:16, John Garry wrote:
-> On 20/09/2023 14:54, Damien Le Moal wrote:
->> +int ata_scsi_dev_alloc(struct scsi_device *sdev, struct ata_port *ap)
+On 2023/09/21 2:22, Geert Uytterhoeven wrote:
+> On Thu, Sep 21, 2023 at 11:21 AM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+>> On Wed, Sep 20, 2023 at 3:54 PM Damien Le Moal <dlemoal@kernel.org> wrote:
+>>> The first 9 patches of this series fix several issues with suspend/resume
+>>> power management operations in scsi and libata. The most significant
+>>> changes introduced are in patch 4 and 5, where the manage_start_stop
+>>> flag of scsi devices is split into the manage_system_start_stop and
+>>> manage_runtime_start_stop flags to allow keeping scsi runtime power
+>>> operations for spining up/down ATA devices but have libata do its own
+>>> system suspend/resume device power state management using EH.
+>>>
+>>> The remaining patches are code cleanup that do not introduce any
+>>> significant functional change.
+>>>
+>>> This series was tested on qemu and on various PCs and servers. I am
+>>> CC-ing people who recently reported issues with suspend/resume.
+>>> Additional testing would be much appreciated.
+>>>
+>>> Changes from v3:
+>>>  * Corrected pathc 1 (typo in commit message and WARN_ON() removal)
+>>>  * Changed path 3 as suggested by Niklas (moved definition of
+>>>    ->slave_alloc)
+>>>  * Rebased on rc2
+>>>  * Added review tags
+>>
+>> Thanks for the update!
+>>
+>> I gave this a try on Renesas Salvator-XS with R-Car H3 ES2.0 and
+>> a SATA hard drive:
+>>   - The drive is spun up during system resume,
+>>   - Accessing the drive after the system was resumed is instantaneous.
 > 
-> nit: why not static? I could not see it used elsewhere. Indeed, I am not 
-> sure why it is not inlined in its only caller, ata_scsi_slave_alloc().
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-The initial version of this patchset used this function for libsas as well. But
-that is now gone, so I can indeed inline this.
-Note that with the STATELESS flag added, the linking of ata dev and scsi dev
-should work just fine for libsas now, so we could add it. But I am still not
-convinced that is necessary... Will have a look as a follow up.
+Thanks Geert !
 
 > 
-> Thanks,
-> John
+> Gr{oetje,eeting}s,
 > 
->> +{
->> +	struct device_link *link;
->> +
->> +	ata_scsi_sdev_config(sdev);
->> +
->> +	/*
->> +	 * Create a link from the ata_port device to the scsi device to ensure
->> +	 * that PM does suspend/resume in the correct order: the scsi device is
->> +	 * consumer (child) and the ata port the supplier (parent).
->> +	 */
->> +	link = device_link_add(&sdev->sdev_gendev, &ap->tdev,
->> +			       DL_FLAG_STATELESS |
->> +			       DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
->> +	if (!link) {
->> +		ata_port_err(ap, "Failed to create link to scsi device %s\n",
->> +			     dev_name(&sdev->sdev_gendev));
->> +		return -ENODEV;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +/**
->> + *	ata_scsi_slave_alloc - Early setup of SCSI device
->> + *	@sdev: SCSI device to examine
->> + *
->> + *	This is called from scsi_alloc_sdev() when the scsi device
->> + *	associated with an ATA device is scanned on a port.
->> + *
->> + *	LOCKING:
->> + *	Defined by SCSI layer.  We don't really care.
->> + */
->> +
->> +int ata_scsi_slave_alloc(struct scsi_device *sdev)
->> +{
->> +	return ata_scsi_dev_alloc(sdev, ata_shost_to_port(sdev->host));
->> +}
->> +EXPORT_SYMBOL_GPL(ata_scsi_slave_alloc);
+>                         Geert
 > 
 
 -- 
