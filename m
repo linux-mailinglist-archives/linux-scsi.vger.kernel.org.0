@@ -2,85 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DAF7A9A0F
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 20:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E377A9CD5
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 21:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbjIUSgE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Sep 2023 14:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
+        id S229514AbjIUTZC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Sep 2023 15:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbjIUSff (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 14:35:35 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D3EB05A1;
-        Thu, 21 Sep 2023 11:08:34 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CDA5C433C9;
-        Thu, 21 Sep 2023 18:08:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695319714;
-        bh=GTW29Tbo2vbr6MXSdFJhe+fVerKvAHx6guP8pG4B20I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z9xjB7o0jOzbqwk57rIT09TZjHTN0XwA14WHPRqogmqjSJx1ryhH/nUfREujR73nn
-         4BDgQ/JoishRJX81XlLCgiSKL5TG9SIOb6mI5JpLE3wc9fmXvBqUr9mQPaEFCiG6fu
-         9AFsucINDFc5GfGYAPKpAZvExCflsmHEmBi1jhaF6z7cen8ThNzMVhNJSAJjhRsplr
-         x7FfG9308wNXqawp5iQ/6Bgg0sbZCZrVlfWEbYEdyxA2jt8F9XPIV5YPow49COiUZ9
-         95qeZXvprI5kzIQjpp8JPjMu7eXLfrUhnW43EK75I9DYanV3MF0RkDVsVVnRNoMd9F
-         6zomXlZ6Xbrew==
-From:   Damien Le Moal <dlemoal@kernel.org>
-To:     linux-ide@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Paul Ausbeck <paula@soe.ucsc.edu>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chia-Lin Kao <acelan.kao@canonical.com>
-Subject: [PATCH v5 18/23] ata: libata-core: Do not poweroff runtime suspended ports
-Date:   Fri, 22 Sep 2023 03:07:53 +0900
-Message-ID: <20230921180758.955317-19-dlemoal@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230921180758.955317-1-dlemoal@kernel.org>
-References: <20230921180758.955317-1-dlemoal@kernel.org>
+        with ESMTP id S229477AbjIUTZB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 15:25:01 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4650FD5BC5
+        for <linux-scsi@vger.kernel.org>; Thu, 21 Sep 2023 12:24:55 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6c0f3f24c27so796185a34.2
+        for <linux-scsi@vger.kernel.org>; Thu, 21 Sep 2023 12:24:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695324294; x=1695929094;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FdVRT32ydCZpe3KPPlQ+TAjponX+fmmWG7mWw+SNPgs=;
+        b=oev/R48XIOKnrp3hfns11tZJh83USDEOiwft34BXddCvvX/zxLuEVSWmywGfC/vN2/
+         JQuxCf+OPpts4NUOxV/Z65DKE6RUb6yrdDRavQ3rBXJDWpBbnOpQ+sqvlS+E7VW69l/a
+         og2B6w/x3UABt9r9tTYQS6aQUDWVu6bxc3l5jw55ypbG4Pkr2nUb/RWB1GIf32wcMzFk
+         SP06nAfqce822kWB7fHjg2+kDeJkzs3gLenKS8CrhnkFG6wWsMzHhsW7qZdTfzO+Kd+c
+         d6WDM6wP685DtHNpVX3VN9IuF3FVkAMwjxyxHkB6LSMnlOaYRmKa8NSy8C0vjTjeHlxb
+         /Ksg==
+X-Gm-Message-State: AOJu0Yy4gU8F94G+1NCQw+oD2aUxe8djQ1CLiGMRWSNIuXAD9Os4PHRr
+        /4NXQE7WD4lWb0W7IbGv5p0=
+X-Google-Smtp-Source: AGHT+IGYkyYWkZCh2ONwnTzEoPAyBZfgbiptqVwfcbt7sZIl+8gmSXXRXrmZk+H7Q0AZT32bT05rag==
+X-Received: by 2002:a05:6830:1e5a:b0:6bc:86f1:f24e with SMTP id e26-20020a0568301e5a00b006bc86f1f24emr7605933otj.12.1695324294403;
+        Thu, 21 Sep 2023 12:24:54 -0700 (PDT)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:6903:9a1f:51f3:593e])
+        by smtp.gmail.com with ESMTPSA id fm1-20020a056a002f8100b00679a4b56e41sm1760061pfb.43.2023.09.21.12.24.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Sep 2023 12:24:53 -0700 (PDT)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v2 0/4] UFS core patches
+Date:   Thu, 21 Sep 2023 12:22:45 -0700
+Message-ID: <20230921192335.676924-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When powering off, there is no need to suspend a port that has already
-been runtime suspended. Skip the EH PM request in ata_port_pm_poweroff()
-in this case.
+Hi Martin,
 
-Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/ata/libata-core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Please consider these UFS core patches for the next merge window.
 
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index b46980fe69b4..35112f9e482d 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -5215,7 +5215,8 @@ static int ata_port_pm_freeze(struct device *dev)
- 
- static int ata_port_pm_poweroff(struct device *dev)
- {
--	ata_port_suspend(to_ata_port(dev), PMSG_HIBERNATE, false);
-+	if (!pm_runtime_suspended(dev))
-+		ata_port_suspend(to_ata_port(dev), PMSG_HIBERNATE, false);
- 	return 0;
- }
- 
--- 
-2.41.0
+Thanks,
+
+Bart.
+
+Changes compared to v1:
+- In patch 1/4, instead of preserving the WARN_ONCE() statements, remove these.
+- Added a reference to CDL in the description of patch 4/4.
+
+Bart Van Assche (4):
+  scsi: ufs: Remove request tag range checks
+  scsi: ufs: Move the 4K alignment code into the Exynos driver
+  scsi: ufs: Simplify ufshcd_comp_scsi_upiu()
+  scsi: ufs: Set the Command Priority (CP) flag for RT requests
+
+ drivers/ufs/core/ufshcd.c     | 32 ++++++++++++--------------------
+ drivers/ufs/host/ufs-exynos.c |  9 +++++++--
+ include/ufs/ufs.h             |  3 ++-
+ include/ufs/ufshcd.h          |  7 ++-----
+ 4 files changed, 23 insertions(+), 28 deletions(-)
 
