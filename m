@@ -2,101 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B617AA4F6
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Sep 2023 00:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C197AA541
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Sep 2023 00:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjIUW03 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Sep 2023 18:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
+        id S229649AbjIUWyt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Sep 2023 18:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232860AbjIUWJg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 18:09:36 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAFA1F05;
-        Thu, 21 Sep 2023 15:06:56 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 068D3C433C8;
-        Thu, 21 Sep 2023 22:06:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695334016;
-        bh=kT0e72tCIEAvk5dMKfTfwqeHv4BEqCLZkqxf7evQD1o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=tcLNscMwCk0715c6IAzqV1CA3r2EpHPWR5HxweRata8zenEqlbQXqvTuK+nLkDQ71
-         Can0UNlyCDH2HaATjUS9emOC1UvgZPji2ZSZUzy840sB5D+7E4JOfZvJRbDGybE+5y
-         92+wA4ZKOmF2U9UL3x3cLSQUmp2W+VINnvie0kG1fgOfcPJuy0JFlDh96pZHB7xL3e
-         JJk7ruqZKGGZxac140UJ2fcfNdeYqy+y2xwiJoH3BJAex/FTJ5eBafw64hUtSuObFj
-         4mhtGVnc90+rmiWdhAz+hbrquDXh4Ay76f8c9zNsS1oq8/ViuV+7O7P/KSahV8PedS
-         fqynT6FOj+s3w==
-Message-ID: <3dd76ffc-d66d-f37f-27da-6c39edbc7e9c@kernel.org>
-Date:   Thu, 21 Sep 2023 15:06:54 -0700
+        with ESMTP id S229449AbjIUWys (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 18:54:48 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6D7F7
+        for <linux-scsi@vger.kernel.org>; Thu, 21 Sep 2023 15:54:42 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38LMmasM023458;
+        Thu, 21 Sep 2023 22:54:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=RB7rw6nlQUUlWLdjf3n68TJHCNiDe97LdM3CZFQ8EDc=;
+ b=X/NuH3iq3U8AQKj3Kqewtdr4hoRzrbyGhkV75mSK6YBoyNZtz8WUHjjY8JjSpKDnXNLb
+ 8nGMmlpyAz8EXWApKKKZs5OGJHQt8qgT/gTyqjpnMN6xzTwA6K+BvryE2x6m5ELsC9jc
+ aSTvtZVjCvBCbDYsewsE6f9fMQWKt3VayMeP4JsdG28x7MCIFCKMlaybS/w4yh9jWStx
+ YqFzDDJFzxQtyrmyXs2WKtaCrK/DgfRguNjWCNyCqio1Gkmhd6+bobYRh8m75mmSDEZq
+ pbUN5mPlJvRwfSoaTn9kHa4e97SjlVJ4YQ0gSgxprBFsMiLM0JcQD9ftWkvW4hdk9FRx eQ== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t8x1018f8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Sep 2023 22:54:38 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38LLqutl018872;
+        Thu, 21 Sep 2023 22:54:38 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3t8tsnm729-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Sep 2023 22:54:38 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38LMsbAB21693142
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 21 Sep 2023 22:54:37 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5039C58051;
+        Thu, 21 Sep 2023 22:54:37 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 18F425805F;
+        Thu, 21 Sep 2023 22:54:37 +0000 (GMT)
+Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 21 Sep 2023 22:54:37 +0000 (GMT)
+From:   Tyrel Datwyler <tyreld@linux.ibm.com>
+To:     martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, brking@linux.ibm.com,
+        james.bottomley@hansenpartnership.com,
+        Tyrel Datwyler <tyreld@linux.ibm.com>
+Subject: [PATCH v2 00/11] ibmvfc: fixes and generic prep work for NVMeoF support
+Date:   Thu, 21 Sep 2023 17:54:24 -0500
+Message-Id: <20230921225435.3537728-1-tyreld@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.1
-Subject: Re: [PATCH v4 09/23] scsi: sd: Do not issue commands to suspended
- disks on shutdown
-Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>, linux-ide@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Paul Ausbeck <paula@soe.ucsc.edu>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chia-Lin Kao <acelan.kao@canonical.com>
-References: <20230920135439.929695-1-dlemoal@kernel.org>
- <20230920135439.929695-10-dlemoal@kernel.org>
- <daa44a6b-59fd-4735-b881-7d182a7d2a41@acm.org>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <daa44a6b-59fd-4735-b881-7d182a7d2a41@acm.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 5lVLDBwAx9sWk8D7cG86O_hZln4RGSCc
+X-Proofpoint-GUID: 5lVLDBwAx9sWk8D7cG86O_hZln4RGSCc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-21_19,2023-09-21_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=978
+ mlxscore=0 phishscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0
+ bulkscore=0 malwarescore=0 priorityscore=1501 clxscore=1015 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
+ definitions=main-2309210196
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2023/09/21 14:36, Bart Van Assche wrote:
-> On 9/20/23 06:54, Damien Le Moal wrote:
->> If an error occurs when resuming a host adapter before the devices
->> attached to the adapter are resumed, the adapter low level driver may
->> remove the scsi host, resulting in a call to sd_remove() for the
->> disks of the host. This in turn results in a call to sd_shutdown() which
->> will issue a synchronize cache command and a start stop unit command to
->> spindown the disk. sd_shutdown() issues the commands only if the device
->> is not already suspended but does not check the power state for
->> system-wide suspend/resume. That is, the commands may be issued with the
->> device in a suspended state, which causes PM resume to hang, forcing a
->> reset of the machine to recover.
->>
->> Fix this by not calling sd_shutdown() in sd_remove() if the device
->> is not running.
-> 
-> Hi Damien,
-> 
-> I'd like to look into an alternative fix (after this patch series went 
-> in) but I couldn't identify the call chain in the ATA resume code that 
-> results in removal of the SCSI host. Can you please show me the call 
-> chain that results in SCSI host removal if resuming fails?
+This series includes a couple minor fixes, generalization of some code that is
+not protocol specific, and a reworking of the way event pool buffers are
+accounted for by the driver. This is a precursor to a series to follow that
+introduces support for NVMeoF protocol with ibmvfc.
 
-See the pm80xx driver for which I recently fixed a resume issue. That is how I
-found this problem with device removal: resuming the pm800xx HBA was failing and
-the driver then called scsi_remove_host() to drop the ports and that led to
-trying to removed sd devices that were still suspended.
+v2 Changes:
+* Fixed kernel test bot build warnings in patches 1 & 2
 
-> 
-> Thanks,
-> 
-> Bart.
-> 
+Tyrel Datwyler (11):
+  ibmvfc: remove BUG_ON in the case of an empty event pool
+  ibmvfc: implement channel queue depth and event buffer accounting
+  ibmvfc: limit max hw queues by num_online_cpus()
+  ibmvfc: fix erroneous use of rtas_busy_delay with hcall return code
+  ibmvfc: use a bitfield for boolean flags
+  ibmvfc: rename ibmvfc_scsi_channels to ibmvfc_channels
+  ibmvfc: track max and desired queue size in ibmvfc_channels
+  ibmvfc: make channel allocation generic
+  ibmvfc: add protocol field to ibmvfc_channels
+  ibmvfc: make discovery buffer per protocol channel group
+  ibmvfc: add protocol field to target structure
+
+ drivers/scsi/ibmvscsi/ibmvfc.c | 438 ++++++++++++++++++++++++---------
+ drivers/scsi/ibmvscsi/ibmvfc.h |  50 ++--
+ 2 files changed, 353 insertions(+), 135 deletions(-)
 
 -- 
-Damien Le Moal
-Western Digital Research
+2.31.1
 
