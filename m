@@ -2,100 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B217AA573
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Sep 2023 01:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B617AA4F6
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Sep 2023 00:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjIUXFp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Sep 2023 19:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
+        id S230018AbjIUW03 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Sep 2023 18:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbjIUXFb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 19:05:31 -0400
+        with ESMTP id S232860AbjIUWJg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 18:09:36 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93665561C4;
-        Thu, 21 Sep 2023 13:47:21 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEDE7C433C9;
-        Thu, 21 Sep 2023 20:47:20 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAFA1F05;
+        Thu, 21 Sep 2023 15:06:56 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 068D3C433C8;
+        Thu, 21 Sep 2023 22:06:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695329241;
-        bh=RLA8T3fc6qHtdc/his8qpk9mIDEAxM3xk0IjQR4r2PA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rsr/Lctcicc+50Eg3JXu0b8dhmZ2v3WiFXeY2wkmrCnTqXUF4B7nsPi9SuqW7wRul
-         J71+88B/rdDTyO0UzmenIyD+3u0qf56/39z2OoPLy2LZVxpos7P1sw4x+ZsjCPD1lQ
-         Oi9wT74862kw3Owh0dAp1xYUD+4S0G0QULBC/Bc82yvw4uqrhWsK/tI7wWQ7VPjEC8
-         khmD/u7EE/Fzc2tfF3nKmvx7KwOL6FCNMKwTQ4cwikFOFEDe8GintWgWS1PEIGrSOb
-         dnAd2mBBrhDizb7QLZ5SDOooRRhE27lfw506KM3naUySsxMrWD5uZ8F0beX7iHsWlf
-         o2ovLfeWYivnA==
-Date:   Thu, 21 Sep 2023 13:47:19 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Niklas Cassel <Niklas.Cassel@wdc.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 00/13] Pass data temperature information to zoned UFS
- devices
-Message-ID: <ZQyr1wR9rM48p65l@google.com>
-References: <20230920191442.3701673-1-bvanassche@acm.org>
- <ZQtHwsNvS1wYDKfG@casper.infradead.org>
- <1522d8ec-6b15-45d5-b6d9-517337e2c8cf@acm.org>
- <ZQv07Mg7qIXayHlf@x1-carbon>
- <8781636a-57ac-4dbd-8ec6-b49c10c81345@acm.org>
- <ZQyZEqXJymyFWlKV@casper.infradead.org>
- <4cacae64-6a11-41ab-9bec-f8915da00106@acm.org>
- <ZQydeSIoHHJDQjHW@casper.infradead.org>
+        s=k20201202; t=1695334016;
+        bh=kT0e72tCIEAvk5dMKfTfwqeHv4BEqCLZkqxf7evQD1o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=tcLNscMwCk0715c6IAzqV1CA3r2EpHPWR5HxweRata8zenEqlbQXqvTuK+nLkDQ71
+         Can0UNlyCDH2HaATjUS9emOC1UvgZPji2ZSZUzy840sB5D+7E4JOfZvJRbDGybE+5y
+         92+wA4ZKOmF2U9UL3x3cLSQUmp2W+VINnvie0kG1fgOfcPJuy0JFlDh96pZHB7xL3e
+         JJk7ruqZKGGZxac140UJ2fcfNdeYqy+y2xwiJoH3BJAex/FTJ5eBafw64hUtSuObFj
+         4mhtGVnc90+rmiWdhAz+hbrquDXh4Ay76f8c9zNsS1oq8/ViuV+7O7P/KSahV8PedS
+         fqynT6FOj+s3w==
+Message-ID: <3dd76ffc-d66d-f37f-27da-6c39edbc7e9c@kernel.org>
+Date:   Thu, 21 Sep 2023 15:06:54 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZQydeSIoHHJDQjHW@casper.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.15.1
+Subject: Re: [PATCH v4 09/23] scsi: sd: Do not issue commands to suspended
+ disks on shutdown
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>, linux-ide@vger.kernel.org
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Paul Ausbeck <paula@soe.ucsc.edu>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Joe Breuer <linux-kernel@jmbreuer.net>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Chia-Lin Kao <acelan.kao@canonical.com>
+References: <20230920135439.929695-1-dlemoal@kernel.org>
+ <20230920135439.929695-10-dlemoal@kernel.org>
+ <daa44a6b-59fd-4735-b881-7d182a7d2a41@acm.org>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <daa44a6b-59fd-4735-b881-7d182a7d2a41@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 09/21, Matthew Wilcox wrote:
-> On Thu, Sep 21, 2023 at 12:39:00PM -0700, Bart Van Assche wrote:
-> > On 9/21/23 12:27, Matthew Wilcox wrote:
-> > > On Thu, Sep 21, 2023 at 07:27:08AM -0700, Bart Van Assche wrote:
-> > > > On 9/21/23 00:46, Niklas Cassel wrote:
-> > > > > Should NVMe streams be brought back? Yes? No?
-> > > > 
-> > > > From commit 561593a048d7 ("Merge tag 'for-5.18/write-streams-2022-03-18'
-> > > > of git://git.kernel.dk/linux-block"): "This removes the write streams
-> > > > support in NVMe. No vendor ever really shipped working support for this,
-> > > > and they are not interested in supporting it."
-> > > 
-> > > It sounds like UFS is at the same stage that NVMe got to -- standard
-> > > exists, no vendor has committed to actually shipping it.  Isn't bringing
-> > > it back a little premature?
-> > 
-> > Hi Matthew,
-> > 
-> > That's a misunderstanding. UFS vendors support interpreting the SCSI GROUP
-> > NUMBER as a data temperature since many years, probably since more than ten
-> > years. Additionally, for multiple UFS vendors having the data temperature
-> > available is important for achieving good performance. This message shows
-> > how UFS vendors were using that information before write hint support was
-> > removed: https://lore.kernel.org/linux-block/PH0PR08MB7889642784B2E1FC1799A828DB0B9@PH0PR08MB7889.namprd08.prod.outlook.com/
+On 2023/09/21 14:36, Bart Van Assche wrote:
+> On 9/20/23 06:54, Damien Le Moal wrote:
+>> If an error occurs when resuming a host adapter before the devices
+>> attached to the adapter are resumed, the adapter low level driver may
+>> remove the scsi host, resulting in a call to sd_remove() for the
+>> disks of the host. This in turn results in a call to sd_shutdown() which
+>> will issue a synchronize cache command and a start stop unit command to
+>> spindown the disk. sd_shutdown() issues the commands only if the device
+>> is not already suspended but does not check the power state for
+>> system-wide suspend/resume. That is, the commands may be issued with the
+>> device in a suspended state, which causes PM resume to hang, forcing a
+>> reset of the machine to recover.
+>>
+>> Fix this by not calling sd_shutdown() in sd_remove() if the device
+>> is not running.
 > 
-> If vendor support already exists, then why did you dodge the question
-> asking for quantified data that I asked earlier?  And can we have that
-> data now?
+> Hi Damien,
+> 
+> I'd like to look into an alternative fix (after this patch series went 
+> in) but I couldn't identify the call chain in the ATA resume code that 
+> results in removal of the SCSI host. Can you please show me the call 
+> chain that results in SCSI host removal if resuming fails?
 
-I'm in doubt this patch-set really requires the quantified data which may be
-mostly confidential to all the companies, also given the revert reason was no
-user, IIUC. OTOH, I'm not sure whether you're famailiar with FTL, but, when
-we consider the entire stack ranging from f2fs to FTL which manages NAND blocks,
-I do see a clear benefit to give the temperature hints for FTL to align therein
-garbage collection unit with one in f2fs, which is the key idea on Zoned UFS
-in mobile world, I believe. Otherwise, it can show non-deterministic longer
-write latencies due to internal GCs, increase WAI feeding to shorter lifetime.
+See the pm80xx driver for which I recently fixed a resume issue. That is how I
+found this problem with device removal: resuming the pm800xx HBA was failing and
+the driver then called scsi_remove_host() to drop the ports and that led to
+trying to removed sd devices that were still suspended.
+
+> 
+> Thanks,
+> 
+> Bart.
+> 
+
+-- 
+Damien Le Moal
+Western Digital Research
+
