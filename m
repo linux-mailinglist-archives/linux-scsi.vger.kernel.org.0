@@ -2,147 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915AB7A9EAE
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 22:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2F77AA2DE
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 23:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjIUUKl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Sep 2023 16:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
+        id S232403AbjIUVhh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Sep 2023 17:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbjIUUJ4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 16:09:56 -0400
+        with ESMTP id S232465AbjIUVhY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 17:37:24 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71327A12C;
-        Thu, 21 Sep 2023 12:53:53 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A149C433C8;
-        Thu, 21 Sep 2023 19:53:52 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD53D527F
+        for <linux-scsi@vger.kernel.org>; Thu, 21 Sep 2023 14:13:22 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 12337C433C8
+        for <linux-scsi@vger.kernel.org>; Thu, 21 Sep 2023 21:13:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695326032;
-        bh=9tegRpBn0T7ZwEv7hvddeZlERiRItKLoI9ZsE/YWkMc=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=dtp/wudWE0lRsa0DaxQrOfkAlSIv3LkFgy6iGkBu4WdM841oiUQyuZbTFih40t3Bx
-         pFPYLYHirDkUoLTwt51ztuI9sl5jnxr8iJqC2/Y5WrqChzEhG3KtxPq/WXUZM0FfGm
-         FtUEZma+wgVj/wrcvF49dLIGfqc+rZaSScij7CgehEEY1Jbst3gHnUjRYNNE8gb7nk
-         eBvbG0hdZO9/vq+NqjJl3m1EuGyMrm2RBAlO7RqH1r2lTNqZk0rX+RIUjfxpNTS+vr
-         b+8ITHxZ2oCFByIsaHp+SU3xEzi7sCC7o/0fJtKEuYr8QtsVdRXVX2x9Yek/Uyo7sS
-         OBzwA2BOcKzPA==
-Message-ID: <09688c78-6708-fa1e-1447-3105b69ccb49@kernel.org>
-Date:   Thu, 21 Sep 2023 12:53:51 -0700
+        s=k20201202; t=1695330802;
+        bh=+U9hcCnu59J1LgaG9sM42KIckRVPEEfa+aw1k2B9vjs=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=shAYz+M4Oeru9+OntaVGMHXYXl4aJau/Opu/pzOA1A8+XUz/IojppNCM0mCu6jMGx
+         r1G/wrO0JZ4Jm7znyeIz5vjN/5Q2TY332+KgOBV4rZZfwnsDce7RdHHFmTts+CsY/M
+         M9AVxUW6cTuMOO6CkRTK4fSFL9GC9t7W0B3aQPpf2RtSxDb7qOOSlPhyLdDhdlOXkn
+         IFAJkuCfdsKRo0pMpgKcLtUa5EZuLIIFyc6J61kZrS6tVmC0K6Fu8TQRRnn/V38UlS
+         sboZIfcy6vo/RipVtkGgW4QHr/y/Mop4gDBKR4TMsV/tOzc9gcirambZ8ChmCNtGfA
+         4zT1k5sQFljSg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id EC0EDC53BD1; Thu, 21 Sep 2023 21:13:21 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-scsi@vger.kernel.org
+Subject: [Bug 215788] arcmsr driver on kernel 5.16 and up fails to initialize
+ ARC-1280ML RAID controller
+Date:   Thu, 21 Sep 2023 21:13:21 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Product: SCSI Drivers
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: iissmart@numberzero.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-215788-11613-vlcy9MvcIW@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215788-11613@https.bugzilla.kernel.org/>
+References: <bug-215788-11613@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.1
-Subject: Re: [PATCH v4 00/23] Fix libata suspend/resume handling and code
- cleanup
-From:   Damien Le Moal <dlemoal@kernel.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, John Garry <john.g.garry@oracle.com>,
-        linux-ide@vger.kernel.org
-References: <20230920135439.929695-1-dlemoal@kernel.org>
-Content-Language: en-US
-Organization: Western Digital Research
-In-Reply-To: <20230920135439.929695-1-dlemoal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2023/09/20 6:54, Damien Le Moal wrote:
-> The first 9 patches of this series fix several issues with suspend/resume
-> power management operations in scsi and libata. The most significant
-> changes introduced are in patch 4 and 5, where the manage_start_stop
-> flag of scsi devices is split into the manage_system_start_stop and
-> manage_runtime_start_stop flags to allow keeping scsi runtime power
-> operations for spining up/down ATA devices but have libata do its own
-> system suspend/resume device power state management using EH.
-> 
-> The remaining patches are code cleanup that do not introduce any
-> significant functional change.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215788
 
-Martin,
+Ken Link (iissmart@numberzero.org) changed:
 
-Could you please review and Ack (if appropriate) the scsi bits of this series ?
-I would like to send out the first 9 patches ASAP to address regressions.
-Thanks !
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |iissmart@numberzero.org
 
-> 
-> This series was tested on qemu and on various PCs and servers. I am
-> CC-ing people who recently reported issues with suspend/resume.
-> Additional testing would be much appreciated.
-> 
-> Changes from v3:
->  * Corrected pathc 1 (typo in commit message and WARN_ON() removal)
->  * Changed path 3 as suggested by Niklas (moved definition of
->    ->slave_alloc)
->  * Rebased on rc2
->  * Added review tags
-> 
-> Changes from v2:
->  * Added patch 4 as simply disabling manage_start_stop from libata was
->    breaking individual disk runtime suspend/autosuspend. Patch 5 was
->    reworked accordingly to the changes in patch 4.
->  * Fixed patch 3: applying the link creation was missing and the link
->    creation itself was also incorrect, preventing sd probe to execute
->    correctly. Thanks to Geert for testing and reporting this issue.
->  * Split the "Fix delayed scsi_rescan_device() execution" patch into
->    patch 6 (scsi part) and patch 7 (ata part).
->  * Modified patch 9 to not call sd_shutdown() from sd_remove() for
->    devices that are not running.
->  * Added Chia-Lin Tested tag to unchanged patches
-> 
-> Changes from v1:
->  * Added patch 8 and 9 to fix compilation warnings with W=1
->  * Addressed John comment in patch 19
->  * Fixed patch 20 commit message (Sergei)
->  * Added Hannes Review tag
-> 
-> Damien Le Moal (23):
->   ata: libata-core: Fix ata_port_request_pm() locking
->   ata: libata-core: Fix port and device removal
->   ata: libata-scsi: link ata port and scsi device
->   scsi: sd: Differentiate system and runtime start/stop management
->   ata: libata-scsi: Disable scsi device manage_system_start_stop
->   scsi: Do not attempt to rescan suspended devices
->   ata: libata-scsi: Fix delayed scsi_rescan_device() execution
->   ata: libata-core: Do not register PM operations for SAS ports
->   scsi: sd: Do not issue commands to suspended disks on shutdown
->   ata: libata-core: Fix compilation warning in ata_dev_config_ncq()
->   ata: libata-eh: Fix compilation warning in ata_eh_link_report()
->   scsi: Remove scsi device no_start_on_resume flag
->   ata: libata-scsi: Cleanup ata_scsi_start_stop_xlat()
->   ata: libata-core: Synchronize ata_port_detach() with hotplug
->   ata: libata-core: Detach a port devices on shutdown
->   ata: libata-core: Remove ata_port_suspend_async()
->   ata: libata-core: Remove ata_port_resume_async()
->   ata: libata-core: Do not poweroff runtime suspended ports
->   ata: libata-core: Do not resume runtime suspended ports
->   ata: libata-sata: Improve ata_sas_slave_configure()
->   ata: libata-eh: Improve reset error messages
->   ata: libata-eh: Reduce "disable device" message verbosity
->   ata: libata: Cleanup inline DMA helper functions
-> 
->  drivers/ata/libata-core.c      | 242 +++++++++++++++++++++++++--------
->  drivers/ata/libata-eh.c        |  76 +++++++++--
->  drivers/ata/libata-sata.c      |   5 +-
->  drivers/ata/libata-scsi.c      | 146 ++++++++++----------
->  drivers/ata/libata-transport.c |   9 +-
->  drivers/ata/libata.h           |   7 +
->  drivers/firewire/sbp2.c        |   9 +-
->  drivers/scsi/scsi_scan.c       |  18 ++-
->  drivers/scsi/sd.c              |  88 ++++++++----
->  include/linux/libata.h         |  26 ++--
->  include/scsi/scsi_device.h     |   4 +-
->  include/scsi/scsi_host.h       |   2 +-
->  12 files changed, 444 insertions(+), 188 deletions(-)
-> 
+--- Comment #18 from Ken Link (iissmart@numberzero.org) ---
+I am also experiencing this, on an Areca 1882ix-24 with firmware V1.56
+2021-01-12 and arcmsr driver version v1.50.0X.14-20230614 in Ubuntu 22.04 on
+kernel 6.2.0. I take it the 5.18/discovery branch hasn't been merged anywhe=
+re
+yet? What more testing needs to be done? How can I help?
 
--- 
-Damien Le Moal
-Western Digital Research
+--=20
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
