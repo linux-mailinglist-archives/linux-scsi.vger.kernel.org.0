@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9F37AA172
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 23:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0860D7AA133
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 22:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232255AbjIUVCa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Sep 2023 17:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
+        id S232056AbjIUU7F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Sep 2023 16:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbjIUVBy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 17:01:54 -0400
+        with ESMTP id S232161AbjIUU6m (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 16:58:42 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A35BB05AE;
-        Thu, 21 Sep 2023 11:08:39 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0BB0C433C9;
-        Thu, 21 Sep 2023 18:08:37 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0E3B05AF;
+        Thu, 21 Sep 2023 11:08:41 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5BA6C433CA;
+        Thu, 21 Sep 2023 18:08:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695319719;
-        bh=v+gYEK1rbQqzg3/TKGCS1gzTm+Sa5IIqlODyrx0gJiU=;
+        s=k20201202; t=1695319721;
+        bh=Sq6E9bjA1ZIF0QNv/u0hbvoBqHCxusrxEbAxfDUhCCE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SLKkjNlNr64IhfNUoeXAIK5SFibu3fm59IJ+Eq3gaRPTFB7Bi015QQq6d4t8s9jmp
-         +JXJX67esmTRultQAzmiu0jbEemWmMP8b/saHsZRkI1Z+4wk5sb+KdnRh/nv4S6w51
-         Eo17lx5UlRKR2WpiGQLYTGKIKfCpcGr/IYJl/5IOHhzG09A/XaaMn8uL6+TUtfDv2b
-         0qqfB/fALZfUB8oGDt38CCWbKnTORf15F0Aez8ze5DBMRXoBdYROWCGK/yHEe0fgoM
-         MhVhRRo41IT5zE63NaHWU6SUI4Sd3vMdoN8klgfeG1t3MrS625AWgzLjz7yxRnvcYC
-         6VIovUR6eh8Og==
+        b=ZgSegz2xp+vu5yhjN8uaCrek6iKOft2x0Q0pmwIgjyFv3pG8CTWp+Oj5eNRNniOYd
+         vVvplE/+jeA1//7wGYlsJlHojCAuY333cD9hr9NNJr+Kd0sYHu+AjxhzWplrEBFWFu
+         Ri2ujwbk1aMXmpSETZACplCpOsjKc6wihPVj35w5a7jpXZ/S3Nvl5JVyrsTkMMaPUx
+         vSy1NLAwA091/0K+jIHhGd/RSmCazQKjDDkWG2vC4jcZSJqj8HQnOI6jMesguxI8eF
+         84NW/CRFggUnHN9gb8aEMqkejLYjOWmRCn+NWVHoQ1nfGC4lOcGYhoOR5AVUK+11bY
+         1Emul/J9/RKaQ==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     linux-ide@vger.kernel.org
 Cc:     linux-scsi@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc:     linux-scsi@vger.kernel.org,
         Joe Breuer <linux-kernel@jmbreuer.net>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Chia-Lin Kao <acelan.kao@canonical.com>
-Subject: [PATCH v5 21/23] ata: libata-eh: Improve reset error messages
-Date:   Fri, 22 Sep 2023 03:07:56 +0900
-Message-ID: <20230921180758.955317-22-dlemoal@kernel.org>
+Subject: [PATCH v5 22/23] ata: libata-eh: Reduce "disable device" message verbosity
+Date:   Fri, 22 Sep 2023 03:07:57 +0900
+Message-ID: <20230921180758.955317-23-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230921180758.955317-1-dlemoal@kernel.org>
 References: <20230921180758.955317-1-dlemoal@kernel.org>
@@ -55,55 +55,91 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Some drives are really slow to spinup on resume, resulting is a very
-slow response to COMRESET and to error messages such as:
+There is no point in warning about a device being disabled when we
+expect it to be, that is, on suspend, shutdown or when detaching the
+device.
 
-ata1: COMRESET failed (errno=-16)
-ata1: link is slow to respond, please be patient (ready=0)
-ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-ata1.00: configured for UDMA/133
-
-Given that the slowness of the response is indicated with the message
-"link is slow to respond..." and that resets are retried until the
-device is detected as online after up to 1min (ata_eh_reset_timeouts),
-there is no point in printing the "COMRESET failed" error message. Let's
-not scare the user with non fatal errors and only warn about reset
-failures in ata_eh_reset() when all reset retries have been exhausted.
+Suppress the message "disable device" for these cases by introducing the
+EH static function ata_eh_dev_disable() and by using it in
+ata_eh_unload() and ata_eh_detach_dev(). ata_dev_disable() code is
+modified to call this new function after printing the "disable device"
+message.
 
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/ata/libata-eh.c   | 2 ++
- drivers/ata/libata-sata.c | 1 -
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/ata/libata-eh.c | 32 +++++++++++++++++++-------------
+ 1 file changed, 19 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
-index 5686353e442c..67387d602735 100644
+index 67387d602735..945675f6b822 100644
 --- a/drivers/ata/libata-eh.c
 +++ b/drivers/ata/libata-eh.c
-@@ -2909,6 +2909,8 @@ int ata_eh_reset(struct ata_link *link, int classify,
- 		 */
- 		if (ata_is_host_link(link))
- 			ata_eh_thaw_port(ap);
-+		ata_link_warn(link, "%s failed\n",
-+			      reset == hardreset ? "hardreset" : "softreset");
- 		goto out;
+@@ -494,6 +494,18 @@ void ata_eh_release(struct ata_port *ap)
+ 	mutex_unlock(&ap->host->eh_mutex);
+ }
+ 
++static void ata_eh_dev_disable(struct ata_device *dev)
++{
++	ata_acpi_on_disable(dev);
++	ata_down_xfermask_limit(dev, ATA_DNXFER_FORCE_PIO0 | ATA_DNXFER_QUIET);
++	dev->class++;
++
++	/* From now till the next successful probe, ering is used to
++	 * track probe failures.  Clear accumulated device error info.
++	 */
++	ata_ering_clear(&dev->ering);
++}
++
+ static void ata_eh_unload(struct ata_port *ap)
+ {
+ 	struct ata_link *link;
+@@ -517,8 +529,8 @@ static void ata_eh_unload(struct ata_port *ap)
+ 	 */
+ 	ata_for_each_link(link, ap, PMP_FIRST) {
+ 		sata_scr_write(link, SCR_CONTROL, link->saved_scontrol & 0xff0);
+-		ata_for_each_dev(dev, link, ALL)
+-			ata_dev_disable(dev);
++		ata_for_each_dev(dev, link, ENABLED)
++			ata_eh_dev_disable(dev);
  	}
  
-diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
-index 83a9497e48e1..b6656c287175 100644
---- a/drivers/ata/libata-sata.c
-+++ b/drivers/ata/libata-sata.c
-@@ -621,7 +621,6 @@ int sata_link_hardreset(struct ata_link *link, const unsigned int *timing,
- 		/* online is set iff link is online && reset succeeded */
- 		if (online)
- 			*online = false;
--		ata_link_err(link, "COMRESET failed (errno=%d)\n", rc);
- 	}
- 	return rc;
+ 	/* freeze and set UNLOADED */
+@@ -1211,14 +1223,8 @@ void ata_dev_disable(struct ata_device *dev)
+ 		return;
+ 
+ 	ata_dev_warn(dev, "disable device\n");
+-	ata_acpi_on_disable(dev);
+-	ata_down_xfermask_limit(dev, ATA_DNXFER_FORCE_PIO0 | ATA_DNXFER_QUIET);
+-	dev->class++;
+ 
+-	/* From now till the next successful probe, ering is used to
+-	 * track probe failures.  Clear accumulated device error info.
+-	 */
+-	ata_ering_clear(&dev->ering);
++	ata_eh_dev_disable(dev);
  }
+ EXPORT_SYMBOL_GPL(ata_dev_disable);
+ 
+@@ -1240,12 +1246,12 @@ void ata_eh_detach_dev(struct ata_device *dev)
+ 
+ 	/*
+ 	 * If the device is still enabled, transition it to standby power mode
+-	 * (i.e. spin down HDDs).
++	 * (i.e. spin down HDDs) and disable it.
+ 	 */
+-	if (ata_dev_enabled(dev))
++	if (ata_dev_enabled(dev)) {
+ 		ata_dev_power_set_standby(dev);
+-
+-	ata_dev_disable(dev);
++		ata_eh_dev_disable(dev);
++	}
+ 
+ 	spin_lock_irqsave(ap->lock, flags);
+ 
 -- 
 2.41.0
 
