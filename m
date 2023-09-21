@@ -2,111 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578F37A9769
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 19:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6737A97E0
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 19:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbjIURXv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Sep 2023 13:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
+        id S230073AbjIUR2T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Sep 2023 13:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjIURXW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 13:23:22 -0400
-Received: from out-214.mta1.migadu.com (out-214.mta1.migadu.com [95.215.58.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439C824865
-        for <linux-scsi@vger.kernel.org>; Thu, 21 Sep 2023 10:11:31 -0700 (PDT)
-Message-ID: <cd1891e1-75f8-938e-317e-9a9760db7e13@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1695275225;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aN+EUH0vaJjZAAWY+RQaRw5xxfN01hvoxcEUTvT6ACw=;
-        b=JxwbhX3i+3E+Yoc0pOM8/UsDWVsL2ZUD7tD7mdZaYMuxw4k2kS/Fi1VEWwLsaSWYwEFnlA
-        QfBhsO+wQTb1ypSJH6uZhrnxYa1Oke1fdEFAEXX4spIsMyhK3zlReAWDvnQ6VLt67nq+zz
-        mZWPPKgt10ZhLl8nrnaWfnoBJE8wrtk=
-Date:   Thu, 21 Sep 2023 13:46:56 +0800
+        with ESMTP id S229790AbjIUR1q (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 13:27:46 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070A4E53;
+        Thu, 21 Sep 2023 10:02:03 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.80.103) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Thu, 21 Sep
+ 2023 10:32:25 +0300
+Subject: Re: [PATCH v4 19/23] ata: libata-core: Do not resume runtime
+ suspended ports
+To:     Damien Le Moal <dlemoal@kernel.org>, <linux-ide@vger.kernel.org>
+CC:     <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        John Garry <john.g.garry@oracle.com>,
+        "Rodrigo Vivi" <rodrigo.vivi@intel.com>,
+        Paul Ausbeck <paula@soe.ucsc.edu>,
+        "Kai-Heng Feng" <kai.heng.feng@canonical.com>,
+        Joe Breuer <linux-kernel@jmbreuer.net>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Chia-Lin Kao <acelan.kao@canonical.com>
+References: <20230920135439.929695-1-dlemoal@kernel.org>
+ <20230920135439.929695-20-dlemoal@kernel.org>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <cb714cbb-0fba-6774-f525-726b829af02e@omp.ru>
+Date:   Thu, 21 Sep 2023 10:32:24 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Subject: Re: [bug report] blktests srp/002 hang
-To:     Bob Pearson <rpearsonhpe@gmail.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Cc:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-References: <dsg6rd66tyiei32zaxs6ddv5ebefr5vtxjwz6d2ewqrcwisogl@ge7jzan7dg5u>
- <0c5c732c-283c-b29a-0ac2-c32211fc7e17@gmail.com>
- <yewvcfcketee5qduraajra2g37t2mpxdlmj7aqny3umf7mkavk@wsm5forumsou>
- <8be8f611-e413-9584-7c2e-2c1abf4147be@acm.org>
- <plrbpd5gg32uaferhjj6ibkt4wqybu3v3y32f4rlhvsruc7cu4@2pgrj2542da2>
- <18a3ae8c-145b-4c7f-a8f5-67840feeb98c@acm.org>
- <ab93655f-c187-fdab-6c67-3bfb2d9aa516@gmail.com>
- <9dd0aa0a-d696-a95b-095b-f54d6d31a6ab@linux.dev>
- <d3205633-0cd2-f87e-1c40-21b8172b6da3@linux.dev>
- <nqdsj764d7e56kxevcwnq6qoi6ptuu3bi6ntfakb55vm3toda7@eo3ffzzqrot7>
- <5a4efe6f-d8c6-84ce-377e-eb64bcad706c@linux.dev>
- <f50beb15-2cab-dfb9-3b58-ea66e7f114a6@gmail.com>
- <fe61fdc5-ca8f-2efc-975d-46b99d66c6f5@linux.dev>
- <afc98035-1bb8-f75c-451a-8e3e39fb74aa@gmail.com>
- <6fc3b524-af7d-43ce-aa05-5c44ec850b9b@acm.org>
- <b728f4db-bafa-dd0f-e288-7e3f56e6eae8@gmail.com>
- <02d7cbf2-b17b-488a-b6e9-ebb728b51c94@acm.org>
- <b80dae29-3a7c-f039-bc35-08c6e9f91197@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <b80dae29-3a7c-f039-bc35-08c6e9f91197@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=0.9 required=5.0 tests=DATE_IN_PAST_06_12,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230920135439.929695-20-dlemoal@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.80.103]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 09/21/2023 07:11:12
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 180015 [Sep 21 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 534 534 808c2ea49f7195c68d40844e073217da4fa0d1e3
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.80.103 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;31.173.80.103:7.4.1,7.7.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: {cloud_iprep_silent}
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: {rdns complete}
+X-KSE-AntiSpam-Info: {fromrtbl complete}
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.80.103
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=none header.from=omp.ru;spf=none
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 09/21/2023 07:16:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 9/21/2023 5:19:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 9/20/23 4:54 PM, Damien Le Moal wrote:
 
-在 2023/9/21 1:29, Bob Pearson 写道:
-> On 9/20/23 12:22, Bart Van Assche wrote:
->> On 9/20/23 10:18, Bob Pearson wrote:
->>> But I have also seen the same behavior in the siw driver which is
->>> completely independent.
->> Hmm ... I haven't seen any hangs yet with the siw driver.
-> I was on Ubuntu 6-9 months ago. Currently I don't see hangs on either.
->>> As mentioned above at the moment Ubuntu is failing rarely. But it used to fail reliably (srp/002 about 75% of the time and srp/011 about 99% of the time.) There haven't been any changes to rxe to explain this.
->> I think that Zhu mentioned commit 9b4b7c1f9f54 ("RDMA/rxe: Add workqueue
->> support for rxe tasks")?
-> That change happened well before the failures went away. I was seeing failures at the same rate with tasklets
-> and wqs. But after updating Ubuntu and the kernel at some point they all went away.
+> The scsi disk driver does not resume disks that have been runtime
+> suspended by the user. To be consistent with this behavior, do the same
+> for ata ports and skip the PM request in ata_port_pm_resume() if the
+> port was already runtime suspended. With this change, it is no longer
+> necessary to for the PM state of the port to ACTIVE as the PM core code
+            ^^^^^^
+   Can't parse this. :-)
 
-Thanks, Bob. From what you said, in Ubuntu, this problem does not occur 
-now.
+> will take care of that when handling runtime resume.
+> 
+> Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
+> Reviewed-by: Hannes Reinecke <hare@suse.de>
+> Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+[...]
 
-To now,
-
-On Debian, without the commit 9b4b7c1f9f54 ("RDMA/rxe: Add workqueue 
-support for rxe tasks"), this hang does not occur.
-
-On Fedora, similar to Debian.
-
-On Ubuntu, this problem does not occur now. But not sure if this commit 
-exists or not.
-
-Hi, Bob, can you make tests without the above commit to verify if the 
-same problem occurs or not on Ubuntu?
-
-Can any one who has test environments to verify if this problem still 
-occurs on Ubuntu without this commit?
-
-Jason && Leon, please comment on this.
-
-Thanks a lot.
-
-Zhu Yanjun
-
->
->> Thanks,
->>
->> Bart.
->
+MBR, Sergey
