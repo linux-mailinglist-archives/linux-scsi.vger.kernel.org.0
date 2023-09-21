@@ -2,120 +2,121 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E3B7AA387
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 23:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9272E7AA4E9
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Sep 2023 00:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232957AbjIUVwD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Sep 2023 17:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
+        id S233207AbjIUW0F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Sep 2023 18:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbjIUVvj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 17:51:39 -0400
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C2AEA9B;
-        Thu, 21 Sep 2023 14:45:41 -0700 (PDT)
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1bf6ea270b2so12399675ad.0;
-        Thu, 21 Sep 2023 14:45:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695332740; x=1695937540;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1LPrsNGq5boi9mTTl9FBwqXIkZb8sPgUWflUeQRr3Ok=;
-        b=W6XnAANUCZZPDRKVYXrOvRouHpqrtUYaKN/rPKdyWW/qddHm8mgKdaQOqt3rGL7XGd
-         62+YjRP4q+K5SuAc0WkE7Kx0RprIkr+f74XY9BTo+0HYG+P1lYMsgiqcLy6uIZu5yo62
-         ZMmT5g9sxBhsp2D97diqOJX3MBASUvyG8Gi85DzxTtujAJGA/nT7/kBkhMw3GPGxAkl+
-         5eYdJEYzzvlZKfmdtr7CVt4G9/vJbxlTVsYfNLYZAxWunR/NpGg1QEMjTh/2Mbknd6eM
-         XEvmxoxqpSQmQjDDbbXtNsD0cW6Nr1nm6VW0OZzt+O7Au6dq5pCIpB+LFv+FHVwW2OqA
-         SQRg==
-X-Gm-Message-State: AOJu0YyqUNJn9CSXHrswWvzLkfWZd1stri3XzTC7PYUHIxtX0wtU9Iuh
-        hfzZXRbGm6Lully24ctegMQ=
-X-Google-Smtp-Source: AGHT+IHcny4NbNWJJDSxqpc/G4dbD6t73q0FM4Zb41m46Rdpjj6k8yQlsSrvlgoB6ZgJZ0dPH2UUMg==
-X-Received: by 2002:a17:902:7202:b0:1c4:588f:5971 with SMTP id ba2-20020a170902720200b001c4588f5971mr4772696plb.29.1695332740302;
-        Thu, 21 Sep 2023 14:45:40 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:6903:9a1f:51f3:593e? ([2620:15c:211:201:6903:9a1f:51f3:593e])
-        by smtp.gmail.com with ESMTPSA id f9-20020a170902ce8900b001b86492d724sm2015994plg.223.2023.09.21.14.45.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Sep 2023 14:45:39 -0700 (PDT)
-Message-ID: <3cfe137b-59f5-434f-a40b-2ed14b4aa408@acm.org>
-Date:   Thu, 21 Sep 2023 14:45:38 -0700
+        with ESMTP id S233203AbjIUWZd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 18:25:33 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA1A6E90;
+        Thu, 21 Sep 2023 10:05:22 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38LBPFsB015981;
+        Thu, 21 Sep 2023 13:58:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=cD5Or24CZG81ZUTaaF+5Vpj9oUT+HOKZ5Ed4kTL/4UM=;
+ b=fDXsRMv2cxiHx925ps72qevFS8eYbv887C5VeEW3NjJDItoDd2HGvz+lkF6jQ8FBsejO
+ Uz99BoNrOwiWmQe7KQ5dED6cvG9x5MgL73T1zpquMJr8usXzdVCEdESRAxOOQEs5RccX
+ YsKgg9ITuOkfpD2vjxcbHbUx6kAh+gWOe0ZI/B1bIm+tKc968sqC4JCRQuQZ+WofKgbu
+ 178rSic6zncbtvSSYPzA9XDBbwJepCfYD57e9Lhs0CAwtSOa5nvNeC5Fg+sVY9wShxpv
+ l42hJY2kqEl9bnWalvWjMMRb48IHI7bw1p9x4zTIM2iYn9tKENTOpPdER6UrA9Our885 Eg== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t87511u14-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Sep 2023 13:58:46 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38LDwkB3023005
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Sep 2023 13:58:46 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Thu, 21 Sep 2023 06:58:45 -0700
+Date:   Thu, 21 Sep 2023 06:58:44 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+CC:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Can Guo <quic_cang@quicinc.com>, <quic_nguyenb@quicinc.com>,
+        <quic_nitirawa@quicinc.com>, <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>
+Subject: Re: [PATCH 4/6] phy: qualcomm: phy-qcom-qmp-ufs: Move data structs
+ and setting tables to header
+Message-ID: <20230921135844.GJ1487598@hu-bjorande-lv.qualcomm.com>
+References: <1694411968-14413-1-git-send-email-quic_cang@quicinc.com>
+ <1694411968-14413-5-git-send-email-quic_cang@quicinc.com>
+ <CAA8EJpoWnXeJKPB04kJW6Qo7ifAnt1u2ZSiq+W2HWOez=hi5gA@mail.gmail.com>
+ <20230919121524.GD4732@thinkpad>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 04/23] scsi: sd: Differentiate system and runtime
- start/stop management
-Content-Language: en-US
-To:     Damien Le Moal <dlemoal@kernel.org>, linux-ide@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Paul Ausbeck <paula@soe.ucsc.edu>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chia-Lin Kao <acelan.kao@canonical.com>
-References: <20230920135439.929695-1-dlemoal@kernel.org>
- <20230920135439.929695-5-dlemoal@kernel.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230920135439.929695-5-dlemoal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230919121524.GD4732@thinkpad>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IW9xvv3U4ODVgGvl-Jx7bxMrXq2se5ma
+X-Proofpoint-ORIG-GUID: IW9xvv3U4ODVgGvl-Jx7bxMrXq2se5ma
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-21_11,2023-09-21_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ phishscore=0 mlxlogscore=953 impostorscore=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 spamscore=0 adultscore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309210121
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/20/23 06:54, Damien Le Moal wrote:
-> The underlying device and driver of a scsi disk may have different
-> system and runtime power mode control requirements. This is because
-> runtime power management affects only the scsi disk, while sustem level
-> power management affects all devices, including the controller for the
-> scsi disk.
+On Tue, Sep 19, 2023 at 02:15:24PM +0200, Manivannan Sadhasivam wrote:
+> On Thu, Sep 14, 2023 at 03:28:59PM +0300, Dmitry Baryshkov wrote:
+> > On Mon, 11 Sept 2023 at 09:01, Can Guo <quic_cang@quicinc.com> wrote:
+> > >
+> > > To make the code more readable, move the data structs and PHY settting
+> > > tables to a header file, namely the phy-qcom-qmp-ufs.h.
+> > >
+> > > Signed-off-by: Can Guo <quic_cang@quicinc.com>
+> > > ---
+> > >  drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 802 +------------------------------
+> > >  drivers/phy/qualcomm/phy-qcom-qmp-ufs.h | 805 ++++++++++++++++++++++++++++++++
+> > >  2 files changed, 806 insertions(+), 801 deletions(-)
+> > >  create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-ufs.h
+> > 
+> > Is there any reason to do so? Other than just moving stuff around, it
+> > doesn't give us anything. This header will not be shared with any
+> > other driver. Just moving data tables to the header (ugh, static data
+> > in the header) doesn't make code more readable.
+> > 
 > 
-> For instance, issuing a START STOP UNIT command when a scsi disk is
-> runtime suspended and resumed is fine: the command is translated to a
-> STANDBY IMMEDIATE command to spin down the ATA disk and to a VERIFY
-> command to wake it up. The scsi disk runtime operations have no effect
-> on the ata port device used to connect the ATA disk. However, for
-> system suspend/resume operations, the ATA port used to connect the
-> device will also be suspended and resumed, with the resum operation
+> I think the motive here is to move the static tables to one file and have the
+> rest of the code in another. Because, the static tables itself occupy 1.2k LoC
+> now and it is going to grow. So let's keep them in a single file to avoid mixing
+> it with rest of the driver code.
+> 
 
-resum -> resume
+To me, the problem with the current layout is that we have:
+* structures
+* data
+* structures
+* implementation
 
-> requiring re-validating the device link and the device itseld. In this
+So to find the second structures you need to jump somewhere in the
+middle of the file. If we shift those up, it's easy to jump between the
+three portions of the file.
 
-itseld -> itself
-
-> -static int sd_suspend_common(struct device *dev, bool ignore_stop_errors)
-> +static inline bool sd_do_start_stop(struct scsi_device *sdev, bool runtime)
-> +{
-> +	return (sdev->manage_system_start_stop && !runtime) ||
-> +		(sdev->manage_runtime_start_stop && runtime);
-> +}
-
-This function wouldn't be necessary if the sd_suspend_common() callers 
-would pass sdev->manage_system_start_stop / 
-sdev->manage_runtime_start_stop as an additional argument to 
-sd_suspend_common().
-
-> -		if (ignore_stop_errors)
-> +		if (!runtime)
->   			ret = 0;
->   	}
-
-The old code was self-documenting. If the name of the "runtime" argument 
-is retained, a comment above this if-statement that explains why stop 
-errors are ignored during a system suspend would be welcome.
-
-Otherwise this patch looks good to me.
-
-Thanks,
-
-Bart.
-
-
+Regards,
+Bjorn
