@@ -2,116 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997877A9F51
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 22:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E27C7AA244
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Sep 2023 23:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbjIUUU4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Thu, 21 Sep 2023 16:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        id S231521AbjIUVOT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Sep 2023 17:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232031AbjIUUUO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 16:20:14 -0400
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6923566D2;
-        Thu, 21 Sep 2023 10:18:01 -0700 (PDT)
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-76d846a4b85so474576241.1;
-        Thu, 21 Sep 2023 10:18:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695316681; x=1695921481;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NO0yqQguls8fEFEOgHbqQzy4RYylK/iX7jORUKeFHng=;
-        b=Jutdcrnp+rJ4XZe6BL5uPIVaazcY3jmqsNr+joD/UkH+B/umwOLuKw54YvKAXUPp8z
-         QwGIyTgitzm/hnJFPregpzPliIFeXiBjPOURIXP9xq2LIJReTzMA2oodEClVwTJ6+y/U
-         cfdfLIX/vH9vF1nfJr7NsNrVuMW/PrqvESJCwWWidCCMls8H+y+7X/lY9mVvLWSW2z4I
-         hWAzp6TxNIzT9l6+iyBI+CcKfvO59oOQvumnqQ+jAwrU9sTCI4HfJMU0RsAJZV9ULIh2
-         G3e2xo5Q194EDh1Salh/FpW22tsliy+h46HIyDcgDro8KebHS9lssJssJWuIJ4jrzKHG
-         3u8w==
-X-Gm-Message-State: AOJu0YwstSHjhd8bejqascd3i3ObC0SWVQaVXHp3YJIrZz7H+lmmg4zy
-        gWTQr0RZ84SI1yGBh7B1Okv5OAWJWe7Uz5WF
-X-Google-Smtp-Source: AGHT+IEaOjq+6yCoT0ifd/ilRJd7IkoMM9BERuexe9lXdiGIKZrTtKBbG0H7qcTLTwY+ssFbz2aS2Q==
-X-Received: by 2002:a81:4ed3:0:b0:57a:8de9:16a3 with SMTP id c202-20020a814ed3000000b0057a8de916a3mr4874119ywb.8.1695288124230;
-        Thu, 21 Sep 2023 02:22:04 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id f184-20020a0dc3c1000000b0059af121d0b8sm235845ywd.52.2023.09.21.02.22.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Sep 2023 02:22:03 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-59be6605e1dso8931557b3.3;
-        Thu, 21 Sep 2023 02:22:03 -0700 (PDT)
-X-Received: by 2002:a0d:d8d7:0:b0:58f:9696:842d with SMTP id
- a206-20020a0dd8d7000000b0058f9696842dmr4800813ywe.15.1695288123555; Thu, 21
- Sep 2023 02:22:03 -0700 (PDT)
+        with ESMTP id S231760AbjIUVN4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Sep 2023 17:13:56 -0400
+Received: from out-226.mta0.migadu.com (out-226.mta0.migadu.com [91.218.175.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A1E8A6D
+        for <linux-scsi@vger.kernel.org>; Thu, 21 Sep 2023 10:05:38 -0700 (PDT)
+Message-ID: <3b220489-5308-2391-235b-b8391d04e991@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1695290779;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LdKWJ2w335d7PBbzKmbpoSg/0hYsrVxxlFOpD1xdhXc=;
+        b=q7qzzdnDqBXWNuiUFPM4rLiMbqJQXrC4Ly2a6cIlszg9BdoKpYykGnjzLVas2G+7UHnF1s
+        D2DvaFx3kWhoXRgEfHe9LuuWJdZTvSMvUKBX54CbBRIQUCGDLyX78b0a5e6W9TuLuXrMnt
+        H2/Xgg5hISPBgZfSBbxnqQM89QG1Kmc=
+Date:   Thu, 21 Sep 2023 18:06:13 +0800
 MIME-Version: 1.0
-References: <20230920135439.929695-1-dlemoal@kernel.org>
-In-Reply-To: <20230920135439.929695-1-dlemoal@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 21 Sep 2023 11:21:52 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWHXC=qPTcLS9VeqfFy7Js84pd84oZqqWdd7E+bAHrcqw@mail.gmail.com>
-Message-ID: <CAMuHMdWHXC=qPTcLS9VeqfFy7Js84pd84oZqqWdd7E+bAHrcqw@mail.gmail.com>
-Subject: Re: [PATCH v4 00/23] Fix libata suspend/resume handling and code cleanup
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Paul Ausbeck <paula@soe.ucsc.edu>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Chia-Lin Kao <acelan.kao@canonical.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Subject: Re: [bug report] blktests srp/002 hang
+To:     Bob Pearson <rpearsonhpe@gmail.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Cc:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+References: <dsg6rd66tyiei32zaxs6ddv5ebefr5vtxjwz6d2ewqrcwisogl@ge7jzan7dg5u>
+ <0c5c732c-283c-b29a-0ac2-c32211fc7e17@gmail.com>
+ <yewvcfcketee5qduraajra2g37t2mpxdlmj7aqny3umf7mkavk@wsm5forumsou>
+ <8be8f611-e413-9584-7c2e-2c1abf4147be@acm.org>
+ <plrbpd5gg32uaferhjj6ibkt4wqybu3v3y32f4rlhvsruc7cu4@2pgrj2542da2>
+ <18a3ae8c-145b-4c7f-a8f5-67840feeb98c@acm.org>
+ <ab93655f-c187-fdab-6c67-3bfb2d9aa516@gmail.com>
+ <9dd0aa0a-d696-a95b-095b-f54d6d31a6ab@linux.dev>
+ <d3205633-0cd2-f87e-1c40-21b8172b6da3@linux.dev>
+ <nqdsj764d7e56kxevcwnq6qoi6ptuu3bi6ntfakb55vm3toda7@eo3ffzzqrot7>
+ <5a4efe6f-d8c6-84ce-377e-eb64bcad706c@linux.dev>
+ <f50beb15-2cab-dfb9-3b58-ea66e7f114a6@gmail.com>
+ <fe61fdc5-ca8f-2efc-975d-46b99d66c6f5@linux.dev>
+ <afc98035-1bb8-f75c-451a-8e3e39fb74aa@gmail.com>
+ <6fc3b524-af7d-43ce-aa05-5c44ec850b9b@acm.org>
+ <b728f4db-bafa-dd0f-e288-7e3f56e6eae8@gmail.com>
+ <02d7cbf2-b17b-488a-b6e9-ebb728b51c94@acm.org>
+ <b80dae29-3a7c-f039-bc35-08c6e9f91197@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <b80dae29-3a7c-f039-bc35-08c6e9f91197@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Damien,
 
-On Wed, Sep 20, 2023 at 3:54 PM Damien Le Moal <dlemoal@kernel.org> wrote:
-> The first 9 patches of this series fix several issues with suspend/resume
-> power management operations in scsi and libata. The most significant
-> changes introduced are in patch 4 and 5, where the manage_start_stop
-> flag of scsi devices is split into the manage_system_start_stop and
-> manage_runtime_start_stop flags to allow keeping scsi runtime power
-> operations for spining up/down ATA devices but have libata do its own
-> system suspend/resume device power state management using EH.
+在 2023/9/21 1:29, Bob Pearson 写道:
+> On 9/20/23 12:22, Bart Van Assche wrote:
+>> On 9/20/23 10:18, Bob Pearson wrote:
+>>> But I have also seen the same behavior in the siw driver which is
+>>> completely independent.
+>> Hmm ... I haven't seen any hangs yet with the siw driver.
+> I was on Ubuntu 6-9 months ago. Currently I don't see hangs on either.
+>>> As mentioned above at the moment Ubuntu is failing rarely. But it used to fail reliably (srp/002 about 75% of the time and srp/011 about 99% of the time.) There haven't been any changes to rxe to explain this.
+>> I think that Zhu mentioned commit 9b4b7c1f9f54 ("RDMA/rxe: Add workqueue
+>> support for rxe tasks")?
+> That change happened well before the failures went away. I was seeing failures at the same rate with tasklets
+> and wqs. But after updating Ubuntu and the kernel at some point they all went away.
+Thanks, Bob. From what you said, in Ubuntu, this problem does not occur 
+now.
+
+To now,
+
+On Debian, without the commit 9b4b7c1f9f54 ("RDMA/rxe: Add workqueue 
+support for rxe tasks"), this hang does not occur.
+
+On Fedora, similar to Debian.
+
+On Ubuntu, this problem does not occur now. But not sure if this commit 
+exists or not.
+
+Hi, Bob, can you make tests without the above commit to verify if the 
+same problem occurs or not on Ubuntu?
+
+Can any one who has test environments to verify if this problem still 
+occurs on Ubuntu without this commit?
+
+Jason && Leon, please comment on this.
+
+Thanks a lot.
+
+Zhu Yanjun
 >
-> The remaining patches are code cleanup that do not introduce any
-> significant functional change.
+>> Thanks,
+>>
+>> Bart.
 >
-> This series was tested on qemu and on various PCs and servers. I am
-> CC-ing people who recently reported issues with suspend/resume.
-> Additional testing would be much appreciated.
->
-> Changes from v3:
->  * Corrected pathc 1 (typo in commit message and WARN_ON() removal)
->  * Changed path 3 as suggested by Niklas (moved definition of
->    ->slave_alloc)
->  * Rebased on rc2
->  * Added review tags
-
-Thanks for the update!
-
-I gave this a try on Renesas Salvator-XS with R-Car H3 ES2.0 and
-a SATA hard drive:
-  - The drive is spun up during system resume,
-  - Accessing the drive after the system was resumed is instantaneous.
-
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
