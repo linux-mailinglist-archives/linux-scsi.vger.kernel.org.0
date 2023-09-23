@@ -2,108 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1311E7ABCCF
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 Sep 2023 02:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D72E7ABE9E
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 Sep 2023 09:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjIWAbS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 22 Sep 2023 20:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        id S230355AbjIWHvN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 23 Sep 2023 03:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbjIWAay (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 22 Sep 2023 20:30:54 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFCFCCA;
-        Fri, 22 Sep 2023 17:30:10 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E18C433CA;
-        Sat, 23 Sep 2023 00:30:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695429009;
-        bh=53d3ZPKvrChRMkkJyJG5wwgMC5g/WRn51TobyMswQos=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oW1R8OI5DzJLFaBbVx7nba5azZko+1aLyEaSmgnXX1kYnf0eg0Wtt38g+JLojJ4KF
-         8/PvCMrkrAsk36pyVbwW5zXgnjZstR592QXwl00AI+PlBhypUE6aPXyqYzqB59ftlI
-         jiPrFaH87DXWd9ZUpXOAkks2prW3v+RKnbxAIFe7Ou7kaYqs6+Tg3GS5EQ34tWJZCn
-         Do/PjicOPCBFbr9KpgFHuGlSdB2aLRUTus0AfFWtImuaN+AqvvsmXBUUn5sbPFUxSU
-         DKBjPv3ZmnspRzbsXS5iGXz+50NW4GJYw0SlJZU1DLqMCThNHz51eju8pU/n2Ns36g
-         QM6TdGAY/1xXQ==
-From:   Damien Le Moal <dlemoal@kernel.org>
-To:     linux-ide@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Paul Ausbeck <paula@soe.ucsc.edu>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chia-Lin Kao <acelan.kao@canonical.com>
-Subject: [PATCH v6 23/23] ata: libata: Cleanup inline DMA helper functions
-Date:   Sat, 23 Sep 2023 09:29:32 +0900
-Message-ID: <20230923002932.1082348-24-dlemoal@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230923002932.1082348-1-dlemoal@kernel.org>
-References: <20230923002932.1082348-1-dlemoal@kernel.org>
+        with ESMTP id S229808AbjIWHvM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 23 Sep 2023 03:51:12 -0400
+Received: from shiva.jussieu.fr (shiva.jussieu.fr [134.157.0.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4A0D11D;
+        Sat, 23 Sep 2023 00:51:05 -0700 (PDT)
+Received: from mailix1.insp.jussieu.fr (mailix1.insp.jussieu.fr [134.157.37.11])
+          by shiva.jussieu.fr (8.15.2/jtpda-5.4) with ESMTP id 38N7mEO5035034
+          ; Sat, 23 Sep 2023 09:48:14 +0200 (CEST)
+X-Ids:  164
+Received: from hordix.insp.jussieu.fr (hordix.insp.jussieu.fr [134.157.37.9])
+        by mailix1.insp.jussieu.fr (Postfix-INSP-2.10.1) with ESMTPSA id EE6E9C06B5F6;
+        Sat, 23 Sep 2023 09:48:08 +0200 (CEST)
+Received: from [105.112.214.216] ([105.112.214.216]) by
+ webmail.insp.jussieu.fr (Horde Framework) with HTTPS; Sat, 23 Sep 2023
+ 07:48:08 +0000
+Date:   Sat, 23 Sep 2023 07:48:08 +0000
+Message-ID: <20230923074808.Horde.cbloaD0KutWc0KgVIYXLh1O@webmail.insp.jussieu.fr>
+From:   Victoria Cleland <lamya.essaoui@insp.upmc.fr>
+Subject: Hallo
+Reply-to: v.cleland10@aol.com
+User-Agent: Horde Application Framework 5
+Organization: Institut des NanoSciences de Paris
+X-InspUpmcSession: essaoui
+Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
 MIME-Version: 1.0
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Miltered: at jchkmail2.reseau.jussieu.fr with ID 650E983E.001 by Joe's j-chkmail (http : // j-chkmail dot ensmp dot fr)!
+X-j-chkmail-Enveloppe: 650E983E.001 from mailix1.insp.jussieu.fr/mailix1.insp.jussieu.fr/134.157.37.11/mailix1.insp.jussieu.fr/<lamya.essaoui@insp.upmc.fr>
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,MISSING_HEADERS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
+        *      DNSWL was blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [134.157.0.129 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 RCVD_IN_MSPIKE_H3 RBL: Good reputation (+3)
+        *      [134.157.0.129 listed in wl.mailspike.net]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [v.cleland10[at]aol.com]
+        *  1.0 MISSING_HEADERS Missing To: header
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
+        *  0.0 RCVD_IN_MSPIKE_WL Mailspike good senders
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Simplify the inline DMA helper functions ata_using_mwdma(),
-ata_using_udma() and ata_dma_enabled() to directly return as a boolean
-the result of their test condition.
 
-Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
----
- include/linux/libata.h | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+23. September 2023.
 
-diff --git a/include/linux/libata.h b/include/linux/libata.h
-index 00b4a2b7819a..3c0fd04b0035 100644
---- a/include/linux/libata.h
-+++ b/include/linux/libata.h
-@@ -1881,23 +1881,21 @@ static inline unsigned long ata_deadline(unsigned long from_jiffies,
-    change in future hardware and specs, secondly 0xFF means 'no DMA' but is
-    > UDMA_0. Dyma ddreigiau */
- 
--static inline int ata_using_mwdma(struct ata_device *adev)
-+static inline bool ata_using_mwdma(struct ata_device *adev)
- {
--	if (adev->dma_mode >= XFER_MW_DMA_0 && adev->dma_mode <= XFER_MW_DMA_4)
--		return 1;
--	return 0;
-+	return adev->dma_mode >= XFER_MW_DMA_0 &&
-+		adev->dma_mode <= XFER_MW_DMA_4;
- }
- 
--static inline int ata_using_udma(struct ata_device *adev)
-+static inline bool ata_using_udma(struct ata_device *adev)
- {
--	if (adev->dma_mode >= XFER_UDMA_0 && adev->dma_mode <= XFER_UDMA_7)
--		return 1;
--	return 0;
-+	return adev->dma_mode >= XFER_UDMA_0 &&
-+		adev->dma_mode <= XFER_UDMA_7;
- }
- 
--static inline int ata_dma_enabled(struct ata_device *adev)
-+static inline bool ata_dma_enabled(struct ata_device *adev)
- {
--	return (adev->dma_mode == 0xFF ? 0 : 1);
-+	return adev->dma_mode != 0xFF;
- }
- 
- /**************************************************************************
--- 
-2.41.0
+Hallo,
+
+Ich möchte Ihnen einen Geschäftsvorschlag mitteilen. Für weitere  
+Details antworten Sie auf Englisch.
+
+Grüße
+Frau Victoria Cleland
+_________________________
+Sekretärin: Lamya Essaoui
 
