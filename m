@@ -2,107 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A594A7AE7DF
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Sep 2023 10:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2751C7AE97C
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Sep 2023 11:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234058AbjIZIQ0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Sep 2023 04:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
+        id S234240AbjIZJni (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Sep 2023 05:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234000AbjIZIQR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Sep 2023 04:16:17 -0400
+        with ESMTP id S234133AbjIZJnh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Sep 2023 05:43:37 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B756FC;
-        Tue, 26 Sep 2023 01:15:55 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A019C433C7;
-        Tue, 26 Sep 2023 08:15:53 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76905EB;
+        Tue, 26 Sep 2023 02:43:31 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94144C433C9;
+        Tue, 26 Sep 2023 09:43:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695716155;
-        bh=53d3ZPKvrChRMkkJyJG5wwgMC5g/WRn51TobyMswQos=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P/t4D4x4aQL3TGfsVxwobIbQ/KeArNbDiZozUqDhQVYOmNYOuoxr4CXyr91v9MijR
-         Wr449OMWkfgUteChMdHZ/O+DCaj40SZ12loPtCdFk6J+1bt/LIsnWGlaJjAISqLvCS
-         voRGNw3JpL/+5hHfwpzP91Ix6fYFOD+yN9RWiAZYI4cvpP5uoUSYB1DNsOx8X+XE44
-         rHeOq2mqHp1EWZ5Scjb0FVZJtIO7VDpqN7qTVc0rZ1x4aE43pCJWnHfvrUEzyuTg62
-         hGjuAC6F8FWw4yszs58kLvbwgynZz0ULa6ADx+2Zrikla4MVd+N6pTi0/+KIqXMPRd
-         h6jG13I6aHYKw==
-From:   Damien Le Moal <dlemoal@kernel.org>
-To:     linux-ide@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Paul Ausbeck <paula@soe.ucsc.edu>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chia-Lin Kao <acelan.kao@canonical.com>
-Subject: [PATCH v7 23/23] ata: libata: Cleanup inline DMA helper functions
-Date:   Tue, 26 Sep 2023 17:15:07 +0900
-Message-ID: <20230926081507.69346-24-dlemoal@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230926081507.69346-1-dlemoal@kernel.org>
-References: <20230926081507.69346-1-dlemoal@kernel.org>
+        s=k20201202; t=1695721411;
+        bh=62Ms2RdlEUDykhXpqwiq2jDEjnzL81U/ZQEs+uHkKxM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ho38iDJqkErZAlYQJAGYYewQFHKBA47CdYXunzVInFmKO29dbWXPohvw1IJWQsIii
+         4gMUji6hWrJoKyIRWGHIkgPxfisKYm4MDfNuRajfQnFBbyHaM66Pd3JOvsyL6ejG8r
+         25WzYYU1pRxslm4f2LzEAzEyba2f3PPktSWd4k0Ie7PiZ3/ASjnnpylDnM7T2E2jCJ
+         1bwBGkZRo/9YQkSIlxW+3aRGJLIVkOeLY+Xzgz3nPp5efEjnmhyjW6ZWeD2Tr0Uspj
+         IccmdORTdbeGz65lA1Sj3mUlnQPFOB16D5x+cSEh7un8izQ6/pwXPoyepTuE3SoPi8
+         50vOP3CPI4hzg==
+Date:   Tue, 26 Sep 2023 12:43:27 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     zyjzyj2000@gmail.com, jgg@ziepe.ca, linux-rdma@vger.kernel.org,
+        rpearsonhpe@gmail.com, matsuda-daisuke@fujitsu.com,
+        shinichiro.kawasaki@wdc.com, linux-scsi@vger.kernel.org,
+        Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH 1/1] Revert "RDMA/rxe: Add workqueue support for rxe
+ tasks"
+Message-ID: <20230926094327.GI1642130@unreal>
+References: <20230922163231.2237811-1-yanjun.zhu@intel.com>
+ <841c0cf2-48f6-4a3c-a991-aaa5a737a9af@acm.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <841c0cf2-48f6-4a3c-a991-aaa5a737a9af@acm.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Simplify the inline DMA helper functions ata_using_mwdma(),
-ata_using_udma() and ata_dma_enabled() to directly return as a boolean
-the result of their test condition.
+On Fri, Sep 22, 2023 at 09:42:08AM -0700, Bart Van Assche wrote:
+> On 9/22/23 09:32, Zhu Yanjun wrote:
+> > From: Zhu Yanjun <yanjun.zhu@linux.dev>
+> > 
+> > This reverts commit 9b4b7c1f9f54120940e243251e2b1407767b3381.
+> > 
+> > This commit replaces tasklet with workqueue. But this results
+> > in occasionally pocess hang at the blktests test case srp/002.
+> > After the discussion in the link[1], this commit is reverted.
+> > 
+> > Link: https://lore.kernel.org/linux-rdma/e8b76fae-780a-470e-8ec4-c6b650793d10@leemhuis.info/T/#t [1]
+> > Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
+> > CC: rpearsonhpe@gmail.com
+> > CC: matsuda-daisuke@fujitsu.com
+> > CC: bvanassche@acm.org
+> > CC: shinichiro.kawasaki@wdc.com
+> 
+> Shouldn't the Cc-list occur before the Signed-off-by tag? Anyway:
 
-Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
----
- include/linux/libata.h | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+chackpatch didn't complain, so I took it as is.
 
-diff --git a/include/linux/libata.h b/include/linux/libata.h
-index 00b4a2b7819a..3c0fd04b0035 100644
---- a/include/linux/libata.h
-+++ b/include/linux/libata.h
-@@ -1881,23 +1881,21 @@ static inline unsigned long ata_deadline(unsigned long from_jiffies,
-    change in future hardware and specs, secondly 0xFF means 'no DMA' but is
-    > UDMA_0. Dyma ddreigiau */
- 
--static inline int ata_using_mwdma(struct ata_device *adev)
-+static inline bool ata_using_mwdma(struct ata_device *adev)
- {
--	if (adev->dma_mode >= XFER_MW_DMA_0 && adev->dma_mode <= XFER_MW_DMA_4)
--		return 1;
--	return 0;
-+	return adev->dma_mode >= XFER_MW_DMA_0 &&
-+		adev->dma_mode <= XFER_MW_DMA_4;
- }
- 
--static inline int ata_using_udma(struct ata_device *adev)
-+static inline bool ata_using_udma(struct ata_device *adev)
- {
--	if (adev->dma_mode >= XFER_UDMA_0 && adev->dma_mode <= XFER_UDMA_7)
--		return 1;
--	return 0;
-+	return adev->dma_mode >= XFER_UDMA_0 &&
-+		adev->dma_mode <= XFER_UDMA_7;
- }
- 
--static inline int ata_dma_enabled(struct ata_device *adev)
-+static inline bool ata_dma_enabled(struct ata_device *adev)
- {
--	return (adev->dma_mode == 0xFF ? 0 : 1);
-+	return adev->dma_mode != 0xFF;
- }
- 
- /**************************************************************************
--- 
-2.41.0
+> 
+> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
+Thanks
