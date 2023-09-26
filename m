@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D32C7AE7CE
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Sep 2023 10:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73AD7AE7D3
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Sep 2023 10:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233992AbjIZIQM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Sep 2023 04:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
+        id S234017AbjIZIQU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Sep 2023 04:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233975AbjIZIPo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Sep 2023 04:15:44 -0400
+        with ESMTP id S233949AbjIZIPz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Sep 2023 04:15:55 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5A010A;
-        Tue, 26 Sep 2023 01:15:37 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 146E6C433C9;
-        Tue, 26 Sep 2023 08:15:35 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6D310E;
+        Tue, 26 Sep 2023 01:15:40 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA23EC433CA;
+        Tue, 26 Sep 2023 08:15:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695716137;
-        bh=HuQHvEmRjsflkMBvRlfx+zSVsAeF4E9Jq7Sw4Ms5+6w=;
+        s=k20201202; t=1695716139;
+        bh=nRftvtXnga/jrlbpRmeNLEXg+UJSvM6XOdo4yjkCmUg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BFlSaZw/QZiwYlVG222h2nbd3j5CejwikLlnzRERirlCwp1VuQTElSSgTLlgF34gX
-         GrgOLOZsev59RJIgJP0PdUmwFejm4l9/gF8u25QesfeGdkFVavtAdetIJqfQD6JlIB
-         KDePhS344UfdQGR27v74+N8D4R5+lSjEZ+2YnKL/VNWR9Z+fyfX6jTJ5fTnawFr2Ep
-         TPqJ27slegGhqTkShWgwHFR+4gBxvdVs8diyXtBF1GLKKQSg4bvsLTBIndTTx4s1gL
-         k7+39kUW2BT3/RvjPTJFj8iOvUuxl2xmPFZCfcai2brPCsX38xh3jeBQPE3XffAJas
-         c8XB2KRbGZcTg==
+        b=TatCXQ/EWPuY3TCObX179BFUqBuq8SIACJUOB42zzn4rcc4W4F4g1mcdpanuotjU9
+         NDIGVtNmJrXfCs5oC3dh0OxLiBJdz+Bl7r/P29+X/67Pak8M8Mtnc2FTn7d6GD1zwR
+         nc/8G2qEOlcefeTz9K18epgNN5YtgZ67rJL1dLSgmF9a0Yg8ymfReNtr99s0tKy9cn
+         WagzIVMXpraGsrKKcaQnbjosB4DJkkfX1C31J3gDvS56B6J4SDu5W8sI7igN4NfmAF
+         uhKplgVuyOFmAMJmPSp6SUyUVW9M5PcERGyCBk+K2dbtY95g7S9w9RylYSMHnqQ572
+         eNs2Yt5Yb/KlA==
 From:   Damien Le Moal <dlemoal@kernel.org>
 To:     linux-ide@vger.kernel.org
 Cc:     linux-scsi@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc:     linux-scsi@vger.kernel.org,
         Joe Breuer <linux-kernel@jmbreuer.net>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Chia-Lin Kao <acelan.kao@canonical.com>
-Subject: [PATCH v7 14/23] ata: libata-core: Synchronize ata_port_detach() with hotplug
-Date:   Tue, 26 Sep 2023 17:14:58 +0900
-Message-ID: <20230926081507.69346-15-dlemoal@kernel.org>
+Subject: [PATCH v7 15/23] ata: libata-core: Detach a port devices on shutdown
+Date:   Tue, 26 Sep 2023 17:14:59 +0900
+Message-ID: <20230926081507.69346-16-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230926081507.69346-1-dlemoal@kernel.org>
 References: <20230926081507.69346-1-dlemoal@kernel.org>
@@ -54,10 +54,10 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The call to async_synchronize_cookie() to synchronize a port removal
-and hotplug probe is done in ata_host_detach() right before calling
-ata_port_detach(). Move this call at the beginning of ata_port_detach()
-to ensure that this operation is always synchronized with probe.
+Modify ata_pci_shutdown_one() to schedule EH to unload a port devices
+before freezing and thawing the port. This ensures that drives are
+cleanly disabled and transitioned to standby power mode when
+a PCI adapter is removed or the system is powered off.
 
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
@@ -65,36 +65,39 @@ Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
 ---
- drivers/ata/libata-core.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/ata/libata-core.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index 8e326a445765..de661780a31e 100644
+index de661780a31e..6b38ebaad019 100644
 --- a/drivers/ata/libata-core.c
 +++ b/drivers/ata/libata-core.c
-@@ -6065,6 +6065,9 @@ static void ata_port_detach(struct ata_port *ap)
- 	struct ata_link *link;
- 	struct ata_device *dev;
- 
-+	/* Ensure ata_port probe has completed */
-+	async_synchronize_cookie(ap->cookie + 1);
-+
- 	/* Wait for any ongoing EH */
- 	ata_port_wait_eh(ap);
- 
-@@ -6129,11 +6132,8 @@ void ata_host_detach(struct ata_host *host)
+@@ -6164,10 +6164,24 @@ EXPORT_SYMBOL_GPL(ata_pci_remove_one);
+ void ata_pci_shutdown_one(struct pci_dev *pdev)
  {
+ 	struct ata_host *host = pci_get_drvdata(pdev);
++	struct ata_port *ap;
++	unsigned long flags;
  	int i;
  
--	for (i = 0; i < host->n_ports; i++) {
--		/* Ensure ata_port probe has completed */
--		async_synchronize_cookie(host->ports[i]->cookie + 1);
-+	for (i = 0; i < host->n_ports; i++)
- 		ata_port_detach(host->ports[i]);
--	}
++	/* Tell EH to disable all devices */
+ 	for (i = 0; i < host->n_ports; i++) {
+-		struct ata_port *ap = host->ports[i];
++		ap = host->ports[i];
++		spin_lock_irqsave(ap->lock, flags);
++		ap->pflags |= ATA_PFLAG_UNLOADING;
++		ata_port_schedule_eh(ap);
++		spin_unlock_irqrestore(ap->lock, flags);
++	}
++
++	for (i = 0; i < host->n_ports; i++) {
++		ap = host->ports[i];
++
++		/* Wait for EH to complete before freezing the port */
++		ata_port_wait_eh(ap);
  
- 	/* the host is dead now, dissociate ACPI */
- 	ata_acpi_dissociate(host);
+ 		ap->pflags |= ATA_PFLAG_FROZEN;
+ 
 -- 
 2.41.0
 
