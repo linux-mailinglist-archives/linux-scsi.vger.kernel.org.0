@@ -2,69 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2021A7AFD92
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Sep 2023 10:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 715C57AFE15
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Sep 2023 10:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjI0IFW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 Sep 2023 04:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
+        id S230220AbjI0ITZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Sep 2023 04:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjI0IFO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Sep 2023 04:05:14 -0400
-Received: from jari.cn (unknown [218.92.28.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CA78CDA;
-        Wed, 27 Sep 2023 01:05:01 -0700 (PDT)
-Received: from chenguohua$jari.cn ( [182.148.12.64] ) by
- ajax-webmail-localhost.localdomain (Coremail) ; Wed, 27 Sep 2023 16:03:43
- +0800 (GMT+08:00)
-X-Originating-IP: [182.148.12.64]
-Date:   Wed, 27 Sep 2023 16:03:43 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   chenguohua@jari.cn
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: esp_scsi: Clean up errors in esp_scsi.c
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.1-cmXT6 build
- 20230419(ff23bf83) Copyright (c) 2002-2023 www.mailtech.cn
- mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
-MIME-Version: 1.0
-Message-ID: <234008e6.887.18ad5aa5094.Coremail.chenguohua@jari.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAfwDnhD_f4RNl7vW9AA--.582W
-X-CM-SenderInfo: xfkh0w5xrk3tw6md2xgofq/1tbiAQAHEWUSpy8AOwAesN
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_PBL,RDNS_NONE,T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+        with ESMTP id S230203AbjI0ITR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Sep 2023 04:19:17 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408AD196;
+        Wed, 27 Sep 2023 01:19:16 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38R7BUlI006647;
+        Wed, 27 Sep 2023 08:19:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=J9u/+D2zCY/87RIp3ZMHd3xTrm2mgrfjjUVaI33OnZk=;
+ b=f6bjSowaC3aJHQNT3krztk1k/HPCU8UBepDAKx5T54h09GYUvS7balet6029sdeKB/In
+ Mp+LWXJH4er76589b9AuJM6tDOE9L736hjIhn8oQMltQHI482KbBniGDSibHSqjqPa3W
+ YM3zWH1LSkcU1d+z+ibrnF6LOwwLntCFIabaCKK604XRsD5fGoI8SYxJ2JwgCbNUEQnY
+ bzZchsl2/LpurjnoJiPYs8TcnxY0yFTIoXmtKvHZZJuoiRTrNAjA+QDIjglST6dVPzTV
+ JJ8X2oMG7TeWpTIfXMBzjiyAkHMQFtNY3X0fwc+vJtrqi21zUc+l3HnMGg7me1R/MtbC RQ== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tcfg7g4wy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Sep 2023 08:19:04 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 38R8J1sr009655;
+        Wed, 27 Sep 2023 08:19:01 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3t9s3ksnrr-1;
+        Wed, 27 Sep 2023 08:19:01 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38R8J10r009647;
+        Wed, 27 Sep 2023 08:19:01 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-nitirawa-hyd.qualcomm.com [10.213.109.152])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 38R8J0UM009645;
+        Wed, 27 Sep 2023 08:19:01 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2342877)
+        id C69975000AA; Wed, 27 Sep 2023 13:48:59 +0530 (+0530)
+From:   Nitin Rawat <quic_nitirawa@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mani@kernel.org, alim.akhtar@samsung.com, bvanassche@acm.org,
+        avri.altman@wdc.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        cros-qcom-dts-watchers@chromium.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Nitin Rawat <quic_nitirawa@quicinc.com>
+Subject: [PATCH V3 0/4] Add UFS host controller and Phy nodes for sc7280
+Date:   Wed, 27 Sep 2023 13:48:54 +0530
+Message-Id: <20230927081858.15961-1-quic_nitirawa@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lXgG2ODLh0-hBQbH58neyyyhUk-r_772
+X-Proofpoint-ORIG-GUID: lXgG2ODLh0-hBQbH58neyyyhUk-r_772
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-27_03,2023-09-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ phishscore=0 spamscore=0 impostorscore=0 bulkscore=0 adultscore=0
+ clxscore=1015 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=636 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2309270067
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Rml4IHRoZSBmb2xsb3dpbmcgZXJyb3JzIHJlcG9ydGVkIGJ5IGNoZWNrcGF0Y2g6CgpFUlJPUjog
-c3BhY2UgcmVxdWlyZWQgYWZ0ZXIgdGhhdCAnLCcgKGN0eDpWeFYpCkVSUk9SOiBuZWVkIGNvbnNp
-c3RlbnQgc3BhY2luZyBhcm91bmQgJzw8JyAoY3R4Old4VikKClNpZ25lZC1vZmYtYnk6IEd1b0h1
-YSBDaGVuZyA8Y2hlbmd1b2h1YUBqYXJpLmNuPgotLS0KIGRyaXZlcnMvc2NzaS9lc3Bfc2NzaS5j
-IHwgNCArKy0tCiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygt
-KQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvc2NzaS9lc3Bfc2NzaS5jIGIvZHJpdmVycy9zY3NpL2Vz
-cF9zY3NpLmMKaW5kZXggOTc4MTZhMGU2MjQwLi41NmNmYmQ5ZTBhODggMTAwNjQ0Ci0tLSBhL2Ry
-aXZlcnMvc2NzaS9lc3Bfc2NzaS5jCisrKyBiL2RyaXZlcnMvc2NzaS9lc3Bfc2NzaS5jCkBAIC0x
-MTQsNyArMTE0LDcgQEAgZG8geyAgIGlmIChlc3BfZGVidWcgJiBFU1BfREVCVUdfQ09NTUFORCkJ
-XAogfSB3aGlsZSAoMCkKIAogI2RlZmluZSBlc3BfcmVhZDgoUkVHKQkJZXNwLT5vcHMtPmVzcF9y
-ZWFkOChlc3AsIFJFRykKLSNkZWZpbmUgZXNwX3dyaXRlOChWQUwsUkVHKQllc3AtPm9wcy0+ZXNw
-X3dyaXRlOChlc3AsIFZBTCwgUkVHKQorI2RlZmluZSBlc3Bfd3JpdGU4KFZBTCwgUkVHKQllc3At
-Pm9wcy0+ZXNwX3dyaXRlOChlc3AsIFZBTCwgUkVHKQogCiBzdGF0aWMgdm9pZCBlc3BfbG9nX2Zp
-bGxfcmVncyhzdHJ1Y3QgZXNwICplc3AsCiAJCQkgICAgICBzdHJ1Y3QgZXNwX2V2ZW50X2VudCAq
-cCkKQEAgLTU0Myw3ICs1NDMsNyBAQCBzdGF0aWMgdTMyIGVzcF9kbWFfbGVuZ3RoX2xpbWl0KHN0
-cnVjdCBlc3AgKmVzcCwgdTMyIGRtYV9hZGRyLCB1MzIgZG1hX2xlbikKIAkJYmFzZSA9IGRtYV9h
-ZGRyICYgKCgxVSA8PCAyNCkgLSAxVSk7CiAJCWVuZCA9IGJhc2UgKyBkbWFfbGVuOwogCQlpZiAo
-ZW5kID4gKDFVIDw8IDI0KSkKLQkJCWVuZCA9ICgxVSA8PDI0KTsKKwkJCWVuZCA9ICgxVSA8PCAy
-NCk7CiAJCWRtYV9sZW4gPSBlbmQgLSBiYXNlOwogCX0KIAlyZXR1cm4gZG1hX2xlbjsKLS0gCjIu
-MTcuMQo=
+This patch adds UFS host controller and Phy nodes for Qualcomm sc7280 SOC
+and sc7280 Board.
+
+Changes from v2:
+- Addressed Konrad comment to update binding qcom,ufs.yaml
+- Addresses mani/konrad comment to align ufs clock entry in devicetree.
+
+Changes from v1:
+- Addressed mani comment to separate soc and board change.
+- Addressed mani comment to sort ufs node in ascending order.
+
+Nitin Rawat (4):
+  scsi: ufs: qcom: dt-bindings: Add SC7280 compatible string
+  arm64: dts: qcom: sc7280: Add UFS nodes for sc7280 soc
+  arm64: dts: qcom: sc7280: Add UFS nodes for sc7280 IDP board
+  dt-bindings: ufs: qcom: Align clk binding property for Qualcomm UFS
+
+ .../devicetree/bindings/ufs/qcom,ufs.yaml     | 18 +++---
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      | 19 ++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi          | 63 +++++++++++++++++++
+ 3 files changed, 92 insertions(+), 8 deletions(-)
+
+--
+2.17.1
+
