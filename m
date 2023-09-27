@@ -2,154 +2,124 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA977AF9D3
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Sep 2023 07:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 295127AFB08
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Sep 2023 08:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjI0FM1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 Sep 2023 01:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
+        id S229774AbjI0G0T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Sep 2023 02:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjI0FLi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Sep 2023 01:11:38 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602456E87
-        for <linux-scsi@vger.kernel.org>; Tue, 26 Sep 2023 21:43:10 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59f4f2a9ef0so173532457b3.2
-        for <linux-scsi@vger.kernel.org>; Tue, 26 Sep 2023 21:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695789789; x=1696394589; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=iePGiIkzKfdzMIOYNHOPRk3cHv3ow4quHNbS62CX7cc=;
-        b=f+BgNC9iLIinJJtX9RsOwyapX+ljtdbJ6aXe875+wmA+mhGZZpFyW8IXkfcCq6foEF
-         hBi7GYcengpzpVU04f0ddt/A61YSoN7ayzrL/TX/G+iZI3LQxtupxuhxOsNq/vzo/IBG
-         +5BlZGaWVRWaMF8jGmSYi5/SolazV3zHGXhXvZnd4wJdhEYzEfJWPIrhu6QKAdnQ77kH
-         CUHUwARmC3VHOdvK9gHu/+jSB+JjPSWuI8joKEmt5Pbc+OX0EzepzllCI+GLmQHKwaC7
-         59TGzErtfZxD5ng8c+EX14dgtvH4qOil1hccALcQXOC3i5DG30McDOyzlP30HKIQgV2b
-         CXww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695789789; x=1696394589;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iePGiIkzKfdzMIOYNHOPRk3cHv3ow4quHNbS62CX7cc=;
-        b=ChTgx+whS3ltteYiAF5eQQ5QrctgYuKVoRGBuLpikL+S2BTHpa1Ps8fhNebm+HJJX4
-         WvrKrVacMvwI7hc2cvwLGsO3ycswgILW23ZtTwiCfIg9Ji8x4CiM+WkvFZqhbaynTUGU
-         ugPk6tVEklKmitNrMdlvY8yk/lbFAM3pjSo8j0ivwzjplP1qbuPEvQc12WQo1k2rjXok
-         qQdyah1B6gOVcqEKsfYaFvXDQAYJJuF4+u2pEehx9mkaPEnWuxtogdA0dIAB5fiDKtik
-         rcYW/vuXcGXvLZqlEPF562kzPQWzYQ9Wv7VOSZQTIdz/mmKtoj4eg1XhTQ33hGtBbe1X
-         1bhw==
-X-Gm-Message-State: AOJu0Yz8Ge0u3CzzuJxkFIlzFJPnsZmKznWVijX8klVD/J0BvR5c/oLR
-        E+m7XdGsBtydtJYuG6UkY5llXcL2rpnI08sVPg==
-X-Google-Smtp-Source: AGHT+IFd0ooW1etTxxJiTNoTbFujxXZt/InXzvbY0UsHwCdSv0uv0h4zfagMpHW3ZgyyIZZQBDRZadcuoO6RPk4m5Q==
-X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a05:6902:503:b0:d7b:8acc:beb8 with
- SMTP id x3-20020a056902050300b00d7b8accbeb8mr10054ybs.2.1695789789581; Tue,
- 26 Sep 2023 21:43:09 -0700 (PDT)
-Date:   Wed, 27 Sep 2023 04:43:08 +0000
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIANuyE2UC/x2NSw7CMAwFr1J5jaVgQHyuglhEiQNeNER+pQJVv
- TuB5Uhv3iwEdVPQZVjIdTbYs3bYbgZKj1jvypY7kwTZhbMcGZPX1D6c3WZ18KhA7LPy+qk8tgk RnLiI5EPch5OoUH9rrsXe/9L1tq5fn35o8HkAAAA=
-X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1695789788; l=3357;
- i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=EG1YpGCKOg76/PpeoMN8n1JVEehvPAP4ohoFDY4oUi4=; b=qhrzWo9sVm0VaNN5eB2F4JA68rayk7qenKcrcBKhCIwLhJbjdk7cI5E1kw0NBzW7Fn/9c+Wsc
- TDomOeaRGTJDjyyt3Nq2pOIikjhgZO5jnJrgq1M8e+SRVRIwLmBzEVc
-X-Mailer: b4 0.12.3
-Message-ID: <20230927-strncpy-drivers-message-fusion-mptsas-c-v1-1-edac65cd7010@google.com>
-Subject: [PATCH] scsi: message: fusion: replace deprecated strncpy with strscpy
-From:   Justin Stitt <justinstitt@google.com>
-To:     Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>
-Cc:     MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229846AbjI0G0J (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Sep 2023 02:26:09 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2330D1A8;
+        Tue, 26 Sep 2023 23:26:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B655921873;
+        Wed, 27 Sep 2023 06:26:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1695795966; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iMMMAkXIfCJBA1fnhBXlrKaQDS1jkKA6gpwpqc4OApU=;
+        b=ktWgBJDUGFFX22xHnBuwDLIabwT1AksbzWTA7mv7gKbegGZMI0DqlqBKjZF1a8F0FnFEkZ
+        +/gmw3ZKTYYD6cIztyrG1Tqqa1IA+N1m+gwm9AcnG5JhmsnC+J6Fd7Pd27wQGLx92/C2IY
+        E4hGHgb3EfWuoebiy454mRdL9jQsVrE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1695795966;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iMMMAkXIfCJBA1fnhBXlrKaQDS1jkKA6gpwpqc4OApU=;
+        b=itz5ji7XRrmNIUxMaFZVmHJkUG0I1y0AmNVOaciU2yssUCqPtPXOyoDmUykHdoB9R1uGzO
+        SfA0yR1+Pec/jdDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C355113479;
+        Wed, 27 Sep 2023 06:26:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Vqo9Kv3KE2VMIwAAMHmgww
+        (envelope-from <hare@suse.de>); Wed, 27 Sep 2023 06:26:05 +0000
+Message-ID: <d837ebda-2dbd-46d9-b04a-3d086ab5ba92@suse.de>
+Date:   Wed, 27 Sep 2023 08:26:05 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 00/18] scsi: scsi_error: Introduce new error handle
+ mechanism
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>,
+        Mike Christie <michael.christie@oracle.com>
+Cc:     Wenchao Hao <haowenchao2@huawei.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        louhongxiang@huawei.com, lixiaokeng@huawei.com
+References: <20230901094127.2010873-1-haowenchao2@huawei.com>
+ <ZRGfc73BSW0yyUtI@infradead.org>
+ <47bed3cb-f307-ec55-5c28-051687dab1ea@huawei.com>
+ <a92f5e0c-1976-4fc6-ba48-7ff49546318a@oracle.com>
+ <ZRKHokGtOE/AgAFY@infradead.org>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <ZRKHokGtOE/AgAFY@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-`strncpy` is deprecated for use on NUL-terminated destination strings
-[1] and as such we should prefer more robust and less ambiguous string
-interfaces.
+On 9/26/23 09:26, Christoph Hellwig wrote:
+> On Mon, Sep 25, 2023 at 12:54:48PM -0500, Mike Christie wrote:
+>> I think we want to figure out Hannes's patches first.
+> 
+> Yes.
+> 
+>> For a new EH design we will want to be able to do multiple TMFs in parallel
+>> on the same host/target right?
+>>
+>> The problem is that we need to be able to make forward progress in the EH
+>> path and not fail just because we can't allocate memory for a TMF related
+>> struct. To accomplish this now, drivers will use mempools, preallocate TMF
+>> related structs/mem/tags with their scsi_cmnd related structs, preallocate
+>> per host/target/device related structs or ignore what I wrote above and just
+>> fail.
+>>
+>> Hannes's patches fix up the eh callouts so they don't pass in a scsi_cmnd
+>> when it's not needed. That seems nice because after that, then for your new
+>> EH we can begin to standardize on how to handle preallocation of drivers
+>> resources needed to perform TMFs for your new EH. It could be a per
+>> device/target/host callout to allow drivers to preallocate, then scsi-ml calls
+>> into the drivers with that data. It doesn't have to be exactly like that or
+>> anything close. It would be nice for drivers to not have to think about this
+>> type of thing and scsi-ml just to handle the resource management for us when
+>> there are multiple TMFs in progress.
+> 
+> Exactly!
 
-The only caller of mptsas_exp_repmanufacture_info() is
-mptsas_probe_one_phy() which can allocate rphy in either
-sas_end_device_alloc() or sas_expander_alloc(). Both of which
-zero-allocate:
-|       rdev = kzalloc(sizeof(*rdev), GFP_KERNEL);
-... this is supplied to mptsas_exp_repmanufacture_info() as edev meaning
-that no future NUL-padding of edev members is needed.
+Yeah, thanks for the vote of support.
+Last time I tried the attempt got shot down, as it had been using the 
+'wrong' interface. But seeing that there's renewed interest I'll be 
+reposting them.
 
-Considering the above, a suitable replacement is `strscpy` [2] due to
-the fact that it guarantees NUL-termination on the destination buffer
-without unnecessarily NUL-padding.
+Cheers,
 
-Note that while `strscpy(dest, src, sizeof(dest))` is more idiomatic
-strscpy usage, we should keep `SAS_EXPANDER...LEN` for length arguments
-since changing these to sizeof would mean we are getting buffers one
-character larger than expected due to the declaration for these members:
-|       char   vendor_id[SAS_EXPANDER_VENDOR_ID_LEN+1];
-|       char   product_id[SAS_EXPANDER_PRODUCT_ID_LEN+1];
-|       char   product_rev[SAS_EXPANDER_PRODUCT_REV_LEN+1];
-|       char   component_vendor_id[SAS_EXPANDER_COMPONENT_VENDOR_ID_LEN+1];
-... and simply removing the "+1" in conjunction with using sizeof() may
-not work as other code may rely on this adjusted buffer length for
-sas_expander_device members.
-
-Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-Link: https://github.com/KSPP/linux/issues/90
-Cc: linux-hardening@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-Note: build-tested only.
-
-Note: similar to drivers/scsi/mpi3mr/mpi3mr_transport.c +212 which uses
-strscpy
----
- drivers/message/fusion/mptsas.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/message/fusion/mptsas.c b/drivers/message/fusion/mptsas.c
-index 86f16f3ea478..1dc225701a50 100644
---- a/drivers/message/fusion/mptsas.c
-+++ b/drivers/message/fusion/mptsas.c
-@@ -2964,15 +2964,15 @@ mptsas_exp_repmanufacture_info(MPT_ADAPTER *ioc,
- 			goto out_free;
- 
- 		manufacture_reply = data_out + sizeof(struct rep_manu_request);
--		strncpy(edev->vendor_id, manufacture_reply->vendor_id,
-+		strscpy(edev->vendor_id, manufacture_reply->vendor_id,
- 			SAS_EXPANDER_VENDOR_ID_LEN);
--		strncpy(edev->product_id, manufacture_reply->product_id,
-+		strscpy(edev->product_id, manufacture_reply->product_id,
- 			SAS_EXPANDER_PRODUCT_ID_LEN);
--		strncpy(edev->product_rev, manufacture_reply->product_rev,
-+		strscpy(edev->product_rev, manufacture_reply->product_rev,
- 			SAS_EXPANDER_PRODUCT_REV_LEN);
- 		edev->level = manufacture_reply->sas_format;
- 		if (manufacture_reply->sas_format) {
--			strncpy(edev->component_vendor_id,
-+			strscpy(edev->component_vendor_id,
- 				manufacture_reply->component_vendor_id,
- 				SAS_EXPANDER_COMPONENT_VENDOR_ID_LEN);
- 			tmp = (u8 *)&manufacture_reply->component_id;
-
----
-base-commit: 6465e260f48790807eef06b583b38ca9789b6072
-change-id: 20230927-strncpy-drivers-message-fusion-mptsas-c-f22d5a4082e2
-
-Best regards,
---
-Justin Stitt <justinstitt@google.com>
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman
 
