@@ -2,102 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E007B00C2
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Sep 2023 11:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC297B0202
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Sep 2023 12:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjI0Jlv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 Sep 2023 05:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
+        id S229985AbjI0KkZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Sep 2023 06:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbjI0Jlt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Sep 2023 05:41:49 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98ADC0;
-        Wed, 27 Sep 2023 02:41:47 -0700 (PDT)
-Received: from kwepemm000012.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RwWm21jq5zrTBX;
-        Wed, 27 Sep 2023 17:39:30 +0800 (CST)
-Received: from [10.174.178.220] (10.174.178.220) by
- kwepemm000012.china.huawei.com (7.193.23.142) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Wed, 27 Sep 2023 17:41:45 +0800
-Message-ID: <98ea6e9b-cbfb-0485-6452-e3d979aaed54@huawei.com>
-Date:   Wed, 27 Sep 2023 17:41:44 +0800
+        with ESMTP id S230143AbjI0IZ7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Sep 2023 04:25:59 -0400
+Received: from jari.cn (unknown [218.92.28.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 547C7CC4;
+        Wed, 27 Sep 2023 01:25:41 -0700 (PDT)
+Received: from chenguohua$jari.cn ( [182.148.12.64] ) by
+ ajax-webmail-localhost.localdomain (Coremail) ; Wed, 27 Sep 2023 16:24:13
+ +0800 (GMT+08:00)
+X-Originating-IP: [182.148.12.64]
+Date:   Wed, 27 Sep 2023 16:24:13 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   chenguohua@jari.cn
+To:     gotom@debian.or.jp, yokota@netlab.is.tsukuba.ac.jp,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: Clean up errors in nsp32_io.h
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2023.1-cmXT6 build
+ 20230419(ff23bf83) Copyright (c) 2002-2023 www.mailtech.cn
+ mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH v2 00/18] scsi: scsi_error: Introduce new error handle
- mechanism
-Content-Language: en-US
-To:     Hannes Reinecke <hare@suse.de>,
-        Mike Christie <michael.christie@oracle.com>,
-        Christoph Hellwig <hch@infradead.org>
-CC:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <louhongxiang@huawei.com>, <lixiaokeng@huawei.com>
-References: <20230901094127.2010873-1-haowenchao2@huawei.com>
- <ZRGfc73BSW0yyUtI@infradead.org>
- <47bed3cb-f307-ec55-5c28-051687dab1ea@huawei.com>
- <a92f5e0c-1976-4fc6-ba48-7ff49546318a@oracle.com>
- <06268327-cfed-f266-34a7-fda69411ef2a@huawei.com>
- <c3763949-c810-4a1f-87cc-e2248bfdc40b@suse.de>
-From:   Wenchao Hao <haowenchao2@huawei.com>
-In-Reply-To: <c3763949-c810-4a1f-87cc-e2248bfdc40b@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.220]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm000012.china.huawei.com (7.193.23.142)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <7612214f.888.18ad5bd14bc.Coremail.chenguohua@jari.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAfwDnhD+t5hNlYPi9AA--.583W
+X-CM-SenderInfo: xfkh0w5xrk3tw6md2xgofq/1tbiAQAHEWUSpy8AOwAgsz
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_PBL,RDNS_NONE,T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2023/9/27 15:59, Hannes Reinecke wrote:
-> On 9/26/23 14:57, Wenchao Hao wrote:
->> On 2023/9/26 1:54, Mike Christie wrote:
->>> On 9/25/23 10:07 AM, Wenchao Hao wrote:
->>>> On 2023/9/25 22:55, Christoph Hellwig wrote:
->>>>> Before we add another new error handling mechanism we need to fix the
->>>>> old one first.  Hannes' work on not passing the scsi_cmnd to the various
->>>>> reset handlers hasn't made a lot of progress in the last five years and
->>>>> we'll need to urgently fix that first before adding even more
->>>>> complexity.
->>>>>
->>>> I observed Hannes's patches posted about one year ago, it has not been
->>>> applied yet. I don't know if he is still working on it.
->>>>
->>>> My patches do not depend much on that work, I think the conflict can be
->>>> solved fast between two changes.
->>>
->>> I think we want to figure out Hannes's patches first.
->>>
->>> For a new EH design we will want to be able to do multiple TMFs in parallel
->>> on the same host/target right?
->>>
->>
->> It's not necessary to do multiple TMFs in parallel, it's ok to make sure
->> each TMFs do not affect each other.
->>
->> For example, we have two devices: 0:0:0:0 and 0:0:0:1
->>
->> Both of them request device reset, they do not happened in parallel, but
->> would in serial. If 0:0:0:0 is performing device reset in progress, 0:0:0:1
->> just wait 0:0:0:0 to finish.
->>
-> Well, not quite. Any higher-order TMFs are serialized by virtue of SCSI-EH, but command aborts (which also devolve down to TMFs on certain drivers) do run in parallel, and there we will be requiring multiple TMFs.
-> 
-
-It's best that multiple  TMFs can run in parallel, again, looking forwarding
-to your changes.
-
-> Cheers,
-> 
-> Hannes
-
+Rml4IHRoZSBmb2xsb3dpbmcgZXJyb3JzIHJlcG9ydGVkIGJ5IGNoZWNrcGF0Y2g6CgpFUlJPUjog
+c3BhY2UgcHJvaGliaXRlZCBiZWZvcmUgdGhhdCBjbG9zZSBwYXJlbnRoZXNpcyAnKScKRVJST1I6
+IHNwYWNlIHJlcXVpcmVkIGFmdGVyIHRoYXQgJywnIChjdHg6VnhWKQoKU2lnbmVkLW9mZi1ieTog
+R3VvSHVhIENoZW5nIDxjaGVuZ3VvaHVhQGphcmkuY24+Ci0tLQogZHJpdmVycy9zY3NpL25zcDMy
+X2lvLmggfCAxOCArKysrKysrKystLS0tLS0tLS0KIGRyaXZlcnMvc2NzaS9zY3NpX3BtLmMgIHwg
+IDQgKystLQogMiBmaWxlcyBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspLCAxMSBkZWxldGlvbnMo
+LSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3Njc2kvbnNwMzJfaW8uaCBiL2RyaXZlcnMvc2NzaS9u
+c3AzMl9pby5oCmluZGV4IGUzZjNjMjdiMDFlZi4uNTkwMmYzMDM1YWZhIDEwMDY0NAotLS0gYS9k
+cml2ZXJzL3Njc2kvbnNwMzJfaW8uaAorKysgYi9kcml2ZXJzL3Njc2kvbnNwMzJfaW8uaApAQCAt
+MTI2LDcgKzEyNiw3IEBAIHN0YXRpYyBpbmxpbmUgdm9pZCBuc3AzMl9pbmRleF93cml0ZTEodW5z
+aWduZWQgaW50ICBiYXNlLAogCQkJCSAgICAgIHVuc2lnbmVkIGludCAgcmVnLAogCQkJCSAgICAg
+IHVuc2lnbmVkIGNoYXIgdmFsKQogewotCW91dGIocmVnLCBiYXNlICsgSU5ERVhfUkVHICAgKTsK
+KwlvdXRiKHJlZywgYmFzZSArIElOREVYX1JFRyk7CiAJb3V0Yih2YWwsIGJhc2UgKyBEQVRBX1JF
+R19MT1cpOwogfQogCkBAIC0xNDEsMTggKzE0MSwxOCBAQCBzdGF0aWMgaW5saW5lIHZvaWQgbnNw
+MzJfaW5kZXhfd3JpdGUyKHVuc2lnbmVkIGludCAgIGJhc2UsCiAJCQkJICAgICAgdW5zaWduZWQg
+aW50ICAgcmVnLAogCQkJCSAgICAgIHVuc2lnbmVkIHNob3J0IHZhbCkKIHsKLQlvdXRiKHJlZywg
+YmFzZSArIElOREVYX1JFRyAgICk7CisJb3V0YihyZWcsIGJhc2UgKyBJTkRFWF9SRUcpOwogCW91
+dHcodmFsLCBiYXNlICsgREFUQV9SRUdfTE9XKTsKIH0KIAogc3RhdGljIGlubGluZSB1bnNpZ25l
+ZCBsb25nIG5zcDMyX2luZGV4X3JlYWQ0KHVuc2lnbmVkIGludCBiYXNlLAogCQkJCQkgICAgICB1
+bnNpZ25lZCBpbnQgcmVnKQogewotCXVuc2lnbmVkIGxvbmcgaCxsOworCXVuc2lnbmVkIGxvbmcg
+aCwgbDsKIAogCW91dGIocmVnLCBiYXNlICsgSU5ERVhfUkVHKTsKIAlsID0gaW53KGJhc2UgKyBE
+QVRBX1JFR19MT1cpOwotCWggPSBpbncoYmFzZSArIERBVEFfUkVHX0hJICk7CisJaCA9IGludyhi
+YXNlICsgREFUQV9SRUdfSEkpOwogCiAJcmV0dXJuICgoaCA8PCAxNikgfCBsKTsKIH0KQEAgLTE2
+MSwxNCArMTYxLDE0IEBAIHN0YXRpYyBpbmxpbmUgdm9pZCBuc3AzMl9pbmRleF93cml0ZTQodW5z
+aWduZWQgaW50ICBiYXNlLAogCQkJCSAgICAgIHVuc2lnbmVkIGludCAgcmVnLAogCQkJCSAgICAg
+IHVuc2lnbmVkIGxvbmcgdmFsKQogewotCXVuc2lnbmVkIGxvbmcgaCxsOworCXVuc2lnbmVkIGxv
+bmcgaCwgbDsKIAogCWggPSAodmFsICYgMHhmZmZmMDAwMCkgPj4gMTY7CiAJbCA9ICh2YWwgJiAw
+eDAwMDBmZmZmKSA+PiAgMDsKIAotCW91dGIocmVnLCBiYXNlICsgSU5ERVhfUkVHICAgKTsKKwlv
+dXRiKHJlZywgYmFzZSArIElOREVYX1JFRyk7CiAJb3V0dyhsLCAgIGJhc2UgKyBEQVRBX1JFR19M
+T1cpOwotCW91dHcoaCwgICBiYXNlICsgREFUQV9SRUdfSEkgKTsKKwlvdXR3KGgsICAgYmFzZSAr
+IERBVEFfUkVHX0hJKTsKIH0KIAogLyo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09Ki8KQEAgLTE5NSw3ICsxOTUsNyBAQCBzdGF0aWMgaW5saW5lIHZvaWQgbnNw
+MzJfbW1pb19pbmRleF93cml0ZTEodW5zaWduZWQgbG9uZyBiYXNlLAogCWRhdGFfcHRyICA9ICh1
+bnNpZ25lZCBzaG9ydCAqKShiYXNlICsgTlNQMzJfTU1JT19PRkZTRVQgKyBEQVRBX1JFR19MT1cp
+OwogCiAJd3JpdGViKHJlZywgaW5kZXhfcHRyKTsKLQl3cml0ZWIodmFsLCBkYXRhX3B0ciApOwor
+CXdyaXRlYih2YWwsIGRhdGFfcHRyKTsKIH0KIAogc3RhdGljIGlubGluZSB1bnNpZ25lZCBzaG9y
+dCBuc3AzMl9tbWlvX2luZGV4X3JlYWQyKHVuc2lnbmVkIGxvbmcgYmFzZSwKQEAgLTIyMCw3ICsy
+MjAsNyBAQCBzdGF0aWMgaW5saW5lIHZvaWQgbnNwMzJfbW1pb19pbmRleF93cml0ZTIodW5zaWdu
+ZWQgbG9uZyAgYmFzZSwKIAlkYXRhX3B0ciAgPSAodW5zaWduZWQgc2hvcnQgKikoYmFzZSArIE5T
+UDMyX01NSU9fT0ZGU0VUICsgREFUQV9SRUdfTE9XKTsKIAogCXdyaXRlYihyZWcsICAgICAgICAg
+ICAgICBpbmRleF9wdHIpOwotCXdyaXRldyhjcHVfdG9fbGUxNih2YWwpLCBkYXRhX3B0ciApOwor
+CXdyaXRldyhjcHVfdG9fbGUxNih2YWwpLCBkYXRhX3B0cik7CiB9CiAKIC8qPT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSovCmRpZmYgLS1naXQgYS9kcml2ZXJz
+L3Njc2kvc2NzaV9wbS5jIGIvZHJpdmVycy9zY3NpL3Njc2lfcG0uYwppbmRleCBkNTgxNjEzZDg3
+YzcuLmVlNDRmZGVkOGU1NSAxMDA2NDQKLS0tIGEvZHJpdmVycy9zY3NpL3Njc2lfcG0uYworKysg
+Yi9kcml2ZXJzL3Njc2kvc2NzaV9wbS5jCkBAIC0yMTgsNyArMjE4LDcgQEAgaW50IHNjc2lfYXV0
+b3BtX2dldF9kZXZpY2Uoc3RydWN0IHNjc2lfZGV2aWNlICpzZGV2KQogCWludAllcnI7CiAKIAll
+cnIgPSBwbV9ydW50aW1lX2dldF9zeW5jKCZzZGV2LT5zZGV2X2dlbmRldik7Ci0JaWYgKGVyciA8
+IDAgJiYgZXJyICE9LUVBQ0NFUykKKwlpZiAoZXJyIDwgMCAmJiBlcnIgIT0gLUVBQ0NFUykKIAkJ
+cG1fcnVudGltZV9wdXRfc3luYygmc2Rldi0+c2Rldl9nZW5kZXYpOwogCWVsc2UKIAkJZXJyID0g
+MDsKQEAgLTI0Nyw3ICsyNDcsNyBAQCBpbnQgc2NzaV9hdXRvcG1fZ2V0X2hvc3Qoc3RydWN0IFNj
+c2lfSG9zdCAqc2hvc3QpCiAJaW50CWVycjsKIAogCWVyciA9IHBtX3J1bnRpbWVfZ2V0X3N5bmMo
+JnNob3N0LT5zaG9zdF9nZW5kZXYpOwotCWlmIChlcnIgPCAwICYmIGVyciAhPS1FQUNDRVMpCisJ
+aWYgKGVyciA8IDAgJiYgZXJyICE9IC1FQUNDRVMpCiAJCXBtX3J1bnRpbWVfcHV0X3N5bmMoJnNo
+b3N0LT5zaG9zdF9nZW5kZXYpOwogCWVsc2UKIAkJZXJyID0gMDsKLS0gCjIuMTcuMQo=
