@@ -2,52 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 567907B57A0
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Oct 2023 18:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2967F7B5736
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Oct 2023 18:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238258AbjJBPtn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Oct 2023 11:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
+        id S238255AbjJBPtk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Oct 2023 11:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238239AbjJBPtg (ORCPT
+        with ESMTP id S238231AbjJBPtg (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Oct 2023 11:49:36 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A2CE0
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60272E3
         for <linux-scsi@vger.kernel.org>; Mon,  2 Oct 2023 08:49:32 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C36AF21869;
+        by smtp-out1.suse.de (Postfix) with ESMTP id CBBCF21870;
         Mon,  2 Oct 2023 15:49:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1696261770; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IhxM4nMoUH6zdFVXAFSn4VR69R3vRMEkl/JepLw8wHM=;
-        b=NuDHGWi47wklrOnVQI9uYXvNLv7iBI5A+0uw0uz/OO/9nLOookUlNgNc1H+v3gQly3uGRa
-        Vd4r+zohqSwDW19MDjruzXjGA18UlNPLLhba5OdYjfmfcXiQkKtp0S6zeoHXKzk7D6wSyO
-        555Bw1LgHzA/j+eycxwQdk7kwE78cY0=
+        bh=Y7L8Wpsh5iWWrXfyehG3TEBRvdEEtzu8R+SUX59G+UE=;
+        b=N6JM7pcclziFiqqs3tx8FLCC3SHar1c+soDTMfpQg8v1fMucqdQ56jvVOVsyGspthAPN2e
+        tZVKVDmjHOw8qJyLBboDTfqXro6qBRpIN63ZRnKKQf+XyXCNFoSQTheBEo/oOHAlJ8wyGd
+        PHRytLzxjEQGca/QyEdCPHRcy+yfOJ0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1696261770;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IhxM4nMoUH6zdFVXAFSn4VR69R3vRMEkl/JepLw8wHM=;
-        b=UHXe+XEERG69YahoG5rBb1HwyydBmKD5QIH1ndhBoraRa/+tkyz0Ba36ufQSpQp2tqnx8h
-        lmGMm/Lt/LG+ITAg==
+        bh=Y7L8Wpsh5iWWrXfyehG3TEBRvdEEtzu8R+SUX59G+UE=;
+        b=6rNe6miQm+A3v6NDVdOMOJcEhgaPJ1rhRGE6BIZ414WPhbXK4mz7785hnKiMj9zgH/3oFj
+        pbgrQ+YIal/JSXCw==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id A3C902C149;
+        by relay2.suse.de (Postfix) with ESMTP id AC0B92C14B;
         Mon,  2 Oct 2023 15:49:30 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id BAB3451E7565; Mon,  2 Oct 2023 17:49:30 +0200 (CEST)
+        id C262251E7567; Mon,  2 Oct 2023 17:49:30 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 04/15] a1000u2w: do not rely on the command for inia100_device_reset()
-Date:   Mon,  2 Oct 2023 17:49:16 +0200
-Message-Id: <20231002154927.68643-5-hare@suse.de>
+Subject: [PATCH 05/15] fas216: Rework device reset to not rely on SCSI command pointer
+Date:   Mon,  2 Oct 2023 17:49:17 +0200
+Message-Id: <20231002154927.68643-6-hare@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20231002154927.68643-1-hare@suse.de>
 References: <20231002154927.68643-1-hare@suse.de>
@@ -62,120 +62,113 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use the scsi device as argument to orc_device_reset() instead
-of relying on the passed in scsi command.
+The device reset code should not rely on the SCSI command pointer;
+it will be going away with the device reset handler rework.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/scsi/a100u2w.c | 43 +++++++++++-------------------------------
- 1 file changed, 11 insertions(+), 32 deletions(-)
+ drivers/scsi/arm/fas216.c | 39 +++++++++++++++++++--------------------
+ 1 file changed, 19 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/scsi/a100u2w.c b/drivers/scsi/a100u2w.c
-index b95147fb18b0..43b119add2b9 100644
---- a/drivers/scsi/a100u2w.c
-+++ b/drivers/scsi/a100u2w.c
-@@ -592,39 +592,20 @@ static int orc_reset_scsi_bus(struct orc_host * host)
-  *	commands for target w/o soft reset
-  */
+diff --git a/drivers/scsi/arm/fas216.c b/drivers/scsi/arm/fas216.c
+index 4ce0b2d73614..e6289c6af5ef 100644
+--- a/drivers/scsi/arm/fas216.c
++++ b/drivers/scsi/arm/fas216.c
+@@ -1985,7 +1985,6 @@ static void fas216_devicereset_done(FAS216_Info *info, struct scsi_cmnd *SCpnt,
+ {
+ 	fas216_log(info, LOG_ERROR, "fas216 device reset complete");
  
--static int orc_device_reset(struct orc_host * host, struct scsi_cmnd *cmd, unsigned int target)
-+static int orc_device_reset(struct orc_host * host, struct scsi_device *sdev)
- {				/* I need Host Control Block Information */
- 	struct orc_scb *scb;
- 	struct orc_extended_scb *escb;
--	struct orc_scb *host_scb;
--	u8 i;
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&(host->allocation_lock), flags);
- 	scb = (struct orc_scb *) NULL;
- 	escb = (struct orc_extended_scb *) NULL;
- 
--	/* setup scatter list address with one buffer */
--	host_scb = host->scb_virt;
--
- 	/* FIXME: is this safe if we then fail to issue the reset or race
- 	   a completion ? */
- 	init_alloc_map(host);
- 
--	/* Find the scb corresponding to the command */
--	for (i = 0; i < ORC_MAXQUEUE; i++) {
--		escb = host_scb->escb;
--		if (host_scb->status && escb->srb == cmd)
--			break;
--		host_scb++;
--	}
--
--	if (i == ORC_MAXQUEUE) {
--		printk(KERN_ERR "Unable to Reset - No SCB Found\n");
--		spin_unlock_irqrestore(&(host->allocation_lock), flags);
--		return FAILED;
--	}
--
- 	/* Allocate a new SCB for the reset command to the firmware */
- 	if ((scb = __orc_alloc_scb(host)) == NULL) {
- 		/* Can't happen.. */
-@@ -635,7 +616,7 @@ static int orc_device_reset(struct orc_host * host, struct scsi_cmnd *cmd, unsig
- 	/* Reset device is handled by the firmware, we fill in an SCB and
- 	   fire it at the controller, it does the rest */
- 	scb->opcode = ORC_BUSDEVRST;
--	scb->target = target;
-+	scb->target = sdev->id;
- 	scb->hastat = 0;
- 	scb->tastat = 0;
- 	scb->status = 0x0;
-@@ -645,8 +626,8 @@ static int orc_device_reset(struct orc_host * host, struct scsi_cmnd *cmd, unsig
- 	scb->xferlen = cpu_to_le32(0);
- 	scb->sg_len = cpu_to_le32(0);
- 
-+	escb = scb->escb;
- 	escb->srb = NULL;
--	escb->srb = cmd;
- 	orc_exec_scb(host, scb);	/* Start execute SCB            */
- 	spin_unlock_irqrestore(&host->allocation_lock, flags);
- 	return SUCCESS;
-@@ -971,7 +952,7 @@ static int inia100_device_reset(struct scsi_cmnd * cmd)
- {				/* I need Host Control Block Information */
- 	struct orc_host *host;
- 	host = (struct orc_host *) cmd->device->host->hostdata;
--	return orc_device_reset(host, cmd, scmd_id(cmd));
-+	return orc_device_reset(host, cmd->device);
- 
+-	info->rstSCpnt = NULL;
+ 	info->rst_dev_status = 1;
+ 	wake_up(&info->eh_wait);
  }
+@@ -2143,12 +2142,12 @@ static void fas216_done(FAS216_Info *info, unsigned int result)
  
-@@ -991,11 +972,7 @@ static void inia100_scb_handler(struct orc_host *host, struct orc_scb *scb)
- 	struct orc_extended_scb *escb;
+ 	fas216_checkmagic(info);
  
- 	escb = scb->escb;
--	if ((cmd = (struct scsi_cmnd *) escb->srb) == NULL) {
--		printk(KERN_ERR "inia100_scb_handler: SRB pointer is empty\n");
--		orc_release_scb(host, scb);	/* Release SCB for current channel */
--		return;
--	}
-+	cmd = (struct scsi_cmnd *)escb->srb;
- 	escb->srb = NULL;
+-	if (!info->SCpnt)
++	if (!info->SCpnt && info->rst_dev_status)
+ 		goto no_command;
  
- 	switch (scb->hastat) {
-@@ -1033,13 +1010,15 @@ static void inia100_scb_handler(struct orc_host *host, struct orc_scb *scb)
- 		break;
- 	}
+ 	SCpnt = info->SCpnt;
+ 	info->SCpnt = NULL;
+-    	info->scsi.phase = PHASE_IDLE;
++	info->scsi.phase = PHASE_IDLE;
  
--	if (scb->tastat == 2) {	/* Check condition              */
-+	if (cmd && scb->tastat == 2) {	/* Check condition              */
- 		memcpy((unsigned char *) &cmd->sense_buffer[0],
- 		   (unsigned char *) &escb->sglist[0], SENSE_SIZE);
- 	}
--	cmd->result = scb->tastat | (scb->hastat << 16);
--	scsi_dma_unmap(cmd);
--	scsi_done(cmd);		/* Notify system DONE           */
-+	if (cmd) {
-+		cmd->result = scb->tastat | (scb->hastat << 16);
-+		scsi_dma_unmap(cmd);
-+		scsi_done(cmd);		/* Notify system DONE           */
+ 	if (info->scsi.aborting) {
+ 		fas216_log(info, 0, "uncaught abort - returning DID_ABORT");
+@@ -2160,7 +2159,7 @@ static void fas216_done(FAS216_Info *info, unsigned int result)
+ 	 * Sanity check the completion - if we have zero bytes left
+ 	 * to transfer, we should not have a valid pointer.
+ 	 */
+-	if (info->scsi.SCp.ptr && info->scsi.SCp.this_residual == 0) {
++	if (SCpnt && info->scsi.SCp.ptr && info->scsi.SCp.this_residual == 0) {
+ 		scmd_printk(KERN_INFO, SCpnt,
+ 			    "zero bytes left to transfer, but buffer pointer still valid: ptr=%p len=%08x\n",
+ 			    info->scsi.SCp.ptr, info->scsi.SCp.this_residual);
+@@ -2173,12 +2172,18 @@ static void fas216_done(FAS216_Info *info, unsigned int result)
+ 	 * the sense information, fas216_kick will re-assert the busy
+ 	 * status.
+ 	 */
+-	info->device[SCpnt->device->id].parity_check = 0;
+-	clear_bit(SCpnt->device->id * 8 +
+-		  (u8)(SCpnt->device->lun & 0x7), info->busyluns);
+-
+-	fn = (void (*)(FAS216_Info *, struct scsi_cmnd *, unsigned int))SCpnt->host_scribble;
+-	fn(info, SCpnt, result);
++	if (SCpnt) {
++		info->device[SCpnt->device->id].parity_check = 0;
++		clear_bit(SCpnt->device->id * 8 +
++			  (u8)(SCpnt->device->lun & 0x7), info->busyluns);
 +	}
- 	orc_release_scb(host, scb);	/* Release SCB for current channel */
- }
++	if (!info->rst_dev_status) {
++		info->rst_dev_status = 1;
++		wake_up(&info->eh_wait);
++	} else {
++		fn = (void (*)(FAS216_Info *, struct scsi_cmnd *, unsigned int))SCpnt->host_scribble;
++		fn(info, SCpnt, result);
++	}
  
+ 	if (info->scsi.irq) {
+ 		spin_lock_irqsave(&info->host_lock, flags);
+@@ -2478,9 +2483,10 @@ int fas216_eh_abort(struct scsi_cmnd *SCpnt)
+  */
+ int fas216_eh_device_reset(struct scsi_cmnd *SCpnt)
+ {
+-	FAS216_Info *info = (FAS216_Info *)SCpnt->device->host->hostdata;
++	struct scsi_device *sdev = SCpnt->device;
++	FAS216_Info *info = (FAS216_Info *)sdev->host->hostdata;
+ 	unsigned long flags;
+-	int i, res = FAILED, target = SCpnt->device->id;
++	int i, res = FAILED, target = sdev->id;
+ 
+ 	fas216_log(info, LOG_ERROR, "device reset for target %d", target);
+ 
+@@ -2494,7 +2500,7 @@ int fas216_eh_device_reset(struct scsi_cmnd *SCpnt)
+ 		 * and we need a bus reset.
+ 		 */
+ 		if (info->SCpnt && !info->scsi.disconnectable &&
+-		    info->SCpnt->device->id == SCpnt->device->id)
++		    info->SCpnt->device->id == sdev->id)
+ 			break;
+ 
+ 		/*
+@@ -2512,14 +2518,7 @@ int fas216_eh_device_reset(struct scsi_cmnd *SCpnt)
+ 		for (i = 0; i < 8; i++)
+ 			clear_bit(target * 8 + i, info->busyluns);
+ 
+-		/*
+-		 * Hijack this SCSI command structure to send
+-		 * a bus device reset message to this device.
+-		 */
+-		SCpnt->host_scribble = (void *)fas216_devicereset_done;
+-
+ 		info->rst_dev_status = 0;
+-		info->rstSCpnt = SCpnt;
+ 
+ 		if (info->scsi.phase == PHASE_IDLE)
+ 			fas216_kick(info);
 -- 
 2.35.3
 
