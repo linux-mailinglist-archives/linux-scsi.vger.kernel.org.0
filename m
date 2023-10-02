@@ -2,53 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE917B577D
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Oct 2023 18:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD457B5750
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Oct 2023 18:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238202AbjJBPn6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Oct 2023 11:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41118 "EHLO
+        id S238210AbjJBPoY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Oct 2023 11:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238175AbjJBPnu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Oct 2023 11:43:50 -0400
+        with ESMTP id S238206AbjJBPoC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Oct 2023 11:44:02 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2C7D7
-        for <linux-scsi@vger.kernel.org>; Mon,  2 Oct 2023 08:43:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361D5B8
+        for <linux-scsi@vger.kernel.org>; Mon,  2 Oct 2023 08:43:49 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id A60F621870;
+        by smtp-out1.suse.de (Postfix) with ESMTP id B68D921871;
         Mon,  2 Oct 2023 15:43:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1696261423; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BNFiTRwCLOfEBd8DglHhf68eErrpTTR27L3zs1xBk1g=;
-        b=ybGJjXSmOqG9XhIn9E6LjNKWNPyxS+NJM8qDfeGyOCDNXKP2w5xFdqibr3iP6IeDrmjFAV
-        33A+QB1D6Jm6h2YMzjsYDDTnAAfEcR28FobRdPcEGHKstIN5fOhZm8575WT+ZoXGg/puLz
-        Dc/OhgspEnGS1go0ffHv/FmUkuZAA7I=
+        bh=Q0UUnKa+wq1IlAEu599ybvzy2zilPAiq8xY/HKBbqm8=;
+        b=W7fuSdQiWZ0DV4xsz1LnPnfcoAI7Wy5IB4tQsbMjkttTbE1cOB7slmNQNpnWvM8hIbmQ2f
+        HJLB6Og48tSrEltUKCUBuyqCpKAjcHtyIOodzNVTpQ+ypYqwotWV33datmAbBfPjnNF2Hc
+        1zXS0XKaopQkTRJzpQZhQeTzjyxYzbI=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1696261423;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BNFiTRwCLOfEBd8DglHhf68eErrpTTR27L3zs1xBk1g=;
-        b=UnbRsjgiJd2hMNFFrbFabNk1e4yxNZqficFrdsda0Y/A66nz3yuaAsecs/QhRHjrWyezqr
-        k8mdlHcoQUFXttCA==
+        bh=Q0UUnKa+wq1IlAEu599ybvzy2zilPAiq8xY/HKBbqm8=;
+        b=oOOGxBxmsjfA+RD8NrR+nU2nkEV/ehMPAPPDpve/VyJzmKdHtEgbh6pYARdB4NL6mw8lOj
+        h98K9qeXzbyXCACA==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 84E682C15B;
+        by relay2.suse.de (Postfix) with ESMTP id 8C7482C15C;
         Mon,  2 Oct 2023 15:43:43 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 9B94751E754D; Mon,  2 Oct 2023 17:43:43 +0200 (CEST)
+        id A409A51E754F; Mon,  2 Oct 2023 17:43:43 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Hannes Reinecke <hare@suse.de>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Subject: [PATCH 11/18] megaraid: pass in NULL scb for host reset
-Date:   Mon,  2 Oct 2023 17:43:21 +0200
-Message-Id: <20231002154328.43718-12-hare@suse.de>
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+Subject: [PATCH 12/18] ips: Do not try to abort command from host reset
+Date:   Mon,  2 Oct 2023 17:43:22 +0200
+Message-Id: <20231002154328.43718-13-hare@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20231002154328.43718-1-hare@suse.de>
 References: <20231002154328.43718-1-hare@suse.de>
@@ -63,96 +64,55 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When calling a host reset we shouldn't rely on the command triggering
-the reset, so allow megaraid_abort_and_reset() to be called with a
-NULL scb.
-And drop the pointless 'bus_reset' and 'target_reset' handlers, which
-just call the same function as host_reset.
+The code for aborting an outstanding command is a copy of the
+functionality from command abort. As we already have called this
+function once we reach host reset there's no point in trying to
+do so again.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
 ---
- drivers/scsi/megaraid.c | 42 ++++++++++++++++-------------------------
- 1 file changed, 16 insertions(+), 26 deletions(-)
+ drivers/scsi/ips.c | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
-diff --git a/drivers/scsi/megaraid.c b/drivers/scsi/megaraid.c
-index e92f1a73cc9b..329c3da88416 100644
---- a/drivers/scsi/megaraid.c
-+++ b/drivers/scsi/megaraid.c
-@@ -1898,7 +1898,7 @@ megaraid_reset(struct scsi_cmnd *cmd)
+diff --git a/drivers/scsi/ips.c b/drivers/scsi/ips.c
+index bb206509265e..10cf5775a939 100644
+--- a/drivers/scsi/ips.c
++++ b/drivers/scsi/ips.c
+@@ -835,7 +835,6 @@ static int __ips_eh_reset(struct scsi_cmnd *SC)
+ 	int i;
+ 	ips_ha_t *ha;
+ 	ips_scb_t *scb;
+-	ips_copp_wait_item_t *item;
  
- 	spin_lock_irq(&adapter->lock);
+ 	METHOD_TRACE("ips_eh_reset", 1);
  
--	rval =  megaraid_abort_and_reset(adapter, cmd, SCB_RESET);
-+	rval =  megaraid_abort_and_reset(adapter, NULL, SCB_RESET);
+@@ -860,23 +859,6 @@ static int __ips_eh_reset(struct scsi_cmnd *SC)
+ 	if (!ha->active)
+ 		return (FAILED);
  
- 	/*
- 	 * This is required here to complete any completed requests
-@@ -1937,7 +1937,7 @@ megaraid_abort_and_reset(adapter_t *adapter, struct scsi_cmnd *cmd, int aor)
- 
- 		scb = list_entry(pos, scb_t, list);
- 
--		if (scb->cmd == cmd) { /* Found command */
-+		if (!cmd || scb->cmd == cmd) { /* Found command */
- 
- 			scb->state |= aor;
- 
-@@ -1956,31 +1956,23 @@ megaraid_abort_and_reset(adapter_t *adapter, struct scsi_cmnd *cmd, int aor)
- 
- 				return FAILED;
- 			}
--			else {
+-	/* See if the command is on the copp queue */
+-	item = ha->copp_waitlist.head;
+-	while ((item) && (item->scsi_cmd != SC))
+-		item = item->next;
 -
--				/*
--				 * Not yet issued! Remove from the pending
--				 * list
--				 */
--				dev_warn(&adapter->dev->dev,
--					"%s-[%x], driver owner\n",
--					(aor==SCB_ABORT) ? "ABORTING":"RESET",
--					scb->idx);
+-	if (item) {
+-		/* Found it */
+-		ips_removeq_copp(&ha->copp_waitlist, item);
+-		return (SUCCESS);
+-	}
 -
--				mega_free_scb(adapter, scb);
+-	/* See if the command is on the wait queue */
+-	if (ips_removeq_wait(&ha->scb_waitlist, SC)) {
+-		/* command not sent yet */
+-		return (SUCCESS);
+-	}
 -
--				if( aor == SCB_ABORT ) {
--					cmd->result = (DID_ABORT << 16);
--				}
--				else {
--					cmd->result = (DID_RESET << 16);
--				}
-+			/*
-+			 * Not yet issued! Remove from the pending
-+			 * list
-+			 */
-+			dev_warn(&adapter->dev->dev,
-+				 "%s-[%x], driver owner\n",
-+				 (cmd) ? "ABORTING":"RESET",
-+				 scb->idx);
-+			mega_free_scb(adapter, scb);
- 
-+			if (cmd) {
-+				cmd->result = (DID_ABORT << 16);
- 				list_add_tail(SCSI_LIST(cmd),
--						&adapter->completed_list);
--
--				return SUCCESS;
-+					      &adapter->completed_list);
- 			}
-+
-+			return SUCCESS;
- 		}
- 	}
- 
-@@ -4114,8 +4106,6 @@ static const struct scsi_host_template megaraid_template = {
- 	.sg_tablesize			= MAX_SGLIST,
- 	.cmd_per_lun			= DEF_CMD_PER_LUN,
- 	.eh_abort_handler		= megaraid_abort,
--	.eh_device_reset_handler	= megaraid_reset,
--	.eh_bus_reset_handler		= megaraid_reset,
- 	.eh_host_reset_handler		= megaraid_reset,
- 	.no_write_same			= 1,
- 	.cmd_size			= sizeof(struct megaraid_cmd_priv),
+ 	/* An explanation for the casual observer:                              */
+ 	/* Part of the function of a RAID controller is automatic error         */
+ 	/* detection and recovery.  As such, the only problem that physically   */
 -- 
 2.35.3
 
