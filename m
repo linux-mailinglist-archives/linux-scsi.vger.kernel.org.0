@@ -2,49 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D20137B57B7
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Oct 2023 18:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C107B5740
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Oct 2023 18:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238036AbjJBPtj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Oct 2023 11:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
+        id S238237AbjJBPtg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Oct 2023 11:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238224AbjJBPtg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Oct 2023 11:49:36 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F311FD9
+        with ESMTP id S238228AbjJBPtf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Oct 2023 11:49:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1760D7
         for <linux-scsi@vger.kernel.org>; Mon,  2 Oct 2023 08:49:31 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id AFF0C2185F;
+        by smtp-out2.suse.de (Postfix) with ESMTP id B262D1F37C;
         Mon,  2 Oct 2023 15:49:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1696261770; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=KXsDW4bHzz48+4x7pZWIdVLveXvjFzWFCS2CRNPPqBw=;
-        b=n6Q06WewQrfzKKLVB18lItckeeRN1qM+IprBoyJSreTFVqlcA//tAZBamkDCzmnhjJZWnl
-        LCmMUtwx4NXSs7oQNmBz7+4wTJCGivC9Ris5tQ4k35eM1YRnIVNnbd7HV/xe4IeGBIfi55
-        0o45iU0mOM7qQ6WtnLB9ufNXpTLbWOk=
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h+pTSru1/5Zskxjj1gROaT0Wm7ozGHCsG2zuQ90NTRM=;
+        b=aPLCWGGPb3+4abun/F3Fa6URjjVt04wKfulhmex3LAnjw3uKU6PYKAMTVs2NZspw3i56BS
+        OQSeuq/X9n3Hw9q72DeOYs1gMJ9OY7yv/teXpBRLX7svQ8wr023OjX2B7Ol1M9UqBvV6gx
+        8x1cpToO1ElNmlFpZNflFFfl8qgug70=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1696261770;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=KXsDW4bHzz48+4x7pZWIdVLveXvjFzWFCS2CRNPPqBw=;
-        b=NYE5ghuTuu5mH+l2GwiUkGnvDUtxFYoqJGaV56TIwmnQpL0Mbs740UvkYpKpy200kLVQA6
-        Mura2PgliJ6sCvBA==
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h+pTSru1/5Zskxjj1gROaT0Wm7ozGHCsG2zuQ90NTRM=;
+        b=co9D6p6rYXybzpZaWyb5y3tdYOAmgceT5UCqO+aAJ/vOL+B+17G8bSUCsKh8QWoP8W1wCv
+        fZbjPjm7BFyQhtCw==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 8E5F62C142;
+        by relay2.suse.de (Postfix) with ESMTP id 9148A2C143;
         Mon,  2 Oct 2023 15:49:30 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 9E4AD51E755D; Mon,  2 Oct 2023 17:49:30 +0200 (CEST)
+        id A3BD351E755F; Mon,  2 Oct 2023 17:49:30 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Hannes Reinecke <hare@suse.de>
-Subject: [PATCHv500/15] scsi: EH rework prep patches, part 2
-Date:   Mon,  2 Oct 2023 17:49:12 +0200
-Message-Id: <20231002154927.68643-1-hare@suse.de>
+        Hannes Reinecke <hare@suse.de>,
+        Benjamin Block <bblock@linux.ibm.com>
+Subject: [PATCH 01/15] zfcp: do not wait for rports to become unblocked after host reset
+Date:   Mon,  2 Oct 2023 17:49:13 +0200
+Message-Id: <20231002154927.68643-2-hare@suse.de>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20231002154927.68643-1-hare@suse.de>
+References: <20231002154927.68643-1-hare@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -56,83 +63,39 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi all,
+zfcp_scsi_eh_host_reset_handler() would call fc_block_rport() to
+wait for all rports to become unblocked after host reset.
+But after host reset it might happen that the port is gone, hence
+fc_block_rport() might fail due to a missing port.
+But that's a perfectly legal operation; on FC remote ports might
+come and go.
+In the same vein FC HBAs are able to deal with ports being temporarily
+blocked, so really there is not point in waiting for all ports
+to become unblocked during host reset.
+Hence remove the call to fc_block_rport() in host reset.
 
-(taking up an old thread:)
-here's the second batch of patches for my EH rework.
-It modifies the reset callbacks for SCSI drivers
-such that the final conversion to drop the 'struct scsi_cmnd'
-argument and use the entity in question (host, bus, target, device)
-as the argument to the SCSI EH callbacks becomes possible.
-The second part covers drivers which require a bit more love.
-In particular the fnic, snic, and csiostor drivers require a tag to
-send TMFs. So to handle that I've modified the patches to call
-scsi_alloc_request() with the NOWAIT flag; that will return a scsi
-command with a valid tag. It might fail (eg when the tagset is full),
-but in these cases it might be better to fall back to host_reset anyway.
+Signed-off-by: Hannes Reinecke <hare@suse.de>
+Cc: Steffen Maier <maier@linux.ibm.com
+Cc: Benjamin Block <bblock@linux.ibm.com>
+---
+ drivers/s390/scsi/zfcp_scsi.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-As usual, comments and reviews are welcome.
-
-Changes to v4:
-- rework snic to use a dedicated tag for host reset
-- rework snic to allocate TMFs on the fly
-- rework fnic to allocate TMFs on the fly
-- rework csiostor to allocat TMFs on the fly
-- drop fc_block_rport() from zfcp host_reset
-- Rebase to latest linus tree
-
-Changes to v3:
-- Move fnic and snic patches to the next patchset
-- Include reviews from Ewan Milne
-
-Changes to v2:
-- Include reviews from John Garry
-- move mpi3mr, zfcp, sym53c8xx_2, and qla1280 patches to the
-  next patchset
-
-Changes to the initial version:
-- Include reviews from Christoph
-- Fixup build robot issues
-
-Hannes Reinecke (15):
-  zfcp: do not wait for rports to become unblocked after host reset
-  bfa: Do not use scsi command to signal TMF status
-  aha152x: look for stuck command when resetting device
-  a1000u2w: do not rely on the command for inia100_device_reset()
-  fas216: Rework device reset to not rely on SCSI command pointer
-  xen-scsifront: add scsi device as argument to scsifront_do_request()
-  xen-scsifront: rework scsifront_action_handler()
-  libiscsi: use cls_session as argument for target and session reset
-  scsi_transport_iscsi: use session as argument for
-    iscsi_block_scsi_eh()
-  snic: reserve tag for TMF
-  snic: allocate device reset command
-  snic: Use scsi_host_busy_iter() to traverse commands
-  fnic: allocate device reset command on the fly
-  fnic: use fc_block_rport() correctly
-  csiostor: use separate TMF command
-
- drivers/s390/scsi/zfcp_scsi.c       |   4 -
- drivers/scsi/a100u2w.c              |  43 +---
- drivers/scsi/aha152x.c              |  26 ++-
- drivers/scsi/arm/fas216.c           |  39 ++--
- drivers/scsi/be2iscsi/be_main.c     |  10 +-
- drivers/scsi/bfa/bfad_im.c          | 112 +++++-----
- drivers/scsi/bfa/bfad_im.h          |   2 +
- drivers/scsi/csiostor/csio_scsi.c   |  72 ++++---
- drivers/scsi/fnic/fnic.h            |   1 -
- drivers/scsi/fnic/fnic_scsi.c       | 115 +++++-----
- drivers/scsi/libiscsi.c             |  21 +-
- drivers/scsi/qla4xxx/ql4_os.c       |  34 +--
- drivers/scsi/scsi_transport_iscsi.c |   6 +-
- drivers/scsi/snic/snic.h            |   2 +-
- drivers/scsi/snic/snic_main.c       |   5 +-
- drivers/scsi/snic/snic_scsi.c       | 319 ++++++++++++----------------
- drivers/scsi/xen-scsifront.c        |  49 +++--
- include/scsi/libiscsi.h             |   2 +-
- include/scsi/scsi_transport_iscsi.h |   2 +-
- 19 files changed, 414 insertions(+), 450 deletions(-)
-
+diff --git a/drivers/s390/scsi/zfcp_scsi.c b/drivers/s390/scsi/zfcp_scsi.c
+index b2a8cd792266..14f929cca271 100644
+--- a/drivers/s390/scsi/zfcp_scsi.c
++++ b/drivers/s390/scsi/zfcp_scsi.c
+@@ -383,10 +383,6 @@ static int zfcp_scsi_eh_host_reset_handler(struct scsi_cmnd *scpnt)
+ 	}
+ 	zfcp_erp_adapter_reopen(adapter, 0, "schrh_1");
+ 	zfcp_erp_wait(adapter);
+-	fc_ret = fc_block_scsi_eh(scpnt);
+-	if (fc_ret)
+-		ret = fc_ret;
+-
+ 	zfcp_dbf_scsi_eh("schrh_r", adapter, ~0, ret);
+ 	return ret;
+ }
 -- 
 2.35.3
 
