@@ -2,53 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A645C7B5722
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Oct 2023 18:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 072957B5765
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Oct 2023 18:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238213AbjJBPoI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Oct 2023 11:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
+        id S238186AbjJBPoL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Oct 2023 11:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238179AbjJBPnw (ORCPT
+        with ESMTP id S238189AbjJBPnw (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Oct 2023 11:43:52 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446F0BD
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E3DC6
         for <linux-scsi@vger.kernel.org>; Mon,  2 Oct 2023 08:43:49 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id C608C1F86A;
+        by smtp-out2.suse.de (Postfix) with ESMTP id CE2321F86B;
         Mon,  2 Oct 2023 15:43:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1696261423; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xskjwynT95EH6gax9fj/3ykbCeIbEUTsdja11nrUKg4=;
-        b=EU9bpE2YBVNTl0x0xSghjE+A8LUoSxdKbzr2bdT/wFyXkBrCeo0yUWGNP+HR//p9gBF0/l
-        Jg6AAp4F/hFZo1NugF7l8WGlWS/plmh7c9BnSdxXT1Ng0b0FYylvmcsaXN9RI62MpFkJvX
-        EDUA/ey4k9X1NTf5HSWUBGIQu4XxT58=
+        bh=A/TDhizFlEl7tYMAYxsc1tBELdRyeYcc8GM4wTm1sSg=;
+        b=oUjgFRCKjGICOlgZq5M9dlThipW1JXxswZJEj+BPFVjoaZJ9wxSDV/cQjhOt2z5nGpSdZn
+        5IS/P3UKY18mRsGyeDg/eEL+nEsK/aNsfok0a7bCHaQcAJT9OdQXtN+YFs7659VCLUJrWx
+        nvf3HqPOCggsDVvzCctf8q7JWIOTiDo=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1696261423;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xskjwynT95EH6gax9fj/3ykbCeIbEUTsdja11nrUKg4=;
-        b=zPy2/pF2Wx4QqsdKhA213ZNpoErCgl927gvJq92HdwraG72z0UvvZrftBXUmzbsmyDoV0m
-        LSUxhNUfXBYK8NCw==
+        bh=A/TDhizFlEl7tYMAYxsc1tBELdRyeYcc8GM4wTm1sSg=;
+        b=+Fufbobdgnn/2aLECPWnADA/ziiRxlATsVDY917YgbQO92g5BVK6r9Q5hIAjZ94mCOpdIr
+        omLWZRYcrFxsQnDQ==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id A5E892C161;
+        by relay2.suse.de (Postfix) with ESMTP id ADBDF2C162;
         Mon,  2 Oct 2023 15:43:43 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id BD5A751E7555; Mon,  2 Oct 2023 17:43:43 +0200 (CEST)
+        id C56ED51E7557; Mon,  2 Oct 2023 17:43:43 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Hannes Reinecke <hare@suse.de>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Subject: [PATCH 15/18] qla1280: separate out host reset function from qla1280_error_action()
-Date:   Mon,  2 Oct 2023 17:43:25 +0200
-Message-Id: <20231002154328.43718-16-hare@suse.de>
+        Hannes Reinecke <hare@suse.de>
+Subject: [PATCH 16/18] pmcraid: Select device in pmcraid_eh_bus_reset_handler()
+Date:   Mon,  2 Oct 2023 17:43:26 +0200
+Message-Id: <20231002154328.43718-17-hare@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20231002154328.43718-1-hare@suse.de>
 References: <20231002154328.43718-1-hare@suse.de>
@@ -63,84 +62,102 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There's not much in common between host reset and all other error
-handlers, so use a separate function here.
+The reset code requires a device to be selected, but we shouldn't
+rely on the command to provide a device for us. So select the first
+device on the bus when sending down a bus reset.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 ---
- drivers/scsi/qla1280.c | 42 ++++++++++++++++++++++--------------------
- 1 file changed, 22 insertions(+), 20 deletions(-)
+ drivers/scsi/pmcraid.c | 46 ++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 38 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/scsi/qla1280.c b/drivers/scsi/qla1280.c
-index 6e5e89aaa283..27bce80262c2 100644
---- a/drivers/scsi/qla1280.c
-+++ b/drivers/scsi/qla1280.c
-@@ -716,7 +716,6 @@ enum action {
- 	ABORT_COMMAND,
- 	DEVICE_RESET,
- 	BUS_RESET,
--	ADAPTER_RESET,
- };
- 
- 
-@@ -898,22 +897,9 @@ qla1280_error_action(struct scsi_cmnd *cmd, enum action action)
- 		}
- 		break;
- 
--	case ADAPTER_RESET:
- 	default:
--		if (qla1280_verbose) {
--			printk(KERN_INFO
--			       "scsi(%ld): Issued ADAPTER RESET\n",
--			       ha->host_no);
--			printk(KERN_INFO "scsi(%ld): I/O processing will "
--			       "continue automatically\n", ha->host_no);
--		}
--		ha->flags.reset_active = 1;
--
--		if (qla1280_abort_isp(ha) != 0) {	/* it's dead */
--			result = FAILED;
--		}
--
--		ha->flags.reset_active = 0;
-+		dprintk(1, "RESET invalid action %d\n", action);
-+		return FAILED;
- 	}
- 
- 	/*
-@@ -1011,11 +997,27 @@ qla1280_eh_bus_reset(struct scsi_cmnd *cmd)
- static int
- qla1280_eh_adapter_reset(struct scsi_cmnd *cmd)
+diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
+index 50dc30051f22..d7a331255e71 100644
+--- a/drivers/scsi/pmcraid.c
++++ b/drivers/scsi/pmcraid.c
+@@ -2691,7 +2691,7 @@ static int pmcraid_error_handler(struct pmcraid_cmd *cmd)
+  *	SUCCESS / FAILED
+  */
+ static int pmcraid_reset_device(
+-	struct scsi_cmnd *scsi_cmd,
++	struct scsi_device *scsi_dev,
+ 	unsigned long timeout,
+ 	u8 modifier)
  {
--	int rc;
-+	int rc = SUCCESS;
-+	struct Scsi_Host *shost = cmd->device->host;
-+	struct scsi_qla_host *ha = (struct scsi_qla_host *)shost->hostdata;
+@@ -2703,11 +2703,11 @@ static int pmcraid_reset_device(
+ 	u32 ioasc;
  
--	spin_lock_irq(cmd->device->host->host_lock);
--	rc = qla1280_error_action(cmd, ADAPTER_RESET);
--	spin_unlock_irq(cmd->device->host->host_lock);
-+	spin_lock_irq(shost->host_lock);
-+	if (qla1280_verbose) {
-+		printk(KERN_INFO
-+		       "scsi(%ld): Issued ADAPTER RESET\n",
-+		       ha->host_no);
-+		printk(KERN_INFO "scsi(%ld): I/O processing will "
-+		       "continue automatically\n", ha->host_no);
-+	}
-+	ha->flags.reset_active = 1;
-+
-+	if (qla1280_abort_isp(ha) != 0) {	/* it's dead */
-+		rc = FAILED;
-+	}
-+
-+	ha->flags.reset_active = 0;
-+
-+	spin_unlock_irq(shost->host_lock);
+ 	pinstance =
+-		(struct pmcraid_instance *)scsi_cmd->device->host->hostdata;
+-	res = scsi_cmd->device->hostdata;
++		(struct pmcraid_instance *)scsi_dev->host->hostdata;
++	res = scsi_dev->hostdata;
  
- 	return rc;
+ 	if (!res) {
+-		sdev_printk(KERN_ERR, scsi_cmd->device,
++		sdev_printk(KERN_ERR, scsi_dev,
+ 			    "reset_device: NULL resource pointer\n");
+ 		return FAILED;
+ 	}
+@@ -3018,16 +3018,46 @@ static int pmcraid_eh_device_reset_handler(struct scsi_cmnd *scmd)
+ {
+ 	scmd_printk(KERN_INFO, scmd,
+ 		    "resetting device due to an I/O command timeout.\n");
+-	return pmcraid_reset_device(scmd,
++	return pmcraid_reset_device(scmd->device,
+ 				    PMCRAID_INTERNAL_TIMEOUT,
+ 				    RESET_DEVICE_LUN);
+ }
+ 
+ static int pmcraid_eh_bus_reset_handler(struct scsi_cmnd *scmd)
+ {
+-	scmd_printk(KERN_INFO, scmd,
++	struct Scsi_Host *host = scmd->device->host;
++	struct pmcraid_instance *pinstance =
++		(struct pmcraid_instance *)host->hostdata;
++	struct pmcraid_resource_entry *res = NULL;
++	struct pmcraid_resource_entry *temp;
++	struct scsi_device *sdev = NULL;
++	unsigned long lock_flags;
++
++	/*
++	 * The reset device code insists on us passing down
++	 * a device, so grab the first device on the bus.
++	 */
++	spin_lock_irqsave(&pinstance->resource_lock, lock_flags);
++	list_for_each_entry(temp, &pinstance->used_res_q, queue) {
++		if (scmd->device->channel == PMCRAID_VSET_BUS_ID &&
++		    RES_IS_VSET(temp->cfg_entry)) {
++			res = temp;
++			break;
++		} else if (scmd->device->channel == PMCRAID_PHYS_BUS_ID &&
++			   RES_IS_GSCSI(temp->cfg_entry)) {
++			res = temp;
++			break;
++		}
++	}
++	if (res)
++		sdev = res->scsi_dev;
++	spin_unlock_irqrestore(&pinstance->resource_lock, lock_flags);
++	if (!sdev)
++		return FAILED;
++
++	sdev_printk(KERN_INFO, sdev,
+ 		    "Doing bus reset due to an I/O command timeout.\n");
+-	return pmcraid_reset_device(scmd,
++	return pmcraid_reset_device(sdev,
+ 				    PMCRAID_RESET_BUS_TIMEOUT,
+ 				    RESET_DEVICE_BUS);
+ }
+@@ -3036,7 +3066,7 @@ static int pmcraid_eh_target_reset_handler(struct scsi_cmnd *scmd)
+ {
+ 	scmd_printk(KERN_INFO, scmd,
+ 		    "Doing target reset due to an I/O command timeout.\n");
+-	return pmcraid_reset_device(scmd,
++	return pmcraid_reset_device(scmd->device,
+ 				    PMCRAID_INTERNAL_TIMEOUT,
+ 				    RESET_DEVICE_TARGET);
  }
 -- 
 2.35.3
