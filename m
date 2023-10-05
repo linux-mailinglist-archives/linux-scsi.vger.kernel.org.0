@@ -2,103 +2,40 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A81507BA40D
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Oct 2023 18:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47757BA84D
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Oct 2023 19:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232660AbjJEQEy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 Oct 2023 12:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
+        id S231593AbjJERos (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 Oct 2023 13:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237503AbjJEQDR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Oct 2023 12:03:17 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847327FF2D
-        for <linux-scsi@vger.kernel.org>; Thu,  5 Oct 2023 08:56:23 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-41517088479so17987831cf.1
-        for <linux-scsi@vger.kernel.org>; Thu, 05 Oct 2023 08:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1696521382; x=1697126182; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uG4Ph64bewzJVU49JFBslaTgnXwJjaVRqO+mHvKsins=;
-        b=eRC9OuOnWgE+5IHji7P/SGFXu3/zgLv+Atumhq0U01RmN6egXpJ+BVP6jLMm9Lk6Gl
-         jYPQ470ltD0wuJrLWDC2wE1WKNlsdahmUjbHSggzwmCZW4vm5CjK/FBaXZTZPX8WGDzl
-         QJJrIp0OXFD3pO5sek6BH5Ge4PKkAeGqRIZm78FU1YRzHwNfymUPySUadOxjsHp4+Pdl
-         M3urN58FveKpLomrfDQLS5ryHM3DCcv3QruRoP6Ibb6mXJhHeh1JMj6C9oATkwA+qcjX
-         BBf4ry4GvLPPbwI6FI4TcIMkLHjk1j7IyuKKn+WHgS5cuQsr/RlVUbRbB/4GYorh55k2
-         mcZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696521382; x=1697126182;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uG4Ph64bewzJVU49JFBslaTgnXwJjaVRqO+mHvKsins=;
-        b=dQ5ApZKyEpJlv0UEahHBwdHlBF7AUZXlVCbHAu0eDvBSdjWbJNcy+hPS1FG5gU0NgE
-         HRTa/O2UJuwPWXM/HQFt8c9XzZrHJUC6cJr67kcLdnsplyMDkX/DmY6aQG8R6VqY4Z57
-         pynM148TJzszwLYLPAPewlo415HgSKNaT3plKYu6bIMBhnQCPOlMKrtT6U29HaPjczgK
-         1T1qEHU+MFnh6qekRH8WaFfYMS0FAufNaWsPGntWeCC9B7spb2vCf1IqqFaSx4BC3dGV
-         TBZntRk4MQYTn3c6Eu8LCnWadHNrpdhADDf1grSR7mlMTlmHz9sCvf4AHTg74Z1Mh2Fi
-         l+OA==
-X-Gm-Message-State: AOJu0YxGYK90bsiAqPhoVrvklRKZ4n+wm+B7pCKgxH48el6QvRZZ/ppG
-        PDGahXICnVJjtQrFs3i+uWcW28yyuqh1B6uAepY=
-X-Google-Smtp-Source: AGHT+IGWO/x3ytUeLf5AFCkVaB7RnAy+uiwHbX9L5BgFMBqhYq0K8pe3itPgQK5suUVO326lMXZwpg==
-X-Received: by 2002:a05:622a:14f:b0:417:fe21:b254 with SMTP id v15-20020a05622a014f00b00417fe21b254mr1562596qtw.18.1696521382422;
-        Thu, 05 Oct 2023 08:56:22 -0700 (PDT)
-Received: from ziepe.ca ([142.68.26.201])
-        by smtp.gmail.com with ESMTPSA id x24-20020ac87ed8000000b004181a3eeff4sm572363qtj.5.2023.10.05.08.56.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 08:56:21 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qoQi0-0045ZW-1M;
-        Thu, 05 Oct 2023 12:56:16 -0300
-Date:   Thu, 5 Oct 2023 12:56:16 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Zhu Yanjun <yanjun.zhu@linux.dev>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Leon Romanovsky <leon@kernel.org>, zyjzyj2000@gmail.com,
-        linux-rdma@vger.kernel.org, matsuda-daisuke@fujitsu.com,
-        shinichiro.kawasaki@wdc.com, linux-scsi@vger.kernel.org,
-        Zhu Yanjun <yanjun.zhu@intel.com>
-Subject: Re: [PATCH 1/1] Revert "RDMA/rxe: Add workqueue support for rxe
- tasks"
-Message-ID: <20231005155616.GR13795@ziepe.ca>
-References: <20230926140656.GM1642130@unreal>
- <d3c05064-a88b-4719-a390-6bf9ae01fba5@acm.org>
- <b7b365e3-dd11-bc66-dace-05478766bf41@gmail.com>
- <2d5e02d7-cf84-4170-b1a3-a65316ac84ee@acm.org>
- <2fcef3c8-808e-8e6a-b23d-9f1b3f98c1f9@linux.dev>
- <552f2342-e800-43bc-b859-d73297ce940f@acm.org>
- <20231004183824.GQ13795@ziepe.ca>
- <c0665377-d2be-e4b6-3d25-727ef303d26e@linux.dev>
- <20231005142148.GA970053@ziepe.ca>
- <6a730dad-9d81-46d9-8adc-764d00745b01@acm.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6a730dad-9d81-46d9-8adc-764d00745b01@acm.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        with ESMTP id S231364AbjJERoH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Oct 2023 13:44:07 -0400
+Received: from maputo.btgroup.co.mz (maputo.btgroup.co.mz [41.77.129.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3B77C6
+        for <linux-scsi@vger.kernel.org>; Thu,  5 Oct 2023 10:43:22 -0700 (PDT)
+Received: from [192.168.8.103] ([192.168.0.254])
+ by maputo.btgroup.co.mz (Sun Java System Messaging Server 6.2-3.04 (built Jul
+ 15 2005)) with ESMTPA id <0S2200D44E26R930@maputo.btgroup.co.mz> for
+ linux-scsi@vger.kernel.org; Thu, 05 Oct 2023 18:35:19 +0200 (CAT)
+Date:   Thu, 05 Oct 2023 18:35:20 +0200
+From:   Metro Finance <admin@btgroup.co.mz>
+Subject: Apply For an Affordable Loan
+To:     Recipients <admin@btgroup.co.mz>
+Reply-to: metroloans@consultant.com
+Message-id: <0S2200D4YE2SR930@maputo.btgroup.co.mz>
+MIME-version: 1.0
+Content-type: text/plain; charset=iso-8859-1
+Content-transfer-encoding: 7BIT
+Content-description: Mail message body
+X-Spam-Status: No, score=3.0 required=5.0 tests=BAD_CREDIT,BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Oct 05, 2023 at 07:50:28AM -0700, Bart Van Assche wrote:
-> On 10/5/23 07:21, Jason Gunthorpe wrote:
-> > Which is why it shows there are locking problems in this code.
-> 
-> Hi Jason,
-> 
-> Since the locking problems have not yet been root-caused, do you
-> agree that it is safer to revert patch "RDMA/rxe: Add workqueue
-> support for rxe tasks" rather than trying to fix it?
-
-I don't think that makes the locking problems go away any more that
-using a single threaded work queue?
-
-Jason
+Get a loan from Metro Finance @4% interest rate with no credit checks from R10,000-R10million, to apply Contact/whatsapp: 0838870574, Email; metroloans@consultant.com
