@@ -2,101 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F817B9F5C
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Oct 2023 16:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D877BA00E
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Oct 2023 16:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbjJEOWT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 Oct 2023 10:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
+        id S234064AbjJEOcW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 Oct 2023 10:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233651AbjJEOUS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Oct 2023 10:20:18 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2081e.outbound.protection.outlook.com [IPv6:2a01:111:f403:700c::81e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7216D10F
-        for <linux-scsi@vger.kernel.org>; Wed,  4 Oct 2023 19:56:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AcKqoZhSCt86xrfhL15KDnbOJT/l3kfIb79moeQ1HT2VAW91rAmPgQteRxwQByCh8KdBbSBASeeXdMH2Wmal1D/T0BN2CJHrl0dg+tdv/yunL2/6YuxVje6YbI/hSrurRV3Wr8cNg7o0iCBQxY1FFpnZ7MEWvyVaHmb6WWgX7COE8fyv5PBEFxO+cXy3Bq8g2627kYDVZyoPoPOBgmosGHnSpm2ZjxWyiiIK/BZvo0BTns81SRlJRgxDtm5Tewv4A5kdt0icGZnciYpfscL9VbrS03u+MwdbiX7oT+pmvhrUvVuYNrOnb5SqGtd0KVoQ2Tnq6RR1KmyJ5rxe0USYCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=71ciRhf9qQ3wjDKsqGKqMsP7OuEHk/q4yhAjX7L/Qn4=;
- b=PDWXaY1Iy/EcJgp6AWxh1bs6Eop2Lhy/j6WdaJBtLPqg+uQQEcJ0Mknc/QWvNHkA7gNg2WHNonr2a2FUbvhSh8+kHlkbss4d8gQiA3Zc6pHjiPyo7rmF04OBSzpwnixVoFB3m9WV+oWVHIkVA6v30Mj/nCKwYYffA3IwWzF2iPbwi96RQqwXehFSLvrJAqOMzHbU48eeo0Kd8ecbKkThyVq5Y86NLdBRr/08KxTQW5n4CIyPNN0skX9GZ4sLAaVTGYt5qYLuQHXonyZO056k8HqXALniLq0c8I4wrFwAXqKnnNfHdmwSojdsGmDhJxSTrMR3Fs3E5QxLJZ4Zxdla2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=71ciRhf9qQ3wjDKsqGKqMsP7OuEHk/q4yhAjX7L/Qn4=;
- b=AgWMLQYUq/Kt2gkOnNgWmfTZuMX9deP1Qt/6BAYlkcg6RcrHomwDhetrSnnA4wh/t3+VPmtc3VZwUA+FER0aEA5nH2qwJUcHthB+hMnL0kUgkIUOhal0+uwJfaH5uU2EZ6CNsrOpsasmOknKPkCip4sa7ywA9Cp4tgyJ/44bDQwapBhbOoKh/R/iqV4mPjRE5EWke/a81XvF5JGRjb3LUvYoddLHggHJ/2VnEbaHVEZhLLyFgwNpmdlVmsHjl+ahob3WDnA0JkPO9eVlgA+lAMvcSCPEmLzmXSF0Fr7eV3WpJyDsmQZgu8cG9d7NXDdmOhwkk+4GlmlpkjOXV8Q3QA==
-Received: from TYBP286MB0207.JPNP286.PROD.OUTLOOK.COM (2603:1096:404:802b::15)
- by TYVP286MB3652.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:36d::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.26; Thu, 5 Oct
- 2023 02:55:55 +0000
-Received: from TYBP286MB0207.JPNP286.PROD.OUTLOOK.COM
- ([fe80::376d:6ccf:bbf9:5f6c]) by TYBP286MB0207.JPNP286.PROD.OUTLOOK.COM
- ([fe80::376d:6ccf:bbf9:5f6c%4]) with mapi id 15.20.6863.024; Thu, 5 Oct 2023
- 02:55:55 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-From:   hikingsale@outlook.com
-To:     linux-scsi@vger.kernel.org
-Subject: Re: Fiberglass Insect Screen/Pleated Screen Mesh
-Date:   Thu, 5 Oct 2023 02:55:54 +0000
-X-TMN:  [YHlpAoue0QFR/mfe8DXqODO4PtXc+gLb]
-X-ClientProxiedBy: TYAPR01CA0036.jpnprd01.prod.outlook.com
- (2603:1096:404:28::24) To TYBP286MB0207.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:404:802b::15)
-Message-ID: <TYBP286MB02079B9256CD0FEE16E120A0CDCAA@TYBP286MB0207.JPNP286.PROD.OUTLOOK.COM>
+        with ESMTP id S229598AbjJEObD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Oct 2023 10:31:03 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDFF21A15
+        for <linux-scsi@vger.kernel.org>; Thu,  5 Oct 2023 03:40:10 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-4056ce55e7eso6915625e9.2
+        for <linux-scsi@vger.kernel.org>; Thu, 05 Oct 2023 03:40:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696502409; x=1697107209; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hcpe8rpxiNY6s6GgKaLTLVHfVFyP836KXSYgAp7SqpE=;
+        b=Va24mCbq81CnDzeYTZf01p260MrDwuuBD1o2Ikau00muychZsy0v/kEvg4YKw7itVa
+         ieEbIeKO1XWvVNAUmwGKuNrWt/aLC6CfP2iAsuuqj5kjUhUZunRm6Bt4xfYrdL0za+Yt
+         CO+24muiQ8RPaUjP3ApGNb56LUuo7Fi7xRNEKbv0c9N4MFry5yA0svmWP5cNKBexOn39
+         mULmdXSOjeuM+GgxYOqZtEj8G7EvXKI+RoCRxly2OcuojsfN0Patr4TXoMBg4iHuJwPf
+         kD6p8+DdBJ7PSUh7nekP9ZdqUpNlXbF7rdSI/FjNxBna2aPfW9jUOlVMuuvHr9P50qvo
+         C9XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696502409; x=1697107209;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hcpe8rpxiNY6s6GgKaLTLVHfVFyP836KXSYgAp7SqpE=;
+        b=Yi0f9zq9H9fFH+6hy48yW66PSdyOLoDmF/9dBo5HdOF3GvbZWFG+VGPHrhBGi9azuH
+         3256iKz14MGgOHpWCRoz2nqSi2XHI20ZTh/N29lDlugHq+I7Wel4fl9g3Va2abCM77Xw
+         P0TE7wT82P/KiKtUljlXpX/7CEqbs+YdbCbH/veIsoYnV/Pf5qnnvdkE0W/6OWYE0xMN
+         C9F2dKM/9ANIq0mkGb6Tarzd3hdHwI0h/5iEqrBV6GRU5CMDaibXRIafolp5JVhO+Njm
+         oUvV7SAkZfcnuDfFYu+d3bRaMtIf8R+q64PvEpTXFALmJ1uwOUCxXDRhTFzXgML+p8F9
+         /p8g==
+X-Gm-Message-State: AOJu0YxuajYQ42UlNEjmTw7/uuN4rEjlV3D+B2ToUg87Rqnz4/TnyM85
+        XlYsesWfdIEWc1vGgk97L4KtwVzqybPJWFNMZOk=
+X-Google-Smtp-Source: AGHT+IHkfE301rGoIUoml80of17gfam6SekWJu6NiY5tLgP7T3EWA12tZCbwvLyVJFAlNR8kDe+Wxw==
+X-Received: by 2002:a1c:7914:0:b0:405:37bb:d942 with SMTP id l20-20020a1c7914000000b0040537bbd942mr4906124wme.4.1696502408717;
+        Thu, 05 Oct 2023 03:40:08 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id y6-20020a1c4b06000000b00405588aa40asm1209179wma.24.2023.10.05.03.40.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Oct 2023 03:40:07 -0700 (PDT)
+Date:   Thu, 5 Oct 2023 13:40:05 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev, Wenchao Hao <haowenchao2@huawei.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, louhongxiang@huawei.com,
+        Wenchao Hao <haowenchao2@huawei.com>
+Subject: Re: [PATCH v5 06/10] scsi: scsi_debug: set command's result and
+ sense data if the error is injected
+Message-ID: <752bff1e-91a7-414f-a4d2-cb88fd556ead@kadam.mountain>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYBP286MB0207:EE_|TYVP286MB3652:EE_
-X-MS-Office365-Filtering-Correlation-Id: efef0a68-b912-40b3-741a-08dbc54e9817
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bcLd9JimXjbQb4Qqr3fX+gspBZqDuj+1fhQ2QHb/PvxpW3QvhtSt8ZQWMvzo0twvLYyvGhSUukCEOjbSuXRCJTOUwNPkHOwDfx9WUR8X/QqCMAFcbIHD7SpjOiYuCy2kG1EvOHWns3ccUp6tFUuN6r/zMjgjaHljnPkCr6uqbsfeknRcU1ES3ds/jquG1IliYBsSfqDay+OAsr5cLeMtYSw7+swm7smeCh/WdowYTkK6FKBK7/wCcuFiKDAIA2D3pbZy+vV6TmOVFItl1P7XuGB41G4rUM0ad/QtWU3J5j30TyI5fAl0MpuM+B2XQ5eMI6p4ZgnRBf+2k0Hl45KNss3BnQF+y0UThe9V0wG6/X75jMrcO3uDZLlsGsBnRzSUIUG6TpKBLXdk0BxJKBjau5hXcGRL2Ix4UwA+BgJZMICyn6HKkeNFJkG8IDn8fmu9jEpwczr0Nezn6AxcMAF47PH4v6Dc5iAwHQsmK9CzsCOhBdZknHvtCLpOqt6xrhAOfnvaJ/F5fkUevbm/MWs2Hhkg2zc/4IyUhsrIs8eZ097MmlKxQcYsXRMPiy1OG7nW
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SWRxaTU5dlpWaDJTV0k1ZFFGZTRscnBjSWR4ZjMxaHBoM25PYml1QnRxK0NB?=
- =?utf-8?B?RW9FeklueHB4SjU2NWJRWnZ2OWpwaUx1YW9TWi8raTJGYW9vRnhCdytLYUpH?=
- =?utf-8?B?bnp6Wi9FOGwzdkoyZmc0MW1uZW5RaWcwaGl3TFFKSld0SVVCOTh0SDVyaXkx?=
- =?utf-8?B?cHhDWGNySURnUHV3NHN1cm9KT05DalRKRTNZSDVjYnBJSFByN29jOTdiekRl?=
- =?utf-8?B?VWYyL2RCdEkzbEpLSVcwTWtwdHlHVG1sVDRyYW9QNXJOdTU4dWZPWjlTZklq?=
- =?utf-8?B?NzRoaEtpK0pBOVM4UzA1eXpSQjAyc25XNG4yeW8xVGUwZEV5LzJIbkRpcWxk?=
- =?utf-8?B?SU94b3NxdFRRMG1kOEE1bk02d082NGJ3SnI4KzJBRzBOM1Q1Mnk4YW5sNHp0?=
- =?utf-8?B?MEkwVTZ4N2IwODVkL0p5a21oeDBTMVV4NnhJdDBnQ0orek9TZDVCdG1kdmZl?=
- =?utf-8?B?aEdlOUwwVEd5bXg4eXdHcnlqbmlhcG9QWCtNM2wzKzJYUFdzSi9KUDJYMGZv?=
- =?utf-8?B?a1RsVUl1VThJWktubDEyRmM4d3NTSzFNZndhNmxwVTZmQkJOeVB0QzBiSU10?=
- =?utf-8?B?US85dUxvUUpZY0o5WnVlOUtYY0pReTk1WFU2Uk9CeW14Si92VmRTTkkreGFE?=
- =?utf-8?B?SWNURE5hNm5CeDNBMUp6TmpPTUdaNXFmR1RJTERMeXpYaVIybnZkUkJlNTBC?=
- =?utf-8?B?ZDZLUlUrYU1rd21vL1ZXK00vdG8vTU96MVdBUjhHNFhhUXB4dnBKckRvc212?=
- =?utf-8?B?Vzkyeks1N05XTzA2VjR0ZENlSTZYa04xT28yL2NHNys2Nm1HVEdTMzNFSFoy?=
- =?utf-8?B?STFMV21BYXh1dFJpNnFMeVZIY0hBNmZ3YXdJSGxnZ29keEFDTDFVTGtFcDJ0?=
- =?utf-8?B?dWsvbWVzYmtPT1BETnNnbmlxMnp0ckdKaFgzK0tkaFJPOHFBcTVyMmljN2VO?=
- =?utf-8?B?cHhXQUl3dkpsTkoxVEtrb1BQbDhhOXVGYzM0R2dvN2VBV0dGa2VQS2p3WjVU?=
- =?utf-8?B?UjRLNzNvdFJIamF6Um81Z3d1TWpMZ29Td2oxSmE2WFZjalQzU0RGS2h6NTk5?=
- =?utf-8?B?VUVMeEw1Y295b0piZThOZUdya0lTSnFtR25MSUx0NElHZHVpK1ZwWms4OVRG?=
- =?utf-8?B?NmNNNzhQTkE1NXIrTnhaZkpmZThEWG1DMjFlN01CTFZlbVROaFF3TGp1WDFw?=
- =?utf-8?B?T3ZpeFdlcW9EbjNFL2Fqa2oycFlpRGo3Wm83aUJWajVGdTVxeXpMYUw3Wk1S?=
- =?utf-8?B?QWdZUTFxK0w0YUtoclFkelBxbTN0YzRSYSs2ZTNWeHY0RlRJM2tEemh5RkRj?=
- =?utf-8?B?TmlFYmlBRzd6cDdCK3YzdkdMZkRvSlREa1FRUWFldWx5NVZkU2pEb0VTc0Zh?=
- =?utf-8?B?aUs0V3FmUFBkbFlWM0FKNGlFUXB6VEsxUVhUZFcxVGh6R3VPd2NFNnZqT2pl?=
- =?utf-8?B?MTJNZ1pXbkdHQUxYQlRScVVNVmdtRWJ2VTNuaGtHZlFVUWJaaHZGWFRXUDZV?=
- =?utf-8?B?L0o4REd6QnpIc0dXdndqa2ZLZXQvTXlVbzZBUno1aGVYN2FqYTd5N2gxTVMr?=
- =?utf-8?B?SXlzdUNwNk5XWFAyQUdGaHBIZEdOajNoYTVHalNPZVJFeXBNampaWkU2SEpG?=
- =?utf-8?Q?1rLMihUPl96Z2qdEI+EuCmEvkhOP9yrk1+jplFgAN1qo=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: efef0a68-b912-40b3-741a-08dbc54e9817
-X-MS-Exchange-CrossTenant-AuthSource: TYBP286MB0207.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2023 02:55:55.7017
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYVP286MB3652
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230922092906.2645265-7-haowenchao2@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,16 +75,126 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGVsbG8gbWFuYWdlciwKCkdyZWV0aW5ncyBmcm9tIExpbmRhLCBhIENoaW5lc2UgbWFudWZhY3R1
-cmVyIG9mIG1vc3F1aXRvIG5ldHMgYW5kIHBsZWF0ZWQgbW9zcXVpdG8gbmV0cy4KCldlIGV4cG9y
-dCBsYXJnZSBxdWFudGl0aWVzIHRvIEV1cm9wZWFuIGNvdW50cmllcyBzdWNoIGFzIFNwYWluLCBQ
-b2xhbmQsIEdyZWVjZSwgSXRhbHkgZXRjLgpIZXJlIGFyZSBvdXIgc3RhbmRhcmQgc3BlY2lmaWNh
-dGlvbnM6CjEpIEZpYmVyZ2xhc3MgSW5zZWN0IFNjcmVlbjogZGVuc2l0eTogMTgqMTYvaW5jaCBv
-ciAxNyoxNS9pbmNoLCB3aWR0aDogMS4wLTMuMG0sIGxlbmd0aDogMzBtLTMwMG0vcm9sbDsKMikg
-UGxlYXRlZCBtb3NxdWl0byBuZXRzOiBkZW5zaXR5OiAyMCoxOS9pbmNoLCB3aWR0aDogMS4wLTMu
-MG0sIGxlbmd0aDogMzBtL3BjcywgZm9sZGluZyBoZWlnaHQ6IDE0LTIwbW07CgpQcmljZSBjYW4g
-YmUgb2ZmZXJlZCBpbW1lZGlhdGVseSBhZnRlciByZWNlaXZpbmcgeW91ciByZXBseS4KRG8geW91
-IG5lZWQgYW55IG9mIHRoZW0/CgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpMaW5k
-YSBaaGFvClByb2plY3QgTWFuYWdlcgpFeHBvcnRpbmcgRGVwYXJ0bWVudAoKQWRkcmVzczogQnVp
-bGRpbmcgMTgsIE5vLiA3LCBLYWlUdW8gUm9hZCwgSHVhbmdkYW8gRGlzdHJpY3QsIFFpbmdkYW8s
-IFNoYW5kb25nLCBDaGluYQpNb2JpbGUvV2hhdHNhcHA6ICs4NiAxNTc2MjI4MTA5NQo=
+Hi Wenchao,
+
+kernel test robot noticed the following build warnings:
+
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Wenchao-Hao/scsi-scsi_debug-create-scsi_debug-directory-in-the-debugfs-filesystem/20230922-173226
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20230922092906.2645265-7-haowenchao2%40huawei.com
+patch subject: [PATCH v5 06/10] scsi: scsi_debug: set command's result and sense data if the error is injected
+config: x86_64-randconfig-161-20231003 (https://download.01.org/0day-ci/archive/20231005/202310050209.VOl6gV40-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20231005/202310050209.VOl6gV40-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202310050209.VOl6gV40-lkp@intel.com/
+
+smatch warnings:
+drivers/scsi/scsi_debug.c:7912 scsi_debug_queuecommand() warn: missing error code? 'ret'
+
+vim +/ret +7912 drivers/scsi/scsi_debug.c
+
+fd32119b0deac1 Douglas Gilbert 2016-04-25  7832  static int scsi_debug_queuecommand(struct Scsi_Host *shost,
+fd32119b0deac1 Douglas Gilbert 2016-04-25  7833  				   struct scsi_cmnd *scp)
+c2248fc974df7b Douglas Gilbert 2014-11-24  7834  {
+c2248fc974df7b Douglas Gilbert 2014-11-24  7835  	u8 sdeb_i;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7836  	struct scsi_device *sdp = scp->device;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7837  	const struct opcode_info_t *oip;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7838  	const struct opcode_info_t *r_oip;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7839  	struct sdebug_dev_info *devip;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7840  	u8 *cmd = scp->cmnd;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7841  	int (*r_pfp)(struct scsi_cmnd *, struct sdebug_dev_info *);
+f66b85171a0ebd Martin Wilck    2018-02-14  7842  	int (*pfp)(struct scsi_cmnd *, struct sdebug_dev_info *) = NULL;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7843  	int k, na;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7844  	int errsts = 0;
+ad0c7775e745d2 Douglas Gilbert 2020-08-21  7845  	u64 lun_index = sdp->lun & 0x3FFF;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7846  	u32 flags;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7847  	u16 sa;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7848  	u8 opcode = cmd[0];
+c2248fc974df7b Douglas Gilbert 2014-11-24  7849  	bool has_wlun_rl;
+3a90a63d02b8b7 Douglas Gilbert 2020-07-12  7850  	bool inject_now;
+929aad8ff0578d Wenchao Hao     2023-09-22  7851  	int ret = 0;
+cc36ffafc0f7e6 Wenchao Hao     2023-09-22  7852  	struct sdebug_err_inject err;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7853  
+c2248fc974df7b Douglas Gilbert 2014-11-24  7854  	scsi_set_resid(scp, 0);
+3a90a63d02b8b7 Douglas Gilbert 2020-07-12  7855  	if (sdebug_statistics) {
+c483739430f107 Douglas Gilbert 2016-05-06  7856  		atomic_inc(&sdebug_cmnd_count);
+3a90a63d02b8b7 Douglas Gilbert 2020-07-12  7857  		inject_now = inject_on_this_cmd();
+3a90a63d02b8b7 Douglas Gilbert 2020-07-12  7858  	} else {
+3a90a63d02b8b7 Douglas Gilbert 2020-07-12  7859  		inject_now = false;
+3a90a63d02b8b7 Douglas Gilbert 2020-07-12  7860  	}
+f46eb0e9fc763b Douglas Gilbert 2016-04-25  7861  	if (unlikely(sdebug_verbose &&
+f46eb0e9fc763b Douglas Gilbert 2016-04-25  7862  		     !(SDEBUG_OPT_NO_CDB_NOISE & sdebug_opts))) {
+c2248fc974df7b Douglas Gilbert 2014-11-24  7863  		char b[120];
+c2248fc974df7b Douglas Gilbert 2014-11-24  7864  		int n, len, sb;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7865  
+c2248fc974df7b Douglas Gilbert 2014-11-24  7866  		len = scp->cmd_len;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7867  		sb = (int)sizeof(b);
+c2248fc974df7b Douglas Gilbert 2014-11-24  7868  		if (len > 32)
+c2248fc974df7b Douglas Gilbert 2014-11-24  7869  			strcpy(b, "too long, over 32 bytes");
+c2248fc974df7b Douglas Gilbert 2014-11-24  7870  		else {
+c2248fc974df7b Douglas Gilbert 2014-11-24  7871  			for (k = 0, n = 0; k < len && n < sb; ++k)
+c2248fc974df7b Douglas Gilbert 2014-11-24  7872  				n += scnprintf(b + n, sb - n, "%02x ",
+c2248fc974df7b Douglas Gilbert 2014-11-24  7873  					       (u32)cmd[k]);
+c2248fc974df7b Douglas Gilbert 2014-11-24  7874  		}
+458df78b1c513d Bart Van Assche 2018-01-26  7875  		sdev_printk(KERN_INFO, sdp, "%s: tag=%#x, cmd %s\n", my_name,
+a6e76e6f2c0efd Bart Van Assche 2021-08-09  7876  			    blk_mq_unique_tag(scsi_cmd_to_rq(scp)), b);
+c2248fc974df7b Douglas Gilbert 2014-11-24  7877  	}
+3a90a63d02b8b7 Douglas Gilbert 2020-07-12  7878  	if (unlikely(inject_now && (sdebug_opts & SDEBUG_OPT_HOST_BUSY)))
+7ee6d1b4357ac2 Bart Van Assche 2017-12-07  7879  		return SCSI_MLQUEUE_HOST_BUSY;
+34d55434ba1f39 Tomas Winkler   2015-07-28  7880  	has_wlun_rl = (sdp->lun == SCSI_W_LUN_REPORT_LUNS);
+ad0c7775e745d2 Douglas Gilbert 2020-08-21  7881  	if (unlikely(lun_index >= sdebug_max_luns && !has_wlun_rl))
+f46eb0e9fc763b Douglas Gilbert 2016-04-25  7882  		goto err_out;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7883  
+c2248fc974df7b Douglas Gilbert 2014-11-24  7884  	sdeb_i = opcode_ind_arr[opcode];	/* fully mapped */
+c2248fc974df7b Douglas Gilbert 2014-11-24  7885  	oip = &opcode_info_arr[sdeb_i];		/* safe if table consistent */
+c2248fc974df7b Douglas Gilbert 2014-11-24  7886  	devip = (struct sdebug_dev_info *)sdp->hostdata;
+f46eb0e9fc763b Douglas Gilbert 2016-04-25  7887  	if (unlikely(!devip)) {
+f46eb0e9fc763b Douglas Gilbert 2016-04-25  7888  		devip = find_build_dev_info(sdp);
+c2248fc974df7b Douglas Gilbert 2014-11-24  7889  		if (NULL == devip)
+f46eb0e9fc763b Douglas Gilbert 2016-04-25  7890  			goto err_out;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7891  	}
+3f07ff40cb2457 Wenchao Hao     2023-09-22  7892  
+3f07ff40cb2457 Wenchao Hao     2023-09-22  7893  	if (sdebug_timeout_cmd(scp)) {
+3f07ff40cb2457 Wenchao Hao     2023-09-22  7894  		scmd_printk(KERN_INFO, scp, "timeout command 0x%x\n", opcode);
+3f07ff40cb2457 Wenchao Hao     2023-09-22  7895  		return 0;
+3f07ff40cb2457 Wenchao Hao     2023-09-22  7896  	}
+3f07ff40cb2457 Wenchao Hao     2023-09-22  7897  
+929aad8ff0578d Wenchao Hao     2023-09-22  7898  	ret = sdebug_fail_queue_cmd(scp);
+929aad8ff0578d Wenchao Hao     2023-09-22  7899  	if (ret) {
+929aad8ff0578d Wenchao Hao     2023-09-22  7900  		scmd_printk(KERN_INFO, scp, "fail queue command 0x%x with 0x%x\n",
+929aad8ff0578d Wenchao Hao     2023-09-22  7901  				opcode, ret);
+929aad8ff0578d Wenchao Hao     2023-09-22  7902  		return ret;
+929aad8ff0578d Wenchao Hao     2023-09-22  7903  	}
+929aad8ff0578d Wenchao Hao     2023-09-22  7904  
+cc36ffafc0f7e6 Wenchao Hao     2023-09-22  7905  	if (sdebug_fail_cmd(scp, &ret, &err)) {
+cc36ffafc0f7e6 Wenchao Hao     2023-09-22  7906  		scmd_printk(KERN_INFO, scp,
+cc36ffafc0f7e6 Wenchao Hao     2023-09-22  7907  			"fail command 0x%x with hostbyte=0x%x, "
+cc36ffafc0f7e6 Wenchao Hao     2023-09-22  7908  			"driverbyte=0x%x, statusbyte=0x%x, "
+cc36ffafc0f7e6 Wenchao Hao     2023-09-22  7909  			"sense_key=0x%x, asc=0x%x, asq=0x%x\n",
+cc36ffafc0f7e6 Wenchao Hao     2023-09-22  7910  			opcode, err.host_byte, err.driver_byte,
+cc36ffafc0f7e6 Wenchao Hao     2023-09-22  7911  			err.status_byte, err.sense_key, err.asc, err.asq);
+cc36ffafc0f7e6 Wenchao Hao     2023-09-22 @7912  		return ret;
+
+This returns zero but it should be an error code.
+
+cc36ffafc0f7e6 Wenchao Hao     2023-09-22  7913  	}
+cc36ffafc0f7e6 Wenchao Hao     2023-09-22  7914  
+3a90a63d02b8b7 Douglas Gilbert 2020-07-12  7915  	if (unlikely(inject_now && !atomic_read(&sdeb_inject_pending)))
+3a90a63d02b8b7 Douglas Gilbert 2020-07-12  7916  		atomic_set(&sdeb_inject_pending, 1);
+3a90a63d02b8b7 Douglas Gilbert 2020-07-12  7917  
+c2248fc974df7b Douglas Gilbert 2014-11-24  7918  	na = oip->num_attached;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7919  	r_pfp = oip->pfp;
+c2248fc974df7b Douglas Gilbert 2014-11-24  7920  	if (na) {	/* multiple commands with this opcode */
+c2248fc974df7b Douglas Gilbert 2014-11-24  7921  		r_oip = oip;
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
