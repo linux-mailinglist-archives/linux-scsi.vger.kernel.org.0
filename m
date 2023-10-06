@@ -2,192 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0547BC0EB
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Oct 2023 23:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A6C7BC220
+	for <lists+linux-scsi@lfdr.de>; Sat,  7 Oct 2023 00:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233639AbjJFVEj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 6 Oct 2023 17:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
+        id S233736AbjJFWPw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Fri, 6 Oct 2023 18:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233643AbjJFVEi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Oct 2023 17:04:38 -0400
-Received: from mp-relay-01.fibernetics.ca (mp-relay-01.fibernetics.ca [208.85.217.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF94EA;
-        Fri,  6 Oct 2023 14:04:36 -0700 (PDT)
-Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mp-relay-01.fibernetics.ca (Postfix) with ESMTPS id A30AAE179C;
-        Fri,  6 Oct 2023 21:04:34 +0000 (UTC)
-Received: from localhost (mailpool-mx-02.fibernetics.ca [208.85.217.141])
-        by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id 89C6C60BBD;
-        Fri,  6 Oct 2023 21:04:34 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: -0.199
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
-        by localhost (mail-mx-02.fibernetics.ca [208.85.217.141]) (amavisd-new, port 10024)
-        with ESMTP id zZQtcZxEEU-n; Fri,  6 Oct 2023 21:04:33 +0000 (UTC)
-Received: from [192.168.2.19] (lnsm3-torontoxn-142-116-140-195.internet.virginmobile.ca [142.116.140.195])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dgilbert@interlog.com)
-        by mail.ca.inter.net (Postfix) with ESMTPSA id CB7066091D;
-        Fri,  6 Oct 2023 21:04:32 +0000 (UTC)
-Message-ID: <fd68ba92-7736-4924-945e-4bb238a02860@interlog.com>
-Date:   Fri, 6 Oct 2023 17:04:30 -0400
+        with ESMTP id S233397AbjJFWPu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Oct 2023 18:15:50 -0400
+X-Greylist: delayed 10089 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 Oct 2023 15:15:48 PDT
+Received: from dentika.net (unknown [202.72.206.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500CABD;
+        Fri,  6 Oct 2023 15:15:48 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by dentika.net (Postfix) with ESMTP id 859BC4A2A63;
+        Sat,  7 Oct 2023 00:38:16 +0700 (WIB)
+Received: from dentika.net ([127.0.0.1])
+ by localhost (dentika.net [127.0.0.1]) (amavis, port 10032) with ESMTP
+ id Xh8AcrSVJoiV; Sat,  7 Oct 2023 00:38:13 +0700 (WIB)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by dentika.net (Postfix) with ESMTP id 741574A1532;
+        Sat,  7 Oct 2023 00:26:24 +0700 (WIB)
+X-Virus-Scanned: amavis at 
+Received: from dentika.net ([127.0.0.1])
+ by localhost (dentika.net [127.0.0.1]) (amavis, port 10026) with ESMTP
+ id 4zOZR5LWt33C; Sat,  7 Oct 2023 00:26:24 +0700 (WIB)
+Received: from [185.225.73.120] (wifi.dentika.net [10.0.0.1])
+        by dentika.net (Postfix) with ESMTP id 17A164A3BD4;
+        Sat,  7 Oct 2023 00:14:51 +0700 (WIB)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH v5 08/10] scsi: scsi_debug: Add new error injection reset
- lun failed
-To:     Wenchao Hao <haowenchao2@huawei.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, louhongxiang@huawei.com
-References: <20230922092906.2645265-1-haowenchao2@huawei.com>
- <20230922092906.2645265-9-haowenchao2@huawei.com>
-Content-Language: en-CA
-From:   Douglas Gilbert <dgilbert@interlog.com>
-In-Reply-To: <20230922092906.2645265-9-haowenchao2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: business loan and investment are you interested? 
+To:     Recipients <support@xmails.me>
+From:   "Mr. mohd" <support@xmails.me>
+Date:   Fri, 06 Oct 2023 10:14:45 -0700
+Reply-To: a69412571@gmail.com
+Message-Id: <20231006171452.17A164A3BD4@dentika.net>
+X-Spam-Status: Yes, score=6.3 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,
+        RCVD_IN_VALIDITY_RPBL,RDNS_NONE,SPF_HELO_PASS,T_SPF_PERMERROR
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [202.72.206.114 listed in bl.score.senderscore.com]
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  0.0 T_SPF_PERMERROR SPF: test of record failed (permerror)
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [a69412571[at]gmail.com]
+        *  1.0 HK_NAME_MR_MRS No description available.
+        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2023-09-22 05:29, Wenchao Hao wrote:
-> Add error injection type 3 to make scsi_debug_device_reset() return FAILED.
-> Fail abort command foramt:
 
-s/foramt/format/
+Dear
+My name is Mohamed Abdul I have the capacity to inject a considerable
+amount of capital in any viable project 
+1,cell phone number 
+2,full name
 
-> 
->    +--------+------+-------------------------------------------------------+
->    | Column | Type | Description                                           |
->    +--------+------+-------------------------------------------------------+
->    |   1    |  u8  | Error type, fixed to 0x4                              |
->    +--------+------+-------------------------------------------------------+
->    |   2    |  s32 | Error count                                           |
->    |        |      |  0: this rule will be ignored                         |
->    |        |      |  positive: the rule will always take effect           |
->    |        |      |  negative: the rule takes effect n times where -n is  |
->    |        |      |            the value given. Ignored after n times     |
->    +--------+------+-------------------------------------------------------+
->    |   3    |  x8  | SCSI command opcode, 0xff for all commands            |
->    +--------+------+-------------------------------------------------------+
-> 
-> Examples:
->      error=/sys/kernel/debug/scsi_debug/0:0:0:1/error
->      echo "0 -10 0x12" > ${error}
 
-These examples are misleading. Same with the one in patch 7/10 . The example
-should be showing an invocation that exercises _this_ patch. So the first
-byte of the echo should be 4 not the 0 shown above.
-
-Doug Gilbert
-
-> will make the device return FAILED when try to reset lun with inquiry
-> command 10 times.
->      error=/sys/kernel/debug/scsi_debug/0:0:0:1/error
->      echo "0 -10 0xff" > ${error}
-> will make the device return FAILED when try to reset lun 10 times.
-> 
-> Usually we do not care about what command it is when trying to perform
-> reset LUN, so 0xff could be applied.
-> 
-> Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
-> ---
->   drivers/scsi/scsi_debug.c | 39 +++++++++++++++++++++++++++++++++++++++
->   1 file changed, 39 insertions(+)
-> 
-> diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-> index 8a16cb9642a6..db8ab6cad078 100644
-> --- a/drivers/scsi/scsi_debug.c
-> +++ b/drivers/scsi/scsi_debug.c
-> @@ -295,6 +295,8 @@ enum sdebug_err_type {
->   					/* with errors set in scsi_cmnd */
->   	ERR_ABORT_CMD_FAILED	= 3,	/* control return FAILED from */
->   					/* scsi_debug_abort() */
-> +	ERR_LUN_RESET_FAILED	= 4,	/* control return FAILED from */
-> +					/* scsi_debug_device_reseLUN_RESET_FAILEDt() */
->   };
->   
->   struct sdebug_err_inject {
-> @@ -973,6 +975,7 @@ static int sdebug_error_show(struct seq_file *m, void *p)
->   		switch (err->type) {
->   		case ERR_TMOUT_CMD:
->   		case ERR_ABORT_CMD_FAILED:
-> +		case ERR_LUN_RESET_FAILED:
->   			seq_printf(m, "%d\t%d\t0x%x\n", err->type, err->cnt,
->   				err->cmd);
->   		break;
-> @@ -1035,6 +1038,7 @@ static ssize_t sdebug_error_write(struct file *file, const char __user *ubuf,
->   	switch (inject_type) {
->   	case ERR_TMOUT_CMD:
->   	case ERR_ABORT_CMD_FAILED:
-> +	case ERR_LUN_RESET_FAILED:
->   		if (sscanf(buf, "%d %d %hhx", &inject->type, &inject->cnt,
->   			   &inject->cmd) != 3)
->   			goto out_error;
-> @@ -5578,10 +5582,40 @@ static void scsi_debug_stop_all_queued(struct scsi_device *sdp)
->   				scsi_debug_stop_all_queued_iter, sdp);
->   }
->   
-> +static int sdebug_fail_lun_reset(struct scsi_cmnd *cmnd)
-> +{
-> +	struct scsi_device *sdp = cmnd->device;
-> +	struct sdebug_dev_info *devip = (struct sdebug_dev_info *)sdp->hostdata;
-> +	struct sdebug_err_inject *err;
-> +	unsigned char *cmd = cmnd->cmnd;
-> +	int ret = 0;
-> +
-> +	if (devip == NULL)
-> +		return 0;
-> +
-> +	rcu_read_lock();
-> +	list_for_each_entry_rcu(err, &devip->inject_err_list, list) {
-> +		if (err->type == ERR_LUN_RESET_FAILED &&
-> +		    (err->cmd == cmd[0] || err->cmd == 0xff)) {
-> +			ret = !!err->cnt;
-> +			if (err->cnt < 0)
-> +				err->cnt++;
-> +
-> +			rcu_read_unlock();
-> +			return ret;
-> +		}
-> +	}
-> +	rcu_read_unlock();
-> +
-> +	return 0;
-> +}
-> +
->   static int scsi_debug_device_reset(struct scsi_cmnd *SCpnt)
->   {
->   	struct scsi_device *sdp = SCpnt->device;
->   	struct sdebug_dev_info *devip = sdp->hostdata;
-> +	u8 *cmd = SCpnt->cmnd;
-> +	u8 opcode = cmd[0];
->   
->   	++num_dev_resets;
->   
-> @@ -5592,6 +5626,11 @@ static int scsi_debug_device_reset(struct scsi_cmnd *SCpnt)
->   	if (devip)
->   		set_bit(SDEBUG_UA_POR, devip->uas_bm);
->   
-> +	if (sdebug_fail_lun_reset(SCpnt)) {
-> +		scmd_printk(KERN_INFO, SCpnt, "fail lun reset 0x%x\n", opcode);
-> +		return FAILED;
-> +	}
-> +
->   	return SUCCESS;
->   }
->   
-
+yours truly
+Mohamed Abdul Ahmed
