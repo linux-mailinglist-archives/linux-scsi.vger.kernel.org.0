@@ -2,70 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5817BB843
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Oct 2023 14:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20D07BBBAF
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Oct 2023 17:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbjJFMzL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 6 Oct 2023 08:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
+        id S232746AbjJFPYw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 6 Oct 2023 11:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232273AbjJFMzD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Oct 2023 08:55:03 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74223E9;
-        Fri,  6 Oct 2023 05:55:01 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-99bdeae1d0aso399746866b.1;
-        Fri, 06 Oct 2023 05:55:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696596900; x=1697201700; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1hGVnjdGEOumYZe081/NvT5dGB2xwJn4Ju//yjOVJPI=;
-        b=Y9UaCvO4K/mYbFVG5kkGA0sJq+68VnCZ6MF+7oBn0jqraCFUJ30itNjSPHoGIPkrl8
-         Hd/9qEw7iyQ2tDs0+UyRA0AwKjXy/DTqVCiugtxhj+NWcHx1xtJxsC4/+Q5VIf1vNWlj
-         NvXz+wvyQhThApvIjMTSFCwdP1DzGS22N63iFNV+j4zUxxKD5sbQVfogpXhLfVMb2Mqi
-         J1EPgRSqjSOo31NVNDeRVe4w00+kSBL2aNHr1y9VMos/0+zTramYEhx2SyR8bLimAZ18
-         T9I/+2iFT9FZi6e9VvFW7lR2lU7Xz1zWutTP0SG2hJTm8O74A/m3EMdDoI3gDTJWc5X6
-         cTeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696596900; x=1697201700;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1hGVnjdGEOumYZe081/NvT5dGB2xwJn4Ju//yjOVJPI=;
-        b=L7uVi4eOAzhvkzAMooQuW4i5PnYBfWiz3P7fULGDxs5ZO4m951QWCLFhqGnlvGGfyD
-         rf+wU5tirhSQciNcWdCl7BcoMUMIl7FUZGCLGGLA/E+OPAxgxt6MyOR9HZj6EAtu22fk
-         tw2XKa0IqdBkoc9QwvPEDveMcgV9P6kl3d3FNIM3VLXFVwowQ6bW9ANsJwG+Dln98/LX
-         fBWNh5TaP5WIArqA28dDw7AWYhWvpfWQgtPTgOwdSDQKPJPL0GArGdlKldLhSlauLrEy
-         XpNdWPaTN9hJ93Ir0W/xNDqcxxZdhmTqtahAx3PBUfQx9EDZms8gZiZWQV1a0A+aS8c3
-         nEbA==
-X-Gm-Message-State: AOJu0YzYtQrR06udWeh2NdWzMhgRutDAy2xfTTJqxPAVvkMjIZgqVfDB
-        qW5GpRQu/gDP//Iq3Vyn3oL7PMUw8NGunw==
-X-Google-Smtp-Source: AGHT+IGA2SkMIhhjl5o3xK0Cgzq/nu9xewMEnyg1G2kSMo60FMhO8VSwk2kxX++tiRWPSK2sFhQgzA==
-X-Received: by 2002:a17:907:1dd8:b0:9ad:f143:e554 with SMTP id og24-20020a1709071dd800b009adf143e554mr6590860ejc.30.1696596899617;
-        Fri, 06 Oct 2023 05:54:59 -0700 (PDT)
-Received: from sauvignon.fi.muni.cz (laomedon.fi.muni.cz. [147.251.42.107])
-        by smtp.gmail.com with ESMTPSA id p26-20020a1709060dda00b0099bc08862b6sm2894660eji.171.2023.10.06.05.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Oct 2023 05:54:59 -0700 (PDT)
-From:   Milan Broz <gmazyland@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     usb-storage@lists.one-eyed-alien.net, linux-scsi@vger.kernel.org,
-        linux-block@vger.kernel.org, stern@rowland.harvard.edu,
-        oneukum@suse.com, jonathan.derrick@linux.dev,
-        Milan Broz <gmazyland@gmail.com>
-Subject: [RFC PATCH 6/6] usb-storage,uas: Disable security commands (OPAL) for RT9210 chip family
-Date:   Fri,  6 Oct 2023 14:54:45 +0200
-Message-ID: <20231006125445.122380-7-gmazyland@gmail.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231006125445.122380-1-gmazyland@gmail.com>
-References: <20231006125445.122380-1-gmazyland@gmail.com>
+        with ESMTP id S232691AbjJFPYv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Oct 2023 11:24:51 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBD783;
+        Fri,  6 Oct 2023 08:24:50 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A19FC433C7;
+        Fri,  6 Oct 2023 15:24:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696605890;
+        bh=AO05v9JmyrA8bcxdjoiJJRByxIdeqJtv5Ylzy/7Dbyw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=p9vGTePWrtFU5lMs5jv3+Lib2JjCGUs3k+NDvSBNG8z986POaljaM7Gt/FSxlSeOl
+         oBopycTLIiDtMegbrwfmKOrWESSU0/rdc/XkigtN+9hKtfqH4/0Fn+r2tuqhD7je3K
+         /I3WKkhrM5tUbBO+8SF/zE5A7ipeKaTtoLN2iLMMXGnzr+XcoYta7/VGgQRBMbO0tM
+         hlddI2eV60WPR0bFhnP6EwmymZkPXPvM7WpoQi7vdWHwKtXgngsehPddg25WsMS6Jx
+         KR+YmMJRKmfGHVXoXUAH/DSeldgYENKzAE5AE6QngrzQnvTz1rb9iKxqbKe/YLTje3
+         cSqtYehj2qkyQ==
+Message-ID: <53cf6fa8-5325-d9e5-7f89-d97974d53989@kernel.org>
+Date:   Sat, 7 Oct 2023 00:24:45 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v4 2/6] PM / devfreq: Switch to
+ dev_pm_opp_find_freq_{ceil/floor}_indexed() APIs
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org
+References: <20231003111232.42663-1-manivannan.sadhasivam@linaro.org>
+ <20231003111232.42663-3-manivannan.sadhasivam@linaro.org>
+From:   Chanwoo Choi <chanwoo@kernel.org>
+In-Reply-To: <20231003111232.42663-3-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,63 +66,80 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Realtek 9210 family (NVME to USB bridge) adapters always set
-the write-protected bit for the whole drive if an OPAL locking range
-is defined (even if the OPAL locking range just covers part of the disk).
+On 23. 10. 3. 20:12, Manivannan Sadhasivam wrote:
+> Some devfreq consumers like UFS driver need to work with multiple clocks
+> through the OPP framework. For this reason, OPP framework exposes the
+> _indexed() APIs for finding the floor/ceil of the supplied frequency of
+> the indexed clock. So let's use them in the devfreq driver.
+> 
+> Currently, the clock index of 0 is used which works fine for multiple as
+> well as single clock.
+> 
+> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/devfreq/devfreq.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 474d81831ad3..b3a68d5833bd 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -88,7 +88,7 @@ static unsigned long find_available_min_freq(struct devfreq *devfreq)
+>  	struct dev_pm_opp *opp;
+>  	unsigned long min_freq = 0;
+>  
+> -	opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &min_freq);
+> +	opp = dev_pm_opp_find_freq_ceil_indexed(devfreq->dev.parent, &min_freq, 0);
+>  	if (IS_ERR(opp))
+>  		min_freq = 0;
+>  	else
+> @@ -102,7 +102,7 @@ static unsigned long find_available_max_freq(struct devfreq *devfreq)
+>  	struct dev_pm_opp *opp;
+>  	unsigned long max_freq = ULONG_MAX;
+>  
+> -	opp = dev_pm_opp_find_freq_floor(devfreq->dev.parent, &max_freq);
+> +	opp = dev_pm_opp_find_freq_floor_indexed(devfreq->dev.parent, &max_freq, 0);
+>  	if (IS_ERR(opp))
+>  		max_freq = 0;
+>  	else
+> @@ -196,7 +196,7 @@ static int set_freq_table(struct devfreq *devfreq)
+>  		return -ENOMEM;
+>  
+>  	for (i = 0, freq = 0; i < devfreq->max_state; i++, freq++) {
+> -		opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &freq);
+> +		opp = dev_pm_opp_find_freq_ceil_indexed(devfreq->dev.parent, &freq, 0);
+>  		if (IS_ERR(opp)) {
+>  			devm_kfree(devfreq->dev.parent, devfreq->freq_table);
+>  			return PTR_ERR(opp);
+> @@ -2036,18 +2036,18 @@ struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
+>  
+>  	if (flags & DEVFREQ_FLAG_LEAST_UPPER_BOUND) {
+>  		/* The freq is an upper bound. opp should be lower */
+> -		opp = dev_pm_opp_find_freq_floor(dev, freq);
+> +		opp = dev_pm_opp_find_freq_floor_indexed(dev, freq, 0);
+>  
+>  		/* If not available, use the closest opp */
+>  		if (opp == ERR_PTR(-ERANGE))
+> -			opp = dev_pm_opp_find_freq_ceil(dev, freq);
+> +			opp = dev_pm_opp_find_freq_ceil_indexed(dev, freq, 0);
+>  	} else {
+>  		/* The freq is an lower bound. opp should be higher */
+> -		opp = dev_pm_opp_find_freq_ceil(dev, freq);
+> +		opp = dev_pm_opp_find_freq_ceil_indexed(dev, freq, 0);
+>  
+>  		/* If not available, use the closest opp */
+>  		if (opp == ERR_PTR(-ERANGE))
+> -			opp = dev_pm_opp_find_freq_floor(dev, freq);
+> +			opp = dev_pm_opp_find_freq_floor_indexed(dev, freq, 0);
+>  	}
+>  
+>  	return opp;
 
-The only way to recover is PSID reset and physical reconnection of the device.
+The related OPP patch was already merge. So that applied it. Thanks.
 
-This looks like a wrong implementation of OPAL standard (and I will try
-to report it to Realtek as it happens for all firmware versions I have),
-but for now, these adapters are unusable for OPAL.
-
-Signed-off-by: Milan Broz <gmazyland@gmail.com>
----
- drivers/usb/storage/unusual_devs.h | 11 +++++++++++
- drivers/usb/storage/unusual_uas.h  | 11 +++++++++++
- 2 files changed, 22 insertions(+)
-
-diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-index 20dcbccb290b..b7c0df180e5d 100644
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -1476,6 +1476,17 @@ UNUSUAL_DEV( 0x0bc2, 0x3332, 0x0000, 0x9999,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_NO_WP_DETECT ),
- 
-+/*
-+ * Realtek 9210 family set global write-protection flag
-+ * for any OPAL locking range making device unusable
-+ * Reported-by: Milan Broz <gmazyland@gmail.com>
-+ */
-+UNUSUAL_DEV( 0x0bda, 0x9210, 0x0000, 0xffff,
-+		"Realtek",
-+		"",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_OPAL),
-+
- UNUSUAL_DEV(  0x0d49, 0x7310, 0x0000, 0x9999,
- 		"Maxtor",
- 		"USB to SATA",
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index 1f8c9b16a0fb..71ab824bfb32 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -185,3 +185,14 @@ UNUSUAL_DEV(0x4971, 0x8024, 0x0000, 0x9999,
- 		"External HDD",
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_ALWAYS_SYNC),
-+
-+/*
-+ * Realtek 9210 family set global write-protection flag
-+ * for any OPAL locking range making device unusable
-+ * Reported-by: Milan Broz <gmazyland@gmail.com>
-+ */
-+UNUSUAL_DEV(0x0bda, 0x9210, 0x0000, 0xffff,
-+		"Realtek",
-+		"",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_OPAL),
 -- 
-2.42.0
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
