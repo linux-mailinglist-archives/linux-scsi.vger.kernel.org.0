@@ -2,96 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AACEF7BD11B
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Oct 2023 01:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0F47BD16D
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Oct 2023 02:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344913AbjJHXRM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 8 Oct 2023 19:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
+        id S1344597AbjJIAX5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 8 Oct 2023 20:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344437AbjJHXRL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 8 Oct 2023 19:17:11 -0400
-Received: from mp-relay-01.fibernetics.ca (mp-relay-01.fibernetics.ca [208.85.217.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44B69D;
-        Sun,  8 Oct 2023 16:17:10 -0700 (PDT)
-Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mp-relay-01.fibernetics.ca (Postfix) with ESMTPS id DA5F8E1947;
-        Sun,  8 Oct 2023 23:17:09 +0000 (UTC)
-Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
-        by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id C39346091F;
-        Sun,  8 Oct 2023 23:17:09 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: -0.199
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
-Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
-        by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
-        with ESMTP id n9tGbeY3WSBp; Sun,  8 Oct 2023 23:17:09 +0000 (UTC)
-Received: from [192.168.48.17] (host-104-157-209-188.dyn.295.ca [104.157.209.188])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dgilbert@interlog.com)
-        by mail.ca.inter.net (Postfix) with ESMTPSA id B336660455;
-        Sun,  8 Oct 2023 23:17:08 +0000 (UTC)
-Message-ID: <d61e88d3-e1b7-44e0-ba9b-f633be0b5b30@interlog.com>
-Date:   Sun, 8 Oct 2023 19:17:08 -0400
+        with ESMTP id S229845AbjJIAXx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 8 Oct 2023 20:23:53 -0400
+X-Greylist: delayed 5649 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 08 Oct 2023 17:23:50 PDT
+Received: from mx.ucpejv.edu.cu (mail.ucpejv.edu.cu [200.14.49.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 498B0A3;
+        Sun,  8 Oct 2023 17:23:50 -0700 (PDT)
+Received: from mx.ucpejv.edu.cu (localhost.localdomain [127.0.0.1])
+        by mx.ucpejv.edu.cu (mx.ucpejv.edu.cu) with ESMTP id 500B3EEE2B;
+        Sun,  8 Oct 2023 17:46:22 -0400 (CDT)
+Received: from mail.ucpejv.edu.cu (mail.ucpejv.edu.cu [10.68.100.8])
+        by mx.ucpejv.edu.cu (mx.ucpejv.edu.cu) with ESMTPS id 383A5EEE1D;
+        Sun,  8 Oct 2023 17:46:22 -0400 (CDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.ucpejv.edu.cu (Postfix) with ESMTP id 1DFE1704437;
+        Sun,  8 Oct 2023 17:46:22 -0400 (CDT)
+Received: from mail.ucpejv.edu.cu ([127.0.0.1])
+        by localhost (mail.ucpejv.edu.cu [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Exztl3zqKXNR; Sun,  8 Oct 2023 17:46:21 -0400 (CDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.ucpejv.edu.cu (Postfix) with ESMTP id F0D85704FB1;
+        Sun,  8 Oct 2023 17:46:20 -0400 (CDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.ucpejv.edu.cu F0D85704FB1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucpejv.edu.cu;
+        s=6944A500-D828-11EB-A78A-E8BC65E2ACE4; t=1696801581;
+        bh=YVQkxxsQjcA28pTrfdCHmYTQQhEotWPiglViH2UlrcU=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=DLPCjbxihiDywpazJbQICW0FLN/mTBiWOthdLxGSWez1EspKn3I/FPTdhtTxUrYmx
+         wqGeHqOgHKhGtEgMB4JpjcKbRvVuZSxk35B3JGEy94d1UB5Y1VOIXBLdAquCTMg4w9
+         whtpNY2wqJIrUxLvJmpuoqgFdJQyQcwHhvXleSPHw3N6WJnQnuGcI4SD97x/2eF88y
+         OvDDMrGvUyvhFy5ZvNOE2oatctQHJgj0SiYZRVHTVjCDEh4l4m0egCC8VNp332DKIC
+         gF7lK6FB/WIWKWWTH5fPwQSuPEOjwVu7iGbuE2qibUoKpOQDAFKqFwk2shg0aw+8Of
+         lM2bUX52VXvWQ==
+X-Virus-Scanned: amavisd-new at ucpejv.edu.cu
+Received: from mail.ucpejv.edu.cu ([127.0.0.1])
+        by localhost (mail.ucpejv.edu.cu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Ayjgxo3xmSXN; Sun,  8 Oct 2023 17:46:20 -0400 (CDT)
+Received: from mail.ucpejv.edu.cu (mail.ucpejv.edu.cu [10.68.100.8])
+        by mail.ucpejv.edu.cu (Postfix) with ESMTP id C2C7F704E55;
+        Sun,  8 Oct 2023 17:46:18 -0400 (CDT)
+Date:   Sun, 8 Oct 2023 17:46:18 -0400 (CDT)
+From:   Han <atencionalapoblacion@ucpejv.edu.cu>
+Reply-To: Han <han92728817@proton.me>
+Message-ID: <1382327503.25736.1696801578768.JavaMail.zimbra@ucpejv.edu.cu>
+Subject: Gesture
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH v5 10/10] scsi: scsi_debug: Add param to control sdev's
- allow_restart
-Content-Language: en-CA
-To:     Wenchao Hao <haowenchao2@huawei.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, louhongxiang@huawei.com
-References: <20230922092906.2645265-1-haowenchao2@huawei.com>
- <20230922092906.2645265-11-haowenchao2@huawei.com>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-In-Reply-To: <20230922092906.2645265-11-haowenchao2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.68.100.8]
+X-Mailer: Zimbra 8.8.15_GA_4508 (zclient/8.8.15_GA_4508)
+Thread-Index: VdKfUkenmeSz1eReGIH0qC6shMVA1w==
+Thread-Topic: Gesture
+X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_BLOCKED,REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2023-09-22 05:29, Wenchao Hao wrote:
-> Add new module param "allow_restart" to control if setup
-> scsi_device's allow_restart flag. This is used to test scsi
-> command finished with sense_key 0x6, asc 0x4 and ascq 0x2
-> 
-> Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
-
-Hi,
-Looked at this and verified that the allow_restart flag of scsi_debug
-devices (disks ?) is usually 0 and when the scsi_debug module is
-started with allow_restart=1 then the allow_restart flag does indeed
-change to 1. For example:
-    # cat /sys/class/scsi_disk/1\:0\:0\:0/allow_restart
-    1
-
-That ASC/ASCQ code means: "Logical unit not ready, initializing command
-required" according to my library. Played around with sg_start but didn't
-see any change in how it reacts. According to scsi_device.h that flag's
-description is: "issue START_UNIT in error handler" which implies it
-changes how the EH handler reacts.
-
-Perhaps the 3 line patch description could say a little more about how
-to use this new parameter...
-
-Tested-by: Douglas Gilbert <dgilbert@interlog.com>
-
-<snip>
 
 
-
+A smile is a small gesture that expresses an interest and is a first step towards getting to know someone better! I am sending you a smile,I would love to know you more.I am 100% genuine in my search to hopefully meet someone special and withwhom together we can start as Friends and from that strong foundation hopefully build a life lasting relationship.Han
 
