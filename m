@@ -2,77 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0F47BD16D
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Oct 2023 02:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DF07BD33A
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Oct 2023 08:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344597AbjJIAX5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 8 Oct 2023 20:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
+        id S1345211AbjJIGRp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Oct 2023 02:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjJIAXx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 8 Oct 2023 20:23:53 -0400
-X-Greylist: delayed 5649 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 08 Oct 2023 17:23:50 PDT
-Received: from mx.ucpejv.edu.cu (mail.ucpejv.edu.cu [200.14.49.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 498B0A3;
-        Sun,  8 Oct 2023 17:23:50 -0700 (PDT)
-Received: from mx.ucpejv.edu.cu (localhost.localdomain [127.0.0.1])
-        by mx.ucpejv.edu.cu (mx.ucpejv.edu.cu) with ESMTP id 500B3EEE2B;
-        Sun,  8 Oct 2023 17:46:22 -0400 (CDT)
-Received: from mail.ucpejv.edu.cu (mail.ucpejv.edu.cu [10.68.100.8])
-        by mx.ucpejv.edu.cu (mx.ucpejv.edu.cu) with ESMTPS id 383A5EEE1D;
-        Sun,  8 Oct 2023 17:46:22 -0400 (CDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.ucpejv.edu.cu (Postfix) with ESMTP id 1DFE1704437;
-        Sun,  8 Oct 2023 17:46:22 -0400 (CDT)
-Received: from mail.ucpejv.edu.cu ([127.0.0.1])
-        by localhost (mail.ucpejv.edu.cu [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Exztl3zqKXNR; Sun,  8 Oct 2023 17:46:21 -0400 (CDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.ucpejv.edu.cu (Postfix) with ESMTP id F0D85704FB1;
-        Sun,  8 Oct 2023 17:46:20 -0400 (CDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.ucpejv.edu.cu F0D85704FB1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucpejv.edu.cu;
-        s=6944A500-D828-11EB-A78A-E8BC65E2ACE4; t=1696801581;
-        bh=YVQkxxsQjcA28pTrfdCHmYTQQhEotWPiglViH2UlrcU=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=DLPCjbxihiDywpazJbQICW0FLN/mTBiWOthdLxGSWez1EspKn3I/FPTdhtTxUrYmx
-         wqGeHqOgHKhGtEgMB4JpjcKbRvVuZSxk35B3JGEy94d1UB5Y1VOIXBLdAquCTMg4w9
-         whtpNY2wqJIrUxLvJmpuoqgFdJQyQcwHhvXleSPHw3N6WJnQnuGcI4SD97x/2eF88y
-         OvDDMrGvUyvhFy5ZvNOE2oatctQHJgj0SiYZRVHTVjCDEh4l4m0egCC8VNp332DKIC
-         gF7lK6FB/WIWKWWTH5fPwQSuPEOjwVu7iGbuE2qibUoKpOQDAFKqFwk2shg0aw+8Of
-         lM2bUX52VXvWQ==
-X-Virus-Scanned: amavisd-new at ucpejv.edu.cu
-Received: from mail.ucpejv.edu.cu ([127.0.0.1])
-        by localhost (mail.ucpejv.edu.cu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Ayjgxo3xmSXN; Sun,  8 Oct 2023 17:46:20 -0400 (CDT)
-Received: from mail.ucpejv.edu.cu (mail.ucpejv.edu.cu [10.68.100.8])
-        by mail.ucpejv.edu.cu (Postfix) with ESMTP id C2C7F704E55;
-        Sun,  8 Oct 2023 17:46:18 -0400 (CDT)
-Date:   Sun, 8 Oct 2023 17:46:18 -0400 (CDT)
-From:   Han <atencionalapoblacion@ucpejv.edu.cu>
-Reply-To: Han <han92728817@proton.me>
-Message-ID: <1382327503.25736.1696801578768.JavaMail.zimbra@ucpejv.edu.cu>
-Subject: Gesture
+        with ESMTP id S1345217AbjJIGRp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Oct 2023 02:17:45 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EFCCF;
+        Sun,  8 Oct 2023 23:17:41 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id B18BF194F40;
+        Mon,  9 Oct 2023 08:17:38 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1696832258; bh=cSotfQwbGSibXtsizQ/xjKnpycVo566GkyDdz3BdcMg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=43CGV8jcblIvmjT5SYlDA948jVfgK2O5uSw35YsJ29jrMMOINc/BysNJq5ibBi67Y
+         6Wm4B+OaQ1a2s7cGcGHav/VlaSUmjLq9ZTlodjB0IT/D9TBBiz/zPtxfiBe+Lqfk6a
+         EQ4yXX1w0gGs7aY/sKymc+RK17c8Sq3J46lZDmBhgW/8t8lHlwmJHDTJef8tq2ce5s
+         r/vcHxd6mPp7kPOSt3HXpy/CCLt5D5uaP9HkPsGN0WeG5p/nrzjRNQNGIZOnI+7OKr
+         Dm7h1CNn8h7QF0gB92OqtLYvsXS6D31aeM3T5+BCwP8u56qbt8qsedayoReDZHV47j
+         sqHMjUU8cgoAQ==
+Date:   Mon, 9 Oct 2023 08:17:36 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc:     Damien Le Moal <dlemoal@kernel.org>, linux-scsi@vger.kernel.org,
+        linux-ide@vger.kernel.org
+Subject: Re: [PATCH] scsi: Do not rescan devices with a suspended queue
+Message-ID: <20231009081736.28ddb5fe@meshulam.tesarici.cz>
+In-Reply-To: <20231004085803.130722-1-dlemoal@kernel.org>
+References: <20231004085803.130722-1-dlemoal@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.68.100.8]
-X-Mailer: Zimbra 8.8.15_GA_4508 (zclient/8.8.15_GA_4508)
-Thread-Index: VdKfUkenmeSz1eReGIH0qC6shMVA1w==
-Thread-Topic: Gesture
-X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_BLOCKED,REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi, (adding James)
 
+On Wed,  4 Oct 2023 17:58:03 +0900
+Damien Le Moal <dlemoal@kernel.org> wrote:
 
-A smile is a small gesture that expresses an interest and is a first step towards getting to know someone better! I am sending you a smile,I would love to know you more.I am 100% genuine in my search to hopefully meet someone special and withwhom together we can start as Friends and from that strong foundation hopefully build a life lasting relationship.Han
+> Commit ff48b37802e5 ("scsi: Do not attempt to rescan suspended devices")
+> modified scsi_rescan_device() to avoid attempting rescanning a suspended
+> device. However, the modification added a check to verify that a SCSI
+> device is in the running state without checking if the device request
+> queue (in the case of block device) is also running, thus allowing the
+> exectuion of internal requests. Without checking the device request
+> queue, commit ff48b37802e5 fix is incomplete and deadlocks on resume can
+> still happen. Use blk_queue_pm_only() to check if the device request
+> queue allows executing commands in addition to checking the SCSI device
+> state.
+
+FTR this fix is still needed for rc5. Is there any chance it goes into
+fixes before v6.6 is final?
+
+Petr T
+
+> Reported-by: Petr Tesarik <petr@tesarici.cz>
+> Fixes: ff48b37802e5 ("scsi: Do not attempt to rescan suspended
+> devices") Cc: stable@vger.kernel.org
+> Tested-by: Petr Tesarik <petr@tesarici.cz>
+> Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
+> ---
+>  drivers/scsi/scsi_scan.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+> index 3db4d31a03a1..b05a55f498a2 100644
+> --- a/drivers/scsi/scsi_scan.c
+> +++ b/drivers/scsi/scsi_scan.c
+> @@ -1627,12 +1627,13 @@ int scsi_rescan_device(struct scsi_device
+> *sdev) device_lock(dev);
+>  
+>  	/*
+> -	 * Bail out if the device is not running. Otherwise, the
+> rescan may
+> -	 * block waiting for commands to be executed, with us
+> holding the
+> -	 * device lock. This can result in a potential deadlock in
+> the power
+> -	 * management core code when system resume is on-going.
+> +	 * Bail out if the device or its queue are not running.
+> Otherwise,
+> +	 * the rescan may block waiting for commands to be executed,
+> with us
+> +	 * holding the device lock. This can result in a potential
+> deadlock
+> +	 * in the power management core code when system resume is
+> on-going. */
+> -	if (sdev->sdev_state != SDEV_RUNNING) {
+> +	if (sdev->sdev_state != SDEV_RUNNING ||
+> +	    blk_queue_pm_only(sdev->request_queue)) {
+>  		ret = -EWOULDBLOCK;
+>  		goto unlock;
+>  	}
 
