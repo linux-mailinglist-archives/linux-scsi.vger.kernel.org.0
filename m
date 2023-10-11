@@ -2,86 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D50A77C5EC6
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Oct 2023 22:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 270B07C60E5
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Oct 2023 01:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235233AbjJKU4x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Oct 2023 16:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
+        id S233840AbjJKXMF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Oct 2023 19:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbjJKU4w (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Oct 2023 16:56:52 -0400
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A80B90;
-        Wed, 11 Oct 2023 13:56:50 -0700 (PDT)
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-27cfb8bc7eeso186196a91.0;
-        Wed, 11 Oct 2023 13:56:50 -0700 (PDT)
+        with ESMTP id S233834AbjJKXME (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Oct 2023 19:12:04 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC8DA4
+        for <linux-scsi@vger.kernel.org>; Wed, 11 Oct 2023 16:12:03 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-7741b18a06aso23485185a.1
+        for <linux-scsi@vger.kernel.org>; Wed, 11 Oct 2023 16:12:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1697065922; x=1697670722; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rULuvUvnuG1CX4LiHBwNEfcd4JOf3InADvu8MYgVkDI=;
+        b=hTG8WIap3Y1EbGflt8R93QtrWRgm5NjPBXf/w6xeQiZwiQbRYuZcUWldHSvpzVpH31
+         Gdm/aLmJ+pax48cM2GVYfjabxBkCv60zLKBs8sBLV0IWHC4C+kLD/xAqjBBVe5tPJNn4
+         372bccJjqY+PQyQu7xLN81dTzO3iZ7vtWhECUKHHHg4BWoEjyfN/Nr5kepfhjpZPGbhi
+         tGOgTWbWyoMt8gJSPsRxhwAUSf8G/Wdvfr7QKWvweVb0PBlguAOOk4bLPVDON/UclG3X
+         G22zjiw9GQRJmN3/I0GgXd7dGXoQCX7frkg8zUOrlmtxcAy6KaZdmFz3kD2XX0b4VhrQ
+         YY5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697057810; x=1697662610;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5fCHObAEeL5mzpUTwwILbHdlQXAib9rb/QiAV6nbo0Q=;
-        b=RFGP8ZzMUT9BNA8FtKED82EWcTDI7LvmUqIiA42CrFIBBXYgABZe+dDEhSzeRSHf0i
-         sIcNHssiLBMgx28X0gAT9PFX4jxJrYPtDqcVQ3JEnsjlC7kVP0uxhzi72MBodXVqGHmx
-         GeGVwKD+mnIWF2FANMey+78smV3j3Dd5igEalzTSKqfoAIMvudsG6Y1u+Omd5CLA5EjC
-         3tAuT+Xv1t2QFy8lslJFjWs27qJuFNqVRaea3J0DZWrvJGrsOsBz2+niS5NXJKPIqLP7
-         KkoPeVa/PUMxPr4tOmQ+MsMlDRlHU2Drd8gYU1OzDqhX1qAEYrvMhAtRkcFRaaSwXv/P
-         AkWQ==
-X-Gm-Message-State: AOJu0Yy2iozfPYVkKiExzLH+BJzDLKhzTEmHZovWjW+v+wj9jWPQdH3I
-        X84EfqnkjgUC1DFvKQfv404=
-X-Google-Smtp-Source: AGHT+IG71j0EgRlck26WH3mT2067Yv5guihfeH1VtvMnSfj7MCMwdvHpRv3xWbysKOyNPt8XJoWarw==
-X-Received: by 2002:a17:90a:1650:b0:27d:273:93ba with SMTP id x16-20020a17090a165000b0027d027393bamr3045155pje.30.1697057809787;
-        Wed, 11 Oct 2023 13:56:49 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:19de:6b54:16fe:c022? ([2620:15c:211:201:19de:6b54:16fe:c022])
-        by smtp.gmail.com with ESMTPSA id d17-20020a17090ac25100b0026b70d2a8a2sm353153pjx.29.2023.10.11.13.56.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Oct 2023 13:56:49 -0700 (PDT)
-Message-ID: <23c91551-9d94-4ec6-85eb-be1e2af20dc7@acm.org>
-Date:   Wed, 11 Oct 2023 13:56:43 -0700
+        d=1e100.net; s=20230601; t=1697065922; x=1697670722;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rULuvUvnuG1CX4LiHBwNEfcd4JOf3InADvu8MYgVkDI=;
+        b=dfrNpH3bkN5OzkicQDaJpSH2sqlMSKviQAvGn1y6c4o1vXg8vbN1xbetp28axaglIM
+         J+FG8NZo2dN6/Z4j+r69fsp6ssB9OZE5nDEXZO4ExomaLMXi/DF2W8Aa2aMdhq1JiXc5
+         4KNAcKZ/ZStL/loSOnDdKxQAbih6r64PNjKwRQElknRDGpbSmUSzLICTxlEIumcLLVkd
+         rrblftpCZkljk/EA8mf5BaDivT6clc4+DzhNcRJebu7tQH2Li13on5VkDK29skKQNJD9
+         loT12rQXsrv+wbOvEtN0Qio47tClPhO1Dj/IG/gQfyUMQSY6n29Q3dXLsV8f8JRAg45D
+         p8JA==
+X-Gm-Message-State: AOJu0Yyq0WQAv9r3UcQFdATizh9jcq9fmK5mCJypb/Uc27w0YtvD2ubB
+        S902vf2N6d+1O00Y5Aq8Iue88g==
+X-Google-Smtp-Source: AGHT+IHAdoL/C7864vxcmWQAWizjkMnu8Ywa5Zls/FUMDs/09hVwrQ/aN28WOiFXPUtPodjMkjH5eA==
+X-Received: by 2002:a0c:dc14:0:b0:66d:566:9174 with SMTP id s20-20020a0cdc14000000b0066d05669174mr3074371qvk.32.1697065922510;
+        Wed, 11 Oct 2023 16:12:02 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-26-201.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.26.201])
+        by smtp.gmail.com with ESMTPSA id w9-20020a0cb549000000b0065b14fcfca6sm6095577qvd.118.2023.10.11.16.12.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Oct 2023 16:12:02 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qqiMz-0014Yo-EL;
+        Wed, 11 Oct 2023 20:12:01 -0300
+Date:   Wed, 11 Oct 2023 20:12:01 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Bob Pearson <rpearsonhpe@gmail.com>,
+        "Daisuke Matsuda (Fujitsu)" <matsuda-daisuke@fujitsu.com>,
+        'Zhu Yanjun' <yanjun.zhu@linux.dev>,
+        Leon Romanovsky <leon@kernel.org>,
+        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "shinichiro.kawasaki@wdc.com" <shinichiro.kawasaki@wdc.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Zhu Yanjun <yanjun.zhu@intel.com>
+Subject: Re: [PATCH 1/1] Revert "RDMA/rxe: Add workqueue support for rxe
+ tasks"
+Message-ID: <20231011231201.GH55194@ziepe.ca>
+References: <20231004183824.GQ13795@ziepe.ca>
+ <c0665377-d2be-e4b6-3d25-727ef303d26e@linux.dev>
+ <20231005142148.GA970053@ziepe.ca>
+ <6a730dad-9d81-46d9-8adc-764d00745b01@acm.org>
+ <a8453889-3f5f-49ff-89f2-ec0ef929d915@linux.dev>
+ <OS3PR01MB9865F9BEB1A90DDCAEEBFC8BE5CDA@OS3PR01MB9865.jpnprd01.prod.outlook.com>
+ <20231010160919.GC55194@ziepe.ca>
+ <a4808fa6-5bd5-4a64-a437-6a7e89ca7e9f@acm.org>
+ <20231011155104.GF55194@ziepe.ca>
+ <70191324-018e-4cfe-9c1d-0bd3d17fb437@acm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V1 0/4] Add per-cpu PM QoS support for QCOM UFS
-Content-Language: en-US
-To:     Maramaina Naresh <quic_mnaresh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_cang@quicinc.com, quic_nguyenb@quicinc.com
-References: <1696952947-18062-1-git-send-email-quic_mnaresh@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1696952947-18062-1-git-send-email-quic_mnaresh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <70191324-018e-4cfe-9c1d-0bd3d17fb437@acm.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/10/23 08:49, Maramaina Naresh wrote:
-> Add per-cpu PM QoS support for ufs. This improves random io performance
-> by 20% for ufs.
+On Wed, Oct 11, 2023 at 01:14:16PM -0700, Bart Van Assche wrote:
+> On 10/11/23 08:51, Jason Gunthorpe wrote:
+> > If we revert it then rxe will probably just stop development
+> > entirely. Daisuke's ODP work will be blocked and if Bob was able to
+> > fix it he would have done so already. Which mean's Bobs ongoing work
+> > is lost too.
+> 
+> If Daisuke's work depends on the RXE changes then Daisuke may decide
+> to help with the RXE changes.
+> 
+> Introducing regressions while refactoring code is not acceptable.
 
-What in this patch series (other than the DT-bindings) is specific to
-the Qualcomm driver? If the answer is not much: please move this
-functionality into the UFS driver core.
+Generally, but I don't view rxe as a production part of the kernel so
+I prefer to give time to resolve it.
 
-Thanks,
+> I don't have enough spare time to help with the RXE driver.
 
-Bart.
+Nor I
 
+Jason
