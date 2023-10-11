@@ -2,378 +2,132 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1157C4C0B
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Oct 2023 09:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A020D7C4C71
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Oct 2023 09:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344995AbjJKHho (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Oct 2023 03:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        id S1344758AbjJKH6e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Oct 2023 03:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjJKHhn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Oct 2023 03:37:43 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4C3E1;
-        Wed, 11 Oct 2023 00:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697009860; x=1728545860;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i869bTlkDvlvhw+3PFO7u3lAm6RWC1HKuCi+xwZmGyQ=;
-  b=H7QuN7NGYg4FUpYhqWdpAF989OcVVOIZn78eKmJnL/c4iK6cm+BOkUgD
-   5+wg0L2CcAGhhwEr0mqwBOK9C36P8bs9oWKTl8lotEKmiTGiOUBtSBc4O
-   lP8DrmKJzBAhxO6tZvp8I2daBIYrMjxBebz7rVQHhymuZlpDzFX9SFlsk
-   0MTm50yOC6aN/8xNJj5xyDTbXsNZJXhLVe54e65RdQ2dWLF77wljkqq3x
-   9oEwrCkNVSG1gO5vXTfmBrlZbZRGs4U2RD0xYX8isgwzmhaQE+W13p2z9
-   ulfzeFwhQYJ9qOb1tj6XR0S/lnaiJts9V1NwJGkCtQoMktBlRXEPWCPBk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="3193853"
-X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
-   d="scan'208";a="3193853"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 00:37:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="877573199"
-X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
-   d="scan'208";a="877573199"
-Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 11 Oct 2023 00:37:34 -0700
-Received: from kbuild by f64821696465 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qqTme-0001vq-1U;
-        Wed, 11 Oct 2023 07:37:32 +0000
-Date:   Wed, 11 Oct 2023 15:37:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Maramaina Naresh <quic_mnaresh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_cang@quicinc.com, quic_nguyenb@quicinc.com
-Subject: Re: [PATCH V1 1/4] dt-bindings: ufs: qcom: Add qos property
-Message-ID: <202310111509.fFHOVdaI-lkp@intel.com>
-References: <1696952947-18062-2-git-send-email-quic_mnaresh@quicinc.com>
+        with ESMTP id S229743AbjJKH6d (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Oct 2023 03:58:33 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01olkn2066.outbound.protection.outlook.com [40.92.66.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9F792;
+        Wed, 11 Oct 2023 00:58:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ny5MPnkbS5D2qTsEpgmgTpZdOnWlO3JDaeuKddtX2pxpWZbSHszPyZQEKmUg83XWnWs9ItySbtYPt82r+IBdOIwtkz9CGQ9kDFbK6wqW1eeo8ZDKw6D3UJ3mMCf1ZkEJrMPXw3LCZ4WfXACj+RegYOfnXHcNf0U95LtrhNY9kymuwWUbW+Sd9d7cxwCysZdi56OK0UixhrUx5b1BNksiQ+sUiT+oTBIc+KkW8omOwy12oGDAAzchjGYZU6e10e8aTtOZ3q1JKE0EK2GOzeSji5wNQjr0IjI4BVHWui4r7+TagGAtFKD4lkNab56QCAQHPqACxNCBMi6FXmSXXCjqzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Mt3jCKF0v+Uk7RX0BS4ImLfYMkUF1tuR6/wfuaSZWIY=;
+ b=VHA0lG2axMIahansaDiCHr/1AC+n9EHT1rlTik/mxvTQTJOQWmr0RsmT0HfWyPvcgs9wOE3xdLdUaBaUqkdBGlViSn5YGS5EdAkFWHwsU3z4tzPPUTVzI6aomcN73LwPToZdRkHsdvjHmIORhTFr5VsqjniO7MKJGIcnHwJr6cGwE8CQud02TxhCWf1c+sJVclTsoLEPb1t6Z+z/hgkh6cafjmZtL1uBk/zwLd/W6ZrmV5dRGPq4pUefbFbRbj14cmuH+U/tV67uYfvHa6pabp2Hc0XG5laWeuLlP1WEj66BENNj9pXnb/VW8jc3U9Xi2SYJfPkDyeTEGyQJ1LS+Hg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Mt3jCKF0v+Uk7RX0BS4ImLfYMkUF1tuR6/wfuaSZWIY=;
+ b=rQ2lRdOhA3a6CMf11HDYaWoaVGlDE5Q6u7OmCPkXWaXsBPJ8NSaE1lqGIOzSnwpEhaLy7RByRvcmmTdvci1BrkyyqH8NBC0KiA1PYQQkUr5C1QcGohJcfMGUCcA1WYBLrzGevyVHomxU/LpEEBEHYQH+OXW1PVZRIG1Bxm28cjZTF8lTui35qu9t3b7MvsxZGRkBvqFr/ao16+M0w4i0vmeztNdguSJLvPXi8yfA8ubrcVNdenjMbeECHNBu1cdSj68zYmt0PajK4cgEXhIWXpJlbg1+1zvOlEf9IIjH50Ylm98X1W9Yg8A6EbjmWSXfylN/yOMz3280Un7+iZToGw==
+Received: from GV1PR10MB6148.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:97::11)
+ by VI1PR10MB7736.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:800:1bd::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38; Wed, 11 Oct
+ 2023 07:58:23 +0000
+Received: from GV1PR10MB6148.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::8b03:a641:57ce:d126]) by GV1PR10MB6148.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::8b03:a641:57ce:d126%6]) with mapi id 15.20.6863.043; Wed, 11 Oct 2023
+ 07:58:22 +0000
+From:   Mr Louis Holland <mr.patricetalon@outlook.com>
+Subject: Money-Gram Payment Notification!
+Thread-Topic: Money-Gram Payment Notification!
+Thread-Index: AQHZ/Biwia65fHW3GUibQx8DwTkUwA==
+Date:   Wed, 11 Oct 2023 07:58:22 +0000
+Message-ID: <GV1PR10MB614877CCAD35522265A10236EDCCA@GV1PR10MB6148.EURPRD10.PROD.OUTLOOK.COM>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [SjmsG84VRjGAegWqCyKppYzyYYZPA4ci]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: GV1PR10MB6148:EE_|VI1PR10MB7736:EE_
+x-ms-office365-filtering-correlation-id: 2bcf2c12-56b7-4fe9-0692-08dbca2fd741
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: SYKJv0ROW6Y30RfJ4p+D3uP9vnGg8B36y67rkGKhfrFTiZSSiWGHDXIuRIRS5daPRmt05Rk7grURQGgQH9QDgP2AmMWM+QiRuqRmqI087RsA0ETLu8LEhEXGFCWLhu7zABY+O75pVvKi/dcwV3w4Tib1dpJB9L8/cRuFVEzYC/tl97EvqnC9MmMR9mhvOepnbqGx86B90uiPnaY5AwRmhdzkPxCSTf7QNIaaoDYsGDYLSLG/01SZB96FLdju2KgF93pA6nKIj2bgEYsGZ1xo3DZzrLsII+8S0rXGNO17UnFkMHx/kU0VL5i3m1myuV7avCp65BDhOnqb+9rErrTXRgNBayULEWlnmKv3uydixMIz1SkWXSbVF0BTtt0Egsbug/agwzVpBFD4WWvTiBJ7touAxxoIapcR3nX7hQctupqTR2Ccaqoj7QceWooxLdgRz70VUBYTWy9ues38Vs63DRlY35zbsOVw9a01R6SWt/bUiFJDm6AjrSPzjogWWsV5+DffqJgbJiMG5Sv2PWweVSgwfrgtEtsc/DYjiNWyl0vShhMILT6LuM1yuTyEC1Q5
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?zph9mccsfmu2LG73B6/V8ULCeqvATPTnzSSkqcDmA7ZafBbmsuI+7TmI8P?=
+ =?iso-8859-1?Q?7y9va6iQP8gq1somUHpGetkOsIK0t1uK7/CfNZ7YGJ+mhbst2PzoyjiAda?=
+ =?iso-8859-1?Q?RRqJ+7tQwynkg5u20FbsrtpEOddwMuO33cWyd3d9SyffHWihtVX4JmzD6O?=
+ =?iso-8859-1?Q?haaixtmwrzu4oPGgmSlPTmC3PWfohg/51+6G2AnKlVmRcU37vfdZFnNZp9?=
+ =?iso-8859-1?Q?+NFDVNzWfrgG4wDZ/NZOU2ijoeVEiKcuEy0jPxcWa8epoSMWsIbprL3E0Y?=
+ =?iso-8859-1?Q?kqlfJDRpicmUYv0/0wohNi0DFgLB20T7/pHAl+LR7vA3RQ5cHbX8grKppJ?=
+ =?iso-8859-1?Q?2rpgXo0jG0RmrTOdPE7I13WRci2pEL3Znj+Iq6/woh3XHAPlGS6IIwzhSa?=
+ =?iso-8859-1?Q?//hagjURy5xwtHC4ren8gmGCIG2sYBGiGB0hbovuhgH7FY0HzBXefYiOs7?=
+ =?iso-8859-1?Q?rBoKoVYtNkB0LVZGBHkLCKcHpSAaMq9U1pbHDM9qV40Pvem9EKgoH20jAM?=
+ =?iso-8859-1?Q?+tlMXTBi/NHoIZdV5VwbqAzi1Bt8YBGGDFXzEVHxNE2UCLQi7SbX8dXF03?=
+ =?iso-8859-1?Q?Et59JVcDbRJRyD1dJiLjGCyO2Jtii5mrvpjnRDhqUcTW4r1bWIOLHnhoJ3?=
+ =?iso-8859-1?Q?QLCK5Yf8eEl++cmdw5RFhHT2i+TxfesZC/xDyXc1I0XZIRmi8JB27X7N/0?=
+ =?iso-8859-1?Q?IuMlVOh3DJQIR4oPTdvI9xc0BJrEh/hOFn7fuRyFsMr6nyREegq5jOG28n?=
+ =?iso-8859-1?Q?tPasrRy9fUIxBmG3WD1IsUhA1hCGaB7Lf/UjutCYq/+a1QhUEiFU9WS6Pb?=
+ =?iso-8859-1?Q?nQPtBtT80klgcP4guoioLjHtBGoj1LEI3fKf+DgIUpU8nF+u34/ZxNqtjf?=
+ =?iso-8859-1?Q?C882VMAVERJGc3J1c9A2JiykT2JZlaw2fFLjtcbHsy4KdIHZoHKAR5Ov8h?=
+ =?iso-8859-1?Q?rIKnvzheUfmnfTatC1FMX95AH/+rVkWTebW4LdVylz4p6Cz0xtpRwe3VI+?=
+ =?iso-8859-1?Q?XlG06m0Qbi+Zvy3xDuIm3pjs6UKvBxgtcrakU/8PAQ23Es836N6c2vywUZ?=
+ =?iso-8859-1?Q?KSNJ50QbhGQDgmiv5ZfVWj87HiIzfGA8rkX3qkrZxfnOcAGZN6zEQyEG2/?=
+ =?iso-8859-1?Q?GwWT0mveS1r23apwLXwrC7f5Z9betLfgPGWyEUK3V0evs+ETJLO1viklMo?=
+ =?iso-8859-1?Q?Tx+xgvgHz/GbJHbMcImEUldfLW5QZPcvKl/nEaPviGICSipcsbzqhGpNrE?=
+ =?iso-8859-1?Q?7TYRZEx/ZRs3IzvWKHLSjighZcWZmOna4l7Y/FCek=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1696952947-18062-2-git-send-email-quic_mnaresh@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: GV1PR10MB6148.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2bcf2c12-56b7-4fe9-0692-08dbca2fd741
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2023 07:58:22.6137
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB7736
+X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        HK_NAME_FM_MR_MRS,LOTS_OF_MONEY,MILLION_HUNDRED,MILLION_USD,
+        MISSING_HEADERS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Maramaina,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on mkp-scsi/for-next]
-[also build test WARNING on jejb-scsi/for-next robh/for-next linus/master v6.6-rc5 next-20231010]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Maramaina-Naresh/dt-bindings-ufs-qcom-Add-qos-property/20231010-235602
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/1696952947-18062-2-git-send-email-quic_mnaresh%40quicinc.com
-patch subject: [PATCH V1 1/4] dt-bindings: ufs: qcom: Add qos property
-compiler: loongarch64-linux-gcc (GCC) 13.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20231011/202310111509.fFHOVdaI-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310111509.fFHOVdaI-lkp@intel.com/
-
-dtcheck warnings: (new ones prefixed by >>)
->> Documentation/devicetree/bindings/ufs/qcom,ufs.yaml:83:6: [warning] wrong indentation: expected 6 but found 5 (indentation)
-   Documentation/devicetree/bindings/ufs/qcom,ufs.yaml:85:6: [warning] wrong indentation: expected 6 but found 5 (indentation)
---
->> Documentation/devicetree/bindings/ufs/qcom,ufs.yaml: properties:qos: 'anyOf' conditional failed, one must be fixed:
-   	'cpumask' is not one of ['$ref', 'additionalItems', 'additionalProperties', 'allOf', 'anyOf', 'const', 'contains', 'default', 'dependencies', 'dependentRequired', 'dependentSchemas', 'deprecated', 'description', 'else', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'items', 'if', 'minItems', 'minimum', 'maxItems', 'maximum', 'multipleOf', 'not', 'oneOf', 'pattern', 'patternProperties', 'properties', 'required', 'then', 'typeSize', 'unevaluatedProperties', 'uniqueItems']
-   	'type' was expected
-   	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
->> Documentation/devicetree/bindings/ufs/qcom,ufs.yaml: properties:qos: 'anyOf' conditional failed, one must be fixed:
-   	'vote' is not one of ['$ref', 'additionalItems', 'additionalProperties', 'allOf', 'anyOf', 'const', 'contains', 'default', 'dependencies', 'dependentRequired', 'dependentSchemas', 'deprecated', 'description', 'else', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'items', 'if', 'minItems', 'minimum', 'maxItems', 'maximum', 'multipleOf', 'not', 'oneOf', 'pattern', 'patternProperties', 'properties', 'required', 'then', 'typeSize', 'unevaluatedProperties', 'uniqueItems']
-   	'type' was expected
-   	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-
-vim +83 Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-
-     8	
-     9	maintainers:
-    10	  - Bjorn Andersson <bjorn.andersson@linaro.org>
-    11	  - Andy Gross <agross@kernel.org>
-    12	
-    13	# Select only our matches, not all jedec,ufs-2.0
-    14	select:
-    15	  properties:
-    16	    compatible:
-    17	      contains:
-    18	        const: qcom,ufshc
-    19	  required:
-    20	    - compatible
-    21	
-    22	properties:
-    23	  compatible:
-    24	    items:
-    25	      - enum:
-    26	          - qcom,msm8994-ufshc
-    27	          - qcom,msm8996-ufshc
-    28	          - qcom,msm8998-ufshc
-    29	          - qcom,sa8775p-ufshc
-    30	          - qcom,sc8280xp-ufshc
-    31	          - qcom,sdm845-ufshc
-    32	          - qcom,sm6115-ufshc
-    33	          - qcom,sm6350-ufshc
-    34	          - qcom,sm8150-ufshc
-    35	          - qcom,sm8250-ufshc
-    36	          - qcom,sm8350-ufshc
-    37	          - qcom,sm8450-ufshc
-    38	          - qcom,sm8550-ufshc
-    39	      - const: qcom,ufshc
-    40	      - const: jedec,ufs-2.0
-    41	
-    42	  clocks:
-    43	    minItems: 8
-    44	    maxItems: 11
-    45	
-    46	  clock-names:
-    47	    minItems: 8
-    48	    maxItems: 11
-    49	
-    50	  dma-coherent: true
-    51	
-    52	  interconnects:
-    53	    minItems: 2
-    54	    maxItems: 2
-    55	
-    56	  interconnect-names:
-    57	    items:
-    58	      - const: ufs-ddr
-    59	      - const: cpu-ufs
-    60	
-    61	  iommus:
-    62	    minItems: 1
-    63	    maxItems: 2
-    64	
-    65	  phys:
-    66	    maxItems: 1
-    67	
-    68	  phy-names:
-    69	    items:
-    70	      - const: ufsphy
-    71	
-    72	  power-domains:
-    73	    maxItems: 1
-    74	
-    75	  qcom,ice:
-    76	    $ref: /schemas/types.yaml#/definitions/phandle
-    77	    description: phandle to the Inline Crypto Engine node
-    78	
-    79	  qos:
-    80	    minItems: 2
-    81	    maxItems: 2
-    82	    cpumask:
-  > 83	     description: list of CPUs under CPU group
-    84	    vote:
-    85	     description: vote value for QoS CPU group
-    86	
-    87	  reg:
-    88	    minItems: 1
-    89	    maxItems: 2
-    90	
-    91	  reg-names:
-    92	    items:
-    93	      - const: std
-    94	      - const: ice
-    95	
-    96	  required-opps:
-    97	    maxItems: 1
-    98	
-    99	  resets:
-   100	    maxItems: 1
-   101	
-   102	  '#reset-cells':
-   103	    const: 1
-   104	
-   105	  reset-names:
-   106	    items:
-   107	      - const: rst
-   108	
-   109	  reset-gpios:
-   110	    maxItems: 1
-   111	    description:
-   112	      GPIO connected to the RESET pin of the UFS memory device.
-   113	
-   114	required:
-   115	  - compatible
-   116	  - reg
-   117	
-   118	allOf:
-   119	  - $ref: ufs-common.yaml
-   120	
-   121	  - if:
-   122	      properties:
-   123	        compatible:
-   124	          contains:
-   125	            enum:
-   126	              - qcom,msm8998-ufshc
-   127	              - qcom,sa8775p-ufshc
-   128	              - qcom,sc8280xp-ufshc
-   129	              - qcom,sm8250-ufshc
-   130	              - qcom,sm8350-ufshc
-   131	              - qcom,sm8450-ufshc
-   132	              - qcom,sm8550-ufshc
-   133	    then:
-   134	      properties:
-   135	        clocks:
-   136	          minItems: 8
-   137	          maxItems: 8
-   138	        clock-names:
-   139	          items:
-   140	            - const: core_clk
-   141	            - const: bus_aggr_clk
-   142	            - const: iface_clk
-   143	            - const: core_clk_unipro
-   144	            - const: ref_clk
-   145	            - const: tx_lane0_sync_clk
-   146	            - const: rx_lane0_sync_clk
-   147	            - const: rx_lane1_sync_clk
-   148	        reg:
-   149	          minItems: 1
-   150	          maxItems: 1
-   151	        reg-names:
-   152	          maxItems: 1
-   153	
-   154	  - if:
-   155	      properties:
-   156	        compatible:
-   157	          contains:
-   158	            enum:
-   159	              - qcom,sdm845-ufshc
-   160	              - qcom,sm6350-ufshc
-   161	              - qcom,sm8150-ufshc
-   162	    then:
-   163	      properties:
-   164	        clocks:
-   165	          minItems: 9
-   166	          maxItems: 9
-   167	        clock-names:
-   168	          items:
-   169	            - const: core_clk
-   170	            - const: bus_aggr_clk
-   171	            - const: iface_clk
-   172	            - const: core_clk_unipro
-   173	            - const: ref_clk
-   174	            - const: tx_lane0_sync_clk
-   175	            - const: rx_lane0_sync_clk
-   176	            - const: rx_lane1_sync_clk
-   177	            - const: ice_core_clk
-   178	        reg:
-   179	          minItems: 2
-   180	          maxItems: 2
-   181	        reg-names:
-   182	          minItems: 2
-   183	      required:
-   184	        - reg-names
-   185	
-   186	  - if:
-   187	      properties:
-   188	        compatible:
-   189	          contains:
-   190	            enum:
-   191	              - qcom,msm8996-ufshc
-   192	    then:
-   193	      properties:
-   194	        clocks:
-   195	          minItems: 11
-   196	          maxItems: 11
-   197	        clock-names:
-   198	          items:
-   199	            - const: core_clk_src
-   200	            - const: core_clk
-   201	            - const: bus_clk
-   202	            - const: bus_aggr_clk
-   203	            - const: iface_clk
-   204	            - const: core_clk_unipro_src
-   205	            - const: core_clk_unipro
-   206	            - const: core_clk_ice
-   207	            - const: ref_clk
-   208	            - const: tx_lane0_sync_clk
-   209	            - const: rx_lane0_sync_clk
-   210	        reg:
-   211	          minItems: 1
-   212	          maxItems: 1
-   213	        reg-names:
-   214	          maxItems: 1
-   215	
-   216	  - if:
-   217	      properties:
-   218	        compatible:
-   219	          contains:
-   220	            enum:
-   221	              - qcom,sm6115-ufshc
-   222	    then:
-   223	      properties:
-   224	        clocks:
-   225	          minItems: 8
-   226	          maxItems: 8
-   227	        clock-names:
-   228	          items:
-   229	            - const: core_clk
-   230	            - const: bus_aggr_clk
-   231	            - const: iface_clk
-   232	            - const: core_clk_unipro
-   233	            - const: ref_clk
-   234	            - const: tx_lane0_sync_clk
-   235	            - const: rx_lane0_sync_clk
-   236	            - const: ice_core_clk
-   237	        reg:
-   238	          minItems: 2
-   239	          maxItems: 2
-   240	        reg-names:
-   241	          minItems: 2
-   242	      required:
-   243	        - reg-names
-   244	
-   245	    # TODO: define clock bindings for qcom,msm8994-ufshc
-   246	
-   247	  - if:
-   248	      required:
-   249	        - qcom,ice
-   250	    then:
-   251	      properties:
-   252	        reg:
-   253	          maxItems: 1
-   254	        clocks:
-   255	          minItems: 8
-   256	          maxItems: 8
-   257	    else:
-   258	      properties:
-   259	        reg:
-   260	          minItems: 1
-   261	          maxItems: 2
-   262	        clocks:
-   263	          minItems: 8
-   264	          maxItems: 11
-   265	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+=0A=
+=0A=
+Attention Dear Customer,=0A=
+=0A=
+This is to bring to your notice that your long awaited fund of USD$ 4,800.0=
+00.00) Four Million Eight Hundred Thousand United State Dollars has been de=
+posited with MoneyGram Global Money Transfer Services. New Delhi, INDIA. Af=
+ter cross-checking your record last week Friday, we =A0noted that your reco=
+rd is clear and you are free to receive your long awaited fund without dela=
+y. Be advised to contact MoneyGram Global Money Transfer Services Manager N=
+EW DELHI INDIA immediately for urgent access to your payment file so that y=
+ou will start receiving your daily amount today.=0A=
+=0A=
+Find their contact email below:=0A=
+=0A=
+MR HASSANAND MASAND/ Manager MoneyGram=0A=
+Address: 13&14 OLD MARKET TILAK NAGAR NEW DELHI=0A=
+E-mail: officedesk1978@email.cz=0A=
+=0A=
+Please you have to contact the MoneyGram Office immediately you receive thi=
+s message because your payment files are on their desk right now. They are =
+waiting to hear from you to give you more details on how you will receive y=
+our daily payment.=0A=
+=0A=
+Thanks for your time and patience.=0A=
+Mr Louis Holland.=
