@@ -2,97 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27AE67C7D9B
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Oct 2023 08:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BECBD7C8065
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Oct 2023 10:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjJMGSM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 13 Oct 2023 02:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
+        id S230124AbjJMIfQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 13 Oct 2023 04:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjJMGSL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Oct 2023 02:18:11 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EB995
-        for <linux-scsi@vger.kernel.org>; Thu, 12 Oct 2023 23:18:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2411A2188E;
-        Fri, 13 Oct 2023 06:18:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1697177888; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tMzqj+tzqjzHGTqL8cjCJH80aNm1jETIjyJBPOqhvGs=;
-        b=AEY0/lfnQmdocrkRslgne81d1Vwn8Z+xjlb3BdHbGJwIQoHhXxbFbtMDByhRHfQRcxlNMi
-        v7Jbba8TcxIHD1wl7G+0MtzgR1zdHBjuaPotYlqR9IBQ+PeZRzq/aCFkPfqlr63iqqvmb9
-        R1w3zpvd4UBU2U4LUlrkaLLeSVRkXB8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1697177888;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tMzqj+tzqjzHGTqL8cjCJH80aNm1jETIjyJBPOqhvGs=;
-        b=7Cfr3atLa2IqtzxzvAfsmlDWSiwrgUKN97qG6SkTFem1QAA58+NNThZb7yK2HQMJQ0Tiyt
-        VLEz9bv/qNGIVVCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B4155138EF;
-        Fri, 13 Oct 2023 06:18:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id x4pQKh/hKGWINAAAMHmgww
-        (envelope-from <hare@suse.de>); Fri, 13 Oct 2023 06:18:07 +0000
-Message-ID: <d216bb05-3f30-4662-9a38-23c5caab2e41@suse.de>
-Date:   Fri, 13 Oct 2023 08:18:07 +0200
+        with ESMTP id S229900AbjJMIfP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Oct 2023 04:35:15 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D805BE;
+        Fri, 13 Oct 2023 01:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=5MOpr
+        jAOmKuRQcUEFPjJnljw9+pk28pP88631pmQ2V4=; b=TtTV8rMsFGMzsof06r6ey
+        TN+KdGZoxGw9EVowzSLK0PkAJx7I9uJQX9IzEix6yc4iMR0F0YSGs4+qnupVYjyo
+        faEOJJ3LoatohGINbcjyGxhsKlI8ES/Nl3X/e4B68K2Wv121bz22Rkhs1ERf29Dk
+        bjTAmGMGHvoed8xjaPZCaw=
+Received: from test-Z390-GAMING-X.bayhubtech.com (unknown [58.48.115.170])
+        by zwqz-smtp-mta-g3-4 (Coremail) with SMTP id _____wD3n6SsACllYx2+AQ--.7595S2;
+        Fri, 13 Oct 2023 16:32:45 +0800 (CST)
+From:   liuchang_125125@163.com
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     mark.tao@bayhubtech.com, shaper.liu@bayhubtech.com,
+        thomas.hu@bayhubtech.com, chevron.li@bayhubtech.com,
+        charl.liu@bayhubtech.com, Charl Liu <liuchang_125125@163.com>
+Subject: [PATCH 0/9] Add support for Bayhub SD/MMC controller
+Date:   Fri, 13 Oct 2023 16:32:42 +0800
+Message-Id: <20231013083242.10227-1-liuchang_125125@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/15] zfcp: do not wait for rports to become unblocked
- after host reset
-Content-Language: en-US
-To:     Benjamin Block <bblock@linux.ibm.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Steffen Maier <maier@linux.ibm.com>
-References: <20231002154927.68643-1-hare@suse.de>
- <20231002154927.68643-2-hare@suse.de>
- <20231012135452.GB31157@p1gen4-pw042f0m.fritz.box>
- <58658f0c-c5e9-4321-8bd1-13223472eb1b@suse.de>
- <20231012174908.GC31157@p1gen4-pw042f0m.fritz.box>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20231012174908.GC31157@p1gen4-pw042f0m.fritz.box>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Authentication-Results: smtp-out1.suse.de;
-        none
-X-Spam-Level: 
-X-Spam-Score: -7.09
-X-Spamd-Result: default: False [-7.09 / 50.00];
-         ARC_NA(0.00)[];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         XM_UA_NO_VERSION(0.01)[];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         BAYES_HAM(-3.00)[100.00%];
-         MIME_GOOD(-0.10)[text/plain];
-         NEURAL_HAM_LONG(-3.00)[-1.000];
-         RCPT_COUNT_FIVE(0.00)[6];
-         DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-         NEURAL_HAM_SHORT(-1.00)[-1.000];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         RCVD_COUNT_TWO(0.00)[2];
-         RCVD_TLS_ALL(0.00)[];
-         MID_RHS_MATCH_FROM(0.00)[]
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+X-CM-TRANSID: _____wD3n6SsACllYx2+AQ--.7595S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3JF4rJr43GrW5JryUXF1kZrb_yoW3tF1fpF
+        WrZ34rAw4UKrWIkrn7Kry2yFy3JayxGryDK3y2q3s8ua4IkFyrtrnrJFy5AF93Xr18trnF
+        qFs0qFyDK3WDKFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0p_8n5dUUUUU=
+X-Originating-IP: [58.48.115.170]
+X-CM-SenderInfo: polxux5dqjsiqsvrjki6rwjhhfrp/xtbBnwQHWVetlIO+lQABsC
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,143 +52,164 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/12/23 19:49, Benjamin Block wrote:
-> On Thu, Oct 12, 2023 at 04:23:47PM +0200, Hannes Reinecke wrote:
->> On 10/12/23 15:54, Benjamin Block wrote:
->>> On Mon, Oct 02, 2023 at 05:49:13PM +0200, Hannes Reinecke wrote:
->>>> zfcp_scsi_eh_host_reset_handler() would call fc_block_rport() to
->>>> wait for all rports to become unblocked after host reset.
->>>> But after host reset it might happen that the port is gone, hence
->>>> fc_block_rport() might fail due to a missing port.
->>>> But that's a perfectly legal operation; on FC remote ports might
->>>> come and go.
->>>> In the same vein FC HBAs are able to deal with ports being temporarily
->>>> blocked, so really there is not point in waiting for all ports
->>>> to become unblocked during host reset.
->>>
->>> But in scsi_transport_fc.c we have this documented:
->>>
->>>       * fc_block_scsi_eh - Block SCSI eh thread for blocked fc_rport
->>>       * @cmnd: SCSI command that scsi_eh is trying to recover
->>>       *
->>>       * This routine can be called from a FC LLD scsi_eh callback. It
->>>       * blocks the scsi_eh thread until the fc_rport leaves the
->>>       * FC_PORTSTATE_BLOCKED, or the fast_io_fail_tmo fires. This is
->>>       * necessary to avoid the scsi_eh failing recovery actions for blocked
->>>                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->>>       * rports which would lead to offlined SCSI devices.
->>>         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->>>
->>> So I don't understand what the real expectation by the SCSI EH call back for
->>> host reset is then.
->>>
->>> Is it that all objects (host/target ports/luns) are operational again once we
->>> return to the EH thread, or is it ok that some parts are still being
->>> recovered (as with our host reset handler, rports might still be blocked after
->>> `zfcp_erp_wait()` finishes, because of how this is organized internally).
->>>
->>> If it's the later, I'd think this change is fine. But then I'd wonder why this
->>> function exists in the first place? Is it because in other EH steps it's more
->>> important that rports are ready after the step (e.g. because a TUR is send
->>> after, and if that fails, things get escalate unnecessarily)?
->>>
->>
->> Thing is, fc_block_scsi_eh() is assumed to be called from eh callbacks
->> _before_ any TMFs are to be sent.
->> Typically you would call them in eh_device_reset() or eh_target_reset()
->> to ensure that you can sent TMFs in the first place; no point in attempting
->> to send TMFs is the port is blocked.
-> 
-> Ok. Interesting. We don't really care about the state of the rport when
-> sending TMFs or Aborts, as those commands are sent outside the normal
-> queuecommand flow (we just check "internal bits"), in case of Aborts we even
-> hand this off to firmware. Consequently we don't really care about their state
-> before trying to send either.
-> 
-Interesting. All others do care about the state of the rport, as for
-them sending commands to a blocked rport will just cause
-the TMF to fail.
+From: Charl Liu <liuchang_125125@163.com>
 
-[ .. ]
->>> My impression from look at the code that follows `scsi_try_host_reset()` in
->>> `scsi_error.c` really is, it rather expects things to be ready to be used
->>> after, right there and then (admittedly, this is probably already today
->>> problematic, as things might go back to not working concurrently because of
->>> some fabric event.. but anyway, we can life with that off-chance it seems).
->>>
->>> Or do I miss something?
->>>
->>
->> Ah, right. True, when the rports are not ready (ie still being blocked)
->> sending a TEST UNIT READY will fail, with probably unintended consequences.
->>
->> But: if host reset would return FAST_IO_FAIL everything would be dandy
-> 
-> Ok, so that would mean, we finish all commands left in the EH work_q with
-> `scsi_eh_finish_cmd()`, and not populate the local `check_list` at all, which
-> in turns means, we don't do anything in `scsi_eh_test_devices()` (no state
-> checks, not TURs).
-> 
->> as then we would just check if the devices are online (by virtue of
->> scsi_eh_flush_done_q() in scsi_unjam_host()), which they really should
->> as no-one should have set them offline by then.
-> 
-> When returning to `scsi_unjam_host()` directly after we return from
-> `scsi_eh_host_reset()` we call into `scsi_eh_flush_done_q()` and go over all
-> commands that are now in the done-queue (everything, if host reset returned
-> FAST_IO_FAIL).
-> 
-> In there we delete the commands from the EH list, and then check whether we
-> ought to retry the command on the same SDEV or return it to some upper layer
-> (i.e. hopefully dm-multipath for our installations).
-> 
-> The former depends on whether the SDEV is online again. If everything is fine
-> in the SAN (not cable pulled or something), I think this should be the case,
-> but IFF we assume the rport is still blocked because the async registration
-> (`zfcp_scsi_rport_work()`) hasn't finished yet (the original point for using
-> `fc_block_scsi_eh()`), then the SDEV might still be in state
-> SDEV_TRANSPORT_OFFLINE.
->      This can happen during adapter recovery (where we block, IOW call
-> `fc_remote_port_delete()` on all rports) if fast-io-fail-tmo runs out, and
-> `fc_terminate_rport_io()` is called.
->      That is undone when we call `fc_remote_port_add()` to 'unblock' the rport.
-> This would then set all SDEVs into RUNNING again. And there we have the
-> interaction with `fc_block_scsi_eh()` again.
-> 
-Yes, but that is perfectly fine, and in fact exactly as things should
-work. Once a device is in SDEV_TRANSPORT_OFFLINE it means that the
-underlying rport has been deleted after dev_loss_tmo has expired.
-If that happened during SCSI EH, well, tough luck. I/O would have
-been aborted even without SCSI EH here.
-All fine by me.
+The Bayhub's SD/MMC Card interface driver implements card detection,
+card initialization, and other application level functions. The whole
+project is divided into 9 patches to commit. Patch [1/9] and patch
+[2/9] commit the Kconfig and Makefile, and the other code is divided
+into 7 patches (patch [3/9] to patch [9/9]) by function.
 
-> Hmm. I think I could life with both though. If someone drives I/O directly on
-> the SDEV, and it fails after EH because of some unfortunate timing, that's bad
-> luck, and something was actually wrong in the SAN if fast-io-fail-tmo runs out
-> during recovery. They ought to use dm-multipath.
->      And if they do, the commands are re-issued from that layer. I think that
-> should be fine.
-> 
-> So I think we can work with returning FAST_IO_FAIL from
-> `zfcp_scsi_eh_host_reset_handler()`, and removing the call to
-> `fc_block_scsi_eh()`.
->      We (Steffen and/or I) might still want to look into some other solution
-> for only returning from that when we know the async rport registrations have
-> ran at least once after adapter recovery. But as far as your patchset goes, I
-> don't think that is a gate.
-> 
-Thanks a lot. Modification to zfcp have been bogging me down for quite some
-while, glad that we've found this rather easy solution.
+Charl Liu (9):
+  scsi: Update Kconfig and Makefile for supporting Bayhub's SD/MMC Card
+    interface driver
+  scsi: bht: Add Bayhub module's Kconfig and Makefile for compiling
+    Bayhub's SD/MMC Card interface driver
+  scsi: bht: card: Add the source files related to card initialization
+  scsi: bht: host: Add the source files related to host initialization,
+    command handler, interrupt handler and transfer handler
+  scsi: bht: include: Add the header files related to Bayhub specific
+    struct, enum and macro
+  scsi: bht: linux_os: Add the source files related to SCSI frame and
+    driver entry
+  scsi: bht: main: Add the source files related to driver setting
+    management
+  scsi: bht: tagqueue: Add the source files related to tagqueue transfer
+    function
+  scsi: bht: util: Add the source files related to utility
 
-Will be sending an updated version.
+ drivers/scsi/Kconfig                         |    1 +
+ drivers/scsi/Makefile                        |    2 +
+ drivers/scsi/bht/Kconfig                     |   10 +
+ drivers/scsi/bht/Makefile                    |   18 +
+ drivers/scsi/bht/card/card_ddr200_support.c  |  195 ++
+ drivers/scsi/bht/card/card_ddr200_support.h  |   38 +
+ drivers/scsi/bht/card/cardcommon.c           |  961 ++++++
+ drivers/scsi/bht/card/cardcommon.h           |  123 +
+ drivers/scsi/bht/card/cardinterface.c        | 2448 ++++++++++++++
+ drivers/scsi/bht/card/mmc.c                  | 1666 ++++++++++
+ drivers/scsi/bht/card/output_tuning.c        |  756 +++++
+ drivers/scsi/bht/card/sd.c                   | 3029 ++++++++++++++++++
+ drivers/scsi/bht/card/thermal.c              |  348 ++
+ drivers/scsi/bht/card/uhs2.c                 | 1228 +++++++
+ drivers/scsi/bht/host/cmdhandler.c           | 1686 ++++++++++
+ drivers/scsi/bht/host/handler.h              |   36 +
+ drivers/scsi/bht/host/host.c                 | 2947 +++++++++++++++++
+ drivers/scsi/bht/host/hostreg.h              |  478 +++
+ drivers/scsi/bht/host/hostven.c              | 2774 ++++++++++++++++
+ drivers/scsi/bht/host/hostven.h              |   31 +
+ drivers/scsi/bht/host/irqhandler.c           |  742 +++++
+ drivers/scsi/bht/host/transhandler.c         | 1730 ++++++++++
+ drivers/scsi/bht/include/basic.h             |  395 +++
+ drivers/scsi/bht/include/card.h              |  626 ++++
+ drivers/scsi/bht/include/cardapi.h           |   85 +
+ drivers/scsi/bht/include/cfgmng.h            | 1303 ++++++++
+ drivers/scsi/bht/include/cmdhandler.h        |  289 ++
+ drivers/scsi/bht/include/debug.h             |  169 +
+ drivers/scsi/bht/include/funcapi.h           |   80 +
+ drivers/scsi/bht/include/function.h          |   94 +
+ drivers/scsi/bht/include/globalcfg.h         |   78 +
+ drivers/scsi/bht/include/host.h              |  282 ++
+ drivers/scsi/bht/include/hostapi.h           |  170 +
+ drivers/scsi/bht/include/hostvenapi.h        |   47 +
+ drivers/scsi/bht/include/osapi.h             |  201 ++
+ drivers/scsi/bht/include/reqapi.h            |   80 +
+ drivers/scsi/bht/include/tq.h                |  159 +
+ drivers/scsi/bht/include/tqapi.h             |   36 +
+ drivers/scsi/bht/include/transh.h            |  132 +
+ drivers/scsi/bht/include/transhapi.h         |   25 +
+ drivers/scsi/bht/include/util.h              |   37 +
+ drivers/scsi/bht/linux_os/linux_api.c        | 2207 +++++++++++++
+ drivers/scsi/bht/linux_os/linux_api.h        |   90 +
+ drivers/scsi/bht/linux_os/linux_base.c       |  985 ++++++
+ drivers/scsi/bht/linux_os/linux_scsi.c       | 1076 +++++++
+ drivers/scsi/bht/linux_os/linux_scsi.h       |  239 ++
+ drivers/scsi/bht/main/autotimerfunc.c        |  335 ++
+ drivers/scsi/bht/main/cfgmng.c               | 1132 +++++++
+ drivers/scsi/bht/main/funcapi.h              |   36 +
+ drivers/scsi/bht/main/geniofunc.c            |  618 ++++
+ drivers/scsi/bht/main/pmfunc.c               |  357 +++
+ drivers/scsi/bht/main/reqmng.c               |  546 ++++
+ drivers/scsi/bht/main/testcase.c             |  213 ++
+ drivers/scsi/bht/main/thread.c               |  530 +++
+ drivers/scsi/bht/tagqueue/tagqueue.c         | 2517 +++++++++++++++
+ drivers/scsi/bht/tagqueue/tq_merge.c         |  433 +++
+ drivers/scsi/bht/tagqueue/tq_trans_api.h     |   91 +
+ drivers/scsi/bht/tagqueue/tq_util.h          |   29 +
+ drivers/scsi/bht/tagqueue/tqadma2.c          |  821 +++++
+ drivers/scsi/bht/tagqueue/tqadma3.c          |  504 +++
+ drivers/scsi/bht/tagqueue/tqadma_sdma_like.c |  373 +++
+ drivers/scsi/bht/tagqueue/tqpolicy.c         |  210 ++
+ drivers/scsi/bht/tagqueue/tqsdma.c           |  285 ++
+ drivers/scsi/bht/util/debug.c                |  413 +++
+ drivers/scsi/bht/util/util.c                 |  141 +
+ 65 files changed, 39716 insertions(+)
+ create mode 100644 drivers/scsi/bht/Kconfig
+ create mode 100644 drivers/scsi/bht/Makefile
+ create mode 100644 drivers/scsi/bht/card/card_ddr200_support.c
+ create mode 100644 drivers/scsi/bht/card/card_ddr200_support.h
+ create mode 100644 drivers/scsi/bht/card/cardcommon.c
+ create mode 100644 drivers/scsi/bht/card/cardcommon.h
+ create mode 100644 drivers/scsi/bht/card/cardinterface.c
+ create mode 100644 drivers/scsi/bht/card/mmc.c
+ create mode 100644 drivers/scsi/bht/card/output_tuning.c
+ create mode 100644 drivers/scsi/bht/card/sd.c
+ create mode 100644 drivers/scsi/bht/card/thermal.c
+ create mode 100644 drivers/scsi/bht/card/uhs2.c
+ create mode 100644 drivers/scsi/bht/host/cmdhandler.c
+ create mode 100644 drivers/scsi/bht/host/handler.h
+ create mode 100644 drivers/scsi/bht/host/host.c
+ create mode 100644 drivers/scsi/bht/host/hostreg.h
+ create mode 100644 drivers/scsi/bht/host/hostven.c
+ create mode 100644 drivers/scsi/bht/host/hostven.h
+ create mode 100644 drivers/scsi/bht/host/irqhandler.c
+ create mode 100644 drivers/scsi/bht/host/transhandler.c
+ create mode 100644 drivers/scsi/bht/include/basic.h
+ create mode 100644 drivers/scsi/bht/include/card.h
+ create mode 100644 drivers/scsi/bht/include/cardapi.h
+ create mode 100644 drivers/scsi/bht/include/cfgmng.h
+ create mode 100644 drivers/scsi/bht/include/cmdhandler.h
+ create mode 100644 drivers/scsi/bht/include/debug.h
+ create mode 100644 drivers/scsi/bht/include/funcapi.h
+ create mode 100644 drivers/scsi/bht/include/function.h
+ create mode 100644 drivers/scsi/bht/include/globalcfg.h
+ create mode 100644 drivers/scsi/bht/include/host.h
+ create mode 100644 drivers/scsi/bht/include/hostapi.h
+ create mode 100644 drivers/scsi/bht/include/hostvenapi.h
+ create mode 100644 drivers/scsi/bht/include/osapi.h
+ create mode 100644 drivers/scsi/bht/include/reqapi.h
+ create mode 100644 drivers/scsi/bht/include/tq.h
+ create mode 100644 drivers/scsi/bht/include/tqapi.h
+ create mode 100644 drivers/scsi/bht/include/transh.h
+ create mode 100644 drivers/scsi/bht/include/transhapi.h
+ create mode 100644 drivers/scsi/bht/include/util.h
+ create mode 100644 drivers/scsi/bht/linux_os/linux_api.c
+ create mode 100644 drivers/scsi/bht/linux_os/linux_api.h
+ create mode 100644 drivers/scsi/bht/linux_os/linux_base.c
+ create mode 100644 drivers/scsi/bht/linux_os/linux_scsi.c
+ create mode 100644 drivers/scsi/bht/linux_os/linux_scsi.h
+ create mode 100644 drivers/scsi/bht/main/autotimerfunc.c
+ create mode 100644 drivers/scsi/bht/main/cfgmng.c
+ create mode 100644 drivers/scsi/bht/main/funcapi.h
+ create mode 100644 drivers/scsi/bht/main/geniofunc.c
+ create mode 100644 drivers/scsi/bht/main/pmfunc.c
+ create mode 100644 drivers/scsi/bht/main/reqmng.c
+ create mode 100644 drivers/scsi/bht/main/testcase.c
+ create mode 100644 drivers/scsi/bht/main/thread.c
+ create mode 100644 drivers/scsi/bht/tagqueue/tagqueue.c
+ create mode 100644 drivers/scsi/bht/tagqueue/tq_merge.c
+ create mode 100644 drivers/scsi/bht/tagqueue/tq_trans_api.h
+ create mode 100644 drivers/scsi/bht/tagqueue/tq_util.h
+ create mode 100644 drivers/scsi/bht/tagqueue/tqadma2.c
+ create mode 100644 drivers/scsi/bht/tagqueue/tqadma3.c
+ create mode 100644 drivers/scsi/bht/tagqueue/tqadma_sdma_like.c
+ create mode 100644 drivers/scsi/bht/tagqueue/tqpolicy.c
+ create mode 100644 drivers/scsi/bht/tagqueue/tqsdma.c
+ create mode 100644 drivers/scsi/bht/util/debug.c
+ create mode 100644 drivers/scsi/bht/util/util.c
 
-Cheers,
 
-Hannes
+base-commit: 401644852d0b2a278811de38081be23f74b5bb04
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
-Myers, Andrew McDonald, Martje Boudien Moerman
+2.34.1
 
