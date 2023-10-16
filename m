@@ -2,44 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C9B7CA402
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Oct 2023 11:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817D27CA404
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Oct 2023 11:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbjJPJYw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Oct 2023 05:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        id S232944AbjJPJYz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Oct 2023 05:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232580AbjJPJYt (ORCPT
+        with ESMTP id S232494AbjJPJYt (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Oct 2023 05:24:49 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E273EA
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C92395
         for <linux-scsi@vger.kernel.org>; Mon, 16 Oct 2023 02:24:45 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 482F121C44;
+        by smtp-out1.suse.de (Postfix) with ESMTP id 46B5721884;
         Mon, 16 Oct 2023 09:24:44 +0000 (UTC)
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id C599B2CB39;
+        by relay2.suse.de (Postfix) with ESMTP id C61772CB3C;
         Mon, 16 Oct 2023 09:24:43 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id BF4AE51EBDC0; Mon, 16 Oct 2023 11:24:43 +0200 (CEST)
+        id C37D251EBDC2; Mon, 16 Oct 2023 11:24:43 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCHv6 00/17] scsi: EH rework prep patches, part 2
-Date:   Mon, 16 Oct 2023 11:24:13 +0200
-Message-Id: <20231016092430.55557-1-hare@suse.de>
+Subject: [PATCH 01/17] pmcraid: add missing scsi_device_put() in pmcraid_eh_target_reset_handler()
+Date:   Mon, 16 Oct 2023 11:24:14 +0200
+Message-Id: <20231016092430.55557-2-hare@suse.de>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20231016092430.55557-1-hare@suse.de>
+References: <20231016092430.55557-1-hare@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: ++++++++
+X-Spamd-Bar: +++++++++++
 Authentication-Results: smtp-out1.suse.de;
         dkim=none;
         dmarc=none;
         spf=softfail (smtp-out1.suse.de: 149.44.160.134 is neither permitted nor denied by domain of hare@suse.de) smtp.mailfrom=hare@suse.de
 X-Rspamd-Server: rspamd2
-X-Spamd-Result: default: False [8.49 / 50.00];
+X-Spamd-Result: default: False [11.49 / 50.00];
          ARC_NA(0.00)[];
          FROM_HAS_DN(0.00)[];
          TO_DN_SOME(0.00)[];
@@ -61,9 +63,9 @@ X-Spamd-Result: default: False [8.49 / 50.00];
          R_DKIM_NA(0.20)[];
          MIME_TRACE(0.00)[0:+];
          RCVD_COUNT_TWO(0.00)[2];
-         BAYES_HAM(-3.00)[100.00%]
-X-Spam-Score: 8.49
-X-Rspamd-Queue-Id: 482F121C44
+         BAYES_HAM(-0.00)[20.75%]
+X-Spam-Score: 11.49
+X-Rspamd-Queue-Id: 46B5721884
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,95 +74,63 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi all,
+When breaking out of a shost_for_each_device() loop one need to do
+an explicit scsi_device_put(). And while at it convert to use
+shost_priv() instead of a direct reference to ->hostdata.
 
-(taking up an old thread:)
-here's the second batch of patches for my EH rework.
-It modifies the reset callbacks for SCSI drivers
-such that the final conversion to drop the 'struct scsi_cmnd'
-argument and use the entity in question (host, bus, target, device)
-as the argument to the SCSI EH callbacks becomes possible.
-The second part covers drivers which require a bit more love.
-In particular the fnic, snic, and csiostor drivers require a tag to
-send TMFs. So to handle that I've set aside a tag and used that directly
-(for snic host reset), or call scsi_alloc_request() with the NOWAIT flag.
-That will return a scsi command with a valid tag, which then can be used
-to send the reset. It might fail (eg when the tagset is full),
-but in these cases it might be better to fall back to host_reset anyway.
+Fixes: c2a14ab3b9b3 ("scsi: pmcraid: Select device in pmcraid_eh_target_reset_handler()")
+Signed-off-by: Hannes Reinecke <hare@suse.de>
+---
+ drivers/scsi/pmcraid.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-As usual, comments and reviews are welcome.
-
-Changes to v5:
-- Modified zfcp host reset to return FAST_IO_FAIL
-- Rebased to 6.7/staging
-- Add fix for missing scsi_device_put() in pmcraid
-- Modify doing_srb_done() in dc395x to not use a scsi command
-
-Changes to v4:
-- rework snic to use a dedicated tag for host reset
-- rework snic to allocate TMFs on the fly
-- rework fnic to allocate TMFs on the fly
-- rework csiostor to allocat TMFs on the fly
-- drop fc_block_rport() from zfcp host_reset
-- Rebase to latest linus tree
-
-Changes to v3:
-- Move fnic and snic patches to the next patchset
-- Include reviews from Ewan Milne
-
-Changes to v2:
-- Include reviews from John Garry
-- move mpi3mr, zfcp, sym53c8xx_2, and qla1280 patches to the
-  next patchset
-
-Changes to the initial version:
-- Include reviews from Christoph
-- Fixup build robot issues
-
-Hannes Reinecke (17):
-  pmcraid: add missing scsi_device_put() in
-    pmcraid_eh_target_reset_handler()
-  zfcp: do not wait for rports to become unblocked after host reset
-  bfa: Do not use scsi command to signal TMF status
-  aha152x: look for stuck command when resetting device
-  a1000u2w: do not rely on the command for inia100_device_reset()
-  fas216: Rework device reset to not rely on SCSI command pointer
-  xen-scsifront: add scsi device as argument to scsifront_do_request()
-  xen-scsifront: rework scsifront_action_handler()
-  libiscsi: use cls_session as argument for target and session reset
-  scsi_transport_iscsi: use session as argument for
-    iscsi_block_scsi_eh()
-  snic: reserve tag for TMF
-  snic: allocate device reset command
-  snic: Use scsi_host_busy_iter() to traverse commands
-  fnic: allocate device reset command on the fly
-  fnic: use fc_block_rport() correctly
-  csiostor: use separate TMF command
-  dc395x: Remove 'scmd' parameter from doing_srb_done()
-
- drivers/s390/scsi/zfcp_scsi.c       |   6 +-
- drivers/scsi/a100u2w.c              |  43 +---
- drivers/scsi/aha152x.c              |  26 ++-
- drivers/scsi/arm/fas216.c           |  39 ++--
- drivers/scsi/be2iscsi/be_main.c     |  10 +-
- drivers/scsi/bfa/bfad_im.c          | 112 +++++-----
- drivers/scsi/bfa/bfad_im.h          |   2 +
- drivers/scsi/csiostor/csio_scsi.c   |  72 ++++---
- drivers/scsi/dc395x.c               |  14 +-
- drivers/scsi/fnic/fnic.h            |   1 -
- drivers/scsi/fnic/fnic_scsi.c       | 115 +++++-----
- drivers/scsi/libiscsi.c             |  21 +-
- drivers/scsi/pmcraid.c              |  15 +-
- drivers/scsi/qla4xxx/ql4_os.c       |  34 +--
- drivers/scsi/scsi_transport_iscsi.c |   6 +-
- drivers/scsi/snic/snic.h            |   2 +-
- drivers/scsi/snic/snic_main.c       |   5 +-
- drivers/scsi/snic/snic_scsi.c       | 319 ++++++++++++----------------
- drivers/scsi/xen-scsifront.c        |  49 +++--
- include/scsi/libiscsi.h             |   2 +-
- include/scsi/scsi_transport_iscsi.h |   2 +-
- 21 files changed, 429 insertions(+), 466 deletions(-)
-
+diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
+index a831b34c08a4..d946fb014474 100644
+--- a/drivers/scsi/pmcraid.c
++++ b/drivers/scsi/pmcraid.c
+@@ -2702,8 +2702,7 @@ static int pmcraid_reset_device(
+ 	unsigned long lock_flags;
+ 	u32 ioasc;
+ 
+-	pinstance =
+-		(struct pmcraid_instance *)scsi_dev->host->hostdata;
++	pinstance = shost_priv(scsi_dev->host);
+ 	res = scsi_dev->hostdata;
+ 
+ 	if (!res) {
+@@ -3026,8 +3025,7 @@ static int pmcraid_eh_device_reset_handler(struct scsi_cmnd *scmd)
+ static int pmcraid_eh_bus_reset_handler(struct scsi_cmnd *scmd)
+ {
+ 	struct Scsi_Host *host = scmd->device->host;
+-	struct pmcraid_instance *pinstance =
+-		(struct pmcraid_instance *)host->hostdata;
++	struct pmcraid_instance *pinstance = shost_priv(host);
+ 	struct pmcraid_resource_entry *res = NULL;
+ 	struct pmcraid_resource_entry *temp;
+ 	struct scsi_device *sdev = NULL;
+@@ -3066,6 +3064,7 @@ static int pmcraid_eh_target_reset_handler(struct scsi_cmnd *scmd)
+ {
+ 	struct Scsi_Host *shost = scmd->device->host;
+ 	struct scsi_device *scsi_dev = NULL, *tmp;
++	int ret;
+ 
+ 	shost_for_each_device(tmp, shost) {
+ 		if ((tmp->channel == scmd->device->channel) &&
+@@ -3078,9 +3077,11 @@ static int pmcraid_eh_target_reset_handler(struct scsi_cmnd *scmd)
+ 		return FAILED;
+ 	sdev_printk(KERN_INFO, scsi_dev,
+ 		    "Doing target reset due to an I/O command timeout.\n");
+-	return pmcraid_reset_device(scsi_dev,
+-				    PMCRAID_INTERNAL_TIMEOUT,
+-				    RESET_DEVICE_TARGET);
++	ret = pmcraid_reset_device(scsi_dev,
++				   PMCRAID_INTERNAL_TIMEOUT,
++				   RESET_DEVICE_TARGET);
++	scsi_device_put(scsi_dev);
++	return ret;
+ }
+ 
+ /**
 -- 
 2.35.3
 
