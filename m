@@ -2,61 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFA77CA086
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Oct 2023 09:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545AB7CA089
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Oct 2023 09:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232255AbjJPH0e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Oct 2023 03:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
+        id S232181AbjJPH0g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Oct 2023 03:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbjJPH0U (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Oct 2023 03:26:20 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5B0E1;
-        Mon, 16 Oct 2023 00:26:19 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9bf0ac97fdeso216514166b.2;
-        Mon, 16 Oct 2023 00:26:19 -0700 (PDT)
+        with ESMTP id S232073AbjJPH0Y (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Oct 2023 03:26:24 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB02E3;
+        Mon, 16 Oct 2023 00:26:20 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9b1ebc80d0aso644385566b.0;
+        Mon, 16 Oct 2023 00:26:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697441177; x=1698045977; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1697441178; x=1698045978; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xnxVJqIRdQtouvx5n5R9hP/D5oVVipLHSJQwRP3ossw=;
-        b=TlUmt8hZ4LVdRAf781E3554vUA8EVfRwwmGzOD5eA7/8B7f4WsmPiM3YfqytxtS4YX
-         LO3k3/nMSmnx0qh00U3dmHG6mE7wjOItSX2Sfb4tzizdQupVInJMB3G26PZ5pLfVum60
-         HLjhubNwo1YtVXWayYuvZceL765Gm+yZDuvHlMkrAR+ijWPmegB1M8sfVYSct1DD1aAN
-         b8pcm4D4tZ8feAzlTeKDYYEL/O6pDM0bI0dli4sV+pQ2qvERueHCl+HQvaKlNe4ic8aS
-         uNfQiBC5LouSln7uuoPRmg4YwkOlUhxLLBPxkP06wU+6O1NxW4ZvoqbK8rsy9McL7zup
-         QWBw==
+        bh=AKEonLkFv7flAIkFjaxuLAbAMwome4P+GcLKsO3pvRg=;
+        b=LkHVELcENYEuD66PF4as0i61MUwXe0vYHeWRMDUalDBkgA6EF9TKG1Ps+hJLp+t1fd
+         Wk7lQan00yKW9soXGBwxdHrMBvakt1YvH41Hf7XJL/cPOWJ1ewFtx6cpecddTWmh0pq9
+         Z+zibzdGR/G0JpPFwa+oHfhWcS6Z+pqkV3D+vYvLtxLu1tC5GciA0TBwwlducEXbxXbJ
+         lmFYGaa5m120idt7FIIzaMyP+9nJmYefNOSl792f2nN2/24mTgtgk9RRUbU64OzCFM1n
+         fu6rvtDK0gCHxKYPFpw20khSWKgQJM85A0RqzUma4ElAZa2yF9suF4rL18KTh7UKTjHn
+         TAYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697441177; x=1698045977;
+        d=1e100.net; s=20230601; t=1697441178; x=1698045978;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xnxVJqIRdQtouvx5n5R9hP/D5oVVipLHSJQwRP3ossw=;
-        b=FA3c3f3/ifnlOzJe67tiq7bXgRhgOXDHmipYB2Q0gOmcegjETOMRGKpg0zn12jjjIA
-         L4IL4NOfVlZYklWZ3xwC7i4XTKOtDX7MCRVN3JEHC9mOdM2Fop32JMvqW41CSxKO02WS
-         BWefSKJ+nAhqNsF9fRm3PrhyEOAO9XugpT/ac/wbIriP59RIcF1X3mVoNTUw0Q0qumsx
-         YdkJjdhZT6tsuW/G90e+IrqTu+d6JZ0NRlqBlj4P9SqMNSipD1tVNGiagq73bd1JNUYJ
-         BQ+Etx9pwnccZFEuztfGRxsLzjXFU2G5AAo9VVmAsTcg/G5975NYbM38mfqKOGyN3pne
-         AhEQ==
-X-Gm-Message-State: AOJu0Yw3jBKkdMUpKpJfVylP/hQImkN8U65MYvGQjxqxJA5tzmQqoAGB
-        ZszxrxxPz9L1FaqATS2Fp0ne63gm4R5rLg==
-X-Google-Smtp-Source: AGHT+IH9KvZqYihmyg2FnPlR7/ZYAkszc3cWqEXIzdLn9JoffIMrIfjfZIs0poWr0ZmOjTinLnsjuA==
-X-Received: by 2002:a17:906:9c1:b0:9b2:89ec:d701 with SMTP id r1-20020a17090609c100b009b289ecd701mr32086734eje.27.1697441177480;
-        Mon, 16 Oct 2023 00:26:17 -0700 (PDT)
+        bh=AKEonLkFv7flAIkFjaxuLAbAMwome4P+GcLKsO3pvRg=;
+        b=MFuiHyod/aaYqii15qvf5ORWnrOOrRgzTDmP2MHDpRaOodost8WKsfy4ngp0B3j9uc
+         d77cQGfbZJy19jcCmOOE1LMuxkQApjZzmYuZFu5aekny4nH5Jcb6/Eh/c/Kg2/UnRXFJ
+         9MiaDmAA0VUWen4JnYZkwp7fE3sME2WcmQ24ZqOsNT/jtrITOuLahJB0g0YOj4HNjBst
+         5jGj8FgNrWfGOgC+AbAZ+vDnIbZ325sY2m4/j6z/7o96e5ZxiuvNaPHhBmnfGB2YqaiW
+         PWUyi0yV58ss/eZOG+owGMKHZNqAoY0rBnim6TGctLCmqn+i9iwPCNG7Wu10fhGH3HlR
+         scNw==
+X-Gm-Message-State: AOJu0YxC7itaSf6EeLmYki0KRo7li74UUDFP2e+0tF3A8Y3VA/wPNHKG
+        sE30uhJcFQlBdMR2uw3TP34hqdTkP9IXVQ==
+X-Google-Smtp-Source: AGHT+IHdmnwLce4qtarN1rGmGRlcyujEaX4lm1wqfQv8yqEMT6/tV7Pw2rgJvyZae9i6xgGyA9fHVg==
+X-Received: by 2002:a17:906:db08:b0:9bd:bb63:49db with SMTP id xj8-20020a170906db0800b009bdbb6349dbmr7432298ejb.7.1697441178436;
+        Mon, 16 Oct 2023 00:26:18 -0700 (PDT)
 Received: from sauvignon.fi.muni.cz ([2001:718:801:22c:bdcb:518:be8f:6a76])
-        by smtp.gmail.com with ESMTPSA id n25-20020a17090673d900b0099297782aa9sm3399980ejl.49.2023.10.16.00.26.16
+        by smtp.gmail.com with ESMTPSA id n25-20020a17090673d900b0099297782aa9sm3399980ejl.49.2023.10.16.00.26.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Oct 2023 00:26:17 -0700 (PDT)
+        Mon, 16 Oct 2023 00:26:18 -0700 (PDT)
 From:   Milan Broz <gmazyland@gmail.com>
 To:     linux-usb@vger.kernel.org
 Cc:     usb-storage@lists.one-eyed-alien.net, linux-scsi@vger.kernel.org,
         stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
         oneukum@suse.com, Milan Broz <gmazyland@gmail.com>
-Subject: [PATCH 5/7] usb-storage,uas: do not convert device_info for 64-bit platforms
-Date:   Mon, 16 Oct 2023 09:26:02 +0200
-Message-ID: <20231016072604.40179-6-gmazyland@gmail.com>
+Subject: [PATCH 6/7] usb-storage,uas: enable security commands for USB-attached storage
+Date:   Mon, 16 Oct 2023 09:26:03 +0200
+Message-ID: <20231016072604.40179-7-gmazyland@gmail.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231016072604.40179-1-gmazyland@gmail.com>
 References: <20231006125445.122380-1-gmazyland@gmail.com>
@@ -73,92 +73,110 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch optimizes the previous one for 64-bit platforms, where
-unsigned long is 64-bit, so we do not need to convert quirk flags
-to 32-bit index.
+This patch enables security commands (currently mostly OPAL hardware
+encryption) for UAS and usb-storage drivers.
+
+The SCSI layer uses security commands for the initial OPAL support
+check (discovery command) and for in-kernel sed-ioctl interface.
+
+Some adapters support these commands, but firmware can be buggy or
+implemented incorrectly; the patch also adds a new quirk IGNORE_OPAL
+to disable security commands for particular devices.
+
+If adapters do not implement needed commands (ATA-12 pass-thru),
+the commands are rejected, and OPAL support remains disabled.
+(This is how it already works if OPAL command is sent from userspace
+directly, like in sedutils.)
 
 Signed-off-by: Milan Broz <gmazyland@gmail.com>
 ---
- drivers/usb/storage/Makefile  | 3 +++
- drivers/usb/storage/mkflags.c | 9 +++++++++
- drivers/usb/storage/usb-ids.h | 4 ++++
- 3 files changed, 16 insertions(+)
+ Documentation/admin-guide/kernel-parameters.txt | 2 ++
+ drivers/usb/storage/scsiglue.c                  | 4 ++++
+ drivers/usb/storage/uas.c                       | 5 +++++
+ drivers/usb/storage/usb.c                       | 5 ++++-
+ include/linux/usb_usual.h                       | 2 ++
+ 5 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/storage/Makefile b/drivers/usb/storage/Makefile
-index 612678f108d0..62ebaa76ef95 100644
---- a/drivers/usb/storage/Makefile
-+++ b/drivers/usb/storage/Makefile
-@@ -57,6 +57,9 @@ $(obj)/usual-tables.o: $(obj)/usb-ids.c
- $(obj)/uas.o: $(obj)/usb-ids-uas.c
- clean-files		:= usb-ids.c usb-ids-uas.c
- HOSTCFLAGS_mkflags.o	:= -I $(srctree)/include/
-+ifdef CONFIG_64BIT
-+HOSTCFLAGS_mkflags.o	+= -D CONFIG_64BIT
-+endif
- hostprogs		+= mkflags
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 0a1731a0f0ef..e3f072cbb833 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6885,6 +6885,8 @@
+ 				y = ALWAYS_SYNC (issue a SYNCHRONIZE_CACHE
+ 					even if the device claims no cache,
+ 					not on uas)
++				z = IGNORE_OPAL (the device security commands
++					(OPAL) are broken, do not enable them);
+ 			Example: quirks=0419:aaf5:rl,0421:0433:rc
  
- quiet_cmd_mkflag_storage = FLAGS   $@
-diff --git a/drivers/usb/storage/mkflags.c b/drivers/usb/storage/mkflags.c
-index 2514ffef0154..08c37d2e52d6 100644
---- a/drivers/usb/storage/mkflags.c
-+++ b/drivers/usb/storage/mkflags.c
-@@ -89,11 +89,15 @@ static struct svals vals[] = {
+ 	user_debug=	[KNL,ARM]
+diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
+index c54e9805da53..ef93813a2049 100644
+--- a/drivers/usb/storage/scsiglue.c
++++ b/drivers/usb/storage/scsiglue.c
+@@ -209,6 +209,10 @@ static int slave_configure(struct scsi_device *sdev)
+ 		/* Do not attempt to use WRITE SAME */
+ 		sdev->no_write_same = 1;
  
- static unsigned long get_device_info(uint64_t flags, unsigned int idx)
- {
-+#ifndef CONFIG_64BIT
- 	if (flags < HI32)
- 		return (unsigned long)flags;
++		/* Allow security commands (OPAL) passthrough */
++		if (!(us->fflags & US_FL_IGNORE_OPAL))
++			sdev->security_supported = 1;
++
+ 		/*
+ 		 * Some disks return the total number of blocks in response
+ 		 * to READ CAPACITY rather than the highest block number.
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index 8a1c4449dcc9..8967767d6753 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -865,6 +865,11 @@ static int uas_slave_configure(struct scsi_device *sdev)
+ 	/* Some disks cannot handle WRITE_SAME */
+ 	if (devinfo->flags & US_FL_NO_SAME)
+ 		sdev->no_write_same = 1;
++
++	/* Allow security commands (OPAL) passthrough */
++	if (!(devinfo->flags & US_FL_IGNORE_OPAL))
++		sdev->security_supported = 1;
++
+ 	/*
+ 	 * Some disks return the total number of blocks in response
+ 	 * to READ CAPACITY rather than the highest block number.
+diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
+index bb48ab1bd461..3facc80292d7 100644
+--- a/drivers/usb/storage/usb.c
++++ b/drivers/usb/storage/usb.c
+@@ -477,7 +477,7 @@ void usb_stor_adjust_quirks(struct usb_device *udev, u64 *fflags)
+ 			US_FL_INITIAL_READ10 | US_FL_WRITE_CACHE |
+ 			US_FL_NO_ATA_1X | US_FL_NO_REPORT_OPCODES |
+ 			US_FL_MAX_SECTORS_240 | US_FL_NO_REPORT_LUNS |
+-			US_FL_ALWAYS_SYNC);
++			US_FL_ALWAYS_SYNC | US_FL_IGNORE_OPAL);
  
- 	/* Use index that will be processed in usb_stor_di2flags */
- 	return HI32 + idx;
-+#else
-+	return flags;
-+#endif
- }
- 
- static void print_class(uint8_t bDeviceSubClass, uint8_t bDeviceProtocol)
-@@ -123,6 +127,10 @@ static void print_type(unsigned int type)
- 
- static void print_usb_flags(const char *type)
- {
-+#ifdef CONFIG_64BIT
-+	printf("const u64 usb_%s_di_to_u64[] = {};\n", type);
-+	printf("const unsigned long usb_%s_di_idx_size = 0;\n\n", type);
-+#else
- 	int i, count;
- 
- 	printf("const u64 usb_%s_di_to_u64[] = {\n", type);
-@@ -134,6 +142,7 @@ static void print_usb_flags(const char *type)
+ 	p = quirks;
+ 	while (*p) {
+@@ -566,6 +566,9 @@ void usb_stor_adjust_quirks(struct usb_device *udev, u64 *fflags)
+ 		case 'y':
+ 			f |= US_FL_ALWAYS_SYNC;
+ 			break;
++		case 'z':
++			f |= US_FL_IGNORE_OPAL;
++			break;
+ 		/* Ignore unrecognized flag characters */
+ 		}
  	}
- 	printf("};\n\n");
- 	printf("const unsigned long usb_%s_di_idx_size = %i;\n\n", type, count);
-+#endif
- }
+diff --git a/include/linux/usb_usual.h b/include/linux/usb_usual.h
+index 712363c7a2e8..0181c94d7d91 100644
+--- a/include/linux/usb_usual.h
++++ b/include/linux/usb_usual.h
+@@ -88,6 +88,8 @@
+ 		/* Cannot handle WRITE_SAME */			\
+ 	US_FLAG(SENSE_AFTER_SYNC, 0x80000000)			\
+ 		/* Do REQUEST_SENSE after SYNCHRONIZE_CACHE */	\
++	US_FLAG(IGNORE_OPAL, 0x100000000)			\
++		/* Security commands (OPAL) are broken */	\
  
- static void print_usb_storage(void)
-diff --git a/drivers/usb/storage/usb-ids.h b/drivers/usb/storage/usb-ids.h
-index 8bfd84e07f96..4abe1a6d3a66 100644
---- a/drivers/usb/storage/usb-ids.h
-+++ b/drivers/usb/storage/usb-ids.h
-@@ -15,6 +15,9 @@ extern const u64 usb_uas_di_to_u64[];
- static u64 usb_stor_di2flags(const u64 *di_to_u64,
- 		unsigned long idx_size, unsigned long idx)
- {
-+#if IS_ENABLED(CONFIG_64BIT)
-+	return idx;
-+#else
- 	u64 flags = 0;
- 
- 	if (idx < (1UL << 31))
-@@ -28,6 +31,7 @@ static u64 usb_stor_di2flags(const u64 *di_to_u64,
- 		WARN_ONCE(true, "usb_stor_di_to_u64 table not updated");
- 
- 	return flags;
-+#endif
- }
- 
- #endif
+ #define US_FLAG(name, value)	US_FL_##name = value ,
+ enum { US_DO_ALL_FLAGS };
 -- 
 2.42.0
 
