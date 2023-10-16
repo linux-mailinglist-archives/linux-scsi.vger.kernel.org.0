@@ -2,34 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB847CA7D4
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Oct 2023 14:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473F67CA7D2
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Oct 2023 14:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233651AbjJPMQA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Oct 2023 08:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
+        id S233638AbjJPMP6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Oct 2023 08:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbjJPMPy (ORCPT
+        with ESMTP id S231990AbjJPMPy (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Oct 2023 08:15:54 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077BFE6
-        for <linux-scsi@vger.kernel.org>; Mon, 16 Oct 2023 05:15:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5867BEA
+        for <linux-scsi@vger.kernel.org>; Mon, 16 Oct 2023 05:15:51 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 880A01FEB9;
+        by smtp-out2.suse.de (Postfix) with ESMTP id 88F4B1FEBC;
         Mon, 16 Oct 2023 12:15:49 +0000 (UTC)
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 218882D157;
+        by relay2.suse.de (Postfix) with ESMTP id 249B22D15A;
         Mon, 16 Oct 2023 12:15:49 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 45F0E51EBE00; Mon, 16 Oct 2023 14:15:49 +0200 (CEST)
+        id 4E54D51EBE02; Mon, 16 Oct 2023 14:15:49 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 8/9] scsi_error: iterate over list of failed commands in scsi_eh_bus_device_reset()
-Date:   Mon, 16 Oct 2023 14:15:41 +0200
-Message-Id: <20231016121542.111501-9-hare@suse.de>
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Subject: [PATCH 9/9] scsi: remove SUBMITTED_BY_SCSI_RESET_IOCTL
+Date:   Mon, 16 Oct 2023 14:15:42 +0200
+Message-Id: <20231016121542.111501-10-hare@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20231016121542.111501-1-hare@suse.de>
 References: <20231016121542.111501-1-hare@suse.de>
@@ -43,6 +45,7 @@ Authentication-Results: smtp-out2.suse.de;
 X-Rspamd-Server: rspamd2
 X-Spamd-Result: default: False [14.49 / 50.00];
          ARC_NA(0.00)[];
+         RWL_MAILSPIKE_GOOD(0.00)[149.44.160.134:from];
          FROM_HAS_DN(0.00)[];
          TO_DN_SOME(0.00)[];
          R_MISSING_CHARSET(2.50)[];
@@ -51,20 +54,20 @@ X-Spamd-Result: default: False [14.49 / 50.00];
          DMARC_NA(0.20)[suse.de];
          BROKEN_CONTENT_TYPE(1.50)[];
          R_SPF_SOFTFAIL(0.60)[~all:c];
-         RCPT_COUNT_FIVE(0.00)[5];
          TO_MATCH_ENVRCPT_SOME(0.00)[];
          VIOLATED_DIRECT_SPF(3.50)[];
          MX_GOOD(-0.01)[];
          NEURAL_SPAM_LONG(3.00)[1.000];
+         RCPT_COUNT_SEVEN(0.00)[7];
          MID_CONTAINS_FROM(1.00)[];
-         RWL_MAILSPIKE_GOOD(0.00)[149.44.160.134:from];
          RCVD_NO_TLS_LAST(0.10)[];
          FROM_EQ_ENVFROM(0.00)[];
          R_DKIM_NA(0.20)[];
          MIME_TRACE(0.00)[0:+];
-         RCVD_COUNT_TWO(0.00)[2]
+         RCVD_COUNT_TWO(0.00)[2];
+         BAYES_HAM(-0.00)[17.92%]
 X-Spam-Score: 14.49
-X-Rspamd-Queue-Id: 880A01FEB9
+X-Rspamd-Queue-Id: 88F4B1FEBC
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,105 +76,41 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Iterating over all devices in scsi_eh_bus_device_reset() is
-inefficient as not all devices may be affected during SCSI EH.
-There also is no reason to open-code scsi_eh_test_devices()
-as for FAST_IO_FAIL we really should just return the commands
-without further ado.
-So rewrite the loop in scsi_eh_bus_device_reset() to match the
-loop in scsi_eh_target_reset() and scsi_eh_bus_reset().
+Unused now.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 ---
- drivers/scsi/scsi_error.c | 59 ++++++++++++++++++---------------------
- 1 file changed, 27 insertions(+), 32 deletions(-)
+ drivers/scsi/scsi_lib.c  | 2 --
+ include/scsi/scsi_cmnd.h | 1 -
+ 2 files changed, 3 deletions(-)
 
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index 9ae9b936e67b..b7aca379d051 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -1579,54 +1579,49 @@ static int scsi_eh_bus_device_reset(struct Scsi_Host *shost,
- 				    struct list_head *work_q,
- 				    struct list_head *done_q)
- {
--	struct scsi_cmnd *scmd, *bdr_scmd, *next;
--	struct scsi_device *sdev;
--	enum scsi_disposition rtn;
-+	struct scsi_cmnd *scmd, *next;
-+	LIST_HEAD(tmp_list);
-+	LIST_HEAD(check_list);
-+
-+	list_splice_init(work_q, &tmp_list);
-+
-+	while (!list_empty(&tmp_list)) {
-+		struct scsi_device *sdev;
-+		enum scsi_disposition rtn;
-+
-+		scmd = list_entry(tmp_list.next, struct scsi_cmnd, eh_entry);
-+		sdev = scmd->device;
- 
--	shost_for_each_device(sdev, shost) {
- 		if (scsi_host_eh_past_deadline(shost)) {
-+			/* push back on work queue for further processing */
-+			list_splice_init(&check_list, work_q);
-+			list_splice_init(&tmp_list, work_q);
- 			SCSI_LOG_ERROR_RECOVERY(3,
- 				sdev_printk(KERN_INFO, sdev,
- 					    "%s: skip BDR, past eh deadline\n",
- 					     current->comm));
--			scsi_device_put(sdev);
--			break;
-+			return list_empty(work_q);
- 		}
--		bdr_scmd = NULL;
--		list_for_each_entry(scmd, work_q, eh_entry)
--			if (scmd->device == sdev) {
--				bdr_scmd = scmd;
--				break;
--			}
--
--		if (!bdr_scmd)
--			continue;
--
- 		SCSI_LOG_ERROR_RECOVERY(3,
- 			sdev_printk(KERN_INFO, sdev,
- 				     "%s: Sending BDR\n", current->comm));
--		rtn = scsi_try_bus_device_reset(bdr_scmd);
--		if (rtn == SUCCESS || rtn == FAST_IO_FAIL) {
--			if (!scsi_device_online(sdev) ||
--			    rtn == FAST_IO_FAIL ||
--			    !scsi_eh_tur(bdr_scmd)) {
--				list_for_each_entry_safe(scmd, next,
--							 work_q, eh_entry) {
--					if (scmd->device == sdev &&
--					    scsi_eh_action(scmd, rtn) != FAILED)
--						__scsi_eh_finish_cmd(scmd,
--								     done_q,
--								     DID_RESET);
--				}
--			}
--		} else {
-+		rtn = scsi_try_bus_device_reset(sdev);
-+		if (rtn != SUCCESS && rtn != FAST_IO_FAIL)
- 			SCSI_LOG_ERROR_RECOVERY(3,
- 				sdev_printk(KERN_INFO, sdev,
- 					    "%s: BDR failed\n", current->comm));
-+		list_for_each_entry_safe(scmd, next, work_q, eh_entry) {
-+			if (scmd->device != sdev)
-+				continue;
-+			if (rtn == SUCCESS)
-+				list_move_tail(&scmd->eh_entry, &check_list);
-+			else if (rtn == FAST_IO_FAIL)
-+				__scsi_eh_finish_cmd(scmd, done_q,
-+						     DID_ABORT);
- 		}
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 195ca80667d0..3069e021c2aa 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -1615,8 +1615,6 @@ static void scsi_done_internal(struct scsi_cmnd *cmd, bool complete_directly)
+ 		break;
+ 	case SUBMITTED_BY_SCSI_ERROR_HANDLER:
+ 		return scsi_eh_done(cmd);
+-	case SUBMITTED_BY_SCSI_RESET_IOCTL:
+-		return;
  	}
  
--	return list_empty(work_q);
-+	return scsi_eh_test_devices(&check_list, work_q, done_q, 0);
- }
+ 	if (unlikely(blk_should_fake_timeout(scsi_cmd_to_rq(cmd)->q)))
+diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
+index 526def14e7fb..d681510724aa 100644
+--- a/include/scsi/scsi_cmnd.h
++++ b/include/scsi/scsi_cmnd.h
+@@ -68,7 +68,6 @@ struct scsi_pointer {
+ enum scsi_cmnd_submitter {
+ 	SUBMITTED_BY_BLOCK_LAYER = 0,
+ 	SUBMITTED_BY_SCSI_ERROR_HANDLER = 1,
+-	SUBMITTED_BY_SCSI_RESET_IOCTL = 2,
+ } __packed;
  
- /**
+ struct scsi_cmnd {
 -- 
 2.35.3
 
