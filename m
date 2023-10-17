@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61EE7CC024
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Oct 2023 12:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89AEA7CC033
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Oct 2023 12:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234911AbjJQKHo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Oct 2023 06:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
+        id S1343591AbjJQKIS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Oct 2023 06:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbjJQKHo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Oct 2023 06:07:44 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3152B0
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Oct 2023 03:07:41 -0700 (PDT)
+        with ESMTP id S234932AbjJQKHr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Oct 2023 06:07:47 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600D6F5
+        for <linux-scsi@vger.kernel.org>; Tue, 17 Oct 2023 03:07:45 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 814F721CEE;
+        by smtp-out2.suse.de (Postfix) with ESMTP id 81B181FF12;
         Tue, 17 Oct 2023 10:07:40 +0000 (UTC)
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id DFE3B2D3F1;
+        by relay2.suse.de (Postfix) with ESMTP id E72DE2D3F2;
         Tue, 17 Oct 2023 10:07:39 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 171BB51EBE8E; Tue, 17 Oct 2023 12:07:40 +0200 (CEST)
+        id 1E71951EBE90; Tue, 17 Oct 2023 12:07:40 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 07/16] xen-scsifront: rework scsifront_action_handler()
-Date:   Tue, 17 Oct 2023 12:07:20 +0200
-Message-Id: <20231017100729.123506-8-hare@suse.de>
+Subject: [PATCH 08/16] libiscsi: use cls_session as argument for target and session reset
+Date:   Tue, 17 Oct 2023 12:07:21 +0200
+Message-Id: <20231017100729.123506-9-hare@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20231017100729.123506-1-hare@suse.de>
 References: <20231017100729.123506-1-hare@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: +++++
-Authentication-Results: smtp-out1.suse.de;
+X-Spamd-Bar: ++
+Authentication-Results: smtp-out2.suse.de;
         dkim=none;
         dmarc=none;
-        spf=softfail (smtp-out1.suse.de: 149.44.160.134 is neither permitted nor denied by domain of hare@suse.de) smtp.mailfrom=hare@suse.de
+        spf=softfail (smtp-out2.suse.de: 149.44.160.134 is neither permitted nor denied by domain of hare@suse.de) smtp.mailfrom=hare@suse.de
 X-Rspamd-Server: rspamd2
-X-Spamd-Result: default: False [5.47 / 50.00];
+X-Spamd-Result: default: False [2.49 / 50.00];
          ARC_NA(0.00)[];
          FROM_HAS_DN(0.00)[];
          TO_DN_SOME(0.00)[];
@@ -63,9 +63,9 @@ X-Spamd-Result: default: False [5.47 / 50.00];
          R_DKIM_NA(0.20)[];
          MIME_TRACE(0.00)[0:+];
          RCVD_COUNT_TWO(0.00)[2];
-         BAYES_HAM(-0.02)[54.89%]
-X-Spam-Score: 5.47
-X-Rspamd-Queue-Id: 814F721CEE
+         BAYES_HAM(-3.00)[100.00%]
+X-Spam-Score: 2.49
+X-Rspamd-Queue-Id: 81B181FF12
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,69 +74,144 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Rework scsifront_action_handler() to add the SCSI device as the
-first argument, and select between abort and device reset by
-checking whether the scsi_cmnd argument is NULL.
+iscsi_eh_target_reset() and iscsi_eh_session_reset() only depend
+on the cls_session, so use that as an argument.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/scsi/xen-scsifront.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ drivers/scsi/be2iscsi/be_main.c | 10 +++++++++-
+ drivers/scsi/libiscsi.c         | 25 +++++++++++--------------
+ include/scsi/libiscsi.h         |  2 +-
+ 3 files changed, 21 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/scsi/xen-scsifront.c b/drivers/scsi/xen-scsifront.c
-index a0c13200d53a..5a6cb582e5eb 100644
---- a/drivers/scsi/xen-scsifront.c
-+++ b/drivers/scsi/xen-scsifront.c
-@@ -668,11 +668,12 @@ static int scsifront_queuecommand(struct Scsi_Host *shost,
-  * We have to wait until an answer is returned. This answer contains the
-  * result to be returned to the requestor.
-  */
--static int scsifront_action_handler(struct scsi_cmnd *sc, uint8_t act)
-+static int scsifront_action_handler(struct scsi_device *sdev,
-+				    struct scsi_cmnd *sc)
- {
--	struct Scsi_Host *host = sc->device->host;
-+	struct Scsi_Host *host = sdev->host;
- 	struct vscsifrnt_info *info = shost_priv(host);
--	struct vscsifrnt_shadow *shadow, *s = scsi_cmd_priv(sc);
-+	struct vscsifrnt_shadow *shadow;
- 	int err = 0;
+diff --git a/drivers/scsi/be2iscsi/be_main.c b/drivers/scsi/be2iscsi/be_main.c
+index e48f14ad6dfd..441ad2ebc5d5 100644
+--- a/drivers/scsi/be2iscsi/be_main.c
++++ b/drivers/scsi/be2iscsi/be_main.c
+@@ -385,6 +385,14 @@ static int beiscsi_eh_device_reset(struct scsi_cmnd *sc)
+ 	return rc;
+ }
  
- 	if (info->host_active == STATE_ERROR)
-@@ -682,10 +683,14 @@ static int scsifront_action_handler(struct scsi_cmnd *sc, uint8_t act)
- 	if (!shadow)
- 		return FAILED;
- 
--	shadow->act = act;
-+	shadow->act = sc ? VSCSIIF_ACT_SCSI_ABORT : VSCSIIF_ACT_SCSI_RESET;
- 	shadow->rslt_reset = RSLT_RESET_WAITING;
- 	shadow->sc = sc;
--	shadow->ref_rqid = s->rqid;
-+	if (sc) {
-+		struct vscsifrnt_shadow *s = scsi_cmd_priv(sc);
++static int beiscsi_eh_session_reset(struct scsi_cmnd *sc)
++{
++	struct iscsi_cls_session *cls_session;
 +
-+		shadow->ref_rqid = s->rqid;
-+	}
- 	init_waitqueue_head(&shadow->wq_reset);
++	cls_session = starget_to_session(scsi_target(sc->device));
++	return iscsi_eh_session_reset(cls_session);
++}
++
+ /*------------------- PCI Driver operations and data ----------------- */
+ static const struct pci_device_id beiscsi_pci_id_table[] = {
+ 	{ PCI_DEVICE(BE_VENDOR_ID, BE_DEVICE_ID1) },
+@@ -408,7 +416,7 @@ static const struct scsi_host_template beiscsi_sht = {
+ 	.eh_timed_out = iscsi_eh_cmd_timed_out,
+ 	.eh_abort_handler = beiscsi_eh_abort,
+ 	.eh_device_reset_handler = beiscsi_eh_device_reset,
+-	.eh_target_reset_handler = iscsi_eh_session_reset,
++	.eh_target_reset_handler = beiscsi_eh_session_reset,
+ 	.shost_groups = beiscsi_groups,
+ 	.sg_tablesize = BEISCSI_SGLIST_ELEMENTS,
+ 	.can_queue = BE2_IO_DEPTH,
+diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+index 0fda8905eabd..3b9e1c35936e 100644
+--- a/drivers/scsi/libiscsi.c
++++ b/drivers/scsi/libiscsi.c
+@@ -2595,18 +2595,16 @@ EXPORT_SYMBOL_GPL(iscsi_session_recovery_timedout);
  
- 	spin_lock_irq(host->host_lock);
-@@ -735,13 +740,13 @@ static int scsifront_action_handler(struct scsi_cmnd *sc, uint8_t act)
- static int scsifront_eh_abort_handler(struct scsi_cmnd *sc)
+ /**
+  * iscsi_eh_session_reset - drop session and attempt relogin
+- * @sc: scsi command
++ * @cls_session: class session to reset
+  *
+  * This function will wait for a relogin, session termination from
+  * userspace, or a recovery/replacement timeout.
+  */
+-int iscsi_eh_session_reset(struct scsi_cmnd *sc)
++int iscsi_eh_session_reset(struct iscsi_cls_session *cls_session)
  {
- 	pr_debug("%s\n", __func__);
--	return scsifront_action_handler(sc, VSCSIIF_ACT_SCSI_ABORT);
-+	return scsifront_action_handler(sc->device, sc);
- }
+-	struct iscsi_cls_session *cls_session;
+ 	struct iscsi_session *session;
+ 	struct iscsi_conn *conn;
  
- static int scsifront_dev_reset_handler(struct scsi_cmnd *sc)
+-	cls_session = starget_to_session(scsi_target(sc->device));
+ 	session = cls_session->dd_data;
+ 
+ 	mutex_lock(&session->eh_mutex);
+@@ -2653,7 +2651,7 @@ int iscsi_eh_session_reset(struct scsi_cmnd *sc)
+ }
+ EXPORT_SYMBOL_GPL(iscsi_eh_session_reset);
+ 
+-static void iscsi_prep_tgt_reset_pdu(struct scsi_cmnd *sc, struct iscsi_tm *hdr)
++static void iscsi_prep_tgt_reset_pdu(struct iscsi_tm *hdr)
  {
- 	pr_debug("%s\n", __func__);
--	return scsifront_action_handler(sc, VSCSIIF_ACT_SCSI_RESET);
-+	return scsifront_action_handler(sc->device, NULL);
- }
+ 	memset(hdr, 0, sizeof(*hdr));
+ 	hdr->opcode = ISCSI_OP_SCSI_TMFUNC | ISCSI_OP_IMMEDIATE;
+@@ -2664,23 +2662,20 @@ static void iscsi_prep_tgt_reset_pdu(struct scsi_cmnd *sc, struct iscsi_tm *hdr)
  
- static int scsifront_sdev_configure(struct scsi_device *sdev)
+ /**
+  * iscsi_eh_target_reset - reset target
+- * @sc: scsi command
++ * @cls_session: class session to reset
+  *
+  * This will attempt to send a warm target reset.
+  */
+-static int iscsi_eh_target_reset(struct scsi_cmnd *sc)
++static int iscsi_eh_target_reset(struct iscsi_cls_session *cls_session)
+ {
+-	struct iscsi_cls_session *cls_session;
+ 	struct iscsi_session *session;
+ 	struct iscsi_conn *conn;
+ 	struct iscsi_tm *hdr;
+ 	int rc = FAILED;
+ 
+-	cls_session = starget_to_session(scsi_target(sc->device));
+ 	session = cls_session->dd_data;
+ 
+-	ISCSI_DBG_EH(session, "tgt Reset [sc %p tgt %s]\n", sc,
+-		     session->targetname);
++	ISCSI_DBG_EH(session, "tgt Reset [tgt %s]\n", session->targetname);
+ 
+ 	mutex_lock(&session->eh_mutex);
+ 	spin_lock_bh(&session->frwd_lock);
+@@ -2698,7 +2693,7 @@ static int iscsi_eh_target_reset(struct scsi_cmnd *sc)
+ 	session->tmf_state = TMF_QUEUED;
+ 
+ 	hdr = &session->tmhdr;
+-	iscsi_prep_tgt_reset_pdu(sc, hdr);
++	iscsi_prep_tgt_reset_pdu(hdr);
+ 
+ 	if (iscsi_exec_task_mgmt_fn(conn, hdr, session->age,
+ 				    session->tgt_reset_timeout)) {
+@@ -2750,11 +2745,13 @@ static int iscsi_eh_target_reset(struct scsi_cmnd *sc)
+  */
+ int iscsi_eh_recover_target(struct scsi_cmnd *sc)
+ {
++	struct iscsi_cls_session *cls_session;
+ 	int rc;
+ 
+-	rc = iscsi_eh_target_reset(sc);
++	cls_session = starget_to_session(scsi_target(sc->device));
++	rc = iscsi_eh_target_reset(cls_session);
+ 	if (rc == FAILED)
+-		rc = iscsi_eh_session_reset(sc);
++		rc = iscsi_eh_session_reset(cls_session);
+ 	return rc;
+ }
+ EXPORT_SYMBOL_GPL(iscsi_eh_recover_target);
+diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
+index 7282555adfd5..7dddf785edd0 100644
+--- a/include/scsi/libiscsi.h
++++ b/include/scsi/libiscsi.h
+@@ -390,7 +390,7 @@ struct iscsi_host {
+  */
+ extern int iscsi_eh_abort(struct scsi_cmnd *sc);
+ extern int iscsi_eh_recover_target(struct scsi_cmnd *sc);
+-extern int iscsi_eh_session_reset(struct scsi_cmnd *sc);
++extern int iscsi_eh_session_reset(struct iscsi_cls_session *cls_session);
+ extern int iscsi_eh_device_reset(struct scsi_cmnd *sc);
+ extern int iscsi_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc);
+ extern enum scsi_timeout_action iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc);
 -- 
 2.35.3
 
