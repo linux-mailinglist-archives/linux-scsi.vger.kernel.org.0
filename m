@@ -2,51 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E0F7CBD32
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Oct 2023 10:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2D07CC025
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Oct 2023 12:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234469AbjJQIQ0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Oct 2023 04:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
+        id S234925AbjJQKHp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Oct 2023 06:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232300AbjJQIQZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Oct 2023 04:16:25 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1763293
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Oct 2023 01:16:22 -0700 (PDT)
-Received: from kwepemm000012.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4S8msN2kFkzvPvd;
-        Tue, 17 Oct 2023 16:11:36 +0800 (CST)
-Received: from [10.174.178.220] (10.174.178.220) by
- kwepemm000012.china.huawei.com (7.193.23.142) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Tue, 17 Oct 2023 16:16:19 +0800
-Message-ID: <0f7a0131-3f6a-1627-2bba-96dab1ad6d9d@huawei.com>
-Date:   Tue, 17 Oct 2023 16:16:18 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Wenchao Hao <haowenchao2@huawei.com>
-Subject: Re: [PATCH 1/9] scsi: Use Scsi_Host as argument for
- eh_host_reset_handler
-To:     Hannes Reinecke <hare@suse.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     Christoph Hellwig <hch@lst.de>,
+        with ESMTP id S234787AbjJQKHo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Oct 2023 06:07:44 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B448E
+        for <linux-scsi@vger.kernel.org>; Tue, 17 Oct 2023 03:07:41 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1271721C54;
+        Tue, 17 Oct 2023 10:07:40 +0000 (UTC)
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id CC05F2C4DD;
+        Tue, 17 Oct 2023 10:07:39 +0000 (UTC)
+Received: by adalid.arch.suse.de (Postfix, from userid 16045)
+        id EE6B551EBE83; Tue, 17 Oct 2023 12:07:39 +0200 (CEST)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
-        <linux-scsi@vger.kernel.org>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>
-References: <20231016121542.111501-1-hare@suse.de>
- <20231016121542.111501-2-hare@suse.de>
-Content-Language: en-US
-In-Reply-To: <20231016121542.111501-2-hare@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.220]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm000012.china.huawei.com (7.193.23.142)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCHv7 00/16] scsi: EH rework prep patches, part 2
+Date:   Tue, 17 Oct 2023 12:07:13 +0200
+Message-Id: <20231017100729.123506-1-hare@suse.de>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: ++
+Authentication-Results: smtp-out1.suse.de;
+        dkim=none;
+        dmarc=none;
+        spf=softfail (smtp-out1.suse.de: 149.44.160.134 is neither permitted nor denied by domain of hare@suse.de) smtp.mailfrom=hare@suse.de
+X-Rspamd-Server: rspamd2
+X-Spamd-Result: default: False [2.49 / 50.00];
+         ARC_NA(0.00)[];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         R_MISSING_CHARSET(2.50)[];
+         NEURAL_HAM_LONG(-3.00)[-1.000];
+         MIME_GOOD(-0.10)[text/plain];
+         DMARC_NA(0.20)[suse.de];
+         BROKEN_CONTENT_TYPE(1.50)[];
+         R_SPF_SOFTFAIL(0.60)[~all:c];
+         RCPT_COUNT_FIVE(0.00)[5];
+         TO_MATCH_ENVRCPT_SOME(0.00)[];
+         VIOLATED_DIRECT_SPF(3.50)[];
+         MX_GOOD(-0.01)[];
+         NEURAL_HAM_SHORT(-1.00)[-1.000];
+         MID_CONTAINS_FROM(1.00)[];
+         RWL_MAILSPIKE_GOOD(0.00)[149.44.160.134:from];
+         RCVD_NO_TLS_LAST(0.10)[];
+         FROM_EQ_ENVFROM(0.00)[];
+         R_DKIM_NA(0.20)[];
+         MIME_TRACE(0.00)[0:+];
+         RCVD_COUNT_TWO(0.00)[2];
+         BAYES_HAM(-3.00)[100.00%]
+X-Spam-Score: 2.49
+X-Rspamd-Queue-Id: 1271721C54
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,127 +72,96 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2023/10/16 20:15, Hannes Reinecke wrote:
-> Issuing a host reset should not rely on any commands.
-> So use Scsi_Host as argument for eh_host_reset_handler.
-> 
+Hi all,
 
-Some small points.
+(taking up an old thread:)
+here's the second batch of patches for my EH rework.
+It modifies the reset callbacks for SCSI drivers
+such that the final conversion to drop the 'struct scsi_cmnd'
+argument and use the entity in question (host, bus, target, device)
+as the argument to the SCSI EH callbacks becomes possible.
+The second part covers drivers which require a bit more love.
+In particular the fnic, snic, and csiostor drivers require a tag to
+send TMFs. So to handle that I've set aside a tag and used that directly
+(for snic host reset), or call scsi_alloc_request() with the NOWAIT flag.
+That will return a scsi command with a valid tag, which then can be used
+to send the reset. It might fail (eg when the tagset is full),
+but in these cases it might be better to fall back to host_reset anyway.
 
-> diff --git a/drivers/message/fusion/mptscsih.c b/drivers/message/fusion/mptscsih.c
-> index 9080a73b4ea6..caf045cfea0e 100644
-> --- a/drivers/message/fusion/mptscsih.c
-> +++ b/drivers/message/fusion/mptscsih.c
-> @@ -1955,15 +1955,15 @@ mptscsih_bus_reset(struct scsi_cmnd * SCpnt)
->   
->   /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
->   /**
-> - *	mptscsih_host_reset - Perform a SCSI host adapter RESET (new_eh variant)
-> - *	@SCpnt: Pointer to scsi_cmnd structure, IO which reset is due to
-> + *	mptscsih_host_reset - Perform a SCSI host adapter RESET
-> + *	@sh: Pointer to Scsi_Host structure, which is reset due to
->    *
->    *	(linux scsi_host_template.eh_host_reset_handler routine)
->    *
->    *	Returns SUCCESS or FAILED.
->    */
->   int
-> -mptscsih_host_reset(struct scsi_cmnd *SCpnt)
-> +mptscsih_host_reset(struct Scsi_Host *sh)
->   {
->   	MPT_SCSI_HOST *  hd;
->   	int              status = SUCCESS;
-> @@ -1971,9 +1971,8 @@ mptscsih_host_reset(struct scsi_cmnd *SCpnt)
->   	int		retval;
->   
->   	/*  If we can't locate the host to reset, then we failed. */
-> -	if ((hd = shost_priv(SCpnt->device->host)) == NULL){
-> -		printk(KERN_ERR MYNAM ": host reset: "
-> -		    "Can't locate host! (sc=%p)\n", SCpnt);
-> +	if ((hd = shost_priv(sh)) == NULL){
-> +		printk(KERN_ERR MYNAM ": host reset: Can't locate host!\n");
->   		return FAILED;
->   	}
+As usual, comments and reviews are welcome.
 
-It looks better to use shost_printk(), same for following 2 printk.
+Changes to v6:
+- Include reviews from Christoph
+- Add missing kerneldoc updates
 
->   
-> @@ -1981,8 +1980,8 @@ mptscsih_host_reset(struct scsi_cmnd *SCpnt)
->   	mptscsih_flush_running_cmds(hd);
->   
->   	ioc = hd->ioc;
-> -	printk(MYIOC_s_INFO_FMT "attempting host reset! (sc=%p)\n",
-> -	    ioc->name, SCpnt);
-> +	printk(MYIOC_s_INFO_FMT "attempting host reset!\n",
-> +	    ioc->name);
->  
->   	/*  If our attempts to reset the host failed, then return a failed
->   	 *  status.  The host will be taken off line by the SCSI mid-layer.
-> @@ -1993,8 +1992,8 @@ mptscsih_host_reset(struct scsi_cmnd *SCpnt)
->   	else
->   		status = SUCCESS;
->   
-> -	printk(MYIOC_s_INFO_FMT "host reset: %s (sc=%p)\n",
-> -	    ioc->name, ((retval == 0) ? "SUCCESS" : "FAILED" ), SCpnt);
-> +	printk(MYIOC_s_INFO_FMT "host reset: %s\n",
-> +	    ioc->name, ((retval == 0) ? "SUCCESS" : "FAILED" ));
->   
->   	return status;
->   }
+Changes to v5:
+- Modified zfcp host reset to return FAST_IO_FAIL
+- Rebased to 6.7/staging
+- Add fix for missing scsi_device_put() in pmcraid
+- Modify doing_srb_done() in dc395x to not use a scsi command
 
-> diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
-> index 72ceaf650b0d..9be45b7a2571 100644
-> --- a/drivers/scsi/BusLogic.c
-> +++ b/drivers/scsi/BusLogic.c
-> @@ -2852,21 +2852,14 @@ static bool blogic_write_outbox(struct blogic_adapter *adapter,
->   
->   /* Error Handling (EH) support */
->   
-> -static int blogic_hostreset(struct scsi_cmnd *SCpnt)
-> +static int blogic_hostreset(struct Scsi_Host *shost)
->   {
-> -	struct blogic_adapter *adapter =
-> -		(struct blogic_adapter *) SCpnt->device->host->hostdata;
-> -
-> -	unsigned int id = SCpnt->device->id;
-> -	struct blogic_tgt_stats *stats = &adapter->tgt_stats[id];
-> +	struct blogic_adapter *adapter = shost_priv(shost);
->   	int rc;
->   
-> -	spin_lock_irq(SCpnt->device->host->host_lock);
-> -
-> -	blogic_inc_count(&stats->adapter_reset_req);
-> -
-> +	spin_lock_irq(shost->host_lock);
->   	rc = blogic_resetadapter(adapter, false);
-> -	spin_unlock_irq(SCpnt->device->host->host_lock);
-> +	spin_unlock_irq(shost->host_lock);
->   	return rc;
->   }
+Changes to v4:
+- rework snic to use a dedicated tag for host reset
+- rework snic to allocate TMFs on the fly
+- rework fnic to allocate TMFs on the fly
+- rework csiostor to allocat TMFs on the fly
+- drop fc_block_rport() from zfcp host_reset
+- Rebase to latest linus tree
 
-Why remove line "blogic_inc_count(&stats->adapter_reset_req);" ?
+Changes to v3:
+- Move fnic and snic patches to the next patchset
+- Include reviews from Ewan Milne
 
-> diff --git a/drivers/scsi/hptiop.c b/drivers/scsi/hptiop.c
-> index f5334ccbf2ca..b9e241b9bb54 100644
-> --- a/drivers/scsi/hptiop.c
-> +++ b/drivers/scsi/hptiop.c
-> @@ -1088,12 +1088,12 @@ static int hptiop_reset_hba(struct hptiop_hba *hba)
->   	return 0;
->   }
->   
-> -static int hptiop_reset(struct scsi_cmnd *scp)
-> +static int hptiop_reset(struct Scsi_Host *host)
->   {
-> -	struct hptiop_hba * hba = (struct hptiop_hba *)scp->device->host->hostdata;
-> +	struct hptiop_hba * hba = shost_priv(host);
->   
->   	printk(KERN_WARNING "hptiop_reset(%d/%d/%d)\n",
-> -	       scp->device->host->host_no, -1, -1);
-> +	       host->host_no, -1, -1);
->   
+Changes to v2:
+- Include reviews from John Garry
+- move mpi3mr, zfcp, sym53c8xx_2, and qla1280 patches to the
+  next patchset
 
-Also, it looks better to use shost_printk().
+Changes to the initial version:
+- Include reviews from Christoph
+- Fixup build robot issues
 
->   	return hptiop_reset_hba(hba)? FAILED : SUCCESS;
->   }
+Hannes Reinecke (16):
+  zfcp: do not wait for rports to become unblocked after host reset
+  bfa: Do not use scsi command to signal TMF status
+  aha152x: look for stuck command when resetting device
+  a1000u2w: do not rely on the command for inia100_device_reset()
+  fas216: Rework device reset to not rely on SCSI command pointer
+  xen-scsifront: add scsi device as argument to scsifront_do_request()
+  xen-scsifront: rework scsifront_action_handler()
+  libiscsi: use cls_session as argument for target and session reset
+  scsi_transport_iscsi: use session as argument for
+    iscsi_block_scsi_eh()
+  snic: reserve tag for TMF
+  snic: allocate device reset command
+  snic: Use scsi_host_busy_iter() to traverse commands
+  fnic: allocate device reset command on the fly
+  fnic: use fc_block_rport() correctly
+  csiostor: use separate TMF command
+  dc395x: Remove 'scmd' parameter from doing_srb_done()
+
+ drivers/s390/scsi/zfcp_scsi.c       |   6 +-
+ drivers/scsi/a100u2w.c              |  46 +---
+ drivers/scsi/aha152x.c              |  26 ++-
+ drivers/scsi/arm/fas216.c           |  39 ++--
+ drivers/scsi/be2iscsi/be_main.c     |  10 +-
+ drivers/scsi/bfa/bfad_im.c          | 112 +++++-----
+ drivers/scsi/bfa/bfad_im.h          |   2 +
+ drivers/scsi/csiostor/csio_scsi.c   |  72 ++++--
+ drivers/scsi/dc395x.c               |  14 +-
+ drivers/scsi/fnic/fnic.h            |   1 -
+ drivers/scsi/fnic/fnic_scsi.c       | 120 +++++-----
+ drivers/scsi/libiscsi.c             |  25 +--
+ drivers/scsi/qla4xxx/ql4_os.c       |  34 +--
+ drivers/scsi/scsi_transport_iscsi.c |   6 +-
+ drivers/scsi/snic/snic.h            |   2 +-
+ drivers/scsi/snic/snic_main.c       |   5 +-
+ drivers/scsi/snic/snic_scsi.c       | 328 ++++++++++++----------------
+ drivers/scsi/xen-scsifront.c        |  50 +++--
+ include/scsi/libiscsi.h             |   2 +-
+ include/scsi/scsi_transport_iscsi.h |   2 +-
+ 20 files changed, 441 insertions(+), 461 deletions(-)
+
+-- 
+2.35.3
 
