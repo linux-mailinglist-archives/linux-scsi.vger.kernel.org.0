@@ -2,78 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BC47CC786
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Oct 2023 17:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43477CC78B
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Oct 2023 17:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344404AbjJQPch (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Oct 2023 11:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33296 "EHLO
+        id S1344345AbjJQPfM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Oct 2023 11:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344402AbjJQPcg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Oct 2023 11:32:36 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C5210D
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Oct 2023 08:32:33 -0700 (PDT)
+        with ESMTP id S1343858AbjJQPfL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Oct 2023 11:35:11 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937BA92
+        for <linux-scsi@vger.kernel.org>; Tue, 17 Oct 2023 08:35:09 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3F8F81F88C;
-        Tue, 17 Oct 2023 15:32:32 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 20FF921D0F;
+        Tue, 17 Oct 2023 15:35:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1697556752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1697556908; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SuEpEYO/n91S8ReKzIqb093LMvok4UzKMVUOlbqTJis=;
-        b=lXsgYSkxv4c6VVg8WGHYRiFFXZz/pl53ye4CvQDb5BFRHrQZAANvhiHWd5vgOZA52vQdHX
-        DI64Fr/fq6Tr1RdJ3UN/os4QLi3npsBFvnDJL0wKUprtRxIfefehcZn5gTJTUkhVQElFG2
-        Gdl/4gvrnF+lzc0WtE47FuBtq94L0nE=
+        bh=rbaNqRTAuAG5R1ksCvIceuFuGBg4Vt+zVl8+vWVv1mg=;
+        b=d8kYlJZ1gPsPp0GNbdGKZu7KuP93raP0Zn2GKYPFzTzDm+SFIr4z+RFnHcd8OMeDh0y/vK
+        L+d+YM3RgVlkcTTr+fePyBg3Hj/htmS3IRHH0ckD/A/9beHjIgDvin/ovCcZgQbGcfF+P4
+        V/i7pdiFwml/nlTHuGeBQaNWIo8j8FQ=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1697556752;
+        s=susede2_ed25519; t=1697556908;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SuEpEYO/n91S8ReKzIqb093LMvok4UzKMVUOlbqTJis=;
-        b=C8koSVlmEXLPcRWZ6iLgXiYGBl+VHekrHnDpBD3bhe3BdxFmmb1I0ux54/KmKT5bRBDc5z
-        722JghlNMrs5b1DA==
+        bh=rbaNqRTAuAG5R1ksCvIceuFuGBg4Vt+zVl8+vWVv1mg=;
+        b=IBofjeGRQP6qu1fhoodrB57mn2bmyKx6qGzVqmHlsYsvQGc94UJj2B7OUD3KNhgj2qufv3
+        LdfSp9w9kRgTeKAA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2679013584;
-        Tue, 17 Oct 2023 15:32:32 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0C0D113584;
+        Tue, 17 Oct 2023 15:35:08 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id /sciCBCpLmW8PAAAMHmgww
-        (envelope-from <hare@suse.de>); Tue, 17 Oct 2023 15:32:32 +0000
-Message-ID: <6cb9b294-1a43-4db3-95b8-99c7dc941768@suse.de>
-Date:   Tue, 17 Oct 2023 17:32:31 +0200
+        id oePcAaypLmX/PQAAMHmgww
+        (envelope-from <hare@suse.de>); Tue, 17 Oct 2023 15:35:08 +0000
+Message-ID: <028062b3-c0fb-45c9-8283-330a2f2235bf@suse.de>
+Date:   Tue, 17 Oct 2023 17:35:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [bug report] scsi: aic79xx: Do not reference SCSI command when
- resetting device
+Subject: Re: [bug report] scsi: megaraid: Pass in NULL scb for host reset
 Content-Language: en-US
 To:     Dan Carpenter <dan.carpenter@linaro.org>
 Cc:     linux-scsi@vger.kernel.org
-References: <e0776fce-bf5b-415b-9e17-384b0ead8e32@moroto.mountain>
+References: <731d9834-76a7-4e01-be8e-f2850c50b45a@moroto.mountain>
 From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <e0776fce-bf5b-415b-9e17-384b0ead8e32@moroto.mountain>
+In-Reply-To: <731d9834-76a7-4e01-be8e-f2850c50b45a@moroto.mountain>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Authentication-Results: smtp-out2.suse.de;
+Authentication-Results: smtp-out1.suse.de;
         none
 X-Spam-Level: 
-X-Spam-Score: -4.97
-X-Spamd-Result: default: False [-4.97 / 50.00];
+X-Spam-Score: -6.72
+X-Spamd-Result: default: False [-6.72 / 50.00];
          ARC_NA(0.00)[];
          RCVD_VIA_SMTP_AUTH(0.00)[];
          XM_UA_NO_VERSION(0.01)[];
          FROM_HAS_DN(0.00)[];
          TO_DN_SOME(0.00)[];
          TO_MATCH_ENVRCPT_ALL(0.00)[];
-         BAYES_HAM(-0.88)[85.76%];
+         BAYES_HAM(-2.63)[98.35%];
          MIME_GOOD(-0.10)[text/plain];
          NEURAL_HAM_LONG(-3.00)[-1.000];
          DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
@@ -93,152 +92,41 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/17/23 15:38, Dan Carpenter wrote:
+On 10/17/23 15:56, Dan Carpenter wrote:
 > Hello Hannes Reinecke,
 > 
-> The patch c67e63800446: "scsi: aic79xx: Do not reference SCSI command
-> when resetting device" from Oct 2, 2023 (linux-next), leads to the
-> following Smatch static checker warning:
+> The patch 5bcd3bfbda02: "scsi: megaraid: Pass in NULL scb for host
+> reset" from Oct 2, 2023 (linux-next), leads to the following Smatch
+> static checker warning:
 > 
-> 	drivers/scsi/aic7xxx/aic79xx_osm.c:1793 ahd_done()
-> 	error: we previously assumed 'cmd' could be null (see line 1774)
+>      drivers/scsi/megaraid.c:1901 megaraid_reset()
+>      error: NULL dereference inside function 'megaraid_abort_and_reset()'
 > 
-> drivers/scsi/aic7xxx/aic79xx_osm.c
->      1758 void
->      1759 ahd_done(struct ahd_softc *ahd, struct scb *scb)
->      1760 {
->      1761         struct scsi_cmnd *cmd;
->      1762         struct          ahd_linux_device *dev;
->      1763
->      1764         if ((scb->flags & SCB_ACTIVE) == 0) {
->      1765                 printk("SCB %d done'd twice\n", SCB_GET_TAG(scb));
->      1766                 ahd_dump_card_state(ahd);
->      1767                 panic("Stopping for safety");
->      1768         }
->      1769         LIST_REMOVE(scb, pending_links);
->      1770         cmd = scb->io_ctx;
->      1771         dev = scb->platform_data->dev;
->      1772         dev->active--;
->      1773         dev->openings++;
->      1774         if (cmd) {
->                       ^^^
-> The patch adds this NULL check
+>      drivers/scsi/megaraid.c:1940 megaraid_abort_and_reset()
+>      warn: variable dereferenced before check 'cmd' (see line 1928)
 > 
->      1775                 if ((cmd->result & (CAM_DEV_QFRZN << 16)) != 0) {
->      1776                         cmd->result &= ~(CAM_DEV_QFRZN << 16);
->      1777                         dev->qfrozen--;
->      1778                 }
->      1779         } else if (scb->flags & SCB_DEVICE_RESET) {
->      1780                 if (ahd->platform_data->eh_done)
->      1781                         complete(ahd->platform_data->eh_done);
->      1782                 ahd_free_scb(ahd, scb);
->      1783                 return;
->      1784         }
->      1785         ahd_linux_unmap_scb(ahd, scb);
->      1786
->      1787         /*
->      1788          * Guard against stale sense data.
->      1789          * The Linux mid-layer assumes that sense
->      1790          * was retrieved anytime the first byte of
->      1791          * the sense buffer looks "sane".
->      1792          */
-> --> 1793         cmd->sense_buffer[0] = 0;
->                   ^^^^^^^^^^^^^^^^^
-> But if cmd is NULL we're going to crash anyway
+> drivers/scsi/megaraid.c
+>      1899         spin_lock_irq(&adapter->lock);
+>      1900
+> --> 1901         rval =  megaraid_abort_and_reset(adapter, NULL, SCB_RESET);
+>                                                             ^^^^
+> The debug code dereferences this unconditionally...
 > 
-This has been fixed with the latest version.
-
->      1794         if (ahd_get_transaction_status(scb) == CAM_REQ_INPROG) {
->      1795 #ifdef AHD_REPORT_UNDERFLOWS
->      1796                 uint32_t amount_xferred;
->      1797
->      1798                 amount_xferred =
->      1799                     ahd_get_transfer_length(scb) - ahd_get_residual(scb);
->      1800 #endif
->      1801                 if ((scb->flags & SCB_TRANSMISSION_ERROR) != 0) {
->      1802 #ifdef AHD_DEBUG
->      1803                         if ((ahd_debug & AHD_SHOW_MISC) != 0) {
->      1804                                 ahd_print_path(ahd, scb);
->      1805                                 printk("Set CAM_UNCOR_PARITY\n");
->      1806                         }
->      1807 #endif
->      1808                         ahd_set_transaction_status(scb, CAM_UNCOR_PARITY);
->      1809 #ifdef AHD_REPORT_UNDERFLOWS
->      1810                 /*
->      1811                  * This code is disabled by default as some
->      1812                  * clients of the SCSI system do not properly
->      1813                  * initialize the underflow parameter.  This
->      1814                  * results in spurious termination of commands
->      1815                  * that complete as expected (e.g. underflow is
->      1816                  * allowed as command can return variable amounts
->      1817                  * of data.
->      1818                  */
->      1819                 } else if (amount_xferred < scb->io_ctx->underflow) {
->      1820                         u_int i;
->      1821
->      1822                         ahd_print_path(ahd, scb);
->      1823                         printk("CDB:");
->      1824                         for (i = 0; i < scb->io_ctx->cmd_len; i++)
->      1825                                 printk(" 0x%x", scb->io_ctx->cmnd[i]);
->      1826                         printk("\n");
->      1827                         ahd_print_path(ahd, scb);
->      1828                         printk("Saw underflow (%ld of %ld bytes). "
->      1829                                "Treated as error\n",
->      1830                                 ahd_get_residual(scb),
->      1831                                 ahd_get_transfer_length(scb));
->      1832                         ahd_set_transaction_status(scb, CAM_DATA_RUN_ERR);
->      1833 #endif
->      1834                 } else {
->      1835                         ahd_set_transaction_status(scb, CAM_REQ_CMP);
->      1836                 }
->      1837         } else if (ahd_get_transaction_status(scb) == CAM_SCSI_STATUS_ERROR) {
->      1838                 ahd_linux_handle_scsi_status(ahd, cmd->device, scb);
+>      1902
+>      1903         /*
+>      1904          * This is required here to complete any completed requests
+>      1905          * to be communicated over to the mid layer.
+>      1906          */
+>      1907         mega_rundoneq(adapter);
+>      1908         spin_unlock_irq(&adapter->lock);
+>      1909
+>      1910         return rval;
+>      1911 }
 > 
-> No check here either
-> 
-Correct, needs to be fixed.
-
->      1839         }
->      1840
->      1841         if (dev->openings == 1
->      1842          && ahd_get_transaction_status(scb) == CAM_REQ_CMP
->      1843          && ahd_get_scsi_status(scb) != SAM_STAT_TASK_SET_FULL)
->      1844                 dev->tag_success_count++;
->      1845         /*
->      1846          * Some devices deal with temporary internal resource
->      1847          * shortages by returning queue full.  When the queue
->      1848          * full occurrs, we throttle back.  Slowly try to get
->      1849          * back to our previous queue depth.
->      1850          */
->      1851         if ((dev->openings + dev->active) < dev->maxtags
->      1852          && dev->tag_success_count > AHD_TAG_SUCCESS_INTERVAL) {
->      1853                 dev->tag_success_count = 0;
->      1854                 dev->openings++;
->      1855         }
->      1856
->      1857         if (dev->active == 0)
->      1858                 dev->commands_since_idle_or_otag = 0;
->      1859
->      1860         if ((scb->flags & SCB_RECOVERY_SCB) != 0) {
->      1861                 printk("Recovery SCB completes\n");
->      1862                 if (ahd_get_transaction_status(scb) == CAM_BDR_SENT
->      1863                  || ahd_get_transaction_status(scb) == CAM_REQ_ABORTED)
->      1864                         ahd_set_transaction_status(scb, CAM_CMD_TIMEOUT);
->      1865
->      1866                 if (ahd->platform_data->eh_done)
->      1867                         complete(ahd->platform_data->eh_done);
->      1868         }
->      1869
->      1870         ahd_free_scb(ahd, scb);
->      1871         ahd_linux_queue_cmd_complete(ahd, cmd);
-> 
-> Or here
-> 
-Needs to be fixed, too.
-
 Will be sending a patch.
 
 Cheers,
 
 Hannes
+
 
