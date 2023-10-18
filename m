@@ -2,176 +2,274 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5587CDD4F
-	for <lists+linux-scsi@lfdr.de>; Wed, 18 Oct 2023 15:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062FF7CDC36
+	for <lists+linux-scsi@lfdr.de>; Wed, 18 Oct 2023 14:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjJRNcD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 18 Oct 2023 09:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
+        id S230391AbjJRMrw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 18 Oct 2023 08:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbjJRNcB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 18 Oct 2023 09:32:01 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666F6106
-        for <linux-scsi@vger.kernel.org>; Wed, 18 Oct 2023 06:31:58 -0700 (PDT)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20231018133152epoutp041fba28d95f6bafe72f3c04f6df277b06~PNt5O-hnz0689406894epoutp04P
-        for <linux-scsi@vger.kernel.org>; Wed, 18 Oct 2023 13:31:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20231018133152epoutp041fba28d95f6bafe72f3c04f6df277b06~PNt5O-hnz0689406894epoutp04P
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1697635913;
-        bh=u3aqnbBtv3vyIec2Mlnu7VZjNoMVUqew8xlxNtYVuT0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ar6xkA8WBl8DA0SXsHcUVW75HU2NC5zijFCz8StrEtpWkgAFvxJxoiUkdTrbqG2y9
-         kgPzjsOUDvtGuJ9jGcdZBnry/lrAS/Wvvukv0pFZtjxUUtp/o5adSXHk78H6c7+rhD
-         ESb9LwyAHWcb+xFbPHmL/0g2YvO2tm7JqVe+KF1E=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20231018133151epcas5p32eee98f338fcffca106dc084b9405c3d~PNt3_9ePq1794217942epcas5p34;
-        Wed, 18 Oct 2023 13:31:51 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.179]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4S9WwP5y9Yz4x9Pt; Wed, 18 Oct
-        2023 13:31:49 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1F.31.10009.54EDF256; Wed, 18 Oct 2023 22:31:49 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20231018101516epcas5p2ac132e21cc9f83edd819c7680a51487d~PLCPQwGhZ3226032260epcas5p2g;
-        Wed, 18 Oct 2023 10:15:16 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20231018101516epsmtrp23a828f342d83585a91c501a654146b0c~PLCPPbHfq1426614266epsmtrp2K;
-        Wed, 18 Oct 2023 10:15:16 +0000 (GMT)
-X-AuditID: b6c32a4a-ff1ff70000002719-05-652fde45eb1a
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BA.0F.07368.430BF256; Wed, 18 Oct 2023 19:15:16 +0900 (KST)
-Received: from green245 (unknown [107.99.41.245]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20231018101513epsmtip27d59481a87c3dbfc474968108748ac3d~PLCMGR7Ek0062200622epsmtip2h;
-        Wed, 18 Oct 2023 10:15:13 +0000 (GMT)
-Date:   Wed, 18 Oct 2023 15:38:48 +0530
-From:   Nitesh Jagadeesh Shetty <nj.shetty@samsung.com>
-To:     Jinyoung Choi <j-young.choi@samsung.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "nitheshshetty@gmail.com" <nitheshshetty@gmail.com>,
-        "anuj1072538@gmail.com" <anuj1072538@gmail.com>,
-        SSDR Gost Dev <gost.dev@samsung.com>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        Vincent Kang Fu <vincent.fu@samsung.com>,
-        Anuj Gupta <anuj20.g@samsung.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH v16 04/12] block: add emulation for copy
-Message-ID: <20231018100848.i26yrkuufv4koluq@green245>
+        with ESMTP id S230202AbjJRMrv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 18 Oct 2023 08:47:51 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B1EA3;
+        Wed, 18 Oct 2023 05:47:49 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6b44befac59so3872898b3a.0;
+        Wed, 18 Oct 2023 05:47:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697633269; x=1698238069; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9kzuTzxZVlGgh2f5mC3oIMplNBV8HnSfbYCkmlfvIO0=;
+        b=FghNIC/6Ky0TDrGA5L+6MIbYS4RZzOrcCQ/gvu+h3/36los+pKUA0A5Mhm1WOCz7IS
+         teerGv3bM5eUJ7csLv6Oi47uyim01+tB5nNTd17r+ulRBUqIIEscD39pnDRSTvAkatU3
+         2MqGzFLR7BMUVO75gqtjGdJbrEVEflCUNbNTEhqvw9lZDb8gDP3gyDfav/L9ohUExcgF
+         QAGAz2PMiEVU/trN9Ir0Zjc6sdqyYxcpsULMiTIJTM6V3SqgVi84m4q4veoBDCHsqKLv
+         eOG80aHVXHBIh/pYVzOeL37berqwA0Q6swHBd45EhS8x5DJvS5+0/1W02eewL1oLzo9j
+         lhMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697633269; x=1698238069;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9kzuTzxZVlGgh2f5mC3oIMplNBV8HnSfbYCkmlfvIO0=;
+        b=u40rByz1CfXpIApXfdLszdtmZAeiTWPwdnAwpnqMV/IkHTJ4ZunJC4Wyj6zUwsY3F3
+         7XLkDKTcwfnYBik7+uHZh+MHgZVm2IDjxwBHWmcEQh7VcL9QY4A+ar2KIzydodEmswxj
+         F0DpVUPQlkGK7BMOD/QAGpWEup6eTthwUuUzPZkbCNxnvJHox660Ve23nzhsKjbWwbGe
+         VVUo8I43cVo7Wy8yQHzwmo/vp6U8In98fnF+yY9Vhqg4NR0TkznyjdHeSwiDAdN9SsSa
+         UkjX8Mf39Hhp7t1DQHZrrRmP77UdaBAf7KQ7UTwS05C2PgXW5X3+eM69dlhblbbuqGKS
+         eoAA==
+X-Gm-Message-State: AOJu0YwVYjZs3z9WpmfvA9UqbhMiXxVaniZtx+wjkSQ/6/0Ao3IlPfR7
+        sWpszR4URTRAbp43sVyKEd+ZBkkTI/0RbQ==
+X-Google-Smtp-Source: AGHT+IGXGeVHsVlXRGS2m6a7frgX1L1AYtgLEn9FwtI5ugKjMogKB6UXepsFeotAkt1UZrRjKys6fw==
+X-Received: by 2002:a05:6a20:7288:b0:15d:4cf1:212e with SMTP id o8-20020a056a20728800b0015d4cf1212emr6856294pzk.4.1697633268764;
+        Wed, 18 Oct 2023 05:47:48 -0700 (PDT)
+Received: from thinkpad ([117.202.186.25])
+        by smtp.gmail.com with ESMTPSA id i13-20020a65484d000000b00578afd8e012sm1389183pgs.92.2023.10.18.05.47.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Oct 2023 05:47:48 -0700 (PDT)
+Date:   Wed, 18 Oct 2023 18:17:41 +0530
+From:   Manivannan Sadhasivam <manivannanece23@gmail.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Can Guo <quic_cang@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        quic_nguyenb@quicinc.com, quic_nitirawa@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "open list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER..." 
+        <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/6] scsi: ufs: ufs-qcom: Add support for UFS device
+ version detection
+Message-ID: <20231018124741.GA47321@thinkpad>
+References: <1694411968-14413-1-git-send-email-quic_cang@quicinc.com>
+ <1694411968-14413-3-git-send-email-quic_cang@quicinc.com>
+ <6055cd57-4de7-4b7e-a4f3-68a7de1aef28@linaro.org>
+ <6225a132-4b7f-bbb4-e863-4e62b99dd79d@quicinc.com>
+ <31823dc4-6f50-435b-9a20-66471209ec31@linaro.org>
+ <d34242f8-6e21-1549-b87d-3db2e825b7d5@quicinc.com>
+ <1413119B-8B9C-4DE4-A086-476B2BAA60AD@linaro.org>
+ <20230919120829.GB4732@thinkpad>
+ <CAA8EJppwjzNDsPHZqUdmgQy3fAbP+AFnOo4+FTDCdpBEZp5S_w@mail.gmail.com>
+ <20230920102327.GH4732@thinkpad>
 MIME-Version: 1.0
-In-Reply-To: <20230926100718.wcptispc2zhfi5eh@green245>
-User-Agent: NeoMutt/20171215
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTVxzHd+4tt4VRdgGZpzAeueAiyqMFWg7KY4mPXMeysZCwqTNY22vL
-        gLZry9zIkhUYQ94gzmARhYzxqFNGB6SIMASURxA3HTCIGMyAhIE8ZMgYAVdaWPzvc77n+z2/
-        c37nHA7uZGS7chIUWkatECdRhB2ruct3r/+RJ4EM32TyR/X993C0tLLOQulFGzi6Pl5IoNmu
-        5wBNdmQB1DZfZoNGO1owVHf9LobyC5sIdKFzGKCpIT2G2sb2o8pvq1jodlsfCz26dYVA16qn
-        2Ch3xESgmp5NDP1RNAWQaTINoJuzCyzUO+aG/sw9D9CDjR6bd3h0i36cTT940sCiH91PoY2G
-        bIL+ueprunVUR9DfF5TY0PkZ8wS9NDXGohfahwi6oNEA6GWjB22cfIbFcE8khssZsZRRezEK
-        iVKaoJBFUNGx8YfihSK+wF8QhkIpL4U4mYmgDr8X4380IcncBMrrc3FSilmKEWs0VGBkuFqZ
-        omW85EqNNoJiVNIkVYgqQCNO1qQoZAEKRntAwOcHCc3G04nymew1G9Ui+4vKqV8IHRgjcoAt
-        B5IhcH0gDc8BdhwnshXAjrtz24PnADavNrGtgxcA6pavgJ1Iw1Uje4udyDYASy6praZpAB8/
-        zGVtTbDIPTDrTprFRJBC2NqQYdY5nF2kH8w0eG/5cbKCA9tHblgWfY2MgsZ+oyXrTIbDpsLb
-        liyXFMHpBhNmZUfYd3nS4rElQ6Eu657F40K+BUt/WLFsG5KDtrD8t9+3d3oYZv9azbKyM/yr
-        p5FtZVe4PN+23YBzsO5iLWENfwOgfkS/HY6Cmf2F+BbjpBwO5OfZWHV3+F3/TcyqO8D89UnM
-        qnOh6eoOe8Mf6yu2C/Dg8GoasXV6SNIw46dT1m5VYXBwdQIvAl76Vw6nf6WclQ/A7MX0bfaE
-        GU1luN68FE66wZpNjhV9Yf2twApAGACPUWmSZYxGqApSMOf+fwkSZbIRWD7PvndN4OnEYkAn
-        wDigE0AOTu3iymL9GCeuVPxlKqNWxqtTkhhNJxCaL7EYd3WRKM2/T6GNF4SE8UNEIlFIWLBI
-        QO3mzmaWS51ImVjLJDKMilHv5DCOrasOa5laWXZ03njzUvJMsZQ9pLdrMcjlwXc8JLnKgdoC
-        j4y87lOp0qc580T3J3m5zgmrXdrQ3tOlyx6f7i+vj+tJVhilIxcPufMuO7e+Ye8+vKeDVBac
-        jIus8zn20W52qOiMr3PD4zVHF/5cJKUrXlup1B308+5rWOLVlt1IHeXOZDsMFklGHTy6B8U8
-        kUHf+LLINWoDr3N7djYxwFRCt77wO/lQnRIkG//KVjA8vkId7/KprssH8e1H++sXrh0fyDkh
-        4afdn4j+p5PnuRcznfn4yPvNH7z0HD//YWl61dtxQvvPfHphsOfrngejaoKoWIe/fc+6Rks0
-        m/Wr9tOc2WP/zjlSLI1cLNiHqzXi/wBk9K1gxQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SaUwTURSFeTPT6YBpHBb1YY0kNSrBUm1EfcQFTIyOxsSlJiSYKEUmBaVY
-        W+uWoIUGQRRpcMPWgAuC4MooylasFUFcaBBRQVCRVmOUpYhxgRalaOTfyTnnfvf+uBTup+NN
-        phKSdrLqJHmiiPQhbt8XBYWG3ZjNzhngJOj6ozocOb8NEijV4MLR5Y5sEn2+3w+Q3ZIOkLnH
-        xEOtlgoMFV9+gKGs7DIS5VhfAORoMWLI3DYLnTtYQKBqcwOBmivPkCi/0MFHh1+Wk6io3o2h
-        VwYHQOX2FICufe4l0MM2Ieo6nAGQzVXPiwxkKowdfMb2ppRgmp9qGa7kEMncLDjAVLXqSObC
-        0WM8JkvfQzJORxvB9Na0kMzRWyWA+cpNZTh7N7ZWEO2zKI5NTNjFqmcvifGJf91tw1QpvD3N
-        JzsJHcggMoE3BekwWJrH8TOBD+VHVwFY+PMDPhoEwkJX7V/tD4vdH/+W7ABWvr3rmSbo6TD9
-        Xgp/RJP0PFhVqv/jU1QALYZpJdNG+jh9iYLnzv/w9L3oCMg94jzan14Ey7KrPbMCej78UFqO
-        jS4owGBebgcxGvjChtN2j8b/lPJuduIjC3BaCIvc1KgdBPVlJs+h3vQCqEuv8zAn0FNg7sVv
-        uAH4G8eQjGNIxv8k4xjSWUCUgEBWpVEqlFukKmkSu1uikSs12iSFZMt2JQc8TxISXA7e5Lsl
-        VoBRwAoghYsCBAqZmPUTxMn37mPV2zertYmsxgqEFCGaJJDmmuL8aIV8J7uNZVWs+l+KUd6T
-        dZjY1/qra77a0m69ccX86WTkJi+Wy22ZOT0rojnra0JOjT5s8P3BdwEXVqTNdIq3hhv6uops
-        nZprQj3fvcB/boSsQDrQtzQ+eNgy6FUhe5+z7yU8lVl8orGxrzWgTUIlLwz7NW8Ha+7tcjqi
-        7cXcc/Ga46Zl+wVBK4VlMWlHaNOXd0OqvcdDmybW28PbU61NP7+4ur93nskZct1qGi87oOzZ
-        +EkoWq4YsCVrr9oal0JZYUjs4tMbtHwUFd4PY1Jj8uNEsZQlwxBtebI+9vGwb+hqX+3bYGXR
-        2XVRGZNqhwXjNsaLnXcsYHVy/pAh9Fj/s9r2SzXKqOeaVTOGU095R4oITbxcGoKrNfLfzLD+
-        a5MDAAA=
-X-CMS-MailID: 20231018101516epcas5p2ac132e21cc9f83edd819c7680a51487d
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----.DGRwfvtDKQaTon4q7jBZTz_rY-uYfv-SaOoriR32EfX1D_r=_12cae_"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230920081458epcas5p3a3e12d8b5661b5d6f4420316630b02e1
-References: <20230920080756.11919-5-nj.shetty@samsung.com>
-        <20230920080756.11919-1-nj.shetty@samsung.com>
-        <CGME20230920081458epcas5p3a3e12d8b5661b5d6f4420316630b02e1@epcms2p6>
-        <20230922130815epcms2p631fc5fc5ebe634cc948fef1992f83a38@epcms2p6>
-        <20230926100718.wcptispc2zhfi5eh@green245>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230920102327.GH4732@thinkpad>
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-------.DGRwfvtDKQaTon4q7jBZTz_rY-uYfv-SaOoriR32EfX1D_r=_12cae_
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: 8bit
-Content-Disposition: inline
+On Wed, Sep 20, 2023 at 12:23:27PM +0200, Manivannan Sadhasivam wrote:
+> On Wed, Sep 20, 2023 at 01:27:59AM +0300, Dmitry Baryshkov wrote:
+> > On Tue, 19 Sept 2023 at 15:08, Manivannan Sadhasivam <mani@kernel.org> wrote:
+> > >
+> > > On Fri, Sep 15, 2023 at 05:31:45AM +0300, Dmitry Baryshkov wrote:
+> > > > On 11 September 2023 13:02:50 GMT+03:00, Can Guo <quic_cang@quicinc.com> wrote:
+> > > > >
+> > > > >On 9/11/2023 5:46 PM, Konrad Dybcio wrote:
+> > > > >> On 11.09.2023 11:42, Can Guo wrote:
+> > > > >>> Hi Konrad,
+> > > > >>>
+> > > > >>> On 9/11/2023 5:17 PM, Konrad Dybcio wrote:
+> > > > >>>> On 11.09.2023 07:59, Can Guo wrote:
+> > > > >>>>> From: "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+> > > > >>>>>
+> > > > >>>>> Retrieve UFS device version from UFS host controller's spare register
+> > > > >>>>> which is populated by bootloader, and use the UFS device version together
+> > > > >>>>> with host controller's HW version to decide the proper power modes which
+> > > > >>>>> should be used to configure the UFS PHY.
+> > > > >>>> That sounds a bit fishy.. is there no bootloader-independent
+> > > > >>>> solution to that? Can't we bring in the code that the bootloader
+> > > > >>>> uses to determine these values?
+> > > > >>>>
+> > > > >>>> Konrad
+> > > > >>>
+> > > > >>> Agree, it is.
+> > > > >>>
+> > > > >>>
+> > > > >>> All these complexities come from one request from PHY design team - power saving.
+> > > > >>>
+> > > > >>> And to achieve power saving, Qualcomm UFS developers are requested to use the
+> > > > >>>
+> > > > >>> lowest hanging PHY settings which can sustain the Max agreed HS Gear (btw host
+> > > > >>>
+> > > > >>> and UFS device) during UFS's lifecycle in High Level OS,  whereas the power saving
+> > > > >>>
+> > > > >>> request does not apply to bootloader, which works for only a few seconds during
+> > > > >>>
+> > > > >>> bootup. Hence, there is no such version detect code in bootloader -  it just uses the
+> > > > >>>
+> > > > >>> highest PHY settings to configure PHY, boot up UFS and put UFS device version in this
+> > > > >>>
+> > > > >>> register.
+> > > > >> First of all, your email client seems to be inserting 2 newlines
+> > > > >> instead of 1. If you're using thunderbird, you may want to edit:
+> > > > >>
+> > > > >> mail.identity.(default or your mail identity idx).default.compose_html
+> > > > >>
+> > > > >> to `false`
+> > > > >>
+> > > > >> and add that to your internal wiki page, as I see many @quic folks having
+> > > > >> this issue.
+> > > > >>
+> > > > >>
+> > > > >> Going back to the main topic, I don't think we understood each other.
+> > > > >> The commit message states:
+> > > > >>
+> > > > >>
+> > > > >> "Retrieve UFS device version from UFS host controller's spare register
+> > > > >> which is populated by bootloader"
+> > > > >>
+> > > > >>
+> > > > >> Which means the bootloader is able to somehow determine the value
+> > > > >> that's in the spare register and write it there.
+> > > > >>
+> > > > >> I'm asking whether we can take the logic behind this value and
+> > > > >> move it to Linux so that we don't depend on the bootloader to
+> > > > >> guarantee it (e.g. Chrome or some other devices with more exotic
+> > > > >> fw may not work this way).
+> > > > >>
+> > > > >>
+> > > > >> Konrad
+> > > > >
+> > > > >
+> > > > >There is no logic behind this value at all in bootloader, as I explained, after bootloader
+> > > > >
+> > > > >initializes UFS, bootloader simply reads UFS's device version (the value you are referring)
+> > > > >
+> > > > >and write it to the register. But in Linux kernel, we need (or want to know) this value
+> > > > >
+> > > > >BEFORE we initialize UFS host controller (and UFS device).
+> > > >
+> > > > Depending on the bootloader behaviour is not an option. For example the kernel might be started via kexec. Or via u-boot. Or grub. Or any other bootloader. So please duplicate the logic to read the UFS version instead.
+> > > >
+> > >
+> > > As Can said, there is no logic in the bootloader. What it does it, after doing
+> > > the UFS initialization, it writes the agreed gear (between host and the device)
+> > > to this register. And in linux, we use that value to initialize the device
+> > > (i.e., not doing init based on the min gear).
+> > >
+> > > But the important factor here is that, we use this gear value to program the PHY
+> > > init sequence. So if there is no hint from the bootloader, linux will program
+> > > the min phy sequence (G3/G4) and then once the gear scaling happens, it will
+> > > program the max phy sequence (G4/G5).
+> > >
+> > > Now on recent platforms, the init sequences are not compatible with each other
+> > > i.e., once the min seq. is programmed, then before programming max seq. the
+> > > registers not common to both seq. should be programmed to default value. In
+> > > other words, min seq. specific registers should be reset to the default value.
+> > > Otherwise, there will be stability issues in the PHY.
+> > 
+> > I see nothing wrong with adding 'default' register programming to the
+> > gear tables. If we have to reset them to the default values to switch
+> > the PHY settings, these writes must be a part of the corresponding
+> > tables.
+> > 
+> 
+> Yep, that's what I initially proposed. But Qcom wanted to avoid the cost of
+> programming the reset tables in the PHY driver.
+> 
+> Can, could you please check if programming the additional sequence doesn't cause
+> any power/performance effect?
+> 
 
-On 26/09/23 03:37PM, Nitesh Jagadeesh Shetty wrote:
->>>+                write_bio->bi_iter.bi_size = chunk;
->>>+                ret = submit_bio_wait(write_bio);
->>>+                kfree(write_bio);
->>
->>blk_mq_map_bio_put(write_bio) ?
->>or bio_uninit(write_bio); kfree(write_bio)?
->>
->>hmm...
->>It continuously allocates and releases memory for bio,
->>Why don't you just allocate and reuse bio outside the loop?
->>
->
->Agree, we will update this in next version.
->
-Reusing the bio won't work in cases where the bio gets split.
-So we decided to keep the previous design.
+I'd like to simplify this conversion as there has been some misunderstanding.
 
-Thank you,
-Nitesh Shetty
+First of all in linux, while probing the UFS device by the host controller, it
+needs to use _some_ gear. So far we were using HS_G2 as that gear and using the
+PHY init sequence of G3/G4 depending on the SoC. We do not need to use G2 init
+sequence because, there are only 2 init sequences available for any SoC and
+since the init sequences are backwards compatible, we mostly use the min init
+sequence, G3/G4. Even though this incurs slight power consumption during boot,
+the ufs host controller after probing the device will switch to max gear
+supported by both entities. If that max is G4/G5, then the respective init
+sequence will be programmed again.
 
-------.DGRwfvtDKQaTon4q7jBZTz_rY-uYfv-SaOoriR32EfX1D_r=_12cae_
-Content-Type: text/plain; charset="utf-8"
+Now the issue is, for the automotive usecases, switching the gears 2 times
+during boot is affecting the boot KPI (Key Performance Inidicator). So the UFS
+team came with the idea of populating a spare register in the bootloader with
+the max gear info that the bootloader has already found out and using the same
+in the linux for first time itself. This helps linux in using a single gear
+during probe time.
 
+This is what this patch is doing. If for some reason, that register is not
+populated, then we default to the existing G2 gear and do init twice as the
+driver is doing currently.
 
-------.DGRwfvtDKQaTon4q7jBZTz_rY-uYfv-SaOoriR32EfX1D_r=_12cae_--
+I hope this clarifies the intention of this patch.
+
+- Mani
+
+> - Mani
+> 
+> > >
+> > > So to avoid that, if we get the hint from bootloader (always the max supported
+> > > gear between host and device), then only one seq. will be programmed.
+> > >
+> > > Other way to solve this issue is to reset the non common registers in the init
+> > > seq. to default value. But that will be an additional overhead.
+> > >
+> > > But... if the bootloader doesn't populate this register (if the boot device is
+> > > not UFS, like in compute platforms), then this whole logic won't work. This
+> > > should also be taken into consideration.
+> > 
+> > Yep, that's the dependency on the bootloader. Which we should avoid.
+> > 
+> > >
+> > > - Mani
+> > >
+> > > >
+> > > > P.S. you have been asked to fix your email client. Please do so. Or, if you are inserting these linebreaks manually, please stop.
+> > > >
+> > > > >Thanks,
+> > > > >
+> > > > >Can Guo.
+> > > > >
+> > > >
+> > >
+> > > --
+> > > மணிவண்ணன் சதாசிவம்
+> > 
+> > 
+> > 
+> > -- 
+> > With best wishes
+> > Dmitry
+> 
+> -- 
+> மணிவண்ணன் சதாசிவம்
+
+-- 
+மணிவண்ணன் சதாசிவம்
