@@ -2,48 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11BD7D2E3D
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Oct 2023 11:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6167D2E3E
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Oct 2023 11:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbjJWJ2w (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 23 Oct 2023 05:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
+        id S232997AbjJWJ2x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 23 Oct 2023 05:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbjJWJ2s (ORCPT
+        with ESMTP id S229840AbjJWJ2s (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 23 Oct 2023 05:28:48 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F4AF7
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52064FC
         for <linux-scsi@vger.kernel.org>; Mon, 23 Oct 2023 02:28:45 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 7C5F021ACF;
+        by smtp-out2.suse.de (Postfix) with ESMTP id 817EB1FE17;
         Mon, 23 Oct 2023 09:28:43 +0000 (UTC)
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id D800C2CF5A;
+        by relay2.suse.de (Postfix) with ESMTP id DEF1B2CF5B;
         Mon, 23 Oct 2023 09:28:42 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 14E3551EC354; Mon, 23 Oct 2023 11:28:43 +0200 (CEST)
+        id 1B3A251EC356; Mon, 23 Oct 2023 11:28:43 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Benjamin Block <bblock@linux.ibm.com>
-Subject: [PATCH 09/10] scsi_error: map FAST_IO_FAIL to -EAGAIN in SCSI EH
-Date:   Mon, 23 Oct 2023 11:28:36 +0200
-Message-Id: <20231023092837.33786-10-hare@suse.de>
+        Bart Van Assche <bvanassche@acm.org>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Subject: [PATCH 10/10] scsi: remove SUBMITTED_BY_SCSI_RESET_IOCTL
+Date:   Mon, 23 Oct 2023 11:28:37 +0200
+Message-Id: <20231023092837.33786-11-hare@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20231023092837.33786-1-hare@suse.de>
 References: <20231023092837.33786-1-hare@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spamd-Bar: +++++
-Authentication-Results: smtp-out1.suse.de;
+Authentication-Results: smtp-out2.suse.de;
         dkim=none;
         dmarc=none;
-        spf=softfail (smtp-out1.suse.de: 149.44.160.134 is neither permitted nor denied by domain of hare@suse.de) smtp.mailfrom=hare@suse.de
+        spf=softfail (smtp-out2.suse.de: 149.44.160.134 is neither permitted nor denied by domain of hare@suse.de) smtp.mailfrom=hare@suse.de
 X-Rspamd-Server: rspamd2
 X-Spamd-Result: default: False [5.49 / 50.00];
          ARC_NA(0.00)[];
+         RWL_MAILSPIKE_GOOD(0.00)[149.44.160.134:from];
          FROM_HAS_DN(0.00)[];
          TO_DN_SOME(0.00)[];
          R_MISSING_CHARSET(2.50)[];
@@ -52,21 +54,20 @@ X-Spamd-Result: default: False [5.49 / 50.00];
          DMARC_NA(0.20)[suse.de];
          BROKEN_CONTENT_TYPE(1.50)[];
          R_SPF_SOFTFAIL(0.60)[~all:c];
-         RCPT_COUNT_FIVE(0.00)[6];
          TO_MATCH_ENVRCPT_SOME(0.00)[];
          VIOLATED_DIRECT_SPF(3.50)[];
          MX_GOOD(-0.01)[];
          NEURAL_HAM_SHORT(-1.00)[-1.000];
+         RCPT_COUNT_SEVEN(0.00)[7];
          MID_CONTAINS_FROM(1.00)[];
-         RWL_MAILSPIKE_GOOD(0.00)[149.44.160.134:from];
          RCVD_NO_TLS_LAST(0.10)[];
          FROM_EQ_ENVFROM(0.00)[];
          R_DKIM_NA(0.20)[];
          MIME_TRACE(0.00)[0:+];
          RCVD_COUNT_TWO(0.00)[2];
-         BAYES_HAM(-0.00)[11.35%]
+         BAYES_HAM(-0.00)[21.00%]
 X-Spam-Score: 5.49
-X-Rspamd-Queue-Id: 7C5F021ACF
+X-Rspamd-Queue-Id: 817EB1FE17
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,71 +76,42 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Returning FAST_IO_FAIL from any of the SCSI EH functions is perfectly
-valid, and indicates that the request could not be executed due to
-the transport being busy.
-But that is not an I/O error, and we should return -EAGAIN from
-scsi_ioctl_reset() to correctly inform userspace.
+Unused now.
 
-Suggested-by: Benjamin Block <bblock@linux.ibm.com>
 Signed-off-by: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/scsi/scsi_error.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+ drivers/scsi/scsi_lib.c  | 2 --
+ include/scsi/scsi_cmnd.h | 1 -
+ 2 files changed, 3 deletions(-)
 
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index 7c655d08a305..8e184d92abe9 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -2453,22 +2453,25 @@ scsi_ioctl_reset(struct scsi_device *dev, int __user *arg)
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index aca57c3ab626..d38734298b2c 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -1616,8 +1616,6 @@ static void scsi_done_internal(struct scsi_cmnd *cmd, bool complete_directly)
  		break;
- 	case SG_SCSI_RESET_DEVICE:
- 		rtn = scsi_try_bus_device_reset(dev);
--		if (rtn == SUCCESS || (val & SG_SCSI_RESET_NO_ESCALATE))
-+		if (rtn == SUCCESS || rtn == FAST_IO_FAIL ||
-+		    (val & SG_SCSI_RESET_NO_ESCALATE))
- 			break;
- 		fallthrough;
- 	case SG_SCSI_RESET_TARGET:
- 		rtn = scsi_try_target_reset(shost, starget);
--		if (rtn == SUCCESS || (val & SG_SCSI_RESET_NO_ESCALATE))
-+		if (rtn == SUCCESS || rtn == FAST_IO_FAIL ||
-+		    (val & SG_SCSI_RESET_NO_ESCALATE))
- 			break;
- 		fallthrough;
- 	case SG_SCSI_RESET_BUS:
- 		rtn = scsi_try_bus_reset(shost, dev->channel);
--		if (rtn == SUCCESS || (val & SG_SCSI_RESET_NO_ESCALATE))
-+		if (rtn == SUCCESS || rtn == FAST_IO_FAIL ||
-+		    (val & SG_SCSI_RESET_NO_ESCALATE))
- 			break;
- 		fallthrough;
- 	case SG_SCSI_RESET_HOST:
- 		rtn = scsi_try_host_reset(shost);
--		if (rtn == SUCCESS)
-+		if (rtn == SUCCESS || rtn == FAST_IO_FAIL)
- 			break;
- 		fallthrough;
- 	default:
-@@ -2476,7 +2479,17 @@ scsi_ioctl_reset(struct scsi_device *dev, int __user *arg)
- 		break;
+ 	case SUBMITTED_BY_SCSI_ERROR_HANDLER:
+ 		return scsi_eh_done(cmd);
+-	case SUBMITTED_BY_SCSI_RESET_IOCTL:
+-		return;
  	}
  
--	error = (rtn == SUCCESS) ? 0 : -EIO;
-+	switch (rtn) {
-+	case SUCCESS:
-+		error = 0;
-+		break;
-+	case FAST_IO_FAIL:
-+		error = -EAGAIN;
-+		break;
-+	default:
-+		error = -EIO;
-+		break;
-+	}
+ 	if (unlikely(blk_should_fake_timeout(scsi_cmd_to_rq(cmd)->q)))
+diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
+index 526def14e7fb..d681510724aa 100644
+--- a/include/scsi/scsi_cmnd.h
++++ b/include/scsi/scsi_cmnd.h
+@@ -68,7 +68,6 @@ struct scsi_pointer {
+ enum scsi_cmnd_submitter {
+ 	SUBMITTED_BY_BLOCK_LAYER = 0,
+ 	SUBMITTED_BY_SCSI_ERROR_HANDLER = 1,
+-	SUBMITTED_BY_SCSI_RESET_IOCTL = 2,
+ } __packed;
  
- 	spin_lock_irqsave(shost->host_lock, flags);
- 	shost->tmf_in_progress = 0;
+ struct scsi_cmnd {
 -- 
 2.35.3
 
