@@ -2,34 +2,34 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50357D2DDA
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Oct 2023 11:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5507D2DD7
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Oct 2023 11:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232929AbjJWJPc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 23 Oct 2023 05:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        id S232874AbjJWJP0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 23 Oct 2023 05:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbjJWJPS (ORCPT
+        with ESMTP id S231732AbjJWJPS (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 23 Oct 2023 05:15:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09F4D73
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF0DD65
         for <linux-scsi@vger.kernel.org>; Mon, 23 Oct 2023 02:15:13 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id AAFCC21ACD;
+        by smtp-out1.suse.de (Postfix) with ESMTP id 4FC3F21ACC;
         Mon, 23 Oct 2023 09:15:11 +0000 (UTC)
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 041082CF53;
+        by relay2.suse.de (Postfix) with ESMTP id 03C452CF52;
         Mon, 23 Oct 2023 09:15:11 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 1600551EC32B; Mon, 23 Oct 2023 11:15:11 +0200 (CEST)
+        id 1E22A51EC32D; Mon, 23 Oct 2023 11:15:11 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 06/16] xen-scsifront: add scsi device as argument to scsifront_do_request()
-Date:   Mon, 23 Oct 2023 11:14:57 +0200
-Message-Id: <20231023091507.120828-7-hare@suse.de>
+Subject: [PATCH 07/16] xen-scsifront: rework scsifront_action_handler()
+Date:   Mon, 23 Oct 2023 11:14:58 +0200
+Message-Id: <20231023091507.120828-8-hare@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20231023091507.120828-1-hare@suse.de>
 References: <20231023091507.120828-1-hare@suse.de>
@@ -63,9 +63,9 @@ X-Spamd-Result: default: False [5.49 / 50.00];
          R_DKIM_NA(0.20)[];
          MIME_TRACE(0.00)[0:+];
          RCVD_COUNT_TWO(0.00)[2];
-         BAYES_HAM(-0.00)[13.59%]
+         BAYES_HAM(-0.00)[37.74%]
 X-Spam-Score: 5.49
-X-Rspamd-Queue-Id: AAFCC21ACD
+X-Rspamd-Queue-Id: 4FC3F21ACC
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,81 +74,69 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add scsi device as argument to scsifront_do_request() so that it
-will be possible to call it with a NULL command pointer.
+Rework scsifront_action_handler() to add the SCSI device as the
+first argument, and select between abort and device reset by
+checking whether the scsi_cmnd argument is NULL.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/scsi/xen-scsifront.c | 31 ++++++++++++++++++++-----------
- 1 file changed, 20 insertions(+), 11 deletions(-)
+ drivers/scsi/xen-scsifront.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/scsi/xen-scsifront.c b/drivers/scsi/xen-scsifront.c
-index 9ec55ddc1204..a0c13200d53a 100644
+index a0c13200d53a..5a6cb582e5eb 100644
 --- a/drivers/scsi/xen-scsifront.c
 +++ b/drivers/scsi/xen-scsifront.c
-@@ -178,7 +178,8 @@ static void scsifront_put_rqid(struct vscsifrnt_info *info, uint32_t id)
- 		scsifront_wake_up(info);
+@@ -668,11 +668,12 @@ static int scsifront_queuecommand(struct Scsi_Host *shost,
+  * We have to wait until an answer is returned. This answer contains the
+  * result to be returned to the requestor.
+  */
+-static int scsifront_action_handler(struct scsi_cmnd *sc, uint8_t act)
++static int scsifront_action_handler(struct scsi_device *sdev,
++				    struct scsi_cmnd *sc)
+ {
+-	struct Scsi_Host *host = sc->device->host;
++	struct Scsi_Host *host = sdev->host;
+ 	struct vscsifrnt_info *info = shost_priv(host);
+-	struct vscsifrnt_shadow *shadow, *s = scsi_cmd_priv(sc);
++	struct vscsifrnt_shadow *shadow;
+ 	int err = 0;
+ 
+ 	if (info->host_active == STATE_ERROR)
+@@ -682,10 +683,14 @@ static int scsifront_action_handler(struct scsi_cmnd *sc, uint8_t act)
+ 	if (!shadow)
+ 		return FAILED;
+ 
+-	shadow->act = act;
++	shadow->act = sc ? VSCSIIF_ACT_SCSI_ABORT : VSCSIIF_ACT_SCSI_RESET;
+ 	shadow->rslt_reset = RSLT_RESET_WAITING;
+ 	shadow->sc = sc;
+-	shadow->ref_rqid = s->rqid;
++	if (sc) {
++		struct vscsifrnt_shadow *s = scsi_cmd_priv(sc);
++
++		shadow->ref_rqid = s->rqid;
++	}
+ 	init_waitqueue_head(&shadow->wq_reset);
+ 
+ 	spin_lock_irq(host->host_lock);
+@@ -735,13 +740,13 @@ static int scsifront_action_handler(struct scsi_cmnd *sc, uint8_t act)
+ static int scsifront_eh_abort_handler(struct scsi_cmnd *sc)
+ {
+ 	pr_debug("%s\n", __func__);
+-	return scsifront_action_handler(sc, VSCSIIF_ACT_SCSI_ABORT);
++	return scsifront_action_handler(sc->device, sc);
  }
  
--static int scsifront_do_request(struct vscsifrnt_info *info,
-+static int scsifront_do_request(struct scsi_device *sdev,
-+				struct vscsifrnt_info *info,
- 				struct vscsifrnt_shadow *shadow)
+ static int scsifront_dev_reset_handler(struct scsi_cmnd *sc)
  {
- 	struct vscsiif_front_ring *ring = &(info->ring);
-@@ -205,17 +206,25 @@ static int scsifront_do_request(struct vscsifrnt_info *info,
- 	ring_req->ref_rqid    = shadow->ref_rqid;
- 	ring_req->nr_segments = shadow->nr_segments;
+ 	pr_debug("%s\n", __func__);
+-	return scsifront_action_handler(sc, VSCSIIF_ACT_SCSI_RESET);
++	return scsifront_action_handler(sc->device, NULL);
+ }
  
--	ring_req->id      = sc->device->id;
--	ring_req->lun     = sc->device->lun;
--	ring_req->channel = sc->device->channel;
--	ring_req->cmd_len = sc->cmd_len;
-+	ring_req->id      = sdev->id;
-+	ring_req->lun     = sdev->lun;
-+	ring_req->channel = sdev->channel;
- 
--	BUG_ON(sc->cmd_len > VSCSIIF_MAX_COMMAND_SIZE);
-+	if (sc) {
-+		ring_req->cmd_len = sc->cmd_len;
- 
--	memcpy(ring_req->cmnd, sc->cmnd, sc->cmd_len);
-+		BUG_ON(sc->cmd_len > VSCSIIF_MAX_COMMAND_SIZE);
- 
--	ring_req->sc_data_direction   = (uint8_t)sc->sc_data_direction;
--	ring_req->timeout_per_command = scsi_cmd_to_rq(sc)->timeout / HZ;
-+		memcpy(ring_req->cmnd, sc->cmnd, sc->cmd_len);
-+
-+		ring_req->sc_data_direction   = (uint8_t)sc->sc_data_direction;
-+		ring_req->timeout_per_command =
-+			scsi_cmd_to_rq(sc)->timeout / HZ;
-+	} else {
-+		ring_req->cmd_len = VSCSIIF_MAX_COMMAND_SIZE;
-+		memset(ring_req->cmnd, 0, VSCSIIF_MAX_COMMAND_SIZE);
-+		ring_req->sc_data_direction = DMA_NONE;
-+	}
- 
- 	for (i = 0; i < (shadow->nr_segments & ~VSCSIIF_SG_GRANT); i++)
- 		ring_req->seg[i] = shadow->seg[i];
-@@ -637,7 +646,7 @@ static int scsifront_queuecommand(struct Scsi_Host *shost,
- 		return 0;
- 	}
- 
--	if (scsifront_do_request(info, shadow)) {
-+	if (scsifront_do_request(sc->device, info, shadow)) {
- 		scsifront_gnttab_done(info, shadow);
- 		goto busy;
- 	}
-@@ -685,7 +694,7 @@ static int scsifront_action_handler(struct scsi_cmnd *sc, uint8_t act)
- 		if (scsifront_enter(info))
- 			goto fail;
- 
--		if (!scsifront_do_request(info, shadow))
-+		if (!scsifront_do_request(sc->device, info, shadow))
- 			break;
- 
- 		scsifront_return(info);
+ static int scsifront_sdev_configure(struct scsi_device *sdev)
 -- 
 2.35.3
 
