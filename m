@@ -2,81 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4336F7D60EF
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Oct 2023 06:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B2B7D621A
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Oct 2023 09:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjJYEpP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 25 Oct 2023 00:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
+        id S232469AbjJYHHj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 25 Oct 2023 03:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjJYEpN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 Oct 2023 00:45:13 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB492128
-        for <linux-scsi@vger.kernel.org>; Tue, 24 Oct 2023 21:45:10 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40906fc54fdso18461135e9.0
-        for <linux-scsi@vger.kernel.org>; Tue, 24 Oct 2023 21:45:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698209109; x=1698813909; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C2eQlkrHXsb01SkD0r5lPH6teOpnFeXQ1oyHS+DlKI4=;
-        b=kqjdgDVo2L8mGqVk66nuH9Htxk7Vr3/n6p8npKnEEMp8TwAIzfP5DOY0vH7NpULoDA
-         hRwMuBbEYdM2k/YmEl7q02cyYrj/K1clTTsY7pMZIOTA8bfgDRgE45+wIAXsFp7wFOak
-         lrSLd9T6wZKfDAm9cU9ktF99I7R0Hz9zBF1yB5eN0IllH2rFrrRRtMSjRhCwHWvQ4z8w
-         R9FRDKzvDRuMMGCFinBeKjLG2j0NdA/2lFjTnoiLzsFOX37tQEudBFuB+uS5E+4jyoBh
-         4+PyAuLCgE3H/3qnA4WFA5LFpiCubid6vqu7blWPXqX45zCKBXeVsekXUsuQNtnYfzSO
-         1bMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698209109; x=1698813909;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C2eQlkrHXsb01SkD0r5lPH6teOpnFeXQ1oyHS+DlKI4=;
-        b=RL18fk4W9eq1hW4+YzjGlMgc+JEzWHRZd8C+PBLQZSdkh/BsqVzmPC2cIfh1wewX5t
-         2rouSD67hJwi8J/08Gicz2uKDVFdmrQZ4fkJTyAEpX0LDDNyNDYaVAaxjZRjMZTs3cEC
-         0gAyYXaglon87NRlfKrsq5WeW3dUGYrIYE9RBwccLX6VjwGV4b96OE7oa3gQy6IFqVDO
-         2a7uI6rvnGaO+qrdH6S07NDcmUuF60YSG03ER8n70QO/1XLSrTXGh4PcKUN8OFRrhvaC
-         VmUIW8GH/ueFq4ieQFGL3fXA0e1y7pYe0XYFZsGaDHYB6lHPDhqFSxD7PteuqCFM9ICQ
-         r2hA==
-X-Gm-Message-State: AOJu0YyU7RfIkJ6gctEjt85TjmMr6YyHobmW6HJuQiaHK1bh4PR+qj7g
-        B+JqTHXGnKPX9TdY0GGiyjJ7HQ==
-X-Google-Smtp-Source: AGHT+IH5u+VrhTrLq4ZQUG00msn+IStTkp3E/NHGTSlHLwWSz3OReR5BpJ0FFZ2Ie1ciq6NwvNCJcA==
-X-Received: by 2002:a05:600c:1ca6:b0:408:386b:1916 with SMTP id k38-20020a05600c1ca600b00408386b1916mr10835678wms.8.1698209109293;
-        Tue, 24 Oct 2023 21:45:09 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id x10-20020a05600c21ca00b003feea62440bsm13254454wmj.43.2023.10.24.21.45.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Oct 2023 21:45:08 -0700 (PDT)
-Date:   Wed, 25 Oct 2023 07:45:04 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev, Nitesh Shetty <nj.shetty@samsung.com>,
-        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@lists.linux.dev,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        nitheshshetty@gmail.com, anuj1072538@gmail.com,
-        gost.dev@samsung.com, mcgrof@kernel.org,
-        Nitesh Shetty <nj.shetty@samsung.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Anuj Gupta <anuj20.g@samsung.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v17 03/12] block: add copy offload support
-Message-ID: <4c126ecc-ac29-46a5-8cd2-1149d37886c7@kadam.mountain>
+        with ESMTP id S230009AbjJYHHi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 Oct 2023 03:07:38 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D920DE5
+        for <linux-scsi@vger.kernel.org>; Wed, 25 Oct 2023 00:07:35 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id CF35587179;
+        Wed, 25 Oct 2023 09:07:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1698217652;
+        bh=LEPArud3iOvIj3yfHCApd+2wR2s9ZN/taOl2hnkpgzo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aSqSKjgv4lbVE5KFBkrwh0toDDWhV9zaPS4C8EDYy2I3GJueC2+NtYSQ797uETM3k
+         ybjYO3x6lQkRcKiSrQ2bBKxM342QShSWWc/z35PdSyPGvZfGW8I6kAkz0hFtUuEA5b
+         VxKzNbIbMfD9/XuujrrcRBFLomvwhqlifhDE8gNAbZiA9a4wGGCcM520xv3CvZqixI
+         Zh+8YCJIsRDwDc24PpR420dgqisSXRgpByum/ewbRo/iqO387Dul+yQohw6ZXP3IvF
+         06yaRot/0GtMvyEjsByXQ/gA2dmJy1zEaEH3hYY7p8jcUiCmoYhjLPlvH+P1XAxmQq
+         LC7/ibzvn641Q==
+Message-ID: <76abf633-5e11-4e92-95ba-d3fcf47a964f@denx.de>
+Date:   Tue, 24 Oct 2023 14:31:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231019110147.31672-4-nj.shetty@samsung.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] [RFC] scsi: mvsas: Try to enable MSI
+To:     John Garry <john.g.garry@oracle.com>, linux-scsi@vger.kernel.org
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Jason Yan <yanaijie@huawei.com>
+References: <20231022200329.60844-1-marex@denx.de>
+ <4da00d15-2715-bd87-daed-16b348535782@oracle.com>
+Content-Language: en-US
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <4da00d15-2715-bd87-daed-16b348535782@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,131 +59,98 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Nitesh,
+On 10/24/23 12:46, John Garry wrote:
+> On 22/10/2023 21:03, Marek Vasut wrote:
+>> This seems to be needed on OCZ RevoDrive 3 X2 / RevoDrive 350
+>> OCZ Technology Group, Inc. RevoDrive 3 X2 PCIe SSD 240 GB (Marvell SAS 
+>> Controller) [1b85:1021] (rev 02)
+>>
+> 
+> By chance do you have any documentation on this controller
 
-kernel test robot noticed the following build warnings:
+None what-so-ever, only this ancient oczpcie mvsas driver fork, which I 
+injected hunk by hunk into existing mvsas, tested, etc. until I got to 
+this one PCIe MSI line thing which made that controller work.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nitesh-Shetty/block-Introduce-queue-limits-and-sysfs-for-copy-offload-support/20231019-200658
-base:   213f891525c222e8ed145ce1ce7ae1f47921cb9c
-patch link:    https://lore.kernel.org/r/20231019110147.31672-4-nj.shetty%40samsung.com
-patch subject: [PATCH v17 03/12] block: add copy offload support
-config: i386-randconfig-141-20231022 (https://download.01.org/0day-ci/archive/20231025/202310251059.GiTmwLYx-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20231025/202310251059.GiTmwLYx-lkp@intel.com/reproduce)
+> which tells us that it requires MSI?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202310251059.GiTmwLYx-lkp@intel.com/
+The situation is even worse in that OCZ got assimilated by Toshiba and 
+all information about this device disappeared from toshiba website long 
+ago. It is still in archive.org, but whatever software they released is 
+non-trivial to even get working at all, and tbh even this drive itself 
+is weird piece of hardware.
 
-New smatch warnings:
-block/blk-lib.c:248 blkdev_copy_offload() warn: use 'gfp' here instead of GFP_KERNEL?
+>> Without MSI enabled, the controller fails as follows:
+>> "
+>> mvsas 0000:00:02.0: mvsas: PCI-E x0, Bandwidth Usage: UnKnown Gbps
+>> scsi host0: mvsas
+>> sas: Enter sas_scsi_recover_host busy: 0 failed: 0
+>> ata1.00: qc timeout after 5000 msecs (cmd 0xec)
+>> ata1.00: failed to IDENTIFY (I/O error, err_mask=0x4)
+>> ata1.00: qc timeout after 10000 msecs (cmd 0xec)
+>> ata1.00: failed to IDENTIFY (I/O error, err_mask=0x4)
+>> ata1.00: qc timeout after 30000 msecs (cmd 0xec)
+>> ata1.00: failed to IDENTIFY (I/O error, err_mask=0x4)
+>> sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
+>> sas: sas_probe_sata: for direct-attached device 0000000000000000 
+>> returned -19
+>> sas: Enter sas_scsi_recover_host busy: 0 failed: 0
+>> ata2.00: qc timeout after 5000 msecs (cmd 0xec)
+>> ata2.00: failed to IDENTIFY (I/O error, err_mask=0x4)
+>> ata2.00: qc timeout after 10000 msecs (cmd 0xec)
+>> ata2.00: failed to IDENTIFY (I/O error, err_mask=0x4)
+>> ata2.00: qc timeout after 30000 msecs (cmd 0xec)
+>> ata2.00: failed to IDENTIFY (I/O error, err_mask=0x4)
+>> sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
+>> sas: sas_probe_sata: for direct-attached device 0100000000000000 
+>> returned -19
+>> "
+>>
+>> With this patch, the controller detects the two SSD drives on it:
+>> "
+>> mvsas 0000:00:02.0: mvsas: PCI-E x0, Bandwidth Usage: UnKnown Gbps
+>> scsi host0: mvsas
+>> sas: Enter sas_scsi_recover_host busy: 0 failed: 0
+>> ata1.00: ATA-8: OCZ-REVODRIVE350, 2.50, max UDMA/133
+>> ata1.00: 234441648 sectors, multi 1: LBA48 NCQ (depth 32)
+>> ata1.00: configured for UDMA/133
+>> sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
+>> scsi 0:0:0:0: Direct-Access     ATA      OCZ-REVODRIVE350 2.50 PQ: 0 
+>> ANSI: 5
+>> sas: Enter sas_scsi_recover_host busy: 0 failed: 0
+>> ata2.00: ATA-8: OCZ-REVODRIVE350, 2.50, max UDMA/133
+>> ata2.00: 234441648 sectors, multi 1: LBA48 NCQ (depth 32)
+>> ata2.00: configured for UDMA/133
+>> sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
+>> scsi 0:0:1:0: Direct-Access     ATA      OCZ-REVODRIVE350 2.50 PQ: 0 
+>> ANSI: 5
+>> scsi 0:0:0:0: Attached scsi generic sg0 type 0
+>> sd 0:0:0:0: [sda] 234441648 512-byte logical blocks: (120 GB/112 GiB)
+>> sd 0:0:1:0: [sdb] 234441648 512-byte logical blocks: (120 GB/112 GiB)
+>> sd 0:0:1:0: Attached scsi generic sg1 type 0
+>> sd 0:0:0:0: [sda] Write Protect is off
+>> sd 0:0:1:0: [sdb] Write Protect is off
+>> sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't 
+>> support DPO or FUA
+>> sd 0:0:1:0: [sdb] Write cache: enabled, read cache: enabled, doesn't 
+>> support DPO or FUA
+>> sd 0:0:0:0: [sda] Preferred minimum I/O size 512 bytes
+>> sd 0:0:1:0: [sdb] Preferred minimum I/O size 512 bytes
+>> sd 0:0:0:0: [sda] Attached SCSI disk
+>> sd 0:0:1:0: [sdb] Attached SCSI disk
+>> "
+>>
+>> I am not sure whether this is the correct fix, or whether this should
+>> be a controller specific quirk instead, considering how this is likely
+>> a legacy controller driver.
+> 
+> pci_enable_msi() switches from pin-based interrupts to MSI. So currently 
+> the driver relies on pin-based. As such, I would be more inclined to 
+> quirk the driver for this controller.
 
-Old smatch warnings:
-block/blk-lib.c:264 blkdev_copy_offload() warn: use 'gfp' here instead of GFP_KERNEL?
+Indeed.
 
-vim +/gfp +248 block/blk-lib.c
+I'll send a V2 with the quirk and return value check when time permits, 
+considering there seem to be few users, I don't think there is much urgency.
 
-391929a15e2c18 Nitesh Shetty 2023-10-19  228  ssize_t blkdev_copy_offload(struct block_device *bdev, loff_t pos_in,
-391929a15e2c18 Nitesh Shetty 2023-10-19  229  			    loff_t pos_out, size_t len,
-391929a15e2c18 Nitesh Shetty 2023-10-19  230  			    void (*endio)(void *, int, ssize_t),
-391929a15e2c18 Nitesh Shetty 2023-10-19  231  			    void *private, gfp_t gfp)
-391929a15e2c18 Nitesh Shetty 2023-10-19  232  {
-391929a15e2c18 Nitesh Shetty 2023-10-19  233  	struct blkdev_copy_io *cio;
-391929a15e2c18 Nitesh Shetty 2023-10-19  234  	struct blkdev_copy_offload_io *offload_io;
-391929a15e2c18 Nitesh Shetty 2023-10-19  235  	struct bio *src_bio, *dst_bio;
-391929a15e2c18 Nitesh Shetty 2023-10-19  236  	size_t rem, chunk;
-391929a15e2c18 Nitesh Shetty 2023-10-19  237  	size_t max_copy_bytes = bdev_max_copy_sectors(bdev) << SECTOR_SHIFT;
-391929a15e2c18 Nitesh Shetty 2023-10-19  238  	ssize_t ret;
-391929a15e2c18 Nitesh Shetty 2023-10-19  239  	struct blk_plug plug;
-391929a15e2c18 Nitesh Shetty 2023-10-19  240  
-391929a15e2c18 Nitesh Shetty 2023-10-19  241  	if (!max_copy_bytes)
-391929a15e2c18 Nitesh Shetty 2023-10-19  242  		return -EOPNOTSUPP;
-391929a15e2c18 Nitesh Shetty 2023-10-19  243  
-391929a15e2c18 Nitesh Shetty 2023-10-19  244  	ret = blkdev_copy_sanity_check(bdev, pos_in, bdev, pos_out, len);
-391929a15e2c18 Nitesh Shetty 2023-10-19  245  	if (ret)
-391929a15e2c18 Nitesh Shetty 2023-10-19  246  		return ret;
-391929a15e2c18 Nitesh Shetty 2023-10-19  247  
-391929a15e2c18 Nitesh Shetty 2023-10-19 @248  	cio = kzalloc(sizeof(*cio), GFP_KERNEL);
-
-Should this be: cio = kzalloc(sizeof(*cio), gfp);?  It's not totally
-clear from the context honestly.  (I haven't looked at the code outside
-what is in this automated email).
-
-391929a15e2c18 Nitesh Shetty 2023-10-19  249  	if (!cio)
-391929a15e2c18 Nitesh Shetty 2023-10-19  250  		return -ENOMEM;
-391929a15e2c18 Nitesh Shetty 2023-10-19  251  	atomic_set(&cio->refcount, 1);
-391929a15e2c18 Nitesh Shetty 2023-10-19  252  	cio->waiter = current;
-391929a15e2c18 Nitesh Shetty 2023-10-19  253  	cio->endio = endio;
-391929a15e2c18 Nitesh Shetty 2023-10-19  254  	cio->private = private;
-391929a15e2c18 Nitesh Shetty 2023-10-19  255  
-391929a15e2c18 Nitesh Shetty 2023-10-19  256  	/*
-391929a15e2c18 Nitesh Shetty 2023-10-19  257  	 * If there is a error, copied will be set to least successfully
-391929a15e2c18 Nitesh Shetty 2023-10-19  258  	 * completed copied length
-391929a15e2c18 Nitesh Shetty 2023-10-19  259  	 */
-391929a15e2c18 Nitesh Shetty 2023-10-19  260  	cio->copied = len;
-391929a15e2c18 Nitesh Shetty 2023-10-19  261  	for (rem = len; rem > 0; rem -= chunk) {
-391929a15e2c18 Nitesh Shetty 2023-10-19  262  		chunk = min(rem, max_copy_bytes);
-391929a15e2c18 Nitesh Shetty 2023-10-19  263  
-391929a15e2c18 Nitesh Shetty 2023-10-19  264  		offload_io = kzalloc(sizeof(*offload_io), GFP_KERNEL);
-391929a15e2c18 Nitesh Shetty 2023-10-19  265  		if (!offload_io)
-391929a15e2c18 Nitesh Shetty 2023-10-19  266  			goto err_free_cio;
-391929a15e2c18 Nitesh Shetty 2023-10-19  267  		offload_io->cio = cio;
-391929a15e2c18 Nitesh Shetty 2023-10-19  268  		/*
-391929a15e2c18 Nitesh Shetty 2023-10-19  269  		 * For partial completion, we use offload_io->offset to truncate
-391929a15e2c18 Nitesh Shetty 2023-10-19  270  		 * successful copy length
-391929a15e2c18 Nitesh Shetty 2023-10-19  271  		 */
-391929a15e2c18 Nitesh Shetty 2023-10-19  272  		offload_io->offset = len - rem;
-391929a15e2c18 Nitesh Shetty 2023-10-19  273  
-391929a15e2c18 Nitesh Shetty 2023-10-19  274  		src_bio = bio_alloc(bdev, 0, REQ_OP_COPY_SRC, gfp);
-391929a15e2c18 Nitesh Shetty 2023-10-19  275  		if (!src_bio)
-391929a15e2c18 Nitesh Shetty 2023-10-19  276  			goto err_free_offload_io;
-391929a15e2c18 Nitesh Shetty 2023-10-19  277  		src_bio->bi_iter.bi_size = chunk;
-391929a15e2c18 Nitesh Shetty 2023-10-19  278  		src_bio->bi_iter.bi_sector = pos_in >> SECTOR_SHIFT;
-391929a15e2c18 Nitesh Shetty 2023-10-19  279  
-391929a15e2c18 Nitesh Shetty 2023-10-19  280  		blk_start_plug(&plug);
-391929a15e2c18 Nitesh Shetty 2023-10-19  281  		dst_bio = blk_next_bio(src_bio, bdev, 0, REQ_OP_COPY_DST, gfp);
-391929a15e2c18 Nitesh Shetty 2023-10-19  282  		if (!dst_bio)
-391929a15e2c18 Nitesh Shetty 2023-10-19  283  			goto err_free_src_bio;
-391929a15e2c18 Nitesh Shetty 2023-10-19  284  		dst_bio->bi_iter.bi_size = chunk;
-391929a15e2c18 Nitesh Shetty 2023-10-19  285  		dst_bio->bi_iter.bi_sector = pos_out >> SECTOR_SHIFT;
-391929a15e2c18 Nitesh Shetty 2023-10-19  286  		dst_bio->bi_end_io = blkdev_copy_offload_dst_endio;
-391929a15e2c18 Nitesh Shetty 2023-10-19  287  		dst_bio->bi_private = offload_io;
-391929a15e2c18 Nitesh Shetty 2023-10-19  288  
-391929a15e2c18 Nitesh Shetty 2023-10-19  289  		atomic_inc(&cio->refcount);
-391929a15e2c18 Nitesh Shetty 2023-10-19  290  		submit_bio(dst_bio);
-391929a15e2c18 Nitesh Shetty 2023-10-19  291  		blk_finish_plug(&plug);
-391929a15e2c18 Nitesh Shetty 2023-10-19  292  		pos_in += chunk;
-391929a15e2c18 Nitesh Shetty 2023-10-19  293  		pos_out += chunk;
-391929a15e2c18 Nitesh Shetty 2023-10-19  294  	}
-391929a15e2c18 Nitesh Shetty 2023-10-19  295  
-391929a15e2c18 Nitesh Shetty 2023-10-19  296  	if (atomic_dec_and_test(&cio->refcount))
-391929a15e2c18 Nitesh Shetty 2023-10-19  297  		blkdev_copy_endio(cio);
-391929a15e2c18 Nitesh Shetty 2023-10-19  298  	if (endio)
-391929a15e2c18 Nitesh Shetty 2023-10-19  299  		return -EIOCBQUEUED;
-391929a15e2c18 Nitesh Shetty 2023-10-19  300  
-391929a15e2c18 Nitesh Shetty 2023-10-19  301  	return blkdev_copy_wait_for_completion_io(cio);
-391929a15e2c18 Nitesh Shetty 2023-10-19  302  
-391929a15e2c18 Nitesh Shetty 2023-10-19  303  err_free_src_bio:
-391929a15e2c18 Nitesh Shetty 2023-10-19  304  	bio_put(src_bio);
-391929a15e2c18 Nitesh Shetty 2023-10-19  305  err_free_offload_io:
-391929a15e2c18 Nitesh Shetty 2023-10-19  306  	kfree(offload_io);
-391929a15e2c18 Nitesh Shetty 2023-10-19  307  err_free_cio:
-391929a15e2c18 Nitesh Shetty 2023-10-19  308  	cio->copied = min_t(ssize_t, cio->copied, (len - rem));
-391929a15e2c18 Nitesh Shetty 2023-10-19  309  	cio->status = -ENOMEM;
-391929a15e2c18 Nitesh Shetty 2023-10-19  310  	if (rem == len) {
-391929a15e2c18 Nitesh Shetty 2023-10-19  311  		ret = cio->status;
-391929a15e2c18 Nitesh Shetty 2023-10-19  312  		kfree(cio);
-391929a15e2c18 Nitesh Shetty 2023-10-19  313  		return ret;
-391929a15e2c18 Nitesh Shetty 2023-10-19  314  	}
-391929a15e2c18 Nitesh Shetty 2023-10-19  315  	if (cio->endio)
-391929a15e2c18 Nitesh Shetty 2023-10-19  316  		return cio->status;
-391929a15e2c18 Nitesh Shetty 2023-10-19  317  
-391929a15e2c18 Nitesh Shetty 2023-10-19  318  	return blkdev_copy_wait_for_completion_io(cio);
-391929a15e2c18 Nitesh Shetty 2023-10-19  319  }
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
+Thanks !
