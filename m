@@ -2,56 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B2B7D621A
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Oct 2023 09:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC757D6176
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Oct 2023 08:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232469AbjJYHHj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 25 Oct 2023 03:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
+        id S231637AbjJYGKt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 25 Oct 2023 02:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjJYHHi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 Oct 2023 03:07:38 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D920DE5
-        for <linux-scsi@vger.kernel.org>; Wed, 25 Oct 2023 00:07:35 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id CF35587179;
-        Wed, 25 Oct 2023 09:07:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1698217652;
-        bh=LEPArud3iOvIj3yfHCApd+2wR2s9ZN/taOl2hnkpgzo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aSqSKjgv4lbVE5KFBkrwh0toDDWhV9zaPS4C8EDYy2I3GJueC2+NtYSQ797uETM3k
-         ybjYO3x6lQkRcKiSrQ2bBKxM342QShSWWc/z35PdSyPGvZfGW8I6kAkz0hFtUuEA5b
-         VxKzNbIbMfD9/XuujrrcRBFLomvwhqlifhDE8gNAbZiA9a4wGGCcM520xv3CvZqixI
-         Zh+8YCJIsRDwDc24PpR420dgqisSXRgpByum/ewbRo/iqO387Dul+yQohw6ZXP3IvF
-         06yaRot/0GtMvyEjsByXQ/gA2dmJy1zEaEH3hYY7p8jcUiCmoYhjLPlvH+P1XAxmQq
-         LC7/ibzvn641Q==
-Message-ID: <76abf633-5e11-4e92-95ba-d3fcf47a964f@denx.de>
-Date:   Tue, 24 Oct 2023 14:31:50 +0200
+        with ESMTP id S229688AbjJYGKs (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 Oct 2023 02:10:48 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E58A6;
+        Tue, 24 Oct 2023 23:10:45 -0700 (PDT)
+Received: from kwepemm000012.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4SFdjm5TFjzVlKJ;
+        Wed, 25 Oct 2023 14:06:52 +0800 (CST)
+Received: from [10.174.178.220] (10.174.178.220) by
+ kwepemm000012.china.huawei.com (7.193.23.142) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Wed, 25 Oct 2023 14:10:42 +0800
+Message-ID: <afe1eca8-cdf8-612b-867e-4fef50ad423f@huawei.com>
+Date:   Wed, 25 Oct 2023 14:10:41 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] [RFC] scsi: mvsas: Try to enable MSI
-To:     John Garry <john.g.garry@oracle.com>, linux-scsi@vger.kernel.org
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] scsi: scsi_debug: fix some bugs in
+ sdebug_error_write()
+To:     Dan Carpenter <dan.carpenter@linaro.org>,
+        Wenchao Hao <haowenchao22@gmail.com>
+CC:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Jason Yan <yanaijie@huawei.com>
-References: <20231022200329.60844-1-marex@denx.de>
- <4da00d15-2715-bd87-daed-16b348535782@oracle.com>
+        Douglas Gilbert <dgilbert@interlog.com>,
+        <dmaengine@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>
+References: <96d50cf7-afec-46af-9d98-08099f8dc76e@moroto.mountain>
+ <CAOptpSMTgGwyFkn8o6qAEnUKXh+_mOr8dQKAZUWfM_4QEnxzxw@mail.gmail.com>
+ <44b0eca3-57c1-4edd-ab35-c389dc976273@kadam.mountain>
+ <cbe14e3a-11c7-4da5-b125-5801244e27f2@gmail.com>
+ <9767953c-480d-4ad9-a553-a45ae80c572b@kadam.mountain>
 Content-Language: en-US
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <4da00d15-2715-bd87-daed-16b348535782@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+From:   Wenchao Hao <haowenchao2@huawei.com>
+In-Reply-To: <9767953c-480d-4ad9-a553-a45ae80c572b@kadam.mountain>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.220]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm000012.china.huawei.com (7.193.23.142)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,98 +60,54 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/24/23 12:46, John Garry wrote:
-> On 22/10/2023 21:03, Marek Vasut wrote:
->> This seems to be needed on OCZ RevoDrive 3 X2 / RevoDrive 350
->> OCZ Technology Group, Inc. RevoDrive 3 X2 PCIe SSD 240 GB (Marvell SAS 
->> Controller) [1b85:1021] (rev 02)
->>
+On 2023/10/25 12:11, Dan Carpenter wrote:
+> On Wed, Oct 25, 2023 at 01:09:34AM +0800, Wenchao Hao wrote:
+>> Yes, there is bug here if write with .c code. Because your change to use
+>> strndup_user() would make write with dirty data appended to "ubuf" failed,
 > 
-> By chance do you have any documentation on this controller
-
-None what-so-ever, only this ancient oczpcie mvsas driver fork, which I 
-injected hunk by hunk into existing mvsas, tested, etc. until I got to 
-this one PCIe MSI line thing which made that controller work.
-
-> which tells us that it requires MSI?
-
-The situation is even worse in that OCZ got assimilated by Toshiba and 
-all information about this device disappeared from toshiba website long 
-ago. It is still in archive.org, but whatever software they released is 
-non-trivial to even get working at all, and tbh even this drive itself 
-is weird piece of hardware.
-
->> Without MSI enabled, the controller fails as follows:
->> "
->> mvsas 0000:00:02.0: mvsas: PCI-E x0, Bandwidth Usage: UnKnown Gbps
->> scsi host0: mvsas
->> sas: Enter sas_scsi_recover_host busy: 0 failed: 0
->> ata1.00: qc timeout after 5000 msecs (cmd 0xec)
->> ata1.00: failed to IDENTIFY (I/O error, err_mask=0x4)
->> ata1.00: qc timeout after 10000 msecs (cmd 0xec)
->> ata1.00: failed to IDENTIFY (I/O error, err_mask=0x4)
->> ata1.00: qc timeout after 30000 msecs (cmd 0xec)
->> ata1.00: failed to IDENTIFY (I/O error, err_mask=0x4)
->> sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
->> sas: sas_probe_sata: for direct-attached device 0000000000000000 
->> returned -19
->> sas: Enter sas_scsi_recover_host busy: 0 failed: 0
->> ata2.00: qc timeout after 5000 msecs (cmd 0xec)
->> ata2.00: failed to IDENTIFY (I/O error, err_mask=0x4)
->> ata2.00: qc timeout after 10000 msecs (cmd 0xec)
->> ata2.00: failed to IDENTIFY (I/O error, err_mask=0x4)
->> ata2.00: qc timeout after 30000 msecs (cmd 0xec)
->> ata2.00: failed to IDENTIFY (I/O error, err_mask=0x4)
->> sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
->> sas: sas_probe_sata: for direct-attached device 0100000000000000 
->> returned -19
->> "
->>
->> With this patch, the controller detects the two SSD drives on it:
->> "
->> mvsas 0000:00:02.0: mvsas: PCI-E x0, Bandwidth Usage: UnKnown Gbps
->> scsi host0: mvsas
->> sas: Enter sas_scsi_recover_host busy: 0 failed: 0
->> ata1.00: ATA-8: OCZ-REVODRIVE350, 2.50, max UDMA/133
->> ata1.00: 234441648 sectors, multi 1: LBA48 NCQ (depth 32)
->> ata1.00: configured for UDMA/133
->> sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
->> scsi 0:0:0:0: Direct-Access     ATA      OCZ-REVODRIVE350 2.50 PQ: 0 
->> ANSI: 5
->> sas: Enter sas_scsi_recover_host busy: 0 failed: 0
->> ata2.00: ATA-8: OCZ-REVODRIVE350, 2.50, max UDMA/133
->> ata2.00: 234441648 sectors, multi 1: LBA48 NCQ (depth 32)
->> ata2.00: configured for UDMA/133
->> sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
->> scsi 0:0:1:0: Direct-Access     ATA      OCZ-REVODRIVE350 2.50 PQ: 0 
->> ANSI: 5
->> scsi 0:0:0:0: Attached scsi generic sg0 type 0
->> sd 0:0:0:0: [sda] 234441648 512-byte logical blocks: (120 GB/112 GiB)
->> sd 0:0:1:0: [sdb] 234441648 512-byte logical blocks: (120 GB/112 GiB)
->> sd 0:0:1:0: Attached scsi generic sg1 type 0
->> sd 0:0:0:0: [sda] Write Protect is off
->> sd 0:0:1:0: [sdb] Write Protect is off
->> sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't 
->> support DPO or FUA
->> sd 0:0:1:0: [sdb] Write cache: enabled, read cache: enabled, doesn't 
->> support DPO or FUA
->> sd 0:0:0:0: [sda] Preferred minimum I/O size 512 bytes
->> sd 0:0:1:0: [sdb] Preferred minimum I/O size 512 bytes
->> sd 0:0:0:0: [sda] Attached SCSI disk
->> sd 0:0:1:0: [sdb] Attached SCSI disk
->> "
->>
->> I am not sure whether this is the correct fix, or whether this should
->> be a controller specific quirk instead, considering how this is likely
->> a legacy controller driver.
+> I don't understand this sentence.  What is "dirty" data in this context?
 > 
-> pci_enable_msi() switches from pin-based interrupts to MSI. So currently 
-> the driver relies on pin-based. As such, I would be more inclined to 
-> quirk the driver for this controller.
 
-Indeed.
+This is what I posted in previous reply:
 
-I'll send a V2 with the quirk and return value check when time permits, 
-considering there seem to be few users, I don't think there is much urgency.
+We might have following pairs of parameters for sdebug_error_write:
 
-Thanks !
+ubuf: "0 -10 0x12\n0 0 0x2 0x6 0x4 0x2"
+count=11
+
+the valid data in ubuf is "0 -10 -x12\n", others are dirty data.
+strndup_user() would return EINVAL for this pair which caused
+a correct write to fail.
+
+>> can we fix it with following change:
+>>
+>> diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+>> index 67922e2c4c19..0e8ct724463f 100644
+>> --- a/drivers/scsi/scsi_debug.c
+>> +++ b/drivers/scsi/scsi_debug.c
+>> @@ -1019,7 +1019,7 @@ static seize_t sdebug_error_write(struct file *file, const char __user *ubuf,
+>>          struct sdebug_err_inject *inject;
+>>          struct scsi_device *sdev = (struct scsi_device *)file->f_inode->i_private;
+>>   
+>> -       buf = kmalloc(count, GFP_KERNEL);
+>> +       buf = kzalloc(count + 1, GFP_KERNEL);
+> 
+> That would also fix the bug.
+> 
+>>          if (!buf)
+>>                  return -ENOMEM;
+>>
+>> Or is there other kernel lib function which can address this issue?
+> 
+> I don't understand the issue.
+> 
+
+I mean the bug you mentioned.
+
+Thanks.
+
+> regards,
+> dan carpenter
+> 
+> 
+
