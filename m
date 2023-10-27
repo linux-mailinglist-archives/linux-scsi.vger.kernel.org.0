@@ -2,61 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82EBF7D9F57
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Oct 2023 20:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC0F7DA190
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Oct 2023 22:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346467AbjJ0SEY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 Oct 2023 14:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
+        id S232831AbjJ0UAp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 27 Oct 2023 16:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346531AbjJ0SEF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Oct 2023 14:04:05 -0400
-Received: from alln-iport-3.cisco.com (alln-iport-3.cisco.com [173.37.142.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BFA172A;
-        Fri, 27 Oct 2023 11:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=14031; q=dns/txt;
-  s=iport; t=1698429832; x=1699639432;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=b0Zo9m81cJ1meXuIVA4WAwJ0k92nX4n9XYOkSvbBGtI=;
-  b=igM07n4kUGgC0Dl61OnV2ZEy+lNuwK7U5sqPzdrAxsaXHyFn6odo70Jl
-   2zf30VEaCMLKXSCMyYiDzNE9tB54upOsgcNRpeauoDgSZT8OkkvvPADzw
-   IbI5RbREi2T3azi4jRkHUrjQ9Ac2+kiE+g07bpAnd/5h0LwxI+H5Q4GjK
-   A=;
-X-CSE-ConnectionGUID: EdayJz5YTayyARLaGGxTyw==
-X-CSE-MsgGUID: Qy5B/OQmStyj2fRKlU5e3w==
-X-IronPort-AV: E=Sophos;i="6.03,256,1694736000"; 
-   d="scan'208";a="173160236"
-Received: from rcdn-core-11.cisco.com ([173.37.93.147])
-  by alln-iport-3.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 18:03:51 +0000
-Received: from localhost.cisco.com ([10.193.101.253])
-        (authenticated bits=0)
-        by rcdn-core-11.cisco.com (8.15.2/8.15.2) with ESMTPSA id 39RI39Op029226
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 27 Oct 2023 18:03:50 GMT
-From:   Karan Tilak Kumar <kartilak@cisco.com>
-To:     sebaddel@cisco.com
-Cc:     arulponn@cisco.com, djhawar@cisco.com, gcboffa@cisco.com,
-        mkai2@cisco.com, satishkh@cisco.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Karan Tilak Kumar <kartilak@cisco.com>
-Subject: [PATCH v2 13/13] scsi: fnic: Improve logs and add support for multiqueue (MQ)
-Date:   Fri, 27 Oct 2023 11:03:02 -0700
-Message-Id: <20231027180302.418676-14-kartilak@cisco.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20231027180302.418676-1-kartilak@cisco.com>
-References: <20231027180302.418676-1-kartilak@cisco.com>
+        with ESMTP id S232515AbjJ0UAo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Oct 2023 16:00:44 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AD81B1
+        for <linux-scsi@vger.kernel.org>; Fri, 27 Oct 2023 13:00:38 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9936b3d0286so383655766b.0
+        for <linux-scsi@vger.kernel.org>; Fri, 27 Oct 2023 13:00:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698436837; x=1699041637; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yobZYiTROnZbnWt97aXOIqRoozVbekmuSyrI2D0DmEQ=;
+        b=21cD94GlI92fGvgrGKcZWzvwaqs7PFcDB/jLm5qg3U87N6CWwVlL2jA1+CWwv6VkEo
+         fu7zZizsT/KJQUjYKGR3IQsGs3/VNDmYx/BzRIWinePzsG08t4DeJOIduR62HQyccEeb
+         mmlziFc44tTQgjXOxXpmTSxmVf74fMnQdbm1APu+LqCB77ZYgbECTNdNnnx2eR3CybU1
+         wtv8iOtQMD+aZqjfWE5eXxtmom3JMkEoXZnEGsRFFpSEy7UPIl6E5vtRQ5nutrUBC8IN
+         RhlspDw8v5pTpzCHoSzxCLZxLYgq1rHYwZBrMNwkD5iFaP+N2QNxlXFVGt+BccjG+Yv5
+         YZ/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698436837; x=1699041637;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yobZYiTROnZbnWt97aXOIqRoozVbekmuSyrI2D0DmEQ=;
+        b=AEhczl8UWftCEEUHEaLeb+30Qa49z43BtQRz2eYvJoicKu5Ie0iI0zw8hk+o2u3T/1
+         ZDDHFDLSAwZL2gmfy4TwhMMAA7PsBcNrZOoFeciLu48yWVpS9Nu7RNzWA1RcLzCb/TgX
+         hQQqHsGcxKZHTSro4BVgUONdPtOO1GA7p3MkhIDx2sG6Ibow+IqzrJUbXgMVaqEzrxSD
+         aFbokiAXVcva4TzMPeKqqsbdPBlb7gPxNg63nXPbQ246AVR4z4Ktb+M94PQ7Y42IAYot
+         FQWmCH9jRZwcdkE+dyRw1UFQzpPBCVoVtFvm6g5Bkhfik+xHllDMPR2ezWOeRSkXnLvM
+         8Ayw==
+X-Gm-Message-State: AOJu0YwS7HJ8zIVV66W+MOEwemgovT02s4893vqO8DaJ1DSBZNlxluDW
+        ocRV2GIachDe8SE0D9Bk3W/Kdr2P3OMem17FIiPaUw==
+X-Google-Smtp-Source: AGHT+IEECTHllrJmzv5sahl44qlCGaWHzkN+S8KPH5915KPk6hOjL1gjxgKo6qnIhYlrpIN54Jh1oJ+0er/1gULQ1H4=
+X-Received: by 2002:a17:907:26c9:b0:9c7:6fa7:586e with SMTP id
+ bp9-20020a17090726c900b009c76fa7586emr3499260ejc.1.1698436837160; Fri, 27 Oct
+ 2023 13:00:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-User: kartilak@cisco.com
-X-Outbound-SMTP-Client: 10.193.101.253, [10.193.101.253]
-X-Outbound-Node: rcdn-core-11.cisco.com
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
+References: <20231026-strncpy-drivers-scsi-hpsa-c-v2-1-2fe2d05122fd@google.com>
+ <202310270901.B49F63CD5@keescook>
+In-Reply-To: <202310270901.B49F63CD5@keescook>
+From:   Justin Stitt <justinstitt@google.com>
+Date:   Fri, 27 Oct 2023 13:00:25 -0700
+Message-ID: <CAFhGd8ooYaPBXyWLTKD94-jiR0Na4qnyRT602R1tzjdF9W3BWg@mail.gmail.com>
+Subject: Re: [PATCH v2] scsi: hpsa: replace deprecated strncpy
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Don Brace <don.brace@microchip.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        storagedev@microchip.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,316 +73,173 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Improve existing logs by adding fnic number, hardware queue,
-tag, and mqtag in the prints.
-Add logs with the above elements for effective debugging.
+On Fri, Oct 27, 2023 at 9:04=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> On Thu, Oct 26, 2023 at 11:13:41PM +0000, Justin Stitt wrote:
+> > strncpy() is deprecated for use on NUL-terminated destination strings
+> > [1] and as such we should prefer more robust and less ambiguous string
+> > interfaces.
+> >
+> > Instances of strncpy()'ing a string into a buffer and manually
+> > NUL-terminating followed by sccanf with just "%d" as the format
+> > specifier can be accomplished by strscpy() and kstrtoint().
+> >
+> > strscpy() guarantees NUL-termination on the destination buffer and
+> > kstrtoint is better way of getting strings turned into ints.
+> >
+> > For the last two strncpy() use cases in init_driver_version(), we can
+> > actually drop this function entirely.
+> >
+> > Firstly, we are kmalloc()'ing driver_version. Then, we are calling
+> > init_driver_version() which memset's it to 0 followed by a strncpy().
+> > The pattern is 1) allocating memory for a string, 2) setting all bytes
+> > to NUL, 3) copy bytes from another string + ensure NUL-padded.
+> >
+> > For these, we can just stack allocate driver_version and
+> > old_driver_version. This simplifies the code greatly as we don't have
+> > any malloc/free or strncpy's.
+> >
+> > Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#st=
+rncpy-on-nul-terminated-strings [1]
+> > Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en=
+.html [2]
+> > Link: https://github.com/KSPP/linux/issues/90
+> > Cc: linux-hardening@vger.kernel.org
+> > Cc: Kees Cook <keescook@chromium.org>
+> > Signed-off-by: Justin Stitt <justinstitt@google.com>
+> > ---
+> > Changes in v2:
+> > - use stack for buffers (thanks Kees)
+> > - use kstrtoint (thanks Kees)
+> > - Link to v1: https://lore.kernel.org/r/20231026-strncpy-drivers-scsi-h=
+psa-c-v1-1-75519d7a191b@google.com
+> > ---
+> > Note: build-tested only.
+> >
+> > Found with: $ rg "strncpy\("
+> > ---
+> >  drivers/scsi/hpsa.c | 53 ++++++++++++++++++++-------------------------=
+--------
+> >  1 file changed, 20 insertions(+), 33 deletions(-)
+> >
+> > diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+> > index af18d20f3079..4d42fbb071cf 100644
+> > --- a/drivers/scsi/hpsa.c
+> > +++ b/drivers/scsi/hpsa.c
+> > @@ -452,18 +452,18 @@ static ssize_t host_store_hp_ssd_smart_path_statu=
+s(struct device *dev,
+> >                                        struct device_attribute *attr,
+> >                                        const char *buf, size_t count)
+> >  {
+> > -     int status, len;
+> > +     int status;
+> >       struct ctlr_info *h;
+> >       struct Scsi_Host *shost =3D class_to_shost(dev);
+> >       char tmpbuf[10];
+> >
+> >       if (!capable(CAP_SYS_ADMIN) || !capable(CAP_SYS_RAWIO))
+> >               return -EACCES;
+> > -     len =3D count > sizeof(tmpbuf) - 1 ? sizeof(tmpbuf) - 1 : count;
+> > -     strncpy(tmpbuf, buf, len);
+> > -     tmpbuf[len] =3D '\0';
+> > -     if (sscanf(tmpbuf, "%d", &status) !=3D 1)
+> > +
+> > +     strscpy(tmpbuf, buf, sizeof(tmpbuf));
+> > +     if (kstrtoint(tmpbuf, 0, &status))
+>
+> I actually meant:
+>
+>         if (kstrtoint(buf, 0, &status))
 
-Reviewed-by: Sesidhar Baddela <sebaddel@cisco.com>
-Reviewed-by: Arulprabhu Ponnusamy <arulponn@cisco.com>
-Tested-by: Karan Tilak Kumar <kartilak@cisco.com>
-Signed-off-by: Karan Tilak Kumar <kartilak@cisco.com>
----
- drivers/scsi/fnic/fnic.h      |   2 +-
- drivers/scsi/fnic/fnic_scsi.c | 127 ++++++++++++++++++++--------------
- 2 files changed, 77 insertions(+), 52 deletions(-)
+How do we know `buf` is NUL-terminated as kstrtoint() demands:
 
-diff --git a/drivers/scsi/fnic/fnic.h b/drivers/scsi/fnic/fnic.h
-index 87dab09a426d..0f1581c1fb4a 100644
---- a/drivers/scsi/fnic/fnic.h
-+++ b/drivers/scsi/fnic/fnic.h
-@@ -27,7 +27,7 @@
- 
- #define DRV_NAME		"fnic"
- #define DRV_DESCRIPTION		"Cisco FCoE HBA Driver"
--#define DRV_VERSION		"1.6.0.56"
-+#define DRV_VERSION		"1.6.0.58"
- #define PFX			DRV_NAME ": "
- #define DFX                     DRV_NAME "%d: "
- 
-diff --git a/drivers/scsi/fnic/fnic_scsi.c b/drivers/scsi/fnic/fnic_scsi.c
-index fdc4d73ba63c..e6dccb752f7e 100644
---- a/drivers/scsi/fnic/fnic_scsi.c
-+++ b/drivers/scsi/fnic/fnic_scsi.c
-@@ -211,12 +211,14 @@ int fnic_fw_reset_handler(struct fnic *fnic)
- 
- 	if (!ret) {
- 		atomic64_inc(&fnic->fnic_stats.reset_stats.fw_resets);
--		FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--			      "Issued fw reset\n");
-+		FNIC_SCSI_DBG(KERN_INFO, fnic->lport->host,
-+				"fnic<%d>: %s: %d: Issued fw reset\n",
-+				fnic->fnic_num, __func__, __LINE__);
- 	} else {
- 		fnic_clear_state_flags(fnic, FNIC_FLAGS_FWRESET);
--		FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--			      "Failed to issue fw reset\n");
-+		FNIC_SCSI_DBG(KERN_ERR, fnic->lport->host,
-+				"fnic<%d>: %s: %d: Failed to issue fw reset\n",
-+				fnic->fnic_num, __func__, __LINE__);
- 	}
- 
- 	return ret;
-@@ -265,9 +267,9 @@ int fnic_flogi_reg_handler(struct fnic *fnic, u32 fc_id)
- 	} else {
- 		fnic_queue_wq_copy_desc_flogi_reg(wq, SCSI_NO_TAG,
- 						  format, fc_id, gw_mac);
--		FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--			      "FLOGI reg issued fcid %x map %d dest %pM\n",
--			      fc_id, fnic->ctlr.map_dest, gw_mac);
-+		FNIC_SCSI_DBG(KERN_INFO, fnic->lport->host,
-+			"fnic<%d>: %s: %d: FLOGI reg issued fcid 0x%x map %d dest 0x%p\n",
-+			fnic->fnic_num, __func__, __LINE__, fc_id, fnic->ctlr.map_dest, gw_mac);
- 	}
- 
- 	atomic64_inc(&fnic->fnic_stats.fw_stats.active_fw_reqs);
-@@ -644,15 +646,16 @@ static int fnic_fcpio_fw_reset_cmpl_handler(struct fnic *fnic,
- 	if (fnic->state == FNIC_IN_FC_TRANS_ETH_MODE) {
- 		/* Check status of reset completion */
- 		if (!hdr_status) {
--			FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--				      "reset cmpl success\n");
-+			FNIC_SCSI_DBG(KERN_INFO, fnic->lport->host,
-+					"fnic<%d>: %s: %d: reset cmpl success\n",
-+					fnic->fnic_num, __func__, __LINE__);
- 			/* Ready to send flogi out */
- 			fnic->state = FNIC_IN_ETH_MODE;
- 		} else {
--			FNIC_SCSI_DBG(KERN_DEBUG,
--				      fnic->lport->host,
--				      "fnic fw_reset : failed %s\n",
--				      fnic_fcpio_status_to_str(hdr_status));
-+			FNIC_SCSI_DBG(KERN_ERR, fnic->lport->host,
-+				"fnic<%d>: %s: %d: reset failed with header status: %s\n",
-+				fnic->fnic_num, __func__, __LINE__,
-+				fnic_fcpio_status_to_str(hdr_status));
- 
- 			/*
- 			 * Unable to change to eth mode, cannot send out flogi
-@@ -665,10 +668,9 @@ static int fnic_fcpio_fw_reset_cmpl_handler(struct fnic *fnic,
- 			ret = -1;
- 		}
- 	} else {
--		FNIC_SCSI_DBG(KERN_DEBUG,
--			      fnic->lport->host,
--			      "Unexpected state %s while processing"
--			      " reset cmpl\n", fnic_state_to_str(fnic->state));
-+		FNIC_SCSI_DBG(KERN_ERR, fnic->lport->host,
-+			"fnic<%d>: %s: %d: Unexpected state while processing reset completion: %s\n",
-+			fnic->fnic_num, __func__, __LINE__, fnic_state_to_str(fnic->state));
- 		atomic64_inc(&reset_stats->fw_reset_failures);
- 		ret = -1;
- 	}
-@@ -1177,9 +1179,10 @@ static void fnic_fcpio_itmf_cmpl_handler(struct fnic *fnic, unsigned int cq_inde
- 	if ((id & FNIC_TAG_ABORT) && (id & FNIC_TAG_DEV_RST)) {
- 		/* Abort and terminate completion of device reset req */
- 		/* REVISIT : Add asserts about various flags */
--		FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--			      "dev reset abts cmpl recd. id %x status %s\n",
--			      id, fnic_fcpio_status_to_str(hdr_status));
-+		FNIC_SCSI_DBG(KERN_INFO, fnic->lport->host,
-+			"fnic<%d>: %s: %d: hwq: %d mqtag: 0x%x tag: 0x%x hst: %s Abt/term completion received\n",
-+			fnic->fnic_num, __func__, __LINE__, hwq, mqtag, tag,
-+			fnic_fcpio_status_to_str(hdr_status));
- 		fnic_priv(sc)->state = FNIC_IOREQ_ABTS_COMPLETE;
- 		fnic_priv(sc)->abts_status = hdr_status;
- 		fnic_priv(sc)->flags |= FNIC_DEV_RST_DONE;
-@@ -1188,6 +1191,10 @@ static void fnic_fcpio_itmf_cmpl_handler(struct fnic *fnic, unsigned int cq_inde
- 		spin_unlock_irqrestore(&fnic->wq_copy_lock[hwq], flags);
- 	} else if (id & FNIC_TAG_ABORT) {
- 		/* Completion of abort cmd */
-+		shost_printk(KERN_DEBUG, fnic->lport->host,
-+			"fnic<%d>: %s: %d: hwq: %d mqtag: 0x%x tag: 0x%x Abort header status: %s\n",
-+			fnic->fnic_num, __func__, __LINE__, hwq, mqtag, tag,
-+			fnic_fcpio_status_to_str(hdr_status));
- 		switch (hdr_status) {
- 		case FCPIO_SUCCESS:
- 			break;
-@@ -1247,9 +1254,14 @@ static void fnic_fcpio_itmf_cmpl_handler(struct fnic *fnic, unsigned int cq_inde
- 		if (io_req->abts_done) {
- 			complete(io_req->abts_done);
- 			spin_unlock_irqrestore(&fnic->wq_copy_lock[hwq], flags);
-+			shost_printk(KERN_INFO, fnic->lport->host,
-+					"fnic<%d>: %s: %d: hwq: %d mqtag: 0x%x tag: 0x%x Waking up abort thread\n",
-+					fnic->fnic_num, __func__, __LINE__, hwq, mqtag, tag);
- 		} else {
- 			FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--				      "abts cmpl, completing IO\n");
-+				"fnic<%d>: %s: %d: hwq: %d mqtag: 0x%x tag: 0x%x hst: %s Completing IO\n",
-+				fnic->fnic_num, __func__, __LINE__, hwq, mqtag,
-+				tag, fnic_fcpio_status_to_str(hdr_status));
- 			fnic_priv(sc)->io_req = NULL;
- 			sc->result = (DID_ERROR << 16);
- 			fnic->sw_copy_wq[hwq].io_req_table[tag] = NULL;
-@@ -1277,6 +1289,10 @@ static void fnic_fcpio_itmf_cmpl_handler(struct fnic *fnic, unsigned int cq_inde
- 		}
- 	} else if (id & FNIC_TAG_DEV_RST) {
- 		/* Completion of device reset */
-+		shost_printk(KERN_INFO, fnic->lport->host,
-+			"fnic<%d>: %s: %d: hwq: %d mqtag: 0x%x tag: 0x%x DR hst: %s\n",
-+			fnic->fnic_num, __func__, __LINE__, hwq, mqtag,
-+			tag, fnic_fcpio_status_to_str(hdr_status));
- 		fnic_priv(sc)->lr_status = hdr_status;
- 		if (fnic_priv(sc)->state == FNIC_IOREQ_ABTS_PENDING) {
- 			spin_unlock_irqrestore(&fnic->wq_copy_lock[hwq], flags);
-@@ -1286,10 +1302,9 @@ static void fnic_fcpio_itmf_cmpl_handler(struct fnic *fnic, unsigned int cq_inde
- 				  jiffies_to_msecs(jiffies - start_time),
- 				  desc, 0, fnic_flags_and_state(sc));
- 			FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--				"Terminate pending "
--				"dev reset cmpl recd. id %d status %s\n",
--				(int)(id & FNIC_TAG_MASK),
--				fnic_fcpio_status_to_str(hdr_status));
-+				"fnic<%d>: %s: %d: hwq: %d mqtag: 0x%x tag: 0x%x hst: %s Terminate pending\n",
-+				fnic->fnic_num, __func__, __LINE__, hwq, mqtag,
-+				tag, fnic_fcpio_status_to_str(hdr_status));
- 			return;
- 		}
- 		if (fnic_priv(sc)->flags & FNIC_DEV_RST_TIMED_OUT) {
-@@ -1308,18 +1323,18 @@ static void fnic_fcpio_itmf_cmpl_handler(struct fnic *fnic, unsigned int cq_inde
- 		}
- 		fnic_priv(sc)->state = FNIC_IOREQ_CMD_COMPLETE;
- 		fnic_priv(sc)->flags |= FNIC_DEV_RST_DONE;
--		FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--			      "dev reset cmpl recd. id %d status %s\n",
--			      (int)(id & FNIC_TAG_MASK),
--			      fnic_fcpio_status_to_str(hdr_status));
-+		FNIC_SCSI_DBG(KERN_INFO, fnic->lport->host,
-+			"fnic<%d>: %s: %d: hwq: %d mqtag: 0x%x tag: 0x%x hst: %s DR completion received\n",
-+			fnic->fnic_num, __func__, __LINE__, hwq, mqtag,
-+			tag, fnic_fcpio_status_to_str(hdr_status));
- 		if (io_req->dr_done)
- 			complete(io_req->dr_done);
- 		spin_unlock_irqrestore(&fnic->wq_copy_lock[hwq], flags);
- 
- 	} else {
- 		shost_printk(KERN_ERR, fnic->lport->host,
--			     "Unexpected itmf io state %s tag %x\n",
--			     fnic_ioreq_state_to_str(fnic_priv(sc)->state), id);
-+			"%s: Unexpected itmf io state: hwq: %d tag 0x%x %s\n",
-+			__func__, hwq, id, fnic_ioreq_state_to_str(fnic_priv(sc)->state));
- 		spin_unlock_irqrestore(&fnic->wq_copy_lock[hwq], flags);
- 	}
- 
-@@ -1470,9 +1485,9 @@ static bool fnic_cleanup_io_iter(struct scsi_cmnd *sc, void *data)
- 	mempool_free(io_req, fnic->io_req_pool);
- 
- 	sc->result = DID_TRANSPORT_DISRUPTED << 16;
--	FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--		      "fnic_cleanup_io: tag:0x%x : sc:0x%p duration = %lu DID_TRANSPORT_DISRUPTED\n",
--		      tag, sc, jiffies - start_time);
-+	FNIC_SCSI_DBG(KERN_ERR, fnic->lport->host,
-+		"fnic<%d>: %s: %d: mqtag:0x%x tag: 0x%x sc:0x%p duration = %lu DID_TRANSPORT_DISRUPTED\n",
-+		fnic->fnic_num, __func__, __LINE__, mqtag, tag, sc, (jiffies - start_time));
- 
- 	if (atomic64_read(&fnic->io_cmpl_skip))
- 		atomic64_dec(&fnic->io_cmpl_skip);
-@@ -1641,9 +1656,9 @@ static bool fnic_rport_abort_io_iter(struct scsi_cmnd *sc, void *data)
- 
- 	if ((fnic_priv(sc)->flags & FNIC_DEVICE_RESET) &&
- 	    !(fnic_priv(sc)->flags & FNIC_DEV_RST_ISSUED)) {
--		FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--			"fnic_rport_exch_reset dev rst not pending sc 0x%p\n",
--			sc);
-+		FNIC_SCSI_DBG(KERN_ERR, fnic->lport->host,
-+			"fnic<%d>: %s: %d: hwq: %d abt_tag: 0x%x flags: 0x%x Device reset is not pending\n",
-+			fnic->fnic_num, __func__, __LINE__, hwq, abt_tag, fnic_priv(sc)->flags);
- 		spin_unlock_irqrestore(&fnic->wq_copy_lock[hwq], flags);
- 		return true;
- 	}
-@@ -1699,6 +1714,9 @@ static bool fnic_rport_abort_io_iter(struct scsi_cmnd *sc, void *data)
- 		 * lun reset
- 		 */
- 		spin_lock_irqsave(&fnic->wq_copy_lock[hwq], flags);
-+		FNIC_SCSI_DBG(KERN_ERR, fnic->lport->host,
-+			"fnic<%d>: %s: %d: hwq: %d abt_tag: 0x%x flags: 0x%x Queuing abort failed\n",
-+			fnic->fnic_num, __func__, __LINE__, hwq, abt_tag, fnic_priv(sc)->flags);
- 		if (fnic_priv(sc)->state == FNIC_IOREQ_ABTS_PENDING)
- 			fnic_priv(sc)->state = old_ioreq_state;
- 		spin_unlock_irqrestore(&fnic->wq_copy_lock[hwq], flags);
-@@ -1869,8 +1887,9 @@ int fnic_abort_cmd(struct scsi_cmnd *sc)
- 	else
- 		atomic64_inc(&abts_stats->abort_issued_greater_than_60_sec);
- 
--	FNIC_SCSI_DBG(KERN_INFO, fnic->lport->host,
--		"CBD Opcode: %02x Abort issued time: %lu msec\n", sc->cmnd[0], abt_issued_time);
-+	FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
-+		"fnic<%d>: %s: CDB Opcode: 0x%02x Abort issued time: %lu msec\n",
-+		fnic->fnic_num, __func__, sc->cmnd[0], abt_issued_time);
- 	/*
- 	 * Command is still pending, need to abort it
- 	 * If the firmware completes the command after this point,
-@@ -1959,8 +1978,9 @@ int fnic_abort_cmd(struct scsi_cmnd *sc)
- 
- 	if (!(fnic_priv(sc)->flags & (FNIC_IO_ABORTED | FNIC_IO_DONE))) {
- 		spin_unlock_irqrestore(&fnic->wq_copy_lock[hwq], flags);
--		FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--			"Issuing Host reset due to out of order IO\n");
-+	    FNIC_SCSI_DBG(KERN_ERR, fnic->lport->host,
-+			"fnic<%d>: %s: Issuing host reset due to out of order IO\n",
-+			fnic->fnic_num, __func__);
- 
- 		ret = FAILED;
- 		goto fnic_abort_cmd_end;
-@@ -2167,6 +2187,9 @@ static bool fnic_pending_aborts_iter(struct scsi_cmnd *sc, void *data)
- 			fnic_priv(sc)->state = old_ioreq_state;
- 		spin_unlock_irqrestore(&fnic->wq_copy_lock[hwq], flags);
- 		iter_data->ret = FAILED;
-+		FNIC_SCSI_DBG(KERN_ERR, fnic->lport->host,
-+			"fnic<%d>: %s: %d: hwq: %d abt_tag: 0x%lx Abort could not be queued\n",
-+			fnic->fnic_num, __func__, __LINE__, hwq, abt_tag);
- 		return false;
- 	} else {
- 		spin_lock_irqsave(&fnic->wq_copy_lock[hwq], flags);
-@@ -2300,8 +2323,9 @@ int fnic_device_reset(struct scsi_cmnd *sc)
- 
- 	rport = starget_to_rport(scsi_target(sc->device));
- 	FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--		      "Device reset called FCID 0x%x, LUN 0x%llx sc 0x%p\n",
--		      rport->port_id, sc->device->lun, sc);
-+		"fnic<%d>: %s: %d: fcid: 0x%x lun: 0x%llx hwq: %d mqtag: 0x%x flags: 0x%x Device reset\n",
-+		fnic->fnic_num, __func__, __LINE__, rport->port_id, sc->device->lun, hwq, mqtag,
-+		fnic_priv(sc)->flags);
- 
- 	if (lp->state != LPORT_ST_READY || !(lp->link_up))
- 		goto fnic_device_reset_end;
-@@ -2536,8 +2560,9 @@ int fnic_reset(struct Scsi_Host *shost)
- 	fnic = lport_priv(lp);
- 	reset_stats = &fnic->fnic_stats.reset_stats;
- 
--	FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--		      "fnic_reset called\n");
-+	FNIC_SCSI_DBG(KERN_INFO, fnic->lport->host,
-+			"fnic<%d>: %s: %d: Issuing fnic reset\n",
-+			fnic->fnic_num, __func__, __LINE__);
- 
- 	atomic64_inc(&reset_stats->fnic_resets);
- 
-@@ -2547,10 +2572,9 @@ int fnic_reset(struct Scsi_Host *shost)
- 	 */
- 	ret = fc_lport_reset(lp);
- 
--	FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--		      "Returning from fnic reset %s\n",
--		      (ret == 0) ?
--		      "SUCCESS" : "FAILED");
-+	FNIC_SCSI_DBG(KERN_INFO, fnic->lport->host,
-+		"fnic<%d>: %s: %d: Returning from fnic reset with: %s\n",
-+		fnic->fnic_num, __func__, __LINE__, (ret == 0) ? "SUCCESS" : "FAILED");
- 
- 	if (ret == 0)
- 		atomic64_inc(&reset_stats->fnic_reset_completions);
-@@ -2766,8 +2790,9 @@ static bool fnic_abts_pending_iter(struct scsi_cmnd *sc, void *data)
- 	 * belongs to the LUN that we are resetting
- 	 */
- 	FNIC_SCSI_DBG(KERN_INFO, fnic->lport->host,
--		      "Found IO in %s on lun\n",
--		      fnic_ioreq_state_to_str(fnic_priv(sc)->state));
-+		"fnic<%d>: %s: %d: hwq: %d tag: 0x%x Found IO in state: %s on lun\n",
-+		fnic->fnic_num, __func__, __LINE__, hwq, tag,
-+		fnic_ioreq_state_to_str(fnic_priv(sc)->state));
- 	cmd_state = fnic_priv(sc)->state;
- 	spin_unlock_irqrestore(&fnic->wq_copy_lock[hwq], flags);
- 	if (cmd_state == FNIC_IOREQ_ABTS_PENDING)
--- 
-2.31.1
+/**
+ * kstrtoint - convert a string to an int
+ * @s: The start of the string. The string must be null-terminated, and may=
+ also
+ *  include a single newline before its terminating null. The first charact=
+er
+ *  may also be a plus sign or a minus sign.
+...
 
+>
+> I don't see any reason for "tmpbuf" at all.
+>
+> > @@ -7234,25 +7234,15 @@ static int hpsa_controller_hard_reset(struct pc=
+i_dev *pdev,
+> >       return 0;
+> >  }
+> >
+> > -static void init_driver_version(char *driver_version, int len)
+> > -{
+> > -     memset(driver_version, 0, len);
+> > -     strncpy(driver_version, HPSA " " HPSA_DRIVER_VERSION, len - 1);
+> > -}
+> > -
+> >  static int write_driver_ver_to_cfgtable(struct CfgTable __iomem *cfgta=
+ble)
+> >  {
+> > -     char *driver_version;
+> >       int i, size =3D sizeof(cfgtable->driver_version);
+> > +     char driver_version[sizeof(cfgtable->driver_version)] =3D
+> > +                                             HPSA " " HPSA_DRIVER_VERS=
+ION;
+> >
+> > -     driver_version =3D kmalloc(size, GFP_KERNEL);
+> > -     if (!driver_version)
+> > -             return -ENOMEM;
+> > -
+> > -     init_driver_version(driver_version, size);
+> >       for (i =3D 0; i < size; i++)
+> >               writeb(driver_version[i], &cfgtable->driver_version[i]);
+> > -     kfree(driver_version);
+> > +
+> >       return 0;
+> >  }
+> >
+> > @@ -7268,21 +7258,18 @@ static void read_driver_ver_from_cfgtable(struc=
+t CfgTable __iomem *cfgtable,
+> >  static int controller_reset_failed(struct CfgTable __iomem *cfgtable)
+> >  {
+> >
+> > -     char *driver_ver, *old_driver_ver;
+> > -     int rc, size =3D sizeof(cfgtable->driver_version);
+> > -
+> > -     old_driver_ver =3D kmalloc_array(2, size, GFP_KERNEL);
+> > -     if (!old_driver_ver)
+> > -             return -ENOMEM;
+> > -     driver_ver =3D old_driver_ver + size;
+> > +     char driver_ver[sizeof(cfgtable->driver_version)] =3D "";
+> > +     char old_driver_ver[sizeof(cfgtable->driver_version)] =3D
+> > +                                             HPSA " " HPSA_DRIVER_VERS=
+ION;
+> > +     int rc;
+> >
+> >       /* After a reset, the 32 bytes of "driver version" in the cfgtabl=
+e
+> >        * should have been changed, otherwise we know the reset failed.
+> >        */
+> > -     init_driver_version(old_driver_ver, size);
+> >       read_driver_ver_from_cfgtable(cfgtable, driver_ver);
+> > -     rc =3D !memcmp(driver_ver, old_driver_ver, size);
+> > -     kfree(old_driver_ver);
+> > +     rc =3D !memcmp(driver_ver, old_driver_ver,
+> > +                  sizeof(cfgtable->driver_version));
+> > +
+> >       return rc;
+> >  }
+> >  /* This does a hard reset of the controller using PCI power management
+>
+> These two look good now; thanks!
+
+Woot!
+
+>
+> -Kees
+>
+> --
+> Kees Cook
+
+Thanks
+Justin
