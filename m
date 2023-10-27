@@ -2,209 +2,171 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A64297D9DBE
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Oct 2023 18:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C217D9F40
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Oct 2023 20:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345599AbjJ0QEX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 Oct 2023 12:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
+        id S232550AbjJ0SD3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 27 Oct 2023 14:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbjJ0QEW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Oct 2023 12:04:22 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D339CE
-        for <linux-scsi@vger.kernel.org>; Fri, 27 Oct 2023 09:04:19 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1ca3a54d2c4so20184435ad.3
-        for <linux-scsi@vger.kernel.org>; Fri, 27 Oct 2023 09:04:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1698422659; x=1699027459; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MxlKg2ZQ3RoZNDmMa69SR5WTeNAq3sPQXyEwWMiM4L0=;
-        b=gltRgHuxY5o+P9g8ANEyv7rF4oMAu8FIHcpnYD/5q7/eNceH04wzejDhIno07mL6Pr
-         3nVPbxE5240aE2cqX3uE/cAP70WQz1okaESaCJGc6A5Qs1jTJZxO9tvZ2pye9/3jEzrU
-         Mtfav1SapZ2jtlMqsHlAkmQQASaxG+Gtl+hJs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698422659; x=1699027459;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MxlKg2ZQ3RoZNDmMa69SR5WTeNAq3sPQXyEwWMiM4L0=;
-        b=Zgdk3UWZ0siQb+SapFZJErvKlCrmCWOByOQkD5Zuf+bdb0DDiG3Fl3q7CgSmwPiSBp
-         zoWArDpXijSB2zH8Z9m2rHj/VNlzDJUGMW6bGoIRt94WhcHxZX2H+p6PPJDid+PejWUN
-         m2t+63DnGZ5JOcLecb81+MWBpMwUvZXnrkEHDfPqn4hYkklzdNSXFpENGapR6spp7UuE
-         18/f9NhOD49l9UpHFg0LkTEy2Uo2e/RFvQUV3yCwP+3JWOxBgn9HB1z9anCXMVBoF9e6
-         FggFuUuhmiDg/F+w/2VvN/MEmz31l+KouSXDRqr+W8zIz8rDfLgDx2LiE6afmTLg922C
-         f1Fw==
-X-Gm-Message-State: AOJu0Yxf7jcj8XvmkOgqXAhANi6TUBfb2QnijrtApkWLsTWhNue13OPy
-        +fCF70GKn6PjVLpJIO2cNF8jBQ==
-X-Google-Smtp-Source: AGHT+IFqUCba7aRtPkUHObTTG1ZiQw4DS+HcqIGAlBr7TQQWpqIfOztfjD7ggjl7XY1/UrvlIXSV6A==
-X-Received: by 2002:a17:902:ce83:b0:1ca:77e9:3863 with SMTP id f3-20020a170902ce8300b001ca77e93863mr3771879plg.31.1698422652677;
-        Fri, 27 Oct 2023 09:04:12 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id z5-20020a170902ee0500b001b8b1f6619asm1750005plb.75.2023.10.27.09.04.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Oct 2023 09:04:12 -0700 (PDT)
-Date:   Fri, 27 Oct 2023 09:04:11 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Don Brace <don.brace@microchip.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        storagedev@microchip.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] scsi: hpsa: replace deprecated strncpy
-Message-ID: <202310270901.B49F63CD5@keescook>
-References: <20231026-strncpy-drivers-scsi-hpsa-c-v2-1-2fe2d05122fd@google.com>
+        with ESMTP id S231461AbjJ0SD3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Oct 2023 14:03:29 -0400
+Received: from alln-iport-3.cisco.com (alln-iport-3.cisco.com [173.37.142.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783D0F3;
+        Fri, 27 Oct 2023 11:03:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=4701; q=dns/txt; s=iport;
+  t=1698429806; x=1699639406;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MLltXISI9Lx12xFxYGsiVUPlQvDHPNkLyDHkpW9D4rQ=;
+  b=fZrdJ9av41R/Zwc7cVRoJfyWqy73iivgrRIWxEpDBR22VCP1MxULNjPV
+   G7Q9cqJPmrnrlpm9MKYxhARPFwfwRz9Xx/kpUZmJOiNSOeQus7XElenRP
+   1+3VmAvgdzC6E9ziiuwzdj0sxwC+FkJHYQvD2aq0pJUdFaTqiFCc7pPbR
+   4=;
+X-CSE-ConnectionGUID: Av0DtP0+THaiR8uRkvJYDA==
+X-CSE-MsgGUID: w2Aw8V5SREiUjrboMXrEcg==
+X-IronPort-AV: E=Sophos;i="6.03,256,1694736000"; 
+   d="scan'208";a="173159750"
+Received: from rcdn-core-11.cisco.com ([173.37.93.147])
+  by alln-iport-3.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 18:03:20 +0000
+Received: from localhost.cisco.com ([10.193.101.253])
+        (authenticated bits=0)
+        by rcdn-core-11.cisco.com (8.15.2/8.15.2) with ESMTPSA id 39RI39Oc029226
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 27 Oct 2023 18:03:19 GMT
+From:   Karan Tilak Kumar <kartilak@cisco.com>
+To:     sebaddel@cisco.com
+Cc:     arulponn@cisco.com, djhawar@cisco.com, gcboffa@cisco.com,
+        mkai2@cisco.com, satishkh@cisco.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Karan Tilak Kumar <kartilak@cisco.com>
+Subject: [PATCH v2 00/13] Introduce support for multiqueue (MQ) in fnic 
+Date:   Fri, 27 Oct 2023 11:02:49 -0700
+Message-Id: <20231027180302.418676-1-kartilak@cisco.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231026-strncpy-drivers-scsi-hpsa-c-v2-1-2fe2d05122fd@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Authenticated-User: kartilak@cisco.com
+X-Outbound-SMTP-Client: 10.193.101.253, [10.193.101.253]
+X-Outbound-Node: rcdn-core-11.cisco.com
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Oct 26, 2023 at 11:13:41PM +0000, Justin Stitt wrote:
-> strncpy() is deprecated for use on NUL-terminated destination strings
-> [1] and as such we should prefer more robust and less ambiguous string
-> interfaces.
-> 
-> Instances of strncpy()'ing a string into a buffer and manually
-> NUL-terminating followed by sccanf with just "%d" as the format
-> specifier can be accomplished by strscpy() and kstrtoint().
-> 
-> strscpy() guarantees NUL-termination on the destination buffer and
-> kstrtoint is better way of getting strings turned into ints.
-> 
-> For the last two strncpy() use cases in init_driver_version(), we can
-> actually drop this function entirely.
-> 
-> Firstly, we are kmalloc()'ing driver_version. Then, we are calling
-> init_driver_version() which memset's it to 0 followed by a strncpy().
-> The pattern is 1) allocating memory for a string, 2) setting all bytes
-> to NUL, 3) copy bytes from another string + ensure NUL-padded.
-> 
-> For these, we can just stack allocate driver_version and
-> old_driver_version. This simplifies the code greatly as we don't have
-> any malloc/free or strncpy's.
-> 
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Cc: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
-> Changes in v2:
-> - use stack for buffers (thanks Kees)
-> - use kstrtoint (thanks Kees)
-> - Link to v1: https://lore.kernel.org/r/20231026-strncpy-drivers-scsi-hpsa-c-v1-1-75519d7a191b@google.com
-> ---
-> Note: build-tested only.
-> 
-> Found with: $ rg "strncpy\("
-> ---
->  drivers/scsi/hpsa.c | 53 ++++++++++++++++++++---------------------------------
->  1 file changed, 20 insertions(+), 33 deletions(-)
-> 
-> diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-> index af18d20f3079..4d42fbb071cf 100644
-> --- a/drivers/scsi/hpsa.c
-> +++ b/drivers/scsi/hpsa.c
-> @@ -452,18 +452,18 @@ static ssize_t host_store_hp_ssd_smart_path_status(struct device *dev,
->  					 struct device_attribute *attr,
->  					 const char *buf, size_t count)
->  {
-> -	int status, len;
-> +	int status;
->  	struct ctlr_info *h;
->  	struct Scsi_Host *shost = class_to_shost(dev);
->  	char tmpbuf[10];
->  
->  	if (!capable(CAP_SYS_ADMIN) || !capable(CAP_SYS_RAWIO))
->  		return -EACCES;
-> -	len = count > sizeof(tmpbuf) - 1 ? sizeof(tmpbuf) - 1 : count;
-> -	strncpy(tmpbuf, buf, len);
-> -	tmpbuf[len] = '\0';
-> -	if (sscanf(tmpbuf, "%d", &status) != 1)
-> +
-> +	strscpy(tmpbuf, buf, sizeof(tmpbuf));
-> +	if (kstrtoint(tmpbuf, 0, &status))
+Hi Martin,
 
-I actually meant:
+This cover letter describes the feature: add support for multiqueue (MQ)
+to fnic driver.
 
-	if (kstrtoint(buf, 0, &status))
+Background: The Virtual Interface Card (VIC) firmware exposes several
+queues that can be configured for sending IOs and receiving IO
+responses. Unified Computing System Manager (UCSM) and Intersight
+Manager (IMM) allows users to configure the number of queues to be
+used for IOs.
 
-I don't see any reason for "tmpbuf" at all.
+The number of IO queues to be used is stored in a configuration file
+by the VIC firmware. The fNIC driver reads the configuration file and sets
+the number of queues to be used. Previously, the driver was hard-coded
+to use only one queue. With this set of changes, the fNIC driver will
+configure itself to use multiple queues. This feature takes advantage of
+the block multiqueue layer to parallelize IOs being sent out of the VIC
+card.
 
-> @@ -7234,25 +7234,15 @@ static int hpsa_controller_hard_reset(struct pci_dev *pdev,
->  	return 0;
->  }
->  
-> -static void init_driver_version(char *driver_version, int len)
-> -{
-> -	memset(driver_version, 0, len);
-> -	strncpy(driver_version, HPSA " " HPSA_DRIVER_VERSION, len - 1);
-> -}
-> -
->  static int write_driver_ver_to_cfgtable(struct CfgTable __iomem *cfgtable)
->  {
-> -	char *driver_version;
->  	int i, size = sizeof(cfgtable->driver_version);
-> +	char driver_version[sizeof(cfgtable->driver_version)] =
-> +						HPSA " " HPSA_DRIVER_VERSION;
->  
-> -	driver_version = kmalloc(size, GFP_KERNEL);
-> -	if (!driver_version)
-> -		return -ENOMEM;
-> -
-> -	init_driver_version(driver_version, size);
->  	for (i = 0; i < size; i++)
->  		writeb(driver_version[i], &cfgtable->driver_version[i]);
-> -	kfree(driver_version);
-> +
->  	return 0;
->  }
->  
-> @@ -7268,21 +7258,18 @@ static void read_driver_ver_from_cfgtable(struct CfgTable __iomem *cfgtable,
->  static int controller_reset_failed(struct CfgTable __iomem *cfgtable)
->  {
->  
-> -	char *driver_ver, *old_driver_ver;
-> -	int rc, size = sizeof(cfgtable->driver_version);
-> -
-> -	old_driver_ver = kmalloc_array(2, size, GFP_KERNEL);
-> -	if (!old_driver_ver)
-> -		return -ENOMEM;
-> -	driver_ver = old_driver_ver + size;
-> +	char driver_ver[sizeof(cfgtable->driver_version)] = "";
-> +	char old_driver_ver[sizeof(cfgtable->driver_version)] =
-> +						HPSA " " HPSA_DRIVER_VERSION;
-> +	int rc;
->  
->  	/* After a reset, the 32 bytes of "driver version" in the cfgtable
->  	 * should have been changed, otherwise we know the reset failed.
->  	 */
-> -	init_driver_version(old_driver_ver, size);
->  	read_driver_ver_from_cfgtable(cfgtable, driver_ver);
-> -	rc = !memcmp(driver_ver, old_driver_ver, size);
-> -	kfree(old_driver_ver);
-> +	rc = !memcmp(driver_ver, old_driver_ver,
-> +		     sizeof(cfgtable->driver_version));
-> +
->  	return rc;
->  }
->  /* This does a hard reset of the controller using PCI power management
+Here's a brief description of some of the salient patches:
 
-These two look good now; thanks!
+- vnic_scsi.h needs to be in sync with VIC firmware to be able to read
+the number of queues from the firmware config file. A patch has been
+created for this.
+- In an environment with many fnics (like we see in our customer
+environments), it is hard to distinguish which fnic is printing logs.
+Therefore, an fnic number has been included in the logs.
+- read the number of queues from the firmware config file.
+- include definitions in fnic.h to support multiqueue.
+- modify the interrupt service routines (ISRs) to read from the
+correct registers. The numbers that are used here come from discussions
+with the VIC firmware team.
+- track IO statistics for different queues.
+- remove usage of host_lock, and only use fnic_lock in the fnic driver.
+- use a hardware queue based spinlock to protect io_req.
+- replace the hard-coded zeroth queue with a hardware queue number.
+This presents a bulk of the changes.
+- modify the definition of fnic_queuecommand to accept multiqueue tags.
+- improve log messages, and indicate fnic number and multiqueue tags for
+effective debugging.
 
--Kees
+Even though the patches have been made into a series, some patches are
+heavier than others.
+But, every effort has been made to keep the purpose of each patch as
+a single-purpose, and to compile cleanly.
+
+This patchset has been tested as a whole. Therefore, the tested-by fields
+have been added only to the last two patches
+in the set. All the individual patches compile cleanly. However,
+I've refrained from adding tested-by to
+most of the patches, so as to not mislead the reviewer/reader.
+
+A brief note on the unit tests:
+
+1. Increase number of queues to 64. Load driver. Run IOs via Medusa.
+12+ hour run successful.
+2. Configure multipathing, and run link flaps on single link.
+IOs drop briefly, but pick up as expected.
+3. Configure multipathing, and run link flaps on two links, with a
+30 second delay in between. IOs drop briefly, but pick up as expected.
+
+Repeat the above tests with single queue. All tests were successful.
+
+Please consider this patch series for the next merge window.
+
+Changes between v1 and v2:
+	Suppress a warning raised by a kernel test bot,
+	Incorporate the following review comments from Bart:
+	Remove outdated comment,
+	Remove unnecessary out of range tag checks,
+	Remove unnecessary local variable,
+	Modify function name.
+ 
+Thanks and regards,
+Karan
+
+Karan Tilak Kumar (13):
+  scsi: fnic: Modify definitions to sync with VIC firmware
+  scsi: fnic: Add and use fnic number
+  scsi: fnic: Add and improve log messages
+  scsi: fnic: Rename wq_copy to hw_copy_wq
+  scsi: fnic: Get copy workqueue count and interrupt mode from config
+  scsi: fnic: Refactor and redefine fnic.h for multiqueue
+  scsi: fnic: Modify ISRs to support multiqueue(MQ)
+  scsi: fnic: Define stats to track multiqueue (MQ) IOs
+  scsi: fnic: Remove usage of host_lock
+  scsi: fnic: Add support for multiqueue (MQ) in fnic_main.c
+  scsi: fnic: Use fnic_lock to protect fnic structures in queuecommand
+  scsi: fnic: Add support for multiqueue (MQ) in fnic driver
+  scsi: fnic: Improve logs and add support for multiqueue (MQ)
+
+ drivers/scsi/fnic/fnic.h         |  42 +-
+ drivers/scsi/fnic/fnic_debugfs.c |   2 +-
+ drivers/scsi/fnic/fnic_fcs.c     |  36 +-
+ drivers/scsi/fnic/fnic_io.h      |   2 +
+ drivers/scsi/fnic/fnic_isr.c     | 166 +++++--
+ drivers/scsi/fnic/fnic_main.c    | 156 ++++--
+ drivers/scsi/fnic/fnic_res.c     |  48 +-
+ drivers/scsi/fnic/fnic_scsi.c    | 789 ++++++++++++++++++-------------
+ drivers/scsi/fnic/fnic_stats.h   |   3 +
+ drivers/scsi/fnic/fnic_trace.c   |  11 +
+ drivers/scsi/fnic/vnic_dev.c     |   4 +
+ drivers/scsi/fnic/vnic_scsi.h    |  13 +-
+ 12 files changed, 823 insertions(+), 449 deletions(-)
 
 -- 
-Kees Cook
+2.31.1
+
