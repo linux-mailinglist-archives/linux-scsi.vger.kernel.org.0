@@ -2,108 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B02A27D98F4
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Oct 2023 14:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C197D9D44
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Oct 2023 17:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbjJ0Mvs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 Oct 2023 08:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
+        id S1346209AbjJ0PqC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 27 Oct 2023 11:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjJ0Mvr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Oct 2023 08:51:47 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117A9FA
-        for <linux-scsi@vger.kernel.org>; Fri, 27 Oct 2023 05:51:44 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-31c5cac3ae2so1495823f8f.3
-        for <linux-scsi@vger.kernel.org>; Fri, 27 Oct 2023 05:51:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698411102; x=1699015902; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:from:content-language:subject:reply-to:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AaC3Tst7u/+sfV3eqRZ7QDIrge5vEY2rhdCtJxg0roU=;
-        b=LbX/sRyxLx0vbQFnQy5xztxQ4KZsEI4mTtSgH4CCOOU9CSYgM+T+hNTjhZcf09aI2i
-         mdHQH7Zv5RLGmhQaONAscWgDLoEeIXq3uz0l586Vk6jOb2p3Wie5R+CKqZy9fCaRqznN
-         mwFGcHU5kGm3IJiVq0GAMKcekFDl/7KgrH6GJyl1kNstxKrolk617L9a25IluIYyZdOc
-         Ekh6cD/eHwmsZmoc7BwZfcTSHz3WPuuFY9Ao1kjUk5D/+KfuHlN22Uc3Jq4m/UM8m6Wb
-         TyFhrlDCtuj3VyAayjZJ2FnwgMGEmWLp8JHEP/b0xYBGAZItLMaGrZT+Nr5xORzblMwJ
-         BDiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698411102; x=1699015902;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:from:content-language:subject:reply-to:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=AaC3Tst7u/+sfV3eqRZ7QDIrge5vEY2rhdCtJxg0roU=;
-        b=ofmTslBBYl7OJBi1CcbrqPqXkEEeSeBrW/sUTF1L0ttSrg6ovuKBB2A93/74GHGjzL
-         ORWgp7xugmvTzcObvxpNQMumVZhbh5DZntZZtwC4hRHnWQ9sK+S1fMK2z7nfGPj55hsP
-         DAi0qo/Pjs5onp2y8F7yXWReqY8/qY+vPZH/LYRd/mRvoNcqTc7HgOxnVssjSmtJHPVd
-         wuS74kyf2MNfTr/jwfii+xOIv+4j/XKeJv7Q32yZKj5T2j2/ujzscivLKUsENynx5Emb
-         w+B3p5nxxzPAJNzuE+kMoNqB9bXSsKwW54PiLh31fnJ8zsacuI64rqe6RjcU9D4jzJF9
-         D+Dg==
-X-Gm-Message-State: AOJu0YyLvdc05JqdWNtHc1k62Nksqh1N6+xdR3kFCYAYR2ORVdNepjxM
-        QQrZr1PbPUt+gDKrrZkMK2jIWQ==
-X-Google-Smtp-Source: AGHT+IH8hagq+WbAKMvfNgSyoiEk62mu6RFvdQDX+6GMr0u3AOSp8GkSpVsqN50DlZNICMdZHODWow==
-X-Received: by 2002:a5d:4dcd:0:b0:32d:87df:6dea with SMTP id f13-20020a5d4dcd000000b0032d87df6deamr1946689wru.45.1698411102373;
-        Fri, 27 Oct 2023 05:51:42 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:bba7:4e7d:4d42:af62? ([2a01:e0a:982:cbb0:bba7:4e7d:4d42:af62])
-        by smtp.gmail.com with ESMTPSA id j13-20020a5d564d000000b0032ddf2804ccsm1692158wrw.83.2023.10.27.05.51.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Oct 2023 05:51:41 -0700 (PDT)
-Message-ID: <059cc112-7fb6-4da4-bc25-4eede0252f0e@linaro.org>
-Date:   Fri, 27 Oct 2023 14:51:37 +0200
+        with ESMTP id S1346190AbjJ0Pp7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Oct 2023 11:45:59 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9A41FCE
+        for <linux-scsi@vger.kernel.org>; Fri, 27 Oct 2023 08:45:55 -0700 (PDT)
+Received: (qmail 573168 invoked by uid 1000); 27 Oct 2023 11:45:54 -0400
+Date:   Fri, 27 Oct 2023 11:45:54 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Milan Broz <gmazyland@gmail.com>
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-scsi@vger.kernel.org, gregkh@linuxfoundation.org,
+        oneukum@suse.com
+Subject: Re: [PATCH v3] usb-storage,uas: use host helper to generate driver
+ info
+Message-ID: <083755b2-7d02-45f2-8ce5-a8102cf6911c@rowland.harvard.edu>
+References: <20231016072604.40179-5-gmazyland@gmail.com>
+ <20231026101615.395113-1-gmazyland@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 2/6] scsi: ufs: ufs-qcom: Add support for UFS device
- version detection
-Content-Language: en-US, fr
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Can Guo <quic_cang@quicinc.com>, mani@kernel.org,
-        quic_nguyenb@quicinc.com, quic_nitirawa@quicinc.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "open list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER..." 
-        <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1694411968-14413-1-git-send-email-quic_cang@quicinc.com>
- <1694411968-14413-3-git-send-email-quic_cang@quicinc.com>
- <ccf40aed-3acc-474e-b456-031669b4a895@linaro.org>
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro Developer Services
-In-Reply-To: <ccf40aed-3acc-474e-b456-031669b4a895@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231026101615.395113-1-gmazyland@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,103 +39,160 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 18/10/2023 16:02, Neil Armstrong wrote:
-> On 11/09/2023 07:59, Can Guo wrote:
->> From: "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
->>
->> Retrieve UFS device version from UFS host controller's spare register
->> which is populated by bootloader, and use the UFS device version together
->> with host controller's HW version to decide the proper power modes which
->> should be used to configure the UFS PHY.
->>
->> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
->> Signed-off-by: Can Guo <quic_cang@quicinc.com>
->> ---
->>   drivers/ufs/host/ufs-qcom.c | 30 +++++++++++++++++++++++-------
->>   drivers/ufs/host/ufs-qcom.h |  2 ++
->>   2 files changed, 25 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
->> index 710f079..8a9d54f 100644
->> --- a/drivers/ufs/host/ufs-qcom.c
->> +++ b/drivers/ufs/host/ufs-qcom.c
->> @@ -1030,7 +1030,7 @@ static void ufs_qcom_advertise_quirks(struct ufs_hba *hba)
->>                   | UFSHCD_QUIRK_BROKEN_PA_RXHSUNTERMCAP);
->>       }
->> -    if (host->hw_ver.major > 0x3)
->> +    if (host->hw_ver.major > 0x3 && host->hw_ver.major < 0x5)
->>           hba->quirks |= UFSHCD_QUIRK_REINIT_AFTER_MAX_GEAR_SWITCH;
->>   }
->> @@ -1038,11 +1038,33 @@ static void ufs_qcom_set_pwr_mode_limits(struct ufs_hba *hba)
->>   {
->>       struct ufs_qcom_host *host = ufshcd_get_variant(hba);
->>       struct ufs_dev_params *host_pwr_cap = &host->host_pwr_cap;
->> +    u32 val, dev_major = 0;
->>       ufshcd_init_pwr_dev_param(host_pwr_cap);
->>       /* This driver only supports symmetic gear setting i.e., hs_tx_gear == hs_rx_gear */
->>       host_pwr_cap->hs_tx_gear = host_pwr_cap->hs_rx_gear = ufs_qcom_get_hs_gear(hba);
->> +    host->phy_gear = host_pwr_cap->hs_rx_gear;
->> +
->> +    if (host->hw_ver.major < 0x5) {
+On Thu, Oct 26, 2023 at 12:16:15PM +0200, Milan Broz wrote:
+> The USB mass storage quirks flags can be stored in driver_info in
+> a 32-bit integer (unsigned long on 32-bit platforms).
+> As this attribute cannot be enlarged, we need to use some form
+> of translation of 64-bit quirk bits.
 > 
-> Here you set G2 for < 0x5
+> This problem was discussed on the USB list
+> https://lore.kernel.org/linux-usb/f9e8acb5-32d5-4a30-859f-d4336a86b31a@gmail.com/
 > 
->> +        /*
->> +         * Power up the PHY using the minimum supported gear (UFS_HS_G2).
->> +         * Switching to max gear will be performed during reinit if supported.
->> +         */
->> +        host->phy_gear = UFS_HS_G2;
->> +    } else {
+> The initial solution to use a static array extensively increased the size
+> of the kernel module, so I decided to try the second suggested solution:
+> generate a table by host-compiled program and use bit 31 to indicate
+> that the value is an index, not the actual value.
 > 
-> So here is for >= 0x5
+> This patch adds a host-compiled program that processes unusual_devs.h
+> (and unusual_uas.h) and generates files usb-ids.c and usb-ids-uas.c
+> (for pre-processed USB device table with 32-bit device info).
+> These files also contain a generated translation table for driver_info
+> to 64-bit values.
 > 
->> +        val = ufshcd_readl(host->hba, REG_UFS_DEBUG_SPARE_CFG);
->> +        dev_major = FIELD_GET(GENMASK(7, 4), val);
->> +
->> +        if (host->hw_ver.major == 0x5 && (dev_major >= 0x4 ||
->> +                          dev_major == 0)) {
->> +            /* For UFS 4.0 and newer, or dev version is not populated */
->> +            host_pwr_cap->hs_rate = PA_HS_MODE_A;
->> +        } else if (dev_major < 0x4 && dev_major > 0) {
->> +            /* For UFS 3.1 and older, apply HS-G4 PHY settings to save power */
->> +            host->phy_gear = UFS_HS_G4;
->> +        }
+> The translation function is used only in usb-storage and uas modules; all
+> other USB storage modules store flags directly, using only 32-bit flags.
 > 
-> But behavior of > 0x5 is not clear here, could you clarify it in v2 ?
+> For 64-bit platforms, where unsigned long is 64-bit, we do not need to
+> convert quirk flags to 32-bit index; the translation function there uses
+> flags directly.
+> 
+> Signed-off-by: Milan Broz <gmazyland@gmail.com>
+> ---
 
-Now SM8650 is public, could you update it for v2 ?
+Just a few minor comments.
 
-Thanks,
-Neil
+> diff --git a/drivers/usb/storage/Makefile b/drivers/usb/storage/Makefile
+> index 46635fa4a340..9c09d83769e3 100644
+> --- a/drivers/usb/storage/Makefile
+> +++ b/drivers/usb/storage/Makefile
+> @@ -45,3 +45,35 @@ ums-realtek-y		:= realtek_cr.o
+>  ums-sddr09-y		:= sddr09.o
+>  ums-sddr55-y		:= sddr55.o
+>  ums-usbat-y		:= shuttle_usbat.o
+> +
+> +# The mkflags host-compiled generator produces usb-ids.c (usb-storage)
+> +# and usb-ids-uas.c (uas) with USB device tables.
+> +# These tables include pre-computed 32-bit values, as USB driver_info
+> +# (where the value is stored) can be only 32-bit.
+> +# The most significant bit means it is index to 64-bit pre-computed table
+> +# generated by mkflags host-compiled program.
+> +# Currently used only by mass-storage and uas driver.
+> +
+> +$(obj)/usual-tables.o: $(obj)/usb-ids.c
+> +$(obj)/uas.o: $(obj)/usb-ids-uas.c
 
-> 
-> Thanks,
-> Neil
-> 
->> +    }
->>   }
->>   static void ufs_qcom_set_caps(struct ufs_hba *hba)
->> @@ -1287,12 +1309,6 @@ static int ufs_qcom_init(struct ufs_hba *hba)
->>           dev_warn(dev, "%s: failed to configure the testbus %d\n",
->>                   __func__, err);
->> -    /*
->> -     * Power up the PHY using the minimum supported gear (UFS_HS_G2).
->> -     * Switching to max gear will be performed during reinit if supported.
->> -     */
->> -    host->phy_gear = UFS_HS_G2;
->> -
->>       return 0;
->>   out_variant_clear:
->> diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
->> index 4db64d9..e10889f 100644
->> --- a/drivers/ufs/host/ufs-qcom.h
->> +++ b/drivers/ufs/host/ufs-qcom.h
->> @@ -56,6 +56,8 @@ enum {
->>       UFS_AH8_CFG                = 0xFC,
->>       REG_UFS_CFG3                = 0x271C,
->> +
->> +    REG_UFS_DEBUG_SPARE_CFG            = 0x284C,
->>   };
->>   /* QCOM UFS host controller vendor specific debug registers */
-> 
+It would look better to put tabs after the ':'s in these two lines, so 
+that the second field aligns with the lines below.
 
+> +clean-files		:= usb-ids.c usb-ids-uas.c
+> +HOSTCFLAGS_mkflags.o	:= -I $(srctree)/include/
+> +ifdef CONFIG_64BIT
+> +HOSTCFLAGS_mkflags.o	+= -D CONFIG_64BIT=1
+> +else
+> +HOSTCFLAGS_mkflags.o	+= -D CONFIG_64BIT=0
+> +endif
+> +hostprogs		+= mkflags
+> +
+> +quiet_cmd_mkflag_storage = FLAGS   $@
+> +cmd_mkflag_storage = $(obj)/mkflags storage > $@
+> +
+> +quiet_cmd_mkflag_uas = FLAGS   $@
+> +cmd_mkflag_uas = $(obj)/mkflags uas > $@
+> +
+> +# mkflags always need to include unusual_devs.h and unusual_uas.h
+> +$(obj)/usb-ids.c: $(obj)/mkflags $(obj)/unusual_devs.h $(obj)/unusual_uas.h
+> +	$(call cmd,mkflag_storage)
+> +
+> +$(obj)/usb-ids-uas.c: $(obj)/mkflags $(obj)/unusual_devs.h $(obj)/unusual_uas.h
+> +	$(call cmd,mkflag_uas)
+
+I don't think these dependencies are quite right.  usb-ids.c and 
+usb-ids-uas.c don't depend directly on unusual_devs.h or unusual_uas.h 
+-- that is, the mkflags program doesn't read those header files when it 
+runs.  Rather, mkflags itself depends on those headers, and the compiler 
+can figure this out by itself so the Makefile doesn't need to mention 
+it.
+
+So instead you should say:
+
+$(obj)/usb-ids.c:	$(obj)/mkflags
+	$(call cmd,mkflag_storage)
+
+$(obj)/usb-ids-uas.c:	$(obj)/mkflags
+	$(call cmd,mkflag_uas)
+
+> diff --git a/drivers/usb/storage/usb-ids.h b/drivers/usb/storage/usb-ids.h
+> new file mode 100644
+> index 000000000000..d0359c572f33
+> --- /dev/null
+> +++ b/drivers/usb/storage/usb-ids.h
+> @@ -0,0 +1,37 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +
+> +#ifndef _USB_STOR_IDS_H_
+> +#define _USB_STOR_IDS_H_
+> +
+> +#include <linux/types.h>
+> +#include <linux/bug.h>
+> +
+> +/* Conversion of 32-bit quirks flags for 32-bit platforms */
+> +extern const unsigned long usb_stor_drv_info_u64_table_size;
+> +extern const unsigned long usb_uas_drv_info_u64_table_size;
+> +extern const u64 usb_stor_drv_info_u64_table[];
+> +extern const u64 usb_uas_drv_info_u64_table[];
+> +
+> +static u64 usb_stor_drv_info_to_flags(const u64 *drv_info_u64_table,
+> +		unsigned long table_size, unsigned long idx)
+> +{
+> +#if IS_ENABLED(CONFIG_64BIT)
+> +	return idx;
+> +#else
+> +	u64 flags = 0;
+> +
+> +	if (idx < (1UL << 31))
+> +		return idx;
+> +
+> +	idx -= (1UL << 31);
+> +
+> +	if (idx < table_size)
+> +		flags = drv_info_u64_table[idx];
+> +	else
+> +		pr_warn_once("usb_stor_drv_info_u64_table not updated");
+> +
+> +	return flags;
+> +#endif
+> +}
+
+In order to avoid conditional macros within a function definition, this 
+can be rewritten as:
+
+#if IS_ENABLED(CONFIG_64BIT)
+/* 64-bit systems don't need to use the drv_info_64_table */
+static u64 usb_stor_drv_info_to_flags(const u64 *drv_info_u64_table,
+		unsigned long table_size, unsigned long idx)
+{
+	return idx;
+}
+
+#else
+/* 32-bit systems need to look up flags if bits 31 or beyond are used */
+static u64 usb_stor_drv_info_to_flags(const u64 *drv_info_u64_table,
+		unsigned long table_size, unsigned long idx)
+{
+...
+}
+#endif
+
+Everything else looks okay.
+
+Alan Stern
