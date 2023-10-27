@@ -2,197 +2,209 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C197D9D44
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Oct 2023 17:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A64297D9DBE
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Oct 2023 18:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346209AbjJ0PqC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 Oct 2023 11:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
+        id S1345599AbjJ0QEX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 27 Oct 2023 12:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346190AbjJ0Pp7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Oct 2023 11:45:59 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9A41FCE
-        for <linux-scsi@vger.kernel.org>; Fri, 27 Oct 2023 08:45:55 -0700 (PDT)
-Received: (qmail 573168 invoked by uid 1000); 27 Oct 2023 11:45:54 -0400
-Date:   Fri, 27 Oct 2023 11:45:54 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Milan Broz <gmazyland@gmail.com>
-Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-scsi@vger.kernel.org, gregkh@linuxfoundation.org,
-        oneukum@suse.com
-Subject: Re: [PATCH v3] usb-storage,uas: use host helper to generate driver
- info
-Message-ID: <083755b2-7d02-45f2-8ce5-a8102cf6911c@rowland.harvard.edu>
-References: <20231016072604.40179-5-gmazyland@gmail.com>
- <20231026101615.395113-1-gmazyland@gmail.com>
+        with ESMTP id S231685AbjJ0QEW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Oct 2023 12:04:22 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D339CE
+        for <linux-scsi@vger.kernel.org>; Fri, 27 Oct 2023 09:04:19 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1ca3a54d2c4so20184435ad.3
+        for <linux-scsi@vger.kernel.org>; Fri, 27 Oct 2023 09:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1698422659; x=1699027459; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MxlKg2ZQ3RoZNDmMa69SR5WTeNAq3sPQXyEwWMiM4L0=;
+        b=gltRgHuxY5o+P9g8ANEyv7rF4oMAu8FIHcpnYD/5q7/eNceH04wzejDhIno07mL6Pr
+         3nVPbxE5240aE2cqX3uE/cAP70WQz1okaESaCJGc6A5Qs1jTJZxO9tvZ2pye9/3jEzrU
+         Mtfav1SapZ2jtlMqsHlAkmQQASaxG+Gtl+hJs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698422659; x=1699027459;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MxlKg2ZQ3RoZNDmMa69SR5WTeNAq3sPQXyEwWMiM4L0=;
+        b=Zgdk3UWZ0siQb+SapFZJErvKlCrmCWOByOQkD5Zuf+bdb0DDiG3Fl3q7CgSmwPiSBp
+         zoWArDpXijSB2zH8Z9m2rHj/VNlzDJUGMW6bGoIRt94WhcHxZX2H+p6PPJDid+PejWUN
+         m2t+63DnGZ5JOcLecb81+MWBpMwUvZXnrkEHDfPqn4hYkklzdNSXFpENGapR6spp7UuE
+         18/f9NhOD49l9UpHFg0LkTEy2Uo2e/RFvQUV3yCwP+3JWOxBgn9HB1z9anCXMVBoF9e6
+         FggFuUuhmiDg/F+w/2VvN/MEmz31l+KouSXDRqr+W8zIz8rDfLgDx2LiE6afmTLg922C
+         f1Fw==
+X-Gm-Message-State: AOJu0Yxf7jcj8XvmkOgqXAhANi6TUBfb2QnijrtApkWLsTWhNue13OPy
+        +fCF70GKn6PjVLpJIO2cNF8jBQ==
+X-Google-Smtp-Source: AGHT+IFqUCba7aRtPkUHObTTG1ZiQw4DS+HcqIGAlBr7TQQWpqIfOztfjD7ggjl7XY1/UrvlIXSV6A==
+X-Received: by 2002:a17:902:ce83:b0:1ca:77e9:3863 with SMTP id f3-20020a170902ce8300b001ca77e93863mr3771879plg.31.1698422652677;
+        Fri, 27 Oct 2023 09:04:12 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id z5-20020a170902ee0500b001b8b1f6619asm1750005plb.75.2023.10.27.09.04.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Oct 2023 09:04:12 -0700 (PDT)
+Date:   Fri, 27 Oct 2023 09:04:11 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     Don Brace <don.brace@microchip.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        storagedev@microchip.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] scsi: hpsa: replace deprecated strncpy
+Message-ID: <202310270901.B49F63CD5@keescook>
+References: <20231026-strncpy-drivers-scsi-hpsa-c-v2-1-2fe2d05122fd@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231026101615.395113-1-gmazyland@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20231026-strncpy-drivers-scsi-hpsa-c-v2-1-2fe2d05122fd@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Oct 26, 2023 at 12:16:15PM +0200, Milan Broz wrote:
-> The USB mass storage quirks flags can be stored in driver_info in
-> a 32-bit integer (unsigned long on 32-bit platforms).
-> As this attribute cannot be enlarged, we need to use some form
-> of translation of 64-bit quirk bits.
+On Thu, Oct 26, 2023 at 11:13:41PM +0000, Justin Stitt wrote:
+> strncpy() is deprecated for use on NUL-terminated destination strings
+> [1] and as such we should prefer more robust and less ambiguous string
+> interfaces.
 > 
-> This problem was discussed on the USB list
-> https://lore.kernel.org/linux-usb/f9e8acb5-32d5-4a30-859f-d4336a86b31a@gmail.com/
+> Instances of strncpy()'ing a string into a buffer and manually
+> NUL-terminating followed by sccanf with just "%d" as the format
+> specifier can be accomplished by strscpy() and kstrtoint().
 > 
-> The initial solution to use a static array extensively increased the size
-> of the kernel module, so I decided to try the second suggested solution:
-> generate a table by host-compiled program and use bit 31 to indicate
-> that the value is an index, not the actual value.
+> strscpy() guarantees NUL-termination on the destination buffer and
+> kstrtoint is better way of getting strings turned into ints.
 > 
-> This patch adds a host-compiled program that processes unusual_devs.h
-> (and unusual_uas.h) and generates files usb-ids.c and usb-ids-uas.c
-> (for pre-processed USB device table with 32-bit device info).
-> These files also contain a generated translation table for driver_info
-> to 64-bit values.
+> For the last two strncpy() use cases in init_driver_version(), we can
+> actually drop this function entirely.
 > 
-> The translation function is used only in usb-storage and uas modules; all
-> other USB storage modules store flags directly, using only 32-bit flags.
+> Firstly, we are kmalloc()'ing driver_version. Then, we are calling
+> init_driver_version() which memset's it to 0 followed by a strncpy().
+> The pattern is 1) allocating memory for a string, 2) setting all bytes
+> to NUL, 3) copy bytes from another string + ensure NUL-padded.
 > 
-> For 64-bit platforms, where unsigned long is 64-bit, we do not need to
-> convert quirk flags to 32-bit index; the translation function there uses
-> flags directly.
+> For these, we can just stack allocate driver_version and
+> old_driver_version. This simplifies the code greatly as we don't have
+> any malloc/free or strncpy's.
 > 
-> Signed-off-by: Milan Broz <gmazyland@gmail.com>
+> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
+> Link: https://github.com/KSPP/linux/issues/90
+> Cc: linux-hardening@vger.kernel.org
+> Cc: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
 > ---
-
-Just a few minor comments.
-
-> diff --git a/drivers/usb/storage/Makefile b/drivers/usb/storage/Makefile
-> index 46635fa4a340..9c09d83769e3 100644
-> --- a/drivers/usb/storage/Makefile
-> +++ b/drivers/usb/storage/Makefile
-> @@ -45,3 +45,35 @@ ums-realtek-y		:= realtek_cr.o
->  ums-sddr09-y		:= sddr09.o
->  ums-sddr55-y		:= sddr55.o
->  ums-usbat-y		:= shuttle_usbat.o
+> Changes in v2:
+> - use stack for buffers (thanks Kees)
+> - use kstrtoint (thanks Kees)
+> - Link to v1: https://lore.kernel.org/r/20231026-strncpy-drivers-scsi-hpsa-c-v1-1-75519d7a191b@google.com
+> ---
+> Note: build-tested only.
+> 
+> Found with: $ rg "strncpy\("
+> ---
+>  drivers/scsi/hpsa.c | 53 ++++++++++++++++++++---------------------------------
+>  1 file changed, 20 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+> index af18d20f3079..4d42fbb071cf 100644
+> --- a/drivers/scsi/hpsa.c
+> +++ b/drivers/scsi/hpsa.c
+> @@ -452,18 +452,18 @@ static ssize_t host_store_hp_ssd_smart_path_status(struct device *dev,
+>  					 struct device_attribute *attr,
+>  					 const char *buf, size_t count)
+>  {
+> -	int status, len;
+> +	int status;
+>  	struct ctlr_info *h;
+>  	struct Scsi_Host *shost = class_to_shost(dev);
+>  	char tmpbuf[10];
+>  
+>  	if (!capable(CAP_SYS_ADMIN) || !capable(CAP_SYS_RAWIO))
+>  		return -EACCES;
+> -	len = count > sizeof(tmpbuf) - 1 ? sizeof(tmpbuf) - 1 : count;
+> -	strncpy(tmpbuf, buf, len);
+> -	tmpbuf[len] = '\0';
+> -	if (sscanf(tmpbuf, "%d", &status) != 1)
 > +
-> +# The mkflags host-compiled generator produces usb-ids.c (usb-storage)
-> +# and usb-ids-uas.c (uas) with USB device tables.
-> +# These tables include pre-computed 32-bit values, as USB driver_info
-> +# (where the value is stored) can be only 32-bit.
-> +# The most significant bit means it is index to 64-bit pre-computed table
-> +# generated by mkflags host-compiled program.
-> +# Currently used only by mass-storage and uas driver.
-> +
-> +$(obj)/usual-tables.o: $(obj)/usb-ids.c
-> +$(obj)/uas.o: $(obj)/usb-ids-uas.c
+> +	strscpy(tmpbuf, buf, sizeof(tmpbuf));
+> +	if (kstrtoint(tmpbuf, 0, &status))
 
-It would look better to put tabs after the ':'s in these two lines, so 
-that the second field aligns with the lines below.
+I actually meant:
 
-> +clean-files		:= usb-ids.c usb-ids-uas.c
-> +HOSTCFLAGS_mkflags.o	:= -I $(srctree)/include/
-> +ifdef CONFIG_64BIT
-> +HOSTCFLAGS_mkflags.o	+= -D CONFIG_64BIT=1
-> +else
-> +HOSTCFLAGS_mkflags.o	+= -D CONFIG_64BIT=0
-> +endif
-> +hostprogs		+= mkflags
-> +
-> +quiet_cmd_mkflag_storage = FLAGS   $@
-> +cmd_mkflag_storage = $(obj)/mkflags storage > $@
-> +
-> +quiet_cmd_mkflag_uas = FLAGS   $@
-> +cmd_mkflag_uas = $(obj)/mkflags uas > $@
-> +
-> +# mkflags always need to include unusual_devs.h and unusual_uas.h
-> +$(obj)/usb-ids.c: $(obj)/mkflags $(obj)/unusual_devs.h $(obj)/unusual_uas.h
-> +	$(call cmd,mkflag_storage)
-> +
-> +$(obj)/usb-ids-uas.c: $(obj)/mkflags $(obj)/unusual_devs.h $(obj)/unusual_uas.h
-> +	$(call cmd,mkflag_uas)
+	if (kstrtoint(buf, 0, &status))
 
-I don't think these dependencies are quite right.  usb-ids.c and 
-usb-ids-uas.c don't depend directly on unusual_devs.h or unusual_uas.h 
--- that is, the mkflags program doesn't read those header files when it 
-runs.  Rather, mkflags itself depends on those headers, and the compiler 
-can figure this out by itself so the Makefile doesn't need to mention 
-it.
+I don't see any reason for "tmpbuf" at all.
 
-So instead you should say:
-
-$(obj)/usb-ids.c:	$(obj)/mkflags
-	$(call cmd,mkflag_storage)
-
-$(obj)/usb-ids-uas.c:	$(obj)/mkflags
-	$(call cmd,mkflag_uas)
-
-> diff --git a/drivers/usb/storage/usb-ids.h b/drivers/usb/storage/usb-ids.h
-> new file mode 100644
-> index 000000000000..d0359c572f33
-> --- /dev/null
-> +++ b/drivers/usb/storage/usb-ids.h
-> @@ -0,0 +1,37 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
+> @@ -7234,25 +7234,15 @@ static int hpsa_controller_hard_reset(struct pci_dev *pdev,
+>  	return 0;
+>  }
+>  
+> -static void init_driver_version(char *driver_version, int len)
+> -{
+> -	memset(driver_version, 0, len);
+> -	strncpy(driver_version, HPSA " " HPSA_DRIVER_VERSION, len - 1);
+> -}
+> -
+>  static int write_driver_ver_to_cfgtable(struct CfgTable __iomem *cfgtable)
+>  {
+> -	char *driver_version;
+>  	int i, size = sizeof(cfgtable->driver_version);
+> +	char driver_version[sizeof(cfgtable->driver_version)] =
+> +						HPSA " " HPSA_DRIVER_VERSION;
+>  
+> -	driver_version = kmalloc(size, GFP_KERNEL);
+> -	if (!driver_version)
+> -		return -ENOMEM;
+> -
+> -	init_driver_version(driver_version, size);
+>  	for (i = 0; i < size; i++)
+>  		writeb(driver_version[i], &cfgtable->driver_version[i]);
+> -	kfree(driver_version);
 > +
-> +#ifndef _USB_STOR_IDS_H_
-> +#define _USB_STOR_IDS_H_
+>  	return 0;
+>  }
+>  
+> @@ -7268,21 +7258,18 @@ static void read_driver_ver_from_cfgtable(struct CfgTable __iomem *cfgtable,
+>  static int controller_reset_failed(struct CfgTable __iomem *cfgtable)
+>  {
+>  
+> -	char *driver_ver, *old_driver_ver;
+> -	int rc, size = sizeof(cfgtable->driver_version);
+> -
+> -	old_driver_ver = kmalloc_array(2, size, GFP_KERNEL);
+> -	if (!old_driver_ver)
+> -		return -ENOMEM;
+> -	driver_ver = old_driver_ver + size;
+> +	char driver_ver[sizeof(cfgtable->driver_version)] = "";
+> +	char old_driver_ver[sizeof(cfgtable->driver_version)] =
+> +						HPSA " " HPSA_DRIVER_VERSION;
+> +	int rc;
+>  
+>  	/* After a reset, the 32 bytes of "driver version" in the cfgtable
+>  	 * should have been changed, otherwise we know the reset failed.
+>  	 */
+> -	init_driver_version(old_driver_ver, size);
+>  	read_driver_ver_from_cfgtable(cfgtable, driver_ver);
+> -	rc = !memcmp(driver_ver, old_driver_ver, size);
+> -	kfree(old_driver_ver);
+> +	rc = !memcmp(driver_ver, old_driver_ver,
+> +		     sizeof(cfgtable->driver_version));
 > +
-> +#include <linux/types.h>
-> +#include <linux/bug.h>
-> +
-> +/* Conversion of 32-bit quirks flags for 32-bit platforms */
-> +extern const unsigned long usb_stor_drv_info_u64_table_size;
-> +extern const unsigned long usb_uas_drv_info_u64_table_size;
-> +extern const u64 usb_stor_drv_info_u64_table[];
-> +extern const u64 usb_uas_drv_info_u64_table[];
-> +
-> +static u64 usb_stor_drv_info_to_flags(const u64 *drv_info_u64_table,
-> +		unsigned long table_size, unsigned long idx)
-> +{
-> +#if IS_ENABLED(CONFIG_64BIT)
-> +	return idx;
-> +#else
-> +	u64 flags = 0;
-> +
-> +	if (idx < (1UL << 31))
-> +		return idx;
-> +
-> +	idx -= (1UL << 31);
-> +
-> +	if (idx < table_size)
-> +		flags = drv_info_u64_table[idx];
-> +	else
-> +		pr_warn_once("usb_stor_drv_info_u64_table not updated");
-> +
-> +	return flags;
-> +#endif
-> +}
+>  	return rc;
+>  }
+>  /* This does a hard reset of the controller using PCI power management
 
-In order to avoid conditional macros within a function definition, this 
-can be rewritten as:
+These two look good now; thanks!
 
-#if IS_ENABLED(CONFIG_64BIT)
-/* 64-bit systems don't need to use the drv_info_64_table */
-static u64 usb_stor_drv_info_to_flags(const u64 *drv_info_u64_table,
-		unsigned long table_size, unsigned long idx)
-{
-	return idx;
-}
+-Kees
 
-#else
-/* 32-bit systems need to look up flags if bits 31 or beyond are used */
-static u64 usb_stor_drv_info_to_flags(const u64 *drv_info_u64_table,
-		unsigned long table_size, unsigned long idx)
-{
-...
-}
-#endif
-
-Everything else looks okay.
-
-Alan Stern
+-- 
+Kees Cook
