@@ -2,94 +2,212 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508737E0DCC
-	for <lists+linux-scsi@lfdr.de>; Sat,  4 Nov 2023 05:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2527DC9A9
+	for <lists+linux-scsi@lfdr.de>; Tue, 31 Oct 2023 10:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbjKDEiZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 4 Nov 2023 00:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        id S1343909AbjJaJbD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 31 Oct 2023 05:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjKDEiY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 4 Nov 2023 00:38:24 -0400
-X-Greylist: delayed 4218 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Nov 2023 21:38:21 PDT
-Received: from mail.profitpathwaygo.com (mail.profitpathwaygo.com [141.94.21.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783DBB8
-        for <linux-scsi@vger.kernel.org>; Fri,  3 Nov 2023 21:38:21 -0700 (PDT)
-Received: by mail.profitpathwaygo.com (Postfix, from userid 1002)
-        id DA567588BF; Tue, 31 Oct 2023 08:31:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitpathwaygo.com;
-        s=mail; t=1698742829;
-        bh=qp3Ofokho6Ql+WtI8ZPVilyHYhskXL7fod7u9CWs8W4=;
-        h=Date:From:To:Subject:From;
-        b=oYBjs2nhnEPzFOF4M7ChbIjXy6h4beyv5dotVBs63w3urr+qbeT1cOABvhglNjwOb
-         1EAKQou2yAjD2fUPyaHsqvjgzno6AXQJhwjbMPzv+6HfCil4tNYWRPQIbAXdKMvU3W
-         ru18G6R9wjlfJOajNHrjwq+GqADdQ1BOgFhNb78E3NvCNK3WCIfYjXuH/OKqRBfMKM
-         ajGnadHC8MoW5ZLsHT5CDWST3iXWuz74E06ii8ZwPz1HsBT8PM5wcTBLKBZpa9+J6w
-         kYi4/cMROQWcs5bGNRnZS38WfgCX8+wbrwzKzJteqU3lIvKSEFfrwB/Nigavc1fMKe
-         7/uXIdJIx50ew==
-Received: by mail.profitpathwaygo.com for <linux-scsi@vger.kernel.org>; Tue, 31 Oct 2023 08:30:48 GMT
-Message-ID: <20231031074500-0.1.2t.15rqc.0.p9ine7456p@profitpathwaygo.com>
-Date:   Tue, 31 Oct 2023 08:30:48 GMT
-From:   "Adam Charachuta" <adam.charachuta@profitpathwaygo.com>
-To:     <linux-scsi@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania_?=
-X-Mailer: mail.profitpathwaygo.com
+        with ESMTP id S1343925AbjJaJbB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 31 Oct 2023 05:31:01 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5F4FD
+        for <linux-scsi@vger.kernel.org>; Tue, 31 Oct 2023 02:30:58 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2c50906f941so78028221fa.2
+        for <linux-scsi@vger.kernel.org>; Tue, 31 Oct 2023 02:30:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1698744657; x=1699349457; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p0Y2avDJsz7sXh0pdxQmO/TmfDGo4p5TSfw0Y5/rpSY=;
+        b=Pkq6njkoCl5w3kltM+CUZvmbEaYXHKJdXmKwcucz6D94TsDvFYwHf/LlByF8Y6WlFL
+         5Ki5QNkjjdX/LAje8BLLPSf1NrjyDTwYJHyt/NQK7mk14iISi0vBUG3uzyGKbGSgeIrS
+         8FB0cYLe6ZFTWJKHcgr1DEre86MWmfnVulU0D/kFxdv9TaMQbhvvgBOAFME9EJfAUQn1
+         kRyKqFRdLVLXSEBaqAabVzxjTPwv86NnO6c1vqI+GaVT6Ejh0+4RJz5rnWaXvY5diEHA
+         QIrv/rY65UWw45qhJv4Fn7qtNi/4ivtWnSLuuMzIqp+u2jXUDlCBKjO1rHHzvwHa7Uoj
+         pJxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698744657; x=1699349457;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=p0Y2avDJsz7sXh0pdxQmO/TmfDGo4p5TSfw0Y5/rpSY=;
+        b=wids+jq/CqVcVWFj4Yq82cWbjrlHEK9gwiu6MT29OnavtuYkMmdv4Izty0vljrLFpn
+         myeyf7MV/EBqu+po+BMVgk7OWjiemESuTdjkEu6UFQg7lINjf7trkDMtK406jY1dhXhU
+         AP995iQBMzSShOg0+/2OQ815MN+jz4Z5f36UxVywaoi5N/gurZF1csJtAxKvzDY35zBu
+         p8QboZkXhfH3C3lyKuKon2b/gtuTOicf7tWjlE5Rbe2X/StYiokRVcdJcYzS2mIqNPuy
+         zsVf2Zc2/Rs8OezwhsAkl86q9ckz7AMXV/vCNDXcCwzWWPNzuTfoj/K6IIUjwA6XzMOK
+         l39A==
+X-Gm-Message-State: AOJu0YweQ4e0OJnEauvm+frFdog6cF2tJLQ8n3aEgD8qeB/2E2sr9QXZ
+        OUjlo+FaDZp/cjAqt+GqL9cEog==
+X-Google-Smtp-Source: AGHT+IGow8orEXWDCnDIZ+pmVCaCifTA3MFRpjtvbFIu4Aft683/Ms/V0+dbh4Ine2mE2lEwGBAtfw==
+X-Received: by 2002:a2e:9893:0:b0:2c5:9e4:3fdd with SMTP id b19-20020a2e9893000000b002c509e43fddmr9753182ljj.27.1698744656754;
+        Tue, 31 Oct 2023 02:30:56 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:4d69:3958:c5b9:5f3e? ([2a01:e0a:982:cbb0:4d69:3958:c5b9:5f3e])
+        by smtp.gmail.com with ESMTPSA id q2-20020a05600c2e4200b004064e3b94afsm1187183wmf.4.2023.10.31.02.30.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Oct 2023 02:30:56 -0700 (PDT)
+Message-ID: <14ecb334-827b-41b8-b0d1-41c4d9d98dc1@linaro.org>
+Date:   Tue, 31 Oct 2023 10:30:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
+User-Agent: Mozilla Thunderbird
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 2/6] scsi: ufs: ufs-qcom: Add support for UFS device
+ version detection
+Content-Language: en-US, fr
+To:     Can Guo <quic_cang@quicinc.com>, mani@kernel.org,
+        quic_nguyenb@quicinc.com, quic_nitirawa@quicinc.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "open list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER..." 
+        <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1694411968-14413-1-git-send-email-quic_cang@quicinc.com>
+ <1694411968-14413-3-git-send-email-quic_cang@quicinc.com>
+ <ccf40aed-3acc-474e-b456-031669b4a895@linaro.org>
+ <059cc112-7fb6-4da4-bc25-4eede0252f0e@linaro.org>
+ <d5ffacca-579e-83c9-148e-1fd3b6ab5aad@quicinc.com>
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro Developer Services
+In-Reply-To: <d5ffacca-579e-83c9-148e-1fd3b6ab5aad@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: profitpathwaygo.com]
-        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
-        *      blocklist
-        *      [URIs: profitpathwaygo.com]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [141.94.21.238 listed in zen.spamhaus.org]
-        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
-        *      blocklist
-        *      [URIs: profitpathwaygo.com]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0086]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [141.94.21.238 listed in bl.score.senderscore.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi,
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+On 31/10/2023 06:06, Can Guo wrote:
+> Hi Neil,
+> 
+> On 10/27/2023 8:51 PM, Neil Armstrong wrote:
+>> On 18/10/2023 16:02, Neil Armstrong wrote:
+>>> On 11/09/2023 07:59, Can Guo wrote:
+>>>> From: "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+>>>>
+>>>> Retrieve UFS device version from UFS host controller's spare register
+>>>> which is populated by bootloader, and use the UFS device version together
+>>>> with host controller's HW version to decide the proper power modes which
+>>>> should be used to configure the UFS PHY.
+>>>>
+>>>> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
+>>>> Signed-off-by: Can Guo <quic_cang@quicinc.com>
+>>>> ---
+>>>>   drivers/ufs/host/ufs-qcom.c | 30 +++++++++++++++++++++++-------
+>>>>   drivers/ufs/host/ufs-qcom.h |  2 ++
+>>>>   2 files changed, 25 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+>>>> index 710f079..8a9d54f 100644
+>>>> --- a/drivers/ufs/host/ufs-qcom.c
+>>>> +++ b/drivers/ufs/host/ufs-qcom.c
+>>>> @@ -1030,7 +1030,7 @@ static void ufs_qcom_advertise_quirks(struct ufs_hba *hba)
+>>>>                   | UFSHCD_QUIRK_BROKEN_PA_RXHSUNTERMCAP);
+>>>>       }
+>>>> -    if (host->hw_ver.major > 0x3)
+>>>> +    if (host->hw_ver.major > 0x3 && host->hw_ver.major < 0x5)
+>>>>           hba->quirks |= UFSHCD_QUIRK_REINIT_AFTER_MAX_GEAR_SWITCH;
+>>>>   }
+>>>> @@ -1038,11 +1038,33 @@ static void ufs_qcom_set_pwr_mode_limits(struct ufs_hba *hba)
+>>>>   {
+>>>>       struct ufs_qcom_host *host = ufshcd_get_variant(hba);
+>>>>       struct ufs_dev_params *host_pwr_cap = &host->host_pwr_cap;
+>>>> +    u32 val, dev_major = 0;
+>>>>       ufshcd_init_pwr_dev_param(host_pwr_cap);
+>>>>       /* This driver only supports symmetic gear setting i.e., hs_tx_gear == hs_rx_gear */
+>>>>       host_pwr_cap->hs_tx_gear = host_pwr_cap->hs_rx_gear = ufs_qcom_get_hs_gear(hba);
+>>>> +    host->phy_gear = host_pwr_cap->hs_rx_gear;
+>>>> +
+>>>> +    if (host->hw_ver.major < 0x5) {
+>>>
+>>> Here you set G2 for < 0x5
+>>>
+>>>> +        /*
+>>>> +         * Power up the PHY using the minimum supported gear (UFS_HS_G2).
+>>>> +         * Switching to max gear will be performed during reinit if supported.
+>>>> +         */
+>>>> +        host->phy_gear = UFS_HS_G2;
+>>>> +    } else {
+>>>
+>>> So here is for >= 0x5
+>>>
+>>>> +        val = ufshcd_readl(host->hba, REG_UFS_DEBUG_SPARE_CFG);
+>>>> +        dev_major = FIELD_GET(GENMASK(7, 4), val);
+>>>> +
+>>>> +        if (host->hw_ver.major == 0x5 && (dev_major >= 0x4 ||
+>>>> +                          dev_major == 0)) {
+>>>> +            /* For UFS 4.0 and newer, or dev version is not populated */
+>>>> +            host_pwr_cap->hs_rate = PA_HS_MODE_A;
+>>>> +        } else if (dev_major < 0x4 && dev_major > 0) {
+>>>> +            /* For UFS 3.1 and older, apply HS-G4 PHY settings to save power */
+>>>> +            host->phy_gear = UFS_HS_G4;
+>>>> +        }
+>>>
+>>> But behavior of > 0x5 is not clear here, could you clarify it in v2 ?
+>>
+>> Now SM8650 is public, could you update it for v2 ?
+> 
+> For HWs whose hw_ver.major is > 0x5, say SM8650, initially phy_gear == host_pwr_cap->hs_rx_gear, which is HS_G5.
+> 
+> If a UFS3.x or older UFS device is connected, we overwrite phy_gear as HS_G4. I don't see an impact to SM8650.
+> 
+> Please let me know if I misunderstand anything here.
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+It's clear now, please add this in a comment when you send a v2,
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+Thanks,
+Neil
 
+> 
+> 
+> Thanks,
+> 
+> Can Guo.
+> 
+>>
+>> Thanks,
+>> Neil
+>>
+>>>
+>>> Thanks,
+>>> Neil
+>>
 
-Pozdrawiam serdecznie
-Adam Charachuta
