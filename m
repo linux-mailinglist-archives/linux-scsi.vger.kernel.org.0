@@ -2,197 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297207E15DF
-	for <lists+linux-scsi@lfdr.de>; Sun,  5 Nov 2023 19:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8754B7E171E
+	for <lists+linux-scsi@lfdr.de>; Sun,  5 Nov 2023 23:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjKEShl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 5 Nov 2023 13:37:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S229932AbjKEWAO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 5 Nov 2023 17:00:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjKEShk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 5 Nov 2023 13:37:40 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF8CBE
-        for <linux-scsi@vger.kernel.org>; Sun,  5 Nov 2023 10:37:37 -0800 (PST)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        with ESMTP id S229897AbjKEWAM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 5 Nov 2023 17:00:12 -0500
+X-Greylist: delayed 5224 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Nov 2023 14:00:09 PST
+Received: from SMTP-HCRC-200.brggroup.vn (unknown [42.112.212.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A37BF;
+        Sun,  5 Nov 2023 14:00:09 -0800 (PST)
+Received: from SMTP-HCRC-200.brggroup.vn (localhost [127.0.0.1])
+        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTP id 3945C19092;
+        Mon,  6 Nov 2023 01:57:29 +0700 (+07)
+Received: from zimbra.hcrc.vn (unknown [192.168.200.66])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 1197086844;
-        Sun,  5 Nov 2023 19:37:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1699209454;
-        bh=2bQ1NBdYxAkeSjvQu0LHUnnnotHkIk6ivN+kRNSRHl4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SiilG6zr/IP25x7vS84qZfmn6RpQyAo6YY6dX8LCNdbk4lO7Ekgkm3c28t9pqDXTM
-         SBpH7ddSQLMhAoJ9YYZdlAUZahj4djiyYv5NRjDm4PoKOmMt4csQqG6IuYnnrU0nZt
-         Ozz9G9xtRTxLYVFZq8eazsm5lOTXqkB8Ue3ky/TstaCgYPiAHquQ0eoFbr3kZ6yO7c
-         EQbEmDN6BX2Gz5uLMB1JQlIp5g/cBvyYBaJfL/1ccfPun/Y07Xb4iTXv9tBl4HJmd2
-         ZmKorJ23l5jMblf78EZPm8J3ohU76BhH8wo6KVmGLeuY0ypYAYagGKqtgCppWMEHf4
-         CuMleMlql/cPQ==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-scsi@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Jason Yan <yanaijie@huawei.com>,
-        John Garry <john.g.garry@oracle.com>
-Subject: [PATCH v2] scsi: mvsas: Try to enable MSI
-Date:   Sun,  5 Nov 2023 19:36:49 +0100
-Message-ID: <20231105183712.26520-1-marex@denx.de>
-X-Mailer: git-send-email 2.42.0
+        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTPS id 3268215767;
+        Mon,  6 Nov 2023 01:57:29 +0700 (+07)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.hcrc.vn (Postfix) with ESMTP id C2FC61B824EE;
+        Mon,  6 Nov 2023 01:57:30 +0700 (+07)
+Received: from zimbra.hcrc.vn ([127.0.0.1])
+        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id BYnJRaubdInR; Mon,  6 Nov 2023 01:57:30 +0700 (+07)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.hcrc.vn (Postfix) with ESMTP id 90B211B8252B;
+        Mon,  6 Nov 2023 01:57:30 +0700 (+07)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.hcrc.vn 90B211B8252B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hcrc.vn;
+        s=64D43D38-C7D6-11ED-8EFE-0027945F1BFA; t=1699210650;
+        bh=WOZURJ77pkiMUL2pPLC14ifVPRvyTQIBEQmxuN1ezAA=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=upWRS3OWyxENQWiCJDQqoAuBx3OUjTR85kSnv2scqx6A1F42g8nqyYUjt+I5ce4vr
+         bQYcrGrcWfWZZvgCjeRQChMyKD62P+veWPd4lYhvL++Tzmq898af5S04ieADHCh3uu
+         ypLh5lK3OEt5fDWYP7nW7ckd8giU4UvAWRK+JgbtWp2d2CewMceL2dVsL170kvFfco
+         uoM3gUJ52BPln5LrikSbWHyHu6+pxRcpJrtBmWskbhAG+JRB60JYiTv7xGrB5ndSRP
+         BwWlwFJgb9RsV9IxEIzvpfeEyfoDrYijfo+akAxpE0jTk/gKV3aT540xx/h4O/GOZr
+         yVIJTd4XXVB9g==
+X-Virus-Scanned: amavisd-new at hcrc.vn
+Received: from zimbra.hcrc.vn ([127.0.0.1])
+        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id kRSVfju_rQx3; Mon,  6 Nov 2023 01:57:30 +0700 (+07)
+Received: from [192.168.1.152] (unknown [51.179.100.52])
+        by zimbra.hcrc.vn (Postfix) with ESMTPSA id 4D2C31B824EE;
+        Mon,  6 Nov 2023 01:57:24 +0700 (+07)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?b?4oKsIDEwMC4wMDAuMDAwPw==?=
+To:     Recipients <ch.31hamnghi@hcrc.vn>
+From:   ch.31hamnghi@hcrc.vn
+Date:   Sun, 05 Nov 2023 19:57:13 +0100
+Reply-To: joliushk@gmail.com
+Message-Id: <20231105185724.4D2C31B824EE@zimbra.hcrc.vn>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This seems to be needed on OCZ RevoDrive 3 X2 / RevoDrive 350
-OCZ Technology Group, Inc. RevoDrive 3 X2 PCIe SSD 240 GB (Marvell SAS Controller) [1b85:1021] (rev 02)
+Goededag,
+Ik ben mevrouw Joanna Liu en een medewerker van Citi Bank Hong Kong.
+Kan ik =E2=82=AC 100.000.000 aan u overmaken? Kan ik je vertrouwen
 
-Without MSI enabled, the controller fails as follows:
-"
-mvsas 0000:00:02.0: mvsas: PCI-E x0, Bandwidth Usage: UnKnown Gbps
-scsi host0: mvsas
-sas: Enter sas_scsi_recover_host busy: 0 failed: 0
-ata1.00: qc timeout after 5000 msecs (cmd 0xec)
-ata1.00: failed to IDENTIFY (I/O error, err_mask=0x4)
-ata1.00: qc timeout after 10000 msecs (cmd 0xec)
-ata1.00: failed to IDENTIFY (I/O error, err_mask=0x4)
-ata1.00: qc timeout after 30000 msecs (cmd 0xec)
-ata1.00: failed to IDENTIFY (I/O error, err_mask=0x4)
-sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
-sas: sas_probe_sata: for direct-attached device 0000000000000000 returned -19
-sas: Enter sas_scsi_recover_host busy: 0 failed: 0
-ata2.00: qc timeout after 5000 msecs (cmd 0xec)
-ata2.00: failed to IDENTIFY (I/O error, err_mask=0x4)
-ata2.00: qc timeout after 10000 msecs (cmd 0xec)
-ata2.00: failed to IDENTIFY (I/O error, err_mask=0x4)
-ata2.00: qc timeout after 30000 msecs (cmd 0xec)
-ata2.00: failed to IDENTIFY (I/O error, err_mask=0x4)
-sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
-sas: sas_probe_sata: for direct-attached device 0100000000000000 returned -19
-"
 
-With this patch, the controller detects the two SSD drives on it:
-"
-mvsas 0000:00:02.0: mvsas: PCI-E x0, Bandwidth Usage: UnKnown Gbps
-scsi host0: mvsas
-sas: Enter sas_scsi_recover_host busy: 0 failed: 0
-ata1.00: ATA-8: OCZ-REVODRIVE350, 2.50, max UDMA/133
-ata1.00: 234441648 sectors, multi 1: LBA48 NCQ (depth 32)
-ata1.00: configured for UDMA/133
-sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
-scsi 0:0:0:0: Direct-Access     ATA      OCZ-REVODRIVE350 2.50 PQ: 0 ANSI: 5
-sas: Enter sas_scsi_recover_host busy: 0 failed: 0
-ata2.00: ATA-8: OCZ-REVODRIVE350, 2.50, max UDMA/133
-ata2.00: 234441648 sectors, multi 1: LBA48 NCQ (depth 32)
-ata2.00: configured for UDMA/133
-sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
-scsi 0:0:1:0: Direct-Access     ATA      OCZ-REVODRIVE350 2.50 PQ: 0 ANSI: 5
-scsi 0:0:0:0: Attached scsi generic sg0 type 0
-sd 0:0:0:0: [sda] 234441648 512-byte logical blocks: (120 GB/112 GiB)
-sd 0:0:1:0: [sdb] 234441648 512-byte logical blocks: (120 GB/112 GiB)
-sd 0:0:1:0: Attached scsi generic sg1 type 0
-sd 0:0:0:0: [sda] Write Protect is off
-sd 0:0:1:0: [sdb] Write Protect is off
-sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-sd 0:0:1:0: [sdb] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-sd 0:0:0:0: [sda] Preferred minimum I/O size 512 bytes
-sd 0:0:1:0: [sdb] Preferred minimum I/O size 512 bytes
-sd 0:0:0:0: [sda] Attached SCSI disk
-sd 0:0:1:0: [sdb] Attached SCSI disk
-"
-
-The enablement of MSIs has been part of this driver before, but was
-removed without any real explanation in commit:
-20b09c2992fe ("[SCSI] mvsas: add support for 94xx; layout change; bug fixes")
-The enablement of MSIs is also part of the 'oczpcie' driver, which is
-really an ancient fork of this driver with a lot of variable renames
-and such.
-
-This variant of fix attempt limits the MSI enablement to OCZ devices,
-since the only ones produced are likely the RevoDrive series, and all
-are likely to be affected. In case the MSI enablement fails, try to
-continue in hope that the probe might still somehow work out, but warn
-the user about this.
-
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Note that the "PCI-E x0, Bandwidth Usage: UnKnown Gbps" is due to QEMU
-     vfio-pci VT-d passthrough, for some reason this is what it reports.
-     The issue with PCI MSI happens on real hardware too, this vfio/VT-d
-     is just debugging convenience.
-Note that this would be nice to have in stable series, but I'm reluctant
-     to ask for that in order to avoid breaking other peoples' machines.
-     Maybe a default-off kernel parameter for the mvsas module would be
-     acceptable for stable?
----
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Bart Van Assche <bvanassche@acm.org>
-Cc: Damien Le Moal <dlemoal@kernel.org>
-Cc: Jason Yan <yanaijie@huawei.com>
-Cc: John Garry <john.g.garry@oracle.com>
-Cc: linux-scsi@vger.kernel.org
----
-V2: - Limit the MSI enablement to OCZ devices only
----
- drivers/scsi/mvsas/mv_init.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
-index 43ebb331e2167..d3b1cee6b3252 100644
---- a/drivers/scsi/mvsas/mv_init.c
-+++ b/drivers/scsi/mvsas/mv_init.c
-@@ -571,6 +571,17 @@ static int mvs_pci_init(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	rc = sas_register_ha(SHOST_TO_SAS_HA(shost));
- 	if (rc)
- 		goto err_out_shost;
-+
-+	/* Try to enable MSI, this is needed at least on OCZ RevoDrive 3 X2 */
-+	if (pdev->vendor == PCI_VENDOR_ID_OCZ) {
-+		rc = pci_enable_msi(mvi->pdev);
-+		if (rc) {
-+			dev_err(&mvi->pdev->dev,
-+				"mvsas: Failed to enable MSI for OCZ device, attached drives may not be detected. rc=%d\n",
-+				rc);
-+		}
-+	}
-+
- 	rc = request_irq(pdev->irq, irq_handler, IRQF_SHARED,
- 		DRV_NAME, SHOST_TO_SAS_HA(shost));
- 	if (rc)
-@@ -583,6 +594,9 @@ static int mvs_pci_init(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	return 0;
- 
- err_not_sas:
-+	if (pdev->vendor == PCI_VENDOR_ID_OCZ)
-+		pci_disable_msi(mvi->pdev);
-+
- 	sas_unregister_ha(SHOST_TO_SAS_HA(shost));
- err_out_shost:
- 	scsi_remove_host(mvi->shost);
-@@ -607,6 +621,9 @@ static void mvs_pci_remove(struct pci_dev *pdev)
- 	tasklet_kill(&((struct mvs_prv_info *)sha->lldd_ha)->mv_tasklet);
- #endif
- 
-+	if (pdev->vendor == PCI_VENDOR_ID_OCZ)
-+		pci_disable_msi(mvi->pdev);
-+
- 	sas_unregister_ha(sha);
- 	sas_remove_host(mvi->shost);
- 
--- 
-2.42.0
+Ik wacht op jullie reacties
+Met vriendelijke groeten
+mevrouw Joanna Liu
 
