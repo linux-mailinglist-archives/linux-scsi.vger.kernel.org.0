@@ -2,88 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25297E455E
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Nov 2023 17:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E4C7E4805
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Nov 2023 19:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344487AbjKGQEx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Nov 2023 11:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
+        id S235137AbjKGSOy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Nov 2023 13:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344636AbjKGQEP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Nov 2023 11:04:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C54D468C;
-        Tue,  7 Nov 2023 07:55:34 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60F41C433CA;
-        Tue,  7 Nov 2023 15:55:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699372534;
-        bh=5nn9rQ9rkS9+XG5bPxfRyTGYrqtetJox/GOm5Mv7JFE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fo/HzkIryFoD2pNW+MsZl52fEXOy8dfO5icBKfbqiixCJ5PxnAMI2QtzuAhixjK+e
-         rWr51XUcPzPB8MQuy3IqjujXTAr1BOmIdG4mLYEOckPN0aaHqxq2nMvaMDyLDMZlly
-         M9MwyXKZ50Y8gfNZhqY0YgS0wTjbndAyRPgaaDJcRZBg4KVjHSGIzbLTPjEVnGJfQG
-         nl97f+2Ks3QbinkBDzSY5QcaYZoDTMKBjmB6umrpOOSP1uUpOWQ06BanFbLYrfF/1Z
-         i8r8y6en5jxZUvHNqnB0Kht2kaRVyYGts2zzL4OHVcYjyRys+ZLYoTN/y8MAKva3vG
-         C7cktmH8q/SIA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wenchao Hao <haowenchao2@huawei.com>,
-        Simon Horman <horms@kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, hare@suse.de,
-        jejb@linux.ibm.com, richardcochran@gmail.com,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 9/9] scsi: libfc: Fix potential NULL pointer dereference in fc_lport_ptp_setup()
-Date:   Tue,  7 Nov 2023 10:54:59 -0500
-Message-ID: <20231107155509.3769038-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231107155509.3769038-1-sashal@kernel.org>
-References: <20231107155509.3769038-1-sashal@kernel.org>
+        with ESMTP id S232861AbjKGSOx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Nov 2023 13:14:53 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04C412B
+        for <linux-scsi@vger.kernel.org>; Tue,  7 Nov 2023 10:14:51 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-d9bf9122c1aso885768276.1
+        for <linux-scsi@vger.kernel.org>; Tue, 07 Nov 2023 10:14:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699380891; x=1699985691; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wcogn3if5x+iFLnXB5sybkqGYS285fbBdbSGLeI0L8I=;
+        b=YQz0SprHmEgV43v/GqI4hyy+LW5mKb0ouIipcpMnxNtQBTVaw4wGYuxtsTkLxU5zhT
+         f4VYiCg1omwkK86wZ+M3fE0qm038kEk9762cVypA4z0PGAaRlps9cthYeiJ8l6eSiAC3
+         mgwAU+EQNINZp8n3ilUc4j0Qd22cTAX2ZaQmSINrP/SdAPzQdoQcw6t5InRm2Ad/sGvi
+         KBsFDT7yXffL53fUxH3v/TDAH0Rm9AUIkuO0/x6EJD6pp/vOsDLUtvNn4UssImUg9f/d
+         hPhGuGAB8urTcDU1kEWH3tGsx6NxIyIvPWVTgcpFba0NtLebrC9qUC4PB+szgmM/q+lq
+         YZgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699380891; x=1699985691;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wcogn3if5x+iFLnXB5sybkqGYS285fbBdbSGLeI0L8I=;
+        b=gMJF/L3t24hAHDyUsGRB/NqNmUL6zYYH6qXr8SosxZH1AfPA6P6HC1Azqo0TdyrRar
+         LzG+D3NvZmw8ddts8eJMGLsgnHbR7Zxm8MjqHCj2IlTcl6o7riDi7ncwt5eJTDvfvKZ3
+         5oCRK0HfLyyok8Ot1wfsijygccBgtoaeyg89OkyE+R8n+qecs6EBE8lVoEs+1bc+18tc
+         REDtBAVeQnuclPSu99qiDeVyrWu6/HEB4g1ywCkI4vstS8vbI5fuRwMSbMFiBxZXrKtd
+         nbKUmzMh7ilF/9Tp+ciwbCi1VxZOLKQ4/LWbOT2NdfgIlunACfH8NUm+sYhZ7eP+JnR6
+         9n6Q==
+X-Gm-Message-State: AOJu0YzcKS2MNPGOnAC0kiBGvR4Kn7M61ufgc48/hTL7fIVOcTSAHPOW
+        Ozb4UkVkoBJZu2i3sr/Q4xfvJdda36x/g9knB/c=
+X-Google-Smtp-Source: AGHT+IE37PwiaaharuOYglaqMrIefRjTshaUYYCrs5sJDJbnJZAu4Fs/Dpf9Xf1thpUqFoIR23Z4wyPoXSzOL6MVNWQ=
+X-Received: by 2002:a25:414b:0:b0:d9c:e705:5d48 with SMTP id
+ o72-20020a25414b000000b00d9ce7055d48mr20541484yba.1.1699380890752; Tue, 07
+ Nov 2023 10:14:50 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.14.328
-Content-Transfer-Encoding: 8bit
+References: <d3e2ffd8-3ebe-4e28-8509-c76f2b991ca3@moroto.mountain>
+In-Reply-To: <d3e2ffd8-3ebe-4e28-8509-c76f2b991ca3@moroto.mountain>
+From:   Justin Tee <justintee8345@gmail.com>
+Date:   Tue, 7 Nov 2023 10:14:40 -0800
+Message-ID: <CABPRKS9aAP7ngRkGRxZGggeRQVDJCGA=w_AW+YB+ahiO7TtkUQ@mail.gmail.com>
+Subject: Re: [bug report] scsi: lpfc: Add EDC ELS support
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     jsmart2021@gmail.com, linux-scsi@vger.kernel.org,
+        Justin Tee <justin.tee@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Wenchao Hao <haowenchao2@huawei.com>
+Hi Dan,
 
-[ Upstream commit 4df105f0ce9f6f30cda4e99f577150d23f0c9c5f ]
+> On Tue, Nov 7, 2023 at 7:26=E2=80=AFAM Dan Carpenter <dan.carpenter@linar=
+o.org> wrote:
+> This is a couple years old but apparently, but I've never reported it
+> before.  Smatch wanted a goto try_rdf; here.  Not sure if Smatch is
+> correct.  If not just ignore this it.  These are one time emails.
 
-fc_lport_ptp_setup() did not check the return value of fc_rport_create()
-which can return NULL and would cause a NULL pointer dereference. Address
-this issue by checking return value of fc_rport_create() and log error
-message on fc_rport_create() failed.
+I think return =E2=80=93EIO on line 4353 is fine.  If lpfc_nlp_get(ndlp) fr=
+om
+line 4350 returned NULL, then we want to early return and not issue an
+RDF.  This behavior is consistent with the !ndlp check on lines
+4307=E2=80=934308.  If we don=E2=80=99t have a valid ndlp login context wit=
+h the
+Fabric, then there=E2=80=99s no point to goto try_rdf to issue an RDF.
 
-Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
-Link: https://lore.kernel.org/r/20231011130350.819571-1-haowenchao2@huawei.com
-Reviewed-by: Simon Horman <horms@kernel.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/libfc/fc_lport.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+And for line 4353, I confirm that the only unwind needed is
+lpfc_els_free_iocb from the previous line.
 
-diff --git a/drivers/scsi/libfc/fc_lport.c b/drivers/scsi/libfc/fc_lport.c
-index 5c0aa2c5fd558..cb22c7afa3cdc 100644
---- a/drivers/scsi/libfc/fc_lport.c
-+++ b/drivers/scsi/libfc/fc_lport.c
-@@ -251,6 +251,12 @@ static void fc_lport_ptp_setup(struct fc_lport *lport,
- 	}
- 	mutex_lock(&lport->disc.disc_mutex);
- 	lport->ptp_rdata = fc_rport_create(lport, remote_fid);
-+	if (!lport->ptp_rdata) {
-+		printk(KERN_WARNING "libfc: Failed to setup lport 0x%x\n",
-+			lport->port_id);
-+		mutex_unlock(&lport->disc.disc_mutex);
-+		return;
-+	}
- 	kref_get(&lport->ptp_rdata->kref);
- 	lport->ptp_rdata->ids.port_name = remote_wwpn;
- 	lport->ptp_rdata->ids.node_name = remote_wwnn;
--- 
-2.42.0
-
+Regards,
+Justin
