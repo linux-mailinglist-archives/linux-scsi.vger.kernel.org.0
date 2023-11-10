@@ -2,172 +2,134 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18DD77E7697
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Nov 2023 02:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C147E8095
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Nov 2023 19:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345551AbjKJBdz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Nov 2023 20:33:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
+        id S1345082AbjKJSP2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 10 Nov 2023 13:15:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjKJBdy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Nov 2023 20:33:54 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A34D25B8
-        for <linux-scsi@vger.kernel.org>; Thu,  9 Nov 2023 17:33:51 -0800 (PST)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20231110013348epoutp018f7caf01992555a372b7206dca7e0e17~WHwfsBpuP1620216202epoutp01Y
-        for <linux-scsi@vger.kernel.org>; Fri, 10 Nov 2023 01:33:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20231110013348epoutp018f7caf01992555a372b7206dca7e0e17~WHwfsBpuP1620216202epoutp01Y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1699580028;
-        bh=EyjsNtWq3/Lnam+CZqeSLOeCVenh+Ro2Ki/oM0kxsak=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=EAaKBC+YwwzCdQFQ+b9qwkqXExw6pne5eutUvn3Y8tHWwQJ2/0CVxGGGhA0l5JMqI
-         tEGP4jMCUHQohQRbHP2X6rvinjHITTbCqFCe2OlTXlNkzhetc4x9S8UswFvma6fpzb
-         Q4Nm3JDo6BGrhL8Au0KJY2DzaSL6z6EiPhWN6cXY=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20231110013347epcas2p2c50a5e6c3203c60d998d723ec60fca36~WHwfB3eUD1693116931epcas2p2E;
-        Fri, 10 Nov 2023 01:33:47 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.91]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4SRLvG5qflz4x9Q0; Fri, 10 Nov
-        2023 01:33:46 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        83.23.10006.A788D456; Fri, 10 Nov 2023 10:33:46 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20231110013346epcas2p37825f4b67674dd8aa3530f761256ef7d~WHwdzLUtB2802428024epcas2p3u;
-        Fri, 10 Nov 2023 01:33:46 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20231110013346epsmtrp19bb1f272e426e8ff4a946e6562eef2b0~WHwdya_6Y2199621996epsmtrp1J;
-        Fri, 10 Nov 2023 01:33:46 +0000 (GMT)
-X-AuditID: b6c32a45-179ff70000002716-99-654d887a314f
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B9.97.07368.A788D456; Fri, 10 Nov 2023 10:33:46 +0900 (KST)
-Received: from rack03.dsn.sec.samsung.com (unknown [10.229.95.126]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20231110013345epsmtip2618c25208f5c03250dd104a12ae49541~WHwdiD7Om0278302783epsmtip2L;
-        Fri, 10 Nov 2023 01:33:45 +0000 (GMT)
-From:   SEO HOYOUNG <hy50.seo@samsung.com>
-To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com, bvanassche@acm.org,
-        kwangwon.min@samsung.com, kwmad.kim@samsung.com,
-        sh425.lee@samsung.com, sc.suh@samsung.com,
-        quic_nguyenb@quicinc.com, cpgs@samsung.com
-Cc:     SEO HOYOUNG <hy50.seo@samsung.com>
-Subject: [PATCH v2] scsi: ufs: core: Process abort completed command in MCQ
- mode
-Date:   Fri, 10 Nov 2023 10:36:16 +0900
-Message-Id: <20231110013616.33590-1-hy50.seo@samsung.com>
-X-Mailer: git-send-email 2.26.0
+        with ESMTP id S235782AbjKJSOi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Nov 2023 13:14:38 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AED7A9D;
+        Thu,  9 Nov 2023 22:40:57 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AA5UT4Z003312;
+        Fri, 10 Nov 2023 05:50:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=1qeJzEU9+q9du+S9Sx8kYO/KTx5lYz7McRllLoryFDM=;
+ b=Cj5fkE9Yf5Z1HlPdZe/aaaFHUJI7/w0+XK6IcZFTXFnuDXJUn5WQNoLXKefCgm+kt9DM
+ HBetWEpz7NyaJoVRUiRUwmFL6PrC2K98RuXa6YRZYKvwAHu/1hiGl7qw/c3GMBniniOk
+ df3z3LP4mcfumzh1aBN8jDA728XVj/JZfSoIkejnz13BRylReQ/sI9k7uRqGLag1cxXH
+ 3ubnXtpjHrT+MDUOA8QwWQFExJs6fScZeehO/E/hSpeTdeq9JwZgvKxAGR0roVba049E
+ Fz8iAUM6O8WGcnxFUYyN9zAIP9LFGHH3RKgnpIwEcPNAJEFbGycJet3SxhZGKxCF21LM zQ== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u93tq9a5r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Nov 2023 05:50:21 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AA5oKOV019464
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Nov 2023 05:50:20 GMT
+Received: from [10.239.155.136] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Thu, 9 Nov
+ 2023 21:50:15 -0800
+Message-ID: <c77d3b96-cec0-b13f-2fd8-df59e29bb889@quicinc.com>
+Date:   Fri, 10 Nov 2023 13:50:13 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] dt-bindings: ufs: Add msi-parent for UFS MCQ
+Content-Language: en-US
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Rob Herring <robh@kernel.org>
+CC:     Bart Van Assche <bvanassche@acm.org>, <quic_asutoshd@quicinc.com>,
+        <quic_cang@quicinc.com>, <beanhuo@micron.com>,
+        <avri.altman@wdc.com>, <junwoo80.lee@samsung.com>,
+        <martin.petersen@oracle.com>, <quic_nguyenb@quicinc.com>,
+        <quic_nitirawa@quicinc.com>, <quic_rampraka@quicinc.com>,
+        <linux-scsi@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Ulf Hansson" <ulf.hansson@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "Mark Brown" <broonie@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1698835699-28550-1-git-send-email-quic_ziqichen@quicinc.com>
+ <20231106144831.GA317907-robh@kernel.org>
+ <5850d5ac-e735-4358-866d-f410b00ba39d@acm.org>
+ <CAL_Jsq+XB5p_K3C+rc5XetQ-Xfxu4umNFzcF0idB2hhZvS7HLA@mail.gmail.com>
+ <20231109161656.GH3752@thinkpad>
+From:   Ziqi Chen <quic_ziqichen@quicinc.com>
+In-Reply-To: <20231109161656.GH3752@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLJsWRmVeSWpSXmKPExsWy7bCmqW5Vh2+qwZZDuhYP5m1js3j58yqb
-        xcGHnSwW0z78ZLZ4eUjTYvXiBywWi25sY7LYemMni8XNLUdZLC7vmsNm0X19B5vF8uP/mCym
-        vjjObtF19wajxdJ/b1kc+D0uX/H2mLDoAKPH9/UdbB4fn95i8Zi4p86jb8sqRo/Pm+Q82g90
-        MwVwRGXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gCd
-        rqRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMC/QK07MLS7NS9fLSy2xMjQwMDIF
-        KkzIzlg84ShjwTa+iufPulkaGE9wdzFyckgImEg8/HKPvYuRi0NIYAejxNsTv1ghnE+MEmtO
-        NkBlvjFKPHi8kQ2m5fiXy4wQib2MEvf2fmaGcH4wSrSve84IUsUmoCGx5tghJpCEiMAlJonW
-        e2vZQRLMAmoSn+8uYwGxhQWCJBr+7waLswioSnyZ0ghm8wpYSjQ2fmGEWCcvsajhNxNEXFDi
-        5MwnLBBz5CWat85mhqiZySHR89sBwnaR2PP4BAuELSzx6vgWdghbSuJlfxuUnS3RuGctlF0h
-        MXfzZKhdxhKznrUD2RxA8zUl1u/SBzElBJQljtyC2son0XH4L1Qnr0TDxt/sECW8Eh1tQhBh
-        JYkzc29DhSUkDs7OgTA9JG5srgWpEBKIlVixZgX7BEaFWUi+moXkq1kIFyxgZF7FKJZaUJyb
-        nlpsVGAIj97k/NxNjOB0rOW6g3Hy2w96hxiZOBgPMUpwMCuJ8F4w8UkV4k1JrKxKLcqPLyrN
-        SS0+xGgKDOeJzFKiyfnAjJBXEm9oYmlgYmZmaG5kamCuJM57r3VuipBAemJJanZqakFqEUwf
-        EwenVAMTv84mfr03MiJx+kZ9SWYX3vXL7/r+3HfjV5OvdwPjtqbtl3C7yMn6SNRh2eU5q86w
-        uPxaoXT7jmrlq3/8pw1NLM4ULa6pawv7deTZmaTVLnXLF++ctdjV+WmkeFgKx/HPCReuz+Xj
-        kL59QfeH46+3S1ybZ00v/vX9t9hUz4OLLvGeCX6TVspRriC/YafgxuzWKx08am2iajYbPvFk
-        ysrGrzmq/3H/Css9/KsVzSXmn3865zXPoh96jQ/3emrN7hDPYsm69nebfrmSa/j5s5H7+aSj
-        J2c0r7U6emOZ5KzpD58cvdX8wvm8rMVWYV2PaeyWXov3pXL1yec4XIy3/pO7Zv++gujJFWtv
-        PAs/6V/uoMRSnJFoqMVcVJwIAJhFWx9QBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMLMWRmVeSWpSXmKPExsWy7bCSvG5Vh2+qwb7brBYP5m1js3j58yqb
-        xcGHnSwW0z78ZLZ4eUjTYvXiBywWi25sY7LYemMni8XNLUdZLC7vmsNm0X19B5vF8uP/mCym
-        vjjObtF19wajxdJ/b1kc+D0uX/H2mLDoAKPH9/UdbB4fn95i8Zi4p86jb8sqRo/Pm+Q82g90
-        MwVwRHHZpKTmZJalFunbJXBlLJ5wlLFgG1/F82fdLA2MJ7i7GDk5JARMJI5/uczYxcjFISSw
-        m1Hi58oz7BAJCYn/i5uYIGxhifstR1ghir4xSiw6+IcFJMEmoCGx5tghsCIRgSdMEhObPUFs
-        ZgE1ic93l4HVCAsESDye9A2shkVAVeLLlEawBbwClhKNjV8YIRbISyxq+M0EEReUODnzCQvE
-        HHmJ5q2zmScw8s1CkpqFJLWAkWkVo2RqQXFuem6yYYFhXmq5XnFibnFpXrpecn7uJkZwPGhp
-        7GC8N/+f3iFGJg7GQ4wSHMxKIrwXTHxShXhTEiurUovy44tKc1KLDzFKc7AoifMazpidIiSQ
-        nliSmp2aWpBaBJNl4uCUamDaue5VZfqCHvnmZPddf41+i/71rPOOED7leEdV5vyt1If754jr
-        fjRlqFXw/OGstSjr7wZ944Rq9tUz4+a1OVju+8q589Kj7oLcy3u/dk5S3vkpzqiK751a4Y2V
-        O95OkopXjpMQqFo871VMbADju4ch21ob3kcekXNqqTmTNLm6TnxSR66CT/PzuZVz3lw492Hf
-        Xw/bt0vnfz81N+WaxuINkXnrCzaeNCq6+lM1eP3EwAMTTdT4i08sPBN7WD/hbKFs6d6Fd40L
-        tM4aXr5ZIDCT+Ykmg6ybaf+pyLnuGhNeu0gsTWja8ffBiunGxbkbfmrUtiwsOuzttkQ16Ost
-        uVs2JQ1z49SDbbi2vXDnnJ+rxFKckWioxVxUnAgAdU1E8vYCAAA=
-X-CMS-MailID: 20231110013346epcas2p37825f4b67674dd8aa3530f761256ef7d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20231110013346epcas2p37825f4b67674dd8aa3530f761256ef7d
-References: <CGME20231110013346epcas2p37825f4b67674dd8aa3530f761256ef7d@epcas2p3.samsung.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: jJeOAbnbHovkp2p0lBuzujKZ7WRIQexM
+X-Proofpoint-ORIG-GUID: jJeOAbnbHovkp2p0lBuzujKZ7WRIQexM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-10_02,2023-11-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=999
+ spamscore=0 phishscore=0 impostorscore=0 bulkscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311100047
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In MCQ mode, the case where OCS is updated to aborted is as follows
- 1. when abort processing is completed
- 2. When a duplicate command occurs
 
-In case of 1 situation, cmd should be re-request.
-So in the case of cmd whose abort processing is completed in MCQ mode,
-the ufs driver needs to update to scsi with DID_REQUEUE.
 
-v1->v2: change the method of determinging mcq and legacy mode.
-check cqe value for checking mcq mode
+On 11/10/2023 12:16 AM, Manivannan Sadhasivam wrote:
+> On Thu, Nov 09, 2023 at 07:55:14AM -0600, Rob Herring wrote:
+>> On Mon, Nov 6, 2023 at 11:56 AM Bart Van Assche <bvanassche@acm.org> wrote:
+>>>
+>>> On 11/6/23 06:48, Rob Herring wrote:
+>>>> On Wed, Nov 01, 2023 at 06:48:13PM +0800, Ziqi Chen wrote:
+>>>>> The Message Signaled Interrupts (MSI) has been introduced
+>>>>> to UFS driver since the MCQ be enabled.
+>>>>
+>>>> Not really relevant when a driver supported MSI, but the when the h/w
+>>>> did. Has UFS always supported MSI? It was added in some version of the
+>>>> spec?
+>>>
+>>> MSI support has been introduced in UFSHCI version 4.0 and I think that
+>>> the controller vendor can decide whether or not to implement MSI. Does
+>>> this mean that the patch needs to be improved?
+>>
+>> Yes, this information is what should be in the commit msg rather than
+>> driver details.
+>>
+> 
+> Yes, agreed. Ziqi, please update the commit message to incorporate the hw
+> details about when MCQ/MSI got introduced. Devicetree binding should describe
+> the hw, not the driver.
+> 
+Thank you all, I will update the commit message in next version.
 
-Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
----
- drivers/ufs/core/ufshcd.c | 8 +++++++-
- include/ufs/ufshci.h      | 1 +
- 2 files changed, 8 insertions(+), 1 deletion(-)
+- Ziqi
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 68d7da02944f..9a730a794b66 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -5307,6 +5307,7 @@ ufshcd_transfer_rsp_status(struct ufs_hba *hba, struct ufshcd_lrb *lrbp,
- 	enum utp_ocs ocs;
- 	u8 upiu_flags;
- 	u32 resid;
-+	u8 eec;
- 
- 	upiu_flags = lrbp->ucd_rsp_ptr->header.flags;
- 	resid = be32_to_cpu(lrbp->ucd_rsp_ptr->sr.residual_transfer_count);
-@@ -5371,7 +5372,12 @@ ufshcd_transfer_rsp_status(struct ufs_hba *hba, struct ufshcd_lrb *lrbp,
- 		}
- 		break;
- 	case OCS_ABORTED:
--		result |= DID_ABORT << 16;
-+		if (cqe) {
-+			eec = le32_to_cpu(cqe->status) & MASK_EEC;
-+			result |= eec ? (DID_ABORT << 16) : (DID_REQUEUE << 16);
-+		} else {
-+			result |= DID_ABORT << 16;
-+		}
- 		break;
- 	case OCS_INVALID_COMMAND_STATUS:
- 		result |= DID_REQUEUE << 16;
-diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
-index d5accacae6bc..9aefc7e6d0fc 100644
---- a/include/ufs/ufshci.h
-+++ b/include/ufs/ufshci.h
-@@ -465,6 +465,7 @@ enum utp_ocs {
- 
- enum {
- 	MASK_OCS			= 0x0F,
-+	MASK_EEC			= 0xF0,
- };
- 
- /* The maximum length of the data byte count field in the PRDT is 256KB */
--- 
-2.26.0
-
+> - Mani
+> 
+>> Rob
+> 
