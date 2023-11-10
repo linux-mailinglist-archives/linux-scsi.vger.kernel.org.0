@@ -2,88 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2B27ECD0F
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Nov 2023 20:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D649D7ED8A6
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Nov 2023 01:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbjKOTeN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 15 Nov 2023 14:34:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
+        id S229879AbjKPAp7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 15 Nov 2023 19:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234333AbjKOTeI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Nov 2023 14:34:08 -0500
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0B9D53
-        for <linux-scsi@vger.kernel.org>; Wed, 15 Nov 2023 11:34:02 -0800 (PST)
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1cc3bc5df96so371305ad.2
-        for <linux-scsi@vger.kernel.org>; Wed, 15 Nov 2023 11:34:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700076842; x=1700681642;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eXoxudhApR8SDK00jSoOTCJpyTRuTNK9Kl71C71cvs0=;
-        b=wPrZvktkcDaDigMypR/FHdkyjF9wx659Zi41c59oDoMnhsdZ7JkGyzYBL3WLlF8egt
-         kpIh0QFPW7Y/4ukukeA9Ig/bukoqIDZc9cQdXePYjsT3NnA7Nx528FSE3Kv6LKGyqkNt
-         1ugrTXFAMAQ8kC32Z03X3V1FvieUKX4Tcruv6n5wjch0TzrAS8btaAU06N7lX3/aYmq4
-         EgOKPpcVyzLHBfW93D2/VsWpiBYx5FgOO+Ww5UCfjVoaQdJOigvzQRRbaWGZab+1mqxk
-         prNfp9Rhaca144fkXw2Ks/G2PbUZZqQEwyJRDEsLTJ1OCkjOs/3vRercKOWN/SCgKcFG
-         gjFw==
-X-Gm-Message-State: AOJu0YxKdlJtz9i/4GevtGj3czcKfp4Ocxvd10ZECm8OhPL1aAhPr+P4
-        VLVIz4noihw4B3QH8lZhNfc=
-X-Google-Smtp-Source: AGHT+IHWA45g5ZC2gLpXwxDfl80cKkZNx8cvJjmxk81BwMfpiVg/q88+59HGhpFsQC0qQzOQS1qDIw==
-X-Received: by 2002:a17:903:41cc:b0:1cc:e36a:8bb with SMTP id u12-20020a17090341cc00b001cce36a08bbmr8029850ple.25.1700076841950;
-        Wed, 15 Nov 2023 11:34:01 -0800 (PST)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:0:1000:8411:56f1:2160:3a2a:2645])
-        by smtp.gmail.com with ESMTPSA id b5-20020a170903228500b001cc32f46757sm7681800plh.107.2023.11.15.11.34.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Nov 2023 11:34:01 -0800 (PST)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Can Guo <quic_cang@quicinc.com>,
-        Asutosh Das <quic_asutoshd@quicinc.com>,
-        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>
-Subject: [PATCH] scsi: ufs: core: Warn if the request tag is truncated
-Date:   Wed, 15 Nov 2023 11:33:47 -0800
-Message-ID: <20231115193359.2262044-1-bvanassche@acm.org>
-X-Mailer: git-send-email 2.43.0.rc0.421.g78406f8d94-goog
+        with ESMTP id S229692AbjKPAp6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Nov 2023 19:45:58 -0500
+Received: from lib3.msu.ac.th (unknown [202.28.34.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5630C19F
+        for <linux-scsi@vger.kernel.org>; Wed, 15 Nov 2023 16:45:55 -0800 (PST)
+Received: from CGKAHNYLSDUQWZI (localhost [127.0.0.1])
+        by lib3.msu.ac.th (8.14.7/8.14.7) with ESMTP id 3AAFUSav036745
+        for <linux-scsi@vger.kernel.org>; Fri, 10 Nov 2023 22:41:58 +0700
+Message-ID: <03f51f74-45240-f3443208131713@cgkahnylsduqwzi>
+Reply-To: "CEO/Founder" <info@relaiblecharity.com>
+From:   "CEO/Founder" <donation@shinyusha.jp>
+To:     linux-scsi@vger.kernel.org
+Subject: Humanitarian philanthropist
+Date:   Fri, 10 Nov 2023 07:40:58 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_99,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,
+        RCVD_IN_VALIDITY_RPBL,RDNS_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
+        *      bl.spamcop.net
+        *      [Blocked - see <https://www.spamcop.net/bl.shtml?202.28.34.30>]
+        *  0.0 RCVD_IN_MSPIKE_L4 RBL: Bad reputation (-4)
+        *      [202.28.34.30 listed in bl.mailspike.net]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 0.9955]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [202.28.34.30 listed in bl.score.senderscore.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 RCVD_IN_MSPIKE_BL Mailspike blocklisted
+        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-ufshcd_prepare_utp_scsi_cmd_upiu() only uses the lowest eight bits of
-lrbp->task_tag. Issue a runtime warning if this results in truncation.
+Hello,
 
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/ufs/core/ufshcd.c | 2 ++
- 1 file changed, 2 insertions(+)
+I'm Mrs. Maria Elisabeth Schaeffler, I'm a 2023 Lottery winner and philanthropist trying to give back to humanity, I have a donation grant for you, contact me for more information if you're interested.
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 68d7da02944f..21fe4b125081 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -2720,6 +2720,8 @@ void ufshcd_prepare_utp_scsi_cmd_upiu(struct ufshcd_lrb *lrbp, u8 upiu_flags)
- 		.command_set_type = UPIU_COMMAND_SET_TYPE_SCSI,
- 	};
- 
-+	WARN_ON_ONCE(ucd_req_ptr->header.task_tag != lrbp->task_tag);
-+
- 	ucd_req_ptr->sc.exp_data_transfer_len = cpu_to_be32(cmd->sdb.length);
- 
- 	cdb_len = min_t(unsigned short, cmd->cmd_len, UFS_CDB_SIZE);
+Regards,
+Maria Schaeffler.
+
