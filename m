@@ -2,237 +2,188 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1067EA8BA
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Nov 2023 03:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E10787EA994
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Nov 2023 05:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbjKNC3f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Nov 2023 21:29:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
+        id S232076AbjKNEet (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Nov 2023 23:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbjKNC3e (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Nov 2023 21:29:34 -0500
-Received: from rcdn-iport-7.cisco.com (rcdn-iport-7.cisco.com [173.37.86.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6A6198
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Nov 2023 18:29:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=1377; q=dns/txt; s=iport;
-  t=1699928971; x=1701138571;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=rHQ/IQlrT2RGBCK2cFgqVnseLfnCVCm0uqZYO0Zjy94=;
-  b=fYFS5hKdcH26K8VwIEOsAk+JfUmxWozcKQmZyK3j2EIFBfPJBKff827G
-   J4/2C4BDmyPAjzBvYkPvrR0H4ZWIaciBLWG7SvVdZWsPVZM1RhST+zTfw
-   1NEpp+nyEsFXyPyH58teAf+7VCky0oKp8/cbQgCA48QWCDnJDsgnc2fm3
-   s=;
-X-CSE-ConnectionGUID: 0KoCyIXESiaOqq85vhpVzg==
-X-CSE-MsgGUID: j29yTx5HQ5uZcSuipnLWaA==
-X-IPAS-Result: =?us-ascii?q?A0AoAAD42lJlmJJdJa1aHQEBAQEJARIBBQUBQCWBFggBC?=
- =?us-ascii?q?wGBZlJ4WyoSSIgeA4ROX4hmnX4UgREDVg8BAQENAQFEBAEBhQYChygCJjQJD?=
- =?us-ascii?q?gECAgIBAQEBAwIDAQEBAQEBAQIBAQUBAQECAQcEFAEBAQEBAQEBHhkFDhAnh?=
- =?us-ascii?q?WgNhkUBAQEBAxIoBgEBNwEPAgEIDgodARAyJQIEAQ0FCBqCXoJfAwGhMgGBQ?=
- =?us-ascii?q?AKKKHiBNIEBggkBAQYEBbJtCYFIAYgMAYVVhDUnG4INgVeCaD6CYQKBRxuEE?=
- =?us-ascii?q?oIviSMHMoIig1KNWX8EQ3AdAwcDfw8rBwQwGwcGCRQtIwZRBCgkCRMSPgSBY?=
- =?us-ascii?q?YFRCn8/Dw4Rgj8iAgc2NhlIgl4VDDVKdhAqBBQXgRIEagUWFR43ERIFEg0DC?=
- =?us-ascii?q?HQdAhEjPAMFAwQzChINCyEFFEIDRQZJCwMCGgUDAwSBNgUNHgIQGgYNJwMDE?=
- =?us-ascii?q?00CEBQDOwMDBgMLMQMwVUQMUANrHzYJPA8MHwIbHg0nKAIyQwMRBRICFgMkG?=
- =?us-ascii?q?QQ6IwNEHUADC209NRQbBQRkWQWhVAiBA4JJgQOVRa58CoQNoT8XqgOHbZBSI?=
- =?us-ascii?q?KgIAgQCBAUCDgEBBoFjOoFbcBWDIlIZD44gGYNfj3l2OwIHCwEBAwmKYQEB?=
-IronPort-PHdr: A9a23:bj80NhFZnYaqqdDx4GMjep1Gfu4Y04WdBeZdwoAsh7QLdbys4NG+e
- kfe/v5qylTOWNaT5/FFjr/Ourv7ESwb4JmHuWwfapEESRIfiMsXkgBhSM6IAEH2NrjrOgQxH
- d9JUxlu+HToeVNNFpPGbkbJ6ma38SZUHxz+MQRvIeGgGYfIk8Wz3uOa8JzIaAIOjz24Mvt+K
- RysplDJv9INyct6f78swwHApGdJfekeyWJzcFSUmRu9rsvl9594+CMWsPUkn/M=
-IronPort-Data: A9a23:AamfaqlWGsZHwtmw9UhypNLo5gyzJkRdPkR7XQ2eYbSJt1+Wr1Gzt
- xIZXjuOafeIZWr2KIp2bt/i90gDsJGGmNRhSAU9riA9EVtH+JHPbTi7wugcHM8zwunrFh8PA
- xA2M4GYRCwMZiaB4E/rav649SUUOZigHtLUEPTDNj16WThqQSIgjQMLs+Mii+aEu/Dha++2k
- Y20+5a31GONgWYuaTtNsvnb8nuDgdyr0N8mlg1mDRx0lAe2e0k9VPo3Oay3Jn3kdYhYdsbSq
- zHrlezREsvxpn/BO/v9+lrJWhRiro36YWBivkFrt52K2XCukMCdPpETb5LwYW8P49mAcksYJ
- N9l7fRcQi9xVkHAdXh0vxRwS0lD0aN6FLDveVu4mt2y/2D9cnLL2uw+UV82JbMK9bMiaY1O3
- aRwxDEldBuPgae9x6i2D7A0wM8iN8LseogYvxmMzxmAUq1gGs+FEv6MvIMGtNszrpgm8fL2Z
- MMDdTtrZRfoaBxUMVBRA5U79AutriCkLGYC+QPM+sLb5UDRll1g7KiwEOOIZ+6BfthUhkC8m
- WvvqjGR7hYybYzDlmXtHmiXruvOmz7rHZkZD7yQ6PFnmhuQy3YVBRlQUkG0ycRVkWakUN5Zb
- kcT4Cdr9PB0/02wRd67VBq9yJKZgvICc4JzFMYryTGg8avdxB+AVjUaTiZ/etNz4afaWgcW/
- lOOmtroAxlmv7uUVW+R+9+oQdWaZHV9wYgqOHJscOcV3zXwiNpp306QFL6PBIbw34OqQWuvq
- 9yfhHJm74j/m/LnwElSEbrvuTOnppHTQhUy4G07tUr6s1spPeZJi2FUgGU3AN5aJ4qfC1KGp
- nVBwpDY5+EVBpbLnyuIKAnsIF1Lz6jfWNE/qQcyd3XEy9hL0yL4FWy3yG0mTHqFyu5eJVfUj
- Lb74Gu9HqN7MnqwdrNQaImsEcksxqWIPY27B6GFNoIUOcguLV7vEMRSiai4gTiFfK8Ez/lXB
- HtnWZrE4YsyUP4+l2PmG4/xL5dxmH9mrY8seXwL5033jeXBDJJkYbwEK1CJJvso97+JpR69z
- jqsH5Xi9vmra8WnOnO/2ddKdTgidCFnbbio8JY/XrDYfWJb9JQJVqW5LUUJIdI1xsy4V47go
- xmAZ6Ov4AOm3iKecF7VNi0LhXGGdc8XkE/X9BcEZD6A83Mieo2oqqwYcvMKkXMProSPEdYco
- yE5Rvi9
-IronPort-HdrOrdr: A9a23:ySbAhKi42ZEjFQVZkjFXIQC+zHBQX5923DAbv31ZSRFFG/FwyP
- re/8jzhCWVtN9OYhAdcIi7Sdi9qBPnmaKc4eEqTM6ftXrdyRuVxeZZnMXfKlzbamLDH4tmpM
- VdmsdFeaDN5DRB/KHHCUyDYqgdKbq8geGVbIXlvgtQpGhRAskKgXYde2Km+w9NNXZ77PECZe
- KhD7981kCdkAMsH7+G7xc+Lo7+juyOvqjLJTQBABkq4hSPizSH1J7WeiLz4j4uFxl07fMH62
- bqryzVj5/Pjxi88HDh/l6Wy64TtMrqy9NFCsDJoNMSMC/QhgGhY5kkc6GevRguydvfq2oCoZ
- 3pmVMNLs5z43TeciWeuh32wTTt1z4o9jvL1UKYu33+usb0LQhKSfapxLgpNycx2XBQ++2U45
- g7mV5xcKAnVC8oqR6No+QgkSsaznZc70BSytL7xEYvIrf2IIUh37D3unklUKvp2EnBmd0a+C
- 4ENrCH2N9GNVyddHzXpW9p3ZilWWkyBA6PRgwYttWSyCU+pgEy86I0/r1Wop47zuN3d7BUo+
- Dfdqh4nrBHScEbKap7GecaWMOyTmjAWwjFPm6eKUnuUPhvAQOAl7fnpLEuoO26cp0By5U/3J
- zHTVNDrGY3P0bjE9eH0pFH+g3EBG+9QTPuwMdD4IURgMyweJP7dSmYDFw+mcqppPsSRsXdRv
- aoIZpTR+TuKGP/cLw5ljEWm6MiX0X2fPdlzerTAWj+1/4jAreawtDmTA==
-X-Talos-CUID: 9a23:AAnPjW71oi69eU5hQtssrG0TMdEEQlDmzX73OlboVHhpUIOHRgrF
-X-Talos-MUID: =?us-ascii?q?9a23=3AYiXzBw07P86Z7TcHlYcU4YsdiDUj4f7/GXwdzLU?=
- =?us-ascii?q?/5tS2PhdtOi+bqAu+a9py?=
-X-IronPort-Anti-Spam-Filtered: true
-Received: from rcdn-core-10.cisco.com ([173.37.93.146])
-  by rcdn-iport-7.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 02:29:30 +0000
-Received: from rcdn-opgw-4.cisco.com (rcdn-opgw-4.cisco.com [72.163.7.165])
-        by rcdn-core-10.cisco.com (8.15.2/8.15.2) with ESMTPS id 3AE2TUDp017725
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
-        for <linux-scsi@vger.kernel.org>; Tue, 14 Nov 2023 02:29:30 GMT
-X-CSE-ConnectionGUID: 5+Ki8/cNTxOzBAktuJrn0A==
-X-CSE-MsgGUID: pQk/t/pHT0uen0bQyXkftw==
-Authentication-Results: rcdn-opgw-4.cisco.com; dkim=pass (signature verified) header.i=@cisco.com; spf=Pass smtp.mailfrom=kartilak@cisco.com; dmarc=pass (p=quarantine dis=none) d=cisco.com
-X-IronPort-AV: E=Sophos;i="6.03,299,1694736000"; 
-   d="scan'208";a="7967326"
-Received: from mail-sn1nam02lp2040.outbound.protection.outlook.com (HELO NAM02-SN1-obe.outbound.protection.outlook.com) ([104.47.57.40])
-  by rcdn-opgw-4.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 02:29:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dXdl8+Yt7yMrubCzZOf4esXeDqQjlWoWuZrOndgcYd/CYrsnRIbQpVC5f+WMZvDWiYFeb0r0Lh1GAII0DWM52Mf015/i9N4Sn+LcbbKKj6cqL/NvfSwfAcyjw9EgH4AyZl9c0ZG0tej+Vh9U9zktZMUC70KQyL5qbkjELQQ58EVuaMAFgvuqRW05WKBWmWZV4iLcjEl4h7N/TCdgXMtgdGjvLfYft6KO+BjUOOkUgSJSG6/d17DhCwxNTVsdBFjE2oTytorIYeDE7awmv9zJJ8pXDn8aw7nPNFIbVr8tRml+ZCr5MoPo8Lsv+YHF4zOHd19MGMygttPXeulB9+bX0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rHQ/IQlrT2RGBCK2cFgqVnseLfnCVCm0uqZYO0Zjy94=;
- b=LuFrNwPeqse/r98SRblRPqqwpaX2LGFlRfsJCA+pRwO6ztU1WNKVDenK77PgDpjzIucLYgqeIuR+d1qnz7HoN0mfoAEm5oqYDBHJqBh5WgSjUKcsvigcISqpqpDu9XzJk+s2Jn+OOGOydoKCSxmumETs6lmMSRkR9nCaPsD7Bh8RUDGT8dUhAwJMmBpg3p6p662DnKEqap7swlcpntV0MExoPnxmydPgf8Je7tpvVwOYhI1l2b21dNgkiD7lMrpxexaQYIjAs21l2pjW5UtyBlql+IvbZ/egOSs/jFRNES8myDUMRJZNVgyDrbS69LD5TrJACbi/JxCHQMAjYmuzcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cisco.com; dmarc=pass action=none header.from=cisco.com;
- dkim=pass header.d=cisco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cisco.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rHQ/IQlrT2RGBCK2cFgqVnseLfnCVCm0uqZYO0Zjy94=;
- b=SSyPGmViYFXJrDL8KexLiUepQcVcNjPiecGxVGhLt46NBlKZ8OMlMGJALXaweueF0R46lsQrZSJK1uqI2++NrY9IsO33d1jCWrEp/wM620z0kNj1DgVJVoQfCYQrIh8V2MWpaW5knI0LwnLOSGwNUZNvp8ajyHjOmO7tFIFPhSs=
-Received: from SJ0PR11MB5896.namprd11.prod.outlook.com (2603:10b6:a03:42c::19)
- by MW4PR11MB5911.namprd11.prod.outlook.com (2603:10b6:303:16b::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6977.31; Tue, 14 Nov
- 2023 02:29:28 +0000
-Received: from SJ0PR11MB5896.namprd11.prod.outlook.com
- ([fe80::24ee:3bbf:e40:6022]) by SJ0PR11MB5896.namprd11.prod.outlook.com
- ([fe80::24ee:3bbf:e40:6022%7]) with mapi id 15.20.6977.028; Tue, 14 Nov 2023
- 02:29:28 +0000
-From:   "Karan Tilak Kumar (kartilak)" <kartilak@cisco.com>
-To:     Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>
-CC:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "Dhanraj Jhawar (djhawar)" <djhawar@cisco.com>,
-        "Gian Carlo Boffa (gcboffa)" <gcboffa@cisco.com>,
-        "Masa Kai (mkai2)" <mkai2@cisco.com>,
-        "Satish Kharat (satishkh)" <satishkh@cisco.com>,
-        "Arulprabhu Ponnusamy (arulponn)" <arulponn@cisco.com>,
-        "Sesidhar Baddela (sebaddel)" <sebaddel@cisco.com>
-Subject: RE: [PATCH 13/16] fnic: allocate device reset command on the fly
-Thread-Topic: [PATCH 13/16] fnic: allocate device reset command on the fly
-Thread-Index: AQHaBkb42cCL+heyGUeyjm7ciZVVH7BtxXAwgAtnMMA=
-Date:   Tue, 14 Nov 2023 02:29:28 +0000
-Message-ID: <SJ0PR11MB58960463A1A9D634BE8D2A62C3B2A@SJ0PR11MB5896.namprd11.prod.outlook.com>
-References: <20231023091507.120828-1-hare@suse.de>
- <20231023091507.120828-14-hare@suse.de> <20231024065427.GD9847@lst.de>
- <SJ0PR11MB589682551110734A017D19C3C3AAA@SJ0PR11MB5896.namprd11.prod.outlook.com>
-In-Reply-To: <SJ0PR11MB589682551110734A017D19C3C3AAA@SJ0PR11MB5896.namprd11.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ0PR11MB5896:EE_|MW4PR11MB5911:EE_
-x-ms-office365-filtering-correlation-id: c69e70f7-269b-4a7e-d80e-08dbe4b986c9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: R74EUBZNYh5I0zRkQmk5G0LBouz6swlWTt+X7JSv1GDcRrpt4rmNshdFTKElKkH0SGgGd2uTCwoffoxJoQTGb8lbkgEsYB4mEHIVhOBCpNufQTENcQOlnBtfOfW4CI66AU3ohyu60gIvJnaOgYgLX+3JDq7wHTTcfUOv8dUE1K256IyDRW3S8eHvQVZ3p9gRFKACBqtJ0W4X6fRctJu6LJMhLM16Q0/k8PhqZXbj3yD/73X4bUdIxbpsfIHRUIJudBioRUaz1xZk4WuWtf8cZ3MftpSKA5OOZyYV6pZwo1GwH6eH7WOEVDoNcLNmwG/ziZYtwa75yUPQXAYUy8AYuSc041J/BxELaXXPSEq5VnoOdtDEXR6WXTUAqv7k4s5OA5cDmjIDf1rJMG7W2DvCW1/HfLOIad0rDNz/v+WzkvBwpR3vkiIkOAli9cOuM8+EewoRWi5QMHHheMCl70riSy8xZuEKQU2re8EW9ZHRt3nBhQ/7tieft1IJwXriyqSv+ZNaao6QFca0/3VJcMzUzQhiI7nl4WxJ4izXTOc3DDiN+o4a2qGbf9QoGxBaWZtjbkDbpse80G/OPPtBZQG/XBkNYicZhhJcgacrYPCd1GFVPGKw+UXb+4P6SzOVtkQ+
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5896.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(346002)(376002)(396003)(136003)(230922051799003)(64100799003)(451199024)(186009)(1800799009)(83380400001)(38070700009)(122000001)(107886003)(110136005)(478600001)(53546011)(7696005)(6506007)(71200400001)(9686003)(5660300002)(38100700002)(86362001)(52536014)(33656002)(2906002)(41300700001)(66556008)(66946007)(66446008)(76116006)(66476007)(316002)(64756008)(54906003)(8676002)(4326008)(8936002)(55016003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JUBN0txjS0PMYSjbqpCPncm4muYD0HifpYMrBsZvCZAYWR4dbPeHDsq0+Hme?=
- =?us-ascii?Q?ChLBjDx5Au4rTEpbZoULTYGQ/dWvpOvT6NCIp1MyKWcKTtlhXpRzhgBZMSL2?=
- =?us-ascii?Q?NS1yCAjCP16wbTEhmltD407NrET6RDo3r9CP4K7w+JBMdtQKrR7MpGFvkFbT?=
- =?us-ascii?Q?W+3lq+p776pNlzAz9jiiRzWov62l1mWwCsZ11FuYtYpGZ2VzEA/NbypVHxqo?=
- =?us-ascii?Q?GVvgWtIGlLRGTCFNYSilHLqEFiR+kwkUgbHj5KGfyhxE2e0RmTz8B4uRFVHm?=
- =?us-ascii?Q?f0P0aJ16moCWav3OHGNozF5XB35UPj81zu0pvjrNZliip2w5Ax71LqvP0kaV?=
- =?us-ascii?Q?0TxJLQ5F4O0ZUz4myt1cpw7OsFlf3EnWRlkntUxxwYzkgXhhko4mGtiV/lAJ?=
- =?us-ascii?Q?DFiR+JLpwDkfOdbJ2ZSLa047SOgJzPvIhznw0evQJwQhOaIxmB5RzmdzY3wB?=
- =?us-ascii?Q?ZGvU3OwKgb51rTrgkyUADzCEp/Dzfa653SR12+FVDwdU6+6WZNfD6pYz/LD5?=
- =?us-ascii?Q?2d+A8Z9YHYhJu4pOKdGmMHfSUpAfmVD+WBwVwzEUUXnRUxGR6OEnb7K3w6hx?=
- =?us-ascii?Q?mV1LH5iisYzdM2CkiYCoVvhWfOvfuAZi/x3ykZpTbRXIjRRQ/own+8jajifC?=
- =?us-ascii?Q?QlVa44HwAxe/3hco0ukn9sr4Yu7JUoLfIGjaEds8aGkznpC29x3v0qUivWJP?=
- =?us-ascii?Q?k13T2ARJBB25nBvA5OeEleDv+lFmt2qzLUY0xDBCThFhfPMEQkodAY917OAX?=
- =?us-ascii?Q?qMSsU4R72LbCzFIIgqL7lpbqtfcbcvNZ48GHIQBwr4cppaq9rwqwXCZO9K0e?=
- =?us-ascii?Q?0vGJCKzTsmp/D2Tan0xh8P08ov4ZnnGITjthoZhkp877eSzKFZlXzyxJyq/6?=
- =?us-ascii?Q?lmYZ0uYPE9lL/swscv7i74tRJfXQReejOzhiBGyAyBsobhAzp/RE94zVy+46?=
- =?us-ascii?Q?ppAOMutepq1BdIAyeN79t6Oe+yFVavOawd26kkTFDiIoLWU9jLDjZe2ObuZl?=
- =?us-ascii?Q?hfr5QJmPK8QzvcDXFrP0J/9i91FOjH4P6nifQ4T/xeGWjKnD3ni1qUk946mU?=
- =?us-ascii?Q?daCJFKTpWHiHApyGrUZp6rDRG/exz3VvkKsnhW+3jeAZTOLBXS85q0C1IJRC?=
- =?us-ascii?Q?EvP/GMXN7u6lMEJhFFQvexXxt6HQbrRLdOxLMrY2X62d9wH4/qM3mFaoDvld?=
- =?us-ascii?Q?rEuTJkUCbRak4t/zdF/SwwqnsGaFipegzjZC9yDYFCfeUlJqfx14Jxj7dfI5?=
- =?us-ascii?Q?YIMg86xoFRxBtmm7/TGiaNUmmLBc0CgugoQi3fVW4um4oqmjQBV5/YGVKWfY?=
- =?us-ascii?Q?h6aebpQ/Ud8eKimFo2NI366BCCLDLNyh6JAP8E6O3I8rOXA0z7jDMDLVPsde?=
- =?us-ascii?Q?meOwEpNLEHKp0yL+R9LrHhzymwleIgiTdV21utlNxRwJs2mEADRmtju1gVmo?=
- =?us-ascii?Q?wzeNvf+ZexYqGIQ3YHxbrbp4fXlG3b2B3JwJG2TbhxZbPLER8eGtwqPG+pJ7?=
- =?us-ascii?Q?Y2LlKxOeBkGM0a+MvwOM+gSTxINHWLzZs9CMzYRuwTDwIvccNQyYF1NcJcL/?=
- =?us-ascii?Q?pv5EosCTxHp4ljMaXf4zRt0AEnxbeUKh5j+9V0AI/RAagwfw/57Q3g1Vd8p3?=
- =?us-ascii?Q?YTqif5cOaKFHHUhFgqePu90=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S232050AbjKNEep (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Nov 2023 23:34:45 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65246D42
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Nov 2023 20:34:37 -0800 (PST)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20231114043433epoutp024238117c908a4d5590b380945ad5ab13~XYzc71spN1178611786epoutp02j
+        for <linux-scsi@vger.kernel.org>; Tue, 14 Nov 2023 04:34:33 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20231114043433epoutp024238117c908a4d5590b380945ad5ab13~XYzc71spN1178611786epoutp02j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1699936473;
+        bh=RIC7YkwBl2NC41T0dxI39QTyveUYqtvDqehJ7FnOOFs=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=NZTBzGgoOVG6hebG9UQ6xx9fLLHHfAh8QmJv4HyU7MERsPBM1w+TbgI/jrcoo3YpD
+         Mh449cXlAGsvOLKe3hQaPVEvdhvP6okRzK69pXetS1i2z9/jxfpVj0om7/sy1G1T0U
+         hI+0FvXJyNE07Dxg7vttH83ZrVtxk/IhE6T1ZyHY=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20231114043432epcas2p32ae4aa7e0e8c3a5ff39886719567fb94~XYzce87360064800648epcas2p3U;
+        Tue, 14 Nov 2023 04:34:32 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.90]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4STtk00TyWz4x9QC; Tue, 14 Nov
+        2023 04:34:32 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        60.0F.09607.7D8F2556; Tue, 14 Nov 2023 13:34:31 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20231114043431epcas2p4a8d452e18fff192c03fb6066e81514ea~XYzbStkKp2631626316epcas2p4X;
+        Tue, 14 Nov 2023 04:34:31 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20231114043431epsmtrp140ee62eba0a9185ec95371dd20cc306b~XYzbRwS8a0312303123epsmtrp1B;
+        Tue, 14 Nov 2023 04:34:31 +0000 (GMT)
+X-AuditID: b6c32a48-1d26ea8000002587-d2-6552f8d73c13
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FD.06.08817.7D8F2556; Tue, 14 Nov 2023 13:34:31 +0900 (KST)
+Received: from rack03.dsn.sec.samsung.com (unknown [10.229.95.126]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20231114043431epsmtip259eb9cf00d84b20dcdd351af9a2a4391~XYzbFknSk0798907989epsmtip2M;
+        Tue, 14 Nov 2023 04:34:31 +0000 (GMT)
+From:   SEO HOYOUNG <hy50.seo@samsung.com>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com, bvanassche@acm.org,
+        kwangwon.min@samsung.com, kwmad.kim@samsung.com,
+        sh425.lee@samsung.com, sc.suh@samsung.com,
+        quic_nguyenb@quicinc.com, cpgs@samsung.com, grant.jung@samsung.com,
+        junwoo80.lee@samsung.com
+Cc:     SEO HOYOUNG <hy50.seo@samsung.com>
+Subject: [PATCH v2] scsi: ufs: core: fix racing issue during
+ ufshcd_mcq_abort
+Date:   Tue, 14 Nov 2023 13:37:04 +0900
+Message-Id: <20231114043704.52525-1-hy50.seo@samsung.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-X-OriginatorOrg: cisco.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5896.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c69e70f7-269b-4a7e-d80e-08dbe4b986c9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2023 02:29:28.4240
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5ae1af62-9505-4097-a69a-c1553ef7840e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Z+0wsw6jC7M3fV+j2r2pbhqyKLL005INKnykm6MwB5NHALcEMUbeNBk2KksinmyxPsX8tR9uy58tEVoq53u71A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB5911
-X-Outbound-SMTP-Client: 72.163.7.165, rcdn-opgw-4.cisco.com
-X-Outbound-Node: rcdn-core-10.cisco.com
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrGJsWRmVeSWpSXmKPExsWy7bCmme71H0GpBpfXW1s8mLeNzeLlz6ts
+        FgcfdrJYTPvwk9ni5SFNi19/17NbrF78gMVi0Y1tTBa7/jYzWWy9sZPF4uaWoywWl3fNYbPo
+        vr6DzWL58X9MFlNfHGe36Lp7g9Fi6b+3LA6CHpeveHtMWHSA0eP7+g42j49Pb7F4TNxT59G3
+        ZRWjx+dNch7tB7qZAjiism0yUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNT
+        bZVcfAJ03TJzgJ5QUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BSYF+gVJ+YWl+al
+        6+WlllgZGhgYmQIVJmRnLOg8z1bwXrCieZVAA2MrfxcjJ4eEgInE5nsNjCC2kMAORolT90S7
+        GLmA7E+MEj0NE9kgnG+MEq82/2WF6Xj74QsjRGIvo8SziWtZIJwfjBJnp/WAzWIT0JBYc+wQ
+        E0hCRKCNWWLln8tsIAlmATWJz3eXAXVwcAgL+Eus/w92B4uAqsSD6Y1gG3gFLCWeLNzEDrFN
+        XmJRw28miLigxMmZT1ggxshLNG+dzQwyX0JgJYfEyZdnGSEaXCSeTtgAZQtLvDq+BWqQlMTL
+        /jYoO1uicc9aKLtCYu7myVD1xhKznrUzgtzGLKApsX6XPogpIaAsceQW1Fo+iY7Df6E6eSUa
+        Nv5mhyjhlehoE4IIK0mcmXsbKiwhcXB2DkTYQ+Lx37fMkICOlbj3rId5AqPCLCR/zULy1yyE
+        ExYwMq9iFEstKM5NTy02KjCBx25yfu4mRnCC1vLYwTj77Qe9Q4xMHIyHGCU4mJVEePM0A1KF
+        eFMSK6tSi/Lji0pzUosPMZoCQ3ois5Rocj4wR+SVxBuaWBqYmJkZmhuZGpgrifPea52bIiSQ
+        nliSmp2aWpBaBNPHxMEp1cAk+v/89w8faz9aOfM1M5Tbv+ErPvBsx11773P5O89snGKQFvp9
+        +szK1ZmLjB9aXVUOX8Z95LFY1tHaU+kRax593nGu5O/l9M16q1hm+mx+sOd2zrOEKRPN3YTk
+        VDvNZKtzJd9GrLpfl1jxtz2Pz2ly5RV1xusKBhc/T7mx67xD9bbFn6Qe101RmKe2V68t+7tC
+        iWLp9VwrJsFak1OrRR0PCGyKXGSu42C/N+Wp+5W7F42vfj5kvb3u2+Yp1TOWxRmuPH4xZrHP
+        ZKZ38abJNt49C4U2Tl+bVRnhWmevYpR1j/Ff/j3OBpPNR9qsuCKXzZRm5Vd9c40hyYdtl+oD
+        boYk/3fCu8qefq9T2VxwS11SiaU4I9FQi7moOBEA8/b98lkEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDLMWRmVeSWpSXmKPExsWy7bCSvO71H0GpBof3iVs8mLeNzeLlz6ts
+        FgcfdrJYTPvwk9ni5SFNi19/17NbrF78gMVi0Y1tTBa7/jYzWWy9sZPF4uaWoywWl3fNYbPo
+        vr6DzWL58X9MFlNfHGe36Lp7g9Fi6b+3LA6CHpeveHtMWHSA0eP7+g42j49Pb7F4TNxT59G3
+        ZRWjx+dNch7tB7qZAjiiuGxSUnMyy1KL9O0SuDIWdJ5nK3gvWNG8SqCBsZW/i5GTQ0LAROLt
+        hy+MXYxcHEICuxklpq37xQqRkJD4v7iJCcIWlrjfcoQVougbo8SZc3/AEmwCGhJrjh1iAkmI
+        CMxillhy6w8bSIJZQE3i891lLF2MHBzCAr4Se6Y7g4RZBFQlHkxvBFvAK2Ap8WThJnaIBfIS
+        ixp+M0HEBSVOznzCAjFGXqJ562zmCYx8s5CkZiFJLWBkWsUomVpQnJueW2xYYJSXWq5XnJhb
+        XJqXrpecn7uJERwhWlo7GPes+qB3iJGJg/EQowQHs5IIb55mQKoQb0piZVVqUX58UWlOavEh
+        RmkOFiVx3m+ve1OEBNITS1KzU1MLUotgskwcnFINTHXc+/2evNl5qV24V0T/9dJW3ROVtk6L
+        bx88ceMjW6y86JvVfmmpljrqmRuWS52cp5O5PSIieVXunU/bco+sNTl05vLihwELX+Ys2ch6
+        jDf+w7YKZ8OZ06/eOPKj1jrd/qdnQs/yYzdmcf2X0uyIFxDdlcZrW5pT1JOz+4Zv1su8hp9e
+        nlcyRLJiFvvl6gcxz0pOkJeVTH1hk335Pc/ueMZGnjsVPc/05WwSDubuXHDqlO6lWQdfWlz7
+        51ndsMm/js/rk9CCm4kdoRHVrKf4/S+orQl/0H7F/k2xo47SSecjlU0PLuwNiFK8+e2SwVLD
+        xZMeepbWMG61yVc0/MQQ/NHpZ8W/+c09SwV+ZSR/UmIpzkg01GIuKk4EACsPldD/AgAA
+X-CMS-MailID: 20231114043431epcas2p4a8d452e18fff192c03fb6066e81514ea
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20231114043431epcas2p4a8d452e18fff192c03fb6066e81514ea
+References: <CGME20231114043431epcas2p4a8d452e18fff192c03fb6066e81514ea@epcas2p4.samsung.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Monday, November 6, 2023 11:42 AM, Karan Tilak Kumar (kartilak) wrote:
->
-> On Monday, October 23, 2023 11:54 PM, Christoph Hellwig <hch@lst.de> wrot=
-e:
-> >
-> > Adding the fnic maintainers as they are probably most qualified to revi=
-ew and test this.
-> >
-> > On Mon, Oct 23, 2023 at 11:15:04AM +0200, Hannes Reinecke wrote:
-> > > Allocate a reset command on the fly instead of relying on using the
-> > > command which triggered the device failure.
-> > > This might fail if all available tags are busy, but in that case
-> > > it'll be safer to fall back to host reset anyway.
-> > >
->
-> Thanks for this fix, Hannes.
-> I'm working on integrating these changes and testing them.
-> I'll get back to you about this.
->
+If cq complete irq raise during abort processing,
+the command has already been complete.
+So could not get utag to erase cmd like below log.
+Because the cmd that was handling abort has already been completed
 
-I integrated your patch set using "b4 shazam" and built all the changes to =
-do some dev testing.
-I instrumented the code to do the following:
+ufshcd_try_to_abort_task: cmd pending in the device. tag = 25
+Unable to handle kernel NULL pointer dereference at virtual address
+0000000000000194
+Mem abort info:
+ESR = 0x0000000096000006
+EC = 0x25: DABT (current EL), IL = 32 bits
+SET = 0, FnV = 0
+EA = 0, S1PTW = 0
+FSC = 0x06: level 2 translation fault
+Data abort info:
+ISV = 0, ISS = 0x00000006
+CM = 0, WnR = 0
 
-- After one million IOs, drop one IO response.
-- This will trigger an abort. Drop that abort response.
-- This will trigger a device reset. I'm seeing that the tag here is 0xFFFFF=
-FFF (SCSI_NO_TAG).
+pc : blk_mq_unique_tag+0x8/0x14
+lr : ufshcd_mcq_sq_cleanup+0x6c/0x1b8
+sp : ffffffc03e3b3b10
+x29: ffffffc03e3b3b10 x28: 0000000000000001 x27: ffffff8830b34f68
+x26: ffffff8830b34f6c x25: ffffff8830b34040 x24: 0000000000000000
+x23: 0000000000000f18 x22: ffffffc03e3b3bb8 x21: 0000000000000019
+x20: 0000000000000019 x19: ffffff8830b309b0 x18: ffffffc00a1b5380
+x17: 00000000529c6ef0 x16: 00000000529c6ef0 x15: 0000000000000000
+x14: 0000000000000010 x13: 0000000000000032 x12: 0000001169e8a5bc
+x11: 0000000000000001 x10: ffffff885dfc1588 x9 : 0000000000000019
+x8 : 0000000000000000 x7 : 0000000000000001 x6 : fffffffdef706f28
+x5 : 000000000000283d x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000003 x1 : 0000000000000019 x0 : ffffff8855781200
+Call trace:
+blk_mq_unique_tag+0x8/0x14
+ufshcd_clear_cmd+0x34/0x118
+ufshcd_try_to_abort_task+0x1c4/0x4b0
+ufshcd_err_handler+0x8d0/0xd24
+process_one_work+0x1e4/0x43c
+worker_thread+0x25c/0x430
+kthread+0x104/0x1d4
+ret_from_fork+0x10/0x20
 
-This tag fails the out-of-range tag check and escalates to host reset.
-I've been able to repro this three times with the same result.
+v1 -> v2: fix build error
 
-The expectation with this test case is that the device reset should go thro=
-ugh successfully without escalating to host reset.
+Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
+---
+ drivers/ufs/core/ufshcd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Regards,
-Karan
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 9a730a794b66..55f4c0eeda7b 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -7574,6 +7574,10 @@ int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag)
+ 		goto out;
+ 	}
+ 
++	if (!ufshcd_cmd_inflight(lrbp->cmd) ||
++	    test_bit(SCMD_STATE_COMPLETE, &lrbp->cmd->state))
++		goto out;
++
+ 	err = ufshcd_clear_cmd(hba, tag);
+ 	if (err)
+ 		dev_err(hba->dev, "%s: Failed clearing cmd at tag %d, err %d\n",
+-- 
+2.26.0
+
