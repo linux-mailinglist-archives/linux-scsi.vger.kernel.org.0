@@ -2,72 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4BE57F04DF
-	for <lists+linux-scsi@lfdr.de>; Sun, 19 Nov 2023 10:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1B17F0681
+	for <lists+linux-scsi@lfdr.de>; Sun, 19 Nov 2023 14:42:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjKSJBD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 19 Nov 2023 04:01:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S229549AbjKSNmj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 19 Nov 2023 08:42:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjKSJBC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 Nov 2023 04:01:02 -0500
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA598C2
-        for <linux-scsi@vger.kernel.org>; Sun, 19 Nov 2023 01:00:58 -0800 (PST)
-Received: by mail-ed1-x543.google.com with SMTP id 4fb4d7f45d1cf-5441305cbd1so4644366a12.2
-        for <linux-scsi@vger.kernel.org>; Sun, 19 Nov 2023 01:00:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700384457; x=1700989257; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=S1JAwuZcaxKjV8o/lzqh5tCVyk7jnBIk/8uUF161tfM=;
-        b=XJU49EHHXEL//Fk0cGQXrjiyzayahqNKjVrBR8NhGFCBdA60mD8EuQm+7MDRS1Iof0
-         PDVOVkwTS0zftVz9vjNpTvWO5pwQb9Fs7WEBK7kHOZeEE7hiDVRajJpqLzDOqlKl8M9Q
-         Z57FoaGuHQuNZuoih5kleIateCHf1GV7G0ttsBL9FPZsyf/Wid5xWlH0X7chmwMCMeNl
-         cpgU0DR4ZIQ9wp14z6n4cp8nQgU1QVAGKz51FovdulpOnOXrJJjeuXbNEJCEPl2mVfjO
-         gpMjlzQh1bx1qQq4Uz83Yk8NHbyB3iPT7BbWOud35WMXEWeKmLBXXIukd2kBYuOiD2GP
-         XfLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700384457; x=1700989257;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S1JAwuZcaxKjV8o/lzqh5tCVyk7jnBIk/8uUF161tfM=;
-        b=OIQUZHLcpYwhEM00E6lkPXaJ63/UuX0wEm35XZXmFimXoLog99Vdr5D65oQizAKl9Q
-         +NK1ASbFuE27Bnvglud3cpmJ/D+lg5I2Fv5Mdn4H9P2GK0Jch/0BN6cLQow6Xl50FH/k
-         X8shajK1pBYuaYi1r3IdcfGcSDM8tNfSPzb9lzbcgjsE/C+U37eV7r1QD+ppOXq3ZOe7
-         YlTaS8wRkjsVDEr61Sbe1w03WG8qwDb3qJ4TwwvY1zJi4eEO2ofQ5nLElgBDbj57GHxs
-         0T2ZA/CfY4gs5v/z2AZbEftLLYtw5xwBzPOY+hHkHjhffgbMxuWg5Nabp3i/0g1hv8NH
-         1C/A==
-X-Gm-Message-State: AOJu0YzanlIIy4rOy4wg8H7YNzjkR4vrce+5QKDrYkl5p2Z+7pHQszz1
-        ZMcZoDxakYoH5P11avN0hOG+4TDs+Z7yj4gbDrA=
-X-Google-Smtp-Source: AGHT+IFZjZfx2vQ4if9ymu/0Qy2NVzf+AJoiWznMCsMM5IPC2fCMCvxIItmgCYRTHQRps57Ad0qAb0ErbfR72xgWKg0=
-X-Received: by 2002:a17:907:b9cc:b0:9c1:66cc:1d7d with SMTP id
- xa12-20020a170907b9cc00b009c166cc1d7dmr2515533ejc.64.1700384456628; Sun, 19
- Nov 2023 01:00:56 -0800 (PST)
+        with ESMTP id S231260AbjKSNkn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 Nov 2023 08:40:43 -0500
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E479E6;
+        Sun, 19 Nov 2023 05:40:37 -0800 (PST)
+X-UUID: acb510e49d924fe2a26b7b2e735369e7-20231119
+X-CID-O-RULE: Release_Ham
+X-CID-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.32,REQID:818b19ef-3f45-4b5d-9838-c3dd21cdabbd,IP:15,
+        URL:0,TC:0,Content:-5,EDM:25,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,AC
+        TION:release,TS:20
+X-CID-INFO: VERSION:1.1.32,REQID:818b19ef-3f45-4b5d-9838-c3dd21cdabbd,IP:15,UR
+        L:0,TC:0,Content:-5,EDM:25,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:20
+X-CID-META: VersionHash:5f78ec9,CLOUDID:25298f95-10ce-4e4b-85c2-c9b5229ff92b,B
+        ulkID:231119214015QRM3A46K,BulkQuantity:0,Recheck:0,SF:44|66|38|24|17|19|1
+        02,TC:nil,Content:0,EDM:5,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL
+        :0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
+X-UUID: acb510e49d924fe2a26b7b2e735369e7-20231119
+X-User: chentao@kylinos.cn
+Received: from vt.. [(116.128.244.169)] by mailgw
+        (envelope-from <chentao@kylinos.cn>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 141419594; Sun, 19 Nov 2023 21:40:13 +0800
+From:   Kunwu Chan <chentao@kylinos.cn>
+To:     njavali@marvell.com, mrangankar@marvell.com,
+        GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     kunwu.chan@hotmail.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kunwu Chan <chentao@kylinos.cn>
+Subject: [PATCH] scsi: qedi: Fix warning of restricted __le32 degrades to integer in qedi_main.c
+Date:   Sun, 19 Nov 2023 21:40:09 +0800
+Message-Id: <20231119134009.8015-1-chentao@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a05:6f02:678f:b0:5d:9432:e3f7 with HTTP; Sun, 19 Nov 2023
- 01:00:56 -0800 (PST)
-From:   audu bello <d12u819@gmail.com>
-Date:   Sun, 19 Nov 2023 10:00:56 +0100
-Message-ID: <CAE8=1O1p7-nVO6f6DuM6c8rfqU_q_wd5CH0wmPeixRg8QrRMTw@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_75_100 autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-AN EMAIL WAS SENT TO YOU ABOUT RECEIVING A PENDING FUNDS BUT I'M
-SURPRISED THAT YOU NEVER BOTHERED TO RESPOND.
+drivers/scsi/qedi/qedi_main.c:1867:37: warning: restricted __le32 degrades to integer
 
-PLEASE URGENTLY USE MY REGULAR EMAIL ADDRESS:  mgr.audu@yahoo.com
-YOURS FAITHFULLY
-AUDIT MANAGER
+Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
+---
+ drivers/scsi/qedi/qedi_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.c
+index cd0180b1f5b9..3f5b148347d2 100644
+--- a/drivers/scsi/qedi/qedi_main.c
++++ b/drivers/scsi/qedi/qedi_main.c
+@@ -1864,7 +1864,7 @@ void qedi_get_task_tid(struct qedi_ctx *qedi, u32 itt, s16 *tid)
+ 	u16 i;
+ 
+ 	for (i = 0; i < MAX_ISCSI_TASK_ENTRIES; i++) {
+-		if (qedi->itt_map[i].itt == itt) {
++		if (le32_to_cpu(qedi->itt_map[i].itt) == itt) {
+ 			*tid = i;
+ 			QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_CONN,
+ 				  "Ref itt=0x%x, found at tid=0x%x\n",
+-- 
+2.34.1
+
