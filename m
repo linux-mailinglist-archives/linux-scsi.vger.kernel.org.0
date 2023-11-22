@@ -1,113 +1,173 @@
-Return-Path: <linux-scsi+bounces-44-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-46-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 522EA7F3E3B
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Nov 2023 07:35:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 906577F3E3D
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Nov 2023 07:35:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6C65B20F2D
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Nov 2023 06:35:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A142281317
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Nov 2023 06:35:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5562A16423
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Nov 2023 06:35:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01E6D14F9D
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Nov 2023 06:35:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="V/96vLGq"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="MZj8FJuV"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B3B1A2;
-	Tue, 21 Nov 2023 21:40:18 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AM4gVVs024685;
-	Wed, 22 Nov 2023 05:40:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=M3ih5k73hTUGLAHB8pFzvY3VIGT0+mRjjUOBX7AhHKg=;
- b=V/96vLGqwLjvaljeglMBfb6zOidPyjm4BsuRV+ixuUdIpRo4ulQxgzay0oW7vg7DDdQ0
- kWWtCabn6WQj9F/FZLii7zrvnT712E1LHE4v3zHjSWbymOSVscFUqsZCyLOm4ActOsNl
- vKJzykdu+wYXHPYy0cEQ1KPFhwMFlLZFS9Ag1DiJLAuRaajhA1HvJ+pk+dx9ehNn2UHY
- acK8w4Y892F7qiu6D6w0LdCP4AipqhtRlRx3QCjiFTFcimwoIjsHmE6kLoulFd590RZX
- Bs4sRPOwSxVOkBU3TeFlhukMde5KfMRoplx6e0EWR1qNY14TGU0lvJPNctb5dzHa7tXv 7g== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ugr85u3e6-1
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8A9D40;
+	Tue, 21 Nov 2023 22:15:31 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AM5kqSV001503;
+	Wed, 22 Nov 2023 06:15:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=wYDNyT+fybxznp+VAFlr6au6RMMN4XBDNwkEIag44Yg=;
+ b=MZj8FJuVK33KmlSs43xfH2C+BWqAB5QwHv3nqlC7VUmQSSiOn2TvUhaGXz2CrzmcW5uq
+ kiA+wTdSO73Kjvn0ChaRipGYQfRo7oxoHONoAPdznOvY0UdoKnOLLQMUKechuR+VDJCK
+ QYQspCXVrggbaUtQw+Sfg5/RDepnDz44e2B0iwBoubAoj9Uq0Ew6tEHCyggdxYrhp3sv
+ Yk9plrdTwXbajsK8H/bgU4xLwklx6ln86jpO5c5ULuExFfD7+L82sV44+C6Ln4+C12cV
+ 4bafqSbzasEntFgWnwykbEcv34lKACSz25U+UTAVOWlj0xy6B0n8fNQMO44UWcL00HQD 0A== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uh477gvvk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Nov 2023 05:40:15 +0000
+	Wed, 22 Nov 2023 06:15:05 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AM5eEKu025905
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AM6F5Hl028121
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Nov 2023 05:40:14 GMT
-Received: from hu-gaurkash-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Tue, 21 Nov 2023 21:40:04 -0800
-From: Gaurav Kashyap <quic_gaurkash@quicinc.com>
-To: <linux-scsi@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <ebiggers@google.com>, <neil.armstrong@linaro.org>,
-        <srinivas.kandagatla@linaro.org>
-CC: <linux-mmc@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-fscrypt@vger.kernel.org>, <omprsing@qti.qualcomm.com>,
-        <quic_psodagud@quicinc.com>, <abel.vesa@linaro.org>,
-        <quic_spuppala@quicinc.com>, <kernel@quicinc.com>,
-        Gaurav Kashyap
-	<quic_gaurkash@quicinc.com>
-Subject: [PATCH v3 12/12] dt-bindings: crypto: ice: document the hwkm property
-Date: Tue, 21 Nov 2023 21:38:17 -0800
-Message-ID: <20231122053817.3401748-13-quic_gaurkash@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231122053817.3401748-1-quic_gaurkash@quicinc.com>
-References: <20231122053817.3401748-1-quic_gaurkash@quicinc.com>
+	Wed, 22 Nov 2023 06:15:05 GMT
+Received: from [10.253.15.194] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 21 Nov
+ 2023 22:15:00 -0800
+Message-ID: <85d7a1ef-92c4-49ae-afe0-727c1b446f55@quicinc.com>
+Date: Wed, 22 Nov 2023 14:14:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] scsi: ufs: qcom: move ufs_qcom_host_reset() to
+ ufs_qcom_device_reset()
+To: Manivannan Sadhasivam <mani@kernel.org>,
+        Ziqi Chen
+	<quic_ziqichen@quicinc.com>
+CC: <quic_asutoshd@quicinc.com>, <bvanassche@acm.org>, <beanhuo@micron.com>,
+        <avri.altman@wdc.com>, <junwoo80.lee@samsung.com>,
+        <martin.petersen@oracle.com>, <quic_nguyenb@quicinc.com>,
+        <quic_nitirawa@quicinc.com>, <quic_rampraka@quicinc.com>,
+        <linux-scsi@vger.kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "James E.J.
+ Bottomley" <jejb@linux.ibm.com>,
+        "open list:ARM/QUALCOMM SUPPORT"
+	<linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1698145815-17396-1-git-send-email-quic_ziqichen@quicinc.com>
+ <20231025074128.GA3648@thinkpad>
+Content-Language: en-US
+From: Can Guo <quic_cang@quicinc.com>
+In-Reply-To: <20231025074128.GA3648@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: AIKcHt8ulWoxBE92h_6_xVSkozyDMypH
-X-Proofpoint-ORIG-GUID: AIKcHt8ulWoxBE92h_6_xVSkozyDMypH
+X-Proofpoint-ORIG-GUID: RLh3YGxEGWi-AlI53KP2pIPZ0pez9c9i
+X-Proofpoint-GUID: RLh3YGxEGWi-AlI53KP2pIPZ0pez9c9i
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-22_02,2023-11-21_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- phishscore=0 suspectscore=0 adultscore=0 malwarescore=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 mlxscore=0 clxscore=1015
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311220040
+ definitions=2023-11-22_03,2023-11-21_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
+ impostorscore=0 malwarescore=0 mlxlogscore=999 clxscore=1015
+ suspectscore=0 spamscore=0 bulkscore=0 mlxscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311220043
 
-Add documentation for the ice-use-hwkm property in
-qcom ice.
 
-Signed-off-by: Gaurav Kashyap <quic_gaurkash@quicinc.com>
----
- .../bindings/crypto/qcom,inline-crypto-engine.yaml         | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/crypto/qcom,inline-crypto-engine.yaml b/Documentation/devicetree/bindings/crypto/qcom,inline-crypto-engine.yaml
-index ca4f7d1cefaa..93e017dddc9d 100644
---- a/Documentation/devicetree/bindings/crypto/qcom,inline-crypto-engine.yaml
-+++ b/Documentation/devicetree/bindings/crypto/qcom,inline-crypto-engine.yaml
-@@ -24,6 +24,13 @@ properties:
-   clocks:
-     maxItems: 1
- 
-+  qcom,ice-use-hwkm:
-+    type: boolean
-+    description:
-+      Use the supported Hardware Key Manager (HWKM) in Qualcomm
-+      ICE to support wrapped keys. This dictates if wrapped keys
-+      have to be used by ICE.
-+
- required:
-   - compatible
-   - reg
--- 
-2.25.1
+On 10/25/2023 3:41 PM, Manivannan Sadhasivam wrote:
+> On Tue, Oct 24, 2023 at 07:10:15PM +0800, Ziqi Chen wrote:
+>> During PISI test, we found the issue that host Tx still bursting after
+> 
+> What is PISI test?
+> 
+>> H/W reset. Move ufs_qcom_host_reset() to ufs_qcom_device_reset() and
+>> reset host before device reset to stop tx burst.
+>>
+> 
+> device_reset() callback is supposed to reset only the device and not the host.
+> So NACK for this patch.
 
+Agree, the change should come in a more reasonable way.
+
+Actually, similar code is already there in ufs_mtk_device_reset() in 
+ufs-mediatek.c, I guess here is trying to mimic that fashion.
+
+This change, from its functionality point of view, we do need it, 
+because I occasionally (2 out of 10) hit PHY error on lane 0 during 
+reboot test (in my case, I tried SM8350, SM8450 and SM8550， all same).
+
+[    1.911188] [DEBUG]ufshcd_update_uic_error: UECPA:0x80000002
+[    1.922843] [DEBUG]ufshcd_update_uic_error: UECDL:0x80004000
+[    1.934473] [DEBUG]ufshcd_update_uic_error: UECN:0x0
+[    1.944688] [DEBUG]ufshcd_update_uic_error: UECT:0x0
+[    1.954901] [DEBUG]ufshcd_update_uic_error: UECDME:0x0
+
+I found out that the PHY error pops out right after UFS device gets 
+reset in the 2nd init. After having this change in place, the PA/DL 
+errors are gone.
+
+Thanks,
+Can Guo.
+> 
+> - Mani
+> 
+>> Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
+>> ---
+>>   drivers/ufs/host/ufs-qcom.c | 13 +++++++------
+>>   1 file changed, 7 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+>> index 96cb8b5..43163d3 100644
+>> --- a/drivers/ufs/host/ufs-qcom.c
+>> +++ b/drivers/ufs/host/ufs-qcom.c
+>> @@ -445,12 +445,6 @@ static int ufs_qcom_power_up_sequence(struct ufs_hba *hba)
+>>   	struct phy *phy = host->generic_phy;
+>>   	int ret;
+>>   
+>> -	/* Reset UFS Host Controller and PHY */
+>> -	ret = ufs_qcom_host_reset(hba);
+>> -	if (ret)
+>> -		dev_warn(hba->dev, "%s: host reset returned %d\n",
+>> -				  __func__, ret);
+>> -
+>>   	/* phy initialization - calibrate the phy */
+>>   	ret = phy_init(phy);
+>>   	if (ret) {
+>> @@ -1709,6 +1703,13 @@ static void ufs_qcom_dump_dbg_regs(struct ufs_hba *hba)
+>>   static int ufs_qcom_device_reset(struct ufs_hba *hba)
+>>   {
+>>   	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
+>> +	int ret = 0;
+>> +
+>> +	/* Reset UFS Host Controller and PHY */
+>> +	ret = ufs_qcom_host_reset(hba);
+>> +	if (ret)
+>> +		dev_warn(hba->dev, "%s: host reset returned %d\n",
+>> +				  __func__, ret);
+>>   
+>>   	/* reset gpio is optional */
+>>   	if (!host->device_reset)
+>> -- 
+>> 2.7.4
+>>
+> 
 
