@@ -1,160 +1,152 @@
-Return-Path: <linux-scsi+bounces-95-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-99-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 586FE7F5C96
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Nov 2023 11:39:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FFFC7F5C9D
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Nov 2023 11:39:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89FC11C20D1B
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Nov 2023 10:39:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18B482818D5
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Nov 2023 10:39:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7A4822321
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Nov 2023 10:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C654F22EE0
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Nov 2023 10:39:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="BQ/5W9PB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BKqERmlc"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAE51707;
-	Thu, 23 Nov 2023 00:47:33 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AN3fh7k029808;
-	Thu, 23 Nov 2023 08:47:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=DFF6SBown3zJI3vv5koqMtjckFgbW+mpaijN5lmrUrY=;
- b=BQ/5W9PBp7Xr8lHCah1/z0syAJqbyZFBGS1hjH1CAE3s13/wk0lgy3G8/Vfd8BU75uqx
- rokqjPT1L2J3MpImiwbfZgCT/aErGrLj9d8CUeQCMrL4YBwfCyjU5e2gSSLGpK5+vhB/
- WXeoF6/q1ua6Ulf7kcf6hWgkz2woWqaPIK7CL4jPdMHh9oKp9iee03tN/v6tfwhZn+zU
- w7S3L8N6UgUxt6PZKD5rHvXEoh6xDoJHjzjhAMJ4LFoO9x3nnBI1S4Bb9vMK0lNqYR63
- yXQ912GAPqQoQ+BzlVG8Bq+vnwHpOvsf919Mjr81o8CISxdasYEidBvjSwWqYECQtrGU UA== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uhf66aus4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Nov 2023 08:47:19 +0000
-Received: from pps.filterd (NASANPPMTA05.qualcomm.com [127.0.0.1])
-	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3AN82gHD026378;
-	Thu, 23 Nov 2023 08:47:18 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by NASANPPMTA05.qualcomm.com (PPS) with ESMTP id 3uhcusvt9r-1;
-	Thu, 23 Nov 2023 08:47:18 +0000
-Received: from NASANPPMTA05.qualcomm.com (NASANPPMTA05.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AN8htcP019143;
-	Thu, 23 Nov 2023 08:47:18 GMT
-Received: from stor-dylan.qualcomm.com (stor-dylan.qualcomm.com [192.168.140.207])
-	by NASANPPMTA05.qualcomm.com (PPS) with ESMTP id 3AN8lHn6023130;
-	Thu, 23 Nov 2023 08:47:18 +0000
-Received: by stor-dylan.qualcomm.com (Postfix, from userid 359480)
-	id B3B7920A68; Thu, 23 Nov 2023 00:47:17 -0800 (PST)
-From: Can Guo <quic_cang@quicinc.com>
-To: quic_cang@quicinc.com, bvanassche@acm.org, mani@kernel.org,
-        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
-        junwoo80.lee@samsung.com, martin.petersen@oracle.com
-Cc: linux-scsi@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v5 10/10] scsi: ufs: ufs-qcom: Add support for UFS device version detection
-Date: Thu, 23 Nov 2023 00:46:30 -0800
-Message-Id: <1700729190-17268-11-git-send-email-quic_cang@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1700729190-17268-1-git-send-email-quic_cang@quicinc.com>
-References: <1700729190-17268-1-git-send-email-quic_cang@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: SU5_WK-mkjbtXxfzmq-VAK_GebOoRKuP
-X-Proofpoint-GUID: SU5_WK-mkjbtXxfzmq-VAK_GebOoRKuP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-23_06,2023-11-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- clxscore=1015 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
- priorityscore=1501 malwarescore=0 spamscore=0 suspectscore=0
- impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2311060000 definitions=main-2311230062
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29F71AE;
+	Thu, 23 Nov 2023 01:20:11 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-4094301d505so3746615e9.2;
+        Thu, 23 Nov 2023 01:20:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700731210; x=1701336010; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=agWSrKHOHYuZjNUZSTGfhGdN53IKkDI5ATnREaAaw0E=;
+        b=BKqERmlcT/e/kUtq4+VGfNxG4rVteZyxvLM+2RFXpHfRvvCcJmUJl3EKNshqU8Eekx
+         O51iK2kpfwiBYr/lwJvIh7ScT3YRP2zHD6+Nv+uPCN5UirTH6m0nGRw2uiGqdYJIrs41
+         G8RwpbC03gJ2iCaQafxQRkHca5jjkszLaRfdawNsXBmATfarTZp+/41CbVbbd//9e1De
+         50Hck6lp30kP/PmWxXfpPdTPG7sbElaPDFCnxqmHo7FfCYdQdT7uQWUd8kE74GP7Cv6E
+         TFUqeZbm1qaNAeunp9nGSep8K+sg4X36hRWAX2Q+eyOYP7qTR9fbNLA8SFctDxOuMxzg
+         UQvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700731210; x=1701336010;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=agWSrKHOHYuZjNUZSTGfhGdN53IKkDI5ATnREaAaw0E=;
+        b=dvSckkugIXlZpqUhOBNdTc0F3HqFt3obXfIEU7q4s87ZxXGEmYD8NVAY7sfot+CMot
+         Vngg/zDApbrZP82MPI6XLOl9JSdvCdOXcAHvB2zl6YVZVU0hNckVhZQXZOpqE0MvJI78
+         OYnWxYrIC1hVGPJIKzAk1NlVg71LpTqKC0BV9rw+vT/2TUnyuWVvvpG/RVhicExt67zJ
+         jAbYZoQKsnzei6B0QZ423XTGpAeVflawaAPd0BctAEdMCqOKkceo0n00AnYCibZBUPQO
+         Xgvo5ixCiSqL70MyQfqXyZwYB7AI7jsgOl1F2bFa3vlHv6bIpZD6iJt1M/g4RnJuWykl
+         fpYA==
+X-Gm-Message-State: AOJu0YxtbOUoZpXySIHCJQVfxobatGG16JQgY6nk+bK4UYHmMxQAvM9s
+	3IEfyxiMCnAOiv3AMnf39P7MnkPofBI=
+X-Google-Smtp-Source: AGHT+IFCzqERQRf3kI6frXxEB17qyukCZx9xxj2dvuRXtr7+/PbpuiA3nV5Olnycm/GRCR4ZJI+Tzw==
+X-Received: by 2002:a05:600c:4514:b0:409:787b:5ab5 with SMTP id t20-20020a05600c451400b00409787b5ab5mr3682862wmo.23.1700731210011;
+        Thu, 23 Nov 2023 01:20:10 -0800 (PST)
+Received: from amir-ThinkPad-T480.lan ([5.29.249.86])
+        by smtp.gmail.com with ESMTPSA id x12-20020adff64c000000b0032dcb08bf94sm1094868wrp.60.2023.11.23.01.20.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Nov 2023 01:20:09 -0800 (PST)
+From: Amir Goldstein <amir73il@gmail.com>
+To: "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Jan Kara <jack@suse.cz>,
+	Josef Bacik <josef@toxicpanda.com>,
+	David Howells <dhowells@redhat.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	linux-fsdevel@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] scsi: target: core: add missing file_{start,end}_write()
+Date: Thu, 23 Nov 2023 11:20:00 +0200
+Message-Id: <20231123092000.2665902-1-amir73il@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-From: "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+The callers of vfs_iter_write() are required to hold file_start_write().
+file_start_write() is a no-op for the S_ISBLK() case, but it is really
+needed when the backing file is a regular file.
 
-A spare register in UFS host controller is used to indicate the UFS device
-version. The spare register is populated by bootloader for now, but in
-future it will be populated by HW automatically during link startup with
-its best efforts in any boot stages prior to Linux.
+We are going to move file_{start,end}_write() into vfs_iter_write(), but
+we need to fix this first, so that the fix could be backported to stable
+kernels.
 
-During host driver init, read the spare register, if it is not populated
-with a UFS device version, go ahead with the dual init mechanism. If a UFS
-device version is in there, use the UFS device version together with host
-controller's HW version to decide the proper PHY gear which should be used
-to configure the UFS PHY without going through the second init.
-
-Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
-Signed-off-by: Can Guo <quic_cang@quicinc.com>
+Suggested-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/ZV8ETIpM+wZa33B5@infradead.org/
+Cc: stable@vger.kernel.org
+Signed-off-by: Amir Goldstein <amir73il@gmail.com>
 ---
- drivers/ufs/host/ufs-qcom.c | 23 ++++++++++++++++++-----
- drivers/ufs/host/ufs-qcom.h |  2 ++
- 2 files changed, 20 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 7bbccf4..70bedd9 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -1070,15 +1070,28 @@ static void ufs_qcom_advertise_quirks(struct ufs_hba *hba)
- static void ufs_qcom_set_phy_gear(struct ufs_qcom_host *host)
- {
- 	struct ufs_host_params *host_params = &host->host_params;
-+	u32 val, dev_major = 0;
+Hi Martin,
+
+This bug is already fixed by commit "fs: move file_start_write() into
+vfs_iter_write()" on the vfs.rw branch in Christian's vfs tree, but
+Christoph suggested that I post a separate backportable fix for the scsi
+target code.
+
+You may decide if this is worth expediting to v6.7-rc or not.
+If not, then I think it would be best if Christian insert this patch
+at the bottom of the vfs.rw branch and revert in the later aformentioned
+commit.
+
+If you prefer to expedite it to v6.7-rc, then it's probably best to
+rebase vfs.rw branch after the fix hits master.
+
+Please let us know how you prefer to handle this patch.
+
+Thanks,
+Amir.
+
+ drivers/target/target_core_file.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/target/target_core_file.c b/drivers/target/target_core_file.c
+index 4d447520bab8..4e4cf6c34a77 100644
+--- a/drivers/target/target_core_file.c
++++ b/drivers/target/target_core_file.c
+@@ -332,11 +332,13 @@ static int fd_do_rw(struct se_cmd *cmd, struct file *fd,
+ 	}
  
- 	host->phy_gear = host_params->hs_tx_gear;
- 
--	/*
--	 * Power up the PHY using the minimum supported gear (UFS_HS_G2).
--	 * Switching to max gear will be performed during reinit if supported.
--	 */
--	if (host->hw_ver.major < 0x5)
-+	if (host->hw_ver.major < 0x5) {
-+		/*
-+		 * Power up the PHY using the minimum supported gear (UFS_HS_G2).
-+		 * Switching to max gear will be performed during reinit if supported.
-+		 */
- 		host->phy_gear = UFS_HS_G2;
+ 	iov_iter_bvec(&iter, is_write, bvec, sgl_nents, len);
+-	if (is_write)
++	if (is_write) {
++		file_start_write(fd);
+ 		ret = vfs_iter_write(fd, &iter, &pos, 0);
+-	else
++		file_end_write(fd);
 +	} else {
-+		val = ufshcd_readl(host->hba, REG_UFS_DEBUG_SPARE_CFG);
-+		dev_major = FIELD_GET(GENMASK(7, 4), val);
-+
-+		/* UFS device version populated, no need to do init twice */
-+		if (dev_major != 0)
-+			host->hba->quirks &= ~UFSHCD_QUIRK_REINIT_AFTER_MAX_GEAR_SWITCH;
-+
-+		/* For UFS 3.1 and older, apply HS-G4 PHY gear to save power */
-+		if (dev_major < 0x4 && dev_major > 0)
-+			host->phy_gear = UFS_HS_G4;
+ 		ret = vfs_iter_read(fd, &iter, &pos, 0);
+-
 +	}
- }
+ 	if (is_write) {
+ 		if (ret < 0 || ret != data_length) {
+ 			pr_err("%s() write returned %d\n", __func__, ret);
+@@ -467,7 +469,9 @@ fd_execute_write_same(struct se_cmd *cmd)
+ 	}
  
- static void ufs_qcom_set_host_params(struct ufs_hba *hba)
-diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
-index 11419eb..d12fc5a 100644
---- a/drivers/ufs/host/ufs-qcom.h
-+++ b/drivers/ufs/host/ufs-qcom.h
-@@ -54,6 +54,8 @@ enum {
- 	UFS_AH8_CFG				= 0xFC,
+ 	iov_iter_bvec(&iter, ITER_SOURCE, bvec, nolb, len);
++	file_start_write(fd_dev->fd_file);
+ 	ret = vfs_iter_write(fd_dev->fd_file, &iter, &pos, 0);
++	file_end_write(fd_dev->fd_file);
  
- 	REG_UFS_CFG3				= 0x271C,
-+
-+	REG_UFS_DEBUG_SPARE_CFG			= 0x284C,
- };
- 
- /* QCOM UFS host controller vendor specific debug registers */
+ 	kfree(bvec);
+ 	if (ret < 0 || ret != len) {
 -- 
-2.7.4
+2.34.1
 
 
