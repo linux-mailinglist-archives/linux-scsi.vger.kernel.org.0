@@ -1,70 +1,74 @@
-Return-Path: <linux-scsi+bounces-81-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-83-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 223DD7F5A3A
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Nov 2023 09:38:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46C617F5C77
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Nov 2023 11:37:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD55F2816E4
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Nov 2023 08:38:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AF141C20D3A
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Nov 2023 10:37:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87BE51CABA
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Nov 2023 08:38:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA6F6612D
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Nov 2023 10:37:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Px4L++YX"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DDJS0UyT"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146DFD60;
-	Thu, 23 Nov 2023 00:36:51 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AN2292I000973;
-	Thu, 23 Nov 2023 08:36:38 GMT
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A9619AA;
+	Thu, 23 Nov 2023 00:37:06 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AN5kAZ2010883;
+	Thu, 23 Nov 2023 08:36:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=WIQCdSgEj5TLVd/PGUl5OKiv3siOpwgcZTEMV961cRA=;
- b=Px4L++YXiQgVcmKb8m+e09U9hpEz+8/swjx39QAHfoeQ86JcNN6KxZsx6zNCy4FjXQcY
- rhq2CgFfKxCrLIg6SsYr2HK08hF58T/ajiTRNF/JLcri/xiNSQ87F8GOAje0l+9X33iC
- cgbfdiD+7qdKRkA70Qu4pRvUxh0eKTRwHfIRIORTRvozh2sXj1NErpFOwXokdwh3T8dm
- lt3SRlp7Za//iRGxAUIZrCk8ztwVPglLpD8/qz2h9yZbE4uKE0cRfVt8XBXTMNaJHtx5
- L//IfYiuIBGoBicv7E2LVhzCzVRGhwBgcZTPgcVDMpJpMHJqjODh4/ePtepT0c6Ds6xU TA== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uhey5atfc-1
+ bh=eGdUvC/zd6Q/5MxjneStcUeitt7DJD3M5D51wFgBbyI=;
+ b=DDJS0UyTtEos6CN0J44Lkoq8Hbty9b5+EB0s+HfxQrQpiIbd8ghHBa6R68y7O+ItXodZ
+ tVU3XgGXQuBvcfwWfU14A+S4shXIjuEaCcaAkCpw80eDBQl8BxMtr+axpFODKRPCczUX
+ 0JeUtYlDSVIy85SEelc9+uWLE91LgEtDsTW1rkR5LO7tb8oQ8ahIIRo8DwdNW6p8FqZ/
+ LzE2BoekyCPQJsx4hmQkSzB284VxYuEs2V3CGi2grTKE/woMFlhc1Roy1PtWa9YPddZC
+ zwNATj/uFCNu+RyJe0fuG2/rBSKn+IArsrXWuNuQQn4GoR4bXDAtTYm004RAlFAiqyP8 Zg== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uhf66au4j-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Nov 2023 08:36:38 +0000
-Received: from pps.filterd (NASANPPMTA05.qualcomm.com [127.0.0.1])
-	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3AN8WJTn002919;
-	Thu, 23 Nov 2023 08:36:37 GMT
+	Thu, 23 Nov 2023 08:36:31 +0000
+Received: from pps.filterd (NASANPPMTA04.qualcomm.com [127.0.0.1])
+	by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3AN8MnuU007761;
+	Thu, 23 Nov 2023 08:36:30 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by NASANPPMTA05.qualcomm.com (PPS) with ESMTP id 3uhcusvqnu-1;
-	Thu, 23 Nov 2023 08:36:37 +0000
-Received: from NASANPPMTA05.qualcomm.com (NASANPPMTA05.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AN8U8MQ000491;
-	Thu, 23 Nov 2023 08:36:36 GMT
+	by NASANPPMTA04.qualcomm.com (PPS) with ESMTP id 3uhpmqphdk-1;
+	Thu, 23 Nov 2023 08:36:30 +0000
+Received: from NASANPPMTA04.qualcomm.com (NASANPPMTA04.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AN8aUEk025472;
+	Thu, 23 Nov 2023 08:36:30 GMT
 Received: from stor-dylan.qualcomm.com (stor-dylan.qualcomm.com [192.168.140.207])
-	by NASANPPMTA05.qualcomm.com (PPS) with ESMTP id 3AN8aasq008256;
-	Thu, 23 Nov 2023 08:36:36 +0000
+	by NASANPPMTA04.qualcomm.com (PPS) with ESMTP id 3AN8aToF025465;
+	Thu, 23 Nov 2023 08:36:30 +0000
 Received: by stor-dylan.qualcomm.com (Postfix, from userid 359480)
-	id A0FC720A68; Thu, 23 Nov 2023 00:36:36 -0800 (PST)
+	id B5B0F20A68; Thu, 23 Nov 2023 00:36:29 -0800 (PST)
 From: Can Guo <quic_cang@quicinc.com>
 To: quic_cang@quicinc.com, bvanassche@acm.org, mani@kernel.org,
         adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
         junwoo80.lee@samsung.com, martin.petersen@oracle.com
-Cc: linux-scsi@vger.kernel.org, Andy Gross <agross@kernel.org>,
+Cc: linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Stanley Chu <stanley.chu@mediatek.com>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
-        linux-phy@lists.infradead.org (open list:GENERIC PHY FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v4 08/10] phy: qualcomm: phy-qcom-qmp-ufs: Rectify SM8550 UFS HS-G4 PHY Settings
-Date: Thu, 23 Nov 2023 00:36:14 -0800
-Message-Id: <1700728577-14729-9-git-send-email-quic_cang@quicinc.com>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES),
+        linux-samsung-soc@vger.kernel.org (open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES),
+        linux-kernel@vger.kernel.org (open list),
+        linux-mediatek@lists.infradead.org (moderated list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER...),
+        linux-arm-msm@vger.kernel.org (open list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER...)
+Subject: [PATCH v4 01/10] scsi: ufs: host: Rename structure ufs_dev_params to ufs_host_params
+Date: Thu, 23 Nov 2023 00:36:07 -0800
+Message-Id: <1700728577-14729-2-git-send-email-quic_cang@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1700728577-14729-1-git-send-email-quic_cang@quicinc.com>
 References: <1700728577-14729-1-git-send-email-quic_cang@quicinc.com>
@@ -72,115 +76,341 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 0LqwKBwbzQFODcluslVGHDsl3CEpatL9
-X-Proofpoint-GUID: 0LqwKBwbzQFODcluslVGHDsl3CEpatL9
+X-Proofpoint-ORIG-GUID: bIUIvCR7xDdp71-vNV0kJBC0QM-KWOdZ
+X-Proofpoint-GUID: bIUIvCR7xDdp71-vNV0kJBC0QM-KWOdZ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-23_06,2023-11-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=857
- lowpriorityscore=0 spamscore=0 impostorscore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 clxscore=1015 phishscore=0
- bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311230060
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ clxscore=1015 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
+ priorityscore=1501 malwarescore=0 spamscore=0 suspectscore=0
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311060000 definitions=main-2311230060
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 
-The registers, which are being touched in current SM8550 UFS PHY settings,
-and the values being programmed are mainly the ones working for HS-G4 mode,
-meanwhile, there are also a few ones somehow taken from HS-G5 PHY settings.
-However, even consider HS-G4 mode only, some of them are incorrect and some
-are missing. Rectify the HS-G4 PHY settings by strictly aligning with the
-SM8550 UFS PHY Hardware Programming Guide suggested HS-G4 PHY settings.
+Structure ufs_dev_params is actually used in UFS host vendor drivers to
+declare host specific power mode parameters, like ufs_<vendor>_params or
+host_cap, which makes the code not very straightforward to read. Rename the
+structure ufs_dev_params to ufs_host_params and unify the declarations in
+all vendor drivers to host_params.
 
-Fixes: 1679bfef906f ("phy: qcom-qmp-ufs: Add SM8550 support")
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+In addition, rename the two functions ufshcd_init_pwr_dev_param() and
+ufshcd_get_pwr_dev_param() which work based on the ufs_host_params to
+ufshcd_init_host_param() and ufshcd_negotiate_pwr_param() respectively to
+avoid confusions.
+
+This change does not change any functionalities or logic.
+
+Acked-by: Andrew Halaney <ahalaney@redhat.com>
 Signed-off-by: Can Guo <quic_cang@quicinc.com>
 ---
- .../qualcomm/phy-qcom-qmp-qserdes-txrx-ufs-v6.h    |  3 +++
- drivers/phy/qualcomm/phy-qcom-qmp-ufs.c            | 28 +++++++++++++++-------
- 2 files changed, 22 insertions(+), 9 deletions(-)
+ drivers/ufs/host/ufs-exynos.c    |  7 ++--
+ drivers/ufs/host/ufs-hisi.c      | 11 +++----
+ drivers/ufs/host/ufs-mediatek.c  | 12 +++----
+ drivers/ufs/host/ufs-qcom.c      | 12 +++----
+ drivers/ufs/host/ufshcd-pltfrm.c | 69 ++++++++++++++++++++--------------------
+ drivers/ufs/host/ufshcd-pltfrm.h | 10 +++---
+ 6 files changed, 57 insertions(+), 64 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-ufs-v6.h b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-ufs-v6.h
-index 15bcb4b..674f158 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-ufs-v6.h
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-ufs-v6.h
-@@ -10,9 +10,12 @@
- #define QSERDES_UFS_V6_TX_RES_CODE_LANE_RX			0x2c
- #define QSERDES_UFS_V6_TX_RES_CODE_LANE_OFFSET_TX		0x30
- #define QSERDES_UFS_V6_TX_RES_CODE_LANE_OFFSET_RX		0x34
-+#define QSERDES_UFS_V6_TX_LANE_MODE_1				0x7c
-+#define QSERDES_UFS_V6_TX_FR_DCC_CTRL				0x108
+diff --git a/drivers/ufs/host/ufs-exynos.c b/drivers/ufs/host/ufs-exynos.c
+index 71bd6db..674f2f4 100644
+--- a/drivers/ufs/host/ufs-exynos.c
++++ b/drivers/ufs/host/ufs-exynos.c
+@@ -765,7 +765,7 @@ static int exynos_ufs_pre_pwr_mode(struct ufs_hba *hba,
+ {
+ 	struct exynos_ufs *ufs = ufshcd_get_variant(hba);
+ 	struct phy *generic_phy = ufs->phy;
+-	struct ufs_dev_params ufs_exynos_cap;
++	struct ufs_host_params host_params;
+ 	int ret;
  
- #define QSERDES_UFS_V6_RX_UCDR_FASTLOCK_FO_GAIN_RATE2		0x08
- #define QSERDES_UFS_V6_RX_UCDR_FASTLOCK_FO_GAIN_RATE4		0x10
-+#define QSERDES_UFS_V6_RX_UCDR_FO_GAIN_RATE2			0xd4
- #define QSERDES_UFS_V6_RX_VGA_CAL_MAN_VAL			0x178
- #define QSERDES_UFS_V6_RX_MODE_RATE_0_1_B0			0x208
- #define QSERDES_UFS_V6_RX_MODE_RATE_0_1_B1			0x20c
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-index 3927eba..ad91f92 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-@@ -658,22 +658,26 @@ static const struct qmp_phy_init_tbl sm8550_ufsphy_serdes[] = {
- 	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_CCTRL_MODE0, 0x14),
- 	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP1_MODE0, 0x7f),
- 	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP2_MODE0, 0x06),
--	QMP_PHY_INIT_CFG(QSERDES_V6_COM_DEC_START_MODE0, 0x4c),
--	QMP_PHY_INIT_CFG(QSERDES_V6_COM_CP_CTRL_MODE0, 0x0a),
--	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_RCTRL_MODE0, 0x18),
--	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_CCTRL_MODE0, 0x14),
--	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP1_MODE0, 0x99),
--	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP2_MODE0, 0x07),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_DEC_START_MODE1, 0x4c),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_CP_CTRL_MODE1, 0x0a),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_RCTRL_MODE1, 0x18),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_CCTRL_MODE1, 0x14),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP1_MODE1, 0x99),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP2_MODE1, 0x07),
-+};
-+
-+static const struct qmp_phy_init_tbl sm8550_ufsphy_hs_b_serdes[] = {
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_VCO_TUNE_MAP, 0x44),
+ 	if (!dev_req_params) {
+@@ -774,10 +774,9 @@ static int exynos_ufs_pre_pwr_mode(struct ufs_hba *hba,
+ 		goto out;
+ 	}
+ 
+-	ufshcd_init_pwr_dev_param(&ufs_exynos_cap);
++	ufshcd_init_host_param(&host_params);
+ 
+-	ret = ufshcd_get_pwr_dev_param(&ufs_exynos_cap,
+-				       dev_max_params, dev_req_params);
++	ret = ufshcd_negotiate_pwr_param(&host_params, dev_max_params, dev_req_params);
+ 	if (ret) {
+ 		pr_err("%s: failed to determine capabilities\n", __func__);
+ 		goto out;
+diff --git a/drivers/ufs/host/ufs-hisi.c b/drivers/ufs/host/ufs-hisi.c
+index 0229ac0..bb0c9a7 100644
+--- a/drivers/ufs/host/ufs-hisi.c
++++ b/drivers/ufs/host/ufs-hisi.c
+@@ -293,9 +293,9 @@ static int ufs_hisi_link_startup_notify(struct ufs_hba *hba,
+ 	return err;
+ }
+ 
+-static void ufs_hisi_set_dev_cap(struct ufs_dev_params *hisi_param)
++static void ufs_hisi_set_dev_cap(struct ufs_host_params *host_params)
+ {
+-	ufshcd_init_pwr_dev_param(hisi_param);
++	ufshcd_init_host_param(host_params);
+ }
+ 
+ static void ufs_hisi_pwr_change_pre_change(struct ufs_hba *hba)
+@@ -365,7 +365,7 @@ static int ufs_hisi_pwr_change_notify(struct ufs_hba *hba,
+ 				       struct ufs_pa_layer_attr *dev_max_params,
+ 				       struct ufs_pa_layer_attr *dev_req_params)
+ {
+-	struct ufs_dev_params ufs_hisi_cap;
++	struct ufs_host_params host_params;
+ 	int ret = 0;
+ 
+ 	if (!dev_req_params) {
+@@ -377,9 +377,8 @@ static int ufs_hisi_pwr_change_notify(struct ufs_hba *hba,
+ 
+ 	switch (status) {
+ 	case PRE_CHANGE:
+-		ufs_hisi_set_dev_cap(&ufs_hisi_cap);
+-		ret = ufshcd_get_pwr_dev_param(&ufs_hisi_cap,
+-					       dev_max_params, dev_req_params);
++		ufs_hisi_set_dev_cap(&host_params);
++		ret = ufshcd_negotiate_pwr_param(&host_params, dev_max_params, dev_req_params);
+ 		if (ret) {
+ 			dev_err(hba->dev,
+ 			    "%s: failed to determine capabilities\n", __func__);
+diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
+index fc61790..016067d 100644
+--- a/drivers/ufs/host/ufs-mediatek.c
++++ b/drivers/ufs/host/ufs-mediatek.c
+@@ -996,16 +996,14 @@ static int ufs_mtk_pre_pwr_change(struct ufs_hba *hba,
+ 				  struct ufs_pa_layer_attr *dev_req_params)
+ {
+ 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
+-	struct ufs_dev_params host_cap;
++	struct ufs_host_params host_params;
+ 	int ret;
+ 
+-	ufshcd_init_pwr_dev_param(&host_cap);
+-	host_cap.hs_rx_gear = UFS_HS_G5;
+-	host_cap.hs_tx_gear = UFS_HS_G5;
++	ufshcd_init_host_param(&host_params);
++	host_params.hs_rx_gear = UFS_HS_G5;
++	host_params.hs_tx_gear = UFS_HS_G5;
+ 
+-	ret = ufshcd_get_pwr_dev_param(&host_cap,
+-				       dev_max_params,
+-				       dev_req_params);
++	ret = ufshcd_negotiate_pwr_param(&host_params, dev_max_params, dev_req_params);
+ 	if (ret) {
+ 		pr_info("%s: failed to determine capabilities\n",
+ 			__func__);
+diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+index 96cb8b5..aee66a3 100644
+--- a/drivers/ufs/host/ufs-qcom.c
++++ b/drivers/ufs/host/ufs-qcom.c
+@@ -898,7 +898,7 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
+ 				struct ufs_pa_layer_attr *dev_req_params)
+ {
+ 	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
+-	struct ufs_dev_params ufs_qcom_cap;
++	struct ufs_host_params host_params;
+ 	int ret = 0;
+ 
+ 	if (!dev_req_params) {
+@@ -908,15 +908,13 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
+ 
+ 	switch (status) {
+ 	case PRE_CHANGE:
+-		ufshcd_init_pwr_dev_param(&ufs_qcom_cap);
+-		ufs_qcom_cap.hs_rate = UFS_QCOM_LIMIT_HS_RATE;
++		ufshcd_init_host_param(&host_params);
++		host_params.hs_rate = UFS_QCOM_LIMIT_HS_RATE;
+ 
+ 		/* This driver only supports symmetic gear setting i.e., hs_tx_gear == hs_rx_gear */
+-		ufs_qcom_cap.hs_tx_gear = ufs_qcom_cap.hs_rx_gear = ufs_qcom_get_hs_gear(hba);
++		host_params.hs_tx_gear = host_params.hs_rx_gear = ufs_qcom_get_hs_gear(hba);
+ 
+-		ret = ufshcd_get_pwr_dev_param(&ufs_qcom_cap,
+-					       dev_max_params,
+-					       dev_req_params);
++		ret = ufshcd_negotiate_pwr_param(&host_params, dev_max_params, dev_req_params);
+ 		if (ret) {
+ 			dev_err(hba->dev, "%s: failed to determine capabilities\n",
+ 					__func__);
+diff --git a/drivers/ufs/host/ufshcd-pltfrm.c b/drivers/ufs/host/ufshcd-pltfrm.c
+index da2558e..9ec11b9 100644
+--- a/drivers/ufs/host/ufshcd-pltfrm.c
++++ b/drivers/ufs/host/ufshcd-pltfrm.c
+@@ -285,61 +285,60 @@ static int ufshcd_parse_operating_points(struct ufs_hba *hba)
+ }
+ 
+ /**
+- * ufshcd_get_pwr_dev_param - get finally agreed attributes for
+- *                            power mode change
+- * @pltfrm_param: pointer to platform parameters
++ * ufshcd_negotiate_pwr_param - find power mode settings that are supported by
++				both the controller and the device
++ * @host_param: pointer to host parameters
+  * @dev_max: pointer to device attributes
+  * @agreed_pwr: returned agreed attributes
+  *
+  * Return: 0 on success, non-zero value on failure.
+  */
+-int ufshcd_get_pwr_dev_param(const struct ufs_dev_params *pltfrm_param,
+-			     const struct ufs_pa_layer_attr *dev_max,
+-			     struct ufs_pa_layer_attr *agreed_pwr)
++int ufshcd_negotiate_pwr_param(const struct ufs_host_params *host_param,
++			       const struct ufs_pa_layer_attr *dev_max,
++			       struct ufs_pa_layer_attr *agreed_pwr)
+ {
+-	int min_pltfrm_gear;
++	int min_host_gear;
+ 	int min_dev_gear;
+ 	bool is_dev_sup_hs = false;
+-	bool is_pltfrm_max_hs = false;
++	bool is_host_max_hs = false;
+ 
+ 	if (dev_max->pwr_rx == FAST_MODE)
+ 		is_dev_sup_hs = true;
+ 
+-	if (pltfrm_param->desired_working_mode == UFS_HS_MODE) {
+-		is_pltfrm_max_hs = true;
+-		min_pltfrm_gear = min_t(u32, pltfrm_param->hs_rx_gear,
+-					pltfrm_param->hs_tx_gear);
++	if (host_param->desired_working_mode == UFS_HS_MODE) {
++		is_host_max_hs = true;
++		min_host_gear = min_t(u32, host_param->hs_rx_gear,
++					host_param->hs_tx_gear);
+ 	} else {
+-		min_pltfrm_gear = min_t(u32, pltfrm_param->pwm_rx_gear,
+-					pltfrm_param->pwm_tx_gear);
++		min_host_gear = min_t(u32, host_param->pwm_rx_gear,
++					host_param->pwm_tx_gear);
+ 	}
+ 
+ 	/*
+-	 * device doesn't support HS but
+-	 * pltfrm_param->desired_working_mode is HS,
+-	 * thus device and pltfrm_param don't agree
++	 * device doesn't support HS but host_param->desired_working_mode is HS,
++	 * thus device and host_param don't agree
+ 	 */
+-	if (!is_dev_sup_hs && is_pltfrm_max_hs) {
++	if (!is_dev_sup_hs && is_host_max_hs) {
+ 		pr_info("%s: device doesn't support HS\n",
+ 			__func__);
+ 		return -ENOTSUPP;
+-	} else if (is_dev_sup_hs && is_pltfrm_max_hs) {
++	} else if (is_dev_sup_hs && is_host_max_hs) {
+ 		/*
+ 		 * since device supports HS, it supports FAST_MODE.
+-		 * since pltfrm_param->desired_working_mode is also HS
++		 * since host_param->desired_working_mode is also HS
+ 		 * then final decision (FAST/FASTAUTO) is done according
+ 		 * to pltfrm_params as it is the restricting factor
+ 		 */
+-		agreed_pwr->pwr_rx = pltfrm_param->rx_pwr_hs;
++		agreed_pwr->pwr_rx = host_param->rx_pwr_hs;
+ 		agreed_pwr->pwr_tx = agreed_pwr->pwr_rx;
+ 	} else {
+ 		/*
+-		 * here pltfrm_param->desired_working_mode is PWM.
++		 * here host_param->desired_working_mode is PWM.
+ 		 * it doesn't matter whether device supports HS or PWM,
+-		 * in both cases pltfrm_param->desired_working_mode will
++		 * in both cases host_param->desired_working_mode will
+ 		 * determine the mode
+ 		 */
+-		agreed_pwr->pwr_rx = pltfrm_param->rx_pwr_pwm;
++		agreed_pwr->pwr_rx = host_param->rx_pwr_pwm;
+ 		agreed_pwr->pwr_tx = agreed_pwr->pwr_rx;
+ 	}
+ 
+@@ -349,9 +348,9 @@ int ufshcd_get_pwr_dev_param(const struct ufs_dev_params *pltfrm_param,
+ 	 * the same decision will be made for rx
+ 	 */
+ 	agreed_pwr->lane_tx = min_t(u32, dev_max->lane_tx,
+-				    pltfrm_param->tx_lanes);
++				    host_param->tx_lanes);
+ 	agreed_pwr->lane_rx = min_t(u32, dev_max->lane_rx,
+-				    pltfrm_param->rx_lanes);
++				    host_param->rx_lanes);
+ 
+ 	/* device maximum gear is the minimum between device rx and tx gears */
+ 	min_dev_gear = min_t(u32, dev_max->gear_rx, dev_max->gear_tx);
+@@ -364,26 +363,26 @@ int ufshcd_get_pwr_dev_param(const struct ufs_dev_params *pltfrm_param,
+ 	 * what is the gear, as it is the one that also decided previously what
+ 	 * pwr the device will be configured to.
+ 	 */
+-	if ((is_dev_sup_hs && is_pltfrm_max_hs) ||
+-	    (!is_dev_sup_hs && !is_pltfrm_max_hs)) {
++	if ((is_dev_sup_hs && is_host_max_hs) ||
++	    (!is_dev_sup_hs && !is_host_max_hs)) {
+ 		agreed_pwr->gear_rx =
+-			min_t(u32, min_dev_gear, min_pltfrm_gear);
++			min_t(u32, min_dev_gear, min_host_gear);
+ 	} else if (!is_dev_sup_hs) {
+ 		agreed_pwr->gear_rx = min_dev_gear;
+ 	} else {
+-		agreed_pwr->gear_rx = min_pltfrm_gear;
++		agreed_pwr->gear_rx = min_host_gear;
+ 	}
+ 	agreed_pwr->gear_tx = agreed_pwr->gear_rx;
+ 
+-	agreed_pwr->hs_rate = pltfrm_param->hs_rate;
++	agreed_pwr->hs_rate = host_param->hs_rate;
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(ufshcd_get_pwr_dev_param);
++EXPORT_SYMBOL_GPL(ufshcd_negotiate_pwr_param);
+ 
+-void ufshcd_init_pwr_dev_param(struct ufs_dev_params *dev_param)
++void ufshcd_init_host_param(struct ufs_host_params *host_param)
+ {
+-	*dev_param = (struct ufs_dev_params){
++	*host_param = (struct ufs_host_params){
+ 		.tx_lanes = UFS_LANE_2,
+ 		.rx_lanes = UFS_LANE_2,
+ 		.hs_rx_gear = UFS_HS_G3,
+@@ -398,7 +397,7 @@ void ufshcd_init_pwr_dev_param(struct ufs_dev_params *dev_param)
+ 		.desired_working_mode = UFS_HS_MODE,
+ 	};
+ }
+-EXPORT_SYMBOL_GPL(ufshcd_init_pwr_dev_param);
++EXPORT_SYMBOL_GPL(ufshcd_init_host_param);
+ 
+ /**
+  * ufshcd_pltfrm_init - probe routine of the driver
+diff --git a/drivers/ufs/host/ufshcd-pltfrm.h b/drivers/ufs/host/ufshcd-pltfrm.h
+index a86a3ad..2d4d047 100644
+--- a/drivers/ufs/host/ufshcd-pltfrm.h
++++ b/drivers/ufs/host/ufshcd-pltfrm.h
+@@ -10,7 +10,7 @@
+ #define UFS_PWM_MODE 1
+ #define UFS_HS_MODE  2
+ 
+-struct ufs_dev_params {
++struct ufs_host_params {
+ 	u32 pwm_rx_gear;        /* pwm rx gear to work in */
+ 	u32 pwm_tx_gear;        /* pwm tx gear to work in */
+ 	u32 hs_rx_gear;         /* hs rx gear to work in */
+@@ -25,10 +25,10 @@ struct ufs_dev_params {
+ 	u32 desired_working_mode;
  };
  
- static const struct qmp_phy_init_tbl sm8550_ufsphy_tx[] = {
--	QMP_PHY_INIT_CFG(QSERDES_V6_TX_LANE_MODE_1, 0x05),
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_TX_LANE_MODE_1, 0x05),
- 	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_TX_RES_CODE_LANE_OFFSET_TX, 0x07),
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_TX_FR_DCC_CTRL, 0x4c),
- };
- 
- static const struct qmp_phy_init_tbl sm8550_ufsphy_rx[] = {
--	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_UCDR_FASTLOCK_FO_GAIN_RATE2, 0x0c),
--	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_UCDR_FASTLOCK_FO_GAIN_RATE4, 0x0f),
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_UCDR_FO_GAIN_RATE2, 0x0c),
- 	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_VGA_CAL_MAN_VAL, 0x0e),
- 
- 	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE_0_1_B0, 0xc2),
-@@ -696,6 +700,8 @@ static const struct qmp_phy_init_tbl sm8550_ufsphy_pcs[] = {
- 	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_TX_MID_TERM_CTRL1, 0x43),
- 	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_PLL_CNTL, 0x2b),
- 	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_MULTI_LANE_CTRL1, 0x02),
-+	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_TX_HSGEAR_CAPABILITY, 0x04),
-+	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_RX_HSGEAR_CAPABILITY, 0x04),
- };
- 
- struct qmp_ufs_offsets {
-@@ -1157,6 +1163,10 @@ static const struct qmp_phy_cfg sm8550_ufsphy_cfg = {
- 		.pcs		= sm8550_ufsphy_pcs,
- 		.pcs_num	= ARRAY_SIZE(sm8550_ufsphy_pcs),
- 	},
-+	.tbls_hs_b = {
-+		.serdes		= sm8550_ufsphy_hs_b_serdes,
-+		.serdes_num	= ARRAY_SIZE(sm8550_ufsphy_hs_b_serdes),
-+	},
- 	.clk_list		= sdm845_ufs_phy_clk_l,
- 	.num_clks		= ARRAY_SIZE(sdm845_ufs_phy_clk_l),
- 	.vreg_list		= qmp_phy_vreg_l,
+-int ufshcd_get_pwr_dev_param(const struct ufs_dev_params *dev_param,
+-			     const struct ufs_pa_layer_attr *dev_max,
+-			     struct ufs_pa_layer_attr *agreed_pwr);
+-void ufshcd_init_pwr_dev_param(struct ufs_dev_params *dev_param);
++int ufshcd_negotiate_pwr_param(const struct ufs_host_params *host_param,
++			       const struct ufs_pa_layer_attr *dev_max,
++			       struct ufs_pa_layer_attr *agreed_pwr);
++void ufshcd_init_host_param(struct ufs_host_params *host_param);
+ int ufshcd_pltfrm_init(struct platform_device *pdev,
+ 		       const struct ufs_hba_variant_ops *vops);
+ int ufshcd_populate_vreg(struct device *dev, const char *name,
 -- 
 2.7.4
 
