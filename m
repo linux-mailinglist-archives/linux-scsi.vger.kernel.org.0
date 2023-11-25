@@ -1,62 +1,66 @@
-Return-Path: <linux-scsi+bounces-149-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-154-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B9AC7F884E
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 05:32:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 813F47F8853
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 05:33:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADF891C20B42
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 04:32:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B48D280F6C
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 04:33:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BF6D7476
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 04:32:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9BD18F56
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 04:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="CX3chmqV"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="F4Zp5Mbm"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EADA19A2
-	for <linux-scsi@vger.kernel.org>; Fri, 24 Nov 2023 18:54:34 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AP1hlK0018673;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F9E1FF6;
+	Fri, 24 Nov 2023 18:54:49 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AP1b0EV028524;
 	Sat, 25 Nov 2023 02:54:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=py5/2BHN36mvtvppFh6lkNFHerOtQgcPIb7sWY4yLAs=;
- b=CX3chmqVH3qqvIt8F1p/siA6jDDfORWzf5dbtOY5gto8TDwPc5WjOpYzLQqjogV/Qlf4
- 4yO/RQQwaFOSaWi7ygDIeed5dOvyayBtBv51AUS+SB84cDGFfuRNmgTcnFy3Fx4beuys
- 1sZcLcojL9kvMoTQYv5QfIyiGuMMYqyCXjEoaN3dqzKemEJnxjsKw0TOfYpijbDHa9HB
- SerOH3cCq7vBLIuQt2v8+4lGNa86RxnLDlPICFX5l2WZVyKrLY12Mh7KtIFWUXzI6v88
- qPY+HTuQv/J9M3QjttApRE22TCUfvwyTu4V/yDwHbc64jr4HOUDThwyZx8k1ee8TYsJz Qw== 
+ bh=t2XmwvFjukFwuTz/SUSXk2rks2dH+lU6ckR4eeevBEM=;
+ b=F4Zp5Mbmz1spMonx1UsuxNkjC5caMxpgppgjzG7Sf91Ghr0hyrLjXU71ShgK4lTxi/LS
+ LWiOxy0n7utxzT//2SjH7K8gPOpEW3dentnw1NOkLh8dB02H4GEmabU63WTgLNNdUh9j
+ caoEnkkEbkNXDFfS7DtewrctcypNapffgLet1+WEqMJXQXIMRprXUKkzQz5npGYKRpN7
+ T6+fCHg/Ktlzihzo6svcJctAa0IIM7/ajVvZzB72zdyOb+LdmAtItYi1k60LTXatYZyJ
+ piJDfWof7afdTOhQwGyPdpNXUvwBWTnsqhAudiUIfsTKsWtMjyL2pxmEP2LA4A4uby57 Fg== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3uk7h2g1dv-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3uen5bkxgv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 25 Nov 2023 02:54:31 +0000
+	Sat, 25 Nov 2023 02:54:32 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3AP1Xmu3026961;
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3AP1Xo5k027021;
 	Sat, 25 Nov 2023 02:54:30 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3uk7c99f6e-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3uk7c99f6n-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Sat, 25 Nov 2023 02:54:30 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AP2sRT1011828;
-	Sat, 25 Nov 2023 02:54:29 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AP2sRT3011828;
+	Sat, 25 Nov 2023 02:54:30 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3uk7c99f5h-7;
-	Sat, 25 Nov 2023 02:54:29 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3uk7c99f5h-8;
+	Sat, 25 Nov 2023 02:54:30 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, Justin Tee <justintee8345@gmail.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, jsmart2021@gmail.com,
-        justin.tee@broadcom.com
-Subject: Re: [PATCH 0/9] lpfc: Update lpfc to revision 14.2.0.16
-Date: Fri, 24 Nov 2023 21:54:19 -0500
-Message-ID: <170087016629.1036733.10669027755360058266.b4-ty@oracle.com>
+To: bvanassche@acm.org, mani@kernel.org, stanley.chu@mediatek.com,
+        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
+        junwoo80.lee@samsung.com, Can Guo <quic_cang@quicinc.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Lu Hongfei <luhongfei@vivo.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] scsi: ufs: ufs-sysfs: Expose UFS power info
+Date: Fri, 24 Nov 2023 21:54:20 -0500
+Message-ID: <170087016633.1036733.5693164654454165304.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231031191224.150862-1-justintee8345@gmail.com>
-References: <20231031191224.150862-1-justintee8345@gmail.com>
+In-Reply-To: <1698890324-7374-1-git-send-email-quic_cang@quicinc.com>
+References: <1698890324-7374-1-git-send-email-quic_cang@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -69,43 +73,24 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-25_01,2023-11-22_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
- suspectscore=0 spamscore=0 mlxlogscore=906 mlxscore=0 phishscore=0
+ suspectscore=0 spamscore=0 mlxlogscore=675 mlxscore=0 phishscore=0
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2311060000 definitions=main-2311250020
-X-Proofpoint-GUID: d1SVnupugrlT5qiY1BC3mZpfdXMHnuU-
-X-Proofpoint-ORIG-GUID: d1SVnupugrlT5qiY1BC3mZpfdXMHnuU-
+X-Proofpoint-GUID: Ldr8gfnmatpIUNHuunYSXil8Ml5AwVDc
+X-Proofpoint-ORIG-GUID: Ldr8gfnmatpIUNHuunYSXil8Ml5AwVDc
 
-On Tue, 31 Oct 2023 12:12:15 -0700, Justin Tee wrote:
+On Wed, 01 Nov 2023 18:58:36 -0700, Can Guo wrote:
 
-> Update lpfc to revision 14.2.0.16
+> Having UFS power info available in sysfs makes it easier to tell the state
+> of the link during runtime considering we have a bunch of power saving
+> features and various combinations for backward compatibility.
 > 
-> This patch set contains a user input range check correction, static code
-> analyzer fixes, refactoring of clean up code, and logging enhancements.
 > 
-> The patches were cut against Martin's 6.7/scsi-queue tree.
-> 
-> [...]
 
 Applied to 6.8/scsi-queue, thanks!
 
-[1/9] lpfc: Correct maximum PCI function value for RAS fw logging
-      https://git.kernel.org/mkp/scsi/c/2fe4b6a67730
-[2/9] lpfc: Fix possible file string name overflow when updating firmware
-      https://git.kernel.org/mkp/scsi/c/f5779b529240
-[3/9] lpfc: Fix list_entry null check warning in lpfc_cmpl_els_plogi
-      https://git.kernel.org/mkp/scsi/c/1dec1311b9b6
-[4/9] lpfc: Eliminate unnecessary relocking in lpfc_check_nlp_post_devloss
-      https://git.kernel.org/mkp/scsi/c/e07ac2d2aa5f
-[5/9] lpfc: Return early in lpfc_poll_eratt when the driver is unloading
-      https://git.kernel.org/mkp/scsi/c/57ea41eb7fe6
-[6/9] lpfc: Refactor and clean up mailbox command memory free
-      https://git.kernel.org/mkp/scsi/c/349b1e2c1bda
-[7/9] lpfc: Enhance driver logging for selected discovery events
-      https://git.kernel.org/mkp/scsi/c/e6af45218755
-[8/9] lpfc: Update lpfc version to 14.2.0.16
-      https://git.kernel.org/mkp/scsi/c/c855e02b57ed
-[9/9] lpfc: Copyright updates for 14.2.0.16 patches
-      https://git.kernel.org/mkp/scsi/c/1f86b0d9c76c
+[1/1] scsi: ufs: ufs-sysfs: Expose UFS power info
+      https://git.kernel.org/mkp/scsi/c/4f6dd2a4bf37
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
