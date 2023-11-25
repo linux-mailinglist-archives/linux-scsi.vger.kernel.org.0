@@ -1,97 +1,104 @@
-Return-Path: <linux-scsi+bounces-150-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-155-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C158A7F884F
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 05:32:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09F647F894E
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 09:35:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50358B20B44
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 04:32:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C0CA1C20AEF
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 08:35:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4D4C63B9
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 04:32:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="YDRQYaYm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BF74BA28
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 08:35:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6DE19A6
-	for <linux-scsi@vger.kernel.org>; Fri, 24 Nov 2023 18:54:35 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AP1Zn04015880;
-	Sat, 25 Nov 2023 02:54:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=h9f3o5jrgKLLjPQdmghts344TU4HJfntHIfBtXgpOec=;
- b=YDRQYaYmr6RiN8crGt17APIWz6tvHOmBHt3IxGrlJ8C7bsY3aKkDEerPezGgPo5JsMoY
- f9fxjEO74GWUDDPS74extJyj2guxho1W9aEX2T34mtsSdcv3FpOE3S/lSSKkEOu/qwON
- 1ybGu69vIhyOWpajoCPQvanfpKx8WVIEKNTZQRl7tqZLABxkYro5r6GlQBI7mjNWJ8xA
- Ob6sQn/VBc0T5AqHg++KLmOqXIRxcahS7Z3Pv2VfIAaLE3J5d7TMaHHA55r77/XBZ+cJ
- SQ06JKGGFCzsXHcRYrhZYeYOvYNSvJc0k6508oGQLLrEpOy4DplunKUIgYCd9aMWHPqj EQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3uentvm17d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 25 Nov 2023 02:54:32 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3AP1Xm0e026991;
-	Sat, 25 Nov 2023 02:54:31 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3uk7c99f6q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 25 Nov 2023 02:54:31 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AP2sRT5011828;
-	Sat, 25 Nov 2023 02:54:30 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3uk7c99f5h-9;
-	Sat, 25 Nov 2023 02:54:30 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, Tomas Henzl <thenzl@redhat.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        sreekanth.reddy@broadcom.com, ranjan.kumar@broadcom.com,
-        sathya.prakash@broadcom.com
-Subject: Re: [PATCH v2] mpt3sas: suppress a warning in debug kernel
-Date: Fri, 24 Nov 2023 21:54:21 -0500
-Message-ID: <170087016635.1036733.5703735671985019205.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231019153706.7967-1-thenzl@redhat.com>
-References: <20231019153706.7967-1-thenzl@redhat.com>
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03111D60;
+	Fri, 24 Nov 2023 23:10:40 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1r6moG-000216-3U; Sat, 25 Nov 2023 08:10:36 +0100
+Message-ID: <34c5b291-b69e-4592-bc9f-fc1b2ef5c5d7@leemhuis.info>
+Date: Sat, 25 Nov 2023 08:10:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-25_01,2023-11-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
- suspectscore=0 spamscore=0 mlxlogscore=884 mlxscore=0 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311250020
-X-Proofpoint-ORIG-GUID: heUScldVCmlzcxQjxbVmJ0XeV7mPQqQb
-X-Proofpoint-GUID: heUScldVCmlzcxQjxbVmJ0XeV7mPQqQb
+User-Agent: Mozilla Thunderbird
+Subject: Re: scsi regression that after months is still not addressed and now
+ bothering 6.1.y users, too
+Content-Language: en-US, de-DE
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Sagar Biradar <sagar.biradar@microchip.com>,
+ James Bottomley <James.Bottomley@hansenpartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>,
+ Sasha Levin <sashal@kernel.org>,
+ Linux kernel regressions list <regressions@lists.linux.dev>,
+ Hannes Reinecke <hare@suse.de>, scsi <linux-scsi@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, Gilbert Wu <gilbert.wu@microchip.com>,
+ John Garry <john.g.garry@oracle.com>
+References: <c6ff53dc-a001-48ee-8559-b69be8e4db81@leemhuis.info>
+ <2023112456-disinfect-undoing-b5ef@gregkh>
+From: Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <2023112456-disinfect-undoing-b5ef@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1700896240;f15d9d50;
+X-HE-SMSGID: 1r6moG-000216-3U
 
-On Thu, 19 Oct 2023 17:37:06 +0200, Tomas Henzl wrote:
+On 24.11.23 17:25, Greg KH wrote:
+> On Tue, Nov 21, 2023 at 10:50:57AM +0100, Thorsten Leemhuis wrote:
+>> * @SCSI maintainers: could you please look into below please?
+>>
+>> * @Stable team: you might want to take a look as well and consider a
+>> revert in 6.1.y (yes, I know, those are normally avoided, but here it
+>> might make sense).
+>>
+>> Hi everyone!
+>>
+>> TLDR: I noticed a regression (Adaptec 71605z with aacraid sometimes
+>> hangs for a while) that was reported months ago already but is still not
+>> fixed. Not only that, it apparently more and more users run into this
+>> recently, as the culprit was recently integrated into 6.1.y; I wonder if
+>> it would be best to revert it there, unless a fix for mainline comes
+>> into reach soon.
+>>
+>> Details:
+>>
+>> Quite a few machines with Adaptec controllers seems to hang for a few
+>> tens of seconds to a few minutes before things start to work normally
+>> again for a while:
+>> https://bugzilla.kernel.org/show_bug.cgi?id=217599
+>>
+>> That problem is apparently caused by 9dc704dcc09eae ("scsi: aacraid:
+>> Reply queue mapping to CPUs based on IRQ affinity") [v6.4-rc7]. That
+>> commit despite a warning of mine to Sasha recently made it into 6.1.53
+>> -- and that way apparently recently reached more users recently, as
+>> quite a few joined that ticket.
+>[...]
+> I am loath to revert a stable patch that has been there for so long as
+> any upgrade will just cause the same bug to show back up. Why can't we
+> just revert it in Linus's tree now and I'll take that revert in the
+> stable trees as well?
 
-> The mpt3sas_ctl_exit should be called after communication
-> with the controller stops but in currently  it may cause
-> false warnings about not released memory.
-> Fix it by leaving mpt3sas_ctl_exit handle misc driver release
-> per driver and release DMA in mpt3sas_ctl_release per ioc.
-> 
-> 
-> [...]
+FWIW, I know and in general agree with that strategy, that's why I
+normally wouldn't have brought a stable-only revert up for
+consideration. But this issue to me looked somewhat special and urgent
+for two and a half reasons: (1) that backport apparently made a lot more
+people suddenly hit the issue (2) there was also this data corruption
+aspect one of the reporters mentioned (not sure if that is real and/or
+if this might be just a 6.1.y thing). Furthermore for 6.1.y it was
+recently confirmed that reverting the change fixes things, while we iirc
+had no such confirmation for recent mainline kernels at that point. So
+it looked like it would take a while to get this sorted out in mainline.
+But it seems we finally might get closer to that now, so yeah, maybe
+it's not worth a stable revert.
 
-Applied to 6.8/scsi-queue, thanks!
-
-[1/1] mpt3sas: suppress a warning in debug kernel
-      https://git.kernel.org/mkp/scsi/c/6a965ee1892a
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Ciao, Thorsten
 
