@@ -1,66 +1,62 @@
-Return-Path: <linux-scsi+bounces-151-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-149-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B03207F8850
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 05:32:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B9AC7F884E
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 05:32:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1EA71C20B4E
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 04:32:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADF891C20B42
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 04:32:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E99E8F62
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 04:32:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BF6D7476
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Nov 2023 04:32:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="MTgZIX7V"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="CX3chmqV"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D615819A3;
-	Fri, 24 Nov 2023 18:54:34 -0800 (PST)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AP27C70001998;
-	Sat, 25 Nov 2023 02:54:31 GMT
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EADA19A2
+	for <linux-scsi@vger.kernel.org>; Fri, 24 Nov 2023 18:54:34 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AP1hlK0018673;
+	Sat, 25 Nov 2023 02:54:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=kQn8x6bLmDO7gCoPY5/hW3tUTK9kDp5O45WlyduHfHY=;
- b=MTgZIX7Vr3jZCg0Ji7/pOD5rlBY7MoSNRoZ3YOtcmgfmGSn9bi4PypeUwdB5Hgc9WBX7
- n4ChkvEtM2jDgPIDaSFr2xel8h2dLYPKQEJ6w6upox0zFQ4oA7G2LZx373gBCtONWNMN
- Yz5+WVpWT/TfE0i8qcE0b9ujdtCNtwBQtiKCAZPH8E0ytsrKyCnXHUSBJwCbIJ+XUpUo
- cJ2QxRfsTV/fviR4p9mn9kQmWFhQMwrKH8zXlm/q8TAMCQv7bVLYx5DnsvLH6WTRhlia
- r2Q0iE7U9k8tcvCJpD+wWbizyWd7l02BaSsD1XF5dpGufisfJ+16ZRs2ziYIobKMFBWv LQ== 
+ bh=py5/2BHN36mvtvppFh6lkNFHerOtQgcPIb7sWY4yLAs=;
+ b=CX3chmqVH3qqvIt8F1p/siA6jDDfORWzf5dbtOY5gto8TDwPc5WjOpYzLQqjogV/Qlf4
+ 4yO/RQQwaFOSaWi7ygDIeed5dOvyayBtBv51AUS+SB84cDGFfuRNmgTcnFy3Fx4beuys
+ 1sZcLcojL9kvMoTQYv5QfIyiGuMMYqyCXjEoaN3dqzKemEJnxjsKw0TOfYpijbDHa9HB
+ SerOH3cCq7vBLIuQt2v8+4lGNa86RxnLDlPICFX5l2WZVyKrLY12Mh7KtIFWUXzI6v88
+ qPY+HTuQv/J9M3QjttApRE22TCUfvwyTu4V/yDwHbc64jr4HOUDThwyZx8k1ee8TYsJz Qw== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3uk7ucg12c-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3uk7h2g1dv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Sat, 25 Nov 2023 02:54:31 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3AP1XuVx027070;
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3AP1Xmu3026961;
 	Sat, 25 Nov 2023 02:54:30 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3uk7c99f6c-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3uk7c99f6e-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Sat, 25 Nov 2023 02:54:30 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AP2sRSx011828;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AP2sRT1011828;
 	Sat, 25 Nov 2023 02:54:29 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3uk7c99f5h-6;
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3uk7c99f5h-7;
 	Sat, 25 Nov 2023 02:54:29 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: James Smart <james.smart@broadcom.com>,
-        Ram Vegesna <ram.vegesna@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Justin Stitt <justinstitt@google.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] scsi: elx: libefc: replace deprecated strncpy with strscpy_pad/memcpy
-Date: Fri, 24 Nov 2023 21:54:18 -0500
-Message-ID: <170087016627.1036733.4443783771400286080.b4-ty@oracle.com>
+To: linux-scsi@vger.kernel.org, Justin Tee <justintee8345@gmail.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, jsmart2021@gmail.com,
+        justin.tee@broadcom.com
+Subject: Re: [PATCH 0/9] lpfc: Update lpfc to revision 14.2.0.16
+Date: Fri, 24 Nov 2023 21:54:19 -0500
+Message-ID: <170087016629.1036733.10669027755360058266.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231026-strncpy-drivers-scsi-elx-libefc-efc_node-h-v2-1-5c083d0c13f4@google.com>
-References: <20231026-strncpy-drivers-scsi-elx-libefc-efc_node-h-v2-1-5c083d0c13f4@google.com>
+In-Reply-To: <20231031191224.150862-1-justintee8345@gmail.com>
+References: <20231031191224.150862-1-justintee8345@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -73,28 +69,43 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-25_01,2023-11-22_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
- suspectscore=0 spamscore=0 mlxlogscore=770 mlxscore=0 phishscore=0
+ suspectscore=0 spamscore=0 mlxlogscore=906 mlxscore=0 phishscore=0
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2311060000 definitions=main-2311250020
-X-Proofpoint-GUID: -PHVGXN59J63RBStTidkzNOaeNlhKRXV
-X-Proofpoint-ORIG-GUID: -PHVGXN59J63RBStTidkzNOaeNlhKRXV
+X-Proofpoint-GUID: d1SVnupugrlT5qiY1BC3mZpfdXMHnuU-
+X-Proofpoint-ORIG-GUID: d1SVnupugrlT5qiY1BC3mZpfdXMHnuU-
 
-On Thu, 26 Oct 2023 01:53:13 +0000, Justin Stitt wrote:
+On Tue, 31 Oct 2023 12:12:15 -0700, Justin Tee wrote:
 
-> strncpy() is deprecated for use on NUL-terminated destination strings
-> [1] and as such we should prefer more robust and less ambiguous string
-> interfaces.
+> Update lpfc to revision 14.2.0.16
 > 
-> To keep node->current_state_name and node->prev_state_name NUL-padded
-> and NUL-terminated let's use strscpy_pad() as this implicitly provides
-> both.
+> This patch set contains a user input range check correction, static code
+> analyzer fixes, refactoring of clean up code, and logging enhancements.
+> 
+> The patches were cut against Martin's 6.7/scsi-queue tree.
 > 
 > [...]
 
 Applied to 6.8/scsi-queue, thanks!
 
-[1/1] scsi: elx: libefc: replace deprecated strncpy with strscpy_pad/memcpy
-      https://git.kernel.org/mkp/scsi/c/1057f44137c5
+[1/9] lpfc: Correct maximum PCI function value for RAS fw logging
+      https://git.kernel.org/mkp/scsi/c/2fe4b6a67730
+[2/9] lpfc: Fix possible file string name overflow when updating firmware
+      https://git.kernel.org/mkp/scsi/c/f5779b529240
+[3/9] lpfc: Fix list_entry null check warning in lpfc_cmpl_els_plogi
+      https://git.kernel.org/mkp/scsi/c/1dec1311b9b6
+[4/9] lpfc: Eliminate unnecessary relocking in lpfc_check_nlp_post_devloss
+      https://git.kernel.org/mkp/scsi/c/e07ac2d2aa5f
+[5/9] lpfc: Return early in lpfc_poll_eratt when the driver is unloading
+      https://git.kernel.org/mkp/scsi/c/57ea41eb7fe6
+[6/9] lpfc: Refactor and clean up mailbox command memory free
+      https://git.kernel.org/mkp/scsi/c/349b1e2c1bda
+[7/9] lpfc: Enhance driver logging for selected discovery events
+      https://git.kernel.org/mkp/scsi/c/e6af45218755
+[8/9] lpfc: Update lpfc version to 14.2.0.16
+      https://git.kernel.org/mkp/scsi/c/c855e02b57ed
+[9/9] lpfc: Copyright updates for 14.2.0.16 patches
+      https://git.kernel.org/mkp/scsi/c/1f86b0d9c76c
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
