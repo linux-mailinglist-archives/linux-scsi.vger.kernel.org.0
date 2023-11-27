@@ -1,120 +1,176 @@
-Return-Path: <linux-scsi+bounces-171-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-173-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92FCE7F9A01
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Nov 2023 07:38:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D9807F9A05
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Nov 2023 07:39:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EEDB2802A1
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Nov 2023 06:38:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D8AA1C208E8
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Nov 2023 06:39:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD25CD27F
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Nov 2023 06:38:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="lH0u1Jeb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF9A4D27E
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Nov 2023 06:39:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CED01BC0;
-	Sun, 26 Nov 2023 21:36:39 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AR4FQGw011281;
-	Mon, 27 Nov 2023 05:36:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=GCPVOVi5g6LysSZSqHHe3W2fDnHZfgK9keTuJB1q5wk=;
- b=lH0u1Jebzl+vy48uFnKxmgWh8IrF6Z5N52UuYyIUeZ2X60cNb/8WCXcaQh0YK4ZI9jdZ
- lgZS3sok/0tiqsev3xXQ4g7m7cgwYEBT2PR8LBm2stsYphBYzbwyMHpVPrrETK+gI82E
- 7h4FdU2RrKXr/FnhQuKdpKyRgUNh+UQerQIWNt5wWQC+5gci0OyE+vsmGj6y/k2zMwDZ
- wKf7TemsFzsitYXJAOSCnBrCjxvcdSg6OHfCMVpSHXg+g6tdb3X3MN2BrA4MH7n1+QL0
- OktePYqmIqenl/JIlQKQhIjDIYhGPE886+1qbLK57d2CtPQ1LCeH0EOnSaMFmWkL2OTM gw== 
-Received: from aptaippmta02.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uk9ppk7pe-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 05:36:12 +0000
-Received: from pps.filterd (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-	by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3AR5a9FB023415;
-	Mon, 27 Nov 2023 05:36:09 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 3uka0k9hyh-1;
-	Mon, 27 Nov 2023 05:36:09 +0000
-Received: from APTAIPPMTA02.qualcomm.com (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AR5a9aT023409;
-	Mon, 27 Nov 2023 05:36:09 GMT
-Received: from cbsp-sh-gv.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
-	by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 3AR5a8Hq023405;
-	Mon, 27 Nov 2023 05:36:09 +0000
-Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 393357)
-	id 28F26552F; Mon, 27 Nov 2023 13:36:08 +0800 (CST)
-From: Ziqi Chen <quic_ziqichen@quicinc.com>
-To: quic_asutoshd@quicinc.com, quic_cang@quicinc.com, bvanassche@acm.org,
-        mani@kernel.org, stanley.chu@mediatek.com, adrian.hunter@intel.com,
-        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
-        martin.petersen@oracle.com, quic_ziqichen@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_nitirawa@quicinc.com
-Cc: linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3] dt-bindings: ufs: Add msi-parent for UFS MCQ
-Date: Mon, 27 Nov 2023 13:36:02 +0800
-Message-Id: <1701063365-82582-1-git-send-email-quic_ziqichen@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gNL2OK04Xe0OSooPseeNyimQDizKgmP3
-X-Proofpoint-GUID: gNL2OK04Xe0OSooPseeNyimQDizKgmP3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-27_03,2023-11-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 mlxlogscore=949 suspectscore=0 lowpriorityscore=0
- clxscore=1011 mlxscore=0 bulkscore=0 spamscore=0 adultscore=0
- malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2311060000 definitions=main-2311270038
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557B1E4;
+	Sun, 26 Nov 2023 22:21:58 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4SdwTp0cTZz4f3m7D;
+	Mon, 27 Nov 2023 14:21:50 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 71ECC1A092C;
+	Mon, 27 Nov 2023 14:21:54 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+	by APP1 (Coremail) with SMTP id cCh0CgDX2hB+NWRlrcU8CA--.57866S4;
+	Mon, 27 Nov 2023 14:21:53 +0800 (CST)
+From: Yu Kuai <yukuai1@huaweicloud.com>
+To: hch@infradead.org,
+	ming.lei@redhat.com,
+	axboe@kernel.dk,
+	roger.pau@citrix.com,
+	colyli@suse.de,
+	kent.overstreet@gmail.com,
+	joern@lazybastard.org,
+	miquel.raynal@bootlin.com,
+	richard@nod.at,
+	vigneshr@ti.com,
+	sth@linux.ibm.com,
+	hoeppner@linux.ibm.com,
+	hca@linux.ibm.com,
+	gor@linux.ibm.com,
+	agordeev@linux.ibm.com,
+	jejb@linux.ibm.com,
+	martin.petersen@oracle.com,
+	clm@fb.com,
+	josef@toxicpanda.com,
+	dsterba@suse.com,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	nico@fluxnic.net,
+	xiang@kernel.org,
+	chao@kernel.org,
+	tytso@mit.edu,
+	adilger.kernel@dilger.ca,
+	agruenba@redhat.com,
+	jack@suse.com,
+	konishi.ryusuke@gmail.com,
+	dchinner@redhat.com,
+	linux@weissschuh.net,
+	min15.li@samsung.com,
+	yukuai3@huawei.com,
+	dlemoal@kernel.org,
+	willy@infradead.org,
+	akpm@linux-foundation.org,
+	hare@suse.de,
+	p.raghav@samsung.com
+Cc: linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	xen-devel@lists.xenproject.org,
+	linux-bcache@vger.kernel.org,
+	linux-mtd@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linux-bcachefs@vger.kernel.org,
+	linux-btrfs@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-erofs@lists.ozlabs.org,
+	linux-ext4@vger.kernel.org,
+	gfs2@lists.linux.dev,
+	linux-nilfs@vger.kernel.org,
+	yukuai1@huaweicloud.com,
+	yi.zhang@huawei.com,
+	yangerkun@huawei.com
+Subject: [PATCH block/for-next v2 00/16] block: remove field 'bd_inode' from block_device
+Date: Mon, 27 Nov 2023 14:21:00 +0800
+Message-Id: <20231127062116.2355129-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgDX2hB+NWRlrcU8CA--.57866S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ar4fKw15Jr18CF1kZr1rtFb_yoW8urWfpr
+	9xKFWrJ3yjkryrua1Iqw45X345Ja1kKayxuF97Aw4ruFW8G34furWktrsxGrW0qrZrJrWj
+	gF13t34DJF4xXaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvI14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4U
+	JwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+	wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf
+	9x0JUd8n5UUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 
-The Message Signaled Interrupts (MSI) support has been introduced in
-UFSHCI version 4.0 (JESD223E). The MSI is the recommended interrupt
-approach for MCQ. If choose to use MSI, In UFS DT, we need to provide
-msi-parent property that point to the hardware entity which serves as
-the MSI controller for this UFS controller.
+From: Yu Kuai <yukuai3@huawei.com>
 
-Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
+Changes in v2:
+ - split different portions into different patches, as greg k-h
+ suggested.
+ - use container_of() instead of "bdev + 1" to get the address of
+ bd_inode in the new helper, as grep k-h suggested.
 
-V2 -> V3: Wrap commit message to meet Linux coding style.
-V1 -> V2: Rebased on Linux 6.7-rc1 and updated the commit message to
-          incorporate the details about when MCQ/MSI got introduced.
----
- Documentation/devicetree/bindings/ufs/ufs-common.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+Yu Kuai (16):
+  block: add a new helper to get inode from block_device
+  xen/blkback: use new helper to get inode from block_device
+  bcache: use new helper to get inode from block_device
+  mtd: block2mtd: use new helper to get inode from block_device
+  s390/dasd: use new helper to get inode from block_device
+  scsicam: use new helper to get inode from block_device
+  bcachefs: use new helper to get inode from block_device
+  btrfs: use new helper to get inode from block_device
+  cramfs: use new helper to get inode from block_device
+  erofs: use new helper to get inode from block_device
+  ext4: use new helper to get inode from block_device
+  gfs2: use new helper to get inode from block_device
+  jbd2: use new helper to get inode from block_device
+  nilfs2: use new helper to get inode from block_device
+  buffer: use new helper to get inode from block_device
+  block: use new helper to get inode from block_device
 
-diff --git a/Documentation/devicetree/bindings/ufs/ufs-common.yaml b/Documentation/devicetree/bindings/ufs/ufs-common.yaml
-index 985ea8f..31fe7f3 100644
---- a/Documentation/devicetree/bindings/ufs/ufs-common.yaml
-+++ b/Documentation/devicetree/bindings/ufs/ufs-common.yaml
-@@ -87,6 +87,8 @@ properties:
-     description:
-       Specifies max. load that can be drawn from VCCQ2 supply.
- 
-+  msi-parent: true
-+
- dependencies:
-   freq-table-hz: [ clocks ]
-   operating-points-v2: [ clocks, clock-names ]
+ block/bdev.c                       | 44 +++++++++++++++---------------
+ block/blk-zoned.c                  |  4 +--
+ block/fops.c                       |  4 +--
+ block/genhd.c                      |  8 +++---
+ block/ioctl.c                      |  8 +++---
+ block/partitions/core.c            |  9 +++---
+ drivers/block/xen-blkback/xenbus.c |  2 +-
+ drivers/md/bcache/super.c          |  2 +-
+ drivers/mtd/devices/block2mtd.c    | 12 ++++----
+ drivers/s390/block/dasd_ioctl.c    |  2 +-
+ drivers/scsi/scsicam.c             |  2 +-
+ fs/bcachefs/util.h                 |  2 +-
+ fs/btrfs/disk-io.c                 |  6 ++--
+ fs/btrfs/volumes.c                 |  4 +--
+ fs/btrfs/zoned.c                   |  2 +-
+ fs/buffer.c                        |  8 +++---
+ fs/cramfs/inode.c                  |  2 +-
+ fs/erofs/data.c                    |  2 +-
+ fs/ext4/dir.c                      |  2 +-
+ fs/ext4/ext4_jbd2.c                |  2 +-
+ fs/ext4/super.c                    |  8 +++---
+ fs/gfs2/glock.c                    |  2 +-
+ fs/gfs2/ops_fstype.c               |  2 +-
+ fs/jbd2/journal.c                  |  3 +-
+ fs/jbd2/recovery.c                 |  2 +-
+ fs/nilfs2/segment.c                |  2 +-
+ include/linux/blk_types.h          | 15 ++++++++--
+ include/linux/blkdev.h             |  4 +--
+ include/linux/buffer_head.h        |  4 +--
+ 29 files changed, 91 insertions(+), 78 deletions(-)
+
 -- 
-2.7.4
+2.39.2
 
 
