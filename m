@@ -1,57 +1,57 @@
-Return-Path: <linux-scsi+bounces-261-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-263-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89D237FBA46
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Nov 2023 13:39:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDC9B7FBA49
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Nov 2023 13:39:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 897CE1C20E2A
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Nov 2023 12:39:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9983282878
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Nov 2023 12:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBDC941A86
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Nov 2023 12:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6416E57884
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Nov 2023 12:39:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rZNdqWOh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eant+qr0"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B26134AE;
-	Tue, 28 Nov 2023 11:15:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 568CBC433C7;
-	Tue, 28 Nov 2023 11:15:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2799B4652D;
+	Tue, 28 Nov 2023 11:21:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EACEAC433C8;
+	Tue, 28 Nov 2023 11:21:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701170142;
-	bh=3+j71CuhjAOePD46bT+Oifrh9ykcPU2RFbLXXeRFQys=;
+	s=k20201202; t=1701170490;
+	bh=i2DI2lTZRH7Axef8lpr2fdCRAi/tsvwjQbIBNg6ppKI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rZNdqWOh6qU+ZW25NoVDR0ho+3PC8J3JfEp9d+h766C2jbGpO5HIcLr6YeQ0g875U
-	 xPFXxdB13sTGHFWZOZDKxFUqZtN8xVGKLLnMalBzIdomBJ0X9klYxzCt223iI74Y0f
-	 d+07Tg31Jg5TODNX0V54OQNBF+CGfBC0ppetifmnZWxu9Hfde84vdYYsYPnRSp2PiY
-	 R+2+uI0enCq8TAZ4Xyaf5/NOGjVJ5obgM04WQfKcx+HBXIzlZP7YteB1/F4bP5Ad8k
-	 qQBKajWstbNG99FyIHBOWU+LuIKGROsMBCMQj0hOnG90h+c2em5TOlbfgpV8S7l7li
-	 SMSKHgYBeX7bw==
-Date: Tue, 28 Nov 2023 16:45:28 +0530
+	b=Eant+qr0P1HZHabKslZIjVVItph5/CbW2XVL0AUtY1QEuN3EMW2onX27lKXKbg3Bn
+	 Bvg+MNrC+kdHf7IsAST0EXCJmRnuOtRXzCZ3xdStk/ONmQm+SC9IjpT4CfIIKgeiNf
+	 74SwjhX8le2hIUSdIeCmo88ZD46XPYdvzSiS8s0XUF2TZeSwUiN069wok99T5xGiUJ
+	 f9cH/mTvAxGSu0r21mQ7FWOh6lo9RVwUjp/sUZctQpG1qnPSoG+rud1D0BE97nlEGj
+	 gyYU1J6eiHzqFETUht0MTuMMe9vpnSWhLqVbQjyL6o+MtE66YijZ5V8xy1dAMUHXSr
+	 RcN4Twvwxh9Tw==
+Date: Tue, 28 Nov 2023 16:50:59 +0530
 From: Manivannan Sadhasivam <mani@kernel.org>
 To: Can Guo <quic_cang@quicinc.com>
-Cc: Ziqi Chen <quic_ziqichen@quicinc.com>, quic_asutoshd@quicinc.com,
-	bvanassche@acm.org, beanhuo@micron.com, avri.altman@wdc.com,
-	junwoo80.lee@samsung.com, martin.petersen@oracle.com,
-	quic_nguyenb@quicinc.com, quic_nitirawa@quicinc.com,
-	quic_rampraka@quicinc.com, linux-scsi@vger.kernel.org,
-	Andy Gross <agross@kernel.org>,
+Cc: bvanassche@acm.org, adrian.hunter@intel.com, beanhuo@micron.com,
+	avri.altman@wdc.com, junwoo80.lee@samsung.com,
+	martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
 	Bjorn Andersson <andersson@kernel.org>,
 	Konrad Dybcio <konrad.dybcio@linaro.org>,
 	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	"open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
 	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] scsi: ufs: qcom: move ufs_qcom_host_reset() to
- ufs_qcom_device_reset()
-Message-ID: <20231128111528.GR3088@thinkpad>
-References: <1698145815-17396-1-git-send-email-quic_ziqichen@quicinc.com>
- <20231025074128.GA3648@thinkpad>
- <85d7a1ef-92c4-49ae-afe0-727c1b446f55@quicinc.com>
+Subject: Re: [PATCH v5 04/10] scsi: ufs: ufs-qcom: Limit negotiated gear to
+ selected PHY gear
+Message-ID: <20231128112059.GS3088@thinkpad>
+References: <1700729190-17268-1-git-send-email-quic_cang@quicinc.com>
+ <1700729190-17268-5-git-send-email-quic_cang@quicinc.com>
+ <20231128054522.GF3088@thinkpad>
+ <bc69d9ef-6ddc-4389-8bf0-9405385a494b@quicinc.com>
+ <20231128105237.GN3088@thinkpad>
+ <238a3df1-5631-4922-b268-83d3dfb80c6a@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -61,91 +61,104 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <85d7a1ef-92c4-49ae-afe0-727c1b446f55@quicinc.com>
+In-Reply-To: <238a3df1-5631-4922-b268-83d3dfb80c6a@quicinc.com>
 
-On Wed, Nov 22, 2023 at 02:14:57PM +0800, Can Guo wrote:
+On Tue, Nov 28, 2023 at 07:03:41PM +0800, Can Guo wrote:
 > 
 > 
-> On 10/25/2023 3:41 PM, Manivannan Sadhasivam wrote:
-> > On Tue, Oct 24, 2023 at 07:10:15PM +0800, Ziqi Chen wrote:
-> > > During PISI test, we found the issue that host Tx still bursting after
-> > 
-> > What is PISI test?
-> > 
-> > > H/W reset. Move ufs_qcom_host_reset() to ufs_qcom_device_reset() and
-> > > reset host before device reset to stop tx burst.
+> On 11/28/2023 6:52 PM, Manivannan Sadhasivam wrote:
+> > On Tue, Nov 28, 2023 at 04:05:59PM +0800, Can Guo wrote:
+> > > Hi Mani,
 > > > 
+> > > On 11/28/2023 1:45 PM, Manivannan Sadhasivam wrote:
+> > > > On Thu, Nov 23, 2023 at 12:46:24AM -0800, Can Guo wrote:
+> > > > > In the dual init scenario, the initial PHY gear is set to HS-G2, and the
+> > > > > first Power Mode Change (PMC) is meant to find the best matching PHY gear
+> > > > > for the 2nd init. However, for the first PMC, if the negotiated gear (say
+> > > > > HS-G4) is higher than the initial PHY gear, we cannot go ahead let PMC to
+> > > > > the negotiated gear happen, because the programmed UFS PHY settings may not
+> > > > > support the negotiated gear. Fix it by overwriting the negotiated gear with
+> > > > > the PHY gear.
+> > > > > 
+> > > > 
+> > > > I don't quite understand this patch. If the phy_gear is G2 initially and the
+> > > > negotiated gear is G4, then as per this change,
+> > > > 
+> > > > phy_gear = G4;
+> > > > negotiated gear = G2;
+> > > > 
+> > > > Could you please explain how this make sense?
+> > > 
+> > > phy_gear was G2 (in the beginning) and just now changed to G4, but the PHY
+> > > settings programmed in the beginning can only support no-G4 (not G4).
+> > > Without this change, as the negotiated gear is G4, the power mode change is
+> > > going to put UFS at HS-G4 mode, but the PHY settings programmed is no-G4.
 > > 
-> > device_reset() callback is supposed to reset only the device and not the host.
-> > So NACK for this patch.
+> > But we are going to reinit the PHY anyway, isn't it?
 > 
-> Agree, the change should come in a more reasonable way.
-> 
-> Actually, similar code is already there in ufs_mtk_device_reset() in
-> ufs-mediatek.c, I guess here is trying to mimic that fashion.
-> 
-> This change, from its functionality point of view, we do need it, because I
-> occasionally (2 out of 10) hit PHY error on lane 0 during reboot test (in my
-> case, I tried SM8350, SM8450 and SM8550， all same).
+> We are power mode changing to HS-G4 with no-G4 PHY settings programmed, the
+> power mode change operation, in the 1st init, may immediately cause UIC
+> errors and lead to probe fail. We are not seeing issues as of now, maybe
+> because the amount of HW used for testing is not large enough.
 > 
 
-I do not suspect the intention of this patch, but I do not like the way how it
-is being done. Even if the reset has to be moved, the patch description should
-describe how it fixes the issue.
+I'm not sure what you are saying is what happening. Because, if we use the
+incompatible gear setting, we should immediately see the UIC error.
+
+> This change is not really related to this specific series, I can remove it
+> in next version.
+> 
+
+Please do so. This needs to be reviewed separately.
 
 - Mani
 
-> [    1.911188] [DEBUG]ufshcd_update_uic_error: UECPA:0x80000002
-> [    1.922843] [DEBUG]ufshcd_update_uic_error: UECDL:0x80004000
-> [    1.934473] [DEBUG]ufshcd_update_uic_error: UECN:0x0
-> [    1.944688] [DEBUG]ufshcd_update_uic_error: UECT:0x0
-> [    1.954901] [DEBUG]ufshcd_update_uic_error: UECDME:0x0
-> 
-> I found out that the PHY error pops out right after UFS device gets reset in
-> the 2nd init. After having this change in place, the PA/DL errors are gone.
-> 
 > Thanks,
 > Can Guo.
+> 
+> > 
+> > > This change is to limit the negotiated gear to HS-G2 for the 1st init. In
+> > > the 2nd init, as the new PHY gear is G4, G4 PHY settings would be
+> > > programmed, it'd be safe to put the UFS at HS-G4 mode.
+> > > 
+> > 
+> > Why do we need to limit it since we already have the logic in place to set
+> > whatever gear mode applicable for 1st init?
 > > 
 > > - Mani
 > > 
-> > > Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
-> > > ---
-> > >   drivers/ufs/host/ufs-qcom.c | 13 +++++++------
-> > >   1 file changed, 7 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> > > index 96cb8b5..43163d3 100644
-> > > --- a/drivers/ufs/host/ufs-qcom.c
-> > > +++ b/drivers/ufs/host/ufs-qcom.c
-> > > @@ -445,12 +445,6 @@ static int ufs_qcom_power_up_sequence(struct ufs_hba *hba)
-> > >   	struct phy *phy = host->generic_phy;
-> > >   	int ret;
-> > > -	/* Reset UFS Host Controller and PHY */
-> > > -	ret = ufs_qcom_host_reset(hba);
-> > > -	if (ret)
-> > > -		dev_warn(hba->dev, "%s: host reset returned %d\n",
-> > > -				  __func__, ret);
-> > > -
-> > >   	/* phy initialization - calibrate the phy */
-> > >   	ret = phy_init(phy);
-> > >   	if (ret) {
-> > > @@ -1709,6 +1703,13 @@ static void ufs_qcom_dump_dbg_regs(struct ufs_hba *hba)
-> > >   static int ufs_qcom_device_reset(struct ufs_hba *hba)
-> > >   {
-> > >   	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
-> > > +	int ret = 0;
-> > > +
-> > > +	/* Reset UFS Host Controller and PHY */
-> > > +	ret = ufs_qcom_host_reset(hba);
-> > > +	if (ret)
-> > > +		dev_warn(hba->dev, "%s: host reset returned %d\n",
-> > > +				  __func__, ret);
-> > >   	/* reset gpio is optional */
-> > >   	if (!host->device_reset)
-> > > -- 
-> > > 2.7.4
-> > > 
+> > > Thanks,
+> > > Can Guo.
+> > > > 
+> > > > - Mani
+> > > > 
+> > > > > Signed-off-by: Can Guo <quic_cang@quicinc.com>
+> > > > > ---
+> > > > >    drivers/ufs/host/ufs-qcom.c | 7 ++++++-
+> > > > >    1 file changed, 6 insertions(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+> > > > > index cc0eb37..d4edf58 100644
+> > > > > --- a/drivers/ufs/host/ufs-qcom.c
+> > > > > +++ b/drivers/ufs/host/ufs-qcom.c
+> > > > > @@ -920,8 +920,13 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
+> > > > >    		 * because, the PHY gear settings are backwards compatible and we only need to
+> > > > >    		 * change the PHY gear settings while scaling to higher gears.
+> > > > >    		 */
+> > > > > -		if (dev_req_params->gear_tx > host->phy_gear)
+> > > > > +		if (dev_req_params->gear_tx > host->phy_gear) {
+> > > > > +			u32 old_phy_gear = host->phy_gear;
+> > > > > +
+> > > > >    			host->phy_gear = dev_req_params->gear_tx;
+> > > > > +			dev_req_params->gear_tx = old_phy_gear;
+> > > > > +			dev_req_params->gear_rx = old_phy_gear;
+> > > > > +		}
+> > > > >    		/* enable the device ref clock before changing to HS mode */
+> > > > >    		if (!ufshcd_is_hs_mode(&hba->pwr_info) &&
+> > > > > -- 
+> > > > > 2.7.4
+> > > > > 
+> > > > 
 > > 
 
 -- 
