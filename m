@@ -1,45 +1,75 @@
-Return-Path: <linux-scsi+bounces-310-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-311-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 004FE7FE12D
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Nov 2023 21:36:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A36CC7FE12E
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Nov 2023 21:36:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE18028242F
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Nov 2023 20:36:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D13FE1C20ADA
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Nov 2023 20:36:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A77640C05
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Nov 2023 20:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F70E60EEF
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Nov 2023 20:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OyD4pAw9"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from vps.thesusis.net (vps.thesusis.net [34.202.238.73])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED30E198;
-	Wed, 29 Nov 2023 10:47:16 -0800 (PST)
-Received: by vps.thesusis.net (Postfix, from userid 1000)
-	id 3C1E014B221; Wed, 29 Nov 2023 13:47:16 -0500 (EST)
-From: Phillip Susi <phill@thesusis.net>
-To: Niklas Cassel <Niklas.Cassel@wdc.com>, "bugzilla-daemon@kernel.org"
- <bugzilla-daemon@kernel.org>
-Cc: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>, Damien Le Moal
- <dlemoal@kernel.org>
-Subject: Re: [Bug 218198] Suspend/Resume Regression with attached ATA devices
-In-Reply-To: <ZWcVhXMbJOEHIq0D@x1-carbon>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1335D4BE
+	for <linux-scsi@vger.kernel.org>; Wed, 29 Nov 2023 18:47:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 345E3C433C9
+	for <linux-scsi@vger.kernel.org>; Wed, 29 Nov 2023 18:47:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701283647;
+	bh=kKqoVZrMG6NrpK7GCnxOULu65KHt9pRUoLDLYOHMMSA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=OyD4pAw9JqhNru8S62dg8a8L8tszpV/MDgnniEqOrkH0vHWJ4y5MBb5YnHgyztm4n
+	 jCxvacgTEAxylXuDbfKkI/gVTvP/aGnp/gIwzG1jLhe3J6N1ek9uXpqLhkyftXvcO3
+	 R/hQv4tX4rswmD98XupZm+8km5WW5U3yY7hzX6V+NdyiwbYpCFhHEuEDy4RnZ2DpAQ
+	 HIr1nzTCA6pedpU/68cgjpTwxDdNcTuI/1Bdtu5OEO0BZiYqlTd4OaTPmSZZpRQaWj
+	 KiZ3IlEQPSp66QdRWguI8z6sBlxUfzTyv9bLZRiysdWTm9wU6Ii1Y7lG+g2piaA3BE
+	 8aYjhsnKliMnA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 1DD41C53BD2; Wed, 29 Nov 2023 18:47:27 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-scsi@vger.kernel.org
+Subject: [Bug 218198] Suspend/Resume Regression with attached ATA devices
+Date: Wed, 29 Nov 2023 18:47:26 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Product: SCSI Drivers
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: phill@thesusis.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218198-11613-ocr8fkurzT@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218198-11613@https.bugzilla.kernel.org/>
 References: <bug-218198-11613@https.bugzilla.kernel.org/>
- <bug-218198-11613-NAsEdarpyZ@https.bugzilla.kernel.org/>
- <ZWcVhXMbJOEHIq0D@x1-carbon>
-Date: Wed, 29 Nov 2023 13:47:16 -0500
-Message-ID: <87zfywv1l7.fsf@vps.thesusis.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218198
+
+--- Comment #10 from Phillip Susi (phill@thesusis.net) ---
 Niklas Cassel <Niklas.Cassel@wdc.com> writes:
 
 > The reason why many platforms do this override, is because:
@@ -82,4 +112,10 @@ simpler than the full sata PHY.
 
 It sounds like somebody decided to hack an OOB signal into ALPM rather
 than use ATA SLEEP, but why?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
