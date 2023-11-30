@@ -1,56 +1,39 @@
-Return-Path: <linux-scsi+bounces-344-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-347-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BB487FE75D
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Nov 2023 03:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 848B07FE85C
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Nov 2023 05:39:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4745328133A
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Nov 2023 02:45:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E2B9281EC0
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Nov 2023 04:39:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00A58134C3
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Nov 2023 02:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b="hTw7cjqZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC6624CB2E
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Nov 2023 04:39:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from rcdn-iport-9.cisco.com (rcdn-iport-9.cisco.com [173.37.86.80])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF495171A;
-	Wed, 29 Nov 2023 18:36:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=877; q=dns/txt; s=iport;
-  t=1701311782; x=1702521382;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XEQ4NSFM5Uqzyo57IeSl2o8heX6pLC+We2PwToQ+IVw=;
-  b=hTw7cjqZrYEFHKpQDfnaPBGTQwU/UjlRxy4/DHk1SAKBHVlbGdWXCdIu
-   1SAfmnwARGTo6OFSC4m36MZg0EFNue8AFDWV1/DHX1lmdVsTtoiAyKTE8
-   jkjCD370MFChuGl7X6kmb3ndc0/Pl0Sh+ca1BSsWACEV3SwJJfT0t9m2O
-   4=;
-X-CSE-ConnectionGUID: pNs4Hyj5TUSlq2YEjJWXKA==
-X-CSE-MsgGUID: u90wgHi2TPKyM/+9mDsotA==
-X-IronPort-AV: E=Sophos;i="6.04,237,1695686400"; 
-   d="scan'208";a="148824002"
-Received: from rcdn-core-9.cisco.com ([173.37.93.145])
-  by rcdn-iport-9.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 02:36:21 +0000
-Received: from localhost.cisco.com ([10.193.101.253])
-	(authenticated bits=0)
-	by rcdn-core-9.cisco.com (8.15.2/8.15.2) with ESMTPSA id 3AU2YA4F007614
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Thu, 30 Nov 2023 02:36:20 GMT
-From: Karan Tilak Kumar <kartilak@cisco.com>
-To: sebaddel@cisco.com
-Cc: arulponn@cisco.com, djhawar@cisco.com, gcboffa@cisco.com, mkai2@cisco.com,
-        satishkh@cisco.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Karan Tilak Kumar <kartilak@cisco.com>
-Subject: [PATCH v4 13/13] scsi: fnic: Increment driver version
-Date: Wed, 29 Nov 2023 18:34:02 -0800
-Message-Id: <20231130023402.802282-14-kartilak@cisco.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20231130023402.802282-1-kartilak@cisco.com>
-References: <20231130023402.802282-1-kartilak@cisco.com>
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id 09BF110E3;
+	Wed, 29 Nov 2023 18:42:04 -0800 (PST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 09CE860DF8F3F;
+	Thu, 30 Nov 2023 10:41:48 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+To: hare@suse.com,
+	jejb@linux.ibm.com,
+	martin.petersen@oracle.com
+Cc: Su Hui <suhui@nfschina.com>,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH] scsi: aic7xxx: fix some problem of return value
+Date: Thu, 30 Nov 2023 10:41:23 +0800
+Message-Id: <20231130024122.1193324-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -58,36 +41,85 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Authenticated-User: kartilak@cisco.com
-X-Outbound-SMTP-Client: 10.193.101.253, [10.193.101.253]
-X-Outbound-Node: rcdn-core-9.cisco.com
 
-Changes between v2 and v3:
-    Incorporate the following review comments from Hannes:
-	Create a separate patch to increment driver version.
-	Increment driver version number to 1.7.0.0.
+aic7770_probe() should return negative error code rather than positive.
+However, aic7770_config() only return positive error code,
+ahc_linux_register_host() return both positive and negative error
+code. Make aic7770_probe() return negative if error happened and let
+ahc_linux_register_host() only return positive error code to fix this
+problem.
 
-Reviewed-by: Sesidhar Baddela <sebaddel@cisco.com>
-Reviewed-by: Arulprabhu Ponnusamy <arulponn@cisco.com>
-Signed-off-by: Karan Tilak Kumar <kartilak@cisco.com>
+ahc_linux_pci_dev_probe() should return the value of
+ahc_linux_register_host() rather than zero.
+
+Signed-off-by: Su Hui <suhui@nfschina.com>
 ---
- drivers/scsi/fnic/fnic.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/aic7xxx/aic7770_osm.c     | 8 ++++----
+ drivers/scsi/aic7xxx/aic7xxx_osm.c     | 2 +-
+ drivers/scsi/aic7xxx/aic7xxx_osm_pci.c | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/fnic/fnic.h b/drivers/scsi/fnic/fnic.h
-index c4edbd7dfc25..7241aebf79d6 100644
---- a/drivers/scsi/fnic/fnic.h
-+++ b/drivers/scsi/fnic/fnic.h
-@@ -27,7 +27,7 @@
+diff --git a/drivers/scsi/aic7xxx/aic7770_osm.c b/drivers/scsi/aic7xxx/aic7770_osm.c
+index bdd177e3d762..3c1aca15d956 100644
+--- a/drivers/scsi/aic7xxx/aic7770_osm.c
++++ b/drivers/scsi/aic7xxx/aic7770_osm.c
+@@ -87,23 +87,23 @@ aic7770_probe(struct device *dev)
+ 	sprintf(buf, "ahc_eisa:%d", eisaBase >> 12);
+ 	name = kstrdup(buf, GFP_ATOMIC);
+ 	if (name == NULL)
+-		return (ENOMEM);
++		return -ENOMEM;
+ 	ahc = ahc_alloc(&aic7xxx_driver_template, name);
+ 	if (ahc == NULL)
+-		return (ENOMEM);
++		return -ENOMEM;
+ 	ahc->dev = dev;
+ 	error = aic7770_config(ahc, aic7770_ident_table + edev->id.driver_data,
+ 			       eisaBase);
+ 	if (error != 0) {
+ 		ahc->bsh.ioport = 0;
+ 		ahc_free(ahc);
+-		return (error);
++		return -error;
+ 	}
  
- #define DRV_NAME		"fnic"
- #define DRV_DESCRIPTION		"Cisco FCoE HBA Driver"
--#define DRV_VERSION		"1.6.0.56"
-+#define DRV_VERSION		"1.7.0.0"
- #define PFX			DRV_NAME ": "
- #define DFX                     DRV_NAME "%d: "
+  	dev_set_drvdata(dev, ahc);
  
+ 	error = ahc_linux_register_host(ahc, &aic7xxx_driver_template);
+-	return (error);
++	return -error;
+ }
+ 
+ static int
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_osm.c b/drivers/scsi/aic7xxx/aic7xxx_osm.c
+index 4ae0a1c4d374..158aaeca8941 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_osm.c
++++ b/drivers/scsi/aic7xxx/aic7xxx_osm.c
+@@ -1117,7 +1117,7 @@ ahc_linux_register_host(struct ahc_softc *ahc, struct scsi_host_template *templa
+ 	if (retval) {
+ 		printk(KERN_WARNING "aic7xxx: scsi_add_host failed\n");
+ 		scsi_host_put(host);
+-		return retval;
++		return -retval;
+ 	}
+ 
+ 	scsi_scan_host(host);
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_osm_pci.c b/drivers/scsi/aic7xxx/aic7xxx_osm_pci.c
+index a07e94fac673..e17eb8df12c4 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_osm_pci.c
++++ b/drivers/scsi/aic7xxx/aic7xxx_osm_pci.c
+@@ -241,8 +241,8 @@ ahc_linux_pci_dev_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 		ahc_linux_pci_inherit_flags(ahc);
+ 
+ 	pci_set_drvdata(pdev, ahc);
+-	ahc_linux_register_host(ahc, &aic7xxx_driver_template);
+-	return (0);
++	error = ahc_linux_register_host(ahc, &aic7xxx_driver_template);
++	return -error;
+ }
+ 
+ /******************************* PCI Routines *********************************/
 -- 
-2.31.1
+2.30.2
 
 
