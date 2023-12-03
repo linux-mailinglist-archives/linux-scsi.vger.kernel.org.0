@@ -1,39 +1,75 @@
-Return-Path: <linux-scsi+bounces-479-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-480-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87331802757
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 21:35:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3089A802758
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 21:35:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8C551C20841
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 20:35:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93247B207E2
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 20:35:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6241CF92
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 20:35:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 129B81EB31
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 20:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ER6YbbhT"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from vps.thesusis.net (vps.thesusis.net [IPv6:2600:1f18:60b9:2f00:6f85:14c6:952:bad3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13763A0
-	for <linux-scsi@vger.kernel.org>; Sun,  3 Dec 2023 11:50:38 -0800 (PST)
-Received: by vps.thesusis.net (Postfix, from userid 1000)
-	id 5E58314BB90; Sun,  3 Dec 2023 14:50:37 -0500 (EST)
-From: Phillip Susi <phill@thesusis.net>
-To: bugzilla-daemon@kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [Bug 218198] Suspend/Resume Regression with attached ATA devices
-In-Reply-To: <bug-218198-11613-IZUsDxnbCF@https.bugzilla.kernel.org/>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3805218026
+	for <linux-scsi@vger.kernel.org>; Sun,  3 Dec 2023 19:50:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BFD5FC433C7
+	for <linux-scsi@vger.kernel.org>; Sun,  3 Dec 2023 19:50:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701633046;
+	bh=xfNCrb/1HjN0Av9C0TdcJcA5iVBiH6tfgQ7DPqmCWug=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=ER6YbbhTt7C5hfbJjtu4tmCzExnEqqyV+TYXKL0EP17BaWzYGD9gE7pC+jZ8NQ7vI
+	 zF6UdgpP8KDzIBoIbjUH3AxoZwJoGMFgw0S/GttEtvyjmW8BotzLGwpfsOddrtyirA
+	 NVjFZqOC8C4/hnovT4ijYnc1ak2hGRxjmbrEXX45oo032zfHYZM83fsZA4GMJ8az1+
+	 buJSJjbDWZWK2gxRy2SLr477Phy8EAkeVL+Y/OEA9slUwbxBGV9pty1wRmrkF7Si0F
+	 CP/TylhK8hkA1bnRyjsT5QI/fZID4SCalurNUZuWE/4fP2mc/BFC20xCrU29eFOo6/
+	 uyBrQKdVOdb5A==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id A5B04C53BC6; Sun,  3 Dec 2023 19:50:46 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-scsi@vger.kernel.org
+Subject: [Bug 218198] Suspend/Resume Regression with attached ATA devices
+Date: Sun, 03 Dec 2023 19:50:46 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Product: SCSI Drivers
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: phill@thesusis.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218198-11613-4m8lH62VXx@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218198-11613@https.bugzilla.kernel.org/>
 References: <bug-218198-11613@https.bugzilla.kernel.org/>
- <bug-218198-11613-IZUsDxnbCF@https.bugzilla.kernel.org/>
-Date: Sun, 03 Dec 2023 14:50:37 -0500
-Message-ID: <87y1ebawvm.fsf@vps.thesusis.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218198
+
+--- Comment #12 from Phillip Susi (phill@thesusis.net) ---
 bugzilla-daemon@kernel.org writes:
 
 > I guess you need to ask Intel.
@@ -57,4 +93,10 @@ everything, including the SATA PHY, and only keep a simple logic gate
 active that can detect the big and obvious RESET signal from the host.
 It seems to accomplish the same goal as DEVSLP without requiring hacking
 in another logic line somewhere that wasn't meant for that purpose.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
