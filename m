@@ -1,42 +1,44 @@
-Return-Path: <linux-scsi+bounces-463-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-457-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7916802574
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 17:32:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8055080256E
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 17:31:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D90B1F21091
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:32:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACA661C20841
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:31:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FB3217736
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:32:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26C2615AF2
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:31:38 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D598FFF
-	for <linux-scsi@vger.kernel.org>; Sun,  3 Dec 2023 08:06:19 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46ACBD3
+	for <linux-scsi@vger.kernel.org>; Sun,  3 Dec 2023 08:06:20 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r9oz0-0005gh-DZ; Sun, 03 Dec 2023 17:06:14 +0100
+	id 1r9oz0-0005gi-Ft; Sun, 03 Dec 2023 17:06:14 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r9oyz-00DK9e-ID; Sun, 03 Dec 2023 17:06:13 +0100
+	id 1r9oyz-00DK9h-Oe; Sun, 03 Dec 2023 17:06:13 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r9oyz-00DPoc-9F; Sun, 03 Dec 2023 17:06:13 +0100
+	id 1r9oyz-00DPog-FW; Sun, 03 Dec 2023 17:06:13 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: "James E.J. Bottomley" <jejb@linux.ibm.com>,
 	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org,
+Cc: Finn Thain <fthain@linux-m68k.org>,
+	Michael Schmitz <schmitzmic@gmail.com>,
+	linux-scsi@vger.kernel.org,
 	kernel@pengutronix.de
-Subject: [PATCH 02/14] scsi: a4000t: Convert to platform remove callback returning void
-Date: Sun,  3 Dec 2023 17:05:47 +0100
-Message-ID:  <c15ffc57efebc5da3f7e6dd558d69181e129cafe.1701619134.git.u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 03/14] scsi: atari: Convert to platform remove callback returning void
+Date: Sun,  3 Dec 2023 17:05:48 +0100
+Message-ID:  <27a2b133b1b88a9baf51353c511e93a5027f9602.1701619134.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <cover.1701619134.git.u.kleine-koenig@pengutronix.de>
 References: <cover.1701619134.git.u.kleine-koenig@pengutronix.de>
@@ -47,7 +49,7 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2006; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=KzSqkQS+P+EAs50HUDLbAV72d+j525CgjL8snTXrU2M=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlbKdanxP0l9h7zpQ2OK3kJQheNg7pwaiKNxvci hEg/uqVqt2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZWynWgAKCRCPgPtYfRL+ TrwBB/0RsEXAgHedciw4T23tqItOhKnDusdIzRtyAHIU73fnQWNPaHy2e8L2JZx7ULFm5AdHg9d xmOP9rvuMgepnU/W1W9wj3R1VRLwaNAI55gZHfIyj4iWQZgq4cOuHT+Hi5oqkg0iPEtoiz8PvZn qyQvMk6sCmNvWg41HWGGjX2Mfm9m+Xg+xqmA1JHJzO5IQNUdhG5iUOYVfhgEa3AyNJAPsTUMCEl buSRCEYQsbCjlAe6lWhMBMhLl5ZRDWBwp9MOJJ/bGkCqObPvhBEeQ3vOzOmCDk8juCh5Lu9XPyS 9zMS9hg5qAiA+9cftyQinyKsWhQzUnh3wffyHhKz1hEmYkMa
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1902; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=sRYZSbRJaYODroZSM3hlQCPdJxwiywJTTKzwkqKHtDI=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlbKdb1DJt9dB/DRt3YazdHFnN6+/DpgYxtoVbM JIqcXtie2uJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZWynWwAKCRCPgPtYfRL+ Tg5NB/9hEO6MNVQpawOrM78d2dVm+sIGbLyHKvV+KmlXBJmkoKIcqxkdIVkSdOTFfij9Z/qWFoB 6t9XIykVpV5lsPDEYYFr9VCBxreiY2V4wcQokwOIKJEEecOmnKqFNnGzEkUXfoF2RwIZOhTvv4Y tLVdub5HlQAfDTJTCu+N/kFDeMmW4s1GdW4L25BAUXsaRhQ+PjtXDjV5cNeFcY+suM7gE5So16P tIegum0MZo//wiMMJfncrxeSlFMsFoyNw2SqYsBZf4kgRzCdjq+nF8n4s/hxO5HUqcsCWfa+f0+ GAGjcirKlSPHns0BObaNeHaxNdQndARf1bUrWBlwGCnPVvVr
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -74,34 +76,34 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/scsi/a4000t.c | 5 ++---
+ drivers/scsi/atari_scsi.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/a4000t.c b/drivers/scsi/a4000t.c
-index 5e575afce134..e435fc06a624 100644
---- a/drivers/scsi/a4000t.c
-+++ b/drivers/scsi/a4000t.c
-@@ -95,7 +95,7 @@ static int __init amiga_a4000t_scsi_probe(struct platform_device *pdev)
- 	return -ENODEV;
+diff --git a/drivers/scsi/atari_scsi.c b/drivers/scsi/atari_scsi.c
+index d401cf27113a..d99e70914817 100644
+--- a/drivers/scsi/atari_scsi.c
++++ b/drivers/scsi/atari_scsi.c
+@@ -865,7 +865,7 @@ static int __init atari_scsi_probe(struct platform_device *pdev)
+ 	return error;
  }
  
--static int __exit amiga_a4000t_scsi_remove(struct platform_device *pdev)
-+static void __exit amiga_a4000t_scsi_remove(struct platform_device *pdev)
+-static int __exit atari_scsi_remove(struct platform_device *pdev)
++static void __exit atari_scsi_remove(struct platform_device *pdev)
  {
- 	struct Scsi_Host *host = platform_get_drvdata(pdev);
- 	struct NCR_700_Host_Parameters *hostdata = shost_priv(host);
-@@ -106,11 +106,10 @@ static int __exit amiga_a4000t_scsi_remove(struct platform_device *pdev)
- 	kfree(hostdata);
- 	free_irq(host->irq, host);
- 	release_mem_region(res->start, resource_size(res));
+ 	struct Scsi_Host *instance = platform_get_drvdata(pdev);
+ 
+@@ -876,11 +876,10 @@ static int __exit atari_scsi_remove(struct platform_device *pdev)
+ 	scsi_host_put(instance);
+ 	if (atari_dma_buffer)
+ 		atari_stram_free(atari_dma_buffer);
 -	return 0;
  }
  
- static struct platform_driver amiga_a4000t_scsi_driver = {
--	.remove = __exit_p(amiga_a4000t_scsi_remove),
-+	.remove_new = __exit_p(amiga_a4000t_scsi_remove),
- 	.driver   = {
- 		.name	= "amiga-a4000t-scsi",
+ static struct platform_driver atari_scsi_driver = {
+-	.remove = __exit_p(atari_scsi_remove),
++	.remove_new = __exit_p(atari_scsi_remove),
+ 	.driver = {
+ 		.name	= DRV_MODULE_NAME,
  	},
 -- 
 2.42.0
