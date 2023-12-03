@@ -1,96 +1,108 @@
-Return-Path: <linux-scsi+bounces-456-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-461-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB2EC80256D
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 17:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EDD7B802572
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 17:31:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7651928060B
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:31:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A949128060B
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:31:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CBD015AE2
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:31:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="TXgQzPbf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7273B1D692
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:31:57 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A367AFC;
-	Sun,  3 Dec 2023 07:51:21 -0800 (PST)
-Received: from localhost.localdomain (unknown [46.242.8.170])
-	by mail.ispras.ru (Postfix) with ESMTPSA id 3E8F140F1DE6;
-	Sun,  3 Dec 2023 15:51:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 3E8F140F1DE6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-	s=default; t=1701618677;
-	bh=OzqlpYzBI15i6FXYFGVQXHLoruvKle2z9Cu7A+AYusY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=TXgQzPbfxSrdpYYw84oDK20OZfkSeQdWdzqyfZOwnJMGcYsbwkX1D27IEo/QQ2F8F
-	 nn6+wULBdJn0Hz87drvzHz3Rj+/WG0VhY5x8uqGqgBG7YV2bYKjbd8LGroyWhns4gz
-	 q7IDTPju6sD5xZhcREAO5OXY+BKTeKm1dmwVZJfg=
-From: Fedor Pchelkin <pchelkin@ispras.ru>
-To: Kashyap Desai <kashyap.desai@broadcom.com>
-Cc: Fedor Pchelkin <pchelkin@ispras.ru>,
-	Sumit Saxena <sumit.saxena@broadcom.com>,
-	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-	Chandrakanth patil <chandrakanth.patil@broadcom.com>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	megaraidlinux.pdl@broadcom.com,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Alexey Khoroshilov <khoroshilov@ispras.ru>,
-	lvc-project@linuxtesting.org
-Subject: [PATCH] scsi: megaraid_mm: do not access uninit kioc_list members
-Date: Sun,  3 Dec 2023 18:50:57 +0300
-Message-ID: <20231203155058.24293-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.43.0
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5438FE
+	for <linux-scsi@vger.kernel.org>; Sun,  3 Dec 2023 08:06:19 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r9oz0-0005gf-Fr; Sun, 03 Dec 2023 17:06:14 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r9oyz-00DK9Y-4E; Sun, 03 Dec 2023 17:06:13 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r9oyy-00DPoV-R9; Sun, 03 Dec 2023 17:06:12 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: "James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org,
+	Finn Thain <fthain@linux-m68k.org>,
+	Michael Schmitz <schmitzmic@gmail.com>,
+	kernel@pengutronix.de
+Subject: [PATCH 00/14] scsci: Convert to platform remove callback returning void
+Date: Sun,  3 Dec 2023 17:05:45 +0100
+Message-ID: <cover.1701619134.git.u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2063; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=iubrYeMiuZQvnPp7zpziUnn3i98Bk0McvVTNOciwiDw=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlbKdYbRdywXdVYvlAEUzj4+r66wHoxwsz9keeH nT087Ws8faJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZWynWAAKCRCPgPtYfRL+ TkoXCACgoounhc9N3LsZxym5HA9IuV4cdHixHmrH04hKUMRy01ZWiUT/hf4VLFGVDtjT1HPEkVg aHxG21+GJdBjzLvdYuHTYwEwhd1Ec6RPhS6Zs2GbL8SUbvWywzKAaH/PbIHwdqzgR3fDEKcaCgA eRBthZBuPsVzAEyafpNZ+8l1BddLBb0P+Hif/RTeL9Y+FLM7QCJWBwHtGG/WuAX7pTZ2ANLtaqz wO3mhKuWte2NUb9IPgtbsJPxJ+M/+cX5poD0N9T0Ypo4rVRvfagS+PepNNtmNdLdiCTMlUwuV4x eEviGVjQ6Vsih4CD+D1l/rqCG4cBmVqlU/lQ2EkU5q3VjAGj
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-scsi@vger.kernel.org
 
-adapter->kioc_list is allocated using kmalloc_array() so its values are
-left uninitialized. In a rare OOM case when dma_pool_alloc() fails in
-mraid_mm_register_adp(), we should free the already allocated DMA pools
-but comparing kioc->pthru32 with NULL doesn't guard from accessing uninit
-memory.
+Hello,
 
-Properly roll back in error case: free array members with lower indices.
+this series converts all drivers below drivers/scsi to struct
+platform_driver::remove_new(). See commit 5c5a7680e67b ("platform:
+Provide a remove callback that returns no value") for an extended
+explanation and the eventual goal.
 
-Found by Linux Verification Center (linuxtesting.org).
+All conversations are trivial, because all .remove() callbacks returned
+zero unconditionally.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
----
- drivers/scsi/megaraid/megaraid_mm.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+Best regards
+Uwe
 
-diff --git a/drivers/scsi/megaraid/megaraid_mm.c b/drivers/scsi/megaraid/megaraid_mm.c
-index c509440bd161..701eb5ee2a69 100644
---- a/drivers/scsi/megaraid/megaraid_mm.c
-+++ b/drivers/scsi/megaraid/megaraid_mm.c
-@@ -1001,12 +1001,10 @@ mraid_mm_register_adp(mraid_mmadp_t *lld_adp)
- 
- pthru_dma_pool_error:
- 
--	for (i = 0; i < lld_adp->max_kioc; i++) {
-+	while (--i >= 0) {
- 		kioc = adapter->kioc_list + i;
--		if (kioc->pthru32) {
--			dma_pool_free(adapter->pthru_dma_pool, kioc->pthru32,
--				kioc->pthru32_h);
--		}
-+		dma_pool_free(adapter->pthru_dma_pool, kioc->pthru32,
-+			kioc->pthru32_h);
- 	}
- 
- memalloc_error:
+Uwe Kleine-König (14):
+  scsi: a3000: Convert to platform remove callback returning void
+  scsi: a4000t: Convert to platform remove callback returning void
+  scsi: atari: Convert to platform remove callback returning void
+  scsi: bvme6000: Convert to platform remove callback returning void
+  scsi: jazz_esp: Convert to platform remove callback returning void
+  scsi: mac_esp: Convert to platform remove callback returning void
+  scsi: mac: Convert to platform remove callback returning void
+  scsi: mvme16x: Convert to platform remove callback returning void
+  scsi: qlogicpti: Convert to platform remove callback returning void
+  scsi: sgiwd93: Convert to platform remove callback returning void
+  scsi: sni_53c710: Convert to platform remove callback returning void
+  scsi: sun3: Convert to platform remove callback returning void
+  scsi: sun3x_esp: Convert to platform remove callback returning void
+  scsi: sun_esp: Convert to platform remove callback returning void
+
+ drivers/scsi/a3000.c         | 5 ++---
+ drivers/scsi/a4000t.c        | 5 ++---
+ drivers/scsi/atari_scsi.c    | 5 ++---
+ drivers/scsi/bvme6000_scsi.c | 6 ++----
+ drivers/scsi/jazz_esp.c      | 6 ++----
+ drivers/scsi/mac_esp.c       | 6 ++----
+ drivers/scsi/mac_scsi.c      | 5 ++---
+ drivers/scsi/mvme16x_scsi.c  | 6 ++----
+ drivers/scsi/qlogicpti.c     | 6 ++----
+ drivers/scsi/sgiwd93.c       | 5 ++---
+ drivers/scsi/sni_53c710.c    | 6 ++----
+ drivers/scsi/sun3_scsi.c     | 5 ++---
+ drivers/scsi/sun3x_esp.c     | 6 ++----
+ drivers/scsi/sun_esp.c       | 6 ++----
+ 14 files changed, 28 insertions(+), 50 deletions(-)
+
+
+base-commit: 5eda217cee887e595ba2265435862d585d399769
 -- 
-2.43.0
+2.42.0
 
 
