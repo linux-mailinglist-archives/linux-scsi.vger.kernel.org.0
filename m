@@ -1,42 +1,42 @@
-Return-Path: <linux-scsi+bounces-459-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-467-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98522802570
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 17:31:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42DB2802579
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 17:32:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 381D91F20FA7
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:31:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8297B280E0E
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:32:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE88418049
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:31:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47BD31EB2C
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:32:26 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23C1CC
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6712102
 	for <linux-scsi@vger.kernel.org>; Sun,  3 Dec 2023 08:06:19 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r9oz1-0005i4-JP; Sun, 03 Dec 2023 17:06:15 +0100
+	id 1r9oz1-0005iF-T1; Sun, 03 Dec 2023 17:06:15 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r9oz1-00DKA6-6o; Sun, 03 Dec 2023 17:06:15 +0100
+	id 1r9oz1-00DKAD-G0; Sun, 03 Dec 2023 17:06:15 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r9oz0-00DPp4-UB; Sun, 03 Dec 2023 17:06:14 +0100
+	id 1r9oz1-00DPp8-6x; Sun, 03 Dec 2023 17:06:15 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: "James E.J. Bottomley" <jejb@linux.ibm.com>,
 	"Martin K. Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	kernel@pengutronix.de
-Subject: [PATCH 09/14] scsi: qlogicpti: Convert to platform remove callback returning void
-Date: Sun,  3 Dec 2023 17:05:54 +0100
-Message-ID:  <8242c07f617fc946aab857c9357f540598fe964e.1701619134.git.u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 10/14] scsi: sgiwd93: Convert to platform remove callback returning void
+Date: Sun,  3 Dec 2023 17:05:55 +0100
+Message-ID:  <92114604fd1274073915e515cae15003ff07aa4a.1701619134.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <cover.1701619134.git.u.kleine-koenig@pengutronix.de>
 References: <cover.1701619134.git.u.kleine-koenig@pengutronix.de>
@@ -47,7 +47,7 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1993; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=DX9lJcChY3CbQVT0Hv59ZpzGpcFqvDKPIdvqtf8GhXo=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlbKdibp/lMfWQf/RxHEVZXQ0cP6woZbRj9WksK jlDcwSlxoCJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZWynYgAKCRCPgPtYfRL+ ToIOB/9DKjLa9KSKqfZR3a2o0UfL4a9LfJKqX9gAwCG+/C+jDcOzPljdBmF+A9kjCgHfPYPa+eq LQPfCLu5QhZ4wq9BwGPYNDjOg240cfAU1aJIXovGLsmY0meAElXqJDIcFNfSdHL08O3D1oZMq3/ wNphFlz14C32fSzWeT+WyAaEpx+lKntQSX/6OJeES7mvaS68uBmoxoEHm15hQAcAl8OlkMin/Aa Jg8KvnJFsCLAsaRlatext/vijw1ND5PHLYdaHvpHPSmkqvR3lQpmYlkKSaNvfNqDAOBvQN7ZDTG t3P0fa1YkQgyDbmyYXUR7ZqVoN1MOhpShj1rfiHf+dN3v301
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1932; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=DW3LG7aglWlZOVUC2OH9y5ea5FON/xeAQBAEDC/idiM=; b=owGbwMvMwMXY3/A7olbonx/jabUkhtSc5ckb3lg4dbtsvjD38jwDg7PyVYE9DewKLEYnY9ck5 e0zaEjsZDRmYWDkYpAVU2Sxb1yTaVUlF9m59t9lmEGsTCBTGLg4BWAirx+y/y/clGXxekUg96r/ DL9aGbgqZhXN5Gx2vV/oVPgtKdyzu3RbmxDv+YmMudOk3Hp5Pl/qNaou6j9+dIGIY/oF9pO3Fsz tXzqFcVpeXdONnee4pD7POvIu8GBJ7feH2suVTL58n5KYVm/Io7R8yf3LMp/79dTjL/epSkg5vO 3s2DlrRWxbhchDhjvTz4XIlf5LvtMcHfDb9Z1094Twc2JVLj+mPtigsS0yJeWUJ3eCz+spMSLzS 9r63V0OBhzJOL9Qr8R9W/rn10eaXnYVlrnu2xj1YAX3KiH+4/rTw6bG57R0np2Q6hQb2td7zfdr 9dR5oQ+v2Non20Vy95WrvKvQWTKRlevSXTU/wbmNDRMTAA==
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -74,40 +74,36 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/scsi/qlogicpti.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/scsi/sgiwd93.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/qlogicpti.c b/drivers/scsi/qlogicpti.c
-index 3b95f7a6216f..5d560d9b8944 100644
---- a/drivers/scsi/qlogicpti.c
-+++ b/drivers/scsi/qlogicpti.c
-@@ -1409,7 +1409,7 @@ static int qpti_sbus_probe(struct platform_device *op)
- 	return -ENODEV;
+diff --git a/drivers/scsi/sgiwd93.c b/drivers/scsi/sgiwd93.c
+index 88e2b5eb9caa..b0bef83db7b6 100644
+--- a/drivers/scsi/sgiwd93.c
++++ b/drivers/scsi/sgiwd93.c
+@@ -291,7 +291,7 @@ static int sgiwd93_probe(struct platform_device *pdev)
+ 	return err;
  }
  
--static int qpti_sbus_remove(struct platform_device *op)
-+static void qpti_sbus_remove(struct platform_device *op)
+-static int sgiwd93_remove(struct platform_device *pdev)
++static void sgiwd93_remove(struct platform_device *pdev)
  {
- 	struct qlogicpti *qpti = dev_get_drvdata(&op->dev);
- 
-@@ -1438,8 +1438,6 @@ static int qpti_sbus_remove(struct platform_device *op)
- 		of_iounmap(&op->resource[0], qpti->sreg, sizeof(unsigned char));
- 
- 	scsi_host_put(qpti->qhost);
--
+ 	struct Scsi_Host *host = platform_get_drvdata(pdev);
+ 	struct ip22_hostdata *hdata = (struct ip22_hostdata *) host->hostdata;
+@@ -302,12 +302,11 @@ static int sgiwd93_remove(struct platform_device *pdev)
+ 	dma_free_noncoherent(&pdev->dev, HPC_DMA_SIZE, hdata->cpu, hdata->dma,
+ 			DMA_TO_DEVICE);
+ 	scsi_host_put(host);
 -	return 0;
  }
  
- static const struct of_device_id qpti_match[] = {
-@@ -1465,7 +1463,7 @@ static struct platform_driver qpti_sbus_driver = {
- 		.of_match_table = qpti_match,
- 	},
- 	.probe		= qpti_sbus_probe,
--	.remove		= qpti_sbus_remove,
-+	.remove_new	= qpti_sbus_remove,
- };
- module_platform_driver(qpti_sbus_driver);
- 
+ static struct platform_driver sgiwd93_driver = {
+ 	.probe  = sgiwd93_probe,
+-	.remove = sgiwd93_remove,
++	.remove_new = sgiwd93_remove,
+ 	.driver = {
+ 		.name   = "sgiwd93",
+ 	}
 -- 
 2.42.0
 
