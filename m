@@ -1,42 +1,42 @@
-Return-Path: <linux-scsi+bounces-470-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-469-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C66C80257C
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 17:32:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B04F80257B
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 17:32:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA03B280E0E
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:32:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 508501F210C3
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:32:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E2771EB4B
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D058F1EB31
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:32:35 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C231410E
-	for <linux-scsi@vger.kernel.org>; Sun,  3 Dec 2023 08:06:20 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E69BFA
+	for <linux-scsi@vger.kernel.org>; Sun,  3 Dec 2023 08:06:21 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r9oz2-0005nP-NZ; Sun, 03 Dec 2023 17:06:16 +0100
+	id 1r9oz2-0005oZ-Sw; Sun, 03 Dec 2023 17:06:16 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r9oz2-00DKAO-58; Sun, 03 Dec 2023 17:06:16 +0100
+	id 1r9oz2-00DKAR-A4; Sun, 03 Dec 2023 17:06:16 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r9oz1-00DPpK-SA; Sun, 03 Dec 2023 17:06:15 +0100
+	id 1r9oz2-00DPpN-18; Sun, 03 Dec 2023 17:06:16 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: "James E.J. Bottomley" <jejb@linux.ibm.com>,
 	"Martin K. Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	kernel@pengutronix.de
-Subject: [PATCH 13/14] scsi: sun3x_esp: Convert to platform remove callback returning void
-Date: Sun,  3 Dec 2023 17:05:58 +0100
-Message-ID:  <5010d1a4f3d77eaa1114fa254c343c4f23313901.1701619134.git.u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 14/14] scsi: sun_esp: Convert to platform remove callback returning void
+Date: Sun,  3 Dec 2023 17:05:59 +0100
+Message-ID:  <1d385231c23c2a1e6e7dc1968eb111327386d1f6.1701619134.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <cover.1701619134.git.u.kleine-koenig@pengutronix.de>
 References: <cover.1701619134.git.u.kleine-koenig@pengutronix.de>
@@ -47,7 +47,7 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1883; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=b8kdc5NUtC8q0GXD2i5QPt7FoloXN5G7rEJdkurrL5I=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlbKdnsppi63Ssn9wP43fZFWIrXiD6qeZrCnMye Bs8MyJHZWSJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZWynZwAKCRCPgPtYfRL+ TraZCACAFmJv5gpY1Rkz7QjGeo/e44+YlAYGYsp0xYBvuHNm3IHAr6M1C6Hm2qNicdx5IvphSyq CMA5mIRjAY+DGcAInseByGmggTe0FRv94MkjkowzOMnoqCTK8fPyG+oTBZF0EHamIVldz1iq4JN 6f9JYolAl7KiGQC4HG5JYKTQgKCLkUGhDelBCFKdb3xosc1F/GjOVq1HdFKzmOwawuvsEgZgG/H /BB/8MFToxdsdQYHJj/U6ynQ+3rwdVGScYskLwpeAppOIRCSq/9zdiUs7VqnpkbKZEZ6jMdEw/k a4HhEGZR4oTPXfb3rdubzgC3i32qS4E4F/PpH+s7hPh+Q5P1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1963; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=669rSRbFAMDpXl1yfjpgeYu0Rciw+vTbBypz438k1KA=; b=owEBbAGT/pANAwAKAY+A+1h9Ev5OAcsmYgBlbKdo0Yub6ZnaZAtp4ZN/cWTVrqgggbIJu3eJN Wer3bkvQuCJATIEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZWynaAAKCRCPgPtYfRL+ TmFhB/jJJ+J7DR/w8IK7Y65UOYrwQGhY7Nw+ZUk893a3QdA5I8eeo/QBRwCbH9X3URfONXTtjur 7cfWZ//RhdsjXmveq4ARP65BLffj2KuWzqPW86fPsEsr2xASo5Hz99TAUuqXNRzNpGJL+xOKwgG tBLTPDLi3JSvw+g/QsP+8IYpkCSECqwv3u/ET0OG1UuHE7OJz7kJ9ubCQ7OwlLHlkiNKRYhqhe0 R2oLgp3I66cSXtk9D8Ra50jV4T+QVSrLVOFCrGYAlVAldCGuQLBdflIO5DWEhZXIuehwiJr8q35 B8uzUwIj3B5XrkBc2WL7C0EAWRB/vvSu15LsF/gV1SVdlhQ=
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -74,37 +74,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/scsi/sun3x_esp.c | 6 ++----
+ drivers/scsi/sun_esp.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/sun3x_esp.c b/drivers/scsi/sun3x_esp.c
-index 30f67cbf4a7a..09219c362acc 100644
---- a/drivers/scsi/sun3x_esp.c
-+++ b/drivers/scsi/sun3x_esp.c
-@@ -243,7 +243,7 @@ static int esp_sun3x_probe(struct platform_device *dev)
- 	return err;
+diff --git a/drivers/scsi/sun_esp.c b/drivers/scsi/sun_esp.c
+index afa9d02a33ec..64a7c2c6c5ff 100644
+--- a/drivers/scsi/sun_esp.c
++++ b/drivers/scsi/sun_esp.c
+@@ -550,7 +550,7 @@ static int esp_sbus_probe(struct platform_device *op)
+ 	return ret;
  }
  
--static int esp_sun3x_remove(struct platform_device *dev)
-+static void esp_sun3x_remove(struct platform_device *dev)
+-static int esp_sbus_remove(struct platform_device *op)
++static void esp_sbus_remove(struct platform_device *op)
  {
- 	struct esp *esp = dev_get_drvdata(&dev->dev);
- 	unsigned int irq = esp->host->irq;
-@@ -261,13 +261,11 @@ static int esp_sun3x_remove(struct platform_device *dev)
- 			  esp->command_block_dma);
+ 	struct esp *esp = dev_get_drvdata(&op->dev);
+ 	struct platform_device *dma_of = esp->dma;
+@@ -581,8 +581,6 @@ static int esp_sbus_remove(struct platform_device *op)
+ 	dev_set_drvdata(&op->dev, NULL);
  
- 	scsi_host_put(esp->host);
+ 	put_device(&dma_of->dev);
 -
 -	return 0;
  }
  
- static struct platform_driver esp_sun3x_driver = {
- 	.probe          = esp_sun3x_probe,
--	.remove         = esp_sun3x_remove,
-+	.remove_new     = esp_sun3x_remove,
- 	.driver = {
- 		.name   = "sun3x_esp",
+ static const struct of_device_id esp_match[] = {
+@@ -605,7 +603,7 @@ static struct platform_driver esp_sbus_driver = {
+ 		.of_match_table = esp_match,
  	},
+ 	.probe		= esp_sbus_probe,
+-	.remove		= esp_sbus_remove,
++	.remove_new	= esp_sbus_remove,
+ };
+ module_platform_driver(esp_sbus_driver);
+ 
 -- 
 2.42.0
 
