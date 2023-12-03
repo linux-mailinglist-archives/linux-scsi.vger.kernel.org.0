@@ -1,42 +1,42 @@
-Return-Path: <linux-scsi+bounces-465-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-459-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82B39802577
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 17:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 98522802570
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 17:31:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C6D71F210E1
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:32:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 381D91F20FA7
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:31:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE80C18046
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:32:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE88418049
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Dec 2023 16:31:47 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60CB101
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23C1CC
 	for <linux-scsi@vger.kernel.org>; Sun,  3 Dec 2023 08:06:19 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r9oz1-0005hu-By; Sun, 03 Dec 2023 17:06:15 +0100
+	id 1r9oz1-0005i4-JP; Sun, 03 Dec 2023 17:06:15 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r9oz0-00DKA2-VY; Sun, 03 Dec 2023 17:06:14 +0100
+	id 1r9oz1-00DKA6-6o; Sun, 03 Dec 2023 17:06:15 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r9oz0-00DPp0-MW; Sun, 03 Dec 2023 17:06:14 +0100
+	id 1r9oz0-00DPp4-UB; Sun, 03 Dec 2023 17:06:14 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: "James E.J. Bottomley" <jejb@linux.ibm.com>,
 	"Martin K. Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	kernel@pengutronix.de
-Subject: [PATCH 08/14] scsi: mvme16x: Convert to platform remove callback returning void
-Date: Sun,  3 Dec 2023 17:05:53 +0100
-Message-ID:  <1d16e93a498831abd64df8b8cf54fd8872cdd1cd.1701619134.git.u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 09/14] scsi: qlogicpti: Convert to platform remove callback returning void
+Date: Sun,  3 Dec 2023 17:05:54 +0100
+Message-ID:  <8242c07f617fc946aab857c9357f540598fe964e.1701619134.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <cover.1701619134.git.u.kleine-koenig@pengutronix.de>
 References: <cover.1701619134.git.u.kleine-koenig@pengutronix.de>
@@ -47,7 +47,7 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2091; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=OmXRLj7k/75ILKZOY3rC0Oh9OHKObfZIwuESWPXVjtM=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlbKdhzT4TJdCtFZXIriXfeFHv1lVktPFGFMiLu bkAX9UTpWeJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZWynYQAKCRCPgPtYfRL+ Tn/iB/9Xg/IIJmyxC9vyaE6xj/fjOcyoaynT9o7u5et7oecIyUgT6/ZHC21ctNSyI7vWzu7Rmo0 Kmww1aKA3fRSDbKJFI/VYCSf9a1XEZNOWYxwxQ2vifgF/TnKDivl5V77rqMtREXb43VtDZMydYe VjWR1YXIbKuHbgBLF6x7dakOtVdT2go6bAlaEK7ewYpHw2qdUXffV+071jJ1L4uDTTFRO9obtYb iWjEWjOQJ4fXJeuheVXU/u7IfVbLihojPdHH9AZz0n1OgQtZ/32Anor9561TRdZk7tJDh42V7z/ PIiyvKoxTwL+fTz84Ndjr+1GpmSXxmFRHN2mBH9LBS/ihi+G
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1993; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=DX9lJcChY3CbQVT0Hv59ZpzGpcFqvDKPIdvqtf8GhXo=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlbKdibp/lMfWQf/RxHEVZXQ0cP6woZbRj9WksK jlDcwSlxoCJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZWynYgAKCRCPgPtYfRL+ ToIOB/9DKjLa9KSKqfZR3a2o0UfL4a9LfJKqX9gAwCG+/C+jDcOzPljdBmF+A9kjCgHfPYPa+eq LQPfCLu5QhZ4wq9BwGPYNDjOg240cfAU1aJIXovGLsmY0meAElXqJDIcFNfSdHL08O3D1oZMq3/ wNphFlz14C32fSzWeT+WyAaEpx+lKntQSX/6OJeES7mvaS68uBmoxoEHm15hQAcAl8OlkMin/Aa Jg8KvnJFsCLAsaRlatext/vijw1ND5PHLYdaHvpHPSmkqvR3lQpmYlkKSaNvfNqDAOBvQN7ZDTG t3P0fa1YkQgyDbmyYXUR7ZqVoN1MOhpShj1rfiHf+dN3v301
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -74,40 +74,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/scsi/mvme16x_scsi.c | 6 ++----
+ drivers/scsi/qlogicpti.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/mvme16x_scsi.c b/drivers/scsi/mvme16x_scsi.c
-index 21d638299ab8..e08a38e2a442 100644
---- a/drivers/scsi/mvme16x_scsi.c
-+++ b/drivers/scsi/mvme16x_scsi.c
-@@ -103,7 +103,7 @@ static int mvme16x_probe(struct platform_device *dev)
+diff --git a/drivers/scsi/qlogicpti.c b/drivers/scsi/qlogicpti.c
+index 3b95f7a6216f..5d560d9b8944 100644
+--- a/drivers/scsi/qlogicpti.c
++++ b/drivers/scsi/qlogicpti.c
+@@ -1409,7 +1409,7 @@ static int qpti_sbus_probe(struct platform_device *op)
  	return -ENODEV;
  }
  
--static int mvme16x_device_remove(struct platform_device *dev)
-+static void mvme16x_device_remove(struct platform_device *dev)
+-static int qpti_sbus_remove(struct platform_device *op)
++static void qpti_sbus_remove(struct platform_device *op)
  {
- 	struct Scsi_Host *host = platform_get_drvdata(dev);
- 	struct NCR_700_Host_Parameters *hostdata = shost_priv(host);
-@@ -120,8 +120,6 @@ static int mvme16x_device_remove(struct platform_device *dev)
- 	NCR_700_release(host);
- 	kfree(hostdata);
- 	free_irq(host->irq, host);
+ 	struct qlogicpti *qpti = dev_get_drvdata(&op->dev);
+ 
+@@ -1438,8 +1438,6 @@ static int qpti_sbus_remove(struct platform_device *op)
+ 		of_iounmap(&op->resource[0], qpti->sreg, sizeof(unsigned char));
+ 
+ 	scsi_host_put(qpti->qhost);
 -
 -	return 0;
  }
  
- static struct platform_driver mvme16x_scsi_driver = {
-@@ -129,7 +127,7 @@ static struct platform_driver mvme16x_scsi_driver = {
- 		.name           = "mvme16x-scsi",
+ static const struct of_device_id qpti_match[] = {
+@@ -1465,7 +1463,7 @@ static struct platform_driver qpti_sbus_driver = {
+ 		.of_match_table = qpti_match,
  	},
- 	.probe          = mvme16x_probe,
--	.remove         = mvme16x_device_remove,
-+	.remove_new     = mvme16x_device_remove,
+ 	.probe		= qpti_sbus_probe,
+-	.remove		= qpti_sbus_remove,
++	.remove_new	= qpti_sbus_remove,
  };
+ module_platform_driver(qpti_sbus_driver);
  
- static int __init mvme16x_scsi_init(void)
 -- 
 2.42.0
 
