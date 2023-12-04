@@ -1,174 +1,284 @@
-Return-Path: <linux-scsi+bounces-503-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-500-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C5F38032FD
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 13:37:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D715F8032FA
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 13:37:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D90D1C209CE
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 12:37:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8DB99280F37
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 12:37:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05BFC241F8
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 12:37:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46FE0241F8
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 12:37:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kQyNNodt"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B639CD2;
-	Mon,  4 Dec 2023 04:32:34 -0800 (PST)
-Received: from dggpemd100001.china.huawei.com (unknown [172.30.72.53])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4SkNMK0hhTzWjH6;
-	Mon,  4 Dec 2023 20:31:41 +0800 (CST)
-Received: from localhost.localdomain (10.50.165.33) by
- dggpemd100001.china.huawei.com (7.185.36.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1258.28; Mon, 4 Dec 2023 20:32:32 +0800
-From: Xingui Yang <yangxingui@huawei.com>
-To: <john.g.garry@oracle.com>, <yanaijie@huawei.com>, <jejb@linux.ibm.com>,
-	<martin.petersen@oracle.com>, <damien.lemoal@opensource.wdc.com>
-CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
-	<chenxiang66@hisilicon.com>, <kangfenglong@huawei.com>
-Subject: [PATCH v5 3/3] scsi: libsas: Fix the failure of adding phy with zero-address to port
-Date: Mon, 4 Dec 2023 12:29:32 +0000
-Message-ID: <20231204122932.55741-4-yangxingui@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20231204122932.55741-1-yangxingui@huawei.com>
-References: <20231204122932.55741-1-yangxingui@huawei.com>
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1231A6
+	for <linux-scsi@vger.kernel.org>; Mon,  4 Dec 2023 04:30:53 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-40bd5eaa66eso24039075e9.3
+        for <linux-scsi@vger.kernel.org>; Mon, 04 Dec 2023 04:30:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701693051; x=1702297851; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q3OtdRkBZRq7c4/uzUGtMz05bMeQtmqGYrkcfDBhpi0=;
+        b=kQyNNodt8aSNcQDglGqpwTVuzAoH5liX8T9cwActy7fSp5tqbWrAh+8R0l+/NvM97x
+         WjUsRlOolMvJAhvDFFcxoFiTsih2/pR3Cij7JY0/qK+qcUKSkaVucBNjE3uno+IDQMrt
+         w+sGAhhODYhONjlOjWF/fQ0tAFj00aehPIgnORJ2AlTpA5L3gAZ6qTgh/4MQYtw1pWEc
+         ul/lowtOe0ANjHWxs147a0RssZ0SfshbRzbtjnWezV47U/MZBmt3vK3VJOycvFtcptDD
+         cdkH7Ajc4rWnH/0ssnz21TMNJIXve5H1nrE5PfHccgb0WFLsarAMPeTW0vv5aVTWmg1v
+         CJ4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701693051; x=1702297851;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q3OtdRkBZRq7c4/uzUGtMz05bMeQtmqGYrkcfDBhpi0=;
+        b=HeBXTva8Ick4/+r6S36oFrf4xk+9sEcHNjQ5gYQ/VAjMDDRs1tcL+kpZYdh11owxHV
+         mrb5645oozYN/l1ZP/rR+yxQrJE7SVwumoW2cGQOX/qGsy33vcFXf//n+pSi27ASiOa7
+         ssMGVuLWVfQdLx+R/YJaP34qPilkkwytfMOM3b2YN69c45pFnoqzD1ra9AME60251BB9
+         dMol68aicZ6OsCBIs+dVlhW6SF+VdA25NwvjAT+7fkg+3m591X5I6sPvfGAv3yEpllvL
+         B/DcJaVjfPuJzNtKb1EHcwXhYHBZWYW7nl0/PeKDNqMZNTzdDIdjZdXZ0vv+ZyGfxphZ
+         ppbw==
+X-Gm-Message-State: AOJu0YzHAPDYujuPFWiKMmJmXoBkS+U8jCzlEerv2AMdZ3KuHi7tzZqO
+	/fBXkkK0j0kwFXh4b/plQT5ClRreFBJgHxcZYYU=
+X-Google-Smtp-Source: AGHT+IFHT7pWkz5jXoCY2Zxxuol2b8zZ2sF1dh++x+fuTT7zUz8AT/KGgEX1O6SSPNQ50dW7WQEomg==
+X-Received: by 2002:a05:600c:b45:b0:40b:5e21:ec27 with SMTP id k5-20020a05600c0b4500b0040b5e21ec27mr2459790wmr.89.1701693051636;
+        Mon, 04 Dec 2023 04:30:51 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id a13-20020a05600c348d00b0040b5377cf03sm18649920wmq.1.2023.12.04.04.30.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Dec 2023 04:30:51 -0800 (PST)
+Date: Mon, 4 Dec 2023 15:30:48 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: jsmart2021@gmail.com
+Cc: linux-scsi@vger.kernel.org
+Subject: [bug report] scsi: lpfc: Add support for the CM framework
+Message-ID: <121b7df5-8277-497a-983a-eac00061fb58@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemd100001.china.huawei.com (7.185.36.94)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When the expander device which attached many SATA disks is connected to
-the host, first disable and then enable the local phy. The following BUG()
-will be triggered with a small probability:
+[ I'm not sure what triggered this warning 2 years after the commit.
+  I checked on lore but I've never reported it previously. -dan ]
 
-[562240.051046] sas: phy19 part of wide port with phy16
-[562240.051197] sas: ex 500e004aaaaaaa1f phy19:U:0 attached: 0000000000000000 (no device)
-[562240.051203] sas: done REVALIDATING DOMAIN on port 0, pid:435909, res 0x0
-<...>
-[562240.062536] sas: ex 500e004aaaaaaa1f phy0 new device attached
-[562240.062616] sas: ex 500e004aaaaaaa1f phy00:U:5 attached: 0000000000000000 (stp)
-[562240.062680]  port-7:7:0: trying to add phy phy-7:7:19 fails: it's already part of another port
-[562240.085064] ------------[ cut here ]------------
-[562240.096612] kernel BUG at drivers/scsi/scsi_transport_sas.c:1083!
-[562240.109611] Internal error: Oops - BUG: 0 [#1] SMP
-[562240.343518] Process kworker/u256:3 (pid: 435909, stack limit = 0x0000000003bcbebf)
-[562240.421714] Workqueue: 0000:b4:02.0_disco_q sas_revalidate_domain [libsas]
-[562240.437173] pstate: 40c00009 (nZcv daif +PAN +UAO)
-[562240.450478] pc : sas_port_add_phy+0x13c/0x168 [scsi_transport_sas]
-[562240.465283] lr : sas_port_add_phy+0x13c/0x168 [scsi_transport_sas]
-[562240.479751] sp : ffff0000300cfa70
-[562240.674822] Call trace:
-[562240.682709]  sas_port_add_phy+0x13c/0x168 [scsi_transport_sas]
-[562240.694013]  sas_ex_get_linkrate.isra.5+0xcc/0x128 [libsas]
-[562240.704957]  sas_ex_discover_end_dev+0xfc/0x538 [libsas]
-[562240.715508]  sas_ex_discover_dev+0x3cc/0x4b8 [libsas]
-[562240.725634]  sas_ex_discover_devices+0x9c/0x1a8 [libsas]
-[562240.735855]  sas_ex_revalidate_domain+0x2f0/0x450 [libsas]
-[562240.746123]  sas_revalidate_domain+0x158/0x160 [libsas]
-[562240.756014]  process_one_work+0x1b4/0x448
-[562240.764548]  worker_thread+0x54/0x468
-[562240.772562]  kthread+0x134/0x138
-[562240.779989]  ret_from_fork+0x10/0x18
+Hello James Smart,
 
-What causes this problem:
-1. For phy19, when the phy is attached and added to the parent wide port,
-the path is:
-sas_rediscover()
-    ->sas_discover_new()
-        ->sas_ex_discover_devices()
-            ->sas_ex_discover_dev()
-                -> sas_add_parent_port()
+The patch 02243836ad6f: "scsi: lpfc: Add support for the CM
+framework" from Aug 16, 2021 (linux-next), leads to the following
+Smatch static checker warning:
 
-ex_phy->port was not set and when it is removed from parent wide port the
-path is:
-sas_rediscover()
-    ->sas_unregister_devs_sas_addr()
+	drivers/scsi/lpfc/lpfc_sli.c:8343 lpfc_cmf_setup()
+	error: we previously assumed 'phba->cgn_i' could be null (see line 8289)
 
-Then the sas address of phy19 becomes 0, and since ex_phy->port is NULL,
-phy19 was not removed from the parent wide port's phy_list.
+drivers/scsi/lpfc/lpfc_sli.c
+    8203 static int
+    8204 lpfc_cmf_setup(struct lpfc_hba *phba)
+    8205 {
+    8206         LPFC_MBOXQ_t *mboxq;
+    8207         struct lpfc_dmabuf *mp;
+    8208         struct lpfc_pc_sli4_params *sli4_params;
+    8209         int rc, cmf, mi_ver;
+    8210 
+    8211         rc = lpfc_sli4_refresh_params(phba);
+    8212         if (unlikely(rc))
+    8213                 return rc;
+    8214 
+    8215         mboxq = (LPFC_MBOXQ_t *)mempool_alloc(phba->mbox_mem_pool, GFP_KERNEL);
+    8216         if (!mboxq)
+    8217                 return -ENOMEM;
+    8218 
+    8219         sli4_params = &phba->sli4_hba.pc_sli4_params;
+    8220 
+    8221         /* Always try to enable MI feature if we can */
+    8222         if (sli4_params->mi_ver) {
+    8223                 lpfc_set_features(phba, mboxq, LPFC_SET_ENABLE_MI);
+    8224                 rc = lpfc_sli_issue_mbox(phba, mboxq, MBX_POLL);
+    8225                 mi_ver = bf_get(lpfc_mbx_set_feature_mi,
+    8226                                  &mboxq->u.mqe.un.set_feature);
+    8227 
+    8228                 if (rc == MBX_SUCCESS) {
+    8229                         if (mi_ver) {
+    8230                                 lpfc_printf_log(phba,
+    8231                                                 KERN_WARNING, LOG_CGN_MGMT,
+    8232                                                 "6215 MI is enabled\n");
+    8233                                 sli4_params->mi_ver = mi_ver;
+    8234                         } else {
+    8235                                 lpfc_printf_log(phba,
+    8236                                                 KERN_WARNING, LOG_CGN_MGMT,
+    8237                                                 "6338 MI is disabled\n");
+    8238                                 sli4_params->mi_ver = 0;
+    8239                         }
+    8240                 } else {
+    8241                         /* mi_ver is already set from GET_SLI4_PARAMETERS */
+    8242                         lpfc_printf_log(phba, KERN_INFO,
+    8243                                         LOG_CGN_MGMT | LOG_INIT,
+    8244                                         "6245 Enable MI Mailbox x%x (x%x/x%x) "
+    8245                                         "failed, rc:x%x mi:x%x\n",
+    8246                                         bf_get(lpfc_mqe_command, &mboxq->u.mqe),
+    8247                                         lpfc_sli_config_mbox_subsys_get
+    8248                                                 (phba, mboxq),
+    8249                                         lpfc_sli_config_mbox_opcode_get
+    8250                                                 (phba, mboxq),
+    8251                                         rc, sli4_params->mi_ver);
+    8252                 }
+    8253         } else {
+    8254                 lpfc_printf_log(phba, KERN_WARNING, LOG_CGN_MGMT,
+    8255                                 "6217 MI is disabled\n");
+    8256         }
+    8257 
+    8258         /* Ensure FDMI is enabled for MI if enable_mi is set */
+    8259         if (sli4_params->mi_ver)
+    8260                 phba->cfg_fdmi_on = LPFC_FDMI_SUPPORT;
+    8261 
+    8262         /* Always try to enable CMF feature if we can */
+    8263         if (sli4_params->cmf) {
+    8264                 lpfc_set_features(phba, mboxq, LPFC_SET_ENABLE_CMF);
+    8265                 rc = lpfc_sli_issue_mbox(phba, mboxq, MBX_POLL);
+    8266                 cmf = bf_get(lpfc_mbx_set_feature_cmf,
+    8267                              &mboxq->u.mqe.un.set_feature);
+    8268                 if (rc == MBX_SUCCESS && cmf) {
+    8269                         lpfc_printf_log(phba, KERN_WARNING, LOG_CGN_MGMT,
+    8270                                         "6218 CMF is enabled: mode %d\n",
+    8271                                         phba->cmf_active_mode);
+    8272                 } else {
+    8273                         lpfc_printf_log(phba, KERN_WARNING,
+    8274                                         LOG_CGN_MGMT | LOG_INIT,
+    8275                                         "6219 Enable CMF Mailbox x%x (x%x/x%x) "
+    8276                                         "failed, rc:x%x dd:x%x\n",
+    8277                                         bf_get(lpfc_mqe_command, &mboxq->u.mqe),
+    8278                                         lpfc_sli_config_mbox_subsys_get
+    8279                                                 (phba, mboxq),
+    8280                                         lpfc_sli_config_mbox_opcode_get
+    8281                                                 (phba, mboxq),
+    8282                                         rc, cmf);
+    8283                         sli4_params->cmf = 0;
+    8284                         phba->cmf_active_mode = LPFC_CFG_OFF;
+    8285                         goto no_cmf;
+    8286                 }
+    8287 
+    8288                 /* Allocate Congestion Information Buffer */
+    8289                 if (!phba->cgn_i) {
+    8290                         mp = kmalloc(sizeof(*mp), GFP_KERNEL);
+    8291                         if (mp)
+    8292                                 mp->virt = dma_alloc_coherent
+    8293                                                 (&phba->pcidev->dev,
+    8294                                                 sizeof(struct lpfc_cgn_info),
+    8295                                                 &mp->phys, GFP_KERNEL);
+    8296                         if (!mp || !mp->virt) {
+    8297                                 lpfc_printf_log(phba, KERN_ERR, LOG_INIT,
+    8298                                                 "2640 Failed to alloc memory "
+    8299                                                 "for Congestion Info\n");
+    8300                                 kfree(mp);
+    8301                                 sli4_params->cmf = 0;
+    8302                                 phba->cmf_active_mode = LPFC_CFG_OFF;
+    8303                                 goto no_cmf;
 
-2. For phy0, it is connected to a new sata device and the path is:
-sas_rediscover()
-    ->sas_discover_new()->sas_ex_phy_discover()
-                            ->sas_ex_phy_discover_helper()
-                                ->sas_set_ex_phy()
-                        ->sas_ex_discover_devices()
-                            ->sas_ex_discover_dev()
-                                ->sas_ex_discover_end_dev()
-                                    ->sas_port_alloc() // Create port-7:7:0
-                                    ->sas_ex_get_linkrate()
-                                        ->sas_port_add_phy()
+phba->cgn_i is NULL here.
 
-The type of the newly connected device is stp, but the linkrate is 5 which
-less than 1.5G, then the sas address is set to 0 in sas_set_ex_phy().
-Subsequently, a new port port-7:7:0 was created and tried to add phy19 with
-the same zero-address to this new port. However, phy19 still belongs to
-another port, then a BUG() was triggered in sas_ex_get_linkrate().
+    8304                         }
+    8305                         phba->cgn_i = mp;
+    8306 
+    8307                         /* initialize congestion buffer info */
+    8308                         lpfc_init_congestion_buf(phba);
+    8309                         lpfc_init_congestion_stat(phba);
+    8310 
+    8311                         /* Zero out Congestion Signal counters */
+    8312                         atomic64_set(&phba->cgn_acqe_stat.alarm, 0);
+    8313                         atomic64_set(&phba->cgn_acqe_stat.warn, 0);
+    8314                 }
+    8315 
+    8316                 rc = lpfc_sli4_cgn_params_read(phba);
+    8317                 if (rc < 0) {
+    8318                         lpfc_printf_log(phba, KERN_ERR, LOG_CGN_MGMT | LOG_INIT,
+    8319                                         "6242 Error reading Cgn Params (%d)\n",
+    8320                                         rc);
+    8321                         /* Ensure CGN Mode is off */
+    8322                         sli4_params->cmf = 0;
+    8323                 } else if (!rc) {
+    8324                         lpfc_printf_log(phba, KERN_ERR, LOG_CGN_MGMT | LOG_INIT,
+    8325                                         "6243 CGN Event empty object.\n");
+    8326                         /* Ensure CGN Mode is off */
+    8327                         sli4_params->cmf = 0;
+    8328                 }
+    8329         } else {
+    8330 no_cmf:
+    8331                 lpfc_printf_log(phba, KERN_WARNING, LOG_CGN_MGMT,
+    8332                                 "6220 CMF is disabled\n");
+    8333         }
+    8334 
+    8335         /* Only register congestion buffer with firmware if BOTH
+    8336          * CMF and E2E are enabled.
+    8337          */
+    8338         if (sli4_params->cmf && sli4_params->mi_ver) {
+    8339                 rc = lpfc_reg_congestion_buf(phba);
+    8340                 if (rc) {
+    8341                         dma_free_coherent(&phba->pcidev->dev,
+    8342                                           sizeof(struct lpfc_cgn_info),
+--> 8343                                           phba->cgn_i->virt, phba->cgn_i->phys);
+                                                   ^^^^^^^^^^^^^^^^^
+Unchecked dereference.
 
-Fix the problem as follows:
-1. Use sas_port_add_ex_phy() instead of sas_port_add_phy() when ex_phy is
-added to the parent port.
+    8344                         kfree(phba->cgn_i);
+    8345                         phba->cgn_i = NULL;
+    8346                         /* Ensure CGN Mode is off */
+    8347                         phba->cmf_active_mode = LPFC_CFG_OFF;
+    8348                         sli4_params->cmf = 0;
+    8349                         return 0;
+    8350                 }
+    8351         }
+    8352         lpfc_printf_log(phba, KERN_INFO, LOG_INIT,
+    8353                         "6470 Setup MI version %d CMF %d mode %d\n",
+    8354                         sli4_params->mi_ver, sli4_params->cmf,
+    8355                         phba->cmf_active_mode);
+    8356 
+    8357         mempool_free(mboxq, phba->mbox_mem_pool);
+    8358 
+    8359         /* Initialize atomic counters */
+    8360         atomic_set(&phba->cgn_fabric_warn_cnt, 0);
+    8361         atomic_set(&phba->cgn_fabric_alarm_cnt, 0);
+    8362         atomic_set(&phba->cgn_sync_alarm_cnt, 0);
+    8363         atomic_set(&phba->cgn_sync_warn_cnt, 0);
+    8364         atomic_set(&phba->cgn_driver_evt_cnt, 0);
+    8365         atomic_set(&phba->cgn_latency_evt_cnt, 0);
+    8366         atomic64_set(&phba->cgn_latency_evt, 0);
+    8367 
+    8368         phba->cmf_interval_rate = LPFC_CMF_INTERVAL;
+    8369 
+    8370         /* Allocate RX Monitor Buffer */
+    8371         if (!phba->rx_monitor) {
+    8372                 phba->rx_monitor = kzalloc(sizeof(*phba->rx_monitor),
+    8373                                            GFP_KERNEL);
+    8374 
+    8375                 if (!phba->rx_monitor) {
+    8376                         lpfc_printf_log(phba, KERN_ERR, LOG_INIT,
+    8377                                         "2644 Failed to alloc memory "
+    8378                                         "for RX Monitor Buffer\n");
+    8379                         return -ENOMEM;
+    8380                 }
+    8381 
+    8382                 /* Instruct the rx_monitor object to instantiate its ring */
+    8383                 if (lpfc_rx_monitor_create_ring(phba->rx_monitor,
+    8384                                                 LPFC_MAX_RXMONITOR_ENTRY)) {
+    8385                         kfree(phba->rx_monitor);
+    8386                         phba->rx_monitor = NULL;
+    8387                         lpfc_printf_log(phba, KERN_ERR, LOG_INIT,
+    8388                                         "2645 Failed to alloc memory "
+    8389                                         "for RX Monitor's Ring\n");
+    8390                         return -ENOMEM;
+    8391                 }
+    8392         }
+    8393 
+    8394         return 0;
+    8395 }
 
-2. Set ex_dev->parent_port to NULL when the number of phy on the port
-becomes 0.
-
-3. When phy->attached_dev_type != NO_DEVICE, do not set the zero address
-for phy->attached_sas_addr.
-
-Fixes: 2908d778ab3e ("[SCSI] aic94xx: new driver")
-Fixes: 7d1d86518118 ("[SCSI] libsas: fix false positive 'device attached' conditions")
-Signed-off-by: Xingui Yang <yangxingui@huawei.com>
----
- drivers/scsi/libsas/sas_expander.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-index 7aa968b85e1e..9152152d5e10 100644
---- a/drivers/scsi/libsas/sas_expander.c
-+++ b/drivers/scsi/libsas/sas_expander.c
-@@ -45,7 +45,7 @@ static void sas_add_parent_port(struct domain_device *dev, int phy_id)
- 		BUG_ON(sas_port_add(ex->parent_port));
- 		sas_port_mark_backlink(ex->parent_port);
- 	}
--	sas_port_add_phy(ex->parent_port, ex_phy->phy);
-+	sas_port_add_ex_phy(ex->parent_port, ex_phy);
- }
- 
- /* ---------- SMP task management ---------- */
-@@ -261,8 +261,7 @@ static void sas_set_ex_phy(struct domain_device *dev, int phy_id,
- 	/* help some expanders that fail to zero sas_address in the 'no
- 	 * device' case
- 	 */
--	if (phy->attached_dev_type == SAS_PHY_UNUSED ||
--	    phy->linkrate < SAS_LINK_RATE_1_5_GBPS)
-+	if (phy->attached_dev_type == SAS_PHY_UNUSED)
- 		memset(phy->attached_sas_addr, 0, SAS_ADDR_SIZE);
- 	else
- 		memcpy(phy->attached_sas_addr, dr->attached_sas_addr, SAS_ADDR_SIZE);
-@@ -1864,9 +1863,12 @@ static void sas_unregister_devs_sas_addr(struct domain_device *parent,
- 	if (phy->port) {
- 		sas_port_delete_phy(phy->port, phy->phy);
- 		sas_device_set_phy(found, phy->port);
--		if (phy->port->num_phys == 0)
-+		if (phy->port->num_phys == 0) {
- 			list_add_tail(&phy->port->del_list,
- 				&parent->port->sas_port_del_list);
-+			if (ex_dev->parent_port == phy->port)
-+				ex_dev->parent_port = NULL;
-+		}
- 		phy->port = NULL;
- 	}
- }
--- 
-2.17.1
-
+regards,
+dan carpenter
 
