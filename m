@@ -1,87 +1,122 @@
-Return-Path: <linux-scsi+bounces-488-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-490-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D70B8030BF
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 11:43:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A45C38030C4
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 11:43:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C799B1F20EED
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 10:43:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 601A9280D87
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 10:43:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 475BA224C9
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 10:43:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17F6D224C9
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 10:43:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u68Q91Ew"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="25+2DmbH"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C09AC15B
-	for <linux-scsi@vger.kernel.org>; Mon,  4 Dec 2023 09:31:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 417F2C433C9
-	for <linux-scsi@vger.kernel.org>; Mon,  4 Dec 2023 09:31:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701682296;
-	bh=euNi+3tiOiFS1FjOSjYhCJakZcOSx0ua0LF1yM+Aws4=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=u68Q91EwBYl8EA3xMPcyGccLrjCvyYGRGTl42O8U++df7pmAECVmHMfCmdnfgO2vE
-	 p+HQQ0MGloEgU6LwEGQXFY7cjKuRM2m7kedLareUjsvwsbKj1WB8qpGiLAqAaGHVw7
-	 dWo1eAxEaCBWsywsJEHd2PdbmGGsHcHEBG12WKSDGdrwbHgsR0eKjt6LTpuARcscrN
-	 cmnDF1hnYkcRJqtQjMF4DtIjrKdoF5eT4a0KBgdyRC5JtA6a/wNoazKvMY3+AQYMSw
-	 uBlAvZSCrNGQtB54JloxMKZzpiLpS/Seo1QBfoIpFVer1Qlco0frUsU3MXY9gJ08Uc
-	 grOiHhIXzjS9g==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 29D22C53BD0; Mon,  4 Dec 2023 09:31:36 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-scsi@vger.kernel.org
-Subject: [Bug 218198] Suspend/Resume Regression with attached ATA devices
-Date: Mon, 04 Dec 2023 09:31:35 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Product: SCSI Drivers
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: dmummenschanz@web.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218198-11613-Bo6VtC0lyT@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218198-11613@https.bugzilla.kernel.org/>
-References: <bug-218198-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085901B8
+	for <linux-scsi@vger.kernel.org>; Mon,  4 Dec 2023 02:24:14 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-a0029289b1bso551332166b.1
+        for <linux-scsi@vger.kernel.org>; Mon, 04 Dec 2023 02:24:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1701685452; x=1702290252; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d+/UUK0tjiTbrYrWq+ZnEpTiWe5a1pluZVFLk6AmF9c=;
+        b=25+2DmbHuqMHRgfnJnrtDiwtqhqI7co39OL04t86nWhS9eW5Tzp6RsffFux3oF6gM5
+         Q0yigNgvCuMGYnZX8YiSRTbKvPgp1LJoJNZAByozfWR1eL1x6Lq2X6x/wa/tBMbw8PTG
+         yxMJs/yN4tQ9ESI7/jivditAn3sUqCOk2m/mPQUam5e/+2up6O5GjfPWZ54KXFBxENgQ
+         WnBBWdBC1z1z1hdPMQ+2bWgYukBWFMa553K6r5/6Ijj7BOmG/bp7vMFIewGDejkCSU53
+         XAwdrYrNSGfJsxHktKoaylnS6V4kPbYb0ad0thgbCsJ5fzqSHqMCC2DER0m8ueevFsj1
+         vRvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701685452; x=1702290252;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d+/UUK0tjiTbrYrWq+ZnEpTiWe5a1pluZVFLk6AmF9c=;
+        b=TDUC4hgT16QGJr4ZdYEGsnVulnJ6iTpJyCgDkpGXZR9pINsSQBa89UDGkbJTL6rarm
+         8bsrsKMQEWjV9BmsQjytE+PN+Vr90YOHNOEa6Uuc8XfXryIZCTNOo0nOelsBiUqexkV/
+         aI0eEy+OaCGB1cGkS5LsaIbLuoiqIVsG2n8XNPbILfukGHXRtg4RQ1NXVLnxombbsYNS
+         uE6N3yYmxV2LxU81xV8oiWL8xjel1CabV/0AD6IdY1o8u2/lUp27IYxy6VSsLqPMT/aX
+         T2tstuG23CK0HWlfvh2i0ZSslkOtN6x7e7aAiGl2xjaJzqCvbC+jIJs6RaR86QLdgO49
+         lNfg==
+X-Gm-Message-State: AOJu0YzOXqmdGEobE55EixcEETF+kXWuRh9ZG70/TaGkjvUXRlsYfjsV
+	G7RvIQHSGYZQIO8G7VBMaoeUSw==
+X-Google-Smtp-Source: AGHT+IHqro09Ko7X2V1DD4rgCax4G8WDgquQW3myh5xd0r5oyG9Hr2vgMNE9sZB0D3NOqxQZv3Bx/A==
+X-Received: by 2002:a17:906:103:b0:a0f:42da:1715 with SMTP id 3-20020a170906010300b00a0f42da1715mr3012340eje.50.1701685452409;
+        Mon, 04 Dec 2023 02:24:12 -0800 (PST)
+Received: from otso.luca.vpn.lucaweiss.eu (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id t15-20020a1709066bcf00b00a0bdfab0f02sm5121551ejs.77.2023.12.04.02.24.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Dec 2023 02:24:11 -0800 (PST)
+From: Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH v5 0/3] Add UFS host controller and Phy nodes for sc7280
+Date: Mon, 04 Dec 2023 11:24:03 +0100
+Message-Id: <20231204-sc7280-ufs-v5-0-926ceed550da@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMOobWUC/z3MQQ6CMBBA0auQWTukHSpYV97DGFPLILOgYAtqQ
+ ri71YXLt/h/hcRROMGxWCHyU5KMIWO/K8D3LtwZpc0GUlRpUgaTb+igcOkS3jQ3pmZXK24hB1P
+ kTt6/2fmS3cVxwLmP7P4LZcnqStuqLska0qjxsYi/Bpklupc7fSXBl34cYNs+K/ULnZ8AAAA=
+To: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, 
+ Manivannan Sadhasivam <mani@kernel.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>, 
+ Bart Van Assche <bvanassche@acm.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, cros-qcom-dts-watchers@chromium.org
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Nitin Rawat <quic_nitirawa@quicinc.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ "Bao D. Nguyen" <quic_nguyenb@quicinc.com>, 
+ Luca Weiss <luca.weiss@fairphone.com>, 
+ Manivannan Sadhasivam <mani@kernel.org>
+X-Mailer: b4 0.12.4
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218198
+This patch adds UFS host controller and Phy nodes for Qualcomm sc7280
+SoC and enable it on some sc7280-based boards.
 
---- Comment #13 from Dieter Mummenschanz (dmummenschanz@web.de) ---
-Maybe it helps to mention that if I issue=20
+Pick up the patchset from Nitin since the last revision (v4) has been
+sent end of September and is blocking qcm6490-fairphone-fp5 UFS.
 
-hdparm -Y /dev/sda && hdparm -Y /dev/sdb
+---
+Changes in v5:
+- Try to get patch tags in order
+- Drop patch reordering clocks/clock-names in dt-bindings example (Rob)
+- Use QCOM_ICC_TAG_ALWAYS for interconnect (Konrad)
+- Add missing interconnect-names (Luca)
+- Fix sorting of ufs nodes, place at correct location (Luca)
+- Provide ufs_mem_phy clock to gcc node (Luca)
+- Add missing power-domain to ufs_mem_phy (Luca)
+- Link to v4: https://lore.kernel.org/linux-arm-msm/20230929131936.29421-1-quic_nitirawa@quicinc.com/
 
-a couple of seconds after successful resume my system transitions down to p=
-c8.
-hdparm manual doesn't explicitly tell what command is issued with the -Y
-switch.
+---
+Nitin Rawat (3):
+      scsi: ufs: qcom: dt-bindings: Add SC7280 compatible string
+      arm64: dts: qcom: sc7280: Add UFS nodes for sc7280 soc
+      arm64: dts: qcom: sc7280: Add UFS nodes for sc7280 IDP board
 
---=20
-You may reply to this email to add a comment.
+ .../devicetree/bindings/ufs/qcom,ufs.yaml          |  2 +
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           | 19 ++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               | 74 +++++++++++++++++++++-
+ 3 files changed, 94 insertions(+), 1 deletion(-)
+---
+base-commit: ce733604ab13d907655fd76ef5be55d16bbd0f8c
+change-id: 20231204-sc7280-ufs-b1e746ea60ed
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Best regards,
+-- 
+Luca Weiss <luca.weiss@fairphone.com>
+
 
