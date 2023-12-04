@@ -1,24 +1,24 @@
-Return-Path: <linux-scsi+bounces-501-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-504-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C30558032FB
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 13:37:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EA438032FE
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 13:37:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2FDE1C209F9
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 12:37:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5966B280AB8
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 12:37:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394F7241FE
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 12:37:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F78A24204
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 12:37:54 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917CBC0;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926BFC3;
 	Mon,  4 Dec 2023 04:32:34 -0800 (PST)
 Received: from dggpemd100001.china.huawei.com (unknown [172.30.72.54])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4SkNHz6LXWz1P9HV;
-	Mon,  4 Dec 2023 20:28:47 +0800 (CST)
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4SkNJ00Ldhz1P9HW;
+	Mon,  4 Dec 2023 20:28:48 +0800 (CST)
 Received: from localhost.localdomain (10.50.165.33) by
  dggpemd100001.china.huawei.com (7.185.36.94) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -29,9 +29,9 @@ To: <john.g.garry@oracle.com>, <yanaijie@huawei.com>, <jejb@linux.ibm.com>,
 CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
 	<chenxiang66@hisilicon.com>, <kangfenglong@huawei.com>
-Subject: [PATCH v5 1/3] scsi: libsas: Add helper for port add ex_phy
-Date: Mon, 4 Dec 2023 12:29:30 +0000
-Message-ID: <20231204122932.55741-2-yangxingui@huawei.com>
+Subject: [PATCH v5 2/3] scsi: libsas: Move sas_add_parent_port() to sas_expander.c
+Date: Mon, 4 Dec 2023 12:29:31 +0000
+Message-ID: <20231204122932.55741-3-yangxingui@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20231204122932.55741-1-yangxingui@huawei.com>
 References: <20231204122932.55741-1-yangxingui@huawei.com>
@@ -46,42 +46,67 @@ X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  dggpemd100001.china.huawei.com (7.185.36.94)
 X-CFilter-Loop: Reflected
 
-This moves the process of adding ex_phy to a port into a new helper.
+Move sas_add_parent_port() to sas_expander.c since it is only used in this
+file.
 
 Signed-off-by: Xingui Yang <yangxingui@huawei.com>
 ---
- drivers/scsi/libsas/sas_expander.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/scsi/libsas/sas_expander.c | 15 +++++++++++++++
+ drivers/scsi/libsas/sas_internal.h | 15 ---------------
+ 2 files changed, 15 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-index a2204674b680..1257f90130fb 100644
+index 1257f90130fb..7aa968b85e1e 100644
 --- a/drivers/scsi/libsas/sas_expander.c
 +++ b/drivers/scsi/libsas/sas_expander.c
-@@ -26,6 +26,13 @@ static int sas_configure_phy(struct domain_device *dev, int phy_id,
- 			     u8 *sas_addr, int include);
- static int sas_disable_routing(struct domain_device *dev,  u8 *sas_addr);
+@@ -33,6 +33,21 @@ static void sas_port_add_ex_phy(struct sas_port *port, struct ex_phy *ex_phy)
+ 	ex_phy->phy_state = PHY_DEVICE_DISCOVERED;
+ }
  
-+static void sas_port_add_ex_phy(struct sas_port *port, struct ex_phy *ex_phy)
++static void sas_add_parent_port(struct domain_device *dev, int phy_id)
 +{
-+	sas_port_add_phy(port, ex_phy->phy);
-+	ex_phy->port = port;
-+	ex_phy->phy_state = PHY_DEVICE_DISCOVERED;
++	struct expander_device *ex = &dev->ex_dev;
++	struct ex_phy *ex_phy = &ex->ex_phy[phy_id];
++
++	if (!ex->parent_port) {
++		ex->parent_port = sas_port_alloc(&dev->rphy->dev, phy_id);
++		/* FIXME: error handling */
++		BUG_ON(!ex->parent_port);
++		BUG_ON(sas_port_add(ex->parent_port));
++		sas_port_mark_backlink(ex->parent_port);
++	}
++	sas_port_add_phy(ex->parent_port, ex_phy->phy);
 +}
 +
  /* ---------- SMP task management ---------- */
  
  /* Give it some long enough timeout. In seconds. */
-@@ -857,9 +864,7 @@ static bool sas_ex_join_wide_port(struct domain_device *parent, int phy_id)
- 
- 		if (!memcmp(phy->attached_sas_addr, ephy->attached_sas_addr,
- 			    SAS_ADDR_SIZE) && ephy->port) {
--			sas_port_add_phy(ephy->port, phy->phy);
--			phy->port = ephy->port;
--			phy->phy_state = PHY_DEVICE_DISCOVERED;
-+			sas_port_add_ex_phy(ephy->port, phy);
- 			return true;
- 		}
+diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
+index 3804aef165ad..85948963fb97 100644
+--- a/drivers/scsi/libsas/sas_internal.h
++++ b/drivers/scsi/libsas/sas_internal.h
+@@ -189,21 +189,6 @@ static inline void sas_phy_set_target(struct asd_sas_phy *p, struct domain_devic
  	}
+ }
+ 
+-static inline void sas_add_parent_port(struct domain_device *dev, int phy_id)
+-{
+-	struct expander_device *ex = &dev->ex_dev;
+-	struct ex_phy *ex_phy = &ex->ex_phy[phy_id];
+-
+-	if (!ex->parent_port) {
+-		ex->parent_port = sas_port_alloc(&dev->rphy->dev, phy_id);
+-		/* FIXME: error handling */
+-		BUG_ON(!ex->parent_port);
+-		BUG_ON(sas_port_add(ex->parent_port));
+-		sas_port_mark_backlink(ex->parent_port);
+-	}
+-	sas_port_add_phy(ex->parent_port, ex_phy->phy);
+-}
+-
+ static inline struct domain_device *sas_alloc_device(void)
+ {
+ 	struct domain_device *dev = kzalloc(sizeof(*dev), GFP_KERNEL);
 -- 
 2.17.1
 
