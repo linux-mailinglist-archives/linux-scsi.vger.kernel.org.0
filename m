@@ -1,131 +1,188 @@
-Return-Path: <linux-scsi+bounces-491-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-493-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18A6A8030C9
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 11:43:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C88638032F0
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 13:36:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7728BB20A2D
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 10:43:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83DA2280F92
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 12:36:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0225A224C6
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 10:43:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="j2ujXazv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4328D24205
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Dec 2023 12:36:21 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CEA191
-	for <linux-scsi@vger.kernel.org>; Mon,  4 Dec 2023 02:24:18 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2c9eca5bbaeso22064581fa.3
-        for <linux-scsi@vger.kernel.org>; Mon, 04 Dec 2023 02:24:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1701685456; x=1702290256; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F+ofOOqwlUZnjaPwU1R/ES77wt7OX5hZOTqDiest6VM=;
-        b=j2ujXazv/wUQHlX6L8k6yZjFkX7b+JLx6E7rsmF0HvSXzJVk/vgAgyUv8P/uHNfpQP
-         LCWWv1SC/SJCFOA/JqPwDd8DEA8rFl9incD11jouhTn4TSilgqoF1cXhWuYDEaYRMCCX
-         aVl7qIwlksXK12AuKAzpfMLvWvmaT0z5irvGkqr+UMF8Dh77GzZrkjd/JnSVHVwID1ri
-         cRP6dTJ7lNRsZlamwAUoOmkh0fx6DFh1Q+ywHNA8NTbhiEpN42QcN7UvQ9IUitNIXbVw
-         W+z8K7aercDlu3VQ2BGnbl/SMyVOmlF61BZ+j+4T7wwm+NZxixK1V6LYGsgwIZvIPOt6
-         T1SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701685456; x=1702290256;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F+ofOOqwlUZnjaPwU1R/ES77wt7OX5hZOTqDiest6VM=;
-        b=aLi8klB447RhyaC/45yXUGiGRXIAUuyJkXBcsaeAmRlTAJpPUkg3Hc9xi5+KsxCZ9H
-         ugRs0sV5JJAqqsdd8u1S/8YJm3cg7WpPTFy5oXNcAfw0w5kTQRGGzQfB2HUIqDIrXg+/
-         Abgi5vg351kKcMxsjbbzcSzaQR4h88bxEd9MaD1QwmwBHvIB0T5rvmtBdmvGyO7G22lZ
-         msQScLQ1YKpALTI7rLR1fRY7QPyRWTsZ8Jchu08rLH9lRLnAefZA6ZG94ejs20IkyRWg
-         heacvtQoq8hYUUJcVJQTMpNQphQQf+HjjL7KVXn2dQEHO4QwHnki5DSFMRqX7YPTvSfV
-         j1mg==
-X-Gm-Message-State: AOJu0YyfgN/XIAUIMXBzMr07VnMMew9HCkdAEf+vTn7LMCcx9D5BXFTi
-	qJhtUB9anXizk2V3QfdN2+yvfw==
-X-Google-Smtp-Source: AGHT+IGfZyiNNc0jMr4snd1gdmvFtqMZ3JH/kWXhhcJq6QF1u/8bMbIuMuKp40e7ciUb3tmmWiMGlQ==
-X-Received: by 2002:a2e:2c01:0:b0:2c9:f776:e28f with SMTP id s1-20020a2e2c01000000b002c9f776e28fmr396256ljs.120.1701685456383;
-        Mon, 04 Dec 2023 02:24:16 -0800 (PST)
-Received: from otso.luca.vpn.lucaweiss.eu (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id t15-20020a1709066bcf00b00a0bdfab0f02sm5121551ejs.77.2023.12.04.02.24.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Dec 2023 02:24:15 -0800 (PST)
-From: Luca Weiss <luca.weiss@fairphone.com>
-Date: Mon, 04 Dec 2023 11:24:06 +0100
-Subject: [PATCH v5 3/3] arm64: dts: qcom: sc7280: Add UFS nodes for sc7280
- IDP board
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2355AAC;
+	Mon,  4 Dec 2023 03:49:09 -0800 (PST)
+Received: from dggpemd100001.china.huawei.com (unknown [172.30.72.55])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4SkMPC4NG4zWjG1;
+	Mon,  4 Dec 2023 19:48:15 +0800 (CST)
+Received: from [10.67.120.108] (10.67.120.108) by
+ dggpemd100001.china.huawei.com (7.185.36.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1258.28; Mon, 4 Dec 2023 19:49:07 +0800
+Message-ID: <635ad8e8-c123-5cd9-9b80-7f0bce46ee8e@huawei.com>
+Date: Mon, 4 Dec 2023 19:49:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231204-sc7280-ufs-v5-3-926ceed550da@fairphone.com>
-References: <20231204-sc7280-ufs-v5-0-926ceed550da@fairphone.com>
-In-Reply-To: <20231204-sc7280-ufs-v5-0-926ceed550da@fairphone.com>
-To: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, 
- Manivannan Sadhasivam <mani@kernel.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>, 
- Bart Van Assche <bvanassche@acm.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, cros-qcom-dts-watchers@chromium.org
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Nitin Rawat <quic_nitirawa@quicinc.com>, 
- Luca Weiss <luca.weiss@fairphone.com>, 
- Manivannan Sadhasivam <mani@kernel.org>
-X-Mailer: b4 0.12.4
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v4] scsi: libsas: Fix the failure of adding phy with
+ zero-address to port
+Content-Language: en-CA
+To: John Garry <john.g.garry@oracle.com>, <yanaijie@huawei.com>,
+	<jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+	<damien.lemoal@opensource.wdc.com>
+CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@huawei.com>, <prime.zeng@hisilicon.com>, <kangfenglong@huawei.com>,
+	<chenxiang66@hisilicon.com>
+References: <20231117090001.35840-1-yangxingui@huawei.com>
+ <32c42e1e-0399-4af4-a5ed-6a257e300fe8@oracle.com>
+ <307d251f-ff49-5d8f-1f8e-aed314256732@huawei.com>
+ <a13f0419-c4ef-4b8b-9757-7cf7cea32458@oracle.com>
+ <baacad33-f568-6151-75a2-dfc09caf2a81@huawei.com>
+ <cf98eb9f-ac42-4d9b-9cf3-3085f6fc0cda@oracle.com>
+ <d6b20d8f-7653-6806-d7c8-0adc54f1333b@huawei.com>
+ <25b6b575-3108-41cc-96d4-70279ce61a48@oracle.com>
+From: yangxingui <yangxingui@huawei.com>
+In-Reply-To: <25b6b575-3108-41cc-96d4-70279ce61a48@oracle.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggpemm500022.china.huawei.com (7.185.36.162) To
+ dggpemd100001.china.huawei.com (7.185.36.94)
+X-CFilter-Loop: Reflected
 
-From: Nitin Rawat <quic_nitirawa@quicinc.com>
+Hi, John
 
-Add UFS host controller and PHY nodes for sc7280 IDP board.
+On 2023/12/1 17:22, John Garry wrote:
+> On 30/11/2023 03:53, yangxingui wrote:
+>>>>
+>>>> For phy19, when the phy is attached and added to the parent wide 
+>>>> port, the path is:
+>>>> sas_rediscover()
+>>>>      ->sas_discover_new()
+>>>>          ->sas_ex_discover_devices()
+>>>>              ->sas_ex_discover_dev()
+>>>>                  -> sas_add_parent_port().
+>>>
+>>> ok, so then the change to set ex_phy->port = ex->parent_port looks 
+>>> ok. Maybe we can put this in a helper with the sas_port_add_phy() 
+>>> call, as it is duplicated in sas_ex_join_wide_port()
+>>>
+>>> Do we also need to set ex_phy->phy_state (like sas_ex_join_wide_port())?
+>>
+>> Well, okay, as follows?
+>> +++ b/drivers/scsi/libsas/sas_expander.c
+>> @@ -856,9 +856,7 @@ static bool sas_ex_join_wide_port(struct 
+>> domain_device *parent, int phy_id)
+>>
+>>                  if (!memcmp(phy->attached_sas_addr, 
+>> ephy->attached_sas_addr,
+>>                              SAS_ADDR_SIZE) && ephy->port) {
+>> -                       sas_port_add_phy(ephy->port, phy->phy);
+>> -                       phy->port = ephy->port;
+>> -                       phy->phy_state = PHY_DEVICE_DISCOVERED;
+>> +                       sas_port_add_ex_phy(ephy->port, phy);
+>>                          return true;
+> 
+> this looks ok. How about adding this helper and using it in a separate 
+> change?
+Okay, then I will update the version.
+> 
+>>                  }
+>>          }
+>> diff --git a/drivers/scsi/libsas/sas_internal.h 
+>> b/drivers/scsi/libsas/sas_internal.h
+>> index e860d5b19880..39ffa60a9a01 100644
+>> --- a/drivers/scsi/libsas/sas_internal.h
+>> +++ b/drivers/scsi/libsas/sas_internal.h
+>> @@ -189,6 +189,13 @@ static inline void sas_phy_set_target(struct 
+>> asd_sas_phy *p, struct domain_devic
+>>          }
+>>   }
+>>
+>> +static inline void sas_port_add_ex_phy(struct sas_port *port, struct 
+>> ex_phy *ex_phy)
+>> +{
+>> +       sas_port_add_phy(port, ex_phy->phy);
+>> +       ex_phy->port = port;
+>> +       ex_phy->phy_state = PHY_DEVICE_DISCOVERED;
+>> +}
+> 
+> I'd prefer sas_expander.c, but sas_add_parent_port() is here... having 
+> said that, sas_add_parent_port() is only used in sas_expander.c
+Okay, then I will update the version and move it to sas_expander.c .
 
-Signed-off-by: Nitin Rawat <quic_nitirawa@quicinc.com>
-Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+> 
+>> +
+>>   static inline void sas_add_parent_port(struct domain_device *dev, 
+>> int phy_id)
+>>   {
+>>          struct expander_device *ex = &dev->ex_dev;
+>> @@ -201,8 +208,7 @@ static inline void sas_add_parent_port(struct 
+>> domain_device *dev, int phy_id)
+>>                  BUG_ON(sas_port_add(ex->parent_port));
+>>                  sas_port_mark_backlink(ex->parent_port);
+>>          }
+>> -       sas_port_add_phy(ex->parent_port, ex_phy->phy);
+>> +       sas_port_add_ex_phy(ex->parent_port, ex_phy);
+>>   }
+>>
+>>>
+>>>> And the path called when it is removed from parent wide port is:
+>>>> sas_rediscover()
+>>>>      ->sas_unregister_devs_sas_addr() // The sas address of phy19 
+>>>> becomes 0. Since ex_phy->port is NULL, phy19 is not removed from the 
+>>>> parent wide port's phy_list.
+>>>>
+>>>> For phy0, it is connected to a new sata device.
+>>>> sas_rediscover()
+>>>>      ->sas_discover_new()->sas_ex_phy_discover()
+>>>>                              ->sas_ex_phy_discover_helper()
+>>>>                                  ->sas_set_ex_phy() // The device 
+>>>> type is stp. Since the linkrate is 5 and less than 1.5G, sas_address 
+>>>> is set to 0.
+>>>
+>>> Then when we get the proper linkrate later, will we then rediscover 
+>>> and set the proper SAS address? I am just wondering if this change is 
+>>> really required?
+>> Yes, but in fact it has not reached that stage yet. After setting the 
+>> address to 0, it will continue to create a new port and try to add 
+>> other phys with the same address as it to this new port.
+> 
+> creating a port for SAS address == 0 and adding phys seems incorrect, 
+> right?
+Yes. There are three possible ways to solve the problem of creating a 
+port with a zero address:
+1. Use the sas address obtained by querying the expander instead of the 
+zero address.
+2. Forbid the phy with an address of 0 to create a port.
+3. When the rate is less than 1.5G, do not let it enter 
+sas_ex_discover_end_dev().
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index 2ff549f4dc7a..a0059527d9e4 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -499,6 +499,25 @@ &uart5 {
- 	status = "okay";
- };
- 
-+&ufs_mem_hc {
-+	reset-gpios = <&tlmm 175 GPIO_ACTIVE_LOW>;
-+	vcc-supply = <&vreg_l7b_2p9>;
-+	vcc-max-microamp = <800000>;
-+	vccq-supply = <&vreg_l9b_1p2>;
-+	vccq-max-microamp = <900000>;
-+	vccq2-supply = <&vreg_l9b_1p2>;
-+	vccq2-max-microamp = <900000>;
-+
-+	status = "okay";
-+};
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply = <&vreg_l10c_0p8>;
-+	vdda-pll-supply = <&vreg_l6b_1p2>;
-+
-+	status = "okay";
-+};
-+
- &usb_1 {
- 	status = "okay";
- };
+Because when the device type is not empty, its SAS address is legal, and 
+we are currently using the first one.
+> 
+>>
+>>>
+>>> BTW, Even with the change to set ex_phy->port = ex->parent_port, are 
+>>> we still joining the host-attached expander phy (19) to a port with 
+>>> SAS address == 0?
+>> Yes, in order to avoid this situation, in the current patch, we will 
+>> not force the SAS address to be set to 0 when the device type is not 
+>> NULL, but will still use the address obtained after requesting the 
+>> expander.
+> 
+> ok, let me check that again later today.
+OK.
 
--- 
-2.43.0
+Thanks
+Xingui
 
 
