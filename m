@@ -1,99 +1,119 @@
-Return-Path: <linux-scsi+bounces-662-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-664-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DB66807995
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 21:39:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07CDF807997
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 21:39:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32A94B20F4C
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 20:39:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AC3C1F216C3
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 20:39:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88DAC41841
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 20:39:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00F2A46456
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 20:39:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b="Rh7pbLO8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ei+Kw6Rd"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from rcdn-iport-9.cisco.com (rcdn-iport-9.cisco.com [173.37.86.80])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6598F10FF;
-	Wed,  6 Dec 2023 10:47:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=1056; q=dns/txt; s=iport;
-  t=1701888435; x=1703098035;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DvpvexVDMU5638wqFKGLX6VF8dgg0xDpZ3MUoNlfWeY=;
-  b=Rh7pbLO8lRb+VAfCFVi9uxswufie0P0oQICcwGUSjpS9vbm3FS86YwiC
-   72/LAaW41Wso5O0weUDmLHb3Hq1D4G41dbU01C3SYn+YqvHQkclVCkbnE
-   mhFTDt9RHm52ZV7IFAJUVdxz+CnpzcQKLDBRfpBBJTqeyfFAxwyOCld5K
-   s=;
-X-CSE-ConnectionGUID: 0VqnhO/SSNu5vJN/vZvf+Q==
-X-CSE-MsgGUID: /Vur/SGrSamPKHoNazhmpw==
-X-IronPort-AV: E=Sophos;i="6.04,256,1695686400"; 
-   d="scan'208";a="154982619"
-Received: from alln-core-4.cisco.com ([173.36.13.137])
-  by rcdn-iport-9.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 18:47:14 +0000
-Received: from localhost.cisco.com ([10.193.101.253])
-	(authenticated bits=0)
-	by alln-core-4.cisco.com (8.15.2/8.15.2) with ESMTPSA id 3B6IkHD9010013
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Wed, 6 Dec 2023 18:47:13 GMT
-From: Karan Tilak Kumar <kartilak@cisco.com>
-To: sebaddel@cisco.com
-Cc: arulponn@cisco.com, djhawar@cisco.com, gcboffa@cisco.com, mkai2@cisco.com,
-        satishkh@cisco.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Karan Tilak Kumar <kartilak@cisco.com>
-Subject: [PATCH v5 13/13] scsi: fnic: Increment driver version
-Date: Wed,  6 Dec 2023 10:46:15 -0800
-Message-Id: <20231206184615.878755-14-kartilak@cisco.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20231206184615.878755-1-kartilak@cisco.com>
-References: <20231206184615.878755-1-kartilak@cisco.com>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B6A135
+	for <linux-scsi@vger.kernel.org>; Wed,  6 Dec 2023 10:54:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701888892;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2T2oM8n7ES3F56mk7P89karRriuSouYwO1C14uj3RQs=;
+	b=Ei+Kw6Rdi6/Ly9WMK1Nk1jK82EfWCRtS6uCuKQp0Ak9k4MN2/h4OzttNROMzh9NOVrdsu5
+	xBtFrjT5LPKMWAhnvzZd20FYDIYcxES9r8PBW3OmkQLar27PvbW8fl5EuzYdKhQYxhWWQQ
+	BJYEeh5t+MVPhs9z6I9PHmqKfqStQW4=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-167-z5w73h2gNVamrwP4HuCN6A-1; Wed, 06 Dec 2023 13:52:43 -0500
+X-MC-Unique: z5w73h2gNVamrwP4HuCN6A-1
+Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-58e157f489dso216916eaf.0
+        for <linux-scsi@vger.kernel.org>; Wed, 06 Dec 2023 10:52:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701888758; x=1702493558;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2T2oM8n7ES3F56mk7P89karRriuSouYwO1C14uj3RQs=;
+        b=k+hBhFuD6LXcMKvxilWL8rCGTDkDOCiFFBBtVH2toSbRVCiASN6c4+XHcUheTKs9hB
+         ksPZRS4KAWmC6wkJ+BXNQ72CkiOASXGmE3BjtCznk4GhHwmvxRRpqs1A3xYn8bMWWvrU
+         Xu4C/GrUOqbIuwBVZhCMtkv8lDMNapNW+hIEQTb23LPS4Z87eQznVst9scp4ryADT+XB
+         8Itx4kzUJsp8EUG+ZvzCplMvClhcI/Xhsbb8MmAbcC6JAjkugvyIZwZYeIFNAZPuTZdI
+         DwlQBKlpaANzNTOA3uEYY2Xxwm18esVpu9AK8ulWAjzzUt+LhOUFy44OhYsGEYM85DgN
+         MA3Q==
+X-Gm-Message-State: AOJu0Yx/rna4m1QfFIbRziFkae+RVLpygBI5KB98OrzWoUicaNm8iLB3
+	tObA7uJ50y1turwf+02zA2z6IZa/WBOv4C3SFZJ6wloM75fS1TAM9CGYULHUCqA4eU23nloTOAl
+	n+AztfHD442gPkH6NDtd0Yw==
+X-Received: by 2002:a05:6358:9049:b0:170:982:5611 with SMTP id f9-20020a056358904900b0017009825611mr1734950rwf.32.1701888758719;
+        Wed, 06 Dec 2023 10:52:38 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFGWWO9/aICv0W0WM3P+DYCIxzbBCoWdkWyVRrfijwhjBdH3/PviMW3Ncuu5AZPyvNFq7pIKg==
+X-Received: by 2002:a05:6358:9049:b0:170:982:5611 with SMTP id f9-20020a056358904900b0017009825611mr1734939rwf.32.1701888758442;
+        Wed, 06 Dec 2023 10:52:38 -0800 (PST)
+Received: from fedora ([2600:1700:1ff0:d0e0::47])
+        by smtp.gmail.com with ESMTPSA id s6-20020ad45006000000b0067a3ad49979sm185483qvo.96.2023.12.06.10.52.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Dec 2023 10:52:38 -0800 (PST)
+Date: Wed, 6 Dec 2023 12:52:36 -0600
+From: Andrew Halaney <ahalaney@redhat.com>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: martin.petersen@oracle.com, jejb@linux.ibm.com, andersson@kernel.org, 
+	konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, quic_cang@quicinc.com
+Subject: Re: [PATCH 10/13] scsi: ufs: qcom: Use dev_err_probe() to simplify
+ error handling of devm_gpiod_get_optional()
+Message-ID: <swt7fadd6cpi3tfyphpuhv5omlr3jzc6uipc246f7flritnufs@4hjdjfjnydgr>
+References: <20231201151417.65500-1-manivannan.sadhasivam@linaro.org>
+ <20231201151417.65500-11-manivannan.sadhasivam@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-User: kartilak@cisco.com
-X-Outbound-SMTP-Client: 10.193.101.253, [10.193.101.253]
-X-Outbound-Node: alln-core-4.cisco.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231201151417.65500-11-manivannan.sadhasivam@linaro.org>
 
-Increment driver version for multiqueue(MQ)
+On Fri, Dec 01, 2023 at 08:44:14PM +0530, Manivannan Sadhasivam wrote:
+> As done in other places, let's use dev_err_probe() to simplify the error
+> handling while acquiring the device reset gpio using
+> devm_gpiod_get_optional().
+> 
+> While at it, let's reword the error message to make it clear that the
+> failure is due to acquiring "device reset gpio".
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Reviewed-by: Sesidhar Baddela <sebaddel@cisco.com>
-Reviewed-by: Arulprabhu Ponnusamy <arulponn@cisco.com>
-Signed-off-by: Karan Tilak Kumar <kartilak@cisco.com>
----
-Changes between v4 and v5:
-    Incorporate review comments from Martin:
-	Modify patch commits to include a "---" separator.
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 
-Changes between v2 and v3:
-    Incorporate the following review comments from Hannes:
-	Create a separate patch to increment driver version.
-	Increment driver version number to 1.7.0.0.
----
- drivers/scsi/fnic/fnic.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/fnic/fnic.h b/drivers/scsi/fnic/fnic.h
-index c4edbd7dfc25..7241aebf79d6 100644
---- a/drivers/scsi/fnic/fnic.h
-+++ b/drivers/scsi/fnic/fnic.h
-@@ -27,7 +27,7 @@
- 
- #define DRV_NAME		"fnic"
- #define DRV_DESCRIPTION		"Cisco FCoE HBA Driver"
--#define DRV_VERSION		"1.6.0.56"
-+#define DRV_VERSION		"1.7.0.0"
- #define PFX			DRV_NAME ": "
- #define DFX                     DRV_NAME "%d: "
- 
--- 
-2.31.1
+> ---
+>  drivers/ufs/host/ufs-qcom.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+> index 218d22e1efce..a86f6620abc8 100644
+> --- a/drivers/ufs/host/ufs-qcom.c
+> +++ b/drivers/ufs/host/ufs-qcom.c
+> @@ -1146,9 +1146,8 @@ static int ufs_qcom_init(struct ufs_hba *hba)
+>  	host->device_reset = devm_gpiod_get_optional(dev, "reset",
+>  						     GPIOD_OUT_HIGH);
+>  	if (IS_ERR(host->device_reset)) {
+> -		err = PTR_ERR(host->device_reset);
+> -		if (err != -EPROBE_DEFER)
+> -			dev_err(dev, "failed to acquire reset gpio: %d\n", err);
+> +		err = dev_err_probe(dev, PTR_ERR(host->device_reset),
+> +				    "Failed to acquire device reset gpio\n");
+>  		goto out_variant_clear;
+>  	}
+>  
+> -- 
+> 2.25.1
+> 
+> 
 
 
