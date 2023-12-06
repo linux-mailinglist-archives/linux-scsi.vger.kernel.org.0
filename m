@@ -1,65 +1,64 @@
-Return-Path: <linux-scsi+bounces-589-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-587-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16F9F806652
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 05:39:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5D9080664E
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 05:38:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48FA81C21106
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 04:39:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1D58280CA6
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 04:38:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9D131078E
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 04:39:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D1BDFC11
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 04:38:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="QZmGGr+j"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="DMD/SDtg"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5591BC
-	for <linux-scsi@vger.kernel.org>; Tue,  5 Dec 2023 19:16:27 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B61xA0c029543;
-	Wed, 6 Dec 2023 03:16:14 GMT
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665581AA;
+	Tue,  5 Dec 2023 19:16:23 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B61xv4m019441;
+	Wed, 6 Dec 2023 03:16:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=CLpCj6Nn/N7Yog/QZem914m7T2h/9mIPxtFChFcp4Qs=;
- b=QZmGGr+jelZsgBfX694FOppezbCHh5VXg4fpWmBoOqszTaq2kwCYJKfmiKjhcTEVdOh9
- jdEHixFkUjJB+7AdT91yyjtl3ykIdhslevjwOuSuZ7nQ7utitfb14jcwM8ajVF64sxe1
- h9TeQVFUFcoZyIZicabhhiXRij7PmvD4wcvYEm6qobiqFvVAukgfPDmgvrRDgdjWL25i
- rXSXlV9aFpG1Yx9hwxWa1mEGbT4unehx+pyb9g9gPc55SGKxk/utPADS2SxnMx9O8IXC
- HbZ2BhiDeX6tFrkzWym/KUPo3IOWM19ItAdWQyIzWfLzU+7DTxYkqGxjdhtsKz0oWNKE KQ== 
+ bh=Ndo+OzVgUR3TxIcbF2kTQPE1DcugcsGSIR50oprEUIc=;
+ b=DMD/SDtgkrcZqnKphzMvXMk1UijBiOdWOAodW+nMSjM9iDdcWwrODQfefIFEkB9LNMAj
+ WENykQkXceJa+UEqRDPD+bd4LNPzXrQAp9HRxc8j37F5EYANv4KrcbV67zyS2djLbHH8
+ cQEcjImcKCAYC/Fdg7Q4P/v515ekX3g5HgJMRWNURRwvY0OjdtEx81qA8NldpmXRg1np
+ 22ovjsZy/UK+sr+ly9y4qeB5mygqeT9MOmqWgAAd9YllE2qiub+SbzrQiApxH7vZ3n7V
+ +OlYAQ62FDjl9k05ezKgL1NeSNATbT8/bk4uFzt5xotbKYxGE10+vh3178vjIIifsH4T iQ== 
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3utdda07ea-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3utdc187c6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Wed, 06 Dec 2023 03:16:14 +0000
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3B62S2RR036605;
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3B62VZJr036659;
 	Wed, 6 Dec 2023 03:16:13 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3utan9684s-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3utan96852-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 06 Dec 2023 03:16:12 +0000
+	Wed, 06 Dec 2023 03:16:13 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3B63GCYL014062;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3B63GCYN014062;
 	Wed, 6 Dec 2023 03:16:12 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3utan9684d-2;
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3utan9684d-3;
 	Wed, 06 Dec 2023 03:16:12 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
-        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: Re: [PATCH] scsi: bfa: Use the proper data type for BLIST flags
-Date: Tue,  5 Dec 2023 22:15:59 -0500
-Message-ID: <170182644879.1446429.15530001044411628072.b4-ty@oracle.com>
+To: James.Bottomley@HansenPartnership.com, linux-scsi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ching Huang <ching2048@areca.com.tw>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, bvanassche@acm.org,
+        kbuild test robot <lkp@intel.com>
+Subject: Re: [PATCH v3 1/3] scsi: arcmsr: support new Raid controller ARC-1688
+Date: Tue,  5 Dec 2023 22:16:00 -0500
+Message-ID: <170182644886.1446429.18288780625904064068.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231115193338.2261972-1-bvanassche@acm.org>
-References: <20231115193338.2261972-1-bvanassche@acm.org>
+In-Reply-To: <110bdc873497d3d5e090b908fb159b6155bb3a2b.camel@areca.com.tw>
+References: <110bdc873497d3d5e090b908fb159b6155bb3a2b.camel@areca.com.tw>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -72,24 +71,22 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-06_01,2023-12-05_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0
- mlxlogscore=445 suspectscore=0 adultscore=0 malwarescore=0 mlxscore=0
+ mlxlogscore=640 suspectscore=0 adultscore=0 malwarescore=0 mlxscore=0
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2311290000 definitions=main-2312060026
-X-Proofpoint-GUID: x_9MO7pTLmxXYY5JRwzvZ1KTZJ5pM3Du
-X-Proofpoint-ORIG-GUID: x_9MO7pTLmxXYY5JRwzvZ1KTZJ5pM3Du
+X-Proofpoint-GUID: Yv0IVBcA5r_cIzs_a9Lj4HZ4uRve9ROj
+X-Proofpoint-ORIG-GUID: Yv0IVBcA5r_cIzs_a9Lj4HZ4uRve9ROj
 
-On Wed, 15 Nov 2023 11:33:38 -0800, Bart Van Assche wrote:
+On Mon, 02 Oct 2023 17:42:19 +0800, ching Huang wrote:
 
-> Fix the following sparse warning:
-> 
-> drivers/scsi/bfa/bfad_bsg.c:2553:50: sparse: sparse: incorrect type in initializer (different base types)
+> This patch supports Areca new Raid controller ARC-1688
 > 
 > 
 
 Applied to 6.8/scsi-queue, thanks!
 
-[1/1] scsi: bfa: Use the proper data type for BLIST flags
-      https://git.kernel.org/mkp/scsi/c/0349be31e4ff
+[1/3] scsi: arcmsr: support new Raid controller ARC-1688
+      https://git.kernel.org/mkp/scsi/c/14ef4b001ae7
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
