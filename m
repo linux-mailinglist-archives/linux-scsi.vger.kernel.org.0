@@ -1,68 +1,63 @@
-Return-Path: <linux-scsi+bounces-591-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-588-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77BDB806654
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 05:39:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C69C9806651
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 05:39:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32CDE282344
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 04:39:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72B261F21790
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 04:39:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0EB510782
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 04:39:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17C410785
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Dec 2023 04:39:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Co1DVdD8"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="lXSiaKwa"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F3AC6;
-	Tue,  5 Dec 2023 19:26:01 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B61xYpg017584;
-	Wed, 6 Dec 2023 03:15:42 GMT
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E087F1AA
+	for <linux-scsi@vger.kernel.org>; Tue,  5 Dec 2023 19:16:25 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B61xxeD006715;
+	Wed, 6 Dec 2023 03:16:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=faQsfCR32SmynHzxms7TMiEndrZGrhEhdsB18uSNh3s=;
- b=Co1DVdD8Cs29G4m+RqMH4P9ZsEorgYHC0z1Uad7nlkK9ogNovIDwq3X/Kf6rJIrg5gkF
- lb1fmHUkiKQ5sGLX6mD93J1PB2XIG04MzifsXHuUV0if1vGE36vvr0qzZgi8SyfX8Umw
- m6mON2snqkkPOx6mQs+CDKQm6z4A0Gnb0Kkt9V+Ze1j15jaFUAmw0ps6W+ArK4OzWn82
- TzZtNia1faeY2WyIzslhA9qCQwzH4Lm90XNYXBip1abeHGAVwVfqTbxvladOi5sEcm0R
- oUvTOSzWVB2VLT7c0iddoc5uaXxfb1QL0w9ihTX0O5cdwgHaWc8b4xorefaUy0a+AHZl OQ== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3utdmbg6tt-1
+ bh=qZp1Q9e0HJh/N/Tp9vuRmCWzBy8SIjp2yhpB1BukQls=;
+ b=lXSiaKwaWL/yAAvsDOTxFVTxFvbYDyYc1nWbZiepCJODCuFicB0Fjje35xuluR0Psa4O
+ 17XIew5w8MBihLItR2QEJB+3ZOF11f++T40i/8Ax7X84JBJbYoS2170OKO0zaDAeiFMW
+ N4ElbXIjQ2hGMUZYqnhmFHuYPyzAj0Cj8r4AhZ9PZ9ZAjpFIR+cgILBZc4u8TQCqrv1n
+ T3JvZKhhUqbyBZQJjDLtoaPsgVRkblocC8z64EidGny2XC13M+7usIqDJhUeIVc3USZB
+ NbJai8x6DfhKtspmiIwtvkDY+a/K3E2h1FI5/UeKxi7blPuY1m2WyM+uUKRYXiMHxBXi 9Q== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3utd0mg8gc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 06 Dec 2023 03:15:42 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3B62So2G039465;
-	Wed, 6 Dec 2023 03:15:41 GMT
+	Wed, 06 Dec 2023 03:16:14 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3B62A0FL035367;
+	Wed, 6 Dec 2023 03:16:12 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3utan56ayw-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3utan9684m-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 06 Dec 2023 03:15:41 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3B63FeNO029625;
-	Wed, 6 Dec 2023 03:15:41 GMT
+	Wed, 06 Dec 2023 03:16:12 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3B63GCYJ014062;
+	Wed, 6 Dec 2023 03:16:12 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3utan56axn-1;
-	Wed, 06 Dec 2023 03:15:40 +0000
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3utan9684d-1;
+	Wed, 06 Dec 2023 03:16:12 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Dinghao Liu <dinghao.liu@zju.edu.cn>
+To: linux-scsi@vger.kernel.org, Akinobu Mita <akinobu.mita@gmail.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Ketan Mukadam <ketan.mukadam@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        John Soni Jose <sony.john-n@emulex.com>,
-        Jayamohan Kallickal <jayamohank@gmail.com>,
-        James Bottomley <JBottomley@Parallels.com>,
-        Mike Christie <michaelc@cs.wisc.edu>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: be2iscsi: fix a memleak in beiscsi_init_wrb_handle
-Date: Tue,  5 Dec 2023 22:15:33 -0500
-Message-ID: <170183237805.1755281.6903745084335290167.b4-ty@oracle.com>
+        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        jejb@linux.ibm.com
+Subject: Re: [PATCH] scsi: ufs: core: make fault-injection dynamically configurable per HBA
+Date: Tue,  5 Dec 2023 22:15:58 -0500
+Message-ID: <170182644878.1446429.5040870287877114124.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231123081941.24854-1-dinghao.liu@zju.edu.cn>
-References: <20231123081941.24854-1-dinghao.liu@zju.edu.cn>
+In-Reply-To: <20231118124443.1007116-1-akinobu.mita@gmail.com>
+References: <20231118124443.1007116-1-akinobu.mita@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -74,25 +69,30 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-06_01,2023-12-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 malwarescore=0
- suspectscore=0 mlxscore=0 adultscore=0 bulkscore=0 mlxlogscore=556
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2312060026
-X-Proofpoint-ORIG-GUID: xFgCyMNec_q89i1gb7heEGh5MP2DBYDe
-X-Proofpoint-GUID: xFgCyMNec_q89i1gb7heEGh5MP2DBYDe
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0
+ mlxlogscore=999 suspectscore=0 adultscore=0 malwarescore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2312060026
+X-Proofpoint-GUID: H3eoAUdl9zEJY3GyWW0Hi0sB_Aa4kfYj
+X-Proofpoint-ORIG-GUID: H3eoAUdl9zEJY3GyWW0Hi0sB_Aa4kfYj
 
-On Thu, 23 Nov 2023 16:19:41 +0800, Dinghao Liu wrote:
+On Sat, 18 Nov 2023 21:44:43 +0900, Akinobu Mita wrote:
 
-> When an error occurs in the for loop of beiscsi_init_wrb_handle(),
-> we should free phwi_ctxt->be_wrbq before returning an error code
-> to prevent potential memleak.
+> The UFS driver has two driver-specific fault injection mechanisms.
+> (trigger_eh and timeout)
+> Each fault injection configuration can only be specified by a module
+> parameter and cannot be reconfigured without reloading the driver.
+> Also, each configuration is common to all HBAs.
 > 
+> This change adds the following subdirectories for each UFS HBA when
+> debugfs is enabled.
 > 
+> [...]
 
-Applied to 6.7/scsi-fixes, thanks!
+Applied to 6.8/scsi-queue, thanks!
 
-[1/1] scsi: be2iscsi: fix a memleak in beiscsi_init_wrb_handle
-      https://git.kernel.org/mkp/scsi/c/235f2b548d7f
+[1/1] scsi: ufs: core: make fault-injection dynamically configurable per HBA
+      https://git.kernel.org/mkp/scsi/c/045da3077bc5
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
