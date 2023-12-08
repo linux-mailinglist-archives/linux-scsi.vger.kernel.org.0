@@ -1,141 +1,154 @@
-Return-Path: <linux-scsi+bounces-763-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-765-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97BBC80A149
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Dec 2023 11:39:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FC6180A37C
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Dec 2023 13:38:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27C1DB20426
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Dec 2023 10:39:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68454281850
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Dec 2023 12:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F370199AE
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Dec 2023 10:39:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2374C6FD3
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Dec 2023 12:38:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RQRHtWg/"
+	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="GK8Jj26t";
+	dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="FGCpsvn3"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126622705
-	for <linux-scsi@vger.kernel.org>; Fri,  8 Dec 2023 02:28:42 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-5bdb0be3591so1570113a12.2
-        for <linux-scsi@vger.kernel.org>; Fri, 08 Dec 2023 02:28:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702031322; x=1702636122; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SUV+KrS/M1PX7b2cWkbcJDPyrMmWw0crWFGMGpiuR+Q=;
-        b=RQRHtWg/2ACiwRcoKfXTM57yi+/U22p2yk8gM3UGCdkD2xLP7dMfax23W4FJKCwtnR
-         z8BNgRo9O8a+hEV6eKzw6geclLDgyNy9TVDk+K9b6KcXaAzQl2pVl/cO/CV3Ep6ubdYZ
-         SNZmPfOOm7REoVGiNmeNPXGTJ1db1r599Z9zZBREhi3W1MSEkZ1mVoDPjSQ391QdSRWW
-         6Vq9Mgit7INzHOtLRhAYkK+E6Geml8ZLwDtoaixWc9MYFNadivhyTw3wn6UlOQG+CHL9
-         P9+0DfuBFr07y633OJ5rwIB1jD8qVNTm9x0PPJ3WvCew+3SXwI+zjZPK8x9dZwsUoQ5p
-         KYdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702031322; x=1702636122;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SUV+KrS/M1PX7b2cWkbcJDPyrMmWw0crWFGMGpiuR+Q=;
-        b=C+i81mAekWQmHTLkSLrAARVI5v+Uoey8OXLkETlJomhwkBZbcAgLM6SwMXLb9LGKGL
-         5l10qn6fQzO+T5wZhvq+BzS2BnLYyM4xG0SiyVO8RyXALG2Eg72b0XE9pkX4m3lhexif
-         0IsYQPKPT7srCFN8toeh5r7hYgbYO40LTLQTQPpuVqcQPDVn6OOYdG64p6dApkE8jPMZ
-         GV1/ABB1au6yV1R02eyovlQc+u31wUXz2YrEZBzXhkWmS87yuZ7+Tysoemm0KCjPrJzo
-         eW/miAnNDgaEJ8NhRh9+a0UBo3LVVyOJp6XsufrGtOqXrYiP1bb8VBBhqA/iEuYW274f
-         ETQQ==
-X-Gm-Message-State: AOJu0YycljZtZabCFTA1Lr8l4cIxePL6Iy0I8IwqlXXY2a9eO/W9BisK
-	O+ZBgCEd1Dw81rTYWS0C8w6C
-X-Google-Smtp-Source: AGHT+IF2FRydo8njGp04OKtgX72qcMhY6Q36zNhjSrP9AlmGihq0Ok6RbEQ7vZs61mh+BlsQIlwCcg==
-X-Received: by 2002:a05:6a20:9410:b0:18b:c96b:a433 with SMTP id hl16-20020a056a20941000b0018bc96ba433mr3565998pzb.56.1702031321911;
-        Fri, 08 Dec 2023 02:28:41 -0800 (PST)
-Received: from thinkpad ([117.216.123.142])
-        by smtp.gmail.com with ESMTPSA id p25-20020aa78619000000b006ce71af841bsm1241285pfn.4.2023.12.08.02.28.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Dec 2023 02:28:41 -0800 (PST)
-Date: Fri, 8 Dec 2023 15:58:32 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Nitin Rawat <quic_nitirawa@quicinc.com>
-Cc: martin.petersen@oracle.com, jejb@linux.ibm.com, andersson@kernel.org,
-	konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	quic_cang@quicinc.com, ahalaney@redhat.com
-Subject: Re: [PATCH v2 05/17] scsi: ufs: qcom: Remove the warning message
- when core_reset is not available
-Message-ID: <20231208102832.GA3008@thinkpad>
-References: <20231208065902.11006-1-manivannan.sadhasivam@linaro.org>
- <20231208065902.11006-6-manivannan.sadhasivam@linaro.org>
- <7472fe73-e7a0-5c8c-6e85-655db028a5c3@quicinc.com>
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.166])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9D219AA;
+	Fri,  8 Dec 2023 02:39:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1702031988; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=XQLkyYB9v9tytI2kApw55WwMrqWvRp0HtsCne9Qw0yHkqcRp2AAry7R5TjHtTvQx9I
+    wl3l2ATQWS1tjOhHUuo4f840aFKJ+7ZuUnTVFvgIM4zNxL98uj9EUUuSDsDHvxV82/wB
+    2JLWXgOGMuaeXwBsVre/AzrHm56NTPMqQ0rIaIgB6VLanbiRhF3rya1T0baHKeHF425m
+    NsPH9/WRgI+los08FNWGyWuIADO5JroOygrQAzVRkOMAtptqnkcAZJ5QmieB8PqDUz7K
+    UX17tnZQj/0Jt8sxpXrqfQjGyKSSG4j/E6pEM8q5LRjHoeS5yJ8on7MV+cTUzT2De0pq
+    2iWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1702031988;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=OrWD30iWehTxBVGJryNXXCaLkTyI5f4JdUovjWmK+BU=;
+    b=CR5aR2OFeWFdKcDKmb25cAOHmW77237JuVdyRPzfBvJd6O4bw5H3ycNrktQ7LwhaZ9
+    8Gl69sBJvkz9fMEbg35k90NKojFK07/YWtAsKl2Bqo8C/U6yOVZ3qAYYeXMHIVn6bPI9
+    PdLUYPwySV3E8liBTj0s6HaWyMpOPMqWJTqA5sdGQvRvd+hICVf9+0eKcYMG13dKd8UB
+    SKrydPry6a2CVCLbXxuvdmf0FCSxpeBBMK25sRGWt6FT9qyg0MarUhuf5CYdr31uCJM1
+    QFwDWJzPayzwh9L+XVnEpUAn/mo/OESqRJOIQTUiCYcg5y0XtQrjsLs0Ob3HprxaIkxd
+    +u7w==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1702031988;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=OrWD30iWehTxBVGJryNXXCaLkTyI5f4JdUovjWmK+BU=;
+    b=GK8Jj26tyy5Pqe6uih7a2Prw/OvZ4kX5G2ojKxhynJvZTtBCaKr/q+hV15F6lCnMm1
+    bxSJ0vFz4bs+6fYBRrfKKz0QDvX10TVlALvHuBQ6XjyjrAaZRsRGFlRN3bnAmeSZhf8f
+    FECaMHkqHpNN9eOQsnqQ3oSVSKGXY0y3uBkCAOzPT54ZmkR6jOwomNdEJMhfoPi+S3yP
+    udTDNB50O+rAgEgvIMMNdjBzKJvWU5rH8OPx1YJYudYaXRrMOi/4sGdS+DhQnh3YradV
+    snb4GyMi/+0XjdCl3buGICtHrC01W1MNmLJAc3x3bVngkWD0kdAY6ag3e1qcFj2fFM4z
+    XPaA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1702031988;
+    s=strato-dkim-0003; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=OrWD30iWehTxBVGJryNXXCaLkTyI5f4JdUovjWmK+BU=;
+    b=FGCpsvn3533KqHxLTGECm6tzGoNGCdC3GRmwe5I/W7YLqsplkRjZSN4hUqYbM3g4Mw
+    oLjTnR9ppqFnhjRu6FDA==
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD2QzemV2tdlNlNRZBXiUw="
+Received: from Munilab01-lab.micron.com
+    by smtp.strato.de (RZmta 49.10.0 AUTH)
+    with ESMTPSA id z4c2a6zB8AdlBb3
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Fri, 8 Dec 2023 11:39:47 +0100 (CET)
+From: Bean Huo <beanhuo@iokpp.de>
+To: avri.altman@wdc.com,
+	bvanassche@acm.org,
+	alim.akhtar@samsung.com,
+	jejb@linux.ibm.com,
+	martin.petersen@oracle.com,
+	mani@kernel.org,
+	quic_cang@quicinc.com,
+	quic_asutoshd@quicinc.com,
+	beanhuo@micron.com,
+	thomas@t-8ch.de
+Cc: linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	mikebi@micron.com,
+	lporzio@micron.com,
+	Bean Huo <beanhuo@iokpp.de>
+Subject: [PATCH v4 0/3] Add UFS RTC support
+Date: Fri,  8 Dec 2023 11:39:37 +0100
+Message-Id: <20231208103940.153734-1-beanhuo@iokpp.de>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <7472fe73-e7a0-5c8c-6e85-655db028a5c3@quicinc.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On Fri, Dec 08, 2023 at 02:55:21PM +0530, Nitin Rawat wrote:
-> 
-> 
-> On 12/8/2023 12:28 PM, Manivannan Sadhasivam wrote:
-> > core_reset is optional, so there is no need to warn the user if it is not
-> > available.
-> > 
-> > Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >   drivers/ufs/host/ufs-qcom.c | 4 +---
-> >   1 file changed, 1 insertion(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> > index dc93b1c5ca74..d474de0739e4 100644
-> > --- a/drivers/ufs/host/ufs-qcom.c
-> > +++ b/drivers/ufs/host/ufs-qcom.c
-> > @@ -296,10 +296,8 @@ static int ufs_qcom_host_reset(struct ufs_hba *hba)
-> >   	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
-> >   	bool reenable_intr;
-> > -	if (!host->core_reset) {
-> > -		dev_warn(hba->dev, "%s: reset control not set\n", __func__);
-> > +	if (!host->core_reset)
-> >   		return 0;
-> > -	}
-> >   	reenable_intr = hba->is_irq_enabled;
-> >   	disable_irq(hba->irq);
-> 
-> 
-> Hi Mani,
-> 
-> I think core reset is not frequent. It happen during only probe ,error
-> handler.
-> 
-> core reset is needed in kernel to cleanup UFS phy and controller
-> configuration before UFS HLOS operation starts as per HPG.
-> 
+Adding RTC support for embedded storage device UFS in its driver, it is
+important for a few key reasons:
 
-This sounds like core reset is not an optional property but a required one. I
-just checked the upstream DT files for all SoCs, and looks like pretty much all
-of them support core reset.
+1. Helps with Regular Maintenance:
+The RTC provides a basic way to keep track of time, making it useful for
+scheduling routine maintenance tasks in the storage device. This includes
+things like making sure data is spread
+evenly across the storage to extend its life.
 
-Only MSM8996 doesn't have the reset property, but the reset is available in GCC.
-So we should be able to use it in dtsi.
+2. Figuring Out How Old Data Is:
+The RTC helps the device estimate how long ago certain parts of the storage
+were last used. This is handy for deciding when to do maintenance tasks to
+keep the storage working well over time.
 
-I also skimmed through the HPG and looks like core reset is not optional. Please
-confirm.
+3. Making Devices Last Longer:
+By using the RTC for regular upkeep, we can make sure the storage device lasts
+longer and stays reliable. This is especially important for devices that need
+to work well for a long time.
 
-- Mani
+4.Fitting In with Other Devices:
+The inclusion of RTC support aligns with existing UFS specifications (starting
+from UFS Spec 2.0) and is consistent with the prevalent industry practice. Many
+UFS devices currently on the market utilize RTC for internal timekeeping. By
+ensuring compatibility with this widely adopted standard, the embedded storage
+device becomes seamlessly integrable with existing hardware and software
+ecosystems, reducing the risk of compatibility issues.
 
-> Having existing warn print can be used to to debug or atleast know
-> core_reset is missed in device tree to give indication complete reset hasn't
-> been done and we could still be operating in bootloader configuration.
-> 
-> 
-> Regards,
-> Nitin
-> 
+In short, adding RTC support to embedded storage device UFS helps with regular
+upkeep, extends the device's life, ensures compatibility, and keeps everything
+running smoothly with the rest of the system.
+
+Changelog:
+	v3--v4:
+		1. Incorporate a check for "Current time precedes previous setting" in ufshcd_update_rtc()
+		2. Eliminate redundant return value code in ufshcd_update_rtc().
+        v2--v3:
+                1. Move ufshcd_is_ufs_dev_busy() to the source file ufshcd.c in patch 1/3.
+                2. Format commit statement in patch 2/3.
+        v1--v2:
+                1. Add a new patch "scsi: ufs: core: Add ufshcd_is_ufs_dev_busy()"
+                2. RTC periodic update work is disabled by default
+                3. Address several issues raised by Avri, Bart, and Thomas.
+
+Bean Huo (3):
+  scsi: ufs: core: Add ufshcd_is_ufs_dev_busy()
+  scsi: ufs: core: Add UFS RTC support
+  scsi: ufs: core: Add sysfs node for UFS RTC update
+
+ Documentation/ABI/testing/sysfs-driver-ufs |   7 ++
+ drivers/ufs/core/ufs-sysfs.c               |  31 +++++++
+ drivers/ufs/core/ufshcd.c                  | 103 ++++++++++++++++++++-
+ include/ufs/ufs.h                          |  15 +++
+ include/ufs/ufshcd.h                       |   4 +
+ 5 files changed, 156 insertions(+), 4 deletions(-)
 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.34.1
+
 
