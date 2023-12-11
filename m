@@ -1,91 +1,63 @@
-Return-Path: <linux-scsi+bounces-821-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-822-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10DE780CE09
-	for <lists+linux-scsi@lfdr.de>; Mon, 11 Dec 2023 15:16:17 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B979180D299
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 Dec 2023 17:44:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE395281CCF
-	for <lists+linux-scsi@lfdr.de>; Mon, 11 Dec 2023 14:16:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5977DB210F4
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 Dec 2023 16:44:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEC8B48796;
-	Mon, 11 Dec 2023 14:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CfS+bz40"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 007943B794;
+	Mon, 11 Dec 2023 16:44:50 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2E148786
-	for <linux-scsi@vger.kernel.org>; Mon, 11 Dec 2023 14:11:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DA125C433CB
-	for <linux-scsi@vger.kernel.org>; Mon, 11 Dec 2023 14:11:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702303867;
-	bh=T/0xottVlCypmObn/DTUakeUnK6pRwk22Bm9INEALrA=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=CfS+bz40FBsIHw1WyhWkfP0jcUox4DQg1mqxkBXyQgWqMNDk6gfActUnmAVBnTCFC
-	 wO7M+CrLvxgjoOTuJ23wlEYbzvQBG1Pn9uSWbOSn/XN/Eox53yKmfJlNe1BepouQMm
-	 OL0OyRRv5Y8RnQmXn5PONKGmn/0fsqiH0MG1cgKEUkwxYyJkDu33FZMKvjOgoGwLRE
-	 NhVtkE5Bkbh7sUwGt8M2+TpvmiQ65f0oabTdgEiN2rez6qkKz/OynbYWwOXWJaChny
-	 rFfrbxx3GjsVsTjPKVjvT+hm1NMe4bONPUHKN3vgunzo3QYBz3aqPjLmZ22MbT6aUh
-	 /UAuW4t+M0D0A==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id C5719C53BD3; Mon, 11 Dec 2023 14:11:07 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-scsi@vger.kernel.org
-Subject: [Bug 214311] megaraid_sas - no disks detected
-Date: Mon, 11 Dec 2023 14:11:07 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: IO/Storage
-X-Bugzilla-Component: SCSI
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: manu@unam.re
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-scsi@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-214311-11613-jwq664whdL@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214311-11613@https.bugzilla.kernel.org/>
-References: <bug-214311-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDADD2;
+	Mon, 11 Dec 2023 08:44:47 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id D47DA68B05; Mon, 11 Dec 2023 17:44:43 +0100 (CET)
+Date: Mon, 11 Dec 2023 17:44:43 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: Christoph Hellwig <hch@lst.de>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+	Daejun Park <daejun7.park@samsung.com>,
+	Kanchan Joshi <joshi.k@samsung.com>,
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Subject: Re: [PATCH v5 03/17] fs/f2fs: Restore the whint_mode mount option
+Message-ID: <20231211164443.GA25306@lst.de>
+References: <20231130013322.175290-1-bvanassche@acm.org> <20231130013322.175290-4-bvanassche@acm.org> <20231207174529.GC31184@lst.de> <fd6d207d-fe03-4fdf-bd74-3463860135ef@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fd6d207d-fe03-4fdf-bd74-3463860135ef@acm.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214311
+On Thu, Dec 07, 2023 at 09:39:06AM -1000, Bart Van Assche wrote:
+> On 12/7/23 07:45, Christoph Hellwig wrote:
+>> On Wed, Nov 29, 2023 at 05:33:08PM -0800, Bart Van Assche wrote:
+>>> Restore support for the whint_mode mount option by reverting commit
+>>> 930e2607638d ("f2fs: remove obsolete whint_mode").
+>>
+>> I know that commit sets a precedence by having a horribly short and
+>> uninformative commit message, but please write a proper one for this
+>> commit and explain why you are restoring the option.  Also if anything
+>> changed since last year.
+>
+> Hi Christoph,
+>
+> A possible approach is that I drop this patch from this patch series and
+> that I let the F2FS maintainers restore write hint support in F2FS.
 
-Manu (manu@unam.re) changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |manu@unam.re
-
---- Comment #9 from Manu (manu@unam.re) ---
-I had the same problem with Dell Poweredge R340 and RAID0. I could not veri=
-fy
-with UEFI because If UEFI is enable it does not detect the VirtualDisk.
-
-My fix for linux-image-5.10.0-26-amd64 was adding to grub CMDLINE
-"intel_iommu=3Don iommu=3Dpt"
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+I'm not saying you should drop it.  Just that it should have a useful
+commit message.
 
