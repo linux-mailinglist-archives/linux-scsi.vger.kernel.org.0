@@ -1,234 +1,202 @@
-Return-Path: <linux-scsi+bounces-902-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-905-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD5F280F9ED
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Dec 2023 23:09:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0B7380FB3A
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Dec 2023 00:19:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 278F4B20F85
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Dec 2023 22:08:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E21831C20D9D
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Dec 2023 23:19:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FFD164CE1;
-	Tue, 12 Dec 2023 22:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 363916472B;
+	Tue, 12 Dec 2023 23:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="lg9Ow90A";
-	dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="tfM9X+Cv"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T0IgtaJB"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260DEBC;
-	Tue, 12 Dec 2023 14:08:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1702418918; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=qnC7nnzpbvNgU8zh8JtzhugnbaXcgeDuSE286EHpQu9KmOq7TnwlZydgcpIr5fK5Cl
-    M7r+kTZeoXCOT8smlrvkx1q7N9wdwyCms5fnIce4JIx7XMM6h7efaz1ScdsY1gOIYsIF
-    DSxree929bmgpgmICtIM88J+KXw+4O2RBZkZunil0QQsbJnS4kgEDLzICiJWBKtqPrRY
-    uqKNFq+bF7gsjy2Fh2VX1yoRxqnmpz2TImlAd+ZD2bQHffUrTJanbOEolspq+zd5Rsvs
-    lwoMJUlZ6Pj8fSLwcUXWji5isnVWTAX/ynnJous2sZXeJvzyeE8LKWagb2/3WjMwkTWP
-    t4vA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1702418918;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=Os9UsUUURWypEi8Tdr5n+BK78P8cj8KZaYdYD1dJztc=;
-    b=rQ1d0lYxI/GnIsXAQGtL63gQHQQ9hjCkPNA3UyT4Ygsals1x+BUVyDAmLlXF+Cb+16
-    2YbSb5t3oxCOrsdeQmRBC+Pa9bEYU3jNVsWZDwwKzf6A2cMTVZqxFazbRBB59gAQKUqC
-    CYUe7uwXzVF0bS3jS0TNWqo6Txs/tV1mo/0ku0G5zToijZnaoM/SN+wkbwx82r4q80d0
-    Eej+gtafuP+1MC/GtvmM4EUM0P/qjQDm/Nwyd8EqhRQingoXVuUkMn7ZGZIL0r5nfEap
-    PJFu4XjP94SZQAGDATZr1pCYdRPcQD/Ej4H4vbFGvqSfXOr8p8i2MonWXiutgez2RjsG
-    S8Aw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1702418918;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=Os9UsUUURWypEi8Tdr5n+BK78P8cj8KZaYdYD1dJztc=;
-    b=lg9Ow90ArEq4RbqZOLkpTKN0SO9mkzlazuBZWb2tAQvmizJ4XJXGpIL6cpzaRuFJp8
-    +QkpCDEvHVvfuErFBenRLMTWt+2p3PXb9wewAFDr0zAeivlLCKMNTbYvYmJ12obH4Crc
-    Nqz9gEcpU6xDkbJYYQOXc2cNR2iUagSWAISHct3c1wGRymFlc/+3dyQZLWRZe5qqMTkT
-    VHDRPObfjOpcvEVscWWn6hD5t/fm0PQC2BoRScp09r+hfTmgYvzd4tiUjQ1MEvgGk3Iv
-    CNLyjLBQ8DuhX8YvZgGSAi1Ww/8BA75gCURAFIS9XL9aDFmFJa4/2/tNnnn+HQQ5UrYT
-    aWbg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1702418918;
-    s=strato-dkim-0003; d=iokpp.de;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=Os9UsUUURWypEi8Tdr5n+BK78P8cj8KZaYdYD1dJztc=;
-    b=tfM9X+CvmRyxXAmQ2ElG5vwXGm3TxKvS3zj3vFiXHVENdXt6kW/GAJgyyWmwVcxdDD
-    Wiic+FZw/tjByZDG3+Cg==
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD1QLj68UeUr1+U1krW49WPrbTU8waUHk0CK6S5K43N4UTp8lPg"
-Received: from Munilab01-lab.speedport.ip
-    by smtp.strato.de (RZmta 49.10.0 AUTH)
-    with ESMTPSA id z4c2a6zBCM8cNW1
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Tue, 12 Dec 2023 23:08:38 +0100 (CET)
-From: Bean Huo <beanhuo@iokpp.de>
-To: avri.altman@wdc.com,
-	bvanassche@acm.org,
-	alim.akhtar@samsung.com,
-	jejb@linux.ibm.com,
-	martin.petersen@oracle.com,
-	mani@kernel.org,
-	quic_cang@quicinc.com,
-	quic_asutoshd@quicinc.com,
-	beanhuo@micron.com,
-	thomas@t-8ch.de
-Cc: linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	mikebi@micron.com,
-	lporzio@micron.com,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v5 3/3] scsi: ufs: core: Add sysfs node for UFS RTC update
-Date: Tue, 12 Dec 2023 23:08:25 +0100
-Message-Id: <20231212220825.85255-4-beanhuo@iokpp.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231212220825.85255-1-beanhuo@iokpp.de>
-References: <20231212220825.85255-1-beanhuo@iokpp.de>
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1BDEA
+	for <linux-scsi@vger.kernel.org>; Tue, 12 Dec 2023 15:19:08 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5e16d7537bcso24933257b3.3
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Dec 2023 15:19:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702423147; x=1703027947; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/YmSdHW0YnrgQyxCZCfpHUpcVYgfb1QxvP3xvZamGAg=;
+        b=T0IgtaJB2ly20lZB2MHikNj+HcKJKO2+Y6NXtlLuNyFF92RdVOXjPx9PkOldabIBAK
+         herFA6ZFzq6TMmaMoD9o1UlnuqdefWd8dSE5qdgswnzGNrIpMpOyY+bWMXl3+lJ8oM39
+         3ZE8UA6zhINly1tf364Ju+LLyMXdRBfJwyRiOpq3Su67n3rr1PZiwM5bk5tYdB5AfBFN
+         z/2slIL/OcmfcHIvcW3BGU3HyVrWx9S+Fnc+PHbbs/zdFYqaMUdqkoULagpXmKz6O9Vx
+         gzBjacsWZsoJz98N7xd0qLeluBvd/58qLCXYD7YOOcKnZVY+g0QajHnDGzPslWJ14T+h
+         pn3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702423147; x=1703027947;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/YmSdHW0YnrgQyxCZCfpHUpcVYgfb1QxvP3xvZamGAg=;
+        b=mcQKXKrIa6DSQAAAdCIsoJko4LaHkwXHc2OSUcsq3UgA+qgccoafYtNI8Vpk4yL386
+         unh9VZEUt2YOck8/kx0zQutn1AZZF8fGdwDrek5+IcSjb312WKZv4+cpn79V8l+x+0+i
+         89H4yatOCx3LqZ1UDuGJlxZcL6MTJ5IS/Uc1MtAmG6117CN0CAfzA1tBmwT4XQ6KfXDh
+         I3Q5s8lW8Bx2jutee3eTgO9Iy+CDptcgTBaM5gUABm2nFFDMrcammJIOhrfKmBSQU6GG
+         Z7nbavTewtbiQQMwElAfERGuPWaPXFojIIwecM6bANk0y5wYZTdoz2rIxmzfxqiGk4g4
+         DkeQ==
+X-Gm-Message-State: AOJu0YyuPwavCISYEusE4EWzbdE0OGrCp6FYKETtxf3uEvPYm6AiMvO9
+	JFSV6zFPjDPGHkGYmQbOBS82z3B7HwekydokQA==
+X-Google-Smtp-Source: AGHT+IEpLi0Rm/0x6D0ko9SJaw0nsb4I84pLyrEFP8w1pM+ISdP1wxAh6qDWor2wI6KeyuvP6T8XV9dzFXyb/rXUVQ==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a05:690c:b8d:b0:5d4:2ff3:d280 with
+ SMTP id ck13-20020a05690c0b8d00b005d42ff3d280mr63466ywb.7.1702423147099; Tue,
+ 12 Dec 2023 15:19:07 -0800 (PST)
+Date: Tue, 12 Dec 2023 23:19:06 +0000
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAGnqeGUC/5WNQQqDMBBFryJZNyWZqNWueo8ipU0mGmiNZCRUx
+ Ls3ZtWtDAy8v3hvZYTBIbFrsbKA0ZHzYwI4FUwPz7FH7kxiBgKUFFBymsOop4Wb4CIG4qTJcas
+ 95veghSxxzQVKYy020FQVS7IpoHXfHLp3iQdHsw9L7ka5r4cTUfJ0KATUiEKBufXe9288a//Zk 9kHUh7yXdSrLQFUo9r639dt2/YDe0N+py0BAAA=
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1702423146; l=4253;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=YiBU+J66ZaYx7q1aD7BISZtA4pcTkaCKnD8Tq9532Dc=; b=qaycx8xPm6Y1bhVtOlCyfrYYpwIzDp8dE+H1QlGhA1uuN5u5JDihjUla+CzhLRbk00RO80gRk
+ yTiIV4l3Z3HCtuOp0xW65fVh9g+EjUXg1EuEn2oht/+IoHbtLzb70wk
+X-Mailer: b4 0.12.3
+Message-ID: <20231212-strncpy-drivers-scsi-fcoe-fcoe_sysfs-c-v2-1-1f2d6b2fc409@google.com>
+Subject: [PATCH v2] scsi: fcoe: use sysfs_match_string over fcoe_parse_mode
+From: Justin Stitt <justinstitt@google.com>
+To: Hannes Reinecke <hare@suse.de>, "James E.J. Bottomley" <jejb@linux.ibm.com>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, Bart Van Assche <bvanassche@acm.org>
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-From: Bean Huo <beanhuo@micron.com>
+Instead of copying @buf into a new buffer and carefully managing its
+newline/null-terminating status, we can just use sysfs_match_string()
+as it uses sysfs_streq() internally which handles newline/null-term:
 
-Introduce a sysfs node named 'rtc_update_ms' within the kernel, enabling
-user to adjust the RTC periodic update frequency to suit the specific
-requirements of the system and UFS. Also, this patch allows the user to
-disable/enable periodic update RTC in the UFS idle time.
+|  /**
+|   * sysfs_streq - return true if strings are equal, modulo trailing newline
+|   * @s1: one string
+|   * @s2: another string
+|   *
+|   * This routine returns true iff two strings are equal, treating both
+|   * NUL and newline-then-NUL as equivalent string terminations.  It's
+|   * geared for use with sysfs input strings, which generally terminate
+|   * with newlines but are compared against values without newlines.
+|   */
+|  bool sysfs_streq(const char *s1, const char *s2)
+|  ...
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
-Acked-by: Avri Altman <avri.altman@wdc.com>
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+Then entirely drop the now unused fcoe_parse_mode, being careful to
+change if condition from checking for FIP_CONN_TYPE_UNKNOWN to < 0 as
+sysfs_match_string can return -EINVAL. Also check explicitly if
+ctlr->mode is equal to FIP_CONN_TYPE_UNKNOWN -- this is probably
+preferred to "<=" as the behavior is more obvious while maintaining
+functionality.
+
+To get the compiler not to complain, make fip_conn_type_names
+const char * const. Perhaps, this should also be done for
+fcf_state_names.
+
+This also removes an instance of strncpy() which helps [1].
+
+Link: https://github.com/KSPP/linux/issues/90 [1]
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Justin Stitt <justinstitt@google.com>
 ---
- Documentation/ABI/testing/sysfs-driver-ufs |  7 +++++
- drivers/ufs/core/ufs-sysfs.c               | 31 ++++++++++++++++++++++
- drivers/ufs/core/ufshcd.c                  | 11 ++++++--
- include/ufs/ufs.h                          |  1 +
- 4 files changed, 48 insertions(+), 2 deletions(-)
+Changes in v2:
+- update if-cond to check for unknown type (thanks Kees)
+- Link to v1: https://lore.kernel.org/r/20231211-strncpy-drivers-scsi-fcoe-fcoe_sysfs-c-v1-1-73b942238396@google.com
+---
+Builds upon patch and feedback from [2]:
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
-index b73067bb5ea2..5bf7073b4f75 100644
---- a/Documentation/ABI/testing/sysfs-driver-ufs
-+++ b/Documentation/ABI/testing/sysfs-driver-ufs
-@@ -1523,3 +1523,10 @@ Description:	Indicates status of Write Booster.
+However, this is different enough to warrant its own patch and not be a
+continuation.
+
+[2]: https://lore.kernel.org/all/9f38f4aa-c6b5-4786-a641-d02d8bd92f7f@acm.org/
+---
+ drivers/scsi/fcoe/fcoe_sysfs.c | 26 ++++----------------------
+ 1 file changed, 4 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/scsi/fcoe/fcoe_sysfs.c b/drivers/scsi/fcoe/fcoe_sysfs.c
+index e17957f8085c..408a806bf4c2 100644
+--- a/drivers/scsi/fcoe/fcoe_sysfs.c
++++ b/drivers/scsi/fcoe/fcoe_sysfs.c
+@@ -10,6 +10,7 @@
+ #include <linux/kernel.h>
+ #include <linux/etherdevice.h>
+ #include <linux/ctype.h>
++#include <linux/string.h>
  
- 		The file is read only.
- 
-+What:		/sys/bus/platform/drivers/ufshcd/*/rtc_update_ms
-+What:		/sys/bus/platform/devices/*.ufs/rtc_update_ms
-+Date:		November 2023
-+Contact:	Bean Huo <beanhuo@micron.com>
-+Description:
-+		rtc_update_ms indicates how often the host should synchronize or update the
-+		UFS RTC. If set to 0, this will disable UFS RTC periodic update.
-diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
-index 05b10ca90b50..e6d12289e017 100644
---- a/drivers/ufs/core/ufs-sysfs.c
-+++ b/drivers/ufs/core/ufs-sysfs.c
-@@ -302,6 +302,35 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
- 	return res < 0 ? res : count;
+ #include <scsi/fcoe_sysfs.h>
+ #include <scsi/libfcoe.h>
+@@ -214,25 +215,13 @@ static const char *get_fcoe_##title##_name(enum table_type table_key)	\
+ 	return table[table_key];					\
  }
  
-+static ssize_t rtc_update_ms_show(struct device *dev, struct device_attribute *attr,
-+				  char *buf)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%d\n", hba->dev_info.rtc_update_period);
-+}
-+
-+static ssize_t rtc_update_ms_store(struct device *dev, struct device_attribute *attr,
-+				   const char *buf, size_t count)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+	unsigned int ms;
-+	bool resume_period_update = false;
-+
-+	if (kstrtouint(buf, 0, &ms))
-+		return -EINVAL;
-+
-+	if (!hba->dev_info.rtc_update_period && ms > 0)
-+		resume_period_update =  true;
-+	/* Minimum and maximum update frequency should be synchronized with all UFS vendors */
-+	hba->dev_info.rtc_update_period = ms;
-+
-+	if (resume_period_update)
-+		schedule_delayed_work(&hba->ufs_rtc_update_work,
-+				      msecs_to_jiffies(hba->dev_info.rtc_update_period));
-+	return count;
-+}
-+
- static ssize_t enable_wb_buf_flush_show(struct device *dev,
- 				    struct device_attribute *attr,
- 				    char *buf)
-@@ -386,6 +415,7 @@ static DEVICE_ATTR_RW(auto_hibern8);
- static DEVICE_ATTR_RW(wb_on);
- static DEVICE_ATTR_RW(enable_wb_buf_flush);
- static DEVICE_ATTR_RW(wb_flush_threshold);
-+static DEVICE_ATTR_RW(rtc_update_ms);
- 
- static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
- 	&dev_attr_rpm_lvl.attr,
-@@ -398,6 +428,7 @@ static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
- 	&dev_attr_wb_on.attr,
- 	&dev_attr_enable_wb_buf_flush.attr,
- 	&dev_attr_wb_flush_threshold.attr,
-+	&dev_attr_rtc_update_ms.attr,
- 	NULL
+-static char *fip_conn_type_names[] = {
++static const char * const fip_conn_type_names[] = {
+ 	[ FIP_CONN_TYPE_UNKNOWN ] = "Unknown",
+ 	[ FIP_CONN_TYPE_FABRIC ]  = "Fabric",
+ 	[ FIP_CONN_TYPE_VN2VN ]   = "VN2VN",
  };
+ fcoe_enum_name_search(ctlr_mode, fip_conn_type, fip_conn_type_names)
  
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index cda1e1080446..5ebc9c957236 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -8235,9 +8235,9 @@ static void ufshcd_rtc_work(struct work_struct *work)
- 	if (!ufshcd_is_ufs_dev_busy(hba) && hba->ufshcd_state == UFSHCD_STATE_OPERATIONAL)
- 		ufshcd_update_rtc(hba);
+-static enum fip_conn_type fcoe_parse_mode(const char *buf)
+-{
+-	int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(fip_conn_type_names); i++) {
+-		if (strcasecmp(buf, fip_conn_type_names[i]) == 0)
+-			return i;
+-	}
+-
+-	return FIP_CONN_TYPE_UNKNOWN;
+-}
+-
+ static char *fcf_state_names[] = {
+ 	[ FCOE_FCF_STATE_UNKNOWN ]      = "Unknown",
+ 	[ FCOE_FCF_STATE_DISCONNECTED ] = "Disconnected",
+@@ -274,17 +263,10 @@ static ssize_t store_ctlr_mode(struct device *dev,
+ 			       const char *buf, size_t count)
+ {
+ 	struct fcoe_ctlr_device *ctlr = dev_to_ctlr(dev);
+-	char mode[FCOE_MAX_MODENAME_LEN + 1];
  
--	if (ufshcd_is_ufs_dev_active(hba))
-+	if (ufshcd_is_ufs_dev_active(hba) && hba->dev_info.rtc_update_period)
- 		schedule_delayed_work(&hba->ufs_rtc_update_work,
--				      msecs_to_jiffies(UFS_RTC_UPDATE_INTERVAL_MS));
-+				      msecs_to_jiffies(hba->dev_info.rtc_update_period));
- }
+ 	if (count > FCOE_MAX_MODENAME_LEN)
+ 		return -EINVAL;
  
- static void ufs_init_rtc(struct ufs_hba *hba, u8 *desc_buf)
-@@ -8259,6 +8259,13 @@ static void ufs_init_rtc(struct ufs_hba *hba, u8 *desc_buf)
- 		dev_info->rtc_type = UFS_RTC_RELATIVE;
- 		dev_info->rtc_time_baseline = 0;
- 	}
-+
-+	/*
-+	 * We ignore TIME_PERIOD defined in wPeriodicRTCUpdate because Spec does not clearly state
-+	 * how to calculate the specific update period for each time unit. And we disable periodic
-+	 * RTC update work, let user configure by sysfs node according to specific circumstance.
-+	 */
-+	dev_info->rtc_update_period = 0;
- }
+-	strncpy(mode, buf, count);
+-
+-	if (mode[count - 1] == '\n')
+-		mode[count - 1] = '\0';
+-	else
+-		mode[count] = '\0';
  
- static int ufs_get_device_desc(struct ufs_hba *hba)
-diff --git a/include/ufs/ufs.h b/include/ufs/ufs.h
-index 7e7169d94596..b6003749bc83 100644
---- a/include/ufs/ufs.h
-+++ b/include/ufs/ufs.h
-@@ -591,6 +591,7 @@ struct ufs_dev_info {
- 	/* UFS RTC */
- 	enum ufs_rtc_time rtc_type;
- 	time64_t rtc_time_baseline;
-+	u32 rtc_update_period;
- };
+ 	switch (ctlr->enabled) {
+ 	case FCOE_CTLR_ENABLED:
+@@ -297,8 +279,8 @@ static ssize_t store_ctlr_mode(struct device *dev,
+ 			return -ENOTSUPP;
+ 		}
  
- /*
--- 
-2.34.1
+-		ctlr->mode = fcoe_parse_mode(mode);
+-		if (ctlr->mode == FIP_CONN_TYPE_UNKNOWN) {
++		ctlr->mode = sysfs_match_string(fip_conn_type_names, buf);
++		if (ctlr->mode < 0 || ctlr->mode == FIP_CONN_TYPE_UNKNOWN) {
+ 			LIBFCOE_SYSFS_DBG(ctlr, "Unknown mode %s provided.\n",
+ 					  buf);
+ 			return -EINVAL;
+
+---
+base-commit: bee0e7762ad2c6025b9f5245c040fcc36ef2bde8
+change-id: 20231024-strncpy-drivers-scsi-fcoe-fcoe_sysfs-c-0e1dffe82855
+
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
 
 
