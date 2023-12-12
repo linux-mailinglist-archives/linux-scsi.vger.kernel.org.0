@@ -1,185 +1,89 @@
-Return-Path: <linux-scsi+bounces-883-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-886-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46D4680EB03
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Dec 2023 12:56:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AA1B80ECFE
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Dec 2023 14:15:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCE5F1F21B74
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Dec 2023 11:56:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B2FD1C20B1F
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Dec 2023 13:15:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 305E05DF2A;
-	Tue, 12 Dec 2023 11:56:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 013A46167F;
+	Tue, 12 Dec 2023 13:15:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VW26hZjl"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dT7hUcTd"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB59D3;
-	Tue, 12 Dec 2023 03:56:16 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BC7erv6019065;
-	Tue, 12 Dec 2023 11:55:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type; s=qcppdkim1; bh=FMgWXnILq2a0EzORWYwo
-	s3k1dovqenJDgzuHog06xUA=; b=VW26hZjlKmzsSBL6iQYmtnNENGHz8wMZ212r
-	UPmD1NA/oSR0bKdnVY9IENuzyv/4iP///YSrLMASNdd6ycnefIhPkXwhphmg65CR
-	gWnjtMOXFAsj+zzvT1cJ663rn0s/kuCk4pv1IfDkFBvMxXlNiummSMLa+R8ipusr
-	YqSBBR/TcFWKiN03+sdj0SaIDa/X5kWRHYcG9UWwZoZnp4Da/06+5jshDFZfQ2nr
-	VYeeuJM5BkN3e1JLDDpU/nnTc1V7tZxlOiqTwoO/+ydEM7j5oPkVNPDzXlw4bxMS
-	CASuxPAI55/tWZiOvPANcxTOGXZo9b1KKE8zuEbVv7EWVs23PQ==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uxepkh5j3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Dec 2023 11:55:52 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BCBtptP009807
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Dec 2023 11:55:51 GMT
-Received: from hu-mnaresh-hyd.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Tue, 12 Dec 2023 03:55:46 -0800
-From: Maramaina Naresh <quic_mnaresh@quicinc.com>
-To: "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen"
-	<martin.petersen@oracle.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        "Matthias
- Brugger" <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>,
-        <stanley.chu@mediatek.com>
-CC: Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Stanley Jhu <chu.stanley@gmail.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <quic_cang@quicinc.com>,
-        <quic_nguyenb@quicinc.com>
-Subject: [PATCH V3 2/2] ufs: ufs-mediatek: Enable CPU latency PM QoS support for MEDIATEK SoC
-Date: Tue, 12 Dec 2023 17:25:10 +0530
-Message-ID: <20231212115510.30935-3-quic_mnaresh@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20231212115510.30935-1-quic_mnaresh@quicinc.com>
-References: <20231212115510.30935-1-quic_mnaresh@quicinc.com>
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A045A7;
+	Tue, 12 Dec 2023 05:15:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=d9GOM1CReQqHO2Eq5TSJ+QFrtD+BDx0i0I5iG3RHOkc=; b=dT7hUcTdggq68z9eTLTpZvkowz
+	o0hzxFtGP/1A5CdpXLfKR7IAabXtd6tscvW4EWJ7bqf73me/qP/EdG2B4FI3typytMvICOqncBaZB
+	juLPQegmxMqcDjRUgDWRxj7eyVDzzLp60SQCJEDdgc0OscK42Z3kENibYVgGF0I1l4mcAYgv7Nega
+	dtBKSq2W5Eht1hqZUznEkZjKNtAWvDjb82DMtqFruzGL7aQEKgH38NdlFfSSWk5+OxXcyVtpRNqmc
+	NPwFb5zSyEEcKZJQSk14/2oMDYGzCgMBHQVgCHGvkAUHl3vAl4PoAud1hrwXpknFsKsviOKDCWU7T
+	JzSMOq4g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1rD2ae-00BldE-0K;
+	Tue, 12 Dec 2023 13:14:24 +0000
+Date: Tue, 12 Dec 2023 05:14:24 -0800
+From: Christoph Hellwig <hch@infradead.org>
+To: Jan Kara <jack@suse.cz>
+Cc: Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk,
+	roger.pau@citrix.com, colyli@suse.de, kent.overstreet@gmail.com,
+	joern@lazybastard.org, miquel.raynal@bootlin.com, richard@nod.at,
+	vigneshr@ti.com, sth@linux.ibm.com, hoeppner@linux.ibm.com,
+	hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+	jejb@linux.ibm.com, martin.petersen@oracle.com, clm@fb.com,
+	josef@toxicpanda.com, dsterba@suse.com, viro@zeniv.linux.org.uk,
+	brauner@kernel.org, nico@fluxnic.net, xiang@kernel.org,
+	chao@kernel.org, tytso@mit.edu, adilger.kernel@dilger.ca,
+	agruenba@redhat.com, jack@suse.com, konishi.ryusuke@gmail.com,
+	willy@infradead.org, akpm@linux-foundation.org,
+	p.raghav@samsung.com, hare@suse.de, linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+	linux-bcache@vger.kernel.org, linux-mtd@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-bcachefs@vger.kernel.org, linux-btrfs@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+	linux-ext4@vger.kernel.org, gfs2@lists.linux.dev,
+	linux-nilfs@vger.kernel.org, yukuai3@huawei.com,
+	yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH RFC v2 for-6.8/block 01/18] block: add some bdev apis
+Message-ID: <ZXhcsNbvzbArtBUj@infradead.org>
+References: <20231211140552.973290-1-yukuai1@huaweicloud.com>
+ <20231211140552.973290-2-yukuai1@huaweicloud.com>
+ <20231211165217.fil437byq7w2vcp7@quack3>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6qTqvBmZpd56bFsjl0wu537RnGkGyamv
-X-Proofpoint-ORIG-GUID: 6qTqvBmZpd56bFsjl0wu537RnGkGyamv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- malwarescore=0 adultscore=0 lowpriorityscore=0 phishscore=0
- priorityscore=1501 bulkscore=0 mlxlogscore=999 spamscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312120096
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231211165217.fil437byq7w2vcp7@quack3>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Revert the existing PM QoS feature from MEDIATEK UFS driver as similar
-PM QoS feature implementation is moved to core ufshcd and also enable
-CPU latency PM QoS capability for MEDIATEK SoC.
+On Mon, Dec 11, 2023 at 05:52:17PM +0100, Jan Kara wrote:
+> > +void bdev_associated_mapping(struct block_device *bdev,
+> > +			     struct address_space *mapping)
+> > +{
+> > +	mapping->host = bdev->bd_inode;
+> > +}
+> 
+> Here I'm not sure - is the helper really a win? It seems a bit obscure to
+> me. This initialization of another mapping for a bdev looks really special.
 
-Signed-off-by: Maramaina Naresh <quic_mnaresh@quicinc.com>
----
- drivers/ufs/host/ufs-mediatek.c | 20 +++-----------------
- drivers/ufs/host/ufs-mediatek.h |  3 ---
- 2 files changed, 3 insertions(+), 20 deletions(-)
+If we want to hide bd_inode we'll something like this helper even if
+I don't particularly like it either.
 
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index fc61790d289b..d8ece88103b9 100644
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -17,7 +17,6 @@
- #include <linux/of_platform.h>
- #include <linux/phy/phy.h>
- #include <linux/platform_device.h>
--#include <linux/pm_qos.h>
- #include <linux/regulator/consumer.h>
- #include <linux/reset.h>
- #include <linux/soc/mediatek/mtk_sip_svc.h>
-@@ -626,21 +625,9 @@ static void ufs_mtk_init_host_caps(struct ufs_hba *hba)
- 	dev_info(hba->dev, "caps: 0x%x", host->caps);
- }
- 
--static void ufs_mtk_boost_pm_qos(struct ufs_hba *hba, bool boost)
--{
--	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
--
--	if (!host || !host->pm_qos_init)
--		return;
--
--	cpu_latency_qos_update_request(&host->pm_qos_req,
--				       boost ? 0 : PM_QOS_DEFAULT_VALUE);
--}
--
- static void ufs_mtk_scale_perf(struct ufs_hba *hba, bool scale_up)
- {
- 	ufs_mtk_boost_crypt(hba, scale_up);
--	ufs_mtk_boost_pm_qos(hba, scale_up);
- }
- 
- static void ufs_mtk_pwr_ctrl(struct ufs_hba *hba, bool on)
-@@ -937,6 +924,9 @@ static int ufs_mtk_init(struct ufs_hba *hba)
- 	/* Enable clk scaling*/
- 	hba->caps |= UFSHCD_CAP_CLK_SCALING;
- 
-+	/* Enable PM QoS */
-+	hba->caps |= UFSHCD_CAP_PM_QOS;
-+
- 	hba->quirks |= UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL;
- 	hba->quirks |= UFSHCD_QUIRK_MCQ_BROKEN_INTR;
- 	hba->quirks |= UFSHCD_QUIRK_MCQ_BROKEN_RTC;
-@@ -959,10 +949,6 @@ static int ufs_mtk_init(struct ufs_hba *hba)
- 
- 	host->ip_ver = ufshcd_readl(hba, REG_UFS_MTK_IP_VER);
- 
--	/* Initialize pm-qos request */
--	cpu_latency_qos_add_request(&host->pm_qos_req, PM_QOS_DEFAULT_VALUE);
--	host->pm_qos_init = true;
--
- 	goto out;
- 
- out_variant_clear:
-diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
-index f76e80d91729..38eab95b0f79 100644
---- a/drivers/ufs/host/ufs-mediatek.h
-+++ b/drivers/ufs/host/ufs-mediatek.h
-@@ -7,7 +7,6 @@
- #define _UFS_MEDIATEK_H
- 
- #include <linux/bitops.h>
--#include <linux/pm_qos.h>
- #include <linux/soc/mediatek/mtk_sip_svc.h>
- 
- /*
-@@ -167,7 +166,6 @@ struct ufs_mtk_mcq_intr_info {
- 
- struct ufs_mtk_host {
- 	struct phy *mphy;
--	struct pm_qos_request pm_qos_req;
- 	struct regulator *reg_va09;
- 	struct reset_control *hci_reset;
- 	struct reset_control *unipro_reset;
-@@ -178,7 +176,6 @@ struct ufs_mtk_host {
- 	struct ufs_mtk_hw_ver hw_ver;
- 	enum ufs_mtk_host_caps caps;
- 	bool mphy_powered_on;
--	bool pm_qos_init;
- 	bool unipro_lpm;
- 	bool ref_clk_enabled;
- 	u16 ref_clk_ungating_wait_us;
--- 
-2.17.1
-
+But it might be a good idea to move out of this series and into the
+follow on removing bd_inode, as it's rather pointless without that
+context.
 
