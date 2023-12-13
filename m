@@ -1,174 +1,102 @@
-Return-Path: <linux-scsi+bounces-925-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-927-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DD90811142
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Dec 2023 13:44:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B324811254
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Dec 2023 14:02:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C962CB20CA3
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Dec 2023 12:44:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD7C4281630
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Dec 2023 13:02:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C39D528E36;
-	Wed, 13 Dec 2023 12:44:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 104BE2C845;
+	Wed, 13 Dec 2023 13:02:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aOcOzCDZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qMGDveku"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56D0CF;
-	Wed, 13 Dec 2023 04:44:43 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BD8rFvC031194;
-	Wed, 13 Dec 2023 12:44:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type; s=qcppdkim1; bh=W/51e5iz1+IaMnPeMal6
-	JSyz1/dK//yeUO2cbZ7wXjM=; b=aOcOzCDZYZ4KFA4aCLuqlxZcj4ojg0gbnoK+
-	vZfJINDFJCfdZyDaUjmMqkjX5ht8WhZKALf7+GrA4xMz4s8uS/92GRys/4bXkxbQ
-	LS5vfhjtE6hDj7nT7DJT8mEdSRNr3XrkjcILlpNe7ng64ah8S5x5DkTEToeSBURe
-	tOj92IaDaHPOBL3CSknWI2hZjHjsmGHqOvsfFMje8RBmTpoHxD9i9TbJ6yENrCIn
-	1H05W1UHT57N2Q4/CT6YcxvbGFIoIunwqstdHv+mvu8g6S8VRZcRRIFQfkJy57KI
-	jkjwdnzhWmb3JiWp8s0VfepLQrL5MAhNiGlOMgv4q7x+TzQc1g==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uy5x4s2xk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Dec 2023 12:44:25 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BDCiOnT001127
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Dec 2023 12:44:24 GMT
-Received: from hu-mnaresh-hyd.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Wed, 13 Dec 2023 04:44:19 -0800
-From: Maramaina Naresh <quic_mnaresh@quicinc.com>
-To: "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen"
-	<martin.petersen@oracle.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        "Matthias
- Brugger" <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>
-CC: Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Stanley Jhu <chu.stanley@gmail.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <quic_cang@quicinc.com>,
-        <quic_nguyenb@quicinc.com>
-Subject: [PATCH V5 2/2] ufs: ufs-mediatek: Migrate to UFSHCD generic CPU latency PM QoS support
-Date: Wed, 13 Dec 2023 18:13:53 +0530
-Message-ID: <20231213124353.16407-3-quic_mnaresh@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20231213124353.16407-1-quic_mnaresh@quicinc.com>
-References: <20231213124353.16407-1-quic_mnaresh@quicinc.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B261A26AFD;
+	Wed, 13 Dec 2023 13:02:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57CCFC433C8;
+	Wed, 13 Dec 2023 13:02:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702472559;
+	bh=oucTferbO8z09uzRC+QN/9ilQDasa9VaUoOZvOLBlL4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qMGDvekulMiLgPyCQAmQWR/eYvFAOux9M1LrBgXpjuHKi5GdnupdLCcjMmHeANAZw
+	 NDWN1eQkHCW2Sw+pfLuqq2pfj/JcgsDdVtA22OmSnHNJxYpw+yR1FExTe1nE8Z/wZs
+	 akM7+FPs9zpIm5sPjIcHPvfZPn+4KlneeGqG3rOB6Je1SWsz2emIBCRZySFkAzIPeA
+	 xA8qRf8Vl62kxL6qdWQBsLnN2r/BrbU0YpgQxCdD/1rH6ftoAJoKvEHvCU6oG3Umxf
+	 wyUryDjEKQZG4E1FVlzWMllV3UPLfXuBS3NdhfbgQtbEkbPuCgd+tR20WHysGMMqwt
+	 MUW7KhdPyiXlw==
+Date: Wed, 13 Dec 2023 14:02:31 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: John Garry <john.g.garry@oracle.com>
+Cc: axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+	jejb@linux.ibm.com, martin.petersen@oracle.com, djwong@kernel.org,
+	viro@zeniv.linux.org.uk, dchinner@redhat.com, jack@suse.cz,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-nvme@lists.infradead.org, linux-xfs@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, tytso@mit.edu, jbongio@google.com,
+	linux-scsi@vger.kernel.org, ming.lei@redhat.com,
+	jaswin@linux.ibm.com, bvanassche@acm.org
+Subject: Re: [PATCH v2 04/16] fs: Increase fmode_t size
+Message-ID: <20231213-gurte-beeren-e71ff21c3c03@brauner>
+References: <20231212110844.19698-1-john.g.garry@oracle.com>
+ <20231212110844.19698-5-john.g.garry@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -CTmDAMoydg8RNHUWrvXzvHv2p2lmlU6
-X-Proofpoint-ORIG-GUID: -CTmDAMoydg8RNHUWrvXzvHv2p2lmlU6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 priorityscore=1501 adultscore=0 suspectscore=0
- malwarescore=0 spamscore=0 mlxlogscore=999 clxscore=1015 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312130093
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231212110844.19698-5-john.g.garry@oracle.com>
 
-The PM QoS feature found in the MediaTek UFS driver was moved to the UFSHCD
-core. Hence remove it from MediaTek UFS driver as it is redundant now.
+On Tue, Dec 12, 2023 at 11:08:32AM +0000, John Garry wrote:
+> Currently all bits are being used in fmode_t.
+> 
+> To allow for further expansion, increase from unsigned int to unsigned
+> long.
+> 
+> Since the dma-buf driver prints the file->f_mode member, change the print
+> as necessary to deal with the larger size.
+> 
+> Signed-off-by: John Garry <john.g.garry@oracle.com>
+> ---
+>  drivers/dma-buf/dma-buf.c | 2 +-
+>  include/linux/types.h     | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> index 21916bba77d5..a5227ae3d637 100644
+> --- a/drivers/dma-buf/dma-buf.c
+> +++ b/drivers/dma-buf/dma-buf.c
+> @@ -1628,7 +1628,7 @@ static int dma_buf_debug_show(struct seq_file *s, void *unused)
+>  
+>  
+>  		spin_lock(&buf_obj->name_lock);
+> -		seq_printf(s, "%08zu\t%08x\t%08x\t%08ld\t%s\t%08lu\t%s\n",
+> +		seq_printf(s, "%08zu\t%08x\t%08lx\t%08ld\t%s\t%08lu\t%s\n",
+>  				buf_obj->size,
+>  				buf_obj->file->f_flags, buf_obj->file->f_mode,
+>  				file_count(buf_obj->file),
+> diff --git a/include/linux/types.h b/include/linux/types.h
+> index 253168bb3fe1..49c754fde1d6 100644
+> --- a/include/linux/types.h
+> +++ b/include/linux/types.h
+> @@ -153,7 +153,7 @@ typedef u32 dma_addr_t;
+>  
+>  typedef unsigned int __bitwise gfp_t;
+>  typedef unsigned int __bitwise slab_flags_t;
+> -typedef unsigned int __bitwise fmode_t;
+> +typedef unsigned long __bitwise fmode_t;
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Maramaina Naresh <quic_mnaresh@quicinc.com>
----
- drivers/ufs/host/ufs-mediatek.c | 17 -----------------
- drivers/ufs/host/ufs-mediatek.h |  3 ---
- 2 files changed, 20 deletions(-)
-
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index fc61790d289b..1e7dadcb644f 100644
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -17,7 +17,6 @@
- #include <linux/of_platform.h>
- #include <linux/phy/phy.h>
- #include <linux/platform_device.h>
--#include <linux/pm_qos.h>
- #include <linux/regulator/consumer.h>
- #include <linux/reset.h>
- #include <linux/soc/mediatek/mtk_sip_svc.h>
-@@ -626,21 +625,9 @@ static void ufs_mtk_init_host_caps(struct ufs_hba *hba)
- 	dev_info(hba->dev, "caps: 0x%x", host->caps);
- }
- 
--static void ufs_mtk_boost_pm_qos(struct ufs_hba *hba, bool boost)
--{
--	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
--
--	if (!host || !host->pm_qos_init)
--		return;
--
--	cpu_latency_qos_update_request(&host->pm_qos_req,
--				       boost ? 0 : PM_QOS_DEFAULT_VALUE);
--}
--
- static void ufs_mtk_scale_perf(struct ufs_hba *hba, bool scale_up)
- {
- 	ufs_mtk_boost_crypt(hba, scale_up);
--	ufs_mtk_boost_pm_qos(hba, scale_up);
- }
- 
- static void ufs_mtk_pwr_ctrl(struct ufs_hba *hba, bool on)
-@@ -959,10 +946,6 @@ static int ufs_mtk_init(struct ufs_hba *hba)
- 
- 	host->ip_ver = ufshcd_readl(hba, REG_UFS_MTK_IP_VER);
- 
--	/* Initialize pm-qos request */
--	cpu_latency_qos_add_request(&host->pm_qos_req, PM_QOS_DEFAULT_VALUE);
--	host->pm_qos_init = true;
--
- 	goto out;
- 
- out_variant_clear:
-diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
-index f76e80d91729..38eab95b0f79 100644
---- a/drivers/ufs/host/ufs-mediatek.h
-+++ b/drivers/ufs/host/ufs-mediatek.h
-@@ -7,7 +7,6 @@
- #define _UFS_MEDIATEK_H
- 
- #include <linux/bitops.h>
--#include <linux/pm_qos.h>
- #include <linux/soc/mediatek/mtk_sip_svc.h>
- 
- /*
-@@ -167,7 +166,6 @@ struct ufs_mtk_mcq_intr_info {
- 
- struct ufs_mtk_host {
- 	struct phy *mphy;
--	struct pm_qos_request pm_qos_req;
- 	struct regulator *reg_va09;
- 	struct reset_control *hci_reset;
- 	struct reset_control *unipro_reset;
-@@ -178,7 +176,6 @@ struct ufs_mtk_host {
- 	struct ufs_mtk_hw_ver hw_ver;
- 	enum ufs_mtk_host_caps caps;
- 	bool mphy_powered_on;
--	bool pm_qos_init;
- 	bool unipro_lpm;
- 	bool ref_clk_enabled;
- 	u16 ref_clk_ungating_wait_us;
--- 
-2.17.1
-
+As Jan said, that's likely a bad idea. There's a bunch of places that
+assume fmode_t is 32bit. So not really a change we want to make if we
+can avoid it.
 
