@@ -1,144 +1,184 @@
-Return-Path: <linux-scsi+bounces-994-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-996-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB447813B88
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Dec 2023 21:30:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CDC5813BAC
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Dec 2023 21:42:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9594D1F224C3
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Dec 2023 20:30:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90BD51C212C7
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Dec 2023 20:42:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AE7523AA;
-	Thu, 14 Dec 2023 20:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vy82tJqn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59DB282E6;
+	Thu, 14 Dec 2023 20:42:03 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795E16A35D
-	for <linux-scsi@vger.kernel.org>; Thu, 14 Dec 2023 20:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1702585809;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QXuga73/c/MA5mQD7NNrVlnCLK003+KYeVkn9fwBS0Q=;
-	b=Vy82tJqnJMvZotN02R/6e+CkweCOgboWZxVYhtWilmwd7/4wxTDGkplowIbOI8gkqAN/I3
-	6ONh8SNDU18ZpxLdcFe4BtSGE4jslnNun+kEslRE/IoBCFY2BfA5F6He1zNgE88SwOOb7c
-	cSTfyvoK6nwiww1kX9buG8Bmsm0sb48=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-26-5RDRj6REPkG2aO5zjCKD4Q-1; Thu, 14 Dec 2023 15:30:02 -0500
-X-MC-Unique: 5RDRj6REPkG2aO5zjCKD4Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A11888FBA3;
-	Thu, 14 Dec 2023 20:30:02 +0000 (UTC)
-Received: from rhel-developer-toolbox-latest (unknown [10.2.17.21])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 3CD052166B31;
-	Thu, 14 Dec 2023 20:30:01 +0000 (UTC)
-Date: Thu, 14 Dec 2023 12:29:59 -0800
-From: Chris Leech <cleech@redhat.com>
-To: Lee Duncan <lduncan@suse.com>
-Cc: target-devel@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dbond@suse.com, hare@suse.de,
-	michael.christie@oracle.com
-Subject: Re: [PATCH 1/2] scsi: target: iscsi: handle SCSI immediate commands
-Message-ID: <ZXtlxzVtY3M_WrQ2@rhel-developer-toolbox-latest>
-References: <cover.1701540918.git.lduncan@suse.com>
- <dc0006176e90cf3fb90e5b1c1917b54fe07c91cd.1701540918.git.lduncan@suse.com>
- <ZXoOtgVZW_QpkU11@rhel-developer-toolbox-latest>
- <CAPj3X_W5kOEOapG3F8NETBRzBmrQ1Lfudy7QGmCLXPT3UwUrkw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504046A34D;
+	Thu, 14 Dec 2023 20:41:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1d345b187bbso28553555ad.0;
+        Thu, 14 Dec 2023 12:41:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702586512; x=1703191312;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IqG9tJ7zxgQayQdCX9vHyACQ3e5VCk0VcwcnCVDKags=;
+        b=TMCqCDyo4pbdXa2d2xpvL+q55dfMoC7tRtnV6lLrkU8/JGDtx5zuGbA0fE1kxmw7ew
+         6tKtIB+otSbKXaMHD5ToQOUN7S+RXkbSPQAoGUQeAD2TPxg1KV15LN5oAhEVXJ9a+Fl8
+         VdULMQUkPwKc7ffTlbeazM8NqwydJudaxWiDyjmTXoMwtXPF1sFdw7NBr2tTZqjk62nQ
+         w+IaGjGIMrIdGwpmL+lRoUX7y0pgsTvJBOUFsdrV6J3b0cD6Qz6W2jugpMtArErKBe1D
+         KqqMvWYCnwp+pjTPs/cr9qtKOrfwWOosyhKuM/C21Ng1zTTeHB46RsBiGQQE2yt909Wt
+         Yg9w==
+X-Gm-Message-State: AOJu0Yz18KZreARnRVNEg2T5C+xpld87aOzLeJUE2CI5MYpQL81BJpl7
+	NgXuutWtvCIn/k5vHGGNcbNPtEPPPt8=
+X-Google-Smtp-Source: AGHT+IH0koqdWEPlxxr8NmpgVeEwRQtR8MHg2PQCOxQa8cD/vGqgA7yxF6npfWXzuuIbtq4sCQeW1A==
+X-Received: by 2002:a17:902:7ed0:b0:1d0:83af:fa0d with SMTP id p16-20020a1709027ed000b001d083affa0dmr8940524plb.112.1702586512001;
+        Thu, 14 Dec 2023 12:41:52 -0800 (PST)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:0:1000:8411:bae8:452d:2e24:5984])
+        by smtp.gmail.com with ESMTPSA id z21-20020a170902ee1500b001d340c71ccasm5091640plb.275.2023.12.14.12.41.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Dec 2023 12:41:51 -0800 (PST)
+From: Bart Van Assche <bvanassche@acm.org>
+To: "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	Jens Axboe <axboe@kernel.dk>,
+	Christoph Hellwig <hch@lst.de>,
+	Daejun Park <daejun7.park@samsung.com>,
+	Kanchan Joshi <joshi.k@samsung.com>,
+	Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v6 00/20] Pass data lifetime information to SCSI disk devices
+Date: Thu, 14 Dec 2023 12:40:33 -0800
+Message-ID: <20231214204119.3670625-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPj3X_W5kOEOapG3F8NETBRzBmrQ1Lfudy7QGmCLXPT3UwUrkw@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
+Content-Transfer-Encoding: 8bit
 
-On Wed, Dec 13, 2023 at 05:24:54PM -0800, Lee Duncan wrote:
-> >
-> > > @@ -1255,14 +1248,15 @@ int iscsit_process_scsi_cmd(struct iscsit_conn *conn, struct iscsit_cmd *cmd,
-> > >       /*
-> > >        * Check the CmdSN against ExpCmdSN/MaxCmdSN here if
-> > >        * the Immediate Bit is not set, and no Immediate
-> > > -      * Data is attached.
-> > > +      * Data is attached. Also skip the check if this is
-> > > +      * an immediate command.
-> >
-> > This comment addition seems redundant, isn't that what the
-> > "Immediate Bit is not set" already means?
-> 
-> The spec is confusing with respect to this. The "Immediate Bit" means
-> an immediate command. These commands are done "now", not queued, and
-> they do not increment the expected sequence number.
-> 
-> Immediate data is different, and unfortunately named IMHO. It's when a
-> PDU supplies the data for the SCSI command in the current PDU instead
-> of the next PDU.
+Hi Martin,
 
-I understand the protocol, just trying to make sense of the
-implementation and what the existing comment meant. And the existing
-comment already has two conditions in it, even if the code doesn't.
+UFS vendors need the data lifetime information to achieve good performance.
+Providing data lifetime information to UFS devices can result in up to 40%
+lower write amplification. Hence this patch series that adds support in F2FS
+and also in the block layer for data lifetime information. The SCSI disk (sd)
+driver is modified such that it passes write hint information to SCSI devices
+via the GROUP NUMBER field.
 
-I think I understand now why this is delaying CmdSN validation when
-there is immediate data, until after the DataCRC can be checked.
+Please consider this patch series for the next merge window.
 
-This comment in iscsit_get_immediate_data, where the delayed processing
-occurs, also seems to read that "Immediate Bit" is in reference to an
-immediate command.
+Thank you,
 
-  * A PDU/CmdSN carrying Immediate Data passed
-  * DataCRC, check against ExpCmdSN/MaxCmdSN if
-  * Immediate Bit is not set.
+Bart.
 
-but neither of these locations (before these changes) that mention the
-"Immediate Bit" in the comments actually check for cmd->immediate_cmd.
+Changes compared to v5:
+ - Added compile-time tests that compare the WRITE_LIFE_* and RWH_* constants.
+ - Split the F_[GS]ET_RW_HINT handlers.
+ - Removed the structure member kiocb.ki_hint again. Instead, copy the data
+   lifetime information directly from struct file into a bio.
+ - Together with Doug Gilbert, fixed multiple bugs in the scsi_debug patches.
+   Added Doug's Tested-by.
+ - Changed the type of "rscs:1" from bool into unsigned.
+ - Added unit tests for the new SCSI protocol data structures.
+ - Improved multiple patch descriptions.
+ 
+Changes compared to v4:
+ - Dropped the patch that renames the WRITE_LIFE_* constants.
+ - Added a fix for an argument check in fcntl_rw_hint().
+ - Reordered the patches that restore data lifetime support.
+ - Included a fix for data lifetime support for buffered I/O to raw block
+   devices.
 
-> > >        *
-> > >        * A PDU/CmdSN carrying Immediate Data can only
-> > >        * be processed after the DataCRC has passed.
-> > >        * If the DataCRC fails, the CmdSN MUST NOT
-> > >        * be acknowledged. (See below)
-> > >        */
-> > > -     if (!cmd->immediate_data) {
-> > > +     if (!cmd->immediate_data && !cmd->immediate_cmd) {
-> > >               cmdsn_ret = iscsit_sequence_cmd(conn, cmd,
-> > >                                       (unsigned char *)hdr, hdr->cmdsn);
-> > >               if (cmdsn_ret == CMDSN_ERROR_CANNOT_RECOVER)
-> >
-> > Are you sure this needs to be checking both conditions here?  I'm
-> > struggling to understand why CmdSN checking would be bypassed for
-> > immediate data.  Is this a longstanding bug where the condition should
-> > have been on immediate_cmd (and only immediate_cmd) instead?
-> 
-> The immediate data check was there already, and there haven't been any
-> bugs I know of, so I assumed that part of the code was ok.
-> 
-> >
-> > Or is this because of the handling the immediate data with DataCRC case
-> > mentioned?  I do see iscsit_sequence_cmd also being called in
-> > iscsit_get_immediate_data.
-> 
-> I will check that but I suspect you are correct.
+Changes compared to v3:
+ - Renamed the data lifetime constants (WRITE_LIFE_*).
+ - Fixed a checkpatch complaint by changing "unsigned" into "unsigned int".
+ - Rebased this patch series on top of kernel v6.7-rc1.
+ 
+Changes compared to v2:
+ - Instead of storing data lifetime information in bi_ioprio, introduce the
+   new struct bio member bi_lifetime and also the struct request member
+   'lifetime'.
+ - Removed the bio_set_data_lifetime() and bio_get_data_lifetime() functions
+   and replaced these with direct assignments.
+ - Dropped all changes related to I/O priority.
+ - Improved patch descriptions.
 
-Is it correct to skip all of iscsit_sequence_cmd for an immediate
-command here? You are already skipping iscsit_check_received_cmdsn
-inside iscsit_sequence_cmd in this patch. If cmd->immediate_cmd is set,
-where does iscsit_execute_cmd now get called from?
+Changes compared to v1:
+ - Use six bits from the ioprio field for data lifetime information. The
+   bio->bi_write_hint / req->write_hint / iocb->ki_hint members that were
+   introduced in v1 have been removed again.
+ - The F_GET_FILE_RW_HINT and F_SET_FILE_RW_HINT fcntls have been removed.
+ - In the SCSI disk (sd) driver, query the stream status and check the PERM bit.
+ - The GET STREAM STATUS command has been implemented in the scsi_debug driver.
 
-- Chris Leech
+Bart Van Assche (20):
+  fs: Fix rw_hint validation
+  fs: Verify write lifetime constants at compile time
+  fs: Split fcntl_rw_hint()
+  fs: Move enum rw_hint into a new header file
+  fs: Restore F_[GS]ET_FILE_RW_HINT support
+  block, fs: Restore the per-bio/request data lifetime fields
+  block, fs: Propagate write hints to the block device inode
+  fs/f2fs: Restore the whint_mode mount option
+  fs/f2fs: Restore support for tracing data lifetimes
+  scsi: core: Query the Block Limits Extension VPD page
+  scsi: scsi_proto: Add structures and constants related to I/O groups
+    and streams
+  scsi: sd: Translate data lifetime information
+  scsi: scsi_debug: Reduce code duplication
+  scsi: scsi_debug: Support the block limits extension VPD page
+  scsi: scsi_debug: Rework page code error handling
+  scsi: scsi_debug: Rework subpage code error handling
+  scsi: scsi_debug: Allocate the MODE SENSE response from the heap
+  scsi: scsi_debug: Implement the IO Advice Hints Grouping mode page
+  scsi: scsi_debug: Implement GET STREAM STATUS
+  scsi: scsi_debug: Maintain write statistics per group number
+
+ Documentation/filesystems/f2fs.rst |  70 +++++++
+ block/bio.c                        |   2 +
+ block/blk-crypto-fallback.c        |   1 +
+ block/blk-merge.c                  |   8 +
+ block/blk-mq.c                     |   2 +
+ block/bounce.c                     |   1 +
+ block/fops.c                       |  14 ++
+ drivers/scsi/Kconfig               |   5 +
+ drivers/scsi/Makefile              |   2 +
+ drivers/scsi/scsi.c                |   2 +
+ drivers/scsi/scsi_debug.c          | 293 ++++++++++++++++++++++-------
+ drivers/scsi/scsi_proto_test.c     |  56 ++++++
+ drivers/scsi/scsi_sysfs.c          |  10 +
+ drivers/scsi/sd.c                  | 111 ++++++++++-
+ drivers/scsi/sd.h                  |   3 +
+ fs/buffer.c                        |  12 +-
+ fs/direct-io.c                     |   2 +
+ fs/f2fs/data.c                     |   2 +
+ fs/f2fs/f2fs.h                     |  10 +
+ fs/f2fs/segment.c                  |  95 ++++++++++
+ fs/f2fs/super.c                    |  32 +++-
+ fs/fcntl.c                         | 100 +++++++---
+ fs/inode.c                         |   1 +
+ fs/iomap/buffered-io.c             |   2 +
+ fs/iomap/direct-io.c               |   1 +
+ fs/mpage.c                         |   1 +
+ fs/open.c                          |   1 +
+ include/linux/blk-mq.h             |   2 +
+ include/linux/blk_types.h          |   2 +
+ include/linux/fs.h                 |  26 ++-
+ include/linux/rw_hint.h            |  21 +++
+ include/scsi/scsi_device.h         |   1 +
+ include/scsi/scsi_proto.h          |  78 ++++++++
+ include/trace/events/f2fs.h        |   5 +-
+ 34 files changed, 859 insertions(+), 115 deletions(-)
+ create mode 100644 drivers/scsi/scsi_proto_test.c
+ create mode 100644 include/linux/rw_hint.h
 
 
