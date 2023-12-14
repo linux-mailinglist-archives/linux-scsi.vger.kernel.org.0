@@ -1,64 +1,64 @@
-Return-Path: <linux-scsi+bounces-960-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-965-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6433E812674
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Dec 2023 05:29:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 698DE81267F
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Dec 2023 05:30:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96DCC1C21440
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Dec 2023 04:29:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D3CE1C214E3
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Dec 2023 04:30:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92BFF6AB6;
-	Thu, 14 Dec 2023 04:29:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F090CA58;
+	Thu, 14 Dec 2023 04:29:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="XpzH+r8P"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="fe8y5oOs"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9A7120
-	for <linux-scsi@vger.kernel.org>; Wed, 13 Dec 2023 20:29:30 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BE0S6XB015214;
-	Thu, 14 Dec 2023 04:29:29 GMT
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C94131
+	for <linux-scsi@vger.kernel.org>; Wed, 13 Dec 2023 20:29:42 -0800 (PST)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BE0TXJ2005880;
+	Thu, 14 Dec 2023 04:29:30 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=INgbnCodzyNnFra7u5+L3I3vKQxlW+4wUWS6OKZ2PjI=;
- b=XpzH+r8Planym0g3ZaUvlk7VIdfJ1gMUYEfpPw3UB3NIfKRlETugOd0v941GFtedi55o
- EIJ1WA8AfD2XxxeJMyljy14Pt76VTnfEvg0vKcEAK3jDnybM+zawcU/p1AYCRXVRmwsg
- QV8hdO7DBoviXEUgk1VCG0o28nhaQdeWHBEn+5M0gOoatkVF//W1wvlM1QQTwZmAaJ82
- zjr5Y2QIBxraMXXI12R3XbEc15nNMQD0/NlpYugrzFlhFANVcHOpxfHDbbsqE6RwYl4E
- gppRNLduTZSQJ+EDfCr2IyUiZQuL/9ACorPusQdhQdABA/bgeK5iopiRQ8sffdQ9zM5w jg== 
+ bh=VOhCrRQI6v15uPT9tN8m8h8I4mP1moBbAIF9emlD9hQ=;
+ b=fe8y5oOsQfRgEgKRd7hjVUyEeUbc5psX5ze920lpXVC9pJoJ4qQrd+JXnjvtDvMqEF++
+ yzsT59DhD4M2n8GAUJ9I9HuBOmPyI8OUiRzsfLmOU1+Kq/UyxbjHowJowz9bd4F2M8l7
+ vwWCUNnxchFIdkNHoejd9n9NiHybbUsPAa7vZZI4fu5MjCUyMpy2+E7ErbRcasaefpzH
+ oseoJNztN79E/kSsrqyzdE7nx8PPQVC5Q1+I541qtOJm38r5qBRJ6iAG0qIsD896qSU5
+ 7/LeKH62rW9Z24fu9mMfx+woltOyrE+lF70LL2ws3//zzFiZY6cvp9pKNmqng4eiea/l uw== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3uwgn3r25e-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3uvg9d9x69-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Thu, 14 Dec 2023 04:29:29 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3BE3OdLF009843;
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3BE3aPbW009868;
 	Thu, 14 Dec 2023 04:29:28 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3uvep9ev2g-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3uvep9ev2q-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Thu, 14 Dec 2023 04:29:28 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BE4TQMC035965;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BE4TQME035965;
 	Thu, 14 Dec 2023 04:29:28 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3uvep9ev0g-5;
-	Thu, 14 Dec 2023 04:29:27 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3uvep9ev0g-6;
+	Thu, 14 Dec 2023 04:29:28 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, sumit.saxena@broadcom.com,
-        sathya.prakash@broadcom.com, ranjan.kumar@broadcom.com,
-        prayas.patel@broadcom.com,
-        Chandrakanth patil <chandrakanth.patil@broadcom.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH 0/4] Support for preallocation of SGL BSG data buffers
-Date: Wed, 13 Dec 2023 23:29:10 -0500
-Message-ID: <170205513110.1790765.3232347303851232446.b4-ty@oracle.com>
+To: hare@kernel.org
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org,
+        Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH 0/3] libfc: fixup command abort handling
+Date: Wed, 13 Dec 2023 23:29:11 -0500
+Message-ID: <170205513106.1790765.4775577640203759673.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231205191630.12201-1-chandrakanth.patil@broadcom.com>
-References: <20231205191630.12201-1-chandrakanth.patil@broadcom.com>
+In-Reply-To: <20231129165832.224100-1-hare@kernel.org>
+References: <20231129165832.224100-1-hare@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -71,38 +71,34 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-14_01,2023-12-13_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
- phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=762 bulkscore=0
+ phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=981 bulkscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2311290000 definitions=main-2312140024
-X-Proofpoint-ORIG-GUID: cgIHgTQnZ9aIqz86Td_cM8m4n-wHcOu8
-X-Proofpoint-GUID: cgIHgTQnZ9aIqz86Td_cM8m4n-wHcOu8
+X-Proofpoint-GUID: pLG2Usg6GwO1shBx_fmsXAqj-NbEdGHn
+X-Proofpoint-ORIG-GUID: pLG2Usg6GwO1shBx_fmsXAqj-NbEdGHn
 
-On Wed, 06 Dec 2023 00:46:26 +0530, Chandrakanth patil wrote:
+On Wed, 29 Nov 2023 17:58:29 +0100, hare@kernel.org wrote:
 
-> This set of patches includes a new feature and version update.
-> 
-> The initial three patches are related to "Support for preallocation of SGL
-> BSG data buffers" and patches are interdependent. The fourth patch updates
-> the driver version.
-> 
-> Chandrakanth patil (4):
->   mpi3mr: Support for preallocation of SGL BSG data buffers part-1
->   mpi3mr: Support for preallocation of SGL BSG data buffers part-2
->   mpi3mr: Support for preallocation of SGL BSG data buffers part-3
->   mpi3mr: Update driver version to 8.5.1.0.0
+> when testing command timeout with the help of XDP I found
+> that scsi_try_to_abort_cmd() would always return 'SUCCESS'
+> for FCoE, even if no commands could be sent over the wire.
+> Which is not only surprising, but also can lead to data
+> corruption as commands were never aborted.
+> Root cause was that aborts had been sent twice, once
+> from FC error recovery and once from SCSI EH, with the
+> former inducing the latter to assume that the command
+> was already aborted.
 > 
 > [...]
 
 Applied to 6.8/scsi-queue, thanks!
 
-[1/4] mpi3mr: Support for preallocation of SGL BSG data buffers part-1
-      https://git.kernel.org/mkp/scsi/c/c432e1675239
-[2/4] mpi3mr: Support for preallocation of SGL BSG data buffers part-2
-      https://git.kernel.org/mkp/scsi/c/fb231d7deffb
-[3/4] mpi3mr: Support for preallocation of SGL BSG data buffers part-3
-      https://git.kernel.org/mkp/scsi/c/9536af615dc9
-[4/4] mpi3mr: Update driver version to 8.5.1.0.0
-      https://git.kernel.org/mkp/scsi/c/d0a60e3edaa4
+[1/3] libfc: don't schedule abort twice
+      https://git.kernel.org/mkp/scsi/c/b57c4db5d23b
+[2/3] libfc: Fixup timeout error in fc_fcp_rec_error()
+      https://git.kernel.org/mkp/scsi/c/53122a49f497
+[3/3] libfc: map FC_TIMED_OUT to DID_TIME_OUT
+      https://git.kernel.org/mkp/scsi/c/be40572c22cc
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
