@@ -1,112 +1,118 @@
-Return-Path: <linux-scsi+bounces-1173-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-1176-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58FF2818F36
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Dec 2023 19:06:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35F738190F6
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Dec 2023 20:37:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 005E91F22675
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Dec 2023 18:06:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 690021C2503B
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Dec 2023 19:37:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E192E37D0C;
-	Tue, 19 Dec 2023 18:06:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ACD039AD6;
+	Tue, 19 Dec 2023 19:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="SZ9dj1nn"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="F/AlW9Fe"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91B737D03;
-	Tue, 19 Dec 2023 18:06:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.18] ([92.140.202.140])
-	by smtp.orange.fr with ESMTPA
-	id FeTdrw2ddb4TgFeTerlrH5; Tue, 19 Dec 2023 19:06:00 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1703009160;
-	bh=bRe4uIB8VoeySe+3f/IWMRV40y9LM+iMuTk9Wv+fjso=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=SZ9dj1nnoJo0BiJSMqFkTD+KT3PwX9vSxqitdbCJS8sv2PyWeXf3qkGo5s2yUw7H3
-	 ui5p3n2ElpGv9uPU5l5kZ3cqxxAPUkUKqHeHV1dl1b57lBnHaMkCn/+DHz3IIHcwtB
-	 ik0vjNeeZ90ci0bcgq+In9ZXDnLDb/6lJCoyPH+OrhMZcJBBXjMFHDu0xkOnvz+ifm
-	 WpidANTlEk0shqidjRyqiEcSG3OkNSwkkKs5FPJncQy/Cbgrn6mq8kcm9REL2fk8Ir
-	 GqkMaIPAmxWP+AGDPH+5YjZcrmCP9p91zCAAR8xAN2e/uyeI46O0bcVngGlaBBpHxl
-	 2ekLbIQstdl0g==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 19 Dec 2023 19:06:00 +0100
-X-ME-IP: 92.140.202.140
-Message-ID: <851d4638-970a-48d0-8f79-493a7ebcc0a5@wanadoo.fr>
-Date: Tue, 19 Dec 2023 19:05:56 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D36539AC4
+	for <linux-scsi@vger.kernel.org>; Tue, 19 Dec 2023 19:37:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1703014639; x=1734550639;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MxQyFtq0T1CUQIvZ4nakCRNMAORdiwBKAYt8TVZpsK0=;
+  b=F/AlW9FeJVX8NQxdQKrfSmUvH1/HTu4+LWcLYjxjW8uwNBWacYqfQpKZ
+   Z0GjvssV510hMiNybGVafPyQRt4/M4zG9f/Mw0li0EoLLaLlBpUV8fk5/
+   gZnfqdcctpSwpoxD3LPt5cbXO51Qbj9c3/tvku0D3bCGs7b8Sprze8UV7
+   fw6/XjFSk5XXcJ3p/Oeub74fy26GhWuNLm4C2NRbHt7vWPt0XA4B60wer
+   lEMckD4lyLBRvEGpftCPvadq4nNgzlMNiniknDA4+DFnDqRGpNkW3Dk23
+   bhZNj5HVlYppUiombBA2H9NRmdIc2ZOWe8EkQwGbd6mVHEenU0yhU7boo
+   Q==;
+X-CSE-ConnectionGUID: QfATRU5QQbSZ4OmFfcIKRQ==
+X-CSE-MsgGUID: 7vvmf9BrSa+t6GE2vVK9yA==
+X-ThreatScanner-Verdict: Negative
+X-IronPort-AV: E=Sophos;i="6.04,289,1695711600"; 
+   d="scan'208";a="13591430"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Dec 2023 12:37:18 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 19 Dec 2023 12:36:53 -0700
+Received: from brunhilda.pdev.net (10.10.85.11) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
+ Transport; Tue, 19 Dec 2023 12:36:53 -0700
+From: Don Brace <don.brace@microchip.com>
+To: <don.brace@microchip.com>, <Kevin.Barnett@microchip.com>,
+	<scott.teel@microchip.com>, <Justin.Lindley@microchip.com>,
+	<scott.benesh@microchip.com>, <gerry.morong@microchip.com>,
+	<mahesh.rajashekhara@microchip.com>, <mike.mcgowen@microchip.com>,
+	<murthy.bhat@microchip.com>, <kumar.meiyappan@microchip.com>,
+	<jeremy.reeves@microchip.com>, <david.strahan@microchip.com>,
+	<hch@infradead.org>, <jejb@linux.vnet.ibm.com>, <joseph.szczypek@hpe.com>,
+	<POSWALD@suse.com>
+CC: <linux-scsi@vger.kernel.org>
+Subject: [PATCH 0/3] smartpqi updates
+Date: Tue, 19 Dec 2023 13:36:49 -0600
+Message-ID: <20231219193653.277553-1-don.brace@microchip.com>
+X-Mailer: git-send-email 2.43.0.76.g1a87c842ec
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: ufs: qcom: Remove unnecessary goto statement from
- ufs_qcom_config_esi function
-Content-Language: fr
-To: Chanwoo Lee <cw9316.lee@samsung.com>, mani@kernel.org, agross@kernel.org,
- andersson@kernel.org, konrad.dybcio@linaro.org, jejb@linux.ibm.com,
- martin.petersen@oracle.com, linux-arm-msm@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: grant.jung@samsung.com, jt77.jang@samsung.com, dh0421.hwang@samsung.com,
- sh043.lee@samsung.com
-References: <CGME20231219082757epcas1p33bda4e0723d3d57552132054d3e5a3fe@epcas1p3.samsung.com>
- <20231219082740.27644-1-cw9316.lee@samsung.com>
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20231219082740.27644-1-cw9316.lee@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Le 19/12/2023 à 09:27, Chanwoo Lee a écrit :
-> From: ChanWoo Lee <cw9316.lee@samsung.com>
-> 
-> There is only one place where goto is used,
-> and it is unnecessary to check the ret value through 'goto out'
-> because the ret value is already true.
-> 
-> Therefore, remove the goto statement and
-> integrate the '!ret' condition into the existing code.
-> 
-> Signed-off-by: ChanWoo Lee <cw9316.lee@samsung.com>
+These patches are based on Martin Petersen's 6.8/scsi-queue tree
+  https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
+  6.8/scsi-queue
 
-Reviewed-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+The only functional change to smartpqi is correction of a race condition
+during a scan/rescan operation. The device->rescan flag can be updated
+by multiple threads causing issues.
 
-> ---
->   drivers/ufs/host/ufs-qcom.c | 7 ++-----
->   1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> index 17e24270477d..8cf803806326 100644
-> --- a/drivers/ufs/host/ufs-qcom.c
-> +++ b/drivers/ufs/host/ufs-qcom.c
-> @@ -1929,7 +1929,7 @@ static int ufs_qcom_config_esi(struct ufs_hba *hba)
->   					     ufs_qcom_write_msi_msg);
->   	if (ret) {
->   		dev_err(hba->dev, "Failed to request Platform MSI %d\n", ret);
-> -		goto out;
-> +		return ret;
->   	}
->   
->   	msi_lock_descs(hba->dev);
-> @@ -1964,11 +1964,8 @@ static int ufs_qcom_config_esi(struct ufs_hba *hba)
->   				      REG_UFS_CFG3);
->   		}
->   		ufshcd_mcq_enable_esi(hba);
-> -	}
-> -
-> -out:
-> -	if (!ret)
->   		host->esi_enabled = true;
-> +	}
->   
->   	return ret;
->   }
+The other two patches add PCI-IDs for new controllers and change the
+driver version.
+
+This set of changes consists of:
+* smartpqi-Add-new-controller-PCI-IDs
+  No functional changes. Just adding in more device support.
+* smartpqi: fix logical volume rescan race condition
+  The driver has several threads that can contend for accessing
+  a controller instance wide 'rescan' flag. In some rare cases
+  a race condition can occur that bypasses a call to rescan for
+  device changes. Some of these changes are; device removal, logical
+  volume changes, and device adds. We basically added a spin-lock
+  to protect the 'rescan' flag.
+* smartpqi-change-driver-version-to-2.1.26-030
+  No functional changes.
+
+---
+
+David Strahan (1):
+  smartpqi: Add new controller PCI IDs
+
+Don Brace (1):
+  smartpqi: bump driver version to 2.1.26-030
+
+Mahesh Rajashekhara (1):
+  smartpqi: fix logical volume rescan race condition
+
+ drivers/scsi/smartpqi/smartpqi.h      |  1 -
+ drivers/scsi/smartpqi/smartpqi_init.c | 89 ++++++++++++++++++++++++---
+ 2 files changed, 79 insertions(+), 11 deletions(-)
+
+-- 
+2.43.0.76.g1a87c842ec
 
 
