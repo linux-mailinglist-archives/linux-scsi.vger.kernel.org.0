@@ -1,75 +1,188 @@
-Return-Path: <linux-scsi+bounces-1188-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-1186-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FB1F81A155
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Dec 2023 15:45:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2BB381A12E
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Dec 2023 15:34:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0F0D2857D1
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Dec 2023 14:45:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DB8E1F22D7D
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Dec 2023 14:34:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11AEE3D3B8;
-	Wed, 20 Dec 2023 14:45:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF6D13B29A;
+	Wed, 20 Dec 2023 14:34:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ax/u038B"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-m49205.qiye.163.com (mail-m49205.qiye.163.com [45.254.49.205])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988103D989;
-	Wed, 20 Dec 2023 14:45:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sangfor.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sangfor.com.cn
-Received: from [0.0.0.0] (unknown [IPV6:240e:3b7:3270:35d0:2d5d:a87c:93d7:296a])
-	by mail-m12773.qiye.163.com (Hmail) with ESMTPA id 9186D2C063A;
-	Wed, 20 Dec 2023 16:47:09 +0800 (CST)
-Message-ID: <8a0d7c64-128b-277a-8128-5b413f4fc341@sangfor.com.cn>
-Date: Wed, 20 Dec 2023 16:47:09 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A73043AC1A;
+	Wed, 20 Dec 2023 14:34:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87BEEC433CA;
+	Wed, 20 Dec 2023 14:34:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703082881;
+	bh=iNsI8JfwO+C25hEOmVx+Z0q3QIW2jx9qavk1Utsxgy4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ax/u038BkU+2lQkEoNO6vULvumIx9BczrUQfu3Zkcpac03PvdKfZ7yn54XvC4IqG4
+	 rYyIej/075WZvwXH/UO3s2WJ9vHe4rnVF2g3AnWgwHd/ZCjfDcpALbkr0ZyoGZIjL+
+	 jhiYqau5FIXhITuc8XTbZvP5Vxt6nVp3jtIseZPB4j8HQLA8ZHVV6lVYD6ybhRheUJ
+	 HHpkSashYQQxYjxU/kt743PGBPTlpuM/n/+kVJPuYyu/bhOjq79NAHH27vq/+2USbV
+	 raw1KMS0sErTjbcDqKFkk24v43FMiM3XoNSDDDSfiVd/WQWUeMjHPOEiSB7XqP4+XR
+	 BG+OeSv71QGBQ==
+Date: Wed, 20 Dec 2023 20:04:22 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Chanwoo Lee <cw9316.lee@samsung.com>
+Cc: alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+	jejb@linux.ibm.com, martin.petersen@oracle.com,
+	peter.wang@mediatek.com, chu.stanley@gmail.com,
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+	stanley.chu@mediatek.com, quic_cang@quicinc.com,
+	quic_asutoshd@quicinc.com, powen.kao@mediatek.com,
+	quic_nguyenb@quicinc.com, yang.lee@linux.alibaba.com,
+	beanhuo@micron.com, Arthur.Simchaev@wdc.com, ebiggers@google.com,
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, grant.jung@samsung.com,
+	jt77.jang@samsung.com, dh0421.hwang@samsung.com,
+	sh043.lee@samsung.com
+Subject: Re: [PATCH] ufs: mcq: Adding a function for MCQ enable
+Message-ID: <20231220143422.GF3544@thinkpad>
+References: <CGME20231220052749epcas1p3b90f6c03110ff5f63ffc547ef0f35907@epcas1p3.samsung.com>
+ <20231220052737.19857-1-cw9316.lee@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 0/2] scsi: ses: Fix out-of-bounds accesses
-Content-Language: en-US
-To: jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc: zhuwei@sangfor.com.cn, thenzl@redhat.com, linux-scsi@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231130142835.18041-1-dinghui@sangfor.com.cn>
-From: Ding Hui <dinghui@sangfor.com.cn>
-In-Reply-To: <20231130142835.18041-1-dinghui@sangfor.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDGR5DVktNHU9DS08eGEkeQ1UTARMWGhIXJBQOD1
-	lXWRgSC1lBWUlPSx5BSBlMQUhJTEtBSE4fS0FJH04fQRpDTBhBQkgfTEFJQk0aWVdZFhoPEhUdFF
-	lBWU9LSFVKTU9JTklVSktLVUpCWQY+
-X-HM-Tid: 0a8c86684666b249kuuu9186d2c063a
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MQg6Kgw*AzwxNyNJCx1RTkoI
-	CRVPChdVSlVKTEtIS01JS0hLTkhKVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
-	QVlJT0seQUgZTEFISUxLQUhOH0tBSR9OH0EaQ0wYQUJIH0xBSUJNGllXWQgBWUFKTEpKNwY+
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231220052737.19857-1-cw9316.lee@samsung.com>
 
-On 2023/11/30 22:28, Ding Hui wrote:
-> This series includes a few OOB fixes for ses driver
+On Wed, Dec 20, 2023 at 02:27:37PM +0900, Chanwoo Lee wrote:
+> From: ChanWoo Lee <cw9316.lee@samsung.com>
 > 
-> Ding Hui (1):
->    scsi: ses: increase default init_alloc_size
+> The REG_UFS_MEM_CFG register is too general(broad)
+> and it is difficult to know the meaning of only values of 0x1 and 0x2.
+> So far, comments were required.
 > 
-> Zhu Wei (1):
->    scsi: ses: Fix slab-out-of-bounds in ses_get_power_status()
+> Therefore, I have added new functions and defines
+> to improve code readability/reusability.
 > 
->   drivers/scsi/ses.c | 55 +++++++++++++++++++++++++++++++++++++++-------
->   1 file changed, 47 insertions(+), 8 deletions(-)
+> Signed-off-by: ChanWoo Lee <cw9316.lee@samsung.com>
+> ---
+>  drivers/ufs/core/ufs-mcq.c      | 10 +++++++++-
+>  drivers/ufs/core/ufshcd.c       |  5 +----
+>  drivers/ufs/host/ufs-mediatek.c |  4 +---
+>  include/ufs/ufshcd.h            |  1 +
+>  include/ufs/ufshci.h            |  4 ++++
+>  5 files changed, 16 insertions(+), 8 deletions(-)
 > 
+> diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+> index 0787456c2b89..a34ef3aac540 100644
+> --- a/drivers/ufs/core/ufs-mcq.c
+> +++ b/drivers/ufs/core/ufs-mcq.c
+> @@ -394,11 +394,19 @@ EXPORT_SYMBOL_GPL(ufshcd_mcq_make_queues_operational);
+>  
+>  void ufshcd_mcq_enable_esi(struct ufs_hba *hba)
+>  {
+> -	ufshcd_writel(hba, ufshcd_readl(hba, REG_UFS_MEM_CFG) | 0x2,
+> +	ufshcd_writel(hba, ufshcd_readl(hba, REG_UFS_MEM_CFG) | ESI_ENABLE,
+>  		      REG_UFS_MEM_CFG);
 
-Friendly ping.
+This change should be a separate patch.
+
+>  }
+>  EXPORT_SYMBOL_GPL(ufshcd_mcq_enable_esi);
+>  
+> +void ufshcd_mcq_enable(struct ufs_hba *hba)
+> +{
+> +	ufshcd_writel(hba, ufshcd_readl(hba, REG_UFS_MEM_CFG) | MCQ_MODE_SELECT,
+> +		      REG_UFS_MEM_CFG);
+
+Use ufshcd_rmwl().
+
+> +	hba->mcq_enabled = true;
+> +}
+> +EXPORT_SYMBOL_GPL(ufshcd_mcq_enable);
+> +
+>  void ufshcd_mcq_config_esi(struct ufs_hba *hba, struct msi_msg *msg)
+>  {
+>  	ufshcd_writel(hba, msg->address_lo, REG_UFS_ESILBA);
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index ae9936fc6ffb..8195e01e7a3f 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -8723,10 +8723,7 @@ static void ufshcd_config_mcq(struct ufs_hba *hba)
+>  	hba->host->can_queue = hba->nutrs - UFSHCD_NUM_RESERVED;
+>  	hba->reserved_slot = hba->nutrs - UFSHCD_NUM_RESERVED;
+>  
+> -	/* Select MCQ mode */
+> -	ufshcd_writel(hba, ufshcd_readl(hba, REG_UFS_MEM_CFG) | 0x1,
+> -		      REG_UFS_MEM_CFG);
+> -	hba->mcq_enabled = true;
+> +	ufshcd_mcq_enable(hba);
+>  
+>  	dev_info(hba->dev, "MCQ configured, nr_queues=%d, io_queues=%d, read_queue=%d, poll_queues=%d, queue_depth=%d\n",
+>  		 hba->nr_hw_queues, hba->nr_queues[HCTX_TYPE_DEFAULT],
+> diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
+> index fc61790d289b..1048add66419 100644
+> --- a/drivers/ufs/host/ufs-mediatek.c
+> +++ b/drivers/ufs/host/ufs-mediatek.c
+> @@ -1219,9 +1219,7 @@ static int ufs_mtk_link_set_hpm(struct ufs_hba *hba)
+>  		ufs_mtk_config_mcq(hba, false);
+>  		ufshcd_mcq_make_queues_operational(hba);
+>  		ufshcd_mcq_config_mac(hba, hba->nutrs);
+> -		/* Enable MCQ mode */
+> -		ufshcd_writel(hba, ufshcd_readl(hba, REG_UFS_MEM_CFG) | 0x1,
+> -			      REG_UFS_MEM_CFG);
+> +		ufshcd_mcq_enable(hba);
+
+hba->mcq_enabled flag will be set now which is not done previously.
+
+>  	}
+>  
+>  	if (err)
+> diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+> index d862c8ddce03..a96c45fa4b4b 100644
+> --- a/include/ufs/ufshcd.h
+> +++ b/include/ufs/ufshcd.h
+> @@ -1257,6 +1257,7 @@ unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
+>  					 struct ufs_hw_queue *hwq);
+>  void ufshcd_mcq_make_queues_operational(struct ufs_hba *hba);
+>  void ufshcd_mcq_enable_esi(struct ufs_hba *hba);
+> +void ufshcd_mcq_enable(struct ufs_hba *hba);
+>  void ufshcd_mcq_config_esi(struct ufs_hba *hba, struct msi_msg *msg);
+>  
+>  int ufshcd_opp_config_clks(struct device *dev, struct opp_table *opp_table,
+> diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
+> index d5accacae6bc..e669fad11fd4 100644
+> --- a/include/ufs/ufshci.h
+> +++ b/include/ufs/ufshci.h
+> @@ -282,6 +282,10 @@ enum {
+>  /* UTMRLRSR - UTP Task Management Request Run-Stop Register 80h */
+>  #define UTP_TASK_REQ_LIST_RUN_STOP_BIT		0x1
+>  
+> +/* REG_UFS_MEM_CFG - Global Config Registers 300h */
+> +#define MCQ_MODE_SELECT 	0x1
+> +#define ESI_ENABLE		0x2
+
+Use BIT() macros.
+
+- Mani
+
+> +
+>  /* CQISy - CQ y Interrupt Status Register  */
+>  #define UFSHCD_MCQ_CQIS_TAIL_ENT_PUSH_STS	0x1
+>  
+> -- 
+> 2.29.0
+> 
 
 -- 
-Thanks,
-- Ding Hui
-
+மணிவண்ணன் சதாசிவம்
 
