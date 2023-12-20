@@ -1,112 +1,75 @@
-Return-Path: <linux-scsi+bounces-1185-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-1188-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA17D819E2A
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Dec 2023 12:34:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FB1F81A155
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Dec 2023 15:45:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A6F4B260CB
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Dec 2023 11:34:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0F0D2857D1
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Dec 2023 14:45:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5860B2137F;
-	Wed, 20 Dec 2023 11:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VlREs5F6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11AEE3D3B8;
+	Wed, 20 Dec 2023 14:45:18 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m49205.qiye.163.com (mail-m49205.qiye.163.com [45.254.49.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A3FE20DF3;
-	Wed, 20 Dec 2023 11:34:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD941C433C9;
-	Wed, 20 Dec 2023 11:33:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703072041;
-	bh=RAXyl4ljakAiP1xrw3EqjOoDMXwJ4PyKKqT6SUzQ5HA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VlREs5F6Zd39xwtfPWVcwlaPWa/UsQGFUgyUrblbh5aicN1h/jnFsLs2G0hrzoL1G
-	 KZcBP9H/2iqypNfcsG9tykx34d3DQMzV/xuSwZOTqKlSfJxJ4zdRkdSlT217odhyQw
-	 NZIHuFYJgQhu8Ir6GhUDbTIhWrwUR6FIzL8Z3vvY2xvSnaCQYDEytHqDQb4X/hEmXK
-	 3Tfu8zgPjlXwAK/Bh54i7XTSDLmVeVoS6Ffrf8W/79nC58Wh9yOWjsT2Eo/cdRyH4C
-	 ZsyrLxYMNi5z5DS53F3PFvWoDemeIk1VnnoVd8bcXpV6YWrwFVVsBWXX4MEa8hVgZW
-	 Gq02I2ewKV5/A==
-Date: Wed, 20 Dec 2023 17:03:44 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Chanwoo Lee <cw9316.lee@samsung.com>
-Cc: agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-	jejb@linux.ibm.com, martin.petersen@oracle.com,
-	linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, grant.jung@samsung.com,
-	jt77.jang@samsung.com, dh0421.hwang@samsung.com,
-	sh043.lee@samsung.com
-Subject: Re: [PATCH] scsi: ufs: qcom: Remove unnecessary goto statement from
- ufs_qcom_config_esi function
-Message-ID: <20231220113344.GC3544@thinkpad>
-References: <CGME20231219082757epcas1p33bda4e0723d3d57552132054d3e5a3fe@epcas1p3.samsung.com>
- <20231219082740.27644-1-cw9316.lee@samsung.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988103D989;
+	Wed, 20 Dec 2023 14:45:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sangfor.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sangfor.com.cn
+Received: from [0.0.0.0] (unknown [IPV6:240e:3b7:3270:35d0:2d5d:a87c:93d7:296a])
+	by mail-m12773.qiye.163.com (Hmail) with ESMTPA id 9186D2C063A;
+	Wed, 20 Dec 2023 16:47:09 +0800 (CST)
+Message-ID: <8a0d7c64-128b-277a-8128-5b413f4fc341@sangfor.com.cn>
+Date: Wed, 20 Dec 2023 16:47:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231219082740.27644-1-cw9316.lee@samsung.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 0/2] scsi: ses: Fix out-of-bounds accesses
+Content-Language: en-US
+To: jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc: zhuwei@sangfor.com.cn, thenzl@redhat.com, linux-scsi@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20231130142835.18041-1-dinghui@sangfor.com.cn>
+From: Ding Hui <dinghui@sangfor.com.cn>
+In-Reply-To: <20231130142835.18041-1-dinghui@sangfor.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDGR5DVktNHU9DS08eGEkeQ1UTARMWGhIXJBQOD1
+	lXWRgSC1lBWUlPSx5BSBlMQUhJTEtBSE4fS0FJH04fQRpDTBhBQkgfTEFJQk0aWVdZFhoPEhUdFF
+	lBWU9LSFVKTU9JTklVSktLVUpCWQY+
+X-HM-Tid: 0a8c86684666b249kuuu9186d2c063a
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MQg6Kgw*AzwxNyNJCx1RTkoI
+	CRVPChdVSlVKTEtIS01JS0hLTkhKVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+	QVlJT0seQUgZTEFISUxLQUhOH0tBSR9OH0EaQ0wYQUJIH0xBSUJNGllXWQgBWUFKTEpKNwY+
 
-On Tue, Dec 19, 2023 at 05:27:40PM +0900, Chanwoo Lee wrote:
-> From: ChanWoo Lee <cw9316.lee@samsung.com>
+On 2023/11/30 22:28, Ding Hui wrote:
+> This series includes a few OOB fixes for ses driver
 > 
-> There is only one place where goto is used,
-> and it is unnecessary to check the ret value through 'goto out'
-> because the ret value is already true.
+> Ding Hui (1):
+>    scsi: ses: increase default init_alloc_size
 > 
-> Therefore, remove the goto statement and
-> integrate the '!ret' condition into the existing code.
+> Zhu Wei (1):
+>    scsi: ses: Fix slab-out-of-bounds in ses_get_power_status()
 > 
-> Signed-off-by: ChanWoo Lee <cw9316.lee@samsung.com>
+>   drivers/scsi/ses.c | 55 +++++++++++++++++++++++++++++++++++++++-------
+>   1 file changed, 47 insertions(+), 8 deletions(-)
+> 
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-- Mani
-
-> ---
->  drivers/ufs/host/ufs-qcom.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> index 17e24270477d..8cf803806326 100644
-> --- a/drivers/ufs/host/ufs-qcom.c
-> +++ b/drivers/ufs/host/ufs-qcom.c
-> @@ -1929,7 +1929,7 @@ static int ufs_qcom_config_esi(struct ufs_hba *hba)
->  					     ufs_qcom_write_msi_msg);
->  	if (ret) {
->  		dev_err(hba->dev, "Failed to request Platform MSI %d\n", ret);
-> -		goto out;
-> +		return ret;
->  	}
->  
->  	msi_lock_descs(hba->dev);
-> @@ -1964,11 +1964,8 @@ static int ufs_qcom_config_esi(struct ufs_hba *hba)
->  				      REG_UFS_CFG3);
->  		}
->  		ufshcd_mcq_enable_esi(hba);
-> -	}
-> -
-> -out:
-> -	if (!ret)
->  		host->esi_enabled = true;
-> +	}
->  
->  	return ret;
->  }
-> -- 
-> 2.29.0
-> 
+Friendly ping.
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Thanks,
+- Ding Hui
+
 
