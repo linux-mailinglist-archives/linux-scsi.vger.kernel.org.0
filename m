@@ -1,63 +1,87 @@
-Return-Path: <linux-scsi+bounces-1404-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-1407-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9A1F8229FA
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jan 2024 10:12:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26153822B97
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jan 2024 11:48:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 74403B22E4E
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jan 2024 09:12:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9949F1F228B7
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jan 2024 10:48:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AC5A182BD;
-	Wed,  3 Jan 2024 09:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED62D18C20;
+	Wed,  3 Jan 2024 10:48:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="MX2q4EUS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Xjai7+k5"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98821182BB
-	for <linux-scsi@vger.kernel.org>; Wed,  3 Jan 2024 09:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4037Xfqv021043;
-	Wed, 3 Jan 2024 01:12:04 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	pfpt0220; bh=WmUyq/kxfUsyQn4LpZ/kv754p13WkC0G9aUbi1IE0DM=; b=MX2
-	q4EUS+/c9snFKI0DQjcioAnxPd/Hj/J9kmpr+v4gTck1QCUYZ4cWBx9GQ6h2oouK
-	q0pVWV09qeRZQUDNpd68mUByK684slIv4uTSDXo8ATcw8q3U4693H6hFBahNkbs+
-	ZDSTXjA+Wo6pS9DI4nDBnd7CUru17Czd6FwOvF8EpuA5D8/tb70zOyzTZ3wOOcX8
-	qhDD6UhzktY20jrTeKEzJKQiesKcCM+zfcQZixbGN8EJc7XIpnhajO1gSSEjKhUG
-	IUeOZvUkhBtRqpENLLaIYlTcW/aiCTC0ibGKtGKgUrWew02dILftoxP6cvOnfJFr
-	+TUdTfk/QJ+pc+4wr1Q==
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3vd39q8ewt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-	Wed, 03 Jan 2024 01:12:04 -0800 (PST)
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 3 Jan
- 2024 01:12:02 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Wed, 3 Jan 2024 01:12:02 -0800
-Received: from stgdev-a5u16.punelab.marvell.com (stgdev-a5u16.punelab.marvell.com [10.31.33.187])
-	by maili.marvell.com (Postfix) with ESMTP id 09FC83F707C;
-	Wed,  3 Jan 2024 01:11:59 -0800 (PST)
-From: Nilesh Javali <njavali@marvell.com>
-To: <martin.petersen@oracle.com>, <lduncan@suse.com>, <cleech@redhat.com>
-CC: <linux-scsi@vger.kernel.org>, <GR-QLogic-Storage-Upstream@marvell.com>,
-        <jmeneghi@redhat.com>
-Subject: [PATCH v2 3/3] cnic,bnx2,bnx2x: page align uio mmap allocations
-Date: Wed, 3 Jan 2024 14:41:37 +0530
-Message-ID: <20240103091137.27142-4-njavali@marvell.com>
-X-Mailer: git-send-email 2.23.1
-In-Reply-To: <20240103091137.27142-1-njavali@marvell.com>
-References: <20240103091137.27142-1-njavali@marvell.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4713C18C1D
+	for <linux-scsi@vger.kernel.org>; Wed,  3 Jan 2024 10:48:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1d4c767d3a8so7830915ad.1
+        for <linux-scsi@vger.kernel.org>; Wed, 03 Jan 2024 02:48:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704278904; x=1704883704; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pdPU059J9ZVWznV8an692mayob38PCXn1K2je3VxOtQ=;
+        b=Xjai7+k5VtQKzf7LA/eVAKNTdK5PaEGp+RJS0s8tEczECFIeq4sHN1bRTCyrNRSvTH
+         HzjWUV8v3oP/MIgelm1Yc/mnDLqCouyguWsANLDhcd7a04K5TelP14m+dNGRGpSIDkrl
+         xFUCt8fnOKBPEPrRHHBln4CjX1EGi/a/8Lknyayu1bVwqXU0ayNQPwQX2jEWd9GiZFai
+         8YpEmYqmSoUFBAGj6ENaI3qq5i0MTwFxn1FbGLFdRO/iEM7RfzDkvFEgEELBJkUarbwn
+         sHJteICa4PT1bmW3Hhgj7Mx+Ql4bmSDrRjsRlOUD3+06+tPK9e09jEcHVGCCDh//yyE/
+         el6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704278904; x=1704883704;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pdPU059J9ZVWznV8an692mayob38PCXn1K2je3VxOtQ=;
+        b=oVWa0MAyoWX/Spg+S+kBrvIig8W8AwnzN7SJxsuLNBjc999q5Php+62BKBLuZNoTH2
+         Q+9AXRLRUn7WRBJuuSK49/3a906AAgGQ3KLVqRj/eNOuAO8cPBEZB0nVb9VYnetdJNvO
+         74iUHvotIavZMiIvjipZITdDqiAMLC/KFO+VX5uBjpsHidgznaEBzCjjmpnY1EwuPm4y
+         DTp8MLBf4NwPRwgtU5yG4U6T0n/PmZnH3BFV59Y0Cxhkr4phnAAkftPzG6v0b0jT68OJ
+         4p0/TTA7Tt+hDKs01aNyb8F2wCAF0sSsUtz8Q9eZATehT7Uq1xJ3q0Fq6UytmO53IaNH
+         74pg==
+X-Gm-Message-State: AOJu0YwoHr44BgG4GuIdQbmEWxCcsct6i40qc9WeJEROEjKod4F1aI7O
+	kn7yb1io59NpdRHwMIkB83TsY4drRgc0Fg==
+X-Google-Smtp-Source: AGHT+IGiwlRazKmwSv9SQEFS3/AG7SEW3FZuxDqnkmfBlfZ6Y+vxPON78qJPQ3mDacfO3RhGKwzv5g==
+X-Received: by 2002:a17:902:da81:b0:1d4:c2ad:8ff8 with SMTP id j1-20020a170902da8100b001d4c2ad8ff8mr1891688plx.34.1704278904539;
+        Wed, 03 Jan 2024 02:48:24 -0800 (PST)
+Received: from localhost ([122.172.86.168])
+        by smtp.gmail.com with ESMTPSA id z20-20020a170902ee1400b001d3a9676973sm23495578plb.111.2024.01.03.02.48.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jan 2024 02:48:24 -0800 (PST)
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Dmitry Osipenko <digetx@gmail.com>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-scsi@vger.kernel.org
+Subject: [PATCH] OPP: Remove the unused argument to config_clks_t
+Date: Wed,  3 Jan 2024 16:18:18 +0530
+Message-Id: <f24f32f1213b4b9e9ff2b4a36922f8d6e3abac51.1704278832.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -65,113 +89,195 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: DO-yufqaaI3JXg0fIUkrIeHPu_iiyfXH
-X-Proofpoint-GUID: DO-yufqaaI3JXg0fIUkrIeHPu_iiyfXH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
 
-From: Chris Leech <cleech@redhat.com>
+The OPP core needs to take care of a special case, where the OPPs aren't
+available for a device, but in order to keep the same unified interface
+for the driver, the same OPP core API must take care of performing a
+simple clk_set_rate() for the device.
 
-Allocations in these drivers that will be mmaped through a uio device
-should be made in multiples of PAGE_SIZE to avoid exposing additional
-kernel memory unintentionally.
+This required the extra argument, but that is used only within the OPP
+core and the drivers don't need to take care of that.
 
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Chris Leech <cleech@redhat.com>
+Simplify the external API and handle it differently within the OPP core.
+
+This shouldn't result in any functional change.
+
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/net/ethernet/broadcom/bnx2.c             | 1 +
- drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c | 8 ++++----
- drivers/net/ethernet/broadcom/cnic.c             | 8 +++++---
- 3 files changed, 10 insertions(+), 7 deletions(-)
+I will be taking this through the PM tree for the upcoming merge window.
+Hopefully this won't create any issues for the ufs and devfreq driver as there
+is no functional change for them.
 
-diff --git a/drivers/net/ethernet/broadcom/bnx2.c b/drivers/net/ethernet/broadcom/bnx2.c
-index b65b8592ad75..490f88ad3bd2 100644
---- a/drivers/net/ethernet/broadcom/bnx2.c
-+++ b/drivers/net/ethernet/broadcom/bnx2.c
-@@ -838,6 +838,7 @@ bnx2_alloc_stats_blk(struct net_device *dev)
- 						 BNX2_SBLK_MSIX_ALIGN_SIZE);
- 	bp->status_stats_size = status_blk_size +
- 				sizeof(struct statistics_block);
-+	bp->status_stats_size = PAGE_ALIGN(bp->status_stats_size);
- 	status_blk = dma_alloc_coherent(&bp->pdev->dev, bp->status_stats_size,
- 					&bp->status_blk_mapping, GFP_KERNEL);
- 	if (!status_blk)
-diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-index 678829646cec..1d7be7b7c63f 100644
---- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-+++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-@@ -8270,10 +8270,10 @@ void bnx2x_free_mem_cnic(struct bnx2x *bp)
+ drivers/devfreq/tegra30-devfreq.c |  2 +-
+ drivers/opp/core.c                | 37 +++++++++++++------------------
+ drivers/ufs/core/ufshcd.c         |  3 +--
+ include/linux/pm_opp.h            |  5 ++---
+ include/ufs/ufshcd.h              |  3 +--
+ 5 files changed, 20 insertions(+), 30 deletions(-)
+
+diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+index 4a4f0106ab9d..730c6618abc5 100644
+--- a/drivers/devfreq/tegra30-devfreq.c
++++ b/drivers/devfreq/tegra30-devfreq.c
+@@ -823,7 +823,7 @@ static int devm_tegra_devfreq_init_hw(struct device *dev,
  
- 	if (!CHIP_IS_E1x(bp))
- 		BNX2X_PCI_FREE(bp->cnic_sb.e2_sb, bp->cnic_sb_mapping,
--			       sizeof(struct host_hc_status_block_e2));
-+			       PAGE_ALIGN(sizeof(struct host_hc_status_block_e2)));
- 	else
- 		BNX2X_PCI_FREE(bp->cnic_sb.e1x_sb, bp->cnic_sb_mapping,
--			       sizeof(struct host_hc_status_block_e1x));
-+			       PAGE_ALIGN(sizeof(struct host_hc_status_block_e1x)));
- 
- 	BNX2X_PCI_FREE(bp->t2, bp->t2_mapping, SRC_T2_SZ);
+ static int tegra_devfreq_config_clks_nop(struct device *dev,
+ 					 struct opp_table *opp_table,
+-					 struct dev_pm_opp *opp, void *data,
++					 struct dev_pm_opp *opp,
+ 					 bool scaling_down)
+ {
+ 	/* We want to skip clk configuration via dev_pm_opp_set_opp() */
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 29f8160c3e38..ba5f692e2161 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -940,24 +940,11 @@ static int _set_opp_voltage(struct device *dev, struct regulator *reg,
+ 	return ret;
  }
-@@ -8316,12 +8316,12 @@ int bnx2x_alloc_mem_cnic(struct bnx2x *bp)
- 	if (!CHIP_IS_E1x(bp)) {
- 		/* size = the status block + ramrod buffers */
- 		bp->cnic_sb.e2_sb = BNX2X_PCI_ALLOC(&bp->cnic_sb_mapping,
--						    sizeof(struct host_hc_status_block_e2));
-+						    PAGE_ALIGN(sizeof(struct host_hc_status_block_e2)));
- 		if (!bp->cnic_sb.e2_sb)
- 			goto alloc_mem_err;
- 	} else {
- 		bp->cnic_sb.e1x_sb = BNX2X_PCI_ALLOC(&bp->cnic_sb_mapping,
--						     sizeof(struct host_hc_status_block_e1x));
-+						     PAGE_ALIGN(sizeof(struct host_hc_status_block_e1x)));
- 		if (!bp->cnic_sb.e1x_sb)
- 			goto alloc_mem_err;
+ 
+-static int
+-_opp_config_clk_single(struct device *dev, struct opp_table *opp_table,
+-		       struct dev_pm_opp *opp, void *data, bool scaling_down)
++static int _opp_clk_set_rate(struct device *dev, struct opp_table *opp_table,
++			     unsigned long freq)
+ {
+-	unsigned long *target = data;
+-	unsigned long freq;
+ 	int ret;
+ 
+-	/* One of target and opp must be available */
+-	if (target) {
+-		freq = *target;
+-	} else if (opp) {
+-		freq = opp->rates[0];
+-	} else {
+-		WARN_ON(1);
+-		return -EINVAL;
+-	}
+-
+ 	ret = clk_set_rate(opp_table->clk, freq);
+ 	if (ret) {
+ 		dev_err(dev, "%s: failed to set clock rate: %d\n", __func__,
+@@ -969,12 +956,19 @@ _opp_config_clk_single(struct device *dev, struct opp_table *opp_table,
+ 	return ret;
+ }
+ 
++static int
++_opp_config_clk_single(struct device *dev, struct opp_table *opp_table,
++		       struct dev_pm_opp *opp, bool scaling_down)
++{
++	return _opp_clk_set_rate(dev, opp_table, opp->rates[0]);
++}
++
+ /*
+  * Simple implementation for configuring multiple clocks. Configure clocks in
+  * the order in which they are present in the array while scaling up.
+  */
+ int dev_pm_opp_config_clks_simple(struct device *dev,
+-		struct opp_table *opp_table, struct dev_pm_opp *opp, void *data,
++		struct opp_table *opp_table, struct dev_pm_opp *opp,
+ 		bool scaling_down)
+ {
+ 	int ret, i;
+@@ -1183,7 +1177,7 @@ static int _disable_opp_table(struct device *dev, struct opp_table *opp_table)
+ }
+ 
+ static int _set_opp(struct device *dev, struct opp_table *opp_table,
+-		    struct dev_pm_opp *opp, void *clk_data, bool forced)
++		    struct dev_pm_opp *opp, bool forced)
+ {
+ 	struct dev_pm_opp *old_opp;
+ 	int scaling_down, ret;
+@@ -1243,7 +1237,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
  	}
-diff --git a/drivers/net/ethernet/broadcom/cnic.c b/drivers/net/ethernet/broadcom/cnic.c
-index d9b52dc6d060..11a25d336221 100644
---- a/drivers/net/ethernet/broadcom/cnic.c
-+++ b/drivers/net/ethernet/broadcom/cnic.c
-@@ -1026,6 +1026,7 @@ static int __cnic_alloc_uio_rings(struct cnic_uio_dev *udev, int pages)
- 		return 0;
  
- 	udev->l2_ring_size = pages * CNIC_PAGE_SIZE;
-+	udev->l2_ring_size = PAGE_ALIGN(udev->l2_ring_size);
- 	udev->l2_ring = dma_alloc_coherent(&udev->pdev->dev, udev->l2_ring_size,
- 					   &udev->l2_ring_map, GFP_KERNEL);
- 	if (!udev->l2_ring)
-@@ -1033,6 +1034,7 @@ static int __cnic_alloc_uio_rings(struct cnic_uio_dev *udev, int pages)
- 
- 	udev->l2_buf_size = (cp->l2_rx_ring_size + 1) * cp->l2_single_buf_size;
- 	udev->l2_buf_size = CNIC_PAGE_ALIGN(udev->l2_buf_size);
-+	udev->l2_buf_size = PAGE_ALIGN(udev->l2_buf_size);
- 	udev->l2_buf = dma_alloc_coherent(&udev->pdev->dev, udev->l2_buf_size,
- 					  &udev->l2_buf_map, GFP_KERNEL);
- 	if (!udev->l2_buf) {
-@@ -1109,9 +1111,9 @@ static int cnic_init_uio(struct cnic_dev *dev)
- 					CNIC_PAGE_MASK;
- 		uinfo->mem[1].dma_addr = cp->status_blk_map;
- 		if (cp->ethdev->drv_state & CNIC_DRV_STATE_USING_MSIX)
--			uinfo->mem[1].size = BNX2_SBLK_MSIX_ALIGN_SIZE * 9;
-+			uinfo->mem[1].size = PAGE_ALIGN(BNX2_SBLK_MSIX_ALIGN_SIZE * 9);
- 		else
--			uinfo->mem[1].size = BNX2_SBLK_MSIX_ALIGN_SIZE;
-+			uinfo->mem[1].size = PAGE_ALIGN(BNX2_SBLK_MSIX_ALIGN_SIZE);
- 
- 		uinfo->name = "bnx2_cnic";
- 	} else if (test_bit(CNIC_F_BNX2X_CLASS, &dev->flags)) {
-@@ -1120,7 +1122,7 @@ static int cnic_init_uio(struct cnic_dev *dev)
- 		uinfo->mem[1].addr = (phys_addr_t)cp->bnx2x_def_status_blk &
- 			CNIC_PAGE_MASK;
- 		uinfo->mem[1].dma_addr = cp->status_blk_map;
--		uinfo->mem[1].size = sizeof(*cp->bnx2x_def_status_blk);
-+		uinfo->mem[1].size = PAGE_ALIGN(sizeof(*cp->bnx2x_def_status_blk));
- 
- 		uinfo->name = "bnx2x_cnic";
+ 	if (opp_table->config_clks) {
+-		ret = opp_table->config_clks(dev, opp_table, opp, clk_data, scaling_down);
++		ret = opp_table->config_clks(dev, opp_table, opp, scaling_down);
+ 		if (ret)
+ 			return ret;
  	}
+@@ -1322,8 +1316,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+ 		 * equivalent to a clk_set_rate()
+ 		 */
+ 		if (!_get_opp_count(opp_table)) {
+-			ret = opp_table->config_clks(dev, opp_table, NULL,
+-						     &target_freq, false);
++			ret = _opp_clk_set_rate(dev, opp_table, target_freq);
+ 			goto put_opp_table;
+ 		}
+ 
+@@ -1355,7 +1348,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+ 		forced = opp_table->rate_clk_single != target_freq;
+ 	}
+ 
+-	ret = _set_opp(dev, opp_table, opp, &target_freq, forced);
++	ret = _set_opp(dev, opp_table, opp, forced);
+ 
+ 	if (target_freq)
+ 		dev_pm_opp_put(opp);
+@@ -1387,7 +1380,7 @@ int dev_pm_opp_set_opp(struct device *dev, struct dev_pm_opp *opp)
+ 		return PTR_ERR(opp_table);
+ 	}
+ 
+-	ret = _set_opp(dev, opp_table, opp, NULL, false);
++	ret = _set_opp(dev, opp_table, opp, false);
+ 	dev_pm_opp_put_opp_table(opp_table);
+ 
+ 	return ret;
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index bce0d2a9a7f3..51d6c8567189 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -1064,8 +1064,7 @@ static int ufshcd_set_clk_freq(struct ufs_hba *hba, bool scale_up)
+ }
+ 
+ int ufshcd_opp_config_clks(struct device *dev, struct opp_table *opp_table,
+-			   struct dev_pm_opp *opp, void *data,
+-			   bool scaling_down)
++			   struct dev_pm_opp *opp, bool scaling_down)
+ {
+ 	struct ufs_hba *hba = dev_get_drvdata(dev);
+ 	struct list_head *head = &hba->clk_list_head;
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index 76dcb7f37bcd..c99a66e88e78 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -50,7 +50,7 @@ typedef int (*config_regulators_t)(struct device *dev,
+ 			struct regulator **regulators, unsigned int count);
+ 
+ typedef int (*config_clks_t)(struct device *dev, struct opp_table *opp_table,
+-			struct dev_pm_opp *opp, void *data, bool scaling_down);
++			struct dev_pm_opp *opp, bool scaling_down);
+ 
+ /**
+  * struct dev_pm_opp_config - Device OPP configuration values
+@@ -181,8 +181,7 @@ int dev_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config);
+ int devm_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config);
+ void dev_pm_opp_clear_config(int token);
+ int dev_pm_opp_config_clks_simple(struct device *dev,
+-		struct opp_table *opp_table, struct dev_pm_opp *opp, void *data,
+-		bool scaling_down);
++		struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down);
+ 
+ struct dev_pm_opp *dev_pm_opp_xlate_required_opp(struct opp_table *src_table, struct opp_table *dst_table, struct dev_pm_opp *src_opp);
+ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, struct opp_table *dst_table, unsigned int pstate);
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index 7f0b2c5599cd..156e47dd4d9c 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -1255,8 +1255,7 @@ void ufshcd_mcq_enable_esi(struct ufs_hba *hba);
+ void ufshcd_mcq_config_esi(struct ufs_hba *hba, struct msi_msg *msg);
+ 
+ int ufshcd_opp_config_clks(struct device *dev, struct opp_table *opp_table,
+-			   struct dev_pm_opp *opp, void *data,
+-			   bool scaling_down);
++			   struct dev_pm_opp *opp, bool scaling_down);
+ /**
+  * ufshcd_set_variant - set variant specific data to the hba
+  * @hba: per adapter instance
 -- 
-2.23.1
+2.31.1.272.g89b43f80a514
 
 
