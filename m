@@ -1,44 +1,44 @@
-Return-Path: <linux-scsi+bounces-1452-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-1453-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CD278263B9
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 Jan 2024 11:11:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C77E28263D0
+	for <lists+linux-scsi@lfdr.de>; Sun,  7 Jan 2024 11:48:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C50451F21945
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 Jan 2024 10:11:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE7421C20CDC
+	for <lists+linux-scsi@lfdr.de>; Sun,  7 Jan 2024 10:48:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 201D612B7A;
-	Sun,  7 Jan 2024 10:11:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64DF112B96;
+	Sun,  7 Jan 2024 10:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q/cgkN6V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AA33urKP"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD0E12B84
-	for <linux-scsi@vger.kernel.org>; Sun,  7 Jan 2024 10:11:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C1F1C433AD
-	for <linux-scsi@vger.kernel.org>; Sun,  7 Jan 2024 10:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B9312B8D
+	for <linux-scsi@vger.kernel.org>; Sun,  7 Jan 2024 10:48:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 92941C433AB
+	for <linux-scsi@vger.kernel.org>; Sun,  7 Jan 2024 10:48:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704622303;
-	bh=H9KXHTo7bFBHFjFmWVtjAexXYZsF1M8v/1tm9CZ6tXI=;
+	s=k20201202; t=1704624489;
+	bh=nU/zZuzq/S8kw1V8Q1LLf2p1n6Gj2Tq0szjNN78WVCU=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=q/cgkN6VipL5da93iFWz7+4qCAerMbXjoitivkC8QQ9AvOHxs0JkidgpEAQ6INSNC
-	 GVutWNnkNritbHyXbfiS56NN4fVqhgaRjZckaJW9fRapTDYBxK195lFvk1hpUBr97E
-	 4+L1W4eBp+lUaPD9Y9O9gs6ygG3JIBw4KvfBMPlDIEttqMm0fhrkhu30rrbXmMS6e+
-	 MnkZPaLvAzdosA3axipBqifnIC0//3Z3mWp4Eb6VdvcBqHUOMuhOvtUSLuKnnNq08r
-	 Id5gQMDb3KU5kVPHd4sBllc3eIo95k/zvMccuxEu37UlEY9GEygGITj8wykvpniFrP
-	 3SOFxKGMU4Rww==
+	b=AA33urKPgla2KC5b87ekVWsat0ZrTHwi7PZM8cg+cYFjLJQQwIgTRKrkW/p7AGSMC
+	 sukYKaTHFLSjvG0eWpIugBjN8ggWDQaEfZvr6cn5YVVZetS4ceQDnzW9yg3f4jkvs3
+	 Zkz5u7NQ3Pu/k5x4SbqGuPMtEsLYlTWfDvtkhbeO8zT9K26QMueWXbbGvvjrP4ynqf
+	 TnKEsfjoFaHFUwX4Hi6XugBcIBLMbZDCMj35+2lrhABWpgIyuS2RzzmYK5gquMF2Mb
+	 QBrJIn/hUDmG5X2aVVdLTKrXaGlIPdq6UhVl7zB+umn8dnNSGbVSL7JneMS/VF/Ktk
+	 1FI608pRYiFag==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 3987EC53BD2; Sun,  7 Jan 2024 10:11:43 +0000 (UTC)
+	id 83874C53BCD; Sun,  7 Jan 2024 10:48:09 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-scsi@vger.kernel.org
 Subject: [Bug 217599] Adaptec 71605z hangs with aacraid: Host adapter abort
  request after update to linux 6.4.0
-Date: Sun, 07 Jan 2024 10:11:42 +0000
+Date: Sun, 07 Jan 2024 10:48:08 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-aacraid@kernel-bugs.osdl.org
@@ -47,14 +47,14 @@ X-Bugzilla-Component: AACRAID
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: high
-X-Bugzilla-Who: regressions@leemhuis.info
+X-Bugzilla-Who: carnil@debian.org
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: scsi_drivers-aacraid@kernel-bugs.osdl.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217599-11613-WzL1PqCWUA@https.bugzilla.kernel.org/>
+Message-ID: <bug-217599-11613-2Tg9ptBnD7@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-217599-11613@https.bugzilla.kernel.org/>
 References: <bug-217599-11613@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -70,15 +70,19 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D217599
 
---- Comment #57 from The Linux kernel's regression tracker (Thorsten Leemhu=
-is) (regressions@leemhuis.info) ---
-(In reply to Salvatore Bonaccorso from comment #56)
-> #regzbot fixed-by: [=E2=80=A6]
+--- Comment #58 from Salvatore Bonaccorso (carnil@debian.org) ---
+(In reply to The Linux kernel's regression tracker (Thorsten Leemhuis) from
+comment #57)
+> (In reply to Salvatore Bonaccorso from comment #56)
+> > #regzbot fixed-by: [=E2=80=A6]
+>=20
+> Thx, but this confused regzbot a bit, as it tracks the issue as a mainline
+> commit only this is needed:
+> [...]
 
-Thx, but this confused regzbot a bit, as it tracks the issue as a mainline
-commit only this is needed:
-
-#regzbot fixed-by: c5becf57dd56
+apologies for that, this was not my intention (and cause more work)! I thou=
+gh
+we can track as well the regression fixes in the stable series with it.
 
 --=20
 You may reply to this email to add a comment.
