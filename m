@@ -1,112 +1,89 @@
-Return-Path: <linux-scsi+bounces-1469-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-1475-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5BC78276AB
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jan 2024 18:57:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 961D88278C5
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jan 2024 20:51:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B5761F23612
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jan 2024 17:57:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC3B71C22C2E
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jan 2024 19:51:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 673C456B76;
-	Mon,  8 Jan 2024 17:48:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C1454F9B;
+	Mon,  8 Jan 2024 19:51:38 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from vulcan.kevinlocke.name (vulcan.kevinlocke.name [107.191.43.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0AFC56B73
-	for <linux-scsi@vger.kernel.org>; Mon,  8 Jan 2024 17:48:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6d98ce84e18so1814464b3a.3
-        for <linux-scsi@vger.kernel.org>; Mon, 08 Jan 2024 09:48:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704736093; x=1705340893;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Je+N5/eI8rc/XVLEqXPJ+Ow6eFSB68e6E3iFhj+bXrw=;
-        b=YFXfpENdRbKIOIEoA/yF3Ja3Sh0pa+riOOXXl8Mw2Kou56R3rZtFGEw8HWzMLnfMgX
-         ibrAfkICGxH0MGGzzOhu9uq/TwnRetzB1Fql0OjyAWrit3Tkw+3Rr/l4pDGt/M4eQwsf
-         RbAsUvknSFog1UkyrgE3XimB8V1uhWkQmiCFb/1jaTymXUvQGNYxolQCpyebVnVla7X6
-         zfl2rBSrY/8RwpAeOcE0wUjpOeCwnj6UY+DFwuWCXOmESOJaIy6Q/FeGqnItmEEX4rYT
-         xcxsISEPEI1Bb3N63ZRbaVrSpPiY4RL06sRKrJYxGYuWgR/gP6Mg5epZZRF5osiB7qU8
-         8a8w==
-X-Gm-Message-State: AOJu0Yz0s/cSRqfgYw7+G92Sr8idxBZP397h+dHGANl3av+mDzAK4Gy1
-	f/9mWHBj7UwnACe7gHmKLY0=
-X-Google-Smtp-Source: AGHT+IFDm7PMPqAIUPZymDnRMVyJQawE1u4SgYTlSngPdmXaBBIe+2c8B66La4dA+eZNVuyJquBznw==
-X-Received: by 2002:a05:6a21:a581:b0:196:5a46:4963 with SMTP id gd1-20020a056a21a58100b001965a464963mr4427256pzc.99.1704736093067;
-        Mon, 08 Jan 2024 09:48:13 -0800 (PST)
-Received: from ?IPV6:2620:0:1000:8411:cee:c48d:78d6:ed9a? ([2620:0:1000:8411:cee:c48d:78d6:ed9a])
-        by smtp.gmail.com with ESMTPSA id l8-20020a056a00140800b006dacfab07b6sm140896pfu.121.2024.01.08.09.48.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Jan 2024 09:48:12 -0800 (PST)
-Message-ID: <f5dc9add-4995-4a55-ace0-b091569f0f76@acm.org>
-Date: Mon, 8 Jan 2024 09:48:11 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6BB5380B
+	for <linux-scsi@vger.kernel.org>; Mon,  8 Jan 2024 19:51:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kevinlocke.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kevinlocke.name
+Received: from kevinolos.kevinlocke.name (071-015-196-093.res.spectrum.com [71.15.196.93])
+	(Authenticated sender: kevin@kevinlocke.name)
+	by vulcan.kevinlocke.name (Postfix) with ESMTPSA id 2F26F40C6835;
+	Mon,  8 Jan 2024 19:42:29 +0000 (UTC)
+Received: by kevinolos.kevinlocke.name (Postfix, from userid 1000)
+	id 391331300449; Mon,  8 Jan 2024 10:56:30 -0700 (MST)
+Date: Mon, 8 Jan 2024 10:56:30 -0700
+From: Kevin Locke <kevin@kevinlocke.name>
+To: Bart Van Assche <bvanassche@acm.org>, linux-scsi@vger.kernel.org
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
+	Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
+	Niklas Cassel <niklas.cassel@wdc.com>
+Subject: [Regression] Hang deleting ATA HDD device for undocking
+Message-ID: <ZZw3Th70wUUvCiCY@kevinlocke.name>
+Mail-Followup-To: Kevin Locke <kevin@kevinlocke.name>,
+	Bart Van Assche <bvanassche@acm.org>, linux-scsi@vger.kernel.org,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
+	Niklas Cassel <niklas.cassel@wdc.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 79/80] scsi: ufs: Declare SCSI host template const
-Content-Language: en-US
-To: =?UTF-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= <peter.wang@mediatek.com>,
- "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-Cc: =?UTF-8?B?QWxpY2UgQ2hhbyAo6LaZ54+u5Z2HKQ==?= <Alice.Chao@mediatek.com>,
- "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
- "beanhuo@micron.com" <beanhuo@micron.com>,
- "avri.altman@wdc.com" <avri.altman@wdc.com>,
- =?UTF-8?B?Q2h1bi1IdW5nIFd1ICjlt6vpp7/lro8p?= <Chun-hung.Wu@mediatek.com>,
- "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- =?UTF-8?B?UG93ZW4gS2FvICjpq5jkvK/mlocp?= <Powen.Kao@mediatek.com>,
- =?UTF-8?B?TmFvbWkgQ2h1ICjmnLHoqaDnlLAp?= <Naomi.Chu@mediatek.com>
-References: <20230322195515.1267197-1-bvanassche@acm.org>
- <20230322195515.1267197-80-bvanassche@acm.org>
- <543800c0b840ac1fd2943b1bc1fe909937be3e68.camel@mediatek.com>
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <543800c0b840ac1fd2943b1bc1fe909937be3e68.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 1/4/24 01:52, Peter Wang (王信友) wrote:
-> On Wed, 2023-03-22 at 12:55 -0700, Bart Van Assche wrote:
->> Make it explicit that the SCSI host template is not modified.
->>
->> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
->> ---
->>   drivers/ufs/core/ufshcd.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
->> index 8e7dfaadc691..35a3bd95c5e4 100644
->> --- a/drivers/ufs/core/ufshcd.c
->> +++ b/drivers/ufs/core/ufshcd.c
->> @@ -8751,7 +8751,7 @@ static struct ufs_hba_variant_params
->> ufs_hba_vps = {
->>   	.ondemand_data.downdifferential	= 5,
->>   };
->>   
->> -static struct scsi_host_template ufshcd_driver_template = {
->> +static const struct scsi_host_template ufshcd_driver_template = {
->>   	.module			= THIS_MODULE,
->>   	.name			= UFSHCD,
->>   	.proc_name		= UFSHCD,
-> 
-> Hi Bart,
-> 
-> This patch change scsi_host_templete to const.
-> If mediatek host want to modify deault rpm_autosuspend_delay timer,
-> could you have any suggestions?
+Hi all,
 
-Hi Peter,
+On a ThinkPad T430 running Linux 6.7, when I attempt to delete the ATA
+device for a hard drive in the Ultrabay slot (to hotswap/undock it[1])
+the process freezes in an unterruptible sleep.  Specifically, if I run
 
-Please add a new rpm_autosuspend_delay member to struct Scsi_Host and add code
-in scsi_host_alloc() for copying that member from the host template into struct
-Scsi_Host. An example is available in commit b125bb99559e.
+    echo 1 >/sys/devices/pci0000:00/0000:00:1f.2/ata2/host1/target1:0:0/1:0:0:0/delete
 
-Bart.
+The shell process hangs in the write(2) syscall.  The last dmesg
+entries post hang are:
+
+    sd 1:0:0:0: [sda] Synchronizing SCSI cache
+    ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+    ata2.00: ACPI cmd f5/00:00:00:00:00:a0(SECURITY FREEZE LOCK) filtered out
+    ata2.00: ACPI cmd ef/10:03:00:00:00:a0(SET FEATURES) filtered out
+    ata2.00: ACPI cmd f5/00:00:00:00:00:a0(SECURITY FREEZE LOCK) filtered out
+    ata2.00: ACPI cmd ef/10:03:00:00:00:a0(SET FEATURES) filtered out
+    ata2.00: configured for UDMA/133
+    ata2.00: retrying FLUSH 0xea Emask 0x0
+
+On kernel versions prior to 6.5-rc1, dmesg would subsequently contain:
+
+    sd 1:0:0:0: [sda] Stopping disk
+    ata2.00: disable device
+
+Note that the hang only occurs when deleting a hard disk drive.  It
+does not occur when deleting an optical disk drive.
+
+I bisected the regression to 8b566edbdbfb5cde31a322c57932694ff48125ed.
+
+I know very little about the SCSI/ATA subsystems or the internals of
+ATA hotswapping/undocking.  I'd appreciate any help investigating the
+issue, or properly undocking.
+
+Thanks,
+Kevin
+
+[1]: https://www.thinkwiki.org/wiki/How_to_hotswap_Ultrabay_devices
 
