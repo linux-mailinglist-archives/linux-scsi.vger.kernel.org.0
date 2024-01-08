@@ -1,92 +1,127 @@
-Return-Path: <linux-scsi+bounces-1474-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-1476-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC80F8278A3
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jan 2024 20:35:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DF37827A3B
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jan 2024 22:34:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F7051C21387
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jan 2024 19:35:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8BB64B22DF5
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jan 2024 21:34:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF28D537E3;
-	Mon,  8 Jan 2024 19:35:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="v7UTSp5y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037C956456;
+	Mon,  8 Jan 2024 21:34:00 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73CE5380C;
-	Mon,  8 Jan 2024 19:35:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=/CnY1WrNa6ivAwOul4iLunYaBF0zr/21B1/t616St8k=; b=v7UTSp5yHaxoKw/l6drPxI8TGd
-	eEQOGfG75PN/u2R8GCSiFXX8/FgIcyz4FeOiqy4Qn1DmN53Lddq27eJPNPHHSau2g22qhNvLBydfL
-	omZZQVQV435kP8cVkuKkuBY2Q1kxjCnneG1EcdW34GP0MWJXxP1CMOEo5KhxmLf7fcMhEICOVmRR0
-	kCq3gh8g+lvK4JFhi+QT1z0fjI4nASTHvtHk1roiqnhdoxYYexx4LwPVqbnabGYHHntbifHaWDIWR
-	M/diELIjTfwbx0tvVBCsP4MejbaeK0NBagqRQ2bnIUuBVluAnx2kWtTGZ5/nIBdpJP1VDUVWbRpV1
-	iXZ5dKVA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1rMvP3-008I9G-Ol; Mon, 08 Jan 2024 19:35:17 +0000
-Date: Mon, 8 Jan 2024 19:35:17 +0000
-From: Matthew Wilcox <willy@infradead.org>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: Christoph Hellwig <hch@infradead.org>, Hannes Reinecke <hare@suse.de>,
-	lsf-pc@lists.linuxfoundation.org, linux-mm@kvack.org,
-	linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-	"linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>
-Subject: Re: [LSF/MM/BPF TOPIC] Large block for I/O
-Message-ID: <ZZxOdWoHrKH4ImL7@casper.infradead.org>
-References: <7970ad75-ca6a-34b9-43ea-c6f67fe6eae6@iogearbox.net>
- <4343d07b-b1b2-d43b-c201-a48e89145e5c@iogearbox.net>
- <03ebbc5f-2ff5-4f3c-8c5b-544413c55257@suse.de>
- <5c356222-fe9e-41b0-b7fe-218fbcde4573@acm.org>
- <ZYUbB3brQ0K3rP97@casper.infradead.org>
- <ZYUgo0a51nCgjLNZ@infradead.org>
- <9b46c48f-d7c4-4ed3-a644-fba90850eab8@acm.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8837A56440
+	for <linux-scsi@vger.kernel.org>; Mon,  8 Jan 2024 21:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1d4ca2fd2fbso8437835ad.2
+        for <linux-scsi@vger.kernel.org>; Mon, 08 Jan 2024 13:33:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704749638; x=1705354438;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lENAuYCpJCCLcBXq/6HG9fKOC4bWrbgWn/zrs639J4c=;
+        b=l522wTISQIEqzK90toZPyhoKRQC0mrbSkU/B1LC4lE6ZWC82ZfeOrWgLTqD+xLHvZY
+         wUPmGUY2vpweyhkQUrhsye1xWgkK4JtYz3AVHaQGLuzqG18ubkMqJqoZuc0yHgl2b4yu
+         q+t50m+tJHa6xxW0mFNM/sdb8gs2iv3YkIns9D9to5QyFO0tvU6stZJrjcTXZPmCuORv
+         g7ItrkobYYQHZyeF8Iwmt7vdOvhj+1s5OoOcbh4VblOGKeTElfLCylNIjhmm0N2p8b5N
+         FIbAebWyw9SpsuSZTRkHXtZ/HNBz7OT9IZQjVl4NbN2PY1pGrYwfmecxxxM0+ukvKr77
+         kfZQ==
+X-Gm-Message-State: AOJu0YxbNJzzhXRsVMvELuCBlnewIHiBjOF8IJLqzXdxARNKD4BcB7Gr
+	9wEnqTuDQHtSFz3NLSCcJNM=
+X-Google-Smtp-Source: AGHT+IFMpUEYTMf+mPSWA4+VbteWN8b1OzpCEBXqJy3LLCuRJayQ8QyO4sht/Uh2fphnHMZ4XGqSjA==
+X-Received: by 2002:a17:902:cec3:b0:1d5:8cf:110e with SMTP id d3-20020a170902cec300b001d508cf110emr1864408plg.88.1704749637466;
+        Mon, 08 Jan 2024 13:33:57 -0800 (PST)
+Received: from ?IPV6:2620:0:1000:8411:fe53:b285:ad53:95e0? ([2620:0:1000:8411:fe53:b285:ad53:95e0])
+        by smtp.gmail.com with ESMTPSA id m11-20020a170902db0b00b001d4b17161dbsm337678plx.217.2024.01.08.13.33.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Jan 2024 13:33:57 -0800 (PST)
+Message-ID: <c7c4769c-5999-4373-90df-f2203ecfc423@acm.org>
+Date: Mon, 8 Jan 2024 13:33:55 -0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9b46c48f-d7c4-4ed3-a644-fba90850eab8@acm.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Regression] Hang deleting ATA HDD device for undocking
+Content-Language: en-US
+To: Kevin Locke <kevin@kevinlocke.name>, linux-scsi@vger.kernel.org,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
+ Niklas Cassel <niklas.cassel@wdc.com>
+References: <ZZw3Th70wUUvCiCY@kevinlocke.name>
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <ZZw3Th70wUUvCiCY@kevinlocke.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jan 08, 2024 at 11:30:10AM -0800, Bart Van Assche wrote:
-> On 12/21/23 21:37, Christoph Hellwig wrote:
-> > On Fri, Dec 22, 2023 at 05:13:43AM +0000, Matthew Wilcox wrote:
-> > > It clearly solves a problem (and the one I think it's solving is the
-> > > size of the FTL map).  But I can't see why we should stop working on it,
-> > > just because not all drive manufacturers want to support it.
-> > 
-> > I don't think it is drive vendors.  It is is the SSD divisions which
-> > all pretty much love it (for certain use cases) vs the UFS/eMMC
-> > divisions which tends to often be fearful and less knowledgeable (to
-> > say it nicely) no matter what vendor you're talking to.
+On 1/8/24 09:56, Kevin Locke wrote:
+> Hi all,
 > 
-> Hi Christoph,
+> On a ThinkPad T430 running Linux 6.7, when I attempt to delete the ATA
+> device for a hard drive in the Ultrabay slot (to hotswap/undock it[1])
+> the process freezes in an unterruptible sleep.  Specifically, if I run
 > 
-> If there is a significant number of 4 KiB writes in a workload (e.g.
-> filesystem metadata writes), and the logical block size is increased from
-> 4 KiB to 16 KiB, this will increase write amplification no matter how the
-> SSD storage controller has been designed, isn't it? Is there perhaps
-> something that I'm misunderstanding?
+>      echo 1 >/sys/devices/pci0000:00/0000:00:1f.2/ata2/host1/target1:0:0/1:0:0:0/delete
+> 
+> The shell process hangs in the write(2) syscall.  The last dmesg
+> entries post hang are:
+> 
+>      sd 1:0:0:0: [sda] Synchronizing SCSI cache
+>      ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+>      ata2.00: ACPI cmd f5/00:00:00:00:00:a0(SECURITY FREEZE LOCK) filtered out
+>      ata2.00: ACPI cmd ef/10:03:00:00:00:a0(SET FEATURES) filtered out
+>      ata2.00: ACPI cmd f5/00:00:00:00:00:a0(SECURITY FREEZE LOCK) filtered out
+>      ata2.00: ACPI cmd ef/10:03:00:00:00:a0(SET FEATURES) filtered out
+>      ata2.00: configured for UDMA/133
+>      ata2.00: retrying FLUSH 0xea Emask 0x0
+> 
+> On kernel versions prior to 6.5-rc1, dmesg would subsequently contain:
+> 
+>      sd 1:0:0:0: [sda] Stopping disk
+>      ata2.00: disable device
+> 
+> Note that the hang only occurs when deleting a hard disk drive.  It
+> does not occur when deleting an optical disk drive.
+> 
+> I bisected the regression to 8b566edbdbfb5cde31a322c57932694ff48125ed.
+> 
+> I know very little about the SCSI/ATA subsystems or the internals of
+> ATA hotswapping/undocking.  I'd appreciate any help investigating the
+> issue, or properly undocking.
+> 
+> Thanks,
+> Kevin
+> 
+> [1]: https://www.thinkwiki.org/wiki/How_to_hotswap_Ultrabay_devices
 
-You're misunderstanding that it's the _drive_ which gets to decide the
-logical block size.  Filesystems literally can't do 4kB writes to these
-drives; you can't do a write smaller than a block.  If your clients
-don't think it's a good tradeoff for them, they won't tell Linux that
-the minimum IO size is 16kB.
+Hi Kevin,
 
-Some workloads are better with a 4kB block size, no doubt.  Others are
-better with a 512 byte block size.  That doesn't prevent vendors from
-offering 4kB LBA size drives.
+Thank you for having bisected this issue.
+
+The "Synchronizing SCSI cache" message probably comes from sd_shutdown().
+sd_shutdown() is called by sd_remove(). sd_remove() is called by
+__scsi_remove_device(). __scsi_remove_device() is called by
+sdev_store_delete(). It's not clear to me how commit 8b566edbdbfb
+("scsi: core: Only kick the requeue list if necessary") can affect that
+call path.
+
+It would help if more information about the hang could be provided by
+running the following command after having reproduced the hang and by
+sharing the dmesg output triggered by this command:
+
+     echo w > /proc/sysrq-trigger
+
+Thank you,
+
+Bart.
 
