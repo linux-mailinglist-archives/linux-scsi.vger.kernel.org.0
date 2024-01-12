@@ -1,115 +1,129 @@
-Return-Path: <linux-scsi+bounces-1574-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-1576-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 760FB82C1CA
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jan 2024 15:28:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C72F582C2CF
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jan 2024 16:34:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24E4E282D9F
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jan 2024 14:28:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D39E286518
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jan 2024 15:34:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34FF86DD00;
-	Fri, 12 Jan 2024 14:27:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 145BD6EB6F;
+	Fri, 12 Jan 2024 15:34:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pOJ1cgW3"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="X7632k/F"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2986DCF2;
-	Fri, 12 Jan 2024 14:27:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4449BC433F1;
-	Fri, 12 Jan 2024 14:27:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1705069648;
-	bh=rURI4j8Qzdu95xSW0tWCVC+7bpXBaT8ciPIXxAKQmg8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pOJ1cgW3CWiVAHKRwC/0P+QLn6Rc+YRjGcrFkax05Yw8qge//B1fNWXjwf40ZQNk5
-	 HFGBx0FPiN/gLjP/Y5bNdy6nPnmigOrmQLGEEDTG3d4bEfrOy5KDDcfMa8wnnL9oNC
-	 QC/SDSPB8RmizPkWwIIqQIgdsH/L6DyBaJeKO0do=
-Date: Fri, 12 Jan 2024 09:27:27 -0500
-From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, linux-scsi <linux-scsi@vger.kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] first round of SCSI updates for the 6.7+ merge window
-Message-ID: <20240112-steadfast-eager-porcupine-2c9b3a@lemur>
-References: <c5ac3166f35bac3a618b126dabadaddc11c8512d.camel@HansenPartnership.com>
- <CAHk-=whKVgb27o3+jhSRzuZdpjWJiAvxeO8faMjHpb-asONE1g@mail.gmail.com>
- <CAHk-=wiHCkxrMCOL+rSGuPxUoX0_GSMLjgs9v5NJg6okxc1NLw@mail.gmail.com>
- <255e3328bd48c23fbaae0be6d927820d36e14404.camel@HansenPartnership.com>
- <CAHk-=wi6PenRqDCuumMK_5+_gU+JdUqrBEDS-XwFiaNdVRZAHA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9081E6EB57;
+	Fri, 12 Jan 2024 15:34:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40CDOrcn023577;
+	Fri, 12 Jan 2024 15:33:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=qcppdkim1; bh=Q11XAhYvlT+pPYbbmi3t
+	nqbrEGmbsowZ/Otmw6pZCPw=; b=X7632k/Fs4ESIA4H4gaa1MPB+AoDv7rcdtsr
+	4SqNWWz2brnMjN0jtiLQ3hADObwF7ScIYxC5BL0F/o8DvgJZMtC5LQoWKG5FP5su
+	ctlaRRisjeF0emWFo3ngQzvRLTmw1yIt430PSbYuyEwBoHWBtvu8Y0XzxmniIUKR
+	z52qUtz+SOR+DI8CA3+tGteuqh9fSnTXIP2ACHyoBdypyy9ad1zayFAcR60+5boo
+	385vnkHmAXhaiAvqrBswEft6TrOhkV07Lm9MqnFxkzOWVXXNOGenfLnui25D0iEq
+	UbfQb5/dfyXEAB60v2+dC1IbHMSWNZhlsCPtbo/+302uT3RYgg==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vjjjj3425-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 12 Jan 2024 15:33:56 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 40CFXqno032668;
+	Fri, 12 Jan 2024 15:33:52 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3veyxnj2y6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Fri, 12 Jan 2024 15:33:52 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40CFXp1v032660;
+	Fri, 12 Jan 2024 15:33:51 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-nitirawa-hyd.qualcomm.com [10.213.109.152])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 40CFXpi3032657;
+	Fri, 12 Jan 2024 15:33:51 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2342877)
+	id 5435E572C41; Fri, 12 Jan 2024 21:03:50 +0530 (+0530)
+From: Nitin Rawat <quic_nitirawa@quicinc.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Nitin Rawat <quic_nitirawa@quicinc.com>
+Subject: [PATCH V1 0/2] Refactor phy powerup sequence
+Date: Fri, 12 Jan 2024 21:03:46 +0530
+Message-ID: <20240112153348.2778-1-quic_nitirawa@quicinc.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi6PenRqDCuumMK_5+_gU+JdUqrBEDS-XwFiaNdVRZAHA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: fV1al1rQQFm9ktPOmNbbSJEkyTvavawf
+X-Proofpoint-GUID: fV1al1rQQFm9ktPOmNbbSJEkyTvavawf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ phishscore=0 mlxscore=0 spamscore=0 impostorscore=0 mlxlogscore=424
+ lowpriorityscore=0 priorityscore=1501 clxscore=1011 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2401120121
 
-On Thu, Jan 11, 2024 at 03:50:32PM -0800, Linus Torvalds wrote:
-> > jejb@lingrow:~> gpg --list-key E76040DB76CA3D176708F9AAE742C94CEE98AC85
-> > pub   rsa2048 2011-09-23 [SC] [expires: 2026-03-11]
-> >       D5606E73C8B46271BEAD9ADF814AE47C214854D6
-> > uid           [ultimate] James Bottomley
-> > <James.Bottomley@HansenPartnership.com>
-> > uid           [ultimate] James Bottomley <jejb@linux.vnet.ibm.com>
-> > uid           [ultimate] James Bottomley <jejb@kernel.org>
-> > uid           [ultimate] [jpeg image of size 5254]
-> > uid           [ultimate] James Bottomley <jejb@linux.ibm.com>
-> > uid           [ultimate] James Bottomley <jejb@hansenpartnership.com>
-> > sub   nistp256 2018-01-23 [S] [expires: 2024-01-16]
-> > sub   nistp256 2018-01-23 [E] [expires: 2024-01-16]
-> > sub   nistp256 2023-07-20 [A] [expires: 2024-01-16]
-> 
-> Look closer.
-> 
-> NOWHERE there does it mention E76040D.. Nowhere.
+Refactor phy_power_on and phy_calibrate callbacks.
 
-I'm piping up just because I know how to get the output you want, not because
-I hold any opinions on GnuPG (I do, but they aren't relevant here). :)
+In Current code regulators enable, clks enable, calibrating UFS PHY,
+start_serdes and polling PCS_ready_status are part of phy_power_on.
 
-Add the following to your ~/.gnupg/gpg.conf:
+UFS PHY registers are retained after power collapse, meaning calibrating
+UFS PHY, start_serdes and polling PCS_ready_status can be done only when
+hba is powered_on, and not needed every time when phy_power_on is called
+during resume. Hence keep the code which enables PHY's regulators & clks
+in phy_power_on and move the rest steps into phy_calibrate function.
 
-    keyid-format long
+Since phy_power_on is separated out from phy calibrate, make separate calls
+to phy_power_on and phy_calibrate calls from ufs qcom driver.
 
-After that the output should look like this:
+Also for better power saving, remove the phy_power_on/off calls from
+resume/suspend path and put them to ufs_qcom_setup_clocks, so that
+PHY's regulators & clks can be turned on/off along with UFS's clocks.
 
-    $ gpg --list-key E76040DB76CA3D176708F9AAE742C94CEE98AC85
-    pub   rsa2048/814AE47C214854D6 2011-09-23 [SC] [expires: 2026-03-11]
-          D5606E73C8B46271BEAD9ADF814AE47C214854D6
-    uid                 [  full  ] James Bottomley <James.Bottomley@HansenPartnership.com>
-    uid                 [  full  ] James Bottomley <jejb@kernel.org>
-    uid                 [  full  ] James Bottomley <jejb@linux.vnet.ibm.com>
-    uid                 [  never ] [jpeg image of size 5254]
-    uid                 [  full  ] James Bottomley <jejb@linux.ibm.com>
-    sub   nistp256/E742C94CEE98AC85 2018-01-23 [S] [expires: 2024-01-16]
-    sub   nistp256/3E01E40786F26FB8 2018-01-23 [E] [expires: 2024-01-16]
-    sub   nistp256/920E9CA6AA3F170D 2023-07-20 [A] [expires: 2024-01-16]
+This patch series is tested on SM8550 MTP, SM8350 MTP and SA8775p.
 
-Note, that keyids are truncated from the right, as opposed to git commits.
+There is functional dependency between ufs-qcom and phy-qcom-qmp-ufs
+and hence both the patches should be part of same merge window.
 
-> And the above is actually being *generous* to gpg. The reality is even
-> worse. Try this:
-> 
->    gpg --list-key 37AAA9562C5CBD0C
-> 
-> and notice how it doesn't even list the subkey I asked about. Not even
-> with '--with-subkey-fingerprint'.
+Nitin Rawat (2):
+  scsi: ufs: qcom : Refactor phy_power_on/off calls
+  phy: qcom: Refactor phy_power_on and phy_calibrate callbacks
 
-Again, just because I happen to know the right incantation and it may come up
-in a search for someone:
+ drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 183 +++++++++---------------
+ drivers/ufs/host/ufs-qcom.c             | 104 +++++++++-----
+ drivers/ufs/host/ufs-qcom.h             |   4 +
+ 3 files changed, 139 insertions(+), 152 deletions(-)
 
-    $ gpg --list-options show-unusable-subkeys --list-key 37AAA9562C5CBD0C
+--
+2.43.0
 
-You can add it to your .gnupg/gpg.conf as well:
-
-    list-options show-unusable-subkeys
-
--K
 
