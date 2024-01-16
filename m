@@ -1,53 +1,53 @@
-Return-Path: <linux-scsi+bounces-1611-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-1618-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E01382E8D2
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jan 2024 06:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F4BC82E8F4
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jan 2024 06:05:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3245B22FAF
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jan 2024 05:00:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD3E8B20B9E
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jan 2024 05:05:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7FD21CF8C;
-	Tue, 16 Jan 2024 04:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E5B112E40;
+	Tue, 16 Jan 2024 04:53:37 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
+Received: from esa10.hc1455-7.c3s2.iphmx.com (esa10.hc1455-7.c3s2.iphmx.com [139.138.36.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2DB31C695;
-	Tue, 16 Jan 2024 04:52:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4417125AF;
+	Tue, 16 Jan 2024 04:53:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-X-IronPort-AV: E=McAfee;i="6600,9927,10954"; a="134244468"
+X-IronPort-AV: E=McAfee;i="6600,9927,10954"; a="133883812"
 X-IronPort-AV: E=Sophos;i="6.04,198,1695654000"; 
-   d="scan'208";a="134244468"
-Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
-  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2024 13:52:30 +0900
-Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
-	by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id EAB19D5027;
-	Tue, 16 Jan 2024 13:52:27 +0900 (JST)
+   d="scan'208";a="133883812"
+Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
+  by esa10.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2024 13:52:21 +0900
+Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
+	by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 857C9D6187;
+	Tue, 16 Jan 2024 13:52:18 +0900 (JST)
 Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
-	by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 35BDAD3F0C;
-	Tue, 16 Jan 2024 13:52:27 +0900 (JST)
+	by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id B8082C5CCD;
+	Tue, 16 Jan 2024 13:52:17 +0900 (JST)
 Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id B84E0200A7685;
-	Tue, 16 Jan 2024 13:52:26 +0900 (JST)
+	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id 5A693200A56C5;
+	Tue, 16 Jan 2024 13:52:17 +0900 (JST)
 Received: from localhost.localdomain (unknown [10.167.226.45])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id 41B171A0070;
-	Tue, 16 Jan 2024 12:52:26 +0800 (CST)
+	by edo.cn.fujitsu.com (Postfix) with ESMTP id D7F801A015F;
+	Tue, 16 Jan 2024 12:52:16 +0800 (CST)
 From: Li Zhijian <lizhijian@fujitsu.com>
 To: linux-kernel@vger.kernel.org
 Cc: Li Zhijian <lizhijian@fujitsu.com>,
-	Karan Tilak Kumar <kartilak@cisco.com>,
-	Sesidhar Baddela <sebaddel@cisco.com>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Sathya Prakash <sathya.prakash@broadcom.com>,
+	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+	MPT-FusionLinux.pdl@broadcom.com,
 	linux-scsi@vger.kernel.org
-Subject: [PATCH 40/42] drivers/scsi/snic/snic_attrs: Convert snprintf to sysfs_emit
-Date: Tue, 16 Jan 2024 12:51:49 +0800
-Message-Id: <20240116045151.3940401-38-lizhijian@fujitsu.com>
+Subject: [PATCH 12/42] drivers/message/fusion: Convert snprintf to sysfs_emit
+Date: Tue, 16 Jan 2024 12:51:21 +0800
+Message-Id: <20240116045151.3940401-10-lizhijian@fujitsu.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20240116045151.3940401-1-lizhijian@fujitsu.com>
 References: <20240116041129.3937800-1-lizhijian@fujitsu.com>
@@ -63,12 +63,12 @@ X-TM-AS-GCONF: 00
 X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28122.004
 X-TM-AS-User-Approved-Sender: Yes
 X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28122.004
-X-TMASE-Result: 10--15.843000-10.000000
-X-TMASE-MatchedRID: i5zBIT546Mc4ibokZ3+Q0CoiRKlBVkYIBXngI6jFvpfvd49YGReckE1N
-	J2MN+nPkgxCMf8A0YpR5sRK06wHV4QjYlErXRAnoLdBFrfY9r2n0swHSFcVJ6MC5DTEMxpeQfiq
-	1gj2xET8vYRhsicUjm84WYLmQfXYmFZzhICPDv1zfSQNpZkETVAv/9UzFeXITGxDxAG8HwlajxY
-	yRBa/qJcFwgTvxipFajoczmuoPCq3jsutR+QmP0N8aX0oz9KYehB2W+CYlDhFtqNG73mqQ0w521
-	VKzZ7kU
+X-TMASE-Result: 10--13.896000-10.000000
+X-TMASE-MatchedRID: st9CF01730Y4ibokZ3+Q0CoiRKlBVkYIBXngI6jFvpfvd49YGReckE1N
+	J2MN+nPk0No1mkr2A1hM0AWQBBcXdpRSkbxKeJc4rMZ+BqQt2NrBOVz0Jwcxl6vCrG0TnfVUg9x
+	e4gtUJtptIv0A3hSOW84WYLmQfXYmpoPHQXywp1eXd9LOVu4KPfCrUlDnEXiSuzdiHYg4JjP+tn
+	MvnQl+U2tLgqAV+5PDAPNERLsv2l+XBXaJoB9JZxRFJJyf5BJe3QfwsVk0UbtuRXh7bFKB7tjlq
+	sM06ZRaAhkNqYwTSAYqd+5N1jjBA8gQRSDx83t5xYVzI3UCCaY=
 X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
 Per filesystems/sysfs.rst, show() should only use sysfs_emit()
@@ -77,65 +77,144 @@ or sysfs_emit_at() when formatting the value to be returned to user space.
 coccinelle complains that there are still a couple of functions that use
 snprintf(). Convert them to sysfs_emit().
 
-> ./drivers/scsi/snic/snic_attrs.c:16:8-16: WARNING: please use sysfs_emit
-> ./drivers/scsi/snic/snic_attrs.c:26:8-16: WARNING: please use sysfs_emit
-> ./drivers/scsi/snic/snic_attrs.c:35:8-16: WARNING: please use sysfs_emit
-> ./drivers/scsi/snic/snic_attrs.c:48:8-16: WARNING: please use sysfs_emit
+> ./drivers/message/fusion/mptscsih.c:3100:8-16: WARNING: please use sysfs_emit
+> ./drivers/message/fusion/mptscsih.c:3116:8-16: WARNING: please use sysfs_emit
+> ./drivers/message/fusion/mptscsih.c:3132:8-16: WARNING: please use sysfs_emit
+> ./drivers/message/fusion/mptscsih.c:3145:8-16: WARNING: please use sysfs_emit
+> ./drivers/message/fusion/mptscsih.c:3159:8-16: WARNING: please use sysfs_emit
+> ./drivers/message/fusion/mptscsih.c:3173:8-16: WARNING: please use sysfs_emit
+> ./drivers/message/fusion/mptscsih.c:3186:8-16: WARNING: please use sysfs_emit
+> ./drivers/message/fusion/mptscsih.c:3198:8-16: WARNING: please use sysfs_emit
+> ./drivers/message/fusion/mptscsih.c:3211:8-16: WARNING: please use sysfs_emit
+> ./drivers/message/fusion/mptscsih.c:3224:8-16: WARNING: please use sysfs_emit
+> ./drivers/message/fusion/mptscsih.c:3237:8-16: WARNING: please use sysfs_emit
+> ./drivers/message/fusion/mptscsih.c:3250:8-16: WARNING: please use sysfs_emit
 
 No functional change intended
 
-CC: Karan Tilak Kumar <kartilak@cisco.com>
-CC: Sesidhar Baddela <sebaddel@cisco.com>
-CC: "James E.J. Bottomley" <jejb@linux.ibm.com>
-CC: "Martin K. Petersen" <martin.petersen@oracle.com>
+CC: Sathya Prakash <sathya.prakash@broadcom.com>
+CC: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+CC: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
+CC: MPT-FusionLinux.pdl@broadcom.com
 CC: linux-scsi@vger.kernel.org
 Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 ---
- drivers/scsi/snic/snic_attrs.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/message/fusion/mptscsih.c | 25 ++++++++++++-------------
+ 1 file changed, 12 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/scsi/snic/snic_attrs.c b/drivers/scsi/snic/snic_attrs.c
-index 3ddbdbc3ded1..03921618182d 100644
---- a/drivers/scsi/snic/snic_attrs.c
-+++ b/drivers/scsi/snic/snic_attrs.c
-@@ -13,7 +13,7 @@ snic_show_sym_name(struct device *dev,
- {
- 	struct snic *snic = shost_priv(class_to_shost(dev));
+diff --git a/drivers/message/fusion/mptscsih.c b/drivers/message/fusion/mptscsih.c
+index 9080a73b4ea6..24063b201699 100644
+--- a/drivers/message/fusion/mptscsih.c
++++ b/drivers/message/fusion/mptscsih.c
+@@ -3097,7 +3097,7 @@ mptscsih_version_fw_show(struct device *dev, struct device_attribute *attr,
+ 	MPT_SCSI_HOST	*hd = shost_priv(host);
+ 	MPT_ADAPTER *ioc = hd->ioc;
  
--	return snprintf(buf, PAGE_SIZE, "%s\n", snic->name);
-+	return sysfs_emit(buf, "%s\n", snic->name);
+-	return snprintf(buf, PAGE_SIZE, "%02d.%02d.%02d.%02d\n",
++	return sysfs_emit(buf, "%02d.%02d.%02d.%02d\n",
+ 	    (ioc->facts.FWVersion.Word & 0xFF000000) >> 24,
+ 	    (ioc->facts.FWVersion.Word & 0x00FF0000) >> 16,
+ 	    (ioc->facts.FWVersion.Word & 0x0000FF00) >> 8,
+@@ -3113,7 +3113,7 @@ mptscsih_version_bios_show(struct device *dev, struct device_attribute *attr,
+ 	MPT_SCSI_HOST	*hd = shost_priv(host);
+ 	MPT_ADAPTER *ioc = hd->ioc;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
++	return sysfs_emit(buf, "%02x.%02x.%02x.%02x\n",
+ 	    (ioc->biosVersion & 0xFF000000) >> 24,
+ 	    (ioc->biosVersion & 0x00FF0000) >> 16,
+ 	    (ioc->biosVersion & 0x0000FF00) >> 8,
+@@ -3129,7 +3129,7 @@ mptscsih_version_mpi_show(struct device *dev, struct device_attribute *attr,
+ 	MPT_SCSI_HOST	*hd = shost_priv(host);
+ 	MPT_ADAPTER *ioc = hd->ioc;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%03x\n", ioc->facts.MsgVersion);
++	return sysfs_emit(buf, "%03x\n", ioc->facts.MsgVersion);
  }
+ static DEVICE_ATTR(version_mpi, S_IRUGO, mptscsih_version_mpi_show, NULL);
  
+@@ -3142,7 +3142,7 @@ char *buf)
+ 	MPT_SCSI_HOST	*hd = shost_priv(host);
+ 	MPT_ADAPTER *ioc = hd->ioc;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%s\n", ioc->prod_name);
++	return sysfs_emit(buf, "%s\n", ioc->prod_name);
+ }
+ static DEVICE_ATTR(version_product, S_IRUGO,
+     mptscsih_version_product_show, NULL);
+@@ -3156,8 +3156,7 @@ mptscsih_version_nvdata_persistent_show(struct device *dev,
+ 	MPT_SCSI_HOST	*hd = shost_priv(host);
+ 	MPT_ADAPTER *ioc = hd->ioc;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%02xh\n",
+-	    ioc->nvdata_version_persistent);
++	return sysfs_emit(buf, "%02xh\n", ioc->nvdata_version_persistent);
+ }
+ static DEVICE_ATTR(version_nvdata_persistent, S_IRUGO,
+     mptscsih_version_nvdata_persistent_show, NULL);
+@@ -3170,7 +3169,7 @@ mptscsih_version_nvdata_default_show(struct device *dev,
+ 	MPT_SCSI_HOST	*hd = shost_priv(host);
+ 	MPT_ADAPTER *ioc = hd->ioc;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%02xh\n",ioc->nvdata_version_default);
++	return sysfs_emit(buf, "%02xh\n",ioc->nvdata_version_default);
+ }
+ static DEVICE_ATTR(version_nvdata_default, S_IRUGO,
+     mptscsih_version_nvdata_default_show, NULL);
+@@ -3183,7 +3182,7 @@ mptscsih_board_name_show(struct device *dev, struct device_attribute *attr,
+ 	MPT_SCSI_HOST	*hd = shost_priv(host);
+ 	MPT_ADAPTER *ioc = hd->ioc;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%s\n", ioc->board_name);
++	return sysfs_emit(buf, "%s\n", ioc->board_name);
+ }
+ static DEVICE_ATTR(board_name, S_IRUGO, mptscsih_board_name_show, NULL);
+ 
+@@ -3195,7 +3194,7 @@ mptscsih_board_assembly_show(struct device *dev,
+ 	MPT_SCSI_HOST	*hd = shost_priv(host);
+ 	MPT_ADAPTER *ioc = hd->ioc;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%s\n", ioc->board_assembly);
++	return sysfs_emit(buf, "%s\n", ioc->board_assembly);
+ }
+ static DEVICE_ATTR(board_assembly, S_IRUGO,
+     mptscsih_board_assembly_show, NULL);
+@@ -3208,7 +3207,7 @@ mptscsih_board_tracer_show(struct device *dev, struct device_attribute *attr,
+ 	MPT_SCSI_HOST	*hd = shost_priv(host);
+ 	MPT_ADAPTER *ioc = hd->ioc;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%s\n", ioc->board_tracer);
++	return sysfs_emit(buf, "%s\n", ioc->board_tracer);
+ }
+ static DEVICE_ATTR(board_tracer, S_IRUGO,
+     mptscsih_board_tracer_show, NULL);
+@@ -3221,7 +3220,7 @@ mptscsih_io_delay_show(struct device *dev, struct device_attribute *attr,
+ 	MPT_SCSI_HOST	*hd = shost_priv(host);
+ 	MPT_ADAPTER *ioc = hd->ioc;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%02d\n", ioc->io_missing_delay);
++	return sysfs_emit(buf, "%02d\n", ioc->io_missing_delay);
+ }
+ static DEVICE_ATTR(io_delay, S_IRUGO,
+     mptscsih_io_delay_show, NULL);
+@@ -3234,7 +3233,7 @@ mptscsih_device_delay_show(struct device *dev, struct device_attribute *attr,
+ 	MPT_SCSI_HOST	*hd = shost_priv(host);
+ 	MPT_ADAPTER *ioc = hd->ioc;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%02d\n", ioc->device_missing_delay);
++	return sysfs_emit(buf, "%02d\n", ioc->device_missing_delay);
+ }
+ static DEVICE_ATTR(device_delay, S_IRUGO,
+     mptscsih_device_delay_show, NULL);
+@@ -3247,7 +3246,7 @@ mptscsih_debug_level_show(struct device *dev, struct device_attribute *attr,
+ 	MPT_SCSI_HOST	*hd = shost_priv(host);
+ 	MPT_ADAPTER *ioc = hd->ioc;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%08xh\n", ioc->debug_level);
++	return sysfs_emit(buf, "%08xh\n", ioc->debug_level);
+ }
  static ssize_t
-@@ -23,7 +23,7 @@ snic_show_state(struct device *dev,
- {
- 	struct snic *snic = shost_priv(class_to_shost(dev));
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n",
-+	return sysfs_emit(buf, "%s\n",
- 			snic_state_str[snic_get_state(snic)]);
- }
- 
-@@ -32,7 +32,7 @@ snic_show_drv_version(struct device *dev,
- 		      struct device_attribute *attr,
- 		      char *buf)
- {
--	return snprintf(buf, PAGE_SIZE, "%s\n", SNIC_DRV_VERSION);
-+	return sysfs_emit(buf, "%s\n", SNIC_DRV_VERSION);
- }
- 
- static ssize_t
-@@ -45,8 +45,8 @@ snic_show_link_state(struct device *dev,
- 	if (snic->config.xpt_type == SNIC_DAS)
- 		snic->link_status = svnic_dev_link_status(snic->vdev);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n",
--			(snic->link_status) ? "Link Up" : "Link Down");
-+	return sysfs_emit(buf, "%s\n",
-+			  (snic->link_status) ? "Link Up" : "Link Down");
- }
- 
- static DEVICE_ATTR(snic_sym_name, S_IRUGO, snic_show_sym_name, NULL);
+ mptscsih_debug_level_store(struct device *dev, struct device_attribute *attr,
 -- 
 2.29.2
 
