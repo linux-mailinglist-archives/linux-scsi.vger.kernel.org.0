@@ -1,165 +1,196 @@
-Return-Path: <linux-scsi+bounces-1912-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-1914-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 572B683D9D1
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jan 2024 12:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2173483E1D1
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jan 2024 19:44:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AEBD1C228AD
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jan 2024 11:58:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45F811C209C0
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jan 2024 18:44:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22A311AAAE;
-	Fri, 26 Jan 2024 11:58:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65BD3225AC;
+	Fri, 26 Jan 2024 18:39:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=unist.ac.kr header.i=@unist.ac.kr header.b="c+k8gTl/"
+	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="rHbfKoiP"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from KOR01-PS2-obe.outbound.protection.outlook.com (mail-ps2kor01on2095.outbound.protection.outlook.com [40.107.128.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0291A731;
-	Fri, 26 Jan 2024 11:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.128.95
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706270292; cv=fail; b=kux3qYAWaKajs0nxlx0tyUa0wzc7GyNxk8EmKuPVYNH+p0z5MscmBlMZdDRSTOHUsHw2Lycx7cs2vOFgkc4Laq+UZTo81l+PKJKGHQDCKWikSurkVuI2lXGrLtY29T10Fw5kyWyv2HSWKxqWt83+CxCQTKIjxzrvbr6UUDEd8ac=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706270292; c=relaxed/simple;
-	bh=f9yUmzcGZ3rSmd+T2WsHrKRzv4dZ61yzjAZhvGVOMX4=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=Hwk+9Oe7/Mf5xsfYtlzI5r9E/sJ/owGFgIGfLuutbftLwARzmvRghAXU3ClM8LvM1ZxZ2h+RyGZFMUq2GAakQDoWrAmF8gtp5wr8Xra+zStgtZtEmiQ44YcNPEIRTKqrBh/6v/oD/wA6N5i6/59iZ3YvnZ+7tfsrEYCCpxyfrc8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=unist.ac.kr; spf=pass smtp.mailfrom=unist.ac.kr; dkim=pass (1024-bit key) header.d=unist.ac.kr header.i=@unist.ac.kr header.b=c+k8gTl/; arc=fail smtp.client-ip=40.107.128.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=unist.ac.kr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=unist.ac.kr
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P3fkMXd1zhkV/5qgBsgNvqpSNQA+HVn6qgrOn2kiHiASBPdcBcdQF+Ut904ETAjLCK6Bh9//TrNF/+qATnxV5sl7jRp/m407jzyvgg/vey4XmT8BdWzMP69MaoHkdXhXcchFejjQVYpUFG2V4jlAV77Lq+7KtoFRpuD3e1p96eLBg0UXfWa3Dmt27RIVsz1rUDF81d5uNLILcoEpIAEgxrYtlGOt6/1pi7OGjMwHt1RZyClZfDcnma+OBI96geJGt1SbXNuYYOqSoI5igvWMVg9aBm9uMSK3SllaYLMaUlrpJjFxlDCFdkUe+pEF/TBgHf9ubS4YIo43WRo0W4iMsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9lRAOadIuHuMs2kRbrjNcYfyh/oU1deTbAU6tDKtZRw=;
- b=SG1/R0+nNc7//C0TNAQ5TihxGdBh1Kf/PGqKcVQB7ySm4V/YurYZYeRht6+okd3AZ5GymWxrqX7YMlL9dqsyOCxGC0xbcclH938Sc6firj/NBlAse/Ju5/hEF0HWrZ6a/pRhmuy0L2InmBgQa11mybuH4pz8piWTLlMMjhLtGdCGWOvweXfgU8whV/ApO0MoqhGt1u7wfs1QoaRx+bo93Txpxt9wS/t7QosBaML1t559JiB9ZUGwMUd5lnftpyYY1cKRvX0MJPspZ0ZizGZyI/tSreKzocSQPnSq6asUcAf8/bQ7/UfIZstAjy+vuWa7SPMKnXMT1MyiqcRPO7pVsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=unist.ac.kr; dmarc=pass action=none header.from=unist.ac.kr;
- dkim=pass header.d=unist.ac.kr; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=unist.ac.kr;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9lRAOadIuHuMs2kRbrjNcYfyh/oU1deTbAU6tDKtZRw=;
- b=c+k8gTl/HJHK1F/NxQ1EAddb8FJvNOj8TjK47Ckodr8yvcCS6RhRNquUe2zw66HGO/2gr51ExXdomUjQDJbmbdckhoyvqErbukj49WpWQjjfqtaRpMdGLpeA+jF7pddXZq6D3AinJ+H1I+VnzjTIxrKQbV911vMvW8TarrNHpLQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=unist.ac.kr;
-Received: from SE1P216MB2287.KORP216.PROD.OUTLOOK.COM (2603:1096:101:15d::5)
- by SE1P216MB2406.KORP216.PROD.OUTLOOK.COM (2603:1096:101:1d2::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.28; Fri, 26 Jan
- 2024 11:58:06 +0000
-Received: from SE1P216MB2287.KORP216.PROD.OUTLOOK.COM
- ([fe80::d365:3ee8:ce4d:c15c]) by SE1P216MB2287.KORP216.PROD.OUTLOOK.COM
- ([fe80::d365:3ee8:ce4d:c15c%3]) with mapi id 15.20.7228.027; Fri, 26 Jan 2024
- 11:58:06 +0000
-From: Ingyu Jang <ingyujang25@unist.ac.kr>
-To: jejb@linux.ibm.com
-Cc: linux-scsi@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B7E5788E;
+	Fri, 26 Jan 2024 18:39:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706294391; cv=none; b=a3ivfu5+cHqCIhH/bHycQ+XCAKx8TNa3ZfXa7v/cKDPjhCTp0HUYvQ20P9eIkdZd/EN7MEr4XtPgB/EOOZ9UKO6CuL9UR7VYijPZFDXkjb52LzMA0YV9gDU7nMav/B1/V9mXdC/3Kj2PB9Ki7POcCAPwdc5t+iGzxJui4gl5khI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706294391; c=relaxed/simple;
+	bh=eauj58OBoo8xZvl2rPD9VNk7G7uSuwhiIRJeInveqVs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ToYPsFqCsPiJAyaiUGNSHW1qFXKkq5rSMMoTHqmyUQZIUZ5H197epqQitpWw849DL7BKKQY7Vfs4kzGUQmqkSy+klIya0oi1ZB1bvOOvWoJRjMvmM4I00/oWgmZWXKfPQWx3Eep5Pyia1CgEspV1niJG8RUADp8ghyuaBMp0OpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=rHbfKoiP; arc=none smtp.client-ip=83.149.199.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
+Received: from localhost.localdomain (unknown [109.252.166.233])
+	by mail.ispras.ru (Postfix) with ESMTPSA id E20BF40F1DF0;
+	Fri, 26 Jan 2024 18:39:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru E20BF40F1DF0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+	s=default; t=1706294378;
+	bh=78dGZXUBaq73+RyFvDkx3Qmk9Enz29Z8QRzceyGVnSg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=rHbfKoiPtBUj9RX0e6g7eyvQnUJR6LiVQXkiE6qOSgZDDLGIQBjjA7eB8kD3toNKR
+	 f+MnrndJnalJOSwZ7EUJfNz994HPwIIjc5VgAvgHLPoR0J0p3vZqjDvcH4yg58LBGb
+	 cETAVhLPe1r1ONrTyDIU8W8l9Rtto/KMjbHrfiEM=
+From: Vadim Marchenko <v.marchenko@ispras.ru>
+To: HighPoint Linux Team <linux@highpoint-tech.com>
+Cc: Vadim Marchenko <v.marchenko@ispras.ru>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	linux-scsi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	ysjeon@unist.ac.kr
-Subject: [PATCH 2/2] Add error checking and returning for transport_register_device() in scsi_sysfs_add_host()
-Date: Fri, 26 Jan 2024 20:57:59 +0900
-Message-Id: <20240126115759.1361058-1-ingyujang25@unist.ac.kr>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SE2P216CA0010.KORP216.PROD.OUTLOOK.COM
- (2603:1096:101:117::19) To SE1P216MB2287.KORP216.PROD.OUTLOOK.COM
- (2603:1096:101:15d::5)
+	lvc-project@linuxtesting.org
+Subject: [PATCH] scsi: hptiop: Fix buffer overflow of hba->reqs[]
+Date: Fri, 26 Jan 2024 19:50:59 +0300
+Message-Id: <20240126165059.8175-1-v.marchenko@ispras.ru>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231006204653.4677-1-jakosvadim@gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SE1P216MB2287:EE_|SE1P216MB2406:EE_
-X-MS-Office365-Filtering-Correlation-Id: 753d73bf-92c0-40ea-a274-08dc1e660eae
-X-LD-Processed: e8715ec0-6179-432a-a864-54ea4008adc2,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	qfFLHFTwhxQsaIMJMzJw+m566fuR+WjkE4C3/sJL5ujmAGxa8nhSHN1MDz5cSm575XiL9rk6BcwnKrL2lHezMISaZ5SYgF+k3dIa8NO6ACVyTuPX1cjvsqNJe5YOfGiddIwiXXgxlofMnkQGnH0UQk9yftzPV8Z7DPtM1L1jMRRCb5l7KpFGAGpKkTVjMpsxt9HVK684qqR8IhnJqlFEioBJJtqNlR45mTIGXM8I6Oaf0+lU/yhJy1WwWigxKYd1T5OrcaAcnbGv41xo2bzyaKwKyJX4ixNc84AZXs5vFEGlJFgI1J1bpiDZj6FaeSMqsjxPkWQ8jY47rJbr5QIY2GX8uSU30fQxjDdh+hXJrS8ajhl1VXAjtvD+lCumQ78C2xTHlDYgra4jOBq9XUeKf3W1UpcBuEphwNw84o4oy0cPX0wfRQjL9Ta8uAUdmkgesCcFkLyFQx9inz2/UOLXRKkeZRFI3L5FByC8zt290cL6IQ/4C+SVe9P3GmWrYOq52P2CGqXWRkOwN7KxaDxELwGT9JvSHuwglFRVOJm8DewN+13DEz6Ikb+KXi2Xg6MmQykuIfUqGvJF8Bx/RxQxO7l1bi1BdqCGfSVOSAx/EDy2RFOSdoJJAqP5c6cd++EV
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SE1P216MB2287.KORP216.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(366004)(136003)(376002)(396003)(346002)(230922051799003)(64100799003)(1800799012)(451199024)(186009)(41320700001)(38100700002)(2906002)(5660300002)(41300700001)(36756003)(38350700005)(86362001)(6486002)(26005)(478600001)(52116002)(6512007)(107886003)(1076003)(6506007)(2616005)(6666004)(4326008)(8936002)(8676002)(83380400001)(66946007)(66556008)(66476007)(316002)(6916009)(786003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?vBJB5DN7DUS+MXNV5Qfy0ycAOvveqspCQVw9AKB2K+EZx57zAEdPiuzTltPE?=
- =?us-ascii?Q?gh9w6YHlW3rKN3963t6KzTSd0HNapwnjBIPVjvS1F5AxzPatG3foZcCeD9YM?=
- =?us-ascii?Q?K6JTUqNPqOuZS6NBA/aBzXkZrm7rjHtLqwE2KuN/b8HfliK7jGXgU5nVgfsY?=
- =?us-ascii?Q?/iws+gj68QiYPx+EUwSWw8e+QUCbg7iZLwjFD+nH9VD58EzSArbutJaLQB+r?=
- =?us-ascii?Q?+pdTsX2ijT7+LhvoG5D/QMMPwMuhqLMhTVte1qT0CEImxmX/8poTIF6nJRxG?=
- =?us-ascii?Q?Twq6z+sdNGjVqDLcg+zQI025tiS964BeZdqEAGKo1jyv48cBUWVJ+mYsfL/w?=
- =?us-ascii?Q?K5pMqfGaN14noiuEagzZdykstX4+Yr9Z1+Niar+2mlFGDo38OcgrMtXJgOnD?=
- =?us-ascii?Q?Uk1gdF4EiNkVnwR+E5BmRMSmqhnzcx1713n89bv9TkB4V0DRIjjcYsZtppW6?=
- =?us-ascii?Q?/ql5AqWa6MhTWj7hn0+rofHy8XdPNcRksKkfL0X7xLB0Hy1U30H0tyqRtAQQ?=
- =?us-ascii?Q?HkWrvDQn16RTb+zHlYmDcuuWemMxDueYSv75Y/XauyCr7rV7raXwXrDf46di?=
- =?us-ascii?Q?AT2u9ouTGxFDa/37+1hf4LS8QDv8qrVjFGqxAqOV9dQCC9NFt71eGYgVx1Xr?=
- =?us-ascii?Q?0nShEOLk8ue9+hmfLE80ijPfydo1DnL+pCuDq4TTqvMWqHE+FO95T7//d4lM?=
- =?us-ascii?Q?WfyTKScdtspokIAQyLXwoMtI72J5Rlr9YpkBG8P+EadF/CGxRDrlZVYbg5eY?=
- =?us-ascii?Q?PWXW0Qs9b8F6O3OCONeHADixapY7YNKka2uJ5/nNEpYa1qE7YBePMaSVaYPk?=
- =?us-ascii?Q?p5mC7RwYFK74jOnoRXDuNdTNaur7teLYVBIlgpZPfpLZz/XbnxN8BExvx5u+?=
- =?us-ascii?Q?uwvWSSMIqNR1HYTdny9WGV7AZPz2GKyCAQ8lqHmtHFeN3yGzZs8xgIR0HAUG?=
- =?us-ascii?Q?QdORAkRbdiHDk1dy/ytwoGf06hdwT4RO5VxbraeUC5OovgrQiR7XD2DBUkkm?=
- =?us-ascii?Q?/kKKd6bhomuh5+OmGBvvGTz/kAirFYXNgdiNsAOLPkVjsv3TGEXL2pMHhg1j?=
- =?us-ascii?Q?E8cGOyUto5e3XZTHu1MqwRQtOhJzdPSS8rhjUcFNNB7WbPoljZV5X2tSu9kV?=
- =?us-ascii?Q?TJp/jgtAF85YOH9a90TxuYk2CEfFMhXdG/JCLxLzm03nXXJACvPvADrolDDj?=
- =?us-ascii?Q?mRd4V7W8PyOoc7Sl2mFu7xqt+S0zUZoe2Y2psZzB+P+qIe5EACRWHuWcitgE?=
- =?us-ascii?Q?aVqUtZh+VK6dbLiJc6k7te37oVbfwt4rSRQj3j6rGCZM/m/pucL+1uPh41z+?=
- =?us-ascii?Q?3czZUITbkywewTigrPOHGZZSQt+ZyqlkT7y85BuiRnXRN4BMZlCFRrlge27C?=
- =?us-ascii?Q?VExu+Ptufh4OudQ5Zyh9PRu0OonoIbli0J0oERcHMBykSRR+Dy9YaLg1eGPF?=
- =?us-ascii?Q?dp8PJ9mJjTNTbGF0+Kg3/ZMdnYWfDUoFbjz/l4H4njXrECs2VAIztczDiJRn?=
- =?us-ascii?Q?IIpa2Fb/bYSWho8gfk1kgr8UQMF+SSEmzK/2R4qblb3nvCahb9xaJPInqmhI?=
- =?us-ascii?Q?MH9hJadgrKjRpSfp+M3c84kg8bQ3iwpCL9GeqRLp?=
-X-OriginatorOrg: unist.ac.kr
-X-MS-Exchange-CrossTenant-Network-Message-Id: 753d73bf-92c0-40ea-a274-08dc1e660eae
-X-MS-Exchange-CrossTenant-AuthSource: SE1P216MB2287.KORP216.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2024 11:58:06.2709
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e8715ec0-6179-432a-a864-54ea4008adc2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7i45dEIzKyU8+DR5esGwrG9EuNitO6xqN/A37nGrLzy4+MuX20f5jQnXssiOPyx7CX1E3kIJ6uu9AQ/A5NIv6g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SE1P216MB2406
+Content-Transfer-Encoding: 8bit
 
-The function transport_register_device() can return error code.
-However, scsi_sysfs_add_host() currently does not check return value
-of transport_register_device() and always returns 0.
-Also, return value of scsi_sysfs_add_host() is
-checked at drivers/scsi/hosts.c:307.
+Buffer overflow when accessing an hba->reqs[tag]. Since the tag value is
+read from the device with readl(), it can be greater than 
+HPTIOP_MAX_REQUESTS, which is the maximum size of reqs[].
+struct hptiop_hba { ... struct hptiop_request reqs[HPTIOP_MAX_REQUESTS]; ... }
 
-Therefore, this commit adds error checking for transport_register_device()
-and returning error code in scsi_sysfs_add_host().
+For example, if tag is 0x80000101, then in hptiop.c:79 we will pass tag equal
+to (tag & ~IOPMU_QUEUE_ADDR_HOST_BIT) = (0x80000101 & 0x7fffffff) = 0x101 = 257
+and get a buffer overflow in hptiop_host_request_callback_itl().
 
-Signed-off-by: Ingyu Jang <ingyujang25@unist.ac.kr>
+To fix it, we need to get the last 8 bits of the tag before accessing the
+hba->reqs[tag]. We can do this by calculating bitwise and of tag with macros
+IOPMU_QUEUE_REQUEST_INDEX_BITS which is equal to 0xff.
+By the way, array access that prevents overflow was in commit 286aa031664b
+("[SCSI] hptiop: Support HighPoint RR4520/RR4522 HBA") in function
+hptiop_request_callback_mvfrey(), and this fix extends it to all other cases.
+
+Found by Linux Verification Center (linuxtesting.org) with KLEVER.
+
+Signed-off-by: Vadim Marchenko <v.marchenko@ispras.ru>
 ---
- drivers/scsi/scsi_sysfs.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/scsi/hptiop.c | 22 +++++++++++++++-------
+ drivers/scsi/hptiop.h |  1 +
+ 2 files changed, 16 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index 24f6eefb6803..88f1b901d01b 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -1621,7 +1621,11 @@ EXPORT_SYMBOL(scsi_register_interface);
-  **/
- int scsi_sysfs_add_host(struct Scsi_Host *shost)
+diff --git a/drivers/scsi/hptiop.c b/drivers/scsi/hptiop.c
+index f5334ccbf2ca..174a350c4f58 100644
+--- a/drivers/scsi/hptiop.c
++++ b/drivers/scsi/hptiop.c
+@@ -176,6 +176,7 @@ static void hptiop_request_callback_mv(struct hptiop_hba *hba, u64 tag)
  {
--	transport_register_device(&shost->shost_gendev);
-+	int ret;
-+
-+	ret = transport_register_device(&shost->shost_gendev);
-+	if (ret) 
-+		return ret;
- 	transport_configure_device(&shost->shost_gendev);
- 	return 0;
+ 	u32 req_type = (tag >> 5) & 0x7;
+ 	struct hpt_iop_request_scsi_command *req;
++	u32 req_idx;
+ 
+ 	dprintk("hptiop_request_callback_mv: tag=%llx\n", tag);
+ 
+@@ -188,7 +189,8 @@ static void hptiop_request_callback_mv(struct hptiop_hba *hba, u64 tag)
+ 		break;
+ 
+ 	case IOP_REQUEST_TYPE_SCSI_COMMAND:
+-		req = hba->reqs[tag >> 8].req_virt;
++		req_idx = (tag >> 8) & IOPMU_QUEUE_REQUEST_INDEX_BITS;
++		req = hba->reqs[req_idx].req_virt;
+ 		if (likely(tag & MVIOP_MU_QUEUE_REQUEST_RESULT_BIT))
+ 			req->header.result = cpu_to_le32(IOP_RESULT_SUCCESS);
+ 
+@@ -231,6 +233,7 @@ static void hptiop_request_callback_mvfrey(struct hptiop_hba *hba, u32 _tag)
+ {
+ 	u32 req_type = _tag & 0xf;
+ 	struct hpt_iop_request_scsi_command *req;
++	u32 req_idx;
+ 
+ 	switch (req_type) {
+ 	case IOP_REQUEST_TYPE_GET_CONFIG:
+@@ -239,10 +242,11 @@ static void hptiop_request_callback_mvfrey(struct hptiop_hba *hba, u32 _tag)
+ 		break;
+ 
+ 	case IOP_REQUEST_TYPE_SCSI_COMMAND:
+-		req = hba->reqs[(_tag >> 4) & 0xff].req_virt;
++		req_idx = (_tag >> 4) & IOPMU_QUEUE_REQUEST_INDEX_BITS;
++		req = hba->reqs[req_idx].req_virt;
+ 		if (likely(_tag & IOPMU_QUEUE_REQUEST_RESULT_BIT))
+ 			req->header.result = IOP_RESULT_SUCCESS;
+-		hptiop_finish_scsi_req(hba, (_tag >> 4) & 0xff, req);
++		hptiop_finish_scsi_req(hba, req_idx, req);
+ 		break;
+ 
+ 	default:
+@@ -717,6 +721,7 @@ static void hptiop_finish_scsi_req(struct hptiop_hba *hba, u32 tag,
+ 				struct hpt_iop_request_scsi_command *req)
+ {
+ 	struct scsi_cmnd *scp;
++	u32 req_idx = tag & IOPMU_QUEUE_REQUEST_INDEX_BITS;
+ 
+ 	dprintk("hptiop_finish_scsi_req: req=%p, type=%d, "
+ 			"result=%d, context=0x%x tag=%d\n",
+@@ -726,7 +731,7 @@ static void hptiop_finish_scsi_req(struct hptiop_hba *hba, u32 tag,
+ 	BUG_ON(!req->header.result);
+ 	BUG_ON(req->header.type != cpu_to_le32(IOP_REQUEST_TYPE_SCSI_COMMAND));
+ 
+-	scp = hba->reqs[tag].scp;
++	scp = hba->reqs[req_idx].scp;
+ 
+ 	if (HPT_SCP(scp)->mapped)
+ 		scsi_dma_unmap(scp);
+@@ -770,22 +775,25 @@ static void hptiop_finish_scsi_req(struct hptiop_hba *hba, u32 tag,
+ skip_resid:
+ 	dprintk("scsi_done(%p)\n", scp);
+ 	scsi_done(scp);
+-	free_req(hba, &hba->reqs[tag]);
++	free_req(hba, &hba->reqs[req_idx]);
  }
+ 
+ static void hptiop_host_request_callback_itl(struct hptiop_hba *hba, u32 _tag)
+ {
+ 	struct hpt_iop_request_scsi_command *req;
+ 	u32 tag;
++	u32 req_idx;
+ 
+ 	if (hba->iopintf_v2) {
+ 		tag = _tag & ~IOPMU_QUEUE_REQUEST_RESULT_BIT;
+-		req = hba->reqs[tag].req_virt;
++		req_idx = tag & IOPMU_QUEUE_REQUEST_INDEX_BITS;
++		req = hba->reqs[req_idx].req_virt;
+ 		if (likely(_tag & IOPMU_QUEUE_REQUEST_RESULT_BIT))
+ 			req->header.result = cpu_to_le32(IOP_RESULT_SUCCESS);
+ 	} else {
+ 		tag = _tag;
+-		req = hba->reqs[tag].req_virt;
++		req_idx = tag & IOPMU_QUEUE_REQUEST_INDEX_BITS;
++		req = hba->reqs[req_idx].req_virt;
+ 	}
+ 
+ 	hptiop_finish_scsi_req(hba, tag, req);
+diff --git a/drivers/scsi/hptiop.h b/drivers/scsi/hptiop.h
+index 394ef6aa469e..742ce87ab56d 100644
+--- a/drivers/scsi/hptiop.h
++++ b/drivers/scsi/hptiop.h
+@@ -32,6 +32,7 @@ struct hpt_iopmu_itl {
+ #define IOPMU_QUEUE_ADDR_HOST_BIT    0x80000000
+ #define IOPMU_QUEUE_REQUEST_SIZE_BIT    0x40000000
+ #define IOPMU_QUEUE_REQUEST_RESULT_BIT   0x40000000
++#define IOPMU_QUEUE_REQUEST_INDEX_BITS   0xff
+ 
+ #define IOPMU_OUTBOUND_INT_MSG0      1
+ #define IOPMU_OUTBOUND_INT_MSG1      2
 -- 
-2.34.1
+2.39.2
 
 
