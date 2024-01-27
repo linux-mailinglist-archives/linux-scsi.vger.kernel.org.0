@@ -1,113 +1,121 @@
-Return-Path: <linux-scsi+bounces-1913-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-1915-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4474483E0A8
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jan 2024 18:43:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3AB483ECAC
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jan 2024 11:10:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B46FDB21220
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jan 2024 17:43:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A60C71F237FA
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jan 2024 10:10:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02664208CE;
-	Fri, 26 Jan 2024 17:43:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C2241EB23;
+	Sat, 27 Jan 2024 10:10:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SPUi2GE1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QuKbOhMk"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8E7200D8
-	for <linux-scsi@vger.kernel.org>; Fri, 26 Jan 2024 17:43:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1921EB35;
+	Sat, 27 Jan 2024 10:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706290994; cv=none; b=Pk4ZY7gK0AKsm9L2GTyufmTXihaG/ypNDQ40z9df2tJWSfIbTFJn9gkgL/MQWr/UhuPczX+NYBtNGs9EHWdDYfWgy3Xf3naOQrX4/ANrtqcJ0Z60JvLMAaYJrxSP2IiztR8xTgpgmV30JLBZGSiEsNtkuO3cHHwVBl2EzOX66pM=
+	t=1706350247; cv=none; b=bmB1VqqzdhdadzPCFmK6VzXIKUFFsRjLL2NAjbKiPG2C7O4M5iIdxS1odcF5x1ZH8fYzT6uOu4ayoDw/L9uOTsIpMbZBg07NFEIbwbDKLbFzKoCqXX8gsOxiA+eDEBuX/bkPxAIHRJxImTO+GOxSVklaMS4yOg/+CpZlt37+rkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706290994; c=relaxed/simple;
-	bh=SXylSozMIFvQcgeeHiv2u7d8n6Xr+YfeABQSd/Jah/o=;
+	s=arc-20240116; t=1706350247; c=relaxed/simple;
+	bh=jSza4nl5ABvCTIqTesQ4ouII2QMVazxvM4Gbtr4uVXw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MxqqBkJTULy+Hw4SJobq7qNnVKbDhdAYAeLkPkpPtjZfHc3h0FolsI/j3o4cLvnnjwAhuJt2rjsTla/WRzmKAUq2AW/OiFYyA3+mn85YIHQmRlxskixUD0PzkRup3L1DodBa5rIB4DxuLtQAH5fLmthlxUdu7KiBmEC70z5DsLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SPUi2GE1; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-40e800461baso13617015e9.3
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Jan 2024 09:43:12 -0800 (PST)
+	 To:Cc:Content-Type; b=f+VOsVNjZA+mBLmuNeCBTuNS8BcBvaUXnB8Q4egsviDe/VuBM4CHXPA/7KGc4CfUTW24tU5K3PGIPtd2XrXoR1tYglahaHjbakp9bEhGK4arob19LQi09Siv6IMGjvdsw2qcb93oCvk1FFqlIe1I3sgrL/w1S3iV1mlrMAPkTm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QuKbOhMk; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-42a8a3973c5so4072851cf.2;
+        Sat, 27 Jan 2024 02:10:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1706290991; x=1706895791; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706350244; x=1706955044; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ggkqhy1FEbzA5h/m9nSB2QSTIebzKmuAmAgA30UHV7c=;
-        b=SPUi2GE1f34Gu8hYOAq6eKwv6nNIrcJlQPPX0gTyIwCcTdYwe+LrThmd3+pijcToeB
-         XGkIbcOMzN9sfzTU1LPBNxDmZIKRMGPPTPPDWeJnFhvaNi61yPr3AWqN6R83qCQbW9Qi
-         QQmKmPzmkV93Vf/ggQiLhmUshFCvUv2Ra93GuI/jq4X1jF+2T7uEp8s3km1y7nMBRH+Z
-         +z3HCFTjqJKtqiv1GvT1J/nu1isqSOfN2DRI9FijjM16wHmzKDKRIFOn6VDEUgjp6tX9
-         ID2YtmOLKY1lon2IcOINmUXdcpY3FrrjItANYw+T8MNxpH7G+ckn5g5ccQrgq99qzJ8u
-         3dZw==
+        bh=B8boM7ORGYNMPVReZtTMFOzEa3BTzmrT4lpyXZ03SE4=;
+        b=QuKbOhMkI2iwWdP+0on4/8AtWkbxBj0BxNuysnj7jsoUdxQLOHBsM0gSSa2mVYFexE
+         EQkzN/zdeiO1orTw0fnCb26emWmkVzmqCnuT9YYafCOAU2uZL0uYaagmuYSQe+u9E7Ua
+         dS+dKCNAULvPYJSBBmSx6OKObt/Akk4G3bgeXQsXhVohVmsbbiyWU9bLNG8aWHrj+q4F
+         7XU8ZZKFqxe3L5SvEs1GKr8CHUOE97q12G8ZgnngmEq0NN+GHtwG6XvZtvi2COO49OKx
+         efrhhqHAI1RDE3uRLRWVvXSGZASL9QZIf7lDcMcNSqbBKxYuhwsA9V6HjpP6yiLCY0bG
+         JtEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706290991; x=1706895791;
+        d=1e100.net; s=20230601; t=1706350244; x=1706955044;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ggkqhy1FEbzA5h/m9nSB2QSTIebzKmuAmAgA30UHV7c=;
-        b=b3PSl6IdCe+j1nbsYBWnpe4Mw02pDWX2W2ZMepqNfXu4FyL+AI7W96gj4A/8d3qZCP
-         zUVj5NTGd0IozWGD68TnxagESQP8Q9fEzXCcwpxgwrM8QfqqmHHmRDxYBFWVJ6iZYS76
-         8Ejrgw/RZ9jcYTphZ6d3kM0wq+W6eAOPB8ZhxhB2hMtq5+IJPz7/kYRmiXEfPFWVFxOi
-         4SWhFtBSRD6b7fUpqpMqjd9KVl/0BTKQl/BuePi7QNMspwWIz5AZiwvxJVovf0UEWv//
-         Md3hA97Kp6emlKBCVXZAL9vSgvcaOl8X1RRo1M0TxBkaSwtHJrpftj2d8qP/vg3Bk6pK
-         llaQ==
-X-Gm-Message-State: AOJu0YzcqDqUAq9fVSktcOZTN3gP4uXvmIkDtohQJeIx3WYO4HAyAyDL
-	tY3OXdlIyxp1+R/LnjxteetC+b3vAwJOZ3EsSsvhgl0jtvSY/WWkBWOQ51umWMVI1kDphs5hyOZ
-	udrbNd+81a7vriqnQiy4RBvmTSSgZmwP6UpKxHQ==
-X-Google-Smtp-Source: AGHT+IGymZGOhPiBKUQdsU+xfemOOTrCKN1ifGOHRfzo2kxHI0JiEurg0pV4VOJN2l1MG+o8Srz9ZjMpBoWYfzOBwbg=
-X-Received: by 2002:a05:600c:3d91:b0:40e:5577:189 with SMTP id
- bi17-20020a05600c3d9100b0040e55770189mr66580wmb.147.1706290990772; Fri, 26
- Jan 2024 09:43:10 -0800 (PST)
+        bh=B8boM7ORGYNMPVReZtTMFOzEa3BTzmrT4lpyXZ03SE4=;
+        b=t/FSKK66l9UyrILW+LDFNR7yv6BTniP7jqYrAAlzxaPr0ZbylhOQssk4OTHUDXyXMN
+         xe4+61YzHE5nG/nXimR0iAm7Bxvk2seKQtkSmyPCkkMtH2O13rnBan7AlkATuoIZuCjp
+         kku8A+mogR3ldICEYHvGSRrhlvAvSzD+IzaaRJIU4eB0j223GgRtJeHGoZOmjYmIQR2I
+         5vkw3RzVHH45/5BIAIw7m5gIo6zvRjFCNGzH3Xyhuyi8t7TFFt0tV8YMG1VX+xrDJBCb
+         jYotZIUdGz2bY9IuKxTWtFRFk6HrgOEQEuv6TvPfS3VWCvJOFLO8ijAD3VKUrsDH0hvB
+         7LNw==
+X-Gm-Message-State: AOJu0YzMLVrp5P8vg2C3D4L6bIX3xfr1bN/32JdddosLsqOz4cNRope6
+	RffHHd1wakRXkZ7vZ1KDWOHAPZtMK3hrOanG3LWtKKpzzeAE07/jJbIcsGxUpp77mt28qF1PMOa
+	da3U3rU55v5OyiX23R0Mk43YSFpXb817+guk=
+X-Google-Smtp-Source: AGHT+IGUiH9HXC26Vu3/anzdVnuqtGlcGQJbaXMTzGJ5DFv7hsAeCFLU6XPgobuQw9kM3iclvcK7hFxD/N8fQjpWGJI=
+X-Received: by 2002:a05:6214:258d:b0:681:9ae1:94f3 with SMTP id
+ fq13-20020a056214258d00b006819ae194f3mr1669408qvb.115.1706350244304; Sat, 27
+ Jan 2024 02:10:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1701540918.git.lduncan@suse.com>
-In-Reply-To: <cover.1701540918.git.lduncan@suse.com>
-From: Lee Duncan <lduncan@suse.com>
-Date: Fri, 26 Jan 2024 09:42:59 -0800
-Message-ID: <CAPj3X_UWL8a3iXxA64bN5NDqWV2Try2-q84fYxaXk5uLCfGezQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] scsi: target: iscsi: Fix two protocol issues
-To: target-devel@vger.kernel.org
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, dbond@suse.com, 
-	hare@suse.de, cleech@redhat.com, michael.christie@oracle.com
+References: <ZaqiPSj1wMrTMdHa@casper.infradead.org>
+In-Reply-To: <ZaqiPSj1wMrTMdHa@casper.infradead.org>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Sat, 27 Jan 2024 12:10:32 +0200
+Message-ID: <CAOQ4uxh1BCmBA3ow130p1FBUrLLRVO2i_DDtAGQWhAzrabmP8Q@mail.gmail.com>
+Subject: Re: [LSF/MM/BPF TOPIC] State Of The Page
+To: Matthew Wilcox <willy@infradead.org>
+Cc: lsf-pc@lists.linux-foundation.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-block@vger.kernel.org, linux-ide@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-nvme@lists.infradead.org, 
+	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Ping.
+On Fri, Jan 19, 2024 at 6:24=E2=80=AFPM Matthew Wilcox <willy@infradead.org=
+> wrote:
+>
+> It's probably worth doing another roundup of where we are on our journey
+> to separating folios, slabs, pages, etc.  Something suitable for people
+> who aren't MM experts, and don't care about the details of how page
+> allocation works.  I can talk for hours about whatever people want to
+> hear about but some ideas from me:
+>
+>  - Overview of how the conversion is going
+>  - Convenience functions for filesystem writers
+>  - What's next?
+>  - What's the difference between &folio->page and page_folio(folio, 0)?
+>  - What are we going to do about bio_vecs?
+>  - How does all of this work with kmap()?
+>
+> I'm sure people would like to suggest other questions they have that
+> aren't adequately answered already and might be of interest to a wider
+> audience.
+>
 
-I believe I've addressed Chris' issues. Chris?
+Matthew,
 
-On Sat, Dec 2, 2023 at 10:45=E2=80=AFAM lduncan@suse.com <lduncan@suse.com>=
- wrote:
->
-> From: Lee Duncan <lduncan@suse.com>
->
-> Recent boot testing using the fastlinq qedi iSCSI Converged Network
-> Adapter and an LIO target uncovered a couple of issues with the
-> kernel iSCSI target driver. The first patch addresses an issue
-> with the handling of iSCSI "immediate commands", which are allowed
-> but not common, and the second patch lowers the noise level of the
-> driver when initiators send PDUs with the read and/or write bits
-> set but no data, which is also allowed. (See RFC 3720)
->
-> Lee Duncan (2):
->   scsi: target: iscsi: handle SCSI immediate commands
->   scsi: target: iscsi: don't warn of R/W when no data
->
->  drivers/target/iscsi/iscsi_target.c      | 17 ++++++-----------
->  drivers/target/iscsi/iscsi_target_util.c | 10 ++++++++--
->  2 files changed, 14 insertions(+), 13 deletions(-)
->
-> --
-> 2.43.0
->
+And everyone else who suggests LSF/MM/BPF topic.
+
+Please do not forget to also fill out the Google form:
+
+          https://forms.gle/TGCgBDH1x5pXiWFo7
+
+So we have your attendance request with suggested topics in our spreadsheet=
+.
+
+Thanks,
+Amir.
 
