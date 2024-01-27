@@ -1,109 +1,204 @@
-Return-Path: <linux-scsi+bounces-1918-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-1932-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11DCD83EF83
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jan 2024 19:43:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AACA883F21A
+	for <lists+linux-scsi@lfdr.de>; Sun, 28 Jan 2024 00:31:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 774F7285355
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jan 2024 18:43:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61B512853AE
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jan 2024 23:31:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84A062CCBA;
-	Sat, 27 Jan 2024 18:43:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9452023773;
+	Sat, 27 Jan 2024 23:29:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lELbwOzz"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cfl0SUTN"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48C1D1E514;
-	Sat, 27 Jan 2024 18:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2E72032F;
+	Sat, 27 Jan 2024 23:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706381022; cv=none; b=j3aPwxKkURCFEexo5jwJR5U6MoJuuc8p89jC/z+y1M1kkP4iDMoy1YzwTzq7/DHbCT2mOpWU/cVKemDkEARBH28pY5+oPmN4lbbjnxsIUhB89XpmvgK/C4Fi5CfOwg1+gmw/dZHSEIxDKbzeeegoL4ZkbORo4Cs1miNCw+TyhDM=
+	t=1706398184; cv=none; b=ckiEhHEKdFuIlhbOkcEltt8Ub/z9YMqSnTYm47pWL2TpI54bJpCBNYdrHArIN5hWjlWNDY4rjidBPf/Hn0Sy5ar6Cx8VSzTXkUS8tu0Mvb722p4slfujafUMlP2fmT+hZt/EDAd95GCAGRMnxxUv2yD7PBH7K2Y/Hu3XS48elr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706381022; c=relaxed/simple;
-	bh=o90Uy09FMG+nY6hJBnszRS178dx2FJoI9DHsL7uc4jI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f/YHG8aheootNFnzcDuuy6G7EkFo8hwOKCOJlrJl8+bHBh9b9J0eEi74OeyrYe4YhHhWKHQuwySPizXyg4Y8KV6SRTnqPd0R3u3S74a4xOeRIc8FrqrmBN4IPRf32JKrCNsHvRtZ7J8xQXriOfAAYnnxhYTMwTm55QSH1GzAB9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lELbwOzz; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=X6dqNNaFcBPAuUj/Qb7BL8mzsncc4vwb10YQ9AHh2wU=; b=lELbwOzzp1TR91on867emJBA1d
-	avobqrdJ8X7yB9badToi0BoMO96MowyanbyF5LaeRj65WWbJbwni699zGz/2EG8LVzbhIQIZQHJ66
-	ZEOhKelSRC9LdHVTE/Qv/LzJsoEhFTcX3pSrMMHV8vraAYReK0RhQVbAp5wv1iF7LCp+D3iQ4GZ6F
-	Ik//ZLI7LL9Eqh3cUFXOhbEM55uQij82k1lfPkCdZw/SJhA7C1ITmkWtfCxI+Q9bSGz2z1LBaiTsZ
-	NUS3eWu46fYn809l7rTxCMLJvNvauvvXIIPMCbg/oSIskf8I7CYTgvFKUE4YX58ztH/r9QBdsy2gv
-	QxiM558g==;
-Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rTneT-00000000400-0bqE;
-	Sat, 27 Jan 2024 18:43:37 +0000
-Date: Sat, 27 Jan 2024 18:43:37 +0000
-From: Matthew Wilcox <willy@infradead.org>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: lsf-pc@lists.linux-foundation.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-block@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-nvme@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] State Of The Page
-Message-ID: <ZbVO2RKhw-dLUMvf@casper.infradead.org>
-References: <ZaqiPSj1wMrTMdHa@casper.infradead.org>
- <yrswihigbp46vlyxqvi3io5pfngcivfwfb3gdlnjs6tzntldbx@mbnrycaujxb3>
+	s=arc-20240116; t=1706398184; c=relaxed/simple;
+	bh=+7sGisfjBDLw3/+65hJ8oE5P46X3obGEXGgOIuz9ZDM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WN4xbYs5aEHyutr32vx6/LRaNluha9nlIAI5O6800j5n/8eftWYQWKAE5pnlBJIYOG+TZmf3t6Sfgu1nj3q3CDxafz6ZsLmFPkSbJZv0sfS5CniqbOTNC1P5L+CnHHnjebDH+4OA6TYsLCcodh0jl8ZSxqbwijOtgqZgHPu1epo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=cfl0SUTN; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40RNQLfd032284;
+	Sat, 27 Jan 2024 23:26:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=ZtabC2d
+	xcshri/iz1qUsrq8UwR1bNPdOel6KB0APenU=; b=cfl0SUTNFei8oB1OgxmCymf
+	Fd55UL9id5JYRDZW/RGhR6frlnO5M4c9WyeooGnVmN44ewHfS+SBBy5BaBrtoYhW
+	Zoc3/Mx9VoRkEKrplwzxpvn8xMUq9QwRzcrS1M86vysyOd/gYPDwszboc/mDRHMl
+	KDqrt1t1ImzXvdsC47RhN/waFn/Q9zpP3I0kVF02XBBZP6nw+DC+vpSYSBB7Htev
+	5SZVPfrRB0/rthcWsh8Sn/Fpnexmd+dmvgzfDQRWS/OGdtjsLqabiQXCi0I7mT2p
+	ipBFHj6Gx4u0dY0T2HevnRU9cFNCxDmURn7RVc6Vb0b88ws1MQypmRCQx90GksA=
+	=
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vvq6shb8t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 27 Jan 2024 23:26:20 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40RNQJmV031151
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 27 Jan 2024 23:26:19 GMT
+Received: from hu-gaurkash-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Sat, 27 Jan 2024 15:26:16 -0800
+From: Gaurav Kashyap <quic_gaurkash@quicinc.com>
+To: <linux-arm-msm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <andersson@kernel.org>, <ebiggers@google.com>,
+        <neil.armstrong@linaro.org>, <srinivas.kandagatla@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <robh+dt@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <kernel@quicinc.com>, <linux-crypto@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_omprsing@quicinc.com>,
+        <quic_nguyenb@quicinc.com>, <bartosz.golaszewski@linaro.org>,
+        <konrad.dybcio@linaro.org>, <ulf.hansson@linaro.org>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>, <mani@kernel.org>,
+        <davem@davemloft.net>, <herbert@gondor.apana.org.au>,
+        Gaurav Kashyap <quic_gaurkash@quicinc.com>
+Subject: [PATCH v4 00/15] Hardware wrapped key support for qcom ice and ufs
+Date: Sat, 27 Jan 2024 15:13:58 -0800
+Message-ID: <20240127232436.2632187-1-quic_gaurkash@quicinc.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yrswihigbp46vlyxqvi3io5pfngcivfwfb3gdlnjs6tzntldbx@mbnrycaujxb3>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KjY5zR7Wb7Z5kNM7GdqgFixxWWs-mXHx
+X-Proofpoint-ORIG-GUID: KjY5zR7Wb7Z5kNM7GdqgFixxWWs-mXHx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-25_14,2024-01-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ phishscore=0 adultscore=0 clxscore=1015 malwarescore=0 priorityscore=1501
+ suspectscore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=999
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401190000 definitions=main-2401270178
 
-On Sat, Jan 27, 2024 at 12:57:45PM -0500, Kent Overstreet wrote:
-> On Fri, Jan 19, 2024 at 04:24:29PM +0000, Matthew Wilcox wrote:
-> >  - What are we going to do about bio_vecs?
-> 
-> For bios and biovecs, I think it's important to keep in mind the
-> distinction between the code that owns and submits the bio, and the
-> consumer underneath.
-> 
-> The code underneath could just as easily work with pfns, and the code
-> above got those pages from somewhere else, so it doesn't _need_ the bio
-> for access to those pages/folios (it would be a lot of refactoring
-> though).
-> 
-> But I've been thinking about going in a different direction - what if we
-> unified iov_iter and bio? We've got ~3 different scatter-gather types
-> that an IO passes through down the stack, and it would be lovely if we
-> could get it down to just one; e.g. for DIO, pinning pages right at the
-> copy_from_user boundary.
+The fourth iteration of patches that add support to Qualcomm ICE (Inline Crypto Engine) for hardware wrapped keys using Qualcomm Hardware Key Manager (HWKM)
 
-Yes, but ...
+These patches do the following:
+- Address comments from previous versions (https://lore.kernel.org/linux-arm-msm/20231122053817.3401748-1-quic_gaurkash@quicinc.com/)
+- Tested on top of Eric's latest fscrypt and block set: https://lore.kernel.org/all/20231104211259.17448-1-ebiggers@kernel.org/
+- Rebased and tested on top of Linaro's SHMBridge patches: (https://lkml.org/lkml/2023/11/20/555)
 
-One of the things that Xen can do and Linux can't is I/O to/from memory
-that doesn't have an associated struct page.  We have all kinds of hacks
-in place to get around that right now, and I'd like to remove those.
+Explanation and use of hardware-wrapped-keys can be found here:
+Documentation/block/inline-encryption.rst (https://lore.kernel.org/all/20231104211259.17448-1-ebiggers@kernel.org/)
 
-Since we want that kind of memory (lets take, eg, GPU memory as an
-example) to be mappable to userspace, and we want to be able to do DIO
-to that memory, that points us to using a non-page-based structure right
-from the start.  Yes, if it happens to be backed by pages we need to 'pin'
-them in some way (I'd like to get away from per-page or even per-folio
-pinning, but we'll see about that), but the data structure that we use
-to represent that memory as it moves through the I/O subsystem needs to
-be physical address based.
+Testing: 
+Test platform: SM8650 MTP
 
-So my 40,000 foot view is that we do something like get_user_phyrs()
-at the start of DIO, pas the phyr to the filesystem; the filesystem then
-passes one or more phyrs to the block layer, the block layer gives the
-phyrs to the driver which DMA maps the phyr.
+The changes were tested by mounting initramfs and running the fscryptctl
+tool (Ref: https://github.com/ebiggers/fscryptctl/tree/wip-wrapped-keys) to
+generate and prepare keys, as well as to set policies on folders, which
+consequently invokes disk encryption flows through UFS.
 
-Yes, the IO completion path (for buffered IO) needs to figure out which
-folios are decsribed by this phyr, but that's a phys_to_folio() call away.
+Tested both standard and wrapped keys (Removing qcom,ice-use-hwkm from dtsi will support using standard keys)
+
+Steps to test:
+
+The following configs were enabled:
+CONFIG_BLK_INLINE_ENCRYPTION=y
+CONFIG_QCOM_INLINE_CRYPTO_ENGINE=m
+CONFIG_FS_ENCRYPTION_INLINE_CRYPT=y
+CONFIG_SCSI_UFS_CRYPTO=y
+
+Flash boot image to shell and run the following commands
+
+Creating and preparing keys
+- mkfs.ext4 -F -O encrypt,stable_inodes /dev/disk/by-partlabel/userdata
+- mount /dev/disk/by-partlabel/userdata -o inlinecrypt /mnt
+- ./fscryptctl generate_hw_wrapped_key /dev/disk/by-partlabel/userdata > /mnt/key.longterm  OR
+   dd if=/dev/zero bs=32 count=1 | tr '\0' 'X' \ | fscryptctl import_hw_wrapped_key /dev/disk/by-partlabel/userdata > /mnt/key.longterm
+- ./fscryptctl prepare_hw_wrapped_key /dev/disk/by-partlabel/userdata < /mnt/key.longterm > /tmp/key.ephemeral
+- ./fscryptctl add_key --hw-wrapped-key < /tmp/key.ephemeral /mnt
+
+Create a folder and associate created keys with the folder
+- rm -rf /mnt/dir
+- mkdir /mnt/dir
+- ./fscryptctl set_policy --hw-wrapped-key --iv-ino-lblk-64 "$keyid" /mnt/dir
+- dmesg > /mnt/dir/test.txt
+- sync
+
+- Reboot
+- mount /dev/disk/by-partlabel/userdata -o inlinecrypt /mnt
+- ls /mnt/dir (You should see an encrypted file)
+- ./fscryptctl prepare_hw_wrapped_key /dev/disk/by-partlabel/userdata < /mnt/key.longterm > /tmp/key.ephemeral
+- ./fscryptctl add_key --hw-wrapped-key < /tmp/key.ephemeral /mnt
+- cat /mnt/dir/test.txt
+
+NOTE: Evicting a key with HWKM is not supported in the current SCM call for HWKM v2 chipsets, TZ already supports a different call for this.
+Changes will be added separately for these after further internal discussions. But this should not stop merging the existing patches.
+
+Merge Strategy:
+
+This is an open-ended question to the community and the respective component maintainers.
+The changes have the following components.
+
+- Fscrypt and block patches (From Eric Biggers)
+- SHMBridge patches (Bartosz Golaszewski)
+- Qualcomm SCM (This patchset)
+- Qualcomm ICE (This patchset)
+- UFS Core ((This patchset))
+- Qualcomm UFS Host (This patchset)
+
+It would be ideal if one maintainer can take in all the changes together since working with many immutable branches shared with each other might get tricky.
+
+Gaurav Kashyap (15):
+  ice, ufs, mmc: use blk_crypto_key for program_key
+  qcom_scm: scm call for deriving a software secret
+  qcom_scm: scm call for create, prepare and import keys
+  soc: qcom: ice: add hwkm support in ice
+  soc: qcom: ice: support for hardware wrapped keys
+  soc: qcom: ice: support for generate, import and prepare key
+  ufs: core: support wrapped keys in ufs core
+  ufs: core: add support to derive software secret
+  ufs: core: add support for generate, import and prepare keys
+  ufs: host: wrapped keys support in ufs qcom
+  ufs: host: implement derive sw secret vop in ufs qcom
+  ufs: host: support for generate, import and prepare key
+  dt-bindings: crypto: ice: document the hwkm property
+  arm64: dts: qcom: sm8650: add hwkm support to ufs ice
+  arm64: dts: qcom: sm8550: add hwkm support to ufs ice
+
+ .../crypto/qcom,inline-crypto-engine.yaml     |  10 +
+ arch/arm64/boot/dts/qcom/sm8550.dtsi          |   3 +-
+ arch/arm64/boot/dts/qcom/sm8650.dtsi          |   3 +-
+ drivers/firmware/qcom/qcom_scm.c              | 247 ++++++++++++++
+ drivers/firmware/qcom/qcom_scm.h              |   4 +
+ drivers/mmc/host/cqhci-crypto.c               |   7 +-
+ drivers/mmc/host/cqhci.h                      |   2 +
+ drivers/mmc/host/sdhci-msm.c                  |   6 +-
+ drivers/soc/qcom/ice.c                        | 315 +++++++++++++++++-
+ drivers/ufs/core/ufshcd-crypto.c              |  87 ++++-
+ drivers/ufs/host/ufs-qcom.c                   |  61 +++-
+ include/linux/firmware/qcom/qcom_scm.h        |   7 +
+ include/soc/qcom/ice.h                        |  18 +-
+ include/ufs/ufshcd.h                          |  22 ++
+ 14 files changed, 754 insertions(+), 38 deletions(-)
+
+-- 
+2.43.0
+
 
