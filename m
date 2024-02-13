@@ -1,77 +1,75 @@
-Return-Path: <linux-scsi+bounces-2400-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-2402-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 362A8852729
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Feb 2024 02:57:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9128C85272D
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Feb 2024 02:57:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 452041C24F6B
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Feb 2024 01:57:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57C94287189
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Feb 2024 01:57:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 697A717CD;
-	Tue, 13 Feb 2024 01:57:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F306FD1;
+	Tue, 13 Feb 2024 01:57:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jEz9Qc4F"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mmyJ595M"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AB8F1385;
-	Tue, 13 Feb 2024 01:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D0B63A1
+	for <linux-scsi@vger.kernel.org>; Tue, 13 Feb 2024 01:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707789447; cv=none; b=s2wYJjlC1Zqo4N524uCc8bHl8xelOtd/UEE2uPpsbnioKsnx9jIDFtuckJuJ/F9ZzaOYfShUR/UNBIWBWBy9qyQMndo2yZh9NVPfIyDE2N7O6yiA89Tc4OswG/JrxqRYP9uFGJXPeUYbnqKrluCX7U8/2ovNHbRUJvQk4Wesi+k=
+	t=1707789474; cv=none; b=Gkd+AHz9PZzEDqZas/LOCqMiKEPW9UU4rKxPFL3Ie09K7lyo+wwPBMaS5ziJJ0Lkl4pSoTAB7l4YMSQtsUwMyh37rGlkwIldqrAQ5L6UyTCzd5ielLf/RFiqiDYw4t6JFlkWDGL+Wv5nyumAt0slci8ma5VRGGcBM/nGLnURU4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707789447; c=relaxed/simple;
-	bh=a5yqHZbc/GrGOemVLKPdqs679lt+QCaXY3iHVV+qpcI=;
+	s=arc-20240116; t=1707789474; c=relaxed/simple;
+	bh=Eda0qraDzmS8PbUG6aeUDNSTEEi0oSfFgrx9n6fzXGI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JfJgjd2j+OzbxbLtUj5/Dsr4vGqwjfw+wt14Tx+ahCBRl6465z9/RXvh9eQhVVfcvJcxwsKAjtYJQ0BK77x5oDDzPM2rdiDZDoIG5Ndrzo0lsUH41Jodc9gWBe2U/MqnjNThRBic9tgHbgr0iSuH1LteY1MzoRMK1QLFoUSUxhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=jEz9Qc4F; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=WLYBwHa/02XlXG/ar1YJmc5VeobhtWH8syY4uAP3lrAsL2kYRzuQmIoDSDSK5kNjMwxDjqoQlHqnMoeBwYuIzt3keX/VXVxvTr0oCWyAcbkEdC82PmwNvIYwYY6h4SPnDLOi+SPA/PLHqk6Ou1+c5u5IwSd5C0KjvU0SMRf4mSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=mmyJ595M; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41D1qGt4016532;
-	Tue, 13 Feb 2024 01:57:21 GMT
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41D1hmx2006419;
+	Tue, 13 Feb 2024 01:57:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=xwHkmHak5wlEGc78J1yvYxxvCkivXANayJ8zzsjkIc8=;
- b=jEz9Qc4FYr6DGeu1I158YuL1laUdit0+uDLnCjw6RRLDCQDKOBIHiiFvoTyQOZb/ldq5
- 7QzXkWLDY8rzIQHPDpc0UQ5o9I/9qzUvCO4TgRKcOfGddD2tn1JlcVmlLDvfgAEfulZ4
- SsDtEGsI3H3Sd4jFoEx2/SU849Gtgms2+k4+konmS5BRMQe8PdMprU89zMcubyoNTU9S
- 6BpFPypKl+6o8Phcir7nJTcOWAMK7B88vTCTtvwKn8BR9Hh5AqfdhhXoLnpvA3s6RVLj
- p1EYyNkxX9fK1otLONQAoINJlavMTVx9QxwtuIoq+T3wfcN6bSp8Xfdb682SaXedFZx+ WQ== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3w7y4rr04j-1
+ bh=hmuZT7EtKJ11FDKMBvgrGj/E6kxV8Vv0eCEF8mb2bbM=;
+ b=mmyJ595MkQ9bkDHc+rut2qaJZvrJBKoPMFM5fBLzM/1RRZa6alZfqmTH7hTEbIfaCxg7
+ nJm4J2igXqQIwZLCE+xFujuE4QCOcwhm6pjCxV/bpdbS8rOVP4ZJkQfeTyR1nIVpsPCu
+ rB252fHavpSZHw/w2PhM20D8L7gDrPG/TnieJg1aI5dyRHI4cj+UjRnFEnrr5UDZjVaj
+ EFlDgdMdEEO0PL1vtjxSVnCcQgLDn7eYH8aX1LJibcfNZZt+8sqGjs5mTD2Q96PUUL7B
+ 1dbbcQNYiz8jtZIOrHpAh4TuE7oI5YSiBVzwJpq5CWwaWveOHgeS+my6JiXorG8IRHw0 oQ== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3w7xt500xh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 13 Feb 2024 01:57:21 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 41D1IviR000608;
-	Tue, 13 Feb 2024 01:57:20 GMT
+	Tue, 13 Feb 2024 01:57:50 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 41D10gwl024566;
+	Tue, 13 Feb 2024 01:57:49 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3w5yk6ms0d-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3w5ykcw3ac-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 13 Feb 2024 01:57:20 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41D1vJGE016701;
-	Tue, 13 Feb 2024 01:57:20 GMT
+	Tue, 13 Feb 2024 01:57:49 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41D1vm1h022232;
+	Tue, 13 Feb 2024 01:57:49 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3w5yk6ms05-2;
-	Tue, 13 Feb 2024 01:57:20 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3w5ykcw3a9-1;
+	Tue, 13 Feb 2024 01:57:48 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: mlombard@redhat.com, d.bogdanov@yadro.com, me@xecycle.info,
-        target-devel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        james.bottomley@hansenpartnership.com,
-        Mike Christie <michael.christie@oracle.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v2 1/1] scsi: target: Fix unmap setup during configuration
-Date: Mon, 12 Feb 2024 20:57:10 -0500
-Message-ID: <170778915958.2192303.12158894712146810239.b4-ty@oracle.com>
+To: linux-scsi@vger.kernel.org, Justin Tee <justintee8345@gmail.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, jsmart2021@gmail.com,
+        justin.tee@broadcom.com, himanshu.madhani@oracle.com
+Subject: Re: [PATCH v2 00/17] Update lpfc to revision 14.4.0.0
+Date: Mon, 12 Feb 2024 20:57:41 -0500
+Message-ID: <170778686835.2103627.3025860483050076365.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20240209215247.5213-1-michael.christie@oracle.com>
-References: <20240209215247.5213-1-michael.christie@oracle.com>
+In-Reply-To: <20240131185112.149731-1-justintee8345@gmail.com>
+References: <20240131185112.149731-1-justintee8345@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -83,28 +81,61 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-12_20,2024-02-12_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=793 phishscore=0 mlxscore=0
- bulkscore=0 spamscore=0 malwarescore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2402130011
-X-Proofpoint-ORIG-GUID: ASnPByo9VY9geFyxGDGpkyxsmO92E4Zp
-X-Proofpoint-GUID: ASnPByo9VY9geFyxGDGpkyxsmO92E4Zp
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0
+ mlxlogscore=999 malwarescore=0 mlxscore=0 spamscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402130011
+X-Proofpoint-GUID: JGXsBFm06cItdI0-wGssnTbXhq_T5msr
+X-Proofpoint-ORIG-GUID: JGXsBFm06cItdI0-wGssnTbXhq_T5msr
 
-On Fri, 09 Feb 2024 15:52:47 -0600, Mike Christie wrote:
+On Wed, 31 Jan 2024 10:50:55 -0800, Justin Tee wrote:
 
-> This issue was found and also debugged by Carl Lei <me@xecycle.info>.
+> Update lpfc to revision 14.4.0.0
 > 
-> If the device is not enabled, iblock/file will have not setup their
-> se_device to bdev/file mappings. If a user tries to config the unmap
-> settings at this time, we will then crash trying to access a NULL
-> pointer where the bdev/file should be.
+> This patch set contains fixes identified by static code analyzers, updates
+> to log messaging, bug fixes related to discovery and congestion management,
+> and clean up patches regarding the abuse of shost lock in the driver.
+> 
+> The patches were cut against Martin's 6.9/scsi-queue tree.
 > 
 > [...]
 
-Applied to 6.8/scsi-fixes, thanks!
+Applied to 6.9/scsi-queue, thanks!
 
-[1/1] scsi: target: Fix unmap setup during configuration
-      https://git.kernel.org/mkp/scsi/c/4cbec7e89a41
+[01/17] lpfc: Initialize status local variable in lpfc_sli4_repost_sgl_list
+        https://git.kernel.org/mkp/scsi/c/3d0f9342ae20
+[02/17] lpfc: Fix possible memory leak in lpfc_rcv_padisc
+        https://git.kernel.org/mkp/scsi/c/2ae917d4bcab
+[03/17] lpfc: Use sg_dma_len API to get struct scatterlist's length
+        https://git.kernel.org/mkp/scsi/c/aa7674bd8da5
+[04/17] lpfc: Remove D_ID swap log message from trace event logger
+        https://git.kernel.org/mkp/scsi/c/b76beac1a4f5
+[05/17] lpfc: Allow lpfc_plogi_confirm_nport logic to execute for Fabric nodes
+        https://git.kernel.org/mkp/scsi/c/e1b3acad0d7b
+[06/17] lpfc: Remove NLP_RCV_PLOGI early return during RSCN processing for ndlps
+        https://git.kernel.org/mkp/scsi/c/a801d57a110d
+[07/17] lpfc: Fix failure to delete vports when discovery is in progress
+        https://git.kernel.org/mkp/scsi/c/7bb6cb7bb21c
+[08/17] lpfc: Add condition to delete ndlp object after sending BLS_RJT to an ABTS
+        https://git.kernel.org/mkp/scsi/c/900db34ad265
+[09/17] lpfc: Save FPIN frequency statistics upon receipt of peer cgn notifications
+        https://git.kernel.org/mkp/scsi/c/6ca396c5e3c4
+[10/17] lpfc: Move handling of reset congestion statistics events
+        https://git.kernel.org/mkp/scsi/c/140bd888ed0d
+[11/17] lpfc: Remove shost_lock protection for fc_host_port shost APIs
+        https://git.kernel.org/mkp/scsi/c/4be4ad6cd237
+[12/17] lpfc: Change nlp state statistic counters into atomic_t
+        https://git.kernel.org/mkp/scsi/c/0dfd9cbc187c
+[13/17] lpfc: Protect vport fc_nodes list with an explicit spin lock
+        https://git.kernel.org/mkp/scsi/c/9bb36777d0a2
+[14/17] lpfc: Change lpfc_vport fc_flag member into a bitmask
+        https://git.kernel.org/mkp/scsi/c/a645b8c1f5bc
+[15/17] lpfc: Change lpfc_vport load_flag member into a bitmask
+        https://git.kernel.org/mkp/scsi/c/e39811bec6b1
+[16/17] lpfc: Update lpfc version to 14.4.0.0
+        https://git.kernel.org/mkp/scsi/c/5b22878daf48
+[17/17] lpfc: Copyright updates for 14.4.0.0 patches
+        https://git.kernel.org/mkp/scsi/c/ea4044e4dd0d
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
