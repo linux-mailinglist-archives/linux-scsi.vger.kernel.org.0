@@ -1,167 +1,322 @@
-Return-Path: <linux-scsi+bounces-2532-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-2534-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B592859749
-	for <lists+linux-scsi@lfdr.de>; Sun, 18 Feb 2024 14:57:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B6A1859EF9
+	for <lists+linux-scsi@lfdr.de>; Mon, 19 Feb 2024 09:59:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7E791C20B07
-	for <lists+linux-scsi@lfdr.de>; Sun, 18 Feb 2024 13:57:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B72691F23722
+	for <lists+linux-scsi@lfdr.de>; Mon, 19 Feb 2024 08:59:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E0686D1B9;
-	Sun, 18 Feb 2024 13:56:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D821C225CC;
+	Mon, 19 Feb 2024 08:59:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BKPiNtPd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PskdjkVh"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728596BFD9
-	for <linux-scsi@vger.kernel.org>; Sun, 18 Feb 2024 13:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B4F224F5
+	for <linux-scsi@vger.kernel.org>; Mon, 19 Feb 2024 08:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708264603; cv=none; b=gSn0/HtW6//KELR8L3+jWNJBtRag6V3ay8hZSJDVZxYaKJDgiZ3HQTGNVBUGDtm6EO8gdLRyBl4P+o5o+/EO9mUaSBzohKGNP05GY3c5qShInr03VlpTiQXOCKd88vmZf7oV2k+Oxa2+6Zi0Vnub3DdSWAiiyum8Ra9kVjJUIA8=
+	t=1708333178; cv=none; b=VwDX50fucSV6SS+CJFq+yhDclSpp06EcHcTNk0tZ2OA9aTYBYSrdDzZfJFvhcw8m8gRbkfNXGYsC95FknFD8mrrF+JUwx/B81PdYYiYuHh3xHwIQ0Xcab5EZysVTnYw8c00S+ctsbpkSXo9gvDKfvHAh5I4PaP07CXWnSn7pTDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708264603; c=relaxed/simple;
-	bh=5/2tUPFDY8rn6BKKryQEGZNAdZyZ7qK6H/ztEl0/dfM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sJu6+ZXFkXfwf1Dz2x30kZywEL6itdTtunbGLJSZL1gWNox+4AX0U7wW+1rOacJ+GVWLq0frlw2faxxb4n7cIMgDWTcrtlAwcO0K2Wnhw5lcYOSzkjvqps9xwUM2CWL2EWR02IZ/P93DMs2knq0dbupOfwdkQMV2ofFpGX6Dqb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BKPiNtPd; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-512ab55fde6so751923e87.2
-        for <linux-scsi@vger.kernel.org>; Sun, 18 Feb 2024 05:56:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708264599; x=1708869399; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qVoA1ANzdbe0FJlv0J4O2Wqp7VzCUhtM15EgEKGlLeo=;
-        b=BKPiNtPdHraV9Ffm4LdMVta+tmdDUyrqZvBgDqrR/wK6hh4sAg0Pc5pkeY030ulvHW
-         CfvvOr9P9g1pHV9g9SoT2RrcHMGwKVSBKlvwrtu/rePNY7/iLFUGCyR0soivkbKqtllD
-         E96sGsmClE5DW0Ry6HnooBBd0QuoFVlcOvO7eLkAywboXBWlLhw9FzSO6cckxAjCzmIN
-         WegSKj7u3Gy8cuenExYEsbUcxjRNYDYYeSYtIe/SfS4yj7+veB6aNrQmG08g40SzrzHl
-         /SRPEyl7x5nHg2BWqSAi8IB8yekQP5eU9ghZEGo6s3FMjZt+dVLB3cBTf3UUnm/gRj00
-         RP3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708264599; x=1708869399;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qVoA1ANzdbe0FJlv0J4O2Wqp7VzCUhtM15EgEKGlLeo=;
-        b=TE3JLZ/YGZaB6SQ7PxS32vXoqQqNRRpI/3dGl2rW69hYd+7zB8+drSRz3SF7y6XLtn
-         4p2RonCXDxj+dF0+HLZNYdHRAEMG2Dy6VG8vfCy13cwXcqm7tYo1+Iichg3TSvDruJPX
-         A9Fg/TB27T/qTd1HfKF/16xcOSPG8g8eyIym0ZGy4swreCWtc6tPn5OsNpSTNRXo6m1K
-         4MzY+oKzvn0AVb1NRnb3Nw1JkUj5xRubepNNB9VOB0QFTzM4Ouwi+EkiSYcI36doulZr
-         HnW6jc1BKVANy3PRSrh7DTUIaRGJVQ0GTVE5NkHUYYyq7ffzK+/DxSuBaOd68UENtXhO
-         ixKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXbZQitXT2YWC6LJ03x3Kq8/SW3iuR/gt3ZdB3pDxkdrWT/QS+FXT/njW0ai23gv9jIhSiBMb4HrsHCYG535BPb+VDFFvyKzV0KrA==
-X-Gm-Message-State: AOJu0Yw/6MI68OU+EZDHzyuTGCjcKt4a3h/aMvFL9O61uuNdMn4mYnNS
-	Al2/J/pS3K8e2Lu1+dik2rorjzFZy2r4I2yKOpSzCpu32rJI4MJ5ndAkbi+SC1aMEtHVH6maSbJ
-	G
-X-Google-Smtp-Source: AGHT+IHlNOGJwWnLzPunxcunoXNUiKAL4QraL+pMHJvkl+d6rEs5Suy6efn7K6MOWQsV9Cwe+MbokQ==
-X-Received: by 2002:a05:6512:3485:b0:512:b2ff:aaa5 with SMTP id v5-20020a056512348500b00512b2ffaaa5mr294158lfr.20.1708264599751;
-        Sun, 18 Feb 2024 05:56:39 -0800 (PST)
-Received: from umbar.lan ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id w9-20020a05651204c900b005119fdbac87sm548698lfq.289.2024.02.18.05.56.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Feb 2024 05:56:39 -0800 (PST)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Sun, 18 Feb 2024 15:56:38 +0200
-Subject: [PATCH v3 5/5] arm64: dts: qcom: msm8996: drop source clock
- entries from the UFS node
+	s=arc-20240116; t=1708333178; c=relaxed/simple;
+	bh=ikmZhADSrUsDZIz7zPd91If5CKDROuuLkYgqZftl+Z8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=V954KNAXpUqNLKQYEM65YMDDKfLrVH+OxLl/E8pSIqie5lV+xLcaip54eJkPkfE49h0LBXnNZBkHrwNnDzDkAasYblXPHdMCjOqKLoU6CF8kEOCHdMGEU8U3MjWubp4qz1nAOvRYg396DM1sX2sIBgXE+SPF2RXZw8b1uNxqEdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PskdjkVh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 784DFC43394;
+	Mon, 19 Feb 2024 08:59:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708333178;
+	bh=ikmZhADSrUsDZIz7zPd91If5CKDROuuLkYgqZftl+Z8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=PskdjkVhi/MSQtL5FTwMmmU3O0gotS5+k7/zcxSICuexhEPH6cG43hET/oBBZscUf
+	 sJQKhysuj0vJ3F7HrlDHsIYCXIZlgoi4Tym8gJaaJzZhs4qTi7ESaKbrHDafMxsTjP
+	 opbsU395VYCTCGnds0vaj7G6mHf2dFQAoa3pAySfFFDiKmuBpkgdg7TFwhGlY7t6MN
+	 Z6VWdMcBDYmEFTUhzA5mzW5+IKtqHNAxFjZJJf635BzDGTzbHCOllbLSh4BpFt3050
+	 QeDGEVTp4IBtc53px3vDYwH1xyg4ULnpM3Uriv/2aG5E96C/ki3Cb6X2U79mOxmmbH
+	 GGLB5ZTtusm4A==
+From: hare@kernel.org
+To: Christoph Hellwig <hch@lst.de>
+Cc: Keith Busch <kbusch@kernel.org>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	James Smart <james.smart@broadcom.com>,
+	linux-nvme@lists.infradead.org,
+	linux-scsi@vger.kernel.org,
+	Hannes Reinecke <hare@suse.de>
+Subject: [PATCH RFC] nvme-fc: FPIN link integrity handling
+Date: Mon, 19 Feb 2024 09:59:29 +0100
+Message-Id: <20240219085929.31255-1-hare@kernel.org>
+X-Mailer: git-send-email 2.35.3
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240218-msm8996-fix-ufs-v3-5-40aab49899a3@linaro.org>
-References: <20240218-msm8996-fix-ufs-v3-0-40aab49899a3@linaro.org>
-In-Reply-To: <20240218-msm8996-fix-ufs-v3-0-40aab49899a3@linaro.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, 
- "James E.J. Bottomley" <jejb@linux.ibm.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Nitin Rawat <quic_nitirawa@quicinc.com>, Can Guo <quic_cang@quicinc.com>, 
- Naveen Kumar Goud Arepalli <quic_narepall@quicinc.com>, 
- Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
- Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
- Andy Gross <agross@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org, 
- devicetree@vger.kernel.org, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1595;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=5/2tUPFDY8rn6BKKryQEGZNAdZyZ7qK6H/ztEl0/dfM=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBl0gyT5VUkDlw8c6k5qZmwVfZjWiSZypdHWwl+v
- X7gZ/C9q+OJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZdIMkwAKCRCLPIo+Aiko
- 1Z7vB/9sWdR56Hve+vaWP2jvHtgdAf5iIaAwRBMU8brmRi0Hg/Z38UWqHf2hhu/kgMc7lQdb9eR
- dGCJs8fFsoyOSVqpW1ps9fxTqujpVSNqCzZDW/s5w2cnHHMhTiFN03/iuJ7mN9McCoe+1WYpiw5
- ST1otAxFE+J7gF1/Qb0Y//ol0yXnzUxF2IKeN/xu5zvDerbQLnFStjBV0wKMUR075hn/LSSHsSS
- p6agOKhlF4U0RgFLDFKX9CFcODQRi+1oqdedAJs7ENH5R8udTaxKRCJAzTje948LXOSwHXbCVlY
- y+n/BmS2VkkqSScP6aVyXKX1isLB0fwPZyqqZ9UGG5+CGKwm
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+Content-Transfer-Encoding: 8bit
 
-There is no need to mention and/or to touch in any way the intermediate
-(source) clocks. Drop them from MSM8996 UFSHCD schema, making it follow
-the example lead by all other platforms.
+From: Hannes Reinecke <hare@suse.de>
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+FPIN LI (link integrity) messages are received when the attached
+fabric detects hardware errors. In response to these messages the
+affected ports should not be used for I/O, and only put back into
+service once the ports had been reset as then the hardware might
+have been replaced.
+This patch adds a new controller flag 'NVME_CTRL_TRANSPORT_BLOCKED'
+which will be checked during multipath path selection, causing the
+path to be skipped.
+
+Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/nvme/host/core.c       |  13 ++--
+ drivers/nvme/host/fc.c         | 108 +++++++++++++++++++++++++++++++++
+ drivers/nvme/host/multipath.c  |   2 +
+ drivers/nvme/host/nvme.h       |   1 +
+ drivers/scsi/lpfc/lpfc_els.c   |   6 +-
+ drivers/scsi/qla2xxx/qla_isr.c |   1 +
+ include/linux/nvme-fc-driver.h |   3 +
+ 7 files changed, 129 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index ce94e2af6bc5..f18d80a97bbf 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -2047,24 +2047,20 @@ ufshc: ufshc@624000 {
- 			power-domains = <&gcc UFS_GDSC>;
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index eed3e22e24d9..5e9a0cf43636 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -750,10 +750,14 @@ blk_status_t nvme_fail_nonready_command(struct nvme_ctrl *ctrl,
  
- 			clock-names =
--				"core_clk_src",
- 				"core_clk",
- 				"bus_clk",
- 				"bus_aggr_clk",
- 				"iface_clk",
--				"core_clk_unipro_src",
- 				"core_clk_unipro",
- 				"core_clk_ice",
- 				"ref_clk",
- 				"tx_lane0_sync_clk",
- 				"rx_lane0_sync_clk";
- 			clocks =
--				<&gcc UFS_AXI_CLK_SRC>,
- 				<&gcc GCC_UFS_AXI_CLK>,
- 				<&gcc GCC_SYS_NOC_UFS_AXI_CLK>,
- 				<&gcc GCC_AGGRE2_UFS_AXI_CLK>,
- 				<&gcc GCC_UFS_AHB_CLK>,
--				<&gcc UFS_ICE_CORE_CLK_SRC>,
- 				<&gcc GCC_UFS_UNIPRO_CORE_CLK>,
- 				<&gcc GCC_UFS_ICE_CORE_CLK>,
- 				<&rpmcc RPM_SMD_LN_BB_CLK>,
-@@ -2072,8 +2068,6 @@ ufshc: ufshc@624000 {
- 				<&gcc GCC_UFS_RX_SYMBOL_0_CLK>;
- 			freq-table-hz =
- 				<100000000 200000000>,
--				<100000000 200000000>,
--				<0 0>,
- 				<0 0>,
- 				<0 0>,
- 				<0 0>,
-
+ 	if (state != NVME_CTRL_DELETING_NOIO &&
+ 	    state != NVME_CTRL_DELETING &&
+-	    state != NVME_CTRL_DEAD &&
+-	    !test_bit(NVME_CTRL_FAILFAST_EXPIRED, &ctrl->flags) &&
+-	    !blk_noretry_request(rq) && !(rq->cmd_flags & REQ_NVME_MPATH))
+-		return BLK_STS_RESOURCE;
++	    state != NVME_CTRL_DEAD) {
++		if (!test_bit(NVME_CTRL_FAILFAST_EXPIRED, &ctrl->flags) &&
++		    !blk_noretry_request(rq) &&
++		    !(rq->cmd_flags & REQ_NVME_MPATH))
++			return BLK_STS_RESOURCE;
++		if (test_bit(NVME_CTRL_TRANSPORT_BLOCKED, &ctrl->flags))
++			return BLK_STS_TRANSPORT;
++	}
+ 	return nvme_host_path_error(rq);
+ }
+ EXPORT_SYMBOL_GPL(nvme_fail_nonready_command);
+@@ -4575,6 +4579,7 @@ int nvme_init_ctrl(struct nvme_ctrl *ctrl, struct device *dev,
+ 	WRITE_ONCE(ctrl->state, NVME_CTRL_NEW);
+ 	ctrl->passthru_err_log_enabled = false;
+ 	clear_bit(NVME_CTRL_FAILFAST_EXPIRED, &ctrl->flags);
++	clear_bit(NVME_CTRL_TRANSPORT_BLOCKED, &ctrl->flags);
+ 	spin_lock_init(&ctrl->lock);
+ 	mutex_init(&ctrl->scan_lock);
+ 	INIT_LIST_HEAD(&ctrl->namespaces);
+diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
+index 5e226728c822..fdf77f5cb944 100644
+--- a/drivers/nvme/host/fc.c
++++ b/drivers/nvme/host/fc.c
+@@ -787,6 +787,9 @@ nvme_fc_ctrl_connectivity_loss(struct nvme_fc_ctrl *ctrl)
+ 		"NVME-FC{%d}: controller connectivity lost. Awaiting "
+ 		"Reconnect", ctrl->cnum);
+ 
++	/* clear 'transport blocked' flag as controller will be reset */
++	clear_bit(NVME_CTRL_TRANSPORT_BLOCKED, &ctrl->flags);
++
+ 	switch (nvme_ctrl_state(&ctrl->ctrl)) {
+ 	case NVME_CTRL_NEW:
+ 	case NVME_CTRL_LIVE:
+@@ -3741,6 +3744,111 @@ static struct nvmf_transport_ops nvme_fc_transport = {
+ 	.create_ctrl	= nvme_fc_create_ctrl,
+ };
+ 
++static struct nvme_fc_rport *nvme_fc_rport_from_wwpn(struct nvme_fc_lport *lport,
++						     u64 rport_wwpn)
++{
++	struct nvme_fc_rport *rport;
++
++	list_for_each_entry(rport, &lport->endp_list, endp_list) {
++		if (!nvme_fc_rport_get(rport))
++			continue;
++		if (rport->remoteport.port_name == rport_wwpn &&
++		    rport->remoteport.port_role & FC_PORT_ROLE_NVME_TARGET)
++			return rport;
++		nvme_fc_rport_put(rport);
++	}
++	return NULL;
++}
++
++/*
++ * nvme_fc_fpin_li_lport_update - routine to update Link Integrity
++ * event statistics.
++ * @lport:		local port the FPIN was received on
++ * @tlv:		pointer to link integrity descriptor
++ *
++ */
++static void
++nvme_fc_fpin_li_lport_update(struct nvme_fc_lport *lport, struct fc_tlv_desc *tlv)
++{
++	unsigned int i, pname_count;
++	struct nvme_fc_rport *attached_rport;
++	struct fc_fn_li_desc *li_desc = (struct fc_fn_li_desc *)tlv;
++	u64 wwpn;
++
++	wwpn = be64_to_cpu(li_desc->attached_wwpn);
++	attached_rport = nvme_fc_rport_from_wwpn(lport, wwpn);
++	pname_count = be32_to_cpu(li_desc->pname_count);
++
++	for (i = 0; pname_count; i++) {
++		struct nvme_fc_rport *rport;
++
++		wwpn = be64_to_cpu(li_desc->pname_list[i]);
++		rport = nvme_fc_rport_from_wwpn(lport, wwpn);
++		if (!rport)
++			continue;
++		if (rport != attached_rport) {
++			struct nvme_fc_ctrl *ctrl;
++
++			spin_lock_irq(&rport->lock);
++			list_for_each_entry(ctrl, &rport->ctrl_list, ctrl_list)
++				set_bit(NVME_CTRL_TRANSPORT_BLOCKED, &ctrl->ctrl.flags);
++			spin_unlock_irq(&rport->lock);
++		}
++		nvme_fc_rport_put(rport);
++	}
++	if (attached_rport) {
++		struct nvme_fc_ctrl *ctrl;
++
++		spin_lock_irq(&attached_rport->lock);
++		list_for_each_entry(ctrl, &attached_rport->ctrl_list, ctrl_list)
++			set_bit(NVME_CTRL_TRANSPORT_BLOCKED, &ctrl->ctrl.flags);
++		spin_unlock_irq(&attached_rport->lock);
++		nvme_fc_rport_put(attached_rport);
++	}
++}
++
++/**
++ * fc_host_fpin_rcv - routine to process a received FPIN.
++ * @localport:		local port the FPIN was received on
++ * @fpin_len:		length of FPIN payload, in bytes
++ * @fpin_buf:		pointer to FPIN payload
++ * Notes:
++ *	This routine assumes no locks are held on entry.
++ */
++void
++nvme_fc_fpin_rcv(struct nvme_fc_local_port *localport,
++		 u32 fpin_len, char *fpin_buf)
++{
++	struct nvme_fc_lport *lport;
++	struct fc_els_fpin *fpin = (struct fc_els_fpin *)fpin_buf;
++	struct fc_tlv_desc *tlv;
++	u32 bytes_remain;
++	u32 dtag;
++
++	if (!localport)
++		return;
++	lport = localport_to_lport(localport);
++	tlv = (struct fc_tlv_desc *)&fpin->fpin_desc[0];
++	bytes_remain = fpin_len - offsetof(struct fc_els_fpin, fpin_desc);
++	bytes_remain = min_t(u32, bytes_remain, be32_to_cpu(fpin->desc_len));
++
++	while (bytes_remain >= FC_TLV_DESC_HDR_SZ &&
++	       bytes_remain >= FC_TLV_DESC_SZ_FROM_LENGTH(tlv)) {
++		dtag = be32_to_cpu(tlv->desc_tag);
++		switch (dtag) {
++		case ELS_DTAG_LNK_INTEGRITY:
++			nvme_fc_fpin_li_lport_update(lport, tlv);
++			break;
++		default:
++			break;
++		}
++
++		bytes_remain -= FC_TLV_DESC_SZ_FROM_LENGTH(tlv);
++		tlv = fc_tlv_next_desc(tlv);
++	}
++}
++EXPORT_SYMBOL(nvme_fc_fpin_rcv);
++
+ /* Arbitrary successive failures max. With lots of subsystems could be high */
+ #define DISCOVERY_MAX_FAIL	20
+ 
+diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
+index 4a90dad43303..e0dcfe9edb89 100644
+--- a/drivers/nvme/host/multipath.c
++++ b/drivers/nvme/host/multipath.c
+@@ -235,6 +235,8 @@ static bool nvme_path_is_disabled(struct nvme_ns *ns)
+ 	 */
+ 	if (state != NVME_CTRL_LIVE && state != NVME_CTRL_DELETING)
+ 		return true;
++	if (test_bit(NVME_CTRL_TRANSPORT_BLOCKED, &ns->ctrl->flags))
++		return true;
+ 	if (test_bit(NVME_NS_ANA_PENDING, &ns->flags) ||
+ 	    !test_bit(NVME_NS_READY, &ns->flags))
+ 		return true;
+diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+index ee30bb63e36b..6ed2ca6b35e4 100644
+--- a/drivers/nvme/host/nvme.h
++++ b/drivers/nvme/host/nvme.h
+@@ -258,6 +258,7 @@ enum nvme_ctrl_flags {
+ 	NVME_CTRL_SKIP_ID_CNS_CS	= 4,
+ 	NVME_CTRL_DIRTY_CAPABILITY	= 5,
+ 	NVME_CTRL_FROZEN		= 6,
++	NVME_CTRL_TRANSPORT_BLOCKED	= 7,
+ };
+ 
+ struct nvme_ctrl {
+diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
+index 4d723200690a..ecfe6bc8ab63 100644
+--- a/drivers/scsi/lpfc/lpfc_els.c
++++ b/drivers/scsi/lpfc/lpfc_els.c
+@@ -33,6 +33,7 @@
+ #include <scsi/scsi_transport_fc.h>
+ #include <uapi/scsi/fc/fc_fs.h>
+ #include <uapi/scsi/fc/fc_els.h>
++#include <linux/nvme-fc-driver.h>
+ 
+ #include "lpfc_hw4.h"
+ #include "lpfc_hw.h"
+@@ -10343,9 +10344,12 @@ lpfc_els_rcv_fpin(struct lpfc_vport *vport, void *p, u32 fpin_length)
+ 		fpin_length += sizeof(struct fc_els_fpin); /* the entire FPIN */
+ 
+ 		/* Send every descriptor individually to the upper layer */
+-		if (deliver)
++		if (deliver) {
+ 			fc_host_fpin_rcv(lpfc_shost_from_vport(vport),
+ 					 fpin_length, (char *)fpin, 0);
++			nvme_fc_fpin_rcv(vport->localport,
++					 fpin_length, (char *)fpin);
++		}
+ 		desc_cnt++;
+ 	}
+ }
+diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
+index d48007e18288..b180e10053c5 100644
+--- a/drivers/scsi/qla2xxx/qla_isr.c
++++ b/drivers/scsi/qla2xxx/qla_isr.c
+@@ -46,6 +46,7 @@ qla27xx_process_purex_fpin(struct scsi_qla_host *vha, struct purex_item *item)
+ 		       pkt, pkt_size);
+ 
+ 	fc_host_fpin_rcv(vha->host, pkt_size, (char *)pkt, 0);
++	nvme_fc_fpin_rcv(vha->nvme_local_port, pkt_size, (char *)pkt);
+ }
+ 
+ const char *const port_state_str[] = {
+diff --git a/include/linux/nvme-fc-driver.h b/include/linux/nvme-fc-driver.h
+index 4109f1bd6128..994bc459e6dd 100644
+--- a/include/linux/nvme-fc-driver.h
++++ b/include/linux/nvme-fc-driver.h
+@@ -536,6 +536,9 @@ void nvme_fc_rescan_remoteport(struct nvme_fc_remote_port *remoteport);
+ int nvme_fc_set_remoteport_devloss(struct nvme_fc_remote_port *remoteport,
+ 			u32 dev_loss_tmo);
+ 
++void nvme_fc_fpin_rcv(struct nvme_fc_local_port *localport,
++		      u32 fpin_len, char *fpin_buf);
++
+ /*
+  * Routine called to pass a NVME-FC LS request, received by the lldd,
+  * to the nvme-fc transport.
 -- 
-2.39.2
+2.35.3
 
 
