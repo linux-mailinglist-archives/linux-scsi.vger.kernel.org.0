@@ -1,101 +1,129 @@
-Return-Path: <linux-scsi+bounces-2724-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-2726-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F35E3868C90
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Feb 2024 10:43:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04F578692EF
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Feb 2024 14:40:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9247D1F20CC8
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Feb 2024 09:43:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DFE21C22369
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Feb 2024 13:40:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC40A1369AA;
-	Tue, 27 Feb 2024 09:42:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3EBB13B7AA;
+	Tue, 27 Feb 2024 13:39:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="uYme2QI6"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE69A15D0;
-	Tue, 27 Feb 2024 09:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC8913B2B9;
+	Tue, 27 Feb 2024 13:39:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709026966; cv=none; b=l+30gk9VpXQbzOGwfuMWgwZ5pD9pAEfVNXCJIB3eej9CRzaIXkZ07bU/MvvopjJBCex/9IkIZOKOpxlUesfg0d3fPuesbxq977NAHGRWLmPZuGiy1onuj8mGplbLcy516VwlfELMKuSxlfBfJ2cyhRtsGBB/Rj61FChCONh0NRo=
+	t=1709041198; cv=none; b=dc02aubfzJJO9eiM14PtZuKrHaMVVIXtF/DeSRsp6HQVXKo3mOakoejm0mz2Dc0zvDpDjkVbsp4GMbtDozjMa9pqavYxIPR8Mnfd0No2kvFesmLpLUPbsWnz7Bp+sRTWFv7kdC9g2I1shEeCKPbm58pWJ5e+tcX7/hkZhD5X4lM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709026966; c=relaxed/simple;
-	bh=NltuXZkeIhA7SW+L8lNtMeXkelidiUwx3+LJjumtTHI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=l6wVw3Gb2Hh7euwn3C+5DS0fXK6I5he2IA3oFarwrvQqi6YPacuEhcdAUPTKXj/OSQiMsWr1+uokN9Zmrx5NQxMUBqKt222EirZShf5KMxkK68N4YsSl6cP+0sZOPitg6uXXhIyFrAkd4DhhDzlmq46kOcqrllTmBSGk2qzyVls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4TkXTM4tntz1b13f;
-	Tue, 27 Feb 2024 17:37:43 +0800 (CST)
-Received: from dggpemd100001.china.huawei.com (unknown [7.185.36.94])
-	by mail.maildlp.com (Postfix) with ESMTPS id CD70B1A016C;
-	Tue, 27 Feb 2024 17:42:41 +0800 (CST)
-Received: from [10.67.120.108] (10.67.120.108) by
- dggpemd100001.china.huawei.com (7.185.36.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Tue, 27 Feb 2024 17:42:41 +0800
-Message-ID: <e95993da-db88-5db2-0aa8-f0c7589ce902@huawei.com>
-Date: Tue, 27 Feb 2024 17:42:41 +0800
+	s=arc-20240116; t=1709041198; c=relaxed/simple;
+	bh=YQ0U1V4gvzPe2wvx/qzDZQm6nE8CwWJfxGbxF84iZjw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gd+LJqA3pgIHIVoGKiwfCdKfrU2OTXqBcNqBBujKeS5SCaXMniIXo3NgYom6DPRCUtXoGsslTXEFaelY6RLi7G+9dkj1Ox4Q21+rHSOc/iNFRBHe6UewCTknzDX+njm3htXwm7xl7NZ2d4tFi9HHF1AbKf9mzhMQkU21ntf/Qw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=uYme2QI6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0CB1C433F1;
+	Tue, 27 Feb 2024 13:39:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1709041198;
+	bh=YQ0U1V4gvzPe2wvx/qzDZQm6nE8CwWJfxGbxF84iZjw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=uYme2QI61LqXar1R5WGcjAFAu43UY3XOqMTf4lXu7FP2KVtAbmCd7fTW6yFvoVUSm
+	 B7zhVVaetL20jq4WKlg00u2p8iG3Qcod2Aw4Iui77ZhPVdNLQiEqdxkpV2ZuV3ZQWT
+	 WNxkQwV/ABvryCt/4Nl/w8FbENfj2gFq+9hhjMb8=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	linux-scsi@vger.kernel.org,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	kernel test robot <lkp@intel.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.7 256/334] scsi: jazz_esp: Only build if SCSI core is builtin
+Date: Tue, 27 Feb 2024 14:21:54 +0100
+Message-ID: <20240227131639.175856705@linuxfoundation.org>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240227131630.636392135@linuxfoundation.org>
+References: <20240227131630.636392135@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH] scsi: libsas: Fix disk not being scanned in after being
- removed
-Content-Language: en-CA
-To: John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>,
-	<jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-	<damien.lemoal@opensource.wdc.com>
-CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
-	<chenxiang66@hisilicon.com>, <kangfenglong@huawei.com>
-References: <20240221073159.29408-1-yangxingui@huawei.com>
- <d765d2c5-3451-4519-a5e1-9e8f28dcd6b3@oracle.com>
- <cdf241a7-8504-5b87-2d18-d2a971f6ebb9@huawei.com>
- <8dc34f04-943b-26fd-01bc-34fb98803503@huawei.com>
- <b2ab5439-361b-4160-4e73-171026ecc486@huawei.com>
- <8138ab55-1c43-8df1-dafd-95b16b7b3ce4@huawei.com>
- <7d132b63-7336-4f59-a5f0-5ec37c3c34d3@oracle.com>
-From: yangxingui <yangxingui@huawei.com>
-In-Reply-To: <7d132b63-7336-4f59-a5f0-5ec37c3c34d3@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggpemm100006.china.huawei.com (7.185.36.196) To
- dggpemd100001.china.huawei.com (7.185.36.94)
 
-Hi John,
+6.7-stable review patch.  If anyone has any objections, please let me know.
 
-On 2024/2/27 17:06, John Garry wrote:
-> On 27/02/2024 07:16, Jason Yan wrote:
->>>>
->>>> Can we directly set phy->negotiated_linkrate = SAS_PHY_DISABLED 
->>>> here? For an empty PHY the other variables means nothing, so why 
->>>> bother get and update them?
->>> The value of the negotiated link rate has two possible values ​​in 
->>> the current processing branch: SAS_LINK_RATE_UNKNOWN and 
->>> SAS_PHY_DISABLED, and both come from disc_resp. If we do not use 
->>> disc_resp, but set a fixed value SAS_PHY_DISABLED for it, it may not 
->>> be appropriate.
-> 
-> But we know that the phy is disabled, right? It's our phy, isn't it?
-Yes, just like the previous submission, if we disable phy ourselves 
-through the sysfs node, we can configure the negotiation rate to 
-SAS_PHY_DISABLED by setting phy->phy->enable to 0. It might be better to 
-use sas_set_ex_phy() as you described before, it will refresh other phy 
-information synchronously, such as sas_address, device_type, 
-target_protocols, etc. If we only update the negotiation rate and 
-maintain the old information, is it because it is special? Is it better 
-to update phy information uniformly?
+------------------
 
-Thanks,
-Xingui
+From: Randy Dunlap <rdunlap@infradead.org>
+
+[ Upstream commit 9ddf190a7df77b77817f955fdb9c2ae9d1c9c9a3 ]
+
+JAZZ_ESP is a bool kconfig symbol that selects SCSI_SPI_ATTRS.  When
+CONFIG_SCSI=m, this results in SCSI_SPI_ATTRS=m while JAZZ_ESP=y, which
+causes many undefined symbol linker errors.
+
+Fix this by only offering to build this driver when CONFIG_SCSI=y.
+
+[mkp: JAZZ_ESP is unique in that it does not support being compiled as a
+module unlike the remaining SPI SCSI HBA drivers]
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Link: https://lore.kernel.org/r/20240214055953.9612-1-rdunlap@infradead.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: James E.J. Bottomley <jejb@linux.ibm.com>
+Cc: Martin K. Petersen <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202402112222.Gl0udKyU-lkp@intel.com/
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+index addac7fbe37b9..9ce27092729c3 100644
+--- a/drivers/scsi/Kconfig
++++ b/drivers/scsi/Kconfig
+@@ -1270,7 +1270,7 @@ source "drivers/scsi/arm/Kconfig"
+ 
+ config JAZZ_ESP
+ 	bool "MIPS JAZZ FAS216 SCSI support"
+-	depends on MACH_JAZZ && SCSI
++	depends on MACH_JAZZ && SCSI=y
+ 	select SCSI_SPI_ATTRS
+ 	help
+ 	  This is the driver for the onboard SCSI host adapter of MIPS Magnum
+-- 
+2.43.0
+
+
+
 
