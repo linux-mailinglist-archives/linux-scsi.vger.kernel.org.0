@@ -1,126 +1,140 @@
-Return-Path: <linux-scsi+bounces-2749-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-2751-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC38C86B013
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Feb 2024 14:14:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5349D86B247
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Feb 2024 15:48:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A863F2861C8
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Feb 2024 13:14:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACFFAB2981D
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Feb 2024 14:48:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BF5D14A4D6;
-	Wed, 28 Feb 2024 13:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA96F15B100;
+	Wed, 28 Feb 2024 14:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VtyyEKVq"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06AAE149E0B;
-	Wed, 28 Feb 2024 13:13:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4E7146015
+	for <linux-scsi@vger.kernel.org>; Wed, 28 Feb 2024 14:47:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709126037; cv=none; b=ZdP5ak93nlT60V92o77ZoU8oIkDghEBijn7mqLlqkHn4gp2r7d1r5iiFVwll1XlxBX0Lgb0L1o24gWYacaGc6z6VAXdFFbZPrXiejqxb0VdeTPN/IMGtwcoplA6rZ/EEE+YN94AHge2QnpZzzUqXfYYS6CTOwd9KR7zZymM1LRE=
+	t=1709131677; cv=none; b=gdRdVcQxrsMY/bFY56Ji42IHNYFTA/4eBN21yl2KfjxhaRWsHL8ilh5aLT7fX9vTiNXjA30Z/JhTMWJWmjIwJ9HgdKs1umoJ1y61z87e7GoCsWC1MdpyNIAciD0KB3RBhoU4vwcFFZi1+GOh/TjZo9i91VuPK5dGse9KYTFl2vA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709126037; c=relaxed/simple;
-	bh=HgwVfW0K+Hhu2RJ2w8yehDlFn8KAHL04pm/mocETtp0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ScBJPmK63lQa0ygbcYtugbbP+p4ex4A5fps5HNG/WC1bzdj3Wv9WvEw4UHtU49+YA4dH38wtlf7cOU780oHn3dEZ2n2JzMeKTmQhESlhsITeiT79Z2qdXfxkhz4JGEONxOFX2CxMl6TLm6JTzkBClN84KDnxn4XGUGqGcM18Uwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4TlFCZ73XBzqhs3;
-	Wed, 28 Feb 2024 21:13:14 +0800 (CST)
-Received: from dggpemd100001.china.huawei.com (unknown [7.185.36.94])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3CE591A016B;
-	Wed, 28 Feb 2024 21:13:52 +0800 (CST)
-Received: from [10.67.120.108] (10.67.120.108) by
- dggpemd100001.china.huawei.com (7.185.36.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Wed, 28 Feb 2024 21:13:51 +0800
-Message-ID: <693dec74-1750-191e-cbc3-37f993d165ac@huawei.com>
-Date: Wed, 28 Feb 2024 21:13:51 +0800
+	s=arc-20240116; t=1709131677; c=relaxed/simple;
+	bh=5MvfFrf1G4ERBN3zHNH5ZYScjoyEnlfETFdY+bUYgoM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n5yrNHLtPT6FiT9dQdlEs5Vvd9MDRUzb+STQMqQSSyVWZoF/rx2pSPhTdOe8djUH4S/E9Jec850sn0ues+cUtkFem5ejxa6c2pd6s+416lhlS+uwXab265dYJK9+1KLtZ5rOzUxt1vzkTb1FcFKQsne8bFgNDoqNjcRd0D/dVa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VtyyEKVq; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-512ed314881so5865155e87.2
+        for <linux-scsi@vger.kernel.org>; Wed, 28 Feb 2024 06:47:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1709131673; x=1709736473; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3GbQN37mhhA8J1p486CCanaHeSFjvjlJFFfeli9pCvc=;
+        b=VtyyEKVqcz+oaPvzd9GBQBtjhE3sojlgDngsIjNmuHstYjVK6g5rFtmqoLwzqHPfOH
+         XOD4+BHv59cejcEiEqhRt36HFso/GMwgsanlXko5pkqV2QURIuLi1WZwmPD37Z4jLY1C
+         gCGH+ZJfMhGXpaWns3bmNqd8OQ3QPMALWF8zJQg81xOnoiiaN/Z/EdDvmxmUkuC11snJ
+         es0npuccCVih88qi72nwcb/IvqWdOuEkGxyOE+4Q9GkV6aXAGEclH9P2ENVYyxv9hg9q
+         EPPzFcdgQ48CLaKPq+yZ9LJl41q1iqqybQb4xRpBv535ay93mGa3/Po8kO8StxxZ3mQT
+         GKKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709131673; x=1709736473;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3GbQN37mhhA8J1p486CCanaHeSFjvjlJFFfeli9pCvc=;
+        b=acNUZLCfjYfOHPwiGKE1/XCeuk/ZngwijuEn0uiWZ7nFVGOKwU/EGiwu/J1mg0+yfV
+         clQUnUuD14jdKwEDECj8redrBI1TER829MZYviGugqF55be1CyzeHXXqXQIrr0VTOgoJ
+         qH4Xww7OtNuhEAIJ2LKTV1dJqYEaIqQbtZ4+QLPepv9r24u5oCx3pHVHo73sC1Zq4ZvT
+         jCRaRphLjDkpL4fGcdlys1nWUqMgNjh/Mz0MW5sJ6JMCKwWrIZTlkCki4FWGhDt448f8
+         TrU+e7kJ3ShG5M2eYWKb8Qumz/gaeP+tCq9+3eyVV/3h1S6vG3qOJAIQKY9qBsKIe0yl
+         gaPg==
+X-Forwarded-Encrypted: i=1; AJvYcCV68FGcHYcPIbuDYOQSNQeso9PlzHG4XYloGtPjtjFoF1tQmBa1X8Y7j+zU+8nU926U5L0UknU4KmRU9+IMBAka0HlElLZuftaI9Q==
+X-Gm-Message-State: AOJu0Yze2xjuqdQA1TSSRSlOBTziWcvEPlX2dR1HK1d2KClhjsgYPO9H
+	fO5GzHArJVIDTxn4WK/WSiefP+oaxUvE4xo6eoBWz5zyEeMvInhIczmvvaAiKiQ=
+X-Google-Smtp-Source: AGHT+IH91e8k5xsqpA7DNNC9jiLw5SufBWVlhROZKlTXqcqtB2uevW9HcetR8P9jbSkCOV0afMvOzQ==
+X-Received: by 2002:a19:750d:0:b0:512:ab46:3de6 with SMTP id y13-20020a19750d000000b00512ab463de6mr7491124lfe.32.1709131672792;
+        Wed, 28 Feb 2024 06:47:52 -0800 (PST)
+Received: from ?IPV6:2001:a61:1366:6801:d8:8490:cf1a:3274? ([2001:a61:1366:6801:d8:8490:cf1a:3274])
+        by smtp.gmail.com with ESMTPSA id n16-20020a05600c3b9000b00411e3cc0e0asm2351047wms.44.2024.02.28.06.47.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Feb 2024 06:47:52 -0800 (PST)
+Message-ID: <49a365a7-199a-42cd-b8d3-86d72fe5bca6@suse.com>
+Date: Wed, 28 Feb 2024 15:47:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH] scsi: libsas: Fix disk not being scanned in after being
- removed
-Content-Language: en-CA
-To: John Garry <john.g.garry@oracle.com>, <yanaijie@huawei.com>,
-	<jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-	<damien.lemoal@opensource.wdc.com>
-CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
-	<chenxiang66@hisilicon.com>, <kangfenglong@huawei.com>
-References: <20240221073159.29408-1-yangxingui@huawei.com>
- <d765d2c5-3451-4519-a5e1-9e8f28dcd6b3@oracle.com>
-From: yangxingui <yangxingui@huawei.com>
-In-Reply-To: <d765d2c5-3451-4519-a5e1-9e8f28dcd6b3@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] USB:UAS:return ENODEV when submit urbs fail with
+ device not attached.
+Content-Language: en-US
+To: "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>,
+ Oliver Neukum <oneukum@suse.com>, stern@rowland.harvard.edu,
+ gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+ usb-storage@lists.one-eyed-alien.net
+Cc: WeitaoWang@zhaoxin.com, stable@vger.kernel.org
+References: <20240228111521.3864-1-WeitaoWang-oc@zhaoxin.com>
+ <e8c4e8a3-bfc3-463f-afce-b9f600b588b2@suse.com>
+ <07e80d55-d766-1781-ffc9-fab9ddcd33e3@zhaoxin.com>
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <07e80d55-d766-1781-ffc9-fab9ddcd33e3@zhaoxin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggpemm100023.china.huawei.com (7.185.36.248) To
- dggpemd100001.china.huawei.com (7.185.36.94)
 
-Hi John,
 
-On 2024/2/22 20:41, John Garry wrote:
-> On 21/02/2024 07:31, Xingui Yang wrote:
->> As of commit d8649fc1c5e4 ("scsi: libsas: Do discovery on empty PHY to
->> update PHY info"), do discovery will send a new SMP_DISCOVER and update
->> phy->phy_change_count. We found that if the disk is reconnected and phy
->> change_count changes at this time, the disk scanning process will not be
->> triggered.
->>
->> So update the PHY info with the last query results.
->>
->> Fixes: d8649fc1c5e4 ("scsi: libsas: Do discovery on empty PHY to 
->> update PHY info")
->> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
->> ---
->>   drivers/scsi/libsas/sas_expander.c | 9 ++++-----
->>   1 file changed, 4 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/scsi/libsas/sas_expander.c 
->> b/drivers/scsi/libsas/sas_expander.c
->> index a2204674b680..9563f5589948 100644
->> --- a/drivers/scsi/libsas/sas_expander.c
->> +++ b/drivers/scsi/libsas/sas_expander.c
->> @@ -1681,6 +1681,10 @@ int sas_get_phy_attached_dev(struct 
->> domain_device *dev, int phy_id,
->>           if (*type == 0)
->>               memset(sas_addr, 0, SAS_ADDR_SIZE);
->>       }
->> +
->> +    if ((SAS_ADDR(sas_addr) == 0) || (res == -ECOMM))
->> +        sas_set_ex_phy(dev, phy_id, disc_resp);
->> +
->>       kfree(disc_resp);
->>       return res;
->>   }
->> @@ -1972,11 +1976,6 @@ static int sas_rediscover_dev(struct 
->> domain_device *dev, int phy_id,
->>       if ((SAS_ADDR(sas_addr) == 0) || (res == -ECOMM)) {
->>           phy->phy_state = PHY_EMPTY;
->>           sas_unregister_devs_sas_addr(dev, phy_id, last);
->> -        /*
->> -         * Even though the PHY is empty, for convenience we discover
->> -         * the PHY to update the PHY info, like negotiated linkrate.
->> -         */
->> -        sas_ex_phy_discover(dev, phy_id);
+
+On 28.02.24 23:32, WeitaoWang-oc@zhaoxin.com wrote:
+
+> @@ -602,6 +606,8 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+>           if (err) {
+>               usb_unanchor_urb(cmdinfo->data_out_urb);
+>               uas_log_cmd_state(cmnd, "data out submit err", err);
+> +            if (err == -ENODEV)
+> +                return -ENODEV;
+
+This is a generic error code from errno.h
+
+>               return SCSI_MLQUEUE_DEVICE_BUSY;
+
+This is not.
+
+>           }
+>           cmdinfo->state &= ~SUBMIT_DATA_OUT_URB;
+> @@ -621,6 +627,8 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+>           if (err) {
+>               usb_unanchor_urb(cmdinfo->cmd_urb);
+>               uas_log_cmd_state(cmnd, "cmd submit err", err);
+> +            if (err == -ENODEV)
+> +                return -ENODEV;
+>               return SCSI_MLQUEUE_DEVICE_BUSY;
+>           }
 > 
-> It would be nice to be able to call sas_set_ex_phy() here (instead of 
-> sas_get_phy_attached_dev()), but I assume that you can't do that as the 
-> disc_resp memory is not available.
-> 
-By the way, I have updated a version and call sas_set_ex_phy() here, 
-please check it again.
+> I'm not sure I fully understand what your mean.
+> Whether the above code is more reasonable? If not,could you give me some
+> suggestion? Thanks for your help!
 
-Thanks,
-Xingui
+You want to change uas_submit_urbs() to return the reason for
+errors, because -ENODEV needs to be handled differently. That
+is good.
+But why don't you just do
+
+return err;
+
+unconditionally? There is no point in using SCSI_MLQUEUE_DEVICE_BUSY
+
+	Regards
+		Oliver
+
 
