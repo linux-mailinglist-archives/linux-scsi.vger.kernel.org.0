@@ -1,74 +1,74 @@
-Return-Path: <linux-scsi+bounces-2781-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-2783-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 583FA86C691
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Feb 2024 11:14:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A806786C882
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Feb 2024 12:52:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D50A0B2155D
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Feb 2024 10:14:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 593A7288A53
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Feb 2024 11:52:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA96164A89;
-	Thu, 29 Feb 2024 10:14:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDB607CF17;
+	Thu, 29 Feb 2024 11:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OQYLDG9W"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HGQMKhTm"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D316350F
-	for <linux-scsi@vger.kernel.org>; Thu, 29 Feb 2024 10:14:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA11E7CF04
+	for <linux-scsi@vger.kernel.org>; Thu, 29 Feb 2024 11:52:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709201649; cv=none; b=MUxPxedQAVErbwxzDDiIKLrBqti26CwZ3Spwh3ygfuelf1svXoXmwIW7G04oU5t80ct4/vPLMb4WTfWriBO8G7rdVOtbgvE6Fnwz/gOwEk6azwd7cInridRyBUp9FAl4ytaVZWvYsPhBND9JveDTvzamTFJc/DFRRJWQAZu1Gp4=
+	t=1709207546; cv=none; b=mzDvf8GfBl0gR45kIVocNcTsHdUZVjF/9+ANg+x5IKoFGA9cVieGMf+bV6lsJdEGgVoQuXI06Vb3oyRohIPT50DgvvoaAxRK0vGxJZhkWtIhAdsTqtDGVXWP11TiA+m+HCjZHGA6/OmoxlopMvWlokR5XdY0ESjXl70Z60YLzTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709201649; c=relaxed/simple;
-	bh=aO/xACjri3DeJZJbYyZbIn3zPglqkV2lKn/RFIM8uSY=;
+	s=arc-20240116; t=1709207546; c=relaxed/simple;
+	bh=7d6CvrWmzaz6TNCwdkf499bxCEdW1K7nR/01VhW1RJA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V8zFjovWgye+E+jF1T6HgwI1qyanK+oiPkRP552i/gyOUxyKohjS3koKtAc8sy9T4acNWAJ7X9tNdyYhYA66W5OUZbH2lMR6eSvSR+WzVajmwOVBU9GcULzlhT1WZwfys2OoryfGDj933xRf79ged0ILLdkfQ6I11SzBKX94fhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OQYLDG9W; arc=none smtp.client-ip=209.85.128.42
+	 In-Reply-To:Content-Type; b=k353H0bfJeoQhslqFO5UJtcMTexDQc1cqGtlHXwMjWtsyDc5g9auiYB2Kx9fEYcby24uUCBK5YSSzcg/QiCc8wq0ZBeniOrZFmoX4s0N4IBWCuXjqg9wDrgVNztHUyXPHtIzdxsN3ywTnh81C8QFjYkDfkiytd5vRS0PtE6OU1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HGQMKhTm; arc=none smtp.client-ip=209.85.208.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-412bf3d52d7so2034915e9.2
-        for <linux-scsi@vger.kernel.org>; Thu, 29 Feb 2024 02:14:07 -0800 (PST)
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2d28e465655so10303191fa.0
+        for <linux-scsi@vger.kernel.org>; Thu, 29 Feb 2024 03:52:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1709201646; x=1709806446; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1709207542; x=1709812342; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=jnnbn314m5C/930ao7THUc7euOiuIRor/2uYI5CotuI=;
-        b=OQYLDG9WK5oGDUeJw3oEY+37s7u1HPzCaDnG2gE110jbPcu23xWvrOnaVu7Bkiii/s
-         AJrrnDMEsKhN88lCVoyaoV2YYhccDCU0M7qaJt43pziq3wPuIkg5+pwBWikz/tlF+Y11
-         jOd3d5VY8r7tWTNOxRIuQwZGisErRgfCUbDTB8VRcWhq5WUjXcxiEQdiX57JFJ/+yWW6
-         yifbG/lKq7t+l+AjUD1j6FtdR9alPKcumRLlIpflKpO8atep/xhR73UgB3lsGY2/i3pS
-         H0+0dwb2usPzGni/lsbMaKRrZlde7iqPQh6FFb+Nzc6NNwvjWKO72FLqp+DUUySl0Jkr
-         e80A==
+        bh=79gNBOsuDeIYR+Lh3gRA6KG8pNTkHwRoYAWTsnujzmg=;
+        b=HGQMKhTmMZ63lzVoTzex9HePv1nw+L0kznKo07FxUoEhDn3SN21QGPemUEeRKCjkIk
+         xq894Z/ER8zch3mA6RgqfFqqIUO73VhbknagdGEgOlQgzvBpiNBEuVTGtiGKVvOs1Iik
+         mjHtAAISejZNbTTv7TBDPyeZv8Bji+gbG9+bmbSxRzOxDKBlbj9AtyetNR8jpToZgchq
+         KTuOWQSjXxNRD4LyuLLjp7rq/rht4MmtvdLvw9t4ldZrkhwGy0GOjP9tUTlTahDmWARR
+         hgPPZ7JF3xlveDxrewDZjAy1AhNYZfh44V6Y9CvTupghnqSVQa0fdKQWqBOPmru7/w6R
+         69jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709201646; x=1709806446;
+        d=1e100.net; s=20230601; t=1709207542; x=1709812342;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jnnbn314m5C/930ao7THUc7euOiuIRor/2uYI5CotuI=;
-        b=kc9YkQnsw+Osi4C52ht/3F9qzg7HjExfX0nSRD5yi0TQGG34cKtE/LCLIq5oBMuQw6
-         /294KtEmnM4s2TF2ia+MWzVResBMYLmkqumiFdWaGWMqx+k2QODCzaXqIjPERoSnYSzw
-         lVRE7ZSgh8WEjUoDpiYI1ySJox0YjvkAAvgj5ReXcPEnuMGDWEDoCV2qscM2JDNEXz1y
-         OeBZlNYeVMs34zlzULxAmVqQAJg/GfV3KVYYVsqW45cF2PMZ4GjcOhthKSVMP3OLKmRl
-         iQjG3slmNVyuUotzMGt6aJDDQV7CiLShKFOAkw2NDideAkfsT7JmGOAeMIVFOi94p/Gr
-         1nUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUmkW5ZHXZT1ico0SYBhqs4b1fHLZuNW/t+T3poUzztg8m3ml+p/4mr9Bb7YfoSi832IDXkLJprJcpPJLhNxUA8jB2lDmuFcbEL+Q==
-X-Gm-Message-State: AOJu0Yw6UaPXZGjXiBdpaBGMiJAx3pLeZQfRETtsOjM0gIGUuDfoc9b8
-	h+ycc7KmSu1VnCxTWQpqAw+B53f7cLftZTwCVkitOnUNYr50kBfrr5BMr2DjlnE=
-X-Google-Smtp-Source: AGHT+IGFyJEaCoJzyd7PF1nh1cjcVfv4xAAk+3Zq2JvER863k+1HDULiC8Ke+TEiagF31qTpvhzwyQ==
-X-Received: by 2002:a05:600c:a001:b0:412:bd5b:efbd with SMTP id jg1-20020a05600ca00100b00412bd5befbdmr1040220wmb.1.1709201645978;
-        Thu, 29 Feb 2024 02:14:05 -0800 (PST)
+        bh=79gNBOsuDeIYR+Lh3gRA6KG8pNTkHwRoYAWTsnujzmg=;
+        b=BXogD3+vwcQ8GOI5HGIHp1Uak0ouOaTzZ8jYJZhlAua8WH/uCXPOMdMWorbpaoa/oL
+         cIoIxDVGmHfIeUg0f/twgMLfFWkRd2SMuZ2K3zBzkFCXc9NBZjOWSro/vtVzFeOw2jLY
+         ydTY1QTAdVpFpj0ZgmuaqB7/VpuGdLNIDZFcCrrm4CY3rzxxXRtPRh/bpBnXbhlnDgAo
+         pnloelJ2iI7xkiYCHqZbzneKwexT7fo9w2Cuud/lp77jU5HlysCDpbMJMsY9HmZLArrw
+         tWRbf828+1Kf0y91TRIeDenPXWnsqI9KxbdFmh2k/UZLJsxcM7kH6Pa4E8RDoCPaa5xh
+         La5w==
+X-Forwarded-Encrypted: i=1; AJvYcCVA45Q0yK+1wgMlcL1BUJ5lqxBhd1RcuPTwhqRWpYkRTxGRdzud69JDv2ltsOaiIGkGUf8mgXxH5xb1sM2ZgVIAjM3s3qgdEBgRbQ==
+X-Gm-Message-State: AOJu0YzsGZX7TcNf2QGymHYEcS3ihzBz8PXqNZYCDcFyUO/4FYr1WtUS
+	42uyAtcNqfQHtlrFMojiMdHT5UEnNNAIQ+ancNPdaHrrrfdBpcPyhb38otrAAxI=
+X-Google-Smtp-Source: AGHT+IGhwPu+Q2oxJ6EL93Dq/uuQN0NQLhyZbY884uXBca6OJ0LijbNlZgjt3A3mOMZBdiCsTv8nRA==
+X-Received: by 2002:a2e:9f46:0:b0:2d2:64ca:7a2d with SMTP id v6-20020a2e9f46000000b002d264ca7a2dmr1304324ljk.31.1709207542106;
+        Thu, 29 Feb 2024 03:52:22 -0800 (PST)
 Received: from ?IPV6:2001:a61:1366:6801:d8:8490:cf1a:3274? ([2001:a61:1366:6801:d8:8490:cf1a:3274])
-        by smtp.gmail.com with ESMTPSA id n33-20020a05600c3ba100b00412bca4cdf9sm1504987wms.36.2024.02.29.02.14.05
+        by smtp.gmail.com with ESMTPSA id bj12-20020a0560001e0c00b0033db0bbc2ccsm1690355wrb.3.2024.02.29.03.52.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Feb 2024 02:14:05 -0800 (PST)
-Message-ID: <62891b42-7662-463a-885b-fba1d29bafdd@suse.com>
-Date: Thu, 29 Feb 2024 11:14:04 +0100
+        Thu, 29 Feb 2024 03:52:21 -0800 (PST)
+Message-ID: <7a48c332-acbe-4677-b189-9dda01151d18@suse.com>
+Date: Thu, 29 Feb 2024 12:52:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -76,38 +76,44 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] USB:UAS:return ENODEV when submit urbs fail with
- device not attached.
+Subject: Re: [PATCH v3] USB:UAS:return ENODEV when submit urbs fail with
+ device not attached
 Content-Language: en-US
-To: "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>,
- Oliver Neukum <oneukum@suse.com>, stern@rowland.harvard.edu,
- gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
- usb-storage@lists.one-eyed-alien.net
+To: Weitao Wang <WeitaoWang-oc@zhaoxin.com>, oneukum@suse.com,
+ stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-scsi@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
 Cc: WeitaoWang@zhaoxin.com, stable@vger.kernel.org
-References: <20240228111521.3864-1-WeitaoWang-oc@zhaoxin.com>
- <e8c4e8a3-bfc3-463f-afce-b9f600b588b2@suse.com>
- <07e80d55-d766-1781-ffc9-fab9ddcd33e3@zhaoxin.com>
- <49a365a7-199a-42cd-b8d3-86d72fe5bca6@suse.com>
- <0b0eefa5-71b6-dc08-d103-72b9aebd9237@zhaoxin.com>
- <9263b77e-9ebe-4987-bf7f-8f9fafcf06b3@suse.com>
- <bb269ab0-128b-1988-acf1-8df05f08cf86@zhaoxin.com>
+References: <20240229193349.5407-1-WeitaoWang-oc@zhaoxin.com>
 From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <bb269ab0-128b-1988-acf1-8df05f08cf86@zhaoxin.com>
+In-Reply-To: <20240229193349.5407-1-WeitaoWang-oc@zhaoxin.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 29.02.24 17:40, WeitaoWang-oc@zhaoxin.com wrote:
-
-> OK, I'll submit a new version after you help to review the following patch.
-
-Hi,
-
-perfect.
-
-	Regards
-		Oliver
-
+On 29.02.24 20:33, Weitao Wang wrote:
+> In the scenario of entering hibernation with udisk in the system, if the
+> udisk was gone or resume fail in the thaw phase of hibernation. Its state
+> will be set to NOTATTACHED. At this point, usb_hub_wq was already freezed
+> and can't not handle disconnect event. Next, in the poweroff phase of
+> hibernation, SYNCHRONIZE_CACHE SCSI command will be sent to this udisk
+> when poweroff this scsi device, which will cause uas_submit_urbs to be
+> called to submit URB for sense/data/cmd pipe. However, these URBs will
+> submit fail as device was set to NOTATTACHED state. Then, uas_submit_urbs
+> will return a value SCSI_MLQUEUE_DEVICE_BUSY to the caller. That will lead
+> the SCSI layer go into an ugly loop and system fail to go into hibernation.
+> 
+> On the other hand, when we specially check for -ENODEV in function
+> uas_queuecommand_lck, returning DID_ERROR to SCSI layer will cause device
+> poweroff fail and system shutdown instead of entering hibernation.
+> 
+> To fix this issue, let uas_submit_urbs to return original generic error
+> when submitting URB failed. At the same time, we need to translate -ENODEV
+> to DID_NOT_CONNECT for the SCSI layer.
+> 
+> Suggested-by: Oliver Neukum<oneukum@suse.com>
+> Cc:stable@vger.kernel.org
+> Signed-off-by: Weitao Wang<WeitaoWang-oc@zhaoxin.com>
+Acked-by: Oliver Neukum <oneukum@suse.com>
 
