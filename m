@@ -1,227 +1,220 @@
-Return-Path: <linux-scsi+bounces-3005-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3018-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89CD38733AF
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Mar 2024 11:10:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E67E0873FBD
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Mar 2024 19:39:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 745B7B2C59F
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Mar 2024 10:08:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CDD4281C62
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Mar 2024 18:39:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 509885F560;
-	Wed,  6 Mar 2024 10:08:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AF7813E7C3;
+	Wed,  6 Mar 2024 18:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="COJWi66S"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F0F5F566
-	for <linux-scsi@vger.kernel.org>; Wed,  6 Mar 2024 10:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D57F140383
+	for <linux-scsi@vger.kernel.org>; Wed,  6 Mar 2024 18:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709719704; cv=none; b=MV4dud2T7S8VrNUFgbIWASatJLXwAxlRnASNu+j/1wzr/276hjIaxNatQn38WQSz6vWhJMJ8XxeUQp465ePOcTq3XjuDSBZkXLPZltU1l/NklG8DvJlcgesmNwlR+1zaoUhWQrnntYZu8Y1AOQIxyuOdNLxHBoe7i24/6ZVDeGs=
+	t=1709750014; cv=none; b=HpMr3gTEMMxVYv4fkg7gNPT1wgjV8WC7NblvB8MYy9UlT0hJcbw503wzrWf3fbaqsNHezbXDYLNsZ0H5ufuar7BoonSW3la0ORxSBd8otA3cFJtrvZfOPOwzqU0DlgcMb4Ue048LKSR3MqURrkU2YQ1Ymb5vuNFTDUHKr5wuO+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709719704; c=relaxed/simple;
-	bh=hR/19JzpQyKFppwRdzG/kRWbzHpOMlcpjWy79ER/pjE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hxgZO4vcuCZ0CtZamrLqLNaTOxiHnCLqZNNmH27p90mDuUpI8EeATsK+kurkgTMbPnGpzgdIIw7TZHWp86ElQ8p6NCJs6Iium7EiemIre2UKMztQYjXr/2zwE+CyGydOzsh63GgQMMqF+Nj3zPJGKo8yHAfMJoo435f/+b69gcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-X-ASG-Debug-ID: 1709719695-086e23661801ec0001-ziuLRu
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id EdfuJbHKFDqKghyV (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Wed, 06 Mar 2024 18:08:15 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 6 Mar
- 2024 18:08:15 +0800
-Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 6 Mar
- 2024 18:08:14 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-From: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
-To: <oneukum@suse.com>, <stern@rowland.harvard.edu>,
-	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-	<usb-storage@lists.one-eyed-alien.net>
-CC: <WeitaoWang@zhaoxin.com>, <stable@vger.kernel.org>
-Subject: [PATCH v4] USB:UAS:return ENODEV when submit urbs fail with device not attached
-Date: Thu, 7 Mar 2024 02:08:14 +0800
-X-ASG-Orig-Subj: [PATCH v4] USB:UAS:return ENODEV when submit urbs fail with device not attached
-Message-ID: <20240306180814.4897-1-WeitaoWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.32.0
+	s=arc-20240116; t=1709750014; c=relaxed/simple;
+	bh=77JE9whOjmq8e6QHGc2OLNU+Itd7sw4MTNx7FsuK8Cw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E77i06KqUneoRsTSjQuHR43PlUwDbTX7MTrmnQ2ebNtrAXMlbkSmctd5D1TOuvxqWjuyJ2uLI3pCmJu2jrbXMTK8+7mtXUaj1JeCPNglCChPjkJw9wuvBCNyTMuFcnG1zS1AZYo235LCWx22F4kgwYQu3WR7qrHO3b3OHAfHIDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=COJWi66S; arc=none smtp.client-ip=199.89.1.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4TqgsS2jZ9z6ClSqV;
+	Wed,  6 Mar 2024 18:27:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:references:content-language:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1709749672; x=1712341673; bh=bEEXFG4vhdJKrJoL9iO0f87L
+	CcG0N+Vs9i3My6y61Mg=; b=COJWi66SJXVpRW4YXhlojkasNqMmEeFpU+Cu8j1c
+	a1CpU86+g5ghJcyoB/xd5YKFcnvzCTzwkALwEy8hGo4Cnt7WQfRoGE9JCZVnljT0
+	cY5MvXtdNFOvoFlM3qb/CE05UBiP1MemzYMwpXqZutE9cFBcQ+KjjoS6sXRsLW2E
+	zLcQK6lf7cAvDmrwxifs0FVaQDSBV12uGhTuwZ+cFjoGf1EDvpQ/mrPIbVJPB5P3
+	ekvPblQurgK/ikzhXkEVzkwbJodohqGvXVDBB1ksIDcKlr7pZqwXdoal69jVh76/
+	ID1EYiWo388RkoPcPzKKhaNXrLt3aaD7yl4TJYx1MtN97Q==
+X-Virus-Scanned: by MailRoute
+Received: from 008.lax.mailroute.net ([127.0.0.1])
+ by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id 8xZJyFlNa_Qw; Wed,  6 Mar 2024 18:27:52 +0000 (UTC)
+Received: from [100.96.154.173] (unknown [104.132.1.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4TqgsL6F2xz6ClSqL;
+	Wed,  6 Mar 2024 18:27:50 +0000 (UTC)
+Message-ID: <4fbd2106-1e39-4fd9-b0e0-411105e80bb7@acm.org>
+Date: Wed, 6 Mar 2024 10:27:48 -0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1709719695
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
-X-Barracuda-BRTS-Status: 0
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 5185
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.121737
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------------------------
-	0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-	3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] scsi_debug: Make CRC_T10DIF support optional
+Content-Language: en-US
+To: John Garry <john.g.garry@oracle.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org, Douglas Gilbert <dgilbert@interlog.com>,
+ "James E.J. Bottomley" <jejb@linux.ibm.com>
+References: <20240305222612.37383-1-bvanassche@acm.org>
+ <cd54668a-8f01-46d8-a597-3dc25ad1ad00@oracle.com>
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <cd54668a-8f01-46d8-a597-3dc25ad1ad00@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-In the scenario of entering hibernation with udisk in the system, if the
-udisk was gone or resume fail in the thaw phase of hibernation. Its state
-will be set to NOTATTACHED. At this point, usb_hub_wq was already freezed
-and can't not handle disconnect event. Next, in the poweroff phase of
-hibernation, SYNCHRONIZE_CACHE SCSI command will be sent to this udisk
-when poweroff this scsi device, which will cause uas_submit_urbs to be
-called to submit URB for sense/data/cmd pipe. However, these URBs will
-submit fail as device was set to NOTATTACHED state. Then, uas_submit_urbs
-will return a value SCSI_MLQUEUE_DEVICE_BUSY to the caller. That will lead
-the SCSI layer go into an ugly loop and system fail to go into hibernation.
+On 3/6/24 05:19, John Garry wrote:
+> On 05/03/2024 22:25, Bart Van Assche wrote:
+>> =C2=A0 drivers/scsi/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 2 +-
+>> =C2=A0 drivers/scsi/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 2 +
+>> =C2=A0 drivers/scsi/scsi_debug-dif.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 65 +=
+++++
+>> =C2=A0 drivers/scsi/scsi_debug_dif.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 224 ++++++=
++++++++++
+>=20
+> inconsistent filename format: scsi_debug-dif.c vs scsi_debug_dif.h - is=
+=20
+> that intentional?
 
-On the other hand, when we specially check for -ENODEV in function
-uas_queuecommand_lck, returning DID_ERROR to SCSI layer will cause device
-poweroff fail and system shutdown instead of entering hibernation.
+That should be fixed. Do you perhaps have a preference?
 
-To fix this issue, let uas_submit_urbs to return original generic error
-when submitting URB failed. At the same time, we need to translate -ENODEV
-to DID_NOT_CONNECT for the SCSI layer.
+>> =C2=A0 .../scsi/{scsi_debug.c =3D> scsi_debug_main.c}=C2=A0 | 257 ++--=
+--------------
+>> =C2=A0 5 files changed, 308 insertions(+), 242 deletions(-)
+>> =C2=A0 create mode 100644 drivers/scsi/scsi_debug-dif.h
+>> =C2=A0 create mode 100644 drivers/scsi/scsi_debug_dif.c
+>> =C2=A0 rename drivers/scsi/{scsi_debug.c =3D> scsi_debug_main.c} (97%)
+>>
+>> diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+>> index 3328052c8715..b7c92d7af73d 100644
+>> --- a/drivers/scsi/Kconfig
+>> +++ b/drivers/scsi/Kconfig
+>> @@ -1227,7 +1227,7 @@ config SCSI_WD719X
+>> =C2=A0 config SCSI_DEBUG
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tristate "SCSI debugging host and devic=
+e simulator"
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 depends on SCSI
+>> -=C2=A0=C2=A0=C2=A0 select CRC_T10DIF
+>> +=C2=A0=C2=A0=C2=A0 select CRC_T10DIF if SCSI_DEBUG =3D y
+>=20
+> Do we really need to select at all now? What does this buy us?=20
+> Preference is generally not to use select.
 
-Suggested-by: Oliver Neukum <oneukum@suse.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
----
-v3->v4
- - remove unused variable declaration in function uas_submit_urbs.
+I want to exclude the CRC_T10DIF =3D m and SCSI_DEBUG =3D y combination
+because it causes the build to fail. I will leave out the select
+statement and will change "depends on SCSI" into the following:
 
- drivers/usb/storage/uas.c | 28 +++++++++++++---------------
- 1 file changed, 13 insertions(+), 15 deletions(-)
+	depends on SCSI && (m || CRC_T10DIF =3D y)
 
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 9707f53cfda9..5930cfc03111 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -533,7 +533,7 @@ static struct urb *uas_alloc_cmd_urb(struct uas_dev_info *devinfo, gfp_t gfp,
-  * daft to me.
-  */
- 
--static struct urb *uas_submit_sense_urb(struct scsi_cmnd *cmnd, gfp_t gfp)
-+static int uas_submit_sense_urb(struct scsi_cmnd *cmnd, gfp_t gfp)
- {
- 	struct uas_dev_info *devinfo = cmnd->device->hostdata;
- 	struct urb *urb;
-@@ -541,30 +541,28 @@ static struct urb *uas_submit_sense_urb(struct scsi_cmnd *cmnd, gfp_t gfp)
- 
- 	urb = uas_alloc_sense_urb(devinfo, gfp, cmnd);
- 	if (!urb)
--		return NULL;
-+		return -ENOMEM;
- 	usb_anchor_urb(urb, &devinfo->sense_urbs);
- 	err = usb_submit_urb(urb, gfp);
- 	if (err) {
- 		usb_unanchor_urb(urb);
- 		uas_log_cmd_state(cmnd, "sense submit err", err);
- 		usb_free_urb(urb);
--		return NULL;
- 	}
--	return urb;
-+	return err;
- }
- 
- static int uas_submit_urbs(struct scsi_cmnd *cmnd,
- 			   struct uas_dev_info *devinfo)
- {
- 	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
--	struct urb *urb;
- 	int err;
- 
- 	lockdep_assert_held(&devinfo->lock);
- 	if (cmdinfo->state & SUBMIT_STATUS_URB) {
--		urb = uas_submit_sense_urb(cmnd, GFP_ATOMIC);
--		if (!urb)
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+		err = uas_submit_sense_urb(cmnd, GFP_ATOMIC);
-+		if (err)
-+			return err;
- 		cmdinfo->state &= ~SUBMIT_STATUS_URB;
- 	}
- 
-@@ -572,7 +570,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
- 		cmdinfo->data_in_urb = uas_alloc_data_urb(devinfo, GFP_ATOMIC,
- 							cmnd, DMA_FROM_DEVICE);
- 		if (!cmdinfo->data_in_urb)
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+			return -ENOMEM;
- 		cmdinfo->state &= ~ALLOC_DATA_IN_URB;
- 	}
- 
-@@ -582,7 +580,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
- 		if (err) {
- 			usb_unanchor_urb(cmdinfo->data_in_urb);
- 			uas_log_cmd_state(cmnd, "data in submit err", err);
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+			return err;
- 		}
- 		cmdinfo->state &= ~SUBMIT_DATA_IN_URB;
- 		cmdinfo->state |= DATA_IN_URB_INFLIGHT;
-@@ -592,7 +590,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
- 		cmdinfo->data_out_urb = uas_alloc_data_urb(devinfo, GFP_ATOMIC,
- 							cmnd, DMA_TO_DEVICE);
- 		if (!cmdinfo->data_out_urb)
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+			return -ENOMEM;
- 		cmdinfo->state &= ~ALLOC_DATA_OUT_URB;
- 	}
- 
-@@ -602,7 +600,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
- 		if (err) {
- 			usb_unanchor_urb(cmdinfo->data_out_urb);
- 			uas_log_cmd_state(cmnd, "data out submit err", err);
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+			return err;
- 		}
- 		cmdinfo->state &= ~SUBMIT_DATA_OUT_URB;
- 		cmdinfo->state |= DATA_OUT_URB_INFLIGHT;
-@@ -611,7 +609,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
- 	if (cmdinfo->state & ALLOC_CMD_URB) {
- 		cmdinfo->cmd_urb = uas_alloc_cmd_urb(devinfo, GFP_ATOMIC, cmnd);
- 		if (!cmdinfo->cmd_urb)
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+			return -ENOMEM;
- 		cmdinfo->state &= ~ALLOC_CMD_URB;
- 	}
- 
-@@ -621,7 +619,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
- 		if (err) {
- 			usb_unanchor_urb(cmdinfo->cmd_urb);
- 			uas_log_cmd_state(cmnd, "cmd submit err", err);
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+			return err;
- 		}
- 		cmdinfo->cmd_urb = NULL;
- 		cmdinfo->state &= ~SUBMIT_CMD_URB;
-@@ -698,7 +696,7 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd)
- 	 * of queueing, no matter how fatal the error
- 	 */
- 	if (err == -ENODEV) {
--		set_host_byte(cmnd, DID_ERROR);
-+		set_host_byte(cmnd, DID_NO_CONNECT);
- 		scsi_done(cmnd);
- 		goto zombie;
- 	}
--- 
-2.32.0
+>> --- /dev/null
+>> +++ b/drivers/scsi/scsi_debug-dif.h
+>> @@ -0,0 +1,65 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#ifndef _SCSI_DEBUG_DIF_H
+>> +#define _SCSI_DEBUG_DIF_H
+>> +
+>> +#include <linux/kconfig.h>
+>> +#include <linux/types.h>
+>> +#include <linux/spinlock_types.h>
+>> +
+>> +struct scsi_cmnd;
+>=20
+> Do you really need to have a prototype for this? I'm a bit in shock=20
+> seeing this in a scsi low-level driver.
+
+I will leave the above out and add "#include <scsi/scsi_cmnd.h>"
+instead.
+
+> dix_writes is defined in main.c, so surely this extern needs to be in=20
+> scsi_debug_dif.c or a common header
+
+The scsi_debug-dif.h header file is included from two .c files. Without
+this header file, the compiler wouldn't be able to check the consistency
+of the declarations in scsi_debug-dif.h with the definitions in the two
+scsi_debug .c files.
+
+> For me, I would actually just declare this in scsi_debug_dif.c and have=
+=20
+> scsi_debug_dif_get_dix_writes() or similar to return this value. This=20
+> function would be stubbed for CONFIG_CRC_T10DIF=3Dn
+
+My goal is to minimize changes while splitting the scsi_debug source
+code. Hence the "extern" declaration.
+
+>> +extern int dix_reads;
+>> +extern int dif_errors;
+>> +extern struct xarray *const per_store_ap;
+>> +extern int sdebug_dif;
+>> +extern int sdebug_dix;
+>> +extern unsigned int sdebug_guard;
+>> +extern int sdebug_sector_size;
+>> +extern unsigned int sdebug_store_sectors;
+>=20
+> I doubt why all these are here
+
+All the variables declared above are used in both scsi_debug_dif.c and
+scsi_debug_main.c.
+
+>> +int dif_verify(struct t10_pi_tuple *sdt, const void *data, sector_t=20
+>> sector,
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 ei_l=
+ba);
+>=20
+> Is this actually used in main.c?
+
+It is not. I will remove it.
+
+> I do also notice that we have chunks of code in main.c that does PI=20
+> checking, like in resp_write_scat() - surely dif stuff should be in=20
+> dif.c now
+
+I'm concerned that moving that code would make resp_write_scat() much
+less readable. Please note that the code in resp_write_scat() that does
+PI checking is guarded by an 'if (have_dif_prot)' check and that
+have_dif_prot =3D false if CONFIG_CRC_T10DIF=3Dn.
+
+>> --- /dev/null
+>> +++ b/drivers/scsi/scsi_debug_dif.c
+>> @@ -0,0 +1,224 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +#include "scsi_debug-dif.h"
+>=20
+> I always find it is strange to include driver proprietary header files=20
+> before common header files - I guess that is why the scsi_cmnd prototyp=
+e=20
+> is declared, above
+
+Including driver-private header files first is required by some coding
+style guides because it causes the build to fail if the driver-private
+header file does not include all include files it should include. See
+also
+https://google.github.io/styleguide/cppguide.html#Names_and_Order_of_Incl=
+udes
+(I am aware that this style guide does not apply to Linux kernel code).
+
+Thanks,
+
+Bart.
 
 
