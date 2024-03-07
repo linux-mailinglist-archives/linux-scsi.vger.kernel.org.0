@@ -1,152 +1,89 @@
-Return-Path: <linux-scsi+bounces-3051-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3054-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0C06874F97
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 14:06:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64B5D87519A
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 15:16:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 799261F2194B
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 13:06:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E9F21C219EE
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 14:16:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C976C12BEBA;
-	Thu,  7 Mar 2024 13:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XIjudYMx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7087D12DDB9;
+	Thu,  7 Mar 2024 14:15:54 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9747F7DB;
-	Thu,  7 Mar 2024 13:06:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7282E12D773;
+	Thu,  7 Mar 2024 14:15:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709816798; cv=none; b=IU5NH9FG8jscOyAW8Yrwoqs+/j87/lkP+pLNjNr8n7eG2k6ZPoeFXoPeyoDcEWquRmGHuSoLH3qcLZNJ9lMrAP8HvWkHyr2hxaV5glngwjuLByk9m+V96IK60QJ+/ujXoD0QXbOb2rZFHZMqk8kMium+Ut5UacsMRwQYCucaxc0=
+	t=1709820954; cv=none; b=J4LR3/LAXjzj/OTjN+uFvBubnGWLCHEjD+0wh3zLIk1BhFZJdsNq4DRCgGXxvJUDVZ50OSme6fty42QZhxNgn852C/BK4ZOSr1+Y7T2NH2POqsfUIGa69KAyYB+n3Lu849PAgfpFEeYEVIWqNicz1Isb6z+oGQ8HyVz+R5tQb4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709816798; c=relaxed/simple;
-	bh=RiU+yV9otIE+FfiUJCTFmjpI6TQk1VsgwIYafXgJGQM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HOjQ4ZoCaYydxnQ/YF7rlMorNk6cjRFpHdLH4b0vzVb32K8E0q0SGC4zEbEyUemtjHz5jmYurhwQdNBo5/MP8rDSt0I+H9r3a0H5aQ4/rvoyLZW5M8CC/vUbKverMBRJl4zmbt0Z0pYBng5v1bOOE4r2nuKP/RrrzDQ1BV/d6DE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XIjudYMx; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2d240d8baf6so10110001fa.3;
-        Thu, 07 Mar 2024 05:06:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709816795; x=1710421595; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6b0dP2x9JgNOkZdWVMwZj4fWH+1O5YM+rCuFRVEaBss=;
-        b=XIjudYMxAdrtzEeesINsrnICKWEFPDkCn2sDSdhwGfXrjdK79QJ1Am0IekA32z1J4P
-         M5zSdDumaLoYMDMeIzZ2RSzkwzDmEyklIYw9eWRJ9NoK1CGFTLNImJSLQPEKi+4JYuAo
-         XU1XpntF7LpThIxtcYKPJc26TJUioTvZDDRQ4l4Y247lUiHVZ1A868AOzN/WGJNbSG2Q
-         M6m17wTuukVOKKRa+S+whk2vgbpQ5hsYVbi2v+kLAYI2cmFlC410TzbcRPOSM/xkRTwC
-         Upf63Gw3EYcs9e1FS9TE9pn1AXOSFMsyEAmp6XmbHgR8ku3rA3HRw64GVKb0DmJryfP3
-         49VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709816795; x=1710421595;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6b0dP2x9JgNOkZdWVMwZj4fWH+1O5YM+rCuFRVEaBss=;
-        b=soYbJYHsZ+Cl9w8QbIJ5ODAgJv8zxesXv97yBwGIabZFvQ/+WTMCdYI4WjlH1okUbq
-         4bTkABbj0//p5AM5v3yjVrwN0at3S5iCrdJqZN9A/envihbzibj8P1IGEnbxLgnOw9Tq
-         JL56S4dIf0JRy4z2l7PWYBZZH821k2LhTIyCHWHf/5yro4Y419N2nfWSMjcO9xdj+HYM
-         jelrp6r5Xms5mv/Il9s5F4078kYB9eeqCUqJpya9mXiccRHXmMqRWpM1/ucJKp1w1Kep
-         CPUioyshW5OSiE1OHMiYI89l72UoeB/RGofTlzE54kAQ/clDCL9btuBLYadn61t78liu
-         +yYw==
-X-Forwarded-Encrypted: i=1; AJvYcCX8dj0Ulo1M8fmyZX2eW81IKJwOrtA1VgqgXmMekWhguCLONI/RBPSo1OgWyvhVmRERanlYc9Y8Gg+HT8wyMZovQOkuaO3LzC13pxEo6kszvV6mtecxKqT809I5ZeyriblJionirjMx2w==
-X-Gm-Message-State: AOJu0YxECdRweFzxiZqAg1Ots4LGf4StxxPy5hDagdcn/YCrB8tTcsRQ
-	Zc0sEB3QpLjYZeeVi7QwvKc3qIlh/oM4QQw2bdpn145ZOUYMPjLt
-X-Google-Smtp-Source: AGHT+IEJOLHABL7/l7Gi0d4ejmJvati3k9LbR/a70UY0ZQiL7MIms3UjinQtd5hBKUSTzNSALocD6g==
-X-Received: by 2002:a2e:2414:0:b0:2d3:365e:9cfe with SMTP id k20-20020a2e2414000000b002d3365e9cfemr1232600ljk.22.1709816794664;
-        Thu, 07 Mar 2024 05:06:34 -0800 (PST)
-Received: from [10.176.235.119] ([137.201.254.41])
-        by smtp.gmail.com with ESMTPSA id ds9-20020a0564021cc900b00567f39a8b55sm1592159edb.39.2024.03.07.05.06.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Mar 2024 05:06:34 -0800 (PST)
-Message-ID: <6826cdb060609f81c970fc21b2050535f7c5a810.camel@gmail.com>
-Subject: Re: [PATCH v2 4/4] scsi: ufs: Re-use compose_devman_upiu
-From: Bean Huo <huobean@gmail.com>
-To: Avri Altman <avri.altman@wdc.com>, "James E . J . Bottomley"
- <jejb@linux.vnet.ibm.com>, "Martin K . Petersen"
- <martin.petersen@oracle.com>
-Cc: Bart Van Assche <bvanassche@acm.org>, Bean Huo <beanhuo@micron.com>, 
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 07 Mar 2024 14:06:33 +0100
-In-Reply-To: <20240305210051.10847-5-avri.altman@wdc.com>
-References: <20240305210051.10847-1-avri.altman@wdc.com>
-	 <20240305210051.10847-5-avri.altman@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1709820954; c=relaxed/simple;
+	bh=iGKpp0d8z1mVCzIfV5+9TMt2PLt5T167/2ptn0oeSbo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PJi0WzOBcT4UZVVbmLtRagrLGox4KpIAQI/jvoccfC8Ut9qHEJb4wwZC4BrcdISI7ovF2cnGJObZrf5Wd8wF0F+nlkgAC1Uw9ghUy6vB30fCBuHgyezu35bkgDDuogDIdHc8SAi/QK5rH3LomTsswktMi7DBsVtAGhbJdjYYAxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4TrB9L2Qtpz2BfYp;
+	Thu,  7 Mar 2024 22:13:26 +0800 (CST)
+Received: from dggpemd100001.china.huawei.com (unknown [7.185.36.94])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7B2EC1A016C;
+	Thu,  7 Mar 2024 22:15:48 +0800 (CST)
+Received: from localhost.localdomain (10.50.165.33) by
+ dggpemd100001.china.huawei.com (7.185.36.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Thu, 7 Mar 2024 22:15:48 +0800
+From: Xingui Yang <yangxingui@huawei.com>
+To: <john.g.garry@oracle.com>, <yanaijie@huawei.com>, <jejb@linux.ibm.com>,
+	<martin.petersen@oracle.com>, <damien.lemoal@opensource.wdc.com>
+CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
+	<chenxiang66@hisilicon.com>, <kangfenglong@huawei.com>
+Subject: [PATCH v4 0/2] scsi: libsas: Fix disk not being scanned in after being removed
+Date: Thu, 7 Mar 2024 14:14:11 +0000
+Message-ID: <20240307141413.48049-1-yangxingui@huawei.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemd100001.china.huawei.com (7.185.36.94)
 
-On Tue, 2024-03-05 at 23:00 +0200, Avri Altman wrote:
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index c9c2b7f99758..a39a2b34ee2b 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -2710,18 +2710,27 @@ static void ufshcd_disable_intr(struct
-> ufs_hba *hba, u32 intrs)
-> =C2=A0/**
-> =C2=A0 * ufshcd_prepare_req_desc_hdr - Fill UTP Transfer request
-> descriptor header according to request
-> =C2=A0 * descriptor according to request
-> + * @hba: per adapter instance
-> =C2=A0 * @lrbp: pointer to local reference block
-> =C2=A0 * @upiu_flags: flags required in the header
-> =C2=A0 * @cmd_dir: requests data direction
-> =C2=A0 * @ehs_length: Total EHS Length (in 32=E2=80=90bytes units of all =
-Extra
-> Header Segments)
-> + * @scsi: scsi or device management`
-				      ^  '`'
+This patch series fixes an issue when do discovery on an empty PHY to
+update PHY info after device unregister could cause newly connected device
+to not be scanned.
 
-> =C2=A0 */
-> -static void ufshcd_prepare_req_desc_hdr(struct ufshcd_lrb *lrbp, u8
-> *upiu_flags,
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0enum dma_data_direction
-> cmd_dir, int ehs_length)
-> +static void
-> +ufshcd_prepare_req_desc_hdr(struct ufs_hba *hba, struct ufshcd_lrb
-> *lrbp,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 u8 *upiu_flags, enum dma_data_direction
-> cmd_dir,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 int ehs_length, bool scsi)
+Changes since v3:
+- Revert to allocating the resp memory with alloc_smp_resp().
+- Optimize goto statement.
 
-Why not directly pass UTP_CMD_TYPE_SCSI or UTP_CMD_TYPE_DEV_MANAGE
-instead of using below ?: logic?
+Changes since v2:
+- Based on John's suggestion, allow smp_execute_task() arguments to be on
+the stack.
+- Based on John's suggestion, add a helper sas_get_sas_addr_and_dev_type.
+- Updated comments.
 
+Changes since v1:
+- Use sas_get_phy_discover() instead of sas_get_phy_attached_dev() in
+sas_rediscover_dev() and use disc_resp to update phy info.
 
-> =C2=A0{
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct utp_transfer_req_d=
-esc *req_desc =3D lrbp-
-> >utr_descriptor_ptr;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct request_desc_heade=
-r *h =3D &req_desc->header;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0enum utp_data_direction d=
-ata_direction;
-> =C2=A0
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (hba->ufs_version <=3D ufsh=
-ci_version(1, 1))
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0lrbp->command_type =3D scsi ? UTP_CMD_TYPE_SCSI :
-> UTP_CMD_TYPE_DEV_MANAGE;
+Xingui Yang (2):
+  scsi: libsas: Add a helper sas_get_sas_addr_and_dev_type()
+  scsi: libsas: Fix disk not being scanned in after being removed
 
+ drivers/scsi/libsas/sas_expander.c | 51 ++++++++++++++++++++----------
+ 1 file changed, 34 insertions(+), 17 deletions(-)
+
+-- 
+2.17.1
 
 
