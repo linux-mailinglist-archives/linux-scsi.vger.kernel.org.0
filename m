@@ -1,120 +1,99 @@
-Return-Path: <linux-scsi+bounces-3057-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3060-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38CE18751F5
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 15:36:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90C8887522E
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 15:46:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCA941F26963
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 14:36:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 439851F25D06
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 14:46:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88D5A1E535;
-	Thu,  7 Mar 2024 14:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7239E128811;
+	Thu,  7 Mar 2024 14:45:53 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3801E18E10;
-	Thu,  7 Mar 2024 14:36:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2271EB2F;
+	Thu,  7 Mar 2024 14:45:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709822171; cv=none; b=BypLOZjoCyGtA1YlTe/lVdsNB69l8M3hyZDXHwOp4tmebpJ7QdEBUmAeWvNLNHg3LtNB/+6dY/b53ARqKI9/2pLsdnbmw5QWEsffy7aBZ7QPmUVagpo7JkeBth5IAUi++zuTZsUn509F9Ywu4s2Ra6P3nYREQW7UU4P18VuspoU=
+	t=1709822753; cv=none; b=Mo1Y26JmPH+jYNHgNkidqqHrMhHEGyesvZ/oYCEQtYS0IsF+Qd3LbZyKgD5+TdEKFBI4dMlE+sjBk6E9a2i0+Y74Tl10YCY3IX5dh1wvL6NfmfLxytyWVM5YccZzgDwvVDVyeALeEpfj6zAQUEho7Dg4xVqP45SWbm3QV/nhj+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709822171; c=relaxed/simple;
-	bh=IN+B13K/eqW9yzntEF91yCyCk7hS1yU/DuL07Ghww0k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=OE9Vp0QQNHc+e3/0ZXATyU0223jl4prBcbY9A00QYgKRqzNE9KQ+HTszhv//5s/GsHzT0xWNOOdc/oplxzXbI4Zi0Kt7yqISUrJWOk/60ZdS4igFfeWH1t3+5PtwVZD0ii78qaDQyh8M4EHd6ygH43jhWseKfb+kcveIbAti+vA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+	s=arc-20240116; t=1709822753; c=relaxed/simple;
+	bh=1qZVm0xyYLh7JYAEGw5xTkCh+bdrOkAYksX68kfmoGk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Vtmkd4mFHT/ssUHo/0sGK3hG1CGcNlykUhBxS5YQI/wkd4nzhFvFNlGVpoxdwzVY8TbPGlKfsSjQJvL5aeCM+nkFQhmoubdtKoE0KeIiKqYxkGfPckUVkhJj1B+OCx9qoq/Z6KJoNjWK0mblU2NPp/FKSrSF9TBZWuQfKkVmoxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4TrBck4sr8z1Q9mL;
-	Thu,  7 Mar 2024 22:33:42 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4TrBtT6wFlz1FLwj;
+	Thu,  7 Mar 2024 22:45:37 +0800 (CST)
 Received: from kwepemm600012.china.huawei.com (unknown [7.193.23.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2AD1E140155;
-	Thu,  7 Mar 2024 22:36:05 +0800 (CST)
-Received: from [10.174.178.220] (10.174.178.220) by
+	by mail.maildlp.com (Postfix) with ESMTPS id 56B271A016C;
+	Thu,  7 Mar 2024 22:45:47 +0800 (CST)
+Received: from build.huawei.com (10.175.101.6) by
  kwepemm600012.china.huawei.com (7.193.23.74) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Thu, 7 Mar 2024 22:36:04 +0800
-Message-ID: <193904fa-d1d6-4bf8-9f49-e44969bdfd85@huawei.com>
-Date: Thu, 7 Mar 2024 22:36:03 +0800
+ 15.1.2507.35; Thu, 7 Mar 2024 22:45:46 +0800
+From: Wenchao Hao <haowenchao2@huawei.com>
+To: "James E . J . Bottomley" <jejb@linux.ibm.com>, "Martin K . Petersen"
+	<martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: Wenchao Hao <haowenchao2@huawei.com>, <louhongxiang@huawei.com>
+Subject: [PATCH v4 0/3] SCSI: Fix issues between removing device and error handle
+Date: Thu, 7 Mar 2024 22:43:08 +0800
+Message-ID: <20240307144311.73735-1-haowenchao2@huawei.com>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] scsi: scsi_core: Fix IO hang when device removing
-Content-Language: en-US
-To: "James E . J . Bottomley" <jejb@linux.ibm.com>, "Martin K . Petersen"
-	<martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <louhongxiang@huawei.com>
-References: <20231016020314.1269636-1-haowenchao2@huawei.com>
- <20231016020314.1269636-5-haowenchao2@huawei.com>
-From: Wenchao Hao <haowenchao2@huawei.com>
-In-Reply-To: <20231016020314.1269636-5-haowenchao2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  kwepemm600012.china.huawei.com (7.193.23.74)
 
-On 2023/10/16 10:03, Wenchao Hao wrote:
-> shost_for_each_device() would skip devices which is in progress of
-> removing, so scsi_run_queue() for these devices would be skipped in
-> scsi_run_host_queues() after blocking hosts' IO.
-> 
-> IO hang would be caused if return true when state is SDEV_CANCEL with
-> following order:
-> 
-> T1:					    T2:scsi_error_handler
-> __scsi_remove_device()
->    scsi_device_set_state(sdev, SDEV_CANCEL)
->    ...
->    sd_remove()
->    del_gendisk()
->    blk_mq_freeze_queue_wait()
->    					    scsi_eh_flush_done_q()
-> 					      scsi_queue_insert(scmd,...)
-> 
-> scsi_queue_insert() would not kick device's queue since commit
-> 8b566edbdbfb ("scsi: core: Only kick the requeue list if necessary")
-> 
-> After scsi_unjam_host(), the scsi error handler would call
-> scsi_run_host_queues() to trigger run queue for devices, while it
-> would not run queue for devices which is in progress of removing
-> because shost_for_each_device() would skip them.
-> 
-> So the requests added to these queues would not be handled any more,
-> and the removing device process would hang too.
-> 
-> Fix this issue by using shost_for_each_device_include_deleted() in
-> scsi_run_host_queues() to trigger a run queue for devices in removing.
-> 
+I am testing SCSI error handle with my previous scsi_debug error
+injection patches, and found some issues when removing device and
+error handler happened together.
 
-This issue is fixed by commit '6df0e077d76bd (scsi: core: Kick the requeue
-list after inserting when flushing)', so do not need any more.
+These issues are triggered because devices in removing would be skipped
+when calling shost_for_each_device().
 
-> Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
-> ---
->   drivers/scsi/scsi_lib.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-> index 195ca80667d0..40f407ffd26f 100644
-> --- a/drivers/scsi/scsi_lib.c
-> +++ b/drivers/scsi/scsi_lib.c
-> @@ -466,7 +466,7 @@ void scsi_run_host_queues(struct Scsi_Host *shost)
->   {
->   	struct scsi_device *sdev;
->   
-> -	shost_for_each_device(sdev, shost)
-> +	shost_for_each_device_include_deleted(sdev, shost)
->   		scsi_run_queue(sdev->request_queue);
->   }
->   
+The issues are found:
+1. statistic info printed at beginning of scsi_error_handler is wrong
+2. device reset is not triggered
+
+V4:
+ - Remove the forth patch which fix IO hang when device removing
+   becaust the issue is fixed by commit '6df0e077d76bd (scsi: core:
+   Kick the requeue list after inserting when flushing)'
+
+V3:
+  - Update patch description
+  - Update comments of functions added
+
+V2:
+  - Fix IO hang by run all devices' queue after error handler
+  - Do not modify shost_for_each_device() directly but add a new
+    helper to iterate devices but do not skip devices in removing
+
+Wenchao Hao (3):
+  scsi: core: Add new helper to iterate all devices of host
+  scsi: scsi_error: Fix wrong statistic when print error info
+  scsi: scsi_error: Fix device reset is not triggered
+
+ drivers/scsi/scsi.c        | 46 ++++++++++++++++++++++++++------------
+ drivers/scsi/scsi_error.c  |  4 ++--
+ include/scsi/scsi_device.h | 25 ++++++++++++++++++---
+ 3 files changed, 56 insertions(+), 19 deletions(-)
+
+-- 
+2.32.0
 
 
