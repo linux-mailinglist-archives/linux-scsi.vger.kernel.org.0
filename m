@@ -1,216 +1,112 @@
-Return-Path: <linux-scsi+bounces-3052-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3049-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A226874FFC
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 14:31:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A8A9874F1D
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 13:32:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DD681C22A70
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 13:31:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CEAF1F25320
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 12:32:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D14C882876;
-	Thu,  7 Mar 2024 13:31:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD81612A142;
+	Thu,  7 Mar 2024 12:32:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="kIRa5GiF";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Coch1DB8";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="kIRa5GiF";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Coch1DB8"
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="lBx1+QuJ"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB0312C7EC
-	for <linux-scsi@vger.kernel.org>; Thu,  7 Mar 2024 13:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78F384FD5;
+	Thu,  7 Mar 2024 12:32:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709818268; cv=none; b=EqMG6D41djDH6OE6MUjQ3dXfkcIpHaZRKkv+sGv6o19PQONOe6tByqBohQjAJcUgV8L/v4Qt4OiQfMcbrIKQjLyaLthA2hwx0Z2Ry/Vz+8mEp7ru2FDg6JpsuPhKO/yQrvWXycYN/4J2w9oIqdSI6yyipn+iUwC1c9gv+Jw2MfY=
+	t=1709814742; cv=none; b=qlrHjZF5gfMHB129LSyAWWqP2IoxSWOf210cWLZpG6im0mcsxbpDRKZ/wH/+4QTofWegGoXm0PSqWYJDQ20yNU069sTvF5x7u2OzfIF9J3u8Fx54earuwfFVlU9Ep75b/KRcRVbzS6RN5tyUW48IHEQlcqYJ0AChMc3b94KyOaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709818268; c=relaxed/simple;
-	bh=kcHGXxaxmSOBJ2OCFh6zk22ZwzuRTWU4RDlWHOuNO4Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TEGdxqSNKIXLFvyS+NtpB49mpraXsRo2gATyh8TZoS9APQDoqsMbnBRNsLroz8aFBwbIWFibYCDG3ZhhPDXmfuFsHqscxrk1h8oaRnj81Q4CyIuWWyJI6Nqozao0ba+TbuCCceadsZVKWYKlEv0zLpCw05qPUKONJLpLMC7Y3Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=kIRa5GiF; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Coch1DB8; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=kIRa5GiF; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Coch1DB8; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	s=arc-20240116; t=1709814742; c=relaxed/simple;
+	bh=CnKV7YkmwKVN45OVgq9HMp191oP0lkB4cDHb6peK+T4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=qSXw9glSI9pQzgAlZWw01fjMjQRLCoYzV23qVcUHioZC0HVjAXzgiDk9IEn3fvtI04niI/Hp8XJ3kLK8YOx/xl3LthwwB8UvrfrVCjtioVkV7NSWpGB2J32Y6dVJTbGOLtyTmvsS4k7e3p+6CmBWYuyk9U5TOBXTK9pp7uauiK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=lBx1+QuJ; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1709814736;
+	bh=CnKV7YkmwKVN45OVgq9HMp191oP0lkB4cDHb6peK+T4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=lBx1+QuJTEVHApTpCCDU+EV1Aykxe0USdn1M5qeFxUu86nOmkjduBDq8dT3o7qXpm
+	 oS8/qBbiILsQJC5KQx/qJRP/+1Rtwj+Mvna+PmMaQHKiOOUzj3K4BfsAnCXpYBeO5i
+	 sIHi1sZKR2G1jRkcILr1PE7EJZw85kHZ0/HyQZD5Je+4MUjufb3f6fIkyubjPbz8re
+	 /xYRYrDhHsNlHZi8hwJ5D8xkg2qXwM8ii3IePd37e1Jh7QAPge7a0+jwCSZNdI+ZOe
+	 Y4f3knEgXbFr14hWz3pvmzLU64Pzxk2jZ5fbpD4Fd7BcqwRmHFTOSol/RnqeVlE3F0
+	 mpc6I8Pch7Hkg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 2CE925F879;
-	Thu,  7 Mar 2024 12:13:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1709813589; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X+X4RtqesHUgTo2LWHgZ07Y0OREFz8I4FH89i8xneP0=;
-	b=kIRa5GiFWHUDenpr4fKPZgz7wiDQUhtexoBDfhPJej6bm54uzksQuij952y68cIDQgFpS0
-	NBPRiQB1Vv1CJyP4GMkfcblfd7Hza8PX6yk+LG6krTAZgzdg8qXu1A35Ir1rkzrW7p85Pp
-	qwpWi2uS/fX5bTuqlbWKJl08qiPOu3w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1709813589;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X+X4RtqesHUgTo2LWHgZ07Y0OREFz8I4FH89i8xneP0=;
-	b=Coch1DB8k4lJtmOqVVL24phIdztmEm3qrY90r0RubQCc3BxN1N8Xa0Plwga/0g6K0sHFgP
-	BPFd+KYqvIaeIXBg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1709813589; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X+X4RtqesHUgTo2LWHgZ07Y0OREFz8I4FH89i8xneP0=;
-	b=kIRa5GiFWHUDenpr4fKPZgz7wiDQUhtexoBDfhPJej6bm54uzksQuij952y68cIDQgFpS0
-	NBPRiQB1Vv1CJyP4GMkfcblfd7Hza8PX6yk+LG6krTAZgzdg8qXu1A35Ir1rkzrW7p85Pp
-	qwpWi2uS/fX5bTuqlbWKJl08qiPOu3w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1709813589;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X+X4RtqesHUgTo2LWHgZ07Y0OREFz8I4FH89i8xneP0=;
-	b=Coch1DB8k4lJtmOqVVL24phIdztmEm3qrY90r0RubQCc3BxN1N8Xa0Plwga/0g6K0sHFgP
-	BPFd+KYqvIaeIXBg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1886D12FC5;
-	Thu,  7 Mar 2024 12:13:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ilqQBVWv6WVEQwAAD6G6ig
-	(envelope-from <hare@suse.de>); Thu, 07 Mar 2024 12:13:09 +0000
-Message-ID: <0b18f1f9-5011-46f4-a0a1-a69cd54bfc88@suse.de>
-Date: Thu, 7 Mar 2024 13:13:08 +0100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tr7wZ6z4Xz4wc8;
+	Thu,  7 Mar 2024 23:32:14 +1100 (AEDT)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Dawei Li <set_pte_at@outlook.com>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>
+Cc: "npiggin@gmail.com" <npiggin@gmail.com>, "linuxppc-dev@lists.ozlabs.org"
+ <linuxppc-dev@lists.ozlabs.org>, "linux-ide@vger.kernel.org"
+ <linux-ide@vger.kernel.org>, "netdev@vger.kernel.org"
+ <netdev@vger.kernel.org>, "linux-wireless@vger.kernel.org"
+ <linux-wireless@vger.kernel.org>, "linux-scsi@vger.kernel.org"
+ <linux-scsi@vger.kernel.org>, "linux-serial@vger.kernel.org"
+ <linux-serial@vger.kernel.org>, "alsa-devel@alsa-project.org"
+ <alsa-devel@alsa-project.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] powerpc: macio: Make remove callback of macio driver
+ void returned
+In-Reply-To: <TYTP286MB356472357994D5EA49E2F5E3CA212@TYTP286MB3564.JPNP286.PROD.OUTLOOK.COM>
+References: <TYCP286MB232391520CB471E7C8D6EA84CAD19@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+ <3dc29701-239f-4a3b-b571-b9732975bd73@csgroup.eu>
+ <TYTP286MB356472357994D5EA49E2F5E3CA212@TYTP286MB3564.JPNP286.PROD.OUTLOOK.COM>
+Date: Thu, 07 Mar 2024 23:32:14 +1100
+Message-ID: <87bk7qnrxt.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC] nvme-fc: FPIN link integrity handling
-Content-Language: en-US
-To: Sagi Grimberg <sagi@grimberg.me>, hare@kernel.org,
- Christoph Hellwig <hch@lst.de>
-Cc: Keith Busch <kbusch@kernel.org>, James Smart <james.smart@broadcom.com>,
- linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org
-References: <20240219085929.31255-1-hare@kernel.org>
- <1dfa9a4e-e4a2-4d48-b569-85e48ce4311c@grimberg.me>
- <1c3eea31-b80f-4b95-ab15-ac42f7c45c16@suse.de>
- <7ff7c9cc-6b02-4adc-9b78-8bab26341049@grimberg.me>
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <7ff7c9cc-6b02-4adc-9b78-8bab26341049@grimberg.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spamd-Result: default: False [-3.09 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 XM_UA_NO_VERSION(0.01)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 BAYES_HAM(-3.00)[100.00%];
-	 MIME_GOOD(-0.10)[text/plain];
-	 URIBL_BLOCKED(0.00)[suse.de:email];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 RCPT_COUNT_SEVEN(0.00)[7];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RCVD_TLS_ALL(0.00)[];
-	 MID_RHS_MATCH_FROM(0.00)[]
-X-Spam-Score: -3.09
-X-Spam-Flag: NO
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 3/7/24 13:01, Sagi Grimberg wrote:
-> 
-> 
-> On 07/03/2024 13:29, Hannes Reinecke wrote:
->> On 3/7/24 11:10, Sagi Grimberg wrote:
->>>
->>>
->>> On 19/02/2024 10:59, hare@kernel.org wrote:
->>>> From: Hannes Reinecke <hare@suse.de>
->>>>
->>>> FPIN LI (link integrity) messages are received when the attached
->>>> fabric detects hardware errors. In response to these messages the
->>>> affected ports should not be used for I/O, and only put back into
->>>> service once the ports had been reset as then the hardware might
->>>> have been replaced.
->>>
->>> Does this mean it cannot service any type of communication over
->>> the wire?
->>>
->> It means that the service is impacted, and communication cannot be 
->> guaranteed (CRC errors, packet loss, you name it).
->> So the link should be taken out of service until it's been (manually)
->> replaced.
-> 
-> OK, that's what I assumed.
-> 
->>
->>>> This patch adds a new controller flag 'NVME_CTRL_TRANSPORT_BLOCKED'
->>>> which will be checked during multipath path selection, causing the
->>>> path to be skipped.
->>>
->>> While this looks sensible to me, it also looks like this introduces a 
->>> ctrl state
->>> outside of ctrl->state... Wouldn't it make sense to move the 
->>> controller to
->>> NVME_CTRL_DEAD ? or is it not a terminal state?
->>>
->> Actually, I was trying to model it alongside the 
->> 'devloss_tmo'/'fast_io_fail' mechanism we have in SCSI.
->> Technically the controller is still present, it's just that we shouldn't
->> send I/O to it.
-> 
-> Sounds like a dead controller to me.
-> 
-Sort of, yes.
+Dawei Li <set_pte_at@outlook.com> writes:
+> Hi Christophe,
+>
+> On Tue, Feb 20, 2024 at 04:12:17PM +0000, Christophe Leroy wrote:
+>> Hi Michael,
+>>=20
+>> ping ?
+>>=20
+>> Le 01/02/2023 =C3=A0 15:36, Dawei Li a =C3=A9crit=C2=A0:
+>> > Commit fc7a6209d571 ("bus: Make remove callback return void") forces
+>> > bus_type::remove be void-returned, it doesn't make much sense for any
+>> > bus based driver implementing remove callbalk to return non-void to
+>> > its caller.
+>> >=20
+>> > This change is for macio bus based drivers.
+>> >=20
+>> > Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+>>=20
+>> This patch is Acked , any special reason for not applying it ?
+>>=20
+>> Note that it now conflicts with commit 1535d5962d79 ("wifi: remove=20
+>> orphaned orinoco driver") but resolution is trivial, just drop the=20
+>> changes to that file.
+>
+> Thanks for picking it up, hardly believe that it's been one year.
+>
+> Michael,
+>
+> I will respin V4 if it's needed.
 
->> And I'd rather not disconnect here as we're trying to
->> do an autoconnect on FC, so manually disconnect would interfere with
->> that and we probably end in a death spiral doing disconnect/reconnect.
-> 
-> I suggested just transitioning the state to DEAD... Not sure how 
-> keep-alives behave though...
-> 
-Hmm. The state machine has the transition LIVE->DELETING->DEAD,
-ie a dead controller is on the way out, with all resources being
-reclaimed.
+No that's fine, I'll sort it out.
 
-A direct transition would pretty much violate that.
-If we were going that way I'd prefer to have another state
-('IMPACTED' ? 'LIVE_NOIO' ?) with the transitions
-LIVE->IMPACTED->DELETING->DEAD
-
->>
->> We could 'elevate' it to a new controller state, but wasn't sure how big
->> an appetite there is. And we already have flags like 'stopped' which
->> seem to fall into the same category.
-> 
-> stopped is different because it is not used to determine if it is capable
-> for IO (admin or io queues). Hence it is ok to be a flag.
-> 
-Okay.
-
-So yeah, we could introduce a new state, but I guess a direct transition
-to 'DEAD' is not really a good idea.
-
-Cheers,
-
-Hannes
-
+cheers
 
