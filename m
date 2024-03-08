@@ -1,131 +1,120 @@
-Return-Path: <linux-scsi+bounces-3088-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3093-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66CDC8759B9
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 22:46:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFB4F875E23
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Mar 2024 08:03:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E39A1B26DC0
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Mar 2024 21:46:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CFD01C2143F
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Mar 2024 07:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E484143748;
-	Thu,  7 Mar 2024 21:44:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 868524F5F9;
+	Fri,  8 Mar 2024 07:02:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="q7lLRLLL"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Hz+pQfpI"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1BDD13DB9A
-	for <linux-scsi@vger.kernel.org>; Thu,  7 Mar 2024 21:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7D64EB3C
+	for <linux-scsi@vger.kernel.org>; Fri,  8 Mar 2024 07:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709847881; cv=none; b=A9sCRfYKdGtYkkE2JKODuhqi8MevhXK8FgKoz747fFvFYdXc6wHWM48eMJ+ZHHYLBejz57icuq3NnTXAImxNWAeXC7G60RnmHB7+U8mMnkWvwXGRwGFKOVq3NYSA7A+eMxul18WuggHRhAGnGM/fGzU9Csm1zw01m0cfZqnf8YQ=
+	t=1709881375; cv=none; b=too1VRQo+7MVnOyOJllXSgLYL85fsIB1Y4/Ne4QLTxscGcYxNplZWD3maD2vJkPnan27az3diJxa6YjjiSHc2sefLM0kWtkjT8+vYnYXBXveVQc0p00RJGkXOxkbeJZLGBVDfwoSsu8HOBzVIluTQsyx9q/tRvSZbLP8Oz4sZK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709847881; c=relaxed/simple;
-	bh=oKUWwFJtdtWNhMzwdWgAICCV9qWEtrIx7hjp1hett1A=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=tf+fM5Cj2aCoktOfXiGNbowfAi++qwPEw1yOp12vcFeTmhIlykqFu01mwbEbdZmsFqJOLmqpmwwTF5/1nJLr5o7AsR5QRWp+dM/FuaCdfPodJTmzY85iEQKBeu85JssFdAbQCm4Na9RBFXJuFEcm3n/wJ2wn0sQflKfEZ9LpsYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ipylypiv.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=q7lLRLLL; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ipylypiv.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6b267bf11so423559276.2
-        for <linux-scsi@vger.kernel.org>; Thu, 07 Mar 2024 13:44:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709847878; x=1710452678; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2vpzIuphj8BSvlf66XaaBIKXyJGCME8GN7Op/FUvHdM=;
-        b=q7lLRLLLqj4ZixcWweKKNskOKVXZYteWJ2f6RkN2f18wlyun41QTyc/lZd7UOpdT+D
-         xEa0hyQtbsXCoK7Z9w4+jgv2M6zAJV+FEeMUK5aqLq0dmkl79bSF0M60VYy/EGHaOoNF
-         vDAqT47BnwLK4wZ0Mm2+ilSBUaMcrPKuDIxzDdQzBu8QkBFYTjMt2RA010cHSEMlEiKT
-         gR/Q6gD11MhTmpRYbBM8PbRbH2f+FRE5vrYLWTxYCnywtF35vTe2q5PdHbOQcwgyxWut
-         XRFv2MqTMY25YDDHfns1TzHISy3dhAR395zZ8w/wqHTujVvy/anEjgZjUYSIrbDkzXZT
-         wFbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709847878; x=1710452678;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2vpzIuphj8BSvlf66XaaBIKXyJGCME8GN7Op/FUvHdM=;
-        b=YDHHqJVF2XNbtHO+zXpHOD9F72L5h/yd7Tvgd3V9ssJNQj9EaY3LL16fm7hx0d+VT9
-         nUnJuD85+JCFk5LBwnQNtxuJbT5Lx+THLa3nBG7FmF1M5PnsPJcPxlylb3WmT8tvVh5F
-         /aiU9Qv/Ek/F3h6tmPfKGtN2vc8U+fp9K/gTsSln3D3emapSXK2k2FglGZU6NwfIud3d
-         UkQHqZHMIPNnM7XyE1HXTI1G5qduj2tLmNtHKRHxQ8Hu1rc1RZrhJRSfxFYVON9U2Q6T
-         LaaGAFDc1hfqwrkOUzjMNaaLuA7At+oAE1OswgNYPRgOQyJ5rt8L+mCjm/gPF2gPV4ly
-         HtdA==
-X-Forwarded-Encrypted: i=1; AJvYcCV9CojAVHCe39hINC3YHUxWvbJtZK4hTS2EfOsORFQ8a8bO+6J9tuUqEt9tUeDXk0Ry7z/cUPOi4EFrI9ufSYXVZsk9GYVzhGiExw==
-X-Gm-Message-State: AOJu0Yz1AaFcRrSxkTT2eT4Z5j24lYgVQIKzwLXqW2YAeKogOB5jIMyN
-	Wz1cBubbB0GS2wJXCgKGvPx6DfzYolJEBRjoEB14BeZvujzDvfTSxwxyb+j4ZJd6Ltvy06OLP+A
-	qZdKOfhfawg==
-X-Google-Smtp-Source: AGHT+IEJLNyfct4IVxJM1xng3J7p5UWMEzEo7qnqC43CO2vkdOobv3kRmpH4aDa8M7rwEpAdkiwZw+qBIcq8/Q==
-X-Received: from ipylypiv.svl.corp.google.com ([2620:15c:2c5:13:69c0:c447:593d:278c])
- (user=ipylypiv job=sendgmr) by 2002:a05:6902:1009:b0:dbe:387d:a8ef with SMTP
- id w9-20020a056902100900b00dbe387da8efmr656689ybt.1.1709847878739; Thu, 07
- Mar 2024 13:44:38 -0800 (PST)
-Date: Thu,  7 Mar 2024 13:44:18 -0800
-In-Reply-To: <20240307214418.3812290-1-ipylypiv@google.com>
+	s=arc-20240116; t=1709881375; c=relaxed/simple;
+	bh=/38y0AuLHzqEmnaQjlKLKAIePR1DEDQy2WGeq67bBtQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=i6mqc7pTziUJQYX63YKadrPkogqzl0mPl1Noa9WeykcznpqKOouGorDmKpBzVrLsgPELJ5snk48BK0vD25jb5Ua71v5KYraeVkDxZBBr4WeOwxCbGkzh/mceJhkPesPTYz/SqvJVnJt2AxdUOzfNORrx9oBeAeDsVlG3yrESzi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=Hz+pQfpI; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: dd17ceaadd1911ee935d6952f98a51a9-20240308
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=35OV9bm/nJfNjbrb7yi/BB0BrjLFYQJ7Jo6Rx4Ol1pg=;
+	b=Hz+pQfpIBBmRt3VRq8xBDvbQEj7d6dRAchxdt+KRnY5CGKIGjmfPnEdlzPAwtekxFKG6aPhnm1zdNlx8ojG78yHqTSdB+lAZ6Jf71BPQ/oMYZSQaK1j+zae+mzSEIkg1LRr/86xd7HjLmV6wSUdOMO+8XQXJ47giHuQ2JQlctkM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:2b2fc066-2f16-4e84-950b-80d9fd720733,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:6f543d0,CLOUDID:3aa84381-4f93-4875-95e7-8c66ea833d57,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: dd17ceaadd1911ee935d6952f98a51a9-20240308
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+	(envelope-from <peter.wang@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 658427736; Fri, 08 Mar 2024 15:02:44 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 8 Mar 2024 15:02:43 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 8 Mar 2024 15:02:43 +0800
+From: <peter.wang@mediatek.com>
+To: <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+	<avri.altman@wdc.com>, <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
+CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+	<peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+	<alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
+	<chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+	<powen.kao@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
+	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
+	<naomi.chu@mediatek.com>, <chu.stanley@gmail.com>
+Subject: [PATCH v1 0/7] ufs: host: mediatek: Provide features and fixes in MediaTek platforms
+Date: Fri, 8 Mar 2024 15:02:34 +0800
+Message-ID: <20240308070241.9163-1-peter.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240307214418.3812290-1-ipylypiv@google.com>
-X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Message-ID: <20240307214418.3812290-8-ipylypiv@google.com>
-Subject: [PATCH v8 7/7] scsi: isci: Add libsas SATA sysfs attributes group
-From: Igor Pylypiv <ipylypiv@google.com>
-To: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
-	John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>, 
-	"James E.J. Bottomley" <jejb@linux.ibm.com>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
-	Jack Wang <jinpu.wang@cloud.ionos.com>, Hannes Reinecke <hare@suse.de>, 
-	Xiang Chen <chenxiang66@hisilicon.com>, Artur Paszkiewicz <artur.paszkiewicz@intel.com>, 
-	Bart Van Assche <bvanassche@acm.org>
-Cc: TJ Adams <tadamsjr@google.com>, linux-ide@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Igor Pylypiv <ipylypiv@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--7.753000-8.000000
+X-TMASE-MatchedRID: sBypFcuOxUYMQLXc2MGSbDPDkSOzeDWWNNuh+5zmS680QmmUihPzrEI+
+	GPbgg5kxzd7s/pivV7Ebeq8jPqXwbj95f95FaTdFP0HVIeixJdAraL2mh8ZVK0k7tZaD19NMo8W
+	MkQWv6iUoTQl7wNH8Pg1fA1QHegDv3QfwsVk0UbuGrPnef/I+esSfI/a4Ki1CnfkRCpX3LDY2KU
+	2TjSiKo14YemAKcq+3l5lPxc0kjNU=
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--7.753000-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP: A66417B6A0862F3EBCC3F098BB2B814C3613DB32401881B33D6B87E704E73AC52000:8
+X-MTK: N
 
-The added sysfs attributes group enables the configuration of NCQ Priority
-feature for HBAs that rely on libsas to manage SATA devices.
+From: Peter Wang <peter.wang@mediatek.com>
 
-Reviewed-by: John Garry <john.g.garry@oracle.com>
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Jason Yan <yanaijie@huawei.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Niklas Cassel <cassel@kernel.org>
-Signed-off-by: Igor Pylypiv <ipylypiv@google.com>
----
- drivers/scsi/isci/init.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+This series fixes some defects and provide features in MediaTek UFS drivers.
 
-diff --git a/drivers/scsi/isci/init.c b/drivers/scsi/isci/init.c
-index 6277162a028b..8658dcd61b87 100644
---- a/drivers/scsi/isci/init.c
-+++ b/drivers/scsi/isci/init.c
-@@ -149,6 +149,11 @@ static struct attribute *isci_host_attrs[] = {
- 
- ATTRIBUTE_GROUPS(isci_host);
- 
-+static const struct attribute_group *isci_sdev_groups[] = {
-+	&sas_ata_sdev_attr_group,
-+	NULL
-+};
-+
- static const struct scsi_host_template isci_sht = {
- 
- 	.module				= THIS_MODULE,
-@@ -176,6 +181,7 @@ static const struct scsi_host_template isci_sht = {
- 	.compat_ioctl			= sas_ioctl,
- #endif
- 	.shost_groups			= isci_host_groups,
-+	.sdev_groups			= isci_sdev_groups,
- 	.track_queue_depth		= 1,
- };
- 
+Peter Wang (3):
+  ufs: host: mediatek: fix vsx/vccqx control logic
+  ufs: host: mediatek: tx skew fix
+  ufs: host: mediatek: support mphy reset
+
+Po-Wen Kao  (3):
+  ufs: host: mediatek: Add UFS_MTK_CAP_DISABLE_MCQ
+  ufs: host: mediatek: ufs mtk sip command reconstruct
+  ufs: host: mediatek: rename host power control API
+
+Alice Chao (1):
+  ufs: host: mediatek: support rtff in PM flow
+
+ drivers/ufs/host/ufs-mediatek-sip.h |  94 ++++++++++++++++++++
+ drivers/ufs/host/ufs-mediatek.c     | 130 ++++++++++++++++++++++++----
+ drivers/ufs/host/ufs-mediatek.h     |  89 +++----------------
+ 3 files changed, 219 insertions(+), 94 deletions(-)
+ create mode 100755 drivers/ufs/host/ufs-mediatek-sip.h
+
 -- 
-2.44.0.278.ge034bb2e1d-goog
+2.18.0
 
 
