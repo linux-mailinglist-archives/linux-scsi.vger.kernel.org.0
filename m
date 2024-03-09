@@ -1,96 +1,109 @@
-Return-Path: <linux-scsi+bounces-3130-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3135-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13DA4876D29
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Mar 2024 23:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5772E876FBB
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 Mar 2024 09:12:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC3991F216BD
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Mar 2024 22:32:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AC361F2108A
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 Mar 2024 08:12:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD7321DFE1;
-	Fri,  8 Mar 2024 22:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7969374D1;
+	Sat,  9 Mar 2024 08:12:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com header.b="mtckFTT6"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 718191DA4D;
-	Fri,  8 Mar 2024 22:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5994249F5;
+	Sat,  9 Mar 2024 08:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.71.154.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709937134; cv=none; b=bF5gGV/5DFraMEZ0YO/PIYVvsqd68bT2lgQBgd/90nv2wXj8tZmOJRu9U0dhnXDvFYwEYPo/W68pvjUp/iujDvEs8f+UAm4rmYxiQ8Wflrsxe9sKF27mTKj7w8O6nB1UMhZ/6rfiD084wZWQC4EQPXAFxpo63Pn/Hz4yey0R4hE=
+	t=1709971931; cv=none; b=C1yvr/9TbEADU74Z9PQ4392og1Q4o2UCE5MIojhY90S8Of0ko9k2R2zPksRxL61Mn8DCadfMY4wovbWS1Dt4Lp7zWV7RB+NegvsRt/NChM4ePaVbWhZapmM9yE0LLmLt5QSP+qpXoYBtWrMP+T51co5IMz2uPsk5+1VK1jtfs54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709937134; c=relaxed/simple;
-	bh=ssGP/sKIDd40DWkEnGb8v8pNLmQIx5G0esCNsJrdJlQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tWcg3MOc4emhGcXxu4CMEa2X8uaVsQQ1rFpfUDVi9yyy+LLOa9wN0fUc4KT1LU3KFv7nqj7s+CrlOWlQ7q9bogKW9jG0AyAbjqeVWBmskOr+PMxBRjyd659bIIAoHlls9olsUUXGijRIyQekb+Y+vJKdraCANXEYWqHpn3sKmRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=acm.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso2092124a12.2;
-        Fri, 08 Mar 2024 14:32:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709937133; x=1710541933;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pwOes60SqhGmD6fZ45p3rXPhDx2zuEPddRLFEizjnLQ=;
-        b=DRopFoS1ac+Hb2qnqDZD7eBGb/IBPg3DW8nk3bZS5XB2X3alW9vhVD8OuQa/8qYYbM
-         SYnBcuR2+ne0QcBXub4jO03NhZRnuxeuCLInT8f61w/K9pBbYDMHwhgAKvLlHcsGydf3
-         /UUJs/JtcL7dltlv6KI+rAap/t7dhOlvLF+oCl05/ziX0z62CNsBf+2QnHORmNu7TfJm
-         MLV/s5FXTZUy8yulUSZWxm8EqSXG1Eo3n1hrwGpxyWm8ANNjzhEcrgFasZb8/hFZ2M3x
-         Q8iGED+aL1P6czui0WG8X+J0HCqc3GmXpfEEbw1p8aqqLC4eSCwZelo9YN/fys855bPA
-         iCxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWwMdwT4ul3ewIWVcOoXfpzRAsIKJD+jC+9OnT4CeBeTy/801U+gkGQi9H4WcushNbG9AWz0fT9C5DcH/v/D+4Ydc9+MRmQ5CkaJ6WWyun4HawWnJZnE2fBSwcnNwwUlcTySpUU2fot1g==
-X-Gm-Message-State: AOJu0Yy38FkXklME2ozaO5QBU0yWBCCfDt0unA3QmyNVsGG4L/S46h+v
-	npwiUzQwEyjj/70KM4LcOSZwSN9VLZL31S1mrcZqz5NdODx78VKG
-X-Google-Smtp-Source: AGHT+IEofjUYiuTHZodgC8kisAUsnNX/Pl05xaom5ZZLvFQn7Ie0Ci/J9NbNpfyb98BUf5hbtIc2Zg==
-X-Received: by 2002:a05:6a20:daa4:b0:1a0:eea4:c612 with SMTP id iy36-20020a056a20daa400b001a0eea4c612mr70027pzb.11.1709937132754;
-        Fri, 08 Mar 2024 14:32:12 -0800 (PST)
-Received: from ?IPV6:2601:647:4d7e:54f3:667:4981:ffa1:7be1? ([2601:647:4d7e:54f3:667:4981:ffa1:7be1])
-        by smtp.gmail.com with ESMTPSA id f49-20020a056a000b3100b006e4dad633e1sm191350pfu.177.2024.03.08.14.32.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Mar 2024 14:32:12 -0800 (PST)
-Message-ID: <b21751d5-21e2-45c8-88a2-b148ac335637@acm.org>
-Date: Fri, 8 Mar 2024 14:32:11 -0800
+	s=arc-20240116; t=1709971931; c=relaxed/simple;
+	bh=YUXiHY4k8KdxfRkpMRa4zrfX6fzO4umIBuPK9q+tKlE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IaIuvAzq0sphS2sk9XC+DQEE2SyTM7D2UOgKX+y1e6ZkgiwunIlCz6/EbkrhY0Xzyr2Pt0ETsr+F1ZI6ls87SmH9LmQ1POUx133s5K2A0ca+hXfncB99DkoXgn4v4P79VqMto7rn4OforJyb1VeS9OCvloGg0Ebyd9wVGOo6pcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wdc.com; spf=pass smtp.mailfrom=wdc.com; dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com header.b=mtckFTT6; arc=none smtp.client-ip=216.71.154.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wdc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1709971930; x=1741507930;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YUXiHY4k8KdxfRkpMRa4zrfX6fzO4umIBuPK9q+tKlE=;
+  b=mtckFTT6nYEuitlaINCOORYAJOvtgPAAdpgCrCPhcsFEkW6AMiCWMBoC
+   J+scBnWhPm8iEo3B/HWl2ag5RcpcwhNdnSUGVNpR/Y5YHkkCtWP4H0y7Y
+   vidVxIgSp9OqdJva4t0k69tREMyuWC6S8EzSymzcIXbw0klfDlaQqviZm
+   nvy+Pjb04GenNVCBL8am781doqzJGv3MAOMqe1mreh3GMg0kkToxj9KLK
+   HWpPAV7xdtG8IhOYIq0U3A3pM3VLXqcA6lofrLOx/Yz4tzTbfRqedsMTX
+   zae8M0mYnMa4DE3SmGIUp2w2NMadlVgOXm+WHOQupzgde9RRArSWuJTYX
+   A==;
+X-CSE-ConnectionGUID: NvKoeE8dSyO2eCb06znFxw==
+X-CSE-MsgGUID: Zuiiz2TyRIa70X024KqZpQ==
+X-IronPort-AV: E=Sophos;i="6.07,112,1708358400"; 
+   d="scan'208";a="10715102"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 09 Mar 2024 16:11:07 +0800
+IronPort-SDR: jSC2buZsMmFz+I5Tn+6SLJpkng26O2S7da8W9BYkAhvcYr86IgKLG24qr5RUME5OiDxX4dqMPj
+ bzkHcBOYsKhQ==
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Mar 2024 23:14:33 -0800
+IronPort-SDR: xo0xJQxqbFnR1B0uE3yFCV1Jf1+WGqrMjq4vctoJz5Hd8fWZNDKLSNkqkJ9cP48N7/iAVnAYzi
+ FL15C8bINO1g==
+WDCIronportException: Internal
+Received: from 87h6l33.ad.shared (HELO BXYGM33.ad.shared) ([10.225.32.8])
+  by uls-op-cesaip01.wdc.com with ESMTP; 09 Mar 2024 00:11:06 -0800
+From: Avri Altman <avri.altman@wdc.com>
+To: "James E . J . Bottomley" <jejb@linux.ibm.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: Bart Van Assche <bvanassche@acm.org>,
+	Bean Huo <beanhuo@micron.com>,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Avri Altman <avri.altman@wdc.com>
+Subject: [PATCH v3 0/4] Re-use device management code fragments
+Date: Sat,  9 Mar 2024 10:10:58 +0200
+Message-ID: <20240309081104.5006-1-avri.altman@wdc.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] scsi: ufs: Re-use compose_devman_upiu
-Content-Language: en-US
-To: Avri Altman <Avri.Altman@wdc.com>, Bean Huo <huobean@gmail.com>,
- "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: Bean Huo <beanhuo@micron.com>,
- "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20240305210051.10847-1-avri.altman@wdc.com>
- <20240305210051.10847-5-avri.altman@wdc.com>
- <6826cdb060609f81c970fc21b2050535f7c5a810.camel@gmail.com>
- <DM6PR04MB6575AC3761F84B308EB0633DFC202@DM6PR04MB6575.namprd04.prod.outlook.com>
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <DM6PR04MB6575AC3761F84B308EB0633DFC202@DM6PR04MB6575.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/7/24 11:26, Avri Altman wrote:
-> On Tue, 2024-03-05 at 23:00 +0200, Avri Altman wrote:
->> Why not directly pass UTP_CMD_TYPE_SCSI or UTP_CMD_TYPE_DEV_MANAGE
->> instead of using below ?: logic?
->
-> Thanks.  Will do that.
+v2->v3:
+ - 2/4 - Clarify commit log (Bean)
+ - 4/4 - pass cmd_type to ufshcd_prepare_req_desc_hdr (Bean)
 
-While making that change, please keep the version check inside
-ufshcd_prepare_req_desc_hdr().
+v1->v2:
+ - Attend Bart's comments
 
-Thanks,
 
-Bart.
+Device management commands are constructed for query commands that are
+being issued by the driver, but also for raw device management commands
+originated by the bsg module, and recently, by the advanced rpmb
+handler. Thus, the same code fragments, e.g. locking, composing the
+command, composing the upiu etc., appear over and over. Remove those
+duplications.  Theoretically, there should be no functional change.
+
+Avri Altman (4):
+  scsi: ufs: Re-use device management locking code
+  scsi: ufs: Re-use exec_dev_cmd
+  scsi: ufs: Re-use compose_dev_cmd
+  scsi: ufs: Re-use compose_devman_upiu
+
+ drivers/ufs/core/ufshcd.c | 204 ++++++++++++++++----------------------
+ include/ufs/ufshci.h      |   2 +-
+ 2 files changed, 87 insertions(+), 119 deletions(-)
+
+-- 
+2.42.0
 
 
