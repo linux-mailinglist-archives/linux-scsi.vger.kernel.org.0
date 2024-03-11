@@ -1,112 +1,113 @@
-Return-Path: <linux-scsi+bounces-3157-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3159-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BF1587791E
-	for <lists+linux-scsi@lfdr.de>; Mon, 11 Mar 2024 00:05:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 008028779A0
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 Mar 2024 02:47:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F18CB20CA9
-	for <lists+linux-scsi@lfdr.de>; Sun, 10 Mar 2024 23:05:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 322BE1C210E2
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 Mar 2024 01:47:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24D913D3BA;
-	Sun, 10 Mar 2024 23:04:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="MiDCYJTV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC46E3C0D;
+	Mon, 11 Mar 2024 01:46:46 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FDA3CF79;
-	Sun, 10 Mar 2024 23:04:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC7192919;
+	Mon, 11 Mar 2024 01:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710111885; cv=none; b=AjW9Vpn0lmTfPk9UaafPV/yOGznX9AADOrAtmay6MQcOlKVPmeUU2SW86F3uwJmzTLz/OtIsJXfuiN87RbXBGZKZO4bpZ1l9ryKOwZvodBW8mLh3UifaHWzdXLih46rBnilQf46GWUDch7R4kUc0/4N4smPLNXj/7BICbh/lZ2M=
+	t=1710121606; cv=none; b=IR/EBhjnw9SHKZ+FftelHlQbRnY8A565Zo8ORwSiuXTKSggr7ZbYAu4pYv3QyRCyABtXGR7ZOTOqIhmLJZehHaxd5S0pIoDSp3vp9qBwFeb8UpNV3ybkHJj4LQFlYeuiYHaV5ghQUbzKy5uMzNoyX9b0fzeyeh6xBBq4bjLk3q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710111885; c=relaxed/simple;
-	bh=IqKlVXdvRCGyV3P+9ATcptDQsKk0x0UuV2i/DuWwdnM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RRMjDLjG/sye6AL89Gx71Rp5GMTAis3b+S4fLV/TLmPG1bAqYI3Nm5ZWMMESg1YA0jqw3I7Z/fMCwyolqys3OuxwTdc/GKMVMq/mgO/XtO704RLruAw5Lb5dlmhgQ/BNSRZ7ZT9d2PBU5SwVN9BAr78MbY6176R5lLSGW8nhtDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=MiDCYJTV; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42ALnUR2024778;
-	Sun, 10 Mar 2024 23:04:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=6fPMDNozrHsLnGVjWcs5LMYU5HVRwihp+ZkxbBA2AMA=;
- b=MiDCYJTVRLe9Z5YNRyPgu0it8On5PQE23w0p4R83wMB2ERxfbAL29P1HsDxJCfFl4M7t
- GIvP14W4KBezFjrG67flGw27wXKWUGPVkbTD4Gw/wrWYKqCDtXd9Kw4L+0Cw2peynCNV
- D+7Ys3mgqK3x4GGbE5Zg4ULGELhaKnRRajcx2grudyhvrhX7NAQNrneLm6QpTGhgypLV
- l3sa1Y3+CUEgsSPa4MLa7sB36JSXf7LDj17dyC4cXIlRLTMJuoeBMuwi7TAK1Vt23VKg
- 1C2r6avrDiWO0O2ujcUat9I2eRkrgfy2BggB6XGGBiwuAFXCqWbkrU3MN5X1A0RiD0uS 1w== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3wrftd9svu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 10 Mar 2024 23:04:32 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42AMsVK5005032;
-	Sun, 10 Mar 2024 23:04:31 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3wre750nej-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 10 Mar 2024 23:04:31 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42AN4TSI006839;
-	Sun, 10 Mar 2024 23:04:31 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3wre750ndq-5;
-	Sun, 10 Mar 2024 23:04:31 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
-        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, simone.p.weiss@posteo.com
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: bfa: Remove further unnecessary struct declaration
-Date: Sun, 10 Mar 2024 19:04:21 -0400
-Message-ID: <171010474745.3838281.8532324205422385487.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20240217191409.6260-1-simone.p.weiss@posteo.com>
-References: <20240217191409.6260-1-simone.p.weiss@posteo.com>
+	s=arc-20240116; t=1710121606; c=relaxed/simple;
+	bh=RIu7MRdePbJEjk8rWnbql5et/GijQFHwwo53gnn4EzU=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=rjFPD+YTHMq9ScS6hxe5iyZ8kwMQkQKeiX6BulMD9hEOJ1HSycnBNdw9gWyFVHmknj+PE1sA1xOZ/v8/DLyFJDYBUG1gEsKKqmB4eb5QVOFnaQra3ZDnc1DGjMmlM+fNfk25DheikWOiF9vP8OYs+/Be36QRcCYjmP/GQMFoyVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4TtKMm2B4XzNlsN;
+	Mon, 11 Mar 2024 09:44:52 +0800 (CST)
+Received: from canpemm500003.china.huawei.com (unknown [7.192.105.39])
+	by mail.maildlp.com (Postfix) with ESMTPS id 747CE1404DB;
+	Mon, 11 Mar 2024 09:46:35 +0800 (CST)
+Received: from canpemm500004.china.huawei.com (7.192.104.92) by
+ canpemm500003.china.huawei.com (7.192.105.39) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Mon, 11 Mar 2024 09:46:35 +0800
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Mon, 11 Mar 2024 09:46:34 +0800
+Subject: Re: [PATCH v2 0/6] Add LIBSAS_SHT_BASE for libsas
+To: John Garry <john.g.garry@oracle.com>, <jejb@linux.ibm.com>,
+	<martin.petersen@oracle.com>, <chenxiang66@hisilicon.com>,
+	<jinpu.wang@cloud.ionos.com>, <artur.paszkiewicz@intel.com>,
+	<dlemoal@kernel.org>, <ipylypiv@google.com>, <cassel@kernel.org>
+CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20240308114339.1340549-1-john.g.garry@oracle.com>
+From: Jason Yan <yanaijie@huawei.com>
+Message-ID: <cf0cfd01-43e3-141e-01ca-867a8eb9a982@huawei.com>
+Date: Mon, 11 Mar 2024 09:46:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-10_14,2024-03-06_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 adultscore=0
- mlxscore=0 phishscore=0 spamscore=0 suspectscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2403100187
-X-Proofpoint-ORIG-GUID: G1AGs45jbMjuU4jbh_LkqgLMHQBcX1kF
-X-Proofpoint-GUID: G1AGs45jbMjuU4jbh_LkqgLMHQBcX1kF
+In-Reply-To: <20240308114339.1340549-1-john.g.garry@oracle.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500004.china.huawei.com (7.192.104.92)
 
-On Sat, 17 Feb 2024 19:14:09 +0000, simone.p.weiss@posteo.com wrote:
+Hi John,
 
-> With Commit c3b0d087763f9833
-> ("scsi: bfa: Remove unnecessary struct declarations") duplicated struct
-> declarions for struct bfa_fcs_s and struct bfa_fcs_fabric_s where already
-> removed.
+On 2024/3/8 19:43, John Garry wrote:
+> There is much duplication in the scsi_host_template structure for the
+> drivers which use libsas.
 > 
-> There are further duplications:
+> Similar to how a standard template is used in libata with __ATA_BASE_SHT,
+> create a standard template in LIBSAS_SHT_BASE.
 > 
-> [...]
+> Based on following:
+> b914227e4215 (tag: mkp-scsi-staging, mkp-scsi/staging, mkp-scsi/for-next, mkp-scsi/6.9/scsi-staging) Merge patch series "Pass data lifetime information to SCSI disk devices"
+> 
+> Differences to v1:
+> - tidy libsas.h change (Jason)
+> - Don't set eh_abort_handler in LIBSAS_SHT_BASE (Jason)
+> - Remove sg_tablesize in LIBSAS_SHT_BASE, as W=1 build dislikes it
 
-Applied to 6.9/scsi-queue, thanks!
+I cannot find sg_tablesize in LIBSAS_SHT_BASE in v1, did I misssed anything?
 
-[1/1] scsi: bfa: Remove further unnecessary struct declaration
-      https://git.kernel.org/mkp/scsi/c/c121b588a5e4
+Thanks,
+Jason
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+> - Add some RB tags (Thanks)
+> 
+> John Garry (6):
+>    scsi: libsas: Add LIBSAS_SHT_BASE
+>    scsi: pm8001: Use LIBSAS_SHT_BASE
+>    scsi: hisi_sas: Use LIBSAS_SHT_BASE_NO_SLAVE_INIT
+>    scsi: aic94xx: Use LIBSAS_SHT_BASE
+>    scsi: mvsas: Use LIBSAS_SHT_BASE
+>    scsi: isci: Use LIBSAS_SHT_BASE
+> 
+>   drivers/scsi/aic94xx/aic94xx_init.c    | 21 ++-----------------
+>   drivers/scsi/hisi_sas/hisi_sas_v1_hw.c | 18 +---------------
+>   drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 18 +---------------
+>   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 18 +---------------
+>   drivers/scsi/isci/init.c               | 23 ++------------------
+>   drivers/scsi/mvsas/mv_init.c           | 19 +----------------
+>   drivers/scsi/pm8001/pm8001_init.c      | 20 +-----------------
+>   include/scsi/libsas.h                  | 29 ++++++++++++++++++++++++++
+>   8 files changed, 38 insertions(+), 128 deletions(-)
+> 
 
