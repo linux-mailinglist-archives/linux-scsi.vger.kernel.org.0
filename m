@@ -1,56 +1,56 @@
-Return-Path: <linux-scsi+bounces-3244-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3248-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9787A87C9FA
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Mar 2024 09:35:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF0F687C9FF
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Mar 2024 09:35:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DCC92833E7
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Mar 2024 08:35:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E16EA1C2259C
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Mar 2024 08:35:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A93617BA9;
-	Fri, 15 Mar 2024 08:35:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAB6A17C79;
+	Fri, 15 Mar 2024 08:35:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="TDhzrJrP"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="BQwlOg/v"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88AD17991
-	for <linux-scsi@vger.kernel.org>; Fri, 15 Mar 2024 08:35:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44B517BB9
+	for <linux-scsi@vger.kernel.org>; Fri, 15 Mar 2024 08:35:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710491703; cv=none; b=t9mfeio/8lJ+thFaCh9Ea9yNjABK7zgZjZs9MyrJxkhzYmbdNnomhTfFiuBgcqtHLT3vb3AXNdIyDCG4ilFOnfPBkIXQQBuN/WiJCWerYuZzzKS7N7lj1Br6NmZmTtfPWHrodcNg4zMP5CwyyV0ekr9jUMSUyU5dOvdaPcV1mXU=
+	t=1710491705; cv=none; b=lnFK6aQdD2dlZPgNQm8xMYat/B0cvfym/vCIjEJq0otMHNe2oD4lxWKktaDKRghauVDsbW4V6fRvEzHtGAypt/Fz+Y8X0B7X+G2RrqFekRJ5d7jQoIiuoHtT2FCRp6V0vVICOZ4jeqEulvu0ebmJ/3YA6pCc2bsgzi8LQWwjTvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710491703; c=relaxed/simple;
-	bh=ZLT0XQ5a17yqkeDND7aeK14SzHEJWffjzcUXulcEtQA=;
+	s=arc-20240116; t=1710491705; c=relaxed/simple;
+	bh=5vUwtcbFHl3j5evxTY6HAgAUfr0td4h4NOOpHnXFDrg=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LO9JEiFNig8nmu0YFJfkICEPW4vWAJJvnYQQcr93tR6+/066Ww5pMQp15wtyRL+pEskHCYlQNHT3K613Id5q7SyxwOiZM5fU5TScBrBatUcIpQInashnIzStyraazGxdw6U1kH+uwaGm4sZruJL+l+9dziatYMHFm2SpEW4NOAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=TDhzrJrP; arc=none smtp.client-ip=60.244.123.138
+	 MIME-Version:Content-Type; b=k8ykFQfvOTIiqtFlDkUDRAYmXp9Om9aJKPWPBqJ5E+/SNE0cqZnRY2TJUJVu6VyppObILTljAG3WEKqg3mHN1PvxyWO7nXREinSOI5YscpMNkULO6PmmYPqK+BjLDRboQRh62XQ08Co/EiMNWYQ13fc7XaEMRCRQHYZJeQag8o4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=BQwlOg/v; arc=none smtp.client-ip=60.244.123.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: e4afeb6ae2a611eeb8927bc1f75efef4-20240315
+X-UUID: e4b27a88e2a611eeb8927bc1f75efef4-20240315
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=fydS8KBtthi1h3b4IeD9/II1N6JzyYB+1Hi99jvkzCo=;
-	b=TDhzrJrP0xJilDblVU8G4+Qywvtrkc/opoLOSTexDxISJKaV1t3KvZWTtW4P0JRf72HO9pGGJT4yLa0j0iy8mriUxmAXFT5cFwjdHLj1YaaXRElJj8KdyfUk7tb71Krx/gjaKXn1SdNzJWaKSK6hMXEhKhlq9xTCIVYTPG7b1wM=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=oeAzBoL9EBJWz2qwI3onG0bmYDXNeq0oJ9wAQA83NiU=;
+	b=BQwlOg/vzUrx94EIV+M8Xy3K9V0Zz/NZ1+oKlxHL/7FFGAosTB1tESfH4e/eaUnQMtWDZpt2jN3cRIMRofmoofxFnKPEqe5WtzjkPqWJ52iNSnhjmjWWLjoggKcoIosQUJWMBewI9bNC+HpsAc31dYM5MxFlW27i1c8Zic6FsLc=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:bc35102a-9678-4427-93ce-e8b06fc24ce9,IP:0,U
+X-CID-O-INFO: VERSION:1.1.37,REQID:b4a80c6a-15eb-408b-bf7a-f66d39ef2104,IP:0,U
 	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
 	N:release,TS:-25
-X-CID-META: VersionHash:6f543d0,CLOUDID:57e68981-4f93-4875-95e7-8c66ea833d57,B
+X-CID-META: VersionHash:6f543d0,CLOUDID:11047190-e2c0-40b0-a8fe-7c7e47299109,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
 	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
 	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: e4afeb6ae2a611eeb8927bc1f75efef4-20240315
+X-UUID: e4b27a88e2a611eeb8927bc1f75efef4-20240315
 Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
 	(envelope-from <peter.wang@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1882789772; Fri, 15 Mar 2024 16:34:52 +0800
+	with ESMTP id 1913406672; Fri, 15 Mar 2024 16:34:52 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -68,9 +68,9 @@ CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
 	<powen.kao@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
 	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
 	<naomi.chu@mediatek.com>, <chu.stanley@gmail.com>
-Subject: [PATCH v2 5/7] ufs: host: mediatek: rename host power control API
-Date: Fri, 15 Mar 2024 16:34:46 +0800
-Message-ID: <20240315083448.7185-6-peter.wang@mediatek.com>
+Subject: [PATCH v2 6/7] ufs: host: mediatek: support mphy reset
+Date: Fri, 15 Mar 2024 16:34:47 +0800
+Message-ID: <20240315083448.7185-7-peter.wang@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20240315083448.7185-1-peter.wang@mediatek.com>
 References: <20240315083448.7185-1-peter.wang@mediatek.com>
@@ -82,98 +82,133 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--8.382800-8.000000
-X-TMASE-MatchedRID: Dz2rI8EJB2ASsMJYjeJjbpXi1z8zt1TRVg8Cu6buTGUH8UzOewTxw64T
-	oUk/aSm1G04xakpCTBluGm5dWKYjJW94Ipa1otxoFYJUGv4DL3xo3Yq5PCwLAvNhzIgXtFJV88y
-	Ax0zkDh7IrNi4B9W0wmRsrGzt2UVHWrGyEceiJjOO0rt0LpQGedVeTBbTX7DomyiLZetSf8mfop
-	0ytGwvXiq2rl3dzGQ1l3+bAt/YFVQrDtKO1nMb87ylVHbseLLr9peJJrwQXnmJjf1mJVm5IF8I4
-	oUq5Vga
+X-TM-AS-Result: No-10--3.982300-8.000000
+X-TMASE-MatchedRID: pO+4S45NqGgMQLXc2MGSbHTnOygHVQpOKx5ICGp/WtE1LB46LFAAklO4
+	BD7nLMxnlTJXKqh1ne0FNz4MVU+iBPDZOKmFLlvIVU3yVpaj3Qz0O7M3lSnTWxqB+wKK9uZeQmZ
+	9+1UBYL38s+61e4dE7OM+w5me8ld4HxPMjOKY7A81yT2WGspnOMRB0bsfrpPI34T9cYMsdwyovi
+	qi0Ulcpy5jTX93RJHTezxWo31ggUESo09hC/CfsnPSd/w3TEtqlekI0xnK/LEfJy08VBayAmYo2
+	UxAR0dC/jgY96F76fmOh+wyNBrFXDJiNuKohDcKzKSG3JdyKAPqtV2AGMNPaiHWPYzouJUy
 X-TM-AS-User-Approved-Sender: No
 X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--8.382800-8.000000
+X-TMASE-Result: 10--3.982300-8.000000
 X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: C01B34E67F7175378414B0B793A12B756D2599DB6D4BDD5D41C9AA142BEDD6D22000:8
+X-TM-SNTS-SMTP: 868B550B241EF93FD85E393556C72F669E959B90092E606A820678E1BB2C1F762000:8
 X-MTK: N
 
-From: Po-Wen Kao <powen.kao@mediatek.com>
+From: Peter Wang <peter.wang@mediatek.com>
 
-Mediatek host power include two part:
-1. ufshci power, which is the main power of ufs host controller.
-2. ufshci crypto sram power, which is the power of ufs crypto engine.
-
-This host power control is actually control crypto sram power.
-Rename it for easy maintain.
+This patch will reset mphy when host reset.
+Backup mphy setting after mphy reset control get.
+Restore mphy setting after mphy reset.
 
 Acked-by: Chun-Hung Wu <Chun-Hung.Wu@mediatek.com>
-Reviewed-by: Avri Altman <avri.altman@wdc.com>
-Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 Signed-off-by: Peter Wang <peter.wang@mediatek.com>
-Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
 ---
- drivers/ufs/host/ufs-mediatek-sip.h | 13 +++----------
- drivers/ufs/host/ufs-mediatek.c     |  4 ++--
- 2 files changed, 5 insertions(+), 12 deletions(-)
+ drivers/ufs/host/ufs-mediatek-sip.h |  9 ++++++++-
+ drivers/ufs/host/ufs-mediatek.c     | 14 ++++++++++++++
+ drivers/ufs/host/ufs-mediatek.h     |  1 +
+ 3 files changed, 23 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek-sip.h b/drivers/ufs/host/ufs-mediatek-sip.h
-index 35d1d5e76a2c..c26513aedee3 100755
+index c26513aedee3..caeb70a6ae83 100755
 --- a/drivers/ufs/host/ufs-mediatek-sip.h
 +++ b/drivers/ufs/host/ufs-mediatek-sip.h
-@@ -16,7 +16,7 @@
- #define UFS_MTK_SIP_DEVICE_RESET          BIT(1)
- #define UFS_MTK_SIP_CRYPTO_CTRL           BIT(2)
- #define UFS_MTK_SIP_REF_CLK_NOTIFICATION  BIT(3)
--#define UFS_MTK_SIP_HOST_PWR_CTRL         BIT(5)
-+#define UFS_MTK_SIP_SRAM_PWR_CTRL         BIT(5)
+@@ -19,7 +19,7 @@
+ #define UFS_MTK_SIP_SRAM_PWR_CTRL         BIT(5)
  #define UFS_MTK_SIP_GET_VCC_NUM           BIT(6)
  #define UFS_MTK_SIP_DEVICE_PWR_CTRL       BIT(7)
+-
++#define UFS_MTK_SIP_MPHY_CTRL             BIT(8)
  
-@@ -31,13 +31,6 @@ enum ufs_mtk_vcc_num {
+ /*
+  * Multi-VCC by Numbering
+@@ -31,6 +31,10 @@ enum ufs_mtk_vcc_num {
  	UFS_VCC_MAX
  };
  
--/*
-- * Host Power Control options
-- */
--enum {
--	HOST_PWR_HCI = 0,
--	HOST_PWR_MPHY
--};
++enum ufs_mtk_mphy_op {
++	UFS_MPHY_BACKUP = 0,
++	UFS_MPHY_RESTORE
++};
  
  /*
   * SMC call wrapper function
-@@ -78,8 +71,8 @@ static inline void _ufs_mtk_smc(struct ufs_mtk_smc_arg s)
- #define ufs_mtk_device_reset_ctrl(high, res) \
- 	ufs_mtk_smc(UFS_MTK_SIP_DEVICE_RESET, &(res), high)
+@@ -80,4 +84,7 @@ static inline void _ufs_mtk_smc(struct ufs_mtk_smc_arg s)
+ #define ufs_mtk_device_pwr_ctrl(on, ufs_version, res) \
+ 	ufs_mtk_smc(UFS_MTK_SIP_DEVICE_PWR_CTRL, &(res), on, ufs_version)
  
--#define ufs_mtk_host_pwr_ctrl(opt, on, res) \
--	ufs_mtk_smc(UFS_MTK_SIP_HOST_PWR_CTRL, &(res), opt, on)
-+#define ufs_mtk_sram_pwr_ctrl(on, res) \
-+	ufs_mtk_smc(UFS_MTK_SIP_SRAM_PWR_CTRL, &(res), on)
- 
- #define ufs_mtk_get_vcc_num(res) \
- 	ufs_mtk_smc(UFS_MTK_SIP_GET_VCC_NUM, &(res))
++#define ufs_mtk_mphy_ctrl(op, res) \
++	ufs_mtk_smc(UFS_MTK_SIP_MPHY_CTRL, &(res), op)
++
+ #endif /* !_UFS_MEDIATEK_SIP_H */
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index bb5b11185d8a..90523652a6fb 100644
+index 90523652a6fb..a18978060c77 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1376,7 +1376,7 @@ static int ufs_mtk_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
- 	if (ufshcd_is_link_off(hba))
- 		ufs_mtk_device_reset_ctrl(0, res);
+@@ -185,16 +185,23 @@ static void ufs_mtk_crypto_enable(struct ufs_hba *hba)
+ static void ufs_mtk_host_reset(struct ufs_hba *hba)
+ {
+ 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
++	struct arm_smccc_res res;
  
--	ufs_mtk_host_pwr_ctrl(HOST_PWR_HCI, false, res);
-+	ufs_mtk_sram_pwr_ctrl(false, res);
+ 	reset_control_assert(host->hci_reset);
+ 	reset_control_assert(host->crypto_reset);
+ 	reset_control_assert(host->unipro_reset);
++	reset_control_assert(host->mphy_reset);
  
- 	return 0;
- fail:
-@@ -1397,7 +1397,7 @@ static int ufs_mtk_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- 	if (hba->ufshcd_state != UFSHCD_STATE_OPERATIONAL)
- 		ufs_mtk_dev_vreg_set_lpm(hba, false);
+ 	usleep_range(100, 110);
  
--	ufs_mtk_host_pwr_ctrl(HOST_PWR_HCI, true, res);
-+	ufs_mtk_sram_pwr_ctrl(true, res);
+ 	reset_control_deassert(host->unipro_reset);
+ 	reset_control_deassert(host->crypto_reset);
+ 	reset_control_deassert(host->hci_reset);
++	reset_control_deassert(host->mphy_reset);
++
++	/* restore mphy setting aftre mphy reset */
++	if (host->mphy_reset)
++		ufs_mtk_mphy_ctrl(UFS_MPHY_RESTORE, res);
+ }
  
- 	err = ufs_mtk_mphy_power_on(hba, true);
- 	if (err)
+ static void ufs_mtk_init_reset_control(struct ufs_hba *hba,
+@@ -219,6 +226,8 @@ static void ufs_mtk_init_reset(struct ufs_hba *hba)
+ 				   "unipro_rst");
+ 	ufs_mtk_init_reset_control(hba, &host->crypto_reset,
+ 				   "crypto_rst");
++	ufs_mtk_init_reset_control(hba, &host->mphy_reset,
++				   "mphy_rst");
+ }
+ 
+ static int ufs_mtk_hce_enable_notify(struct ufs_hba *hba,
+@@ -918,6 +927,7 @@ static int ufs_mtk_init(struct ufs_hba *hba)
+ 	struct device *dev = hba->dev;
+ 	struct ufs_mtk_host *host;
+ 	int err = 0;
++	struct arm_smccc_res res;
+ 
+ 	host = devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
+ 	if (!host) {
+@@ -946,6 +956,10 @@ static int ufs_mtk_init(struct ufs_hba *hba)
+ 
+ 	ufs_mtk_init_reset(hba);
+ 
++	/* backup mphy setting if mphy can reset */
++	if (host->mphy_reset)
++		ufs_mtk_mphy_ctrl(UFS_MPHY_BACKUP, res);
++
+ 	/* Enable runtime autosuspend */
+ 	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
+ 
+diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
+index 9226e95c4a60..eb3744ae3a42 100644
+--- a/drivers/ufs/host/ufs-mediatek.h
++++ b/drivers/ufs/host/ufs-mediatek.h
+@@ -167,6 +167,7 @@ struct ufs_mtk_host {
+ 	struct reset_control *hci_reset;
+ 	struct reset_control *unipro_reset;
+ 	struct reset_control *crypto_reset;
++	struct reset_control *mphy_reset;
+ 	struct ufs_hba *hba;
+ 	struct ufs_mtk_crypt_cfg *crypt;
+ 	struct ufs_mtk_clk mclk;
 -- 
 2.18.0
 
