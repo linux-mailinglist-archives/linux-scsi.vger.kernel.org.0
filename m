@@ -1,99 +1,57 @@
-Return-Path: <linux-scsi+bounces-3360-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3412-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98E0B88962A
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 Mar 2024 09:47:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A3F3888A03B
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 Mar 2024 13:49:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E76629A731
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 Mar 2024 08:47:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B3D82A467A
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 Mar 2024 12:49:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FE829E1B7;
-	Mon, 25 Mar 2024 03:46:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E053D185209;
+	Mon, 25 Mar 2024 07:32:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="AiAGPerO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dq/dHpX2"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352192A65B3;
-	Sun, 24 Mar 2024 23:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D8113E6A1;
+	Mon, 25 Mar 2024 04:44:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711324604; cv=none; b=Eodf7a8Yu/iA0Z/rcCEOmw2x2P8Zw9XjPqSORTBdio32vBIE3MpAYT9QjohNd0nIMzUlXagin5K4/g4xNDJk4JHRa6CEMlR4unNInDajUccrhl4H7Dl2HBeLpYDDWKMZH5OEmhvETlrCvTOyC1HsmZyj600BY9KmN+r6FU3toXY=
+	t=1711341896; cv=none; b=ZiysjupQb5bwjQJcAQqDts9FNjmC2xHzjvAJJOPPPliWHlp5myv15SqxsD9YbYuOjPaKiN6nsbiZKgti8fgU/RJlmVFNdL2c4nRY220R75FFO1fu7Q3n9YnUrET2Wlt2OOuRzn3dNf3RRe7i1NjKs3JzH5qGX/Vrk10Sb1P1yQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711324604; c=relaxed/simple;
-	bh=4X5JDASsyVTqpZ1mOIk4YSbgd2kOuQOTKm1luQihzFY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dAu4A6cNbE6LNR2/nHQLvx/0gvJcsdYOPsxG/UOyWwQ0TT5Zqve2nipZA4h43ZH3grPuSpbyvdE5j8nZQLHxSB43oj7O4o6h1l4yiOB7pxI5gOx2ztImfffRDEI5z6lBN6JcG36QwsUhAuKp5+qS7H5tjwTOdgYB6DsBUgtzM1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=AiAGPerO; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=8Ap781XzTEv6/N3Fz2uGluUK4bmcyE+i99tuUWvhx7k=; b=AiAGPerOJJbKRhNpuJsVUJbWmU
-	YiCXZspsGoKuruGzkhXHiiyVNOI0Loafwt6J7055bgOgT1jWkIP3AlLWQCJzfIg5DEuQhyeElrsHh
-	OUojqAL/iskl2rJR6f4LO0c6wQeTpj9lncLIYXijQOwKZ1TTLd69jX+0LnPqXUNDLZNDWpLyMfBH4
-	0TUN7wXQwCDU7Dw7VjvYj4KhVtBPjRgM7rcf/vQAfFcA/AqookY3rH0oBWYMq7S5C0oVO3i58Jf2H
-	0SoUGAFpU1+jYml+W1kBdGthgRKRmPFP+q0UdWjn2AhGHMe3nHBwmW18pDrUtn155JRbx1UolfBb0
-	aB1fenLA==;
-Received: from [210.13.83.2] (helo=localhost)
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1roXhZ-0000000DzuH-28iC;
-	Sun, 24 Mar 2024 23:56:34 +0000
-From: Christoph Hellwig <hch@lst.de>
-To: Jens Axboe <axboe@kernel.dk>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-	Sathya Prakash <sathya.prakash@broadcom.com>,
-	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-	"Juergen E. Fischer" <fischer@norbit.de>,
-	Xiang Chen <chenxiang66@hisilicon.com>,
-	HighPoint Linux Team <linux@highpoint-tech.com>,
-	Tyrel Datwyler <tyreld@linux.ibm.com>,
-	Brian King <brking@us.ibm.com>,
-	Lee Duncan <lduncan@suse.com>,
-	Chris Leech <cleech@redhat.com>,
-	Mike Christie <michael.christie@oracle.com>,
-	John Garry <john.g.garry@oracle.com>,
-	Jason Yan <yanaijie@huawei.com>,
-	Kashyap Desai <kashyap.desai@broadcom.com>,
-	Sumit Saxena <sumit.saxena@broadcom.com>,
-	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-	Chandrakanth patil <chandrakanth.patil@broadcom.com>,
-	Jack Wang <jinpu.wang@cloud.ionos.com>,
-	Nilesh Javali <njavali@marvell.com>,
-	GR-QLogic-Storage-Upstream@marvell.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	linux-block@vger.kernel.org,
-	linux-ide@vger.kernel.org,
-	linux1394-devel@lists.sourceforge.net,
-	MPT-FusionLinux.pdl@broadcom.com,
+	s=arc-20240116; t=1711341896; c=relaxed/simple;
+	bh=dCyq4IlLyCxZDmF0hNOTrSr/OwDTABcs0o62nUuJaT0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ww6huz7hqi4lgYMmVhGglrS5Pp/hil0OSbe7sDCVqXoehPBEjbkEZcwEWlHvzITrm6aAEx0yHkV2Ps5SFVUAloq3BMlCoBOZXmJqvMsTXTb4pfwVuSYOSs0sF5CqFvslkzpqthpN7pCftHOn5ZbG8lWFuk+7y55ZkgJiAlfs0+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dq/dHpX2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9914AC433C7;
+	Mon, 25 Mar 2024 04:44:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711341895;
+	bh=dCyq4IlLyCxZDmF0hNOTrSr/OwDTABcs0o62nUuJaT0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Dq/dHpX2TKC3Q1cqVWFDLG24Ijui6m7kAiIRKj1aCHHBYme4HRO1rvC+T1Np5mvp2
+	 gfY78hQd3DMqdD7koSpEBP2kJfRlOOVqg8+srsj4Mc2Ojzt10E96p12AIKLVst3++I
+	 4rpwcpfrFNJJJROWhcEZrgXpZ0/1276j9XEPFZdq/x0GEHVEv6Oq0DNupu2MqPeZae
+	 vvTrSOHibpQRuQzNvJMb1Dzsq6gILVXRQ7Qg3HA/0QiMxsB/X7qYs2F0Awn7B0xPOj
+	 4CEWVstWJKVQwzNmCWO2zTFUrxHwno5OlF0jwxP5tO2TSPVCLm/8gAlV5RyvQ4w84m
+	 1qzx9OfjOk6CA==
+From: Damien Le Moal <dlemoal@kernel.org>
+To: linux-block@vger.kernel.org,
+	Jens Axboe <axboe@kernel.dk>,
 	linux-scsi@vger.kernel.org,
-	open-iscsi@googlegroups.com,
-	megaraidlinux.pdl@broadcom.com,
-	mpi3mr-linuxdrv.pdl@broadcom.com,
-	linux-samsung-soc@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net
-Subject: [PATCH 23/23] block: remove now unused queue limits helpers
-Date: Mon, 25 Mar 2024 07:54:48 +0800
-Message-Id: <20240324235448.2039074-24-hch@lst.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240324235448.2039074-1-hch@lst.de>
-References: <20240324235448.2039074-1-hch@lst.de>
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	dm-devel@lists.linux.dev,
+	Mike Snitzer <snitzer@redhat.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v2 00/28] Zone write plugging
+Date: Mon, 25 Mar 2024 13:44:24 +0900
+Message-ID: <20240325044452.3125418-1-dlemoal@kernel.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -101,381 +59,271 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- block/blk-settings.c           | 245 ---------------------------------
- drivers/s390/block/dasd_eckd.c |   6 +-
- include/linux/blkdev.h         |  13 --
- include/linux/mmc/host.h       |   4 +-
- 4 files changed, 5 insertions(+), 263 deletions(-)
+The patch series introduces zone write plugging (ZWP) as the new
+mechanism to control the ordering of writes to zoned block devices.
+ZWP replaces zone write locking (ZWL) which is implemented only by
+mq-deadline today. ZWP also allows emulating zone append operations
+using regular writes for zoned devices that do not natively support this
+operation (e.g. SMR HDDs). This patch series removes the scsi disk
+driver and device mapper zone append emulation to use ZWP emulation.
 
-diff --git a/block/blk-settings.c b/block/blk-settings.c
-index cdbaef159c4bc3..57cd1660815ec2 100644
---- a/block/blk-settings.c
-+++ b/block/blk-settings.c
-@@ -283,72 +283,6 @@ int queue_limits_set(struct request_queue *q, struct queue_limits *lim)
- }
- EXPORT_SYMBOL_GPL(queue_limits_set);
- 
--/**
-- * blk_queue_bounce_limit - set bounce buffer limit for queue
-- * @q: the request queue for the device
-- * @bounce: bounce limit to enforce
-- *
-- * Description:
-- *    Force bouncing for ISA DMA ranges or highmem.
-- *
-- *    DEPRECATED, don't use in new code.
-- **/
--void blk_queue_bounce_limit(struct request_queue *q, enum blk_bounce bounce)
--{
--	q->limits.bounce = bounce;
--}
--EXPORT_SYMBOL(blk_queue_bounce_limit);
--
--/**
-- * blk_queue_max_hw_sectors - set max sectors for a request for this queue
-- * @q:  the request queue for the device
-- * @max_hw_sectors:  max hardware sectors in the usual 512b unit
-- *
-- * Description:
-- *    Enables a low level driver to set a hard upper limit,
-- *    max_hw_sectors, on the size of requests.  max_hw_sectors is set by
-- *    the device driver based upon the capabilities of the I/O
-- *    controller.
-- *
-- *    max_dev_sectors is a hard limit imposed by the storage device for
-- *    READ/WRITE requests. It is set by the disk driver.
-- *
-- *    max_sectors is a soft limit imposed by the block layer for
-- *    filesystem type requests.  This value can be overridden on a
-- *    per-device basis in /sys/block/<device>/queue/max_sectors_kb.
-- *    The soft limit can not exceed max_hw_sectors.
-- **/
--void blk_queue_max_hw_sectors(struct request_queue *q, unsigned int max_hw_sectors)
--{
--	struct queue_limits *limits = &q->limits;
--	unsigned int max_sectors;
--
--	if ((max_hw_sectors << 9) < PAGE_SIZE) {
--		max_hw_sectors = 1 << (PAGE_SHIFT - 9);
--		pr_info("%s: set to minimum %u\n", __func__, max_hw_sectors);
--	}
--
--	max_hw_sectors = round_down(max_hw_sectors,
--				    limits->logical_block_size >> SECTOR_SHIFT);
--	limits->max_hw_sectors = max_hw_sectors;
--
--	max_sectors = min_not_zero(max_hw_sectors, limits->max_dev_sectors);
--
--	if (limits->max_user_sectors)
--		max_sectors = min(max_sectors, limits->max_user_sectors);
--	else
--		max_sectors = min(max_sectors, BLK_DEF_MAX_SECTORS_CAP);
--
--	max_sectors = round_down(max_sectors,
--				 limits->logical_block_size >> SECTOR_SHIFT);
--	limits->max_sectors = max_sectors;
--
--	if (!q->disk)
--		return;
--	q->disk->bdi->io_pages = max_sectors >> (PAGE_SHIFT - 9);
--}
--EXPORT_SYMBOL(blk_queue_max_hw_sectors);
--
- /**
-  * blk_queue_chunk_sectors - set size of the chunk for this queue
-  * @q:  the request queue for the device
-@@ -435,65 +369,6 @@ void blk_queue_max_zone_append_sectors(struct request_queue *q,
- }
- EXPORT_SYMBOL_GPL(blk_queue_max_zone_append_sectors);
- 
--/**
-- * blk_queue_max_segments - set max hw segments for a request for this queue
-- * @q:  the request queue for the device
-- * @max_segments:  max number of segments
-- *
-- * Description:
-- *    Enables a low level driver to set an upper limit on the number of
-- *    hw data segments in a request.
-- **/
--void blk_queue_max_segments(struct request_queue *q, unsigned short max_segments)
--{
--	if (!max_segments) {
--		max_segments = 1;
--		pr_info("%s: set to minimum %u\n", __func__, max_segments);
--	}
--
--	q->limits.max_segments = max_segments;
--}
--EXPORT_SYMBOL(blk_queue_max_segments);
--
--/**
-- * blk_queue_max_discard_segments - set max segments for discard requests
-- * @q:  the request queue for the device
-- * @max_segments:  max number of segments
-- *
-- * Description:
-- *    Enables a low level driver to set an upper limit on the number of
-- *    segments in a discard request.
-- **/
--void blk_queue_max_discard_segments(struct request_queue *q,
--		unsigned short max_segments)
--{
--	q->limits.max_discard_segments = max_segments;
--}
--EXPORT_SYMBOL_GPL(blk_queue_max_discard_segments);
--
--/**
-- * blk_queue_max_segment_size - set max segment size for blk_rq_map_sg
-- * @q:  the request queue for the device
-- * @max_size:  max size of segment in bytes
-- *
-- * Description:
-- *    Enables a low level driver to set an upper limit on the size of a
-- *    coalesced segment
-- **/
--void blk_queue_max_segment_size(struct request_queue *q, unsigned int max_size)
--{
--	if (max_size < PAGE_SIZE) {
--		max_size = PAGE_SIZE;
--		pr_info("%s: set to minimum %u\n", __func__, max_size);
--	}
--
--	/* see blk_queue_virt_boundary() for the explanation */
--	WARN_ON_ONCE(q->limits.virt_boundary_mask);
--
--	q->limits.max_segment_size = max_size;
--}
--EXPORT_SYMBOL(blk_queue_max_segment_size);
--
- /**
-  * blk_queue_logical_block_size - set logical block size for the queue
-  * @q:  the request queue for the device
-@@ -660,29 +535,6 @@ void blk_limits_io_opt(struct queue_limits *limits, unsigned int opt)
- }
- EXPORT_SYMBOL(blk_limits_io_opt);
- 
--/**
-- * blk_queue_io_opt - set optimal request size for the queue
-- * @q:	the request queue for the device
-- * @opt:  optimal request size in bytes
-- *
-- * Description:
-- *   Storage devices may report an optimal I/O size, which is the
-- *   device's preferred unit for sustained I/O.  This is rarely reported
-- *   for disk drives.  For RAID arrays it is usually the stripe width or
-- *   the internal track size.  A properly aligned multiple of
-- *   optimal_io_size is the preferred request size for workloads where
-- *   sustained throughput is desired.
-- */
--void blk_queue_io_opt(struct request_queue *q, unsigned int opt)
--{
--	blk_limits_io_opt(&q->limits, opt);
--	if (!q->disk)
--		return;
--	q->disk->bdi->ra_pages =
--		max(queue_io_opt(q) * 2 / PAGE_SIZE, VM_READAHEAD_PAGES);
--}
--EXPORT_SYMBOL(blk_queue_io_opt);
--
- static int queue_limit_alignment_offset(const struct queue_limits *lim,
- 		sector_t sector)
- {
-@@ -932,81 +784,6 @@ void blk_queue_update_dma_pad(struct request_queue *q, unsigned int mask)
- }
- EXPORT_SYMBOL(blk_queue_update_dma_pad);
- 
--/**
-- * blk_queue_segment_boundary - set boundary rules for segment merging
-- * @q:  the request queue for the device
-- * @mask:  the memory boundary mask
-- **/
--void blk_queue_segment_boundary(struct request_queue *q, unsigned long mask)
--{
--	if (mask < PAGE_SIZE - 1) {
--		mask = PAGE_SIZE - 1;
--		pr_info("%s: set to minimum %lx\n", __func__, mask);
--	}
--
--	q->limits.seg_boundary_mask = mask;
--}
--EXPORT_SYMBOL(blk_queue_segment_boundary);
--
--/**
-- * blk_queue_virt_boundary - set boundary rules for bio merging
-- * @q:  the request queue for the device
-- * @mask:  the memory boundary mask
-- **/
--void blk_queue_virt_boundary(struct request_queue *q, unsigned long mask)
--{
--	q->limits.virt_boundary_mask = mask;
--
--	/*
--	 * Devices that require a virtual boundary do not support scatter/gather
--	 * I/O natively, but instead require a descriptor list entry for each
--	 * page (which might not be idential to the Linux PAGE_SIZE).  Because
--	 * of that they are not limited by our notion of "segment size".
--	 */
--	if (mask)
--		q->limits.max_segment_size = UINT_MAX;
--}
--EXPORT_SYMBOL(blk_queue_virt_boundary);
--
--/**
-- * blk_queue_dma_alignment - set dma length and memory alignment
-- * @q:     the request queue for the device
-- * @mask:  alignment mask
-- *
-- * description:
-- *    set required memory and length alignment for direct dma transactions.
-- *    this is used when building direct io requests for the queue.
-- *
-- **/
--void blk_queue_dma_alignment(struct request_queue *q, int mask)
--{
--	q->limits.dma_alignment = mask;
--}
--EXPORT_SYMBOL(blk_queue_dma_alignment);
--
--/**
-- * blk_queue_update_dma_alignment - update dma length and memory alignment
-- * @q:     the request queue for the device
-- * @mask:  alignment mask
-- *
-- * description:
-- *    update required memory and length alignment for direct dma transactions.
-- *    If the requested alignment is larger than the current alignment, then
-- *    the current queue alignment is updated to the new value, otherwise it
-- *    is left alone.  The design of this is to allow multiple objects
-- *    (driver, device, transport etc) to set their respective
-- *    alignments without having them interfere.
-- *
-- **/
--void blk_queue_update_dma_alignment(struct request_queue *q, int mask)
--{
--	BUG_ON(mask > PAGE_SIZE);
--
--	if (mask > q->limits.dma_alignment)
--		q->limits.dma_alignment = mask;
--}
--EXPORT_SYMBOL(blk_queue_update_dma_alignment);
--
- /**
-  * blk_set_queue_depth - tell the block layer about the device queue depth
-  * @q:		the request queue for the device
-@@ -1060,28 +837,6 @@ void blk_queue_required_elevator_features(struct request_queue *q,
- }
- EXPORT_SYMBOL_GPL(blk_queue_required_elevator_features);
- 
--/**
-- * blk_queue_can_use_dma_map_merging - configure queue for merging segments.
-- * @q:		the request queue for the device
-- * @dev:	the device pointer for dma
-- *
-- * Tell the block layer about merging the segments by dma map of @q.
-- */
--bool blk_queue_can_use_dma_map_merging(struct request_queue *q,
--				       struct device *dev)
--{
--	unsigned long boundary = dma_get_merge_boundary(dev);
--
--	if (!boundary)
--		return false;
--
--	/* No need to update max_segment_size. see blk_queue_virt_boundary() */
--	blk_queue_virt_boundary(q, boundary);
--
--	return true;
--}
--EXPORT_SYMBOL_GPL(blk_queue_can_use_dma_map_merging);
--
- /**
-  * disk_set_zoned - inidicate a zoned device
-  * @disk:	gendisk to configure
-diff --git a/drivers/s390/block/dasd_eckd.c b/drivers/s390/block/dasd_eckd.c
-index 180a008d38eaaf..2f16f543079b4f 100644
---- a/drivers/s390/block/dasd_eckd.c
-+++ b/drivers/s390/block/dasd_eckd.c
-@@ -4561,9 +4561,9 @@ static struct dasd_ccw_req *dasd_eckd_build_cp_tpm_track(
- 	len_to_track_end = 0;
- 	/*
- 	 * A tidaw can address 4k of memory, but must not cross page boundaries
--	 * We can let the block layer handle this by setting
--	 * blk_queue_segment_boundary to page boundaries and
--	 * blk_max_segment_size to page size when setting up the request queue.
-+	 * We can let the block layer handle this by setting seg_boundary_mask
-+	 * to page boundaries and max_segment_size to page size when setting up
-+	 * the request queue.
- 	 * For write requests, a TIDAW must not cross track boundaries, because
- 	 * we have to set the CBC flag on the last tidaw for each track.
- 	 */
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index c3e8f7cf96be9e..7a1e96c5bb1106 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -895,15 +895,9 @@ int queue_limits_set(struct request_queue *q, struct queue_limits *lim);
- /*
-  * Access functions for manipulating queue properties
-  */
--void blk_queue_bounce_limit(struct request_queue *q, enum blk_bounce limit);
--extern void blk_queue_max_hw_sectors(struct request_queue *, unsigned int);
- extern void blk_queue_chunk_sectors(struct request_queue *, unsigned int);
--extern void blk_queue_max_segments(struct request_queue *, unsigned short);
--extern void blk_queue_max_discard_segments(struct request_queue *,
--		unsigned short);
- void blk_queue_max_secure_erase_sectors(struct request_queue *q,
- 		unsigned int max_sectors);
--extern void blk_queue_max_segment_size(struct request_queue *, unsigned int);
- extern void blk_queue_max_discard_sectors(struct request_queue *q,
- 		unsigned int max_discard_sectors);
- extern void blk_queue_max_write_zeroes_sectors(struct request_queue *q,
-@@ -920,7 +914,6 @@ void disk_update_readahead(struct gendisk *disk);
- extern void blk_limits_io_min(struct queue_limits *limits, unsigned int min);
- extern void blk_queue_io_min(struct request_queue *q, unsigned int min);
- extern void blk_limits_io_opt(struct queue_limits *limits, unsigned int opt);
--extern void blk_queue_io_opt(struct request_queue *q, unsigned int opt);
- extern void blk_set_queue_depth(struct request_queue *q, unsigned int depth);
- extern void blk_set_stacking_limits(struct queue_limits *lim);
- extern int blk_stack_limits(struct queue_limits *t, struct queue_limits *b,
-@@ -928,10 +921,6 @@ extern int blk_stack_limits(struct queue_limits *t, struct queue_limits *b,
- void queue_limits_stack_bdev(struct queue_limits *t, struct block_device *bdev,
- 		sector_t offset, const char *pfx);
- extern void blk_queue_update_dma_pad(struct request_queue *, unsigned int);
--extern void blk_queue_segment_boundary(struct request_queue *, unsigned long);
--extern void blk_queue_virt_boundary(struct request_queue *, unsigned long);
--extern void blk_queue_dma_alignment(struct request_queue *, int);
--extern void blk_queue_update_dma_alignment(struct request_queue *, int);
- extern void blk_queue_rq_timeout(struct request_queue *, unsigned int);
- extern void blk_queue_write_cache(struct request_queue *q, bool enabled, bool fua);
- 
-@@ -948,8 +937,6 @@ void disk_set_independent_access_ranges(struct gendisk *disk,
- 
- extern void blk_queue_required_elevator_features(struct request_queue *q,
- 						 unsigned int features);
--extern bool blk_queue_can_use_dma_map_merging(struct request_queue *q,
--					      struct device *dev);
- 
- bool __must_check blk_get_queue(struct request_queue *);
- extern void blk_put_queue(struct request_queue *);
-diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
-index 5894bf912f7bdb..88c6a76042ee73 100644
---- a/include/linux/mmc/host.h
-+++ b/include/linux/mmc/host.h
-@@ -433,8 +433,8 @@ struct mmc_host {
- 	mmc_pm_flag_t		pm_caps;	/* supported pm features */
- 
- 	/* host specific block data */
--	unsigned int		max_seg_size;	/* see blk_queue_max_segment_size */
--	unsigned short		max_segs;	/* see blk_queue_max_segments */
-+	unsigned int		max_seg_size;	/* lim->max_segment_size */
-+	unsigned short		max_segs;	/* lim->max_segments */
- 	unsigned short		unused;
- 	unsigned int		max_req_size;	/* maximum number of bytes in one req */
- 	unsigned int		max_blk_size;	/* maximum size of one mmc block */
+Unlike ZWL which operates on requests, ZWP operates on BIOs. A zone
+write plug is simply a BIO list that is atomically manipulated using a
+spinlock and a kblockd submission work. A write BIO to a zone is
+"plugged" to delay its execution if a write BIO for the same zone was
+already issued, that is, if a write request for the same zone is being
+executed. The next plugged BIO is unplugged and issued once the write
+request completes.
+
+This mechanism allows to:
+ - Untangle zone write ordering from the block IO schedulers. This
+   allows removing the restriction on using only mq-deadline for zoned
+   block devices. Any block IO scheduler, including "none" can be used.
+ - Zone write plugging operates on BIOs instead of requests. Plugged
+   BIOs waiting for execution thus do not hold scheduling tags and thus
+   do not prevent other BIOs from being submitted to the device (reads
+   or writes to other zones). Depending on the workload, this can
+   significantly improve the device use and the performance.
+ - Both blk-mq (request) based zoned devices and BIO-based devices (e.g.
+   device mapper) can use ZWP. It is mandatory for the
+   former but optional for the latter: BIO-based driver can use zone
+   write plugging to implement write ordering guarantees, or the drivers
+   can implement their own if needed.
+ - The code is less invasive in the block layer and in device drivers.
+   ZWP implementation is mostly limited to blk-zoned.c, with some small
+   changes in blk-mq.c, blk-merge.c and bio.c.
+
+Performance evaluation results are shown below.
+
+The series is based on 6.9.0-rc1 and organized as follows:
+
+ - Patch 1 to 6 are preparatory changes for patch 7.
+ - Patch 7, 8 and 9 introduce ZWP
+ - Patch 10 and 11 add zone append emulation to ZWP.
+ - Patch 12 to 19 modify zoned block device drivers to use ZWP and
+   prepare for the removal of ZWL.
+ - Patch 20 to 28 remove zone write locking
+
+Overall, these changes do not significantly increase the amount of code
+(the higher number of addition shown by diff-stat is in fact due to a
+larger amount of comments in the code).
+
+Many thanks must go to Christoph Hellwig for comments and suggestions
+he provided on earlier versions of these patches.
+
+Performance evaluation results
+==============================
+
+Environments:
+ - Intel Xeon 16-cores/32-threads, 128GB of RAM
+ - Kernel:
+   - ZWL (baseline): 6.9.0-rc1
+   - ZWP: 6.9.0-rc1 patched kernel to add zone write plugging
+   (both kernels were compiled with the same configuration turning off
+   most heavy debug features)
+
+Workoads:
+ - seqw4K1: 4KB sequential write, qd=1
+ - seqw4K16: 4KB sequential write, qd=16
+ - seqw1M16: 1MB sequential write, qd=16
+ - rndw4K16: 4KB random write, qd=16
+ - rndw128K16: 128KB random write, qd=16
+ - btrfs workoad: Single fio job writing 128 MB files using 128 KB
+   direct IOs at qd=16.
+
+Devices:
+ - nullblk (zoned): 4096 zones of 256 MB, 128 max open zones.
+ - NVMe ZNS drive: 1 TB ZNS drive with 2GB zone size, 14 max open and
+   active zones.
+ - SMR HDD: 20 TB disk with 256MB zone size, 128 max open zones.
+
+For ZWP, the result show the performance percentage increase (or
+decrease) against ZWL (baseline) case.
+
+1) null_blk zoned device:
+
+             +--------+--------+-------+--------+---------+---------+
+             |seqw4K1 |seqw4K16|seqw1M1|seqw1M16|rndw4K16|rndw128K16|
+             |(MB/s)  | (MB/s) |(MB/s) | (MB/s) | (KIOPS)| (KIOPS)  |
+ +-----------+--------+--------+-------+--------+--------+----------+
+ |    ZWL    | 961    | 835    | 18640 | 14480  | 415    | 167      |
+ |mq-deadline|        |        |       |        |        |          |
+ +-----------+--------+--------+-------+--------+--------+----------+
+ |    ZWP    | 963    | 845    | 18640 | 14630  | 452    | 165      |
+ |mq-deadline| (+0%)  | (+1%)  | (+0%) | (+1%)  | (+8%)  | (-1%)    |
+ +-----------+--------+--------+-------+--------+--------+----------+
+ |    ZWP    | 731    | 651    | 15780 | 12710  | 129    | 108      |
+ |    bfq    | (-23%) | (-22%) | (-15%)| (-12%) | (-68%) | (-15%)   |
+ +-----------+--------+--------+-------+--------+--------+----------+
+ |    ZWP    | 2511   | 1632   | 27470 | 19340  | 336    | 150      |
+ |   none    | (+161%)| (+95%) | (+47%)| (+33%) | (-19%) | (-19%)   |
+ +-----------+--------+--------+-------+--------+--------+----------+
+
+ZWP with mq-deadline gives performance very similar to zone write
+locking, showing that zone write plugging overhead is acceptable.
+But ZWP ability to run fast block devices with the none scheduler
+shows brings all the benefits of zone write plugging and results in
+significant performance increase for all workloads. The exception to
+this are random write workloads with multiple jobs: for these, the
+faster request submission rate achieved by zone write plugging results
+in higher contention on null-blk zone spinlock, which degrades
+performance.
+
+2) NVMe ZNS drive:
+
+             +--------+--------+-------+--------+--------+----------+
+             |seqw4K1 |seqw4K16|seqw1M1|seqw1M16|rndw4K16|rndw128K16|
+             |(MB/s)  | (MB/s) |(MB/s) | (MB/s) | (KIOPS)|  (KIOPS) |
+ +-----------+--------+--------+-------+--------+--------+----------+
+ |    ZWL    | 183    | 707    | 1083  | 1101   | 53.6   | 14.1     |
+ |mq-deadline|        |        |       |        |        |          |
+ +-----------+--------+--------+-------+--------+--------+----------+
+ |    ZWP    | 183    | 719    | 1082  | 1103   |55.5    | 14.1     |
+ |mq-deadline|(-0%)   | (+1%)  | (+0%) | (+0%)  |(+3%)   | (+0%)    |
+ +-----------+--------+--------+-------+--------+--------+----------+
+ |    ZWP    | 175    | 691    | 1078  | 1097   | 28.3   | 11.2     |
+ |    bfq    | (-4%)  | (-2%)  | (-0%) | (-0%)  | (-47%) | (-20%)   |
+ +-----------+--------+--------+-------+--------+--------+----------+
+ |    ZWP    | 190    | 665    | 1083  | 1105   | 51.4   | 14.1     |
+ |   none    | (+4%)  | (-5%)  | (+0%) | (+0%)  | (-4%)  | (+0%)    |
+ +-----------+--------+--------+-------+--------+--------+----------+
+
+Zone write plugging overhead does not significantly impact performance.
+Similar to nullblk, using the none scheduler leads to performance
+increase for most workloads.
+
+3) SMR SATA HDD:
+
+             +-------+--------+-------+--------+--------+----------+
+             |seqw4K1|seqw4K16|seqw1M1|seqw1M16|rndw4K16|rndw128K16|
+             |(MB/s) | (MB/s) |(MB/s) | (MB/s) | (KIOPS)|  (KIOPS) |
+ +-----------+-------+--------+-------+--------+--------+----------+
+ |    ZWL    | 107   | 243    | 246   | 246    | 2.2    | 0.769    |
+ |mq-deadline|       |        |       |        |        |          |
+ +-----------+-------+--------+-------+--------+--------+----------+
+ |    ZWP    | 107   | 240    | 245   | 242    | 2.2    | 0.767    |
+ |mq-deadline|(-0%)  | (-1%)  | (-0%) | (-1%)  | (+0%)  | (+0%)    |
+ +-----------+-------+--------+-------+--------+--------+----------+
+ |    ZWP    | 104   | 240    | 245   | 243    | 2.3    | 0.765    |
+ |    bfq    | (-2%) | (-1%)  | (-0%) | (-1%)  | (+0%)  | (+0%)    |
+ +-----------+-------+--------+-------+--------+--------+----------+
+ |    ZWP    | 113   | 230    | 246   | 242    | 2.2    | 0.771    |
+ |   none    | (+5%) | (-5%)  | (+0%) | (-1%)  | (+0%)  | (+0%)    |
+ +-----------+-------+--------+-------+--------+--------+----------+
+
+Performance with purely sequential write workloads at high queue depth
+somewhat decrease a little when using zone write plugging. This is due
+to the different IO pattern that ZWP generates where the first writes to
+a zone start being issued when the end of the previous zone are still
+being written. Depending on how the disk handles queued commands, seek
+may be generated, slightly impacting the throughput achieved. Such pure
+sequential write workloads are however rare with SMR drives.
+
+4) Zone append tests using btrfs:
+
+             +-------------+-------------+-----------+-------------+
+             |  null-blk   |  null_blk   |    ZNS    |     SMR     |
+             |  native ZA  | emulated ZA | native ZA | emulated ZA |
+             |    (MB/s)   |   (MB/s)    |   (MB/s)  |    (MB/s)   |
+ +-----------+-------------+-------------+-----------+-------------+
+ |    ZWL    | 2434        | N/A         | 1083      | 244         |
+ |mq-deadline|             |             |           |             |
+ +-----------+-------------+-------------+-----------+-------------+
+ |    ZWP    | 2361        | 3111        | 1087      | 237         |
+ |mq-deadline| (+1%)       |             | (+0%)     | (-2%)       |
+ +-----------+-------------+-------------+-----------+-------------+
+ |    ZWP    | 2299        | 2840        | 1082      | 239         |
+ |    bfq    | (-4%)       |             | (+0%)     | (-2%)       |
+ +-----------+-------------+-------------+-----------+-------------+
+ |    ZWP    | 2443        | 3152        | 1078      | 238         |
+ |    none   | (+0%)       |             | (-0%)     | (-2%)       |
+ +-----------+-------------+-------------+-----------+-------------+
+
+With a more realistic use of the device though a file system, ZWP does
+not introduce significant performance differences, except for SMR for
+the same reason as with the fio sequential workloads at high queue
+depth.
+
+Changes from v1:
+ - Added patch 6
+ - Rewrite of patch 7 to use a hash table of dynamically allocated zone
+   write plugs. This results in changes in patch 11 and the addition of
+   patch 8 and 9.
+ - Rebased everything on 6.9.0-rc1
+ - Added review tags for patches that did not change
+
+Damien Le Moal (28):
+  block: Restore sector of flush requests
+  block: Remove req_bio_endio()
+  block: Introduce blk_zone_update_request_bio()
+  block: Introduce bio_straddle_zones() and bio_offset_from_zone_start()
+  block: Allow using bio_attempt_back_merge() internally
+  block: Remember zone capacity when revalidating zones
+  block: Introduce zone write plugging
+  block: Use a mempool to allocate zone write plugs
+  block: Fake max open zones limit when there is no limit
+  block: Allow zero value of max_zone_append_sectors queue limit
+  block: Implement zone append emulation
+  block: Allow BIO-based drivers to use blk_revalidate_disk_zones()
+  dm: Use the block layer zone append emulation
+  scsi: sd: Use the block layer zone append emulation
+  ublk_drv: Do not request ELEVATOR_F_ZBD_SEQ_WRITE elevator feature
+  null_blk: Do not request ELEVATOR_F_ZBD_SEQ_WRITE elevator feature
+  null_blk: Introduce zone_append_max_sectors attribute
+  null_blk: Introduce fua attribute
+  nvmet: zns: Do not reference the gendisk conv_zones_bitmap
+  block: Remove BLK_STS_ZONE_RESOURCE
+  block: Simplify blk_revalidate_disk_zones() interface
+  block: mq-deadline: Remove support for zone write locking
+  block: Remove elevator required features
+  block: Do not check zone type in blk_check_zone_append()
+  block: Move zone related debugfs attribute to blk-zoned.c
+  block: Remove zone write locking
+  block: Do not force select mq-deadline with CONFIG_BLK_DEV_ZONED
+  block: Do not special-case plugging of zone write operations
+
+ block/Kconfig                     |    5 -
+ block/Makefile                    |    1 -
+ block/bio.c                       |    7 +
+ block/blk-core.c                  |   13 +-
+ block/blk-flush.c                 |    1 +
+ block/blk-merge.c                 |   22 +-
+ block/blk-mq-debugfs-zoned.c      |   22 -
+ block/blk-mq-debugfs.c            |    3 +-
+ block/blk-mq-debugfs.h            |    6 +-
+ block/blk-mq.c                    |  144 ++--
+ block/blk-mq.h                    |   31 -
+ block/blk-settings.c              |   46 +-
+ block/blk-sysfs.c                 |    2 +-
+ block/blk-zoned.c                 | 1262 +++++++++++++++++++++++++++--
+ block/blk.h                       |   73 +-
+ block/elevator.c                  |   46 +-
+ block/elevator.h                  |    1 -
+ block/genhd.c                     |    3 +-
+ block/mq-deadline.c               |  176 +---
+ drivers/block/null_blk/main.c     |   24 +-
+ drivers/block/null_blk/null_blk.h |    2 +
+ drivers/block/null_blk/zoned.c    |   23 +-
+ drivers/block/ublk_drv.c          |    5 +-
+ drivers/block/virtio_blk.c        |    2 +-
+ drivers/md/dm-core.h              |    2 +-
+ drivers/md/dm-zone.c              |  476 +----------
+ drivers/md/dm.c                   |   75 +-
+ drivers/md/dm.h                   |    4 +-
+ drivers/nvme/host/core.c          |    2 +-
+ drivers/nvme/target/zns.c         |   10 +-
+ drivers/scsi/scsi_lib.c           |    1 -
+ drivers/scsi/sd.c                 |    8 -
+ drivers/scsi/sd.h                 |   19 -
+ drivers/scsi/sd_zbc.c             |  335 +-------
+ include/linux/blk-mq.h            |   85 +-
+ include/linux/blk_types.h         |   30 +-
+ include/linux/blkdev.h            |  106 ++-
+ 37 files changed, 1607 insertions(+), 1466 deletions(-)
+ delete mode 100644 block/blk-mq-debugfs-zoned.c
+
 -- 
-2.39.2
+2.44.0
 
 
