@@ -1,125 +1,108 @@
-Return-Path: <linux-scsi+bounces-3374-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3420-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79592889EB8
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 Mar 2024 13:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 74C3988A138
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 Mar 2024 14:14:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32E2E29FEB1
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 Mar 2024 12:13:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 022252C623B
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 Mar 2024 13:14:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ACF3171E7B;
-	Mon, 25 Mar 2024 07:31:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A2D14E2CF;
+	Mon, 25 Mar 2024 09:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nu67yIa1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rtrmh5Sf"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B7D0152E11;
-	Mon, 25 Mar 2024 07:11:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C136D18431C;
+	Mon, 25 Mar 2024 07:14:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711350695; cv=none; b=lNZkBxFLZPkjZmVxHj11Ymw157AZsULfOjFhKGyRbCrOO1IasAGi9iqPhX7cUO714wlTAkn5MW+z5FaHcwCIjkTdfTM2F3EiK/35+plZNc12KC7rzS0B7GaKkZ9rcEr4J2T4lIBNS72wvBXwLcm6lf5/GuKwkfWdBP14AsNI0N4=
+	t=1711350898; cv=none; b=LRQ9XxXr5shgu5TlTXB4D/luQMHpOytxAKe/BxGV+zVyX0p2SYFbTKIVbYApz5vl9TPfxHmOS3692EezkQC2nyrM3XU/hT0YcQqHNWAWZFNpJwXXWGN8Xsm3QNgLfykwIA1a1HTaDlbF6IkbifRG5eW0h1w6TnSxZTwW/ujyDO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711350695; c=relaxed/simple;
-	bh=cNYwknOCoYozJYQki18ub+BQTqAuTBwIbKmwkZH+Rdw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RubJxn5LDtsaFFsN8ElWOB4VQ40FV0ueGEpinrINFx2NUgSHRpuWYR4Z1ULMSBo0psDrE5j84wJ5EhVbFWMBIlE+pFpMQfmJimVsEo09ujaol462NJbI0pDmXpI3HpJScdirNSjxzv4HVq3WXNlw0p6oF8c3PjuUyzKX6aHpdn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nu67yIa1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B49A5C43390;
-	Mon, 25 Mar 2024 07:11:31 +0000 (UTC)
+	s=arc-20240116; t=1711350898; c=relaxed/simple;
+	bh=y3qv71zpjndpj4NB+KeexavfGhw/KD4Z+vmOdRol9g0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aDEd2bN35UBaAqEI5DfjkZhtL8mqnDuwXP3IYxybIwVY/B0Ywd8cH7OJ6oyPZMY4/F+GIk0JH6r8weZua2v1aLy0sqDDMFwm1WjY/Kcj5v4DXHnwTk4oJsmnOLfpjTtK4uTe5aDieD3Gs8Y5FEH2kjL/0h0U+OoiYMAaaszoUe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rtrmh5Sf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D80BC43390;
+	Mon, 25 Mar 2024 07:14:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711350695;
-	bh=cNYwknOCoYozJYQki18ub+BQTqAuTBwIbKmwkZH+Rdw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=nu67yIa15SCpfTJanXaBWhOku7Ap2WldWog9PIvPYtQPZeiYE926Hie6SdsjloJH6
-	 YQ6R8skFC+9ab9kVrHZFuyLivI+Q1eWoHLN5yxo/pgnMhkeb5Pi3wVMr/YnG8STYFh
-	 sOQiwxOgY7p6DxYSBLLIPJ9mTqOqzcLEh/tXKSVLeip3JGYceudpbifFCjbV5FqCBq
-	 8HITItpYSLpEC1F2HzymMHHFEul4WNVKbPWXqQhHogxudlpl7p5i8PRE9nC5tDBgnc
-	 l4pnrR7cP7UAlAso5G48ciHZN4QbC/+8mjek7+1x7jWuc1SMzH55HvRQyXAAFQWm2f
-	 vjO+LHlblY5ww==
-From: Damien Le Moal <dlemoal@kernel.org>
-To: linux-pci@vger.kernel.org,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Manivannan Sadhasivami <manivannan.sadhasivam@linaro.org>,
-	linux-scsi@vger.kernel.org,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Jaroslav Kysela <perex@perex.cz>,
-	linux-sound@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	Hans de Goede <hdegoede@redhat.com>,
-	platform-driver-x86@vger.kernel.org,
-	ntb@lists.linux.dev,
-	Lee Jones <lee@kernel.org>,
-	David Airlie <airlied@gmail.com>,
-	amd-gfx@lists.freedesktop.org,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-rdma@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 28/28] PCI: Remove PCI_IRQ_LEGACY
-Date: Mon, 25 Mar 2024 16:09:39 +0900
-Message-ID: <20240325070944.3600338-29-dlemoal@kernel.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240325070944.3600338-1-dlemoal@kernel.org>
-References: <20240325070944.3600338-1-dlemoal@kernel.org>
+	s=k20201202; t=1711350898;
+	bh=y3qv71zpjndpj4NB+KeexavfGhw/KD4Z+vmOdRol9g0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Rtrmh5SfbgjERmHsqPcQ+yhhfByQQq8GxgvgRdmK7Z+Hjkdms8oZ+o/UmiYcqZ16x
+	 Dks5YmvOe4uY/xGqR/Ty83lnbI6YNpx+jDOWCJXw8y8JK+BPozZOxLa+XqubWoV97M
+	 PEVP8itGIYGNI3tnfonfdvQ6AbqfRJUyGrtoJya7FWk3PTZi++DCDUmK44jaWGMeTL
+	 Yi2zJUJlzbsFvOD6TfhJsknzpUGbU0Iz3dE2XpkhqRZlzCa1dhU13LkBqPQNHMQ7Hh
+	 Fii0E7sNJ37tfk2IR4ihYhXcwMa4KAJ/9lXdY3WB4TX+xg+hvKuZRqyGG7Bbaey5iR
+	 NlThAD2Cl/Pxw==
+Message-ID: <b8346696-316c-497d-972e-c76d897a1c87@kernel.org>
+Date: Mon, 25 Mar 2024 16:14:51 +0900
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 01/23] block: don't reject too large max_user_setors in
+ blk_validate_limits
+Content-Language: en-US
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Niklas Cassel <cassel@kernel.org>,
+ Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+ Sathya Prakash <sathya.prakash@broadcom.com>,
+ Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+ Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+ "Juergen E. Fischer" <fischer@norbit.de>,
+ Xiang Chen <chenxiang66@hisilicon.com>,
+ HighPoint Linux Team <linux@highpoint-tech.com>,
+ Tyrel Datwyler <tyreld@linux.ibm.com>, Brian King <brking@us.ibm.com>,
+ Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+ Mike Christie <michael.christie@oracle.com>,
+ John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>,
+ Kashyap Desai <kashyap.desai@broadcom.com>,
+ Sumit Saxena <sumit.saxena@broadcom.com>,
+ Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+ Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+ Jack Wang <jinpu.wang@cloud.ionos.com>, Nilesh Javali <njavali@marvell.com>,
+ GR-QLogic-Storage-Upstream@marvell.com,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Bart Van Assche <bvanassche@acm.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Alan Stern <stern@rowland.harvard.edu>, linux-block@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+ MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+ open-iscsi@googlegroups.com, megaraidlinux.pdl@broadcom.com,
+ mpi3mr-linuxdrv.pdl@broadcom.com, linux-samsung-soc@vger.kernel.org,
+ linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+References: <20240324235448.2039074-1-hch@lst.de>
+ <20240324235448.2039074-2-hch@lst.de>
+From: Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20240324235448.2039074-2-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Replace the last references to PCI_IRQ_LEGACY with PCI_IRQ_INTX in pci.h
-header file. With this change, PCI_IRQ_LEGACY is unused and we can
-remove its definition.
+On 3/25/24 08:54, Christoph Hellwig wrote:
+> We already cap down the actual max_sectors to the max of the hardware
+> and user limit, so don't reject the configuration.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
----
- include/linux/pci.h | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Looks OK to me.
 
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 16493426a04f..b19992a5dfaf 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -1077,8 +1077,6 @@ enum {
- #define PCI_IRQ_MSIX		(1 << 2) /* Allow MSI-X interrupts */
- #define PCI_IRQ_AFFINITY	(1 << 3) /* Auto-assign affinity */
- 
--#define PCI_IRQ_LEGACY		PCI_IRQ_INTX /* Deprecated! Use PCI_IRQ_INTX */
--
- /* These external functions are only available when PCI support is enabled */
- #ifdef CONFIG_PCI
- 
-@@ -1648,8 +1646,7 @@ int pci_set_vga_state(struct pci_dev *pdev, bool decode,
-  */
- #define PCI_IRQ_VIRTUAL		(1 << 4)
- 
--#define PCI_IRQ_ALL_TYPES \
--	(PCI_IRQ_LEGACY | PCI_IRQ_MSI | PCI_IRQ_MSIX)
-+#define PCI_IRQ_ALL_TYPES	(PCI_IRQ_INTX | PCI_IRQ_MSI | PCI_IRQ_MSIX)
- 
- #include <linux/dmapool.h>
- 
-@@ -1719,7 +1716,7 @@ pci_alloc_irq_vectors_affinity(struct pci_dev *dev, unsigned int min_vecs,
- 			       unsigned int max_vecs, unsigned int flags,
- 			       struct irq_affinity *aff_desc)
- {
--	if ((flags & PCI_IRQ_LEGACY) && min_vecs == 1 && dev->irq)
-+	if ((flags & PCI_IRQ_INTX) && min_vecs == 1 && dev->irq)
- 		return 1;
- 	return -ENOSPC;
- }
+Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+
 -- 
-2.44.0
+Damien Le Moal
+Western Digital Research
 
 
