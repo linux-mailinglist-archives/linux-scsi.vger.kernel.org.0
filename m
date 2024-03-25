@@ -1,60 +1,72 @@
-Return-Path: <linux-scsi+bounces-3418-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3368-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDC8488A03D
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 Mar 2024 13:49:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3E08889EAA
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 Mar 2024 13:12:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 728C42A449B
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 Mar 2024 12:49:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A75821F3734C
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 Mar 2024 12:12:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 055091856BC;
-	Mon, 25 Mar 2024 07:32:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E783170EAB;
+	Mon, 25 Mar 2024 07:31:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SEaktO0K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QE/7hIf4"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4157F1C32B4;
-	Mon, 25 Mar 2024 04:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5637717F392;
+	Mon, 25 Mar 2024 07:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711341945; cv=none; b=gHC2KEUEe0up6f2leJp+X5ttR6tvSQIDyvZ2hR7Q4f+oErdmqqEueTSdqy+oeV0/jGeZn7bjHBtm+s2THS1eB8MBnDnBHV7jFIZY22lVIy91ycG57R//M/cfdY7tm3NX5Faatgu1b/Jf1xAEXdFxXDnOWoE2bkruPlSxjKEFGSg=
+	t=1711350589; cv=none; b=jXBZJ1+KbfrRXyBjnPMCeCNSRXu8Tvo8slJLIgomnHd/EEZpiYdygxkqdazrOacidZVMEnvluvkkZXtKAcvR+QJqSX67fbXRSi1rZuY65W9XlIya3qwcXEkhg8XrXy/tHfL7uihtVClBbTuz0so4g4T0jKLeakwwGTbeLcq+dAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711341945; c=relaxed/simple;
-	bh=lJdXm6kZHBLn98NgydS5bgmSx7BunP3v50zlSlAL0MQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LIedcOGrBFPsYn1Hzb5DkljfiV0aDo6/KJVbtmzxkMuM6Ig8eCC4lPJGtCsmndHbnGwiT3sjyMUG7ds+NFaDWqa/v+mPSMthd4v/DxwPLdYwfoJsHxzNPxhNtQqBQLxAlpb9ovurftNvRUEKX1ccXdFpe6RUq82Gt8AWuowIT/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SEaktO0K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A981C43394;
-	Mon, 25 Mar 2024 04:45:43 +0000 (UTC)
+	s=arc-20240116; t=1711350589; c=relaxed/simple;
+	bh=dGJkJbFdBqM1o9IeFZ+PlOQFJCVwRbT/Iii7yFVFMSI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=XDYBAoZaCPis8y3DEnsXsrSM0trJV9sr2/VkpCkwR28fKJCQq4WRLYybrydHxEXccBzh3Txrs82BW+U5L7bemhxNFTcgm3BazX1JDo7xqFqwlwZ0pLnuj9cdYwhk1yTQItiO59ylIs2OPKsEkcx7Lp7w1tNdLgCQ1UEm82UhtjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QE/7hIf4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7946AC433F1;
+	Mon, 25 Mar 2024 07:09:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711341945;
-	bh=lJdXm6kZHBLn98NgydS5bgmSx7BunP3v50zlSlAL0MQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SEaktO0KZNFeeFbKarPz3E6Fq02yQHmpZe93NTRWKZySxV2EjtNCvMWNMEi80wKiH
-	 +5GcjGUeC6C/a/dGfwJxZtebSNem5inL+oYla99wRfMu8Kd75hSo661LfV0WuInHm1
-	 B0y90pPQwjMQFTz067auv4hKKPynp1IsARL7B5xmeoaZnJ0pyqsC7CGaipe/FDA16Z
-	 8944cGFsJ2IQdwGIDL+gXIFXe90bBsWk7LKG4ar4SfxHCmiSnsHewpHbldxfcKA4hZ
-	 ZIQhBMi4p6e9oynAbZPeVYVA5Bdag88Loi0fZ3OGcsLqsLdwsfk84851Rlo1tM0eo/
-	 vO3O7VRM7tTJw==
+	s=k20201202; t=1711350588;
+	bh=dGJkJbFdBqM1o9IeFZ+PlOQFJCVwRbT/Iii7yFVFMSI=;
+	h=From:To:Subject:Date:From;
+	b=QE/7hIf4k1WdMYvCLYH6NWECK80CO9rFwUlKJkwfZ3wfMTBHrGASomESh4jVHXrIM
+	 QpknjzOPFaMLXXYDFsWUzeEjTgmzhhGoh2uEYo6ZaDnMv9KkNibR5UwQMPbzQWhjge
+	 4U/VOeJdCnGli7BcYDHsW1gEbczyXFxPW6Ouc/cZG194BBgVdKEra/Ri8v12n71hRy
+	 yxHTeeLcfPlZ0eYRVyOfM4PT0y5mXYStStFcX/563oqrleQ+x1z/BtOj2RklJxNr4G
+	 lE24FyJC+G1TiuwTkDXCNeL044b8fAkOJt1ES3F/I+1YxhlZB4bkmFEMKHpzoaZvPC
+	 5yzMMFW9kDEcg==
 From: Damien Le Moal <dlemoal@kernel.org>
-To: linux-block@vger.kernel.org,
-	Jens Axboe <axboe@kernel.dk>,
+To: linux-pci@vger.kernel.org,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Manivannan Sadhasivami <manivannan.sadhasivam@linaro.org>,
 	linux-scsi@vger.kernel.org,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	dm-devel@lists.linux.dev,
-	Mike Snitzer <snitzer@redhat.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v2 28/28] block: Do not special-case plugging of zone write operations
-Date: Mon, 25 Mar 2024 13:44:52 +0900
-Message-ID: <20240325044452.3125418-29-dlemoal@kernel.org>
+	Jaroslav Kysela <perex@perex.cz>,
+	linux-sound@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	Hans de Goede <hdegoede@redhat.com>,
+	platform-driver-x86@vger.kernel.org,
+	ntb@lists.linux.dev,
+	Lee Jones <lee@kernel.org>,
+	David Airlie <airlied@gmail.com>,
+	amd-gfx@lists.freedesktop.org,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-rdma@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 00/28] Remove PCI_IRQ_LEGACY
+Date: Mon, 25 Mar 2024 16:09:11 +0900
+Message-ID: <20240325070944.3600338-1-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240325044452.3125418-1-dlemoal@kernel.org>
-References: <20240325044452.3125418-1-dlemoal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -63,148 +75,83 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With the block layer zone write plugging being automatically done for
-any write operation to a zone of a zoned block device, a regular request
-plugging handled through current->plug can only ever see at most a
-single write request per zone. In such case, any potential reordering
-of the plugged requests will be harmless. We can thus remove the special
-casing for write operations to zones and have these requests plugged as
-well. This allows removing the function blk_mq_plug and instead directly
-using current->plug where needed.
+This patch series removes the use of the depracated PCI_IRQ_LEGACY macro
+and replace it with PCI_IRQ_INTX. No functional change.
 
-Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
----
- block/blk-core.c       |  6 ------
- block/blk-merge.c      |  3 +--
- block/blk-mq.c         |  7 +------
- block/blk-mq.h         | 31 -------------------------------
- include/linux/blkdev.h | 12 ------------
- 5 files changed, 2 insertions(+), 57 deletions(-)
+Damien Le Moal (28):
+  PCI: msi: Use PCI_IRQ_INTX
+  PCI: portdrv: Use PCI_IRQ_INTX
+  PCI: documentation: Use PCI_IRQ_INTX
+  sound: intel: Use PCI_IRQ_INTX
+  usb: hcd-pci: Use PCI_IRQ_INTX
+  tty: 8250_pci: Use PCI_IRQ_INTX
+  platform: intel_ips: Use PCI_IRQ_INTX
+  ntb: Use PCI_IRQ_INTX
+  mfd: intel-lpss-pci: Use PCI_IRQ_INTX
+  drm: amdgpu: Use PCI_IRQ_INTX
+  infiniband: qib: Use PCI_IRQ_INTX
+  infiniband: vmw_pvrdma: Use PCI_IRQ_INTX
+  misc: vmci_guest: Use PCI_IRQ_ALL_TYPES
+  net: xgbe: Use PCI_IRQ_INTX
+  net: aquantia atlantic: Use PCI_IRQ_INTX
+  net: atheros: alx: Use PCI_IRQ_INTX
+  net: realtek: r8169: Use PCI_IRQ_INTX
+  net: wangxun: Use PCI_IRQ_INTX
+  net: wireless: ath10k: Use references to INTX instead of LEGACY
+  net wireless; realtec: Use PCI_IRQ_INTX
+  scsi: arcmsr: Use PCI_IRQ_INTX
+  scsi: hpsa: Use PCI_IRQ_INTX
+  scsi: ipr: Use PCI_IRQ_INTX
+  scsi: megaraid: Use PCI_IRQ_INTX
+  scsi: mpt3sas: Use PCI_IRQ_INTX
+  scsi: pmcraid: Use PCI_IRQ_INTX
+  scsi: vmw_pvscsi: Do not use PCI_IRQ_LEGACY
+  PCI: Remove PCI_IRQ_LEGACY
 
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 64eb135c7501..917848b39e0a 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -907,12 +907,6 @@ int bio_poll(struct bio *bio, struct io_comp_batch *iob, unsigned int flags)
- 	    !test_bit(QUEUE_FLAG_POLL, &q->queue_flags))
- 		return 0;
- 
--	/*
--	 * As the requests that require a zone lock are not plugged in the
--	 * first place, directly accessing the plug instead of using
--	 * blk_mq_plug() should not have any consequences during flushing for
--	 * zoned devices.
--	 */
- 	blk_flush_plug(current->plug, false);
- 
- 	/*
-diff --git a/block/blk-merge.c b/block/blk-merge.c
-index b96466d2ba94..1a9a424212ee 100644
---- a/block/blk-merge.c
-+++ b/block/blk-merge.c
-@@ -1112,10 +1112,9 @@ static enum bio_merge_status blk_attempt_bio_merge(struct request_queue *q,
- bool blk_attempt_plug_merge(struct request_queue *q, struct bio *bio,
- 		unsigned int nr_segs)
- {
--	struct blk_plug *plug;
-+	struct blk_plug *plug = current->plug;
- 	struct request *rq;
- 
--	plug = blk_mq_plug(bio);
- 	if (!plug || rq_list_empty(plug->mq_list))
- 		return false;
- 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index d9763be1d043..764c8b6177d9 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -1336,11 +1336,6 @@ void blk_execute_rq_nowait(struct request *rq, bool at_head)
- 
- 	blk_account_io_start(rq);
- 
--	/*
--	 * As plugging can be enabled for passthrough requests on a zoned
--	 * device, directly accessing the plug instead of using blk_mq_plug()
--	 * should not have any consequences.
--	 */
- 	if (current->plug && !at_head) {
- 		blk_add_rq_to_plug(current->plug, rq);
- 		return;
-@@ -2928,7 +2923,7 @@ static void blk_mq_use_cached_rq(struct request *rq, struct blk_plug *plug,
- void blk_mq_submit_bio(struct bio *bio)
- {
- 	struct request_queue *q = bdev_get_queue(bio->bi_bdev);
--	struct blk_plug *plug = blk_mq_plug(bio);
-+	struct blk_plug *plug = current->plug;
- 	const int is_sync = op_is_sync(bio->bi_opf);
- 	struct blk_mq_hw_ctx *hctx;
- 	unsigned int nr_segs = 1;
-diff --git a/block/blk-mq.h b/block/blk-mq.h
-index f75a9ecfebde..260beea8e332 100644
---- a/block/blk-mq.h
-+++ b/block/blk-mq.h
-@@ -365,37 +365,6 @@ static inline void blk_mq_clear_mq_map(struct blk_mq_queue_map *qmap)
- 		qmap->mq_map[cpu] = 0;
- }
- 
--/*
-- * blk_mq_plug() - Get caller context plug
-- * @bio : the bio being submitted by the caller context
-- *
-- * Plugging, by design, may delay the insertion of BIOs into the elevator in
-- * order to increase BIO merging opportunities. This however can cause BIO
-- * insertion order to change from the order in which submit_bio() is being
-- * executed in the case of multiple contexts concurrently issuing BIOs to a
-- * device, even if these context are synchronized to tightly control BIO issuing
-- * order. While this is not a problem with regular block devices, this ordering
-- * change can cause write BIO failures with zoned block devices as these
-- * require sequential write patterns to zones. Prevent this from happening by
-- * ignoring the plug state of a BIO issuing context if it is for a zoned block
-- * device and the BIO to plug is a write operation.
-- *
-- * Return current->plug if the bio can be plugged and NULL otherwise
-- */
--static inline struct blk_plug *blk_mq_plug( struct bio *bio)
--{
--	/* Zoned block device write operation case: do not plug the BIO */
--	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) &&
--	    bdev_op_is_zoned_write(bio->bi_bdev, bio_op(bio)))
--		return NULL;
--
--	/*
--	 * For regular block devices or read operations, use the context plug
--	 * which may be NULL if blk_start_plug() was not executed.
--	 */
--	return current->plug;
--}
--
- /* Free all requests on the list */
- static inline void blk_mq_free_requests(struct list_head *list)
- {
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 9e3590ad8a07..677e5ab9e53d 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1303,18 +1303,6 @@ static inline unsigned int bdev_zone_no(struct block_device *bdev, sector_t sec)
- 	return disk_zone_no(bdev->bd_disk, sec);
- }
- 
--/* Whether write serialization is required for @op on zoned devices. */
--static inline bool op_needs_zoned_write_locking(enum req_op op)
--{
--	return op == REQ_OP_WRITE || op == REQ_OP_WRITE_ZEROES;
--}
--
--static inline bool bdev_op_is_zoned_write(struct block_device *bdev,
--					  enum req_op op)
--{
--	return bdev_is_zoned(bdev) && op_needs_zoned_write_locking(op);
--}
--
- static inline sector_t bdev_zone_sectors(struct block_device *bdev)
- {
- 	struct request_queue *q = bdev_get_queue(bdev);
+ Documentation/PCI/msi-howto.rst               |  2 +-
+ Documentation/PCI/pci.rst                     |  2 +-
+ .../translations/zh_CN/PCI/msi-howto.rst      |  2 +-
+ Documentation/translations/zh_CN/PCI/pci.rst  |  2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c       |  2 +-
+ drivers/infiniband/hw/qib/qib_iba7220.c       |  2 +-
+ drivers/infiniband/hw/qib/qib_iba7322.c       |  5 ++-
+ drivers/infiniband/hw/qib/qib_pcie.c          |  2 +-
+ .../infiniband/hw/vmw_pvrdma/pvrdma_main.c    |  2 +-
+ drivers/mfd/intel-lpss-pci.c                  |  2 +-
+ drivers/misc/vmw_vmci/vmci_guest.c            |  3 +-
+ drivers/net/ethernet/amd/xgbe/xgbe-pci.c      |  2 +-
+ .../net/ethernet/aquantia/atlantic/aq_cfg.h   |  2 +-
+ .../net/ethernet/aquantia/atlantic/aq_hw.h    |  2 +-
+ .../net/ethernet/aquantia/atlantic/aq_nic.c   |  2 +-
+ .../ethernet/aquantia/atlantic/aq_pci_func.c  |  9 ++---
+ .../aquantia/atlantic/hw_atl/hw_atl_a0.c      |  2 +-
+ .../aquantia/atlantic/hw_atl/hw_atl_b0.c      |  2 +-
+ .../aquantia/atlantic/hw_atl2/hw_atl2.c       |  2 +-
+ drivers/net/ethernet/atheros/alx/main.c       |  2 +-
+ drivers/net/ethernet/realtek/r8169_main.c     |  2 +-
+ drivers/net/ethernet/wangxun/libwx/wx_lib.c   |  8 ++---
+ drivers/net/wireless/ath/ath10k/ahb.c         | 18 +++++-----
+ drivers/net/wireless/ath/ath10k/pci.c         | 36 +++++++++----------
+ drivers/net/wireless/ath/ath10k/pci.h         |  6 ++--
+ drivers/net/wireless/realtek/rtw88/pci.c      |  2 +-
+ drivers/net/wireless/realtek/rtw89/pci.c      |  2 +-
+ drivers/ntb/hw/idt/ntb_hw_idt.c               |  2 +-
+ drivers/pci/msi/api.c                         |  8 ++---
+ drivers/pci/pcie/portdrv.c                    |  8 ++---
+ drivers/platform/x86/intel_ips.c              |  2 +-
+ drivers/scsi/arcmsr/arcmsr_hba.c              |  2 +-
+ drivers/scsi/hpsa.c                           |  2 +-
+ drivers/scsi/ipr.c                            |  2 +-
+ drivers/scsi/megaraid/megaraid_sas_base.c     |  4 +--
+ drivers/scsi/mpt3sas/mpt3sas_base.c           |  2 +-
+ drivers/scsi/pmcraid.c                        |  2 +-
+ drivers/scsi/vmw_pvscsi.c                     |  2 +-
+ drivers/tty/serial/8250/8250_pci.c            |  2 +-
+ drivers/usb/core/hcd-pci.c                    |  3 +-
+ include/linux/pci.h                           |  7 ++--
+ sound/soc/intel/avs/core.c                    |  2 +-
+ 42 files changed, 84 insertions(+), 91 deletions(-)
+
 -- 
 2.44.0
 
