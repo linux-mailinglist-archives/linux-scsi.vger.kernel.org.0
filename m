@@ -1,30 +1,31 @@
-Return-Path: <linux-scsi+bounces-3792-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3794-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CCE38925F4
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 Mar 2024 22:12:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1D718925F7
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 Mar 2024 22:12:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 481B028435E
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 Mar 2024 21:12:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F8381C21BD0
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 Mar 2024 21:12:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCEF713CF86;
-	Fri, 29 Mar 2024 21:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EDCF13D604;
+	Fri, 29 Mar 2024 21:12:09 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CE513BC0C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C6E13BC04
 	for <linux-scsi@vger.kernel.org>; Fri, 29 Mar 2024 21:12:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711746728; cv=none; b=DsY5GQi7dpr0oP0ItwhYt+Ik/OvKGR9EhADqMYhLWt8jhyb1l/ub3ms4nvsK+ZspLnQC2EWyUSVEIUlrmekUa9VMX7hWHJj6bTwmCYvXqFFBjfAGrj0d8NVFK7s3F5vAHJAVK/DsGkPo006gaWHljYIpeUmEE0thJtFGotWziX4=
+	t=1711746728; cv=none; b=g/0SNDQ8FbeYHdpp20mp+O/dyq+3U9Hn6OIYrxovDI7nOS+7U74NozIaCR3njyCAJki7v2v9JRtN+LDT2HJeNg1r0LG8qMyIDryBcwXMX3ucmMRlTZ7Ozo5TuMSamB6Wnm9XpYuEkN67I3wuMEX1aWNWDU1YU2k0Kh+xNGt+ShM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1711746728; c=relaxed/simple;
-	bh=JtTL+c2bS9aqbGNEYLyo6HGZV7l/VlUDv6dCdKlmUBM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tmJzN6LHze536FLSyAq4r+3wcB7BebEXJR4JHkyCoEaQ207zlWI3zs/JLatMIP02t95Vz9YnCbhG4UOL2jTEF0a2XQqUxOf7Ns7tTxJVc6Wg0svi1qWkw7M81v4qcHwcln27ziZqSSrBaKVG8moA9UmzefEA2jx8HMBsiXk5WdU=
+	bh=bKdMOx1D1ms9abbmdlq3OhzYAiylGh+vfVq74VLFAqI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=b8DFYQJk3wLPDMO+8YOGop50Ap+ECtR/sVeqU/45EuJe7U7ENAGn278zDryxxX9QXfZN5yLoY4jvrNubqZnPlv9BjKoTNZgBhwZYYwoN37rFa1MwWtEN+bHZpA8EuDRay5pORR1vZPubP1hF54+FRUs+g9UB3n0dMaFvgYVPFXA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -32,27 +33,27 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rqJVy-0001yF-D5; Fri, 29 Mar 2024 22:11:54 +0100
+	id 1rqJVy-0001yG-0Q; Fri, 29 Mar 2024 22:11:54 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rqJVx-009GFO-64; Fri, 29 Mar 2024 22:11:53 +0100
+	id 1rqJVx-009GFR-BC; Fri, 29 Mar 2024 22:11:53 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rqJVx-00DTbq-0K;
+	id 1rqJVx-00DTbu-0s;
 	Fri, 29 Mar 2024 22:11:53 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: "James E.J. Bottomley" <jejb@linux.ibm.com>,
 	"Martin K. Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Finn Thain <fthain@linux-m68k.org>,
-	Michael Schmitz <schmitzmic@gmail.com>
-Subject: [PATCH 0/4] scsi: Prevent several section mismatch warnings
-Date: Fri, 29 Mar 2024 22:11:40 +0100
-Message-ID: <cover.1711746359.git.u.kleine-koenig@pengutronix.de>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] scsi: a3000: Mark driver struct with __refdata to prevent section mismatch
+Date: Fri, 29 Mar 2024 22:11:41 +0100
+Message-ID:  <c7222ad7f0baaff78b19f16e789726d42515f025.1711746359.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1711746359.git.u.kleine-koenig@pengutronix.de>
+References: <cover.1711746359.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -60,7 +61,7 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=880; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=JtTL+c2bS9aqbGNEYLyo6HGZV7l/VlUDv6dCdKlmUBM=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBmBy6NXVfMslrPLjkOkeq7mIZbqPjp3E8rCJiB+ OHgjgP80fyJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZgcujQAKCRCPgPtYfRL+ Tp30B/485swCHclkSUfxdbzl6LRqoMGm/3w3ra76KMgu7JCNI31x31py2PnVssaLu2xa4MetMuR 1LILiSkP/Sqbnghqi1Ke/Uez1WRb3Wheiq+Ohik2C9r2kYLArykfj/RQdCgBdKzZbP03GMelwX6 LdO+NLL3qlJKs1yOijXe5CJIQWpU/0gav18m7j+k2AARJZB9+nHyQ8h3rHHpQC+MqQ7fSwiQs71 KRsoP5nXxc4pJFK5KlAk+8UBJe63ZQufpCLXornZ9M1GHOZ49ax4DkLVqdKXewEZi8GGS/0Gxd2 jPxIDt0c2G+kvhmObS3Ux97sacdQv8RWV2uyGB9tFYZoILTa
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1424; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=bKdMOx1D1ms9abbmdlq3OhzYAiylGh+vfVq74VLFAqI=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBmBy6P+LLBanKBe+nswRcMQfjDig8IwRQDd0edP 2le/lg8Ub2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZgcujwAKCRCPgPtYfRL+ TnO8CAClW1s6i+N5UZj8nckRXB2iZWFepVWwMVK5aeqULpdOk/7G295An1wcD0C1418mVSFEK8a +WbDZrMfKRqqFmhhMjMxCN7PTqBftKCsrJS2jWG0jDtoXI8xw/EuvWK31TxYrrXd6fLpukonF5i EDWGIAfoqiyVvrrI/TJdR182Gl0bIm5DxgR53j7kM7+mxMWH/iAK71jD3/x8Rf9HD5PMVTMxUnp ndfm3Ee3eWHYTnXFDH8EcnSOOxqVePxuA+ZkIc2Axa3Spt3TJ4r13+LXP/VYwm4viH90mu+ZS0U BgeBAcHFEwHXZR0YWoPetpGIRqBMOZXnHkyES6i+gHjQM1Si
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -68,29 +69,38 @@ X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-scsi@vger.kernel.org
 
-Hello,
+As described in the added code comment, a reference to .exit.text is ok
+for drivers registered via module_platform_driver_probe(). Make this
+explicit to prevent the following section mismatch warning
 
-this series fixes the same issue in four drivers. The warning is a false
-positive and to suppress it the driver structs are marked with
-__refdata and a comment is added to describe the (non-trivial)
-situation.
+	WARNING: modpost: drivers/scsi/a3000: section mismatch in reference: amiga_a3000_scsi_driver+0x8 (section: .data) -> amiga_a3000_scsi_remove (section: .exit.text)
 
-Best regards
-Uwe
+that triggers on an allmodconfig W=1 build.
 
-Uwe Kleine-König (4):
-  scsi: a3000: Mark driver struct with __refdata to prevent section mismatch
-  scsi: a4000t: Mark driver struct with __refdata to prevent section mismatch
-  scsi: atari_scsi: Mark driver struct with __refdata to prevent section mismatch
-  scsi: mac_scsi: Mark driver struct with __refdata to prevent section mismatch
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/scsi/a3000.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
- drivers/scsi/a3000.c      | 8 +++++++-
- drivers/scsi/a4000t.c     | 8 +++++++-
- drivers/scsi/atari_scsi.c | 8 +++++++-
- drivers/scsi/mac_scsi.c   | 8 +++++++-
- 4 files changed, 28 insertions(+), 4 deletions(-)
-
-base-commit: a6bd6c9333397f5a0e2667d4d82fef8c970108f2
+diff --git a/drivers/scsi/a3000.c b/drivers/scsi/a3000.c
+index 378906f77909..ad39797890e5 100644
+--- a/drivers/scsi/a3000.c
++++ b/drivers/scsi/a3000.c
+@@ -295,7 +295,13 @@ static void __exit amiga_a3000_scsi_remove(struct platform_device *pdev)
+ 	release_mem_region(res->start, resource_size(res));
+ }
+ 
+-static struct platform_driver amiga_a3000_scsi_driver = {
++/*
++ * amiga_a3000_scsi_remove() lives in .exit.text. For drivers registered via
++ * module_platform_driver_probe() this is ok because they cannot get unbound at
++ * runtime. So mark the driver struct with __refdata to prevent modpost
++ * triggering a section mismatch warning.
++ */
++static struct platform_driver amiga_a3000_scsi_driver __refdata = {
+ 	.remove_new = __exit_p(amiga_a3000_scsi_remove),
+ 	.driver   = {
+ 		.name	= "amiga-a3000-scsi",
 -- 
 2.43.0
 
