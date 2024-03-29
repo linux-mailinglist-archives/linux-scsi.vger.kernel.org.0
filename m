@@ -1,46 +1,46 @@
-Return-Path: <linux-scsi+bounces-3763-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3764-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B05DF891E6E
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 Mar 2024 15:41:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0B62891F63
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 Mar 2024 16:03:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3E601C25DE1
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 Mar 2024 14:41:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 127B7B29A41
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 Mar 2024 14:50:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9018A144D2E;
-	Fri, 29 Mar 2024 12:49:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A99C1152DF0;
+	Fri, 29 Mar 2024 12:50:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JC5LrH9Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XQ9fdp5E"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A30B4B5DA;
-	Fri, 29 Mar 2024 12:49:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F03DFBF3;
+	Fri, 29 Mar 2024 12:50:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711716552; cv=none; b=prSwGtC4z8kUXaEJyT+bprInPQqrY5pFoe3SXY+GyEWEiCHU9twsqKjWn05me8cWsms2diHpHDij5ng/NTXEZQucyrysQPDZ/zP9/n37uLLQbZIxJoKzrt8wmvfBvqZ6YAd1AsuajYLbxuQ5eJH5zuQYLCsMcLvKAirnPINIhvc=
+	t=1711716617; cv=none; b=dpDKtXUa9x9aN+Ictvd1p0V+nrYmg7BTFKf+A9vMCOEhOoTJP+OjlEHWD/1+QvExeid4ML2dq1/lUIXjBNVe1p68sP6Vr4uvaap/dhcMjsK7ALSfJSfO8fcm0iy/+swwEhnN4vhAjEgwQfrqia/TQPwZONvyRJIOTt1GC0P8Wuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711716552; c=relaxed/simple;
-	bh=zbfG8Y7YfdH65hGwwCRSp1aDrIKpzwitTrDpe3/Gw5E=;
+	s=arc-20240116; t=1711716617; c=relaxed/simple;
+	bh=RjwteC0Nxfpz34RGHKSiWhHY5QMrYVvsPuLjeFuD2W4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pJ9qHnqEh8qXRNxq5aTHpDGFtHGyHrhtnLuri23KSXaGJepMoa04K9Zm0Sbb4Vz1zOpFy8IJqM524YfduEB8xWnudwE8mwZ/7mviM/B7P8uUW/+fetafVRuHn5l18zbkYzTGkXJk2B5sl6YUEgNC3RDL62uvfM8zhAUCoeZStW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JC5LrH9Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C45FAC43399;
-	Fri, 29 Mar 2024 12:49:10 +0000 (UTC)
+	 MIME-Version; b=BIwiD5CxeRA0OFWgVlG/yD/7u+MDZd0c0rNfkXv4NtIsgdgycqN8tKn/HSOSlgUsljxj0nfDuZvYr5p129aQGZlL2CXIupFUt2PasGtubCX5Ewgz88fxrQ84rBJK4IMjWSzL8bcpnmuXXZNKp9SnaTmehTfDUb675kHeIDTcZo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XQ9fdp5E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30DE8C433C7;
+	Fri, 29 Mar 2024 12:50:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711716551;
-	bh=zbfG8Y7YfdH65hGwwCRSp1aDrIKpzwitTrDpe3/Gw5E=;
+	s=k20201202; t=1711716617;
+	bh=RjwteC0Nxfpz34RGHKSiWhHY5QMrYVvsPuLjeFuD2W4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JC5LrH9YEAOoPue/TvWM5Mm2MGFgALYi7oLVzpaoo2jcgvwQZT+1q4GnyJfoMJ0WM
-	 PS0r7W99PDrgSfJW8odSXpnUly/J4Ro6rEF8HVpIypntIgx8Goxymk8mL+CXTJFUh3
-	 NMuU9HbWq5cnaP4u92QjeJJbkyPPQVwb4v6pRJeFYk5UzFX9X4AZhq6LMjyZp64b/1
-	 oxrYkPkF34H0TdqH9zRolTvd42/3KJYZ8glqwJVgTR1mCAETaYAnbOM/uTrQKbwCJz
-	 Rpj+2gzfvYNoWacgnT1fT04d8l8m+eNmHFGNr22SnX9TyKn4+1PmewIcSYu3Uxpy68
-	 Rocr23CTU6WdQ==
+	b=XQ9fdp5EueqXSWMBKfbJk10GGOPE1Kki7N3K8YZk8dcNl0m1vPiRckr9oxxHW/Wqq
+	 tDexYrbzhaYN3MzNrqMIcNU0oKyfOcGe1uN8wG4z3+UvyV6jWpI7ubZugMjijdf/db
+	 TTzW4e9iKGl1MBSPNfoKVxi7fnq5k8cFgBVv8JuNvwcAoCZfcbw4m7wNfGKTCpRkDW
+	 pYYZo2hGnUhB+sQIKjWYkR0JwEmAN8F128cT9/Ugvyz24FBRgcYnbznNoJWaCa02B9
+	 Ka/ugEhE9bAlKW3sVFapX9HDOEqg2xgT+m29C2g766eM7b5fIbGs/GLvFcJ7YkFxnU
+	 0hb6Wth8U97WA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: Justin Tee <justin.tee@broadcom.com>,
 	dick.kennedy@broadcom.com,
 	jejb@linux.ibm.com,
 	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 06/31] scsi: lpfc: Fix possible memory leak in lpfc_rcv_padisc()
-Date: Fri, 29 Mar 2024 08:48:23 -0400
-Message-ID: <20240329124903.3093161-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 05/23] scsi: lpfc: Fix possible memory leak in lpfc_rcv_padisc()
+Date: Fri, 29 Mar 2024 08:49:38 -0400
+Message-ID: <20240329125009.3093845-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240329124903.3093161-1-sashal@kernel.org>
-References: <20240329124903.3093161-1-sashal@kernel.org>
+In-Reply-To: <20240329125009.3093845-1-sashal@kernel.org>
+References: <20240329125009.3093845-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.214
+X-stable-base: Linux 5.4.273
 Content-Transfer-Encoding: 8bit
 
 From: Justin Tee <justin.tee@broadcom.com>
@@ -90,10 +90,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
-index 1e22364a31fcf..d6287c58d5045 100644
+index e6a94f550a572..1ca3179444d23 100644
 --- a/drivers/scsi/lpfc/lpfc_nportdisc.c
 +++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
-@@ -784,8 +784,10 @@ lpfc_rcv_padisc(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+@@ -781,8 +781,10 @@ lpfc_rcv_padisc(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
  				/* Save the ELS cmd */
  				elsiocb->drvrTimeout = cmd;
  
