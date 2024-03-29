@@ -1,197 +1,125 @@
-Return-Path: <linux-scsi+bounces-3841-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3843-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20164893177
-	for <lists+linux-scsi@lfdr.de>; Sun, 31 Mar 2024 13:21:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D913893472
+	for <lists+linux-scsi@lfdr.de>; Sun, 31 Mar 2024 19:06:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43B541C20E0D
-	for <lists+linux-scsi@lfdr.de>; Sun, 31 Mar 2024 11:21:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D34B1C2381B
+	for <lists+linux-scsi@lfdr.de>; Sun, 31 Mar 2024 17:06:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD4D144D05;
-	Sun, 31 Mar 2024 11:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9917315E20B;
+	Sun, 31 Mar 2024 16:43:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O9hNEPm9"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=acm.org header.i=@acm.org header.b="s/Dvxr52"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB04144311
-	for <linux-scsi@vger.kernel.org>; Sun, 31 Mar 2024 11:20:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711884043; cv=none; b=Td0K0Dc/AxPxcBBdsLpPXs5HGNhaURwqiaVXk6bHq721pJ1ixTh7Z4aYDvfUWcu1fIzveS0opSGUJZ/k44TPsqD0xp0oLoHgs/mMfr57+j7lRjcyioWN2NgUAccONttmjlkEKI9K8I6r/J1Io1MvG56PkNu7/iRKhqNJtOu4uQE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711884043; c=relaxed/simple;
-	bh=HA92dRzVt3vZdgr5pQJY02em2UTWtsR+GLFyMiGbHw4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m1tBTK3Lp+mpwrC8OOTmBGpOqYaaLZDufWoBamCm4oesnba6zWPc8z3Ti5ZywYCr3EeYXp8nMnHFVj6Qx4t0+McvJJCZu6fPQmL62bcbOLzlHuSTMHrjl2AiRIzPWDlbl2ygcNJW0ME2nkcQAt7zIYPipG90yF0RpAExJqOLbzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O9hNEPm9; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711884040;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZAFJ+0SeTqdsqNS6GC0N4AccV7yeFgGXHpRB2cwbNo4=;
-	b=O9hNEPm9d0O69v2SYtEVIAv/U2/DkfMVnqoT3sS3hw97Pwv3xLSYQMy3hz8OAtCRArUzk4
-	POezS0OrrZtR9aqD1bN9s6JF162Hg0s7ZbHhe3NUriXHopxotUal9HkHvj149BMkZNsWX8
-	dTvicyJ42irvCew2m05QMhtYhYfYtqI=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-253-Q8myaGoBOaCNgaBntFQPYQ-1; Sun, 31 Mar 2024 07:20:35 -0400
-X-MC-Unique: Q8myaGoBOaCNgaBntFQPYQ-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-41485831b2dso21073335e9.3
-        for <linux-scsi@vger.kernel.org>; Sun, 31 Mar 2024 04:20:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711884034; x=1712488834;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZAFJ+0SeTqdsqNS6GC0N4AccV7yeFgGXHpRB2cwbNo4=;
-        b=bA8lSZEvv+8QsD1nYP4p/q0UfrxJOgj9Kh5NfVxztqnlENz0fnNcTilcceZZySSnsn
-         UVj9RtlE7VEWB82hwNIAi4YfSISnzS2Mz4fSWbrenHfueCi1eRR+qAV9/muuD0eQOHzA
-         OaGiLjLnzNLsJYN43paXpTD30ej9wOirqO9aG4ojad5uh0nATZWLlAW2Y4Sx+8ZUWVNR
-         17JlTTv1tOQr5lhJjyC7YmkYICjU1NNZuhj1atSsMBwIWVbiSVAucsw1QR48rC6FkQCA
-         3FEO3KgeYRrIO1uY5gm/K/nCHCEvTMbZcIY2IP9bonMJUIL9ZjM7nHT5JEAruuzKBW9x
-         M+rQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX/UDhe3wWgc2A+8Z8Y2gDwMvNHm4TjSaAC8DD76b29Jmq1a3kHQ20YoDBiFtMLtJeC8DTEtasu1qzIO3fnBMsBCJ7TG+MuYcnHNw==
-X-Gm-Message-State: AOJu0Yz+1gOOnkjdAMhR4+Q8f2HExoFrW1NRA7oFMM7qgQ8ZNAKAzoXs
-	Bb2ERu1fg0PD980Q9FpteBG8h8gLy8u2dofo62C2IgIYk7wOgsj1H4BikcJLqQsYhptnv1wxFAf
-	C3BdAaUNsHtTryM6x0lKOFVaqqRT419ELjnayyf7rMPbGYJ85LEaGJTpTsgU=
-X-Received: by 2002:a05:600c:220f:b0:413:e19:337f with SMTP id z15-20020a05600c220f00b004130e19337fmr6115870wml.22.1711884034573;
-        Sun, 31 Mar 2024 04:20:34 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEhoN6xvj4jps7JZJhPCGbovoaf04BQIV4BBUP7925nSfWx1HPIV5PQzN7Ku2MIo02ql2sOQw==
-X-Received: by 2002:a05:600c:220f:b0:413:e19:337f with SMTP id z15-20020a05600c220f00b004130e19337fmr6115845wml.22.1711884033951;
-        Sun, 31 Mar 2024 04:20:33 -0700 (PDT)
-Received: from redhat.com ([2a02:14f:173:c52c:ce6f:ec9c:ca7c:7200])
-        by smtp.gmail.com with ESMTPSA id u22-20020a05600c139600b004148d7b889asm14465567wmf.8.2024.03.31.04.20.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Mar 2024 04:20:33 -0700 (PDT)
-Date: Sun, 31 Mar 2024 07:20:24 -0400
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: virtualization@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	iommu@lists.linux.dev, netdev@vger.kernel.org, v9fs@lists.linux.dev,
-	kvm@vger.kernel.org, linux-wireless@vger.kernel.org,
-	nvdimm@lists.linux.dev, linux-remoteproc@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	alsa-devel@alsa-project.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH 01/22] virtio: store owner from modules with
- register_virtio_driver()
-Message-ID: <20240331071546-mutt-send-email-mst@kernel.org>
-References: <20240327-module-owner-virtio-v1-0-0feffab77d99@linaro.org>
- <20240327-module-owner-virtio-v1-1-0feffab77d99@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F46015E1EE;
+	Sun, 31 Mar 2024 16:43:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=62.96.220.36
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711903398; cv=fail; b=Hb6yvwfp3VCrBX0pnjRft1tCRhNVShurfM1qlJSsV2xa1y7NumfE3CDOTK+4+kZH9xt+QHiq0x0jMU4+u2K+4pDGrM67g7b8keFNiaVi1NLNZoSd3eroR0mYLFV//3cYZRO9Cr9KFdUTiH8NDj13c8VcyG1LDnbS3ak3JcxbOx0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711903398; c=relaxed/simple;
+	bh=FRIggP1YvWWV3rj+5WU1Cj2nMoZrQOSbDSPE/2jMC40=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=OWsvc1cqszKw4VxEwhaRWox8zRe2X4xiAAH/lgPgwIZ79yJu5ukPmVp7vhq2774pKiN59RP593EaLPGH2F/+4en34OEbcuZclp7xeUORyPk+BTnQ/Vz6S4q0WfxY2KLaKU2SRUjrbKl6wgD+JAywr3FpOSKVnlBKIN2654Rbsbg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=acm.org; spf=fail smtp.mailfrom=acm.org; dkim=fail (2048-bit key) header.d=acm.org header.i=@acm.org header.b=s/Dvxr52 reason="signature verification failed"; arc=none smtp.client-ip=199.89.1.11; dmarc=pass (p=none dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; arc=fail smtp.client-ip=62.96.220.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by a.mx.secunet.com (Postfix) with ESMTP id 1F76020851;
+	Sun, 31 Mar 2024 18:43:15 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Lq2V0N2KrWnv; Sun, 31 Mar 2024 18:43:14 +0200 (CEST)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by a.mx.secunet.com (Postfix) with ESMTPS id 8FDBA20896;
+	Sun, 31 Mar 2024 18:43:14 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 8FDBA20896
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+	by mailout2.secunet.com (Postfix) with ESMTP id 8219B800060;
+	Sun, 31 Mar 2024 18:43:14 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Sun, 31 Mar 2024 18:43:14 +0200
+Received: from Pickup by mbx-essen-01.secunet.de with Microsoft SMTP Server id
+ 15.1.2507.17; Sun, 31 Mar 2024 16:36:42 +0000
+X-sender: <linux-kernel+bounces-125451-steffen.klassert=secunet.com@vger.kernel.org>
+X-Receiver: <steffen.klassert@secunet.com> ORCPT=rfc822;steffen.klassert@secunet.com
+X-CreatedBy: MSExchange15
+X-HeloDomain: mbx-dresden-01.secunet.de
+X-ExtendedProps: BQBjAAoAAkimlidQ3AgFADcAAgAADwA8AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5NYWlsUmVjaXBpZW50Lk9yZ2FuaXphdGlvblNjb3BlEQAAAAAAAAAAAAAAAAAAAAAADwA/AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5EaXJlY3RvcnlEYXRhLk1haWxEZWxpdmVyeVByaW9yaXR5DwADAAAATG93
+X-Source: SMTP:Default MBX-ESSEN-02
+X-SourceIPAddress: 10.53.40.199
+X-EndOfInjectedXHeaders: 8536
+X-Virus-Scanned: by secunet
+Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=147.75.80.249; helo=am.mirrors.kernel.org; envelope-from=linux-kernel+bounces-125451-steffen.klassert=secunet.com@vger.kernel.org; receiver=steffen.klassert@secunet.com 
+DKIM-Filter: OpenDKIM Filter v2.11.0 b.mx.secunet.com 4D990200BB
+Authentication-Results: b.mx.secunet.com;
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="s/Dvxr52"
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
+ARC-Seal: i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711748918; cv=none; b=VPhuwEAboN1B1KPk5aQyEpkEMVWrWWP/IdhXXV5eLRCna7HEkKp7BM3rDJITZyXyt8X5jXK27fGKjIROL6xPPOAD8uOa4c0AAx40IPrO74Zh4xrC8gGZ9PiycA8fnItZ3mHiYd/ItOjFlY6RNVHfYc2jgWXvIJ7ylR8YlG3YAOQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711748918; c=relaxed/simple;
+	bh=FRIggP1YvWWV3rj+5WU1Cj2nMoZrQOSbDSPE/2jMC40=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SmDDcUb1o/8HWQ8aWmJe3HtVNcfO4grSSaHP13RUl9LUDfyLMpOL9+9yB7FyWMajHfhBW/ni5MFQUW3gIkzS6Hf97oHNP8Rj2SM5sAItR1w0hsv7U9UnTkGpPN4TYxFFlNTmebJbbnr5cUtp0oI1Dhl+qjQ4pNAUeUBCQdtMkdo=
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=s/Dvxr52; arc=none smtp.client-ip=199.89.1.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1711748911; x=1714340912; bh=FRIggP1YvWWV3rj+5WU1Cj2n
+	MoZrQOSbDSPE/2jMC40=; b=s/Dvxr52XitclrTlpgcZFz1EvTsZ6IJyetgiEUoc
+	fGPCO+2x16JzhzlNHQ8RX0ZgBiZDvWPA9xqloF7JTB1Zqve2kpgh9ayH1QM7g6sr
+	gfdVpHECtsbtLnA0NEzWVfy7UULP0qh790n3BUwTAOSVpq/L/UN2lJcOZibeOzvL
+	S1QB6xOn9LmNJ5yMxY0cQQSSGywBxihLBMyeO9yj4KnmuUhIK3O9/rO/XQzRn4vi
+	sNMTNIFdrN/1s79czI9ponzXiHo4bF8N/ica5CsWXf+Md1hVGOlSxq3ALbB8Nf6E
+	VlQfHFOvYCkVIQ0tUmNfxBk1tBNrmhcESEEEaTL2NZncMA==
+X-Virus-Scanned: by MailRoute
+Message-ID: <abaf0f8d-8531-42b8-a714-cc02ae658646@acm.org>
+Date: Fri, 29 Mar 2024 14:48:25 -0700
+Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240327-module-owner-virtio-v1-1-0feffab77d99@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 10/11] scsi: ufs: core: Remove unnecessary wmb() after
+ ringing doorbell
+To: Andrew Halaney <ahalaney@redhat.com>, Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio
+	<konrad.dybcio@linaro.org>, Manivannan Sadhasivam <mani@kernel.org>, "James
+ E.J. Bottomley" <jejb@linux.ibm.com>, "Martin K. Petersen"
+	<martin.petersen@oracle.com>, Hannes Reinecke <hare@suse.de>, Janek Kotas
+	<jank@cadence.com>, Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman
+	<avri.altman@wdc.com>, Can Guo <quic_cang@quicinc.com>, Anjana Hari
+	<quic_ahari@quicinc.com>
+CC: Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+	<linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20240329-ufs-reset-ensure-effect-before-delay-v5-0-181252004586@redhat.com>
+ <20240329-ufs-reset-ensure-effect-before-delay-v5-10-181252004586@redhat.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20240329-ufs-reset-ensure-effect-before-delay-v5-10-181252004586@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
 
-On Wed, Mar 27, 2024 at 01:40:54PM +0100, Krzysztof Kozlowski wrote:
-> Modules registering driver with register_virtio_driver() might forget to
-> set .owner field.  i2c-virtio.c for example has it missing.  The field
-> is used by some of other kernel parts for reference counting
-> (try_module_get()), so it is expected that drivers will set it.
-> 
-> Solve the problem by moving this task away from the drivers to the core
-> amba bus code, just like we did for platform_driver in
-> commit 9447057eaff8 ("platform_device: use a macro instead of
-> platform_driver_register").
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-
-This makes sense. So this will be:
-
-Fixes: 3cfc88380413 ("i2c: virtio: add a virtio i2c frontend driver")
-Cc: "Jie Deng" <jie.deng@intel.com>
-
-and I think I will pick this patch for this cycle to fix
-the bug. The cleanups can go in the next cycle.
-
-
-> ---
->  Documentation/driver-api/virtio/writing_virtio_drivers.rst | 1 -
->  drivers/virtio/virtio.c                                    | 6 ++++--
->  include/linux/virtio.h                                     | 7 +++++--
->  3 files changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/driver-api/virtio/writing_virtio_drivers.rst b/Documentation/driver-api/virtio/writing_virtio_drivers.rst
-> index e14c58796d25..e5de6f5d061a 100644
-> --- a/Documentation/driver-api/virtio/writing_virtio_drivers.rst
-> +++ b/Documentation/driver-api/virtio/writing_virtio_drivers.rst
-> @@ -97,7 +97,6 @@ like this::
->  
->  	static struct virtio_driver virtio_dummy_driver = {
->  		.driver.name =  KBUILD_MODNAME,
-> -		.driver.owner = THIS_MODULE,
->  		.id_table =     id_table,
->  		.probe =        virtio_dummy_probe,
->  		.remove =       virtio_dummy_remove,
-> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-> index f173587893cb..9510c551dce8 100644
-> --- a/drivers/virtio/virtio.c
-> +++ b/drivers/virtio/virtio.c
-> @@ -362,14 +362,16 @@ static const struct bus_type virtio_bus = {
->  	.remove = virtio_dev_remove,
->  };
->  
-> -int register_virtio_driver(struct virtio_driver *driver)
-> +int __register_virtio_driver(struct virtio_driver *driver, struct module *owner)
->  {
->  	/* Catch this early. */
->  	BUG_ON(driver->feature_table_size && !driver->feature_table);
->  	driver->driver.bus = &virtio_bus;
-> +	driver->driver.owner = owner;
-> +
->  	return driver_register(&driver->driver);
->  }
-> -EXPORT_SYMBOL_GPL(register_virtio_driver);
-> +EXPORT_SYMBOL_GPL(__register_virtio_driver);
->  
->  void unregister_virtio_driver(struct virtio_driver *driver)
->  {
-> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
-> index b0201747a263..26c4325aa373 100644
-> --- a/include/linux/virtio.h
-> +++ b/include/linux/virtio.h
-> @@ -170,7 +170,7 @@ size_t virtio_max_dma_size(const struct virtio_device *vdev);
->  
->  /**
->   * struct virtio_driver - operations for a virtio I/O driver
-> - * @driver: underlying device driver (populate name and owner).
-> + * @driver: underlying device driver (populate name).
->   * @id_table: the ids serviced by this driver.
->   * @feature_table: an array of feature numbers supported by this driver.
->   * @feature_table_size: number of entries in the feature table array.
-> @@ -208,7 +208,10 @@ static inline struct virtio_driver *drv_to_virtio(struct device_driver *drv)
->  	return container_of(drv, struct virtio_driver, driver);
->  }
->  
-> -int register_virtio_driver(struct virtio_driver *drv);
-> +/* use a macro to avoid include chaining to get THIS_MODULE */
-> +#define register_virtio_driver(drv) \
-> +	__register_virtio_driver(drv, THIS_MODULE)
-> +int __register_virtio_driver(struct virtio_driver *drv, struct module *owner);
->  void unregister_virtio_driver(struct virtio_driver *drv);
->  
->  /* module_virtio_driver() - Helper macro for drivers that don't do
-> 
-> -- 
-> 2.34.1
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
 
