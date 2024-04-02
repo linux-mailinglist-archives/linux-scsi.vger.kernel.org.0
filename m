@@ -1,117 +1,122 @@
-Return-Path: <linux-scsi+bounces-3871-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3874-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6106D8948F6
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Apr 2024 03:49:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB2A5894902
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Apr 2024 03:51:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B83C284228
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Apr 2024 01:49:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 079A21C236D6
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Apr 2024 01:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62B8DBA2D;
-	Tue,  2 Apr 2024 01:49:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="TS1/SGOa"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E26FDDC5;
+	Tue,  2 Apr 2024 01:51:45 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95E0912E7F
-	for <linux-scsi@vger.kernel.org>; Tue,  2 Apr 2024 01:49:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F72AD518
+	for <linux-scsi@vger.kernel.org>; Tue,  2 Apr 2024 01:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712022571; cv=none; b=hhx7nvKSCr1/3ZafrNQ9MYl4DXsuQNHuU3iMttnDmh52gDs26WHoqEDfvEmqWD1Qsw/uAyCpVHw7o2zL/hn7ocZZXlZ8MvF5zZNXUBlvmC0ETEkTgw+jRfdAaijIO+2YpDKwfpNDaPHNMUT9beKsd5cjU5tnw9Mp2qHIyC1BWhM=
+	t=1712022705; cv=none; b=nMF3YzzjpQ58icBcG+t/vrQ4HrebD5by6F6blFrypXpuz5egdb04XIl1muirTkK6U8pOE3skE++hMLC9Kk3gbjG+KqF9bl39G1MtZmi2bl9ThDzn9kDhh3dKKaTmAMZBObfLc+YrmDvAKwMqu792xtPFclxFWaVTW4szlzggKEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712022571; c=relaxed/simple;
-	bh=cEZO2vzLbSF4BUUUAQUTsIXhOzUm4FAJN1weWBnll4A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QNkmBZNSrTslU5YQWTvWxOP1IL+ILV/g48ONf1OJ2NuBb40RIekn0TTEUnZF5i0lCsakRNwjo3JtzhRmyg28rYlXmw9MTPwr8I7HQ9Ew2RVihuIxwRe5x8qvlXuVNi/7jdrnClafAKjalEicVY7ULJ+NUfJPiZ3bo28OCONH0ho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=TS1/SGOa; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 431IKCQA009659;
-	Tue, 2 Apr 2024 01:48:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=ZCbDPopcwvRQZMkSktlFhLLo3Nu0UpFGUCF9FeZ0mNY=;
- b=TS1/SGOa5In3K4lia4GpZP6pw5LvIzzAghuW0r1O/qrnSxNz4Yp86tk/X3Hy0dzipN3G
- srycrpFXDkCSs53hlqczNYwskkvZQzUKQbKkaTgIjqk/jOgsNVF82vTTRf4hz3Ti25+y
- hClYMCFwZ95t78oYrhmrhELpe2tn3luzPM2LVG/MPCa9OFy2XO5VnSM4CcvdlqPhOI9c
- 1TF5fMtt9vdG26IJ9GSlBdiXl0NjuId2GZIpOX5fFAIuo/O2gAPVI4KRrpsKqbRTsvcn
- Wa+cTdeqUS5ilaCGbEtfo5w12GW9ljSnEcvxP9AtKzJ+1t3HQ1t+hSTyV4lN+TObDi2R tA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3x7tb9sjpu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 02 Apr 2024 01:48:49 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 431NUTEj018607;
-	Tue, 2 Apr 2024 01:48:48 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3x696cd6cs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 02 Apr 2024 01:48:48 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4321mkNH030130;
-	Tue, 2 Apr 2024 01:48:48 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3x696cd6bp-5;
-	Tue, 02 Apr 2024 01:48:48 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, avri.altman@wdc.com, alim.akhtar@samsung.com,
-        jejb@linux.ibm.com, peter.wang@mediatek.com
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        wsd_upstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
-        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
-        jiajie.hao@mediatek.com, powen.kao@mediatek.com,
-        qilin.tan@mediatek.com, lin.gui@mediatek.com, tun-yu.yu@mediatek.com,
-        eddie.huang@mediatek.com, naomi.chu@mediatek.com,
-        chu.stanley@gmail.com
-Subject: Re: [PATCH v2] ufs: core: wlun suspend dev/link state error recovery
-Date: Mon,  1 Apr 2024 21:48:39 -0400
-Message-ID: <171202249153.2135322.11918822860021186461.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240329015036.15707-1-peter.wang@mediatek.com>
-References: <20240329015036.15707-1-peter.wang@mediatek.com>
+	s=arc-20240116; t=1712022705; c=relaxed/simple;
+	bh=QDAOQGO2uk7UjH/aEPnaMzE8ddV9MOA2N4MXZt1cJlM=;
+	h=Subject:To:References:CC:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=llG8NE4QJxKWT53PIbNsyJueu2SAVcxmCH5Dg1W6M4r3YzuEIB8f0K284JhdrTor/GcaYIvEQwjNwUFz8h8yeGarm2ojlt+I4rypFpyxoyuSEIAk56rWL7IUHD7UPrvStH9TNpMbEEzhQufGjj4XYY26JdfS6JbA4gtqi1lBjcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4V7rQG5tbhz29lmC;
+	Tue,  2 Apr 2024 09:48:54 +0800 (CST)
+Received: from kwepemd200015.china.huawei.com (unknown [7.221.188.21])
+	by mail.maildlp.com (Postfix) with ESMTPS id 58584140124;
+	Tue,  2 Apr 2024 09:51:39 +0800 (CST)
+Received: from [10.40.193.166] (10.40.193.166) by
+ kwepemd200015.china.huawei.com (7.221.188.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Tue, 2 Apr 2024 09:51:38 +0800
+Subject: Re: [PATCH 2/2] scsi: hisi_sas: Modify the deadline for
+ ata_wait_after_reset()
+To: Damien Le Moal <dlemoal@kernel.org>, <jejb@linux.vnet.ibm.com>,
+	<martin.petersen@oracle.com>
+References: <20240401054914.721093-1-chenxiang66@hisilicon.com>
+ <20240401054914.721093-3-chenxiang66@hisilicon.com>
+ <98d9748f-a723-4b35-9ff6-1e425fe5d5b2@kernel.org>
+CC: <linuxarm@huawei.com>, <linux-scsi@vger.kernel.org>
+From: "chenxiang (M)" <chenxiang66@hisilicon.com>
+Message-ID: <ceb11b1b-9da6-530e-c3c4-d7b8a39650b3@hisilicon.com>
+Date: Tue, 2 Apr 2024 09:51:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <98d9748f-a723-4b35-9ff6-1e425fe5d5b2@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-01_18,2024-04-01_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 spamscore=0
- bulkscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2403210000
- definitions=main-2404020012
-X-Proofpoint-GUID: HmNuGV14Tod30m5MRiyUXr86DJKBqJsW
-X-Proofpoint-ORIG-GUID: HmNuGV14Tod30m5MRiyUXr86DJKBqJsW
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemd200015.china.huawei.com (7.221.188.21)
 
-On Fri, 29 Mar 2024 09:50:36 +0800, peter.wang@mediatek.com wrote:
+Hi Damien,
 
-> When wl suspend error occurs, for example, BKOP or SSU timeout, the host
-> triggers an error handler and returns -EBUSY to break the wl suspend process.
-> However, it is possible for the runtime PM to enter wl suspend again before
-> the error handler has finished, and return -EINVAL because the device is
-> in an error state. To address this, ensure that the rumtime PM waits for the
-> error handler to finish, or trigger the error handler in such cases,
-> because returning -EINVAL can cause the I/O to hang.
-> 
-> [...]
 
-Applied to 6.9/scsi-fixes, thanks!
+在 2024/4/1 星期一 15:08, Damien Le Moal 写道:
+> On 4/1/24 14:49, chenxiang wrote:
+>> From: Yihang Li <liyihang9@huawei.com>
+>>
+>> We found that the second parameter of function ata_wait_after_reset() is
+>> incorrectly used. We call smp_ata_check_ready_type() to poll the device
+>> type until the 30s timeout, so the correct deadline should be (jiffies +
+>> 30000).
+>>
+>> Fixes: 3c2673a09cf1 ("scsi: hisi_sas: Fix SATA devices missing issue during I_T nexus reset")
+>> Signed-off-by: xiabing <xiabing12@h-partners.com>
+>> Signed-off-by: Yihang Li <liyihang9@huawei.com>
+>> Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+>> ---
+>>   drivers/scsi/hisi_sas/hisi_sas_main.c | 4 +++-
+>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> index 097dfe4b620d..7245600aedb2 100644
+>> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> @@ -1796,8 +1796,10 @@ static int hisi_sas_debug_I_T_nexus_reset(struct domain_device *device)
+>>   
+>>   	if (dev_is_sata(device)) {
+>>   		struct ata_link *link = &device->sata_dev.ap->link;
+>> +		unsigned long deadline = ata_deadline(jiffies,
+>> +				HISI_SAS_WAIT_PHYUP_TIMEOUT / HZ * 1000);
+> At the very least, you should use jiffies_to_msecs() here. But I do not see the
+> point though given that ata_deadline will do "jiffies + msecs_to_jiffies()".
 
-[1/1] ufs: core: wlun suspend dev/link state error recovery
-      https://git.kernel.org/mkp/scsi/c/6bc5e70b1c79
+We found the issue when reading the code of  libata-eh which uses 
+ata_deadline() and ata_wait_after_reset().
+So we modify it as above.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+>
+> So may be calling:
+>
+> 	rc = ata_wait_after_reset(link, jiffies + HISI_SAS_WAIT_PHYUP_TIMEOUT,
+> 				  smp_ata_check_ready_type);
+>
+> May be simpler and more readable.
+
+OK, it is more simpler and readable. Will change it in next version.
+
+>
+>>   
+>> -		rc = ata_wait_after_reset(link, HISI_SAS_WAIT_PHYUP_TIMEOUT,
+>> +		rc = ata_wait_after_reset(link, deadline,
+>>   					  smp_ata_check_ready_type);
+>>   	} else {
+>>   		msleep(2000);
+
 
