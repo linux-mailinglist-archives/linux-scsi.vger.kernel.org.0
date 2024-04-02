@@ -1,62 +1,95 @@
-Return-Path: <linux-scsi+bounces-3919-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-3922-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF1088953A5
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Apr 2024 14:42:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82164895455
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Apr 2024 15:07:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DD091C228F3
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Apr 2024 12:42:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37CBD285157
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Apr 2024 13:07:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C18A582886;
-	Tue,  2 Apr 2024 12:39:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BD3284A4D;
+	Tue,  2 Apr 2024 13:07:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fxPJmJPR"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="5AkjCBFQ"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AB67A151;
-	Tue,  2 Apr 2024 12:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92018172E;
+	Tue,  2 Apr 2024 13:07:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712061589; cv=none; b=lAfLz8puLFwpVS3NwZXh9e6gcWDNx6mPPdQ737yoLli2sLYXzfN0csCwo7m18FIOEdNOawHrIaEHE6vKxeLgWthrp7JKkHkjhFHPtlVMN8sOH0CqkGFhYnrZ+55oNq0ntiWcSlW909SnQ8YaYmhmTMt80VR/PD6oixfYXATU5DM=
+	t=1712063228; cv=none; b=e1lM3SkQTOzG5zaweaAipWzg/MqyTuGUCQt8GndgbfQnhgG1n4SBYybPhvzH/Ze2TIZWzAQd5JV6wLgvczzYqi3fW6vvr/D4TUUmWs9FXGGR0yB5iqsdQw8d1UZP1bQOQMnxP+kH5Qfl/ESBaNue04nOrVVkPD+2wHHUWuhKQss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712061589; c=relaxed/simple;
-	bh=I/kfomac+HfU+6TqAibNGPZkKFgGudZZ6kHMd4uDmxg=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Bg9B1V5P2RUlDozLXkb/ARB2vYddcI30uXmTvAOHp0sIjtIdY3pbryFVLl8slYd6W8XfU1ansjLcAunYTYbALBWkkRFtQ4Okc0Bl+B1VRATIRqpcj7aC2V22NzhimvQ87vD3zyhWWcXi1A10diyboG0i2frf2IhKx3sm056ocD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fxPJmJPR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44874C43394;
-	Tue,  2 Apr 2024 12:39:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712061589;
-	bh=I/kfomac+HfU+6TqAibNGPZkKFgGudZZ6kHMd4uDmxg=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=fxPJmJPRiMFDx+utnhtGpuLsQNe7ccZebfJyPhrXidah2dgDegKho5mkNm5kiae49
-	 FJ12+DN6Dlaq6PSrktL1pJBaKXdcVp4UC601DhPIX1UweTRbJ2jSm7XkUH/cE20GzB
-	 qMOPKhgXF08LQx1geWdVI9dyHvqjUj4AdeQQdCIJjNyatZkouY/awruaBPDqLPpCkR
-	 yNBwKwHIIguTub+HJKgpAYDujGzSdsRt5sZzCGPNHHnz/Tg7t1Rbet10/qqqGXvkgI
-	 vIRIEIFI/rT89kYybyvGfduFTzWvDf8U5EOc5AV1PSFvT/nG8J2/a/5Ar8PcBu+qHF
-	 +NmR8fvMf+GDw==
-From: Damien Le Moal <dlemoal@kernel.org>
-To: linux-block@vger.kernel.org,
-	Jens Axboe <axboe@kernel.dk>,
+	s=arc-20240116; t=1712063228; c=relaxed/simple;
+	bh=2G2qEquSvx52a0PIlUVbUSvg2J45WYjkbhYl2DUcWj4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QXjGgfghGv1bFWRGFW4zMXJkJhR3s4hZE0XCGb5Y4ejrqcz1szuvTGwMqq4GuILHCT1/9LhC7XXbeCK+n2Ta7keQFq46CLniyinEBv0GMMbuGFUx7m/R1lRMWVhpOIQoaX1Tnif1zk6617L5sKsfFLqSXe0ji4R6L8GIGNLsr24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=5AkjCBFQ; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=WnMplBC7d5smH4h7cTd7I8II3Hw8mKB1V3xXI/Gj8Ow=; b=5AkjCBFQhxjVS5LWWNi/NcO0iV
+	++ife0rQkF5+K7pHBfNcw0qOjQ1Ni+NZziD4wUzw9LdougAsm7bg4SMKyHjQG6kpjQxdP2ABQpvrt
+	wrmtZQzz8hm/ZL9E8QXJY7jijlRSqnIlZDqSWqzkoreREb97xrGaoZ9ebTBgQ5p+VRwKCUamm/iWr
+	Oyr7FHydwy18VyBgTNoT+vm+eKGmgq2FrycG1sifTr9htnvkdJK7ZHMLnWHvOreWJG1KeGzpXqAQX
+	xyIuYdZiJzkwE7vUmttLZbVmVjWY/5d33qG+EloZo5g3jGbw7cpNFoA2s/dx9Asf4D+dTJvl0uJ+C
+	hNgI+mbg==;
+Received: from [2001:4bb8:199:60a5:c70:4a89:bc61:2] (helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rrdqh-0000000BFIS-12gL;
+	Tue, 02 Apr 2024 13:06:47 +0000
+From: Christoph Hellwig <hch@lst.de>
+To: Jens Axboe <axboe@kernel.dk>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+	Sathya Prakash <sathya.prakash@broadcom.com>,
+	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+	"Juergen E. Fischer" <fischer@norbit.de>,
+	Xiang Chen <chenxiang66@hisilicon.com>,
+	HighPoint Linux Team <linux@highpoint-tech.com>,
+	Tyrel Datwyler <tyreld@linux.ibm.com>,
+	Brian King <brking@us.ibm.com>,
+	Lee Duncan <lduncan@suse.com>,
+	Chris Leech <cleech@redhat.com>,
+	Mike Christie <michael.christie@oracle.com>,
+	John Garry <john.g.garry@oracle.com>,
+	Jason Yan <yanaijie@huawei.com>,
+	Kashyap Desai <kashyap.desai@broadcom.com>,
+	Sumit Saxena <sumit.saxena@broadcom.com>,
+	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+	Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+	Jack Wang <jinpu.wang@cloud.ionos.com>,
+	Nilesh Javali <njavali@marvell.com>,
+	GR-QLogic-Storage-Upstream@marvell.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	linux-block@vger.kernel.org,
+	linux-ide@vger.kernel.org,
+	linux1394-devel@lists.sourceforge.net,
+	MPT-FusionLinux.pdl@broadcom.com,
 	linux-scsi@vger.kernel.org,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	dm-devel@lists.linux.dev,
-	Mike Snitzer <snitzer@redhat.com>,
-	linux-nvme@lists.infradead.org,
-	Keith Busch <kbusch@kernel.org>,
-	Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v4 28/28] block: Do not special-case plugging of zone write operations
-Date: Tue,  2 Apr 2024 21:39:07 +0900
-Message-ID: <20240402123907.512027-29-dlemoal@kernel.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240402123907.512027-1-dlemoal@kernel.org>
-References: <20240402123907.512027-1-dlemoal@kernel.org>
+	megaraidlinux.pdl@broadcom.com,
+	mpi3mr-linuxdrv.pdl@broadcom.com,
+	linux-samsung-soc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net
+Subject: convert SCSI to atomic queue limits, part 1 (v2)
+Date: Tue,  2 Apr 2024 15:06:22 +0200
+Message-Id: <20240402130645.653507-1-hch@lst.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -64,152 +97,92 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-With the block layer zone write plugging being automatically done for
-any write operation to a zone of a zoned block device, a regular request
-plugging handled through current->plug can only ever see at most a
-single write request per zone. In such case, any potential reordering
-of the plugged requests will be harmless. We can thus remove the special
-casing for write operations to zones and have these requests plugged as
-well. This allows removing the function blk_mq_plug and instead directly
-using current->plug where needed.
+Hi all,
 
-Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
----
- block/blk-core.c       |  6 ------
- block/blk-merge.c      |  3 +--
- block/blk-mq.c         |  7 +------
- block/blk-mq.h         | 31 -------------------------------
- include/linux/blkdev.h | 12 ------------
- 5 files changed, 2 insertions(+), 57 deletions(-)
+this series converts the SCSI midlayer and LLDDs to use atomic queue limits
+API.  It is pretty straight forward, except for the mpt3mr driver which
+does really weird and probably already broken things by setting limits
+from unlocked device iteration callbacks.
 
-diff --git a/block/blk-core.c b/block/blk-core.c
-index e1a5344c2257..47400a4fe851 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -907,12 +907,6 @@ int bio_poll(struct bio *bio, struct io_comp_batch *iob, unsigned int flags)
- 	    !test_bit(QUEUE_FLAG_POLL, &q->queue_flags))
- 		return 0;
- 
--	/*
--	 * As the requests that require a zone lock are not plugged in the
--	 * first place, directly accessing the plug instead of using
--	 * blk_mq_plug() should not have any consequences during flushing for
--	 * zoned devices.
--	 */
- 	blk_flush_plug(current->plug, false);
- 
- 	/*
-diff --git a/block/blk-merge.c b/block/blk-merge.c
-index 7a9f8187ea62..3228868283a4 100644
---- a/block/blk-merge.c
-+++ b/block/blk-merge.c
-@@ -1112,10 +1112,9 @@ static enum bio_merge_status blk_attempt_bio_merge(struct request_queue *q,
- bool blk_attempt_plug_merge(struct request_queue *q, struct bio *bio,
- 		unsigned int nr_segs)
- {
--	struct blk_plug *plug;
-+	struct blk_plug *plug = current->plug;
- 	struct request *rq;
- 
--	plug = blk_mq_plug(bio);
- 	if (!plug || rq_list_empty(plug->mq_list))
- 		return false;
- 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 66dc289f5bee..9eda4d8413f4 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -1333,11 +1333,6 @@ void blk_execute_rq_nowait(struct request *rq, bool at_head)
- 
- 	blk_account_io_start(rq);
- 
--	/*
--	 * As plugging can be enabled for passthrough requests on a zoned
--	 * device, directly accessing the plug instead of using blk_mq_plug()
--	 * should not have any consequences.
--	 */
- 	if (current->plug && !at_head) {
- 		blk_add_rq_to_plug(current->plug, rq);
- 		return;
-@@ -2935,7 +2930,7 @@ static void blk_mq_use_cached_rq(struct request *rq, struct blk_plug *plug,
- void blk_mq_submit_bio(struct bio *bio)
- {
- 	struct request_queue *q = bdev_get_queue(bio->bi_bdev);
--	struct blk_plug *plug = blk_mq_plug(bio);
-+	struct blk_plug *plug = current->plug;
- 	const int is_sync = op_is_sync(bio->bi_opf);
- 	struct blk_mq_hw_ctx *hctx;
- 	unsigned int nr_segs = 1;
-diff --git a/block/blk-mq.h b/block/blk-mq.h
-index f75a9ecfebde..260beea8e332 100644
---- a/block/blk-mq.h
-+++ b/block/blk-mq.h
-@@ -365,37 +365,6 @@ static inline void blk_mq_clear_mq_map(struct blk_mq_queue_map *qmap)
- 		qmap->mq_map[cpu] = 0;
- }
- 
--/*
-- * blk_mq_plug() - Get caller context plug
-- * @bio : the bio being submitted by the caller context
-- *
-- * Plugging, by design, may delay the insertion of BIOs into the elevator in
-- * order to increase BIO merging opportunities. This however can cause BIO
-- * insertion order to change from the order in which submit_bio() is being
-- * executed in the case of multiple contexts concurrently issuing BIOs to a
-- * device, even if these context are synchronized to tightly control BIO issuing
-- * order. While this is not a problem with regular block devices, this ordering
-- * change can cause write BIO failures with zoned block devices as these
-- * require sequential write patterns to zones. Prevent this from happening by
-- * ignoring the plug state of a BIO issuing context if it is for a zoned block
-- * device and the BIO to plug is a write operation.
-- *
-- * Return current->plug if the bio can be plugged and NULL otherwise
-- */
--static inline struct blk_plug *blk_mq_plug( struct bio *bio)
--{
--	/* Zoned block device write operation case: do not plug the BIO */
--	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) &&
--	    bdev_op_is_zoned_write(bio->bi_bdev, bio_op(bio)))
--		return NULL;
--
--	/*
--	 * For regular block devices or read operations, use the context plug
--	 * which may be NULL if blk_start_plug() was not executed.
--	 */
--	return current->plug;
--}
--
- /* Free all requests on the list */
- static inline void blk_mq_free_requests(struct list_head *list)
- {
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index faacc9853e0b..79ed07bd652a 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1301,18 +1301,6 @@ static inline unsigned int bdev_zone_no(struct block_device *bdev, sector_t sec)
- 	return disk_zone_no(bdev->bd_disk, sec);
- }
- 
--/* Whether write serialization is required for @op on zoned devices. */
--static inline bool op_needs_zoned_write_locking(enum req_op op)
--{
--	return op == REQ_OP_WRITE || op == REQ_OP_WRITE_ZEROES;
--}
--
--static inline bool bdev_op_is_zoned_write(struct block_device *bdev,
--					  enum req_op op)
--{
--	return bdev_is_zoned(bdev) && op_needs_zoned_write_locking(op);
--}
--
- static inline sector_t bdev_zone_sectors(struct block_device *bdev)
- {
- 	struct request_queue *q = bdev_get_queue(bdev);
--- 
-2.44.0
+I will probably defer the (more complicated) ULD changes to the next
+merge window as they would heavily conflict with Damien's zone write
+plugging series.  With that the series could go in through the SCSI
+tree if Jens' ACKs the core block layer bits.
 
+Changes since v1:
+ - print a different warning message for queue_limits_commit failure vs
+   ->device_configure failure
+ - cancel the queue limits update when ->device_configure fails
+ - spelling fixes
+ - improve comments
+
+Diffstat:
+ block/blk-settings.c                        |  245 ----------------------------
+ block/bsg-lib.c                             |    6 
+ drivers/ata/ahci.h                          |    2 
+ drivers/ata/libata-sata.c                   |   11 -
+ drivers/ata/libata-scsi.c                   |   19 +-
+ drivers/ata/libata.h                        |    3 
+ drivers/ata/pata_macio.c                    |   11 -
+ drivers/ata/sata_mv.c                       |    2 
+ drivers/ata/sata_nv.c                       |   24 +-
+ drivers/ata/sata_sil24.c                    |    2 
+ drivers/firewire/sbp2.c                     |   13 -
+ drivers/message/fusion/mptfc.c              |    1 
+ drivers/message/fusion/mptsas.c             |    1 
+ drivers/message/fusion/mptscsih.c           |    2 
+ drivers/message/fusion/mptspi.c             |    1 
+ drivers/s390/block/dasd_eckd.c              |    6 
+ drivers/scsi/aha152x.c                      |    8 
+ drivers/scsi/aic94xx/aic94xx_init.c         |    2 
+ drivers/scsi/hisi_sas/hisi_sas.h            |    3 
+ drivers/scsi/hisi_sas/hisi_sas_main.c       |    7 
+ drivers/scsi/hisi_sas/hisi_sas_v1_hw.c      |    2 
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c      |    2 
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c      |    7 
+ drivers/scsi/hosts.c                        |    6 
+ drivers/scsi/hptiop.c                       |    8 
+ drivers/scsi/ibmvscsi/ibmvfc.c              |    5 
+ drivers/scsi/imm.c                          |   12 -
+ drivers/scsi/ipr.c                          |   10 -
+ drivers/scsi/isci/init.c                    |    2 
+ drivers/scsi/iscsi_tcp.c                    |    2 
+ drivers/scsi/libsas/sas_scsi_host.c         |    7 
+ drivers/scsi/megaraid/megaraid_sas.h        |    2 
+ drivers/scsi/megaraid/megaraid_sas_base.c   |   29 +--
+ drivers/scsi/megaraid/megaraid_sas_fusion.c |    3 
+ drivers/scsi/mpi3mr/mpi3mr.h                |    1 
+ drivers/scsi/mpi3mr/mpi3mr_app.c            |   12 -
+ drivers/scsi/mpi3mr/mpi3mr_os.c             |   76 +++-----
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c        |   18 --
+ drivers/scsi/mvsas/mv_init.c                |    2 
+ drivers/scsi/pm8001/pm8001_init.c           |    2 
+ drivers/scsi/pmcraid.c                      |   11 -
+ drivers/scsi/ppa.c                          |    8 
+ drivers/scsi/qla2xxx/qla_os.c               |    6 
+ drivers/scsi/scsi_lib.c                     |   40 +---
+ drivers/scsi/scsi_scan.c                    |   74 ++++----
+ drivers/scsi/scsi_transport_fc.c            |   15 +
+ drivers/scsi/scsi_transport_iscsi.c         |    6 
+ drivers/scsi/scsi_transport_sas.c           |    4 
+ drivers/staging/rts5208/rtsx.c              |   24 +-
+ drivers/ufs/core/ufs_bsg.c                  |    3 
+ drivers/ufs/core/ufshcd.c                   |    3 
+ drivers/ufs/host/ufs-exynos.c               |    8 
+ drivers/usb/image/microtek.c                |    8 
+ drivers/usb/storage/scsiglue.c              |   57 ++----
+ drivers/usb/storage/uas.c                   |   29 +--
+ drivers/usb/storage/usb.c                   |   10 +
+ include/linux/blkdev.h                      |   26 +-
+ include/linux/bsg-lib.h                     |    3 
+ include/linux/libata.h                      |   10 -
+ include/linux/mmc/host.h                    |    4 
+ include/scsi/libsas.h                       |    3 
+ include/scsi/scsi_host.h                    |    9 +
+ include/scsi/scsi_transport.h               |    2 
+ include/scsi/scsi_transport_fc.h            |    1 
+ include/ufs/ufshcd.h                        |    1 
+ 65 files changed, 347 insertions(+), 595 deletions(-)
 
