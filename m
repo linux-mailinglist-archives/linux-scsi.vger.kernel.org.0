@@ -1,166 +1,140 @@
-Return-Path: <linux-scsi+bounces-4268-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-4271-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D03C689B4E0
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Apr 2024 02:04:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9B4C89B4F5
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Apr 2024 02:58:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 481701F214AC
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Apr 2024 00:04:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5447B20EED
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Apr 2024 00:58:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 457C2F511;
-	Mon,  8 Apr 2024 00:04:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAD987EC;
+	Mon,  8 Apr 2024 00:58:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D8hah39t"
+	dkim=pass (2048-bit key) header.d=bell.net header.i=@bell.net header.b="O55HDRnf"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cmx-mtlrgo002.bell.net (mta-mtl-005.bell.net [209.71.208.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ECAFBE47
-	for <linux-scsi@vger.kernel.org>; Mon,  8 Apr 2024 00:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02FEF63A;
+	Mon,  8 Apr 2024 00:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.71.208.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712534680; cv=none; b=UJ8VC9JBls1wNgIEMVwMlNbvb5yBAVDCrGkt+ymWoFB+dsxzIVXHW1QVbgiUaF/BQS2cNm1m3b5Pkf5wIKsqttrL0Sg1Jg0XhLKne8o/eIsqCUGD3LQ4lC4/Nnd6vLcMaSSDrF+dZPKWRq/DQPw19D4wkEarNhQXdNqkvrbLCHg=
+	t=1712537919; cv=none; b=M0x/QdvNmX+fwpk0/bq2/mq9yVTV0Mz2wPOKS54StQM0FpiDs+H+UZq6oboJ0McnupwmVlyh5mdDvjWVFOYfR0NIJXQh5y+qU6H0iLq+2rzTnpCjgDCMYzG323exhGvLsiqMOlu7rFx1C989NZtlijWv6u8RWNxf47M/py0J7kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712534680; c=relaxed/simple;
-	bh=nAYKKMjqM3Kb8RFCha5OI1S6EWj+PTGtIqzAtlEkxmQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=t0rGO7o5izB3Jt1O8OZJp6R6MTpdBiQYHeIXPQH0fzuETqfh2YIbwJeaizJ2u7xy/23lehSIQGcodHMz3+FZieOTpU39jmL/5YLsx3Vmbx4tycnR0wXIGEQR/qjrgNHwzICOiqHgQGuerWUjt5T8LT9GH7KRdI2lOHHjfe4RweA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D8hah39t; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2d71765d3e1so46881011fa.0
-        for <linux-scsi@vger.kernel.org>; Sun, 07 Apr 2024 17:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712534676; x=1713139476; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5fggAFWGtjVvdqtakB0C83EFk680HhcCQBgjQ4syqX4=;
-        b=D8hah39t3me/eolUfdcYzoYDSrXHDn48l1UF0m2cDlEMLeItwpDKID8OyM9A1mDxWq
-         YqJ9IhI2jEGWpdguT50zntSydCeM9YwF/TpAULZJ4T0wcd13+n0unuuDt1FwEPfnhodk
-         Dq+6brtcpORv77/GrPd34EqJ6tr28Yy+CpIOvf0CRjE3b2GdhOOEnQXSzULbur/zqck8
-         FFStulYg2SkFyX1lvNFbZq/tF7ezzJH+0daIgD/CHL8jpxnfqzgjgMbztKssctD6FG4u
-         NzHSJcWOUahQSwjse6vXIcYDYiT8D3EBphvXhyfaXpIXABB7hbktP1A4sisuYOyagGPw
-         ao6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712534676; x=1713139476;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5fggAFWGtjVvdqtakB0C83EFk680HhcCQBgjQ4syqX4=;
-        b=cIQpwmrFsv4tbRTBa2Ce2y5I4ZkcRFBleX3hHGNAsTAPAW6xyRz9Dmia+Bj0n6Ff6G
-         tPHtH/JYgvvH6x2dGW2/M01cREQAVeWHIk5GpCcKa1V0t4EU1nauhooBQoouB7kp9RPS
-         H9+3Vf6VN5Ctm1OmRb87uobYyI3mlG3Ixe+6Ge2P8YDUuKIdswHzARpzlwW7giFz5L9F
-         nBUpJxWj5tIGAzhlCPjcgmYWLXg+SnPSyfwzRpL07HlW5wVCWJqnNOU/6iCOKEMc5oEW
-         ag0MMN2Ctrtjb6o4Wi5Rb5w/zq9kmPuy8XzC+CG/B3Lhzk2j2AqKZC1OsyBtavJgRi1e
-         17tw==
-X-Forwarded-Encrypted: i=1; AJvYcCWoPj2puqB5nD5rLLE9ptV5B+6Ef7MLt1mSoMmaSwTNKxbo34Ki5Uptu/t8eNIO3lkV/z+58dapPhlnzC7bLD3Dy9l1qDifmk3l6Q==
-X-Gm-Message-State: AOJu0YxreexNh89u80DBg96UnevZvUerPa3K+2xxdZ4cBOebltexbUDD
-	DSw3keKNvCvyROYoE1v0hswPx9pGGBrMTytdfNcAbYWEZulyYmG4xbbL+dpIinQ=
-X-Google-Smtp-Source: AGHT+IEYyEqfmWIUKG2Y+ruPQ9Io2nHHG5li13pYUOchjuJ8qo3zDn3ISkVLwm5t55YYTxTWAvHfSA==
-X-Received: by 2002:a2e:8557:0:b0:2d4:69bd:77b2 with SMTP id u23-20020a2e8557000000b002d469bd77b2mr5818267ljj.36.1712534676623;
-        Sun, 07 Apr 2024 17:04:36 -0700 (PDT)
-Received: from umbar.lan ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id n9-20020a2e86c9000000b002d2191e20e1sm947077ljj.92.2024.04.07.17.04.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Apr 2024 17:04:36 -0700 (PDT)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Mon, 08 Apr 2024 03:04:34 +0300
-Subject: [PATCH v4 4/4] arm64: dts: qcom: msm8996: drop source clock
- entries from the UFS node
+	s=arc-20240116; t=1712537919; c=relaxed/simple;
+	bh=rhyCYD3K8um4oNbLgx5SrRsIEtNjn41Zz1K1xilJADo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=J7BEOSxDuPok86rzsjxNwkqsbYzOY1aVZTbV82fdbTyhsRQZGoN8HA/Q+YtPx2/pu4na9WasCvCSc3sRNDbfB4H+L4dCkSmZqq8D8/xQBxK0tBna2K6jox1lpz1dXCUYe8G46s7KKjhGKjcIr++VNL1BN42WCUN7k+5AG1weksA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bell.net; spf=pass smtp.mailfrom=bell.net; dkim=pass (2048-bit key) header.d=bell.net header.i=@bell.net header.b=O55HDRnf; arc=none smtp.client-ip=209.71.208.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bell.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bell.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bell.net; s=selector1; t=1712537917; 
+        bh=AC0aZJQ/bp1TUJq6918GOcLuMkOaWKxk7uUM0P4vGX8=;
+        h=Message-ID:Date:MIME-Version:Subject:To:References:From:In-Reply-To:Content-Type;
+        b=O55HDRnfx6e/Abpf3evUsNERw5ASxkKTDEb7LUOb8XQDNqcSRatZFlDlG1q9AZD5zQFiq9hnatPJRCRSWs/QO0k2smHaDacpUc4PEz7vRxR4acmURJLC41BzKXcL3YvM1nLMhcJ27yC62iZyHhf9UA2afss/qEETaE69wrN8aIxPHug20lUotDDL4rsbCG8+O3blkDxby1CF23YILFSRLTetxq7Np9GJ16BotK4+Prupq5TPBqfdSo9VkY3lSlsE82iFcAWZtY4+j86tIY8yQhbuohJ/q82QXHfzBu6u9+aBZGEi3hrQXKAQLa6T0qtU2ivfSpc3bncMOGSZFNVXcQ==
+X-RG-SOPHOS: Clean
+X-RG-VADE-SC: 0
+X-RG-VADE: Clean
+X-RG-Env-Sender: dave.anglin@bell.net
+X-RG-Rigid: 660D6FF1005BA5B3
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvledrudeghedggedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuuefgnffnpdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomheplfhohhhnucffrghvihguucetnhhglhhinhcuoegurghvvgdrrghnghhlihhnsegsvghllhdrnhgvtheqnecuggftrfgrthhtvghrnhepjeelffffjeehgffgueehleegfeegueeigedtkeffgeduueetffegffejudekgfeunecukfhppedugedvrdduvdeirddukeekrddvhedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddvrdeglegnpdhinhgvthepudegvddruddviedrudekkedrvdehuddpmhgrihhlfhhrohhmpegurghvvgdrrghnghhlihhnsegsvghllhdrnhgvthdpnhgspghrtghpthhtohepjedprhgtphhtthhopeflrghmvghsrdeuohhtthhomhhlvgihsefjrghnshgvnhfrrghrthhnvghrshhhihhprdgtohhmpdhrtghpthhtohepsghvrghnrghsshgthhgvsegrtghmrdhorhhgpdhrtghpthhtohepuggrvhgvrdgrnhhglhhinhessggvlhhlrdhnvghtpdhrtghpthhtohepghhrvghgsehkrhhorghhrdgtohhmpdhrtghpthhtoheplhhinhhugidqphgrrhhishgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhr
+	tghpthhtoheplhhinhhugidqshgtshhisehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.2.49] (142.126.188.251) by cmx-mtlrgo002.bell.net (5.8.814) (authenticated as dave.anglin@bell.net)
+        id 660D6FF1005BA5B3; Sun, 7 Apr 2024 20:58:12 -0400
+Message-ID: <d04f4358-6c27-46b6-be26-4d42eebc2acc@bell.net>
+Date: Sun, 7 Apr 2024 20:58:13 -0400
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240408-msm8996-fix-ufs-v4-4-ee1a28bf8579@linaro.org>
-References: <20240408-msm8996-fix-ufs-v4-0-ee1a28bf8579@linaro.org>
-In-Reply-To: <20240408-msm8996-fix-ufs-v4-0-ee1a28bf8579@linaro.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, 
- "James E.J. Bottomley" <jejb@linux.ibm.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Nitin Rawat <quic_nitirawa@quicinc.com>, Can Guo <quic_cang@quicinc.com>, 
- Naveen Kumar Goud Arepalli <quic_narepall@quicinc.com>, 
- Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
- Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
- Andy Gross <agross@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org, 
- devicetree@vger.kernel.org
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1595;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=nAYKKMjqM3Kb8RFCha5OI1S6EWj+PTGtIqzAtlEkxmQ=;
- b=owGbwMvMwMXYbdNlx6SpcZXxtFoSQ5qwyYTVklLe1943zd6sOMNEMdP4517zT+lm7tall/p/c
- nx5KqfayWjMwsDIxSArpsjiU9AyNWZTctiHHVPrYQaxMoFMYeDiFICJOP9j/6clU7YoVvTI7sIw
- tT3VKpG/M+NVbm5sE7p+cQ/3NJulTcKGy5pmhn8RDbgo/rrTcXvjjbokFuWennMTF3xsXpah2L9
- VZ1HwlZI09mM3WY8F/aiIn7OjMuMJyxFRr+rzdQWMD+MesmZ5HePy9y9njNkxmeW9nvWXRRd9mw
- 5ul1or1Wwcwnf6G9/eRN0wJvY105/qOC5r3MiRly8dte9oWYVD5PM/hfuezj1360tAoGhvh+kBk
- /d73k6vOj21fl1ke0/G5ofWvIa7bTpn+rRfjo39q3ujVdLp2IPORi/9J8J3GpMYmOw6iuy/PhSK
- y9srcmWj1z854TxpcXeHyjYfgS5LJ4GVrw2N8t5vtngDAA==
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+User-Agent: Mozilla Thunderbird
+Subject: Re: Broken Domain Validation in 6.1.84+
+To: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: James Bottomley <James.Bottomley@HansenPartnership.com>,
+ Bart Van Assche <bvanassche@acm.org>,
+ linux-parisc <linux-parisc@vger.kernel.org>, linux-scsi@vger.kernel.org,
+ Greg KH <greg@kroah.com>
+References: <b0670b6f-b7f7-4212-9802-7773dcd7206e@bell.net>
+ <d1fc0b8d-4858-4234-8b66-c8980f612ea2@acm.org>
+ <db784080-2268-4e6d-84bd-b33055a3331b@bell.net>
+ <028352c6-7e34-4267-bbff-10c93d3596d3@acm.org>
+ <cf78b204-9149-4462-8e82-b8f98859004b@bell.net>
+ <6cb06622e6add6309e8dbb9a8944d53d1b9c4aaa.camel@HansenPartnership.com>
+ <03ef7afd-98f5-4f1b-8330-329f47139ddf@bell.net>
+ <yq1wmp9pb0d.fsf@ca-mkp.ca.oracle.com>
+Content-Language: en-US
+From: John David Anglin <dave.anglin@bell.net>
+Autocrypt: addr=dave.anglin@bell.net; keydata=
+ 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
+ T70V9SSrl2hiw38vRzsl
+In-Reply-To: <yq1wmp9pb0d.fsf@ca-mkp.ca.oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-There is no need to mention and/or to touch in any way the intermediate
-(source) clocks. Drop them from MSM8996 UFSHCD schema, making it follow
-the example lead by all other platforms.
+On 2024-04-07 9:19 a.m., Martin K. Petersen wrote:
+> Could you please try the patch below on top of v6.1.80?
+>
+   CC [M]  drivers/scsi/sd.o
+   CC [M]  net/ipv6/xfrm6_policy.o
+   CC [M]  net/llc/llc_output.o
+drivers/scsi/sd.c: In function 'sd_read_block_zero':
+drivers/scsi/sd.c:3300:9: error: implicit declaration of function 'scsi_execute_
+cmd'; did you mean 'scsi_execute_req'? [-Werror=implicit-function-declaration]
+  3300 |         scsi_execute_cmd(sdkp->device, cmd, REQ_OP_DRV_IN, buffer, buf_l
+en,
+       |         ^~~~~~~~~~~~~~~~
+       |         scsi_execute_req
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index da7f599bd2a5..708f797f1b44 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -2047,24 +2047,20 @@ ufshc: ufshc@624000 {
- 			power-domains = <&gcc UFS_GDSC>;
- 
- 			clock-names =
--				"core_clk_src",
- 				"core_clk",
- 				"bus_clk",
- 				"bus_aggr_clk",
- 				"iface_clk",
--				"core_clk_unipro_src",
- 				"core_clk_unipro",
- 				"core_clk_ice",
- 				"ref_clk",
- 				"tx_lane0_sync_clk",
- 				"rx_lane0_sync_clk";
- 			clocks =
--				<&gcc UFS_AXI_CLK_SRC>,
- 				<&gcc GCC_UFS_AXI_CLK>,
- 				<&gcc GCC_SYS_NOC_UFS_AXI_CLK>,
- 				<&gcc GCC_AGGRE2_UFS_AXI_CLK>,
- 				<&gcc GCC_UFS_AHB_CLK>,
--				<&gcc UFS_ICE_CORE_CLK_SRC>,
- 				<&gcc GCC_UFS_UNIPRO_CORE_CLK>,
- 				<&gcc GCC_UFS_ICE_CORE_CLK>,
- 				<&rpmcc RPM_SMD_LN_BB_CLK>,
-@@ -2072,8 +2068,6 @@ ufshc: ufshc@624000 {
- 				<&gcc GCC_UFS_RX_SYMBOL_0_CLK>;
- 			freq-table-hz =
- 				<100000000 200000000>,
--				<100000000 200000000>,
--				<0 0>,
- 				<0 0>,
- 				<0 0>,
- 				<0 0>,
+Dave
 
 -- 
-2.39.2
+John David Anglin  dave.anglin@bell.net
 
 
