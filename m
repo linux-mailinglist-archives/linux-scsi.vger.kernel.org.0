@@ -1,119 +1,131 @@
-Return-Path: <linux-scsi+bounces-4344-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-4348-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B573789D0B7
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Apr 2024 05:09:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 766CB89D0D4
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Apr 2024 05:16:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D82271C2391D
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Apr 2024 03:09:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CFF41F254EE
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Apr 2024 03:16:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B5255E58;
-	Tue,  9 Apr 2024 03:09:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7DCE548FC;
+	Tue,  9 Apr 2024 03:15:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Rxzy7HHx"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="QDL9/zEL"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3531D54BDA;
-	Tue,  9 Apr 2024 03:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65CC548F2;
+	Tue,  9 Apr 2024 03:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712632158; cv=none; b=Begom8fcSz3eFGT7w5EyEY4yNBDG9eUkKMyjeU/Fb803mh8Yt2dPrSrjJ3Ww3UIKFiSxNYKNzDDQHgJKc7qOpp23pGi1v3aCUW6fvCA/0aFHr3gWk8uxNRsUnrqYiMhOFrWr7bHBnBGGxYgMoGHjuxGvaBXpybJ0Ql3C5R0jx3M=
+	t=1712632554; cv=none; b=Kc1k8hLZ22B9QJmT2UMbcpfta5767NvQdPTWGxaB2MmHyQ6SNxxNV3XNjqnGvipLOnO/ivk/wL8JeIXACos0RIJRjlT8WleY2JkvYHiVTIySRZ486cwfKEhuuStkYYnxUNUgywCz3u6kHQm8iZBcb5kGPB9GpQcbwyXs46DaL7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712632158; c=relaxed/simple;
-	bh=s84R/QNSBP4M44H6LFkEyJVzicIiPwCXHRnXHiRWOUQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KzduNJKE2ZWyK+Vc7VhFlwI7TSHBOimD7bFy43ozxXgZsksvfsDjkqEcgHc++MEuSuaLzbR7qFiHsi5L1yUDvzeQoBdmGyxpgd0Zyeo/6Q4E1HwHHxjQbQ86g1zwNdPcXAW/I/zbHqH96hC6oEHN39JLkcubdJBVCktVCaX85xQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Rxzy7HHx; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 438LmwmD018610;
-	Tue, 9 Apr 2024 03:09:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=vE+9o9BkLURaI9VMoiOQYusDiI3hCMVMoz5FiCiu6CI=;
- b=Rxzy7HHxRdqP+7asazirdy4MxpcZcAEAsk3+YlQfbUN8ue/ymMWBizhyS66LGo9uJH6g
- Qxv833omkbf2sXpmysZfJJ5jViNLvXDtU1NtxnOYRGvC4AwYDqe4ItfuSqxY6ddhKfTt
- ETx0Sgq1dY/D5y9tuHaUP/+2F3XCX012i+2Vjl3q67zGnU7ybEEl+5mNYYIO+iXzkjQS
- pp8Jd1wZ6NMJn3r9fdft5J8wu3wR/yeDT2UnVVT1O6+EUj1qx7ubuZK/hL3scBLWC+SJ
- seqk/k+0wmcalH5o0mGqzxlUbsQ9Djrs3IR9aEluTSpLi8x5aDGwVm1DwY7yY6+EKKao kQ== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xaw6445xr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 09 Apr 2024 03:09:09 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 438NjXev017921;
-	Tue, 9 Apr 2024 03:09:05 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3xavuca6fd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 09 Apr 2024 03:09:05 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 439392FJ012913;
-	Tue, 9 Apr 2024 03:09:04 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3xavuca6e1-6;
-	Tue, 09 Apr 2024 03:09:04 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Finn Thain <fthain@linux-m68k.org>,
-        Michael Schmitz <schmitzmic@gmail.com>
-Subject: Re: [PATCH 0/4] scsi: Prevent several section mismatch warnings
-Date: Mon,  8 Apr 2024 23:08:55 -0400
-Message-ID: <171260277844.3109929.5187390857869116431.b4-ty@oracle.com>
+	s=arc-20240116; t=1712632554; c=relaxed/simple;
+	bh=jrIScl7tEROJREqjIpcHI6bGspQlGAFhvM6VM7rlaV0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LgV/9bjYBYlXIinBxD37AXh+c86++9Nf8qVW9/r8Q8qekpFDFvVWYxs5nQDxFOqY9nrtiPK7Q48n9ge0FaIv4bPghkqkSXuadBSUoWlxHkdjZ7Ro/qUNZcM6NPEA54ndC5rp0gw2jXo6q6fG/fEVm/7ulg4nisSu+G+H9limZZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=QDL9/zEL; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 439386Hr005531;
+	Tue, 9 Apr 2024 03:15:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=3hR7/b+Lcmm0h+bCz7ikScFKg0g90gZUtEoSlyOaUGQ=;
+ b=QDL9/zELLwJNTA0AlRX0XMVL5usITKhIqI7llCZqCy7N8HGs3rxRV/D0UwmrLLuGzbjM
+ yvDYC37VQftNtPjImysV3fWO2/YqdG7hjBeE5aEhfVcM856SZKQSJ0dPtP6pccEaVKIE
+ lq9/hxwzsYTliDoyEkFdEN58SBsV978NCM1absBAfDovsIrF7QDk+A5yGdY4wTpdceLj
+ 9V/9ZgafeMs8F4P7mVfMI641SZ22vli5o/+VNGzL9DhpltKtJMKgkC6XQ//3bYmlk6iV
+ p/gVyxDRbS/1KrgswfW5PQCbioAkZt1yzu7b1BpxwI4JcpfAM5W7/m2zTXafHmMwgnT/ tQ== 
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xcv1gg43b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Apr 2024 03:15:45 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 4390vlJA013550;
+	Tue, 9 Apr 2024 03:15:44 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3xbgqtc1ws-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Apr 2024 03:15:44 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4393Ff1F27656924
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 9 Apr 2024 03:15:43 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2E28E2004B;
+	Tue,  9 Apr 2024 03:15:41 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AC77F20040;
+	Tue,  9 Apr 2024 03:15:40 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  9 Apr 2024 03:15:40 +0000 (GMT)
+Received: from jarvis.ozlabs.ibm.com.com (unknown [9.36.30.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 481A76016D;
+	Tue,  9 Apr 2024 13:15:37 +1000 (AEST)
+From: Andrew Donnellan <ajd@linux.ibm.com>
+To: linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Cc: manoj@linux.ibm.com, ukrishn@linux.ibm.com, fbarrat@linux.ibm.com
+Subject: [PATCH 1/2] MAINTAINERS: Make cxlflash obsolete
+Date: Tue,  9 Apr 2024 13:10:26 +1000
+Message-ID: <20240409031027.41587-1-ajd@linux.ibm.com>
 X-Mailer: git-send-email 2.44.0
-In-Reply-To: <cover.1711746359.git.u.kleine-koenig@pengutronix.de>
-References: <cover.1711746359.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MjqIFWIQGX14MH6cBX1Ov2X8XbAeNIZ5
+X-Proofpoint-ORIG-GUID: MjqIFWIQGX14MH6cBX1Ov2X8XbAeNIZ5
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-04-08_19,2024-04-05_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 adultscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2404010000
- definitions=main-2404090018
-X-Proofpoint-GUID: dEEkDF4sRO2VvVDh3BInaZMA7K7vVCGs
-X-Proofpoint-ORIG-GUID: dEEkDF4sRO2VvVDh3BInaZMA7K7vVCGs
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=703 priorityscore=1501 adultscore=0 lowpriorityscore=0
+ suspectscore=0 malwarescore=0 phishscore=0 bulkscore=0 clxscore=1011
+ mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2404010000 definitions=main-2404090018
 
-On Fri, 29 Mar 2024 22:11:40 +0100, Uwe Kleine-König wrote:
+The cxlflash driver is no longer actively maintained and we intend to
+remove it in a future kernel release. Change its status to obsolete.
 
-> this series fixes the same issue in four drivers. The warning is a false
-> positive and to suppress it the driver structs are marked with
-> __refdata and a comment is added to describe the (non-trivial)
-> situation.
-> 
-> Best regards
-> Uwe
-> 
-> [...]
+While we're here, Matthew Ochs no longer works at IBM and is no longer in
+a position to access cxlflash hardware, so remove him from the maintainers
+list.
 
-Applied to 6.10/scsi-queue, thanks!
+Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+---
+ MAINTAINERS | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-[1/4] scsi: a3000: Mark driver struct with __refdata to prevent section mismatch
-      https://git.kernel.org/mkp/scsi/c/e81bb6f59b35
-[2/4] scsi: a4000t: Mark driver struct with __refdata to prevent section mismatch
-      https://git.kernel.org/mkp/scsi/c/e70d4cce8923
-[3/4] scsi: atari_scsi: Mark driver struct with __refdata to prevent section mismatch
-      https://git.kernel.org/mkp/scsi/c/bb8520996fe1
-[4/4] scsi: mac_scsi: Mark driver struct with __refdata to prevent section mismatch
-      https://git.kernel.org/mkp/scsi/c/4a0166d55edd
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index aea47e04c3a5..34f605498873 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5780,10 +5780,9 @@ F:	include/uapi/misc/cxl.h
+ 
+ CXLFLASH (IBM Coherent Accelerator Processor Interface CAPI Flash) SCSI DRIVER
+ M:	Manoj N. Kumar <manoj@linux.ibm.com>
+-M:	Matthew R. Ochs <mrochs@linux.ibm.com>
+ M:	Uma Krishnan <ukrishn@linux.ibm.com>
+ L:	linux-scsi@vger.kernel.org
+-S:	Supported
++S:	Obsolete
+ F:	Documentation/arch/powerpc/cxlflash.rst
+ F:	drivers/scsi/cxlflash/
+ F:	include/uapi/scsi/cxlflash_ioctl.h
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.44.0
+
 
