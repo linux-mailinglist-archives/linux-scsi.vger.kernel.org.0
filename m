@@ -1,53 +1,53 @@
-Return-Path: <linux-scsi+bounces-4560-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-4563-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4DFC8A496D
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Apr 2024 09:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 21D248A4976
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Apr 2024 09:55:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 008161C23319
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Apr 2024 07:54:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 534041C23330
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Apr 2024 07:55:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FA422C868;
-	Mon, 15 Apr 2024 07:54:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04DBD3839E;
+	Mon, 15 Apr 2024 07:54:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="boO3Pids"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="onc2rJxj"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFEF32421A;
-	Mon, 15 Apr 2024 07:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ACD936120;
+	Mon, 15 Apr 2024 07:54:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713167661; cv=none; b=i4+oYl8JwTsEdGhLFnD0EeJm5efgbPu60+7MqjU/GuM2rkjpOXATOYPwdfSt5BrJLzgyQR0HUEYvVMbrX4QvkQJSaACXC9CwymKMtMr8WszjgWQRkZY/YE0bCOc/yO31A6sCCvCI8BBWmTOoNflbSR13XLuyV11ZqU0SMMZVdZA=
+	t=1713167663; cv=none; b=O6g+VCbH7Tg/VTHhiJrhGZIJTDSS6d8tY4nHcoeXDvfmUwxaQIJEH1GWh52cIVGHr9afLX4mab0F33QqCpWQvxXbi46WDbZVhzLMSDA6486a1ydXjgVKjyTVEzhzKGDE5tmvoTB2HrqYUj/uocymUAMec2Bqsgvv3xOiva9rlHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713167661; c=relaxed/simple;
-	bh=mtHtsXrLALzqGVSNLxyK9tAZfpbHED2YLsLqlHv6qkE=;
+	s=arc-20240116; t=1713167663; c=relaxed/simple;
+	bh=CqzKZd4vjnj7h8MQHLZ+d4uf+/wUuKKChJa/MWda7XQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kmXrNQ7mOs0S9D1SQbBtip/FzzjonjfCFFgkEvY5eB+04IqRf1d6Ov5WGHYQXh4fnKZmgyMljJiy9DpphJlRbqluVOEu6Yz2CPHgohjwvtM4fmyZhD59WfXovWJD46yfTJEK2kXQ9YTTeikcjKQcmWAITZgiBK5WCSXUe0FnWlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=boO3Pids; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=cYk6kDsKVBBUXaK25HV39A925sQGQt+e2bku5b/i/uI5DkoQZ+4pO6yh8s6X/ylpmrjds7FrI5IM5s9W2EzuwJ3mif2UqRBgLx4UHtbKD8udCq6EZOl7S8xvqZpfcTK3ku127nQ4Rtu/1g4t5ZJzMlD25XpHmO9/le7OwsI90OI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=onc2rJxj; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713167658;
-	bh=mtHtsXrLALzqGVSNLxyK9tAZfpbHED2YLsLqlHv6qkE=;
+	s=mail; t=1713167659;
+	bh=CqzKZd4vjnj7h8MQHLZ+d4uf+/wUuKKChJa/MWda7XQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=boO3PidsKRgQDIa/WhDqBUQNs7yBhxTFL7Nlsuv92KD8iRzBFz14iCVhIKRvwvsV2
-	 Vt2ZWp964MKE24SKxWmksKT27IKbOwRUjckSBlcYEy95SSzhq9zdWwxR/N3VH1ncCY
-	 n1tfwcrYubZTOBSGpYGDv/4P2zXN2AWmPQTDlMrUHH7zaCRmCHBK/nVvp3HZUIg4wt
-	 8t8FZxOZaAp20E+fUGhnekXe0jmtWZ4TbC0TMp78fVYjBAP0A9ViS45Vmq5uu3lZcA
-	 gxYNx/y3ylf8bTdAqeD4V0S6HvM6Kh5ENPBduQaA1Xb9Ow/9d/uov0+UZsxkGDWyH/
-	 2Eojl66gBqDaw==
+	b=onc2rJxjkWbPZah2WuFKV0fdhQWeh+XGcbfkjKJMUGgt2370dHgdH8uecgoPrixB/
+	 /KNmvHqpqOjekfJ7XV3YGnX4ubynn670NnqR8qsOpIoHfZFwacNNCZJKoF4yEsK7q3
+	 uUE/F9VgalZqSN5dhdcZynOhuJ4dRhbtVXRmM90gRlIyoC/6McBzipMWPkHYnsUtM1
+	 By8t/a45kugn3BnPmJRaNmQhufgprNNNjm0pUKAY+PRl9ufQ0VhFqA3mEedSP6Y5CI
+	 pjAXyasKqX1ZHeZjq/dqb9GTUgkK9sWCttGKxfLuJatuePYSf5mfRJYRSEM3+XOdyE
+	 IAsSVnBAcw82Q==
 Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id EE98237820AB;
-	Mon, 15 Apr 2024 07:54:16 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 83A3937820EF;
+	Mon, 15 Apr 2024 07:54:18 +0000 (UTC)
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 To: linux-scsi@vger.kernel.org
 Cc: alim.akhtar@samsung.com,
@@ -69,9 +69,9 @@ Cc: alim.akhtar@samsung.com,
 	linux-kernel@vger.kernel.org,
 	linux-mediatek@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 4/8] scsi: ufs: ufs-mediatek: Avoid underscores in crypt clock names
-Date: Mon, 15 Apr 2024 09:54:02 +0200
-Message-ID: <20240415075406.47543-5-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 5/8] dt-bindings: ufs: mediatek,ufs: Document MT8192 compatible with MT8183
+Date: Mon, 15 Apr 2024 09:54:03 +0200
+Message-ID: <20240415075406.47543-6-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240415075406.47543-1-angelogioacchino.delregno@collabora.com>
 References: <20240415075406.47543-1-angelogioacchino.delregno@collabora.com>
@@ -83,40 +83,39 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Change all of crypt_{mux,lp,perf} clock names to crypt-{mux,lp-perf}:
-retaining compatibility with the old names is ignored as there is no
-user of this driver declaring any of those clocks, and the binding
-also doesn't allow these ones at all.
+The MT8192 UFS controller is compatible with the MT8183 one:
+document this by allowing to assign both compatible strings
+"mediatek,mt8192-ufshci", "mediatek,mt8183-ufshci" to the UFSHCI node.
 
-Fixes: 590b0d2372fe ("scsi: ufs-mediatek: Support performance mode for inline encryption engine")
+Moreover, since no MT8192 devicetree ever declared any UFSHCI node,
+disallow specifying only the MT8192 compatible.
+
+In preparation for adding MT8195 to the mix, the MT8192 compatible
+was added as enum instead of const.
+
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 47f16e6720f4..5db6d27f75af 100644
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -604,15 +604,15 @@ static int ufs_mtk_init_boost_crypt(struct ufs_hba *hba)
- 		return -ENOMEM;
+diff --git a/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml b/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
+index 32fd535a514a..2f4b0a40bd5e 100644
+--- a/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
++++ b/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
+@@ -14,9 +14,10 @@ allOf:
  
- 	cfg = host->crypt;
--	ret = ufs_mtk_init_host_clk(hba, "crypt_mux", &cfg->clk_crypt_mux);
-+	ret = ufs_mtk_init_host_clk(hba, "crypt-mux", &cfg->clk_crypt_mux);
- 	if (ret)
- 		goto out;
+ properties:
+   compatible:
+-    enum:
+-      - mediatek,mt8183-ufshci
+-      - mediatek,mt8192-ufshci
++    items:
++      - enum:
++          - mediatek,mt8192-ufshci
++      - const: mediatek,mt8183-ufshci
  
--	ret = ufs_mtk_init_host_clk(hba, "crypt_lp", &cfg->clk_crypt_lp);
-+	ret = ufs_mtk_init_host_clk(hba, "crypt-lp", &cfg->clk_crypt_lp);
- 	if (ret)
- 		goto out;
- 
--	ret = ufs_mtk_init_host_clk(hba, "crypt_perf", &cfg->clk_crypt_perf);
-+	ret = ufs_mtk_init_host_clk(hba, "crypt-perf", &cfg->clk_crypt_perf);
- 	if (ret)
- 		goto out;
- 
+   clocks:
+     maxItems: 1
 -- 
 2.44.0
 
