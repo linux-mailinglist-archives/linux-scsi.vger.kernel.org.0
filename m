@@ -1,122 +1,144 @@
-Return-Path: <linux-scsi+bounces-4757-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-4760-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F1B38B189F
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 Apr 2024 03:57:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C9898B1912
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 Apr 2024 04:57:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C04601C21118
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 Apr 2024 01:57:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7F55B23301
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 Apr 2024 02:57:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2BB17578;
-	Thu, 25 Apr 2024 01:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="L/c3ctz3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1405111AA;
+	Thu, 25 Apr 2024 02:57:49 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4A71173F;
-	Thu, 25 Apr 2024 01:57:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB1014A8F
+	for <linux-scsi@vger.kernel.org>; Thu, 25 Apr 2024 02:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714010248; cv=none; b=KbTRfp7nfLkP+RY2SXH3lzEVHOf8DMCSUYEhL5k9V9RokCaNEwIBTxc5dROcgYZxGk3vzMa8E857YWlRyn54BrBslxD3nH5zem1BJQYuiHKFpWp+Xy9APJAl+TPNZnjzrupUK37UURMkVfUcoinRUsCrMaYw69OoTNNezGGJzYI=
+	t=1714013869; cv=none; b=RXoDmWH7GEF7rsW5tYzopkQL2v6Xur6edJofZuOw3+O2O5NWAXpCs75123k0iMK99uArzmskTuQ8gX+qxtOulBe4p4jC/3KZ5CHyjxYGtD2IoE5+7JeGILqGb3quSVxFte+TFRsVQv87cDRVeBMhgBtZrbSUkL4IPjIfllsWCms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714010248; c=relaxed/simple;
-	bh=/GB48CjrcrQCL8M5LlkM1nJzW/MpeTEDdniq8BdBgbc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QWp4k/OjdRrYTMGQzfUfBYoKe3teTaQYj6UtcjgIdUbQcFWekqXXaniLDE/N+1RdcCM2Bv2sLbH3onf2FtFHWHhbV+jt7jUYI9G28FrGfnCse0OmA03HBVZG+fgmuMPP00G/lT+SQ0vLXDBMp/cUsOLAu6VWtJtZqXvcUsFSOQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=L/c3ctz3; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43P0jUw6032460;
-	Thu, 25 Apr 2024 01:57:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=93pgeyhaAFraO8DY5WjEs/xj9MduHGbB28caTZ1Yq8o=;
- b=L/c3ctz3wCdbmGE4o6wElcr3+7MC4vfzMXe1r+ATa0AeY0rHUK8YuHLj/7JYBkiBUXxy
- phwk5ZyeW3yY37Ea/m+ulslJNe7hmUJYt3rEiGuidXj+zo4k+/6MWwfmjYIh6a2JK4Rq
- unDdRza1Jzl/B1sU9d90ILv3f4zuWnanrDR9dOgWpRJhGCSAAJsx5xOLMOzxGuQRcO+F
- n+AT1m1w5/uzUKA9888/HqSdGt7gIpufaiL45+p5tqdzRSsglZPgurdFdvdrsSBtHthp
- wqvt++AQ6maJwIn5W2A1tCLuzqivTbE/wK8oS7+R0xIRHHDuajOOPmtN/wy3j6/nCy2I qw== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xm5kbt352-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 25 Apr 2024 01:57:16 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 43P1oZDc025314;
-	Thu, 25 Apr 2024 01:57:15 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3xm45fyh2g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 25 Apr 2024 01:57:15 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43P1vCuT009586;
-	Thu, 25 Apr 2024 01:57:14 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3xm45fyh1b-5;
-	Thu, 25 Apr 2024 01:57:14 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Will McVicker <willmcvicker@google.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Peter Griffin <peter.griffin@linaro.org>, andre.draszik@linaro.org,
-        tudor.ambarus@linaro.org, kernel-team@android.com,
-        linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] scsi: ufs: exynos: Support module autoloading
-Date: Wed, 24 Apr 2024 21:57:04 -0400
-Message-ID: <171362345483.571343.13648416767019194881.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240409202203.1308163-1-willmcvicker@google.com>
-References: <20240409202203.1308163-1-willmcvicker@google.com>
+	s=arc-20240116; t=1714013869; c=relaxed/simple;
+	bh=mOaX0aN5GdQ+4he2dbSA3m4paQF6TH+COfTE/KmsZtk=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=YYV1RWVIlN+iOLl+oXMIlK/hfeh+DIhe64D2T5GytuYoPWzd16A/IabI6o+z5lXvZPBoodIShQQmppx8RUFnnvUR+BbHkBxOwyxbHTc+Fay+uIkFjyR1OyDEQx8ymB77KbEN0ZoJwKpRMNS6P55kBDYb+pYuH7K0QVJZX60UOdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4VQ0p82F4Bz1ymc4;
+	Thu, 25 Apr 2024 10:55:12 +0800 (CST)
+Received: from canpemm100003.china.huawei.com (unknown [7.192.104.85])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0C9651401E9;
+	Thu, 25 Apr 2024 10:57:44 +0800 (CST)
+Received: from canpemm500004.china.huawei.com (7.192.104.92) by
+ canpemm100003.china.huawei.com (7.192.104.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Thu, 25 Apr 2024 10:57:43 +0800
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Thu, 25 Apr 2024 10:57:43 +0800
+Subject: Re: Issue in sas_ex_discover_dev() for multiple level of SAS
+ expanders in a domain
+To: John Garry <john.g.garry@oracle.com>, "Li, Eric (Honggang)"
+	<Eric.H.Li@Dell.com>, "james.bottomley@hansenpartnership.com"
+	<James.Bottomley@HansenPartnership.com>, "Martin K . Petersen"
+	<martin.petersen@oracle.com>
+CC: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+References: <SJ0PR19MB5415BBBE841D8272DB2C67D6C4102@SJ0PR19MB5415.namprd19.prod.outlook.com>
+ <09dd80bb-09f9-481f-a7a7-b9227b6f928f@oracle.com>
+From: Jason Yan <yanaijie@huawei.com>
+Message-ID: <b1a5552c-689e-d220-88d3-56d24752be5b@huawei.com>
+Date: Thu, 25 Apr 2024 10:57:43 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <09dd80bb-09f9-481f-a7a7-b9227b6f928f@oracle.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-25_01,2024-04-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
- mlxscore=0 phishscore=0 spamscore=0 malwarescore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2404010000 definitions=main-2404250012
-X-Proofpoint-GUID: 0EOElnENofiHRAXb33XiRdYqPBv5m3xI
-X-Proofpoint-ORIG-GUID: 0EOElnENofiHRAXb33XiRdYqPBv5m3xI
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500004.china.huawei.com (7.192.104.92)
 
-On Tue, 09 Apr 2024 13:22:02 -0700, Will McVicker wrote:
-
-> Export the module alias information using the MODULE_DEVICE_TABLE()
-> macro in order to support auto-loading this module for devices that
-> support it.
+On 2024/4/24 18:46, John Garry wrote:
+> On 24/04/2024 09:59, Li, Eric (Honggang) wrote:
+>> Hi,
+>>
+>> There is an issue in the function sas_ex_discover_dev() when I have 
+>> multiple SAS expanders chained under one SAS port on SAS controller.
 > 
-> $ modinfo -F alias out/linux/drivers/ufs/host/ufs-exynos.ko
-> of:N*T*Ctesla,fsd-ufsC*
-> of:N*T*Ctesla,fsd-ufs
-> of:N*T*Csamsung,exynosautov9-ufs-vhC*
-> of:N*T*Csamsung,exynosautov9-ufs-vh
-> of:N*T*Csamsung,exynosautov9-ufsC*
-> of:N*T*Csamsung,exynosautov9-ufs
-> of:N*T*Csamsung,exynos7-ufsC*
-> of:N*T*Csamsung,exynos7-ufs
+> I think typically we can't and so don't test such a setup.
+
+Eric,
+
+I also don't understand why you need such a setup. Can you explain more 
+details of your topology?
+
 > 
-> [...]
+>>
+>> In this function, we first check whether the PHY’s 
+>> attached_sas_address is already present in the SAS domain, and then 
+>> check if this PHY belongs to an existing port on this SAS expander.
+>> I think this has an issue if this SAS expander use a wide port 
+>> connecting a downstream SAS expander.
+>> This is because if the PHY belongs to an existing port on this SAS 
+>> expander, the attached SAS address of this port must already be 
+>> present in the domain and it results in disabling that port.
+>> I don’t think that is what we expect.
+>>
+>> In old release (4.x), at the end of this function, it would make 
+>> addition sas_ex_join_wide_port() call for any possibly PHYs that could 
+>> be added into the SAS port.
+>> This will make subsequent PHYs (other than the first PHY of that port) 
+>> being marked to DISCOVERED so that this function would not be invoked 
+>> on those subsequent PHYs (in that port).
+>> But potential question here is we didn’t configure the per-PHY routing 
+>> table for those PHYs.
+>> As I don’t have such SAS expander on hand, I am not sure what’s impact 
+>> (maybe just performance/bandwidth impact).
+>> But at least, it didn’t impact the functionality of that port.
+>>
+>> But in v5.3 or later release, that part of code was removed (in the 
+>> commit a1b6fb947f923).
+> 
+> Jason, can you please check this?
 
-Applied to 6.10/scsi-queue, thanks!
+The removed code is only for races before we serialize the event 
+processing. All PHYs will still be scanned one by one and add to the 
+wide port if they have the same address. So are you encountering a real 
+issue? If so, can you share the full log?
 
-[1/1] scsi: ufs: exynos: Support module autoloading
-      https://git.kernel.org/mkp/scsi/c/2810702f2cbc
+Thanks,
+Jason
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+祝一切顺利！
+
+> 
+> Thanks!
+> 
+>> And this caused this problem occurred (downstream port of that SAS 
+>> expander was disabled and all downstream SAS devices were removed from 
+>> the domain).
+>>
+>> Regards.
+>> Eric Li
+>>
+>> SPE, DellEMC
+>> 3/F KIC 1, 252# Songhu Road, YangPu District, SHANGHAI
+>> +86-21-6036-4384
+>>
+>>
+>> Internal Use - Confidential
+> 
+> .
 
