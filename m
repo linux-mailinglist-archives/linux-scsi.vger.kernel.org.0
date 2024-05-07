@@ -1,80 +1,78 @@
-Return-Path: <linux-scsi+bounces-4858-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-4861-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43E4C8BD93C
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2024 04:01:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3AFA8BD940
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2024 04:01:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D725C1F23E52
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2024 02:01:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59B09283F40
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2024 02:01:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4874A15;
-	Tue,  7 May 2024 02:01:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B38B653BE;
+	Tue,  7 May 2024 02:01:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="MO9uPe3r"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="SELtF+V+"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1D08830
-	for <linux-scsi@vger.kernel.org>; Tue,  7 May 2024 02:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3FE5228
+	for <linux-scsi@vger.kernel.org>; Tue,  7 May 2024 02:01:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715047287; cv=none; b=XIEvGr+QLJqpj/h6a/gcn7Zo3yUs07dK0+TjdcQQaLJ22hLi1gMu+KvU5QqJ9r89D+h3vcxZzskUYTwg2bE3c68FliG/BFYuhdgZ5/p8bvJALzHuQVeXE/UGz8tRnmzUSXEfTwgHmiA9buRQcPK9WvKAkfMlAM6fnDkvnOfxsiQ=
+	t=1715047293; cv=none; b=ES6VOot/ieYTisFG5XxHVz2MKnDqh/rQuu1BV7u5uS98HoOlmd3j0BvIHbcj7uZ8mGa7rd2EfAJdZu7OuVgoPwMlSz72TnNkJJVvKr4c/uCXOnhfsXdDYITbXO60tAlsce5qDbgOuJtvDMH3XYvZ0RdsO2lgZMsvNT414SWz46o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715047287; c=relaxed/simple;
-	bh=N6gcn5pDst2jTVUy2VtwpWooKLNexlTpB4S4my8VwCQ=;
+	s=arc-20240116; t=1715047293; c=relaxed/simple;
+	bh=ALwfuvVb7OLtHVTaeyXj+wfSmgW2LxLeFdbppgAj59E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ENJj9QNQnz6WCcxLm9mP2Efr7HqZvJmfcXflWhNS28vcVzS6/m+ha8mnfgXCZucPvHOctudL9h/o1H0R1PLT9MMyvjO2lLKhwskeYpqJ++Za71iGe/6AZ6eYZXBN7n+rMqANIj+gTP3LhhelDd4dJ8ewYpDHqwzSteN6UWzGyZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=MO9uPe3r; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=sLN22izQuT2Af1BSvXM+CTJus6jQhm6YKPtowqve/OkOWPnpe/I3ksaO5Espm8j8ohLD4FVNyYKtNUVUrNtsrnQL+ti22J5plYHXR1yBq+wHwKchPE++EID++FmrlrWmdIr3ifeoJd11kd6dn9Pzw6D5QRDT6DZQ2CJ5FvLv29c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=SELtF+V+; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 446MqIhC031187;
-	Tue, 7 May 2024 02:01:22 GMT
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 446Mq0ef027932;
+	Tue, 7 May 2024 02:01:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=KXCiWAnmLFUubjL4NIUuUrZcok4wg0q40JvqpUaRdr0=;
- b=MO9uPe3rdeM6V2SR8J9VVpjAfuFZCI+jNUmXSpfUK8s0Zbnleh8M+gm4F3GZz4ezdPt3
- P2lgT7aDpvAyHoYT47vXF/vy+ti6340OAQn18QOsnDsjO6FlsFcVS0dsLkoZSdjn74HI
- M0erNy6zbj1etpFQWYbzkGIafKGFwIQKdB/AKYyvIc7H3TfOrQA2pZmo6Q+OlJLKkUOR
- raH4Qk6sRX+l01QKn4/QnHsFe+mNNO8wJZ+BZKZUAr3eInR1nSuMQpGAr24trLO+0Uw0
- WML5ObJZYCM5Stxdba/JZzXj/+Nm9kYdfSRf1mU2lnhm7aoMY1b4nVAxnQXpkTFpxWKm nQ== 
+ bh=BylQ60MFfPl62ZD444msicH/z7YTx98bC1FLDhnMPbU=;
+ b=SELtF+V+fdNA/KXq6MiijYjNSOWPOrcXX70kA2TBlqVHtdpawqNIyy2U5kRjX7gdyxlW
+ P/wGUg/+rbruq5q8YzXY7O2nPdij4vdWk5go2l5OPhKIcjXT5m4OrabrNb9wSHi/bqfG
+ ndypllfKMw2bWexsNMgcgJMO7OY7lrClQZTDtIzXf6fkQPSMgs5rmUJnyIDEgczjGWWn
+ 1gxC1jkaXn+M073Hjuz//OwfFKSTqEMxlHLPNXyBLJmtDtpZ7rQh4kEHb687xOfWnRwt
+ V7e2GeWRuzCTC9zz5DuscdeKVc6xyjzJTXHfVabLcIXhArKtOsSfy8FXNqxybWYzn8qo Nw== 
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xwdjuuuw3-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xwcwbuvej-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 07 May 2024 02:01:23 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 44700Adx007053;
+	Tue, 7 May 2024 02:01:22 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3xwbf7dc0k-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 07 May 2024 02:01:22 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 446Nkjun007016;
-	Tue, 7 May 2024 02:01:21 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3xwbf7dbyv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 07 May 2024 02:01:21 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44721Em9034149;
-	Tue, 7 May 2024 02:01:20 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44721EmB034149;
+	Tue, 7 May 2024 02:01:21 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3xwbf7dbvc-6;
-	Tue, 07 May 2024 02:01:20 +0000
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3xwbf7dbvc-7;
+	Tue, 07 May 2024 02:01:21 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
 To: linux-scsi@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        mpi3mr-linuxdrv.pdl@broadcom.com
-Subject: Re: [PATCH] scsi: mpi3mr: fix some kernel-doc warnings in scsi_bsg_mpi3mr.h
-Date: Mon,  6 May 2024 21:59:53 -0400
-Message-ID: <171504445063.1494912.15289291740670820883.b4-ty@oracle.com>
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH] scsi: ufs: scsi_bsg_ufs.h: fix all kernel-doc warnings
+Date: Mon,  6 May 2024 21:59:54 -0400
+Message-ID: <171504445061.1494912.4170421545818557572.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240424055322.1400-1-rdunlap@infradead.org>
-References: <20240424055322.1400-1-rdunlap@infradead.org>
+In-Reply-To: <20240424055316.1384-1-rdunlap@infradead.org>
+References: <20240424055316.1384-1-rdunlap@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -86,28 +84,28 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
  definitions=2024-05-06_19,2024-05-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=941
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=962
  phishscore=0 spamscore=0 suspectscore=0 mlxscore=0 malwarescore=0
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2404010000 definitions=main-2405070014
-X-Proofpoint-ORIG-GUID: KP8_q-glHEfNH1TxDCC3xXbfg7ZZ3igB
-X-Proofpoint-GUID: KP8_q-glHEfNH1TxDCC3xXbfg7ZZ3igB
+X-Proofpoint-GUID: QbsxNQUw8zfS_sZ6C9UbKo3FZ2uMFysu
+X-Proofpoint-ORIG-GUID: QbsxNQUw8zfS_sZ6C9UbKo3FZ2uMFysu
 
-On Tue, 23 Apr 2024 22:53:22 -0700, Randy Dunlap wrote:
+On Tue, 23 Apr 2024 22:53:16 -0700, Randy Dunlap wrote:
 
-> Correct the name of a struct in kernel-doc to match the actual
-> function name.
-> Add kernel-doc comments for 2 reserved fields to match comments
-> for other reserved fields.
-> Correct the kernel-doc comments for a nested struct to eliminate
-> kernel-doc warnings for them.
+> In struct utp_upiu_query_v4_0, add description for @osf3 and mark
+> the @reserved field as private so that no description is needed for it.
+> 
+> In struct utp_upiu_cmd, use the correct struct member name to
+> eliminate a kernel-doc warning.
+> 
 > 
 > [...]
 
 Applied to 6.10/scsi-queue, thanks!
 
-[1/1] scsi: mpi3mr: fix some kernel-doc warnings in scsi_bsg_mpi3mr.h
-      https://git.kernel.org/mkp/scsi/c/aca061774bc4
+[1/1] scsi: ufs: scsi_bsg_ufs.h: fix all kernel-doc warnings
+      https://git.kernel.org/mkp/scsi/c/de37677ef17d
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
