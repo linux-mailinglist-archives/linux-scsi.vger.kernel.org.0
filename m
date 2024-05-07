@@ -1,78 +1,78 @@
-Return-Path: <linux-scsi+bounces-4862-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-4864-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE8B28BD941
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2024 04:01:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C055E8BD944
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2024 04:02:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF0611C21F7C
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2024 02:01:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D785283F40
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2024 02:02:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE5D74A11;
-	Tue,  7 May 2024 02:01:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC64C4C8A;
+	Tue,  7 May 2024 02:01:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eCLduM+B"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mJBjUcgW"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1D94436;
-	Tue,  7 May 2024 02:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DE7139F;
+	Tue,  7 May 2024 02:01:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715047306; cv=none; b=uNHb9igTtTfalRJfH+BowcuGWPfKdcro5kWzraOkXfw972QLj1wAitLKrIThsh7Rb8rhcjyLmwTb2TsGG2u3mVd7iZy1NooIe+uQyu8EkyWo+/YM6BhOi4WY8DDhbIDa3VJo3SVRpE0ggGpDe29ZqOnNu55TMEV1ONhUpF4pWPs=
+	t=1715047317; cv=none; b=q8QoNVzS82BJrXkQUeKAGvQATdsLM+w9fU2xeJB1Q2Mbs/T0peFM1KCxbtM0rbD5aISUfsOrqT3GX6kDAiPSnr3vZKXu7C66cf8FTgK+c+pgj4UhNYSfTFIBWeyiiNGtlB7S0YSbW5VsntjpvZyQxOg7CePkpotCemc5Yxl4LLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715047306; c=relaxed/simple;
-	bh=qMt7sU3ZWyHxeJUaorFvVIZh1bjYtjLVJT4/fbpZrTY=;
+	s=arc-20240116; t=1715047317; c=relaxed/simple;
+	bh=zUyhYe5OtN23P11OszwOjjX3edmhpjZvIm4gW+1NX44=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dKPq2hiOqAFJbNPkvKVzsekyfIYTszQ4uI43SS8jgnZ67TM77kAozt4FG3ebjNjCatB8dUhNdnPhYt8/QVd4oj1bkqgw7IcHetdtBOZdSW0f3mIdVoWN0z7jx709Olt101rj9UtHD3lwRN75CRZ2rbmtupehqslOVuBILWLICqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=eCLduM+B; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=mKurhEluiQshidXN6ycCShDMmupoIDXR6jR9oxX16YZSZMi8t8wstVZZ8ZcL8toCUoJ9/c2xYY1hXqoxWdsKEW5EcBw68RaNuss8zP6CQyLmNarE7Nh3jNfT5lpo5YHfFz8aebkE9FmiSxAO86jwzgyqZMDTk9A4Ssz9e3SpByU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=mJBjUcgW; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 446MqL7w031193;
-	Tue, 7 May 2024 02:01:25 GMT
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 446MqT3J026857;
+	Tue, 7 May 2024 02:01:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=3yCBnT8Rhyu+4Pc9Jt7MvgGt0OJJp1+pnGM6iurVjXA=;
- b=eCLduM+BjTejLRUo8jl8FNB8idnm6u9go8EVRjp4gAyiMK4yNqaIYMUecXKiZkdWuFam
- lbyDOBosXAr1HLmz0fXsF2osjCDIbl9LmnuXN7J2T43fdV6hokvrr3QRqBAcFClM/joz
- nHmBIXp7OmFQzuGKltOqzTPF/AjnAn5Scad0uBZphhxaCON2i996ApvN06XpaYOkR+hA
- BFjLs4wcoByZm2dTzgXRm/h/yoKFexRJNqSB710xcw+BLCT9nkYYGm8Qg1f3bUn3hNhy
- 9W4f0F4yHUciUPxbJhr5lwick+UJLHUnwdsUtSbIOmll2OBZUdwnDMvZ4nE0EEW7fd9F 5w== 
+ bh=Dwin0PvhLjskOeJ53Iu+NpuUxl1I6Q7LfDccU18EjIA=;
+ b=mJBjUcgWLsX3HSnNilMwSrMCRs2U6BFIJDaoxsWAg6UdXZMnrzkyy9BENFzLcirq8j3M
+ 0mvwMAj0YPock63iC+pKfENHqRgL4VwmnQGLfkVUVXxI1ShSS2+xNxwvKwXhX0Pn2wSd
+ etAytKbSNmvvgcZfLbWf80PlPW45C6H6y2lDWte/OdpvgQquGduM9LiOwlpd1RBUqmPs
+ uZyx4nu0tJe9lumbGUP61nu03oSvQPQ5e6anBnTz8SfsAOhZLQVojT2f1prF4FW23cU9
+ Ey+inp3eIlbO9LrBPF/VwDYuymhs1xMm7jjrzvKQy583MOtaW6caA396uNlKGQ/hU9FG Ng== 
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xwdjuuuw4-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xwbxcux8k-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 07 May 2024 02:01:24 +0000
+	Tue, 07 May 2024 02:01:26 +0000
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 4470HWtG006969;
-	Tue, 7 May 2024 02:01:24 GMT
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 44701JhA006890;
+	Tue, 7 May 2024 02:01:25 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3xwbf7dc1q-1
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3xwbf7dc2u-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 07 May 2024 02:01:24 +0000
+	Tue, 07 May 2024 02:01:25 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44721EmC034149;
-	Tue, 7 May 2024 02:01:23 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44721EmF034149;
+	Tue, 7 May 2024 02:01:24 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3xwbf7dbvc-8;
-	Tue, 07 May 2024 02:01:23 +0000
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3xwbf7dbvc-9;
+	Tue, 07 May 2024 02:01:24 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: john.g.garry@oracle.com, yanaijie@huawei.com, jejb@linux.ibm.com,
-        damien.lemoal@opensource.wdc.com, Xingui Yang <yangxingui@huawei.com>
+To: Don Brace <don.brace@microchip.com>, Yuri Karpov <YKarpov@ispras.ru>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, prime.zeng@hisilicon.com,
-        chenxiang66@hisilicon.com, kangfenglong@huawei.com
-Subject: Re: [PATCH v6 0/4] scsi: libsas: Fix the failure of adding phy with zero-address to port
-Date: Mon,  6 May 2024 21:59:55 -0400
-Message-ID: <171504445049.1494912.3512778899419716186.b4-ty@oracle.com>
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Alexey V. Vissarionov" <gremlin@altlinux.org>,
+        storagedev@microchip.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] scsi: hpsa: Fix allocation size for Scsi_Host private data
+Date: Mon,  6 May 2024 21:59:56 -0400
+Message-ID: <171504445051.1494912.9967167091221671734.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240312141103.31358-1-yangxingui@huawei.com>
-References: <20240312141103.31358-1-yangxingui@huawei.com>
+In-Reply-To: <20240312170447.743709-1-YKarpov@ispras.ru>
+References: <20240312170447.743709-1-YKarpov@ispras.ru>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -84,36 +84,28 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
  definitions=2024-05-06_19,2024-05-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=725
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=895
  phishscore=0 spamscore=0 suspectscore=0 mlxscore=0 malwarescore=0
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2404010000 definitions=main-2405070014
-X-Proofpoint-ORIG-GUID: K5q5vtK6tmk4AX-nkFAd-wO04F1iyFhW
-X-Proofpoint-GUID: K5q5vtK6tmk4AX-nkFAd-wO04F1iyFhW
+X-Proofpoint-GUID: ygi42Gwqwt_b9k4GuN1ED3TF2YWjI5Hf
+X-Proofpoint-ORIG-GUID: ygi42Gwqwt_b9k4GuN1ED3TF2YWjI5Hf
 
-On Tue, 12 Mar 2024 14:10:59 +0000, Xingui Yang wrote:
+On Tue, 12 Mar 2024 20:04:47 +0300, Yuri Karpov wrote:
 
-> This series is to solve the problem of a BUG() when adding phy with zero
-> address to a new port.
+> struct Scsi_Host private data contains pointer to struct ctlr_info.
 > 
-> v5 -> v6
-> 1. rename sas_add_parent_port() to sas_ex_add_parent_port() based on
->    John's suggestion.
-> 2. Distill port settings into a single patch.
-> 3. Update comments information.
+> Restore allocation of only 8 bytes to store pointer in struct Scsi_Host
+>  private data area.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 > 
 > [...]
 
 Applied to 6.10/scsi-queue, thanks!
 
-[1/4] scsi: libsas: Add helper for port add ex_phy
-      https://git.kernel.org/mkp/scsi/c/888ea1b12b06
-[2/4] scsi: libsas: Move sas_add_parent_port() to sas_expander.c
-      https://git.kernel.org/mkp/scsi/c/48032c0be6c7
-[3/4] scsi: libsas: Set port when ex_phy is added or deleted
-      https://git.kernel.org/mkp/scsi/c/7a165a81d55f
-[4/4] scsi: libsas: Fix the failure of adding phy with zero-address to port
-      https://git.kernel.org/mkp/scsi/c/06036a0a5db3
+[1/1] scsi: hpsa: Fix allocation size for Scsi_Host private data
+      https://git.kernel.org/mkp/scsi/c/504e2bed5d50
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
