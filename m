@@ -1,115 +1,95 @@
-Return-Path: <linux-scsi+bounces-5019-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-5023-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B600F8CA649
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2024 04:43:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9C3F8CAACC
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2024 11:30:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 708AF280FD1
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2024 02:43:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6866DB208A6
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2024 09:30:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E783A8C1A;
-	Tue, 21 May 2024 02:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30AD058234;
+	Tue, 21 May 2024 09:29:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BU+ldhz2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="URyvz+xp"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3642C17545
-	for <linux-scsi@vger.kernel.org>; Tue, 21 May 2024 02:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E566A57C8C
+	for <linux-scsi@vger.kernel.org>; Tue, 21 May 2024 09:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716259265; cv=none; b=mMChBspZbhfGXZQYhwbF/g+0lnuZh7Sak7Ajtgs+UjQnE/szFM7QT4HPtSvLvPlC+JMRO4Z6OuJ//ufY1JAsEQ61maj8ehMjyUSHSB0mvpD/adExXAzZYtaFoj6zS0He09bgm0Uit45bhgEdPbif+CbvuBYkWC5IVpTh1Aq13bg=
+	t=1716283799; cv=none; b=eK3wWqUJ+O60LriHXM1FpLbG4ueNTRM0TAT+6b1ny5OsQZyVdd/44SE/nFU46LvtQjNb64QKDuJmTKK4SqGJ/Lm8mnGdevoflvYUlbTSZliI4drwviZ9Qmd+/B+bCSuGJLQe7VOZL2pzt1YFYdwiUhwWn49FB7Yb6EtYuSbVG1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716259265; c=relaxed/simple;
-	bh=CAxArys7AACDrns6RZliH4jzDgc0eCF/xx4FSq/2+T0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RpHQT2vEQgLslFdGNOnXPzmmvP4fD1VfkXeRkRiQth1VMtndksXGpo9gBFx2kYijsQkKEWXzqMOxneNwCNLrWejpkm22XilffP8gh9IYyg2dwaYC/UFNyct1l+fDqOYGEXH2zmZ8Lt/EW9QGeD+Xz/tXNh+G1t3XtPoyh79i3kU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=BU+ldhz2; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44KNKDFl001525;
-	Tue, 21 May 2024 02:41:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=y2Olu3a+gifQ3e5TOj2wQ71VmbrR0t1MzgJaxZeUlYc=;
- b=BU+ldhz2C/o6eKbjtEammBNHgCuFgbOo4nGAepf2qMnwE9a1s8dcr/Ztk59BVsaGx69L
- NvbmIti0AnygWcB2z64Iyb51LDSyX9BVfX1w7UotXOCwtrXZ5OSFW4PsoW/7rUJ/AveW
- iALeCVbuI6BmDnYy0tkPiX6udPRmw/aj6gP1dte+SxhKQBFHECljuoSGqowegkCKfNC+
- hLwOWGYgUDSILu8QUeLq9sgqX3rU/PuUt+tVotqCPskcUSZMB2zO7kaeY29tJ/21CvU7
- EnnuvgwButQn6tM/Hk0KpigH6A9vrkn9w9JymyDZv4JPOUZxjX1LVX00fOooSif3NPkB tQ== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3y6m7b3uq5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 21 May 2024 02:41:02 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 44L2SmNc002774;
-	Tue, 21 May 2024 02:41:01 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3y6js72bgp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 21 May 2024 02:41:01 +0000
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44L2excq013516;
-	Tue, 21 May 2024 02:41:00 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3y6js72bfn-4;
-	Tue, 21 May 2024 02:41:00 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Saurav Kashyap <skashyap@marvell.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] qedf misc bug fixes
-Date: Mon, 20 May 2024 22:40:17 -0400
-Message-ID: <171625915913.2717551.9388300921053108665.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240515091101.18754-1-skashyap@marvell.com>
-References: <20240515091101.18754-1-skashyap@marvell.com>
+	s=arc-20240116; t=1716283799; c=relaxed/simple;
+	bh=x03RN+gk338kvAwyOOFbclj73jphNqFab/PtEijHbYg=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=DTLwMVsjvaAQyx0Lt5h38z3TbY0r7QYuOeeM7pplZUJdU81yIwVg64xfYAquAkomlyjiUsdFg10eO0j/42ppudKw5pwxSZPm0gO2Xntw0co3+ALg/g+EC6ypWnuvO2ePf508K0OzGK2LABpHVTNtmAoGydJMXwqMy0+6d8KjUK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=URyvz+xp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B9930C4AF08
+	for <linux-scsi@vger.kernel.org>; Tue, 21 May 2024 09:29:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716283798;
+	bh=x03RN+gk338kvAwyOOFbclj73jphNqFab/PtEijHbYg=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=URyvz+xpmhBmFIbafwWelVsfJpII+5zv8fyjF+/Xb2Lxg/vf3FAwZ50mzzzitf4aV
+	 RVAYt4jillEVc4uahnXeBvpvtBMz0UoJSdAz4BigM/PEYS7iYAjD1LkH6HAywR0KtO
+	 JKaVhFzRn0oyiKuI9Arp2x49DehQKXKl69SwygQ9TFdMZPzFr8Vfrs3oYdFrxm+Dsd
+	 GPmKpHEX4mqmkCL+c9hKJMo/ba+nbRz8WVg/suhxqvJ9P02HP6Tq0+D/C2niVSqiYq
+	 ytZpGl5ueiYdK5G/MJbIWrBhirHIozxJL3HCgdVvQTXO0LUDHCURscrMcdSoy7eDO4
+	 v04hTr9wtRb5Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id A3473C53BB7; Tue, 21 May 2024 09:29:58 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-scsi@vger.kernel.org
+Subject: [Bug 198923] Linux 4.15.4+: Write on Ext4 causes system block
+Date: Tue, 21 May 2024 09:29:58 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Product: SCSI Drivers
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: xosamop642@cgbird.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: DUPLICATE
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-198923-11613-UhaM3aQfzj@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-198923-11613@https.bugzilla.kernel.org/>
+References: <bug-198923-11613@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-21_01,2024-05-17_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
- suspectscore=0 spamscore=0 mlxscore=0 adultscore=0 mlxlogscore=818
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2405210020
-X-Proofpoint-ORIG-GUID: PWSAOrxfCRUaCI7P9dspLtCv--3iYUyv
-X-Proofpoint-GUID: PWSAOrxfCRUaCI7P9dspLtCv--3iYUyv
 
-On Wed, 15 May 2024 14:40:58 +0530, Saurav Kashyap wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D198923
 
-> Please apply the qedf driver fixes to the
-> scsi tree at your earliest convenience.
-> 
-> Thanks,
-> Saurav
-> 
-> v1->v2:
-> - Merged uininitalize qedf warning patch.
-> 
-> [...]
+Tom Hiddleston (xosamop642@cgbird.com) changed:
 
-Applied to 6.10/scsi-queue, thanks!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |xosamop642@cgbird.com
 
-[1/3] qedf: Don't process stag work during unload and recovery.
-      https://git.kernel.org/mkp/scsi/c/51071f0831ea
-[2/3] qedf: Wait for stag work during unload.
-      https://git.kernel.org/mkp/scsi/c/78e88472b609
-[3/3] qedf: Memset qed_slowpath_params to zero before use.
-      https://git.kernel.org/mkp/scsi/c/6c3bb589debd
+--- Comment #17 from Tom Hiddleston (xosamop642@cgbird.com) ---
+This bug has been marked as a duplicate
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
