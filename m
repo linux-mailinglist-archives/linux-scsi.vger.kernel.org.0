@@ -1,134 +1,123 @@
-Return-Path: <linux-scsi+bounces-5018-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-5020-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16E068CA62E
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2024 04:31:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 653F28CA64A
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2024 04:43:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6609281B1B
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2024 02:31:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8813E1C213FC
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2024 02:43:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79E0F179BD;
-	Tue, 21 May 2024 02:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A9217545;
+	Tue, 21 May 2024 02:41:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mLbiSGXT"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="DCeeH3lQ"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA53514A8E;
-	Tue, 21 May 2024 02:31:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B8E12E71;
+	Tue, 21 May 2024 02:41:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716258682; cv=none; b=KksRJy8GMVuRZIa2PHutQIJFVvadcOIHgZG8h7m3F/Og6y+7Dh5+i9ymB/aQzYIGJGWorEETXlSYGftpeQEMttDjli25VJbbeuYxq95Qls8PmATYjEXDxT3boRsONmux4+a8ezRxj/BNlDeILqi4qQx5VZUGoYix+oaa2pD/WsU=
+	t=1716259267; cv=none; b=P5hXFyts6VFTgWbjZPgChl6/eY/9y9f7rkc3gcSL+bD6jN2UNLgTuibQHRFqHrr+54oreAxuKaRHml3+nlaWT+NztffLTIH+6ZHOnpOzE0sQaQop6D9fulmsguO9qEclpJo5NoWMzhPT8Qg+VrBpHjMiLSt8+GhXhU0p+N1eutU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716258682; c=relaxed/simple;
-	bh=ZSX+wvOF3eqvyPaF2POW7kz2n72QyRVioknBx/xaoiI=;
+	s=arc-20240116; t=1716259267; c=relaxed/simple;
+	bh=IOasFjIiDzWB1gXgz0Z5A2JuGeYdYgB6kaV7r4ZKVfw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YK1w1DEVfrGTuC0UyL2DrcIIRvR5USlhWP/8UrCpKS58p7PAQcdjt2ekAyh2hnGwm5aN0m+nQY33eEGYAKC7qljWP85TGqAmKPLP+Nny1C+sli1yBW7RDBGWwnZ7wnf4jv8cEekdEVC1Z72FaZZBnkbJ3nRz/dHB/V/8VhysfOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=mLbiSGXT; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=fBL9fQ8qZI9+LZ+9spBYbbSAEqMJEAYh8fbPgZJmzhPrwZJQID3RHE0Azk2HR+UaYHbG7Ed2YiiJgXhYwchBbZ3cvcXISXSNgw0QOe1vzQCNc84yIBixUtsUYzsGlmn37aG2DkxqPrOvZNnW62ox4JDt/ECDjnsiAcFHAPnRV5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=DCeeH3lQ; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44KN0AcU006153;
-	Tue, 21 May 2024 02:31:17 GMT
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44KMxVOK001853;
+	Tue, 21 May 2024 02:41:01 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2023-11-20;
- bh=jztGpo4CZLNydWCIM3JweZ/8H1o+ivOHncHsXRiVk8s=;
- b=mLbiSGXTjkxm2GQ6wG9WstJbvS7ms2YNYNhjlGtke+3bv8AKuvwrgK/Tsjez/O/tNfmJ
- NeCT8bcMNSh03AUM5+6KS32oCcdDKRHI/Qyd2nhGQ2yRyPUTXMqQr3dymuP7u+uMEDpU
- JOhNlalTnaQ7Vgk3ehyoe1UwjICcSmD1gBB5Lzz2f/AnmhtbVLob/4KgKiyPYPGF/5SS
- ZNNbBCnE/xXWafnbtxw4s2jBQ9n2FPchv0Z0JI01Y09wJgYoZkeucPLbKRHB4vHMwdNs
- lR7/qZtlGn0Czac1/gznL92YEg6HSDoKeNuZvp7r5lQgI6GQwwFUfXJ0tf7vGfaqpHdX Eg== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3y6jx2bxyr-1
+ content-type : content-transfer-encoding; s=corp-2023-11-20;
+ bh=Q1ANszq/KhRVZ0uqtnDVZiqdhsEBMdrbt1oqDmfmMKE=;
+ b=DCeeH3lQDgN4QkAoVA7aQquo+Ke/pXvxkJJLaCFk1kfqkQkrTpeeAvtPRtAri3rmLhQx
+ 0TlvVWLHACdmJuzpakpWFlE52yoYyYJW3OoC3UpEP3q1BsHgBua1a+HW1m4qxY1cUEK8
+ csF6U8XcY20UXFI+q+tMjwB5BlFQqwqn36Ng1p++ijLMK+yiJ0LYCz6taCnNSSwBtao6
+ OOLPAFQYPEJr8iJ5AP+xBmRruVn4T5+eR8tH2Tg7k83KzT5az2HpU6xFSDWbl8qVp9wz
+ IhqucqzqKD/AVtoX8D+Ybkavrhyo7/SWumhhjez19fVYxUC+iheR/hxalAwHch6AnJQb Ug== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3y6mvv40yk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 21 May 2024 02:31:16 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 44L02LEX035965;
-	Tue, 21 May 2024 02:31:16 GMT
+	Tue, 21 May 2024 02:41:01 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 44L1TVC6002776;
+	Tue, 21 May 2024 02:40:59 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3y6js7320u-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3y6js72bg1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 21 May 2024 02:31:16 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44L2UmN5040510;
-	Tue, 21 May 2024 02:31:15 GMT
+	Tue, 21 May 2024 02:40:59 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44L2exck013516;
+	Tue, 21 May 2024 02:40:59 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3y6js7320g-1;
-	Tue, 21 May 2024 02:31:15 +0000
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3y6js72bfn-1;
+	Tue, 21 May 2024 02:40:59 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>, stable@vger.kernel.org,
-        Peter Schneider <pschneider1968@googlemail.com>
-Subject: [PATCH] scsi: core: Handle devices which return an unusually large VPD page count
-Date: Mon, 20 May 2024 22:30:40 -0400
-Message-ID: <20240521023040.2703884-1-martin.petersen@oracle.com>
+To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] scsi: sr: fix unintentional arithmetic wraparound
+Date: Mon, 20 May 2024 22:40:14 -0400
+Message-ID: <171625915912.2717551.9281506639932713567.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.44.0
-In-Reply-To: <eec6ebbf-061b-4a7b-96dc-ea748aa4d035@googlemail.com>
-References: <eec6ebbf-061b-4a7b-96dc-ea748aa4d035@googlemail.com>
+In-Reply-To: <20240508-b4-b4-sio-sr_select_speed-v2-1-00b68f724290@google.com>
+References: <20240508-b4-b4-sio-sr_select_speed-v2-1-00b68f724290@google.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
  definitions=2024-05-21_01,2024-05-17_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 spamscore=0
- mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
- definitions=main-2405210019
-X-Proofpoint-GUID: BM5harIC2eKaN6T2WUWdoOB8o2M1LlUw
-X-Proofpoint-ORIG-GUID: BM5harIC2eKaN6T2WUWdoOB8o2M1LlUw
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
+ suspectscore=0 spamscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2405010000 definitions=main-2405210020
+X-Proofpoint-ORIG-GUID: mM9dtlgOZ54M8MsG3vFYc6BkwmSNCfdS
+X-Proofpoint-GUID: mM9dtlgOZ54M8MsG3vFYc6BkwmSNCfdS
 
-Peter Schneider reported that a system would no longer boot after
-updating to 6.8.4.  Peter bisected the issue and identified commit
-b5fc07a5fb56 ("scsi: core: Consult supported VPD page list prior to
-fetching page") as being the culprit.
+On Wed, 08 May 2024 17:22:51 +0000, Justin Stitt wrote:
 
-Turns out the enclosure device in Peter's system reports a byteswapped
-page length for VPD page 0. It reports "02 00" as page length instead
-of "00 02". This causes us to attempt to access 516 bytes (page length
-+ header) of information despite only 2 pages being present.
+> Running syzkaller with the newly reintroduced signed integer overflow
+> sanitizer produces this report:
+> 
+> [   65.194362] ------------[ cut here ]------------
+> [   65.197752] UBSAN: signed-integer-overflow in ../drivers/scsi/sr_ioctl.c:436:9
+> [   65.203607] -2147483648 * 177 cannot be represented in type 'int'
+> [   65.207911] CPU: 2 PID: 10416 Comm: syz-executor.1 Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
+> [   65.213585] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+> [   65.219923] Call Trace:
+> [   65.221556]  <TASK>
+> [   65.223029]  dump_stack_lvl+0x93/0xd0
+> [   65.225573]  handle_overflow+0x171/0x1b0
+> [   65.228219]  sr_select_speed+0xeb/0xf0
+> [   65.230786]  ? __pm_runtime_resume+0xe6/0x130
+> [   65.233606]  sr_block_ioctl+0x15d/0x1d0
+> ...
+> 
+> [...]
 
-Limit the page search scope to the size of our VPD buffer to guard
-against devices returning a larger page count than requested.
+Applied to 6.10/scsi-queue, thanks!
 
-Cc: stable@vger.kernel.org
-Reported-by: Peter Schneider <pschneider1968@googlemail.com>
-Tested-by: Peter Schneider <pschneider1968@googlemail.com>
-Fixes: b5fc07a5fb56 ("scsi: core: Consult supported VPD page list prior to fetching page")
-Link: https://lore.kernel.org/all/eec6ebbf-061b-4a7b-96dc-ea748aa4d035@googlemail.com/
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
----
- drivers/scsi/scsi.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+[1/1] scsi: sr: fix unintentional arithmetic wraparound
+      https://git.kernel.org/mkp/scsi/c/9fad9d560af5
 
-diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-index 3e0c0381277a..f0464db3f9de 100644
---- a/drivers/scsi/scsi.c
-+++ b/drivers/scsi/scsi.c
-@@ -350,6 +350,13 @@ static int scsi_get_vpd_size(struct scsi_device *sdev, u8 page)
- 		if (result < SCSI_VPD_HEADER_SIZE)
- 			return 0;
- 
-+		if (result > sizeof(vpd)) {
-+			dev_warn_once(&sdev->sdev_gendev,
-+				      "%s: long VPD page 0 length: %d bytes\n",
-+				      __func__, result);
-+			result = sizeof(vpd);
-+		}
-+
- 		result -= SCSI_VPD_HEADER_SIZE;
- 		if (!memchr(&vpd[SCSI_VPD_HEADER_SIZE], page, result))
- 			return 0;
 -- 
-2.44.0
-
+Martin K. Petersen	Oracle Linux Engineering
 
