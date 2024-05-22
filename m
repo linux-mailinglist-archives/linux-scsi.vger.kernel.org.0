@@ -1,140 +1,98 @@
-Return-Path: <linux-scsi+bounces-5035-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-5037-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 692848CBBA7
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2024 09:02:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 088E28CBD7F
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2024 11:06:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E100282457
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2024 07:02:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 392601C20FB2
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2024 09:06:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E9777620;
-	Wed, 22 May 2024 07:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E56D7D408;
+	Wed, 22 May 2024 09:06:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="nDDlW6Ws"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jAcRSw9C"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B4D17758;
-	Wed, 22 May 2024 07:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BCF718EB1
+	for <linux-scsi@vger.kernel.org>; Wed, 22 May 2024 09:06:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716361332; cv=none; b=qX1nRjXUxAmNa9giB52ZGjeS++aCru3/LzIfVeWGTRrKCaZceqL+HwktDttvVydhBKw3RO8P7JBtw0qJnLEwed6tr2TqEUCJYwAUYAnGW6nkRjkHl3+virrR28kc6RsEVNMOlGBz+ViSTJRizk/y54yFkKAuwGPOG9QnIZtWmaw=
+	t=1716368798; cv=none; b=XmB8E5WOK4cCcFK3fVd9zIFiX6XNHKMXqPOxY8U5d2NsGJ5bowzgys9QBIC4TZh/3Y1PSytnx9MrN8ApUfrQw265BYLQdmlzEP5w+KNUr3yp9BE64A2MWUm9c3h1hY9IfedgKP5DUa7Yc4gA8FldKB3YPHGL2GeOnmJGpQ7bYyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716361332; c=relaxed/simple;
-	bh=1UfZkb4B2JrKG4crbIuSVRNoZKf1gDZK+5FboRIfZ+o=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ldlsxv0hwJkriSqERMLLpBwlHA2bOOoOzzoL9RqGxNdic27js1Gxad11CQFTL1zGos7HvFoHfPjimA3scf6dE1D0HVsctNTDJEGi2PNQi2CX9Nbn1s9AAiuR9pSzrr4x3HfsqH59AqmxJ1FfDVv/AO8Lb58qJJyDzZrERb04QNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=nDDlW6Ws; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44LJIwQT028232;
-	Wed, 22 May 2024 07:01:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type; s=qcppdkim1; bh=qRTPNRgzLNaqp1abE7ty
-	bw26shArfVhyaTLRSm7ms2c=; b=nDDlW6Wstt+A9qTzA04c6OEeiYi8xI0b/JZC
-	2aA1BeYxF0HQEL6gtXeXMjnZBoDfnrOVb/qDBmESu2vLy4d1sC1pa4GGzHnzoo5O
-	VlAU5walmtF2klYgMBOGZA/tVeRGqpzF9O+Xuln7CB0M89QImlAXAWhpxgdx9q8p
-	ApHI5lAG/rYmHAEhhbgaxO5W6apS5O0wJH4/fNFpKM52i3UMWf/5g9doTwFmoIsQ
-	LD8hJxo8Bpl3aGWK2Q3qMk13/mxmBLAX+QwKm8ZlAHZ2zn3UNlLy4R4CLNgz/jkV
-	qyXJvfEDDgxQE15WSG8x/pbjEGv+50s3shxb+xcuCG2t41FVqA==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y6n3tgsgs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 May 2024 07:01:56 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44M71tJB009742
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 May 2024 07:01:55 GMT
-Received: from stor-berry.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 22 May 2024 00:01:54 -0700
-From: "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
-To: <quic_cang@quicinc.com>, <quic_nitirawa@quicinc.com>, <bvanassche@acm.org>,
-        <avri.altman@wdc.com>, <beanhuo@micron.com>, <adrian.hunter@intel.com>,
-        <martin.petersen@oracle.com>
-CC: <linux-scsi@vger.kernel.org>, "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam
-	<manivannan.sadhasivam@linaro.org>,
-        "James E.J. Bottomley"
-	<jejb@linux.ibm.com>,
-        "open list:ARM/QUALCOMM SUPPORT"
-	<linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 2/2] scsi: ufs: qcom: Update the UIC Command Timeout
-Date: Wed, 22 May 2024 00:01:28 -0700
-Message-ID: <8e5593feaac75660ff132d67ee5d9130e628fefb.1716359578.git.quic_nguyenb@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1716359578.git.quic_nguyenb@quicinc.com>
-References: <cover.1716359578.git.quic_nguyenb@quicinc.com>
+	s=arc-20240116; t=1716368798; c=relaxed/simple;
+	bh=x3DP1oymv+I7KMXjlRkq9u282sPbIaVjg1GuUjtDRKk=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=EXHaJPTF3Lr5PuF2N9GdAOC7zJIzMCE2WLijDNfdQna4Y2non69YTZA3/zRDP5Q9/c+BxgduChjNylcXClCKkkgQ2GZ/Q1FSyRi9R75fiNHtAYLHAZlWISa1Sv5GgizVGrEJ8yYAD6mDb/w8S2l5q15S5BcORD7j4iyp+CWjk1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jAcRSw9C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 934F2C32789
+	for <linux-scsi@vger.kernel.org>; Wed, 22 May 2024 09:06:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716368797;
+	bh=x3DP1oymv+I7KMXjlRkq9u282sPbIaVjg1GuUjtDRKk=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=jAcRSw9C5qQuSgnXjGeq3p0Pj9aB9Glb/EdKXUTqZFQG4tRC+kwC6xZuVumLtvIaf
+	 XfADdi6XK+phTm4fjljXYhgR8gN8ko8KGHqJqP51mhgpt4hdmIcWsH5FnCN/Etz/BR
+	 oStUjUx3usHn8LWvy12MbBcI7RNWex4d/vBKuBz6SV/odqkgV8FnzmZKT1sNAhK8zX
+	 XYbVh5Kf3Z3EMAbV8Ond1PZMOn0dXSnNTqLs2STMsuT2GRtoYDlQuuYfO1shIewCVV
+	 oVF85s4QfokLwEEyZkkcMsluUOju31FdJEdKthXT2RpaFPJgS7/HEkscjDL9JmeF0U
+	 gu9JAyDJblysQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 8599EC53B7F; Wed, 22 May 2024 09:06:37 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-scsi@vger.kernel.org
+Subject: [Bug 218866] Extra /dev/sd.. entries for a fake raid on Z10PE-D16 WS
+ motherboard.
+Date: Wed, 22 May 2024 09:06:37 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: IO/Storage
+X-Bugzilla-Component: SCSI
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: marc_debruyne@telenet.be
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-scsi@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cf_kernel_version
+Message-ID: <bug-218866-11613-EcOfHzZjxq@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218866-11613@https.bugzilla.kernel.org/>
+References: <bug-218866-11613@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: VVfVq3LnP2y92wbQrY89XTQZH3k5garw
-X-Proofpoint-ORIG-GUID: VVfVq3LnP2y92wbQrY89XTQZH3k5garw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-22_03,2024-05-21_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- bulkscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=999
- lowpriorityscore=0 phishscore=0 spamscore=0 impostorscore=0 clxscore=1011
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405010000 definitions=main-2405220050
 
-Change the UIC command timeout to 2 seconds.
-This extra time is to allow the uart occasionally print long
-debug messages and logging from different modules during
-product development. With the default hardcoded 500ms timeout,
-the uart printing with interrupt disabled may cause the UIC command
-interrupt get starved, resulting in a UIC command timeout and
-eventually a watchdog timeout.
-When a product development completes, the vendors may
-select a different UIC command timeout as desired.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218866
 
-Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
----
- drivers/ufs/host/ufs-qcom.c | 3 +++
- 1 file changed, 3 insertions(+)
+Marc Debruyne (marc_debruyne@telenet.be) changed:
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 79f8cb3..4649e0f 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -49,6 +49,7 @@ enum {
- 
- #define QCOM_UFS_MAX_GEAR 4
- #define QCOM_UFS_MAX_LANE 2
-+#define QCOM_UIC_CMD_TIMEOUT_MS 2000
- 
- enum {
- 	MODE_MIN,
-@@ -1111,6 +1112,8 @@ static int ufs_qcom_init(struct ufs_hba *hba)
- 		dev_warn(dev, "%s: failed to configure the testbus %d\n",
- 				__func__, err);
- 
-+	hba->uic_cmd_timeout = QCOM_UIC_CMD_TIMEOUT_MS;
-+
- 	return 0;
- 
- out_variant_clear:
--- 
-2.7.4
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+     Kernel Version|6.8.3                       |6.9.1
 
+--- Comment #1 from Marc Debruyne (marc_debruyne@telenet.be) ---
+Upgraded kernel to 6.9.1-gentoo-x86_64 (6.9.1)
+
+same result.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
