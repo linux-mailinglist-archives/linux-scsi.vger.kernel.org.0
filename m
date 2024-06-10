@@ -1,105 +1,132 @@
-Return-Path: <linux-scsi+bounces-5513-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-5515-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2968902B18
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Jun 2024 23:59:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A062C902C64
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jun 2024 01:18:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F5AD285781
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Jun 2024 21:59:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FD7C1C21899
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 Jun 2024 23:18:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6177F149C43;
-	Mon, 10 Jun 2024 21:59:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6A5152189;
+	Mon, 10 Jun 2024 23:18:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b="bS6Qn4Fh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e7m+kI7V"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from alln-iport-6.cisco.com (alln-iport-6.cisco.com [173.37.142.93])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9AD1879;
-	Mon, 10 Jun 2024 21:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.37.142.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE29D54FAD;
+	Mon, 10 Jun 2024 23:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718056753; cv=none; b=KOwZt6A5i4Xkl3Xltgd459YHB9H9mm0Q0Zf9PoX7uRQdfNT33jD1WgJtBNyBhkcMjVKV73IFYcYLphLEh+40qbwa/rPStrG30wtc1vOMbbw/8oh5fp3/4iJK3HHApmHrvBCQkgRB4CdTqsbp9X+KIhaBgKVVqTywWvpCnIDo/gw=
+	t=1718061525; cv=none; b=XLjIho1/Y4tQFhGKpGR0axiwKlCdfPi8u08/9UIQLNzmk8pF1hlZvw1zU5NeO0eFOjmDa7h7/cXkPNHdGhMLZoZEmi/uFzk0zN3hOIHgmNLHDxm6iYj81BnHiTziNByhpGtWm4mhPDhuI4/AEhss+86w5b6dcM84/xolV3sMNdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718056753; c=relaxed/simple;
-	bh=s6AKf2rw41CuqIC+ov9OURowxloV3qJ1rpMVfuh3PZY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Y8UUZPPHJXOwNSa0LHGxwqqY6cV5zjVgAimsFwtuKWZ1Q21XyxiLD3xLHgavv5ACjuhNATpDJ4YJ3myrHyZILfq5ijKzdI/LB9IIc3R0y7tr0sdA3VIpCuWxz9bceM4IZYHhVnJamabxwevNxk7dfZcEFVm2zOjQuZfFCTjUfH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b=bS6Qn4Fh; arc=none smtp.client-ip=173.37.142.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=cisco.com; i=@cisco.com; l=797; q=dns/txt; s=iport;
-  t=1718056751; x=1719266351;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tAh2Y+dzo30unDYIsvmEMV6pDuRIP7jOTBLF69yuE5c=;
-  b=bS6Qn4Fhn3Mgc0zw4LOfyZnoUcLhWRtXDz3eyyypOEnH23HF1SVnAKOR
-   ygiKv+LRJiRkZmCk/Yhvf8rh71ydeUn9FKSr35rCWwkFYqUsVKgJxNMf7
-   UwaqNHw3h5zfF7WxuI+DmIfYZxbeLrycEBNhfb+SfSBShh1CzkhsEe1Re
-   M=;
-X-CSE-ConnectionGUID: zcg7fJCsR1W/lANtoA3ImA==
-X-CSE-MsgGUID: p9xZx8UASzK7c9ZBxLXkzw==
-X-IronPort-AV: E=Sophos;i="6.08,227,1712620800"; 
-   d="scan'208";a="293601214"
-Received: from alln-core-4.cisco.com ([173.36.13.137])
-  by alln-iport-6.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 21:59:10 +0000
-Received: from localhost.cisco.com ([10.193.101.253])
-	(authenticated bits=0)
-	by alln-core-4.cisco.com (8.15.2/8.15.2) with ESMTPSA id 45ALpBCc012699
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 10 Jun 2024 21:59:10 GMT
-From: Karan Tilak Kumar <kartilak@cisco.com>
-To: sebaddel@cisco.com
-Cc: arulponn@cisco.com, djhawar@cisco.com, gcboffa@cisco.com, mkai2@cisco.com,
-        satishkh@cisco.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Karan Tilak Kumar <kartilak@cisco.com>
-Subject: [PATCH 14/14] scsi: fnic: Increment driver version
-Date: Mon, 10 Jun 2024 14:51:00 -0700
-Message-Id: <20240610215100.673158-15-kartilak@cisco.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20240610215100.673158-1-kartilak@cisco.com>
-References: <20240610215100.673158-1-kartilak@cisco.com>
+	s=arc-20240116; t=1718061525; c=relaxed/simple;
+	bh=KIyL2/Hl4FaIl2MR/Gi9klRT1Z9ieuVHLhL4igv4HKw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S5ZMa+qYXsHxw+wjUda0lHfMIPqLEF/aSvseaQQxIDFjrQtshL3l42kuJGeIAufPAi1fc4k8rWsvtj32Zxqb4NK6Sj4BF42VAEAwzZDqkGOra3hRIypO55fRYnKhRaPK6JHCcjzKMkgU+PAp6/ZLbufk7thE+BSCg86EZh9ec1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e7m+kI7V; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718061522; x=1749597522;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KIyL2/Hl4FaIl2MR/Gi9klRT1Z9ieuVHLhL4igv4HKw=;
+  b=e7m+kI7VAbj1qz69uuH11lW+LphIRjgygNpKzMBi/2ugUjLSSJADuJG/
+   p/cBpz5rDukLsf8sCJU/Ubn4WqtFgyujNjJBMw5Qkf995SUOYFdYXT7yF
+   8C5HW61TS/9gRJAIUcUEo835I/wYFM25sXj2bYJilQijqzWx+xMHSDKVn
+   iylV0JDxZdjjDPUGB3GLCPIIN5wpGbXYjBKtCDyKf/m1CEzk++rhUqOQm
+   AOkVOCQwTRtuxlUhK2L2gRxzK1kksrm4ijZUuiddq21QcMr8k/BORK84Z
+   Yc1vcoSQR23ZwIgxfYt7vV8kDkcyniTjkj9AIpCSnKTkRnbmvwy6q+fXO
+   w==;
+X-CSE-ConnectionGUID: LfkXujOERxGJFOfRwhNM4w==
+X-CSE-MsgGUID: qLNlt7UdRZuQVbg4VMzngw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="12008205"
+X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
+   d="scan'208";a="12008205"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 16:18:42 -0700
+X-CSE-ConnectionGUID: 26nkzdepRRavkqvQZ6bjbg==
+X-CSE-MsgGUID: 0M+KnpDiQsGcNL9mbEd6OA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
+   d="scan'208";a="76672525"
+Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 10 Jun 2024 16:18:39 -0700
+Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sGoHc-0002Zd-3A;
+	Mon, 10 Jun 2024 23:18:36 +0000
+Date: Tue, 11 Jun 2024 07:18:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Karan Tilak Kumar <kartilak@cisco.com>, sebaddel@cisco.com
+Cc: oe-kbuild-all@lists.linux.dev, arulponn@cisco.com, djhawar@cisco.com,
+	gcboffa@cisco.com, mkai2@cisco.com, satishkh@cisco.com,
+	jejb@linux.ibm.com, martin.petersen@oracle.com,
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Karan Tilak Kumar <kartilak@cisco.com>
+Subject: Re: [PATCH 06/14] scsi: fnic: Add and integrate support for FDMI
+Message-ID: <202406110734.p2v8dq9v-lkp@intel.com>
+References: <20240610215100.673158-7-kartilak@cisco.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-User: kartilak@cisco.com
-X-Outbound-SMTP-Client: 10.193.101.253, [10.193.101.253]
-X-Outbound-Node: alln-core-4.cisco.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240610215100.673158-7-kartilak@cisco.com>
 
-Increment driver version to 1.8.0.0
+Hi Karan,
 
-Reviewed-by: Sesidhar Baddela <sebaddel@cisco.com>
-Reviewed-by: Arulprabhu Ponnusamy <arulponn@cisco.com>
-Reviewed-by: Gian Carlo Boffa <gcboffa@cisco.com>
-Tested-by: Karan Tilak Kumar <kartilak@cisco.com>
-Signed-off-by: Karan Tilak Kumar <kartilak@cisco.com>
----
- drivers/scsi/fnic/fnic.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/scsi/fnic/fnic.h b/drivers/scsi/fnic/fnic.h
-index bcf2aaed0b1f..8bdfdd67f08c 100644
---- a/drivers/scsi/fnic/fnic.h
-+++ b/drivers/scsi/fnic/fnic.h
-@@ -30,7 +30,7 @@
- 
- #define DRV_NAME		"fnic"
- #define DRV_DESCRIPTION		"Cisco FCoE HBA Driver"
--#define DRV_VERSION		"1.7.0.0"
-+#define DRV_VERSION		"1.8.0.0"
- #define PFX			DRV_NAME ": "
- #define DFX                     DRV_NAME "%d: "
- 
+[auto build test WARNING on mkp-scsi/for-next]
+[also build test WARNING on jejb-scsi/for-next linus/master v6.10-rc3 next-20240607]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Karan-Tilak-Kumar/scsi-fnic-Replace-shost_printk-with-pr_info-pr_err/20240611-060227
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20240610215100.673158-7-kartilak%40cisco.com
+patch subject: [PATCH 06/14] scsi: fnic: Add and integrate support for FDMI
+reproduce: (https://download.01.org/0day-ci/archive/20240611/202406110734.p2v8dq9v-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406110734.p2v8dq9v-lkp@intel.com/
+
+versioncheck warnings: (new ones prefixed by >>)
+   INFO PATH=/opt/cross/rustc-1.78.0-bindgen-0.65.1/cargo/bin:/opt/cross/clang-18/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+   /usr/bin/timeout -k 100 3h /usr/bin/make KCFLAGS= -Wtautological-compare -Wno-error=return-type -Wreturn-type -Wcast-function-type -funsigned-char -Wundef -fstrict-flex-arrays=3 -Wformat-overflow -Wformat-truncation -Wenum-conversion W=1 --keep-going LLVM=1 -j32 ARCH=x86_64 versioncheck
+   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
+   	-name '*.[hcS]' -type f -print | sort \
+   	| xargs perl -w ./scripts/checkversion.pl
+   ./drivers/accessibility/speakup/genmap.c: 13 linux/version.h not needed.
+   ./drivers/accessibility/speakup/makemapdata.c: 13 linux/version.h not needed.
+>> ./drivers/scsi/fnic/fnic_pci_subsys_devid.c: 11 linux/version.h not needed.
+   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
+   ./samples/bpf/spintest.bpf.c: 8 linux/version.h not needed.
+   ./samples/trace_events/trace_custom_sched.c: 11 linux/version.h not needed.
+   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
+   ./tools/lib/bpf/bpf_helpers.h: 423: need linux/version.h
+   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
+   ./tools/testing/selftests/wireguard/qemu/init.c: 27 linux/version.h not needed.
+
 -- 
-2.31.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
