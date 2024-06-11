@@ -1,132 +1,182 @@
-Return-Path: <linux-scsi+bounces-5515-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-5517-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A062C902C64
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jun 2024 01:18:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 194DC902FE6
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jun 2024 07:20:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FD7C1C21899
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Jun 2024 23:18:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9541B1F242A2
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jun 2024 05:20:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6A5152189;
-	Mon, 10 Jun 2024 23:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C1FC171099;
+	Tue, 11 Jun 2024 05:19:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e7m+kI7V"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SP0peDuU"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE29D54FAD;
-	Mon, 10 Jun 2024 23:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C871E488;
+	Tue, 11 Jun 2024 05:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718061525; cv=none; b=XLjIho1/Y4tQFhGKpGR0axiwKlCdfPi8u08/9UIQLNzmk8pF1hlZvw1zU5NeO0eFOjmDa7h7/cXkPNHdGhMLZoZEmi/uFzk0zN3hOIHgmNLHDxm6iYj81BnHiTziNByhpGtWm4mhPDhuI4/AEhss+86w5b6dcM84/xolV3sMNdU=
+	t=1718083189; cv=none; b=EIoK7UfaGzKLbDeD2AwyFmoVe3q2q6nFxBwB+VXj3JsI06ziL4u6t6Xdj9PFyk+g5wOArVoEF4y47qAKKpMCbxPHkCmus9Zj9XU1vZqQGUS0x64bnrsV4vyb3GEMB+T9M6QAhC1iC5ED7oq7+9ECVCHIxE/xETkCfa3cGOMIc6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718061525; c=relaxed/simple;
-	bh=KIyL2/Hl4FaIl2MR/Gi9klRT1Z9ieuVHLhL4igv4HKw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S5ZMa+qYXsHxw+wjUda0lHfMIPqLEF/aSvseaQQxIDFjrQtshL3l42kuJGeIAufPAi1fc4k8rWsvtj32Zxqb4NK6Sj4BF42VAEAwzZDqkGOra3hRIypO55fRYnKhRaPK6JHCcjzKMkgU+PAp6/ZLbufk7thE+BSCg86EZh9ec1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e7m+kI7V; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718061522; x=1749597522;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KIyL2/Hl4FaIl2MR/Gi9klRT1Z9ieuVHLhL4igv4HKw=;
-  b=e7m+kI7VAbj1qz69uuH11lW+LphIRjgygNpKzMBi/2ugUjLSSJADuJG/
-   p/cBpz5rDukLsf8sCJU/Ubn4WqtFgyujNjJBMw5Qkf995SUOYFdYXT7yF
-   8C5HW61TS/9gRJAIUcUEo835I/wYFM25sXj2bYJilQijqzWx+xMHSDKVn
-   iylV0JDxZdjjDPUGB3GLCPIIN5wpGbXYjBKtCDyKf/m1CEzk++rhUqOQm
-   AOkVOCQwTRtuxlUhK2L2gRxzK1kksrm4ijZUuiddq21QcMr8k/BORK84Z
-   Yc1vcoSQR23ZwIgxfYt7vV8kDkcyniTjkj9AIpCSnKTkRnbmvwy6q+fXO
-   w==;
-X-CSE-ConnectionGUID: LfkXujOERxGJFOfRwhNM4w==
-X-CSE-MsgGUID: qLNlt7UdRZuQVbg4VMzngw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="12008205"
-X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="12008205"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 16:18:42 -0700
-X-CSE-ConnectionGUID: 26nkzdepRRavkqvQZ6bjbg==
-X-CSE-MsgGUID: 0M+KnpDiQsGcNL9mbEd6OA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="76672525"
-Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 10 Jun 2024 16:18:39 -0700
-Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sGoHc-0002Zd-3A;
-	Mon, 10 Jun 2024 23:18:36 +0000
-Date: Tue, 11 Jun 2024 07:18:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Karan Tilak Kumar <kartilak@cisco.com>, sebaddel@cisco.com
-Cc: oe-kbuild-all@lists.linux.dev, arulponn@cisco.com, djhawar@cisco.com,
-	gcboffa@cisco.com, mkai2@cisco.com, satishkh@cisco.com,
-	jejb@linux.ibm.com, martin.petersen@oracle.com,
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Karan Tilak Kumar <kartilak@cisco.com>
-Subject: Re: [PATCH 06/14] scsi: fnic: Add and integrate support for FDMI
-Message-ID: <202406110734.p2v8dq9v-lkp@intel.com>
-References: <20240610215100.673158-7-kartilak@cisco.com>
+	s=arc-20240116; t=1718083189; c=relaxed/simple;
+	bh=hch/0P55byq5GbA9713XqbKHtmWPgz2RFxBLYpB4kbo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HgNOG+OsbdsKoI80rVrawWwkHXtiCxMFIge11OjQjS0nMJqW7ILOnHLQ+dKFsfE5PhQYY9X7rfMSn2HXUXZZ1ONt9kYnXVV230HaCBnJcGtK9h8V9OnD9NHgyzKm9GhIQQOXCAYZM6zJXKRV9b+SCyzuhvcHtflJAJiOj8cyyGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=SP0peDuU; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=xQZ0tGVxbRfMe28F2c3vaqhpukPqzWUR2mw3UooUIr8=; b=SP0peDuUs+KEwheRnMyMlYgkS7
+	BJO3TbWxLcYZrtF9hG/zSYlaaEBbMSCF64VvtU307jsPdSrtdMGsHLbLIPlb+3JQ+eYPkj0WFLQ82
+	0RHyWfdxKEhDZW5T1ob5hHG0b14ikv/6qveZEUAQmVDgvdsZVt4TYWW6sqJaVmrwg5KcUOZQ84nPg
+	CjpVq303dQfXA8cJ1suDHbBA/aeCpy9t1nwAxlcRoZCDjrGUy5Vn9fE6+OpvbxggFWtigsP5ZcQpg
+	pUZerKUXlbVu4I0/QgfLjMkjQJmRXdy7KEomGmmJMn8IDs2fYlaMIz6Izl+aZ3CL2CjeVsmwbwNGT
+	O/+0DiLA==;
+Received: from 2a02-8389-2341-5b80-cdb4-8e7d-405d-6b77.cable.dynamic.v6.surfer.at ([2a02:8389:2341:5b80:cdb4:8e7d:405d:6b77] helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sGtuu-00000007Qnj-2sBx;
+	Tue, 11 Jun 2024 05:19:33 +0000
+From: Christoph Hellwig <hch@lst.de>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
+	Richard Weinberger <richard@nod.at>,
+	Philipp Reisner <philipp.reisner@linbit.com>,
+	Lars Ellenberg <lars.ellenberg@linbit.com>,
+	=?UTF-8?q?Christoph=20B=C3=B6hmwalder?= <christoph.boehmwalder@linbit.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Ming Lei <ming.lei@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	=?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+	Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Song Liu <song@kernel.org>,
+	Yu Kuai <yukuai3@huawei.com>,
+	Vineeth Vijayan <vneethv@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	linux-m68k@lists.linux-m68k.org,
+	linux-um@lists.infradead.org,
+	drbd-dev@lists.linbit.com,
+	nbd@other.debian.org,
+	linuxppc-dev@lists.ozlabs.org,
+	ceph-devel@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	xen-devel@lists.xenproject.org,
+	linux-bcache@vger.kernel.org,
+	dm-devel@lists.linux.dev,
+	linux-raid@vger.kernel.org,
+	linux-mmc@vger.kernel.org,
+	linux-mtd@lists.infradead.org,
+	nvdimm@lists.linux.dev,
+	linux-nvme@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linux-block@vger.kernel.org
+Subject: move features flags into queue_limits
+Date: Tue, 11 Jun 2024 07:19:00 +0200
+Message-ID: <20240611051929.513387-1-hch@lst.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240610215100.673158-7-kartilak@cisco.com>
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Hi Karan,
+Hi all,
 
-kernel test robot noticed the following build warnings:
+this is the third and last major series to convert settings to
+queue_limits for this merge window.  After a bunch of prep patches to
+get various drivers in shape, it moves all the queue_flags that specify
+driver controlled features into the queue limits so that they can be
+set atomically and are separated from the blk-mq internal flags.
 
-[auto build test WARNING on mkp-scsi/for-next]
-[also build test WARNING on jejb-scsi/for-next linus/master v6.10-rc3 next-20240607]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Note that I've only Cc'ed the maintainers for drivers with non-mechanical
+changes as the Cc list is already huge.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Karan-Tilak-Kumar/scsi-fnic-Replace-shost_printk-with-pr_info-pr_err/20240611-060227
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20240610215100.673158-7-kartilak%40cisco.com
-patch subject: [PATCH 06/14] scsi: fnic: Add and integrate support for FDMI
-reproduce: (https://download.01.org/0day-ci/archive/20240611/202406110734.p2v8dq9v-lkp@intel.com/reproduce)
+This series sits on top of the "convert the SCSI ULDs to the atomic queue
+limits API v2" and "move integrity settings to queue_limits v2" series.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406110734.p2v8dq9v-lkp@intel.com/
+A git tree is available here:
 
-versioncheck warnings: (new ones prefixed by >>)
-   INFO PATH=/opt/cross/rustc-1.78.0-bindgen-0.65.1/cargo/bin:/opt/cross/clang-18/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-   /usr/bin/timeout -k 100 3h /usr/bin/make KCFLAGS= -Wtautological-compare -Wno-error=return-type -Wreturn-type -Wcast-function-type -funsigned-char -Wundef -fstrict-flex-arrays=3 -Wformat-overflow -Wformat-truncation -Wenum-conversion W=1 --keep-going LLVM=1 -j32 ARCH=x86_64 versioncheck
-   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
-   	-name '*.[hcS]' -type f -print | sort \
-   	| xargs perl -w ./scripts/checkversion.pl
-   ./drivers/accessibility/speakup/genmap.c: 13 linux/version.h not needed.
-   ./drivers/accessibility/speakup/makemapdata.c: 13 linux/version.h not needed.
->> ./drivers/scsi/fnic/fnic_pci_subsys_devid.c: 11 linux/version.h not needed.
-   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
-   ./samples/bpf/spintest.bpf.c: 8 linux/version.h not needed.
-   ./samples/trace_events/trace_custom_sched.c: 11 linux/version.h not needed.
-   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
-   ./tools/lib/bpf/bpf_helpers.h: 423: need linux/version.h
-   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
-   ./tools/testing/selftests/wireguard/qemu/init.c: 27 linux/version.h not needed.
+    git://git.infradead.org/users/hch/block.git block-limit-flags
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Gitweb:
+
+    http://git.infradead.org/?p=users/hch/block.git;a=shortlog;h=refs/heads/block-limit-flags
+
+Diffstat:
+ Documentation/block/writeback_cache_control.rst |   67 +++++---
+ arch/m68k/emu/nfblock.c                         |    1 
+ arch/um/drivers/ubd_kern.c                      |    3 
+ arch/xtensa/platforms/iss/simdisk.c             |    5 
+ block/blk-core.c                                |    7 
+ block/blk-flush.c                               |   36 ++--
+ block/blk-mq-debugfs.c                          |   13 -
+ block/blk-mq.c                                  |   42 +++--
+ block/blk-settings.c                            |   46 ++----
+ block/blk-sysfs.c                               |  118 ++++++++-------
+ block/blk-wbt.c                                 |    4 
+ block/blk.h                                     |    2 
+ drivers/block/amiflop.c                         |    5 
+ drivers/block/aoe/aoeblk.c                      |    1 
+ drivers/block/ataflop.c                         |    5 
+ drivers/block/brd.c                             |    6 
+ drivers/block/drbd/drbd_main.c                  |    6 
+ drivers/block/floppy.c                          |    3 
+ drivers/block/loop.c                            |   79 +++++-----
+ drivers/block/mtip32xx/mtip32xx.c               |    2 
+ drivers/block/n64cart.c                         |    2 
+ drivers/block/nbd.c                             |   24 +--
+ drivers/block/null_blk/main.c                   |   13 -
+ drivers/block/null_blk/zoned.c                  |    3 
+ drivers/block/pktcdvd.c                         |    1 
+ drivers/block/ps3disk.c                         |    8 -
+ drivers/block/rbd.c                             |   12 -
+ drivers/block/rnbd/rnbd-clt.c                   |   14 -
+ drivers/block/sunvdc.c                          |    1 
+ drivers/block/swim.c                            |    5 
+ drivers/block/swim3.c                           |    5 
+ drivers/block/ublk_drv.c                        |   21 +-
+ drivers/block/virtio_blk.c                      |   37 ++--
+ drivers/block/xen-blkfront.c                    |   33 +---
+ drivers/block/zram/zram_drv.c                   |    6 
+ drivers/cdrom/gdrom.c                           |    1 
+ drivers/md/bcache/super.c                       |    9 -
+ drivers/md/dm-table.c                           |  181 +++++-------------------
+ drivers/md/dm-zone.c                            |    2 
+ drivers/md/dm-zoned-target.c                    |    2 
+ drivers/md/dm.c                                 |   13 -
+ drivers/md/md.c                                 |   40 -----
+ drivers/md/raid5.c                              |    6 
+ drivers/mmc/core/block.c                        |   42 ++---
+ drivers/mmc/core/queue.c                        |   20 +-
+ drivers/mmc/core/queue.h                        |    3 
+ drivers/mtd/mtd_blkdevs.c                       |    9 -
+ drivers/nvdimm/btt.c                            |    4 
+ drivers/nvdimm/pmem.c                           |   14 -
+ drivers/nvme/host/core.c                        |   33 ++--
+ drivers/nvme/host/multipath.c                   |   24 ---
+ drivers/nvme/host/zns.c                         |    3 
+ drivers/s390/block/dasd_genhd.c                 |    1 
+ drivers/s390/block/dcssblk.c                    |    2 
+ drivers/s390/block/scm_blk.c                    |    5 
+ drivers/scsi/iscsi_tcp.c                        |    8 -
+ drivers/scsi/scsi_lib.c                         |    5 
+ drivers/scsi/sd.c                               |   60 +++----
+ drivers/scsi/sd.h                               |    7 
+ drivers/scsi/sd_zbc.c                           |   17 +-
+ include/linux/blkdev.h                          |  119 +++++++++++----
+ 61 files changed, 556 insertions(+), 710 deletions(-)
 
