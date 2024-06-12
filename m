@@ -1,69 +1,78 @@
-Return-Path: <linux-scsi+bounces-5679-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-5681-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ACDF905931
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2024 18:53:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 484F2905936
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2024 18:53:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C21F1C217E5
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2024 16:53:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9FBF7B25EFB
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2024 16:53:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 618AD181CE5;
-	Wed, 12 Jun 2024 16:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56A8E181D0D;
+	Wed, 12 Jun 2024 16:53:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="gGyW0CEW"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="k0afUE6r"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE13181BAE;
-	Wed, 12 Jun 2024 16:53:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A825181BAB;
+	Wed, 12 Jun 2024 16:53:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718211201; cv=none; b=DGj7WsY36RRuJNioLvvGCWoKui6pmTD5FjYJB1xVCFrqAWqBYX+lnb4ULlCRtZtl/BmupAoXK1ylV5BVHJYkPquD2Onr55KoVNgfIydOTTAoLqaYuD+dx5cnkG8zc5AVxhSvM/ppstMF7s21eL02Q0WUSKLel1ClKSunPTtLIQo=
+	t=1718211207; cv=none; b=snJj9ZXC7jsSk5x5XpzGM2egSskaCyrfSjDBWrRoMEda1v8zsGGxQvZBT5vijCKgESqcXPm+uwznikzQcHnwMw0oh3o8QiwY1N01WwTQ6T+htNlmMLY4GunRJOdckeODwBL0iHr8BhPbb6Y/PRdH+VnoH+aU+4vCgDS3EKb3fDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718211201; c=relaxed/simple;
-	bh=BgI2Qfg+ZHlXmF1l434ZjiNv91MSMDdP8E4X0CC/qyA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fx7jyLaTqC17OyVtpB7yUd/cmLavQgz4Z+yJ/ek3Rd5aF7+wQ2RIqS7k8TXhDjGw8LUziBDKltX9vhXfIRp7lE/laPquo0IjG9toOuG8sUT+lHBauzwlWhGs4NQkrLA3isBKw6JtsGut4nsANiRzpinpZhZHz0sWBUufIr0nkGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=gGyW0CEW; arc=none smtp.client-ip=199.89.1.11
+	s=arc-20240116; t=1718211207; c=relaxed/simple;
+	bh=qVdsce9kI7phLWSg6H8f1oBYl958AVtUymwUn2irbvs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Q5lXF5alz7GCITu1a6hM7nj+i5118zmR9uzkTHmIQoahGRW8JEcQiLQK+NGbcKSbZS1IdPAXi+qyz1ke5GPRePVnuQh1wHp8mHIdF1hYbC1XR21TwW05JfBpvHI5wWAEZ9bJPPA+55vb967BK5KQA1vrKF/MPwRuUPvtbOOp2f8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=k0afUE6r; arc=none smtp.client-ip=199.89.1.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4Vzs6x5xqJz6Cp2tZ;
-	Wed, 12 Jun 2024 16:53:13 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4Vzs720TxKz6Cnk8t;
+	Wed, 12 Jun 2024 16:53:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:x-mailer:message-id:date
-	:date:subject:subject:from:from:received:received; s=mr01; t=
-	1718211191; x=1720803192; bh=ja65RPmAsYQ4wtG5tAMncT4tzoRsc4drTGU
-	2fNccyQE=; b=gGyW0CEWy/7RW0dzTcENI0pO+oBugDjGo2BAQJu8LGPBoGKK/Qd
-	qknLYVPIImfM1k+6GWcg1PjXdytj03ggqQUNdtefbeebjImVv0lUQK3nfEhLXi1R
-	2J9VcSZoW5PL/ankcL++R0PKTTQt3eTG5YJkhs3foL9myeBDSonn35llGnXyRquW
-	YdWBVr/Kyz+InC8G2XM7MqeQV8gkzVWfPtY5I4aGIOOBziy4m4l3hmdeTq3bNpjH
-	Sg2fmHWyekhrtiCHx1bI1LThGtw0W8TNBWaV0gJGldtSbmpQhdAuYpbZ0GV68ZkM
-	Zyd6p/RT/Sq2GhYNe5VEGAeplP5E04KRikg==
+	content-transfer-encoding:mime-version:references:in-reply-to
+	:x-mailer:message-id:date:date:subject:subject:from:from
+	:received:received; s=mr01; t=1718211193; x=1720803194; bh=yEYek
+	9bgEzYOmdogb2Tp0iSUExccUecXfH9k7dVFWHc=; b=k0afUE6rL2twrqKfTMT7q
+	7HTZ4ZRm5GA09ocoi/y82YPA0JOPT035Qcn6Wy3zN6LfRDdOuRigmiCTMR1MW6DW
+	VkakGL1aNm5s9CDFI7/4ClFCAlmRJl0WKDAPDuk7rcmas/hz3s6tVG4NWdFfNLh9
+	LU+KcmmdV7k9JlK28zwzeSCSgjychtGBjMl3xNGIQKPdaccQNlLCZbQzQcKOUfME
+	qQFib6xaEsuCN/AJIds67nALZEhjXakgbpA/hqs9C7jcitSfbGI3NPraQlkG06Bu
+	1Nv4TWOhQ5Zwq9qym+04Iol1xXbGYNFKiCYyoMJENXpy3W8YQ84LOWBXNgBWtVtu
+	g==
 X-Virus-Scanned: by MailRoute
 Received: from 008.lax.mailroute.net ([127.0.0.1])
  by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id DsBOtPlFHF6O; Wed, 12 Jun 2024 16:53:11 +0000 (UTC)
+ id Uje01OWT_d2e; Wed, 12 Jun 2024 16:53:13 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.132.0.90])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4Vzs6v2g5Dz6Cnk8t;
-	Wed, 12 Jun 2024 16:53:11 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4Vzs6w14JRz6Cnv3Q;
+	Wed, 12 Jun 2024 16:53:12 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: Alan Stern <stern@rowland.harvard.edu>,
 	linux-scsi@vger.kernel.org,
 	linux-usb@vger.kernel.org,
-	Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH 0/2] Do not read the IO hints VPD page from USB storage devices
-Date: Wed, 12 Jun 2024 09:52:47 -0700
-Message-ID: <20240612165249.2671204-1-bvanassche@acm.org>
+	Bart Van Assche <bvanassche@acm.org>,
+	Joao Machado <jocrismachado@gmail.com>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Christian Heusel <christian@heusel.eu>,
+	stable@vger.kernel.org,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH 1/2] scsi: core: Introduce the BLIST_SKIP_IO_HINTS flag
+Date: Wed, 12 Jun 2024 09:52:48 -0700
+Message-ID: <20240612165249.2671204-2-bvanassche@acm.org>
 X-Mailer: git-send-email 2.45.2.505.gda0bf45e8d-goog
+In-Reply-To: <20240612165249.2671204-1-bvanassche@acm.org>
+References: <20240612165249.2671204-1-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -72,27 +81,58 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Hi Martin,
+Prepare for skipping reading the IO hints VPD page for USB storage device=
+s.
 
-Recently it was reported that reading the IO hints VPD page makes at leas=
-t two
-USB storage devices crash. Hence this patch series that disables reading =
-the IO
-hints VPD page from USB storage devices. Please consider this patch serie=
-s for
-your scsi-fixes branch.
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Joao Machado <jocrismachado@gmail.com>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Christian Heusel <christian@heusel.eu>
+Cc: stable@vger.kernel.org
+Fixes: 4f53138fffc2 ("scsi: sd: Translate data lifetime information")
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/scsi/sd.c           | 4 ++++
+ include/scsi/scsi_devinfo.h | 4 +++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-Thanks,
-
-Bart.
-
-Bart Van Assche (2):
-  scsi: core: Introduce the BLIST_SKIP_IO_HINTS flag
-  scsi: core: Do not query IO hints for USB devices
-
- drivers/scsi/sd.c              | 4 ++++
- drivers/usb/storage/scsiglue.c | 2 ++
- include/scsi/scsi_devinfo.h    | 4 +++-
- 3 files changed, 9 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+index 3a43e2209751..fcf3d7730466 100644
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -63,6 +63,7 @@
+ #include <scsi/scsi_cmnd.h>
+ #include <scsi/scsi_dbg.h>
+ #include <scsi/scsi_device.h>
++#include <scsi/scsi_devinfo.h>
+ #include <scsi/scsi_driver.h>
+ #include <scsi/scsi_eh.h>
+ #include <scsi/scsi_host.h>
+@@ -3117,6 +3118,9 @@ static void sd_read_io_hints(struct scsi_disk *sdkp=
+, unsigned char *buffer)
+ 	struct scsi_mode_data data;
+ 	int res;
+=20
++	if (sdp->sdev_bflags & BLIST_SKIP_IO_HINTS)
++		return;
++
+ 	res =3D scsi_mode_sense(sdp, /*dbd=3D*/0x8, /*modepage=3D*/0x0a,
+ 			      /*subpage=3D*/0x05, buffer, SD_BUF_SIZE, SD_TIMEOUT,
+ 			      sdkp->max_retries, &data, &sshdr);
+diff --git a/include/scsi/scsi_devinfo.h b/include/scsi/scsi_devinfo.h
+index 6b548dc2c496..fa8721e49dec 100644
+--- a/include/scsi/scsi_devinfo.h
++++ b/include/scsi/scsi_devinfo.h
+@@ -69,8 +69,10 @@
+ #define BLIST_RETRY_ITF		((__force blist_flags_t)(1ULL << 32))
+ /* Always retry ABORTED_COMMAND with ASC 0xc1 */
+ #define BLIST_RETRY_ASC_C1	((__force blist_flags_t)(1ULL << 33))
++/* Do not read the I/O hints mode page */
++#define BLIST_SKIP_IO_HINTS	((__force blist_flags_t)(1ULL << 34))
+=20
+-#define __BLIST_LAST_USED BLIST_RETRY_ASC_C1
++#define __BLIST_LAST_USED BLIST_SKIP_IO_HINTS
+=20
+ #define __BLIST_HIGH_UNUSED (~(__BLIST_LAST_USED | \
+ 			       (__force blist_flags_t) \
 
