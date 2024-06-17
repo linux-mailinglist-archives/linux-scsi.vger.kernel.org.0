@@ -1,73 +1,76 @@
-Return-Path: <linux-scsi+bounces-5923-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-5925-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACF9790BCA4
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2024 23:09:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 293F090BCA6
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2024 23:09:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F9661F22313
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2024 21:09:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A9B50B239F1
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2024 21:09:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25789198A3D;
-	Mon, 17 Jun 2024 21:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF6BE18F2E1;
+	Mon, 17 Jun 2024 21:09:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="YPY34Zhe"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="VrEntE1r"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778F318F2D9
-	for <linux-scsi@vger.kernel.org>; Mon, 17 Jun 2024 21:09:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C6918C356
+	for <linux-scsi@vger.kernel.org>; Mon, 17 Jun 2024 21:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718658553; cv=none; b=hHAWusiV+VYNKRafP5LrP+CMnzjjxU1W5rq80J71j6XHz/8EDoZGrBvF6Pza3ULHOXrjG9qhLB1ybPH1DqyJM06Y0rS3hkaEnh2WOMhvfSvxgMrbD9QWvlAcEBTmHqtGNOad4CMsRBRq+KErtgeNQAocryLKN5+2TsBVhZMMgoA=
+	t=1718658564; cv=none; b=nXwfoVneUM5zb4ZlJVF0LQc60GWwN1k36TMFb3oYxgoJdCG8eUvcN6WgBrr3AEPbiFONeTTBXgs9Sx6SXyUtae4wWIBtt+y6FE2NFjLuqDiLom5C18uTnkRhGXhazpc1uNNli6u5M0kf19bbAQFUzhWEV321GFn0QiCCf5yJFjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718658553; c=relaxed/simple;
-	bh=O/JB9XQAY0uS7Cq3b1wiklbTpa90dbpWm4YJGEgP5a4=;
+	s=arc-20240116; t=1718658564; c=relaxed/simple;
+	bh=OoJLwAFNGsANX8AMDEEGDq9DOjbfM7yxO52DiqBftqg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ecaZUmTnSgakiTMNkwlkFBIIOCDq0twyQMOTvzwnm6wdqoQXCIzcceF1NaHulabeOwYiqmqRxMbrzIGXhPI23VWyYHh4A+cTaMurdRWkYn0Tkys/7VGlVuJ3xD59A73b6sMDNChieDc9jDtT/h3dmC8Pqr91Y3m8IwXMARgRQ9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=YPY34Zhe; arc=none smtp.client-ip=199.89.1.11
+	 MIME-Version; b=Fr6h7mUOISD+N0eyeUq0/wtVsa5YhZBZnAfP87pDC39R3O75AlyebgulPkISaXXfVz0f+r1bkdISxxJsoG23a8mQhHZKHe7GmJ28zNOaaHf0M2ER+9QwMZi3zjOrKFhPh7PdIi/KtPOnqrbQ6chcUZJjSh0Q6xu5LI1tRMpeAV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=VrEntE1r; arc=none smtp.client-ip=199.89.1.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4W32Yz6w3Gz6Cnk98;
-	Mon, 17 Jun 2024 21:09:11 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4W32ZB6f0Tz6Cnk98;
+	Mon, 17 Jun 2024 21:09:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1718658548; x=1721250549; bh=UVoNf
-	os25vc8suv/8xQHLa0e80xjHR4VymJwDgxT5TA=; b=YPY34ZheDxijAwNhTEThi
-	+fzXn53NHl3VeitaCchrXQv0FQqe/zFqRy8IGJiiiO1t/uboWt+CDf3336JpZf1e
-	mlEpb9GaviJGMfhZvjt6WLMH+2aC0W/KCUjKK5YrxZm7rFMGpTgYJpNmKmohHU2G
-	pKev3kj/YQdmM2htbnujTuSCg6t6UMXMSJI3Tf57NBmnfq/uHnYFAjosJdBMomnZ
-	v49HIw6Ab/hzX7YVt2pEMzgWwTqLS5hRqKSXoFa4XgJW7YV1dWsJtjwfh0S1/OCw
-	rHvBlciPUukOPvdHZMyGabQxy0VlcA9vl3Lz0cmwfdMHe/HBpcvuYBo0cfqw0Y1v
-	w==
+	:received:received; s=mr01; t=1718658557; x=1721250558; bh=aQcdM
+	7osT1j4+4virxde9dcGmwT94mxRb7fWbCygNfg=; b=VrEntE1r9Ae/SmnMmAXli
+	of7t7UXApBdACP5essTi2CRSZZ1GkDKs/OFr0HjWG5wmb1Q8kP7cSfJHZl+sRDIS
+	NyWPnw+12S/czXNkyMgseXlCG9eW139R+1lakbV+afyfwi67IJWBRXwhmYPCzOIn
+	Vn9u1JNHrl62PzcNPWeYdOKCKz5NSTceJ/qXusn+teiwrF7Y6GiUbZPI5N699VUU
+	xjG9OvXCyLO6FP9Hvkr0D9KsdUomDQoBnInBvIWgVz5ZdlGVWYLHifsMbAA+6y4h
+	de7XqUDNeR+tqGOF5jKnvzghZXuwW7h7NRxyX7YJEieOLDv9SspEtNaM/o1jaOXf
+	g==
 X-Virus-Scanned: by MailRoute
 Received: from 008.lax.mailroute.net ([127.0.0.1])
  by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id U-MEyR0aGE76; Mon, 17 Jun 2024 21:09:08 +0000 (UTC)
+ id 07SkSgVHPb5R; Mon, 17 Jun 2024 21:09:17 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.132.0.90])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4W32Yw0sqXz6Cnk97;
-	Mon, 17 Jun 2024 21:09:08 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4W32Z44s16z6Cnk95;
+	Mon, 17 Jun 2024 21:09:16 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	Bart Van Assche <bvanassche@acm.org>,
 	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Avri Altman <avri.altman@wdc.com>,
+	Minwoo Im <minwoo.im@samsung.com>,
 	Peter Wang <peter.wang@mediatek.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bean Huo <beanhuo@micron.com>
-Subject: [PATCH 2/8] scsi: ufs: Remove two constants
-Date: Mon, 17 Jun 2024 14:07:41 -0700
-Message-ID: <20240617210844.337476-3-bvanassche@acm.org>
+	ChanWoo Lee <cw9316.lee@samsung.com>,
+	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+	Po-Wen Kao <powen.kao@mediatek.com>,
+	Yang Li <yang.lee@linux.alibaba.com>,
+	Keoseong Park <keosung.park@samsung.com>
+Subject: [PATCH 3/8] scsi: ufs: Inline ufshcd_mcq_vops_get_hba_mac()
+Date: Mon, 17 Jun 2024 14:07:42 -0700
+Message-ID: <20240617210844.337476-4-bvanassche@acm.org>
 X-Mailer: git-send-email 2.45.2.627.g7a2c4fd464-goog
 In-Reply-To: <20240617210844.337476-1-bvanassche@acm.org>
 References: <20240617210844.337476-1-bvanassche@acm.org>
@@ -79,37 +82,72 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The SCSI host template members .cmd_per_lun and .can_queue are copied
-into the SCSI host data structure. Before these are used, these are
-overwritten by ufshcd_init(). Hence, this patch does not change any
-functionality.
+Make ufshcd_mcq_decide_queue_depth() easier to read by inlining
+ufshcd_mcq_vops_get_hba_mac().
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/ufs/core/ufshcd.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/ufs/core/ufs-mcq.c     | 18 +++++++++++-------
+ drivers/ufs/core/ufshcd-priv.h |  8 --------
+ 2 files changed, 11 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 5d784876513e..7761ccca2115 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -164,8 +164,6 @@ EXPORT_SYMBOL_GPL(ufshcd_dump_regs);
- enum {
- 	UFSHCD_MAX_CHANNEL	=3D 0,
- 	UFSHCD_MAX_ID		=3D 1,
--	UFSHCD_CMD_PER_LUN	=3D 32 - UFSHCD_NUM_RESERVED,
--	UFSHCD_CAN_QUEUE	=3D 32 - UFSHCD_NUM_RESERVED,
- };
+diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+index 4bcae410c268..0482c7a1e419 100644
+--- a/drivers/ufs/core/ufs-mcq.c
++++ b/drivers/ufs/core/ufs-mcq.c
+@@ -144,14 +144,14 @@ EXPORT_SYMBOL_GPL(ufshcd_mcq_queue_cfg_addr);
+  */
+ int ufshcd_mcq_decide_queue_depth(struct ufs_hba *hba)
+ {
+-	int mac;
++	int mac =3D -EOPNOTSUPP;
 =20
- static const char *const ufshcd_state_name[] =3D {
-@@ -8959,8 +8957,6 @@ static const struct scsi_host_template ufshcd_drive=
-r_template =3D {
- 	.eh_timed_out		=3D ufshcd_eh_timed_out,
- 	.this_id		=3D -1,
- 	.sg_tablesize		=3D SG_ALL,
--	.cmd_per_lun		=3D UFSHCD_CMD_PER_LUN,
--	.can_queue		=3D UFSHCD_CAN_QUEUE,
- 	.max_segment_size	=3D PRDT_DATA_BYTE_COUNT_MAX,
- 	.max_sectors		=3D SZ_1M / SECTOR_SIZE,
- 	.max_host_blocked	=3D 1,
+-	/* Mandatory to implement get_hba_mac() */
+-	mac =3D ufshcd_mcq_vops_get_hba_mac(hba);
+-	if (mac < 0) {
+-		dev_err(hba->dev, "Failed to get mac, err=3D%d\n", mac);
+-		return mac;
+-	}
++	if (!hba->vops || !hba->vops->get_hba_mac)
++		goto err;
++
++	mac =3D hba->vops->get_hba_mac(hba);
++	if (mac < 0)
++		goto err;
+=20
+ 	WARN_ON_ONCE(!hba->dev_info.bqueuedepth);
+ 	/*
+@@ -160,6 +160,10 @@ int ufshcd_mcq_decide_queue_depth(struct ufs_hba *hb=
+a)
+ 	 * shared queuing architecture is enabled.
+ 	 */
+ 	return min_t(int, mac, hba->dev_info.bqueuedepth);
++
++err:
++	dev_err(hba->dev, "Failed to get mac, err=3D%d\n", mac);
++	return mac;
+ }
+=20
+ static int ufshcd_mcq_config_nr_queues(struct ufs_hba *hba)
+diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-pri=
+v.h
+index f42d99ce5bf1..a1add22205db 100644
+--- a/drivers/ufs/core/ufshcd-priv.h
++++ b/drivers/ufs/core/ufshcd-priv.h
+@@ -255,14 +255,6 @@ static inline int ufshcd_vops_mcq_config_resource(st=
+ruct ufs_hba *hba)
+ 	return -EOPNOTSUPP;
+ }
+=20
+-static inline int ufshcd_mcq_vops_get_hba_mac(struct ufs_hba *hba)
+-{
+-	if (hba->vops && hba->vops->get_hba_mac)
+-		return hba->vops->get_hba_mac(hba);
+-
+-	return -EOPNOTSUPP;
+-}
+-
+ static inline int ufshcd_mcq_vops_op_runtime_config(struct ufs_hba *hba)
+ {
+ 	if (hba->vops && hba->vops->op_runtime_config)
 
