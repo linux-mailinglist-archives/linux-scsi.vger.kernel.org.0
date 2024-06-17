@@ -1,61 +1,61 @@
-Return-Path: <linux-scsi+bounces-5925-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-5927-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 293F090BCA6
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2024 23:09:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A27A90BCA8
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2024 23:09:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A9B50B239F1
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2024 21:09:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04B9E1C23A14
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2024 21:09:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF6BE18F2E1;
-	Mon, 17 Jun 2024 21:09:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 381831991AF;
+	Mon, 17 Jun 2024 21:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="VrEntE1r"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="sJlgJhgV"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C6918C356
-	for <linux-scsi@vger.kernel.org>; Mon, 17 Jun 2024 21:09:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917181990AA
+	for <linux-scsi@vger.kernel.org>; Mon, 17 Jun 2024 21:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718658564; cv=none; b=nXwfoVneUM5zb4ZlJVF0LQc60GWwN1k36TMFb3oYxgoJdCG8eUvcN6WgBrr3AEPbiFONeTTBXgs9Sx6SXyUtae4wWIBtt+y6FE2NFjLuqDiLom5C18uTnkRhGXhazpc1uNNli6u5M0kf19bbAQFUzhWEV321GFn0QiCCf5yJFjs=
+	t=1718658580; cv=none; b=IkMYlADobhCJvo2fm/0xeaBwKsQHZ/6J0jk7BmsmAq7fAtf/9ZGnScIZfEWSDBPTS8Ssqxj+xcLMYxcHkyB2GhezCZknQ2J4EChibO5Z7IkKlzNnZCeg5DpiqJGlmzuJAAKSZ6ULzmV1gHm7Fexajml9Yjaqp7nkj0DCYJmLJE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718658564; c=relaxed/simple;
-	bh=OoJLwAFNGsANX8AMDEEGDq9DOjbfM7yxO52DiqBftqg=;
+	s=arc-20240116; t=1718658580; c=relaxed/simple;
+	bh=2zKDr8TmKteVUKVH/MAwKAaBSZyj490W7Dnu5Frhw20=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Fr6h7mUOISD+N0eyeUq0/wtVsa5YhZBZnAfP87pDC39R3O75AlyebgulPkISaXXfVz0f+r1bkdISxxJsoG23a8mQhHZKHe7GmJ28zNOaaHf0M2ER+9QwMZi3zjOrKFhPh7PdIi/KtPOnqrbQ6chcUZJjSh0Q6xu5LI1tRMpeAV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=VrEntE1r; arc=none smtp.client-ip=199.89.1.11
+	 MIME-Version; b=IXH4PYx7AYv0W2BJNDoZXHa8Inl9noNAUySL5hGaF+6IMlVtlbkORwpoIws7o92yetEKSlhdMXXQVmeyOInIX0qYoWfj7we9rugZf9mCPJfURFpVeCHNVJTdf0HM5LNGxeGxqcuSgfpfy6QaHcI+lh47/du9WON0uT4fG+IQU+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=sJlgJhgV; arc=none smtp.client-ip=199.89.1.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4W32ZB6f0Tz6Cnk98;
-	Mon, 17 Jun 2024 21:09:22 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4W32ZT6wWSz6Cnk8y;
+	Mon, 17 Jun 2024 21:09:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1718658557; x=1721250558; bh=aQcdM
-	7osT1j4+4virxde9dcGmwT94mxRb7fWbCygNfg=; b=VrEntE1r9Ae/SmnMmAXli
-	of7t7UXApBdACP5essTi2CRSZZ1GkDKs/OFr0HjWG5wmb1Q8kP7cSfJHZl+sRDIS
-	NyWPnw+12S/czXNkyMgseXlCG9eW139R+1lakbV+afyfwi67IJWBRXwhmYPCzOIn
-	Vn9u1JNHrl62PzcNPWeYdOKCKz5NSTceJ/qXusn+teiwrF7Y6GiUbZPI5N699VUU
-	xjG9OvXCyLO6FP9Hvkr0D9KsdUomDQoBnInBvIWgVz5ZdlGVWYLHifsMbAA+6y4h
-	de7XqUDNeR+tqGOF5jKnvzghZXuwW7h7NRxyX7YJEieOLDv9SspEtNaM/o1jaOXf
-	g==
+	:received:received; s=mr01; t=1718658570; x=1721250571; bh=oY0f7
+	FaDNCyBr1Oi4AJhOqe+7IsMJ9NaLgyilxl9+SE=; b=sJlgJhgVqfJJl33Z6BoJS
+	2GHCug4LHBO8mjyxczLrtFdRyphimFMqXTOuMdlJzl24sKopWk0H0ecCy/YajdGU
+	bwguvazj6zuHen1PgrLI8wSoyKf1nD4+KsRgnSupJjq/+8bqiD9XgVqCksqGEX6h
+	FJ3fcqb/5gqpMLhEZ2QDV1ZSsBkLY9f1CiRIkkOtH64Pu9WRyWni47LdkgeHIxGU
+	LtHCwFSeOA/3fYPThf7PdIhWpe3+dFMEKAKG2MT0KOZmRm0uKLwEPKZfTKJDmUpZ
+	yZlZ2iURTBSuAi5cAipvd3+657j7paSfTlRTwD1WUw6Anl0uaNnJZCxVqscapjsU
+	w==
 X-Virus-Scanned: by MailRoute
 Received: from 008.lax.mailroute.net ([127.0.0.1])
  by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 07SkSgVHPb5R; Mon, 17 Jun 2024 21:09:17 +0000 (UTC)
+ id PTi_Naww_Y4z; Mon, 17 Jun 2024 21:09:30 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.132.0.90])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4W32Z44s16z6Cnk95;
-	Mon, 17 Jun 2024 21:09:16 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4W32ZJ594cz6Cnk95;
+	Mon, 17 Jun 2024 21:09:28 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
@@ -64,13 +64,16 @@ Cc: linux-scsi@vger.kernel.org,
 	Minwoo Im <minwoo.im@samsung.com>,
 	Peter Wang <peter.wang@mediatek.com>,
 	ChanWoo Lee <cw9316.lee@samsung.com>,
-	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-	Po-Wen Kao <powen.kao@mediatek.com>,
 	Yang Li <yang.lee@linux.alibaba.com>,
-	Keoseong Park <keosung.park@samsung.com>
-Subject: [PATCH 3/8] scsi: ufs: Inline ufshcd_mcq_vops_get_hba_mac()
-Date: Mon, 17 Jun 2024 14:07:42 -0700
-Message-ID: <20240617210844.337476-4-bvanassche@acm.org>
+	Po-Wen Kao <powen.kao@mediatek.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Maramaina Naresh <quic_mnaresh@quicinc.com>,
+	Akinobu Mita <akinobu.mita@gmail.com>,
+	Bean Huo <beanhuo@micron.com>
+Subject: [PATCH 4/8] scsi: ufs: Make .get_hba_mac() optional
+Date: Mon, 17 Jun 2024 14:07:43 -0700
+Message-ID: <20240617210844.337476-5-bvanassche@acm.org>
 X-Mailer: git-send-email 2.45.2.627.g7a2c4fd464-goog
 In-Reply-To: <20240617210844.337476-1-bvanassche@acm.org>
 References: <20240617210844.337476-1-bvanassche@acm.org>
@@ -82,72 +85,78 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Make ufshcd_mcq_decide_queue_depth() easier to read by inlining
-ufshcd_mcq_vops_get_hba_mac().
+UFSHCI controllers that are compliant with the UFSHCI 4.0 standard report
+the maximum number of supported commands in the controller capabilities
+register. Use that value if .get_hba_mac =3D=3D NULL.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/ufs/core/ufs-mcq.c     | 18 +++++++++++-------
- drivers/ufs/core/ufshcd-priv.h |  8 --------
- 2 files changed, 11 insertions(+), 15 deletions(-)
+ drivers/ufs/core/ufs-mcq.c | 12 +++++++-----
+ include/ufs/ufshcd.h       |  4 +++-
+ include/ufs/ufshci.h       |  2 +-
+ 3 files changed, 11 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-index 4bcae410c268..0482c7a1e419 100644
+index 0482c7a1e419..d6f966f4abef 100644
 --- a/drivers/ufs/core/ufs-mcq.c
 +++ b/drivers/ufs/core/ufs-mcq.c
-@@ -144,14 +144,14 @@ EXPORT_SYMBOL_GPL(ufshcd_mcq_queue_cfg_addr);
+@@ -138,7 +138,6 @@ EXPORT_SYMBOL_GPL(ufshcd_mcq_queue_cfg_addr);
+  *
+  * MAC - Max. Active Command of the Host Controller (HC)
+  * HC wouldn't send more than this commands to the device.
+- * It is mandatory to implement get_hba_mac() to enable MCQ mode.
+  * Calculates and adjusts the queue depth based on the depth
+  * supported by the HC and ufs device.
   */
- int ufshcd_mcq_decide_queue_depth(struct ufs_hba *hba)
+@@ -146,10 +145,13 @@ int ufshcd_mcq_decide_queue_depth(struct ufs_hba *h=
+ba)
  {
--	int mac;
-+	int mac =3D -EOPNOTSUPP;
+ 	int mac =3D -EOPNOTSUPP;
 =20
--	/* Mandatory to implement get_hba_mac() */
--	mac =3D ufshcd_mcq_vops_get_hba_mac(hba);
--	if (mac < 0) {
--		dev_err(hba->dev, "Failed to get mac, err=3D%d\n", mac);
--		return mac;
--	}
-+	if (!hba->vops || !hba->vops->get_hba_mac)
-+		goto err;
-+
-+	mac =3D hba->vops->get_hba_mac(hba);
-+	if (mac < 0)
-+		goto err;
-=20
- 	WARN_ON_ONCE(!hba->dev_info.bqueuedepth);
- 	/*
-@@ -160,6 +160,10 @@ int ufshcd_mcq_decide_queue_depth(struct ufs_hba *hb=
-a)
- 	 * shared queuing architecture is enabled.
- 	 */
- 	return min_t(int, mac, hba->dev_info.bqueuedepth);
-+
-+err:
-+	dev_err(hba->dev, "Failed to get mac, err=3D%d\n", mac);
-+	return mac;
- }
-=20
- static int ufshcd_mcq_config_nr_queues(struct ufs_hba *hba)
-diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-pri=
-v.h
-index f42d99ce5bf1..a1add22205db 100644
---- a/drivers/ufs/core/ufshcd-priv.h
-+++ b/drivers/ufs/core/ufshcd-priv.h
-@@ -255,14 +255,6 @@ static inline int ufshcd_vops_mcq_config_resource(st=
-ruct ufs_hba *hba)
- 	return -EOPNOTSUPP;
- }
-=20
--static inline int ufshcd_mcq_vops_get_hba_mac(struct ufs_hba *hba)
--{
--	if (hba->vops && hba->vops->get_hba_mac)
--		return hba->vops->get_hba_mac(hba);
+-	if (!hba->vops || !hba->vops->get_hba_mac)
+-		goto err;
 -
--	return -EOPNOTSUPP;
--}
--
- static inline int ufshcd_mcq_vops_op_runtime_config(struct ufs_hba *hba)
- {
- 	if (hba->vops && hba->vops->op_runtime_config)
+-	mac =3D hba->vops->get_hba_mac(hba);
++	if (!hba->vops || !hba->vops->get_hba_mac) {
++		hba->capabilities =3D
++			ufshcd_readl(hba, REG_CONTROLLER_CAPABILITIES);
++		mac =3D (hba->capabilities & MASK_TRANSFER_REQUESTS_SLOTS) + 1;
++	} else {
++		mac =3D hba->vops->get_hba_mac(hba);
++	}
+ 	if (mac < 0)
+ 		goto err;
+=20
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index d4d63507d090..d32637d267f3 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -325,7 +325,9 @@ struct ufs_pwr_mode_info {
+  * @event_notify: called to notify important events
+  * @reinit_notify: called to notify reinit of UFSHCD during max gear swi=
+tch
+  * @mcq_config_resource: called to configure MCQ platform resources
+- * @get_hba_mac: called to get vendor specific mac value, mandatory for =
+mcq mode
++ * @get_hba_mac: reports maximum number of outstanding commands supporte=
+d by
++ *	the controller. Should be implemented for UFSHCI 4.0 or later
++ *	controllers that are not compliant with the UFSHCI 4.0 specification.
+  * @op_runtime_config: called to config Operation and runtime regs Point=
+ers
+  * @get_outstanding_cqs: called to get outstanding completion queues
+  * @config_esi: called to config Event Specific Interrupt
+diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
+index c50f92bf2e1d..899077bba2d2 100644
+--- a/include/ufs/ufshci.h
++++ b/include/ufs/ufshci.h
+@@ -67,7 +67,7 @@ enum {
+=20
+ /* Controller capability masks */
+ enum {
+-	MASK_TRANSFER_REQUESTS_SLOTS		=3D 0x0000001F,
++	MASK_TRANSFER_REQUESTS_SLOTS		=3D 0x000000FF,
+ 	MASK_NUMBER_OUTSTANDING_RTT		=3D 0x0000FF00,
+ 	MASK_TASK_MANAGEMENT_REQUEST_SLOTS	=3D 0x00070000,
+ 	MASK_EHSLUTRD_SUPPORTED			=3D 0x00400000,
 
