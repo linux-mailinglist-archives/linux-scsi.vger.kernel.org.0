@@ -1,71 +1,71 @@
-Return-Path: <linux-scsi+bounces-5994-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-5991-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 158BD90D35E
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2024 16:04:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E877790D3B5
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2024 16:11:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94381284E9C
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2024 14:03:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69AB6B2F0B6
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2024 14:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 399F017D89F;
-	Tue, 18 Jun 2024 13:38:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C521716EB4E;
+	Tue, 18 Jun 2024 13:38:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="hFnDeXLO"
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="JPu/ierC"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71CF17DE17
-	for <linux-scsi@vger.kernel.org>; Tue, 18 Jun 2024 13:38:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D642A17B40F
+	for <linux-scsi@vger.kernel.org>; Tue, 18 Jun 2024 13:38:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718717898; cv=none; b=ATe7huQ/IEeTHkqd343Nz4S35RnJ+ZQBjcuQNeW/X8NhT0uwrtt+bxqXU26xO1x25ERi0Q4U6be0vmCGgiCDKLN5CcFC+XBHFc4ialU4ZMCQnyPu0FIxxBCGOJ8EJYJo0EEbk0jN6ecySde5ruZp4ItmVJ0ZhjH27FCURuLCrL4=
+	t=1718717892; cv=none; b=GTmeedg2jitBcHWr9GRlsZaq+sCtJusE32FfcTLsLl8hdHOWdnPV+qr84SiGrJXJB267m67WACPRdfrucO4jKRpy/DwvbeDjR1gVpvAHggL55/d0e2JUlsWzN+DJiVU0igyXdNf1W6lSBIVzepeiOr/GAYfTehXsujNMUPGWvBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718717898; c=relaxed/simple;
-	bh=+CO3BPz4W44DkSkNuf7qPS1f+sHH31xfXjZfxNKkgrg=;
+	s=arc-20240116; t=1718717892; c=relaxed/simple;
+	bh=544ylzY5GOXzDidcIhR+69W8wELXttoUiLFcLuhuDOs=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pnQkWPIzrbC8TtELgsHQv/iB0Gc0Z4yw56ZxqRvhQgkXKSVGsUgO9uTPFU9wUxSZoiN22QyoYAK1j39X/npc9PoELjnTK8EzlU44fbiaZtrRte/DAppRuTHhFo9hTczcXdZUHkuEdklSYPlXONF+uRRaJFtbq0rv2XBFLSCICeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=hFnDeXLO; arc=none smtp.client-ip=67.231.148.174
+	 MIME-Version:Content-Type; b=b0XOjJBEcb9RYyY88kwmvtnbIk2b22Bo622fKT46iRmLwkLAQUElxgBB354iUCjQ0jjTkQUwubKp7tVcjKFju0zGfhY3hrcmdsIGxLDg7JxEjzDERxwSV2ieHEVP+IheFod/Vh3oQ14MoIaui0pOW13NRnYriBlw68+xBGMMTds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=JPu/ierC; arc=none smtp.client-ip=67.231.148.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45IBgQBv015588;
-	Tue, 18 Jun 2024 06:38:13 -0700
+	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45IBi7vk015519;
+	Tue, 18 Jun 2024 06:38:08 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=t
-	ynMF0/Rvrh4WYWs54dpTLovBZvzy17c8JcHjd0TgVg=; b=hFnDeXLOQeJxzvwfX
-	hKi/Nv6teJXFeD/l5y07Mew2Gm7gLobuk3vYI20E9uX25ZWUpSoqIUa/Pe4chjxA
-	pHL1jUOQsjEA+QlHEw5ngVudBrvv3nbvg3MY2Fl1Kxo15Ix1IRnGzsQoAAFCSyH7
-	hI0TmeEyDylS0I8NG85ft2oQzf1GdNRREHlIVNe8McLKjOYpDcRVpVQl8rdNW3qY
-	3WbLpOyB6cGwDF3AG5U9BtSYoIDLdGNAFYRRcv/EKuA3SHeWzZ/vAyfxU4UQK8Rc
-	BzJU3wvbm+6qsa27aj89tGKWiffqr1mqdLkzIBgvea1p1tDOdkNmt9IMjrUwT1tZ
-	tkMmQ==
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=A
+	LUzV/AOJiTpa++PE+NJw7PKnfoV1mszioWRpBM3Yc4=; b=JPu/ierClG+WXmKBY
+	D/aemFPULftRnxQnZFANr+HGRNV27wN8/7NM+0fJ3KhgWQZSo9VzyEsIk9d0cFWq
+	2/PpnlTxmKzJiQ5kCWUMJSO+MwBhVP+0WRMGkC+CoROJhQYKqIlXgwdyDcKQH23o
+	4qYtNDY5CB+jpBURJobi+59i+g9cLc7CDYjSPcEStTFeoEt48Li5V3w9tE8KdTGu
+	AonOreZcPdmHilGrMH6SmkCraGpZVA8DkVuOgvhAg9Wy5tjc2itdDQKqlZtmnyKQ
+	OOLUZ4HVWyzDpSBaQ2V9hVKFESH1j4DiDekBWBfqeD1AVNUCsMT0Wxt7tt9Edi8b
+	6k5FA==
 Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3yu0nwt3pg-1
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3yu0nwt3nv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Jun 2024 06:38:13 -0700 (PDT)
+	Tue, 18 Jun 2024 06:38:08 -0700 (PDT)
 Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
  DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Tue, 18 Jun 2024 06:38:12 -0700
+ 15.2.1544.4; Tue, 18 Jun 2024 06:38:07 -0700
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
  (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Tue, 18 Jun 2024 06:38:12 -0700
+ Transport; Tue, 18 Jun 2024 06:38:07 -0700
 Received: from stgdev-a5u16.punelab.marvell.com (stgdev-a5u16.punelab.marvell.com [10.31.33.187])
-	by maili.marvell.com (Postfix) with ESMTP id 93D513F706D;
-	Tue, 18 Jun 2024 06:38:10 -0700 (PDT)
+	by maili.marvell.com (Postfix) with ESMTP id F0D583F706D;
+	Tue, 18 Jun 2024 06:38:04 -0700 (PDT)
 From: Nilesh Javali <njavali@marvell.com>
 To: <martin.petersen@oracle.com>
 CC: <linux-scsi@vger.kernel.org>, <GR-QLogic-Storage-Upstream@marvell.com>,
         <agurumurthy@marvell.com>, <sdeodhar@marvell.com>, <emilne@redhat.com>,
         <jmeneghi@redhat.com>
-Subject: [PATCH 07/11] qla2xxx: During vport delete send async logout explicitly
-Date: Tue, 18 Jun 2024 19:07:35 +0530
-Message-ID: <20240618133739.35456-8-njavali@marvell.com>
+Subject: [PATCH 05/11] qla2xxx: Fix flash read failure
+Date: Tue, 18 Jun 2024 19:07:33 +0530
+Message-ID: <20240618133739.35456-6-njavali@marvell.com>
 X-Mailer: git-send-email 2.23.1
 In-Reply-To: <20240618133739.35456-1-njavali@marvell.com>
 References: <20240618133739.35456-1-njavali@marvell.com>
@@ -77,78 +77,347 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: XtY2OaArBWOyinzHm6gLG_CS2J_nFz4b
-X-Proofpoint-ORIG-GUID: XtY2OaArBWOyinzHm6gLG_CS2J_nFz4b
+X-Proofpoint-GUID: d6tQLwpzLAURmzxILIhC33yME3gHkjsc
+X-Proofpoint-ORIG-GUID: d6tQLwpzLAURmzxILIhC33yME3gHkjsc
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-06-18_02,2024-06-17_01,2024-05-17_01
 
-From: Manish Rangankar <mrangankar@marvell.com>
+From: Quinn Tran <qutran@marvell.com>
 
-During vport delete, it is observed that during unload we hit a
-crash because of stale entries in outstanding command array.
-For all these stale I/O entries, eh_abort was issued and aborted
-(fast_fail_io = 2009h) but I/Os could not complete while vport delete
-is in process of deleting.
+Link up failure is observed as a result of flash read failure.
+Current code does not check flash read return code where it relies on
+FW checksum to detect the problem.
 
-  BUG: kernel NULL pointer dereference, address: 000000000000001c
-  #PF: supervisor read access in kernel mode
-  #PF: error_code(0x0000) - not-present page
-  PGD 0 P4D 0
-  Oops: 0000 [#1] PREEMPT SMP NOPTI
-  Workqueue: qla2xxx_wq qla_do_work [qla2xxx]
-  RIP: 0010:dma_direct_unmap_sg+0x51/0x1e0
-  RSP: 0018:ffffa1e1e150fc68 EFLAGS: 00010046
-  RAX: 0000000000000000 RBX: 0000000000000021 RCX: 0000000000000001
-  RDX: 0000000000000021 RSI: 0000000000000000 RDI: ffff8ce208a7a0d0
-  RBP: ffff8ce208a7a0d0 R08: 0000000000000000 R09: ffff8ce378aac9c8
-  R10: ffff8ce378aac8a0 R11: ffffa1e1e150f9d8 R12: 0000000000000000
-  R13: 0000000000000000 R14: ffff8ce378aac9c8 R15: 0000000000000000
-  FS:  0000000000000000(0000) GS:ffff8d217f000000(0000) knlGS:0000000000000000
-  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  CR2: 000000000000001c CR3: 0000002089acc000 CR4: 0000000000350ee0
-  Call Trace:
-  <TASK>
-  qla2xxx_qpair_sp_free_dma+0x417/0x4e0
-  ? qla2xxx_qpair_sp_compl+0x10d/0x1a0
-  ? qla2x00_status_entry+0x768/0x2830
-  ? newidle_balance+0x2f0/0x430
-  ? dequeue_entity+0x100/0x3c0
-  ? qla24xx_process_response_queue+0x6a1/0x19e0
-  ? __schedule+0x2d5/0x1140
-  ? qla_do_work+0x47/0x60
-  ? process_one_work+0x267/0x440
-  ? process_one_work+0x440/0x440
-  ? worker_thread+0x2d/0x3d0
-  ? process_one_work+0x440/0x440
-  ? kthread+0x156/0x180
-  ? set_kthread_struct+0x50/0x50
-  ? ret_from_fork+0x22/0x30
-  </TASK>
-
-Send out async logout explicitly for all the ports during
-vport delete.
+Add check of flash read failure to detect the problem sooner.
 
 Cc: stable@vger.kernel.org
-Signed-off-by: Manish Rangankar <mrangankar@marvell.com>
+Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_mid.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_init.c |  63 +++++++++++++++-----
+ drivers/scsi/qla2xxx/qla_sup.c  | 100 +++++++++++++++++++++++---------
+ 2 files changed, 121 insertions(+), 42 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_mid.c b/drivers/scsi/qla2xxx/qla_mid.c
-index b67416951a5f..76703f2706b8 100644
---- a/drivers/scsi/qla2xxx/qla_mid.c
-+++ b/drivers/scsi/qla2xxx/qla_mid.c
-@@ -180,7 +180,7 @@ qla24xx_disable_vp(scsi_qla_host_t *vha)
- 	atomic_set(&vha->loop_state, LOOP_DOWN);
- 	atomic_set(&vha->loop_down_timer, LOOP_DOWN_TIME);
- 	list_for_each_entry(fcport, &vha->vp_fcports, list)
--		fcport->logout_on_delete = 0;
-+		fcport->logout_on_delete = 1;
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index d88f05ea55cb..5ff017546540 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -8221,15 +8221,21 @@ qla28xx_get_aux_images(
+ 	struct qla27xx_image_status pri_aux_image_status, sec_aux_image_status;
+ 	bool valid_pri_image = false, valid_sec_image = false;
+ 	bool active_pri_image = false, active_sec_image = false;
++	int rc;
  
- 	if (!vha->hw->flags.edif_enabled)
- 		qla2x00_wait_for_sess_deletion(vha);
+ 	if (!ha->flt_region_aux_img_status_pri) {
+ 		ql_dbg(ql_dbg_init, vha, 0x018a, "Primary aux image not addressed\n");
+ 		goto check_sec_image;
+ 	}
+ 
+-	qla24xx_read_flash_data(vha, (uint32_t *)&pri_aux_image_status,
++	rc = qla24xx_read_flash_data(vha, (uint32_t *)&pri_aux_image_status,
+ 	    ha->flt_region_aux_img_status_pri,
+ 	    sizeof(pri_aux_image_status) >> 2);
++	if (rc) {
++		ql_log(ql_log_info, vha, 0x01a1,
++		    "Unable to read Primary aux image(%x).\n", rc);
++		goto check_sec_image;
++	}
+ 	qla27xx_print_image(vha, "Primary aux image", &pri_aux_image_status);
+ 
+ 	if (qla28xx_check_aux_image_status_signature(&pri_aux_image_status)) {
+@@ -8260,9 +8266,15 @@ qla28xx_get_aux_images(
+ 		goto check_valid_image;
+ 	}
+ 
+-	qla24xx_read_flash_data(vha, (uint32_t *)&sec_aux_image_status,
++	rc = qla24xx_read_flash_data(vha, (uint32_t *)&sec_aux_image_status,
+ 	    ha->flt_region_aux_img_status_sec,
+ 	    sizeof(sec_aux_image_status) >> 2);
++	if (rc) {
++		ql_log(ql_log_info, vha, 0x01a2,
++		    "Unable to read Secondary aux image(%x).\n", rc);
++		goto check_valid_image;
++	}
++
+ 	qla27xx_print_image(vha, "Secondary aux image", &sec_aux_image_status);
+ 
+ 	if (qla28xx_check_aux_image_status_signature(&sec_aux_image_status)) {
+@@ -8320,6 +8332,7 @@ qla27xx_get_active_image(struct scsi_qla_host *vha,
+ 	struct qla27xx_image_status pri_image_status, sec_image_status;
+ 	bool valid_pri_image = false, valid_sec_image = false;
+ 	bool active_pri_image = false, active_sec_image = false;
++	int rc;
+ 
+ 	if (!ha->flt_region_img_status_pri) {
+ 		ql_dbg(ql_dbg_init, vha, 0x018a, "Primary image not addressed\n");
+@@ -8361,8 +8374,14 @@ qla27xx_get_active_image(struct scsi_qla_host *vha,
+ 		goto check_valid_image;
+ 	}
+ 
+-	qla24xx_read_flash_data(vha, (uint32_t *)(&sec_image_status),
++	rc = qla24xx_read_flash_data(vha, (uint32_t *)(&sec_image_status),
+ 	    ha->flt_region_img_status_sec, sizeof(sec_image_status) >> 2);
++	if (rc) {
++		ql_log(ql_log_info, vha, 0x01a3,
++		    "Unable to read Secondary image status(%x).\n", rc);
++		goto check_valid_image;
++	}
++
+ 	qla27xx_print_image(vha, "Secondary image", &sec_image_status);
+ 
+ 	if (qla27xx_check_image_status_signature(&sec_image_status)) {
+@@ -8434,11 +8453,10 @@ qla24xx_load_risc_flash(scsi_qla_host_t *vha, uint32_t *srisc_addr,
+ 	    "FW: Loading firmware from flash (%x).\n", faddr);
+ 
+ 	dcode = (uint32_t *)req->ring;
+-	qla24xx_read_flash_data(vha, dcode, faddr, 8);
+-	if (qla24xx_risc_firmware_invalid(dcode)) {
++	rval = qla24xx_read_flash_data(vha, dcode, faddr, 8);
++	if (rval || qla24xx_risc_firmware_invalid(dcode)) {
+ 		ql_log(ql_log_fatal, vha, 0x008c,
+-		    "Unable to verify the integrity of flash firmware "
+-		    "image.\n");
++		    "Unable to verify the integrity of flash firmware image (rval %x).\n", rval);
+ 		ql_log(ql_log_fatal, vha, 0x008d,
+ 		    "Firmware data: %08x %08x %08x %08x.\n",
+ 		    dcode[0], dcode[1], dcode[2], dcode[3]);
+@@ -8452,7 +8470,12 @@ qla24xx_load_risc_flash(scsi_qla_host_t *vha, uint32_t *srisc_addr,
+ 	for (j = 0; j < segments; j++) {
+ 		ql_dbg(ql_dbg_init, vha, 0x008d,
+ 		    "-> Loading segment %u...\n", j);
+-		qla24xx_read_flash_data(vha, dcode, faddr, 10);
++		rval = qla24xx_read_flash_data(vha, dcode, faddr, 10);
++		if (rval) {
++			ql_log(ql_log_fatal, vha, 0x016a,
++			    "-> Unable to read segment addr + size .\n");
++			return QLA_FUNCTION_FAILED;
++		}
+ 		risc_addr = be32_to_cpu((__force __be32)dcode[2]);
+ 		risc_size = be32_to_cpu((__force __be32)dcode[3]);
+ 		if (!*srisc_addr) {
+@@ -8468,7 +8491,13 @@ qla24xx_load_risc_flash(scsi_qla_host_t *vha, uint32_t *srisc_addr,
+ 			ql_dbg(ql_dbg_init, vha, 0x008e,
+ 			    "-> Loading fragment %u: %#x <- %#x (%#lx dwords)...\n",
+ 			    fragment, risc_addr, faddr, dlen);
+-			qla24xx_read_flash_data(vha, dcode, faddr, dlen);
++			rval = qla24xx_read_flash_data(vha, dcode, faddr, dlen);
++			if (rval) {
++				ql_log(ql_log_fatal, vha, 0x016b,
++				    "-> Unable to read fragment(faddr %#x dlen %#lx).\n",
++				    faddr, dlen);
++				return QLA_FUNCTION_FAILED;
++			}
+ 			for (i = 0; i < dlen; i++)
+ 				dcode[i] = swab32(dcode[i]);
+ 
+@@ -8497,7 +8526,14 @@ qla24xx_load_risc_flash(scsi_qla_host_t *vha, uint32_t *srisc_addr,
+ 		fwdt->length = 0;
+ 
+ 		dcode = (uint32_t *)req->ring;
+-		qla24xx_read_flash_data(vha, dcode, faddr, 7);
++
++		rval = qla24xx_read_flash_data(vha, dcode, faddr, 7);
++		if (rval) {
++			ql_log(ql_log_fatal, vha, 0x016c,
++			    "-> Unable to read template size.\n");
++			goto failed;
++		}
++
+ 		risc_size = be32_to_cpu((__force __be32)dcode[2]);
+ 		ql_dbg(ql_dbg_init, vha, 0x0161,
+ 		    "-> fwdt%u template array at %#x (%#x dwords)\n",
+@@ -8523,11 +8559,12 @@ qla24xx_load_risc_flash(scsi_qla_host_t *vha, uint32_t *srisc_addr,
+ 		}
+ 
+ 		dcode = fwdt->template;
+-		qla24xx_read_flash_data(vha, dcode, faddr, risc_size);
++		rval = qla24xx_read_flash_data(vha, dcode, faddr, risc_size);
+ 
+-		if (!qla27xx_fwdt_template_valid(dcode)) {
++		if (rval || !qla27xx_fwdt_template_valid(dcode)) {
+ 			ql_log(ql_log_warn, vha, 0x0165,
+-			    "-> fwdt%u failed template validate\n", j);
++			    "-> fwdt%u failed template validate (rval %x)\n",
++			    j, rval);
+ 			goto failed;
+ 		}
+ 
+diff --git a/drivers/scsi/qla2xxx/qla_sup.c b/drivers/scsi/qla2xxx/qla_sup.c
+index c092a6b1ced4..f0a1c5381075 100644
+--- a/drivers/scsi/qla2xxx/qla_sup.c
++++ b/drivers/scsi/qla2xxx/qla_sup.c
+@@ -555,6 +555,7 @@ qla2xxx_find_flt_start(scsi_qla_host_t *vha, uint32_t *start)
+ 	struct qla_flt_location *fltl = (void *)req->ring;
+ 	uint32_t *dcode = (uint32_t *)req->ring;
+ 	uint8_t *buf = (void *)req->ring, *bcode,  last_image;
++	int rc;
+ 
+ 	/*
+ 	 * FLT-location structure resides after the last PCI region.
+@@ -584,14 +585,24 @@ qla2xxx_find_flt_start(scsi_qla_host_t *vha, uint32_t *start)
+ 	pcihdr = 0;
+ 	do {
+ 		/* Verify PCI expansion ROM header. */
+-		qla24xx_read_flash_data(vha, dcode, pcihdr >> 2, 0x20);
++		rc = qla24xx_read_flash_data(vha, dcode, pcihdr >> 2, 0x20);
++		if (rc) {
++			ql_log(ql_log_info, vha, 0x016d,
++			    "Unable to read PCI Expansion Rom Header (%x).\n", rc);
++			return QLA_FUNCTION_FAILED;
++		}
+ 		bcode = buf + (pcihdr % 4);
+ 		if (bcode[0x0] != 0x55 || bcode[0x1] != 0xaa)
+ 			goto end;
+ 
+ 		/* Locate PCI data structure. */
+ 		pcids = pcihdr + ((bcode[0x19] << 8) | bcode[0x18]);
+-		qla24xx_read_flash_data(vha, dcode, pcids >> 2, 0x20);
++		rc = qla24xx_read_flash_data(vha, dcode, pcids >> 2, 0x20);
++		if (rc) {
++			ql_log(ql_log_info, vha, 0x0179,
++			    "Unable to read PCI Data Structure (%x).\n", rc);
++			return QLA_FUNCTION_FAILED;
++		}
+ 		bcode = buf + (pcihdr % 4);
+ 
+ 		/* Validate signature of PCI data structure. */
+@@ -606,7 +617,12 @@ qla2xxx_find_flt_start(scsi_qla_host_t *vha, uint32_t *start)
+ 	} while (!last_image);
+ 
+ 	/* Now verify FLT-location structure. */
+-	qla24xx_read_flash_data(vha, dcode, pcihdr >> 2, sizeof(*fltl) >> 2);
++	rc = qla24xx_read_flash_data(vha, dcode, pcihdr >> 2, sizeof(*fltl) >> 2);
++	if (rc) {
++		ql_log(ql_log_info, vha, 0x017a,
++		    "Unable to read FLT (%x).\n", rc);
++		return QLA_FUNCTION_FAILED;
++	}
+ 	if (memcmp(fltl->sig, "QFLT", 4))
+ 		goto end;
+ 
+@@ -2605,13 +2621,18 @@ qla24xx_read_optrom_data(struct scsi_qla_host *vha, void *buf,
+     uint32_t offset, uint32_t length)
+ {
+ 	struct qla_hw_data *ha = vha->hw;
++	int rc;
+ 
+ 	/* Suspend HBA. */
+ 	scsi_block_requests(vha->host);
+ 	set_bit(MBX_UPDATE_FLASH_ACTIVE, &ha->mbx_cmd_flags);
+ 
+ 	/* Go with read. */
+-	qla24xx_read_flash_data(vha, buf, offset >> 2, length >> 2);
++	rc = qla24xx_read_flash_data(vha, buf, offset >> 2, length >> 2);
++	if (rc) {
++		ql_log(ql_log_info, vha, 0x01a0,
++		    "Unable to perform optrom read(%x).\n", rc);
++	}
+ 
+ 	/* Resume HBA. */
+ 	clear_bit(MBX_UPDATE_FLASH_ACTIVE, &ha->mbx_cmd_flags);
+@@ -3432,7 +3453,13 @@ qla24xx_get_flash_version(scsi_qla_host_t *vha, void *mbuf)
+ 
+ 	do {
+ 		/* Verify PCI expansion ROM header. */
+-		qla24xx_read_flash_data(vha, dcode, pcihdr >> 2, 0x20);
++		ret = qla24xx_read_flash_data(vha, dcode, pcihdr >> 2, 0x20);
++		if (ret) {
++			ql_log(ql_log_info, vha, 0x017d,
++			    "Unable to read PCI EXP Rom Header(%x).\n", ret);
++			break;
++		}
++
+ 		bcode = mbuf + (pcihdr % 4);
+ 		if (memcmp(bcode, "\x55\xaa", 2)) {
+ 			/* No signature */
+@@ -3445,7 +3472,13 @@ qla24xx_get_flash_version(scsi_qla_host_t *vha, void *mbuf)
+ 		/* Locate PCI data structure. */
+ 		pcids = pcihdr + ((bcode[0x19] << 8) | bcode[0x18]);
+ 
+-		qla24xx_read_flash_data(vha, dcode, pcids >> 2, 0x20);
++		ret = qla24xx_read_flash_data(vha, dcode, pcids >> 2, 0x20);
++		if (ret) {
++			ql_log(ql_log_info, vha, 0x018e,
++			    "Unable to read PCI Data Structure (%x).\n", ret);
++			break;
++		}
++
+ 		bcode = mbuf + (pcihdr % 4);
+ 
+ 		/* Validate signature of PCI data structure. */
+@@ -3507,20 +3540,25 @@ qla24xx_get_flash_version(scsi_qla_host_t *vha, void *mbuf)
+ 			faddr = ha->flt_region_fw_sec;
+ 	}
+ 
+-	qla24xx_read_flash_data(vha, dcode, faddr, 8);
+-	if (qla24xx_risc_firmware_invalid(dcode)) {
+-		ql_log(ql_log_warn, vha, 0x005f,
+-		    "Unrecognized fw revision at %x.\n",
+-		    ha->flt_region_fw * 4);
+-		ql_dump_buffer(ql_dbg_init, vha, 0x005f, dcode, 32);
++	ret = qla24xx_read_flash_data(vha, dcode, faddr, 8);
++	if (ret) {
++		ql_log(ql_log_info, vha, 0x019e,
++		    "Unable to read FW version (%x).\n", ret);
+ 	} else {
+-		for (i = 0; i < 4; i++)
+-			ha->fw_revision[i] =
++		if (qla24xx_risc_firmware_invalid(dcode)) {
++			ql_log(ql_log_warn, vha, 0x005f,
++			    "Unrecognized fw revision at %x.\n",
++			    ha->flt_region_fw * 4);
++			ql_dump_buffer(ql_dbg_init, vha, 0x005f, dcode, 32);
++		} else {
++			for (i = 0; i < 4; i++)
++				ha->fw_revision[i] =
+ 				be32_to_cpu((__force __be32)dcode[4+i]);
+-		ql_dbg(ql_dbg_init, vha, 0x0060,
+-		    "Firmware revision (flash) %u.%u.%u (%x).\n",
+-		    ha->fw_revision[0], ha->fw_revision[1],
+-		    ha->fw_revision[2], ha->fw_revision[3]);
++			ql_dbg(ql_dbg_init, vha, 0x0060,
++			    "Firmware revision (flash) %u.%u.%u (%x).\n",
++			    ha->fw_revision[0], ha->fw_revision[1],
++			    ha->fw_revision[2], ha->fw_revision[3]);
++		}
+ 	}
+ 
+ 	/* Check for golden firmware and get version if available */
+@@ -3531,18 +3569,22 @@ qla24xx_get_flash_version(scsi_qla_host_t *vha, void *mbuf)
+ 
+ 	memset(ha->gold_fw_version, 0, sizeof(ha->gold_fw_version));
+ 	faddr = ha->flt_region_gold_fw;
+-	qla24xx_read_flash_data(vha, dcode, ha->flt_region_gold_fw, 8);
+-	if (qla24xx_risc_firmware_invalid(dcode)) {
+-		ql_log(ql_log_warn, vha, 0x0056,
+-		    "Unrecognized golden fw at %#x.\n", faddr);
+-		ql_dump_buffer(ql_dbg_init, vha, 0x0056, dcode, 32);
+-		return ret;
+-	}
+-
+-	for (i = 0; i < 4; i++)
+-		ha->gold_fw_version[i] =
+-			be32_to_cpu((__force __be32)dcode[4+i]);
++	ret = qla24xx_read_flash_data(vha, dcode, ha->flt_region_gold_fw, 8);
++	if (ret) {
++		ql_log(ql_log_info, vha, 0x019f,
++		    "Unable to read Gold FW version (%x).\n", ret);
++	} else {
++		if (qla24xx_risc_firmware_invalid(dcode)) {
++			ql_log(ql_log_warn, vha, 0x0056,
++			    "Unrecognized golden fw at %#x.\n", faddr);
++			ql_dump_buffer(ql_dbg_init, vha, 0x0056, dcode, 32);
++			return ret;
++		}
+ 
++		for (i = 0; i < 4; i++)
++			ha->gold_fw_version[i] =
++			   be32_to_cpu((__force __be32)dcode[4+i]);
++	}
+ 	return ret;
+ }
+ 
 -- 
 2.23.1
 
