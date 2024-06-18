@@ -1,163 +1,200 @@
-Return-Path: <linux-scsi+bounces-5929-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-5931-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20D6590BCAA
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2024 23:10:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D25290C052
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2024 02:26:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 345F81C217DC
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2024 21:10:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B0E92832FE
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2024 00:26:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C40F318F2D9;
-	Mon, 17 Jun 2024 21:10:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC6FC5C89;
+	Tue, 18 Jun 2024 00:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="rNI14ai3"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="eEqP0G36"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A3A18C356
-	for <linux-scsi@vger.kernel.org>; Mon, 17 Jun 2024 21:10:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7B54C7C;
+	Tue, 18 Jun 2024 00:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718658608; cv=none; b=O+tC3L+1zOlQ9Qq1/3Q7qCfpht+M9XfD8WpG3jGum72cerdYv6vInLh3qFQ0Dn0dmOIv/243lgfAQ0QrfhlDsKq4ipVZA5y/fvZnwTRtNrnjezcu3UDfPkgQ5m53/jfaHe7smGHdO88leWeWdrY/d6k7st0IMLm47m4CkYpjWg0=
+	t=1718670391; cv=none; b=LhKM5992Sf1g8yzYaGIGP080Iu/knIT6aEW7BuIOPey7WfW277gK147cuSYSPo282ykOsAuM3inLknUCp/Ug92zZHQveVn64p7zEF5BqoKh/BpCDnPBDE7rJ4gK3w/+3ppyp38+cCwTowsqmZv6gjsaajZOR9dG8OvH5a7CKESU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718658608; c=relaxed/simple;
-	bh=yb0McD41g0o0HCK3QhnzrK3mBzf73/2CNyLyHjfHosA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M8e45e71s3ritgaakWg+M+FqDkEe7e7LUtC37WlqOW2fttqRAv2W7L0tBwfUroYzlRQJvjlXyKWXAs2ZSMcgIHEjG+NnnqGqiWrCJxXum0Ewu3GXSjNQ8PC7IFlJ9bQJFGQCvTZjdmT7UnIXYiHXCiOr7vcCqEA4PG/FgtzxzQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=rNI14ai3; arc=none smtp.client-ip=199.89.1.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4W32b24Z7fz6Cnk9B;
-	Mon, 17 Jun 2024 21:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:mime-version
-	:references:in-reply-to:x-mailer:message-id:date:date:subject
-	:subject:from:from:received:received; s=mr01; t=1718658601; x=
-	1721250602; bh=tQEsiqrH6OPSOAxgYaULeIt/dsptPbFpcFz+UiujRzw=; b=r
-	NI14ai3PTVSHVFiCuGeOmtKiB9mHT3n3axPHgXmzt8oAmzzvn2Ab7UcWqLniKRg6
-	2L9qUVE8MHAOTV8NZmE3iS6asBNTg38mvu0ONOl0aAc2K7d3fDUNsSNjslXkUulq
-	DHyFdvwJHkIi+TLHDt2fGiD0cFu1QgStMnCP7OyimVwZiQca01O5zFsCr/Q2mCCa
-	CKjdyjvBlLQA/TEdO3oULJajeFiYB9SpHmjhb7vSDEHRaxNMwcsItPN29UNxY0Tb
-	q18LfbTv0BSV0SbPoHB50DrRNtksXzguzCWoo9CQAGp1+0YqH7ga+FGKN32McDof
-	gw5MB0vM4zxM7sMALRu7g==
-X-Virus-Scanned: by MailRoute
-Received: from 008.lax.mailroute.net ([127.0.0.1])
- by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id x5-e__vOByqT; Mon, 17 Jun 2024 21:10:01 +0000 (UTC)
-Received: from bvanassche.mtv.corp.google.com (unknown [104.132.0.90])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4W32Zw63Ykz6Cnk98;
-	Mon, 17 Jun 2024 21:10:00 +0000 (UTC)
-From: Bart Van Assche <bvanassche@acm.org>
-To: "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org,
-	Bart Van Assche <bvanassche@acm.org>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Peter Wang <peter.wang@mediatek.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bean Huo <beanhuo@micron.com>,
-	Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH 8/8] scsi: ufs: Check for completion from the timeout handler
-Date: Mon, 17 Jun 2024 14:07:47 -0700
-Message-ID: <20240617210844.337476-9-bvanassche@acm.org>
-X-Mailer: git-send-email 2.45.2.627.g7a2c4fd464-goog
-In-Reply-To: <20240617210844.337476-1-bvanassche@acm.org>
-References: <20240617210844.337476-1-bvanassche@acm.org>
+	s=arc-20240116; t=1718670391; c=relaxed/simple;
+	bh=reeVrLOqwgdIWsL9AdTMmQHj3mGW4vYjVQkg32JaCH0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=PDCfg8Zgy7C9r0qJlOxcYQyi4mr6KM4Cq57fM+pVZfABpnE20eSAGekKVSAucZsh07jnal8NP53kHS3uNRPuXy5Xd1f94EL9oExws8UfqICg+kyXpsvX8IYGPoYt0wTwQQiuqfewEZaqKDbBJQYS5kwybEN+75Dig6o+j2uSo0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=eEqP0G36; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45HMbuoR021328;
+	Tue, 18 Jun 2024 00:26:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	reeVrLOqwgdIWsL9AdTMmQHj3mGW4vYjVQkg32JaCH0=; b=eEqP0G36ArvsCtp2
+	olLGOah7tqLU0bjqUYvS2hrhZBFquCRlAFUecdu6CX29T7/A8Ky7kFMjezRN77IG
+	I2tvXzR2X10Ay6gpnjUtAjztXDzAjPi1xaxGZYhGBI3yPkh098icvUBQ9cTWgOMI
+	fRzuJp5Vk7umoHe7ceR1jdLZvU17YE9sJ+AZSOZqDRkST0qG+KvGWOTp1nU5mjfx
+	HLuE0cfJzsec0mLaV0gyHSjIH5XWKa6b5NNy3qNLkDOnQGxuVQtQHiF418sP0O/M
+	sBbrIPFthOEfz4W8WbcI1nUlIdqcC5EZRYrTvAZsM6DwKVUVMeW4gqwq5z2KeH2U
+	VDMBsA==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ytx3wr4m3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Jun 2024 00:26:19 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45I0QI70030167
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Jun 2024 00:26:18 GMT
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 17 Jun 2024 17:26:14 -0700
+Received: from nalasex01a.na.qualcomm.com ([fe80::62ba:cee1:5495:c89]) by
+ nalasex01a.na.qualcomm.com ([fe80::62ba:cee1:5495:c89%4]) with mapi id
+ 15.02.1544.009; Mon, 17 Jun 2024 17:26:14 -0700
+From: "Gaurav Kashyap (QUIC)" <quic_gaurkash@quicinc.com>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski@linaro.org>,
+        "Gaurav Kashyap (QUIC)"
+	<quic_gaurkash@quicinc.com>,
+        "linux-arm-msm@vger.kernel.org"
+	<linux-arm-msm@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org"
+	<linux-scsi@vger.kernel.org>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "ebiggers@google.com" <ebiggers@google.com>,
+        "neil.armstrong@linaro.org"
+	<neil.armstrong@linaro.org>,
+        srinivas.kandagatla
+	<srinivas.kandagatla@linaro.org>,
+        "krzysztof.kozlowski+dt@linaro.org"
+	<krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org"
+	<conor+dt@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        kernel
+	<kernel@quicinc.com>,
+        "linux-crypto@vger.kernel.org"
+	<linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>,
+        "Om Prakash Singh (QUIC)"
+	<quic_omprsing@quicinc.com>,
+        "Bao D. Nguyen (QUIC)"
+	<quic_nguyenb@quicinc.com>,
+        bartosz.golaszewski
+	<bartosz.golaszewski@linaro.org>,
+        "ulf.hansson@linaro.org"
+	<ulf.hansson@linaro.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "mani@kernel.org"
+	<mani@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>
+Subject: RE: [PATCH v4 13/15] dt-bindings: crypto: ice: document the hwkm
+ property
+Thread-Topic: [PATCH v4 13/15] dt-bindings: crypto: ice: document the hwkm
+ property
+Thread-Index: AQHaUXhKMdiCdvq2U0iHJQ04R2/mK7Dw+oYAgAVuJICA15X98A==
+Date: Tue, 18 Jun 2024 00:26:14 +0000
+Message-ID: <9892c541ba4e4b5d975faaa4b49c92ba@quicinc.com>
+References: <20240127232436.2632187-1-quic_gaurkash@quicinc.com>
+ <20240127232436.2632187-14-quic_gaurkash@quicinc.com>
+ <301be6d8-b105-4bba-a154-9caebc8013e3@linaro.org>
+ <dd219c40-33d5-43ff-b0da-16ccf0198bb9@linaro.org>
+In-Reply-To: <dd219c40-33d5-43ff-b0da-16ccf0198bb9@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: u87o1qFjA_Ow3Pouiq8et6FWaBcKu1q_
+X-Proofpoint-ORIG-GUID: u87o1qFjA_Ow3Pouiq8et6FWaBcKu1q_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-17_14,2024-06-17_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 clxscore=1011 mlxlogscore=999 suspectscore=0 mlxscore=0
+ spamscore=0 bulkscore=0 priorityscore=1501 phishscore=0 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406180002
 
-If ufshcd_abort() returns SUCCESS for an already completed command then
-that command is completed twice. This results in a crash. Prevent this by
-checking whether a command has completed without completion interrupt fro=
-m
-the timeout handler. This CL fixes the following kernel crash:
-
-Unable to handle kernel NULL pointer dereference at virtual address 00000=
-00000000000
-Call trace:
-=C2=A0dma_direct_map_sg+0x70/0x274
-=C2=A0scsi_dma_map+0x84/0x124
-=C2=A0ufshcd_queuecommand+0x3fc/0x880
-=C2=A0scsi_queue_rq+0x7d0/0x111c
-=C2=A0blk_mq_dispatch_rq_list+0x440/0xebc
-=C2=A0blk_mq_do_dispatch_sched+0x5a4/0x6b8
-=C2=A0__blk_mq_sched_dispatch_requests+0x150/0x220
-=C2=A0__blk_mq_run_hw_queue+0xf0/0x218
-=C2=A0__blk_mq_delay_run_hw_queue+0x8c/0x18c
-=C2=A0blk_mq_run_hw_queue+0x1a4/0x360
-=C2=A0blk_mq_sched_insert_requests+0x130/0x334
-=C2=A0blk_mq_flush_plug_list+0x138/0x234
-=C2=A0blk_flush_plug_list+0x118/0x164
-=C2=A0blk_finish_plug()
-=C2=A0read_pages+0x38c/0x408
-=C2=A0page_cache_ra_unbounded+0x230/0x2f8
-=C2=A0do_sync_mmap_readahead+0x1a4/0x208
-=C2=A0filemap_fault+0x27c/0x8f4
-=C2=A0f2fs_filemap_fault+0x28/0xfc
-=C2=A0__do_fault+0xc4/0x208
-=C2=A0handle_pte_fault+0x290/0xe04
-=C2=A0do_handle_mm_fault+0x52c/0x858
-=C2=A0do_page_fault+0x5dc/0x798
-=C2=A0do_translation_fault+0x40/0x54
-=C2=A0do_mem_abort+0x60/0x134
-=C2=A0el0_da+0x40/0xb8
-=C2=A0el0t_64_sync_handler+0xc4/0xe4
-=C2=A0el0t_64_sync+0x1b4/0x1b8
-
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/ufs/core/ufshcd.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index e3835e61e4b1..47cc0802c4f4 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -8922,7 +8922,28 @@ static void ufshcd_async_scan(void *data, async_co=
-okie_t cookie)
-=20
- static enum scsi_timeout_action ufshcd_eh_timed_out(struct scsi_cmnd *sc=
-md)
- {
--	struct ufs_hba *hba =3D shost_priv(scmd->device->host);
-+	struct scsi_device *sdev =3D scmd->device;
-+	struct ufs_hba *hba =3D shost_priv(sdev->host);
-+	struct scsi_cmnd *cmd2 =3D scmd;
-+	const u32 unique_tag =3D blk_mq_unique_tag(scsi_cmd_to_rq(scmd));
-+
-+	WARN_ON_ONCE(!scmd);
-+
-+	if (is_mcq_enabled(hba)) {
-+		struct request *rq =3D scsi_cmd_to_rq(scmd);
-+		struct ufs_hw_queue *hwq =3D ufshcd_mcq_req_to_hwq(hba, rq);
-+
-+		ufshcd_mcq_poll_cqe_lock(hba, hwq, &cmd2);
-+	} else {
-+		__ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT,
-+			      &cmd2);
-+	}
-+	if (cmd2 =3D=3D NULL) {
-+		sdev_printk(KERN_INFO, sdev,
-+			    "%s: cmd with tag %#x has already been completed\n",
-+			    __func__, unique_tag);
-+		return SCSI_EH_DONE;
-+	}
-=20
- 	if (!hba->system_suspending) {
- 		/* Activate the error handler in the SCSI core. */
+SGVsbG8gS29ucmFkIGFuZCBLcnp5c3p0b2YNCg0KT24gMDIvMDEvMjAyNCAxMToxNCwgS29ucmFk
+IER5YmNpbyB3cm90ZQ0KPiBPbiAyOS4wMS4yMDI0IDA5OjE4LCBLcnp5c3p0b2YgS296bG93c2tp
+IHdyb3RlOg0KPiA+IE9uIDI4LzAxLzIwMjQgMDA6MTQsIEdhdXJhdiBLYXNoeWFwIHdyb3RlOg0K
+PiA+PiBXaGVuIFF1YWxjb21tJ3MgSW5saW5lIENyeXB0byBFbmdpbmUgKElDRSkgY29udGFpbnMg
+SGFyZHdhcmUgS2V5DQo+ID4+IE1hbmFnZXIgKEhXS00pLCBhbmQgdGhlICdIV0tNJyBtb2RlIGlz
+IGVuYWJsZWQsIGl0IHN1cHBvcnRzIHdyYXBwZWQNCj4gPj4ga2V5cy4gSG93ZXZlciwgdGhpcyBh
+bHNvIHJlcXVpcmVzIGZpcm13YXJlIHN1cHBvcnQgaW4gVHJ1c3R6b25lIHRvDQo+ID4+IHdvcmsg
+Y29ycmVjdGx5LCB3aGljaCBtYXkgbm90IGJlIGF2YWlsYWJsZSBvbiBhbGwgY2hpcHNldHMuIElu
+IHRoZQ0KPiA+PiBhYm92ZSBzY2VuYXJpbywgSUNFIG5lZWRzIHRvIHN1cHBvcnQgc3RhbmRhcmQg
+a2V5cyBldmVuIHRob3VnaCBIV0tNDQo+ID4+IGlzIGludGVncmF0ZWQgZnJvbSBhIGhhcmR3YXJl
+IHBlcnNwZWN0aXZlLg0KPiA+Pg0KPiA+PiBJbnRyb2R1Y2luZyB0aGlzIHByb3BlcnR5IHNvIHRo
+YXQgSGFyZHdhcmUgd3JhcHBlZCBrZXkgc3VwcG9ydCBjYW4gYmUNCj4gPj4gZW5hYmxlZC9kaXNh
+YmxlZCBmcm9tIHNvZnR3YXJlIGJhc2VkIG9uIGNoaXBzZXQgZmlybXdhcmUsIGFuZCBub3QNCj4g
+Pj4ganVzdCBiYXNlZCBvbiBoYXJkd2FyZSB2ZXJzaW9uLg0KPiA+Pg0KPiA+PiBTaWduZWQtb2Zm
+LWJ5OiBHYXVyYXYgS2FzaHlhcCA8cXVpY19nYXVya2FzaEBxdWljaW5jLmNvbT4NCj4gPj4gVGVz
+dGVkLWJ5OiBOZWlsIEFybXN0cm9uZyA8bmVpbC5hcm1zdHJvbmdAbGluYXJvLm9yZz4NCj4gPj4g
+LS0tDQo+ID4+ICAuLi4vYmluZGluZ3MvY3J5cHRvL3Fjb20saW5saW5lLWNyeXB0by1lbmdpbmUu
+eWFtbCAgICAgfCAxMCArKysrKysrKysrDQo+ID4+ICAxIGZpbGUgY2hhbmdlZCwgMTAgaW5zZXJ0
+aW9ucygrKQ0KPiA+Pg0KPiA+PiBkaWZmIC0tZ2l0DQo+ID4+IGEvRG9jdW1lbnRhdGlvbi9kZXZp
+Y2V0cmVlL2JpbmRpbmdzL2NyeXB0by9xY29tLGlubGluZS1jcnlwdG8tDQo+IGVuZ2luZS4NCj4g
+Pj4geWFtbA0KPiA+PiBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jcnlwdG8v
+cWNvbSxpbmxpbmUtY3J5cHRvLQ0KPiBlbmdpbmUuDQo+ID4+IHlhbWwgaW5kZXggMDllNDMxNTdj
+YzcxLi42NDE1ZDdiZTliNzMgMTAwNjQ0DQo+ID4+IC0tLQ0KPiA+PiBhL0RvY3VtZW50YXRpb24v
+ZGV2aWNldHJlZS9iaW5kaW5ncy9jcnlwdG8vcWNvbSxpbmxpbmUtY3J5cHRvLQ0KPiBlbmdpbmUu
+DQo+ID4+IHlhbWwNCj4gPj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
+L2NyeXB0by9xY29tLGlubGluZS1jcnlwdG8tDQo+IGVuZw0KPiA+PiArKysgaW5lLnlhbWwNCj4g
+Pj4gQEAgLTI1LDYgKzI1LDE2IEBAIHByb3BlcnRpZXM6DQo+ID4+ICAgIGNsb2NrczoNCj4gPj4g
+ICAgICBtYXhJdGVtczogMQ0KPiA+Pg0KPiA+PiArICBxY29tLGljZS11c2UtaHdrbToNCj4gPj4g
+KyAgICB0eXBlOiBib29sZWFuDQo+ID4+ICsgICAgZGVzY3JpcHRpb246DQo+ID4+ICsgICAgICBV
+c2UgdGhlIHN1cHBvcnRlZCBIYXJkd2FyZSBLZXkgTWFuYWdlciAoSFdLTSkgaW4gUXVhbGNvbW0g
+SUNFDQo+ID4+ICsgICAgICB0byBzdXBwb3J0IHdyYXBwZWQga2V5cy4gSGF2aW5nIHRoaXMgZW50
+cnkgaGVscHMgc2NlbmFyaW9zIHdoZXJlDQo+ID4+ICsgICAgICB0aGUgSUNFIGhhcmR3YXJlIHN1
+cHBvcnRzIEhXS00sIGJ1dCB0aGUgVHJ1c3R6b25lIGZpcm13YXJlIGRvZXMNCj4gPj4gKyAgICAg
+IG5vdCBoYXZlIHRoZSBmdWxsIGNhcGFiaWxpdHkgdG8gdXNlIHRoaXMgSFdLTSBhbmQgc3VwcG9y
+dA0KPiA+PiArIHdyYXBwZWQNCj4gPg0KPiA+IEhvdyBkb2VzIGl0IGhlbHAgaW4gdGhpcyBzY2Vu
+YXJpbz8gWW91IGVuYWJsZSB0aGlzIHByb3BlcnR5LCBUcnVzdHpvbmUNCj4gPiBkb2VzIG5vdCBz
+dXBwb3J0IGl0LCBzbyB3aGF0IGhhcHBlbnM/DQo+ID4NCj4gPiBBbHNvLCB3aGljaCBTb0NzIGhh
+dmUgaW5jb21wbGV0ZSBUcnVzdHpvbmUgc3VwcG9ydD8gSSBleHBlY3QgdGhpcyB0bw0KPiA+IGJl
+IGEgcXVpcmssIHRodXMgbGltaXRlZCB0byBzcGVjaWZpYyBTb0NzIHdpdGggaXNzdWVzLg0KDQpB
+cG9sb2dpZXMgZm9yIG5vdCBhZGRyZXNzaW5nIHRoaXMgZWFybGllciwgd2UgY2FuIHBlcmhhcHMg
+Y29udGludWUgdGhpcyAgZGlzY3Vzc2lvbiANCmluIHRoZSBuZXcgcGF0Y2ggdGhyZWFkLiBJIHdp
+bGwgbGluayB0byB0aGlzIHRoZXJlLg0KDQpTTTg0NTAgYW5kIFNNODM1MCBRQ09NIElDRSBib3Ro
+IHN1cHBvcnQgSFdLTSBpbiB0aGVpciBJQ0UgaGFyZHdhcmUuDQpIb3dldmVyLCB3cmFwcGVkIGtl
+eXMgY2FuIG5vdCBiZSBlbmFibGVkIG9uIHRob3NlIHRhcmdldHMgZHVlIHRvIGNlcnRhaW4NCm1p
+c3NpbmcgdHJ1c3R6b25lIHN1cHBvcnQuIElmIHdlIHNvbGVseSByZWx5IG9uIGhhcmR3YXJlIHZl
+cnNpb24gdG8gZGVjaWRlDQppZiBJQ0UgaGFzIHRvIHVzZSB3cmFwcGVkIGtleXMgZm9yIGRhdGEg
+ZW5jcnlwdGlvbiwgdGhlbiBpdCBiZWNvbWVzIHVudGVzdGFibGUNCm9uIHRob3NlIGNoaXBzZXRz
+LiANCg0KU28sIHdlIHdhbnQgYW5vdGhlciB3YXkgdG8gZGlzdGluZ3Vpc2ggdGhpcyBzY2VuYXJp
+bywgYW5kIGhlbmNlIEkgY2hvc2UgYSBEVCB2ZW5kb3IgcHJvcGVydHkNCnRvIGV4cGxpY2l0bHkg
+bWVudGlvbiBpZiB3ZSBoYXZlIHRvIHVzZSB0aGUgc3VwcG9ydGVkIEhXS00uDQpJZiB0aGVyZSBp
+cyBhbm90aGVyIHdheSwgSSBhbSBvcGVuIHRvIGV4cGxvcmluZyB0aGF0IGFzIHdlbGwuDQoNCj4g
+DQo+IENhbiB3ZSBzaW1wbHkgZXZhbHVhdGUgdGhlIHJldHVybiB2YWx1ZSBvZiB0aGUgc2VjdXJl
+IGNhbGxzPw0KPiANCg0KVGhpcyBtaWdodCBub3Qgd29yayBhcyBVRlMgY3J5cHRvIG5lZWRzIHRo
+aXMgaW5mb3JtYXRpb24gbXVjaCBlYXJsaWVyLCBhbmQgYmFzZWQNCm9uIHRoYXQgLCBpdCB3b3Vs
+ZCBuZWVkIHRvIHJlZ2lzdGVyIHdpdGggdGhlIGtleXNsb3QgbWFuYWdlciAoYW5kIGJsb2NrIGNy
+eXB0byksIA0Kb24gd2hldGhlciB3cmFwcGVkIGtleXMgYXJlIHN1cHBvcnRlZC4NCmh0dHBzOi8v
+bG9yZS5rZXJuZWwub3JnL2FsbC8yMDIzMTEwNDIxMTI1OS4xNzQ0OC0yLWViaWdnZXJzQGtlcm5l
+bC5vcmcvDQogDQo+IEtvbnJhZA0K
 
