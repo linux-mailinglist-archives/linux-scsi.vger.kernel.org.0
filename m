@@ -1,78 +1,183 @@
-Return-Path: <linux-scsi+bounces-6030-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-6032-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 676DE90E521
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2024 10:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 50BE790E6E8
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2024 11:25:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1266E1F2260D
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2024 08:02:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F19821F21B17
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2024 09:25:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEE5478C68;
-	Wed, 19 Jun 2024 08:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7308B7FBCF;
+	Wed, 19 Jun 2024 09:24:57 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E2C577F12;
-	Wed, 19 Jun 2024 08:02:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10957FBBF;
+	Wed, 19 Jun 2024 09:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718784154; cv=none; b=PQ56dboE36azl78PGDGg7jVVPnK/X1VDrNjleGcUtuEfnsB0or2YBzI5rz5bkrvmIOCgwO4HyVhqZpl0+JVZsWRg4gutjV1poG3A8iXvMGPwBeQrdKaxTDbfqoKwU5DdJ5AQAXpt4ONH+BtLsZPxwm0hl4HbSljaFIFOOWzmAE8=
+	t=1718789097; cv=none; b=eXdF0/Dm8G2HgjBnxz8jcjCtlCUy5O3Z+tvANiJZ+7vvWh3ktyVfRi1TnKvVkdjkknWEO0wNe+5zVTWjoMw45eCj9Puff7OR47dIxeImoTkJX6VCREpWRWx9OV1JBlafW95aSsA9d5mrbdVaoU3rBSsswBDCkw865u8l/ExOG1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718784154; c=relaxed/simple;
-	bh=z0SlEVjuMjft4IMkiONjhZcAyB+pz/y+jPbljyxtcyo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mCK19a6+dUqRcYcAbTEsqdldhcjmwjj53VOIrAdNZADs+mEdW6638aQ9rJ84oLW0SdNS5kVQ/V8Jl0r0/mwC+5RyoexoZiiERUkRCC4cLEAh7vqqk05kDKmkiju6evSZX1mzOMMvYxaoJzPcd7v6KtXgaCtZ0dzMswRF222bLNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id B204868AFE; Wed, 19 Jun 2024 10:02:18 +0200 (CEST)
-Date: Wed, 19 Jun 2024 10:02:18 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: John Garry <john.g.garry@oracle.com>
-Cc: Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>,
-	axboe@kernel.dk, sagi@grimberg.me, jejb@linux.ibm.com,
-	martin.petersen@oracle.com, viro@zeniv.linux.org.uk,
-	brauner@kernel.org, dchinner@redhat.com, jack@suse.cz,
-	djwong@kernel.org, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-fsdevel@vger.kernel.org, tytso@mit.edu, jbongio@google.com,
-	linux-scsi@vger.kernel.org, ojaswin@linux.ibm.com,
-	linux-aio@kvack.org, linux-btrfs@vger.kernel.org,
-	io-uring@vger.kernel.org, nilay@linux.ibm.com,
-	ritesh.list@gmail.com, willy@infradead.org, agk@redhat.com,
-	snitzer@kernel.org, mpatocka@redhat.com, dm-devel@lists.linux.dev,
-	hare@suse.de, Himanshu Madhani <himanshu.madhani@oracle.com>
-Subject: Re: [PATCH v8 05/10] block: Add core atomic write support
-Message-ID: <20240619080218.GA4437@lst.de>
-References: <20240610104329.3555488-1-john.g.garry@oracle.com> <20240610104329.3555488-6-john.g.garry@oracle.com> <ZnCGwYomCC9kKIBY@kbusch-mbp.dhcp.thefacebook.com> <20240618065112.GB29009@lst.de> <91e9bbe3-75cf-4874-9d64-0785f7ea21d9@oracle.com> <ZnHDCYiRA9EvuLTc@kbusch-mbp.dhcp.thefacebook.com> <24b58c63-95c9-43d4-a5cb-78754c94cbfb@oracle.com>
+	s=arc-20240116; t=1718789097; c=relaxed/simple;
+	bh=hN6kdnLBTquDXR9KrmJk7yIsGzVwE9lDcA2ZQdIL3wI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=n+0kB3zeIUbZjWAWyAS+7j3llXhwajop4i56xoZEPYoExbQQJUqTW5BeEDOxj+1kY3oNx+/wHNI1UnU2mxFo07TdqRBBbiI9nEKUuL2URTeFZ9A0UsXLKIhPeH8GrWDaADPCW2ZAuMyouPds5HI1HjxxXnPGCOahKupO9+R7y6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4W3yNw3MCqznWSR;
+	Wed, 19 Jun 2024 17:04:32 +0800 (CST)
+Received: from dggpemd100001.china.huawei.com (unknown [7.185.36.94])
+	by mail.maildlp.com (Postfix) with ESMTPS id CE6A518007A;
+	Wed, 19 Jun 2024 17:09:26 +0800 (CST)
+Received: from [10.67.120.108] (10.67.120.108) by
+ dggpemd100001.china.huawei.com (7.185.36.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.34; Wed, 19 Jun 2024 17:09:26 +0800
+Message-ID: <df7b4ee6-0d75-9ed5-f147-3c180be6d4a5@huawei.com>
+Date: Wed, 19 Jun 2024 17:09:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24b58c63-95c9-43d4-a5cb-78754c94cbfb@oracle.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v4] scsi: libsas: Fix exp-attached end device cannot be
+ scanned in again after probe failed
+Content-Language: en-CA
+To: John Garry <john.g.garry@oracle.com>, <yanaijie@huawei.com>,
+	<jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+	<damien.lemoal@opensource.wdc.com>
+CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
+	<chenxiang66@hisilicon.com>, <kangfenglong@huawei.com>
+References: <20240619032815.3499-1-yangxingui@huawei.com>
+ <45175ca4-d0da-42ca-97b9-f3891bf13c53@oracle.com>
+From: yangxingui <yangxingui@huawei.com>
+In-Reply-To: <45175ca4-d0da-42ca-97b9-f3891bf13c53@oracle.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggpemm500007.china.huawei.com (7.185.36.183) To
+ dggpemd100001.china.huawei.com (7.185.36.94)
 
-On Wed, Jun 19, 2024 at 08:59:33AM +0100, John Garry wrote:
-> In this case, I would expect NOIOB >= atomic write boundary.
->
-> Would it be sane to have a NOIOB < atomic write boundary in some other 
-> config?
->
-> I can support these possibilities, but the code will just get more complex.
+Hi John,
 
-I'd be tempted to simply not support the case where NOIOB is not a
-multiple of the atomic write boundary for now and disable atomic writes
-with a big fat warning (and a good comment in the soure code).  If users
-show up with a device that hits this and want to use atomic writes we
-can resolved it.
+On 2024/6/19 15:50, John Garry wrote:
+> On 19/06/2024 04:28, Xingui Yang wrote:
+>> The expander phy will be treated as broadcast flutter in the next
+>> revalidation after the exp-attached end device probe failed, as follows:
+>>
+>> [78779.654026] sas: broadcast received: 0
+>> [78779.654037] sas: REVALIDATING DOMAIN on port 0, pid:10
+>> [78779.654680] sas: ex 500e004aaaaaaa1f phy05 change count has changed
+>> [78779.662977] sas: ex 500e004aaaaaaa1f phy05 originated 
+>> BROADCAST(CHANGE)
+>> [78779.662986] sas: ex 500e004aaaaaaa1f phy05 new device attached
+>> [78779.663079] sas: ex 500e004aaaaaaa1f phy05:U:8 attached: 
+>> 500e004aaaaaaa05 (stp)
+>> [78779.693542] hisi_sas_v3_hw 0000:b4:02.0: dev[16:5] found
+>> [78779.701155] sas: done REVALIDATING DOMAIN on port 0, pid:10, res 0x0
+>> [78779.707864] sas: Enter sas_scsi_recover_host busy: 0 failed: 0
+>> ...
+>> [78835.161307] sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 
+>> tries: 1
+>> [78835.171344] sas: sas_probe_sata: for exp-attached device 
+>> 500e004aaaaaaa05 returned -19
+>> [78835.180879] hisi_sas_v3_hw 0000:b4:02.0: dev[16:5] is gone
+>> [78835.187487] sas: broadcast received: 0
+>> [78835.187504] sas: REVALIDATING DOMAIN on port 0, pid:10
+>> [78835.188263] sas: ex 500e004aaaaaaa1f phy05 change count has changed
+>> [78835.195870] sas: ex 500e004aaaaaaa1f phy05 originated 
+>> BROADCAST(CHANGE)
+>> [78835.195875] sas: ex 500e004aaaaaaa1f rediscovering phy05
+>> [78835.196022] sas: ex 500e004aaaaaaa1f phy05:U:A attached: 
+>> 500e004aaaaaaa05 (stp)
+>> [78835.196026] sas: ex 500e004aaaaaaa1f phy05 broadcast flutter
+>> [78835.197615] sas: done REVALIDATING DOMAIN on port 0, pid:10, res 0x0
+>>
+>> The cause of the problem is that the related ex_phy's 
+>> attached_sas_addr was
+>> not cleared after the end device probe failed, so reset it.
+>>
+>> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+> 
+> Apart from a couple of comments, below:
+> Reviewed-by: John Garry <john.g.garry@oracle.com>
+> 
+>> ---
+>> Changes since v3:
+>> - Just manually clear the ex_phy's attached_sas_addr instead of calling
+>>    sas_unregister_devs_sas_addr() and deleting the port.
+>> - Update commit information.
+>>
+>> Changes since v2:
+>> - Add a helper for calling sas_destruct_devices() and 
+>> sas_destruct_ports(),
+>>    and put the new call at the end of sas_probe_devices() based on John's
+>>    suggestion.
+>>
+>> Changes since v1:
+>> - Simplify the process of getting ex_phy id based on Jason's suggestion.
+>> - Update commit information.
+>> ---
+>>   drivers/scsi/libsas/sas_internal.h | 14 ++++++++++++++
+>>   1 file changed, 14 insertions(+)
+>>
+>> diff --git a/drivers/scsi/libsas/sas_internal.h 
+>> b/drivers/scsi/libsas/sas_internal.h
+>> index 85948963fb97..7c0931ccea23 100644
+>> --- a/drivers/scsi/libsas/sas_internal.h
+>> +++ b/drivers/scsi/libsas/sas_internal.h
+>> @@ -145,6 +145,20 @@ static inline void sas_fail_probe(struct 
+>> domain_device *dev, const char *func, i
+>>           func, dev->parent ? "exp-attached" :
+>>           "direct-attached",
+>>           SAS_ADDR(dev->sas_addr), err);
+>> +
+>> +    /* if the device probe failed, the expander phy attached address
+> 
+> please use standard comment format, i.e. /* goes on a line on its own
+OK.
+> 
+>> +     * need to be reset so that the phy will not be treated as flutter
+> 
+> /s/need to be reset/needs to be reset/OK.
+> 
+>> +     * in the next revalidation
+>> +     */
+>> +    if (dev->parent && !dev_is_expander(dev->dev_type)) {
+>> +        struct domain_device *parent = dev->parent;
+>> +        struct expander_device *ex_dev = &parent->ex_dev;
+>> +        struct sas_phy *phy = dev->phy;
+>> +        struct ex_phy *ex_phy = &ex_dev->ex_phy[phy->number];
+> 
+> this could all be put on fewer lines, or even 1, like:
+OK. I'll update a new version.
+> 
+> struct ex_phy *ex_phy = &dev->ex_dev.ex_phy[phy->number];
+> 
+> you could even add a helper, like:
+> 
+> static inline struct ex_phy *sas_expander_ex_phy(struct domain_device
+>   *parent, int phy_id)
+>   {
+>   struct expander_device *ex_dev = &parent->ex_dev;
+> 
+>   return &ex_dev->ex_phy[phy_id];
+>   }
+> 
+> However, I am not sure how helpful it will be, since we often require a 
+> struct expander_device pointer when we would be using that helper.
+> 
+Thanks,
+Xingui
+
 
 
