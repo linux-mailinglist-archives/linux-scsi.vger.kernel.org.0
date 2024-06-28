@@ -1,62 +1,63 @@
-Return-Path: <linux-scsi+bounces-6376-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-6378-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 996C091B775
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Jun 2024 09:00:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1273191B779
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Jun 2024 09:00:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DC371F21A84
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Jun 2024 07:00:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC5D4282A8E
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Jun 2024 07:00:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F725335D3;
-	Fri, 28 Jun 2024 07:00:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9615113E409;
+	Fri, 28 Jun 2024 07:00:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="gESS++xT"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="OunPT4Pn"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96480125AC
-	for <linux-scsi@vger.kernel.org>; Fri, 28 Jun 2024 07:00:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4513F125AC;
+	Fri, 28 Jun 2024 07:00:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719558043; cv=none; b=EMFBlYf2Tz6wLySotNEjd+X3BQXBA2Ph1MMHlqA7M0ODfr5i14o+6zcffaWqfA2A6n+2Hg4UxHWdeeJ7MYv71hO2nB1hqJ7xEKzQMjau/mtklmYyTFO9vkZSCSoePwaU7tIcVwCorNDjNd0vY8RMjWlS7MdYbbniFtRswRpJcHY=
+	t=1719558047; cv=none; b=eIWD39VvX7eIFhr/GXGFUoGHyBiNlrdadRRslQJlRFZqnRB4yuV3M14FxritZq0QDumAU/UDBjj+c+iKtIJAxu+clp1Nvr/DzeKxkQlGq4ZmVo1wYZmBHB62M4fQNjeVOi66CTiT/RXZOsxdOEYrgg4NmCOvwL0P1xownd918E0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719558043; c=relaxed/simple;
-	bh=9RAH1BfZXCtDT3OzpLeqjAd9+mWzb+jQi9GAKrm6pCM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=N8IrK5zYG6/CuejJ+b0UZmLlfQFmRPESjd/Gn7u3CcWTNIwyb7e29toN6BqSwZHfeFZ6y0MUpL/2ahQANhS+FKuEc6477Oj5FUx+Ukdfyi+JzUps8fapHAK9sSWCIUyQZUtpGPPtUnHsx0Q8AqYL26guhZfrAoPuiCty4PzT06I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=gESS++xT; arc=none smtp.client-ip=60.244.123.138
+	s=arc-20240116; t=1719558047; c=relaxed/simple;
+	bh=tOHwfZ93hiEmDUsn1jpm3RPZ3DNHszOKBvPicffM9IQ=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VZKmXcm3WDUJT7sKxdwbwcx8j3c+JJpTtGaFZX0A9hOV4opancYe4WB906YI4kui4Nup5R5w44xVPSRyZItDnNZx8Ef3StmB5NcKEIcdLBLFO8MBIECPrZdj2vXs6QZIrTqezK7x3uMlHVdV/60Hl4C6sF7n2skea9qhalF9bXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=OunPT4Pn; arc=none smtp.client-ip=60.244.123.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 1e7d1fe4351c11ef8b8f29950b90a568-20240628
+X-UUID: 1fbba10a351c11ef8b8f29950b90a568-20240628
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=irLaHCX2zHKTSIkKOfcy2lIsUrR7jXGz603EzNUAFxo=;
-	b=gESS++xTlkNxY1r8WydCSW3b7XjbGuDnjAm2YgjqhUObQ42Td5Qw1C7B+9VVoce6Ma+8GE1y1fk894AY/K7VjNjqA52R/v39hcfEjn5ascisqCm0qArrXpleQYR7R5vCW9HxmJbe2wJCkRfGmplQjBV/4uMaQCq9zjiSP8p5Oeg=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=eOLZG0fPLUZI4Kx1KyCZ8oJIi2m2oDZFwUkFX6Rb94c=;
+	b=OunPT4PnK+NByHW7unJjeebcoAG38+xUaM/qV1jZed3baa5y82RBy/apKkXmZbooH/qWOMg+/Xp7g+GbJYWrgLJQmJ0W91eJqoxOt1RpPc1p86Y2fY0wOPcc77X+CGT1QyiDLfGCaS1k5ybqeRqi/XI2RLAMTNPvXlEQ+o8st4c=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.39,REQID:ca962c98-453e-49eb-9fc7-6a57a10b1c9a,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:393d96e,CLOUDID:095eaa44-a117-4f46-a956-71ffeac67bfa,B
+X-CID-O-INFO: VERSION:1.1.39,REQID:f7bf2dca-961b-4c96-a95b-9ee86c144d06,IP:0,U
+	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-25
+X-CID-META: VersionHash:393d96e,CLOUDID:dfe7b5d4-0d68-4615-a20f-01d7bd41f0bb,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
 	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
 	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: 1e7d1fe4351c11ef8b8f29950b90a568-20240628
+X-UUID: 1fbba10a351c11ef8b8f29950b90a568-20240628
 Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
 	(envelope-from <peter.wang@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1168072136; Fri, 28 Jun 2024 15:00:35 +0800
+	with ESMTP id 472472958; Fri, 28 Jun 2024 15:00:37 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 28 Jun 2024 15:00:31 +0800
+ 15.2.1118.26; Fri, 28 Jun 2024 15:00:32 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 28 Jun 2024 15:00:31 +0800
+ 15.2.1118.26 via Frontend Transport; Fri, 28 Jun 2024 15:00:32 +0800
 From: <peter.wang@mediatek.com>
 To: <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
 	<avri.altman@wdc.com>, <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
@@ -66,11 +67,13 @@ CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
 	<chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
 	<powen.kao@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
 	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
-	<naomi.chu@mediatek.com>, <chu.stanley@gmail.com>
-Subject: [PATCH v3 0/2] ufs: core: fix ufshcd_abort_all racing issue
-Date: Fri, 28 Jun 2024 15:00:28 +0800
-Message-ID: <20240628070030.30929-1-peter.wang@mediatek.com>
+	<naomi.chu@mediatek.com>, <chu.stanley@gmail.com>, <stable@vger.kernel.org>
+Subject: [PATCH v3 1/2] ufs: core: fix ufshcd_clear_cmd racing issue
+Date: Fri, 28 Jun 2024 15:00:29 +0800
+Message-ID: <20240628070030.30929-2-peter.wang@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20240628070030.30929-1-peter.wang@mediatek.com>
+References: <20240628070030.30929-1-peter.wang@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -79,38 +82,121 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--7.428700-8.000000
-X-TMASE-MatchedRID: lR9wedxBitsMQLXc2MGSbBes/RxhysDbFJFr2qlKix+7qpOHKudqc5as
-	fA8Y/RCFiI8t/Y95trJix2NkmtuoxShlmALF5LHIjNvYZHpO13dKPIx+MJF9o5soi2XrUn/J8m+
-	hzBStant2jkpctwKLBQtuKBGekqUpI/NGWt0UYPBkV0ySDuBhe6atgnJszNdSNvttFIXy+pKzdl
-	k4phIsUlncShV1VSIi
+X-TM-AS-Result: No-10--11.414900-8.000000
+X-TMASE-MatchedRID: fnR2S3QqRUoMQLXc2MGSbEKcYi5Qw/RVNACnndLvXwfIvQIyugvKdaEP
+	LQgibzEi9dqfQ8cn44p1Mm/bnHYgUB2P280ZiGmRnu1HSadECDWuiRuR9mCaukX2ZslDQzOjnCc
+	+RLKEo8YLMCxkuTq/ZJPkifTzZWVPEd0YyW6tLbnk7k9yXJiqqoiuaoNXJrK/47E6rstCUYsQr5
+	8JtEoLH4xkEcgY5pLA4Fs8REBewRHDiZmOF0V5Feuhtmmz4+rYMB97xsSzwcJbi1ZFDTzcNG19g
+	M1gDJGc4vM1YF6AJbbGXyXDzkRpVAtuKBGekqUpI/NGWt0UYPBJl7pFycsuwIOU3H+O8qhagp78
+	MHEGFTgd1y1FoLGxsFGUsNMK829j
 X-TM-AS-User-Approved-Sender: No
 X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--7.428700-8.000000
+X-TMASE-Result: 10--11.414900-8.000000
 X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: 07A7C2201B6794F2E8F3CC91F6D157BECF181419B27292004DFDF86857F7DD2C2000:8
+X-TM-SNTS-SMTP: B9C48369B76D977127D7B415F5DCEC9B2060AADCEDF948C795BFF5E2B3F4ED782000:8
 X-MTK: N
 
 From: Peter Wang <peter.wang@mediatek.com>
 
-This series fixes race condition KE in ufshcd_err_handler, which call 
-ufshcd_abort_all abort an already completed request by ISR in MCQ mode.
+When ufshcd_clear_cmd racing with complete ISR,
+the completed tag of request's mq_hctx pointer will set NULL by ISR.
+And ufshcd_clear_cmd call ufshcd_mcq_req_to_hwq will get NULL pointer KE.
+Return success when request is completed by ISR beacuse sq dosen't
+need cleanup.
 
-V3:
- - Modify ufshcd_mcq_req_to_hwq to distinguish cmd is completed or not
- - Split two patches and add more race description.
+The racing flow is:
 
-V2:
- - Change patch description and add Fixes/Cc tag
+Thread A
+ufshcd_err_handler					step 1
+	ufshcd_try_to_abort_task
+		ufshcd_cmd_inflight(true)		step 3
+		ufshcd_clear_cmd
+			...
+			ufshcd_mcq_req_to_hwq
+			blk_mq_unique_tag
+				rq->mq_hctx->queue_num	step 5
 
-Peter Wang (2):
-  ufs: core: fix ufshcd_clear_cmd racing issue
-  ufs: core: fix ufshcd_abort_one racing issue
+Thread B
+ufs_mtk_mcq_intr(cq complete ISR)			step 2
+	scsi_done
+		...
+		__blk_mq_free_request
+			rq->mq_hctx = NULL;		step 4
 
+Below is KE back trace:
+
+  ufshcd_try_to_abort_task: cmd pending in the device. tag = 6
+  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000194
+   pc : [0xffffffd589679bf8] blk_mq_unique_tag+0x8/0x14
+   lr : [0xffffffd5862f95b4] ufshcd_mcq_sq_cleanup+0x6c/0x1cc [ufs_mediatek_mod_ise]
+   Workqueue: ufs_eh_wq_0 ufshcd_err_handler [ufs_mediatek_mod_ise]
+   Call trace:
+    dump_backtrace+0xf8/0x148
+    show_stack+0x18/0x24
+    dump_stack_lvl+0x60/0x7c
+    dump_stack+0x18/0x3c
+    mrdump_common_die+0x24c/0x398 [mrdump]
+    ipanic_die+0x20/0x34 [mrdump]
+    notify_die+0x80/0xd8
+    die+0x94/0x2b8
+    __do_kernel_fault+0x264/0x298
+    do_page_fault+0xa4/0x4b8
+    do_translation_fault+0x38/0x54
+    do_mem_abort+0x58/0x118
+    el1_abort+0x3c/0x5c
+    el1h_64_sync_handler+0x54/0x90
+    el1h_64_sync+0x68/0x6c
+    blk_mq_unique_tag+0x8/0x14
+    ufshcd_clear_cmd+0x34/0x118 [ufs_mediatek_mod_ise]
+    ufshcd_try_to_abort_task+0x2c8/0x5b4 [ufs_mediatek_mod_ise]
+    ufshcd_err_handler+0xa7c/0xfa8 [ufs_mediatek_mod_ise]
+    process_one_work+0x208/0x4fc
+    worker_thread+0x228/0x438
+    kthread+0x104/0x1d4
+    ret_from_fork+0x10/0x20
+
+Fixes: 8d7290348992 ("scsi: ufs: mcq: Add supporting functions for MCQ abort")
+Cc: <stable@vger.kernel.org> 6.6.x
+Suggested-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+---
  drivers/ufs/core/ufs-mcq.c | 11 ++++++-----
- drivers/ufs/core/ufshcd.c  |  2 ++
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+index 8944548c30fa..c532416aec22 100644
+--- a/drivers/ufs/core/ufs-mcq.c
++++ b/drivers/ufs/core/ufs-mcq.c
+@@ -105,16 +105,15 @@ EXPORT_SYMBOL_GPL(ufshcd_mcq_config_mac);
+  * @hba: per adapter instance
+  * @req: pointer to the request to be issued
+  *
+- * Return: the hardware queue instance on which the request would
+- * be queued.
++ * Return: the hardware queue instance on which the request will be or has
++ * been queued. %NULL if the request has already been freed.
+  */
+ struct ufs_hw_queue *ufshcd_mcq_req_to_hwq(struct ufs_hba *hba,
+ 					 struct request *req)
+ {
+-	u32 utag = blk_mq_unique_tag(req);
+-	u32 hwq = blk_mq_unique_tag_to_hwq(utag);
++	struct blk_mq_hw_ctx *hctx = READ_ONCE(req->mq_hctx);
+ 
+-	return &hba->uhq[hwq];
++	return hctx ? &hba->uhq[hctx->queue_num] : NULL;
+ }
+ 
+ /**
+@@ -515,6 +514,8 @@ int ufshcd_mcq_sq_cleanup(struct ufs_hba *hba, int task_tag)
+ 		if (!cmd)
+ 			return -EINVAL;
+ 		hwq = ufshcd_mcq_req_to_hwq(hba, scsi_cmd_to_rq(cmd));
++		if (!hwq)
++			return 0;
+ 	} else {
+ 		hwq = hba->dev_cmd_queue;
+ 	}
 -- 
 2.18.0
 
