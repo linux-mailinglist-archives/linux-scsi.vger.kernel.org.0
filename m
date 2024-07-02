@@ -1,119 +1,143 @@
-Return-Path: <linux-scsi+bounces-6510-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-6513-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C52AA924A27
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jul 2024 23:54:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71630924B5C
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2024 00:15:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D7FDB22A70
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jul 2024 21:54:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C144128E7D9
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jul 2024 22:15:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B68201276;
-	Tue,  2 Jul 2024 21:53:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69884191F65;
+	Tue,  2 Jul 2024 22:06:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="kHlLSoAx"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="U2GuGzV7"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
+Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4771BD512
-	for <linux-scsi@vger.kernel.org>; Tue,  2 Jul 2024 21:53:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 851B26A342;
+	Tue,  2 Jul 2024 22:06:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719957232; cv=none; b=d/cDxN9Fr4Jo16Qp8/IVgHWbg7SW8/O3YGT6lPgxITuzq2SPVVxa0o72YL2Z3klMj43r373CwRyDRLb+iQ64BRNLhsylKTrzlvw/IVf31Veijc91F36o6ZfIu5TaZEZKyFSXiBe0bz204j8mDwV/xuXPQkDW52txbd2uiX0SfrY=
+	t=1719957977; cv=none; b=I+QvWXmW5Y6siUsKMLbuI5Xh6b7J/O+nQvdrW8BDyEHck3hYDMaEzx2cIc9Oi2otP9XVlm2NzpBd8gYUg8/3knlJ0YOlAimdSEEcDkrSlXvRKl9Nak4P4K22sK5/crsbjwm7NiseDinaR5aK862Ogy7hVk5C6Y3yYL8E7XZvwMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719957232; c=relaxed/simple;
-	bh=O2OrLXJz8NlgzXoaHx3h+T2weOez+12wHqJLQT6eTug=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qfZjy4u7zpLrp0ktUdL4C6uJGHUo4gvNU8HWnjF6K6pyX3OTG7DENVF5iFps61gxuxuw6VECwRSx8DdywH+9uHbbvEESvQ7tR48y0DsRyf20MpwJa86hrXpZ2XkO43yvXaFqVF8eAds4FvLHvVJBgyWJdC8sLkUUSX4a3DKVtu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=kHlLSoAx; arc=none smtp.client-ip=199.89.1.12
+	s=arc-20240116; t=1719957977; c=relaxed/simple;
+	bh=yoMDGGwqTVXI17wNYQaDCOxxPTHrbhvRwcACZIYsh6o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CzGDhlroWW8klMG4IEXFjbGZ2bCxkKYtlhXeXN+lRvIBldj5jqXowX0zcqcMyVKQbX6hFBycqQUtCjaLsXR7EJ026oJnjMSMg9CigeVLOs3mQONsqpm47FGm9o3XjXnSRtDchpfGtWkx2XjH+as+mMkN9Hp0J+0LLiKH/5wAAnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=U2GuGzV7; arc=none smtp.client-ip=199.89.1.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4WDGrZ43cfzlnRR8;
-	Tue,  2 Jul 2024 21:53:50 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4WDH6t6vNjz6CmR07;
+	Tue,  2 Jul 2024 22:06:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:references:in-reply-to
-	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1719957229; x=1722549230; bh=mQrK3
-	KKyRGgIt9lcPNd0uRl3KXZA98cf9AH6yNIdU6s=; b=kHlLSoAxVR6o6f2Rh2Bu1
-	Paop604DF1teERwYBYeQB8OcEQ2QflHsCkk8yjdGMztmf6NMD1tymgRavBp7Py76
-	WGyCZjztLX8GLZEEgrsBFhD2moecq7+xpNve6YzfUY7D8fdy9ryQlh55j1k8tcWV
-	9AhGGUxujHlEV+bzKXEtt3AQWzS/nvuvk0pKpr4uekJ58T4Hpr1QbWEej70z8FGF
-	KJSqFA1pqv+kN5OhF/89wpUStLMDLaS4FB+MihNJsre4y1e1QdTE/HDKWRw7OzDR
-	LItw6Cst9muMIXd7KUGUg+k9r8yG25FI1a8ogYMSOpJclSi1AC4EZ5ZpXtON2hb2
-	A==
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1719957969; x=1722549970; bh=53t/1vaV5VWoDO4McN2tJQwG
+	rleSCJWNTeOAz3dTpvQ=; b=U2GuGzV7ph5Uhf5iOniPYc3AnB6b4HupvSMX/r7F
+	ecf6TyvDtMXcC5qOwe6UOird18nb9rQiNisOMgYfWtP2+93fRKVdfH2wAI8iuqvS
+	Lbh8pqbK/YEzpG6oL223IB8JgnU0QJw+BRYugu2M4iAi3M826+bs6eqhcn4tB5VY
+	oyn7jO+as2hFNYfULz6miH9RVa5MbLNZt8hmoO3XuEoUyYFk86wG03YUTq7OQU89
+	L7zSHQoFUcdToLsPnIQ+HiluPB+L0N9j513N+A9RoR9wUIOc50viOk1olD04TVVp
+	A1tQadu/fEcBdNNW59P3LwE2/MlsiCPj5grplPA8HztmGw==
 X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id priFveoiEDQn; Tue,  2 Jul 2024 21:53:49 +0000 (UTC)
-Received: from bvanassche.mtv.corp.google.com (unknown [104.132.0.90])
+Received: from 008.lax.mailroute.net ([127.0.0.1])
+ by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id RvjfZ_96gQmZ; Tue,  2 Jul 2024 22:06:09 +0000 (UTC)
+Received: from [100.96.154.26] (unknown [104.132.0.90])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4WDGrW5ybRzlnQkq;
-	Tue,  2 Jul 2024 21:53:47 +0000 (UTC)
-From: Bart Van Assche <bvanassche@acm.org>
-To: "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org,
-	Bart Van Assche <bvanassche@acm.org>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH 18/18] scsi: core: Simplify an alloc_workqueue() invocation
-Date: Tue,  2 Jul 2024 14:52:05 -0700
-Message-ID: <20240702215228.2743420-19-bvanassche@acm.org>
-X-Mailer: git-send-email 2.45.2.803.g4e1b14247a-goog
-In-Reply-To: <20240702215228.2743420-1-bvanassche@acm.org>
-References: <20240702215228.2743420-1-bvanassche@acm.org>
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4WDH6m5zTyz6Cnv3Q;
+	Tue,  2 Jul 2024 22:06:08 +0000 (UTC)
+Message-ID: <97452445-2db8-4c78-a410-ec8b34e56148@acm.org>
+Date: Tue, 2 Jul 2024 15:06:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 6/6] scsi: ufs: exynos: Add support for Flash Memory
+ Protector (FMP)
+To: Eric Biggers <ebiggers@kernel.org>, linux-scsi@vger.kernel.org
+Cc: linux-samsung-soc@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ William McVicker <willmcvicker@google.com>
+References: <20240702072510.248272-1-ebiggers@kernel.org>
+ <20240702072510.248272-7-ebiggers@kernel.org>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20240702072510.248272-7-ebiggers@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Let alloc_workqueue() format the workqueue name.
+On 7/2/24 12:25 AM, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
+> 
+> Add support for Flash Memory Protector (FMP), which is the inline
+> encryption hardware on Exynos and Exynos-based SoCs.
+> 
+> Specifically, add support for the "traditional FMP mode" that works on
+> many Exynos-based SoCs including gs101.  This is the mode that uses
+> "software keys" and is compatible with the upstream kernel's existing
+> inline encryption framework in the block and filesystem layers.  I plan
+> to add support for the wrapped key support on gs101 at a later time.
+> 
+> Tested on gs101 (specifically Pixel 6) by running the 'encrypt' group of
+> xfstests on a filesystem mounted with the 'inlinecrypt' mount option.
+> 
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> ---
+>   drivers/ufs/host/ufs-exynos.c | 228 +++++++++++++++++++++++++++++++++-
+>   1 file changed, 222 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/ufs/host/ufs-exynos.c b/drivers/ufs/host/ufs-exynos.c
+> index 88d125d1ee3c..dd545ef7c361 100644
+> --- a/drivers/ufs/host/ufs-exynos.c
+> +++ b/drivers/ufs/host/ufs-exynos.c
+> @@ -6,10 +6,13 @@
+>    * Author: Seungwon Jeon  <essuuj@gmail.com>
+>    * Author: Alim Akhtar <alim.akhtar@samsung.com>
+>    *
+>    */
+>   
+> +#include <asm/unaligned.h>
+> +#include <crypto/aes.h>
+> +#include <linux/arm-smccc.h>
+>   #include <linux/clk.h>
+>   #include <linux/delay.h>
+>   #include <linux/module.h>
+>   #include <linux/of.h>
+>   #include <linux/of_address.h>
+> @@ -23,16 +26,18 @@
+>   #include <ufs/ufshci.h>
+>   #include <ufs/unipro.h>
+>   
+>   #include "ufs-exynos.h"
+>   
+> +#define DATA_UNIT_SIZE		4096
+> +#define LOG2_DATA_UNIT_SIZE	12
 
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/hosts.c     | 9 ++++-----
- include/scsi/scsi_host.h | 1 -
- 2 files changed, 4 insertions(+), 6 deletions(-)
+If this series has to be reposted, please consider changing "12" into
+"ilog2(DATA_UNIT_SIZE)". I think that the ilog2() macro generates a
+constant expression if its argument is a constant.
 
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index 7f987335b44c..e021f1106bea 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -292,11 +292,10 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost,=
- struct device *dev,
- 	}
-=20
- 	if (shost->transportt->create_work_queue) {
--		snprintf(shost->work_q_name, sizeof(shost->work_q_name),
--			 "scsi_wq_%d", shost->host_no);
--		shost->work_q =3D alloc_workqueue("%s",
--			WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | WQ_UNBOUND,
--			1, shost->work_q_name);
-+		shost->work_q =3D alloc_workqueue(
-+			"scsi_wq_%d",
-+			WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | WQ_UNBOUND, 1,
-+			shost->host_no);
-=20
- 		if (!shost->work_q) {
- 			error =3D -EINVAL;
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index 19a1c5c48935..2b4ab0369ffb 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -677,7 +677,6 @@ struct Scsi_Host {
- 	/*
- 	 * Optional work queue to be utilized by the transport
- 	 */
--	char work_q_name[20];
- 	struct workqueue_struct *work_q;
-=20
- 	/*
+In case it wouldn't be clear, I'm fine with this patch with or without
+that change.
+
+Thanks,
+
+Bart.
+
 
