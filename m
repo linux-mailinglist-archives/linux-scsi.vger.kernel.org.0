@@ -1,77 +1,77 @@
-Return-Path: <linux-scsi+bounces-6486-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-6488-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B89E924975
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jul 2024 22:41:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F314924979
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jul 2024 22:41:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31CE21F263DF
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jul 2024 20:41:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA8FF1C227CD
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jul 2024 20:41:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 583DF20013C;
-	Tue,  2 Jul 2024 20:41:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B883C20013C;
+	Tue,  2 Jul 2024 20:41:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="Bao10MbR"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="c8Gw72Ts"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A456F1CF8F
-	for <linux-scsi@vger.kernel.org>; Tue,  2 Jul 2024 20:41:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C721CF8F
+	for <linux-scsi@vger.kernel.org>; Tue,  2 Jul 2024 20:41:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719952883; cv=none; b=sCZoenljLmmPQ6oEeNGl7TPGbH4+h2Kk/qlV8SqSNdcwdJLLBDAPdSk/4jtHuyvrrJ4xXo6ny1qJqeL3iGJUavGZLb+Tz0vkkslypJTvWqeS8UGF3VmB53X7i8i8+9iRAqEFx8cAoRq7HfsSkfWc25LbJtJk/Avz/LYdNFfnjW4=
+	t=1719952893; cv=none; b=MmwCmpN7DajUk2pXTPX0hJJe5zRHIOvtl7owxdv12Fssa7NXq4Ok0rEWU7ZMpYTnQDlLvOr9p7MUIwzUVJMHtFMP+16A8q28isi+gNFa2417Fv5EKxAN88ojw8RJBewaKN0VfCcCb24nOsV1B2+xijuBpwGcVtrRhztOt8cfRqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719952883; c=relaxed/simple;
-	bh=EBiV7D4z+WEztx2RgRRU7jfIZTy/vzjL6zISW7O5fco=;
+	s=arc-20240116; t=1719952893; c=relaxed/simple;
+	bh=iIelxTrUEyCu9m2YbccZUhxOKRIC2Q0+5C60rs2R+S4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jP5jn36HU1ULpjqNoujux16LhccJFbUUVcObthx6JOiF7J49m5cpbQ/uZZqo9ANaOLi4JAoDxsP085rze0rUUYstjKngOYRXH+qU3TuBf4ZybFILc4n6GQQLqN/Suem8pU4WmFZhcFymog7LAjjGiOMx17FG1zuHX+ZvDMtQDrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=Bao10MbR; arc=none smtp.client-ip=199.89.1.11
+	 MIME-Version; b=fXmntPe0fkASPpEgFaHKq3f3J1WJEmRHC4cdCs4vJJmKwn4kgiX9+V4hbuZW7ZPHlimIlHrQWiX+JoPYz91bQP14UNP223kIrg1l86MJeVjN/TllVFogHOvmRZHGeW7CIZmuNAixyO1m9UTl39wJyacXT3Mm8cW/hYAZT35xSSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=c8Gw72Ts; arc=none smtp.client-ip=199.89.1.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4WDFDw6r8lz6Cnk90;
-	Tue,  2 Jul 2024 20:41:20 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4WDFF64rT6z6CmQyM;
+	Tue,  2 Jul 2024 20:41:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1719952876; x=1722544877; bh=4ziCu
-	nqHIUeWHu7uh7TCdc2Tl6mLk+QYUQDvl0l8OwE=; b=Bao10MbRT/6qS/0CsfmKu
-	KdaXlQVO71Iz4WXxCYgAoOtyEmm240l4cESl7XwDTf2qZeEy5B0ayb+oByv+/qnM
-	A1Fq6Vm2S2hURoNd55ZK3vKu1ylj/I41IHDl9mp7mex52f8hGiggkSO2/UuLyH2r
-	TioFSBM7+9EXkDlVKeas/lDnMGorXzJsHrqyf3GLzElQRBg8xv3Xfn1IZTmYJXS6
-	S8/0JYWM2gFwhCe3ZfvCCokQxZIe9KVHy0FTkCUcH2YW3M89RcMWoieDbW2kZT6J
-	XLyYNCWT7AIUprEahNy0wemkysXd2eKpiJ6MNjFjvrP7EfpRrBMSif1Qv2IFuAmS
+	:received:received; s=mr01; t=1719952884; x=1722544885; bh=iejQk
+	SU/hIQcf0C3EA4NXqSVrmp7WFjlGQtyV9AAy1w=; b=c8Gw72Ts0GYF9VbLGUGeV
+	Aoqcs4P7Xp5XmuZPPa/1fvDlD9/SmpxWmX0U5ApY3d9imv3SiYEgsLpUAmDJFXgt
+	kR0yGt3ufvhOJRb/tXBhrq3eE9NiAILsCeB6GjD9qBIjjiuPqDh/HFuk6XDDu6oq
+	rCc5W1GhsRf/GPC+K1q3wBNFrmBg2Pf3r5oJvEXD6P4PJ01//YbL40EmxHQ2/gwl
+	Xu+APlAKPm34RsTWydFcwvtQ2kmKnyH2oxRgpSQYUAWLHUjQtbcuuJsbQb/VHYK9
+	X2x3A4BdeI3XvC2GLIXQMfD79hNnBxKfTbEc2vE79Y2WpCDwOMK98KeGrs/MybnC
 	g==
 X-Virus-Scanned: by MailRoute
 Received: from 008.lax.mailroute.net ([127.0.0.1])
  by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 68m7qmoXpt8y; Tue,  2 Jul 2024 20:41:16 +0000 (UTC)
+ id KfEnlreOec-H; Tue,  2 Jul 2024 20:41:24 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.132.0.90])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4WDFDq0nR5z6Cnv3Q;
-	Tue,  2 Jul 2024 20:41:14 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4WDFDz5MZ5z6Cnk98;
+	Tue,  2 Jul 2024 20:41:23 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	Bart Van Assche <bvanassche@acm.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Keoseong Park <keosung.park@samsung.com>,
 	Peter Wang <peter.wang@mediatek.com>,
 	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
 	Matthias Brugger <matthias.bgg@gmail.com>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	Avri Altman <avri.altman@wdc.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
 	Andrew Halaney <ahalaney@redhat.com>,
-	Bean Huo <beanhuo@micron.com>
-Subject: [PATCH v4 3/9] scsi: ufs: Remove two constants
-Date: Tue,  2 Jul 2024 13:39:11 -0700
-Message-ID: <20240702204020.2489324-4-bvanassche@acm.org>
+	Bean Huo <beanhuo@micron.com>,
+	ChanWoo Lee <cw9316.lee@samsung.com>
+Subject: [PATCH v4 4/9] scsi: ufs: Rename the MASK_TRANSFER_REQUESTS_SLOTS constant
+Date: Tue,  2 Jul 2024 13:39:12 -0700
+Message-ID: <20240702204020.2489324-5-bvanassche@acm.org>
 X-Mailer: git-send-email 2.45.2.803.g4e1b14247a-goog
 In-Reply-To: <20240702204020.2489324-1-bvanassche@acm.org>
 References: <20240702204020.2489324-1-bvanassche@acm.org>
@@ -83,40 +83,43 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The SCSI host template members .cmd_per_lun and .can_queue are copied
-into the SCSI host data structure. Before these are used, these are
-overwritten by ufshcd_init(). Hence, this patch does not change any
-functionality.
+Rename this constant to prepare for the introduction of the
+MASK_TRANSFER_REQUESTS_SLOTS_MCQ constant. The acronym "SDB" stands for
+"single doorbell" (mode).
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Reviewed-by: Keoseong Park <keosung.park@samsung.com>
 Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/ufs/core/ufshcd.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/ufs/core/ufshcd.c | 2 +-
+ include/ufs/ufshci.h      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index b7ceedba4f93..9a0697556953 100644
+index 9a0697556953..2cbd0f91953b 100644
 --- a/drivers/ufs/core/ufshcd.c
 +++ b/drivers/ufs/core/ufshcd.c
-@@ -164,8 +164,6 @@ EXPORT_SYMBOL_GPL(ufshcd_dump_regs);
- enum {
- 	UFSHCD_MAX_CHANNEL	=3D 0,
- 	UFSHCD_MAX_ID		=3D 1,
--	UFSHCD_CMD_PER_LUN	=3D 32 - UFSHCD_NUM_RESERVED,
--	UFSHCD_CAN_QUEUE	=3D 32 - UFSHCD_NUM_RESERVED,
- };
+@@ -2401,7 +2401,7 @@ static inline int ufshcd_hba_capabilities(struct uf=
+s_hba *hba)
+ 		hba->capabilities &=3D ~MASK_64_ADDRESSING_SUPPORT;
 =20
- static const char *const ufshcd_state_name[] =3D {
-@@ -8958,8 +8956,6 @@ static const struct scsi_host_template ufshcd_drive=
-r_template =3D {
- 	.eh_timed_out		=3D ufshcd_eh_timed_out,
- 	.this_id		=3D -1,
- 	.sg_tablesize		=3D SG_ALL,
--	.cmd_per_lun		=3D UFSHCD_CMD_PER_LUN,
--	.can_queue		=3D UFSHCD_CAN_QUEUE,
- 	.max_segment_size	=3D PRDT_DATA_BYTE_COUNT_MAX,
- 	.max_sectors		=3D SZ_1M / SECTOR_SIZE,
- 	.max_host_blocked	=3D 1,
+ 	/* nutrs and nutmrs are 0 based values */
+-	hba->nutrs =3D (hba->capabilities & MASK_TRANSFER_REQUESTS_SLOTS) + 1;
++	hba->nutrs =3D (hba->capabilities & MASK_TRANSFER_REQUESTS_SLOTS_SDB) +=
+ 1;
+ 	hba->nutmrs =3D
+ 	((hba->capabilities & MASK_TASK_MANAGEMENT_REQUEST_SLOTS) >> 16) + 1;
+ 	hba->reserved_slot =3D hba->nutrs - 1;
+diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
+index c50f92bf2e1d..8d0cc73537c6 100644
+--- a/include/ufs/ufshci.h
++++ b/include/ufs/ufshci.h
+@@ -67,7 +67,7 @@ enum {
+=20
+ /* Controller capability masks */
+ enum {
+-	MASK_TRANSFER_REQUESTS_SLOTS		=3D 0x0000001F,
++	MASK_TRANSFER_REQUESTS_SLOTS_SDB	=3D 0x0000001F,
+ 	MASK_NUMBER_OUTSTANDING_RTT		=3D 0x0000FF00,
+ 	MASK_TASK_MANAGEMENT_REQUEST_SLOTS	=3D 0x00070000,
+ 	MASK_EHSLUTRD_SUPPORTED			=3D 0x00400000,
 
