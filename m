@@ -1,158 +1,144 @@
-Return-Path: <linux-scsi+bounces-6616-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-6618-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1656925FCC
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2024 14:11:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39778926100
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2024 14:59:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AFFA2B3CF01
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2024 11:24:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B25E1C211BF
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2024 12:59:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDEB918F2D0;
-	Wed,  3 Jul 2024 11:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3942F177981;
+	Wed,  3 Jul 2024 12:59:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="R8EuXd0t";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="wwDb8D4F";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="R8EuXd0t";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="wwDb8D4F"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tMzS8c67"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30B9143879
-	for <linux-scsi@vger.kernel.org>; Wed,  3 Jul 2024 11:13:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802C216DEAC
+	for <linux-scsi@vger.kernel.org>; Wed,  3 Jul 2024 12:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720005206; cv=none; b=sdJV5HHv4ojg89cLeyxSK0pRSLDU77NNokTmJljHny7UD8zdUBk1nAL8j2frNcLNL5e72AzrTcH6FPBUZYGWjtCBM+ri6ImI2rLbLEOdh+gTybG8SFLT8217WDJOFcfYohmpZ8spw/3Rp6mNq75//RZCqo7GoOvtMOgv3OU2neU=
+	t=1720011591; cv=none; b=P/sDRwA4zq9KfvvhIsHN/4sK5rINvNoTPa8LvaOvxykMMwzpqhPSCLmRZbjOUEekeoAVfQ0MgfTtlTR3AqsUlF3z5jx/IVWGcUK7NhuEx1vAcx+PLx1NT8k1Wz9Bsct3kavdO/SACfBI1iqY4WF5HsMYeuEVmZ8rKzfYtZWZBbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720005206; c=relaxed/simple;
-	bh=kz+FFGYQA1uMyZjM/HDLifDynfXPhXGzq/HYUKS9jA4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=enonVWATvaELPZtHI9QZ/vWSUfqlpsb1O7m24XrJYv9DKggs/OWNUzNUlE/pgM98WRyDfavkTKtLkgadgvVDsKegT8m36heXzEVePyn53mSKjy1sKjx8lpX9SxVMF8mswHtNdVsrp53vv5YESb3CeYzyYQBliFs8wtkVpv5xD3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=R8EuXd0t; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=wwDb8D4F; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=R8EuXd0t; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=wwDb8D4F; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 1D1681FCDA;
-	Wed,  3 Jul 2024 11:13:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1720005203; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/tt1TfQUdUDUFfwkPg4spPyyIgY89+4QX8VztXYjD34=;
-	b=R8EuXd0t0t/ZBXb26CGB+JXGufEHncR+pxLIliykYvaDgUOKQYK+iyBXcg0JCxTLCjVfsP
-	cHA20Oh6zckSiY4zos1gGrEfQMcnlj8ex1NeT3+YiOMI99KxUBbJ424SlQOYG28FoiG3c3
-	8L1OutKnWXKnHzCu4Klo32dx2W5/oYs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1720005203;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/tt1TfQUdUDUFfwkPg4spPyyIgY89+4QX8VztXYjD34=;
-	b=wwDb8D4Fyb2KFXFwLfQbDmkXYXLRseHkBwgh2NQcNRxtWjtLkL+WQCX/4OGU79XbwfiFV6
-	OWXQF8jraUBIDMBg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1720005203; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/tt1TfQUdUDUFfwkPg4spPyyIgY89+4QX8VztXYjD34=;
-	b=R8EuXd0t0t/ZBXb26CGB+JXGufEHncR+pxLIliykYvaDgUOKQYK+iyBXcg0JCxTLCjVfsP
-	cHA20Oh6zckSiY4zos1gGrEfQMcnlj8ex1NeT3+YiOMI99KxUBbJ424SlQOYG28FoiG3c3
-	8L1OutKnWXKnHzCu4Klo32dx2W5/oYs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1720005203;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/tt1TfQUdUDUFfwkPg4spPyyIgY89+4QX8VztXYjD34=;
-	b=wwDb8D4Fyb2KFXFwLfQbDmkXYXLRseHkBwgh2NQcNRxtWjtLkL+WQCX/4OGU79XbwfiFV6
-	OWXQF8jraUBIDMBg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E9D5A13974;
-	Wed,  3 Jul 2024 11:13:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id KDjKN1IyhWawdAAAD6G6ig
-	(envelope-from <hare@suse.de>); Wed, 03 Jul 2024 11:13:22 +0000
-Message-ID: <f32e1411-6acb-43a7-886e-20d0dae95cc7@suse.de>
-Date: Wed, 3 Jul 2024 13:13:22 +0200
+	s=arc-20240116; t=1720011591; c=relaxed/simple;
+	bh=3qVjwe8JSoBeQ62ic5/5AKhZAZV/LsICslUKQRvBIPM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jK2XuoyrP2fdmNuwVqsMbRL7s02P7RcHEeWD42it7bK9ugMK7WBZ59+8/awqLz5ugO7+p3aUKO57Fmruf0zspliA+j6t00Mrmundu2gx3O3jAwyWqLiWU8qYE2YVOpDayS6KddRB1d43ynIZECMoE3AUc2jeJbmHR4Re6DSZgKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tMzS8c67; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1fa07e4f44eso35320595ad.2
+        for <linux-scsi@vger.kernel.org>; Wed, 03 Jul 2024 05:59:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720011589; x=1720616389; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=M/HUx2z68wHC+7+MGltuv0hwTRcQymV4Of6HlMwnIoA=;
+        b=tMzS8c675lsErTlQFDI1aXm2/pgmxo1HBs0I92eR6IMUj2N7C4BMlGCgU/SJp7iltN
+         sI9PWrkYJ4g8jtu0w66KzbLasKZF4giT1dqf5pMvmuu50/w94uUhrBidzYfPGij5Bqgt
+         J//OOlF2UCIzBdtOcqaddR2E5MiNKFG0OaIJCcEGqKtoDCLqoz9eMo5O6lBIgvUN6c/1
+         a40/Z1+8cwCKz4xYRkIcYozjtZfo9dmjOUDkgX/jzI9gNzVS/l6cwMqqdT9c3O+H0Irv
+         eZQyBfmAVme//UkcFLdtlugSgWoa4P4WIbgpeurZsTtVXeTCh7yKF5JOu4p+ycjTs67y
+         gqdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720011589; x=1720616389;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M/HUx2z68wHC+7+MGltuv0hwTRcQymV4Of6HlMwnIoA=;
+        b=GPu7mnm1co2iAdhjjCNeJBt5RJMFga9s4OuP68YwR6VUYazXtklsD/g537dBW2Ioko
+         fChJ1Ns63+b/ehhKkZ7hkf+sKuK+aXUZ6a8zEzLcjtYaVxCJZ/hOyP1l70AuQR1lBTA0
+         3BogyazlikvAOqxVCaH1QsNXblcknHLNE6yjQLS4AmvewPZrj4OSvoWpHS2m5t9tQv7j
+         SX+S1uSLHLkOCwuk1WTsULaird/ANjPnPEidWtc9mRGFShg/+lkpxyPyFt44TUutddjW
+         34inKgQLLcKx3+LJ5WkQSQ3zjMhU1QQD6JmDw08L+RUdZJmE1B2yIKUs5djq86z7NWFx
+         CnlA==
+X-Forwarded-Encrypted: i=1; AJvYcCXScvMqo0PYEWPl7AiQAJQg8msVNmstHmkfnLLsWLmR4lGGBJKQBdeYLwP5LAJ7sTf4MwSeSdL4dfDq9Y/DHnSLruV8HnHSTQn+zQ==
+X-Gm-Message-State: AOJu0YzDfVdLXViG9AYbyU9EK264MteklzSs7oybeMjAbtAa8uywKfYZ
+	B7SmvSRlg/7zvCvrIm/QH3J0+a0gx5/XEB27OCNCkP17op6pjCKisjxp1ghp1t8RaIaixRDhjqY
+	=
+X-Google-Smtp-Source: AGHT+IEi359puHY1EWphwUsnc2L0OZ1He8voWNeKGDxJSXllvm8HRgnPFSwoIXC3MkIO/dhD4BvZLw==
+X-Received: by 2002:a17:902:b192:b0:1f6:fbde:9b96 with SMTP id d9443c01a7336-1fadbcfce9fmr79519715ad.59.1720011588811;
+        Wed, 03 Jul 2024 05:59:48 -0700 (PDT)
+Received: from thinkpad ([220.158.156.98])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fb01e36dbdsm29042275ad.203.2024.07.03.05.59.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jul 2024 05:59:48 -0700 (PDT)
+Date: Wed, 3 Jul 2024 18:29:43 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+	linux-scsi@vger.kernel.org, Peter Wang <peter.wang@mediatek.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Andrew Halaney <ahalaney@redhat.com>, Bean Huo <beanhuo@micron.com>,
+	ChanWoo Lee <cw9316.lee@samsung.com>
+Subject: Re: [PATCH v4 4/9] scsi: ufs: Rename the
+ MASK_TRANSFER_REQUESTS_SLOTS constant
+Message-ID: <20240703125943.GA3498@thinkpad>
+References: <20240702204020.2489324-1-bvanassche@acm.org>
+ <20240702204020.2489324-5-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/18] scsi: myrs: Simplify an alloc_ordered_workqueue()
- invocation
-To: Bart Van Assche <bvanassche@acm.org>,
- "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org, Hannes Reinecke <hare@kernel.org>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-References: <20240702215228.2743420-1-bvanassche@acm.org>
- <20240702215228.2743420-12-bvanassche@acm.org>
-Content-Language: en-US
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20240702215228.2743420-12-bvanassche@acm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -4.29
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-4.29 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+In-Reply-To: <20240702204020.2489324-5-bvanassche@acm.org>
 
-On 7/2/24 23:51, Bart Van Assche wrote:
-> Let alloc_ordered_workqueue() format the workqueue name instead of calling
-> snprintf() explicitly.
+On Tue, Jul 02, 2024 at 01:39:12PM -0700, Bart Van Assche wrote:
+> Rename this constant to prepare for the introduction of the
+> MASK_TRANSFER_REQUESTS_SLOTS_MCQ constant. The acronym "SDB" stands for
+> "single doorbell" (mode).
 > 
+> Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 > Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+- Mani
+
 > ---
->   drivers/scsi/myrs.c | 6 ++----
->   drivers/scsi/myrs.h | 1 -
->   2 files changed, 2 insertions(+), 5 deletions(-)
+>  drivers/ufs/core/ufshcd.c | 2 +-
+>  include/ufs/ufshci.h      | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index 9a0697556953..2cbd0f91953b 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -2401,7 +2401,7 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
+>  		hba->capabilities &= ~MASK_64_ADDRESSING_SUPPORT;
+>  
+>  	/* nutrs and nutmrs are 0 based values */
+> -	hba->nutrs = (hba->capabilities & MASK_TRANSFER_REQUESTS_SLOTS) + 1;
+> +	hba->nutrs = (hba->capabilities & MASK_TRANSFER_REQUESTS_SLOTS_SDB) + 1;
+>  	hba->nutmrs =
+>  	((hba->capabilities & MASK_TASK_MANAGEMENT_REQUEST_SLOTS) >> 16) + 1;
+>  	hba->reserved_slot = hba->nutrs - 1;
+> diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
+> index c50f92bf2e1d..8d0cc73537c6 100644
+> --- a/include/ufs/ufshci.h
+> +++ b/include/ufs/ufshci.h
+> @@ -67,7 +67,7 @@ enum {
+>  
+>  /* Controller capability masks */
+>  enum {
+> -	MASK_TRANSFER_REQUESTS_SLOTS		= 0x0000001F,
+> +	MASK_TRANSFER_REQUESTS_SLOTS_SDB	= 0x0000001F,
+>  	MASK_NUMBER_OUTSTANDING_RTT		= 0x0000FF00,
+>  	MASK_TASK_MANAGEMENT_REQUEST_SLOTS	= 0x00070000,
+>  	MASK_EHSLUTRD_SUPPORTED			= 0x00400000,
 
-Cheers,
-
-Hannes
 -- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.de                                +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
-
+மணிவண்ணன் சதாசிவம்
 
