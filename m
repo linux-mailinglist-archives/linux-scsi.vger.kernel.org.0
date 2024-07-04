@@ -1,100 +1,88 @@
-Return-Path: <linux-scsi+bounces-6648-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-6650-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F332926CF7
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jul 2024 03:14:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03DB6926D27
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jul 2024 03:42:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 700891C211EF
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jul 2024 01:14:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 349C11C217EC
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jul 2024 01:42:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46ED69461;
-	Thu,  4 Jul 2024 01:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bIUrsvSc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197E5C125;
+	Thu,  4 Jul 2024 01:42:12 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F0C8BFF;
-	Thu,  4 Jul 2024 01:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD357125C0;
+	Thu,  4 Jul 2024 01:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720055661; cv=none; b=Xf9KKolyy7x12XWIE3yh2mP209wxzVzLOz6P31evCpfPZKtaQrjLwG2gBYb9DcHwgh5a2ggEwN88uIM3aRk2rqmX7XiuvsLduzmcMBhJ0d1IA+U4HIrBMYVCjDiJA3vI51SONZFe4MfaKurcQwGiWMm4oqIJ1m11/8UeafIzP9I=
+	t=1720057331; cv=none; b=MC+yBHBkttzCvlDDP33VcsZOmUtr3mVbyZR55d/pOZQKxupi4EzFhnFRFyZvoH34Wf9+lYqyDdm7kJTK88de6EKX6Ki8EFwfS4yadgkdt1L0mA6lMOoUik4sAz/xPxPW7Q2v3XEdD60UfKcbYBxFWw5zkKv0/GZ636ZKO2YZAGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720055661; c=relaxed/simple;
-	bh=IT/0qmpouGjAntmssXPWkmLwzlopcZSsDDAtvyNgKEI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=q0LZkdv5EXOMSx+ISPJQvQzYe0GAc+ywC1Zs1LRPwX13/vQCsKLq4CTk+3Zjtmkz7xBpifzgO9e+42vyrV0YEl8qsFaPWbHuyTBsz2kEEFdQgVyzqtsO/Qf7BgIT9zpEujavU7l6kjodiuq1I2o55r6/thEgTTDaYaqLrbGbOv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bIUrsvSc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2958C2BD10;
-	Thu,  4 Jul 2024 01:14:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720055660;
-	bh=IT/0qmpouGjAntmssXPWkmLwzlopcZSsDDAtvyNgKEI=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=bIUrsvScsVgHP5PZtTZzAEYE8G+B2DRTUd4NbTIpfBpU27Eh19za6EANkCFIEB/0Y
-	 0P0rGf4AvotTsziZ+/8U6tULA+zNfel+9XCB/+YxUIeN8fLJvEkGsxWm4jjyCKLL1G
-	 0MTwPILpAKPkDM1+1/a0qXzwVZXuxe2UmQahzN9H3pH8lM0NSIVWqP4bG/SNzyEHF0
-	 S64XrqXy0uaYQ/thWgtKJcMu6fgXg5+kHGnpd6OPHPMV3xpQR76mZ1UQDU8+9cwZl9
-	 pidfLOqu8r15doN+QqZJWo2M23Qz8ou4+LVCunG34K+zOkClBUOUY3qwaF809ut/3N
-	 xanmDc018kSrw==
-Message-ID: <b011fe29-3602-4857-ac30-f47ce84d43d5@kernel.org>
-Date: Thu, 4 Jul 2024 10:14:17 +0900
+	s=arc-20240116; t=1720057331; c=relaxed/simple;
+	bh=L5pfeTx33tvZp5Q0108felt0l5qLiHIHw76vUpE3yg4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sqBzC4XxHi+/4V2XUgzjD+uLtDPi11C1xWXzzrbJBN1AatPbx9FLrsln4xAxbGwnJ+OXCaC6I1cDPD50uOiQaBfuY9CTdCrkbsYptp70bU9pPyNzmkzjYtPFHNX3Mb/gmO5Ufw1FO5Xysbr32K5haCTJoM5TO50kaPF6STyfFg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 9c362dfc39a611ef93f4611109254879-20240704
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:a5354cc7-1870-4ca8-8a7f-11539d1a9c97,IP:20,
+	URL:0,TC:0,Content:0,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:40
+X-CID-INFO: VERSION:1.1.38,REQID:a5354cc7-1870-4ca8-8a7f-11539d1a9c97,IP:20,UR
+	L:0,TC:0,Content:0,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:40
+X-CID-META: VersionHash:82c5f88,CLOUDID:e83a72d1186fc2e033b0521bd59c2d3f,BulkI
+	D:2407040858191VGC4GU1,BulkQuantity:1,Recheck:0,SF:19|45|66|38|25|17|102,T
+	C:nil,Content:0,EDM:5,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,C
+	OL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
+X-UUID: 9c362dfc39a611ef93f4611109254879-20240704
+X-User: mengfanhui@kylinos.cn
+Received: from localhost.localdomain [(223.70.160.255)] by mailgw.kylinos.cn
+	(envelope-from <mengfanhui@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 952528297; Thu, 04 Jul 2024 09:42:01 +0800
+From: Fanhui Meng <mengfanhui@kylinos.cn>
+To: kashyap.desai@broadcom.com,
+	sumit.saxena@broadcom.com,
+	shivasharan.srikanteshwara@broadcom.com,
+	chandrakanth.patil@broadcom.com,
+	martin.petersen@oracle.com,
+	James.Bottomley@HansenPartnership.com
+Cc: linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [scsi-next v2 0/2] scsi: add megasas_dcmd_timeout helper
+Date: Thu,  4 Jul 2024 09:40:47 +0800
+Message-Id: <cover.1720056514.git.mengfanhui@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] block: Remove REQ_OP_ZONE_RESET_ALL emulation
-To: =?UTF-8?B?RWQgVHNhaSAo6JSh5a6X6LuSKQ==?= <Ed.Tsai@mediatek.com>,
- "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
- "hch@lst.de" <hch@lst.de>,
- "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
- "axboe@kernel.dk" <axboe@kernel.dk>,
- "ming.lei@redhat.com" <ming.lei@redhat.com>,
- "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- "mpatocka@redhat.com" <mpatocka@redhat.com>, "mst@redhat.com"
- <mst@redhat.com>, "dm-devel@lists.linux.dev" <dm-devel@lists.linux.dev>,
- "jasowang@redhat.com" <jasowang@redhat.com>,
- "snitzer@kernel.org" <snitzer@kernel.org>
-References: <20240703233932.545228-1-dlemoal@kernel.org>
- <20240703233932.545228-5-dlemoal@kernel.org>
- <c2022791ae3b082d9da3694aadb4b089a991570a.camel@mediatek.com>
-From: Damien Le Moal <dlemoal@kernel.org>
-Content-Language: en-US
-Organization: Western Digital Research
-In-Reply-To: <c2022791ae3b082d9da3694aadb4b089a991570a.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 7/4/24 09:07, Ed Tsai (蔡宗軒) wrote:
->> diff --git a/block/blk-core.c b/block/blk-core.c
->> index 71b7622c523a..0c25df9758d0 100644
->> --- a/block/blk-core.c
->> +++ b/block/blk-core.c
->> @@ -834,7 +834,7 @@ void submit_bio_noacct(struct bio *bio)
->>  			goto not_supported;
->>  		break;
->>  	case REQ_OP_ZONE_RESET_ALL:
->> -		if (!bdev_is_zoned(bio->bi_bdev) ||
->> !blk_queue_zone_resetall(q))
->> +		if (!bdev_is_zoned(bio->bi_bdev))
->>  			goto not_supported;
->>  		break;
->>  	case REQ_OP_DRV_IN:
-> 
-> It does the same thing as other zone operations, putting these together
-> will be more cleaner?
+This patch set contains small cleanups for megaraid_sas. Patch 1 adds
+a new helper megasas_dcmd_timeout() to reduce duplicate code. Patch 2
+makes dcmd_timeout_ocr_possible() static.
 
-Indeed. Will do that in v2.
+Fanhui Meng (2):
+  scsi: megaraid_sas: Add megasas_dcmd_timeout helper
+  scsi: megaraid_sas: make dcmd_timeout_ocr_possible static
+
+ drivers/scsi/megaraid/megaraid_sas.h      |   2 +
+ drivers/scsi/megaraid/megaraid_sas_base.c | 203 ++++------------------
+ 2 files changed, 38 insertions(+), 167 deletions(-)
 
 -- 
-Damien Le Moal
-Western Digital Research
+2.25.1
 
 
