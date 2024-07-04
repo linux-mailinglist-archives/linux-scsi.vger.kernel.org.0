@@ -1,37 +1,37 @@
-Return-Path: <linux-scsi+bounces-6660-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-6661-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F358E926EC2
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jul 2024 07:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 178A5926EC5
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jul 2024 07:22:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 357811F231FD
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jul 2024 05:21:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B61D91F23337
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jul 2024 05:22:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 043CD1A00FC;
-	Thu,  4 Jul 2024 05:21:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E07961A01A2;
+	Thu,  4 Jul 2024 05:22:08 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5572E403;
-	Thu,  4 Jul 2024 05:21:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430724204F;
+	Thu,  4 Jul 2024 05:22:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720070489; cv=none; b=FzFjP5wWem53GA/qKyhKj1OMyRTFJmEKPc3VmyvcdkgBg2RDOwsenbqWbybSmWrS55vmhvPhmtLEw7o/xZZeYYZb3uJZITJIfEUYpTA2MiVaogpcZgpSC2qRwuLVwaMQI7kIn8fT1bHLGGXs0ReI1IC4on4M8oqH7mZGzLOcFZ8=
+	t=1720070528; cv=none; b=I2fNr5wjFCjBNlQKaDkTCNXl+RUnNH0V/xetV0RnIdEy42EzR/dr1ZKOUbp6QXLv1Tu50U3rJOA3uWhvzGUVl+IcMv7vLt76nDNHvhskyeQOVjwINufCZ3np16YUuM5UtKX89TWYNvUapTr4aoDAezzFJfS68yaAN2QHRbFbcs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720070489; c=relaxed/simple;
+	s=arc-20240116; t=1720070528; c=relaxed/simple;
 	bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GhhpNdLpSpxZqVA+GabrDI29qZi+4+u6oPCqYGbR2UFCQbyHZwl1TJDZ/wnR0l4Wt8W52fgxI3ftBw7AzIMATzH1ORhSuaa+hxoKMrmQ/wh0X7OqEQmIr2SS99peMmTSfKgDHIM4/IdMk7eePxeBv/tLjyUA7BoTAFYQQtkZmZQ=
+	 Content-Type:Content-Disposition:In-Reply-To; b=hhM6T1kzVPkJrZWzQaflXnVcfeil34kW3kaF136ZJEyYCaZxwalG0KJAQVvGXuvsY/dEPhDbS7e4bbbN/z9IKkQovKSocqnS7N7ClehovW12eD5sWDg3LOiQvlYv/8Hy/wvfek3l3pZMN2ENVXcayZEOUjK8BpH6g+dYbfiiyBs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
 Received: by verein.lst.de (Postfix, from userid 2407)
-	id C07C968AFE; Thu,  4 Jul 2024 07:21:24 +0200 (CEST)
-Date: Thu, 4 Jul 2024 07:21:24 +0200
+	id 0043D68AFE; Thu,  4 Jul 2024 07:22:03 +0200 (CEST)
+Date: Thu, 4 Jul 2024 07:22:03 +0200
 From: Christoph Hellwig <hch@lst.de>
 To: Damien Le Moal <dlemoal@kernel.org>
 Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
@@ -41,9 +41,9 @@ Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
 	Ming Lei <ming.lei@redhat.com>,
 	"Michael S . Tsirkin" <mst@redhat.com>,
 	Jason Wang <jasowang@redhat.com>, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 4/5] block: Remove REQ_OP_ZONE_RESET_ALL emulation
-Message-ID: <20240704052124.GA19637@lst.de>
-References: <20240703233932.545228-1-dlemoal@kernel.org> <20240703233932.545228-5-dlemoal@kernel.org>
+Subject: Re: [PATCH 5/5] block: Remove blk_alloc_zone_bitmap()
+Message-ID: <20240704052203.GB19637@lst.de>
+References: <20240703233932.545228-1-dlemoal@kernel.org> <20240703233932.545228-6-dlemoal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240703233932.545228-5-dlemoal@kernel.org>
+In-Reply-To: <20240703233932.545228-6-dlemoal@kernel.org>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 
 Looks good:
