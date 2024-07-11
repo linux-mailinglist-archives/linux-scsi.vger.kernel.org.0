@@ -1,115 +1,90 @@
-Return-Path: <linux-scsi+bounces-6849-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-6851-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5AE792DEBE
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2024 05:09:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63FC192DFB3
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2024 07:42:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71195281E66
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2024 03:09:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AC54282483
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2024 05:42:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32DF5DDDF;
-	Thu, 11 Jul 2024 03:09:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="RfdlBg9u"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B0E277115;
+	Thu, 11 Jul 2024 05:42:31 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CF710A36;
-	Thu, 11 Jul 2024 03:09:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F223AC1F;
+	Thu, 11 Jul 2024 05:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720667367; cv=none; b=ezqywsGjF1Wygzp1XTxte41Dl22ZnWuCa39BzJhz+jCNPo1BG8cJN6vSohazO4bxQwrbmH4MCd3LagU9rTsjf1bZVAnVtDrJ5cf1okIaitNyJ+A6ua3C6KFI0mEi8PO/0WYsZTQylycWXlF+zmgIrdJEevRzR2P+rCAYF9MAoyk=
+	t=1720676551; cv=none; b=hDAOa7WSFEzTWYlrFTGvr11YnlJo5JaQjca+zw+/IEht8XmsyvS7+ij+YzHtPCKkt7JrPVFt9qbinTtTuhceNNWB0CaUQSDUzl1YnF39Xj1x+AFXinaoF+5tY8wVCykSi1zt2HUa4Pq3LWtNcm2NN7qe2t559RbR44+JGmLdEII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720667367; c=relaxed/simple;
-	bh=XUstL11BeDWvPWznWt06Pq5fKndnRoflKrUeNNgbCnQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XDiXXEc0jCQdm1X2hXSOSgo5gnSXPnoRjM1U9gxoO94EB9lUYVeRqvZBchpxP9te0qTfOultjvOaYbEvnmTcOCp3bi0LN04uMTq3TqztTUkKYFM7OJLUtgmTUoqllUrKhm+byjh2zYgt3r8y2IHCcwpWWh8BuJilCTWEyABGNTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=RfdlBg9u; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46B0W2N6029600;
-	Thu, 11 Jul 2024 03:09:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type:content-transfer-encoding; s=
-	corp-2023-11-20; bh=QZt32ryLc+2mLGCiP6px8XlN2AI/SprGl4vbMVzIvzo=; b=
-	RfdlBg9udxMW2W3CN9Te8lB86fEcErkxuvfX8sqqOzY//HCiDT9QK3j5Qx+g8thc
-	cmzHQSjbzDWdZutBrNjs52BYjkXHTtUsQqkbSMRwDnPTmes4Mg4wayjBGnLS0JdR
-	1yf+aTBTvsVzIBKLLAOUGJcDksD3vJYl2H7Fs/cXz54rCHYvDfsov3ZWKcNDKfFw
-	sbjO21xDiu4WZB5Qz6HiUagtqGOMUK3NFKiR16pG0p6lLrrPr9wvtA4rvuLA8cFc
-	e9uyRf0yGHwIv3My4Bz+4Qkpcl7IdPlrecBqJeR9RmNJXzAWgxEGlRzC1BE/hJNI
-	YBelx6WcG+TaLsGU6TU2fg==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 406wgq0p89-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 11 Jul 2024 03:09:19 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 46B1MjXO008691;
-	Thu, 11 Jul 2024 03:09:18 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 409vv3x4dd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 11 Jul 2024 03:09:18 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 46B39D9n006490;
-	Thu, 11 Jul 2024 03:09:18 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 409vv3x4ar-4;
-	Thu, 11 Jul 2024 03:09:18 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Jack Wang <jinpu.wang@cloud.ionos.com>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        TJ Adams <tadamsjr@google.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Igor Pylypiv <ipylypiv@google.com>
-Subject: Re: [PATCH v2 0/2] small pm80xx driver fixes
-Date: Wed, 10 Jul 2024 23:08:35 -0400
-Message-ID: <172066369904.698281.13143387624330894977.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240627155924.2361370-1-tadamsjr@google.com>
-References: <20240627155924.2361370-1-tadamsjr@google.com>
+	s=arc-20240116; t=1720676551; c=relaxed/simple;
+	bh=CgAFU959M+tbjtGnitDMPE9JCtXXNro4X7Ff4vH5ctA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nOtBiCTmSo7WS1DVGHRfHST+dEr0FucMrWdE6UI4+iHJgWb4kkWOrxzaHh+Koz7lHPDBbriUydYh6zzsJXSC8h7MpIMZR5gy4xZgcLOkxnk0GYtIBa0jdpD4KfnUBICmUnejUQTzIGYFww6OcNJzN4jOn6J4mrNaHBKztfogrxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 1A8CA68AA6; Thu, 11 Jul 2024 07:42:25 +0200 (CEST)
+Date: Thu, 11 Jul 2024 07:42:24 +0200
+From: Christoph Hellwig <hch@lst.de>
+To: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Christoph Hellwig <hch@lst.de>, Kanchan Joshi <joshi.k@samsung.com>,
+	Anuj Gupta <anuj20.g@samsung.com>, linux-block@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-nvme@lists.infradead.org
+Subject: Re: fine-grained PI control
+Message-ID: <20240711054224.GA4331@lst.de>
+References: <20240705083205.2111277-1-hch@lst.de> <yq1ttgz5l6d.fsf@ca-mkp.ca.oracle.com> <20240709071604.GB18993@lst.de> <yq1h6cy3r3f.fsf@ca-mkp.ca.oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-10_20,2024-07-10_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=748 bulkscore=0
- suspectscore=0 malwarescore=0 phishscore=0 adultscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
- definitions=main-2407110020
-X-Proofpoint-ORIG-GUID: pPaP-5VGD87VHVjliNFyiv4pr4cPxjfl
-X-Proofpoint-GUID: pPaP-5VGD87VHVjliNFyiv4pr4cPxjfl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yq1h6cy3r3f.fsf@ca-mkp.ca.oracle.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Thu, 27 Jun 2024 15:59:22 +0000, TJ Adams wrote:
-
-> These are 2 small patches to prevent a kernel crash and change some
-> logs' levels. V1 consisted of 3 patches. One patch is being dropped so
-> it can be reworked and sent separately.
+On Tue, Jul 09, 2024 at 11:47:58PM -0400, Martin K. Petersen wrote:
+> For the user API I think it would be most sensible to have CHECK_GUARD,
+> CHECK_APP, CHECK_REF to cover the common DIX/NVMe case.
 > 
-> Igor Pylypiv (1):
->   scsi: pm80xx: Set phy->enable_completion only when we wait for it
+> And then we could have NO_CHECK_DISK and IP_CHECKSUM_CONVERSION to
+> handle the peculiar SCSI corner cases and document that these are
+> experimental flags to be used for test purposes only. Not particularly
+> elegant but I don't have a better idea. Especially since things are
+> inherently asymmetric with controller-to-target communication being
+> protected even if you don't attach PI to the bio.
 > 
-> [...]
+> I.e. I think the CHECK_{GUARD,APP,REF} flags should describe how a
+> DIX or NVMe controller should check the attached bip payload. And
+> nothing else.
 
-Applied to 6.11/scsi-queue, thanks!
+I really hate an API that is basically exposes a completely
+different set of flags for SCSI vs NVMe.
 
-[1/2] scsi: pm80xx: Set phy->enable_completion only when we wait for it
-      https://git.kernel.org/mkp/scsi/c/e4f949ef1516
-[2/2] scsi: pm8001: Update log level when reading config table
-      https://git.kernel.org/mkp/scsi/c/76a20140ef76
+I am also really not sold on IP_CHECKSUM_CONVERSION and the separate
+no check for disk vs controller things.  I can see why someone would
+want to do that for testing, but as a general API at the syscall
+level it just is not a useful abstraction and highly confusing.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Can we figure out a way to do these as error injection points in
+scsi or something similar so that we don't have to overload the
+user interface with it?
+
+> I'll try to connect my NVMe test box tomorrow. It's been offline after a
+> rack move. Would like to understand what's going on. Are we not setting
+> ILBRT/EILBRT appropriately?
+
+I think NVMe just had a real mess with deallocation and Write Zeroes
+in the past, and my test driver might be old enough to have implemented
+the ECNs that fixes this eventually, assuming it actually got fixed
+everywhere.
+
 
