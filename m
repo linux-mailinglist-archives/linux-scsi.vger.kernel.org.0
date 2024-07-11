@@ -1,121 +1,95 @@
-Return-Path: <linux-scsi+bounces-6890-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-6893-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E61092EFEC
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2024 21:47:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 726D092F167
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2024 23:57:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A5792828A4
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2024 19:47:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AC2B1F23673
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2024 21:57:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8726419E82C;
-	Thu, 11 Jul 2024 19:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C95A81A01A9;
+	Thu, 11 Jul 2024 21:57:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="JlQRYg2S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fyxhCn65"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CF319E819
-	for <linux-scsi@vger.kernel.org>; Thu, 11 Jul 2024 19:47:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757E01A00DE;
+	Thu, 11 Jul 2024 21:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720727258; cv=none; b=jYoSjenxM92m8Y0Ssb9d0H1mIJOO0439olvIgNddkTrMDuHyjzGOe6wAYt8IclV1g/Ot16Zgf9KI/2NiYu/8PsUvSjfnWHPCArYI3Yy33LQFQxNCQ4TuJj6O0wTT3trvxTAWeJbFkVjw5yq9XVHTucHnQ/dXZeCWrbuMx8Xj8x0=
+	t=1720735060; cv=none; b=DjWF6AoBvdBBRNgKNor63k5vX0S8g2lrKbk2gRw9BfiWKk0BUok6PgZ4lkFIh18Ka2Fe91LTJ4rybNwvzAeOmb/7hDNeEEhLp4RXSLq/8AEz+qCG+yYRlwAd2zeVX8GAH6dPuiym00GUvI81IkID+PuCtLLiNVcbCBPbbUbI/VI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720727258; c=relaxed/simple;
-	bh=T/GzQbh0X4TKvXQbjdOYEp62TV3ZEQxPb0M8pfhIlpQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hf+0RW+g+/IcwGekxdfY8ylZcaZXJkyX8Omwurah3ps4QVbkMUySTvMizPDxk8aX6K+xgiosP6gryYfGRpXgpxJvcEtmEuEyoFYkDIzEQFFjtZSATG0cI99wmYJiTmycQkGA3LTjDGcR3akDq31g4UvGovKtbHheH9et8EGczSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=JlQRYg2S; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1720727256; x=1752263256;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=T/GzQbh0X4TKvXQbjdOYEp62TV3ZEQxPb0M8pfhIlpQ=;
-  b=JlQRYg2S+pWVDqtRxLVSEV9lvGVTmLqgVWm5xgKbqxXWcEWpLyrZE/MA
-   jBo2k0dUMhjN4K+m9DpdOoBGS/laTxZlHSjzBNjERey5hBmlEK1mUfJg8
-   eXS9GECy72YJg4DfeD3kbFCITi/x+P/qOXUp/1TAjlaRzUuJqtGQbUFrh
-   2dqimNSN0MZPMaAxV/Jovm8i7AVtHQ/tuoo3nGv9Vl/TXsPy8mWuY3tCj
-   CPznPuldyZSfE0Lur90TjC4xQtnVCynfbCce8WWEYRWsifcMkRMdt/njp
-   j0dIH/Kmrcif+sYG9j5PhlZC/GEGNbb0bmxEuigTRnpOoYW7Mhw0tURGt
-   w==;
-X-CSE-ConnectionGUID: lpLBJxwkSjifens90ReNAw==
-X-CSE-MsgGUID: VOATk1O5S1uPUuA7yuwiIQ==
-X-IronPort-AV: E=Sophos;i="6.09,201,1716274800"; 
-   d="scan'208";a="29106958"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Jul 2024 12:47:30 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 11 Jul 2024 12:47:09 -0700
-Received: from brunhilda.pdev.net (10.10.85.11) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Thu, 11 Jul 2024 12:47:08 -0700
-From: Don Brace <don.brace@microchip.com>
-To: <don.brace@microchip.com>, <Kevin.Barnett@microchip.com>,
-	<scott.teel@microchip.com>, <Justin.Lindley@microchip.com>,
-	<scott.benesh@microchip.com>, <gerry.morong@microchip.com>,
-	<mahesh.rajashekhara@microchip.com>, <mike.mcgowen@microchip.com>,
-	<murthy.bhat@microchip.com>, <kumar.meiyappan@microchip.com>,
-	<jeremy.reeves@microchip.com>, <david.strahan@microchip.com>,
-	<hch@infradead.org>, James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Martin Petersen <martin.petersen@oracle.com>, <joseph.szczypek@hpe.com>,
-	<POSWALD@suse.com>
-CC: <linux-scsi@vger.kernel.org>
-Subject: [PATCH 5/5] smartpqi: update driver version to 2.1.28-025
-Date: Thu, 11 Jul 2024 14:47:04 -0500
-Message-ID: <20240711194704.982400-6-don.brace@microchip.com>
-X-Mailer: git-send-email 2.45.2.827.g557ae147e6
-In-Reply-To: <20240711194704.982400-1-don.brace@microchip.com>
-References: <20240711194704.982400-1-don.brace@microchip.com>
+	s=arc-20240116; t=1720735060; c=relaxed/simple;
+	bh=ybyGHtzigMOqjGxyaBFEijGZXpaJVJQ9vmvlN/xYw6k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DNTBZmfmhxr3MrhKQlJFhVuq7ilwGMvhKlg29oCHANplgcmyx9K8wIRSOyEsOI/qZAaZsfiY3jBzptjo8w4rQgOeDvOxpVqoowSg+4LfhxSlizO4UW/RDu3TUNP+rBWGYlkJJ16yzz2Mz/Q9jfqV4C4K4SM784NtxM1EUHXEAxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fyxhCn65; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15511C116B1;
+	Thu, 11 Jul 2024 21:57:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720735060;
+	bh=ybyGHtzigMOqjGxyaBFEijGZXpaJVJQ9vmvlN/xYw6k=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fyxhCn65O0fL5Nm5CGAL/QB4Do+KHjGMMjZPxX+sVc4H83mjnFayLNnl4htXv69SQ
+	 3qdD88En/n9wrZuHkwO3M/W3+nY1rm+viDEVIkwCBLtKOICL2RHfKu3wB+Q5Usky4T
+	 e9TgzzFPwxyYnpDRb6os6pePlIiiyX5Z6XOXrXiZuqYzjC0YByjBdGeoOeR8NnM3r9
+	 hdJ+0VtH21xpII2hHACWCV64uPIHTopTWOnXbG/nn8opETJImp0GN6kCc+HV0DyA/H
+	 I57L36qLf8PzyRHK99LDUJmQVzH/v08D9sT1foVoJ3X6ijsYXHigjU1b/gHIgTNMxz
+	 y2an+BjZuuaxQ==
+From: Kees Cook <kees@kernel.org>
+To: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+Cc: Kees Cook <kees@kernel.org>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	linux-kernel@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH 0/2] scsi: aacraid: struct sgmap: Replace 1-element arrays with flexible arrays
+Date: Thu, 11 Jul 2024 14:57:36 -0700
+Message-Id: <20240711212732.work.162-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Organization: Microchip Technology Inc.
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1022; i=kees@kernel.org; h=from:subject:message-id; bh=ybyGHtzigMOqjGxyaBFEijGZXpaJVJQ9vmvlN/xYw6k=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmkFVSFXvDE+43NNFnHJ1H7JDM3JDiB473Tr38G QFs5Y1V3SCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZpBVUgAKCRCJcvTf3G3A Js26D/9tz2/3LOkXmEYeBUeNrZkqGkGNi55YQp9+H7SwRq0hmT1BEFDlB6ufjRkHMvWs41Y1sEy vNvC7gOgi1DVp+lxTyJCxByUT1a5490MoJwzuI6hRuia0HXJuWXOc0JGZL86T1yhUartNOcK3GF 0xs0/Sh8QwxnLQfD9vd5CkxfV+CN5wfJrwwhgHe8LtjIZ+srv8rfKCYfhoNjV1Wx0xwCm+RC+3o tdFAJLEgeFiglAPUdhdoJDmdALq224DFBkJVA9HxBkQYRR49hIfYR6h7GX2pxR0iRZQKjiB+mZT sB6N/HXNmfxs2rVEhEO+uMw/LIi+qmSagO0ChUQSvXOaVuzTCqW59iEWMKp9hFnFeeo63zonBt2 FR8zAl1x5aXGMkLIe9rXjuji4jiaUjCK27tWo5TKrkkgrtX1M0xwxcxq1Q4bfkpjPG9QXaEuBko yWa1/s9jf3ldMHxTYGzOyM9844vXZC2bGaDLfEWx0t55gt/duAYnj7sFPqO7Iqk2FCuxrCOAGD7 V6w4ens4bvF4/YHJB5nVwiEAMDFmKBCL7A3TBxjW/15f2kZYagDxFwoRdsFUulgJHgDNy/e7RtO QaYaFJSv6hlxzFp3wPH44QB1ekz9DBWMgu+0g5B2iNRAp7JUoaAw5jPTTp34OgWiKLa7LCBr0sO luYgP4Lnkg6Xx
+ gw==
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 
-Update driver version to 2.1.28-025
+Hi,
 
-Reviewed-by: Mike Tran <mike.tran@microchip.com>
-Reviewed-by: Gerry Morong <gerry.morong@microchip.com>
-Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
-Reviewed-by: Scott Teel <scott.teel@microchip.com>
-Signed-off-by: Don Brace <don.brace@microchip.com>
----
- drivers/scsi/smartpqi/smartpqi_init.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This replaces some of the last remaining uses in the kernel of 1-element
+"fake" flexible arrays with modern C99 flexible arrays. Some refactoring
+is done to ease this, and binary differences are identified. For the
+on stack size changes in patch 2, the "yes, that is the source of the binary
+differences" debugging patch can be found here[1].
 
-diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 0dd901445dcc..823cc97a9788 100644
---- a/drivers/scsi/smartpqi/smartpqi_init.c
-+++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -33,11 +33,11 @@
- #define BUILD_TIMESTAMP
- #endif
- 
--#define DRIVER_VERSION		"2.1.26-030"
-+#define DRIVER_VERSION		"2.1.28-025"
- #define DRIVER_MAJOR		2
- #define DRIVER_MINOR		1
--#define DRIVER_RELEASE		26
--#define DRIVER_REVISION		30
-+#define DRIVER_RELEASE		28
-+#define DRIVER_REVISION		25
- 
- #define DRIVER_NAME		"Microchip SmartPQI Driver (v" \
- 				DRIVER_VERSION BUILD_TIMESTAMP ")"
+Thanks!
+
+-Kees
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=dev/v6.10-rc2/1-element&id=45e6226bcbc5e982541754eca7ac29f403e82f5e
+
+Kees Cook (2):
+  scsi: aacraid: Rearrange order of struct aac_srb_unit
+  scsi: aacraid: struct {user,}sgmap{,64,raw}: Replace 1-element arrays
+    with flexible arrays
+
+ drivers/scsi/aacraid/aachba.c   | 26 ++++++++++++--------------
+ drivers/scsi/aacraid/aacraid.h  | 17 ++++++-----------
+ drivers/scsi/aacraid/commctrl.c |  4 ++--
+ drivers/scsi/aacraid/comminit.c |  3 +--
+ drivers/scsi/aacraid/commsup.c  |  5 +++--
+ 5 files changed, 24 insertions(+), 31 deletions(-)
+
 -- 
-2.45.2.827.g557ae147e6
+2.34.1
 
 
