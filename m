@@ -1,78 +1,77 @@
-Return-Path: <linux-scsi+bounces-6924-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-6928-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8163931ED1
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2024 04:30:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D3A8931EDC
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2024 04:31:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 938EB2829E0
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2024 02:30:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 02BF0B21D0F
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2024 02:31:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56EE279E0;
-	Tue, 16 Jul 2024 02:30:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9528D101CA;
+	Tue, 16 Jul 2024 02:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="iu4qWo9n"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Hou1IwWb"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCB21876
-	for <linux-scsi@vger.kernel.org>; Tue, 16 Jul 2024 02:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88C51C694;
+	Tue, 16 Jul 2024 02:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721097012; cv=none; b=o9n0ocUzwQKA4yFnJAlbG/4iQId1P/z5+OFneVWu6MNLHXRTQ9X5/LAWPKIBWXhu8F/0Thtan+c9UC7IWf64kyU7cl5aqnGDT7YH4ktzUpBahUHn8kWvrPLlebm+Yw9wci5A/ophFio0lkHGkhON0US9yo/ECwdefNDqeRjc5ME=
+	t=1721097030; cv=none; b=LMgZTMDOEN0A2WFkyv8a/ztBKtGl/SmGtxDMtPsCh0tNOfpiL5K4kWhlb2ecSDV0miMrljaxnpXoB91zjTpuMhgBNJfneWDuPwkJMqb03hE0BhbYq0dQeNXJCH16u+w7Eq49piZNlsROoPx2XIhilfSAZp/d50/bbJlMaJNJjQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721097012; c=relaxed/simple;
-	bh=RmlO5VwMtsy6ErmCf4oVrz20kdI5yYDTKczzrqHsf/4=;
+	s=arc-20240116; t=1721097030; c=relaxed/simple;
+	bh=8Cpsm0ZhBHuf444Yk8e+Az5VO1dkZdncwNCBhXbtbUI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BwaVcSHJmAnOWXphVnWxy2gM0/jJRJdxSIwCiU4jGSZd2HcgXDfb63tG2ihIS+8M9zw4fbyxHDNGxTzqDnRTjlmpiG0aNnnhWcISbjvnolpIf/FhQJWrnF0yEJwSnCmz/p6s8nCSi6naXL5b6CusOtVvKguj2TnyYB4utAUVvB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=iu4qWo9n; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=phO8mXPorVz9nVyYP5ipLeu6WHCMjZIiuSj5lyWvmKU9lm1pZXN5MYuVIjaL7Kou7Hrm1RqNXkJ/IQs5DP/tPqUojoMpszu8FyUtWXD87kS8Xd9tD4S2Iwu5Y/LV+W3L7MXB7aJYVzFyZpbQsJInVqkYevA66OWUxRToyH22mRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Hou1IwWb; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46FLXceU019169;
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46FL90HB002980;
 	Tue, 16 Jul 2024 02:30:06 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-type:content-transfer-encoding; s=
-	corp-2023-11-20; bh=38pQ/FkG3WiXRL+9+sgt9kgMMfnCgWY3FUDthaKG3DU=; b=
-	iu4qWo9ntCt8aSwXHlvJ3xqjo84Rm0TjXcvMXYD6UWtirHEFqu49gLo+cPPvg9SA
-	1/Yx1V3KBXLAjZFhsm1ybXTBPbx9jGP9Er22vmD4pZVcM/3b42u71+sj5Lqz+7gE
-	JxTJjlwz4F35gnCJv9zSGm30qBYpKZP78DlvrZCA7fAR2kPJQgwxKCjIoN5hZCyt
-	oag74l5vNBgmmI1wPZgXieieSS+v5OtfkOZbHu9bRIQ3sCml/mWn66w3ta68y0qL
-	Wh72RsqFuKA0moJYu9PRHT4geVTF2tV7uaEPUB9F7P9RE9r8n7DgMkudcl3KJTcl
-	+L1h+CHIf4Krjc4qaliLag==
+	corp-2023-11-20; bh=ohhSNM0LsvUICVcsJwpHtQH6rwZE/78TtulzmT1jz+0=; b=
+	Hou1IwWbGsd36whFPWUwyQDU4xZZbF/jrqT6M4JOqGpJVK/Sl8/WhjMKwdWFwOAk
+	9nY/S8dRuOSTeM/VS3AGcp+9PVBwOV/6pnLYgDQAyaOG6+TRI0iAj+RYNKpHoGy9
+	tNLlcLhfTMLruXNB/apzuPTy1e7+8MaKuF2YFac0qO068wHfWCAW36oY5pG6Q+Oq
+	oiL1/9r4j4AQDW6tC0Eun4UernYJzLGp3WRNdBAA18Cwn+tDgOrxaHN9ZaZPVanN
+	ywnWqjFinluIcqY+0OpK+DAvtmD85CtV53MNVahJKykqO92ABWPtnpUQisRsvenZ
+	pd4Y77F5DR2WL9KZOK2sPg==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 40bhmcmf37-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 40bh6svnf1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 16 Jul 2024 02:30:05 +0000 (GMT)
+	Tue, 16 Jul 2024 02:30:06 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 46G1fYuC002627;
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 46G23phI002651;
 	Tue, 16 Jul 2024 02:30:05 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 40bg1exxdj-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 40bg1exxds-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 16 Jul 2024 02:30:05 +0000
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 46G2U3AB027682;
-	Tue, 16 Jul 2024 02:30:04 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 46G2U3AD027682;
+	Tue, 16 Jul 2024 02:30:05 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 40bg1exxah-4;
-	Tue, 16 Jul 2024 02:30:04 +0000
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 40bg1exxah-5;
+	Tue, 16 Jul 2024 02:30:05 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Nilesh Javali <njavali@marvell.com>
+To: fischer@norbit.de, James.Bottomley@HansenPartnership.com,
+        Zhongqiu Han <quic_zhonhan@quicinc.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, GR-QLogic-Storage-Upstream@marvell.com,
-        agurumurthy@marvell.com, sdeodhar@marvell.com, emilne@redhat.com,
-        jmeneghi@redhat.com
-Subject: Re: [PATCH v2 00/11] qla2xxx misc. bug fixes
-Date: Mon, 15 Jul 2024 22:29:23 -0400
-Message-ID: <172109323560.941202.13735343870813567849.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: aha152x: use DECLARE_COMPLETION_ONSTACK for non-constant completion
+Date: Mon, 15 Jul 2024 22:29:24 -0400
+Message-ID: <172109323565.941202.9875743621405105678.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240710171057.35066-1-njavali@marvell.com>
-References: <20240710171057.35066-1-njavali@marvell.com>
+In-Reply-To: <20240705103614.3650637-1-quic_zhonhan@quicinc.com>
+References: <20240705103614.3650637-1-quic_zhonhan@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -85,49 +84,24 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-07-15_19,2024-07-11_01,2024-05-17_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 adultscore=0
- bulkscore=0 mlxlogscore=871 malwarescore=0 phishscore=0 spamscore=0
+ bulkscore=0 mlxlogscore=904 malwarescore=0 phishscore=0 spamscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
  definitions=main-2407160018
-X-Proofpoint-GUID: bWrUrCP7FnMupi4t3LP0vvC3f19aguTK
-X-Proofpoint-ORIG-GUID: bWrUrCP7FnMupi4t3LP0vvC3f19aguTK
+X-Proofpoint-GUID: RgNm-uhvztY9jBc9zAirnPGsF4qEI9M-
+X-Proofpoint-ORIG-GUID: RgNm-uhvztY9jBc9zAirnPGsF4qEI9M-
 
-On Wed, 10 Jul 2024 22:40:46 +0530, Nilesh Javali wrote:
+On Fri, 05 Jul 2024 18:36:14 +0800, Zhongqiu Han wrote:
 
-> Martin,
+> The _ONSTACK variant should be used for on-stack completion, otherwise it
+> will break lockdep. See also commit 6e9a4738c9fa ("[PATCH] completions:
+> lockdep annotate on stack completions").
 > 
-> Please apply the qla2xxx driver miscellaneous bug fixes
-> to the scsi tree at your earliest convenience.
 > 
-> v2:
-> - Fix smatch warn, val_is_in_range() warn: always true condition '(val <= 4294967295) => (0-u32max <= u32max)'
-> - Fix smatch warn, qla24xx_get_flash_version() warn: missing error code? 'ret'
-> 
-> [...]
 
 Applied to 6.11/scsi-queue, thanks!
 
-[01/11] qla2xxx: unable to act on RSCN for port online
-        https://git.kernel.org/mkp/scsi/c/c3d98b12eef8
-[02/11] qla2xxx: validate nvme_local_port correctly
-        https://git.kernel.org/mkp/scsi/c/eb1d4ce26095
-[03/11] qla2xxx: Fix for possible memory corruption
-        https://git.kernel.org/mkp/scsi/c/c03d740152f7
-[04/11] qla2xxx: Return ENOBUFS if sg_cnt is more than one for ELS cmds
-        https://git.kernel.org/mkp/scsi/c/ce2065c4cc4f
-[05/11] qla2xxx: Fix flash read failure
-        https://git.kernel.org/mkp/scsi/c/29e222085d89
-[06/11] qla2xxx: complete command early within lock
-        https://git.kernel.org/mkp/scsi/c/4475afa2646d
-[07/11] qla2xxx: During vport delete send async logout explicitly
-        https://git.kernel.org/mkp/scsi/c/76f480d7c717
-[08/11] qla2xxx: Fix optrom version displayed in FDMI
-        https://git.kernel.org/mkp/scsi/c/348744f27a35
-[09/11] qla2xxx: Reduce fabric scan duplicate code
-        https://git.kernel.org/mkp/scsi/c/beafd6924614
-[10/11] qla2xxx: Use QP lock to search for bsg
-        https://git.kernel.org/mkp/scsi/c/c449b4198701
-[11/11] qla2xxx: Update version to 10.02.09.300-k
-        https://git.kernel.org/mkp/scsi/c/a1392b19ca59
+[1/1] scsi: aha152x: use DECLARE_COMPLETION_ONSTACK for non-constant completion
+      https://git.kernel.org/mkp/scsi/c/23cef42d1741
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
