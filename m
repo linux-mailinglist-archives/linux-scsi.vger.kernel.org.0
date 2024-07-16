@@ -1,77 +1,82 @@
-Return-Path: <linux-scsi+bounces-6925-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-6927-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FA12931ED0
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2024 04:30:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65C48931ED8
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2024 04:30:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FF961C210D3
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2024 02:30:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83F7EB21CE0
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2024 02:30:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56E9F6FBE;
-	Tue, 16 Jul 2024 02:30:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EC4F15EA6;
+	Tue, 16 Jul 2024 02:30:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="JS92SVwm"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="JhYulX4l"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCEB7482
-	for <linux-scsi@vger.kernel.org>; Tue, 16 Jul 2024 02:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9597E14265;
+	Tue, 16 Jul 2024 02:30:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721097012; cv=none; b=SXpg4RXbxDwbAp3Ey8ctBPW5zsIVJxnHT7Xa2mWEyT0WJJAgu6+D7KDQjO8y4IpkyE8kmcokJqII+GVQ5geWqVT7Ro1sZcSQk9AK7Hcdj/GQlT0AhV93HUctiMUAXIagWmaT1Jx3bpHkU/oJrXA6xCqvVQJFe+e34yx+/IyLC8c=
+	t=1721097019; cv=none; b=d18bq2g0AyfhbN0fltpD/rkNeClNdHfSDG6es2gQM2PUqi8CP2U+VCGXNcNTJ4CwIFnZ1eTWR1CgAcIXlogK9vwWQ84JKU+9V12Jlf7Phgdq7Nf11pJhAOFsPrVc8b4w5LgWINE6GXHxTM7b7vMdKAotWrg3eYvoOiIjjgzBn3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721097012; c=relaxed/simple;
-	bh=OFXiqlyFglBpm/sMCO/7gOD7PO1vQUOC3h3PO5TEbqM=;
+	s=arc-20240116; t=1721097019; c=relaxed/simple;
+	bh=r7BeG+M7Wb2IqW/43sFe+cgMEddiFYxRW4MoQrVWLFU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lM5fId0LbbQ2vzZDMukbBKiDs4KVKpcanrmWuSuaWBciaeRux0rAW80UVdHDEvKBAdzNvhIpd24VAlejwL/89fTnYm1Vg8d+/xvzWIb6KhcJgqoWfybhvvgnNPUAfsPeMeFn3Hmo38hAY2/Vo32GYzXrCX+Hsy6X/JNsA8xfb+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=JS92SVwm; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=L4K6bEkwSBi/3SzlwDoPfRapFxPfsnGe4baU3orB4/s9p3zbwWUHsCOycDdjkBUW7Maxh49quzIb5RvRl0jrflLwmMP/eZIMGDUW2I5Wv6iWtDbmJCQt4hZOp5sgnfoxWdAGYzt2izMbWMcnXpWVVCVUOJw79TWggFvPZGQ6nds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=JhYulX4l; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46FL1MSW005763;
-	Tue, 16 Jul 2024 02:30:04 GMT
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46FLAEYu002966;
+	Tue, 16 Jul 2024 02:30:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-type:content-transfer-encoding; s=
-	corp-2023-11-20; bh=BCYKCxRE+M5IadJrdTP/P2zx6ZKFSbzruGKmfEpfkPs=; b=
-	JS92SVwmpXKN8lP4HMf2pcCf1Dx2Am/hFe7RV0lO1IOpPngwmAILjnYL2K/4FD1i
-	bw/oYDv5Ng0B6758yrzG+a/lL2V/1JMfnGcAN1v27VBT3jl1h2i6eEPKi8+tk5Gd
-	6TrbS8aGxeww7zHwhHKpvtHMUzgbr+B67XMtM3rN750vhbe4SMH9qRjy05V1KguV
-	W/LLvmOIMzRBgO4I0wCtw3KTVw0Q/GJgKZmrKNVYvs2RyimL7SY5+5+up45hSWLd
-	2rxzJ7sCetqNggRENIrF/CGha0GycFO9y3+wtL4bTuXX4p7hk1XtKbmz6gXyyCX8
-	7UJd5vNrDttYmAoC6FU49Q==
+	corp-2023-11-20; bh=NVIMiyPj9Tna6v8yf6ZmHWlzRGDvugihZRaZDMrV3ac=; b=
+	JhYulX4lGSeslrXQ31oUkf0RjkywUlwQtyTQHEoQN7uacsrs0hsnVb2uC4KOjG+4
+	kkhQmQDYBoa5J3FjZ/Tmq3kyNMq7UDEib1dGa9ZioIhqc3K50hwPMKEVh1JeUzgf
+	lRTxZjj6DIGGeJtO9cXHTqy3MWfdooFineiSTq+7C1upURsJiTawyi1KQNshijz0
+	yQC1MQIrParfis93zmo2Ue0aiXBhXvbn3WsHJ5lPI6rXineieNKed2+WzKpOBvB2
+	BkgR/p5fgF6I3MY/g9ZbSVEHuNQlsEmwGf3pd6oKw8QhUYh12dDWu73s6GCXjkS3
+	5XU2qVPeXYe2leYC08M4Lw==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 40bgc2cu0t-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 40bh6svney-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 16 Jul 2024 02:30:04 +0000 (GMT)
+	Tue, 16 Jul 2024 02:30:05 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 46G10Fp4002641;
-	Tue, 16 Jul 2024 02:30:03 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 46G196Oq002613;
+	Tue, 16 Jul 2024 02:30:04 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 40bg1exxcb-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 40bg1exxd5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 16 Jul 2024 02:30:03 +0000
+	Tue, 16 Jul 2024 02:30:04 +0000
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 46G2U3A5027682;
-	Tue, 16 Jul 2024 02:30:03 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 46G2U3A7027682;
+	Tue, 16 Jul 2024 02:30:04 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 40bg1exxah-1;
-	Tue, 16 Jul 2024 02:30:03 +0000
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 40bg1exxah-2;
+	Tue, 16 Jul 2024 02:30:04 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Bart Van Assche <bvanassche@acm.org>
+To: linux-scsi@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, peter.wang@mediatek.com,
-        manivannan.sadhasivam@linaro.org
-Subject: Re: [PATCH v5 00/10] UFS patches for kernel 6.11
-Date: Mon, 15 Jul 2024 22:29:20 -0400
-Message-ID: <172109323553.941202.15493909377795653078.b4-ty@oracle.com>
+        linux-samsung-soc@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Peter Griffin <peter.griffin@linaro.org>,
+        =?UTF-8?q?Andr=C3=A9=20Draszik?= <andre.draszik@linaro.org>,
+        William McVicker <willmcvicker@google.com>
+Subject: Re: [PATCH v3 0/6] Basic inline encryption support for ufs-exynos
+Date: Mon, 15 Jul 2024 22:29:21 -0400
+Message-ID: <172109323557.941202.10485953221148966734.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240708211716.2827751-1-bvanassche@acm.org>
-References: <20240708211716.2827751-1-bvanassche@acm.org>
+In-Reply-To: <20240708235330.103590-1-ebiggers@kernel.org>
+References: <20240708235330.103590-1-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -84,52 +89,39 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-07-15_19,2024-07-11_01,2024-05-17_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 adultscore=0
- bulkscore=0 mlxlogscore=934 malwarescore=0 phishscore=0 spamscore=0
+ bulkscore=0 mlxlogscore=669 malwarescore=0 phishscore=0 spamscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
  definitions=main-2407160018
-X-Proofpoint-GUID: 3SVmaxWxhUnQHzRxzudXqoE4CLOtZkXN
-X-Proofpoint-ORIG-GUID: 3SVmaxWxhUnQHzRxzudXqoE4CLOtZkXN
+X-Proofpoint-GUID: diyzOwlsDqqhjvI7WSuySuffOQT2BrUI
+X-Proofpoint-ORIG-GUID: diyzOwlsDqqhjvI7WSuySuffOQT2BrUI
 
-On Mon, 08 Jul 2024 14:15:55 -0700, Bart Van Assche wrote:
+On Mon, 08 Jul 2024 16:53:24 -0700, Eric Biggers wrote:
 
-> Please consider this series of UFS driver patches for the next merge window.
+> Add support for Flash Memory Protector (FMP), which is the inline
+> encryption hardware on Exynos and Exynos-based SoCs.
 > 
-> Thank you,
-> 
-> Bart.
-> 
-> Changes compared to v4:
->  - Included changes for the MediaTek driver in patch "Inline is_mcq_enabled()".
->    Dropped the Reviewed-by tags from that patch.
->  - Added a patch that moves the "hba->mcq_enabled = true" assignment into
->    ufshcd_mcq_enable(). Later patches have been modified such that
->    hba->mcq_enabled assignments only happen inside ufshcd_mcq_enable() and
->    ufshcd_mcq_disable().
+> Specifically, add support for the "traditional FMP mode" that works on
+> many Exynos-based SoCs including gs101.  This is the mode that uses
+> "software keys" and is compatible with the upstream kernel's existing
+> inline encryption framework in the block and filesystem layers.  I plan
+> to add support for the wrapped key support on gs101 at a later time.
 > 
 > [...]
 
 Applied to 6.11/scsi-queue, thanks!
 
-[01/10] scsi: ufs: Declare functions once
-        https://git.kernel.org/mkp/scsi/c/d502dac69ac0
-[02/10] scsi: ufs: Initialize struct uic_command once
-        https://git.kernel.org/mkp/scsi/c/93ef12d92f65
-[03/10] scsi: ufs: Remove two constants
-        https://git.kernel.org/mkp/scsi/c/92c0b10fefe2
-[04/10] scsi: ufs: Rename the MASK_TRANSFER_REQUESTS_SLOTS constant
-        https://git.kernel.org/mkp/scsi/c/b53eb9a050d7
-[05/10] scsi: ufs: Initialize hba->reserved_slot earlier
-        https://git.kernel.org/mkp/scsi/c/f4750af7081d
-[06/10] scsi: ufs: Inline is_mcq_enabled()
-        https://git.kernel.org/mkp/scsi/c/0fca3318e550
-[07/10] scsi: ufs: Move the "hba->mcq_enabled = true" assignment
-        https://git.kernel.org/mkp/scsi/c/4a8c859b44da
-[08/10] scsi: ufs: Move the ufshcd_mcq_enable() call
-        https://git.kernel.org/mkp/scsi/c/7e2c268dc306
-[09/10] scsi: ufs: Inline ufshcd_mcq_vops_get_hba_mac()
-        https://git.kernel.org/mkp/scsi/c/5e2053a41984
-[10/10] scsi: ufs: Make .get_hba_mac() optional
-        https://git.kernel.org/mkp/scsi/c/af568c7e8292
+[1/6] scsi: ufs: core: Add UFSHCD_QUIRK_CUSTOM_CRYPTO_PROFILE
+      https://git.kernel.org/mkp/scsi/c/c2a90eee29f4
+[2/6] scsi: ufs: core: fold ufshcd_clear_keyslot() into its caller
+      https://git.kernel.org/mkp/scsi/c/ec99818afb03
+[3/6] scsi: ufs: core: Add UFSHCD_QUIRK_BROKEN_CRYPTO_ENABLE
+      https://git.kernel.org/mkp/scsi/c/e95881e0081a
+[4/6] scsi: ufs: core: Add fill_crypto_prdt variant op
+      https://git.kernel.org/mkp/scsi/c/8ecea3da1567
+[5/6] scsi: ufs: core: Add UFSHCD_QUIRK_KEYS_IN_PRDT
+      https://git.kernel.org/mkp/scsi/c/4c45dba50a37
+[6/6] scsi: ufs: exynos: Add support for Flash Memory Protector (FMP)
+      https://git.kernel.org/mkp/scsi/c/c96499fcb403
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
