@@ -1,70 +1,75 @@
-Return-Path: <linux-scsi+bounces-7021-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7023-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C4B99421F4
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2024 23:01:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15DE89421F6
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2024 23:01:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 023E61F2561B
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2024 21:01:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDC45287248
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2024 21:01:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C41F14B94C;
-	Tue, 30 Jul 2024 21:01:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D661183098;
+	Tue, 30 Jul 2024 21:01:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="ru+dIOgG"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="CSCp5KQ4"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA4338B
-	for <linux-scsi@vger.kernel.org>; Tue, 30 Jul 2024 21:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0C814B94C
+	for <linux-scsi@vger.kernel.org>; Tue, 30 Jul 2024 21:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722373288; cv=none; b=e/3XV6L8owcqh4n5HZ2cONMD1O1uwO51HZi4fGxFRze77RHh9lh+z1/SEsazqaWWxoBL3ZgK4MM+CeQeibHfkp0ZWV08tj3Ufvb02j+NLLNY/rIwjWGltjAkXcqnblmW6+QF/YSPiqNAiEKHJ0vH7CaAtMGJ4YalIoXevhNw6lI=
+	t=1722373292; cv=none; b=pyAiWIi99Daen5KWasQK4KD8ABgVLRXQOyVb6LgpVM4B4mebhCpnb0+/H2CXACclJ3kUS0wNFweH1rR9/dyqHGzdNzH8rvjuo65m+dt9p32wO930LL53WPOshdzEgalflyisY1R76PmUw40OElO57BbiAGRXNEXXjTtiSwD7ttc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722373288; c=relaxed/simple;
-	bh=Jsrij01xQIq4cy8Y9h/sp8k6EUB8pm59HSDNg4pxKxE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UYyO25pK4yn3tW4CST2MIwLSMUhd8vKqBhXGTSgfEr+xkjCgDV6fvAbnPhx7Gzufi6wU4A1vqI5fFsslNoRLO59V8PbGvaD2gMOcSKk4NNGKjdZxScBJP/K8ztaATSGqesoIZJBRfyGo5pFUjrK5K1HdG8kjPTKzwpqw/fU4bNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=ru+dIOgG; arc=none smtp.client-ip=199.89.1.11
+	s=arc-20240116; t=1722373292; c=relaxed/simple;
+	bh=MSCDvzmhGpUUKowAsg7B5/si3ikKThoVck0E3qk2ZJU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XIVcESOhR1gmwOx8lq5DPUzjtxPfBY4+Ks2Y5Y7xlNCbw51J4QeJaDXJyPrI13/0jLOTlECi8fEzFqGxy75rillRCAMM4g1Y9Klb1WOaq+DKfEjXPvyPpLlDvmGsoznxZwXBvYe8ApocIKAPCUzubvIZiDtxtimJD6cGxEA7OsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=CSCp5KQ4; arc=none smtp.client-ip=199.89.1.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4WYSM45686z6CmM6Q;
-	Tue, 30 Jul 2024 21:01:20 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4WYSM76599z6CmM6f;
+	Tue, 30 Jul 2024 21:01:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:x-mailer:message-id:date
-	:date:subject:subject:from:from:received:received; s=mr01; t=
-	1722373278; x=1724965279; bh=+nWFw3bkB6v8WZxDZrtYY79DGyS919TRgzi
-	vdoncBck=; b=ru+dIOgGpyNuYcm4F78AcaoA+S+WHeqjffF+FYukLEHPGAkAzhL
-	HSnKGmcoLcvQd8eYuslxUDoociTgk1UXicrkCG+XrT0tZsgXezYt1OlPXrsN/AKT
-	reBi8cTYOzKvXSYMzqciujwhuYTr3o2uGkfIMNl++o+4v3BoD6Tlvum849TkxPlh
-	+RzAzW3l390zkEzxRSxzPHtSMEhhN5htzxMKm0PZFKEv9K4KL6/uW8KIvPlmEdas
-	xT541xk6D50Nqy8fgfsfCBu8JygwMKCVhnba1Ree+tjHbtdR8pW9uAp3mezLRUzE
-	gFyXEfnfRl57YgZ8xUPBf9mHtax+huJzfQQ==
+	content-transfer-encoding:mime-version:references:in-reply-to
+	:x-mailer:message-id:date:date:subject:subject:from:from
+	:received:received; s=mr01; t=1722373279; x=1724965280; bh=MoB+v
+	WcGV34z9qL1SBrnAObpzsa3T5PWZ7ibSXidmCU=; b=CSCp5KQ4TMX27BM2GKhKu
+	0LV0CqX9+4KWGA/5yhoM97NVpCg5lkvT4+p0lbvbT37+W1XtJzwvkzjlyly7P1pE
+	XV7oRCMKEwGrmzpqPPaCUk40EIKMqOSSbUVa5mNZqeBe4bdOoV06UZD7MGrC7ZYb
+	Jwi5lEM1IYvOosudS40bdQ4CO4KEInI74qDYqRbF1kR6OBIUl/UXG3sKtmJjp6ml
+	nBQY2yNslLXMjyeicVPf0PtzzuH5pPS3lJzZlDe6qeeC/quSdoXwQncMs0wNwo49
+	j0C9E3IGDgdm1dDtIjGKdMWIyf+gtQxxUsNI/fgWlZdHINlk+7Np1+YIhENzGTOF
+	w==
 X-Virus-Scanned: by MailRoute
 Received: from 008.lax.mailroute.net ([127.0.0.1])
  by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id dBUFSIx8d3gI; Tue, 30 Jul 2024 21:01:18 +0000 (UTC)
+ id GVdkJFIoOW9h; Tue, 30 Jul 2024 21:01:19 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.204.82])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4WYSM152Zlz6CmQwN;
-	Tue, 30 Jul 2024 21:01:17 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4WYSM23Wh5z6CmQvG;
+	Tue, 30 Jul 2024 21:01:18 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	Christoph Hellwig <hch@lst.de>,
 	Damien Le Moal <dlemoal@kernel.org>,
 	Hannes Reinecke <hare@suse.de>,
-	Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH 0/6] SCSI disk source code cleanup
-Date: Tue, 30 Jul 2024 14:00:35 -0700
-Message-ID: <20240730210042.266504-1-bvanassche@acm.org>
+	Bart Van Assche <bvanassche@acm.org>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH 1/6] scsi: sd: Move the sd_remove() function definition
+Date: Tue, 30 Jul 2024 14:00:36 -0700
+Message-ID: <20240730210042.266504-2-bvanassche@acm.org>
 X-Mailer: git-send-email 2.46.0.rc2.264.g509ed76dc8-goog
+In-Reply-To: <20240730210042.266504-1-bvanassche@acm.org>
+References: <20240730210042.266504-1-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -73,27 +78,92 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Hi Martin,
+Move the sd_remove() function definition such that the sd_shutdown()
+forward declaration can be removed.
 
-This patch series removes multiple forward declarations from the SCSI dis=
-k (sd)
-driver and also makes error messages easier to find with grep. Please con=
-sider
-this patch series for the next merge window.
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/scsi/sd.c | 53 +++++++++++++++++++++++------------------------
+ 1 file changed, 26 insertions(+), 27 deletions(-)
 
-Thanks,
-
-Bart.
-
-Bart Van Assche (6):
-  scsi: sd: Move the sd_remove() function definition
-  scsi: sd: Move the sd_config_discard() function definition
-  scsi: sd: Move the sd_config_write_same() function definition
-  scsi: sd: Move the scsi_disk_release() function definition
-  scsi: sd: Move the sd_fops definition
-  scsi: sd: Do not split error messages
-
- drivers/scsi/sd.c | 411 ++++++++++++++++++++++------------------------
- 1 file changed, 198 insertions(+), 213 deletions(-)
-
+diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+index adeaa8ab9951..58ea8c06205b 100644
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -109,7 +109,6 @@ static void sd_config_write_same(struct scsi_disk *sd=
+kp,
+ 		struct queue_limits *lim);
+ static int  sd_revalidate_disk(struct gendisk *);
+ static void sd_unlock_native_capacity(struct gendisk *disk);
+-static void sd_shutdown(struct device *);
+ static void scsi_disk_release(struct device *cdev);
+=20
+ static DEFINE_IDA(sd_index_ida);
+@@ -4042,32 +4041,6 @@ static int sd_probe(struct device *dev)
+ 	return error;
+ }
+=20
+-/**
+- *	sd_remove - called whenever a scsi disk (previously recognized by
+- *	sd_probe) is detached from the system. It is called (potentially
+- *	multiple times) during sd module unload.
+- *	@dev: pointer to device object
+- *
+- *	Note: this function is invoked from the scsi mid-level.
+- *	This function potentially frees up a device name (e.g. /dev/sdc)
+- *	that could be re-used by a subsequent sd_probe().
+- *	This function is not called when the built-in sd driver is "exit-ed".
+- **/
+-static int sd_remove(struct device *dev)
+-{
+-	struct scsi_disk *sdkp =3D dev_get_drvdata(dev);
+-
+-	scsi_autopm_get_device(sdkp->device);
+-
+-	device_del(&sdkp->disk_dev);
+-	del_gendisk(sdkp->disk);
+-	if (!sdkp->suspended)
+-		sd_shutdown(dev);
+-
+-	put_disk(sdkp->disk);
+-	return 0;
+-}
+-
+ static void scsi_disk_release(struct device *dev)
+ {
+ 	struct scsi_disk *sdkp =3D to_scsi_disk(dev);
+@@ -4147,6 +4120,32 @@ static void sd_shutdown(struct device *dev)
+ 	}
+ }
+=20
++/**
++ *	sd_remove - called whenever a scsi disk (previously recognized by
++ *	sd_probe) is detached from the system. It is called (potentially
++ *	multiple times) during sd module unload.
++ *	@dev: pointer to device object
++ *
++ *	Note: this function is invoked from the scsi mid-level.
++ *	This function potentially frees up a device name (e.g. /dev/sdc)
++ *	that could be re-used by a subsequent sd_probe().
++ *	This function is not called when the built-in sd driver is "exit-ed".
++ **/
++static int sd_remove(struct device *dev)
++{
++	struct scsi_disk *sdkp =3D dev_get_drvdata(dev);
++
++	scsi_autopm_get_device(sdkp->device);
++
++	device_del(&sdkp->disk_dev);
++	del_gendisk(sdkp->disk);
++	if (!sdkp->suspended)
++		sd_shutdown(dev);
++
++	put_disk(sdkp->disk);
++	return 0;
++}
++
+ static inline bool sd_do_start_stop(struct scsi_device *sdev, bool runti=
+me)
+ {
+ 	return (sdev->manage_system_start_stop && !runtime) ||
 
