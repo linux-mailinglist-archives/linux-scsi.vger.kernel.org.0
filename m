@@ -1,78 +1,81 @@
-Return-Path: <linux-scsi+bounces-7114-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7116-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 054C494840A
-	for <lists+linux-scsi@lfdr.de>; Mon,  5 Aug 2024 23:19:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5966C94840F
+	for <lists+linux-scsi@lfdr.de>; Mon,  5 Aug 2024 23:20:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE5E41F21BC2
-	for <lists+linux-scsi@lfdr.de>; Mon,  5 Aug 2024 21:19:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADE69B210BF
+	for <lists+linux-scsi@lfdr.de>; Mon,  5 Aug 2024 21:20:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E06CF17109B;
-	Mon,  5 Aug 2024 21:18:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D1E01741DA;
+	Mon,  5 Aug 2024 21:18:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="hSzzkRYA"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ABKQ2q/s"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1105816F288;
-	Mon,  5 Aug 2024 21:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F40C17278D;
+	Mon,  5 Aug 2024 21:18:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722892720; cv=none; b=UC4/5/sWRDswLYfWfttURCpvrJHxrPnFvPKxcvvV4pPLLPRnc3wsax+AHLXttaX3waJVTureVIcAvKaNANzIN4QvLjE3df8pL5Kma0HWIbbsGPygt9iWwXJqVFoU1P9TARNFrrQxEJB2K+ksY5EzgXnnZ2AohCUNVgGpo8R6LLQ=
+	t=1722892725; cv=none; b=GFsTTKV7A6iK/wcnsHF+bggS9n9HO6PQW+Hen3Nn5oWvGf8bYdB2FxjynnoOBZEo2enrD6f4HIdBLXabu5Pn+f0Z2eZoI0OY9BIM7JbWIUMJDnDImWopSkRJlAyYPIPKPLlucKQDC/gLkANTJScGRIBX0yNvMsyxk03Qk7O5gQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722892720; c=relaxed/simple;
-	bh=4Qel4rucoQ/Bm9tZo7yO/q1cOT8+yABNCks6ZBg28ls=;
+	s=arc-20240116; t=1722892725; c=relaxed/simple;
+	bh=ZtYzxRxwWBp6bC31/4/B9/9mCEuN4MBBaKqD2IYjV7w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bQVVnFaGmMcg+fv2nWWCVfJ0kUltZ4xf57oYQ2+16Pv8tJMmd1jExa5S1C8gu8Dk52SM9fpstXj9h7Be3vlsDGuI29GG23K3lgPe+q9LZcMbG6nTMO17Pm3XRDcIeU8eLkGl9nqjbIHwfZg6lyhFyPXLzc42yfh5CiYI7KQwfL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=hSzzkRYA; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=fM94iy2TS7idUDEquTrhbdq9o30/J0vldEJkdoPoRZZq1+XDTj2HbGxGRjOGP1NyGXfZSwWdCR2mzQA59CVYTVc0F27Ypz810umFVKEG5sGuycwAI1Ps/3xKzAS9aoKm58BcXhFGpJiZZdJmkIGbYn/Q9dvRg/xvDAKRAKQbN5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ABKQ2q/s; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 475KjRqj005274;
-	Mon, 5 Aug 2024 21:18:34 GMT
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 475KjSKL005293;
+	Mon, 5 Aug 2024 21:18:36 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-type:content-transfer-encoding; s=
-	corp-2023-11-20; bh=3qZWUo8ekLHKxbADQtUatjril6XW9ogMK8TA6kii3zA=; b=
-	hSzzkRYAV0r6Iy1UbRtieJdzGDw/nhU+ZxCn7lll5/dnxxlnUfu7XxlxpdyJ4cwl
-	7FyaVXQSegCVRB+MiLAOMymDh5zN10Y4JbDfm4afNyxw2tdX+sUDtIxz311AHUYP
-	5eTSp69QcufGQnsfpBJa0e22GjpEPVSbG/CK12Z0a0xdPPkvgcuvqGK/HpwBwT0I
-	ZTlk7C/SVy61oCsTM40lmKN/JRH7WV4zf76zOak86XRligvlL+6xkDdw2clmq2M8
-	FXy415NfYOZc2va38GjjkqiIbRo98QHz+Xm9pLD+TxNWbOYOSkHQZmFugeuLdf9o
-	hml2JnH1IksxU3u8aBxiyA==
+	corp-2023-11-20; bh=+2mRglz8YMJu9tB80+gf1v8xPqsFb3Xw2pex1b3qBvg=; b=
+	ABKQ2q/sHGOFY56RAbYBxbOay2oQNIio1gfIf6gRvL3IJ5x4q5AvObFn2B/IZ0Di
+	dgLH05k28tHeFMLh2J7QR1/FNVSImGvcXQtOfY0ImKwZW+uPiGPxkkOPThz8c8GT
+	PY43aVYNIAyvpEVA3yITS+rzMysCs/+nXrQ+ok2MNqX3W9cDLjnrYi4au7eUoxd9
+	LX5ChtAmIHgnd+cuTpDUWLVZT8d32Xt0TL88YShhDqimzjpcSvfPPkUCOVPIDUL0
+	uV3iqgZ46voi6sToj7nC7/kwVDnJ+nccDXE2+EPW0ljxL9RZ8Qk+7N7xy97q//PW
+	DDaelZbNFpWYEgoCyMlKfA==
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 40sbb2krqa-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 40sbb2krqb-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 05 Aug 2024 21:18:34 +0000 (GMT)
+	Mon, 05 Aug 2024 21:18:35 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 475JbvBK034971;
-	Mon, 5 Aug 2024 21:18:33 GMT
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 475K8BcZ034980;
+	Mon, 5 Aug 2024 21:18:34 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 40sb07ydmd-1
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 40sb07ydmy-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 05 Aug 2024 21:18:33 +0000
+	Mon, 05 Aug 2024 21:18:34 +0000
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 475LINEX035403;
-	Mon, 5 Aug 2024 21:18:32 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 475LINEZ035403;
+	Mon, 5 Aug 2024 21:18:34 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 40sb07ydcw-8;
-	Mon, 05 Aug 2024 21:18:32 +0000
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 40sb07ydcw-9;
+	Mon, 05 Aug 2024 21:18:33 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Brian King <brking@us.ibm.com>, Kees Cook <kees@kernel.org>
+To: Kashyap Desai <kashyap.desai@broadcom.com>, Kees Cook <kees@kernel.org>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Chandrakanth patil <chandrakanth.patil@broadcom.com>,
         "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] scsi: ipr: Replace 1-element arrays with flexible arrays
-Date: Mon,  5 Aug 2024 17:17:32 -0400
-Message-ID: <172289240511.2008326.3989315023392784238.b4-ty@oracle.com>
+        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] scsi: megaraid_sas: struct MR_LD_VF_MAP: Replace 1-element arrays with flexible arrays
+Date: Mon,  5 Aug 2024 17:17:33 -0400
+Message-ID: <172289240509.2008326.4613816844614756968.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240711180702.work.536-kees@kernel.org>
-References: <20240711180702.work.536-kees@kernel.org>
+In-Reply-To: <20240711155823.work.778-kees@kernel.org>
+References: <20240711155823.work.778-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -85,27 +88,25 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-08-05_09,2024-08-02_01,2024-05-17_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 phishscore=0
- mlxlogscore=885 mlxscore=0 adultscore=0 malwarescore=0 bulkscore=0
+ mlxlogscore=637 mlxscore=0 adultscore=0 malwarescore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
  definitions=main-2408050151
-X-Proofpoint-GUID: sD6dBm9-uvmVtQRbqfpWsUVxCIyMnT-3
-X-Proofpoint-ORIG-GUID: sD6dBm9-uvmVtQRbqfpWsUVxCIyMnT-3
+X-Proofpoint-GUID: UNO7DzaUiH-vDDSw1HCJXzBp8hXTnJ7d
+X-Proofpoint-ORIG-GUID: UNO7DzaUiH-vDDSw1HCJXzBp8hXTnJ7d
 
-On Thu, 11 Jul 2024 11:07:06 -0700, Kees Cook wrote:
+On Thu, 11 Jul 2024 08:58:23 -0700, Kees Cook wrote:
 
-> Replace the deprecated[1] use of a 1-element arrays in
-> struct ipr_hostrcb_fabric_desc and struct ipr_hostrcb64_fabric_desc
-> with modern flexible arrays.
+> Replace the deprecated[1] use of a 1-element array in
+> struct MR_LD_VF_MAP with a modern flexible array.
 > 
 > No binary differences are present after this conversion.
 > 
 > 
-> [...]
 
 Applied to 6.12/scsi-queue, thanks!
 
-[1/1] scsi: ipr: Replace 1-element arrays with flexible arrays
-      https://git.kernel.org/mkp/scsi/c/c72e13cf820b
+[1/1] scsi: megaraid_sas: struct MR_LD_VF_MAP: Replace 1-element arrays with flexible arrays
+      https://git.kernel.org/mkp/scsi/c/ed8ab02c85b3
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
