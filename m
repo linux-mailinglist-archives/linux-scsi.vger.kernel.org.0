@@ -1,170 +1,437 @@
-Return-Path: <linux-scsi+bounces-7140-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7137-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA80C948C00
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2024 11:15:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 546ED948B7F
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2024 10:44:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 262C11C23229
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2024 09:15:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A1ED28169B
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2024 08:44:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7B921BDA80;
-	Tue,  6 Aug 2024 09:15:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E891BD02F;
+	Tue,  6 Aug 2024 08:44:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="csuHE/b3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h5CGQqF8"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-m127175.xmail.ntesmail.com (mail-m127175.xmail.ntesmail.com [115.236.127.175])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129D91607BD;
-	Tue,  6 Aug 2024 09:15:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D496C16BE0A;
+	Tue,  6 Aug 2024 08:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722935710; cv=none; b=l7bR6tE8c2jKN2uLlLaDfl+MDeN/b5JXtvsSvBi4NaL7h4Sz7N6hI06LJkfla5xFyxUeR9Nh8imXrjGT3C812SJl7qB3gb9ifR+McCZRJzSREUaxlntWXJHhNX+ES3cG6BbZAAFrxAIiWC78u5lgcke1MgLQwzNYGA2mCpZXpJU=
+	t=1722933843; cv=none; b=nLhNpN6c1Hk5Xdexa3Dqy5jVaodXTmfNRfr0zOF6OohZXAxVOIQnY2n+/PDjW2xURzEwQAX5rwllj8qIbcrSgYTr8tdJduxMK2tq8C0vamIEe93HIpmJ12ICDOAAPgslG59WpuRzfBPy6MXx5dNG51/g40oRfdiHJNrWZu5tWNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722935710; c=relaxed/simple;
-	bh=U7CC4FRHymHCqssl1IA3pMgvF9xhzgHxO7SntYYtcGg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=D73yVWTfBSPYeW8AyeFeB0Jt7kiq6Ges2k39KGL359w2Brf05pufUUfa5wG5t6NCCbcqFRnhzSxzwqb61tO8l/LH+ui5N/ASR7mt8ZCPTCj9cnMSfExezx4csIvbgdXpeJYOv4oC6LKMXn8WRfurpzHjIdHcZNHeYkWeCzKP7+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=csuHE/b3; arc=none smtp.client-ip=115.236.127.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-DKIM-Signature: a=rsa-sha256;
-	b=csuHE/b3StOi/ls1Sa2rMC6zBwf9yGJ+8oh4hx9GLHyKONb3p2jIQUQxXCkoEahXQ4LTycMkNtMhShTAZv3tpI8V8HcncE+roBDGSeMdtytyAdOHvdIbZ9uCUimKgvsiQJzGBYgK+QTBIEaneXVJlG1MQRyUZQSclixSHdTeTss=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=LMVMwH7LofqOvPfrqlYHp9W5j7CWVyj4pSOchCn8W2E=;
-	h=date:mime-version:subject:message-id:from;
-Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTPA id 48F154604F8;
-	Tue,  6 Aug 2024 15:20:19 +0800 (CST)
-From: Shawn Lin <shawn.lin@rock-chips.com>
-To: Rob Herring <robh+dt@kernel.org>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	YiFeng Zhao <zyf@rock-chips.com>,
-	Liang Chen <cl@rock-chips.com>,
-	linux-scsi@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	Shawn Lin <shawn.lin@rock-chips.com>
-Subject: [PATCH v1 2/3] dt-bindings: ufs: Document Rockchip UFS host controller
-Date: Tue,  6 Aug 2024 15:19:59 +0800
-Message-Id: <1722928800-137042-3-git-send-email-shawn.lin@rock-chips.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1722928800-137042-1-git-send-email-shawn.lin@rock-chips.com>
-References: <1722928800-137042-1-git-send-email-shawn.lin@rock-chips.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGUlNGVZLSUwdHRhDSB0eGkNWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCSE
-	NVSktLVUpCS0tZBg++
-X-HM-Tid: 0a91268f6eaa03aekunm48f154604f8
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6N0k6Fyo4ODI*ExI4Cj8OSk0I
-	HTwwCShVSlVKTElJQklDQ0lLTkJPVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
-	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQU9JSE03Bg++
+	s=arc-20240116; t=1722933843; c=relaxed/simple;
+	bh=B0WQPw973C3LVxYk5S53XmcEe0PD9+2JgOcuWSoxE+M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NQDpTbbn+IjJqPSJnjPBdQLmiBUyJl35Wl2Q+BiH3BYZVAdm49Q51+vY7mF2lJ8HD3Ak9rHxrtgX/CbpRvYnifytwAlbSGLCwo3/lAT+pGhnfxEPVjZz2A7l0ermDou3HNNDTZ5O7983ghNTgDnqAw36uN93G0FHr83iUFWBJvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h5CGQqF8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA74FC32786;
+	Tue,  6 Aug 2024 08:43:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722933843;
+	bh=B0WQPw973C3LVxYk5S53XmcEe0PD9+2JgOcuWSoxE+M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=h5CGQqF8n+gyRKnX92AoR975/Pi+PSNvgw3kAi84Iak6hDF24gIwz9Yb1MdxmPIP2
+	 ESsJlVZMSIGjb1c/yhJJ5RRov+fQtj2FQN97reAhf7PmN7u3wIW7JJNyZlpLAnBiZh
+	 izRQF37DE31yTEJjfzQi10kNXXbbyL+UUQfEUCAVI43F/XQo7n7T/2vyo60Q31+shy
+	 C6r81y9xdsNnVhvfsG7GZhEQ/DlkdRsZmf9KgVfS5GwWLesUBIV9MZ9cNS3hsTa3ch
+	 gntcMVXQNcJ/CvLlKp8g3LhRrwW8xuIAUvxK23cLuIPKiYll78v5OHVRK+WL+yKRP0
+	 pzPyWW2mM/3MQ==
+Message-ID: <ea136482-16bc-4e67-8370-de72ee0c034e@kernel.org>
+Date: Tue, 6 Aug 2024 10:43:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 3/3] scsi: ufs: rockchip: init support for UFS
+To: Shawn Lin <shawn.lin@rock-chips.com>, Rob Herring <robh+dt@kernel.org>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: Heiko Stuebner <heiko@sntech.de>, Alim Akhtar <alim.akhtar@samsung.com>,
+ Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>,
+ YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+ linux-scsi@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ devicetree@vger.kernel.org
+References: <1722928800-137042-1-git-send-email-shawn.lin@rock-chips.com>
+ <1722928800-137042-4-git-send-email-shawn.lin@rock-chips.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <1722928800-137042-4-git-send-email-shawn.lin@rock-chips.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Document Rockchip UFS host controller for RK3576 SoC.
+On 06/08/2024 09:20, Shawn Lin wrote:
+> RK3576 contains a UFS controller, add init support fot it.
+> 
+> Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+> 
+> ---
 
-Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
----
 
- .../devicetree/bindings/ufs/rockchip,ufs.yaml      | 78 ++++++++++++++++++++++
- 1 file changed, 78 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/ufs/rockchip,ufs.yaml
 
-diff --git a/Documentation/devicetree/bindings/ufs/rockchip,ufs.yaml b/Documentation/devicetree/bindings/ufs/rockchip,ufs.yaml
-new file mode 100644
-index 0000000..e2e492c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/ufs/rockchip,ufs.yaml
-@@ -0,0 +1,78 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/ufs/rockchip,ufs.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Rockchip UFS Host Controller
-+
-+maintainers:
-+  - Shawn Lin <shawn.lin@rock-chips.com>
-+
-+allOf:
-+  - $ref: ufs-common.yaml
-+
-+properties:
-+  compatible:
-+    const: rockchip,rk3576-ufs
-+
-+  reg:
-+    maxItems: 5
-+
-+  reg-names:
-+    items:
-+     - const: hci
-+     - const: mphy
-+     - const: hci_grf
-+     - const: mphy_grf
-+     - const: hci_apb
-+
-+  clocks:
-+    maxItems: 4
-+
-+  clock-names:
-+    items:
-+      - const: core
-+      - const: pclk
-+      - const: pclk_mphy
-+      - const: ref_out
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 4
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - power-domains
-+  - resets
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/rockchip,rk3576-cru.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/rk3576-power.h>
-+
-+    ufs: ufs@2a2d0000 {
-+            compatible = "rockchip,rk3576-ufs";
-+            reg = <0x0 0x2a2d0000 0 0x10000>,
-+	          <0x0 0x2b040000 0 0x10000>,
-+		  <0x0 0x2601f000 0 0x1000>,
-+		  <0x0 0x2603c000 0 0x1000>,
-+		  <0x0 0x2a2e0000 0 0x10000>;
-+            reg-names = "hci", "mphy", "hci_grf", "mphy_grf", "hci_apb";
-+            clocks = <&cru ACLK_UFS_SYS>, <&cru PCLK_USB_ROOT>, <&cru PCLK_MPHY>,
-+                     <&cru CLK_REF_UFS_CLKOUT>;
-+            clock-names = "core", "pclk", "pclk_mphy", "ref_out";
-+            interrupts = <GIC_SPI 361 IRQ_TYPE_LEVEL_HIGH>;
-+            power-domains = <&power RK3576_PD_USB>;
-+            resets = <&cru SRST_A_UFS_BIU>, <&cru SRST_A_UFS_SYS>, <&cru SRST_A_UFS>,
-+	             <&cru SRST_P_UFS_GRF>;
-+            reset-names = "biu", "sys", "ufs", "grf";
-+    };
--- 
-2.7.4
+> +
+> +static int ufs_rockchip_common_init(struct ufs_hba *hba)
+> +{
+> +	struct device *dev = hba->dev;
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	struct ufs_rockchip_host *host;
+> +	int err = 0;
+> +
+> +	host = devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
+> +	if (!host)
+> +		return -ENOMEM;
+> +
+> +	/* system control register for hci */
+> +	host->ufs_sys_ctrl = devm_platform_ioremap_resource_byname(pdev, "hci_grf");
+> +	if (IS_ERR(host->ufs_sys_ctrl)) {
+> +		dev_err(dev, "cannot ioremap for hci system control register\n");
+> +		return PTR_ERR(host->ufs_sys_ctrl);
+> +	}
+> +
+> +	/* system control register for mphy */
+> +	host->ufs_phy_ctrl = devm_platform_ioremap_resource_byname(pdev, "mphy_grf");
+> +	if (IS_ERR(host->ufs_phy_ctrl)) {
+> +		dev_err(dev, "cannot ioremap for mphy system control register\n");
+> +		return PTR_ERR(host->ufs_phy_ctrl);
+> +	}
+> +
+> +	/* mphy base register */
+> +	host->mphy_base = devm_platform_ioremap_resource_byname(pdev, "mphy");
+> +	if (IS_ERR(host->mphy_base)) {
+> +		dev_err(dev, "cannot ioremap for mphy base register\n");
+> +		return PTR_ERR(host->mphy_base);
+> +	}
+> +
+> +	host->rst = devm_reset_control_array_get_exclusive(dev);
+> +	if (IS_ERR(host->rst)) {
+> +		dev_err(dev, "failed to get reset control\n");
+> +		return PTR_ERR(host->rst);
+
+return dev_err_probe, assuming this is a probe path?
+
+> +	}
+> +
+> +	reset_control_assert(host->rst);
+> +	udelay(1);
+> +	reset_control_deassert(host->rst);
+> +
+> +	host->ref_out_clk = devm_clk_get(dev, "ref_out");
+> +	if (IS_ERR(host->ref_out_clk)) {
+> +		dev_err(dev, "ciu-drive not available\n");
+> +		return PTR_ERR(host->ref_out_clk);
+
+Ditto
+
+> +	}
+> +	err = clk_prepare_enable(host->ref_out_clk);
+> +	if (err) {
+> +		dev_err(dev, "failed to enable ref out clock %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	host->rst_gpio = devm_gpiod_get(&pdev->dev, "reset", GPIOD_OUT_LOW);
+
+Hm? Test your DTS and bindings.
+
+> +	if (IS_ERR(host->rst_gpio)) {
+> +		dev_err(&pdev->dev, "invalid reset-gpios property in node\n");
+
+Post your DTS so we can review it. Post also results of dtbs_check...
+
+> +		err = PTR_ERR(host->rst_gpio);
+
+dev_err_probe
+
+> +		goto out;
+> +	}
+> +	udelay(20);
+> +	gpiod_set_value_cansleep(host->rst_gpio, 1);
+> +
+> +	host->clks[0].id = "core";
+> +	host->clks[1].id = "pclk";
+> +	host->clks[2].id = "pclk_mphy";
+> +	err = devm_clk_bulk_get_optional(dev, UFS_MAX_CLKS, host->clks);
+> +	if (err) {
+> +		dev_err(dev, "failed to get clocks %d\n", err);
+> +		goto out;
+> +	}
+> +
+> +	err = clk_bulk_prepare_enable(UFS_MAX_CLKS, host->clks);
+> +	if (err) {
+> +		dev_err(dev, "failed to enable clocks %d\n", err);
+> +		goto out;
+> +	}
+> +
+> +	if (device_property_read_u32(dev, "ufs-phy-config-mode",
+
+No, stop adding undocumented properties.
+
+> +				     &host->phy_config_mode))
+> +		host->phy_config_mode = 0;
+> +
+> +	pm_runtime_set_active(&pdev->dev);
+> +
+> +	host->hba = hba;
+> +	ufs_rockchip_set_pm_lvl(hba);
+> +
+> +	ufshcd_set_variant(hba, host);
+> +
+> +	return 0;
+> +out:
+> +	clk_disable_unprepare(host->ref_out_clk);
+> +	return err;
+> +}
+> +
+> +static int ufs_rockchip_rk3576_init(struct ufs_hba *hba)
+> +{
+> +	int ret = 0;
+> +	struct device *dev = hba->dev;
+> +
+> +	hba->quirks = UFSHCI_QUIRK_BROKEN_HCE | UFSHCD_QUIRK_SKIP_DEF_UNIPRO_TIMEOUT_SETTING;
+> +
+> +	/* Enable BKOPS when suspend */
+> +	hba->caps |= UFSHCD_CAP_AUTO_BKOPS_SUSPEND;
+> +	/* Enable putting device into deep sleep */
+> +	hba->caps |= UFSHCD_CAP_DEEPSLEEP;
+> +	/* Enable devfreq of UFS */
+> +	hba->caps |= UFSHCD_CAP_CLK_SCALING;
+> +	/* Enable WriteBooster */
+> +	hba->caps |= UFSHCD_CAP_WB_EN;
+> +
+> +	ret = ufs_rockchip_common_init(hba);
+> +	if (ret) {
+> +		dev_err(dev, "ufs common init fail\n");
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int ufs_rockchip_device_reset(struct ufs_hba *hba)
+> +{
+> +	struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+> +
+> +	if (!host->rst_gpio)
+> +		return -EOPNOTSUPP;
+> +
+> +	gpiod_set_value_cansleep(host->rst_gpio, 0);
+> +	udelay(20);
+> +
+> +	gpiod_set_value_cansleep(host->rst_gpio, 1);
+> +	udelay(20);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct ufs_hba_variant_ops ufs_hba_rk3576_vops = {
+> +	.name = "rk3576",
+> +	.init = ufs_rockchip_rk3576_init,
+> +	.device_reset = ufs_rockchip_device_reset,
+> +	.hce_enable_notify = ufs_rockchip_hce_enable_notify,
+> +	.phy_initialization = ufs_rockchip_rk3576_phy_init,
+> +};
+> +
+> +static const struct of_device_id ufs_rockchip_of_match[] = {
+> +	{ .compatible = "rockchip,rk3576-ufs", .data = &ufs_hba_rk3576_vops},
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, ufs_rockchip_of_match);
+> +
+> +static int ufs_rockchip_probe(struct platform_device *pdev)
+> +{
+> +	int err;
+> +	struct device *dev = &pdev->dev;
+> +	const struct ufs_hba_variant_ops *vops;
+> +
+> +	vops = device_get_match_data(dev);
+> +	err = ufshcd_pltfrm_init(pdev, vops);
+> +	if (err)
+> +		dev_err(dev, "ufshcd_pltfrm_init() failed %d\n", err);
+> +
+> +	return err;
+> +}
+> +
+> +static void ufs_rockchip_remove(struct platform_device *pdev)
+> +{
+> +	struct ufs_hba *hba = platform_get_drvdata(pdev);
+> +	struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+> +
+> +	pm_runtime_forbid(&pdev->dev);
+> +	pm_runtime_get_noresume(&pdev->dev);
+> +	ufshcd_remove(hba);
+> +	ufshcd_dealloc_host(hba);
+> +	clk_disable_unprepare(host->ref_out_clk);
+> +}
+> +
+> +static int ufs_rockchip_restore_link(struct ufs_hba *hba, bool is_store)
+> +{
+> +	struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+> +	int err, retry = 3;
+> +
+> +	if (is_store) {
+> +		host->ie = ufshcd_readl(hba, REG_INTERRUPT_ENABLE);
+> +		host->ahit = ufshcd_readl(hba, REG_AUTO_HIBERNATE_IDLE_TIMER);
+> +		return 0;
+> +	}
+> +
+> +	/* Enable controller */
+> +	err = ufshcd_hba_enable(hba);
+> +	if (err)
+> +		return err;
+> +
+> +	/* Link startup and wait for DP */
+> +	do {
+> +		err = ufshcd_dme_link_startup(hba);
+> +		if (!err && ufshcd_is_device_present(hba)) {
+> +			dev_dbg_ratelimited(hba->dev, "rockchip link startup successfully.\n");
+> +			break;
+> +		}
+> +	} while (retry--);
+> +
+> +	if (retry < 0) {
+> +		dev_err(hba->dev, "rockchip link startup failed.\n");
+> +		return -ENXIO;
+> +	}
+> +
+> +	/* Restore negotiated power mode */
+> +	err = ufshcd_config_pwr_mode(hba, &(hba->pwr_info));
+> +	if (err)
+> +		dev_err(hba->dev, "Failed to restore power mode, err = %d\n", err);
+> +
+> +	/* Restore task and transfer list */
+> +	ufshcd_writel(hba, 0xffffffff, REG_INTERRUPT_STATUS);
+> +	ufshcd_make_hba_operational(hba);
+> +
+> +	/* Restore lost regs */
+> +	ufshcd_writel(hba, host->ie, REG_INTERRUPT_ENABLE);
+> +	ufshcd_writel(hba, host->ahit, REG_AUTO_HIBERNATE_IDLE_TIMER);
+> +	ufshcd_writel(hba, 0x1, REG_UTP_TRANSFER_REQ_LIST_RUN_STOP);
+> +	ufshcd_writel(hba, 0x1, REG_UTP_TASK_REQ_LIST_RUN_STOP);
+> +
+> +	return err;
+> +}
+> +
+> +static int ufs_rockchip_runtime_suspend(struct device *dev)
+> +{
+> +	struct ufs_hba *hba = dev_get_drvdata(dev);
+> +	struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+> +
+> +	clk_disable_unprepare(host->ref_out_clk);
+> +	return ufs_rockchip_restore_link(hba, true);
+> +}
+> +
+> +static int ufs_rockchip_runtime_resume(struct device *dev)
+> +{
+> +	struct ufs_hba *hba = dev_get_drvdata(dev);
+> +	struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+> +	int err;
+> +
+> +	err = clk_prepare_enable(host->ref_out_clk);
+> +	if (err) {
+> +		dev_err(hba->dev, "failed to enable ref out clock %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	reset_control_assert(host->rst);
+> +	udelay(1);
+> +	reset_control_deassert(host->rst);
+> +
+> +	return ufs_rockchip_restore_link(hba, false);
+> +}
+> +
+> +static int ufs_rockchip_suspend(struct device *dev)
+> +{
+> +	struct ufs_hba *hba = dev_get_drvdata(dev);
+> +
+> +	if (pm_runtime_suspended(hba->dev))
+> +		return 0;
+> +
+> +	ufs_rockchip_restore_link(hba, true);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ufs_rockchip_resume(struct device *dev)
+> +{
+> +	struct ufs_hba *hba = dev_get_drvdata(dev);
+> +
+> +	if (pm_runtime_suspended(hba->dev))
+> +		return 0;
+> +
+> +	/* Reset device if possible */
+> +	ufs_rockchip_device_reset(hba);
+> +	ufs_rockchip_restore_link(hba, false);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct dev_pm_ops ufs_rockchip_pm_ops = {
+> +	SET_SYSTEM_SLEEP_PM_OPS(ufs_rockchip_suspend, ufs_rockchip_resume)
+> +	SET_RUNTIME_PM_OPS(ufs_rockchip_runtime_suspend, ufs_rockchip_runtime_resume, NULL)
+> +	.prepare	 = ufshcd_suspend_prepare,
+> +	.complete	 = ufshcd_resume_complete,
+> +};
+> +
+> +static struct platform_driver ufs_rockchip_pltform = {
+> +	.probe = ufs_rockchip_probe,
+> +	.remove = ufs_rockchip_remove,
+> +	.driver = {
+> +		.name = "ufshcd-rockchip",
+> +		.pm = &ufs_rockchip_pm_ops,
+> +		.of_match_table = of_match_ptr(ufs_rockchip_of_match),
+
+Drop of_match_ptr, you have here warnings.
+
+Best regards,
+Krzysztof
 
 
