@@ -1,105 +1,120 @@
-Return-Path: <linux-scsi+bounces-7136-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7139-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC412948A1D
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2024 09:28:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50670948BD7
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2024 11:01:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E17C2286966
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2024 07:28:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF904B264F6
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2024 09:01:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6443166F0B;
-	Tue,  6 Aug 2024 07:28:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4F891BDAB6;
+	Tue,  6 Aug 2024 09:00:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="S7lo9+Cc"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="a7+pmduT"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mail-m3276.qiye.163.com (mail-m3276.qiye.163.com [220.197.32.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C99F164A;
-	Tue,  6 Aug 2024 07:28:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 560B71BDAA6;
+	Tue,  6 Aug 2024 09:00:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722929312; cv=none; b=Yfuot8OB/1i+qcgMRiGNZPVwrk1s7q4IqL3qMETQ+BLRtAvgv1zmkEenWJYdoETcXEUZrqgnalAf3bhcfeFC9PWp2nNtt9H8wqeM/tbwkxh8iR0kCrUxPUH0eenOGxA2+1BxX+tK8tLsH84gYYq+Hist1T+qg/2cTWc2Y+J3eBI=
+	t=1722934811; cv=none; b=gp3EoOM0dROsFTKEa0FVqnygmGSYmB0GsyxxBcZft5ZObp9m6MpiTP4zYCJ+xYZDZgfMj+i4xhd7wuNherjvA9PJl5NSRfaz7neJ3XcWoaWU/l6tExJ4tCfrqCXn2HdPpqzlZLICC4JoUeDRjcr7iSPTJZPYy+oo2ptikIte0Rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722929312; c=relaxed/simple;
-	bh=DPKMbIhNMBWo8TVDQHV16EL/N7iDJy1aU8uVJ8RTMBc=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EIyyxMm+tbAC3cyJAS/2vN70lRkxBEDYcgYk9aqdX+KZ/ZW8KyJPuYcMyoHASlUkpz+mhrBNzojecTdw7gE8yJD1IYYlvZdHpCwTNsC1mvEHPnaoCPj4tB9+stKVH7mWbZ4Hkz0xJVIe/Md9CznF78umffykfJE6e2vBQdIOCkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=S7lo9+Cc; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 70155fb653c511ef9a4e6796c666300c-20240806
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=bd8GlhW9froM6GOA2YyMMX+R5JWkQRdHXG8ufSuKDZk=;
-	b=S7lo9+CcEvbtzQeRMFP90ClQE05B2DplLGO+YHRUL8nvyWUKJvhyejiClqcIzd6kmCQJHD0F2XQlVO6AOy+n7KZ+y5vgo5forAQrx4uXCAB2WUw6P7zcD3mpJ2/KGdEVXaQ6F0fn63JGjE57gb3amP3BxZiJWQYiwBxWB16rK8g=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:35d93b46-6f65-4d6a-b2ea-bb55fe00c44a,IP:0,U
-	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:25
-X-CID-META: VersionHash:6dc6a47,CLOUDID:b66160d2-931c-41a1-8323-49b8649cd827,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:5,IP:nil,UR
-	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
-	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 70155fb653c511ef9a4e6796c666300c-20240806
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-	(envelope-from <chaotian.jing@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1313570926; Tue, 06 Aug 2024 15:28:12 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 6 Aug 2024 15:28:13 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 6 Aug 2024 15:28:12 +0800
-From: Chaotian Jing <chaotian.jing@mediatek.com>
-To: <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>
-CC: Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, <linux-scsi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <srv_heupstream@mediatek.com>, Chaotian
- Jing <chaotian.jing@mediatek.com>
-Subject: [PATCH] scsi: fix the return value of scsi_logical_block_count
-Date: Tue, 6 Aug 2024 15:26:34 +0800
-Message-ID: <20240806072714.29756-1-chaotian.jing@mediatek.com>
-X-Mailer: git-send-email 2.46.0
+	s=arc-20240116; t=1722934811; c=relaxed/simple;
+	bh=kMdWiSf/1boSmTUNkizBwwGriN3drglDRJ9RHmZOWBo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=cLSG/MG9qQ1/RjeOAin0k62BOx2szO4tLMrjx0xkSwjybDSVGbpMNRcDJNPj87FsVsHN1GCByb/YIe1PacFTpi96VL3xI2ZmjAXtEKyajsiiyT5oO0VWgHkAgHbyX4Q/Oy5zjROnnTjAF2hkD2nu8Up8Qy6wMVEFe/5Ngtg7iP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=a7+pmduT; arc=none smtp.client-ip=220.197.32.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+DKIM-Signature: a=rsa-sha256;
+	b=a7+pmduTfaZo0RXuqTOAD3tak+CNX30MER8fidFZ0XQAtSkmwBR0zgW6aeldCe751FPR+pcN8DnQzDgHun5M3GRPDkNVxhbY0hKiyUp3vZ3DBfAsbWOmKK+u1PoG+E6emaUCc7tzxX7sLaY0Kwa8U3af6qZfNXrAfqIjaT3h2Qk=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=oO6QiV9LFiusHne5Uw00k4qSuVf5cRytxrG80x+Kk2c=;
+	h=date:mime-version:subject:message-id:from;
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTPA id E04A64604F7;
+	Tue,  6 Aug 2024 15:20:15 +0800 (CST)
+From: Shawn Lin <shawn.lin@rock-chips.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: Heiko Stuebner <heiko@sntech.de>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>,
+	Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Subject: [PATCH v1 1/3] scsi: ufs: core: Export ufshcd_dme_link_startup() helper
+Date: Tue,  6 Aug 2024 15:19:58 +0800
+Message-Id: <1722928800-137042-2-git-send-email-shawn.lin@rock-chips.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1722928800-137042-1-git-send-email-shawn.lin@rock-chips.com>
+References: <1722928800-137042-1-git-send-email-shawn.lin@rock-chips.com>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ0MZGVYdGUsfSEpNGUlJGRpWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCSE
+	NVSktLVUpCS0tZBg++
+X-HM-Tid: 0a91268f617403aekunme04a64604f7
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NDo6Ayo*NDIxCxIvCjgrSgod
+	A0saCQFVSlVKTElJQklDQ0pMT09KVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUhKTE43Bg++
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
 
-scsi_logical_block_count() should return the block count of scsi device,
-but the original code has a wrong implement.
+Export it for host drivers.
 
-Signed-off-by: Chaotian Jing <chaotian.jing@mediatek.com>
+Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
 ---
- include/scsi/scsi_cmnd.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
-index 45c40d200154..f0be0caa295a 100644
---- a/include/scsi/scsi_cmnd.h
-+++ b/include/scsi/scsi_cmnd.h
-@@ -236,7 +236,7 @@ static inline unsigned int scsi_logical_block_count(struct scsi_cmnd *scmd)
+ drivers/ufs/core/ufshcd.c | 4 +++-
+ include/ufs/ufshcd.h      | 1 +
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 8f4abc5..e09f004 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -4019,7 +4019,7 @@ static void ufshcd_host_memory_configure(struct ufs_hba *hba)
+  *
+  * Return: 0 on success, non-zero value on failure.
+  */
+-static int ufshcd_dme_link_startup(struct ufs_hba *hba)
++int ufshcd_dme_link_startup(struct ufs_hba *hba)
  {
- 	unsigned int shift = ilog2(scmd->device->sector_size) - SECTOR_SHIFT;
- 
--	return blk_rq_bytes(scsi_cmd_to_rq(scmd)) >> shift;
-+	return blk_rq_sectors(scsi_cmd_to_rq(scmd)) >> shift;
+ 	struct uic_command uic_cmd = {
+ 		.command = UIC_CMD_DME_LINK_STARTUP,
+@@ -4032,6 +4032,8 @@ static int ufshcd_dme_link_startup(struct ufs_hba *hba)
+ 			"dme-link-startup: error code %d\n", ret);
+ 	return ret;
  }
++EXPORT_SYMBOL_GPL(ufshcd_dme_link_startup);
++
+ /**
+  * ufshcd_dme_reset - UIC command for DME_RESET
+  * @hba: per adapter instance
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index cac0cdb..8bc28c1 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -1432,6 +1432,7 @@ int ufshcd_read_string_desc(struct ufs_hba *hba, u8 desc_index,
+ void ufshcd_hold(struct ufs_hba *hba);
+ void ufshcd_release(struct ufs_hba *hba);
  
- /*
++int ufshcd_dme_link_startup(struct ufs_hba *hba);
+ void ufshcd_clkgate_delay_set(struct device *dev, unsigned long value);
+ 
+ int ufshcd_get_vreg(struct device *dev, struct ufs_vreg *vreg);
 -- 
-2.46.0
+2.7.4
 
 
