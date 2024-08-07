@@ -1,86 +1,86 @@
-Return-Path: <linux-scsi+bounces-7176-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7181-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99C27949E5B
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Aug 2024 05:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 89690949E69
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Aug 2024 05:41:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54908286A21
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Aug 2024 03:40:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49FE8287A7D
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Aug 2024 03:41:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 479D7190464;
-	Wed,  7 Aug 2024 03:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04F3A192B98;
+	Wed,  7 Aug 2024 03:40:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ELIRnuJU"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JNx7JjrX"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
+Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384F6190077;
-	Wed,  7 Aug 2024 03:39:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF5E16D33A;
+	Wed,  7 Aug 2024 03:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723001992; cv=none; b=lEZTN2xM7ckHabWX+n/fZYoLfUrBqaJMFxokzCmn6hV9FCxG6n+JnqEL8GyAcpFq9f2VEyOSWvhuSPIvUoZlbuS/CGI6noJ2uFg7yc3Z7De9WsVYk0BWIp5a23ho8Z6Hbl4nMxSsJnlFNPRLTWwHRk9A5bJf32hz0Lj0CCTHpPc=
+	t=1723002034; cv=none; b=P4/paYlGcsoutt5vWztpQ7wlIlkmpVIxNfJgKFlS98wOgRDYZVY6JSeBIQMsFQiLMv1UMRgrZsvxPMH07t8n+CNcCuHFYaIo/7GlcbV96soyo50T1ain7SnIfwzCLqs719t14c7Y9bIdKR2Z50B5/u+HM36LHySVsaZlqI8vp4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723001992; c=relaxed/simple;
-	bh=qYQuIcOFTPtzqL1PbxGk9TxMN2OJkD6TyQQSvKpUUU0=;
-	h=To:Cc:Message-Id:In-Reply-To:References:From:Subject:Date; b=fFXRme8V4frCIPMRdu9jG8URm2o/go+JBwT41EDODnyHiT5x/RxCZ91VZVgZ8funB26Cq+tzFCz+7DiZ3vkzcd7LCaU96BTqcyd57bc1J3i3R3Oa4eU/MengyAm921GQn03/4or+jhM1tAOlFEsk3YUwu4eD1Po8dzfvfa4ujZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ELIRnuJU; arc=none smtp.client-ip=103.168.172.158
+	s=arc-20240116; t=1723002034; c=relaxed/simple;
+	bh=kMhox047Tp/K8qC0/o44RL4wbc/V4x4pI9dtcTHlDuA=;
+	h=To:Cc:Message-Id:In-Reply-To:References:From:Subject:Date; b=Vn0bwMopS8W3gnD+WDRZuHYW6Pptby5rXkNeItjDbvNqKCBT1cjqYSD+EsIV+E0NvwwxEUZZk5QkiV4gZ8IJr3iiA/NgDJ7wVyc5fslV1EzNBiRzUjalb/Hq/nslTBv+cinr2ORhKmBBv6SqcWWrxiOomScMDadKsrELkJK9naY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JNx7JjrX; arc=none smtp.client-ip=103.168.172.145
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 517821151AE5;
-	Tue,  6 Aug 2024 23:39:48 -0400 (EDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 8A1CD138FD05;
+	Tue,  6 Aug 2024 23:40:32 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 06 Aug 2024 23:39:48 -0400
+  by compute2.internal (MEProxy); Tue, 06 Aug 2024 23:40:32 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
 	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1723001988; x=
-	1723088388; bh=HGEfU5BmDu4YX25rlEXjLHuCURndhPbFar6LNKiNQgg=; b=E
-	LIRnuJURPX/8Eu5xVmXwYLw6ECgdIYpfuQAKB1G8EL/gM43SPA86hNwUku2cJ66g
-	rB1sXzVmGJik48dkCJYwCZ/iqd/8QwKYl+6EyZvM0DwvKhaVzg1Q2Kg7ozz9f80M
-	7BlsVesxN4QpWyE6F3ZogXCqxw7n4PSYivXkDPPPByW6WFSvZ50bOan3ZcLdyqQz
-	XM32yS5cydUyJfk7tC5dzkJMASbVdvGaInW3AGd8HO8mZRYcvqnAmM1SYm3g3i0b
-	9JEmN9+9az6IDUWDRoLHQn2xy7r/HWPFktgmR86KUNW/sjtZSdma7rf+sJ5sQ7N+
-	d+YCLEz28NQlDQbClnmyA==
-X-ME-Sender: <xms:hOyyZqU5YhHEWtbfHnhyzimlVtvLJOp-SwrLPPJ4oznuHRzKJR_nGA>
-    <xme:hOyyZmnlrii87QYukvlfQZoFECu0ejFEhyqyDPhrujpOERDdkKiA9YUn9kFSgb2L9
-    dncL8aTh5_OT8smalE>
-X-ME-Received: <xmr:hOyyZuZbwPYif-4yPumdxIzbtnLChKHgRBzMlr08xJ1CW3gn4LsU-85woAS-bjg-OvsrsMwaaHsKnHolpTwYZoKk2T48drJR-To>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1723002032; x=
+	1723088432; bh=jmQ2zlmZiZC69dubowebACwe5xiaU3F+36b99mtz3HU=; b=J
+	Nx7JjrXtf9dDfe9M+cFd+pa76/ZXT9SreW8c+9gILC6mFwc5Np3oWd7XDC747jc8
+	bftwUGJaJBZsLHiBg9XUcvwXj/DgeDkolB93Y+2Oi5vyNFT61954x3lnmAK34PRa
+	WmLQYMaHg0B0oZgIJcgNfYvkLAhPsN+/Eo6yZg4K+DJt+xB2sFZpWLH7FPrxok6O
+	gjxuDzduFgRDRpL1RrbF4olQgF/xRuLzmlDKUdMK+nBU508PbcQ0ZFEHqq5aTlNd
+	WuX2CV9/atxSdNnMVY1oS5212uJjPauyX0V4a6NBC8Isp14ROfGEtDPh5I0MRlea
+	szwuzyCPI+JwnXNNGUzHQ==
+X-ME-Sender: <xms:sOyyZhq_qU5r4Bxbqovz3lkvEXyG4uNI9JyCl7lZH7YM5tD9oHlNSg>
+    <xme:sOyyZjrW5f_FEYUOyjnzoGES8e-rEQE9sC0bmRQg8IYw5yf--I9GB25pxCJA_gJ3Y
+    hn274Ww9gSG28qXTzc>
+X-ME-Received: <xmr:sOyyZuOqLDS69zq0kYRHmXP8OyGHiD7T17RN2g-F4hk4Y0ExGIrineJbEkRU4Yji91G6gZ2ZsscNH0dZfB0cEIrAmjFqubM44JM>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrkeelgdejiecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefvvefkjghfhffuffestddtredttddttdenucfhrhhomhephfhinhhnucfvhhgr
     ihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvg
     hrnhepvefggfdthffhfeevuedugfdtuefgfeettdevkeeigefgudelteeggeeuheegffff
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfhhthh
+    necuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepfhhthh
     grihhnsehlihhnuhigqdhmieekkhdrohhrghdpnhgspghrtghpthhtoheptd
-X-ME-Proxy: <xmx:hOyyZhUxY1MeTLuzi8JNho1X1km88e8lp5sH1cWV_Lr7-gU-m5SuzA>
-    <xmx:hOyyZkmI9FBvjsmuzQiT0Ccldn1dOcuYHtu919RRwyg2htmKjhODNw>
-    <xmx:hOyyZmc5wpxS6rYkhjLa23ZTxIqw_8d5MnRf3_BqFcyCWmuXxRRnQg>
-    <xmx:hOyyZmGM1u25iNzJlgY78wz5sp8U-e9aF58Eexajw9esbtBaDivwhQ>
-    <xmx:hOyyZu4JdkOZe4ta2fTzRHfeeThOBmNmDAiE_OXaHjDyyqA051aQk4yN>
+X-ME-Proxy: <xmx:sOyyZs4gtABfdhxXegOhvRxSkFS_boJPBCV5jdB7nBE7JRIePUW1_Q>
+    <xmx:sOyyZg7QVkARMXgZgWKhUDn7cjYazIWPmalZo6lUGlX9z5aJ5ukWTA>
+    <xmx:sOyyZkjGsdX_6nb0rds-37b1EUUDRbdkOn96-8IafmxtLP8pKb6LJQ>
+    <xmx:sOyyZi6u02EkQuPhLLGmpaEyhMy-r8wG6lKVLrMSsFuz-xe-DSJZ0Q>
+    <xmx:sOyyZvZiuYnNIsHI25wN18bbnPScPntP8B2BH0pGinLiULCrnd8YOt5X>
 Feedback-ID: i58a146ae:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 Aug 2024 23:39:45 -0400 (EDT)
+ 6 Aug 2024 23:40:30 -0400 (EDT)
 To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc: Hannes Reinecke <hare@suse.com>,
     Michael Schmitz <schmitzmic@gmail.com>,
     Ondrej Zary <linux@zary.sk>,
     Stan Johnson <userm57@yahoo.com>,
-    stable@vger.kernel.org,
     linux-scsi@vger.kernel.org,
     linux-kernel@vger.kernel.org
-Message-Id: <7573c79f4e488fc00af2b8a191e257ca945e0409.1723001788.git.fthain@linux-m68k.org>
+Message-Id: <52e02a8812ae1a2d810d7f9f7fd800c3ccc320c4.1723001788.git.fthain@linux-m68k.org>
 In-Reply-To: <cover.1723001788.git.fthain@linux-m68k.org>
 References: <cover.1723001788.git.fthain@linux-m68k.org>
 From: Finn Thain <fthain@linux-m68k.org>
-Subject: [PATCH 01/11] scsi: mac_scsi: Revise printk(KERN_DEBUG ...) messages
+Subject: [PATCH 06/11] scsi: NCR5380: Initialize buffer for MSG IN and STATUS
+ transfers
 Date: Wed, 07 Aug 2024 13:36:28 +1000
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -88,124 +88,41 @@ List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 
-After a bus fault, capture and log the chip registers immediately,
-if the NDEBUG_PSEUDO_DMA macro is defined. Remove some
-printk(KERN_DEBUG ...) messages that aren't needed any more.
-Don't skip the debug message when bytes == 0. Show all of the byte
-counters in the debug messages.
+Following an incomplete transfer in MSG IN phase, the driver would not
+notice the problem and would make use of invalid data. Initialize 'tmp'
+appropriately and bail out if no message was received. For STATUS phase,
+preserve the existing status code unless a new value was transferred.
 
-Cc: stable@vger.kernel.org # 5.15+
 Tested-by: Stan Johnson <userm57@yahoo.com>
 Signed-off-by: Finn Thain <fthain@linux-m68k.org>
 ---
-This is not really a bug fix, but has been sent to @stable because it is a
-prerequisite for the bug fixes which follow.
----
- drivers/scsi/mac_scsi.c | 42 +++++++++++++++++++++--------------------
- 1 file changed, 22 insertions(+), 20 deletions(-)
+ drivers/scsi/NCR5380.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/scsi/mac_scsi.c b/drivers/scsi/mac_scsi.c
-index a402c4dc4645..5ae8f4a1e9ca 100644
---- a/drivers/scsi/mac_scsi.c
-+++ b/drivers/scsi/mac_scsi.c
-@@ -286,13 +286,14 @@ static inline int macscsi_pread(struct NCR5380_hostdata *hostdata,
- 	while (!NCR5380_poll_politely(hostdata, BUS_AND_STATUS_REG,
- 	                              BASR_DRQ | BASR_PHASE_MATCH,
- 	                              BASR_DRQ | BASR_PHASE_MATCH, 0)) {
--		int bytes;
-+		int bytes, chunk_bytes;
+diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
+index 00e245173320..4fcb73b727aa 100644
+--- a/drivers/scsi/NCR5380.c
++++ b/drivers/scsi/NCR5380.c
+@@ -1807,8 +1807,11 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
+ 				return;
+ 			case PHASE_MSGIN:
+ 				len = 1;
++				tmp = 0xff;
+ 				data = &tmp;
+ 				NCR5380_transfer_pio(instance, &phase, &len, &data, 0);
++				if (tmp == 0xff)
++					break;
+ 				ncmd->message = tmp;
  
- 		if (macintosh_config->ident == MAC_MODEL_IIFX)
- 			write_ctrl_reg(hostdata, CTRL_HANDSHAKE_MODE |
- 			                         CTRL_INTERRUPTS_ENABLE);
- 
--		bytes = mac_pdma_recv(s, d, min(hostdata->pdma_residual, 512));
-+		chunk_bytes = min(hostdata->pdma_residual, 512);
-+		bytes = mac_pdma_recv(s, d, chunk_bytes);
- 
- 		if (bytes > 0) {
- 			d += bytes;
-@@ -302,23 +303,23 @@ static inline int macscsi_pread(struct NCR5380_hostdata *hostdata,
- 		if (hostdata->pdma_residual == 0)
- 			goto out;
- 
--		if (NCR5380_poll_politely2(hostdata, STATUS_REG, SR_REQ, SR_REQ,
--		                           BUS_AND_STATUS_REG, BASR_ACK,
--		                           BASR_ACK, 0) < 0)
--			scmd_printk(KERN_DEBUG, hostdata->connected,
--			            "%s: !REQ and !ACK\n", __func__);
- 		if (!(NCR5380_read(BUS_AND_STATUS_REG) & BASR_PHASE_MATCH))
- 			goto out;
- 
- 		if (bytes == 0)
- 			udelay(MAC_PDMA_DELAY);
- 
--		if (bytes >= 0)
-+		if (bytes > 0)
- 			continue;
- 
--		dsprintk(NDEBUG_PSEUDO_DMA, hostdata->host,
--		         "%s: bus error (%d/%d)\n", __func__, d - dst, len);
- 		NCR5380_dprint(NDEBUG_PSEUDO_DMA, hostdata->host);
-+		dsprintk(NDEBUG_PSEUDO_DMA, hostdata->host,
-+			 "%s: bus error [%d/%d] (%d/%d)\n",
-+			 __func__, d - dst, len, bytes, chunk_bytes);
-+
-+		if (bytes == 0)
-+			continue;
-+
- 		result = -1;
- 		goto out;
- 	}
-@@ -345,13 +346,14 @@ static inline int macscsi_pwrite(struct NCR5380_hostdata *hostdata,
- 	while (!NCR5380_poll_politely(hostdata, BUS_AND_STATUS_REG,
- 	                              BASR_DRQ | BASR_PHASE_MATCH,
- 	                              BASR_DRQ | BASR_PHASE_MATCH, 0)) {
--		int bytes;
-+		int bytes, chunk_bytes;
- 
- 		if (macintosh_config->ident == MAC_MODEL_IIFX)
- 			write_ctrl_reg(hostdata, CTRL_HANDSHAKE_MODE |
- 			                         CTRL_INTERRUPTS_ENABLE);
- 
--		bytes = mac_pdma_send(s, d, min(hostdata->pdma_residual, 512));
-+		chunk_bytes = min(hostdata->pdma_residual, 512);
-+		bytes = mac_pdma_send(s, d, chunk_bytes);
- 
- 		if (bytes > 0) {
- 			s += bytes;
-@@ -370,23 +372,23 @@ static inline int macscsi_pwrite(struct NCR5380_hostdata *hostdata,
- 			goto out;
- 		}
- 
--		if (NCR5380_poll_politely2(hostdata, STATUS_REG, SR_REQ, SR_REQ,
--		                           BUS_AND_STATUS_REG, BASR_ACK,
--		                           BASR_ACK, 0) < 0)
--			scmd_printk(KERN_DEBUG, hostdata->connected,
--			            "%s: !REQ and !ACK\n", __func__);
- 		if (!(NCR5380_read(BUS_AND_STATUS_REG) & BASR_PHASE_MATCH))
- 			goto out;
- 
- 		if (bytes == 0)
- 			udelay(MAC_PDMA_DELAY);
- 
--		if (bytes >= 0)
-+		if (bytes > 0)
- 			continue;
- 
--		dsprintk(NDEBUG_PSEUDO_DMA, hostdata->host,
--		         "%s: bus error (%d/%d)\n", __func__, s - src, len);
- 		NCR5380_dprint(NDEBUG_PSEUDO_DMA, hostdata->host);
-+		dsprintk(NDEBUG_PSEUDO_DMA, hostdata->host,
-+			 "%s: bus error [%d/%d] (%d/%d)\n",
-+			 __func__, s - src, len, bytes, chunk_bytes);
-+
-+		if (bytes == 0)
-+			continue;
-+
- 		result = -1;
- 		goto out;
- 	}
+ 				switch (tmp) {
+@@ -1996,6 +1999,7 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
+ 				break;
+ 			case PHASE_STATIN:
+ 				len = 1;
++				tmp = ncmd->status;
+ 				data = &tmp;
+ 				NCR5380_transfer_pio(instance, &phase, &len, &data, 0);
+ 				ncmd->status = tmp;
 -- 
 2.39.5
 
