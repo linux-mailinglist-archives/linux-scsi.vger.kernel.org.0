@@ -1,72 +1,72 @@
-Return-Path: <linux-scsi+bounces-7182-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7184-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98E38949E6B
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Aug 2024 05:41:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0E81949E71
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Aug 2024 05:42:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A366287BBF
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Aug 2024 03:41:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D78141C22AEF
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Aug 2024 03:42:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61DBB1917D1;
-	Wed,  7 Aug 2024 03:40:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037F71917F0;
+	Wed,  7 Aug 2024 03:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="QXmjgVnd"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="a5UOBiOn"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D08119149B;
-	Wed,  7 Aug 2024 03:40:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4721917FB;
+	Wed,  7 Aug 2024 03:40:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723002044; cv=none; b=tmc2TPVw8ceSA0g7eDNXEQ7f6bcy+7nceN/f8QHhcEHX4Ue3+FbePbDk1K/7nNt9ctPG5VPBYbjtaWcTjPRQ2nLWpYAwSEWaMtql/ZaDytjRIPNrBAVIKeqpGZRNYxMmBB1hv2855ZrPM9LNn6lbrOrWs32MWNzj1ziwDSY+cOY=
+	t=1723002060; cv=none; b=SuGZIgk5UHtyhF3Nt7EJicRDEPn1oFAaScU2lsqaSuoeCg/hRhy1ECG0MOgHuOKCEIZ6H+fVlQS2KSc3FMGvzmUndxblIaFiuwTDEY2/Ij7Alg6BkZntfVQ6iH2xO56qh6tUcYCwyWE4vTmLtb0JQkytRWj7pJlc+FL0LJtweRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723002044; c=relaxed/simple;
-	bh=GNU32m9KdeB5kbgCrfjZ2KBpDLrY/RVEA6Uz9KUVz/c=;
-	h=To:Cc:Message-Id:In-Reply-To:References:From:Subject:Date; b=bisyFBzeiqr818SEuvsw7t1/H24uo76zMj4RNIYn+KdpKZadzoFuvlWw2ZHgTUlG78O8kjXe6sHEjSPugPgH45bAOwsKnp07xxlhqCtoG5sUdz+ChR6RTUWPyj8TW/HKt/mTaT39hxtCPVlNWcIqewQ7Gvfrn+yAp3ylMPOBcZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=QXmjgVnd; arc=none smtp.client-ip=103.168.172.145
+	s=arc-20240116; t=1723002060; c=relaxed/simple;
+	bh=8YbE6nPplrm7iAQje3AFjR0Z0EounlM+vOraxHzgHcA=;
+	h=To:Cc:Message-Id:In-Reply-To:References:From:Subject:Date; b=FOcXoWUoFPkv6OAjx1+MQnrbJQdSxgDhv2Vx8GE7y8pkAToOAMIzdgBFLQo1OAsZF7LLDNcUxAw3TY4NfzYy8X/VHIUj6TmIvZLwKeYXmDR6yzJnv6g/EwQtT9UqgrH1Qdp5dmspq4RseyuaVi3U0eGraaYB7q06g+QTeDRb8kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=a5UOBiOn; arc=none smtp.client-ip=103.168.172.145
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 89F68138FD07;
-	Tue,  6 Aug 2024 23:40:41 -0400 (EDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 2354D138FD0C;
+	Tue,  6 Aug 2024 23:40:58 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 06 Aug 2024 23:40:41 -0400
+  by compute5.internal (MEProxy); Tue, 06 Aug 2024 23:40:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
 	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1723002041; x=
-	1723088441; bh=egUzzAe7vvnFliIK8YUcPQSQAMPTfZC930nIdp1FlpA=; b=Q
-	XmjgVndfQFHJMSJQDtoOO1FRmeOJllOdX73/C40F/KVmffoaMzRuLfdYAnuwpuKR
-	LdlsUy/LSVJjFDk5JKdwN7pqoWMK6rby+keY4nnqZBZQqMA/ch9Dyy2P6JQI2yPY
-	FC7ksnPEGidlxRmZub02fPN9W3R28JYdtKabhjt9OeRfHelC/ZbXwqTMnyKgLFyW
-	hX52Pd5R9eG1eW2Ul0pX37vrv1lqlAEuNtv1TOgT1ea9Jf8eMyv8VW5KHnM5eARV
-	f8bvoxcnozrjVOIvvYuRsL6rkGk0J++7D/6y3Z3n6ZdTapanyemkmQXVoQVayWF9
-	7Nx9UtcrlBKM11zshyjQg==
-X-ME-Sender: <xms:ueyyZk4VjSqNrFwxhKsJ1sSjEpv3uIWZizEUX_58tNR52U8g-QRbrQ>
-    <xme:ueyyZl5CFG88weRDTUcmYV78kKNXeQzvL_1Si8oL7OdNK2QPOnzagfClxlteXxHcP
-    5B7AFIxfBBHANGVPMY>
-X-ME-Received: <xmr:ueyyZjcOSSmcAUoagc_4cT_lidu1I2jFvoDOQClNDvzd4yiRGZV655wSIh8XeYctmETRJZhpclpE4Q5JEYOuuJ0BadsPXMlQSBg>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1723002058; x=
+	1723088458; bh=50tsiTsAoFPq4H1EooO1tYntxdLY9J4eOgbEeowimQw=; b=a
+	5UOBiOnqPu5ZLJUowBp07ed+2j/Ls283PAWD894Mnyzh+RRDrgmFuZIk3lKz6FGe
+	UD5renSl3Gd5SkVOz+vg/SA0B+VTNcTjoZL9yBDOe00ZbMyh83LfmBf1gGtvTtlw
+	dha/K4HNZ79Y3jVRcnXCPcVnrulRl5TlkoRruIl6I97COWs05Ov0abErhGQMqaD0
+	1aPol25kn+Pz4u9Kq3Hj4108UbUcTxcwi/9TgrE044YLw97gVI4OyApowRIy66ES
+	AlAofDuC1vOGZrJupus1ZuG5sbuGh1fgngzEEUMtRW2fgKH9pe47TP0V0Pp8YoGm
+	lO0+jIv6H9hhzF6I77U/g==
+X-ME-Sender: <xms:yuyyZsMjOaRz0khTHE2XVv6_MFd7BQ0LtQsZUbCdGzwvyroNYqdr5g>
+    <xme:yuyyZi-IL5z1xDY94swmvi48QyhiHTZozWgvCUGa-lR7SgLd40ytwGapPt0GbqcyI
+    BREgWcOjPRIkB5BTig>
+X-ME-Received: <xmr:yuyyZjSOS3lw71hF8MHMaNYoCo-27aJ2I-B-xL40-fu2HStQDHMwDE2nQPt6DCZ9qe6elMsANoEAk2Ml9PD8aIQCsIElkPmPD8Q>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrkeelgdejiecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefvvefkjghfhffuffestddtredttddttdenucfhrhhomhephfhinhhnucfvhhgr
     ihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvg
     hrnhepvefggfdthffhfeevuedugfdtuefgfeettdevkeeigefgudelteeggeeuheegffff
-    necuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehmrghilhhfrhhomhepfhhthh
+    necuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehmrghilhhfrhhomhepfhhthh
     grihhnsehlihhnuhigqdhmieekkhdrohhrghdpnhgspghrtghpthhtoheptd
-X-ME-Proxy: <xmx:ueyyZpLjd0ioplEkC4WGMCC1OIbJmAzlPEysRRsABRxKcq-JofRqcA>
-    <xmx:ueyyZoLVXDRxgmxBi664QLgR4lrbBOs3-zEQaQyXL4IyTdZQCdA-tg>
-    <xmx:ueyyZqxQGMSgQWj879l7h0iz0NoiLlUUNKEY5W_PR6D3pdhg8E7yFg>
-    <xmx:ueyyZsJyAlDF0Rs5Knr4OcVkz29E77dOfASLW1QN2vcxwbR8A9dqqg>
-    <xmx:ueyyZhogq6GNQV1G_cj459-e3dfbPlhMJCsT_GmSilI0k8vUAUDY74TO>
+X-ME-Proxy: <xmx:yuyyZkuwwfuo7nq8XXp-WfU0ct1EIhE5hEyTdU7GFJaQQAY3L2Ll7Q>
+    <xmx:yuyyZkc2QwGZWMEBdMwt0in7baYdLvF0ZGuD5_A8IMCpNXtVGvn54A>
+    <xmx:yuyyZo2CvAh6iOobhzY9NxxiyrWKzSTvka-kXQ3MX-cmHSNV7d7CXw>
+    <xmx:yuyyZo_VJyiy1swIpBSWsIeX1BRFb8LQwfDnM3MN0-XcSs2GOnQyWQ>
+    <xmx:yuyyZit8105a1wGtQd4--eEeThB5pIeSAWhbm1tnM7MBkpds7lxYq6lg>
 Feedback-ID: i58a146ae:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 Aug 2024 23:40:39 -0400 (EDT)
+ 6 Aug 2024 23:40:55 -0400 (EDT)
 To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc: Hannes Reinecke <hare@suse.com>,
@@ -75,12 +75,12 @@ Cc: Hannes Reinecke <hare@suse.com>,
     Stan Johnson <userm57@yahoo.com>,
     linux-scsi@vger.kernel.org,
     linux-kernel@vger.kernel.org
-Message-Id: <d253dddaf4d9bc17b8ee02ea2b731d92f25b16f1.1723001788.git.fthain@linux-m68k.org>
+Message-Id: <c07a52d0d7610b4b9969d6dd4fc9a62458fe15de.1723001788.git.fthain@linux-m68k.org>
 In-Reply-To: <cover.1723001788.git.fthain@linux-m68k.org>
 References: <cover.1723001788.git.fthain@linux-m68k.org>
 From: Finn Thain <fthain@linux-m68k.org>
-Subject: [PATCH 07/11] scsi: NCR5380: Handle BSY signal loss during
- information transfer phases
+Subject: [PATCH 09/11] scsi: NCR5380: Remove redundant result calculation from
+ NCR5380_transfer_pio()
 Date: Wed, 07 Aug 2024 13:36:28 +1000
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -88,74 +88,93 @@ List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 
-Improve robustness by checking for a lost BSY signal during the
-information transfer loop. The status register is being polled anyway,
-so a BSY check costs nothing. BSY signal loss could be caused by a
-target error or a kicked plug etc. A bus reset is another possibility
-but that is already handled and hostdata->connected would be NULL.
+NCR5380_transfer_pio() returns an ambiguous value which is ignored by
+callers. Make it void and remove the redundant calculation. Adopt
+kernel-doc format for the updated description.
 
 Tested-by: Stan Johnson <userm57@yahoo.com>
 Signed-off-by: Finn Thain <fthain@linux-m68k.org>
 ---
- drivers/scsi/NCR5380.c | 22 ++++++++++++++--------
- 1 file changed, 14 insertions(+), 8 deletions(-)
+ drivers/scsi/NCR5380.c | 34 +++++++++++-----------------------
+ drivers/scsi/NCR5380.h |  5 +++--
+ 2 files changed, 14 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
-index 4fcb73b727aa..8a9df2ab9569 100644
+index a47a825e7220..931b2581a33d 100644
 --- a/drivers/scsi/NCR5380.c
 +++ b/drivers/scsi/NCR5380.c
-@@ -1244,8 +1244,6 @@ static bool NCR5380_select(struct Scsi_Host *instance, struct scsi_cmnd *cmd)
-  * is in same phase.
-  *
-  * Also, *phase, *count, *data are modified in place.
+@@ -1227,22 +1227,15 @@ static bool NCR5380_select(struct Scsi_Host *instance, struct scsi_cmnd *cmd)
+ 	return ret;
+ }
+ 
+-/*
+- * Function : int NCR5380_transfer_pio (struct Scsi_Host *instance,
+- * unsigned char *phase, int *count, unsigned char **data)
 - *
-- * XXX Note : handling for bus free may be useful.
+- * Purpose : transfers data in given phase using polled I/O
+- *
+- * Inputs : instance - instance of driver, *phase - pointer to
+- * what phase is expected, *count - pointer to number of
+- * bytes to transfer, **data - pointer to data pointer,
+- * can_sleep - 1 or 0 when sleeping is permitted or not, respectively.
+- *
+- * Returns : -1 when different phase is entered without transferring
+- * maximum number of bytes, 0 if all bytes are transferred or exit
+- * is in same phase.
++/**
++ * NCR5380_transfer_pio() - transfers data in given phase using polled I/O
++ * @instance: instance of driver
++ * @phase: pointer to what phase is expected
++ * @count: pointer to number of bytes to transfer
++ * @data: pointer to data pointer
++ * @can_sleep: 1 or 0 when sleeping is permitted or not, respectively
+  *
+- * Also, *phase, *count, *data are modified in place.
++ * Returns: void. *phase, *count, *data are modified in place.
   */
  
  /*
-@@ -1277,8 +1275,8 @@ static int NCR5380_transfer_pio(struct Scsi_Host *instance,
- 		 * valid
- 		 */
- 
--		if (NCR5380_poll_politely(hostdata, STATUS_REG, SR_REQ, SR_REQ,
--					  HZ * can_sleep) < 0)
-+		if (NCR5380_poll_politely(hostdata, STATUS_REG, SR_REQ | SR_BSY,
-+					  SR_REQ | SR_BSY, HZ * can_sleep) < 0)
- 			break;
- 
- 		dsprintk(NDEBUG_HANDSHAKE, instance, "REQ asserted\n");
-@@ -1666,9 +1664,6 @@ static int NCR5380_transfer_dma(struct Scsi_Host *instance,
-  * Side effects : SCSI things happen, the disconnected queue will be
-  * modified if a command disconnects, *instance->connected will
-  * change.
-- *
-- * XXX Note : we need to watch for bus free or a reset condition here
-- * to recover from an unexpected bus free condition.
+@@ -1251,9 +1244,9 @@ static bool NCR5380_select(struct Scsi_Host *instance, struct scsi_cmnd *cmd)
+  * counts, we will always do a pseudo DMA or DMA transfer.
   */
  
- static void NCR5380_information_transfer(struct Scsi_Host *instance)
-@@ -2009,9 +2004,20 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
- 				NCR5380_dprint(NDEBUG_ANY, instance);
- 			} /* switch(phase) */
- 		} else {
-+			int err;
-+
- 			spin_unlock_irq(&hostdata->lock);
--			NCR5380_poll_politely(hostdata, STATUS_REG, SR_REQ, SR_REQ, HZ);
-+			err = NCR5380_poll_politely(hostdata, STATUS_REG,
-+						    SR_REQ, SR_REQ, HZ);
- 			spin_lock_irq(&hostdata->lock);
-+
-+			if (err < 0 && hostdata->connected &&
-+			    !(NCR5380_read(STATUS_REG) & SR_BSY)) {
-+				scmd_printk(KERN_ERR, hostdata->connected,
-+					    "BSY signal lost\n");
-+				do_reset(instance);
-+				bus_reset_cleanup(instance);
-+			}
- 		}
- 	}
+-static int NCR5380_transfer_pio(struct Scsi_Host *instance,
+-				unsigned char *phase, int *count,
+-				unsigned char **data, unsigned int can_sleep)
++static void NCR5380_transfer_pio(struct Scsi_Host *instance,
++				 unsigned char *phase, int *count,
++				 unsigned char **data, unsigned int can_sleep)
+ {
+ 	struct NCR5380_hostdata *hostdata = shost_priv(instance);
+ 	unsigned char p = *phase, tmp;
+@@ -1358,11 +1351,6 @@ static int NCR5380_transfer_pio(struct Scsi_Host *instance,
+ 		*phase = tmp & PHASE_MASK;
+ 	else
+ 		*phase = PHASE_UNKNOWN;
+-
+-	if (!c || (*phase == p))
+-		return 0;
+-	else
+-		return -1;
  }
+ 
+ /**
+diff --git a/drivers/scsi/NCR5380.h b/drivers/scsi/NCR5380.h
+index 84db14b036e4..64a1c6ce5e1b 100644
+--- a/drivers/scsi/NCR5380.h
++++ b/drivers/scsi/NCR5380.h
+@@ -285,8 +285,9 @@ static const char *NCR5380_info(struct Scsi_Host *instance);
+ static void NCR5380_reselect(struct Scsi_Host *instance);
+ static bool NCR5380_select(struct Scsi_Host *, struct scsi_cmnd *);
+ static int NCR5380_transfer_dma(struct Scsi_Host *instance, unsigned char *phase, int *count, unsigned char **data);
+-static int NCR5380_transfer_pio(struct Scsi_Host *instance, unsigned char *phase, int *count, unsigned char **data,
+-				unsigned int can_sleep);
++static void NCR5380_transfer_pio(struct Scsi_Host *instance,
++				 unsigned char *phase, int *count,
++				 unsigned char **data, unsigned int can_sleep);
+ static int NCR5380_poll_politely2(struct NCR5380_hostdata *,
+                                   unsigned int, u8, u8,
+                                   unsigned int, u8, u8, unsigned long);
 -- 
 2.39.5
 
