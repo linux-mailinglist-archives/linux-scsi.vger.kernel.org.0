@@ -1,127 +1,113 @@
-Return-Path: <linux-scsi+bounces-7175-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7185-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E18B4949E59
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Aug 2024 05:40:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAAA4949E74
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Aug 2024 05:42:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5706AB24C17
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Aug 2024 03:40:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64D7F28826D
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Aug 2024 03:42:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD0531917FA;
-	Wed,  7 Aug 2024 03:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F205B190484;
+	Wed,  7 Aug 2024 03:41:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HmWfwpV9"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Y7IXKmyZ"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
+Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350E41917D9;
-	Wed,  7 Aug 2024 03:39:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 565D215D5AB;
+	Wed,  7 Aug 2024 03:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723001983; cv=none; b=eX1QaRfxVwMPSNtEevHL3/zKtj9WRLuLCg8Yqc/BSaV1TFBGEar6BDC6nEn3t+68nAXTLzyToVKtrwNtn4JMeODLEfuXDPuOqQ01N3IEZoOZJBtv3yK5QbZPUZlA62KY+vBA0FOnoP+h7ie2pBOYRyYvlGho53IRVfdG2VYnvrU=
+	t=1723002068; cv=none; b=Db+iRJI/+fFFjVMriIEnS2VCiUDkE1aBJOMSgZA3ZHyjfCjsJp71c7RpCZ41PtAzvYFYsbQkrk0UbThAgIuqHJfTkb/V/ReJx8lPO2O99kv4HTos0J/TnjQMZ1WMfSBpOVcZsHsyfZeMYub2ecXyle88MDrRT5GxJH8SOow0hHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723001983; c=relaxed/simple;
-	bh=1NxX7c+Lb7XXNquDdjuXVF38sWOSuvYblH0nBf18lXM=;
-	h=Message-Id:From:Subject:Date:To:Cc; b=eb468PqBEXzcvE5AGIJ9QwEPdIxJJC0sbzu3bBaNPElkibtklYJPBZ2Rx9lIqCbWRDDY8AlUZCpelDMdfmeI3MfYS5h4vKhjZuM8lmeC5Ug162mTwK0137QAqPBDgJKffKw7vX+8GVHtmCUWuPfwHufFtRVfOWatGQEtiv2bJjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HmWfwpV9; arc=none smtp.client-ip=103.168.172.158
+	s=arc-20240116; t=1723002068; c=relaxed/simple;
+	bh=O67O2fVlIYaZyQAS2g6kWfXMRlGRXuuwcBgR0IHz0ps=;
+	h=To:Cc:Message-Id:In-Reply-To:References:From:Subject:Date; b=F6bPc+A6z9hIZ42UV+sDonyi1stKtLugtrtw6amv+jNkAy6GY2X/CaIY7YGd8HqtLhTX97DJtn1yrGppmbHF2wPnYAXo19mDNmTZwrbmzBqdY5j0iyiegKST7JdPDNJJTZko3/pbY30UO5lmL3UGvTT/NrJeMjabuLEsTYeDZFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Y7IXKmyZ; arc=none smtp.client-ip=103.168.172.145
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 223891151AEB;
-	Tue,  6 Aug 2024 23:39:39 -0400 (EDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 78B1E138FD09;
+	Tue,  6 Aug 2024 23:41:06 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Tue, 06 Aug 2024 23:39:39 -0400
+  by compute4.internal (MEProxy); Tue, 06 Aug 2024 23:41:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:message-id:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1723001979; x=1723088379; bh=KEDR2ogHBsfT3
-	PrrVmvq6bSI0RjEiMuZh0Nx5OFgiPU=; b=HmWfwpV96JR3OzkAeLpeBGSdQ6Sq9
-	gy/IwV3wVx6K2vBL/ohg97Oan1+yIUWGo+x0ekX8x/6TlZFb6RAS3WHX7mlmUMty
-	rmSxQup0Ukoef2A38SJDeozBzHJe5O6fxGtZLB0DETOeCayXW/I1MY59Q15Nt7+e
-	eQ0BUuthSWKsTg3/cOVRYF6QOylxPgiC5gR6eGnljz9R4oBuUVnYxJrMOn+ktNpD
-	ENP7WqUIIvO8DAWQwi9jDi1CVcDBN978zJ9cKIALBsmb819O0Zv0WRarf8Nw7Xjs
-	QxyhB5FoTAbYJbhDKsVOPGspGY3gf8OMilQACRysq9vP5HIaMecvR0s0A==
-X-ME-Sender: <xms:euyyZq5G2GzgPuBN3SXi4CT50comvh5Vf-ebbwUkezI3_ktDXvqbww>
-    <xme:euyyZj6I9PvLIWeNUWZ-CXUwziX418i7tOOWopUWv2-qLBVSZBLwPShe7uHioj4JD
-    OW7VWldL0ezHkxAWTU>
-X-ME-Received: <xmr:euyyZpcODk7ZqkCm_-i8iYqyX-HAjJAflsWUAOrAlim7TAEhsojitNW0sQpPmIb1iVfiKpUDfeTT3mts7lyqoQv-lUlzJZhPdyI>
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1723002066; x=
+	1723088466; bh=2c2ciecJJb1jJm1kaXBOvMCtmXLBFReu/hf4ZrVnh44=; b=Y
+	7IXKmyZ/xmOIMC4oQo6QCge7RTMuUM5enwANtToTiY98wbAw4gZIG7xifC1ouCRY
+	gYJprbtA9Nx2Wyio4IB/gUr57Jw9K9NsuQ+hjsbPhr7cD22USV0S/epPIHJzalX9
+	CNC9rA+8kiDMemM9YDG5Z6OwodjHlmX4qPWkdJMNgzWCSq95XkXu+sAwckYgOmX3
+	4f8OymWQB90aJnw9JEXQfA5/VaNn0g91QgDjrB3xY4xKG78z5rCqmrMqNdyG/i7i
+	yTs8Ga2M1fG7CpJlPm2F9rR1EQnyI/THefPXWoHhpB2IQzrfw2xQjiFVtDuY8Oon
+	oQ9D1SQAMNOb+7lvF8u8A==
+X-ME-Sender: <xms:0uyyZn_gRJiUgPNstBcUyWsadYW_xF03iM6aAAD_9snkZ9Rr4dXtJg>
+    <xme:0uyyZjvMDxaTvCROY89IsnOIRt6QbJIhJjmZb2oLUmq7siMUorwT2a7606Y0GblAt
+    U2DbTsHrN6r9IKGUsw>
+X-ME-Received: <xmr:0uyyZlBP-_0RDXeWCofLXszzV4tj7D_cdmQLK4cBLD4SSsLrT1QqoHKy_vgFsWfF-L_aVMFhLf-N9q9K_ODOVN7iv0zZPgu7KW4>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrkeelgdejiecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkhffufffvveestddtredttddttdenucfhrhhomhephfhinhhnucfvhhgrihhn
-    uceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvghrnh
-    epheffudekteffudetvdffffehgedtteekkeefvefgieethfevvddtlefhuddutedtnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfhhthhgrih
-    hnsehlihhnuhigqdhmieekkhdrohhrghdpnhgspghrtghpthhtoheptd
-X-ME-Proxy: <xmx:euyyZnJML4fHulYcq4ZeNN3K77mfS5QI6C7-lhhHzoJQ7H7ainOSCw>
-    <xmx:euyyZuK8LZ-kY8dY0frEKxD5_yr-Jmfl1WnC0RlhXMdrXlimYsZfEA>
-    <xmx:euyyZowUa3snNNpy-W4xvBDfzXjHNbj6Y06-_S2UjGF0r_H1ViMrJw>
-    <xmx:euyyZiIZu4yNm-3F1_nnQQzQEY97s8o28PqdMpkH1sOcrI32tCCdjA>
-    <xmx:e-yyZt_KyWE6nivn06JOoUN-sLJpNi98diMeSpuZHRgiYxBZ9ddk5GDg>
+    fjughrpefvvefkjghfhffuffestddtredttddttdenucfhrhhomhephfhinhhnucfvhhgr
+    ihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvg
+    hrnhepvefggfdthffhfeevuedugfdtuefgfeettdevkeeigefgudelteeggeeuheegffff
+    necuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepfhhthh
+    grihhnsehlihhnuhigqdhmieekkhdrohhrghdpnhgspghrtghpthhtoheptd
+X-ME-Proxy: <xmx:0uyyZjcR5q86edyMxx1b-ahwn3Cvs2ZDceVlbXooPp4mcIvjhyg5jw>
+    <xmx:0uyyZsOCZGXAC_e9ji8wAuLMM9C862kVIevHtWMPIAbTyWxOphzGRA>
+    <xmx:0uyyZll78Z901bVbSQnYO9hwzftrPXTlsI_McblZ4O2PJClW1SPWrQ>
+    <xmx:0uyyZmsMTWW3je7AorvTNStUy6heHh6VNOYIREDC-M2yXjaL9TznUw>
+    <xmx:0uyyZjfbwFbX0a6b8uJgU7tO5DkbBToaHve0QI9ETgIsXN17fSqwao-a>
 Feedback-ID: i58a146ae:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 Aug 2024 23:39:35 -0400 (EDT)
-Message-Id: <cover.1723001788.git.fthain@linux-m68k.org>
-From: Finn Thain <fthain@linux-m68k.org>
-Subject: [PATCH 00/11] NCR5380: Bug fixes and other improvements
-Date: Wed, 07 Aug 2024 13:36:28 +1000
+ 6 Aug 2024 23:41:04 -0400 (EDT)
 To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc: Hannes Reinecke <hare@suse.com>,
-    linux-kernel@vger.kernel.org,
-    linux-scsi@vger.kernel.org,
-    Ondrej Zary <linux@zary.sk>,
     Michael Schmitz <schmitzmic@gmail.com>,
-    stable@vger.kernel.org,
-    Stan Johnson <userm57@yahoo.com>
+    Ondrej Zary <linux@zary.sk>,
+    Stan Johnson <userm57@yahoo.com>,
+    linux-scsi@vger.kernel.org,
+    linux-kernel@vger.kernel.org
+Message-Id: <c54aff198b5a60be8ecfd50df0a9a77850730501.1723001788.git.fthain@linux-m68k.org>
+In-Reply-To: <cover.1723001788.git.fthain@linux-m68k.org>
+References: <cover.1723001788.git.fthain@linux-m68k.org>
+From: Finn Thain <fthain@linux-m68k.org>
+Subject: [PATCH 10/11] scsi: NCR5380: Remove obsolete comment
+Date: Wed, 07 Aug 2024 13:36:28 +1000
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 
-This series begins with some work on the mac_scsi driver to improve
-compatibility with SCSI2SD v5 devices. Better error handling is needed
-there because the PDMA hardware does not tolerate the write latency spikes
-which SD cards can produce.
+This comment should have been removed in commit e7734ef14ead ("scsi:
+NCR5380: Remove context check") when the irqs_disabled() conditional
+was removed.
 
-A bug is fixed in the 5380 core driver so that scatter/gather can be
-enabled in mac_scsi.
+Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+---
+ drivers/scsi/NCR5380.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Several patches at the end of this series improve robustness and correctness
-in the core driver.
-
-This series has been tested on a variety of mac_scsi hosts. A variety of
-SCSI targets was also tested, including Quantum HDD, Fujitsu HDD, Iomega FDD,
-Ricoh CD-RW, Matsushita CD-ROM, SCSI2SD and BlueSCSI.
-
-
-Finn Thain (11):
-  scsi: mac_scsi: Revise printk(KERN_DEBUG ...) messages
-  scsi: mac_scsi: Refactor polling loop
-  scsi: mac_scsi: Disallow bus errors during PDMA send
-  scsi: NCR5380: Check for phase match during PDMA fixup
-  scsi: mac_scsi: Enable scatter/gather by default
-  scsi: NCR5380: Initialize buffer for MSG IN and STATUS transfers
-  scsi: NCR5380: Handle BSY signal loss during information transfer
-    phases
-  scsi: NCR5380: Drop redundant member from struct NCR5380_cmd
-  scsi: NCR5380: Remove redundant result calculation from
-    NCR5380_transfer_pio()
-  scsi: NCR5380: Remove obsolete comment
-  scsi: NCR5380: Clean up indentation
-
- drivers/scsi/NCR5380.c   | 233 +++++++++++++++++++--------------------
- drivers/scsi/NCR5380.h   |  20 ++--
- drivers/scsi/mac_scsi.c  | 170 ++++++++++++++--------------
- drivers/scsi/sun3_scsi.c |   2 +-
- 4 files changed, 215 insertions(+), 210 deletions(-)
-
+diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
+index 931b2581a33d..94501773506b 100644
+--- a/drivers/scsi/NCR5380.c
++++ b/drivers/scsi/NCR5380.c
+@@ -198,7 +198,6 @@ static inline void set_resid_from_SCp(struct scsi_cmnd *cmd)
+  * Polls the chip in a reasonably efficient manner waiting for an
+  * event to occur. After a short quick poll we begin to yield the CPU
+  * (if possible). In irq contexts the time-out is arbitrarily limited.
+- * Callers may hold locks as long as they are held in irq mode.
+  *
+  * Returns 0 if either or both event(s) occurred otherwise -ETIMEDOUT.
+  */
 -- 
 2.39.5
 
