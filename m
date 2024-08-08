@@ -1,82 +1,55 @@
-Return-Path: <linux-scsi+bounces-7223-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7225-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 590EF94BE02
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Aug 2024 14:58:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90FB094C354
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Aug 2024 19:07:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11E511F21A87
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Aug 2024 12:58:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D8161F216AA
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Aug 2024 17:07:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA88F18C937;
-	Thu,  8 Aug 2024 12:58:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CF5E19049C;
+	Thu,  8 Aug 2024 17:06:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="LHPVB0wG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cOP4Ak1P"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3999218C925
-	for <linux-scsi@vger.kernel.org>; Thu,  8 Aug 2024 12:58:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3671F19A;
+	Thu,  8 Aug 2024 17:06:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723121884; cv=none; b=TiSM6kLBbuwC/Zqspuzj5+c1WHJ7cdXGybrHZXeTiZm7admuAqFF9/TrmKkAOjFw+a8cT8kVypXBhtmv2VvK4mUsDTik7LDcm3QlSdAYs0RZReatUS9Qlx7K53SzHIyCooDuIBitRhn7Ns3Bv6jftVbLsFafQpoSgKhzKWjNpIk=
+	t=1723136817; cv=none; b=tVIOgCxlq8FByVEHtLJmatzfV9lsd54pgw33Iv+F3aY9ezfVHpMsMj/x/e+RuDOYbeguvAFs7FExZn9hcVfHp8XqfPpAOo5Jk08Vxu4cNCf/TuGy4SQ+pfD1/jks2sOULA/7UhSHn3FtRkSxd9ZtzDc3XcPyI0njxdmTM7Kuhsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723121884; c=relaxed/simple;
-	bh=8Fx02ZeVvlacdTyi+Vsr7I38+MSCpSvrhtXjm1L7UYI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NeMHS2yWdOFdq60AGYYHPt3YpIfsTO1KekjHMZS2EDZTM/ckkQb26WghrwzZe5jh/XlQZJ8EpVYmPAtpGQ2IcsY6ZTozt0djh9d/XvqwhtTItflo4hKjf+oP3gRDkke3KL/lJbJd7uu8spT29vO9iXf9surhsO/WGrSRZZTahkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=LHPVB0wG; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1fc49c0aaffso8624075ad.3
-        for <linux-scsi@vger.kernel.org>; Thu, 08 Aug 2024 05:58:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1723121882; x=1723726682; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XPbGhFYXBq9HfDXscnGRou+mE1HRUEoxNIwtJnyaTaE=;
-        b=LHPVB0wGs5qqOimrnkzsje/vh48rjO6RzmnvQH+Iu5rhaP0EtE2uGWagmlJpqWBuVe
-         vrZ3c0vsSdjfbE2/vBngcBT7u7thmJqQAB83td7biOOvAG6xNh3nRKNW5avju5zaxohE
-         0R8xcVVzj0XGz39D3MiOHf0jRK2zMdXhs1AXA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723121882; x=1723726682;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XPbGhFYXBq9HfDXscnGRou+mE1HRUEoxNIwtJnyaTaE=;
-        b=kEPL2vpJ0zHnndkn+eEh0lF5aJ4VvxZC4t+Mwd10RbsQdUVNQyGXLbIGtzACWGsJCv
-         FqOr8WfbcoP74e8agDvGaP1e9Qn/gl8yA2NtvrfnvWr0HZCVIDUAVR2gbhH87hiiqfLn
-         wHiZCgujTZFpzowsX4/6baCsSsEnnmpNSyHHa4XDmMQoKpmBs8gvN2YeVQ61ItRBTCap
-         bwgpsl9IIT0Btgnxd1hwS5IZ2ZKy8nlyhfweaxf7hWq3LtSl8G4N6SERGPT0qU334szK
-         TRfLRvT1pjH7+BhZFNlNSdd2/yjZp/QgXFwzcmqBHkabT505xgYMVwjxIlJtEyAgPdY+
-         htUg==
-X-Gm-Message-State: AOJu0YxnesfpkjIRlo+W03lgLTyTCxodkSoGFIcHdZgxwrp03+L9R3Qq
-	looZFtOwF6eaFvXzQfQHUCAdAtwi2+Oz82abtFTswgniFsQOUSlCSmaDM3aZVtmBpluJ6C7Eh0l
-	HGMKcy3XForMD/i+IYvPNMTE55DkwCc19Z9USZeKmBIwKW+IPdcYREzjVSFC/LHMX1wRnHPL+eb
-	qmjtO+0+xA+NHxJ2A1Wi3T7a2WBITUvcZix9vz1CATKE1SEg==
-X-Google-Smtp-Source: AGHT+IHiILTfLegTklq1jebkDqQD8xJublKrr+ZGw0+Sr3jY7DoaPME7MjVRld7edkwcz4UQOBWbjQ==
-X-Received: by 2002:a17:902:f683:b0:1fd:8677:6160 with SMTP id d9443c01a7336-200952487eemr20970285ad.15.1723121881937;
-        Thu, 08 Aug 2024 05:58:01 -0700 (PDT)
-Received: from localhost.localdomain ([115.110.236.218])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff590608b2sm123283325ad.152.2024.08.08.05.57.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Aug 2024 05:58:01 -0700 (PDT)
-From: Ranjan Kumar <ranjan.kumar@broadcom.com>
-To: linux-scsi@vger.kernel.org,
-	martin.petersen@oracle.com
-Cc: sathya.prakash@broadcom.com,
-	sumit.saxena@broadcom.com,
-	Ranjan Kumar <ranjan.kumar@broadcom.com>
-Subject: [PATCH v1 3/3] mpi3mr: Driver version update to 8.10.0.5.50
-Date: Thu,  8 Aug 2024 18:24:18 +0530
-Message-Id: <20240808125418.8832-4-ranjan.kumar@broadcom.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20240808125418.8832-1-ranjan.kumar@broadcom.com>
-References: <20240808125418.8832-1-ranjan.kumar@broadcom.com>
+	s=arc-20240116; t=1723136817; c=relaxed/simple;
+	bh=pNlH+7HI3TR9dpc9zTA0Qmu4ReupDI0h17l5PY7YrcA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IKuKxGntTzZKc/xG8ZT9YzGhFarWyt6BRxDRoP4+SfNv74CsFJ1NKxl8SgUnC0+7nyxMX1BjzEuasIQr+152KHJdIu0VEqTMyNbeQ1m7rXol/mK1bkrnflrZ7KiQvFYkBBGvi8KBmqX0KdSx4rTe6OLUNTglAageaOuW/FZVyw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cOP4Ak1P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6047AC32782;
+	Thu,  8 Aug 2024 17:06:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723136817;
+	bh=pNlH+7HI3TR9dpc9zTA0Qmu4ReupDI0h17l5PY7YrcA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=cOP4Ak1PmXnIBxIUilWoLghQw2l+MIg4wXxQ1NWA7gXpKJxmLiyva7B5V0SHVNdBa
+	 SyESSO9umE7hLqVJp+Ss6SZijnizXWG7cXrya0dP4O554NjD/dX9UDhw0u55V6psnv
+	 4EmSuGIOMhzTwuyiU/080qx1ytUzRU7tTYoE3DSegaByCxoZpEi5UH1uIWj3bcEnA8
+	 P8KaQP+/Ef2vMPt9TqbE2bMcNE28UVYexwsMxZx8vvUmdUjnEFmyYeGhpFVGjcBQqM
+	 nUdx5y0Tn3iPMUHvz5BaawGzpY+zdc3DThH5d/52J2KIUZl5gUZ+t9r70TgKqx235b
+	 +oJ6t6+MirHFA==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Bart Van Assche <bvanassche@acm.org>,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] scsi: ufs: ufshcd-pltfrm: Use of_property_present()
+Date: Thu,  8 Aug 2024 11:06:44 -0600
+Message-ID: <20240808170644.1436991-1-robh@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -85,29 +58,38 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Update driver version to 8.10.0.5.50
+Use of_property_present() to test for property presence rather than
+of_find_property(). This is part of a larger effort to remove callers
+of of_find_property() and similar functions. of_find_property() leaks
+the DT struct property and data pointers which is a problem for
+dynamically allocated nodes which may be freed.
 
-Signed-off-by: Ranjan Kumar <ranjan.kumar@broadcom.com>
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- drivers/scsi/mpi3mr/mpi3mr.h | 4 ++--
+v2:
+ - Update subject to include 'ufshcd-pltfrm'
+---
+ drivers/ufs/host/ufshcd-pltfrm.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr.h b/drivers/scsi/mpi3mr/mpi3mr.h
-index cbb6e4b2d447..875bad7538f2 100644
---- a/drivers/scsi/mpi3mr/mpi3mr.h
-+++ b/drivers/scsi/mpi3mr/mpi3mr.h
-@@ -57,8 +57,8 @@ extern struct list_head mrioc_list;
- extern int prot_mask;
- extern atomic64_t event_counter;
+diff --git a/drivers/ufs/host/ufshcd-pltfrm.c b/drivers/ufs/host/ufshcd-pltfrm.c
+index a3e69ecafd27..2e1eb898a27c 100644
+--- a/drivers/ufs/host/ufshcd-pltfrm.c
++++ b/drivers/ufs/host/ufshcd-pltfrm.c
+@@ -272,10 +272,10 @@ static int ufshcd_parse_operating_points(struct ufs_hba *hba)
+ 	const char **clk_names;
+ 	int cnt, i, ret;
  
--#define MPI3MR_DRIVER_VERSION	"8.9.1.0.51"
--#define MPI3MR_DRIVER_RELDATE	"29-May-2024"
-+#define MPI3MR_DRIVER_VERSION	"8.10.0.5.50"
-+#define MPI3MR_DRIVER_RELDATE	"08-Aug-2024"
+-	if (!of_find_property(np, "operating-points-v2", NULL))
++	if (!of_property_present(np, "operating-points-v2"))
+ 		return 0;
  
- #define MPI3MR_DRIVER_NAME	"mpi3mr"
- #define MPI3MR_DRIVER_LICENSE	"GPL"
+-	if (of_find_property(np, "freq-table-hz", NULL)) {
++	if (of_property_present(np, "freq-table-hz")) {
+ 		dev_err(dev, "%s: operating-points and freq-table-hz are incompatible\n",
+ 			 __func__);
+ 		return -EINVAL;
 -- 
-2.31.1
+2.43.0
 
 
