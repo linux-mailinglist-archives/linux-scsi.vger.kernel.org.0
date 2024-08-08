@@ -1,111 +1,98 @@
-Return-Path: <linux-scsi+bounces-7224-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7220-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89DD194BE74
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Aug 2024 15:20:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6144294BE00
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Aug 2024 14:57:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26D23B25BDB
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Aug 2024 13:20:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 881D71C21E7A
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Aug 2024 12:57:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D1018DF6F;
-	Thu,  8 Aug 2024 13:20:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FF818C917;
+	Thu,  8 Aug 2024 12:57:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="IRmC65bj"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="LZB8kLRJ"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-m19731103.qiye.163.com (mail-m19731103.qiye.163.com [220.197.31.103])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B8744A33;
-	Thu,  8 Aug 2024 13:20:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.103
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A5A149DFA
+	for <linux-scsi@vger.kernel.org>; Thu,  8 Aug 2024 12:57:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723123213; cv=none; b=j8kB/CmRoHsmt4/gmIrgcYpVVgXZo4QivPwTzX96y5mXC5rOl6GxLueYpbTWvDhubUoYPH/1dp1NzWc7In1JnZiClA63DOtQ0pOK5/dEVkceXU1WEV7lU8pYV8j8oFudpCFOSgm3xOWMO0OC7j1DyG8DxCQXfPx/fFzYYzuQjv4=
+	t=1723121867; cv=none; b=rTMyAJnplkC2hH+OezImwo9g5A346xhVnggYf5QUQgOM3/M9DNMYGCgOHkL0t6Z3hnatMbqiEm7YoBFhm27POj3uLS7uzk2LR6guDuUjsSkIeOJpJbOrxTHmbd0fDxgNHLNp84j9VKvqrgPcbZKu/MW1D0xY5AkthJ5ap07BOLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723123213; c=relaxed/simple;
-	bh=7/yCxFPro8RakUQFD/0TlBtf7y1AC/HaUbdkmyuJfXk=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=lYDDzLbIoXhAQl5yQSl9AmWfcj0JyEH/ovC0quDp9hF8m8Epx/d2VFE3fcgrEoZLJ2eBQvKX7jECUZma48OcttyNeYVWrwSlkFGGZVLps4V5qcxmjaBvIjxkVE4aCEe/j1kyGBDq3EskxLqaMWjBey+DKclLxB1QEPlBgK2d1mM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=IRmC65bj; arc=none smtp.client-ip=220.197.31.103
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-DKIM-Signature: a=rsa-sha256;
-	b=IRmC65bjg0O2MQCEcTZKZ91mzw4TUasMD1V0i5q4J2Q8HdiiQcD+iXrRNAYyfcbLSrTUuMlijmsZzbaugXLo8xRjn94ZwLfZu4KeCo695onKZ3q7Go0mUZu/3UZrhFvV3XaTdt3cK/lBy7tifWw2oCuv075TCpG2NS9ez/gW1OI=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=RrX9VkXf3lokm0hBqCnf6pgq8Xxrgk1T4urj3G50BrQ=;
-	h=date:mime-version:subject:message-id:from;
-Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTPA id 353F0460378;
-	Thu,  8 Aug 2024 11:53:05 +0800 (CST)
-From: Shawn Lin <shawn.lin@rock-chips.com>
-To: Rob Herring <robh+dt@kernel.org>,
-	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	YiFeng Zhao <zyf@rock-chips.com>,
-	Liang Chen <cl@rock-chips.com>,
-	linux-scsi@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Shawn Lin <shawn.lin@rock-chips.com>
-Subject: [PATCH v2 0/3] Init support for RK3576 UFS controller
-Date: Thu,  8 Aug 2024 11:52:40 +0800
-Message-Id: <1723089163-28983-1-git-send-email-shawn.lin@rock-chips.com>
-X-Mailer: git-send-email 2.7.4
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGkkZSlYdSEkYS05DTBlLHxhWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCSE
-	NVSktLVUpCS0tZBg++
-X-HM-Tid: 0a91301e6d0503aekunm353f0460378
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Mjo6Ngw5TjI1IQsPAQodKDof
-	NAEKCjlVSlVKTElIS0NCSkNNTklKVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
-	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUhKSU03Bg++
+	s=arc-20240116; t=1723121867; c=relaxed/simple;
+	bh=9tSkIyDwr9yjKeq7U46n/Mz4NfmutFCP0YNPt/kJMfs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BIDIyc6NBJQp9AAWuLQCxoGUdvCmbeQshJfhXNPUXDu3GVF628J0Y6WPpP6++YWcYDmsYpO4y0CPVHlV9sQ2XV7a3M4gVNqa6/mfJLPA3TFZ0mdSs00RjSOyFh+EnmMnaxtJ+eNH6/+P9zTrpUG1utg/YaYFcJCFjuyW7LAiLUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=LZB8kLRJ; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1fc65329979so9521395ad.0
+        for <linux-scsi@vger.kernel.org>; Thu, 08 Aug 2024 05:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1723121864; x=1723726664; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JrX4akE5L+R3pCgNOMU+iWt7qu5j4qMSKzBrXpAKkqE=;
+        b=LZB8kLRJb7rZ+Yst5XU5PjS/R8+c9ScgGs/iVU4TEtvLlx5LPzAp5yAjvoebyTIaV0
+         YV6+rebNtXPGGauVvYC2vrqlkUOYLFnG0NIUmiSX+gdrGjpQavyRTt4QwSWWOaOUEt//
+         tB6yFJtDjLFsaMLj2iBPc08Vwl8R4RgUDd0Hk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723121864; x=1723726664;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JrX4akE5L+R3pCgNOMU+iWt7qu5j4qMSKzBrXpAKkqE=;
+        b=YoRInRYSUtGxZyiNUUANwS4308KiB7HkEdQ89mg4OAVsGSNdkWRFv4B3REnBpK65ZR
+         K6U+YWMMECsAdwfoxbmMWa77eAa4LbuGyot6Txu/ATGAtj8fOBEp6x7PGvCnUPLfuSVL
+         jXtBsBUHqa7TFv7xvm5jIq+m5bHfq9bqwYEepcEUXpTwOP9QHF9cxXaqYxqUTtMQ9VTK
+         v/AiiYRwynhOf+0SWpolY9PYa+pI6q5i0UqtNP9EOfb9q4TfwNiM0slHhHxND2P72EEi
+         UmofGHI9eE5c0C1YOFLJ/u8igHzT+r/jMiUSmpZ7uVulDpv25UsOOU1sDYfWe5TH6rd1
+         s/bQ==
+X-Gm-Message-State: AOJu0YyOVKPWtfZlibmo8M7Wj9foDsw6E/jnpDiOcSYKO00K4uYKqyAh
+	Hs6SdnFMjhu69jdAoyePmT0Ht2a7VZ6lX0Ufl9pKeKr7GRyYC9MwD8q/iAemHWycCCIZA7Klycx
+	7Bu/805x8StkMHsxOL46g3vj3Q85jhOCUGB+JYWFG6VaOBa1qmM5o6gXIT+OoB8hyPPObZy5Roi
+	CtX6aeLvlmxaiFFDXHe1PZWroQDUO/ihpqcPrQGjNDHMDFkA==
+X-Google-Smtp-Source: AGHT+IFumT2I9kkjvlMfSlaXbByd+N61QuGfXoN44+hx4PBZR9fELU1SJ6LXuCkOihiYqk+63MKwtg==
+X-Received: by 2002:a17:902:e80d:b0:1ff:4d66:d7bb with SMTP id d9443c01a7336-200952635a1mr18843415ad.36.1723121863983;
+        Thu, 08 Aug 2024 05:57:43 -0700 (PDT)
+Received: from localhost.localdomain ([115.110.236.218])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff590608b2sm123283325ad.152.2024.08.08.05.57.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Aug 2024 05:57:43 -0700 (PDT)
+From: Ranjan Kumar <ranjan.kumar@broadcom.com>
+To: linux-scsi@vger.kernel.org,
+	martin.petersen@oracle.com
+Cc: sathya.prakash@broadcom.com,
+	sumit.saxena@broadcom.com,
+	Ranjan Kumar <ranjan.kumar@broadcom.com>
+Subject: [PATCH v1 0/3] mpi3mr: Critical bug fixes
+Date: Thu,  8 Aug 2024 18:24:15 +0530
+Message-Id: <20240808125418.8832-1-ranjan.kumar@broadcom.com>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
+This patch set contains mpi3mr critical bug fixes.
 
-This patchset add initial support UFS controller for RK3576 SoC.
-Patch 1 export ufshcd_dme_link_startup function for host drivers, and
-patch 2&3 add ufs-rockchip driver.
+Ranjan Kumar (3):
+  mpi3mr: return complete ioc_status for ioctl commands
+  mpi3mr: Update consumer index of reply queues after every 100 replies
+  mpi3mr: Driver version update to 8.10.0.5.50
 
-
-Changes in v2:
-- renmae file name
-- fix all errors and pass the dt_binding_check:
-  make dt_binding_check DT_SCHEMA_FILES=rockchip,rk3576-ufs.yaml
-- use dev_probe_err
-- remove ufs-phy-config-mode as it's not used
-- drop of_match_ptr
-
-Shawn Lin (3):
-  scsi: ufs: core: Export ufshcd_dme_link_startup() helper
-  dt-bindings: ufs: Document Rockchip UFS host controller
-  scsi: ufs: rockchip: init support for UFS
-
- .../bindings/ufs/rockchip,rk3576-ufs.yaml          |  96 +++++
- drivers/ufs/core/ufshcd.c                          |   4 +-
- drivers/ufs/host/Kconfig                           |  12 +
- drivers/ufs/host/Makefile                          |   1 +
- drivers/ufs/host/ufs-rockchip.c                    | 438 +++++++++++++++++++++
- drivers/ufs/host/ufs-rockchip.h                    |  51 +++
- include/ufs/ufshcd.h                               |   1 +
- 7 files changed, 602 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufs.yaml
- create mode 100644 drivers/ufs/host/ufs-rockchip.c
- create mode 100644 drivers/ufs/host/ufs-rockchip.h
+ drivers/scsi/mpi3mr/mpi3mr.h    |  5 +++--
+ drivers/scsi/mpi3mr/mpi3mr_fw.c | 32 +++++++++++++++++++++++++-------
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
 -- 
-2.7.4
+2.31.1
 
 
