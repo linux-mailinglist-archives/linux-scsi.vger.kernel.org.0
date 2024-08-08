@@ -1,108 +1,199 @@
-Return-Path: <linux-scsi+bounces-7209-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7211-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A67194B65F
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Aug 2024 07:55:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 777BB94B882
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Aug 2024 10:05:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A051B21108
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Aug 2024 05:55:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25E5B1F26E66
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Aug 2024 08:05:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C2DB184526;
-	Thu,  8 Aug 2024 05:55:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BCC31891A4;
+	Thu,  8 Aug 2024 08:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="YF9fGd4r"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-m12742.qiye.163.com (mail-m12742.qiye.163.com [115.236.127.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1908183CD5;
-	Thu,  8 Aug 2024 05:55:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99BF188CAC;
+	Thu,  8 Aug 2024 08:05:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723096507; cv=none; b=M7GNloHXCmQLd/Dflc+ScnBmcVhfjSBGXrpLH28kkn5wy/CletrZp+in9mlwEc5LwTb7Fov9tsXcnNoXD9dSJ34ZvbSho4KS8+eidJNdycMVAuXZuTmLBySaNpX46Znv7Yv2jJEIoiv9beePaOumUMX4EcIaUpTxVT3LELO3WqM=
+	t=1723104305; cv=none; b=bxsZ7X1xBjQDvs5LSwXcDhXTNlph3TAbeC6nwrBc2T7PMnvp3cFwH18PmlVkekfGFPd2oKewhScwhW9ukkeDELQDdZqSDsqCACUpCHzpaxLwTBZIKJYuhvpiX3Hex+p2iTLEGIswoY3iBHH8ra6lu9VOgTpiTubhFcXyWzBqsdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723096507; c=relaxed/simple;
-	bh=d/YDeM3gBlId/zLD9YGyTJEGALHdfOuvwu8J/aYD0+U=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HrS049+LqMkXkBs49WDzYUELRkAEGMS+1+JmAwus2LiaSt2JTafA6/G4F+hjt7ylClvA17PADTusfMsNMdZAn/GC5Cl1005PHGIJOzSnkaluph/g41rtw3eeqobyinvoeG5ok0IvHpdXbHleIIvqgPgDhUe3Latv/pbsg0QWX48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
-	by APP-05 (Coremail) with SMTP id zQCowACnjjl6XbRmqPFZBA--.19447S2;
-	Thu, 08 Aug 2024 13:54:17 +0800 (CST)
-From: Ma Ke <make24@iscas.ac.cn>
-To: alim.akhtar@samsung.com,
-	avri.altman@wdc.com,
-	bvanassche@acm.org,
-	James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com,
-	peter.wang@mediatek.com,
-	manivannan.sadhasivam@linaro.org,
-	ahalaney@redhat.com,
-	beanhuo@micron.com,
-	subhashj@codeaurora.org,
-	quic_asutoshd@quicinc.com,
-	vviswana@codeaurora.org,
-	quic_cang@quicinc.com
-Cc: linux-scsi@vger.kernel.org,
+	s=arc-20240116; t=1723104305; c=relaxed/simple;
+	bh=L+r/HPZRMIHvW6UsJFyhRES7VCZ6aY4gERAkeuL3nTE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=MhlWyO/Ntrx9LK8XhMkmoVsc+1QuOyhNk2H8yRIVyZK7DM4Z83GP09Ywd+P4eNvlfOgUQ+U20XkfSIeQ6BRLE3OuGjweYi4nW0sjbw2CXc9PxfDK3w1i5hRC8h1um7nqO0VBvxVKEU10Bwz91C/Nu2ZXXbeCeURQ3fdjXgHzWBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=YF9fGd4r; arc=none smtp.client-ip=115.236.127.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+DKIM-Signature: a=rsa-sha256;
+	b=YF9fGd4rIGl5OkA3atjMC+2dfHT2JPYHLMiFvZddJo9D7ZuOvCBnoEK5gUH2DBp0wDhUVdY0RKzg+O18jk3jMn5wlOQXnb4SsM/GumU0v8CL5Jjq5XzhKD9fKt/CHdbxav1an3zVdd4vP/QTw2bzgGckAH3G5nv3xBVxprS4dbw=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=dQ73/rM8eDJWygK5o939zObKIeQ3hk5HLMMw1WM662Q=;
+	h=date:mime-version:subject:message-id:from;
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTPA id A3F054602E9;
+	Thu,  8 Aug 2024 12:27:06 +0800 (CST)
+From: Shawn Lin <shawn.lin@rock-chips.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>,
+	Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	Ma Ke <make24@iscas.ac.cn>,
-	stable@vger.kernel.org
-Subject: [PATCH] scsi: ufs: Add missing check for alloc_ordered_workqueue
-Date: Thu,  8 Aug 2024 13:54:00 +0800
-Message-Id: <20240808055400.2784028-1-make24@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	devicetree@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Subject: [RESEND PATCH v2 2/3] dt-bindings: ufs: Document Rockchip UFS host controller
+Date: Thu,  8 Aug 2024 12:27:00 +0800
+Message-Id: <1723091220-29291-1-git-send-email-shawn.lin@rock-chips.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1723089163-28983-1-git-send-email-shawn.lin@rock-chips.com>
+References: <1723089163-28983-1-git-send-email-shawn.lin@rock-chips.com>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGR0YSlZKTUMZHhgeS0ofGBhWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCSE
+	NVSktLVUpCS0tZBg++
+X-HM-Tid: 0a91303d936e03aekunma3f054602e9
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MDI6Agw6DjIzOQsdFylNIzMC
+	LRgaCQlVSlVKTElIS0JKSUlDS0lKVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQU5IT0o3Bg++
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowACnjjl6XbRmqPFZBA--.19447S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gr1DKryrtFW3uFyUKFWfKrg_yoWfXFb_Cr
-	ZxXr9Fy3yDKr4Dur1xJry3XrWrKay8Zr18Xa9avFZxJrykZF1Sq3yDZ395ur43ua98Xrnr
-	Cr40yr98uwsrWjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbSkFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-	0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-	Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
-	W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI2
-	0VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxAIw28Icx
-	kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-	xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42
-	IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY
-	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
-	CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sRiSfO3UUUUU==
-X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 
-As it may return NULL pointer and cause NULL pointer dereference. Add check
-for the return value of alloc_ordered_workqueue.
+Document Rockchip UFS host controller for RK3576 SoC.
 
-Cc: stable@vger.kernel.org
-Fixes: 10e5e37581fc ("scsi: ufs: Add clock ungating to a separate workqueue")
-Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+
 ---
- drivers/ufs/core/ufshcd.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 5e3c67e96956..41842f2cd454 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -2139,6 +2139,8 @@ static void ufshcd_init_clk_gating(struct ufs_hba *hba)
- 		 hba->host->host_no);
- 	hba->clk_gating.clk_gating_workq = alloc_ordered_workqueue(wq_name,
- 					WQ_MEM_RECLAIM | WQ_HIGHPRI);
-+	if (!hba->clk_gating.clk_gating_workq)
-+		return;
- 
- 	ufshcd_init_clk_gating_sysfs(hba);
- 
+Changes in v2:
+- renmae file name
+- fix all errors and pass the dt_binding_check:
+  make dt_binding_check DT_SCHEMA_FILES=rockchip,rk3576-ufs.yaml
+
+ .../bindings/ufs/rockchip,rk3576-ufs.yaml          | 96 ++++++++++++++++++++++
+ 1 file changed, 96 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufs.yaml
+
+diff --git a/Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufs.yaml b/Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufs.yaml
+new file mode 100644
+index 0000000..1844fe3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufs.yaml
+@@ -0,0 +1,96 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/ufs/rockchip,rk3576-ufs.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip UFS Host Controller
++
++maintainers:
++  - Shawn Lin <shawn.lin@rock-chips.com>
++
++allOf:
++  - $ref: ufs-common.yaml
++
++properties:
++  compatible:
++    const: rockchip,rk3576-ufs
++
++  reg:
++    maxItems: 5
++
++  reg-names:
++    items:
++      - const: hci
++      - const: mphy
++      - const: hci_grf
++      - const: mphy_grf
++      - const: hci_apb
++
++  clocks:
++    maxItems: 4
++
++  clock-names:
++    items:
++      - const: core
++      - const: pclk
++      - const: pclk_mphy
++      - const: ref_out
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 4
++
++  reset-names:
++    items:
++      - const: biu
++      - const: sys
++      - const: ufs
++      - const: grf
++
++  reset-gpios:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - clock-names
++  - interrupts
++  - power-domains
++  - resets
++  - reset-names
++  - reset-gpios
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/rockchip,rk3576-cru.h>
++    #include <dt-bindings/reset/rockchip,rk3576-cru.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/power/rk3576-power.h>
++    #include <dt-bindings/pinctrl/rockchip.h>
++    #include <dt-bindings/gpio/gpio.h>
++
++    ufs: ufs@2a2d0000 {
++          compatible = "rockchip,rk3576-ufs";
++          reg = <0x2a2d0000 0x10000>,
++                <0x2b040000 0x10000>,
++                <0x2601f000 0x1000>,
++                <0x2603c000 0x1000>,
++                <0x2a2e0000 0x10000>;
++          reg-names = "hci", "mphy", "hci_grf", "mphy_grf", "hci_apb";
++          clocks = <&cru ACLK_UFS_SYS>, <&cru PCLK_USB_ROOT>, <&cru PCLK_MPHY>,
++                  <&cru CLK_REF_UFS_CLKOUT>;
++          clock-names = "core", "pclk", "pclk_mphy", "ref_out";
++          interrupts = <GIC_SPI 361 IRQ_TYPE_LEVEL_HIGH>;
++          power-domains = <&power RK3576_PD_USB>;
++          resets = <&cru SRST_A_UFS_BIU>, <&cru SRST_A_UFS_SYS>, <&cru SRST_A_UFS>,
++                    <&cru SRST_P_UFS_GRF>;
++          reset-names = "biu", "sys", "ufs", "grf";
++          reset-gpios = <&gpio4 RK_PD0 GPIO_ACTIVE_HIGH>;
++    };
 -- 
-2.25.1
+2.7.4
 
 
