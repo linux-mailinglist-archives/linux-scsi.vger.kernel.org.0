@@ -1,144 +1,130 @@
-Return-Path: <linux-scsi+bounces-7409-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7411-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EEA49541AB
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2024 08:25:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DEB99541E2
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2024 08:36:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B7E8282638
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2024 06:25:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 692DFB23860
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2024 06:36:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F317384DFE;
-	Fri, 16 Aug 2024 06:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 580948563E;
+	Fri, 16 Aug 2024 06:34:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BK4tfzQl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ysfnu2hl"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CDE784A32;
-	Fri, 16 Aug 2024 06:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7604485626
+	for <linux-scsi@vger.kernel.org>; Fri, 16 Aug 2024 06:34:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723789513; cv=none; b=HnZSfKtpqOobD+LXs59e98ZWfc6F1TyUoPxRLDfytuSjY9J3P7FhBgja3qeI0KruaPLx1R87K7icRpZFF2WUQyARBwLSEHOS0Bznrx7z+hFqNcX7niBfL914YIuOituFtvffMjDu6Tz5Ew9OPSkr6oIVxb8Htq1+69ggUDPBI6Y=
+	t=1723790052; cv=none; b=FJCfcSyxsQhIHIniz88W1sF/Vh7Lklqu1Rv/7BXWZ2j+0fDK4ISf46rS/LtKNV5l7H99uAXD3RZNMyPTVQCxzezC8f14zFZiQ+4tOVasLk979qlXn47bCZ+rcRhpRbfdwMFfohQpZaOp274LI39goTYUz717+9BF3lTTZ1RmakA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723789513; c=relaxed/simple;
-	bh=i2n12+ScGrT1bI73kq3wV+iMxq9iQfyx5iyATix3BBI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=njMhp8PUGtByHktkglgmgcElrD5csDmWOYLRpY8Bn3HJTAiJqEKwRdRaVIuNnKHJzjuvLwNJwYrfb0J0GqbvecV5v9yPdtBRWhMM1G2DaTp1Z1pPvfnj3fPrHREhTNCwEao5FBo7sqGGpapxlo9eDM28f+np2oNwlFJ39IZ0v2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BK4tfzQl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4658FC4AF0B;
-	Fri, 16 Aug 2024 06:25:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723789513;
-	bh=i2n12+ScGrT1bI73kq3wV+iMxq9iQfyx5iyATix3BBI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=BK4tfzQlH7GcqzEkJR6Z9AmesVqJWfenV8txB1dGkp+COrkfKjOnMWGIhb0GgO3QU
-	 i039cC7NOs7DCel1Co8XbE7pS6fc0faSvkTBq9EDNriXQK7hvWLRZOihV89hROvmC1
-	 cV5r4coxvc/KyvFXxZ+gjvNjec/mc3LywVxtiUoHZlVsz7qx+w2ljAXqtR7OaQPyPy
-	 QQ8bYg+/k3jInU4mQARzR8i/zuejXWxxBjuRxhQoePLjeDjPtXmIPPfoXEYTWbZKJF
-	 gC3N3+bEagA41JC4SNQGOfT0X0hXL7RcM+fn1IxK+yE/53UPFXcbcLIkuyNUXfWZPb
-	 V2t/KYPyZVcNA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30F09C531DC;
-	Fri, 16 Aug 2024 06:25:13 +0000 (UTC)
-From: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.linaro.org@kernel.org>
-Date: Fri, 16 Aug 2024 11:55:11 +0530
-Subject: [PATCH v3 2/2] ufs: qcom: Add UFSHCD_QUIRK_BROKEN_LSDBS_CAP for
- SM8550 SoC
+	s=arc-20240116; t=1723790052; c=relaxed/simple;
+	bh=4uCrMhQ06N0SQ35tVNzYs2DOgiGlKcWDSHAS0/JjxSQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fXySt7BsAMgwgGDJuLh6NQmuo+4togBYS7GAVRijHZ0N/IGCpCq8hdR6EHNv8sFB8AhGxCkG+8kcUP5Qf7LYwezb/+1sFEbQL+FxmqZf/c9fN4fUjewphHCH4Z6v9Nea4Uyi3AkwuYV7rCD7Q6mHHW+AT62UpZ7Hk4bcBscHnec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ysfnu2hl; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2d3e46ba5bcso371543a91.0
+        for <linux-scsi@vger.kernel.org>; Thu, 15 Aug 2024 23:34:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1723790050; x=1724394850; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=a/uavK0PbYy3J4bVDBO5APBAVCLocLDlmvM+81JXjMc=;
+        b=Ysfnu2hlkUEu8IlxTsboeRoAeaCIkQbrGsaUMJIKNc51johwkvr2GVRzVJ/bOlzWG2
+         +MOSRjvBp/jJQaMkSrH1E783Bb0t0In72EQum3wLyryRsVLZoo7FWFUe5rVeQy+HTSAK
+         ygewqtszz2NK4dEoyKrRNKEU1APcwqNsRbqvY9sdss5dyTo61yYq5SSWptvvBeSVym6C
+         AxZCghq5zTB3trEIDgSVwqec1oFX+lQ9vzbvB9OZQicwRbqLdoCa68vCTiyRdwBfv891
+         35ap9vKFylSHhKadDHGgwA9x0n/BF3S4Y5pfuvGGcLANgHGKPmutNadwDe+j5nAwyiMF
+         013g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723790050; x=1724394850;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a/uavK0PbYy3J4bVDBO5APBAVCLocLDlmvM+81JXjMc=;
+        b=jQ3oxoCHvcdFTmPWqIPbjwDZUcAwQuxVRSjLfw9hwR7hzlMVcsNcR7JlnWBm1RO0j7
+         a87fxipCV+8D7xcBR618fLue49Zu5w0yZiFOeOFsF2PE9NU1vhRwfsfGZkoJ3M036kew
+         zlyCLMzTKggmwaNes1Oug6gJfIYBDRhb9l0rN+EKIMz/vAXoDKX74CieL9rHrM9fbtsv
+         cE37T+mdwxHxBnwylT/fTU6Baa3vNQWD9vLzKnmxK3UFV8c7tb+hrY8vC2LeFKbz9P1D
+         IoaFu+QWrFuBHJxXProg3VRBgSoL1xBJ9rTo+acZT0ypAYTZnZf1IZoXFXR8NZ+S3CHM
+         or3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVWJ7GPqaRbSmPGP8O5neTM6EN+ktnTinbFfzDw6eA92jyAsDJQLajcVtf4rDR6OGHNKP5ulsi0xjzaXGbaV8l5FVKIyTCE8KLEeQ==
+X-Gm-Message-State: AOJu0YzfY4W3425Kayrl7bEmF1VqvSpf66D2ieQ1AZKPcbbAgph+OBnn
+	c/HJIO7NMRlbAyA6YqUGacgjAeeIDeoRkOwJPglXFj1wpkqrKYnKjwPUmX01JQ==
+X-Google-Smtp-Source: AGHT+IG+rI3TLugumIXccrhydXWKglvJJ/DXhaBKWiPX4142sdMZr6blJoDC4km6y3HgiGXYFRfx/w==
+X-Received: by 2002:a17:90a:ce11:b0:2d3:d09a:630e with SMTP id 98e67ed59e1d1-2d3dfc29dabmr2190989a91.1.1723790049604;
+        Thu, 15 Aug 2024 23:34:09 -0700 (PDT)
+Received: from thinkpad ([36.255.17.34])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d3e3ebf665sm970485a91.56.2024.08.15.23.34.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Aug 2024 23:34:09 -0700 (PDT)
+Date: Fri, 16 Aug 2024 12:04:04 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Bart Van Assche <bvanassche@acm.org>, Rob Herring <robh@kernel.org>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Brian Masney <bmasney@redhat.com>,
+	Nitin Rawat <quic_nitirawa@quicinc.com>,
+	Can Guo <quic_cang@quicinc.com>, linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] scsi: ufs: ufshcd-pltfrm: Signedness bug in
+ ufshcd_parse_clock_info()
+Message-ID: <20240816063404.GH2331@thinkpad>
+References: <404a4727-89c6-410b-9ece-301fa399d4db@stanley.mountain>
+ <b613d16f-1167-456d-a5cd-807db875adb9@acm.org>
+ <6beba3f4-dfa1-4871-829c-ed1e44b5bd39@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240816-ufs-bug-fix-v3-2-e6fe0e18e2a3@linaro.org>
-References: <20240816-ufs-bug-fix-v3-0-e6fe0e18e2a3@linaro.org>
-In-Reply-To: <20240816-ufs-bug-fix-v3-0-e6fe0e18e2a3@linaro.org>
-To: Alim Akhtar <alim.akhtar@samsung.com>, 
- Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, Kyoungrul Kim <k831.kim@samsung.com>, 
- Amit Pundir <amit.pundir@linaro.org>, 
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2162;
- i=manivannan.sadhasivam@linaro.org; h=from:subject:message-id;
- bh=8PjwyrRDlmmjf4UdCJV0ALAaFI4EcPDr3ooZLdpnWiY=;
- b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBmvvDHWeDACvtMQnNU4By972MH5qzCsZh0VjWPD
- vH6P/OQXiiJATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCZr7wxwAKCRBVnxHm/pHO
- 9cE8B/9IQhrAOhxrjCY15GSLwWU0aaa1k+sLEV2IJhN8OmrslZGRhjBeYqADFZvtQYJdnGUQshk
- RoaqVyWJb0Ao6GmxQvTyLrOpu3R2hoW6AVMcIyxBk3kerZ3sT5J9CHLnTjbrE8xxljU1SvR5v8q
- UCH/v7fC0ExO7uo2c++S2tIG0/UCOfn4B5nAdhOQjAlp9H4UbhmDmXiSe5o0FmxQlnfQO2ecVDQ
- Dd5lRZZK+OJG9fNdCY8H4IO4Uf9GKjbD+25rBg0QDEf46/+64kMpkDQsx9CGxk0tNeJEPSupDDM
- 8CDi3jL5WL6AwIjeMZAFecb0pILlbI2L0osfL1pr8Uti23AM
-X-Developer-Key: i=manivannan.sadhasivam@linaro.org; a=openpgp;
- fpr=C668AEC3C3188E4C611465E7488550E901166008
-X-Endpoint-Received: by B4 Relay for
- manivannan.sadhasivam@linaro.org/default with auth_id=185
-X-Original-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Reply-To: manivannan.sadhasivam@linaro.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6beba3f4-dfa1-4871-829c-ed1e44b5bd39@stanley.mountain>
 
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+On Fri, Aug 16, 2024 at 12:35:22AM +0300, Dan Carpenter wrote:
+> On Thu, Aug 15, 2024 at 10:47:30AM -0700, Bart Van Assche wrote:
+> > On 8/15/24 4:24 AM, Dan Carpenter wrote:
+> > > The "sz" variable needs to be a signed type for the error handling to
+> > > work as intended.
+> > 
+> > What error handling are you referring to? I haven't found any code that
+> > assigns a negative value to 'sz' in ufshcd_parse_clock_info(). Did I
+> > perhaps overlook something?
+> > 
+> 
+> Rob's patch in linux-next.
+> 
 
-SM8550 SoC has the UFSHCI 4.0 compliant UFS controller and only supports
-legacy single doorbell mode without MCQ. But due to a hardware bug, it
-reports 1 in the 'Legacy Queue & Single Doorbell Support (LSDBS)' field of
-the Controller Capabilities register. This field is supposed to read as 0
-if legacy single doorbell mode is supported and 1 otherwise.
+It would've been helpful if you added 'next' in the patch subject prefix.
 
-Starting with commit 0c60eb0cc320 ("scsi: ufs: core: Check LSDBS cap when
-!mcq"), ufshcd driver is now relying on the LSDBS field to decide when to
-use the legacy doorbell mode if MCQ is not supported. And this ends up
-breaking UFS on SM8550:
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-ufshcd-qcom 1d84000.ufs: ufshcd_init: failed to initialize (legacy doorbell mode not supported)
-ufshcd-qcom 1d84000.ufs: error -EINVAL: Initialization failed with error -22
+- Mani
 
-So use the UFSHCD_QUIRK_BROKEN_LSDBS_CAP quirk for SM8550 SoC so that the
-ufshcd driver could use legacy doorbell mode correctly.
-
-Fixes: 0c60eb0cc320 ("scsi: ufs: core: Check LSDBS cap when !mcq")
-Tested-by: Amit Pundir <amit.pundir@linaro.org>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/ufs/host/ufs-qcom.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 810e637047d0..c87fdc849c62 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -857,6 +857,9 @@ static void ufs_qcom_advertise_quirks(struct ufs_hba *hba)
- 
- 	if (host->hw_ver.major > 0x3)
- 		hba->quirks |= UFSHCD_QUIRK_REINIT_AFTER_MAX_GEAR_SWITCH;
-+
-+	if (of_device_is_compatible(hba->dev->of_node, "qcom,sm8550-ufshc"))
-+		hba->quirks |= UFSHCD_QUIRK_BROKEN_LSDBS_CAP;
- }
- 
- static void ufs_qcom_set_phy_gear(struct ufs_qcom_host *host)
-@@ -1847,7 +1850,8 @@ static void ufs_qcom_remove(struct platform_device *pdev)
- }
- 
- static const struct of_device_id ufs_qcom_of_match[] __maybe_unused = {
--	{ .compatible = "qcom,ufshc"},
-+	{ .compatible = "qcom,ufshc" },
-+	{ .compatible = "qcom,sm8550-ufshc" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, ufs_qcom_of_match);
+> -       if (!of_get_property(np, "freq-table-hz", &len)) {
+> +       sz = of_property_count_u32_elems(np, "freq-table-hz");
+> +       if (sz <= 0) {
+>                 dev_info(dev, "freq-table-hz property not specified\n");
+>                 goto out;
+> 
+> regards,
+> dan carpenter
+> 
 
 -- 
-2.25.1
-
-
+மணிவண்ணன் சதாசிவம்
 
