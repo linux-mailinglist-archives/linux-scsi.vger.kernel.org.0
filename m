@@ -1,119 +1,130 @@
-Return-Path: <linux-scsi+bounces-7437-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7440-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4B5A9552DB
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2024 23:57:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5150E955385
+	for <lists+linux-scsi@lfdr.de>; Sat, 17 Aug 2024 00:50:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 699481F227EB
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2024 21:57:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9736B223F4
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2024 22:50:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 992FA1C6880;
-	Fri, 16 Aug 2024 21:57:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15037145A16;
+	Fri, 16 Aug 2024 22:50:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="5DsCrQuT"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="n8b/rxrc"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122A61C57B2
-	for <linux-scsi@vger.kernel.org>; Fri, 16 Aug 2024 21:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B18813C80F;
+	Fri, 16 Aug 2024 22:50:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723845441; cv=none; b=ASkxt0JPJI5dPt443XNl038sbHaR0qj+SeVuWsl1MDN65tUo5sUsSjiItvedig3mG+p4u6q1q5qKnGt8ZOkn9bVVCmd5BciaIjvjUwOQp8JSkFhIlY+sw6LMf5cC6w3aLSDIKNjFdY3jYUsuzzRguK7sRu5S/FpQBBu5k61Vdw4=
+	t=1723848639; cv=none; b=phk6q8QFFNUFrEnaLfXOO6dpxdq8mGBlJg2SBse++SEJ8j23guFt9lWr/dPXeYOeDPF+GVSAyWtB75ErJSuh9Wgw0BN//L0Fl1cAKtBLzs4e6CJ1aJpEz7N5sOLoNjEUtNlJkglYoPKvPfehqbCJopJjK9MfPxqdrDUUfsicd3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723845441; c=relaxed/simple;
-	bh=O2OrLXJz8NlgzXoaHx3h+T2weOez+12wHqJLQT6eTug=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QRgnjScMTkdTkZMMdR/e07U0mLakkKcs2jf6DqSAjgUDZ3qMwss3MN6vQHTZ+305DgCSc25diI56qCaTRULYYhnBB+gDm7BMcjC4YyKbRIJPeas+4/72M+qpWBdZ//ogsdVnZu95KiCN2tPkIwM9Usx1+DDlKRUTG3BVCTjyQ0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=5DsCrQuT; arc=none smtp.client-ip=199.89.1.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4Wlwnq3LKQz6ClY9D;
-	Fri, 16 Aug 2024 21:57:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:references:in-reply-to
-	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1723845437; x=1726437438; bh=mQrK3
-	KKyRGgIt9lcPNd0uRl3KXZA98cf9AH6yNIdU6s=; b=5DsCrQuTmfB4s5MxiVmNS
-	RjM4+onV6kW1PJbgfxAaK7PaoQe/8CMQcq8r26iXx9K8mzyls4gtG9dqxY1Xe4zJ
-	X6Lv+MVyBiJNJf/i52JRzbythX7SVxbKjhBJROxOUvnkuLuuL2GlyxWhaytMkIvE
-	mnDpgBBBpAjPlkUZoaXeSITyp4bWaGyJL9jkLC9S9h2olmum+6OqQ3WKrXn02Cuy
-	sEiehO6hrLrjZ7iQkSIxRo2L/0G3S1HKyJG0p+qwaVDkalTNuzZMu837+ynN3KJ/
-	rzhaJw+0oJbvOlz7f9KdIWj+RnMjS3XttSE/jLGnpZ+z9RWxSANl5x5Xz84hkd+C
-	Q==
-X-Virus-Scanned: by MailRoute
-Received: from 008.lax.mailroute.net ([127.0.0.1])
- by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id ue-UjcuW1mn4; Fri, 16 Aug 2024 21:57:17 +0000 (UTC)
-Received: from bvanassche.mtv.corp.google.com (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4Wlwnm4SKfz6ClY99;
-	Fri, 16 Aug 2024 21:57:16 +0000 (UTC)
-From: Bart Van Assche <bvanassche@acm.org>
-To: "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org,
-	Bart Van Assche <bvanassche@acm.org>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH v2 18/18] scsi: core: Simplify an alloc_workqueue() invocation
-Date: Fri, 16 Aug 2024 14:55:41 -0700
-Message-ID: <20240816215605.36240-19-bvanassche@acm.org>
-X-Mailer: git-send-email 2.46.0.184.g6999bdac58-goog
-In-Reply-To: <20240816215605.36240-1-bvanassche@acm.org>
-References: <20240816215605.36240-1-bvanassche@acm.org>
+	s=arc-20240116; t=1723848639; c=relaxed/simple;
+	bh=4sFCiaTXrG/c3VpDIkVNec8p/t/V/GjyJ1lQxTaGo1k=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LRxqIWpROoN4In1u2hPoo1b7/vknxZOpSW8EB9UaTFE2TVTWsz07LR8dwjjUkHuggQH2ttVz4IUfl31EIT/nwVi4CMSnQXzm4H73PvFrcIERDDsoKtZtxnN0Y8rTeZvOFSV6Dq5F3lsllWaKHPH4sCYJM4o09YXMhDf8R+JUTAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=n8b/rxrc; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47GMmH2E013748;
+	Fri, 16 Aug 2024 22:50:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=iboElvC40g+k3Ef6sTPLY5xE
+	vHgmIN9WYKSF8oebX3Q=; b=n8b/rxrcXliV/7A81Hfekr/fOqC7i4mteWIh1EiR
+	w171zvjNN+Ie7831E7YF3NIJTnYibV50+drAKxZx43ApQsgPrJA/XL9hMxDsBwbO
+	MoOw+V1HKTt8P0BhOUNnwxoYRRDf1SIM7Fc0xzAOvu9COpWiWNLmQQNFF5+Hj9DW
+	U4udVgFIfomZJBc/lu7Q638inBkfvGeYyW161cBvZFvBH/btHICE7eDU7tIaPrLm
+	fOazRCgNB1ciNK9neIV8B1Jnqb07SYdp4OviPMZs8DYbi6j2gAESpSMpIXOsGQfT
+	fkG0C63d0pTNOZZFaw23WPm5A0Ur4zt9JfdS77U3ozyJFw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 412bqe8jqx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Aug 2024 22:50:22 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47GMoLR1032159
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Aug 2024 22:50:21 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 16 Aug 2024 15:50:21 -0700
+Date: Fri, 16 Aug 2024 15:50:20 -0700
+From: Bjorn Andersson <quic_bjorande@quicinc.com>
+To: <regressions@lists.linux.dev>, Kyoungrul Kim <k831.kim@samsung.com>
+CC: "James.Bottomley@HansenPartnership.com"
+	<James.Bottomley@hansenpartnership.com>,
+        "martin.petersen@oracle.com"
+	<martin.petersen@oracle.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "Ed.Tsai@mediatek.com" <Ed.Tsai@mediatek.com>,
+        Minwoo Im
+	<minwoo.im@samsung.com>,
+        "linux-scsi@vger.kernel.org"
+	<linux-scsi@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH V4] scsi: ufs: core: Check LSDBS cap when !mcq
+Message-ID: <Zr/XrH1hsp0seP2Q@hu-bjorande-lv.qualcomm.com>
+References: <CGME20240709232520epcms2p8ebdb5c4fccc30a6221390566589bf122@epcms2p8>
+ <20240709232520epcms2p8ebdb5c4fccc30a6221390566589bf122@epcms2p8>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240709232520epcms2p8ebdb5c4fccc30a6221390566589bf122@epcms2p8>
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: x8rIhf8rJX-QQ7rTOprVbAbUF1u37MsT
+X-Proofpoint-ORIG-GUID: x8rIhf8rJX-QQ7rTOprVbAbUF1u37MsT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-16_16,2024-08-16_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 spamscore=0 adultscore=0 impostorscore=0 phishscore=0
+ bulkscore=0 mlxscore=0 mlxlogscore=999 clxscore=1011 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408160163
 
-Let alloc_workqueue() format the workqueue name.
+On Wed, Jul 10, 2024 at 08:25:20AM +0900, Kyoungrul Kim wrote:
+> if the user sets use_mcq_mode to 0, the host will try to activate the
+> lsdb mode unconditionally even when the lsdbs of device hci cap is 1. so
+> it makes timeout cmds and fail to device probing.
+> 
+> To prevent that problem. check the lsdbs cap when mcq is not supported
+> case.
+> 
+> Signed-off-by: k831.kim <k831.kim@samsung.com>
+> ---
+> Changes to v1: Fix wrong bit of lsdb support.
+> Changes to v2: Fix extra space and wrong commit messeage.
+> Changes to v3: Close missing parenthesis and fix grammatical error.
 
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/hosts.c     | 9 ++++-----
- include/scsi/scsi_host.h | 1 -
- 2 files changed, 4 insertions(+), 6 deletions(-)
+This causes the probe of the UFSHCD in Qualcomm SM8550 MTP to fail with
+-EINVAL.
 
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index 7f987335b44c..e021f1106bea 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -292,11 +292,10 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost,=
- struct device *dev,
- 	}
-=20
- 	if (shost->transportt->create_work_queue) {
--		snprintf(shost->work_q_name, sizeof(shost->work_q_name),
--			 "scsi_wq_%d", shost->host_no);
--		shost->work_q =3D alloc_workqueue("%s",
--			WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | WQ_UNBOUND,
--			1, shost->work_q_name);
-+		shost->work_q =3D alloc_workqueue(
-+			"scsi_wq_%d",
-+			WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | WQ_UNBOUND, 1,
-+			shost->host_no);
-=20
- 		if (!shost->work_q) {
- 			error =3D -EINVAL;
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index 19a1c5c48935..2b4ab0369ffb 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -677,7 +677,6 @@ struct Scsi_Host {
- 	/*
- 	 * Optional work queue to be utilized by the transport
- 	 */
--	char work_q_name[20];
- 	struct workqueue_struct *work_q;
-=20
- 	/*
+[    6.132937] ufshcd-qcom 1d84000.ufs: Adding to iommu group 4
+[    6.142509] ufshcd-qcom 1d84000.ufs: freq-table-hz property not specified
+[    6.149843] ufshcd-qcom 1d84000.ufs: ufshcd_populate_vreg: Unable to find vccq2-supply regulator, assuming enabled
+[    6.209794] ufshcd-qcom 1d84000.ufs: ufshcd_init: failed to initialize (legacy doorbell mode not supported)
+[    6.226571] ufshcd-qcom 1d84000.ufs: error -EINVAL: Initialization failed with error -22
+[    6.348770] ufshcd-qcom 1d84000.ufs: error -EINVAL: ufshcd_pltfrm_init() failed
+[    6.363203] ufshcd-qcom 1d84000.ufs: probe with driver ufshcd-qcom failed with error -22
+
+#regzbot introduced: 0c60eb0cc320
+#regzbot title: scsi: ufs: Qualcomm SM8550 MTP UFSHCD probe failing
+
+Regards,
+Bjorn
 
