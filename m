@@ -1,72 +1,71 @@
-Return-Path: <linux-scsi+bounces-7433-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7435-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72CA39552D7
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2024 23:57:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 534E89552D8
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2024 23:57:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 10EA0B211A3
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2024 21:57:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85A701C241F4
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2024 21:57:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A7911C7B71;
-	Fri, 16 Aug 2024 21:57:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACAD91C6883;
+	Fri, 16 Aug 2024 21:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="XZbCLCgW"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="ER9o1oru"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65371C68BB
-	for <linux-scsi@vger.kernel.org>; Fri, 16 Aug 2024 21:57:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266BF1C7B6A
+	for <linux-scsi@vger.kernel.org>; Fri, 16 Aug 2024 21:57:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723845428; cv=none; b=k5SggDZ6uYYk3tkI+53V8tMELLLcjeuVfcFqrLpAcuchl2sx3LHl1ECwDZBKV0JEXAdNiFljb13SDwZ+dun8OC8qPUxKRk5lqKrJugGlQslsQql+04CBLUfqXnYZTuvfxVHDnHMVo6Bd9W+MJAmKK6jBOGTNIThE6G/hj4RtyvQ=
+	t=1723845432; cv=none; b=GjJQior9oHgTMuVqjvnRfuTlh8HoVTtOEVuCSsyINM9S+ZIfbZnNndpeIECUbkbovnDWWhWbyRT+51iuXsplgcUzbejPjEOXD17EtEzcjK98ApTFENJilXVe6XOyGg7S3ASHoJArBMP5A/V+BMtpAPFFGdFrm60HtdIMQJcAkY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723845428; c=relaxed/simple;
-	bh=7nGf1avZ8XzYh4Jo/5xXziYrWN4ZpJANrQpBr0PjxYU=;
+	s=arc-20240116; t=1723845432; c=relaxed/simple;
+	bh=iKo12Zcm8Zbo34tPHVFkh0XZoaQw1KgD5dTmB84fqpo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UxjlvmKNN6yMllf0Aqa/WwLnila1fq3feQwxXTwTzewSo4yJ3MUJ5PXrHrjJJop1cgq13pWCafLxm+eg4sirdu4s4ylLpDdix7gsJWzylyZl9LbUzW5cQVkANEJ3gViLrTvHZVwt4/EOL7PXrBPeUGBO/Dopzspm/a4CvsNwafs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=XZbCLCgW; arc=none smtp.client-ip=199.89.1.11
+	 MIME-Version; b=T7w71w96jglN7bJCvgAV9EpiG+jx4F+2xpLTSfv2WS9BXT1jAVN2RLBjfw1c379vnqo0wZzqO5SPCNO7xj4MhSJ086rVXppKg86d9SytipAgBYhVb9GYhGonw/psRca2JgVYLn7S4WyVGuNmCsrPnGOd6nTeOg3DMy4Ybn16SGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=ER9o1oru; arc=none smtp.client-ip=199.89.1.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4WlwnZ2vNqz6ClY98;
-	Fri, 16 Aug 2024 21:57:06 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4Wlwnc3yg2z6ClY9C;
+	Fri, 16 Aug 2024 21:57:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1723845423; x=1726437424; bh=FvyvV
-	epn9Ef318j/BW4eY2hkqG5sJ6CUqIzNn60Mg04=; b=XZbCLCgW6gkRXHP7bvNpW
-	HXol7eLEPvwI7GK5u+dYej3GK1zAms78RM4qEZKQJq4st6lqB7xLhtMFp2/U2gPm
-	HkU9gcHojZR1j8zr08/BUPlu2m2WlxHdVsWtZWnNBGLteSfZBESCO3oSEqDi/7J4
-	CJF8gP0h1Q1YEGXv3kXxSJbJB7Mj9Sl6BPA2OqXsLvY3JrUgUAlOxcT+sP+5jvd8
-	KXjMeRESyAyaCSxHI86QvOTVzAJVqJjr+gv7W8Mnqk1PjG1I7cqeqXg98TQhrx8v
-	ZmYtdLTg7K9uY56h7pY49QOxvAyd1M13hN4PYItyImfqtRvdrXoFgBpwJhRSCl2s
-	Q==
+	:received:received; s=mr01; t=1723845426; x=1726437427; bh=IE5zt
+	FyDbDJQ71voVaNJt6ltQ8eIt/zzNNkiuLZwLH8=; b=ER9o1oruRq5Y8GPHy7n+C
+	HQlAKgXhkN6U1RnBBL0dshYSTObiWL7HDjrC/fGdCcfKyiXFXShxSNxwvZsBGOaT
+	M0GiovXntQPwHdtOakKR3JwYTzZPn4dQKGxVovfm67E8bzcIgxJQ7LfbC5z84C5d
+	q7irwS+XVQSZMUc+lIHKedknSxAHowhkqtMtZopwQUfL4PAfCd8htnHl40kTMuue
+	/RuMWrRu2nn4Gay2ensFVeEoqYHkEILWg0wJpHQc5NYNdEJ7TBYNSGvqvhmyjSgk
+	cqnzvolGNNkNIkmzNttyWB0l/GLy9Pts6tq4FjhV9AgE0HJQ0u1EdHpG0ZjFrWd/
+	w==
 X-Virus-Scanned: by MailRoute
 Received: from 008.lax.mailroute.net ([127.0.0.1])
  by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 1rdiSiZ2iUsg; Fri, 16 Aug 2024 21:57:03 +0000 (UTC)
+ id BdQkq8pxxWr1; Fri, 16 Aug 2024 21:57:06 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.204.82])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4WlwnT6mMGz6ClY99;
-	Fri, 16 Aug 2024 21:57:01 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4WlwnX1rRNz6ClY9F;
+	Fri, 16 Aug 2024 21:57:04 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	Bart Van Assche <bvanassche@acm.org>,
-	Nilesh Javali <njavali@marvell.com>,
-	Manish Rangankar <mrangankar@marvell.com>,
-	GR-QLogic-Storage-Upstream@marvell.com,
+	Karan Tilak Kumar <kartilak@cisco.com>,
+	Sesidhar Baddela <sebaddel@cisco.com>,
 	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH v2 13/18] scsi: qedi: Simplify an alloc_workqueue() invocation
-Date: Fri, 16 Aug 2024 14:55:36 -0700
-Message-ID: <20240816215605.36240-14-bvanassche@acm.org>
+Subject: [PATCH v2 14/18] scsi: snic: Simplify alloc_workqueue() invocations
+Date: Fri, 16 Aug 2024 14:55:37 -0700
+Message-ID: <20240816215605.36240-15-bvanassche@acm.org>
 X-Mailer: git-send-email 2.46.0.184.g6999bdac58-goog
 In-Reply-To: <20240816215605.36240-1-bvanassche@acm.org>
 References: <20240816215605.36240-1-bvanassche@acm.org>
@@ -79,30 +78,31 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
 Let alloc_workqueue() format the workqueue name instead of calling
-snprintf() explicitly.
+snprintf() explicitly. Not setting shost->work_q_name is safe because
+there is no code that reads the value set by the removed code.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qedi/qedi_main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/snic/snic_main.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.=
+diff --git a/drivers/scsi/snic/snic_main.c b/drivers/scsi/snic/snic_main.=
 c
-index 319c1da549f7..c5aec26019d6 100644
---- a/drivers/scsi/qedi/qedi_main.c
-+++ b/drivers/scsi/qedi/qedi_main.c
-@@ -2776,9 +2776,9 @@ static int __qedi_probe(struct pci_dev *pdev, int m=
-ode)
- 			goto free_cid_que;
- 		}
+index 2bd01eb57869..5ca8bc89dfa7 100644
+--- a/drivers/scsi/snic/snic_main.c
++++ b/drivers/scsi/snic/snic_main.c
+@@ -300,10 +300,8 @@ snic_add_host(struct Scsi_Host *shost, struct pci_de=
+v *pdev)
+ 	}
 =20
--		sprintf(host_buf, "qedi_ofld%d", qedi->shost->host_no);
--		qedi->offload_thread =3D
--			alloc_workqueue("%s", WQ_MEM_RECLAIM, 1, host_buf);
-+		qedi->offload_thread =3D alloc_workqueue("qedi_ofld%d",
-+						       WQ_MEM_RECLAIM,
-+						       1, qedi->shost->host_no);
- 		if (!qedi->offload_thread) {
- 			QEDI_ERR(&qedi->dbg_ctx,
- 				 "Unable to start offload thread!\n");
+ 	SNIC_BUG_ON(shost->work_q !=3D NULL);
+-	snprintf(shost->work_q_name, sizeof(shost->work_q_name), "scsi_wq_%d",
+-		 shost->host_no);
+-	shost->work_q =3D alloc_ordered_workqueue("%s", WQ_MEM_RECLAIM,
+-						shost->work_q_name);
++	shost->work_q =3D alloc_ordered_workqueue("scsi_wq_%d", WQ_MEM_RECLAIM,
++						shost->host_no);
+ 	if (!shost->work_q) {
+ 		SNIC_HOST_ERR(shost, "Failed to Create ScsiHost wq.\n");
+=20
 
