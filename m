@@ -1,153 +1,151 @@
-Return-Path: <linux-scsi+bounces-7552-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7554-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96A0F95B312
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2024 12:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D131A95B391
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2024 13:13:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C0761F24185
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2024 10:39:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E7D11F2297B
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2024 11:13:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6123A183CC3;
-	Thu, 22 Aug 2024 10:39:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A6618595A;
+	Thu, 22 Aug 2024 11:13:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CH6+LB2v"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Qds/ri7O"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90917183CC4;
-	Thu, 22 Aug 2024 10:39:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96F3E181BA8
+	for <linux-scsi@vger.kernel.org>; Thu, 22 Aug 2024 11:12:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724323148; cv=none; b=Vx7OUu0mcRzMVE3dIq+3eFGN+2k884k3xoTdxenv0EN9LsZY55FzwHR/RROx7sHO2SMiLgOCjXr9+BOJX5gFsEkK8fpzuI3YcgyxbkAGtTWEhpe2aTxTnnQ+AgWfUpn2+iTWX5iBoy3zXZjp8mfCZLV0K00yUIKiTs9NEzd0njo=
+	t=1724325179; cv=none; b=DPgJFarXvAafpUThho+4critbVEqTZLSYwPTaTjIJeVTn02OM1jfuVWSjU5HqmEd44w+D4hk8twf87VSPOlDQN28lRlg1SN9uXXxTGNoN/t6KlhzfQoXa35YC/V7TIiJxqgEPhipFPYyHSH1957rkGFXbaq1LsO57chX9ISvejY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724323148; c=relaxed/simple;
-	bh=Io9HIxmoSqST+xmstMBwH5AUMwojE/puDceefBlKsTU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qQTiqoSOEYs3GcXwhZ5I7XAND/p4ucfjD/G2U3DIAdqodf6PeIFTQ/WD5ocl2iR/AiwXWM31wjyIFmvhUvtFCCQpy6NkeQv4BkaMOe4LCZg+f2T2mNWZFu/81PEIv3uyTBJsgUN2/uhZuonzrIz2FgBkjT4lSygeDbSJ5HZd12I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CH6+LB2v; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724323145; x=1755859145;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Io9HIxmoSqST+xmstMBwH5AUMwojE/puDceefBlKsTU=;
-  b=CH6+LB2vZyYgW55xWQJ4dmgQW9WOk/w/PsUN+QgjkdKd1npE3dHSIYCQ
-   tmb6WNjlU8ocGSRLAGxsw6uo7KHtXldTZ4BPnyM3S6V6hUi9TO38BLQPv
-   m8n2V3SlPNvNMpEUPG4EAPmyA1ZsZ4ZOnlm3mQjCfVVh0k+Az/Ynda9oe
-   VvgL2l3u/llr7MGCJsX2LDaFe9bhRQkoCHE0HwSMmpgfTbbJ7U7mKxY11
-   xwbE6f/rmFSWVUw/ELOD7q+Pu62x19mark0zuHbXAZnrfJ888buAFO+V1
-   a8N6SH9nE4BGELT7TGDJNErheBSCa+y40q0S+d7he8Gk26219xNf+cP+d
-   A==;
-X-CSE-ConnectionGUID: pv+1dAuDRha5DHxBpCAUiQ==
-X-CSE-MsgGUID: Lf2gwXAjRW+c1/cwO1v6sw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="33346049"
-X-IronPort-AV: E=Sophos;i="6.10,166,1719903600"; 
-   d="scan'208";a="33346049"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 03:39:04 -0700
-X-CSE-ConnectionGUID: ZhXwxmwCT0KLnj6UUSK+1Q==
-X-CSE-MsgGUID: mBz6vPkIRAiOT0CUj44S4g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,166,1719903600"; 
-   d="scan'208";a="92144920"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 22 Aug 2024 03:39:02 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sh5DX-000Cfy-1p;
-	Thu, 22 Aug 2024 10:38:59 +0000
-Date: Thu, 22 Aug 2024 18:38:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
-	avri.altman@wdc.com, bvanassche@acm.org, jejb@linux.ibm.com,
-	martin.petersen@oracle.com, beanhuo@micron.com,
+	s=arc-20240116; t=1724325179; c=relaxed/simple;
+	bh=SuZrccKzCSPQqQLqIX2vs/jH5qQtYOvtGQfvs/Z831A=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:References; b=Zx7Oa4asyP3wfg+Fnfjx286u0UChW2CtTd8BlxEOgbt6rsHXCU6FK00pyx81o3SZjSQmt6syQ+FU3MABdbzR2oPB42Zy9Iolwln6yDzGonTesA+6InYNW9xXPAJTUX+qHRbSSFwsqstP+vqky63x21Nx7K50HrXWPAbEVCD77wk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Qds/ri7O; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240822111249epoutp030f84175a9bbd90c9198572b9e3f8f116~uCJsVzs3N2702927029epoutp036
+	for <linux-scsi@vger.kernel.org>; Thu, 22 Aug 2024 11:12:49 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240822111249epoutp030f84175a9bbd90c9198572b9e3f8f116~uCJsVzs3N2702927029epoutp036
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1724325169;
+	bh=7wJH0ruhvIbGPxyk4vcVYDrWfQdZ2MepAtstQEdVnno=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=Qds/ri7OKu1NBnglD2UORGxkwaHa0hKN75PpGLIk9H7hrBpm70FASByyhB54hBI7z
+	 vg9ScHUMRojKOjZSkUB0oKdhHLlB13SzsFLu9HL2KdLZUEjmVbSWPQSZO1L7dC+i1u
+	 2F9ihDBhE8MgSvOSpcMiax/qiFKb+T0I+ix5OCs0=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+	20240822111248epcas2p4f7c8325f21944a1d07ee4f4c80859d76~uCJrunEtH2325423254epcas2p4c;
+	Thu, 22 Aug 2024 11:12:48 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.92]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4WqLCN07KQz4x9Q3; Thu, 22 Aug
+	2024 11:12:48 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+	epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	D5.09.10431.F2D17C66; Thu, 22 Aug 2024 20:12:47 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+	20240822111247epcas2p2d3051255f42af05fd049b7247c395da4~uCJqcRXHg0251202512epcas2p2L;
+	Thu, 22 Aug 2024 11:12:47 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240822111247epsmtrp1ed1ba7e848e58dd5251b7f65ee83ab46~uCJqbOj5C1127011270epsmtrp1t;
+	Thu, 22 Aug 2024 11:12:47 +0000 (GMT)
+X-AuditID: b6c32a45-ffffa700000028bf-49-66c71d2ff98f
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	A9.03.08456.F2D17C66; Thu, 22 Aug 2024 20:12:47 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [10.229.95.128]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240822111247epsmtip13670b75d2e0b1a54ce0a6f4bdc8eb177~uCJqLmjOv0588005880epsmtip19;
+	Thu, 22 Aug 2024 11:12:47 +0000 (GMT)
+From: Kiwoong Kim <kwmad.kim@samsung.com>
+To: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+	jejb@linux.ibm.com, martin.petersen@oracle.com, beanhuo@micron.com,
 	adrian.hunter@intel.com, h10.kim@samsung.com, hy50.seo@samsung.com,
-	sh425.lee@samsung.com, kwangwon.min@samsung.com,
-	junwoo80.lee@samsung.com, wkon.kim@samsung.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kiwoong Kim <kwmad.kim@samsung.com>
-Subject: Re: [PATCH v1 1/2] scsi: ufs: core: introduce override_cqe_ocs
-Message-ID: <202408221823.jnozM7Ys-lkp@intel.com>
-References: <895b69ac1e938490cd1d17b5f82b6f730bcd82c2.1724222619.git.kwmad.kim@samsung.com>
+	sh425.lee@samsung.com, kwangwon.min@samsung.com, junwoo80.lee@samsung.com,
+	wkon.kim@samsung.com
+Cc: Kiwoong Kim <kwmad.kim@samsung.com>
+Subject: [PATCH v2 0/2] scsi: ufs: introduce a callback to override OCS
+ value
+Date: Thu, 22 Aug 2024 20:15:33 +0900
+Message-Id: <cover.1724325280.git.kwmad.kim@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupmk+LIzCtJLcpLzFFi42LZdljTXFdf9niaQcMqI4uTT9awWTyYt43N
+	4uXPq2wWBx92slhM+/CT2eLv7YusFqsXP2CxWHRjG5PFrr/NTBZbb+xksbi55SiLxeVdc9gs
+	uq/vYLNYfvwfk8XSf29ZLDZf+sbiIOBx+Yq3x+I9L5k8Jiw6wOjxfX0Hm8fHp7dYPPq2rGL0
+	+LxJzqP9QDdTAEdUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmBoa6hpYW5kkJeYm6qrZKL
+	T4CuW2YO0AdKCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKUnALzAr3ixNzi0rx0vbzU
+	EitDAwMjU6DChOyMtytvMhe8ZKlYuWcdewPjY+YuRk4OCQETia4TExi7GLk4hAR2MEqsOrGS
+	CcL5xCjRN+cjM4TzjVHi5LlNTDAtC95/YINI7GWUmPfuEFTVD0aJzR+/sIFUsQloSjy9ORVs
+	lojARyaJzfO3sYMkmAXUJXZNOAE2SljAX+LsrGuMIDaLgKpE24cdYM28AhYSi9Z8ZINYJydx
+	81wn1LWtHBLr9tVD2C4S/VN/sULYwhKvjm9hh7ClJF72t0HZxRJrd1wFO0JCoIFRYvWr01AJ
+	Y4lZz9qBFnMAHaQpsX6XPogpIaAsceQWC8SZfBIdh/+yQ4R5JTrahCAalSV+TZrMCGFLSsy8
+	eQdqoIfE6RN3weJCArESDVteMU1glJ2FMH8BI+MqRrHUguLc9NRiowJDeCwl5+duYgSnSi3X
+	HYyT337QO8TIxMF4iFGCg1lJhDfp3tE0Id6UxMqq1KL8+KLSnNTiQ4ymwOCayCwlmpwPTNZ5
+	JfGGJpYGJmZmhuZGpgbmSuK891rnpggJpCeWpGanphakFsH0MXFwSjUw8UvYK+Y5Trjq8/r5
+	2rqSyksOhlIdv2bp+TJs2qHV59G0cuKCI4sYO5Lbr9pl679vm1MSWm1yVSkwoynr8+6LGh9P
+	JtwP2jpn1bda+YXqdqxVd5N/vJI8qmJ+ombq99MJPIZRrgyK3W+bNzNPvHToSt4P55csWUt/
+	lDe+WvR90uODxvImHZ72bMUpxfkPP/+f8GtF1ispTzvpuU3PQu+/ncp/IZg/Njd9b7Ja6EzR
+	g7Pfye1geuz2bptX6gMbd3Y5xgUv7h5IOKVhx9/suGRJ3PqoPRdFD9yK9F3M7Zj9bP6LNMkd
+	B3dXKV322RAsv1ctLPL17NVGlo/4Z1b4KswKiS962v4lut645PbHBTO8lViKMxINtZiLihMB
+	uJQGMR4EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFLMWRmVeSWpSXmKPExsWy7bCSnK6+7PE0gy2nRS1OPlnDZvFg3jY2
+	i5c/r7JZHHzYyWIx7cNPZou/ty+yWqxe/IDFYtGNbUwWu/42M1lsvbGTxeLmlqMsFpd3zWGz
+	6L6+g81i+fF/TBZL/71lsdh86RuLg4DH5SveHov3vGTymLDoAKPH9/UdbB4fn95i8ejbsorR
+	4/MmOY/2A91MARxRXDYpqTmZZalF+nYJXBlvV95kLnjJUrFyzzr2BsbHzF2MnBwSAiYSC95/
+	YOti5OIQEtjNKPFlwxtWiISkxImdzxkhbGGJ+y1HWCGKvjFKTF/fCVbEJqAp8fTmVCYQW0Sg
+	mVmir8kexGYWUJfYNeEEWFxYwFei4egUNhCbRUBVou3DDjCbV8BCYtGaj2wQC+Qkbp7rZJ7A
+	yLOAkWEVo2RqQXFuem6xYYFRXmq5XnFibnFpXrpecn7uJkZw8Gpp7WDcs+qD3iFGJg7GQ4wS
+	HMxKIrxJ946mCfGmJFZWpRblxxeV5qQWH2KU5mBREuf99ro3RUggPbEkNTs1tSC1CCbLxMEp
+	1cCUPolbZkFp9+tLqccajfffvlYudG6Vwo6Lyawbts1O3z61+9iusp37va7dkdF3idg655vx
+	xT0z1RJ3xS6qfK7am1G08c6p6B9hETuPbZo547URa33S2oVsvP791yzYbsoYfvDVEvnF+vvF
+	n/Wn/z7ut5tncGfvzu5elg8GuTJB95zef40sn7n5YevVbamlUoWMM/+a/e5INuEMnsW+XOrb
+	pjqDty8ZvFY8fGQRUcMyV75X02yLo8WXB29djT95L7354G3lbLUDHNw1wpJySfliHDd9JU5c
+	TXv5/jb3rknFE655Z4nd+Vp4a8evRK3vd1IdOS9trVjhf5dR+V3b3X4WhrM2cYevn5yzPNJv
+	yrnIaCWW4oxEQy3mouJEAO1AVjLNAgAA
+X-CMS-MailID: 20240822111247epcas2p2d3051255f42af05fd049b7247c395da4
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240822111247epcas2p2d3051255f42af05fd049b7247c395da4
+References: <CGME20240822111247epcas2p2d3051255f42af05fd049b7247c395da4@epcas2p2.samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <895b69ac1e938490cd1d17b5f82b6f730bcd82c2.1724222619.git.kwmad.kim@samsung.com>
 
-Hi Kiwoong,
+UFSHCI defines OCS values but doesn't specify what exact
+conditions raise them. So I think it needs another callback
+to replace the original OCS value with the value that works
+the way you want.
 
-kernel test robot noticed the following build errors:
+v1 -> v2: fix build error for arguments
 
-[auto build test ERROR on jejb-scsi/for-next]
-[also build test ERROR on mkp-scsi/for-next krzk/for-next linus/master v6.11-rc4 next-20240822]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Kiwoong Kim (2):
+  scsi: ufs: core: introduce override_cqe_ocs
+  scsi: ufs: ufs-exynos: implement override_cqe_ocs
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kiwoong-Kim/scsi-ufs-core-introduce-override_cqe_ocs/20240821-144404
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-patch link:    https://lore.kernel.org/r/895b69ac1e938490cd1d17b5f82b6f730bcd82c2.1724222619.git.kwmad.kim%40samsung.com
-patch subject: [PATCH v1 1/2] scsi: ufs: core: introduce override_cqe_ocs
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240822/202408221823.jnozM7Ys-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408221823.jnozM7Ys-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408221823.jnozM7Ys-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/ufs/core/ufshcd.c:828:39: error: use of undeclared identifier 'hba'
-     828 |                 return ufshcd_vops_override_cqe_ocs(hba,
-         |                                                     ^
-   drivers/ufs/core/ufshcd.c:10344:44: warning: shift count >= width of type [-Wshift-count-overflow]
-    10344 |                 if (!dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(64)))
-          |                                                          ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
-   1 warning and 1 error generated.
-
-
-vim +/hba +828 drivers/ufs/core/ufshcd.c
-
-   814	
-   815	/**
-   816	 * ufshcd_get_tr_ocs - Get the UTRD Overall Command Status
-   817	 * @lrbp: pointer to local command reference block
-   818	 * @cqe: pointer to the completion queue entry
-   819	 *
-   820	 * This function is used to get the OCS field from UTRD
-   821	 *
-   822	 * Return: the OCS field in the UTRD.
-   823	 */
-   824	static enum utp_ocs ufshcd_get_tr_ocs(struct ufshcd_lrb *lrbp,
-   825					      struct cq_entry *cqe)
-   826	{
-   827		if (cqe)
- > 828			return ufshcd_vops_override_cqe_ocs(hba,
-   829							    le32_to_cpu(cqe->status) &
-   830							    MASK_OCS);
-   831	
-   832		return lrbp->utr_descriptor_ptr->header.ocs & MASK_OCS;
-   833	}
-   834	
+ drivers/ufs/core/ufshcd-priv.h |  9 +++++++++
+ drivers/ufs/core/ufshcd.c      | 11 +++++++----
+ drivers/ufs/host/ufs-exynos.c  |  8 ++++++++
+ include/ufs/ufshcd.h           |  1 +
+ 4 files changed, 25 insertions(+), 4 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.7.4
+
 
