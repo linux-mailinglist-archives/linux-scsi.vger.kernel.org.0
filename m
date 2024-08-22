@@ -1,69 +1,76 @@
-Return-Path: <linux-scsi+bounces-7589-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7592-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDF7195BF56
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2024 22:01:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 041A095BF59
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2024 22:01:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A524A281708
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2024 20:00:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A40241F26E7F
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2024 20:01:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C542C12AAFD;
-	Thu, 22 Aug 2024 20:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 872811607AA;
+	Thu, 22 Aug 2024 20:00:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="TODsb/Lq"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="dgx6N/EC"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41FBE1D0DE3
-	for <linux-scsi@vger.kernel.org>; Thu, 22 Aug 2024 20:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD2D13AA4E
+	for <linux-scsi@vger.kernel.org>; Thu, 22 Aug 2024 20:00:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724356829; cv=none; b=Ee6w/fxCEgC6pRey9rYGbKC2eYf8qW+lR51dOcp+RpCCw0+uhoTq/JRWqZK5GXfZp1Rh7zpLxfOlEzcX853qtQu2T8MTbDosgkYyY5qj2DS5Mxc1CqO7VUwoW/vuIsnF/y6YQRuwR9H8nLKFEu9GsDtDhyqD6EEthgt4hvdZPeE=
+	t=1724356836; cv=none; b=Thrmb5cIPA8fwzCw9Cl/bfOXf3cnjVWqgIVZn6jB6Dkq/BdcF/sgcSexNg4MSZGIfl7O+3jaIfdVZ4to30o9Nij4gcnwZeo9YFB77TyWZdKo/ITRAd2CMdd/31BonFPiP7Mve1xoGSXn0IVEoYYAjVq3wq9I+tjllxOeuyGmkqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724356829; c=relaxed/simple;
-	bh=R8HumJBM8ZU/AKzLjESjdXJq5h4uLvaVuxrkBFXonYo=;
+	s=arc-20240116; t=1724356836; c=relaxed/simple;
+	bh=OXtnHsx14vrlA8yUoDAw4bvMVRD349ZIRskqcSnCkew=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JKplyiAF2kx31Fz+GdF8tG8CnxOYYjdbzXo2tj4nyzgA7l8mt0raF1XgzLNhJy7vx3NIm+l1W+odlFJXQyGMZjTssiCE8EXdYbtfy+ZTZSsSYf+qzhnKc6HUSKVONe8ZiEskQ0UnK67qUiOy455WWDKd2LGI9/VBrXkc2xbcbHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=TODsb/Lq; arc=none smtp.client-ip=199.89.1.11
+	 MIME-Version; b=F0xzvEC8nhBVgFu/WmvWLrIh9NMBla34K+H4NUWBzHMWSRXOczbjErIdeuSs2yajgC7wD0cfwyvHpxTTe4Hpamx/3W42TpeM5D2Z9GmFJ9Lxpd9fEOqptcRLXgMGDoSw4NeynzQjLXoid8faclW/WWgAznhQfo0slzo4yUKV4AY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=dgx6N/EC; arc=none smtp.client-ip=199.89.1.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4WqYw91fM3z6ClY9K;
-	Thu, 22 Aug 2024 20:00:25 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4WqYwL56Qgz6ClY9K;
+	Thu, 22 Aug 2024 20:00:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1724356823; x=1726948824; bh=NUMwq
-	9m0NGA/JPJnvjiSkyJiugCR5QZ35pSWfTHWtKw=; b=TODsb/LqPJ+U+HWT/+Jub
-	pWPM9vRTUnRTeHTiGG94sZQoeYY8ganHmqHr/Af8pjF90HHAIA0fw3mT8++piUDy
-	DqooJ0aAPnmvQjAB8HWqp5Mlh2DU6XI8WaF5gqVEQc7DkFxgPVRlxYaV4dov3asw
-	+zkTrZhBD0QzFJszWHT1aBb+4QyQYtZli/wiBk/04+/8uBucfqA15jxFrZEsOhPB
-	YWJxOWQva/0qPhWcA5yTvdVNRU+mP0u9IrMH+95LXpxuxwhSXgUHBV64IrwDCQsN
-	+zgODqIvLOCN0H1tDIAVtpzY8Io/FWrv2aaEIj/JVN4dEfeAEiRIpSH9ZCTJWMvC
-	A==
+	:received:received; s=mr01; t=1724356828; x=1726948829; bh=WtPiN
+	dwGiioFIODzHvIxB4aENqsjb99zdQo7b/4Ezfc=; b=dgx6N/ECAolaJU0sZuxQ+
+	aKySr4jQhbdzZyj5EYnFkWlMhp8+/9wJT526s3llzhT50hjXSgE4BPWXDzn+J7f0
+	iF9ZWkio2eLogY3hKC0W8L0csgsN79zrOeE++9gqVe4CPj3EmMAiqD9d3AnNVRHq
+	y9bKZic1gikBwHnA0rwmXZrCds6uMh8LAZPbmiy0iair2CmxHIwfW49Yafwmcs/K
+	HzEv8cJAFQBlq9jsDMYBhCtkysyZtq/D4DvDh0E6ISp+Mk5gVOdbjJhIn1Tkfmj2
+	bwuKl1fGAy26BEB3zXTo2dX553Ll/rAiwdHucz7XSyRjnDSkrGyGjWfbdjWeWSW6
+	w==
 X-Virus-Scanned: by MailRoute
 Received: from 008.lax.mailroute.net ([127.0.0.1])
  by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id q58s3-N3F8qI; Thu, 22 Aug 2024 20:00:23 +0000 (UTC)
+ id M2JMgyjlr1qY; Thu, 22 Aug 2024 20:00:28 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.204.82])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4WqYw66Zmtz6ClY9Q;
-	Thu, 22 Aug 2024 20:00:22 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4WqYwC1nZvz6ClY9P;
+	Thu, 22 Aug 2024 20:00:27 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	Bart Van Assche <bvanassche@acm.org>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH v3 16/18] scsi: stex: Simplify an alloc_ordered_workqueue() invocation
-Date: Thu, 22 Aug 2024 12:59:20 -0700
-Message-ID: <20240822195944.654691-17-bvanassche@acm.org>
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Peter Wang <peter.wang@mediatek.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bean Huo <beanhuo@micron.com>,
+	Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH v3 17/18] scsi: ufs: Simplify alloc*_workqueue() invocation
+Date: Thu, 22 Aug 2024 12:59:21 -0700
+Message-ID: <20240822195944.654691-18-bvanassche@acm.org>
 X-Mailer: git-send-email 2.46.0.295.g3b9ea8a38a-goog
 In-Reply-To: <20240822195944.654691-1-bvanassche@acm.org>
 References: <20240822195944.654691-1-bvanassche@acm.org>
@@ -75,39 +82,90 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Let alloc_ordered_workqueue() format the workqueue name instead of callin=
-g
+Let alloc*_workqueue() format the workqueue name instead of calling
 snprintf() explicitly.
 
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/stex.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/ufs/core/ufshcd.c | 23 +++++++----------------
+ 1 file changed, 7 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/scsi/stex.c b/drivers/scsi/stex.c
-index fbee7db4a835..0e81125df8c7 100644
---- a/drivers/scsi/stex.c
-+++ b/drivers/scsi/stex.c
-@@ -334,7 +334,6 @@ struct st_hba {
- 	struct st_ccb *wait_ccb;
- 	__le32 *scratch;
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index bc00603a6837..f3a50517d691 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -1804,8 +1804,6 @@ static void ufshcd_remove_clk_scaling_sysfs(struct =
+ufs_hba *hba)
 =20
--	char work_q_name[20];
- 	struct workqueue_struct *work_q;
- 	struct work_struct reset_work;
- 	wait_queue_head_t reset_waitq;
-@@ -1795,10 +1794,8 @@ static int stex_probe(struct pci_dev *pdev, const =
-struct pci_device_id *id)
- 	hba->pdev =3D pdev;
- 	init_waitqueue_head(&hba->reset_waitq);
+ static void ufshcd_init_clk_scaling(struct ufs_hba *hba)
+ {
+-	char wq_name[sizeof("ufs_clkscaling_00")];
+-
+ 	if (!ufshcd_is_clkscaling_supported(hba))
+ 		return;
 =20
--	snprintf(hba->work_q_name, sizeof(hba->work_q_name),
--		 "stex_wq_%d", host->host_no);
--	hba->work_q =3D
--		alloc_ordered_workqueue("%s", WQ_MEM_RECLAIM, hba->work_q_name);
-+	hba->work_q =3D alloc_ordered_workqueue("stex_wq_%d", WQ_MEM_RECLAIM,
-+					      host->host_no);
- 	if (!hba->work_q) {
- 		printk(KERN_ERR DRV_NAME "(%s): create workqueue failed\n",
- 			pci_name(pdev));
+@@ -1817,10 +1815,8 @@ static void ufshcd_init_clk_scaling(struct ufs_hba=
+ *hba)
+ 	INIT_WORK(&hba->clk_scaling.resume_work,
+ 		  ufshcd_clk_scaling_resume_work);
+=20
+-	snprintf(wq_name, sizeof(wq_name), "ufs_clkscaling_%d",
+-		 hba->host->host_no);
+-	hba->clk_scaling.workq =3D
+-		alloc_ordered_workqueue("%s", WQ_MEM_RECLAIM, wq_name);
++	hba->clk_scaling.workq =3D alloc_ordered_workqueue(
++		"ufs_clkscaling_%d", WQ_MEM_RECLAIM, hba->host->host_no);
+=20
+ 	hba->clk_scaling.is_initialized =3D true;
+ }
+@@ -2144,8 +2140,6 @@ static void ufshcd_remove_clk_gating_sysfs(struct u=
+fs_hba *hba)
+=20
+ static void ufshcd_init_clk_gating(struct ufs_hba *hba)
+ {
+-	char wq_name[sizeof("ufs_clk_gating_00")];
+-
+ 	if (!ufshcd_is_clkgating_allowed(hba))
+ 		return;
+=20
+@@ -2155,10 +2149,9 @@ static void ufshcd_init_clk_gating(struct ufs_hba =
+*hba)
+ 	INIT_DELAYED_WORK(&hba->clk_gating.gate_work, ufshcd_gate_work);
+ 	INIT_WORK(&hba->clk_gating.ungate_work, ufshcd_ungate_work);
+=20
+-	snprintf(wq_name, ARRAY_SIZE(wq_name), "ufs_clk_gating_%d",
+-		 hba->host->host_no);
+-	hba->clk_gating.clk_gating_workq =3D alloc_ordered_workqueue(wq_name,
+-					WQ_MEM_RECLAIM | WQ_HIGHPRI);
++	hba->clk_gating.clk_gating_workq =3D alloc_ordered_workqueue(
++		"ufs_clk_gating_%d", WQ_MEM_RECLAIM | WQ_HIGHPRI,
++		hba->host->host_no);
+=20
+ 	ufshcd_init_clk_gating_sysfs(hba);
+=20
+@@ -10395,7 +10388,6 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem=
+ *mmio_base, unsigned int irq)
+ 	int err;
+ 	struct Scsi_Host *host =3D hba->host;
+ 	struct device *dev =3D hba->dev;
+-	char eh_wq_name[sizeof("ufs_eh_wq_00")];
+=20
+ 	/*
+ 	 * dev_set_drvdata() must be called before any callbacks are registered
+@@ -10462,9 +10454,8 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem=
+ *mmio_base, unsigned int irq)
+ 	hba->max_pwr_info.is_valid =3D false;
+=20
+ 	/* Initialize work queues */
+-	snprintf(eh_wq_name, sizeof(eh_wq_name), "ufs_eh_wq_%d",
+-		 hba->host->host_no);
+-	hba->eh_wq =3D alloc_ordered_workqueue("%s", WQ_MEM_RECLAIM, eh_wq_name=
+);
++	hba->eh_wq =3D alloc_ordered_workqueue("ufs_eh_wq_%d", WQ_MEM_RECLAIM,
++					     hba->host->host_no);
+ 	if (!hba->eh_wq) {
+ 		dev_err(hba->dev, "%s: failed to create eh workqueue\n",
+ 			__func__);
 
