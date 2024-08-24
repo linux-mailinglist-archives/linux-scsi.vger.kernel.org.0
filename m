@@ -1,137 +1,102 @@
-Return-Path: <linux-scsi+bounces-7676-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7678-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D45C595DD03
-	for <lists+linux-scsi@lfdr.de>; Sat, 24 Aug 2024 10:44:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B90295DD0D
+	for <lists+linux-scsi@lfdr.de>; Sat, 24 Aug 2024 10:50:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 610F8B22587
-	for <lists+linux-scsi@lfdr.de>; Sat, 24 Aug 2024 08:44:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C88D41C2102D
+	for <lists+linux-scsi@lfdr.de>; Sat, 24 Aug 2024 08:50:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61DA1154BE4;
-	Sat, 24 Aug 2024 08:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B5641509B4;
+	Sat, 24 Aug 2024 08:50:24 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 990948460;
-	Sat, 24 Aug 2024 08:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F7E64A;
+	Sat, 24 Aug 2024 08:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724489076; cv=none; b=laiC4D4f3mFy4NA+LLl9+kemnmpHXxf3uR+cfE+APBzsbT3me0bUbK+JBaGz5JJsbQAgOCjeazdZq8cY62iWzYiDH2UJctWGvg7oyyhWX4cPWB1LiDjWiMZHcpyCZ84PYljm1/3SZxEX2Ds6hBwjxO8TeAD22QotHeU6/0PBo90=
+	t=1724489424; cv=none; b=GmGwROiwh1cz9enN2MTRb5oPM8d8QLe8cINWO6uubIz03+kKHGKlyKbAD4XVpF51gWfpBhNlLUuaHKdiEedTT1ppxUMezciBPWp3IH+B81AWOtqZ0LgFA0vY76w/JvLL3gM1K195gzQlat/JvG5NzxCIE8S6DEH1qACv+qF9X8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724489076; c=relaxed/simple;
-	bh=eLrPulrnIY/B36XVtFNCVSHh/ecSt3QlKey4nC8gxwQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b2td4BrAEq1xst2CfY62ylVXEs+sTSabq4A6fFcJPVTrPPOhM9RNFChTGmZic9jcSbdAkinJ3flESUc5GjTwpx07aWAOtT7PyhTV+Kg3LMqsVW9eWczTxP1f1vmHwURBpPT1tm2eF5b+rVK6DoDR3sv77mocgQYTecx631U0t60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id 4148A227A87; Sat, 24 Aug 2024 10:44:30 +0200 (CEST)
-Date: Sat, 24 Aug 2024 10:44:30 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: Anuj Gupta <anuj20.g@samsung.com>
-Cc: axboe@kernel.dk, hch@lst.de, kbusch@kernel.org,
-	martin.petersen@oracle.com, asml.silence@gmail.com, krisman@suse.de,
-	io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-block@vger.kernel.org, gost.dev@samsung.com,
-	linux-scsi@vger.kernel.org, Kanchan Joshi <joshi.k@samsung.com>
-Subject: Re: [PATCH v3 08/10] block: add support to pass user meta buffer
-Message-ID: <20240824084430.GG8805@lst.de>
-References: <20240823103811.2421-1-anuj20.g@samsung.com> <CGME20240823104634epcas5p4ef1af26cc7146b4e8b7a4a1844ffe476@epcas5p4.samsung.com> <20240823103811.2421-10-anuj20.g@samsung.com>
+	s=arc-20240116; t=1724489424; c=relaxed/simple;
+	bh=ktjUn6JSbP8cOaxNgNKbBqIwbeWwCGeUPh0a450dJUY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WDod7IldnhgPPZhmwXyk2sasOs6uNXGXIevpcRuzFWl772C1XJ0P4+zKkESi+PLkY4uU7UbqJIHh61+LZvcgIhBOpanhIgjqxvONJuB8EGmi0j9Gd89jEALDUyRKasdVGZcqQvKVJNfBr3R1nc4DggcvihIoQMLAhvV563VHD9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4WrVxw2Jpgz2CnLq;
+	Sat, 24 Aug 2024 16:50:12 +0800 (CST)
+Received: from dggpemf500002.china.huawei.com (unknown [7.185.36.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id 6327D1401F2;
+	Sat, 24 Aug 2024 16:50:18 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpemf500002.china.huawei.com
+ (7.185.36.57) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sat, 24 Aug
+ 2024 16:50:17 +0800
+From: Yue Haibing <yuehaibing@huawei.com>
+To: <njavali@marvell.com>, <mrangankar@marvell.com>,
+	<GR-QLogic-Storage-Upstream@marvell.com>,
+	<James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
+	<yuehaibing@huawei.com>
+CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] scsi: bnx2i: Remove unused declarations
+Date: Sat, 24 Aug 2024 16:47:24 +0800
+Message-ID: <20240824084724.3647307-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240823103811.2421-10-anuj20.g@samsung.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemf500002.china.huawei.com (7.185.36.57)
 
-On Fri, Aug 23, 2024 at 04:08:09PM +0530, Anuj Gupta wrote:
-> From: Kanchan Joshi <joshi.k@samsung.com>
-> 
-> If iocb contains the meta, extract that and prepare the bip.
+Commit cf4e6363859d ("[SCSI] bnx2i: Add bnx2i iSCSI driver.") declared but
+never implemented these.
 
-If an iocb contains metadata, ...
+Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
+---
+ drivers/scsi/bnx2i/bnx2i.h | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-> --- a/block/fops.c
-> +++ b/block/fops.c
-> @@ -154,6 +154,9 @@ static void blkdev_bio_end_io(struct bio *bio)
->  		}
->  	}
->  
-> +	if (bio_integrity(bio) && (dio->iocb->ki_flags & IOCB_HAS_META))
-> +		bio_integrity_unmap_user(bio);
-
-How could bio_integrity() be true here without the iocb flag?
-
-> +		if (!is_sync && unlikely(iocb->ki_flags & IOCB_HAS_META)) {
-
-unlikely is actively harmful here, as the code is likely if you use
-the feature..
-
-> +			ret = bio_integrity_map_iter(bio, iocb->private);
-> +			if (unlikely(ret)) {
-> +				bio_release_pages(bio, false);
-> +				bio_clear_flag(bio, BIO_REFFED);
-> +				bio_put(bio);
-> +				blk_finish_plug(&plug);
-> +				return ret;
-> +			}
-
-This duplicates the error handling done just above.  Please add a
-goto label to de-duplicate it.
-
-> +	if (unlikely(iocb->ki_flags & IOCB_HAS_META)) {
-> +		ret = bio_integrity_map_iter(bio, iocb->private);
-> +		WRITE_ONCE(iocb->private, NULL);
-> +		if (unlikely(ret)) {
-> +			bio_put(bio);
-> +			return ret;
-
-This probably also wants an out_bio_put label even if the duplication
-is minimal so far.
-
-You probably also want a WARN_ON for the iocb meta flag in
-__blkdev_direct_IO_simple so that we don't get caught off guard
-if someone adds a synchronous path using PI.
-
-> diff --git a/block/t10-pi.c b/block/t10-pi.c
-> index e7052a728966..cb7bc4a88380 100644
-> --- a/block/t10-pi.c
-> +++ b/block/t10-pi.c
-> @@ -139,6 +139,8 @@ static void t10_pi_type1_prepare(struct request *rq)
->  		/* Already remapped? */
->  		if (bip->bip_flags & BIP_MAPPED_INTEGRITY)
->  			break;
-> +		if (bip->bip_flags & BIP_INTEGRITY_USER)
-> +			break;
-
-This is wrong.  When submitting metadata on a partition the ref tag
-does need to be remapped.  Please also add a tests that tests submitting
-metadata on a partition so that we have a regression test for this.
-
-> +	BIP_INTEGRITY_USER      = 1 << 9, /* Integrity payload is user
-> +					   * address
-> +					   */
-
-.. and with the above fix this flag should not be needed.
-
->  };
->  
->  struct bio_integrity_payload {
-> @@ -24,6 +27,7 @@ struct bio_integrity_payload {
->  	unsigned short		bip_vcnt;	/* # of integrity bio_vecs */
->  	unsigned short		bip_max_vcnt;	/* integrity bio_vec slots */
->  	unsigned short		bip_flags;	/* control flags */
-> +	u16			app_tag;
-
-Please document the field even if it seems obvious.
+diff --git a/drivers/scsi/bnx2i/bnx2i.h b/drivers/scsi/bnx2i/bnx2i.h
+index df7d04afce05..7030efee5c46 100644
+--- a/drivers/scsi/bnx2i/bnx2i.h
++++ b/drivers/scsi/bnx2i/bnx2i.h
+@@ -815,11 +815,6 @@ extern struct bnx2i_hba *get_adapter_list_head(void);
+ struct bnx2i_conn *bnx2i_get_conn_from_id(struct bnx2i_hba *hba,
+ 					  u16 iscsi_cid);
+ 
+-int bnx2i_alloc_ep_pool(void);
+-void bnx2i_release_ep_pool(void);
+-struct bnx2i_endpoint *bnx2i_ep_ofld_list_next(struct bnx2i_hba *hba);
+-struct bnx2i_endpoint *bnx2i_ep_destroy_list_next(struct bnx2i_hba *hba);
+-
+ struct bnx2i_hba *bnx2i_find_hba_for_cnic(struct cnic_dev *cnic);
+ 
+ struct bnx2i_hba *bnx2i_alloc_hba(struct cnic_dev *cnic);
+@@ -869,12 +864,6 @@ extern int bnx2i_arm_cq_event_coalescing(struct bnx2i_endpoint *ep, u8 action);
+ 
+ extern int bnx2i_hw_ep_disconnect(struct bnx2i_endpoint *bnx2i_ep);
+ 
+-/* Debug related function prototypes */
+-extern void bnx2i_print_pend_cmd_queue(struct bnx2i_conn *conn);
+-extern void bnx2i_print_active_cmd_queue(struct bnx2i_conn *conn);
+-extern void bnx2i_print_xmit_pdu_queue(struct bnx2i_conn *conn);
+-extern void bnx2i_print_recv_state(struct bnx2i_conn *conn);
+-
+ extern int bnx2i_percpu_io_thread(void *arg);
+ extern int bnx2i_process_scsi_cmd_resp(struct iscsi_session *session,
+ 				       struct bnx2i_conn *bnx2i_conn,
+-- 
+2.34.1
 
 
