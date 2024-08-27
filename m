@@ -1,63 +1,63 @@
-Return-Path: <linux-scsi+bounces-7745-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7747-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 842B3961750
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Aug 2024 20:55:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2800961752
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Aug 2024 20:55:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FBF32846EB
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Aug 2024 18:55:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4FC61C234F8
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Aug 2024 18:55:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70AC81D2788;
-	Tue, 27 Aug 2024 18:55:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8242E1D2F59;
+	Tue, 27 Aug 2024 18:55:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="pp/N6kev"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="G1SeTW4D"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCEA1D2F40
-	for <linux-scsi@vger.kernel.org>; Tue, 27 Aug 2024 18:55:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7809B1D2F57
+	for <linux-scsi@vger.kernel.org>; Tue, 27 Aug 2024 18:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724784933; cv=none; b=Gjb/WKXnRc4n4bQB2f9tIJQ9g2b97LKWI+PJ/oNJRVJQP/bU7KJ2VjiCtYUtVTOMSiobgPO/42wA61NihbPPTGAYIA69OjEzZYYb4KI/M75pNUXbTBK/CcBctD7YAC+rlAqPJi0Nt38SAW1YizREVAST5VejcrKQUeciduPNz08=
+	t=1724784935; cv=none; b=fAYjzKOPG6sNSImrbeojRpgquwNKoO9S6IQsc6Xx2b880CaIoFKwyiZ7mgjT1L+VGV1MJBKOzTXq3dPb0Bq4+VtAJ2f7sfvEvhZNS22YRHDPaVptbxiPAOdnhf8xcGnuAdQ8uTKAhZQS0O22rOPdUGUXDIxQxIxDJLGWAcywC6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724784933; c=relaxed/simple;
-	bh=46MPHm0+LJXVG0Ty3jqVwZpfj8izPGBWiFpBgMNOgUs=;
+	s=arc-20240116; t=1724784935; c=relaxed/simple;
+	bh=EkjeigIzbeUE0Dot+e8ArizcQGN5koMeaQY0OldUnkQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WA12sbAmSYPqTRXkgaC9NiWePyCdaN8zr8jLoA/NPJjBdqpxK1/LaThhLQ801G6G11JVv8OoDpeyxdrEnNWINzqpX7MauZAiSX5vqsWklZkLyhsLGEMFh9NdP6wbIZ3l4CDVO9aZuJduRsqFlHJh49bcBlZIocL1A2m/9L8mTLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=pp/N6kev; arc=none smtp.client-ip=68.232.154.123
+	 MIME-Version:Content-Type; b=eZPnTmCvXGpXCmnpG7uJN5aAFIdJ9VgvgWgclZTJ0rBbbrKzmUqvSQVm7xzRXO0lGX7pJxQ8v4V16cZEfAadV5uB0QhXLalrv3cZlkVjZ9O80ACzJm03R+U/y/WTdZxWpUmeqFSDcBJOiIwxm0wqf00/C5uXzi+bzbPPUL/YTcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=G1SeTW4D; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1724784931; x=1756320931;
+  t=1724784932; x=1756320932;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=46MPHm0+LJXVG0Ty3jqVwZpfj8izPGBWiFpBgMNOgUs=;
-  b=pp/N6kevt1LA9RmaUJ3r2MxkNU94Q7T3DNTu5CXAgmc6Hl2zKQIDR+XQ
-   RzqM+9m7Ym+CBkt+cD9V5BzhKVEiAbOrlxmg21HTW3XKMpJa0orcmwBVP
-   T3jDJK/BXNSkhhEG4DA7DxTNME3moE1qdCxNWDAt8NBccKOdT4vpGzWRc
-   x37FJRzYSZKsis0GdKE7wWKUOSQhO/ff9Cb3hjGkE336RHS+PiHah9OlW
-   WYTNXlqjOsPeiF80zEfmyM199EC5aRWkLbrNtxhYSuyI40KkNXpE5ZFfW
-   N22kqxGLFISdfQdtPP4x9MNqBF/0bPGz8IBWLFtDPw+cqnd6o4j1OcReU
+  bh=EkjeigIzbeUE0Dot+e8ArizcQGN5koMeaQY0OldUnkQ=;
+  b=G1SeTW4Dvn6T0+jCFt5uzzq0Bc75G0bg3PocwpA9NyNC2r0pQOARBoxb
+   4P3CgQYotps6qND7MqRYV6tlrphT3IZ5uJ1F3S8vs/tNpM6OYg/gdbmQo
+   FCu6N1gLRZVLBI8PI75DPhkotNF/rwGVD/24O+sRKtDLpRJVnNCDRAZ4I
+   T9kXTjeZEDLBy9+feD6HLBIX1qvYIw3lzJIK+uN237xwkDWhr5M6Lb+mN
+   ASyuV9algDG4tj1D6BuwY9dyQkuFAXCytEWi14tmABW4e02PO5HBPjsuH
+   vgX18WHwW90ol+3BC6LR1XOJeJNVUrkmBWTmqSmlnkQB+siUcwNDKdRP8
    Q==;
 X-CSE-ConnectionGUID: HXogS4E1Q5emAr2ic36fkw==
-X-CSE-MsgGUID: MUqvWWi3RQmUz3Wl8OGhrQ==
+X-CSE-MsgGUID: 5Y5EdCAyTWaRBOIqMGGc8Q==
 X-IronPort-AV: E=Sophos;i="6.10,181,1719903600"; 
-   d="scan'208";a="198399615"
+   d="scan'208";a="198399617"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Aug 2024 11:55:27 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 27 Aug 2024 11:54:59 -0700
+ 15.1.2507.35; Tue, 27 Aug 2024 11:55:00 -0700
 Received: from brunhilda.pdev.net (10.10.85.11) by chn-vm-ex01.mchp-main.com
  (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Tue, 27 Aug 2024 11:55:04 -0700
+ Transport; Tue, 27 Aug 2024 11:55:05 -0700
 From: Don Brace <don.brace@microchip.com>
 To: <don.brace@microchip.com>, <scott.teel@microchip.com>,
 	<Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -68,9 +68,9 @@ To: <don.brace@microchip.com>, <scott.teel@microchip.com>,
 	<James.Bottomley@HansenPartnership.com>, Martin Petersen
 	<martin.petersen@oracle.com>, <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
 CC: <linux-scsi@vger.kernel.org>
-Subject: [PATCH 4/7] smartpqi: add new controller PCI IDs
-Date: Tue, 27 Aug 2024 13:54:58 -0500
-Message-ID: <20240827185501.692804-5-don.brace@microchip.com>
+Subject: [PATCH 5/7] smartpqi: fix rare system hang during LUN reset
+Date: Tue, 27 Aug 2024 13:54:59 -0500
+Message-ID: <20240827185501.692804-6-don.brace@microchip.com>
 X-Mailer: git-send-email 2.46.0.421.g159f2d50e7
 In-Reply-To: <20240827185501.692804-1-don.brace@microchip.com>
 References: <20240827185501.692804-1-don.brace@microchip.com>
@@ -84,92 +84,57 @@ Organization: Microchip Technology Inc.
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-From: David Strahan <David.Strahan@microchip.com>
+From: Murthy Bhat <Murthy.Bhat@microchip.com>
 
-All PCI ID entries in Hex.
+Correct a rare case where in a LUN reset occurs on a device
+and I/O requests for other devices persist in the driver's internal
+request queue.
 
-Add new cisco pci ids:
-                                             VID  / DID  / SVID / SDID
-                                             ----   ----   ----   ----
-                                             9005   028f   1137   02fe
-                                             9005   028f   1137   02ff
-                                             9005   028f   1137   0300
+Part of a LUN reset involves waiting for our internal request queue
+to empty before proceeding. The internal request queue contains requests
+not yet sent down to the controller.
 
-Add new h3c pci ids:
-                                             VID  / DID  / SVID / SDID
-                                             ----   ----   ----   ----
-                                             9005   028f   193d   0462
-                                             9005   028f   193d   8462
+We were clearing the requests queued for the LUN undergoing a reset, but
+not all of the queued requests. Causing a hang.
 
-Add new ieit pci ids:
-                                             VID  / DID  / SVID / SDID
-                                             ----   ----   ----   ----
-                                             9005   028f   1ff9   00a3
+For all requests in our internal request queue:
+   Complete requests with DID_RESET for queued requests for the device
+   undergoing a reset.
+
+   Complete requests with DID_REQUEUE for all other queued requests.
 
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
+Reviewed-by: Scott Teel <scott.teel@microchip.com>
 Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
-Signed-off-by: David Strahan <David.Strahan@microchip.com>
+Signed-off-by: Murthy Bhat <Murthy.Bhat@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi_init.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/scsi/smartpqi/smartpqi_init.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 6a941735c982..46bef2cf95c4 100644
+index 46bef2cf95c4..d1d117d5d08d 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -9548,6 +9548,10 @@ static const struct pci_device_id pqi_pci_id_table[] = {
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
- 			       0x152d, 0x8a37)
- 	},
-+	{
-+		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
-+			       0x193d, 0x0462)
-+	},
- 	{
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
- 			       0x193d, 0x1104)
-@@ -9588,6 +9592,10 @@ static const struct pci_device_id pqi_pci_id_table[] = {
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
- 			       0x193d, 0x8461)
- 	},
-+	{
-+		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
-+			       0x193d, 0x8462)
-+	},
- 	{
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
- 			       0x193d, 0xc460)
-@@ -10296,6 +10304,18 @@ static const struct pci_device_id pqi_pci_id_table[] = {
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
- 			       0x1137, 0x02fa)
- 	},
-+	{
-+		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
-+			       0x1137, 0x02fe)
-+	},
-+	{
-+		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
-+			       0x1137, 0x02ff)
-+	},
-+	{
-+		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
-+			       0x1137, 0x0300)
-+	},
- 	{
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
- 			       0x1ff9, 0x0045)
-@@ -10472,6 +10492,10 @@ static const struct pci_device_id pqi_pci_id_table[] = {
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
- 			       0x1f51, 0x1045)
- 	},
-+	{
-+		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
-+			       0x1ff9, 0x00a3)
-+	},
- 	{
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
- 			       PCI_ANY_ID, PCI_ANY_ID)
+@@ -6200,14 +6200,12 @@ static void pqi_fail_io_queued_for_device(struct pqi_ctrl_info *ctrl_info,
+ 					continue;
+ 
+ 				scsi_device = scmd->device->hostdata;
+-				if (scsi_device != device)
+-					continue;
+-
+-				if ((u8)scmd->device->lun != lun)
+-					continue;
+ 
+ 				list_del(&io_request->request_list_entry);
+-				set_host_byte(scmd, DID_RESET);
++				if (scsi_device == device && (u8)scmd->device->lun == lun)
++					set_host_byte(scmd, DID_RESET);
++				else
++					set_host_byte(scmd, DID_REQUEUE);
+ 				pqi_free_io_request(io_request);
+ 				scsi_dma_unmap(scmd);
+ 				pqi_scsi_done(scmd);
 -- 
 2.46.0.421.g159f2d50e7
 
