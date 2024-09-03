@@ -1,114 +1,121 @@
-Return-Path: <linux-scsi+bounces-7907-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7912-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69AAF96A73A
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Sep 2024 21:19:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B74A396A8A9
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Sep 2024 22:43:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 204A81F21B17
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Sep 2024 19:19:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74AED28225D
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Sep 2024 20:43:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C99A18CBEE;
-	Tue,  3 Sep 2024 19:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 993B41D5CFF;
+	Tue,  3 Sep 2024 20:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="nq+KH05I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eD7r4+AN"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D0C71D5CC6;
-	Tue,  3 Sep 2024 19:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5155C1D5CF6;
+	Tue,  3 Sep 2024 20:42:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725391143; cv=none; b=rJQ0ruvkOBqGFFJxxMpJfYOIrDVuZl5l4iSt7jzbk41lH+qM32hTzhFvfHhd3e0nLsC+fMdtL/IgGFaoJhNrFrmlMe+NMdqNDOIKn4UkddqsXrW6PrK44VPyJpOLax2P7UD/WmMo+IFBLqZjDjVc5FWVuicyuiuCrdn6iuK1Khc=
+	t=1725396140; cv=none; b=NAQYtSwOWNrXE1ESPUbv9N7Q0glFLqgGdBSMdB/38/J0RpYyoM8Zpzc99Xty6rpgjLMs/ybiz9YiMT+Iri/VAQWky0mYVuzsJ+b1StbQG9DnKshYyrctX9rNA/y6wgN6VJDSGV1anYfbSWL01cZy7VKaVCS49B0gMe+RRo7sGC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725391143; c=relaxed/simple;
-	bh=C6tyTlzrvQ744QWHSoF7W4UR1hVGzE0ndrYG0/hpzi0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CTyebVzMzjjMD8i+vSH+qqIIScZnyg4CP2JyfTvdAeb5H0WTcE+NZgqCM6pzG6JsTdRTLotzAJv1ISX9DNyPjXpdMQuwSUhFNFmtOZtPXgHYSmii3GFLls8Hjfruw/gZIk36PnLCmO6SZWEbLpESx/HdkTqNWMZZkZAtRVk6yYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=nq+KH05I; arc=none smtp.client-ip=199.89.1.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4WywQr4RVlzlgTWR;
-	Tue,  3 Sep 2024 19:19:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1725391138; x=1727983139; bh=coBZ9lyHTBRDqRpSWT44D/Qb
-	8lF4EuJZ+HhHtbYLR84=; b=nq+KH05ICOejEbF/Vx9An/ZPSCrbZ9al6t60YGnM
-	3+jcmjDwTpzIXxAkK8yP7ETk41ppy6mTmftCMkt774RTyHjswE3KB+tftKBfYnSZ
-	HMgckfje6oChlcucWYiR7YbDc6tuMAhPAp9Mg0okrfrKugfAcmtpHCpB6JJvlxM3
-	FpwfByf1NTuQ2tglPUEvyFryOmRIjfYNRstqkIRRSFmBYNwOj9hce30NthTMVdde
-	i/bOo9AUXgAW8kEWmBSKdJ4ekoq9QfG1za3cIxm1094ZwmQ84DFwvvTFOHPDVutd
-	WOTKz1vdWL4k3hkppWC3hA7oShOjaDJb8sZJySmiP9QZ6A==
-X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id XDfrxYmerwhi; Tue,  3 Sep 2024 19:18:58 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4WywQn6JmnzlgTWP;
-	Tue,  3 Sep 2024 19:18:57 +0000 (UTC)
-Message-ID: <b7f0acf4-5e7d-4491-81be-71518197c58b@acm.org>
-Date: Tue, 3 Sep 2024 12:18:56 -0700
+	s=arc-20240116; t=1725396140; c=relaxed/simple;
+	bh=j45dtGe1JbA6NaHG0W7dRRtycTu/PakftatcafLRIr4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bljRZNMs4NGyf199nN1A1IpGOG1DOifgJp3k9zmYe5LUqlDoeMq+wdi66n5TJTdXvaeJSjrY/oW0r6civA1/soFYUMs2tHZNAjucJvPV/2C57qKvv1yr4lYS010lqkqOZYvO61dMx1StF/0YD5e6jb9bAWk2v2sQb2nnyvNEL+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eD7r4+AN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 984F7C4CEC9;
+	Tue,  3 Sep 2024 20:42:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725396139;
+	bh=j45dtGe1JbA6NaHG0W7dRRtycTu/PakftatcafLRIr4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=eD7r4+AN5u90jhGBCVVVQ/VTL+Xs6xPjwKcb3fELICg+0+3myeBWh05MNXRT0Rccm
+	 rT00Ug/zxDZr112/iL+eo0EGItlrVo/xC09fQXu1PtH+yaAVfGMtvu4ywKXGEvgJbN
+	 62RNSpTbPmJgb6+P/cwstxLVmu4NaxvpH7/Qca4ktLHRvEv9GYsMlb9yF7RXygmZYS
+	 nhbT79gw5Hb2rfPW0pl1Hv3EM4TCqJqBMjVqH9eSRKBZvSivefqsC4CLr/chiBd5F3
+	 7B1OFEQ9C/XLGDVENVGZW4ROdH/DRSypjUmUu/UzGa1zdBmNPCKRqQuIqU48ypnB+X
+	 3irkR8HIqHezg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Sherry Yang <sherry.yang@oracle.com>,
+	Justin Tee <justin.tee@broadcom.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Sasha Levin <sashal@kernel.org>,
+	james.smart@broadcom.com,
+	dick.kennedy@broadcom.com,
+	James.Bottomley@HansenPartnership.com,
+	linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.10 07/22] scsi: lpfc: Fix overflow build issue
+Date: Tue,  3 Sep 2024 15:21:54 -0400
+Message-ID: <20240903192243.1107016-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240903192243.1107016-1-sashal@kernel.org>
+References: <20240903192243.1107016-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: aacraid: Fix memory leak in open_getadapter_fib
- function
-To: Riyan Dhiman <riyandhiman14@gmail.com>, aacraid@microsemi.com,
- James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240903185410.21144-1-riyandhiman14@gmail.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20240903185410.21144-1-riyandhiman14@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.10.7
+Content-Transfer-Encoding: 8bit
 
-On 9/3/24 11:54 AM, Riyan Dhiman wrote:
-> In the open_getadapter_fib() function, memory allocated for the fibctx structure
-> was not freed when copy_to_user() failed. This can lead to memory leaks as the
-> allocated memory remains unreferenced and cannot be reclaimed.
-> 
-> This patch ensures that the allocated memory for fibctx is properly
-> freed if copy_to_user() fails, thereby preventing potential memory leaks.
+From: Sherry Yang <sherry.yang@oracle.com>
 
-What made you analyze the code modified by this patch?
+[ Upstream commit 3417c9574e368f0330637505f00d3814ca8854d2 ]
 
-How has this patch been tested?
+Build failed while enabling "CONFIG_GCOV_KERNEL=y" and
+"CONFIG_GCOV_PROFILE_ALL=y" with following error:
 
-> Changes:
-> - Added kfree(fibctx); to release memory when copy_to_user() fails.
+BUILDSTDERR: drivers/scsi/lpfc/lpfc_bsg.c: In function 'lpfc_get_cgnbuf_info':
+BUILDSTDERR: ./include/linux/fortify-string.h:114:33: error: '__builtin_memcpy' accessing 18446744073709551615 bytes at offsets 0 and 0 overlaps 9223372036854775807 bytes at offset -9223372036854775808 [-Werror=restrict]
+BUILDSTDERR:   114 | #define __underlying_memcpy     __builtin_memcpy
+BUILDSTDERR:       |                                 ^
+BUILDSTDERR: ./include/linux/fortify-string.h:637:9: note: in expansion of macro '__underlying_memcpy'
+BUILDSTDERR:   637 |         __underlying_##op(p, q, __fortify_size);                        \
+BUILDSTDERR:       |         ^~~~~~~~~~~~~
+BUILDSTDERR: ./include/linux/fortify-string.h:682:26: note: in expansion of macro '__fortify_memcpy_chk'
+BUILDSTDERR:   682 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+BUILDSTDERR:       |                          ^~~~~~~~~~~~~~~~~~~~
+BUILDSTDERR: drivers/scsi/lpfc/lpfc_bsg.c:5468:9: note: in expansion of macro 'memcpy'
+BUILDSTDERR:  5468 |         memcpy(cgn_buff, cp, cinfosz);
+BUILDSTDERR:       |         ^~~~~~
 
-Changes compared to what? I don't see a version number in the email
-subject.
+This happens from the commit 06bb7fc0feee ("kbuild: turn on -Wrestrict by
+default"). Address this issue by using size_t type.
 
-> @@ -220,6 +220,7 @@ static int open_getadapter_fib(struct aac_dev * dev, void __user *arg)
->   		if (copy_to_user(arg, &fibctx->unique,
->   						sizeof(fibctx->unique))) {
->   			status = -EFAULT;
-> +			kfree(fibctx);
->   		} else {
->   			status = 0;
->   		}
+Signed-off-by: Sherry Yang <sherry.yang@oracle.com>
+Link: https://lore.kernel.org/r/20240821065131.1180791-1-sherry.yang@oracle.com
+Reviewed-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/lpfc/lpfc_bsg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Just above the copy_to_user() call there is the following statement:
+diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
+index 4156419c52c78..4756a3f825310 100644
+--- a/drivers/scsi/lpfc/lpfc_bsg.c
++++ b/drivers/scsi/lpfc/lpfc_bsg.c
+@@ -5410,7 +5410,7 @@ lpfc_get_cgnbuf_info(struct bsg_job *job)
+ 	struct get_cgnbuf_info_req *cgnbuf_req;
+ 	struct lpfc_cgn_info *cp;
+ 	uint8_t *cgn_buff;
+-	int size, cinfosz;
++	size_t size, cinfosz;
+ 	int  rc = 0;
+ 
+ 	if (job->request_len < sizeof(struct fc_bsg_request) +
+-- 
+2.43.0
 
-	list_add_tail(&fibctx->next, &dev->fib_list);
-
-Does that mean that the above kfree() will cause list corruption?
-
-Bart.
 
