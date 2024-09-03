@@ -1,121 +1,108 @@
-Return-Path: <linux-scsi+bounces-7915-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7908-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7661D96A948
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Sep 2024 22:58:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7998896A791
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Sep 2024 21:42:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D18C1F2588E
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Sep 2024 20:58:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A97A31C23B36
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Sep 2024 19:42:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22C9D1DCB28;
-	Tue,  3 Sep 2024 20:46:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1CE519149E;
+	Tue,  3 Sep 2024 19:42:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jSsq+p5D"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="Pl7wJjOy"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72BA1DCB1E;
-	Tue,  3 Sep 2024 20:46:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D1818E77D;
+	Tue,  3 Sep 2024 19:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725396403; cv=none; b=CWCTJ0i0lgXb8drL2dyz4RV1S4tbYnzDygvimVVNy+KFAchGYMdmcLHmJW8IRs2vNlpe01R41ywNK1zyo5hEwK+XsHsFI+RNbnQLSdQ/xtOlRnBhWXubOI3HRPY4s3T2YFiX/xJwthvzputs7U1P3/yjCMR95Uf6dJNsN3SQFY4=
+	t=1725392565; cv=none; b=D3x8P2fz/499RSNbjXvjTx6ZagLB/6mwOrHYipSkeMOtBUm9v3ZvuCT+aUaplZe45aqCEtp0yLO+AUIMmATwzNUhdR/4QxTxxSXgazGE/6kbCSH3/2Anav2Xn8g51J97QThakyyahWwKgI3C7BN/9R7CziPMn8B07hMFnjoyjgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725396403; c=relaxed/simple;
-	bh=gyKmTyTWsLFKWuyb1CViguXxZW6EghA9L1hLyOY/2+o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CKkyKhWu9rjww9z3p4jz8UM3s7ncg/Yetl9gLyZGfvii8xQuPoxJE18UYFejO8T7HHXLaTCGKjCYBNKCnkdoXzZaQn6cyaj1nKWNF1WBDqEWpKwD3bKQqdNfRc4/zB0nbzIat72BoSNV0ajRElt562f5TAiNs+htc62DcZdWrOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jSsq+p5D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72B34C4CEC5;
-	Tue,  3 Sep 2024 20:46:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725396403;
-	bh=gyKmTyTWsLFKWuyb1CViguXxZW6EghA9L1hLyOY/2+o=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jSsq+p5DXz7504YkA4dpgdREt+zsahPtNYYmOxY1nkU5MW6H0flgzy5OrToc2OSJx
-	 OExvBQcXQ/bSWZn5aWC8p35ZABleTEMpb7Lj+GYOs5Q/HgGDSmEs0mpi704A7NiDXI
-	 S3O5BbVFEcuVcsKZBSx/blbIm3TOvH/QD5mm3xR1RxXf27y7k+3FsCkwEuU8AhdqQ6
-	 Id2iFAdtDB5NJN8twoVH9d5vQnNHoosgqfHER/5yNBCvv1cNqEBHAZwowLE7KZ9ZLq
-	 jbIf4D50sQ3vKEwlK1V5YOIIl2GBmgGp5JxdL/yRnu0Fb6huI2NfFW/ZSgW+E7XALS
-	 WOFOguyHTiRRA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Sherry Yang <sherry.yang@oracle.com>,
-	Justin Tee <justin.tee@broadcom.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Sasha Levin <sashal@kernel.org>,
-	james.smart@broadcom.com,
-	dick.kennedy@broadcom.com,
-	James.Bottomley@HansenPartnership.com,
-	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 04/12] scsi: lpfc: Fix overflow build issue
-Date: Tue,  3 Sep 2024 15:26:48 -0400
-Message-ID: <20240903192718.1108456-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240903192718.1108456-1-sashal@kernel.org>
-References: <20240903192718.1108456-1-sashal@kernel.org>
+	s=arc-20240116; t=1725392565; c=relaxed/simple;
+	bh=zmMDKLJ+pb/N6z6OdKFlaVSX9l23YNKVttSAfF1rbKc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Gize3HO+YB8c1ZwqHJzAJs6+entNDBz0OxNkFzgYZzCVYxCRajv+uzoTa7hCMvpOvvyfNvoyqgvvno7tF6qZlz9p+JUlXSeCLJy5GWw4FTdnlLU+8gxOphO2fHBPMeweYvMF02J9F5YeRzYLGYD6/fy2DqZO1CfjvQ8stJjpBX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=Pl7wJjOy; arc=none smtp.client-ip=199.89.1.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4WywyC0TZ5z6ClY96;
+	Tue,  3 Sep 2024 19:42:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1725392557; x=1727984558; bh=zmMDKLJ+pb/N6z6OdKFlaVSX
+	9l23YNKVttSAfF1rbKc=; b=Pl7wJjOyBf2C6NwwwRmYCiWPUbT0wcfOv3r4nkMw
+	Kl24j1Bg21mx1xUae1XF/jmCoPLJPu/upwVjXLJZhsfiP6udCHlqJW9mqINffSFo
+	J/IJElTjRBeKeQZffmyzC5igkwYZ+oZ2PRLto/3Bkjxk4Jk/+SXrjt7MIzuNMuAR
+	bakLHIMDoiFOCX6bVlBXRpgMBsbu+UoU4Bf3u6zhqFCr6YsevJloFIEFVt6WR9+W
+	42/sJ+j/03293urPdouOzKY1ZiOyZ1vhHGT2jRTHqfA2gYGeQokTAyQ+1E6PrGBk
+	1N+kWCb+UFbaqg76RrGfITvViWJMI449w93Jy8Sbq9ZLtQ==
+X-Virus-Scanned: by MailRoute
+Received: from 008.lax.mailroute.net ([127.0.0.1])
+ by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id uDglJ5ZjXDBW; Tue,  3 Sep 2024 19:42:37 +0000 (UTC)
+Received: from [100.66.154.22] (unknown [104.135.204.82])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4Wywy30rTqz6ClY95;
+	Tue,  3 Sep 2024 19:42:34 +0000 (UTC)
+Message-ID: <7734408c-82e0-4b4a-930b-401bfa26161f@acm.org>
+Date: Tue, 3 Sep 2024 12:42:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.165
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RESEND PATCH v2 2/2] scsi: ufs: ufs-exynos: implement
+ override_cqe_ocs
+To: Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, huobean@gmail.com, alim.akhtar@samsung.com,
+ avri.altman@wdc.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
+ beanhuo@micron.com, adrian.hunter@intel.com, h10.kim@samsung.com,
+ hy50.seo@samsung.com, sh425.lee@samsung.com, kwangwon.min@samsung.com,
+ junwoo80.lee@samsung.com, wkon.kim@samsung.com
+References: <cover.1725251103.git.kwmad.kim@samsung.com>
+ <CGME20240902041755epcas2p316730258dc0c2ed2b3f9744722dcde9c@epcas2p3.samsung.com>
+ <041c7204703ed2ee7563344e935921dffa34ccfb.1725251103.git.kwmad.kim@samsung.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <041c7204703ed2ee7563344e935921dffa34ccfb.1725251103.git.kwmad.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Sherry Yang <sherry.yang@oracle.com>
+On 9/1/24 9:26 PM, Kiwoong Kim wrote:
+> Exynos host reports OCS_ABORT when a command is nullifed
+> or cleaned up with MCQ enabled.
 
-[ Upstream commit 3417c9574e368f0330637505f00d3814ca8854d2 ]
+That is the behavior that is required by the UFSHCI 4.0 standard. Hence,
+handling the OCS_ABORTED response should be the same for all host
+controllers and no new callback function should be introduced to handle
+nullified commands.
 
-Build failed while enabling "CONFIG_GCOV_KERNEL=y" and
-"CONFIG_GCOV_PROFILE_ALL=y" with following error:
+> I think the command in those
+> situations should be issued again, rather than fail, because
+> when some conditions that caused the nullification or cleaning up
+> disppears after recovery, the command could be processed.
 
-BUILDSTDERR: drivers/scsi/lpfc/lpfc_bsg.c: In function 'lpfc_get_cgnbuf_info':
-BUILDSTDERR: ./include/linux/fortify-string.h:114:33: error: '__builtin_memcpy' accessing 18446744073709551615 bytes at offsets 0 and 0 overlaps 9223372036854775807 bytes at offset -9223372036854775808 [-Werror=restrict]
-BUILDSTDERR:   114 | #define __underlying_memcpy     __builtin_memcpy
-BUILDSTDERR:       |                                 ^
-BUILDSTDERR: ./include/linux/fortify-string.h:637:9: note: in expansion of macro '__underlying_memcpy'
-BUILDSTDERR:   637 |         __underlying_##op(p, q, __fortify_size);                        \
-BUILDSTDERR:       |         ^~~~~~~~~~~~~
-BUILDSTDERR: ./include/linux/fortify-string.h:682:26: note: in expansion of macro '__fortify_memcpy_chk'
-BUILDSTDERR:   682 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-BUILDSTDERR:       |                          ^~~~~~~~~~~~~~~~~~~~
-BUILDSTDERR: drivers/scsi/lpfc/lpfc_bsg.c:5468:9: note: in expansion of macro 'memcpy'
-BUILDSTDERR:  5468 |         memcpy(cgn_buff, cp, cinfosz);
-BUILDSTDERR:       |         ^~~~~~
+ufshcd_mcq_nullify_sqe() is called by ufshcd_mcq_sqe_search() and the
+latter function is called by ufshcd_mcq_abort(). It is up to the SCSI
+core to decide whether or not commands aborted by ufshcd_mcq_abort()
+should be resubmitted. This is not something the host driver should
+decide about.
 
-This happens from the commit 06bb7fc0feee ("kbuild: turn on -Wrestrict by
-default"). Address this issue by using size_t type.
+Thanks,
 
-Signed-off-by: Sherry Yang <sherry.yang@oracle.com>
-Link: https://lore.kernel.org/r/20240821065131.1180791-1-sherry.yang@oracle.com
-Reviewed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/lpfc/lpfc_bsg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
-index ed827f198cb68..45c59006945b9 100644
---- a/drivers/scsi/lpfc/lpfc_bsg.c
-+++ b/drivers/scsi/lpfc/lpfc_bsg.c
-@@ -5761,7 +5761,7 @@ lpfc_get_cgnbuf_info(struct bsg_job *job)
- 	struct get_cgnbuf_info_req *cgnbuf_req;
- 	struct lpfc_cgn_info *cp;
- 	uint8_t *cgn_buff;
--	int size, cinfosz;
-+	size_t size, cinfosz;
- 	int  rc = 0;
- 
- 	if (job->request_len < sizeof(struct fc_bsg_request) +
--- 
-2.43.0
-
+Bart.
 
