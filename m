@@ -1,67 +1,67 @@
-Return-Path: <linux-scsi+bounces-7955-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7958-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AFAA96C23E
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Sep 2024 17:26:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A923396C245
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Sep 2024 17:27:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7715B2664F
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Sep 2024 15:26:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 612521F260D4
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Sep 2024 15:27:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 470021DEFC7;
-	Wed,  4 Sep 2024 15:26:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 712B01DEFF3;
+	Wed,  4 Sep 2024 15:26:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="Hi8kP2nY"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="CzsZeyu+"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A552D1DA615
-	for <linux-scsi@vger.kernel.org>; Wed,  4 Sep 2024 15:26:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29711DEFE7
+	for <linux-scsi@vger.kernel.org>; Wed,  4 Sep 2024 15:26:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725463587; cv=none; b=k2gboSlgj10Y0fv+5x4ERx7XJBWRy2G2DKhjWcHmPk7PtDmk/RS1oTOmmR762qKJ2MkMciCKbcURPbNEwy0KdlaAs62XN2/6UPQ3CM+7N2uGKn5YIWVAABSXcfa4adsgJq+bGJi1bY5xJosktHW15Emdy2zBOq9DlcnTsxddnn0=
+	t=1725463611; cv=none; b=d0G8GO1NYJbyZuDf1oL1FVdJkDQsggv7UXMnHw9blW7VXAuRT5xkJiEhyUxvAEwjQlZEBYP74T6omMZ2ZqXlC5x1hIYwtSfG1jRUFgxz6phPxEPZhy/v9nNrgT1gBpwX4aLJ0p28g7adgd5FTpMpSZlL57/kIFkxqvXA0s63b6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725463587; c=relaxed/simple;
-	bh=9vS7WtpRyiE+BLkhEWwb5KsvA1A51Cz9iROIwAJDUsY=;
+	s=arc-20240116; t=1725463611; c=relaxed/simple;
+	bh=tX/zarXxO7puhxjx/jrVhqBehAaFTn8xlf2Qid+DYjo=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o67zub4AlBsxvKKbu8apTc1k3pc3pFovyVVamarhF3oS64kyaRldxrE77FJ+IeRAXPE//iyGekL/5yg/+tl+99tK2TID1w6+K7RSFNjYk6rGGuGLa6zvgP73BYrfXn8T31jbAkEQHSgFemZrOTmRa1/IDPr2QHWgJYVEoQGtEIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=Hi8kP2nY; arc=none smtp.client-ip=67.231.145.42
+	 MIME-Version:Content-Type; b=aJt6nsCkFuGXGTb9E8Ljdwj6mauic3FlPo21uEy1rbiV85s6s3F6+00kK7c9NMV1bOcbdcGRcAveBNhMpBxFDUK34InoecwW4Hm/XPAc1cWZcdFOw3shOQ94FqjiUDvYRQ3B9RHZYDcQDPaexeT+/3BXd9Zb5+Ai9DLA0x1rjMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=CzsZeyu+; arc=none smtp.client-ip=67.231.145.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4845F7Wj022818
-	for <linux-scsi@vger.kernel.org>; Wed, 4 Sep 2024 08:26:25 -0700
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 484F4ToN017373
+	for <linux-scsi@vger.kernel.org>; Wed, 4 Sep 2024 08:26:49 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from
 	:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-transfer-encoding:content-type; s=
-	s2048-2021-q4; bh=rd7a/k5fb4q3A2ywz24VKgaB3Pwg9YzXlvjTsg1C6HY=; b=
-	Hi8kP2nYf0wRpYjozES0Sosfu/EGIo6kVR9uDPeUa5Xt+sWTKXii+m1+4myIO4TM
-	OZQDic7hNdeGNzd3dFBEsaCMq2hOmN4RG9bQtWju7JTHWhe1REUMMbtgP859sCam
-	WxjlCernoQTGslwKD2RwQqHkjlqS6zdT3oNhwQSf4VzYIEHafhmR7GoAzU2GRNQ5
-	T5NAUygpwUs82YEhJVOZfeQjRJI2Ap8cO+CBe55ZX04Gcd0KBAZiQnf5Or8ATkJp
-	eMYvriATFnxqP41EWtvYbyv2VlxdY6ymsOArUVSoqBbCxOe1A5OWiR6yCfNUiyJN
-	cOHoyyDnxm3Sdk4XqryLsA==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 41eh7v2vxw-15
+	s2048-2021-q4; bh=vtkxDOQrx1Rg5NzxikIzXHuhR2yFcTtLhhIWMA6/swA=; b=
+	CzsZeyu+NICK0kL6N+7EH6c+Q2ef0hYEvS4+uyv6H+z2M4z1PRNqUcRTy/jtjmzx
+	DvUOPc5SyoGrDuTFop/iebQfl3cJv85LExffkOiM1iuGSrsGvVTOd9Xk6ic2wdlW
+	9tk5OpXDX16eRDgwauwVyHcXo7VTUG4b4t1GbZ5oaHoNxa7JIaNa6Vie1lH8Hdo4
+	9qyDdJkzBWQhSJwyFyJEnBco/I3PmMffLxrlEbX7/6a9mjeHzeEG7M1bMNrrbfRN
+	pMBt5UI+ls9t3QF3e2pNt8VJPRLm9OtCF2uWzPc51qGAaA+sPa60qiJBr/VU1hfR
+	46GKo83b1Hsxv/qT961xew==
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 41eejbkfh6-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-scsi@vger.kernel.org>; Wed, 04 Sep 2024 08:26:24 -0700 (PDT)
-Received: from twshared34253.17.frc2.facebook.com (2620:10d:c085:108::150d) by
- mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
+	for <linux-scsi@vger.kernel.org>; Wed, 04 Sep 2024 08:26:49 -0700 (PDT)
+Received: from twshared4923.09.ash9.facebook.com (2620:10d:c0a8:1b::2d) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1544.11; Wed, 4 Sep 2024 15:26:12 +0000
+ 15.2.1544.11; Wed, 4 Sep 2024 15:26:11 +0000
 Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
-	id A784612A036E3; Wed,  4 Sep 2024 08:26:07 -0700 (PDT)
+	id ADC0912A036E5; Wed,  4 Sep 2024 08:26:07 -0700 (PDT)
 From: Keith Busch <kbusch@meta.com>
 To: <axboe@kernel.dk>, <hch@lst.de>, <martin.petersen@oracle.com>,
         <linux-block@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
         <linux-scsi@vger.kernel.org>, <sagi@grimberg.me>
 CC: Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv3 01/10] blk-mq: set the nr_integrity_segments from bio
-Date: Wed, 4 Sep 2024 08:25:56 -0700
-Message-ID: <20240904152605.4055570-2-kbusch@meta.com>
+Subject: [PATCHv3 02/10] block: provide helper for nr_integrity_segments
+Date: Wed, 4 Sep 2024 08:25:57 -0700
+Message-ID: <20240904152605.4055570-3-kbusch@meta.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20240904152605.4055570-1-kbusch@meta.com>
 References: <20240904152605.4055570-1-kbusch@meta.com>
@@ -74,37 +74,48 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Eclz2GJnv_iy37q45D9j3nrvf_BjnN24
-X-Proofpoint-GUID: Eclz2GJnv_iy37q45D9j3nrvf_BjnN24
+X-Proofpoint-ORIG-GUID: Ycd9q3iBZIqGvWz7L647-eoGFxA6_cC5
+X-Proofpoint-GUID: Ycd9q3iBZIqGvWz7L647-eoGFxA6_cC5
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-04_13,2024-09-04_01,2024-09-02_01
 
 From: Keith Busch <kbusch@kernel.org>
 
-This value is used for potential merging later.
+This way drivers that want this value don't need to concern themselves
+with the CONFIG_BLK_DEV_INTEGRITY setting.
 
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
- block/blk-mq.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ include/linux/blk-mq.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 36abbaefe3874..3ed5181c75610 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2546,6 +2546,10 @@ static void blk_mq_bio_to_request(struct request *=
-rq, struct bio *bio,
- 	rq->__sector =3D bio->bi_iter.bi_sector;
- 	rq->write_hint =3D bio->bi_write_hint;
- 	blk_rq_bio_prep(rq, bio, nr_segs);
-+#if defined(CONFIG_BLK_DEV_INTEGRITY)
-+	if (bio->bi_opf & REQ_INTEGRITY)
-+		rq->nr_integrity_segments =3D blk_rq_count_integrity_sg(rq->q, bio);
-+#endif
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index 8d304b1d16b15..3984aad9bf64a 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -228,6 +228,18 @@ static inline unsigned short req_get_ioprio(struct r=
+equest *req)
+ 	return req->ioprio;
+ }
 =20
- 	/* This can't fail, since GFP_NOIO includes __GFP_DIRECT_RECLAIM. */
- 	err =3D blk_crypto_rq_bio_prep(rq, bio, GFP_NOIO);
++#ifdef CONFIG_BLK_DEV_INTEGRITY
++static inline unsigned short blk_rq_integrity_segments(struct request *r=
+q)
++{
++	return rq->nr_integrity_segments;
++}
++#else
++static inline unsigned short blk_rq_integrity_segments(struct request *r=
+q)
++{
++	return 0;
++}
++#endif
++
+ #define rq_data_dir(rq)		(op_is_write(req_op(rq)) ? WRITE : READ)
+=20
+ #define rq_dma_dir(rq) \
 --=20
 2.43.5
 
