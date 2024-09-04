@@ -1,67 +1,67 @@
-Return-Path: <linux-scsi+bounces-7958-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7953-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A923396C245
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Sep 2024 17:27:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5427896C23A
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Sep 2024 17:26:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 612521F260D4
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Sep 2024 15:27:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86A5D1C24B60
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Sep 2024 15:26:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 712B01DEFF3;
-	Wed,  4 Sep 2024 15:26:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEBCD1DCB30;
+	Wed,  4 Sep 2024 15:26:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="CzsZeyu+"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="WcZ8iVmH"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29711DEFE7
-	for <linux-scsi@vger.kernel.org>; Wed,  4 Sep 2024 15:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E878DDDCD
+	for <linux-scsi@vger.kernel.org>; Wed,  4 Sep 2024 15:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725463611; cv=none; b=d0G8GO1NYJbyZuDf1oL1FVdJkDQsggv7UXMnHw9blW7VXAuRT5xkJiEhyUxvAEwjQlZEBYP74T6omMZ2ZqXlC5x1hIYwtSfG1jRUFgxz6phPxEPZhy/v9nNrgT1gBpwX4aLJ0p28g7adgd5FTpMpSZlL57/kIFkxqvXA0s63b6M=
+	t=1725463575; cv=none; b=iPd9mkHqu6U8kT16U2eefS74/iS4bb1d2isarFZj5WMnfn9xtpv+6cZJSWkGO5VJchM8awECD0tkoTpWBCJ9WvR8387fbISC6ut2yQBEDeojtphT8Dy5dCAqHuTYSe/HZlFTn7eXSrpDsD2V7ZZvPbvdBUIuQFL0AJFlrKbCs68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725463611; c=relaxed/simple;
-	bh=tX/zarXxO7puhxjx/jrVhqBehAaFTn8xlf2Qid+DYjo=;
+	s=arc-20240116; t=1725463575; c=relaxed/simple;
+	bh=tbelIYErMOsag2MIJL4MBYUSOAYcOXInrX7qRvcyW5w=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aJt6nsCkFuGXGTb9E8Ljdwj6mauic3FlPo21uEy1rbiV85s6s3F6+00kK7c9NMV1bOcbdcGRcAveBNhMpBxFDUK34InoecwW4Hm/XPAc1cWZcdFOw3shOQ94FqjiUDvYRQ3B9RHZYDcQDPaexeT+/3BXd9Zb5+Ai9DLA0x1rjMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=CzsZeyu+; arc=none smtp.client-ip=67.231.145.42
+	 MIME-Version:Content-Type; b=TPcgFav3+uRi3elL2LjrkvBhgcaFTPNu5Z+kuwhowngyp5ANvSqj95w3F5aXxO3m0o/QlGEPNvO2UIcygkdK7KvWj0bLpB5ruLtFFSHQPuKquVlQm7MPvCLdiXnxgFii7gQ/eKOFFSzY7qKV+yQhnLU9Jq8CubKqRpIG9WHeCus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=WcZ8iVmH; arc=none smtp.client-ip=67.231.153.30
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 484F4ToN017373
-	for <linux-scsi@vger.kernel.org>; Wed, 4 Sep 2024 08:26:49 -0700
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 484DoYWR030424
+	for <linux-scsi@vger.kernel.org>; Wed, 4 Sep 2024 08:26:12 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from
 	:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-transfer-encoding:content-type; s=
-	s2048-2021-q4; bh=vtkxDOQrx1Rg5NzxikIzXHuhR2yFcTtLhhIWMA6/swA=; b=
-	CzsZeyu+NICK0kL6N+7EH6c+Q2ef0hYEvS4+uyv6H+z2M4z1PRNqUcRTy/jtjmzx
-	DvUOPc5SyoGrDuTFop/iebQfl3cJv85LExffkOiM1iuGSrsGvVTOd9Xk6ic2wdlW
-	9tk5OpXDX16eRDgwauwVyHcXo7VTUG4b4t1GbZ5oaHoNxa7JIaNa6Vie1lH8Hdo4
-	9qyDdJkzBWQhSJwyFyJEnBco/I3PmMffLxrlEbX7/6a9mjeHzeEG7M1bMNrrbfRN
-	pMBt5UI+ls9t3QF3e2pNt8VJPRLm9OtCF2uWzPc51qGAaA+sPa60qiJBr/VU1hfR
-	46GKo83b1Hsxv/qT961xew==
+	s2048-2021-q4; bh=/PAGpf/UPAc9rFDLEQebGE5/D0j//o/WEEpf7l0XZ+M=; b=
+	WcZ8iVmHX9iXjyHoQrIn7V6wfWSmW8wfICQcMbWYb8nv2nMiEr/9JiGopqAio7r0
+	NRhQYm5SUQarsIiM8qcC11WrSAhxQ2WedjIs9uZGJcPYGyjdydQpRv4s3tEImtIX
+	Jky/3qOqyLss7LTdgh8mVM7Gg8m6r3T6uCirDD0pXJYb/Gb3gxdgbVgp2nAMpH6n
+	TH6Nw4TzIKJTScciuvC/Vm8nLDtrd+ci4DC6Jc1Hiiaw0S5BkxHa8Ep0Bd1ALgJC
+	rRpAEtojrzfOZ2ltWP6Y4qFbpbFNTcDvhL8231fRzKiI/eUtUDifE1zrplDQ8hEZ
+	8jvvnJBmZbBPW+rn5L4x+g==
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 41eejbkfh6-4
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 41e5y5xxc7-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-scsi@vger.kernel.org>; Wed, 04 Sep 2024 08:26:49 -0700 (PDT)
-Received: from twshared4923.09.ash9.facebook.com (2620:10d:c0a8:1b::2d) by
+	for <linux-scsi@vger.kernel.org>; Wed, 04 Sep 2024 08:26:12 -0700 (PDT)
+Received: from twshared4923.09.ash9.facebook.com (2620:10d:c0a8:fe::f072) by
  mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.2.1544.11; Wed, 4 Sep 2024 15:26:11 +0000
 Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
-	id ADC0912A036E5; Wed,  4 Sep 2024 08:26:07 -0700 (PDT)
+	id B7C9312A036E7; Wed,  4 Sep 2024 08:26:07 -0700 (PDT)
 From: Keith Busch <kbusch@meta.com>
 To: <axboe@kernel.dk>, <hch@lst.de>, <martin.petersen@oracle.com>,
         <linux-block@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
         <linux-scsi@vger.kernel.org>, <sagi@grimberg.me>
 CC: Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv3 02/10] block: provide helper for nr_integrity_segments
-Date: Wed, 4 Sep 2024 08:25:57 -0700
-Message-ID: <20240904152605.4055570-3-kbusch@meta.com>
+Subject: [PATCHv3 03/10] scsi: use request helper to get integrity segments
+Date: Wed, 4 Sep 2024 08:25:58 -0700
+Message-ID: <20240904152605.4055570-4-kbusch@meta.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20240904152605.4055570-1-kbusch@meta.com>
 References: <20240904152605.4055570-1-kbusch@meta.com>
@@ -74,48 +74,37 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Ycd9q3iBZIqGvWz7L647-eoGFxA6_cC5
-X-Proofpoint-GUID: Ycd9q3iBZIqGvWz7L647-eoGFxA6_cC5
+X-Proofpoint-ORIG-GUID: RUeJ9Ns8bwETT3p9TTyAg8uEYrSbwKC6
+X-Proofpoint-GUID: RUeJ9Ns8bwETT3p9TTyAg8uEYrSbwKC6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-04_13,2024-09-04_01,2024-09-02_01
 
 From: Keith Busch <kbusch@kernel.org>
 
-This way drivers that want this value don't need to concern themselves
-with the CONFIG_BLK_DEV_INTEGRITY setting.
+The request tracks the integrity segments already, so no need to recount
+the segements again.
 
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
- include/linux/blk-mq.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/scsi/scsi_lib.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
-index 8d304b1d16b15..3984aad9bf64a 100644
---- a/include/linux/blk-mq.h
-+++ b/include/linux/blk-mq.h
-@@ -228,6 +228,18 @@ static inline unsigned short req_get_ioprio(struct r=
-equest *req)
- 	return req->ioprio;
- }
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 3958a6d14bf45..dc1a1644cbc0c 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -1175,8 +1175,7 @@ blk_status_t scsi_alloc_sgtables(struct scsi_cmnd *=
+cmd)
+ 			goto out_free_sgtables;
+ 		}
 =20
-+#ifdef CONFIG_BLK_DEV_INTEGRITY
-+static inline unsigned short blk_rq_integrity_segments(struct request *r=
-q)
-+{
-+	return rq->nr_integrity_segments;
-+}
-+#else
-+static inline unsigned short blk_rq_integrity_segments(struct request *r=
-q)
-+{
-+	return 0;
-+}
-+#endif
-+
- #define rq_data_dir(rq)		(op_is_write(req_op(rq)) ? WRITE : READ)
-=20
- #define rq_dma_dir(rq) \
+-		ivecs =3D blk_rq_count_integrity_sg(rq->q, rq->bio);
+-
++		ivecs =3D blk_rq_integrity_segments(rq);
+ 		if (sg_alloc_table_chained(&prot_sdb->table, ivecs,
+ 				prot_sdb->table.sgl,
+ 				SCSI_INLINE_PROT_SG_CNT)) {
 --=20
 2.43.5
 
