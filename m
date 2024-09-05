@@ -1,132 +1,121 @@
-Return-Path: <linux-scsi+bounces-7987-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-7989-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC7A896E4E1
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Sep 2024 23:17:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 810A896E57F
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Sep 2024 00:02:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47B81B21AFF
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Sep 2024 21:17:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D20C284F83
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Sep 2024 22:02:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE9E1B12DB;
-	Thu,  5 Sep 2024 21:16:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6982D1925B3;
+	Thu,  5 Sep 2024 22:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="IEfSPC+n"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="leQ9pp9P"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
+Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C65F188583;
-	Thu,  5 Sep 2024 21:16:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951C21863F
+	for <linux-scsi@vger.kernel.org>; Thu,  5 Sep 2024 22:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725571013; cv=none; b=r0X5tW6E4msbaw+g/Dh0Ay+gmvwn5w9tw2p3FdHjKiYLo5t7ouy/g6c7WXYiETqa2Anjz7tWEpPhNU+mspCjNhgXNjFj85enQgnkarBE0ByUzzKgEjS1vDQ/ybMyuIMPHNBTcjIsOiMOAffpwUbG0jq+9T+CsUX5h2hs9uOnlIc=
+	t=1725573745; cv=none; b=rlPU8jXX07k92pZCYb4b29T/zqikdyYc9l+iiMAfozCiZbbmqLfczF6pmNOC9YxF/AiK6j0eSZ7WWueBwWIV7BKWvU/pG/BojDjzfF6MipxpA825oCWP2gk4bGan2GOZMolb62/X9kUmwWPyerttZnjuT3Uww7bkHj+TBVrJuaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725571013; c=relaxed/simple;
-	bh=mkgaHAtecYvGuELnigUBtDygVelEKPQ8Kci4kOl7sRg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SLgnIGmpbIPWqrw4e/I9oUXi0RKhMexEM+FLV0oEcyCW0Q9JsNxdlMhMoJ9JsPF5ZrTlw6s3PMq3cD0zdjiUxFtoZwiGMefUAYFvzAaeepp3i3nFTkRD8x/9E41n/AnlUFW629E4OOhyxp0yr4HFHKlI4HK6p2CPad1ueswjXJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=IEfSPC+n; arc=none smtp.client-ip=199.89.1.12
+	s=arc-20240116; t=1725573745; c=relaxed/simple;
+	bh=v7ETuhD9oXWPIXPAD/y8M0F9av6RiJoXwmXukWScqJo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pWXfz3NprwqC+vChyi0SV/SaqY/KCy1sQgZEedOz+KwvlUrePV/Gy+xKXxdxXRNbkjS9kGZ6Y4dBF9sG6u2TcneC3B6TnbLmM/+WjUQN5y5pnZp2Ijo8i/D2oIQgLmkbIzVgVmuUgbs1ZIpXDTh7bFHrEp+f1N8vR9lAPMSiJqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=leQ9pp9P; arc=none smtp.client-ip=199.89.1.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4X0Bxt6gV5zlgMVQ;
-	Thu,  5 Sep 2024 21:16:50 +0000 (UTC)
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4X0CyQ6bBxz6ClY8x;
+	Thu,  5 Sep 2024 22:02:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1725571003; x=1728163004; bh=zRqrbLL/IkYQjEdfxlAqcVOg
-	FpFtctrQ9TMTQ5NK0Ac=; b=IEfSPC+njuqLZi/CcmLZbIT9BMmZ4yCAVYMVbcr3
-	AxR0cxhu3HxW4Q3wcFsTfznLZjYWs3oNx5Fgx08Qezq0ZR59Rg1Ki7zzByoqV6sp
-	buFoaLDo5fuIQuJpgqtJkpx7oNcUG2dHPg20NXd5FO+VXQ601FJ+sHKC0CfnsvxH
-	+8g6sxZj/dzKhcbkbBXTdnGIrVe4AYCfC/HtWHeq1MD/dpRq/+KvP4KN6s9OV79/
-	9E8eMDTmNWYCC9M0NE+Nf2OmMLtIefDuI5aKCy6sKeeRBQAvAR9iULGrJlhH3pYS
-	9lt2LHAgoJ0E567pvY4MZEb0me02GKTvo1OuES1IFqea2A==
+	content-transfer-encoding:mime-version:x-mailer:message-id:date
+	:date:subject:subject:from:from:received:received; s=mr01; t=
+	1725573741; x=1728165742; bh=d3ogksf1PvuRZ7I7pWecLQcDPiYEPEJ4FFV
+	a9H8385c=; b=leQ9pp9Pdpa5HHSnLsd++xLLwuJwisXICTq8SR9N7c63Vyh4uJz
+	vfESgW2P/AUzPHVP/J7A7HBSpBXitmziy4U8RkwXAfVHcvm0/oaRSDtv6NlpIwJT
+	8Y7uTVXzz0QXX88cEOEOg32gCRQQyZ/rr6D32OIyS0971Tl1GYYoPqGrPMy3gU+U
+	ReokJQbnkiGsKPQbs+R62u9386vrEarzjFtBJg+gPyeIFEnxhlL39iZTNg1DRcu0
+	EkkPYZkRgtwIX0eACN47wsa5JkVmC+azdQi6b1qsgUSSlbDE272nwhUECmkIzGM6
+	y1nvC77fiOLwBT5v7WnphJbdhqKWHjJpKhg==
 X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id MDlJSuh_GfjV; Thu,  5 Sep 2024 21:16:43 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
+Received: from 008.lax.mailroute.net ([127.0.0.1])
+ by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id 6PixMLoe_LQK; Thu,  5 Sep 2024 22:02:21 +0000 (UTC)
+Received: from bvanassche.mtv.corp.google.com (unknown [104.135.204.82])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4X0Bxh55c2zlgMVL;
-	Thu,  5 Sep 2024 21:16:40 +0000 (UTC)
-Message-ID: <b31bf24f-588e-43e5-b71f-b4e9edd1b60a@acm.org>
-Date: Thu, 5 Sep 2024 14:16:40 -0700
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4X0CyN72tKz6ClY8w;
+	Thu,  5 Sep 2024 22:02:20 +0000 (UTC)
+From: Bart Van Assche <bvanassche@acm.org>
+To: "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org,
+	Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v4 00/10] Simplify the UFS driver initialization code
+Date: Thu,  5 Sep 2024 15:01:26 -0700
+Message-ID: <20240905220214.738506-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.46.0.598.g6f2099f65c-goog
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] ufs: core: requeue MCQ abort request
-To: peter.wang@mediatek.com, linux-scsi@vger.kernel.org,
- martin.petersen@oracle.com, avri.altman@wdc.com, alim.akhtar@samsung.com,
- jejb@linux.ibm.com
-Cc: wsd_upstream@mediatek.com, linux-mediatek@lists.infradead.org,
- chun-hung.wu@mediatek.com, alice.chao@mediatek.com, cc.chou@mediatek.com,
- chaotian.jing@mediatek.com, jiajie.hao@mediatek.com, powen.kao@mediatek.com,
- qilin.tan@mediatek.com, lin.gui@mediatek.com, tun-yu.yu@mediatek.com,
- eddie.huang@mediatek.com, naomi.chu@mediatek.com, ed.tsai@mediatek.com,
- quic_nguyenb@quicinc.com, stable@vger.kernel.org
-References: <20240902021805.1125-1-peter.wang@mediatek.com>
- <20240902021805.1125-3-peter.wang@mediatek.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20240902021805.1125-3-peter.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On 9/1/24 7:18 PM, peter.wang@mediatek.com wrote:
-> diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-> index afd9541f4bd8..abdc55a8b960 100644
-> --- a/drivers/ufs/core/ufs-mcq.c
-> +++ b/drivers/ufs/core/ufs-mcq.c
-> @@ -642,6 +642,7 @@ static bool ufshcd_mcq_sqe_search(struct ufs_hba *hba,
->   		match = le64_to_cpu(utrd->command_desc_base_addr) & CQE_UCD_BA;
->   		if (addr == match) {
->   			ufshcd_mcq_nullify_sqe(utrd);
-> +			lrbp->host_initiate_abort = true;
->   			ret = true;
->   			goto out;
->   		}
+Hi Martin,
 
-I think this is wrong. The above code is only executed if the SCSI core
-decides to abort a SCSI command. It is up to the SCSI core to decide
-whether or not to retry an aborted command.
+This patch series addresses the following issues in the UFS driver
+initialization code:
+* The legacy and MCQ scsi_add_host() calls occur in different functions. =
+This
+  patch series reduces the number of scsi_add_host() calls from two to on=
+e
+  and hence makes the UFS driver easier to maintain.
+* Two functions have a boolean 'init_dev_params' argument. This patch ser=
+ies
+  removes that argument from both functions by splitting functions and by
+  pushing some function calls from caller into callee.
 
-> -	/* Release cmd in MCQ mode if abort succeeds */
-> -	if (hba->mcq_enabled && (*ret == 0)) {
-> -		hwq = ufshcd_mcq_req_to_hwq(hba, scsi_cmd_to_rq(lrbp->cmd));
-> -		if (!hwq)
-> -			return 0;
-> -		spin_lock_irqsave(&hwq->cq_lock, flags);
-> -		if (ufshcd_cmd_inflight(lrbp->cmd))
-> -			ufshcd_release_scsi_cmd(hba, lrbp);
-> -		spin_unlock_irqrestore(&hwq->cq_lock, flags);
-> -	}
-> +	/* Host will post to CQ with OCS_ABORTED after SQ cleanup */
-> +	if (hba->mcq_enabled && (*ret == 0))
-> +		lrbp->host_initiate_abort = true;
-
-I think this code is racy because the UFS host controller may have 
-posted a completion before the "lrbp->host_initiate_abort = true"
-assignment is executed.
-
-> + * @host_initiate_abort: Abort flag initiated by host
-
-What is "Abort flag"? Please consider renaming "host_initiate_abort"
-into "abort_initiated_by_err_handler" since I think that aborted
-commands should only be retried if these have been aborted by
-ufshcd_err_handler().
+Please consider this patch series for the next merge window.
 
 Thanks,
 
 Bart.
+
+Changes compared to v3:
+ - Split patch "Move the MCQ scsi_add_host() call" into two patches to ma=
+ke
+   it easier for reviewers.
+
+Changes compared to v2:
+ - Improved several patch descriptions.
+ - Moved one source code comment.
+
+Changes compared to v1:
+ - Fixed a compiler warning reported by the kernel build robot.
+ - Improved patch descriptions.
+
+Bart Van Assche (10):
+  scsi: ufs: core: Introduce ufshcd_add_scsi_host()
+  scsi: ufs: core: Introduce ufshcd_activate_link()
+  scsi: ufs: core: Introduce ufshcd_post_device_init()
+  scsi: ufs: core: Call ufshcd_add_scsi_host() later
+  scsi: ufs: core: Move the ufshcd_device_init() call
+  scsi: ufs: core: Move the ufshcd_device_init(hba, true) call
+  scsi: ufs: core: Expand the ufshcd_device_init(hba, true) call
+  scsi: ufs: core: Move the MCQ scsi_add_host() call
+  scsi: ufs: core: Move code out of an if-statement
+  scsi: ufs: core: Remove the second argument of ufshcd_device_init()
+
+ drivers/ufs/core/ufshcd.c | 268 ++++++++++++++++++++++----------------
+ 1 file changed, 153 insertions(+), 115 deletions(-)
+
 
