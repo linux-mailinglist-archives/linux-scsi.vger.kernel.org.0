@@ -1,220 +1,232 @@
-Return-Path: <linux-scsi+bounces-7988-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8000-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B32996E57E
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Sep 2024 00:02:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7668496E960
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Sep 2024 07:40:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B80C01C22F67
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Sep 2024 22:02:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB3531F238C8
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Sep 2024 05:40:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 791801925B3;
-	Thu,  5 Sep 2024 22:02:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF8A12EBE1;
+	Fri,  6 Sep 2024 05:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FFQxcND2"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="VlptsF3J"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E3C15532A
-	for <linux-scsi@vger.kernel.org>; Thu,  5 Sep 2024 22:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866CA2628C;
+	Fri,  6 Sep 2024 05:40:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725573731; cv=none; b=gpQwpEs0PgQjU3YNzg/THWs7bEi7suFs0R5rCHF14C2f8Hs+RwrCksv8DoB/uslb+qpFFhg/vuIwAbAa4MdzZqvPcZSYKcZ3WoHbzjlbbILWcASlTT7+ZU0UqqAyAwM79uzCFVqo1ww55o/8Q7sbMY1392h7bZ6wsup69kep22Q=
+	t=1725601246; cv=none; b=aUgffcdqYMtDA946gIMPORXFiSU2Ze/H2TCScV/5jPHhes7/vmXq/kTHhDY32O5a6e4EkisHkUDo1DXvX2ynW2dq37tOYVEDEU16/vtKjm0NJtyOKmMXDDCcDCKwdEJ9heaA0KZS2X/qT1UwEBjPSCmW2sVbibUYg7GV07LMntw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725573731; c=relaxed/simple;
-	bh=c+LJYgLefMf2TuplTagIwvnMkU8XCXcioAd7YJAzMzk=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=m/XdiZxuEkbF39tKpEHWF8yFzN7ZMMVYOYO/71ttpfVfIOd3QydpGKMlyx7CsPByfh08+HJUylYrSjwrM1N4bpHrSnfpUEg257+Nvg267oddwnFC6OaFccCk3l+TYnt2lrc+3aIUSV6NfIifEVYNpI76FZj937FTRIf9UieSkNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FFQxcND2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C97ECC4CEC4
-	for <linux-scsi@vger.kernel.org>; Thu,  5 Sep 2024 22:02:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725573730;
-	bh=c+LJYgLefMf2TuplTagIwvnMkU8XCXcioAd7YJAzMzk=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=FFQxcND2UVFP2UU5O3kUMvRIMuMu9fV4//58QCyJLcs/3uBYMy42CUCWwmIJxis/x
-	 MHnnzfWrwruDLgzxJY+mEixXx4wIXT8skFOE+vV+Fv+dTl3WmVqWAdhZCRH0ggVkiX
-	 lawko21cJtxu76i6br3ncgEWryqZSAjpDjpcaPZm8mKKk50AuBTFKOtwhXazppuNKK
-	 JxsxiTOiM1X8Suq4TgTxYy48yiCwQ98p0AhRr74Wrc1yDHy5tm+33TAIUayi/WtnIR
-	 6wZTAFyH9JKCbBxYN52pxkkerhKGafZsPJOfsIiRIZ58N8I/gE1gP5Zb8spfUNhYYg
-	 Gc1zifbxCj1HQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id B2164C53BBF; Thu,  5 Sep 2024 22:02:10 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-scsi@vger.kernel.org
-Subject: [Bug 198975] Highpoint 840A RocketRAID Controller and drives are NOT
- detected by SCSI_HPTIOP kernel module
-Date: Thu, 05 Sep 2024 22:02:10 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Product: SCSI Drivers
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: jackhicks121@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-198975-11613-ze8G9dEak1@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-198975-11613@https.bugzilla.kernel.org/>
-References: <bug-198975-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1725601246; c=relaxed/simple;
+	bh=Cniav45urdpVNzapqVqrBdTz6uLrtoPLIOl7/GG06PM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YdNQcELLMjAVD+HOf2FTOvGhOkyKgkngZYlPE9GFaLfolbB8nG5cNt0ZWn9ZM1fUEx/8GN6Q3w3PM2fE580h4MULDwEC4UZP8LANsB4Hd0F73R1xvv2ztcdW/L8LDmdGyM/P7rCv6UM/x8su/BU0yT9x8WqYe9zqknS2yCV41i0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=VlptsF3J; arc=none smtp.client-ip=54.204.34.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1725601229;
+	bh=Um2fielNufiPq2gPF+cakRDGheYfuE60dnAlgqaba+4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=VlptsF3JjbCh+zw7R23THL+asQr2yCm8+ot2y6+ZS41sf0P2y5MoAz8AjOwZzI33p
+	 Oes0w1cLqgls+dqB5AXMEEpxyQlxswec2/MrgknftN1iYKq04QdMcDUEgWGEq5G3TV
+	 5ev8/Um/EpQiThubn8bN15U11J6jygRMafgdv2k0=
+X-QQ-mid: bizesmtp89t1725601217t86fmi1u
+X-QQ-Originating-IP: pp2HEb8VFRV3OyePs+K/oTB0T0vJNpih3CUIsTHdOR4=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 06 Sep 2024 13:40:11 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 3399184416924761505
+From: WangYuli <wangyuli@uniontech.com>
+To: aaro.koskinen@iki.fi,
+	andreas@kemnade.info,
+	khilman@baylibre.com,
+	rogerq@kernel.org,
+	tony@atomide.com,
+	linux@armlinux.org.uk,
+	jgg@ziepe.ca,
+	leon@kernel.org,
+	wangyuli@uniontech.com,
+	gustavoars@kernel.org,
+	mitr@volny.cz,
+	dmitry.torokhov@gmail.com,
+	miquel.raynal@bootlin.com,
+	richard@nod.at,
+	vigneshr@ti.com,
+	anil.gurumurthy@qlogic.com,
+	sudarsana.kalluru@qlogic.com,
+	James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com,
+	obdclark@gmail.com,
+	quic_abhinavk@quicinc.com,
+	dmitry.baryshkov@linaro.org,
+	sean@poorly.run,
+	marijn.suijten@somainline.org,
+	airlied@gmail.com,
+	daniel@ffwll.ch
+Cc: linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-mtd@lists.infradead.org,
+	linux-scsi@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	freedreno@lists.freedesktop.org,
+	abhinavk@codeaurora.org,
+	architt@codeaurora.org,
+	chandanu@codeaurora.org,
+	jsanka@codeaurora.org,
+	jcrouse@codeaurora.org,
+	ryadav@codeaurora.org,
+	skolluku@codeaurora.org,
+	seanpaul@chromium.org,
+	robdclark@gmail.com,
+	anil_ravindranath@pmc-sierra.com,
+	standby24x7@gmail.com,
+	jkosina@suse.cz,
+	don.hiatt@intel.com,
+	ira.weiny@intel.com,
+	dasaratharaman.chandramouli@intel.com,
+	dledford@redhat.com,
+	eric.piel@tremplin-utc.net,
+	akpm@linux-foundation.org,
+	dtor@mail.ru,
+	vijaykumar@bravegnu.org,
+	dwmw2@infradead.org,
+	kgudipat@brocade.com,
+	James.Bottomley@suse.de,
+	guanwentao@uniontech.com,
+	zhanjun@uniontech.com
+Subject: [PATCH] treewide: Correct the typo 'retun'
+Date: Fri,  6 Sep 2024 13:40:08 +0800
+Message-ID: <63D0F870EE8E87A0+20240906054008.390188-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.43.4
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D198975
+There are some spelling mistakes of 'retun' in comments which
+should be instead of 'return'.
 
-Jack Hicks (jackhicks121@gmail.com) changed:
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
+---
+ arch/arm/mach-omap2/omap-mpuss-lowpower.c | 2 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h  | 2 +-
+ drivers/infiniband/core/sa_query.c        | 2 +-
+ drivers/input/misc/wistron_btns.c         | 2 +-
+ drivers/mtd/nand/raw/nandsim.c            | 2 +-
+ drivers/scsi/bfa/bfa_fcs.c                | 2 +-
+ drivers/scsi/pmcraid.c                    | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |jackhicks121@gmail.com
+diff --git a/arch/arm/mach-omap2/omap-mpuss-lowpower.c b/arch/arm/mach-omap2/omap-mpuss-lowpower.c
+index 7ad74db951f6..f18ef45e2fe1 100644
+--- a/arch/arm/mach-omap2/omap-mpuss-lowpower.c
++++ b/arch/arm/mach-omap2/omap-mpuss-lowpower.c
+@@ -333,7 +333,7 @@ int omap4_hotplug_cpu(unsigned int cpu, unsigned int power_state)
+ 	omap_pm_ops.scu_prepare(cpu, power_state);
+ 
+ 	/*
+-	 * CPU never retuns back if targeted power state is OFF mode.
++	 * CPU never returns back if targeted power state is OFF mode.
+ 	 * CPU ONLINE follows normal CPU ONLINE ptah via
+ 	 * omap4_secondary_startup().
+ 	 */
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
+index b26d5fe40c72..febc3e764a63 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
+@@ -231,7 +231,7 @@ struct dpu_crtc_state {
+ 	container_of(x, struct dpu_crtc_state, base)
+ 
+ /**
+- * dpu_crtc_frame_pending - retun the number of pending frames
++ * dpu_crtc_frame_pending - return the number of pending frames
+  * @crtc: Pointer to drm crtc object
+  */
+ static inline int dpu_crtc_frame_pending(struct drm_crtc *crtc)
+diff --git a/drivers/infiniband/core/sa_query.c b/drivers/infiniband/core/sa_query.c
+index 8175dde60b0a..53571e6b3162 100644
+--- a/drivers/infiniband/core/sa_query.c
++++ b/drivers/infiniband/core/sa_query.c
+@@ -1420,7 +1420,7 @@ enum opa_pr_supported {
+ /*
+  * opa_pr_query_possible - Check if current PR query can be an OPA query.
+  *
+- * Retuns PR_NOT_SUPPORTED if a path record query is not
++ * Returns PR_NOT_SUPPORTED if a path record query is not
+  * possible, PR_OPA_SUPPORTED if an OPA path record query
+  * is possible and PR_IB_SUPPORTED if an IB path record
+  * query is possible.
+diff --git a/drivers/input/misc/wistron_btns.c b/drivers/input/misc/wistron_btns.c
+index 5c4956678cd0..39d6f642cd19 100644
+--- a/drivers/input/misc/wistron_btns.c
++++ b/drivers/input/misc/wistron_btns.c
+@@ -1075,7 +1075,7 @@ static void wistron_led_init(struct device *parent)
+ 	}
+ 
+ 	if (leds_present & FE_MAIL_LED) {
+-		/* bios_get_default_setting(MAIL) always retuns 0, so just turn the led off */
++		/* bios_get_default_setting(MAIL) always returns 0, so just turn the led off */
+ 		wistron_mail_led.brightness = LED_OFF;
+ 		if (led_classdev_register(parent, &wistron_mail_led))
+ 			leds_present &= ~FE_MAIL_LED;
+diff --git a/drivers/mtd/nand/raw/nandsim.c b/drivers/mtd/nand/raw/nandsim.c
+index 179b28459b4b..df48b7d01d16 100644
+--- a/drivers/mtd/nand/raw/nandsim.c
++++ b/drivers/mtd/nand/raw/nandsim.c
+@@ -1381,7 +1381,7 @@ static inline union ns_mem *NS_GET_PAGE(struct nandsim *ns)
+ }
+ 
+ /*
+- * Retuns a pointer to the current byte, within the current page.
++ * Returns a pointer to the current byte, within the current page.
+  */
+ static inline u_char *NS_PAGE_BYTE_OFF(struct nandsim *ns)
+ {
+diff --git a/drivers/scsi/bfa/bfa_fcs.c b/drivers/scsi/bfa/bfa_fcs.c
+index 5023c0ab4277..e52ce9b01f49 100644
+--- a/drivers/scsi/bfa/bfa_fcs.c
++++ b/drivers/scsi/bfa/bfa_fcs.c
+@@ -1431,7 +1431,7 @@ bfa_cb_lps_flogo_comp(void *bfad, void *uarg)
+  *	param[in]	vf_id - VF_ID
+  *
+  *	return
+- *	If lookup succeeds, retuns fcs vf object, otherwise returns NULL
++ *	If lookup succeeds, returns fcs vf object, otherwise returns NULL
+  */
+ bfa_fcs_vf_t   *
+ bfa_fcs_vf_lookup(struct bfa_fcs_s *fcs, u16 vf_id)
+diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
+index a2a084c8075e..72a4c6e3d0c8 100644
+--- a/drivers/scsi/pmcraid.c
++++ b/drivers/scsi/pmcraid.c
+@@ -4009,7 +4009,7 @@ static void pmcraid_tasklet_function(unsigned long instance)
+  * This routine un-registers registered interrupt handler and
+  * also frees irqs/vectors.
+  *
+- * Retun Value
++ * Return Value
+  *	None
+  */
+ static
+-- 
+2.43.4
 
---- Comment #9 from Jack Hicks (jackhicks121@gmail.com) ---
-Hello,
-
-This is my first Bugzilla report, so I appreciate your patience!
-
-I recently purchased a Highpoint 840A RocketRAID Controller with eight
-connected Samsung 860 EVO SSDs . Unfortunately, the "SCSI_HPTIOP" kernel
-low-level SCSI driver module does not detect this controller. It appears th=
-at
-the 840A is a smaller version of the 3740A, which is already supported by t=
-he
-kernel. The main difference seems to be that the 840A supports only 6Gb/s p=
-er
-channel, as indicated by the product markings on the card.
-
-I am currently using the latest firmware version 1.0.0 for the controller. I
-couldn't find any other driver modules that might be compatible with my
-controller. The drivers available from Highpoint for Linux do not work on
-(Gentoo) Linux. The controller and SSDs
-(https://serverorbit.com/solid-state-drives-ssd/sata-6gbps-ssd) are functio=
-ning
-perfectly under Windows 10, so the hardware is not faulty. I am using a
-Gigabyte X99-SLI motherboard with BIOS version F24a.
-
-I am willing to provide regular dump logs for driver debugging if needed. I
-would be extremely grateful if support for this hardware could be included =
-in
-the next kernel release!
-
-Here is a top-down view of the expansion card for reference:
-[Top-down view of the expansion
-card](https://www.bhphotovideo.com/images/images1000x1000/highpoint_rocketr=
-aid_3740a_12gb_s_pcie_1269779.jpg)
-
-Current dmesg output:
-```
-RocketRAID 3xxx/4xxx Controller driver v1.10.0
-```
-
-`lspci -kvv` output:
-```
-02:00.0 RAID bus controller: HighPoint Technologies, Inc. Device 0840 (rev =
-a1)
-        Subsystem: HighPoint Technologies, Inc. Device 0000
-        Physical Slot: 6
-        Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-Stepping- SERR+ FastB2B- DisINTx-
-        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=3Dfast >TAbort- <T=
-Abort-
-<MAbort- >SERR- <PERR- INTx-
-        Latency: 0, Cache Line Size: 32 bytes
-        Interrupt: pin A routed to IRQ 11
-        NUMA node: 0
-        Region 0: Memory at d0900000 (64-bit, prefetchable) [size=3D1M]
-        Region 4: Memory at d0a00000 (64-bit, prefetchable) [size=3D256K]
-        Expansion ROM at dfe00000 [disabled] [size=3D128K]
-        Capabilities: [80] Power Management version 3
-                Flags: PMEClk- DSI- D1+ D2- AuxCurrent=3D0mA
-PME(D0+,D1+,D2-,D3hot+,D3cold-)
-                Status: D0 NoSoftRst- PME-Enable- DSel=3D0 DScale=3D0 PME-
-        Capabilities: [90] MSI: Enable- Count=3D1/32 Maskable+ 64bit+
-                Address: 0000000000000000  Data: 0000
-                Masking: 00000000  Pending: 00000000
-        Capabilities: [b0] MSI-X: Enable- Count=3D18 Masked-
-                Vector table: BAR=3D0 offset=3D00038000
-                PBA: BAR=3D0 offset=3D00039000
-        Capabilities: [c0] Express (v2) Endpoint, MSI 00
-                DevCap: MaxPayload 512 bytes, PhantFunc 0, Latency L0s <128=
-ns,
-L1 <2us
-                        ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset-
-SlotPowerLimit 0.000W
-                DevCtl: Report errors: Correctable- Non-Fatal- Fatal-
-Unsupported-
-                        RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop+
-                        MaxPayload 256 bytes, MaxReadReq 512 bytes
-                DevSta: CorrErr+ UncorrErr- FatalErr- UnsuppReq+ AuxPwr-
-TransPend-
-                LnkCap: Port #0, Speed 8GT/s, Width x8, ASPM L0s L1, Exit
-Latency L0s <128ns, L1 <2us
-                        ClockPM- Surprise- LLActRep- BwNot- ASPMOptComp+
-                LnkCtl: ASPM Disabled; RCB 64 bytes Disabled- CommClk-
-                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-                LnkSta: Speed 8GT/s, Width x8, TrErr- Train- SlotClk- DLAct=
-ive-
-BWMgmt- ABWMgmt-
-                DevCap2: Completion Timeout: Range B, TimeoutDis+, LTR-, OB=
-FF
-Not Supported
-                DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-, LTR=
--,
-OBFF Disabled
-                LnkCtl2: Target Link Speed: 8GT/s, EnterCompliance- SpeedDi=
-s-
-                         Transmit Margin: Normal Operating Range,
-EnterModifiedCompliance- ComplianceSOS-
-                         Compliance De-emphasis: -6dB
-                LnkSta2: Current De-emphasis Level: -6dB,
-EqualizationComplete+, EqualizationPhase1+
-                         EqualizationPhase2+, EqualizationPhase3+,
-LinkEqualizationRequest-
-        Capabilities: [100 v2] Advanced Error Reporting
-                UESta:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-                UEMsk:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-                UESvrt: DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt-
-RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-                CESta:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- NonFatal=
-Err-
-                CEMsk:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- NonFatal=
-Err+
-                AERCap: First Error Pointer: 00, GenCap+ CGenEn- ChkCap+ Ch=
-kEn-
-        Capabilities: [300 v1] #19
-```
-
-For more information on the Highpoint 800 series RocketRAID:
-[Highpoint 800 Series
-Overview](http://www.highpoint-tech.com/USA_new/series-rr800-overview.htm)
-
-And the 3700 series RocketRAID:
-[Highpoint 3700 Series
-Overview](http://www.highpoint-tech.com/USA_new/series-rr3700-overview.htm)
-
-Thank you for your help!
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
