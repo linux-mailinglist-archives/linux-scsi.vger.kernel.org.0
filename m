@@ -1,95 +1,117 @@
-Return-Path: <linux-scsi+bounces-8027-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8029-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EACE970055
-	for <lists+linux-scsi@lfdr.de>; Sat,  7 Sep 2024 08:36:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A23A79701F0
+	for <lists+linux-scsi@lfdr.de>; Sat,  7 Sep 2024 13:28:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0F251C21FA2
-	for <lists+linux-scsi@lfdr.de>; Sat,  7 Sep 2024 06:36:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CED071C217F1
+	for <lists+linux-scsi@lfdr.de>; Sat,  7 Sep 2024 11:28:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2A5113D53A;
-	Sat,  7 Sep 2024 06:36:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6311157A7C;
+	Sat,  7 Sep 2024 11:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="tIVan0CG"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QltI8ubb"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7928537F5;
-	Sat,  7 Sep 2024 06:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083AAA55
+	for <linux-scsi@vger.kernel.org>; Sat,  7 Sep 2024 11:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725691000; cv=none; b=uLJwSuncSW0wmOZk5ueRWvzLbCPPxqqZ033IrxyLTF60GCAoSvwauECnjonVHwa6gWTnFmfbTYztSnGAzfOoiPxe0dOQqTYD0z5fw90fCqA9VAfM0Ek3+xZwkmGZR3h66UAUS51/StQMWJa6O1Cwr4YRfdFtObYORclAcFbPn24=
+	t=1725708504; cv=none; b=uW5VH4/cF6yv237MpSTPZGDwqC9qCDy01zkYHoRYgxFj1yEP7Z/7d4mgU1FMz9ZkA9DsZAZsxG2HaW+aPnF15rNfrtraGndxp1D1cVEQkQKwRkh+/6dFSPikHh7LMvwwn6wYfMUVHHo3sn5+mwdM4XpfzlJG9jlgrzYouw8NXJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725691000; c=relaxed/simple;
-	bh=S8uBneI7PpV05fm7xVEpV7bYxOY1zUNfKM8lVvwCKyw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Cx7B1we06j5ztNupUh/wtOSVpjVeGsoPhQkLqIiF1KQAh7yTT7OfFRorW1xQx8mw3/RZTcAB/Rv/BQRG9m6XbB9KlmtcG7JdBBziDV64RgXPrvwgcjCUSY+1RQIyV6Q+cgVGdOJH6q1G0BDzK66d4MA9ygXIW0YEiIUOPdhd5Sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=tIVan0CG; arc=none smtp.client-ip=80.12.242.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from fedora.home ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id mouss9ADDJokxmousseWhW; Sat, 07 Sep 2024 08:27:28 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1725690448;
-	bh=UXFZxJayFVmRBjL/YPnjN27oAjTntbi+iSfWBhiI8ug=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=tIVan0CGAvSAm6oQdCCvHTvobKSxinMOQ5ciJwly1/qJ1aO6rcgyzEOI3/0qg6aVC
-	 HMejnHSYGV+20xtw7WnnN6/02QMsU6m/7r5Ns7PslzvH6vJOUaNzn1HZhxm2ZXlxJ5
-	 PaVi0PoCMQ6baUq5jsq5SjZqDh1P91t1/idnIdfqp8dmHPPWCIlKeoI9yFPBXjcq5Y
-	 Sgs0ToJpwGptReAdqhbt1Xu/WKpG12Dohwd7N6YFANC1msStX2bQsd9qlbxTDtJ4nQ
-	 Nd9PhCgIk/5XO/jTcpiMhlWA5+Rd73WscZAyVNHHwG2hJ5PM9Y7qKyKcm7flYwqs2M
-	 eczI/V/b3TuMQ==
-X-ME-Helo: fedora.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 07 Sep 2024 08:27:28 +0200
-X-ME-IP: 90.11.132.44
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-scsi@vger.kernel.org
-Subject: [PATCH] scsi: scsi_debug: Remove a useless memset()
-Date: Sat,  7 Sep 2024 08:27:22 +0200
-Message-ID: <6296722174e39a51cac74b7fc68b0d75bd0db2a3.1725690433.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.46.0
+	s=arc-20240116; t=1725708504; c=relaxed/simple;
+	bh=7RIj3V/DMVTw6HKIpIephCeEP9SLLzL0oIjiWcg5yjo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ibkXwe5Cuqfc0xMzyQY7U7wyhWarv1+/nqGZE0LQF2Kd8zwn8sRfJgYao87xXKwxwJ0NKAQHjmm5o/SQ8BrO/NEfkL6fuIEMJ4DtIjXs9vaYaG31STtO6AWYHwIJpryCW1mf7Ziwc+/QBn25Z6+yGh82T0ZhHeLNirfvTISQOy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QltI8ubb; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 487AlQLD005948;
+	Sat, 7 Sep 2024 10:52:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	WHv+z/5vHHSnNU3Zfjemt84Oo6QexxFa6s/OhPxtF1U=; b=QltI8ubb1vrh6lUm
+	Lhtmc/Y9ny+w5Pm/VPVJp2nCAlflQjTR5cS7bNKT5rywInFFKGl4rmZjz274wxrz
+	AqF0Gr0VBXWDDz4tWywrFjz+4RlAd5Ce6QhFzMmFVTzArcVV38BG4aEyXRp3Y36H
+	3De6MiKL+tPGesRgy+QTSDH5amRp3nDCGGy+hETKoyuH81u7w1LdjHtvidcrl68t
+	yyxJ/AUlYq9snW14YJSAJPUCFFTenLX3lLrNAIw7fLIE48Y5ikgKtCRwslDVvTp3
+	r+UdokJIu3aDyFH8Idosh5rZ2+3Souxm9Fy5fe6C4MC6FSQ2srKmSA0LajR35ZYn
+	n0aoTA==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41gf758edh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 07 Sep 2024 10:52:57 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 487AqtGo017982
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 7 Sep 2024 10:52:55 GMT
+Received: from [192.168.143.77] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sat, 7 Sep 2024
+ 03:52:55 -0700
+Message-ID: <d68d0f7c-ce71-3973-cf72-e789f0916ca1@quicinc.com>
+Date: Sat, 7 Sep 2024 03:52:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 04/10] scsi: ufs: core: Call ufshcd_add_scsi_host()
+ later
+Content-Language: en-US
+To: Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen"
+	<martin.petersen@oracle.com>
+CC: <linux-scsi@vger.kernel.org>,
+        Manivannan Sadhasivam
+	<manivannan.sadhasivam@linaro.org>,
+        Bean Huo <beanhuo@micron.com>,
+        "James
+ E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Peter Wang
+	<peter.wang@mediatek.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Andrew Halaney
+	<ahalaney@redhat.com>
+References: <20240905220214.738506-1-bvanassche@acm.org>
+ <20240905220214.738506-5-bvanassche@acm.org>
+From: "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+In-Reply-To: <20240905220214.738506-5-bvanassche@acm.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: oplIUMsUG_w7lLacpNDhgV639ifREwdm
+X-Proofpoint-GUID: oplIUMsUG_w7lLacpNDhgV639ifREwdm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ clxscore=1015 mlxlogscore=776 bulkscore=0 impostorscore=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409070087
 
-'arr' is kzalloc()'ed, so there is no need to call memset(.., 0, ...) on
-it. It is already cleared.
+On 9/5/2024 3:01 PM, Bart Van Assche wrote:
+> Call ufshcd_add_scsi_host() after host controller initialization has
+> completed. This is possible because no code between the old and new
+> ufshcd_add_scsi_host() call site depends on the scsi_add_host() call.
+> 
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Reviewed-by: Bean Huo <beanhuo@micron.com>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 
-This is a follow up of commit b952eb270df3 ("scsi: scsi_debug: Allocate the
-MODE SENSE response from the heap").
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/scsi/scsi_debug.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index a9d8a9c62663..d95f417e24c0 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -2760,7 +2760,6 @@ static int resp_mode_sense(struct scsi_cmnd *scp,
- 	else
- 		bd_len = 0;
- 	alloc_len = msense_6 ? cmd[4] : get_unaligned_be16(cmd + 7);
--	memset(arr, 0, SDEBUG_MAX_MSENSE_SZ);
- 	if (0x3 == pcontrol) {  /* Saving values not supported */
- 		mk_sense_buffer(scp, ILLEGAL_REQUEST, SAVING_PARAMS_UNSUP, 0);
- 		return check_condition_result;
--- 
-2.46.0
-
+Reviewed-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
 
