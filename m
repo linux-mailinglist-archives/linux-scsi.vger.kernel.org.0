@@ -1,247 +1,321 @@
-Return-Path: <linux-scsi+bounces-8039-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8041-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20423970C6A
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Sep 2024 05:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 657FD970ED4
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Sep 2024 09:08:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E6FD1C218D3
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Sep 2024 03:41:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83CCE1C21C4F
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Sep 2024 07:08:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B708317C22A;
-	Mon,  9 Sep 2024 03:41:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDF5E1AE040;
+	Mon,  9 Sep 2024 07:08:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="I76Ci6lH";
-	dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b="V8zafNN3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lS78+Lk2"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8199D172BCE;
-	Mon,  9 Sep 2024 03:41:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=60.244.123.138
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725853307; cv=fail; b=iLXn9II7k6b1wig1mBsr68KeKK0p9u7OQcfV6f5shwZzllpF8L6qpPMqBjEsvm2MAr3rqGU/B6fFBcuQAIxPY6ShlYJelih/nbJWFNjv4zcNOGrtXYAsU42HlnqCrUxntsei0ihiw5/O0anjXjEXJrIcM+HW93q21Es1BHj2914=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725853307; c=relaxed/simple;
-	bh=gjqf4rbzA/IEI3rYdHaFjiTlycb3aV/84mMsCKCG8p4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=SdOKkPFOEw7tqe/mVYIVuCnM64D7v3KR3l5l0azOdTH6vn6xccUXo76EIo9d592ZZqRbvShvdk1O+uoLrksRE3W4vvQdIdkIo/pvQVZPGanQ8Ln5hswjsa+1PgtLi6I5IiVII5MDpM7BLeuWqtp9aoMVPxqu2YnokjEYRpCORsU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=I76Ci6lH; dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b=V8zafNN3; arc=fail smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 6ccd8aec6e5d11efb66947d174671e26-20240909
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=gjqf4rbzA/IEI3rYdHaFjiTlycb3aV/84mMsCKCG8p4=;
-	b=I76Ci6lHo9DX+Qy7PZzsZJxNhc4k+ysGuIl2dn12WFHgTo1ygdLvqut3WoakY6B5Kw6lNp5+wP73yzcRG9SKoRY91DJXCT5LtZReAizc2x1syy4SOLJ8O3DJ9Jiuj+P+FAdu5BZT5Il+5fGd5aTswv4/BZM8uIzU5nI80fVz4lE=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:8d6058e4-50df-4001-a9bd-8b6338b59cbf,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6dc6a47,CLOUDID:4b75a6bf-d7af-4351-93aa-42531abf0c7b,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|-5,EDM:-3,IP:ni
-	l,URL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,
-	LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: 6ccd8aec6e5d11efb66947d174671e26-20240909
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-	(envelope-from <peter.wang@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1809284166; Mon, 09 Sep 2024 11:41:40 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 9 Sep 2024 11:41:39 +0800
-Received: from HK3PR03CU002.outbound.protection.outlook.com (172.21.101.237)
- by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 9 Sep 2024 11:41:39 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iBwbdXHIsFd58n9SgNd5TlQTxbh7MOOXo3D+BAIxcJwbWIqLM1Uc2K7evRx5+XRwQcWfrjlKvbQD2DYP1TEIewSUFbA1VB6dYeDgsohukfAhAL9oEhZFAcRYE6G8qhMnZMlIESpwZ+JIdCqtAtCs5/T5vqPyfX8w9GCR2GldKq0IPmBnQL+BejlGMIchWHQJeruH99nFTSVVzEE6/cpA+aUFkXZj9H7FfZ7EZQmwJA3kIUcOT/sM5EtzI00i4rldbhO/ylRLuOU+Ghd1UE9nRcApSuT5Lv3SYe2+JU9DchVELars0BnadtXE77VC7/3s8V0AU+l+rmkXT4dWmA9xIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gjqf4rbzA/IEI3rYdHaFjiTlycb3aV/84mMsCKCG8p4=;
- b=fLrBASCL0283Zym/aMeRjYSb4z0vEiKYAFZGyX7UY+3SSoB1WXmcMWWGOH5P9lMMqzN6pnovJSsQo68SNWlhQAHZMhwxlDmQiQPZRKYW6hADg4LfwwdYIx3vksCBXvUwR0qd0zV/hPnXxBh8ZYdmj3D1V9GW2BeMsr+8RcDHrLViL20oVmaPSrniV2YCJ5LZM2SWb2FRykY2OZYBEfQvWqFtkVa7mgDY7Mc4urtToLw59dBtAatFFnEU5NL/72udln7DJqGKZCJaPA48Z3Cwgtn3x3IAc7l/Kvy9/f9MlLELfGnbQUy3vkfR0XrcYoRzERtTePo3aczJ+yT3kVGV/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AC9613AD1C;
+	Mon,  9 Sep 2024 07:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725865700; cv=none; b=G8QhHaMlz9KZmATQu6IRxJdK4u6nErBgN26TVfJNfy0uHRThkg0DYvm/iN9R/yipZGvzHOyFw4KLsmllGl890lrw38kVE5DJ+zTMSO/oNUw6laP5SncdXB0fV9QsCDBzi5YbfiyWCHWiqYiUs6/X+QBUD/w4o8D+g8I5TYB02PY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725865700; c=relaxed/simple;
+	bh=RMuc+tRrmkYpvFs6XoBT06qJxFcaXeP4F1UTo91Sw8M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XN1mEvb25jSIz0dnZCLqJSof+UfmsMvtCrJA57UM3VfHm4KRjjj2EmzcfNEsM9bF/Zn45X1cmGuashpP6yEdtxNz3BB9IzNwi9Boa1U/wJDWJnBW7rLySId/MgupNZ8isVyvIFPkAbjAuD7Y8s4T2yezG1AwcpIa2sGITi7uwmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lS78+Lk2; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-374c962e5adso2152152f8f.1;
+        Mon, 09 Sep 2024 00:08:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gjqf4rbzA/IEI3rYdHaFjiTlycb3aV/84mMsCKCG8p4=;
- b=V8zafNN3JWgbbZI1T7XE5Qtc82cXSxxtGwTad+FSsKCdsdNitAU8XACzLf8AyI5xLjVprOlv/ewg0jIOeZeSFHp6bVnkPO3Uj6lpvk3oLjoM6TVrTp4OSoopURVfX1NIrkKbZnUb6jB6SzzWaIhRVleIO7ibnwXcp8OGbSILKrA=
-Received: from PSAPR03MB5605.apcprd03.prod.outlook.com (2603:1096:301:66::6)
- by OSQPR03MB8504.apcprd03.prod.outlook.com (2603:1096:604:27a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.17; Mon, 9 Sep
- 2024 03:41:37 +0000
-Received: from PSAPR03MB5605.apcprd03.prod.outlook.com
- ([fe80::3945:7dbc:62bd:c31c]) by PSAPR03MB5605.apcprd03.prod.outlook.com
- ([fe80::3945:7dbc:62bd:c31c%7]) with mapi id 15.20.7939.022; Mon, 9 Sep 2024
- 03:41:37 +0000
-From: =?utf-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= <peter.wang@mediatek.com>
-To: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-	"avri.altman@wdc.com" <avri.altman@wdc.com>, "alim.akhtar@samsung.com"
-	<alim.akhtar@samsung.com>, "quic_nguyenb@quicinc.com"
-	<quic_nguyenb@quicinc.com>, "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-	"martin.petersen@oracle.com" <martin.petersen@oracle.com>
-CC: "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
-	=?utf-8?B?SmlhamllIEhhbyAo6YOd5Yqg6IqCKQ==?= <jiajie.hao@mediatek.com>,
-	=?utf-8?B?Q0MgQ2hvdSAo5ZGo5b+X5p2wKQ==?= <cc.chou@mediatek.com>,
-	=?utf-8?B?RWRkaWUgSHVhbmcgKOm7g+aZuuWCkSk=?= <eddie.huang@mediatek.com>,
-	=?utf-8?B?QWxpY2UgQ2hhbyAo6LaZ54+u5Z2HKQ==?= <Alice.Chao@mediatek.com>,
-	=?utf-8?B?RWQgVHNhaSAo6JSh5a6X6LuSKQ==?= <Ed.Tsai@mediatek.com>, wsd_upstream
-	<wsd_upstream@mediatek.com>, "bvanassche@acm.org" <bvanassche@acm.org>,
-	=?utf-8?B?TGluIEd1aSAo5qGC5p6XKQ==?= <Lin.Gui@mediatek.com>,
-	=?utf-8?B?Q2h1bi1IdW5nIFd1ICjlt6vpp7/lro8p?= <Chun-hung.Wu@mediatek.com>,
-	=?utf-8?B?VHVuLXl1IFl1ICjmuLjmlabogb8p?= <Tun-yu.Yu@mediatek.com>,
-	=?utf-8?B?Q2hhb3RpYW4gSmluZyAo5LqV5pyd5aSpKQ==?=
-	<Chaotian.Jing@mediatek.com>, =?utf-8?B?UG93ZW4gS2FvICjpq5jkvK/mlocp?=
-	<Powen.Kao@mediatek.com>, =?utf-8?B?TmFvbWkgQ2h1ICjmnLHoqaDnlLAp?=
-	<Naomi.Chu@mediatek.com>, "stable@vger.kernel.org" <stable@vger.kernel.org>,
-	=?utf-8?B?UWlsaW4gVGFuICjosK3pupLpup8p?= <Qilin.Tan@mediatek.com>
-Subject: Re: [PATCH v2 1/2] ufs: core: fix the issue of ICU failure
-Thread-Topic: [PATCH v2 1/2] ufs: core: fix the issue of ICU failure
-Thread-Index: AQHa/N6PJ26RZpB7TE++KXC82NWtMLJLP/MAgAOapwA=
-Date: Mon, 9 Sep 2024 03:41:37 +0000
-Message-ID: <ffbd0593f8f736a2631b7711c7a1287189806006.camel@mediatek.com>
-References: <20240902021805.1125-1-peter.wang@mediatek.com>
-	 <20240902021805.1125-2-peter.wang@mediatek.com>
-	 <4d28f099-137f-b9b8-463f-40ec2a745694@quicinc.com>
-In-Reply-To: <4d28f099-137f-b9b8-463f-40ec2a745694@quicinc.com>
-Accept-Language: zh-TW, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PSAPR03MB5605:EE_|OSQPR03MB8504:EE_
-x-ms-office365-filtering-correlation-id: 6bc01fd2-ee9b-4bad-53e3-08dcd0814ee9
-x-ld-processed: a7687ede-7a6b-4ef6-bace-642f677fbe31,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|38070700018;
-x-microsoft-antispam-message-info: =?utf-8?B?VDhYUitYUStudUtNTE5KUHIwZkovSHBkc0xpSHozaGIrZWZxM2p3eFdkVnU5?=
- =?utf-8?B?UElzY2JVcE9iYWwwMnhBakNRWHZFWWpFbE5MSHdPSkZYK1hDYnlpa2lBa3pG?=
- =?utf-8?B?VFF6SlVBek82MStvRFRCTFBDTjNxWFZHTFRrdjdIdkFyZFN0Z0EreFFFblQy?=
- =?utf-8?B?U054cVFmMC8xa05DVkpvM09ndi9BNFBVUlloZEk1cG1VU20xbTU4Vm5pRk05?=
- =?utf-8?B?ZEFQUW0vdHhOaUNFa0tWK280SkpTeUYrS2RzbEJmQklKdnlmSDBPOXZ2NVdl?=
- =?utf-8?B?ZzZYTVVFTy9VOExaRVl3NUJmd0ZiSEsxcUxEbkYxaFIzbiswbHVhZEFFSWpl?=
- =?utf-8?B?N0pKQUNGRDhvQW5mQlkrY1BsVFNCSkVwSjRUbWdIR0M1bFp1TDhRK3VuaWN5?=
- =?utf-8?B?SHpscjJxNFZ5cDRNU01SRG9kRWNNdmU2c1J5VFJ1bmxFa0NndG1wamE3NkZD?=
- =?utf-8?B?cE1DK2g1T3Jtb1hlMkxDenZjUnJ5MXFYeWg5cW5aWmRhWkw4dkRoekJxRGdX?=
- =?utf-8?B?V2tWMWEwd251R0ZCZ3lQSW9qeWcrWVFGSVI4Y3FuK24vT09EcitMNHFrR2FO?=
- =?utf-8?B?ekhyV2IxZDNMRnZaVzM3a3ZRMzhrd1Z0TE1JOWs4L3BtUzRCcFNwWUx2eFB3?=
- =?utf-8?B?aHhpUFZnbTFoZVVZRjhkTkErTHZhWVVCS2ZKU0dtd0QzWUtQVFkzNFNwNXUz?=
- =?utf-8?B?Yk90VzFueVBzaUhmbWVtY1Y5d21qSjFDVFAxdHFBV1ZuQW8vL0lWUVNsK3h6?=
- =?utf-8?B?YkNabmxyUlZjTTcyc291ZzhXTVlkZlQrVWhrdzhidElORzlpcExLdFBiTDNw?=
- =?utf-8?B?aTFibGo0WlNBM3grM3RsRms3ajRWL0NoWnEwZlVYeEZqcDBOUkdzWnJmcWtU?=
- =?utf-8?B?WjlOeHNEMmN5ZStmSVk1cHpTKzZpQ3k3TjJOMXo3amlpdmFIU2pNODFWNFRa?=
- =?utf-8?B?dmppSXJ1ZjU2Q0VKSlBnSkx2ZjJIc3VZdkpCUUgycFFYQWVWbjk1N0kyVEUy?=
- =?utf-8?B?UHVaRThvNkFGK3V3Uk5nK0tGdWgxYkx3SWVQekJIZHZESEVzTlowMjFMRDlP?=
- =?utf-8?B?TnRwUUF6REU4Yy8zNWRkcGp2bzJlRy9oUjFRRkZiR2Y1ajF4ZGcrTUJjbDhz?=
- =?utf-8?B?R0VNUUEvZG5RL04vZlZsMHZscWUvWnVXc2JkL1p5LzFZZG85WTFoRHBpYXA0?=
- =?utf-8?B?TUF0VUJxajIxVDcrU2licVNoeDZIQUFzWXhUazczVFpqWFB1OHJaLzdjQ0lK?=
- =?utf-8?B?MXA5VlBTNFVrU3hGUDltclprMEY0U2FYbjlKWmZRelRvd0U0VXROKzBnLzhu?=
- =?utf-8?B?azhVVjFRWUpOUmhLWjZMRmZXd2RHSmJ0MEh5SkExK2xKV1g3MkFrMUJQVXpX?=
- =?utf-8?B?MmJGQmVsalRLWG9zcFRUeDdTRmQxUmFKUWx2dE0xOU0zOXdzd2c4Y2FYWFBE?=
- =?utf-8?B?b25VZTdjVXFMZVF1Zi92aHJLMmU5aDZyRzV3TVNZTE9PZmRWOFU3RzZGVmYr?=
- =?utf-8?B?S3dNOUE5aExRT21teE1VMXQ5V281ODFUTUNvZjl6R09lRDZ0QjhiRmQwMnRa?=
- =?utf-8?B?S1FOQU9GZEcvcHd1dEtDcEFKZkF0TzhUZEtKNVFYRHY3dnpYMjNjQUJkRXlq?=
- =?utf-8?B?L1RZZUlNUXZWbW10aFRESTBWdzU3d21iNDN2WHlTVFdlK1gza2JDL0hQZmY1?=
- =?utf-8?B?bFFYTC9SK0wvNzh3ei8wdDIwMWxTL09WS2orSkIwSys4clUrU3lUZWljaWhY?=
- =?utf-8?B?OEx2OEpEcjc5QVVnLyt3SHMrL3M5dS9ZMWxaSi9HUDR4N3k0ZzZHN0QraWFK?=
- =?utf-8?B?elhFeDJZQVVPR0J2Z054ZzBBV2VkOWN6aWM2M3lBYVBWT2lvRmI4RTNCK2cz?=
- =?utf-8?B?MlFyeTNGdTJBNnNzdmx1Z2FHSktLNmtTaUhOTGhzVWRvL1E9PQ==?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PSAPR03MB5605.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eVBlZkpiRUs3cWlzVWF2UUNZS0pWa2Y4aC9FTTlDS2puWThjaFZyODEzdHVl?=
- =?utf-8?B?SGpuOHRUOFY4YTNob01RaGdqTk5VSUpITGJRMW9NNjVxc1lmUTc0b2RaUmlo?=
- =?utf-8?B?dFpFUy9PMVhTWWdxQ1BZdGpmbFFBNkRtNG9FcWs3ckdyT2RWVll6a0Q3cmZY?=
- =?utf-8?B?SEVZelNCbURDZzdwYW1HVDRoT1ZrMnFHcEMrMTJYYWczd1doaHc3b1dmV3Vi?=
- =?utf-8?B?S3dGYnJSZENrRXhzNXZVR3o0cFpJd0thQVllWVNuT3pSZE9ycllHZWZxb243?=
- =?utf-8?B?dFZwazRqckhKL2s1Q0xJVm9MaUFQMDdrZWVzbXQ1ejFadyt0VGJBQjdyR3dY?=
- =?utf-8?B?TlBoaWcwTGp6V2x4djNZdU9WZFkzelp1TEo4NU9OSDdSL0ZGRDV3bWxzWk0r?=
- =?utf-8?B?Qk5ZVjdLNnlyN0w5bFdseS9QbXRMUVBaWnNXeENEMXViS0lMZlFSKzdkSUdn?=
- =?utf-8?B?Z0tESER3ZmtzMmVuNEdqTGRtS2tuZHV0Tzc3ZS9kaldNd0l2Z2VVdEE5NEor?=
- =?utf-8?B?cnRLVjVqUlRtNU9vbE5BRTYwdzY0NE5wc2Z6eFhWOXNtdmpwR2N1NWRudG5U?=
- =?utf-8?B?cExIQVVqT2tTMmxYTzUxRWtMMytqTWV3RnhiWVdPajhaekwzN0l6dHlJQk1P?=
- =?utf-8?B?RVZIVjU3MzRDVlFzS0dwN040dEdScTVSN0tZUFZFNk5OMzVuc0Z3aXFpclVa?=
- =?utf-8?B?RVVhb1JwOTRISE9hS1Y3c2w0WjdidmV5bTFKZkM2a01iWm5Jd096RFBHQklr?=
- =?utf-8?B?WGh1VHdsNWJ6c1Y4YzlSblozRG1CU01URDZwUEJta1pCWTN1VmFrRkpRbUVN?=
- =?utf-8?B?QUQ2QThpM1ZkTEg2SU93SHJhNEpLb2VLNFQ4UFRFb3hSa003VzYvZzg0Q0Fq?=
- =?utf-8?B?VWFEU1hFTmNKdndiZ0J0R2UvNitpcEpFcnpqMlV3YXNHM3ZST2JSc1JsTGY0?=
- =?utf-8?B?L2pQNEE5L2syMjViV3JwYjdrK3NUYUFuODQ2ZmhTME1MOXJRUzVPcWJNSUti?=
- =?utf-8?B?eVNDbnk0SHB6bEIvTVVUMXQyOHhZTEZibGlFUUVyakRUM0Z6Q1N6ci85enN0?=
- =?utf-8?B?VzFQTEp0UzZTYkwveTVxSVlxMzBNd1VPNFlORkkvWnAvRWRFZTBNVWRMU1p0?=
- =?utf-8?B?RmZZS0MyUXMxS0ZVaElLcWE3TVhhZ0JYTFNGSEF1bTR2Tm1kTm0wYjlQM2tD?=
- =?utf-8?B?OENGVjR2U3lFb2ozcE1DYkhXQ25vdEdSdiswckZ4UFZKWmRZVUVBUTQ1MGRp?=
- =?utf-8?B?bEZzWTJvSmIvK3ovaW1PYko2WnVFS1g3cmcwc2puQmMwcE9pbWNqeFBGM0Uv?=
- =?utf-8?B?SEp6ZnFHOGZKYnNZbExPTC8wMnBkeVNkZ1lsaW5TVnlyai8yVDBCMnN6K2JE?=
- =?utf-8?B?eGdMZWlsa1dlVGNvZVRTaFpPMk4zcmtZNzlMelJPdmpXbW9JcFJQMUMrVEdo?=
- =?utf-8?B?OUxtS2MweWdJNG92S2t6dWEyQnJHZk52OTZScjBzcUZHQ3NvTStKQkVTcWhV?=
- =?utf-8?B?UjdzUUhtTlNVek94OUY4cnlpVjJQWkRzd3BYV0VHM0REclZGOXo1dDNxUmRE?=
- =?utf-8?B?VkJXeU5XS1AzLzhyMmdVZm5jRkZCUDRHY2xMUW1sUGIvbW0rN00ydk1wTnly?=
- =?utf-8?B?cWZZdGcxa3NnZUl2SzA2M0hsZy9hYUpQK1Fpc2d1aGlmcE1EcHRRMWovTEYy?=
- =?utf-8?B?bGJwaDFJaGhaMUxIczIrWG1Cd084SDRIdmFBeldrZTdUWUhPMW90TE5UR2sx?=
- =?utf-8?B?cUt4VjdyenNZbG9IYVFnTHExY05LV0k4akR2UnZQa29aNVhodHVFUmVJK0xw?=
- =?utf-8?B?TVRTY0laYjh1NTQvR1hZVzdjRXpGTlY2VXBvRVdCaGV6b2dwYkg3WkVWOHk2?=
- =?utf-8?B?UkNXcGRMZHdJTEJUa1FMWEVwUVJKeEd2MzZ4VEFkcmhZVm9lUlBlbUc2ZnBO?=
- =?utf-8?B?T3prVDBvQlQ4ZlNQa2FRcEd6THVjMnplMERDdHRmeEtVd1JmaHUyYUg3SXpS?=
- =?utf-8?B?bW4vdGV4RmY5STlOL3ZTaU1XZ0dFT3V1TllNckJrNXhqUkdwa095bnVVeWcz?=
- =?utf-8?B?Nk90UkQrQ25CYzNkOUkrbUowdEova2ZxS2dVOTUwQlNSN0JRWjlzKzhTTGt2?=
- =?utf-8?B?dXVxQ3ZqWWpuMGhjSDZISEMzeFdqcUJxOS9YTHhTU3pnWXBOcEhkQVQrWHFU?=
- =?utf-8?B?S1E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6687B6BFD1E2C1429D25E602CBBA0701@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20230601; t=1725865697; x=1726470497; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=miIa0uylE1UFUz+fjwRH8q3H5W2F4hzW6ItDHV+UbYY=;
+        b=lS78+Lk2n0ieNORBO1hGCGQVQDgpLFx6HylIWYw8Sxy2cOXjOt+l4H4tl+y2RwmOea
+         ZSMKU8Ej6MgRoV1iuEm61vqHzl6xM0tFIqqIFU8bLhDzMSrWwoGGqdSuK/hh7R3s360B
+         I1F38/vPKRUCdCoWR8QEs5m6c1G6cb8P1eNUxs7TPmEAfxDzkhtP88rj1ROJxnHRNB/g
+         bs+SBMMZpLRM7ofqEbOx6lh+5kiwE3daMsrVXSZmS8x2r/Z9DekUZZfYTA4rIV+tqYRY
+         j132atV8ba3MXRI7BchBBvyATnhDCGrKXXFaNHI47ucQ7zs2ONQh85j6wkuVOCybxrKW
+         Tuhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725865697; x=1726470497;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=miIa0uylE1UFUz+fjwRH8q3H5W2F4hzW6ItDHV+UbYY=;
+        b=ipZxceh+e7QNLM5o7It0inLXheh3BmLQzhdcFl7K1oL7ebl6hOQF8b7MZksy4Vwu6e
+         kjP9o8769WcuuVn9G58vk4JXyaotYhoEd076qTTgZbBrR0LuNjCxaxacyIRc2340zsDR
+         GyxQ7W0ZEWGaArYHTSkRnHWowtXJR60U4bZLnt64SouKMhwRtxzsiUeXt5DmgHm5LvjW
+         za68R2JkmJvHyx8B6Gd/DYMD1JBNr1xaTnRckxopYfA/ySSrUXvOKENUXC0xmCNZrdHB
+         JgQznA6wLe8ebTzfKTYuKClhNjLTyiLYjcZFJqDy99/IKQJ5KQKqi8H1Nh5/l6eSqL1L
+         fiRw==
+X-Forwarded-Encrypted: i=1; AJvYcCV7l2g2Sb7Cg/5lzYGfLWEsdql4VJ31wz95O6FCrVKGvDViDbb1su1wXyK2owUHl7qEgFBAkuBd7HRbmqUO+Ymn@vger.kernel.org, AJvYcCVhc5NMFEVHJ1t0l4IxbhdQ+hqn1mFONYU1+U9p307RfT0DIBlpDShtFvUE71IfGc7pCA/XZVXAp9FqDXA=@vger.kernel.org, AJvYcCWBw7PtNFPsCJFS1gpnEx+cNZA7T9DXXtC2TFQ/i/TevjGW7tYMyRaWFoA5bJmq07vyq+l5Kko6dx3pDw==@vger.kernel.org, AJvYcCWRwbk6pSI6smdN7QpZdgtOp1LjbFUtz7hF59Mxb9Bv0rP8HHODYPe193Hk+NnSC6ovdX6ZQh8jvJM0+TIboQ==@vger.kernel.org, AJvYcCX5h0TXHKAbcOebbm2m+ddCFiJwdGq6ieCPxTnIwHdVwJAZ2mfz6WJym612Fs5tATiws+YlHlLu6H++Zh6e@vger.kernel.org, AJvYcCXT4ysz5bf/O4MXm/T0DR2BMEql4inr+3EMLGYbTl3KxhoUujfJxCZepW9oZ6ihdjNFJds=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrYzhZET3c08dQ9B/FVT/iO4XfCf3VMd+WnV1kFz6x3fveUP0X
+	6FzqUBgdQpZQHtcJxtYiuwYVwwWjcElWygGifuETZvGgZ26bV9ol
+X-Google-Smtp-Source: AGHT+IF7PvU559w9RG/+WWePAWHfln7qrp/xZmFruXqBgk/EtXWofmJCF9Gu7pllhU4Q5vs+uudvoA==
+X-Received: by 2002:a5d:4146:0:b0:367:938f:550 with SMTP id ffacd0b85a97d-3779bb2e591mr10665534f8f.25.1725865696041;
+        Mon, 09 Sep 2024 00:08:16 -0700 (PDT)
+Received: from fedora.iskraemeco.si ([193.77.86.250])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-378956d375asm5178754f8f.66.2024.09.09.00.08.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Sep 2024 00:08:15 -0700 (PDT)
+From: Uros Bizjak <ubizjak@gmail.com>
+To: x86@kernel.org,
+	linux-crypto@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org,
+	linux-mtd@lists.infradead.org,
+	linux-fscrypt@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Cc: Uros Bizjak <ubizjak@gmail.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Jaegeuk Kim <jaegeuk@kernel.org>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Hannes Reinecke <hare@suse.de>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Cong Wang <xiyou.wangcong@gmail.com>,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [PATCH v2 00/19] random: Resolve circular include dependency and include <linux/percpu.h>
+Date: Mon,  9 Sep 2024 09:05:14 +0200
+Message-ID: <20240909070742.75425-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PSAPR03MB5605.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6bc01fd2-ee9b-4bad-53e3-08dcd0814ee9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2024 03:41:37.3016
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CCzI3wUFt9t6hLtHb96AiWwJnIhyVzroKkbisN7yN205bcoQUx4tbyb+oaWcb1+Oewc4HBERurDt0pUHRA8+WA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSQPR03MB8504
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--16.068000-8.000000
-X-TMASE-MatchedRID: F7tLedRt7ifUL3YCMmnG4ia1MaKuob8PCJpCCsn6HCHBnyal/eRn3gzR
-	CsGHURLuwpcJm2NYlPAF6GY0Fb6yCn6dhLukK+2HGfRQPgZTkip+Mk6ACsw4JlOHCSh9uqMhEwa
-	0+RTIVt0T1H86vwca/5lRsxp1W42u1ZganTi7yVhtD1qg9KZYkTGZtPrBBPZrZj0yUhVrMqujxY
-	yRBa/qJRVHsNBZf9aRIC0OoeD/hCbu2nB9KtyYQNmzcdRxL+xwKrauXd3MZDU980qe9xzB3A==
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--16.068000-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP:
-	79A407F2D8198683750A641CD33BFD810305381E3F8191FD704E31B1BB4AB9832000:8
-X-MTK: N
+Content-Transfer-Encoding: 8bit
 
-T24gRnJpLCAyMDI0LTA5LTA2IGF0IDEzOjM5IC0wNzAwLCBCYW8gRC4gTmd1eWVuIHdyb3RlOg0K
-PiAgCSANCj4gRXh0ZXJuYWwgZW1haWwgOiBQbGVhc2UgZG8gbm90IGNsaWNrIGxpbmtzIG9yIG9w
-ZW4gYXR0YWNobWVudHMgdW50aWwNCj4geW91IGhhdmUgdmVyaWZpZWQgdGhlIHNlbmRlciBvciB0
-aGUgY29udGVudC4NCj4gIE9uIDkvMS8yMDI0IDc6MTggUE0sIHBldGVyLndhbmdAbWVkaWF0ZWsu
-Y29tIHdyb3RlOg0KPiANCj4gPiAgIC8qIFNRUlRDeS5JQ1UgPSAxICovDQo+ID4gLXdyaXRlbChT
-UV9JQ1UsIG9wcl9zcWRfYmFzZSArIFJFR19TUVJUQyk7DQo+ID4gK3dyaXRlbChyZWFkbChvcHJf
-c3FkX2Jhc2UgKyBSRUdfU1FSVEMpIHwgU1FfSUNVLA0KPiA+ICtvcHJfc3FkX2Jhc2UgKyBSRUdf
-U1FSVEMpOw0KPiBIaSBQZXRlciwNCj4gSW5zdGVhZCBvZiByZWFkbCgpIGhlcmUsIGhvdyBhYm91
-dCB3cml0ZSAoU1FfU1RPUCB8IFNRX0lDVSkgdG8gU1FSVEM/DQo+IA0KPiBUaGFua3MsIEJhbw0K
-DQpIaSBCYW8sDQoNCk15IG9waW5pb24gaXMgbm90IHRvIGRvIGl0IHRoaXMgd2F5LCBiZWNhdXNl
-IHdlIGRvbid0IGtub3cgaWYgDQp0aGUgZnV0dXJlIHNwZWNpZmljYXRpb24gb2YgUkVHX1NRUlRD
-IHdpbGwgYWRkIGV4dHJhIGJpdHMuIA0KT25jZSBhZGRlZCwgc3VjaCBhbiBhcHByb2FjaCB3b3Vs
-ZCBhZ2FpbiBiZWNvbWUgYSBidWcgaW4gdWZzIGRyaXZlci4NCg0KVGhhbmtzDQpQZXRlcg0K
+There were several attempts to resolve circular include dependency
+after the addition of percpu.h: 1c9df907da83 ("random: fix circular
+include dependency on arm64 after addition of percpu.h"), c0842fbc1b18
+("random32: move the pseudo-random 32-bit definitions to prandom.h") and
+finally d9f29deb7fe8 ("prandom: Remove unused include") that completely
+removes the inclusion of <linux/percpu.h>.
+
+Due to legacy reasons, <linux/random.h> includes <linux/prandom.h>, but
+with the commit entry remark:
+
+--quote--
+A further cleanup step would be to remove this from <linux/random.h>
+entirely, and make people who use the prandom infrastructure include
+just the new header file.  That's a bit of a churn patch, but grepping
+for "prandom_" and "next_pseudo_random32" "struct rnd_state" should
+catch most users.
+
+But it turns out that that nice cleanup step is fairly painful, because
+a _lot_ of code currently seems to depend on the implicit include of
+<linux/random.h>, which can currently come in a lot of ways, including
+such fairly core headfers as <linux/net.h>.
+
+So the "nice cleanup" part may or may never happen.
+--/quote--
+
+We would like to include <linux/percpu.h> in <linux/prandom.h>.
+In [1] we would like to repurpose __percpu tag as a named address space
+qualifier, where __percpu macro uses defines from <linux/percpu.h>.
+
+The major roadblock to inclusion of <linux/percpu.h> is the above
+mentioned legacy inclusion of <linux/prandom.h> in <linux/random.h> that
+causes circular include dependency that prevents <linux/percpu.h>
+inclusion.
+
+This patch series is the "nice cleanup" part that:
+
+a) Substitutes the inclusion of <linux/random.h> with the
+inclusion of <linux/prandom.h> where needed (patches 1 - 17).
+
+b) Removes legacy inclusion of <linux/prandom.h> from
+<linux/random.h> (patch 18).
+
+c) Includes <linux/percpu.h> in <linux/prandom.h> (patch 19).
+
+The whole series was tested by compiling the kernel for x86_64 allconfig
+and some popular architectures, namely arm64 defconfig, powerpc defconfig
+and loongarch defconfig.
+
+[1] https://lore.kernel.org/lkml/20240812115945.484051-4-ubizjak@gmail.com/
+
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Tvrtko Ursulin <tursulin@ursulin.net>
+Cc: David Airlie <airlied@gmail.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Cc: "Theodore Y. Ts'o" <tytso@mit.edu>
+Cc: Jaegeuk Kim <jaegeuk@kernel.org>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yonghong.song@linux.dev>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Stanislav Fomichev <sdf@fomichev.me>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: David Gow <davidgow@google.com>
+Cc: Rae Moar <rmoar@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Jiri Pirko <jiri@resnulli.us>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Stephen Hemminger <stephen@networkplumber.org>
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>
+Cc: Cong Wang <xiyou.wangcong@gmail.com>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>
+---
+v2: - Reword commit messages to mention the removal of legacy inclusion
+    of <linux/prandom.h> from <linux/random.h>
+    - Add missing substitution in crypto/testmgr.c
+    (reported by kernel test robot)
+    - Add Acked-by:.
+
+Uros Bizjak (19):
+  x86/kaslr: Include <linux/prandom.h> instead of <linux/random.h>
+  crypto: testmgr: Include <linux/prandom.h> instead of <linux/random.h>
+  drm/i915/selftests: Include <linux/prandom.h> instead of
+    <linux/random.h>
+  drm/lib: Include <linux/prandom.h> instead of <linux/random.h>
+  media: vivid: Include <linux/prandom.h> in vivid-vid-cap.c
+  mtd: tests: Include <linux/prandom.h> instead of <linux/random.h>
+  fscrypt: Include <linux/once.h> in fs/crypto/keyring.c
+  scsi: libfcoe: Include <linux/prandom.h> instead of <linux/random.h>
+  bpf: Include <linux/prandom.h> instead of <linux/random.h>
+  lib/interval_tree_test.c: Include <linux/prandom.h> instead of
+    <linux/random.h>
+  kunit: string-stream-test: Include <linux/prandom.h> instead of
+    <linux/random.h>
+  random32: Include <linux/prandom.h> instead of <linux/random.h>
+  lib/rbtree-test: Include <linux/prandom.h> instead of <linux/random.h>
+  bpf/tests: Include <linux/prandom.h> instead of <linux/random.h>
+  lib/test_parman: Include <linux/prandom.h> instead of <linux/random.h>
+  lib/test_scanf: Include <linux/prandom.h> instead of <linux/random.h>
+  netem: Include <linux/prandom.h> in sch_netem.c
+  random: Do not include <linux/prandom.h> in <linux/random.h>
+  prandom: Include <linux/percpu.h> in <linux/prandom.h>
+
+ arch/x86/mm/kaslr.c                              | 2 +-
+ crypto/testmgr.c                                 | 2 +-
+ drivers/gpu/drm/i915/selftests/i915_gem.c        | 2 +-
+ drivers/gpu/drm/i915/selftests/i915_random.h     | 2 +-
+ drivers/gpu/drm/i915/selftests/scatterlist.c     | 2 +-
+ drivers/gpu/drm/lib/drm_random.h                 | 2 +-
+ drivers/media/test-drivers/vivid/vivid-vid-cap.c | 1 +
+ drivers/mtd/tests/oobtest.c                      | 2 +-
+ drivers/mtd/tests/pagetest.c                     | 2 +-
+ drivers/mtd/tests/subpagetest.c                  | 2 +-
+ fs/crypto/keyring.c                              | 1 +
+ include/linux/prandom.h                          | 1 +
+ include/linux/random.h                           | 7 -------
+ include/scsi/libfcoe.h                           | 2 +-
+ kernel/bpf/core.c                                | 2 +-
+ lib/interval_tree_test.c                         | 2 +-
+ lib/kunit/string-stream-test.c                   | 1 +
+ lib/random32.c                                   | 2 +-
+ lib/rbtree_test.c                                | 2 +-
+ lib/test_bpf.c                                   | 2 +-
+ lib/test_parman.c                                | 2 +-
+ lib/test_scanf.c                                 | 2 +-
+ net/sched/sch_netem.c                            | 1 +
+ 23 files changed, 22 insertions(+), 24 deletions(-)
+
+-- 
+2.46.0
+
 
