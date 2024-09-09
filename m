@@ -1,144 +1,108 @@
-Return-Path: <linux-scsi+bounces-8079-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8081-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E053D971112
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Sep 2024 10:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4507C9711C6
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Sep 2024 10:24:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89C44B222FC
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Sep 2024 08:04:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2ED2B23F1D
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Sep 2024 08:24:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 623291BA272;
-	Mon,  9 Sep 2024 07:57:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B83081B3B23;
+	Mon,  9 Sep 2024 08:21:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K5TSn1Zu"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="KPF8ix/0"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839011B9B26;
-	Mon,  9 Sep 2024 07:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE871B3750
+	for <linux-scsi@vger.kernel.org>; Mon,  9 Sep 2024 08:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725868639; cv=none; b=DnGFwXzlEx07xYz1rGT2uuYkIdSw7ZtTFlRJAntp4W8ZEE0NWiMV406ql90hmpWjz/6DTD5VPWJcdJDISK2WVp/OgBRUBsQl1XyurJ3psFOWufyMWlJvzKwKcMr3CJiESqcjiRaDE9JCLT0otznhx5qZiLZF6SQA0XFVzftNs/I=
+	t=1725870072; cv=none; b=T+SHuzWuDc3HAdtGkdl6pAfnMX6SR0dt7wbJODdTe1WXbrrqjm6tn8JLGM4/bVfuqsGovZd3/xsRLHkBD7sYG48RbJ3teX/dB6+WzLMWdtUq462WyNI08R7FjLxZuKdqt8wrrNQcZ7q6UOcXM/8CL1gaJ/LH1OQ8rXBiUoU/8is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725868639; c=relaxed/simple;
-	bh=3uUcilVnojt4+ddh4TttNjspH/Ah42tEMA3oIXy4hyM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GZnCTGPigUydlVbEnx3rDq48h7yEVGVGRVU1szDeN1H1dEEwyBR118BTfxba0Bz9D7rReISK/7+sp8s+9NZng4hsRh9NWimjmwYmrumzh55+NT4O6QwWMARIqVAobfUdjR9FlHrgS3XPyEstC+bL4LLYldXHsOhSlFWGt0wxCGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K5TSn1Zu; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-374c1e5fe79so2605856f8f.1;
-        Mon, 09 Sep 2024 00:57:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725868636; x=1726473436; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=diK2vfMDlJNUyXW9lcHoHKMejPsgQZ2jk7i/6JqtmLQ=;
-        b=K5TSn1Zu9wSHyg22vRIUBJRFZE0+nW0Fx61sQgywJSYKXXLa24rlxyssEtJDaq1Mkz
-         N26Q+luc+IVHFIj1bRTkUUTHI/zFHRIqKaNalJUWYm5xcWqiKgDxb7xpeCefYsPul2n8
-         Bba6XMUX3g6obJ4S6/rElfdPZ+IsIG/w4z546vGJYNC1UuTFPjFeOniceUmzwIlWHyn0
-         0UynNYF3onJH3dpO2ZQdHi9JXqT77KzrZZqDC1ZZpeOheJV1Ztx5whzaeu+muKUMi6+K
-         x2IESbG4MFYSNwCWX4H4eAiYUiEkL8Pgl2toMjS//8s6VoRpFy4gWv0u5afnOO57z5qZ
-         mS3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725868636; x=1726473436;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=diK2vfMDlJNUyXW9lcHoHKMejPsgQZ2jk7i/6JqtmLQ=;
-        b=KvN7UiVsuoDXFVMMFR0eAgWOL8sUMfAwB9i7rNsSVMH8At2ycZfkGfgm2wOrb524Qk
-         JAPL8SYV7t64eRoWTBdwkehIzwuT8UFB853rmtQV2Fle56ou39YB7YGyOkXNCZiHpE6U
-         XCUzMAd9L/PQFH29eKSjuQvtIsoxPYKkrU/Qs/9eVRkfquPBAd8G4tNid2RGb+0vrOwe
-         zOt4n6uUOBVICspaQ+xHJq6hf7+EGBt5r7bvNsIIuXwx7sM9U2r4qJYqRUV1gRlahAjq
-         Exn0V/IcPO2L37GvQzjIbtEOIQ3zqrP+EHh5Imzb7cm9M/G+Cqcaw2/4/uGq/dcpPwvu
-         Hqhg==
-X-Forwarded-Encrypted: i=1; AJvYcCUPihdABBPFC/HaFqR4d01GlhVltIRcBfm6i2dtniSdD78m8iRYFWneq3g9MY8QZ+xCK1g=@vger.kernel.org, AJvYcCUvTkDJruDZ3Se60ORLIIgoBHHujuO6Q73h3CtRwrrgmwp16rnWn8TvbZmBexBvZp/84miLoZU+8rJP1A==@vger.kernel.org, AJvYcCV9F9AhS26NOhp0NpVtem4LWt9QFBH0+OYw4uENk9wC+WhSRR0IRphSjcJ2PjH5A5IicHZTFdHr0+4KbvaP4A==@vger.kernel.org, AJvYcCVHEyMdwXE7mDQdt7rS2YHME1Po+fspeZxn0zAU55krw17T+A/pSchs8lf/IcPN2XEkJ1QnJp1JH5XsSeg=@vger.kernel.org, AJvYcCWTencOdfl0NdzDRpMzknC25N7dB+ykjoSrVrXzAUE99VCYIooRlRAd6dgT0zdPSTWQLnDlZekypol0+mMN@vger.kernel.org, AJvYcCWZk3H3YFLZRSEwu9zZvdfXlKmo5aKycb9ngyuxZHSJa7CcDKb3YIoADOo5gHp8hPPQBAXbHgi7fK3sL8Jp@vger.kernel.org, AJvYcCWd9V4BtsAVh9z+dTYYRmfQFfZL6MFZx+YyuO92lknnWoGZBToXDg+bHLBmapEdoxtENkjVRfUnorr1/y5ubb6G@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuppX+HNfvgcQNBrPy83ADsTztYvuR66OzzhMDNd6tW6WtbcnA
-	ZNRCHmuu8Bp+kJ00GF1wkEwSkCfclKeBdqXddY9Pl6hK6zE7EEId
-X-Google-Smtp-Source: AGHT+IFme0X5nXLgn/ucuf8q8ansjRE1zBSf1qUsO6JYCVp2iHcyiqIaQ+1W/AW6ZFOhV/STuqOK5w==
-X-Received: by 2002:adf:fe84:0:b0:371:8e3c:59 with SMTP id ffacd0b85a97d-378895c2578mr7417099f8f.5.1725868635798;
-        Mon, 09 Sep 2024 00:57:15 -0700 (PDT)
-Received: from fedora.iskraemeco.si ([193.77.86.250])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37895675b7esm5303001f8f.50.2024.09.09.00.57.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Sep 2024 00:57:15 -0700 (PDT)
-From: Uros Bizjak <ubizjak@gmail.com>
-To: x86@kernel.org,
-	linux-crypto@vger.kernel.org,
-	intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-media@vger.kernel.org,
-	linux-mtd@lists.infradead.org,
-	linux-fscrypt@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org
-Cc: Uros Bizjak <ubizjak@gmail.com>,
-	"Theodore Ts'o" <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [PATCH RESEND v2 19/19] prandom: Include <linux/percpu.h> in <linux/prandom.h>
-Date: Mon,  9 Sep 2024 09:54:02 +0200
-Message-ID: <20240909075641.258968-20-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240909075641.258968-1-ubizjak@gmail.com>
-References: <20240909075641.258968-1-ubizjak@gmail.com>
+	s=arc-20240116; t=1725870072; c=relaxed/simple;
+	bh=pVg3DPuJGdNQn1mbhHFVI809OOmHzRXMtEr2DMG7SmU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dWpn41ILsmh6WNE/5KA6zMY+EOAuMlN+vQEVhErHll6DfkQosO/7K7UxdbvtqYhw5qVYl5t9lNtJspwBQenEOvZFhvqoQhXXvQjk99ULTc8sKJdUAMwxmPpNNLJmYEwY5tgzUKT+j4+nahna6+pvpOBcfnM4LF4D+CNUQruPTrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=KPF8ix/0; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 7451fc4a6e8411efb66947d174671e26-20240909
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=yLu2KE+XrIvKi5ZvfVr6caNuFiiJdh0jYEYYVKb1huI=;
+	b=KPF8ix/03BUazqUuPZWbHnq53h1oOg9cCae8atceiT2Zi47vqoFftZhcBZSDzkfACg4q33aXWLsUpZr/gEKGFXjwJLCtLR6JhuQdTEb9maSUJogWvISgkzaXtwQvvJwzIEJwwmt4V00zC1LP2OiyGjFmMg9H7KQ4a1AGE9qdmiE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:8d856e2a-cd2b-4a45-a683-18597504e2d0,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6dc6a47,CLOUDID:eebeaabf-d7af-4351-93aa-42531abf0c7b,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: 7451fc4a6e8411efb66947d174671e26-20240909
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+	(envelope-from <peter.wang@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1166372217; Mon, 09 Sep 2024 16:21:03 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 9 Sep 2024 01:21:02 -0700
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 9 Sep 2024 16:21:02 +0800
+From: <peter.wang@mediatek.com>
+To: <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+	<avri.altman@wdc.com>, <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
+CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+	<peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+	<alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
+	<chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+	<powen.kao@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
+	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
+	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <bvanassche@acm.org>,
+	<quic_nguyenb@quicinc.com>
+Subject: [PATCH v3 0/2] fix abort defect
+Date: Mon, 9 Sep 2024 16:20:58 +0800
+Message-ID: <20240909082100.24019-1-peter.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-<linux/percpu.h> include was removed from <linux/prandom.h>
-in d9f29deb7fe8 ("prandom: Remove unused include") because
-this inclusion broke arm64 due to a circular dependency
-on include files.
+From: Peter Wang <peter.wang@mediatek.com>
 
-__percpu tag is defined in include/linux/compiler_types.h, so there
-is currently no direct need for the inclusion of <linux/percpu.h>.
-However, in [1] we would like to repurpose __percpu tag as a named
-address space qualifier, where __percpu macro uses defines from
-<linux/percpu.h>.
+This series fixes MCQ and SDB abort defect.
 
-The circular dependency was removed in xxxxxxxxxxxx ("random: Do not
-include <linux/prandom.h> in <linux/random.h>") and it cleared
-the path for the inclusion of <linux/percpu.h> in <linux/prandom.h>.
+V3:
+ - Change comment and use variable(rtc) for error print
+ - Change flag name and move flag set before ufshcd_clear_cmd
+ - Add SDB mode clear UTRLCLR tag receive OCS_ABORTED requeue
 
-This patch is basically a revert of d9f29deb7fe8
-("prandom: Remove unused include").
+V2:
+ - Fix mcq_enabled build error.
 
-[1] https://lore.kernel.org/lkml/20240812115945.484051-4-ubizjak@gmail.com/
+Peter Wang (2):
+  ufs: core: fix the issue of ICU failure
+  ufs: core: requeue aborted request
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: "Theodore Ts'o" <tytso@mit.edu>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>
----
- include/linux/prandom.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/ufs/core/ufs-mcq.c | 16 +++++++++-------
+ drivers/ufs/core/ufshcd.c  | 29 +++++++++++++++--------------
+ include/ufs/ufshcd.h       |  2 ++
+ 3 files changed, 26 insertions(+), 21 deletions(-)
 
-diff --git a/include/linux/prandom.h b/include/linux/prandom.h
-index f7f1e5251c67..f2ed5b72b3d6 100644
---- a/include/linux/prandom.h
-+++ b/include/linux/prandom.h
-@@ -10,6 +10,7 @@
- 
- #include <linux/types.h>
- #include <linux/once.h>
-+#include <linux/percpu.h>
- #include <linux/random.h>
- 
- struct rnd_state {
 -- 
-2.46.0
+2.45.2
 
 
