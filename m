@@ -1,67 +1,70 @@
-Return-Path: <linux-scsi+bounces-8188-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8179-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05680975B7A
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Sep 2024 22:13:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA5FB975B69
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Sep 2024 22:12:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 72202B22B88
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Sep 2024 20:13:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0863A1C20A23
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Sep 2024 20:12:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA8C61BAEF9;
-	Wed, 11 Sep 2024 20:12:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA4871BB69D;
+	Wed, 11 Sep 2024 20:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="dwO5eQPM"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="DNZV5ZR4"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37CA51BBBFE
-	for <linux-scsi@vger.kernel.org>; Wed, 11 Sep 2024 20:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B381BB684
+	for <linux-scsi@vger.kernel.org>; Wed, 11 Sep 2024 20:12:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726085579; cv=none; b=b2RzvRb9OFZo0eBc4uoH7PEcDnLuYtU4Le6fWrcWICJilURi2GULcgjtiie9x2fFBlcm/zsmdsDq0iMbenx6K2f3TAJGpd9/Xfy0Lg8Ze1mxfq60fc4L8qNhwj2ROGA66xmBSyPAorcquxba3Eb4TYtB+TBL+wU+peF83on/Tg4=
+	t=1726085571; cv=none; b=qDAR3GQ4LSLBU8kT3b6zmrp6g4dQBXqpjcByKH8vs0/94pvvteNZdJsW2ipYN2Ik1KDw9K4LzkDuuqHlW7bDCoxn2lXu/tPsOZHJszIlo4psGWEPM72bbtk3OJns2SYTfZvKCz4TUxvpTHp66rVoV8ZnK6JJQh1Mz7+ZDJpMw2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726085579; c=relaxed/simple;
-	bh=AxrZkBM4T15MxKMDxb9xeBAgee7VFlRxEGLQfC7Nu+w=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GhAWCF9W3/SEK2JQKlVsL0uDpI1v1OcDyEeX/CoFnNxoCcx6CogB2tXxlY3m6Psxb4ul7YTcLNdz8xe4IWgbDUQzXeEC7yuloMJsMfSoSYUi+uPO2mdbucpdgjRKPNOESTVRWNYoNWQQ33ws9ZlPZT3jr+IzeGEMS+ovsDEYkvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=dwO5eQPM; arc=none smtp.client-ip=67.231.145.42
+	s=arc-20240116; t=1726085571; c=relaxed/simple;
+	bh=WHQPzewD65Yh+IZ0arekLAOtx01ofE6B+C9ms79J1Bc=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=U/LLneCBxoj+3hS+PdNQ1MofzOIVYsj5uJCdLt3dFvv5MOIlP8OhmyQFytLwdDEF2vwitmi6mnhCwp7efdSWecK8rKafa/QwNWKRytYI/iIqYvvyhB4hClvUAMzXuTX2Z+zhoFi1y/RX93xb3nwEsahwPTNjwVDn10BygzJYbTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=DNZV5ZR4; arc=none smtp.client-ip=67.231.145.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48BHjGDv027790
-	for <linux-scsi@vger.kernel.org>; Wed, 11 Sep 2024 13:12:57 -0700
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48BHja1G023861
+	for <linux-scsi@vger.kernel.org>; Wed, 11 Sep 2024 13:12:49 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from
-	:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=s2048-2021-q4; bh=LvD
-	NngJGsWnatCyWW6vNi4OaEo2CnYyawxAlUHXUK4s=; b=dwO5eQPMAfqEQrJAdFF
-	BQlrSXYCdox1DnS1KkpEbEQBR5EeLwwUDKkMnddw9N4Zof64jlTMsxaCUKbZIoj1
-	grEUaZLsN49oyz+5IaKqcD6NOPmGFcCsKlS2RiGCoivMqHrd6D3pOx9H6QHfI5ut
-	IQA+lHImKmoIkzO1fp6edRzx/nZ1thLlo6rYmT+yRcwAij5SNE/O0vwsSESc3uPl
-	7PsrJSs9Y3JvK+nYZDFGfTe39USN9P4DsN6r3If6ouRGCVTjLl7MvWmf4wVICXDq
-	swKzFfjiKw0stqYtRQ9F2ZHKC0Pf3dSQgg9Q7yRzVHgEf87GgwjRotdWh9Q5/CYL
-	NOQ==
+	:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding:content-type; s=
+	s2048-2021-q4; bh=vsWJ1tyzQEJgxec9rmC6OH4EJf2VkiCpPCBFVPp8kHY=; b=
+	DNZV5ZR4Zrg9sf9ap/zFilwq+iA2YPhe/8du1eZ2sdeaA/ab56r+pVyOFJjIuFOd
+	l35xrfT7kL3P/MQtH2CukPbv58YkO2z8W3JxsRD/gmMWQrc6uMQ9YU/mIdHHDpw1
+	/49iQoP3J75bq+60b57JSbdCaCBiLrHLERnLubj/rv8DAbZnZW2tCsipUwptCjJI
+	7sH1pk+ueNtCCI796H/bec/EYkZfBjRkDuJIW4Lo9IRntF+WQHqNmWDuStLXQwxa
+	1q+e1PIox20+TWq8bPdgC5/NDxx5B6aHd7yjR8QQb5J5G5NJgHZZxUPXo9WKf5HD
+	x5ceSlSCxerVvktgXzNsYw==
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 41k61wn0k0-8
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 41k87cmcqt-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-scsi@vger.kernel.org>; Wed, 11 Sep 2024 13:12:57 -0700 (PDT)
-Received: from twshared18321.17.frc2.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
+	for <linux-scsi@vger.kernel.org>; Wed, 11 Sep 2024 13:12:49 -0700 (PDT)
+Received: from twshared25838.31.frc3.facebook.com (2620:10d:c0a8:1c::11) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1544.11; Wed, 11 Sep 2024 20:12:56 +0000
+ 15.2.1544.11; Wed, 11 Sep 2024 20:12:47 +0000
 Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
-	id B204112E5EDA2; Wed, 11 Sep 2024 13:12:41 -0700 (PDT)
+	id BE5DA12E5EDA5; Wed, 11 Sep 2024 13:12:41 -0700 (PDT)
 From: Keith Busch <kbusch@meta.com>
 To: <axboe@kernel.dk>, <hch@lst.de>, <martin.petersen@oracle.com>,
         <linux-block@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
         <linux-scsi@vger.kernel.org>, <sagi@grimberg.me>
 CC: Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv4 00/10] block integrity merging and counting
-Date: Wed, 11 Sep 2024 13:12:30 -0700
-Message-ID: <20240911201240.3982856-1-kbusch@meta.com>
+Subject: [PATCHv4 01/10] blk-mq: unconditional nr_integrity_segments
+Date: Wed, 11 Sep 2024 13:12:31 -0700
+Message-ID: <20240911201240.3982856-2-kbusch@meta.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20240911201240.3982856-1-kbusch@meta.com>
+References: <20240911201240.3982856-1-kbusch@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -71,56 +74,58 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 4EjS84f8CG7b9CV31iDyTuHNDyRqSvrJ
-X-Proofpoint-GUID: 4EjS84f8CG7b9CV31iDyTuHNDyRqSvrJ
+X-Proofpoint-GUID: VLT6IV7FPwFN_lKEmjNuxeBqukdOnYLF
+X-Proofpoint-ORIG-GUID: VLT6IV7FPwFN_lKEmjNuxeBqukdOnYLF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-11_01,2024-09-09_02,2024-09-02_01
 
 From: Keith Busch <kbusch@kernel.org>
 
-Some fixes and cleanups to counting integrity segments when metadata is
-used. This addresses merging issues when integrity data is present.
+Always defining the field will make using it easier and less error prone
+in future patches.
 
-Changes from v3:
+There shouldn't be any downside to this: the field fits in what would
+otherwise be a 2-byte hole, so we're not saving space by conditionally
+leaving it out.
 
-  Unconditionally define nr_integrity_segments. (Christoph)
+Suggested-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Keith Busch <kbusch@kernel.org>
+---
+ block/blk-mq.c         | 2 --
+ include/linux/blk-mq.h | 3 ---
+ 2 files changed, 5 deletions(-)
 
-  Dropped the "simplify" patches and the queue limits checks; they are
-  not correct under some conditions. (Christoph)
-
-  Fix a commit message typo. (Anuj)
-
-  Reordered the driver patches to appear after the integrity segment
-  count is accurate.
-
-  Added a patch (5/9) that accounts for user mapped integrity segments.
-
-  Added reviews.
-
-Keith Busch (10):
-  blk-mq: unconditional nr_integrity_segments
-  blk-mq: set the nr_integrity_segments from bio
-  blk-integrity: properly account for segments
-  blk-integrity: consider entire bio list for merging
-  block: provide a request helper for user integrity segments
-  block: provide helper for nr_integrity_segments
-  scsi: use request helper to get integrity segments
-  nvme-rdma: use request helper to get integrity segments
-  block: unexport blk_rq_count_integrity_sg
-  blk-integrity: improved sg segment mapping
-
- block/bio-integrity.c         |  1 -
- block/blk-integrity.c         | 36 ++++++++++++++++++++++++-----------
- block/blk-merge.c             |  4 ++++
- block/blk-mq.c                |  5 +++--
- drivers/nvme/host/ioctl.c     |  6 ++----
- drivers/nvme/host/rdma.c      |  6 +++---
- drivers/scsi/scsi_lib.c       | 12 +++---------
- include/linux/blk-integrity.h | 13 +++++++++----
- include/linux/blk-mq.h        |  8 +++++---
- 9 files changed, 54 insertions(+), 37 deletions(-)
-
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 3f1f7d0b3ff35..ef3a2ed499563 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -376,9 +376,7 @@ static struct request *blk_mq_rq_ctx_init(struct blk_=
+mq_alloc_data *data,
+ 	rq->io_start_time_ns =3D 0;
+ 	rq->stats_sectors =3D 0;
+ 	rq->nr_phys_segments =3D 0;
+-#if defined(CONFIG_BLK_DEV_INTEGRITY)
+ 	rq->nr_integrity_segments =3D 0;
+-#endif
+ 	rq->end_io =3D NULL;
+ 	rq->end_io_data =3D NULL;
+=20
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index 8d304b1d16b15..4fecf46ef681b 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -149,10 +149,7 @@ struct request {
+ 	 * physical address coalescing is performed.
+ 	 */
+ 	unsigned short nr_phys_segments;
+-
+-#ifdef CONFIG_BLK_DEV_INTEGRITY
+ 	unsigned short nr_integrity_segments;
+-#endif
+=20
+ #ifdef CONFIG_BLK_INLINE_ENCRYPTION
+ 	struct bio_crypt_ctx *crypt_ctx;
 --=20
 2.43.5
 
