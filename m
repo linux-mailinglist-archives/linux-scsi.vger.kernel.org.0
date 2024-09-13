@@ -1,67 +1,69 @@
-Return-Path: <linux-scsi+bounces-8328-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8325-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 779CD9787DE
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Sep 2024 20:29:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC7E09787D4
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Sep 2024 20:29:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8548B27191
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Sep 2024 18:29:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 839912811CE
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Sep 2024 18:29:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC93D12C530;
-	Fri, 13 Sep 2024 18:29:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6EAB12C465;
+	Fri, 13 Sep 2024 18:29:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="bVysg4A6"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="fHF+1n/8"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ABED139590
-	for <linux-scsi@vger.kernel.org>; Fri, 13 Sep 2024 18:29:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE40A2F860
+	for <linux-scsi@vger.kernel.org>; Fri, 13 Sep 2024 18:29:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726252155; cv=none; b=G6uEYqSynGNQBJImJHBQ+/y01gKih58STKHBkWV1FPGCnabnh6R8rf3as4CAX/56wfKTfg3ml2cQVMiTyw7vQ/m1kHcrsoQ/jHPWknBv0rpTuHz1r8S9nZ9l7zDvDndQiDXla8x5b/7PVyed/fuk8Suqf9ZZ9B1jvgwBO1Apo+Y=
+	t=1726252150; cv=none; b=XZKIIqnObz3dyn1HZyjSKs/a4GuoIFyM9COw+CnRm22boRi+kM9I14oYWHMvZ2n2fRaQO4vRyp5IWWXCCleY7cHcGqyVyftkcEWB8v9L4KzF7XhTNU41lz+ffB0UPLvj+E3gnuXiZrc/nQ3r1FVS9MQKzPVqQBJIooiAo4rD9/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726252155; c=relaxed/simple;
-	bh=DVVKnOrWjiRoSCgaBNa//smYB0J1VdkCfgXVLidzJbQ=;
+	s=arc-20240116; t=1726252150; c=relaxed/simple;
+	bh=/xRbpYTmItdNfTgMZUlmMcBDDQDJai5vbVVoVSnAvNM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oVSBhojuAX6lp0xTwH1BJK0liW5+GyhxUyRh9JDgAi6spDjWqZnXoLuwCx/WBFi/DQpFqKq9VhoZNOqYKqM0i4Fz5E142hoD7B9EadDrrPaCk8YRtvaTz6GCros9C5xJEQ6ZXrOqXo8te7CpJECjX6iqFEB851tWYeSUVXNZcjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=bVysg4A6; arc=none smtp.client-ip=67.231.145.42
+	 MIME-Version:Content-Type; b=Mp+3jyT5sJ4gkND3HMflTdmFUZjwuAMgp3o8IT9qCjTVYzTBixOH2pnhHWGE3pTaBIRci3GyBdz9/9BeoT2esvs78x/fmldsVT+n3P6cdx1oFSCWaxWPqGNHX+h11pSjOTQikDp2iEj+AKb/u/eWOdpxt9d/dQsYtQGfxOMUufw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=fHF+1n/8; arc=none smtp.client-ip=67.231.145.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48DI2DVZ032589
-	for <linux-scsi@vger.kernel.org>; Fri, 13 Sep 2024 11:29:13 -0700
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48DI9uOc016519
+	for <linux-scsi@vger.kernel.org>; Fri, 13 Sep 2024 11:29:08 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from
 	:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-transfer-encoding:content-type; s=
-	s2048-2021-q4; bh=oUfSROr0FhSCtvL6UbszCRKrsV9riysj4gJgGG+83JA=; b=
-	bVysg4A6Z0dHj0+PmhLV8Fv/24JJKgX75zpqBCm4rw1XGrIsmNbHbP899aGx3k/p
-	FiR6gcC19dPSqqe2R1E9VSiuYFZrzcfmwKtfZQA4TFKt7oi9PXtq0/tik3rolCri
-	boS/0Vnnj0XCkqcL1iFPM0zVPObyQxeTSy+W5yOhUEBJzRldGLGJkEEWpibMPSaC
-	+tpN+Wy24Dd3bXtAuRu7mRrgRk0Dm0PsT+zQz8LpqDlSemrRatH3rei457+o0Ytf
-	aFC3KgiMMG2IOMwyDIzIJsZ0wmINfxF04AOMrnoXMRtOLynAtkBbVqYB1MLWi2vf
-	woLE+om6VClxVlKH2/aChg==
+	s2048-2021-q4; bh=YjRDVhh75SMTGa/Nn/K3IvSmdcIyNqHJBBkm4InR34M=; b=
+	fHF+1n/8IqkkxClSZzL2/Xn6LCL7Uw93tAn9SkLLlcFFctTvPF3/5/9dBlnOSqLh
+	1cv14+n7lTZVWXdOUQbwgqHqDQz13PrJllwLh2huzG96i/xuBAcMrNvuOB0mMLNT
+	BLut+nGeGD0sGeajx+2l7NHfHkFRjIYpagWwCqZnriQ772SvdCLXzcHL1j7+rF3f
+	0aK7bhEgvu9yQ8e2QhityVK80eMFUbRw9nUQ8mLNCSmC7B2x1VLsDP1wuNcon6Y3
+	TvTwIwcd9G/sOUqoNuqyK+OvTSO6i60jNjVJr5ez6cBtVoF9k4lm/+LUQG0lozgy
+	ACZhy2Dg0AbiOyRc7eiUWw==
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 41mqb2sp7a-11
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 41mte705n8-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-scsi@vger.kernel.org>; Fri, 13 Sep 2024 11:29:13 -0700 (PDT)
-Received: from twshared13976.17.frc2.facebook.com (2620:10d:c0a8:1c::11) by
- mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
+	for <linux-scsi@vger.kernel.org>; Fri, 13 Sep 2024 11:29:07 -0700 (PDT)
+Received: from twshared57535.03.ash8.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.2.1544.11; Fri, 13 Sep 2024 18:29:06 +0000
 Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
-	id 6F30E12F91049; Fri, 13 Sep 2024 11:29:03 -0700 (PDT)
+	id 7966312F9104B; Fri, 13 Sep 2024 11:29:03 -0700 (PDT)
 From: Keith Busch <kbusch@meta.com>
 To: <axboe@kernel.dk>, <hch@lst.de>, <martin.petersen@oracle.com>,
         <linux-block@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
         <linux-scsi@vger.kernel.org>
-CC: <sagi@grimberg.me>, Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv5 4/9] blk-integrity: consider entire bio list for merging
-Date: Fri, 13 Sep 2024 11:28:49 -0700
-Message-ID: <20240913182854.2445457-5-kbusch@meta.com>
+CC: <sagi@grimberg.me>, Keith Busch <kbusch@kernel.org>,
+        Kanchan Joshi
+	<joshi.k@samsung.com>
+Subject: [PATCHv5 5/9] block: provide a request helper for user integrity segments
+Date: Fri, 13 Sep 2024 11:28:50 -0700
+Message-ID: <20240913182854.2445457-6-kbusch@meta.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20240913182854.2445457-1-kbusch@meta.com>
 References: <20240913182854.2445457-1-kbusch@meta.com>
@@ -74,53 +76,128 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: Bgv5YagGNgGvI6h2V4ROH2gaRBZW71HY
-X-Proofpoint-ORIG-GUID: Bgv5YagGNgGvI6h2V4ROH2gaRBZW71HY
+X-Proofpoint-ORIG-GUID: Eegenq0eeyezyqqVNAb6Md0WLiwSv9BK
+X-Proofpoint-GUID: Eegenq0eeyezyqqVNAb6Md0WLiwSv9BK
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-13_11,2024-09-13_02,2024-09-02_01
 
 From: Keith Busch <kbusch@kernel.org>
 
-If a bio is merged to a request, the entire bio list is merged, so don't
-temporarily detach it from its list when counting segments. In most
-cases, bi_next will already be NULL, so detaching is usually a no-op.
-But if the bio does have a list, the current code is miscounting the
-segments for the resulting merge.
+Provide a helper to keep the request flags and nr_integrity_segments in
+sync with the bio's integrity payload. This is an integrity equivalent
+to the normal data helper function, 'blk_rq_map_user()'.
 
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
+Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
- block/blk-integrity.c | 4 ----
- 1 file changed, 4 deletions(-)
+ block/bio-integrity.c         |  1 -
+ block/blk-integrity.c         | 14 ++++++++++++++
+ drivers/nvme/host/ioctl.c     |  6 ++----
+ include/linux/blk-integrity.h |  9 +++++++++
+ 4 files changed, 25 insertions(+), 5 deletions(-)
 
+diff --git a/block/bio-integrity.c b/block/bio-integrity.c
+index 8d1fb38f745f9..357a022eed411 100644
+--- a/block/bio-integrity.c
++++ b/block/bio-integrity.c
+@@ -371,7 +371,6 @@ int bio_integrity_map_user(struct bio *bio, void __us=
+er *ubuf, ssize_t bytes,
+ 		kfree(bvec);
+ 	return ret;
+ }
+-EXPORT_SYMBOL_GPL(bio_integrity_map_user);
+=20
+ /**
+  * bio_integrity_prep - Prepare bio for integrity I/O
 diff --git a/block/blk-integrity.c b/block/blk-integrity.c
-index afd101555d3cb..84065691aaed0 100644
+index 84065691aaed0..ddc742d58330b 100644
 --- a/block/blk-integrity.c
 +++ b/block/blk-integrity.c
-@@ -134,7 +134,6 @@ bool blk_integrity_merge_bio(struct request_queue *q,=
- struct request *req,
- 			     struct bio *bio)
+@@ -107,6 +107,20 @@ int blk_rq_map_integrity_sg(struct request_queue *q,=
+ struct bio *bio,
+ }
+ EXPORT_SYMBOL(blk_rq_map_integrity_sg);
+=20
++int blk_rq_integrity_map_user(struct request *rq, void __user *ubuf,
++			      ssize_t bytes, u32 seed)
++{
++	int ret =3D bio_integrity_map_user(rq->bio, ubuf, bytes, seed);
++
++	if (ret)
++		return ret;
++
++	rq->nr_integrity_segments =3D blk_rq_count_integrity_sg(rq->q, rq->bio)=
+;
++	rq->cmd_flags |=3D REQ_INTEGRITY;
++	return 0;
++}
++EXPORT_SYMBOL_GPL(blk_rq_integrity_map_user);
++
+ bool blk_integrity_merge_rq(struct request_queue *q, struct request *req=
+,
+ 			    struct request *next)
  {
- 	int nr_integrity_segs;
--	struct bio *next =3D bio->bi_next;
+diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
+index 1d769c842fbf5..b9b79ccfabf8a 100644
+--- a/drivers/nvme/host/ioctl.c
++++ b/drivers/nvme/host/ioctl.c
+@@ -3,7 +3,6 @@
+  * Copyright (c) 2011-2014, Intel Corporation.
+  * Copyright (c) 2017-2021 Christoph Hellwig.
+  */
+-#include <linux/bio-integrity.h>
+ #include <linux/blk-integrity.h>
+ #include <linux/ptrace.h>	/* for force_successful_syscall_return */
+ #include <linux/nvme_ioctl.h>
+@@ -153,11 +152,10 @@ static int nvme_map_user_request(struct request *re=
+q, u64 ubuffer,
+ 		bio_set_dev(bio, bdev);
 =20
- 	if (blk_integrity_rq(req) =3D=3D 0 && bio_integrity(bio) =3D=3D NULL)
- 		return true;
-@@ -145,10 +144,7 @@ bool blk_integrity_merge_bio(struct request_queue *q=
-, struct request *req,
- 	if (bio_integrity(req->bio)->bip_flags !=3D bio_integrity(bio)->bip_fla=
-gs)
- 		return false;
+ 	if (has_metadata) {
+-		ret =3D bio_integrity_map_user(bio, meta_buffer, meta_len,
+-					     meta_seed);
++		ret =3D blk_rq_integrity_map_user(req, meta_buffer, meta_len,
++						meta_seed);
+ 		if (ret)
+ 			goto out_unmap;
+-		req->cmd_flags |=3D REQ_INTEGRITY;
+ 	}
 =20
--	bio->bi_next =3D NULL;
- 	nr_integrity_segs =3D blk_rq_count_integrity_sg(q, bio);
--	bio->bi_next =3D next;
--
- 	if (req->nr_integrity_segments + nr_integrity_segs >
- 	    q->limits.max_integrity_segments)
- 		return false;
+ 	return ret;
+diff --git a/include/linux/blk-integrity.h b/include/linux/blk-integrity.=
+h
+index de98049b7ded9..793dbb1e0672d 100644
+--- a/include/linux/blk-integrity.h
++++ b/include/linux/blk-integrity.h
+@@ -28,6 +28,8 @@ static inline bool queue_limits_stack_integrity_bdev(st=
+ruct queue_limits *t,
+ int blk_rq_map_integrity_sg(struct request_queue *, struct bio *,
+ 				   struct scatterlist *);
+ int blk_rq_count_integrity_sg(struct request_queue *, struct bio *);
++int blk_rq_integrity_map_user(struct request *rq, void __user *ubuf,
++			      ssize_t bytes, u32 seed);
+=20
+ static inline bool
+ blk_integrity_queue_supports_integrity(struct request_queue *q)
+@@ -102,6 +104,13 @@ static inline int blk_rq_map_integrity_sg(struct req=
+uest_queue *q,
+ {
+ 	return 0;
+ }
++static inline int blk_rq_integrity_map_user(struct request *rq,
++					    void __user *ubuf,
++					    ssize_t bytes,
++					    u32 seed)
++{
++	return -EINVAL;
++}
+ static inline struct blk_integrity *bdev_get_integrity(struct block_devi=
+ce *b)
+ {
+ 	return NULL;
 --=20
 2.43.5
 
