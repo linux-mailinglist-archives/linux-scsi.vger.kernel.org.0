@@ -1,102 +1,120 @@
-Return-Path: <linux-scsi+bounces-8324-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8330-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87F01978747
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Sep 2024 19:55:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BB1C9787DF
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Sep 2024 20:29:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D4861F22016
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Sep 2024 17:55:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AAFF282B90
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Sep 2024 18:29:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EAD684DE4;
-	Fri, 13 Sep 2024 17:55:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22D62132121;
+	Fri, 13 Sep 2024 18:29:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="A7GcIoD9"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="R7owH2/Y"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959886F2E2
-	for <linux-scsi@vger.kernel.org>; Fri, 13 Sep 2024 17:55:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853C213212A
+	for <linux-scsi@vger.kernel.org>; Fri, 13 Sep 2024 18:29:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726250136; cv=none; b=f3FvKL74bu3sxrpvCJDg340AKkiK1CFXHhzqfivZEAdL7aScCrVDxtNIfedIAqjgVrQSpD/u2L/BxEefJpu+0oHzBNLtqEWc1bzrBFql7ksPar5RPtjpps1JwqG0d9COlInYfrMIEqC/Uckco4I+OmWlfI8n2PfkRjnHwCfS+XU=
+	t=1726252158; cv=none; b=d4P+12f+LA295KfwWMSSKchGZ+l0Adw5U5YhJLdICMkQFLgaz6QFbob9vpC4T0Hr6pNObPo30DuFSH4HZiFZkoeiZrsNz9B0OWBa7tHEFQTJw6ufRogcmFjmHz/9/7rHSB8deEFtN+1xYOMk2tJkZG94XBBHMn1adOitIsLMfww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726250136; c=relaxed/simple;
-	bh=GU4VC/uji0ikp/wEq2IDZJMobVOdcoViMCfqfKAvzIc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bR7+siFhMWk6Zt4bkGDWuaNKdg6P8Hf4RNf4VIiVVIFw1Jc8bUckn9xqUOLEDIswLD5YFGZMDglLjj3tmuV1AbvDLptvDJDDeq25N5tQd55/Icn47XiDLTOlqVx/RG+G3tWUGoqRyTT/uajfrghBvpg+nuMmywaU6KMA/al5mdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=A7GcIoD9; arc=none smtp.client-ip=199.89.1.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4X525y0XG2z6ClY9y;
-	Fri, 13 Sep 2024 17:55:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1726250131; x=1728842132; bh=GU4VC/uji0ikp/wEq2IDZJMo
-	bVOdcoViMCfqfKAvzIc=; b=A7GcIoD9K3BnX/jhfbwtseOFLCW4I1Nom6B57uys
-	WfF1B0Pi4riHE5IQmYQQ2i5ktIw3SPpVCz/RmpYTAGbK2nmuynEHtyRQMTAvJzaX
-	LlRimFJEI28X24OpByI7VQ453KfaHxGqff4qiAhmR+lbUUg2drdXJOX72F66c5hG
-	iWPJdDJyBL/sByqc+AaoqTnG9J/9y9fQGheib4BaOHKaTdzvxWIMnFLnUbwbYREt
-	o7I5sqD8vq12pnECzGSPwpInhQADO7GtNJj0QJOAHs03YDS0LA/Q1km71/regCHk
-	yrK9aJugfJFJu0xpmBHIJDpv6Pnb/aCwMwVxT6XlJtH4QQ==
-X-Virus-Scanned: by MailRoute
-Received: from 008.lax.mailroute.net ([127.0.0.1])
- by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id LP3wr7ye64yW; Fri, 13 Sep 2024 17:55:31 +0000 (UTC)
-Received: from [192.168.51.14] (c-73-231-117-72.hsd1.ca.comcast.net [73.231.117.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4X525s3mf5z6ClY9v;
-	Fri, 13 Sep 2024 17:55:29 +0000 (UTC)
-Message-ID: <fbbb8d00-2b70-403a-98cb-55ca0dba1d7f@acm.org>
-Date: Fri, 13 Sep 2024 10:55:28 -0700
+	s=arc-20240116; t=1726252158; c=relaxed/simple;
+	bh=eIXOszwJIaTt2ApvNGA+AQrdpcUa4ECXIJNPnsA5dwk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=j/4StP88O0V/KmqXaxEv4RbVlDgSU0xu0mJiavBKVfS+sYeRZ9XO/K+T7VrFKdt6Saq7rm/bha7ZMvr/FAWjtwsI2JkZ+QVOjuvbh1IfSMtPmWs4zcDhhkHrdhELM3n0g2bRi48x9ujAuZdsxifH0jFlVCJkOr1v6ZhygD7OWCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=R7owH2/Y; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48DI2LlX003051
+	for <linux-scsi@vger.kernel.org>; Fri, 13 Sep 2024 11:29:16 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from
+	:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=s2048-2021-q4; bh=/V+
+	SQCa2TzW8MFzEkXVSlXsp7/37DTm/d7GB3FIFO3s=; b=R7owH2/YW1ioGYQXpUm
+	E6nWvgKbwyT+UR5+hMdzVUr1dXh/hr402fZifZUtcggoO0KKgd0howyrhb5wl5XR
+	GTq3fl5bWp9Hx0kQMsEA3n+CBvRQPe9pbzGXoNacgvP568JC1Twl6D6CgA19ig9d
+	nUM1yz0RrqcsxTTKEuPmp8zAIiJBVp/hyWkWSrMbDgNSwBHSVj5t7hlP+cCiS5mD
+	RycnwdMV6NhUuZpM4l++3mtRSJsNw3qXU85Ut/FAChqsYPcI3lx57PQ2D3ZfRecn
+	ndcMNZkEoiu1ptieZuyoNt3keAKw3l503sldbL+R6n2ED5fi3xzPGzK0Iy0dkVzx
+	pIA==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 41kha4qjc4-14
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-scsi@vger.kernel.org>; Fri, 13 Sep 2024 11:29:16 -0700 (PDT)
+Received: from twshared32638.07.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1544.11; Fri, 13 Sep 2024 18:29:10 +0000
+Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
+	id 518A912F91041; Fri, 13 Sep 2024 11:29:03 -0700 (PDT)
+From: Keith Busch <kbusch@meta.com>
+To: <axboe@kernel.dk>, <hch@lst.de>, <martin.petersen@oracle.com>,
+        <linux-block@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
+        <linux-scsi@vger.kernel.org>
+CC: <sagi@grimberg.me>, Keith Busch <kbusch@kernel.org>
+Subject: [PATCHv5 0/9] block integrity merging and counting
+Date: Fri, 13 Sep 2024 11:28:45 -0700
+Message-ID: <20240913182854.2445457-1-kbusch@meta.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/4] scsi: ufs: core: Make ufshcd_uic_cmd_compl()
- easier to analyze
-To: "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Peter Wang <peter.wang@mediatek.com>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Avri Altman <avri.altman@wdc.com>, Andrew Halaney <ahalaney@redhat.com>,
- Bean Huo <beanhuo@micron.com>
-References: <20240912223019.3510966-1-bvanassche@acm.org>
- <20240912223019.3510966-4-bvanassche@acm.org>
- <c4ce91f3-6724-03eb-ed72-0215c8992e0c@quicinc.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <c4ce91f3-6724-03eb-ed72-0215c8992e0c@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: tyOcRlalM58RjAVqhzHxNHdv1Bt6oaoh
+X-Proofpoint-ORIG-GUID: tyOcRlalM58RjAVqhzHxNHdv1Bt6oaoh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-13_11,2024-09-13_02,2024-09-02_01
 
-On 9/13/24 12:31 AM, Bao D. Nguyen wrote:
-> On 9/12/2024 3:30 PM, Bart Van Assche wrote:
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ufshcd_is_auto_hibern8_error(hba, i=
-ntr_status))
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 hba->errors |=3D=
- (UFSHCD_UIC_HIBERN8_MASK & intr_status);
->=20
-> Hi Bart, while you are at it, there are extra parenthesis here too.
+From: Keith Busch <kbusch@kernel.org>
 
-Agreed, but since of the one-change-per-patch rule I'd like to keep that
-change out of this patch.
+Some fixes and cleanups to counting integrity segments when metadata is
+used. This addresses merging issues when integrity data is present.
 
-Thanks,
+Changes from v3:
 
-Bart.
+  Dropped the trivial nr_integerity_segments helper
+
+  Fixed sg mapping sanity check
+
+  Added reviews
+
+  Fixed commit log typos
+
+Keith Busch (9):
+  blk-mq: unconditional nr_integrity_segments
+  blk-mq: set the nr_integrity_segments from bio
+  blk-integrity: properly account for segments
+  blk-integrity: consider entire bio list for merging
+  block: provide a request helper for user integrity segments
+  scsi: use request to get integrity segments
+  nvme-rdma: use request to get integrity segments
+  block: unexport blk_rq_count_integrity_sg
+  blk-integrity: improved sg segment mapping
+
+ block/bio-integrity.c         |  1 -
+ block/blk-integrity.c         | 36 ++++++++++++++++++++++++-----------
+ block/blk-merge.c             |  4 ++++
+ block/blk-mq.c                |  5 +++--
+ drivers/nvme/host/ioctl.c     |  6 ++----
+ drivers/nvme/host/rdma.c      |  6 +++---
+ drivers/scsi/scsi_lib.c       | 12 +++---------
+ include/linux/blk-integrity.h | 15 +++++++++++----
+ include/linux/blk-mq.h        |  3 ---
+ 9 files changed, 51 insertions(+), 37 deletions(-)
+
+--=20
+2.43.5
+
 
