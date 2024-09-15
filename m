@@ -1,48 +1,49 @@
-Return-Path: <linux-scsi+bounces-8341-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8343-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 955AC9796AF
-	for <lists+linux-scsi@lfdr.de>; Sun, 15 Sep 2024 14:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 76D079796B4
+	for <lists+linux-scsi@lfdr.de>; Sun, 15 Sep 2024 14:57:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1EFEB2120C
-	for <lists+linux-scsi@lfdr.de>; Sun, 15 Sep 2024 12:56:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 208B7B22169
+	for <lists+linux-scsi@lfdr.de>; Sun, 15 Sep 2024 12:57:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F29DA1C6898;
-	Sun, 15 Sep 2024 12:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46C6D1C6F6A;
+	Sun, 15 Sep 2024 12:56:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="sBb2v41N"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="auB5Efjk"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A191C578E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989661CF93;
 	Sun, 15 Sep 2024 12:56:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726405010; cv=none; b=EBpCbyo7B9942V6zfONNDLAPoxsGyBCqqc7HlngN3lH92Oj20rkMxfAdQ/qj/ik23iXKbMOQSQujaimnAHhUwBohcezU+3fdmshwR7zOfQrgEa0mCtK2Yej+b8n9LcYD+op3e6CVXrHpvkDxlC3eBKknK/Qg4rylGxEQT2PJS0I=
+	t=1726405012; cv=none; b=nm3LvU9IcxfFlPDens1X2iTLX9lZlBB6GBDnqJP/9duudPeS80AMa/u4PK1KGPapfa5BHAB80VyBDmz2DNwC8LUfFAsvaj8nLmANGiuH7LDDBmMI0EsMQnKdWNnMgeFdFiHn64+xN5ylPdwZ6dsawwOoFpx50MpzGH+ivWtMXoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726405010; c=relaxed/simple;
-	bh=l2W860h9XJMVBRnRiaVwUmTtuf2GuQeSfDo+3U7iwTw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=idvSs/sNYdDkO2GO9/kFPeVWxjlWwvsCBD3wy76EbMHrngfjPyaB2fM1XRkxGeXbkRayL/xY59wdnRXmkm7iUiiCwsZzjj8AMsu0FVbJ2D5bEhli0UBpRqVwL2SHLIBvA0PNuXWLpdVtdXIdLzLeQwx1ncOx7mTe53UrRUkpsi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=sBb2v41N; arc=none smtp.client-ip=46.235.229.95
+	s=arc-20240116; t=1726405012; c=relaxed/simple;
+	bh=NMWDb3XblC6zTta47blxYZ4COB1rS+nAcwpZwwZsYH8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WBVY2cbmzmmXvPxO1OWUTgnx8twqxFkv0pvgvWDYVuxvYUts4nzfzsODWPzBDeUeSarFp5avetxon1zY2QKzNkZqUNvv0v4LYRmxStBGvhLyu6sYG7jW1qjzFn+XMGSmUYoqV1SMkoyS9l8gEduCfhHdg0b0HpulnG7V6ED8fnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=auB5Efjk; arc=none smtp.client-ip=46.235.229.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
 	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=+N+Zt3XGYAMPFCZBNNwBCyER2yBCeTEw6QFLxiqdk1s=; b=sBb2v41NrDurcoZa
-	qgu9w/3WNzAlMrloGq9WkrJBi1h1Q7Cd9aRjSzsKY+zorf0tPBj6Y14aoVghefduWhrV7n+BNfsyx
-	Esn7bA2QvXe9EB9j6S5HvPjJ1gccgOZxDq2s+R1XfMj4PoUS4TQqTs2TyBYUH/3xdh0zJ6Yv6oueF
-	t6VDjz1Dx/lw41gXf/oatze3Tw1wb77FBcK7Yv0H7kcRiSAZpQVxJs+oruRPjAjQNnDNOkcKanrKL
-	6UaXiBlXN0hcJ1yQNpKTmXDUZIMsgYU/PkmquSIOILwJMjT3HuoVFCiGVS1uEMOhcXONwSJh99RTF
-	D8m4WE1vR/5MLLdCgQ==;
+	:Subject; bh=kxmBdvtcdtZPJkbPCzOmFPqfCK3K6y8Z41XrFg3oUv8=; b=auB5EfjktrIwyuNd
+	nHlMPDWHFjo1HrQUoWPYi0w2pHHPJL39isuhvMKEitD5iuDSKwzDEiax/yriPFUFW7uZvyLmmKt3U
+	rLF6S4yY89OQL5NPTgybWNf/pORgYjJwq4QL0NdL2Ze9WgGA17oIDBuXjV5XaU0lCWt2YSf201l0s
+	DCPvbe4UwFRr7QltNB+aF+bhieNBGZNDN0yoeq753LUe1FS6QTz7p9k282Wyf/KadykIGYrEYC0Vq
+	HAa9bHPSkHFXY1fZBVFyi6PERvyipJ1A0WOEkrJHP4QyCGKrPSvG9RkZQfk0nTYkGiVasmR6dTozW
+	lcadHx3JKGER+yAJqw==;
 Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
 	by mx.treblig.org with esmtp (Exim 4.96)
 	(envelope-from <linux@treblig.org>)
-	id 1sponv-005pGt-37;
-	Sun, 15 Sep 2024 12:56:39 +0000
+	id 1sponz-005pGt-28;
+	Sun, 15 Sep 2024 12:56:43 +0000
 From: linux@treblig.org
 To: anil.gurumurthy@qlogic.com,
 	sudarsana.kalluru@qlogic.com,
@@ -51,10 +52,12 @@ To: anil.gurumurthy@qlogic.com,
 Cc: linux-scsi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH 0/5] scsi: bfa: Remove deadcode
-Date: Sun, 15 Sep 2024 13:56:28 +0100
-Message-ID: <20240915125633.25036-1-linux@treblig.org>
+Subject: [PATCH 1/5] scsi: bfa: Remove unused bfa_core code
+Date: Sun, 15 Sep 2024 13:56:29 +0100
+Message-ID: <20240915125633.25036-2-linux@treblig.org>
 X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240915125633.25036-1-linux@treblig.org>
+References: <20240915125633.25036-1-linux@treblig.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -65,45 +68,96 @@ Content-Transfer-Encoding: 8bit
 
 From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-Hi,
-  This removes a pile of dead functions in the SCSI bfa driver.
-These were spotted by hunting for unused symbols in a unmodular
-kernel build, and then double checking by grepping for the function
-name.
+bfa_get_pciids and bfa_cfg_get_min aren't called anywhere;
+remove them together with the bfa_pciid_s used by bfa_get_pciids.
 
-  It's been build tested only, I don't have the hardware, but
-it's strictly full function (and the occasional struct) deletion,
-so there should be no change in functionality.
+(Build tested, I don't have the card)
 
-  Thanks to David Hildenbrand for the suggestion of hunting
-for unused symbols.
+Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+---
+ drivers/scsi/bfa/bfa.h      | 10 ----------
+ drivers/scsi/bfa/bfa_core.c | 35 -----------------------------------
+ 2 files changed, 45 deletions(-)
 
-Dave
-
-Dr. David Alan Gilbert (5):
-  scsi: bfa: Remove unused bfa_core code
-  scsi: bfa: Remove unused bfa_svc code
-  scsi: bfa: Remove unused bfa_ioc code
-  scsi: bfa: Remove unused bfa_fcs code
-  scsi: bfa: Remove unused misc code
-
- drivers/scsi/bfa/bfa.h           |  10 ---
- drivers/scsi/bfa/bfa_core.c      |  35 --------
- drivers/scsi/bfa/bfa_defs_fcs.h  |  22 -----
- drivers/scsi/bfa/bfa_fcpim.c     |   9 --
- drivers/scsi/bfa/bfa_fcpim.h     |   1 -
- drivers/scsi/bfa/bfa_fcs.h       |  12 ---
- drivers/scsi/bfa/bfa_fcs_lport.c | 142 -------------------------------
- drivers/scsi/bfa/bfa_fcs_rport.c |  36 --------
- drivers/scsi/bfa/bfa_ioc.c       |  21 -----
- drivers/scsi/bfa/bfa_ioc.h       |   2 -
- drivers/scsi/bfa/bfa_modules.h   |   1 -
- drivers/scsi/bfa/bfa_svc.c       |  72 ----------------
- drivers/scsi/bfa/bfa_svc.h       |   5 --
- drivers/scsi/bfa/bfad.c          |  20 -----
- drivers/scsi/bfa/bfad_drv.h      |   1 -
- 15 files changed, 389 deletions(-)
-
+diff --git a/drivers/scsi/bfa/bfa.h b/drivers/scsi/bfa/bfa.h
+index 4cb9249e583c..a6b8c4ddea19 100644
+--- a/drivers/scsi/bfa/bfa.h
++++ b/drivers/scsi/bfa/bfa.h
+@@ -138,14 +138,6 @@ bfa_reqq_winit(struct bfa_reqq_wait_s *wqe, void (*qresume) (void *cbarg),
+ 	} while (0)
+ 
+ 
+-/*
+- * PCI devices supported by the current BFA
+- */
+-struct bfa_pciid_s {
+-	u16	device_id;
+-	u16	vendor_id;
+-};
+-
+ extern char     bfa_version[];
+ 
+ struct bfa_iocfc_regs_s {
+@@ -408,9 +400,7 @@ int bfa_iocfc_get_pbc_vports(struct bfa_s *bfa,
+ 	(((&(_bfa)->modules.dconf_mod)->min_cfg)		\
+ 	 ? BFA_LUNMASK_MINCFG : ((bfa_get_lun_mask(_bfa))->status))
+ 
+-void bfa_get_pciids(struct bfa_pciid_s **pciids, int *npciids);
+ void bfa_cfg_get_default(struct bfa_iocfc_cfg_s *cfg);
+-void bfa_cfg_get_min(struct bfa_iocfc_cfg_s *cfg);
+ void bfa_cfg_get_meminfo(struct bfa_iocfc_cfg_s *cfg,
+ 			struct bfa_meminfo_s *meminfo,
+ 			struct bfa_s *bfa);
+diff --git a/drivers/scsi/bfa/bfa_core.c b/drivers/scsi/bfa/bfa_core.c
+index 3438d0b8ba06..a99a101b95ef 100644
+--- a/drivers/scsi/bfa/bfa_core.c
++++ b/drivers/scsi/bfa/bfa_core.c
+@@ -1933,24 +1933,6 @@ bfa_comp_free(struct bfa_s *bfa, struct list_head *comp_q)
+ 	}
+ }
+ 
+-/*
+- * Return the list of PCI vendor/device id lists supported by this
+- * BFA instance.
+- */
+-void
+-bfa_get_pciids(struct bfa_pciid_s **pciids, int *npciids)
+-{
+-	static struct bfa_pciid_s __pciids[] = {
+-		{BFA_PCI_VENDOR_ID_BROCADE, BFA_PCI_DEVICE_ID_FC_8G2P},
+-		{BFA_PCI_VENDOR_ID_BROCADE, BFA_PCI_DEVICE_ID_FC_8G1P},
+-		{BFA_PCI_VENDOR_ID_BROCADE, BFA_PCI_DEVICE_ID_CT},
+-		{BFA_PCI_VENDOR_ID_BROCADE, BFA_PCI_DEVICE_ID_CT_FC},
+-	};
+-
+-	*npciids = ARRAY_SIZE(__pciids);
+-	*pciids = __pciids;
+-}
+-
+ /*
+  * Use this function query the default struct bfa_iocfc_cfg_s value (compiled
+  * into BFA layer). The OS driver can then turn back and overwrite entries that
+@@ -1987,20 +1969,3 @@ bfa_cfg_get_default(struct bfa_iocfc_cfg_s *cfg)
+ 	cfg->drvcfg.delay_comp = BFA_FALSE;
+ 
+ }
+-
+-void
+-bfa_cfg_get_min(struct bfa_iocfc_cfg_s *cfg)
+-{
+-	bfa_cfg_get_default(cfg);
+-	cfg->fwcfg.num_ioim_reqs   = BFA_IOIM_MIN;
+-	cfg->fwcfg.num_tskim_reqs  = BFA_TSKIM_MIN;
+-	cfg->fwcfg.num_fcxp_reqs   = BFA_FCXP_MIN;
+-	cfg->fwcfg.num_uf_bufs     = BFA_UF_MIN;
+-	cfg->fwcfg.num_rports      = BFA_RPORT_MIN;
+-	cfg->fwcfg.num_fwtio_reqs = 0;
+-
+-	cfg->drvcfg.num_sgpgs      = BFA_SGPG_MIN;
+-	cfg->drvcfg.num_reqq_elems = BFA_REQQ_NELEMS_MIN;
+-	cfg->drvcfg.num_rspq_elems = BFA_RSPQ_NELEMS_MIN;
+-	cfg->drvcfg.min_cfg	   = BFA_TRUE;
+-}
 -- 
 2.46.0
 
