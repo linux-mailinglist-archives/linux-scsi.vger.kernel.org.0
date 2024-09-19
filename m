@@ -1,78 +1,82 @@
-Return-Path: <linux-scsi+bounces-8390-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8392-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4632D97CBC0
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Sep 2024 17:54:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FDDB97CBC4
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Sep 2024 17:54:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4BACB21ABB
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Sep 2024 15:54:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF174285152
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Sep 2024 15:54:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 451041A0720;
-	Thu, 19 Sep 2024 15:53:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94F661A0AF1;
+	Thu, 19 Sep 2024 15:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="NiuueSWG"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="RTqF83BL"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A82C1A01D3;
-	Thu, 19 Sep 2024 15:53:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAEF01A08BD;
+	Thu, 19 Sep 2024 15:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726761233; cv=none; b=duVryy/C+rDbFGnVmMzJpbmGJNn7QY0aA5UEuFvYQT/7xTEFE2YkbXdtLkkHZbAxI1iYYLh1yBpZ/zXQukTM6T0OTLd1vMbqY3Ul6G1N5KAdw7Kx2cNeMaYQBrRRQekEPs3VxTmsYTo88NXiXW+Axu/CdX1HNWGwv1GuNkfJhOQ=
+	t=1726761237; cv=none; b=aI9PGEBgxkhodNGAz7RIELAuKHbEJo4Y3/6QfIqx6hWxD2AE9c8wGVMRD2fKyc7CA7c5Di6bFn6Vu398yyottC8hQhveOUVqiS9N11a+RWFY9eIKmJxkJC0kDE3fTyPRZ0eTJaRt8isoOTwGmauWyAEFSscfNL5V5Jbbt8kZTmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726761233; c=relaxed/simple;
-	bh=jo3TFiFx/N2EmFz3jVz1F96Ld15njDQ8XfMM+Kh48u8=;
+	s=arc-20240116; t=1726761237; c=relaxed/simple;
+	bh=imFDZ7DKWRYQNvnJgAAKTRMb1ulVUpG/D4WdMvu4vXU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a3FbD0a11AUINZEUNkd4icfUtdqBGfqoO3JjYbRcTfrXGGcVvCCFZkl/PXKi8FmG5M5urexJKsSTC4hPGcEgwnjj/bZKzm9JXO1LlOrB70qJUfcKI29lUjYJDfVWMsS+03FdF2p6CJCNqT4XObSWZNGt5miDn+XgdHPlke/1Dgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=NiuueSWG; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=FV9SLEh8RQNBU0DR/LZ17ND6IYtErFKiVO4oodFSV09CQgi0scX0mxTBzuY4ji3zPme568FY3AWp0Dq18j2vUcSiSyHKvv4U5gYDVhA4yhFaCrQoEDICUD2zk8ZFt+/8QS2Rde16FEi3w9dkfzLVB0CQ7rKdi6x45sfdLJtlE1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=RTqF83BL; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48JEii8S008059;
-	Thu, 19 Sep 2024 15:53:47 GMT
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48JEfkhL014315;
+	Thu, 19 Sep 2024 15:53:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-type:content-transfer-encoding; s=
-	corp-2023-11-20; bh=KnwA194irds/NaTFt+o3UsRBy9GX22a8ZbYMTsgsjWs=; b=
-	NiuueSWG+5JFx7+VQ12kLbOYkCNC+wlipkWtsyRWo99aLh0WwVPJ5RxO1MLRUH3v
-	Xo4EZHmhMoLRrBdjICdfKdIYoPkvxK7MoX3QFoRn8tSUmCAiugwYCeuDowvwnLej
-	F79yUr00EghY1nfjQsLHi3P62Pfs4h40V28tV/w94/O6RhhvfxWEoIP21uv1rdx9
-	YsixQ8ryyhShj9JkautCVcuVdUbiUMh8cQJNqppia5NqmsLhnFzuGmU9iibayxjB
-	xc/R8q5+dtsBGgacUb0RZk3nmHQOqhqZV3ZE7+ouhqFRZG6vL1yWELNAUg5tqemB
-	OdT11qgA6RQj1Q20O2r7Ug==
+	corp-2023-11-20; bh=uPmDJNgoqS44O0rfmrNLmEE2hBO4gGobBmgV6+3s7b8=; b=
+	RTqF83BLLsrSnyaF1mK9zbcEB6gqxuVxCLwlgMjXJOCLFfxgrL3hJ0t+tTC9S6Kt
+	Ph+fYaJK/uioky45VhjpTWwoCSiseeojtmeF51IEs4qoHPRwgthjnb1UoPm8wB4G
+	FxBYcJ6hMy+IxCDVw85N+ZnJtvcVRPnfIjapUVhu4g/58x3i4RQjUh2ZwuXEQl+u
+	e5mGv+9dyMkst/H9VbDqkbKx1rTK3WYgAxuMC+rdQZ+wtsml4YIjCouiVeyFhBpj
+	yDuS6QIz+yTqsNjUAs01ReCqTIHWSaC8aYZu78uRqgkFMaVJOUCHsmBoXxfoBXEM
+	uPWYWKrDVgIC5Jp90VFi7w==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41n3sd4mfk-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41n3n3mhxy-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 19 Sep 2024 15:53:47 +0000 (GMT)
+	Thu, 19 Sep 2024 15:53:50 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 48JFhL4D010398;
-	Thu, 19 Sep 2024 15:53:46 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 48JFAEYC010466;
+	Thu, 19 Sep 2024 15:53:48 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 41nyb9xj9u-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 41nyb9xjay-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 19 Sep 2024 15:53:46 +0000
+	Thu, 19 Sep 2024 15:53:48 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 48JFri8h031813;
-	Thu, 19 Sep 2024 15:53:46 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 48JFri8j031813;
+	Thu, 19 Sep 2024 15:53:47 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 41nyb9xj7h-3;
-	Thu, 19 Sep 2024 15:53:46 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 41nyb9xj7h-4;
+	Thu, 19 Sep 2024 15:53:47 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        Colin Ian King <colin.i.king@gmail.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: scsi_debug: Remove a useless memset()
-Date: Thu, 19 Sep 2024 11:52:49 -0400
-Message-ID: <172676112049.1503679.10469211610378676302.b4-ty@oracle.com>
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] megaraid_sas: Remove trailing space after \n newline
+Date: Thu, 19 Sep 2024 11:52:50 -0400
+Message-ID: <172676112043.1503679.5790201067153267535.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <6296722174e39a51cac74b7fc68b0d75bd0db2a3.1725690433.git.christophe.jaillet@wanadoo.fr>
-References: <6296722174e39a51cac74b7fc68b0d75bd0db2a3.1725690433.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20240902142252.309232-1-colin.i.king@gmail.com>
+References: <20240902142252.309232-1-colin.i.king@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -84,28 +88,24 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-19_12,2024-09-19_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=759 bulkscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=908 bulkscore=0
  adultscore=0 malwarescore=0 suspectscore=0 phishscore=0 spamscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2408220000 definitions=main-2409190105
-X-Proofpoint-ORIG-GUID: oWFASKyR7U2tLziMf4Rd-iUCfsl12il3
-X-Proofpoint-GUID: oWFASKyR7U2tLziMf4Rd-iUCfsl12il3
+X-Proofpoint-GUID: nDEcpbjwaqR5A4wSHFpHKsaqD5s-bNH6
+X-Proofpoint-ORIG-GUID: nDEcpbjwaqR5A4wSHFpHKsaqD5s-bNH6
 
-On Sat, 07 Sep 2024 08:27:22 +0200, Christophe JAILLET wrote:
+On Mon, 02 Sep 2024 15:22:52 +0100, Colin Ian King wrote:
 
-> 'arr' is kzalloc()'ed, so there is no need to call memset(.., 0, ...) on
-> it. It is already cleared.
-> 
-> This is a follow up of commit b952eb270df3 ("scsi: scsi_debug: Allocate the
-> MODE SENSE response from the heap").
+> There is a extraneous space after a newline in a dev_err message.
+> Remove it.
 > 
 > 
-> [...]
 
 Applied to 6.12/scsi-queue, thanks!
 
-[1/1] scsi: scsi_debug: Remove a useless memset()
-      https://git.kernel.org/mkp/scsi/c/bba20b894e3c
+[1/1] megaraid_sas: Remove trailing space after \n newline
+      https://git.kernel.org/mkp/scsi/c/571d81b482f0
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
