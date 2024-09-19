@@ -1,78 +1,77 @@
-Return-Path: <linux-scsi+bounces-8402-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8404-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 432B597CBDD
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Sep 2024 17:56:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBD4597CBE0
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Sep 2024 17:56:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09FCB282847
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Sep 2024 15:56:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 933A51F24AD4
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Sep 2024 15:56:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E031A42DB;
-	Thu, 19 Sep 2024 15:54:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 485191A0722;
+	Thu, 19 Sep 2024 15:54:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="d3lRroSK"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="bGbA0eRC"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305F11A3BCD
-	for <linux-scsi@vger.kernel.org>; Thu, 19 Sep 2024 15:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F0F1A070E;
+	Thu, 19 Sep 2024 15:54:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726761246; cv=none; b=fRMJZnLW6lbydx+54MKOKwNsS+8GiwdtRSUObxFgEvFcVppCA1b8VxN/wuNzeoK7uYMoMNivaehilCK2SAukUq/ZIKd3UK0VIgwVtN8btN35Ms3c6LvlWSC7FhtdtVUhndP8VIBc7xV6NCw/hPKm0HGyjUGXOq0kCPh3l6NhpTA=
+	t=1726761258; cv=none; b=kc0gwxNGEfPOEiPvigkGwxJ1Gx4Fg5IfOPFoTxzHQNpfyuZ/NRXmeX6hzUcH4hnDgoTh3ujVKcsbs8tfn1XLmqIgouRpwO2Q6Z8Fyn1uVQlPkgeSSp3L+WcflyKK5nN5Ha3uBjuMPeQgR4Wuk8rAHmFGyRJCoz9/UTOPwc7Y9Fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726761246; c=relaxed/simple;
-	bh=ceYa7Bmyhn5UDoS08X3TkE7I8HMJLNN35Gpxqw/vgDY=;
+	s=arc-20240116; t=1726761258; c=relaxed/simple;
+	bh=JQO25n3k3vstu4ts+z91Yzk/TvTOV83zbXFRjgSwCNQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=J6WedolA8ZyVbN9zr5Dl+fjhCjkGCBpTXqyLHF+4lomElhBw7+1cBFuPGgLWAtTWoScwbAzlTIVtvGe5soQ7ezNp/WcXxWL7WrEGiEgE3j9pAFcmpcy/8oGiwZkuq9JA8bVkHw87X+ni8If/FQD3F1K6KjuWor//3/CYtHRQ8+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=d3lRroSK; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=QQInR6n5iPfWd/ISxNNmnO+6zK46qN4qSZh/Kw3Mh6wfuQv33CAY9jc1T0tv81mCIwOCiJ9qKJuuA5D6hPRS9qVjumAciVQlEm1TtskLpPwMmSeEG1qLLmF4qojOeOFVk21fjGTXVdi0ZjVtx/j7ELFkWlWgw6m7ysz78eCpMKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=bGbA0eRC; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48JEnclW008100;
-	Thu, 19 Sep 2024 15:54:00 GMT
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48JEal9J003659;
+	Thu, 19 Sep 2024 15:54:01 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-type:content-transfer-encoding; s=
-	corp-2023-11-20; bh=zC84NKSRaURBu+dJT4XVylkcvtB1qELWEDEQqIDsKK8=; b=
-	d3lRroSKuo/PI1SFut9fZQxLMwmTOS5UZPbjtNr5+AsIUmcJ/cbebpc8mxm4py9Y
-	i12p78QQpp8n/YzJiSXAGDCAtB59Ib65S+FvszSt+UubP75qJoI/3U3CdDGNjJ+8
-	IaPujIXCnBP1fDBhLAY4XWtSgYxNTqb5wxKOHlbV4XHaXAo0aZ2WPgx1gpFg6FR3
-	Ap4TSjxiad5sxW8BdlYhdNWSd8Fk0A2YxJzrlFh1Z+6Ef/67aT4M44WHZOPDZQrk
-	lFecl8bXi7jttZgo+c3QkHYJDmRndN0qFXVOiBex24RwKMM/VhWh0RZDyWyQeRP+
-	ZrCnBN5leDitCiqyOymj2A==
+	corp-2023-11-20; bh=IY0Aejd7Foz1guIm3ThzIWgT2e9OwO3i6sFiEpk2r7Q=; b=
+	bGbA0eRCduD5nVx+F/hxfrrpCydsr3uYTnF7uvZIGY9r1qx7ze1iQb2U0s4U9G3Y
+	OYwDfNv167+wqK0NsEK+YSQf/aGm3PoJjfJhilvitxNYnSzI8+zMeh+4kzf/excD
+	D4rlQpLY1jofk2qqwpn6CtxVvGIIEUrFPxgG5r0DIU1VBc+w85IL0v41b1odenLB
+	Nbx5EMJchAqhm2nlvc+3VVojjvQ+53GQ9Tnee8T3N1Ll3DqihE4M1CYQkXdUexq4
+	NswG04UtyTGWeFQ0814v8u48FHMc/NW8PJTfbSAmhdPl5n0kDEthgoQg+riLnRx6
+	6+YYRlKANNm5hXqTMnaLbg==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41n3sd4mgu-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41n3nsmkx7-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 19 Sep 2024 15:54:00 +0000 (GMT)
+	Thu, 19 Sep 2024 15:54:01 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 48JEVBmt011116;
-	Thu, 19 Sep 2024 15:53:59 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 48JEeNe9010443;
+	Thu, 19 Sep 2024 15:54:00 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 41nyb9xjj3-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 41nyb9xjjx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 19 Sep 2024 15:53:59 +0000
+	Thu, 19 Sep 2024 15:54:00 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 48JFri95031813;
-	Thu, 19 Sep 2024 15:53:58 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 48JFri97031813;
+	Thu, 19 Sep 2024 15:53:59 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 41nyb9xj7h-14;
-	Thu, 19 Sep 2024 15:53:58 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 41nyb9xj7h-15;
+	Thu, 19 Sep 2024 15:53:59 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, Tomas Henzl <thenzl@redhat.com>
+To: Kai.Makisara@kolumbus.fi, Rafael Rocha <vidurri@gmail.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        chandrakanth.patil@broadcom.com, sathya.prakash@broadcom.com,
-        jjurca@redhat.com, sumit.saxena@broadcom.com,
-        ranjan.kumar@broadcom.com
-Subject: Re: [PATCH v2] mpi3mr: a performance fix
-Date: Thu, 19 Sep 2024 11:53:00 -0400
-Message-ID: <172676112048.1503679.6297062816182904132.b4-ty@oracle.com>
+        James.Bottomley@HansenPartnership.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rrochavi@fnal.gov
+Subject: Re: [PATCH] scsi: st: Fix input/output error on empty drive reset
+Date: Thu, 19 Sep 2024 11:53:01 -0400
+Message-ID: <172676112033.1503679.5048085390706628215.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240903144729.37218-1-thenzl@redhat.com>
-References: <20240903144729.37218-1-thenzl@redhat.com>
+In-Reply-To: <20240905173921.10944-1-rrochavi@fnal.gov>
+References: <20240905173921.10944-1-rrochavi@fnal.gov>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -88,26 +87,25 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 b
  adultscore=0 malwarescore=0 suspectscore=0 phishscore=0 spamscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2408220000 definitions=main-2409190105
-X-Proofpoint-ORIG-GUID: F2QNlv9FfrloEi95yM3fGcfrMvUKqdm5
-X-Proofpoint-GUID: F2QNlv9FfrloEi95yM3fGcfrMvUKqdm5
+X-Proofpoint-GUID: IfsKOtBy9IX49kdas-XkpndTWcqfWh0r
+X-Proofpoint-ORIG-GUID: IfsKOtBy9IX49kdas-XkpndTWcqfWh0r
 
-On Tue, 03 Sep 2024 16:47:29 +0200, Tomas Henzl wrote:
+On Thu, 05 Sep 2024 12:39:21 -0500, Rafael Rocha wrote:
 
-> Commit 0c52310f2600 ("hrtimer: Ignore slack time for RT tasks in schedule_hrtimeout_range()")
-> effectivelly shortens a sleep in a polling function in the driver.
-> That is causing a performance regression as the new value
-> of just 2us is too low, in certain tests the perf drop is ~30%.
-> Fix this by adjusting the sleep to 20us (close to the previous value).
+> A previous change was introduced to prevent data loss during a power-on reset
+> when a tape is present inside the drive. This change set the "pos_unknown" flag
+> to true to avoid operations that could compromise data by performing actions
+> from an untracked position. The relevant commit is:
 > 
-> The '+1' added to the max parameter in usleep_range is there just
-> to silence static code analyzers like checkpatch.
+> Commit: 9604eea5bd3ae1fa3c098294f4fc29ad687141ea
+> Subject: scsi: st: Add third-party power-on reset handling
 > 
 > [...]
 
 Applied to 6.12/scsi-queue, thanks!
 
-[1/1] mpi3mr: a performance fix
-      https://git.kernel.org/mkp/scsi/c/24d7071d9645
+[1/1] scsi: st: Fix input/output error on empty drive reset
+      https://git.kernel.org/mkp/scsi/c/3d882cca73be
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
