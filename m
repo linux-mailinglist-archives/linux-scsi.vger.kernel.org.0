@@ -1,77 +1,78 @@
-Return-Path: <linux-scsi+bounces-8393-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8389-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 091E597CBC7
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Sep 2024 17:54:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B61EC97CBBD
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Sep 2024 17:53:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B09AE1F23314
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Sep 2024 15:54:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E45B1F21403
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Sep 2024 15:53:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A95961A0AF8;
-	Thu, 19 Sep 2024 15:53:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E7F19F48B;
+	Thu, 19 Sep 2024 15:53:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="IWhnaDnF"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="nNPXuguF"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DE51A08C2
-	for <linux-scsi@vger.kernel.org>; Thu, 19 Sep 2024 15:53:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474971DFF8;
+	Thu, 19 Sep 2024 15:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726761237; cv=none; b=l5YWFLkYcyVjCI4OnjUlWeIJ9dSLy7jbZAAoHtKapo9mLJgca5IMmsadLToY15lkhtkz928NNholrj7gnDRaceEf+5AuPzuuukGZNxYcx5X+1bb8tAfjQulGQrrxGfoIjdu5DwurB5RbhQidR/uQjd9tiYHTX1Ov7kIbLBvMnbM=
+	t=1726761229; cv=none; b=bG0AXIFiRLPfCCSGyM/3C5KAUlZ0ofYPWM27uQ4WMBeJriibktMv7o2Ia3t3m+bpQGCgvQ7/6B8aVsHLdqO33UATlLEV6eqprOPsyhsHnbuujwiroWB8q+WnGyd9Z6OJYKnXMyDdr3lpTvQ++HR8CF+LBZ5qqjFpaOZLKX1BlDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726761237; c=relaxed/simple;
-	bh=QB897ca3sr2xDzeTcWefSsGW+wptUE3CJ9pO/im0B18=;
+	s=arc-20240116; t=1726761229; c=relaxed/simple;
+	bh=+GXy4rtW8HjEfO1GxqkZCmCZR5XIZsFMc8rJlH7bSMs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o2gQvr0WdaMOAdngEs7NbkR7vnat1lCuEYsATafiKTMcvvQF71Sg18YyevzwbsvjuSrbMLelFd7GqoGT+kchlgvTg+8+25Upxo12JO76/RORz+CbH9SI8/g6UZiC0IlGfcMgT4YGObdcRzX9OUzC6RayZI4VxVdm/+MLwP3oyio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=IWhnaDnF; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=sYUtMlDIBVIr8X4EbokI55CqPgC0dv5n5ZRDZ9vNjJoJFQ7zqZ3mH4jr4njtcErd6pwaWjY6ujh+QxSS7NlBvuWPpmXGmN1Cp1tG75rMSK+X2/6qLGZlCRCArooINBg6/4R5FuiVhFk0Mf1B/aZona89/S4d4Z5dwSk8DMaDQT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=nNPXuguF; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48J9PDbk015605;
-	Thu, 19 Sep 2024 15:53:45 GMT
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48JEb4Kv014325;
+	Thu, 19 Sep 2024 15:53:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-type:content-transfer-encoding; s=
-	corp-2023-11-20; bh=5GXA/rJ8vH6PWmHUgJIsVuhz0PYt6j/NhygOPJsJZ5Y=; b=
-	IWhnaDnFmT5P6r1JgPP0NAhgGSBd8CPkXgxN+aqNE9jKL8Rof0VEaYipeE/TfqzO
-	42ISWCeSZ9mzpopgk154j3kNIDw5LYYMpNU7a3Ji4XHUKKlTo3TSoGSLVHt3V7lM
-	w6Xb+lJHluMYEindi1vthWWgBiuCB+9kMxc4bpPI8NV69HQdsN4zpZpoJE153WIo
-	mmT2Eyco6tOoceCw9veu4M6ov5ftAgpcLWRw0YY0YpZiiqmfhmZyapLzGIhKwbaU
-	hBl3e62DjMr+AZ+V81BmTXEibB1/0X26jSjwf7XJD3AEys0zB/oEWEV2gGy83DxL
-	ZZyMNl9MNQ6n44669CxDxw==
+	corp-2023-11-20; bh=YSGJ0py9Kb0wL2o0WyoTq47y0b2eEGcxm0N27Z1bH9k=; b=
+	nNPXuguF6xjjXR/2LDPaUv3UlmmZhasOddcS1XrFEijidb2X26CzJYSrR1tWmpzb
+	txPZta516876UVQlpzmaOR2XD4fKS5j/pi4J/zQ6Tl8j8XHbFex7+UlugNsYv2Lc
+	+Ucs5X7lT4jr7ZPfu/5iEZUH4R+ltX7Z6j7D/MT0E3SsooiXu/+VCYHnTsl0sd8k
+	GfcSHKx+Avd6Pw9/ga6EwtF6Uk+bKhoM6cLZDP71lSFgSyOhLcRiexckbCnu7vqn
+	hU5ySPHJLod4MA7tcWo/R5tohB1m3Tag8LsSp/KqqEckvJJ9ARfxqR61tWkn7xo7
+	xMQGhuuf3s97k+Ybl1M7Bg==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41n3sfvgcb-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41n3n3mhxu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 19 Sep 2024 15:53:45 +0000 (GMT)
+	Thu, 19 Sep 2024 15:53:46 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 48JFJt7I011588;
-	Thu, 19 Sep 2024 15:53:44 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 48JFHG1i010473;
+	Thu, 19 Sep 2024 15:53:45 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 41nyb9xj88-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 41nyb9xj8w-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 19 Sep 2024 15:53:44 +0000
+	Thu, 19 Sep 2024 15:53:45 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 48JFri8d031813;
-	Thu, 19 Sep 2024 15:53:44 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 48JFri8f031813;
+	Thu, 19 Sep 2024 15:53:45 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 41nyb9xj7h-1;
-	Thu, 19 Sep 2024 15:53:43 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 41nyb9xj7h-2;
+	Thu, 19 Sep 2024 15:53:44 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: mwilck@suse.com, Brian King <brking@linux.ibm.com>
+To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James.Bottomley@HansenPartnership.com, linux-scsi@vger.kernel.org,
-        tyreld@linux.ibm.com, brking@pobox.com
-Subject: Re: [PATCH v3] ibmvfc: Add max_sectors module parameter
-Date: Thu, 19 Sep 2024 11:52:47 -0400
-Message-ID: <172676112035.1503679.842454992605986623.b4-ty@oracle.com>
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: libcxgbi: Remove an unused field in struct cxgbi_device
+Date: Thu, 19 Sep 2024 11:52:48 -0400
+Message-ID: <172676112036.1503679.8936206482923788401.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240903134708.139645-2-brking@linux.ibm.com>
-References: <6594529f81c043f25b74198958718c84be27be4a.camel@suse.com> <20240903134708.139645-2-brking@linux.ibm.com>
+In-Reply-To: <58f77f690d85e2c653447e3e3fc4f8d3c3ce8563.1725223504.git.christophe.jaillet@wanadoo.fr>
+References: <58f77f690d85e2c653447e3e3fc4f8d3c3ce8563.1725223504.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -83,33 +84,28 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-19_12,2024-09-19_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=887 bulkscore=0
  adultscore=0 malwarescore=0 suspectscore=0 phishscore=0 spamscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2408220000 definitions=main-2409190105
-X-Proofpoint-GUID: WaipykLoPXwx59PoRXJ3iPKkHDc0wDZc
-X-Proofpoint-ORIG-GUID: WaipykLoPXwx59PoRXJ3iPKkHDc0wDZc
+X-Proofpoint-GUID: VCuLG5tLrnc6qv3XkndkJmd7iohqPzKi
+X-Proofpoint-ORIG-GUID: VCuLG5tLrnc6qv3XkndkJmd7iohqPzKi
 
-On Tue, 03 Sep 2024 08:47:09 -0500, Brian King wrote:
+On Sun, 01 Sep 2024 22:45:27 +0200, Christophe JAILLET wrote:
 
-> There are some scenarios that can occur, such as performing an
-> upgrade of the virtual I/O server, where the supported max transfer
-> of the backing device for an ibmvfc HBA can change. If the max
-> transfer of the backing device decreases, this can cause issues with
-> previously discovered LUNs. This patch accomplishes two things.
-> First, it changes the default ibmvfc max transfer value to 1MB.
-> This is generally supported by all backing devices, which should
-> mitigate this issue out of the box. Secondly, it adds a module
-> parameter, enabling a user to increase the max transfer value to
-> values that are larger than 1MB, as long as they have configured
-> these larger values on the virtual I/O server as well.
+> Usage of .dev_ddp_cleanup() in libcxgbi was removed by commit 5999299f1ce9
+> ("cxgb3i,cxgb4i,libcxgbi: remove iSCSI DDP support") on 2016-07.
+> 
+> .csk_rx_pdu_ready() and debugfs_root have apparently never been used since
+> introduction by commit 9ba682f01e2f ("[SCSI] libcxgbi: common library for
+> cxgb3i and cxgb4i")
 > 
 > [...]
 
 Applied to 6.12/scsi-queue, thanks!
 
-[1/1] ibmvfc: Add max_sectors module parameter
-      https://git.kernel.org/mkp/scsi/c/e36840069454
+[1/1] scsi: libcxgbi: Remove an unused field in struct cxgbi_device
+      https://git.kernel.org/mkp/scsi/c/45fad027df61
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
