@@ -1,55 +1,56 @@
-Return-Path: <linux-scsi+bounces-8409-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8411-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 521D497D355
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Sep 2024 11:06:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1851E97D359
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Sep 2024 11:07:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21666285D49
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Sep 2024 09:06:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 892DBB20D1B
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Sep 2024 09:07:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C246139D19;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F71C13A268;
 	Fri, 20 Sep 2024 09:06:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="By16Ey9m"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="kcPkI4q9"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DCC6135A69
-	for <linux-scsi@vger.kernel.org>; Fri, 20 Sep 2024 09:06:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD26136341;
+	Fri, 20 Sep 2024 09:06:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726823213; cv=none; b=ucxmDlDcujfEPoUhAGSkX0oqCAVB9UwbcaiVcM8efsr9RrgmO8BfW4jZ8gwG6LhhD33xK5AGHj2ePyjQPYzDKanNiqeJjMPg7rhruUL7JtDaFC4yaOua9zeINtxEHCj4bhKiEtoUAca1zdbTj/ubPgOFVdxTxOxU7s2MAExMxkA=
+	t=1726823213; cv=none; b=W5hYrF6OzGoJxmbv2nlaJ/5sLKL+tDu3PaleELgYXgz4xmRPy9Xp1cDDstcbqx1geVoCojweSUaDBCWGtwMi9dg1KmzM+z3pE4Uk3kSqYaX6+4XLz2cB9t/F43FRiL9jVpSRqkgV7FNhM2w3QVX2LM1IhjDzJVEm02WceWTLmHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1726823213; c=relaxed/simple;
-	bh=c5kxyNMWXdkI8h6HrT4xCeVDrYlKoovah9fUmHCAPhI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=F4oMpXb5IBYnnM85PmS71wVOwz7vv57YnmJ1AEZ+j8TnkHDpVdVrB88DXth+/u5ZbFbH7kTpEmMPVdOhgdrz+tl96YA4s2dmBSV6/GWGC/cjPFBais26UNyyom6WfIFaMXErPNaLldGd+mbauVKVQ0LVhW6KFgsrOcQl+6gJaAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=By16Ey9m; arc=none smtp.client-ip=210.61.82.184
+	bh=9g6mH65weF44bLQevwU1JtpQ/d+yi8uM5z152woSbYc=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oAClsiSqzrARV2eTb0Y5Q1NIB0iSbqdW4t6oKvan4QPR+O2vvstBNCeqJnNC0tywvroMe7m3k7kyLam49sV2YjVKRGwqfC9iCNdjnz3JjdeBEsBmSUdbxjftrge7nJfVlkruTiNuxhDki90KLMYfN0umYjRbJfZoiS2qYYWf5rA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=kcPkI4q9; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: a92905f4772f11ef8b96093e013ec31c-20240920
+X-UUID: a92a8e9c772f11ef8b96093e013ec31c-20240920
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=zwo4xBU6lj3FjG+IfMoGyS13z9c2D1Xz4JKX3Twas+Y=;
-	b=By16Ey9m2O/BJy6VmFZjyGdrNHGkz7+z3+zU/r5tDnNryP18OdvTtztV7nGlMA4OtrisHks3o7mGSZj8dv4iTOPrBR+zn0w6quuWwGd9HRebCv6covAXWY5hanQsd4dSjD0Bx8mkIRUhXXUvKyCuuS22LLIKcEvFiFgAlO5RNIk=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=LQLPSb8ldyG1OVVh0BB+yFOhjzNrq/gu6sGXkPkLj9A=;
+	b=kcPkI4q97MBJv97o41awTYaF2TrAghtcM1fssO3GIev9X1ILT9huzoQgbUWxxGsnX+qRM21D5BHWipxGkDICIEddtDfyJ4VJEmF2tp4vxGvmzwC3DiWdcV2d/1x3HBetPvwMmwZs6Ni5e6lLdYEiLf26K7j5BeD48ydSeA4AW3U=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:63e91656-4958-4d53-a6d0-ca2cbe0db3fc,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6dc6a47,CLOUDID:509bfc17-b42d-49a6-94d2-a75fa0df01d2,B
+X-CID-O-INFO: VERSION:1.1.41,REQID:38f1b19d-c89b-4d0f-a77a-99c5efec33d2,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:6dc6a47,CLOUDID:8ee84b9e-8e9a-4ac1-b510-390a86b53c0a,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
 	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
 	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: a92905f4772f11ef8b96093e013ec31c-20240920
+X-UUID: a92a8e9c772f11ef8b96093e013ec31c-20240920
 Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw02.mediatek.com
 	(envelope-from <peter.wang@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 2014424320; Fri, 20 Sep 2024 17:06:45 +0800
+	with ESMTP id 623127845; Fri, 20 Sep 2024 17:06:45 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -67,11 +68,13 @@ CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
 	<powen.kao@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
 	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
 	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <bvanassche@acm.org>,
-	<quic_nguyenb@quicinc.com>
-Subject: [PATCH v7 0/4] fix abort defect
-Date: Fri, 20 Sep 2024 17:06:39 +0800
-Message-ID: <20240920090643.3566-1-peter.wang@mediatek.com>
+	<quic_nguyenb@quicinc.com>, <stable@vger.kernel.org>
+Subject: [PATCH v7 1/4] ufs: core: fix the issue of ICU failure
+Date: Fri, 20 Sep 2024 17:06:40 +0800
+Message-ID: <20240920090643.3566-2-peter.wang@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20240920090643.3566-1-peter.wang@mediatek.com>
+References: <20240920090643.3566-1-peter.wang@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -83,47 +86,60 @@ X-MTK: N
 
 From: Peter Wang <peter.wang@mediatek.com>
 
-This series fixes MCQ and SDB abort defect.
+When setting the ICU bit without using read-modify-write,
+SQRTCy will restart SQ again and receive an RTC return
+error code 2 (Failure - SQ not stopped).
 
-V7:
- - Use a variable instead of a flag.
- - Add a check for MCQ mode when setting this variable to UFS_ERR_HANDLER.
- - Print OCS information for OCS_ABORTED and OCS_INVALID_COMMAND_STATUS.
- - Add a MediaTek quirk for handling OCS_ABORTED in SDB mode.
- - Skip notifying SCSI from ISR during SCSI abort (ufshcd_abort()).
+Additionally, the error log has been modified so that
+this type of error can be observed.
 
-V6:
- - Add err handler check before set flag true.
+Fixes: ab248643d3d6 ("scsi: ufs: core: Add error handling for MCQ mode")
+Cc: stable@vger.kernel.org
+Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+Reviewed-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/ufs/core/ufs-mcq.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-V5:
- - Change flag name.
- - Amend comment and patch description.
-
-V4:
- - Remove nullify SQ entry abort requeue.
- - Add more comment for flag usage and set description.
- - Fix build warning.
-
-V3:
- - Change comment and use variable(rtc) for error print
- - Change flag name and move flag set before ufshcd_clear_cmd
- - Add SDB mode clear UTRLCLR tag receive OCS_ABORTED requeue
-
-V2:
- - Fix mcq_enabled build error.
-
-Peter Wang (4):
-  ufs: core: fix the issue of ICU failure
-  ufs: core: requeue aborted request
-  ufs: core: add a quirk for MediaTek SDB mode aborted
-  ufs: core: skip ISR notifying scsi when ufshcd_abort
-
- drivers/ufs/core/ufs-mcq.c      | 21 ++++++----
- drivers/ufs/core/ufshcd.c       | 68 +++++++++++++++++++++++++--------
- drivers/ufs/host/ufs-mediatek.c |  1 +
- include/ufs/ufshcd.h            | 15 ++++++++
- 4 files changed, 83 insertions(+), 22 deletions(-)
-
+diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+index 5891cdacd0b3..3903947dbed1 100644
+--- a/drivers/ufs/core/ufs-mcq.c
++++ b/drivers/ufs/core/ufs-mcq.c
+@@ -539,7 +539,7 @@ int ufshcd_mcq_sq_cleanup(struct ufs_hba *hba, int task_tag)
+ 	struct scsi_cmnd *cmd = lrbp->cmd;
+ 	struct ufs_hw_queue *hwq;
+ 	void __iomem *reg, *opr_sqd_base;
+-	u32 nexus, id, val;
++	u32 nexus, id, val, rtc;
+ 	int err;
+ 
+ 	if (hba->quirks & UFSHCD_QUIRK_MCQ_BROKEN_RTC)
+@@ -569,17 +569,18 @@ int ufshcd_mcq_sq_cleanup(struct ufs_hba *hba, int task_tag)
+ 	opr_sqd_base = mcq_opr_base(hba, OPR_SQD, id);
+ 	writel(nexus, opr_sqd_base + REG_SQCTI);
+ 
+-	/* SQRTCy.ICU = 1 */
+-	writel(SQ_ICU, opr_sqd_base + REG_SQRTC);
++	/* Initiate Cleanup */
++	writel(readl(opr_sqd_base + REG_SQRTC) | SQ_ICU,
++		opr_sqd_base + REG_SQRTC);
+ 
+ 	/* Poll SQRTSy.CUS = 1. Return result from SQRTSy.RTC */
+ 	reg = opr_sqd_base + REG_SQRTS;
+ 	err = read_poll_timeout(readl, val, val & SQ_CUS, 20,
+ 				MCQ_POLL_US, false, reg);
+-	if (err)
+-		dev_err(hba->dev, "%s: failed. hwq=%d, tag=%d err=%ld\n",
+-			__func__, id, task_tag,
+-			FIELD_GET(SQ_ICU_ERR_CODE_MASK, readl(reg)));
++	rtc = FIELD_GET(SQ_ICU_ERR_CODE_MASK, readl(reg));
++	if (err || rtc)
++		dev_err(hba->dev, "%s: failed. hwq=%d, tag=%d err=%d RTC=%d\n",
++			__func__, id, task_tag, err, rtc);
+ 
+ 	if (ufshcd_mcq_sq_start(hba, hwq))
+ 		err = -ETIMEDOUT;
 -- 
 2.45.2
 
