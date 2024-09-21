@@ -1,52 +1,52 @@
-Return-Path: <linux-scsi+bounces-8431-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8433-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0732197DBE1
-	for <lists+linux-scsi@lfdr.de>; Sat, 21 Sep 2024 08:35:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC4FF97DC3D
+	for <lists+linux-scsi@lfdr.de>; Sat, 21 Sep 2024 10:44:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0A8C1F219B3
-	for <lists+linux-scsi@lfdr.de>; Sat, 21 Sep 2024 06:35:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07C111C20E5B
+	for <lists+linux-scsi@lfdr.de>; Sat, 21 Sep 2024 08:44:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE32E3A1C9;
-	Sat, 21 Sep 2024 06:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B0A914B960;
+	Sat, 21 Sep 2024 08:44:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ET3PgdF3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZSfRYNcG"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BCF06FBF
-	for <linux-scsi@vger.kernel.org>; Sat, 21 Sep 2024 06:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473EC13D51C
+	for <linux-scsi@vger.kernel.org>; Sat, 21 Sep 2024 08:44:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726900532; cv=none; b=jZu0Y5m4Xqh7PwqnC2cie0Jf7UY11PqzXaR1FUXHEK6JP4+pwzLInzD+SnhRE+Eyjr+s0bJHoqoTKi8pd0U1D0kEEGgHITWmCHY4XVj4SVbxLm4FrAhnllyWRALrBuvR5HyyVT8PDAZrnEyl54Qw5RzNiuWMH78SPYKodKu1m+o=
+	t=1726908280; cv=none; b=sd24FObzHpSP09VMHQq6AGxiK2n2wAzZ6IdeUI3HnRiFKLZ6V/wWOetgFT8D0n1+cJIkl6fz+vqOyvYfr+oG11xJ5O7+kYPG9fSoQ/21Xe3Z8dQxjw5pKtZrZdJ8QtDLETF49xRVOhRBjjUPoqlMuIjP3mXD/s/h0sxwixLKjPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726900532; c=relaxed/simple;
-	bh=37q1s/V8mh3MzNOyGGG1XdMC892g1dP2UfLuUnXmwvE=;
+	s=arc-20240116; t=1726908280; c=relaxed/simple;
+	bh=NLJwiLmhadbmBTo6z5Vzexb4S0CyodltMOGKH8EdurA=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GBXhamWhnk/INxoC6bGz7Q/mFXJ2fsdVRF1DNUSiI4J6EReeKqs29qmZEOCE5qbmbqP4BL2/nOXROUfE+zXA6uK2vy8uGXwrv/SJ+a7Nmn4fxXK4GW5HIvr5y/zp6/QLJuThasHaPFI3ZBuA4KN/I1AE2CEUkxoLSDdCps/Q11U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ET3PgdF3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E7DD8C4CEC2
-	for <linux-scsi@vger.kernel.org>; Sat, 21 Sep 2024 06:35:31 +0000 (UTC)
+	 Content-Type:MIME-Version; b=gE11zBcMH/o861GI+WGCYces609ufLeltnyUoQL2XVwKVGkknwpwUNr/imwzLJjzO7t3cRJA43ztLq2FuD3JsI00lTKVS61krn+vzK3KVflXzw5AbAxFf4ESY2ppWi+KLZ82RDgNCBPAoNBwiOrHlm6a7RPxw/28MpbxcoacXZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZSfRYNcG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AE13DC4CEC7
+	for <linux-scsi@vger.kernel.org>; Sat, 21 Sep 2024 08:44:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726900531;
-	bh=37q1s/V8mh3MzNOyGGG1XdMC892g1dP2UfLuUnXmwvE=;
+	s=k20201202; t=1726908279;
+	bh=NLJwiLmhadbmBTo6z5Vzexb4S0CyodltMOGKH8EdurA=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ET3PgdF3vQy94vnyPegIk2/I3fela8TFeiuaeDtnkFzGkMpAjZ5jU16MfdDdx7XxS
-	 MCSZLXhzQkpcwoJA9aV9L0ESer49YNd0jC3ceq5eIO2e18rPrgMDpRztWg0H+GrJH/
-	 X15KfDYyzLVyB1UxHXcFYOgTQreyuXqBpYCZwR77eP5Exl6kF38MZmL+b+grrJV6Z6
-	 MecrWm3L5cKBZRK63iqBzFy4pvR+RB50EAOjjOjq6BbcB0oT6kWHVEXFRYd3cEBqkl
-	 TWJwgvXMQt8M6VaPPQ2OMjuzUk/mIkTTkZIfZFYPkAimJFim/Ph6l8dGG8PZfWM1MS
-	 0/2GLgEdGIV8g==
+	b=ZSfRYNcGONcLezHpYCoBT1cZcbA//SvsQhnL2EplrpiA4z0qaOlbO4tjInQOHky3h
+	 Ro7MApJzJobqN1EuX4UwNo8v9q9nKttOo5D1crFXgrMWxgzWH2dWqrSknM2c3RR4sN
+	 7wQ03dnILxRib3RlVUAClRw22a3SDzTi++Z3vRqachKU8IEsRsZwd+y+9ce54erqjB
+	 o8xFRsi9g17T4/fTbZ32oiQ778Ezd2yenf4R+NXIf7fizfsit5Y5VB4XtCDZDFKISt
+	 h7eKEHnVBS/PRdpQ+QaKRQjcRe/sxBwyxCpvR0wJkBxuRBlYyOESj+L2fdwGmt7omX
+	 tbUZMSvJIafuA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id DA767C53BC5; Sat, 21 Sep 2024 06:35:31 +0000 (UTC)
+	id A468CC53BC8; Sat, 21 Sep 2024 08:44:39 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-scsi@vger.kernel.org
 Subject: [Bug 219296] libahci driver and power switching HDD on newer kernels
-Date: Sat, 21 Sep 2024 06:35:31 +0000
+Date: Sat, 21 Sep 2024 08:44:39 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
@@ -55,14 +55,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: linuxcdeveloper@gmail.com
+X-Bugzilla-Who: aros@gmx.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219296-11613-1RuseKfGdk@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: cf_bisect_commit cf_kernel_version dependson
+ cf_regression
+Message-ID: <bug-219296-11613-Pi1SGogXAa@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219296-11613@https.bugzilla.kernel.org/>
 References: <bug-219296-11613@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -78,20 +79,29 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219296
 
---- Comment #3 from linuxcdeveloper@gmail.com ---
-I attached 2 dmesg logs:
+Artem S. Tashkinov (aros@gmx.com) changed:
 
-1. https://bugzilla.kernel.org/attachment.cgi?id=3D306906
-2. https://bugzilla.kernel.org/attachment.cgi?id=3D306907
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Bisected commit-id|                            |aa3998dbeb3abce63653b7f6d45
+                   |                            |42e7dcd022590
+     Kernel Version|                            |6.11
+         Depends on|                            |218038
+         Regression|No                          |Yes
 
-and the first one is the dmesg from first bad commit and the second one is =
-the
-last good commit I found after git bisect.
+--- Comment #4 from Artem S. Tashkinov (aros@gmx.com) ---
+Damien,
 
-As "bad commit" I mean the commit on which the issue with power cycling of =
-HDD
-occurs and "good commit" is the commit on which this issue doesn't appear.
+Please take a look.
 
+There's also bug 218038 which is a fallout from this patch.
+
+
+Referenced Bugs:
+
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218038
+[Bug 218038] bbbf096ea227607cbb348155eeda7af71af1a35b results in "dirty"
+shutdown
 --=20
 You may reply to this email to add a comment.
 
