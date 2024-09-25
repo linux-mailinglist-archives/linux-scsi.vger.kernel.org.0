@@ -1,179 +1,130 @@
-Return-Path: <linux-scsi+bounces-8493-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8495-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5E1A9860D3
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Sep 2024 16:34:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B09F9864E3
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Sep 2024 18:34:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 035B7B2C9ED
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Sep 2024 14:02:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04AEB1F258B2
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Sep 2024 16:34:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133DA227F8E;
-	Wed, 25 Sep 2024 12:17:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F41DC282FD;
+	Wed, 25 Sep 2024 16:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ob8jdves"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="DOp8J+7c"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4D3227F84;
-	Wed, 25 Sep 2024 12:17:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A5717C6C;
+	Wed, 25 Sep 2024 16:34:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727266633; cv=none; b=PVAe1gs5rBShIiQm7YSE2fDJ+IDWOPEVjAFjD+3d7OwTZrTnEvycUVzB/uGqwcBnGVs5/A/XPcHqqDPOyHmtUV1dpMa+WBr1areT5HbPE0jQD0skVRwPG+L19QQmHuoommUCkIiGHOhWdxCkSb08yw7fRaLRZSsTtWqOX3R/NNY=
+	t=1727282049; cv=none; b=ruOdN5DauLln5uxNtF7g1a5l6fEuNVmLQp0087ewdTOouxHQLxsNeys8lGE1Ip++S83sDiLj2OT34kfgHnhtw7+khKH+QJxMBUjDn/609jx0HavA4ecffWTwHax5t0uSow/VvoqqmqfeeHQI6VHvGIYrcs1NGXGJbSQrXn3bJ+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727266633; c=relaxed/simple;
-	bh=5DoGp52IJUiE0n2fp/tbrPCAtK58gCvc9+GEYhKX6Ug=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UDzFrw359GqNHwD/gUkBOmISs0zAnxjndau9hb6gPmMiBa55tTTVLvY+UygvKyhpzuuoEjw+NCZZAZDqtq4b5Xk7mMQ43zezWqsPNOwH7PGw5EW2Gy2cw9eB1r7qahCqXxcXVbsSTPYOGZDTevezB/QxvtNsX8Kuj4Er+F41l4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ob8jdves; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 678B2C4CEC3;
-	Wed, 25 Sep 2024 12:17:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727266633;
-	bh=5DoGp52IJUiE0n2fp/tbrPCAtK58gCvc9+GEYhKX6Ug=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ob8jdvesuKgqOz4LFVJVFLGLM3mwmF/heIto3QVTf7BEHKBXnc/8ivTyZ0LeFcscf
-	 k5fTvQzFZ3Y0VTMUG//hCeXagutPCMMn4OYpwopGIIbS2kiszqnYbKnY1CB/8us/XP
-	 iK0GY2dgI6rG8iGVvw6MA+TjgsDlse/8oIJjw8w2LP4lsrfr1IQscQ9hKtShbs6Xua
-	 p326fbT5eZg35g5Rh+7v/ldYGn9Zqv6N4h//cyXP9jbcFQWquh4AOyXJzoLUeL7zgu
-	 OqoSJriDaw37cHy/x1U2BK5KdtNMMVjF8jEEaqa99FCL1cpsNSVvtJT++BD3XyJMaU
-	 g56SPu7WkGp/w==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Justin Tee <justin.tee@broadcom.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Sasha Levin <sashal@kernel.org>,
-	james.smart@broadcom.com,
-	dick.kennedy@broadcom.com,
-	James.Bottomley@HansenPartnership.com,
-	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 117/139] scsi: lpfc: Update PRLO handling in direct attached topology
-Date: Wed, 25 Sep 2024 08:08:57 -0400
-Message-ID: <20240925121137.1307574-117-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240925121137.1307574-1-sashal@kernel.org>
-References: <20240925121137.1307574-1-sashal@kernel.org>
+	s=arc-20240116; t=1727282049; c=relaxed/simple;
+	bh=cuLHVkDzKjoEHhogUbpQZo71rZ7nSas3O2rhEfclQHA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XUzZeH8ekoKRO8L6JzanqWoagkaWj6V+tFYIsdGNME3eg4100hTT68NWKg5761ivf9PklhbasoPjo1jo34XEf6kq/vWS4TH/nRJwS0JydRrvirmS9dh9tN44F6CIAarNDMn1DCytHHwKGRpiZSOhBJRWzKZD92WrHCaz0nRniC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=DOp8J+7c; arc=none smtp.client-ip=199.89.1.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4XDMkR3MFXz6ClY98;
+	Wed, 25 Sep 2024 16:34:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1727282043; x=1729874044; bh=/FyXFs10MLjrqvHD+X2ddLPl
+	nu+sUJLNIwL7ZV9g+ds=; b=DOp8J+7cAsp/Tz33eG8p/X5L0yEHSriZC9a2JBFi
+	ZuZJPCYIzcMyC2Cn3OSEhOtSPETKDRFa09ChFdJHDXQPq8Vzpgkg4DrUfV5HaCH+
+	t6nm+SMwqZJcw85cT5LSh6AocrfmhUuK76mrK9kwq2OIy1bWzSkw6tF5bCiuVN2R
+	ef7yKCeMbjZTL/kxX1r1C6UKM+XGnyMX5mJ/2VDPTrSKXODwCHBne9y07/NoGana
+	8LXwoeFwUrHmbBOA3eA03eUam9LZ3VTldoDtdRB4M7GyavPr7G3vU9joihjzxQTl
+	T+1m/tG4ZFjQ3PQ7cbvB1JXBp3exgH5LmI4QSVkMXcbPCA==
+X-Virus-Scanned: by MailRoute
+Received: from 008.lax.mailroute.net ([127.0.0.1])
+ by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id i2J2OkpuoVyI; Wed, 25 Sep 2024 16:34:03 +0000 (UTC)
+Received: from [100.66.154.22] (unknown [104.135.204.82])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4XDMkL38Tyz6ClY9N;
+	Wed, 25 Sep 2024 16:34:02 +0000 (UTC)
+Message-ID: <7c760b76-aba1-4e30-8966-17ae81a7e223@acm.org>
+Date: Wed, 25 Sep 2024 09:34:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.52
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] scsi:ufs:core: Add trace READ(16)/WRITE(16) commands
+To: liuderong@oppo.com, alim.akhtar@samsung.com, avri.altman@wdc.com
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Jaegeuk Kim <jaegeuk@kernel.org>
+References: <1727232523-188866-1-git-send-email-liuderong@oppo.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1727232523-188866-1-git-send-email-liuderong@oppo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Justin Tee <justin.tee@broadcom.com>
+On 9/24/24 7:48 PM, liuderong@oppo.com wrote:
+> From: liuderong <liuderong@oppo.com>
+> 
+> For sd_zbc_read_zones, READ(16)/WRITE(16) are mandatory for ZBC disks.
+> Currently, when printing the trace:ufshcd_command on zone UFS devices,
+> the LBA and SIZE fields appear invalid,
+> making it difficult to trace commands.
+> So add trace READ(16)/WRITE(16) commands for zone ufs device.
+> 
+> Trace sample:
+> ufshcd_command: send_req: 1d84000.ufshc: tag: 31, DB: 0x0,
+> size: -1, IS: 0, LBA: 0, opcode: 0x8a (WRITE_16), group_id: 0x0, hwq_id: 7
+> ufshcd_command: complete_rsp: 1d84000.ufshc: tag: 31, DB: 0x0,
+> size: -1, IS: 0, LBA: 0, opcode: 0x8a (WRITE_16), group_id: 0x0, hwq_id: 7
+> 
+> Signed-off-by: liuderong <liuderong@oppo.com>
+> ---
+>   drivers/ufs/core/ufshcd.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index 5e3c67e..9e5e903 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -434,15 +434,19 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
+>   
+>   	opcode = cmd->cmnd[0];
+>   
+> -	if (opcode == READ_10 || opcode == WRITE_10) {
+> +	if (opcode == READ_10 || opcode == READ_16 ||
+> +		opcode == WRITE_10 || opcode == WRITE_16) {
+>   		/*
+> -		 * Currently we only fully trace read(10) and write(10) commands
+> +		 * Currently we only fully trace the following commands,
+> +		 * read(10),read(16),write(10), and write(16)
+>   		 */
+>   		transfer_len =
+>   		       be32_to_cpu(lrbp->ucd_req_ptr->sc.exp_data_transfer_len);
+>   		lba = scsi_get_lba(cmd);
+>   		if (opcode == WRITE_10)
+>   			group_id = lrbp->cmd->cmnd[6];
+> +		if (opcode == WRITE_16)
+> +			group_id = lrbp->cmd->cmnd[14];
+>   	} else if (opcode == UNMAP) {
+>   		/*
+>   		 * The number of Bytes to be unmapped beginning with the lba.
 
-[ Upstream commit 1f0f7679ad8942f810b0f19ee9cf098c3502d66a ]
+To me the above patch looks like a subset of this patch from 1.5y ago:
+https://lore.kernel.org/linux-scsi/20230215190448.1687786-1-jaegeuk@kernel.org/
 
-A kref imbalance occurs when handling an unsolicited PRLO in direct
-attached topology.
-
-Rework PRLO rcv handling when in MAPPED state.  Save the state that we were
-handling a PRLO by setting nlp_last_elscmd to ELS_CMD_PRLO.  Then in the
-lpfc_cmpl_els_logo_acc() completion routine, manually restart discovery.
-By issuing the PLOGI, which nlp_gets, before nlp_put at the end of the
-lpfc_cmpl_els_logo_acc() routine, we are saving us from a final nlp_put.
-And, we are still allowing the unreg_rpi to happen.
-
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Link: https://lore.kernel.org/r/20240726231512.92867-7-justintee8345@gmail.com
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/lpfc/lpfc_els.c       | 27 ++++++++++++++++-----------
- drivers/scsi/lpfc/lpfc_nportdisc.c | 22 ++++++++++++++++++++--
- 2 files changed, 36 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 44d3ada9fbbcb..f67d72160d36e 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -5228,9 +5228,10 @@ lpfc_cmpl_els_logo_acc(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	/* ACC to LOGO completes to NPort <nlp_DID> */
- 	lpfc_printf_vlog(vport, KERN_INFO, LOG_ELS,
- 			 "0109 ACC to LOGO completes to NPort x%x refcnt %d "
--			 "Data: x%x x%x x%x\n",
--			 ndlp->nlp_DID, kref_read(&ndlp->kref), ndlp->nlp_flag,
--			 ndlp->nlp_state, ndlp->nlp_rpi);
-+			 "last els x%x Data: x%x x%x x%x\n",
-+			 ndlp->nlp_DID, kref_read(&ndlp->kref),
-+			 ndlp->nlp_last_elscmd, ndlp->nlp_flag, ndlp->nlp_state,
-+			 ndlp->nlp_rpi);
- 
- 	/* This clause allows the LOGO ACC to complete and free resources
- 	 * for the Fabric Domain Controller.  It does deliberately skip
-@@ -5242,18 +5243,22 @@ lpfc_cmpl_els_logo_acc(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 		goto out;
- 
- 	if (ndlp->nlp_state == NLP_STE_NPR_NODE) {
--		/* If PLOGI is being retried, PLOGI completion will cleanup the
--		 * node. The NLP_NPR_2B_DISC flag needs to be retained to make
--		 * progress on nodes discovered from last RSCN.
--		 */
--		if ((ndlp->nlp_flag & NLP_DELAY_TMO) &&
--		    (ndlp->nlp_last_elscmd == ELS_CMD_PLOGI))
--			goto out;
--
- 		if (ndlp->nlp_flag & NLP_RPI_REGISTERED)
- 			lpfc_unreg_rpi(vport, ndlp);
- 
-+		/* If came from PRLO, then PRLO_ACC is done.
-+		 * Start rediscovery now.
-+		 */
-+		if (ndlp->nlp_last_elscmd == ELS_CMD_PRLO) {
-+			spin_lock_irq(&ndlp->lock);
-+			ndlp->nlp_flag |= NLP_NPR_2B_DISC;
-+			spin_unlock_irq(&ndlp->lock);
-+			ndlp->nlp_prev_state = ndlp->nlp_state;
-+			lpfc_nlp_set_state(vport, ndlp, NLP_STE_PLOGI_ISSUE);
-+			lpfc_issue_els_plogi(vport, ndlp->nlp_DID, 0);
-+		}
- 	}
-+
-  out:
- 	/*
- 	 * The driver received a LOGO from the rport and has ACK'd it.
-diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
-index 3ed211d093dd1..fe174062e4946 100644
---- a/drivers/scsi/lpfc/lpfc_nportdisc.c
-+++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
-@@ -2635,8 +2635,26 @@ lpfc_rcv_prlo_mapped_node(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 	/* flush the target */
- 	lpfc_sli_abort_iocb(vport, ndlp->nlp_sid, 0, LPFC_CTX_TGT);
- 
--	/* Treat like rcv logo */
--	lpfc_rcv_logo(vport, ndlp, cmdiocb, ELS_CMD_PRLO);
-+	/* Send PRLO_ACC */
-+	spin_lock_irq(&ndlp->lock);
-+	ndlp->nlp_flag |= NLP_LOGO_ACC;
-+	spin_unlock_irq(&ndlp->lock);
-+	lpfc_els_rsp_acc(vport, ELS_CMD_PRLO, cmdiocb, ndlp, NULL);
-+
-+	/* Save ELS_CMD_PRLO as the last elscmd and then set to NPR.
-+	 * lpfc_cmpl_els_logo_acc is expected to restart discovery.
-+	 */
-+	ndlp->nlp_last_elscmd = ELS_CMD_PRLO;
-+	ndlp->nlp_prev_state = ndlp->nlp_state;
-+
-+	lpfc_printf_vlog(vport, KERN_INFO, LOG_NODE | LOG_ELS | LOG_DISCOVERY,
-+			 "3422 DID x%06x nflag x%x lastels x%x ref cnt %u\n",
-+			 ndlp->nlp_DID, ndlp->nlp_flag,
-+			 ndlp->nlp_last_elscmd,
-+			 kref_read(&ndlp->kref));
-+
-+	lpfc_nlp_set_state(vport, ndlp, NLP_STE_NPR_NODE);
-+
- 	return ndlp->nlp_state;
- }
- 
--- 
-2.43.0
-
+Bart.
 
