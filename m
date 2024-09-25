@@ -1,148 +1,262 @@
-Return-Path: <linux-scsi+bounces-8473-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8475-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 866A79856FA
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Sep 2024 12:12:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 738B4985AD7
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Sep 2024 14:15:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8E371C23675
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Sep 2024 10:12:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE20A1F2430C
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Sep 2024 12:15:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0FD715C15C;
-	Wed, 25 Sep 2024 10:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4BBF18D645;
+	Wed, 25 Sep 2024 11:46:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="GY15UL5r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mXyPvy7v"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7836115B966
-	for <linux-scsi@vger.kernel.org>; Wed, 25 Sep 2024 10:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C30E188CA8;
+	Wed, 25 Sep 2024 11:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727259118; cv=none; b=hMAnFfllM+cd/ocPBfVWjrb3952VsmIoU7O6OPpL7zdlk3YeuAxPNwFO3KVgU41/rGcy6SL3kglCfa6+Pf3jd94XTetXYEyafzAKPg/pZPVf0RG/8icq84zdccqR5qIWqZtBF8wNmmxt55MNBNys94WmUMRG+/WFEi2n5S61oY8=
+	t=1727264760; cv=none; b=EpTNZUBCotl11oF/scYsCl+8CKrDgvTMumfoMy2CYCDulw8uzjW2H/xnforjcBWVeFmEC6alHT0g/NUUc5Ahc7MGcWWSX+Hrd1ZFp04Q+mW8XS8dUtfye2fiNOVoT+y5/8MtazZ7W+rpniqI9las93U8DEvhQ9a/VQS2OT8uxss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727259118; c=relaxed/simple;
-	bh=yFGrwhTL7h3KlIChOJVg9xasvHKXUJbnGJ3TyKa/ZlI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h+ONAQW0/CkHoHwDNjxAWafkfaq1o95tlNPFOcS50QPqbDYckWqNvipiH7HliXB9RZLLfHHE1v54DJxJWyuRHuMc9S2qywYG1+Pyx//SlVJHVpdH7SH2U+ER6YnuWV14UJ+vN3JNJmTWtYiDWHgOv3msVQDganrTImyNewmNnNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=GY15UL5r; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 9409d5b87b2611efb66947d174671e26-20240925
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=MJnQKK/9GVFCpol62/YKdi7Bop9r1f03D07/z2b8dVI=;
-	b=GY15UL5rFPRXr/Z1SUYsyi2gzkEUAUsz89RqWiXIaWS8bZULjvztgqIkodx7EEozSUB5Zi4iHVJ7oKe8S7kibXs0ZzJ+STqQBEg/ow7W8K+jqIiHT85ab1YoPeoYIT7QzOZetXa+ql8eRo4IM1vNV+fIKJJT/UP1PRtXfCSkjco=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:7d04bba9-310c-4d85-b6f5-d4495875fbd3,IP:0,U
-	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-25
-X-CID-META: VersionHash:6dc6a47,CLOUDID:90e68a9e-8e9a-4ac1-b510-390a86b53c0a,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
-	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: 9409d5b87b2611efb66947d174671e26-20240925
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-	(envelope-from <peter.wang@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 956276798; Wed, 25 Sep 2024 18:11:49 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 25 Sep 2024 03:11:47 -0700
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 25 Sep 2024 18:11:47 +0800
-From: <peter.wang@mediatek.com>
-To: <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-	<avri.altman@wdc.com>, <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
-CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
-	<peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-	<alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
-	<chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-	<powen.kao@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
-	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
-	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <bvanassche@acm.org>,
-	<quic_nguyenb@quicinc.com>
-Subject: [PATCH v9 3/3] ufs: core: add a quirk for MediaTek SDB mode aborted
-Date: Wed, 25 Sep 2024 17:55:46 +0800
-Message-ID: <20240925095546.19492-4-peter.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20240925095546.19492-1-peter.wang@mediatek.com>
-References: <20240925095546.19492-1-peter.wang@mediatek.com>
+	s=arc-20240116; t=1727264760; c=relaxed/simple;
+	bh=DIgccXoM7l0r0k5D5IXzP36HlpO+6jZM1+Rqh+3F1xk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PjsE4nlpdmV+JMuAWejGShGrcFr0tX/J8QTtkcpOFaJI1NbU6e3PM2d8uvR7GzdipMZYZWDA9TZ0uGZGEeOPF7Jjrut4da/5qC6cv62EECMnBzuWnvb75NPf07mc7o7V/Kz3diqsv12oJbllGtFrxjTFI3ZYMiFskD1ZJBowsW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mXyPvy7v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8462C4CEC7;
+	Wed, 25 Sep 2024 11:45:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727264760;
+	bh=DIgccXoM7l0r0k5D5IXzP36HlpO+6jZM1+Rqh+3F1xk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=mXyPvy7vLnUdlZVJryoU3J6TIIcoVLQG3wgKWeEjjTb14IHMkHTfzDE8S07t5jJXC
+	 cLiDkBqaQ4QR+T2nUviEqWB3BGeNrqbfKyvC+nhgfKceAOEd6zqHtYatZoBLbZgpWD
+	 QINRNdGIqI20w6ouP5I+r1T+0T+OFbxJb7PVtIzzZ3x9/PRxZMfZjoZmYxSvtFwgvA
+	 t7hdXw29o7RXQoPyVNeRo8vtqAC8P0MifZ1b0777AHM5c8Hwai6pEnUTFP3c9hMaJt
+	 UlpafglVDplpCx2/tF3oWEZAnLHWEd91Zr2gsHJJCdNyiPdyXIFdHMbTIw3RrxJtS4
+	 yHnP0DQlV88wQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: David Strahan <David.Strahan@microchip.com>,
+	Scott Benesh <scott.benesh@microchip.com>,
+	Scott Teel <scott.teel@microchip.com>,
+	Mike McGowen <mike.mcgowen@microchip.com>,
+	Don Brace <don.brace@microchip.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Sasha Levin <sashal@kernel.org>,
+	James.Bottomley@HansenPartnership.com,
+	storagedev@microchip.com,
+	linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.11 148/244] scsi: smartpqi: Add new controller PCI IDs
+Date: Wed, 25 Sep 2024 07:26:09 -0400
+Message-ID: <20240925113641.1297102-148-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240925113641.1297102-1-sashal@kernel.org>
+References: <20240925113641.1297102-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK: N
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.11
+Content-Transfer-Encoding: 8bit
 
-From: Peter Wang <peter.wang@mediatek.com>
+From: David Strahan <David.Strahan@microchip.com>
 
-Because the MediaTek UFS controller uses UTRLCLR to clear commands
-and fills the OCS with ABORTED, this patch introduces a quirk to
-treat ABORTED as INVALID_OCS_VALUE.
+[ Upstream commit 0e21e73384d324f75ea16f3d622cfc433fa6209b ]
 
-Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+All PCI ID entries in hex.
+
+Add new inagile PCI IDs:
+                                             VID  / DID  / SVID / SDID
+                                             ----   ----   ----   ----
+            SMART-HBA 8242-24i               9005 / 028f / 1ff9 / 0045
+            RAID 8236-16i                    9005 / 028f / 1ff9 / 0046
+            RAID 8240-24i                    9005 / 028f / 1ff9 / 0047
+            SMART-HBA 8238-16i               9005 / 028f / 1ff9 / 0048
+            PM8222-SHBA                      9005 / 028f / 1ff9 / 004a
+            RAID PM8204-2GB                  9005 / 028f / 1ff9 / 004b
+            RAID PM8204-4GB                  9005 / 028f / 1ff9 / 004c
+            PM8222-HBA                       9005 / 028f / 1ff9 / 004f
+            MT0804M6R                        9005 / 028f / 1ff9 / 0051
+            MT0801M6E                        9005 / 028f / 1ff9 / 0052
+            MT0808M6R                        9005 / 028f / 1ff9 / 0053
+            MT0800M6H                        9005 / 028f / 1ff9 / 0054
+            RS0800M5H24i                     9005 / 028f / 1ff9 / 006b
+            RS0800M5E8i                      9005 / 028f / 1ff9 / 006c
+            RS0800M5H8i                      9005 / 028f / 1ff9 / 006d
+            RS0804M5R16i                     9005 / 028f / 1ff9 / 006f
+            RS0800M5E24i                     9005 / 028f / 1ff9 / 0070
+            RS0800M5H16i                     9005 / 028f / 1ff9 / 0071
+            RS0800M5E16i                     9005 / 028f / 1ff9 / 0072
+            RT0800M7E                        9005 / 028f / 1ff9 / 0086
+            RT0800M7H                        9005 / 028f / 1ff9 / 0087
+            RT0804M7R                        9005 / 028f / 1ff9 / 0088
+            RT0808M7R                        9005 / 028f / 1ff9 / 0089
+            RT1608M6R16i                     9005 / 028f / 1ff9 / 00a1
+
+Add new h3c pci_id:
+                                             VID  / DID  / SVID / SDID
+                                             ----   ----   ----   ----
+            UN RAID P4408-Mr-2               9005 / 028f / 193d / 1110
+
+Add new powerleader pci ids:
+                                             VID  / DID  / SVID / SDID
+                                             ----   ----   ----   ----
+            PL SmartROC PM8204               9005 / 028f / 1f3a / 0104
+
+Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
+Reviewed-by: Scott Teel <scott.teel@microchip.com>
+Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
+Signed-off-by: David Strahan <David.Strahan@microchip.com>
+Signed-off-by: Don Brace <don.brace@microchip.com>
+Link: https://lore.kernel.org/r/20240711194704.982400-2-don.brace@microchip.com
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/ufs/core/ufshcd.c       | 5 ++++-
- drivers/ufs/host/ufs-mediatek.c | 1 +
- include/ufs/ufshcd.h            | 6 ++++++
- 3 files changed, 11 insertions(+), 1 deletion(-)
+ drivers/scsi/smartpqi/smartpqi_init.c | 104 ++++++++++++++++++++++++++
+ 1 file changed, 104 insertions(+)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 4fff929b70d6..d429817fca94 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -5404,7 +5404,10 @@ ufshcd_transfer_rsp_status(struct ufs_hba *hba, struct ufshcd_lrb *lrbp,
- 		}
- 		break;
- 	case OCS_ABORTED:
--		result |= DID_ABORT << 16;
-+		if (hba->quirks & UFSHCD_QUIRK_OCS_ABORTED)
-+			result |= DID_REQUEUE << 16;
-+		else
-+			result |= DID_ABORT << 16;
- 		dev_warn(hba->dev,
- 				"OCS aborted from controller for tag %d\n",
- 				lrbp->task_tag);
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 02c9064284e1..8a4c1b8f5a26 100644
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1021,6 +1021,7 @@ static int ufs_mtk_init(struct ufs_hba *hba)
- 	hba->quirks |= UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL;
- 	hba->quirks |= UFSHCD_QUIRK_MCQ_BROKEN_INTR;
- 	hba->quirks |= UFSHCD_QUIRK_MCQ_BROKEN_RTC;
-+	hba->quirks |= UFSHCD_QUIRK_OCS_ABORTED;
- 	hba->vps->wb_flush_threshold = UFS_WB_BUF_REMAIN_PERCENT(80);
- 
- 	if (host->caps & UFS_MTK_CAP_DISABLE_AH8)
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 0fd2aebac728..8f156803d703 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -684,6 +684,12 @@ enum ufshcd_quirks {
- 	 * single doorbell mode.
- 	 */
- 	UFSHCD_QUIRK_BROKEN_LSDBS_CAP			= 1 << 25,
-+
-+	/*
-+	 * Some host controllers set OCS_ABORTED after UTRLCLR (SDB mode),
-+	 * this quirk is set to treat OCS: ABORTED as INVALID_OCS_VALUE
-+	 */
-+	UFSHCD_QUIRK_OCS_ABORTED			= 1 << 26,
- };
- 
- enum ufshcd_caps {
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index 24c7cb285dca0..9166dfa1fedc3 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -9472,6 +9472,10 @@ static const struct pci_device_id pqi_pci_id_table[] = {
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       0x193d, 0x110b)
+ 	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x193d, 0x1110)
++	},
+ 	{
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       0x193d, 0x8460)
+@@ -9588,6 +9592,14 @@ static const struct pci_device_id pqi_pci_id_table[] = {
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       0x1bd4, 0x0089)
+ 	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x00a1)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1f3a, 0x0104)
++	},
+ 	{
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       0x19e5, 0xd227)
+@@ -10180,6 +10192,98 @@ static const struct pci_device_id pqi_pci_id_table[] = {
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       0x1137, 0x02fa)
+ 	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0045)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0046)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0047)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0048)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x004a)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x004b)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x004c)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x004f)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0051)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0052)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0053)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0054)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x006b)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x006c)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x006d)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x006f)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0070)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0071)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0072)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0086)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0087)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0088)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1ff9, 0x0089)
++	},
+ 	{
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 				0x1e93, 0x1000)
 -- 
-2.45.2
+2.43.0
 
 
