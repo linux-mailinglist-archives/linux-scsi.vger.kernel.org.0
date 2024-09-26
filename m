@@ -1,51 +1,51 @@
-Return-Path: <linux-scsi+bounces-8521-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8522-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24AF0987B40
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Sep 2024 00:50:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 403E0987B42
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Sep 2024 00:50:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49941B2694C
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 22:50:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B1CE1F2178A
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 22:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9913F1B07C5;
-	Thu, 26 Sep 2024 22:49:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A55B71B1412;
+	Thu, 26 Sep 2024 22:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k564yRZp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NmBba2Un"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FEB1B07BF;
-	Thu, 26 Sep 2024 22:49:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 613AF1B140D;
+	Thu, 26 Sep 2024 22:49:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727390965; cv=none; b=LLF+1fLOdZi8paQofzIxaIWLiP/vf6IrpjDkLkYPJp4UkI/gkAN7QSMwqNfXiABYrBY24rvigLNOoczSjtb/ascr+/1CasPhVdFbnYH53CJ2N/S7f0sUV0FvZjY+r0si0vXilYS1jFTjH0hjUrLynheZCSj+f1UZgPCN51vOfYE=
+	t=1727390968; cv=none; b=kci0CCR0gxFZ1wWme+xR0ybKW9b9n1/kzOAOpbO6of6blHMf9uUlSGKEWjo2NwpdZpU7Wmk2pJF5kAj2zogrmdEA4qGkbOFnR0UCUf10/9YrcggsJYO5BhVX0ByD8Wqkv/rbdtytSsa/IkGxEwFvtwAnVu/D8tFPabjQg63XOAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727390965; c=relaxed/simple;
-	bh=4yWGGyiLUE5LgminEo1+3BKAknZRJAj6SQQ4Ov4Yt6k=;
+	s=arc-20240116; t=1727390968; c=relaxed/simple;
+	bh=LFXpL5/nrAXstPiOj0IbxTit69TGzKOpoS47R1I/bUE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lf26gn/AzLITM2H953HGO9zsxTUuUmbD0S9OYJcL2ztW2YSpVT/JgpABYoSVirMJf3YnHyeXMH8wzRVdzyWiP4gCQumfxDrTJrw6K9lFG8JPSCk/8IOyXDvy0tyEm1Dz0PtqvJv1k8AEJi0H9OlMfEIslGCYEA5UBGVvdydFAzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k564yRZp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EB30C4CED1;
-	Thu, 26 Sep 2024 22:49:22 +0000 (UTC)
+	 MIME-Version; b=M54J4GhQS6OgIC6tbgNnpLdi7eI/hn9UpdAqmh6F38twV36ChvaBngfyBT89bAe3IgR8sqBRFAJqHVTjkp+uDkxcxA0vUY/5mXnYKHk4bjXCJTBnvrOPo3vBY+4w5ZKgDbcfzBB/6cmTkVuI00cU3H9EMUZncLw57QOybz1JAbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NmBba2Un; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF0F3C4CEC9;
+	Thu, 26 Sep 2024 22:49:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727390965;
-	bh=4yWGGyiLUE5LgminEo1+3BKAknZRJAj6SQQ4Ov4Yt6k=;
+	s=k20201202; t=1727390967;
+	bh=LFXpL5/nrAXstPiOj0IbxTit69TGzKOpoS47R1I/bUE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=k564yRZp8pOLJHoBbfm/GOdk2+Caaj7NNScqdhv/mPScQTthzq01ka8TAu7kEpL1n
-	 Q0/UkRBBoC+BGKtg8+S4xroXlOOc5LjCUvtwXglhSiVAyHpl7QL2rnSxvk85hGrZ7+
-	 yjs6fFuMhLz/oi6EdW1RqmT4Y2H5t6fyXa8Q4rae/mLsKyZMWTlIT3/lITiTin4s/b
-	 gIqsiriOY21JwYw+99K2acb54RBMWSEvtuYQl6KHUiqgbVcHhmX3Ws2REz388v2Y1D
-	 9JTpvXwG/AURaqzkzmaksZhL8ExMpD6roOHA8c4CUn7+FJtI5DVQji79/NN2ctqZkt
-	 Q4uRPdzMxV82A==
+	b=NmBba2UnkZIb9p6p1rdb6P8aQjl7oareIrQ/4NATZEsBVRZPvbzcwJ/17rvFdqNF7
+	 nh9SMwxXzKEbJrwdEzlB+Ic6vxFBVSF9EoJC83mwgn5m0WDFtBQUHbNMUg6aQAFgP3
+	 I7FRMUdm0a6+mxHwLRxQXfGdtmicY62IkURK7hiP5lUIi3zIo6mjUGqxaRiEsTfYHw
+	 DryZHn1hDRxSO0e3ICeZG7QU0t59qbS2vGn6qzwO279/DrCTJRytQkPWwU4BUlRFXi
+	 CBqEE2XNowZhHd2s452qZlR9tKpsg5Cow1O6Ey4fvHl/0RxKmU6tyZce4F8Cv1BFTb
+	 wgwSCjvGBPZAw==
 From: Frederic Weisbecker <frederic@kernel.org>
 To: LKML <linux-kernel@vger.kernel.org>
 Cc: Frederic Weisbecker <frederic@kernel.org>,
-	Saurav Kashyap <skashyap@marvell.com>,
-	Javed Hasan <jhasan@marvell.com>,
+	Nilesh Javali <njavali@marvell.com>,
+	Manish Rangankar <mrangankar@marvell.com>,
 	GR-QLogic-Storage-Upstream@marvell.com,
 	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
 	"Martin K. Petersen" <martin.petersen@oracle.com>,
@@ -53,9 +53,9 @@ Cc: Frederic Weisbecker <frederic@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 04/20] scsi: bnx2fc: Use kthread_create_on_cpu()
-Date: Fri, 27 Sep 2024 00:48:52 +0200
-Message-ID: <20240926224910.11106-5-frederic@kernel.org>
+Subject: [PATCH 05/20] scsi: bnx2i: Use kthread_create_on_cpu()
+Date: Fri, 27 Sep 2024 00:48:53 +0200
+Message-ID: <20240926224910.11106-6-frederic@kernel.org>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240926224910.11106-1-frederic@kernel.org>
 References: <20240926224910.11106-1-frederic@kernel.org>
@@ -69,27 +69,27 @@ Content-Transfer-Encoding: 8bit
 
 Use the proper API instead of open coding it.
 
-However it looks like bnx2fc_percpu_io_thread() kthread could be
+However it looks like bnx2i_percpu_io_thread() kthread could be
 replaced by the use of a high prio workqueue instead.
 
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- drivers/scsi/bnx2fc/bnx2fc_fcoe.c | 7 ++-----
+ drivers/scsi/bnx2i/bnx2i_init.c | 7 ++-----
  1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-index f49783b89d04..36126030e76d 100644
---- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-+++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-@@ -2610,14 +2610,11 @@ static int bnx2fc_cpu_online(unsigned int cpu)
+diff --git a/drivers/scsi/bnx2i/bnx2i_init.c b/drivers/scsi/bnx2i/bnx2i_init.c
+index 872ad37e2a6e..cecc3a026762 100644
+--- a/drivers/scsi/bnx2i/bnx2i_init.c
++++ b/drivers/scsi/bnx2i/bnx2i_init.c
+@@ -415,14 +415,11 @@ static int bnx2i_cpu_online(unsigned int cpu)
  
- 	p = &per_cpu(bnx2fc_percpu, cpu);
+ 	p = &per_cpu(bnx2i_percpu, cpu);
  
--	thread = kthread_create_on_node(bnx2fc_percpu_io_thread,
--					(void *)p, cpu_to_node(cpu),
--					"bnx2fc_thread/%d", cpu);
-+	thread = kthread_create_on_cpu(bnx2fc_percpu_io_thread,
-+				       (void *)p, cpu, "bnx2fc_thread/%d");
+-	thread = kthread_create_on_node(bnx2i_percpu_io_thread, (void *)p,
+-					cpu_to_node(cpu),
+-					"bnx2i_thread/%d", cpu);
++	thread = kthread_create_on_cpu(bnx2i_percpu_io_thread, (void *)p,
++				       cpu, "bnx2i_thread/%d");
  	if (IS_ERR(thread))
  		return PTR_ERR(thread);
  
