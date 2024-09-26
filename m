@@ -1,39 +1,39 @@
-Return-Path: <linux-scsi+bounces-8501-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8511-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D757986AB1
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 03:43:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23BB9986ABB
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 03:44:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E84E1C216A2
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 01:43:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D502F2814F4
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 01:44:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44376176ABA;
-	Thu, 26 Sep 2024 01:43:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A6F4175D53;
+	Thu, 26 Sep 2024 01:43:45 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605D21741C9
-	for <linux-scsi@vger.kernel.org>; Thu, 26 Sep 2024 01:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B98B175548
+	for <linux-scsi@vger.kernel.org>; Thu, 26 Sep 2024 01:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727315018; cv=none; b=d4qDpoxK+RKrIOe5qid6IpXMl+36M1PIXRU2qySuq9i8sW4fqv66sBz+SiKIiuqJs08YP27oeBq6JlS1PJ2nPlQabMf3nujx5pTLwyCnwIa8xN8kwXMXPRiw3uobBU+K9biyhEwR0HWvRRSyO9btsn/kwsfl3Ek05zPVpsRXylU=
+	t=1727315025; cv=none; b=ssUbOboujg7rvyeHYDwaxAjStFnh2gJeUCsrfXDuJXTfnm2oFdmbw23ILr0NKBO/ASaLvLsK+gDUXHPJ+87JjsD9aSmRQOH0lf7q1QsZi3bwRho0KVmFAS2mBjmKjUXfhFx35h1pfzQ9QE1N2HtvnJRLRkX4oJk4pcDjdKkVfgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727315018; c=relaxed/simple;
-	bh=q2AKoGhnIiBcdT7XxtJcWugGDNOtlbDnK/simK7d+ho=;
+	s=arc-20240116; t=1727315025; c=relaxed/simple;
+	bh=IHxNe1/41c7IgS/541Yw90TfVcryoq3NCOxf8MO0htU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E1IJfN3TIhCiTmbV12gSvjG/seBfLRUKocSIIry26LaCA63NYJqEAUBwKrCXodOP3RSWiqUmt1busTqycGbOrMhI1BL6Ce6/1uYBV6RlyZRLP4ZrhPDXL99OibGDAN/YmcrVTgoWX0VTv70r1AmofDSu2dL6f/J6osHx9k3xLJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+	 MIME-Version:Content-Type; b=Ep5q1PleajpV1NuNn/MtrqqO6k4q9eZ5syHOEbV62Dl7mAjNaS0ZcuH7XEM7ymjuoCcf0Fjsw/WkNjnmmAOX6cUcBOFPMasvpT1v2BUB9jMcTDm+YHT6PZWv/9senbIKnH7NIcRv8b2ucZrzJghT2VChCcoHLL4+gxewFzErtRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4XDbvT4vYFz1SBnl;
-	Thu, 26 Sep 2024 09:42:45 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4XDbw02q0jzFqsK;
+	Thu, 26 Sep 2024 09:43:12 +0800 (CST)
 Received: from dggpemf100013.china.huawei.com (unknown [7.185.36.179])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6C6721400D5;
+	by mail.maildlp.com (Postfix) with ESMTPS id 9709F18005F;
 	Thu, 26 Sep 2024 09:43:34 +0800 (CST)
 Received: from localhost.huawei.com (10.50.165.33) by
  dggpemf100013.china.huawei.com (7.185.36.179) with Microsoft SMTP Server
@@ -43,9 +43,9 @@ From: Yihang Li <liyihang9@huawei.com>
 To: <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>
 CC: <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
 	<liyihang9@huawei.com>
-Subject: [PATCH 09/13] scsi: hisi_sas: Update disk locked timeout to 7 seconds
-Date: Thu, 26 Sep 2024 09:43:28 +0800
-Message-ID: <20240926014332.3905399-10-liyihang9@huawei.com>
+Subject: [PATCH 10/13] scsi: hisi_sas: Add time interval between two H2D FIS following soft reset spec
+Date: Thu, 26 Sep 2024 09:43:29 +0800
+Message-ID: <20240926014332.3905399-11-liyihang9@huawei.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20240926014332.3905399-1-liyihang9@huawei.com>
 References: <20240926014332.3905399-1-liyihang9@huawei.com>
@@ -62,44 +62,27 @@ X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
 
 From: Xingui Yang <yangxingui@huawei.com>
 
-The sata disk will be locked after the disk sends the DMA Setup frame until
-all data frame transmission is completed. The CFG_ICT_TIMER_STEP_TRSH
-register is used for sata disk to configure the step size of the timer
-which records the time when the disk is locked. The unit is 1us and the
-default step size is 150ms. If the disk is locked for more than 7 timer
-steps, the io to be sent to the disk will end abnormally.
-
-The current timeout is only about 1 second, it is easy to trigger IO
-abnormal end when the SATA hard disk returns data slowly. Adjust the
-timeout to 7 seconds based on ERC time of most disks.
+Spec says at least 5us between two H2D FIS when do soft reset, but be
+generous and sleep for about 1ms.
 
 Signed-off-by: Xingui Yang <yangxingui@huawei.com>
-Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
 Reviewed-by: Yihang Li <liyihang9@huawei.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/hisi_sas/hisi_sas_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 310c782b4926..5c97c4463032 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -43,6 +43,7 @@
- #define CQ_INT_CONVERGE_EN		0xb0
- #define CFG_AGING_TIME			0xbc
- #define HGC_DFX_CFG2			0xc0
-+#define CFG_ICT_TIMER_STEP_TRSH		0xc8
- #define CFG_ABT_SET_QUERY_IPTT	0xd4
- #define CFG_SET_ABORTED_IPTT_OFF	0
- #define CFG_SET_ABORTED_IPTT_MSK	(0xfff << CFG_SET_ABORTED_IPTT_OFF)
-@@ -638,6 +639,7 @@ static void init_reg_v3_hw(struct hisi_hba *hisi_hba)
- 	hisi_sas_write32(hisi_hba, TRANS_LOCK_ICT_TIME, 0x4A817C80);
- 	hisi_sas_write32(hisi_hba, HGC_SAS_TXFAIL_RETRY_CTRL, 0x108);
- 	hisi_sas_write32(hisi_hba, CFG_AGING_TIME, 0x1);
-+	hisi_sas_write32(hisi_hba, CFG_ICT_TIMER_STEP_TRSH, 0xf4240);
- 	hisi_sas_write32(hisi_hba, INT_COAL_EN, 0x3);
- 	/* configure the interrupt coalescing timeout period 10us */
- 	hisi_sas_write32(hisi_hba, OQ_INT_COAL_TIME, 0xa);
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index 452baf9d5a26..246712cace28 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -1321,6 +1321,7 @@ static int hisi_sas_softreset_ata_disk(struct domain_device *device)
+ 	}
+ 
+ 	if (rc == TMF_RESP_FUNC_COMPLETE) {
++		usleep_range(900, 1000);
+ 		ata_for_each_link(link, ap, EDGE) {
+ 			int pmp = sata_srst_pmp(link);
+ 
 -- 
 2.33.0
 
