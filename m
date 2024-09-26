@@ -1,38 +1,39 @@
-Return-Path: <linux-scsi+bounces-8508-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8500-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA302986AB8
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 03:44:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9FBF986AB0
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 03:43:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6070E1F20FB6
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 01:44:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1E7C1C2155A
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 01:43:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C62817B4F6;
-	Thu, 26 Sep 2024 01:43:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D010F176227;
+	Thu, 26 Sep 2024 01:43:37 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8BD017334E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C1A173355
 	for <linux-scsi@vger.kernel.org>; Thu, 26 Sep 2024 01:43:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727315018; cv=none; b=GfoJEPjyOmy6UqAWj5LB5s5kpCuVlEoyzjti04lX8ufS1lYQXRU+GXGwe0GFsLwC138b1ARQgt4RUtH0WPoelv7HZa5bNan+CApYTdMT+8TFy5OJhvCAx6WBDz8qpyTcVwUJEadZHjtsg+X8pAu2RAf2ez72hAVT6TgwBZPAVbU=
+	t=1727315017; cv=none; b=FnotI0Imf+4kormWYC0NB8KX4Vt+9DGRoTYi8E9zOCY5ebZswSyTjJFjgGgCoX14x6w0Piilrrv+jFzV2WRj9e78PoI/SL36466rJwwfjWd+4y1eL65RFGQCufG2I3BAVJqY/jaTKfFJ4STPHLeO7shZqOZxsjb+FBH2wyrgemU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727315018; c=relaxed/simple;
-	bh=mQDQwGEjnI6zhdlDT9Q/g8HZZGTCEn5ltEXJ1cv1JGs=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=L43Gi+sGi62cODhyTpel/GaqWuyxvo9NbAB4yVB56Wc17BzFFE+dkTLq9toO2ekkkk3TXViasEmyb8r5nZSLw4XyCkWpua+9RlXWYPr87dcqF6dPMHqJ+3D+Yx7nHgQToj1rRRLR05slyfgFwgjFms8Lsh+LT9Stdu4C8EgZmjQ=
+	s=arc-20240116; t=1727315017; c=relaxed/simple;
+	bh=jNQMpKsQA6W8gNsOBDDufeV/8BQ5Gx7pLeLyFhwKx3Y=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=USLEDivV/uNqanw85QgRlQ5IbNyBkmL0SULQJ1P5zhv/w/01hd5s04j9/0qb5tUW64uClr8XnPZqi0NWcWEYlpUDUGolj0Mxh4JuvEyyXJtN3fn20xYCp+Sl7X5NxDsDm3CyengK9+OqxcpEQD9AYBMvk7GDJ6nmN82fp4gzE4Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4XDbtl1pmQz1T7wp;
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4XDbtl2xP7z1T80D;
 	Thu, 26 Sep 2024 09:42:07 +0800 (CST)
 Received: from dggpemf100013.china.huawei.com (unknown [7.185.36.179])
-	by mail.maildlp.com (Postfix) with ESMTPS id 10CD814037E;
+	by mail.maildlp.com (Postfix) with ESMTPS id 3A7DC1401E0;
 	Thu, 26 Sep 2024 09:43:33 +0800 (CST)
 Received: from localhost.huawei.com (10.50.165.33) by
  dggpemf100013.china.huawei.com (7.185.36.179) with Microsoft SMTP Server
@@ -42,10 +43,12 @@ From: Yihang Li <liyihang9@huawei.com>
 To: <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>
 CC: <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
 	<liyihang9@huawei.com>
-Subject: [PATCH 00/13] scsi: hisi_sas: Some fixes for hisi_sas
-Date: Thu, 26 Sep 2024 09:43:19 +0800
-Message-ID: <20240926014332.3905399-1-liyihang9@huawei.com>
+Subject: [PATCH 01/13] scsi: hisi_sas: Adjust priority of registering and exiting debugfs for security
+Date: Thu, 26 Sep 2024 09:43:20 +0800
+Message-ID: <20240926014332.3905399-2-liyihang9@huawei.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20240926014332.3905399-1-liyihang9@huawei.com>
+References: <20240926014332.3905399-1-liyihang9@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -57,50 +60,95 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  dggpemf100013.china.huawei.com (7.185.36.179)
 
-This series contains some fixes including:
-- Adjust priority of registering and exiting debugfs for security;
-- Create trigger_dump at the end of the debugfs initialization;
-- Add firmware information check;
-- Enable all PHYs that are not disabled by user during controller reset;
-- Reset PHY again if phyup timeout;
-- Check usage count only when the runtime PM status is RPM_SUSPENDING;
-- Add cond_resched() for no forced preemption model;
-- Default enable interrupt coalescing;
-- Update disk locked timeout to 7 seconds;
-- Add time interval between two H2D FIS following soft reset spec;
-- Update v3 hw STP_LINK_TIMER setting;
-- Create all dump files during debugfs initialization;
-- Add latest_dump for the debugfs dump;
+To be safe, we should register debugfs at the last stage of driver
+initialization and then unregister debugfs at the first stage of driver
+uninstallation.
 
-Xingui Yang (3):
-  scsi: hisi_sas: Update disk locked timeout to 7 seconds
-  scsi: hisi_sas: Add time interval between two H2D FIS following soft
-    reset spec
-  scsi: hisi_sas: Update v3 hw STP_LINK_TIMER setting
+Signed-off-by: Yihang Li <liyihang9@huawei.com>
+Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
+---
+ drivers/scsi/hisi_sas/hisi_sas_main.c  |  4 ++--
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 17 ++++++-----------
+ 2 files changed, 8 insertions(+), 13 deletions(-)
 
-Yihang Li (10):
-  scsi: hisi_sas: Adjust priority of registering and exiting debugfs for
-    security
-  scsi: hisi_sas: Create trigger_dump at the end of the debugfs
-    initialization
-  scsi: hisi_sas: Add firmware information check
-  scsi: hisi_sas: Enable all PHYs that are not disabled by user during
-    controller reset
-  scsi: hisi_sas: Reset PHY again if phyup timeout
-  scsi: hisi_sas: Check usage count only when the runtime PM status is
-    RPM_SUSPENDING
-  scsi: hisi_sas: Add cond_resched() for no forced preemption model
-  scsi: hisi_sas: Default enable interrupt coalescing
-  scsi: hisi_sas: Create all dump files during debugfs initialization
-  scsi: hisi_sas: Add latest_dump for the debugfs dump
-
- drivers/scsi/hisi_sas/hisi_sas.h       |   1 +
- drivers/scsi/hisi_sas/hisi_sas_main.c  |  33 ++++-
- drivers/scsi/hisi_sas/hisi_sas_v1_hw.c |  18 +++
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c |  18 +++
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 187 ++++++++++++++++++-------
- 5 files changed, 206 insertions(+), 51 deletions(-)
-
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index 6219807ce3b9..d3dcc4918444 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -2630,10 +2630,10 @@ static __init int hisi_sas_init(void)
+ 
+ static __exit void hisi_sas_exit(void)
+ {
+-	sas_release_transport(hisi_sas_stt);
+-
+ 	if (hisi_sas_debugfs_enable)
+ 		debugfs_remove(hisi_sas_debugfs_dir);
++
++	sas_release_transport(hisi_sas_stt);
+ }
+ 
+ module_init(hisi_sas_init);
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index 4cd3a3eab6f1..63a7255d2994 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -4860,16 +4860,13 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 					    SHOST_DIX_GUARD_CRC);
+ 	}
+ 
+-	if (hisi_sas_debugfs_enable)
+-		debugfs_init_v3_hw(hisi_hba);
+-
+ 	rc = interrupt_preinit_v3_hw(hisi_hba);
+ 	if (rc)
+-		goto err_out_undo_debugfs;
++		goto err_out_free_host;
+ 
+ 	rc = scsi_add_host(shost, dev);
+ 	if (rc)
+-		goto err_out_undo_debugfs;
++		goto err_out_free_host;
+ 
+ 	rc = sas_register_ha(sha);
+ 	if (rc)
+@@ -4880,6 +4877,8 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		goto err_out_unregister_ha;
+ 
+ 	scsi_scan_host(shost);
++	if (hisi_sas_debugfs_enable)
++		debugfs_init_v3_hw(hisi_hba);
+ 
+ 	pm_runtime_set_autosuspend_delay(dev, 5000);
+ 	pm_runtime_use_autosuspend(dev);
+@@ -4900,9 +4899,6 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	sas_unregister_ha(sha);
+ err_out_remove_host:
+ 	scsi_remove_host(shost);
+-err_out_undo_debugfs:
+-	if (hisi_sas_debugfs_enable)
+-		debugfs_exit_v3_hw(hisi_hba);
+ err_out_free_host:
+ 	hisi_sas_free(hisi_hba);
+ 	scsi_host_put(shost);
+@@ -4934,6 +4930,8 @@ static void hisi_sas_v3_remove(struct pci_dev *pdev)
+ 	struct Scsi_Host *shost = sha->shost;
+ 
+ 	pm_runtime_get_noresume(dev);
++	if (hisi_sas_debugfs_enable)
++		debugfs_exit_v3_hw(hisi_hba);
+ 
+ 	sas_unregister_ha(sha);
+ 	flush_workqueue(hisi_hba->wq);
+@@ -4941,9 +4939,6 @@ static void hisi_sas_v3_remove(struct pci_dev *pdev)
+ 
+ 	hisi_sas_v3_destroy_irqs(pdev, hisi_hba);
+ 	hisi_sas_free(hisi_hba);
+-	if (hisi_sas_debugfs_enable)
+-		debugfs_exit_v3_hw(hisi_hba);
+-
+ 	scsi_host_put(shost);
+ }
+ 
 -- 
 2.33.0
 
