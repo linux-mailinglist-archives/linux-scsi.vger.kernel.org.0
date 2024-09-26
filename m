@@ -1,40 +1,40 @@
-Return-Path: <linux-scsi+bounces-8506-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8502-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 125AE986AB6
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 03:43:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15224986AB2
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 03:43:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42CCF1C21349
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 01:43:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4663E1C2131B
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 01:43:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05B0C17ADEE;
-	Thu, 26 Sep 2024 01:43:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FE48176AD8;
+	Thu, 26 Sep 2024 01:43:38 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0611714BE
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EED917335E
 	for <linux-scsi@vger.kernel.org>; Thu, 26 Sep 2024 01:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727315018; cv=none; b=nRUchm1whN4qqIuyf2s88VLS9hY/K34YvkJ5uJ5EuB+f+ydfwWdsNuolb5DcZ1v5LqAiiL614jVJNGNNhGTGnj61MMTqqjYtsNgqpozPC74bNsj15xhjRnJ30z2D2yj6Khn1dDyNT329qljdcZK/lzMyfz5ifB048tEw7LjJRTg=
+	t=1727315018; cv=none; b=UA7tdn2ZXy9p2WGep57uBfjP/3i5D8aJc89+KjS1b5K1ty3wdIfDzRSgs5XVZ4VHd1GX/ehczphnl8tp/EGUJ8HWz0B7N3fp8cTKXSBv6DeZNaxxJMB8HiqWUi185jnL8QhpOx6JIpcf6mtyqA3W/Cl8QCY4SW7an8wexUJiZwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1727315018; c=relaxed/simple;
-	bh=6UbY7UAJrOSIY62FzegcwiYEE5Aolgs4PcRNS7Cym8M=;
+	bh=wchtal4BB6WvDzdo6JpMhbSZbRuFADPHFRu//GdlI9w=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sEZLY6vghB8cqvHOlAnCs6jdCwrIfphTdgzoelq1yfjsF7ATyU9YttvGZ4K6pJ81p+eX2I7Yy6UcfNOepZNh7msp3WGVPDZX745zh4/mTN/Qync3e3UbNA++CJ7aCajFP4gn88oSqczUnvWObn8meOMJ5h/UZFhViiKagPQRCow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+	 MIME-Version:Content-Type; b=aC9a3eqES6YmreEC3GvGIlRyd+k2vpIwIErs33DlP/g1C9ADCjguUD+hX/3NyAMselCJClDPj0CnX55XTRLZXEKdN87ue/MHO0AKdVYNFdrbCqOB4SvEeG5vWuD8mQLNTfowL4QRCsaOZG+dGzNf3CpQukEkSEHY9OiDEEboQVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4XDbqy4mKpz1HK0d;
-	Thu, 26 Sep 2024 09:39:42 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4XDbtl6Tzdz10MfZ;
+	Thu, 26 Sep 2024 09:42:07 +0800 (CST)
 Received: from dggpemf100013.china.huawei.com (unknown [7.185.36.179])
-	by mail.maildlp.com (Postfix) with ESMTPS id D206418002B;
-	Thu, 26 Sep 2024 09:43:33 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 052E71800F2;
+	Thu, 26 Sep 2024 09:43:34 +0800 (CST)
 Received: from localhost.huawei.com (10.50.165.33) by
  dggpemf100013.china.huawei.com (7.185.36.179) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -43,9 +43,9 @@ From: Yihang Li <liyihang9@huawei.com>
 To: <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>
 CC: <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
 	<liyihang9@huawei.com>
-Subject: [PATCH 05/13] scsi: hisi_sas: Reset PHY again if phyup timeout
-Date: Thu, 26 Sep 2024 09:43:24 +0800
-Message-ID: <20240926014332.3905399-6-liyihang9@huawei.com>
+Subject: [PATCH 06/13] scsi: hisi_sas: Check usage count only when the runtime PM status is RPM_SUSPENDING
+Date: Thu, 26 Sep 2024 09:43:25 +0800
+Message-ID: <20240926014332.3905399-7-liyihang9@huawei.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20240926014332.3905399-1-liyihang9@huawei.com>
 References: <20240926014332.3905399-1-liyihang9@huawei.com>
@@ -60,58 +60,51 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  dggpemf100013.china.huawei.com (7.185.36.179)
 
-In commit 89954f024c3a ("scsi: hisi_sas: Ensure all enabled PHYs up during
-controller reset"), we enable PHYs in parallel through async operations
-and wait for PHYs come up. However, for some directly attached SATA disks,
-the PHY not come up after a timeout period and the hardware is not ready.
-At this time, we should get the latest PHY hardware state, if the new PHY
-state is not ready but the old PHY state is ready, call work
-HISI_PHYE_LINK_RESET to give it another chance to phyup.
+Users can suspend the machine with 'echo disk > /sys/power/state', but the
+suspend will fail because the SAS controller cannot be suspended:
+
+[root@localhost ~]# echo freeze > /sys/power/state
+-bash: echo: write error: Device or resource busy
+[15104.142955] PM: suspend entry (s2idle)
+...
+[15104.283465] hisi_sas_v3_hw 0000:32:04.0: entering suspend state
+[15104.283480] hisi_sas_v3_hw 0000:30:04.0: entering suspend state
+[15104.283500] hisi_sas_v3_hw 0000:32:04.0: PM suspend: host status cannot be suspended
+[15104.283508] hisi_sas_v3_hw 0000:30:04.0: PM suspend: host status cannot be suspended
+[15104.283516] hisi_sas_v3_hw 0000:32:04.0: PM: pci_pm_suspend(): suspend_v3_hw+0x0/0x210 [hisi_sas_v3_hw] returns -16
+[15104.283527] hisi_sas_v3_hw 0000:32:04.0: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x1c0 returns -16
+[15104.283524] hisi_sas_v3_hw 0000:30:04.0: PM: pci_pm_suspend(): suspend_v3_hw+0x0/0x210 [hisi_sas_v3_hw] returns -16
+[15104.283533] hisi_sas_v3_hw 0000:32:04.0: PM: failed to suspend async: error -16
+[15104.283536] hisi_sas_v3_hw 0000:30:04.0: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x1c0 returns -16
+[15104.283542] hisi_sas_v3_hw 0000:30:04.0: PM: failed to suspend async: error -16
+
+The problem is that when the ->runtime_suspend() callback suspend_v3_hw()
+is executing, the current runtime PM status is RPM_ACTIVE and the usage
+count of the controller is not 0, so return immediately.
+
+To fix it, Check the device usage count only when the runtime PM status is
+RPM_SUSPENDING.
 
 Signed-off-by: Yihang Li <liyihang9@huawei.com>
 Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_main.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 85374800251a..452baf9d5a26 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -1384,6 +1384,7 @@ static void hisi_sas_refresh_port_id(struct hisi_hba *hisi_hba)
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index d48777fc4bd9..9e65ad0e6ce0 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -5048,7 +5048,8 @@ static int _suspend_v3_hw(struct device *device)
+ 	interrupt_disable_v3_hw(hisi_hba);
  
- static void hisi_sas_rescan_topology(struct hisi_hba *hisi_hba, u32 state)
- {
-+	u32 new_state = hisi_hba->hw->get_phys_state(hisi_hba);
- 	struct asd_sas_port *_sas_port = NULL;
- 	int phy_no;
- 
-@@ -1397,7 +1398,7 @@ static void hisi_sas_rescan_topology(struct hisi_hba *hisi_hba, u32 state)
- 			continue;
- 
- 		/* Report PHY state change to libsas */
--		if (state & BIT(phy_no)) {
-+		if (new_state & BIT(phy_no)) {
- 			if (do_port_check && sas_port && sas_port->port_dev) {
- 				struct domain_device *dev = sas_port->port_dev;
- 
-@@ -1410,6 +1411,16 @@ static void hisi_sas_rescan_topology(struct hisi_hba *hisi_hba, u32 state)
- 			}
- 		} else {
- 			hisi_sas_phy_down(hisi_hba, phy_no, 0, GFP_KERNEL);
-+
-+			/*
-+			 * The new_state is not ready but old_state is ready,
-+			 * the two possible causes:
-+			 * 1. The connected device is removed
-+			 * 2. Device exists but phyup timed out
-+			 */
-+			if (state & BIT(phy_no))
-+				hisi_sas_notify_phy_event(phy,
-+							  HISI_PHYE_LINK_RESET);
- 		}
- 	}
- }
+ #ifdef CONFIG_PM
+-	if (atomic_read(&device->power.usage_count)) {
++	if ((device->power.runtime_status == RPM_SUSPENDING) &&
++	    atomic_read(&device->power.usage_count)) {
+ 		dev_err(dev, "PM suspend: host status cannot be suspended\n");
+ 		rc = -EBUSY;
+ 		goto err_out;
 -- 
 2.33.0
 
