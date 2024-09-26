@@ -1,156 +1,107 @@
-Return-Path: <linux-scsi+bounces-8497-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8508-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8862898653D
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Sep 2024 18:56:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA302986AB8
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 03:44:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B437D1C23A85
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Sep 2024 16:56:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6070E1F20FB6
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Sep 2024 01:44:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 417DB219E0;
-	Wed, 25 Sep 2024 16:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="knUhiyHL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C62817B4F6;
+	Thu, 26 Sep 2024 01:43:39 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8062A134BD
-	for <linux-scsi@vger.kernel.org>; Wed, 25 Sep 2024 16:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8BD017334E
+	for <linux-scsi@vger.kernel.org>; Thu, 26 Sep 2024 01:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727283392; cv=none; b=MkL5/RuMRR+UV9r+WAxSArnO9ZPCR/hT70SziZj4VTDZhNl0Mmt5Qc6A2MjY/D2D8WCIkUpIc0VKk553TQzq51QU2EkqI5d98n034PHBYFCriOYGWuzHGUQjXf+Bo9cE7ri/cmERBp7fSRcAVFz7ObBGbPHqxjeQEukIwTiKNBQ=
+	t=1727315018; cv=none; b=GfoJEPjyOmy6UqAWj5LB5s5kpCuVlEoyzjti04lX8ufS1lYQXRU+GXGwe0GFsLwC138b1ARQgt4RUtH0WPoelv7HZa5bNan+CApYTdMT+8TFy5OJhvCAx6WBDz8qpyTcVwUJEadZHjtsg+X8pAu2RAf2ez72hAVT6TgwBZPAVbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727283392; c=relaxed/simple;
-	bh=8LfVU+3vKBBRvTpUQYOHOe6v/yO7i4HkllNTLYLxIOY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ryGhtRdvgo9ZzIxY/xaG73UWxED5hPFILp4A2O+Gt7cldL24kBr1U7hp0NtoDMxF6Q5QvktIa0kU+ai0jYDsvzD6Gcrw2lKT8xQp66ghPCp3CXT4RWWYbf441CXbs/5xWAjI1J9zDDlz/ZcrepVaYMkT6pXpXXsK1/YhF04RHBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=knUhiyHL; arc=none smtp.client-ip=199.89.1.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4XDNDF5ffhzlgTWQ;
-	Wed, 25 Sep 2024 16:56:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1727283380; x=1729875381; bh=W1uARAEtCZ8e6OEALGT3Y0Ul
-	/ZUS/KuncBTF6dONDlI=; b=knUhiyHLVbFzyYlAwrAT6d8/3aeP5MhmDlNCPNdn
-	h7qhOz8b9M9+Ye7ofQa/bSObAG79D/TtWhmP4u/cJxB97P4F9qbo51VBx7x2v2I/
-	7O/jXpIYAiGYl80StA3EIxUEHP7Udjg3mR5jCcVN9ds1OtludtxRkJKH+/wDVT8m
-	9WKXqKbc1ri4qIdHUlW/Oklfa9082LMGeUfYxg5h0mqmxGEl0G16WLVqqRB5A91D
-	IhnLZvpSmu7v0jmKFRYFTq4iQgi1EywILGwQA6D9Gv++orCFNwnton1674/vXDz+
-	JFTYvX74BTUt8o5Ac1NVMyBJeVjFW4qg9ad5RSscDqFR+A==
-X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id CGrYvXZT-pvp; Wed, 25 Sep 2024 16:56:20 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4XDNCz56jPzlgTWK;
-	Wed, 25 Sep 2024 16:56:15 +0000 (UTC)
-Message-ID: <03b34628-d70b-4ce6-ad87-3c2070105bfa@acm.org>
-Date: Wed, 25 Sep 2024 09:56:13 -0700
+	s=arc-20240116; t=1727315018; c=relaxed/simple;
+	bh=mQDQwGEjnI6zhdlDT9Q/g8HZZGTCEn5ltEXJ1cv1JGs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=L43Gi+sGi62cODhyTpel/GaqWuyxvo9NbAB4yVB56Wc17BzFFE+dkTLq9toO2ekkkk3TXViasEmyb8r5nZSLw4XyCkWpua+9RlXWYPr87dcqF6dPMHqJ+3D+Yx7nHgQToj1rRRLR05slyfgFwgjFms8Lsh+LT9Stdu4C8EgZmjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4XDbtl1pmQz1T7wp;
+	Thu, 26 Sep 2024 09:42:07 +0800 (CST)
+Received: from dggpemf100013.china.huawei.com (unknown [7.185.36.179])
+	by mail.maildlp.com (Postfix) with ESMTPS id 10CD814037E;
+	Thu, 26 Sep 2024 09:43:33 +0800 (CST)
+Received: from localhost.huawei.com (10.50.165.33) by
+ dggpemf100013.china.huawei.com (7.185.36.179) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 26 Sep 2024 09:43:32 +0800
+From: Yihang Li <liyihang9@huawei.com>
+To: <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>
+CC: <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
+	<liyihang9@huawei.com>
+Subject: [PATCH 00/13] scsi: hisi_sas: Some fixes for hisi_sas
+Date: Thu, 26 Sep 2024 09:43:19 +0800
+Message-ID: <20240926014332.3905399-1-liyihang9@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 3/3] ufs: core: add a quirk for MediaTek SDB mode
- aborted
-To: peter.wang@mediatek.com, linux-scsi@vger.kernel.org,
- martin.petersen@oracle.com, avri.altman@wdc.com, alim.akhtar@samsung.com,
- jejb@linux.ibm.com
-Cc: wsd_upstream@mediatek.com, linux-mediatek@lists.infradead.org,
- chun-hung.wu@mediatek.com, alice.chao@mediatek.com, cc.chou@mediatek.com,
- chaotian.jing@mediatek.com, jiajie.hao@mediatek.com, powen.kao@mediatek.com,
- qilin.tan@mediatek.com, lin.gui@mediatek.com, tun-yu.yu@mediatek.com,
- eddie.huang@mediatek.com, naomi.chu@mediatek.com, ed.tsai@mediatek.com,
- quic_nguyenb@quicinc.com
-References: <20240925095546.19492-1-peter.wang@mediatek.com>
- <20240925095546.19492-4-peter.wang@mediatek.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20240925095546.19492-4-peter.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemf100013.china.huawei.com (7.185.36.179)
 
-On 9/25/24 2:55 AM, peter.wang@mediatek.com wrote:
-> From: Peter Wang <peter.wang@mediatek.com>
-> 
-> Because the MediaTek UFS controller uses UTRLCLR to clear commands
-> and fills the OCS with ABORTED, this patch introduces a quirk to
-> treat ABORTED as INVALID_OCS_VALUE.
-> 
-> Signed-off-by: Peter Wang <peter.wang@mediatek.com>
-> ---
->   drivers/ufs/core/ufshcd.c       | 5 ++++-
->   drivers/ufs/host/ufs-mediatek.c | 1 +
->   include/ufs/ufshcd.h            | 6 ++++++
->   3 files changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index 4fff929b70d6..d429817fca94 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -5404,7 +5404,10 @@ ufshcd_transfer_rsp_status(struct ufs_hba *hba, struct ufshcd_lrb *lrbp,
->   		}
->   		break;
->   	case OCS_ABORTED:
-> -		result |= DID_ABORT << 16;
-> +		if (hba->quirks & UFSHCD_QUIRK_OCS_ABORTED)
-> +			result |= DID_REQUEUE << 16;
-> +		else
-> +			result |= DID_ABORT << 16;
->   		dev_warn(hba->dev,
->   				"OCS aborted from controller for tag %d\n",
->   				lrbp->task_tag);
-> diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-> index 02c9064284e1..8a4c1b8f5a26 100644
-> --- a/drivers/ufs/host/ufs-mediatek.c
-> +++ b/drivers/ufs/host/ufs-mediatek.c
-> @@ -1021,6 +1021,7 @@ static int ufs_mtk_init(struct ufs_hba *hba)
->   	hba->quirks |= UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL;
->   	hba->quirks |= UFSHCD_QUIRK_MCQ_BROKEN_INTR;
->   	hba->quirks |= UFSHCD_QUIRK_MCQ_BROKEN_RTC;
-> +	hba->quirks |= UFSHCD_QUIRK_OCS_ABORTED;
->   	hba->vps->wb_flush_threshold = UFS_WB_BUF_REMAIN_PERCENT(80);
->   
->   	if (host->caps & UFS_MTK_CAP_DISABLE_AH8)
-> diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-> index 0fd2aebac728..8f156803d703 100644
-> --- a/include/ufs/ufshcd.h
-> +++ b/include/ufs/ufshcd.h
-> @@ -684,6 +684,12 @@ enum ufshcd_quirks {
->   	 * single doorbell mode.
->   	 */
->   	UFSHCD_QUIRK_BROKEN_LSDBS_CAP			= 1 << 25,
-> +
-> +	/*
-> +	 * Some host controllers set OCS_ABORTED after UTRLCLR (SDB mode),
-> +	 * this quirk is set to treat OCS: ABORTED as INVALID_OCS_VALUE
-> +	 */
-> +	UFSHCD_QUIRK_OCS_ABORTED			= 1 << 26,
->   };
->   
->   enum ufshcd_caps {
+This series contains some fixes including:
+- Adjust priority of registering and exiting debugfs for security;
+- Create trigger_dump at the end of the debugfs initialization;
+- Add firmware information check;
+- Enable all PHYs that are not disabled by user during controller reset;
+- Reset PHY again if phyup timeout;
+- Check usage count only when the runtime PM status is RPM_SUSPENDING;
+- Add cond_resched() for no forced preemption model;
+- Default enable interrupt coalescing;
+- Update disk locked timeout to 7 seconds;
+- Add time interval between two H2D FIS following soft reset spec;
+- Update v3 hw STP_LINK_TIMER setting;
+- Create all dump files during debugfs initialization;
+- Add latest_dump for the debugfs dump;
 
-ufshcd_transfer_rsp_status() only has one caller, namely 
-ufshcd_compl_one_cqe(). The previous patch makes sure that that 
-ufshcd_compl_one_cqe() is not called if a SCSI command is aborted. So
-why does this patch modify how OCS_ABORTED is processed? Is this patch
-necessary or can it perhaps be dropped?
+Xingui Yang (3):
+  scsi: hisi_sas: Update disk locked timeout to 7 seconds
+  scsi: hisi_sas: Add time interval between two H2D FIS following soft
+    reset spec
+  scsi: hisi_sas: Update v3 hw STP_LINK_TIMER setting
 
-Thanks,
+Yihang Li (10):
+  scsi: hisi_sas: Adjust priority of registering and exiting debugfs for
+    security
+  scsi: hisi_sas: Create trigger_dump at the end of the debugfs
+    initialization
+  scsi: hisi_sas: Add firmware information check
+  scsi: hisi_sas: Enable all PHYs that are not disabled by user during
+    controller reset
+  scsi: hisi_sas: Reset PHY again if phyup timeout
+  scsi: hisi_sas: Check usage count only when the runtime PM status is
+    RPM_SUSPENDING
+  scsi: hisi_sas: Add cond_resched() for no forced preemption model
+  scsi: hisi_sas: Default enable interrupt coalescing
+  scsi: hisi_sas: Create all dump files during debugfs initialization
+  scsi: hisi_sas: Add latest_dump for the debugfs dump
 
-Bart.
+ drivers/scsi/hisi_sas/hisi_sas.h       |   1 +
+ drivers/scsi/hisi_sas/hisi_sas_main.c  |  33 ++++-
+ drivers/scsi/hisi_sas/hisi_sas_v1_hw.c |  18 +++
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c |  18 +++
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 187 ++++++++++++++++++-------
+ 5 files changed, 206 insertions(+), 51 deletions(-)
+
+-- 
+2.33.0
+
 
