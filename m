@@ -1,115 +1,145 @@
-Return-Path: <linux-scsi+bounces-8671-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8673-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AB4998FC30
-	for <lists+linux-scsi@lfdr.de>; Fri,  4 Oct 2024 04:09:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB16898FC63
+	for <lists+linux-scsi@lfdr.de>; Fri,  4 Oct 2024 04:36:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 433851F23630
-	for <lists+linux-scsi@lfdr.de>; Fri,  4 Oct 2024 02:09:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD32F2838D9
+	for <lists+linux-scsi@lfdr.de>; Fri,  4 Oct 2024 02:36:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC3A24B5B;
-	Fri,  4 Oct 2024 02:08:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57CDA282FD;
+	Fri,  4 Oct 2024 02:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="krIQcdki"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iApDyG15"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F435241E7;
-	Fri,  4 Oct 2024 02:08:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4ED1CAAF
+	for <linux-scsi@vger.kernel.org>; Fri,  4 Oct 2024 02:35:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728007739; cv=none; b=NyfNqN/A8WIml4I1lEkw9NIcm5DnL6KXzGLlCsd0zDLJjuC/YaF4peCP9GqGSZTxP+2cA+/clnGNjv0rSnEFX9RzkVv7rDFjGYxmGUmg9l1Dq5LKmYB1/ndqcoYNfP0VVxGwyUuCnIDTzvH256okBKJXGJwICGCvoG9nnsTigfY=
+	t=1728009358; cv=none; b=FLGKWzaHvyD+GhDT58jbdXP2mFmME8+PMPXdams4WP80jth//JyZ119HWtRFhnuIV1oPtvTx2LkoYdaW7nOZ2baR0pdpWETSBVL7PP7v7PIINQbqkktyrTqsMSeknhmgg+wmFSJ1ZOUZihzOCjrWUxlLv8yiqvOlmCPlkcjx34g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728007739; c=relaxed/simple;
-	bh=Pa7h51ZuIAZ85G0lqTJND6ua+oBMQex+ghL0S3JOBMQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lan0hQc9xTKXVH76IOzWvUyTP+HCWmgTVvnFAAgL/hPOK5j4GZy7joJBoFmjs4nJzO2e5DKgcj1EqbzVc7BZlQxEgu91Fn5Txr75ePfYlMX0RRbVNJlwr+Ik+A3BmL4dG87wtTpmzr0tqtcC652V8HAsrMyjRgbh7BQEfMdocD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=krIQcdki; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4940te4H007648;
-	Fri, 4 Oct 2024 02:08:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type:content-transfer-encoding; s=
-	corp-2023-11-20; bh=TSYp3uNp/5P9hOjRNQSyP5XupqoeJyPR79IIIZQyRBg=; b=
-	krIQcdkinhku7IuQBT23pu0CO1fqCIZQDlDd34hFbNKNnnlCbfCrAdDPR2QzTXEP
-	EsFUd0+llMXR4GIG800p9zHlg1YUBoeZ3ySfVyUdQ27fv5wgAFfOb3FLeKSSHKPv
-	vlJEdP7C+JwH0WWlLpZm+HoJX1vbitNHpnxlzPdOAV63D++da0yainWhz7WDnjN1
-	+K/Zb8eG7LCmuVz2aR6PYHCrAiJcioEed8pRmZ+N+/dNQIK7Ig3Yl3mcnKPMq2zr
-	+QQar26dRfWbT+ezvVpMphErzR/kxa9OqZphFkGJ8OnlXOjxPB6zcKWkiZGvsy/2
-	WKgRwyfmsBSbr+LBSPN74g==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4220498p44-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 04 Oct 2024 02:08:51 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4940NUSB038380;
-	Fri, 4 Oct 2024 02:08:50 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 422054pb2m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 04 Oct 2024 02:08:50 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49427bli036075;
-	Fri, 4 Oct 2024 02:08:49 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 422054pb11-4;
-	Fri, 04 Oct 2024 02:08:49 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Satish Kharat <satishkh@cisco.com>, Sesidhar Baddela <sebaddel@cisco.com>,
-        Karan Tilak Kumar <kartilak@cisco.com>,
-        Martin Wilck <martin.wilck@suse.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <jejb@linux.vnet.ibm.com>,
-        Lee Duncan <lduncan@suse.com>, Hannes Reinecke <hare@suse.de>,
-        Martin Wilck <mwilck@suse.com>, Petr Mladek <pmladek@suse.com>,
-        linux-scsi@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] scsi: fnic: move flush_work initialization out of if block
-Date: Thu,  3 Oct 2024 22:08:09 -0400
-Message-ID: <172800766873.2547528.18433845515105510650.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.46.1
-In-Reply-To: <20240930133014.71615-1-mwilck@suse.com>
-References: <20240930133014.71615-1-mwilck@suse.com>
+	s=arc-20240116; t=1728009358; c=relaxed/simple;
+	bh=Q+/mUUWKiNG2+IsDs3j9++TToCvr4rKhVypFi77aAjA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=o9fbronuEvQ2vCUoeYJqyR/m3N+c62caXnydqH7132SlNpjEZiO7x+p8nuDK19acoWwrg4CyW/iGJHpfqsJaoOwBh2lAuYQ2lWIYa2N0cOpCOW/e3LM4MEoPyIhMg2vHLdanpujQ049RiNzThKTMV+e2Ky+J3a+xHSwZkK8Ap3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iApDyG15; arc=none smtp.client-ip=95.215.58.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <734623a7-c8c3-46f9-a564-c2265fb79ff1@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1728009352;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ymFwru73XfTHz1sVaFBcyx39mulsMFBjrH0H1o5NdvA=;
+	b=iApDyG15i7FbLMDIaZ0ZF8bgQoeL5WtU9qypE2SWWluHBERlWAX1PAeLeixqM3x2/vlLXz
+	JmdkYvjWUHZ52QioGrHtACKhxMKA09aiMLw/gFN8fLM7S39gAXE/20uuPsb7b7dBYnauqq
+	p/ll/LjrmZPnOGg1ZkIWU4d3hlYja9k=
+Date: Fri, 4 Oct 2024 10:35:33 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Subject: Re: blktests failures with v6.12-rc1 kernel
+To: Bart Van Assche <bvanassche@acm.org>,
+ Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
+ "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+ "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+ "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+ "nbd@other.debian.org" <nbd@other.debian.org>,
+ "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
+References: <xpe6bea7rakpyoyfvspvin2dsozjmjtjktpph7rep3h25tv7fb@ooz4cu5z6bq6>
+ <e6e6f77b-f5c6-4b1e-8ab2-b492755857f0@acm.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <e6e6f77b-f5c6-4b1e-8ab2-b492755857f0@acm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-04_01,2024-10-03_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- bulkscore=0 spamscore=0 mlxscore=0 phishscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2409260000 definitions=main-2410040014
-X-Proofpoint-ORIG-GUID: Lo_UB6J59lPBgPtQsrsSXKeviUAMkUPJ
-X-Proofpoint-GUID: Lo_UB6J59lPBgPtQsrsSXKeviUAMkUPJ
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 30 Sep 2024 15:30:14 +0200, Martin Wilck wrote:
-
-> (resending, sorry - I'd forgotten to add the mailing list)
+在 2024/10/4 4:56, Bart Van Assche 写道:
+> On 10/3/24 1:02 AM, Shinichiro Kawasaki wrote:
+>> #3: srp/001,002,011,012,013,014,016
+>>
+>>     The seven test cases in srp test group failed due to the WARN
+>>     "kmem_cache of name 'srpt-rsp-buf' already exists" [4]. The 
+>> failures are
+>>     recreated in stable manner. They need further debug effort.
 > 
-> After commit 379a58caa199 ("scsi: fnic: Move fnic_fnic_flush_tx() to a work
-> queue"), it can happen that a work item is sent to an uninitialized work
-> queue.  This may has the effect that the item being queued is never
-> actually queued, and any further actions depending on it will not proceed.
+> Does the patch below help?
+
+Hi, Bart
+
+What is the root cause of this problem?
+
+The following patch just allocates a new memory with a unique name. Can 
+we make sure that the allocated memory is freed?
+
+Does this will cause memory leak?
+
+Thanks,
+Zhu Yanjun
+
 > 
-> [...]
+> Thanks,
+> 
+> Bart.
+> 
+> 
+> Subject: [PATCH] RDMA/srpt: Make kmem cache names unique
+> 
+> Make sure that the "srpt-rsp-buf" cache names are unique. An example of
+> a unique name generated by this patch:
+> 
+> srpt-rsp-buf-fe80:0000:0000:0000:5054:00ff:fe5e:4708-enp1s0_siw-1
+> 
+> Reported-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+> Fixes: 5dabcd0456d7 ("RDMA/srpt: Add support for immediate data")
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> ---
+>   drivers/infiniband/ulp/srpt/ib_srpt.c | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/infiniband/ulp/srpt/ib_srpt.c b/drivers/infiniband/ 
+> ulp/srpt/ib_srpt.c
+> index 9632afbd727b..c4feb39b3106 100644
+> --- a/drivers/infiniband/ulp/srpt/ib_srpt.c
+> +++ b/drivers/infiniband/ulp/srpt/ib_srpt.c
+> @@ -2164,6 +2164,7 @@ static int srpt_cm_req_recv(struct srpt_device 
+> *const sdev,
+>       u32 it_iu_len;
+>       int i, tag_num, tag_size, ret;
+>       struct srpt_tpg *stpg;
+> +    char *cache_name;
+> 
+>       WARN_ON_ONCE(irqs_disabled());
+> 
+> @@ -2245,8 +2246,13 @@ static int srpt_cm_req_recv(struct srpt_device 
+> *const sdev,
+>       INIT_LIST_HEAD(&ch->cmd_wait_list);
+>       ch->max_rsp_size = ch->sport->port_attrib.srp_max_rsp_size;
+> 
+> -    ch->rsp_buf_cache = kmem_cache_create("srpt-rsp-buf", ch- 
+>  >max_rsp_size,
+> +    cache_name = kasprintf(GFP_KERNEL, "srpt-rsp-buf-%s-%s-%d", src_addr,
+> +                   dev_name(&sport->sdev->device->dev), port_num);
+> +    if (!cache_name)
+> +        goto free_ch;
+> +    ch->rsp_buf_cache = kmem_cache_create(cache_name, ch->max_rsp_size,
+>                             512, 0, NULL);
+> +    kfree(cache_name);
+>       if (!ch->rsp_buf_cache)
+>           goto free_ch;
+> 
+> 
 
-Applied to 6.12/scsi-fixes, thanks!
-
-[1/1] scsi: fnic: move flush_work initialization out of if block
-      https://git.kernel.org/mkp/scsi/c/f30e5f77d2f2
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
 
