@@ -1,128 +1,120 @@
-Return-Path: <linux-scsi+bounces-8693-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8695-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47C489913CE
-	for <lists+linux-scsi@lfdr.de>; Sat,  5 Oct 2024 03:41:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4FB19914EF
+	for <lists+linux-scsi@lfdr.de>; Sat,  5 Oct 2024 08:44:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 901C6B21757
-	for <lists+linux-scsi@lfdr.de>; Sat,  5 Oct 2024 01:41:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E0B9B21E10
+	for <lists+linux-scsi@lfdr.de>; Sat,  5 Oct 2024 06:44:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BF8D125D5;
-	Sat,  5 Oct 2024 01:41:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36C4E12FB34;
+	Sat,  5 Oct 2024 06:44:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="GSqmSQw/"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="FePy3OCA"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E612D520
-	for <linux-scsi@vger.kernel.org>; Sat,  5 Oct 2024 01:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E00560DCF;
+	Sat,  5 Oct 2024 06:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728092472; cv=none; b=P05dfh56QUYOdz3C32txM5//HFDriKGvQECWKXE6hghdfADPz45MdAjB0YXMkRvQi6Umh5db0rtD2F1yVypCzYhQa3tozNVpTUi2Xqb6NWvTfpysbJAYnAmS02k6vQaISfBM9Lxvh0e/Ub4VSFAwZOWb5n+uktETheaHe2mRezs=
+	t=1728110645; cv=none; b=CwTwA0w8ZxASs++U88xNztizY/yJIjMnIayjZkzNgXsXqEn7I0uM+7fdsb75IbBlX/d68xwvU2o+nXUe5/BP5WfmBD2sXNzoOMoy5nzob2nx4RWuR0fzTPgB9gKvrQcPyU5H3ePvqAurV6ZQnPQHTGayLxE1+t0N/gwqv01F+bE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728092472; c=relaxed/simple;
-	bh=RoscfG4izei2jeMKMWExFvYBHrkJAjn0P0P4nvoPNus=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JjtR8gbNnpnImRyndnKPPTWHKyi4OTofYJxiCPw0lRribgMC6APTEGfxBVO4llC01IqM3ULwrwveQ6AX7ldgZZx46RI9jcsqg5ttmIgQyNx+TBTU6TL43ZOrQZ5HMSWlwzoUh5mD0xRvzW0Gh0a3MElusXmM7sI2DrHGB9fUxDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=GSqmSQw/; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-20bb610be6aso30271825ad.1
-        for <linux-scsi@vger.kernel.org>; Fri, 04 Oct 2024 18:41:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1728092469; x=1728697269; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IUj5Q8Oaq99Jq3sBB6jeIQ4hAZm7itRv4sV13fDobkk=;
-        b=GSqmSQw/uw2yQQK5wbsacuftoIs5s/dXa6DjG7Nw4a2xnA6P9HR2E7eFLziklJ63Lg
-         nf0MHoZGMOLx1JACukv6SjC9PaoooyJRCjfxjajNEk4abZDINB4qxY5LpXVAdJYAAQe5
-         VkFvybDd1wLMtPA05uQ4D1XlHz0mbKw9SB4THJ8MqX/5hr3yL+XXJh/BC7IAL2/QZmIt
-         RBFO6oBl+LhlvkmdJ4ISX6c8YaEACOZ/W8xLMojCkWUE0zYj070Axy9C8dnzTD4oD3mq
-         JI3RW2WJdUq4WqXWQVHYEKTKoLtZ1rACSuxdsGe/4Snwc+Mc+NrjyvirpcX+48FyOMm2
-         GR+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728092469; x=1728697269;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IUj5Q8Oaq99Jq3sBB6jeIQ4hAZm7itRv4sV13fDobkk=;
-        b=p//Ts9KcFJv24PLLH2zyLiEyTckVGVmSFYIodEQHj9frxQkynYncW0VmDZ+DxP1m6A
-         sFYzTs1LJZ4rIFOgIoQyNqD2pl8IaNx5G55ktWFmcKGqQ4X9BHVB8+Dq8BVE8CuJUhh3
-         QNeLSBgibm40O9qq4C73tFDqRv1qEVoAMM9RUP6J+pwPz0pH3MynCb98qeKANLZbr2Pc
-         bMX4U59HzeKleR+x36pGJ9GQHmCjeDQlvWVoGqVrWwZYIr/jRjUG6xWM7wKlLNWH1hOj
-         H5KBrdL6GUUPyquwivHWeDqVoQIW6V+QRjBUZzebUj3UCMVN/koxkv8CxlBYNHu7EZNh
-         +rZw==
-X-Forwarded-Encrypted: i=1; AJvYcCVTmNPKWFK0MuRa0QyqFXs25e2K+Wh3xDXjPNSymsx3sFjH7lxbYYTWy8bAqwJW3qcO33AsPiCKp1uh@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnTgcJNMMYZWI8FFNH+5twlIUEG/jSbI7cbu64nYGyCx4RxAvm
-	RPYw19gEHLvC4ZF7y/uWxIWotCi2HwB4+UUGXyLuW9vA33LAulH3wF50h5h7b8s=
-X-Google-Smtp-Source: AGHT+IHvZWO7L9pO25Kvnfy0cJ2v4rBQB23dVFBbTWYiGKsJlCF/PSI0q+ybt7P6TqG0rO3g149Q5Q==
-X-Received: by 2002:a17:902:fc84:b0:20b:a6f5:2768 with SMTP id d9443c01a7336-20bfde650dfmr59873175ad.10.1728092469699;
-        Fri, 04 Oct 2024 18:41:09 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c138cff51sm4634235ad.87.2024.10.04.18.41.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Oct 2024 18:41:08 -0700 (PDT)
-Message-ID: <c5c3c7d7-2db9-44fe-a316-b0b5bab30f1e@kernel.dk>
-Date: Fri, 4 Oct 2024 19:41:07 -0600
+	s=arc-20240116; t=1728110645; c=relaxed/simple;
+	bh=J2+Tm5bVxB08Iu9FWgYSku7VUYMapKi+gu8t+OX1KMc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mExDkAizPxNBhV/aqLBdYvGetmOT8Hwyopl3cvYFPSYQFJ2Nlex2/40TIc1CYt0V0n4xVydSS1BNC2wFJBZ113+LYjUs5FfiHDFqFnNkuMVP9Pkcr9hTwb6ewi1OvQ80tU9qEJhBbicIPMeYMJE9WkzHpWrb5gYnyYSdY4iXrbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=FePy3OCA; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4955tR4I018621;
+	Sat, 5 Oct 2024 06:43:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=NIpqyTOKFWauQpK8u0q21D
+	LUH04Agr1/9L3AzYagR8M=; b=FePy3OCA38tk/+kqAVBtxkz81Gk92KqJq2RrhD
+	rqru5UUAZg3NOhcOkG06Ar3t+QcaVReOHujSAnc7hRRq58Uev5Mw7qs38IfYVslK
+	xpwLmNiXmpxLvrpvtv0oc7hN6UHXo+nHOobMBTrjdWJfkfazPZfyGocSTh0vhcdj
+	TM8Bdo/Am9m1JKl1lY3LZ2qeOPtJlXmZJyeFjVlkxWwag8ispnnKo/gMdfUcjvXN
+	duh+EXc/Hi1XDd8iAG/vFst0+3zg1AA/Ud6gnBAI6ML/x3rFzzUhjKtgRqI7ruep
+	eaiG9PskivaGiPgDNb7Wd/2D1/ZfEGWKUEPsus/M+UURQD6A==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 422xu683ha-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 05 Oct 2024 06:43:38 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4956hbXm009868
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 5 Oct 2024 06:43:37 GMT
+Received: from hu-rdwivedi-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 4 Oct 2024 23:43:32 -0700
+From: Ram Kumar Dwivedi <quic_rdwivedi@quicinc.com>
+To: <manivannan.sadhasivam@linaro.org>, <alim.akhtar@samsung.com>,
+        <avri.altman@wdc.com>, <bvanassche@acm.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <James.Bottomley@HansenPartnership.com>,
+        <martin.petersen@oracle.com>, <agross@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_narepall@quicinc.com>, <quic_nitirawa@quicinc.com>,
+        <quic_rdwivedi@quicinc.com>
+Subject: [PATCH V1 0/3] Add support for multiple ICE algorithms
+Date: Sat, 5 Oct 2024 12:13:04 +0530
+Message-ID: <20241005064307.18972-1-quic_rdwivedi@quicinc.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: blktests failures with v6.12-rc1 kernel
-To: Zhu Yanjun <yanjun.zhu@linux.dev>, Bart Van Assche <bvanassche@acm.org>,
- Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Cc: "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
- "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
- "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- "nbd@other.debian.org" <nbd@other.debian.org>,
- "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-References: <xpe6bea7rakpyoyfvspvin2dsozjmjtjktpph7rep3h25tv7fb@ooz4cu5z6bq6>
- <e6e6f77b-f5c6-4b1e-8ab2-b492755857f0@acm.org>
- <dvpmtffxeydtpid3gigfmmc2jtp2dws6tx4bc27hqo4dp2adhv@x4oqoa2qzl2l>
- <5cff6598-21f3-4e85-9a06-f3a28380585b@linux.dev>
- <9fe72efb-46b8-4a72-b29c-c60a8c64f88c@acm.org>
- <b60fa0ab-591b-41e8-9fca-399b6a25b6d9@linux.dev>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <b60fa0ab-591b-41e8-9fca-399b6a25b6d9@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: zPAZxZ5DC8pBMYJwUR2JR9uyELrNSvyq
+X-Proofpoint-ORIG-GUID: zPAZxZ5DC8pBMYJwUR2JR9uyELrNSvyq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
+ spamscore=0 mlxscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410050045
 
-On 10/4/24 7:26 PM, Zhu Yanjun wrote:
-> 
-> ? 2024/10/5 0:31, Bart Van Assche ??:
->> On 10/4/24 5:40 AM, Zhu Yanjun wrote:
->>> So I add a jiffies (u64) value into the name.
->>
->> I don't think that embedding the value of the jiffies counter in the kmem cache names is sufficient to make cache names unique. That sounds like a fragile approach to me.
-> 
-> Sorry. I can not get you. Why jiffies counter is not sufficient to
-> make cache names unique? And why is it a fragile approach?
+Add support for ICE algorithms for Qualcomm UFS V5.0 and above,
+which uses a pool of crypto cores for TX stream (UFS Write – 
+Encryption) and RX stream (UFS Read – Decryption).
 
-1 jiffy is an eternity, what happens if someone calls
-kmem_cache_create() twice in that window?
+Using these algorithms, crypto cores can be dynamically allocated
+to either RX stream or TX stream based on algorithm selected.
+Qualcomm UFS controller supports three ICE algorithms:
+Floor based algorithm, Static Algorithm and Instantaneous algorithm
+to share crypto cores between TX and RX stream.
 
-> I read your latest commit. In your commit, the ida is used to make
-> cache names unique. It is a good approach if it can fix this problem.
+Floor Based allocation is selected by default after power On or Reset.
 
-That seems over-engineered. Seems to me that either these things should
-share a slab cache (why do they need one each, if they are the same
-sized object?!). And if they really do need one, surely something ala:
+Ram Kumar Dwivedi (3):
+  dt-bindings: ufs: qcom: Document ice configuration table
+  arm64: dts: qcom: sm8650: Add ICE algorithm entries
+  scsi: ufs: qcom: Add support for multiple ICE algorithms
 
-static atomic_long_t slab_index;
-
-sprintf(slab_name, "foo-%ld", atomic_inc_return(&slab_index));
-
-would be all you need.
+ .../devicetree/bindings/ufs/qcom,ufs.yaml     |  24 ++
+ arch/arm64/boot/dts/qcom/sm8650.dtsi          |  19 ++
+ drivers/ufs/host/ufs-qcom.c                   | 232 ++++++++++++++++++
+ drivers/ufs/host/ufs-qcom.h                   |  38 ++-
+ 4 files changed, 312 insertions(+), 1 deletion(-)
 
 -- 
-Jens Axboe
+2.46.0
+
 
