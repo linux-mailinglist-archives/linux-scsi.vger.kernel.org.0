@@ -1,115 +1,117 @@
-Return-Path: <linux-scsi+bounces-8753-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8755-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF5BC99501E
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 15:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 88E84995025
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 15:33:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 109D31C24705
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 13:32:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB0491C248E8
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 13:33:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 429C21E0089;
-	Tue,  8 Oct 2024 13:31:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C3151DF263;
+	Tue,  8 Oct 2024 13:32:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="j+nRcyis";
-	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="ssqSsqUy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n3ffvz4M"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mta-03.yadro.com (mta-03.yadro.com [89.207.88.253])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99BA0190055;
-	Tue,  8 Oct 2024 13:31:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.207.88.253
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB081DF24B;
+	Tue,  8 Oct 2024 13:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728394299; cv=none; b=bfyDeN6r21ku+7sNpfJtaH46TOm7vrFVs5NHFSueWgaHaEGREtei+94+0awU5w6o1rm4TEA0oDZUkGRbt+fq7cgzrSW9RZrmo5X4xCG8EG2qbPIZZP8cO+fnCITmqvX995YSwgez1gkxX6czOJE2ppA7UBC/bdtk77foNKQeagU=
+	t=1728394337; cv=none; b=skEAmqL0sARiXI86jTbYX6MLWQKFBgBsSCeEoh4Ix/MKkOo+tbDw3z6wVe7mmi3TaKbOitTZAvHax4pQAkXAzDe0TfMxRY6LkONZrvv69k6sQsfckC2SygGJzEy0jvYbxY2jDxxE1YhQaAcKThAv0NWFQyOHYmr2nGuYSqC+jus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728394299; c=relaxed/simple;
-	bh=95R7frcox+BpLSzcSxD73QmPKcWo05sbLhvOIqrwt/o=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=O5gKLafA+vO5Jpdqtr6nx4jfCQRXQNFOIVKtkwOZLqQfDqMi+N9FUlqRQhA7MO/1yQslyH+Re/Z+3iCbxMxZoXCc0vvci5fFWBnE9ncBGU3M1+As03uN1yTHljSdDiMtdIJIvFx/7LFrvdYc81GpmbykAEvSuqDbFo/BTbGBUvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com; spf=pass smtp.mailfrom=yadro.com; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=j+nRcyis; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=ssqSsqUy; arc=none smtp.client-ip=89.207.88.253
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yadro.com
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-03.yadro.com B763FE0018
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-04;
-	t=1728394294; bh=6Jaz5KTsUcnqJMhBopv+w18+cRGcBKKrscV7xAds5Og=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=j+nRcyisDDBz2ua7jQ4Dh0AyjzagptYvj8CoBQh9AqW3v4r+hYdKc3egCm3AskhC1
-	 Gs1YyDhIHPAJc944m3rrGS2uoGKvqk666V9Gfd+QswtajqMlozOSP3ZIvtfTS/0fNJ
-	 Fada7l6fcj7sgsSnwrT06EC6rE3B5QZ2ZQwFU89nGD7Y21c8f9/7HqRGsRvDOCdFL0
-	 0mRHCccM0Uq837GTYXEps7k4gJ52Brdc9lgZQCzA81Y+zhao1CNAYLNxPUo6cNJ2fK
-	 qaEdTAKQy/EZAlCzTvfRdpyuni5HyUb+h60L0F/Fd6skoK3qarp9uCuy55VbiBdRYh
-	 3iU9Pj+E4u9bA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-03;
-	t=1728394294; bh=6Jaz5KTsUcnqJMhBopv+w18+cRGcBKKrscV7xAds5Og=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=ssqSsqUysxs+G5+oHMP3hAOWr6Bib0345pyP1q9/8MFyXSY36p7EqohomWU/WwKZt
-	 9MyzfF73BCjC6BcAGO8+TGy6mKRi59K9Qd5rCEXBJ0c/0pk+GpePhHEHR+tkQzGr+n
-	 FQCpONT4T9t6GCCKK0kAUJVlMjTaFKkVhvuiXTnBDksFd/e4nll9Y+zzvr9m7CoQiQ
-	 8g9mSTH2bkgNTwLpH39f1uN5kJxHaYhR34OBaoC9/fX58/Xk/rYa5MeFr3BILOMrHl
-	 gsalMwXzLGfEJpHBoEIO5sDNKVktpTU9oQLVDJVQfx41xB4ksLxoAVmiMkL7RO7Vxg
-	 7i9CYHOlRA3ag==
-From: Anastasia Kovaleva <a.kovaleva@yadro.com>
-To: <target-devel@vger.kernel.org>
-CC: <njavali@marvell.com>, <GR-QLogic-Storage-Upstream@marvell.com>,
-	<James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
-	<bvanassche@acm.org>, <quinn.tran@cavium.com>, <nab@linux-iscsi.org>,
-	<himanshu.madhani@cavium.com>, <linux-scsi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux@yadro.com>
-Subject: [PATCH 3/3] scsi: qla2xxx: Remove incorrect trap
-Date: Tue, 8 Oct 2024 16:24:02 +0300
-Message-ID: <20241008132402.26164-4-a.kovaleva@yadro.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20241008132402.26164-1-a.kovaleva@yadro.com>
-References: <20241008132402.26164-1-a.kovaleva@yadro.com>
+	s=arc-20240116; t=1728394337; c=relaxed/simple;
+	bh=m3Dqaue9iMHe36I/93iGbTtg5g0XsNP1DjGguFYsNxE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pTXGE8l/m7z+hjo1jPHVcvcnwRZ4K89LQBSkbDKqOAPclQGen4lxYsXdE/Axzz+f2O3v2z1lZYlBW39Ggj1sb4vp88NyUBpo+FTmieVyzO6St2tn4CHEIDW94lqxlA8iJ22jOyf9EBTYlWz/w6qZmiWuBknacFRlDPXjDq/NO7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n3ffvz4M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D6CC4CEC7;
+	Tue,  8 Oct 2024 13:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728394337;
+	bh=m3Dqaue9iMHe36I/93iGbTtg5g0XsNP1DjGguFYsNxE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=n3ffvz4MdASGCADyFqcOUDV3RAoKJ0UC0IMNe+xmXbpkLs55+uR3st3mH2w+0QqAC
+	 hUHLQrtNj2qlRYMakBl95BmzI+lL6m2y40hXK8ucPYmaJzgyaA1Yc/mpIFWZKBjp20
+	 WyqPeVRSvEDKZkyu2TskwsveLVsVNmo0VqrB0cNRngMIFX0fKMp7p0k16vCWzLNWor
+	 /PuXmwHHSDUdUGzMKvUJnEfA2BGYLvCbHn9ksdJ/dWY0C/0ZQskX39pusYBGtrIXzl
+	 cLegrKJm+fmX/OVgHwztKx+d7ukPh+ZLN8NomG57k10SZcEm74PevVZVu8UXc1k+eF
+	 iQRzPmLKmuNsg==
+Date: Tue, 8 Oct 2024 15:32:14 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Shawn Lin <shawn.lin@rock-chips.com>
+Cc: Rob Herring <robh+dt@kernel.org>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K . Petersen" <martin.petersen@oracle.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
+	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/5] dt-bindings: ufs: Document Rockchip UFS host
+ controller
+Message-ID: <pthhldiu7mus3ehk2yndro5npyqaqdenru53daz34gx7vrizlp@ub7lgvoyiq6a>
+References: <1728368130-37213-1-git-send-email-shawn.lin@rock-chips.com>
+ <1728368130-37213-3-git-send-email-shawn.lin@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-ClientProxiedBy: T-EXCH-08.corp.yadro.com (172.17.11.58) To
- T-EXCH-09.corp.yadro.com (172.17.11.59)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1728368130-37213-3-git-send-email-shawn.lin@rock-chips.com>
 
-This BUG_ON() is triggered when there is no fc_port with a certain
-loop ID in the scsi host vp_fcports list, but there is one in
-lport_loopid_map. As these two data structures do not change
-simultaneously and atomically, such a trap is invalid.
+On Tue, Oct 08, 2024 at 02:15:27PM +0800, Shawn Lin wrote:
+> Document Rockchip UFS host controller for RK3576 SoC.
+> 
+> Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+> 
+> ---
+> 
+> Changes in v3:
+> - rename the file to rockchip,rk3576-ufshc.yaml
+> - add description for reset-gpios
+> - use rockchip,rk3576-ufshc as compatible
 
-Cc: stable@vger.kernel.org
-Fixes: 726b85487067 ("qla2xxx: Add framework for async fabric discovery")
-Signed-off-by: Anastasia Kovaleva <a.kovaleva@yadro.com>
-Reviewed-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
----
- drivers/scsi/qla2xxx/qla_target.c | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+... 
 
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index bc7feef6ee79..9a5dbd00de01 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -5190,15 +5190,7 @@ static int qlt_24xx_handle_els(struct scsi_qla_host *vha,
- 		ql_dbg(ql_dbg_disc, vha, 0x20fc,
- 		    "%s: logo %llx res %d sess %p ",
- 		    __func__, wwn, res, sess);
--		if (res == 0) {
--			/*
--			 * cmd went upper layer, look for qlt_xmit_tm_rsp()
--			 * for LOGO_ACK & sess delete
--			 */
--			BUG_ON(!sess);
--			res = 0;
--		} else {
--			/* cmd did not go to upper layer. */
-+		if (res) {
- 			if (sess) {
- 				qlt_schedule_sess_for_deletion(sess);
- 				res = 0;
--- 
-2.40.1
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 4
+> +
+> +  reset-names:
+> +    items:
+> +      - const: biu
+> +      - const: sys
+> +      - const: ufs
+> +      - const: grf
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description: |
+> +      GPIO specifiers for host to reset the device.
+
+Redundant description. I don't get why did you add it.... maybe we were
+confused by duplicating resets and GPIO, but then say here something
+useful not what the property name is already saying.
+
+E.g. Which pin is this? Active low/high? Resets which device - phy?
+memory?
+
+With proper description:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
 
