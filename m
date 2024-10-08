@@ -1,54 +1,84 @@
-Return-Path: <linux-scsi+bounces-8733-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8737-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE7AF993CCB
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 04:19:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C4B0993D26
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 04:58:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A262A283AA8
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 02:19:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DF47285898
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 02:58:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26AB92E634;
-	Tue,  8 Oct 2024 02:18:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E955273F9;
+	Tue,  8 Oct 2024 02:58:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="BpD+gNBH"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4FC1F95E
-	for <linux-scsi@vger.kernel.org>; Tue,  8 Oct 2024 02:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FC524B4A
+	for <linux-scsi@vger.kernel.org>; Tue,  8 Oct 2024 02:58:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728353914; cv=none; b=qnDo+GveikisVWlaqsxlT8xJu47am68byWytbZuMMc+0TSagIlb8FZgrNwBTmZxwkejUdN6KfK/7tTWgzi0AOODtohFa7CjynWrDDtMZ9zg2AE4VdJ/WLPSe0PpAkpNnG2ZsMCEzQrdVh96fAMC9Mg1qYygTPDzESzSchRBqblg=
+	t=1728356328; cv=none; b=X3J45WuGH+DmwmlnT7f8c4y07oEnnMOfgvEAeHb3McfgtxRX3giTD8lJssl8JWgqiJhySJXma2blI18ch1bv0iieNbrV5Go11gwwtiqDX2HzHp4OH/aEq6zDQlL3wg3BTDLD15WQNbLEa11ti/0J4ZoFIk484Xg5Wa4RUi/q2Fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728353914; c=relaxed/simple;
-	bh=BLl+1LQCXTCeMlsN9UCInpisKwT9FJpbLvyHpJ7Kv6s=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZhYqrF8zqnEfdCi9t6PFYfPdPgNVXcnRiT72Zn+OuFhefchxOKA80UFXcZOx9gT2Jj9945wpWmwEGzvTlSOIqd0HSNdZCaT3SSAmcsTVkSAoqsabt6DOn70UaRbEWE6mJZNaH7dkGmbEwatAyHDUIOUBROQP9ykrvfVjpE84nRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4XN02T208Rz1HKL1;
-	Tue,  8 Oct 2024 10:14:25 +0800 (CST)
-Received: from dggpemf100013.china.huawei.com (unknown [7.185.36.179])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8917614013B;
-	Tue,  8 Oct 2024 10:18:29 +0800 (CST)
-Received: from localhost.huawei.com (10.50.165.33) by
- dggpemf100013.china.huawei.com (7.185.36.179) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 8 Oct 2024 10:18:29 +0800
-From: Yihang Li <liyihang9@huawei.com>
-To: <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>
-CC: <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
-	<liyihang9@huawei.com>
-Subject: [PATCH v2 13/13] scsi: hisi_sas: Add latest_dump for the debugfs dump
-Date: Tue, 8 Oct 2024 10:18:22 +0800
-Message-ID: <20241008021822.2617339-14-liyihang9@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20241008021822.2617339-1-liyihang9@huawei.com>
-References: <20241008021822.2617339-1-liyihang9@huawei.com>
+	s=arc-20240116; t=1728356328; c=relaxed/simple;
+	bh=WTtjtG47vymHfMOTZHiAGXAiV8ozOqMHl1YVg0JFja8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=BsrgRYs6F0bHwQlQKXEZVKDNpCz4Q9kiqIrcTxzlAMEk2xN3kq/tKa4DUmWGqiDSoHmYRPbbIEmptwQxmeUj+jV5sttEPlZ8gYLHbLUCRZjxSUwc209hRh3ibQvhtk+XO/Jc/MWlje3ATf72UcJNrebfaGrKko/iOwffbi0d4E4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=BpD+gNBH; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20241008025842epoutp019584e770ed8ff28499c350d7a6f8ac4a~8WusL7RAB1899918999epoutp01Q
+	for <linux-scsi@vger.kernel.org>; Tue,  8 Oct 2024 02:58:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20241008025842epoutp019584e770ed8ff28499c350d7a6f8ac4a~8WusL7RAB1899918999epoutp01Q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1728356322;
+	bh=RUnIJ9K+YQ0p0ZcKfT070l16YRpaY6+jaXV37dAh/TY=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=BpD+gNBHJNJBh9toqRWlyMYnPk6pSPTjfh5HjE+zSNHClSHuNzQLMYpxP/vbq3SRe
+	 d4uPGIdzRIYiickZY6E0ODrZhVTMhOMbPMsrXUvFl8UqjEuR9r52KnN9BktfA4JawR
+	 9S9aFHSQQAUGOi6CdlBiKn0/WxjWdzxGIg8KByYA=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+	20241008025841epcas2p1b2c394df55e270124fd5053b542e7c59~8WurgRqCR1455114551epcas2p1N;
+	Tue,  8 Oct 2024 02:58:41 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.68]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4XN11Y0Sw8z4x9Pw; Tue,  8 Oct
+	2024 02:58:41 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+	epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+	8E.A8.09776.0EF94076; Tue,  8 Oct 2024 11:58:40 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+	20241008025840epcas2p4834ac38412a5cd41d32f85d118febc24~8Wup-12ac3266632666epcas2p4I;
+	Tue,  8 Oct 2024 02:58:40 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20241008025840epsmtrp2dd05d5b875a3222f985201cf7f171ff3~8Wup_-DY10860708607epsmtrp2O;
+	Tue,  8 Oct 2024 02:58:40 +0000 (GMT)
+X-AuditID: b6c32a47-d53fa70000002630-3c-67049fe089bf
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	47.31.08227.0EF94076; Tue,  8 Oct 2024 11:58:40 +0900 (KST)
+Received: from rack03.dsn.sec.samsung.com (unknown [10.229.95.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20241008025839epsmtip1150057a7a3b72671167a1f2dee3d2b13~8WupsaKDp0573505735epsmtip1e;
+	Tue,  8 Oct 2024 02:58:39 +0000 (GMT)
+From: SEO HOYOUNG <hy50.seo@samsung.com>
+To: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+	martin.petersen@oracle.com, beanhuo@micron.com, bvanassche@acm.org,
+	kwangwon.min@samsung.com, kwmad.kim@samsung.com, sh425.lee@samsung.com,
+	quic_nguyenb@quicinc.com, cpgs@samsung.com, h10.kim@samsung.com
+Cc: SEO HOYOUNG <hy50.seo@samsung.com>
+Subject: [PATCH v1] scsi: ufs: core: check asymmetric connected lanes
+Date: Tue,  8 Oct 2024 12:08:45 +0900
+Message-Id: <20241008030845.25997-1-hy50.seo@samsung.com>
+X-Mailer: git-send-email 2.26.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -56,61 +86,80 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemf100013.china.huawei.com (7.185.36.179)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLJsWRmVeSWpSXmKPExsWy7bCmme6D+SzpBndvWlk8mLeNzeLlz6ts
+	FgcfdrJYTPvwk9ni5SFNi7+3L7JarF78gMVi0Y1tTBZbb+xksbi55SiLxeVdc9gsuq/vYLNY
+	fvwfk8XUF8fZLZb+e8viwO9x+Yq3x4RFBxg9vq/vYPP4+PQWi8fEPXUefVtWMXp83iTn0X6g
+	mymAIyrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfo
+	dCWFssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgXmBXnFibnFpXrpeXmqJlaGBgZEp
+	UGFCdsaqOQeZCn6yV/xveMLawLiDrYuRk0NCwETixOY1jCC2kMAORolVR9S7GLmA7E+MEref
+	/mCEcL4xSiy/uZMVpuPB9VssEIm9jBKTtixjhXB+MEr86PvIAlLFJqAhsebYISYQW0TgMpPE
+	n2VmIDazgJrE57vLwGqEBVwllqy/BLabRUBVYt2eW2AbeAUsJW7M28YCsU1eYlHDbyaIuKDE
+	yZlPWCDmyEs0b53NDLJYQmAuh0TXr3tQD7lIdD7dAGULS7w6voUdwpaS+PxuL1CcA8gulpi1
+	sBqit4FR4tDsWVA1xhKznrUzgtQwC2hKrN+lD1GuLHHkFtRaPomOw3+hqnklGjb+Zoco4ZXo
+	aBOCCCtJnJl7GyosIXFwdg5E2EPi6de5zJCAjpX4fu8N2wRGhVlI/pqF5K9ZCCcsYGRexSiW
+	WlCcm55abFRgDI/e5PzcTYzgdKzlvoNxxtsPeocYmTgYDzFKcDArifBGrGFMF+JNSaysSi3K
+	jy8qzUktPsRoCgzpicxSosn5wIyQVxJvaGJpYGJmZmhuZGpgriTOe691boqQQHpiSWp2ampB
+	ahFMHxMHp1QD06Fpj4utX9w5KuXIYtqVN/lVwbV9luuPyEluEe6ZfHPyxPMLVi3PsDcz+9e6
+	PvLbmeezJzY7mjO1G3LNV5Z5c2fx2VL7eapKPeo30jss3m/wV3vDpsT2e78vV+QHoS1zj7/z
+	y9/xoMcsTfr9U4HqznK7mmeKfZn+U0yjjwm75/z76yS374tZfa31vd3ioe+7zhnPPt9wb9b3
+	S7PvJcwLOevreoalNZp1q8ntReFvLR4veZ5+wP4Bw5l7ry9ZW7R/YT94cnUoz4XLRxn9eR7v
+	X/hq8edNWvwKk6svau5aliV0o6eSedfS0k16V+qOLHStE3S0YL/77tjK57Ze0vNWv1JqX8kS
+	fEpmfQn3w21MKx8qsRRnJBpqMRcVJwIANpxsr1AEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCLMWRmVeSWpSXmKPExsWy7bCSnO6D+SzpBh9fMFs8mLeNzeLlz6ts
+	FgcfdrJYTPvwk9ni5SFNi7+3L7JarF78gMVi0Y1tTBZbb+xksbi55SiLxeVdc9gsuq/vYLNY
+	fvwfk8XUF8fZLZb+e8viwO9x+Yq3x4RFBxg9vq/vYPP4+PQWi8fEPXUefVtWMXp83iTn0X6g
+	mymAI4rLJiU1J7MstUjfLoErY9Wcg0wFP9kr/jc8YW1g3MHWxcjJISFgIvHg+i2WLkYuDiGB
+	3YwSa1Y/YYRISEj8X9zEBGELS9xvOcIKUfSNUeLozRNgRWwCGhJrjh1iAkmICDxlkjhxqIsZ
+	JMEsoCbx+e4yFhBbWMBVYsn6S2ANLAKqEuv23GIFsXkFLCVuzNvGArFBXmJRw28miLigxMmZ
+	T1gg5shLNG+dzTyBkW8WktQsJKkFjEyrGCVTC4pz03OLDQuM8lLL9YoTc4tL89L1kvNzNzGC
+	I0JLawfjnlUf9A4xMnEwHmKU4GBWEuGNWMOYLsSbklhZlVqUH19UmpNafIhRmoNFSZz32+ve
+	FCGB9MSS1OzU1ILUIpgsEwenVANTv4HUzy1HmPN7ojgmbXxWtnvmw536+Ztvv679uP7al8zU
+	b3NOn4zy+Rnhf2zTqsYwMY5b4TenMx+0faC9dm1tp9r/Wa3z3V9zTbyitvX85+MaRwSvGJ1l
+	1lOUuhTU+3p/qmWNs7ffXLOzffEPzIwX1DxQf5v5SVswh13keazKufk75mdfNxM/OIdz57Kz
+	P9zqdl52Z9x/WHp1mJWo/5lTHx6VFzroTL8a/bj1GJ+e/q6CwqM3b+4vvzFVmJPrB5+roLJ1
+	1nLTp2yxCcEzHDksNpY9nHsmYd9mViX5iS/tivxfh2xmTvHck7jhroRAjfW1dw8+ne+Pimnx
+	36kmKKUqUBFoH6sam33aRZ6PtXyOEktxRqKhFnNRcSIA0iao5/cCAAA=
+X-CMS-MailID: 20241008025840epcas2p4834ac38412a5cd41d32f85d118febc24
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241008025840epcas2p4834ac38412a5cd41d32f85d118febc24
+References: <CGME20241008025840epcas2p4834ac38412a5cd41d32f85d118febc24@epcas2p4.samsung.com>
 
-Before that, after the user triggers the dump, the latest dump information
-can be viewed in the directory with the maximum number in the dump
-directory.
+Performance problems may occur if there is a problem with the
+asymmetric connected lane such as h/w failure.
+Currently, only check connected lane for rx/tx is checked if it is not 0.
+But it should also be checked if it is asymmetrically connected.
 
-After this series patch, the driver creates all debugfs directories and
-files during initialization. Therefore, users cannot know the directory
-where the latest dump information is stored. So, add latest_dump file to
-notify users where the latest dump information is stored.
-
-Signed-off-by: Yihang Li <liyihang9@huawei.com>
-Reviewed-by: Xingui Yang <yangxingui@huawei.com>
+Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/ufs/core/ufshcd.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 8250d44f0b3e..5db931663ae4 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -4814,6 +4814,19 @@ static void debugfs_bist_init_v3_hw(struct hisi_hba *hisi_hba)
- 	hisi_hba->debugfs_bist_linkrate = SAS_LINK_RATE_1_5_GBPS;
- }
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 24a32e2fd75e..387eec6f19ef 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -4540,6 +4540,14 @@ static int ufshcd_get_max_pwr_mode(struct ufs_hba *hba)
+ 		return -EINVAL;
+ 	}
  
-+static int debugfs_dump_index_v3_hw_show(struct seq_file *s, void *p)
-+{
-+	int *debugfs_dump_index = s->private;
++	if (pwr_info->lane_rx != pwr_info->lane_tx) {
++		dev_err(hba->dev, "%s: asymmetric connected lanes. rx=%d, tx=%d\n",
++			__func__,
++				pwr_info->lane_rx,
++				pwr_info->lane_tx);
++		return -EINVAL;
++	}
 +
-+	if (*debugfs_dump_index > 0)
-+		seq_printf(s, "%d\n", *debugfs_dump_index - 1);
-+	else
-+		seq_puts(s, "dump not triggered\n");
-+
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(debugfs_dump_index_v3_hw);
-+
- static void debugfs_dump_init_v3_hw(struct hisi_hba *hisi_hba)
- {
- 	int i;
-@@ -4821,6 +4834,10 @@ static void debugfs_dump_init_v3_hw(struct hisi_hba *hisi_hba)
- 	hisi_hba->debugfs_dump_dentry =
- 			debugfs_create_dir("dump", hisi_hba->debugfs_dir);
- 
-+	debugfs_create_file("latest_dump", 0400, hisi_hba->debugfs_dump_dentry,
-+			    &hisi_hba->debugfs_dump_index,
-+			    &debugfs_dump_index_v3_hw_fops);
-+
- 	for (i = 0; i < hisi_sas_debugfs_dump_count; i++)
- 		debugfs_create_files_v3_hw(hisi_hba, i);
- }
+ 	/*
+ 	 * First, get the maximum gears of HS speed.
+ 	 * If a zero value, it means there is no HSGEAR capability.
 -- 
-2.33.0
+2.26.0
 
 
