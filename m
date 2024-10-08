@@ -1,39 +1,39 @@
-Return-Path: <linux-scsi+bounces-8736-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8729-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EB82993CCE
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 04:19:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 777E7993CC7
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 04:18:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6629DB23BEE
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 02:19:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9B8F1C22CAE
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 02:18:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93576381C4;
-	Tue,  8 Oct 2024 02:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48EA72AE8C;
+	Tue,  8 Oct 2024 02:18:33 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79604249EB
-	for <linux-scsi@vger.kernel.org>; Tue,  8 Oct 2024 02:18:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F01F182C5
+	for <linux-scsi@vger.kernel.org>; Tue,  8 Oct 2024 02:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728353918; cv=none; b=qn8uB+A/W6VIlvtk9E5udwCGCYXZ7xYeEp2O1h/7RKi01E5Ys7mdWj2XI4q9uPKRDqwY6tYKZwq0l4/gFzVdTcDauNaKSvLyDa21hA22iMDfF9b8JM9SvwbOyCXEftCZ+LFUyQ/Sj9WzG2LclXe6wtPpTQ+x3R12XXZ0rvs9nnA=
+	t=1728353913; cv=none; b=H9XigHqaMAtuxtY/238XoZbeu4cZ8BWmwryeOgkegUtOIDdv2dA7vVL3soH10rarKSDev2NqzGolpLmN9Jb2sSzUuWHKm99oC5q3JV9rgsfl7lgdnHDVYMv6OVZt9lRTaoooM354JLNWd4uJHP0Wy70F/Ylz+5mTqAuB796EGN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728353918; c=relaxed/simple;
-	bh=4WpKlLgpqRqpKuuDkg/DMLuyfrvi5SrfALUcu4Nwhuo=;
+	s=arc-20240116; t=1728353913; c=relaxed/simple;
+	bh=q2AKoGhnIiBcdT7XxtJcWugGDNOtlbDnK/simK7d+ho=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XF/ntbild4ZrnR5YulmquYW8cRmOTPolKpQAgV6rOboYv/5pph4eAJA2nwjEKk/iqzfWRpLhl4pQCPqyWnab4gXjPg3c3NE59HPC4fK0ztmi2oYyVlM1KSbMsxypwYwI3xEvjrLKJpaMZKce8Mu8CmIJQJN8wEvkZ1/h2suH6hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+	 MIME-Version:Content-Type; b=Wk11kE9EJ4LvAVb8SkUg9iZcDDFkvMF11ojgInpUQvEcCQVF2zgt0uXvrrx1Kznsju4H4fGL80Gf65cXgChGpWnJFxWEbN9bvJYF0ttaYOv1e/TltLNSjOxjSnLG3M5lKCuGXbqMP9sGHcs+gfW7Bis4fVEwjYSxcqQl/qb0GGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4XN05C1YQ9z1T84N;
-	Tue,  8 Oct 2024 10:16:47 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4XN02S4k74z1HKJ0;
+	Tue,  8 Oct 2024 10:14:24 +0800 (CST)
 Received: from dggpemf100013.china.huawei.com (unknown [7.185.36.179])
-	by mail.maildlp.com (Postfix) with ESMTPS id C070B180106;
+	by mail.maildlp.com (Postfix) with ESMTPS id E55861A016C;
 	Tue,  8 Oct 2024 10:18:28 +0800 (CST)
 Received: from localhost.huawei.com (10.50.165.33) by
  dggpemf100013.china.huawei.com (7.185.36.179) with Microsoft SMTP Server
@@ -43,9 +43,9 @@ From: Yihang Li <liyihang9@huawei.com>
 To: <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>
 CC: <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
 	<liyihang9@huawei.com>
-Subject: [PATCH v2 08/13] scsi: hisi_sas: Default enable interrupt coalescing
-Date: Tue, 8 Oct 2024 10:18:17 +0800
-Message-ID: <20241008021822.2617339-9-liyihang9@huawei.com>
+Subject: [PATCH v2 09/13] scsi: hisi_sas: Update disk locked timeout to 7 seconds
+Date: Tue, 8 Oct 2024 10:18:18 +0800
+Message-ID: <20241008021822.2617339-10-liyihang9@huawei.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20241008021822.2617339-1-liyihang9@huawei.com>
 References: <20241008021822.2617339-1-liyihang9@huawei.com>
@@ -60,117 +60,46 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
  dggpemf100013.china.huawei.com (7.185.36.179)
 
-In the current interrupt reporting mode, each CQ entry reports an
-interrupt. However, when there are a large number of I/O hardware
-completion interrupts, the following issue may occur:
+From: Xingui Yang <yangxingui@huawei.com>
 
-[ 4682.678657][  C129] irq 134: nobody cared (try booting with the "irqpoll" option)
-[ 4682.708455][  C129] Call trace:
-[ 4682.711589][  C129]  dump_backtrace+0x0/0x1e4
-[ 4682.715934][  C129]  show_stack+0x20/0x2c
-[ 4682.719933][  C129]  dump_stack+0xd8/0x140
-[ 4682.724017][  C129]  __report_bad_irq+0x54/0x180
-[ 4682.728625][  C129]  note_interrupt+0x1ec/0x2f0
-[ 4682.733143][  C129]  handle_irq_event+0x118/0x1ac
-[ 4682.737834][  C129]  handle_fasteoi_irq+0xc8/0x200
-[ 4682.742613][  C129]  __handle_domain_irq+0x84/0xf0
-[ 4682.747391][  C129]  gic_handle_irq+0x88/0x2c0
-[ 4682.751822][  C129]  el1_irq+0xbc/0x140
-[ 4682.755648][  C129]  _find_next_bit.constprop.0+0x20/0x94
-[ 4682.761036][  C129]  cpumask_next+0x24/0x30
-[ 4682.765208][  C129]  gic_ipi_send_mask+0x48/0x170
-[ 4682.769900][  C129]  __ipi_send_mask+0x34/0x110
-[ 4682.775720][  C129]  smp_cross_call+0x3c/0xcc
-[ 4682.780064][  C129]  arch_send_call_function_single_ipi+0x38/0x44
-[ 4682.786146][  C129]  send_call_function_single_ipi+0xd0/0xe0
-[ 4682.791794][  C129]  generic_exec_single+0xb4/0x170
-[ 4682.796659][  C129]  smp_call_function_single_async+0x2c/0x40
-[ 4682.802395][  C129]  blk_mq_complete_request_remote.part.0+0xec/0x100
-[ 4682.808822][  C129]  blk_mq_complete_request+0x30/0x70
-[ 4682.813950][  C129]  scsi_mq_done+0x48/0xac
-[ 4682.818128][  C129]  sas_scsi_task_done+0xb0/0x150 [libsas]
-[ 4682.823692][  C129]  slot_complete_v3_hw+0x230/0x710 [hisi_sas_v3_hw]
-[ 4682.830120][  C129]  cq_thread_v3_hw+0xbc/0x190 [hisi_sas_v3_hw]
-[ 4682.836114][  C129]  irq_thread_fn+0x34/0xa4
-[ 4682.840371][  C129]  irq_thread+0xc4/0x130
-[ 4682.844455][  C129]  kthread+0x108/0x13c
-[ 4682.848365][  C129]  ret_from_fork+0x10/0x18
-[ 4682.852621][  C129] handlers:
-[ 4682.855577][  C129] [<00000000949e52bf>] cq_interrupt_v3_hw [hisi_sas_v3_hw] threaded [<000000005d8e3b68>] cq_thread_v3_hw [hisi_sas_v3_hw]
-[ 4682.868084][  C129] Disabling IRQ #134
+The sata disk will be locked after the disk sends the DMA Setup frame until
+all data frame transmission is completed. The CFG_ICT_TIMER_STEP_TRSH
+register is used for sata disk to configure the step size of the timer
+which records the time when the disk is locked. The unit is 1us and the
+default step size is 150ms. If the disk is locked for more than 7 timer
+steps, the io to be sent to the disk will end abnormally.
 
-When the IRQ management layer processes each hardware interrupt, if the
-return value of the interrupt handler is IRQ_WAKE_THREAD, it will wake up
-the handler thread for this interrupt action and set IRQTF_RUNTHREAD flag,
-wait for the interrupt handling thread to clear the IRQTF_RUNTHREAD flag
-after execution. Later in note_interrupt(), use irq_count to count
-hardware interrupts and irqs_unhandled to count interrupts for which no
-thread handler is responsible. When irq_count reaches 100000 and
-irqs_unhandled reaches 99000, irq will be disabled.
+The current timeout is only about 1 second, it is easy to trigger IO
+abnormal end when the SATA hard disk returns data slowly. Adjust the
+timeout to 7 seconds based on ERC time of most disks.
 
-In the performance test scenario, I/O completion hardware interrupts are
-continuously and quickly generated. As a result, the interrupt processing
-thread is cyclically called in irq_thread() and does not exit, this
-affects the response of the interrupt thread to the hardware interrupt and
-causes irqs_unhandled to grow to 99000. Finally, the irq is disabled.
-
-Therefore, default enable interrupt coalescing to reduce the generation of
-hardware interrupts, this helps interrupt processing threads to stop
-calling in irq_thread().
-
-For interrupt coalescing, according to the actual performance test, set
-the count of CQ entries to 10 and the interrupt coalescing timeout period
-to 10us based on the actual performance test.
-
-Before and after interrupt coalescing is enabled, the 4K read/write
-performance is improved by about 3%, and the 256K read/write performance
-is basically the same.
-
-Signed-off-by: Yihang Li <liyihang9@huawei.com>
+Signed-off-by: Xingui Yang <yangxingui@huawei.com>
 Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
+Reviewed-by: Yihang Li <liyihang9@huawei.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index e6fbbefe9959..310c782b4926 100644
+index 310c782b4926..5c97c4463032 100644
 --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
 +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -638,9 +638,11 @@ static void init_reg_v3_hw(struct hisi_hba *hisi_hba)
+@@ -43,6 +43,7 @@
+ #define CQ_INT_CONVERGE_EN		0xb0
+ #define CFG_AGING_TIME			0xbc
+ #define HGC_DFX_CFG2			0xc0
++#define CFG_ICT_TIMER_STEP_TRSH		0xc8
+ #define CFG_ABT_SET_QUERY_IPTT	0xd4
+ #define CFG_SET_ABORTED_IPTT_OFF	0
+ #define CFG_SET_ABORTED_IPTT_MSK	(0xfff << CFG_SET_ABORTED_IPTT_OFF)
+@@ -638,6 +639,7 @@ static void init_reg_v3_hw(struct hisi_hba *hisi_hba)
  	hisi_sas_write32(hisi_hba, TRANS_LOCK_ICT_TIME, 0x4A817C80);
  	hisi_sas_write32(hisi_hba, HGC_SAS_TXFAIL_RETRY_CTRL, 0x108);
  	hisi_sas_write32(hisi_hba, CFG_AGING_TIME, 0x1);
--	hisi_sas_write32(hisi_hba, INT_COAL_EN, 0x1);
--	hisi_sas_write32(hisi_hba, OQ_INT_COAL_TIME, 0x1);
--	hisi_sas_write32(hisi_hba, OQ_INT_COAL_CNT, 0x1);
-+	hisi_sas_write32(hisi_hba, INT_COAL_EN, 0x3);
-+	/* configure the interrupt coalescing timeout period 10us */
-+	hisi_sas_write32(hisi_hba, OQ_INT_COAL_TIME, 0xa);
-+	/* configure the count of CQ entries 10 */
-+	hisi_sas_write32(hisi_hba, OQ_INT_COAL_CNT, 0xa);
- 	hisi_sas_write32(hisi_hba, CQ_INT_CONVERGE_EN,
- 			 hisi_sas_intr_conv);
- 	hisi_sas_write32(hisi_hba, OQ_INT_SRC, 0xffff);
-@@ -2797,14 +2799,15 @@ static void config_intr_coal_v3_hw(struct hisi_hba *hisi_hba)
- {
- 	/* config those registers between enable and disable PHYs */
- 	hisi_sas_stop_phys(hisi_hba);
-+	hisi_sas_write32(hisi_hba, INT_COAL_EN, 0x3);
- 
- 	if (hisi_hba->intr_coal_ticks == 0 ||
- 	    hisi_hba->intr_coal_count == 0) {
--		hisi_sas_write32(hisi_hba, INT_COAL_EN, 0x1);
--		hisi_sas_write32(hisi_hba, OQ_INT_COAL_TIME, 0x1);
--		hisi_sas_write32(hisi_hba, OQ_INT_COAL_CNT, 0x1);
-+		/* configure the interrupt coalescing timeout period 10us */
-+		hisi_sas_write32(hisi_hba, OQ_INT_COAL_TIME, 0xa);
-+		/* configure the count of CQ entries 10 */
-+		hisi_sas_write32(hisi_hba, OQ_INT_COAL_CNT, 0xa);
- 	} else {
--		hisi_sas_write32(hisi_hba, INT_COAL_EN, 0x3);
- 		hisi_sas_write32(hisi_hba, OQ_INT_COAL_TIME,
- 				 hisi_hba->intr_coal_ticks);
- 		hisi_sas_write32(hisi_hba, OQ_INT_COAL_CNT,
++	hisi_sas_write32(hisi_hba, CFG_ICT_TIMER_STEP_TRSH, 0xf4240);
+ 	hisi_sas_write32(hisi_hba, INT_COAL_EN, 0x3);
+ 	/* configure the interrupt coalescing timeout period 10us */
+ 	hisi_sas_write32(hisi_hba, OQ_INT_COAL_TIME, 0xa);
 -- 
 2.33.0
 
