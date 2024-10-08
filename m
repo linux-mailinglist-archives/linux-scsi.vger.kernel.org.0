@@ -1,71 +1,76 @@
-Return-Path: <linux-scsi+bounces-8715-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8719-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 429CF993C97
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 04:04:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77BC2993C9F
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 04:05:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDD341F22216
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 02:04:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED64F1F21407
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 02:05:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0DE11DA23;
-	Tue,  8 Oct 2024 02:04:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD7981CD0C;
+	Tue,  8 Oct 2024 02:04:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="bWW/CTgN"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="hlULDFS1"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF9F125A9;
-	Tue,  8 Oct 2024 02:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5611DA23;
+	Tue,  8 Oct 2024 02:04:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728353083; cv=none; b=AlWPOy5klxPuTA9Sl03fbjSAV0mte1cuL7YLJs3geT10LcBLG1peIhV5l3UsOQmyW2xPVKaKhF8BafRGHEV2XuEhOD4lIfxDAvUqJkY+IZM8nfC1CNA9TMboUIeFVFenXeU+R+d5ORxXIlcWXJthYWyKpz2TMjBmL5MQgOq9e0o=
+	t=1728353098; cv=none; b=r15siLKFgJenc03mjqDPArqcxsgYh7qAkE8X+N+RYc6lwtsLwcbAQqdrV7A3ZNZET0/DSBxtxsTXG4p1B9YciujVKN9rkGv50bdVTOGJmpvZDeVWNWw3KCwcsqefjp5z0GMzeCKNShrB+1n3G49zYzkukJDbtzqB+uzH/o6bgYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728353083; c=relaxed/simple;
-	bh=Q/4kKgkc6OWzN2m1BwLMu02zY3yA7eZ0zzLL/VFiMQA=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=tkPz/tU8aIouHpqnsunC8ZBtLnTdobsuYANRZQ2D17Ffy6XB9a6h0qkOBPM83JeFu7QULdIzvuXXviNNTB885xdRNN7Kpq+xQGPMrrirufNmuWt+jUrGWbdXKmWU4tjD80AlKmuF5L0g7hPU071ARzCLbm4HyLa4JUePXfgyZGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=bWW/CTgN; arc=none smtp.client-ip=205.220.177.32
+	s=arc-20240116; t=1728353098; c=relaxed/simple;
+	bh=82BbjiaRGg1Q9oIzUyzslP7fiOwJuJ2oj7gVP3Uoros=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MQABOzfTBjnj1CGXgMZCBYmdSpaAUjt0FCunMvcgdTgBcGgrip1/GWcw7D9aoru5w/ig9vLEmMgUgtCR8ubUjwArAHOlDB5+ztsrVRgs9lL2K+8Jk01XCx3p+G9A7aK84JHwCFBd+codKPn6GzZFO0NcFykSWTLPaOXMsvnggng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=hlULDFS1; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4981MnSc028646;
-	Tue, 8 Oct 2024 02:04:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=corp-2023-11-20; bh=Q/4kKgkc6OWzN2m1BwLMu02zY3yA7
-	eZ0zzLL/VFiMQA=; b=bWW/CTgNan8SjdmLEQNybgr9QApdc6bwmfmeMoVxUUDSM
-	uG75Kqg+atyaRoi9mxsxJowvHJKN4+WaQ3x93QtXP01NpFvayaTl+5F6eEkXwWoG
-	L5VRi20B5s+W6sd8sF9H66nTFn3Z+OcHS/i2ba+5vAmyiyaQfEwFI+vO4sD1eAXj
-	RrkGEzkQNZdQdyjF343/NzYfY7HxRtmU6lQ/e0iPiiOJUGFCBYrN2vZDoZOmlHUt
-	XfXFUFI8Z5rCulN7KkkvMbtR6ZlHmL8GmXMdijFcaS4zw2uxSO8Kkat0Q48ZyYJ6
-	0k4gNo0TbJnZsy0t4ndrf+2AMAwQPVOzVsMR5MqNg==
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4981MbNH024471;
+	Tue, 8 Oct 2024 02:04:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=corp-2023-11-20; bh=k7+Ms
+	6pxTDF8/yNlA8b0BKvQYPRC3oihaK/Rh1QnpOQ=; b=hlULDFS1uLtzZJTL8Hu+W
+	1uiOcCUaxXoKlja+3HtJVt2Nw2l2JnLnKJsWGDrAzqEa0ZDUes5vkwGFbUZVSYh6
+	1L9tHJmEw7yP7pIFh0q2+T/qbDfiZzpFOTtuW0UW3pYwkVHLz48Xbm9EN+QZ6Thi
+	4aO33uD09kwBzRqeidBZX5h8AQd5Eeqo3kYO6s/hMmdSETmVwrIit0qghCx3hAAf
+	e8zykKwJYQxp/eTKVaiFPJPZ/a/U4xzjGiAjLtKeNEp0PsXAyQCBNPtBo+hZQZQL
+	iezPJU/BQPB5yfYe4dE9jp3wRrzw0/yzkp5UZ97zyE282jWJ6MHxfov8gaAaQLqW
+	A==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 423034mwj8-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42300dvsjd-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 08 Oct 2024 02:04:40 +0000 (GMT)
+	Tue, 08 Oct 2024 02:04:55 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 497NnL0U004695;
-	Tue, 8 Oct 2024 02:04:39 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 497NtQUo004852;
+	Tue, 8 Oct 2024 02:04:40 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 422uw6k886-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 422uw6k88g-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 08 Oct 2024 02:04:39 +0000
+	Tue, 08 Oct 2024 02:04:40 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49824dIp004476;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49824dIr004476;
 	Tue, 8 Oct 2024 02:04:39 GMT
 Received: from mnc-mac.us.oracle.com (dhcp-10-39-198-64.vpn.oracle.com [10.39.198.64])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 422uw6k87u-1;
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 422uw6k87u-2;
 	Tue, 08 Oct 2024 02:04:39 +0000
 From: Mike Christie <michael.christie@oracle.com>
 To: martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org
-Subject: [PATCH 0/7] scsi: target: Add WRITE_ATOMIC_16 support
-Date: Mon,  7 Oct 2024 21:03:09 -0500
-Message-ID: <20241008020437.78788-1-michael.christie@oracle.com>
+Cc: Mike Christie <michael.christie@oracle.com>
+Subject: [PATCH 1/7] scsi: target: Rename target_configure_unmap_from_queue
+Date: Mon,  7 Oct 2024 21:03:10 -0500
+Message-ID: <20241008020437.78788-2-michael.christie@oracle.com>
 X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20241008020437.78788-1-michael.christie@oracle.com>
+References: <20241008020437.78788-1-michael.christie@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -78,16 +83,92 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  definitions=2024-10-08_01,2024-10-07_01,2024-09-30_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
  suspectscore=0 mlxscore=0 phishscore=0 adultscore=0 spamscore=0
- mlxlogscore=783 classifier=spam adjust=0 reason=mlx scancount=1
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2409260000 definitions=main-2410080011
-X-Proofpoint-GUID: stWeiH0xrSrAEkDILPFeKUs0_FLiLF6a
-X-Proofpoint-ORIG-GUID: stWeiH0xrSrAEkDILPFeKUs0_FLiLF6a
+X-Proofpoint-GUID: s8_8uWV9AxBtsNhhxx_qPm8x6yWsyjSn
+X-Proofpoint-ORIG-GUID: s8_8uWV9AxBtsNhhxx_qPm8x6yWsyjSn
 
-The following patches were made over Linus's current tree and add
-WRITE_ATOMIC_16 support to LIO.
+Rename target_configure_unmap_from_queue to
+target_configure_unmap_from_bdev since it now takes a bdev.
 
-In this patchset we only support target_core_iblock. It's implemented
-similar to UNMAP where we do not do any emulation and instead pass the
-operation to the block layer.
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+---
+ drivers/target/target_core_device.c  | 6 +++---
+ drivers/target/target_core_file.c    | 4 ++--
+ drivers/target/target_core_iblock.c  | 4 ++--
+ include/target/target_core_backend.h | 4 ++--
+ 4 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
+index 7d43d92c44d4..b709a64c0ff3 100644
+--- a/drivers/target/target_core_device.c
++++ b/drivers/target/target_core_device.c
+@@ -797,8 +797,8 @@ struct se_device *target_alloc_device(struct se_hba *hba, const char *name)
+  * Check if the underlying struct block_device supports discard and if yes
+  * configure the UNMAP parameters.
+  */
+-bool target_configure_unmap_from_queue(struct se_dev_attrib *attrib,
+-				       struct block_device *bdev)
++bool target_configure_unmap_from_bdev(struct se_dev_attrib *attrib,
++				      struct block_device *bdev)
+ {
+ 	int block_size = bdev_logical_block_size(bdev);
+ 
+@@ -816,7 +816,7 @@ bool target_configure_unmap_from_queue(struct se_dev_attrib *attrib,
+ 		bdev_discard_alignment(bdev) / block_size;
+ 	return true;
+ }
+-EXPORT_SYMBOL(target_configure_unmap_from_queue);
++EXPORT_SYMBOL(target_configure_unmap_from_bdev);
+ 
+ /*
+  * Convert from blocksize advertised to the initiator to the 512 byte
+diff --git a/drivers/target/target_core_file.c b/drivers/target/target_core_file.c
+index 2d78ef74633c..b2610073e8cc 100644
+--- a/drivers/target/target_core_file.c
++++ b/drivers/target/target_core_file.c
+@@ -92,8 +92,8 @@ static bool fd_configure_unmap(struct se_device *dev)
+ 	struct inode *inode = file->f_mapping->host;
+ 
+ 	if (S_ISBLK(inode->i_mode))
+-		return target_configure_unmap_from_queue(&dev->dev_attrib,
+-							 I_BDEV(inode));
++		return target_configure_unmap_from_bdev(&dev->dev_attrib,
++							I_BDEV(inode));
+ 
+ 	/* Limit UNMAP emulation to 8k Number of LBAs (NoLB) */
+ 	dev->dev_attrib.max_unmap_lba_count = 0x2000;
+diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
+index c8dc92a7d63e..3a191bc35e04 100644
+--- a/drivers/target/target_core_iblock.c
++++ b/drivers/target/target_core_iblock.c
+@@ -83,8 +83,8 @@ static bool iblock_configure_unmap(struct se_device *dev)
+ {
+ 	struct iblock_dev *ib_dev = IBLOCK_DEV(dev);
+ 
+-	return target_configure_unmap_from_queue(&dev->dev_attrib,
+-						 ib_dev->ibd_bd);
++	return target_configure_unmap_from_bdev(&dev->dev_attrib,
++						ib_dev->ibd_bd);
+ }
+ 
+ static int iblock_configure_device(struct se_device *dev)
+diff --git a/include/target/target_core_backend.h b/include/target/target_core_backend.h
+index 4063a701081b..d394306f8f49 100644
+--- a/include/target/target_core_backend.h
++++ b/include/target/target_core_backend.h
+@@ -121,8 +121,8 @@ sense_reason_t passthrough_parse_cdb(struct se_cmd *cmd,
+ 
+ bool target_sense_desc_format(struct se_device *dev);
+ sector_t target_to_linux_sector(struct se_device *dev, sector_t lb);
+-bool target_configure_unmap_from_queue(struct se_dev_attrib *attrib,
+-				       struct block_device *bdev);
++bool target_configure_unmap_from_bdev(struct se_dev_attrib *attrib,
++				      struct block_device *bdev);
+ 
+ static inline bool target_dev_configured(struct se_device *se_dev)
+ {
+-- 
+2.34.1
 
 
