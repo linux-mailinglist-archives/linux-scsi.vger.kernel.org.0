@@ -1,146 +1,91 @@
-Return-Path: <linux-scsi+bounces-8746-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8751-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B52A5994676
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 13:21:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFF84995019
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 15:32:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6D0B1C23F5B
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 11:21:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9469A1F25923
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2024 13:32:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C157A1D0149;
-	Tue,  8 Oct 2024 11:21:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C47DE1DFDB6;
+	Tue,  8 Oct 2024 13:31:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QPpo/rdI"
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="rjRLyNfc";
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="vJNl3ABD"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from mta-03.yadro.com (mta-03.yadro.com [89.207.88.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C8018BC3B
-	for <linux-scsi@vger.kernel.org>; Tue,  8 Oct 2024 11:21:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2A91DE89F;
+	Tue,  8 Oct 2024 13:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.207.88.253
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728386473; cv=none; b=da1F3/m2gPI/D0mDXqGHdXAsgi/kGE3Y+ZToV/4maVr7rQp6pleW4oiYg8a0d13Zz+RZNyiZrsNIBXoiFrZO6ov2DIvyiYDdEPZOiqLHbt5kxks5Ly3KbLtK8HUI/3/4H1ItqyY7E5ZP98e3UcUaZWGmQb0tz6CPqc8HqI+brlw=
+	t=1728394298; cv=none; b=cBcMU7fTBX+ijC2uVeEe/xa8Nf6IMCLrzJtOrFb3gjN0IVgBQeqQCDd25sqciJ8DObR9ufqIPr/4ngoviWClPLFjGGah+qMHTnDhx/KqJkMSTkp87UcbONf+fdLtCiFgetkmTr+0PgnHtVEVfDhEi/gyRs6aAH+eyQld6q4dpOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728386473; c=relaxed/simple;
-	bh=3Ct1mGZN8YLbso2pvrthDD0bQGWLsW98R7kRII4+TaQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cdFAwWhrp4Yj5g0JiNZZK/jegLk6xLf/j3HAPfHlrmoJ2LAMF2YIGD2x5AWC4nvhbvlohdF7bS9rTnLABOLCdaNDiJnIPp4k9+iktKHQE3v9QsfAaxTNr2UOWxZ5eEt95WsMF/YTdNt2W73mBxvJAQQ/2XkZ2ASfZWQn9Kmti0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QPpo/rdI; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1728386467;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=+++WwySE+xnyLVuZgiEzgYGzVYTI3PWElgcf31N76YY=;
-	b=QPpo/rdIXsQ6skAszfc2rWkXn0BuLPW2zvIh19DiynFW7J6eELwfc76RSmHL2BzOXfAIYm
-	UpxB22OQJEorBLcRTkqNT1FB/lS28FRZZFsApnWD+B0GIPljGY0Sir+YlQObwH0A7ZhrO8
-	ncdePiNU2DZEoMJ/45sNuOU9QU4VPb8=
-From: Thorsten Blum <thorsten.blum@linux.dev>
-To: Satish Kharat <satishkh@cisco.com>,
-	Sesidhar Baddela <sebaddel@cisco.com>,
-	Karan Tilak Kumar <kartilak@cisco.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Thorsten Blum <thorsten.blum@linux.dev>,
-	Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] scsi: fnic: Use vcalloc() instead of vmalloc() and memset(0)
-Date: Tue,  8 Oct 2024 13:19:28 +0200
-Message-ID: <20241008111928.49004-2-thorsten.blum@linux.dev>
+	s=arc-20240116; t=1728394298; c=relaxed/simple;
+	bh=+bURHDW1zXCtiAD9N+c9kvwLuZzFe8wpbzI8L4zxdHI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mkNFuQATfpjwMD7VWh9nNnyZND0ZYmpFuDqduWi8YmTGbaW2LuF+4OQ1E1Za4zP2fhUN0vHB6d0RRQVoRM3jkl5h+wZ3GDnM89fh4gdyL5mPH2BHaHlcnm/GCJwjDvGtYz911kGPQZQP0Z56bwPUwTXheCDCcrjurXVicP/5FTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com; spf=pass smtp.mailfrom=yadro.com; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=rjRLyNfc; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=vJNl3ABD; arc=none smtp.client-ip=89.207.88.253
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yadro.com
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-03.yadro.com F02E6E0018
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-04;
+	t=1728394285; bh=NI26YxtnlPI8PCKS5w9xUUDiSDrbLNakfEZ1X9++Fjc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+	b=rjRLyNfcbLz/2hqcVQCMAZoRw8MsqidBEIMAzkMz9zroIpC3xWCaOG0YT/WzbRLJ1
+	 /XrVVwFVOcxMag/Mi+zHKL8wCZD+muLiP7xDGigEcb17HmaiuSvW+nXFVbvAc36e+B
+	 9r8aoUBx1Gv7KshqaioRwX4YEPp4MDI4Vskk5Rz36y74//SA4Ci4E+ED5sUtjo5FEv
+	 sXDrXfarynWGb5KqVrUdzCKkw5B7Kj023exWyZBJErERXasQGzsLZ2GWCdEkBGzWJf
+	 IULKOLvoXpfuKM3qZAp5boQ8U2KMWzJ4ufh8QfC0GYiA0KkuFZ8MdhHBFnuMOqXctB
+	 frK//N1UMR1Ag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-03;
+	t=1728394285; bh=NI26YxtnlPI8PCKS5w9xUUDiSDrbLNakfEZ1X9++Fjc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+	b=vJNl3ABDxivtHYMGDimdOeMMFTtPST5m5bxK6yqbjQtSWgvtyFX5xM6+OtdCyweF4
+	 xrtZNWbcl+t74tvHc9QbVjTdUqCuAAa9DlrE5DFO5dChf5AOG2HHg8IIptZU6qSQMK
+	 ntfM4cMHIpiL7KOT6uEdmnIKgAO4A1mppwrEPLVE0my2u/QcBlDMKEeNoDvHUxYWDu
+	 1tvmzZJk9KfEfsAosc6UhdvGhBq1/xii2qc7yeJUuMcraO5FwKi/UyP4vmyoBCSLrX
+	 4pxIi522jk5khcMYZ6ckQQTYUop4mTqIW3gRWe5EA9tzAWJR10UixR/ll7zzAgE/30
+	 wShXJIXY6rYQQ==
+From: Anastasia Kovaleva <a.kovaleva@yadro.com>
+To: <target-devel@vger.kernel.org>
+CC: <njavali@marvell.com>, <GR-QLogic-Storage-Upstream@marvell.com>,
+	<James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
+	<bvanassche@acm.org>, <quinn.tran@cavium.com>, <nab@linux-iscsi.org>,
+	<himanshu.madhani@cavium.com>, <linux-scsi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux@yadro.com>
+Subject: [PATCH 0/3] Fix bugs in qla2xxx driver
+Date: Tue, 8 Oct 2024 16:23:59 +0300
+Message-ID: <20241008132402.26164-1-a.kovaleva@yadro.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: T-EXCH-08.corp.yadro.com (172.17.11.58) To
+ T-EXCH-09.corp.yadro.com (172.17.11.59)
 
-Use vcalloc() instead of vmalloc() followed by memset(0) to simplify the
-functions fnic_trace_buf_init() and fnic_fc_trace_init().
+This series of patches contains 3 separate changes that fix some bugs in
+the qla2xxx driver.
 
-Compile-tested only.
+Anastasia Kovaleva (3):
+  scsi: qla2xxx: Drop starvation counter on success
+  scsi: qla2xxx: make target send correct LOGO
+  scsi: qla2xxx: Remove incorrect trap
 
-Cc: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
----
-Changes in v2:
-- Remove unsigned long cast as suggested by Johannes Thumshirn
-- Link to v1: https://lore.kernel.org/linux-kernel/20241007115840.2239-6-thorsten.blum@linux.dev/
+ drivers/scsi/qla2xxx/qla_iocb.c   | 11 +++++++++++
+ drivers/scsi/qla2xxx/qla_isr.c    |  4 ++++
+ drivers/scsi/qla2xxx/qla_target.c | 21 ++++++++++++---------
+ 3 files changed, 27 insertions(+), 9 deletions(-)
 
-Changes in v3:
-- Keep the unsigned long cast removed in v2
-- Use vcalloc() instead of vzalloc() as suggested by Johannes Thumshirn
-- Compile-tested again
-- Link to v2: https://lore.kernel.org/linux-kernel/20241008095152.1831-2-thorsten.blum@linux.dev/
----
- drivers/scsi/fnic/fnic_trace.c | 16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/scsi/fnic/fnic_trace.c b/drivers/scsi/fnic/fnic_trace.c
-index aaa4ea02fb7c..e5e0c0492f23 100644
---- a/drivers/scsi/fnic/fnic_trace.c
-+++ b/drivers/scsi/fnic/fnic_trace.c
-@@ -485,8 +485,7 @@ int fnic_trace_buf_init(void)
- 	}
- 
- 	fnic_trace_entries.page_offset =
--		vmalloc(array_size(fnic_max_trace_entries,
--				   sizeof(unsigned long)));
-+		vcalloc(fnic_max_trace_entries, sizeof(unsigned long));
- 	if (!fnic_trace_entries.page_offset) {
- 		printk(KERN_ERR PFX "Failed to allocate memory for"
- 				  " page_offset\n");
-@@ -497,8 +496,6 @@ int fnic_trace_buf_init(void)
- 		err = -ENOMEM;
- 		goto err_fnic_trace_buf_init;
- 	}
--	memset((void *)fnic_trace_entries.page_offset, 0,
--		  (fnic_max_trace_entries * sizeof(unsigned long)));
- 	fnic_trace_entries.wr_idx = fnic_trace_entries.rd_idx = 0;
- 	fnic_buf_head = fnic_trace_buf_p;
- 
-@@ -559,8 +556,7 @@ int fnic_fc_trace_init(void)
- 	fc_trace_max_entries = (fnic_fc_trace_max_pages * PAGE_SIZE)/
- 				FC_TRC_SIZE_BYTES;
- 	fnic_fc_ctlr_trace_buf_p =
--		(unsigned long)vmalloc(array_size(PAGE_SIZE,
--						  fnic_fc_trace_max_pages));
-+		(unsigned long)vcalloc(fnic_fc_trace_max_pages, PAGE_SIZE);
- 	if (!fnic_fc_ctlr_trace_buf_p) {
- 		pr_err("fnic: Failed to allocate memory for "
- 		       "FC Control Trace Buf\n");
-@@ -568,13 +564,9 @@ int fnic_fc_trace_init(void)
- 		goto err_fnic_fc_ctlr_trace_buf_init;
- 	}
- 
--	memset((void *)fnic_fc_ctlr_trace_buf_p, 0,
--			fnic_fc_trace_max_pages * PAGE_SIZE);
--
- 	/* Allocate memory for page offset */
- 	fc_trace_entries.page_offset =
--		vmalloc(array_size(fc_trace_max_entries,
--				   sizeof(unsigned long)));
-+		vcalloc(fc_trace_max_entries, sizeof(unsigned long));
- 	if (!fc_trace_entries.page_offset) {
- 		pr_err("fnic:Failed to allocate memory for page_offset\n");
- 		if (fnic_fc_ctlr_trace_buf_p) {
-@@ -585,8 +577,6 @@ int fnic_fc_trace_init(void)
- 		err = -ENOMEM;
- 		goto err_fnic_fc_ctlr_trace_buf_init;
- 	}
--	memset((void *)fc_trace_entries.page_offset, 0,
--	       (fc_trace_max_entries * sizeof(unsigned long)));
- 
- 	fc_trace_entries.rd_idx = fc_trace_entries.wr_idx = 0;
- 	fc_trace_buf_head = fnic_fc_ctlr_trace_buf_p;
 -- 
-2.46.2
+2.40.1
 
 
