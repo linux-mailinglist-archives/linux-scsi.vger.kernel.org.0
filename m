@@ -1,77 +1,76 @@
-Return-Path: <linux-scsi+bounces-8880-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8883-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5828599FEEA
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Oct 2024 04:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6209299FEEF
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Oct 2024 04:41:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E81A286CC5
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Oct 2024 02:41:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26DAF286CB2
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Oct 2024 02:41:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1E8B15E5CA;
-	Wed, 16 Oct 2024 02:40:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B73E5170854;
+	Wed, 16 Oct 2024 02:40:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="E7YG7N7v"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="aeVJlqlK"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E1613632B;
-	Wed, 16 Oct 2024 02:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11BEA15B10E;
+	Wed, 16 Oct 2024 02:40:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729046455; cv=none; b=chr8NfHlp4N0F3Wbo76HxC2L1Au9Q7ux3tIh9UFeJhZjxXfV5dYwDDij+9pWBIrm/EvSrVPHI/fRYl8CksKqkFn1M2ndyLBNH0ib/0Dj/llmJF4LigXQRPs50TN1IPzttyFl7sga3V84pE3fz+lqmvoUf/UthjDDAYq3KAidSqw=
+	t=1729046456; cv=none; b=aevcv+zPPTkSn7WT7/PNFPGFcQ3G01P2K+n5hgqnFe2R9cEzxBMIbnYsy7cu8QsmS8P9eQvw3yyn2296jH5dBjl0twbapXPSyVARyRrL7NiRQj2Vo504KtQ59Hauui8WJP5UzGxE15rNFENKUBrHiD+RxmI/ZyiqiPppqYtOMKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729046455; c=relaxed/simple;
-	bh=dos+hc0W4S35iHy7p0Pu9U5NVKEmIuU3OGJnn47lmMI=;
+	s=arc-20240116; t=1729046456; c=relaxed/simple;
+	bh=Q+2+Lp+c/9Msd1H7XAI3DpQgBAJTvQMExiqqraH+lRk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MdkjY/CPd8zvz96qt813/y7Rzgpn0kK8Xhc0qYad/FpYT8/WfaT973m+KH27g2yr/85sz7fHQZtxSF6jwwPCZTPxWN01Bo/O/aLM/Y0HWMAoYq6iJaD54v0hMVo3OtJHevjVYAb0XZcezGelM1asUNg8Qobu3LKbTm61SjfKCwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=E7YG7N7v; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=gIPAJ3KTNfhJFJ72xVqfXyt0t6rsXYjCpgc/Vmt4RKbbrLNNTC5WpEoZFVqNJ1zQ4SbAqFPJuMWFY4ZEwBgkFr2it3UnnZqFR/EZS+slXou35wW3hJDLVlqxBofM6V4oia/cAOZykNnJl+JepDsu6X7bJ3JBif0TGFcvPh250oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=aeVJlqlK; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49G2Mb9P010285;
-	Wed, 16 Oct 2024 02:40:50 GMT
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49G2MeXd011172;
+	Wed, 16 Oct 2024 02:40:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=8RybGAs5L6x+eIvjjeRRFAKBG3ys27coEoOqzNz/v8w=; b=
-	E7YG7N7vWslJ/y0+AeIJ+nGcYG/gNriFFn6Ee3wQrvgLM7U6QUOEpqDATFxxZ8jo
-	h2uSsYaGyhbHvTeAZ1j5zK5tzmBpQ3B0Y6Uf1NqySzhTVaEc9N+QDq0u9zql43hZ
-	Q/vghjnXNeKg+QH2lV799CYYjLjHjPMlxjU3faSUwALXQuhrEKu2ZjL8ER9vj/0v
-	fFtSQh1RxrkDYF+vWJO0r7wpAHlojd6MhWNhq8eQeKBoi1k5DJ1VUbPV79iqQ3PK
-	E5BdC31SQSt54midANNlbYaDL9aFaljTbt/k3/TBZxUrdlU2jAAh185DSDXg5qIS
-	rBG0b+VbOAv7V7w0aOqRBA==
+	corp-2023-11-20; bh=bTNdTCbEfiYQlDlHpyIfuv/Z7v9LUM0qP5w1l6HlrMI=; b=
+	aeVJlqlKRJ8unjTE3W6s0ATP98dEioRZ6H7O5TfYw1g2IwqvyeFL7xkJ8LkRwG+f
+	osdr+FUvtWGZXNgIuA+VI/IchGoN6zOztIKHC9r11+/iBIifu9qt3cCQzIT0QmW0
+	6F2NBXVN1qLOMUeeIbv+TxMtD0KrBBrHCKJcW0n+r2n0vJk9iN4n7GLydy6Ab/pq
+	9dvLEANkjTh9EvFfW81jYR9LE37DIJdNgFmOcDtg/A1Wq15THRQnsxkRpn8uCJpR
+	qMNodzyKs/awdGXfep/K3IND/UFuWnRCDUEn4RV/O57v4qPV2Tf8+/AIp1FPfTyn
+	Fs35PT5Jh4EQ/ZXJU8rvHA==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427gqt2nc3-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427hntaqv2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 16 Oct 2024 02:40:49 +0000 (GMT)
+	Wed, 16 Oct 2024 02:40:50 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49G2TBN9027154;
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49G0cfeO027269;
 	Wed, 16 Oct 2024 02:40:49 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjesxyv-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjesy00-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 16 Oct 2024 02:40:48 +0000
+	Wed, 16 Oct 2024 02:40:49 +0000
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49G2elg3001510;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49G2elg5001510;
 	Wed, 16 Oct 2024 02:40:48 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 427fjesxyf-3;
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 427fjesxyf-4;
 	Wed, 16 Oct 2024 02:40:48 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: aacraid@microsemi.com, James.Bottomley@HansenPartnership.com,
-        linux@treblig.org
+To: hare@suse.com, James.Bottomley@HansenPartnership.com, linux@treblig.org
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: aacraid: Remove unused aac_check_health
-Date: Tue, 15 Oct 2024 22:40:04 -0400
-Message-ID: <172852338081.715793.1995047409349459596.b4-ty@oracle.com>
+Subject: Re: [PATCH] scsi: aic7xxx: Remove unused aic7770_find_device
+Date: Tue, 15 Oct 2024 22:40:05 -0400
+Message-ID: <172852338082.715793.14728102435625386723.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.46.1
-In-Reply-To: <20240920202304.333108-1-linux@treblig.org>
-References: <20240920202304.333108-1-linux@treblig.org>
+In-Reply-To: <20240913170116.250996-1-linux@treblig.org>
+References: <20240913170116.250996-1-linux@treblig.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -83,28 +82,28 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-15_21,2024-10-15_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=725 adultscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=868 adultscore=0
  spamscore=0 malwarescore=0 bulkscore=0 suspectscore=0 mlxscore=0
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2409260000 definitions=main-2410160016
-X-Proofpoint-GUID: ZoF_z17aFqiRSQtJf_Wa48GQ213LdGyQ
-X-Proofpoint-ORIG-GUID: ZoF_z17aFqiRSQtJf_Wa48GQ213LdGyQ
+X-Proofpoint-ORIG-GUID: HCwsRidyHkLA30B-EFrp4FAJAKvI2PCj
+X-Proofpoint-GUID: HCwsRidyHkLA30B-EFrp4FAJAKvI2PCj
 
-On Fri, 20 Sep 2024 21:23:04 +0100, linux@treblig.org wrote:
+On Fri, 13 Sep 2024 18:01:16 +0100, linux@treblig.org wrote:
 
-> aac_check_health has been unused since commit
->   9473ddb2b037 ("scsi: aacraid: Use correct function to get ctrl health")
+> 'aic7770_find_device' has been unused since 2005's
+>   commit dedd83108105 ("[SCSI] aic7xxx: remove Linux 2.4 ifdefs")
 > 
-> Remove it.
-> 
-> (I don't have the hardware to test this, build and booted only)
+> Remove it and the associated constant.
+> (Whether anyone still has one of these cards in use is another question,
+> I've just build tested this).
 > 
 > [...]
 
 Applied to 6.13/scsi-queue, thanks!
 
-[1/1] scsi: aacraid: Remove unused aac_check_health
-      https://git.kernel.org/mkp/scsi/c/5a66581a1af5
+[1/1] scsi: aic7xxx: Remove unused aic7770_find_device
+      https://git.kernel.org/mkp/scsi/c/0b1e535598d5
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
