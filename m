@@ -1,77 +1,80 @@
-Return-Path: <linux-scsi+bounces-8875-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-8879-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C29699FEE2
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Oct 2024 04:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B81C99FEE9
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Oct 2024 04:40:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40866286EF3
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Oct 2024 02:39:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EEFE286D02
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Oct 2024 02:40:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF4115C139;
-	Wed, 16 Oct 2024 02:39:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6249915B987;
+	Wed, 16 Oct 2024 02:40:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="c3kj8zHk"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="aV3YVCck"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1C914C5B5;
-	Wed, 16 Oct 2024 02:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B20221E3DE
+	for <linux-scsi@vger.kernel.org>; Wed, 16 Oct 2024 02:40:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729046389; cv=none; b=aIB+iwRsvLpR5AZgYafdaPMk0GsM6DKFTQ+7zRp+H58z9tKJBLJEXsyQfWI4ZBdR1969Bkl0I9J9x0NuFwxf4lr5SPOwRBhB2GxgyvF7p8yI3TNrkhF4Vgqd2onwD29mn9M6eOpp/1HbB7CUinLfFGCRd9TMUwt5Xv9FLulkaMo=
+	t=1729046455; cv=none; b=BM4hbmu4l8lb87ztlw18rl6qMipwy71LlGvWqEGWoOfgQtOCiwfABLvdoy0VKQZlBNakr0oJu+GLFJksOgrf2ZbKO9u3ocrH6rkXEz5UNXsMpRNou4U7LOW58itNu1B+HvZDMm+kuue0trHSstPLsfopZg2kcU8NAaPcQc3wwhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729046389; c=relaxed/simple;
-	bh=g6EASXqUnuuaxkEInr73/Huvms2kMpPHVK/T9xmeJ4A=;
+	s=arc-20240116; t=1729046455; c=relaxed/simple;
+	bh=hO7FB+dDkQB0cnx6VNl0rS+b5uikJAKXD/QaY8KN5KA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DdBcuSUBBVaQwhc8RjldSlMf6jSbrTDRkjalZT8AbUZlEsWD41YhTFxxLdpzPsvV0Os9of/GP5mHgImuM3wz4x2ZfULcdSpSXk27edEmvWz4+FEDB6aWHH2XkSNYu5AHJedQx9DPoM++/od/Go59BzZm4r41VMnzG0GhTWL/IpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=c3kj8zHk; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=cvZ4X2tQxYzfdx3/NDOasHEENxbqNe0eJrFx/lPlj8og4v8gUS2kQDowFDAR8IW9SqS4d6qOTzOHzLAHBrX2WcZLkr+pY6wiOqwKWzYrtVab3m2SUcn+onKJ1BZiizuPxh8Lw6Ep6ra2X1KXVX550JUUOq6N2R5EcwTGEGF70Wo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=aV3YVCck; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49G2Mdad024725;
-	Wed, 16 Oct 2024 02:39:42 GMT
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49G2MaFP016575;
+	Wed, 16 Oct 2024 02:40:49 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=cEQjGSW748e+dYdmvdb3oEcAeJfFo+EFZcumXUkAnTM=; b=
-	c3kj8zHkrnLElMAzh06cx+nIoOBBro+SgjzIyZ2ihQw2yZrfADo8cwnDQs3MLilO
-	jumm0DkR0jUnPrjMQ2D05Gc2nS6Ez30gXeEgRDUoWbKEHymbTaaG51e6ZsHZ3dEm
-	XmeEXATVr+0qz97gSRGVW386Q5VE1oGXWI/v0V4ZUiILGcbVy/zQi2JQ8FDxV+7b
-	9JYogPWhILNhHrXL07J6NyEMdBhXkYitnYYEIJXJtvGnF+WnC5KTOrN5mC+TDViF
-	A87IfXGKbIqiRrUZQdkkAkRdmTYsZ6PZ20WKrJHDP9ERXKqoJn66QlOACv8cqR0U
-	WN/k5N1iDwVffLfIeUdQDw==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427gq7jqdq-1
+	corp-2023-11-20; bh=tcEvuEM9onGz/V1106HeyzNpRoQpriuZgDonwy35bLM=; b=
+	aV3YVCckwVQjJzUVDl75aQhzeq48pNd9+/8+J4766Mtjvy6jVol2KIOR6tuBhwyR
+	y5xNDMoqzu8KMDX3sE04kbLCIhIFRlZrzqCyIgrEFUOTxQkvBwoV4oQNaZnB+wNI
+	dWJ6KlYTbafEdpoDk4jLTzxnjU05BkPmEAHipyZdp699BWpeAaZkTzvHrokRXl8p
+	Lla489fKRvK4o4m+gtJzMFAuj9tjAe1vsY8unZ9QxwMOUCpdHfBpwhjEBppZIO/z
+	ARG/zet2M6ayIFCryMR4m+ZX47aPGxYIXFsxH9GPwpJT5fwqdogHGaKxvQQX92Pl
+	G+FRGZ/Des0DXDTRPPF8vg==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427h5ck0n3-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 16 Oct 2024 02:39:42 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49G1UMfK036660;
-	Wed, 16 Oct 2024 02:39:41 GMT
+	Wed, 16 Oct 2024 02:40:49 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49G0cfeN027269;
+	Wed, 16 Oct 2024 02:40:48 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjem1v2-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjesxyj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 16 Oct 2024 02:39:41 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49G2bkUi023540;
-	Wed, 16 Oct 2024 02:39:40 GMT
+	Wed, 16 Oct 2024 02:40:48 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49G2elfx001510;
+	Wed, 16 Oct 2024 02:40:47 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 427fjem1uj-4;
-	Wed, 16 Oct 2024 02:39:40 +0000
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 427fjesxyf-1;
+	Wed, 16 Oct 2024 02:40:47 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: michael.christie@oracle.com, himanshu.madhani@oracle.com,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wang Hai <wanghai38@huawei.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] scsi: target: core: Fix null-ptr-deref in target_alloc_device()
-Date: Tue, 15 Oct 2024 22:39:02 -0400
-Message-ID: <172904632513.1112721.1540847972381471347.b4-ty@oracle.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+        MPT-FusionLinux.pdl@broadcom.com
+Subject: Re: [PATCH] scsi: mptfusion: Remove #ifndef __GENKSYMS__ / #endif
+Date: Tue, 15 Oct 2024 22:40:02 -0400
+Message-ID: <172852338080.715793.8658348033771386342.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.46.1
-In-Reply-To: <20241011113444.40749-1-wanghai38@huawei.com>
-References: <20241011113444.40749-1-wanghai38@huawei.com>
+In-Reply-To: <20240930201347.1837690-1-bvanassche@acm.org>
+References: <20240930201347.1837690-1-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -83,33 +86,25 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-15_21,2024-10-15_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 bulkscore=0
- spamscore=0 phishscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
- definitions=main-2410160016
-X-Proofpoint-ORIG-GUID: giVx5QzRzPdEIPZ_bDnZ9lxqEIUI1gTf
-X-Proofpoint-GUID: giVx5QzRzPdEIPZ_bDnZ9lxqEIUI1gTf
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=652 adultscore=0
+ spamscore=0 malwarescore=0 bulkscore=0 suspectscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2410160016
+X-Proofpoint-ORIG-GUID: DyIASVVezTQXFe_T-XTu9wVNNWWIbT0o
+X-Proofpoint-GUID: DyIASVVezTQXFe_T-XTu9wVNNWWIbT0o
 
-On Fri, 11 Oct 2024 19:34:44 +0800, Wang Hai wrote:
+On Mon, 30 Sep 2024 13:13:47 -0700, Bart Van Assche wrote:
 
-> There is a null-ptr-deref issue reported by kasan:
+> Except for preventing build errors, there shouldn't be any conditionals in
+> kernel drivers on __GENKSYMS__. Hence remove an #ifndef __GENKSYMS__ / #endif
+> pair from the MPT Fusion driver.
 > 
-> BUG: KASAN: null-ptr-deref in target_alloc_device+0xbc4/0xbe0 [target_core_mod]
-> ...
->  kasan_report+0xb9/0xf0
->  target_alloc_device+0xbc4/0xbe0 [target_core_mod]
->  core_dev_setup_virtual_lun0+0xef/0x1f0 [target_core_mod]
->  target_core_init_configfs+0x205/0x420 [target_core_mod]
->  do_one_initcall+0xdd/0x4e0
-> ...
->  entry_SYSCALL_64_after_hwframe+0x76/0x7e
 > 
-> [...]
 
-Applied to 6.12/scsi-fixes, thanks!
+Applied to 6.13/scsi-queue, thanks!
 
-[1/1] scsi: target: core: Fix null-ptr-deref in target_alloc_device()
-      https://git.kernel.org/mkp/scsi/c/fca6caeb4a61
+[1/1] scsi: mptfusion: Remove #ifndef __GENKSYMS__ / #endif
+      https://git.kernel.org/mkp/scsi/c/09822c231ae6
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
