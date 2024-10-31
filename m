@@ -1,199 +1,127 @@
-Return-Path: <linux-scsi+bounces-9419-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9407-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00D8E9B860E
-	for <lists+linux-scsi@lfdr.de>; Thu, 31 Oct 2024 23:20:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 326BC9B85F8
+	for <lists+linux-scsi@lfdr.de>; Thu, 31 Oct 2024 23:15:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABB0F1F22608
-	for <lists+linux-scsi@lfdr.de>; Thu, 31 Oct 2024 22:20:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70C4E2829D6
+	for <lists+linux-scsi@lfdr.de>; Thu, 31 Oct 2024 22:15:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9A53196D98;
-	Thu, 31 Oct 2024 22:20:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F29D1CCB30;
+	Thu, 31 Oct 2024 22:15:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gvCalbkS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bN98T1XX"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3D113AD32
-	for <linux-scsi@vger.kernel.org>; Thu, 31 Oct 2024 22:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9213122097
+	for <linux-scsi@vger.kernel.org>; Thu, 31 Oct 2024 22:15:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730413212; cv=none; b=eZT3nuNvc1zGZgbNy6m8JYGN0FkEN2SsbdxPtzDOdsIJBPJJiF3/LxY2S4M1zZQ+bopoLv5PNlBGUtVRWnAR6TRSIzJNcnMK0N4bDd48aMFuWacZgn6CA6RUqfFuKaunT9Z2yFxQaXqD/hpE01vr52ME2dpddrlZMCMtDeljPYw=
+	t=1730412928; cv=none; b=Q+CA4MRgCfFGiNTn5TOM5oOEmwTuMjJi61vMBDCWDgp9vKXP8Fux+9F9PCus+NrSaFbMxdOq4RloiFJTjrPTdTfGrceNWuJwY4I3GUf+kSBReD6nOYWJmp4Kj1mZ+YnD/iorBj65un8TpqwT11NkplU1CgivfU+YFDFa5uCByNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730413212; c=relaxed/simple;
-	bh=wKenHdvD9Xsmwf25KbxDjnZ/E4m6yT+YHw5B2thxC/M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OKjNMzOy143CZN2FzCkzP8Gas1W/bDxPtKar6Y++EgXQFsuMXbq6lqiB35lGNV2ltRXXiT61f1byZxZQfRbIZpnOfC2pyFS7hwmDgilH3d2qg7Z/WJTjnLPNVbuKvG6u0AZV8xVc/fjFM9mhOXWHJmeFoHfpJvriE0gqEAVN9Pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gvCalbkS; arc=none smtp.client-ip=209.85.221.47
+	s=arc-20240116; t=1730412928; c=relaxed/simple;
+	bh=BNFvgmDJXMCM3fgJPesUV6WKJAyXZOTZj5VQoZvQYq4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=j+924RBw98GZSMTvqQvQ2tagq6+Om41PMJGg1DSw2W3dW90JlchxTTfhPmLUNdfmVECpUx9NuSNsvcwsOtzcpdBtrzw2xi6LxYOQNQK5SyNvHxdzdLzYPGmU28DuFWJxhc+kq6O2M02o4Kj3EB6vKBgL7kMuLxqghiFCMugoJew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bN98T1XX; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-37d538fe5f2so1003694f8f.2
-        for <linux-scsi@vger.kernel.org>; Thu, 31 Oct 2024 15:20:06 -0700 (PDT)
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7ea8c4ce232so1232301a12.0
+        for <linux-scsi@vger.kernel.org>; Thu, 31 Oct 2024 15:15:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730413205; x=1731018005; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lPuBt9tGKxU2bYWu//4mDOlZIDxLti1o0AzDDXZfmbs=;
-        b=gvCalbkSVpsXkttzX8/quXBo1cQFgNQyZznlKdOeTkVZ9Af3Af2hpYh0wBxEH7ZQyg
-         6hmPwHw4tAMtlZvD+U7cN/ag2/06D23ptkTM/NexgP+8YREQMfxEvjPViNLnsDSD+M0S
-         ZLDjRvGmnSEYoQnoeaErefxIQ7NQBjxXRj9tfkZvHgIO9pB7P5xKcFaR6NvxDQQars3f
-         eeLp5demEzdfmKQpochvCo0dwNqMlGZBzjdAkbs8WYfLuthm+Ki817XCbxSASIlqBCSA
-         1SUSwDP/aOTZw0vPfaZ27kDvOfVdg6QdLp/bB13XflkfOaSUnZPJSsdZBulqddVqXwF0
-         krdQ==
+        d=gmail.com; s=20230601; t=1730412922; x=1731017722; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4HbRns5bjxF9rNRA7bRvKAVUX71FMcyZTuj4TptOT1w=;
+        b=bN98T1XXqam5N1CzY/9q4MoCgCdsU/U0cN+f0XmluP7J5WTdBDFUFM0kgJSphA+QrZ
+         sthvjkvRyZMijdUPv6UMpNZcPZolYhh6c21xnIwe7vX1XaG1hltbkjitpTrBfG9rSJWw
+         Jck2xJS9NuhdAoksJ1hA38RFnlm1pIrhN1Xvsa3OTiLnVacezdleQwrifoBzP0Rcew2F
+         PlXWhHibuKhv919CzKDRizvhsEaKULqOm499e3x2n+5eypfb4SZWcpdf/6eJwd/QI+CD
+         Xpe0YsVGKGilbN9IeBH/QuqN5QV8xlja9Bme2jbG2hXTf3C9OSPrZfmtP7sxSOUjNdVz
+         98Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730413205; x=1731018005;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lPuBt9tGKxU2bYWu//4mDOlZIDxLti1o0AzDDXZfmbs=;
-        b=BddS60C4FlKNAMld8X4KJ+0pbqC4Fo59I2Nk/tOs1p6GrftTzAYl061sYpsufQDJzV
-         FiW7MFpnZn+3cpl9Bbtk2C3tTvZmo1alUSWqcfw50PSljQlI01HqcgYPeSM4ounHcaeH
-         uyxfYztkB7p+NptuBt4GuKVT+B3r8fB7Y9MvzI2a0Y+pK8PA+rgC/17bHuV5D2RHfJSn
-         PKc6IHf34S547ZLd2QxvyXaPb1PQVXOVvxJkFElNofZztOx0s7wCJobXSr5pJs+9xZY7
-         QlpiQ9xwI4+wnzp7v1WdaS96XPmNlXohH5l5c9ypjPx3tvacnRUpBV02alybfI+LZDk4
-         A8ZA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGP6mD9hsFxtzeNlcR6gxyf+dVBGoLteaoMq1MCUBVB8h5Ji3jiGQ5KVWc48uPH91EdLSIGB0Q0105@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBQs9/rwT7A1VXtVhJedkOkYKaxzuOg2vKl4jzqtBwng/aw/Ff
-	y+mmMubAz0iLk5umovz81W93IvSB6gZEgtEP36ekSJ+61DBa30nLNB4QccbLGfGKMjtqqCZVnoq
-	R6IxK9gEsalsReAfN4w1jgRldxDw=
-X-Google-Smtp-Source: AGHT+IHdtpj1B84273DgTqT1ho/mgEKZKHWjlQHIP3ADb9ejBxpf0tyyupnwAktonqbhvpp5Y/IUh1+n4eNfVDiexuk=
-X-Received: by 2002:a5d:6d84:0:b0:37d:5129:f45e with SMTP id
- ffacd0b85a97d-381be7c8137mr4473385f8f.20.1730413204721; Thu, 31 Oct 2024
- 15:20:04 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1730412922; x=1731017722;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4HbRns5bjxF9rNRA7bRvKAVUX71FMcyZTuj4TptOT1w=;
+        b=dkgKqwxrtzTiQ2wI187FpiEMd9768hxPqlrwmTM5KU3XRUvHucjNUfqsYUb3U77+Oh
+         gId3CxyERO3ef+bpxm82Iaj7sArB71d0Q2TwskwWR/xitQyU2/FGFku8hwgLxygBzSNz
+         XQN+Yz9xvfvb6MG/0X0GnYdQSMs0jOJnLWllXmeTumm4DwdTNfULvQ0SAJ5cL2q2ccvv
+         BK3lQqy5aBIzaSK23PAfKGSXOKK3UYJWHcyAdxH6swpJgNWbanWFs1tkr8iOjSFLNb6w
+         2+/g0GoACbvRkXvOtIL1MeAWoo6YePIszwofIa4GyVEzHS99+BzoLhYVXuJWgJL3zYCr
+         +9Ow==
+X-Gm-Message-State: AOJu0YxhW0jKRNwto90N3t8enw2qBFf74AzdYC0j57uWNMliH7GtwzNA
+	snkv3EbzfW79YBfOtIaWXRdqxKV2JeKhLp0zDDF25AQvksbIsApfpdMWGQ==
+X-Google-Smtp-Source: AGHT+IFK6EG5D/RAsRZfFfJ+VwhW4jpeAcqavXIH17c1kxYxbeTa/9gjpw3iptaUbPzmWOJ6J+b8OA==
+X-Received: by 2002:a17:90b:38d0:b0:2e2:a029:3b4b with SMTP id 98e67ed59e1d1-2e94c51c364mr1958442a91.28.1730412921613;
+        Thu, 31 Oct 2024 15:15:21 -0700 (PDT)
+Received: from dhcp-10-231-55-133.dhcp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e92fa25742sm3916528a91.19.2024.10.31.15.15.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 31 Oct 2024 15:15:21 -0700 (PDT)
+From: Justin Tee <justintee8345@gmail.com>
+To: linux-scsi@vger.kernel.org
+Cc: jsmart2021@gmail.com,
+	justin.tee@broadcom.com,
+	Justin Tee <justintee8345@gmail.com>
+Subject: [PATCH 00/11] Update lpfc to revision 14.4.0.6
+Date: Thu, 31 Oct 2024 15:32:08 -0700
+Message-Id: <20241031223219.152342-1-justintee8345@gmail.com>
+X-Mailer: git-send-email 2.38.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+=Fv5QXiwWd+v9vHo89X_H94+P5OsT_0MEs_8dRAYJawWpy1w@mail.gmail.com>
- <yq15xpgdl6j.fsf@ca-mkp.ca.oracle.com> <CA+=Fv5TdeQhdrf_L0D89f6+Q0y8TT3NZy0eQzPPjJfj6fqO=oQ@mail.gmail.com>
- <CA+=Fv5R1c+JCkFFUvY-9=x61FZnks9GOteKETpo2FJV5u3kFzg@mail.gmail.com>
- <yq18qu7d5jy.fsf@ca-mkp.ca.oracle.com> <alpine.DEB.2.21.2410300046400.40463@angie.orcam.me.uk>
- <CA+=Fv5SXrc+esaKmJOC9+vtoxfEo1vOhgfQ739CBzmVcArWT8g@mail.gmail.com>
- <20241030102549.572751ec@samweis> <CA+=Fv5RX-u_X9UgpMg6xzwc_FwLZus7ddJJY8rHMMyUUGc3pxA@mail.gmail.com>
- <alpine.DEB.2.21.2410310517330.40463@angie.orcam.me.uk> <CA+=Fv5Q=eS1O4nwiHkJQRpvZ+JiDncnEZtqCUAyBPf1ZOtkzzA@mail.gmail.com>
- <alpine.DEB.2.21.2410311656400.40463@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2410311656400.40463@angie.orcam.me.uk>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Thu, 31 Oct 2024 23:19:53 +0100
-Message-ID: <CA+=Fv5T5okj3ntmWgYB-509xE7kfoDUUcBGorfroqGpJTNyRoA@mail.gmail.com>
-Subject: Re: qla1280 driver for qlogic-1040 on alpha
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Thomas Bogendoerfer <tbogendoerfer@suse.de>, Christoph Hellwig <hch@infradead.org>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 31, 2024 at 6:31=E2=80=AFPM Maciej W. Rozycki <macro@orcam.me.u=
-k> wrote:
->
-> On Thu, 31 Oct 2024, Magnus Lindholm wrote:
->
-> > I don't have a QLA1040 revC to test with, but I've put together a much
-> > smaller patch which just limits the DMA_BIT_MASK to 32-bit on
-> > 1020/1040 cards this should at least not break anything while fixing
-> > the most urgent problems with file system corruption on some
-> > combination of hardware/memory. Thanks for the pointers to tsunami
-> > chipsets though, I'll try to enable some debugging to see what's going
-> > on when I hit this problem with the qlogic card.
->
->  I think Thomas will be unhappy about disabling DAC completely for the
-> 1040: as I infer from his response it is indeed required for his Octane t=
-o
-> operate correctly, and which also presumably implies he does have revisio=
-n
-> C of the chip to verify your fix with.  Thomas?
+Update lpfc to revision 14.4.0.6
 
+This patch set contains bug fixes related to congestion handling,
+accounting for internal remoteport objects, resource release during HBA
+unload and reset, and clean up regarding the abuse of a global spinlock.
 
-From the Tsunami paper:
+The patches were cut against Martin's 6.13/scsi-queue tree.
 
-"The DMA monster window is enabled by PCTL<MWIN>. If enabled, this
-window lies from 100.0000.0000 to
-100.FFFF.FFFF, which requires a dual-address cycle (DAC) access from
-the PCI bus. This window maps to system memory as defined in Section
-10.1.4"
+Justin Tee (11):
+  lpfc: Modify cgn warning signal calculation based on EDC response
+  lpfc: Check devloss callbk done flag for potential stale ndlp ptrs
+  lpfc: Call lpfc_sli4_queue_unset in restart and rmmod paths
+  lpfc: Update lpfc_els_flush_cmd to check for SLI_ACTIVE before BSG
+    flag
+  lpfc: Check SLI_ACTIVE flag in FDMI cmpl before submitting follow up
+    FDMI
+  lpfc: Add cleanup of nvmels_wq after HBA reset
+  lpfc: Prevent ndlp reference count underflow in dev_loss_tmo callback
+  lpfc: Remove NLP_RELEASE_RPI flag from nodelist structure
+  lpfc: Change lpfc_nodelist nlp_flag member into a bitmask
+  lpfc: Update lpfc version to 14.4.0.6
+  lpfc: Copyright updates for 14.4.0.6 patches
 
-When I run the qla1280.c driver with some debugging enabled I see this
-output after a while:
+ drivers/scsi/lpfc/lpfc_bsg.c       |   6 +-
+ drivers/scsi/lpfc/lpfc_crtn.h      |   5 +-
+ drivers/scsi/lpfc/lpfc_ct.c        |  39 +--
+ drivers/scsi/lpfc/lpfc_debugfs.c   |   4 +-
+ drivers/scsi/lpfc/lpfc_disc.h      |  62 ++--
+ drivers/scsi/lpfc/lpfc_els.c       | 459 ++++++++++++-----------------
+ drivers/scsi/lpfc/lpfc_hbadisc.c   | 311 ++++++++-----------
+ drivers/scsi/lpfc/lpfc_init.c      |  61 ++--
+ drivers/scsi/lpfc/lpfc_nportdisc.c | 329 +++++++++------------
+ drivers/scsi/lpfc/lpfc_nvme.c      |  60 +++-
+ drivers/scsi/lpfc/lpfc_nvmet.c     |   2 +-
+ drivers/scsi/lpfc/lpfc_scsi.c      |   8 +-
+ drivers/scsi/lpfc/lpfc_sli.c       | 125 ++++----
+ drivers/scsi/lpfc/lpfc_version.h   |   2 +-
+ drivers/scsi/lpfc/lpfc_vport.c     |   6 +-
+ 15 files changed, 665 insertions(+), 814 deletions(-)
 
-es40 kernel: S/G Segment Cont. phys_addr=3D100 7fff8000, len=3D0x10000
-es40 kernel: S/G Segment Cont. phys_addr=3D100 80008000, len=3D0x10000
-es40 kernel: S/G Segment Cont. phys_addr=3D100 8011e000, len=3D0x10000
+-- 
+2.38.0
 
-Right after the above messages in log files I see failed read/writes
-on the drive attached to the qla1040B. So as soon as I hit the
-"monster window" in DMA-addressing my files get messed up.  I guess
-this never happens if I don't have enough memory in the system, or if
-I set the DMA_BIT_MASK. I'll try to enable some more debug logs from
-DMA and IOMMU stuff.
-
-
-
-> > I'll clean up the chip revision reporting code to see if I can improve
-> > things there, this will be as a separate patch then.
->
->  Great!
->
-> > I have one question regarding the hardware revision on 1040 chips,
-> > according to qla1280.h we have this:
-> >
-> > #define ISP_CFG0_HWMSK   0x000f /* Hardware revision mask */
-> > #define ISP_CFG0_1020    BIT_0  /* ISP1020 */
-> > #define ISP_CFG0_1020A   BIT_1  /* ISP1020A */
-> > #define ISP_CFG0_1040    BIT_2  /* ISP1040 */
-> > #define ISP_CFG0_1040A   BIT_3  /* ISP1040A */
-> > #define ISP_CFG0_1040B   BIT_4  /* ISP1040B */
-> > #define ISP_CFG0_1040C   BIT_5  /* ISP1040C */
-> >
-> >
-> > But when I examine the register it looks more like:
-> >
-> > #define ISP_CFG0_HWMSK   0x000f /* Hardware revision mask */
-> > #define ISP_CFG0_1020     1  /* ISP1020 *
-> > #define ISP_CFG0_1020A   2  /* ISP1020A */
-> > #define ISP_CFG0_1040     3  /* ISP1040 */
-> > #define ISP_CFG0_1040A   4  /* ISP1040A */
-> > #define ISP_CFG0_1040B   5  /* ISP1040B */
-> > #define ISP_CFG0_1040C   6  /* ISP1040C */
-> >
-> > Which is consistent with how NetBSD does things in their ISP driver.
-> > Also, in this case the HWMSK actually works for filtering out the
-> > hardware revision part of the CFG0 register, since it would actually
-> > require a 6-bit mask to match the current definitions in qla1280.c,
-> > right?
->
-
-Thanks! I guess changing these definitions in the header file should
-be safe, I don't think they are really used anywhere in the code as of
-now. Would make a patch for reporting on the hardware revisions of
-1040/1020 more consistent with the headers.
-
-
->  Well spotted!  This predates kernel.org git history, but I was able to
-> track the origin down with a copy of the LMO git tree, and it has always
-> been like this since the introduction of these macros in 2.6.9 with
-> <https://lore.kernel.org/r/20040606125728.GB31063@lst.de/>.
->
->  This also means that the ISP_CFG0_1040A check also added in 2.6.9 with
-> <https://lore.kernel.org/r/20040606125825.GE31063@lst.de/> will never
-> match, possibly meaning that this code wasn't actually ever verified with
-> affected 1040A hardware.  This might also explain why a later change made
-> with commit 0888f4c33128 ("[SCSI] qla1280: don't use bitfields for
-> hardware access in isp_config") went unnoticed that changed the semantics
-> of the workaround from keeping bursts unconditionally disabled with the
-> 1040A to making them enabled in the absence of NVRAM.
->
->  NB comments for the FIFO threshold surely are suspicious too.
->
->  Christoph can you please have a look into it?  It seems like something
-> you ought to be quite familiar with if not for the passage of time.
->
->   Maciej
->
 
