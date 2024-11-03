@@ -1,87 +1,191 @@
-Return-Path: <linux-scsi+bounces-9467-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9471-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 459079BA5D5
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Nov 2024 14:57:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 395D19BA6F1
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Nov 2024 18:05:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E69B01F2183C
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Nov 2024 13:57:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA1122817A6
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Nov 2024 17:05:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A632A17B428;
-	Sun,  3 Nov 2024 13:57:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A41C318C030;
+	Sun,  3 Nov 2024 17:04:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EgyAPyUV"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="LVkLlDoy"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5F1E552;
-	Sun,  3 Nov 2024 13:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8118E18BB91;
+	Sun,  3 Nov 2024 17:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730642253; cv=none; b=ZBXmgZ0cqbZi5vHhV2ERij70wZq4JibuDCHPS0KcAq8nwCgKBw28CsRI/Z3okA8EsCh0Y5c6K7s2jKv7Bdx6Cfj/xvTf/8V3sykMqGD4UlCsFIUAFJrqCE5ty37dAUbinMYgEYtejW1aV7qaqIVRO8sEmhmjJjK1cKl6GW6RqUE=
+	t=1730653485; cv=none; b=B0Mp4rZsaPRaOWStC8SSBSqtc+vIF+zT/N3Pek/MDuydCJR08dbbFr1tvvdEGfI1ohsi+PDceV0zhSTKG8xttdCMpQm79yUg3PypXnTwEXOLRS/6k71pOQ98cZs7J2DL5b+i/aYCChZ6drqoJgDFqYx3WaiXykOFnNBwOzPPbNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730642253; c=relaxed/simple;
-	bh=VxXH6aqpqHLHF5oRJ5vnT5vpm2uvtxBA9AHVL/CAjN8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FHUAdbtVg33r6Jk88Ja/xm7sNB77wMOkYKE1j36tvHmayjw/dgGT0WqQ3HypDXUp2SVYh4jMF4Krl5lZ371bciCk902mZ/aLg/NvcAZLgxsnZHoXTUuISXMGTZZHc9oXTWWU35YDTKOmUCcr5b/RKrTQthZdL33cT7u2c82I1S8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EgyAPyUV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014DBC4CECD;
-	Sun,  3 Nov 2024 13:57:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730642252;
-	bh=VxXH6aqpqHLHF5oRJ5vnT5vpm2uvtxBA9AHVL/CAjN8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EgyAPyUVzD+RX89LUiOchP3Aw0Js3GqP/DtnP8pAtBfaDedVT967mnJ82pBpE9KRN
-	 ftK066xUf9/ky+dJfz8zo3ZrlOBBIwzAtGdFfjJW9BVBxme/2A7kncMayzUKYZ5xhE
-	 Vmbx+QZrBR8d8lG3rs/hr5GcPBgei7uWbzXvPZxURjQuM+X2Jr3q9fjSTk/A+86b8b
-	 PyY1dLiWpn2qN/lGx/OjiSXOJsgO36lUUbVoSgk7DuHWX2RDImBvvO7ui25Wr0tZYV
-	 0Xe+h5Xj9lpyGr/BCNqgwMBTm5cG9eqiST44/fbsaiqt3sqcAsOAptCwqbnUAM9n9Z
-	 n3EbHG0jaagjw==
-Date: Sun, 3 Nov 2024 05:57:30 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: WangYuli <wangyuli@uniontech.com>
-Cc: ardb@kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev, kernel@xen0n.name, chenhuacai@kernel.org,
-	xry111@xry111.site, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v2 06/18] loongarch/crc32: expose CRC32 functions through
- lib
-Message-ID: <20241103135730.GA813@quark.localdomain>
-References: <20241025191454.72616-7-ebiggers@kernel.org>
- <DA8BCDFFEACDA1C6+20241103133655.217375-1-wangyuli@uniontech.com>
+	s=arc-20240116; t=1730653485; c=relaxed/simple;
+	bh=vLmXHFQrVeANwVFZr7GPEQiJDwV80UwagiHdL+WieYg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CsajXCxKz5kRxf8Fl5keobP0M4SdyAksjWy/MrpTTLz3Vrwz76as6y3LqVRAyzpancXWs7m4Y+kmfdeSARscdRuYE32weHsmzKRsmZKmcQfWmlXgTMXSN1CaG6NG/d7LJRqy/pAJWysCJwLyokBk/4gMIR6dPbLO4sc0gyQRZA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=LVkLlDoy; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1730653478;
+	bh=vLmXHFQrVeANwVFZr7GPEQiJDwV80UwagiHdL+WieYg=;
+	h=From:Subject:Date:To:Cc:From;
+	b=LVkLlDoyAjxSEKNfss+XSXyWYJJQzcZv2JQqsJCbi9rUIOTJ4RL7OxwixFQenCjjd
+	 rlVUh9qqiGz1yV+aWCGMfosXXIgbUe7lyF1Ond/E8etyVdz8oI4rmOCryfvOvF9wdn
+	 hyWkvUc8pYcWGzPC5QJ3hJWaxe+zEoDAAboNa6yg=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v2 00/10] sysfs: constify struct bin_attribute (Part 1)
+Date: Sun, 03 Nov 2024 17:03:29 +0000
+Message-Id: <20241103-sysfs-const-bin_attr-v2-0-71110628844c@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DA8BCDFFEACDA1C6+20241103133655.217375-1-wangyuli@uniontech.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAOGsJ2cC/22NQQ6CMBBFr2JmbU1bQasr72GIKTC1synaKSgh3
+ N2KJm5cvp/89yZgjIQMx9UEEQdi6kIGvV5B4224oqA2M2ipCyW1ETyyY9F0gZOoKVxsSlFYKc1
+ hVxjVyhry9RbR0XPRnqsPR7z32Z5+oydOXRyX9KDe67eyVf8rgxJSaG2UdXbvZFmeHkjM3Pjeb
+ wImqOZ5fgH1E5+t0gAAAA==
+X-Change-ID: 20241028-sysfs-const-bin_attr-a00896481d0b
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Bjorn Helgaas <bhelgaas@google.com>, 
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
+ Davidlohr Bueso <dave@stgolabs.net>, 
+ Jonathan Cameron <jonathan.cameron@huawei.com>, 
+ Dave Jiang <dave.jiang@intel.com>, 
+ Alison Schofield <alison.schofield@intel.com>, 
+ Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+ Alex Deucher <alexander.deucher@amd.com>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Xinhui Pan <Xinhui.Pan@amd.com>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, 
+ Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Pratyush Yadav <pratyush@kernel.org>, Michael Walle <mwalle@kernel.org>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>, 
+ Carlos Bilbao <carlos.bilbao.osdev@gmail.com>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ "David E. Box" <david.e.box@linux.intel.com>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ Richard Henderson <richard.henderson@linaro.org>, 
+ Matt Turner <mattst88@gmail.com>, Frederic Barrat <fbarrat@linux.ibm.com>, 
+ Andrew Donnellan <ajd@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Logan Gunthorpe <logang@deltatee.com>, 
+ "K. Y. Srinivasan" <kys@microsoft.com>, 
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+ Dexuan Cui <decui@microsoft.com>
+Cc: Dan Williams <dan.j.williams@intel.com>, linux-kernel@vger.kernel.org, 
+ linux-pci@vger.kernel.org, linux-cxl@vger.kernel.org, 
+ amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+ linux-rdma@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-alpha@vger.kernel.org, 
+ linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1730653468; l=3861;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=vLmXHFQrVeANwVFZr7GPEQiJDwV80UwagiHdL+WieYg=;
+ b=Bvbt1J2LqQ69JnMU1VrxxAk0oh5wwQXMdeGiNk0LKpzFZww+HQ7ZSL0xtSH7vjejf+nvXyav9
+ 7mYQXMoReN6DBjpqywBjK9Kq5FxOhy2hVOb+j2ENGg6yuLHGvmQRl99
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On Sun, Nov 03, 2024 at 09:36:55PM +0800, WangYuli wrote:
-> Even though the narrower CRC instructions doesn't require GRLEN=64, they still *aren't* part of LA32 (LoongArch reference manual v1.10, Volume 1, Table 2-1).
-> Link: https://lore.kernel.org/all/0a7d0a9e-c56e-4ee2-a83b-00164a450abe@xen0n.name/
-> 
-> Therefore, we could not directly add ARCH_HAS_CRC32 to config LOONGARCH.
-> 
+struct bin_attribute contains a bunch of pointer members, which when
+overwritten by accident or malice can lead to system instability and
+security problems.
+Moving the definitions of struct bin_attribute to read-only memory
+makes these modifications impossible.
+The same change has been performed for many other structures in the
+past. (struct class, struct ctl_table...)
 
-There's still a runtime CPU feature check of cpu_has(CPU_FEATURE_CRC32).
-See arch/loongarch/lib/crc32-loongarch.c.  So it's the same as before.
-ARCH_HAS_CRC32 just means that the file will be compiled.
+For the structure definitions throughout the core to be moved to
+read-only memory the following steps are necessary.
 
-If you're trying to say that you think this file should be built only when
-CONFIG_64BIT=y, then that would be an existing bug since the existing file
-arch/loongarch/crypto/crc32-loongarch.c was built for both 32-bit and 64-bit.
-But if you think this is a bug, I can fix this too.
+1) Change all callbacks invoked from the sysfs core to only pass const
+   pointers
+2) Adapt the sysfs core to only work in terms of const pointers
+3) Adapt the sysfs core APIs to allow const pointers
+4) Change all structure definitions through the core to const
 
-- Eric
+This series provides the foundation for step 1) above.
+It converts some callbacks in a single step to const and provides a
+foundation for those callbacks where a single step is not possible.
+
+Patches 1-5 change the bin_attribute callbacks of 'struct
+attribute_group'. The remaining ones touch 'struct bin_attribute' itself.
+
+The techniques employed by this series can later be reused for the
+same change for other sysfs attributes.
+
+This series is intended to be merged through the driver core tree.
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Changes in v2:
+- Drop RFC state
+- Refuse registration of attributes with both read/read_new or
+  write/write_new
+- Remove don't drop llseek() callback, as it is actually used.
+  Instead also migrate it to "const".
+- _Generic machinery: Simplify and make more robust against misuse
+- Link to v1: https://lore.kernel.org/r/20241031-sysfs-const-bin_attr-v1-0-2281afa7f055@weissschuh.net
+
+---
+Thomas Weißschuh (10):
+      sysfs: explicitly pass size to sysfs_add_bin_file_mode_ns()
+      sysfs: introduce callback attribute_group::bin_size
+      PCI/sysfs: Calculate bin_attribute size through bin_size()
+      nvmem: core: calculate bin_attribute size through bin_size()
+      sysfs: treewide: constify attribute callback of bin_is_visible()
+      sysfs: treewide: constify attribute callback of bin_attribute::mmap()
+      sysfs: treewide: constify attribute callback of bin_attribute::llseek()
+      sysfs: implement all BIN_ATTR_* macros in terms of __BIN_ATTR()
+      sysfs: bin_attribute: add const read/write callback variants
+      driver core: Constify attribute arguments of binary attributes
+
+ arch/alpha/kernel/pci-sysfs.c           |  6 +--
+ drivers/base/node.c                     |  4 +-
+ drivers/base/topology.c                 |  4 +-
+ drivers/cxl/port.c                      |  2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c |  2 +-
+ drivers/infiniband/hw/qib/qib_sysfs.c   |  2 +-
+ drivers/misc/ocxl/sysfs.c               |  2 +-
+ drivers/mtd/spi-nor/sysfs.c             |  2 +-
+ drivers/nvmem/core.c                    | 16 ++++--
+ drivers/pci/p2pdma.c                    |  2 +-
+ drivers/pci/pci-sysfs.c                 | 42 ++++++++-------
+ drivers/pci/vpd.c                       |  2 +-
+ drivers/platform/x86/amd/hsmp.c         |  2 +-
+ drivers/platform/x86/intel/pmt/class.c  |  2 +-
+ drivers/platform/x86/intel/sdsi.c       |  2 +-
+ drivers/scsi/scsi_sysfs.c               |  2 +-
+ drivers/uio/uio_hv_generic.c            |  2 +-
+ drivers/usb/core/sysfs.c                |  2 +-
+ fs/sysfs/file.c                         | 30 +++++++----
+ fs/sysfs/group.c                        |  5 +-
+ fs/sysfs/sysfs.h                        |  2 +-
+ include/linux/sysfs.h                   | 94 ++++++++++++++++++++-------------
+ 22 files changed, 138 insertions(+), 91 deletions(-)
+---
+base-commit: 3e5e6c9900c3d71895e8bdeacfb579462e98eba1
+change-id: 20241028-sysfs-const-bin_attr-a00896481d0b
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
 
