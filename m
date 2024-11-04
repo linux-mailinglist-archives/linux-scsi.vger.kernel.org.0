@@ -1,144 +1,169 @@
-Return-Path: <linux-scsi+bounces-9515-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9517-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 525529BB35A
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 12:31:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B631A9BB371
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 12:33:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D64871F230FF
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 11:31:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74944283F96
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 11:33:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D67E1B3942;
-	Mon,  4 Nov 2024 11:27:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 457DD1C3F0A;
+	Mon,  4 Nov 2024 11:29:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="q1j4hI0h"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="dXzmDXyP"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from fgw23-4.mail.saunalahti.fi (fgw23-4.mail.saunalahti.fi [62.142.5.110])
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163CA1B21B0
-	for <linux-scsi@vger.kernel.org>; Mon,  4 Nov 2024 11:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA861C3022
+	for <linux-scsi@vger.kernel.org>; Mon,  4 Nov 2024 11:29:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730719634; cv=none; b=P6HV7YqXUGmUqZm4vo2gIcYwXQu/+DbmxOrTTw4cZuODFeYwOlILxwMVs3yIwGlkUCGgcvZDuyzm5uzVzO+B8L71eCa/pecHkqLKrqIlar8OhN3itQnjgxKIw1N/kK3usuMp9FUG/rpXc8TggjTZjpajA3uIeOOgsDb5PYlcKKc=
+	t=1730719760; cv=none; b=I4WZcCY+hp9/ct17L27JMgRp0LMRCm0q01F5/HB4xABM6M8eB0ZedApeo6wt2kZ4P3pjj8RmWYR6B+hYi/CDqtEOxDfILuKNEPdHxRTZr0Yuk54BoteB8QBCpm6vjQgf2HjOcEAKg9Rgag5gCI07hwUU7GpPjzr7QDG653BwXOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730719634; c=relaxed/simple;
-	bh=EKzcOqXkev1HDdDEvFYEpziVWcbrNvF2MvGzf3tmk70=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TB5YpT+AWbyxRoslWETI28V7lAHg/V/y1NOftZBJuLsmT1cCXJSgPqCLL212pQviCrD5quXpw7euSCgZJx/F/DVl7p0Bm/y3W5D4ajU3C/NH2aZP2OnhVna1TrDpezdbrcKUfq78wwkQFr1QZPFhLriTK4wzlCxPK4TcntMECsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=q1j4hI0h; arc=none smtp.client-ip=62.142.5.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=kolumbus.fi; s=elisa1;
-	h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-	 message-id:date:subject:cc:to:from:from:to:cc:reply-to:subject:date:
-	 in-reply-to:references:list-archive:list-subscribe:list-unsubscribe:
-	 content-type:content-transfer-encoding:message-id;
-	bh=pNtiOEFbYepsFznXLFUZugf4Oedsf9UkzgKJFcnhwEs=;
-	b=q1j4hI0hNrRvUgSUwbUs0GRRRD43OGBEXuXgeOxcVoUauebHAkTRpi/1DUcSMp3AjkDDosY8QQnUt
-	 8k4NtRpS++gLvkDc7CfaojFsaWBTYLJcjVYk8Svl3i9WIW0qm0jSqG0zxZGty5UgxNrkVEl+atgJZ0
-	 B4C0SD2UW5XVY10Npy3Gg7cnmhoHBgj/TNDJ6gUCa3w0DhJqfpkJ5wRPeyUIwQeP5n54oEW6YMz0wE
-	 6bQ/svKU74NhHtCkS2anXmyW5+lM51lsBUaFG3YOnCj8oVjhX3qyhz5HGOACByetIEpaLWQbpnXfU9
-	 hVTImLbLARta1scmSp70r3u2Zst8e9w==
-Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
-	by fgw21.mail.saunalahti.fi (Halon) with ESMTPSA
-	id b4e4e09f-9a9f-11ef-8872-005056bdd08f;
-	Mon, 04 Nov 2024 13:26:59 +0200 (EET)
-From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
-To: linux-scsi@vger.kernel.org,
-	jmeneghi@redhat.com
-Cc: martin.petersen@oracle.com,
-	James.Bottomley@HansenPartnership.com,
-	loberman@redhat.com,
-	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
-Subject: [PATCH 2/2] scsi: st: Add MTIOCGET and MTLOAD to ioctls allowed after device reset
-Date: Mon,  4 Nov 2024 13:26:23 +0200
-Message-ID: <20241104112623.2675-3-Kai.Makisara@kolumbus.fi>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241104112623.2675-1-Kai.Makisara@kolumbus.fi>
-References: <20241104112623.2675-1-Kai.Makisara@kolumbus.fi>
+	s=arc-20240116; t=1730719760; c=relaxed/simple;
+	bh=iDd8slF5N7csNOR+PtgVCK3+kkri3oqX/3EqKPO39PE=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=kFZ9RPWtRUd4wCP17ULfF+1814+hyr42JhUryQx++lC+08HDixcjCHQbI7eHY8fnGOaCAofISmiTpq5L7/dBWp9dEYjzmAWfCMu03lNtIQuIJOVuHA/q97PqHpCuYq2uv/sgVrrhJNizQe5W/VW0SeVKw1Mujw/CgEaECR0BXX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=dXzmDXyP; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20241104112915epoutp0449a8ed393149e5d0aeb18aa7c78d8f83~EwHKN8x0g2570125701epoutp04b
+	for <linux-scsi@vger.kernel.org>; Mon,  4 Nov 2024 11:29:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20241104112915epoutp0449a8ed393149e5d0aeb18aa7c78d8f83~EwHKN8x0g2570125701epoutp04b
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1730719755;
+	bh=u8hCNjyV4KIImElR4gHHT0N9YbPGoDH0xwSkwumilPE=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=dXzmDXyP4D1IQKI+u+4p/W8hqDgs1aXri61NU55h9xLhYtt2ooPO+gkX7x2c8Nece
+	 wpuwnAs4XmXmurEXmsZ9c6ee7tq4bej4PltSiht7zAcgYNk/90bIZY29xQchP72O0T
+	 /1fxba+JnuT1XJ46lx5rsZ9MHz2bUfdNH6NN4YkE=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+	20241104112914epcas5p1a4de3251704b4186b1ed2cc025ac63ab~EwHJ1wrR-2778827788epcas5p15;
+	Mon,  4 Nov 2024 11:29:14 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.179]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4Xhq486rDBz4x9Pp; Mon,  4 Nov
+	2024 11:29:12 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	21.84.09800.800B8276; Mon,  4 Nov 2024 20:29:12 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20241104112912epcas5p21f80c9615e3ba9db23428fd524106d83~EwHH2ppKt2058320583epcas5p2v;
+	Mon,  4 Nov 2024 11:29:12 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20241104112912epsmtrp24cc6e92f40757ed4e60bcad5adebf9aa~EwHH05i_W2013320133epsmtrp2o;
+	Mon,  4 Nov 2024 11:29:12 +0000 (GMT)
+X-AuditID: b6c32a4b-4a7fa70000002648-dc-6728b008109c
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	77.82.18937.800B8276; Mon,  4 Nov 2024 20:29:12 +0900 (KST)
+Received: from INBRO002756 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20241104112910epsmtip27ee2183ec8fc729518a6bb0611aa65c5~EwHFuvfow2913929139epsmtip2s;
+	Mon,  4 Nov 2024 11:29:10 +0000 (GMT)
+From: "Alim Akhtar" <alim.akhtar@samsung.com>
+To: "'Peter Griffin'" <peter.griffin@linaro.org>,
+	<James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
+	<avri.altman@wdc.com>, <bvanassche@acm.org>, <krzk@kernel.org>
+Cc: <tudor.ambarus@linaro.org>, <ebiggers@kernel.org>,
+	<andre.draszik@linaro.org>, <kernel-team@android.com>,
+	<willmcvicker@google.com>, <linux-scsi@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+In-Reply-To: <20241031150033.3440894-15-peter.griffin@linaro.org>
+Subject: RE: [PATCH v3 14/14] MAINTAINERS: Update UFS Exynos entry
+Date: Mon, 4 Nov 2024 16:59:08 +0530
+Message-ID: <000801db2eac$c5867ea0$50937be0$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQGpHNBxPlSoL7oKvevQtOJlaLn5RgKmbH/8AoOUSlyy4c80YA==
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrCJsWRmVeSWpSXmKPExsWy7bCmhi7HBo10g6uNRhZbXm1msXj58yqb
+	xbQPP5kt1u75w2yxsZ/DYsd2EYvz5zewW2x6fI3V4vKuOWwWM87vY7Lovr6DzWL58X9MFhtm
+	/GOx+HQrzmLVp/+MDvwel694e2zbvY3VY8GmUo9pk06xeWxa1cnmcefaHjaPzUvqPT4+vcXi
+	8XmTnEf7gW6mAK6obJuM1MSU1CKF1Lzk/JTMvHRbJe/geOd4UzMDQ11DSwtzJYW8xNxUWyUX
+	nwBdt8wcoA+UFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnFJbZKqQUpOQUmBXrFibnFpXnpenmp
+	JVaGBgZGpkCFCdkZ/18tYivYx1HRsPAKWwPjEvYuRk4OCQETiWcT3rF0MXJxCAnsZpRYea6J
+	DcL5xCix5OwPsCowZ8peL5iOjn8dUPGdjBKTzgdCNLxglLh6+zYjSIJNQFdix+I2sEkiIGNv
+	zXvNDuIwC8xiklj/bAFYFaeAo0THrSesILawgJPEw0XTgGwODhYBFYkt981AwrwClhLNl/vZ
+	IGxBiZMzn7CA2MwC8hLb385hhrhIQeLn02VgrSJAY5ZOzoUoEZd4efQI2FoJgSccEm++NLJC
+	1LtIrHp/CKpXWOLV8S3QsJCS+PxuLxuEnS1x/OIsKLtCorv1I1SNvcTORzdZQHYxC2hKrN+l
+	D7GLT6L39xMmkLCEAK9ER5sQRLWqRPO7qywQtrTExO5uqAs8JD48+sk4gVFxFpLHZiF5bBaS
+	D2YhLFvAyLKKUTK1oDg3PbXYtMA4L7UcHt3J+bmbGMHJW8t7B+OjBx/0DjEycTAeYpTgYFYS
+	4Z2Xqp4uxJuSWFmVWpQfX1Sak1p8iNEUGNgTmaVEk/OB+SOvJN7QxNLAxMzMzMTS2MxQSZz3
+	devcFCGB9MSS1OzU1ILUIpg+Jg5OqQamwL+PH0nP5J1x1uWXuvSG0O2xOeZz7072DjJdbfc6
+	IFSu8uWE2+fTZ2nlapV6Lhba6mi9sCfAolNijtUr5Ue6udO2X9mfMWvnwvY7dUzCipJHVltf
+	ChBKfyO6Ot/6XOss2ysFsZc/eax+O/PKRZ5wmc68wJvbl+2IWOx5LqvkxNLj/cpHJyzfoH7a
+	30mu9d19lwt8+UER/8zMNpk7yBxa33tcTvlsxBaGZ1/0H0jskd/569WJTfyr2VxMm+Yx7bCb
+	dsYo5IPuzYJdyVP/tXG0tugxZSzsN/pcyyfvavxp76HjOj8mbLYtFvYuV4j4O3Vjr1Jp373i
+	fT9EVnf/qt3BWbnIhk1Ibf6UrN7Zlz4xKbEUZyQaajEXFScCAB57Fm5nBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGIsWRmVeSWpSXmKPExsWy7bCSvC7HBo10g68LxCy2vNrMYvHy51U2
+	i2kffjJbrN3zh9liYz+HxY7tIhbnz29gt9j0+BqrxeVdc9gsZpzfx2TRfX0Hm8Xy4/+YLDbM
+	+Mdi8elWnMWqT/8ZHfg9Ll/x9ti2exurx4JNpR7TJp1i89i0qpPN4861PWwem5fUe3x8eovF
+	4/MmOY/2A91MAVxRXDYpqTmZZalF+nYJXBn/Xy1iK9jHUdGw8ApbA+MS9i5GTg4JAROJjn8d
+	QDYXh5DAdkaJDeceMkMkpCWub5wAVSQssfLfczBbSOAZo8TsM7wgNpuArsSOxW1sILaIwEFG
+	ifU3c0EGMQssYpLo6NrJCtFwjFGie5kSiM0p4CjRcesJWFxYwEni4aJpQDYHB4uAisSW+2Yg
+	YV4BS4nmy/1sELagxMmZT1hASpgF9CTaNjKChJkF5CW2v50DdaaCxM+ny8CmiABNXDo5F6JE
+	XOLl0SPsExiFZyEZNAth0Cwkg2Yh6VjAyLKKUTS1oDg3PTe5wFCvODG3uDQvXS85P3cTIzhq
+	tYJ2MC5b/1fvECMTB+MhRgkOZiUR3nmp6ulCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeZVzOlOE
+	BNITS1KzU1MLUotgskwcnFINTJGlHLPPXJwQIiLAqca5ln+ijO1ua22dGXMLpc6lzM/8Grrs
+	yT7lu9/lDd9aGf24c7FjjTP/bdecxY90mZ+VTqk9Nv9sLZdx50Nt6a7dwcw5KbezZyxysfSp
+	LJl69PzPcNP2c7ektF7zX9H8mXX2Qh9Labc+q/KhvdUdz4VPWJxdozGv9IxPaOb/S0KaUg61
+	gaWdOYcPxi77XHDhoSTn2htKqXxnuhZwW25beN6P1/FT0HmOqTFHP65+9NHQXd+Wv2Aa18ug
+	KZsezX2jfnGFo8ol4famvzE5AbU7BBrdSzvytUN6bq+R8b58QT1mU8OWOzO9lkXudZ9lPWn3
+	+fL5EzPZvjqcfbhhtrgIf8gODiWW4oxEQy3mouJEAMqOm4lJAwAA
+X-CMS-MailID: 20241104112912epcas5p21f80c9615e3ba9db23428fd524106d83
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241031150102epcas5p2b485ea44b17629f3abd0a53fd8d172e7
+References: <20241031150033.3440894-1-peter.griffin@linaro.org>
+	<CGME20241031150102epcas5p2b485ea44b17629f3abd0a53fd8d172e7@epcas5p2.samsung.com>
+	<20241031150033.3440894-15-peter.griffin@linaro.org>
 
-Most drives rewind the tape when the device is reset. Reading
-and writing are not allowed until something is done to make
-the tape position match the user's expectation (e.g.,
-rewind the tape). Add MTIOCGET and MTLOAD to operations allowed
-after reset. MTIOCGET is modified to not touch the tape if
-pos_unknown is non-zero. The tape location is known after MTLOAD.
+Hi Peter
 
-Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
----
- drivers/scsi/st.c | 29 +++++++++++++++++++++--------
- 1 file changed, 21 insertions(+), 8 deletions(-)
+> -----Original Message-----
+> From: Peter Griffin <peter.griffin@linaro.org>
+> Sent: Thursday, October 31, 2024 8:31 PM
+> To: alim.akhtar@samsung.com; James.Bottomley@HansenPartnership.com;
+> martin.petersen@oracle.com; avri.altman@wdc.com; bvanassche@acm.org;
+> krzk@kernel.org
+> Cc: tudor.ambarus@linaro.org; ebiggers@kernel.org;
+> andre.draszik@linaro.org; kernel-team@android.com;
+> willmcvicker@google.com; linux-scsi@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
+> kernel@vger.kernel.org; Peter Griffin <peter.griffin@linaro.org>
+> Subject: [PATCH v3 14/14] MAINTAINERS: Update UFS Exynos entry
+> 
+> Add myself as a reviewer for ufs-exynos as I'm doing various work in this
+> driver currently for gs101 SoC and would like to help review relevant
+patches.
+> 
+> Additionally add the linux-samsung-soc@vger.kernel.org list as that is
+> relevant to this driver.
+> 
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> ---
+Thanks!
 
-diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
-index 8d27e6caf027..c9038284bc89 100644
---- a/drivers/scsi/st.c
-+++ b/drivers/scsi/st.c
-@@ -3506,6 +3506,7 @@ static long st_ioctl(struct file *file, unsigned int cmd_in, unsigned long arg)
- 	int i, cmd_nr, cmd_type, bt;
- 	int retval = 0;
- 	unsigned int blk;
-+	bool cmd_mtiocget;
- 	struct scsi_tape *STp = file->private_data;
- 	struct st_modedef *STm;
- 	struct st_partstat *STps;
-@@ -3619,6 +3620,7 @@ static long st_ioctl(struct file *file, unsigned int cmd_in, unsigned long arg)
- 			 */
- 			if (mtc.mt_op != MTREW &&
- 			    mtc.mt_op != MTOFFL &&
-+			    mtc.mt_op != MTLOAD &&
- 			    mtc.mt_op != MTRETEN &&
- 			    mtc.mt_op != MTERASE &&
- 			    mtc.mt_op != MTSEEK &&
-@@ -3732,17 +3734,28 @@ static long st_ioctl(struct file *file, unsigned int cmd_in, unsigned long arg)
- 		goto out;
- 	}
- 
-+	cmd_mtiocget = cmd_type == _IOC_TYPE(MTIOCGET) && cmd_nr == _IOC_NR(MTIOCGET);
-+
- 	if ((i = flush_buffer(STp, 0)) < 0) {
--		retval = i;
--		goto out;
--	}
--	if (STp->can_partitions &&
--	    (i = switch_partition(STp)) < 0) {
--		retval = i;
--		goto out;
-+		if (cmd_mtiocget && STp->pos_unknown) {
-+			/* flush fails -> modify status accordingly */
-+			reset_state(STp);
-+			STp->pos_unknown = 1;
-+		} else { /* return error */
-+			retval = i;
-+			goto out;
-+		}
-+	} else { /* flush_buffer succeeds */
-+		if (STp->can_partitions) {
-+			i = switch_partition(STp);
-+			if (i < 0) {
-+				retval = i;
-+				goto out;
-+			}
-+		}
- 	}
- 
--	if (cmd_type == _IOC_TYPE(MTIOCGET) && cmd_nr == _IOC_NR(MTIOCGET)) {
-+	if (cmd_mtiocget) {
- 		struct mtget mt_status;
- 
- 		if (_IOC_SIZE(cmd_in) != sizeof(struct mtget)) {
--- 
-2.43.0
+Acked-by: Alim Akhtar <alim.akhtar@samsung.com>
+
+
 
 
