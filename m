@@ -1,93 +1,109 @@
-Return-Path: <linux-scsi+bounces-9544-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9546-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3B3A9BBBD9
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 18:28:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E60329BBC4B
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 18:48:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9246282971
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 17:28:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23A321C214A0
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 17:48:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C9A61C07DE;
-	Mon,  4 Nov 2024 17:28:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB4891C8776;
+	Mon,  4 Nov 2024 17:48:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="rrefPn2w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RG0ZZ45e"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F9C13D53B
-	for <linux-scsi@vger.kernel.org>; Mon,  4 Nov 2024 17:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E972176FD2;
+	Mon,  4 Nov 2024 17:48:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730741310; cv=none; b=cVbmn1fVQG/cPDLq2kSFe7Z8I9YouJhVjtgT8IGTngscMwUtevnigQoEeIIFZL0SQHMSEMjEQUhYRd0hmywkt5SfVPKDZ+LwBLx9FM5hKKuSoaeBQwgGKdkcjIWGDj6jxoarWtHDLqpHd6Bv0VPeFSjLkCgbCQS0UDIAiWmn7/k=
+	t=1730742521; cv=none; b=iqxlTHlEq3Iwk1iMKdJ4RwPoKRq3AmVHkgG2YWx8hdoVccQoc1w7o1cWRRJiczfpzNG20pwHgJnlJ8rKVePT0gOk2gaGuYJiR6HcEynayHqGYYHby1Pe0gdebsG5yNER1Nb1JfAZMAgY8/2kJgTJBcvTAsFGpitZauYsd302jHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730741310; c=relaxed/simple;
-	bh=Sxrqr0ewkjW5c5xbIxe3654Z0aFa+sDSgzmLkD2x1KM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eD8tNecyIeP6q3EEEJnfIrsFnNLzajAm58jqf6GiHYg05qI6EJlGFuFR8an4AtAJqz5nOlzYRVMzT+BTAJ0DvSSkndC+BOWFwY75PEDrNIewDL9qByChioR8YHXGKfrSPpMVTgFIZ+Rdq4wZglXCsmiyKecgM1z5B4tI5fEhf/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=rrefPn2w; arc=none smtp.client-ip=199.89.1.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4Xhz2h1Sd0zlgMVP;
-	Mon,  4 Nov 2024 17:28:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1730741305; x=1733333306; bh=Sxrqr0ewkjW5c5xbIxe3654Z
-	0aFa+sDSgzmLkD2x1KM=; b=rrefPn2wNplcUmPWc0VbddG7yNsZyuhUtNKTxON6
-	rhJtBi+PBvgqhnZNbdDJ9hc8YLF2q1ccambZqQl/BsDb2DfowUyaUuF37YqNVQDg
-	LkWadFv+FdFIGC6T996nskGAyYh9aPrkX3IouzYrABHitrNaGIdHI4fe3niTF7BJ
-	xZaTCGwJI9Jv2mm8lV90NAkyxx+UX7Wl8s45jUOZRkHIjEHu2RKBLWftGiEeSYNL
-	j59ZrRw0eIhSf/zbFJ21T9ziiTtwwwcXq8ndJdKyn2lpO2WNoW0bxWmvkpU8um6o
-	Km4GC0Rrv7UfUvUhmLAjwi65N1og+c0sXLq7doGCaCmkug==
-X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 9t1jBWUoP92w; Mon,  4 Nov 2024 17:28:25 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4Xhz2c0MsjzlgMVN;
-	Mon,  4 Nov 2024 17:28:23 +0000 (UTC)
-Message-ID: <cfba8202-6578-4100-8b95-773ad318f325@acm.org>
-Date: Mon, 4 Nov 2024 09:28:22 -0800
+	s=arc-20240116; t=1730742521; c=relaxed/simple;
+	bh=kyMZ9fV6X+51trgRY65w1AUDjMP2XEnEX7GkvQFyuQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UF1vjMXa9R8x0dQ+lsdq0YSxTKo+D1X6+DOsvt/8ZK/06eITZtN2Yn3CW0q0sk5XAKLHfY7T4b7ssSc5jGmncfhdsSgIRJAWHwNEd3Ta3ZGfjLzjY8zNeX7sABTtLdaKcQ//MPap1vSCoNJJsWlUkopK038/kB7QAEiX+5fLdW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RG0ZZ45e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1421C4CECE;
+	Mon,  4 Nov 2024 17:48:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730742520;
+	bh=kyMZ9fV6X+51trgRY65w1AUDjMP2XEnEX7GkvQFyuQo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RG0ZZ45eSLTeSuURvGHB3h65F9t7QbkI04hRi4PIn9RQya+KVuOq+cKYwcM7OIRag
+	 ftffa9p0RPzhxKxbKbO1phJPPDnrPKDiu3Z4Itvr9Wls0R3DzSPdYDwIWB6GC4b2Kn
+	 OEWSQb/cisXjv+NDzmcx6uuXNdVsmOSyH1jBzLk86RwIVvV7yoI0yJMI8N5O1tLxWZ
+	 sqPAibypRsiDduXZx2vz4SdLoEWaYuAYo/l7nO/C5PoaF6LQixrBB1eQNUAosrKHye
+	 /gCeCfoWgbjXS3QMM1TfccoGnuhihV/zkZVDdun5Dof7x1e0ZdWeQe1z6JZskIC3qV
+	 2uU8b6EJ5uv3w==
+Date: Mon, 4 Nov 2024 17:48:39 +0000
+From: Eric Biggers <ebiggers@kernel.org>
+To: "Darrick J. Wong" <djwong@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v3 15/18] ext4: switch to using the crc32c library
+Message-ID: <20241104174839.GA1049313@google.com>
+References: <20241103223154.136127-1-ebiggers@kernel.org>
+ <20241103223154.136127-16-ebiggers@kernel.org>
+ <20241104155900.GH21832@frogsfrogsfrogs>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] ufs: core: Add WB buffer resize support
-To: Huan Tang <tanghuan@vivo.com>
-Cc: huobean@gmail.com, cang@qti.qualcomm.com, linux-scsi@vger.kernel.org,
- opensource.kernel@vivo.com, richardp@quicinc.com, luhongfei@vivo.com
-References: <5588fc82-888e-4be8-b28a-5ab2a69d2ce9@acm.org>
- <20241104142716.299-1-tanghuan@vivo.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20241104142716.299-1-tanghuan@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241104155900.GH21832@frogsfrogsfrogs>
 
-On 11/4/24 6:27 AM, Huan Tang wrote:
-> I have submitted the v6 patch according to your suggestions.Could you
-> please review it again?
+On Mon, Nov 04, 2024 at 07:59:00AM -0800, Darrick J. Wong wrote:
+> Hmm.  Looking at your git branch (which was quite helpful to link to!) I
+> think for XFS we don't need to change the crc32c() calls, and the only
+> porting work that needs to be done is mirroring this Kconfig change?
+> And that doesn't even need to be done until someone wants to get rid of
+> CONFIG_LIBCRC32C, right?
 
-The WB buffer resize functionality will be included in the JEDEC UFS 4.1
-standard and that standard has not yet been published. Do the JEDEC
-rules allow inclusion in the upstream kernel of functionality that has
-not yet been published?
+That's correct, no porting work is required now.  'select LIBCRC32C' should be
+replaced with 'select CRC32', but that can be done later.
+
+> > @@ -3278,15 +3263,11 @@ extern void ext4_group_desc_csum_set(struct super_block *sb, __u32 group,
+> >  extern int ext4_register_li_request(struct super_block *sb,
+> >  				    ext4_group_t first_not_zeroed);
+> >  
+> >  static inline int ext4_has_metadata_csum(struct super_block *sb)
+> >  {
+> > -	WARN_ON_ONCE(ext4_has_feature_metadata_csum(sb) &&
+> > -		     !EXT4_SB(sb)->s_chksum_driver);
+> > -
+> > -	return ext4_has_feature_metadata_csum(sb) &&
+> > -	       (EXT4_SB(sb)->s_chksum_driver != NULL);
+> > +	return ext4_has_feature_metadata_csum(sb);
+> >  }
+> 
+> Nit: Someone might want to
+> s/ext4_has_metadata_csum/ext4_has_feature_metadata_csum/ here to get rid
+> of the confusingly named trivial helper.
+> 
+
+Yes, that should be done as a follow-up patch.
+
+> Otherwise this logic looks ok to me, so
+> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+> 
+> --D
 
 Thanks,
 
-Bart.
-
+- Eric
 
