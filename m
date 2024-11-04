@@ -1,99 +1,156 @@
-Return-Path: <linux-scsi+bounces-9503-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9508-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FE339BAD59
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 08:41:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A78CB9BB054
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 10:55:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8CA81F2113F
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 07:41:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D20D281ED4
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 09:55:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5718F19993E;
-	Mon,  4 Nov 2024 07:41:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC38A1AF0B5;
+	Mon,  4 Nov 2024 09:55:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fpuW3f6v"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="fyTzUEGq"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mail-m25477.xmail.ntesmail.com (mail-m25477.xmail.ntesmail.com [103.129.254.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D37B18C91D
-	for <linux-scsi@vger.kernel.org>; Mon,  4 Nov 2024 07:41:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5851ABEDC;
+	Mon,  4 Nov 2024 09:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.129.254.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730706104; cv=none; b=oetUKs3waGp1jUqlEp6KZ36tThMAEbEOPrm1xDVjlZkeT969iEQbhpFAvLAlpIszJ9fDj6JqnXvufcNDCQBhaHWgUPLXIavvWF3Bk0LuldiDjH0Se+QFUCy7gEnSxhPoHYVs2Sf6po2CX1/M6iwVe9SSnx+NC8+UuDHVm5Qi7/Y=
+	t=1730714114; cv=none; b=AYSqSBS+tmZZTunhzwkOtGhEwsCYcW6MPMuznMzJG8aVQITCc6yizC0RTtxob8CNLgHVjFz94R4ARzuJ/eWSZcLs/9kNO/E0+sVVLPQTL8fMRUtWsrMFFeFTCQLnKY0HiXnIpkb3DVIkpklkecJZyqd92WBu62CDTMwJuEo3/UI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730706104; c=relaxed/simple;
-	bh=0GzCvqovrsXgUYZjZI8n0l/Kwa/QPAh7TOXhuZU4MUU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KeO5NwDrddAuUF8W18FIYEfQx28mPiCjKXqxlEwBGXYe42qRK7CuNtxYIVfqQ+xFl7P40QwTIwkm4npLsRRctz18hWYoEm4I9UqVMH+yGBvvuh9r70JWWGRLskp6mrFffVwjnrksMC/31625Qdo1bV86t35YdApRerRoDMEY94k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=fpuW3f6v; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=kEKm6zsRPpkyYoMdSoA44siZ2N6lt7pvDyTwQY4yBAA=; b=fpuW3f6vCGm9Mps0beyeSOoJJU
-	lkklFJfNkQvcdT9F2yTaGiA1H6Ho/H41aLMeMNVCy6dHrhHMvrd08B8/sl/GvgtoP7h/j7baCPrh3
-	8ZyAwBVDhX+ws3E41u5QvLk4T2NRFHdN06U+R/I3jdzBcbFrJXrN851EQggZv92xp8NWjb/kERw+K
-	VQBUUG2HJkDeibgoP7VMMg7dUlG3cEwjKWMz7t7ymfWL+TquD5zkdwFgoijqyVFDVvQbAfkoj3Enc
-	q6RP4lnS421WHypaoC1qBV8s8ZHZC1tD3RyPqUn2s1Qg30KZabcNgsq9REnmtz9QNJ2ioP3pf8A7W
-	d+cvwcDg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1t7riW-0000000CsPE-0Wko;
-	Mon, 04 Nov 2024 07:41:40 +0000
-Date: Sun, 3 Nov 2024 23:41:40 -0800
-From: Christoph Hellwig <hch@infradead.org>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Magnus Lindholm <linmag7@gmail.com>,
-	Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-	Christoph Hellwig <hch@infradead.org>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	linux-scsi@vger.kernel.org
-Subject: Re: qla1280 driver for qlogic-1040 on alpha
-Message-ID: <Zyh6tP-eWlABiBG7@infradead.org>
-References: <CA+=Fv5TdeQhdrf_L0D89f6+Q0y8TT3NZy0eQzPPjJfj6fqO=oQ@mail.gmail.com>
- <CA+=Fv5R1c+JCkFFUvY-9=x61FZnks9GOteKETpo2FJV5u3kFzg@mail.gmail.com>
- <yq18qu7d5jy.fsf@ca-mkp.ca.oracle.com>
- <alpine.DEB.2.21.2410300046400.40463@angie.orcam.me.uk>
- <CA+=Fv5SXrc+esaKmJOC9+vtoxfEo1vOhgfQ739CBzmVcArWT8g@mail.gmail.com>
- <20241030102549.572751ec@samweis>
- <CA+=Fv5RX-u_X9UgpMg6xzwc_FwLZus7ddJJY8rHMMyUUGc3pxA@mail.gmail.com>
- <alpine.DEB.2.21.2410310517330.40463@angie.orcam.me.uk>
- <CA+=Fv5Q=eS1O4nwiHkJQRpvZ+JiDncnEZtqCUAyBPf1ZOtkzzA@mail.gmail.com>
- <alpine.DEB.2.21.2410311656400.40463@angie.orcam.me.uk>
+	s=arc-20240116; t=1730714114; c=relaxed/simple;
+	bh=RHWO6iEQTDETJffGVpmIWYwT1WtB/IvuIvBOxzo+Osc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=MCTGpf2/7e/vlgICiJnHdk1D63wSjvyUnp35taWyvA3wTcwHTuMQdvJBzSg26tTbwcLop1AzEt07c/d1/P88kkd84Fghh6pOY23L6rccSJ8Z6uhNFYpfOADnoSdeBPo1hOh3DiOMSmy19QPZuLQPxCcQCba8YY/3KgL+6GQ/uYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=fyTzUEGq; arc=none smtp.client-ip=103.129.254.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 1b5d898f;
+	Mon, 4 Nov 2024 15:32:37 +0800 (GMT+08:00)
+From: Shawn Lin <shawn.lin@rock-chips.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>,
+	Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Subject: [PATCH v4 1/7] scsi: ufs: core: Add UFSHCI_QUIRK_DME_RESET_ENABLE_AFTER_HCE
+Date: Mon,  4 Nov 2024 15:31:55 +0800
+Message-Id: <1730705521-23081-2-git-send-email-shawn.lin@rock-chips.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1730705521-23081-1-git-send-email-shawn.lin@rock-chips.com>
+References: <1730705521-23081-1-git-send-email-shawn.lin@rock-chips.com>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQh9MTFZIS0xPHR0fTBpDTUpWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+X-HM-Tid: 0a92f617072f09cckunm1b5d898f
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Myo6EBw*ITIaLDoKQys0CE0V
+	EQgwFA1VSlVKTEhLTEtOTk5DQktCVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUlKTU03Bg++
+DKIM-Signature:a=rsa-sha256;
+	b=fyTzUEGqpD7cOV/gtR7q6BW8ZrIP2F7Il0l0fRmIWbpntGqeRNaY0xD3go56SRvQDKFp6+9Vn8/QTcR8aBbVlulPDUK1DAXd+5Dc9IpmHP4w03liGg+JBkB6ZXLYqRd1As27+Q5dHci7nSbjEv4mCiQfdHPoDhHPShTxzJaej+w=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=H80kBB4v9HnGpTZXw3/vIrv2TnnmcgYDzbgw9IhYzgg=;
+	h=date:mime-version:subject:message-id:from;
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2410311656400.40463@angie.orcam.me.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Thu, Oct 31, 2024 at 05:30:31PM +0000, Maciej W. Rozycki wrote:
->  This also means that the ISP_CFG0_1040A check also added in 2.6.9 with 
-> <https://lore.kernel.org/r/20040606125825.GE31063@lst.de/> will never 
-> match, possibly meaning that this code wasn't actually ever verified with 
-> affected 1040A hardware.  This might also explain why a later change made 
-> with commit 0888f4c33128 ("[SCSI] qla1280: don't use bitfields for 
-> hardware access in isp_config") went unnoticed that changed the semantics 
-> of the workaround from keeping bursts unconditionally disabled with the 
-> 1040A to making them enabled in the absence of NVRAM.
-> 
->  NB comments for the FIFO threshold surely are suspicious too.
-> 
->  Christoph can you please have a look into it?  It seems like something 
-> you ought to be quite familiar with if not for the passage of time.
+HCE on Rockchip SoC is different from both of ufshcd_hba_execute_hce()
+and UFSHCI_QUIRK_BROKEN_HCE case. It need to do dme_reset and dme_enable
+after enabling HCE. So in order not to abuse UFSHCI_QUIRK_BROKEN_HCE, add
+a new quirk UFSHCI_QUIRK_DME_RESET_ENABLE_AFTER_HCE, to deal with that
+limitation.
 
-Somewhat surprisingly I don't remember that details of a drive by
-cleanup 20 years ago :)
+Suggested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+---
 
-So whatever fixes you have based on other implementations are probably
-correct.
+Changes in v4:
+- fix typo
+
+Changes in v3: None
+Changes in v2: None
+
+ drivers/ufs/core/ufshcd.c | 17 +++++++++++++++++
+ include/ufs/ufshcd.h      |  6 ++++++
+ 2 files changed, 23 insertions(+)
+
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 7cab1031..4084bf9 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -4819,6 +4819,7 @@ static int ufshcd_hba_execute_hce(struct ufs_hba *hba)
+ {
+ 	int retry_outer = 3;
+ 	int retry_inner;
++	int ret;
+ 
+ start:
+ 	if (ufshcd_is_hba_active(hba))
+@@ -4865,6 +4866,22 @@ static int ufshcd_hba_execute_hce(struct ufs_hba *hba)
+ 	/* enable UIC related interrupts */
+ 	ufshcd_enable_intr(hba, UFSHCD_UIC_MASK);
+ 
++	/*
++	 * Do dme_reset and dme_enable if a UFS host controller needs
++	 * this procedure to actually finish HCE.
++	 */
++	if (hba->quirks & UFSHCI_QUIRK_DME_RESET_ENABLE_AFTER_HCE) {
++		ret = ufshcd_dme_reset(hba);
++		if (!ret) {
++			ret = ufshcd_dme_enable(hba);
++			if (ret)
++				dev_err(hba->dev,
++					"Failed to do dme_enable after HCE.\n");
++		} else {
++			dev_err(hba->dev, "Failed to do dme_reset after HCE.\n");
++		}
++	}
++
+ 	ufshcd_vops_hce_enable_notify(hba, POST_CHANGE);
+ 
+ 	return 0;
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index a95282b..e939af8 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -685,6 +685,12 @@ enum ufshcd_quirks {
+ 	 * single doorbell mode.
+ 	 */
+ 	UFSHCD_QUIRK_BROKEN_LSDBS_CAP			= 1 << 25,
++
++	/*
++	 * This quirk needs to be enabled if host controller need to
++	 * do dme_reset and dme_enable after hce.
++	 */
++	UFSHCI_QUIRK_DME_RESET_ENABLE_AFTER_HCE		= 1 << 26,
+ };
+ 
+ enum ufshcd_caps {
+-- 
+2.7.4
 
 
