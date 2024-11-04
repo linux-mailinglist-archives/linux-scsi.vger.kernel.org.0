@@ -1,51 +1,52 @@
-Return-Path: <linux-scsi+bounces-9516-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9514-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C10E59BB35E
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 12:32:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7389A9BB359
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 12:31:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 856962852D6
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 11:32:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A525E1C22388
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 11:31:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A69E1B4F15;
-	Mon,  4 Nov 2024 11:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0691B983E;
+	Mon,  4 Nov 2024 11:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="p8CfUdWf"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="Yh+yoosl"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from fgw21-4.mail.saunalahti.fi (fgw21-4.mail.saunalahti.fi [62.142.5.108])
+Received: from fgw20-4.mail.saunalahti.fi (fgw20-4.mail.saunalahti.fi [62.142.5.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC211B0F1C
-	for <linux-scsi@vger.kernel.org>; Mon,  4 Nov 2024 11:27:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A171BD508
+	for <linux-scsi@vger.kernel.org>; Mon,  4 Nov 2024 11:26:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730719676; cv=none; b=MC/l+p7C5ajC2AAws2xnj64YMiQ3vlP6m/W0oX8bYVUK1eTPYDymMsTvM3ti/7Ybi8uo1zLj0FuriEpyOcUO7t5Rof6n6Ko27wABvjwj9rd2ZyPrElfCL1lAO3ob6+cqGwqqO/3y7QdgTXd1vEO3LZR3UOJ7gJ0giNgAPOYIK6g=
+	t=1730719622; cv=none; b=Bdx8LrEN1dEthmn2R8pq/W7DhUQv8O5/Qe4dw1bwycy4sDee6IaITiOHEeOYBdjSpRXS/UE9jCB9FqAX52PJ15vYuuKtPywvrNshcu0XjyR3Y7vRmXoiB/FgcYLcDgwTMjOETZV+5Waz3YPU2DhYkSkA84hAp5UKdv6bQAH8+OQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730719676; c=relaxed/simple;
-	bh=uLWXsjAY/qJfjcPXAHa2FsHQcyAA1xiTaMUlpn3gXWQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VVLpDu4BxJ9BNmwXvY0km1/QJGV5HJCe9sM2b6r36i9jiqN4MAtHLoyK37WMSyeUsqixb/ewt814ul1o5BjCSXTOtTnreDyFDjHC8yJx2CCSD+YaLT9QwWHeBNQNZDzB7FU710mkBDSp+t8O6mFusRV2YUg2uFHcuTVKuTRk6w8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=p8CfUdWf; arc=none smtp.client-ip=62.142.5.108
+	s=arc-20240116; t=1730719622; c=relaxed/simple;
+	bh=qNzIxubdyAACSSilP/41diGh8Aysnz2bQLFS4wC42WI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=t9Xc2KWQiXDCag+NXRrycMILgIoR3qvz+f+pPErvA19rC7UeLZ965GzmdFLM5vXbJBgvjQ2Nev52QmDRhQzGTqrYJd6eHXZb/0C3+Jbbntu1Z+0fcTsvydadV59Sg3CkrCXTElrf2F/k16UAAYg99ZGOt4ZySBmsKPW/teybiX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=Yh+yoosl; arc=none smtp.client-ip=62.142.5.107
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=kolumbus.fi; s=elisa1;
-	h=content-transfer-encoding:content-type:mime-version:message-id:date:subject:
-	 cc:to:from:from:to:cc:reply-to:subject:date:in-reply-to:references:
-	 list-archive:list-subscribe:list-unsubscribe:content-type:
-	 content-transfer-encoding:message-id;
-	bh=UuIe0zaPSwBV+JJ2fESp3SXw6hBM8P0UFYlV080tmUI=;
-	b=p8CfUdWfgB6LqclAyLvtgCMGaDK1VSXqkAydP2sPEDzqPzBNiBPcX/bfUifbmT/OWEDDKAQden2YE
-	 wV+ehheC4WkK7fWVlzcKIfENjrOndr61NzU0hqATMLZ9gP8dFPPLvF7p2lQjFz49xPzleUamPUIGi6
-	 fhmJAn+MMFvWj4F0yFIaUU7Elr09tRZdr3jPOJDjlzkkw1A6olMqaGNBUoBIkIYMtAvW+s0xhbAAJp
-	 6v+z7FAIL+/7Ax3p8pzTmfNWeo/uSgt+MPhfda7X5GlIRad8rym3bF5C3Vl6JBxqYDynJPJCcVf3H0
-	 9UBqeFrriu4qEnNXL1ap3v36UkQnF9Q==
+	h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
+	 message-id:date:subject:cc:to:from:from:to:cc:reply-to:subject:date:
+	 in-reply-to:references:list-archive:list-subscribe:list-unsubscribe:
+	 content-type:content-transfer-encoding:message-id;
+	bh=zizDeVnse5oSJr33n52Uku2c2fducfcyOLo7vJwdlL4=;
+	b=Yh+yoosl87Aa08pmZkwfGxUEnUpwiA4PQmLV9OKsEdjyMBYyq4hTmfJa1yzgT2QC/KSrH7/lZTG5d
+	 iAZlSa0Bo0uKFwqo1TNgwWuI0qi2pID2IS6WnyLUa4uOMmgwL8vMcZSvRdbfGWGSLi0YIBxqYARFbT
+	 pKPisijgcoIXA3Ntw2ambAqHh0B+1+nAyU7ttEfGzHON+wca2Q8ZlSavC2bSYqz3xvpxnL/chrtRc7
+	 1CjrV/YmmFJsNIo9SFFMLWfwNaexYII29R7YuFfodN3nxdJf7UH58+p+0/wL7WckiMzvPJNYBk1O9C
+	 QXpGTmZYrPS6kENXTFwErNBAlGx6wyA==
 Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
 	by fgw21.mail.saunalahti.fi (Halon) with ESMTPSA
-	id aa70ec24-9a9f-11ef-8872-005056bdd08f;
-	Mon, 04 Nov 2024 13:26:42 +0200 (EET)
+	id b255fdd0-9a9f-11ef-8872-005056bdd08f;
+	Mon, 04 Nov 2024 13:26:55 +0200 (EET)
 From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
 To: linux-scsi@vger.kernel.org,
 	jmeneghi@redhat.com
@@ -53,10 +54,12 @@ Cc: martin.petersen@oracle.com,
 	James.Bottomley@HansenPartnership.com,
 	loberman@redhat.com,
 	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
-Subject: [PATCH 0/2] scsi: st: Device reset patches
-Date: Mon,  4 Nov 2024 13:26:21 +0200
-Message-ID: <20241104112623.2675-1-Kai.Makisara@kolumbus.fi>
+Subject: [PATCH 1/2] scsi: st: Don't modify unknown block number in MTIOCGET
+Date: Mon,  4 Nov 2024 13:26:22 +0200
+Message-ID: <20241104112623.2675-2-Kai.Makisara@kolumbus.fi>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241104112623.2675-1-Kai.Makisara@kolumbus.fi>
+References: <20241104112623.2675-1-Kai.Makisara@kolumbus.fi>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -66,31 +69,27 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-These two patches were developed in response to Bugzilla report
-https://bugzilla.kernel.org/show_bug.cgi?id=219419
+Struct mtget field mt_blkno -1 means it is unknown. Don't add anything to
+it.
 
-After device reset, the tape driver allows only operations tha don't
-write or read anything from tape. The reason for this is that many
-(most ?) drives rewind the tape after reset and the subsequent reads
-or writes would not be at the tape location the user expects. Reading
-and writing is allowed again when the user does something to position the
-tape (e.g., rewind).
+Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
+---
+ drivers/scsi/st.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The Bugzilla report considers the case when a user, after reset, tries
-to read the drive status with MTIOCGET ioctl, but it fails. MTIOCGET
-does not return much useful data after reset, but it can be allowed.
-MTLOAD positions the tape and it should be allowed. The second patch
-adds these to the set of allowed operations after device reset. 
-
-The first patch fixes a bug seen when developing the second patch.
-
-Kai Mäkisara (2):
-  scsi: st: Don't modify unknown block number in MTIOCGET
-  scsi: st: Add MTIOCGET and MTLOAD to ioctls allowed after device reset
-
- drivers/scsi/st.c | 31 ++++++++++++++++++++++---------
- 1 file changed, 22 insertions(+), 9 deletions(-)
-
+diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
+index beb88f25dbb9..8d27e6caf027 100644
+--- a/drivers/scsi/st.c
++++ b/drivers/scsi/st.c
+@@ -3756,7 +3756,7 @@ static long st_ioctl(struct file *file, unsigned int cmd_in, unsigned long arg)
+ 		    ((STp->density << MT_ST_DENSITY_SHIFT) & MT_ST_DENSITY_MASK);
+ 		mt_status.mt_blkno = STps->drv_block;
+ 		mt_status.mt_fileno = STps->drv_file;
+-		if (STp->block_size != 0) {
++		if (STp->block_size != 0 && mt_status.mt_blkno >= 0) {
+ 			if (STps->rw == ST_WRITING)
+ 				mt_status.mt_blkno +=
+ 				    (STp->buffer)->buffer_bytes / STp->block_size;
 -- 
 2.43.0
 
