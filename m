@@ -1,192 +1,97 @@
-Return-Path: <linux-scsi+bounces-9511-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9516-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC5219BB2B1
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 12:15:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C10E59BB35E
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 12:32:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F00251C2090E
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 11:14:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 856962852D6
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2024 11:32:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4641F1B85EB;
-	Mon,  4 Nov 2024 10:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A69E1B4F15;
+	Mon,  4 Nov 2024 11:27:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hznSesPa"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="p8CfUdWf"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fgw21-4.mail.saunalahti.fi (fgw21-4.mail.saunalahti.fi [62.142.5.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675471B85C2
-	for <linux-scsi@vger.kernel.org>; Mon,  4 Nov 2024 10:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC211B0F1C
+	for <linux-scsi@vger.kernel.org>; Mon,  4 Nov 2024 11:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730717918; cv=none; b=Itp5IkegHtS/gqPIDq9StloTbPqPaABHr1tEfienf75luFbamZhChFtdTpKn9lwM/9UalZiChs/p/Z2fJMwj+N7Cwad0U5xPHiwd55Ln7m7Ec7MXzZtuQ3mqkuFJaik7h9F68z0M1PtSq9GyRzqK5+ToAKrojtoroWXfTF1csAQ=
+	t=1730719676; cv=none; b=MC/l+p7C5ajC2AAws2xnj64YMiQ3vlP6m/W0oX8bYVUK1eTPYDymMsTvM3ti/7Ybi8uo1zLj0FuriEpyOcUO7t5Rof6n6Ko27wABvjwj9rd2ZyPrElfCL1lAO3ob6+cqGwqqO/3y7QdgTXd1vEO3LZR3UOJ7gJ0giNgAPOYIK6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730717918; c=relaxed/simple;
-	bh=HXRqLnDDtJW6cTQrcmKnH1WqFgEaTawJdcXZ4z9WS+0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DkXr7FuGFEe1lEfMMSxD1jJjWXQFVNBfBYFfYyRCEv/EU7vYfD29AYSBp1sddUrYZ6l2RLKGNoalEk5oAj9c7uWEqYrS8gIlXnq3qZb6FKuCkWJl8cnfYmSYyuAvLrcr8pT7BU7vjAdAtJO7WoC6/nKPx59LjGZWAeY+KzABXgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hznSesPa; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6e9ba45d67fso36863447b3.1
-        for <linux-scsi@vger.kernel.org>; Mon, 04 Nov 2024 02:58:34 -0800 (PST)
+	s=arc-20240116; t=1730719676; c=relaxed/simple;
+	bh=uLWXsjAY/qJfjcPXAHa2FsHQcyAA1xiTaMUlpn3gXWQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VVLpDu4BxJ9BNmwXvY0km1/QJGV5HJCe9sM2b6r36i9jiqN4MAtHLoyK37WMSyeUsqixb/ewt814ul1o5BjCSXTOtTnreDyFDjHC8yJx2CCSD+YaLT9QwWHeBNQNZDzB7FU710mkBDSp+t8O6mFusRV2YUg2uFHcuTVKuTRk6w8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=p8CfUdWf; arc=none smtp.client-ip=62.142.5.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730717914; x=1731322714; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=A8OEwwbndwQP7wHdh9ISRQA4yW5gd+UJ76JpEPhxfag=;
-        b=hznSesPaYJXF1pGvJjwrrVmxvphKVCUfNmrKb2iCfbiWWY5k3gS+xlD1zTSNmQZhj5
-         Pk9PA7sDOG/UE1Ou9ycYFMNrlsyfTz5oznWIQ3QspNTsKVf41Wn2ItSpo2Om9gaGAn0X
-         lgZWP3f/5M7FJs8hD2yo/MGEYG4HaPwOmmXe+2+R+uD1eg3a4ePmmPeV7f1DjrnylHyR
-         B/Spg3PXyEf5Ra53MRAPH/98LDyUQLEIUTkJXkCPrXVdRL6rTvFDsNDipxvHCVm87d5w
-         hvWnp7zqa0A5lyEfGjZrRTDc2dghK6Ef6s1Oj0dRDJskCmlW8+7QHk8MNZ1D+Iy1ZgT3
-         OYtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730717914; x=1731322714;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A8OEwwbndwQP7wHdh9ISRQA4yW5gd+UJ76JpEPhxfag=;
-        b=kIhJ5O9fsSGkK64Wfq37dOVhmKlie1Qme5daVBoh/EEkw4SQ3dR67WozAZM7N+U6zR
-         AU26mbmnKxMzG0PM8eRaPUi53zr4xVUkhP8fPftUzD//wfZMjbZ+JdsR05IyLt7fjHT+
-         6S9Npo7ENLrYl3SB16NIcb6r/epgrx9P6so9EG2fPrC3ZSGgrBTNgZfn3G49o0iag+vs
-         p7qUt8IGVZpyvhV0EW6ISLdDJEOWdezYF82yO3rM6nnvfR0GjFeQLFbkJelsef5a+cQY
-         GkdiddtlP9b+zNjGGG8Cui6EK3zgEuQeiH0t31/+uq/qwRuc41SH9LOJUd51pI+qwX/y
-         rUtA==
-X-Forwarded-Encrypted: i=1; AJvYcCVoWdyW/XhK2JAsS6sZPZb3DPd59sz/FCab48fGsi4qbR9F0BHZyQfoFPHyot7rSbpnwhJ9gl02NSus@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXVuLemYO0QAFvUtjPaLugX+KMFQPKsoIqq627EvW06I06kdNe
-	EXF9shsZT/atgt6Ba7+oZjCOmA88P2F7/WisnpdmtwGmgRznh3gP10jWB0ndpIl+fTmGP6LRhje
-	Oxut+hSAijecPGEeZ0YMSVDdhgXuRqPLMypYXEA==
-X-Google-Smtp-Source: AGHT+IHi7UAsQfjAiAGv3Fbp4VDCnNLJgrXpVXyVg0zWty3KS6vdc/17EwBBZWalLVopb7bNmLcxY/IvP/w/XllPp6g=
-X-Received: by 2002:a05:690c:3005:b0:6e7:e92d:6c0c with SMTP id
- 00721157ae682-6ea3b8954cdmr141759517b3.10.1730717914161; Mon, 04 Nov 2024
- 02:58:34 -0800 (PST)
+	d=kolumbus.fi; s=elisa1;
+	h=content-transfer-encoding:content-type:mime-version:message-id:date:subject:
+	 cc:to:from:from:to:cc:reply-to:subject:date:in-reply-to:references:
+	 list-archive:list-subscribe:list-unsubscribe:content-type:
+	 content-transfer-encoding:message-id;
+	bh=UuIe0zaPSwBV+JJ2fESp3SXw6hBM8P0UFYlV080tmUI=;
+	b=p8CfUdWfgB6LqclAyLvtgCMGaDK1VSXqkAydP2sPEDzqPzBNiBPcX/bfUifbmT/OWEDDKAQden2YE
+	 wV+ehheC4WkK7fWVlzcKIfENjrOndr61NzU0hqATMLZ9gP8dFPPLvF7p2lQjFz49xPzleUamPUIGi6
+	 fhmJAn+MMFvWj4F0yFIaUU7Elr09tRZdr3jPOJDjlzkkw1A6olMqaGNBUoBIkIYMtAvW+s0xhbAAJp
+	 6v+z7FAIL+/7Ax3p8pzTmfNWeo/uSgt+MPhfda7X5GlIRad8rym3bF5C3Vl6JBxqYDynJPJCcVf3H0
+	 9UBqeFrriu4qEnNXL1ap3v36UkQnF9Q==
+Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
+	by fgw21.mail.saunalahti.fi (Halon) with ESMTPSA
+	id aa70ec24-9a9f-11ef-8872-005056bdd08f;
+	Mon, 04 Nov 2024 13:26:42 +0200 (EET)
+From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
+To: linux-scsi@vger.kernel.org,
+	jmeneghi@redhat.com
+Cc: martin.petersen@oracle.com,
+	James.Bottomley@HansenPartnership.com,
+	loberman@redhat.com,
+	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
+Subject: [PATCH 0/2] scsi: st: Device reset patches
+Date: Mon,  4 Nov 2024 13:26:21 +0200
+Message-ID: <20241104112623.2675-1-Kai.Makisara@kolumbus.fi>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1730705521-23081-1-git-send-email-shawn.lin@rock-chips.com> <1730705521-23081-8-git-send-email-shawn.lin@rock-chips.com>
-In-Reply-To: <1730705521-23081-8-git-send-email-shawn.lin@rock-chips.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 4 Nov 2024 11:57:58 +0100
-Message-ID: <CAPDyKFrig236e5xTSeOHfNR5Z3840o6u_h7LnoAG2P8Ck348WQ@mail.gmail.com>
-Subject: Re: [PATCH v4 7/7] scsi: ufs: rockchip: initial support for UFS
-To: Shawn Lin <shawn.lin@rock-chips.com>
-Cc: Rob Herring <robh+dt@kernel.org>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K . Petersen" <martin.petersen@oracle.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
-	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, 4 Nov 2024 at 08:34, Shawn Lin <shawn.lin@rock-chips.com> wrote:
->
-> RK3576 SoC contains a UFS controller, add initial support for it.
-> The features are:
-> (1) support UFS 2.0 features
-> (2) High speed up to HS-G3
-> (3) 2RX-2TX lanes
-> (4) auto H8 entry and exit
->
-> Software limitation:
-> (1) HCE procedure: enable controller->enable intr->dme_reset->dme_enable
-> (2) disable unipro timeout values before power mode change
->
-> Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
-> ---
->
-> Changes in v4:
-> - deal with power domain of rpm and spm suggested by Ulf
-> - Fix typo and disable clks in ufs_rockchip_remove
-> - remove clk_disable_unprepare(host->ref_out_clk) from
->   ufs_rockchip_remove
->
+These two patches were developed in response to Bugzilla report
+https://bugzilla.kernel.org/show_bug.cgi?id=219419
 
-[...]
+After device reset, the tape driver allows only operations tha don't
+write or read anything from tape. The reason for this is that many
+(most ?) drives rewind the tape after reset and the subsequent reads
+or writes would not be at the tape location the user expects. Reading
+and writing is allowed again when the user does something to position the
+tape (e.g., rewind).
 
-> +#ifdef CONFIG_PM
-> +static int ufs_rockchip_runtime_suspend(struct device *dev)
-> +{
-> +       struct ufs_hba *hba = dev_get_drvdata(dev);
-> +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
-> +
-> +       clk_disable_unprepare(host->ref_out_clk);
-> +
-> +       /* Shouldn't power down if rpm_lvl is less than level 5. */
-> +       dev_pm_genpd_rpm_always_on(dev, hba->rpm_lvl < UFS_PM_LVL_5 ? true : false);
-> +
-> +       return ufshcd_runtime_suspend(dev);
-> +}
-> +
-> +static int ufs_rockchip_runtime_resume(struct device *dev)
-> +{
-> +       struct ufs_hba *hba = dev_get_drvdata(dev);
-> +       struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
-> +       int err;
-> +
-> +       err = clk_prepare_enable(host->ref_out_clk);
-> +       if (err) {
-> +               dev_err(hba->dev, "failed to enable ref out clock %d\n", err);
-> +               return err;
-> +       }
-> +
-> +       reset_control_assert(host->rst);
-> +       usleep_range(1, 2);
-> +       reset_control_deassert(host->rst);
-> +
-> +       return ufshcd_runtime_resume(dev);
-> +}
-> +#endif
-> +
-> +#ifdef CONFIG_PM_SLEEP
-> +static int ufs_rockchip_system_suspend(struct device *dev)
-> +{
-> +       struct ufs_hba *hba = dev_get_drvdata(dev);
-> +
-> +       if (hba->spm_lvl < 5)
-> +               device_set_wakeup_path(dev);
+The Bugzilla report considers the case when a user, after reset, tries
+to read the drive status with MTIOCGET ioctl, but it fails. MTIOCGET
+does not return much useful data after reset, but it can be allowed.
+MTLOAD positions the tape and it should be allowed. The second patch
+adds these to the set of allowed operations after device reset. 
 
-Please use device_set_awake_path() instead.
+The first patch fixes a bug seen when developing the second patch.
 
-Ideally all users of device_set_wakeup_path() should convert into
-device_set_awake_path(), it's just that we haven't been able to
-complete the conversion yet.
+Kai Mäkisara (2):
+  scsi: st: Don't modify unknown block number in MTIOCGET
+  scsi: st: Add MTIOCGET and MTLOAD to ioctls allowed after device reset
 
-> +       else
-> +               device_clr_wakeup_path(dev);
+ drivers/scsi/st.c | 31 ++++++++++++++++++++++---------
+ 1 file changed, 22 insertions(+), 9 deletions(-)
 
-This isn't needed. The flag is getting cleared in device_prepare().
+-- 
+2.43.0
 
-> +
-> +       return ufshcd_system_suspend(dev);
-
-Don't you want to disable the clock during system suspend too? If the
-device is runtime resumed at this point, the clock will be left
-enabled, no?
-
-> +}
-> +#endif
-> +
-> +static const struct dev_pm_ops ufs_rockchip_pm_ops = {
-> +       SET_SYSTEM_SLEEP_PM_OPS(ufs_rockchip_system_suspend, ufshcd_system_resume)
-> +       SET_RUNTIME_PM_OPS(ufs_rockchip_runtime_suspend, ufs_rockchip_runtime_resume, NULL)
-> +       .prepare         = ufshcd_suspend_prepare,
-> +       .complete        = ufshcd_resume_complete,
-> +};
-> +
-
-[...]
-
-Kind regards
-Uffe
 
