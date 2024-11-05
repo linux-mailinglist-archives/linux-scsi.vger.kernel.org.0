@@ -1,207 +1,163 @@
-Return-Path: <linux-scsi+bounces-9570-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9573-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6D429BC33D
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2024 03:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A1E59BC354
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2024 03:47:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFD421C22580
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2024 02:34:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E7131C21C40
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2024 02:47:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0B5B3F9D2;
-	Tue,  5 Nov 2024 02:33:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47EF92EAE5;
+	Tue,  5 Nov 2024 02:47:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="PBmJgfFf";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Gk+nt6l4"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="PJ9nR4jF"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317443BB21
-	for <linux-scsi@vger.kernel.org>; Tue,  5 Nov 2024 02:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730774033; cv=fail; b=Y19s8JXcpe0K3idOjEKg7TY9OtjISRW0f7vik/j4KYJyTdRzgJ+9RCYIc05RWu2JVikXQCVMaf84kpTJ3TAs9QvUgep7ftLQQcpeyqdpVmkYuPQHYXCazAgxRDxSqHtbrVlS+Hx6QZo5tzhkRqtM3wnOk34eIuxLrpPEp8GfI7A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730774033; c=relaxed/simple;
-	bh=lgbtaY54zAXY8QyAmdwHL2B8eQ4R41ts3wwYfIYNDtk=;
-	h=To:Cc:Subject:From:In-Reply-To:Message-ID:References:Date:
-	 Content-Type:MIME-Version; b=fp/AFLPPf3KT/arG4vhSVTdKrZNwy0/6zoMg7sOvc4hOMwI5fX/Wt5UoeGzBw1EgWZCE4vDtP5qnBxwIniWxWzwxJ/uuBMm4P2uX5cMr/DxmQuWGTy+3P6eTT3bdIpkNZUiCAkKLB9mhkxiPva5oSkW7Qx98+5OObGS+Z1lkBDM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=PBmJgfFf; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Gk+nt6l4; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A52MrhO024580;
-	Tue, 5 Nov 2024 02:33:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=kyulmyifEO3Jk3CXEK
-	qM1ctEwctWTPmP2nWRzWnzT2M=; b=PBmJgfFfLkNSv6ZCfxncH7KRIM75yptS0m
-	so/RNRI6G7+tPLbRFNFo9QvG6wp35NBMPGHuc1qxxyxGU7seyC2LaZU6k5iJPtjS
-	+2lr/mf6X1VlFVxs4hrePBaQo3Skx3xvxdweFg8ms6vtVhQv+PE96ievZFBYLIFP
-	BoASu1k8SG9PdtEMACTTLF9Yl/kBTYFwONLOz+24vpwORzOkn1LOcV1tpig/6Llx
-	waUc6Yt68O0br/VtOe6vA/Zt9KPl+6pUMEULOztoVrOeH2F/5oOwCqwTjDx9Uk4P
-	GIjaFe/JCWIkVnA8riv0pG2+7JZmvxQLFwKsXAp5iNkKC1iAPOng==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42nbpsm8k1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 05 Nov 2024 02:33:31 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4NEAKL036847;
-	Tue, 5 Nov 2024 02:33:30 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2042.outbound.protection.outlook.com [104.47.57.42])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 42nah6g2jp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 05 Nov 2024 02:33:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Bf/mNyzRVCaFRfh3lOplldpj6W2MmeKSTJM0Pc9Ag+jiy1polLA6tc17rLxxmMelfHB93fDifVrGgNGny1ACVxqutWzJ8reB5ftKAFSl2qt2VTuipYUDJsyQRENELWYasD4i3waKrIvm/wDeI2kXDmXvpFBv5FaicaQNpMwspbvUUWzy3mIPqSvqLpFrvAT0q6HoPWs7N/p7GM5F8IV83jLavAUz8VSQDLoROFT3JFxqYKVGV8+grtlpFA9pqwtPHKTPpyZJkR6CDRMsZhedEC6U4Md/WYVWquphhWa/FwiCWxDUlF4/MWNWeEVN+4kvn9kRg5EG0dUmSozhhhQdtQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kyulmyifEO3Jk3CXEKqM1ctEwctWTPmP2nWRzWnzT2M=;
- b=laGN7oyLGKgOiG8cSLJN/3mrFw9norrlz1KpjunbxQEar7Q5IhjOYpXAA8AZm98YgXXL7I5IX6mj34ALgOwzxoWhrcabv6EwOPKiLj/kPrTlzpUDA82q1EgDFsKzCBBlF93iYrzNaHHR/YWFnIpCNarBFz4VSQ7XMrxbhIwA98ZzbMMGaVQzxMOdylj/n4va9zXhdzzq9ALec8I60yTZ/iQuE9VqpNRGQpUnGwdaZfRkrQmfuzdeDhNm1WIMWVowvcV7zD7O4UQzqKDk+nXe9q7II7QSUCN2BEo4lATBt7xiSEddQpzaoNLp4oB+oiRJMytE86uoX/KnzVsrubWPMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128E14A0A
+	for <linux-scsi@vger.kernel.org>; Tue,  5 Nov 2024 02:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730774848; cv=none; b=AgeW+5B50Xfp6ydLNiHICftEXj5qZbHgqOiAfCZ7qMMEYbypvYVOG7kCx8Kdte/Im0v/NHqHv8dhr0zxxhTHimAT8yqnkhh+KGmM6SLcA5PHptZFPmgo2z7y1yyON8KCTR3GoPzjb6qrOPAKh1N2ez++HKxGR/ZGMaz/zhfWAOg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730774848; c=relaxed/simple;
+	bh=1yNgrwYPboQhRzRqDTN2FFObV+gJjTHmkMJ/NntUSAw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YGmbGYaAygRzbhnMoVZloxLyX/YBErVLGRvFHEnxVIvd/rcHk+rPEdmrdhB00q8unWMeZrCUPU8e9RY+ijgu3BAe7uJ2+PFxMJjzOIxlm9+um6Yh0WuOUm8N8Ug0QjNpl78rHASE/hzO9Nb9mKDzIZTR/VNP/ZM7K9C6Pder7FA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=PJ9nR4jF; arc=none smtp.client-ip=209.85.222.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-84fc21ac668so1337247241.1
+        for <linux-scsi@vger.kernel.org>; Mon, 04 Nov 2024 18:47:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kyulmyifEO3Jk3CXEKqM1ctEwctWTPmP2nWRzWnzT2M=;
- b=Gk+nt6l4+FmQfkUab3a+iZT2EMBRtyP0SyVGEowVDsed8lZkYiSnROlhW+k3eMM2N2/t8KIQE+677W3recCSWprmesKPN39GFVQe3hOMw2scS6qXZU+21giZ+HrLZFhtqydHqQDwuP7eWlMESMsGfPh4kH3NoE5oftQzqO2gxn8=
-Received: from SN6PR10MB2957.namprd10.prod.outlook.com (2603:10b6:805:cb::19)
- by SJ2PR10MB7736.namprd10.prod.outlook.com (2603:10b6:a03:574::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.30; Tue, 5 Nov
- 2024 02:33:28 +0000
-Received: from SN6PR10MB2957.namprd10.prod.outlook.com
- ([fe80::72ff:b8f4:e34b:18c]) by SN6PR10MB2957.namprd10.prod.outlook.com
- ([fe80::72ff:b8f4:e34b:18c%4]) with mapi id 15.20.8114.015; Tue, 5 Nov 2024
- 02:33:28 +0000
+        d=rowland.harvard.edu; s=google; t=1730774845; x=1731379645; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MTlg3WVtPOaNEtPAughUpTGXurHUbvsup5xya8HjuJ0=;
+        b=PJ9nR4jFxeZCAjEqCNf9X14hv/IO2iPPbnXuwTaIfi5YF8l7FgLO5TFnMGvj5z7Ew+
+         3vhQwrPX4I3u3nMtXLjzeaQ8jU8akdT/jXR5ZbnTIeL7SAK7VFHKIvNlHOk3I13P+0ky
+         OTvcMUNrgavEYGc/izAUr9lLmEfcBYeJC2nq3eU81/wtsstSJtbHU5EDdtL5tJSJ66u/
+         nesaCmGFJ6U/jJoLvcIV8EWfcFq/x+xlr7ClzQT89uysFb3PbvoHlA2FBDQHXb6OBkbR
+         mrvrqGph4177AydOx/JBm8Z29gYZK5pCwRs6Pnxkxv/rpHr8GODko39x2xUFHadndM27
+         d8BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730774845; x=1731379645;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MTlg3WVtPOaNEtPAughUpTGXurHUbvsup5xya8HjuJ0=;
+        b=XLXUwYMT6duLYfDp+Nm9d6Ur0/NPmRtNzXVgnjbVectc+1kRh76vjGtYOF0efpuo6K
+         QZ/m6d0tYi4PlcD60auaMIjHBOcUjhb8KEMbR5hO+ayqtb73zwTh4xvZG2n2W0e98ylg
+         3fqPhubJIbUqWJx8Zzv8ioOsMhiMK/wN+cV3heY/7yBSfmzyK+FOxiBU2RvD4dY1R1DC
+         7Gnw/u5FTyeFI+jO/GnOqxcFFhazmAjzmGJigLwin92df1Ha/P/r5A+4KzBcddTSKoh1
+         maba5LRdnm1i5LFjRvQJj3IrF5KsJSE8kLixV+Zxu8C7xnKAcEVuHc+GT+PACehLfj0u
+         Fscg==
+X-Forwarded-Encrypted: i=1; AJvYcCVolYS3symER6EUgXX2/g41Gn2RxgVdD3OP9Erc81lYIP5UXrK++bgPanH9bGj/gjH6dIPwVRewb+/A@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEoVF506wFdnj321OhaC4p++OIpTekccptYm2dC5dXENwk6cKV
+	g8Aw1nxS0812/hki470BhqdHvs92vOqd/BFg6xkem110qqjpQAQEDH7Pd0mndsVsgTisyUDrh14
+	=
+X-Google-Smtp-Source: AGHT+IEyb/wDyPUaQWdbUNiEg1rmeUbOrh4sZSC2BjpsaaGBYYt0e2XBd8iKJtXS1BeLQBr81PKvtQ==
+X-Received: by 2002:a05:6102:6cc:b0:4a5:6f41:211e with SMTP id ada2fe7eead31-4a8cfd598demr29966954137.24.1730774844864;
+        Mon, 04 Nov 2024 18:47:24 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::dc3c])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d35415a653sm54998556d6.96.2024.11.04.18.47.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Nov 2024 18:47:23 -0800 (PST)
+Date: Mon, 4 Nov 2024 21:47:20 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
 To: Bart Van Assche <bvanassche@acm.org>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Douglas Gilbert <dgilbert@interlog.com>
+	linux-scsi@vger.kernel.org, Douglas Gilbert <dgilbert@interlog.com>
 Subject: Re: [PATCH] scsi: sg: Enable runtime power management
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-In-Reply-To: <40e8ff4e-9ffc-4658-ae1f-69ceee5593cb@acm.org> (Bart Van Assche's
-	message of "Mon, 4 Nov 2024 09:25:17 -0800")
-Organization: Oracle Corporation
-Message-ID: <yq1o72u4dgh.fsf@ca-mkp.ca.oracle.com>
+Message-ID: <43ee24de-8d54-4c41-85b3-b3961366b52e@rowland.harvard.edu>
 References: <20241030220310.1373569-1-bvanassche@acm.org>
-	<40e8ff4e-9ffc-4658-ae1f-69ceee5593cb@acm.org>
-Date: Mon, 04 Nov 2024 21:33:26 -0500
-Content-Type: text/plain
-X-ClientProxiedBy: BLAPR03CA0060.namprd03.prod.outlook.com
- (2603:10b6:208:32d::35) To SN6PR10MB2957.namprd10.prod.outlook.com
- (2603:10b6:805:cb::19)
+ <40e8ff4e-9ffc-4658-ae1f-69ceee5593cb@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR10MB2957:EE_|SJ2PR10MB7736:EE_
-X-MS-Office365-Filtering-Correlation-Id: 664f9787-da5d-488e-6fd3-08dcfd423b1f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?PfyGxdCrHnJlHuogiytbZbMIfS9Ka0MHQZwjee31gl+ORSf4lA2liKDz8m6I?=
- =?us-ascii?Q?vb3OIaSlh6l8aye5x7joQ6not4bPyOpjmDzcldaSMqyJkj8pfuI1TzZW0uGJ?=
- =?us-ascii?Q?XD9JxkGtj7G/JoD6FusecTycc31gm6bFqP69BLCRfkiP7ibJUNKGLa3du7I0?=
- =?us-ascii?Q?PSS+tN6KxZJ7oD1XVaS7zTRYRtY/QSgqBj795R/Lvz1DWB6GNYxep+6771X9?=
- =?us-ascii?Q?RU77h5WZUmCLb0xzGxxbh7iCbOziSUbkPVzDprjZysse2dFnuezpNaDn8Rgh?=
- =?us-ascii?Q?7RD1QYJFV9J7BK3E/n9f8QS5CUvHUutvNWQV5cnHToUzqA7ssxKfonUVISDF?=
- =?us-ascii?Q?6oH/ntw230mVqnKqLV6RrS00jAubE6W1rqYUhH3qBnmVK/Fa+6c38qMXva9Z?=
- =?us-ascii?Q?DeeuTHLqcYMkmLgBvTIIx0x2oFqkqblz52GHmK3UUuvUQed53+wdj9BU3d4I?=
- =?us-ascii?Q?JKTlu+ZjiVEWWdpPfZu/2lacHcSYYIVeH4Xam56WgdrKl7fVipNZlGWfisBC?=
- =?us-ascii?Q?7AQmhWuwBIUjEKYWrRwTtPrBOCkyX0lYHvSuVDowbGEDxaZrDYZPUWCJ3q8Q?=
- =?us-ascii?Q?wDy2Wtmt0T7z8Rv5vFSeI99xULRyI8F1oHk8Trl+BIh4iYsPB2qHza6hPicy?=
- =?us-ascii?Q?pyRXOrttS2SKj5b+EWnrEzxhFMI00A8vrnNb7/GpWsFLSB3Jqiw7y/7PSNDU?=
- =?us-ascii?Q?8CJ1DFp+uGYTNm3LV3gskESJHwitURNiRAolZAE7KeRbVuUIEz1KbVo4WKkb?=
- =?us-ascii?Q?Vk63PrKfPPWszujmkURdkBSrAbXTGqzBF5WO97X6kiAdhscQFLdc/3iOn+d2?=
- =?us-ascii?Q?Cv7OGmQjbWhZVzhD6bCgBIOyXVGSslhI2NjIf0b6MiKZXJEUGLGwk3s8bjY1?=
- =?us-ascii?Q?yK4QjRV/DD7WWVop/WbIcROtLPSqzTU7k71dLWdv/1QUlIJVg4oqMg/jJWbP?=
- =?us-ascii?Q?oSOQWxcGgo+Z6eMRTacOjkBjsSjZwyVKk+T2ABzdkZmZX0GksDWOpHt5bayb?=
- =?us-ascii?Q?O3/C173krlyiBUs++aAD6dXtjRyN+qegR4Fr/U64wxZznIClodoJzxHx9/jB?=
- =?us-ascii?Q?x994Lqr6XSshccozOje+nedN5QUCuZo6h6/h3NoR/p1HHhx9Ko6p818wu3Ls?=
- =?us-ascii?Q?rdRlBs6pFng6X6Kzmqc4uRhUrcPGq3gus6I2ZvHYUY9llHoIwEhltqcLSXJw?=
- =?us-ascii?Q?Ep1AG/og5aWbrHHSrCHJn0ByBJ0kvow5uDpoURggv4wxx8pw+lX64JDpC8QU?=
- =?us-ascii?Q?mpElPisuYJc/U6k5oSN1of8TsFS718eQ0606Z+gH8m76mFKvlcHCMvAnvSp2?=
- =?us-ascii?Q?8SNMD7VMIWy4wcY8AucJlXrH?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB2957.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?hZD+l0W7PxgAuO98ymtYlsRxx53XcbEaNphxEfKuzVWqnMgaXZu4O/cRr5Yq?=
- =?us-ascii?Q?W/Z9aNIbrVRvf/uR6ZuuJCpqZRDPX3AsjLU4AKifyn6SXrQ5IsVMh24gG0Y+?=
- =?us-ascii?Q?IzPUVdEr2Eu1L8G5kI3kFlTgpUqgwMz4zZ5A+Mz5QMeA5gdZ0a/zdFp4GEAU?=
- =?us-ascii?Q?wtbrY5D+J/OwDqhIAUu6DGdrQTmMdzq5nkpzG+5N8HlOoXMuUi6VbbJhK2H3?=
- =?us-ascii?Q?6kBFILwLORNYsFjo1DFLb7gcVsbyeMvhZYQVrzVnsPT5buDD9Gt4EGpTtvoQ?=
- =?us-ascii?Q?Vm1HY0gAZu5dSbgH8y0gzJwGCktoC4DGFcbXKWssx7pOlCJQX5Eve5nTkRVu?=
- =?us-ascii?Q?flK+XziJOuAFdStyCocF3vZBhPdvUFRJX9IE7bK+ydz7a04/q7PcjIyfQ+2c?=
- =?us-ascii?Q?pmLk6b92d9uRmK02rLCVNuQXmZ6EcMAh3eTKbH1czdL5fY+y+bM/Rf3iPaCB?=
- =?us-ascii?Q?nACF02C/Tlg6bzJeiH0xg3kMCYDaF0QHL/Dzt8SN62f7819ZWmO3Ltjm0VdZ?=
- =?us-ascii?Q?HB6AcVZWmwSbzn6bgJ9ahi4n1mXz207n/+iIWDCZlvGD7ZA5n0AOGlIDm+a3?=
- =?us-ascii?Q?uAvMIuHm1FqQr9qYc3G3e4MFnH5yKptYUjNAB9adMFB+efP+Fl7qy7ANHhBl?=
- =?us-ascii?Q?QJYInW8HJlNiUwMIfBgEixXuRi4MVAS+QdOackygy5e73E1vKxMhEZBZHR4H?=
- =?us-ascii?Q?GWTzDALOE8ccXZzPTO0ZFWZiBDjCKxXauH5+pRyYs/etu60tsHy2/j26UuHX?=
- =?us-ascii?Q?m4T+7NqRt5BKOphWYF4QSTBTUKSUGHycDlio77WLlCgRTFl1HKAdw9lnDfO4?=
- =?us-ascii?Q?qOJDm0j1aPvUMYKGiL/APb4nyftTeQ4TVGo5oNjKfw2wgryvJYLQDKE+TpID?=
- =?us-ascii?Q?3BUzWs06LKAzrlmVNOCIQdRDZTgQStKy2L/hzioBMuFNXdu4h1bbcTCRjuLd?=
- =?us-ascii?Q?lHD9Zm5VORNa1nZtsIANg/ImoS4N9fHd8K255MIoVlA/W7vdhTIXkWfSdkix?=
- =?us-ascii?Q?CoyXhkAtm86uwQZUDacHEbJbe1+26dLt7uH3wa8tm+nao/LzbCauselrKB6q?=
- =?us-ascii?Q?NedKQBkPEXW0clGieC704xIA9Ohs+R4ZmaJvE1ZZt60eoIFv8Z8dxHYOXSYX?=
- =?us-ascii?Q?V4SUUkjkCMAMMGqRKBQDRyxzdbSz2cVHByBlxACV4xHvreh01MG4aRYkknYU?=
- =?us-ascii?Q?8Vvr3ULKHb5ej0k6ez4CvLj4sRo8HYKChytbvZYTamkmzlPz5jNoWTaOqmsi?=
- =?us-ascii?Q?vHytCD5sQPS2LaXCuz35PPuO3V3DV1ADg6y3oPAn/NXHGdlp1+/jfzca4gOZ?=
- =?us-ascii?Q?JQSB2MyG5nvpaB26rZwz8N3K2qAfbfkdbjW/Ir8SAUSp8RrMLGGOHYQcD/a2?=
- =?us-ascii?Q?B5YFtu1LuqBORf8m2SHUIPVqFkjsUaoC9ygsjddKbDZaRG/PYV4GGUTRQS8l?=
- =?us-ascii?Q?XjO14XcI9um4Dzm0MFx7pBlZufMSpopGbG2Ty7oNxvqvA9gmmgIFTyEMc8aU?=
- =?us-ascii?Q?n7C2vMikOAsJMIe9w+xIYsBesfGzzXE7EhG32ptGfPbEZ2WmDQf4HSZcYoyw?=
- =?us-ascii?Q?Z6abJAbmW56Eazxr1cJMkwpQBX2BQZMILaqicARYlQbz30dE5436y3ZxJY5L?=
- =?us-ascii?Q?SA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	ujACnpv0LXn26TAnY11mvfkGRmMybVKAuKx3UnxOZORjnuirGyBPPuSRsz8RododF93iWXIVWP3pxXNb1hNdP50IJDrr5gGLnEdmCMFugfggCsOrDT7vct7cdcPwCnv7iz/TOdyFnensv4CZJB0FDELgDDIvzrt9w76wNDq9N5yRgfXWb6MTyjblXH8ZjlN3McvJI7HQ66BQwRaoITfNJlbu2KniL1abaOQyYF57kP6F/6RBX8hgVjnhrW2hmv9ZbPx7DTG9SRCb/6HZjZ8pw9tLha/rSH/NctwvZGGg4WoUfvL+KNz7MLlIHwdguM8uag1DQ4Uqq9cAQI2rbC2/ARogVd/y1Sej789W8YVOwLbx9GNolIcCKX9pVNGDa9cZkLhcakkxBUa3gJ0xDxlNzbOz2FpGOxkRxs6e3TCfONEjko4E1miGtOj5vhY9/Ke+SdR+qYr+15+eHkvC3i1oqbYQJHOOk6/AaPdpdY8iTHFh6pfL3/jOCjPcvg1cVos2vD9NcRJlSoSCKdCMQFPPX3PZ27srzPXgfD271XT04b9nMtBYAplnV2zKC6qPtynYvPr61kTByXPxFT3lOhcHn0jlOX4onNTmyGYj/3PS4dI=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 664f9787-da5d-488e-6fd3-08dcfd423b1f
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB2957.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2024 02:33:28.2232
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5m9h5F029ZOIZWo/oAbaScGe9ZV9ux8iWY6uj6t1eL2hb6vzUmKToZ11TlEMHJJedHMhsn0Sj9eS5llo1VRAjVybViYOEZmUOMbpKKj4xJk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR10MB7736
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-11-04_22,2024-11-04_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0 mlxscore=0
- malwarescore=0 suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=873
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
- definitions=main-2411050019
-X-Proofpoint-ORIG-GUID: AIdvT4apRFut35ORfgshu_epaZzuLCz8
-X-Proofpoint-GUID: AIdvT4apRFut35ORfgshu_epaZzuLCz8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <40e8ff4e-9ffc-4658-ae1f-69ceee5593cb@acm.org>
 
+On Mon, Nov 04, 2024 at 09:25:17AM -0800, Bart Van Assche wrote:
+> On 10/30/24 3:03 PM, Bart Van Assche wrote:
+> > In 2010, runtime power management support was implemented in the SCSI core.
+> > The description of patch "[SCSI] implement runtime Power Management"
+> > mentions that the sg driver is skipped but not why. This patch enables
+> > runtime power management even if an instance of the sg driver is held open.
+> > Enabling runtime PM for the sg driver is safe because all interactions of
+> > the sg driver with the SCSI device pass through the block layer
+> > (blk_execute_rq_nowait()) and the block layer already supports runtime PM.
+> > 
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Cc: Douglas Gilbert <dgilbert@interlog.com>
+> > Fixes: bc4f24014de5 ("[SCSI] implement runtime Power Management")
+> > Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> > ---
+> >   drivers/scsi/sg.c | 9 +--------
+> >   1 file changed, 1 insertion(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+> > index f86be197fedd..84334ab39c81 100644
+> > --- a/drivers/scsi/sg.c
+> > +++ b/drivers/scsi/sg.c
+> > @@ -307,10 +307,6 @@ sg_open(struct inode *inode, struct file *filp)
+> >   	if (retval)
+> >   		goto sg_put;
+> > -	retval = scsi_autopm_get_device(device);
+> > -	if (retval)
+> > -		goto sdp_put;
+> > -
+> >   	/* scsi_block_when_processing_errors() may block so bypass
+> >   	 * check if O_NONBLOCK. Permits SCSI commands to be issued
+> >   	 * during error recovery. Tread carefully. */
+> > @@ -318,7 +314,7 @@ sg_open(struct inode *inode, struct file *filp)
+> >   	      scsi_block_when_processing_errors(device))) {
+> >   		retval = -ENXIO;
+> >   		/* we are in error recovery for this device */
+> > -		goto error_out;
+> > +		goto sdp_put;
+> >   	}
+> >   	mutex_lock(&sdp->open_rel_lock);
+> > @@ -371,8 +367,6 @@ sg_open(struct inode *inode, struct file *filp)
+> >   	}
+> >   error_mutex_locked:
+> >   	mutex_unlock(&sdp->open_rel_lock);
+> > -error_out:
+> > -	scsi_autopm_put_device(device);
+> >   sdp_put:
+> >   	kref_put(&sdp->d_ref, sg_device_destroy);
+> >   	scsi_device_put(device);
+> > @@ -392,7 +386,6 @@ sg_release(struct inode *inode, struct file *filp)
+> >   	SCSI_LOG_TIMEOUT(3, sg_printk(KERN_INFO, sdp, "sg_release\n"));
+> >   	mutex_lock(&sdp->open_rel_lock);
+> > -	scsi_autopm_put_device(sdp->device);
+> >   	kref_put(&sfp->f_ref, sg_remove_sfp);
+> >   	sdp->open_cnt--;
+> 
+> (replying to my own email)
+> 
+> Can anyone please help with reviewing this patch? This patch is
+> important for Android. The Android security software uses the sg driver
+> to communicate with the UFS RPMB so this patch is required to enable
+> run-time power management in Android devices with UFS storage. See also
+> https://android.googlesource.com/platform/system/core/+/refs/heads/main/trusty/storage/proxy/rpmb.c
 
-Bart,
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
->> In 2010, runtime power management support was implemented in the SCSI
->> core. The description of patch "[SCSI] implement runtime Power
->> Management" mentions that the sg driver is skipped but not why. This
->> patch enables runtime power management even if an instance of the sg
->> driver is held open. Enabling runtime PM for the sg driver is safe
->> because all interactions of the sg driver with the SCSI device pass
->> through the block layer (blk_execute_rq_nowait()) and the block layer
->> already supports runtime PM.
+The patch itself is innocuous.  However, it does open up the possibility 
+of devices unexpectedly going into low-power mode between SG commands, 
+if those commands are spaced sufficiently far apart (more than a few 
+seconds).  Presumably the system default is to disallow runtime PM for 
+SCSI devices, so this shouldn't be a big issue.  But it might cause 
+trouble in a few cases.
 
-Applied to 6.13/scsi-staging, thanks!
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Alan Stern
 
