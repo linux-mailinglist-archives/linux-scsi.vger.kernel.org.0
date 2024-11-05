@@ -1,76 +1,81 @@
-Return-Path: <linux-scsi+bounces-9569-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9571-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E1899BC33B
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2024 03:34:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A17D29BC33E
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2024 03:34:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 678181C22488
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2024 02:34:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 556D9284D4B
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2024 02:34:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C66916F073;
-	Tue,  5 Nov 2024 02:33:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E81FD40849;
+	Tue,  5 Nov 2024 02:33:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="a/f2qNQZ"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="LfXenQIV"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F5BB433C4
-	for <linux-scsi@vger.kernel.org>; Tue,  5 Nov 2024 02:33:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D813D0D5;
+	Tue,  5 Nov 2024 02:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730774029; cv=none; b=Z1fypHR09WeoIV6UtTW09oot28XbXE0TpyM8OW1ciuVYQlw5GbnaBGdKsujnnhjFMKe+TyaHvEUCiyX4zSSTz6Ss6fu7FSEHdGsRMMoub7K5okax3n+NsbZ0rwVySsFhF6k8y7cpD4zXJPNYL7IH1nodAgiu6wkePmGgJtsSyT0=
+	t=1730774034; cv=none; b=Rk9cG+JqNwU4m4jlVoVUb972Yr+ZhOdpGBznLxWRraLRn1Uj7lMPh2U9Gp8PxPb7xzR1TkXJslXWokOwR4fm/8XSBlPuCg1geVHp1W5ZOQT1UYM49hzOt+lkTCQd0cqaJq8NVywouPsJktkcEWle53w50ZSOH1GroMzGjWE9dc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730774029; c=relaxed/simple;
-	bh=5uda3O649r38llld6SicMjccSkaJG3Tzo7pjzeisuhg=;
+	s=arc-20240116; t=1730774034; c=relaxed/simple;
+	bh=Z9+To1r72kOymNV2hztmPDQ7n8Eqfg485YJ24O5I4CY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZwjIe0bm6CFpkVZcgo8GXoB4lICIoyp7MFfUFZfgWk5mTjXTsKsbjHA1riu7nTsHOcBCymDGdUU9w8XoFHJnp6/oGpOjty3zjWAt8YqKxCU9nlsutJ6C1EhRNuklyu4Dt0+Y2DrccsTBzL4mpQAm3uwzLG3G+BsRjJSEs81hpow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=a/f2qNQZ; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=KD1SDC3VDP83gjPGQWlXkhbv6j+Fc8ZPv93js4HEVkg8t9CRJwjE93eqpWpGhYuAjIfsdbTB0rcFFm0GBQitIKcX095TrbNZLaMnfjNweZso1knG+26VIW08MQ6gS0mC7m0eHRyOPMLaSlDUittHs8Y79Zv3iZSbHTaZX4DLhck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=LfXenQIV; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A52MYhc016795;
-	Tue, 5 Nov 2024 02:33:34 GMT
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A52Ofcb023094;
+	Tue, 5 Nov 2024 02:33:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=dmT4gSVFYRaOegQuJhd23JNNy96qvG/hc3dAKGZ+s64=; b=
-	a/f2qNQZjO3izoGdP/yMGvHHKUnjJyCRDo18jraEFRjlC/F1IxVNsEvIuT7tHlZP
-	FReEOHHxqVk/Ez9t2g9IGgwRx+54xDSv/Ucre4yk9DuZDFWHnmWuFQ7JWaPdxlkd
-	j+UjDv58Taep4j4lOiJIXAncQmiXRgsNdYrh+AX2QOz5yR9tp4mPEj5m4DpLLvac
-	8eZr4emeCvyTfPoENfwUd7GFHkGWMmC/g6ls7O2TNOJLYg1SWcuJ5OB7YekOA7Qy
-	Dh8nBN8250+fjCQxiQBk4p1DRbQxhKkG5pnDMJKf9vXAZGfSDqG39m/BLl8+7Z+p
-	Y1xlDi7YGC7xKyHmUemfHA==
+	corp-2023-11-20; bh=pML2ykXqoEwg9YOxW7yFOaC2/tXlaBeDG7q5EqOJBm8=; b=
+	LfXenQIV1mIB+OdXH4y94J5sBufN6K7YgKyWDXqhMWqx0VLwbhlekEORRxko6GwH
+	+4OrWXyoM2PLHjsXaGXVNKhFjSfDAoeWyebWNfoDxSo4DWXsW2FQM6fCYcWtbBs4
+	xbZJblgBeaYstmGefWyIC40vC5dooh3/zAQ1SPAleCT3RsE4Z+4/Ta+39sZlNVNg
+	/W1rQK7lRNG1yf/u3BSkYsCwnnk0w5OeUszDFn5uYkXwsZeQb/h0FKUSce6Cm4u/
+	CldGZthcKywG3GhmMWaXQj4XEyJadSOIfImE6MnqFee5HmaZCMIyUzbbq44ZQNtI
+	MmEKLWs+YhDAiMj1HpRukQ==
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42nagc4906-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42nby8v7mw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 05 Nov 2024 02:33:33 +0000 (GMT)
+	Tue, 05 Nov 2024 02:33:35 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4A52IHew036832;
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4A52LqYi036844;
 	Tue, 5 Nov 2024 02:33:33 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 42nah6g2kx-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 42nah6g2m5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 05 Nov 2024 02:33:33 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4A52XVFu017503;
-	Tue, 5 Nov 2024 02:33:32 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4A52XVFw017503;
+	Tue, 5 Nov 2024 02:33:33 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 42nah6g2k1-5;
-	Tue, 05 Nov 2024 02:33:32 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 42nah6g2k1-6;
+	Tue, 05 Nov 2024 02:33:33 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v6 00/11] Combine the two UFS driver scsi_add_host() calls
-Date: Mon,  4 Nov 2024 21:32:51 -0500
-Message-ID: <173077364682.2354920.148933117502221819.b4-ty@oracle.com>
+To: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        beanhuo@micron.com, bvanassche@acm.org, kwangwon.min@samsung.com,
+        kwmad.kim@samsung.com, sh425.lee@samsung.com, quic_nguyenb@quicinc.com,
+        cpgs@samsung.com, h10.kim@samsung.com, grant.jung@samsung.com,
+        junwoo80.lee@samsung.com, wkon.kim@samsung.com,
+        SEO HOYOUNG <hy50.seo@samsung.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH v3 0/2] processing of asymmetric connected lanes
+Date: Mon,  4 Nov 2024 21:32:52 -0500
+Message-ID: <173077364676.2354920.5375785901601330949.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241016201249.2256266-1-bvanassche@acm.org>
-References: <20241016201249.2256266-1-bvanassche@acm.org>
+In-Reply-To: <cover.1728544727.git.hy50.seo@samsung.com>
+References: <CGME20241010074222epcas2p4278413120c00584d83f654dbde6c0f49@epcas2p4.samsung.com> <cover.1728544727.git.hy50.seo@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -83,48 +88,29 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-11-04_22,2024-11-04_01,2024-09-30_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0 mlxscore=0
- malwarescore=0 suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=651
+ malwarescore=0 suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
  definitions=main-2411050019
-X-Proofpoint-ORIG-GUID: z4mNU_llOoCYCd9JsE9geBjS2tX1uSdi
-X-Proofpoint-GUID: z4mNU_llOoCYCd9JsE9geBjS2tX1uSdi
+X-Proofpoint-ORIG-GUID: wZg2YJpFUcfSs1vLlDS-5wspScirAnsH
+X-Proofpoint-GUID: wZg2YJpFUcfSs1vLlDS-5wspScirAnsH
 
-On Wed, 16 Oct 2024 13:11:56 -0700, Bart Van Assche wrote:
+On Thu, 10 Oct 2024 16:52:27 +0900, SEO HOYOUNG wrote:
 
-> In the UFS driver the legacy and MCQ scsi_add_host() calls occur in different
-> functions. This patch series reduces the number of scsi_add_host() calls from
-> two to one and hence makes the UFS driver easier to maintain.
+> Performance problems may occur if there is a problem with the
+> asymmetric connected lane such as h/w failure.
+> Currently, only check connected lane for rx/tx is checked if it is not 0.
+> But it should also be checked if it is asymmetrically connected.
+> So if it is an asymmetric connected lane, an error occurs.
 > 
-> Please consider this patch series for the next merge window.
-> 
-> Thanks,
+> v1 -> v2: add error routine.
+> ufs initialization error occurs in case of asymmetic connected
 > 
 > [...]
 
 Applied to 6.13/scsi-queue, thanks!
 
-[01/11] scsi: ufs: core: Introduce ufshcd_add_scsi_host()
-        https://git.kernel.org/mkp/scsi/c/17a973970397
-[02/11] scsi: ufs: core: Introduce ufshcd_post_device_init()
-        https://git.kernel.org/mkp/scsi/c/3192d28ec660
-[03/11] scsi: ufs: core: Call ufshcd_add_scsi_host() later
-        https://git.kernel.org/mkp/scsi/c/7702c7f64f2d
-[04/11] scsi: ufs: core: Introduce ufshcd_process_probe_result()
-        https://git.kernel.org/mkp/scsi/c/18ec23b60822
-[05/11] scsi: ufs: core: Convert a comment into an explicit check
-        https://git.kernel.org/mkp/scsi/c/093600132264
-[06/11] scsi: ufs: core: Move the ufshcd_device_init() calls
-        https://git.kernel.org/mkp/scsi/c/639e2043b589
-[07/11] scsi: ufs: core: Move the ufshcd_device_init(hba, true) call
-        https://git.kernel.org/mkp/scsi/c/69f5eb78d4b0
-[08/11] scsi: ufs: core: Expand the ufshcd_device_init(hba, true) call
-        https://git.kernel.org/mkp/scsi/c/a390e6677f41
-[09/11] scsi: ufs: core: Remove code that is no longer needed
-        https://git.kernel.org/mkp/scsi/c/b6195d02b914
-[10/11] scsi: ufs: core: Move the MCQ scsi_add_host() call
-        https://git.kernel.org/mkp/scsi/c/72e979225ed2
-[11/11] scsi: ufs: core: Move code out of an if-statement
-        https://git.kernel.org/mkp/scsi/c/b92e5937e352
+[1/2] scsi: ufs: core: check asymmetric connected lanes
+      https://git.kernel.org/mkp/scsi/c/10c58d7eea44
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
