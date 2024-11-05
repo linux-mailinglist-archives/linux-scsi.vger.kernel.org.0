@@ -1,77 +1,77 @@
-Return-Path: <linux-scsi+bounces-9566-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9568-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44BB99BC335
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2024 03:33:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E68B69BC339
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2024 03:34:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7562B1C220FE
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2024 02:33:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CFF51F22AC1
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2024 02:34:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C244F3BBEB;
-	Tue,  5 Nov 2024 02:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F15452F71;
+	Tue,  5 Nov 2024 02:33:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="C4yOqMzy"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="nHbzy9I1"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED43D1CD0C;
-	Tue,  5 Nov 2024 02:33:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE87433B5;
+	Tue,  5 Nov 2024 02:33:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730774026; cv=none; b=u43WoX0E6JmHvf1pbv3t9CecgbdTxCyCPP8dnHaMpiCK6F+VgWi7Cc2eC0KCXVFeAbAnTgAM6SePLn2x05bnU//pvw/RJGpUrNe6ujhSeEUO9zDje/dPP6vBqgn5kwFVnvCrjPZ6Xy3E3WvV6Xw62BTBZNXRCyaBoMUmjb9dsq4=
+	t=1730774029; cv=none; b=lnL0ciBdtiuy//wR0/GU6v6y0qOC9SKK8cMDlGCSKrnYT66ZuplsV/ECT4FhsqY7b1HcrZdWRp8tPUYbOgqw97yVBIw9dd7vARYb7z1MdTiBpmh7thmyUxIyQ/vozXvNkKfzCSxL/sc/hwWA7FUuw9KSY7CGsiPO3QILi1QF6aU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730774026; c=relaxed/simple;
-	bh=T2MrRbO8VNOJ7zDPI1j1o5TMXlbEsXdpep74VtkTHys=;
+	s=arc-20240116; t=1730774029; c=relaxed/simple;
+	bh=ZZWoR6zO/csMBsOYzaeQYVI7ffgZur123IkcRjtdc0g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SUkZ4OG+++E67o61wgci2k6XdIF/IWVGn9/7om0PBLO9lZLHoy+1N2dKHm/9c5dYOwJxMgPZhevhpk23NHtzyZNKBT26sc4pubRFblFRgr2RKpHqDj7fw09qV+2xVTuhnTSdBmv8hS+cSrFvwKJcaCSxyjBVrNPeAmu8xmcm1dU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=C4yOqMzy; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=k+cQmfCqJc1nFRHerW+4VcupowJBYgZN/6W33w4zkXnrowuH2QSiiOapW7qd6GCbHyH+MlTjPPa4kOw8/DAZBucEv3101vanmMzdT8HzcPCl4OsqbbfVNj7M5t7gFUMBaVJUCxZdaM6PGeDPs7IS9uFNO9cwAxi6k22AT6Kd5cM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=nHbzy9I1; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A52NKxJ017744;
-	Tue, 5 Nov 2024 02:33:32 GMT
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A52NdXg021615;
+	Tue, 5 Nov 2024 02:33:33 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=Hgt/k1bQjGX+qyc8JVqc4bJcF156dJRGqDe/4ForzsQ=; b=
-	C4yOqMzy+F2kSmxUXWJWC+67YkzPvV+M0ahUmG2l0K8hkkj61TgrR0gq+NlY39gB
-	FyKiqt6n2fTDLFwJH4+l0EAFBZUCYZZECrHr26vkVqmkvo7xIAytfIY1pY/E5p5j
-	WbmiFbOolnNuoqE/uZKOPBZZnTuXFAjuefR7T3SjX4ernprdzMKhzJavU9iOuGPA
-	Y2h8KmAEDtNoKFJskUT4IPhdPLZfaqRIq/qMstHPYNwYrmCH+tdCaHNx+6D2DTD5
-	6SIyYBxSMN3Vrq8p2/0r7llUYts4IJWuH8HKEdOTEykYDE7Q7eeTS9GoPxDPTZ6Y
-	CHUSLW2szV3iAHk3OwZauQ==
+	corp-2023-11-20; bh=fJ7VNB992qhr070QddIkm+cETzvzg0XmzsqYjkmFuxQ=; b=
+	nHbzy9I1Rogb7qMMY41i4D/ox6kCfz8PcrnKX189MkhuvuGUlwhVaioZOmMIlmsq
+	gf8xK1a7ZOr9ZRAgFAUfEdAvmtugdADcWrFjR+c/cpDLg3i4rcyt7gXWX+HVzfvf
+	EVDBfIgisxob1T9E1nFWYbz2q/mGi2Xf28YU54FDL4EC9beQhK5IF+eccI9GazT9
+	zboQZkGJNyUv7gmSsp2ctzd7XYbY1+4TUwuAT2wTYx1gWA1ZkJ04EJBXZZIlxTbT
+	PvnqB/SKfye7nXOXzYZbfxTRPEmgz6xcErN1Ix/gLURwbbZIxJae1ZJwZQjwzJe5
+	A5eX6KvAxzJ+gjmIgH88Dg==
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42nagc4905-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42nby8v7mv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 05 Nov 2024 02:33:32 +0000 (GMT)
+	Tue, 05 Nov 2024 02:33:33 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4A50aUpI036930;
-	Tue, 5 Nov 2024 02:33:31 GMT
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4NEAKM036847;
+	Tue, 5 Nov 2024 02:33:32 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 42nah6g2ka-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 42nah6g2kh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 05 Nov 2024 02:33:31 +0000
+	Tue, 05 Nov 2024 02:33:32 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4A52XVFm017503;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4A52XVFo017503;
 	Tue, 5 Nov 2024 02:33:31 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 42nah6g2k1-1;
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 42nah6g2k1-2;
 	Tue, 05 Nov 2024 02:33:31 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
 To: Avri Altman <avri.altman@wdc.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH RESEND v2] scsi: ufs: Use wait-for-reg in HCE init
-Date: Mon,  4 Nov 2024 21:32:47 -0500
-Message-ID: <173077364677.2354920.2784543003548947851.b4-ty@oracle.com>
+Subject: Re: [PATCH v3 0/3] Untie the host lock entanglement - part 1
+Date: Mon,  4 Nov 2024 21:32:48 -0500
+Message-ID: <173077364682.2354920.13530203204903244087.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241016102141.441382-1-avri.altman@wdc.com>
-References: <20241016102141.441382-1-avri.altman@wdc.com>
+In-Reply-To: <20241024075033.562562-1-avri.altman@wdc.com>
+References: <20241024075033.562562-1-avri.altman@wdc.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -84,24 +84,32 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-11-04_22,2024-11-04_01,2024-09-30_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0 mlxscore=0
- malwarescore=0 suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=708
+ malwarescore=0 suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=949
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
  definitions=main-2411050019
-X-Proofpoint-ORIG-GUID: C-cjV5wJQo8GvwhykklTgvrpnzQcWaj9
-X-Proofpoint-GUID: C-cjV5wJQo8GvwhykklTgvrpnzQcWaj9
+X-Proofpoint-ORIG-GUID: WnBKKj9LpviJUJr77bLBt03yF1ww8OFW
+X-Proofpoint-GUID: WnBKKj9LpviJUJr77bLBt03yF1ww8OFW
 
-On Wed, 16 Oct 2024 13:21:41 +0300, Avri Altman wrote:
+On Thu, 24 Oct 2024 10:50:30 +0300, Avri Altman wrote:
 
-> The current so called "inner loop" in ufshcd_hba_execute_hce() is open
-> coding ufshcd_wait_for_register. Replace it by ufshcd_wait_for_register.
-> This is a code simplification - no functional change.
+> While trying to simplify the ufs core driver with the guard() macro [1],
+> Bart made note of the abuse of the scsi host lock in the ufs driver.
+> Indeed, the host lock is deeply entangled in various flows across the
+> driver, as if it was some occasional default synchronization mean.
 > 
+> Here is the first part of defusing it, remove some of those calls around
+> host registers accesses, which needs no protection.
 > 
+> [...]
 
 Applied to 6.13/scsi-queue, thanks!
 
-[1/1] scsi: ufs: Use wait-for-reg in HCE init
-      https://git.kernel.org/mkp/scsi/c/6c1143bb5d12
+[1/3] scsi: ufs: core: Remove redundant host_lock calls around UTMRLDBR.
+      https://git.kernel.org/mkp/scsi/c/2b314e182caa
+[2/3] scsi: ufs: core: Remove redundant host_lock calls around UTMRLCLR
+      https://git.kernel.org/mkp/scsi/c/5824e18b3db4
+[3/3] scsi: ufs: core: Remove redundant host_lock calls around UTRLCLR.
+      https://git.kernel.org/mkp/scsi/c/2a330f16ad30
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
