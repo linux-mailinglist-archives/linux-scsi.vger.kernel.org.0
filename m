@@ -1,175 +1,136 @@
-Return-Path: <linux-scsi+bounces-9635-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9639-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 083BE9BE34B
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Nov 2024 10:58:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F83E9BE35E
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Nov 2024 10:59:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BF4A1C21E32
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Nov 2024 09:58:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C81B9284DA7
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Nov 2024 09:59:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39FC51DB92A;
-	Wed,  6 Nov 2024 09:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="exISflq8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7E101DC1BA;
+	Wed,  6 Nov 2024 09:59:45 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173C71DD0C9
-	for <linux-scsi@vger.kernel.org>; Wed,  6 Nov 2024 09:57:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A591E1DA63D;
+	Wed,  6 Nov 2024 09:59:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730887078; cv=none; b=OkvJ/qSRB/u10wdLIu4lrM18hWGWVt7e0Zer2wb5Xxfyr3HnM+xJlGW4pA0VKKJPxVeaYXPwXx+9V5vMGmllYUIV1HYju0iHt0JRTjYEsqTC+2FuU698iJIM8n+UUng4dyj1xomJqF9gNxTHW8dn70nLZGUhxUdOqQVQB0LUcz0=
+	t=1730887185; cv=none; b=onWB42JejNY6D97hOuei2uzpnLfDsp+iur9rbFfW06cJSbaosusF5VOVUJSwmS3YTufNJiY+X7brrqPAcsAbA4lLUJam1IEEaoSCHViaVUSWDk5xBr3MozADSso4/CYsPksEHHrT3pT5mAyyJsPsf5+sT6HAgjCF6E646/zf5B0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730887078; c=relaxed/simple;
-	bh=GrEQs+Mvm8eZUvYF7xkFtXg22qgSfS9+w5/CpzjUSfI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=GJvnKwb8JPTRhD+GZzW98VEbQE+StrMleGLuUh2cnPo0LqHICMTbKJ72QwXAsHFvYfKykxwnzeaeZlcuus4quTHqPHGOaCvdE8Camjr+hPe/Zmm8K/ITTKngj00/jzdQ3ISHt0G1kLUhVLUN4XH3FW9Y9ws7H7qP/TzpDrQYYxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=exISflq8; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-539f0f9ee49so7394207e87.1
-        for <linux-scsi@vger.kernel.org>; Wed, 06 Nov 2024 01:57:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730887074; x=1731491874; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Rst+mqVu3MLq874rD+/4acNC43emUZz7QJpezvdmPm8=;
-        b=exISflq8iPkBERC9mtGKN3ccGw5/x+PW3XFvv3VRdh5gTN7KAfsLv71C973sGM7qUc
-         sr/jwQTCv8FodGaKS+80ECrA0Rg4LEob0fh+HBPeBiveaqAin+L2nyWSl7/3Uud+EAVY
-         aQJPJER/PDNyRyAHu+8j1wwkz+pV43XoD6uO9ZCmiQE1MTssi7D1GMXnqOTtlcC0qcbk
-         MUOxN5ySZoifkbLpgkJrPXM4IHRFG/i57XEu/p42/4eSUhqLCpdnl5U650csjbn6N1rQ
-         xGdWalA4618dzKcPRNGEsuGrJ3RechqQwqTRl5jEhEX6bmSKD+WUkz9dJDXxkkE3rwal
-         gnMA==
+	s=arc-20240116; t=1730887185; c=relaxed/simple;
+	bh=7l6K2Oe+7Ocw7CjKpQQAhOKiVxUpVshv33jRpchU9+0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R4U6TNsDGRhGalg1a9MMcW3E+JcQy9L7a14SDHxZ1EkAYJvzTCrBH2vItE9n/BQ2T4W4I03b8DPHxtTj7cswB+scirV3VNi2nUrCaOy1oLLdIfD1Th43z0K8pjjA8FD438Bcvd7glSeSSfkrZUNVOFi99wW6a1ufdhelXRYezU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6ea1407e978so60855247b3.1;
+        Wed, 06 Nov 2024 01:59:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730887074; x=1731491874;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Rst+mqVu3MLq874rD+/4acNC43emUZz7QJpezvdmPm8=;
-        b=AtbM+0+icKhbZPeUqNipN2bkDVBuXuFIgrZste6FZhBaKAX9qDB4PUEWs/b2TeqG2R
-         KUR554TCkMtE/Ii7qP6G0wqFF+g+JQM9bu6UD2Ctlsn2kt1dJ/jknN0jpzWc3uB4AvIx
-         muYgfXoSeQOADBlH/6GIaME7FczFWJidSPs7vdHv05QWdKWthCbJ1Pfh5NeJnkUEby96
-         SeTxKQKgBRa8sgupEFMGSIE+WA6koeg/Sn8G690hitbIEwJaQOjXF1ayNuUhXJTJt7EF
-         vNRzW/tMy1cIhM+nO1GsYY6HLN3Iwb1QExvQ2Wr3m/yUk5JYcmopzMaurLyezLrMpeRM
-         YhBg==
-X-Gm-Message-State: AOJu0YwPklqGZOIsQ+NuD66K4lbPVQBt/e0DFyL1g3E2iSurDV82/6Md
-	kMUiaoeI4w9leT9hYgaPyaFzH8zHi+g7H1Oz6DPk5+mfTbNTvib9VEbDV6ltQ3I=
-X-Google-Smtp-Source: AGHT+IGPdIPjgwRPzgi31y8GNrxtk1yyF3JFMFCi1WCEorrAxT504D/jMvyiHN7LjHmAionk9tfQQw==
-X-Received: by 2002:a05:6512:3087:b0:539:fb49:c47d with SMTP id 2adb3069b0e04-53b348b7bfcmr18249662e87.12.1730887074102;
-        Wed, 06 Nov 2024 01:57:54 -0800 (PST)
-Received: from [172.16.23.252] ([89.101.134.25])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432a26a7508sm43622355e9.0.2024.11.06.01.57.53
+        d=1e100.net; s=20230601; t=1730887182; x=1731491982;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rC39RasH+GE4mvzpE5BKxCeRZzvkxv3B98iDAPKyxhM=;
+        b=BCVS8wd0vRzgCvN9y4rju3gKKcwDESzC7HzdgowTz1wHtbymuzDFeYBJHCLjIWvcvi
+         YSfLSIK2eddsZukKbZ7ZCM5Px8kzYqZ/SXw4TiKG/Ptjh3HJz5k6l+qZkk5gds+tr5HO
+         PzdsFpaTPydjoYmHtDCXvKXlpWSZMwzjcOzhom4Tv0crWeCtnpLrdUtETc6Aw5Q2Gzuq
+         szqqw4gzd13gVUWDX4h4c5ieiLfGf6DzR6CoeBcM06JxYUIAesv4WtjJq6K1ApzB0Jfo
+         f80nWOvH9ayiqVhTpy3yIi5AqTnFOf9DglfUUG9tvC4yCnOrfOM7npxg7ROmygoZCDcx
+         QZ0g==
+X-Forwarded-Encrypted: i=1; AJvYcCVgS58J8YjnTMdpC66ZDbtiyQYi2C+pZlWaxUSsu44StkmNSjIxDoIKYduPND2s/gk2zBz8vlRUhoUe9A==@vger.kernel.org, AJvYcCVwIZJJV7OoNHmRfntCVD5F3V0tFFyOPTE93uQqfMXwxQ4xQW7ZEt9XCZL0KFwofk6ndWyZK/HN9Joh@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmjTxtHhPMDmWFkegz/YAKS5vapsXnwk9vA7I3cYGBnc+IZyCk
+	xoA8ud5S3r1V1p5fZP0vzAThxpLHiY065GaqrVnA/dKTgVadUFvzSj7LL8Jd
+X-Google-Smtp-Source: AGHT+IGyJbXT1PJOhJsPdjlo6jsGfOHWMdFvqXWneXG6AUxmv5ynX/hDBViKftfjgDO+OF+sa+j0HA==
+X-Received: by 2002:a05:690c:4809:b0:6de:2ae:8138 with SMTP id 00721157ae682-6ea64a8cc02mr194814297b3.5.1730887182153;
+        Wed, 06 Nov 2024 01:59:42 -0800 (PST)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6ea55b10748sm26874227b3.32.2024.11.06.01.59.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Nov 2024 01:57:53 -0800 (PST)
-Message-ID: <6b37ac2c-e3bd-48d0-bc50-4fa2e5789d3d@linaro.org>
-Date: Wed, 6 Nov 2024 10:57:52 +0100
+        Wed, 06 Nov 2024 01:59:41 -0800 (PST)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6e38fc62b9fso55585377b3.2;
+        Wed, 06 Nov 2024 01:59:41 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUpd9vYDJNrnENQYRzJ/nn2gPriVW6BxN8iElsR1YhF3a77Y0GtLAq7FhXcnhEvpfO3MrkladKkgjsx0Q==@vger.kernel.org, AJvYcCWQUntKnziaLUUx77mTqwcV31EX2XotmLtrRr5TtiF1g0Ut/9stksaYE9VYCIzN5ql+tBclMzC8QzR5@vger.kernel.org
+X-Received: by 2002:a05:690c:9b10:b0:6db:e280:a3ae with SMTP id
+ 00721157ae682-6ea64b10af2mr200323037b3.23.1730887181333; Wed, 06 Nov 2024
+ 01:59:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v6 11/11] scsi: ufs: core: Move code out of an
- if-statement
-To: Bart Van Assche <bvanassche@acm.org>,
- "Martin K . Petersen" <martin.petersen@oracle.com>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: linux-scsi@vger.kernel.org, "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
-References: <20241016201249.2256266-1-bvanassche@acm.org>
- <20241016201249.2256266-12-bvanassche@acm.org>
- <0c0bc528-fdc2-4106-bc99-f23ae377f6f5@linaro.org>
- <afaca557-6b7f-4f48-a38a-19eca725282f@acm.org>
- <19b75e1d-bc36-494d-a33a-d36a1646bcc7@linaro.org>
- <6b20595d-c7f6-42aa-922e-3671abd7917c@acm.org>
- <1c9acc01-7b1d-41ac-a0da-4e50dc8f0319@acm.org>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <1c9acc01-7b1d-41ac-a0da-4e50dc8f0319@acm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <b2c56fa3556505befe9b4cb9a830d9e2a962e72c.1730831769.git.geert@linux-m68k.org>
+ <h7x2iksfw7vguvqvjg5axl67mpejodbimwhxluew6cfobotb4t@fewz7knes7au>
+In-Reply-To: <h7x2iksfw7vguvqvjg5axl67mpejodbimwhxluew6cfobotb4t@fewz7knes7au>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 6 Nov 2024 10:59:29 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVemwQkmb-+SWQ2Rsr-E=gMQ5jUNMDX-QmZS+s5CY1zcQ@mail.gmail.com>
+Message-ID: <CAMuHMdVemwQkmb-+SWQ2Rsr-E=gMQ5jUNMDX-QmZS+s5CY1zcQ@mail.gmail.com>
+Subject: Re: [PATCH] scsi: sun3: Mark driver struct with __refdata to prevent
+ section mismatch
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Finn Thain <fthain@linux-m68k.org>, Michael Schmitz <schmitzmic@gmail.com>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K . Petersen" <martin.petersen@oracle.com>, Sam Creasey <sammy@sammy.net>, linux-scsi@vger.kernel.org, 
+	linux-m68k@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-+ Mani
+Hi Uwe,
 
-On 05/11/2024 23:01, Bart Van Assche wrote:
-> On 10/31/24 2:15 PM, Bart Van Assche wrote:
->> On 10/31/24 12:55 PM, Neil Armstrong wrote:
->>> Le 31/10/2024 à 18:51, Bart Van Assche a écrit :
->>>> Is the patch below sufficient to fix both issues?
->>>
->>> Yes it does!
->>
->> Thank you for having tested this patch quickly. Would it be possible
->> to test whether the patch below also fixes the reported boot failure?
->> I think the patch below is a better fix.
->>
->> Thanks,
->>
->> Bart.
->>
->>
->> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
->> index a5a0646bb80a..3b592492e152 100644
->> --- a/drivers/ufs/host/ufs-qcom.c
->> +++ b/drivers/ufs/host/ufs-qcom.c
->> @@ -874,7 +874,8 @@ static void ufs_qcom_advertise_quirks(struct ufs_hba *hba)
->>       if (host->hw_ver.major > 0x3)
->>           hba->quirks |= UFSHCD_QUIRK_REINIT_AFTER_MAX_GEAR_SWITCH;
->>
->> -    if (of_device_is_compatible(hba->dev->of_node, "qcom,sm8550-ufshc"))
->> +    if (of_device_is_compatible(hba->dev->of_node, "qcom,sm8550-ufshc") ||
->> +        of_device_is_compatible(hba->dev->of_node, "qcom,sm8650-ufshc"))
->>           hba->quirks |= UFSHCD_QUIRK_BROKEN_LSDBS_CAP;
->>   }
-> 
-> (replying to my own email)
-> 
-> Can anyone who has access to a Qualcomm SM8650 Platform please help with
-> testing the above patch on top of linux-next?
-> 
-> Thanks,
-> 
-> Bart.
+On Wed, Nov 6, 2024 at 9:50=E2=80=AFAM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@baylibre.com> wrote:
+> On Tue, Nov 05, 2024 at 07:36:31PM +0100, Geert Uytterhoeven wrote:
+> > As described in the added code comment, a reference to .exit.text is ok
+> > for drivers registered via module_platform_driver_probe().  Make this
+> > explicit to prevent the following section mismatch warnings
+> >
+> >     WARNING: modpost: drivers/scsi/sun3_scsi: section mismatch in refer=
+ence: sun3_scsi_driver+0x4 (section: .data) -> sun3_scsi_remove (section: .=
+exit.text)
+> >     WARNING: modpost: drivers/scsi/sun3_scsi_vme: section mismatch in r=
+eference: sun3_scsi_driver+0x4 (section: .data) -> sun3_scsi_remove (sectio=
+n: .exit.text)
+> >
+> > that trigger on a Sun 3 allmodconfig build.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>
+> Reviewed-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@baylibre.com>
 
-Thanks, it does fix the issue. But it won't scale since the next platforms will
-probably need the same tweak in the future.
+Thanks!
 
-Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-HDK
-Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-QRD
+> Seems I missed that one before posting 7308bf8a2c3d ("modpost: Enable
+> section warning from *driver to .exit.text"). My excuse is that this
+> driver isn't enabled for an ARCH=3Dm68k allmodconfig build.
 
-Thanks,
-Neil
+Understandable, as there are basically 5 classes of m68k kernels:
+  - Classic with MMU,
+  - Coldfire with MMU,
+  - Sun-3,
+  - Classic without MMU,
+  - Coldire without MMU.
+
+As the last two consist of multiple single-platform kernels, they're
+harder to do allmodconfig for.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
