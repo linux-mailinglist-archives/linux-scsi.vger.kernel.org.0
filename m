@@ -1,94 +1,69 @@
-Return-Path: <linux-scsi+bounces-9702-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9704-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AB0F9C16E0
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2024 08:09:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BC1D9C16E9
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2024 08:13:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8389286023
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2024 07:09:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 323BF286AA4
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2024 07:13:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 868431D0E31;
-	Fri,  8 Nov 2024 07:09:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C13051D12E5;
+	Fri,  8 Nov 2024 07:12:56 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from cmccmta3.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEF7CDDA8;
-	Fri,  8 Nov 2024 07:09:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.139
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6DF6DDA8;
+	Fri,  8 Nov 2024 07:12:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731049783; cv=none; b=sefOSl2pboTWnSBUxucOM95Wepn8HXkNhZLNiZ6oPxo/SJpVwt0xOP5iSmWpwCRuZ4kx4M7u6QDrb2tq25Y65nw83QIbj0o5aBU7j5137C0i+N2uSjZBegZSydvTLWiM2t/PT/M0HZ17iUJ+/Gl14UTKIxanOuZ2hxYKugmITuY=
+	t=1731049976; cv=none; b=O1wfdPASwDCSjMq2YWawTOjL8IPX/CXE2cXU/ucl+BvnuwVAhS0wDlBVCl1kUpOkrm3zsjLLiOTOf+UmWEJ//z6Vb+Gi0pRBptcp7m3S1MPAlxQAxCm7v75LFtPiSeHgps89CCxLksfmQCtN4B38I0qyz/A3lVaWayNjMs11yJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731049783; c=relaxed/simple;
-	bh=NZfaUT3PuVJd7QSqbh3Iw5TQJNKJ6xXrsnc0CQcgPL0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IShLToe2IA+VIu7uz0HUvwGmJe1qrNmt0KS2kwcZA3NhVEdmzItmb6xtxYLcvCMvyXLD1884laVwHCx77/CPm680gZ0GKGpMXp8QPMh5i0y1SWrzElhhxqXh6uYDzKXyibL1IVN+P7o5TI+Bxvd0VJurKBP5+bv5umK+Ax6NKmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee9672db930ed8-f5eec;
-	Fri, 08 Nov 2024 15:09:37 +0800 (CST)
-X-RM-TRANSID:2ee9672db930ed8-f5eec
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from localhost.localdomain (unknown[10.55.1.71])
-	by rmsmtp-syy-appsvr04-12004 (RichMail) with SMTP id 2ee4672db93004d-866ba;
-	Fri, 08 Nov 2024 15:09:37 +0800 (CST)
-X-RM-TRANSID:2ee4672db93004d-866ba
-From: liujing <liujing@cmss.chinamobile.com>
-To: james.smart@broadcom.com
-Cc: dick.kennedy@broadcom.com,
-	James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	liujing <liujing@cmss.chinamobile.com>
-Subject: [PATCH] scsi: lpfc: Fix spelling errors asynchronously
-Date: Fri,  8 Nov 2024 15:09:35 +0800
-Message-Id: <20241108070935.10427-1-liujing@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.27.0
+	s=arc-20240116; t=1731049976; c=relaxed/simple;
+	bh=srBUBrMtrSwBkm97wqaSMupErLhKc8XzpEsRv7o0Te4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cg6zO4h0SKejLAPY31QJsXi2Xxq1mPPM/5mqPUABDdZemFy41MekonrluStBW0eouXRQXL84UVGx7kor3K7JySy5w+MEE5mHfublgO831qM338iR7i3At85oeHqELuDMEAH9pBrNebD6X5KwGQors+ei5ju/4LsJZSVvc1UJL6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 0640768B05; Fri,  8 Nov 2024 08:12:50 +0100 (CET)
+Date: Fri, 8 Nov 2024 08:12:49 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: Keith Busch <kbusch@kernel.org>, Anuj Gupta <anuj20.g@samsung.com>,
+	axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com,
+	anuj1072538@gmail.com, brauner@kernel.org, jack@suse.cz,
+	viro@zeniv.linux.org.uk, io-uring@vger.kernel.org,
+	linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+	gost.dev@samsung.com, linux-scsi@vger.kernel.org,
+	vishak.g@samsung.com, linux-fsdevel@vger.kernel.org,
+	Kanchan Joshi <joshi.k@samsung.com>
+Subject: Re: [PATCH v5 06/10] io_uring/rw: add support to send metadata
+ along with read/write
+Message-ID: <20241108071249.GA9374@lst.de>
+References: <20241029162402.21400-1-anuj20.g@samsung.com> <CGME20241029163225epcas5p24ec51c7a9b6b115757ed99cadcc3690c@epcas5p2.samsung.com> <20241029162402.21400-7-anuj20.g@samsung.com> <ZyFuxfiRqH8YB-46@kbusch-mbp.dhcp.thefacebook.com> <7995ffbd-7ec0-4f99-86a2-011bc3375228@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7995ffbd-7ec0-4f99-86a2-011bc3375228@gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-Signed-off-by: liujing<liujing@cmss.chinamobile.com>
+On Thu, Nov 07, 2024 at 05:30:36PM +0000, Pavel Begunkov wrote:
+> It makes sense to implement write hints as a meta/attribute type,
+> but depends on whether it's supposed to be widely supported by
+> different file types vs it being a block specific feature, and if
+> SQEs have space for it.
 
-diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
-index 49dd78ed8a9a..43dc1da4a156 100644
---- a/drivers/scsi/lpfc/lpfc_nvme.c
-+++ b/drivers/scsi/lpfc/lpfc_nvme.c
-@@ -242,7 +242,7 @@ lpfc_nvme_remoteport_delete(struct nvme_fc_remote_port *remoteport)
-  * @phba: pointer to lpfc hba data structure.
-  * @axchg: pointer to exchange context for the NVME LS request
-  *
-- * This routine is used for processing an asychronously received NVME LS
-+ * This routine is used for processing an asynchronously received NVME LS
-  * request. Any remaining validation is done and the LS is then forwarded
-  * to the nvme-fc transport via nvme_fc_rcv_ls_req().
-  *
-diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
-index e6c9112a8862..fba2e62027b7 100644
---- a/drivers/scsi/lpfc/lpfc_nvmet.c
-+++ b/drivers/scsi/lpfc/lpfc_nvmet.c
-@@ -2142,7 +2142,7 @@ lpfc_nvmet_destroy_targetport(struct lpfc_hba *phba)
-  * @phba: pointer to lpfc hba data structure.
-  * @axchg: pointer to exchange context for the NVME LS request
-  *
-- * This routine is used for processing an asychronously received NVME LS
-+ * This routine is used for processing an asynchronously received NVME LS
-  * request. Any remaining validation is done and the LS is then forwarded
-  * to the nvmet-fc transport via nvmet_fc_rcv_ls_req().
-  *
--- 
-2.27.0
-
-
+It make sense everywhere.  Implementing it for direct I/O on regular
+files is mostly trivial and I'll do it once this series lands.
 
 
