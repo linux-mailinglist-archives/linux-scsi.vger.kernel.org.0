@@ -1,137 +1,220 @@
-Return-Path: <linux-scsi+bounces-9696-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9700-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C87E79C1450
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2024 03:54:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7584E9C16B6
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2024 08:02:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 066B91C21EFA
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2024 02:54:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 343BC284C76
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2024 07:02:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F133B1A4;
-	Fri,  8 Nov 2024 02:54:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81D671CF7CE;
+	Fri,  8 Nov 2024 07:02:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ujrubfna"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="fK9EP0iA"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mail-m121152.qiye.163.com (mail-m121152.qiye.163.com [115.236.121.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE483D96A
-	for <linux-scsi@vger.kernel.org>; Fri,  8 Nov 2024 02:54:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38DC6E567;
+	Fri,  8 Nov 2024 07:02:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.121.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731034446; cv=none; b=Ra1m70mgQRzQr0rIJYzRcqz/GaG6obYQkSXawXFFjNXU98xh8/M4j51RA5OVKJh1cgNY6dWQpaMzc5PZP+L4dhu/fJK44rpnY0dAVuCFzZ0Z+p5sEllrxLvMFRUtk0rEUW5MeUUNpOUe2Sc/xyejRH05Iua/YpX33rdAwa8vRZ4=
+	t=1731049340; cv=none; b=RmC3YM+RmlY4lTGrD66RMOPDryf1E2UvpWkMeYLxzKhSr9/IS22ClSlMlLpN//JqjT9kw7ADvslAKEJ/WjdXetXgxprpaV0/mGXR0HbFZ0vX/cv4SnW471XQZ7RqqNvyQ0LbbQZRWmxcVAkMv9v40ok81oyncu1X4TuOYKDO67c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731034446; c=relaxed/simple;
-	bh=cwEqbnHj/TJxnIy+3o2VhKgoUs8GcxvB6wBbbqhMWAU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jx40KfGi1Jz9I/2Ahf8rvM+ZVOE4GxPNmZ5ec6neKIPawQGKOZ+tuPxKtMgzh+wn1j6qgfeYOOy0Jr0OlRBS82AQTq7zxTreV0gwFFgo3lNMtxbysgk00z64cuf9kWiIaQg07oAA7OGuogl1Xw/1kmDM1FdviXlDGi01RnOQAzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ujrubfna; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1731034444;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cwEqbnHj/TJxnIy+3o2VhKgoUs8GcxvB6wBbbqhMWAU=;
-	b=Ujrubfna44Raer7m0SiDuwhj/e0q1yzL/RkvOHEUQl33MV4WhVHbrpLnV0mQLBy4bPjXju
-	XmC2SQikTSzXZg7mS255WxB2h3JpWac1o8qj1wT1HGakDbt/QTzAlR942Qv9NYF1kmv6fR
-	Jj8Rbg8mDUwhL0qLeHlOLL3BjAFR6+s=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-163-8dMOe54yM12TPgJLOX8uaQ-1; Thu, 07 Nov 2024 21:54:02 -0500
-X-MC-Unique: 8dMOe54yM12TPgJLOX8uaQ-1
-X-Mimecast-MFC-AGG-ID: 8dMOe54yM12TPgJLOX8uaQ
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-2e2eb765285so1895774a91.1
-        for <linux-scsi@vger.kernel.org>; Thu, 07 Nov 2024 18:54:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731034441; x=1731639241;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cwEqbnHj/TJxnIy+3o2VhKgoUs8GcxvB6wBbbqhMWAU=;
-        b=YLmG2AuhsoEIesavBPQQDtnagIwVObSDw+xeOIh1aLp9rW+MFyTCVLIHAmR4EW8QiY
-         ZVQT5NS1+jKYpY6tTOSMH5NlThVxqIn0WBom68D7590PC/JYxle3vBG7LWsYCbl1IVRr
-         TLCpfzmjDshOkP9loPjquUHwbzc10bk5JG1smqpT5Z5WFKlixmViyAJYiCUA8+7csuxl
-         JIHrYyXkqFtJ6qxk5EA1Qk6x2vhVpsY0ZYng8cxguamMIoAGxNYlG266WMuOjoDGXpSX
-         xAwAkVKNR9hfATLYzAY+KRGuu8jCI9rFjXxYOj4Dj9R2KXdOg39MgYgZx8vIguwPwZLK
-         WNiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWjA7Y6MFomElxLGhk63s7bClg+n3dxMWux8wVBfD24RXZIJzlCXZ1hDJitZryzJcZ8Re5b8dQOE+Sb@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFMLAOjNojLnehpba3v4FZTJZSzR0c/E58nNocuG0jyOAxYUX1
-	Rv1bRhIgYyiFYkJB1xaRrVOgZPferS62iqc0FF2AOlsWZQkm36Zs28hsSFvm2f6dWhUr2sdSrC1
-	95URveASl/0N5uBuQkvd0S0GmH6rimpWKBzkcJa5sUxf2k/0hOU1uFxuyxrklNDxquBNFS2x91X
-	lcsfzuoaAShwzA/zsQE5zLszYO0xFyDajKRg==
-X-Received: by 2002:a17:90b:3d91:b0:2e2:a029:3b4b with SMTP id 98e67ed59e1d1-2e9b177632bmr1984112a91.28.1731034440900;
-        Thu, 07 Nov 2024 18:54:00 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHeAKu6FXOO8aouj3/WFxZQgxhtW8ocCUmDNXhuRcpuePvBO35pclspRsjXFn6dE+pdWYMrEjjMCT0rnXoNyZM=
-X-Received: by 2002:a17:90b:3d91:b0:2e2:a029:3b4b with SMTP id
- 98e67ed59e1d1-2e9b177632bmr1984080a91.28.1731034440508; Thu, 07 Nov 2024
- 18:54:00 -0800 (PST)
+	s=arc-20240116; t=1731049340; c=relaxed/simple;
+	bh=kGTpQp8EW8XsjrZQ5quxicyfgsRmWzXgSlr5j0fuUKk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=qK4VUsVJhjmYKbXz5pbF0VlmQ0iG5MfMdTTINRWj907qWg2NJgLpEvPAJsZt5cN3Rlmh+sIsELRAditonDqe8JoXY0GXFLorc9ky4hBO0EASko1CpG2hbbzlxSZuh8FKzjnVxy8eCm9ALcakP3eThqdtMzG38WgiZCsiHX7Y/l8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=fK9EP0iA; arc=none smtp.client-ip=115.236.121.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 22d35fe2;
+	Fri, 8 Nov 2024 14:56:59 +0800 (GMT+08:00)
+From: Shawn Lin <shawn.lin@rock-chips.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>,
+	Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Subject: [PATCH v5 1/7] dt-bindings: ufs: Document Rockchip UFS host controller
+Date: Fri,  8 Nov 2024 14:56:20 +0800
+Message-Id: <1731048987-229149-2-git-send-email-shawn.lin@rock-chips.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1731048987-229149-1-git-send-email-shawn.lin@rock-chips.com>
+References: <1731048987-229149-1-git-send-email-shawn.lin@rock-chips.com>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQx9JGlZNQh5LTUNIGBkfQkNWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCSE
+	NVSktLVUpCS0tZBg++
+X-HM-Tid: 0a930a8fd78d09cckunm22d35fe2
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NhQ6Pjo*IjIqLCo1US8IKz0i
+	FTUwCRZVSlVKTEhKS09CS0lLQkhJVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUhCSkM3Bg++
+DKIM-Signature:a=rsa-sha256;
+	b=fK9EP0iAzy9uJo0ZQzMFlE+yfD8QOuHvU0NMTPaDFRuBvwe9UEl6X4gZMbTBEzQXUzvRLZIYgv8FIw4D3qgDq5AYMD34qMdjfOU6FB1ePeB/Dxoj7NKZ0mDDbhIFk8sUPOAeL0W8ATX+c4pr9q184soJE/6GtYzEHnlAHMXGBTE=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=u73A+oVy3X2OjpkaOJXO2sj69eyrQLsFTXdCepRWpoE=;
+	h=date:mime-version:subject:message-id:from;
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241031030847.3253873-1-qiang4.zhang@linux.intel.com>
- <20241101015101.98111-1-qiang4.zhang@linux.intel.com> <CACGkMEtvrBRd8BaeUiR6bm1xVX4KUGa83s03tPWPHB2U0mYfLA@mail.gmail.com>
- <20241106042828-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20241106042828-mutt-send-email-mst@kernel.org>
-From: Jason Wang <jasowang@redhat.com>
-Date: Fri, 8 Nov 2024 10:53:49 +0800
-Message-ID: <CACGkMEv4eq9Ej2d2vKp0S8UdTgf4tjXJ_SAtfZmKxQ3iPxfEOg@mail.gmail.com>
-Subject: Re: [PATCH v2] virtio: only reset device and restore status if needed
- in device resume
-To: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: qiang4.zhang@linux.intel.com, Paolo Bonzini <pbonzini@redhat.com>, 
-	Stefan Hajnoczi <stefanha@redhat.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Jens Axboe <axboe@kernel.dk>, 
-	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Gonglei <arei.gonglei@huawei.com>, 
-	"David S. Miller" <davem@davemloft.net>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	"Chen, Jian Jun" <jian.jun.chen@intel.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, David Hildenbrand <david@redhat.com>, 
-	Gerd Hoffmann <kraxel@redhat.com>, Anton Yakovlev <anton.yakovlev@opensynergy.com>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Qiang Zhang <qiang4.zhang@intel.com>, 
-	virtualization@lists.linux.dev, linux-block@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-sound@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 6, 2024 at 5:29=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com> =
-wrote:
->
-> On Fri, Nov 01, 2024 at 10:11:11AM +0800, Jason Wang wrote:
-> > On Fri, Nov 1, 2024 at 9:54=E2=80=AFAM <qiang4.zhang@linux.intel.com> w=
-rote:
-> > >
-> > > From: Qiang Zhang <qiang4.zhang@intel.com>
-> > >
-> > > Virtio core unconditionally reset and restore status for all virtio
-> > > devices before calling restore method. This breaks some virtio driver=
-s
-> > > which don't need to do anything in suspend and resume because they
-> > > just want to keep device state retained.
-> >
-> > The challenge is how can driver know device doesn't need rest.
->
-> I actually don't remember why do we do reset on restore. Do you?
->
+Document Rockchip UFS host controller for RK3576 SoC.
 
-Because the driver doesn't know if the device can keep its state, so
-it chooses to start from that.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+---
 
-Thanks
+Changes in v5:
+- use ufshc for devicetree example suggested by Mani
+
+Changes in v4:
+- properly describe reset-gpios
+
+Changes in v3:
+- rename the file to rockchip,rk3576-ufshc.yaml
+- add description for reset-gpios
+- use rockchip,rk3576-ufshc as compatible
+
+Changes in v2:
+- rename the file
+- add reset-gpios
+
+ .../bindings/ufs/rockchip,rk3576-ufshc.yaml        | 105 +++++++++++++++++++++
+ 1 file changed, 105 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
+
+diff --git a/Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml b/Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
+new file mode 100644
+index 0000000..7d6c038
+--- /dev/null
++++ b/Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
+@@ -0,0 +1,105 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/ufs/rockchip,rk3576-ufshc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip UFS Host Controller
++
++maintainers:
++  - Shawn Lin <shawn.lin@rock-chips.com>
++
++allOf:
++  - $ref: ufs-common.yaml
++
++properties:
++  compatible:
++    const: rockchip,rk3576-ufshc
++
++  reg:
++    maxItems: 5
++
++  reg-names:
++    items:
++      - const: hci
++      - const: mphy
++      - const: hci_grf
++      - const: mphy_grf
++      - const: hci_apb
++
++  clocks:
++    maxItems: 4
++
++  clock-names:
++    items:
++      - const: core
++      - const: pclk
++      - const: pclk_mphy
++      - const: ref_out
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 4
++
++  reset-names:
++    items:
++      - const: biu
++      - const: sys
++      - const: ufs
++      - const: grf
++
++  reset-gpios:
++    maxItems: 1
++    description: |
++      GPIO specifiers for host to reset the whole UFS device including PHY and
++      memory. This gpio is active low and should choose the one whose high output
++      voltage is lower than 1.5V based on the UFS spec.
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - clock-names
++  - interrupts
++  - power-domains
++  - resets
++  - reset-names
++  - reset-gpios
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/rockchip,rk3576-cru.h>
++    #include <dt-bindings/reset/rockchip,rk3576-cru.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/power/rockchip,rk3576-power.h>
++    #include <dt-bindings/pinctrl/rockchip.h>
++    #include <dt-bindings/gpio/gpio.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        ufshc: ufshc@2a2d0000 {
++              compatible = "rockchip,rk3576-ufshc";
++              reg = <0x0 0x2a2d0000 0x0 0x10000>,
++                    <0x0 0x2b040000 0x0 0x10000>,
++                    <0x0 0x2601f000 0x0 0x1000>,
++                    <0x0 0x2603c000 0x0 0x1000>,
++                    <0x0 0x2a2e0000 0x0 0x10000>;
++              reg-names = "hci", "mphy", "hci_grf", "mphy_grf", "hci_apb";
++              clocks = <&cru ACLK_UFS_SYS>, <&cru PCLK_USB_ROOT>, <&cru PCLK_MPHY>,
++                      <&cru CLK_REF_UFS_CLKOUT>;
++              clock-names = "core", "pclk", "pclk_mphy", "ref_out";
++              interrupts = <GIC_SPI 361 IRQ_TYPE_LEVEL_HIGH>;
++              power-domains = <&power RK3576_PD_USB>;
++              resets = <&cru SRST_A_UFS_BIU>, <&cru SRST_A_UFS_SYS>, <&cru SRST_A_UFS>,
++                        <&cru SRST_P_UFS_GRF>;
++              reset-names = "biu", "sys", "ufs", "grf";
++              reset-gpios = <&gpio4 RK_PD0 GPIO_ACTIVE_LOW>;
++        };
++    };
+-- 
+2.7.4
 
 
