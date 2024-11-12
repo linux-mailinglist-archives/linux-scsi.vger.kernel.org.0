@@ -1,164 +1,145 @@
-Return-Path: <linux-scsi+bounces-9827-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9818-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E27A9C5BEE
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 16:33:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C2EE9C5C84
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 16:56:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1315281657
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 15:33:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0FA44B374C4
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 13:50:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E91F201022;
-	Tue, 12 Nov 2024 15:33:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E62D81FC7C6;
+	Tue, 12 Nov 2024 13:49:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="f0NvnLrE";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="1JvtkDuT";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="hpDFdJxD";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="BZoZbY2J"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QUrVSkhl"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D121E200CB9;
-	Tue, 12 Nov 2024 15:33:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EDAB1F7084;
+	Tue, 12 Nov 2024 13:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731425594; cv=none; b=UpVXNK4Qp1yinLS0FuOAIaBUY0G+A+hakdaAVEqxgJyz0CFjS9fVmTBRAbdosDhnL9C0JV8qFtagjk/L4rtBXeJLPxcYn9bumI4pbcU0ANIXmqoiX0v/bQihjRpqKXlBmfJyhqFRUBZuTu2v1/FESIk6/Wt91v1qDIDxANitn5M=
+	t=1731419399; cv=none; b=qCAYwaf41qq6YIXuwewE1gCbYDEexkc4rxX2WPyadNQJdSdE5AWfCBveRzyrQTGCjWskINePS/aSEjN6CErUFHoM0QtCWiAXpw9aiobBUlBU7qHKbBeiWQaWWcKvvh9uJ/ntpzreTNJV9zgWRi9d+hC7h8MPAsKCRyrQ1G3nqsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731425594; c=relaxed/simple;
-	bh=Cx5/EBwhKNt/XPcsIVyrN/2gbpE0N9V8YptGSC04Bqg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DdP5Qy+9L+Z6BLGwG0qn5vS2DPqJDr/7sD7X8AZDnakg+KDj8p561499tIK0Vh2ZXvTwA2vMcgM1vU2Y+CbweVWzCQ2dF+zwmI91VhYyBAncxgUaMVIJ/nkDzD3cTi+WYjPMZJ5zk4K10NxwogJ6bPBdihzFpy16e7ExXawwLaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=f0NvnLrE; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=1JvtkDuT; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=hpDFdJxD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=BZoZbY2J; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 00C0921264;
-	Tue, 12 Nov 2024 15:33:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1731425591; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DAkZqT3tNn4mcCgcObWd3Ub6xGiLu7hrctM4Rq1ElA0=;
-	b=f0NvnLrErEahw7ahsZfdQmC0GiVV6+LO6vqelxZ2ftKRu4seUqwwytgh+726l9TRHxawpT
-	eKIG/aWwB6ykIrTRAgGtlpPUwjqOhsNzwu4Qdj6+r8EWofdMiPUcSxmn8zBTf5r7hTNYLE
-	p1cmx8GdJrEvVHEKAdaaB6iPVNB0NQw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1731425591;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DAkZqT3tNn4mcCgcObWd3Ub6xGiLu7hrctM4Rq1ElA0=;
-	b=1JvtkDuTeB8JxyYw5xAbPBD8guJ57YeS4OP4m7MaJlOzvDND3TKg6kkuRr59Kw1Xbkp/x8
-	Sbln7Dt7KyEdcPAw==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=hpDFdJxD;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=BZoZbY2J
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1731425590; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DAkZqT3tNn4mcCgcObWd3Ub6xGiLu7hrctM4Rq1ElA0=;
-	b=hpDFdJxDsY9GHAjOmLZ3Mh2dcdth54QmUx8ReB0Ae+cAqlwaeCXAt055ts540wFiRElTpR
-	Y4EljyxN4WfvzvedkyoH29w4QyNptZJvdzijQ5NoUFSuJoMCqBIuJFniui4bvOmkIltP6F
-	6FH5DBdmzhWZFxia44Ij/gzycUFJeQo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1731425590;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DAkZqT3tNn4mcCgcObWd3Ub6xGiLu7hrctM4Rq1ElA0=;
-	b=BZoZbY2JFZQS5LyKsdVgHYuDFwbOupwlWTBgqTt3e5qtvOouK8CG6uCfjFtedZHe98aV73
-	nVu7m6+LWmkDt7Bg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D264813721;
-	Tue, 12 Nov 2024 15:33:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id uT4wMTV1M2ddEAAAD6G6ig
-	(envelope-from <dwagner@suse.de>); Tue, 12 Nov 2024 15:33:09 +0000
-Date: Tue, 12 Nov 2024 16:33:09 +0100
-From: Daniel Wagner <dwagner@suse.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Daniel Wagner <wagi@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
-	Bjorn Helgaas <bhelgaas@google.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
-	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
-	virtualization@lists.linux.dev, linux-scsi@vger.kernel.org, megaraidlinux.pdl@broadcom.com, 
-	mpi3mr-linuxdrv.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com, storagedev@microchip.com, 
-	linux-nvme@lists.infradead.org
-Subject: Re: [PATCH v3 4/8] blk-mp: introduce blk_mq_hctx_map_queues
-Message-ID: <c8c671c1-267a-4aa7-a64b-51a461176ad3@flourine.local>
-References: <20241112-refactor-blk-affinity-helpers-v3-0-573bfca0cbd8@kernel.org>
- <20241112-refactor-blk-affinity-helpers-v3-4-573bfca0cbd8@kernel.org>
- <2024111202-parish-prowess-78bc@gregkh>
+	s=arc-20240116; t=1731419399; c=relaxed/simple;
+	bh=xxqZjKyyIL0XXUeabUZZHhuFFj2N9TvWPGK5fiBuKK4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kng3BKNn/Ln+MWq69ypaaRCxVU8npQw3sujcwZZZIAieJS0g+DkF7YNJJ6M9oEz2Urd2yK25baYTKjoHsKPTyGNkSkhJFsqE6lKGMzUGCO6PyrpVtiuohm83EAzAQc41MlJdKyyrkfGJ1NoJw0GI53AkniQ0VX7L9YhSGQcWM6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QUrVSkhl; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a9ec86a67feso981811566b.1;
+        Tue, 12 Nov 2024 05:49:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731419396; x=1732024196; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=l+iykLBkBRw5dPDO2BZR6hZTQ61YSR4pkCwvNoRVC54=;
+        b=QUrVSkhlf+MeMRYrWDCeGdR/OlXuM23a7n9VMeEjTNQIGvF3s9/9uO1n5GshoHCN7B
+         kTrFxAtKGUhiXehs8TKkrE/jpCAntKiY8fUeCaJBZnH0Ok5uhVHM54StQUUYLMjuJvSz
+         2TLLBZi7yUHyNcWaMeGc0GtwH88koVKjXo6cN3Hieb+19OZzv4k/AWDza5EvYkKZTmQS
+         TjJeztSIUEPa3x4lJ2TGd97wWZemMIffCENvsaLG3LhUAWg8ehd/GuUSZ98Hgj4j9jcZ
+         EDoE1rqPeLQIjdw/xbP41zJ784jx0/zytuqcS+vCtoDkNtwUZOykNOF5T0YxIQsQt/MO
+         Xb3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731419396; x=1732024196;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l+iykLBkBRw5dPDO2BZR6hZTQ61YSR4pkCwvNoRVC54=;
+        b=uRu8/93lUV5N59jolqRwalS1te+HVYxc9y5cRam9nd4aK2bZGvfz9qvv0O5jnp+bHM
+         gWszrOWpAKv09uEiHeP4s9cuxMkWsVEA32xlcfqWK7W7tolghtD/7SRjH2NA4UCVE8tx
+         4ntm7AxBQGeOlfKEaHy9bNAAa58UGVADZ4SrUM4TAGxiQcxrLIKqhURLDbGfChJSOJE2
+         UNihHfOEru5sjSKE4yYMj1X3Lc/cBofFzsITqNK2u87T8fPP3PqOtB/BS+UNT2zW8WBF
+         FeIHHgKv9phVSZoz8Wrbm5DE5BlqUQ/bapNiqdsMJK8PF8s03rS87bw6v6GKt4HxRJ1t
+         IShw==
+X-Forwarded-Encrypted: i=1; AJvYcCVBijBcYgZwIueoUETfTJDpj5qteWSeZtxE1foIpjuALVVSxqV3AerqfU4Mt+cxzvtPIykSiiaNBKHGyA==@vger.kernel.org, AJvYcCXkblE5rSDqS1zY4LnOzbxtjnmOPqrTioo/MdikOu4e+cFrJYAEFk7/qi5TOsE9mrLd27C/+PWzyML1UhCwbHo=@vger.kernel.org, AJvYcCXsVJj6IXGDC46dNgDpcN8QffxeWMUiNdDh4nyRQYMaxVUdfU75LpoRfRWY/r2jqNjd6KhsqQ0DHWS91C6D@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHDTliUojJL9hN9FfM+n+OMFwtilzM2qIaAhje6R+4+n1HaGih
+	O/NU1edHeuesieQe8MtdD3uApXJRhsOrsKbsoCZm0g35e22MgEhXpD27+w==
+X-Google-Smtp-Source: AGHT+IEQfwW72fiopWEaiGYHQOMt1gcRAAKz84sp3Cng0TvQds9rT+IUnil1tQ90Bb7C2glXhnM3SA==
+X-Received: by 2002:a17:907:7e8e:b0:a9e:b2da:b4a3 with SMTP id a640c23a62f3a-a9ef00190b1mr1683013266b.42.1731419396312;
+        Tue, 12 Nov 2024 05:49:56 -0800 (PST)
+Received: from [192.168.178.40] ([146.52.232.33])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0dc4933sm718334266b.99.2024.11.12.05.49.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Nov 2024 05:49:55 -0800 (PST)
+Message-ID: <e01952e3-8098-4490-a813-ed0d9457eb3e@gmail.com>
+Date: Tue, 12 Nov 2024 14:49:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024111202-parish-prowess-78bc@gregkh>
-X-Rspamd-Queue-Id: 00C0921264
-X-Spam-Score: -4.51
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[22];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
-	MISSING_XM_UA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] scsi: target: tcmu: Constify some structures
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+References: <f83cd8469cc17391178e1181e8c26c4c1fb6028f.1731330634.git.christophe.jaillet@wanadoo.fr>
+From: Bodo Stroesser <bostroesser@gmail.com>
+Content-Language: en-US
+In-Reply-To: <f83cd8469cc17391178e1181e8c26c4c1fb6028f.1731330634.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 12, 2024 at 02:58:43PM +0100, Greg Kroah-Hartman wrote:
-> > +void blk_mq_hctx_map_queues(struct blk_mq_queue_map *qmap,
-> > +			    struct device *dev, unsigned int offset)
-> > +
-> > +{
-> > +	const struct cpumask *mask;
-> > +	unsigned int queue, cpu;
-> > +
-> > +	if (!dev->bus->irq_get_affinity)
-> > +		goto fallback;
+On 11.11.24 14:10, Christophe JAILLET wrote:
+> 'struct nla_policy' and 'struct match_table_t' are not modified in this
+> driver.
 > 
-> I think this is better than hard-coding it, but are you sure that the
-> bus will always be bound to the device here so that you have a valid
-> bus-> pointer?
+> Constifying these structures moves some data to a read-only section, so
+> increase overall security, especially when the structure holds some
+> function pointers, which is the case of struct nla_policy.
+> 
+> On a x86_64, with allmodconfig:
+> Before:
+> ======
+>     text	   data	    bss	    dec	    hex	filename
+>    93188	   6933	    338	 100459	  1886b	drivers/target/target_core_user.o
+> 
+> After:
+> =====
+>     text	   data	    bss	    dec	    hex	filename
+>    93508	   6581	    338	 100427	  1884b	drivers/target/target_core_user.o
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Compile tested only
+> ---
+>   drivers/target/target_core_user.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+> index 717931267bda..0f5d820af119 100644
+> --- a/drivers/target/target_core_user.c
+> +++ b/drivers/target/target_core_user.c
+> @@ -361,7 +361,7 @@ static const struct genl_multicast_group tcmu_mcgrps[] = {
+>   	[TCMU_MCGRP_CONFIG] = { .name = "config", },
+>   };
+>   
+> -static struct nla_policy tcmu_attr_policy[TCMU_ATTR_MAX+1] = {
+> +static const struct nla_policy tcmu_attr_policy[TCMU_ATTR_MAX + 1] = {
+>   	[TCMU_ATTR_DEVICE]	= { .type = NLA_STRING },
+>   	[TCMU_ATTR_MINOR]	= { .type = NLA_U32 },
+>   	[TCMU_ATTR_CMD_STATUS]	= { .type = NLA_S32 },
+> @@ -2430,7 +2430,7 @@ enum {
+>   	Opt_cmd_ring_size_mb, Opt_err,
+>   };
+>   
+> -static match_table_t tokens = {
+> +static const match_table_t tokens = {
+>   	{Opt_dev_config, "dev_config=%s"},
+>   	{Opt_dev_size, "dev_size=%s"},
+>   	{Opt_hw_block_size, "hw_block_size=%d"},
 
-No, I just assumed the bus pointer is always valid. If it is possible to
-have a device without a bus, than I'll better extend the condition to
 
-	if (!dev->bus || !dev->bus->irq_get_affinity)
-        	goto fallback;
+Reviewed-by: Bodo Stroesser <bostroesser@gmail.com>
+
+Thanks,
+Bodo
 
