@@ -1,104 +1,89 @@
-Return-Path: <linux-scsi+bounces-9822-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9824-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C5879C5C80
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 16:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 43DDD9C5E37
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 18:05:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE489B3B90C
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 14:24:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA703B41DDB
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 14:30:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D45C41FF5F9;
-	Tue, 12 Nov 2024 14:23:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 032061FF609;
+	Tue, 12 Nov 2024 14:25:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YWeFbVtR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ePHLU2/h"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917FE1FF5F3;
-	Tue, 12 Nov 2024 14:23:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A77901FEFD1;
+	Tue, 12 Nov 2024 14:25:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731421388; cv=none; b=D9QW6CIxKmk0xblfvPaQzo72RH55iD8fGTdpG8FYdUKTBZPCerV3f1EpM5IOPSpFyl+5SkIMwGg/jB29uvhkl0iuFz0wET8sQuK/VQBVty0hpU+j+ZxoZijMpuV6l25+JZgf8AlwKpfo5iXqFRpijs3xlFhOHPWG/lllZu8qxaM=
+	t=1731421549; cv=none; b=CYRQvBEVzMAIfAZcljuCUeotflOQplXWh+kNpwvfVB9midSTlfQ1HrKUWKh5JKcoykt9MKf666BsiByv+IkE3PA3BMlyFz1PMV9QfOUDsHv8ima3WZxuBs4Zgh1Ejoare1dL3UVaEGIArFFyTRjsZ/7MPEShdb2EoOtiFLlBqU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731421388; c=relaxed/simple;
-	bh=LFXpL5/nrAXstPiOj0IbxTit69TGzKOpoS47R1I/bUE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KQ9n00UokcR/GfcHz51waoMOrIWQkhnfn2gucJo2f5apy8tA0GqNDCYMAhDiixeQ078LIx/Imfe1VAz/mcezDWej3e0k4yD0RQ3VxltY1wPamlYOjO2r/xuGQ2wn0lItscUcV5p1hqiQEQp/40CfQHLLsUTOO4XNzjvxOvuZ9yQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YWeFbVtR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0229C4CED0;
-	Tue, 12 Nov 2024 14:23:05 +0000 (UTC)
+	s=arc-20240116; t=1731421549; c=relaxed/simple;
+	bh=FqK6AvBbok3agYaXcwWnCFMmVIqq7T/f8WTFeYDo4R8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pAawZicFCVQXj8rIgLRzwIfHAUyJ74mdomKRw7rz2nRSZQfs/NYPw1YyLZhh3OQQjUsyMQIxx2ji8a9GMtr15/cpzseBAQlpSlhpCHvY66pmEKUgheWKZzRoqL1n3mkH73gWLX+LFMl8mdia0CdmKsgovljYKgrq1RClHH0qdp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ePHLU2/h; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F4AC4CECD;
+	Tue, 12 Nov 2024 14:25:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731421388;
-	bh=LFXpL5/nrAXstPiOj0IbxTit69TGzKOpoS47R1I/bUE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YWeFbVtRpVrrinGrTd1jzAL2j4kNcQABzPxJZxhzZ+GTXNND7O3Y/ZO7NeDOmsvVe
-	 MvkMbhqILaysbgRcZrXBh/IR9TR9MY+X9a0xnfh0Y1iwzJwckKgR2fRULKkXiFFko7
-	 meZ5wyV5Hb+gPjFNS/QJwlI8YD46N6BvqO03esOi3qHXYURgHc/v2YhstQTyN2z6Fz
-	 tuGFzK/af7GyBV+Ghaw+415yxEABuzVB/tgNG3xSKUq0pgGlvh8aU+iuKUUvOZrQMD
-	 BCwY2rMIdT9Sg10WpU+Rnyt7wMa9NYeclu/jMyW2vc5WAqsu7iaal+6uPg5yXFUpqA
-	 ilY/DsP4It78A==
-From: Frederic Weisbecker <frederic@kernel.org>
-To: LKML <linux-kernel@vger.kernel.org>
-Cc: Frederic Weisbecker <frederic@kernel.org>,
-	Nilesh Javali <njavali@marvell.com>,
-	Manish Rangankar <mrangankar@marvell.com>,
-	GR-QLogic-Storage-Upstream@marvell.com,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	linux-scsi@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 05/21] scsi: bnx2i: Use kthread_create_on_cpu()
-Date: Tue, 12 Nov 2024 15:22:29 +0100
-Message-ID: <20241112142248.20503-6-frederic@kernel.org>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20241112142248.20503-1-frederic@kernel.org>
-References: <20241112142248.20503-1-frederic@kernel.org>
+	s=k20201202; t=1731421549;
+	bh=FqK6AvBbok3agYaXcwWnCFMmVIqq7T/f8WTFeYDo4R8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ePHLU2/hD6U7PnMMH7nbItnFIAQtapvtYXrLfgEyRh4w1ARIGASKPWGmKV1vKvybR
+	 1EKZvr1QfDBPgUlscNmxhahhmpFrR3vrFkx6aHUnAlH8kwxALSJmqUYcE+nu8SOmbI
+	 0iG1helEUWOdLRfC5PTBSCRxJyBvCiTLDIMgCSMjafxj4k9HZkfNZsC0Vv3ljeJ9bB
+	 WnjjK5n7Lf5wK1OKCGlRUM3O72GrzsH/kTenZhQlJRdHDLPKxdHKLVsR8CdDgENc8k
+	 1C8WcFReORB9mUGjtybP4t6kITOXEr2pwCHcyHlb11/JfLm4+za1LevRJd/DT/tMpN
+	 1I5gvWqlJLpBg==
+Date: Tue, 12 Nov 2024 07:25:45 -0700
+From: Keith Busch <kbusch@kernel.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Kanchan Joshi <joshi.k@samsung.com>, Keith Busch <kbusch@meta.com>,
+	linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+	linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	io-uring@vger.kernel.org, axboe@kernel.dk,
+	martin.petersen@oracle.com, asml.silence@gmail.com,
+	javier.gonz@samsung.com
+Subject: Re: [PATCHv11 0/9] write hints with nvme fdp and scsi streams
+Message-ID: <ZzNlaXZTn3Pjiofn@kbusch-mbp.dhcp.thefacebook.com>
+References: <20241108193629.3817619-1-kbusch@meta.com>
+ <CGME20241111103051epcas5p341a23ed677f2dfd6bc6d4e5c4826327b@epcas5p3.samsung.com>
+ <20241111102914.GA27870@lst.de>
+ <7a2f6231-bb35-4438-ba50-3f9c4cc9789a@samsung.com>
+ <20241112133439.GA4164@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241112133439.GA4164@lst.de>
 
-Use the proper API instead of open coding it.
+On Tue, Nov 12, 2024 at 02:34:39PM +0100, Christoph Hellwig wrote:
+> On Tue, Nov 12, 2024 at 06:56:25PM +0530, Kanchan Joshi wrote:
+> > IMO, passthrough propagation of hints/streams should continue to remain 
+> > the default behavior as it applies on multiple filesystems. And more 
+> > active placement by FS should rather be enabled by some opt in (e.g., 
+> > mount option). Such opt in will anyway be needed for other reasons (like 
+> > regression avoidance on a broken device).
+> 
+> I feel like banging my head against the wall.  No, passing through write
+> streams is simply not acceptable without the file system being in
+> control.  I've said and explained this in detail about a dozend times
+> and the file system actually needing to do data separation for it's own
+> purpose doesn't go away by ignoring it.
 
-However it looks like bnx2i_percpu_io_thread() kthread could be
-replaced by the use of a high prio workqueue instead.
-
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
----
- drivers/scsi/bnx2i/bnx2i_init.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/scsi/bnx2i/bnx2i_init.c b/drivers/scsi/bnx2i/bnx2i_init.c
-index 872ad37e2a6e..cecc3a026762 100644
---- a/drivers/scsi/bnx2i/bnx2i_init.c
-+++ b/drivers/scsi/bnx2i/bnx2i_init.c
-@@ -415,14 +415,11 @@ static int bnx2i_cpu_online(unsigned int cpu)
- 
- 	p = &per_cpu(bnx2i_percpu, cpu);
- 
--	thread = kthread_create_on_node(bnx2i_percpu_io_thread, (void *)p,
--					cpu_to_node(cpu),
--					"bnx2i_thread/%d", cpu);
-+	thread = kthread_create_on_cpu(bnx2i_percpu_io_thread, (void *)p,
-+				       cpu, "bnx2i_thread/%d");
- 	if (IS_ERR(thread))
- 		return PTR_ERR(thread);
- 
--	/* bind thread to the cpu */
--	kthread_bind(thread, cpu);
- 	p->iothread = thread;
- 	wake_up_process(thread);
- 	return 0;
--- 
-2.46.0
-
+But that's just an ideological decision that doesn't jive with how
+people use these. The applications know how they use their data better
+than the filesystem, so putting the filesystem in the way to force
+streams look like zones is just a unnecessary layer of indirection
+getting in the way.
 
