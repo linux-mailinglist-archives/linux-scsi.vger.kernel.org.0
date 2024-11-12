@@ -1,167 +1,241 @@
-Return-Path: <linux-scsi+bounces-9808-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9819-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CBEE9C5A31
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 15:24:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1826F9C5BF3
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 16:34:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BAC7FB3416E
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 13:26:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 371A5B63532
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 13:53:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2A5515443B;
-	Tue, 12 Nov 2024 13:26:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D0E81FBF6E;
+	Tue, 12 Nov 2024 13:53:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="dMUhLFCp"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="pEFHLc19";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="nFvjy9QB";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="pEFHLc19";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="nFvjy9QB"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B47213C908
-	for <linux-scsi@vger.kernel.org>; Tue, 12 Nov 2024 13:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC27D1FBF51
+	for <linux-scsi@vger.kernel.org>; Tue, 12 Nov 2024 13:53:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731417995; cv=none; b=o1GsMn5hILFcUem+PxgYJIfze3RxcrcQtv/3qhOEUjgQuPThq4C8kPODJixzKlbfG8fTrfv0B1Q3Q27JNXV+Vbhri1SiPT2w8zWBm1De3aWWHNaAwHYVzBaDwMNmkbbVMsWzAv3AhU5WX6GYNmWpGkPv9LfTJTYUtSnc/+W/RhE=
+	t=1731419583; cv=none; b=KLsUvvq2E6OYbmWXWZc2gHxniTAG+wms5idyVymCcotsGK+J7Qtzp6Q+t0UhIphPNl8/MnuDFA2dLKta5Q9wiJMFrQpN3t45m9rVPLudLeojROUZ9+ZBbU40Ko53x6e1OyZQV3aWBicTRL4ZVdi3IXd3RwEqjVQcrBKA0tsKGGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731417995; c=relaxed/simple;
-	bh=ECcn1Vt7kh7tx9LcDNSDDOJQmeTJi0LIibgBGaHsvXc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=kiSLcQweVyxG8mjsVSRa2Cuw7JTMoSNsAooBv7TBpv5fQpeKI2+9E3hGGB0uBn7sF+b8Ensa7sFkBRV4E3g3qmShZGo/VThDYh1dIqT3/ZWN0SXqiE08dkFmxQM08TSOEd1n/+KrLV4OpjOz1tJfWFtWlwKOHDE8zFa6rBCCw/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=dMUhLFCp; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20241112132631epoutp01bd0e3e7596224ba3f90372f5a5cc2f23~HO31TGIax1383213832epoutp01N
-	for <linux-scsi@vger.kernel.org>; Tue, 12 Nov 2024 13:26:31 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20241112132631epoutp01bd0e3e7596224ba3f90372f5a5cc2f23~HO31TGIax1383213832epoutp01N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1731417991;
-	bh=n8xVEIDHv5I8gbDECdxLIBU/WpRStbeReffw7f4ORRs=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=dMUhLFCpnXcMHo8g8p5/1+iRhLWVJLPSWE8fCKTIWK+lbZIVB9UsBFg3jz98kd7R8
-	 uKSIcfX9xPDg6IVpPgr0SR/GIVji9xYrJiY9KKKk37IdY/YmrX/n3amm3FfPj908rn
-	 q5loYMXBY6kDsn6XF5h8em04vlWLL/vXaXxhRFSs=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-	20241112132630epcas5p47257cf43edeff21e5e6a23edd8609e51~HO3070SP90804408044epcas5p4v;
-	Tue, 12 Nov 2024 13:26:30 +0000 (GMT)
-Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.183]) by
-	epsnrtp2.localdomain (Postfix) with ESMTP id 4XnnHn3DKdz4x9Pw; Tue, 12 Nov
-	2024 13:26:29 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	B7.A3.08574.58753376; Tue, 12 Nov 2024 22:26:29 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20241112132628epcas5p33b0b5cbdbb64df77a4305802a3134aa0~HO3zD7y_W0215702157epcas5p30;
-	Tue, 12 Nov 2024 13:26:28 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20241112132628epsmtrp260cfa063989f3b867679801d56e9e8ad~HO3zDGNcA2083420834epsmtrp2g;
-	Tue, 12 Nov 2024 13:26:28 +0000 (GMT)
-X-AuditID: b6c32a44-6dbff7000000217e-8c-673357854e30
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	46.12.18937.48753376; Tue, 12 Nov 2024 22:26:28 +0900 (KST)
-Received: from [107.122.11.51] (unknown [107.122.11.51]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20241112132626epsmtip1359346d7bbae74d83a7a62ab10e697b9~HO3xXNPF10035500355epsmtip17;
-	Tue, 12 Nov 2024 13:26:26 +0000 (GMT)
-Message-ID: <7a2f6231-bb35-4438-ba50-3f9c4cc9789a@samsung.com>
-Date: Tue, 12 Nov 2024 18:56:25 +0530
+	s=arc-20240116; t=1731419583; c=relaxed/simple;
+	bh=ZM5XZiCogONgL5oF5W9D2qg8RQsq63f/rugcx9OspOo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kL9c0igHKphqfdEA7ktX5WxD6zJmc4U4EZ84P40ZB0EZgk77tpFtjAxNhq68IKnCIKtqrUJhispzPwoLoeLl1RDerBB821mnE4BTEj/PL7TJt3hCeIYlz2H5v7gDDw2g3dTpvZERRIMSEAjCU4bXhQdXfTyEKYvhMHUI8TIPspY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=pEFHLc19; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=nFvjy9QB; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=pEFHLc19; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=nFvjy9QB; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 14A691F451;
+	Tue, 12 Nov 2024 13:53:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1731419580; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N/W8piaCyl6jsdgzxCncxSHZT+yFr0d9jg20wWL38+o=;
+	b=pEFHLc19vOT+uHtBIt5iD9gczzl1rWuPIYCtRn/lWEel0lnKZmpDm1Eo03PR+MFA/bpbO5
+	khb0k98Z5cPdxqDePtzZrjnBLt9t5nrDu2mwz9XdxCik5pQTbj70HZBQ1F6yg07oIh7D3N
+	XsMV8cF/xKuKSdsGj+KxbNpEiD1oEUk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1731419580;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N/W8piaCyl6jsdgzxCncxSHZT+yFr0d9jg20wWL38+o=;
+	b=nFvjy9QBCdAz38EpL664JbsKVf5GjLwO7o9Rpd3g82NnhFnOloB3PXwM74X4bVa2gK3jVq
+	a/ykjqZEWQ256/DQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1731419580; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N/W8piaCyl6jsdgzxCncxSHZT+yFr0d9jg20wWL38+o=;
+	b=pEFHLc19vOT+uHtBIt5iD9gczzl1rWuPIYCtRn/lWEel0lnKZmpDm1Eo03PR+MFA/bpbO5
+	khb0k98Z5cPdxqDePtzZrjnBLt9t5nrDu2mwz9XdxCik5pQTbj70HZBQ1F6yg07oIh7D3N
+	XsMV8cF/xKuKSdsGj+KxbNpEiD1oEUk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1731419580;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N/W8piaCyl6jsdgzxCncxSHZT+yFr0d9jg20wWL38+o=;
+	b=nFvjy9QBCdAz38EpL664JbsKVf5GjLwO7o9Rpd3g82NnhFnOloB3PXwM74X4bVa2gK3jVq
+	a/ykjqZEWQ256/DQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id EB76213721;
+	Tue, 12 Nov 2024 13:52:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 7F6WOLtdM2fbcQAAD6G6ig
+	(envelope-from <tbogendoerfer@suse.de>); Tue, 12 Nov 2024 13:52:59 +0000
+Date: Tue, 12 Nov 2024 14:52:53 +0100
+From: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To: Magnus Lindholm <linmag7@gmail.com>
+Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>, "Martin K. Petersen"
+ <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org
+Subject: Re: qla1280 driver for qlogic-1040 on alpha
+Message-ID: <20241112145253.7aa5c2ab@samweis>
+In-Reply-To: <CA+=Fv5Q5Q1BUscm2Tua9y1b=2f33+3SkULNwe0gKQpJFL1PLig@mail.gmail.com>
+References: <CA+=Fv5TdeQhdrf_L0D89f6+Q0y8TT3NZy0eQzPPjJfj6fqO=oQ@mail.gmail.com>
+	<CA+=Fv5R1c+JCkFFUvY-9=x61FZnks9GOteKETpo2FJV5u3kFzg@mail.gmail.com>
+	<yq18qu7d5jy.fsf@ca-mkp.ca.oracle.com>
+	<alpine.DEB.2.21.2410300046400.40463@angie.orcam.me.uk>
+	<CA+=Fv5SXrc+esaKmJOC9+vtoxfEo1vOhgfQ739CBzmVcArWT8g@mail.gmail.com>
+	<20241030102549.572751ec@samweis>
+	<CA+=Fv5RX-u_X9UgpMg6xzwc_FwLZus7ddJJY8rHMMyUUGc3pxA@mail.gmail.com>
+	<alpine.DEB.2.21.2410310517330.40463@angie.orcam.me.uk>
+	<CA+=Fv5Q=eS1O4nwiHkJQRpvZ+JiDncnEZtqCUAyBPf1ZOtkzzA@mail.gmail.com>
+	<alpine.DEB.2.21.2410311656400.40463@angie.orcam.me.uk>
+	<Zyh6tP-eWlABiBG7@infradead.org>
+	<CA+=Fv5Q_4GLdezetYYySVntE7KBB2d-zhNGR3rXawsvOh_PHAw@mail.gmail.com>
+	<alpine.DEB.2.21.2411042136280.9262@angie.orcam.me.uk>
+	<yq15xp25ulu.fsf@ca-mkp.ca.oracle.com>
+	<20241105093416.773fb59e@samweis>
+	<alpine.DEB.2.21.2411051226030.9262@angie.orcam.me.uk>
+	<CA+=Fv5Q5Q1BUscm2Tua9y1b=2f33+3SkULNwe0gKQpJFL1PLig@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.34; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv11 0/9] write hints with nvme fdp and scsi streams
-To: Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@meta.com>
-Cc: linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	io-uring@vger.kernel.org, axboe@kernel.dk, martin.petersen@oracle.com,
-	asml.silence@gmail.com, javier.gonz@samsung.com, Keith Busch
-	<kbusch@kernel.org>
-Content-Language: en-US
-From: Kanchan Joshi <joshi.k@samsung.com>
-In-Reply-To: <20241111102914.GA27870@lst.de>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAJsWRmVeSWpSXmKPExsWy7bCmhm5ruHG6QdscYYs5q7YxWqy+289m
-	sXL1USaLd63nWCwe3/nMbjHp0DVGizNXF7JY7L2lbbFn70kWi/nLnrJbdF/fwWax/Pg/Jgce
-	j52z7rJ7XD5b6rFpVSebx+Yl9R67bzaweZy7WOHx8ektFo++LasYPT5vkgvgjMq2yUhNTEkt
-	UkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXLzAG6V0mhLDGnFCgUkFhc
-	rKRvZ1OUX1qSqpCRX1xiq5RakJJTYFKgV5yYW1yal66Xl1piZWhgYGQKVJiQnXF/eVjBHJ6K
-	XbeXMDUw3uDsYuTkkBAwkZjS95IJxBYS2M0o0fjQq4uRC8j+xCixsO0wK5wz5c1Lli5GDrCO
-	6b3iEPGdjBL9MzczQThvGSXeH1/PAjKKV8BOYs+m+4wgNouAqsSsF49ZIeKCEidnPgGrERWQ
-	l7h/awY7iC0s4CbRcPUuWL2IgKPE1w1LwGxmgdlMEidW8kPY4hK3nsxnAjmCTUBT4sLkUpAw
-	p4COxLWuKcwQJfIS29/OYQa5R0LgBIfE6dVHWSHedJH4vm4pC4QtLPHq+BZ2CFtK4vO7vWwQ
-	drbEg0cPoGpqJHZs7oPqtZdo+HODFWQvM9De9bv0IXbxSfT+fsIECRNeiY42IYhqRYl7k55C
-	dYpLPJyxBMr2kJi1ew4jJKDXMEr03kmdwKgwCylQZiF5chaSb2YhLF7AyLKKUTK1oDg3PTXZ
-	tMAwL7UcHtnJ+bmbGMFJWctlB+ON+f/0DjEycTAeYpTgYFYS4T3lbJwuxJuSWFmVWpQfX1Sa
-	k1p8iNEUGDsTmaVEk/OBeSGvJN7QxNLAxMzMzMTS2MxQSZz3devcFCGB9MSS1OzU1ILUIpg+
-	Jg5OqQam+rPPp875si7367xZta07vqQ02/7gF79x1pJJ+NCCm6mqM7dbt551t7Nn+xjAutXs
-	ul2py5/M6wtKjpQmr1j0xrXeRUDjya6nX8tuKzRcWXy9TPfIA3nbU2kMRz4Xy/bN6mi89qNc
-	rC5472rJZ7M6MuZvzmFkMpHWuJQte93tZLjWQ/Mb23TSuT/7zdm/nPmeVrJQWtHa0zd5l1nu
-	tz4SczTnWWRVrNK3vCNRtzwTGGOTf+vpfnOeni7b+3gK29NX3Gf3pm5smXn4zoyVG79/vXaX
-	L5lJWf6yecisHWnH9n5ZnDQ/VdFSjOF28pGidK3VzdfOfuTyN1twwjZQrngZs+geW+nvDxb4
-	x/Jc1ql8q8RSnJFoqMVcVJwIAB1r+zJTBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNIsWRmVeSWpSXmKPExsWy7bCSnG5LuHG6waRTOhZzVm1jtFh9t5/N
-	YuXqo0wW71rPsVg8vvOZ3WLSoWuMFmeuLmSx2HtL22LP3pMsFvOXPWW36L6+g81i+fF/TA48
-	Hjtn3WX3uHy21GPTqk42j81L6j1232xg8zh3scLj49NbLB59W1YxenzeJBfAGcVlk5Kak1mW
-	WqRvl8CVcX95WMEcnopdt5cwNTDe4Oxi5OCQEDCRmN4r3sXIxSEksJ1RoqdpFWsXIydQXFyi
-	+doPdghbWGLlv+fsEEWvGSW2vdkHluAVsJPYs+k+I4jNIqAqMevFY1aIuKDEyZlPWEBsUQF5
-	ifu3ZoDVCwu4STRcvQtWLyLgKPF1wxJGkKHMArOZJFp2N7JBbFjDKPFvwX6wScxAZ9x6Mp8J
-	5FQ2AU2JC5NLQcKcAjoS17qmMEOUmEl0be1ihLDlJba/ncM8gVFoFpI7ZiGZNAtJyywkLQsY
-	WVYxiqYWFOem5yYXGOoVJ+YWl+al6yXn525iBMefVtAOxmXr/+odYmTiYDzEKMHBrCTCe8rZ
-	OF2INyWxsiq1KD++qDQntfgQozQHi5I4r3JOZ4qQQHpiSWp2ampBahFMlomDU6qBabr/qsvM
-	V7Lv37w6s8WMi8st3clvwyK3dxHdYdO5J3XarzsgnTDVL+CowuGO3bL/yy3ln/09WCD77535
-	rlJWl50cMZskTeVenWF/tLhY+6aD6QYWA7/rN7nD872+FHfuXTZFzntK7wPduqu/W/K3ngja
-	XvHv89l7E39aMIp1My0Rvnol2fXkLR02Q+d4n4MfW2/M+n5NVeXFvn0K4jctJl2w6xFj3Fmk
-	FMrDe196/um3r4+Y3DvB+s3tW4Qqw7Yn6cyLivUPemj/rpplcs7g5sYpf2onBj5X3ZtR7T/n
-	ztz01zdrpWr32XNe0peQvhH68EaB5LOV8lJf3y89Gd1R/W5Nocni3uBli2dc6tp7qVKJpTgj
-	0VCLuag4EQCBFqrVLgMAAA==
-X-CMS-MailID: 20241112132628epcas5p33b0b5cbdbb64df77a4305802a3134aa0
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20241111103051epcas5p341a23ed677f2dfd6bc6d4e5c4826327b
-References: <20241108193629.3817619-1-kbusch@meta.com>
-	<CGME20241111103051epcas5p341a23ed677f2dfd6bc6d4e5c4826327b@epcas5p3.samsung.com>
-	<20241111102914.GA27870@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-0.996];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_TLS_ALL(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -3.80
+X-Spam-Flag: NO
 
-On 11/11/2024 3:59 PM, Christoph Hellwig wrote:
->   - there is a separate write_stream value now instead of overloading
->     the write hint.  For now it is an 8-bit field for the internal
->     data structures so that we don't have to grow the bio, but all the
->     user interfaces are kept at 16 bits (or in case of statx reduced to
->     it).  If this becomes now enough because we need to support devices
->     with multiple reclaim groups we'll have to find some space by using
->     unions or growing structures
+On Tue, 5 Nov 2024 20:24:58 +0100
+Magnus Lindholm <linmag7@gmail.com> wrote:
 
->   - block/fops.c is the place to map the existing write hints into
->     the write streams instead of the driver
+> >  Thomas, Magnus, can you please check what hardware revision is actually
+> > reported by your devices?  Also a dump of the PCI configuration space
+> > would be very useful, or at the very least the value of the PCI Revision
+> > ID register, which is independent from the hardware revision reported v=
+ia
+> > the device I/O registers. =20
+>=20
+> Below is some info from my Alpha ES40 with an ISP1040. I've added a
+> printout of hardware revision number to the driver, as previously
+> pointed out the revision numbers in qla1280.h is wrong so I've used
+> info from NetBSD
+> rev5 is a "B" which matches what is actually printed on the chip as
+> well. This seems to be consistent with PCI Revision ID register.
+>=20
+> output from driver:
+>=20
+> qla1280: QLA1040 found on PCI bus 2, dev 4
+> revision=3D5 <-- printout of cfg0 register 5 =3D rev B
+> QLogic QLA1040 PCI to SCSI Host Adapter
+> Firmware version:  7.65.06, Driver version 3.27.1
+>=20
+> #lspci -s 0001:02:04.0 -vvv
+> 0001:02:04.0 SCSI storage controller: QLogic Corp. ISP1020/1040
+> Fast-wide SCSI (rev 05)
+>         Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop-
+> ParErr- Stepping- SERR- FastB2B- DisINTx-
+>         Status: Cap- 66MHz- UDF- FastB2B- ParErr- DEVSEL=3Dmedium
+> >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx- =20
+>         Latency: 248, Cache Line Size: 64 bytes
+>         Interrupt: pin A routed to IRQ 52
+>         Region 0: I/O ports at 200008000 [size=3D256]
+>         Region 1: Memory at 209050000 (32-bit, non-prefetchable) [size=3D=
+4K]
+>         Expansion ROM at 209040000 [disabled] [size=3D64K]
+>         Kernel driver in use: qla1280
+>         Kernel modules: qla1280
 
+0000:00:00.0 SCSI storage controller: QLogic Corp. ISP1020 Fast-wide SCSI (=
+rev 05)
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Steppi=
+ng- SERR- FastB2B- DisINTx-
+	Status: Cap- 66MHz- UDF- FastB2B- ParErr- DEVSEL=3Dmedium >TAbort- <TAbort=
+- <MAbort- >SERR- <PERR- INTx-
+	Latency: 64, Cache Line Size: 256 bytes
+	Interrupt: pin A routed to IRQ 8
+	Region 0: I/O ports at 1f200000 [size=3D256]
+	Region 1: Memory at 1f200000 (32-bit, non-prefetchable) [size=3D4K]
+	Expansion ROM at 1f210000 [disabled] [size=3D64K]
+	Kernel driver in use: qla1280
 
-Last time when I attempted this separation between temperature and 
-placement hints, it required adding a new fcntl[*] too because 
-per-inode/file hints continues to be useful even when they are treated 
-as passthrough by FS.
+0000:00:01.0 SCSI storage controller: QLogic Corp. ISP1020 Fast-wide SCSI (=
+rev 05)
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Steppi=
+ng- SERR- FastB2B- DisINTx-
+	Status: Cap- 66MHz- UDF- FastB2B- ParErr- DEVSEL=3Dmedium >TAbort- <TAbort=
+- <MAbort- >SERR- <PERR- INTx-
+	Latency: 64, Cache Line Size: 256 bytes
+	Interrupt: pin A routed to IRQ 9
+	Region 0: I/O ports at 1f400000 [size=3D256]
+	Region 1: Memory at 1f400000 (32-bit, non-prefetchable) [size=3D4K]
+	Expansion ROM at 1f410000 [disabled] [size=3D64K]
+	Kernel driver in use: qla1280
 
-Applications are able to use temperature hints to group multiple files 
-on device regardless of the logical placement made by FS.
-The same ability is useful for write-streams/placement-hints too. But 
-these patches reduce the scope to only block device.
+qla1280: QLA1040 found on PCI bus 0, dev 0
+qla1280 0000:00:00.0: enabling device (0006 -> 0007)
+random: crng init done
+cfg_0 5
+scsi(0:0): Resetting SCSI BUS
+scsi host0: QLogic QLA1040 PCI to SCSI Host Adapter
+       Firmware version:  7.65.06, Driver version 3.27.1
+qla1280: QLA1040 found on PCI bus 0, dev 1
+qla1280 0000:00:01.0: enabling device (0006 -> 0007)
+scsi 0:0:1:0: Direct-Access     FUJITSU  MAW3073NC        0104 PQ: 0 ANSI: 3
+scsi(0:0:1:0): Sync: period 10, offset 12, Wide, Tagged queuing: depth 31
+scsi 0:0:2:0: Direct-Access     SEAGATE  SX118202LS       B808 PQ: 0 ANSI: 2
+scsi(0:0:2:0): Sync: period 10, offset 12, Wide, Tagged queuing: depth 31
+cfg_0 5
+scsi(1:0): Resetting SCSI BUS
 
-IMO, passthrough propagation of hints/streams should continue to remain 
-the default behavior as it applies on multiple filesystems. And more 
-active placement by FS should rather be enabled by some opt in (e.g., 
-mount option). Such opt in will anyway be needed for other reasons (like 
-regression avoidance on a broken device).
+So the Octane 1040 chips are the same revision and working with 64bit addre=
+ssing.
 
-[*] 
-https://lore.kernel.org/linux-nvme/20240910150200.6589-4-joshi.k@samsung.com/
+Thomas.
+
+--=20
+SUSE Software Solutions Germany GmbH
+HRB 36809 (AG N=C3=BCrnberg)
+Gesch=C3=A4ftsf=C3=BChrer: Ivo Totev, Andrew McDonald, Werner Knoblich
 
