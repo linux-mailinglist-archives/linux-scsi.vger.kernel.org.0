@@ -1,132 +1,114 @@
-Return-Path: <linux-scsi+bounces-9798-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9801-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F8B99C4EE2
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 07:44:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B9F69C4F6F
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 08:27:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F94728A324
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 06:44:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB01FB224EA
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 07:27:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FA6720A5C7;
-	Tue, 12 Nov 2024 06:44:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 081E720B21B;
+	Tue, 12 Nov 2024 07:26:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NSlZdqE7"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="Jm6+WYQi"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m25494.xmail.ntesmail.com (mail-m25494.xmail.ntesmail.com [103.129.254.94])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9E11EBFFD
-	for <linux-scsi@vger.kernel.org>; Tue, 12 Nov 2024 06:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4D920A5D9;
+	Tue, 12 Nov 2024 07:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.129.254.94
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731393845; cv=none; b=WwG0Hmc37apWYgG6B82AN3GNIA1PChfZGV+OCY/4Z4PltmM2wiwyPxvZZDBa/uD1KfeF6zY/wwT3WPvqZ5Hkq3OOJ/X2cWLNylZ8EEE7jDZvaoTv1X2UFilOgpUG9pebtCXQDyaWIF3cvqGOR7y08TCjdOp92cqMy/4O9SasAAM=
+	t=1731396415; cv=none; b=bkO6auaZ0atNxcfBhmlVgF96gAGN/kplbdqGNh1YoVmUFvxGLX/c3oO960kFwBvdAEoe8VVe8wVUXxL2b8meQiqr72cchNwfCrquBqP14n6sGt3UJ4xqfB2af3pBmt6nLfR5fPmVGfwT0fFeDd6irX/zOFPly5uX4B+wWuN0gDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731393845; c=relaxed/simple;
-	bh=FY6WFOJXqCfbzedEEbqnXaBCPjvQ/+RzjiOySYoM/Lk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l1rZm7nWOEueC/hNfiKHM8jFTSJeCSkr9IAmme5AaDHPwfo58DaZVYErY47xyGVljWYhgjLSloqL1YzsEnZoJLiiSkLSgCZJid3zkG2C1seFAlTHLD9q1fAdGlibkCAdfYJ29s0eFnO6bp1hANr8wzPAvoSq4wbdw7XapiT5sFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NSlZdqE7; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7ee6edc47abso3520965a12.3
-        for <linux-scsi@vger.kernel.org>; Mon, 11 Nov 2024 22:44:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731393843; x=1731998643; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JPlc0iWn23rPv1Yelqqb+UADsrKyk5eLdXjS43qvnhE=;
-        b=NSlZdqE7owQlczD41Q00zD6PwMCU+CZ5tWA8IoplXkNgDsmgv3AW7bgXJDhHzPM5iL
-         PgcmtnDRzO+ZrC9uR2jV2BdXJ8KfKkFwAbe+LJkQ5XSPOIG+yX4ACoDproJ/wFr9HDr5
-         ez0EQDg0Tjr9g4TBL0yonNTBUjTygatx0/aeEWtSVsS8VGXrzJy/53XSwUJ2LQespSy4
-         gDyaffp15tE5lgjwbpJIPnUAY/aBRRwI9VduLsCOQMt1vM+/giSWUCn3V2BQzp5b/wRv
-         /+0MPIr3yfsvXSEGAFONLMKEPgBS9woB76ZK35rbfvth1z8qYFN65FTH0QmavhYs3Qm2
-         Uevg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731393843; x=1731998643;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JPlc0iWn23rPv1Yelqqb+UADsrKyk5eLdXjS43qvnhE=;
-        b=q9DNEKtS/20gJPbJwWTv0Lp5SQBLi1EJzU/qP4I3R9U4VLbiXba5JAPRTiHxasaAPO
-         LbkZSnFGbDS7m1cYZ2hJNxd2/CM01Af6ZD+nAjybb+019m3xnR5bdRyHorqohxq/H/dB
-         PLB6fV/r9piXD1CNKax1GLyumcIT8oa5u/tT4VuP5y5nJDgb+5ngGXJZKwv7MmwuefkS
-         kz9ibmJ5fEB5hgVeWp+Ow2h/KJHyBM99eE5p/wAkh9mAKkRfLq2CNP77xbSX6zoaC0iz
-         pkUxHE58l50hVPx6e1lw0gp8i0KAfs4FZ2zfqKrw1Y7/p5vNjGri91BBo/pY1tikwt1d
-         HOvA==
-X-Forwarded-Encrypted: i=1; AJvYcCUKwj3pG0EaOi2zPcGbSQHTe/1qcF90hv3CgPwZzTOlZn0yiNIpbcw0ArbcGBMp/nPLlYfPExmxhP1F@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNjtc4CRI0LKu3wVBl2cvyVqccR9mZVYs9yjyEgBhb/ALnCbGY
-	f4AoUyqmdzzW8WMmO6ThUArLYpmlPz9idfP15/0xRlWfYEN26tTwZCBHPq6IAg==
-X-Google-Smtp-Source: AGHT+IFK7EbTW8j6RbaesACTxS+4wyWWBFBogZmLwWGxzhBM+sg2NEDsPKsDx80UIoPC1dThJW6KHg==
-X-Received: by 2002:a05:6a20:2d1f:b0:1db:e90a:6b24 with SMTP id adf61e73a8af0-1dc22985104mr21818819637.25.1731393843104;
-        Mon, 11 Nov 2024 22:44:03 -0800 (PST)
-Received: from thinkpad ([117.213.103.248])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7240799bb78sm10282483b3a.95.2024.11.11.22.43.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2024 22:44:02 -0800 (PST)
-Date: Tue, 12 Nov 2024 12:13:54 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Shawn Lin <shawn.lin@rock-chips.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
-	linux-scsi@vger.kernel.org, linux-rockchip@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 7/7] scsi: ufs: rockchip: initial support for UFS
-Message-ID: <20241112064354.g634ca5w2gagfyko@thinkpad>
-References: <1730705521-23081-1-git-send-email-shawn.lin@rock-chips.com>
- <1730705521-23081-8-git-send-email-shawn.lin@rock-chips.com>
- <20241109121249.vncqbacvpnpf6d34@thinkpad>
- <13ad21bb-9f5a-4a4b-8b65-55243f6fe817@rock-chips.com>
+	s=arc-20240116; t=1731396415; c=relaxed/simple;
+	bh=VDMekBFW5N4cn9EpGIxb79p4WX0+rU7nRloo1tKyqkk=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Vh0ubi3fdRNGdigDJCI7a5+/fbg/ZkZ7+LQ8xS9yLUiHpYLDLoLRWJecBPMckQvcJlSma56in9TwXn2H/VAuDGYn9f87hzG063OZz/Nz1Pgsklm1ovJd+uyHArppP+CSX7udio2IfhgFuaTG4y9XKXKDCh1u3+6DPib/OHT+pP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=Jm6+WYQi; arc=none smtp.client-ip=103.129.254.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.45] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 27ec4bcb;
+	Tue, 12 Nov 2024 14:51:22 +0800 (GMT+08:00)
+Message-ID: <67dc87c0-d963-4827-8da8-9b4f4b579a0d@rock-chips.com>
+Date: Tue, 12 Nov 2024 14:51:22 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Cc: shawn.lin@rock-chips.com, Rob Herring <robh+dt@kernel.org>,
+ "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Heiko Stuebner <heiko@sntech.de>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Bart Van Assche <bvanassche@acm.org>, YiFeng Zhao <zyf@rock-chips.com>,
+ Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 7/7] scsi: ufs: rockchip: initial support for UFS
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+References: <1730705521-23081-1-git-send-email-shawn.lin@rock-chips.com>
+ <1730705521-23081-8-git-send-email-shawn.lin@rock-chips.com>
+ <20241109121249.vncqbacvpnpf6d34@thinkpad>
+ <13ad21bb-9f5a-4a4b-8b65-55243f6fe817@rock-chips.com>
+ <20241112064354.g634ca5w2gagfyko@thinkpad>
+Content-Language: en-GB
+From: Shawn Lin <shawn.lin@rock-chips.com>
+In-Reply-To: <20241112064354.g634ca5w2gagfyko@thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <13ad21bb-9f5a-4a4b-8b65-55243f6fe817@rock-chips.com>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGR4dSVZJSxkYT05ITk8fGE9WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCSE
+	NVSktLVUpCS0tZBg++
+X-HM-Tid: 0a931f2423e109cckunm27ec4bcb
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OTI6Pww5OTIeMBkDMx4QAREU
+	H0swFEtVSlVKTEhKSEJPSUNPSk5MVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUJJQzcG
+DKIM-Signature:a=rsa-sha256;
+	b=Jm6+WYQihaExmuzwzQSBDbD2+vhMxKDsyzJ53n1wyopYRaO8YqDi6PohavebXpmDDpyMuKAe6kh4oFl0yTQC5IOwCe1LJ4TjcmP+Y/IpyKPNpu7Eht5mMDyaLEftv3uXDwCBhPr2P+P1Ar2/4sTozkDGFB1ieibUrOqSYNBxkj4=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=7DvZ0EaaGDr971+oClLMaAcgcjY9xXaBYV/7GJSzEYg=;
+	h=date:mime-version:subject:message-id:from;
 
-On Mon, Nov 11, 2024 at 09:10:39AM +0800, Shawn Lin wrote:
-
-[...]
-
-> > > +static void ufs_rockchip_remove(struct platform_device *pdev)
-> > > +{
-> > > +	struct ufs_hba *hba = platform_get_drvdata(pdev);
-> > > +	struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
-> > > +
-> > > +	pm_runtime_forbid(&pdev->dev);
-> > > +	pm_runtime_get_noresume(&pdev->dev);
-> > 
-> > Why do you need these? You are not incrementing the refcount in probe() and
-> > there is no auto PM involved.
+在 2024/11/12 14:43, Manivannan Sadhasivam 写道:
+> On Mon, Nov 11, 2024 at 09:10:39AM +0800, Shawn Lin wrote:
 > 
-> Oh, it was a leftover from former version I haven't noticed. Will
-> remove.
+> [...]
+> 
+>>>> +static void ufs_rockchip_remove(struct platform_device *pdev)
+>>>> +{
+>>>> +	struct ufs_hba *hba = platform_get_drvdata(pdev);
+>>>> +	struct ufs_rockchip_host *host = ufshcd_get_variant(hba);
+>>>> +
+>>>> +	pm_runtime_forbid(&pdev->dev);
+>>>> +	pm_runtime_get_noresume(&pdev->dev);
+>>>
+>>> Why do you need these? You are not incrementing the refcount in probe() and
+>>> there is no auto PM involved.
+>>
+>> Oh, it was a leftover from former version I haven't noticed. Will
+>> remove.
+>>
+> 
+> I've sent a series [1] that addresses the runtime PM issues. Could you please
+> give it a try and give your tested-by maybe?
+
+Sure, I will give it a try, thanks.
+
+> 
+> - Mani
+> 
+> [1] https://lore.kernel.org/linux-scsi/20241111-ufs_bug_fix-v1-0-45ad8b62f02e@linaro.org/
 > 
 
-I've sent a series [1] that addresses the runtime PM issues. Could you please
-give it a try and give your tested-by maybe?
-
-- Mani
-
-[1] https://lore.kernel.org/linux-scsi/20241111-ufs_bug_fix-v1-0-45ad8b62f02e@linaro.org/
-
--- 
-மணிவண்ணன் சதாசிவம்
 
