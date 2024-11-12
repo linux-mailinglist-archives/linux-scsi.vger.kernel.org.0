@@ -1,109 +1,48 @@
-Return-Path: <linux-scsi+bounces-9829-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9831-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F1F89C5CF7
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 17:15:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A6529C5DB2
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 17:51:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E42E21F22F10
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 16:15:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CC52281978
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 16:51:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF0852038BE;
-	Tue, 12 Nov 2024 16:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="u3cWQ+wM";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Vq25pLCB";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="u3cWQ+wM";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Vq25pLCB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91E6E2076B8;
+	Tue, 12 Nov 2024 16:51:02 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E92200B84;
-	Tue, 12 Nov 2024 16:15:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22FC7207212;
+	Tue, 12 Nov 2024 16:50:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731428135; cv=none; b=enWez5u7taXM6CZi0l5Z3WrHLchUCUXJ3mfuI2E7w6YBx+jnk2Z1rYsu5UClRF9tyKf3Wrsm5H7RGcgseT76XvOLvfrWNF7lhVO7AXER4DJfQP1D0YKuo++s79tB1BQtBN7rYqlPamxjIamohbvrxyFgyxlNEmsbC1N5zs38i0U=
+	t=1731430262; cv=none; b=OtLxsnAAkWpEEmiLHU5hkpuFfnn6D+x3+VHMKkiLEhIaBiavFoA9QlZhhuoRjpUSZLuxlY3e8ZvpeEKPBlg/4WsQ62NpSdWkU91afvzbRZ8nIWgbHTiizcHJX6DxGokO/hBOGl0aeljoz75hiyUDsaqfD6sz0ouB7UG9oonu+c4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731428135; c=relaxed/simple;
-	bh=FF32yP9KdVfRXMndbaibFOS0cSrXZc8DWTEIL7tpkb0=;
+	s=arc-20240116; t=1731430262; c=relaxed/simple;
+	bh=EBUiZlEK6HZ+A1x2vpCE2pv8RGYfBE2Zi/lkPtedqeY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uPaBsPVdM82mNycU+YqkfXKFcQNDZx8ihHlybvCL8uWqDGOlgwElo1bkk6x5svENJfpdOT8rFpSixoPoa/JgDq19UM8LtJciCjE9pY/b3rmLaZpCS3xaI6kL2w/UIzpggQc/2V22jP0KpAx/0yxBrcpF+L/kfTAo45F9sus7A3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=u3cWQ+wM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Vq25pLCB; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=u3cWQ+wM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Vq25pLCB; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 0CFB61F451;
-	Tue, 12 Nov 2024 16:15:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1731428132; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zPpDV4VXC/O5LDmKqzdbg/wDQnAvo0nuoIGwwECCHkw=;
-	b=u3cWQ+wMMzAJP2k50djmt7ul83n2pp3ULngZXQJrgOPferHT/zAjDf5sKR3BKNgjqIlg3S
-	M+lBeQTR6jkT80Vd1vaHM/5KjtEAa/DIdsKeTWkfvO7r/SmCcvpWJeuvLDh4X40hUYmW/2
-	/z8wG0vkcNSLPHUK9NJK8pfwjA4ZmVg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1731428132;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zPpDV4VXC/O5LDmKqzdbg/wDQnAvo0nuoIGwwECCHkw=;
-	b=Vq25pLCB8TEXXhq7TDInKAnh0I12FTfGKkf/m4FzXhXeiANtYeVEJWqoJIux3sK73MS32c
-	LrbEGMqGoC+sh8Aw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=u3cWQ+wM;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=Vq25pLCB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1731428132; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zPpDV4VXC/O5LDmKqzdbg/wDQnAvo0nuoIGwwECCHkw=;
-	b=u3cWQ+wMMzAJP2k50djmt7ul83n2pp3ULngZXQJrgOPferHT/zAjDf5sKR3BKNgjqIlg3S
-	M+lBeQTR6jkT80Vd1vaHM/5KjtEAa/DIdsKeTWkfvO7r/SmCcvpWJeuvLDh4X40hUYmW/2
-	/z8wG0vkcNSLPHUK9NJK8pfwjA4ZmVg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1731428132;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zPpDV4VXC/O5LDmKqzdbg/wDQnAvo0nuoIGwwECCHkw=;
-	b=Vq25pLCB8TEXXhq7TDInKAnh0I12FTfGKkf/m4FzXhXeiANtYeVEJWqoJIux3sK73MS32c
-	LrbEGMqGoC+sh8Aw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id DC27013721;
-	Tue, 12 Nov 2024 16:15:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id JJNjMyN/M2eAHAAAD6G6ig
-	(envelope-from <dwagner@suse.de>); Tue, 12 Nov 2024 16:15:31 +0000
-Date: Tue, 12 Nov 2024 17:15:31 +0100
-From: Daniel Wagner <dwagner@suse.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Daniel Wagner <wagi@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
-	Bjorn Helgaas <bhelgaas@google.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
-	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
-	virtualization@lists.linux.dev, linux-scsi@vger.kernel.org, megaraidlinux.pdl@broadcom.com, 
-	mpi3mr-linuxdrv.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com, storagedev@microchip.com, 
-	linux-nvme@lists.infradead.org
-Subject: Re: [PATCH v3 4/8] blk-mp: introduce blk_mq_hctx_map_queues
-Message-ID: <5967d256-037e-4ac8-a509-c6955b03db05@flourine.local>
-References: <20241112-refactor-blk-affinity-helpers-v3-0-573bfca0cbd8@kernel.org>
- <20241112-refactor-blk-affinity-helpers-v3-4-573bfca0cbd8@kernel.org>
- <2024111202-parish-prowess-78bc@gregkh>
- <c8c671c1-267a-4aa7-a64b-51a461176ad3@flourine.local>
- <2024111215-jury-unlighted-3953@gregkh>
+	 Content-Type:Content-Disposition:In-Reply-To; b=P+pYSolxSFKgbrt/nVd2kzsRRSH9IV3GXwmNwpJnvR50mg+6JFEYzrkE+SZWwSTZTkZrIHsLPxMqKkd9KjcdK09vmnNol5ioNYPsmyZSNQ+XwXqrHHTyTXJj2VfeQRZVCXWaA+K9kbvMZBR0vr+MKkM7CxO199PyWYmSw1xu53A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 7689768D0A; Tue, 12 Nov 2024 17:50:54 +0100 (CET)
+Date: Tue, 12 Nov 2024 17:50:54 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Keith Busch <kbusch@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>, Kanchan Joshi <joshi.k@samsung.com>,
+	Keith Busch <kbusch@meta.com>, linux-block@vger.kernel.org,
+	linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+	axboe@kernel.dk, martin.petersen@oracle.com, asml.silence@gmail.com,
+	javier.gonz@samsung.com
+Subject: Re: [PATCHv11 0/9] write hints with nvme fdp and scsi streams
+Message-ID: <20241112165054.GA19355@lst.de>
+References: <20241108193629.3817619-1-kbusch@meta.com> <CGME20241111103051epcas5p341a23ed677f2dfd6bc6d4e5c4826327b@epcas5p3.samsung.com> <20241111102914.GA27870@lst.de> <7a2f6231-bb35-4438-ba50-3f9c4cc9789a@samsung.com> <20241112133439.GA4164@lst.de> <ZzNlaXZTn3Pjiofn@kbusch-mbp.dhcp.thefacebook.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -112,92 +51,51 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2024111215-jury-unlighted-3953@gregkh>
-X-Rspamd-Queue-Id: 0CFB61F451
-X-Spam-Score: -4.51
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[22];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+In-Reply-To: <ZzNlaXZTn3Pjiofn@kbusch-mbp.dhcp.thefacebook.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Tue, Nov 12, 2024 at 04:42:40PM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Nov 12, 2024 at 04:33:09PM +0100, Daniel Wagner wrote:
-> > On Tue, Nov 12, 2024 at 02:58:43PM +0100, Greg Kroah-Hartman wrote:
-> > > > +void blk_mq_hctx_map_queues(struct blk_mq_queue_map *qmap,
-> > > > +			    struct device *dev, unsigned int offset)
-> > > > +
-> > > > +{
-> > > > +	const struct cpumask *mask;
-> > > > +	unsigned int queue, cpu;
-> > > > +
-> > > > +	if (!dev->bus->irq_get_affinity)
-> > > > +		goto fallback;
-> > > 
-> > > I think this is better than hard-coding it, but are you sure that the
-> > > bus will always be bound to the device here so that you have a valid
-> > > bus-> pointer?
-> > 
-> > No, I just assumed the bus pointer is always valid. If it is possible to
-> > have a device without a bus, than I'll better extend the condition to
-> > 
-> > 	if (!dev->bus || !dev->bus->irq_get_affinity)
-> >         	goto fallback;
+On Tue, Nov 12, 2024 at 07:25:45AM -0700, Keith Busch wrote:
+> > I feel like banging my head against the wall.  No, passing through write
+> > streams is simply not acceptable without the file system being in
+> > control.  I've said and explained this in detail about a dozend times
+> > and the file system actually needing to do data separation for it's own
+> > purpose doesn't go away by ignoring it.
 > 
-> I don't know if it's possible as I don't know what codepaths are calling
-> this, it was hard to unwind.  But you should check "just to be safe" :)
+> But that's just an ideological decision that doesn't jive with how
+> people use these.
 
-The main path to map_queues is via the probe functions. There are some
-more paths like when updating a tagset after the number of queues but
-that is all after the probe function.
+Sorry, but no it is not.  The file system is the entity that owns the
+block device, and it is the layer that manages the block device.
+Bypassing it is an layering violation that creates a lot of problems
+and solves none at all.
 
-nvme_probe
-  nvme_alloc_admin_tag_set
-    blk_mq_alloc_tag_set
-       blk_mq_update_queue_map
-          set->ops->map_queues
-	     blk_mq_htcx_map_queues
-  nvme_alloc_io_tag_set
-    blk_mq_alloc_tag_set
-      blk_mq_update_queue_map
-        set->ops->map_queues
-          blk_mq_htcx_map_queues
+> The applications know how they use their data better
+> than the filesystem,
 
-virtscsi_probe, hisi_sas_v3_probe, ...
-  scsi_add_host
-    scsi_add_host_with_dma
-      scsi_mq_setup_tags
-         blk_mq_alloc_tag_set
-           blk_mq_update_queue_map
-             set->ops->map_queues
-               blk_mq_htcx_map_queues
+That is a very bold assumption, and a clear indication that you are
+actually approaching this with a rather idiological hat.  If your
+specific application actually thinks it knows the storage better than
+the file system that you are using you probably should not be using
+that file system.  Use a raw block device or even better passthrough
+or spdk if you really know what you are doing (or at least thing so).
 
-virtblk_probe
-  blk_mq_alloc_tag_set
-    blk_mq_update_queue_map
-      set->ops->map_queues
-        blk_mq_htcx_map_queues
+Otherwise you need to agree that the file system is the final arbiter
+of the underlying device resource.  Hint: if you have an application
+that knows that it is doing (there actually are a few of those) it's
+usually not hard to actually work with file system people to create
+abstractions that don't poke holes into layering but still give the
+applications what you want.  There's also the third option of doing
+something like what Damien did with zonefs and actually create an
+abstraction for what what your are doing.
 
-Does this help?
+> so putting the filesystem in the way to force
+> streams look like zones is just a unnecessary layer of indirection
+> getting in the way.
+
+Can you please stop this BS?  Even if a file system doesn't treat
+write streams like zones keeps LBA space and physical allocation units
+entirely separate (for which I see no good reason, but others might
+disagree) you still need the file system in control of the hardware
+resources.
+
 
