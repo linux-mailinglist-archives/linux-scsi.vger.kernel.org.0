@@ -1,113 +1,69 @@
-Return-Path: <linux-scsi+bounces-9845-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9833-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11B439C606E
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 19:30:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37F3B9C6169
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 20:27:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC7041F2442A
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 18:30:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8EB45B84284
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 16:56:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63D7421744F;
-	Tue, 12 Nov 2024 18:29:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="zKLfz999"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED85D2076D8;
+	Tue, 12 Nov 2024 16:54:27 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996FC217442;
-	Tue, 12 Nov 2024 18:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FAED2076BE;
+	Tue, 12 Nov 2024 16:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731436191; cv=none; b=twDpNu8wpcEMfH1HCOS1Zd9YAxOGKCImBsP6iCdpp/T6KjrJYwjTmkHrKK1aW2KEPKt4CLaxpl0yloCgtrxd2Sp4AUYoXqZ1DktNxbJy0attmdfpvreAHbTxgfGz/PcCoSfyUkFiMcd6QXpfR/3XXWDR1MSRRDz+1m9iC79fPDA=
+	t=1731430467; cv=none; b=SXdZCaLMJobFb3MnSfLo7SUXKs2vHj4sLZIuYXUrUbZv442Ge6MS1ljViB7x/SFG4AH/rGQvTV0BdopdJyEtRr0hP1nc7mgmeYb5FLRwm0cLmK32t+GeXWAMUJBzzOB0ifCRoev32JJlbowCsqSiA9/73UlQutFiZKVm0irJjSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731436191; c=relaxed/simple;
-	bh=W7DJhPC2cI4B1hls9mrVYtcxp53BRxGE+EAAK8hoUwI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H4G8ZAu4Qn7TbNEicTzF1zZyBetbsTYMeUoloxMlcFEKnEtry4lnFA42EG6gXnVYTtJwD7mlBVVSomtKclUhPImMgsPwOUBwWhdCRrllj7OpzrKzzeDEsedb8jNmECbsow9v6qd71+Ynnv5jx2xGJgQmd510paBufTS0pXLgsgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=zKLfz999; arc=none smtp.client-ip=199.89.1.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4Xnw1g0ttMz6Cp2tZ;
-	Tue, 12 Nov 2024 18:29:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1731436180; x=1734028181; bh=oPBj+L8mtHTtVAb4BNIxLmXH
-	B/1C8no7WxMT/ljz+Wc=; b=zKLfz999pjxdgJbaeWGIeI0ouu+PGa/XktxIGznD
-	BxCOFVw2Dla+T2Nht+ldbL4QK+ysaqgqNPFDeKolXfalJadVup12/aUWnSMA/N65
-	2DZ8/SRWsCIiZz1LisfR8l4wI1+6tEeOr4Mm7keqi9au9Dfd8BNzddaMjXAZqbnp
-	cMg8UXVAuSL4KKNKhItSbWKx/i8+nCyUXK1SkDxuPrnwjhWwovvRB+feHD67E2m6
-	89wiYey9uavqhEESgEVzwHtzGwM7Gwa49DY/tPWVbH9mIim0C3aVp+IKpVEjcNfm
-	8eRBT50T6Evp/W+0ywC1Zmf5DxN1gwcMoNFfq1UTQkYhfg==
-X-Virus-Scanned: by MailRoute
-Received: from 008.lax.mailroute.net ([127.0.0.1])
- by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id TvZPjWSXIV_9; Tue, 12 Nov 2024 18:29:40 +0000 (UTC)
-Received: from [192.168.51.14] (c-73-231-117-72.hsd1.ca.comcast.net [73.231.117.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4Xnw1Z4ZRTz6ClbFZ;
-	Tue, 12 Nov 2024 18:29:38 +0000 (UTC)
-Message-ID: <aa3b1983-d166-451f-899f-74d6f75687ed@acm.org>
-Date: Tue, 12 Nov 2024 10:29:35 -0800
+	s=arc-20240116; t=1731430467; c=relaxed/simple;
+	bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=diZSSB7a7vxKpe2Ugi2DjCa/wWI5bddj3zfbI21t8hoDCHK1QPW4sRH9P8B2UXUJ3jf3aj823X4LDzGPjzdrl7MNDXQgqp5rzm414PXuT4HSMWtVixE1cnShV0rvVl6kTm2JP1lRRx/+iP2t9equyEqAbGfF+k3gThrqodGIXe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 7FB0968D0A; Tue, 12 Nov 2024 17:54:19 +0100 (CET)
+Date: Tue, 12 Nov 2024 17:54:19 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Daniel Wagner <wagi@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>, Bjorn Helgaas <bhelgaas@google.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, virtualization@lists.linux.dev,
+	linux-scsi@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
+	mpi3mr-linuxdrv.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com,
+	storagedev@microchip.com, linux-nvme@lists.infradead.org
+Subject: Re: [PATCH v3 1/8] driver core: bus: add irq_get_affinity callback
+ to bus_type
+Message-ID: <20241112165419.GA20057@lst.de>
+References: <20241112-refactor-blk-affinity-helpers-v3-0-573bfca0cbd8@kernel.org> <20241112-refactor-blk-affinity-helpers-v3-1-573bfca0cbd8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] block: remove the write_hint field from struct
- request
-To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Cc: linux-block@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <20241112170050.1612998-1-hch@lst.de>
- <20241112170050.1612998-2-hch@lst.de>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20241112170050.1612998-2-hch@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241112-refactor-blk-affinity-helpers-v3-1-573bfca0cbd8@kernel.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On 11/12/24 9:00 AM, Christoph Hellwig wrote:
-> -	/* Don't merge requests with different write hints. */
-> -	if (req->write_hint != next->write_hint)
-> -		return NULL;
-> +	if (req->bio && next->bio) {
-> +		/* Don't merge requests with different write hints. */
-> +		if (req->bio->bi_write_hint != next->bio->bi_write_hint)
-> +			return NULL;
-> +	}
+Looks good:
 
-The above two if-statements can be combined into a single if-statement.
-
-> @@ -1001,9 +1003,11 @@ bool blk_rq_merge_ok(struct request *rq, struct bio *bio)
->   	if (!bio_crypt_rq_ctx_compatible(rq, bio))
->   		return false;
->   
-> -	/* Don't merge requests with different write hints. */
-> -	if (rq->write_hint != bio->bi_write_hint)
-> -		return false;
-> +	if (rq->bio) {
-> +		/* Don't merge requests with different write hints. */
-> +		if (rq->bio->bi_write_hint != bio->bi_write_hint)
-> +			return false;
-> +	}
-
-Same comment here: the above two if-statements can also be combined into 
-a single if-statement.
-
-Otherwise this patch looks good to me.
-
-Thanks,
-
-Bart.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 
