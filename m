@@ -1,119 +1,102 @@
-Return-Path: <linux-scsi+bounces-9851-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9841-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3135F9C63AB
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 22:43:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F1239C63E0
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 22:58:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9EEF28562C
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 21:43:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9909CBA0DF3
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2024 18:10:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DF63204930;
-	Tue, 12 Nov 2024 21:43:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 753DA21642F;
+	Tue, 12 Nov 2024 18:10:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="dUzpt4r8"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="0FVrwnpo"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42EB643AA1
-	for <linux-scsi@vger.kernel.org>; Tue, 12 Nov 2024 21:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FF5215C55;
+	Tue, 12 Nov 2024 18:10:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731447804; cv=none; b=R/hsKatwLmOHl29kwvgEiM/FmYKxewyRREORMTGriYlhFYEnyXB2Usvrpun+erjrqYkS5VwP2IPDMB9hX1RYhTDengnyCSiYdC22JKHr12SqGKZ3fp5DO6nWLFlMkoPao5t111RZxMWpjeeJJH9tEIu+MLzruRZ50E1k2scUZ5U=
+	t=1731435017; cv=none; b=RzcZgmZWaXQd1NrdfpucCjBtFKepLphPmEzKxPkZhK/cPg/0jChVyeHXxzbai5sillE6UFzQ+Zbkscle2GL6TuPUQhjQJOoetgzzdu4rbgJ39avmnn/UKJLifOYQNvRqpIebQpYNvyGmYa5qwVRPn/TCST2YMrc8Uw3ByVEAo8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731447804; c=relaxed/simple;
-	bh=J+RldWsZqsESI2PuHeRabDXgnmVLtr2MD+8L5LtDxY8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=tCYdGTXhqYBJRpXmPSzPYQh3VTawzIAaB0+nkEVQdW4V09tHEZnBJh5tj+s2xceVQhOMkoGdJV52E0ARgI1OGnU8VbHpvFNm9qZeFs1qvp1sN+/kofQDwfhYUMMLB6urkjj4ZiwTCMH1kJ9BUvbrPAcCDoI1z4UuKxbC7s9OMM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=dUzpt4r8; arc=none smtp.client-ip=209.85.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7180cc146d8so3571941a34.0
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Nov 2024 13:43:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1731447798; x=1732052598; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YGtSC//+KuLVSTWwwIoXtxU4RZI/DGnC9v/9JMzPnU8=;
-        b=dUzpt4r81/uMZiH7uAneonK6a96UxOXwMNYG/4D2C7FmHhTjfhtxzseLMrhlJSafYC
-         6DcF2HJZqFwbGwRvsZJ9b4WGx42/H23nmsL+VMvrLLbaMa45b2770PFMO3kLlHF0cD9t
-         oBSl2g5p4XacL578cbKF3vAdr7n1CSOVa/zTsGAl82LCEQZjOVx+DjsKhO412/eXfZSA
-         TDK/wr38oHhmfWvj6QZiUIkNz+ehK/Xp7SFPZvZUFpIxHOC9zAUeJIE/QO6/TOPlihHg
-         EM7QDpe/JA2J/7o+PjmXYWmu799ncMOOO+qtd2oLe9jy/UjPwvhdXnxMOUzAXh+ftqv9
-         GVqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731447798; x=1732052598;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YGtSC//+KuLVSTWwwIoXtxU4RZI/DGnC9v/9JMzPnU8=;
-        b=qDnibNUxgLuKo4a2iXtwGAshe8lfF1R6W7a72Kab+GBs77gfRyp0ro3nTVidMaEQ32
-         tEFER3eMY3ELXkHy4phwtbFCU3eRzz4y+Lv1Iuf8XnSVBT9s7clxkWdhTQH0/NdjY60Y
-         cMVw6Wsh+hHjdh8brfmDxbG+iS/dxXbNs0RtHgA1ILxyykLN93VWshnM+HXQn1mfWs3t
-         Xg+WpYA65IUuJmKmwR2uLzc8xerGV2A6G2ixhrluDUlIPiwHm3jmqHj6+6fZ0jSkUe2Y
-         nAEOLWt0OcHvVT1KwVKFiJ+kquNJOdLzeNeuIfypRANI24dFfGceC66hTUaZ/rBSp4wa
-         umRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVKp5twEnGz5IhmmFtw8J4NypQih5uz82SAM/NThElPwtZG8vK4M5tYPSUU0NzewPp7bniaf0bFO3DE@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywq5iodz2kN13wfJ6NAbkM5AxdcaBK/wmTZ9yiINSffJfLw+Yx5
-	BvIqAh/CLrOVDC27/fyehiwKOftfcD2QP7YBzfoOFK9mlLGVSlN6h8r/fUoWq5bpsCslYgbxygK
-	2fIk=
-X-Google-Smtp-Source: AGHT+IHdA1/BLcE+I0xAd42S/ugK3+MkiErPSWS8lopm+4vQfH1OaBpVpP2E7ccFbc0W+eDDTRko5w==
-X-Received: by 2002:a05:6830:b88:b0:70f:716c:7d4a with SMTP id 46e09a7af769-71a516f6a54mr4411368a34.27.1731447798267;
-        Tue, 12 Nov 2024 13:43:18 -0800 (PST)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-71a6009dfb9sm81837a34.61.2024.11.12.13.43.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 13:43:17 -0800 (PST)
-From: Jens Axboe <axboe@kernel.dk>
-To: Christoph Hellwig <hch@lst.de>
-Cc: linux-block@vger.kernel.org, linux-scsi@vger.kernel.org
-In-Reply-To: <20241112170050.1612998-1-hch@lst.de>
-References: <20241112170050.1612998-1-hch@lst.de>
-Subject: Re: remove two fields from struct request
-Message-Id: <173144779750.2202563.2182339299519835938.b4-ty@kernel.dk>
-Date: Tue, 12 Nov 2024 14:43:17 -0700
+	s=arc-20240116; t=1731435017; c=relaxed/simple;
+	bh=cQNF8sqDey2exlLOHgSvw5x7MKZ5aOz8+xnxhyeYDy8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UPS41jeJYGtySirN+kIVNk57Zkj9ovonJsI0O/m3PQbLJWGpkSwhqejs1E4vXMKI6WvvpJCaNecM8fFQK4ETTHKdVNf/AS9fb9otxGqbu54PKI4O7/Fg6xSz+YI/XU8qq2b8vLeHRNYvyz9273dw0yqhzfyE8CnQrZ7sZNbUc88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=0FVrwnpo; arc=none smtp.client-ip=199.89.1.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 009.lax.mailroute.net (Postfix) with ESMTP id 4XnvbB4NKPzlgMVh;
+	Tue, 12 Nov 2024 18:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1731435011; x=1734027012; bh=OnTouWYoGANIM6Er2wgBFd/G
+	9z2tKXnnqtxhxZfEEyU=; b=0FVrwnpo9hrNXKz9rXENeRTJMNxM6PcM/Y2pTbhn
+	NP9sdmBgnKjaZOl8Q6KCaBKKpqte8MAthVoz9QJoEmiDnL09fFnva/V7TWKjNvMz
+	JTcKlDWHZHd9D9yFrBnKj1pajYu+CcgWWhfGgOXtD6GWqYRhd6O1LO1XAYcUoqZY
+	cyeDwockPKPrpuBttC3kRACzR8rTdnHQG6AlMImVgnqHhh/2tRnsfie1FjyeJ/Hl
+	1qN/1qmqg9SE21+nhmf7kn1pJYmK9FQPis3vjuNeHediYUsA7N7bl5SH2fvTDntV
+	K1pe8OWcE26YAOQSzxXFECzJgNiTyWjQz623VluZrEYagA==
+X-Virus-Scanned: by MailRoute
+Received: from 009.lax.mailroute.net ([127.0.0.1])
+ by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id gbdu87m0IOPq; Tue, 12 Nov 2024 18:10:11 +0000 (UTC)
+Received: from [192.168.51.14] (c-73-231-117-72.hsd1.ca.comcast.net [73.231.117.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4Xnvb16nBNzlgMVc;
+	Tue, 12 Nov 2024 18:10:05 +0000 (UTC)
+Message-ID: <cb3b0c9c-4589-4b58-90a1-998743803c5a@acm.org>
+Date: Tue, 12 Nov 2024 10:10:02 -0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] scsi: ufs-qcom: Enable Dumping of Hibern8, MCQ, and
+ Testbus Registers
+To: Manivannan Sadhasivam <manisadhasivam.linux@gmail.com>,
+ Manish Pandey <quic_mapa@quicinc.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, quic_nitirawa@quicinc.com
+References: <20241025055054.23170-1-quic_mapa@quicinc.com>
+ <20241112075000.vausf7ulr2t5svmg@thinkpad>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20241112075000.vausf7ulr2t5svmg@thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.2
 
-
-On Tue, 12 Nov 2024 18:00:37 +0100, Christoph Hellwig wrote:
-> this series removes two fields from struct request that just duplicate
-> information in the bios.  As-is it doesn't actually shrink the structure
-> size but instead just creates a 4 byte hole, but that will probably
-> become useful sooner or later.
+On 11/11/24 11:50 PM, Manivannan Sadhasivam wrote:
+> On Fri, Oct 25, 2024 at 11:20:51AM +0530, Manish Pandey wrote:
+>> Submitting a series of patches aimed at enhancing the debugging and monitoring capabilities
+>> of the UFS-QCOM driver. These patches introduce new functionalities that will significantly
+>> aid in diagnosing and resolving issues related to hardware and software operations.
+>>
 > 
-> Diffstat:
->  block/blk-merge.c            |   26 ++++++++++++++------------
->  block/blk-mq.c               |    5 +----
->  drivers/scsi/sd.c            |    6 +++---
->  include/linux/blk-mq.h       |    8 +++-----
->  include/trace/events/block.h |    6 +++---
->  5 files changed, 24 insertions(+), 27 deletions(-)
-> 
-> [...]
+> TBH, the current state of dumping UFSHC registers itself is just annoying as it
+> pollutes the kernel ring buffer. I don't think any peripheral driver in the
+> kernel does this. Please dump only relevant registers, not everything that you
+> feel like dumping.
 
-Applied, thanks!
+I wouldn't mind if the code for dumping  UFSHC registers would be removed.
 
-[1/2] block: remove the write_hint field from struct request
-      commit: 61952bb73486fff0f5550bccdf4062d9dd0fb163
-[2/2] block: remove the ioprio field from struct request
-      commit: 6975c1a486a40446b5bc77a89d9c520f8296fd08
+Thanks,
 
-Best regards,
--- 
-Jens Axboe
-
-
-
+Bart.
 
