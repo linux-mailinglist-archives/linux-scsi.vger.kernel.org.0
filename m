@@ -1,81 +1,79 @@
-Return-Path: <linux-scsi+bounces-9907-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9901-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E41A79C8121
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2024 03:53:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A8689C8118
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2024 03:52:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BE8928238F
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2024 02:53:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2505CB2308C
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2024 02:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 415AB1F7559;
-	Thu, 14 Nov 2024 02:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B72661F585B;
+	Thu, 14 Nov 2024 02:51:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Q3fVOdjM"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="YChX9AzC"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A18DC1E9061;
-	Thu, 14 Nov 2024 02:51:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073C61F5848;
+	Thu, 14 Nov 2024 02:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731552679; cv=none; b=oCkWq4p3SObXgMdJGwSOis7wqIrDRQaHjbiJItUFk3bNWiDu6uKdbrj2N2WASkn04Du+ea1s+AfvHNh6aRvwcR3CCBfqGLJ7HtSGxGcUTYIjdwF9kr9rY0GUJdkn3ZeOEoVD0VARlxRWwC7TD39y/zP8M7+KERU0/YmLM8l4lhM=
+	t=1731552663; cv=none; b=RBDQjysGEA8BrFjUxmklJpo/aeI0Vte8ElMsgcJHVjF+fkdiZDtx/hS4cuGdHtyDe6te9m+qdCc+MLDHzNgAG6uZ1FQoi+Qh9YXyPHmhC0PvPjJXMiC7C4E+3Sa8xxhommrDeu6rW9VHRY8TWnzjq3qR2VO9D0Q7+Yzlc3QpkfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731552679; c=relaxed/simple;
-	bh=H6DBNCPZGNERlsPtd3z0WPU3Z3iSUEj5bEcXV0m9LXE=;
+	s=arc-20240116; t=1731552663; c=relaxed/simple;
+	bh=q8NUX0onownKbNP+3xOlyyCKxJAraF/phHIr2sM+330=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HMQ7vZIu+z9iS4hNAg5JuT2/zGNnEkqa3+Iv8SE2cbRttpIiUNP9YN15GlAWVQnLC0MtPQMWu007jmmZ0g3/MAQqcHkbtC2KmdVACOF2/kHDg+o7fq56l3GbMYy4S2B67B7oyZdVsLtOm4L94jk4kWlYCyThWk36d6nCHIOXai4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Q3fVOdjM; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=dDQjJQvErBJr0cMoEPRBYClytzp8bj5tcVt9/ww9DHmvtMfEUC4QA2TwSlN71zAtxEiSuguPi2pq2zSPAqujTexu3yhdpX7k5Fc8K5OoRrhppragWf0GQp2Th1gkjsnLqDFbBJdJzkN9L5ZBwym36fye3/3BlbZA2iC4LfDyo4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=YChX9AzC; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AE1fmb0001312;
-	Thu, 14 Nov 2024 02:50:57 GMT
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AE1fhjc018726;
+	Thu, 14 Nov 2024 02:50:58 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=eMWpl/7Zg3vVe/Ep++BPsCq2npXZ9GfGvkFWuhGIMzo=; b=
-	Q3fVOdjM7Brre7R/1uY55MJ/j2xRyOCo2fI/NvRaIg5UQqIErnYUj07hH8ypm+Yd
-	RNndOZAipro/JBS0ICh5F0VAqIreQg+9I8qJaSTsRH+EzQMv4OdiHO9cxzcQWtNU
-	sg4NDhUFgXK2vyhBcslUJZnhgJH+eUZ/ddZelyO3ssi2Bo+9NQ/N8TKdwap1Qn5K
-	otRNOfV2h71B91pp+NU0RDJv2nXDjiLeCko/mkjyJWTraV5qQdNAjYUgidZQ6nyH
-	9V9cJ67EppKETCYotgK177g7/cbKq5kgirn1dO15jjNWfWgqEaIdILi02mpkOqOD
-	LwYylgsZIpW/HKz1heWWCg==
+	corp-2023-11-20; bh=VQs2ZPLCYhyBIEmiZPdJ5T3BRvYgSyoNAXlQyEYM5B4=; b=
+	YChX9AzCQEYY/dIgvpo1qMYeqQmOeFTRpXvhvCvyxeQlshDkbqyFdLsvXL3HnNtf
+	sLB6rXErCRZ76qKS+Y4m2QRKFe1Jyny+C+1ugv4S7R5KPnmJig5bAh0ExZmJfUl3
+	Fhyog+cVZNoa4w0XWQx/8f8kXQhaQZZRJ7PxD9yvTw9FviVv4KpeKfGrmPhiAPm1
+	6ldzK/5jCY9/oahJVDICor3+ryDnphMcr+bQQ3MkgHUGKyyWmzeH3Uby5UKqZ/VO
+	OzJZy48JXsTmZh3zlM7k7YK1oG5tZuNBHKSmi17IJEUj5SENuM9dqS1xB8my9mb5
+	UyPpOi0sgD/rus5IG0UVbw==
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42vsp4hw3t-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42t0kc0bax-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 14 Nov 2024 02:50:57 +0000 (GMT)
+	Thu, 14 Nov 2024 02:50:58 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4AE1C6Tk023937;
-	Thu, 14 Nov 2024 02:50:56 GMT
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4AE1DZZt022776;
+	Thu, 14 Nov 2024 02:50:57 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42vuw0p22f-1
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42vuw0p233-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 14 Nov 2024 02:50:56 +0000
+	Thu, 14 Nov 2024 02:50:57 +0000
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4AE2ojZ0003527;
-	Thu, 14 Nov 2024 02:50:55 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4AE2ojZ2003527;
+	Thu, 14 Nov 2024 02:50:56 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 42vuw0p1vg-9;
-	Thu, 14 Nov 2024 02:50:55 +0000
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 42vuw0p1vg-10;
+	Thu, 14 Nov 2024 02:50:56 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Minwoo Im <minwoo.im@samsung.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Philipp Stanner <pstanner@redhat.com>
+To: Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Salomon Dushimirimana <salomondush@google.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: ufs: Replace deprecated PCI functions
-Date: Wed, 13 Nov 2024 21:50:02 -0500
-Message-ID: <173155154789.970810.9790026959679246230.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bhavesh Jashnani <bjashnani@google.com>
+Subject: Re: [PATCH] scsi: pm80xx: Use module param to set pcs event log severity
+Date: Wed, 13 Nov 2024 21:50:03 -0500
+Message-ID: <173155154784.970810.3218253453488964963.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241028102428.23118-2-pstanner@redhat.com>
-References: <20241028102428.23118-2-pstanner@redhat.com>
+In-Reply-To: <20241016220944.370539-1-salomondush@google.com>
+References: <20241016220944.370539-1-salomondush@google.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -88,27 +86,25 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-11-14_01,2024-11-13_01,2024-09-30_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 spamscore=0
- adultscore=0 phishscore=0 malwarescore=0 mlxlogscore=780 suspectscore=0
+ adultscore=0 phishscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
  definitions=main-2411140021
-X-Proofpoint-ORIG-GUID: UFI0a4tInzIB9yJGqQhKhE3mF1sgg8Bp
-X-Proofpoint-GUID: UFI0a4tInzIB9yJGqQhKhE3mF1sgg8Bp
+X-Proofpoint-GUID: 0DAspcDxQJu3SbbNRb4akorzjKl-8UFQ
+X-Proofpoint-ORIG-GUID: 0DAspcDxQJu3SbbNRb4akorzjKl-8UFQ
 
-On Mon, 28 Oct 2024 11:24:29 +0100, Philipp Stanner wrote:
+On Wed, 16 Oct 2024 22:09:44 +0000, Salomon Dushimirimana wrote:
 
-> pcim_iomap_regions() and pcim_iomap_table() have been deprecated in
-> commit e354bb84a4c1 ("PCI: Deprecate pcim_iomap_table(),
-> pcim_iomap_regions_request_all()").
+> The pm8006 driver sets pcs event log threshold very high which causes
+> most of the FW logs to not be captured. This adds a module parameter to
+> configure pcs event log severity with 3 (medium severity) as the
+> default.
 > 
-> Replace these functions with pcim_iomap_region().
 > 
-> 
-> [...]
 
 Applied to 6.13/scsi-queue, thanks!
 
-[1/1] scsi: ufs: Replace deprecated PCI functions
-      https://git.kernel.org/mkp/scsi/c/84c1e27e6c64
+[1/1] scsi: pm80xx: Use module param to set pcs event log severity
+      https://git.kernel.org/mkp/scsi/c/c8d81a438544
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
