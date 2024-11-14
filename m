@@ -1,162 +1,114 @@
-Return-Path: <linux-scsi+bounces-9896-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9906-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A08B89C8050
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2024 02:59:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAAD89C811F
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2024 03:53:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 459FD1F22E1C
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2024 01:59:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 927981F20F15
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2024 02:53:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 120371E3DE6;
-	Thu, 14 Nov 2024 01:58:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8227B1E885E;
+	Thu, 14 Nov 2024 02:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="arJS9o64"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="I5OPAPri"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A8771CCEF0
-	for <linux-scsi@vger.kernel.org>; Thu, 14 Nov 2024 01:58:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C471E8850
+	for <linux-scsi@vger.kernel.org>; Thu, 14 Nov 2024 02:51:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731549534; cv=none; b=FSzAeD+obLyvIGbkY2iOjkQcNYokXHrsRpDR9SLoMKRgK+wJvUOldEezxXEJ2Izh9LTUz49d4+cbCYvPtSrS3oGQYGzb2yBoFhewRGQX25ixB3AT2HLU9958+23ETVj00WtdUao4oT04eOAzuTWetRMYVZ1udkrlcCvfgqRZJaE=
+	t=1731552672; cv=none; b=kpdnyl+ImmMvQOvZ1ZZwvAwj8tW2N4FbaYVW4nrWb5fW6ynsRWeTDjYSsUWZJjwUJgPuse5YJnG0rBk2v1G20FV1t/CfBAKy09300HOrUCVLKDJLBNpbR9+x/qPB2M5/85V0qyElhNb2hvUIVrqeFRUEvyXK7vJAk/PdYyOPk8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731549534; c=relaxed/simple;
-	bh=hoqhmg6FlBDvQeuzOBErYwmk/yRj4iVunK80ABEHnIw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ujVTvot0/v27Pycj7KiEUhsX0eiwJ9bw2INIMJ/uyH9AOJ/1zFjtxGlMVOk4o08fa5h7mHlRHpS3RZMjwxyMGLNYS/A4gttWlTjD8jVa0sbXFtLGh2bZHfXwK1qp09X7j98DU3qinszvB9Hz/oOLnyNbkaLXRrOrOW4k9zlQEqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=arJS9o64; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1731549532;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tyzVW+Gg+8+sWP/luqrPCOiZgo6AGIcYlgpgrY3sdVI=;
-	b=arJS9o64uGBDIpmXv1JZDULTbNqDXXL+G94JV0/30kSknPj3WLpuqaFX6SpGeqDcWnKKRh
-	byl8PTUZgWibaLVb/psug0BE0ITC2XixRX5FqpmMowJVj9mA6tTKks49b/Kk/thArZJfgD
-	3R848ueavNL2i2dO7uI7M4pIR5vTBBk=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-216-yJb2Vii1Mz2KxoD1rp3zfw-1; Wed,
- 13 Nov 2024 20:58:47 -0500
-X-MC-Unique: yJb2Vii1Mz2KxoD1rp3zfw-1
-X-Mimecast-MFC-AGG-ID: yJb2Vii1Mz2KxoD1rp3zfw
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5967C1956096;
-	Thu, 14 Nov 2024 01:58:44 +0000 (UTC)
-Received: from fedora (unknown [10.72.116.113])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DD60819560A3;
-	Thu, 14 Nov 2024 01:58:30 +0000 (UTC)
-Date: Thu, 14 Nov 2024 09:58:25 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Daniel Wagner <wagi@kernel.org>
-Cc: Jens Axboe <axboe@kernel.dk>, Bjorn Helgaas <bhelgaas@google.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>,
-	Sagi Grimberg <sagi@grimberg.me>,
-	John Garry <john.g.garry@oracle.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hannes Reinecke <hare@suse.de>, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-scsi@vger.kernel.org,
-	megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
-	MPT-FusionLinux.pdl@broadcom.com, storagedev@microchip.com,
-	linux-nvme@lists.infradead.org
-Subject: Re: [PATCH v4 05/10] blk-mq: introduce blk_mq_hctx_map_queues
-Message-ID: <ZzVZQbZOYhNF08LX@fedora>
-References: <20241113-refactor-blk-affinity-helpers-v4-0-dd3baa1e267f@kernel.org>
- <20241113-refactor-blk-affinity-helpers-v4-5-dd3baa1e267f@kernel.org>
+	s=arc-20240116; t=1731552672; c=relaxed/simple;
+	bh=il08Jrynykib5ULYHqWteBJG3U7vj+x2Y+S7sviduH0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LqOZRdw5VPmXmKjd/VAWMnJJHO7xEp+X3cWWeq+qR5zVCjisob7DfM39gmH0XsA5NhJxNZpDkqPZptqdobUncxLQobv7ffhtwmPYXGigDASwkPv59WjFn7ibYDhvOoP9P9Oo7jpu8hTCp5D9zoxeGx7BfwIB2tNK+Shi2pObgdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=I5OPAPri; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AE1gAnm002009;
+	Thu, 14 Nov 2024 02:50:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2023-11-20; bh=6am5X1tdLjFU6NOoBtYKctM+Xp8FKnto9hqJlCTIX7Q=; b=
+	I5OPAPriidRaBFDx334jnNschCwy9rXSr48n++Ew4gzcEtwGJYk4NwhTKjA8rt3x
+	7Vsi8bfLsD1hkU/zFLyMHlJCLmVLpfUKJP3gbPvfPMOWIhlEt6DfjtnyDAAeq++N
+	3VtZF+fEIibdP/8idpGD/HZM06cuGJB8pEz89VljYTCx3RGCYKz4VWGeSb3VDlvK
+	XQFEfmDbhzD3eL8bUC40Wpk6xCE0za5GDsj5GfQdJcO0Y41oqOQ2jfJvdut022of
+	Pl05uIq/MvkfzOAVYXN1kf6HiDgi50QTosdTCHzFW/4XglW6fPXscvFop+r12Cxp
+	1Be6J7Ct+yNQP/Mqt03oAQ==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42t0k5g4ek-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 14 Nov 2024 02:50:46 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4AE1FYSc022726;
+	Thu, 14 Nov 2024 02:50:46 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42vuw0p1w9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 14 Nov 2024 02:50:45 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4AE2ojYi003527;
+	Thu, 14 Nov 2024 02:50:45 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 42vuw0p1vg-1;
+	Thu, 14 Nov 2024 02:50:45 +0000
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        James Bottomley <James.Bottomley@suse.de>
+Subject: Re: [PATCH] scsi: sg: Enable runtime power management
+Date: Wed, 13 Nov 2024 21:49:54 -0500
+Message-ID: <173155154791.970810.9973027424389333625.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.46.2
+In-Reply-To: <20241030220310.1373569-1-bvanassche@acm.org>
+References: <20241030220310.1373569-1-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241113-refactor-blk-affinity-helpers-v4-5-dd3baa1e267f@kernel.org>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-11-14_01,2024-11-13_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 spamscore=0
+ adultscore=0 phishscore=0 malwarescore=0 mlxlogscore=781 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2411140021
+X-Proofpoint-ORIG-GUID: SS5WIfmzSv9Sro0uW_bZ206-MTybGqLg
+X-Proofpoint-GUID: SS5WIfmzSv9Sro0uW_bZ206-MTybGqLg
 
-On Wed, Nov 13, 2024 at 03:26:19PM +0100, Daniel Wagner wrote:
-> blk_mq_pci_map_queues and blk_mq_virtio_map_queues will create a CPU to
-> hardware queue mapping based on affinity information. These two function
-> share common code and only differ on how the affinity information is
-> retrieved. Also, those functions are located in the block subsystem
-> where it doesn't really fit in. They are virtio and pci subsystem
-> specific.
+On Wed, 30 Oct 2024 15:03:10 -0700, Bart Van Assche wrote:
+
+> In 2010, runtime power management support was implemented in the SCSI core.
+> The description of patch "[SCSI] implement runtime Power Management"
+> mentions that the sg driver is skipped but not why. This patch enables
+> runtime power management even if an instance of the sg driver is held open.
+> Enabling runtime PM for the sg driver is safe because all interactions of
+> the sg driver with the SCSI device pass through the block layer
+> (blk_execute_rq_nowait()) and the block layer already supports runtime PM.
 > 
-> Thus introduce provide a generic mapping function which uses the
-> irq_get_affinity callback from bus_type.
-> 
-> Originally idea from Ming Lei <ming.lei@redhat.com>
-> 
-> Signed-off-by: Daniel Wagner <wagi@kernel.org>
-> ---
->  block/blk-mq-cpumap.c  | 43 +++++++++++++++++++++++++++++++++++++++++++
->  include/linux/blk-mq.h |  2 ++
->  2 files changed, 45 insertions(+)
-> 
-> diff --git a/block/blk-mq-cpumap.c b/block/blk-mq-cpumap.c
-> index 9638b25fd52124f0173e968ebdca5f1fe0b42ad9..3506f1c25a02d331d28212a2a97fb269cb21e738 100644
-> --- a/block/blk-mq-cpumap.c
-> +++ b/block/blk-mq-cpumap.c
-> @@ -11,6 +11,7 @@
->  #include <linux/smp.h>
->  #include <linux/cpu.h>
->  #include <linux/group_cpus.h>
-> +#include <linux/device/bus.h>
->  
->  #include "blk.h"
->  #include "blk-mq.h"
-> @@ -54,3 +55,45 @@ int blk_mq_hw_queue_to_node(struct blk_mq_queue_map *qmap, unsigned int index)
->  
->  	return NUMA_NO_NODE;
->  }
-> +
-> +/**
-> + * blk_mq_hctx_map_queues - Create CPU to hardware queue mapping
-> + * @qmap:	CPU to hardware queue map.
-> + * @dev:	The device to map queues.
-> + * @offset:	Queue offset to use for the device.
-> + *
-> + * Create a CPU to hardware queue mapping in @qmap. The struct bus_type
-> + * irq_get_affinity callback will be used to retrieve the affinity.
-> + */
-> +void blk_mq_hctx_map_queues(struct blk_mq_queue_map *qmap,
+> [...]
 
-Some drivers may not know hctx at all, maybe blk_mq_map_hw_queues()?
+Applied to 6.13/scsi-queue, thanks!
 
-> +			    struct device *dev, unsigned int offset)
-> +
-> +{
-> +	const struct cpumask *(*irq_get_affinity)(struct device *dev,
-> +						  unsigned int irq_vec);
-> +	const struct cpumask *mask;
-> +	unsigned int queue, cpu;
-> +
-> +	if (dev->driver->irq_get_affinity)
-> +		irq_get_affinity = dev->driver->irq_get_affinity;
-> +	else if (dev->bus->irq_get_affinity)
-> +		irq_get_affinity = dev->bus->irq_get_affinity;
+[1/1] scsi: sg: Enable runtime power management
+      https://git.kernel.org/mkp/scsi/c/4045de893f69
 
-It is one generic API, I think both 'dev->driver' and
-'dev->bus' should be validated here.
-
-
-Thanks, 
-Ming
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering
 
