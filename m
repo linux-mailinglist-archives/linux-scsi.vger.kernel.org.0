@@ -1,79 +1,86 @@
-Return-Path: <linux-scsi+bounces-9904-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9908-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E3F49C811D
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2024 03:53:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E5099C8123
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2024 03:53:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE8731F2324F
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2024 02:53:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 231252817BE
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2024 02:53:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0A531F7079;
-	Thu, 14 Nov 2024 02:51:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 988931F7577;
+	Thu, 14 Nov 2024 02:51:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="E6BN6DNY"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="A48CLyrr"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3331F6665
-	for <linux-scsi@vger.kernel.org>; Thu, 14 Nov 2024 02:51:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38DB81E9078;
+	Thu, 14 Nov 2024 02:51:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731552665; cv=none; b=YeIQ3SzMa0em6DQXZxknyoX+X3YQFCnZv5lbeikXchY/3BTKslxG1TbicU+QRToiJ7TnKZ2s9CyEFlZrEbJ0YnKPc6b7F6px59LzwiaLeFQumDMNxoZB8vuMNH4AQpXj9a62obMj1gE44+z90Tfj+U8ueDsktHibz6GFr98hjN4=
+	t=1731552680; cv=none; b=VkPPb7cQ9xvEBTXB+LXu/EnUqBgjv9HNIlSyORJqiveiy5DrXOaIPQanpA/95A5wA41JPMerxPARxkwexmSAEu0rrQ/vUN9BCp7nKI0POWyeiQUXOieFOtBmdyQGsCCuHgPDYlT247Y1XtuzV5Khn0lh3OVg+GmiEDG6PLnlzPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731552665; c=relaxed/simple;
-	bh=XUFg7ODk86pLus/xZcYcgz+IOibqGj6/WZ9pm5SLKXg=;
+	s=arc-20240116; t=1731552680; c=relaxed/simple;
+	bh=ykOy0Gl0f2PCP9FnizdmSyx6sDfupSjE3/Rdd6hQJsI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AZKsy8HbSeYGEK+O0GhpV3UTwLm6Ta9Ffw3MNbNCJI9JUE4mHaYs53DlERemzE8Xg1x4ZZZTD87qt8qoAWcKRnHi22nhmItrjlq+4muXI6o1OJ8+cZWirmwCpBvittRKuV5H+VF2vuzWbYPCihgTiwQIfFBgvhXfJZr87g4nBLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=E6BN6DNY; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=uzBBJln+yLRFJ61p4V12GgI3Xs1FJHFmp36Ww/5W/YBp8rnT5htEnQbuhtQ6K3geK+qnXOZUMtdZ4ybw1KMWBjhR596bDS8NpOqxCQ4IEux+yaJWyQKXvjFq+1mEabh+c4Y4baEb+kCBvVVFHftvIErPtwNKuBbBBOGVhIjGLL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=A48CLyrr; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AE1ftGn006704;
-	Thu, 14 Nov 2024 02:50:48 GMT
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AE1glgc008722;
+	Thu, 14 Nov 2024 02:50:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=0JORMG0C0968J5l9hERfDGtMBAaJVxbZDyuZioAhOZo=; b=
-	E6BN6DNYlQthKcFPIERSu6bAa56gTy8T24flaKaIRQXSv/6nQyVq2k6xNmr/M0gm
-	SGY//AerJSCq//ethi2B+Hk7WPnS4W73s8Ukj23pnAtx/9/n2xb2oETfMQo4VGoP
-	d7RJCk43l3bnBVImkQp2T+Z6z+qVWS0jTdpciyT+xQTPj1pPUsFyKTcOzGzwXZXv
-	gN56BZR0y2xOCjPIpf5WwtTJ5X/QDuc8ql6ZsnGPO0bQyqEytkUaAZG538iNXk0n
-	FeVSPSiDyuyAoCKRsK79j6lk0rb90Tins5YZYDLi5i8HpywSDmlGdoAoKQmMfjOq
-	Gz0uNdOcvLAa/iMmYKitBQ==
+	corp-2023-11-20; bh=gYJVnBPMXhheHdB/DJlVC/G5ubvTltb2akrj529V2ak=; b=
+	A48CLyrrRUW0wIw3MEOMVjBMF4fsBzeh8y3J/lnwbPeiycWBoj1jQngzXlnLaHU8
+	0g9oI0RH030CgjfWg8rzw0garMOdU6MKgMPK21e+9ld4/03gtTKUXbje1oFjsZ/i
+	aNlpk6W28X44vl3uJBRn+Z6mbE3EUlTeXj0VrthRbH95AdH1/yJLE6I4CIaeOeTr
+	mNUgxj5Zd+e2wTQfF6C8UJOi+0VHmKoLWQXaCTQCaM7WP0lz3Ukb6TfJXcb9/bVG
+	766KB+a9NTLSLVSwO3+BBNCXxpVLArOQCJPAIxLUuAqY13GnSPPSfMViqnqcfZgO
+	YBTjvKLOFNf3w1+I0cWd6g==
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42t0nwr8gs-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42t0nwr8gt-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 14 Nov 2024 02:50:47 +0000 (GMT)
+	Thu, 14 Nov 2024 02:50:50 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4AE11Fj9022819;
-	Thu, 14 Nov 2024 02:50:47 GMT
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4AE1LVoc023918;
+	Thu, 14 Nov 2024 02:50:49 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42vuw0p1we-1
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42vuw0p1xg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 14 Nov 2024 02:50:47 +0000
+	Thu, 14 Nov 2024 02:50:49 +0000
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4AE2ojYk003527;
-	Thu, 14 Nov 2024 02:50:46 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4AE2ojYm003527;
+	Thu, 14 Nov 2024 02:50:48 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 42vuw0p1vg-2;
-	Thu, 14 Nov 2024 02:50:46 +0000
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 42vuw0p1vg-3;
+	Thu, 14 Nov 2024 02:50:48 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+To: peter.wang@mediatek.com, Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
         "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
-Subject: Re: [PATCH] scsi: ufs: core: Restore SM8650 support
-Date: Wed, 13 Nov 2024 21:49:55 -0500
-Message-ID: <173155154814.970810.2519647076478319790.b4-ty@oracle.com>
+        Stanley Jhu <chu.stanley@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        ed.tsai@mediatek.com
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        wsd_upstream@mediatek.com, chun-hung.wu@mediatek.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] scsi: ufs: ufs-mediatek: configure individual LU queue flags
+Date: Wed, 13 Nov 2024 21:49:56 -0500
+Message-ID: <173155154783.970810.4459751536411041309.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241106181011.4132974-1-bvanassche@acm.org>
-References: <20241106181011.4132974-1-bvanassche@acm.org>
+In-Reply-To: <20241008065950.23431-1-ed.tsai@mediatek.com>
+References: <20241008065950.23431-1-ed.tsai@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -86,28 +93,25 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-11-14_01,2024-11-13_01,2024-09-30_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 spamscore=0
- adultscore=0 phishscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
+ adultscore=0 phishscore=0 malwarescore=0 mlxlogscore=921 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
  definitions=main-2411140021
-X-Proofpoint-GUID: EhYbJMsqn1hYvnUOUBto0Vk2ICfpGTNr
-X-Proofpoint-ORIG-GUID: EhYbJMsqn1hYvnUOUBto0Vk2ICfpGTNr
+X-Proofpoint-GUID: Zi8IdhYC6FopUOKlx7zd_MFUMADU3u7I
+X-Proofpoint-ORIG-GUID: Zi8IdhYC6FopUOKlx7zd_MFUMADU3u7I
 
-On Wed, 06 Nov 2024 10:10:11 -0800, Bart Van Assche wrote:
+On Tue, 08 Oct 2024 14:59:42 +0800, ed.tsai@mediatek.com wrote:
 
-> Some early UFSHCI 4.0 controllers support the UFSHCI 3.0 register set.
-> The UFSHCD_QUIRK_BROKEN_LSDBS_CAP quirk must be set for these controllers.
-> Commit b92e5937e352 ("scsi: ufs: core: Move code out of an if-statement")
-> changed the behavior for these controllers from working fine into
-> "ufshcd_add_scsi_host: failed to initialize (legacy doorbell mode not
-> supported)". Fix this by setting the "broken LSDBS" quirk for the
-> SM8650 development board.
+> Previously, ufs vops config_scsi_dev was removed because there were no
+> users. ufs-mediatek needs it to configure the queue flags for each LU
+> individually. Therefore, bring it back and customize the queue flag as
+> we required.
 > 
-> [...]
+> 
 
 Applied to 6.13/scsi-queue, thanks!
 
-[1/1] scsi: ufs: core: Restore SM8650 support
-      https://git.kernel.org/mkp/scsi/c/007cd6ba9aac
+[1/1] scsi: ufs: ufs-mediatek: configure individual LU queue flags
+      https://git.kernel.org/mkp/scsi/c/7670e74ff319
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
