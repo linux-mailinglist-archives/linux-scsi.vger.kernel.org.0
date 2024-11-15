@@ -1,117 +1,182 @@
-Return-Path: <linux-scsi+bounces-9977-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9963-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3C459CF336
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Nov 2024 18:45:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15CE49CF36A
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Nov 2024 18:56:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 907D81F24D08
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Nov 2024 17:45:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50B7CB3747A
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Nov 2024 16:38:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 652ED165F1E;
-	Fri, 15 Nov 2024 17:45:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BC8E1D5166;
+	Fri, 15 Nov 2024 16:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="eh2JMG5Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ci0n79GX"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from fgw23-4.mail.saunalahti.fi (fgw23-4.mail.saunalahti.fi [62.142.5.110])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8587E188A3A
-	for <linux-scsi@vger.kernel.org>; Fri, 15 Nov 2024 17:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071C61E4A6;
+	Fri, 15 Nov 2024 16:37:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731692750; cv=none; b=PEP4Tqcqq+AicyRzPoy+XbYASjd/LiVrx3cI9//BlkhQDC0JM1O9SA/Fypny61kwByVUMKolLCMga0RfL4HXFx8/1IYtoIYU5IJJVqUuLtFaQklHbthHuwA3wSqc0THTz51qcknhSVuuP9DJpW2uvRPLb7rhHptSybSv/+rvT3g=
+	t=1731688672; cv=none; b=HShJ6/cMsPBVYg+2QdOdDZR7VoZK7Gr2Lg58mclqNQt/grDNOr2Ga1kQIgcR9XB99U2lWgruUW/FXhYRhzmP2Md7krgD3HVq6rOP0rNntvRMnqdz8oCGmzzjHx+Su4XxkQj6dX0qPEk3KBzzyuzfdUU7d5JHIdsFYbMxjxaGY+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731692750; c=relaxed/simple;
-	bh=w9hlLDF7xjpkQYRDcwkIB9eEkGYh8j+aLYB/SU13+7Y=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=YyOn+Wrp0fblGT39q1QH91Hb268QozqwOERipLQHE/DKM3ULohObH9sjMUbxrN4YtXPIco07Lfif8I+h+FCRHofGg4qWERsarGFvcirtRbkYGibEJTYvXMxkhwcjtH/E/tb96mlyh9K92vA6VzlAYDXetmG3FFEmu+AeCp2lpcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=eh2JMG5Q; arc=none smtp.client-ip=62.142.5.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=kolumbus.fi; s=elisa1;
-	h=to:references:message-id:content-transfer-encoding:cc:date:in-reply-to:from:
-	 subject:mime-version:content-type:from:to:cc:reply-to:subject:date:in-reply-to:
-	 references:list-archive:list-subscribe:list-unsubscribe:content-type:
-	 content-transfer-encoding:message-id;
-	bh=w9hlLDF7xjpkQYRDcwkIB9eEkGYh8j+aLYB/SU13+7Y=;
-	b=eh2JMG5Q4LiQIo98SLWM0fSoXb2r6P/+eloVIpEmAnA4mQEJRc6PAsxLJxfGdcN/e5Swe2aca3msA
-	 Ky3dBdXngzbhZbeilz+sJEIwRHAnNgaBYiT2dUGaL29j6gzsEg2W0r8lZf8byJYL62wFZ2J5GOZkyY
-	 0RJHZ8UdzUYxyUZntwdOrVapCHnxQpquiOumynoufYfGRxzqIPr+FXoTzulltKN3BZZlL7BEItPLtx
-	 Xluyh8HcaYSViS/ILb+bzNakAMVChdKKmigmf5igGqr7uMDQHq+xvHchYjJApOfyh17T8o4aZmNBn4
-	 A3t/ArgX8rxUxCUkqHAHq1bjuMPdp3Q==
-Received: from smtpclient.apple (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
-	by fgw22.mail.saunalahti.fi (Halon) with ESMTPSA
-	id 6faad07c-a379-11ef-8268-005056bdf889;
-	Fri, 15 Nov 2024 19:45:43 +0200 (EET)
-Content-Type: text/plain;
-	charset=utf-8
+	s=arc-20240116; t=1731688672; c=relaxed/simple;
+	bh=xPIEzNMgELR96A8fMGWEUYtmUX8fIT/IURHsLtPs3dE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=peUanB6/7XSZAIRlQedxKtdtUa/SeuGs1mUkGV75k9S1CiRrSvrRGQOjm9cEQAmYUwdBd06l2PJKj+L5iogK0VMReq/TVV1HVj28hTJhNsnSAGVoa+FZGFwX08VyH9ugqKL/b4IKhUWdfgNF529Ydk3D3nGfsriC/1iTOs7P/Yc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ci0n79GX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AC11C4CED0;
+	Fri, 15 Nov 2024 16:37:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731688671;
+	bh=xPIEzNMgELR96A8fMGWEUYtmUX8fIT/IURHsLtPs3dE=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Ci0n79GXpD+jm0+r+F9HkavA5zO439RHVREHGgBezDSJywcwC8KeVPR4au0Y1sYTJ
+	 HJDSqAwJmQCITjKfF3xHy8cFlmW+EGi/mikoxmbtiNSW8oPHDVV9D44sOjBJ8LaFlJ
+	 d5J6hTkAq+ewYBE/A5z7RZwyPbxlnu46xg1pmS8KEAemlhufP8hw6IOZbGY7ApNBPo
+	 iBa4g2n5umIxHgJZRWtVWxHRxRYZXhDuxgvBX9Cb2s7Auy54QvYNxZXd4L3OVzVl6S
+	 26c7LlRuD9PBCtt34ywkFmUA/u/e9c5JvwlhIjy6V50k55ypwhP2ZZaJgTp3nTY5vs
+	 69P07L8RWI0fw==
+From: Daniel Wagner <wagi@kernel.org>
+Subject: [PATCH v5 0/8] blk: refactor queue affinity helpers
+Date: Fri, 15 Nov 2024 17:37:44 +0100
+Message-Id: <20241115-refactor-blk-affinity-helpers-v5-0-c472afd84d9f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.200.121\))
-Subject: Re: [PATCH 1/2] scsi: st: Remove use of device->was_reset
-From: =?utf-8?B?IkthaSBNw6RraXNhcmEgKEtvbHVtYnVzKSI=?= <kai.makisara@kolumbus.fi>
-In-Reply-To: <20241115162003.3908-2-Kai.Makisara@kolumbus.fi>
-Date: Fri, 15 Nov 2024 19:45:33 +0200
-Cc: martin.petersen@oracle.com,
- "James.Bottomley@hansenpartnership.com" <James.Bottomley@HansenPartnership.com>,
- loberman@redhat.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <7E2EA0D1-63ED-44A8-A12B-C9B78C28B0E5@kolumbus.fi>
-References: <20241115162003.3908-1-Kai.Makisara@kolumbus.fi>
- <20241115162003.3908-2-Kai.Makisara@kolumbus.fi>
-To: linux-scsi@vger.kernel.org,
- jmeneghi@redhat.com
-X-Mailer: Apple Mail (2.3826.200.121)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANh4N2cC/4XQza7CIBAF4FcxrMXw00rryvcwLoYyWGLTKlRyj
+ em731Gj1xsXZXcm5DsMN5YwBkxss7ixiDmkMPQUyuWCNS30B+TBUWZKqELUUvGIHppxiNx2Rw7
+ ehz6MV95id8KYuBFVbevSFlYKRsaJroefh7/bP3PE84Vqxr9hGxKB18cbsrxPX3V6pi5LLniFo
+ qy8MeCl2qZLwpVDdnezeluSzpylyPJ6LZwDp7SE7RFjj91qiIcnpz+5uZ/ImrjSaOsbEI111Rd
+ XfHKzmxbEOactgES1Nv4fN03TLx+3iBnKAQAA
+X-Change-ID: 20240912-refactor-blk-affinity-helpers-7089b95b4b10
+To: Jens Axboe <axboe@kernel.dk>, Bjorn Helgaas <bhelgaas@google.com>, 
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+ =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
+ Sagi Grimberg <sagi@grimberg.me>, John Garry <john.g.garry@oracle.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Hannes Reinecke <hare@suse.de>, Ming Lei <ming.lei@redhat.com>
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pci@vger.kernel.org, virtualization@lists.linux.dev, 
+ linux-scsi@vger.kernel.org, megaraidlinux.pdl@broadcom.com, 
+ mpi3mr-linuxdrv.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com, 
+ storagedev@microchip.com, linux-nvme@lists.infradead.org, 
+ Daniel Wagner <wagi@kernel.org>
+X-Mailer: b4 0.14.2
 
+It turns out, it's just not worth to add bits to the core just for
+hisi_sas_v2 driver. I dropped those changes.
 
-> On 15. Nov 2024, at 18.20, Kai M=C3=A4kisara =
-<Kai.Makisara@kolumbus.fi> wrote:
->=20
-> Don't use the was_reset flag set by scsi error handling. It is enough =
-to
-> recognize device resets based in the UNIT ATTENTION sense data. (The
-> retry counts are zero and either REQ_OP_DRV_OUT or REC_OP_DRV_IN are
-> used to prevent retries by midlevel.)
->=20
+BTW, this series is based on linux-block/for-next from 2024-11-11. Not
+sure if this is the right base, if not please let me know which branch I
+should use.
 
-Please hold this patch until the problem below has been solved.
+Original cover letter:
 
+These patches were part of 'honor isolcpus configuration' [1] series. To
+simplify the review process I decided to send this as separate series
+because I think it's a nice cleanup independent of the isolcpus feature.
 
-The following came into my mind when I looked at John's debugging data =
-he
-sent to linux-scsi today.
+Signed-off-by: Daniel Wagner <wagi@kernel.org>
+---
+Changes in v5:
+- dropped the irq_get_affinity callback from struct device_driver
+  again.
+- s/blk_mq_hctx_map_queues/blk_mq_map_hw_queues/
+- collected tags
+- Link to v4: https://lore.kernel.org/r/20241113-refactor-blk-affinity-helpers-v4-0-dd3baa1e267f@kernel.org
 
-I still think that UNIT ATTENTIONs (UAs) reach the high level device =
-without
-problems. The problem is that the device attached to the target first =
-issuing
-a SCSI command after reset gets the UA. As long as this is st device,
-there are no problems. But, if it is the sg device attached to the same =
-target,
-the tape device misses it.
+Changes in v4:
+- added irq_get_affinity callback to struct device_driver
+- hisi_sas use dev pointer directly from hisi_hba.
+- blk_mq_hctx_map_queues: ty irq_get_affinity callback
+  from device_driver first then from bus_type
+- collected tags
+- fixed typos
+- Link to v3: https://lore.kernel.org/r/20241112-refactor-blk-affinity-helpers-v3-0-573bfca0cbd8@kernel.org
 
-The device->was_reset flag stays set in many (most?) cases forever, =
-unless
-someone resets it. (Scsi_error resets it only if the associated kthread =
-ends
-up locking the device door.) Because the flag stays set, the st device =
-can
-notice it even if the sg device gets the UA.
+Changes in v3:
+- dropped the additinal argument in blk_mq_hctx_map_queues.
+  leave open coded version in hisi_sas_v2.
+- splitted "blk-mp: introduce blk_mq_hctx_map_queues" patch into
+  three patches.
+- dropped local variable in pci_device_irq_get_affinity
+- Link to v2: https://lore.kernel.org/r/20241111-refactor-blk-affinity-helpers-v2-0-f360ddad231a@kernel.org
 
-Using a flag set by an other layer is ugly (to put it mildly). Even =
-uglier is that
-st clears the flag when it has noticed that it is set.
+Changes in v2:
+- added new callback to struct bus_type and call directly the affinity
+  helpers from there.
+- Link to v1: https://lore.kernel.org/r/20240913-refactor-blk-affinity-helpers-v1-0-8e058f77af12@suse.de
 
-And there are cases where the device reset does not originate from the
-same computer.
+Changes in v1:
+- renamed blk_mq_dev_map_queues to blk_mq_hctx_map_queues
+- squased 'virito: add APIs for retrieving vq affinity' into
+  'blk-mq: introduce blk_mq_hctx_map_queues'
+- moved hisi_sas changed into a new patch
+- hisi_sas use define instead of hard coded value
+- moved helpers into their matching subsystem, removed
+  blk-mq-pci and blk-mq-virtio files
+- fix spelling/typos
+- fixed long lines in docu (yep new lines in brief descriptions are
+  supported, tested ti)
+- based on the first part of
+  [1] https://lore.kernel.org/all/20240806-isolcpus-io-queues-v3-0-da0eecfeaf8b@suse.de
 
-Does anyone have any suggestions?
+---
+Daniel Wagner (8):
+      driver core: bus: add irq_get_affinity callback to bus_type
+      PCI: hookup irq_get_affinity callback
+      virtio: hookup irq_get_affinity callback
+      blk-mq: introduce blk_mq_map_hw_queues
+      scsi: replace blk_mq_pci_map_queues with blk_mq_map_hw_queues
+      nvme: replace blk_mq_pci_map_queues with blk_mq_map_hw_queues
+      virtio: blk/scsi: replace blk_mq_virtio_map_queues with blk_mq_map_hw_queues
+      blk-mq: remove unused queue mapping helpers
+
+ block/Makefile                            |  2 --
+ block/blk-mq-cpumap.c                     | 37 +++++++++++++++++++++++++
+ block/blk-mq-pci.c                        | 46 -------------------------------
+ block/blk-mq-virtio.c                     | 46 -------------------------------
+ drivers/block/virtio_blk.c                |  4 +--
+ drivers/nvme/host/fc.c                    |  1 -
+ drivers/nvme/host/pci.c                   |  3 +-
+ drivers/pci/pci-driver.c                  | 14 ++++++++++
+ drivers/scsi/fnic/fnic_main.c             |  3 +-
+ drivers/scsi/hisi_sas/hisi_sas.h          |  1 -
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c    |  4 +--
+ drivers/scsi/megaraid/megaraid_sas_base.c |  3 +-
+ drivers/scsi/mpi3mr/mpi3mr.h              |  1 -
+ drivers/scsi/mpi3mr/mpi3mr_os.c           |  2 +-
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c      |  3 +-
+ drivers/scsi/pm8001/pm8001_init.c         |  2 +-
+ drivers/scsi/pm8001/pm8001_sas.h          |  1 -
+ drivers/scsi/qla2xxx/qla_nvme.c           |  3 +-
+ drivers/scsi/qla2xxx/qla_os.c             |  4 +--
+ drivers/scsi/smartpqi/smartpqi_init.c     |  7 ++---
+ drivers/scsi/virtio_scsi.c                |  3 +-
+ drivers/virtio/virtio.c                   | 19 +++++++++++++
+ include/linux/blk-mq-pci.h                | 11 --------
+ include/linux/blk-mq-virtio.h             | 11 --------
+ include/linux/blk-mq.h                    |  2 ++
+ include/linux/device/bus.h                |  3 ++
+ 26 files changed, 92 insertions(+), 144 deletions(-)
+---
+base-commit: c9af98a7e8af266bae73e9d662b8341da1ec5824
+change-id: 20240912-refactor-blk-affinity-helpers-7089b95b4b10
+
+Best regards,
+-- 
+Daniel Wagner <wagi@kernel.org>
 
 
