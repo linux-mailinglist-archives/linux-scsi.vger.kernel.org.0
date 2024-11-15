@@ -1,182 +1,81 @@
-Return-Path: <linux-scsi+bounces-9963-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-9978-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15CE49CF36A
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Nov 2024 18:56:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CFAB9CF37B
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Nov 2024 19:00:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50B7CB3747A
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Nov 2024 16:38:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9B211F240F5
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Nov 2024 18:00:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BC8E1D5166;
-	Fri, 15 Nov 2024 16:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D60F1D79A5;
+	Fri, 15 Nov 2024 18:00:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ci0n79GX"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="u3asuL4I"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071C61E4A6;
-	Fri, 15 Nov 2024 16:37:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309821CDA3F;
+	Fri, 15 Nov 2024 18:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731688672; cv=none; b=HShJ6/cMsPBVYg+2QdOdDZR7VoZK7Gr2Lg58mclqNQt/grDNOr2Ga1kQIgcR9XB99U2lWgruUW/FXhYRhzmP2Md7krgD3HVq6rOP0rNntvRMnqdz8oCGmzzjHx+Su4XxkQj6dX0qPEk3KBzzyuzfdUU7d5JHIdsFYbMxjxaGY+Q=
+	t=1731693622; cv=none; b=nScBcT1nT5nXoqIC2PNcNYpiY/hO6MUKFeDi8b4iPvNv7uZHAxuhVj4wphOiGslztZ1zpdpVw1MsgFz6YIpWLc94u4Ux9/bpg+C1cVWtK4kcJQc+3j7bqUdsl2IQZ406FK9IgAO/BtH2wBGsWe88SCQ7ymt9hrTeIDPVf/xytaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731688672; c=relaxed/simple;
-	bh=xPIEzNMgELR96A8fMGWEUYtmUX8fIT/IURHsLtPs3dE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=peUanB6/7XSZAIRlQedxKtdtUa/SeuGs1mUkGV75k9S1CiRrSvrRGQOjm9cEQAmYUwdBd06l2PJKj+L5iogK0VMReq/TVV1HVj28hTJhNsnSAGVoa+FZGFwX08VyH9ugqKL/b4IKhUWdfgNF529Ydk3D3nGfsriC/1iTOs7P/Yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ci0n79GX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AC11C4CED0;
-	Fri, 15 Nov 2024 16:37:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731688671;
-	bh=xPIEzNMgELR96A8fMGWEUYtmUX8fIT/IURHsLtPs3dE=;
-	h=From:Subject:Date:To:Cc:From;
-	b=Ci0n79GXpD+jm0+r+F9HkavA5zO439RHVREHGgBezDSJywcwC8KeVPR4au0Y1sYTJ
-	 HJDSqAwJmQCITjKfF3xHy8cFlmW+EGi/mikoxmbtiNSW8oPHDVV9D44sOjBJ8LaFlJ
-	 d5J6hTkAq+ewYBE/A5z7RZwyPbxlnu46xg1pmS8KEAemlhufP8hw6IOZbGY7ApNBPo
-	 iBa4g2n5umIxHgJZRWtVWxHRxRYZXhDuxgvBX9Cb2s7Auy54QvYNxZXd4L3OVzVl6S
-	 26c7LlRuD9PBCtt34ywkFmUA/u/e9c5JvwlhIjy6V50k55ypwhP2ZZaJgTp3nTY5vs
-	 69P07L8RWI0fw==
-From: Daniel Wagner <wagi@kernel.org>
-Subject: [PATCH v5 0/8] blk: refactor queue affinity helpers
-Date: Fri, 15 Nov 2024 17:37:44 +0100
-Message-Id: <20241115-refactor-blk-affinity-helpers-v5-0-c472afd84d9f@kernel.org>
+	s=arc-20240116; t=1731693622; c=relaxed/simple;
+	bh=kz1/rdO3MbFLFPxJLFU6eWzlgrxKAo09K7jT0P0w11g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=OI4ZU07j2EYVMSrzclZXiv5zYXT1M3Aa+ZLxPxG8PMkgb1kq9A+w6LexiI3Gr3WmazsVa1iHA+ivcEDjjm1sX//2nNmdyQhLo6pinFW5n2GUVXSqE3BmVYfyzrbZtaa5F4PXMEeF/yPyJRBT8DFOnEoEU0UYgTajOsyBGYns1zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=u3asuL4I; arc=none smtp.client-ip=199.89.1.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4XqlDG2dbbz6CmQyW;
+	Fri, 15 Nov 2024 18:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1731693611; x=1734285612; bh=kz1/rdO3MbFLFPxJLFU6eWzl
+	grxKAo09K7jT0P0w11g=; b=u3asuL4IjmGCidOmgRw8CoZ/sdtX+T472kDGpWYz
+	tncvLg4rUGZ/jxDgOdy7MUJvDF1ctKUzMYZvqF4+fPZQoABQbC0Y0p0bU4I90WTw
+	+iKSWU4WW44LgPGSnn5LNeSNT6ayUDFWnjWqdFKTysODqoe9H+txaj5PB0lSLT6h
+	384UaQbrY6xYkDQOMu3CPeafw2gkPRyF7NGPSHZEKhxVOL9Q/a1pGjUOpwaz4F7r
+	AMA2KmMZFvxqG4HdlKd32lz5nkP8yb8RCVmfpfgaedszfHDZmHAlsZsWPl9ttxod
+	MfNh9wluK9smCXLc/SvuY5QZKXIJpPFVjErUYSsI5tDaVg==
+X-Virus-Scanned: by MailRoute
+Received: from 008.lax.mailroute.net ([127.0.0.1])
+ by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id h_RTI91TuQQ3; Fri, 15 Nov 2024 18:00:11 +0000 (UTC)
+Received: from [100.66.154.22] (unknown [104.135.204.82])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4XqlD971plz6CmQyV;
+	Fri, 15 Nov 2024 18:00:09 +0000 (UTC)
+Message-ID: <1e56d9f8-6e16-4f17-9fdb-5296bb308bdd@acm.org>
+Date: Fri, 15 Nov 2024 10:00:06 -0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [scsi?] [usb?] KASAN: slab-use-after-free Read in
+ sg_release
+To: syzbot <syzbot+7efb5850a17ba6ce098b@syzkaller.appspotmail.com>,
+ linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+ linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <672b574b.050a0220.2edce.1523.GAE@google.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <672b574b.050a0220.2edce.1523.GAE@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANh4N2cC/4XQza7CIBAF4FcxrMXw00rryvcwLoYyWGLTKlRyj
- em731Gj1xsXZXcm5DsMN5YwBkxss7ixiDmkMPQUyuWCNS30B+TBUWZKqELUUvGIHppxiNx2Rw7
- ehz6MV95id8KYuBFVbevSFlYKRsaJroefh7/bP3PE84Vqxr9hGxKB18cbsrxPX3V6pi5LLniFo
- qy8MeCl2qZLwpVDdnezeluSzpylyPJ6LZwDp7SE7RFjj91qiIcnpz+5uZ/ImrjSaOsbEI111Rd
- XfHKzmxbEOactgES1Nv4fN03TLx+3iBnKAQAA
-X-Change-ID: 20240912-refactor-blk-affinity-helpers-7089b95b4b10
-To: Jens Axboe <axboe@kernel.dk>, Bjorn Helgaas <bhelgaas@google.com>, 
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
- =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
- Sagi Grimberg <sagi@grimberg.me>, John Garry <john.g.garry@oracle.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Hannes Reinecke <hare@suse.de>, Ming Lei <ming.lei@redhat.com>
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pci@vger.kernel.org, virtualization@lists.linux.dev, 
- linux-scsi@vger.kernel.org, megaraidlinux.pdl@broadcom.com, 
- mpi3mr-linuxdrv.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com, 
- storagedev@microchip.com, linux-nvme@lists.infradead.org, 
- Daniel Wagner <wagi@kernel.org>
-X-Mailer: b4 0.14.2
 
-It turns out, it's just not worth to add bits to the core just for
-hisi_sas_v2 driver. I dropped those changes.
-
-BTW, this series is based on linux-block/for-next from 2024-11-11. Not
-sure if this is the right base, if not please let me know which branch I
-should use.
-
-Original cover letter:
-
-These patches were part of 'honor isolcpus configuration' [1] series. To
-simplify the review process I decided to send this as separate series
-because I think it's a nice cleanup independent of the isolcpus feature.
-
-Signed-off-by: Daniel Wagner <wagi@kernel.org>
----
-Changes in v5:
-- dropped the irq_get_affinity callback from struct device_driver
-  again.
-- s/blk_mq_hctx_map_queues/blk_mq_map_hw_queues/
-- collected tags
-- Link to v4: https://lore.kernel.org/r/20241113-refactor-blk-affinity-helpers-v4-0-dd3baa1e267f@kernel.org
-
-Changes in v4:
-- added irq_get_affinity callback to struct device_driver
-- hisi_sas use dev pointer directly from hisi_hba.
-- blk_mq_hctx_map_queues: ty irq_get_affinity callback
-  from device_driver first then from bus_type
-- collected tags
-- fixed typos
-- Link to v3: https://lore.kernel.org/r/20241112-refactor-blk-affinity-helpers-v3-0-573bfca0cbd8@kernel.org
-
-Changes in v3:
-- dropped the additinal argument in blk_mq_hctx_map_queues.
-  leave open coded version in hisi_sas_v2.
-- splitted "blk-mp: introduce blk_mq_hctx_map_queues" patch into
-  three patches.
-- dropped local variable in pci_device_irq_get_affinity
-- Link to v2: https://lore.kernel.org/r/20241111-refactor-blk-affinity-helpers-v2-0-f360ddad231a@kernel.org
-
-Changes in v2:
-- added new callback to struct bus_type and call directly the affinity
-  helpers from there.
-- Link to v1: https://lore.kernel.org/r/20240913-refactor-blk-affinity-helpers-v1-0-8e058f77af12@suse.de
-
-Changes in v1:
-- renamed blk_mq_dev_map_queues to blk_mq_hctx_map_queues
-- squased 'virito: add APIs for retrieving vq affinity' into
-  'blk-mq: introduce blk_mq_hctx_map_queues'
-- moved hisi_sas changed into a new patch
-- hisi_sas use define instead of hard coded value
-- moved helpers into their matching subsystem, removed
-  blk-mq-pci and blk-mq-virtio files
-- fix spelling/typos
-- fixed long lines in docu (yep new lines in brief descriptions are
-  supported, tested ti)
-- based on the first part of
-  [1] https://lore.kernel.org/all/20240806-isolcpus-io-queues-v3-0-da0eecfeaf8b@suse.de
-
----
-Daniel Wagner (8):
-      driver core: bus: add irq_get_affinity callback to bus_type
-      PCI: hookup irq_get_affinity callback
-      virtio: hookup irq_get_affinity callback
-      blk-mq: introduce blk_mq_map_hw_queues
-      scsi: replace blk_mq_pci_map_queues with blk_mq_map_hw_queues
-      nvme: replace blk_mq_pci_map_queues with blk_mq_map_hw_queues
-      virtio: blk/scsi: replace blk_mq_virtio_map_queues with blk_mq_map_hw_queues
-      blk-mq: remove unused queue mapping helpers
-
- block/Makefile                            |  2 --
- block/blk-mq-cpumap.c                     | 37 +++++++++++++++++++++++++
- block/blk-mq-pci.c                        | 46 -------------------------------
- block/blk-mq-virtio.c                     | 46 -------------------------------
- drivers/block/virtio_blk.c                |  4 +--
- drivers/nvme/host/fc.c                    |  1 -
- drivers/nvme/host/pci.c                   |  3 +-
- drivers/pci/pci-driver.c                  | 14 ++++++++++
- drivers/scsi/fnic/fnic_main.c             |  3 +-
- drivers/scsi/hisi_sas/hisi_sas.h          |  1 -
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c    |  4 +--
- drivers/scsi/megaraid/megaraid_sas_base.c |  3 +-
- drivers/scsi/mpi3mr/mpi3mr.h              |  1 -
- drivers/scsi/mpi3mr/mpi3mr_os.c           |  2 +-
- drivers/scsi/mpt3sas/mpt3sas_scsih.c      |  3 +-
- drivers/scsi/pm8001/pm8001_init.c         |  2 +-
- drivers/scsi/pm8001/pm8001_sas.h          |  1 -
- drivers/scsi/qla2xxx/qla_nvme.c           |  3 +-
- drivers/scsi/qla2xxx/qla_os.c             |  4 +--
- drivers/scsi/smartpqi/smartpqi_init.c     |  7 ++---
- drivers/scsi/virtio_scsi.c                |  3 +-
- drivers/virtio/virtio.c                   | 19 +++++++++++++
- include/linux/blk-mq-pci.h                | 11 --------
- include/linux/blk-mq-virtio.h             | 11 --------
- include/linux/blk-mq.h                    |  2 ++
- include/linux/device/bus.h                |  3 ++
- 26 files changed, 92 insertions(+), 144 deletions(-)
----
-base-commit: c9af98a7e8af266bae73e9d662b8341da1ec5824
-change-id: 20240912-refactor-blk-affinity-helpers-7089b95b4b10
-
-Best regards,
--- 
-Daniel Wagner <wagi@kernel.org>
-
+#syz test: https://github.com/bvanassche/linux.git scsi-for-next
 
