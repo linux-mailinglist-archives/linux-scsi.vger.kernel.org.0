@@ -1,307 +1,108 @@
-Return-Path: <linux-scsi+bounces-10064-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10067-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA2FE9D0425
-	for <lists+linux-scsi@lfdr.de>; Sun, 17 Nov 2024 14:52:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D97C9D04D2
+	for <lists+linux-scsi@lfdr.de>; Sun, 17 Nov 2024 18:31:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A649282145
-	for <lists+linux-scsi@lfdr.de>; Sun, 17 Nov 2024 13:52:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 263001F21FC9
+	for <lists+linux-scsi@lfdr.de>; Sun, 17 Nov 2024 17:31:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 752981D88C1;
-	Sun, 17 Nov 2024 13:52:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDD961D8DEE;
+	Sun, 17 Nov 2024 17:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="jWit/9Ba"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dB38pEvz"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17A81D279C;
-	Sun, 17 Nov 2024 13:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0219C15C0;
+	Sun, 17 Nov 2024 17:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731851548; cv=none; b=agr7xWmef9Wg+54pISyYMwkZa47VTDqLfFA0Z//iSqJ7DNtuxMW5m3ef2kp6OPd6M6pp9swOzOl3s8ffT2R7b4xzcctb7QaMhc+jrWZlV0NfZkbZW4NoZjiryqU95gnSyO74fzhFduzrHHy/ILu19jH+eAso5pChy35yb/pttDs=
+	t=1731864703; cv=none; b=N2LxR94UhTlLQsNOQRTlhWbgmHTu1ghCedBNWF9ahwzvQH7mBGyEnfe3eagZyzIQ/cAapA6mz4tEQL4EUUHoIWQvNQnZCzQ3wl85ow4u7vvOxU5usTGdQbAauOzjA6OREqPe8Ipp/w8OXOnj3LVz0fPtVPJThbmP3DIlqjX5lDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731851548; c=relaxed/simple;
-	bh=SdM0gr5ZnGZetFxnq8Bvz290hg24qmrzZGg+7mjxsNY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SA9e7Qb2xrg29Fp4dBGmxWMFJ/TTEymLg/51PxIveDwDRn58HHFu8r0W6ZSBICRS4L6F1UGzxnsAkd/9FgiNNNuCjisC1hBz7TI8zUn5XMqclmeTe8cIhLBnmPFU/zgNqDY5SItPvI0QBHIXSV/K5xXw2jG7YwJJXdH4JHMhqY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=jWit/9Ba; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=NuA3nU7Mljj4Skwk5AEWAw2DtXarZnwqjHoZmt4O0YY=; b=jWit/9BaXp8jTn1f
-	ScG6OE5NFPuvriRl2bOSdxIU1c7KAACD5JQTQcnMxcBypAb9OodHvVra08JgUsUiyLVsUVmZGXz13
-	zbHtYj/tRDoVZYEAitRuu8gPfkMAF9LIg47n7aypcDGeQx92vrW59Sg/E7917HV6fSLMTQ950aRkQ
-	fZ6T/GZhm7WVvFwjeFFqMrsM2Qc7Bg4GmVnedqYDP5Jx+ZwKyA0fhbOYrZpWmtf6gGaqgkWaKCB4Q
-	MpTy1j4q1Ms/AfQPNd1bxrDAuKuMP8qctKvEZl+vdoFtqOpvpb+oU7XPOjKEZR/4K5LCjz7jeBRKf
-	KQ2kfRd2hOXuCesJGg==;
-Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
-	by mx.treblig.org with esmtp (Exim 4.96)
-	(envelope-from <linux@treblig.org>)
-	id 1tCfhK-000MsI-0m;
-	Sun, 17 Nov 2024 13:52:18 +0000
-From: linux@treblig.org
-To: martin.petersen@oracle.com,
-	James.Bottomley@HansenPartnership.com,
-	anil.gurumurthy@qlogic.com,
-	sudarsana.kalluru@qlogic.com
-Cc: linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH 2/2] scsi: bfa: Remove unused parsers
-Date: Sun, 17 Nov 2024 13:52:15 +0000
-Message-ID: <20241117135215.38771-3-linux@treblig.org>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241117135215.38771-1-linux@treblig.org>
-References: <20241117135215.38771-1-linux@treblig.org>
+	s=arc-20240116; t=1731864703; c=relaxed/simple;
+	bh=XU3f8iOzysWsUXprwUt22rCfRKOt8VzIxFdJ24lS6Ew=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=h1IWFzoL182KY/fQ4R7Kg7P2bt7Iyfg+MQPPGeegmumSPh/PRxOpbgkC0WULVXRbIi0ZxFtngoLalCtnaqeAwU0pTY9xdenO95Tps5PpYuiFMnNgp3Sg6CQ5zQAu0gmaXOKDcCnqHKv01ctp+AbhL9U3846iNL7L4v6HmBYP7ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dB38pEvz; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-37d4b0943c7so2253570f8f.1;
+        Sun, 17 Nov 2024 09:31:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731864700; x=1732469500; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XU3f8iOzysWsUXprwUt22rCfRKOt8VzIxFdJ24lS6Ew=;
+        b=dB38pEvzh3LILhgDAXUC9JlZjsTXuynrRZssCIP1EYZUbPuAtTDqj6KZfg0fnCjkSU
+         hjIpEAB0UG1WK+uqo/R6a79Gf/gCB7a3PjgPPzl9m+DnWd5JcCYmT0iUdL5zOpEKbK3o
+         8bwP6Moku+cs7MIE6SwDF3X1iRytCiF4tO/dgwKGGVaGY+m71Y26R+ULFZSfYid/UiNj
+         RblUxfh9gfiSZW4FMVZ3ExKBmDSdenU23v/Q8hXRdoFn2W0eZXb2jHxycg6P/harZCbr
+         Gwwj5dXgCO/VvnST5FcHnoEdW0a0Fhz3yazD3tZvhkWFSkwQgvfW/ovANN4Zj56vNkXl
+         gcnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731864700; x=1732469500;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XU3f8iOzysWsUXprwUt22rCfRKOt8VzIxFdJ24lS6Ew=;
+        b=DkBwPZ5hJouuZydHcCV2uiIgSEG+o9LJ5jry0O0Mk7g0wcl3tuBwfrvmhAQa6ON0+a
+         ScR2gyBF6p3bUxz+BFW9k/mtgOEs7OlcJWAYW73wdDCGaQE3JaqXu5/sTG2IchL9iaUg
+         v5nZgPXzmmd2ioSvOGEUFlFYFcyOTFL55W4YHYRNJvL3/e/pp3uT3smsnBWx36+n1cV4
+         1EDCP/mQD5xZZuq/dgbgMcGZO0XOX81qsDEXBHBNte5UB+Qr65o/ZvXVLBQPDvGW+qW0
+         P+T2RgeR+oe0PnE+HeI9e6uzOQ4lqOQAYp4dzDFqkPLyHTvj8akTYG+gvhwVfAmQeNld
+         KzDw==
+X-Forwarded-Encrypted: i=1; AJvYcCU/r5oS8anp/tyjraNR5kjvqlAnSKxnQHRw07ELG6lBRB2x+7ifbTAPdwpIs6QRxhVe6Mghfva3@vger.kernel.org, AJvYcCU4cPXRZbL61XmanX/h8dVcL4nQCtWz1ew3ZE+OzkE2q/dWjfSCxr5H6fQt1T3BAZDbWLk+D+9Wux9pcLPiA75RZN4=@vger.kernel.org, AJvYcCUAEKaI7v2HwfaFJ17lE7lxVYIuL4CMA4LquKBZzmhWw0Zr4Mv5MptWLRmyLxOxCeMtsHIRldrLBE3Hih81C0npjgs=@vger.kernel.org, AJvYcCWeZgrdvCgj+Lb8/9yDpFe6Hju2TE1dfxeF0ntkC+C2HEZifrtNsw7oflyO4mf6ugQdrQOfVaU3lYXZSi/2@vger.kernel.org, AJvYcCX4Zwb1d5VWDuBmuT4fa4kfn9CLit0+stmpCgTQX7deg3nnYP+RZ0w75xLOVumGHlYf+2BRqI+Q4pWwulSQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YxubAau92N+EyC3chUpoNQwJEc8VqJ9GMEVUzNPHXFJL06Md12i
+	z0F44XDFf2rBCRt3+OTpXdyEMwOOsbMnIMtpIINz+WWhDBc4mp5L
+X-Google-Smtp-Source: AGHT+IGM5AOKwL/Gq+vlCdXodaTvKaKrFRZZ7omamsRPMIsQdxFKGxSowkpEpgRfKiIOKPWFsLR64Q==
+X-Received: by 2002:a05:6000:1fac:b0:382:d7a:315b with SMTP id ffacd0b85a97d-382258f0d9emr8122852f8f.11.1731864700227;
+        Sun, 17 Nov 2024 09:31:40 -0800 (PST)
+Received: from p200300c58705a8eb1a556f9921c6cbbb.dip0.t-ipconnect.de (p200300c58705a8eb1a556f9921c6cbbb.dip0.t-ipconnect.de. [2003:c5:8705:a8eb:1a55:6f99:21c6:cbbb])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3821ae1685csm10504821f8f.83.2024.11.17.09.31.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Nov 2024 09:31:39 -0800 (PST)
+Message-ID: <050e354f0d413dc39164bb72262b84b8c2038073.camel@gmail.com>
+Subject: Re: [PATCH 1/5] scsi: ufs: core: Cancel RTC work during
+ ufshcd_remove()
+From: Bean Huo <huobean@gmail.com>
+To: manivannan.sadhasivam@linaro.org, Alim Akhtar <alim.akhtar@samsung.com>,
+  Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, "Martin K.
+ Petersen" <martin.petersen@oracle.com>, Mike Bi <mikebi@micron.com>, Bean
+ Huo <beanhuo@micron.com>, Thomas =?ISO-8859-1?Q?Wei=DFschuh?=
+ <linux@weissschuh.net>,  Luca Porzio <lporzio@micron.com>, Asutosh Das
+ <quic_asutoshd@quicinc.com>, Can Guo <quic_cang@quicinc.com>,  Pedro Sousa
+ <pedrom.sousa@synopsys.com>, Krzysztof Kozlowski <krzk@kernel.org>, Peter
+ Wang <peter.wang@mediatek.com>, Stanley Jhu <chu.stanley@gmail.com>,
+ Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, Orson Zhai
+ <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan
+ Zhang <zhang.lyra@gmail.com>,  Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Santosh Y <santoshsy@gmail.com>, Namjae Jeon <linkinjeon@gmail.com>
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-mediatek@lists.infradead.org, 
+	linux-renesas-soc@vger.kernel.org, stable@vger.kernel.org
+Date: Sun, 17 Nov 2024 18:31:32 +0100
+In-Reply-To: <20241111-ufs_bug_fix-v1-1-45ad8b62f02e@linaro.org>
+References: <20241111-ufs_bug_fix-v1-0-45ad8b62f02e@linaro.org>
+	 <20241111-ufs_bug_fix-v1-1-45ad8b62f02e@linaro.org>
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-bfa has a set of structure parsers, of which quite a few are unused.
-Remove the unused set.
-
-Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
----
- drivers/scsi/bfa/bfa_fcbuild.c | 134 ---------------------------------
- drivers/scsi/bfa/bfa_fcbuild.h |  17 -----
- 2 files changed, 151 deletions(-)
-
-diff --git a/drivers/scsi/bfa/bfa_fcbuild.c b/drivers/scsi/bfa/bfa_fcbuild.c
-index 0f5d8a9cdf14..c44fd096ee68 100644
---- a/drivers/scsi/bfa/bfa_fcbuild.c
-+++ b/drivers/scsi/bfa/bfa_fcbuild.c
-@@ -259,40 +259,6 @@ fc_plogi_acc_build(struct fchs_s *fchs, void *pld, u32 d_id, u32 s_id,
- 				node_name, pdu_size, bb_cr, FC_ELS_ACC);
- }
- 
--enum fc_parse_status
--fc_plogi_rsp_parse(struct fchs_s *fchs, int len, wwn_t port_name)
--{
--	struct fc_els_cmd_s *els_cmd = (struct fc_els_cmd_s *) (fchs + 1);
--	struct fc_logi_s *plogi;
--	struct fc_ls_rjt_s *ls_rjt;
--
--	switch (els_cmd->els_code) {
--	case FC_ELS_LS_RJT:
--		ls_rjt = (struct fc_ls_rjt_s *) (fchs + 1);
--		if (ls_rjt->reason_code == FC_LS_RJT_RSN_LOGICAL_BUSY)
--			return FC_PARSE_BUSY;
--		else
--			return FC_PARSE_FAILURE;
--	case FC_ELS_ACC:
--		plogi = (struct fc_logi_s *) (fchs + 1);
--		if (len < sizeof(struct fc_logi_s))
--			return FC_PARSE_FAILURE;
--
--		if (!wwn_is_equal(plogi->port_name, port_name))
--			return FC_PARSE_FAILURE;
--
--		if (!plogi->class3.class_valid)
--			return FC_PARSE_FAILURE;
--
--		if (be16_to_cpu(plogi->class3.rxsz) < (FC_MIN_PDUSZ))
--			return FC_PARSE_FAILURE;
--
--		return FC_PARSE_OK;
--	default:
--		return FC_PARSE_FAILURE;
--	}
--}
--
- enum fc_parse_status
- fc_plogi_parse(struct fchs_s *fchs)
- {
-@@ -365,21 +331,6 @@ fc_prli_rsp_parse(struct fc_prli_s *prli, int len)
- 	return FC_PARSE_OK;
- }
- 
--enum fc_parse_status
--fc_prli_parse(struct fc_prli_s *prli)
--{
--	if (prli->parampage.type != FC_TYPE_FCP)
--		return FC_PARSE_FAILURE;
--
--	if (!prli->parampage.imagepair)
--		return FC_PARSE_FAILURE;
--
--	if (!prli->parampage.servparams.initiator)
--		return FC_PARSE_FAILURE;
--
--	return FC_PARSE_OK;
--}
--
- u16
- fc_logo_build(struct fchs_s *fchs, struct fc_logo_s *logo, u32 d_id, u32 s_id,
- 	      u16 ox_id, wwn_t port_name)
-@@ -450,55 +401,6 @@ fc_adisc_rsp_parse(struct fc_adisc_s *adisc, int len, wwn_t port_name,
- 	return FC_PARSE_OK;
- }
- 
--enum fc_parse_status
--fc_adisc_parse(struct fchs_s *fchs, void *pld, u32 host_dap, wwn_t node_name,
--	       wwn_t port_name)
--{
--	struct fc_adisc_s *adisc = (struct fc_adisc_s *) pld;
--
--	if (adisc->els_cmd.els_code != FC_ELS_ACC)
--		return FC_PARSE_FAILURE;
--
--	if ((adisc->nport_id == (host_dap))
--	    && wwn_is_equal(adisc->orig_port_name, port_name)
--	    && wwn_is_equal(adisc->orig_node_name, node_name))
--		return FC_PARSE_OK;
--
--	return FC_PARSE_FAILURE;
--}
--
--enum fc_parse_status
--fc_pdisc_parse(struct fchs_s *fchs, wwn_t node_name, wwn_t port_name)
--{
--	struct fc_logi_s *pdisc = (struct fc_logi_s *) (fchs + 1);
--
--	if (pdisc->class3.class_valid != 1)
--		return FC_PARSE_FAILURE;
--
--	if ((be16_to_cpu(pdisc->class3.rxsz) <
--		(FC_MIN_PDUSZ - sizeof(struct fchs_s)))
--	    || (pdisc->class3.rxsz == 0))
--		return FC_PARSE_FAILURE;
--
--	if (!wwn_is_equal(pdisc->port_name, port_name))
--		return FC_PARSE_FAILURE;
--
--	if (!wwn_is_equal(pdisc->node_name, node_name))
--		return FC_PARSE_FAILURE;
--
--	return FC_PARSE_OK;
--}
--
--enum fc_parse_status
--fc_abts_rsp_parse(struct fchs_s *fchs, int len)
--{
--	if ((fchs->cat_info == FC_CAT_BA_ACC)
--	    || (fchs->cat_info == FC_CAT_BA_RJT))
--		return FC_PARSE_OK;
--
--	return FC_PARSE_FAILURE;
--}
--
- u16
- fc_logo_acc_build(struct fchs_s *fchs, void *pld, u32 d_id, u32 s_id,
- 		  __be16 ox_id)
-@@ -666,29 +568,6 @@ fc_rpsc_acc_build(struct fchs_s *fchs, struct fc_rpsc_acc_s *rpsc_acc,
- 	return sizeof(struct fc_rpsc_acc_s);
- }
- 
--u16
--fc_pdisc_rsp_parse(struct fchs_s *fchs, int len, wwn_t port_name)
--{
--	struct fc_logi_s *pdisc = (struct fc_logi_s *) (fchs + 1);
--
--	if (len < sizeof(struct fc_logi_s))
--		return FC_PARSE_LEN_INVAL;
--
--	if (pdisc->els_cmd.els_code != FC_ELS_ACC)
--		return FC_PARSE_ACC_INVAL;
--
--	if (!wwn_is_equal(pdisc->port_name, port_name))
--		return FC_PARSE_PWWN_NOT_EQUAL;
--
--	if (!pdisc->class3.class_valid)
--		return FC_PARSE_NWWN_NOT_EQUAL;
--
--	if (be16_to_cpu(pdisc->class3.rxsz) < (FC_MIN_PDUSZ))
--		return FC_PARSE_RXSZ_INVAL;
--
--	return FC_PARSE_OK;
--}
--
- static void
- fc_gs_cthdr_build(struct ct_hdr_s *cthdr, u32 s_id, u16 cmd_code)
- {
-@@ -752,19 +631,6 @@ fc_gpnid_build(struct fchs_s *fchs, void *pyld, u32 s_id, u16 ox_id,
- 	return sizeof(fcgs_gpnid_req_t) + sizeof(struct ct_hdr_s);
- }
- 
--u16
--fc_ct_rsp_parse(struct ct_hdr_s *cthdr)
--{
--	if (be16_to_cpu(cthdr->cmd_rsp_code) != CT_RSP_ACCEPT) {
--		if (cthdr->reason_code == CT_RSN_LOGICAL_BUSY)
--			return FC_PARSE_BUSY;
--		else
--			return FC_PARSE_FAILURE;
--	}
--
--	return FC_PARSE_OK;
--}
--
- u16
- fc_gs_rjt_build(struct fchs_s *fchs,  struct ct_hdr_s *cthdr,
- 		u32 d_id, u32 s_id, u16 ox_id, u8 reason_code,
-diff --git a/drivers/scsi/bfa/bfa_fcbuild.h b/drivers/scsi/bfa/bfa_fcbuild.h
-index 26646106da4c..51da37b2ae6b 100644
---- a/drivers/scsi/bfa/bfa_fcbuild.h
-+++ b/drivers/scsi/bfa/bfa_fcbuild.h
-@@ -139,8 +139,6 @@ u16        fc_plogi_build(struct fchs_s *fchs, void *pld, u32 d_id,
- 
- enum fc_parse_status fc_plogi_parse(struct fchs_s *fchs);
- 
--enum fc_parse_status fc_abts_rsp_parse(struct fchs_s *buf, int len);
--
- u16        fc_rspnid_build(struct fchs_s *fchs, void *pld, u32 s_id,
- 				u16 ox_id, u8 *name);
- u16	fc_rsnn_nn_build(struct fchs_s *fchs, void *pld, u32 s_id,
-@@ -174,9 +172,6 @@ u16        fc_adisc_build(struct fchs_s *fchs, struct fc_adisc_s *adisc,
- 			u32 d_id, u32 s_id, __be16 ox_id, wwn_t port_name,
- 			       wwn_t node_name);
- 
--enum fc_parse_status fc_adisc_parse(struct fchs_s *fchs, void *pld,
--			u32 host_dap, wwn_t node_name, wwn_t port_name);
--
- enum fc_parse_status fc_adisc_rsp_parse(struct fc_adisc_s *adisc, int len,
- 				 wwn_t port_name, wwn_t node_name);
- 
-@@ -230,14 +225,6 @@ void		fc_get_fc4type_bitmask(u8 fc4_type, u8 *bit_mask);
- void		fc_els_req_build(struct fchs_s *fchs, u32 d_id, u32 s_id,
- 					 __be16 ox_id);
- 
--enum fc_parse_status	fc_plogi_rsp_parse(struct fchs_s *fchs, int len,
--					wwn_t port_name);
--
--enum fc_parse_status	fc_prli_parse(struct fc_prli_s *prli);
--
--enum fc_parse_status	fc_pdisc_parse(struct fchs_s *fchs, wwn_t node_name,
--					wwn_t port_name);
--
- u16 fc_ba_acc_build(struct fchs_s *fchs, struct fc_ba_acc_s *ba_acc, u32 d_id,
- 		u32 s_id, __be16 ox_id, u16 rx_id);
- 
-@@ -246,12 +233,8 @@ int fc_logout_params_pages(struct fchs_s *fc_frame, u8 els_code);
- u16 fc_prlo_acc_build(struct fchs_s *fchs, struct fc_prlo_acc_s *prlo_acc,
- 		u32 d_id, u32 s_id, __be16 ox_id, int num_pages);
- 
--u16 fc_pdisc_rsp_parse(struct fchs_s *fchs, int len, wwn_t port_name);
--
- u16 fc_tprlo_build(struct fchs_s *fchs, u32 d_id, u32 s_id,
- 		u16 ox_id, int num_pages, enum fc_tprlo_type tprlo_type,
- 		u32 tpr_id);
- 
--u16 fc_ct_rsp_parse(struct ct_hdr_s *cthdr);
--
- #endif
--- 
-2.47.0
-
+Reviewed-by: Bean Huo <beanhuo@micron.com>
 
