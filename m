@@ -1,145 +1,86 @@
-Return-Path: <linux-scsi+bounces-10063-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10066-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 787FE9D0166
-	for <lists+linux-scsi@lfdr.de>; Sun, 17 Nov 2024 00:10:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 746FE9D0429
+	for <lists+linux-scsi@lfdr.de>; Sun, 17 Nov 2024 14:53:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FA4F1F21C10
-	for <lists+linux-scsi@lfdr.de>; Sat, 16 Nov 2024 23:10:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0AF27B221FF
+	for <lists+linux-scsi@lfdr.de>; Sun, 17 Nov 2024 13:53:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E66D71B0F0B;
-	Sat, 16 Nov 2024 23:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D037D1D89F1;
+	Sun, 17 Nov 2024 13:52:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V+74xtRE"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="ZmWcIu+O"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A867729A2;
-	Sat, 16 Nov 2024 23:10:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE42F1D90A5;
+	Sun, 17 Nov 2024 13:52:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731798624; cv=none; b=oUQHQ9AzcAxB5wXKbnAXtYEQLE719eDKx6Dp70IYDUm4MXsbf9X44oEY8JdNtwpXe3YVll0yuu30fYptitlJYDAV9i0ik3qoF5jHzmLjpz47oL7jKRsBzVdofjV6lXcRig0GbXF0WFyyAxWHfuHf4LljJnHsiJ5WOXCP5oplVtU=
+	t=1731851561; cv=none; b=prVHh5eJj5Zlg6zoxev4YZXyYZt8y0+/nVXG2iKfG0oNRJKqXVzQ5BdT2TdZEaXWUAEzPeAJaO8ZFLUyoMp6yntHJQpNWwqU5elWUwTnOsoJTMGgDWZFzy/pIvqojKCcjTC1zGJuJ9w8UKkBgMRD6grTpCM+fz8ZFNFspMCkZDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731798624; c=relaxed/simple;
-	bh=J8TdKlbufzk8/hb67F60g16aY7BksH2lDSQzP/7KGb0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OUMHTiIgU05teSNCP9k54DG685nfPt88NPaQMsntJvcq6h2Ft9e0//mAfZoAy2QWuJSIQ/12WsGUnEmYuOdqVLvjxtLUYjITWO/ZHYPJVGcSQNECjdoJ/B69Byg9RZ1ZmbzIzIr2aVyDb+dFqsZfQlJi2JQu9qVtkl0Gq3kHfMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V+74xtRE; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731798623; x=1763334623;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J8TdKlbufzk8/hb67F60g16aY7BksH2lDSQzP/7KGb0=;
-  b=V+74xtREoIPt+e7tjT3W3JZ9TmdD0LoOSZiJ6fQyG1Use5m5Wl9iXe5P
-   SxH75+4Botx/OlS27k49LGMVtq9BTqHFJvpVDwDQXFipzgrY7CNDBKvkj
-   mEHwneJXI8Z8PdTMkPJYWERaARV3HKMVksEQDSbWwVWFOHEKZorSMkjV5
-   UjojxUoE707MdDfDlTRD5d7lb/CjYypekU8OusDh2aLvO1gqMEGwbxQdN
-   SSmmOKk+UwuBDU6XGbuxj8zEuon2u6J4V2MoMosa2iVMXpPXbfdb++DVB
-   X12c8Qe7iMaLpmhVlzUHc67SNkZBwtYxIzuSJTh2HoZqS7704G5PJ3rYo
-   g==;
-X-CSE-ConnectionGUID: y1qfZXGCQjyjfb3+U2IUoQ==
-X-CSE-MsgGUID: Kx4mXAujRWiYYQByjrFX1w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="19388885"
-X-IronPort-AV: E=Sophos;i="6.12,160,1728975600"; 
-   d="scan'208";a="19388885"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 15:10:22 -0800
-X-CSE-ConnectionGUID: 18+FoBMjQe2kvuLxiyxaXA==
-X-CSE-MsgGUID: x4jbkL5oTsSTSFJ0eVCDHQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,160,1728975600"; 
-   d="scan'208";a="89284449"
-Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 16 Nov 2024 15:10:17 -0800
-Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tCRvi-00019x-2o;
-	Sat, 16 Nov 2024 23:10:14 +0000
-Date: Sun, 17 Nov 2024 07:09:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anuj Gupta <anuj20.g@samsung.com>, axboe@kernel.dk, hch@lst.de,
-	kbusch@kernel.org, martin.petersen@oracle.com,
-	asml.silence@gmail.com, anuj1072538@gmail.com, brauner@kernel.org,
-	jack@suse.cz, viro@zeniv.linux.org.uk
-Cc: oe-kbuild-all@lists.linux.dev, io-uring@vger.kernel.org,
-	linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-	gost.dev@samsung.com, linux-scsi@vger.kernel.org,
-	vishak.g@samsung.com, linux-fsdevel@vger.kernel.org,
-	Anuj Gupta <anuj20.g@samsung.com>,
-	Kanchan Joshi <joshi.k@samsung.com>
-Subject: Re: [PATCH v9 06/11] io_uring: introduce attributes for read/write
- and PI support
-Message-ID: <202411170724.GLZyWdlD-lkp@intel.com>
-References: <20241114104517.51726-7-anuj20.g@samsung.com>
+	s=arc-20240116; t=1731851561; c=relaxed/simple;
+	bh=ObcO+Gr8TCkI/gLytzm1vnIEBUyIOuvWYCyed7ryV2w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dXvPhJWMfrUHs59VUTXlsp0UAkHhyTztjQP7OuMZWxyO452rT9X52G4/Wj5FdfbuMx/bced6BRbZ/9AMzLDjs2waR35mvRI6bVZTeJS6vekB587O3/DWNtJ0xM+Pf/YvNTzBnjqA30j13HV3yUvqtPHFF0DuEuhSALNQtjIkdYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=ZmWcIu+O; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
+	:Subject; bh=ZyBmIjTIcSGbctwyBnIM3F3AfWbOl1Dn1J1hUcvpU0k=; b=ZmWcIu+OPQtrKDSc
+	3qUunJJTSGcXL4QXerHQunYFmtbQ4y5ajLsc5GCtIf0sHA2vJZM1oonhe975mEwDfeB5RxENl3fYO
+	sPooZyV21nsYnCuM3UPEtto8QWeGPgL5djkAbmd5OQSiqLL4KzoBF21eBJkfQ1CAPz7UspDZce+yP
+	Fk4j8D9dKEgybiwf77HlNpSVUt1xb52Ee1z94/YWgwvGKT5pXa80ikgzWmsp/OkZ0Rs+evPrAd5PX
+	fvdk3haasbbSoq7t6z3DFVRSMMst7po+qjQCX7HBTSCod8BJlS9qoCJvr9eERY+b+Nxsk5bc7p85S
+	IeNnhfYH1SQ+Ib2wFA==;
+Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
+	by mx.treblig.org with esmtp (Exim 4.96)
+	(envelope-from <linux@treblig.org>)
+	id 1tCfhI-000MsI-2r;
+	Sun, 17 Nov 2024 13:52:16 +0000
+From: linux@treblig.org
+To: martin.petersen@oracle.com,
+	James.Bottomley@HansenPartnership.com,
+	anil.gurumurthy@qlogic.com,
+	sudarsana.kalluru@qlogic.com
+Cc: linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Dr. David Alan Gilbert" <linux@treblig.org>
+Subject: [PATCH 0/2] scsi: bfa: builder/parser deadcode
+Date: Sun, 17 Nov 2024 13:52:13 +0000
+Message-ID: <20241117135215.38771-1-linux@treblig.org>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241114104517.51726-7-anuj20.g@samsung.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Anuj,
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-kernel test robot noticed the following build warnings:
+Hi,
+  This set shaves another chunk of unused code out of the
+bfa driver, in it's structure builder/parser helper file.
 
-[auto build test WARNING on axboe-block/for-next]
-[also build test WARNING on next-20241115]
-[cannot apply to brauner-vfs/vfs.all mkp-scsi/for-next hch-configfs/for-next linus/master jejb-scsi/for-next v6.12-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Anuj-Gupta/block-define-set-of-integrity-flags-to-be-inherited-by-cloned-bip/20241114-193419
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20241114104517.51726-7-anuj20.g%40samsung.com
-patch subject: [PATCH v9 06/11] io_uring: introduce attributes for read/write and PI support
-config: arc-nsimosci_hs_smp_defconfig (https://download.01.org/0day-ci/archive/20241117/202411170724.GLZyWdlD-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411170724.GLZyWdlD-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411170724.GLZyWdlD-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   io_uring/rw.c: In function 'io_prep_pi_indirect':
->> io_uring/rw.c:305:38: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     305 |         if (copy_from_user(&pi_attr, (void __user *)pi_attr_addr, sizeof(pi_attr)))
-         |                                      ^
-   io_uring/rw.c: In function 'io_prep_attr_vec':
-   io_uring/rw.c:321:38: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     321 |         if (copy_from_user(attr_vec, (void __user *)attr_addr, attr_vec_size))
-         |                                      ^
+Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 
 
-vim +305 io_uring/rw.c
+Dr. David Alan Gilbert (2):
+  scsi: bfa: Remove unused structure builders
+  scsi: bfa: Remove unused parsers
 
-   298	
-   299	
-   300	static inline int io_prep_pi_indirect(struct io_kiocb *req, struct io_rw *rw,
-   301					      int ddir, u64 pi_attr_addr)
-   302	{
-   303		struct io_uring_attr_pi pi_attr;
-   304	
- > 305		if (copy_from_user(&pi_attr, (void __user *)pi_attr_addr, sizeof(pi_attr)))
-   306			return -EFAULT;
-   307		return io_prep_rw_pi(req, rw, ddir, &pi_attr);
-   308	}
-   309	
+ drivers/scsi/bfa/bfa_fcbuild.c | 482 ---------------------------------
+ drivers/scsi/bfa/bfa_fcbuild.h |  72 -----
+ 2 files changed, 554 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.0
+
 
