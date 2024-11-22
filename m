@@ -1,147 +1,62 @@
-Return-Path: <linux-scsi+bounces-10252-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10254-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E67E9D5987
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Nov 2024 07:46:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6A349D5E88
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Nov 2024 13:05:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF6B81F22C4D
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Nov 2024 06:46:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 835B01F21D74
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Nov 2024 12:05:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0746F176ADB;
-	Fri, 22 Nov 2024 06:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fhEtIoHo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F32301D9598;
+	Fri, 22 Nov 2024 12:04:58 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9771714D7;
-	Fri, 22 Nov 2024 06:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466D62AE96;
+	Fri, 22 Nov 2024 12:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732257956; cv=none; b=oZkdfY+FgZ+nvQ2+5wvei58PzodXSn7XGaQIaZyzqz0VlDkt+YKw0tQ59DT1NTaoWJoH6WQvgka9R1aUHUwkSmxcaJjZ2ES4/jS8+Ct9IZaF5HhAcS8XeWDiLbFjNycJTAmvyl3jE+qKcXQ7CYCu2fQ0BNpPgUvsaP7YucXV6l4=
+	t=1732277098; cv=none; b=t0UoSB5wfdWDUlvrY1K610N+VyGnsR+oNes/YwP/Sqocixh9HyBIcl7vuTkADI46oS1OftZ33hTARRB9v9O12GMVHqCvkLJjn7mgi5RSU1CDxJUzR8qJsI0IeYDfcfOdUUWpVwZeTScsRm/kC/S/4w6kNXiaUuWRHnlszJZH+J8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732257956; c=relaxed/simple;
-	bh=LkyvncKh0x48UcTr9vCZPEKF/s9rYMsKWE+WpL7iRnY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NQ2zse4QXfuCWFFgsv8w4tYxjLUXj9Ov7NiNlqAT+rt1X+1k+VbO5589BzmeiCfibE9QRtsTr2WALu4oIChR9UpYgCLg4JIgHLOkBbEgycRLEJTWedjWBV7OBMzfAf2lZYXxiqCpP0pf/i0pwZlS7bAGQXGe6BbuUBM3W2mWve4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fhEtIoHo; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AM06BtT004507;
-	Fri, 22 Nov 2024 06:45:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	YaiTaDG4h3OUPCY6b36SmXVgqJDmLzA9RMdrQcI0dhM=; b=fhEtIoHokiSEYU+W
-	O7ck7KohtoicDCUcPDhcWLA9DKr+A+GLz2caViexjEz0XR3obLk1aqjuU0++V/Dl
-	I+SXFYViG2HwS3Db2Ve2KoO2YLJ0jffWKg9V67QByONCb4TRccsGgsN/k09GC/nI
-	VDKygLxwYHl6T8g16jcM1fKA45pOQVkLZ5zddDAex2NM2mFyi/G5UQVapfOmbUeL
-	2AGhTBoKy4HuiwHlhJIe7VKo6Uum3mHDYnx/s14wPSHkbly0WU+DSfXRu5kHRhQs
-	RaOLpzQR4FMOMag0SW4dEZFYLurGGxTqqO4LiZBepc3oBacZ7FueGuCnFlRvFhcr
-	QmjCSg==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 431ea761nc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Nov 2024 06:45:45 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AM6jis9032317
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Nov 2024 06:45:44 GMT
-Received: from liuxin-gv.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 21 Nov 2024 22:45:38 -0800
-From: Xin Liu <quic_liuxin@quicinc.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Manivannan Sadhasivam
-	<manivannan.sadhasivam@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-CC: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>, Andy Gross <agross@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <quic_jiegan@quicinc.com>,
-        <quic_aiquny@quicinc.com>, <quic_tingweiz@quicinc.com>,
-        <quic_sayalil@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: [PATCH v3 3/3] arm64: dts: qcom: qcs615-ride: Enable UFS node
-Date: Fri, 22 Nov 2024 14:44:28 +0800
-Message-ID: <20241122064428.278752-4-quic_liuxin@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241122064428.278752-1-quic_liuxin@quicinc.com>
-References: <20241122064428.278752-1-quic_liuxin@quicinc.com>
+	s=arc-20240116; t=1732277098; c=relaxed/simple;
+	bh=+Dq5meN5ukeG5E5CVzMKP2NGpgL13KsyjObR6Jo/W94=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ODWlJpqspudc6/HhozSX12xgm76Th4uim2HZBoyQnYiTJtdEeBGu+GGyPoZL8wUcIsxeFGVVabKamV53XvoB5cVys0N+Hx3o75WSpuKbk/iZDQAa4qNptYo9gc+5LHlV+yK6s6qTxvBm7MBhXEwXDlYzRplXxxSb5Tu7E3xiIB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id CD90E68C4E; Fri, 22 Nov 2024 13:04:44 +0100 (CET)
+Date: Fri, 22 Nov 2024 13:04:44 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Sam Protsenko <semen.protsenko@linaro.org>
+Cc: hch@lst.de, axboe@kernel.dk, linux-block@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] block: remove the ioprio field from struct request
+Message-ID: <20241122120444.GA25679@lst.de>
+References: <20241112170050.1612998-3-hch@lst.de> <20241122050419.21973-1-semen.protsenko@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: K8jRUzzKeywlp14X0yxrF6E6-q71sqBb
-X-Proofpoint-ORIG-GUID: K8jRUzzKeywlp14X0yxrF6E6-q71sqBb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- bulkscore=0 mlxscore=0 suspectscore=0 lowpriorityscore=0 clxscore=1015
- priorityscore=1501 impostorscore=0 malwarescore=0 mlxlogscore=999
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411220054
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241122050419.21973-1-semen.protsenko@linaro.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-From: Sayali Lokhande <quic_sayalil@quicinc.com>
+On Thu, Nov 21, 2024 at 11:04:19PM -0600, Sam Protsenko wrote:
+> Hi Christoph,
+> 
+> This patch causes a regression on E850-96 board. Specifically, there are
+> two noticeable time lags when booting Debian rootfs:
 
-Enable UFS on the Qualcomm QCS615 Ride platform.
-
-Signed-off-by: Sayali Lokhande <quic_sayalil@quicinc.com>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Co-developed-by: Xin Liu <quic_liuxin@quicinc.com>
-Signed-off-by: Xin Liu <quic_liuxin@quicinc.com>
----
- arch/arm64/boot/dts/qcom/qcs615-ride.dts | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/qcs615-ride.dts b/arch/arm64/boot/dts/qcom/qcs615-ride.dts
-index ee6cab3924a6..79634646350b 100644
---- a/arch/arm64/boot/dts/qcom/qcs615-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/qcs615-ride.dts
-@@ -214,6 +214,22 @@ &uart0 {
- 	status = "okay";
- };
- 
-+&ufs_mem_hc {
-+	vcc-supply = <&vreg_l17a>;
-+	vcc-max-microamp = <600000>;
-+	vccq2-supply = <&vreg_s4a>;
-+	vccq2-max-microamp = <600000>;
-+
-+	status = "okay";
-+};
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply = <&vreg_l5a>;
-+	vdda-pll-supply = <&vreg_l12a>;
-+
-+	status = "okay";
-+};
-+
- &watchdog {
- 	clocks = <&sleep_clk>;
- };
--- 
-2.34.1
+What storage driver does this board use?  Anything else interesting
+about the setup?
 
 
