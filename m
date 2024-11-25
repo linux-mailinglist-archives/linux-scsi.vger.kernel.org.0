@@ -1,34 +1,34 @@
-Return-Path: <linux-scsi+bounces-10294-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10297-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 335C99D8745
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 Nov 2024 15:03:36 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C76A7161CD3
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 Nov 2024 14:03:32 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61DE71A7AC7;
-	Mon, 25 Nov 2024 14:03:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="w/Wmtq98"
-X-Original-To: linux-scsi@vger.kernel.org
-Received: from fgw20-4.mail.saunalahti.fi (fgw20-4.mail.saunalahti.fi [62.142.5.107])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4BB19D881E
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 Nov 2024 15:33:58 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92485376E0
-	for <linux-scsi@vger.kernel.org>; Mon, 25 Nov 2024 14:03:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.107
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2634AB2973A
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 Nov 2024 14:03:56 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 351A518FC85;
+	Mon, 25 Nov 2024 14:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="Lcm8r229"
+X-Original-To: linux-scsi@vger.kernel.org
+Received: from fgw22-4.mail.saunalahti.fi (fgw22-4.mail.saunalahti.fi [62.142.5.109])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E5E192B7F
+	for <linux-scsi@vger.kernel.org>; Mon, 25 Nov 2024 14:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.109
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732543411; cv=none; b=bZnnmZyIwSLLUHPZs8NUfD3Yz1ajOOx6o/JhERt769B0dgFTww+ZwcOxFzU+Xh0AxJGYJaFa/6qRr+fl3tewkfLE4iCEYeB/kupDDkd6UzhBalwX/6I70wnhnQAjb0Y3ZI7Y/wLEwBwEJpys2lLdtpLXfMM+w+aeR1OgnY9PrSw=
+	t=1732543432; cv=none; b=dAEGTzerhLiAoNBTY+lM4jGscgt28AvcN1zIJ1Pye53QMzHgeZdrbg2HefZxixOOlXMmZ6Z3E18VAnA5d8YkNAKFQOWBRHDq1jglKIWsIuM4Gs2UN9N4zRM8eUd9qCmG60J2w6D0n4oPmDBP6szNvAZKUMTjpvVUc1hYVXMVBIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732543411; c=relaxed/simple;
-	bh=8MEwmFiTo7rjB+NGx5umIcQHlacB3w2MExmzilxAQ1Y=;
+	s=arc-20240116; t=1732543432; c=relaxed/simple;
+	bh=3Go/PZyu/K4D4xKrpApeeRJrQZXrkB71scXFvQZQDOw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cuqQSMI5J6kM69vVASWbq0xteocSP+wM5BtV/NAIF69h5gQliUHFYLJjt/ljvKqtt7DrNfS9c3nNXz+npUSPRAewsZN3qxjn0rWACj0PzF6Cqe4Q+99o/moV+joP41YAO+u9NH7WdgquafDIjvW1tQvMzJA83dERGLFCj3b+9jI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=w/Wmtq98; arc=none smtp.client-ip=62.142.5.107
+	 MIME-Version:Content-Type; b=FB+7E7MfPaKpGfhM+A+ROznEOXwEY7I+Z9Usng0+ix/vfCH8Bu+8M3tY47zPlTckKgiKsQ6BuGx7gffcvMuT0pxb/EGOaWJSF6/ZLghDLzmcMGmkhcblXKTGEDVHMvdPdlhZokGMNUVs7DtfHwzJpiFBonkfTKt0dbg4qD13Wg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=Lcm8r229; arc=none smtp.client-ip=62.142.5.109
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
@@ -37,16 +37,16 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	 message-id:date:subject:cc:to:from:from:to:cc:reply-to:subject:date:
 	 in-reply-to:references:list-archive:list-subscribe:list-unsubscribe:
 	 content-type:content-transfer-encoding:message-id;
-	bh=CCuEaY1I75CVu4/J/xAMzSkf6Fn2artCV/2R6lhlYWQ=;
-	b=w/Wmtq980wUa254ld7SjzoVDJbB8kqkxc5GYnRM7Ogr/Q+VBq1aqRLZF2z8ewoeZghvBBMQ/BdGKK
-	 sD3Jh35OLXfEslh74VQs74xna2nS4vUMQW/EjSaHWT5qlOJqtXRSUBlGIzw2lZX//mroS+wA1hJyb9
-	 7aBr3GOWXjPypYKwW8OaATUPZTAuZXZ0hnm8SX8Sdb4Y9bNs5XuCW0YjhdG/8A1ZmKFsPK4rZPbj1D
-	 3v0H/+NHesWKfhffWEv1eEHGnbo5mLwUz59i4U74INxIG8SCffSc8O/2jJzs380vIhuJD8ay192s60
-	 ez5zjrqXWVxnX7oa34rIEDkb07aAS0A==
+	bh=NeqVt7amgvIxmptxFb8tKAWnqzkJFXJev23JSQNq7aw=;
+	b=Lcm8r229ixtrKrKborSvcEAVWeBY4FNnC/gubLuM9fefkH9EOzmC2e6C1NezVDWIM3eu4KNNGItuY
+	 qbBT4C5t3DygPLTYHmR8wb1ARnx9H9KKsZQL5ucfkYekRJYvD/C9U6Q86QQ0+J0BlVBoeIJz5TtGa/
+	 R9DlSviSRd61wWgujXrJYccfs5wSkOGUTeUeNNIULthKL7DCq+SK727fvXotOeaEgYti5KCsYiKnPo
+	 91wF/g1sGiGQGyWWxeD5yORR08IojGcAFRUv90jXkyEazKwXCd2WmNngtXTIam+I2A2NAzWTG2MzTG
+	 kxE2vS3ZrHPLBUqzvvw2pWvVORue5TQ==
 Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
 	by fgw21.mail.saunalahti.fi (Halon) with ESMTPSA
-	id 05da4e4f-ab36-11ef-8882-005056bdd08f;
-	Mon, 25 Nov 2024 16:03:18 +0200 (EET)
+	id 0837c1a6-ab36-11ef-8882-005056bdd08f;
+	Mon, 25 Nov 2024 16:03:22 +0200 (EET)
 From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
 To: linux-scsi@vger.kernel.org,
 	jmeneghi@redhat.com
@@ -54,9 +54,9 @@ Cc: martin.petersen@oracle.com,
 	James.Bottomley@HansenPartnership.com,
 	loberman@redhat.com,
 	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
-Subject: [PATCH v2 3/4] scsi: st: Modify st.c to use the new scsi_error counters
-Date: Mon, 25 Nov 2024 16:03:00 +0200
-Message-ID: <20241125140301.3912-4-Kai.Makisara@kolumbus.fi>
+Subject: [PATCH v2 4/4] scsi: st: Add sysfs file reset_blocked
+Date: Mon, 25 Nov 2024 16:03:01 +0200
+Message-ID: <20241125140301.3912-5-Kai.Makisara@kolumbus.fi>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241125140301.3912-1-Kai.Makisara@kolumbus.fi>
 References: <20241125140301.3912-1-Kai.Makisara@kolumbus.fi>
@@ -69,117 +69,69 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Compare the stored values of por_ctr and new_media_ctr against
-the values in the device struct. In case of mismatch, the
-Unit Attention corresponding to the counter has happened.
-This is a safeguard against another ULD catching the
-Unit Attention sense data.
-
-Remove use of the was_reset flag in struct scsi_device.
+If the value read from the file is 1, reads and writes from/to the
+device are blocked because the tape position may not match user's
+expectation (tape rewound after device reset).
 
 Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
 ---
- drivers/scsi/st.c | 28 +++++++++++++++++++++++++---
- drivers/scsi/st.h |  4 ++++
- 2 files changed, 29 insertions(+), 3 deletions(-)
+ Documentation/scsi/st.rst |  5 +++++
+ drivers/scsi/st.c         | 19 +++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
+diff --git a/Documentation/scsi/st.rst b/Documentation/scsi/st.rst
+index d3b28c28d74c..2209f03faad3 100644
+--- a/Documentation/scsi/st.rst
++++ b/Documentation/scsi/st.rst
+@@ -157,6 +157,11 @@ enabled driver and mode options. The value in the file is a bit mask where the
+ bit definitions are the same as those used with MTSETDRVBUFFER in setting the
+ options.
+ 
++Each directory contains the entry 'reset_blocked'. If this value is one,
++reading and writing to the device is blocked after device reset. Most
++devices rewind the tape after reset and the writes/read don't access the
++tape position the user expects.
++
+ A link named 'tape' is made from the SCSI device directory to the class
+ directory corresponding to the mode 0 auto-rewind device (e.g., st0).
+ 
 diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
-index a0667a0ae4c9..ad86dfbc8919 100644
+index ad86dfbc8919..0e6a87f1f47f 100644
 --- a/drivers/scsi/st.c
 +++ b/drivers/scsi/st.c
-@@ -163,9 +163,11 @@ static const char *st_formats[] = {
+@@ -4697,6 +4697,24 @@ options_show(struct device *dev, struct device_attribute *attr, char *buf)
+ }
+ static DEVICE_ATTR_RO(options);
  
- static int debugging = DEBUG;
- 
-+/* Setting these non-zero may risk recognizing resets */
- #define MAX_RETRIES 0
- #define MAX_WRITE_RETRIES 0
- #define MAX_READY_RETRIES 0
++/**
++ * reset_blocked_show - Value 1 indicates that reads, writes, etc. are blocked
++ * because a device reset has occurred and no operation positioning the tape
++ * has been issued.
++ * @dev: struct device
++ * @attr: attribute structure
++ * @buf: buffer to return formatted data in
++ */
++static ssize_t reset_blocked_show(struct device *dev,
++	struct device_attribute *attr, char *buf)
++{
++	struct st_modedef *STm = dev_get_drvdata(dev);
++	struct scsi_tape *STp = STm->tape;
 +
- #define NO_TAPE  NOT_READY
- 
- #define ST_TIMEOUT (900 * HZ)
-@@ -357,10 +359,18 @@ static int st_chk_result(struct scsi_tape *STp, struct st_request * SRpnt)
- {
- 	int result = SRpnt->result;
- 	u8 scode;
-+	unsigned int ctr;
- 	DEB(const char *stp;)
- 	char *name = STp->name;
- 	struct st_cmdstatus *cmdstatp;
- 
-+	ctr = scsi_get_ua_por_ctr(STp->device);
-+	if (ctr != STp->por_ctr) {
-+		STp->por_ctr = ctr;
-+		STp->pos_unknown = 1; /* ASC => power on / reset */
-+		st_printk(KERN_WARNING, STp, "Power on/reset recognized.");
-+	}
++	return sprintf(buf, "%d", STp->pos_unknown);
++}
++static DEVICE_ATTR_RO(reset_blocked);
 +
- 	if (!result)
- 		return 0;
+ /* Support for tape stats */
  
-@@ -413,10 +423,11 @@ static int st_chk_result(struct scsi_tape *STp, struct st_request * SRpnt)
- 	if (cmdstatp->have_sense &&
- 	    cmdstatp->sense_hdr.asc == 0 && cmdstatp->sense_hdr.ascq == 0x17)
- 		STp->cleaning_req = 1; /* ASC and ASCQ => cleaning requested */
--	if (cmdstatp->have_sense && scode == UNIT_ATTENTION && cmdstatp->sense_hdr.asc == 0x29)
-+	if (cmdstatp->have_sense && scode == UNIT_ATTENTION &&
-+		cmdstatp->sense_hdr.asc == 0x29 && !STp->pos_unknown) {
- 		STp->pos_unknown = 1; /* ASC => power on / reset */
--
--	STp->pos_unknown |= STp->device->was_reset;
-+		st_printk(KERN_WARNING, STp, "Power on/reset recognized.");
-+	}
+ /**
+@@ -4881,6 +4899,7 @@ static struct attribute *st_dev_attrs[] = {
+ 	&dev_attr_default_density.attr,
+ 	&dev_attr_default_compression.attr,
+ 	&dev_attr_options.attr,
++	&dev_attr_reset_blocked.attr,
+ 	NULL,
+ };
  
- 	if (cmdstatp->have_sense &&
- 	    scode == RECOVERED_ERROR
-@@ -968,6 +979,7 @@ static int test_ready(struct scsi_tape *STp, int do_wait)
- {
- 	int attentions, waits, max_wait, scode;
- 	int retval = CHKRES_READY, new_session = 0;
-+	unsigned int ctr;
- 	unsigned char cmd[MAX_COMMAND_SIZE];
- 	struct st_request *SRpnt = NULL;
- 	struct st_cmdstatus *cmdstatp = &STp->buffer->cmdstat;
-@@ -1024,6 +1036,13 @@ static int test_ready(struct scsi_tape *STp, int do_wait)
- 			}
- 		}
- 
-+		ctr = scsi_get_ua_new_media_ctr(STp->device);
-+		if (ctr != STp->new_media_ctr) {
-+			STp->new_media_ctr = ctr;
-+			new_session = 1;
-+			DEBC_printk(STp, "New tape session.");
-+		}
-+
- 		retval = (STp->buffer)->syscall_result;
- 		if (!retval)
- 			retval = new_session ? CHKRES_NEW_SESSION : CHKRES_READY;
-@@ -4394,6 +4413,9 @@ static int st_probe(struct device *dev)
- 		goto out_idr_remove;
- 	}
- 
-+	tpnt->new_media_ctr = scsi_get_ua_new_media_ctr(SDp);
-+	tpnt->por_ctr = scsi_get_ua_por_ctr(SDp);
-+
- 	dev_set_drvdata(dev, tpnt);
- 
- 
-diff --git a/drivers/scsi/st.h b/drivers/scsi/st.h
-index 2105c6a5b458..47b0e31b7828 100644
---- a/drivers/scsi/st.h
-+++ b/drivers/scsi/st.h
-@@ -178,6 +178,10 @@ struct scsi_tape {
- 	int recover_count;     /* From tape opening */
- 	int recover_reg;       /* From last status call */
- 
-+	/* The saved values of midlevel counters */
-+	unsigned int new_media_ctr;
-+	unsigned int por_ctr;
-+
- #if DEBUG
- 	unsigned char write_pending;
- 	int nbr_finished;
 -- 
 2.43.0
 
