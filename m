@@ -1,180 +1,164 @@
-Return-Path: <linux-scsi+bounces-10326-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10328-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D1DA9D9969
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Nov 2024 15:16:36 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C03F166377
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Nov 2024 14:16:21 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9906B1D5163;
-	Tue, 26 Nov 2024 14:15:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="USfKaUw7"
-X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3B809D9A9A
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Nov 2024 16:46:11 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 934F78F7D
-	for <linux-scsi@vger.kernel.org>; Tue, 26 Nov 2024 14:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732630523; cv=none; b=txupsoue13vC4dv+e1Ry7KmCLlD7P9NvxrUu2b10z4eBMW1nIOax4up64xvOYRldYQGdalBLucrJn2PPdm4o0f9rZ9Wck3ZibsehKAO2rllR3709Dl5rBeihORttYfXlE2860Zy06j0qiA6tc0/3NIONsewQyKSOX8QB4Qmttiw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732630523; c=relaxed/simple;
-	bh=KGsXrX1qAgWUV2J4o9NOVGsSuKterTunNEPgArxUBuU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c5zJnrOylEGiEmJL+YcqEy3qIfATYfiPipd3vjVF7uUgdjLdSCYUduJg5t4QoLIRWoVLi4kjPxJ/DiuOhWZPwkZYUGwzMIP7/C0VUSXL+ltMG9KGagYo1Vyh0OfHG7UYveRGlU3vuGSXuFo0VaApk2Vn6jtpQKQmaTbyl1F+uWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=USfKaUw7; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732630520;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z2W4Ssfimb/qOh9l2XaBzKk4OQ1NBpXK08fbyiSEULo=;
-	b=USfKaUw7TGOH7Fkk2LtjZQWvo+/lJkbqS1BkDb/kQFRowTH0pjkKN8f3wLv0h+EKygmwLb
-	y5KYG5uS1cFqBX/fOY+1/2HR+wzOUYfg6VNXetDFBX12cBe/mH/O2qa9TcbmLBffqM/iPF
-	a4oSVjrEc3TjVQyBkNYPxZElwdROwD0=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-647-gyfrhSUnNyuxMJYoMiW5EQ-1; Tue,
- 26 Nov 2024 09:15:16 -0500
-X-MC-Unique: gyfrhSUnNyuxMJYoMiW5EQ-1
-X-Mimecast-MFC-AGG-ID: gyfrhSUnNyuxMJYoMiW5EQ
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DFDA0B25008
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Nov 2024 15:44:47 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEAA21D89F1;
+	Tue, 26 Nov 2024 15:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cpzRVcYr"
+X-Original-To: linux-scsi@vger.kernel.org
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AA3E21955E9F;
-	Tue, 26 Nov 2024 14:15:13 +0000 (UTC)
-Received: from fedora (unknown [10.72.116.45])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EF1181956054;
-	Tue, 26 Nov 2024 14:15:07 +0000 (UTC)
-Date: Tue, 26 Nov 2024 22:15:02 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Qiang Ma <maqianga@uniontech.com>
-Cc: James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com,
-	axboe@kernel.dk, dwagner@suse.de, hare@suse.de,
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: Don't wait for completion of in-flight requests
-Message-ID: <Z0XX5ts2yTO7Frl8@fedora>
-References: <20241126115008.31272-1-maqianga@uniontech.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B67B11D7E4A;
+	Tue, 26 Nov 2024 15:44:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732635866; cv=none; b=BJI127WUi51YyfhEQEkSBQKBfKM5Y8GskB6e/6e11V1C3FQzwToNdIoVHUjmrqDAe6/HXHT6VRtf5JAiZL1PINgUjppQqcgvGKVwp1cWoIrIMPIpZTgx2FTa5FFPmmZNj1AuK/Nu0PhrLTByLi8QtQUleUSxzmnSgRKE4XXsLi8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732635866; c=relaxed/simple;
+	bh=TAw7U5vFpAcrO4h1WG+4U3ymUEZ4YD3HUDBY13jUiLs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WbzPTHikRI2Uw/eJg4L6sFL0cZk/JKwefpXhnX8pvWsv+zdP2N5EnW0BSlEFB4+Xp8N9sXQaTMl41ClhWcOK1pM7S/P7kHmTLqp0ky03H68mNaEhF7REC8wIhBEEe0/pA04wldQ/BscZdUn/w5hLrUYUrnEifslCtEP340sas0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cpzRVcYr; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-53deeb6d986so604033e87.0;
+        Tue, 26 Nov 2024 07:44:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732635863; x=1733240663; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yVDOYNO+iQ6ZhvMztIaukFD/X8oZpaR2llnamKczTuE=;
+        b=cpzRVcYruggUWQfXA37VSuH33y9te0s09KqCtMOsm6Yu5Y95ePmnH/ssvN9CbotelK
+         F0izLVsirlxI/yBsqrLM3auxrCoUF1GTI8L13spP306lVAyDrcpL4AOb6SJBnSjF5U1P
+         75Zrqekl9ONbDjKoGcriDRJ0+7ZB9l/uPdtjNhrT9LTczhRe7G48nCHPKBOD4D7FofQV
+         NvVMA42UccTg2+DVzFwnIEZz05PoXfvWCaVV3VUjp0XpjnV7gcbJ1lNqxZmpm0GBsyV0
+         66XRH2pMq9Ll/4PdXh0PsHAE6Jti/ua4RtYFxbbdI+Y7EzVY6ROSN1HtBOcUibXHhK1D
+         1Kdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732635863; x=1733240663;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yVDOYNO+iQ6ZhvMztIaukFD/X8oZpaR2llnamKczTuE=;
+        b=OOkwriAFb0CVkdqlPINmd9tEA7sLFEWDD8aaKWcTXZYLafqs9Jkv2k5jV+hjEEkn0z
+         /xYGtJx8f4vWHaMYG9ZKgBx69I2bPjscSW7s2G4hXpp8yaJ4c4G17tPQqYTE6fVHPIc7
+         lRBnvzlOGrwvwXeotNgq9uknH+mA72oOgbhmYiuIR+zFZwzF8p01AO6VZ4Wlj09DHXKs
+         Pe4xkpccLRbkVCdM5wSPQyVEfUaldybaL7Fx6S57iyDze6yMDZEHlpe2xfdGmw61JZIj
+         hL4qxx0vfWeddoCjcEwjLYYJIHcxvuLOXMzHD4H1z0Od2z+Va0rGp/qVR2NPzMD9MDzN
+         sOfg==
+X-Forwarded-Encrypted: i=1; AJvYcCUoEj1b0a6Ta/o90zoUm7/JaKfGIQ6jNUGdl2O7dVDBdckfaVYbfKzAHSmEREPFwrbGvKWDeoe9G5TCruU=@vger.kernel.org, AJvYcCWJs9zhxB1P2nYYkAbq5c7YyPSNZ+nOXUHUv/RSKnuLBG5cYv7dJbP4Q2cYyy67fe8jxabhEqbM6pvHdA==@vger.kernel.org, AJvYcCWUtRFo0pbDqJAMbJ5IDK7X6y0pPEeqU4OPo6KES7CvUgV4cU4kYIB1ro8klQGoA0HQ6UgqlDHZKg==@vger.kernel.org, AJvYcCWkTMsmW7/v828hwcHw3qFhXmwk444FnvIxmrJiwhUZeUKbUKCC7Pb35sFF2FGn4P0H5hlZwTxnproXjQyHNw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw01YOmR40yBeG8B6LCMlnOX582WFzgV3lCJaWM/CltCGyFS3YY
+	l23xNAZnqlHeyeUlcxFgkXSA0yJYpi5qTYY+ZpHvp8hwUac7wtR2
+X-Gm-Gg: ASbGncv6+n/6759ewgo6IXm6uCl8E0vIagmTFvsKH+E6UeJBbWVX+LJgZd5K8VF1oT+
+	kMEVMTRnc1NMjcuf3RuF954FlqEPETOSipp40iLpAEWXSD4nTpp1SQOyKSGTj5KQARZUmYL3ECU
+	twe5AsT4So7PwoBZsLc7CAC58p0MbQNdoD2chUVq82v4LxBadvuULD7DVUY3oiRNgnmLr+sk63G
+	i6wBiCqkLqrDedTWjGJx649qzYjCH8QnRB8FgLxE1EycRmwm7Wh+2T+lGBA
+X-Google-Smtp-Source: AGHT+IGWo3MB+7Gb6yHS+bWnq0pFj0SiM5AqaPTVwcxWz0pNUpAyD9lUojQtu9SrCdednPlE58PNpA==
+X-Received: by 2002:a05:6512:400c:b0:53d:eefc:2b48 with SMTP id 2adb3069b0e04-53deefc2f0amr555039e87.33.1732635862546;
+        Tue, 26 Nov 2024 07:44:22 -0800 (PST)
+Received: from [192.168.42.58] ([163.114.131.193])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b28fe55sm602396866b.4.2024.11.26.07.44.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Nov 2024 07:44:22 -0800 (PST)
+Message-ID: <a9d500a4-2609-4dd6-a687-713ae1472a88@gmail.com>
+Date: Tue, 26 Nov 2024 15:45:09 +0000
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241126115008.31272-1-maqianga@uniontech.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 06/10] io_uring: introduce attributes for read/write
+ and PI support
+To: Anuj Gupta <anuj20.g@samsung.com>
+Cc: axboe@kernel.dk, hch@lst.de, kbusch@kernel.org,
+ martin.petersen@oracle.com, anuj1072538@gmail.com, brauner@kernel.org,
+ jack@suse.cz, viro@zeniv.linux.org.uk, io-uring@vger.kernel.org,
+ linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+ gost.dev@samsung.com, linux-scsi@vger.kernel.org, vishak.g@samsung.com,
+ linux-fsdevel@vger.kernel.org, Kanchan Joshi <joshi.k@samsung.com>
+References: <20241125070633.8042-1-anuj20.g@samsung.com>
+ <CGME20241125071502epcas5p46c373574219a958b565f20732797893f@epcas5p4.samsung.com>
+ <20241125070633.8042-7-anuj20.g@samsung.com>
+ <2cbbe4eb-6969-499e-87b5-02d19f53258f@gmail.com>
+ <20241126135423.GB22537@green245>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20241126135423.GB22537@green245>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 26, 2024 at 07:50:08PM +0800, Qiang Ma wrote:
-> Problem:
-> When the system disk uses the scsi disk bus, The main
-> qemu command line includes:
-> ...
-> -device virtio-scsi-pci,id=scsi0 \
-> -device scsi-hd,scsi-id=1,drive=drive-virtio-disk
-> -drive id=drive-virtio-disk,if=none,file=/home/kvm/test.qcow2
-> ...
+On 11/26/24 13:54, Anuj Gupta wrote:
+> On Tue, Nov 26, 2024 at 01:01:03PM +0000, Pavel Begunkov wrote:
+>> On 11/25/24 07:06, Anuj Gupta wrote:
+>> ...
+>>> +	/* type specific struct here */
+>>> +	struct io_uring_attr_pi	pi;
+>>> +};
+>>
+>> This also looks PI specific but with a generic name. Or are
+>> attribute structures are supposed to be unionised?
 > 
-> The dmesg log is as follows::
+> Yes, attribute structures would be unionised here. This is done so that
+> "attr_type" always remains at the top. When there are multiple attributes
+> this structure would look something like this:
 > 
-> [   50.304591][ T4382] sd 0:0:0:0: [sda] Synchronizing SCSI cache
-> [   50.377002][ T4382] kexec_core: Starting new kernel
-> [   50.669775][  T194] psci: CPU1 killed (polled 0 ms)
-> [   50.849665][  T194] psci: CPU2 killed (polled 0 ms)
-> [   51.109625][  T194] psci: CPU3 killed (polled 0 ms)
-> [   51.319594][  T194] psci: CPU4 killed (polled 0 ms)
-> [   51.489667][  T194] psci: CPU5 killed (polled 0 ms)
-> [   51.709582][  T194] psci: CPU6 killed (polled 0 ms)
-> [   51.949508][   T10] psci: CPU7 killed (polled 0 ms)
-> [   52.139499][   T10] psci: CPU8 killed (polled 0 ms)
-> [   52.289426][   T10] psci: CPU9 killed (polled 0 ms)
-> [   52.439552][   T10] psci: CPU10 killed (polled 0 ms)
-> [   52.579525][   T10] psci: CPU11 killed (polled 0 ms)
-> [   52.709501][   T10] psci: CPU12 killed (polled 0 ms)
-> [   52.819509][  T194] psci: CPU13 killed (polled 0 ms)
-> [   52.919509][  T194] psci: CPU14 killed (polled 0 ms)
-> [  243.214009][  T115] INFO: task kworker/0:1:10 blocked for more than 122 seconds.
-> [  243.214810][  T115]       Not tainted 6.6.0+ #1
-> [  243.215517][  T115] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [  243.216390][  T115] task:kworker/0:1     state:D stack:0     pid:10    ppid:2      flags:0x00000008
-> [  243.217299][  T115] Workqueue: events vmstat_shepherd
-> [  243.217816][  T115] Call trace:
-> [  243.218133][  T115]  __switch_to+0x130/0x1e8
-> [  243.218568][  T115]  __schedule+0x660/0xcf8
-> [  243.219013][  T115]  schedule+0x58/0xf0
-> [  243.219402][  T115]  percpu_rwsem_wait+0xb0/0x1d0
-> [  243.219880][  T115]  __percpu_down_read+0x40/0xe0
-> [  243.220353][  T115]  cpus_read_lock+0x5c/0x70
-> [  243.220795][  T115]  vmstat_shepherd+0x40/0x140
-> [  243.221250][  T115]  process_one_work+0x170/0x3c0
-> [  243.221726][  T115]  worker_thread+0x234/0x3b8
-> [  243.222176][  T115]  kthread+0xf0/0x108
-> [  243.222564][  T115]  ret_from_fork+0x10/0x20
-> ...
-> [  243.254080][  T115] INFO: task kworker/0:2:194 blocked for more than 122 seconds.
-> [  243.254834][  T115]       Not tainted 6.6.0+ #1
-> [  243.255529][  T115] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [  243.256378][  T115] task:kworker/0:2     state:D stack:0     pid:194   ppid:2      flags:0x00000008
-> [  243.257284][  T115] Workqueue: events work_for_cpu_fn
-> [  243.257793][  T115] Call trace:
-> [  243.258111][  T115]  __switch_to+0x130/0x1e8
-> [  243.258541][  T115]  __schedule+0x660/0xcf8
-> [  243.258971][  T115]  schedule+0x58/0xf0
-> [  243.259360][  T115]  schedule_timeout+0x280/0x2f0
-> [  243.259832][  T115]  wait_for_common+0xcc/0x2d8
-> [  243.260287][  T115]  wait_for_completion+0x20/0x38
-> [  243.260767][  T115]  cpuhp_kick_ap+0xe8/0x278
-> [  243.261207][  T115]  cpuhp_kick_ap_work+0x5c/0x188
-> [  243.261688][  T115]  _cpu_down+0x120/0x378
-> [  243.262103][  T115]  __cpu_down_maps_locked+0x20/0x38
-> [  243.262609][  T115]  work_for_cpu_fn+0x24/0x40
-> [  243.263059][  T115]  process_one_work+0x170/0x3c0
-> [  243.263533][  T115]  worker_thread+0x234/0x3b8
-> [  243.263981][  T115]  kthread+0xf0/0x108
-> [  243.264405][  T115]  ret_from_fork+0x10/0x20
-> [  243.264846][  T115] INFO: task kworker/15:2:639 blocked for more than 122 seconds.
-> [  243.265602][  T115]       Not tainted 6.6.0+ #1
-> [  243.266296][  T115] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [  243.267143][  T115] task:kworker/15:2    state:D stack:0     pid:639   ppid:2      flags:0x00000008
-> [  243.268044][  T115] Workqueue: events_freezable_power_ disk_events_workfn
-> [  243.268727][  T115] Call trace:
-> [  243.269051][  T115]  __switch_to+0x130/0x1e8
-> [  243.269481][  T115]  __schedule+0x660/0xcf8
-> [  243.269903][  T115]  schedule+0x58/0xf0
-> [  243.270293][  T115]  schedule_timeout+0x280/0x2f0
-> [  243.270763][  T115]  io_schedule_timeout+0x50/0x70
-> [  243.271245][  T115]  wait_for_common_io.constprop.0+0xb0/0x298
-> [  243.271830][  T115]  wait_for_completion_io+0x1c/0x30
-> [  243.272335][  T115]  blk_execute_rq+0x1d8/0x278
-> [  243.272793][  T115]  scsi_execute_cmd+0x114/0x238
-> [  243.273267][  T115]  sr_check_events+0xc8/0x310 [sr_mod]
-> [  243.273808][  T115]  cdrom_check_events+0x2c/0x50 [cdrom]
-> [  243.274408][  T115]  sr_block_check_events+0x34/0x48 [sr_mod]
-> [  243.274994][  T115]  disk_check_events+0x44/0x1b0
-> [  243.275468][  T115]  disk_events_workfn+0x20/0x38
-> [  243.275939][  T115]  process_one_work+0x170/0x3c0
-> [  243.276410][  T115]  worker_thread+0x234/0x3b8
-> [  243.276855][  T115]  kthread+0xf0/0x108
-> [  243.277241][  T115]  ret_from_fork+0x10/0x20
+> /* attribute information along with type */
+> struct io_uring_attr {
+> 	enum io_uring_attr_type attr_type;
+> 	/* type specific struct here */
+> 	union {
+> 		struct io_uring_attr_pi	pi;
+> 		struct io_uring_attr_x	x;
+> 		struct io_uring_attr_y	y;
+> 	};
+> };
+> 
+> And then on the application side for sending attribute x, one would do:
+> 
+> io_uring_attr attr;
+> attr.type = TYPE_X;
+> prepare_attr(&attr.x);
 
-Question is why this scsi command can't be completed?
+Hmm, I have doubts it's going to work well because the union
+members have different sizes. Adding a new type could grow
+struct io_uring_attr, which is already bad for uapi. And it
+can't be stacked:
 
-When blk_mq_hctx_notify_offline() is called, the CPU isn't shutdown yet,
-and it still can handle interrupt of this SCSI command.
+io_uring_attr attrs[2] = {..., ...}
+sqe->attr_ptr = &attrs;
+...
 
+This example would be incorrect. Even if it's just one attribute
+the user would be wasting space on stack. The only use for it I
+see is having ephemeral pointers during parsing, ala
 
-Thanks,
-Ming
+void parse(voud *attributes, offset) {
+	struct io_uring_attr *attr = attributes + offset;
+	
+	if (attr->type == PI) {
+		process_pi(&attr->pi);
+		// or potentially fill_pi() in userspace
+	}
+}
 
+But I don't think it's worth it. I'd say, if you're leaving
+the structure, let's rename it to struct io_uring_attr_type_pi
+or something similar. We can always add a new one later, it
+doesn't change the ABI.
+
+-- 
+Pavel Begunkov
 
