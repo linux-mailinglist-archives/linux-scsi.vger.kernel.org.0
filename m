@@ -1,100 +1,139 @@
-Return-Path: <linux-scsi+bounces-10373-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10381-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DA2F9DE983
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 Nov 2024 16:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F081E9DEA23
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 Nov 2024 17:04:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE17A1639F6
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 Nov 2024 15:33:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 213DC164070
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 Nov 2024 16:04:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 622FC19D898;
-	Fri, 29 Nov 2024 15:32:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C9BB166F32;
+	Fri, 29 Nov 2024 16:04:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="AGLx7Xhh";
-	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="hzkcnPtH"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="kI6RdVCx"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mta-03.yadro.com (mta-03.yadro.com [89.207.88.253])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED97C19C566;
-	Fri, 29 Nov 2024 15:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.207.88.253
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8486F1547FF
+	for <linux-scsi@vger.kernel.org>; Fri, 29 Nov 2024 16:04:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732894358; cv=none; b=RFvrt8QvtJZRfs8tf2ervFKw+XeuLTxbc4gpIjE+DcPDkxBymrOF6HnC3TIAex375mbH5YQc9J6mgDGSYbaXNvzWBbsrWeMLjvi/TJ9IXoo+dWSTJrbpTPEf0tL/8iumHwQzyBZ6fFa9GxwmKcqf4bN9Sma+xzW3olbHU75gPGg=
+	t=1732896257; cv=none; b=td6kaCyRn3jNKQGM+QLRtDQ0dWotYj9tZpkNrCoEeS5CkQuu6OaqoqK32noGT9g81QTWoxX4aP7dEmquJUAZY1NSsUclUiq2VVuyzQDba79dPfl4Dj0gfSclTiO9Zx/xZdtwXd4A/DvFMcG4r0qfr8P4eUWufbHD3tEDrC1+svI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732894358; c=relaxed/simple;
-	bh=bhtU96oxwzBb9jJ71pKc7JkNY4mbmp/siqnKgJRyfL0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RIUjJkHv+T6EK3kc6wuwJVqb0ZzHePgW8w71XJS0x3SnUru47X82uNPX1Rs1WOHG19jFsp4ZhXpdx3WvlW5pJ09Dm9QyBgGRoO4LHHBGGA5NxUn5RhslHvMTgEWJKhdXBCtuT1z13KaoOu2TUKPXQmFGAWHg3PR2YexOi/WQlmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com; spf=pass smtp.mailfrom=yadro.com; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=AGLx7Xhh; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=hzkcnPtH; arc=none smtp.client-ip=89.207.88.253
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yadro.com
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-03.yadro.com 06BA5E0002
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-04;
-	t=1732894352; bh=DLjFI//x5ecdGB56aIfPz255gSyglUHASG3ntCPv2mM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=AGLx7XhhMFtOiKLef9olk2EsnP4wWaJCCEt0kBYcvwRvDudCzA6Tr15yoL64g3+1R
-	 PR3Ssv62YNkGHkUh+R8DaQKpftkZ3GmpFJIQMwJi32fflw8aeLiTpGZlpphc0M2lEC
-	 lO+g/k+kr4+vOIunSbtTTBqlkyQgaR8xTS0coPqXBBulCgSLy55MsSjplDLBRkIw7E
-	 7lvfnwehiCgjL7CdwKPys/PPRlLfHj0/mo6DUWT0/7AIWPlyXWbdal+bchv4ngyfse
-	 LE16dAZBRUsQJF0J3EwlIpze99v1JFG6TO4vJdvkTig5WjlZlYf2I46JjfyS99lPCc
-	 X9uknEta1h0uw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-03;
-	t=1732894352; bh=DLjFI//x5ecdGB56aIfPz255gSyglUHASG3ntCPv2mM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=hzkcnPtHgbr+oBCMAbXV26niHvY1FZrZx/kkp+Hk0RM9l0MqUVw+1D84hYcX8cuFt
-	 eYL9Vbcz1xtpohGp2WZM0SQYrmcZLQYVbvS/0wM5vnKuU45CXKhZ0mcDGvLHR/Bdr+
-	 889t5NPycXQnhnXBUe3c7yUYtlyuMH8CCRZyBNZ1kJ4HXpTHLzA7F46JrO7K0n4Rvt
-	 NOAnV15PS66pz8Tg+WZUryWxlhdiMUcPVHpBA+iUnPNDeFXRcBVJEiD2Pf/q6hhGwk
-	 1fLgW440Rs0CjBwaHk2gxsrqb7Unevzf/B1Mn+iSne12d4JUdDofhl8VhOd6n154cJ
-	 36klx2+PBXyFg==
-From: Anastasia Kovaleva <a.kovaleva@yadro.com>
-To: <martin.petersen@oracle.com>, <bootc@bootc.net>, <bostroesser@gmail.com>,
-	<michael.christie@oracle.com>
-CC: <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>,
-	<linux@yadro.com>
-Subject: [PATCH 10/10] target: iscsi: Improve a log message
-Date: Fri, 29 Nov 2024 18:30:56 +0300
-Message-ID: <20241129153056.6985-11-a.kovaleva@yadro.com>
-X-Mailer: git-send-email 2.40.3
-In-Reply-To: <20241129153056.6985-1-a.kovaleva@yadro.com>
-References: <20241129153056.6985-1-a.kovaleva@yadro.com>
+	s=arc-20240116; t=1732896257; c=relaxed/simple;
+	bh=xu1NVatpA2ZXqTXPG9XzG+l/h1Z/YiWcWL2kKPmqUyE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=d6Ga7vUTwyGSdghxK0zdTVMzMjeagzw5OAE3kVz7R8PykxeO4UCBGscJ0T7ugIuYQEHAWiUu3yzXGaHqHXicdKJbSyEAo2wV3pMK9PpxK6+JBDDxsR7k/3avxYUYY6eNnOCmDEqOrJOVsadQHxD9PUJHFACYWLdzLnHKffWAQLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=kI6RdVCx; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-21210eaa803so18299555ad.2
+        for <linux-scsi@vger.kernel.org>; Fri, 29 Nov 2024 08:04:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1732896255; x=1733501055; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xRYCaR++kEU3PDN2eQ+b+5uSQTJ5Bb61ApyC7HopWXU=;
+        b=kI6RdVCxu3FlE+LyYaFB2fgCilkcyJVo9bctPBY3EGNmIGZH5K3ICFzTB8Z4hPt9ob
+         9GefcI/KhkjcTqglptLus/Atb0nLJ4AHV4krBujLlQvZ8MVOC7LknhlDPfEI9LeRY/DG
+         gy45bNpssy+Q3Zau0ypRGzffNtHIBUhNs4Qqikq11FZdfxvkB+a2xYp+buvP5pBWWpTP
+         aIHjknJMqT5HtFBeEzsqogI39FYl6VcZyAxg8y1lZkkjQEJfBurV4nI3rmSkmtOyMkff
+         +tiZf0R2Q2mAIQfUwx/Ub4bCGEwKEOjTM+RuWoEkZZwVSAqktcICsriDkx1GPBIS62WL
+         o5gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732896255; x=1733501055;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xRYCaR++kEU3PDN2eQ+b+5uSQTJ5Bb61ApyC7HopWXU=;
+        b=N0dGDdQdBOxZgRpmKQezoxnLEr5RWvEyCipAb6U8AkklfoZ6nZlsb30LvrBxoLk6RN
+         YaBF6xzNteVzV/0mTzXlQnjls9XwWPQytwc6n0Yxw/NFgdWfI03/4Ebw8sLNyc8y3zpS
+         JawfZFbpoqDNkJK0jkQU/6Qum1TjSmdt1L+h+L5ZWwhBa2PEAo1afDsSfY5PyPtN7vH1
+         grqPZoW4C+tg+HI3/iMiNiu28DjOfZC2s/CVt/2+ACAf4jL3eHg16LhLQNpYZxEFW+fk
+         69if1b/xMkToBF4UWfTOfghrbR4VaulEbwkcOT2Wq28eWI8SddFsErk4Ka2fDATx19kP
+         DJVg==
+X-Forwarded-Encrypted: i=1; AJvYcCVyrhCyisM8nZblHIBXSf/+jpDwY43yzJgxNAb4jZrMUHPcobWjDRjJ8ia3bUAS5/OjN7lg7QBDx2ng@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFkBMqzfJP0QKptQHZTPC5q01wvWunAsC5+wrHhfCYgUUCIQb9
+	dptvoifrihAEa11kmpG3SYnX5xqbx0Rw5F+qggyEc07YE1Casbi/GuL5lhTtZ16YzAM4n6m81Q8
+	O
+X-Gm-Gg: ASbGncscPdwUjJSrxvvwnxdCEqA4oqYpo8fR7DX14qmx4BhTSSmK2QbrVeL57caVePV
+	CrED2rMbWv6QVrseUxFtlxzsyxZLwMpbn5OKDn0cQG2naXQl7JUoLf8KguInZnK9E7iTLOhuctz
+	cM1QdfmdbIyFsbyhOoVlNZIDrTdH0HR+Eq2NNmJYFRuNcaLmOnHWPFEw1V3yngnL9+DXr3KKLo9
+	yUeoyIwx8K/GMIVAjrincciAv4e06SaB0Lhfhyq2A==
+X-Google-Smtp-Source: AGHT+IGy1chS3Zs1DmbJsFkawdj66lilvO7GzDHuIuxS/pEbGyD3FpT+qxCo038R1fV7cDy/7R55Vg==
+X-Received: by 2002:a17:902:d502:b0:212:6187:6a76 with SMTP id d9443c01a7336-215010960cfmr158548025ad.14.1732896254809;
+        Fri, 29 Nov 2024 08:04:14 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215218f46a1sm32302925ad.39.2024.11.29.08.04.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Nov 2024 08:04:14 -0800 (PST)
+From: Jens Axboe <axboe@kernel.dk>
+To: hch@lst.de, kbusch@kernel.org, martin.petersen@oracle.com, 
+ asml.silence@gmail.com, anuj1072538@gmail.com, brauner@kernel.org, 
+ jack@suse.cz, viro@zeniv.linux.org.uk, Anuj Gupta <anuj20.g@samsung.com>
+Cc: io-uring@vger.kernel.org, linux-nvme@lists.infradead.org, 
+ linux-block@vger.kernel.org, gost.dev@samsung.com, 
+ linux-scsi@vger.kernel.org, vishak.g@samsung.com, 
+ linux-fsdevel@vger.kernel.org
+In-Reply-To: <20241128112240.8867-1-anuj20.g@samsung.com>
+References: <CGME20241128113036epcas5p397ba228852b72fff671fe695c322a3ef@epcas5p3.samsung.com>
+ <20241128112240.8867-1-anuj20.g@samsung.com>
+Subject: Re: [PATCH v11 00/10] Read/Write with meta/integrity
+Message-Id: <173289625329.195012.12251484320092641789.b4-ty@kernel.dk>
+Date: Fri, 29 Nov 2024 09:04:13 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-ClientProxiedBy: T-EXCH-06.corp.yadro.com (172.17.10.110) To
- T-EXCH-09.corp.yadro.com (172.17.11.59)
+X-Mailer: b4 0.14.3-dev-86319
 
-Change the log message to a useful one.
 
-Reviewed-by: Dmitriy Bogdanov <d.bogdanov@yadro.com>
-Signed-off-by: Anastasia Kovaleva <a.kovaleva@yadro.com>
----
- drivers/target/iscsi/iscsi_target_parameters.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, 28 Nov 2024 16:52:30 +0530, Anuj Gupta wrote:
+> This adds a new io_uring interface to exchange additional integrity/pi
+> metadata with read/write.
+> 
+> Example program for using the interface is appended below [1].
+> 
+> The patchset is on top of block/for-next.
+> 
+> [...]
 
-diff --git a/drivers/target/iscsi/iscsi_target_parameters.c b/drivers/target/iscsi/iscsi_target_parameters.c
-index 9eae01538696..587a7a69405b 100644
---- a/drivers/target/iscsi/iscsi_target_parameters.c
-+++ b/drivers/target/iscsi/iscsi_target_parameters.c
-@@ -1143,7 +1143,7 @@ static int iscsi_check_value(struct iscsi_param *param, char *value)
- 			if (iscsi_check_string_or_list_value(param, value) < 0)
- 				return -1;
- 		} else {
--			target_err("Huh? 0x%02x\n", param->type);
-+			target_err("Unknown parameter: 0x%02x\n", param->type);
- 			return -1;
- 		}
- 
+Applied, thanks!
+
+[01/10] block: define set of integrity flags to be inherited by cloned bip
+        commit: f64ec9926ed2fb603acf4fbc73c09ba3f68e271b
+[02/10] block: copy back bounce buffer to user-space correctly in case of split
+        commit: fcc1f91de3e3cf013e810183cb6d333b09fb5741
+[03/10] block: modify bio_integrity_map_user to accept iov_iter as argument
+        commit: 465f05a6462bb67ff51c663759ca9b4952718205
+[04/10] fs, iov_iter: define meta io descriptor
+        commit: 3e73053699fc91839e711c75d87fe3da732a323b
+[05/10] fs: introduce IOCB_HAS_METADATA for metadata
+        commit: bbcf8cb45e21c0a4d4afc45fac6cc6b97e737d8e
+[06/10] io_uring: introduce attributes for read/write and PI support
+        commit: 0ff16f75c747522b403ae8a23513afe354f98fd7
+[07/10] block: introduce BIP_CHECK_GUARD/REFTAG/APPTAG bip_flags
+        commit: ff19426ed1a805571f2a9ccff7d3432b57f4725e
+[08/10] nvme: add support for passing on the application tag
+        commit: 77a3bcc5847683baefd340f615a51e4fdaf9208e
+[09/10] scsi: add support for user-meta interface
+        commit: 1c1d47350d4eb585e2cc8f010000225b6a578322
+[10/10] block: add support to pass user meta buffer
+        commit: a757ddcd74c4b78403e4b46080de6eb73a17ab9e
+
+Best regards,
 -- 
-2.40.3
+Jens Axboe
+
+
 
 
