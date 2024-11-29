@@ -1,64 +1,67 @@
-Return-Path: <linux-scsi+bounces-10378-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10376-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39E4C9DE9CB
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 Nov 2024 16:40:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 026CC9DE9C7
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 Nov 2024 16:40:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91EF0163928
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 Nov 2024 15:40:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A895F16359C
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 Nov 2024 15:40:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F1CD1474C9;
-	Fri, 29 Nov 2024 15:40:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F30C147C9B;
+	Fri, 29 Nov 2024 15:40:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="RC6MEv1F";
-	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="jwIbRr32"
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="HTerLWPG";
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="n+PHglEY"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mta-03.yadro.com (mta-03.yadro.com [89.207.88.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834951474A7;
-	Fri, 29 Nov 2024 15:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915721474A7;
+	Fri, 29 Nov 2024 15:40:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.207.88.253
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732894826; cv=none; b=aJPSPbo3SbgbN2PlXfV7kVUAc1P/9PQIL+JXbjw6mFaTlNE0x5+Pczm+22k8EzurOWUYtOQ7omv+dSViLVqkqiONseYwp6T5F0K5MWiU5Lt/oCzxAoXIMQAzO6BXTQUtps+XQteVddXqRuqZJifyWJHJUnpBiIAs7XWrIHG+7Pg=
+	t=1732894820; cv=none; b=snmbHGcFMKCVxq5dg6P8FSxh5q/yEDZfVeb0ffDiHlYTsBOwM2VpljGXwb44qrHaCtx3YXJ0e2q5DFIUFipibN5XQNqm1R3l84Rj3W/bg7qRNGdBpdU3pzvIvdpotVMtn5t3dnmDGNEuAkHlyaZ064QPKYEzQS1dZb6uklZs3lM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732894826; c=relaxed/simple;
-	bh=4+EBCYGIqX+1YNZd4AVZV83tZLV2KUc5BpUZCxNwYK0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mV/rzrTiz3PednWSADX/z4BOGgAd+XoPx4mIk6dRoZE/kPMXRdWO0PNCyPxhx3sU2+T5/Q3jIziOyeaDI7iQ2Ge6BHjKxfFHkZTfCzuI5c49nqex1IeQjIIbgNT2tPtrPwhCceDMHxBSL4S7ix6jax1CLDN5IOP00Abm7d0X8Aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com; spf=pass smtp.mailfrom=yadro.com; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=RC6MEv1F; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=jwIbRr32; arc=none smtp.client-ip=89.207.88.253
+	s=arc-20240116; t=1732894820; c=relaxed/simple;
+	bh=u47Q1gvKgMH1kh0jdeBwgYwFLlNjhNN70siucFhyyQY=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jOMXHzyPvD8Fiqsfof/7qYAjrAmQq7tYuD+8AljqUabGA0bw1+F12IyzDjbO7//fFRu6AoVJiguDiZkHXyyb8k/oGIm3XO+mlbIHw/CUyBACGiZSn0H80sFp60Dy+t1wrZ6dnoxagw9tXTVYk0Gpgyb922q31DS107FnSX/iZHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com; spf=pass smtp.mailfrom=yadro.com; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=HTerLWPG; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=n+PHglEY; arc=none smtp.client-ip=89.207.88.253
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yadro.com
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-03.yadro.com 61D84E0008
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-03.yadro.com 65E1AE0008
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-04;
-	t=1732894340; bh=e/Mj9Q3r6B3S8/acUA3r+gYznMYxkdB0/sDhGh2BI30=;
+	t=1732894341; bh=1GHSVwHV8orouQzHEaSSA/svRPRNvDLZ5fteFZvZcMY=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=RC6MEv1FslEelE5tf4LXCGth/LC0YYnVAfSBCDrV7sRtIvSxnawWKaP74ECRssn4b
-	 Br/6rP5UfxeiLkO6OzIfi5ohqsKFjyLiJiHY/Z8L++gAC19HviV7LmY1wy+KUz8vvq
-	 POGa1MYBJEzmOc0943ThvFOxyWA7ZJ1meW5g0QPE5s+E/kZuJY73hScvX5M7Bkb6js
-	 SiT1Y/bmGECz0v3AdzFtbAN9woqs/51CI6q1iG1c28676trnnSKnuj6WeLOmHletWh
-	 IHeToDCsfs1Y/wDjIGQMOTJLJ5RMLnRJy+IfY6BVdggEhUCaf8PumTUQUHSw/h7zAf
-	 IDw3UaL0sfC/A==
+	b=HTerLWPGnZxU8SvHr1CkTd2FXlS8nyiQeu2GXoD+JHj6VQxwcc76uTAL2fLhQjhP7
+	 oiSM03GsGtqEv6cPCJ86nHs/DnlgIIe8TsPvDF84w2JzwIrdqwCzmhR4I7tPxm+da4
+	 MGxbro7fngdGUD8lhNOGxGHmKeCy5mOz3Qq8JmH0uiLsprdtqR2kd4clt57CgG4twG
+	 8A29GCZ6vpyTCNPoUayFS7kvYNv3LTZ5k5G12phiRpXF4HnMIJbGREIaDaZ59oohqp
+	 90UCaGi+0P+aJtKJn2Q1QAQkauJJfWylCPoig0Ly0dGVo0hXXW6d+DbH8SIe5Mq0Xr
+	 tXqjh7GQH6QsQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-03;
-	t=1732894340; bh=e/Mj9Q3r6B3S8/acUA3r+gYznMYxkdB0/sDhGh2BI30=;
+	t=1732894341; bh=1GHSVwHV8orouQzHEaSSA/svRPRNvDLZ5fteFZvZcMY=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=jwIbRr32n2C9o3P8Fs68mITV/lpJAsWlSAED5YUxnDV67502M9vM1EJUNRKSX7qE7
-	 xtTUjKJIkbHdjy5EY+oXwK4bH1TApzuJN3M9tQopjcUyIDMYrTE7hdLHCJbIh0OqoB
-	 b2e7dZT0A75qAwwwgMQe/DR5YDLsKdZjQtXbtv1yCknp5dJXtefvcPEtbem7W93OMX
-	 R+BeQ6w5jMYiNlp8YT0kT5Ut6MvC5jS90ySGEW0fOXLPrvLMsC6i9tA7oowXLPK1jD
-	 xwNUeTuqr74sH/XxbD0/JHGg2JSIOueLVHgnpKF1YUEY8DnQujlxm6FBpr/d9U0nMA
-	 8sZ47z81C7w2A==
+	b=n+PHglEY0012IhvX0L3pHQIQAYr7rG06nuoh0tqOY1p19iF+6L31IfbR2F8nTDhLv
+	 xyfNDPV+1WTDWx7dMqzU+X8UbRUK7wCsmpDuIHY3WsnQWkwu6tQpW2QvsM7mvSNU3A
+	 D9IoIv+7pOenGofWoS3C8Fg1XzgEvAkYxF81ZKct1zNlTKwapbKJ3n0ujChh4Uw6S2
+	 wnexxhmf6rbBxFT/nbINpikFKpxzRpaKOwx3JJJJQEaXFvwdgMajWuxkKggsT2V6Iy
+	 rHVzpbZMFUE7w67iwFli0YKlhPFR6fCaCnKLrgYhfdqSjg5PWBGapg93QjCgXwwESy
+	 wQkbfS6hoJzJQ==
 From: Anastasia Kovaleva <a.kovaleva@yadro.com>
 To: <martin.petersen@oracle.com>, <bootc@bootc.net>, <bostroesser@gmail.com>,
 	<michael.christie@oracle.com>
 CC: <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>,
 	<linux@yadro.com>
-Subject: [PATCH 00/10] Improve SCSI target logs
-Date: Fri, 29 Nov 2024 18:30:46 +0300
-Message-ID: <20241129153056.6985-1-a.kovaleva@yadro.com>
+Subject: [PATCH 01/10] target: core: Improve SCSI target logs
+Date: Fri, 29 Nov 2024 18:30:47 +0300
+Message-ID: <20241129153056.6985-2-a.kovaleva@yadro.com>
 X-Mailer: git-send-email 2.40.3
+In-Reply-To: <20241129153056.6985-1-a.kovaleva@yadro.com>
+References: <20241129153056.6985-1-a.kovaleva@yadro.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -67,110 +70,120 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain
-X-ClientProxiedBy: T-EXCH-07.corp.yadro.com (172.17.11.57) To
+X-ClientProxiedBy: T-Exch-05.corp.yadro.com (172.17.10.109) To
  T-EXCH-09.corp.yadro.com (172.17.11.59)
 
-This patch series address two main issues of the current logs in SCSI
-target (discussed in [1]):
+Introduce a new logging wrapper.
 
-  1. Absence of a common prefix for the subsystem to make it possible to
-     filter them out to a separate file.
-  2. Absence of an I-T-L nexus in a log message to understand what is
-     that log for.
+Reviewed-by: Dmitriy Bogdanov <d.bogdanov@yadro.com>
+Signed-off-by: Anastasia Kovaleva <a.kovaleva@yadro.com>
+---
+ include/target/target_core_base.h | 92 +++++++++++++++++++++++++++++++
+ 1 file changed, 92 insertions(+)
 
-Patches 2 - 6 of the series are automated. So, we also included fixes
-[PATCH 04] of other style errors and warnings that checkpatch can fix.
-We've been using these logs for almost an year and didn't encounter any
-kind of problems.
-
-Code style of all patches was made by git clang-format with these
-additional parameters:
-
-+AllowAllArgumentsOnNextLine: false
-+ColumnLimit: 100
-+PenaltyBreakOpenParenthesis: 12000
-+PenaltyBreakBeforeFirstCallParameter: 12000
-+PenaltyBreakString: 12000
-
-In general, logs present in the following format:
-  target <file_prefix>: General log Message
-  target <file_prefix> (<iqn_initiator> -> <RTPI>): Session Log Message
-  target <file_prefix> (<iqn_initiator> -> <RTPI>/<MappedLun>): Command Log Message
-  target <file_prefix> <fabric_name>_tpg[<tpg_tag>](<tpg_rtpi>/<LUN>): Lun Log Message
-
-Examples:
-  target sbp: initiator already logged-in
-  target core (iqn.2001-09.com.example:foobar-1 -> 1): ABORT_TASK: Sending TMR_TASK_DOES_NOT_EXIST for ref_tag: 2281488
-  target core (iqn.2001-09.com.example:foobar-1 -> 1/99): Unknown PERSISTENT_RESERVE_OUT service action: 0x11
-  target core iSCSI_tpg[1](1/99): Unable to extract alua_tg_pt_status
-
-[1] - https://lore.kernel.org/target-devel/ZF0MiCRW8HWm8YYj@yadro.com/
-
-Anastasia Kovaleva (10):
-  target: core: Improve SCSI target logs
-  target: Use new log wrappers
-  target: Fix quoted strings splitting
-  target: Fix some obvious style problems
-  target: Add log prefix to all tcm files
-  target: Remove old prefixes from log messages
-  target: core: Extend CaW logging
-  target: core: Use extended logs where possible
-  target: Use __func__ in logs
-  target: iscsi: Improve a log message
-
- drivers/target/iscsi/cxgbit/cxgbit_cm.c       | 191 +++---
- drivers/target/iscsi/cxgbit/cxgbit_ddp.c      |  19 +-
- drivers/target/iscsi/cxgbit/cxgbit_main.c     |  47 +-
- drivers/target/iscsi/cxgbit/cxgbit_target.c   | 115 ++--
- drivers/target/iscsi/iscsi_target.c           | 559 +++++++--------
- drivers/target/iscsi/iscsi_target_auth.c      | 123 ++--
- drivers/target/iscsi/iscsi_target_configfs.c  |  91 +--
- .../target/iscsi/iscsi_target_datain_values.c |  20 +-
- drivers/target/iscsi/iscsi_target_device.c    |   4 +-
- drivers/target/iscsi/iscsi_target_erl0.c      | 149 ++--
- drivers/target/iscsi/iscsi_target_erl1.c      | 158 ++---
- drivers/target/iscsi/iscsi_target_erl2.c      |  60 +-
- drivers/target/iscsi/iscsi_target_login.c     | 157 ++---
- drivers/target/iscsi/iscsi_target_nego.c      | 187 +++---
- .../target/iscsi/iscsi_target_nodeattrib.c    |  94 ++-
- .../target/iscsi/iscsi_target_parameters.c    | 354 ++++------
- .../target/iscsi/iscsi_target_seq_pdu_list.c  |  86 +--
- drivers/target/iscsi/iscsi_target_stat.c      |   2 +
- drivers/target/iscsi/iscsi_target_tmr.c       | 121 ++--
- drivers/target/iscsi/iscsi_target_tpg.c       | 172 +++--
- drivers/target/iscsi/iscsi_target_transport.c |   6 +-
- drivers/target/iscsi/iscsi_target_util.c      | 133 ++--
- drivers/target/loopback/tcm_loop.c            | 114 ++--
- drivers/target/sbp/sbp_target.c               | 156 +++--
- drivers/target/target_core_alua.c             | 192 +++---
- drivers/target/target_core_configfs.c         | 533 ++++++---------
- drivers/target/target_core_device.c           |  99 +--
- drivers/target/target_core_fabric_configfs.c  |  65 +-
- drivers/target/target_core_fabric_lib.c       |  27 +-
- drivers/target/target_core_file.c             | 126 ++--
- drivers/target/target_core_hba.c              |  15 +-
- drivers/target/target_core_iblock.c           |  96 ++-
- drivers/target/target_core_pr.c               | 635 ++++++++----------
- drivers/target/target_core_pscsi.c            | 160 ++---
- drivers/target/target_core_rd.c               |  87 ++-
- drivers/target/target_core_sbc.c              | 159 ++---
- drivers/target/target_core_spc.c              |  32 +-
- drivers/target/target_core_stat.c             |   4 +-
- drivers/target/target_core_tmr.c              |  57 +-
- drivers/target/target_core_tpg.c              |  81 +--
- drivers/target/target_core_transport.c        | 226 +++----
- drivers/target/target_core_ua.c               |  27 +-
- drivers/target/target_core_user.c             | 257 ++++---
- drivers/target/target_core_xcopy.c            | 228 +++----
- drivers/target/tcm_fc/tcm_fc.h                |   2 +-
- drivers/target/tcm_fc/tfc_cmd.c               |  47 +-
- drivers/target/tcm_fc/tfc_conf.c              |  18 +-
- drivers/target/tcm_fc/tfc_io.c                |  22 +-
- drivers/target/tcm_fc/tfc_sess.c              |   7 +-
- drivers/target/tcm_remote/tcm_remote.c        |  41 +-
- include/target/target_core_base.h             |  92 +++
- 51 files changed, 2847 insertions(+), 3606 deletions(-)
-
+diff --git a/include/target/target_core_base.h b/include/target/target_core_base.h
+index 97099a5e3f6c..da4c09d3698b 100644
+--- a/include/target/target_core_base.h
++++ b/include/target/target_core_base.h
+@@ -11,6 +11,98 @@
+ 
+ #define TARGET_CORE_VERSION		"v5.0"
+ 
++/*
++ * Unified target core logs
++ */
++#define target_sess_log(LVL, SESS, FMT, ...) \
++	pr_##LVL("target " TARGET_PREFIX " (%s -> %d): " FMT, \
++		(SESS)->se_node_acl->initiatorname, \
++		(SESS)->se_tpg->tpg_rtpi, ##__VA_ARGS__)
++
++#define target_cmd_log(LVL, CMD, FMT, ...) \
++	pr_##LVL("target " TARGET_PREFIX " (%s -> %d/%lld): " FMT, \
++		(CMD)->se_sess->se_node_acl->initiatorname, \
++		(CMD)->se_sess->se_tpg->tpg_rtpi, \
++		(CMD)->orig_fe_lun, ##__VA_ARGS__)
++
++#define target_lun_log(LVL, LUN, FMT, ...) \
++	pr_##LVL("target " TARGET_PREFIX " %s_tpg[%hu](%d/%llu): " FMT, \
++		(LUN)->lun_tpg->se_tpg_tfo->fabric_name, \
++		(LUN)->lun_tpg->se_tpg_tfo->tpg_get_tag(LUN->lun_tpg), \
++		(LUN)->lun_tpg->tpg_rtpi, \
++		(LUN)->unpacked_lun, ##__VA_ARGS__)
++
++#define target_log(LVL, FMT, ...) \
++	pr_##LVL("target " TARGET_PREFIX ": " FMT, ##__VA_ARGS__)
++
++#define target_sess_debug(SESS, FMT, ...)  target_sess_log(debug, SESS, FMT, ##__VA_ARGS__)
++#define target_sess_info(SESS, FMT, ...)   target_sess_log(info, SESS, FMT, ##__VA_ARGS__)
++#define target_sess_notice(SESS, FMT, ...) target_sess_log(notice, SESS, FMT, ##__VA_ARGS__)
++#define target_sess_warn(SESS, FMT, ...)   target_sess_log(warn, SESS, FMT, ##__VA_ARGS__)
++#define target_sess_err(SESS, FMT, ...)    target_sess_log(err, SESS, FMT, ##__VA_ARGS__)
++
++#define target_cmd_debug(CMD, FMT, ...)  target_cmd_log(debug, CMD, FMT, ##__VA_ARGS__)
++#define target_cmd_info(CMD, FMT, ...)   target_cmd_log(info, CMD, FMT, ##__VA_ARGS__)
++#define target_cmd_notice(CMD, FMT, ...) target_cmd_log(notice, CMD, FMT, ##__VA_ARGS__)
++#define target_cmd_warn(CMD, FMT, ...)   target_cmd_log(warn, CMD, FMT, ##__VA_ARGS__)
++#define target_cmd_err(CMD, FMT, ...)    target_cmd_log(err, CMD, FMT, ##__VA_ARGS__)
++
++#define target_lun_debug(LUN, FMT, ...)  target_lun_log(debug, LUN, FMT, ##__VA_ARGS__)
++#define target_lun_info(LUN, FMT, ...)   target_lun_log(info, LUN, FMT, ##__VA_ARGS__)
++#define target_lun_notice(LUN, FMT, ...) target_lun_log(notice, LUN, FMT, ##__VA_ARGS__)
++#define target_lun_warn(LUN, FMT, ...)   target_lun_log(warn, LUN, FMT, ##__VA_ARGS__)
++#define target_lun_err(LUN, FMT, ...)    target_lun_log(err, LUN, FMT, ##__VA_ARGS__)
++
++#define target_debug(FMT, ...)  target_log(debug, FMT, ##__VA_ARGS__)
++#define target_info(FMT, ...)   target_log(info, FMT, ##__VA_ARGS__)
++#define target_notice(FMT, ...) target_log(notice, FMT, ##__VA_ARGS__)
++#define target_warn(FMT, ...)   target_log(warn, FMT, ##__VA_ARGS__)
++#define target_err(FMT, ...)    target_log(err, FMT, ##__VA_ARGS__)
++
++#define target_sess_debug_ratelimited(SESS, FMT, ...) \
++	target_sess_log(debug_ratelimited, SESS, FMT, ##__VA_ARGS__)
++#define target_sess_info_ratelimited(SESS, FMT, ...) \
++	target_sess_log(info_ratelimited, SESS, FMT, ##__VA_ARGS__)
++#define target_sess_notice_ratelimited(SESS, FMT, ...) \
++	target_sess_log(notice_ratelimited, SESS, FMT, ##__VA_ARGS__)
++#define target_sess_warn_ratelimited(SESS, FMT, ...) \
++	target_sess_log(warn_ratelimited, SESS, FMT, ##__VA_ARGS__)
++#define target_sess_err_ratelimited(SESS, FMT, ...) \
++	target_sess_log(err_ratelimited, SESS, FMT, ##__VA_ARGS__)
++
++#define target_cmd_debug_ratelimited(CMD, FMT, ...) \
++	target_cmd_log(debug_ratelimited, CMD, FMT, ##__VA_ARGS__)
++#define target_cmd_info_ratelimited(CMD, FMT, ...) \
++	target_cmd_log(info_ratelimited, CMD, FMT, ##__VA_ARGS__)
++#define target_cmd_notice_ratelimited(CMD, FMT, ...) \
++	target_cmd_log(notice_ratelimited, CMD, FMT, ##__VA_ARGS__)
++#define target_cmd_warn_ratelimited(CMD, FMT, ...) \
++	target_cmd_log(warn_ratelimited, CMD, FMT, ##__VA_ARGS__)
++#define target_cmd_err_ratelimited(CMD, FMT, ...) \
++	target_cmd_log(err_ratelimited, CMD, FMT, ##__VA_ARGS__)
++
++#define target_lun_debug_ratelimited(LUN, FMT, ...) \
++	target_lun_log(debug_ratelimited, LUN, FMT, ##__VA_ARGS__)
++#define target_lun_info_ratelimited(LUN, FMT, ...) \
++	target_lun_log(info_ratelimited, LUN, FMT, ##__VA_ARGS__)
++#define target_lun_notice_ratelimited(LUN, FMT, ...) \
++	target_lun_log(notice_ratelimited, LUN, FMT, ##__VA_ARGS__)
++#define target_lun_warn_ratelimited(LUN, FMT, ...) \
++	target_lun_log(warn_ratelimited, LUN, FMT, ##__VA_ARGS__)
++#define target_lun_err_ratelimited(LUN, FMT, ...) \
++	target_lun_log(err_ratelimited, LUN, FMT, ##__VA_ARGS__)
++
++#define target_debug_ratelimited(FMT, ...) \
++	target_log(debug_ratelimited, FMT, ##__VA_ARGS__)
++#define target_info_ratelimited(FMT, ...) \
++	target_log(info_ratelimited, FMT, ##__VA_ARGS__)
++#define target_notice_ratelimited(FMT, ...) \
++	target_log(notice_ratelimited, FMT, ##__VA_ARGS__)
++#define target_warn_ratelimited(FMT, ...) \
++	target_log(warn_ratelimited, FMT, ##__VA_ARGS__)
++#define target_err_ratelimited(FMT, ...) \
++	target_log(err_ratelimited, FMT, ##__VA_ARGS__)
++
+ /*
+  * Maximum size of a CDB that can be stored in se_cmd without allocating
+  * memory dynamically for the CDB.
 -- 
 2.40.3
 
