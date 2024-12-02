@@ -1,213 +1,390 @@
-Return-Path: <linux-scsi+bounces-10425-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10410-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31A8F9E02C2
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2024 14:04:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9A939E02FA
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2024 14:13:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E69132847F4
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2024 13:03:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8928B2DB4E
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2024 12:05:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ADDE1FDE2E;
-	Mon,  2 Dec 2024 13:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC476204F99;
+	Mon,  2 Dec 2024 12:02:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="B3zn1uwp";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="UERSBUs0"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="0QxnT2wE"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0AD31FE46F
-	for <linux-scsi@vger.kernel.org>; Mon,  2 Dec 2024 13:01:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733144473; cv=fail; b=szcKMOV7TGsm5D/+wJPHzsWU7TbUMFAQFuLgUoRAFllEAFGs+E1VYnyr+JbCANvdvg3tsyWp7Hmcic8OCyKIlNgT4+BsHnnN21xpuIli1mNK5y7pu1fzBEKP9TmnXpur9EnasfYTxO5VzXX/GOjspK1xiKX7CH7HnfpGVFuuPu8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733144473; c=relaxed/simple;
-	bh=uSYA+zZQ9P9s00qHkR6fGdPoYh7hyh5EDBj6LpWJhHw=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=KG2LJLDXYLKn8GUbREusgaRt3Fai36ST290nORPJuaFeAerBOpoRWOrzDqnNKoJjbnWeu8gg3AIWQRA/u1jfoJPoRSFxQl+mdGUVbzq9fMkLYiTDcss7/p0zm7ZcyEDOPJdoL+ZI9U2mt0oDeKOPuRLsGyLs3Bb0WuuM22qqK3s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=B3zn1uwp; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=UERSBUs0; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B26WvlK006631;
-	Mon, 2 Dec 2024 13:00:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=corp-2023-11-20; bh=QMdp1BNtBurMK/ji
-	Bh7GAzdGA1Gt2xmFlvNcPC/bMec=; b=B3zn1uwphKYtpH1IdBqZ1+volNKe28Pw
-	0jBFgq0HVUk1xt9ySkYa4Km33mCe4hveM/rlB71+vQvzjOd1HgLF7WgR4Tht9WVI
-	k5UQ6axNT2VEuhu6Q8DaWgTpOHmEok+npSH8rxvU1Vqty5bx0S2sAD5zUgGilGgd
-	JdiGLUkHfTivq3ufOI7Sd5jk59De8RxBHCPVMYybLHHApvJjmA4JHujCwV/uj2if
-	HJmRpAG3nzvSietXK1SCg9pqAz4gfyauuylUmxN8VYQpuVH8YI3kiFfku+vdUtKc
-	P7BfXw1z8HJ/fWUVoQvX8IimJhF4d/To75qIQMSkfQzolR1QF+Csmw==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 437tas2yvx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 02 Dec 2024 13:00:54 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4B2CUKIt030953;
-	Mon, 2 Dec 2024 13:00:54 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2175.outbound.protection.outlook.com [104.47.57.175])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 437wjayx5h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 02 Dec 2024 13:00:53 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mDU0o+iMBq0MG7hhZ2dFnwhMUL0m9nRwAlUoOYCLctJ4/b6B+rDZ13rBbAmp4LkLrCy9ZyeGmJu/+u6EC9D5NMUAWlPOmFjMrG4M6wSFK357d1/kvcRJGZOERaBrDO3V8G9IeV3mBfhwKyoy/H/do4R/yFUVOmmEpoAbl8N3V+B6j9Rym+TpFiaBBn1aH1UOJv1yloVTZqUq46qsHERaQYweeS2h8RQ+kW8jeNbV3LGR6vz3ENrgyi9XH3f4mlCu1xCo6jU1vtEJjyItbgw556dY03I27mczJFeHiyV1qdWxG2frK1DsW2FY7NHmPpOeVjKN0mNDJE2UCJZowOkFOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QMdp1BNtBurMK/jiBh7GAzdGA1Gt2xmFlvNcPC/bMec=;
- b=Uyl5ZmfbUrTLls0klHlUIUkzwVJIUgz9H7k/RIS4TIt8Z39CT5x3VHG49AkZfk7kqsq5xs+ANAKo4LefdGR9bONSOzAQL2zrsT6hOlpDP2LTI2royvLRNP7+pnPkE46hiSnHZ08DLnKfk8YgIdJhcugIhmuIzdsQywQ+BxSBs5QSXrzFXz+T6L8hwXn1TB/7XjPsdBlB5y26Li/qyElI3zjeY3GHgbfsFIvNE/bl1am3yU4D8vVFpFb5X84vKLIcinLPHH+e+qL/Zmsyc6u5qlY4uggnuXDDZRlqt1dxlqD3mnWJhx8yBWB2vXjz1UkQKPvPNtErMZpy2Si1qcWZAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF77204080
+	for <linux-scsi@vger.kernel.org>; Mon,  2 Dec 2024 12:02:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733140974; cv=none; b=onkr8z/ppu4oOjDfMm0jQHWXPsk9X0lw7F7a1N2F6P9zLHJlefNxjMEzntuGamUYMHuE+JWl4kokZPY94igPUtM5zvW/T+4kw9me4ukUI8zUTtUaeWbUDypw4k8KpzXsUVDmZsGRghDahlGEwarFRZGe+QHKNBnG12zBGbiaa1Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733140974; c=relaxed/simple;
+	bh=6YzjV0NPQ5Asz3NMWwdStqqiu2ZFZDJL+XQN18G4jho=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=iDOSE2yKAzDB5JHL2fL0XPxXdo2wCaMSCsNMmVAIefW6ljaVAiII9NFGJc9W5gTR2WbV8eioD5vf8WfTeS9/yUXaLjFHP7jRSyKol+KP2iPgKRpVF6wS9G8Wy4RXr9rj0ngpMbu8vSSTfB+ddfxVbuPn1fWuJgZZwZ34UCoM2WI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=0QxnT2wE; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-434acf1f9abso38161335e9.2
+        for <linux-scsi@vger.kernel.org>; Mon, 02 Dec 2024 04:02:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QMdp1BNtBurMK/jiBh7GAzdGA1Gt2xmFlvNcPC/bMec=;
- b=UERSBUs0rJ8KyO+/7+V4auVi488A0vsdLwF0mBWcIRUACUKMydJ9h7yqmw8d9U+d3vb2Vhs5qiOouRsbYMIh6mJHUwK5BlYftiXLjJlhiEeZ/x5ZvNQMfwX4V8cBiTB5gSKWrjPP1+d1JFjkh1CTYpARLoJWxgM7uCjmJFWnMPM=
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
- by LV8PR10MB7869.namprd10.prod.outlook.com (2603:10b6:408:1e6::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.17; Mon, 2 Dec
- 2024 13:00:50 +0000
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::4f45:f4ab:121:e088]) by DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::4f45:f4ab:121:e088%4]) with mapi id 15.20.8207.017; Mon, 2 Dec 2024
- 13:00:50 +0000
-From: John Garry <john.g.garry@oracle.com>
-To: James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com
-Cc: linux-scsi@vger.kernel.org, dgilbert@interlog.com,
-        John Garry <john.g.garry@oracle.com>
-Subject: [PATCH] scsi: scsi_debug: Fix hrtimer support for ndelay
-Date: Mon,  2 Dec 2024 13:00:45 +0000
-Message-Id: <20241202130045.2335194-1-john.g.garry@oracle.com>
-X-Mailer: git-send-email 2.31.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BLAPR03CA0145.namprd03.prod.outlook.com
- (2603:10b6:208:32e::30) To DM6PR10MB4313.namprd10.prod.outlook.com
- (2603:10b6:5:212::20)
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1733140967; x=1733745767; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZwrqUgzomeZAg551+85HwI0DROl0jONzf+FyxNyg5dI=;
+        b=0QxnT2wEAppUE5irarxp4zFwY8qN5geBVep1eWjFhuUvRGJOLhYH4ubSPiq7fptojW
+         c8swZxFourC5md75I0gkcvJlmFLEw7GgXJpoJtN4LtohjKT4ipg9JZpm1KI0zE+wwWHK
+         Nrd9YINaVPr55/eQzj/12n8yB7PPRQ7EKEeT+hcOZOZIi4IWiB/ybd7OtedKqju9vtPK
+         pbn9zmE2t6HweYHxJCNuCpz735vpTqFf9DdVCEBSu6ea72uH5loEyart+00JicuxJn1j
+         mmcmrb1nM8cz+vMhnl4mGwcSFdwDswibN/GA2dkzQ6GWem/HFnSxAp06eccJQhz4/PTK
+         srDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733140967; x=1733745767;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZwrqUgzomeZAg551+85HwI0DROl0jONzf+FyxNyg5dI=;
+        b=KtbQ9+Y7iKCqT+t0VosY5PZzldKkMzpPK8Ih6fHBZaKUtq8a6UNkRKQ66rQYIb8VBz
+         Iz2F1kStcIfc47RAK2TEhEYGh2mVuQDGzPt6CzUlLZVIew5pFhAAACrBcevH0n0ZzgR+
+         Vs9GBs/J5+N8I+i/sy+G+STHmobJRbq5mXAwkxmKSpiTQCqs3/VDCFn9cdit8lt+REK6
+         rUCT5y6kxABdJL//ymOIlxujmD3W6TSW72/LNpewNi6Ikfrgk8T4+bYnsGk3DWOvejsC
+         578ZSWxlche0g5F1Q5Bd4iejuyr/DP75G160SuRUyRBB004kJ2jHXDxNMCExV2v+89qq
+         jItQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV5FmQ0PeTIEPOQBre3hBIt0gA8VuVE2Iu/Gxq70QHeBF0kRpOCnDVBlp2OclQSDjgWLFU1p84uJWbw@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOeV+5EjjajGk9SEm0O1nk5WVL/SnfLxhb6H+jiamfFCP2V3lt
+	xyAsWi3lNeBr/0feg4ifIwZwjGKc12YHfnORmzIJP0CSVP8kOVoELDh2uE1GKUc=
+X-Gm-Gg: ASbGncuGAFPqHiJcpUXIi4MfRW3+50Xu7uuKqTZmLLuO4r9t/MzHE3C7ce/7aFNKe7A
+	DPwcKsQnOyKRy8NWOWi3N9R6MAbz6+ToHndPzwaT7ILpL0IKUr0omUoiizGCmcnu9qQmSzdsEZ+
+	o3LxO7VB1dPkryHrLQIkNVGkztauSz8BS3XUbE/dWVpIll5w/alfMJmx+VDBPhGDWMG9omWW/b5
+	SX9Irbg9aQjo4U8GEY0S8XiEjy9PJyY7xdF8guX
+X-Google-Smtp-Source: AGHT+IG/w7cCjN0oKPl08ooPpL18eC2QfHH3rm9TU2c2V07Nmil57JLBdJ4jBndbMqB2SsBSN/dg+w==
+X-Received: by 2002:a05:600c:198c:b0:434:a30b:5455 with SMTP id 5b1f17b1804b1-434a9e0ac32mr189639205e9.27.1733140965235;
+        Mon, 02 Dec 2024 04:02:45 -0800 (PST)
+Received: from [127.0.1.1] ([193.57.185.11])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434b0d9bed7sm152396095e9.8.2024.12.02.04.02.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Dec 2024 04:02:44 -0800 (PST)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Mon, 02 Dec 2024 13:02:21 +0100
+Subject: [PATCH RESEND v7 05/17] ice, ufs, mmc: use the blk_crypto_key
+ struct when programming the key
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|LV8PR10MB7869:EE_
-X-MS-Office365-Filtering-Correlation-Id: 60db3a82-d03c-489f-3441-08dd12d1589e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?EdiPk46dEnPlOiZETVywDx2MbSQH5zCV6F1HpwYROc6KWjs86iZUAPYzQXm9?=
- =?us-ascii?Q?Bcuxq5DB+8dA6f2lN5/K8JJXzhE394fROMoIEH+LzwsJplEoGa1YsZwszMBw?=
- =?us-ascii?Q?vwhjume5ZtwrnYDW70XnFN5QIMNghAhpA80KEpjZ4ihGU+Y/WXC/fp35hpEV?=
- =?us-ascii?Q?3s8R1huMP/xtGvZyG2FRij5gdK/nXtddz3s7gN2zfU3vovx0cf6S7AUpGAkx?=
- =?us-ascii?Q?P4rqECACgK66Ib8uRZoAmLnzeT7XZOYN9ShuxwzIUafJSmgYKpjQmluI5kzo?=
- =?us-ascii?Q?M+0+8s+mqpaf6YeJVXcM6MFaVG3tCp453VkAQiwUj9vK1cC8TxP2sHqyYFsM?=
- =?us-ascii?Q?H+UFWIS0LzvsqcnFVSL0UWbG59K7Hvb1hUWLhgcWBAr2kpcz7EZYit8fyNoP?=
- =?us-ascii?Q?6QM4lso+NN9s9FFyJJnJOzLQ978X2/iUwTf0s/aZiLBc877Aux8mk0G+6JH2?=
- =?us-ascii?Q?Q+EpkXUuS/2ONlQmziUFXWpJpR9gxYp3atkhfGg9F9j17Nq3sTUkYIz191Cl?=
- =?us-ascii?Q?NRQrPVZhQ9RoQAYxVKGgm8aBxDxE9dTr15/y0E2ngiuc/FLr+b0t4zmeSLWz?=
- =?us-ascii?Q?y7yEgZg9sQc/wLpQctPg2X3YtfsUscoIwWGTKLpLNRenaDuIJix/aJTIP+Iw?=
- =?us-ascii?Q?hTQz+WeTInjKpm9EZ7i1+TKtiKlUGgEc/WZs3qeuQlK2NGC2OAlTQwAYv4Fq?=
- =?us-ascii?Q?OJaaxyaQr+UfVDeFXZisqRPDlsSsBsYxwA+6PbvQKJ/KELBEym9smcvC9f4U?=
- =?us-ascii?Q?yrnF2PpZeBoQClcsUxR4frT+/Wfa0JCFTprHf9IOCgfi4X3NUxuLU9p4W52u?=
- =?us-ascii?Q?gsjPbUiB5BmPIIsWu8RooGXQIICKHGdi8b/dKhs2HUFDPr0MlITATkknNxcw?=
- =?us-ascii?Q?LU9XiorrfLrgL0IDf7EKsiuZ04GFSiV5TJC1sdJKlTgO4XH/pcBUK23Mb9he?=
- =?us-ascii?Q?DoXqfWmnd7/45sXuufGG+vBy9vCv63+P92rmyMVDuSH67IpnpK+9a7HL9DRd?=
- =?us-ascii?Q?ja4TI+gXI9VvkPba5/iocpyTx1PHosszpyVScETCqqw6nElj/varWIQNZIub?=
- =?us-ascii?Q?DRR4z+OupCFq9//6VfMSb4zeridL0sKwCQf1qHwZ8navl9yEAG33Ot3P2wjq?=
- =?us-ascii?Q?8el3KfIFMqYCKJRDKbYzYqnwaFBlryib/zeHxgXQoHDAdQrongZQy0JfXhlA?=
- =?us-ascii?Q?3mn//w/JvRtYfBDl/iZXn2x3VRTZlXARqwZudoUf6qWHYHhhGQBLF7G3Ogvt?=
- =?us-ascii?Q?lC1zFdgooj3vfgZJsKfpQTlzAC6rR/r6dyCmfAI0eMaiG3x/mQkgnmUmMP7t?=
- =?us-ascii?Q?LKdhIz91LkU+5VlB3psxpwscIIqru+TQV7qxOMa/2MmAGw=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?BwgX9NBxv8/SdZniBXhd9WrWB/XhR5hq6o6yXdjGm8PyDzGkhd1U/gakd2vq?=
- =?us-ascii?Q?O9ZG8LN96Y0mh/sIZgWbPRAVds9wczHmAQttboMU4H0Wf4+afIliMOFaVHSg?=
- =?us-ascii?Q?k3WOo8axm3FfBV/pC3gDsXNZoM/kcK9psvKmidDpRlsZD/JCy3mZpVWo1DCP?=
- =?us-ascii?Q?Hx9M8R1U9v9vpOXt1XkyvTvQmLctLp6wNI8bXbj5NRgGwtUSo+PwYWL5YNLY?=
- =?us-ascii?Q?9qGoZ94H9w7zKHlBS+LN2RKjZ5rvQ9HtnHxCRwRIoFMK55AwXYYyw9cwqf1j?=
- =?us-ascii?Q?biUpKXATlPIQ2z700XNgU/bDtSzcWf7diW432CCSFOjYRI6uoVdJPvPySsAL?=
- =?us-ascii?Q?VPUu/SnmTVGXjYAdoY11JVO6bgVSPMVmVSlEBtMq94ch71yDAJg98dMRf5Ch?=
- =?us-ascii?Q?w+kUxx4MkIgHfI8wbKZKhlVeXz2gUVJ+xWtz9lUJtBS35D7C6Uvj298VI7zv?=
- =?us-ascii?Q?9C8+RvGeXDYvNNmHJQwzLmvAzKxk4tmNEEmZejrnKYAnlmaQGnDoP6xi+Aqf?=
- =?us-ascii?Q?x+dH8sN0gcrxXkMpNp1QEuQs6SDgiDvO67m6QWZM3kFTfDzuMXbAcJPOo217?=
- =?us-ascii?Q?61D808m+EanMgt1fCdT6XYgHi3HzL5CAPIMsbiHqpLLT/4m1GcnW0hWPXx9j?=
- =?us-ascii?Q?3prScIzkne3O9co/ipDhZOYFUvP7xNTX37OzT2z8/JgcXZ01JuAfxOs1rQb6?=
- =?us-ascii?Q?MWrx0MWel9eKlmhHc8015NEV/qqm82UJyHSsF03ZrxBnoqXgOcmHSdhMuWkH?=
- =?us-ascii?Q?qGMtJvTa101wNuC1Chht8lZg/gdjBAUX4aS5NsGA/btCPtW+2qI5I8iOm8/z?=
- =?us-ascii?Q?n4+ExZfeTR6PJ3X5hnmLBLitsWRFjl49Z2dF1JY8CqPsuEBkQhnkTwL2vPHA?=
- =?us-ascii?Q?yagaTrjxyK0/OFt5YEppItfygX9kSXIdk1TUTXujc9k+jKTOZYYOyuMkxgqt?=
- =?us-ascii?Q?j/kkyQfiLom931yUeoVLrkV9UHR2tyNtcB9YOjzO0pAxHPKAduMsHe4c/uZL?=
- =?us-ascii?Q?bXaQG2y5pFyvpvurQDChEI87Cy7Qi8aqN/WJB2HreZBi/5OU30xLf2vje5Pg?=
- =?us-ascii?Q?g76GqdLLRdKBIJXiaZDvC/MKLeyevrgCnBf/Y6NjUQvMbF5vK9snkR9FRb92?=
- =?us-ascii?Q?YD4fjbcE8F3qIE7BpLjT9rlBEwV3/pLRo/nsyvoQwqS3+cWFAyTXb94zD9bL?=
- =?us-ascii?Q?Qobt7OSOv/SPcrB2vIus7EEujbu8hXvB6eP2HdVmJqBW8l2+FH8hCZFJVtO+?=
- =?us-ascii?Q?qSna+PFjxKVt76CiINV3xJ/AN6VyftGcIgFVPF0LG8GMMg3bVDdqC7bETvGd?=
- =?us-ascii?Q?YM+hVaP6hjN5fn7cH4hj1BjHgwohpnfeXfV55tpVFcR6GLSIjlE+6lfqjHr4?=
- =?us-ascii?Q?XEqia2FyvWtC3enO1izkQHy5A73Jqs+HgMGAykl8lLYoGOLoN0nFUQpbQoib?=
- =?us-ascii?Q?MrsKqV+4oDU1SiMkgYQHcfUz7VgnPelNpeWePErPBZlEs3tHjHXdVoZuq5S8?=
- =?us-ascii?Q?nUOgkgE8+rIZ5mvWGrro351ilcl2GrGpn20v/KFd2f7CDLbh7GBTLqqE7tkD?=
- =?us-ascii?Q?wpi/OvPm4T1tyyRxZofCjHrIC+zxoHaPM0gVjHciY4LpUES/BvJnakPI5N+1?=
- =?us-ascii?Q?aA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	IAVBR4aLrI7zix2SX/fRs7GGOxo1jMvmf4959v1UIM9bMAfgu17hdvjYNpanTu5gGES0DIxlJZ9+VKFQPKncYw8Ol8YqiISQCS7ZZ+k7khdnSWLd07d1lXFU4kHP3v2WlQh41dKLeCJP8rVAIdov726Ahi82dhAydUtQRiXeFFGoJCuYLttPIiG4m2GfWxovRAIJ7WPHj2GDdF5AGmTO8tolvomVFScRINNKnReYVmPqfGu5y1GIMvKTPQDMEPKAq+BDNg3btdp1Bex9k6+hsR5lkkHMM2Lfk2SUK3LlR/cBJtBUwZ9fFan7TCp3Dh970fanUk2Qp7eEkDITWfTp0G83UtO+BRm0aP5Ccex3wdW5rjdW8kRWyDo5hotQjdD7Tr42y8AXA+7tElzwT2Tyh9E73Np3dSgFl512B6DdK+YLVDwX8/dBAUy/3xtBXeNm0bARGKokgUWjTeMAY3sNVK9iX3emx4R9H+vPGM14f4hEGCfgHLkPluKum+u16UHM3B/PGiMzZ+TH54m4Q4xmFK5RvfgEJYazCec0wkbmJzPA8QqpLUSI8kiqnOREDrVys1kfv4mWw7UETLesYBeqTrVaAz9BLmAQsrn918NJVW0=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60db3a82-d03c-489f-3441-08dd12d1589e
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2024 13:00:50.1921
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1HuXELhzdLqXYfOkThYN1snmDghSvNeZIZlKoYDBqb29IrPnxyXKhzgxxum3UGVvYD8GprTG50jowmpD9jk59Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR10MB7869
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-02_08,2024-12-02_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 adultscore=0
- malwarescore=0 bulkscore=0 suspectscore=0 spamscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2411120000
- definitions=main-2412020114
-X-Proofpoint-GUID: M-DzXbijiDGzxLWIhuSHM5_MDgwE6mNb
-X-Proofpoint-ORIG-GUID: M-DzXbijiDGzxLWIhuSHM5_MDgwE6mNb
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241202-wrapped-keys-v7-5-67c3ca3f3282@linaro.org>
+References: <20241202-wrapped-keys-v7-0-67c3ca3f3282@linaro.org>
+In-Reply-To: <20241202-wrapped-keys-v7-0-67c3ca3f3282@linaro.org>
+To: Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>, 
+ Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>, 
+ Mikulas Patocka <mpatocka@redhat.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ Asutosh Das <quic_asutoshd@quicinc.com>, 
+ Ritesh Harjani <ritesh.list@gmail.com>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+ Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ Gaurav Kashyap <quic_gaurkash@quicinc.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ Eric Biggers <ebiggers@kernel.org>, "Theodore Y. Ts'o" <tytso@mit.edu>, 
+ Jaegeuk Kim <jaegeuk@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: linux-block@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, dm-devel@lists.linux.dev, 
+ linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+ Om Prakash Singh <quic_omprsing@quicinc.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9620;
+ i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
+ bh=Xxy7T1ivWX9tbiX/lU4uTl3nRxq9bf8iN/DI5qFBRo4=;
+ b=owEBbQKS/ZANAwAKARGnLqAUcddyAcsmYgBnTaHSarEJ/NUdEhODEKyrsFZmobZ9td42n/5Va
+ leOaiEpWfKJAjMEAAEKAB0WIQQWnetsC8PEYBPSx58Rpy6gFHHXcgUCZ02h0gAKCRARpy6gFHHX
+ ciLJD/9WdWPTFWXr4k9CfLh5BwJ2ksXCgxTPX/hCV8uJPp36IJkZgXBK2kMQ/m4RKPB0AxPQtnC
+ /3W1vMNHhU+aQblrj1haiomFSfr34M0Y6KDYpdlLWvDuVPs+QZ4DwSxiZtivQY4y9ccvuu1JXgM
+ 6BeWxRD8SdPHA+r7bPBEgfdKG0Ymf/yqhxU9/w27tu/7gV7+mP9hsxGeXB9k9jbklKwJ1tXy1Vq
+ 2zx6dGg3Gh16sjt27Dz6a+Cm9ake/TAhJHJlm5geNBOoCOW+IWHicXsH2ue77VO03xl9uJKsLsF
+ pB4iKkF1IdIG8c4wkYijgXDcy/ywjNRSPnjQG10Vgg1SWNU/t5ThyR54F65TA/Imf/S0G/ycKYI
+ ss5UgeyX/KgIyNeGsuB2PFqd75ILftltKR4g8m2uBqtfgCVayu/zn3y+wBbT3e0Y2H+r7GniuO2
+ gwhoKbvhNy/IiqghWMS3lhgSjqIDtrw6cExBYPCbS3cC07eGiQF+kuyalt7AN59+E+jVSeiS1TD
+ gofrBL/OD8yyn+0fqFVmrbr00Ec4uhOTIocMOq7fx+728BpJexy5SIq+R3l3ofRjzhEyCLyhGZw
+ Lmrs03J1HFzdWl8mguECrWfdf54OJdSY7aGvPX8xEJsEap9v8qqVsbn/grRlmlec8tF3E2iKO/Q
+ c6bcieyRsfI3ZqA==
+X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
+ fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
 
-Since commit 771f712ba5b0 ("scsi: scsi_debug: Fix cmd duration
-calculation"), ns_from_boot value is only evaluated for in schedule_resp()
-for polled requests.
+From: Gaurav Kashyap <quic_gaurkash@quicinc.com>
 
-However, ns_from_boot is also required for hrtimer support for when ndelay
-is less than INCLUSIVE_TIMING_MAX_NS, so fix up the logic to decide when to
-evaluate ns_from_boot.
+The program key ops in the storage controller does not pass on the
+blk_crypto_key structure to ICE, this is okay with raw keys of standard
+AES XTS sizes. However, wrapped keyblobs can be of any size and in
+preparation for that, modify the ICE and storage controller APIs to
+accept blk_crypto_key which can carry larger keys and indicate their
+size.
 
-Fixes: 771f712ba5b0 ("scsi: scsi_debug: Fix cmd duration calculation")
-Signed-off-by: John Garry <john.g.garry@oracle.com>
+Reviewed-by: Om Prakash Singh <quic_omprsing@quicinc.com>
+Tested-by: Neil Armstrong <neil.armstrong@linaro.org>
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
+Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Signed-off-by: Gaurav Kashyap <quic_gaurkash@quicinc.com>
+Reviewed-by: Konrad Dybcio <konradybcio@kernel.org>
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ drivers/mmc/host/cqhci-crypto.c  | 7 ++++---
+ drivers/mmc/host/cqhci.h         | 2 ++
+ drivers/mmc/host/sdhci-msm.c     | 6 ++++--
+ drivers/soc/qcom/ice.c           | 6 +++---
+ drivers/ufs/core/ufshcd-crypto.c | 7 ++++---
+ drivers/ufs/host/ufs-qcom.c      | 6 ++++--
+ include/soc/qcom/ice.h           | 5 +++--
+ include/ufs/ufshcd.h             | 1 +
+ 8 files changed, 25 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 936565b5000f..8a8ee4aff49e 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -6447,7 +6447,7 @@ static int schedule_resp(struct scsi_cmnd *cmnd, struct sdebug_dev_info *devip,
+diff --git a/drivers/mmc/host/cqhci-crypto.c b/drivers/mmc/host/cqhci-crypto.c
+index 6652982410ec5..91da6de1d6501 100644
+--- a/drivers/mmc/host/cqhci-crypto.c
++++ b/drivers/mmc/host/cqhci-crypto.c
+@@ -32,6 +32,7 @@ cqhci_host_from_crypto_profile(struct blk_crypto_profile *profile)
+ }
+ 
+ static int cqhci_crypto_program_key(struct cqhci_host *cq_host,
++				    const struct blk_crypto_key *bkey,
+ 				    const union cqhci_crypto_cfg_entry *cfg,
+ 				    int slot)
+ {
+@@ -39,7 +40,7 @@ static int cqhci_crypto_program_key(struct cqhci_host *cq_host,
+ 	int i;
+ 
+ 	if (cq_host->ops->program_key)
+-		return cq_host->ops->program_key(cq_host, cfg, slot);
++		return cq_host->ops->program_key(cq_host, bkey, cfg, slot);
+ 
+ 	/* Clear CFGE */
+ 	cqhci_writel(cq_host, 0, slot_offset + 16 * sizeof(cfg->reg_val[0]));
+@@ -99,7 +100,7 @@ static int cqhci_crypto_keyslot_program(struct blk_crypto_profile *profile,
+ 		memcpy(cfg.crypto_key, key->raw, key->size);
  	}
- 	sd_dp = &sqcp->sd_dp;
  
--	if (polled)
-+	if (polled || (ndelay > 0 && ndelay < INCLUSIVE_TIMING_MAX_NS))
- 		ns_from_boot = ktime_get_boottime_ns();
+-	err = cqhci_crypto_program_key(cq_host, &cfg, slot);
++	err = cqhci_crypto_program_key(cq_host, key, &cfg, slot);
  
- 	/* one of the resp_*() response functions is called here */
+ 	memzero_explicit(&cfg, sizeof(cfg));
+ 	return err;
+@@ -113,7 +114,7 @@ static int cqhci_crypto_clear_keyslot(struct cqhci_host *cq_host, int slot)
+ 	 */
+ 	union cqhci_crypto_cfg_entry cfg = {};
+ 
+-	return cqhci_crypto_program_key(cq_host, &cfg, slot);
++	return cqhci_crypto_program_key(cq_host, NULL, &cfg, slot);
+ }
+ 
+ static int cqhci_crypto_keyslot_evict(struct blk_crypto_profile *profile,
+diff --git a/drivers/mmc/host/cqhci.h b/drivers/mmc/host/cqhci.h
+index fab9d74445ba7..06099fd32f23e 100644
+--- a/drivers/mmc/host/cqhci.h
++++ b/drivers/mmc/host/cqhci.h
+@@ -12,6 +12,7 @@
+ #include <linux/completion.h>
+ #include <linux/wait.h>
+ #include <linux/irqreturn.h>
++#include <linux/blk-crypto.h>
+ #include <asm/io.h>
+ 
+ /* registers */
+@@ -291,6 +292,7 @@ struct cqhci_host_ops {
+ 	void (*post_disable)(struct mmc_host *mmc);
+ #ifdef CONFIG_MMC_CRYPTO
+ 	int (*program_key)(struct cqhci_host *cq_host,
++			   const struct blk_crypto_key *bkey,
+ 			   const union cqhci_crypto_cfg_entry *cfg, int slot);
+ #endif
+ 	void (*set_tran_desc)(struct cqhci_host *cq_host, u8 **desc,
+diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+index e00208535bd1c..b8770524c0087 100644
+--- a/drivers/mmc/host/sdhci-msm.c
++++ b/drivers/mmc/host/sdhci-msm.c
+@@ -1859,6 +1859,7 @@ static __maybe_unused int sdhci_msm_ice_suspend(struct sdhci_msm_host *msm_host)
+  * vendor-specific SCM calls for this; it doesn't support the standard way.
+  */
+ static int sdhci_msm_program_key(struct cqhci_host *cq_host,
++				 const struct blk_crypto_key *bkey,
+ 				 const union cqhci_crypto_cfg_entry *cfg,
+ 				 int slot)
+ {
+@@ -1866,6 +1867,7 @@ static int sdhci_msm_program_key(struct cqhci_host *cq_host,
+ 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+ 	struct sdhci_msm_host *msm_host = sdhci_pltfm_priv(pltfm_host);
+ 	union cqhci_crypto_cap_entry cap;
++	u8 ice_key_size;
+ 
+ 	/* Only AES-256-XTS has been tested so far. */
+ 	cap = cq_host->crypto_cap_array[cfg->crypto_cap_idx];
+@@ -1873,11 +1875,11 @@ static int sdhci_msm_program_key(struct cqhci_host *cq_host,
+ 		cap.key_size != CQHCI_CRYPTO_KEY_SIZE_256)
+ 		return -EINVAL;
+ 
++	ice_key_size = QCOM_ICE_CRYPTO_KEY_SIZE_256;
+ 	if (cfg->config_enable & CQHCI_CRYPTO_CONFIGURATION_ENABLE)
+ 		return qcom_ice_program_key(msm_host->ice,
+ 					    QCOM_ICE_CRYPTO_ALG_AES_XTS,
+-					    QCOM_ICE_CRYPTO_KEY_SIZE_256,
+-					    cfg->crypto_key,
++					    ice_key_size, bkey,
+ 					    cfg->data_unit_size, slot);
+ 	else
+ 		return qcom_ice_evict_key(msm_host->ice, slot);
+diff --git a/drivers/soc/qcom/ice.c b/drivers/soc/qcom/ice.c
+index 393d2d1d275f1..e89baaf574bc1 100644
+--- a/drivers/soc/qcom/ice.c
++++ b/drivers/soc/qcom/ice.c
+@@ -163,8 +163,8 @@ EXPORT_SYMBOL_GPL(qcom_ice_suspend);
+ 
+ int qcom_ice_program_key(struct qcom_ice *ice,
+ 			 u8 algorithm_id, u8 key_size,
+-			 const u8 crypto_key[], u8 data_unit_size,
+-			 int slot)
++			 const struct blk_crypto_key *bkey,
++			 u8 data_unit_size, int slot)
+ {
+ 	struct device *dev = ice->dev;
+ 	union {
+@@ -183,7 +183,7 @@ int qcom_ice_program_key(struct qcom_ice *ice,
+ 		return -EINVAL;
+ 	}
+ 
+-	memcpy(key.bytes, crypto_key, AES_256_XTS_KEY_SIZE);
++	memcpy(key.bytes, bkey->raw, AES_256_XTS_KEY_SIZE);
+ 
+ 	/* The SCM call requires that the key words are encoded in big endian */
+ 	for (i = 0; i < ARRAY_SIZE(key.words); i++)
+diff --git a/drivers/ufs/core/ufshcd-crypto.c b/drivers/ufs/core/ufshcd-crypto.c
+index 7d3a3e228db0d..33083e0cad6e1 100644
+--- a/drivers/ufs/core/ufshcd-crypto.c
++++ b/drivers/ufs/core/ufshcd-crypto.c
+@@ -18,6 +18,7 @@ static const struct ufs_crypto_alg_entry {
+ };
+ 
+ static int ufshcd_program_key(struct ufs_hba *hba,
++			      const struct blk_crypto_key *bkey,
+ 			      const union ufs_crypto_cfg_entry *cfg, int slot)
+ {
+ 	int i;
+@@ -27,7 +28,7 @@ static int ufshcd_program_key(struct ufs_hba *hba,
+ 	ufshcd_hold(hba);
+ 
+ 	if (hba->vops && hba->vops->program_key) {
+-		err = hba->vops->program_key(hba, cfg, slot);
++		err = hba->vops->program_key(hba, bkey, cfg, slot);
+ 		goto out;
+ 	}
+ 
+@@ -89,7 +90,7 @@ static int ufshcd_crypto_keyslot_program(struct blk_crypto_profile *profile,
+ 		memcpy(cfg.crypto_key, key->raw, key->size);
+ 	}
+ 
+-	err = ufshcd_program_key(hba, &cfg, slot);
++	err = ufshcd_program_key(hba, key, &cfg, slot);
+ 
+ 	memzero_explicit(&cfg, sizeof(cfg));
+ 	return err;
+@@ -107,7 +108,7 @@ static int ufshcd_crypto_keyslot_evict(struct blk_crypto_profile *profile,
+ 	 */
+ 	union ufs_crypto_cfg_entry cfg = {};
+ 
+-	return ufshcd_program_key(hba, &cfg, slot);
++	return ufshcd_program_key(hba, NULL, &cfg, slot);
+ }
+ 
+ /*
+diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+index 68040b2ab5f82..44fb4a4c0f2d7 100644
+--- a/drivers/ufs/host/ufs-qcom.c
++++ b/drivers/ufs/host/ufs-qcom.c
+@@ -150,6 +150,7 @@ static inline int ufs_qcom_ice_suspend(struct ufs_qcom_host *host)
+ }
+ 
+ static int ufs_qcom_ice_program_key(struct ufs_hba *hba,
++				    const struct blk_crypto_key *bkey,
+ 				    const union ufs_crypto_cfg_entry *cfg,
+ 				    int slot)
+ {
+@@ -157,6 +158,7 @@ static int ufs_qcom_ice_program_key(struct ufs_hba *hba,
+ 	union ufs_crypto_cap_entry cap;
+ 	bool config_enable =
+ 		cfg->config_enable & UFS_CRYPTO_CONFIGURATION_ENABLE;
++	u8 ice_key_size;
+ 
+ 	/* Only AES-256-XTS has been tested so far. */
+ 	cap = hba->crypto_cap_array[cfg->crypto_cap_idx];
+@@ -164,11 +166,11 @@ static int ufs_qcom_ice_program_key(struct ufs_hba *hba,
+ 	    cap.key_size != UFS_CRYPTO_KEY_SIZE_256)
+ 		return -EOPNOTSUPP;
+ 
++	ice_key_size = QCOM_ICE_CRYPTO_KEY_SIZE_256;
+ 	if (config_enable)
+ 		return qcom_ice_program_key(host->ice,
+ 					    QCOM_ICE_CRYPTO_ALG_AES_XTS,
+-					    QCOM_ICE_CRYPTO_KEY_SIZE_256,
+-					    cfg->crypto_key,
++					    ice_key_size, bkey,
+ 					    cfg->data_unit_size, slot);
+ 	else
+ 		return qcom_ice_evict_key(host->ice, slot);
+diff --git a/include/soc/qcom/ice.h b/include/soc/qcom/ice.h
+index 5870a94599a25..9dd835dba2a78 100644
+--- a/include/soc/qcom/ice.h
++++ b/include/soc/qcom/ice.h
+@@ -7,6 +7,7 @@
+ #define __QCOM_ICE_H__
+ 
+ #include <linux/types.h>
++#include <linux/blk-crypto.h>
+ 
+ struct qcom_ice;
+ 
+@@ -30,8 +31,8 @@ int qcom_ice_resume(struct qcom_ice *ice);
+ int qcom_ice_suspend(struct qcom_ice *ice);
+ int qcom_ice_program_key(struct qcom_ice *ice,
+ 			 u8 algorithm_id, u8 key_size,
+-			 const u8 crypto_key[], u8 data_unit_size,
+-			 int slot);
++			 const struct blk_crypto_key *bkey,
++			 u8 data_unit_size, int slot);
+ int qcom_ice_evict_key(struct qcom_ice *ice, int slot);
+ struct qcom_ice *of_qcom_ice_get(struct device *dev);
+ #endif /* __QCOM_ICE_H__ */
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index d7aca9e61684f..bc6f08397769c 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -373,6 +373,7 @@ struct ufs_hba_variant_ops {
+ 				struct devfreq_dev_profile *profile,
+ 				struct devfreq_simple_ondemand_data *data);
+ 	int	(*program_key)(struct ufs_hba *hba,
++			       const struct blk_crypto_key *bkey,
+ 			       const union ufs_crypto_cfg_entry *cfg, int slot);
+ 	int	(*fill_crypto_prdt)(struct ufs_hba *hba,
+ 				    const struct bio_crypt_ctx *crypt_ctx,
+
 -- 
-2.31.1
+2.45.2
 
 
