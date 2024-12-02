@@ -1,229 +1,143 @@
-Return-Path: <linux-scsi+bounces-10444-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10438-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C21C99E0B79
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2024 20:02:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB4F29E0C80
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2024 20:46:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80F5A2830A7
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2024 19:02:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19FC8B45FA2
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2024 18:36:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4106F1DEFCC;
-	Mon,  2 Dec 2024 19:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBB01DE2CC;
+	Mon,  2 Dec 2024 18:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="btGY7MOa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mDXFsGp6"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2A71DE8A6;
-	Mon,  2 Dec 2024 19:00:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD2D70805;
+	Mon,  2 Dec 2024 18:36:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733166045; cv=none; b=aleZLOsHU6LUymvO0uOquzrjlSiKOLqC58IhaaCCcwyilJRYS3CZEvvIQdIGljbhdqEghT/i4aTrIGKS5C1uvS2HdooQCvujVpf0kqMaE9BE+XrvibJ8eO6O1Y0W3/VMv5JRwcr2+Esq2eiCMWKMYoJly42O36OdIzJDG+bvZpY=
+	t=1733164606; cv=none; b=S2PZSqjnv6Ql4keBSjm6fQyRZJ7uzuK6XPFZe1gDs73GI8DTjYczVxkgaaiYGdZwKXi2AGRMxtfaLRvNjwjYjS/d2Qfd9QVo+19+2Qmy6uEmLx4IOYIrj4IugEWXkfgeTi1Oie4W8FxO9DvEic3bgX5NHXH0P69Plx1iaeZhVOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733166045; c=relaxed/simple;
-	bh=6f4mNkpvqRUUeyyo/NJcoh7bQ9hdy8tWinO29V+C6p4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=F8lSgy7GSD5WkjwLJn7s4+tNIC7haiewWMkvYKr876fr084mLklKdAfiYKTdV5Z/1aUvrRQDSB1pGtqF5HWcy2K8fpelq6MbCvHki86Mxbid9uKHjN7FoOHOxsyvZXyrV7DjPymm/WFJyXiAqLjhhCYKSg6s1KCIrEJ2NoCOl4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=btGY7MOa; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1733166038;
-	bh=6f4mNkpvqRUUeyyo/NJcoh7bQ9hdy8tWinO29V+C6p4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=btGY7MOaNEAELCcGQDyjd+njX9nVHFypYDtpB/GQKbJV1iIi5gtyX6lfQLN7FWOuO
-	 bRv+xU7gwx500gh/9MMVmfaAtXQQ8JGkfIy68gIH6SKOtmJKqw+r0n4opaFZwZlINv
-	 6+f7CdANi7p7PQi79BD4w4Iln7oPIuGuojs0Y12Y=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Mon, 02 Dec 2024 20:00:40 +0100
-Subject: [PATCH 5/5] scsi: arcmsr: Use BIN_ATTR_ADMIN_WO() for
- bin_attribute definitions
+	s=arc-20240116; t=1733164606; c=relaxed/simple;
+	bh=SV0a41+RDhocvfEPEyv80/bq/ZSJlaeMPldbjOpf4GA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a9HJhF4+GIFOjAsVV1EJcYU9Ffk7plVU51R6VUy+X1Z17p5U/q+2XGyHxIF0TJwhP5drNuOsccN6SO1nrX3gJNKG5J67m7oEC5mdgkH37HVLY9H2SMvCO+iNa5MjCfZ7UpWP6vlk6dsTB5EDgnAXK8dsmw/DbHef3XelyzH2wM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mDXFsGp6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98048C4CED2;
+	Mon,  2 Dec 2024 18:36:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733164605;
+	bh=SV0a41+RDhocvfEPEyv80/bq/ZSJlaeMPldbjOpf4GA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mDXFsGp6SVShBJ3Ui0hgJsz5amcbCq/I/bbNbZ2kUyQfWOw2ZS5q9ExO9fJelmJDV
+	 JoTW7+mVoW8JQm4aPfX9GffJUvsXf9CKpTJVs952AAHPXkRtNMzStQxAzUh/Zv0IAM
+	 0fAcJug/ASl+Poqji32qvlgh2ELNQMPdZwK3F2r+xv/iG/DXptEJg9zeHdsn/Jb+Iz
+	 0ftJTTXMZjBNyUB0xZcMDq65RoPvWTKPBxqqHxCCvmsG4BmH9jMW9szDkcIz+t9UOi
+	 mrIcG+VFSZqEP8KKocQ42uPkXDpb8JEBmQ5qSM4KpHB9tjvuVuaI9zpuuXloq4bRbo
+	 YzTBzB4DMLNQw==
+Date: Mon, 2 Dec 2024 10:36:43 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
+	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Asutosh Das <quic_asutoshd@quicinc.com>,
+	Ritesh Harjani <ritesh.list@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Gaurav Kashyap <quic_gaurkash@quicinc.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Jaegeuk Kim <jaegeuk@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dm-devel@lists.linux.dev,
+	linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Om Prakash Singh <quic_omprsing@quicinc.com>
+Subject: Re: [PATCH RESEND v7 00/17] Hardware wrapped key support for QCom
+ ICE and UFS core
+Message-ID: <20241202183643.GB2037@sol.localdomain>
+References: <20241202-wrapped-keys-v7-0-67c3ca3f3282@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241202-sysfs-const-bin_attr-admin_wo-v1-5-f489116210bf@weissschuh.net>
-References: <20241202-sysfs-const-bin_attr-admin_wo-v1-0-f489116210bf@weissschuh.net>
-In-Reply-To: <20241202-sysfs-const-bin_attr-admin_wo-v1-0-f489116210bf@weissschuh.net>
-To: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
- Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Tzung-Bi Shih <tzungbi@kernel.org>, Brian Norris <briannorris@chromium.org>, 
- Julius Werner <jwerner@chromium.org>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, chrome-platform@lists.linux.dev, 
- linux-scsi@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733166036; l=5414;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=6f4mNkpvqRUUeyyo/NJcoh7bQ9hdy8tWinO29V+C6p4=;
- b=X+0t7vXFXcE/fxGdmCbWy1dFY2LlFh9Er23M7zOt4ShPWbyx8SOdqDkvlV+lJJOf3qu+NW089
- pkVCKYBLt9UDGRGnD6yU5YvE+wYS5X+ZbLLkLjH9v7kC4Ht9hxJJQuG
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241202-wrapped-keys-v7-0-67c3ca3f3282@linaro.org>
 
-Using the macro saves some lines of code and prepares the attributes for
-the general constifications of struct bin_attributes.
+On Mon, Dec 02, 2024 at 01:02:16PM +0100, Bartosz Golaszewski wrote:
+> The previous iteration[1] has been on the list for many weeks without
+> receiving any comments - neither positive nor negative. If there are no
+> objections - could we start discussing how to make these patches go
+> upstream for v6.14?
 
-While at it also constify the callback parameters.
+The way to do it will be for the block patches to be taken through the block
+tree first.  That will unblock the rest, which can be taken through their
+respective trees in subsequent cycles.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- drivers/scsi/arcmsr/arcmsr_attr.c | 73 ++++++++++++++-------------------------
- 1 file changed, 26 insertions(+), 47 deletions(-)
+I'm really hoping to be able to test these patches with upstream myself, which
+I'm not able to do yet.  I'll try to leave some review comments on the parts not
+authored by me the mean time.  Anyway, thanks for continuing to work on this.
 
-diff --git a/drivers/scsi/arcmsr/arcmsr_attr.c b/drivers/scsi/arcmsr/arcmsr_attr.c
-index baeb5e79569026f1af6612705689219bb4a7052f..af7750b551910b06254e443c25bebf323e29f162 100644
---- a/drivers/scsi/arcmsr/arcmsr_attr.c
-+++ b/drivers/scsi/arcmsr/arcmsr_attr.c
-@@ -58,11 +58,11 @@
- #include <scsi/scsi_transport.h>
- #include "arcmsr.h"
- 
--static ssize_t arcmsr_sysfs_iop_message_read(struct file *filp,
--					     struct kobject *kobj,
--					     struct bin_attribute *bin,
--					     char *buf, loff_t off,
--					     size_t count)
-+static ssize_t mu_read_read(struct file *filp,
-+			    struct kobject *kobj,
-+			    const struct bin_attribute *bin,
-+			    char *buf, loff_t off,
-+			    size_t count)
- {
- 	struct device *dev = container_of(kobj,struct device,kobj);
- 	struct Scsi_Host *host = class_to_shost(dev);
-@@ -105,11 +105,11 @@ static ssize_t arcmsr_sysfs_iop_message_read(struct file *filp,
- 	return allxfer_len;
- }
- 
--static ssize_t arcmsr_sysfs_iop_message_write(struct file *filp,
--					      struct kobject *kobj,
--					      struct bin_attribute *bin,
--					      char *buf, loff_t off,
--					      size_t count)
-+static ssize_t mu_write_write(struct file *filp,
-+			      struct kobject *kobj,
-+			      const struct bin_attribute *bin,
-+			      char *buf, loff_t off,
-+			      size_t count)
- {
- 	struct device *dev = container_of(kobj,struct device,kobj);
- 	struct Scsi_Host *host = class_to_shost(dev);
-@@ -153,11 +153,11 @@ static ssize_t arcmsr_sysfs_iop_message_write(struct file *filp,
- 	}
- }
- 
--static ssize_t arcmsr_sysfs_iop_message_clear(struct file *filp,
--					      struct kobject *kobj,
--					      struct bin_attribute *bin,
--					      char *buf, loff_t off,
--					      size_t count)
-+static ssize_t mu_clear_write(struct file *filp,
-+			      struct kobject *kobj,
-+			      const struct bin_attribute *bin,
-+			      char *buf, loff_t off,
-+			      size_t count)
- {
- 	struct device *dev = container_of(kobj,struct device,kobj);
- 	struct Scsi_Host *host = class_to_shost(dev);
-@@ -188,58 +188,37 @@ static ssize_t arcmsr_sysfs_iop_message_clear(struct file *filp,
- 	return 1;
- }
- 
--static const struct bin_attribute arcmsr_sysfs_message_read_attr = {
--	.attr = {
--		.name = "mu_read",
--		.mode = S_IRUSR ,
--	},
--	.size = ARCMSR_API_DATA_BUFLEN,
--	.read = arcmsr_sysfs_iop_message_read,
--};
-+static const BIN_ATTR_ADMIN_RO(mu_read, ARCMSR_API_DATA_BUFLEN);
- 
--static const struct bin_attribute arcmsr_sysfs_message_write_attr = {
--	.attr = {
--		.name = "mu_write",
--		.mode = S_IWUSR,
--	},
--	.size = ARCMSR_API_DATA_BUFLEN,
--	.write = arcmsr_sysfs_iop_message_write,
--};
-+static const BIN_ATTR_ADMIN_WO(mu_write, ARCMSR_API_DATA_BUFLEN);
- 
--static const struct bin_attribute arcmsr_sysfs_message_clear_attr = {
--	.attr = {
--		.name = "mu_clear",
--		.mode = S_IWUSR,
--	},
--	.size = 1,
--	.write = arcmsr_sysfs_iop_message_clear,
--};
-+static const BIN_ATTR_ADMIN_WO(mu_clear, 1);
- 
- int arcmsr_alloc_sysfs_attr(struct AdapterControlBlock *acb)
- {
- 	struct Scsi_Host *host = acb->host;
- 	int error;
- 
--	error = sysfs_create_bin_file(&host->shost_dev.kobj, &arcmsr_sysfs_message_read_attr);
-+	error = sysfs_create_bin_file(&host->shost_dev.kobj, &bin_attr_mu_read);
- 	if (error) {
- 		printk(KERN_ERR "arcmsr: alloc sysfs mu_read failed\n");
- 		goto error_bin_file_message_read;
- 	}
--	error = sysfs_create_bin_file(&host->shost_dev.kobj, &arcmsr_sysfs_message_write_attr);
-+	error = sysfs_create_bin_file(&host->shost_dev.kobj, &bin_attr_mu_write);
- 	if (error) {
- 		printk(KERN_ERR "arcmsr: alloc sysfs mu_write failed\n");
- 		goto error_bin_file_message_write;
- 	}
--	error = sysfs_create_bin_file(&host->shost_dev.kobj, &arcmsr_sysfs_message_clear_attr);
-+	error = sysfs_create_bin_file(&host->shost_dev.kobj, &bin_attr_mu_clear);
- 	if (error) {
- 		printk(KERN_ERR "arcmsr: alloc sysfs mu_clear failed\n");
- 		goto error_bin_file_message_clear;
- 	}
- 	return 0;
- error_bin_file_message_clear:
--	sysfs_remove_bin_file(&host->shost_dev.kobj, &arcmsr_sysfs_message_write_attr);
-+	sysfs_remove_bin_file(&host->shost_dev.kobj, &bin_attr_mu_write);
- error_bin_file_message_write:
--	sysfs_remove_bin_file(&host->shost_dev.kobj, &arcmsr_sysfs_message_read_attr);
-+	sysfs_remove_bin_file(&host->shost_dev.kobj, &bin_attr_mu_read);
- error_bin_file_message_read:
- 	return error;
- }
-@@ -248,9 +227,9 @@ void arcmsr_free_sysfs_attr(struct AdapterControlBlock *acb)
- {
- 	struct Scsi_Host *host = acb->host;
- 
--	sysfs_remove_bin_file(&host->shost_dev.kobj, &arcmsr_sysfs_message_clear_attr);
--	sysfs_remove_bin_file(&host->shost_dev.kobj, &arcmsr_sysfs_message_write_attr);
--	sysfs_remove_bin_file(&host->shost_dev.kobj, &arcmsr_sysfs_message_read_attr);
-+	sysfs_remove_bin_file(&host->shost_dev.kobj, &bin_attr_mu_clear);
-+	sysfs_remove_bin_file(&host->shost_dev.kobj, &bin_attr_mu_write);
-+	sysfs_remove_bin_file(&host->shost_dev.kobj, &bin_attr_mu_read);
- }
- 
- 
+> Tested on sm8650-qrd.
+> 
+> How to test:
+> 
+> Use the wip-wrapped-keys branch from https://github.com/ebiggers/fscryptctl
+> to build a custom fscryptctl that supports generating wrapped keys.
+> 
+> Enable the following config options:
+> CONFIG_BLK_INLINE_ENCRYPTION=y
+> CONFIG_QCOM_INLINE_CRYPTO_ENGINE=m
+> CONFIG_FS_ENCRYPTION_INLINE_CRYPT=y
+> CONFIG_SCSI_UFS_CRYPTO=y
+> 
+> $ mkfs.ext4 -F -O encrypt,stable_inodes /dev/disk/by-partlabel/userdata
+> $ mount /dev/disk/by-partlabel/userdata -o inlinecrypt /mnt
+> $ fscryptctl generate_hw_wrapped_key /dev/disk/by-partlabel/userdata > /mnt/key.longterm
+> $ fscryptctl prepare_hw_wrapped_key /dev/disk/by-partlabel/userdata < /mnt/key.longterm > /tmp/key.ephemeral
+> $ KEYID=$(fscryptctl add_key --hw-wrapped-key < /tmp/key.ephemeral /mnt)
+> $ rm -rf /mnt/dir
+> $ mkdir /mnt/dir
+> $ fscryptctl set_policy --hw-wrapped-key --iv-ino-lblk-64 "$KEYID" /mnt/dir
+> $ dmesg > /mnt/dir/test.txt
+> $ sync
+> 
+> Reboot the board
+> 
+> $ mount /dev/disk/by-partlabel/userdata -o inlinecrypt /mnt
+> $ ls /mnt/dir
+> $ fscryptctl prepare_hw_wrapped_key /dev/disk/by-partlabel/userdata < /mnt/key.longterm > /tmp/key.ephemeral
+> $ KEYID=$(fscryptctl add_key --hw-wrapped-key < /tmp/key.ephemeral /mnt)
+> $ fscryptctl set_policy --hw-wrapped-key --iv-ino-lblk-64 "$KEYID" /mnt/dir
+> $ cat /mnt/dir/test.txt # File should now be decrypted
 
--- 
-2.47.1
+That doesn't verify that the encryption is being done correctly, which is the
+most important thing to test.  For that we'll need to resurrect the following
+patchset for xfstests:
+https://lore.kernel.org/fstests/20220228074722.77008-1-ebiggers@kernel.org/
 
+- Eric
 
