@@ -1,50 +1,49 @@
-Return-Path: <linux-scsi+bounces-10434-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10429-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 643E59E045A
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2024 15:06:17 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 967AD9E06D0
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2024 16:23:02 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92A3A167AE2
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2024 14:02:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E10E3B44758
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2024 14:01:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27ABA207A31;
-	Mon,  2 Dec 2024 14:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCE39204F6D;
+	Mon,  2 Dec 2024 14:00:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bcMNbPqG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vILuAv9k"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA0A207A26;
-	Mon,  2 Dec 2024 14:00:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9E92040BB;
+	Mon,  2 Dec 2024 14:00:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733148044; cv=none; b=BzfhmGsFblpr+ePGp+/+Fl3zS1xDlqBTBvH4TjZMDkAQfFBU4nZGIg6hASH3bRU6kmZZ/TIQd/pwLwzau4Avy77z98k7lNrvG0iiMXXH6885RyTdQ9ULKhrMZ+lEvONGIYBr++mz08TsmN5tzNuBotb156/5CXMDNAY/R30NCck=
+	t=1733148032; cv=none; b=jDd6LKy39uOkIIoYbpAixKhv0uI3oFwMJqQtrOFNY9mzk0HfwTGNLXzPNj0To4bYaXGSlKy2C1nPGGGp68AcrNBcMM6UZDm92YiVQFV+axewCOr/2B/b3H85qOBOmJ/oDqCttI9s5DIlgBbfuGuncse+8IQotHQx04IxX+735d8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733148044; c=relaxed/simple;
-	bh=1qmzsHGz+F9jFUsodxYPNL3VhVdPzjmOvQGIGXzUi9M=;
+	s=arc-20240116; t=1733148032; c=relaxed/simple;
+	bh=QwopfMBlIpOJKvr84RlumMLTnY5y/KlMMcdWguS43pQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eFNms/IcYkiMFT/a6MgcPoTFo1Z/f/uSD3hE16rWX7Hm0+fh9TI65/g4Cvp22fuc8lQEcVvs+h/6sjIYIkilydQhM+qZAM30WvM6T5dOQvgihSuAPDGaUA0ftivX050jJUmGxn9CEVC+2d/7nXHyFceVGAIHId8pAf9uvP82Pb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bcMNbPqG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB82C4CED1;
-	Mon,  2 Dec 2024 14:00:43 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=BFKConL5LGBSM9oDZV1Xyhfxxr28zyjzxjg2PbN+0CDeBK2iZg5pjNjjaob5VPwGwyfBk9G24mHNJMK4Imy5OqwNa8haEMTNj+QW0lGGfukJbqbKI4Mu6bape/DZQONNwoKHZ7NC3tWx/jAn6V46YGN9OJ7KSmhIzbISlRk2zT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vILuAv9k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4E82C4CEDA;
+	Mon,  2 Dec 2024 14:00:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733148044;
-	bh=1qmzsHGz+F9jFUsodxYPNL3VhVdPzjmOvQGIGXzUi9M=;
+	s=k20201202; t=1733148032;
+	bh=QwopfMBlIpOJKvr84RlumMLTnY5y/KlMMcdWguS43pQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=bcMNbPqGAYoch4VzGMhprcovwyRobcFbRWNY1Y+WOztyE4eZtXoKeE99Xsv7lP8QO
-	 aXYmt8vZPaRGb8UhTwiuCrbMQ8q10CnwyyHomtJQa1WuuHSXiHbj1POEk7gMqWle5p
-	 2dRrIefQNG6XkT8kMzyB+riP+t9pEQZYR7o7gTXWIMuQFam9L8EAaTDHyTd9GIshDH
-	 5HD2uV1bJy6Wnp/Uz+LxerkBr8BsQNINfjEXsb3GMHF9iEP8alPpNDMfSkoT3VFBxC
-	 FxrYM23xdWkjO05BnZNLeJkKTxWiPnXRdaEkauyA3tZUjD/+DZJfWQM62/A6Y89+VP
-	 eD7b748F55+6g==
+	b=vILuAv9kzZEUUbo+6bQQUIEj33xabc+2LPXE6xcQkvqMHgAH1aBdy133YS7lnQ3pS
+	 K+w6AftighOsw6MS+9LjK1bZ3HSL8jweR9lZXIlSkTo26bG04HRjhKDx9Oij+ZUd7J
+	 AesheAr3s/QFZE5BKlg2eMc51l/05nqFiGXMlZMvPhEX8g8EIyIyYei1t6q+khXwqJ
+	 xTRlQlqKiHxMerLC1PkozpmEC1pAqP6/mB0DKw1MoYxSqvih78jjaB3LcgImkT+Ui6
+	 EazyrShhcg612YOUxJCu4y2IMEQdXdQScRtVeneX+OQ6Wby5k2JrKsTnRiZW5vsicW
+	 Bb7nC1Mn34Z0w==
 From: Daniel Wagner <wagi@kernel.org>
-Date: Mon, 02 Dec 2024 15:00:15 +0100
-Subject: [PATCH v6 7/8] virtio: blk/scsi: replace blk_mq_virtio_map_queues
- with blk_mq_map_hw_queues
+Date: Mon, 02 Dec 2024 15:00:10 +0100
+Subject: [PATCH v6 2/8] PCI: hookup irq_get_affinity callback
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241202-refactor-blk-affinity-helpers-v6-7-27211e9c2cd5@kernel.org>
+Message-Id: <20241202-refactor-blk-affinity-helpers-v6-2-27211e9c2cd5@kernel.org>
 References: <20241202-refactor-blk-affinity-helpers-v6-0-27211e9c2cd5@kernel.org>
 In-Reply-To: <20241202-refactor-blk-affinity-helpers-v6-0-27211e9c2cd5@kernel.org>
 To: Jens Axboe <axboe@kernel.dk>, Bjorn Helgaas <bhelgaas@google.com>, 
@@ -73,63 +72,51 @@ Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
  Daniel Wagner <wagi@kernel.org>
 X-Mailer: b4 0.14.2
 
-Replace all users of blk_mq_virtio_map_queues with the more generic
-blk_mq_map_hw_queues. This in preparation to retire
-blk_mq_virtio_map_queues.
+struct bus_type has a new callback for retrieving the IRQ affinity for a
+device. Hook this callback up for PCI based devices.
 
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Ming Lei <ming.lei@redhat.com>
 Reviewed-by: John Garry <john.g.garry@oracle.com>
 Signed-off-by: Daniel Wagner <wagi@kernel.org>
 ---
- drivers/block/virtio_blk.c | 4 ++--
- drivers/scsi/virtio_scsi.c | 3 +--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ drivers/pci/pci-driver.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
-index c0cdba71f43640ccff96d83f9e63620bebdda2ab..4c82bd1ea38e444e2118a1cfbe9a3ac37de9b6da 100644
---- a/drivers/block/virtio_blk.c
-+++ b/drivers/block/virtio_blk.c
-@@ -13,7 +13,6 @@
- #include <linux/string_helpers.h>
- #include <linux/idr.h>
- #include <linux/blk-mq.h>
--#include <linux/blk-mq-virtio.h>
- #include <linux/numa.h>
- #include <linux/vmalloc.h>
- #include <uapi/linux/virtio_ring.h>
-@@ -1181,7 +1180,8 @@ static void virtblk_map_queues(struct blk_mq_tag_set *set)
- 		if (i == HCTX_TYPE_POLL)
- 			blk_mq_map_queues(&set->map[i]);
- 		else
--			blk_mq_virtio_map_queues(&set->map[i], vblk->vdev, 0);
-+			blk_mq_map_hw_queues(&set->map[i],
-+					     &vblk->vdev->dev, 0);
- 	}
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index 35270172c833186995aebdda6f95ab3ffd7c67a0..f57ea36d125d6eecfb60a6dc84d189cf9ed9b423 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -1670,6 +1670,19 @@ static void pci_dma_cleanup(struct device *dev)
+ 		iommu_device_unuse_default_domain(dev);
  }
  
-diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
-index 8471f38b730e205eb57052305c154260864bee95..60be1a0c61836ba643adcf9ad8d5b68563a86cb1 100644
---- a/drivers/scsi/virtio_scsi.c
-+++ b/drivers/scsi/virtio_scsi.c
-@@ -29,7 +29,6 @@
- #include <scsi/scsi_tcq.h>
- #include <scsi/scsi_devinfo.h>
- #include <linux/seqlock.h>
--#include <linux/blk-mq-virtio.h>
- 
- #include "sd.h"
- 
-@@ -746,7 +745,7 @@ static void virtscsi_map_queues(struct Scsi_Host *shost)
- 		if (i == HCTX_TYPE_POLL)
- 			blk_mq_map_queues(map);
- 		else
--			blk_mq_virtio_map_queues(map, vscsi->vdev, 2);
-+			blk_mq_map_hw_queues(map, &vscsi->vdev->dev, 2);
- 	}
- }
- 
++/*
++ * pci_device_irq_get_affinity - get IRQ affinity mask for device
++ * @dev: ptr to dev structure
++ * @irq_vec: interrupt vector number
++ *
++ * Return the CPU affinity mask for @dev and @irq_vec.
++ */
++static const struct cpumask *pci_device_irq_get_affinity(struct device *dev,
++					unsigned int irq_vec)
++{
++	return pci_irq_get_affinity(to_pci_dev(dev), irq_vec);
++}
++
+ const struct bus_type pci_bus_type = {
+ 	.name		= "pci",
+ 	.match		= pci_bus_match,
+@@ -1677,6 +1690,7 @@ const struct bus_type pci_bus_type = {
+ 	.probe		= pci_device_probe,
+ 	.remove		= pci_device_remove,
+ 	.shutdown	= pci_device_shutdown,
++	.irq_get_affinity = pci_device_irq_get_affinity,
+ 	.dev_groups	= pci_dev_groups,
+ 	.bus_groups	= pci_bus_groups,
+ 	.drv_groups	= pci_drv_groups,
 
 -- 
 2.47.0
