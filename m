@@ -1,46 +1,46 @@
-Return-Path: <linux-scsi+bounces-10489-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10491-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 874159E4150
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 18:23:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 626BC9E40F9
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 18:14:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99B1AB3187F
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 17:02:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12D9CB6259B
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 17:02:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1565217641;
-	Wed,  4 Dec 2024 16:58:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55FCF217F28;
+	Wed,  4 Dec 2024 16:58:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sMV339sZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TUEUWiO9"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE4C215F4B;
-	Wed,  4 Dec 2024 16:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E86821767D;
+	Wed,  4 Dec 2024 16:58:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733331508; cv=none; b=dmaDfKTrMuhyjx0gnB47N0vk+49hY5cQhIFJkk85avhzs4V3K+0I+0H7UVlaMvDGOY8L9+izZ6GQwpWqdHTDgNE466kQKglYPjI8AkxYD18hq3lkGsYMnebMj/+/lwIIHQUPrharwjMpltdkaOH6FSVkA7wjOduCz2/wm4d8yQo=
+	t=1733331511; cv=none; b=rdXe4xMS8gZLb/UmtwUEGgAkNMxam8OnkWld1eJ5Tuv3qt5yWjJhCpd3D5nKDKFebwzoEH18ZOb67blmSAghbK5yfKKynqRNxVkUsyyQLuuTMJ9l5xFco9vdKYVtIDzdrVD79RhDVmvnJSihxW5F7z8tru65g+rBlskogPCzdqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733331508; c=relaxed/simple;
-	bh=ShxyKbUZbqLWskYD7MScECKc0N7WMzo8edmStbKj94g=;
+	s=arc-20240116; t=1733331511; c=relaxed/simple;
+	bh=vj4xuSl0a78ioYTZvBCPNYu++sqzDjCITwySP4nkO9U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qmdOIY1smmk6VmN59U59/T5C08oogXpYZNPsS0Iahd8/LWFHc9zKmyPgSSxgrcOE119b+3RwDADOEkt5F/k+AqPn9A+NiFrRO2AGgbUX8iSn7ZEsA+iqm9vAYQ0FtJZV+Lxz9YK+L7WnKzs63wPtIVM2wD4X5L4DfHym1oS9HvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sMV339sZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD874C4CECD;
-	Wed,  4 Dec 2024 16:58:26 +0000 (UTC)
+	 MIME-Version; b=hztHj12sXsSRP3ckcxomOVC80U/Z+yimeMbXB9+T8r5ytaUYaAFHX2MED2eQo1AsTQD5qBBWLWDl0N9jNq1VrnY9Q9es219xErhawwEFc4gEcwxOUqhDcnbiHyaJDwg21PNuGrzMPE3tyErsIUP4GZRucvM0XO5P/YfPZqcENus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TUEUWiO9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF892C4CECD;
+	Wed,  4 Dec 2024 16:58:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733331507;
-	bh=ShxyKbUZbqLWskYD7MScECKc0N7WMzo8edmStbKj94g=;
+	s=k20201202; t=1733331510;
+	bh=vj4xuSl0a78ioYTZvBCPNYu++sqzDjCITwySP4nkO9U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sMV339sZZ7uiJGnGydhXEFB6tzR9a5kz6iZWmSFrp0c76ISQlIpGdwS7puiDgjdm6
-	 06mSjJYTMgDaJgjGUrV2/cwaJRtNvSKLruKwM70CYoAGOdhc4lfK2h/QIioZA7iepO
-	 Rwp/GZIQmodI7qh28P6M5vtBhhBkzBstYag/IWVd70pciEjtXLR9kG8FNId1D5jLZy
-	 L1hI5E8f6qnrzX8tBXqpG2pJ1JtksEP5sh4Kh/JTOmeA4Jfo5K210/awlm20IDH3Fv
-	 YyL4eTwduGlattMdzAdV/hTpBsx8g5bT2Q0Pw3cIwPLDlJJ53Pi3heeKDpvLLzQvHg
-	 vzje4Y5nVlpAg==
+	b=TUEUWiO95PH/lHJqA4QfPvIS9cnNjqZx+1vv0gBXxmJdk93j0VD0eDdgWlsGOVKQn
+	 eA3ZOC8cTNwIBFu5n5RqpMPMKh8jWEo0J/rdbg0jt1MLk5H4G82hptCA/LkjgY13/p
+	 Fe1rhrNR917nXc0jiDDqPG3gGHbSGmW7oXVtvdN/UoJZ4ml/Zmm7llIiE06+343dRQ
+	 0anBwAvFeRH1aQDV6JrspbHfr+xUevsxWFTwMzJYUUZxgfmjKf2UVCfWLJxC9yRew3
+	 MQuLxQr9YQvASZVPPfYgaHcmofs8nwVGX4YHuejyoozHvObWXpZAvJWUs4rB334T3N
+	 c0giBqaL5Cd6w==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -51,9 +51,9 @@ Cc: Justin Tee <justin.tee@broadcom.com>,
 	dick.kennedy@broadcom.com,
 	James.Bottomley@HansenPartnership.com,
 	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 17/36] scsi: lpfc: Call lpfc_sli4_queue_unset() in restart and rmmod paths
-Date: Wed,  4 Dec 2024 10:45:33 -0500
-Message-ID: <20241204154626.2211476-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 19/36] scsi: lpfc: Prevent NDLP reference count underflow in dev_loss_tmo callback
+Date: Wed,  4 Dec 2024 10:45:35 -0500
+Message-ID: <20241204154626.2211476-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241204154626.2211476-1-sashal@kernel.org>
 References: <20241204154626.2211476-1-sashal@kernel.org>
@@ -70,179 +70,98 @@ Content-Transfer-Encoding: 8bit
 
 From: Justin Tee <justin.tee@broadcom.com>
 
-[ Upstream commit d35f7672715d1ff3e3ad9bb4ae6ac6cb484200fe ]
+[ Upstream commit 4281f44ea8bfedd25938a0031bebba1473ece9ad ]
 
-During initialization, the driver allocates wq->pring in lpfc_wq_create
-and lpfc_sli4_queue_unset() is the only place where kfree(wq->pring) is
-called.
-
-There is a possible memory leak in lpfc_sli_brdrestart_s4() (restart)
-and lpfc_pci_remove_one_s4() (rmmod) paths because there are no calls to
-lpfc_sli4_queue_unset() to kfree() the wq->pring.
-
-Fix by inserting a call to lpfc_sli4_queue_unset() in
-lpfc_sli_brdrestart_s4() and lpfc_sli4_hba_unset() routines.  Also, add
-a check for the SLI_ACTIVE flag before issuing the Q_DESTROY mailbox
-command.  If not set, then the mailbox command will obviously fail.  In
-such cases, skip issuing the mailbox command and only execute the driver
-resource clean up portions of the lpfc_*q_destroy routines.
+Current dev_loss_tmo handling checks whether there has been a previous
+call to unregister with SCSI transport.  If so, the NDLP kref count is
+decremented a second time in dev_loss_tmo as the final kref release.
+However, this can sometimes result in a reference count underflow if
+there is also a race to unregister with NVMe transport as well.  Add a
+check for NVMe transport registration before decrementing the final
+kref.  If NVMe transport is still registered, then the NVMe transport
+unregistration is designated as the final kref decrement.
 
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Link: https://lore.kernel.org/r/20241031223219.152342-4-justintee8345@gmail.com
+Link: https://lore.kernel.org/r/20241031223219.152342-8-justintee8345@gmail.com
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_init.c |  2 ++
- drivers/scsi/lpfc/lpfc_sli.c  | 41 ++++++++++++++++++++++++++++++-----
- 2 files changed, 38 insertions(+), 5 deletions(-)
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 36 +++++++++++++++++++++-----------
+ 1 file changed, 24 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 0dd451009b079..a3658ef1141b2 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -13518,6 +13518,8 @@ lpfc_sli4_hba_unset(struct lpfc_hba *phba)
- 	/* Disable FW logging to host memory */
- 	lpfc_ras_stop_fwlog(phba);
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 9241075f72fa4..6e8d8a96c54fb 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -155,6 +155,7 @@ lpfc_dev_loss_tmo_callbk(struct fc_rport *rport)
+ 	struct lpfc_hba   *phba;
+ 	struct lpfc_work_evt *evtp;
+ 	unsigned long iflags;
++	bool nvme_reg = false;
  
-+	lpfc_sli4_queue_unset(phba);
+ 	ndlp = ((struct lpfc_rport_data *)rport->dd_data)->pnode;
+ 	if (!ndlp)
+@@ -177,38 +178,49 @@ lpfc_dev_loss_tmo_callbk(struct fc_rport *rport)
+ 	/* Don't schedule a worker thread event if the vport is going down. */
+ 	if (test_bit(FC_UNLOADING, &vport->load_flag) ||
+ 	    !test_bit(HBA_SETUP, &phba->hba_flag)) {
 +
- 	/* Reset SLI4 HBA FCoE function */
- 	lpfc_pci_function_reset(phba);
+ 		spin_lock_irqsave(&ndlp->lock, iflags);
+ 		ndlp->rport = NULL;
  
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 2ec6e55771b45..6748fba48a07e 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -5291,6 +5291,8 @@ lpfc_sli_brdrestart_s4(struct lpfc_hba *phba)
- 			"0296 Restart HBA Data: x%x x%x\n",
- 			phba->pport->port_state, psli->sli_flag);
- 
-+	lpfc_sli4_queue_unset(phba);
++		if (ndlp->fc4_xpt_flags & NVME_XPT_REGD)
++			nvme_reg = true;
 +
- 	rc = lpfc_sli4_brdreset(phba);
- 	if (rc) {
- 		phba->link_state = LPFC_HBA_ERROR;
-@@ -17625,6 +17627,9 @@ lpfc_eq_destroy(struct lpfc_hba *phba, struct lpfc_queue *eq)
- 	if (!eq)
- 		return -ENODEV;
+ 		/* The scsi_transport is done with the rport so lpfc cannot
+-		 * call to unregister. Remove the scsi transport reference
+-		 * and clean up the SCSI transport node details.
++		 * call to unregister.
+ 		 */
+-		if (ndlp->fc4_xpt_flags & (NLP_XPT_REGD | SCSI_XPT_REGD)) {
++		if (ndlp->fc4_xpt_flags & SCSI_XPT_REGD) {
+ 			ndlp->fc4_xpt_flags &= ~SCSI_XPT_REGD;
  
-+	if (!(phba->sli.sli_flag & LPFC_SLI_ACTIVE))
-+		goto list_remove;
+-			/* NVME transport-registered rports need the
+-			 * NLP_XPT_REGD flag to complete an unregister.
++			/* If NLP_XPT_REGD was cleared in lpfc_nlp_unreg_node,
++			 * unregister calls were made to the scsi and nvme
++			 * transports and refcnt was already decremented. Clear
++			 * the NLP_XPT_REGD flag only if the NVME Rport is
++			 * confirmed unregistered.
+ 			 */
+-			if (!(ndlp->fc4_xpt_flags & NVME_XPT_REGD))
++			if (!nvme_reg && ndlp->fc4_xpt_flags & NLP_XPT_REGD) {
+ 				ndlp->fc4_xpt_flags &= ~NLP_XPT_REGD;
++				spin_unlock_irqrestore(&ndlp->lock, iflags);
++				lpfc_nlp_put(ndlp); /* may free ndlp */
++			} else {
++				spin_unlock_irqrestore(&ndlp->lock, iflags);
++			}
++		} else {
+ 			spin_unlock_irqrestore(&ndlp->lock, iflags);
+-			lpfc_nlp_put(ndlp);
+-			spin_lock_irqsave(&ndlp->lock, iflags);
+ 		}
+ 
++		spin_lock_irqsave(&ndlp->lock, iflags);
 +
- 	mbox = mempool_alloc(eq->phba->mbox_mem_pool, GFP_KERNEL);
- 	if (!mbox)
- 		return -ENOMEM;
-@@ -17651,10 +17656,12 @@ lpfc_eq_destroy(struct lpfc_hba *phba, struct lpfc_queue *eq)
- 				shdr_status, shdr_add_status, rc);
- 		status = -ENXIO;
+ 		/* Only 1 thread can drop the initial node reference.  If
+ 		 * another thread has set NLP_DROPPED, this thread is done.
+ 		 */
+-		if (!(ndlp->fc4_xpt_flags & NVME_XPT_REGD) &&
+-		    !(ndlp->nlp_flag & NLP_DROPPED)) {
+-			ndlp->nlp_flag |= NLP_DROPPED;
++		if (nvme_reg || (ndlp->nlp_flag & NLP_DROPPED)) {
+ 			spin_unlock_irqrestore(&ndlp->lock, iflags);
+-			lpfc_nlp_put(ndlp);
+ 			return;
+ 		}
+ 
++		ndlp->nlp_flag |= NLP_DROPPED;
+ 		spin_unlock_irqrestore(&ndlp->lock, iflags);
++		lpfc_nlp_put(ndlp);
+ 		return;
  	}
-+	mempool_free(mbox, eq->phba->mbox_mem_pool);
- 
-+list_remove:
- 	/* Remove eq from any list */
- 	list_del_init(&eq->list);
--	mempool_free(mbox, eq->phba->mbox_mem_pool);
-+
- 	return status;
- }
- 
-@@ -17682,6 +17689,10 @@ lpfc_cq_destroy(struct lpfc_hba *phba, struct lpfc_queue *cq)
- 	/* sanity check on queue memory */
- 	if (!cq)
- 		return -ENODEV;
-+
-+	if (!(phba->sli.sli_flag & LPFC_SLI_ACTIVE))
-+		goto list_remove;
-+
- 	mbox = mempool_alloc(cq->phba->mbox_mem_pool, GFP_KERNEL);
- 	if (!mbox)
- 		return -ENOMEM;
-@@ -17707,9 +17718,11 @@ lpfc_cq_destroy(struct lpfc_hba *phba, struct lpfc_queue *cq)
- 				shdr_status, shdr_add_status, rc);
- 		status = -ENXIO;
- 	}
-+	mempool_free(mbox, cq->phba->mbox_mem_pool);
-+
-+list_remove:
- 	/* Remove cq from any list */
- 	list_del_init(&cq->list);
--	mempool_free(mbox, cq->phba->mbox_mem_pool);
- 	return status;
- }
- 
-@@ -17737,6 +17750,10 @@ lpfc_mq_destroy(struct lpfc_hba *phba, struct lpfc_queue *mq)
- 	/* sanity check on queue memory */
- 	if (!mq)
- 		return -ENODEV;
-+
-+	if (!(phba->sli.sli_flag & LPFC_SLI_ACTIVE))
-+		goto list_remove;
-+
- 	mbox = mempool_alloc(mq->phba->mbox_mem_pool, GFP_KERNEL);
- 	if (!mbox)
- 		return -ENOMEM;
-@@ -17762,9 +17779,11 @@ lpfc_mq_destroy(struct lpfc_hba *phba, struct lpfc_queue *mq)
- 				shdr_status, shdr_add_status, rc);
- 		status = -ENXIO;
- 	}
-+	mempool_free(mbox, mq->phba->mbox_mem_pool);
-+
-+list_remove:
- 	/* Remove mq from any list */
- 	list_del_init(&mq->list);
--	mempool_free(mbox, mq->phba->mbox_mem_pool);
- 	return status;
- }
- 
-@@ -17792,6 +17811,10 @@ lpfc_wq_destroy(struct lpfc_hba *phba, struct lpfc_queue *wq)
- 	/* sanity check on queue memory */
- 	if (!wq)
- 		return -ENODEV;
-+
-+	if (!(phba->sli.sli_flag & LPFC_SLI_ACTIVE))
-+		goto list_remove;
-+
- 	mbox = mempool_alloc(wq->phba->mbox_mem_pool, GFP_KERNEL);
- 	if (!mbox)
- 		return -ENOMEM;
-@@ -17816,11 +17839,13 @@ lpfc_wq_destroy(struct lpfc_hba *phba, struct lpfc_queue *wq)
- 				shdr_status, shdr_add_status, rc);
- 		status = -ENXIO;
- 	}
-+	mempool_free(mbox, wq->phba->mbox_mem_pool);
-+
-+list_remove:
- 	/* Remove wq from any list */
- 	list_del_init(&wq->list);
- 	kfree(wq->pring);
- 	wq->pring = NULL;
--	mempool_free(mbox, wq->phba->mbox_mem_pool);
- 	return status;
- }
- 
-@@ -17850,6 +17875,10 @@ lpfc_rq_destroy(struct lpfc_hba *phba, struct lpfc_queue *hrq,
- 	/* sanity check on queue memory */
- 	if (!hrq || !drq)
- 		return -ENODEV;
-+
-+	if (!(phba->sli.sli_flag & LPFC_SLI_ACTIVE))
-+		goto list_remove;
-+
- 	mbox = mempool_alloc(hrq->phba->mbox_mem_pool, GFP_KERNEL);
- 	if (!mbox)
- 		return -ENOMEM;
-@@ -17890,9 +17919,11 @@ lpfc_rq_destroy(struct lpfc_hba *phba, struct lpfc_queue *hrq,
- 				shdr_status, shdr_add_status, rc);
- 		status = -ENXIO;
- 	}
-+	mempool_free(mbox, hrq->phba->mbox_mem_pool);
-+
-+list_remove:
- 	list_del_init(&hrq->list);
- 	list_del_init(&drq->list);
--	mempool_free(mbox, hrq->phba->mbox_mem_pool);
- 	return status;
- }
  
 -- 
 2.43.0
