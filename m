@@ -1,59 +1,58 @@
-Return-Path: <linux-scsi+bounces-10490-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10492-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CD5D9E405E
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 18:02:22 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 317269E407A
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 18:04:55 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBD8A281BB9
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 17:02:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6797167E03
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 17:04:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0D2217664;
-	Wed,  4 Dec 2024 16:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A81E321D5AC;
+	Wed,  4 Dec 2024 16:58:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WBjZB2//"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KsnGEtTF"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8107217658;
-	Wed,  4 Dec 2024 16:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6256321D5A4;
+	Wed,  4 Dec 2024 16:58:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733331509; cv=none; b=R+lbykYv6p3UDSUAqanUo1neBoiS2x6CiXHG2N1+/1Uezjl7Q77t+/1l2/EkQkonCk0vPUvsNGxEw+TXmUbP2h8zs/bjTOkr7xddpVLH/ymnx5NrW97tYUwecz0a5AiUXNmtpynwBRfsVtN3hyZ5U5cZCma7iLQlO2B0Ik62A8c=
+	t=1733331522; cv=none; b=NNdVipCj2t+6RbUgRB7IdMFf1Agj0PAGOI9F0E8oRjmDM8ZGhpk4vuA6/BMU5DJdD1u7V0EaEBO306eWi4TsEtV0Dp8q6mAORCTdwKAlfzk5zrvJqFwIhux2JUfeTQ7TEuxJvrH8VSL76UlSZEfCj5X4GZ/GummV1hu7cqPGuaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733331509; c=relaxed/simple;
-	bh=q7IXKpaI1TkzlYWOkjYJObT8QGqZyZO0o9GpeFqExvk=;
+	s=arc-20240116; t=1733331522; c=relaxed/simple;
+	bh=el6qKyrnX/lE8G/cCrHEpJDI7Uq57SiUfsByr0a5lDg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PgszebQ+qg4vEtL41yKE9wNk9J3V5pfPY1ixXPjy+rJsmxP1dR97AGW13PXCUQUMQ0R27NlZ8hmyAqPEsxkWtyfQy8ExKTpzLApm5dYbFM3NsxW7Gb/0miQjQyD2WLTjWGAtCLyRV13WQXMBQDA2s/RwtM9Ux0h+my/XQWRPIl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WBjZB2//; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51CB2C4CEDF;
-	Wed,  4 Dec 2024 16:58:28 +0000 (UTC)
+	 MIME-Version:Content-Type; b=FseyZCgfDVWwudn5wiAN1ZJavymiVaiM0KKHZ4LNzItEdjzdzVVhDb0QWTgvF5xDCmGKe9CELzYIYndUkW6NJJdyP5yYEAbCOIYey8r/xhDesjkb2v3kZTkaDhrSEmu7fdJMukMEpN1ceqiT5CFWdee9+RjANmoJ1kOsWaamXkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KsnGEtTF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A5F3C4CECD;
+	Wed,  4 Dec 2024 16:58:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733331509;
-	bh=q7IXKpaI1TkzlYWOkjYJObT8QGqZyZO0o9GpeFqExvk=;
+	s=k20201202; t=1733331522;
+	bh=el6qKyrnX/lE8G/cCrHEpJDI7Uq57SiUfsByr0a5lDg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WBjZB2//qmQ8NsPgCcrJaPtOvBAe3hTj0LCU9FkKHm2+OVTb1mZCD/HcRKWmL/XET
-	 Llkoli8ex41TzpQi0FLe198ciMXkyl9mgdVrtp6z9Z++GzMCThxGkIercWi2NmB9am
-	 GIXLX1mLG5QBeuvWW+sK1Q8EE3hOaX4knla4KKiRtHoCWPRCnmKuoXpLUdCXYVSwv/
-	 mzUh9BRX8GSvwGDeu42V00Jb+2/4JWFys5FuWcG3K5NWZSSiaWVYVY02YdgTOGgYzC
-	 PavbBvJ4nBPGz9iku3QSahvJG20XY1I6ydeAH/2CUznwnNX8fBgWdOxID+tJmUtkaL
-	 cXMoAYXh6YcWg==
+	b=KsnGEtTFFar2sVluE/EwsCWSt76igwHMFZ80CqWMIUJhDEJPp+B65K0EnlRVZMeMm
+	 kmZN9nCRjhSMTwzei1mCH59wO4Mr3nes1OaWyg6Y9rMP2SR+DFm6f6PqtRis7hDLyN
+	 oZkXVjdRkVE68VNwMOIL0AMhWCrVJd21XJx77wMcPaWR5vcFra8l4qUx03JRoWHWLX
+	 UTkraoXA2bZ7vN1UKTW8KR9VnPKihDDiNmw0DmTScY5W260Q0H/mOD5nJF+v7/P+kN
+	 /C9ezjcRxpSoZfmYzay7yov354Ipj4OaU8k8HGqVgL+GnLZN/1kOBdHx6ihWNfEg9a
+	 7GL3s4VT6Q/jA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Justin Tee <justin.tee@broadcom.com>,
+Cc: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
+	John Meneghini <jmeneghi@redhat.com>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Sasha Levin <sashal@kernel.org>,
-	james.smart@broadcom.com,
-	dick.kennedy@broadcom.com,
 	James.Bottomley@HansenPartnership.com,
 	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 18/36] scsi: lpfc: Check SLI_ACTIVE flag in FDMI cmpl before submitting follow up FDMI
-Date: Wed,  4 Dec 2024 10:45:34 -0500
-Message-ID: <20241204154626.2211476-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 26/36] scsi: st: Don't modify unknown block number in MTIOCGET
+Date: Wed,  4 Dec 2024 10:45:42 -0500
+Message-ID: <20241204154626.2211476-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241204154626.2211476-1-sashal@kernel.org>
 References: <20241204154626.2211476-1-sashal@kernel.org>
@@ -63,79 +62,43 @@ List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.12.1
 Content-Transfer-Encoding: 8bit
 
-From: Justin Tee <justin.tee@broadcom.com>
+From: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
 
-[ Upstream commit 98f8d3588097e321be70f83b844fa67d4828fe5c ]
+[ Upstream commit 5bb2d6179d1a8039236237e1e94cfbda3be1ed9e ]
 
-The lpfc_cmpl_ct_disc_fdmi() routine has incorrect logic that treats an
-FDMI completion with error LOCAL_REJECT/SLI_ABORTED as a success status.
-Under the erroneous assumption of successful completion, the routine
-proceeds to issue follow up FDMI commands, which may never complete if
-the HBA is in an errata state as indicated by the errored completion
-status.  Fix by freeing FDMI cmd resources and early return when the
-LPFC_SLI_ACTIVE flag is not set and a LOCAL_REJECT/SLI_ABORTED or
-SLI_DOWN status is received.
+Struct mtget field mt_blkno -1 means it is unknown. Don't add anything to
+it.
 
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Link: https://lore.kernel.org/r/20241031223219.152342-6-justintee8345@gmail.com
+Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=219419#c14
+Link: https://lore.kernel.org/r/20241106095723.63254-2-Kai.Makisara@kolumbus.fi
+Reviewed-by: John Meneghini <jmeneghi@redhat.com>
+Tested-by: John Meneghini <jmeneghi@redhat.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_ct.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ drivers/scsi/st.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
-index 134bc96dd1340..ce3a1f42713dd 100644
---- a/drivers/scsi/lpfc/lpfc_ct.c
-+++ b/drivers/scsi/lpfc/lpfc_ct.c
-@@ -2226,6 +2226,11 @@ lpfc_cmpl_ct_disc_fdmi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 		ulp_status, ulp_word4, latt);
- 
- 	if (latt || ulp_status) {
-+		lpfc_printf_vlog(vport, KERN_WARNING, LOG_DISCOVERY,
-+				 "0229 FDMI cmd %04x failed, latt = %d "
-+				 "ulp_status: (x%x/x%x), sli_flag x%x\n",
-+				 be16_to_cpu(fdmi_cmd), latt, ulp_status,
-+				 ulp_word4, phba->sli.sli_flag);
- 
- 		/* Look for a retryable error */
- 		if (ulp_status == IOSTAT_LOCAL_REJECT) {
-@@ -2234,8 +2239,16 @@ lpfc_cmpl_ct_disc_fdmi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 			case IOERR_SLI_DOWN:
- 				/* Driver aborted this IO.  No retry as error
- 				 * is likely Offline->Online or some adapter
--				 * error.  Recovery will try again.
-+				 * error.  Recovery will try again, but if port
-+				 * is not active there's no point to continue
-+				 * issuing follow up FDMI commands.
- 				 */
-+				if (!(phba->sli.sli_flag & LPFC_SLI_ACTIVE)) {
-+					free_ndlp = cmdiocb->ndlp;
-+					lpfc_ct_free_iocb(phba, cmdiocb);
-+					lpfc_nlp_put(free_ndlp);
-+					return;
-+				}
- 				break;
- 			case IOERR_ABORT_IN_PROGRESS:
- 			case IOERR_SEQUENCE_TIMEOUT:
-@@ -2256,12 +2269,6 @@ lpfc_cmpl_ct_disc_fdmi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 				break;
- 			}
- 		}
--
--		lpfc_printf_vlog(vport, KERN_INFO, LOG_DISCOVERY,
--				 "0229 FDMI cmd %04x latt = %d "
--				 "ulp_status: x%x, rid x%x\n",
--				 be16_to_cpu(fdmi_cmd), latt, ulp_status,
--				 ulp_word4);
- 	}
- 
- 	free_ndlp = cmdiocb->ndlp;
+diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
+index beb88f25dbb99..8d27e6caf0277 100644
+--- a/drivers/scsi/st.c
++++ b/drivers/scsi/st.c
+@@ -3756,7 +3756,7 @@ static long st_ioctl(struct file *file, unsigned int cmd_in, unsigned long arg)
+ 		    ((STp->density << MT_ST_DENSITY_SHIFT) & MT_ST_DENSITY_MASK);
+ 		mt_status.mt_blkno = STps->drv_block;
+ 		mt_status.mt_fileno = STps->drv_file;
+-		if (STp->block_size != 0) {
++		if (STp->block_size != 0 && mt_status.mt_blkno >= 0) {
+ 			if (STps->rw == ST_WRITING)
+ 				mt_status.mt_blkno +=
+ 				    (STp->buffer)->buffer_bytes / STp->block_size;
 -- 
 2.43.0
 
