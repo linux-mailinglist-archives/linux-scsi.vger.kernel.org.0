@@ -1,189 +1,152 @@
-Return-Path: <linux-scsi+bounces-10484-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10486-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18A6B9E3FF5
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 17:43:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C67F9E41C5
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 18:36:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C40B9281EF6
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 16:43:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2DF2B44EB3
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 16:59:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7595620D51A;
-	Wed,  4 Dec 2024 16:42:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6160B20FAB9;
+	Wed,  4 Dec 2024 16:58:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="u7h8O5xt";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="jwLrm3XJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CYWvZsit"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E3820CCE4;
-	Wed,  4 Dec 2024 16:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A4A20CCFB;
+	Wed,  4 Dec 2024 16:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733330566; cv=none; b=M5r7f52+KjUR+/IMvrT/kERb7/1tzrblJ9QBDgqZlgbufr/38VU95Kf8C1H6QSqEgZA5VzgHSTrhdrWsH9GkRp49Stgs7zz2HCW8q9t6Xz32lp+gjLYoAaVxy+NyMl/2ZpHgVFcCCTTPPlDM/E1J85UjatBkD9qoyGo536C/nNY=
+	t=1733331486; cv=none; b=O1sArXBEgE/1Z8f5gCCVISwQNeq4VlZKbTMAFEEea6TpqRkBkDzcciU0EDcUykRkUullfP5E9137ep8bFA9TRhfVKzBIta7e5OgJ2vZ7B+/le+g9S13M7tkbIBebZgX6Y6CeX8xmCZTWvWYSAQn26tTOVlOAPyfemlS5LvHu2Zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733330566; c=relaxed/simple;
-	bh=/tV2/rqC9g/RzItU4xjpFfq9TJiKncFzSdSN5cVSPCI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SwVBeuyi5v4Lu3+qjVlZ8iH1SiBRWChE28dBLwbwKnQdQjFyYFaUJ3HjQ0Whr0F8P3iZtcbx2PFNWv2XgHcRGqazdjRc+nPb+PqT2WDeYUYqAIGgpTrIbLt1FgzXtOJ9TPs5Yql3fWFXJf/y3h0MDt6urmx/iYF6l1SdgnQnq3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=u7h8O5xt; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=jwLrm3XJ; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1733330562;
-	bh=/tV2/rqC9g/RzItU4xjpFfq9TJiKncFzSdSN5cVSPCI=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=u7h8O5xtkqg9XTRjnm2AByw4j1oANOrzOdAZMt8HHLl3Yjm3FyhEHxMbav7cjDIHA
-	 rH9JDDrakhhHcgYv4A62tmDfzUMvJQoGwAdV/vD+hl7hO/48F0u9n++jPP9OAsaCaz
-	 8lQA+iSncabPRQrhy+aNTkLi+yhrKeJAE1MSyUWQ=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0036B12819C7;
-	Wed, 04 Dec 2024 11:42:42 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id UnAtfjdAjrWL; Wed,  4 Dec 2024 11:42:41 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1733330561;
-	bh=/tV2/rqC9g/RzItU4xjpFfq9TJiKncFzSdSN5cVSPCI=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=jwLrm3XJJg0bE+y+jmRYNMFwEElygfQC2HGQiHPd5Xz/u0WtyW7YWY3rX060euBo7
-	 f9S1jUzBwKhA2RFoWPD/ZkuHcVNkBdGsPnMe1XGCn2DaqvTsyQjVXKsqZzFLZSZ0Tt
-	 bvl4/NIRU0Ww5p2EbpvPP+Glg6xJuhny+E4/K7oQ=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 13309128116A;
-	Wed, 04 Dec 2024 11:42:36 -0500 (EST)
-Message-ID: <5c905df49a332b1136787a524955b46b6153c012.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2 00/32] driver core: Constify API device_find_child()
- and adapt for various existing usages
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Zijun Hu <zijun_hu@icloud.com>, Thomas =?ISO-8859-1?Q?Wei=DFschuh?=
-	 <thomas@t-8ch.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Uwe
- =?ISO-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp Zabel
- <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Jean
- Delvare <jdelvare@suse.com>,  Guenter Roeck <linux@roeck-us.net>, Martin
- Tuma <martin.tuma@digiteqautomotive.com>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Andreas Noever <andreas.noever@gmail.com>, Michael
- Jamet <michael.jamet@intel.com>, Mika Westerberg
- <mika.westerberg@linux.intel.com>,  Yehezkel Bernat
- <YehezkelShB@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Bartosz
- Golaszewski <brgl@bgdev.pl>, Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean
- <olteanv@gmail.com>,  "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Dan Williams
- <dan.j.williams@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Dave
- Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>, Takashi
- Sakamoto <o-takashi@sakamocchi.jp>, Jiri Slaby <jirislaby@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Srinivas Kandagatla
- <srinivas.kandagatla@linaro.org>, Lee Duncan <lduncan@suse.com>, Chris
- Leech <cleech@redhat.com>, Mike Christie <michael.christie@oracle.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>, Nilesh Javali
- <njavali@marvell.com>, Manish Rangankar <mrangankar@marvell.com>,
- GR-QLogic-Storage-Upstream@marvell.com, Davidlohr Bueso
- <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, Alison
- Schofield <alison.schofield@intel.com>, Andreas Larsson
- <andreas@gaisler.com>, Stuart Yoder <stuyoder@gmail.com>, Laurentiu Tudor
- <laurentiu.tudor@nxp.com>, Jens Axboe <axboe@kernel.dk>, Sudeep Holla
- <sudeep.holla@arm.com>, Cristian Marussi <cristian.marussi@arm.com>, Ard
- Biesheuvel <ardb@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Mathieu Poirier <mathieu.poirier@linaro.org>, 
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
- netdev@vger.kernel.org,  linux-pwm@vger.kernel.org, nvdimm@lists.linux.dev,
-  linux1394-devel@lists.sourceforge.net, linux-serial@vger.kernel.org, 
- linux-sound@vger.kernel.org, open-iscsi@googlegroups.com, 
- linux-scsi@vger.kernel.org, linux-cxl@vger.kernel.org, 
- sparclinux@vger.kernel.org, linux-block@vger.kernel.org, 
- arm-scmi@vger.kernel.org, linux-efi@vger.kernel.org, 
- linux-remoteproc@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
-Date: Wed, 04 Dec 2024 11:42:34 -0500
-In-Reply-To: <235ce0a9-1db1-4558-817b-6f92f22be5ab@icloud.com>
-References: <20241203-const_dfc_done-v2-0-7436a98c497f@quicinc.com>
-	 <g32cigmktmj4egkq2tof27el2yss4liccfxgebkgqvkil32mlb@e3ta4ezv7y4m>
-	 <9d34bd6f-b120-428a-837b-5a5813e14618@icloud.com>
-	 <2024120320-manual-jockey-dfd1@gregkh>
-	 <b9885785-d4d4-4c72-b425-3dc552651d7e@icloud.com>
-	 <8eb7c0c54b280b8eb72f82032ede802c001ab087.camel@HansenPartnership.com>
-	 <8fb887a0-3634-4e07-9f0d-d8d7c72ca802@t-8ch.de>
-	 <f5ea7e17-5550-4658-8f4c-1c51827c7627@icloud.com>
-	 <108c63c753f2f637a72c2e105ac138f80d4b0859.camel@HansenPartnership.com>
-	 <235ce0a9-1db1-4558-817b-6f92f22be5ab@icloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	s=arc-20240116; t=1733331486; c=relaxed/simple;
+	bh=QNHkmOZEPKxyeyJlkb7HSoHkNkMYxUTfVvYallOxT4s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=X3agdtuM2VTbgy8IQf7PaB5z5ZSPEMbB2RHRK6O7uBL+GGe+HJh+scgGcFo+KSBU2EdT5EfkVCdfErGFu3Dj90WhZZlHVBd43y80Z5HUoDm7rCBHO6tTBv3wCu1jRl7N9ATBWzGe7357/d5SE1LUoNBSN+7Aai78I6b6WMw/rho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CYWvZsit; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8D87C4CECD;
+	Wed,  4 Dec 2024 16:58:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733331485;
+	bh=QNHkmOZEPKxyeyJlkb7HSoHkNkMYxUTfVvYallOxT4s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=CYWvZsit6BjNM4y99ITTWBFrA6dEKWc1BOOhvEnoqRf6NHcA/t6e15dvXrQ0oGc1Q
+	 A6GKWwxrv5eddlL4ANcY/8K6YdJViP5HK57iwboFFhCL39COEoLADssDdu0b5BnW43
+	 mGXhO/rNTnBn8mHNO93rkGzfmwiMSagXaDu8WfKmM4vGFcERZCxalJeuT66RqWcjjP
+	 ud1HjkW0pBFbCQbDWmjFAz0Wonj+93Evf6YaDZIzXOUqihu0fuCRLerk9VFNrGP606
+	 Q6umIXf03RSGZLP8dvWxhIE35BUoscfwS1PFxmINJO0xSay2gSAT9sNLCRL3mm/+xI
+	 3ZMCesjWc/gxQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Yihang Li <liyihang9@huawei.com>,
+	Xiang Chen <chenxiang66@hisilicon.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Sasha Levin <sashal@kernel.org>,
+	James.Bottomley@HansenPartnership.com,
+	linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 08/36] scsi: hisi_sas: Add cond_resched() for no forced preemption model
+Date: Wed,  4 Dec 2024 10:45:24 -0500
+Message-ID: <20241204154626.2211476-8-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241204154626.2211476-1-sashal@kernel.org>
+References: <20241204154626.2211476-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.12.1
 Content-Transfer-Encoding: 8bit
 
-On Wed, 2024-12-04 at 20:26 +0800, Zijun Hu wrote:
-> On 2024/12/3 23:34, James Bottomley wrote:
-> > > > This also enables an incremental migration.
-> > > change the API prototype from:
-> > > device_find_child(..., void *data_0, int (*match)(struct device
-> > > *dev, void *data));
-> > > 
-> > > to:
-> > > device_find_child(..., const void *data_0, int (*match)(struct
-> > > device *dev, const void *data));
-> > > 
-> > > For @data_0,  void * -> const void * is okay.
-> > > but for @match, the problem is function pointer type
-> > > incompatibility.
-> > > 
-> > > there are two solutions base on discussions.
-> > > 
-> > > 1) squashing likewise Greg mentioned.
-> > >    Do all of the "prep work" first, and then
-> > >    do the const change at the very end, all at once.
-> > > 
-> > > 2)  as changing platform_driver's remove() prototype.
-> > > Commit: e70140ba0d2b ("Get rid of 'remove_new' relic from
-> > > platform driver struct")
-> > > 
-> > >  introduce extra device_find_child_new() which is constified  ->
-> > > use *_new() replace ALL device_find_child() instances one by one
-> > > -> remove device_find_child() -> rename *_new() to
-> > > device_find_child() once.
-> > Why bother with the last step, which churns the entire code base
-> > again?
-> 
-> keep the good API name device_find_child().
+From: Yihang Li <liyihang9@huawei.com>
 
-Well, I think it's a good opportunity to rename the API better, but if
-that's the goal, you can still do it with _Generic() without churning
-the code base a second time.  The example is in
-slab.h:kmem_cache_create
+[ Upstream commit 2233c4a0b948211743659b24c13d6bd059fa75fc ]
 
-> > Why not call the new function device_find_child_const() and simply
-> > keep it (it's descriptive of its function).  That way you can have
-> > a patch series without merging and at the end simply remove the old
-> > function.
-> 
-> device_find_child is a good name for the API, 'find' already means
-> const.
+For no forced preemption model kernel, in the scenario where the
+expander is connected to 12 high performance SAS SSDs, the following
+call trace may occur:
 
-Not to me it doesn't, but that's actually not what I think is wrong
-with the API name: it actually only returns the first match, so I'd
-marginally prefer it to be called device_find_first_child() ... not
-enough to churn the code to change it, but since you're doing that
-anyway it might make sense as an update.
+[  214.409199][  C240] watchdog: BUG: soft lockup - CPU#240 stuck for 22s! [irq/149-hisi_sa:3211]
+[  214.568533][  C240] pstate: 60400009 (nZCv daif +PAN -UAO -TCO BTYPE=--)
+[  214.575224][  C240] pc : fput_many+0x8c/0xdc
+[  214.579480][  C240] lr : fput+0x1c/0xf0
+[  214.583302][  C240] sp : ffff80002de2b900
+[  214.587298][  C240] x29: ffff80002de2b900 x28: ffff1082aa412000
+[  214.593291][  C240] x27: ffff3062a0348c08 x26: ffff80003a9f6000
+[  214.599284][  C240] x25: ffff1062bbac5c40 x24: 0000000000001000
+[  214.605277][  C240] x23: 000000000000000a x22: 0000000000000001
+[  214.611270][  C240] x21: 0000000000001000 x20: 0000000000000000
+[  214.617262][  C240] x19: ffff3062a41ae580 x18: 0000000000010000
+[  214.623255][  C240] x17: 0000000000000001 x16: ffffdb3a6efe5fc0
+[  214.629248][  C240] x15: ffffffffffffffff x14: 0000000003ffffff
+[  214.635241][  C240] x13: 000000000000ffff x12: 000000000000029c
+[  214.641234][  C240] x11: 0000000000000006 x10: ffff80003a9f7fd0
+[  214.647226][  C240] x9 : ffffdb3a6f0482fc x8 : 0000000000000001
+[  214.653219][  C240] x7 : 0000000000000002 x6 : 0000000000000080
+[  214.659212][  C240] x5 : ffff55480ee9b000 x4 : fffffde7f94c6554
+[  214.665205][  C240] x3 : 0000000000000002 x2 : 0000000000000020
+[  214.671198][  C240] x1 : 0000000000000021 x0 : ffff3062a41ae5b8
+[  214.677191][  C240] Call trace:
+[  214.680320][  C240]  fput_many+0x8c/0xdc
+[  214.684230][  C240]  fput+0x1c/0xf0
+[  214.687707][  C240]  aio_complete_rw+0xd8/0x1fc
+[  214.692225][  C240]  blkdev_bio_end_io+0x98/0x140
+[  214.696917][  C240]  bio_endio+0x160/0x1bc
+[  214.701001][  C240]  blk_update_request+0x1c8/0x3bc
+[  214.705867][  C240]  scsi_end_request+0x3c/0x1f0
+[  214.710471][  C240]  scsi_io_completion+0x7c/0x1a0
+[  214.715249][  C240]  scsi_finish_command+0x104/0x140
+[  214.720200][  C240]  scsi_softirq_done+0x90/0x180
+[  214.724892][  C240]  blk_mq_complete_request+0x5c/0x70
+[  214.730016][  C240]  scsi_mq_done+0x48/0xac
+[  214.734194][  C240]  sas_scsi_task_done+0xbc/0x16c [libsas]
+[  214.739758][  C240]  slot_complete_v3_hw+0x260/0x760 [hisi_sas_v3_hw]
+[  214.746185][  C240]  cq_thread_v3_hw+0xbc/0x190 [hisi_sas_v3_hw]
+[  214.752179][  C240]  irq_thread_fn+0x34/0xa4
+[  214.756435][  C240]  irq_thread+0xc4/0x130
+[  214.760520][  C240]  kthread+0x108/0x13c
+[  214.764430][  C240]  ret_from_fork+0x10/0x18
 
-Regards,
+This is because in the hisi_sas driver, both the hardware interrupt
+handler and the interrupt thread are executed on the same CPU. In the
+performance test scenario, function irq_wait_for_interrupt() will always
+return 0 if lots of interrupts occurs and the CPU will be continuously
+consumed. As a result, the CPU cannot run the watchdog thread. When the
+watchdog time exceeds the specified time, call trace occurs.
 
-James
+To fix it, add cond_resched() to execute the watchdog thread.
+
+Signed-off-by: Yihang Li <liyihang9@huawei.com>
+Link: https://lore.kernel.org/r/20241008021822.2617339-8-liyihang9@huawei.com
+Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index 4cd3a3eab6f1c..a7401bade099a 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -2493,6 +2493,7 @@ static int complete_v3_hw(struct hisi_sas_cq *cq)
+ 	/* update rd_point */
+ 	cq->rd_point = rd_point;
+ 	hisi_sas_write32(hisi_hba, COMPL_Q_0_RD_PTR + (0x14 * queue), rd_point);
++	cond_resched();
+ 
+ 	return completed;
+ }
+-- 
+2.43.0
 
 
