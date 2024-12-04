@@ -1,72 +1,59 @@
-Return-Path: <linux-scsi+bounces-10488-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10490-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D290B9E4055
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 18:01:20 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CD5D9E405E
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 18:02:22 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03CF816782E
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 17:01:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBD8A281BB9
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 17:02:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 712E12144C4;
-	Wed,  4 Dec 2024 16:58:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0D2217664;
+	Wed,  4 Dec 2024 16:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kGKDgDdk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WBjZB2//"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28FD520DD5B;
-	Wed,  4 Dec 2024 16:58:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8107217658;
+	Wed,  4 Dec 2024 16:58:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733331502; cv=none; b=IMfhes2/OVkKcaOC11NpOxVbxAGvgnlWvGe+qKJ0SZNHO5+NxWnBfREdAlc6WlI4JvJV3syc7OiFjCizaHpQHEjO20cfJMy3RFF+1otikPqnW8fx37eJBbY4HWS/u58kW08ovbGvy1TlxEv5Grqq4EdcnTiDGEnT6K+PzphuGL4=
+	t=1733331509; cv=none; b=R+lbykYv6p3UDSUAqanUo1neBoiS2x6CiXHG2N1+/1Uezjl7Q77t+/1l2/EkQkonCk0vPUvsNGxEw+TXmUbP2h8zs/bjTOkr7xddpVLH/ymnx5NrW97tYUwecz0a5AiUXNmtpynwBRfsVtN3hyZ5U5cZCma7iLQlO2B0Ik62A8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733331502; c=relaxed/simple;
-	bh=rj/vtyBLlm1VVH5rilqfdOdaVTaN+8/ElgCqvqGAZK4=;
+	s=arc-20240116; t=1733331509; c=relaxed/simple;
+	bh=q7IXKpaI1TkzlYWOkjYJObT8QGqZyZO0o9GpeFqExvk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bpqZYmMDj1jnh6AmZjkrR9B9csANszFvDqBrfk6Z/srLdx094UDcbYIvEF/CFXHFBfLUZc8WHmJOYGg3zOhSg0tIDWq/eqJt8SfVP6XR715EmGm7nZ3Bl9ng3BO6T4jhLnK96G0iC8SanckFhbyIdvanVDM5X2SQge1LZeBldZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kGKDgDdk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD580C4CECD;
-	Wed,  4 Dec 2024 16:58:19 +0000 (UTC)
+	 MIME-Version; b=PgszebQ+qg4vEtL41yKE9wNk9J3V5pfPY1ixXPjy+rJsmxP1dR97AGW13PXCUQUMQ0R27NlZ8hmyAqPEsxkWtyfQy8ExKTpzLApm5dYbFM3NsxW7Gb/0miQjQyD2WLTjWGAtCLyRV13WQXMBQDA2s/RwtM9Ux0h+my/XQWRPIl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WBjZB2//; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51CB2C4CEDF;
+	Wed,  4 Dec 2024 16:58:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733331502;
-	bh=rj/vtyBLlm1VVH5rilqfdOdaVTaN+8/ElgCqvqGAZK4=;
+	s=k20201202; t=1733331509;
+	bh=q7IXKpaI1TkzlYWOkjYJObT8QGqZyZO0o9GpeFqExvk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kGKDgDdkIfhdRD6kUbVshqP7byRdBI1SUDbohM4JRbL1EeVsd1B60QjfyWhrBsXbI
-	 7A46wYSnAMb21y9UHimOYb/d81lQTbbR3e7YytWoDYPzlpU3rl+PxOqFU6rOR8sGxA
-	 lzUO3L1RTv7dnzv5EQYVYu/20TaRPJ2CfNXMefBSeATgE/kaQ+ME+NlYwT84YmDKLb
-	 GmDGXCk27t3tshzULpbpD8rlXDjN59nm42+24oWnqFApD1p3yQdbodoCPMFEdztwMR
-	 v9L0nm69kjGpkYCEmtPCZO6NUIY2aHRSURtm4vov6ObB3hKWyRr+Ij30jIYkIQ1Cd3
-	 53WxAX86jIMQQ==
+	b=WBjZB2//qmQ8NsPgCcrJaPtOvBAe3hTj0LCU9FkKHm2+OVTb1mZCD/HcRKWmL/XET
+	 Llkoli8ex41TzpQi0FLe198ciMXkyl9mgdVrtp6z9Z++GzMCThxGkIercWi2NmB9am
+	 GIXLX1mLG5QBeuvWW+sK1Q8EE3hOaX4knla4KKiRtHoCWPRCnmKuoXpLUdCXYVSwv/
+	 mzUh9BRX8GSvwGDeu42V00Jb+2/4JWFys5FuWcG3K5NWZSSiaWVYVY02YdgTOGgYzC
+	 PavbBvJ4nBPGz9iku3QSahvJG20XY1I6ydeAH/2CUznwnNX8fBgWdOxID+tJmUtkaL
+	 cXMoAYXh6YcWg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Bart Van Assche <bvanassche@acm.org>,
-	Avri Altman <Avri.Altman@wdc.com>,
-	Peter Wang <peter.wang@mediatek.com>,
+Cc: Justin Tee <justin.tee@broadcom.com>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Sasha Levin <sashal@kernel.org>,
+	james.smart@broadcom.com,
+	dick.kennedy@broadcom.com,
 	James.Bottomley@HansenPartnership.com,
-	yoshihiro.shimoda.uh@renesas.com,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	avri.altman@wdc.com,
-	manivannan.sadhasivam@linaro.org,
-	ahalaney@redhat.com,
-	beanhuo@micron.com,
-	quic_mnaresh@quicinc.com,
-	ebiggers@google.com,
-	minwoo.im@samsung.com,
-	linux-scsi@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.12 13/36] scsi: ufs: core: Make DMA mask configuration more flexible
-Date: Wed,  4 Dec 2024 10:45:29 -0500
-Message-ID: <20241204154626.2211476-13-sashal@kernel.org>
+	linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 18/36] scsi: lpfc: Check SLI_ACTIVE flag in FDMI cmpl before submitting follow up FDMI
+Date: Wed,  4 Dec 2024 10:45:34 -0500
+Message-ID: <20241204154626.2211476-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241204154626.2211476-1-sashal@kernel.org>
 References: <20241204154626.2211476-1-sashal@kernel.org>
@@ -81,117 +68,74 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.12.1
 Content-Transfer-Encoding: 8bit
 
-From: Bart Van Assche <bvanassche@acm.org>
+From: Justin Tee <justin.tee@broadcom.com>
 
-[ Upstream commit 78bc671bd1501e2f6c571e063301a4fdc5db53b2 ]
+[ Upstream commit 98f8d3588097e321be70f83b844fa67d4828fe5c ]
 
-Replace UFSHCD_QUIRK_BROKEN_64BIT_ADDRESS with
-ufs_hba_variant_ops::set_dma_mask.  Update the Renesas driver
-accordingly.  This patch enables supporting other configurations than
-32-bit or 64-bit DMA addresses, e.g. 36-bit DMA addresses.
+The lpfc_cmpl_ct_disc_fdmi() routine has incorrect logic that treats an
+FDMI completion with error LOCAL_REJECT/SLI_ABORTED as a success status.
+Under the erroneous assumption of successful completion, the routine
+proceeds to issue follow up FDMI commands, which may never complete if
+the HBA is in an errata state as indicated by the errored completion
+status.  Fix by freeing FDMI cmd resources and early return when the
+LPFC_SLI_ACTIVE flag is not set and a LOCAL_REJECT/SLI_ABORTED or
+SLI_DOWN status is received.
 
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Link: https://lore.kernel.org/r/20241018194753.775074-1-bvanassche@acm.org
-Reviewed-by: Avri Altman <Avri.Altman@wdc.com>
-Reviewed-by: Peter Wang <peter.wang@mediatek.com>
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Link: https://lore.kernel.org/r/20241031223219.152342-6-justintee8345@gmail.com
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/ufs/core/ufshcd.c      | 4 ++--
- drivers/ufs/host/ufs-renesas.c | 9 ++++++++-
- include/ufs/ufshcd.h           | 9 +++------
- 3 files changed, 13 insertions(+), 9 deletions(-)
+ drivers/scsi/lpfc/lpfc_ct.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index abbe7135a9778..2b445a8699dbc 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -2411,8 +2411,6 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
- 	int err;
+diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
+index 134bc96dd1340..ce3a1f42713dd 100644
+--- a/drivers/scsi/lpfc/lpfc_ct.c
++++ b/drivers/scsi/lpfc/lpfc_ct.c
+@@ -2226,6 +2226,11 @@ lpfc_cmpl_ct_disc_fdmi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 		ulp_status, ulp_word4, latt);
  
- 	hba->capabilities = ufshcd_readl(hba, REG_CONTROLLER_CAPABILITIES);
--	if (hba->quirks & UFSHCD_QUIRK_BROKEN_64BIT_ADDRESS)
--		hba->capabilities &= ~MASK_64_ADDRESSING_SUPPORT;
+ 	if (latt || ulp_status) {
++		lpfc_printf_vlog(vport, KERN_WARNING, LOG_DISCOVERY,
++				 "0229 FDMI cmd %04x failed, latt = %d "
++				 "ulp_status: (x%x/x%x), sli_flag x%x\n",
++				 be16_to_cpu(fdmi_cmd), latt, ulp_status,
++				 ulp_word4, phba->sli.sli_flag);
  
- 	/* nutrs and nutmrs are 0 based values */
- 	hba->nutrs = (hba->capabilities & MASK_TRANSFER_REQUESTS_SLOTS_SDB) + 1;
-@@ -10309,6 +10307,8 @@ EXPORT_SYMBOL_GPL(ufshcd_dealloc_host);
-  */
- static int ufshcd_set_dma_mask(struct ufs_hba *hba)
- {
-+	if (hba->vops && hba->vops->set_dma_mask)
-+		return hba->vops->set_dma_mask(hba);
- 	if (hba->capabilities & MASK_64_ADDRESSING_SUPPORT) {
- 		if (!dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(64)))
- 			return 0;
-diff --git a/drivers/ufs/host/ufs-renesas.c b/drivers/ufs/host/ufs-renesas.c
-index 8711e5cbc9680..3ff97112e1f6d 100644
---- a/drivers/ufs/host/ufs-renesas.c
-+++ b/drivers/ufs/host/ufs-renesas.c
-@@ -7,6 +7,7 @@
- 
- #include <linux/clk.h>
- #include <linux/delay.h>
-+#include <linux/dma-mapping.h>
- #include <linux/err.h>
- #include <linux/iopoll.h>
- #include <linux/kernel.h>
-@@ -364,14 +365,20 @@ static int ufs_renesas_init(struct ufs_hba *hba)
- 		return -ENOMEM;
- 	ufshcd_set_variant(hba, priv);
- 
--	hba->quirks |= UFSHCD_QUIRK_BROKEN_64BIT_ADDRESS | UFSHCD_QUIRK_HIBERN_FASTAUTO;
-+	hba->quirks |= UFSHCD_QUIRK_HIBERN_FASTAUTO;
- 
- 	return 0;
- }
- 
-+static int ufs_renesas_set_dma_mask(struct ufs_hba *hba)
-+{
-+	return dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(32));
-+}
-+
- static const struct ufs_hba_variant_ops ufs_renesas_vops = {
- 	.name		= "renesas",
- 	.init		= ufs_renesas_init,
-+	.set_dma_mask	= ufs_renesas_set_dma_mask,
- 	.setup_clocks	= ufs_renesas_setup_clocks,
- 	.hce_enable_notify = ufs_renesas_hce_enable_notify,
- 	.dbg_register_dump = ufs_renesas_dbg_register_dump,
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 3f68ae3e4330d..0b0fba9f1383c 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -299,6 +299,8 @@ struct ufs_pwr_mode_info {
-  * @max_num_rtt: maximum RTT supported by the host
-  * @init: called when the driver is initialized
-  * @exit: called to cleanup everything done in init
-+ * @set_dma_mask: For setting another DMA mask than indicated by the 64AS
-+ *	capability bit.
-  * @get_ufs_hci_version: called to get UFS HCI version
-  * @clk_scale_notify: notifies that clks are scaled up/down
-  * @setup_clocks: called before touching any of the controller registers
-@@ -341,6 +343,7 @@ struct ufs_hba_variant_ops {
- 	int	(*init)(struct ufs_hba *);
- 	void    (*exit)(struct ufs_hba *);
- 	u32	(*get_ufs_hci_version)(struct ufs_hba *);
-+	int	(*set_dma_mask)(struct ufs_hba *);
- 	int	(*clk_scale_notify)(struct ufs_hba *, bool,
- 				    enum ufs_notify_change_status);
- 	int	(*setup_clocks)(struct ufs_hba *, bool,
-@@ -623,12 +626,6 @@ enum ufshcd_quirks {
- 	 */
- 	UFSHCD_QUIRK_SKIP_PH_CONFIGURATION		= 1 << 16,
- 
--	/*
--	 * This quirk needs to be enabled if the host controller has
--	 * 64-bit addressing supported capability but it doesn't work.
--	 */
--	UFSHCD_QUIRK_BROKEN_64BIT_ADDRESS		= 1 << 17,
+ 		/* Look for a retryable error */
+ 		if (ulp_status == IOSTAT_LOCAL_REJECT) {
+@@ -2234,8 +2239,16 @@ lpfc_cmpl_ct_disc_fdmi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 			case IOERR_SLI_DOWN:
+ 				/* Driver aborted this IO.  No retry as error
+ 				 * is likely Offline->Online or some adapter
+-				 * error.  Recovery will try again.
++				 * error.  Recovery will try again, but if port
++				 * is not active there's no point to continue
++				 * issuing follow up FDMI commands.
+ 				 */
++				if (!(phba->sli.sli_flag & LPFC_SLI_ACTIVE)) {
++					free_ndlp = cmdiocb->ndlp;
++					lpfc_ct_free_iocb(phba, cmdiocb);
++					lpfc_nlp_put(free_ndlp);
++					return;
++				}
+ 				break;
+ 			case IOERR_ABORT_IN_PROGRESS:
+ 			case IOERR_SEQUENCE_TIMEOUT:
+@@ -2256,12 +2269,6 @@ lpfc_cmpl_ct_disc_fdmi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 				break;
+ 			}
+ 		}
 -
- 	/*
- 	 * This quirk needs to be enabled if the host controller has
- 	 * auto-hibernate capability but it's FASTAUTO only.
+-		lpfc_printf_vlog(vport, KERN_INFO, LOG_DISCOVERY,
+-				 "0229 FDMI cmd %04x latt = %d "
+-				 "ulp_status: x%x, rid x%x\n",
+-				 be16_to_cpu(fdmi_cmd), latt, ulp_status,
+-				 ulp_word4);
+ 	}
+ 
+ 	free_ndlp = cmdiocb->ndlp;
 -- 
 2.43.0
 
