@@ -1,152 +1,134 @@
-Return-Path: <linux-scsi+bounces-10521-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10485-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7178B9E41BA
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 18:34:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0636E9E4146
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 18:22:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D7A528CBEC
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 17:34:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84363B34DD2
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2024 16:50:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D371A22CE66;
-	Wed,  4 Dec 2024 17:03:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B6A620C473;
+	Wed,  4 Dec 2024 16:50:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fIN+Oose"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eDQ+LDN6"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8578A22CE5D;
-	Wed,  4 Dec 2024 17:03:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB441E519
+	for <linux-scsi@vger.kernel.org>; Wed,  4 Dec 2024 16:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733331832; cv=none; b=Rfv6SniMtlor64HP852IzXlHUzE0z/cLpLyXMvTZX0K/KtocYfiHL/4W+iaKKLLl1ESa41htshYrbZiMcA0T9DvOIruQoFbBSLwj7Q0Fp5JltXr5jWUt/El5qb1h5V7OXau0Ga5kqxOXy7sITEvtgMpkvxPqdqJzBviqCUuTKD0=
+	t=1733331037; cv=none; b=TVQK+fkk3C50y5NUb4MI8n5/jhbCybRE5DnXLh6Y+RSpsiOwFziKbLKAaWjyU8WqYbB10xiLW7IepFcYDevGTuNSwTBUwnTSxQu5d46Uvc+XPOk+CDseM8B95jURJpqlR6cTXASwJiMTiHAebfW6I4k3CpqnS51ULEXM9UQLWgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733331832; c=relaxed/simple;
-	bh=gsV/QsNcFpCtE/D+hR3ES7sxSQqH2WQ/eY32NGrHz18=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=riCUr+Rxyh1D5+FMCwAdo9XneAEJhuKL0G4QcifsN+xnvC1Z8VhGHcNaORxnpu0ozkOz7mfSI2YuEZMaRHV71UxWYLZROgzfCtXopxtA/EO2i15MtLQupEAj0av5qVc6UcpYGR1jlToUWHwZ5sHO77FyqpjKK1yV6i7Lh1tZm+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fIN+Oose; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE59C4CED1;
-	Wed,  4 Dec 2024 17:03:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733331832;
-	bh=gsV/QsNcFpCtE/D+hR3ES7sxSQqH2WQ/eY32NGrHz18=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fIN+OoseD5hToSG66v9s0tKIK7SxxZT6zPt1cG3aHwR2T67o/fVmn2aJ0xVTe6Ugx
-	 zDNpeET0nUy+Ne8qtLoaalW8tjcxT19N3lX5ZQB26MV1eQDOSBhRNmexIgVOdXg0ln
-	 wT7tDho60Ayag7Sxfl2FrOv2fq6X55ymj6uupxC/6xpl5MqPELL4vB/ICmUQmEBhmR
-	 ri7Iy1+gJma9EqWOTxXAzH4hjoZuBAqknSGehEk7aZBpSUJCwA/CWoarbIKbsS3HIF
-	 ylde7gyzwe5Vi83z8wk2dKUh9v6boB+zdKzA1yrPBZeqX0P0AjxPdQtPs+3ltZccRQ
-	 Oyk48Hbdn/oTw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
-	John Meneghini <jmeneghi@redhat.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Sasha Levin <sashal@kernel.org>,
-	James.Bottomley@HansenPartnership.com,
-	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 5/6] scsi: st: Add MTIOCGET and MTLOAD to ioctls allowed after device reset
-Date: Wed,  4 Dec 2024 10:52:24 -0500
-Message-ID: <20241204155226.2215336-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204155226.2215336-1-sashal@kernel.org>
-References: <20241204155226.2215336-1-sashal@kernel.org>
+	s=arc-20240116; t=1733331037; c=relaxed/simple;
+	bh=cOvxnz8nA5vmSJ0d8Nz5OX9cYRshN45UbkNlKX2/dYU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fLzruLv8VDzsAgHSIEYD+vuRf9qAbuZ1DSFSx0OU0msa87YyUhLko1DLbiGZ01QuuPoJ29lWb+8aM+11tXx2/wvBjxDeFQYthmfirmGZDFltEaTd/W4WmFZbdO9SjTiV3eD+ms3WOhmHZU7hXYVt4iB0JKZWZxC66KaLuSxJx4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=eDQ+LDN6; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-aa549d9dffdso1100297466b.2
+        for <linux-scsi@vger.kernel.org>; Wed, 04 Dec 2024 08:50:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1733331033; x=1733935833; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pdsq6JfjPcCpm2zveC7HsrJs7Jt7/a28/pHa3OaP64o=;
+        b=eDQ+LDN6SWg0nzMthjXVm4O6F/wAMuKlMux5pf0p9ni8sPolWzhpJ2lsOZTuCRaZSY
+         fwiMDY1hkdu56UBiIcj8q/bITnvI6G3GCxmdXoDpKeFBv0GuuepU+gr/FraRt6MPE8MZ
+         QAH1CMfBEyBjXvcxKMoPRe1zGN3VhmT1fuF9x1z+57ji9DXQAGCKhO1tkwN8v6MlUfkn
+         kXeJt8YW+e8ObcS6Z0MDxcO9AjnP25Cg7P4+mYRBcAbStHVRRPpM00JoHr3ZYIh69VQs
+         3ZhdcYgMVv+Mwlc+N09mSL7eQaPoQifOYgyBef6e0Ic1Di+IBsya1gZu3H5D8nXkS7ga
+         PUqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733331033; x=1733935833;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Pdsq6JfjPcCpm2zveC7HsrJs7Jt7/a28/pHa3OaP64o=;
+        b=mJ340t4sUQqQlBTvfnuQnTxK2BAeJs4HkC6FdprGxc68LLraF7UTP9UWT5yjcs4YRk
+         5AJuJA/EXNLG6VPaI2uPoOUjrCJQg8K6ozXiMcDe6h+ScPdyg+aWK2b1yLZpyGrdsr4L
+         qM4oTCp2CbjR1eOqkHhmfRB0zvs8LePU56XnUy6rxqOucyZ35loxZEyMuZLDOOjUHDhN
+         0YkD9NWGKRTpEKV2pkl4QIUe4hZNXm6K0wh33U3eFX9Jb52Ocdhk53yM6jLktj11RQpp
+         3pg4Jc/poCVB91Cn+1R/lEft5VcZZ5hb5vlTpMT9ewNPBMoComqGqQH54i9ZTFrjmYdG
+         gRqQ==
+X-Gm-Message-State: AOJu0YzM6EqLSVmAwQE0HTTI14tr/j5wTXGUbmrxaXsQHtNPVWtiXz5g
+	IGfvXgjpXMk+FRiwQhIDIWmEesR0KUmP0nsK1Y/PnATG8rb3zQ2J7Kv8KBrf51zYUKYaGDYn50b
+	l7LpucMBBuM+6F8g8tSsmHMyo443AZScEnExsQs1+Jd3Wbp48NZ0=
+X-Gm-Gg: ASbGncs7sHSBE6L5j0P64XaydzcJfuedccJLcps2LmY8uyLgs32peIXNwYRMNpRm987
+	vr344VZlYPZChYEXnIUWneAtxHOCqSEGS
+X-Google-Smtp-Source: AGHT+IFH4YdfNYTUv4szeMdmJ2p030B64ITseH5nsh/PHsAkBW16kx5x2mQtfQDO2MLGReAJizp9hsxYoac5cfuXDCk=
+X-Received: by 2002:a17:906:3099:b0:a99:ecaf:4543 with SMTP id
+ a640c23a62f3a-aa5f7d8d1abmr556552566b.25.1733331033338; Wed, 04 Dec 2024
+ 08:50:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.324
-Content-Transfer-Encoding: 8bit
+References: <20241117194604.13827-1-leeman.duncan@gmail.com>
+In-Reply-To: <20241117194604.13827-1-leeman.duncan@gmail.com>
+From: Lee Duncan <lduncan@suse.com>
+Date: Wed, 4 Dec 2024 08:50:22 -0800
+Message-ID: <CAPj3X_XGSQswf=iw_7ekfDaed6JGZMs_+=Rb9fgTKZ9Cj0TYAQ@mail.gmail.com>
+Subject: Re: [PATCH] scsi: iscsi: fix sysfs visibility checks for CHAP
+To: "Martin K. Petersen" <martin.petersen@oracle.com>, Hannes Reinecke <hare@suse.com>
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.org, 
+	open-iscsi@googlegroups.com, lduncan@suse.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
+I see there's a spelling error in the description, so I'll resubmit.
 
-[ Upstream commit 0b120edb37dc9dd8ca82893d386922eb6b16f860 ]
-
-Most drives rewind the tape when the device is reset. Reading and writing
-are not allowed until something is done to make the tape position match the
-user's expectation (e.g., rewind the tape). Add MTIOCGET and MTLOAD to
-operations allowed after reset. MTIOCGET is modified to not touch the tape
-if pos_unknown is non-zero. The tape location is known after MTLOAD.
-
-Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=219419#c14
-Link: https://lore.kernel.org/r/20241106095723.63254-3-Kai.Makisara@kolumbus.fi
-Reviewed-by: John Meneghini <jmeneghi@redhat.com>
-Tested-by: John Meneghini <jmeneghi@redhat.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/st.c | 29 +++++++++++++++++++++--------
- 1 file changed, 21 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
-index c6b341415a125..abfde71216faf 100644
---- a/drivers/scsi/st.c
-+++ b/drivers/scsi/st.c
-@@ -3501,6 +3501,7 @@ static long st_ioctl(struct file *file, unsigned int cmd_in, unsigned long arg)
- 	int i, cmd_nr, cmd_type, bt;
- 	int retval = 0;
- 	unsigned int blk;
-+	bool cmd_mtiocget;
- 	struct scsi_tape *STp = file->private_data;
- 	struct st_modedef *STm;
- 	struct st_partstat *STps;
-@@ -3615,6 +3616,7 @@ static long st_ioctl(struct file *file, unsigned int cmd_in, unsigned long arg)
- 			 */
- 			if (mtc.mt_op != MTREW &&
- 			    mtc.mt_op != MTOFFL &&
-+			    mtc.mt_op != MTLOAD &&
- 			    mtc.mt_op != MTRETEN &&
- 			    mtc.mt_op != MTERASE &&
- 			    mtc.mt_op != MTSEEK &&
-@@ -3728,17 +3730,28 @@ static long st_ioctl(struct file *file, unsigned int cmd_in, unsigned long arg)
- 		goto out;
- 	}
- 
-+	cmd_mtiocget = cmd_type == _IOC_TYPE(MTIOCGET) && cmd_nr == _IOC_NR(MTIOCGET);
-+
- 	if ((i = flush_buffer(STp, 0)) < 0) {
--		retval = i;
--		goto out;
--	}
--	if (STp->can_partitions &&
--	    (i = switch_partition(STp)) < 0) {
--		retval = i;
--		goto out;
-+		if (cmd_mtiocget && STp->pos_unknown) {
-+			/* flush fails -> modify status accordingly */
-+			reset_state(STp);
-+			STp->pos_unknown = 1;
-+		} else { /* return error */
-+			retval = i;
-+			goto out;
-+		}
-+	} else { /* flush_buffer succeeds */
-+		if (STp->can_partitions) {
-+			i = switch_partition(STp);
-+			if (i < 0) {
-+				retval = i;
-+				goto out;
-+			}
-+		}
- 	}
- 
--	if (cmd_type == _IOC_TYPE(MTIOCGET) && cmd_nr == _IOC_NR(MTIOCGET)) {
-+	if (cmd_mtiocget) {
- 		struct mtget mt_status;
- 
- 		if (_IOC_SIZE(cmd_in) != sizeof(struct mtget)) {
--- 
-2.43.0
-
+On Sun, Nov 17, 2024 at 11:46=E2=80=AFAM Lee Duncan <leeman.duncan@gmail.co=
+m> wrote:
+>
+> From: Lee Duncan <lduncan@suse.com>
+>
+> The username and password checks were backwards for the sysfs
+> visibility checks, so correct them. This likely went unnoticed,
+> since the visibility/writability for these attributes
+> (username/password and mututual username/password) are all
+> the same.
+>
+> Fixes: 1d063c17298d ('[SCSI] iscsi class: sysfs group is_visible callout =
+for session attrs')
+> Signed-off-by: Lee Duncan <lduncan@suse.com>
+> ---
+>  drivers/scsi/scsi_transport_iscsi.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_tran=
+sport_iscsi.c
+> index fde7de3b1e55..81c57e0e8d90 100644
+> --- a/drivers/scsi/scsi_transport_iscsi.c
+> +++ b/drivers/scsi/scsi_transport_iscsi.c
+> @@ -4587,13 +4587,13 @@ static umode_t iscsi_session_attr_is_visible(stru=
+ct kobject *kobj,
+>         else if (attr =3D=3D &dev_attr_sess_chap_out_idx.attr)
+>                 param =3D ISCSI_PARAM_CHAP_OUT_IDX;
+>         else if (attr =3D=3D &dev_attr_sess_password.attr)
+> -               param =3D ISCSI_PARAM_USERNAME;
+> +               param =3D ISCSI_PARAM_PASSWORD;
+>         else if (attr =3D=3D &dev_attr_sess_password_in.attr)
+> -               param =3D ISCSI_PARAM_USERNAME_IN;
+> +               param =3D ISCSI_PARAM_PASSWORD_IN;
+>         else if (attr =3D=3D &dev_attr_sess_username.attr)
+> -               param =3D ISCSI_PARAM_PASSWORD;
+> +               param =3D ISCSI_PARAM_USERNAME;
+>         else if (attr =3D=3D &dev_attr_sess_username_in.attr)
+> -               param =3D ISCSI_PARAM_PASSWORD_IN;
+> +               param =3D ISCSI_PARAM_USERNAME_IN;
+>         else if (attr =3D=3D &dev_attr_sess_fast_abort.attr)
+>                 param =3D ISCSI_PARAM_FAST_ABORT;
+>         else if (attr =3D=3D &dev_attr_sess_abort_tmo.attr)
+> --
+> 2.43.0
+>
 
