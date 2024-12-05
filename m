@@ -1,83 +1,76 @@
-Return-Path: <linux-scsi+bounces-10551-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10547-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAF519E4C36
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Dec 2024 03:18:38 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87E0616A081
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Dec 2024 02:18:35 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71C1813774B;
-	Thu,  5 Dec 2024 02:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="SrqcCpu+"
-X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C35F59E4C2F
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Dec 2024 03:17:49 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7152F4E2;
-	Thu,  5 Dec 2024 02:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 837FD2865AB
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Dec 2024 02:17:48 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E24915575D;
+	Thu,  5 Dec 2024 02:17:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ZJoo8Z02"
+X-Original-To: linux-scsi@vger.kernel.org
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAD580BEC
+	for <linux-scsi@vger.kernel.org>; Thu,  5 Dec 2024 02:17:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733365114; cv=none; b=HotFAxmKjJOJon8PZOFgNTD3GgNx1YW5f22mBvntl05FGL5u8lc+fP834G4qMDqM4I9gUCalQxEsluVlSw+gnIu5s250tYbJX97NLBxuVlNJe3VSyQCa/alm/JN65GktLVpm3npLMwme66h49GupHG6y/r/Yeqamj2iXOgr6+OM=
+	t=1733365067; cv=none; b=mwd2J0i3UvlL8TCTrR8QQb8gAABZQomxZFgX6omcis5ytR9AU2tpI+aZL0o0GUj4Qe6x2UO3+3nr8taEHIjidVZ8LGdXZIOZzQKd23X6uAQVzZRsboFtkzxYtb/bAZvoyAZT7/hQaVqPEPok1iOUA9yE41Rd/JH/Lj6rHfSQlSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733365114; c=relaxed/simple;
-	bh=nBX3ow0p0Fwc7PV0o1UcbmziHwrQ0Cgt+2+zW2D3g48=;
+	s=arc-20240116; t=1733365067; c=relaxed/simple;
+	bh=Ki8RaMZIi4liz1gtolTbyCANcACe/RBIyiN+OFKjiEM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hHRzovHhy9zybiE80Uygi7qUfdrO4MmjT+9fwKVg0/rA9ohxJ+JIZm9nzXWZLB4Y4zYl306FlObORBNaF5kOgGsoadbzlAUkUQaOmjQ79k+3c11BfPBQ/35czYLNE32ffmHQDOJT7aZJXwAVHuRKy95phqgKIBJh54juX7lJsZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=SrqcCpu+; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=Xw6u/f6LMYZBiEZMMSBlyW1hme5Wjn4fDBQr15tJTaja7l0hVcV7QXQEWX1n8kq2YtNji/9qIOn604w4PJPcA10MmoinCppimd5GZX3Y46zbeWs9mzpMsQ8jZ+z/LWG3oztp4HE/atkRcyiqH+dmW/2vf2aJ2Xpn6BGC1GvSxC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ZJoo8Z02; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B51BpT5026351;
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B51CNPZ017956;
 	Thu, 5 Dec 2024 02:17:43 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=GFDJEh2h+7hEQ8DkKn8zRrqmm5esLpVKlkKmELOfHPY=; b=
-	SrqcCpu+VvENf8ii4rvMCDdqEjO1N3h24quEG4A67Mt9ytpSYn/dFmJWh/07axUy
-	XwfR9XBzHosH78TSfqi9U2+14ZoKGZ70qN6SNQFh2YpmV8b0xK8SstjEOozJJc50
-	xHfVNjOHCKkWEJoRLElAKduySATwaadMfo62LF0OR46EgEzStVXrvb1q8jQUs4TP
-	WjUm+F7FcrOugCd0bMwjTLWlwxph+LEp3IdgMavYY0QEdXxXRMFzybLVteVR8zPm
-	45VgxutmBvrD5uqnbgFpJvqmKZFxdIiBGsJUN2IUAEGQSk5CRny/MaRunD02YwAp
-	Ro7oMG/PS3kmM2QE62F9Vg==
+	corp-2023-11-20; bh=vMRR0W5ZlO709+hFi23C7Q4Uh+fL3jLNDDDv+bv51EI=; b=
+	ZJoo8Z02N0jR7NDhhJDuWxZrOIsOYE73nLop/QcXO2QdWKHsK0Rp3hKA44DjK/Hd
+	tua1zmodl0lI8m7+4pYFN/MrVIMToCT01OFNYmHAA7SgvY59X2ayJpkLyoOj5tLg
+	IWAZ9Tn7zutDc0tgo3nX7C3biucs+AzeqPsclf+DDpVmbCz9AuvLkEEBWXKP6yoZ
+	KmPKAXHDV1ibSYxMRqB7Kqzpc1YUNDvnofv94puIygsTdP6olbvlClTIu5mcerzu
+	fmJmDj7NBCrGaZHvSBiJJ1502dSJDxGz3QfpB4XP5LpG5bL1KZyZp/f8FCrDlKUy
+	B2PNzaQksNmwOfJB9y1LyQ==
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 437trbsxwf-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 437sa01xmm-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Thu, 05 Dec 2024 02:17:43 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4B50Bk4X001376;
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4B4Nif0H001392;
 	Thu, 5 Dec 2024 02:17:42 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 437s5a8u6e-1
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 437s5a8u7c-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Thu, 05 Dec 2024 02:17:42 +0000
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4B52HbvO018742;
-	Thu, 5 Dec 2024 02:17:41 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4B52HbvQ018742;
+	Thu, 5 Dec 2024 02:17:42 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 437s5a8u3n-3;
-	Thu, 05 Dec 2024 02:17:41 +0000
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 437s5a8u3n-4;
+	Thu, 05 Dec 2024 02:17:42 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, avri.altman@wdc.com, alim.akhtar@samsung.com,
-        jejb@linux.ibm.com, peter.wang@mediatek.com
+To: linux-scsi@vger.kernel.org, Ranjan Kumar <ranjan.kumar@broadcom.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        wsd_upstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
-        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
-        jiajie.hao@mediatek.com, yi-fan.peng@mediatek.com,
-        qilin.tan@mediatek.com, lin.gui@mediatek.com, tun-yu.yu@mediatek.com,
-        eddie.huang@mediatek.com, naomi.chu@mediatek.com, ed.tsai@mediatek.com,
-        bvanassche@acm.org, draviv@codeaurora.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] ufs: core: add missing post notify for power mode change
-Date: Wed,  4 Dec 2024 21:17:02 -0500
-Message-ID: <173336487644.2765947.4960635225695603166.b4-ty@oracle.com>
+        sathya.prakash@broadcom.com, sumit.saxena@broadcom.com
+Subject: Re: [PATCH v1 0/2] mpt3sas: Update driver version
+Date: Wed,  4 Dec 2024 21:17:03 -0500
+Message-ID: <173336487627.2765947.14609104172792320921.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241122024943.30589-1-peter.wang@mediatek.com>
-References: <20241122024943.30589-1-peter.wang@mediatek.com>
+In-Reply-To: <20241110173341.11595-1-ranjan.kumar@broadcom.com>
+References: <20241110173341.11595-1-ranjan.kumar@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -93,26 +86,26 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxl
  bulkscore=0 phishscore=0 malwarescore=0 mlxscore=0 suspectscore=0
  spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2411120000 definitions=main-2412050017
-X-Proofpoint-GUID: m1SM2rf2XV08WfvKY5okJaOm3yBzardu
-X-Proofpoint-ORIG-GUID: m1SM2rf2XV08WfvKY5okJaOm3yBzardu
+X-Proofpoint-GUID: pCcJPg4xxDXHLHUeOq1liqO4w28XGNIp
+X-Proofpoint-ORIG-GUID: pCcJPg4xxDXHLHUeOq1liqO4w28XGNIp
 
-On Fri, 22 Nov 2024 10:49:43 +0800, peter.wang@mediatek.com wrote:
+On Sun, 10 Nov 2024 23:03:39 +0530, Ranjan Kumar wrote:
 
-> When the power mode change is successful but the power mode
-> hasn't actually changed, the post notification was missed.
-> Similar to the approach with hibernate/clock scale/hce enable,
-> having pre/post notifications in the same function will
-> make it easier to maintain.
+> Update driver version along with minor Enhancement.
 > 
-> Additionally, supplement the description of power parameters
-> for the pwr_change_notify callback.
+> Ranjan Kumar (2):
+>   mpt3sas:  mpt3sas: Diag-Reset when Doorbell-In-Use bit is set during
+>     driver load time
+>   mpt3sas: Update driver version to 51.100.00.00
 > 
 > [...]
 
 Applied to 6.13/scsi-fixes, thanks!
 
-[1/1] ufs: core: add missing post notify for power mode change
-      https://git.kernel.org/mkp/scsi/c/7f45ed5f0cd5
+[1/2] mpt3sas: mpt3sas: Diag-Reset when Doorbell-In-Use bit is set during driver load time
+      https://git.kernel.org/mkp/scsi/c/3f5eb062e8aa
+[2/2] mpt3sas: Update driver version to 51.100.00.00
+      https://git.kernel.org/mkp/scsi/c/6050471545ee
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
