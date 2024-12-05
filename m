@@ -1,113 +1,114 @@
-Return-Path: <linux-scsi+bounces-10550-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10552-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 450479E4C34
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Dec 2024 03:18:06 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 608F09E4C90
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Dec 2024 04:13:17 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05F8A286A3A
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Dec 2024 02:18:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E8931672EE
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Dec 2024 03:13:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C102B185B5F;
-	Thu,  5 Dec 2024 02:17:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2325E155321;
+	Thu,  5 Dec 2024 03:13:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="TrjJj9mk"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="yWrYmB4l"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76C317E015;
-	Thu,  5 Dec 2024 02:17:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B513EA9A;
+	Thu,  5 Dec 2024 03:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733365075; cv=none; b=e+bvrpRDzYto3w/ksJ7HdNwGuurFph6p2qudvYgsd3fFNQiCQjVgISr/9Qgt60/2p5D6leUFWYJ54Emwso5DOf7kkmbstIXA+RA2mi44gItivaxfs47YTGj2/5LrKDeCuWzIitOdD9mc2mvOWMtpYzRMyZZcZdqVzmKO5wS13wE=
+	t=1733368392; cv=none; b=m/6SPOuxXgP4AfkgzbYRCGfgfBECkUD+J9vAh7t/Y3nVRiYOt4vOSWTQUXbZdUpS5W3TWb/uytRlhMldem1MvHsvT9m3bRA8JF1mU3kxD5ZIHpRtSLjWtbrxm7tjOancMJiRJoyifPVPuaELFE+SCO8Lcuf4TNriDi9qKXgQPC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733365075; c=relaxed/simple;
-	bh=I4QD7Y8cx4lnDe/uxq4YTREyJn+oSqI+X/zUrpWDT9c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jDnuT9kAxqj2rsFAbPJOJT+0vY1+pBoNwwZa8VeXevtp/DiEUCtmDqPdDRVNeqDvbNB9m7ZZJn+OscU8NYXXC3X+T/3P5ar2z49Tkjl+O2J9zvKMQ3A5Eahs6+QLlfwVODg277e4syvC54eFU3GujFkku/u2iEPGUcZF7aeNjR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=TrjJj9mk; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B51BpDU030160;
-	Thu, 5 Dec 2024 02:17:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=rYrDbCNmBdDzx499aoGxgj3z42b/6peKzLPB1hlTzME=; b=
-	TrjJj9mkdCv6RmLYmveLGGFOPkariJVo8L6cg7RvPlKfkwBqPceTRMpCDgT3GYoL
-	lOVfCqbaRSCTnGllfn5s5kpdw/5PFA54B1z7z3qZMG4mmWb50axbz5rETV9bxhmC
-	0m5arZmC8Tq2QezDhoI7f8jG24tDRPHuOEpWH/AqGf9b4dpNJwg1ArZiy0TbCzzo
-	sTBK9+PLcb74QIsi3nIcr6sEuFiXy2lRq1m6+vJSdntro+1A0FQDBeYF5Yni+UzP
-	onslLVWEkDmuGQ904IBJS9iTi8EUGhLXgSjRjaiN8VxEdmpqWpcTa4lvF3jZVLaJ
-	vozSjA+oNZQgIsGL/X7Dxw==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 437tas9sth-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 05 Dec 2024 02:17:46 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4B50EBQT001368;
-	Thu, 5 Dec 2024 02:17:45 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 437s5a8u8y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 05 Dec 2024 02:17:45 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4B52HbvU018742;
-	Thu, 5 Dec 2024 02:17:44 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 437s5a8u3n-6;
-	Thu, 05 Dec 2024 02:17:44 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: dgilbert@interlog.com, Suraj Sonawane <surajsonawane0215@gmail.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James.Bottomley@HansenPartnership.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+7efb5850a17ba6ce098b@syzkaller.appspotmail.com
-Subject: Re: [PATCH] scsi: sg: fix slab-use-after-free Read in sg_release
-Date: Wed,  4 Dec 2024 21:17:05 -0500
-Message-ID: <173336487634.2765947.1842407236657188629.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241120125944.88095-1-surajsonawane0215@gmail.com>
-References: <20241120125944.88095-1-surajsonawane0215@gmail.com>
+	s=arc-20240116; t=1733368392; c=relaxed/simple;
+	bh=S6U6N3BrgifK/MhuHSN2mX6igqOw+eEk/b5KB7r//fw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=djI3Y+PWxxMkiAJlaqHDJKpEozlWPc33CasTUxPFEsQl5egJQINmfQfMu/XZdb4Pz5OtBh/HB/0L7w7hOv+Pl/rjAMyq3+0YZP0ksiElX6k+KqZrjy1PtHWTUVT1XUtEcjAyeYGKbPG+FPsU5u4CHOYyMsaG8GXUNsn+mTKdcWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=yWrYmB4l; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=IuEXT0ZxkFP5mjNKuU9spG+uGaTgHhCC0eXuN9pMpxI=; b=yWrYmB4liOjk59QfQS4Bg4cDFN
+	ZNSuC6QPt6GXuDv8HmDpBTagyrFy8I9qTWFf3x8lgY2cyCMzl1QYGlBp1+5h/w/ASDXMv5gFORch3
+	HoGvNamPXpOkaez7RxVdHTctW6LYD60+FWSo68UpJv9n5d9+OwM2Cm6VHFTLuoHUV+JmO15/hhIs+
+	Qzi1WtbXIvtrweuW2yd+KVY3JMBRSYBxwQacglC0eCy3PAe2nW7WZM4S3Iy/jPz/jOVyr5M5w0kxG
+	2ZxDw7xKUz1I7cIfHXhbfRCzQ7BD3HELrkkhcD6ZSJOpwzcksAAXBQCIhYjotaIPu0/s2gR8qJZuT
+	nwc31rVg==;
+Received: from [50.53.2.24] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tJ2If-0000000EdB2-0OcT;
+	Thu, 05 Dec 2024 03:13:09 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-scsi@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Christoph Hellwig <hch@lst.de>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-doc@vger.kernel.org
+Subject: [PATCH] scsi: Docs: remove init_this_scsi_driver()
+Date: Wed,  4 Dec 2024 19:13:07 -0800
+Message-ID: <20241205031307.130441-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-04_21,2024-12-04_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=674
- bulkscore=0 phishscore=0 malwarescore=0 mlxscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2411120000 definitions=main-2412050017
-X-Proofpoint-GUID: a8lZcI86tvSyOCptG2W5LPOuwzlxzh6a
-X-Proofpoint-ORIG-GUID: a8lZcI86tvSyOCptG2W5LPOuwzlxzh6a
 
-On Wed, 20 Nov 2024 18:29:44 +0530, Suraj Sonawane wrote:
+Finish removing mention of init_this_scsi_driver() that was removed
+ages ago.
 
-> Fix a use-after-free bug in `sg_release`,
-> detected by syzbot with KASAN:
-> 
-> BUG: KASAN: slab-use-after-free in lock_release+0x151/0xa30
-> kernel/locking/lockdep.c:5838
-> __mutex_unlock_slowpath+0xe2/0x750 kernel/locking/mutex.c:912
-> sg_release+0x1f4/0x2e0 drivers/scsi/sg.c:407
-> 
-> [...]
+Fixes: 83c9f08e6c6a ("scsi: remove the old scsi_module.c initialization model")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Martin K. Petersen <martin.petersen@oracle.com>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+---
+ Documentation/scsi/scsi_mid_low_api.rst |   10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-Applied to 6.13/scsi-fixes, thanks!
-
-[1/1] scsi: sg: fix slab-use-after-free Read in sg_release
-      https://git.kernel.org/mkp/scsi/c/f10593ad9bc3
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+--- linux-next-20241204.orig/Documentation/scsi/scsi_mid_low_api.rst
++++ linux-next-20241204/Documentation/scsi/scsi_mid_low_api.rst
+@@ -625,7 +625,7 @@ Interface Functions
+ ===================
+ Interface functions are supplied (defined) by LLDs and their function
+ pointers are placed in an instance of struct scsi_host_template which
+-is passed to scsi_host_alloc() [or scsi_register() / init_this_scsi_driver()].
++is passed to scsi_host_alloc() or scsi_register().
+ Some are mandatory. Interface functions should be declared static. The
+ accepted convention is that driver "xyz" will declare its sdev_configure()
+ function as::
+@@ -636,8 +636,8 @@ and so forth for all interface functions
+ 
+ A pointer to this function should be placed in the 'sdev_configure' member
+ of a "struct scsi_host_template" instance. A pointer to such an instance
+-should be passed to the mid level's scsi_host_alloc() [or scsi_register() /
+-init_this_scsi_driver()].
++should be passed to the mid level's scsi_host_alloc() or scsi_register().
++.
+ 
+ The interface functions are also described in the include/scsi/scsi_host.h
+ file immediately above their definition point in "struct scsi_host_template".
+@@ -817,10 +817,6 @@ Details::
+     *      The SCSI_IOCTL_PROBE_HOST ioctl yields the string returned by this
+     *      function (or struct Scsi_Host::name if this function is not
+     *      available).
+-    *      In a similar manner, init_this_scsi_driver() outputs to the console
+-    *      each host's "info" (or name) for the driver it is registering.
+-    *      Also if proc_info() is not supplied, the output of this function
+-    *      is used instead.
+     *
+     *      Optionally defined in: LLD
+     **/
 
