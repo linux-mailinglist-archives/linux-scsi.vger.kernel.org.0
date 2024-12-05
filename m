@@ -1,78 +1,83 @@
-Return-Path: <linux-scsi+bounces-10546-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10551-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A20059E4C2E
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Dec 2024 03:17:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAF519E4C36
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Dec 2024 03:18:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BCF9169C8B
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Dec 2024 02:17:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87E0616A081
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Dec 2024 02:18:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2431F15E5A6;
-	Thu,  5 Dec 2024 02:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71C1813774B;
+	Thu,  5 Dec 2024 02:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Hsj5ym9h"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="SrqcCpu+"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA7322EE5
-	for <linux-scsi@vger.kernel.org>; Thu,  5 Dec 2024 02:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7152F4E2;
+	Thu,  5 Dec 2024 02:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733365065; cv=none; b=uxz6Otcc8C4e3DJ4iHIUAxy79VEW/qjuox1/1op5maQp3HPbhnIUldrU2umcDR3evR1ar2n+htZvvqHkg8acQsrJJjF2FhDZGIgdjVeg2CQP61uUuytmbDAGYD4j1Fhc3oev+cgyS+0lMk5ZzEfle1PtWO4aqZaDxTOU/rqC9Ug=
+	t=1733365114; cv=none; b=HotFAxmKjJOJon8PZOFgNTD3GgNx1YW5f22mBvntl05FGL5u8lc+fP834G4qMDqM4I9gUCalQxEsluVlSw+gnIu5s250tYbJX97NLBxuVlNJe3VSyQCa/alm/JN65GktLVpm3npLMwme66h49GupHG6y/r/Yeqamj2iXOgr6+OM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733365065; c=relaxed/simple;
-	bh=XvcsraA3VTIOZoU31CgQ9mu+tgPFIoLj1r59mshtyRY=;
+	s=arc-20240116; t=1733365114; c=relaxed/simple;
+	bh=nBX3ow0p0Fwc7PV0o1UcbmziHwrQ0Cgt+2+zW2D3g48=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZCubkbv5CHfaIX8JhIM54iK5SNVcHRcW8UTeTG2jwfonFRc8P9bepQPtm956HwBGrl9ce7cOxb/i33Jp+OgaWpeXxchKUbyAqdSu6t+nWY7J6WDYm+XFc8XUaNTb2A5b92B5zZ+hzC2uxx0vS2j7hk4j/d/AgEqq8YGEs1kMFtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Hsj5ym9h; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=hHRzovHhy9zybiE80Uygi7qUfdrO4MmjT+9fwKVg0/rA9ohxJ+JIZm9nzXWZLB4Y4zYl306FlObORBNaF5kOgGsoadbzlAUkUQaOmjQ79k+3c11BfPBQ/35czYLNE32ffmHQDOJT7aZJXwAVHuRKy95phqgKIBJh54juX7lJsZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=SrqcCpu+; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B51Ci1m010526;
-	Thu, 5 Dec 2024 02:17:40 GMT
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B51BpT5026351;
+	Thu, 5 Dec 2024 02:17:43 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=kLEGxlKmf2oQFf9PfXwaIjesQDKIzkyHHN7mBFo2L4g=; b=
-	Hsj5ym9h9Vus75q3y99O4VbCBba/blBU5/s8aA7zdG94HPnTHVoaHNrsM5NRDD6e
-	qa/0OHmcFkmUYK119Ymnd0hJGApIoHqKYH18G1i31wAnAwkrn+XkalZXPDoebLBw
-	CUD8LYfnjDOFnMRiHUANCEv/ut3Qu8v+T1OSItnMtT+m8LZfC8XZ4eJ5jshX2n+3
-	Ljk0Bd1lHIrtlN99Giv57NwWxb9wyYBhxCBLl3MkJ5yUPIWM0/7vmLwzYwyoTQ+F
-	0URz97v5x4PFQMSOTadCaYaw8ptVCIExInsnTzX66u00ksOlFbhcdZe/6L2UeLTX
-	fLMkuEiSyOu3Q24riqg0Zg==
+	corp-2023-11-20; bh=GFDJEh2h+7hEQ8DkKn8zRrqmm5esLpVKlkKmELOfHPY=; b=
+	SrqcCpu+VvENf8ii4rvMCDdqEjO1N3h24quEG4A67Mt9ytpSYn/dFmJWh/07axUy
+	XwfR9XBzHosH78TSfqi9U2+14ZoKGZ70qN6SNQFh2YpmV8b0xK8SstjEOozJJc50
+	xHfVNjOHCKkWEJoRLElAKduySATwaadMfo62LF0OR46EgEzStVXrvb1q8jQUs4TP
+	WjUm+F7FcrOugCd0bMwjTLWlwxph+LEp3IdgMavYY0QEdXxXRMFzybLVteVR8zPm
+	45VgxutmBvrD5uqnbgFpJvqmKZFxdIiBGsJUN2IUAEGQSk5CRny/MaRunD02YwAp
+	Ro7oMG/PS3kmM2QE62F9Vg==
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 437u8t9ymy-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 437trbsxwf-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 05 Dec 2024 02:17:39 +0000 (GMT)
+	Thu, 05 Dec 2024 02:17:43 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4B50BwC3001409;
-	Thu, 5 Dec 2024 02:17:39 GMT
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4B50Bk4X001376;
+	Thu, 5 Dec 2024 02:17:42 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 437s5a8u55-1
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 437s5a8u6e-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 05 Dec 2024 02:17:39 +0000
+	Thu, 05 Dec 2024 02:17:42 +0000
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4B52HbvM018742;
-	Thu, 5 Dec 2024 02:17:38 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4B52HbvO018742;
+	Thu, 5 Dec 2024 02:17:41 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 437s5a8u3n-2;
-	Thu, 05 Dec 2024 02:17:38 +0000
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 437s5a8u3n-3;
+	Thu, 05 Dec 2024 02:17:41 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Nilesh Javali <njavali@marvell.com>
+To: linux-scsi@vger.kernel.org, avri.altman@wdc.com, alim.akhtar@samsung.com,
+        jejb@linux.ibm.com, peter.wang@mediatek.com
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, GR-QLogic-Storage-Upstream@marvell.com,
-        agurumurthy@marvell.com, sdeodhar@marvell.com, emilne@redhat.com,
-        jmeneghi@redhat.com
-Subject: Re: [PATCH 0/7] qla2xxx misc. bug fixes
-Date: Wed,  4 Dec 2024 21:17:01 -0500
-Message-ID: <173336487631.2765947.15056170020927588581.b4-ty@oracle.com>
+        wsd_upstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
+        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
+        jiajie.hao@mediatek.com, yi-fan.peng@mediatek.com,
+        qilin.tan@mediatek.com, lin.gui@mediatek.com, tun-yu.yu@mediatek.com,
+        eddie.huang@mediatek.com, naomi.chu@mediatek.com, ed.tsai@mediatek.com,
+        bvanassche@acm.org, draviv@codeaurora.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] ufs: core: add missing post notify for power mode change
+Date: Wed,  4 Dec 2024 21:17:02 -0500
+Message-ID: <173336487644.2765947.4960635225695603166.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241115130313.46826-1-njavali@marvell.com>
-References: <20241115130313.46826-1-njavali@marvell.com>
+In-Reply-To: <20241122024943.30589-1-peter.wang@mediatek.com>
+References: <20241122024943.30589-1-peter.wang@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -84,41 +89,30 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2024-12-04_21,2024-12-04_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=957
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
  bulkscore=0 phishscore=0 malwarescore=0 mlxscore=0 suspectscore=0
  spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2411120000 definitions=main-2412050017
-X-Proofpoint-ORIG-GUID: 8Jx6SnA8teDtBpAzzDtXAIajJU7lrrHC
-X-Proofpoint-GUID: 8Jx6SnA8teDtBpAzzDtXAIajJU7lrrHC
+X-Proofpoint-GUID: m1SM2rf2XV08WfvKY5okJaOm3yBzardu
+X-Proofpoint-ORIG-GUID: m1SM2rf2XV08WfvKY5okJaOm3yBzardu
 
-On Fri, 15 Nov 2024 18:33:06 +0530, Nilesh Javali wrote:
+On Fri, 22 Nov 2024 10:49:43 +0800, peter.wang@mediatek.com wrote:
 
-> Martin,
+> When the power mode change is successful but the power mode
+> hasn't actually changed, the post notification was missed.
+> Similar to the approach with hibernate/clock scale/hce enable,
+> having pre/post notifications in the same function will
+> make it easier to maintain.
 > 
-> Please apply the qla2xxx driver miscellaneous bug fixes
-> to the scsi tree at your earliest convenience.
-> 
-> Thanks,
-> Nilesh
+> Additionally, supplement the description of power parameters
+> for the pwr_change_notify callback.
 > 
 > [...]
 
 Applied to 6.13/scsi-fixes, thanks!
 
-[1/7] qla2xxx: fix abort in bsg timeout
-      https://git.kernel.org/mkp/scsi/c/c423263082ee
-[2/7] qla2xxx: Fix use after free on unload
-      https://git.kernel.org/mkp/scsi/c/07c903db0a2f
-[3/7] qla2xxx: Move FCE Trace buffer allocation to user control
-      Feature, queued for 6.14.
-[4/7] qla2xxx: Remove check req_sg_cnt should be equal to rsp_sg_cnt.
-      https://git.kernel.org/mkp/scsi/c/833c70e212fc
-[5/7] qla2xxx: Fix NVME and NPIV connect issue
-      https://git.kernel.org/mkp/scsi/c/4812b7796c14
-[6/7] qla2xxx: Supported speed displayed incorrectly for VPorts
-      https://git.kernel.org/mkp/scsi/c/e4e268f898c8
-[7/7] qla2xxx: Update version to 10.02.09.400-k
-      https://git.kernel.org/mkp/scsi/c/35002a8ec557
+[1/1] ufs: core: add missing post notify for power mode change
+      https://git.kernel.org/mkp/scsi/c/7f45ed5f0cd5
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
