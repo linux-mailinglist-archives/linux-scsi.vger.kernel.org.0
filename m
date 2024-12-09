@@ -1,99 +1,91 @@
-Return-Path: <linux-scsi+bounces-10648-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10650-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C7599E9C95
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Dec 2024 18:06:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D25659E9DD9
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Dec 2024 19:08:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DECD188A421
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Dec 2024 17:04:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 113FC1886F40
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Dec 2024 18:08:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45F7E1E9B2B;
-	Mon,  9 Dec 2024 17:03:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47E00155327;
+	Mon,  9 Dec 2024 18:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iqHBQLNR"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from air.basealt.ru (air.basealt.ru [193.43.8.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4B8153814;
-	Mon,  9 Dec 2024 17:03:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.43.8.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05580154BFC
+	for <linux-scsi@vger.kernel.org>; Mon,  9 Dec 2024 18:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733763832; cv=none; b=FeMaD4zpM3fiJ6aUcJ9SGXSGfm3uNaIYbcPDt92SgSvZ+nAaJ3gFsNpNTNuiAHptyz4+i7xYcOm2bKrtfvIndquqx5OufK2RbWj/RMsEmtLZyOxfEXbKlsS89quqlKWYsDIKKe9OIHSet6KrufDkB96P8AKBjoSTeJk8Ly9fmKU=
+	t=1733767693; cv=none; b=JAvwSUZfMP81INnAPkfdLrhztUCGLB+rr4sKWg6Dp4BO3vVYqP4FFAowH0avSbGKk+ATJ3mQBQw7P7krn+XgROk5KQVa8hqGgllnOWLZDL5eN9s0BujbUV0jMQwJ2vGalfSC45nIvb3CEZmL/3ujk2Eu5F5ik+Hbl6W+zV5KtJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733763832; c=relaxed/simple;
-	bh=pDMotxxAEfmtrMG6MLfN/X4Rpw+KCwDjiko2Kn3T9xQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ECDhsNznOiFPISu2Fik+d97O5jAAOfknY3zmX8qqgVEvfBzRbU/lRovcVruyNySADES/A8Sqqt/la6W6wolC6NX5c4YvJNLaLNhJ77LnPS4aWqenC/59ovMjFvJ6wN+S5xwePDZm1V0GXYEV+io6jmdQMLw+PUtQX6ZMa4PlcDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=193.43.8.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from altlinux.ipa.basealt.ru (unknown [178.76.204.78])
-	by air.basealt.ru (Postfix) with ESMTPSA id 27C48233BE;
-	Mon,  9 Dec 2024 20:03:48 +0300 (MSK)
-From: Vasiliy Kovalev <kovalev@altlinux.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	stable@vger.kernel.org
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-	"James E . J . Bottomley" <jejb@linux.ibm.com>,
-	Damien Le Moal <damien.lemoal@wdc.com>,
-	linux-scsi@vger.kernel.org,
-	lvc-project@linuxtesting.org,
-	kovalev@altlinux.org,
-	nickel@altlinux.org,
-	gerben@altlinux.org,
-	dutyrok@altlinux.org
-Subject: [PATCH 5.10.y 3/3] scsi: sd: Fix sd_do_mode_sense() buffer length handling
-Date: Mon,  9 Dec 2024 20:03:30 +0300
-Message-Id: <20241209170330.113179-4-kovalev@altlinux.org>
-X-Mailer: git-send-email 2.33.8
-In-Reply-To: <20241209170330.113179-1-kovalev@altlinux.org>
-References: <20241209170330.113179-1-kovalev@altlinux.org>
+	s=arc-20240116; t=1733767693; c=relaxed/simple;
+	bh=gaCqSzov3nG1gwdM1Xq3FGe+lidVlKrnCqjU3z3HBjM=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=b84Sqh34hV8hRHw3GkUGpvULMevHnhaybuwPkdj4qD4142nnUJtyRfJR+mn1/C5AxhRzpv+7nX8RYui7TDxo5c2q7Xrdvp52njLPXBUKI07WHanW3IXG+/TTZsDFLYnBMrnDSAlz/xd3uEao8Dhxo07EBnJBa6mKXQfYy3ej09Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iqHBQLNR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 82E26C4CEE1
+	for <linux-scsi@vger.kernel.org>; Mon,  9 Dec 2024 18:08:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733767692;
+	bh=gaCqSzov3nG1gwdM1Xq3FGe+lidVlKrnCqjU3z3HBjM=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=iqHBQLNR0rw0TvUizon1JZBxPfVgYOVYVBx+ZTp7CCWAB29ZfS0+zKGe3CwLbqRht
+	 bwemO3vcIL2sZwU5aOc1aZriUKRg+LeIhL6BnYuXoBxghj83pI/O9ilrzcTjA9PWZM
+	 /YqJGKkN9fM3eLehTH67JboY0eWOrjWCkR4sr7c0jeIp0sPQM3GbJzWQT7G0q5vnz3
+	 U5I/dfXitszXLK9wBcyLcP1FNY9kFA9Es64H6PlPWtmyDeHbRDa0cnsMv3lKKS9Y0+
+	 3QEAJSrbVsq0C0Z8+w1D3nZzxN6qf8OyU3lYLBgOnBjYdi91CI6MNJd+enkAuAaT/J
+	 laHwtyaVuxY5Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 7DF0BC41614; Mon,  9 Dec 2024 18:08:12 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-scsi@vger.kernel.org
+Subject: [Bug 219575] UBSAN: array-index-out-of-bounds in
+ drivers/message/fusion/mptsas.c:2446:22 ; index 1 is out of range for type
+ 'MPI_SAS_IO_UNIT0_PHY_DATA [1]'
+Date: Mon, 09 Dec 2024 18:08:12 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Product: SCSI Drivers
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219575-11613-ogrtZ0J3EJ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219575-11613@https.bugzilla.kernel.org/>
+References: <bug-219575-11613@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Damien Le Moal <damien.lemoal@wdc.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219575
 
-commit c749301ebee82eb5e97dec14b6ab31a4aabe37a6 upstream.
+--- Comment #1 from Artem S. Tashkinov (aros@gmx.com) ---
+Have you checked Linux 6.12.4?
 
-For devices that explicitly asked for MODE SENSE(10) use, make sure that
-scsi_mode_sense() is called with a buffer of at least 8 bytes so that the
-sense header fits.
+--=20
+You may reply to this email to add a comment.
 
-Link: https://lore.kernel.org/r/20210820070255.682775-4-damien.lemoal@wdc.com
-Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Vasiliy Kovalev <kovalev@altlinux.org>
----
- drivers/scsi/sd.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index f2dfd9853d3432..2f2ca287887603 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -2649,6 +2649,13 @@ sd_do_mode_sense(struct scsi_disk *sdkp, int dbd, int modepage,
- 		 unsigned char *buffer, int len, struct scsi_mode_data *data,
- 		 struct scsi_sense_hdr *sshdr)
- {
-+	/*
-+	 * If we must use MODE SENSE(10), make sure that the buffer length
-+	 * is at least 8 bytes so that the mode sense header fits.
-+	 */
-+	if (sdkp->device->use_10_for_ms && len < 8)
-+		len = 8;
-+
- 	return scsi_mode_sense(sdkp->device, dbd, modepage, buffer, len,
- 			       SD_TIMEOUT, sdkp->max_retries, data,
- 			       sshdr);
--- 
-2.33.8
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
