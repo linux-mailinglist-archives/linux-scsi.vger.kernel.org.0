@@ -1,131 +1,90 @@
-Return-Path: <linux-scsi+bounces-10822-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10827-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D71139EFDAB
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Dec 2024 21:52:28 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32F30188D190
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Dec 2024 20:52:29 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A6351B6CE9;
-	Thu, 12 Dec 2024 20:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="To9FaaDM"
-X-Original-To: linux-scsi@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 647F89EFE6E
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Dec 2024 22:37:44 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E498C1ABECF
-	for <linux-scsi@vger.kernel.org>; Thu, 12 Dec 2024 20:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22AD628C3BE
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Dec 2024 21:37:43 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E2F91D9329;
+	Thu, 12 Dec 2024 21:37:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="olHk7jG7"
+X-Original-To: linux-scsi@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B3019995A;
+	Thu, 12 Dec 2024 21:37:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734036744; cv=none; b=E9to+vImDhTbQYyKnjJGGM3GiWRXvMxXc25Hd8nxQ4kAy1UkQO02F1HeAT59I/it86fuMC84eL9W7kbMs9vUeB6reku4iGj4v7x2UD4mZ7wmrhp1HFg6N8UTOFa7ml/qGRWQpFLekvahBkIdfSYC36Y/EWn8dHCYZH3Pn4dom9k=
+	t=1734039456; cv=none; b=q6/mnV+AzOqLutTaOicvTx/6t5L1jaq2oUf2DA35Q++vxKXpVSrbkVa5H6j46wYZs0sL+5IVRVU0rPW6qDIUU7QU03VWbgZFc6zoy7OfFYkBsV9PfMOO6ozXSVK8hNWL3P/W2X1Kn6s8Df7aTLUBvyNwFuApXlqMjaCRJlR7q1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734036744; c=relaxed/simple;
-	bh=/ndaERqmRgwGQ9r6zP/NB3YKf/JSGMmm+65eWWD2sIc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bjZzrtjND87fLPkLhwCYxnNH2ifZFTqn/Hmz1wye6+Cp/IO15TIUq+uyRdFSik0HhwuI0SrrRzNCNrJrWZMlJnlMrHKtafQKRTYQ4zwfHxwlQ/CLipdP5Uygd/D6JI3msTPmy+S769RVQazW3H1U/ejCxCL2tedMprnI30R4ntw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=To9FaaDM; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=vx5PlpxbwZpb2opqxy2k3FqmU4u+duEDP1k6keYODu4=; b=To9FaaDMGqYlda+8V5ciAUaqnY
-	+OSNaO+g8kY49/q1urg2Z7wYWFzgY8fgtWYIFlWabfh0rU6UevW4DMZ139+GRlmoAC/eLNFVgIzpe
-	bcuPWw5siWscQMmTKCEaxXfO1y0RT3h0aDB6ACoWFEey5KWw2wugsTV47hheQ8/L50dvB4/a08ZW4
-	m/4tdjgl2AyHkJcHiqQGh4k8x2UfUBRy4l9OFzM9+SnqJTHJ9a6oLuFxdjE9iNWhrzhHw5efNGpO2
-	Uq9VIpt70Ozpe/4Sj9gyr6vkJMnoRkAzMmvNwF2i6yqAWUt5IKCANj14F3XGnowHk57wzVZXiEEjm
-	Bn9osUSg==;
-Received: from [50.53.2.24] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tLqAY-00000001rO5-27Bf;
-	Thu, 12 Dec 2024 20:52:22 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-scsi@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5/5] scsi: transports: fix kernel-doc for exported functions
-Date: Thu, 12 Dec 2024 12:52:17 -0800
-Message-ID: <20241212205217.597844-6-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20241212205217.597844-1-rdunlap@infradead.org>
-References: <20241212205217.597844-1-rdunlap@infradead.org>
+	s=arc-20240116; t=1734039456; c=relaxed/simple;
+	bh=hF4mJhnVVXZXfZmgDwcher6bwGaSHVExWyvvXFEjp2w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lXyxX5qTluJ/tJdDP3BHIOmLiPaozIW0VSzxubc39ffq124jgIqvMCmlpNBhxnvDXLPoe2EYrNpE+c1AJLxRtxFc3ro3bSVh4DXqzNBnyXiNj2THGFtNJ7st5QbWt6d8f4yv4AmROoCgzSmhTwbsDvKZqu6zJtNNG6k609b0/9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=olHk7jG7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE1CC4CECE;
+	Thu, 12 Dec 2024 21:37:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734039456;
+	bh=hF4mJhnVVXZXfZmgDwcher6bwGaSHVExWyvvXFEjp2w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=olHk7jG7/rj4jRsPenllCQhTf5QGq/o+IXUWAK82q6pCJzN6i0SdtI7XXvHvfiYLW
+	 o7Yb2dtL1CH8VNEjEG8A5mpzTFx8yH0hEIFW7L1nUsgKKc9ugXfj5gaT9OXUqTDi58
+	 6N9jkLSNkjhUTqlAcmvg1HLxdVRSD5WcssiicIJ2Nxmvr9M6pJD1wQCUfPhz2WNC+t
+	 2xdjNIS1+MX5kC7hdRX17/1bm7hIdvOxPxxX9hHKaS50L38XE0/FImLbSAiegVPTIq
+	 VSrgB1QqyjlJeR5aTe0UIkwwE/K4CIPz765ubY7ooteF3fveq0wORNZ7ubo5V6o5Xr
+	 rY71XaqihMshQ==
+Date: Thu, 12 Dec 2024 13:37:34 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-kernel@vger.kernel.org
+Cc: linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-crypto@vger.kernel.org, linux-ext4@vger.kernel.org,
+	linux-f2fs-devel@lists.sourceforge.net, linux-mips@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [PATCH v4 00/19] Wire up CRC32 library functions to
+ arch-optimized code
+Message-ID: <20241212213734.GB39696@sol.localdomain>
+References: <20241202010844.144356-1-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241202010844.144356-1-ebiggers@kernel.org>
 
-Fix kernel-doc for sas_port_alloc(), sas_port_alloc_num(), and
-spi_dv_device().
-This allows them to be part of the SCSI driver-api docbook.
+On Sun, Dec 01, 2024 at 05:08:25PM -0800, Eric Biggers wrote:
+> This patchset applies to v6.13-rc1 and is also available in git via:
+> 
+>     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git crc32-lib-v4
+> 
+> CRC32 is a family of common non-cryptographic integrity check algorithms
+> that are fairly fast with a portable C implementation and become far
+> faster still with the CRC32 or carryless multiplication instructions
+> that most CPUs have.  9 architectures already have optimized code for at
+> least some CRC32 variants; however, except for arm64 this optimized code
+> was only accessible through the crypto API, not the library functions.
+> 
+> This patchset fixes that so that the CRC32 library functions use the
+> optimized code.  This allows users to just use the library instead of
+> the crypto API.  This is much simpler and also improves performance due
+> to eliminating the crypto API overhead including an indirect call.  Some
+> examples of updating users are included at the end of the patchset.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-CC: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-CC: "Martin K. Petersen" <martin.petersen@oracle.com>
----
- drivers/scsi/scsi_transport_sas.c |   10 ++++++----
- drivers/scsi/scsi_transport_spi.c |    3 ++-
- 2 files changed, 8 insertions(+), 5 deletions(-)
+FYI, this patchset is now in linux-next via the crc-next branch in my repo.
+Additional reviews and acks would always be appreciated, of course.
 
---- linux-next-20241212.orig/drivers/scsi/scsi_transport_sas.c
-+++ linux-next-20241212/drivers/scsi/scsi_transport_sas.c
-@@ -888,7 +888,8 @@ static void sas_port_delete_link(struct
- 	sysfs_remove_link(&phy->dev.kobj, "port");
- }
- 
--/** sas_port_alloc - allocate and initialize a SAS port structure
-+/**
-+ * sas_port_alloc - allocate and initialize a SAS port structure
-  *
-  * @parent:	parent device
-  * @port_id:	port number
-@@ -897,7 +898,7 @@ static void sas_port_delete_link(struct
-  * below the device specified by @parent which must be either a Scsi_Host
-  * or a sas_expander_device.
-  *
-- * Returns %NULL on error
-+ * Returns: %NULL on error
-  */
- struct sas_port *sas_port_alloc(struct device *parent, int port_id)
- {
-@@ -932,7 +933,8 @@ struct sas_port *sas_port_alloc(struct d
- }
- EXPORT_SYMBOL(sas_port_alloc);
- 
--/** sas_port_alloc_num - allocate and initialize a SAS port structure
-+/**
-+ * sas_port_alloc_num - allocate and initialize a SAS port structure
-  *
-  * @parent:	parent device
-  *
-@@ -942,7 +944,7 @@ EXPORT_SYMBOL(sas_port_alloc);
-  * the device tree below the device specified by @parent which must be
-  * either a Scsi_Host or a sas_expander_device.
-  *
-- * Returns %NULL on error
-+ * Returns: %NULL on error
-  */
- struct sas_port *sas_port_alloc_num(struct device *parent)
- {
---- linux-next-20241212.orig/drivers/scsi/scsi_transport_spi.c
-+++ linux-next-20241212/drivers/scsi/scsi_transport_spi.c
-@@ -985,7 +985,8 @@ spi_dv_device_internal(struct scsi_devic
- }
- 
- 
--/**	spi_dv_device - Do Domain Validation on the device
-+/**
-+ *	spi_dv_device - Do Domain Validation on the device
-  *	@sdev:		scsi device to validate
-  *
-  *	Performs the domain validation on the given device in the
+- Eric
 
