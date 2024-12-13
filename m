@@ -1,114 +1,137 @@
-Return-Path: <linux-scsi+bounces-10862-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10864-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 704B39F0D08
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Dec 2024 14:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F65D9F0E04
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Dec 2024 14:55:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 309B828325C
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Dec 2024 13:10:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0086928496A
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Dec 2024 13:55:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A41B1DFDB5;
-	Fri, 13 Dec 2024 13:10:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BFF51E0DE3;
+	Fri, 13 Dec 2024 13:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="StqFaX4y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AFlXtQFS"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from fgw23-4.mail.saunalahti.fi (fgw23-4.mail.saunalahti.fi [62.142.5.110])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB071B3922
-	for <linux-scsi@vger.kernel.org>; Fri, 13 Dec 2024 13:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D82591E049E;
+	Fri, 13 Dec 2024 13:53:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734095441; cv=none; b=dwu3jjKoHsLcGMo4XokwB9gUQhO9Gho7SNuvPqOgDuthEH+dPzoi+y7Ejjx1ThcLaYsOk6ckVuWFkgiU8GvoI8aZW+CqTiE3V7hDgVCWCCobXTYLTe0z4KQoVgxisiaJK0DmvJGzik4us7l3LOpbyGBwsZXru6jVQublFIm6iYE=
+	t=1734098017; cv=none; b=c0HjVsmkTHYQ2sbkC41fdnlhEnqN6S5kNcuxSsyiFD5SAgl+PSSJjwPvcFHd0yVNElJ0RcyXVRuvFfVUrcXEHPc8VmvFlF69jM4gDEE8z/7HJvXi4RBESOq7Rw/9NZBjTAeivy1lQAzoXLdA1VQQzBjXz4sjT/GKO2t6StbhzSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734095441; c=relaxed/simple;
-	bh=vfNfwxnHQJP5jbtjS5adEdI1JrNsx9CYBUZ7fz/mjI4=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=Tpzv6DMj1mwAwy03eN5AJmHhF0hu0B33t3GHh7WYpqh6xJZFf5SpUQsGCjXBTxifPAfYsx6wFSDz3aYwR4AtF9lR15fQFkqLvpWTmWnjcPl4gUOxiyIa5iWFXuMMpkKOvSIshDVdZ7fQ/T4m1OBa+gHmH1pm46eC7rL/OYbAE5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=StqFaX4y; arc=none smtp.client-ip=62.142.5.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=kolumbus.fi; s=elisa1;
-	h=to:references:message-id:content-transfer-encoding:cc:date:in-reply-to:from:
-	 subject:mime-version:content-type:from:to:cc:reply-to:subject:date:in-reply-to:
-	 references:list-archive:list-subscribe:list-unsubscribe:content-type:
-	 content-transfer-encoding:message-id;
-	bh=vfNfwxnHQJP5jbtjS5adEdI1JrNsx9CYBUZ7fz/mjI4=;
-	b=StqFaX4yVVay9Vie8bR7bu60TFJ/iwRGZsUZHvwwMjxJvj8xDo6jLf1699ZgxCc9HczJXJRQHoXx8
-	 D4XI2rtTb8e4cs0Dk2OEZKc3OEgff5Lkan7WJMwtTGuMhvyWbizt0+v+DBRYXEnT8wr8KeNSJcs8CI
-	 H2oZarY/s5QVO7Wnw8X0ySPDpDYDbrzSD+jd0k2w485hEhA6OqSL3djCUeIJu1J+17HTzQXOmTw2AY
-	 94UtCkpWSutmI4DTvEoy+3XRHAt/MBqN3IrU7kVImHYj2UP9TC5iZVzOGlTgRpPS3cAzZrjd9EpW++
-	 1PpHTeAS3zp+uSeO+bWmX6H8MOocU+w==
-Received: from smtpclient.apple (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
-	by fgw23.mail.saunalahti.fi (Halon) with ESMTPSA
-	id 7a657f48-b953-11ef-a138-005056bdfda7;
-	Fri, 13 Dec 2024 15:09:26 +0200 (EET)
-Content-Type: text/plain;
-	charset=utf-8
+	s=arc-20240116; t=1734098017; c=relaxed/simple;
+	bh=fIuJ9Ysk9gL+ewa+bZt/zoZBjAsb6V7Ms7TdivTupdo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NgC217vtyTnHck9t/fcWB+Sh5muhaDQ6KW4yllV4eyInklkPOmgIeah11np/9ftr8D5MakCq8QkmYtQ/roTjig6QMJbCAZkTRlP5LMexuFnAe/NM6Z0qVKHyHVrMobT+youyPXPE7hayUyvwU9NshS94HVm+DMNOUPidY44FuLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AFlXtQFS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 67264C4CED0;
+	Fri, 13 Dec 2024 13:53:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734098016;
+	bh=fIuJ9Ysk9gL+ewa+bZt/zoZBjAsb6V7Ms7TdivTupdo=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=AFlXtQFSpaUAKVfh0o1xkhyDkn6F9lsIJQNY+WJUVsYDo5V1zgp1HApaaRysltKrH
+	 /ZZKD1Sx8yNk8MRov/oiFlGkCzFBtxDukZh2Q1DjeFUZR31l/k4MjLlMN+HMnAw5QA
+	 aRsPzpfVGwC/Wn1F7dMyC3BgRdPexm5U4QCVzD2V43HPBDWW0E7aX/ERKfEpw2Ed3q
+	 iGJByceDJG/b2Qo2lIAqaSkgOn0RXtJxch3pk2DvpWmvYUey/OKAPNYpy8gNNTidd1
+	 Q2Qa67PGMrY15Gw9wxlxP0LYNgfZySuZc/3rCBJAJaA8bf5X1UmzvAWa2zgHmXvBzO
+	 FWrzhBvM+UhbA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DFE0E7717D;
+	Fri, 13 Dec 2024 13:53:36 +0000 (UTC)
+From: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.linaro.org@kernel.org>
+Subject: [PATCH v2 0/3] scsi: ufs: qcom: Suspend fixes
+Date: Fri, 13 Dec 2024 19:23:28 +0530
+Message-Id: <20241213-ufs-qcom-suspend-fix-v2-0-1de6cd2d6146@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.300.87.4.3\))
-Subject: Re: [PATCH v2 0/4] scsi: st: scsi_error: More reset patches
-From: =?utf-8?B?IkthaSBNw6RraXNhcmEgKEtvbHVtYnVzKSI=?= <kai.makisara@kolumbus.fi>
-In-Reply-To: <8B3169CC-BD8A-46B5-B9B0-140047A44661@kolumbus.fi>
-Date: Fri, 13 Dec 2024 15:09:15 +0200
-Cc: linux-scsi@vger.kernel.org,
- martin.petersen@oracle.com,
- "James.Bottomley@hansenpartnership.com" <James.Bottomley@HansenPartnership.com>,
- loberman@redhat.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <964CF609-B7DB-44CF-80A2-2955E73561EF@kolumbus.fi>
-References: <20241125140301.3912-1-Kai.Makisara@kolumbus.fi>
- <0c6e699b-8f77-411f-b73d-e6762c6ad286@redhat.com>
- <8B3169CC-BD8A-46B5-B9B0-140047A44661@kolumbus.fi>
-To: John Meneghini <jmeneghi@redhat.com>
-X-Mailer: Apple Mail (2.3826.300.87.4.3)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFg8XGcC/4WNQQ6CMBBFr0K6dgxTBMGV9zAsaDvAJNpiR4iGc
+ HcrF3D5XvLfX5VQZBJ1yVYVaWHh4BPoQ6bs2PmBgF1ipXN9Qo0Icy/wtOEBMstE3kHPbygrrKm
+ xZeWaQqXpFCnpPXtrE48srxA/+8uCP/snuCDkUBdkjKNzZdBe7+y7GI4hDqrdtu0LZeQanrkAA
+ AA=
+To: Alim Akhtar <alim.akhtar@samsung.com>, 
+ Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ Abel Vesa <abel.vesa@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, Amit Pundir <amit.pundir@linaro.org>, 
+ Nitin Rawat <quic_nitirawa@quicinc.com>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ stable@vger.kernel.org, Ram Kumar Dwivedi <quic_rdwivedi@quicinc.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1899;
+ i=manivannan.sadhasivam@linaro.org; h=from:subject:message-id;
+ bh=fIuJ9Ysk9gL+ewa+bZt/zoZBjAsb6V7Ms7TdivTupdo=;
+ b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBnXDxb3KcXOghNgIpuuCcdfyVgKGCwAcCekf5fQ
+ LpHRst7b0+JATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCZ1w8WwAKCRBVnxHm/pHO
+ 9XY3B/wLzUP0NCGuuYLBOLe0RaLeeWkLOene69s5naQb3jmGe58IDnTYvyusrK3iC9RyYFpamGq
+ M1PPlvCjuWcFa51KtKvdjISqMc37XqBZfe7qzsyJCtz1srHqbgOx0jkvQYuKFU1NLEWTx2jE3J0
+ XjBA6biHVHcRjbHFs5XzuoIOih19uMmv0ADGM2pVtADUVPNhtH4WaAx/25EGpQW5ppuOmLBSaSw
+ 9VNNN8EPEH3ePwu+vODoYmbFjeabB7R03o1knI4nHBgjvB5qyxWznWAvd8WNi3IMZlpJhwk1GSb
+ 5i+8p0FNF2dp2mM+SNHREjKelzyJWLTvQy1tTtvIrOzlcGqx
+X-Developer-Key: i=manivannan.sadhasivam@linaro.org; a=openpgp;
+ fpr=C668AEC3C3188E4C611465E7488550E901166008
+X-Endpoint-Received: by B4 Relay for
+ manivannan.sadhasivam@linaro.org/default with auth_id=185
+X-Original-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Reply-To: manivannan.sadhasivam@linaro.org
 
+Hi,
 
-> On 12. Dec 2024, at 20.27, Kai M=C3=A4kisara (Kolumbus) =
-<kai.makisara@kolumbus.fi> wrote:
->=20
-> While doing some detective work, I found a serious problem. So, please =
-hold these patches again.
-> More about the reason below.
-...
-> The problem is that no driver options for the device can be set before =
-something has
-> been done to clear the blocking. For instance, the stinit tool is a =
-recommended method
-> to set the options based on a configuration file, but it fails.
->=20
-> Note that this problem has existed since commit =
-9604eea5bd3ae1fa3c098294f4fc29ad687141ea
-> (for version 6.6) that added recognition of POR UA as an additional =
-method to detect
-> resets. Nobody seems to have noticed this problem in the "real world". =
-(Using
-> was_reset was not problematic because it caught only resets initiated =
-by the midlevel.)
->=20
-> A solution might be to add some more ioctls to the list of allowed =
-commands.
-> But I must think about this a little more.
+This series fixes the several suspend issues on Qcom platforms. Patch 1 fixes
+the resume failure with spm_lvl=5 suspend on most of the Qcom platforms. For
+this patch, I couldn't figure out the exact commit that caused the issue. So I
+used the commit that introduced reinit support as a placeholder.
 
-This does not seem to be a promising direction. I think it is better to =
-see that the
-first test_ready() (called from st_open()) does not set the pos_unknown =
-flag.
-If there are no objections, I will add this to the next version of the =
-patches.
+Patch 3 fixes the suspend issue on SM8550 and SM8650 platforms where UFS
+PHY retention is not supported. Hence the default spm_lvl=3 suspend fails. So
+this patch configures spm_lvl=5 as the default suspend level to force UFSHC/
+device powerdown during suspend. This supersedes the previous series [1] that
+tried to fix the issue in clock drivers.
 
-The justification for this solution is that just after the device is =
-detected by st,
-the position of the tape is known to the user and there is no need to =
-prevent,
-for instance, writing to the tape.
+This series is tested on Qcom SM8550 MTP and Qcom RB5 boards.
+
+[1] https://lore.kernel.org/linux-arm-msm/20241107-ufs-clk-fix-v1-0-6032ff22a052@linaro.org
+
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+Changes in v2:
+- Changed 'ufs_qcom_drvdata::quirks' type to 'enum ufshcd_quirks'
+- Collected tags
+- Link to v1: https://lore.kernel.org/r/20241211-ufs-qcom-suspend-fix-v1-0-83ebbde76b1c@linaro.org
+
+---
+Manivannan Sadhasivam (3):
+      scsi: ufs: qcom: Power off the PHY if it was already powered on in ufs_qcom_power_up_sequence()
+      scsi: ufs: qcom: Allow passing platform specific OF data
+      scsi: ufs: qcom: Power down the controller/device during system suspend for SM8550/SM8650 SoCs
+
+ drivers/ufs/core/ufshcd-priv.h |  6 ------
+ drivers/ufs/core/ufshcd.c      |  1 -
+ drivers/ufs/host/ufs-qcom.c    | 31 +++++++++++++++++++------------
+ drivers/ufs/host/ufs-qcom.h    |  5 +++++
+ include/ufs/ufshcd.h           |  2 --
+ 5 files changed, 24 insertions(+), 21 deletions(-)
+---
+base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+change-id: 20241211-ufs-qcom-suspend-fix-5618e9c56d93
+
+Best regards,
+-- 
+Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
 
 
