@@ -1,46 +1,46 @@
-Return-Path: <linux-scsi+bounces-10893-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10896-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 759309F2F46
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2024 12:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D440E9F2F4B
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2024 12:31:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C96B918853D9
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2024 11:30:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AB811885553
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2024 11:31:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52E20205ABF;
-	Mon, 16 Dec 2024 11:29:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3341C205E30;
+	Mon, 16 Dec 2024 11:29:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="RMkcaJQt"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="IfQGNQzq"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590C3204F76;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387C3204F66;
 	Mon, 16 Dec 2024 11:29:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734348562; cv=none; b=u2+ZLrRvUqNSSx/4ru/UjDDkM5K2xPExKb5Fa+a1YJk8aBIpazrRam+r0p6DxoxrOZmQPJIhepLjULOx7HJqkd9iL/v79CbUFJuNn4sOIWP/X9+E3MLmXoJa4R61GGuxPWC2dJ85OuKOfx5J6vK0lGEUJ4YgovOcbeZ1KQQeAz8=
+	t=1734348563; cv=none; b=bl/ZhhCtHxNuJnnHh8AVHD/a5feAFd96dCs2nzhRWQRRM/G37uMS84CshuIwGXP9cm7MIshIt0c/qmKvbVcSXnTdvWhMv9nrVc/1ODVTglAcZOmB4qZ9zMmSRMwwYB6/SsOgDaRoFFxnoouiNgSu190ceM0PtA08Hwbh+IC8EP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734348562; c=relaxed/simple;
-	bh=/47zmPkyqW64N/sWNZItQvBd6ybLPkBtNbUpLnt2Msc=;
+	s=arc-20240116; t=1734348563; c=relaxed/simple;
+	bh=0zAR1Zgw045+wqZMsF16+d7FFPr4+tRVMSP1LbUeDkQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=T+HNRwPHCIQoWgjX4lIcBUNLUOPqMDKXldyDBo6MEe6TXYgG5MzX+rp4ezY1V2DMknyh4TOS2fHy0NHLTqeizy4/y9wQHnpEC5MQiO6AYvXagLTmvjc2nf5PyJ9dnOulKYb+aGCEi9DoKUUBTcJCQetja6Sg/O8c9nCEkThdzQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=RMkcaJQt; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=RicB43d3X3lAizq50wf9aaUop7EVb/8Lve9ByuEHSYR95in7epa4FkdiF8pQ4u53K2MIFM0XcXTgTTVQiQ64AhinlA7HzqewxQyIxtEGRr6LS3Dliwqo3yNi83N5AfWl9f6gcU7I9L+ItnW9sw7PDPR5YPsuiyUnB4EpxljtDy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=IfQGNQzq; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1734348553;
-	bh=/47zmPkyqW64N/sWNZItQvBd6ybLPkBtNbUpLnt2Msc=;
+	bh=0zAR1Zgw045+wqZMsF16+d7FFPr4+tRVMSP1LbUeDkQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=RMkcaJQt8UBr77DelZNaePGGudtkBLDC/fceGR/DYNrQruoPmfGp4X4Ih/idasJ6J
-	 LiP0ReqpGtsDJ4ilq11ZC+OV9Cbpz725LuWbb6g46Hx+hov/ipO+zMCZVcF09Ux8PE
-	 lJ5Ghu3SIfOUoQJLq2aoT99RDZ4Fio79eyMt9grk=
+	b=IfQGNQzq3sv2I6lR7Bm4wIXf4JexmJ6Orz/ItN7wWI5NG1ehxVi8OJiDmBs3XloXw
+	 SpKa9d0FdcuKXuLbHQ0vgALExfPumXMeWpgHDlTMkDWRfAvHcYQabjxC0qb4cyffv7
+	 Tz2Rcr8yjxSC1drhVomftVoQCIvwhT/jsZ2yCP28=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Mon, 16 Dec 2024 12:29:15 +0100
-Subject: [PATCH 08/11] scsi: qedf: Constify 'struct bin_attribute'
+Date: Mon, 16 Dec 2024 12:29:16 +0100
+Subject: [PATCH 09/11] scsi: qedi: Constify 'struct bin_attribute'
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241216-sysfs-const-bin_attr-scsi-v1-8-f0a5e54b3437@weissschuh.net>
+Message-Id: <20241216-sysfs-const-bin_attr-scsi-v1-9-f0a5e54b3437@weissschuh.net>
 References: <20241216-sysfs-const-bin_attr-scsi-v1-0-f0a5e54b3437@weissschuh.net>
 In-Reply-To: <20241216-sysfs-const-bin_attr-scsi-v1-0-f0a5e54b3437@weissschuh.net>
 To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
@@ -69,11 +69,11 @@ Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
  linuxppc-dev@lists.ozlabs.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734348551; l=2312;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734348551; l=802;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=/47zmPkyqW64N/sWNZItQvBd6ybLPkBtNbUpLnt2Msc=;
- b=yoemaf355a7pBtjrYmusgAHSgDSHBiZ/xpsxVOY2bN+lr7orgVWt0/padwJDXbBQS6h6g2A/v
- ZfCk5GBEeFnA/CuO6ERllqvp4wf56ggfq0HQFvV9/Vx9XlOgwrjVYfl
+ bh=0zAR1Zgw045+wqZMsF16+d7FFPr4+tRVMSP1LbUeDkQ=;
+ b=1W6RZ9BA9Dsc+CBzANf4Tht8N5AIdCyB6NGgVKB+IsTA27eXPneFAttchQy0ojXOOZQZt6vds
+ A+mCsUddQeNDsjzwyDljmAV7qogymPgp/ZcoHbiY7G+vm89CQ7DGCvg
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
@@ -83,55 +83,14 @@ accidental or malicious modifications.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- drivers/scsi/qedf/qedf_attr.c | 10 +++++-----
- drivers/scsi/qedf/qedf_dbg.h  |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/scsi/qedi/qedi_dbg.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qedf/qedf_attr.c b/drivers/scsi/qedf/qedf_attr.c
-index 8d8c760eee435ad9018e64440837211109725ff6..769da92ee20d0fac71525a8265cb6332146585ec 100644
---- a/drivers/scsi/qedf/qedf_attr.c
-+++ b/drivers/scsi/qedf/qedf_attr.c
-@@ -104,7 +104,7 @@ void qedf_capture_grc_dump(struct qedf_ctx *qedf)
- 
- static ssize_t
- qedf_sysfs_read_grcdump(struct file *filep, struct kobject *kobj,
--			struct bin_attribute *ba, char *buf, loff_t off,
-+			const struct bin_attribute *ba, char *buf, loff_t off,
- 			size_t count)
- {
- 	ssize_t ret = 0;
-@@ -124,7 +124,7 @@ qedf_sysfs_read_grcdump(struct file *filep, struct kobject *kobj,
- 
- static ssize_t
- qedf_sysfs_write_grcdump(struct file *filep, struct kobject *kobj,
--			struct bin_attribute *ba, char *buf, loff_t off,
-+			const struct bin_attribute *ba, char *buf, loff_t off,
- 			size_t count)
- {
- 	struct fc_lport *lport = NULL;
-@@ -160,14 +160,14 @@ qedf_sysfs_write_grcdump(struct file *filep, struct kobject *kobj,
- 	return count;
- }
- 
--static struct bin_attribute sysfs_grcdump_attr = {
-+static const struct bin_attribute sysfs_grcdump_attr = {
- 	.attr = {
- 		.name = "grcdump",
- 		.mode = S_IRUSR | S_IWUSR,
- 	},
- 	.size = 0,
--	.read = qedf_sysfs_read_grcdump,
--	.write = qedf_sysfs_write_grcdump,
-+	.read_new = qedf_sysfs_read_grcdump,
-+	.write_new = qedf_sysfs_write_grcdump,
- };
- 
- static struct sysfs_bin_attrs bin_file_entries[] = {
-diff --git a/drivers/scsi/qedf/qedf_dbg.h b/drivers/scsi/qedf/qedf_dbg.h
-index 5ec2b817c694a9846c337c88f6e9b59382dbaa1b..eeb6c841dacb1e68890420db2e5349e9ce60bc20 100644
---- a/drivers/scsi/qedf/qedf_dbg.h
-+++ b/drivers/scsi/qedf/qedf_dbg.h
-@@ -100,7 +100,7 @@ struct Scsi_Host;
+diff --git a/drivers/scsi/qedi/qedi_dbg.h b/drivers/scsi/qedi/qedi_dbg.h
+index fdda12ef13b0fd1f69103a28b8a9e8641281e151..5a1ec45421834bfed5f7d7b87391ae8cc4905c6e 100644
+--- a/drivers/scsi/qedi/qedi_dbg.h
++++ b/drivers/scsi/qedi/qedi_dbg.h
+@@ -91,7 +91,7 @@ struct Scsi_Host;
  
  struct sysfs_bin_attrs {
  	char *name;
@@ -139,7 +98,7 @@ index 5ec2b817c694a9846c337c88f6e9b59382dbaa1b..eeb6c841dacb1e68890420db2e5349e9
 +	const struct bin_attribute *attr;
  };
  
- extern int qedf_alloc_grc_dump_buf(uint8_t **buf, uint32_t len);
+ int qedi_create_sysfs_attr(struct Scsi_Host *shost,
 
 -- 
 2.47.1
