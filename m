@@ -1,46 +1,46 @@
-Return-Path: <linux-scsi+bounces-10889-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10887-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA49F9F2F38
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2024 12:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ECCFE9F2F33
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2024 12:29:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5BD81885972
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2024 11:29:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7342A18814B6
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2024 11:29:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4555D2046A7;
-	Mon, 16 Dec 2024 11:29:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D881D204592;
+	Mon, 16 Dec 2024 11:29:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="FQQrBHSu"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="smBWsnEG"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949D4203D79;
-	Mon, 16 Dec 2024 11:29:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD1E4C7C;
+	Mon, 16 Dec 2024 11:29:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734348559; cv=none; b=EuhQW2Z2S3Mz91scKRnvKjifpDIW3z8z4Zf0/GUgxuTPY6NG6mJqu4kHDK9uj4Z8TDIgcJAc6+043YYlnSGxHYFf/YTTm+5ekebDNM3Qw2Ts4aSq25Wbln0aUj1NP6sDIpGMDmK3b2y9JIoDsK8pRakCzskm+f8a7BMxhffA5Zw=
+	t=1734348558; cv=none; b=BXrk6iODnZYc6ulWxvMeZ7tw27ooJumoXJ7nXESs5UJvroWO17hS3nRbeuMoNulEfLgCzshe49ex/CvJJK68go3/jobW+aE5b2+Q7LCGsn8rKAkK88j+Rk/QnvhxYAKmmUuDfXC4hiHPKz2IuynqVf/30XXApXgfzKzWdhhaLVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734348559; c=relaxed/simple;
-	bh=UxSxwL/qK4i4u8NjbrtHnSuDQ3zqF0XhxRjgbnp1ehs=;
+	s=arc-20240116; t=1734348558; c=relaxed/simple;
+	bh=TjVja/zk+UJSLd4Q97XnJXAzbXafaV96VJJ2y2xcgm4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pqLIxYVKiWKjDf/bCBwCagCAndhQvj9OC/RnUa68AEfD9O+V3SGcickQ1HU3PvBX5NmSInZuyqkweKUl/1tpEaJOIf7EQGJrT3mtcyPAplTyNawqRvKqb0FacDKpr7GIJSNPxOkgm36BEP9rP2BTK5lI9m7hGocSRntqd2lTb/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=FQQrBHSu; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=ilZL0IrMyIU1yJ0bUUz7cjDTa000/Ekru/hZV8yaBK2N+YXIscmX/CspApyYOS/GIYZaqIhuIgzMrVWUw2bngGD/CzWWvnaAR48KF3Q8rPigM1OYLEXaZ4FkQ4VbtMCXnMKjO0Slt0QbzXSkU+mpKSxBi7OjlGn3QVXwjFP9qy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=smBWsnEG; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1734348552;
-	bh=UxSxwL/qK4i4u8NjbrtHnSuDQ3zqF0XhxRjgbnp1ehs=;
+	bh=TjVja/zk+UJSLd4Q97XnJXAzbXafaV96VJJ2y2xcgm4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=FQQrBHSuc72gKSix1QVSuur4IgSvsKGMsC93Gbmx0fPteAd57elXpFWksPYL3Wuul
-	 CtzDCAFfce5XoAN+wFusEAxuZ++WObbQDSu3h+vAgjVa2dsRO2udFjZNmvFleRSHic
-	 xlszaq5LqCMZmwjIwwXu0S/L1pscFPyLclE8Fkcw=
+	b=smBWsnEGDX0bZ10U/9wLxtIv2PGJ5U4XBMe94YkqdZF6ukWU83aG4wJzucfAP2k8P
+	 YBRJMCxE9jiZ/Rrj9akKDg1C4jyus9A4sJaJL8S8em1xWjoKlmkWTA+NOeQ4fli+s+
+	 NzNipJv6XG8USBabiBG904lzidmMQVDwCXIO2c/c=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Mon, 16 Dec 2024 12:29:10 +0100
-Subject: [PATCH 03/11] scsi: arcmsr: Constify 'struct bin_attribute'
+Date: Mon, 16 Dec 2024 12:29:11 +0100
+Subject: [PATCH 04/11] scsi: esas2r: Constify 'struct bin_attribute'
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241216-sysfs-const-bin_attr-scsi-v1-3-f0a5e54b3437@weissschuh.net>
+Message-Id: <20241216-sysfs-const-bin_attr-scsi-v1-4-f0a5e54b3437@weissschuh.net>
 References: <20241216-sysfs-const-bin_attr-scsi-v1-0-f0a5e54b3437@weissschuh.net>
 In-Reply-To: <20241216-sysfs-const-bin_attr-scsi-v1-0-f0a5e54b3437@weissschuh.net>
 To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
@@ -69,11 +69,11 @@ Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
  linuxppc-dev@lists.ozlabs.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734348551; l=2527;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734348551; l=6468;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=UxSxwL/qK4i4u8NjbrtHnSuDQ3zqF0XhxRjgbnp1ehs=;
- b=vcyhEJcSeUIpb/s74+rAXfMuCTEu+PgS5tfd520cNRubmtpMJ+lqdXmNUTpuW64jf2eM5p4hu
- EXGDhImAe/bCfxvGEXm5GK3GNZZPH02XxoEI1YUiBIbmgO1caKNY1v5
+ bh=TjVja/zk+UJSLd4Q97XnJXAzbXafaV96VJJ2y2xcgm4=;
+ b=cHpzmCZLeQqd1OQ9m+VjdHMlnbORVFZql4Wpf6q2sfJdTUE0nTJzea+z2TUT+o90QQnQ3pVcM
+ 1Qkron+E+zwDaDCjDL5AgAFL69ATj+ts8h3Zvs/T8Ma3pN/j1evnvnD
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
@@ -83,67 +83,164 @@ accidental or malicious modifications.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- drivers/scsi/arcmsr/arcmsr_attr.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/scsi/esas2r/esas2r.h      | 12 ++++++------
+ drivers/scsi/esas2r/esas2r_main.c | 32 ++++++++++++++++----------------
+ 2 files changed, 22 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/scsi/arcmsr/arcmsr_attr.c b/drivers/scsi/arcmsr/arcmsr_attr.c
-index baeb5e79569026f1af6612705689219bb4a7052f..8e3d4799ce93c35b0befe8744fd20aa3fe467ad3 100644
---- a/drivers/scsi/arcmsr/arcmsr_attr.c
-+++ b/drivers/scsi/arcmsr/arcmsr_attr.c
-@@ -60,7 +60,7 @@
+diff --git a/drivers/scsi/esas2r/esas2r.h b/drivers/scsi/esas2r/esas2r.h
+index 1e2d7c63a8e36a22bed3b365cd2e6eb81a3a4a1d..c48275d53aef3d45c0b8a1c38f5a21020ab33102 100644
+--- a/drivers/scsi/esas2r/esas2r.h
++++ b/drivers/scsi/esas2r/esas2r.h
+@@ -1411,11 +1411,11 @@ static inline void esas2r_comp_list_drain(struct esas2r_adapter *a,
+ }
  
- static ssize_t arcmsr_sysfs_iop_message_read(struct file *filp,
- 					     struct kobject *kobj,
--					     struct bin_attribute *bin,
-+					     const struct bin_attribute *bin,
- 					     char *buf, loff_t off,
- 					     size_t count)
- {
-@@ -107,7 +107,7 @@ static ssize_t arcmsr_sysfs_iop_message_read(struct file *filp,
+ /* sysfs handlers */
+-extern struct bin_attribute bin_attr_fw;
+-extern struct bin_attribute bin_attr_fs;
+-extern struct bin_attribute bin_attr_vda;
+-extern struct bin_attribute bin_attr_hw;
+-extern struct bin_attribute bin_attr_live_nvram;
+-extern struct bin_attribute bin_attr_default_nvram;
++extern const struct bin_attribute bin_attr_fw;
++extern const struct bin_attribute bin_attr_fs;
++extern const struct bin_attribute bin_attr_vda;
++extern const struct bin_attribute bin_attr_hw;
++extern const struct bin_attribute bin_attr_live_nvram;
++extern const struct bin_attribute bin_attr_default_nvram;
  
- static ssize_t arcmsr_sysfs_iop_message_write(struct file *filp,
- 					      struct kobject *kobj,
--					      struct bin_attribute *bin,
-+					      const struct bin_attribute *bin,
- 					      char *buf, loff_t off,
- 					      size_t count)
- {
-@@ -155,7 +155,7 @@ static ssize_t arcmsr_sysfs_iop_message_write(struct file *filp,
+ #endif /* ESAS2R_H */
+diff --git a/drivers/scsi/esas2r/esas2r_main.c b/drivers/scsi/esas2r/esas2r_main.c
+index f700a16cd88534c1edc9fb0ed8ed8b8d1db4fe51..44871746944ad0c0f30f28975ed40e0fde4e8d03 100644
+--- a/drivers/scsi/esas2r/esas2r_main.c
++++ b/drivers/scsi/esas2r/esas2r_main.c
+@@ -66,7 +66,7 @@ static struct esas2r_adapter *esas2r_adapter_from_kobj(struct kobject *kobj)
+ }
  
- static ssize_t arcmsr_sysfs_iop_message_clear(struct file *filp,
- 					      struct kobject *kobj,
--					      struct bin_attribute *bin,
-+					      const struct bin_attribute *bin,
- 					      char *buf, loff_t off,
- 					      size_t count)
+ static ssize_t read_fw(struct file *file, struct kobject *kobj,
+-		       struct bin_attribute *attr,
++		       const struct bin_attribute *attr,
+ 		       char *buf, loff_t off, size_t count)
  {
-@@ -194,7 +194,7 @@ static const struct bin_attribute arcmsr_sysfs_message_read_attr = {
- 		.mode = S_IRUSR ,
- 	},
- 	.size = ARCMSR_API_DATA_BUFLEN,
--	.read = arcmsr_sysfs_iop_message_read,
-+	.read_new = arcmsr_sysfs_iop_message_read,
+ 	struct esas2r_adapter *a = esas2r_adapter_from_kobj(kobj);
+@@ -75,7 +75,7 @@ static ssize_t read_fw(struct file *file, struct kobject *kobj,
+ }
+ 
+ static ssize_t write_fw(struct file *file, struct kobject *kobj,
+-			struct bin_attribute *attr,
++			const struct bin_attribute *attr,
+ 			char *buf, loff_t off, size_t count)
+ {
+ 	struct esas2r_adapter *a = esas2r_adapter_from_kobj(kobj);
+@@ -84,7 +84,7 @@ static ssize_t write_fw(struct file *file, struct kobject *kobj,
+ }
+ 
+ static ssize_t read_fs(struct file *file, struct kobject *kobj,
+-		       struct bin_attribute *attr,
++		       const struct bin_attribute *attr,
+ 		       char *buf, loff_t off, size_t count)
+ {
+ 	struct esas2r_adapter *a = esas2r_adapter_from_kobj(kobj);
+@@ -93,7 +93,7 @@ static ssize_t read_fs(struct file *file, struct kobject *kobj,
+ }
+ 
+ static ssize_t write_fs(struct file *file, struct kobject *kobj,
+-			struct bin_attribute *attr,
++			const struct bin_attribute *attr,
+ 			char *buf, loff_t off, size_t count)
+ {
+ 	struct esas2r_adapter *a = esas2r_adapter_from_kobj(kobj);
+@@ -109,7 +109,7 @@ static ssize_t write_fs(struct file *file, struct kobject *kobj,
+ }
+ 
+ static ssize_t read_vda(struct file *file, struct kobject *kobj,
+-			struct bin_attribute *attr,
++			const struct bin_attribute *attr,
+ 			char *buf, loff_t off, size_t count)
+ {
+ 	struct esas2r_adapter *a = esas2r_adapter_from_kobj(kobj);
+@@ -118,7 +118,7 @@ static ssize_t read_vda(struct file *file, struct kobject *kobj,
+ }
+ 
+ static ssize_t write_vda(struct file *file, struct kobject *kobj,
+-			 struct bin_attribute *attr,
++			 const struct bin_attribute *attr,
+ 			 char *buf, loff_t off, size_t count)
+ {
+ 	struct esas2r_adapter *a = esas2r_adapter_from_kobj(kobj);
+@@ -127,7 +127,7 @@ static ssize_t write_vda(struct file *file, struct kobject *kobj,
+ }
+ 
+ static ssize_t read_live_nvram(struct file *file, struct kobject *kobj,
+-			       struct bin_attribute *attr,
++			       const struct bin_attribute *attr,
+ 			       char *buf, loff_t off, size_t count)
+ {
+ 	struct esas2r_adapter *a = esas2r_adapter_from_kobj(kobj);
+@@ -138,7 +138,7 @@ static ssize_t read_live_nvram(struct file *file, struct kobject *kobj,
+ }
+ 
+ static ssize_t write_live_nvram(struct file *file, struct kobject *kobj,
+-				struct bin_attribute *attr,
++				const struct bin_attribute *attr,
+ 				char *buf, loff_t off, size_t count)
+ {
+ 	struct esas2r_adapter *a = esas2r_adapter_from_kobj(kobj);
+@@ -158,7 +158,7 @@ static ssize_t write_live_nvram(struct file *file, struct kobject *kobj,
+ }
+ 
+ static ssize_t read_default_nvram(struct file *file, struct kobject *kobj,
+-				  struct bin_attribute *attr,
++				  const struct bin_attribute *attr,
+ 				  char *buf, loff_t off, size_t count)
+ {
+ 	struct esas2r_adapter *a = esas2r_adapter_from_kobj(kobj);
+@@ -169,7 +169,7 @@ static ssize_t read_default_nvram(struct file *file, struct kobject *kobj,
+ }
+ 
+ static ssize_t read_hw(struct file *file, struct kobject *kobj,
+-		       struct bin_attribute *attr,
++		       const struct bin_attribute *attr,
+ 		       char *buf, loff_t off, size_t count)
+ {
+ 	struct esas2r_adapter *a = esas2r_adapter_from_kobj(kobj);
+@@ -187,7 +187,7 @@ static ssize_t read_hw(struct file *file, struct kobject *kobj,
+ }
+ 
+ static ssize_t write_hw(struct file *file, struct kobject *kobj,
+-			struct bin_attribute *attr,
++			const struct bin_attribute *attr,
+ 			char *buf, loff_t off, size_t count)
+ {
+ 	struct esas2r_adapter *a = esas2r_adapter_from_kobj(kobj);
+@@ -211,12 +211,12 @@ static ssize_t write_hw(struct file *file, struct kobject *kobj,
+ }
+ 
+ #define ESAS2R_RW_BIN_ATTR(_name) \
+-	struct bin_attribute bin_attr_ ## _name = { \
++	const struct bin_attribute bin_attr_ ## _name = { \
+ 		.attr	= \
+ 		{ .name = __stringify(_name), .mode  = S_IRUSR | S_IWUSR }, \
+ 		.size	= 0, \
+-		.read	= read_ ## _name, \
+-		.write	= write_ ## _name }
++		.read_new	= read_ ## _name, \
++		.write_new	= write_ ## _name }
+ 
+ ESAS2R_RW_BIN_ATTR(fw);
+ ESAS2R_RW_BIN_ATTR(fs);
+@@ -224,10 +224,10 @@ ESAS2R_RW_BIN_ATTR(vda);
+ ESAS2R_RW_BIN_ATTR(hw);
+ ESAS2R_RW_BIN_ATTR(live_nvram);
+ 
+-struct bin_attribute bin_attr_default_nvram = {
++const struct bin_attribute bin_attr_default_nvram = {
+ 	.attr	= { .name = "default_nvram", .mode = S_IRUGO },
+ 	.size	= 0,
+-	.read	= read_default_nvram,
++	.read_new	= read_default_nvram,
+ 	.write	= NULL
  };
  
- static const struct bin_attribute arcmsr_sysfs_message_write_attr = {
-@@ -203,7 +203,7 @@ static const struct bin_attribute arcmsr_sysfs_message_write_attr = {
- 		.mode = S_IWUSR,
- 	},
- 	.size = ARCMSR_API_DATA_BUFLEN,
--	.write = arcmsr_sysfs_iop_message_write,
-+	.write_new = arcmsr_sysfs_iop_message_write,
- };
- 
- static const struct bin_attribute arcmsr_sysfs_message_clear_attr = {
-@@ -212,7 +212,7 @@ static const struct bin_attribute arcmsr_sysfs_message_clear_attr = {
- 		.mode = S_IWUSR,
- 	},
- 	.size = 1,
--	.write = arcmsr_sysfs_iop_message_clear,
-+	.write_new = arcmsr_sysfs_iop_message_clear,
- };
- 
- int arcmsr_alloc_sysfs_attr(struct AdapterControlBlock *acb)
 
 -- 
 2.47.1
