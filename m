@@ -1,139 +1,132 @@
-Return-Path: <linux-scsi+bounces-10892-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-10897-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE7779F2F47
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2024 12:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AD259F2FA7
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2024 12:41:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C345167945
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2024 11:30:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6724E165D2E
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2024 11:39:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24C39205AAC;
-	Mon, 16 Dec 2024 11:29:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09111204088;
+	Mon, 16 Dec 2024 11:38:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="JZnvdDvI"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="GCfDkvzh"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from fgw23-4.mail.saunalahti.fi (fgw23-4.mail.saunalahti.fi [62.142.5.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38745204F65;
-	Mon, 16 Dec 2024 11:29:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B3E1FFC43
+	for <linux-scsi@vger.kernel.org>; Mon, 16 Dec 2024 11:38:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.110
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734348561; cv=none; b=NG9wTukMZIdSV1gLMfP4HSBgvyerXANGgSgnhhQHx9s7wrErTZzKkw0qX8xFoEHkIqO1aNZHJDDxzbfVwxawUMaN2+iyyO2dSbmtKyX/79bvRRLeWK1pKWAKjBq/ax3Cz1FJJgWiNWSuV6t1cSCfGa68HusGA2moiXl/qC8OmYQ=
+	t=1734349112; cv=none; b=eyhzY/1agDCMwZQP+aT5vsf8SfIxdar7NVqq2WZ+B2CnYPIaelWbZTK3Nm5spTzTODqn2N06eilNKvXdLKSglF8oagzbVpoE+1xNQKcWBgkSyaxHfqbqL3O4puVcm60FdnebQZk0s8nqu+67FLRZ8amIz0PLJ1mjiG5uoaUy3kE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734348561; c=relaxed/simple;
-	bh=3uZW7n2Dks+H/Doo9q/ymOJETj3rjFvKcshiuUcefLM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Xclmz0hhedQj0TSPRXvHSIWJWXGYMmw5UUmjuriEFeNv3BuUGeA4CwD0OrCw6AKsES4uLS0kMrnJVqHgNHz2ZtQ22akGD3Cwkv894XBrUD5P9scZoUoISWOP0ANzU94f9WrvjjvOz2R/LoHO9db6wDF5QWH20aB6/+f5ggcGpY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=JZnvdDvI; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1734348553;
-	bh=3uZW7n2Dks+H/Doo9q/ymOJETj3rjFvKcshiuUcefLM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=JZnvdDvIVLp1ZOxxcHNlXN8wdnL+pIUmr0q7kiYSIb59hF+wPedan38OdkIU3mFxI
-	 GCnSq0idhsTC5EYfkYXdnHztJe4bXI9oXfLHux5+MNwo1WYKNujzy1r+0jT6DM7Gyp
-	 VQzSYcM/qQ/Z4JjpIikvUVUs9SejC6uHDS2gdaF0=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Mon, 16 Dec 2024 12:29:18 +0100
-Subject: [PATCH 11/11] scsi: qla4xxx: Constify 'struct bin_attribute'
+	s=arc-20240116; t=1734349112; c=relaxed/simple;
+	bh=nJcrKjbb/izKfhO5ZCTPYd6zolh1/6O7j/l3sTLP/NQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CK2B6OD+pA8ABHDOUV57eUUZotrX9V19prG20IFxMYPbOWzeNBydm8eaL8PvP15g7EZMSedlZ44+W0piItv+Iqi/MaquLyVnlpcXZqzjeTBL/QKJqUJHGeUZbk+rgF8NaVAAmqYOHBEYQpwOsBUK7U8cagLwRjcuwIH5SQtRH7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=GCfDkvzh; arc=none smtp.client-ip=62.142.5.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=kolumbus.fi; s=elisa1;
+	h=content-transfer-encoding:content-type:mime-version:message-id:date:subject:
+	 cc:to:from:from:to:cc:reply-to:subject:date:in-reply-to:references:
+	 list-archive:list-subscribe:list-unsubscribe:content-type:
+	 content-transfer-encoding:message-id;
+	bh=nQ/yC+8xWtNHB16AC7Zp2qZMVpjX31p5rRFFK6w3pLg=;
+	b=GCfDkvzhqb7rTXUPy1KQQaNd6o3SVWoogVimHogTCazU4aVJPidYVr41kx630NglfcSQu26Cax+5b
+	 rxbEl0k8BA+Q2NBslkfqzEjPrzEmdfM2h/VNSQR/BD3dQCMZ6rTfUf/FuzSbM15v8k4uy1s7HdDPtn
+	 /LJgm+s4rUbGTbXfxchsvF2+CCor+8palLwYiYVUyBTP5VCaDzQznp7YjPSwLVSKjj1Tn0nAhUfjRb
+	 629RDPGZOqsKwdBtGay29EvCVSCTci87U9M5RRaxTh17C0Lk9zeknhyzdQNXnPS98qnlNzTPy6ApBz
+	 j8OFMyOWUxNXbffv/5n15710KcSc0+g==
+Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
+	by fgw23.mail.saunalahti.fi (Halon) with ESMTPSA
+	id 3ed63cc6-bba2-11ef-a13a-005056bdfda7;
+	Mon, 16 Dec 2024 13:38:19 +0200 (EET)
+From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
+To: linux-scsi@vger.kernel.org,
+	jmeneghi@redhat.com
+Cc: martin.petersen@oracle.com,
+	James.Bottomley@HansenPartnership.com,
+	loberman@redhat.com,
+	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
+	stable@vger.kernel.org
+Subject: [PATCH] scsi: st: Regression fix: Don't set pos_unknown just after device recognition
+Date: Mon, 16 Dec 2024 13:37:55 +0200
+Message-ID: <20241216113755.30415-1-Kai.Makisara@kolumbus.fi>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241216-sysfs-const-bin_attr-scsi-v1-11-f0a5e54b3437@weissschuh.net>
-References: <20241216-sysfs-const-bin_attr-scsi-v1-0-f0a5e54b3437@weissschuh.net>
-In-Reply-To: <20241216-sysfs-const-bin_attr-scsi-v1-0-f0a5e54b3437@weissschuh.net>
-To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Adam Radford <aradford@gmail.com>, 
- Bradley Grove <linuxdrivers@attotech.com>, 
- Tyrel Datwyler <tyreld@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
- James Smart <james.smart@broadcom.com>, 
- Dick Kennedy <dick.kennedy@broadcom.com>, Brian King <brking@us.ibm.com>, 
- Saurav Kashyap <skashyap@marvell.com>, Javed Hasan <jhasan@marvell.com>, 
- GR-QLogic-Storage-Upstream@marvell.com, Nilesh Javali <njavali@marvell.com>, 
- Manish Rangankar <mrangankar@marvell.com>
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734348551; l=2063;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=3uZW7n2Dks+H/Doo9q/ymOJETj3rjFvKcshiuUcefLM=;
- b=FudiGZdk+7eiqucd0Mb3IdXBG2lRQt7iNuv+QY5rtiehQ0sCbeMq8dx/vlYt5/Q9/IIhVyJBr
- R65fOzklM+wC2PS3I1zQMq5XL6HeZTFUPE1v5sntq59RyzxSNb7mE4t
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The sysfs core now allows instances of 'struct bin_attribute' to be
-moved into read-only memory. Make use of that to protect them against
-accidental or malicious modifications.
+Commit 9604eea5bd3a ("scsi: st: Add third party poweron reset handling")
+in v6.6 added new code to handle the Power On/Reset Unit Attention
+(POR UA) sense data. This was in addition to the existing method. When
+this Unit Attention is received, the driver blocks attempts to read,
+write and some other operations because the reset may have rewinded
+the tape. Because of the added code, also the initial POR UA resulted
+in blocking operations, including those that are used to set the driver
+options after the device is recognized. Also, reading and writing are
+refused, whereas they succeeded before this commit.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+This patch adds code to not set pos_unknown to block operations if the
+POR UA is received from the first test_ready() call after the st device
+has been created. This restores the behavior before v6.6.
+
+Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
+Fixes: 9604eea5bd3a ("scsi: st: Add third party poweron reset handling")
+Closes: https://lore.kernel.org/linux-scsi/2201CF73-4795-4D3B-9A79-6EE5215CF58D@kolumbus.fi/
+CC: stable@vger.kernel.org
 ---
- drivers/scsi/qla4xxx/ql4_attr.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/scsi/st.c | 6 ++++++
+ drivers/scsi/st.h | 1 +
+ 2 files changed, 7 insertions(+)
 
-diff --git a/drivers/scsi/qla4xxx/ql4_attr.c b/drivers/scsi/qla4xxx/ql4_attr.c
-index abfa6ef604800aefef3dbc757d656b7dc20ede8c..e3f85d6ea0db25d5674ca69475af31a4267e2fdb 100644
---- a/drivers/scsi/qla4xxx/ql4_attr.c
-+++ b/drivers/scsi/qla4xxx/ql4_attr.c
-@@ -10,7 +10,7 @@
+diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
+index e8ef27d7ef61..ebbd50ec0cda 100644
+--- a/drivers/scsi/st.c
++++ b/drivers/scsi/st.c
+@@ -1030,6 +1030,11 @@ static int test_ready(struct scsi_tape *STp, int do_wait)
+ 			retval = new_session ? CHKRES_NEW_SESSION : CHKRES_READY;
+ 		break;
+ 	}
++	if (STp->first_tur) {
++		/* Don't set pos_unknown right after device recognition */
++		STp->pos_unknown = 0;
++		STp->first_tur = 0;
++	}
  
- static ssize_t
- qla4_8xxx_sysfs_read_fw_dump(struct file *filep, struct kobject *kobj,
--			     struct bin_attribute *ba, char *buf, loff_t off,
-+			     const struct bin_attribute *ba, char *buf, loff_t off,
- 			     size_t count)
- {
- 	struct scsi_qla_host *ha = to_qla_host(dev_to_shost(container_of(kobj,
-@@ -28,7 +28,7 @@ qla4_8xxx_sysfs_read_fw_dump(struct file *filep, struct kobject *kobj,
+ 	if (SRpnt != NULL)
+ 		st_release_request(SRpnt);
+@@ -4328,6 +4333,7 @@ static int st_probe(struct device *dev)
+ 	blk_queue_rq_timeout(tpnt->device->request_queue, ST_TIMEOUT);
+ 	tpnt->long_timeout = ST_LONG_TIMEOUT;
+ 	tpnt->try_dio = try_direct_io;
++	tpnt->first_tur = 1;
  
- static ssize_t
- qla4_8xxx_sysfs_write_fw_dump(struct file *filep, struct kobject *kobj,
--			      struct bin_attribute *ba, char *buf, loff_t off,
-+			      const struct bin_attribute *ba, char *buf, loff_t off,
- 			      size_t count)
- {
- 	struct scsi_qla_host *ha = to_qla_host(dev_to_shost(container_of(kobj,
-@@ -104,19 +104,19 @@ qla4_8xxx_sysfs_write_fw_dump(struct file *filep, struct kobject *kobj,
- 	return count;
- }
- 
--static struct bin_attribute sysfs_fw_dump_attr = {
-+static const struct bin_attribute sysfs_fw_dump_attr = {
- 	.attr = {
- 		.name = "fw_dump",
- 		.mode = S_IRUSR | S_IWUSR,
- 	},
- 	.size = 0,
--	.read = qla4_8xxx_sysfs_read_fw_dump,
--	.write = qla4_8xxx_sysfs_write_fw_dump,
-+	.read_new = qla4_8xxx_sysfs_read_fw_dump,
-+	.write_new = qla4_8xxx_sysfs_write_fw_dump,
- };
- 
- static struct sysfs_entry {
- 	char *name;
--	struct bin_attribute *attr;
-+	const struct bin_attribute *attr;
- } bin_file_entries[] = {
- 	{ "fw_dump", &sysfs_fw_dump_attr },
- 	{ NULL },
-
+ 	for (i = 0; i < ST_NBR_MODES; i++) {
+ 		STm = &(tpnt->modes[i]);
+diff --git a/drivers/scsi/st.h b/drivers/scsi/st.h
+index 7a68eaba7e81..1aaaf5369a40 100644
+--- a/drivers/scsi/st.h
++++ b/drivers/scsi/st.h
+@@ -170,6 +170,7 @@ struct scsi_tape {
+ 	unsigned char rew_at_close;  /* rewind necessary at close */
+ 	unsigned char inited;
+ 	unsigned char cleaning_req;  /* cleaning requested? */
++	unsigned char first_tur;     /* first TEST UNIT READY */
+ 	int block_size;
+ 	int min_block;
+ 	int max_block;
 -- 
-2.47.1
+2.43.0
 
 
