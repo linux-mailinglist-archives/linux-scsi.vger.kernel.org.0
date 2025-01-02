@@ -1,83 +1,82 @@
-Return-Path: <linux-scsi+bounces-11090-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11087-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFD5EA00149
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jan 2025 23:47:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A866A00142
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jan 2025 23:47:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE0901883F38
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jan 2025 22:47:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 439731883F1F
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jan 2025 22:47:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6BEC1B86CC;
-	Thu,  2 Jan 2025 22:47:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0A2E19DF99;
+	Thu,  2 Jan 2025 22:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="SDNGaaw3"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="QgAK14fk"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA9EF1B6D0F;
-	Thu,  2 Jan 2025 22:47:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20177462;
+	Thu,  2 Jan 2025 22:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735858062; cv=none; b=XNLQu//UgqjsccuwR1qboTY6Nx8WpV81a4IQNmFBQRLVKPLJoYZoAPiAKYih9MgjUjG/5HAfTehy8D6Z8HrtBs1gIvMDg0alxCC9An9RFrd9ezYkGpARYe/SCnJuucCmjM78ZM4V/Mdx6KYuvVx/AZXwodGrOoHN3UHElJP3dlM=
+	t=1735858041; cv=none; b=MFg2VtuupNMKgpRu/lSlA4Kj8DlL/VfgFjSwf4BlNTq00qL5yeJ2dSsT31SAx3jVJjgietptTw4EhbanuiFqzfKeCboXrlP56SRZc0v+3MtLgoVy+gIKty5SXbwHVaD4pJPsu+q7o53sUjTe2oA0PanAnYQzRcAULfbLO02L7/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735858062; c=relaxed/simple;
-	bh=DSsgKLf1vbtZiKK9KqlWW0egQ9/9VEQqsppWlI2aGHE=;
+	s=arc-20240116; t=1735858041; c=relaxed/simple;
+	bh=xn0Gvxmpq3sCJlFD5wLuUjhPP0d8tS+FiaplLijnHUA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QAMsdOwYE7XJov1ief47hh/twqDEAOziMHB2EiemldzLZ4wNFo7aQQH8V51LFlQTl2WTdD2Qn0Izoqv5CoXuXnuXPFF+DN1uX/XtMVP/uZ7CldUokMwy2GYBgSobxzLpE4+AA1dIjEUX0neHuPCUcbQC6EcbHpbYdYU67bd1w+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=SDNGaaw3; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=ayi6C/2ZNFMiArBjnkKudhZnB10HFFEoRO45Va3ZCXnjXpB2ayvYpDWeeVLGwlC08+hQOqaW5bixVCe1NilKkZXITZ6Watpy0LLJ9ODAXw2oCeH3e4f/zSIep+VUKg5YiXI7SVZcsUjeojmR3u/aoF9T4ZjPdhY3V0dBo5pYBtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=QgAK14fk; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 502KfuJ3015265;
-	Thu, 2 Jan 2025 22:47:14 GMT
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 502KfuQ4030631;
+	Thu, 2 Jan 2025 22:47:16 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=U7tnL0OGsltMWpN+/Pzxk8lgQVrxvWRSVUe9cvOe/ig=; b=
-	SDNGaaw3XbUj1S6QFvLVC5139scD7TWpEhyd5yis3wIKVV6VSOVbHlNrcbCU66nl
-	NVdhDYFwYbqv6NS8bkpwAdaWyyh3tOIF8bz+UkBWocmCmuLpmxfbG2TIOeUWP7Fm
-	c0Mr8tuTzNrtw2S8YuCEO6OKQ7bn/zWvrMUEOfeJZvZBQn5bhslrSBXfLkFbFRgH
-	3ZGgYVRJoa3WOTDSDSQp5gklzoOx67mGwJvrTZWdw0xTcyS0le6eFMWLDsNP7fbH
-	slppSPpJ40jmikDZS+DjCfLcNOHahqZEymWZn0Ds0I5cEeEtVBlV00WHVXLQ+9DR
-	0X2p9LQ1ZP8OY3huRPh0sg==
+	corp-2023-11-20; bh=Gjo6fdzrYE4PhFRTs9ndQrk9WC3uUCywnJRN27P3lsk=; b=
+	QgAK14fkD/Q23UEitKGnGaZR8M5OSkPWvRB5IpNjA4ln4tu1BpefyZIAnNsaiX6I
+	tJZ6jcEiakpQ2vQQ6OkAlY5gt67xbO5Q+lTA9w2xsjY0sPPHZcUllesWrXPYV8ik
+	G2RdE139HVmUahKXENVtz1vzEYwxhRCK8VLIynd+iWkuX1jsvFWI1hAtyXwwqZt1
+	It6c4o2uxW8F2bEhnEr6XMxryY3Ia4PIEdg70bh0qNLYYup0ZAzRh7rS2DjRLosd
+	5+WuRL5mL6L3iLb56nLgLjDJRECUwcdbHPQAWlKn8NXyYjv3w4PM/FyoJl5VlSPE
+	r3yl29N6eCLbG2HWqRVAZQ==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 43t88a7d86-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 43t9chfdr3-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 02 Jan 2025 22:47:14 +0000 (GMT)
+	Thu, 02 Jan 2025 22:47:16 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 502LaiUr008778;
-	Thu, 2 Jan 2025 22:47:13 GMT
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 502K72i5009443;
+	Thu, 2 Jan 2025 22:47:15 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 43t7s93nwu-1
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 43t7s93nxd-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 02 Jan 2025 22:47:13 +0000
+	Thu, 02 Jan 2025 22:47:15 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 502MlAtf004461;
-	Thu, 2 Jan 2025 22:47:12 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 502MlAth004461;
+	Thu, 2 Jan 2025 22:47:14 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 43t7s93nuq-2;
-	Thu, 02 Jan 2025 22:47:12 +0000
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 43t7s93nuq-3;
+	Thu, 02 Jan 2025 22:47:14 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, James.Bottomley@HansenPartnership.com,
-        mhkelley58@gmail.com
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, iommu@lists.linux.dev,
-        netdev@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: (subset) [PATCH 0/5] hyper-v: Don't assume cpu_possible_mask is dense
-Date: Thu,  2 Jan 2025 17:46:38 -0500
-Message-ID: <173583977795.171606.8906239465384373872.b4-ty@oracle.com>
+To: "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Nihar Panda <niharp@linux.ibm.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: [PATCH 0/3] zfcp changes for v6.14
+Date: Thu,  2 Jan 2025 17:46:39 -0500
+Message-ID: <173583977784.171606.5545700115595892014.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241003035333.49261-1-mhklinux@outlook.com>
-References: <20241003035333.49261-1-mhklinux@outlook.com>
+In-Reply-To: <20241205141932.1227039-1-niharp@linux.ibm.com>
+References: <20241205141932.1227039-1-niharp@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -90,32 +89,33 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-01-02_03,2025-01-02_01,2024-11-22_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxscore=0
- suspectscore=0 phishscore=0 mlxlogscore=983 adultscore=0 malwarescore=0
+ suspectscore=0 phishscore=0 mlxlogscore=968 adultscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2411120000
  definitions=main-2501020199
-X-Proofpoint-GUID: e6Ywwye_omB8U1gOZ8hmAB14_FT6wkJA
-X-Proofpoint-ORIG-GUID: e6Ywwye_omB8U1gOZ8hmAB14_FT6wkJA
+X-Proofpoint-GUID: hGrceDJC0iwHuPCHy6FCtfMStzE2PQWs
+X-Proofpoint-ORIG-GUID: hGrceDJC0iwHuPCHy6FCtfMStzE2PQWs
 
-On Wed, 02 Oct 2024 20:53:28 -0700, mhkelley58@gmail.com wrote:
+On Thu, 05 Dec 2024 15:19:29 +0100, Nihar Panda wrote:
 
-> Code specific to Hyper-V guests currently assumes the cpu_possible_mask
-> is "dense" -- i.e., all bit positions 0 thru (nr_cpu_ids - 1) are set,
-> with no "holes". Therefore, num_possible_cpus() is assumed to be equal
-> to nr_cpu_ids.
+> here is a small set of changes for the zFCP device driver.
 > 
-> Per a separate discussion[1], this assumption is not valid in the
-> general case. For example, the function setup_nr_cpu_ids() in
-> kernel/smp.c is coded to assume cpu_possible_mask may be sparse,
-> and other patches have been made in the past to correctly handle
-> the sparseness. See bc75e99983df1efd ("rcu: Correctly handle sparse
-> possible cpu") as noted by Mark Rutland.
+> Fedor Loshakov (1):
+>   zfcp: correct kdoc parameter description for sending ELS and CT
+> 
+> Steffen Maier (2):
+>   zfcp: clarify zfcp_port refcount ownership during "link" test
+>   MAINTAINERS: Update zfcp entry
 > 
 > [...]
 
 Applied to 6.14/scsi-queue, thanks!
 
-[4/5] scsi: storvsc: Don't assume cpu_possible_mask is dense
-      https://git.kernel.org/mkp/scsi/c/6cb7063feb2e
+[1/3] zfcp: correct kdoc parameter description for sending ELS and CT
+      https://git.kernel.org/mkp/scsi/c/9fe5b6130baf
+[2/3] zfcp: clarify zfcp_port refcount ownership during "link" test
+      https://git.kernel.org/mkp/scsi/c/32574fe6e19d
+[3/3] MAINTAINERS: Update zfcp entry
+      https://git.kernel.org/mkp/scsi/c/bd55f56188ca
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
