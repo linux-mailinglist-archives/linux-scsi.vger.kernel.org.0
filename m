@@ -1,53 +1,53 @@
-Return-Path: <linux-scsi+bounces-11053-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11054-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 261C39FF55B
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jan 2025 01:58:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F6399FF55F
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jan 2025 01:59:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A7D33A1D44
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jan 2025 00:58:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A561D3A1D63
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jan 2025 00:59:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5315E10F1;
-	Thu,  2 Jan 2025 00:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6015B1FDD;
+	Thu,  2 Jan 2025 00:59:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jzH6IIzn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MhKVsc+X"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5E2634
-	for <linux-scsi@vger.kernel.org>; Thu,  2 Jan 2025 00:58:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B37D17E4
+	for <linux-scsi@vger.kernel.org>; Thu,  2 Jan 2025 00:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735779518; cv=none; b=cLokLH1DoEixSACwh7iFF76fWU7Egs9c/gDYM4907+NkzLVFEb94zmMjRNwi8DA890rZbdzl7CkAxAfkYi1/1vGVQnRz4eBNPVqrx8JcxEPIaTM7ncpeKQXVDU1YxjjhqW6apcF1CNyGUBGY/TKQBK2N7POzpfZXJnStghG/1Qc=
+	t=1735779564; cv=none; b=ivx1XNyEaY3Ck07NcQ3HbAXoXdGuzbQXgek9yqTxvZ5eKAmzdlQMQScOXMDmZPPQApdFPqcI3PUxSWXh+EBRswprg/RMYPcfupZgPV04tQGVT+JpZg/eUfj4EHrU1kWvx7I0H29aOpIzKcuvuyF49aK3J8msrVIkNVlzhxGKrYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735779518; c=relaxed/simple;
-	bh=CS04RnUmyY7lExerAXEhenRMuVQASmRUVB7wc44xSa8=;
+	s=arc-20240116; t=1735779564; c=relaxed/simple;
+	bh=/TocRNVeEyxF8ZODajcwcxadxz3SMWD2pEYZntKpFBw=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=p0sOtGeinerz00/dpDpRbVy9Rno5Ovhhx8oZHRKcSuTJmtloJZD+UwgeuR/1i+LPFSr/Ptg4ZHF46v3vLcTW/VocFWkTo2Xd3gn2CGkznSg6KIl73KYl/cDCN7kL99Q9bzrQV1yuy6HKDn7p/hGEEXa87LTDM3ANCENjUKV5PbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jzH6IIzn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 90168C4CEDD
-	for <linux-scsi@vger.kernel.org>; Thu,  2 Jan 2025 00:58:37 +0000 (UTC)
+	 Content-Type:MIME-Version; b=MjC6bFisRWLppS6uKgyt2UFcGz72mdEkUuD/Yb5hKNy/LG82bYqjyssGox551LKGJyo8MPAlP9/5ZiYP9odZPSXn6l/WKY7y8yr3esCiTJbso+tNRMiV7ClIiuG5t9W0MiqGG064mBdrfqS5IH1ucIF/fi57VaO5rZ+nTdI+YYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MhKVsc+X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A420FC4CED6
+	for <linux-scsi@vger.kernel.org>; Thu,  2 Jan 2025 00:59:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735779517;
-	bh=CS04RnUmyY7lExerAXEhenRMuVQASmRUVB7wc44xSa8=;
+	s=k20201202; t=1735779563;
+	bh=/TocRNVeEyxF8ZODajcwcxadxz3SMWD2pEYZntKpFBw=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=jzH6IIznm5Z+bbvxeCX4KGRMvsLWCMbV56NPJxBEnHDyHo/08F+yGcm5u1ADy2wgS
-	 2PAs/MkpzQFByDySL5CgRRDyt883fk4BnK6joQ+SIYjeg39f/yT1NH3Ngm/Tuq0I28
-	 Zxvbnk8tnjXTZJ+wxEv8wFqzdXuRIUXJevAil/bur4yCMeM7vX5R2MSVElQaxkWqq9
-	 kSPNqd/Bw8Pq6zW06KFJiSGYulGN0AHCh6LnfMpvH1BGPq0lG1tQDwADgNlJZwxDRu
-	 5d3vUxiK/iQMduYToHiF5X1EhrE7YfmeUlD3Ly2ruCfmFz/hcrZ9s8j9DBDcCOjlcN
-	 HqrrFoDGo1wHQ==
+	b=MhKVsc+XdjQL62LWlv5rx3DQ3DL3zi8GhgF9lCvO2AojOZEPUouuY9UnavyMsWgtQ
+	 /qaU0+LP1SMtBPH3cVPXcmo2PeButl5/D+7cLLs+10rA2NR912UODREM8cGKfLp2SP
+	 iZ+n7MFZOpePZYWlPyZQrZyzVPhF5/0U5PqnuC/NDFeWddsCsS2jffUyX8b5cbl2aL
+	 dQSbhW/Tvb6ykwr6OhUgBgBdbLirbnLhnxx5hxivNFvCKIok3/gFiHlErjLwx64nyv
+	 xZFqJlqT8mKz5cfarvdoQs6hJecjE/GmtZ0eflNAfurn32UWPPuC9RyisPgV4P0rdj
+	 f//v+FiAYHexA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 8A5F8C41614; Thu,  2 Jan 2025 00:58:37 +0000 (UTC)
+	id 9EC43C41613; Thu,  2 Jan 2025 00:59:23 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-scsi@vger.kernel.org
 Subject: [Bug 219652] READ CAPACITY(16) not used on large USB-attached drive
  in recent kernels
-Date: Thu, 02 Jan 2025 00:58:37 +0000
+Date: Thu, 02 Jan 2025 00:59:23 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -63,7 +63,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-scsi@vger.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-219652-11613-8gv4kdvygp@https.bugzilla.kernel.org/>
+Message-ID: <bug-219652-11613-AFdWH1pyxB@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219652-11613@https.bugzilla.kernel.org/>
 References: <bug-219652-11613@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,10 +79,10 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219652
 
---- Comment #1 from Kris Karas (bugs-a21@moonlit-rail.com) ---
-Created attachment 307436
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307436&action=3Dedit
-usbmon trace from kernel 6.12 showing failed capacity negotiation
+--- Comment #2 from Kris Karas (bugs-a21@moonlit-rail.com) ---
+Created attachment 307437
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307437&action=3Dedit
+usbmon trace from kernel 6.1 showing correct capacity negotiation
 
 --=20
 You may reply to this email to add a comment.
