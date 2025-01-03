@@ -1,53 +1,53 @@
-Return-Path: <linux-scsi+bounces-11097-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11100-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF8FAA00229
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jan 2025 01:53:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 086D2A0028F
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jan 2025 03:02:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BDE11883E03
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jan 2025 00:53:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7BD63A16EC
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jan 2025 02:02:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 305E113D89D;
-	Fri,  3 Jan 2025 00:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B793FDDC1;
+	Fri,  3 Jan 2025 02:02:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GTzqIYHr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gjxy04mU"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3BD51DFCB
-	for <linux-scsi@vger.kernel.org>; Fri,  3 Jan 2025 00:53:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7229E9475
+	for <linux-scsi@vger.kernel.org>; Fri,  3 Jan 2025 02:02:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735865600; cv=none; b=vAX2Q9B8KJvvi9RD1wH1x8hZ+jsikbs3QLE0hDzP+wnZM/plamNCmEFUOm4pQ5ZHu+RT2KhVmUSx+o5JSHNCkvpXJrGETPXZHkCg4V0sO3YMqNJ+uiMTZpfPBf3qIF0ksnaYLMm0haZooZIXKUNMPnHrkJ3naMtus1skK3jEut4=
+	t=1735869743; cv=none; b=sVzeB2YjbuiUhp48Jqt5xmXRKbvYf0EY9Euk4dKzjDXjyc8QsZ+hplBzL+iSUrVT86nGyfmtbv1Gkaz/3T03cInpV++tXDTwLhCo9JesoDPit9qPthaaGaMoXdjLLfhjaIn2uYk7s4MulMcZPrHPzOJzjubB7t9ZSKM/fecnjLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735865600; c=relaxed/simple;
-	bh=4UDwjfk1Ts7ZNLFM/VquWZqkE9Gd90fi75++iYqozmw=;
+	s=arc-20240116; t=1735869743; c=relaxed/simple;
+	bh=Uqn98ZcFTTfN8ZAR60khU4ftnY47UINfLi82sDKUt4E=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dbEC3WfRm76EoEiQe043aUhs1RRRBFoeLaLYATMwLSBCjGV2MPPl0OHp6/B4LVgZd9bkUha9mB+r0Q9sdacOZzQAqdSeheIyKhmIyplDpBF4U+RMocfEHpL8JxKitQ25OV0RuDJKtnemE/rqOLldi6f53HUDzv6upcb4zZkt2gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GTzqIYHr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3CFE5C4CED0
-	for <linux-scsi@vger.kernel.org>; Fri,  3 Jan 2025 00:53:19 +0000 (UTC)
+	 Content-Type:MIME-Version; b=hEaFzFj9skpEw4bypsVCnpG7MSPWhV9Ig4/md15pvzVx+qSeuvCvO0ZrDXqOeoW2W+2a5GelIpdnjmgUOQDmmd2ZfusA8w0T285Ekk4SgTos1Pm0B5JY/NiNRDklVMXhmIqvRUa1x4MBZxEHCz5sYXqD3Pe51ahCiwHCuLG3NXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gjxy04mU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E9D40C4CED0
+	for <linux-scsi@vger.kernel.org>; Fri,  3 Jan 2025 02:02:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735865599;
-	bh=4UDwjfk1Ts7ZNLFM/VquWZqkE9Gd90fi75++iYqozmw=;
+	s=k20201202; t=1735869743;
+	bh=Uqn98ZcFTTfN8ZAR60khU4ftnY47UINfLi82sDKUt4E=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=GTzqIYHr02/7lTH5Y8JJxxvVMTpudncblXCKELsKH9/4jZ8x2ORqHGWU2uB8lF6j0
-	 DDdn5yTMzr9xQPHFMfa3a8yO1EFq/mXit/2z+3U0g7Fw+lE0ilpRwyqqnyFI9aDXMS
-	 hCJwWsNfpPjyBjC4Zb3wh3ykqN3VSGXD0AAvnVU7YpzVOWWEUh4e/PNLZqNX6o6mQK
-	 iRPhGWruPRX5shLErnpdtM1J/tGtu3IV3urDOZj7L9ytR64jotvPlERKXaOzh5rvJu
-	 JI6RLF+pKsRIhhBb6APvyV4YyIIEuP7bWpioDKrzYotvHvwYIvsYG1MvfzjbPeT8qu
-	 obtldVBRSyTQA==
+	b=gjxy04mUENGruOVmFgcnvayy979g/Arb7lsqOVmF+db7WYR6V7BlIVKzzchlD3Opx
+	 7M0pGlJt9L7qZ7FbUwpfjSLq9gwHJDywJpFuC1/U9MJOq/huVk/P5cncPxCjGVeHZ8
+	 VnNw1Yy/ikY2hHigywvn6EKdtqcsfABXZHzCERfJ3LTiSg7azOLbjnqqmFbfuqciK+
+	 tGgMGqefNF0Kw/pE29fO1GpGoxD6F4hORSv6zN8/Mr04FbzVQNZ5hFGIvAikTX4WhA
+	 PgM/K92cJRUMIoFyEdG2dZD+e38R0a0qhfhEqp5fYZCZhRZbmHsO8+/IACwAD9q1Hb
+	 fSMbNXn7uT1mw==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 315F5C41613; Fri,  3 Jan 2025 00:53:19 +0000 (UTC)
+	id D775DC41606; Fri,  3 Jan 2025 02:02:22 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-scsi@vger.kernel.org
 Subject: [Bug 219652] READ CAPACITY(16) not used on large USB-attached drive
  in recent kernels
-Date: Fri, 03 Jan 2025 00:53:18 +0000
+Date: Fri, 03 Jan 2025 02:02:22 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -56,14 +56,14 @@ X-Bugzilla-Component: SCSI
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michael.christie@oracle.com
+X-Bugzilla-Who: stern@rowland.harvard.edu
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-scsi@vger.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219652-11613-213Ju5Ap5L@https.bugzilla.kernel.org/>
+Message-ID: <bug-219652-11613-yrS1zqkPr8@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219652-11613@https.bugzilla.kernel.org/>
 References: <bug-219652-11613@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,54 +79,24 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219652
 
---- Comment #6 from michael.christie@oracle.com ---
-On 1/1/25 6:57 PM, bugzilla-daemon@kernel.org wrote:
-> * When booting into kernel 6.12.7, the external drive capacity
->   is mis-reported.  Booting /back/ into 6.6.68, the capacity
->   continues to be mis-reported.  One must now yank the USB
->   cable (or power-cycle) to get the correct size detection again.
+--- Comment #7 from Alan Stern (stern@rowland.harvard.edu) ---
+The two kernels perform identical USB initializations, and the two SCSI
+initializations also start out identically: INQUIRY, TEST UNIT READY, and R=
+EAD
+CAPACITY(10).  Under both kernels, the response to the READ CAPACITY(10) is
+0xffffffff blocks with blocksize 0x00000200, no errors.
 
-That part is really strange. I wonder if the new code is not
-resetting the device and the old code was somehow.
->=20
-> Here is a diff of the dmesg output when plugging in the drive.
-> From (-) is kernel 6.1.122
-> To   (+) is kernel 6.12.7:
->  scsi host12: usb-storage 1-13:1.0
->  scsi 12:0:0:0: Direct-Access     TOSHIBA  DT01ACA300       3.00 PQ: 0 AN=
-SI:
->  4
->  sd 12:0:0:0: Attached scsi generic sg1 type 0
-> -sd 12:0:0:0: [sdb] Very big device. Trying to use READ CAPACITY(16).
-> -sd 12:0:0:0: [sdb] 5860533167 512-byte logical blocks: (3.00 TB/2.73 TiB)
-> +sd 12:0:0:0: [sdb] 4294967295 512-byte logical blocks: (2.20 TB/2.00 TiB)
->  sd 12:0:0:0: [sdb] Write Protect is off
->  sd 12:0:0:0: [sdb] Mode Sense: 23 00 00 00
->  sd 12:0:0:0: [sdb] No Caching mode page found
->  sd 12:0:0:0: [sdb] Assuming drive cache: write through
-> -sd 12:0:0:0: [sdb] Very big device. Trying to use READ CAPACITY(16).
-> - sdb: sdb1
->  sd 12:0:0:0: [sdb] Attached SCSI disk
->=20
-> I am attaching a diff of the usbmon output for the earlier kernel (good) =
-and
-> current kernel (bad),
+At that point the bad kernel repeats the READ CAPACITY(10) command, issuing=
+ it
+a total of 4 times before stopping (the fourth time, the returned value says
+0xfffffffe blocks instead of 0xffffffff -- I'm not sure if the device does =
+this
+or if usb-storage changes the value in flight, but it doesn't really matter
+because the error has already occurred).
 
-Just to start can you tell me what the device is returning?
-
-We hit that "Very big device" code path if the device returns a size
-of 0xffffffff or larger so with the old code we at some point returned
-a large size. With the new code the device returns only 0xfffffffe
-(4294967294) (read_capacity_10 does a lba that we got from the device + 1
-so you see 4294967295 in the log message) so we never hit that very
-bit device code path and try READ CAPACITY(16).
-
-I might have changed some behavior during the retries that causes us
-to not get the right size now.  However, I couldn't fully understand
-the output of the usbmon traces. Can you tell me when we do the READ
-CAPACITY (10) what the device is returning? Is it returning a sense
-error like UNIT_ATTENTION a couple times and when it returns success
-what's in the data buffer?
+By contrast, at that point the good kernel issues READ CAPACITY(16), receiv=
+ing
+a response of 0x15d50a3ae blocks of size 0x00000200, the correct values.
 
 --=20
 You may reply to this email to add a comment.
