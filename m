@@ -1,89 +1,108 @@
-Return-Path: <linux-scsi+bounces-11096-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11099-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64569A00223
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jan 2025 01:47:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B42BA0022C
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jan 2025 01:55:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA8427A1A80
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jan 2025 00:47:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80F953A3A26
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jan 2025 00:55:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB7858BE5;
-	Fri,  3 Jan 2025 00:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AAB014A629;
+	Fri,  3 Jan 2025 00:55:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b="LyHtmrv4"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="CSVpdB1L"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.eurecom.fr (smtp.eurecom.fr [193.55.113.210])
+Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A045C17FE;
-	Fri,  3 Jan 2025 00:47:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.55.113.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083B78BE5;
+	Fri,  3 Jan 2025 00:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735865254; cv=none; b=gFZLyFNLDT9ED+w6j+4RkZuxgdT0AZaK2S95Bpbodw7Y9QPkx80m59OUFiTeNKiNRR+DeNOC0E7zPO4eh8xqPoJJl1SY2pksYzVVtj3yBclxBqToIJqL7xbufz7aVyTGgxPKLNQAx7fACnQ3bkQt1HAc3DNA9sd2+jFnKr0PbqE=
+	t=1735865710; cv=none; b=oF8xege6gtMTjVWDQs1Z+naot4r5z4G/TSkncHRYQrKS5xaPDaA2i0L18XP8FXYAYWfXrTXpgPllDayk6OEYoku6hKl5Yd/wT2a+hmhM8t2y2wO0L8rgHvdXKCApsFpDkgBBe5R9ziGib0R3pI6tow7e4OeRD/mtnde/+02f6kE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735865254; c=relaxed/simple;
-	bh=qSAojnGac8iiWgQNm/GwymTaLAR/dOnzURMucEMiN3Q=;
-	h=From:In-Reply-To:Content-Type:References:Date:Cc:To:MIME-Version:
-	 Message-ID:Subject; b=kLL4yIn4KhEc/ZtlFwA7XVIHCo7IHvj87EFgRnn3sCTfUKl0gtpfZZQoCcbByq2QDscru/p5IeX6E7iyDUFBRpDtYtnoHi/iRnt1IdkWdDRFiQpftOVjlygvTFRu6D61MjsxqDewWVEoOOXsjGI4QG4JSkA+pHZ3ETbXRatwpYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr; spf=pass smtp.mailfrom=eurecom.fr; dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b=LyHtmrv4; arc=none smtp.client-ip=193.55.113.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eurecom.fr
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=eurecom.fr; i=@eurecom.fr; q=dns/txt; s=default;
-  t=1735865251; x=1767401251;
-  h=from:in-reply-to:references:date:cc:to:mime-version:
-   message-id:subject:content-transfer-encoding;
-  bh=qSAojnGac8iiWgQNm/GwymTaLAR/dOnzURMucEMiN3Q=;
-  b=LyHtmrv40VKPhmH4P6eFgifYKE33qw3mlS7sGOC8xEiKlv5TRxLSSUDb
-   WPXSNkf0hffjUYa5gS059bWBw/FJsPVhznVAQCTENzQoD3Zg6uwm3isnH
-   WhCMRd1kFVmEFQsxpY+fEshlQg5kP63qugjR2Ctv4BUaa89FzGIr2jtO/
-   k=;
-X-CSE-ConnectionGUID: Qr5dsO1jQguNzUXQbgKoew==
-X-CSE-MsgGUID: l0V1AArUTJyeei5hpacyiw==
-X-IronPort-AV: E=Sophos;i="6.12,286,1728943200"; 
-   d="scan'208";a="28362203"
-Received: from quovadis.eurecom.fr ([10.3.2.233])
-  by drago1i.eurecom.fr with ESMTP; 03 Jan 2025 01:47:28 +0100
-From: "Ariel Otilibili-Anieli" <Ariel.Otilibili-Anieli@eurecom.fr>
-In-Reply-To: <yq1jzbcde3v.fsf@ca-mkp.ca.oracle.com>
-Content-Type: text/plain; charset="utf-8"
-X-Forward: 88.183.119.157
-References: <20241213225852.62741-1-ariel.otilibili-anieli@eurecom.fr>
-	<20241213225852.62741-2-ariel.otilibili-anieli@eurecom.fr>
-	<yq1ed1lf3z1.fsf@ca-mkp.ca.oracle.com>
-	<2f7a87-67770480-d1b1-141f3260@133486995> <yq1jzbcde3v.fsf@ca-mkp.ca.oracle.com>
-Date: Fri, 03 Jan 2025 01:47:27 +0100
-Cc: linux-scsi@vger.kernel.org, "Hannes Reinecke" <hare@kernel.org>, =?utf-8?q?James_E=2EJ=2E_Bottomley?= <James.Bottomley@HansenPartnership.com>, Linux-kernel@vger.kernel.org
-To: =?utf-8?q?Martin_K=2E_Petersen?= <martin.petersen@oracle.com>
+	s=arc-20240116; t=1735865710; c=relaxed/simple;
+	bh=nAlIjIQ9CbQeql6qpQuRtEPkrP5H9lf3zn9ixZI2ncc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=vAluhd5PXPLHbHP8xyP8Pajix4dp4zxPpGl+7qSxZbbxswgeTiaD+z2wiruE9tCDazi1I+DEXn199bK3JP2ya+IMMd0Uh79QaLcUhREdpiEe7Sv/yOAmqjtaaIY7EAvHLcw2u+UVI/P9DHUbtBoe88Q6zNZrLuTEUEGCHRx3gek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=CSVpdB1L; arc=none smtp.client-ip=199.89.1.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 009.lax.mailroute.net (Postfix) with ESMTP id 4YPQ4D1bfmzlfflL;
+	Fri,  3 Jan 2025 00:51:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1735865466; x=1738457467; bh=m8x9FB66FFGLK/cKk1vcxqNe
+	Lm3IX+GFbU3yVKEVRQc=; b=CSVpdB1LPP/bk5jPs0pokdneHaXbwf2qpG+KBC5o
+	vOjNU6pXRUODm0o+/PEkxag6Mp3/XM+lGlbeKXKp0hbf6ZFZ3grwAzss9BHbOLdA
+	LqUYw6hRnxv9igiZfMcAPjxxtWVDstCcSPGsS5EMsKeBgATiPh4COvnjMWnqgYTi
+	pxlZwZz/wH8Syg67pKxYxIu8LaU6h9Cr/Q3pKL+kT+8VneKki+ZfbwV34ZqfXmlO
+	+16P1YC1GEJD6DhA+1UGecL0Gzl6S1qO+Q9EPK4p3c+J56IcDlJIx7MDHgm/cGh0
+	p9OV2XpL7dmEr83CZOyxVMx8LqiBk7b1km8EPhXLRP+skg==
+X-Virus-Scanned: by MailRoute
+Received: from 009.lax.mailroute.net ([127.0.0.1])
+ by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id 0wiKFJC3YkCO; Fri,  3 Jan 2025 00:51:06 +0000 (UTC)
+Received: from [192.168.3.219] (c-73-231-117-72.hsd1.ca.comcast.net [73.231.117.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4YPQ474zTKzlff0R;
+	Fri,  3 Jan 2025 00:51:03 +0000 (UTC)
+Message-ID: <c933571d-a87c-44b9-af44-4fd9230cb319@acm.org>
+Date: Thu, 2 Jan 2025 16:51:01 -0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <2f7a88-67773380-f509-208cdcc@258589942>
-Subject: =?utf-8?q?Re=3A?= [PATCH 1/1] =?utf-8?q?drivers/scsi=3A?= remove dead code
-User-Agent: SOGoMail 5.11.1
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] Revert "scsi: ufs: core: Probe for EXT_IID support"
+To: Avri Altman <avri.altman@wdc.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Can Guo <quic_cang@quicinc.com>, Asutosh Das <quic_asutoshd@quicinc.com>
+References: <20250101134140.57580-1-avri.altman@wdc.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20250101134140.57580-1-avri.altman@wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thursday, January 02, 2025 23:51 CET, "Martin K. Petersen" <martin.p=
-etersen@oracle.com> wrote:
+On 1/1/25 5:41 AM, Avri Altman wrote:
+> Although added a while ago, to date no one make use of ext_iid,
+> specifically incorporates it in the upiu header.  Therefore, remove it
+> as it is just a dead code.
 
->=20
-> Ariel,
->=20
-> > Were you referring to this tree? The commit hasn=E2=80=99t appeared=
- yet.
->=20
-> It's there now.
+Hi Avri,
 
-Indeed. Thanks, Martin;
-Have a good one.
->=20
-> --=20
-> Martin K. Petersen	Oracle Linux Engineering
+Although the patch itself looks fine to me, is the description
+accurate? "dead code" means code that is not executed. I think that
+the code removed by this patch gets executed?
+
+> diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
+> index 27364c4a6ef9..155f0801e907 100644
+> --- a/include/ufs/ufshci.h
+> +++ b/include/ufs/ufshci.h
+> @@ -23,7 +23,7 @@ enum {
+>   /* UFSHCI Registers */
+>   enum {
+>   	REG_CONTROLLER_CAPABILITIES		= 0x00,
+> -	REG_MCQCAP				= 0x04,
+> +	REG_MCQCAP                              = 0x04,
+
+Is this whitespace-only change really necessary?
+
+Thanks,
+
+Bart.
 
 
