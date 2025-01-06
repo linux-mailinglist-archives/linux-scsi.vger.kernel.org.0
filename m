@@ -1,98 +1,166 @@
-Return-Path: <linux-scsi+bounces-11187-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11189-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C9DDA031D5
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jan 2025 22:08:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB920A032E0
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jan 2025 23:45:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8649D160F45
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jan 2025 21:08:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54DAF1885E87
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jan 2025 22:45:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6740E1DED6C;
-	Mon,  6 Jan 2025 21:08:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 402DB1E0DEE;
+	Mon,  6 Jan 2025 22:45:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qQn4uy+E"
+	dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b="Xfhb/WiE"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from alln-iport-7.cisco.com (alln-iport-7.cisco.com [173.37.142.94])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A321474B9
-	for <linux-scsi@vger.kernel.org>; Mon,  6 Jan 2025 21:08:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6953A8821;
+	Mon,  6 Jan 2025 22:45:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.37.142.94
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736197683; cv=none; b=Kt79KGl3WoENReyjFDhXSXXIm+NHKeR/9ATUNo25sBiJ0G7m1tFDBiMXMfjalMaf08i9V/nQXywI0y6ciqXnmDEKQUwFjPi00HBBwxoYoL7U+nEmPXDRPLHKt48uCE1bX5IowBKx3zUaxveOkbix1VEeKfoyZbV8TonrSUq5x2k=
+	t=1736203535; cv=none; b=JP8Cox+3JRRKIQQGXtu3f+WqlW38VK36W563M2+z2Orm3GQPebWfP3ynrQEPsozlj9uRuojrtQnCVtJsGVLWDRKxBDb/3sZgcY+Cf6ZzzQAvhdXqNmK3/Vhszf3yz6z3/4w+U2k4oz34/XYyExl5gt/gnawATvrp3fhUifxLCmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736197683; c=relaxed/simple;
-	bh=Ilg97tGiUJmCql9B/+Dw80pcrN/SVJAVd/ttzqaGbyY=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LFiyNl6LVxZMrx1KLgegM/nytzs22jKbl05EcOm5pmOSkXb4llkKNOKH3BuJj9JQupXcfSJbSoE77nqyPVl1Lr+DhuTI1HkDdzKDIEbnwfe1mz47CliQp0yqO/FP42uosb/41Cwf2xmfz/j9iZ7MUY9GxbpivDGT2f0PGl5vRd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qQn4uy+E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A769FC4CED6
-	for <linux-scsi@vger.kernel.org>; Mon,  6 Jan 2025 21:08:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736197682;
-	bh=Ilg97tGiUJmCql9B/+Dw80pcrN/SVJAVd/ttzqaGbyY=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=qQn4uy+ETvNKbxCxk9XLl8ETXR5PgXb67+EJ/Sjo0jZrqppFMZG0y2fmf2Qb1Pw5O
-	 Hyj2kflwVvFOV+INCw1a+nAduRXfyg0ozdexQgEzF5k3Zy704/Pj2dhWZ7Nh34u5Tu
-	 CXxMAyx7V8UPgRtj0HAJy7MNQOtiwwhnwNNLk/u6eU1ck8neGhX7+q+tLA0oGGKsdy
-	 oys+1pNQgZlShJx4JESv/uonzOHBhFjjfFxEhOo1aQF53KPI5Srvs04qYpsanVUSR5
-	 XPZAq0D1z3L94Qc5minGHDU2YRd2b+AG5RpVHEovEQ5kaF0ut8YF9caZFfQ23/Nuho
-	 l/H1iJ19i5tmQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 92A6EC41614; Mon,  6 Jan 2025 21:08:02 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-scsi@vger.kernel.org
-Subject: [Bug 219652] READ CAPACITY(16) not used on large USB-attached drive
- in recent kernels
-Date: Mon, 06 Jan 2025 21:08:02 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: IO/Storage
-X-Bugzilla-Component: SCSI
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michael.christie@oracle.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-scsi@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-219652-11613-MLq2QLtKqU@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219652-11613@https.bugzilla.kernel.org/>
-References: <bug-219652-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1736203535; c=relaxed/simple;
+	bh=jMYctyOgStI2zZ2AMhBzIJm7nFI7+CUExrDudzwj79M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P4t83S57/8sZSZiqYKbz7qVq53Va3SpJQ56TdRabU9TNSptvOhW2yJj3xbDPxdeK27smO4CIPv0M+Nv1RFKZz2u6hrdoqQaPG1+5zCie6LzKB1EjvbFRXosnDaf+LwFBarmIFbRgmiNlkP3X6z4A+wcSd1zc9I2OQ2nCv2wrZj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b=Xfhb/WiE; arc=none smtp.client-ip=173.37.142.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=cisco.com; i=@cisco.com; l=1565; q=dns/txt; s=iport;
+  t=1736203533; x=1737413133;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9PMdEQCFtlJ/DKjM4PdTjAUlJZJ9Um7jg2KJB8pUT1Y=;
+  b=Xfhb/WiEDfIcmWZHTmcYDw65DGIyrDrBecOeYgHzyt/VdgSN6X2Nm8MZ
+   SUIjalLtRlopjioQgk1pSos5EuxXQ3f5WJZz6YOQYrABFAvNMsh6GdMNT
+   0zgGNjQXefXiM/UltNEvIz/whGZbmOIo4f+VYRBkPWfWMRcSmA9OtgQNp
+   Y=;
+X-CSE-ConnectionGUID: ftH/vGYFTnuqZqFLh3UlsA==
+X-CSE-MsgGUID: LHN+uUe5SXex+DCWwZUlnQ==
+X-IPAS-Result: =?us-ascii?q?A0ATAACGXHxnj4r/Ja1aHQEBAQEJARIBBQUBgX8IAQsBh?=
+ =?us-ascii?q?BlDGS+McopnnQWBJQNWDwEBAQ9EBAEBhQeKdgImNAkOAQIEAQEBAQMCAwEBA?=
+ =?us-ascii?q?QEBAQEBAQEBCwEBBQEBAQIBBwUUAQEBAQEBOQVJhgiGXSsLAUaBUIMBgmUDs?=
+ =?us-ascii?q?EmBeTOBAd4zgW2BSAGNSXCEdycVBoFJRIEVgnIHb4FSgz6FdwSHbJ1wSIEhA?=
+ =?us-ascii?q?1ksAVUTDQoLBwWBcwM4DAswFTWBJkQ5gkZpSTcCDQI1gh58giuEXIRHhFaFZ?=
+ =?us-ascii?q?oIXhQBAAwsYDUgRLDcUGwY+bgeaZDyDboEOgikWAZNRkh+hA4QloUYaM6pTm?=
+ =?us-ascii?q?HykR4RmgWc6gVszGggbFYMiUhkPjjq3XSUyPAIHCwEBAwmRdAEB?=
+IronPort-Data: A9a23:bWCm6KKG8Tmq0sNoFE+RGpUlxSXFcZb7ZxGr2PjKsXjdYENS1DwGz
+ WsYWGmEPvqPYzT9Kdp+PNm+9B8Pv5OAxtM2HQcd+CA2RRqmiyZq6fd1j6vUF3nPRiEWZBs/t
+ 63yUvGZcoZsCCea/kr1WlTYhSEU/bmSQbbhA/LzNCl0RAt1IA8skhsLd9QR2uaEuvDnRVrX0
+ T/Oi5eHYgL9gmYqajh8B5+r8XuDgtyj4Fv0gXRmDRx7lAe2v2UYCpsZOZawIxPQKqFIHvS3T
+ vr017qw+GXU5X8FUrtJRZ6iLyXm6paLVeS/oiI+t5qK23CulQRuukoPD8fwXG8M49m/c3+d/
+ /0W3XC4YV9B0qQhA43xWTEAe811FfUuFLMqvRFTvOTLp3AqfUcAzN1gEGFxI6Ip1NpxHHh87
+ NI8KGswaguq0rfeLLKTEoGAh+w5J8XteYdasXZ6wHSBVLAtQIvIROPB4towMDUY358VW62BI
+ ZBENHw2N0Sojx5nYj/7DLo9lf20h332cBVTqUmeouw85G27IAlZjOC9a4SKIYTQLSlTtmK4g
+ CHbwmmkOSEXJJ+z4gWawE+ogNaayEsXX6pJSeXnraQ16LGJ/UQRBR8cfV+6p+SpzE+0XpRUL
+ El80i8nt7Qz8gqzQ8XwRQa1plaDpBcXX9cWGOo/gCmJy6zJ80OaC3ICQzppdtMrrok1SCYs2
+ 1vPmMnmbRRrsbuIWTeG/ayVhS29NDJTLmIYYyIACwwf7LHeTJoblBnDSJNnVaWylNCwQWi2y
+ DGRpy94jLIW5SIW60ml1V7bo3Wyianncggo/zfOcEaltT59f6fwMuRE9mPnxfpHKY+YSHyIs
+ 34Fh9WS4Ygy4XelynTlrAIlQu3B2hqVDAAwl2KDCHXIythMx5JBVd0NiN2dDB41WirhRdMPS
+ BSJ0e+2zMQMVEZGlYctP+qM5z0ClMAM7+jNWPHOdcZpaZNsbgKB9ywGTRfPhD60yBF9zftkZ
+ 8jznSOQ4ZAyVP4PIN2eGrZ17FPX7nplrY8ubcmhlk35jer2iIC9FuddbAHmgh8FAFOs+1iNr
+ I0FaKNmOj1UUfb1ZWHM4JUPIFURZXk9DtaeliCkXrDrH+aSI0l4U6W56ep4I+RNxv0F/s+Wp
+ SvVchEDlzLCaYjvdV7ihoZLNOi3Bc4XQLNSFXBEAGtELFB6Pd/ws/9EKMNuFVTlncQ6pcNJo
+ zA+U53oKpxypv7voVzxsbGVQFReSSmW
+IronPort-HdrOrdr: A9a23:94weBKpuS4PDr2VJMPvzHY4aV5oYeYIsimQD101hICG9vPb1qy
+ nIpoV46faaslgssR0b8+xoW5PwIk80l6QV3WB5B97LNzUO01HGEGgN1+bf6gylMzHi9+JbyK
+ dre7VzBZnNF1Rg5PyKhTVQa+xB/DFCm5rY4ts3CBxWPGVXV50=
+X-Talos-CUID: =?us-ascii?q?9a23=3Af2nmUGj9qMlYa+Ol1mwLAYy5kDJufGH9i2n/EmG?=
+ =?us-ascii?q?ED3tweqS7bV/Lxad/up87?=
+X-Talos-MUID: 9a23:xIxyawmy+MryM3KdBJvldnpGFOEr/pmjVXs9nIVFl+K7Kh5NPzGk2WE=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.12,293,1728950400"; 
+   d="scan'208";a="408367302"
+Received: from rcdn-l-core-01.cisco.com ([173.37.255.138])
+  by alln-iport-7.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 06 Jan 2025 22:45:05 +0000
+Received: from fedora.cisco.com (unknown [10.188.112.101])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kartilak@cisco.com)
+	by rcdn-l-core-01.cisco.com (Postfix) with ESMTPSA id E446F180002A2;
+	Mon,  6 Jan 2025 22:45:03 +0000 (GMT)
+From: Karan Tilak Kumar <kartilak@cisco.com>
+To: sebaddel@cisco.com
+Cc: arulponn@cisco.com,
+	djhawar@cisco.com,
+	gcboffa@cisco.com,
+	mkai2@cisco.com,
+	satishkh@cisco.com,
+	aeasi@cisco.com,
+	jejb@linux.ibm.com,
+	martin.petersen@oracle.com,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Karan Tilak Kumar <kartilak@cisco.com>
+Subject: [PATCH 1/3] scsi: fnic: Remove unnecessary else and unnecessary break in FDLS
+Date: Mon,  6 Jan 2025 14:44:49 -0800
+Message-ID: <20250106224451.3597-1-kartilak@cisco.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Authenticated-User: kartilak@cisco.com
+X-Outbound-SMTP-Client: 10.188.112.101, [10.188.112.101]
+X-Outbound-Node: rcdn-l-core-01.cisco.com
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219652
+Incorporate review comments from Martin:
+    Remove unnecessary else and unnecessary break to fix warnings
+    in the FDLS code.
 
-michael.christie@oracle.com changed:
+Reviewed-by: Sesidhar Baddela <sebaddel@cisco.com>
+Reviewed-by: Arulprabhu Ponnusamy <arulponn@cisco.com>
+Reviewed-by: Gian Carlo Boffa <gcboffa@cisco.com>
+Reviewed-by: Arun Easi <aeasi@cisco.com>
+Signed-off-by: Karan Tilak Kumar <kartilak@cisco.com>
+---
+ drivers/scsi/fnic/fdls_disc.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |michael.christie@oracle.com
+diff --git a/drivers/scsi/fnic/fdls_disc.c b/drivers/scsi/fnic/fdls_disc.c
+index 2534af2fff53..2513a82a8915 100644
+--- a/drivers/scsi/fnic/fdls_disc.c
++++ b/drivers/scsi/fnic/fdls_disc.c
+@@ -2776,23 +2776,19 @@ fdls_process_tgt_prli_rsp(struct fnic_iport_s *iport,
+ 			/*Retry Plogi again from the timer routine. */
+ 			tport->flags |= FNIC_FDLS_RETRY_FRAME;
+ 			return;
+-		} else {
+-			FNIC_FCS_DBG(KERN_INFO, fnic->host, fnic->fnic_num,
+-						 "PRLI returned ELS_LS_RJT from target: 0x%x",
+-						 tgt_fcid);
+-
+-			fdls_tgt_logout(iport, tport);
+-			fdls_delete_tport(iport, tport);
+-			return;
+ 		}
+-		break;
++		FNIC_FCS_DBG(KERN_INFO, fnic->host, fnic->fnic_num,
++					 "PRLI returned ELS_LS_RJT from target: 0x%x",
++					 tgt_fcid);
+ 
++		fdls_tgt_logout(iport, tport);
++		fdls_delete_tport(iport, tport);
++		return;
+ 	default:
+ 		atomic64_inc(&iport->iport_stats.tport_prli_misc_rejects);
+ 		FNIC_FCS_DBG(KERN_INFO, fnic->host, fnic->fnic_num,
+ 					 "PRLI not accepted from target: 0x%x", tgt_fcid);
+ 		return;
+-		break;
+ 	}
+ 
+ 	FNIC_FCS_DBG(KERN_INFO, fnic->host, fnic->fnic_num,
+-- 
+2.47.1
 
---- Comment #14 from michael.christie@oracle.com ---
-No problem. Thanks for doing the investigation and lots of debugging. I'll =
-send
-the patch upstream later today.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
 
