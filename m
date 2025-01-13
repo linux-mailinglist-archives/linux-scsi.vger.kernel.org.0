@@ -1,46 +1,46 @@
-Return-Path: <linux-scsi+bounces-11453-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11454-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0A24A0BFFD
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jan 2025 19:37:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CC7AA0C034
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jan 2025 19:41:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D8E77A0285
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jan 2025 18:36:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69DFE3A6669
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jan 2025 18:40:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB1F01C5D5D;
-	Mon, 13 Jan 2025 18:34:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAFB01FCCE7;
+	Mon, 13 Jan 2025 18:35:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IH6tMwJo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i8S2T/aN"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FEA01D5ABA;
-	Mon, 13 Jan 2025 18:34:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7401B1FC7FC;
+	Mon, 13 Jan 2025 18:35:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736793288; cv=none; b=tDAzb7tn3wploQfYqBPYbP+23BjLjxSqqqZuGzC9eoAn0tV437Z40aUwf703vyvIvzJwT6PGhyaGKWGPswuQNpjh0QALyODq6zA7nkNZpX7XK5hCfF3iOPZZUiHEiLT1ww1ur/j1DwTgWUAki7FEevjybZBEeNU4/c1H3KBw7+0=
+	t=1736793328; cv=none; b=Gf5WGqBvPVeysI8+GeTCQaRzCaeUvCPiGhQruSepKEKKIA6iPcn736jp49xnVsbTLOPT/4NcFKWEN3x0G6qGQOLDL/dx5ljmcO2nKJPwBh9FinXDTBpZkYU9vRTcPD6dE36JSt5TMCpGk8OW2eP7WFImPCV6obSG/kTExSjJ4Zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736793288; c=relaxed/simple;
-	bh=ndlq/w9vXLcVuQ3oJkWMS36HYWEtrKJrtDG4/IxWrsQ=;
+	s=arc-20240116; t=1736793328; c=relaxed/simple;
+	bh=J3AxO9abyylv373NfKkPGlmMSGT+EVWJVM9UPh1tgoU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PtkVqsOiUcaUsKxOTa3wbVRc0McnLgE3wDAZb72rgSXL4NoFEu/V2MNe9tiEXPluTHYu0TyyjrtFfQ9M0xzZ5a5Inm9V8/I2uzspS1EBs16lkxHQvFPW9DIhSzfHlic9Gt6LlDAdChxxA9TpKMImxpF6W7Q8P5E9Gd+S9KXSlbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IH6tMwJo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02810C4CED6;
-	Mon, 13 Jan 2025 18:34:46 +0000 (UTC)
+	 MIME-Version; b=kvxNUz1NrUgUVRUCpHL3M8X0MeK5wo1npoQCo9P4npp1gxQiIVcKPFJpZDggVOPnVJ3k5WJyk1AQJiYsdjEvGsT7bdb4A0iS83yvnQ+r1YN/ECW1IDbQptqJpczcLQb5aR/VSts59BTW+QlkcDfkMCeeBDSBFBwXnckCuP2BRVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i8S2T/aN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10727C4CEE1;
+	Mon, 13 Jan 2025 18:35:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736793288;
-	bh=ndlq/w9vXLcVuQ3oJkWMS36HYWEtrKJrtDG4/IxWrsQ=;
+	s=k20201202; t=1736793328;
+	bh=J3AxO9abyylv373NfKkPGlmMSGT+EVWJVM9UPh1tgoU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IH6tMwJoc2xQGryQ9dGK0wQvZ/M1N53gx/yIdYMhVMWzzb3dhyUwY6kx5knv2MPdj
-	 6Zlsql+IRqJsNuoeU1e7WoIppfXMVuHZhvwFoh+H8Un/tj28Cfp/F9QAJ17WEn0oIo
-	 46sb8oD3jwXYbWickNep6oYQJJfwkFKGrQIZaVqehM6+5WZsO+HzJ6bFIEars5JKEk
-	 HnpFaOzXh2kvWchhejSjMF1fpc5RJ4rdQbFRioWOg4qKwmvxlyVM0sIFZWTBqZ7uKR
-	 Zb/keOiXMN2DuYmCgESeJLeF46T9tCmqGtknbi/mGy07oK8Q+fyIcibv/4FdrrRa3h
-	 U1royVqzJtRQg==
+	b=i8S2T/aNO5ud6lnlju2OjLQ7PvS8v10djP9MmGhX3zadBRitfvdjPyD5/i4aBKMOL
+	 b/gyTorD+bRwuUhbzKUtISUqL6/jmvymGCXs2YA7Q0K/Y/0dRupn/02zgm0npc3pqd
+	 t1PeDbYC9DxyyyaNlQDNzPApYzs9K2dFpMXkBn+7Z5I/Vwqs4vDQXje7fPwE5m+HUf
+	 aF/YVN57wQ321fw/FbOMFTc4BGGC++Si0ojkFuOGyWManiOd4OYJGAPzRU0Uuu2JbT
+	 aKHlrOq9I9zsJUOiYIlR5a7DXeLLSrq3GdCcu7JS32LalATvemkivU1YXADyhuDs1K
+	 AOxbL+0z/a99g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -54,12 +54,12 @@ Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
 	ahalaney@redhat.com,
 	quic_mnaresh@quicinc.com,
 	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 09/20] scsi: ufs: core: Honor runtime/system PM levels if set by host controller drivers
-Date: Mon, 13 Jan 2025 13:34:14 -0500
-Message-Id: <20250113183425.1783715-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 06/10] scsi: ufs: core: Honor runtime/system PM levels if set by host controller drivers
+Date: Mon, 13 Jan 2025 13:35:07 -0500
+Message-Id: <20250113183511.1783990-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250113183425.1783715-1-sashal@kernel.org>
-References: <20250113183425.1783715-1-sashal@kernel.org>
+In-Reply-To: <20250113183511.1783990-1-sashal@kernel.org>
+References: <20250113183511.1783990-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.9
+X-stable-base: Linux 6.6.71
 Content-Transfer-Encoding: 8bit
 
 From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index bc13133efaa5..68d9f5ad5061 100644
+index 84dac9050074..5c74293fd685 100644
 --- a/drivers/ufs/core/ufshcd.c
 +++ b/drivers/ufs/core/ufshcd.c
-@@ -10590,14 +10590,17 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
+@@ -10484,14 +10484,17 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
  	}
  
  	/*
