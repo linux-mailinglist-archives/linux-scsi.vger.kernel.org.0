@@ -1,78 +1,77 @@
-Return-Path: <linux-scsi+bounces-11483-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11480-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 935D0A10C8A
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jan 2025 17:42:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85342A10C7F
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jan 2025 17:41:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CF463A4A0F
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jan 2025 16:41:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88EBB1889974
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jan 2025 16:41:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE0B31EE7AC;
-	Tue, 14 Jan 2025 16:41:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 958E71D516A;
+	Tue, 14 Jan 2025 16:40:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="d7MZT8qE"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="laykaakw"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBCB1E764A;
-	Tue, 14 Jan 2025 16:41:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0D31CEAC9
+	for <linux-scsi@vger.kernel.org>; Tue, 14 Jan 2025 16:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736872877; cv=none; b=LAiCEQKiIR/zuSWBIxujEuwIxjypET6EzUNlrJgM0bcWe3P90ZOWA+QJ269wJi3SOLUyuO0C1RV8rdti8Jvy8114hyU7OoxgrUagzR+HiiKupgyhynGz8jDMsQFfPX56COZOznS6dFlf0GxnBfaVZ8anYzyNO2UiagmHx9nQpQg=
+	t=1736872848; cv=none; b=JEhzmQHDeGPG3xXQJnoQ3XygFSkkN4fN0i52tqaupAPODFrhT6nXhMbaum4StA/3/WYTC5XsQFqZTkLqhvBc5qfNqx3vK3Hla/GObcy5QPeZ6aYjBgvrTlQQPWwJHsvQ1jstZPr++XVFeNT70TNzA79bGsptncyoVyP9b8vP2Ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736872877; c=relaxed/simple;
-	bh=5mQOmjlg7CDfy6bpFY4RJtJvsbBh71xhv8ZifeRP1rQ=;
+	s=arc-20240116; t=1736872848; c=relaxed/simple;
+	bh=CHizOH8xd2uKAuO/JuzCO0XcZXGfc21oahpYXC/YOGs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Du71muhgOAR2+91XFrzCxFVpciQd2WZAszH9G5gB0pYEHx1ksJaTQ/85rZd9jIarHbCx1PfKjJ5D0mS2z1EoerzloY56AH6TIVb8ITV9k8HVfDShqjgLA+13e+Wbxk3gvIDF1K6RzaUwyUEQgRoesHU9UHw+Pvw2oiiNSQa0OnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=d7MZT8qE; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=A2l+0a8xEB2VTIrNPkD9uWmiFFDXcVtxHq5pMZuDR7eAIi2sd6Ex/kCQe84z7MPWMUm9bVOXscPp/RxSlaYtSQkitx1xKaHG04KzblPOdhCnvlbCgKRFuscVooZm1Xu8Nj387ey4yhf/GsBylM/XBscK7Cuc10jOyM3en+Vo5rQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=laykaakw; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50EC0oTl008470;
-	Tue, 14 Jan 2025 16:40:44 GMT
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50EC0oK9014294;
+	Tue, 14 Jan 2025 16:40:45 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=f8uXbtIRLei/NudZ033oVfbb9zDm1U80mA40aJktlHk=; b=
-	d7MZT8qE4TgYCfR7ONH3+DnyBSsCDZQFAxUtxc4EiRgf/Ejjt/xBVLwaXheTvoMi
-	ya0/zpOUwVNDoSyE0wbVgBthhueWAk3DajiJxbTB8sjF5b3HVn1TzfcVlIzhp255
-	7Jr6Gn2n34G/YK6O/LeY6vgPap3nOKh9eFaJki/bBALx9bta+02rPwpjzAE6gn71
-	xEgVqw7Cwm6Sy8Qdy7PmXbJRtBMwDKl8Hs7COyxT08Nhl83mrznm5sQRXbQu0A6V
-	b3LRZutbF4LyCFtE/vTf0p+OF8L66RsYHViYLMEfIsG+rwraTjMiedkvfZb3B8zs
-	nHQyoM+ClJaEnb87Z4HYsA==
+	corp-2023-11-20; bh=jAO8evmgY/N1f9+XTABMRax2aZRXvu3rHeF4sfOZIHY=; b=
+	laykaakwNBT2Kd7N4fIut1xs36YWgbPTWgndjWeGAweWgE4cSlF5e48y4uC8XTyY
+	v1HoihVcAUcBzxX21riJVtwmLxTS9t/DKbcq5cYgkm2N9bRSnbRMF+CHkwcwO3Jr
+	8GmMNKGq1NjcpZi84ULxWail+ucy8e9EIfj5SAUFNmgV4bwY3+ahAHgriH57Oi97
+	jsY9EdyTEcEqwmrtBErmNKLcxC6/QrikSZct4srdmL7uu4tYnGHbhJdlwm45qluU
+	DxwY7hEWPixccDeEzshlDt00VOgrEeffRfXwIVgWJxpinbhCeIeeMVbUhTJV3ZcY
+	fSCS/QgI8841pynWaWtM4Q==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 443fjap3k1-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 443gh8wy34-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 14 Jan 2025 16:40:44 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 50EG4P9f036331;
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 50EG78kf036392;
 	Tue, 14 Jan 2025 16:40:43 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 443f38vb5q-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 443f38vb5y-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 14 Jan 2025 16:40:43 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 50EGegee005685;
-	Tue, 14 Jan 2025 16:40:42 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 50EGegeg005685;
+	Tue, 14 Jan 2025 16:40:43 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 443f38vb57-1;
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 443f38vb57-2;
 	Tue, 14 Jan 2025 16:40:42 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Avri Altman <avri.altman@wdc.com>
+To: James.Bottomley@HansenPartnership.com,
+        John Garry <john.g.garry@oracle.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bart Van Assche <bvanassche@acm.org>, Can Guo <quic_cang@quicinc.com>,
-        Asutosh Das <quic_asutoshd@quicinc.com>
-Subject: Re: [PATCH v3] Revert "scsi: ufs: core: Probe for EXT_IID support"
-Date: Tue, 14 Jan 2025 11:40:10 -0500
-Message-ID: <173687227219.1044893.9689399736660500770.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: scsi_debug: Constify sdebug_driver_template
+Date: Tue, 14 Jan 2025 11:40:11 -0500
+Message-ID: <173687227215.1044893.4094468761954938282.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20250103080204.63951-1-avri.altman@wdc.com>
-References: <20250103080204.63951-1-avri.altman@wdc.com>
+In-Reply-To: <20250107153325.1689432-1-john.g.garry@oracle.com>
+References: <20250107153325.1689432-1-john.g.garry@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -85,27 +84,24 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-01-14_05,2025-01-13_02,2024-11-22_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 malwarescore=0
- spamscore=0 suspectscore=0 mlxlogscore=473 adultscore=0 phishscore=0
+ spamscore=0 suspectscore=0 mlxlogscore=974 adultscore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2411120000
  definitions=main-2501140129
-X-Proofpoint-GUID: nr_ec7iCeWxlpX02Jj5vpITBs5pwRQBC
-X-Proofpoint-ORIG-GUID: nr_ec7iCeWxlpX02Jj5vpITBs5pwRQBC
+X-Proofpoint-GUID: KUO4OpV0_gOdIpdp3n0BYNlO8Ctc24H2
+X-Proofpoint-ORIG-GUID: KUO4OpV0_gOdIpdp3n0BYNlO8Ctc24H2
 
-On Fri, 03 Jan 2025 10:02:04 +0200, Avri Altman wrote:
+On Tue, 07 Jan 2025 15:33:25 +0000, John Garry wrote:
 
-> This reverts commit 6e1d850acff9477ae4c18a73c19ef52841ac2010.
-> 
-> Although added a while ago, to date no one make use of ext_iid,
-> specifically incorporates it in the upiu header.  Therefore, remove it
-> as it is currently unused and not serving any purpose.
+> It's better to have sdebug_driver_template as const, so update the probe
+> path to set the shost members directly after allocation and make that
+> change.
 > 
 > 
-> [...]
 
 Applied to 6.14/scsi-queue, thanks!
 
-[1/1] Revert "scsi: ufs: core: Probe for EXT_IID support"
-      https://git.kernel.org/mkp/scsi/c/815940bb7db7
+[1/1] scsi: scsi_debug: Constify sdebug_driver_template
+      https://git.kernel.org/mkp/scsi/c/37d061e1ace1
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
