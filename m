@@ -1,186 +1,84 @@
-Return-Path: <linux-scsi+bounces-11463-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11467-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 588C1A0C407
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jan 2025 22:47:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4722BA0FEED
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jan 2025 03:51:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDA951603E9
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jan 2025 21:47:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1C077A0462
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jan 2025 02:50:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 130221F943C;
-	Mon, 13 Jan 2025 21:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56AAE230988;
+	Tue, 14 Jan 2025 02:50:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aUUxIcjk"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="DL02xFYK"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61B2A1CAA8C;
-	Mon, 13 Jan 2025 21:46:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1ADF288CC;
+	Tue, 14 Jan 2025 02:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736804817; cv=none; b=eNTA1nEt2ELJDuNvBHMG863lnBMI2mdvXJyFJLHxSXkWM9DPFILdHBaXP1hVhCkvD7muMmGt4uTeutAUWQdksH3FokOiEg02/P+4acw5xhPoo5MG9Ez9+z1H7Cmveqx3TyqCJta8mSq+QFk4PmJJkStR0C2smnAxHAJolLHmKo0=
+	t=1736823053; cv=none; b=aRjMjfr4TmUGkKxmiMJz8i72X6hlSxdYQJDtTq8irpPezXbSETVYpcjvvSeWsb7K+tAgDxh/T3OjhVb4OWrAoynGHGK2sck23u0cS2Mt1jUmvfH8zaaRb0eAIXmZLUpLAwLDu31saD265PLYoUWL1cotdwzzFx92kv1t/1MT0tQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736804817; c=relaxed/simple;
-	bh=/lCcYgtW1q0+63MpeP0g7i5QgV/7Z9eEjOvQYw2OP8k=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=d9d0Url9u4TYoFupIDmPm1ARMIooYC77fve8JcyTDXqxYFLcvX8vvntGKpZ+PRUBDHTSRRRq3yJHsckYWQjbCkCcNwJtMD8VzV/mJWQOtkuWvHCc6isayXCDIoNT1j/gJ7yh5FeQt0K3qlJjC8Pn0r6KTYdZcCj1ejuYVzfrzm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=aUUxIcjk; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50DHE2fL016060;
-	Mon, 13 Jan 2025 21:46:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	IDNTS29fXvBUdkGF/6g6GgfdK+c3Xk5KHID7v0RADto=; b=aUUxIcjkYYJs/14I
-	HKvGo/vfUpVlwbMFhJ16KO3XsO6FKNbMthoqPRSjM44SX1Gq4yUNeSzWkJkXa6Xh
-	6ikoQt+H019HuTADmasaXhuQo8oQWUuhQZMS0GUPsTftJ9t+ercQ5qeaoLvNHiLm
-	v4b03D1emkw9P0jhBglaP1dQrd0NMSIUnY34XcP4YbnFqahK7NEnmiNBYubMhaJ4
-	FKt//a2Lu8JsB/VeK7WMW97j1KosnEW8PCMxVXd34EYn0g/bDHOV+5QS7oWc9VRp
-	CRDaX/YhJRhmtJjsq2F1uDqK6K01lVY914SlpMC70dVgUS38NtVFun/Z6gzbapid
-	5CFxiA==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44571yrk04-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 13 Jan 2025 21:46:36 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 50DLkZKb032080
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 13 Jan 2025 21:46:35 GMT
-Received: from hu-molvera-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 13 Jan 2025 13:46:34 -0800
-From: Melody Olvera <quic_molvera@quicinc.com>
-Date: Mon, 13 Jan 2025 13:46:28 -0800
-Subject: [PATCH 5/5] arm64: dts: qcom: sm8750: Add UFS nodes for SM8750 QRD
- and MTP boards
+	s=arc-20240116; t=1736823053; c=relaxed/simple;
+	bh=UWm5y3/ZMfaopHeKjuu2vUzbf6Kl301/+o54N2DrBi0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pE1QBuvW44UxR3CoeYq0KIOKjcPE5/d6bszUWTS/mRr2y0B7zKLtQQyN+WAIdbyj3B4cgM8jV9aoWMybiCsHtGGfG6X1DzvYjcwIFldZhCqiXcOjNUnfO2K5WPMAzG7sWQVfhg5ToPfx9BS+gMf7NyWJ4QxxuTxDet5Hfj4lqHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=DL02xFYK; arc=none smtp.client-ip=115.124.30.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1736823047; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=EU6TwagGDoibJv2sST+W8dmh99DbdVuapWToYMqbmvI=;
+	b=DL02xFYKDotTi3WmZEp7KDu/VKr7Dxy1Ds1DWdHY+nXuDxAXNOZTiBMGySTUshQ9kKAMGAp4wZ/lyVjoFWIApvngPCsJhqenG9saHwptw2i52RBUJDuGp8lK+C+1qsnxz2tv4iZt14G3816sdB1mNJqt3JBHAxHCROWIv/q+iu8=
+Received: from localhost(mailfrom:kanie@linux.alibaba.com fp:SMTPD_---0WNdF3uB_1736823041 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 14 Jan 2025 10:50:47 +0800
+From: Guixin Liu <kanie@linux.alibaba.com>
+To: "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org
+Subject: [PATCH] scsi: target: core: add line break to status show
+Date: Tue, 14 Jan 2025 10:50:41 +0800
+Message-ID: <20250114025041.97301-1-kanie@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20250113-sm8750_ufs_master-v1-5-b3774120eb8c@quicinc.com>
-References: <20250113-sm8750_ufs_master-v1-0-b3774120eb8c@quicinc.com>
-In-Reply-To: <20250113-sm8750_ufs_master-v1-0-b3774120eb8c@quicinc.com>
-To: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Manivannan Sadhasivam
-	<manivannan.sadhasivam@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Bjorn Andersson <andersson@kernel.org>, Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Satya Durga Srinivasu Prabhala
-	<quic_satyap@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, Melody Olvera <quic_molvera@quicinc.com>,
-        "Nitin Rawat" <quic_nitirawa@quicinc.com>,
-        Manish Pandey
-	<quic_mapa@quicinc.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1736804792; l=1903;
- i=quic_molvera@quicinc.com; s=20241204; h=from:subject:message-id;
- bh=9+jQdXJWLgPm1fCnMDQg22K40qBRGHAaAVvSP+BuGQo=;
- b=8r3HVZTBeGUuTQ/5i4gc/olzCn1OiRznlNVR7mpVU6CIWFeWAWV0Dt7QEXDlHhBAOxHVKmH6X
- p+xHJQi0rYPC+T/MfzheCbQElw71zCnf5SOf2dkIbB+CeHCLZgL6Bnp
-X-Developer-Key: i=quic_molvera@quicinc.com; a=ed25519;
- pk=1DGLp3zVYsHAWipMaNZZTHR321e8xK52C9vuAoeca5c=
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: jcOaAhiSj8cln7_3eu3xgpdnx5v5I_ey
-X-Proofpoint-ORIG-GUID: jcOaAhiSj8cln7_3eu3xgpdnx5v5I_ey
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 phishscore=0 spamscore=0 impostorscore=0 bulkscore=0
- clxscore=1015 lowpriorityscore=0 adultscore=0 suspectscore=0 mlxscore=0
- mlxlogscore=755 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501130171
+Content-Transfer-Encoding: 8bit
 
-From: Nitin Rawat <quic_nitirawa@quicinc.com>
+To ensure the output is not tangled with the shell prompt, add a
+line break to clearly display the status.
 
-Add UFS host controller and PHY nodes for SM8750 QRD and MTP boards.
-
-Co-developed-by: Manish Pandey <quic_mapa@quicinc.com>
-Signed-off-by: Manish Pandey <quic_mapa@quicinc.com>
-Signed-off-by: Nitin Rawat <quic_nitirawa@quicinc.com>
-Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
 ---
- arch/arm64/boot/dts/qcom/sm8750-mtp.dts | 18 ++++++++++++++++++
- arch/arm64/boot/dts/qcom/sm8750-qrd.dts | 18 ++++++++++++++++++
- 2 files changed, 36 insertions(+)
+ drivers/target/target_core_stat.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8750-mtp.dts b/arch/arm64/boot/dts/qcom/sm8750-mtp.dts
-index 9e3aacad7bdab6848e86f8e45e04907e1c752a07..9d34159e73948e7f3f939593d1ace444cc5dcd15 100644
---- a/arch/arm64/boot/dts/qcom/sm8750-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8750-mtp.dts
-@@ -792,3 +792,21 @@ &tlmm {
- &uart7 {
- 	status = "okay";
- };
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply = <&vreg_l1j_0p91>;
-+	vdda-pll-supply = <&vreg_l3g_1p2>;
-+
-+	status = "okay";
-+};
-+
-+&ufs_mem_hc {
-+	reset-gpios = <&tlmm 215 GPIO_ACTIVE_LOW>;
-+
-+	vcc-supply = <&vreg_l17b_2p5>;
-+	vcc-max-microamp = <1300000>;
-+	vccq-supply = <&vreg_l1d_1p2>;
-+	vccq-max-microamp = <1200000>;
-+
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sm8750-qrd.dts b/arch/arm64/boot/dts/qcom/sm8750-qrd.dts
-index f77efab0aef9bab751a947173bcdcc27df7295a8..8dd82494ba5aea6e6b5ddafc9299ec68dfb84bcd 100644
---- a/arch/arm64/boot/dts/qcom/sm8750-qrd.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8750-qrd.dts
-@@ -790,3 +790,21 @@ &tlmm {
- &uart7 {
- 	status = "okay";
- };
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply = <&vreg_l1j_0p91>;
-+	vdda-pll-supply = <&vreg_l3g_1p2>;
-+
-+	status = "okay";
-+};
-+
-+&ufs_mem_hc {
-+	reset-gpios = <&tlmm 215 GPIO_ACTIVE_LOW>;
-+
-+	vcc-supply = <&vreg_l17b_2p5>;
-+	vcc-max-microamp = <1300000>;
-+	vccq-supply = <&vreg_l1d_1p2>;
-+	vccq-max-microamp = <1200000>;
-+
-+	status = "okay";
-+};
-
+diff --git a/drivers/target/target_core_stat.c b/drivers/target/target_core_stat.c
+index c42cbde8a31b..210648a0092e 100644
+--- a/drivers/target/target_core_stat.c
++++ b/drivers/target/target_core_stat.c
+@@ -117,9 +117,9 @@ static ssize_t target_stat_tgt_status_show(struct config_item *item,
+ 		char *page)
+ {
+ 	if (to_stat_tgt_dev(item)->export_count)
+-		return snprintf(page, PAGE_SIZE, "activated");
++		return snprintf(page, PAGE_SIZE, "activated\n");
+ 	else
+-		return snprintf(page, PAGE_SIZE, "deactivated");
++		return snprintf(page, PAGE_SIZE, "deactivated\n");
+ }
+ 
+ static ssize_t target_stat_tgt_non_access_lus_show(struct config_item *item,
 -- 
-2.46.1
+2.43.0
 
 
