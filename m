@@ -1,91 +1,104 @@
-Return-Path: <linux-scsi+bounces-11498-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11499-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD5F7A11A75
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jan 2025 08:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 38FADA11B03
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jan 2025 08:36:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2E601886F35
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jan 2025 07:08:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FA38188A5F1
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jan 2025 07:36:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02AFD230275;
-	Wed, 15 Jan 2025 07:08:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7547822F3B9;
+	Wed, 15 Jan 2025 07:36:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="cgrfTeWi"
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="L5rKqhF0";
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="g5wo/hqi"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2566D22FDF0;
-	Wed, 15 Jan 2025 07:07:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from mta-03.yadro.com (mta-03.yadro.com [89.207.88.253])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72AA822F166;
+	Wed, 15 Jan 2025 07:36:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.207.88.253
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736924882; cv=none; b=b/AdQEVOsqxcGWP6hbbIep2ZPveBqAk3XYWZbQYrvznvX5VWoigpBk5DiNoN30h4yX3hx/Dv8TN0+3o/QD6SbGQCzOni3rDfoblBONkJtZOwOYhRhyqKN4Oog8eteR++JfMRTOYk2KS2xYjPuj+NXgegZs1SH6UzJb/VG7/cRE0=
+	t=1736926587; cv=none; b=cZVtYs2ZF4t/E0bmeySbshSqSYjM8LU9ci04tHaLKwhc3x1hVW4oxY/Gzt+9JyexH1Dxn65RjvzBjCsoMMKCWlY1wbHzm0nO87AGo/fJP90OTC8vaSlk0zStliqcOs23t9mijha9LEx+qiV1XNht1aDDxY5xFt2ki9ycuz8wU9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736924882; c=relaxed/simple;
-	bh=USDNyDYzARFNKpdQw2Ri7q5btk7h0WwRIUi3ES2XmUk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dU/xlEoJAko3AKhsspwQRIkdX9DxjsaFcie8WH/N60nOjurTwRo1pVJxuliBmoYp35UG+S3wEm8uVwaBKvCOu88Xzt54+obhIqZm0b9jU6M5jFJPpeFiz44y+xQPKSVxl4zkH0CXZ3Kph++hh94N4sPWtz+H+gq8WnQ8ZN8c5Y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=cgrfTeWi; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=82Na0
-	E6cXSPCtTmmiK9FiuD/ySIJCvmzFIqW6VIgQOw=; b=cgrfTeWi5KXN27Ly0eok1
-	e8pwgmRqR/MZapeJlGM88BipkFIxNjr8eXQpHkAc8EWbuM8idkl6h5nU/+OEvmJg
-	wmKGAiC5YCyfqwMsTdsfL1tNH4HPw/5rqdCyyE6q4jBEWgzAHz/OBXzRf3nuDSWV
-	2Ac0qKfdlFJVLSKkoMLMj8=
-Received: from wdhh6.sugon.cn (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wD3cy_EXodnt3jkFw--.49365S2;
-	Wed, 15 Jan 2025 15:07:49 +0800 (CST)
-From: Chaohai Chen <wdhh66@163.com>
-To: martin.petersen@oracle.com
-Cc: linux-scsi@vger.kernel.org,
-	target-devel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chaohai Chen <wdhh66@163.com>
-Subject: [PATCH] target: fix All_commands parameter data header size
-Date: Wed, 15 Jan 2025 15:07:39 +0800
-Message-Id: <20250115070739.216154-1-wdhh66@163.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1736926587; c=relaxed/simple;
+	bh=i+Lr0l6u7knbE2lN3MK6vmkaz+cKHINY/Jfu/pdkK64=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r/kH1zOcGPyze2gUVkUpLa2v8vnDeI9vH/Bn0bx4yoqskgV+rabYHIARxTRcDyFeeEo0elykQPbpaMzgfmF9HE9787oIAuee8gkjCUXZ3T1sGYg9tyiu1SWRN9mff8rRVLpHbRP/7Py/+gHllGrksFqzfWC57kTePbz3AhLgQwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com; spf=pass smtp.mailfrom=yadro.com; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=L5rKqhF0; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=g5wo/hqi; arc=none smtp.client-ip=89.207.88.253
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yadro.com
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-03.yadro.com 9E18DE0003
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-04;
+	t=1736926573; bh=F4jfK3BzhDlQR4ssxeKb7chAJyn8i/ZZwlISiS7quGc=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+	b=L5rKqhF0VjBXUwVBWo7Jr9dRWw11897tiu4XoXO9QnnQ3kJdZ5oOMyHd5snd288CG
+	 f8C5Uue8MQjUA/pVJ8CmwIXn7Gx2ykhisJlZvVbRmz9vkngAw2pyb15gM3xX/+didn
+	 5jLzQRLti35GgAEP5xyHBqki/1ge38PRgP2paAPvM9uwi/u9UvJW8lO6yM/YRxi9JJ
+	 uS4ILMs21vsq1rVe267vrR1JpvfLjUvd54w9LmEVWzAlBrBb2j8CUu8/Fps0hIOl9w
+	 fc58BYDqevPzkTPCOioONhUshbwPWd6OAjx+vNKtABuvm3pr3EmoVc1LCwGCHhUIP1
+	 NUI/zLdcz9p8Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-03;
+	t=1736926573; bh=F4jfK3BzhDlQR4ssxeKb7chAJyn8i/ZZwlISiS7quGc=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+	b=g5wo/hqiV1UZNiZu2RF40kVpv08cxaTkNlj4oMEzIOwumAjtuCB3Sa8gG152HmaFO
+	 rGPMaLL7SRrfYvO6HKHHRdVfU3aS+BLYlL6kw/oEwxtdbjq/u8c7BBL885V1ZOomeM
+	 pGPk6Odv1U7QhsTL5+if4D87pu3iSGnBn/CumaapD7TSRP7Xh0nSfq1vG3V/w4YjnL
+	 13mHcgfcSliXZLDYE3Mx8p6uEfGmYGKWalYZ4pF7aZKqtNoI5d0Hlb+6b9MShtPGOd
+	 ccKJmw2cOrpPeBamSVTscFcAdwtK/M3EMzU/eBsGXiX18SPBa6GmKUfPDedgaPOgyk
+	 qyZLzfc1zdBXw==
+Date: Wed, 15 Jan 2025 10:36:08 +0300
+From: Dmitry Bogdanov <d.bogdanov@yadro.com>
+To: Chaohai Chen <wdhh66@163.com>
+CC: <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
+	<target-devel@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] target: fix All_commands parameter data header size
+Message-ID: <20250115073608.GA17942@yadro.com>
+References: <20250115070739.216154-1-wdhh66@163.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3cy_EXodnt3jkFw--.49365S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKw1xGw18AF45Gr1UKryxAFb_yoWDXwb_Cw
-	1qqry7W34ruF1UKF4UC398X342yr18uFnavan0vFW7K34j9F1kAF97ursYk34Y9r4kXr9a
-	vr9Fq34DCF45KjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8Xo7JUUUUU==
-X-CM-SenderInfo: hzgkxlqw6rljoofrz/1tbiKA7V1meHWNt4dAAAsK
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250115070739.216154-1-wdhh66@163.com>
+X-ClientProxiedBy: T-Exch-05.corp.yadro.com (172.17.10.109) To
+ T-EXCH-09.corp.yadro.com (172.17.11.59)
 
-The SPC document states that "The COMMAND DATA LENGTH field indicates the
-length in bytes of the command descriptor list".
+On Wed, Jan 15, 2025 at 03:07:39PM +0800, Chaohai Chen wrote:
+> The SPC document states that "The COMMAND DATA LENGTH field indicates the
+> length in bytes of the command descriptor list".
+> 
+> The length should be subtracted by 4 to represent
+> the length of the description list, not 3
+> 
+> Signed-off-by: Chaohai Chen <wdhh66@163.com>
+> ---
+>  drivers/target/target_core_spc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
+> index ea14a3835681..61c065702350 100644
+> --- a/drivers/target/target_core_spc.c
+> +++ b/drivers/target/target_core_spc.c
+> @@ -2243,7 +2243,7 @@ spc_emulate_report_supp_op_codes(struct se_cmd *cmd)
+>                         response_length += spc_rsoc_encode_command_descriptor(
+>                                         &buf[response_length], rctd, descr);
+>                 }
+> -               put_unaligned_be32(response_length - 3, buf);
+> +               put_unaligned_be32(response_length - 4, buf);
+>         } else {
+>                 response_length = spc_rsoc_encode_one_command_descriptor(
+>                                 &buf[response_length], rctd, descr,
+> --
+> 2.34.1
+> 
 
-The length should be subtracted by 4 to represent
-the length of the description list, not 3
-
-Signed-off-by: Chaohai Chen <wdhh66@163.com>
----
- drivers/target/target_core_spc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
-index ea14a3835681..61c065702350 100644
---- a/drivers/target/target_core_spc.c
-+++ b/drivers/target/target_core_spc.c
-@@ -2243,7 +2243,7 @@ spc_emulate_report_supp_op_codes(struct se_cmd *cmd)
- 			response_length += spc_rsoc_encode_command_descriptor(
- 					&buf[response_length], rctd, descr);
- 		}
--		put_unaligned_be32(response_length - 3, buf);
-+		put_unaligned_be32(response_length - 4, buf);
- 	} else {
- 		response_length = spc_rsoc_encode_one_command_descriptor(
- 				&buf[response_length], rctd, descr,
--- 
-2.34.1
-
+Reviewed-by: Dmitry Bogdanov <d.bogdanov@yadro.com> 
 
