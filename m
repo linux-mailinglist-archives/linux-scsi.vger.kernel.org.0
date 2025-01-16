@@ -1,80 +1,80 @@
-Return-Path: <linux-scsi+bounces-11547-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11549-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0127BA13CD0
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2025 15:51:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABA92A13CCE
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2025 15:51:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B1083ACB4B
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2025 14:50:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BA3216B429
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2025 14:51:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6632222C9F3;
-	Thu, 16 Jan 2025 14:49:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86EA022CBD5;
+	Thu, 16 Jan 2025 14:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cj4BxhIO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="klpmnC8R"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B53D722B8BD
-	for <linux-scsi@vger.kernel.org>; Thu, 16 Jan 2025 14:49:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1AB022B8DF
+	for <linux-scsi@vger.kernel.org>; Thu, 16 Jan 2025 14:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737038971; cv=none; b=Shs5KR/TgY9f3Rm43dcqP8dm0CoTvb3HnUwi2hlLb4ITgZh4cfb0BuTMM08aIqCk0hTFjWUPM18d5fOFXtJxBdQvNbzxDNYx4PU0IO5qJ4xFjU+koCcyuzDjBRxHe29YQdaEMwKevnvjRLEbZr11xe/nq0N/Yd1yXGuQ3tqSFMo=
+	t=1737038973; cv=none; b=nJeX0SBdKXdxH+/KprdR2mcf3IF605oufg1M+6KZ1GcNUEvS/YB0cWjNbYI12mnwGStBxpZV6Nm3zIPWDxJExLayKFehLeRMLzAcRrKB3jH0VY1UqIRW66j49Nx8fUb5U3FrQHG8jGtY3JPQ6cMaT8eNuiPKfA9ND2do0pSun2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737038971; c=relaxed/simple;
-	bh=Wje1BciONDqQrKQyhp/R22j+9s7pjT1C1mQYS4XxTmo=;
+	s=arc-20240116; t=1737038973; c=relaxed/simple;
+	bh=mMqcSmFFvw2TkkbHF0Z/tBSpa/sSu9tnGHtQ8tATY60=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HUY3O79xLCnFVqxGJrK7+di2kRNhLFPXg+s2GD0pjrJ6w2rAwBtzBLYpb/vgT92uQTRW9G9r8Euin5Hp2VZsfFkI9k9Xh9UVmshnv3Xom3lTrWmJVwFMH7QF2+t+/ylwpWjticMAdBcqj28FGJAsb6Ran9wouCzeD9VwD5xPcJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cj4BxhIO; arc=none smtp.client-ip=209.85.221.52
+	 In-Reply-To:To:Cc; b=cPR6UFi8uNwEy11E0VGUexYGZXFeoIPMdk0qmXSJlnfFuWkABHpF5CUTddnC3xzgx40nYwfGhKWzdsnfAb4BmMe6+lz23XzeMd4gevXySDnBnCB448QUFqMYiE2QuQKetLI3ppt8whqXEDzYFqeCS3+dQ4jz47bTQBJZMvMVc3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=klpmnC8R; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-38a8b17d7a7so550188f8f.2
-        for <linux-scsi@vger.kernel.org>; Thu, 16 Jan 2025 06:49:29 -0800 (PST)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3862b40a6e0so625377f8f.0
+        for <linux-scsi@vger.kernel.org>; Thu, 16 Jan 2025 06:49:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737038968; x=1737643768; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1737038969; x=1737643769; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rbb6Ezfzp9O8O/V6bl6D5LDxeK+r+UlRD6ckNgY/1gU=;
-        b=cj4BxhIOazRcHCNPKjsyeoxRxz3FuQ4Ok7sBqmWmD1tVSWnG27HKkfrR/NoN8ftx2I
-         VEsUNWMd6b8voWUmiayk67a6BwE6ZAuE7BLfM+cLRX5WUTiB2o5I6CKQIv1MhopaLRoC
-         MbFd3V/x5dGnX6EqIcbFKwDV9pKahE+HZAyFHgsWmGDJO/esypA1uxFBJcqvJyKK0fyS
-         o510CMK33n9WCSv6mOZBx7P5/vALGzjjUF1l1nHVARra/93O7A3uAQYoUxDNpiHmI+jP
-         y4uE6Jb54xEwxChGoUvFhn4IbFLt1eWx5J5my2duEQmmgdzOuX6I1nV9VjwtwTeLFoOQ
-         2p/g==
+        bh=3VDvVHb7Hz9aOiJJ+fFlf31oRvekJW72ufAgH10hVdw=;
+        b=klpmnC8Rc29mih5tU+C64KE486W9gvyUUxMcSb97BRBkhino/vFeLzUI8xBK0L38PU
+         rsDc0fEadxBOI8D7Lsi8p3zd7fGZ9LN7/zPnEXYFG80/3km/cFgrMoNWt4dcqTUoauLM
+         fIt7I8wSz+iOMWpgpjGWqnBLUYpQ2gELlTV/rJaG9XNdx3hp8Zo1XHdK/E6RbcGimMsW
+         fsNpZlE4YpPp89c8WycXOK7qeqeui/tGTxRT+5CqSwF6pnIcarc1gQ0+1Kg+OEJyQG2D
+         WpbACsVqQz9XusnUwJDRTQAh1iqKXCKdhYvniLrFnLVD/ylonoTL90TX9hJJ4sbCZMte
+         UWNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737038968; x=1737643768;
+        d=1e100.net; s=20230601; t=1737038969; x=1737643769;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rbb6Ezfzp9O8O/V6bl6D5LDxeK+r+UlRD6ckNgY/1gU=;
-        b=vKGny3aY+NJY91VkLMg+T8HyHe3zpQftClhkV+PSIdpzrb+HivJoQ7O4L0UpJboXfz
-         UnLtKijUz/y12RDTFfkEB//TOdDYhl2AGPG/FxbSZHPWaR+NWdEiWid1fzTRedIiP6ZO
-         mLujChkVpC23jKq4J/nhiHwZdJRlujmqP1WeN1qPnisVeMuYLg1pPVewcHBp0R3VpdTA
-         pzg3s5e24Iy4wHeF5IHhDTqxvP1s2HJuKRCyM6EACOaVFWuOgSVnxMZQFXGfFlZXijsc
-         tyqKIVUIgJUoWV+ZaybkHRbJCJP4P5dF6aS1EUXWjRgyosLD2EMQ8lDU4Dpq9CVXOchD
-         FFrw==
-X-Forwarded-Encrypted: i=1; AJvYcCXZMxYvBEN7YDEfclRADs57lGO0eDwQFU5JSCVDYt8BKwOV06Dk/3o9q7oGJ5nRH1LXcy/P98jA1J4i@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywm7KVJY8EK1WEdzPsDa/KHyAHecNDkW1JiWhuns3h2kc/MHoZ2
-	1/+HukTe9dH+3D8t2tWcHBebIkknbjyKKe7TW+5ACzzvHUH/FohAU5t03wa2Vmg=
-X-Gm-Gg: ASbGnctgDnt2bU/78qTKmnZMPz0q8Lb41v0i9ZBRFMp8+Vl0kknAI5oDOUys6CVi/yn
-	jC+ZVDkkk0V/1THGL5An7wNbRmx+zV7svvyEZb62iWkU/+SsiTzguaJRltwUGzoO039HgUd+0s/
-	gjFNrmrzS9gyjfYAxvA2PxuPp58Z2WKMvmYBfki4OryaRODOvRdizZn6oNSJH4bs0/lJ8JUr3Tc
-	O30KjhWA0s3oU9z3bDiToSnF3OxOQR7afeAx6scmU1OkQDebc6ZfyTV5fW1jLrwm1iRNrWqRc0S
-	UCeqhAXEZKHbDYX7FnNVsENJdo6EfKaz7+Rc
-X-Google-Smtp-Source: AGHT+IH9TQuJ8S6VwCv/DsUwUueSrMwmdIaON0G+tCnVqhp1ubDleE7CO0HW5JVWQ93mm1BDZ5rH1g==
-X-Received: by 2002:a05:6000:18a4:b0:38a:a043:eacc with SMTP id ffacd0b85a97d-38aa043ee63mr16034591f8f.1.1737038967915;
-        Thu, 16 Jan 2025 06:49:27 -0800 (PST)
+        bh=3VDvVHb7Hz9aOiJJ+fFlf31oRvekJW72ufAgH10hVdw=;
+        b=qnWWChEy981McMp+7SYUmbw9k50+ppQTu3LtZr/FxQNYEHs7OOzyJx1LoSoZnO1DSe
+         CxawSm6llQRuTvAPQlvdbxBJvaM6FjkYDLZ2MsEBZ370rmqUq/7n+K0jwSiWCcfS7bsP
+         oier8/hDDHaqEG1WYN81fZPiG2nCvEWrxlZ4wpybH89aazc+3KPB9k5nCy4bIKxfpjYg
+         hxxDNbjB09+khfG/JUhAtzaVLARKD+bEOlyVupCfyKDA/iONYL+9aF+xiiUi7NByF4xw
+         +OaTEGYK/0k6O9dkLxHEib0hBmvpoLChtQ1geEnrMY4gr/6JXaSp0cIedWkIIhnEzYo5
+         DEHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVoLJcg7LfA4R8TkhCL3n5B7PkfB9W5X9ubd0tTp3qCXEVitEnpK37/h3as+2NsmT7TQKg0YpcDK1/3@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoUDBm2wHmuh8ObxEKwoBYQsm1g6gsMqw3uBtdO05x1T+N1Iwa
+	4rL9dxS8CO2DcqRFPYHrUz9VfH+TloMmia1lfQWIA2oB9JPHDLE/CQqIdMCjzIs=
+X-Gm-Gg: ASbGncsV1cuGNvgvcQfg0avg3PJmH/brXKJ5dcseXBKjcZHTtga7D3KZw5/GzcoTVfd
+	sPhGKQRJcDVwsglkB8+kgI8XHOdMFCpGvzRKsCUzeC+0tvkhkGm3RzfDjNGUD9grH2PwMFAUx9f
+	Ph8fo3WU4h1IY9ov3eKPVlhfAhSf3ug3mO+4icEOW/NXyQS1jbNk6yH9k2Gk1vk2LX0M3MARZN3
+	FQaFdS1tQF6cK5jazuoFZum0PGurowJtTYsQzjRLpFZJuLtNFeZ9+8JNBaMncVWg7qqnr/ch1KG
+	tah1B6YPbzJbvw/NawqKOmRjCyvThlg0vhl7
+X-Google-Smtp-Source: AGHT+IEYjm37I0xC5oyYW1bza4Imter6m0Ap3ye3A3KaXLIpUrnXkIdWfDmQraHXh7LXwIvTqWenkQ==
+X-Received: by 2002:a05:6000:1862:b0:38a:41a3:218 with SMTP id ffacd0b85a97d-38a8733899emr28060936f8f.36.1737038968835;
+        Thu, 16 Jan 2025 06:49:28 -0800 (PST)
 Received: from ta2.c.googlers.com (169.178.77.34.bc.googleusercontent.com. [34.77.178.169])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf321508esm70310f8f.10.2025.01.16.06.49.27
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf321508esm70310f8f.10.2025.01.16.06.49.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2025 06:49:27 -0800 (PST)
+        Thu, 16 Jan 2025 06:49:28 -0800 (PST)
 From: Tudor Ambarus <tudor.ambarus@linaro.org>
-Date: Thu, 16 Jan 2025 14:49:06 +0000
-Subject: [PATCH 2/4] mmc: sdhci-msm: fix dev reference leaked through
+Date: Thu, 16 Jan 2025 14:49:07 +0000
+Subject: [PATCH 3/4] scsi: ufs: qcom: fix dev reference leaked through
  of_qcom_ice_get
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -84,7 +84,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250116-qcom-ice-fix-dev-leak-v1-2-84d937683790@linaro.org>
+Message-Id: <20250116-qcom-ice-fix-dev-leak-v1-3-84d937683790@linaro.org>
 References: <20250116-qcom-ice-fix-dev-leak-v1-0-84d937683790@linaro.org>
 In-Reply-To: <20250116-qcom-ice-fix-dev-leak-v1-0-84d937683790@linaro.org>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -102,31 +102,31 @@ Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
  kernel-team@android.com, Tudor Ambarus <tudor.ambarus@linaro.org>, 
  stable@vger.kernel.org
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1737038965; l=939;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737038965; l=881;
  i=tudor.ambarus@linaro.org; s=20241212; h=from:subject:message-id;
- bh=Wje1BciONDqQrKQyhp/R22j+9s7pjT1C1mQYS4XxTmo=;
- b=aMMD3l+fSYmaasELHSb630GvEIX81VeJMVo3eY8nHViIArWh5G7STBR9Qc3WZpAaFDvitRjk8
- m9LNmbtOIdmDxHTkSnPmHvYOH/JFRZpvuMIE8UrP0vRAQpXFltqIOPi
+ bh=mMqcSmFFvw2TkkbHF0Z/tBSpa/sSu9tnGHtQ8tATY60=;
+ b=ckw/p8Yr8OAqf94ouXfHUwYbbzLskOGYomyFslWm+iFcOpDzJC0mlpKDWKk8wbQ91TJMNb+5E
+ nC9f+glXfEdCGF3iseCm7YkfK5PJU3TI7PKc9l6rqwoy5fHLepwJFWH
 X-Developer-Key: i=tudor.ambarus@linaro.org; a=ed25519;
  pk=uQzE0NXo3dIjeowMTOPCpIiPHEz12IA/MbyzrZVh9WI=
 
 The driver leaks the device reference taken with
 of_find_device_by_node(). Fix the leak by using devm_of_qcom_ice_get().
 
-Fixes: c7eed31e235c ("mmc: sdhci-msm: Switch to the new ICE API")
+Fixes: 56541c7c4468 ("scsi: ufs: ufs-qcom: Switch to the new ICE API")
 Cc: stable@vger.kernel.org
 Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 ---
- drivers/mmc/host/sdhci-msm.c | 2 +-
+ drivers/ufs/host/ufs-qcom.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
-index 4610f067faca..559ea5af27f2 100644
---- a/drivers/mmc/host/sdhci-msm.c
-+++ b/drivers/mmc/host/sdhci-msm.c
-@@ -1824,7 +1824,7 @@ static int sdhci_msm_ice_init(struct sdhci_msm_host *msm_host,
- 	if (!(cqhci_readl(cq_host, CQHCI_CAP) & CQHCI_CAP_CS))
- 		return 0;
+diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+index 23b9f6efa047..a455a95f65fc 100644
+--- a/drivers/ufs/host/ufs-qcom.c
++++ b/drivers/ufs/host/ufs-qcom.c
+@@ -125,7 +125,7 @@ static int ufs_qcom_ice_init(struct ufs_qcom_host *host)
+ 	int err;
+ 	int i;
  
 -	ice = of_qcom_ice_get(dev);
 +	ice = devm_of_qcom_ice_get(dev);
