@@ -1,135 +1,77 @@
-Return-Path: <linux-scsi+bounces-11567-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11569-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CF55A14A3D
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jan 2025 08:43:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9362DA14A51
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jan 2025 08:45:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB503188C898
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jan 2025 07:43:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C011816A646
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jan 2025 07:45:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3B051F7903;
-	Fri, 17 Jan 2025 07:43:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA6F11F7916;
+	Fri, 17 Jan 2025 07:44:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kui+e6AP"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="4kocN+NR"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B29155300;
-	Fri, 17 Jan 2025 07:43:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71EC155300;
+	Fri, 17 Jan 2025 07:44:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737099807; cv=none; b=s9dWlb9XO0AdNujXt7cIhPGnURRs+wqvTV5WA3DNH24N9TV8KjSEfWAmtaYP25rZOFK6eXRTapu7MCbikm2dUkBUD84AG8cBwLmVwB9fSiWQD+FFfeWIbjI9SPRgw2Zz8HWIPvFd0vZV919EVuzz4MptYT+WYjLi/0tIax2xYbA=
+	t=1737099892; cv=none; b=aTo6sT2JlCK3UtyBvjNuCAu3akPWBTF+vEHqlg4tecr5hAuuvPCbP9SpJnTX0+3ECP3jrfpcLGJ3r/HBNZiZjTOL2l1fUluDMnJ69cUYZJS1g54CkfT8XsDFRyXt0+4fuAC6XEnJrjsNdRQ+ftWEJEjJBg85wnzZ2vDmD1xnqk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737099807; c=relaxed/simple;
-	bh=x1fFPjIi7GQDznifKUxZnE0A1FOrRbMvBWPg9TL17uQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OJFvEqme79U3JxKmss8LWmBGF77cn4fRGTdszb1kSi1ASGCouQCcADPkHpmUUktWtjib1I/IP2dmpZAkYXguEIeFXHQ0wHiEeLogjzO1nHshOv9RofO5Z9seQihTHMpncC+Uw0Ag1U0vUdM+NDzvHvfnSsmt8PW/eKE2I0bfutQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kui+e6AP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFBF8C4CEDD;
-	Fri, 17 Jan 2025 07:43:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737099807;
-	bh=x1fFPjIi7GQDznifKUxZnE0A1FOrRbMvBWPg9TL17uQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kui+e6APTVlK6xNyXmGMAjX/ElkgHwQvCUbRB+77REePPgwkMhc1OvhOP+Pitb8U8
-	 tivhVawNMpW1El49blI/diuyO3inGA41b1yQX014l7rlou9BWy9j0PzKT5h0Nfm1C+
-	 6b0ctET8F/JgGxRg99GtH4jeY/lvL305WeaubW7+k6qArgjoqfpchTTn8qGamVg5GU
-	 B8//yPW208AXcbndg1HPHsTnbwLqKo8XDYRCtlb832sutRjm2tbs9YErvl4gdor41d
-	 hPyj8YKgjv+Ad0rteWnxJV1hswvONNpC8Z1zIvb2/0nVzswleWI2vTCN0xCrNEbF5B
-	 uzsV/Dwua9iBQ==
-Message-ID: <ff2a5914-5561-43a0-b10f-b613ea114e14@kernel.org>
-Date: Fri, 17 Jan 2025 08:43:19 +0100
+	s=arc-20240116; t=1737099892; c=relaxed/simple;
+	bh=1G+n6Eoxa8H1GBSuQ+ZUouOiGyTE3Af1srqaX1OOuD0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i5Ncs6LRBKmy2sprOCObfw2H9ce7aLx5lCGJKcfiZSP3OYw9bcsx9gowBKhmiK/pJTiQbjepEyd6rjk9YLOmVt8L+NK4sWeJfo+8/FLGPP2otEvCNeoDjr3oTHx5k18Iv1m39lNXk1S7/OY15aIDC78p+NU4nItMlxByb+I8aMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=4kocN+NR; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=ZbVYkJYrb61Wu580Ft3djKNeSj1im8n+pYtEAikpOC0=; b=4kocN+NRToqX7xNsoN8OhOoZK9
+	4T+lyUH4yD+p+6JBj/iJLHSK5rQFlKM9U0qpf7NjBBJAemrEH2IRwP+MRpeWaYu69bMiysOJ7l5K9
+	sJ4cnzXGJiU1qpZczQ6g7ZpcIOp54dDdlkE3cAxzjWe7gHx8TF/YQwPQ8NUP5QEYcryWyoV7YLdIY
+	3Guk2qfhZ9lFuyjbOoN5Hdjl0MHOmpOrdWZEE+q9/Q3U+BWw369oCDeFqJy4ZeM3mjlBbrvju6rCD
+	DakJEzIYtaMC4fdUFASZ8qv9/etP/0VbR54K0IjcL4WMIDeDBSSKJ1qe5S+3hcvgBzI2uRW1zdBVw
+	SLMP0gmg==;
+Received: from 2a02-8389-2341-5b80-41c4-d87f-051e-5808.cable.dynamic.v6.surfer.at ([2a02:8389:2341:5b80:41c4:d87f:51e:5808] helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tYh25-0000000HEBf-34Fd;
+	Fri, 17 Jan 2025 07:44:46 +0000
+From: Christoph Hellwig <hch@lst.de>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Ming Lei <ming.lei@redhat.com>,
+	linux-block@vger.kernel.org,
+	nbd@other.debian.org,
+	ceph-devel@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	linux-mtd@lists.infradead.org,
+	linux-nvme@lists.infradead.org,
+	linux-scsi@vger.kernel.org
+Subject: annotate noio context
+Date: Fri, 17 Jan 2025 08:44:06 +0100
+Message-ID: <20250117074442.256705-1-hch@lst.de>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] mmc: sdhci-msm: fix dev reference leaked through
- of_qcom_ice_get
-To: Tudor Ambarus <tudor.ambarus@linaro.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Adrian Hunter <adrian.hunter@intel.com>, Ulf Hansson
- <ulf.hansson@linaro.org>, Abel Vesa <abel.vesa@linaro.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Eric Biggers <ebiggers@google.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org,
- andre.draszik@linaro.org, peter.griffin@linaro.org, willmcvicker@google.com,
- kernel-team@android.com, stable@vger.kernel.org
-References: <20250116-qcom-ice-fix-dev-leak-v1-0-84d937683790@linaro.org>
- <20250116-qcom-ice-fix-dev-leak-v1-2-84d937683790@linaro.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250116-qcom-ice-fix-dev-leak-v1-2-84d937683790@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On 16/01/2025 15:49, Tudor Ambarus wrote:
-> The driver leaks the device reference taken with
-> of_find_device_by_node(). Fix the leak by using devm_of_qcom_ice_get().
-> 
-> Fixes: c7eed31e235c ("mmc: sdhci-msm: Switch to the new ICE API")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
+Hi all,
 
-
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+based on the reports from lockdep annotating q_usage_count it became
+clear that we need to do noio allocations in a lot more place.  One
+is when the block driver calls back into the file system as in the
+loop driver, the other is anything done while a process has a queue
+frozen.
 
