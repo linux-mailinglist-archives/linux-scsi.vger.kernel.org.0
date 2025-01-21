@@ -1,112 +1,96 @@
-Return-Path: <linux-scsi+bounces-11653-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11655-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B567A18523
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jan 2025 19:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 09655A187B2
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jan 2025 23:17:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D54C166521
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jan 2025 18:23:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 468D516A9C0
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jan 2025 22:17:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1589519F424;
-	Tue, 21 Jan 2025 18:23:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A41FD1F869F;
+	Tue, 21 Jan 2025 22:17:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="DXU6V+Ke"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="m/1ZCtV9"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3206D1714B3
-	for <linux-scsi@vger.kernel.org>; Tue, 21 Jan 2025 18:23:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E352918AE2;
+	Tue, 21 Jan 2025 22:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737483800; cv=none; b=C9/sJun7hHnhyoqBxCaY8u00plW4tkK2PZKqi8c6kYsYhO2SVuGTAyRRjHLLxDY4vbhbe2I77eXKJ/5h7u7/gVehy+x7BsHFhU/wBAWenwelruRJOizPzzxSKLvZbRdtXTdW8GvFnAPVOhdYBnM/5tBx7m61TtFwNIKYwlaLv2k=
+	t=1737497830; cv=none; b=Hbt8m+xgFS3Y52/YiTPaleXXR+aFSOMwPruDFALlZGXGZr5OXgQk2IFlmAcWibzFS8xcJKzS2yuN9rWXevHiIUj1BhlL++L9yj0DyqQp008o5CjJo/RtORXwyzLrhSFnEGe7HPc4fNxLaWoy0WKL0IlHqZgZH7dIULy5n7fM/eE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737483800; c=relaxed/simple;
-	bh=VuXWFDnoRZbhO4q2a80xz8xghdCD9e0oRWGp3LZ1wuI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=jm0/z8ewvHDS7KJ7pMkI9DirzKPb9k011Gt5nprb5dXbGBvzRJw7CP5z5RWtQofv01LfHDM5gg8zvQ/MMK145kAsTzClFNvQB8dEzTuckT91Ecqvxu0UX3QGsP7koAkupl+5h8d6OECCeGUJBQnIInAAhkKoVvrOBVDXRZwUM3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=DXU6V+Ke; arc=none smtp.client-ip=199.89.1.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4YcwYn3fbfzlfh9R;
-	Tue, 21 Jan 2025 18:23:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1737483787; x=1740075788; bh=3sc2L0qCx/C7nNhvs7REn70F
-	qHQeC2m1fOvzCP5HHFk=; b=DXU6V+Ke/ZauAFUcoRX1VX6QfbpU8GHEVJ6w/at2
-	oZH2tesdPfnFACg2r3zJqpwr2ohqkbETYaZ27jKE9PFLEJC5t0B10H01QPxpxcYc
-	wkqFvyj0YcQx7yAD+DJjnC3xTVy+EnZjtLvg9GTzAE1gAKOJVBQ5XcJs89bj3d7p
-	ZaoaAaIRq96re94az3OYgJtqgY6HiNs24FkX3nBhWbbo56Q6a7dTFvG1FepYFDjZ
-	4BrUlc233fzpvk9RY1tBzEaHR5SyUKla5PadPB7vDiz96Jl/FN95oyxgNIzztlRm
-	0rmpp5K3YLjeAQifXfZXmFgb22POnaGJ6Tu7dGR3ahyA2A==
-X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id adWHPPi9YW1I; Tue, 21 Jan 2025 18:23:07 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4YcwYk5k7pzlfh95;
-	Tue, 21 Jan 2025 18:23:06 +0000 (UTC)
-Message-ID: <da2b7f34-506c-4de8-8322-5ec1fbae8873@acm.org>
-Date: Tue, 21 Jan 2025 10:23:05 -0800
+	s=arc-20240116; t=1737497830; c=relaxed/simple;
+	bh=qws4CGRtecxpbMfGkdf+jE6GWcbxBbffFa2AR5+dL+g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IDZ932w9SGA2gi/b9CzCSqXVnCrQgDPHLWXKO7Fql3tt/tcGOLGzsrnLMhGAkMGL0EQRTBlj8UytUsMhZ2ESCIYHQqc04Rry59k4YW6LRUw2ixgNmDm9lMppFtk/eWaEhXfgPFAxb/hQkxETYXoP3jGFWyWjlZOXXxvU35/7uyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=m/1ZCtV9; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50LJK2HH012570;
+	Tue, 21 Jan 2025 22:17:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2023-11-20; bh=QeNsc5WC6tpfZfsjMRQqubNZIHmtn
+	uAiLEdIcZ2vvrM=; b=m/1ZCtV9dQtmqYmU5j0HQBvvw8OFV2r5ZD5mgvpFFjP1C
+	ZPBWg45DO6a+D69KDV1w368I87H/JEonesXlPjEyRmBdVDA3qhO6N1UHC3J1g0c7
+	T+bjfJ21EGQcBOg1OgyX/zCM6pTebBddeJiYvIu/j0Da5MSdaUjh9uSEs3NqyXIp
+	as8Zl5SgxhqimU69ZWzF6bubINvLuXg12rGC9xYd6xYo01wvfWA3tOsLcP7+Ae5k
+	WgcCrMnxg6EGgX+AfajFM9n6XxoFzAIB9uN6zCYBjyeKeplM2ZsIoMT/I9/i1iRr
+	DUBkzr+yAGc2lQJtil9OVJPCsOEpFWxmyauScV7jA==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4485qapmun-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 21 Jan 2025 22:17:02 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 50LL8SjM036463;
+	Tue, 21 Jan 2025 22:17:02 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44917q44w8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 21 Jan 2025 22:17:02 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 50LMH1Rx022589;
+	Tue, 21 Jan 2025 22:17:01 GMT
+Received: from ca-dev94.us.oracle.com (ca-dev94.us.oracle.com [10.129.136.30])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 44917q44vy-1;
+	Tue, 21 Jan 2025 22:17:01 +0000
+From: Alan Adamson <alan.adamson@oracle.com>
+To: linux-block@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org, alan.adamson@oracle.com,
+        linux-nvme@lists.infradead.org, shinichiro.kawasaki@wdc.com
+Subject: [PATCH blktests 0/2] Add atomic write tests for scsi and nvme
+Date: Tue, 21 Jan 2025 14:25:28 -0800
+Message-ID: <20250121222530.2824516-1-alan.adamson@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] scsi: ufs: core: Fix error return with query response
-To: Seunghui Lee <sh043.lee@samsung.com>, linux-scsi@vger.kernel.org,
- Bean Huo <huobean@gmail.com>
-References: <CGME20250118023817epcas1p1a7cb68709776f01c5ebeeb02908ed157@epcas1p1.samsung.com>
- <20250118023808.24726-1-sh043.lee@samsung.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20250118023808.24726-1-sh043.lee@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-21_09,2025-01-21_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 mlxscore=0
+ spamscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2411120000
+ definitions=main-2501210177
+X-Proofpoint-GUID: VHGMdPPp6gssZAGfKjRmATtmP37piIrh
+X-Proofpoint-ORIG-GUID: VHGMdPPp6gssZAGfKjRmATtmP37piIrh
 
-On 1/17/25 6:38 PM, Seunghui Lee wrote:
-> There is currently no mechanism to return error from query responses.
-> Return the error and print the corresponding error message with it.
-> 
-> Signed-off-by: Seunghui Lee <sh043.lee@samsung.com>
-> ---
-> Changes to v1:
-> - modify the error message with response in UPIU(Bean Huo's suggestion)
-> ---
->   drivers/ufs/core/ufshcd.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index 9c26e8767515..97e50bccb95c 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -3118,8 +3118,13 @@ ufshcd_dev_cmd_completion(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
->   	case UPIU_TRANSACTION_QUERY_RSP: {
->   		u8 response = lrbp->ucd_rsp_ptr->header.response;
->   
-> -		if (response == 0)
-> +		if (response == 0) {
->   			err = ufshcd_copy_query_response(hba, lrbp);
-> +		} else {
-> +			err = -EINVAL;
-> +			dev_err(hba->dev, "%s: unexpected response in Query RSP: %x\n",
-> +					__func__, response);
-> +		}
->   		break;
->   	}
->   	case UPIU_TRANSACTION_REJECT_UPIU:
+Add tests for atomic write support.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Tests will be delivered for scsi (using scsi_debug) and nvme.  NVMe can use the qemu-nvme
+emulated device that supports Controller-based Atomic Parameters (QEMU 9.2).
+
+The xfs_io utility delivered with the xfsprogs-devel package (version 6.12) is required by
+these tests.
+
+The Linux Kernel 6.11 (and greater) supports Atomic Writes and is required by these tests. 
 
