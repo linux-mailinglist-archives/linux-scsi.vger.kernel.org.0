@@ -1,142 +1,141 @@
-Return-Path: <linux-scsi+bounces-11789-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11794-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BB2AA20BFC
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 15:23:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B044A20D4C
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 16:43:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE897165349
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 14:23:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BEB8B1888D27
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 15:43:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAC411A3A8A;
-	Tue, 28 Jan 2025 14:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 764411D7992;
+	Tue, 28 Jan 2025 15:43:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="c1F63nvI"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ZzdR8vdI"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from fgw21-4.mail.saunalahti.fi (fgw21-4.mail.saunalahti.fi [62.142.5.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7071226AFC
-	for <linux-scsi@vger.kernel.org>; Tue, 28 Jan 2025 14:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3431D6DBF
+	for <linux-scsi@vger.kernel.org>; Tue, 28 Jan 2025 15:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738074224; cv=none; b=CYSPOJ4o2zl3tYokHlOB8oq3LqFMPvEHNwayXnqvcQML03TIcNWWAI0W1sOKyYS+rwZo+1PTqlywXIzYtaYzJ9ruJyGKdPiWgDec5w/Fj67aljJ/+6lmMOyNJljAundvlu3KpZY+8xYoXgYTgeJLyON8B+o9HuxVakYd2dIyxiE=
+	t=1738079005; cv=none; b=tfdJgQ8HLk7yc5JD+IuBzPrwYAnx7M4l+NMQhDuRaJouGzTfkNy9Jqb/5v1ywsZ4ND5nFOJBmt74DCPwmwBqBINo/jVh9ext1cOHWvppFiDkO5VJh1mZ+msdgPHD3dgj0Ik+ObfRJBt8AgOCN7/LrrEWAvxPebAf44QU6IwG+lo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738074224; c=relaxed/simple;
-	bh=M4V0o920wPk3JAnnje4ukYTg9er9iN/OWPGE9UrUL+o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k0/dTYlDVKYFe6JwaRcDyAhPLzf54xd6RXoptqIuSj6/wRD2OpDxzRtUXzfteXHJwWdYQwq9ATIBydLYWyTWHZuBzVc/oif6ITspY18+VQ18RLK/J3Cxl9ghWG26sdTUXekhssX4L0orgIMIePrCOX582iyoZnZlUJqVjKzllYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=c1F63nvI; arc=none smtp.client-ip=62.142.5.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
+	s=arc-20240116; t=1738079005; c=relaxed/simple;
+	bh=4CM+Y34LzyqTPbJa964bMKTZoegb6ZCbeVLJYvxkr2Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=utgv2sCbaop+WNqUiGJuTIq+P96X7MtwKOG0fnO1hMyOdHq94jdKryKxH3Mw7ei55wrpHjyaKh43v5oq7OzM0VkRFOppkEfR/mjJsUZ3R+HjLwiDzoIPFTDDEuLH3fUTmd3tuwPVXogWI0yOTHW2TTrQzks4eg5v4SEek/i5rd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ZzdR8vdI; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e549b0f8d57so9734989276.3
+        for <linux-scsi@vger.kernel.org>; Tue, 28 Jan 2025 07:43:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=kolumbus.fi; s=elisa1;
-	h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-	 message-id:date:subject:cc:to:from:from:to:cc:reply-to:subject:date:
-	 in-reply-to:references:list-archive:list-subscribe:list-unsubscribe:
-	 content-type:content-transfer-encoding:message-id;
-	bh=TY7bfxzNMEh+jzYBN3KL7dgpUfFemZO6Mw/7ajBrC/M=;
-	b=c1F63nvIlwLgtcQAOHJIihd7BTX0fea5ALgsZPppCLVJDldUkF8zHIBPOPwciYC5jEN16oJkaJLT1
-	 dv/6M+AuY/6WytHDl+Q2BKLPx01T7bPkThJn5ldKBpgjrSUeN195lZ1FS8FoOhIaK0Yx7w6NbxcGEN
-	 NaZw+BTgHeCMqmE5xhiLPbVfCP1C8rKUiJDyzUd3gqOGdalYvTqwjfkUBsyp7EetRlf2lXwQ26ktKL
-	 PY6H6VIkOfk75shf80TgF58rKCgtSVE2rKDJeIfBJug8+7ktu7MwMXslsZSViORKO7IO4c9wVf03fB
-	 dsklzGFv6jJmco9d++bVacxK6Rkzlqw==
-Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
-	by fgw23.mail.saunalahti.fi (Halon) with ESMTPSA
-	id 6d2b2707-dd83-11ef-a25c-005056bdfda7;
-	Tue, 28 Jan 2025 16:23:21 +0200 (EET)
-From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
-To: linux-scsi@vger.kernel.org,
-	dgilbert@interlog.com
-Cc: jmeneghi@redhat.com,
-	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
-Subject: [RFC PATCH 6/6] scsi: scsi_debug: Reset tape setting at device reset
-Date: Tue, 28 Jan 2025 16:22:50 +0200
-Message-ID: <20250128142250.163901-7-Kai.Makisara@kolumbus.fi>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250128142250.163901-1-Kai.Makisara@kolumbus.fi>
-References: <20250128142250.163901-1-Kai.Makisara@kolumbus.fi>
+        d=paul-moore.com; s=google; t=1738079001; x=1738683801; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4CM+Y34LzyqTPbJa964bMKTZoegb6ZCbeVLJYvxkr2Y=;
+        b=ZzdR8vdIiohnoZ4hKdRsx8vjUSASU/72vdBDURxTPxW6Y5y+xqJe1XFJv37MN3/RSh
+         1N9DWACiMe42Ssr+6RyacQYB0mKZF7r9X4dw06gLm3TJ5kXU+QA6Pwxa8XDIazhEp8C0
+         9uU7YdXy5cLi0N5EPxtYGd6vErWsFg/mLsK5lwXF/VP7H3vmwwe2R2U45ytaFkUMk6Za
+         lp6jed/BVTI9FjvFUI0MN7HYChc3iERhjHp52qu+iW++/bUjLH+wfDW2Jw7AJF6Rr/MJ
+         y67AxGiMWpozGojGCejMex/pBvJsfQOTerwdd08tOqwT12ksmB/+EE0jtUDQTB2nY1qi
+         QFbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738079001; x=1738683801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4CM+Y34LzyqTPbJa964bMKTZoegb6ZCbeVLJYvxkr2Y=;
+        b=Tl6r7fxbqO//edCWiYIpqkC2oWYGQEDVVXUZ9a4G0RLXUrjpYzJgHyNUPYVTs5QTui
+         MQHv1bkxJkMV5sZjDDHa1Y5NIRCChSDzUdyTU/y0BBEqPEdlk2W+PS6B4R7ao2MXvvKj
+         HOqs+EAHwoCHYiOekwxMp3R5Myude2IpkCo4Bc8+eLVVRFbJQxctTxMtgTfHvjohqENn
+         t3xDp9gNnD3D5Fyl82gdkXHalzYH01veyh48h+TMXAUX5nv5pKVaqkKS84hKmUhZ3QdN
+         +gdNzUuO5YmYYCZlxCtfWDvFEzs8xxSIRbJimjHOFbQR13Z7e9tKy7M+87IXUCcoHQ7N
+         6ibA==
+X-Forwarded-Encrypted: i=1; AJvYcCX/ipkPkImG5SLxG4pM1W0lEReaGfRkVOoMK6ahipuSEmcfKZIunauGfSHguWNNsHPHDNj8WN0UzaCm@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0NuJeSHBK4NJS9o8qZ0IqWeWTQp0L/bc6UTzo6m/PIPi9Y9PZ
+	ZYJ0viA9sp2RB0LTnTRw03qKTVR3X/SEzs+sTy+42KUVNPyCq7QkWsBuCb69oQSqdb4it5qcqYD
+	JSlQiE5eri0B4oFnGOi731uHz/ku5foIcwel/
+X-Gm-Gg: ASbGncvOyNZMRqkXRO2d6yeAiTvci9ANdVIvd7Kq7SZDSCxKFoa/tQ2Cz7FW4VNDvP9
+	/MG5d6tgpbRnL0SxHDnNuQDTF9sVE0/W/R5/TMFo2C0p296fgcjUq/3948cXF8CSW7pfN64c=
+X-Google-Smtp-Source: AGHT+IGuLqrmdoXiE8apV7tzhOJZ5Xm1OF/NxWm8Kjkh7RMoG05FR1MdO9WMx2ebniwyt0o5rEC0Jv+xP432BtVJDY0=
+X-Received: by 2002:a05:690c:4d02:b0:6ef:6646:b50a with SMTP id
+ 00721157ae682-6f6eb6b2881mr361409457b3.20.1738079001445; Tue, 28 Jan 2025
+ 07:43:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250110-jag-ctl_table_const-v2-1-0000e1663144@kernel.org>
+ <Z4+jwDBrZNRgu85S@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+ <nslqrapp4v3rknjgtfk4cg64ha7rewrrg24aslo2e5jmxfwce5@t4chrpuk632k>
+ <CAMj1kXEZPe8zk7s67SADK9wVH3cfBup-sAZSC6_pJyng9QT7aw@mail.gmail.com>
+ <f4lfo2fb7ajogucsvisfd5sg2avykavmkizr6ycsllcrco4mo3@qt2zx4zp57zh>
+ <87jzag9ugx.fsf@intel.com> <Z5epb86xkHQ3BLhp@casper.infradead.org> <u2fwibsnbfvulxj6adigla6geiafh2vuve4hcyo4vmeytwjl7p@oz6xonrq5225>
+In-Reply-To: <u2fwibsnbfvulxj6adigla6geiafh2vuve4hcyo4vmeytwjl7p@oz6xonrq5225>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 28 Jan 2025 10:43:10 -0500
+X-Gm-Features: AWEUYZkHRaUuCTQsu1U9C5jhigmIE9c2_8OmkE_i2Qv7ILXtAaTfDLC5EcLBZNk
+Message-ID: <CAHC9VhQnB_bsQaezBfAcA0bE7Zoc99QXrvO1qjpHA-J8+_doYg@mail.gmail.com>
+Subject: Re: Re: Re: Re: [PATCH v2] treewide: const qualify ctl_tables where applicable
+To: Joel Granados <joel.granados@kernel.org>
+Cc: Matthew Wilcox <willy@infradead.org>, Jani Nikula <jani.nikula@intel.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	openipmi-developer@lists.sourceforge.net, intel-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org, 
+	linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-serial@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-aio@kvack.org, linux-fsdevel@vger.kernel.org, netfs@lists.linux.dev, 
+	codalist@coda.cs.cmu.edu, linux-mm@kvack.org, linux-nfs@vger.kernel.org, 
+	ocfs2-devel@lists.linux.dev, fsverity@lists.linux.dev, 
+	linux-xfs@vger.kernel.org, io-uring@vger.kernel.org, bpf@vger.kernel.org, 
+	kexec@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-security-module@vger.kernel.org, keyrings@vger.kernel.org, 
+	Song Liu <song@kernel.org>, "Steven Rostedt (Google)" <rostedt@goodmis.org>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, "Darrick J. Wong" <djwong@kernel.org>, 
+	Corey Minyard <cminyard@mvista.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Set tape block size, density and compression to default values when the
-device is reset (either directly or via target, bus or host reset).
+On Tue, Jan 28, 2025 at 6:22=E2=80=AFAM Joel Granados <joel.granados@kernel=
+.org> wrote:
+> On Mon, Jan 27, 2025 at 03:42:39PM +0000, Matthew Wilcox wrote:
+> > On Mon, Jan 27, 2025 at 04:55:58PM +0200, Jani Nikula wrote:
+> > > You could have static const within functions too. You get the rodata
+> > > protection and function local scope, best of both worlds?
+> >
+> > timer_active is on the stack, so it can't be static const.
+> >
+> > Does this really need to be cc'd to such a wide distribution list?
+> That is a very good question. I removed 160 people from the original
+> e-mail and left the ones that where previously involved with this patch
+> and left all the lists for good measure. But it seems I can reduce it
+> even more.
+>
+> How about this: For these treewide efforts I just leave the people that
+> are/were involved in the series and add two lists: linux-kernel and
+> linux-hardening.
+>
+> Unless someone screams, I'll try this out on my next treewide.
 
-Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
----
- drivers/scsi/scsi_debug.c | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+I'm not screaming about it :) but anything that touches the LSM,
+SELinux, or audit code (or matches the regex in MAINTAINERS) I would
+prefer to see on the associated mailing list.
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index ceacf38cee71..c5d7e8b59ff2 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -6730,6 +6730,20 @@ static int sdebug_fail_lun_reset(struct scsi_cmnd *cmnd)
- 	return 0;
- }
- 
-+static void scsi_tape_reset_clear(struct sdebug_dev_info *devip)
-+{
-+	if (sdebug_ptype == TYPE_TAPE) {
-+		int i;
-+
-+		devip->tape_blksize = TAPE_DEF_BLKSIZE;
-+		devip->tape_density = TAPE_DEF_DENSITY;
-+		devip->tape_partition = 0;
-+		devip->tape_dce = 0;
-+		for (i = 0; i < TAPE_MAX_PARTITIONS; i++)
-+			devip->tape_location[i] = 0;
-+	}
-+}
-+
- static int scsi_debug_device_reset(struct scsi_cmnd *SCpnt)
- {
- 	struct scsi_device *sdp = SCpnt->device;
-@@ -6743,8 +6757,10 @@ static int scsi_debug_device_reset(struct scsi_cmnd *SCpnt)
- 		sdev_printk(KERN_INFO, sdp, "%s\n", __func__);
- 
- 	scsi_debug_stop_all_queued(sdp);
--	if (devip)
-+	if (devip) {
- 		set_bit(SDEBUG_UA_POR, devip->uas_bm);
-+		scsi_tape_reset_clear(devip);
-+	}
- 
- 	if (sdebug_fail_lun_reset(SCpnt)) {
- 		scmd_printk(KERN_INFO, SCpnt, "fail lun reset 0x%x\n", opcode);
-@@ -6782,6 +6798,7 @@ static int scsi_debug_target_reset(struct scsi_cmnd *SCpnt)
- 	list_for_each_entry(devip, &sdbg_host->dev_info_list, dev_list) {
- 		if (devip->target == sdp->id) {
- 			set_bit(SDEBUG_UA_BUS_RESET, devip->uas_bm);
-+			scsi_tape_reset_clear(devip);
- 			++k;
- 		}
- 	}
-@@ -6813,6 +6830,7 @@ static int scsi_debug_bus_reset(struct scsi_cmnd *SCpnt)
- 
- 	list_for_each_entry(devip, &sdbg_host->dev_info_list, dev_list) {
- 		set_bit(SDEBUG_UA_BUS_RESET, devip->uas_bm);
-+		scsi_tape_reset_clear(devip);
- 		++k;
- 	}
- 
-@@ -6836,6 +6854,7 @@ static int scsi_debug_host_reset(struct scsi_cmnd *SCpnt)
- 		list_for_each_entry(devip, &sdbg_host->dev_info_list,
- 				    dev_list) {
- 			set_bit(SDEBUG_UA_BUS_RESET, devip->uas_bm);
-+			scsi_tape_reset_clear(devip);
- 			++k;
- 		}
- 	}
--- 
-2.43.0
-
+--=20
+paul-moore.com
 
