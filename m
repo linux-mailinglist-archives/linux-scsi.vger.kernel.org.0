@@ -1,110 +1,129 @@
-Return-Path: <linux-scsi+bounces-11786-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11790-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA290A20999
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 12:23:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94E1DA20C00
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 15:24:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C17553A8AF3
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 11:22:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC3B41886E59
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 14:24:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64E3C1A2398;
-	Tue, 28 Jan 2025 11:22:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59DB1A3A8A;
+	Tue, 28 Jan 2025 14:24:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="foTouGKI"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="lNBt+ppJ"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fgw23-4.mail.saunalahti.fi (fgw23-4.mail.saunalahti.fi [62.142.5.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE501A072A;
-	Tue, 28 Jan 2025 11:22:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7D019F11B
+	for <linux-scsi@vger.kernel.org>; Tue, 28 Jan 2025 14:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.110
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738063363; cv=none; b=WIed3RYgYQwzRJ8kptd6WG0A7azbhd6tlAJ8xEBUaWX2ov0kUBy04gQIi6BbWu8tMFYNKl75YN8czkWDvn+WWRj8QIwQhjvvqbNMsrA3L5EA19mI/kH3RDJIhN/o6fCHiQgk2PAGt6/tbb88ey/PRCR2gcvdGF3miENGXU3HHl8=
+	t=1738074252; cv=none; b=IB1rwUOMokqpUlHU5aB6TL4mawBmIeVo9DQVkBQ7WckCYPleIHe3FRCFQpSciL+Hm+CqQK4zQM7v/lfKnArYrgfP6kS3R4uDh/Trq9d6y2RhQlXSogybltAI2CsTEOcuuD3l/L8vJwxyc7zzoX+MjN0Hp4Xz5mf0qMj3wQWhfqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738063363; c=relaxed/simple;
-	bh=AJfDJn9pFkPItjs+l9CjDlC33TdlTCE01Kr4mfJIOJE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g+cCyGb2/fsQowQreYNLg9qSUrLirXR7MS1CsgJTWL5oNhbhe1swUVk/CwSswe8PDryMSusPUfNKlrWUa3532e8R+YEEmmA4oN6QzpCINKU580mS3vkG99WHUT1yexgg3lDas9CYY6cW1AeZPm219ztniPyeJErJcq9Nc2Lg5xE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=foTouGKI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98109C4CEDF;
-	Tue, 28 Jan 2025 11:22:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738063362;
-	bh=AJfDJn9pFkPItjs+l9CjDlC33TdlTCE01Kr4mfJIOJE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=foTouGKI5Xpt6DiifiySGU1Px4B0JlxynZkL/A+4GJ+F1wUAFkM/N4G83a9sI8N06
-	 lsMHA2F0I+BGkV1h4oylhwmSeJznMzbN+UJy9qwbYRK5QlpfqNfv8Msq/ndA/iDm4I
-	 JYp3P2GR22dNEIcBnZOOATJGYPU+gMIFK9XfLLma3B24+UKToDLZL/ZLBF6bwp16qy
-	 HMKr9svtYad8MrCuOMMF5t2I0WLB8bGS9HGYMu9w94+SD6sanYCztaTmP2cubx4D+F
-	 lhSPEntAtoYhJR/j92VqRwE5MifEf7tNzvj9NQnTwv0sbHofELHMou005/QzH1lonP
-	 yczCENnq4hKEA==
-Date: Tue, 28 Jan 2025 12:22:37 +0100
-From: Joel Granados <joel.granados@kernel.org>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: Jani Nikula <jani.nikula@intel.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	openipmi-developer@lists.sourceforge.net, intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	intel-xe@lists.freedesktop.org, linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org, linux-serial@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, linux-aio@kvack.org, linux-fsdevel@vger.kernel.org, 
-	netfs@lists.linux.dev, codalist@coda.cs.cmu.edu, linux-mm@kvack.org, 
-	linux-nfs@vger.kernel.org, ocfs2-devel@lists.linux.dev, fsverity@lists.linux.dev, 
-	linux-xfs@vger.kernel.org, io-uring@vger.kernel.org, bpf@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org, 
-	keyrings@vger.kernel.org, Song Liu <song@kernel.org>, 
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
-	"Darrick J. Wong" <djwong@kernel.org>, Corey Minyard <cminyard@mvista.com>
-Subject: Re: Re: Re: Re: [PATCH v2] treewide: const qualify ctl_tables where
- applicable
-Message-ID: <u2fwibsnbfvulxj6adigla6geiafh2vuve4hcyo4vmeytwjl7p@oz6xonrq5225>
-References: <20250110-jag-ctl_table_const-v2-1-0000e1663144@kernel.org>
- <Z4+jwDBrZNRgu85S@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
- <nslqrapp4v3rknjgtfk4cg64ha7rewrrg24aslo2e5jmxfwce5@t4chrpuk632k>
- <CAMj1kXEZPe8zk7s67SADK9wVH3cfBup-sAZSC6_pJyng9QT7aw@mail.gmail.com>
- <f4lfo2fb7ajogucsvisfd5sg2avykavmkizr6ycsllcrco4mo3@qt2zx4zp57zh>
- <87jzag9ugx.fsf@intel.com>
- <Z5epb86xkHQ3BLhp@casper.infradead.org>
+	s=arc-20240116; t=1738074252; c=relaxed/simple;
+	bh=sJGIW4ZAkuXSzDz53oMMezy3x4Lf4jDHnkssjFWBsAo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=enX3PWUR98oowywx2Mz3FahQ6Yjyl8QEnzdBgRdzMkcXp3VRycGMwyooq+VsEHXrm12ixTy0ymX89oRW2taiq3PcCaM4xg7vIq1XPyyjyYgEZEZmak9IRlzGx+P0UNlCi7glUjx48yyQOdYlMj4OR+JHIvUXe8/qu+0Wxw7pi+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=lNBt+ppJ; arc=none smtp.client-ip=62.142.5.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=kolumbus.fi; s=elisa1;
+	h=content-transfer-encoding:content-type:mime-version:message-id:date:subject:
+	 cc:to:from:from:to:cc:reply-to:subject:date:in-reply-to:references:
+	 list-archive:list-subscribe:list-unsubscribe:content-type:
+	 content-transfer-encoding:message-id;
+	bh=zcwejwtb/bLCJ6dXr7NYQC/Q6Cp6NdOgaaYBZ2cxtBQ=;
+	b=lNBt+ppJNNMVhVEC75B34dlKa5+zFCvuQ1yLZhHG5iuDYAFPk3gUq3Vin/dAgSTedamNrW0JgRRS/
+	 VVZ46o3jEPBa5+H5S20SGR7h8URN0moWAAa4PJ0S8Lo0UmmZS9KWGbVYDmv81ThhB/YIshWaX43Vl6
+	 /yCIv2PNInKcNp4iCwU9uOg2tHIRnHIDEI4AWa1cyrOXA4feyKG+hJxsrYZHArJ+0ghoZ/9qCjItNh
+	 oH+YGJvsIWeZBWroepGrUZ9lrc5zWkq5tzk1t1ANt7JjTNPwM50HklGjSWz57AuItt/djEvLfGOryJ
+	 LfGZqwSj8JLjv0HK9XV+nqsW6ZTuv7Q==
+Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
+	by fgw23.mail.saunalahti.fi (Halon) with ESMTPSA
+	id 5f92bef6-dd83-11ef-a25c-005056bdfda7;
+	Tue, 28 Jan 2025 16:22:59 +0200 (EET)
+From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
+To: linux-scsi@vger.kernel.org,
+	dgilbert@interlog.com
+Cc: jmeneghi@redhat.com,
+	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
+Subject: [RFC PATCH 0/6] scsi: scsi_debug: Add more tape support
+Date: Tue, 28 Jan 2025 16:22:44 +0200
+Message-ID: <20250128142250.163901-1-Kai.Makisara@kolumbus.fi>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z5epb86xkHQ3BLhp@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 27, 2025 at 03:42:39PM +0000, Matthew Wilcox wrote:
-> On Mon, Jan 27, 2025 at 04:55:58PM +0200, Jani Nikula wrote:
-> > You could have static const within functions too. You get the rodata
-> > protection and function local scope, best of both worlds?
-> 
-> timer_active is on the stack, so it can't be static const.
-> 
-> Does this really need to be cc'd to such a wide distribution list?
-That is a very good question. I removed 160 people from the original
-e-mail and left the ones that where previously involved with this patch
-and left all the lists for good measure. But it seems I can reduce it
-even more.
+These changes to the scsi_debug driver have been made to support testing
+of the st driver. This is a RFC to see if there is interest to add
+this to the kernel scsi_debug driver.
 
-How about this: For these treewide efforts I just leave the people that
-are/were involved in the series and add two lists: linux-kernel and
-linux-hardening.
+Currently, the scsi_debug driver can create tape devices and the st
+driver attaches to those. Nothing much can be done with the tape devices
+because scsi_debug does not have support for the tape-specific commands
+and features. These patches add some more tape support to the scsi_debug
+driver. The end result is simulated drives with a tape having two
+partitions (i.e., partitioning can't be changed).
 
-Unless someone screams, I'll try this out on my next treewide.
+The tape partitions are implemented as fixed number of 8-byte
+units (partition zero 100 000 units and partition one 1000 units).
+The first four bytes of a unit contains the type of the unit (data
+block, filemark or end-of-data mark). If the units is a data block,
+the first four bytes contain the block length and the remaining
+four bytes the first four bytes of written data. This allows the user
+to use tags to see that the read block is what it was supposed to be.
 
-Thx for the feedback
+The following SCSI operations are added or modified:
+LOCATE
+- added
+MODE SELECT
+- modified to allow use without page(s) (just header and block descriptor)
+  - store density and block size
+MODE SENSE
+- modified to allow use without page(s) (just header and block descriptor)
+  - set density and block size
+- partition page added
+READ BLOCK LIMITS
+- added
+READ POSITION
+- added
+READ
+- added tape support for READ (6)
+REWIND
+- modified to set the tape position
+SPACE
+- added
+START STOP (LOAD)
+- modified to return New Medium Unit Attention if tape loaded (not
+  according to the standard, but enables testing this UA)
+WRITE
+- added tape support for WRITE (6)
+WRITE FILEMARKS
+- added
 
-Best
+Kai Mäkisara (6):
+  scsi: scsi_debug: First fixes for tapes
+  scsi: scsi_debug: Add READ BLOCK LIMITS and modify LOAD for tapes
+  scsi: scsi_debug: Add tape write support with block lengths  and
+    4 bytes of data
+  scsi: scsi_debug: Add read support and update locate for tapes
+  scsi: scsi_debug: Add compression mode page for tapes
+  scsi: scsi_debug: Reset tape setting at device reset
+
+ drivers/scsi/scsi_debug.c | 630 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 618 insertions(+), 12 deletions(-)
 
 -- 
+2.43.0
 
-Joel Granados
 
