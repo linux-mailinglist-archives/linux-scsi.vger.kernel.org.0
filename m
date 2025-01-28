@@ -1,34 +1,34 @@
-Return-Path: <linux-scsi+bounces-11792-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11789-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C39AA20C03
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 15:24:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BB2AA20BFC
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 15:23:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B2CD3A4572
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 14:24:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE897165349
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 14:23:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 510121A3A8A;
-	Tue, 28 Jan 2025 14:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAC411A3A8A;
+	Tue, 28 Jan 2025 14:23:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="UXLON3p2"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="c1F63nvI"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from fgw20-4.mail.saunalahti.fi (fgw20-4.mail.saunalahti.fi [62.142.5.107])
+Received: from fgw21-4.mail.saunalahti.fi (fgw21-4.mail.saunalahti.fi [62.142.5.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3583819F11B
-	for <linux-scsi@vger.kernel.org>; Tue, 28 Jan 2025 14:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7071226AFC
+	for <linux-scsi@vger.kernel.org>; Tue, 28 Jan 2025 14:23:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738074278; cv=none; b=LSRHKU1lu8tCgieJfNL0zZkdVjRAKGawsXUFhOoBObN9s1kD3ElT5iPxs72/gEqDvx4sWT0UcWojxTDyDo8r385oQL2CfqYdO8ewzUkn48aMqXvtRnxZqaivu+6Gb7KBIZ3+VFMioEVBW+NA8kSa/GEZ6h0idfYtpjwXugKNDac=
+	t=1738074224; cv=none; b=CYSPOJ4o2zl3tYokHlOB8oq3LqFMPvEHNwayXnqvcQML03TIcNWWAI0W1sOKyYS+rwZo+1PTqlywXIzYtaYzJ9ruJyGKdPiWgDec5w/Fj67aljJ/+6lmMOyNJljAundvlu3KpZY+8xYoXgYTgeJLyON8B+o9HuxVakYd2dIyxiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738074278; c=relaxed/simple;
-	bh=mINQUpI1X+b3DHHvEgZnXyQEM0o0IDBpOu1dkt9EwGI=;
+	s=arc-20240116; t=1738074224; c=relaxed/simple;
+	bh=M4V0o920wPk3JAnnje4ukYTg9er9iN/OWPGE9UrUL+o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E7yK0UcoIwiTOitl78XzKHKpdkITHaBDoVekjsWBbJkeMWL4+QqYUGhdCu97XTfEM+A/ey/IA7cjxGEm0LAur+d63ifn88n9AssngMTh7dUNKeWGykyvXK3KpVoH7Bu2BulC7ELFPXUBywbEgQQmrs77OGrpkeuMCB2vGYaUjgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=UXLON3p2; arc=none smtp.client-ip=62.142.5.107
+	 MIME-Version:Content-Type; b=k0/dTYlDVKYFe6JwaRcDyAhPLzf54xd6RXoptqIuSj6/wRD2OpDxzRtUXzfteXHJwWdYQwq9ATIBydLYWyTWHZuBzVc/oif6ITspY18+VQ18RLK/J3Cxl9ghWG26sdTUXekhssX4L0orgIMIePrCOX582iyoZnZlUJqVjKzllYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=c1F63nvI; arc=none smtp.client-ip=62.142.5.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
@@ -37,24 +37,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	 message-id:date:subject:cc:to:from:from:to:cc:reply-to:subject:date:
 	 in-reply-to:references:list-archive:list-subscribe:list-unsubscribe:
 	 content-type:content-transfer-encoding:message-id;
-	bh=G+RyuJJ81pSLT5gtmDqg/qBXzBTsufbLYGGhXZzNR2M=;
-	b=UXLON3p2yL3zRSDjf/n6g06vrLQiOmc4nxg1twf4A0KtDCum3g4pKxxcYXkIi4JUN2r47LjDsvfv5
-	 h6A1Iq6D0LOPV/aUUVaViU5qYVRwytvlCJGLHg5Ez5YrjV8h0VroJ2SLRr8rdskeqO2qLG5sWoFktz
-	 LLnR9R7V7+DxkkrsSWI/55mw8vRk/ggXUEC7AZ+XBzQvc34CQtE1172UUUNKJ2IbE7Z9xw6N8hU3t/
-	 UgIppqBjOnHndI7jcWOKtQYclslq0Om3Lc6XF6n3DhNE5QDVUxDp2h+tF2laAtVTKpC8z1DdWATQr8
-	 fX6wF3h9n1WdKroUxYjXEF5V0fzmNkw==
+	bh=TY7bfxzNMEh+jzYBN3KL7dgpUfFemZO6Mw/7ajBrC/M=;
+	b=c1F63nvIlwLgtcQAOHJIihd7BTX0fea5ALgsZPppCLVJDldUkF8zHIBPOPwciYC5jEN16oJkaJLT1
+	 dv/6M+AuY/6WytHDl+Q2BKLPx01T7bPkThJn5ldKBpgjrSUeN195lZ1FS8FoOhIaK0Yx7w6NbxcGEN
+	 NaZw+BTgHeCMqmE5xhiLPbVfCP1C8rKUiJDyzUd3gqOGdalYvTqwjfkUBsyp7EetRlf2lXwQ26ktKL
+	 PY6H6VIkOfk75shf80TgF58rKCgtSVE2rKDJeIfBJug8+7ktu7MwMXslsZSViORKO7IO4c9wVf03fB
+	 dsklzGFv6jJmco9d++bVacxK6Rkzlqw==
 Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
 	by fgw23.mail.saunalahti.fi (Halon) with ESMTPSA
-	id 6b41b66e-dd83-11ef-a25c-005056bdfda7;
-	Tue, 28 Jan 2025 16:23:18 +0200 (EET)
+	id 6d2b2707-dd83-11ef-a25c-005056bdfda7;
+	Tue, 28 Jan 2025 16:23:21 +0200 (EET)
 From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
 To: linux-scsi@vger.kernel.org,
 	dgilbert@interlog.com
 Cc: jmeneghi@redhat.com,
 	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
-Subject: [RFC PATCH 5/6] scsi: scsi_debug: Add compression mode page for tapes
-Date: Tue, 28 Jan 2025 16:22:49 +0200
-Message-ID: <20250128142250.163901-6-Kai.Makisara@kolumbus.fi>
+Subject: [RFC PATCH 6/6] scsi: scsi_debug: Reset tape setting at device reset
+Date: Tue, 28 Jan 2025 16:22:50 +0200
+Message-ID: <20250128142250.163901-7-Kai.Makisara@kolumbus.fi>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250128142250.163901-1-Kai.Makisara@kolumbus.fi>
 References: <20250128142250.163901-1-Kai.Makisara@kolumbus.fi>
@@ -67,86 +67,75 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add support for compression mode page. The compression status
-is saved and returned. No UA is generated.
+Set tape block size, density and compression to default values when the
+device is reset (either directly or via target, bus or host reset).
 
 Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
 ---
- drivers/scsi/scsi_debug.c | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ drivers/scsi/scsi_debug.c | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 912b1c6cf92d..ceacf38cee71 100644
+index ceacf38cee71..c5d7e8b59ff2 100644
 --- a/drivers/scsi/scsi_debug.c
 +++ b/drivers/scsi/scsi_debug.c
-@@ -405,6 +405,7 @@ struct sdebug_dev_info {
- 	unsigned int tape_blksize;
- 	unsigned int tape_density;
- 	unsigned char tape_partition;
-+	unsigned char tape_dce;
- 	unsigned int tape_location[TAPE_MAX_PARTITIONS];
- 	unsigned int tape_eop[TAPE_MAX_PARTITIONS];
- 	struct tape_block *tape_blocks[TAPE_MAX_PARTITIONS];
-@@ -2843,6 +2844,20 @@ static int resp_partition_m_pg(unsigned char *p, int pcontrol, int target)
- 	return sizeof(partition_pg);
+@@ -6730,6 +6730,20 @@ static int sdebug_fail_lun_reset(struct scsi_cmnd *cmnd)
+ 	return 0;
  }
  
-+static int resp_compression_m_pg(unsigned char *p, int pcontrol, int target,
-+	unsigned char dce)
-+{	/* Compression page for mode_sense (tape) */
-+	unsigned char compression_pg[] = {0x0f, 14, 0x40, 0, 0, 0, 0, 0,
-+		0, 0, 0, 0, 00, 00};
++static void scsi_tape_reset_clear(struct sdebug_dev_info *devip)
++{
++	if (sdebug_ptype == TYPE_TAPE) {
++		int i;
 +
-+	memcpy(p, compression_pg, sizeof(compression_pg));
-+	if (dce)
-+		p[2] |= 0x80;
-+	if (pcontrol == 1)
-+		memset(p + 2, 0, sizeof(compression_pg) - 2);
-+	return sizeof(compression_pg);
++		devip->tape_blksize = TAPE_DEF_BLKSIZE;
++		devip->tape_density = TAPE_DEF_DENSITY;
++		devip->tape_partition = 0;
++		devip->tape_dce = 0;
++		for (i = 0; i < TAPE_MAX_PARTITIONS; i++)
++			devip->tape_location[i] = 0;
++	}
 +}
 +
- /* PAGE_SIZE is more than necessary but provides room for future expansion. */
- #define SDEBUG_MAX_MSENSE_SZ PAGE_SIZE
+ static int scsi_debug_device_reset(struct scsi_cmnd *SCpnt)
+ {
+ 	struct scsi_device *sdp = SCpnt->device;
+@@ -6743,8 +6757,10 @@ static int scsi_debug_device_reset(struct scsi_cmnd *SCpnt)
+ 		sdev_printk(KERN_INFO, sdp, "%s\n", __func__);
  
-@@ -2979,6 +2994,12 @@ static int resp_mode_sense(struct scsi_cmnd *scp,
- 		}
- 		offset += len;
- 		break;
-+	case 0xf:	/* Compression Mode Page (tape) */
-+		if (!is_tape)
-+			goto bad_pcode;
-+		len += resp_compression_m_pg(ap, pcontrol, target, devip->tape_dce);
-+		offset += len;
-+		break;
- 	case 0x11:	/* Partition Mode Page (tape) */
- 		if (!is_tape)
- 			goto bad_pcode;
-@@ -3132,6 +3153,14 @@ static int resp_mode_select(struct scsi_cmnd *scp,
- 			goto set_mode_changed_ua;
- 		}
- 		break;
-+	case 0xf:       /* Compression mode page */
-+		if (sdebug_ptype != TYPE_TAPE)
-+			goto bad_pcode;
-+		if ((arr[off + 2] & 0x40) != 0) {
-+			devip->tape_dce = (arr[off + 2] & 0x80) != 0;
-+			return 0;
-+		}
-+		break;
- 	case 0x1c:      /* Informational Exceptions Mode page */
- 		if (iec_m_pg[1] == arr[off + 1]) {
- 			memcpy(iec_m_pg + 2, arr + off + 2,
-@@ -3147,6 +3176,10 @@ static int resp_mode_select(struct scsi_cmnd *scp,
- set_mode_changed_ua:
- 	set_bit(SDEBUG_UA_MODE_CHANGED, devip->uas_bm);
- 	return 0;
-+
-+bad_pcode:
-+	mk_sense_invalid_fld(scp, SDEB_IN_CDB, 2, 5);
-+	return check_condition_result;
- }
+ 	scsi_debug_stop_all_queued(sdp);
+-	if (devip)
++	if (devip) {
+ 		set_bit(SDEBUG_UA_POR, devip->uas_bm);
++		scsi_tape_reset_clear(devip);
++	}
  
- static int resp_temp_l_pg(unsigned char *arr)
+ 	if (sdebug_fail_lun_reset(SCpnt)) {
+ 		scmd_printk(KERN_INFO, SCpnt, "fail lun reset 0x%x\n", opcode);
+@@ -6782,6 +6798,7 @@ static int scsi_debug_target_reset(struct scsi_cmnd *SCpnt)
+ 	list_for_each_entry(devip, &sdbg_host->dev_info_list, dev_list) {
+ 		if (devip->target == sdp->id) {
+ 			set_bit(SDEBUG_UA_BUS_RESET, devip->uas_bm);
++			scsi_tape_reset_clear(devip);
+ 			++k;
+ 		}
+ 	}
+@@ -6813,6 +6830,7 @@ static int scsi_debug_bus_reset(struct scsi_cmnd *SCpnt)
+ 
+ 	list_for_each_entry(devip, &sdbg_host->dev_info_list, dev_list) {
+ 		set_bit(SDEBUG_UA_BUS_RESET, devip->uas_bm);
++		scsi_tape_reset_clear(devip);
+ 		++k;
+ 	}
+ 
+@@ -6836,6 +6854,7 @@ static int scsi_debug_host_reset(struct scsi_cmnd *SCpnt)
+ 		list_for_each_entry(devip, &sdbg_host->dev_info_list,
+ 				    dev_list) {
+ 			set_bit(SDEBUG_UA_BUS_RESET, devip->uas_bm);
++			scsi_tape_reset_clear(devip);
+ 			++k;
+ 		}
+ 	}
 -- 
 2.43.0
 
