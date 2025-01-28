@@ -1,60 +1,63 @@
-Return-Path: <linux-scsi+bounces-11790-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11787-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94E1DA20C00
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 15:24:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1907FA20BF9
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 15:23:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC3B41886E59
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 14:24:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62E3916150E
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2025 14:23:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59DB1A3A8A;
-	Tue, 28 Jan 2025 14:24:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 965511A4F1B;
+	Tue, 28 Jan 2025 14:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="lNBt+ppJ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="DK8K2g6G"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from fgw23-4.mail.saunalahti.fi (fgw23-4.mail.saunalahti.fi [62.142.5.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7D019F11B
-	for <linux-scsi@vger.kernel.org>; Tue, 28 Jan 2025 14:24:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9869D19F11B
+	for <linux-scsi@vger.kernel.org>; Tue, 28 Jan 2025 14:23:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.110
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738074252; cv=none; b=IB1rwUOMokqpUlHU5aB6TL4mawBmIeVo9DQVkBQ7WckCYPleIHe3FRCFQpSciL+Hm+CqQK4zQM7v/lfKnArYrgfP6kS3R4uDh/Trq9d6y2RhQlXSogybltAI2CsTEOcuuD3l/L8vJwxyc7zzoX+MjN0Hp4Xz5mf0qMj3wQWhfqE=
+	t=1738074193; cv=none; b=hrPNWuNIJJdNqUxBq+4wHQP2P7dgOmo2QGrYCHCRWqmRRVr97utvpFFzIoP93HMvqY0GVSxLCPyBeEP7gTAu6BDzZ17b+pogWthIXrU8SssI3ftTov5T4nK4g94dXvaUEgM4XNABXCzQdzFULsspRskxHctj7RNIdpJSr1ewZW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738074252; c=relaxed/simple;
-	bh=sJGIW4ZAkuXSzDz53oMMezy3x4Lf4jDHnkssjFWBsAo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=enX3PWUR98oowywx2Mz3FahQ6Yjyl8QEnzdBgRdzMkcXp3VRycGMwyooq+VsEHXrm12ixTy0ymX89oRW2taiq3PcCaM4xg7vIq1XPyyjyYgEZEZmak9IRlzGx+P0UNlCi7glUjx48yyQOdYlMj4OR+JHIvUXe8/qu+0Wxw7pi+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=lNBt+ppJ; arc=none smtp.client-ip=62.142.5.110
+	s=arc-20240116; t=1738074193; c=relaxed/simple;
+	bh=2M6k+DsYAMJCPOVzvlVP2VtfhES06yIndeT5+90aXnI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QYgxjM2aukk/eACEZN/ULT2AQOSr4wM42lLWIgpvE5qhJ0UBlsilOSNxEfbpxG1RkCwornUae+ukKcm8lGwVdxhjJccLLLxDaGYBj0/smUJAp6zAhZjxJbSMGsJhlbN3Z5aRc0h8u6ZvYlDY40w5QCd++9MmZlE2zK6HSobfQ4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=DK8K2g6G; arc=none smtp.client-ip=62.142.5.110
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=kolumbus.fi; s=elisa1;
-	h=content-transfer-encoding:content-type:mime-version:message-id:date:subject:
-	 cc:to:from:from:to:cc:reply-to:subject:date:in-reply-to:references:
-	 list-archive:list-subscribe:list-unsubscribe:content-type:
-	 content-transfer-encoding:message-id;
-	bh=zcwejwtb/bLCJ6dXr7NYQC/Q6Cp6NdOgaaYBZ2cxtBQ=;
-	b=lNBt+ppJNNMVhVEC75B34dlKa5+zFCvuQ1yLZhHG5iuDYAFPk3gUq3Vin/dAgSTedamNrW0JgRRS/
-	 VVZ46o3jEPBa5+H5S20SGR7h8URN0moWAAa4PJ0S8Lo0UmmZS9KWGbVYDmv81ThhB/YIshWaX43Vl6
-	 /yCIv2PNInKcNp4iCwU9uOg2tHIRnHIDEI4AWa1cyrOXA4feyKG+hJxsrYZHArJ+0ghoZ/9qCjItNh
-	 oH+YGJvsIWeZBWroepGrUZ9lrc5zWkq5tzk1t1ANt7JjTNPwM50HklGjSWz57AuItt/djEvLfGOryJ
-	 LfGZqwSj8JLjv0HK9XV+nqsW6ZTuv7Q==
+	h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
+	 message-id:date:subject:cc:to:from:from:to:cc:reply-to:subject:date:
+	 in-reply-to:references:list-archive:list-subscribe:list-unsubscribe:
+	 content-type:content-transfer-encoding:message-id;
+	bh=xAgNlQZX/jDGUIhfy3hB7tnSWYPmrrVRICUvmeVtmR0=;
+	b=DK8K2g6Gfi2a5a9RF2+GMUS/7XiNbm3FE8euvI1PcibhGSm70g4I2Qy8vwm+VKWTiYGULym6cj5wd
+	 PVlXJxM9l/LDdeN5ebQdBGK3SpXG5HSo/PLVNkA3BTk97DBnz6TRpx/Hzj3bCxHfcg1uOX/pfVaFJ1
+	 WKXcVLLCygcHTGUxr0V4rBd0vdVogRGVep9Z3y7dZFb2xilrFwK9v6dvSOqFTFPrIPDgnBtfEK+qaW
+	 xoglp61PQCApY1QMx4IDQyqeAiqfzsb+iwivKxxg2UjXne1hhJKDo5jdwzkv2bNZ05i1Ny+vFDJr+B
+	 sLPCo9XOWRAXb0KduP92lOs4YufAPmw==
 Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
 	by fgw23.mail.saunalahti.fi (Halon) with ESMTPSA
-	id 5f92bef6-dd83-11ef-a25c-005056bdfda7;
-	Tue, 28 Jan 2025 16:22:59 +0200 (EET)
+	id 649cf8df-dd83-11ef-a25c-005056bdfda7;
+	Tue, 28 Jan 2025 16:23:07 +0200 (EET)
 From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
 To: linux-scsi@vger.kernel.org,
 	dgilbert@interlog.com
 Cc: jmeneghi@redhat.com,
 	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
-Subject: [RFC PATCH 0/6] scsi: scsi_debug: Add more tape support
-Date: Tue, 28 Jan 2025 16:22:44 +0200
-Message-ID: <20250128142250.163901-1-Kai.Makisara@kolumbus.fi>
+Subject: [RFC PATCH 1/6] scsi: scsi_debug: First fixes for tapes
+Date: Tue, 28 Jan 2025 16:22:45 +0200
+Message-ID: <20250128142250.163901-2-Kai.Makisara@kolumbus.fi>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250128142250.163901-1-Kai.Makisara@kolumbus.fi>
+References: <20250128142250.163901-1-Kai.Makisara@kolumbus.fi>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -64,65 +67,136 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-These changes to the scsi_debug driver have been made to support testing
-of the st driver. This is a RFC to see if there is interest to add
-this to the kernel scsi_debug driver.
+Patch includes the following:
+- enable MODE SENSE/SELECT without actual page (to read/write only
+  the Block Descriptor)
+- store the density code and block size in the Block Descriptor
+- fix REWIND not to use the wrong page filling function
 
-Currently, the scsi_debug driver can create tape devices and the st
-driver attaches to those. Nothing much can be done with the tape devices
-because scsi_debug does not have support for the tape-specific commands
-and features. These patches add some more tape support to the scsi_debug
-driver. The end result is simulated drives with a tape having two
-partitions (i.e., partitioning can't be changed).
+Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
+---
+ drivers/scsi/scsi_debug.c | 38 +++++++++++++++++++++++++++++++++-----
+ 1 file changed, 33 insertions(+), 5 deletions(-)
 
-The tape partitions are implemented as fixed number of 8-byte
-units (partition zero 100 000 units and partition one 1000 units).
-The first four bytes of a unit contains the type of the unit (data
-block, filemark or end-of-data mark). If the units is a data block,
-the first four bytes contain the block length and the remaining
-four bytes the first four bytes of written data. This allows the user
-to use tags to see that the read block is what it was supposed to be.
-
-The following SCSI operations are added or modified:
-LOCATE
-- added
-MODE SELECT
-- modified to allow use without page(s) (just header and block descriptor)
-  - store density and block size
-MODE SENSE
-- modified to allow use without page(s) (just header and block descriptor)
-  - set density and block size
-- partition page added
-READ BLOCK LIMITS
-- added
-READ POSITION
-- added
-READ
-- added tape support for READ (6)
-REWIND
-- modified to set the tape position
-SPACE
-- added
-START STOP (LOAD)
-- modified to return New Medium Unit Attention if tape loaded (not
-  according to the standard, but enables testing this UA)
-WRITE
-- added tape support for WRITE (6)
-WRITE FILEMARKS
-- added
-
-Kai Mäkisara (6):
-  scsi: scsi_debug: First fixes for tapes
-  scsi: scsi_debug: Add READ BLOCK LIMITS and modify LOAD for tapes
-  scsi: scsi_debug: Add tape write support with block lengths  and
-    4 bytes of data
-  scsi: scsi_debug: Add read support and update locate for tapes
-  scsi: scsi_debug: Add compression mode page for tapes
-  scsi: scsi_debug: Reset tape setting at device reset
-
- drivers/scsi/scsi_debug.c | 630 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 618 insertions(+), 12 deletions(-)
-
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index 680ba180a672..00daa77f636c 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -173,6 +173,10 @@ static const char *sdebug_version_date = "20210520";
+ #define DEF_ZBC_MAX_OPEN_ZONES	8
+ #define DEF_ZBC_NR_CONV_ZONES	1
+ 
++/* Default parameters for tape drives */
++#define TAPE_DEF_DENSITY  0x0
++#define TAPE_DEF_BLKSIZE  0
++
+ #define SDEBUG_LUN_0_VAL 0
+ 
+ /* bit mask values for sdebug_opts */
+@@ -363,6 +367,10 @@ struct sdebug_dev_info {
+ 	ktime_t create_ts;	/* time since bootup that this device was created */
+ 	struct sdeb_zone_state *zstate;
+ 
++	/* For tapes */
++	unsigned int tape_blksize;
++	unsigned int tape_density;
++
+ 	struct dentry *debugfs_entry;
+ 	struct spinlock list_lock;
+ 	struct list_head inject_err_list;
+@@ -773,7 +781,7 @@ static const struct opcode_info_t opcode_info_arr[SDEB_I_LAST_ELEM_P1 + 1] = {
+ /* 20 */
+ 	{0, 0x1e, 0, 0, NULL, NULL, /* ALLOW REMOVAL */
+ 	    {6,  0, 0, 0, 0x3, 0xc7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+-	{0, 0x1, 0, 0, resp_start_stop, NULL, /* REWIND ?? */
++	{0, 0x1, 0, 0, NULL, NULL, /* REWIND ?? */
+ 	    {6,  0x1, 0, 0, 0, 0xc7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+ 	{0, 0, 0, F_INV_OP | FF_RESPOND, NULL, NULL, /* ATA_PT */
+ 	    {0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+@@ -2742,7 +2750,7 @@ static int resp_mode_sense(struct scsi_cmnd *scp,
+ 	unsigned char *ap;
+ 	unsigned char *arr __free(kfree);
+ 	unsigned char *cmd = scp->cmnd;
+-	bool dbd, llbaa, msense_6, is_disk, is_zbc;
++	bool dbd, llbaa, msense_6, is_disk, is_zbc, is_tape;
+ 
+ 	arr = kzalloc(SDEBUG_MAX_MSENSE_SZ, GFP_ATOMIC);
+ 	if (!arr)
+@@ -2755,7 +2763,8 @@ static int resp_mode_sense(struct scsi_cmnd *scp,
+ 	llbaa = msense_6 ? false : !!(cmd[1] & 0x10);
+ 	is_disk = (sdebug_ptype == TYPE_DISK);
+ 	is_zbc = devip->zoned;
+-	if ((is_disk || is_zbc) && !dbd)
++	is_tape = (sdebug_ptype == TYPE_TAPE);
++	if ((is_disk || is_zbc || is_tape) && !dbd)
+ 		bd_len = llbaa ? 16 : 8;
+ 	else
+ 		bd_len = 0;
+@@ -2793,7 +2802,11 @@ static int resp_mode_sense(struct scsi_cmnd *scp,
+ 			put_unaligned_be32(0xffffffff, ap + 0);
+ 		else
+ 			put_unaligned_be32(sdebug_capacity, ap + 0);
+-		put_unaligned_be16(sdebug_sector_size, ap + 6);
++		if (is_tape) {
++			ap[0] = devip->tape_density;
++			put_unaligned_be16(devip->tape_blksize, ap + 6);
++		} else
++			put_unaligned_be16(sdebug_sector_size, ap + 6);
+ 		offset += bd_len;
+ 		ap = arr + offset;
+ 	} else if (16 == bd_len) {
+@@ -2802,6 +2815,8 @@ static int resp_mode_sense(struct scsi_cmnd *scp,
+ 		offset += bd_len;
+ 		ap = arr + offset;
+ 	}
++	if (cmd[2] == 0)
++		goto only_bd; /* Only block descriptor requested */
+ 
+ 	/*
+ 	 * N.B. If len>0 before resp_*_pg() call, then form of that call should be:
+@@ -2902,6 +2917,7 @@ static int resp_mode_sense(struct scsi_cmnd *scp,
+ 	default:
+ 		goto bad_pcode;
+ 	}
++only_bd:
+ 	if (msense_6)
+ 		arr[0] = offset - 1;
+ 	else
+@@ -2945,7 +2961,14 @@ static int resp_mode_select(struct scsi_cmnd *scp,
+ 			    __func__, param_len, res);
+ 	md_len = mselect6 ? (arr[0] + 1) : (get_unaligned_be16(arr + 0) + 2);
+ 	bd_len = mselect6 ? arr[3] : get_unaligned_be16(arr + 6);
+-	off = bd_len + (mselect6 ? 4 : 8);
++	off = (mselect6 ? 4 : 8);
++	if (sdebug_ptype == TYPE_TAPE) {
++		devip->tape_density = arr[off];
++		devip->tape_blksize = get_unaligned_be16(arr + off + 6);
++	}
++	off += bd_len;
++	if (res <= off)
++		goto only_bd; /* No page written, just descriptors */
+ 	if (md_len > 2 || off >= res) {
+ 		mk_sense_invalid_fld(scp, SDEB_IN_DATA, 0, -1);
+ 		return check_condition_result;
+@@ -2998,6 +3021,7 @@ static int resp_mode_select(struct scsi_cmnd *scp,
+ 	return check_condition_result;
+ set_mode_changed_ua:
+ 	set_bit(SDEBUG_UA_MODE_CHANGED, devip->uas_bm);
++only_bd:
+ 	return 0;
+ }
+ 
+@@ -5835,6 +5859,10 @@ static struct sdebug_dev_info *sdebug_device_create(
+ 		} else {
+ 			devip->zoned = false;
+ 		}
++		if (sdebug_ptype == TYPE_TAPE) {
++			devip->tape_density = TAPE_DEF_DENSITY;
++			devip->tape_blksize = TAPE_DEF_BLKSIZE;
++		}
+ 		devip->create_ts = ktime_get_boottime();
+ 		atomic_set(&devip->stopped, (sdeb_tur_ms_to_ready > 0 ? 2 : 0));
+ 		spin_lock_init(&devip->list_lock);
 -- 
 2.43.0
 
