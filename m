@@ -1,131 +1,120 @@
-Return-Path: <linux-scsi+bounces-11846-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11848-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEE9CA21C45
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Jan 2025 12:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C943A21E44
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Jan 2025 15:01:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D969163B32
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Jan 2025 11:30:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DCD41681C4
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Jan 2025 14:01:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 273091BD9E6;
-	Wed, 29 Jan 2025 11:30:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55C4813D503;
+	Wed, 29 Jan 2025 14:01:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZtI67GZD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KkcE9Q3i"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF8313C9A3;
-	Wed, 29 Jan 2025 11:30:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E1C10A1F;
+	Wed, 29 Jan 2025 14:01:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738150236; cv=none; b=JmSz1AMo52PKJRhYAFoOo1MkjJ4wiKtniP6hxdNJ49VZKIC1VrRvd4xq7izueedoy+iZ0tU2L+CMEAUeJlZ4gLBE9+Aw4VbQerYRuloX47F0Rq3021zqmh61XWuQgFABUHdYHefHy5APrOWHT/9KrQQt7hqiXdc4gGZZ1IHUSHU=
+	t=1738159267; cv=none; b=FAfu5O8KLFwXBRph3STNAfRRQ0H9bOfdPrqBJBFysGrWHtNv4bwv3TtWf3YjPP9BOkPKoi00ZV7fvU8OufM6+aE7pEAI4xr3qteIGJUhsV/A0HNP1e9SrJKMLhssM0nVlkMAd+5k2INf5GxEdvWgU1ZDGE87bSnamlN/QdKDtg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738150236; c=relaxed/simple;
-	bh=PGzhPhIGvedo1hUSZOhnBkmZDQESU8tumG/s6DUxvXc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UOPseLnQ9vgx4ZmyKuAaF4JxW1LyXh5RSNFgxeCT/AWA/Z3Q7xcAtuvA+y02pvM7sxAcB/92PD0pDxincJBB6olNLxZSUAhTf6j3uEbtpn5BznFbZON407Bba+g9juH5GeFL+A7u5TCHgU1fX837VEXYskpzj3bRum+sWCXajlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZtI67GZD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08219C4CED3;
-	Wed, 29 Jan 2025 11:30:24 +0000 (UTC)
+	s=arc-20240116; t=1738159267; c=relaxed/simple;
+	bh=of+qFZwyz1ljoL5PX10TFoOn09zYGwhGgo6csFa5igc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=M+37ligiLk1kRy8vdX9XDwvfGBdpx27XEMUvvzf3xxVfW8TBt6XbxZVK5PQgQ4jfQiHuzYoYF1fbxHucU/d6Btb9V9cmyZEe3BZxQXIR1T1Qi26NuONanfm72sJNbg4lm77I86/WlClm3OTOvIqOO3sKWoHbPutAKlhrhuv7Zm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KkcE9Q3i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D191DC4CED1;
+	Wed, 29 Jan 2025 14:01:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738150236;
-	bh=PGzhPhIGvedo1hUSZOhnBkmZDQESU8tumG/s6DUxvXc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZtI67GZDUwmVObMXVDnkn0JrT90mq1FWzZPJfX54LEnSuCkHcZegr9yD+nONZRlzB
-	 NdTLLdl6vn6f8UrE+u4ErdIRAJ08ob0Xby74NcltekuNw+jlEhZ/ccP0QNf7C6JcXf
-	 SwqH2i3Gs/sVoWSH1fgadm8LkE8QOh8sim2YzKEDtprzZ8ObXHa24pw/dQvs2U98RF
-	 Tr6DWrDeNAfZAaOGR1I0I3HG51Uw66JRtlaZH0NKwMSzMvf3IVfb4NrYOydkdw8khx
-	 9vzabwvkyLvROFag7yIgVq22runc6+02aDA3ULJ93boFRdvIIutHM5yGGI5/dCwLO/
-	 rGjfk6o1HfewA==
-Date: Wed, 29 Jan 2025 11:30:21 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Yaron Avizrat <yaron.avizrat@intel.com>,
-	Oded Gabbay <ogabbay@kernel.org>,
-	Julia Lawall <Julia.Lawall@inria.fr>,
-	Nicolas Palix <nicolas.palix@imag.fr>,
-	James Smart <james.smart@broadcom.com>,
-	Dick Kennedy <dick.kennedy@broadcom.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-	David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>,
-	Dongsheng Yang <dongsheng.yang@easystack.cn>,
-	Jens Axboe <axboe@kernel.dk>, Xiubo Li <xiubli@redhat.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>,
-	"Darrick J. Wong" <djwong@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>, Keith Busch <kbusch@kernel.org>,
-	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
-	Frank Li <Frank.Li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-	Selvin Xavier <selvin.xavier@broadcom.com>,
-	Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-	cocci@inria.fr, linux-kernel@vger.kernel.org,
-	linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org,
-	ceph-devel@vger.kernel.org, linux-block@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-spi@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	platform-driver-x86@vger.kernel.org,
-	ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH 13/16] spi: spi-imx: convert timeouts to secs_to_jiffies()
-Message-ID: <003cc629-1969-432b-9d9a-e17a315a0407@sirena.org.uk>
-References: <20250128-converge-secs-to-jiffies-part-two-v1-0-9a6ecf0b2308@linux.microsoft.com>
- <20250128-converge-secs-to-jiffies-part-two-v1-13-9a6ecf0b2308@linux.microsoft.com>
+	s=k20201202; t=1738159266;
+	bh=of+qFZwyz1ljoL5PX10TFoOn09zYGwhGgo6csFa5igc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=KkcE9Q3i2xfnWRQAadKA9RKLrt7egweYBBDaHZhhfmWgHUfbN0nU8Dte2U7z0p55Y
+	 MCzeGJHpovDtmZrPZOM5qw14Ag5hYIgUMB722EZUoVqb+jWkVzY2oBG5rbBU9sIZ8W
+	 xI/Vfy+owyo3YgC7e2qUsVhekR/6fEmGYx4+GhrGiT6IFDpTyHQ0sZ3NOiO2mQHBtV
+	 PfBRT7FOpKcF6+hAMZRk5BR73kGa4/VujXdQs9ePaDcdcI3O5W0YhzjUmVapH8pRve
+	 IIbzB4cuZRVXxcIbLOJvzFFk2JBAL5XhhJlyqO6ttbarW9OakQef9KXb2nrA2F2sFG
+	 H16E7clbnl+wQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Easwar Hariharan <eahariha@linux.microsoft.com>,
+	Michael Kelley <mhklinux@outlook.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Sasha Levin <sashal@kernel.org>,
+	kys@microsoft.com,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	decui@microsoft.com,
+	James.Bottomley@HansenPartnership.com,
+	linux-hyperv@vger.kernel.org,
+	linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.13 1/4] scsi: storvsc: Ratelimit warning logs to prevent VM denial of service
+Date: Wed, 29 Jan 2025 07:57:20 -0500
+Message-Id: <20250129125724.1272534-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="nqw+F9EZKY3y+n+J"
-Content-Disposition: inline
-In-Reply-To: <20250128-converge-secs-to-jiffies-part-two-v1-13-9a6ecf0b2308@linux.microsoft.com>
-X-Cookie: The world is not octal despite DEC.
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.13
+Content-Transfer-Encoding: 8bit
 
+From: Easwar Hariharan <eahariha@linux.microsoft.com>
 
---nqw+F9EZKY3y+n+J
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+[ Upstream commit d2138eab8cde61e0e6f62d0713e45202e8457d6d ]
 
-On Tue, Jan 28, 2025 at 06:21:58PM +0000, Easwar Hariharan wrote:
-> Commit b35108a51cf7 ("jiffies: Define secs_to_jiffies()") introduced
-> secs_to_jiffies().  As the value here is a multiple of 1000, use
-> secs_to_jiffies() instead of msecs_to_jiffies to avoid the multiplication.
+If there's a persistent error in the hypervisor, the SCSI warning for
+failed I/O can flood the kernel log and max out CPU utilization,
+preventing troubleshooting from the VM side. Ratelimit the warning so
+it doesn't DoS the VM.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Closes: https://github.com/microsoft/WSL/issues/9173
+Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+Link: https://lore.kernel.org/r/20250107-eahariha-ratelimit-storvsc-v1-1-7fc193d1f2b0@linux.microsoft.com
+Reviewed-by: Michael Kelley <mhklinux@outlook.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/storvsc_drv.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
---nqw+F9EZKY3y+n+J
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+index d0b55c1fa908a..b3c588b102d90 100644
+--- a/drivers/scsi/storvsc_drv.c
++++ b/drivers/scsi/storvsc_drv.c
+@@ -171,6 +171,12 @@ do {								\
+ 		dev_warn(&(dev)->device, fmt, ##__VA_ARGS__);	\
+ } while (0)
+ 
++#define storvsc_log_ratelimited(dev, level, fmt, ...)				\
++do {										\
++	if (do_logging(level))							\
++		dev_warn_ratelimited(&(dev)->device, fmt, ##__VA_ARGS__);	\
++} while (0)
++
+ struct vmscsi_request {
+ 	u16 length;
+ 	u8 srb_status;
+@@ -1177,7 +1183,7 @@ static void storvsc_on_io_completion(struct storvsc_device *stor_device,
+ 		int loglevel = (stor_pkt->vm_srb.cdb[0] == TEST_UNIT_READY) ?
+ 			STORVSC_LOGGING_WARN : STORVSC_LOGGING_ERROR;
+ 
+-		storvsc_log(device, loglevel,
++		storvsc_log_ratelimited(device, loglevel,
+ 			"tag#%d cmd 0x%x status: scsi 0x%x srb 0x%x hv 0x%x\n",
+ 			scsi_cmd_to_rq(request->cmd)->tag,
+ 			stor_pkt->vm_srb.cdb[0],
+-- 
+2.39.5
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeaEU0ACgkQJNaLcl1U
-h9DZyQf/T/OK8ZWxSzh3dJWsLr99J2XEq+bjv9e7IU0AU/eyO6YeJOJ5PzHFHkPr
-Zk1IUnGI0OF8pcUXyBzuUL5L6xn4D2+l7+ChMN1V94Q0KWuPSEf7bJL7lo+UBq4k
-BDHHE1Qs7qag4DrPoQb4K+6qXX46HvTIJKamPKtm4VAw0BAVoK/N6pSPKtK+yRC8
-TmfWRcS+046vsaFWuQF1aS3hy1eiY0eFjv3+XLhta71PFbIfQ8sBZtX+gzPu8/t8
-w8BgXrldeDtBpKhtizRNkmlu9WoicVeENDpjYOAf3CeC08eHyRT/GrS4iYwRP26k
-HKKCEB2NvAkAB5bvQXqsqFPC+Nzgmg==
-=CTWt
------END PGP SIGNATURE-----
-
---nqw+F9EZKY3y+n+J--
 
