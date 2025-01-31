@@ -1,85 +1,85 @@
-Return-Path: <linux-scsi+bounces-11884-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11886-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F5C8A2380E
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 Jan 2025 00:45:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE9F3A23810
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 Jan 2025 00:45:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E4461884B8C
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jan 2025 23:45:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 575D57A2FB6
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jan 2025 23:44:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94C2B1C5F25;
-	Thu, 30 Jan 2025 23:45:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 462611BEF91;
+	Thu, 30 Jan 2025 23:45:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XcIcFDQa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OZN09Lqj"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6CE1DDC3A
-	for <linux-scsi@vger.kernel.org>; Thu, 30 Jan 2025 23:45:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A38919AD8D
+	for <linux-scsi@vger.kernel.org>; Thu, 30 Jan 2025 23:45:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738280712; cv=none; b=LB3FknSUYNio6V40rGfARu6I2gvn+nnz1HH71HuO7dIydqi4DX3g1Kt8nOoAgn9G8SHwx08k0dYAaGMMUlUWZdy1ncdU4MeVPQ3oV6mkWtxRW6qk8hJE6p6N42cKd/lAD9pm8qf4DffX6H3P1h5PDzyNjia6L8FMNCKuskpxKQ4=
+	t=1738280718; cv=none; b=ZlvLNJOMJZov+Sj3GM5cgAU1kj9H8H2ICznKoVnXavS+iFEcXuINu1knipsq+YnUbkMfB20fGiCztBks2fjeCo5GPwVqKvwh4SwqswopiMMoC1Qrcf35MzZB1rudGnG9NgbsSSKS1RxJugPpsNibrB8ixVEM1PRa5WRoep7oaHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738280712; c=relaxed/simple;
-	bh=+Vn49Tj1brt4cIAdNU6UVZAET3EJdVGNX0mKf8QA0Sk=;
+	s=arc-20240116; t=1738280718; c=relaxed/simple;
+	bh=fOpY1RyKPOpU9bl/uu7VVDfubHWwXiR+L2bbwycAntI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=poeyEzTXcT4jhSekWUMc8ZOkSf1iT6+FTUXt4dsiTbPrmDO2YtUNhDVSrEowEzqkHBdgJW5BiL2sPQXJJEl1bvP9WkhAEg+Hlz8lMbOjB0SW8iiP9D7vhzIwinCkdlvkVAC+KL6kA08hSshCx8cVh1AolzlUZVhVw7Y34Lhlo94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XcIcFDQa; arc=none smtp.client-ip=209.85.161.54
+	 MIME-Version; b=HqS0dgvApw4bPpDd+COwJZ6/AldC8NB0VNd9msYLGi+/srpaqeyYlac3Ih+hA447ob+JIwyB3MpUYoSsMyr1w6gJOdqsvXVutWdxNz0+Lw3lGP6EjRCROU5yWAczyvvnqNcDRKa08zPHPut/AMCeZ6NjfbbAc94IGKar7khBs+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OZN09Lqj; arc=none smtp.client-ip=209.85.161.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5f2e370bb3aso391688eaf.0
-        for <linux-scsi@vger.kernel.org>; Thu, 30 Jan 2025 15:45:10 -0800 (PST)
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5fc0b7a4e87so1117181eaf.1
+        for <linux-scsi@vger.kernel.org>; Thu, 30 Jan 2025 15:45:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738280710; x=1738885510; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1738280713; x=1738885513; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Kp0yN7qFud0xlqpM6S3vYIiayDRxeWsB+4ws/z2F1Zc=;
-        b=XcIcFDQaEs7TXNOU6nus9tnyRnuaEiOxqDXRxOoZqasLcaFgXek9WLyDhfFXK9LZDF
-         KuRKPaGlyW+UPBalSqZdevOctE4TeEJTgRBnKqwPqkwl51ZtB6T+oUFjjBzphNAz+vbY
-         pH+aXq/z5bfdMbWHIgrXJsfjTP8LhvcFEbiwbAiPzLeY6KDfw882qB6+ZghuwRGuV/vW
-         YmIxKpgml4sgS8mrvz7wviakes9XZpYcsopjcx3jUiCdN63YaUVm/1gR1Mx2cEwUfazu
-         b2krOqLSlEgBZfHIEmX5Ohg/LZyyMi21nfdBtebyLqwT5MYlqSYwqSzvF4JWJxm05NoP
-         HB0A==
+        bh=sGU7ct1w6opxL2vLFHhESbptIn91LoS6CTsXFujPMho=;
+        b=OZN09Lqjz1i5vvtu2xbWIZpOBItdGBwrGaysZiJCrITTRf1XAKpgrnXLZqMHO+6t1l
+         X1dztZ/S6MwZwjbhIVP4ZZLpXGun91EAsGmTV3O7Vt22uaz1sKkIpWnJvcOK9FPz3mAU
+         wEnqZh9p/m9YHQ2YxLPq7xGdEo0LwoRavCaAOSfU1bCfmLUnPsqpKQ3PItHJ9wusR4V+
+         atP7WtQNV4rNLXrBEyIdhE5J8xaKWRwKQQmneu1ZD1hv++qwn2AitXu/v9SxTZ96DPLU
+         AGuMm8qerX9WB9TuPEuctz2KGPAzuK+/lTSTrExHAO87Yc7FhLvEObL6X1P//imuNLNQ
+         73Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738280710; x=1738885510;
+        d=1e100.net; s=20230601; t=1738280713; x=1738885513;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Kp0yN7qFud0xlqpM6S3vYIiayDRxeWsB+4ws/z2F1Zc=;
-        b=qi3xc+LAJzDeWvMm5iIuTg3Q3BBZq/Bd5tD2BhusMbQ3XRsxYHf7RMy0PKMrWfjoGt
-         J22oiVGeBtCLILG/KPQvHCFWKu/LmxW3whpj2s/ixzqAgrB4HBb8lOzpNlYo2zeZMlKT
-         +hmdSHLL1zzufSv9VxuN+gIFQEg6Vqc/JwwsMXwi5Jz+84kZ7hPWmd//fgPF/9IZDXn8
-         afQvYJt+UWx4kqe+ax/XtmZAhp8WGbmxm8vUz9Rwf0uXbxt6CI+PIT+211odGn+WEHbj
-         1xGkK9Mo05fi1YevEoG9oJAGHdV8IA6g/3VCxvGBsHctz1bEtYj33juwqp9x1TGKczO2
-         /feg==
-X-Gm-Message-State: AOJu0YwU6CHlYm2SlQbMKtIQvVsTXdSuw0LR3PZ/d2hIpxNPDnna5k7m
-	0UNzKGP4ww9CEUds4CEJzowwXfLe+TJRLuMBmBwuhFg6/lAxNhHZ2uuB8w==
-X-Gm-Gg: ASbGnctdq8fNHhlIiwNK8f/cMZYUcG3NJhr5rnIJdqFfSadsM5/jK65M3csBfhPotB4
-	YcxivrmFrCOv+KbFzej3nj0Ni5xYdhdwObb/prnzfSg/PLvk+Zr+zxeICJaf5lJsziAROABfIxJ
-	VnkRcS4ctUBMIgcrmTganbx62hryjFZUthx1WeOTz7K0NYJjSCenE1TFH2N52kAwprRQb5ffmny
-	wTy9WnwMrPY9/9uE41fVRtzpZcjZVSWhWeI3eUcqPbiO//rxGZVia4M8MxCzy9JqKCZZ8oc/KdY
-	G1X2hqdV2TwZFJN4oF0lGA1ACajkYZ8Wfo5dMCmxlqNIrf3q/ocnuDKAKVIDrUBC5f+kLTdLM3Y
-	P
-X-Google-Smtp-Source: AGHT+IF471iU8f94HQ/r20rWrzKMgJIklM6ve9S753jTN1nnP7ik+mw492f+JpeVoKFtpKRK9gZpaw==
-X-Received: by 2002:a05:6820:2685:b0:5fa:23f9:a256 with SMTP id 006d021491bc7-5fc003677f8mr6312139eaf.5.1738280703276;
-        Thu, 30 Jan 2025 15:45:03 -0800 (PST)
+        bh=sGU7ct1w6opxL2vLFHhESbptIn91LoS6CTsXFujPMho=;
+        b=Ut4DEn28WMKBUfx2ImdXhRIca84y7DdYNk7h8mE8MJFksn5nbWOFAd/wafGRwBsOUa
+         dzwVYmYlonY7r7cxxFT45M+eAJJd/njnqYhXlYYOlq1YFPv7vqW9L5ncE4rQ6tK7wb/H
+         O1YUxcFQovAdoaHTuX7wUA6KsMuebAD57blHNEnZ7bmmnSICsuzQvqIknzixNWAuMMDM
+         SWgpiLcnEZIG4zGSQLrI5xMFDUfo7R+O4eJpoazBsJv5m79gFSoIyZflmItgRdiyFwPb
+         /Xd0+a579Fy8DlUR9tWgzkMze7fDRy80h6ZpglIt2mlukMoCuItN7XO870utNua93Nc3
+         cz/w==
+X-Gm-Message-State: AOJu0YwtOI1PlPPY7k+4QsleYMjcrULsXFZ+jMDyrMiuVgkjiG3K3500
+	kcORv1x3FbvhGRh7Wi41rJ/tlpKXohKTmnXcnozpkCDBd8Eps6hmkPSTNw==
+X-Gm-Gg: ASbGncvQEDh3u6GdpG6qz4vK4y/BXwSlz9XkTGL5Q+9IUeO+2gD74msP3whkl6AyW5/
+	NZxa7rlAPDA6Qom0o/OZlw3cNAK2IPWXy3EthgyOygDzOxrW8g4HrFqC+j/ZM9oO5OMEyCKMMsU
+	Vh8xtL+Sf6HRFEIRz6zdtwhQMDu7AhqCzRLcOBjVklNAizDj2snvytq8pCUAmTJg7Y3y6izsE7J
+	URIBM0BFtDb2oagd/tz2f3sO/k5JltbQVDSfKzljtS+6RiUjs3BYrMsY5mTi+xAzsb7oxLo70bG
+	dDZu80VnEsO7156b9a42XSXzbx8LEODCRGh6bGBOiM5pVYXN8co9oJ4BZR5KFnKtAr7KOUjW81N
+	4
+X-Google-Smtp-Source: AGHT+IF0IHBWIVqjvdMc2taQiO5NeNJfgemSpSm6ZGF0eT8k34pMV4b4Is2v3d2lOWh//d2y/zHfGA==
+X-Received: by 2002:a4a:db4f:0:b0:5fc:ff5:60a9 with SMTP id 006d021491bc7-5fc0ff561ffmr2769792eaf.5.1738280713368;
+        Thu, 30 Jan 2025 15:45:13 -0800 (PST)
 Received: from dhcp-10-231-55-133.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5fc105d8a22sm517609eaf.37.2025.01.30.15.45.02
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5fc105d8a22sm517609eaf.37.2025.01.30.15.45.12
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 Jan 2025 15:45:02 -0800 (PST)
+        Thu, 30 Jan 2025 15:45:12 -0800 (PST)
 From: Justin Tee <justintee8345@gmail.com>
 To: linux-scsi@vger.kernel.org
 Cc: jsmart2021@gmail.com,
 	justin.tee@broadcom.com,
 	Justin Tee <justintee8345@gmail.com>
-Subject: [PATCH 2/6] lpfc: Free phba irq in lpfc_sli4_enable_msi when pci_irq_vector fails
-Date: Thu, 30 Jan 2025 16:05:20 -0800
-Message-Id: <20250131000524.163662-3-justintee8345@gmail.com>
+Subject: [PATCH 3/6] lpfc: Ignore ndlp rport mismatch in dev_loss_tmo callbk
+Date: Thu, 30 Jan 2025 16:05:21 -0800
+Message-Id: <20250131000524.163662-4-justintee8345@gmail.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20250131000524.163662-1-justintee8345@gmail.com>
 References: <20250131000524.163662-1-justintee8345@gmail.com>
@@ -91,37 +91,49 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix smatch warning regarding missed calls to free_irq.  Free the phba irq
-in the failed pci_irq_vector cases.
+With repeated port swaps between separate fabrics, there can be multiple
+registrations for fabric well known address 0xfffffe.  This can cause ndlp
+reference confusion due to the usage of a single ndlp ptr that stores the
+rport object in fc_rport struct private storage during transport
+registration.  Subsequent registrations update the ndlp->rport field with
+the newer rport, so when transport layer triggers dev_loss_tmo for the
+earlier registered rport the ndlp->rport private storage is referencing the
+newer rport instead of the older rport in dev_loss_tmo callbk.
 
-lpfc_init.c: lpfc_sli4_enable_msi() warn: 'phba->pcidev->irq' from
-             request_irq() not released.
+Because the older ndlp->rport object is already cleaned up elsewhere in
+driver code during the time of fabric swap, check that the rport provided
+in dev_loss_tmo callbk actually matches the rport stored in the LLDD's
+ndlp->rport field.  Otherwise, skip dev_loss_tmo work on a stale rport.
 
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 ---
- drivers/scsi/lpfc/lpfc_init.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index b94624789771..07b614bc9a6b 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -13170,6 +13170,7 @@ lpfc_sli4_enable_msi(struct lpfc_hba *phba)
- 	eqhdl = lpfc_get_eq_hdl(0);
- 	rc = pci_irq_vector(phba->pcidev, 0);
- 	if (rc < 0) {
-+		free_irq(phba->pcidev->irq, phba);
- 		pci_free_irq_vectors(phba->pcidev);
- 		lpfc_printf_log(phba, KERN_WARNING, LOG_INIT,
- 				"0496 MSI pci_irq_vec failed (%d)\n", rc);
-@@ -13250,6 +13251,7 @@ lpfc_sli4_enable_intr(struct lpfc_hba *phba, uint32_t cfg_mode)
- 			eqhdl = lpfc_get_eq_hdl(0);
- 			retval = pci_irq_vector(phba->pcidev, 0);
- 			if (retval < 0) {
-+				free_irq(phba->pcidev->irq, phba);
- 				lpfc_printf_log(phba, KERN_WARNING, LOG_INIT,
- 					"0502 INTR pci_irq_vec failed (%d)\n",
- 					 retval);
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 36e66df36a18..2dfcf1db5395 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -228,10 +228,16 @@ lpfc_dev_loss_tmo_callbk(struct fc_rport *rport)
+ 	if (ndlp->nlp_state == NLP_STE_MAPPED_NODE)
+ 		return;
+ 
+-	/* check for recovered fabric node */
+-	if (ndlp->nlp_state == NLP_STE_UNMAPPED_NODE &&
+-	    ndlp->nlp_DID == Fabric_DID)
++	/* Ignore callback for a mismatched (stale) rport */
++	if (ndlp->rport != rport) {
++		lpfc_vlog_msg(vport, KERN_WARNING, LOG_NODE,
++			      "6788 fc rport mismatch: d_id x%06x ndlp x%px "
++			      "fc rport x%px node rport x%px state x%x "
++			      "refcnt %u\n",
++			      ndlp->nlp_DID, ndlp, rport, ndlp->rport,
++			      ndlp->nlp_state, kref_read(&ndlp->kref));
+ 		return;
++	}
+ 
+ 	if (rport->port_name != wwn_to_u64(ndlp->nlp_portname.u.wwn))
+ 		lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
 -- 
 2.38.0
 
