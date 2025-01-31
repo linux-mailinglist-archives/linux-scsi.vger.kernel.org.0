@@ -1,85 +1,85 @@
-Return-Path: <linux-scsi+bounces-11885-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11887-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26F86A2380F
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 Jan 2025 00:45:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60E6DA23812
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 Jan 2025 00:45:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22F523A74FC
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jan 2025 23:45:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CFAB57A2F78
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jan 2025 23:44:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36C021BEF63;
-	Thu, 30 Jan 2025 23:45:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09D811C302C;
+	Thu, 30 Jan 2025 23:45:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LlXgYAbk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N3JkFwQe"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888007E0E4
-	for <linux-scsi@vger.kernel.org>; Thu, 30 Jan 2025 23:45:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7211C173C
+	for <linux-scsi@vger.kernel.org>; Thu, 30 Jan 2025 23:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738280718; cv=none; b=JxMneRSWYKjJtrMOyEMQMKOd/2DdEuhmISDkHy6fpQBsmRWX3tRxYYi4BCNwSZ3M6NeNscvWxMe2Zy0dCV0CC5Sq6f/iquTo8m1yL+Ny09fhyO0G5D3F3kl8mf2/Eeuv1egw8Zmma1WvquEg7NyD7wUflXlL2DYkTALd8XTGz5c=
+	t=1738280719; cv=none; b=kxDdNNnXtAcdd5TfapyhPcyq1H6M6POk7+1FEPyVcJcKmH3S3KbQwqGyIQxyW9Css4JBpXnFF/78d9JWDqZpGAQjj2mgY8ZnRr+V8IJVRdyOSZsd1AWEpv6znI9xxad0W9R0NpyTGxqn4PXmEBGTu2Ns78A6FaH/dPfBb5FP84c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738280718; c=relaxed/simple;
-	bh=s4Q486s8+h6bfcfJkbxCQ3yW7TUXxl+UzW6c4EX2rwo=;
+	s=arc-20240116; t=1738280719; c=relaxed/simple;
+	bh=ZMZCfZkqKCgllEJ8QLDE/uwjSzo5RLgQ2lNCHjj/YBc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AqrUvQa8gPAAL1uuEq6Talpb1B4/lKAirBI686WFQ7qFT0VO8CVxSUgUDBpjJP9LzDnZl9tcTCoPwMREsDqzf+mMr+7Ney+FyOM3HkAIdmkN6WWeeZTUjYJSt2stXdmnIPTWe5ZpLX8AmlrPoraJP8yAvd4OfhFwEnxOw8cr1hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LlXgYAbk; arc=none smtp.client-ip=209.85.161.45
+	 MIME-Version; b=Gdw7mUHkq23Y6ywwFR9Vg6nOshjxACMgOMmhVI85TTx8Wz+TKka9jzKxcCzJqq91uK+6ARpS+1NZjCC/jjCXtRwwewG8lrcePsOdu1q5YIKYf2bV1U1jR42llSPJ6RVGGPh8x94NLo0UTgSOu+Qp+bYDpUnIEYiy7N+bFt0nT5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N3JkFwQe; arc=none smtp.client-ip=209.85.161.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5fa3714d4bbso649382eaf.1
-        for <linux-scsi@vger.kernel.org>; Thu, 30 Jan 2025 15:45:16 -0800 (PST)
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5fa28eaa52cso782992eaf.2
+        for <linux-scsi@vger.kernel.org>; Thu, 30 Jan 2025 15:45:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738280715; x=1738885515; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1738280717; x=1738885517; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pybraczAWL+kojn9385tILXmJW6hETiIhSWnECKGNjw=;
-        b=LlXgYAbkNHvK9zLPBc8tY7M7we1WRnMqufdqP7LC0E5Za7PnPaf8Q+4W5A7UtkjUrW
-         k6FJaH1Ajyv+lHfx0PYS1LA6YeoDM4DjMWX4lbLQ6BGi2MwnG8WVQYlSZ7+9X3ad8zPn
-         mH48uCRCsWlrLMPFRUafjlrahF5Qix/US0ILhpwJRppy5HQJoXUySIO3VOaef5SpyOf6
-         /r5fiWJgxP1ktoJK/KKGIHOPX8JM4FNepH7QjszoIDFgRle4w8eeTiXtwi9RuVkDkf/7
-         0Dg01vhUuU7EGBJFTzjMgR0JIdmeD740guRuAyhje+fsPKywnil/BMsW4iOCqc1OOa13
-         jxig==
+        bh=daOSnBEGjxLGqhRdU7MOJbCe1fOkLUR5e6WYSwXMpG0=;
+        b=N3JkFwQeYebdgyed27dD0x2kTdFMskN79OkO5a56M2p6839T6dj296fKrPc22MFHSB
+         Xc6harRPivIwMXIXCv5oKWW/y880Jw8O6g0b9Pi6FRkE/rO77LR7my7ZbKxPALzW38pG
+         bQGYKBZKnmi4zp37dE0tv3vsXWmeF+JtSJAWaaz+olRK/+ZnCwXwTeoMqmHW/PEy6zSs
+         hnMHrluCm99det3pml6JGHrTCdkUa7zOKxaglTYylpMUrId6Yj8IN1GivHt6G80vSsXa
+         W8Ys1uhSymfWb4ThPzOu3hzrR8oy2FDqKVIMMkr9mKKQxDXDJcGx+RHW4+9jVfODcLv1
+         CXzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738280715; x=1738885515;
+        d=1e100.net; s=20230601; t=1738280717; x=1738885517;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pybraczAWL+kojn9385tILXmJW6hETiIhSWnECKGNjw=;
-        b=Fh1KGEgEnWRRhoaIZH4+0uYXRFwLOd6BCZGJU1zoHWVPLj5qSYMnZ6PsS+WQhPO5zY
-         dxfGm9s7mZhLF8LIdgLqSla42JOQLxNTEXoo11ItCouJH8DNs7S3GrtqArfWbQtxzCza
-         jNvkjuT+5Zl5Cr+0g+FFgBCjHccIqeupTHowSZoRTCscc+/1M97LmO+gIdhu3tbFF+ne
-         Zw6uxQlb3aFRsr9YJi3At3rHOxX6W70WtVfhjq8WmRR6UzLF8HAHdtqYTqJdhgVqCItv
-         mseKMAfdI/bkuvb4WuhwKmF+J0zM/z+QxU2Hia4rBh47kOI+L/tiTt4AiJHirGVbj2c2
-         D3wA==
-X-Gm-Message-State: AOJu0YzF5ehmbc0nd6kPMBgJuKgUCIaTHgu5M7tqaQeCrii2DcGfqQyS
-	W79ahEEWQcHhy4wM8nU8zvJdCpwXZQmsWi/4YGZaGleGqOkX291rEtodWg==
-X-Gm-Gg: ASbGncuQJ9K39EK5f4o/VgcrkCyvB2om7ItzU8TVi1nSbjevUNo6ZQ8H+W1MMjXcsMx
-	jvgZ6q1j8HVZJs0InMTnzJr4bcHOEI5ADFTIQUsK2P+b+0PPPVYgKPrPPLkqO/aJY1mGuTjLHpv
-	m8XWRZ+XXVOJ0iHp4ROFmNcnSqERIBzus9mnEihvHFKcJ8ieZkteqzIvyZ5JPDfYi6TRLjsl8K/
-	qipnO/e2p1bdHVkgt7uXR+GIhRDwnwWyl8g70DvUsQjZlktxzu/ax403kUtTgI+bEs7Rn08UhLA
-	+/bvr+RoITVUJcAU1+mxqKvq5YorON/vtN9pBw6I1UkKkOyg9Kj98mKHD8K2eAieCAjUmO1UzFu
-	S
-X-Google-Smtp-Source: AGHT+IEcO+lMLhaSz9/PyKbXIeHzgR376LI/V+EShZKdDCJITpETlSVOMBA4DTvG8M+UEF3uBXtmag==
-X-Received: by 2002:a05:6820:3097:b0:5fa:1ee7:1325 with SMTP id 006d021491bc7-5fc00457a2amr6869034eaf.7.1738280715415;
-        Thu, 30 Jan 2025 15:45:15 -0800 (PST)
+        bh=daOSnBEGjxLGqhRdU7MOJbCe1fOkLUR5e6WYSwXMpG0=;
+        b=gJKuWt9gGIzVPtG72BpRwuMcBnp+he+lbjggQK1yiAXADCR5v6RsGm55+MvGMrz9zX
+         2+8WwxVfSSQU0+9VWeBDnmiskrduVqHWaJpanXlgCIrMIZ6SepzoI4rWSUr6mgSHbquU
+         cIGjvSl897xRZxo3vzJ3+4DlZMhGxzLD9+UMyfmiptEn9d3SgFW52eVpZEUGIbf5wxw5
+         l2Luj73EwOnWFJ+GSZvnYsQ0IGdrX4XXRbhTBj7lRhRaLt/uyjEChgZvMZovh18PdlPm
+         wEL3op9jJR0ILOREziVqdJUkp/URfeYiG0ROe3qkMDMty4YZX0QexGbktZe44kQsomys
+         0PqQ==
+X-Gm-Message-State: AOJu0YyvksOu3oA3nOa0MuvtpVZQRiAm68mhDyKkJF/zKg374UC9f6uT
+	d4ZXinFitbbpiaJr+w2TebiSdu0mQg6VW0h/ZGi8V67+5J1EDENXaz/FZg==
+X-Gm-Gg: ASbGnctWnqwdFVQcvCpd228bAS+EBQ5ypiN983xuEkqK1M15hjk3D/62OZSHfolNJBn
+	uLXoPLbZWLTJypFavuJHHKrVw5JM4pmjpSvFAC2jdEiA6rKG3wTNuvB7smyNjfSbWq/GUUN5NJg
+	Kgqg7O3Io37id7RGwr1UNIvQiskxMXEONNjg11Raay3uKFWstCjHDhNB+rjfdeXiLfJ8vec8vjp
+	+Ui2qA/Lh0KjF9nMKQHaYRyupmZ8wlIMoeu/3K/GvEHgdRgzBvzEvIxuhgDyeZmXir74oih7KvB
+	6r/atQFbOI3wQu5oxMAjlA6KOhKRQJFugBwHw8Oz5nkeBCMD5b41yUtC+raMFz9eTbOL2DL3Lxe
+	Q
+X-Google-Smtp-Source: AGHT+IFK9P8Nacq0c7rM5dH6m1Z0SRGA+uJXsPLAmTZY2Zl21cJewG1dNPUnJlMVThYSlGfGy37PVg==
+X-Received: by 2002:a05:6820:1523:b0:5fa:8925:3d76 with SMTP id 006d021491bc7-5fc0025fd1amr7072275eaf.1.1738280717158;
+        Thu, 30 Jan 2025 15:45:17 -0800 (PST)
 Received: from dhcp-10-231-55-133.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5fc105d8a22sm517609eaf.37.2025.01.30.15.45.14
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5fc105d8a22sm517609eaf.37.2025.01.30.15.45.16
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 Jan 2025 15:45:15 -0800 (PST)
+        Thu, 30 Jan 2025 15:45:16 -0800 (PST)
 From: Justin Tee <justintee8345@gmail.com>
 To: linux-scsi@vger.kernel.org
 Cc: jsmart2021@gmail.com,
 	justin.tee@broadcom.com,
 	Justin Tee <justintee8345@gmail.com>
-Subject: [PATCH 4/6] lpfc: Handle duplicate D_IDs in ndlp search-by D_ID routine
-Date: Thu, 30 Jan 2025 16:05:22 -0800
-Message-Id: <20250131000524.163662-5-justintee8345@gmail.com>
+Subject: [PATCH 5/6] lpfc: Update lpfc version to 14.4.0.8
+Date: Thu, 30 Jan 2025 16:05:23 -0800
+Message-Id: <20250131000524.163662-6-justintee8345@gmail.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20250131000524.163662-1-justintee8345@gmail.com>
 References: <20250131000524.163662-1-justintee8345@gmail.com>
@@ -91,57 +91,26 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-After a port swap between separate fabrics, there may be multiple nodes in
-the vport's fc_nodes list with the same fabric well known address.
-Duplication is temporary and eventually resolves itself after dev_loss_tmo
-expires, but nameserver queries may still occur before dev_loss_tmo.  This
-possibly results in returning stale fabric ndlp objects.  Fix by adding an
-nlp_state check to ensure the ndlp search routine returns the correct newer
-allocated ndlp fabric object.
+Update lpfc version to 14.4.0.8
 
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 ---
- drivers/scsi/lpfc/lpfc_hbadisc.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ drivers/scsi/lpfc/lpfc_version.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index 2dfcf1db5395..07cd611f34bd 100644
---- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-+++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -5570,6 +5570,7 @@ static struct lpfc_nodelist *
- __lpfc_findnode_did(struct lpfc_vport *vport, uint32_t did)
- {
- 	struct lpfc_nodelist *ndlp;
-+	struct lpfc_nodelist *np = NULL;
- 	uint32_t data1;
+diff --git a/drivers/scsi/lpfc/lpfc_version.h b/drivers/scsi/lpfc/lpfc_version.h
+index c35f7225058e..8925b51910b6 100644
+--- a/drivers/scsi/lpfc/lpfc_version.h
++++ b/drivers/scsi/lpfc/lpfc_version.h
+@@ -20,7 +20,7 @@
+  * included with this package.                                     *
+  *******************************************************************/
  
- 	list_for_each_entry(ndlp, &vport->fc_nodes, nlp_listp) {
-@@ -5584,14 +5585,20 @@ __lpfc_findnode_did(struct lpfc_vport *vport, uint32_t did)
- 					 ndlp, ndlp->nlp_DID,
- 					 ndlp->nlp_flag, data1, ndlp->nlp_rpi,
- 					 ndlp->active_rrqs_xri_bitmap);
--			return ndlp;
-+
-+			/* Check for new or potentially stale node */
-+			if (ndlp->nlp_state != NLP_STE_UNUSED_NODE)
-+				return ndlp;
-+			np = ndlp;
- 		}
- 	}
+-#define LPFC_DRIVER_VERSION "14.4.0.7"
++#define LPFC_DRIVER_VERSION "14.4.0.8"
+ #define LPFC_DRIVER_NAME		"lpfc"
  
--	/* FIND node did <did> NOT FOUND */
--	lpfc_printf_vlog(vport, KERN_INFO, LOG_NODE,
--			 "0932 FIND node did x%x NOT FOUND.\n", did);
--	return NULL;
-+	if (!np)
-+		/* FIND node did <did> NOT FOUND */
-+		lpfc_printf_vlog(vport, KERN_INFO, LOG_NODE,
-+				 "0932 FIND node did x%x NOT FOUND.\n", did);
-+
-+	return np;
- }
- 
- struct lpfc_nodelist *
+ /* Used for SLI 2/3 */
 -- 
 2.38.0
 
