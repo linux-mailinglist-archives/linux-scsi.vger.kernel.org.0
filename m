@@ -1,122 +1,107 @@
-Return-Path: <linux-scsi+bounces-11943-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11946-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0069CA25E65
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Feb 2025 16:20:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0EB1A25EC6
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Feb 2025 16:32:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3DED3B11A1
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Feb 2025 15:14:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF6D0162855
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Feb 2025 15:31:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D129420ADD9;
-	Mon,  3 Feb 2025 15:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F88F20A5C0;
+	Mon,  3 Feb 2025 15:31:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="NkiN9Xns"
+	dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com header.b="VjPryIrJ"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CF9209F5E
-	for <linux-scsi@vger.kernel.org>; Mon,  3 Feb 2025 15:12:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5804E209F50;
+	Mon,  3 Feb 2025 15:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.141.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738595529; cv=none; b=UvCHL3spbsPk0/qn2fW/iuxd8Of40mdeyP0HRUKcBTzWQwPgG2WXoxyC5WuA4t0F5UaQCOGgGjBA3vFp8YObO1eiSNfLPZhC/bqCK8dEDLN7SykZsHSqv/x+ao7Hgtxg82X7SxECE0fRk+AgDqNozfa2Y/XBbfhyhZi7CbDsg0w=
+	t=1738596700; cv=none; b=u4V0ogp4A2rtOdLDBSApkcjNtQLYz6fLOIM7GM0B4sqWzzXhGCECIYNxRsTI0JhSAJAS1BieGsPKIXClGI4lYck+Rwe9KImy5KJG+89NbwvJZktGEdmKltLuGcHIVCxOJ77Pu1YtHf9BbqpR5NxAnH6I1nxUJnT41MX+tZVcdE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738595529; c=relaxed/simple;
-	bh=J4WPyu2dCpa1wg3kBbT+yTxtUfiD3S5ZdeCx/ev+Q+4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uaxCbTOmQnitfpk1MyeLhDQE3kUkyDiLLHGLQfRVpjxvCF4HCM/DX7O6tnEq337bHexgIQJuDNbW8GnzaIMXx2wYh4lmq2REctymjh7zyHk121yLq8jCowCo8uOKGWlBL45LLyzrkvC73ChX8nFljEwWVn1QtutSbGDZgo3u8S0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=NkiN9Xns; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3cffbcd520aso13869085ab.0
-        for <linux-scsi@vger.kernel.org>; Mon, 03 Feb 2025 07:12:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1738595526; x=1739200326; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QRfpPZzgAZa6Zak9GDas5XD80wl2C6NIA/57szE4cSk=;
-        b=NkiN9XnsNIc9MJ9+BQBMhqCoS4s4xFw7uobCWNFiNpbWh3HQBJG8zie61VQBnwy9f1
-         xtB3skXdXs6TlGnbW441ecnT+L3SoGcBa6ziPKji25fhhj/7Vmbnd2X2hyA0yGlydm7h
-         GnJpR285Ab4PoaqwEcy61WQc0YWmIFWBeJVUkJtxP0QtjUK0Rwqjdktp3vBzilq9CU05
-         xqNpPMNt7k7pR69S3qmCvqbS7aiaftA/pRJ9QEWU3PpdTBmNzz7kyrExM8RLzm2Xa4UV
-         a9rX7wbysZIu4dlZnE8fW9cMdxQCO2k96efKhkR2cvcse6u79Omc8qPp2bhUj/I60Jru
-         9RtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738595526; x=1739200326;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QRfpPZzgAZa6Zak9GDas5XD80wl2C6NIA/57szE4cSk=;
-        b=Pb/3yOvdSx1meiGU4KrhFuS8bhhhF07/3S41QDxruiAd0nYoNQIvK0vZVQRT0Do9Z1
-         ocwCq4LhPw60hhiA3HwnosHr3Od7upV/6/BJU73FZQic/3xnZyrna7jjerdROaqwX2Ml
-         j7fQJKYMHuaEfhM9ILjPWb57K2YjvW/c5sToCN0+OozJWp41DuuoIh68G9q/BZDpIR5C
-         OdCarFl/QPuwWcWHtYX3cakXLEXRLHn0uv08u74liDuGin4xcVegll43ABSbyBOwK4F1
-         Szl1XjmKiOGrWFVFlXrZHLLygk5Qp+TLnq9kczM/ZwwIzBqqJT7cI9OMmIirZNCo9JOx
-         VghQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVIrjB75/yDMJyWWwB50Q2WMju54H/IG1zYZKYOtRocKz4hApAwcVDEDbJIlwBurvBm/+kfKnnFvDS0@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzu3415MnGiOIZEI0ShIpoowjbBamaFfylh3QJTH0pjCsewvpoS
-	D/2Yfs4xHd6b9p99a7S+0lfORtdmrcJiOhKTmzYeQfm4V4b2X1yZK9tCBiYvfKbJFlwNyoOlWb+
-	jl5s=
-X-Gm-Gg: ASbGncvrb2FOLO1gw3RMfi7kniq+V87gdt/TTJhvajnZuoBi70TiufypOVK1PKOb1Lv
-	cwoDIG8PjWrhig6d91OtmhWNxy4zKjVLS9AKdgEvY4nnJFAgOOch7Dm5i0G1BTkzn/ntDewMvpU
-	qbXo0hgvxkJilNzvRd7l4/KXn2/Z4zyJ8zK0mO1gq6r3HqFp9N24V+53CEBwHF/UnaNKDA+I0iz
-	x8Ysnvc1dgdY2op1TYl+gZVUSXQQWm/vKbsoQ6TAgX7nBILPKRTZFhRyNYQc1pOJzcgq0bPQwdl
-	k5yyLZwamAs=
-X-Google-Smtp-Source: AGHT+IExPksUoM3E6ty6LrIuS+bUTXtJbAwi3WKcho/2VPhbuSKK1HIuLb1aeN5jPmbZBIOOLKzxHw==
-X-Received: by 2002:a05:6e02:2688:b0:3cf:b2ca:39b7 with SMTP id e9e14a558f8ab-3d008e71836mr145248235ab.3.1738595526174;
-        Mon, 03 Feb 2025 07:12:06 -0800 (PST)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d01c433734sm16125455ab.14.2025.02.03.07.12.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Feb 2025 07:12:05 -0800 (PST)
-Message-ID: <262032e2-a248-40aa-b5bd-deccc6c405ca@kernel.dk>
-Date: Mon, 3 Feb 2025 08:12:04 -0700
+	s=arc-20240116; t=1738596700; c=relaxed/simple;
+	bh=sItThnSsLUDr/pY3czUV9T87GFqKvM9V5bgQySx2170=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SxfBzKI9O4ufY8Q18FT+6xiQJFK4Fs0tUrmteRoPEQ8UdqzOvx/rWtLl3sBGfxkaZys0A/FyqfjCG3Dw8oZLJUiR0vBgUWcaGNvxylWqtnBGwvyOEYx4Rhb5HDfuY29hqKoccI1b9V7OXp/wySYWGKi7BpaMko1v7Af82ba2+pU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wdc.com; spf=pass smtp.mailfrom=wdc.com; dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com header.b=VjPryIrJ; arc=none smtp.client-ip=68.232.141.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wdc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1738596699; x=1770132699;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sItThnSsLUDr/pY3czUV9T87GFqKvM9V5bgQySx2170=;
+  b=VjPryIrJ6Yq9hMxMoguwqkByfeUx0Nb7QrQyKX55y/dpoT9KRBttPJTK
+   7/UURU4ynh43DqLqfoVaKIWwg/HpH9z1TXXgduSlbI1V/D7ULx178Zefi
+   GracfEJj05uuxObHO6TuaKeyZvT+R9aTryOc3E3HixxpTUQxbg5fF3lXy
+   JQoag6vuPHUvcj1ElS6CxepsXAd7VexE/hWIDFyyOTkxDW0nRWzpZH+3t
+   dJWADzJKKAFtxurq4UhpR1wmKnS0fJfoLgSoInMm1pArZylkvS0w6FA9K
+   J+H67pegf5FGmsLXmzlDThNz0Cy8tznARR+9yTe3hjxCBVM+Zhs5i4zAt
+   Q==;
+X-CSE-ConnectionGUID: Az2flcF5QEW10xsknGO0TA==
+X-CSE-MsgGUID: Nu2pkca3TheTvSYHSmZSeQ==
+X-IronPort-AV: E=Sophos;i="6.13,256,1732550400"; 
+   d="scan'208";a="38686178"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 03 Feb 2025 23:30:30 +0800
+IronPort-SDR: 67a0d370_gRTJO95q/w26+yOXvrEWOSLqvd4v45r2Wq+GC/vuj8sP7M+
+ oBm7Xac0CO6P10KlwolKRAXZVN0KQjwGoj81PSA==
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Feb 2025 06:32:16 -0800
+WDCIronportException: Internal
+Received: from avri-office.ad.shared (HELO avri-office.sdcorp.global.sandisk.com) ([10.45.31.142])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Feb 2025 07:30:29 -0800
+From: Avri Altman <avri.altman@wdc.com>
+To: "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Avri Altman <avri.altman@wdc.com>
+Subject: [PATCH 0/2] scsi: ufs: critical health condition
+Date: Mon,  3 Feb 2025 17:27:33 +0200
+Message-Id: <20250203152735.825010-1-avri.altman@wdc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] block: force noio scope in blk_mq_freeze_queue
-To: Guenter Roeck <linux@roeck-us.net>, Christoph Hellwig <hch@lst.de>
-Cc: Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
- nbd@other.debian.org, ceph-devel@vger.kernel.org,
- virtualization@lists.linux.dev, linux-mtd@lists.infradead.org,
- linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org
-References: <20250131120352.1315351-1-hch@lst.de>
- <20250131120352.1315351-2-hch@lst.de>
- <2273ad20-ed56-429c-a6ef-ffdb3196782b@roeck-us.net>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <2273ad20-ed56-429c-a6ef-ffdb3196782b@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2/3/25 8:09 AM, Guenter Roeck wrote:
-> On Fri, Jan 31, 2025 at 01:03:47PM +0100, Christoph Hellwig wrote:
->> When block drivers or the core block code perform allocations with a
->> frozen queue, this could try to recurse into the block device to
->> reclaim memory and deadlock.  Thus all allocations done by a process
->> that froze a queue need to be done without __GFP_IO and __GFP_FS.
->> Instead of tying to track all of them down, force a noio scope as
->> part of freezing the queue.
->>
->> Note that nvme is a bit of a mess here due to the non-owner freezes,
->> and they will be addressed separately.
->>
->> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> 
-> All sparc64 builds fail with this patch in the tree.
+Martin hi,
+The UFS4.1 standard, released on January 8 2025, is adding several new
+features. Among them a new exception event: HEALTH_CRITICAL, which
+notify the host of a device's critical health condition. This
+notification implies that the device is approaching to the end of its
+life time based on the amount of performed program/erase cycles.
 
-Yep, Stephen reported the same yesterday. The patch is queued up,
-will most likely just send it out separately.
+We use the hw monitor subsystem to proliferate this info via the chip
+alarm channel.
+
+Please consider this for the next merge window.
+
+Thanks,
+Avri
+
+Avri Altman (2):
+  scsi: ufs: hwmon: Prepare for more hwmon notifications
+  scsi: ufs: Add support for critical health notification
+
+ drivers/ufs/core/Kconfig       |  2 +-
+ drivers/ufs/core/ufs-hwmon.c   | 12 ++++++++----
+ drivers/ufs/core/ufshcd-priv.h |  8 ++++----
+ drivers/ufs/core/ufshcd.c      | 31 ++++++++++++++++++++++++++-----
+ include/ufs/ufs.h              |  1 +
+ 5 files changed, 40 insertions(+), 14 deletions(-)
 
 -- 
-Jens Axboe
+2.25.1
 
 
