@@ -1,79 +1,75 @@
-Return-Path: <linux-scsi+bounces-11972-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11968-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 124EAA26ABB
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Feb 2025 04:36:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC766A26AAE
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Feb 2025 04:34:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F82F3A5A1A
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Feb 2025 03:36:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96BF7188306D
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Feb 2025 03:34:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D51118858A;
-	Tue,  4 Feb 2025 03:35:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3DB318A6A7;
+	Tue,  4 Feb 2025 03:34:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="j5Kh5xFS"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="YaMFRJfe"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFFA15689A;
-	Tue,  4 Feb 2025 03:35:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2ADE17C219
+	for <linux-scsi@vger.kernel.org>; Tue,  4 Feb 2025 03:34:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738640130; cv=none; b=XvWmDGSlTMfD4/Q2LzDa8qsZf5ofnZDuWLXmX6KnHv9VGeZbD3ygErm63wAh8uzD1WjU+Q0A0j/4NQdQ2jm8l7j1pqA9c11xKi53NmbiZSyelifQ0/pUOlIdlavVxbcvjphO0/a34424/hF1cR6jQjvAyde+PTyuPvX2tWgqtRo=
+	t=1738640048; cv=none; b=HEszJoKe9svJoTKLlSwJn7n5BM7IFaVXkCIkdL9v6Hjmb2GveUSU+5kniY8G+97UsB15+jfLz89F1i++WEQ7Vub9D+G4y5fGOOgugp5czJr+7se7kSfKwh5EvWYDLhGWYEwbWS/nT4wrIxElqsA0JusK6JlXwU0sCj7Bpusyla8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738640130; c=relaxed/simple;
-	bh=etkXxkIr3zgxbeBq1yYcYuI8y1wCVh04F5Jwz4gyllc=;
+	s=arc-20240116; t=1738640048; c=relaxed/simple;
+	bh=bRLM6p0CNUIPWiAWxUdXod3cUhnm1K0tIPJBNATBtXY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uYdIhKzsvIubkZ23iWvgbWULkkgbSgYavn9oy8xgK9X0wO3veido+CU70yD6ok0mLnSBFVVmciOCt/xcowgK5//wd4Rz/Rk2GmwB1WZB/nplvh3Z25v27VUa8YFBgz5q8Szo8jvEou6YgJUC6ITw8BBH/5UjqJXsSJtpF2iHOKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=j5Kh5xFS; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=TH8GgqOFvfr5bIq/eJGWzD7dckG/RXdtPvsPnsFpwezsiSL4axB0eKI1FOgSTmVd2yxMIbhaWEKGYu61QO2KUIxZ/oWuAcQdsoN2NEnB0dKLOPbtvCeDHyIGHk5PM5sZ+iixovUlEkck7d6NBYQnRYkn6gLT4sl67IWThZ3x5gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=YaMFRJfe; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5141MsMt020492;
-	Tue, 4 Feb 2025 03:34:01 GMT
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5141NOqp008628;
+	Tue, 4 Feb 2025 03:34:02 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=reXDLEnqVMPPLX1BJU34BSBU13kXVWrcjmGU7TLM9B0=; b=
-	j5Kh5xFSGMsivTeUjtRA1/NhVbzpU63eKNawlfCYCS9Xma+eTEYEnLosbqi5hLsH
-	ewvBsUy49RxIEqouOwwn7FZH/7psdiC0fW6JWis05CkM1WLPOBa3p4wi9r/sUtR/
-	tC6b/XUCJiUnTSfbmMS7MEYT033VgkmacuyB4rXx6+rLq5NYtX2L1Xf20CS8SqG/
-	slUMnzWawcXWFbZ/M4c2oueQwz9/zcfbDlGmu0639gNlj2KWlpkF81mCHxbtWdwO
-	rqEUECuAxTg0jTRyB4HqJBzLHMgLwFyYYKcqCpJu9BBH4ykV+XlkXg1363i3zZRc
-	tSuW2Lb2vqog5SWjWsy5zA==
+	corp-2023-11-20; bh=vhrVGqePNZvqZzwdrfY5x0TSVVEGomMra2RZ91XAMCc=; b=
+	YaMFRJfe+lfQcanqne+8buF1oRzT+alykLr/cXg97+ZWR630msoWZ7X9F5uvVUnV
+	1LI4ZuZ23j/ZUG90XMM+R02SwXAqyV1tePTi/gSTrrJ/p4hpDD5qzfg3dWd7Lbnt
+	BcLjoTxWhbqZ1A9WGMDhaZQvaDy966iC8iZnsyFSGVGPyKcbgJvbwXXd6KvvMGJi
+	jo4r3V20BaCnmoB5soSv4ZPnDv/b0zkVWXLwjSSrYBWezCPjBoZSusndoOATSdWC
+	qmtYXPoeMgtOs0NRYlVtCXrAUpWTsDNM/Ua3ki8wBn1BFNFh2QAz45zUFEK5zjDG
+	fbFTScsvEsDe03APdvKXEg==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44hfcgv427-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44hfy83xtc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 04 Feb 2025 03:34:00 +0000 (GMT)
+	Tue, 04 Feb 2025 03:34:01 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5140E0mK038932;
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5140a4rE039034;
 	Tue, 4 Feb 2025 03:34:00 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44j8e76f1c-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44j8e76f1p-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 04 Feb 2025 03:34:00 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5143Xs6s015172;
-	Tue, 4 Feb 2025 03:33:59 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5143Xs6u015172;
+	Tue, 4 Feb 2025 03:34:00 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 44j8e76ex2-5;
-	Tue, 04 Feb 2025 03:33:59 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 44j8e76ex2-6;
+	Tue, 04 Feb 2025 03:34:00 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Christoph Hellwig <hch@infradead.org>, Rik van Riel <riel@surriel.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        =?UTF-8?q?Marc=20Aur=20=C3=A8le=20La=20France?= <tsi@tuyoix.net>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com
-Subject: Re: [PATCH v2] scsi: use GFP_NOIO to avoid circular locking dependency
-Date: Mon,  3 Feb 2025 22:33:08 -0500
-Message-ID: <173863996275.4118719.4750343805511377444.b4-ty@oracle.com>
+To: linux-scsi@vger.kernel.org, Seunghui Lee <sh043.lee@samsung.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH v2] scsi: ufs: core: Fix error return with query response
+Date: Mon,  3 Feb 2025 22:33:09 -0500
+Message-ID: <173863996290.4118719.17998886860886629623.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250129104525.0ae8421e@fangorn>
-References: <20250128164700.6d8504c1@fangorn> <Z5m-FuU7wJsUoSST@infradead.org> <20250129104525.0ae8421e@fangorn>
+In-Reply-To: <20250118023808.24726-1-sh043.lee@samsung.com>
+References: <CGME20250118023817epcas1p1a7cb68709776f01c5ebeeb02908ed157@epcas1p1.samsung.com> <20250118023808.24726-1-sh043.lee@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -85,30 +81,24 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-04_02,2025-01-31_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=647
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=996
  phishscore=0 adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2501170000 definitions=main-2502040026
-X-Proofpoint-GUID: sJMFBtJ4q7v3HiPmOuVCjJ-Fxbu0ZXDt
-X-Proofpoint-ORIG-GUID: sJMFBtJ4q7v3HiPmOuVCjJ-Fxbu0ZXDt
+X-Proofpoint-GUID: Vvy_EW0lD6lQU5sN_Ftj9LufdyGC3iO5
+X-Proofpoint-ORIG-GUID: Vvy_EW0lD6lQU5sN_Ftj9LufdyGC3iO5
 
-On Wed, 29 Jan 2025 10:45:25 -0500, Rik van Riel wrote:
+On Sat, 18 Jan 2025 11:38:08 +0900, Seunghui Lee wrote:
 
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=UTF-8
-> Content-Transfer-Encoding: 8bit
+> There is currently no mechanism to return error from query responses.
+> Return the error and print the corresponding error message with it.
 > 
-> Filesystems can write to disk from page reclaim with __GFP_FS
-> set. Marc found a case where scsi_realloc_sdev_budget_map
-> ends up in page reclaim with GFP_KERNEL, where it could try
-> to take filesystem locks again, leading to a deadlock.
 > 
-> [...]
 
 Applied to 6.14/scsi-fixes, thanks!
 
-[1/1] scsi: use GFP_NOIO to avoid circular locking dependency
-      https://git.kernel.org/mkp/scsi/c/5363ee9d110e
+[1/1] scsi: ufs: core: Fix error return with query response
+      https://git.kernel.org/mkp/scsi/c/1a78a56ea652
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
