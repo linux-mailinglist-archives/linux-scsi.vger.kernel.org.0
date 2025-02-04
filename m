@@ -1,75 +1,78 @@
-Return-Path: <linux-scsi+bounces-11968-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-11974-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC766A26AAE
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Feb 2025 04:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 98BA5A26ABE
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Feb 2025 04:36:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96BF7188306D
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Feb 2025 03:34:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66240188851C
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Feb 2025 03:36:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3DB318A6A7;
-	Tue,  4 Feb 2025 03:34:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C812215D5C5;
+	Tue,  4 Feb 2025 03:35:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="YaMFRJfe"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="dDRgBXdO"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2ADE17C219
-	for <linux-scsi@vger.kernel.org>; Tue,  4 Feb 2025 03:34:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2070115A868;
+	Tue,  4 Feb 2025 03:35:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738640048; cv=none; b=HEszJoKe9svJoTKLlSwJn7n5BM7IFaVXkCIkdL9v6Hjmb2GveUSU+5kniY8G+97UsB15+jfLz89F1i++WEQ7Vub9D+G4y5fGOOgugp5czJr+7se7kSfKwh5EvWYDLhGWYEwbWS/nT4wrIxElqsA0JusK6JlXwU0sCj7Bpusyla8=
+	t=1738640147; cv=none; b=OhVaWRki7Wxnmcf8n1qgjqeBLR6IENFPA6IOhtf3ZbY62DuEMaoV72LCA6NGOZ40yd/w9JP6lGK32bRDm7c06feYGk+VAaZJWGsn1X2FMR+Gf/e33iDrxMPOLZRzY5p8OfbBPTKRsOdjssQIgO+H2iFRRjwkOI3K06SyNfTP2uY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738640048; c=relaxed/simple;
-	bh=bRLM6p0CNUIPWiAWxUdXod3cUhnm1K0tIPJBNATBtXY=;
+	s=arc-20240116; t=1738640147; c=relaxed/simple;
+	bh=A8Xk2szka9yfL7FXFrdplMf1ZG8HHK3nd2SD6m1ubBk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TH8GgqOFvfr5bIq/eJGWzD7dckG/RXdtPvsPnsFpwezsiSL4axB0eKI1FOgSTmVd2yxMIbhaWEKGYu61QO2KUIxZ/oWuAcQdsoN2NEnB0dKLOPbtvCeDHyIGHk5PM5sZ+iixovUlEkck7d6NBYQnRYkn6gLT4sl67IWThZ3x5gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=YaMFRJfe; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=mPPE0fVphjiq8Gp0kkFj4Y3yFIVJf83KsevKo50k2wxvBF0Q4p3J83YqXFPofQqwgvHSWE06qSRq5SGIR5FyzquoDFgcaaQVhbqx+/p3b8MrC1MN5rB08Egg0/XgvnMti6r7u6SkDuMFb86oJhs7IJk1r8N2PDlSPr9lkwG40lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=dDRgBXdO; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5141NOqp008628;
-	Tue, 4 Feb 2025 03:34:02 GMT
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5141Mr1M008591;
+	Tue, 4 Feb 2025 03:35:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=vhrVGqePNZvqZzwdrfY5x0TSVVEGomMra2RZ91XAMCc=; b=
-	YaMFRJfe+lfQcanqne+8buF1oRzT+alykLr/cXg97+ZWR630msoWZ7X9F5uvVUnV
-	1LI4ZuZ23j/ZUG90XMM+R02SwXAqyV1tePTi/gSTrrJ/p4hpDD5qzfg3dWd7Lbnt
-	BcLjoTxWhbqZ1A9WGMDhaZQvaDy966iC8iZnsyFSGVGPyKcbgJvbwXXd6KvvMGJi
-	jo4r3V20BaCnmoB5soSv4ZPnDv/b0zkVWXLwjSSrYBWezCPjBoZSusndoOATSdWC
-	qmtYXPoeMgtOs0NRYlVtCXrAUpWTsDNM/Ua3ki8wBn1BFNFh2QAz45zUFEK5zjDG
-	fbFTScsvEsDe03APdvKXEg==
+	corp-2023-11-20; bh=JCQ3d+gj78UJ8aNKqfbgmNoKT2bTPl4Hls5WbAw9O3k=; b=
+	dDRgBXdOBODr3gwmXhopVFY79XEYl9DDcOcvVaCg0Kn0EIIjgIATQOKE84uy6W8U
+	oPoRAY3csuzpwjgEPYEz/gaDz07g2AYh5+bRy7jOPfwk6G3fiXli0HAsGgxRX+hx
+	v/Q9DUU05f6fcZ1S5DXT8yXg23zSTyQX7myzdZQt53EDv8gqUxNO+OGmkC6j1n+R
+	JvmtpQDeO4soWcm5Vo09loghyx9igQN2RAJmsobgx3Sq68OuYObCVNOTRKJxAu94
+	t8TLOPZpZkuIX7DOeb8yR7M94XiXhXpAHgnlAoyhyajaSHCRDqvLMWq1ei1ZejxD
+	KBrF9aPuceamNFpjLF3gzw==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44hfy83xtc-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44hhjtuy40-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 04 Feb 2025 03:34:01 +0000 (GMT)
+	Tue, 04 Feb 2025 03:35:31 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5140a4rE039034;
-	Tue, 4 Feb 2025 03:34:00 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5140M8eS038975;
+	Tue, 4 Feb 2025 03:35:30 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44j8e76f1p-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44j8e76fxw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 04 Feb 2025 03:34:00 +0000
+	Tue, 04 Feb 2025 03:35:30 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5143Xs6u015172;
-	Tue, 4 Feb 2025 03:34:00 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5143VlxG009625;
+	Tue, 4 Feb 2025 03:35:29 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 44j8e76ex2-6;
-	Tue, 04 Feb 2025 03:34:00 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 44j8e76fxf-1;
+	Tue, 04 Feb 2025 03:35:29 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, Seunghui Lee <sh043.lee@samsung.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v2] scsi: ufs: core: Fix error return with query response
-Date: Mon,  3 Feb 2025 22:33:09 -0500
-Message-ID: <173863996290.4118719.17998886860886629623.b4-ty@oracle.com>
+To: Avri Altman <avri.altman@wdc.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH v2] scsi: ufs: core: Simplify temperature exception event handling
+Date: Mon,  3 Feb 2025 22:35:06 -0500
+Message-ID: <173864009034.4118838.6935428912376140649.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250118023808.24726-1-sh043.lee@samsung.com>
-References: <CGME20250118023817epcas1p1a7cb68709776f01c5ebeeb02908ed157@epcas1p1.samsung.com> <20250118023808.24726-1-sh043.lee@samsung.com>
+In-Reply-To: <20250114181205.153760-1-avri.altman@wdc.com>
+References: <20250114181205.153760-1-avri.altman@wdc.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -81,24 +84,32 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-04_02,2025-01-31_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=996
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=967
  phishscore=0 adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2501170000 definitions=main-2502040026
-X-Proofpoint-GUID: Vvy_EW0lD6lQU5sN_Ftj9LufdyGC3iO5
-X-Proofpoint-ORIG-GUID: Vvy_EW0lD6lQU5sN_Ftj9LufdyGC3iO5
+X-Proofpoint-GUID: 6y6rpgnS2NJcXeiSO90tcPP0xg9IpkBA
+X-Proofpoint-ORIG-GUID: 6y6rpgnS2NJcXeiSO90tcPP0xg9IpkBA
 
-On Sat, 18 Jan 2025 11:38:08 +0900, Seunghui Lee wrote:
+On Tue, 14 Jan 2025 20:12:05 +0200, Avri Altman wrote:
 
-> There is currently no mechanism to return error from query responses.
-> Return the error and print the corresponding error message with it.
+> This commit simplifies the temperature exception event handling by
+> removing the `ufshcd_temp_exception_event_handler` function and directly
+> calling `ufs_hwmon_notify_event` in the `ufshcd_exception_event_handler`
+> function.
 > 
+> The `ufshcd_temp_exception_event_handler` function contained a
+> placeholder comment for platform vendors to add additional steps if
+> required. However, since its introduction a few years ago, no vendor has
+> added any additional steps. Therefore, the placeholder function is
+> removed to streamline the code.
 > 
+> [...]
 
 Applied to 6.14/scsi-fixes, thanks!
 
-[1/1] scsi: ufs: core: Fix error return with query response
-      https://git.kernel.org/mkp/scsi/c/1a78a56ea652
+[1/1] scsi: ufs: core: Simplify temperature exception event handling
+      https://git.kernel.org/mkp/scsi/c/8c09f612b293
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
