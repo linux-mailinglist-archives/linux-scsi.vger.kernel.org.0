@@ -1,142 +1,179 @@
-Return-Path: <linux-scsi+bounces-11996-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12000-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75D3DA28186
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Feb 2025 03:01:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA5ADA284A5
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Feb 2025 07:52:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65E7F1886D69
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Feb 2025 02:01:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EC8117A1F6F
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Feb 2025 06:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA05E213243;
-	Wed,  5 Feb 2025 02:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36D7A227BBA;
+	Wed,  5 Feb 2025 06:52:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cwSIDfUo"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="EyvtoPjn"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m3289.qiye.163.com (mail-m3289.qiye.163.com [220.197.32.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 241CB20F071;
-	Wed,  5 Feb 2025 02:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0346921517A;
+	Wed,  5 Feb 2025 06:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738720886; cv=none; b=fZpQQyPqV0fe1tmbDTTk7OkO387z7losf9BEZ9b+2Q4T6gEeJQnuf/DHzIMrAkfjMCAiXc7qHxmrZ/1TL4Vpnun5RgIIGIXp/hvX4M2sAIa3ktUy5M7OAYr5rdt99pMlFx3/0qGJFSCZiowr04IeLiLFmziJFPHW+Ug4x3WbrzM=
+	t=1738738336; cv=none; b=j18khY7b6+zCIqIq6UPzMgk5kIVMplTS6Nmj3sQn1w0Rjm/Pv+GwtJ0ITXWviy0zbeCnzzOkbc8tpGE/SLmJzeI44/CuZhhS7yZbIFRM6SFGadgqLSolk0pVnazGrC0aeyqQWbO7o3IVgayB2NGL2/mUMbajqjUygwbZ/cwf7KE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738720886; c=relaxed/simple;
-	bh=6Dv9u9iMz+DcsLmWTQCbzBZtfz2P+8l8k57NZKBzhGM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=r1JqTrb7kvibvwqN9qcRqg7CjL8J5SDh4BzN++ka/mvcPdaAGoAVrCjPYpWE9ghV0jkU792Hp44d3e+LpCKX9TSbggw6xBWSsGEq6OEucHvc9++V2LOB9eVvtvi9HG9waJ6SfXJoPwkdGOMfXaEflggyzfn9J2dFPYwig6VnL0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cwSIDfUo; arc=none smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7b6ed0de64aso39667685a.0;
-        Tue, 04 Feb 2025 18:01:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738720884; x=1739325684; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xvOxm3G/Y/wXWwgs+RUvwCjbDevM4XGRT57WeF3I8uE=;
-        b=cwSIDfUoAHHZhMjY1A1vYl7HeZj9ZvItfLEfUqX6DfbUbUXiTF8PA+pdrGQRVkL5ng
-         nj3RkFKOG2FE+/jHoXLn8897qTDvgTYCTxk6DBDT1wz+RANT1Sy5GfYKda6E/QEcXzGr
-         NUN6IWrIU7zOneAneHH2ES+UXGlAIakJ01/yvo9poi5+NEOi13/GpXpMEFIbpJ+Y/EfN
-         mQMLU29/2eRpUYNGovRB54SB1KnSgXphTarDz+/twQa9yiyunqgvGwNVp0s0cuZpXyyx
-         dr0p+GXExAraVlRQRyGrRCbDWg6jz7wYSQ9wkotHJ2xK3L7+2FDNMLsEbxUQddcGj5hB
-         6krw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738720884; x=1739325684;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xvOxm3G/Y/wXWwgs+RUvwCjbDevM4XGRT57WeF3I8uE=;
-        b=FV/Ss2MwF4nDLHtu/3RZ6zlWCXjLyQPP3utzrQ9pBXdZe1ytMVSygVGNBcbmmOAlxE
-         LrIf/hy0sUwq7wB5BWvs0bwNQXcxlMVvFTRblJNNhizpqghdca8ZHpdBEDgY1lf2VCgB
-         rdqzL6dgHdO4EZ2r07LrQnWQuBBjvj0K+Lvhjpirr6uI2kxTj9jXtlTyaM4tSZz4HBBJ
-         G1RjN1BqQCd2YPnFCqRtltls2Jy/h7UDVvAlu5r+vf8COqLju6HZg/n9BSVN8mcaGc13
-         PRz1boaSZFjasCrXlsjxzgnBHGns1xmKrVCcwf9oy3jnHT3oZfVzf8t8ChGxd4Nbc+Mc
-         9fcg==
-X-Forwarded-Encrypted: i=1; AJvYcCVMZSJMrGVE58118c5W9McwuPYWCX4wHJ4CDG0Upmzgy82H1i/ZTgWghjL9TfdzQK4HeylpYnfK1mw/2g4=@vger.kernel.org, AJvYcCVmnWM5nv0WDm4qCEjF7fnMSqCtsVr85Y3bNpuNrtt4QAx7faixO38a9tQyYBlZ2eGAIxJ0OG2v@vger.kernel.org, AJvYcCW2qE0w7io9be/Gk9wX9MywxroHLjWqMx43tsXuUncT8pcanqUMGI+9lvu26UeAFXvxZHPc0ktPiBPddA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzF5dXJXyWrSB5WMABFF6HJm0EFpG/bGqQeWKjD4bmgA/fnlTnE
-	2JXAufN4X3Ko+6kP24iXtx0krP/MT0fgOiKpu285cy0XrRhaUEp8pyMHYg==
-X-Gm-Gg: ASbGncvdgutoRtUUSjpyP+I4zB+hmXMGwqklFBeiQSO7133x1RKxcpxrIk8IE+h6eod
-	rGsur6manzbasqfSCtblUQyuZDAi7J8/WwFX+UaHLGo9CbSPx3gW/SgHotkD/3B75bnN9vGgCyc
-	WHnYRuBUDw7knPPQikKN5Mzl22/QnuqFLzg+PTvQItD97rLgttLAoC3U2AyMJ3xm6L1TBqpSCb7
-	uxWfCnriUxq6zg0m11hxERm32eqJZh88gdSZIBm1nj9XZyihkaIY9w2F6mhTX2EjQguC/jXsZez
-	3r37lUNgm/EHFi18hBtS2ldamJrB3NHu5JwbBw==
-X-Google-Smtp-Source: AGHT+IHrk2CDJtR+3y7SwCFZA3V2lDE1/BPlh5BttuyECZhJNhMlQscblVQmJYXG3UvRN+MtPR5P2Q==
-X-Received: by 2002:a05:620a:254d:b0:7b6:d273:9b4f with SMTP id af79cd13be357-7c039aa0135mr174921085a.11.1738720883820;
-        Tue, 04 Feb 2025 18:01:23 -0800 (PST)
-Received: from newman.cs.purdue.edu ([128.10.127.250])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c00a8bc32bsm705520485a.1.2025.02.04.18.01.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 18:01:23 -0800 (PST)
-From: Jiasheng Jiang <jiashengjiangcool@gmail.com>
-To: markus.elfring@web.de
-Cc: GR-QLogic-Storage-Upstream@marvell.com,
-	James.Bottomley@hansenpartnership.com,
-	arun.easi@cavium.com,
-	bvanassche@acm.org,
-	jhasan@marvell.com,
-	jiashengjiangcool@gmail.com,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1738738336; c=relaxed/simple;
+	bh=SGB3QWwTbnOY/dRtg9F0+JSwM2H3uiSHXb87SVLKkTo=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=AyVBkvybzBJqt+DrJM2h+eA4Ku6XCNmP2y5atZK5mG8yJEKQxw8OR1ZIa8HtuyftltdMawP1V4QYKEtodxehDUjYXUNlVj3YG8nYjghYdi2myaq5R74HDJ+0sQYRmTesjzDTEPr+vXrhS7suxXdZwgfF0LWMG+3vV2XImeI9gLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=EyvtoPjn; arc=none smtp.client-ip=220.197.32.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id a34c45df;
+	Wed, 5 Feb 2025 14:16:41 +0800 (GMT+08:00)
+From: Shawn Lin <shawn.lin@rock-chips.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>,
+	Liang Chen <cl@rock-chips.com>,
 	linux-scsi@vger.kernel.org,
-	manish.rangankar@cavium.com,
-	martin.petersen@oracle.com,
-	nilesh.javali@cavium.com,
-	skashyap@marvell.com,
-	stable@vger.kernel.org
-Subject: [PATCH RESEND v3 2/2] scsi: qedf: Add check for bdt_info
-Date: Wed,  5 Feb 2025 02:01:19 +0000
-Message-Id: <20250205020119.24007-2-jiashengjiangcool@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250205020119.24007-1-jiashengjiangcool@gmail.com>
-References: <444d6d33-d916-467b-aea8-25c61977713a@web.de>
- <20250205020119.24007-1-jiashengjiangcool@gmail.com>
+	linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Subject: [PATCH v7 0/7] Initial support for RK3576 UFS controller
+Date: Wed,  5 Feb 2025 14:15:49 +0800
+Message-Id: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
+X-Mailer: git-send-email 2.7.4
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGU9OHlYaS09LQhpOHUpNTE1WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+X-HM-Tid: 0a94d4c0efd809cckunma34c45df
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nio6FAw4KzISEgsKAj8#SxdP
+	QxwwFDRVSlVKTEhDTEhNSUtISUtJVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUhDQ0k3Bg++
+DKIM-Signature:a=rsa-sha256;
+	b=EyvtoPjnKvd2GCieDWWecf644Er9ayVEOwIBiJWqKu7sv27AO/U50GvCPfBrLfT0G9/WWVkGPYPXuEVXovhpvRf9UiZMDWkJasJYtA4IGhWkOQT3wu1O9ZMosHp7YUE4JBzEgDtXRDgshJ5DBfh4EwAFiyskk8/YEWFX16LRy7o=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=LvWGWQfFisDUe17eK1lZRK/TZq7bEeDm1pbtMWmlHfY=;
+	h=date:mime-version:subject:message-id:from;
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add a check for "bdt_info". Otherwise, if one of the allocations
-for "cmgr->io_bdt_pool[i]" fails, "bdt_info->bd_tbl" will cause a NULL
-pointer dereference.
+This patchset adds initial UFS controller supprt for RK3576 SoC.
+Patch 1 is the dt-bindings. Patch 2-4 deal with rpm and spm support
+in advanced suggested by Ulf. Patch 5 exports two new APIs for host
+driver. Patch 6 and 7 are the host driver and dtsi support.
 
-Fixes: 61d8658b4a43 ("scsi: qedf: Add QLogic FastLinQ offload FCoE driver framework.")
-Cc: <stable@vger.kernel.org> # v5.10+
-Signed-off-by: Jiasheng Jiang <jiashengjiangcool@gmail.com>
----
-Changelog:
 
-v2 -> v3:
+Changes in v7:
+- add definitions for all kinds of hex values if possible
+- Misc log and comment improvement
+- use udelay for less than 10us cases
+- other improvements suggested by Mani
+- Use 0x0 for consistency
+- Collect Mani's acked-by tag
 
-1. No change.
+Changes in v6:
+- fix indentation to 4 spaces suggested by Krzysztof
+- export dev_pm_genpd_rpm_always_on()
+- replace host drivers with glue drivers suggested by Mani
+- add Main's review tag
+- remove UFS_MAX_CLKS
+- improve err log
+- remove hardcoded clocks
+- remove comment from ufs_rockchip_device_reset()
+- remove pm_runtime_* from ufs_rockchip_remove()
+- rebase to scsi/next
+- move ufs_rockchip_set_pm_lvl to ufs_rockchip_rk3576_init()
+- add comments about device_set_awake_path()
+- remove comments suggested by Mani
 
-v1 -> v2:
+Changes in v5:
+- use ufshc for devicetree example suggested by Mani
+- fix a compile warning
+- use device_set_awake_path() and disable ref_out_clk in suspend
+- remove pd_id from header
+- reconstruct ufs_rockchip_hce_enable_notify() to workaround hce enable
+  without using new quirk
 
-1. No change.
----
- drivers/scsi/qedf/qedf_io.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v4:
+- properly describe reset-gpios
+- deal with power domain of rpm and spm suggested by Ulf
+- Fix typo and disable clks in ufs_rockchip_remove
+- remove clk_disable_unprepare(host->ref_out_clk) from
+  ufs_rockchip_remove
 
-diff --git a/drivers/scsi/qedf/qedf_io.c b/drivers/scsi/qedf/qedf_io.c
-index d52057b97a4f..1ed0ee4f8dde 100644
---- a/drivers/scsi/qedf/qedf_io.c
-+++ b/drivers/scsi/qedf/qedf_io.c
-@@ -125,7 +125,7 @@ void qedf_cmd_mgr_free(struct qedf_cmd_mgr *cmgr)
- 	bd_tbl_sz = QEDF_MAX_BDS_PER_CMD * sizeof(struct scsi_sge);
- 	for (i = 0; i < num_ios; i++) {
- 		bdt_info = cmgr->io_bdt_pool[i];
--		if (bdt_info->bd_tbl) {
-+		if (bdt_info && bdt_info->bd_tbl) {
- 			dma_free_coherent(&qedf->pdev->dev, bd_tbl_sz,
- 			    bdt_info->bd_tbl, bdt_info->bd_tbl_dma);
- 			bdt_info->bd_tbl = NULL;
+Changes in v3:
+- rename the file to rockchip,rk3576-ufshc.yaml
+- add description for reset-gpios
+- use rockchip,rk3576-ufshc as compatible
+- reword Kconfig description
+- elaborate more about controller in commit msg
+- use rockchip,rk3576-ufshc for compatible
+- remove useless header file
+- remove inline for ufshcd_is_device_present
+- use usleep_range instead
+- remove initialization, reverse Xmas order
+- remove useless varibles
+- check vops for null
+- other small fixes for err path
+- remove pm_runtime_set_active
+- fix the active and inactive reset-gpios logic
+- fix rpm_lvl and spm_lvl to 5 and move to end of probe path
+- remove unnecessary system PM callbacks
+- use UFSHCI_QUIRK_DME_RESET_ENABLE_AFTER_HCE instead
+  of UFSHCI_QUIRK_BROKEN_HCE
+
+Changes in v2:
+- rename the file
+- add reset-gpios
+
+Shawn Lin (6):
+  dt-bindings: ufs: Document Rockchip UFS host controller
+  soc: rockchip: add header for suspend mode SIP interface
+  pmdomain: rockchip: Add smc call to inform firmware
+  scsi: ufs: core: Export ufshcd_dme_reset() and ufshcd_dme_enable()
+  scsi: ufs: rockchip: initial support for UFS
+  arm64: dts: rockchip: Add UFS support for RK3576 SoC
+
+Ulf Hansson (1):
+  pmdomain: core: Introduce dev_pm_genpd_rpm_always_on()
+
+ .../bindings/ufs/rockchip,rk3576-ufshc.yaml        | 105 ++++++
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi           |  24 ++
+ drivers/pmdomain/core.c                            |  35 ++
+ drivers/pmdomain/rockchip/pm-domains.c             |   8 +
+ drivers/ufs/core/ufshcd.c                          |   6 +-
+ drivers/ufs/host/Kconfig                           |  12 +
+ drivers/ufs/host/Makefile                          |   1 +
+ drivers/ufs/host/ufs-rockchip.c                    | 353 +++++++++++++++++++++
+ drivers/ufs/host/ufs-rockchip.h                    |  90 ++++++
+ include/linux/pm_domain.h                          |   7 +
+ include/soc/rockchip/rockchip_sip.h                |   3 +
+ include/ufs/ufshcd.h                               |   2 +
+ 12 files changed, 644 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
+ create mode 100644 drivers/ufs/host/ufs-rockchip.c
+ create mode 100644 drivers/ufs/host/ufs-rockchip.h
+
 -- 
-2.25.1
+2.7.4
 
 
