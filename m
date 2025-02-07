@@ -1,59 +1,59 @@
-Return-Path: <linux-scsi+bounces-12062-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12065-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE276A2B76D
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 02:00:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DBB4A2B777
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 02:00:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0458D1885BD9
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 01:00:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 164001888938
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 01:00:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74251537E9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC21C1474A7;
 	Fri,  7 Feb 2025 01:00:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K5cIRmNa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uSjQsoxW"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 231E22417F6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB7E200CD;
 	Fri,  7 Feb 2025 01:00:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738890023; cv=none; b=hRlcWJsiZAo27QDV70EQERFU76Mw1a58BM9jtv2O6zTeqTTv2h6e7Y1m0rnTC9UzLLGZEo7ZSKeHgZGx/96DwiKNjjf+I2gUCV5yVmDGb6s8/SAl8LxHdS9H/g2VHxLdXB35D3Qoyz+0s93PVw6ZDj2KlpzrUyBi6cIw8rqLr58=
+	t=1738890023; cv=none; b=A9LQQS7i9kHCDFD6ozYWrsNI8fJHHCugkGSAqQeFW8digNqbudUVOGas0WQzZlPMn9WeW7PC9qmuT1QjtvJj48XqfvLPbZx5g0ZI+uHhIJYu7NEb+2E12Ms6NhPtivRxPiM/mXqpw6opRunfJ67OezJiP1fcvVbUmxa8clntJ4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1738890023; c=relaxed/simple;
-	bh=V/auFlplC4lNkwyu5TsfDCGYYHQ1U9JN/b/NDVqoD00=;
+	bh=hodZU7GQjZAKYVi5akVklCZ+GiDLGTui0BikdPpJ14c=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rx0Ul4NGq/zHUG03EmD7Wnt2QSfyvlKaqqZNqPtyIr4JIQMme9Wl5SitLq0HERBVZfRS2YHsEPQJ8SU803u27mxkZqyeR18dQ4g9izkjQQ46IAKi2PdORdHtLJz5PRUn/adgU2DFG+AfD9aAONVcB7M+lWr1QV8xvYi20qoISn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K5cIRmNa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF0EFC4CEE5;
+	 MIME-Version; b=b+2sxc93zUda0cuZsX9CZH/c99nqKvagXKRFn7kZ6GTNclb3rwjPkd/bBcfWTvXTWNxaGPY6U0KqzdWYpZIDQ15V7r6Ax4qwcGfQM4oML2cxopNtDaX365qoss3CENr/E9CmGZkEgOvMOmBiul4ya4wi8myV4lc7CEsAw1zmfqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uSjQsoxW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7F79C4CEE4;
 	Fri,  7 Feb 2025 01:00:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738890022;
-	bh=V/auFlplC4lNkwyu5TsfDCGYYHQ1U9JN/b/NDVqoD00=;
+	s=k20201202; t=1738890023;
+	bh=hodZU7GQjZAKYVi5akVklCZ+GiDLGTui0BikdPpJ14c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=K5cIRmNa5X35xmajVBLOhiGFfSp2lvzvXBoiBeT1Tt2OUX3yuMiFPcc8ddVzZGPpO
-	 yLMO98/Z6MwLIUsL8wFm+A12crw+lebpAagqrT8fz870tdSYW+T4Lpvmlzy0htbl+b
-	 Zv6AZyHSQapUYt1NtQqmsnSGcVIMAyLX8drKpTZbfo15xzkUfOQi0shDVDAeBAsgKV
-	 3ilaKPe93nxFgPMxSZF1IrkURPCPSH7jrbdqSfBcR7lAENV3MHOGoYthWWcxLvpuvf
-	 n3uI786lBewgzRyYljbOTa+zmHOzRHHhIBcD6LBmGV4VsMf4EUaQUEfWuG4qGkxOoN
-	 Pu3QNMjmVr0xg==
+	b=uSjQsoxW2kEoxwAcBMQ5Dnraq+NRXXUoLUs62pDQLDqR4+p3Bi6W+3CqLBWRC6c9R
+	 kY8ER2vmVCYIk9CKMM1yZGFk6KTsZEb3tgn/NrUq4BUzMCjGo9FRCnOvICB1GGgcqq
+	 NxFkypG/5UG2m5nThQp3TTcl9ESJ30lbJuZN28vIIT/gkb74rpfGHMB8UlmfqwMu3b
+	 8ws/ZshiZEMqP+a9yDP//NTb58yS2M6fEOO1p7pS/SpCzs81ysJx8uiDESEveR+snd
+	 fPUb4VnlBhqo6QukXnWUyfyvt6x6/z0LO1ubGjBwGtSEP6aoh+gM/I456MIYbz0Wjx
+	 ao7M4jGOe7siA==
 From: Kees Cook <kees@kernel.org>
 To: Andy Shevchenko <andy@kernel.org>
 Cc: Kees Cook <kees@kernel.org>,
+	Nilesh Javali <njavali@marvell.com>,
+	GR-QLogic-Storage-Upstream@marvell.com,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	linux-scsi@vger.kernel.org,
 	Sathya Prakash <sathya.prakash@broadcom.com>,
 	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
 	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	MPT-FusionLinux.pdl@broadcom.com,
-	linux-scsi@vger.kernel.org,
 	Kashyap Desai <kashyap.desai@broadcom.com>,
 	Sumit Saxena <sumit.saxena@broadcom.com>,
-	Nilesh Javali <njavali@marvell.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
@@ -70,15 +70,15 @@ Cc: Kees Cook <kees@kernel.org>,
 	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
 	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
 	linux-kernel@vger.kernel.org,
+	MPT-FusionLinux.pdl@broadcom.com,
 	mpi3mr-linuxdrv.pdl@broadcom.com,
-	GR-QLogic-Storage-Upstream@marvell.com,
 	linux-hardening@vger.kernel.org,
 	x86@kernel.org,
 	linux-coco@lists.linux.dev,
 	linux-nilfs@vger.kernel.org
-Subject: [PATCH 03/10] scsi: mpt3sas: Mark device strings as nonstring
-Date: Thu,  6 Feb 2025 17:00:12 -0800
-Message-Id: <20250207010022.749952-3-kees@kernel.org>
+Subject: [PATCH 04/10] scsi: qla2xxx: Mark device strings as nonstring
+Date: Thu,  6 Feb 2025 17:00:13 -0800
+Message-Id: <20250207010022.749952-4-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250207005832.work.324-kees@kernel.org>
 References: <20250207005832.work.324-kees@kernel.org>
@@ -88,7 +88,7 @@ List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2295; i=kees@kernel.org; h=from:subject; bh=V/auFlplC4lNkwyu5TsfDCGYYHQ1U9JN/b/NDVqoD00=; b=owGbwMvMwCVmps19z/KJym7G02pJDOlLoxWqNi1nvPp8fmr5YTfTptvFD+s+f215tPHkviT+e UwOZdpOHaUsDGJcDLJiiixBdu5xLh5v28Pd5yrCzGFlAhnCwMUpABORNGb4X3nzaKNp352Lyss+ ODf/tZzZuvmA4GzfOu/W1zm/Fj3J+Q5Ucesn/7by+VG7zwfK1sw5OG2r8qqO/McPnWYwFcx4LWv NCgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1092; i=kees@kernel.org; h=from:subject; bh=hodZU7GQjZAKYVi5akVklCZ+GiDLGTui0BikdPpJ14c=; b=owGbwMvMwCVmps19z/KJym7G02pJDOlLoxX0n158JD5V/Wf9u85oySd+7YwSZzfd4/8o6MSa5 v0/21Wso5SFQYyLQVZMkSXIzj3OxeNte7j7XEWYOaxMIEMYuDgFYCIdbxn+WTpdNvdlnCl1/8r6 HWvu/mIKO9Hga5TImPXcgWvm/56jkxgZ1k7mnOV4Unuq2IfQXzH7zbltci8t9s6895ejwOPq7LT tLAA=
 X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -97,50 +97,30 @@ nonstring, annotate the device strings accordingly.
 
 Signed-off-by: Kees Cook <kees@kernel.org>
 ---
-Cc: Sathya Prakash <sathya.prakash@broadcom.com>
-Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
+Cc: Nilesh Javali <njavali@marvell.com>
+Cc: GR-QLogic-Storage-Upstream@marvell.com
 Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: MPT-FusionLinux.pdl@broadcom.com
 Cc: linux-scsi@vger.kernel.org
 ---
- drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h     | 2 +-
- drivers/scsi/mpt3sas/mpt3sas_transport.c | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/qla2xxx/qla_mr.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h b/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h
-index 587f7d248219..d123d3b740e1 100644
---- a/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h
-+++ b/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h
-@@ -606,7 +606,7 @@ typedef struct _MPI2_CONFIG_REPLY {
+diff --git a/drivers/scsi/qla2xxx/qla_mr.h b/drivers/scsi/qla2xxx/qla_mr.h
+index 4f63aff333db..3a2bd953a976 100644
+--- a/drivers/scsi/qla2xxx/qla_mr.h
++++ b/drivers/scsi/qla2xxx/qla_mr.h
+@@ -282,8 +282,8 @@ struct register_host_info {
+ #define QLAFX00_TGT_NODE_LIST_SIZE (sizeof(uint32_t) * 32)
  
- typedef struct _MPI2_CONFIG_PAGE_MAN_0 {
- 	MPI2_CONFIG_PAGE_HEADER Header;                     /*0x00 */
--	U8                      ChipName[16];               /*0x04 */
-+	U8                      ChipName[16] __nonstring;   /*0x04 */
- 	U8                      ChipRevision[8];            /*0x14 */
- 	U8                      BoardName[16];              /*0x1C */
- 	U8                      BoardAssembly[16];          /*0x2C */
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_transport.c b/drivers/scsi/mpt3sas/mpt3sas_transport.c
-index d84413b77d84..dc74ebc6405a 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_transport.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_transport.c
-@@ -328,10 +328,10 @@ struct rep_manu_reply {
- 	u8 reserved0[2];
- 	u8 sas_format;
- 	u8 reserved2[3];
--	u8 vendor_id[SAS_EXPANDER_VENDOR_ID_LEN];
--	u8 product_id[SAS_EXPANDER_PRODUCT_ID_LEN];
--	u8 product_rev[SAS_EXPANDER_PRODUCT_REV_LEN];
--	u8 component_vendor_id[SAS_EXPANDER_COMPONENT_VENDOR_ID_LEN];
-+	u8 vendor_id[SAS_EXPANDER_VENDOR_ID_LEN] __nonstring;
-+	u8 product_id[SAS_EXPANDER_PRODUCT_ID_LEN] __nonstring;
-+	u8 product_rev[SAS_EXPANDER_PRODUCT_REV_LEN] __nonstring;
-+	u8 component_vendor_id[SAS_EXPANDER_COMPONENT_VENDOR_ID_LEN] __nonstring;
- 	u16 component_id;
- 	u8 component_revision_id;
- 	u8 reserved3;
+ struct config_info_data {
+-	uint8_t		model_num[16];
+-	uint8_t		model_description[80];
++	uint8_t		model_num[16] __nonstring;
++	uint8_t		model_description[80] __nonstring;
+ 	uint8_t		reserved0[160];
+ 	uint8_t		symbolic_name[64];
+ 	uint8_t		serial_num[32];
 -- 
 2.34.1
 
