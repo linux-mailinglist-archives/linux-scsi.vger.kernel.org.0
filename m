@@ -1,57 +1,54 @@
-Return-Path: <linux-scsi+bounces-12072-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12068-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F5B4A2B784
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46CBFA2B785
 	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 02:01:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8956167354
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 01:01:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6742E3A7C0E
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 01:00:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 879EF170A26;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 514D515DBB3;
 	Fri,  7 Feb 2025 01:00:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l5T51yNs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ISqZHQ6X"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2AD913C9A3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F67E130A7D;
 	Fri,  7 Feb 2025 01:00:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738890023; cv=none; b=tY+mEuCqnnjnMdcj0WB/rpeJ5bFZW5JDy77HV+kr+zcFmym40Ovu7T7eQ2/1cbW4Di+DvqQqVqyO4DKAq3mTmnBoXFRpZHA4z2oFUwnaUI0McO83e8PaSw5YCQQ7kXoZPxUPvJZTq2asbDRvl3QZnf1t9+oGf/C6l0NEkiajdc4=
+	t=1738890023; cv=none; b=C5nQgRDvAjwp78pavi8/KswGHLxl2LQeVbEO/hqzjlbPBeB0arJ7q/1Az+9xXh29nbW/L1r1uwk3jxeAr0rXDI4uryttE/opwt3mn9jj2puTxcYZrzXeEXQggdGlkOMNpQSrrr3S+xi6w7l53/VyJbn6FB9+51NI6dhQaYCm0mA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1738890023; c=relaxed/simple;
-	bh=Opu1xXyyZ3aCe64Oqm1K1/bSvXQOECiF/s4lP93IAgM=;
+	bh=AU4TtQLPUdYghKYrNhONEb5bDCAkZ0FgafFKK4ZzDeY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Kiy2EQfA+3hnvzVpx/FJQ4id/5Z2g6VOGC1xlQOcihj5+wlpT3sJj2jXYyFjtGlB7HuOj7KIl5zir3uKQ34A/3Nu1CAT9qWuZZJQFwZRCHks98yX982fkU+11tHSb5+8KCMKZhbKdzpL6y/0agp5URd4MX2FP4VVoQy8HVUlHpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l5T51yNs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F3CC4CEF4;
+	 MIME-Version; b=q8h4UQXiZyhoSuJMWZ1HzFrCuA15j7blAktj7VcBC/Sl3z88Cu9viR24ONhJwAKBqrOu2lh+/U6MFgzhHuGZ+gFjR3RwNSqaQ4BkrU7FRG1qve/HXPQ/cCMopB/YgFfFcs/UdJJibklCAnYqdVQrFIouMadZR2Q8w4smVjePXw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ISqZHQ6X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3142DC4CEF2;
 	Fri,  7 Feb 2025 01:00:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1738890023;
-	bh=Opu1xXyyZ3aCe64Oqm1K1/bSvXQOECiF/s4lP93IAgM=;
+	bh=AU4TtQLPUdYghKYrNhONEb5bDCAkZ0FgafFKK4ZzDeY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=l5T51yNscCYGt1Edn/A2clAER9RG9za+q2NWF0ds3FvOGP3Gm64us8UWo6wdz5gRj
-	 QwyU/+MHcPG0QHTbSwqSKxEIz91aellUc/HQGKfxhSvse7LXa3QuCM+aq+3osYHNcI
-	 S4y2Efpcd62r099O53jJ/nt9YhyM0vIKuUppXrqDuLz2CUCQUJTg1ii7DaabB0t/z6
-	 vRYjzcLLdKRdILI79jwnfg5KvR8kqmOaxDYQObBEGZUVOtstXzPO2t6pQaez3tJDYw
-	 PPy2hPh0bWu29g5djjfrJBXi5oBTFPV73BsPJ2RhAmDbh6UWMvsZZgiSGk4SoHUAnP
-	 XkcJPHZjzZEjg==
+	b=ISqZHQ6X9bEOFfl/1QaPI0iUHHJOCrar0Oi7tQvo379zrUeGILh17VA6n9KHRl8MJ
+	 UswQ5HWsIpXjqVyVxLnCcCuEPH7sy2x/r8tIIXaHhoT+ffyoTsK1xCVCxg7gFZurSz
+	 VtLZkc4QyA6wyE68OKYZ5ClN4updhXb0CxVgVgqGFuC1dhP6JL2NlFkV26W4+i/LoH
+	 1A/W//Fatt9Bvgjc2pKdt92FUwsltQajY5ut5gWjxj98lfeRqnOe7zZ/wmCtfLWkKp
+	 Ii4OwfJ/PaQSPPeneXfIaRTxPb/DFxP9ooxnLDpFEs/9aIq6BVl5uWVtsTx+YJdfgM
+	 rh67TfpHPV0Iw==
 From: Kees Cook <kees@kernel.org>
 To: Andy Shevchenko <andy@kernel.org>
 Cc: Kees Cook <kees@kernel.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	linux-coco@lists.linux.dev,
+	Alexey Dobriyan <adobriyan@gmail.com>,
+	Sven Eckelmann <sven@narfation.org>,
+	Tadeusz Struk <tadeusz.struk@linaro.org>,
+	Erick Archer <erick.archer@outlook.com>,
+	Dmitry Antipov <dmantipov@yandex.ru>,
 	Sathya Prakash <sathya.prakash@broadcom.com>,
 	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
 	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
@@ -61,12 +58,13 @@ Cc: Kees Cook <kees@kernel.org>,
 	"Martin K. Petersen" <martin.petersen@oracle.com>,
 	Nilesh Javali <njavali@marvell.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Alexey Dobriyan <adobriyan@gmail.com>,
-	Sven Eckelmann <sven@narfation.org>,
-	Tadeusz Struk <tadeusz.struk@linaro.org>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	"H. Peter Anvin" <hpa@zytor.com>,
 	kernel test robot <lkp@intel.com>,
-	Erick Archer <erick.archer@outlook.com>,
-	Dmitry Antipov <dmantipov@yandex.ru>,
 	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
 	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
 	linux-kernel@vger.kernel.org,
@@ -75,10 +73,12 @@ Cc: Kees Cook <kees@kernel.org>,
 	mpi3mr-linuxdrv.pdl@broadcom.com,
 	GR-QLogic-Storage-Upstream@marvell.com,
 	linux-hardening@vger.kernel.org,
+	x86@kernel.org,
+	linux-coco@lists.linux.dev,
 	linux-nilfs@vger.kernel.org
-Subject: [PATCH 06/10] x86/tdx: Mark message.str as nonstring
-Date: Thu,  6 Feb 2025 17:00:15 -0800
-Message-Id: <20250207010022.749952-6-kees@kernel.org>
+Subject: [PATCH 07/10] uapi: stddef.h: Introduce __kernel_nonstring
+Date: Thu,  6 Feb 2025 17:00:16 -0800
+Message-Id: <20250207010022.749952-7-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250207005832.work.324-kees@kernel.org>
 References: <20250207005832.work.324-kees@kernel.org>
@@ -88,40 +88,41 @@ List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1065; i=kees@kernel.org; h=from:subject; bh=Opu1xXyyZ3aCe64Oqm1K1/bSvXQOECiF/s4lP93IAgM=; b=owGbwMvMwCVmps19z/KJym7G02pJDOlLoxVb/a45ye1N3nZuqsmMqdt3iX/LT7mgOIuZk9miY tKcyQynO0pZGMS4GGTFFFmC7NzjXDzetoe7z1WEmcPKBDKEgYtTACbCoMDwV+aBrT9ffG/FQZ6r uj1PbPwD7nH58IRq8pqwzop7MbOHgZFh6sOyGdatOv9PRHA8uLy6X+Rxw6H7l6a1iEf+kXrNbfm MEwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=976; i=kees@kernel.org; h=from:subject; bh=AU4TtQLPUdYghKYrNhONEb5bDCAkZ0FgafFKK4ZzDeY=; b=owGbwMvMwCVmps19z/KJym7G02pJDOlLoxVLUp5s3XfF6NPUBW9uL1kopuLAm3TZaMdFvfOc/ k6fluTadJSyMIhxMciKKbIE2bnHuXi8bQ93n6sIM4eVCWQIAxenAEykv5zhD//3/UYFBW7RbMqH 9vQc7f4gJTtBhv2zRd6SLtWtTOqVLAx/hSzUTbrljHYlNjXcS2zlXHIp88XPU4ZhLw3Fdj4Nm3a IBQA=
 X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-In preparation for strtomem*() checking that its destination is a
-nonstring, annotate message.str accordingly.
+In order to annotate byte arrays in UAPI that are not C strings (i.e.
+they may not be NUL terminated), the "nonstring" attribute is needed.
+However, we can't expose this to userspace as it is compiler version
+specific.
 
 Signed-off-by: Kees Cook <kees@kernel.org>
 ---
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: linux-coco@lists.linux.dev
+Cc: Alexey Dobriyan <adobriyan@gmail.com>
+Cc: Sven Eckelmann <sven@narfation.org>
+Cc: Tadeusz Struk <tadeusz.struk@linaro.org>
+Cc: Erick Archer <erick.archer@outlook.com>
+Cc: Dmitry Antipov <dmantipov@yandex.ru>
 ---
- arch/x86/coco/tdx/tdx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/uapi/linux/stddef.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 0d9b090b4880..977ab1ffa3fe 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -170,7 +170,7 @@ static void __noreturn tdx_panic(const char *msg)
- 		/* Define register order according to the GHCI */
- 		struct { u64 r14, r15, rbx, rdi, rsi, r8, r9, rdx; };
+diff --git a/include/uapi/linux/stddef.h b/include/uapi/linux/stddef.h
+index 58154117d9b0..0e7d289b7c2e 100644
+--- a/include/uapi/linux/stddef.h
++++ b/include/uapi/linux/stddef.h
+@@ -63,4 +63,10 @@
+ #define __counted_by_be(m)
+ #endif
  
--		char str[64];
-+		char str[64] __nonstring;
- 	} message;
- 
- 	/* VMM assumes '\0' in byte 65, if the message took all 64 bytes */
++#ifdef __KERNEL__
++#define __kernel_nonstring	__nonstring
++#else
++#define __kernel_nonstring
++#endif
++
+ #endif /* _UAPI_LINUX_STDDEF_H */
 -- 
 2.34.1
 
