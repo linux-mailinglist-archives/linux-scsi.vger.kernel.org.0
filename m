@@ -1,51 +1,49 @@
-Return-Path: <linux-scsi+bounces-12071-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12069-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39A92A2B786
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 02:01:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FFDBA2B787
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 02:01:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 087201889765
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 01:01:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8889B3A7FCE
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 01:01:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8787F170A23;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F71416D9AA;
 	Fri,  7 Feb 2025 01:00:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cr6304fw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p4xkj2HN"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12C313BAE4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FBA013B29F;
 	Fri,  7 Feb 2025 01:00:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738890023; cv=none; b=tDyPtcCvzwAwh39QyhJmihn/cNWnnFnGrbZBD7HsnGeW6VAn3sWrrmoMuKa2DRMIsgGE4ePBKPGUGFYlHFGyYh6pMGFL99lWbY3/Ygez1GDFk/TSgrTuIqnJHvOR9S0Z4IyXIVYXgPtxCAAXknq9omdyn8d0S8ysHVLA/HxsEKA=
+	t=1738890023; cv=none; b=m41yOO/GetYoYJQ9No4M+BBTbSPeQOWjyZfAmCF9Av/KdJbuI1QJSlJOzEWWITIl4p4TUgpydj4qLsYM5spYygdKrMogBn9PIrvFuzuRidjLawQC5tUo9Qm8OKDFz+cdpTY52KFGWaEwYheiOPqEdxuv4YXHS0WyqtM7SrZgoow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1738890023; c=relaxed/simple;
-	bh=CbM+GnN2ANWE4Vaa6vW+0UlcVuo8j7mn5KKDXvIqbBE=;
+	bh=OD080QOcsvmWmkyEpokD8TJxBS24XHP/FqYv3Q/+7eQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=IapRX5rFNobvE5Wb95Gn+NCZUGeSbMsywC3zov8yLM9A2foHpIbXmaW5ummKCpRV+BWLvS4z//goCkIQgq2+lgmOu2Rt40Tv2anGM1qi7Owc3VbALBHKviqn8kz8VMLxzd3sJM+AaoxR+a4fRkYpVt0cleuKlLQdtmhuINlNaP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cr6304fw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51079C4AF0F;
+	 MIME-Version; b=OC6Tl+yTKWXIiffr4oknt7nLCbXCz7PmIOv5DelHL2GNJcjWjvMPmQWCasRUE3WwQMFJc4/q7Xc6xSPhT/4ZatCkU5OYRLb+XpQZGUf62fY4YD5/C7e7n+Vwjq5JZex3uxSYCe7zErMRyvXJAamhXUaqFG7aGNqctRWgcoIjOC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p4xkj2HN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D03C4CEF3;
 	Fri,  7 Feb 2025 01:00:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1738890023;
-	bh=CbM+GnN2ANWE4Vaa6vW+0UlcVuo8j7mn5KKDXvIqbBE=;
+	bh=OD080QOcsvmWmkyEpokD8TJxBS24XHP/FqYv3Q/+7eQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Cr6304fwYeeuZX2bZra7G3/Z6F7SDGU+yPYFysuApvvLQ78eLazkWtxw2rXUBF8Jp
-	 L8cijDC6lpAngQLp6PJKujxEn/Bdf963Ej6mZgNFG1Aawv2z9F3kp/57meY5/9jYg4
-	 i7J7yBE6dZPkn0is1yZmZ4EGPVrAW2H7y+izwbjdRJaKtqsXiFKotZ3wnFjbhq8fKr
-	 8TBKS9/WRC0cpWedQfE9j8jV7Dm5pCM8NB5IiH3hqVn21PPazHdYa5RDTiTfpL4xuk
-	 f0TfUwyBhvDZTBLxKJUFW+pnth3OQaoiIK4m5R+ENtKqWvs5C8v3EhCZx7vpxyWgW7
-	 P+JN0kvDAi58A==
+	b=p4xkj2HNHL0fP3uLxXElWkqOEMghzdy+9+fMKprTafPGPgA8dQLUGLz6FkHfoS28R
+	 sR418rmGcDPxnomHC7EVpWCfCW+CX8EQBEf17uOXZ6CY/dP5XbGtAvKzFx8joaC6jH
+	 Yz4nK0nLWKP4ObeHKKFDvjNiIBHa+mvTHD0/gD18v8w0IWk9+jTNcaCX2HogJtPpMq
+	 IrsKj3jMLdKe6dxKqE5w7bQKQS0sv+jYLTGEVD4xipjwsPOl9GtU9jFzYyK4monSIE
+	 cBGFuuwO4DNGnO+v8wpUm9H7JssjR/tuOxFns5OFK0kFsIIICot8StIXGThzOU5Ekn
+	 8l0TGUKl+AD7A==
 From: Kees Cook <kees@kernel.org>
 To: Andy Shevchenko <andy@kernel.org>
 Cc: Kees Cook <kees@kernel.org>,
-	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-	linux-nilfs@vger.kernel.org,
 	Sathya Prakash <sathya.prakash@broadcom.com>,
 	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
 	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
@@ -67,6 +65,7 @@ Cc: Kees Cook <kees@kernel.org>,
 	kernel test robot <lkp@intel.com>,
 	Erick Archer <erick.archer@outlook.com>,
 	Dmitry Antipov <dmantipov@yandex.ru>,
+	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
 	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
 	linux-kernel@vger.kernel.org,
 	MPT-FusionLinux.pdl@broadcom.com,
@@ -75,10 +74,11 @@ Cc: Kees Cook <kees@kernel.org>,
 	GR-QLogic-Storage-Upstream@marvell.com,
 	linux-hardening@vger.kernel.org,
 	x86@kernel.org,
-	linux-coco@lists.linux.dev
-Subject: [PATCH 08/10] nilfs2: Mark on-disk strings as nonstring
-Date: Thu,  6 Feb 2025 17:00:17 -0800
-Message-Id: <20250207010022.749952-8-kees@kernel.org>
+	linux-coco@lists.linux.dev,
+	linux-nilfs@vger.kernel.org
+Subject: [PATCH 09/10] compiler.h: Introduce __must_be_noncstr()
+Date: Thu,  6 Feb 2025 17:00:18 -0800
+Message-Id: <20250207010022.749952-9-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250207005832.work.324-kees@kernel.org>
 References: <20250207005832.work.324-kees@kernel.org>
@@ -88,36 +88,51 @@ List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1048; i=kees@kernel.org; h=from:subject; bh=CbM+GnN2ANWE4Vaa6vW+0UlcVuo8j7mn5KKDXvIqbBE=; b=owGbwMvMwCVmps19z/KJym7G02pJDOlLoxV3RF3+srip7wUnS9GrT/Uvj0t4nNrjt4nJdFH9/ 6asj6EXOkpZGMS4GGTFFFmC7NzjXDzetoe7z1WEmcPKBDKEgYtTACai84rhr9DLb6s795Rcl3v7 za1JXsPfK19jcnJQKu9iQZfXBoknIhkZtruvZYuL/3jdUpdxg2f7eYdDJlfjG6do2U5c/pJnGas cCwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1662; i=kees@kernel.org; h=from:subject; bh=OD080QOcsvmWmkyEpokD8TJxBS24XHP/FqYv3Q/+7eQ=; b=owGbwMvMwCVmps19z/KJym7G02pJDOlLo5VM/jrvuzHT8t+U5qBbdwzFMtU1rI7yr439WeE0M eZqjoVGRykLgxgXg6yYIkuQnXuci8fb9nD3uYowc1iZQIYwcHEKwERWSDP893F8yq70KFA4Olrv 1sQXuh/mnj5cefTo2kp/q+2FDz5IvmJkOLNdd/ZkvbDdr6+cypnQ+jZBQH/PjaS9ysffvD06aZK dGAsA
 X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-In preparation for memtostr*() checking that its source is marked as
-nonstring, annotate the device strings accordingly using the new UAPI
-alias for the "nonstring" attribute.
+In preparation for adding more type checking to the memtostr/strtomem*()
+helpers, introduce the ability to check for the "nonstring" attribute.
+This is the reverse of what was added to strscpy*() in commit 559048d156ff
+("string: Check for "nonstring" attribute on strscpy() arguments").
 
 Signed-off-by: Kees Cook <kees@kernel.org>
 ---
-Cc: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Cc: linux-nilfs@vger.kernel.org
----
- include/uapi/linux/nilfs2_ondisk.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/linux/compiler.h | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/nilfs2_ondisk.h b/include/uapi/linux/nilfs2_ondisk.h
-index c23f91ae5fe8..3196cc44a002 100644
---- a/include/uapi/linux/nilfs2_ondisk.h
-+++ b/include/uapi/linux/nilfs2_ondisk.h
-@@ -188,7 +188,8 @@ struct nilfs_super_block {
- 	__le16	s_segment_usage_size;	/* Size of a segment usage */
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 1c0688319435..c89070a2f964 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -229,9 +229,25 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+ #define __must_be_byte_array(a)	__BUILD_BUG_ON_ZERO_MSG(!__is_byte_array(a), \
+ 							"must be byte array")
  
- /*98*/	__u8	s_uuid[16];		/* 128-bit uuid for volume */
--/*A8*/	char	s_volume_name[80];	/* volume name */
-+/*A8*/	char	s_volume_name[80]	/* volume name */
-+			__kernel_nonstring;
++/*
++ * If the "nonstring" attribute isn't available, we have to return true
++ * so the __must_*() checks pass when "nonstring" isn't supported.
++ */
++#if __has_attribute(__nonstring__)
++#define __is_cstr(a)		(!__annotated(a, nonstring))
++#define __is_noncstr(a)		(__annotated(a, nonstring))
++#else
++#define __is_cstr(a)		(true)
++#define __is_noncstr(a)		(true)
++#endif
++
+ /* Require C Strings (i.e. NUL-terminated) lack the "nonstring" attribute. */
+ #define __must_be_cstr(p) \
+-	__BUILD_BUG_ON_ZERO_MSG(__annotated(p, nonstring), "must be cstr (NUL-terminated)")
++	__BUILD_BUG_ON_ZERO_MSG(!__is_cstr(p), \
++				"must be C-string (NUL-terminated)")
++#define __must_be_noncstr(p) \
++	__BUILD_BUG_ON_ZERO_MSG(!__is_noncstr(p), \
++				"must be non-C-string (not NUL-terminated)")
  
- /*F8*/	__le32  s_c_interval;           /* Commit interval of segment */
- 	__le32  s_c_block_max;          /*
+ #endif /* __KERNEL__ */
+ 
 -- 
 2.34.1
 
