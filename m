@@ -1,162 +1,168 @@
-Return-Path: <linux-scsi+bounces-12070-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12073-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC351A2B782
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 02:01:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9FACA2B7A2
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 02:12:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 578851673C2
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 01:01:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 990371887E98
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 01:12:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F6A216C854;
-	Fri,  7 Feb 2025 01:00:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6239E823DE;
+	Fri,  7 Feb 2025 01:12:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DqkdQDHi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gEDgf0oI"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B1D12C470;
-	Fri,  7 Feb 2025 01:00:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4A5BA50;
+	Fri,  7 Feb 2025 01:12:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738890023; cv=none; b=ez9QZ5bo7K5ThoYPbZmo0fPmeMi058iDi7m/8ZLIQNaKcRdSPPX5VzgqwyYzTFo740MYDrvx/gZJVQB9b3iFuKeN4okmkGAs32XEe1nkG+DMzUJBs1TeNyR/Fria6H946zFJkdRgmbaP5VE1ceC1AdCJ6Mv+OK3XRmTGecXXfAU=
+	t=1738890735; cv=none; b=okyk6kwaWVB35Gk5f36hr27Drhu2lHBm1dW/Erjl2SEGMSQd2pmM+QqnWiXDG15pZaRGe5/uuaMWatWfqsc4NMO53iwXtsU1XnKAZspjMFD5pmCOYQPXnFfKOZDeRL1oQE203BvjQiKqgLk6RxWIKhN4rVRh82z+omRv8ero1bQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738890023; c=relaxed/simple;
-	bh=K/07rfCFA4BfrBoFR8MW3miwLviZUsM4VUjLPRUHQSk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NDtAwvitC+HKP5V024DxmPI7ubjxa/Ub8Uj/lrWJnj+jeuY+/2tpWCCzmEpm6q1stwwB5AZJhj1MEVne7QGz4Gm87doX7qRVM8CL8IyC1lcCpfvWt/KYAVZ4wgYDaB3mBw2e/v7iUq82h7YlIImD6+QEyAapAbjMjoZ8mnx38L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DqkdQDHi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44699C4CEE6;
-	Fri,  7 Feb 2025 01:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738890023;
-	bh=K/07rfCFA4BfrBoFR8MW3miwLviZUsM4VUjLPRUHQSk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DqkdQDHi32+fVMBhJIDpDTsAD2KQxIW6emKqDpEwDIeNEsKRSUE3Jdo7K7nnI2L+b
-	 UhJgJLVG9dUctxMfqz8+aA5yZcS6NWu7beIJo6jlapVkpPjfb0vBYzfX/2F3YyFOdU
-	 qL/GbOB4z4wQA69Xp12J7bOE1HQeP6I6iWZbDHJmMQ3WMAYUCtcvUt98ISXzU2ZqL1
-	 TKhfr6HXq2vd296XeXUa2nGaR/oAGU2HWjMS2EMz7a6QRbZ+bc07fqt9Yr1cdiW79d
-	 +pYPhK1tpMPtgB+9SpPJG2+dCuvRM2/zcGg6H8ns4ObNPRxlcDz0By9PjUwZyVCT+3
-	 2WYJpzowanURQ==
-From: Kees Cook <kees@kernel.org>
-To: Andy Shevchenko <andy@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	linux-hardening@vger.kernel.org,
-	Sathya Prakash <sathya.prakash@broadcom.com>,
-	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-	Kashyap Desai <kashyap.desai@broadcom.com>,
-	Sumit Saxena <sumit.saxena@broadcom.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Nilesh Javali <njavali@marvell.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Alexey Dobriyan <adobriyan@gmail.com>,
-	Sven Eckelmann <sven@narfation.org>,
-	Tadeusz Struk <tadeusz.struk@linaro.org>,
-	kernel test robot <lkp@intel.com>,
-	Erick Archer <erick.archer@outlook.com>,
-	Dmitry Antipov <dmantipov@yandex.ru>,
-	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	MPT-FusionLinux.pdl@broadcom.com,
-	linux-scsi@vger.kernel.org,
-	mpi3mr-linuxdrv.pdl@broadcom.com,
-	GR-QLogic-Storage-Upstream@marvell.com,
-	x86@kernel.org,
-	linux-coco@lists.linux.dev,
-	linux-nilfs@vger.kernel.org
-Subject: [PATCH 10/10] string.h: Validate memtostr*()/strtomem*() arguments more carefully
-Date: Thu,  6 Feb 2025 17:00:19 -0800
-Message-Id: <20250207010022.749952-10-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250207005832.work.324-kees@kernel.org>
-References: <20250207005832.work.324-kees@kernel.org>
+	s=arc-20240116; t=1738890735; c=relaxed/simple;
+	bh=UqiFmU/V/6S8lGc+eVaVfWQj7ul+mmeIvAIUPr3ZCc0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X4Z53vSzMXTNUSYjJ6CLEuWtYv21I0m4O0YOB2nW+wo0G05Mjp5oz2XLLphOQ2S2MXVIG4q54ZcDWs4C3V+0FbaVU9yXTgGXzRCyDjtGVdSg7PaQLB5E81HjLIy/OcRmzp49LkTwBXhBD6hFzXscHlbaJ0kqT5t7EBrBCKOF5Tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gEDgf0oI; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738890733; x=1770426733;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UqiFmU/V/6S8lGc+eVaVfWQj7ul+mmeIvAIUPr3ZCc0=;
+  b=gEDgf0oIpbGZgyflpnZr7Ui0fmKUvl/V2dETaM9qI30ZS3o7xwykov0Z
+   mzeTd+PTl2Vjp8xI9URv0/JnvVKKeDfKzxvd4XTHh+tfdM9vATiIXOaZZ
+   Vp3FIZT+OPRgim14bzSoKkW8NHhcSAp1VkeFjkQovMaaFS9iEb0p9niRC
+   DGnOXgjwK/TuwGyaJbf6vmxe6uir4UjUcTVHqmT0byyxbaZ0COiuapkzu
+   mr9S6RaPtLLolTsBOmV+6zRs0d4IAe9VYpkl02+oCjeJPQZTuCEZEFZoE
+   LoJr7MQpl0sDOpBFFCf0KprvQClsY+Ylpz8ZGYIz4ew6lpkNK0+F1Tx3r
+   w==;
+X-CSE-ConnectionGUID: W8RNtC6cSdaSlKStV07jiA==
+X-CSE-MsgGUID: ixAPGPd9Q1+2h9FKB8DK6g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="39639110"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="39639110"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 17:12:12 -0800
+X-CSE-ConnectionGUID: DlYusnUQQWiJz/ajOvdieA==
+X-CSE-MsgGUID: 7lvlRg6BT8eO3PHITFbO/g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,265,1732608000"; 
+   d="scan'208";a="116412567"
+Received: from dnelso2-mobl.amr.corp.intel.com (HELO [10.125.111.17]) ([10.125.111.17])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 17:12:09 -0800
+Message-ID: <b4f08d43-c421-4e8d-9bbb-c954c4472f8a@intel.com>
+Date: Thu, 6 Feb 2025 17:12:11 -0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2779; i=kees@kernel.org; h=from:subject; bh=K/07rfCFA4BfrBoFR8MW3miwLviZUsM4VUjLPRUHQSk=; b=owGbwMvMwCVmps19z/KJym7G02pJDOlLo5WkWqvKtx3a+ezM9LfZXLZVF1S28bTHnSzv5Fyfe SC9+ZxHRykLgxgXg6yYIkuQnXuci8fb9nD3uYowc1iZQIYwcHEKwETmXWJk6GU+ymF/TDzEnnUJ z98paYVBW1b09Ci9/W40l/Hq1ZB9qxkZ/grIVM+9nq/nfq96Owvf5erEL48nZzz9es/+TVJKtu0 EDgA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/10] x86/tdx: Mark message.str as nonstring
+To: Kees Cook <kees@kernel.org>, Andy Shevchenko <andy@kernel.org>
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, linux-coco@lists.linux.dev,
+ Sathya Prakash <sathya.prakash@broadcom.com>,
+ Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+ Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+ Kashyap Desai <kashyap.desai@broadcom.com>,
+ Sumit Saxena <sumit.saxena@broadcom.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Nilesh Javali <njavali@marvell.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Alexey Dobriyan <adobriyan@gmail.com>, Sven Eckelmann <sven@narfation.org>,
+ Tadeusz Struk <tadeusz.struk@linaro.org>, kernel test robot <lkp@intel.com>,
+ Erick Archer <erick.archer@outlook.com>, Dmitry Antipov
+ <dmantipov@yandex.ru>, Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+ Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+ linux-kernel@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+ linux-scsi@vger.kernel.org, mpi3mr-linuxdrv.pdl@broadcom.com,
+ GR-QLogic-Storage-Upstream@marvell.com, linux-hardening@vger.kernel.org,
+ linux-nilfs@vger.kernel.org
+References: <20250207005832.work.324-kees@kernel.org>
+ <20250207010022.749952-6-kees@kernel.org>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20250207010022.749952-6-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Since these functions handle moving between C strings and non-C strings,
-they should check for the appropriate presence/lack of the nonstring
-attribute on arguments.
+On 2/6/25 17:00, Kees Cook wrote:
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -170,7 +170,7 @@ static void __noreturn tdx_panic(const char *msg)
+>  		/* Define register order according to the GHCI */
+>  		struct { u64 r14, r15, rbx, rdi, rsi, r8, r9, rdx; };
+>  
+> -		char str[64];
+> +		char str[64] __nonstring;
+>  	} message;
 
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Andy Shevchenko <andy@kernel.org>
-Cc: linux-hardening@vger.kernel.org
----
- include/linux/string.h | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+So, the patch itself makes sense. But it does end up looking kinda
+funky. We call it a "str"ing and then annotate it as not a string.
 
-diff --git a/include/linux/string.h b/include/linux/string.h
-index fc5ae145bd78..26491a2f8010 100644
---- a/include/linux/string.h
-+++ b/include/linux/string.h
-@@ -412,8 +412,10 @@ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
-  */
- #define strtomem_pad(dest, src, pad)	do {				\
- 	const size_t _dest_len = __must_be_byte_array(dest) +		\
-+				 __must_be_noncstr(dest) +		\
- 				 ARRAY_SIZE(dest);			\
--	const size_t _src_len = __builtin_object_size(src, 1);		\
-+	const size_t _src_len = __must_be_cstr(src) +			\
-+				__builtin_object_size(src, 1);		\
- 									\
- 	BUILD_BUG_ON(!__builtin_constant_p(_dest_len) ||		\
- 		     _dest_len == (size_t)-1);				\
-@@ -436,8 +438,10 @@ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
-  */
- #define strtomem(dest, src)	do {					\
- 	const size_t _dest_len = __must_be_byte_array(dest) +		\
-+				 __must_be_noncstr(dest) +		\
- 				 ARRAY_SIZE(dest);			\
--	const size_t _src_len = __builtin_object_size(src, 1);		\
-+	const size_t _src_len = __must_be_cstr(src) +			\
-+				__builtin_object_size(src, 1);		\
- 									\
- 	BUILD_BUG_ON(!__builtin_constant_p(_dest_len) ||		\
- 		     _dest_len == (size_t)-1);				\
-@@ -456,8 +460,10 @@ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
-  */
- #define memtostr(dest, src)	do {					\
- 	const size_t _dest_len = __must_be_byte_array(dest) +		\
-+				 __must_be_cstr(dest) +			\
- 				 ARRAY_SIZE(dest);			\
--	const size_t _src_len = __builtin_object_size(src, 1);		\
-+	const size_t _src_len = __must_be_noncstr(src) +		\
-+				__builtin_object_size(src, 1);		\
- 	const size_t _src_chars = strnlen(src, _src_len);		\
- 	const size_t _copy_len = min(_dest_len - 1, _src_chars);	\
- 									\
-@@ -482,8 +488,10 @@ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
-  */
- #define memtostr_pad(dest, src)		do {				\
- 	const size_t _dest_len = __must_be_byte_array(dest) +		\
-+				 __must_be_cstr(dest) +			\
- 				 ARRAY_SIZE(dest);			\
--	const size_t _src_len = __builtin_object_size(src, 1);		\
-+	const size_t _src_len = __must_be_noncstr(src) +		\
-+				__builtin_object_size(src, 1);		\
- 	const size_t _src_chars = strnlen(src, _src_len);		\
- 	const size_t _copy_len = min(_dest_len - 1, _src_chars);	\
- 									\
--- 
-2.34.1
+It doesn't have to be done in this patch, but it does seem like we
+should probably not be using 'char' and also shouldn't call it anything
+close to "string". Maybe:
 
+	u8 message[64] __nonstring;
+
+In any case, feel free to carry the annotation in your tree:
+
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 
