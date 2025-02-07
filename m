@@ -1,54 +1,51 @@
-Return-Path: <linux-scsi+bounces-12068-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12071-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46CBFA2B785
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 02:01:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39A92A2B786
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 02:01:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6742E3A7C0E
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 01:00:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 087201889765
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 01:01:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 514D515DBB3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8787F170A23;
 	Fri,  7 Feb 2025 01:00:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ISqZHQ6X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cr6304fw"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F67E130A7D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12C313BAE4;
 	Fri,  7 Feb 2025 01:00:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738890023; cv=none; b=C5nQgRDvAjwp78pavi8/KswGHLxl2LQeVbEO/hqzjlbPBeB0arJ7q/1Az+9xXh29nbW/L1r1uwk3jxeAr0rXDI4uryttE/opwt3mn9jj2puTxcYZrzXeEXQggdGlkOMNpQSrrr3S+xi6w7l53/VyJbn6FB9+51NI6dhQaYCm0mA=
+	t=1738890023; cv=none; b=tDyPtcCvzwAwh39QyhJmihn/cNWnnFnGrbZBD7HsnGeW6VAn3sWrrmoMuKa2DRMIsgGE4ePBKPGUGFYlHFGyYh6pMGFL99lWbY3/Ygez1GDFk/TSgrTuIqnJHvOR9S0Z4IyXIVYXgPtxCAAXknq9omdyn8d0S8ysHVLA/HxsEKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1738890023; c=relaxed/simple;
-	bh=AU4TtQLPUdYghKYrNhONEb5bDCAkZ0FgafFKK4ZzDeY=;
+	bh=CbM+GnN2ANWE4Vaa6vW+0UlcVuo8j7mn5KKDXvIqbBE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=q8h4UQXiZyhoSuJMWZ1HzFrCuA15j7blAktj7VcBC/Sl3z88Cu9viR24ONhJwAKBqrOu2lh+/U6MFgzhHuGZ+gFjR3RwNSqaQ4BkrU7FRG1qve/HXPQ/cCMopB/YgFfFcs/UdJJibklCAnYqdVQrFIouMadZR2Q8w4smVjePXw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ISqZHQ6X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3142DC4CEF2;
+	 MIME-Version; b=IapRX5rFNobvE5Wb95Gn+NCZUGeSbMsywC3zov8yLM9A2foHpIbXmaW5ummKCpRV+BWLvS4z//goCkIQgq2+lgmOu2Rt40Tv2anGM1qi7Owc3VbALBHKviqn8kz8VMLxzd3sJM+AaoxR+a4fRkYpVt0cleuKlLQdtmhuINlNaP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cr6304fw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51079C4AF0F;
 	Fri,  7 Feb 2025 01:00:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1738890023;
-	bh=AU4TtQLPUdYghKYrNhONEb5bDCAkZ0FgafFKK4ZzDeY=;
+	bh=CbM+GnN2ANWE4Vaa6vW+0UlcVuo8j7mn5KKDXvIqbBE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ISqZHQ6X9bEOFfl/1QaPI0iUHHJOCrar0Oi7tQvo379zrUeGILh17VA6n9KHRl8MJ
-	 UswQ5HWsIpXjqVyVxLnCcCuEPH7sy2x/r8tIIXaHhoT+ffyoTsK1xCVCxg7gFZurSz
-	 VtLZkc4QyA6wyE68OKYZ5ClN4updhXb0CxVgVgqGFuC1dhP6JL2NlFkV26W4+i/LoH
-	 1A/W//Fatt9Bvgjc2pKdt92FUwsltQajY5ut5gWjxj98lfeRqnOe7zZ/wmCtfLWkKp
-	 Ii4OwfJ/PaQSPPeneXfIaRTxPb/DFxP9ooxnLDpFEs/9aIq6BVl5uWVtsTx+YJdfgM
-	 rh67TfpHPV0Iw==
+	b=Cr6304fwYeeuZX2bZra7G3/Z6F7SDGU+yPYFysuApvvLQ78eLazkWtxw2rXUBF8Jp
+	 L8cijDC6lpAngQLp6PJKujxEn/Bdf963Ej6mZgNFG1Aawv2z9F3kp/57meY5/9jYg4
+	 i7J7yBE6dZPkn0is1yZmZ4EGPVrAW2H7y+izwbjdRJaKtqsXiFKotZ3wnFjbhq8fKr
+	 8TBKS9/WRC0cpWedQfE9j8jV7Dm5pCM8NB5IiH3hqVn21PPazHdYa5RDTiTfpL4xuk
+	 f0TfUwyBhvDZTBLxKJUFW+pnth3OQaoiIK4m5R+ENtKqWvs5C8v3EhCZx7vpxyWgW7
+	 P+JN0kvDAi58A==
 From: Kees Cook <kees@kernel.org>
 To: Andy Shevchenko <andy@kernel.org>
 Cc: Kees Cook <kees@kernel.org>,
-	Alexey Dobriyan <adobriyan@gmail.com>,
-	Sven Eckelmann <sven@narfation.org>,
-	Tadeusz Struk <tadeusz.struk@linaro.org>,
-	Erick Archer <erick.archer@outlook.com>,
-	Dmitry Antipov <dmantipov@yandex.ru>,
+	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+	linux-nilfs@vger.kernel.org,
 	Sathya Prakash <sathya.prakash@broadcom.com>,
 	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
 	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
@@ -64,8 +61,12 @@ Cc: Kees Cook <kees@kernel.org>,
 	Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>,
 	"H. Peter Anvin" <hpa@zytor.com>,
+	Alexey Dobriyan <adobriyan@gmail.com>,
+	Sven Eckelmann <sven@narfation.org>,
+	Tadeusz Struk <tadeusz.struk@linaro.org>,
 	kernel test robot <lkp@intel.com>,
-	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+	Erick Archer <erick.archer@outlook.com>,
+	Dmitry Antipov <dmantipov@yandex.ru>,
 	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
 	linux-kernel@vger.kernel.org,
 	MPT-FusionLinux.pdl@broadcom.com,
@@ -74,11 +75,10 @@ Cc: Kees Cook <kees@kernel.org>,
 	GR-QLogic-Storage-Upstream@marvell.com,
 	linux-hardening@vger.kernel.org,
 	x86@kernel.org,
-	linux-coco@lists.linux.dev,
-	linux-nilfs@vger.kernel.org
-Subject: [PATCH 07/10] uapi: stddef.h: Introduce __kernel_nonstring
-Date: Thu,  6 Feb 2025 17:00:16 -0800
-Message-Id: <20250207010022.749952-7-kees@kernel.org>
+	linux-coco@lists.linux.dev
+Subject: [PATCH 08/10] nilfs2: Mark on-disk strings as nonstring
+Date: Thu,  6 Feb 2025 17:00:17 -0800
+Message-Id: <20250207010022.749952-8-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250207005832.work.324-kees@kernel.org>
 References: <20250207005832.work.324-kees@kernel.org>
@@ -88,41 +88,36 @@ List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=976; i=kees@kernel.org; h=from:subject; bh=AU4TtQLPUdYghKYrNhONEb5bDCAkZ0FgafFKK4ZzDeY=; b=owGbwMvMwCVmps19z/KJym7G02pJDOlLoxVLUp5s3XfF6NPUBW9uL1kopuLAm3TZaMdFvfOc/ k6fluTadJSyMIhxMciKKbIE2bnHuXi8bQ93n6sIM4eVCWQIAxenAEykv5zhD//3/UYFBW7RbMqH 9vQc7f4gJTtBhv2zRd6SLtWtTOqVLAx/hSzUTbrljHYlNjXcS2zlXHIp88XPU4ZhLw3Fdj4Nm3a IBQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1048; i=kees@kernel.org; h=from:subject; bh=CbM+GnN2ANWE4Vaa6vW+0UlcVuo8j7mn5KKDXvIqbBE=; b=owGbwMvMwCVmps19z/KJym7G02pJDOlLoxV3RF3+srip7wUnS9GrT/Uvj0t4nNrjt4nJdFH9/ 6asj6EXOkpZGMS4GGTFFFmC7NzjXDzetoe7z1WEmcPKBDKEgYtTACai84rhr9DLb6s795Rcl3v7 za1JXsPfK19jcnJQKu9iQZfXBoknIhkZtruvZYuL/3jdUpdxg2f7eYdDJlfjG6do2U5c/pJnGas cCwA=
 X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-In order to annotate byte arrays in UAPI that are not C strings (i.e.
-they may not be NUL terminated), the "nonstring" attribute is needed.
-However, we can't expose this to userspace as it is compiler version
-specific.
+In preparation for memtostr*() checking that its source is marked as
+nonstring, annotate the device strings accordingly using the new UAPI
+alias for the "nonstring" attribute.
 
 Signed-off-by: Kees Cook <kees@kernel.org>
 ---
-Cc: Alexey Dobriyan <adobriyan@gmail.com>
-Cc: Sven Eckelmann <sven@narfation.org>
-Cc: Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc: Erick Archer <erick.archer@outlook.com>
-Cc: Dmitry Antipov <dmantipov@yandex.ru>
+Cc: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Cc: linux-nilfs@vger.kernel.org
 ---
- include/uapi/linux/stddef.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/uapi/linux/nilfs2_ondisk.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/stddef.h b/include/uapi/linux/stddef.h
-index 58154117d9b0..0e7d289b7c2e 100644
---- a/include/uapi/linux/stddef.h
-+++ b/include/uapi/linux/stddef.h
-@@ -63,4 +63,10 @@
- #define __counted_by_be(m)
- #endif
+diff --git a/include/uapi/linux/nilfs2_ondisk.h b/include/uapi/linux/nilfs2_ondisk.h
+index c23f91ae5fe8..3196cc44a002 100644
+--- a/include/uapi/linux/nilfs2_ondisk.h
++++ b/include/uapi/linux/nilfs2_ondisk.h
+@@ -188,7 +188,8 @@ struct nilfs_super_block {
+ 	__le16	s_segment_usage_size;	/* Size of a segment usage */
  
-+#ifdef __KERNEL__
-+#define __kernel_nonstring	__nonstring
-+#else
-+#define __kernel_nonstring
-+#endif
-+
- #endif /* _UAPI_LINUX_STDDEF_H */
+ /*98*/	__u8	s_uuid[16];		/* 128-bit uuid for volume */
+-/*A8*/	char	s_volume_name[80];	/* volume name */
++/*A8*/	char	s_volume_name[80]	/* volume name */
++			__kernel_nonstring;
+ 
+ /*F8*/	__le32  s_c_interval;           /* Commit interval of segment */
+ 	__le32  s_c_block_max;          /*
 -- 
 2.34.1
 
