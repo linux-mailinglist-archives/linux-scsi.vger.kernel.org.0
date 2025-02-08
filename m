@@ -1,287 +1,202 @@
-Return-Path: <linux-scsi+bounces-12098-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12100-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C57F0A2D1BA
-	for <lists+linux-scsi@lfdr.de>; Sat,  8 Feb 2025 00:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 00E5CA2D28D
+	for <lists+linux-scsi@lfdr.de>; Sat,  8 Feb 2025 02:17:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C12B2188D678
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2025 23:47:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2D64188E252
+	for <lists+linux-scsi@lfdr.de>; Sat,  8 Feb 2025 01:17:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 336F21DB546;
-	Fri,  7 Feb 2025 23:47:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58FCB84D0E;
+	Sat,  8 Feb 2025 01:16:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BuWDWLCD"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="EyTlnxcN"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mail-m32106.qiye.163.com (mail-m32106.qiye.163.com [220.197.32.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C211C700F;
-	Fri,  7 Feb 2025 23:47:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9103B1DDE9;
+	Sat,  8 Feb 2025 01:16:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738972052; cv=none; b=smuv3uMRHOyyi6F48t8PTFGPtmBn3MmEsxQ5NSawOxqAg5gwMXewrrWTVhCpFEWbmzDOPJvtduiTsoY8cJdgmstH0P9c1u3hDE+Cfk9+5jJD8YgVteeFDVELPgAw7FX4LizFavBLzvYe2CicxMEWoofytxuUxJjanCSmT6GKYA8=
+	t=1738977419; cv=none; b=TiTARRADQBfWwbiqrRs+Tdn3B1vHYZxV0Ei/XVJNh5Yk/yADULHV7ZdB5NRiScERBS7FeIbnwaopGbvWYvrs46uzhRv5LPxCowIa/6MctQl97psPdLWGtAbu6lehfIcIR11mAsijuFZdMGQsjOkIK60JRO/pkkmhhG7L1+XZHcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738972052; c=relaxed/simple;
-	bh=Zyc0ISUjcc+IBnbC8jGYl5+zh/BbqiMDhq35Xic2fFs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GMJuiYIpUPh4DMWhdja9eCQV2DXDYBGqMF9Gtabdj5OKV2vK5iVMG+fpvcXtsUocbrZ7kzGqeeiEhKbBQTY2+RuVHM0TX/UZu0Sw55x/H8ZhiwrPt3jfGJRR0DWxKcov57Syemx/pMJHgV5ccWduVevDEJTy8jverSGvgywTJ9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=BuWDWLCD; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 517LfuN2001325;
-	Fri, 7 Feb 2025 23:47:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2023-11-20; bh=JWBrF
-	BLsBDhEnf7rRYomevR2OhKdd7JThUukQ1rHuq0=; b=BuWDWLCD7LKO23D1LI8EU
-	RgNkVDEuBChynyJZSEFRzaZa2sjbO0ZrI3o50NAh9DLvTcW0WUYUljfr4m+E/GMy
-	C4rWrMlQlwe0rvihubJOFyXkj+HKD7wjlsb8E5QQYnTxWtGMcMJbVzMlLMinBWKX
-	7WtOmUlQgQzt5cpaGKOdyQQBd/pzSM9ik9kKCjnHMhBkBj2QuIhIFu5olJvpFCcR
-	BHtHCLHxd5kWtKFR+pXX25Id5zC+BtcZ/UI+baD3PhN1xWiRqbM5GKmQ7waA72gC
-	69jPrST+0NToYMmaxhaGXe+KNitk3NS0QKjDI6GNOqILX4nTVAHQ/bWdfZw9q4sq
-	w==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44kku4ypvq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 07 Feb 2025 23:47:24 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 517LMmWW027906;
-	Fri, 7 Feb 2025 23:47:24 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44j8ds5wst-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 07 Feb 2025 23:47:24 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 517NlMLj001803;
-	Fri, 7 Feb 2025 23:47:23 GMT
-Received: from ca-dev94.us.oracle.com (ca-dev94.us.oracle.com [10.129.136.30])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 44j8ds5ws8-3;
-	Fri, 07 Feb 2025 23:47:23 +0000
-From: Alan Adamson <alan.adamson@oracle.com>
-To: linux-block@vger.kernel.org
-Cc: linux-scsi@vger.kernel.org, alan.adamson@oracle.com,
-        linux-nvme@lists.infradead.org, shinichiro.kawasaki@wdc.com
-Subject: [PATCH v4 blktests 2/2] nvme/059: add atomic write tests
-Date: Fri,  7 Feb 2025 15:55:53 -0800
-Message-ID: <20250207235553.322741-3-alan.adamson@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20250207235553.322741-1-alan.adamson@oracle.com>
-References: <20250207235553.322741-1-alan.adamson@oracle.com>
+	s=arc-20240116; t=1738977419; c=relaxed/simple;
+	bh=rZxfDjUQ4oAzhda6/Pw6O5ZJKwwEgFhJANAcnJ/L2ao=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=sh1MHEI3PyIusLRMPErdckcTiKpyfEFm/SwnrMufwb7y8Xk7srBuGU3anRofnOyWWd5fVNPN/BW8zbRc8bgfphsF0UMi3pKNO/kQB0rPiaEq4qln//9Q8QOm/7MlsU+/ltFFIHhi94YRCi9BwOcOVY+5QaCKu0kQZ77xeGq8lvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=EyTlnxcN; arc=none smtp.client-ip=220.197.32.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.45] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id a749478c;
+	Sat, 8 Feb 2025 09:01:26 +0800 (GMT+08:00)
+Message-ID: <e2f0ecc2-25ba-428b-b643-a33cb6e32898@rock-chips.com>
+Date: Sat, 8 Feb 2025 09:01:27 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: shawn.lin@rock-chips.com, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Bart Van Assche <bvanassche@acm.org>, YiFeng Zhao <zyf@rock-chips.com>,
+ Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH v7 0/7] Initial support for RK3576 UFS controller
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+ "James E . J . Bottomley" <james.bottomley@hansenpartnership.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>
+References: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
+ <CAPDyKFq+pWXq75xEtfkeCkmkdZtfp9dAFej4M+6rO6EAUULf=w@mail.gmail.com>
+Content-Language: en-GB
+From: Shawn Lin <shawn.lin@rock-chips.com>
+In-Reply-To: <CAPDyKFq+pWXq75xEtfkeCkmkdZtfp9dAFej4M+6rO6EAUULf=w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-07_11,2025-02-07_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 bulkscore=0
- mlxlogscore=999 adultscore=0 suspectscore=0 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2501170000
- definitions=main-2502070180
-X-Proofpoint-GUID: eiPXTjbCa0tqQEPxxNeMI-two_Vv71ZA
-X-Proofpoint-ORIG-GUID: eiPXTjbCa0tqQEPxxNeMI-two_Vv71ZA
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGUsZQ1YeQ0oaQkwZSkpLQk9WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+X-HM-Tid: 0a94e313640209cckunma749478c
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Pgw6Nxw6CzIRGgMOKCtISz00
+	IwMwCxJVSlVKTEhDQkxNT0NDSk5PVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQU9MSEo3Bg++
+DKIM-Signature:a=rsa-sha256;
+	b=EyTlnxcNxHq+jPstL4itjJJIQg0tHEMz7vXUHWhWgZydlK6DNC2yOs/1y2S0Ik4c+2IFQCQfOQDfOimr6dSEyxKQyVRnef5Hqlj41RDl5dfmZvzgJAuYlzCg1FW50hI28Ci3If4ik9ixWAOCJxSWzfzVhJlmh0xsstQQxkRUQEo=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=zqiqX1eIhEi+d4tOiY9PyRcewyPQx3p/Go2zpFzeFK0=;
+	h=date:mime-version:subject:message-id:from;
 
-Tests basic atomic write functionality using NVMe devices
-that support the AWUN and AWUPF Controller Atomic Parameters
-and NAWUN and NAWUPF Namespace Atomic Parameters.
+Hi Ulf,
 
-Testing areas include:
+在 2025/2/7 18:17, Ulf Hansson 写道:
+> On Wed, 5 Feb 2025 at 07:16, Shawn Lin <shawn.lin@rock-chips.com> wrote:
+>>
+>> This patchset adds initial UFS controller supprt for RK3576 SoC.
+>> Patch 1 is the dt-bindings. Patch 2-4 deal with rpm and spm support
+>> in advanced suggested by Ulf. Patch 5 exports two new APIs for host
+>> driver. Patch 6 and 7 are the host driver and dtsi support.
+> 
+> Looks like this series is almost ready to be merged?
+> 
+> If so, may I suggest that I pick patch2, patch3 and patch4 via my
+> pmdomain tree and share them via an immutable branch, so they can be
+> pulled into James/Martin's scsi tree? Or do you prefer another route?
+> 
 
-- Verify sysfs atomic write attributes are consistent with
-  atomic write capablities advertised by the NVMe HW.
+Thanks for the review. I'm fine with both. Let's wait for James/Martin's
+opinion.
 
-- Verify the atomic write paramters of statx are correct using
-  xfs_io.
-
-- Perform a pwritev2() (with RWF_ATOMIC flag) using xfs_io:
-    - maximum byte size (atomic_write_unit_max_bytes)
-    - minimum byte size (atomic_write_unit_min_bytes)
-    - a write larger than atomic_write_unit_max_bytes
-
-Signed-off-by: Alan Adamson <alan.adamson@oracle.com>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
----
- tests/nvme/059     | 146 +++++++++++++++++++++++++++++++++++++++++++++
- tests/nvme/059.out |   9 +++
- 2 files changed, 155 insertions(+)
- create mode 100755 tests/nvme/059
- create mode 100644 tests/nvme/059.out
-
-diff --git a/tests/nvme/059 b/tests/nvme/059
-new file mode 100755
-index 000000000000..79e0ae9b7034
---- /dev/null
-+++ b/tests/nvme/059
-@@ -0,0 +1,146 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-3.0+
-+# Copyright (C) 2025 Oracle and/or its affiliates
-+#
-+# Test NVMe Atomic Writes
-+
-+. tests/nvme/rc
-+. common/xfs
-+
-+DESCRIPTION="test atomic writes"
-+QUICK=1
-+
-+requires() {
-+	_nvme_requires
-+	_have_program nvme
-+	_have_xfs_io_atomic_write
-+}
-+
-+device_requires() {
-+	_require_device_support_atomic_writes
-+}
-+
-+test_device() {
-+	local ns_dev
-+	local ctrl_dev
-+	local queue_path
-+	local nvme_awupf
-+	local nvme_nsfeat
-+	local nvme_nsabp
-+	local atomic_max_bytes
-+	local statx_atomic_max
-+	local statx_atomic_min
-+	local sysfs_atomic_max_bytes
-+	local sysfs_atomic_unit_max_bytes
-+	local sysfs_atomic_unit_min_bytes
-+	local sysfs_logical_block_size
-+	local bytes_written
-+	local bytes_to_write
-+	local test_desc
-+
-+	echo "Running ${TEST_NAME}"
-+	ns_dev=${TEST_DEV##*/}
-+	ctrl_dev=${ns_dev%n*}
-+	queue_path="${TEST_DEV_SYSFS}/queue/"
-+
-+	test_desc="TEST 1 - Verify sysfs attributes"
-+
-+	sysfs_logical_block_size=$(cat "$queue_path"/logical_block_size)
-+	sysfs_max_hw_sectors_kb=$(cat "$queue_path"/max_hw_sectors_kb)
-+	max_hw_bytes=$(( "$sysfs_max_hw_sectors_kb" * 1024 ))
-+	sysfs_atomic_max_bytes=$(cat "$queue_path"/atomic_write_max_bytes)
-+	sysfs_atomic_unit_max_bytes=$(cat "$queue_path"/atomic_write_unit_max_bytes)
-+	sysfs_atomic_unit_min_bytes=$(cat "$queue_path"/atomic_write_unit_min_bytes)
-+
-+	if [ "$max_hw_bytes" -ge "$sysfs_atomic_max_bytes" ] &&
-+		[ "$sysfs_atomic_max_bytes" -ge "$sysfs_atomic_unit_max_bytes" ] &&
-+		[ "$sysfs_atomic_unit_max_bytes" -ge "$sysfs_atomic_unit_min_bytes" ]
-+	then
-+		echo "$test_desc - pass"
-+	else
-+		echo "$test_desc - fail $max_hw_bytes - $sysfs_max_hw_sectors_kb -" \
-+			"$sysfs_atomic_max_bytes - $sysfs_atomic_unit_max_bytes -" \
-+			"$sysfs_atomic_unit_min_bytes"
-+	fi
-+
-+	test_desc="TEST 2 - Verify sysfs atomic_write_unit_max_bytes is consistent "
-+	test_desc+="with NVMe AWUPF/NAWUPF"
-+	nvme_nsfeat=$(nvme id-ns /dev/"${ns_dev}" | grep nsfeat | awk '{ print $3}')
-+	nvme_nsabp=$((("$nvme_nsfeat" & 0x2) != 0))
-+	if [ "$nvme_nsabp" = 1 ] # Check if NSABP is set
-+	then
-+		nvme_awupf=$(nvme id-ns /dev/"$ns_dev" | grep nawupf | awk '{ print $3}')
-+		atomic_max_bytes=$(( ("$nvme_awupf" + 1) * "$sysfs_logical_block_size" ))
-+	else
-+		nvme_awupf=$(nvme id-ctrl /dev/"${ctrl_dev}" | grep awupf | awk '{ print $3}')
-+		atomic_max_bytes=$(( ("$nvme_awupf" + 1) * "$sysfs_logical_block_size" ))
-+	fi
-+	if [ "$atomic_max_bytes" -le "$max_hw_bytes" ]
-+	then
-+		if [ "$atomic_max_bytes" = "$sysfs_atomic_max_bytes" ]
-+		then
-+			echo "$test_desc - pass"
-+		else
-+			echo "$test_desc - fail $nvme_nsabp - $atomic_max_bytes - $sysfs_atomic_max_bytes -" \
-+				"$max_hw_bytes"
-+		fi
-+	else
-+		if [ "$sysfs_atomic_max_bytes" = "$max_hw_bytes" ]
-+		then
-+			echo "$test_desc - pass"
-+		else
-+			echo "$test_desc - fail $nvme_nsabp - $atomic_max_bytes - $sysfs_atomic_max_bytes -" \
-+				"$max_hw_bytes"
-+		fi
-+	fi
-+
-+	test_desc="TEST 3 - Verify statx is correctly reporting atomic_unit_max_bytes"
-+	statx_atomic_max=$(run_xfs_io_xstat /dev/"$ns_dev" "stat.atomic_write_unit_max")
-+	if [ "$sysfs_atomic_unit_max_bytes" = "$statx_atomic_max" ]
-+	then
-+		echo "$test_desc - pass"
-+	else
-+		echo "$test_desc - fail $statx_atomic_max - $sysfs_atomic_unit_max_bytes"
-+	fi
-+
-+	test_desc="TEST 4 - Verify statx is correctly reporting atomic_unit_min_bytes"
-+	statx_atomic_max=$(run_xfs_io_xstat /dev/"$ns_dev" "stat.atomic_write_unit_min")
-+	if [ "$sysfs_atomic_unit_min_bytes" = "$statx_atomic_max" ]
-+	then
-+		echo "$test_desc - pass"
-+	else
-+		echo "$test_desc - fail $statx_atomic_min - $sysfs_atomic_unit_min_bytes"
-+	fi
-+
-+	test_desc="TEST 5 - perform a pwritev2 with size of sysfs_atomic_unit_min_bytes with "
-+	test_desc+="RWF_ATOMIC flag - pwritev2 should  be successful"
-+	bytes_written=$(run_xfs_io_pwritev2_atomic /dev/"$ns_dev" "$sysfs_atomic_unit_min_bytes")
-+	if [ "$bytes_written" = "$sysfs_atomic_unit_min_bytes" ]
-+	then
-+		echo "$test_desc - pass"
-+	else
-+		echo "$test_desc - fail $bytes_written - $sysfs_atomic_unit_min_bytes"
-+	fi
-+
-+	test_desc="TEST 6 - perform a pwritev2 with size of sysfs_atomic_unit_max_bytes with "
-+	test_desc+="RWF_ATOMIC flag - pwritev2 should  be successful"
-+	bytes_written=$(run_xfs_io_pwritev2_atomic /dev/"$ns_dev" "$sysfs_atomic_unit_max_bytes")
-+	if [ "$bytes_written" = "$sysfs_atomic_unit_max_bytes" ]
-+	then
-+		echo "$test_desc - pass"
-+	else
-+		echo "$test_desc - fail $bytes_written - $sysfs_atomic_unit_max_bytes"
-+	fi
-+
-+	test_desc="TEST 7 - perform a pwritev2 with size of sysfs_atomic_unit_max_bytes + logical "
-+	test_desc+="block with RWF_ATOMIC flag - pwritev2 should not be successful"
-+	bytes_written=$(run_xfs_io_pwritev2_atomic /dev/"$ns_dev" "$bytes_to_write")
-+	if [ "$bytes_written" = "" ]
-+	then
-+		echo "$test_desc - pass"
-+	else
-+		echo "$test_desc - fail $bytes_written - $bytes_to_write"
-+	fi
-+
-+	echo "Test complete"
-+}
-diff --git a/tests/nvme/059.out b/tests/nvme/059.out
-new file mode 100644
-index 000000000000..d52a47a951dc
---- /dev/null
-+++ b/tests/nvme/059.out
-@@ -0,0 +1,9 @@
-+Running nvme/059
-+TEST 1 - Verify sysfs attributes - pass
-+TEST 2 - Verify sysfs atomic_write_unit_max_bytes is consistent with NVMe AWUPF/NAWUPF - pass
-+TEST 3 - Verify statx is correctly reporting atomic_unit_max_bytes - pass
-+TEST 4 - Verify statx is correctly reporting atomic_unit_min_bytes - pass
-+TEST 5 - perform a pwritev2 with size of sysfs_atomic_unit_min_bytes with RWF_ATOMIC flag - pwritev2 should  be successful - pass
-+TEST 6 - perform a pwritev2 with size of sysfs_atomic_unit_max_bytes with RWF_ATOMIC flag - pwritev2 should  be successful - pass
-+TEST 7 - perform a pwritev2 with size of sysfs_atomic_unit_max_bytes + logical block with RWF_ATOMIC flag - pwritev2 should not be successful - pass
-+Test complete
--- 
-2.43.5
+> Kind regards
+> Uffe
+> 
+>>
+>>
+>> Changes in v7:
+>> - add definitions for all kinds of hex values if possible
+>> - Misc log and comment improvement
+>> - use udelay for less than 10us cases
+>> - other improvements suggested by Mani
+>> - Use 0x0 for consistency
+>> - Collect Mani's acked-by tag
+>>
+>> Changes in v6:
+>> - fix indentation to 4 spaces suggested by Krzysztof
+>> - export dev_pm_genpd_rpm_always_on()
+>> - replace host drivers with glue drivers suggested by Mani
+>> - add Main's review tag
+>> - remove UFS_MAX_CLKS
+>> - improve err log
+>> - remove hardcoded clocks
+>> - remove comment from ufs_rockchip_device_reset()
+>> - remove pm_runtime_* from ufs_rockchip_remove()
+>> - rebase to scsi/next
+>> - move ufs_rockchip_set_pm_lvl to ufs_rockchip_rk3576_init()
+>> - add comments about device_set_awake_path()
+>> - remove comments suggested by Mani
+>>
+>> Changes in v5:
+>> - use ufshc for devicetree example suggested by Mani
+>> - fix a compile warning
+>> - use device_set_awake_path() and disable ref_out_clk in suspend
+>> - remove pd_id from header
+>> - reconstruct ufs_rockchip_hce_enable_notify() to workaround hce enable
+>>    without using new quirk
+>>
+>> Changes in v4:
+>> - properly describe reset-gpios
+>> - deal with power domain of rpm and spm suggested by Ulf
+>> - Fix typo and disable clks in ufs_rockchip_remove
+>> - remove clk_disable_unprepare(host->ref_out_clk) from
+>>    ufs_rockchip_remove
+>>
+>> Changes in v3:
+>> - rename the file to rockchip,rk3576-ufshc.yaml
+>> - add description for reset-gpios
+>> - use rockchip,rk3576-ufshc as compatible
+>> - reword Kconfig description
+>> - elaborate more about controller in commit msg
+>> - use rockchip,rk3576-ufshc for compatible
+>> - remove useless header file
+>> - remove inline for ufshcd_is_device_present
+>> - use usleep_range instead
+>> - remove initialization, reverse Xmas order
+>> - remove useless varibles
+>> - check vops for null
+>> - other small fixes for err path
+>> - remove pm_runtime_set_active
+>> - fix the active and inactive reset-gpios logic
+>> - fix rpm_lvl and spm_lvl to 5 and move to end of probe path
+>> - remove unnecessary system PM callbacks
+>> - use UFSHCI_QUIRK_DME_RESET_ENABLE_AFTER_HCE instead
+>>    of UFSHCI_QUIRK_BROKEN_HCE
+>>
+>> Changes in v2:
+>> - rename the file
+>> - add reset-gpios
+>>
+>> Shawn Lin (6):
+>>    dt-bindings: ufs: Document Rockchip UFS host controller
+>>    soc: rockchip: add header for suspend mode SIP interface
+>>    pmdomain: rockchip: Add smc call to inform firmware
+>>    scsi: ufs: core: Export ufshcd_dme_reset() and ufshcd_dme_enable()
+>>    scsi: ufs: rockchip: initial support for UFS
+>>    arm64: dts: rockchip: Add UFS support for RK3576 SoC
+>>
+>> Ulf Hansson (1):
+>>    pmdomain: core: Introduce dev_pm_genpd_rpm_always_on()
+>>
+>>   .../bindings/ufs/rockchip,rk3576-ufshc.yaml        | 105 ++++++
+>>   arch/arm64/boot/dts/rockchip/rk3576.dtsi           |  24 ++
+>>   drivers/pmdomain/core.c                            |  35 ++
+>>   drivers/pmdomain/rockchip/pm-domains.c             |   8 +
+>>   drivers/ufs/core/ufshcd.c                          |   6 +-
+>>   drivers/ufs/host/Kconfig                           |  12 +
+>>   drivers/ufs/host/Makefile                          |   1 +
+>>   drivers/ufs/host/ufs-rockchip.c                    | 353 +++++++++++++++++++++
+>>   drivers/ufs/host/ufs-rockchip.h                    |  90 ++++++
+>>   include/linux/pm_domain.h                          |   7 +
+>>   include/soc/rockchip/rockchip_sip.h                |   3 +
+>>   include/ufs/ufshcd.h                               |   2 +
+>>   12 files changed, 644 insertions(+), 2 deletions(-)
+>>   create mode 100644 Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
+>>   create mode 100644 drivers/ufs/host/ufs-rockchip.c
+>>   create mode 100644 drivers/ufs/host/ufs-rockchip.h
+>>
+>> --
+>> 2.7.4
+>>
+> 
 
 
