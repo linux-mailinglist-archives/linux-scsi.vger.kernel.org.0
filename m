@@ -1,120 +1,143 @@
-Return-Path: <linux-scsi+bounces-12148-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12153-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BC72A2F70F
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Feb 2025 19:30:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A4CCA2F84D
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 Feb 2025 20:14:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA807163078
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Feb 2025 18:30:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36A2E3A828D
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 Feb 2025 19:13:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AD0743AA1;
-	Mon, 10 Feb 2025 18:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BAA41C07F6;
+	Mon, 10 Feb 2025 19:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="Rj/CP3px"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="CmXi+liC"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
+Received: from fgw22-4.mail.saunalahti.fi (fgw22-4.mail.saunalahti.fi [62.142.5.109])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA50325B668;
-	Mon, 10 Feb 2025 18:30:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516F525E446
+	for <linux-scsi@vger.kernel.org>; Mon, 10 Feb 2025 19:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.109
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739212243; cv=none; b=VpGchlwxDG8eQCLxLGg2qya8kSBsbNqPeya8JOCjRi8/jGdgOKFJEaxjmFAEX2y+pIkS7boMSPn8zHSMzTMwLFu+FfOev0d4pVbk0MSzo8jK0MWQmtPDB+f4X0N8ahof85f39RBA3NQE47u4lsonJV4e8K5Wwa3D8dN7SaKBP/I=
+	t=1739214837; cv=none; b=aHPEreXc5XtzntHIjcCTQnMpZV7qIThjJE6p/ots4Df77ksHRY22Ypjfjn3FCbQHlckz90yO6Jr4sxzRp5RqR//c7A2IfKK46jEfpbC6Ngb63iiPW4MxfH6kH6/pfEhvtgm9sFmtnLr6vbjXHi+nJ47JgGepWiXDd05BeMLZjJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739212243; c=relaxed/simple;
-	bh=NpUbqGXrMouY2GQCefFrHJh2xQhsDigKdnZDZh70UiQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LfAsVI/8q47CRGMFvAh+0qxrxMyfDF+JBmqmp5tde/y0/MMpbV+pC+z2Pehy6DBy4udElvtjdS/XdaJONPaqO4QTAyhsUN3xdMEi3z1L810nqTpUs9AYvSI4dbvUuZFNAX4eagU3OgB4+HC5brLR6WH3YcF78x0t7M3PAZhBk/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=Rj/CP3px; arc=none smtp.client-ip=199.89.1.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4YsCn70DPQzlgTxL;
-	Mon, 10 Feb 2025 18:30:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1739212232; x=1741804233; bh=rvjXTLcQM3fw49GIJv8Wb69W
-	nr2JbJyCdGw5e7OGk9g=; b=Rj/CP3pxeFjJyhOywyYi0inr0oyXYvb1xlmTUyDZ
-	o5ZjJ6UgzpiaFTE952nBVcB9IH0LSHlOmUdppFyUAVnZH0BTOIfDnR6mvQh5WzOK
-	6TxfiUKnUrpZSjIFlzYVL0twZLlGKBpPdJIc4uGIh5xzqmTDameZQaQnRzUuQjj6
-	ClibSEwY6zXy/Y3qGE6KkAFihrm9FbkiOboLt/XSUIoXCFNL5sYFnVrAk3eh7uOe
-	T6jLGrv/+XcF6YxfINOarbyHMbxm5bzGL5zoqTld2VrctDZLp+aTrx1m0NeofDcu
-	X6C39ImuQkD1dyv+miL0yVH8S03iaLEwX9z1y+OjVrGntQ==
-X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id pbDLEYCiXs9e; Mon, 10 Feb 2025 18:30:32 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4YsCn412T9zlgTwM;
-	Mon, 10 Feb 2025 18:30:31 +0000 (UTC)
-Message-ID: <01d47263-50a1-4626-ad34-446996ac970e@acm.org>
-Date: Mon, 10 Feb 2025 10:30:31 -0800
+	s=arc-20240116; t=1739214837; c=relaxed/simple;
+	bh=RdukJlXL3e8iMBMbSLxpEJ2CYU6lcGDm4DJnPHHSmbs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Y0FCxrFWjce9tk8ZSW6nZmHVLp2i/nVg9NcQ9xMeNVhFzsCmqKyxLp8TTqVtnKmJ0/pDUFmwmojD8ebjkhEZvBqfSBol7ejwu47Gs79xwRxJ9pYPQDRFO3lsCnOZFJ5ZM2C6RTmXmRK1YmTR2UuVhufwMfzLywObA/Csr5DGat8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=CmXi+liC; arc=none smtp.client-ip=62.142.5.109
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=kolumbus.fi; s=elisa1;
+	h=content-transfer-encoding:content-type:mime-version:message-id:date:subject:
+	 cc:to:from:from:to:cc:reply-to:subject:date:in-reply-to:references:
+	 list-archive:list-subscribe:list-unsubscribe:content-type:
+	 content-transfer-encoding:message-id;
+	bh=oAWVpQxTu6bxmENpl9haW4tJqo7K5S8cJqw6MNnlW8M=;
+	b=CmXi+liCle1bBr+XcvzSwZgM2MYaJt0e4JT1tqupX65vD0H50KE1kKnyIlgzK4kQ//VxdGwlcGNPx
+	 G3WspUfP4A1SlZQrxWsQy6nlcQRCbAhZ5gF/CdLp2nA0Xxh3N3avLSN5PBjDanzz1/KovKH4uUvUCz
+	 2FzHSuiGAQBCMr3v6yFJMYW/aRWESNQEY7UezC+xuDAB4BpgbpqVqsm7gx3+LA2hJfN0n45lnoUNRj
+	 vb033iJJXLmwmKUYL9B9tGNS0InCxnx0dh0lzwtJT5JNKHN2D20Tv2ujsi9VRDQPyjsNKDkjqpsi6x
+	 jmIfp6X0XezYiD1prxhqLWlPI/X4c8g==
+Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
+	by fgw23.mail.saunalahti.fi (Halon) with ESMTPSA
+	id 013bfdcc-e7e3-11ef-a27d-005056bdfda7;
+	Mon, 10 Feb 2025 21:12:44 +0200 (EET)
+From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
+To: linux-scsi@vger.kernel.org,
+	dgilbert@interlog.com
+Cc: martin.petersen@oracle.com,
+	James.Bottomley@HansenPartnership.com,
+	jmeneghi@redhat.com,
+	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
+Subject: [PATCH v1 0/7] scsi: scsi_debug: Add more tape support
+Date: Mon, 10 Feb 2025 21:12:25 +0200
+Message-ID: <20250210191232.185207-1-Kai.Makisara@kolumbus.fi>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] scsi: ufs: critical health condition
-To: Avri Altman <avri.altman@wdc.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250210135814.50783-1-avri.altman@wdc.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20250210135814.50783-1-avri.altman@wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 2/10/25 5:58 AM, Avri Altman wrote:
-> To handle this new `sysfs` entry, either `udev` rules or some other
-> polling code can be configured to monitor changes in the
-> `critical_health` attribute.
+Currently, the scsi_debug driver can create tape devices and the st
+driver attaches to those. Nothing much can be done with the tape devices
+because scsi_debug does not have support for the tape-specific commands
+and features. These patches add some more tape support to the scsi_debug
+driver. The end result is simulated drives with a tape having one or two
+partitions (one partition is created initially).
 
-Hmm ... I'm not aware of any support in udevd to poll on sysfs
-attributes? I think that calling select(), poll() or epoll() is required
-to wait for a sysfs_notify() call.
+The tape is implemented as fixed number (10 000) of 8-byte units.
+The first four bytes of a unit contain the type of the unit (data
+block, filemark or end-of-data mark). If the units is a data block,
+the first four bytes also contain the block length and the remaining
+four bytes the first bytes of written data. This allows the user
+to use tags to see that the read block is what it was supposed to be.
 
-> +Description:	Report the number of times a critical health event has been
-> +		reported by a UFS device. further insight into the specific
+The following SCSI operations are added or modified:
+FORMAT MEDIUM
+- added
+LOCATE
+- added
+MODE SELECT
+- modified to allow use without page(s) (just header and block descriptor)
+  - store density and block size
+- partition page added
+MODE SENSE
+- modified to allow use without page(s) (just header and block descriptor)
+  - set density and block size
+- partition page added
+READ BLOCK LIMITS
+- added
+READ POSITION
+- added
+READ
+- added tape support for READ (6)
+REWIND
+- modified to set the tape position
+SPACE
+- added
+START STOP (LOAD)
+- modified to return New Medium Unit Attention if tape loaded (not
+  according to the standard, but enables testing this UA)
+WRITE
+- added tape support for WRITE (6)
+WRITE FILEMARKS
+- added
 
-further -> Further?
+Changes RFC -> v1:
+- rebased to v6.14-rc1
+- virtual tape initialization is rewritten and the tape is made shorter
+  (10 000 units)
+- only one partition is created initially
+- tape block allocation is moved to sdev_configure()
+- tape blocks are freed in sdev_destroy()
+- block size must be multiple of four (SSC standard)
+- granularity set to four in READ BLOCK LIMITS
+- long LBA not allowed for tapes in MODE SELECT/SENSE
+- READ POSITION checks allocation length
+- new patch 7 adds support for re-partitioning the tape
 
-> +static ssize_t critical_health_show(struct device *dev,
-> +				    struct device_attribute *attr, char *buf)
-> +{
-> +	struct ufs_hba *hba = dev_get_drvdata(dev);
-> +
-> +	return sysfs_emit(buf, "%d\n", hba->critical_health);
-> +}
+Kai Mäkisara (7):
+  scsi: scsi_debug: First fixes for tapes
+  scsi: scsi_debug: Add READ BLOCK LIMITS and modify LOAD for tapes
+  scsi: scsi_debug: Add write support with block lengths  and 4 bytes of
+    data
+  scsi: scsi_debug: Add read support and update locate for tapes
+  scsi: scsi_debug: Add compression mode page for tapes
+  scsi: scsi_debug: Reset tape setting at device reset
+  scsi: scsi_debug: Add support for partitioning the tape
 
-Now that the data type of hba->critical_health has been changed from
-boolean into integer, should its name perhaps be changed into
-hba->critical_health_count?
+ drivers/scsi/scsi_debug.c | 775 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 761 insertions(+), 14 deletions(-)
 
-> @@ -1130,6 +1131,9 @@ struct ufs_hba {
->   	struct delayed_work ufs_rtc_update_work;
->   	struct pm_qos_request pm_qos_req;
->   	bool pm_qos_enabled;
-> +
-> +	/* HEALTH_CRITICAL exception reported */
-> +	int critical_health;
->   };
+-- 
+2.43.0
 
-Please leave out the inline comment since @critical_health already
-has a kernel-doc comment.
-
-Thanks,
-
-Bart.
 
