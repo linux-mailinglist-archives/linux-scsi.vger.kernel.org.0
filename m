@@ -1,165 +1,166 @@
-Return-Path: <linux-scsi+bounces-12132-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12134-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66694A2E890
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Feb 2025 11:04:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BB06A2E8CD
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 Feb 2025 11:14:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A40F3AA3E0
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Feb 2025 10:04:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1ADF516325E
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 Feb 2025 10:14:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4C491E2613;
-	Mon, 10 Feb 2025 10:03:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AF161C5D7A;
+	Mon, 10 Feb 2025 10:13:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hBkaZMdZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mj5b6uYH"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32C81E1C36;
-	Mon, 10 Feb 2025 10:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69ED1C6FE3
+	for <linux-scsi@vger.kernel.org>; Mon, 10 Feb 2025 10:13:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739181786; cv=none; b=lWMQMFrLkn3adoudykNDtn4RkyHu45x9Cw/0BXoL38m3hsaLCik5m8OiBZBzwtTdjvTvqdsm6EkZ2oDm6zPlxcBi9NC4zJQJ2o582+m+RuLnsiC7+sC3buQlxI8VqbvW0sxTG8GpP5OkP6YUbS4FjHAzSz56Ex0sTIwzevTsaYs=
+	t=1739182428; cv=none; b=INqaqQnX1LnpxNs9MxjnnoNEEAhw7qVD2QIXDjtQSqPjW+PcjSeiucJQBcG8uo1Pz2A56pIpXEXl1Cde9TBxN+QEGmCmfcdh2Tu/ndh9KB7XVvoLsdd3XKZ9wgCcpRjVAQylJ891ZjC6QnGLO+Dp+qwjBp5OWFdXYqdyS4PP6vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739181786; c=relaxed/simple;
-	bh=Vl7CYpPKWjPlphD0cTwlIw32L5/caGHj9VS8wq3Zrks=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XGmwro4OVUb4GaGq1s0mbi+z7KQVyZcrEdwI34cSonq6Acjq/GjLzeoE6++4H6p5duS34x8vdjRfsB1WWe7XuIENCdUKKgDwghDJM3v/YeHVFAQzVkIGNC7dqLJbzofWv/haTjGg7ErXrGQn21dPr8ForqDa7Y3j5pJrqVwlews=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=hBkaZMdZ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51A8esAJ006164;
-	Mon, 10 Feb 2025 10:02:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=xzhBDGZU8rg
-	1LGotryfUoD70f6sS8G30bKU0B7m5h5s=; b=hBkaZMdZ+hbQiX5JbmPQ5/8aZ+H
-	GwAJsu7MzIP5FIMtuHLcp3p7syQ3QrA4GrRMtt668ZdSMu9ILuia4pBpqNmnqboM
-	k1DeSY6zvOgcK9v2hUjbZdmWaywxEUCMqWw77MUwGfUAFCqJDuFNhFbsR7EIdAwJ
-	KxraI5571iCj6+qxtJaTGgYtdtbugo97HJJenc1oYlTofTFOC52LGlj62bAwdU57
-	kqEMl8CsVFqlE354NSOAOkB1lgguM4t+2QkKah1ZCQXGBKNEOliUMSUW+CRAWAcr
-	H14XeVHcxtbzJvP6MtIzdiSLB1xd0OfMX8KDaHcVvq2rtjgmIJGlA/TW5Sw==
-Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44qe5mr8fn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 10 Feb 2025 10:02:50 +0000 (GMT)
-Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-	by APTAIPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 51AA2mTq012156;
-	Mon, 10 Feb 2025 10:02:48 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APTAIPPMTA01.qualcomm.com (PPS) with ESMTPS id 44p0bkj1hf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 10 Feb 2025 10:02:48 +0000
-Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 51AA2lha012151;
-	Mon, 10 Feb 2025 10:02:47 GMT
-Received: from cbsp-sh-gv.ap.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
-	by APTAIPPMTA01.qualcomm.com (PPS) with ESMTPS id 51AA2lJC012150
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 10 Feb 2025 10:02:47 +0000
-Received: by cbsp-sh-gv.ap.qualcomm.com (Postfix, from userid 393357)
-	id BE5B540BF7; Mon, 10 Feb 2025 18:02:46 +0800 (CST)
-From: Ziqi Chen <quic_ziqichen@quicinc.com>
-To: quic_cang@quicinc.com, bvanassche@acm.org, mani@kernel.org,
-        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
-        martin.petersen@oracle.com, quic_ziqichen@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_nitirawa@quicinc.com,
-        quic_rampraka@quicinc.com
-Cc: linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Keoseong Park <keosung.park@samsung.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v4 8/8] ABI: sysfs-driver-ufs: Add missing UFS sysfs attributes
-Date: Mon, 10 Feb 2025 18:02:11 +0800
-Message-Id: <20250210100212.855127-9-quic_ziqichen@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250210100212.855127-1-quic_ziqichen@quicinc.com>
-References: <20250210100212.855127-1-quic_ziqichen@quicinc.com>
+	s=arc-20240116; t=1739182428; c=relaxed/simple;
+	bh=yj9rNLDdRjUxGP5fU6NuyeHJVUHXyiKig/1natwetyo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qVgKNhOGA5dlb4ZXtXqfU/Mp3FAAS11X5s2HhqjoVbegq0URNdMZNLD/f3UiDT+If85vOD7VcGupu+TOM/fd0O2/5RHlMnq5+FmxNxFwfLR7/u9vi8+RtasLtE3TgMxG0yQzam9rw3RbzEznjkupTfEpZB95wPeeTOLxC3tP8bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mj5b6uYH; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-21f62cc4088so35675855ad.3
+        for <linux-scsi@vger.kernel.org>; Mon, 10 Feb 2025 02:13:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739182425; x=1739787225; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YVno5Sq7zwbs75yBnVZY8GdclIkXa079v3wSCbF6j08=;
+        b=mj5b6uYHOl13szZ59naCjJ0synW1GL5Tae4JBeX43Ddwjmg7kdxrW2GON3IG0bw4iR
+         UMLdf0ef6S/IxmYfxDugx8BThvXDR5LnO0E9njC02HCRLZLr8JqMdws2Nq8T9STbmgo/
+         rLsDDNDmL6WMEebre6TxDHkgoJ78id9L9pqb0akSOtDKRTAyJYNK+xM5+2ArSp752RUS
+         CLF4rrtdGAHv9FXgefNkVb+7tc7up86Wbzsq1KTuUc2Bi1/5VIWJ4GZrR3OOwnSf55DM
+         2IolmAJUUAz/f1L0dsVtVmRO9u//7tS4486HvFHiBNSi2VCDGaz0g0bjPB/W5u5f/1QU
+         V8Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739182425; x=1739787225;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YVno5Sq7zwbs75yBnVZY8GdclIkXa079v3wSCbF6j08=;
+        b=InVylDKgCcuhnW0U8WBUnA/Ke741pR/ApmQ0SLZV3pCf9sDXKevY+SZF66ipAcYwS0
+         I74TvK8MVS2fc2giMMAXdnKm+JT7RcpmxMKH3CM22PUGGEZIHkKaWZMdi/Jc2d3XcaHE
+         d3Hv+U7rSjq88+RPnZ3TjQcGbMNdh1Opy5BlF26QI6CO5L70vtyKD1sld1eSR67EPjiy
+         ZZ3sSyh1yUrYoaKzVAUzDy7phliq6/BpPAhSmoDbCJJOLWIdDyoRKuKfATkoIDdT9MFD
+         FBaJ8SjZkZep1Z5xno6iUvgBPGvXpyBtePsRc+1+U9EhlvvumXBAUYFI1HANA4d+AM/8
+         n3Gg==
+X-Forwarded-Encrypted: i=1; AJvYcCUJC/Q00UMClfHGGuP3Y1NaM0uXsVpU7uEhmPwP8l0Xk7osGbxtYDKJ23IQzFNpP1iD0s1KC4DCU+NI@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGQoFYIF5HtjejXUS1vMWwXYZuxYOd6kYKnbRF+2SJWq08TTtW
+	WDXhholh4dI3dWwmvgCxAvvm3GMerMfH0nDH1fCdWroXupo6oj8D8+EhOga+5o5TsLIQSp6qnzk
+	=
+X-Gm-Gg: ASbGncu39ZB6RNYGFNSDagJ0EBYScSFFldtAPkGKkaq/OF+3nc2AK+cm3/oW+bKrh0v
+	hS3A5kSMQBQZNP73tegoFcGsGaWbsODajjtODYPGis4YuBk19+/Rtz0wWYOlphVevbDWOge4KB1
+	9Y3sKdVwZhsQRP8N0aTJhEe7DfOSQhC7ww8fv+wMM7qNqp/iicQbxfhfG1i37poeN7rkxmoioAT
+	uMT/VtFLaXn/o6dGGA35PDfl3gcIa7HK+NtY/p3rK6X/VXSI9sUFDF3CjK+l0MjBZQAcI0qetiE
+	yUuW4BkjmteOznl8yJAd539MICYR
+X-Google-Smtp-Source: AGHT+IGUVt1XLeTQyYh8zx2PixPGHrQEZjH5CD8Qy4yBx4PREyPgzsVLxt7fw++6KdqziWtaewNdvA==
+X-Received: by 2002:a05:6a20:d705:b0:1ed:a72f:dab5 with SMTP id adf61e73a8af0-1ee03b64561mr26246724637.36.1739182425181;
+        Mon, 10 Feb 2025 02:13:45 -0800 (PST)
+Received: from thinkpad ([220.158.156.173])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ad54e4a0049sm2072320a12.63.2025.02.10.02.13.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2025 02:13:44 -0800 (PST)
+Date: Mon, 10 Feb 2025 15:43:38 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: neil.armstrong@linaro.org, quic_cang@quicinc.com
+Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Melody Olvera <quic_molvera@quicinc.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Andy Gross <agross@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+	Trilok Soni <quic_tsoni@quicinc.com>, linux-arm-msm@vger.kernel.org,
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+	Nitin Rawat <quic_nitirawa@quicinc.com>,
+	Manish Pandey <quic_mapa@quicinc.com>
+Subject: Re: [PATCH 0/5] Add UFS support for SM8750
+Message-ID: <20250210101338.boziqlrxl2cei775@thinkpad>
+References: <20250113-sm8750_ufs_master-v1-0-b3774120eb8c@quicinc.com>
+ <c6352263-8329-4409-b769-a22f98978ac8@oss.qualcomm.com>
+ <20250209152140.cyry6g7ltccxcmyj@thinkpad>
+ <ae9ba351-53c8-4389-b13b-7b23926a8390@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: yN9U9HwjFErnxI9kEP28W1ak-O7Gyx1E
-X-Proofpoint-ORIG-GUID: yN9U9HwjFErnxI9kEP28W1ak-O7Gyx1E
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-10_05,2025-02-10_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 clxscore=1015 suspectscore=0 mlxscore=0
- lowpriorityscore=0 phishscore=0 impostorscore=0 malwarescore=0 spamscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2501170000 definitions=main-2502100084
+In-Reply-To: <ae9ba351-53c8-4389-b13b-7b23926a8390@linaro.org>
 
-Add UFS driver sysfs attributes clkscale_enable, clkgate_enable and
-clkgate_delay_ms to this doucment.
++ Can (for the MCQ query)
 
-Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
----
-v1 -> v2:
-It is a new patch be added to this series since v2.
+On Mon, Feb 10, 2025 at 10:39:04AM +0100, neil.armstrong@linaro.org wrote:
+> On 09/02/2025 16:21, Manivannan Sadhasivam wrote:
+> > On Fri, Feb 07, 2025 at 11:47:12PM +0100, Konrad Dybcio wrote:
+> > > On 13.01.2025 10:46 PM, Melody Olvera wrote:
+> > > > Add UFS support for SM8750 SoCs.
+> > > > 
+> > > > Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> > > > ---
+> > > > Nitin Rawat (5):
+> > > >        dt-bindings: phy: qcom,sc8280xp-qmp-ufs-phy: Document the SM8750 QMP UFS PHY
+> > > >        phy: qcom-qmp-ufs: Add PHY Configuration support for SM8750
+> > > >        dt-bindings: ufs: qcom: Document the SM8750 UFS Controller
+> > > >        arm64: dts: qcom: sm8750: Add UFS nodes for SM8750 SoC
+> > > >        arm64: dts: qcom: sm8750: Add UFS nodes for SM8750 QRD and MTP boards
+> > > 
+> > > You still need the same workaround 8550/8650 have in the UFS driver
+> > > (UFSHCD_QUIRK_BROKEN_LSDBS_CAP) for it to work reliably, or at least
+> > > that was the case for me on a 8750 QRD.
+> > > 
+> > > Please check whether we can make that quirk apply based on ctrl
+> > > version or so, so that we don't have to keep growing the compatible
+> > > list in the driver.
+> > > 
+> > 
+> > That would be a bizarre. When I added the quirk, I was told that it would affect
+> > only SM8550 and SM8650 (this one I learned later). I'm not against applying the
+> > quirk based on UFSHC version if the bug is carried forward, but that would be an
+> > indication of bad design.
+> 
+> Isn't 8750 capable of using MCQ now ? because this is the whole issue behind
+> this UFSHCD_QUIRK_BROKEN_LSDBS_CAP, it's supposed to use MCQ by default... but
+> we don't.
+> 
+> Is there any news about that ? It's a clear regression against downstream, not
+> having MCQ makes the UFS driver struggle to reach high bandwidth when the system
+> is busy because we can't spread the load over all CPUs and we have only single
+> queue to submit requests.
+> 
 
-v2 -> v3:
-1. Typo fixed for commit message.
-2. Improve the grammar of attributes' descriptions.
+There are hardware issues on SM8550 and SM8650(?) for the MCQ feature.
+Apparently, Qcom carries the workaround in downstream, but I got tired of
+pushing them to upstream the fix(es).
 
-V3 -> v4:
-The use of words is more standardized.
----
- Documentation/ABI/testing/sysfs-driver-ufs | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+Maybe Can Guo can share what is the latest update on this.
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
-index 5fa6655aee84..da8d1437d3f4 100644
---- a/Documentation/ABI/testing/sysfs-driver-ufs
-+++ b/Documentation/ABI/testing/sysfs-driver-ufs
-@@ -1559,3 +1559,36 @@ Description:
- 		Symbol - HCMID. This file shows the UFSHCD manufacturer id.
- 		The Manufacturer ID is defined by JEDEC in JEDEC-JEP106.
- 		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/clkscale_enable
-+What:		/sys/bus/platform/devices/*.ufs/clkscale_enable
-+Date:		January 2025
-+Contact:	Ziqi Chen <quic_ziqichen@quicinc.com>
-+Description:
-+		This attribute shows whether the UFS clock scaling is enabled or not.
-+		And it can be used to enable/disable the clock scaling by writing
-+		1 or 0 to this attribute.
-+
-+		The attribute is read/write.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/clkgate_enable
-+What:		/sys/bus/platform/devices/*.ufs/clkgate_enable
-+Date:		January 2025
-+Contact:	Ziqi Chen <quic_ziqichen@quicinc.com>
-+Description:
-+		This attribute shows whether the UFS clock gating is enabled or not.
-+		And it can be used to enable/disable the clock gating by writing
-+		1 or 0 to this attribute.
-+
-+		The attribute is read/write.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/clkgate_delay_ms
-+What:		/sys/bus/platform/devices/*.ufs/clkgate_delay_ms
-+Date:		January 2025
-+Contact:	Ziqi Chen <quic_ziqichen@quicinc.com>
-+Description:
-+		This attribute shows and sets the number of milliseconds of idle time
-+		before the UFS driver starts to perform clock gating. This can
-+		prevent the UFS from frequently performing clock gating/ungating.
-+
-+		The attribute is read/write.
+- Mani
+
 -- 
-2.34.1
-
+மணிவண்ணன் சதாசிவம்
 
