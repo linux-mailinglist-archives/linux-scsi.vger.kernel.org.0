@@ -1,166 +1,149 @@
-Return-Path: <linux-scsi+bounces-12251-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12253-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B3C4A33987
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Feb 2025 09:03:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3C0CA33B3B
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Feb 2025 10:28:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F7591889579
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Feb 2025 08:03:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA6803A5689
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Feb 2025 09:26:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDFEB20E71F;
-	Thu, 13 Feb 2025 08:01:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B84ED20C49C;
+	Thu, 13 Feb 2025 09:27:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Nmb/QxB+"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="iM92DcV1"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from fgw22-4.mail.saunalahti.fi (fgw22-4.mail.saunalahti.fi [62.142.5.109])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3332620B7F3;
-	Thu, 13 Feb 2025 08:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 211B8202C27
+	for <linux-scsi@vger.kernel.org>; Thu, 13 Feb 2025 09:26:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.109
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739433684; cv=none; b=XL6yKxYw9B+Eqra+GvCTU4MJYE20ydWE2PJUNczru8o86pqjfmJ9UL95XZAtN+TBL9eODPSef0H6YqU8jrPjCbQn5+EKGyAGUU1rSpvo5LlSGXmu63F9h0TbrbTrY/5LD7Gzw7hekut0ul4uersXbt+Iw5D6yDkUH0SZVExidgo=
+	t=1739438820; cv=none; b=LYXqtFIZS5/5BoPP56vdIcEDxE2+drtJTMbxF4HHHvLW03j3EjK0mDYvq/cLFXoF19dBAX7nUhkSan8H0hyAp0arteG16tvJCRKgKJIF6+yWoJC/bGvr6nTsVPuRd60zgVOyHurFUTwcofPFAhkZt867NKtlAWfWKu8IlaC5xXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739433684; c=relaxed/simple;
-	bh=2HK6VWx6yAUzF3Tt49auVHEajJ0MfgYz8UUqOM9LsWc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MJDmOOmkjPBS+sVcJzUC2o/0+bTF6VY63ygTYjsAON22tTNbNPFGapeCUl8FhkaVrj7U6Vy45JLo5Kx+RahTLr3XS+aqT0BRj5g8snQJmdFpOOWt+poasIQYHC7DLefSSoWDy41W9Equ1ksPk9cD4e4Lp2n1k/DUePx82PX4tXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Nmb/QxB+; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51D7E0GM012216;
-	Thu, 13 Feb 2025 08:01:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=zeNKoNUXWN7
-	q38WKulb9c2j79Cq4wy2sVXGqubIieEY=; b=Nmb/QxB+pQOpGBRpXD/KTG6H/Dd
-	VLaBIeWXJhuCMwbV+wD9C8YNBaVdBUWVcv5Zlp6M6ulXoZc5cPHXbCazj6gRTJNJ
-	NRY+gzfUJWRyrF6slB0q/Pq8t7EsExyfiN6b9cprmAl7U3ycEsHjz9AhDDN6vfVs
-	XPL9auzZGvJMZwaillzO4UGt1EaBKnJQnQcHnjVUFETdtH+vK0OaBLUwAmFR8TdW
-	SVMyJ53zLAorM5IZ7wcpvqhgYlW2mrzCk72k3q/8a50/yWdL1YTdA7T961Z97K6V
-	H/fbjT7bSWFaUrOkjVRCJ9tee0UNoV50H0BBd4inFVE8LfHXbn6eNQkIQWg==
-Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44sc5u83g1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 13 Feb 2025 08:01:02 +0000 (GMT)
-Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-	by APTAIPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 51D80mnJ031719;
-	Thu, 13 Feb 2025 08:00:59 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APTAIPPMTA01.qualcomm.com (PPS) with ESMTPS id 44p0bkyak7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 13 Feb 2025 08:00:59 +0000
-Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 51D80xIq032213;
-	Thu, 13 Feb 2025 08:00:59 GMT
-Received: from cbsp-sh-gv.ap.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
-	by APTAIPPMTA01.qualcomm.com (PPS) with ESMTPS id 51D80wKI032212
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 13 Feb 2025 08:00:59 +0000
-Received: by cbsp-sh-gv.ap.qualcomm.com (Postfix, from userid 393357)
-	id F016840C04; Thu, 13 Feb 2025 16:00:57 +0800 (CST)
-From: Ziqi Chen <quic_ziqichen@quicinc.com>
-To: quic_cang@quicinc.com, bvanassche@acm.org, mani@kernel.org,
-        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
-        martin.petersen@oracle.com, quic_ziqichen@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_nitirawa@quicinc.com,
-        peter.wang@mediatek.com, quic_rampraka@quicinc.com
-Cc: linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Keoseong Park <keosung.park@samsung.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v5 8/8] ABI: sysfs-driver-ufs: Add missing UFS sysfs attributes
-Date: Thu, 13 Feb 2025 16:00:08 +0800
-Message-Id: <20250213080008.2984807-9-quic_ziqichen@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250213080008.2984807-1-quic_ziqichen@quicinc.com>
-References: <20250213080008.2984807-1-quic_ziqichen@quicinc.com>
+	s=arc-20240116; t=1739438820; c=relaxed/simple;
+	bh=ctSt3PU/y7Efv3KN2C20hb49uYKOL4AOQkHGR1Siml4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Br1CVzRi/3JGeRr0uR2C57bfJvOHgR0BzpF5RzjUUo6aIpVIaSN3g3LLMrsdqPOZcDRPTLaDbOxp6jbx6YSipRpytW+HcClflwHIZI7hRd7z2AF6B//cl9IE/erBYL0vISqyOHGtFnwCKr18VETrFF0hKiLL4Wt+etHx5iRg1LY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=iM92DcV1; arc=none smtp.client-ip=62.142.5.109
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=kolumbus.fi; s=elisa1;
+	h=content-transfer-encoding:content-type:mime-version:message-id:date:subject:
+	 cc:to:from:from:to:cc:reply-to:subject:date:in-reply-to:references:
+	 list-archive:list-subscribe:list-unsubscribe:content-type:
+	 content-transfer-encoding:message-id;
+	bh=j3M9u/zgiktae9Zl/x49EzDO+MTs+UdVR1gdFZYAu6k=;
+	b=iM92DcV1uHIDp+wEkA1+CmlZZUPuc0i+RzvTAFekfQ1irUGzfTsIyhR0XXFiWgn2Ik0cScQ5m9emH
+	 +26bFJxicyZ/pomhNwHHfiCfLNfWlTgsTEZOcVLMGAPbStfB3b5uNrnkL8kQP8e9jrFr0/MijAJ9KE
+	 ms6fA/5jxoZ9ZDqwT1AWucx+lBicpDiEraTKpu9B0JF0/2YrGKZzqPx0EV2zZmmtWjLziYJENnmhMF
+	 REsohTVLrXeeUw4sfT3Zkovuaz4f5wPiJsViTA/sjKxNqQOrP2dzrhVCedju6qomwWE7rUENB1OM2W
+	 8ztVkxGWVl8DIFzkNPN9cQBTnlKd51Q==
+Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
+	by fgw22.mail.saunalahti.fi (Halon) with ESMTPSA
+	id a52e450f-e9ec-11ef-838a-005056bdf889;
+	Thu, 13 Feb 2025 11:26:47 +0200 (EET)
+From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
+To: linux-scsi@vger.kernel.org,
+	dgilbert@interlog.com
+Cc: martin.petersen@oracle.com,
+	James.Bottomley@HansenPartnership.com,
+	jmeneghi@redhat.com,
+	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
+Subject: [PATCH v2 0/7] scsi: scsi_debug: Add more tape support
+Date: Thu, 13 Feb 2025 11:26:29 +0200
+Message-ID: <20250213092636.2510-1-Kai.Makisara@kolumbus.fi>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ltfJGUWqJY3Ek81kOMh5sfRhD7Km-p8n
-X-Proofpoint-ORIG-GUID: ltfJGUWqJY3Ek81kOMh5sfRhD7Km-p8n
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-13_02,2025-02-11_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 suspectscore=0 lowpriorityscore=0 malwarescore=0
- mlxscore=0 bulkscore=0 mlxlogscore=999 adultscore=0 phishscore=0
- spamscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2501170000 definitions=main-2502130060
 
-Add UFS driver sysfs attributes clkscale_enable, clkgate_enable and
-clkgate_delay_ms to this document.
+Currently, the scsi_debug driver can create tape devices and the st
+driver attaches to those. Nothing much can be done with the tape devices
+because scsi_debug does not have support for the tape-specific commands
+and features. These patches add some more tape support to the scsi_debug
+driver. The end result is simulated drives with a tape having one or two
+partitions (one partition is created initially).
 
-Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
-Reviewed-by: Bean Huo <beanhuo@micron.com>
----
-v1 -> v2:
-It is a new patch be added to this series since v2.
+The tape is implemented as fixed number (10 000) of 8-byte units.
+The first four bytes of a unit contain the type of the unit (data
+block, filemark or end-of-data mark). If the units is a data block,
+the first four bytes also contain the block length and the remaining
+four bytes the first bytes of written data. This allows the user
+to use tags to see that the read block is what it was supposed to be.
 
-v2 -> v3:
-1. Typo fixed for commit message.
-2. Improve the grammar of attributes' descriptions.
+The following SCSI operations are added or modified:
+FORMAT MEDIUM
+- added
+LOCATE
+- added
+MODE SELECT
+- modified to allow use without page(s) (just header and block descriptor)
+  - store density and block size
+- partition page added
+MODE SENSE
+- modified to allow use without page(s) (just header and block descriptor)
+  - set density and block size
+- partition page added
+READ BLOCK LIMITS
+- added
+READ POSITION
+- added
+READ
+- added tape support for READ (6)
+REWIND
+- modified to set the tape position
+SPACE
+- added
+START STOP (LOAD)
+- modified to return New Medium Unit Attention if tape loaded (not
+  according to the standard, but enables testing this UA)
+WRITE
+- added tape support for WRITE (6)
+WRITE FILEMARKS
+- added
 
-V3 -> v4:
-The use of words is more standardized.
----
- Documentation/ABI/testing/sysfs-driver-ufs | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+Changes RFC -> v1:
+- rebased to v6.14-rc1
+- virtual tape initialization is rewritten and the tape is made shorter
+  (10 000 units)
+- only one partition is created initially
+- tape block allocation is moved to sdev_configure()
+- tape blocks are freed in sdev_destroy()
+- block size must be multiple of four (SSC standard)
+- granularity set to four in READ BLOCK LIMITS
+- long LBA not allowed for tapes in MODE SELECT/SENSE
+- READ POSITION checks allocation length
+- new patch 7 adds support for re-partitioning the tape
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
-index 5fa6655aee84..da8d1437d3f4 100644
---- a/Documentation/ABI/testing/sysfs-driver-ufs
-+++ b/Documentation/ABI/testing/sysfs-driver-ufs
-@@ -1559,3 +1559,36 @@ Description:
- 		Symbol - HCMID. This file shows the UFSHCD manufacturer id.
- 		The Manufacturer ID is defined by JEDEC in JEDEC-JEP106.
- 		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/clkscale_enable
-+What:		/sys/bus/platform/devices/*.ufs/clkscale_enable
-+Date:		January 2025
-+Contact:	Ziqi Chen <quic_ziqichen@quicinc.com>
-+Description:
-+		This attribute shows whether the UFS clock scaling is enabled or not.
-+		And it can be used to enable/disable the clock scaling by writing
-+		1 or 0 to this attribute.
-+
-+		The attribute is read/write.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/clkgate_enable
-+What:		/sys/bus/platform/devices/*.ufs/clkgate_enable
-+Date:		January 2025
-+Contact:	Ziqi Chen <quic_ziqichen@quicinc.com>
-+Description:
-+		This attribute shows whether the UFS clock gating is enabled or not.
-+		And it can be used to enable/disable the clock gating by writing
-+		1 or 0 to this attribute.
-+
-+		The attribute is read/write.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/clkgate_delay_ms
-+What:		/sys/bus/platform/devices/*.ufs/clkgate_delay_ms
-+Date:		January 2025
-+Contact:	Ziqi Chen <quic_ziqichen@quicinc.com>
-+Description:
-+		This attribute shows and sets the number of milliseconds of idle time
-+		before the UFS driver starts to perform clock gating. This can
-+		prevent the UFS from frequently performing clock gating/ungating.
-+
-+		The attribute is read/write.
+Changes v1 -> v2:
+- Fixes for bugs reported by the Kernel Test Robot:
+  2/7: changed 'len +=' to 'len =' in resp_mode_sense()
+  3/7: changed 'for (;' to 'for (i = 0;' in partition_tape()
+  4/7: initialized i to zero in resp_space()
+
+Kai Mäkisara (7):
+  scsi: scsi_debug: First fixes for tapes
+  scsi: scsi_debug: Add READ BLOCK LIMITS and modify LOAD for tapes
+  scsi: scsi_debug: Add write support with block lengths  and 4 bytes of
+    data
+  scsi: scsi_debug: Add read support and update locate for tapes
+  scsi: scsi_debug: Add compression mode page for tapes
+  scsi: scsi_debug: Reset tape setting at device reset
+  scsi: scsi_debug: Add support for partitioning the tape
+
+ drivers/scsi/scsi_debug.c | 775 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 761 insertions(+), 14 deletions(-)
+
 -- 
-2.34.1
+2.43.0
 
 
