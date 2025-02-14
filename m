@@ -1,146 +1,91 @@
-Return-Path: <linux-scsi+bounces-12293-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12295-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6491FA35CC6
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Feb 2025 12:44:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E75A3A36423
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Feb 2025 18:12:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 938093AE3A5
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Feb 2025 11:44:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4784A3A65F1
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Feb 2025 17:12:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6594C2627ED;
-	Fri, 14 Feb 2025 11:44:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9990267AEB;
+	Fri, 14 Feb 2025 17:12:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pf3hgB0D"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="TYlKQLtB"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DDEF263C7F
-	for <linux-scsi@vger.kernel.org>; Fri, 14 Feb 2025 11:44:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3936267706
+	for <linux-scsi@vger.kernel.org>; Fri, 14 Feb 2025 17:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739533467; cv=none; b=ukoT5WB69tQWxXuUg4N2EoA8KJU95wZfFEnk8mJsWneeOQZgBMl670oIokN9L0DF82VrNXoBh1PH3yC4U0pbMbVMoa9oeMJvZ780COe7j4K6H0i274UOJCAS7dKtTdR8TWgb1AgTSaWsWVZ6OXuZSn1ivqW4akmvUX5u/TBSfVk=
+	t=1739553145; cv=none; b=Zt63nfsJ5MrM5wJbHcHtHTUTtrW9UIFBhx+wnpnnvibO3m0ZUg/a/VaSEoGLzL7n269kaRTTW8zEvriwg0jYCaEY/c+wUzMRiSBJ6PS0JXXObL+1aMiSLSm69IoXUgtOrIsMzFp1kLXNRmHg83Y162Lo+ww6wtyn9qu9pw5MF4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739533467; c=relaxed/simple;
-	bh=rwhe49/5jB2QdiusmRIz9cSf22eUSJf+KuUjfLK0eQo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p1InHIc8a8to8oZHHKF9nL9xeIA6tbHj/N62pNmtg18Dp9iLs5xMnbGJ2OUafdVkBzQhYhCY3aNYZCVuj5T7o3PxXC6K7XlPUmOAKQrO70bZlXfhRrOA9gerY4pAYC6WEcLzv52Ue/Se6awIB4rMGECkw0V4C2nhNEgNJnURutg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pf3hgB0D; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1739533452;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=89gFJdlR9qUDNbjkUW82cBr8nzW66/88qgzIThpdpAo=;
-	b=pf3hgB0DH54F1MAtwetbpQhnD8ASG/CUsIHMzSv3DqCZTpyk6o6e8nIcFe5fAsmHEMZf7x
-	QSEXFXilQLJ4mSm7dsciz0AK6PuC0V41qB4cutKiZ4eEqdRuHFk4pvwM/GtTnN8Y4gADxi
-	r0u7RX9ixZEMkSv+VAi1iFEnw/4TKEw=
-From: Thorsten Blum <thorsten.blum@linux.dev>
-To: Don Brace <don.brace@microchip.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Thorsten Blum <thorsten.blum@linux.dev>,
-	linux-hardening@vger.kernel.org,
-	Kees Cook <kees@kernel.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	storagedev@microchip.com,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] scsi: hpsa: Remove deprecated and unnecessary strncpy()
-Date: Fri, 14 Feb 2025 12:43:02 +0100
-Message-ID: <20250214114302.86001-2-thorsten.blum@linux.dev>
+	s=arc-20240116; t=1739553145; c=relaxed/simple;
+	bh=ERJOKrkPTqG54cRHxFMcIcDN+46bus5YIHhkbkRGCME=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=plGJipEz/oPkS75A3XScH8pDe6vK4p3mZtmifYfXuV/gNJIUy9UH4yv6NdgukWI0Qcf0updr0MkajKm+4/7nRBq0umK5byYAmE7kh6SVTbAceKE8PMX3b1EIgYGPLP5LpVB/VngrQpgTX69ZlLIvvC8yGUJQPlg3/j0cUQbnDlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=TYlKQLtB; arc=none smtp.client-ip=199.89.1.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4Yvds31cl9z6ClRNk;
+	Fri, 14 Feb 2025 17:12:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1739553140; x=1742145141; bh=ERJOKrkPTqG54cRHxFMcIcDN
+	+46bus5YIHhkbkRGCME=; b=TYlKQLtBnPAVn5caFBR+Ja8IFEAJ5csNKWk/2hBz
+	Yt8jk7sukLgZpop4H9I9vAVUFkJ2juTQ5sTmqyUVTWUUv9Sm359f4kvrlN3kP7o+
+	R5pINrQfZJob0l0mkdpeYgFHPMqBhZKVNir6codEGOoq/xybcl0rw6ZzIM51AYCC
+	AtmZ5P1ORM1F3X5qgYIS/KzOWLOQVV03a5Yl1NuK0T2cTQ5AutVnVheUfev2tKCX
+	T2K7hrNzrrl/SwfHOiHSnF6DU+9efgbscN/0vkbSeGxS7yIzcBrH/D8nFl2sI8eq
+	n/xeXgb7Qi7XWTos0TaQd0ubeaFhLw1Xa3OAkud3qCktbw==
+X-Virus-Scanned: by MailRoute
+Received: from 008.lax.mailroute.net ([127.0.0.1])
+ by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id d-mvZBhj0FZx; Fri, 14 Feb 2025 17:12:20 +0000 (UTC)
+Received: from [100.66.154.22] (unknown [104.135.204.82])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4Yvdrs683Vz6Ckh6m;
+	Fri, 14 Feb 2025 17:12:13 +0000 (UTC)
+Message-ID: <88680b95-97b8-41aa-a39b-b1d03f93669b@acm.org>
+Date: Fri, 14 Feb 2025 09:12:11 -0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] ufs: core: add hba parameter to trace events
+To: peter.wang@mediatek.com, linux-scsi@vger.kernel.org,
+ martin.petersen@oracle.com, avri.altman@wdc.com, alim.akhtar@samsung.com,
+ jejb@linux.ibm.com
+Cc: wsd_upstream@mediatek.com, linux-mediatek@lists.infradead.org,
+ chun-hung.wu@mediatek.com, alice.chao@mediatek.com, cc.chou@mediatek.com,
+ chaotian.jing@mediatek.com, jiajie.hao@mediatek.com,
+ yi-fan.peng@mediatek.com, qilin.tan@mediatek.com, lin.gui@mediatek.com,
+ tun-yu.yu@mediatek.com, eddie.huang@mediatek.com, naomi.chu@mediatek.com,
+ ed.tsai@mediatek.com
+References: <20250214083026.1177880-1-peter.wang@mediatek.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20250214083026.1177880-1-peter.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-While replacing strncpy() with strscpy(), Bart Van Assche pointed out
-that the code occurs inside sysfs write callbacks, which already uses
-NUL-terminated strings. This allows the string to be passed directly to
-sscanf() without requiring a temporary copy.
+On 2/14/25 12:29 AM, peter.wang@mediatek.com wrote:
+> Included the ufs_hba structure as a parameter in various trace events
+> to provide more context and improve debugging capabilities.
+> Also remove dev_name which can replace by dev_name(hba->dev).
 
-Remove the deprecated and unnecessary strncpy() and the corresponding
-local variables, and pass the buffer buf directly to sscanf().
-
-Replace sscanf() with kstrtoint() to silence checkpatch warnings.
-
-Compile-tested only.
-
-Link: https://github.com/KSPP/linux/issues/90
-Cc: linux-hardening@vger.kernel.org
-Cc: Kees Cook <kees@kernel.org>
-Cc: David Laight <david.laight.linux@gmail.com>
-Suggested-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
----
-Changes in v2:
-- Adjust len to copy the same number of bytes as with strncpy()
-- Link to v1: https://lore.kernel.org/r/20250212222214.86110-2-thorsten.blum@linux.dev/
-
-Changes in v3:
-- Remove strncpy() and tmpbuf et al and use buf directly as suggested by
-  Bart Van Assche and Kees Cook
-- Replace sscanf() with kstrtoint() as suggested by David Laight
-- Link to v2: https://lore.kernel.org/linux-kernel/20250213195332.1464-3-thorsten.blum@linux.dev/
----
- drivers/scsi/hpsa.c | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index 84d8de07b7ae..bb65954b1b1e 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -453,17 +453,13 @@ static ssize_t host_store_hp_ssd_smart_path_status(struct device *dev,
- 					 struct device_attribute *attr,
- 					 const char *buf, size_t count)
- {
--	int status, len;
-+	int status;
- 	struct ctlr_info *h;
- 	struct Scsi_Host *shost = class_to_shost(dev);
--	char tmpbuf[10];
- 
- 	if (!capable(CAP_SYS_ADMIN) || !capable(CAP_SYS_RAWIO))
- 		return -EACCES;
--	len = count > sizeof(tmpbuf) - 1 ? sizeof(tmpbuf) - 1 : count;
--	strncpy(tmpbuf, buf, len);
--	tmpbuf[len] = '\0';
--	if (sscanf(tmpbuf, "%d", &status) != 1)
-+	if (kstrtoint(buf, 10, &status))
- 		return -EINVAL;
- 	h = shost_to_hba(shost);
- 	h->acciopath_status = !!status;
-@@ -477,17 +473,13 @@ static ssize_t host_store_raid_offload_debug(struct device *dev,
- 					 struct device_attribute *attr,
- 					 const char *buf, size_t count)
- {
--	int debug_level, len;
-+	int debug_level;
- 	struct ctlr_info *h;
- 	struct Scsi_Host *shost = class_to_shost(dev);
--	char tmpbuf[10];
- 
- 	if (!capable(CAP_SYS_ADMIN) || !capable(CAP_SYS_RAWIO))
- 		return -EACCES;
--	len = count > sizeof(tmpbuf) - 1 ? sizeof(tmpbuf) - 1 : count;
--	strncpy(tmpbuf, buf, len);
--	tmpbuf[len] = '\0';
--	if (sscanf(tmpbuf, "%d", &debug_level) != 1)
-+	if (kstrtoint(buf, 10, &debug_level))
- 		return -EINVAL;
- 	if (debug_level < 0)
- 		debug_level = 0;
--- 
-2.48.1
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
