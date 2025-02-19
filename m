@@ -1,82 +1,79 @@
-Return-Path: <linux-scsi+bounces-12335-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12337-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15733A3AEA8
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Feb 2025 02:12:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1606DA3AE9B
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Feb 2025 02:09:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32D773A93DE
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Feb 2025 01:07:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80A881886855
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Feb 2025 01:08:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C3F325761;
-	Wed, 19 Feb 2025 01:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C75B715A858;
+	Wed, 19 Feb 2025 01:07:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="nop5DK9y"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="NJtVjQ1j"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415381E4AB;
-	Wed, 19 Feb 2025 01:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B881E885
+	for <linux-scsi@vger.kernel.org>; Wed, 19 Feb 2025 01:07:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739927249; cv=none; b=YqgMEt4y1C9rv+/T+IjgKrUDY8iBU0Lmj8O++1GmwEB9myUsOb23DAj/nOF9B2MbG0Ef7rDGETLht3EOMUnyqLnE0grOy4YF3dksD41CDzpxsLE/t1sSwUX9rDARjls7tXh9+HqWTrLmxlMO5w13nZELSxe4mRC3sLfv00N7LFU=
+	t=1739927254; cv=none; b=e0QG7MhuCO6bN5EKhTP6v2cIDA+qYCiBc9orJPUZ1Z5QTxNcMaXza1d/DiU6fTq8/yf6pxwFUGsqKjNaly8ptvtWElkl+g/rPpJaITCR3VSlFG8V3HZI/T+S2lpRmFWv64hCWBDNAa8QBIJrfTwcxktnh2bOe6Ymb3cp6Ms4Ro0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739927249; c=relaxed/simple;
-	bh=/Rf65F85pkUiV5nrOq8Au0uE/3xruaDXFJ2mQw85668=;
+	s=arc-20240116; t=1739927254; c=relaxed/simple;
+	bh=UCllqoHhrQNXM8MmBM44P76s/o9p7I6GnAU6ZLFLWaY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NsMELqWkgbRwuOwswVOKhiz+Guk5IpdxmgAb7J+aECFg8OzNb6+mHMAlHHHZZijxGEiCjXxqeo/OfnWa+0WsBFjq0XvV3rOi9SnrgemWTtL0c/TLT2IfRrk5BXJks1X5ngRN2/QXip0gtVetEHxf+PgfkpG6s6IFuahFKC020JQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=nop5DK9y; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=GFLbWk6HqEgSlkJbDB5KfghpbqvozzLuDml7V7LsfiFcpPe0dveYp8MTOiLhsZ2BOgyvYs5QZMw2/ggUVn7bal+Suk7oVGwwFq4Az0EvLWDmJtsRXAfxaVA1fb8ZftODsEYHUKCFEl61Tok8qqJUfo0Rpfx1uhsKrz5YY/YgAao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=NJtVjQ1j; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51IMfWXM006244;
-	Wed, 19 Feb 2025 01:07:24 GMT
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51IMgfQM007528;
+	Wed, 19 Feb 2025 01:07:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=gsjkC1bMzt9H36MIm7lCtfrmrPip0k5gLjrM6k3FpCk=; b=
-	nop5DK9yrBOOETguhc0hiB+NEocRd5ExX62rNZNnGEVa9M2GKr7b8vnLl/I5c2OH
-	uXO4nZERvMgviLDoZEfdcYItI0YGlBnrTZ3FTZ2UL/1RF9pJkDfB/4ukDymxhbLN
-	tn3V0OFXMXJaU3W99rbSL6rlZYElk5cNiUNnUb6366FVRHrACN4xUp5dY8i2wqjU
-	QxRpr4uF2xqoUk+IGr01eSTpGhAQwcmPIC8FuQHmYPdfZicJ2SWzi9EBbrAziZs8
-	GhvUm9NaCi5IU0KC0+pFseL019e9fk6A3MDZqp0jmBW2KhYAsW+l9InRJI5Z/ROr
-	+FZwrSzAII/43OctZBGPrQ==
+	corp-2023-11-20; bh=mqBZIya0Zo9bV0vIxDWGC8d3N0v62vUQUUrJ7AutH7I=; b=
+	NJtVjQ1jxmLXG8wxZ65E0snrBbIslFXwWNc5y5tzptclMCp/4rK9rAhzY3uzxsU2
+	YkXNzjiFns2H1opOpbCAU3Gi2kCoihvjf78vKo3GrttlM/UXv4SnTrGhEjs1Xh7E
+	SV2i7YOjz4qck+kWm2MqmS6V73Aj2GcH/VLvNTG4kVPa+3jc3hKt3BXcJTe5LLzT
+	3YDwAPBD7/aPTWvLo0Iz/Fznjc7sdU8wbtG19E/akWeWeup4o19bYHlqRbTp3m0X
+	j+xts0a14yMc9ZPGAA8RZpq9gDhF0Vs8/6oEiznLIynzmhvIqaYWFrhs8lmbbUEO
+	veoaupZDGdPZHAav085vgw==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44w00n0jy8-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44w00ngkp0-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 19 Feb 2025 01:07:24 +0000 (GMT)
+	Wed, 19 Feb 2025 01:07:25 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51J0EZSi002092;
-	Wed, 19 Feb 2025 01:07:23 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51J0DSMV002247;
+	Wed, 19 Feb 2025 01:07:24 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44w0tk1rrj-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44w0tk1rrt-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Wed, 19 Feb 2025 01:07:23 +0000
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 51J17KeR000669;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 51J17KeT000669;
 	Wed, 19 Feb 2025 01:07:23 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 44w0tk1rq5-5;
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 44w0tk1rq5-6;
 	Wed, 19 Feb 2025 01:07:23 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        mpi3mr-linuxdrv.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        Colin Ian King <colin.i.king@gmail.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] scsi: mpi3mr: Fix spelling mistake "skiping" -> "skipping"
-Date: Tue, 18 Feb 2025 20:06:53 -0500
-Message-ID: <173992713064.526057.3708376196614857729.b4-ty@oracle.com>
+To: "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com,
+        Eric Biggers <ebiggers@kernel.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH] scsi: iscsi_tcp: switch to using the crc32c library
+Date: Tue, 18 Feb 2025 20:06:54 -0500
+Message-ID: <173992713070.526057.6348295717628038082.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250205091119.715630-1-colin.i.king@gmail.com>
-References: <20250205091119.715630-1-colin.i.king@gmail.com>
+In-Reply-To: <20250207041724.70733-1-ebiggers@kernel.org>
+References: <20250207041724.70733-1-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -89,22 +86,25 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-18_11,2025-02-18_01,2024-11-22_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 malwarescore=0
- mlxscore=0 spamscore=0 phishscore=0 suspectscore=0 mlxlogscore=863
+ mlxscore=0 spamscore=0 phishscore=0 suspectscore=0 mlxlogscore=853
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502100000
  definitions=main-2502190006
-X-Proofpoint-ORIG-GUID: fa9Ey9byn7A8mJvTZMOM7WDgrM6Y6Li7
-X-Proofpoint-GUID: fa9Ey9byn7A8mJvTZMOM7WDgrM6Y6Li7
+X-Proofpoint-GUID: UwujlG0Jhz3eK6aOGlgvsNPyhvxSx66_
+X-Proofpoint-ORIG-GUID: UwujlG0Jhz3eK6aOGlgvsNPyhvxSx66_
 
-On Wed, 05 Feb 2025 09:11:18 +0000, Colin Ian King wrote:
+On Thu, 06 Feb 2025 20:17:24 -0800, Eric Biggers wrote:
 
-> There is a spelling mistake in a dprint_bsg_err message. Fix it.
+> Now that the crc32c() library function directly takes advantage of
+> architecture-specific optimizations, it is unnecessary to go through the
+> crypto API.  Just use crc32c().  This is much simpler, and it improves
+> performance due to eliminating the crypto API overhead.
 > 
 > 
 
 Applied to 6.15/scsi-queue, thanks!
 
-[1/1] scsi: mpi3mr: Fix spelling mistake "skiping" -> "skipping"
-      https://git.kernel.org/mkp/scsi/c/7c1b882ccb13
+[1/1] scsi: iscsi_tcp: switch to using the crc32c library
+      https://git.kernel.org/mkp/scsi/c/92186c1455a2
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
