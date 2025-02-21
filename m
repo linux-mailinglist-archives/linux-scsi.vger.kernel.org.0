@@ -1,298 +1,225 @@
-Return-Path: <linux-scsi+bounces-12402-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12404-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDB28A3EEC7
-	for <lists+linux-scsi@lfdr.de>; Fri, 21 Feb 2025 09:36:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07EBBA3F265
+	for <lists+linux-scsi@lfdr.de>; Fri, 21 Feb 2025 11:45:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D51E519C1878
-	for <lists+linux-scsi@lfdr.de>; Fri, 21 Feb 2025 08:35:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 320CF3BE7B0
+	for <lists+linux-scsi@lfdr.de>; Fri, 21 Feb 2025 10:44:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B135201004;
-	Fri, 21 Feb 2025 08:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09C2A206F1F;
+	Fri, 21 Feb 2025 10:44:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YPCyAP2J"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="gR85HG77"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36DB81B0406;
-	Fri, 21 Feb 2025 08:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF99155336
+	for <linux-scsi@vger.kernel.org>; Fri, 21 Feb 2025 10:44:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740126900; cv=none; b=m8mPFPxCl48EVslnFeqkfT/6hfKuOLdnxNhYboWDVNa6ySLJwxUYfDDuT8dtBQ7lHgfjkEaKS+xUMhqqjYdIks3w4GsM3l6344hrP6oNZ9725NcuCkUyG87SSTQXL/oAYZQGE5vUo5/UoP+Di5dQflwz784VVbcee8H5FvNxnhs=
+	t=1740134687; cv=none; b=IchKnvEWY6sbSZ1Ylf8RxpP3Kdhpb5TdwHrfpuvP6TjDE/U8unJwiHKaon1HfN7cEPoUiedjqwQ4TYiBguuV3aTCPuJMim+nMSoc8nVRW8kD6974M2A5mNWIuYdvKvTawVlT65EoIeDiKs+C3EX1qs6jb0eu2DRK0wu4jstmCXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740126900; c=relaxed/simple;
-	bh=aMGL80grSUdUjAL22Q8i8LGN9RpI+QqS+QI8A3vn9yc=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Q7OZMdI0Ib+glErkqVeGLusALJMFyGPW2NbsdycXukfM2eISAQObXA2D9mk2mWy8lNMlXVt9n3Zqtepz8s1jBEwjozsrBSNzg0ySZfx9MDljWVpAc9JC/304tCNijb0uT8v7zG3Pen1Gjf/co1t5pgdgeUVS4qy+f8aexCxTrFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YPCyAP2J; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43948f77f1aso10882455e9.0;
-        Fri, 21 Feb 2025 00:34:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740126897; x=1740731697; darn=vger.kernel.org;
-        h=in-reply-to:autocrypt:content-language:references:cc:to:from
-         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=aMGL80grSUdUjAL22Q8i8LGN9RpI+QqS+QI8A3vn9yc=;
-        b=YPCyAP2Ju3zj8hcWH2GtPxn2c/iZuQueZTzUDXdBJ7566qeTVAVJF6+I7m6l+Usbks
-         Yfek7v77fI4h3tggFgvIdaQG6M6sk/hX3Uu/iFr8ADDbhJ7j7GqS8Fp0CrJA9jrLdoxr
-         ej02Azf7CuydsnHUNCM+MYuLjAqwOIIIjj9sVhjkcX3Xf8+gQgjgJMmtUt/GELJ0zQOW
-         BV2f6AIxDNQEhYhMqzQ0PtTcg9B+XVcbVdXuepdO/CXWp1GKopmhAZ3HsVde1f9uIMG4
-         8/QkdCMer0JdA1I72islo5fRw+foUevAJ1IB/jtJUfBdvldOZhzQeei6JSrdnUJlDXTM
-         jkhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740126897; x=1740731697;
-        h=in-reply-to:autocrypt:content-language:references:cc:to:from
-         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aMGL80grSUdUjAL22Q8i8LGN9RpI+QqS+QI8A3vn9yc=;
-        b=ZBWxH8PTTxYeqGgGvdAOcN96QM1nm+Jp19zYK+h0r2vlbYuxvjRPKBuKTLCl3Bn/Tx
-         tVnRiaSmQ13kPIEHpOTPBeUVoaT6gq6mwah+acLMKLM4mPT9yIzu06xYhH3ckoX9x2wx
-         01eVcnjpC7Pejdc1fDlKnU89xru78MCKO9ue3mFc9RyM/jGBSP1K/6QaDbID2aRVFX/d
-         chf/4zfGyP1Lcu4S8rpzeMuH2UptLVZPmBKTEbOtOcCpoc1YzB6EqMcEMWhHtfScNTap
-         i2BUdx4+hJKuMCYegQ/0jorKPKjyiRrhSxJWap9ytYt69a8uI+wgTzm306lzoRi2ayW1
-         Ljfg==
-X-Forwarded-Encrypted: i=1; AJvYcCVVPG7+lw/SMpK92PW9Sn0REBXvJDfEHpeMKHNe0bRaxR8k8dLr35X16zjXOsZxUnaIHsQUxMAgRAWqgZs=@vger.kernel.org, AJvYcCXU2YVNVx91VJaOQORr7O9N1L1zOWGh/RQMtSmDwUnmO2uFQzXYjcXrm7hTuglg12dxBcsFBZg2om7XmA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBDuyaNOWT2AC0ZK8VAFee4920o7NiAsbNZTefRKHNHnyP5zP8
-	WFcxgCu53Tz7ZWibM0xrhMJr7eTDF5p3756xZcTr3ztg4njmCChz
-X-Gm-Gg: ASbGnctCIy+s0fMUq7ljqo7FKuS1b6nSFucYQtEsKTknibC8I/IpXdoOQn2/J0/O/h0
-	SgYYMeq4sPcX6mDdwSNn68YiLeLb03dQjse4NLvNmkbKyxY34eOROaxlobIN10HjmfnxZoK4a0l
-	D+tSwkIRUFHOLZKLs8BsIPaoW6trxD/pVcAtwGJYdkvHq7fRVb63NQb+wF1sMMR4yKZkcZDiG+L
-	2izoxMX+irUlJ0E23u0p31J8y/BhViQAa33aHTAZcB/BcTHYCn4rOl2y7hKNnkh5uebcf31oS0P
-	04HdjoEXUqMZBkcDlJ+8OdToirbFinR8m6Q=
-X-Google-Smtp-Source: AGHT+IFQZXGJL43N6rYNUQTDvmOVnpCVxwd85mFObj4vfcP1E6rpn9j10VNNyu/DP5kimIOdPC8C4A==
-X-Received: by 2002:a05:600c:35cc:b0:439:9386:ef6c with SMTP id 5b1f17b1804b1-439ae1d7ba7mr16734895e9.2.1740126897113;
-        Fri, 21 Feb 2025 00:34:57 -0800 (PST)
-Received: from [192.168.1.240] ([194.120.133.72])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-439b031b9basm10033665e9.38.2025.02.21.00.34.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2025 00:34:56 -0800 (PST)
-Message-ID: <f928d92f-7185-42ad-9aa9-844f0e98a850@gmail.com>
-Date: Fri, 21 Feb 2025 08:34:18 +0000
+	s=arc-20240116; t=1740134687; c=relaxed/simple;
+	bh=UUdEecgDqSQ3SckRw+rCo/MjrBAF0Kh1OxWA5Kqg7hY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
+	 Content-Type:References; b=AOwuHCZdP60Fq9LiIOrbGuubogshjQ3yaf2jvcJYM8EprbQ5Snz3JZh0PW7vNrIpEm4zrtd6ynOJBjGn/GFEtwmdSzNLM6/7CxTZKgew6t6QLBjgjS0J5sRF2l6SbCJF9fXzMlM1wC4xFVtrbN7xv/Es0z5dbRzyhkG3lPkFYy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=gR85HG77; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250221104441epoutp049f49f4348148431d56ce1384ff6f49d9~mM0X4VP2H0805108051epoutp04P
+	for <linux-scsi@vger.kernel.org>; Fri, 21 Feb 2025 10:44:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250221104441epoutp049f49f4348148431d56ce1384ff6f49d9~mM0X4VP2H0805108051epoutp04P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1740134681;
+	bh=zq2OvmombF/nmjIv8d+NCP6My+EYDfaxUFB90IcnD0c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=gR85HG770K8U6Ihp65qDxI/1hlL65U/OlnDi0Qm2+OFXknrlnI3WkWxDer23EMu2H
+	 zrw4J9IkmOZXXXAMKPMcE/bV/tro81BsrcGCRg0OFKQhKLmQHc0Laq+cUWQnrXcxrO
+	 vm75V6Xl1FFZAQhOIulhchSPqZ0UnL7Tj7x6Q8E0=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+	20250221104441epcas5p2457463accd4a08408833736bca205105~mM0XczCh01679816798epcas5p2J;
+	Fri, 21 Feb 2025 10:44:41 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.181]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4YzmwQ70B1z4x9Pr; Fri, 21 Feb
+	2025 10:44:38 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	43.65.19933.61958B76; Fri, 21 Feb 2025 19:44:38 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20250221104410epcas5p384409475a9ae988d52d04c424fe70df3~mMz6cUQ_A0563805638epcas5p3E;
+	Fri, 21 Feb 2025 10:44:10 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20250221104410epsmtrp1b1ff0c3a4683e6b3dad47bf9642e04b0~mMz6bjF5z0516605166epsmtrp1a;
+	Fri, 21 Feb 2025 10:44:10 +0000 (GMT)
+X-AuditID: b6c32a4a-c1fda70000004ddd-38-67b85916a399
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	DD.16.18949.9F858B76; Fri, 21 Feb 2025 19:44:09 +0900 (KST)
+Received: from green245 (unknown [107.99.41.245]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20250221104408epsmtip2fbc853b37f2f4278a1203c413b5d60ce~mMz4jcIUj1068210682epsmtip2x;
+	Fri, 21 Feb 2025 10:44:07 +0000 (GMT)
+Date: Fri, 21 Feb 2025 16:05:54 +0530
+From: Anuj Gupta <anuj20.g@samsung.com>
+To: Anuj gupta <anuj1072538@gmail.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>, Christoph Hellwig
+	<hch@lst.de>, M Nikhil <nikh1092@linux.ibm.com>,
+	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+	linux-raid@vger.kernel.org, nvdimm@lists.linux.dev,
+	linux-scsi@vger.kernel.org, hare@suse.de, steffen Maier
+	<maier@linux.ibm.com>, Benjamin Block <bblock@linux.ibm.com>, Nihar Panda
+	<niharp@linux.ibm.com>
+Subject: Re: Change in reported values of some block integrity sysfs
+ attributes
+Message-ID: <20250221103554.GA28830@green245>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: mpt3sas: Fix spelling mistake "receveid" ->
- "received"
-From: "Colin King (gmail)" <colin.i.king@gmail.com>
-To: Sathya Prakash <sathya.prakash@broadcom.com>,
- Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
- Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>,
- MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250221083253.77496-1-colin.i.king@gmail.com>
-Content-Language: en-US
-Autocrypt: addr=colin.i.king@gmail.com; keydata=
- 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
- FVPMkxl2UyaayDvhrO9kNXvl1SKCpdzCMQ==
-In-Reply-To: <20250221083253.77496-1-colin.i.king@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------jjSt2w1IWriAaCB2nSaRnplR"
+In-Reply-To: <CACzX3AvbM4qG+ZOWJoCTNMMgSz8gMjoRcQ10_HJbMyi0Nv9qvQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEJsWRmVeSWpSXmKPExsWy7bCmuq5Y5I50gy9tFhYfv/5msbi07gKz
+	xYJFc1ks9iyaxGSxcvVRJou9t7Qt2ufvYrTovr6DzeJi71dmi+XH/zFZfOv4yG5x9+JTZouV
+	P/6wOvB67Jx1l91jwqIDjB4vNs9k9Nh9s4HN4+PTWywem09Xe3zeJBfAHpVtk5GamJJapJCa
+	l5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0rJJCWWJOKVAoILG4WEnf
+	zqYov7QkVSEjv7jEVim1ICWnwKRArzgxt7g0L10vL7XEytDAwMgUqDAhO2PKylNsBRclK3b2
+	f2JpYDwn0sXIwSEhYCKx4IF2FyMXh5DAbkaJV++vMEM4nxglDv+4wwbhfGOUmPptOXsXIydY
+	x/+t01kgEnsZJW70tkJVPWOU2HDkCitIFYuAqsSPJwvAOtgE1CWOPG9lBLFFBNQknm7bDtbA
+	LNDJLDGtcwobSEJYIFDi64bfYEW8AroSy+5shLIFJU7OfMICYnMC1Xz53swMYosKKEsc2Hac
+	CWSQhMAODoklby6wQdznIjH11AEmCFtY4tXxLVB3S0m87G+DstMlflx+ClVTINF8bB8jhG0v
+	0XqqH2wBs0CGxJnWO1A1skAz1zFBxPkken8/gYrzSuyYB2MrSbSvnANlS0jsPdcAZXtIfNl9
+	EWymkEALk0TTdaYJjPKzkPw2C8k6CFtHYsHuT2yzgBHELCAtsfwfB4SpKbF+l/4CRtZVjJKp
+	BcW56anFpgVGeanl8BhPzs/dxAhOzFpeOxgfPvigd4iRiYPxEKMEB7OSCG9b/ZZ0Id6UxMqq
+	1KL8+KLSnNTiQ4ymwMiayCwlmpwPzA15JfGGJpYGJmZmZiaWxmaGSuK8zTtb0oUE0hNLUrNT
+	UwtSi2D6mDg4pRqY4j4/5ncud7LMVXZ2YuzsXOv1qv/BSp4767M2PL14X1CXh/FjusCHjtSK
+	LVcfT5+4sZ5pT1iBStKlLZ5s3qd2WPrVcnMVnLlwnPNyRI+phQ6b7P+2T6x2K5ZLpzG8YXh1
+	94OvxoKYl6J+9yrsH7j6GRmpKobfFJ85jX8qr+92N9vj+wzeLVvKfaStftfEqa/3v0wKmD0x
+	qbpsqs+RZuP2HYzn5KY0CuSyl+SpaFo26Io4vLb13HnVVaw2tV7tYtP+8LC0j482rGWsSmR9
+	qFRXlNqZbhzuw3RP63rON/F5s17kp3F/y5/2SD1xkZOv4/Fz9uETwvvcutyrY262KW7J/yO5
+	vfFc6uGonzMVrimxFGckGmoxFxUnAgDXBQJ2VQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplkeLIzCtJLcpLzFFi42LZdlhJXvdnxI50gwm7TS0+fv3NYnFp3QVm
+	iwWL5rJY7Fk0icli5eqjTBZ7b2lbtM/fxWjRfX0Hm8XF3q/MFsuP/2Oy+Nbxkd3i7sWnzBYr
+	f/xhdeD12DnrLrvHhEUHGD1ebJ7J6LH7ZgObx8ent1g8Np+u9vi8SS6APYrLJiU1J7MstUjf
+	LoEr48GxWWwFE8UrNvX0MTcwLhfqYuTkkBAwkfi/dTpLFyMXh5DAbkaJIz/72SASEhKnXi5j
+	hLCFJVb+e84OUfSEUeLP5QZWkASLgKrEjycL2EFsNgF1iSPPW8EaRATUJJ5u284G0sAs0M0s
+	sXTzfhaQhLBAoMTXDb/BingFdCWW3dnICDG1hUli+6YbrBAJQYmTM5+ANTALaEnc+PeSqYuR
+	A8iWllj+jwMkzAk058v3ZmYQW1RAWeLAtuNMExgFZyHpnoWkexZC9wJG5lWMkqkFxbnpucWG
+	BUZ5qeV6xYm5xaV56XrJ+bmbGMExpaW1g3HPqg96hxiZOBgPMUpwMCuJ8LbVb0kX4k1JrKxK
+	LcqPLyrNSS0+xCjNwaIkzvvtdW+KkEB6YklqdmpqQWoRTJaJg1OqgWlZhm/JQ2udY28LzZZY
+	Cu/gv7F4kvTaFqbvTnpnBZTdi/d01iQeeXFPM7BqUtOXuohKE7HMgmUK3w+LzP8zx69RMzdh
+	zSl7tT1zE7a8jth+ze3txt/aOcw/5256fZzvwmLL558O2LeFKDKFBk3T0n5stvXm6V2rI4TD
+	F8tp+ZyQfSPMacbCmeMf8chakW1lddXa+HvH124MuuKclMeUsf1Ddv6rr1FZnxyXFn1K5JFJ
+	LP4/b+Mdt26tjIlnFS/W2mgGfpdPSLR91tM3QSvClyHixNn0qtfMyeyNrBMer9skXDW/lE2/
+	df4p7lOsRX+qLMJ3s22peXI+uMX1S/eV809kApbMdts3ozv3pILadyWW4oxEQy3mouJEAJRQ
+	CnwYAwAA
+X-CMS-MailID: 20250221104410epcas5p384409475a9ae988d52d04c424fe70df3
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+	boundary="----MTAFpDJBIS7x0DorxmyomC-IKR7RHdtq514vGN5lDcSFRf5o=_7482b_"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250221103836epcas5p2158071e3449f10b80b44b43595d18704
+References: <f6130475-3ccd-45d2-abde-3ccceada0f0a@linux.ibm.com>
+	<yq18qsjdz0r.fsf@ca-mkp.ca.oracle.com>
+	<CGME20250221103836epcas5p2158071e3449f10b80b44b43595d18704@epcas5p2.samsung.com>
+	<CACzX3AvbM4qG+ZOWJoCTNMMgSz8gMjoRcQ10_HJbMyi0Nv9qvQ@mail.gmail.com>
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------jjSt2w1IWriAaCB2nSaRnplR
-Content-Type: multipart/mixed; boundary="------------4QUfbI588VLWXc5nk1t30fm2";
- protected-headers="v1"
-From: "Colin King (gmail)" <colin.i.king@gmail.com>
-To: Sathya Prakash <sathya.prakash@broadcom.com>,
- Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
- Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>,
- MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <f928d92f-7185-42ad-9aa9-844f0e98a850@gmail.com>
-Subject: Re: [PATCH] scsi: mpt3sas: Fix spelling mistake "receveid" ->
- "received"
-References: <20250221083253.77496-1-colin.i.king@gmail.com>
-In-Reply-To: <20250221083253.77496-1-colin.i.king@gmail.com>
+------MTAFpDJBIS7x0DorxmyomC-IKR7RHdtq514vGN5lDcSFRf5o=_7482b_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
---------------4QUfbI588VLWXc5nk1t30fm2
-Content-Type: multipart/mixed; boundary="------------Ml0WFusNExdpjEsOswU7LrIe"
+On Fri, Feb 21, 2025 at 04:07:55PM +0530, Anuj gupta wrote:
+> > I don't see any change in what's reported with block/for-next in a
+> > regular SCSI HBA/disk setup. Will have to look at whether there is a
+> > stacking issue wrt. multipathing.
+> 
+> Hi Martin, Christoph,
+> 
+> It seems this change in behaviour is not limited to SCSI only. As Nikhil
+> mentioned an earlier commit
+> [9f4aa46f2a74 ("block: invert the BLK_INTEGRITY_{GENERATE,VERIFY} flags")]
+> causes this change in behaviour. On my setup with a NVMe drive not formatted
+> with PI, I see that:
+> 
+> Without this commit:
+> Value reported by read_verify and write_generate sysfs entries is 0.
+> 
+> With this commit:
+> Value reported by read_verify and write_generate sysfs entries is 1.
+> 
+> Diving a bit deeper, both these flags got inverted due to this commit.
+> But during init (in nvme_init_integrity) these values get initialized to 0,
+> inturn setting the sysfs entries to 1. In order to fix this, the driver has to
+> initialize both these flags to 1 in nvme_init_integrity if PI is not supported.
+> That way, the value in sysfs for these entries would become 0 again. Tried this
+> approach in my setup, and I am able to see the right values now. Then something
+> like this would also need to be done for SCSI too.
 
---------------Ml0WFusNExdpjEsOswU7LrIe
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+This is the patch that I used:
 
-Rm9yZ290IHRvIGFkZCBbbmV4dF0gaW4gc3ViamVjdCBsaW5lDQoNCk9uIDIxLzAyLzIwMjUg
-MDg6MzIsIENvbGluIElhbiBLaW5nIHdyb3RlOg0KPiBUaGVyZSBpcyBhIHNwZWxsaW5nIG1p
-c3Rha2UgaW4gYSBpb2NfZXJyIG1lc3NhZ2UuIEZpeCBpdC4NCj4gDQo+IFNpZ25lZC1vZmYt
-Ynk6IENvbGluIElhbiBLaW5nIDxjb2xpbi5pLmtpbmdAZ21haWwuY29tPg0KPiAtLS0NCj4g
-ICBkcml2ZXJzL3Njc2kvbXB0M3Nhcy9tcHQzc2FzX2N0bC5jIHwgMiArLQ0KPiAgIDEgZmls
-ZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvc2NzaS9tcHQzc2FzL21wdDNzYXNfY3RsLmMgYi9kcml2ZXJzL3Nj
-c2kvbXB0M3Nhcy9tcHQzc2FzX2N0bC5jDQo+IGluZGV4IGJkMzkxOWYxNWFkYi4uZmY4ZmVk
-ZjVmMjBlIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3Njc2kvbXB0M3Nhcy9tcHQzc2FzX2N0
-bC5jDQo+ICsrKyBiL2RyaXZlcnMvc2NzaS9tcHQzc2FzL21wdDNzYXNfY3RsLmMNCj4gQEAg
-LTI5NTksNyArMjk1OSw3IEBAIGludCBtcHQzc2FzX3NlbmRfbWN0cF9wYXNzdGhydV9yZXEo
-c3RydWN0IG1wdDNfcGFzc3RocnVfY29tbWFuZCAqY29tbWFuZCkNCj4gICANCj4gICAJbXBp
-X3JlcXVlc3QgPSAoTVBJMlJlcXVlc3RIZWFkZXJfdCAqKWNvbW1hbmQtPm1waV9yZXF1ZXN0
-Ow0KPiAgIAlpZiAobXBpX3JlcXVlc3QtPkZ1bmN0aW9uICE9IE1QSTJfRlVOQ1RJT05fTUNU
-UF9QQVNTVEhST1VHSCkgew0KPiAtCQlpb2NfZXJyKGlvYywgIiVzOiBJbnZhbGlkIHJlcXVl
-c3QgcmVjZXZlaWQsIEZ1bmN0aW9uIDB4JXhcbiIsDQo+ICsJCWlvY19lcnIoaW9jLCAiJXM6
-IEludmFsaWQgcmVxdWVzdCByZWNlaXZlZCwgRnVuY3Rpb24gMHgleFxuIiwNCj4gICAJCQlf
-X2Z1bmNfXywgbXBpX3JlcXVlc3QtPkZ1bmN0aW9uKTsNCj4gICAJCXJldCA9IC1FSU5WQUw7
-DQo+ICAgCQlnb3RvIHVubG9ja19jdGxfY21kczsNCg0K
---------------Ml0WFusNExdpjEsOswU7LrIe
-Content-Type: application/pgp-keys; name="OpenPGP_0x68C287DFC6A80226.asc"
-Content-Disposition: attachment; filename="OpenPGP_0x68C287DFC6A80226.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 818d4e49aab5..6cd9f57131cc 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -1799,6 +1799,7 @@ static bool nvme_init_integrity(struct nvme_ns_head *head,
+ 
+ 	memset(bi, 0, sizeof(*bi));
+ 
++	bi->flags |= BLK_INTEGRITY_NOGENERATE | BLK_INTEGRITY_NOVERIFY;
+ 	if (!head->ms)
+ 		return true;
+ 
+@@ -1817,11 +1818,15 @@ static bool nvme_init_integrity(struct nvme_ns_head *head,
+ 			bi->csum_type = BLK_INTEGRITY_CSUM_CRC;
+ 			bi->tag_size = sizeof(u16) + sizeof(u32);
+ 			bi->flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
++			bi->flags &= ~(BLK_INTEGRITY_NOGENERATE |
++				       BLK_INTEGRITY_NOVERIFY);
+ 			break;
+ 		case NVME_NVM_NS_64B_GUARD:
+ 			bi->csum_type = BLK_INTEGRITY_CSUM_CRC64;
+ 			bi->tag_size = sizeof(u16) + 6;
+ 			bi->flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
++			bi->flags &= ~(BLK_INTEGRITY_NOGENERATE |
++				       BLK_INTEGRITY_NOVERIFY);
+ 			break;
+ 		default:
+ 			break;
+@@ -1835,12 +1840,16 @@ static bool nvme_init_integrity(struct nvme_ns_head *head,
+ 			bi->tag_size = sizeof(u16);
+ 			bi->flags |= BLK_INTEGRITY_DEVICE_CAPABLE |
+ 				     BLK_INTEGRITY_REF_TAG;
++			bi->flags &= ~(BLK_INTEGRITY_NOGENERATE |
++				       BLK_INTEGRITY_NOVERIFY);
+ 			break;
+ 		case NVME_NVM_NS_64B_GUARD:
+ 			bi->csum_type = BLK_INTEGRITY_CSUM_CRC64;
+ 			bi->tag_size = sizeof(u16);
+ 			bi->flags |= BLK_INTEGRITY_DEVICE_CAPABLE |
+ 				     BLK_INTEGRITY_REF_TAG;
++			bi->flags &= ~(BLK_INTEGRITY_NOGENERATE |
++				       BLK_INTEGRITY_NOVERIFY);
+ 			break;
+ 		default:
+ 			break;
 
------BEGIN PGP PUBLIC KEY BLOCK-----
 
-xsFNBE6TJCgBEACo6nMNvy06zNKj5tiwDsXXS+LhT+LwtEsy9EnraKYXAf2xwazc
-ICSjX06efanlyhB0figzQO0n/tP7BcfMVNG7n1+DC71mSyRK1ZERcG1523ajvdZO
-xbBCTvTitYOy3bjs+LXKqeVMhK3mRvdTjjmVpWnWqJ1LL+Hn12ysDVVfkbtuIm2N
-oaSEC8Ae8LSSyCMecd22d9PnLR4UeFgrWEkQsqROq6ZDJT9pBLGe1ZS0pVGhkRyB
-P9GP65oPev39SmfAx9R92SYJygCy0pPvBMWKvEZS/7bpetPNx6l2xu9UvwoeEbpz
-UvH26PHO3DDAv0ynJugPCoxlGPVf3zcfGQxy3otydNTWkP6Wh3Q85m+AlifgKZud
-jZLrO6c+fAw/jFu1UMjNuyhgShtFU7NvEzL3RqzFf9O1qM2muj83IeFQ1FZ65QAi
-CdTa3npz1vHc7N4uEQBUxyXgXfCI+A5yDnjHwzU0Y3RYS52TA3nfa08yLGPLTf5w
-yAREkFYou20vh5vRvPASoXx6auVf1MuxokDShVhxLpryBnlKCobs4voxN54BUO7m
-zuERXN8kadsxGFzItAyfKYzEiJrpUB1yhm78AecDyiPlMjl99xXk0zs9lcKriaBy
-VUv/NsyJFQj/kmdxox3XHi9K29kopFszm1tFiDwCFr/xumbZcMY17Yi2bQARAQAB
-zSdDb2xpbiBJYW4gS2luZyA8Y29saW4uaS5raW5nQGdtYWlsLmNvbT7CwZEEEwEI
-ADsCGwMFCwkIBwMFFQoJCAsFFgIDAQACHgECF4AWIQRwYtqk8AG5xmFnAM9owoff
-xqgCJgUCY8GcawIZAQAKCRBowoffxqgCJtd/EACIWcaxfVt/MH4qqo5ELsjCFPVp
-+RhVpQDWy8v9Np2YbTcZ4AY2Zj4Pq/HrZ3F/Bh02v85C6mNv8BDTKev6Qcq3BYw0
-iqw6/xLNvRcSFHM81mQI9xtnAWIWfI9k5hpX19QooPIIP3GOMdMc1uRUGTxTgTFA
-AsAswRY3kMzo6k7arQnUs9zbiZ9SmS43qWOIxzGnvneekHHDAcomc/oho7kgj6rK
-p/f9qRrhForkgVQwdj6iBlW934yRXzeFVF3wr7Lk5GQNIEkJiNQPZs54ojBS/Kx6
-3UTLT1HgOp6UY9RPEi9wubmUR+J6YjLRZMr5PCcA86EYmRoysnnJ8Q/SlBVD8npp
-GVEcuvrbH3MBfhmwOPDc3RyLkEtKfSTB92k1hsmRkx9zkyuUzhcSnqQnpWGJD+xt
-KHvcHRT7Uxaa+SDwUDM36BjkyVcZQy8c+Is2jA55uwNgPpiA7n82pTeT+FRGd+7i
-CLQHaryu6FO6DNDv09RbPBjIiC/q814aeKJaSILP1ld9/PEBrLPdm+6lG6OKOt9D
-DV6jPmfR96FydjxcmI1cgZVgPomSxv2JB1erOggB8rmX4hhWYsVQl1AXZs3LdEpJ
-6clmCPspn/ufZxHslgR9/WR1EvPMQc8XtssF55p8ehRIcVSXDRcMFr3ZuqMTXcL6
-8YbDmv5OGS95O1Gs4c0iQ29saW4gS2luZyA8Y29saW4ua2luZ0B1YnVudHUuY29t
-PsLBdwQTAQgAIQUCTwq47wIbAwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgAAKCRBo
-woffxqgCJo1bD/4gPIQ0Muy5TGHqTQ/bSiQ9oWjS5rAQvsrsVwcm2Ka7Uo8LzG8e
-grZrYieJxn3Qc22b98TiT6/5+sMa3XxhxBZ9FvALve175NPOz+2pQsAV88tR5NWk
-5YSzhrpzi7+klkWEVAB71hKFZcT0qNlDSeg9NXfbXOyCVNPDJQJfrtOPEuutuRuU
-hrXziaRchqmlhmszKZGHWybmPWnDQEAJdRs2Twwsi68WgScqapqd1vq2+5vWqzUT
-JcoHrxVOnlBq0e0IlbrpkxnmxhfQ+tx/Sw9BP9RITgOEFh6tf7uwly6/aqNWMgFL
-WACArNMMkWyOsFj8ouSMjk4lglT96ksVeCUfKqvCYRhMMUuXxAe+q/lxsXC+6qok
-Jlcd25I5U+hZ52pz3A+0bDDgIDXKXn7VbKooJxTwN1x2g3nsOLffXn/sCsIoslO4
-6nbr0rfGpi1YqeXcTdU2Cqlj2riBy9xNgCiCrqrGfX7VCdzVwpQHyNxBzzGG6JOm
-9OJ2UlpgbbSh6/GJFReW+I62mzC5VaAoPgxmH38g0mA8MvRT7yVpLep331F3Inmq
-4nkpRxLd39dgj6ejjkfMhWVpSEmCnQ/Tw81z/ZCWExFp6+3Q933hGSvifTecKQlO
-x736wORwjjCYH/A3H7HK4/R9kKfL2xKzD+42ejmGqQjleTGUulue8JRtpM1AQ29s
-aW4gSWFuIEtpbmcgKEludGVsIENvbGluIElhbiBLaW5nIGtleSkgPGNvbGluLmtp
-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
-=3DQKm6
------END PGP PUBLIC KEY BLOCK-----
+------MTAFpDJBIS7x0DorxmyomC-IKR7RHdtq514vGN5lDcSFRf5o=_7482b_
+Content-Type: text/plain; charset="utf-8"
 
---------------Ml0WFusNExdpjEsOswU7LrIe--
 
---------------4QUfbI588VLWXc5nk1t30fm2--
-
---------------jjSt2w1IWriAaCB2nSaRnplR
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEEcGLapPABucZhZwDPaMKH38aoAiYFAme4OosFAwAAAAAACgkQaMKH38aoAiYJ
-pg//cdsW1L88ahSM77LAAOS/wns+g7kEKUhlFhfDlbvdzU/bVDeKtyie+7V9QcJ+arMQgOc/JCFv
-lGKGBqEh3xoq915IrPdx2SKc14tCa8zTMyI5XD6NG16CQCsvDZlj1Kp2QESKR349gPQiXF5hpL55
-spJf2TJsVJZPiZLKiFdUGT0g+lkv1uObxIdkk5taOG27ht6SX79ZDfCiSSz0QnpaDF0WLuH7zZZ9
-+zm6L0OXb3W8VfyMiPLq8nnPNEW5tXfQ/0Zs97sh2XJ/4Y55E25DL7Y8rOWXod9rIofiW1kSKMo8
-ivwIcNjalmXo8iQvNokLJuAQEFVLo8gmMJq/6fnJBX/4gBAGCumwreTlLLzeu1MRH5pMHgDafbVs
-Tp2mPSMEt4pbNdV5yaR+w+E4jH6IyMsFZIXjHgr+559u/X9TpGGtul6poPFhOdpoK0RTyOcxRQ+k
-fUVX03e85rCm8Tpq0JYkJy9TQSgnvkk4oJ7vCLUby3Rs16oBOG+FyZaQF3T6chHuXjrsJKEoR9Dr
-cV5liz6LG2TMpKsQ6HfnHpFzzcjolRFYHD1oY8CGNGRgByzuTd1fbSArEF7Oak7H1+HjquGw7PIa
-cKhnM54hfJKkJCXvlGkBSVw6nZb0j+1R0gliBmjJ6Y+BpT9R/Pjn1R3pUAMD2ISo2QaXg5qe8t88
-xws=
-=9kl2
------END PGP SIGNATURE-----
-
---------------jjSt2w1IWriAaCB2nSaRnplR--
+------MTAFpDJBIS7x0DorxmyomC-IKR7RHdtq514vGN5lDcSFRf5o=_7482b_--
 
