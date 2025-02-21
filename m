@@ -1,116 +1,114 @@
-Return-Path: <linux-scsi+bounces-12397-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12399-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4313A3EB57
-	for <lists+linux-scsi@lfdr.de>; Fri, 21 Feb 2025 04:28:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06814A3EC72
+	for <lists+linux-scsi@lfdr.de>; Fri, 21 Feb 2025 07:01:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C81F67A8663
-	for <lists+linux-scsi@lfdr.de>; Fri, 21 Feb 2025 03:27:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17E5E7A5F44
+	for <lists+linux-scsi@lfdr.de>; Fri, 21 Feb 2025 06:00:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 104B51DB92C;
-	Fri, 21 Feb 2025 03:28:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D86C1FAC23;
+	Fri, 21 Feb 2025 06:01:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="IeSe1DYb"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OCOHGOcg"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4149613A3F7
-	for <linux-scsi@vger.kernel.org>; Fri, 21 Feb 2025 03:28:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115B31917E3;
+	Fri, 21 Feb 2025 06:01:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740108487; cv=none; b=V4J2q7P5YRJroPKV0SFBfdNIM4E+cN2LfkWcnEzhfP0YOMqAxYDPw9d2zns87XMa8UbIFtwr27QjVfY5he6oo9Ap8TMkmfUVyBtIzKTzCcZAbevt2Ffi9fQnxj63olwI6I6c+FDF3Oo/iUVIJHH/H7BrsHkXct9HtKX4ox0wfCQ=
+	t=1740117698; cv=none; b=U4buMxHgxhMr/ktNbd+EXFaiAOsoKPePWuxlSUhWuSFGnnmlsN2Z0IkZxavzL4rl9NRI2uA+IzDjQ7lMHrEVRB92+URcqrZZ2w4sSY0W6VqFcl6PtJ/3TtZUWENknMWzzcJCfhYlMcl74OjcQCHE3TVoyge9V/uU1SI7IAUmglU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740108487; c=relaxed/simple;
-	bh=mI4IAyXLH3Bhe9Pf/JsrH5D51PtZjJ2eOPlsd1ao+4I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=djWlxqOBtY8+doJbL/EEx++WRAExBUGazbXAKas04k3iig8qTWlv8w0tWD7Flzs86VuYez8OCl+cwVVn8A211uPqXCh04qUJMm1faufm6pBjCEsnErBXKNAGNzIFJ1BAMi9f1sPFZZsMBfR4PJQ0ztLwaCjyL35Z/8NShzxYADA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=IeSe1DYb; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51KLrksO014041;
-	Fri, 21 Feb 2025 03:27:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	s=arc-20240116; t=1740117698; c=relaxed/simple;
+	bh=fCzc/nNMh2KfoFPRA/XbYY9gHWRIDSlx5rH678Vgm/o=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=XP5RbluVZqnx7uk+NJiCK4daZdsQkbIINFnxxt2Tp3WmIbukFmqZ/TzLoSZ0228Lnq4rEsoV+tYLzwUpLMz/f9FHGxbEill8el3VwgtpUZ33LIiZ/Yn3w4MjgimYXajPp/LD0BZFJNjVnu96mSIg50fb0xyiSY2CeDNyTqXEMGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OCOHGOcg; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51L5P45s003571;
+	Fri, 21 Feb 2025 06:01:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=+GnV/s3Yp6zNkg6RCIHa6uvByxq08aNiGZexpoptHAI=; b=
-	IeSe1DYbH++w2GQhRIZPWmxtLWf0zOdDddbv4H9zmnC0/g+GqhNqxnZ2PQdu9yMB
-	N2E0l0skS4JVWCEOZcBGEQuagWEogqSR2zZIy2LSfAEYI+BtM+GztBgRYXulyCj5
-	yWcSHzG2mPURqPTiS/8zSfzY5L7aNxiUhhv4qk1+QQgK+hJJRn0XRdhi8I3TokbK
-	AAvPWUxIiUd3KZRHI0MABQedTIvB0NppMv9nl01UVaeE41iIP2Zb1qdeXaXmzqsH
-	skt/kJPZs2ztZX2S2VGHH5KgwDTxyn3wbYP86kC6Kspd/V3SD6ySK+5ZMYzMd2xx
-	N78Bm/F9VqIz3N2QEWOLcw==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44w00nnfpy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 21 Feb 2025 03:27:50 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51L0JGZm025347;
-	Fri, 21 Feb 2025 03:27:49 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44w08yu5nu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 21 Feb 2025 03:27:49 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 51L3RmE4001656;
-	Fri, 21 Feb 2025 03:27:49 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 44w08yu5n6-2;
-	Fri, 21 Feb 2025 03:27:49 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
-        Ye Bin <yebin@huaweicloud.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        zhangxiaoxu5@huawei.com
-Subject: Re: [PATCH v3] scsi: core: clear driver private data when retry request
-Date: Thu, 20 Feb 2025 22:27:25 -0500
-Message-ID: <174010841895.1417860.285080719896282100.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250217021628.2929248-1-yebin@huaweicloud.com>
-References: <20250217021628.2929248-1-yebin@huaweicloud.com>
+	:message-id:mime-version:references:subject:to; s=pp1; bh=d4FmSe
+	9M3mZq4yCy32/8QHZt9cN5EPgh9r7qE2bLzdc=; b=OCOHGOcgdKmfZCTNoj9LQX
+	ajTY+gxx8a9BeumZM6wrDYOwTU/L6t0GLLRDZXRlg6waNOcvr7Tp8hv+FSHsPydZ
+	gHJsiRVTQP77+RcAi5KbQeJno0Q30BiDnEtU8W5T9+nSerJusRF1xVXQZU++ufyb
+	eobpb4tEPRbxaMe4CduxaezUTymQEshiTvwveiJNjnHJV76TPc3ZHCgQ7G1lO7qT
+	6VTjoGTJMkycbNX03ic4PlcVNKj0zNZ8KGijjTUGdhjC09AVQv5XXBUG11bDaETF
+	T1TBZXmSyKrIp+AUmA3t3zbkB6lAp8i4B+z6clOTDUfMw2vXdMS6XFatS9UjiHqQ
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44xka8g4bn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Feb 2025 06:01:26 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51L5CtZa027050;
+	Fri, 21 Feb 2025 06:01:25 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 44w025e86v-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Feb 2025 06:01:25 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51L61ODj28902054
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 21 Feb 2025 06:01:24 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5514458062;
+	Fri, 21 Feb 2025 06:01:24 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9BAA55805A;
+	Fri, 21 Feb 2025 06:01:20 +0000 (GMT)
+Received: from [9.109.211.178] (unknown [9.109.211.178])
+	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 21 Feb 2025 06:01:20 +0000 (GMT)
+Message-ID: <21af17ce-e125-4c6c-8826-f6cf6b2448d3@linux.ibm.com>
+Date: Fri, 21 Feb 2025 11:31:19 +0530
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: Change in reported values of some block integrity sysfs
+ attributes
+From: M Nikhil <nikh1092@linux.ibm.com>
+To: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+        linux-raid@vger.kernel.org, nvdimm@lists.linux.dev,
+        linux-scsi@vger.kernel.org, hare@suse.de, hch@lst.de,
+        steffen Maier <maier@linux.ibm.com>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        Nihar Panda <niharp@linux.ibm.com>
+References: <f6130475-3ccd-45d2-abde-3ccceada0f0a@linux.ibm.com>
+ <yq18qsjdz0r.fsf@ca-mkp.ca.oracle.com>
+ <a39d25d3-e6ac-4166-a75e-58a258da4101@linux.ibm.com>
+Content-Language: en-US
+In-Reply-To: <a39d25d3-e6ac-4166-a75e-58a258da4101@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ntn5dI55lF0o7GPFgeztaTKLqIk3V94R
+X-Proofpoint-ORIG-GUID: ntn5dI55lF0o7GPFgeztaTKLqIk3V94R
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-20_09,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0 bulkscore=0
- mlxscore=0 spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502100000
- definitions=main-2502210022
-X-Proofpoint-ORIG-GUID: 6F3CHwirVUSkuHaHzGQDnM9CvkXK9j-Y
-X-Proofpoint-GUID: 6F3CHwirVUSkuHaHzGQDnM9CvkXK9j-Y
+ definitions=2025-02-21_01,2025-02-20_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 suspectscore=0 lowpriorityscore=0
+ adultscore=0 phishscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ mlxlogscore=807 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502210044
 
-On Mon, 17 Feb 2025 10:16:28 +0800, Ye Bin wrote:
+gentle ping!!!
 
-> After commit 1bad6c4a57ef
-> ("scsi: zero per-cmd private driver data for each MQ I/O"),
-> xen-scsifront/virtio_scsi/snic driver remove code that zeroes
-> driver-private command data. If request do retry will lead to
-> driver-private command data remains. Before commit 464a00c9e0ad
-> ("scsi: core: Kill DRIVER_SENSE") if virtio_scsi do capacity
-> expansion, first request may return UA then request will do retry,
-> as driver-private command data remains, request will return UA
-> again. As a result, the request keeps retrying, and the request
-> times out and fails.
-> So zeroes driver-private command data when request do retry.
-> 
-> [...]
+Hopefully I haven't missed anything. I was wondering if you could find 
+out something and if I can provide more information.
 
-Applied to 6.14/scsi-fixes, thanks!
-
-[1/1] scsi: core: clear driver private data when retry request
-      https://git.kernel.org/mkp/scsi/c/dce5c4afd035
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
 
