@@ -1,85 +1,78 @@
-Return-Path: <linux-scsi+bounces-12442-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12437-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63BADA431E7
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Feb 2025 01:34:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8800BA431DD
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Feb 2025 01:33:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 331FB189C7DB
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Feb 2025 00:34:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 740F417AB26
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Feb 2025 00:33:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A999323AD;
-	Tue, 25 Feb 2025 00:33:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A181817E4;
+	Tue, 25 Feb 2025 00:33:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ahfSHd+e"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Vas7O94U"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D42207E9;
-	Tue, 25 Feb 2025 00:33:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33CB7E9
+	for <linux-scsi@vger.kernel.org>; Tue, 25 Feb 2025 00:33:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740443631; cv=none; b=CdVOv0PWFQtaEMRSpIvRWFrQz6wrQXGHzzbivaKVwsZpUGZPQRrWgKTqCIsoIpECs6izRrvKKj9fKufk8ETT9B2l2RRwlqj7XchKobSMYfPLUTglkioLj4N626g6kIbip3/dnbw3lJ/bimz3KUj6YPKJQsx/ozU2K+mjVUVApOQ=
+	t=1740443606; cv=none; b=PfRaUYfNgWBn+bG0+VSe0jSZkj1gcCnJ2skBPRp4C6BPxlTAhkr02HjFYxja26VrzRlfdlg6jyB9sQR73lS4y5yVmqAEkLM9a48jYcn5/3diVtruguiQSYxpsuN9SVAScfIEqMKtWoExDmqqsYFxzDtsUKoKgz02NBLuVpdrP0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740443631; c=relaxed/simple;
-	bh=3Dgn6ap7O8+TC3enKytA6srfujJVLRQOiILzEizZ/vQ=;
+	s=arc-20240116; t=1740443606; c=relaxed/simple;
+	bh=JK1XNHhaEooLEVY9BZSXGQkjBqkHKUi6u6wLHtQQjHI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=siYPjUrxLN5ssGfZb3mg0pSaf2SGLfpW/APUmldlkBOwkQSFLDyz4AYfpKFJzNS9VQYT8PEXTYRFpTpIvYsTRPD/NZ1hxT7AAWHGGWYB3Ss+MJ7OVP8NXcmUCqHl3canYDyOXeJVhWmRP4MN2/hgKi1jnnBCyXtsfe9yeEQuuCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ahfSHd+e; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=KLqsfC3ZvItO6MPaHaHoxdYWHmBXBIY2zrYHQiWrU/q8vKPjBx72vcYJBBoLgdU9ih5jKZ89ymjiSZ8MjXVUM+fSezCoNiKrlKc2X8XNeds4YUXV3mwHPS2fqkCrFySevrjcblg5mgYd9H6tKhuD/hAhB11Gfkzt49UHKs3nRfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Vas7O94U; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51OMK4A2025220;
-	Tue, 25 Feb 2025 00:33:22 GMT
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51OMK2TW002395;
+	Tue, 25 Feb 2025 00:33:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=9rhjYcVXQZupgyG31N9S6xdQy/eIyTiHVZxCjl50oL0=; b=
-	ahfSHd+ee39+/n2jkR581gq4cakz8SZgHscMySx2Z4p0Vu2Pb7APelbGO+eZdDwb
-	U1EtRmPWDp+AA5AMshLCTHyl2pSnQuK4rL7kVFJrfA6N2eYVPh89A66S4f6O2pXF
-	JwgEq7tBlTEQGsorFAUOokZrBZ2gnrN8bkS7qJibSdk1DYnlcZThKTL51j5JiRDi
-	vhnyD3z33Cv98HhYxHCxRIoQWW5JNby3FH6lWINP8UIDwN1/kIm1yCJdHp5ECsi0
-	HHL2JW4a9JzR6ZVez71NLrINHPPdxfkeLAqL8NriZJBShOJeBbgQ6oHoyibtikY3
-	xf7JKIDNlJuSjdZt9Cy0+w==
+	corp-2023-11-20; bh=cpWcDUpHIbyWpaFUme1eOaEhy73vlcBCLKsE/uvzzBQ=; b=
+	Vas7O94UGXzBpsSAowqBJ68puaHsLLErfKMehlszEVFjsMvS9+fNWhukxhjsuXfH
+	DF3/q5lCKR9zecoLV5bSnoXBv3JMEohJxETZgjtxjS9zgjh/vRpaH44nWill8KCp
+	/kX+euVF1CByth5H6fueP4Fe4J2d6tlefKd+U1X18rjkzuC18RDoQ4D3cUPMLhkU
+	HNl34YWNCvMPVRXljf6TjGqR9Iih6muI8a+R1XV4oN8W5CcSTom5pqIxznADn8mN
+	v6QiuwJeFxD1kVs7THFMB+tBQfiE/o/JIBLG5swaYhRz39YLatxFMR1qgIzyJOaE
+	Mt/Ymss+Ns8iHcrVaQkZyQ==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44y50bkwek-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44y5603x5h-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 25 Feb 2025 00:33:21 +0000 (GMT)
+	Tue, 25 Feb 2025 00:33:22 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51P0UE09025437;
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51ON10gq025295;
 	Tue, 25 Feb 2025 00:33:21 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44y51f0q94-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44y51f0q9a-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 25 Feb 2025 00:33:21 +0000
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 51P0XI1x025171;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 51P0XI21025171;
 	Tue, 25 Feb 2025 00:33:20 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 44y51f0q87-4;
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 44y51f0q87-5;
 	Tue, 25 Feb 2025 00:33:20 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: quic_cang@quicinc.com, bvanassche@acm.org, mani@kernel.org,
-        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
-        quic_nguyenb@quicinc.com, quic_nitirawa@quicinc.com,
-        peter.wang@mediatek.com, quic_rampraka@quicinc.com,
-        Ziqi Chen <quic_ziqichen@quicinc.com>
+To: linux-scsi@vger.kernel.org,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v5 0/8] Support Multi-frequency scale for UFS
-Date: Mon, 24 Feb 2025 19:32:49 -0500
-Message-ID: <174044345145.2973737.15116992944360697674.b4-ty@oracle.com>
+        sathya.prakash@broadcom.com, ranjan.kumar@broadcom.com,
+        suganath-prabu.subramani@broadcom.com, sumit.saxena@broadcom.com
+Subject: Re: [PATCH 0/5] mpt3sas driver udpates
+Date: Mon, 24 Feb 2025 19:32:50 -0500
+Message-ID: <174044345139.2973737.18100372323027044318.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250213080008.2984807-1-quic_ziqichen@quicinc.com>
-References: <20250213080008.2984807-1-quic_ziqichen@quicinc.com>
+In-Reply-To: <1739410016-27503-1-git-send-email-shivasharan.srikanteshwara@broadcom.com>
+References: <1739410016-27503-1-git-send-email-shivasharan.srikanteshwara@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -91,46 +84,40 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-24_11,2025-02-24_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=955
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=838
  phishscore=0 mlxscore=0 suspectscore=0 adultscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502100000
  definitions=main-2502250001
-X-Proofpoint-ORIG-GUID: 7ty-sRKwHsNKQL1Xn1bsKeyU2f8-As33
-X-Proofpoint-GUID: 7ty-sRKwHsNKQL1Xn1bsKeyU2f8-As33
+X-Proofpoint-GUID: LyRdn18XgylB8x3K3JpmV3maq1fz8k6l
+X-Proofpoint-ORIG-GUID: LyRdn18XgylB8x3K3JpmV3maq1fz8k6l
 
-On Thu, 13 Feb 2025 16:00:00 +0800, Ziqi Chen wrote:
+On Wed, 12 Feb 2025 17:26:51 -0800, Shivasharan S wrote:
 
-> With OPP V2 enabled, devfreq can scale clocks amongst multiple frequency
-> plans. However, the gear speed is only toggled between min and max during
-> clock scaling. Enable multi-level gear scaling by mapping clock frequencies
-> to gear speeds, so that when devfreq scales clock frequencies we can put
-> the UFS link at the appropraite gear speeds accordingly.
+> This patch series adds support for the MCTP passthrough function over the
+> MPI interface for management commands.
+> Also fix issue related to task management handling during IOCTL timeout.
 > 
-> This series has been tested on below platforms -
-> sm8550 mtp + UFS3.1
-> SM8650 MTP + UFS3.1
-> SM8750 MTP + UFS4.0
+> Shivasharan S (5):
+>   mpt3sas: Update MPI headers to 02.00.62 version
+>   mpt3sas: Add support for MCTP Passthrough IOCTLs
+>   mpt3sas: Report driver capability as part of IOCINFO command
+>   mpt3sas: Send a diag reset if target reset fails
+>   mpt3sas: update driver version to 52.100.00.00
 > 
 > [...]
 
 Applied to 6.15/scsi-queue, thanks!
 
-[1/8] scsi: ufs: core: Pass target_freq to clk_scale_notify() vop
-      https://git.kernel.org/mkp/scsi/c/5e011fcc7d16
-[2/8] scsi: ufs: qcom: Pass target_freq to clk scale pre and post change
-      https://git.kernel.org/mkp/scsi/c/367a0f017c61
-[3/8] scsi: ufs: core: Add a vop to map clock frequency to gear speed
-      https://git.kernel.org/mkp/scsi/c/d7bead60b08e
-[4/8] scsi: ufs: qcom: Implement the freq_to_gear_speed() vop
-      https://git.kernel.org/mkp/scsi/c/c02fe9e222d1
-[5/8] scsi: ufs: core: Enable multi-level gear scaling
-      https://git.kernel.org/mkp/scsi/c/129b44c27c8a
-[6/8] scsi: ufs: core: Check if scaling up is required when disable clkscale
-      https://git.kernel.org/mkp/scsi/c/eff26ad4c34f
-[7/8] scsi: ufs: core: Toggle Write Booster during clock scaling base on gear speed
-      https://git.kernel.org/mkp/scsi/c/2a25cbaa81d2
-[8/8] ABI: sysfs-driver-ufs: Add missing UFS sysfs attributes
-      https://git.kernel.org/mkp/scsi/c/6d7696b4d447
+[1/5] mpt3sas: Update MPI headers to 02.00.62 version
+      https://git.kernel.org/mkp/scsi/c/70684dcbec3a
+[2/5] mpt3sas: Add support for MCTP Passthrough commands
+      https://git.kernel.org/mkp/scsi/c/c72be4b5bb7c
+[3/5] mpt3sas: Report driver capability as part of IOCINFO command
+      https://git.kernel.org/mkp/scsi/c/8c2465e20200
+[4/5] mpt3sas: Send a diag reset if target reset fails
+      https://git.kernel.org/mkp/scsi/c/5612d6d51ed2
+[5/5] mpt3sas: update driver version to 52.100.00.00
+      https://git.kernel.org/mkp/scsi/c/51edde19f008
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
