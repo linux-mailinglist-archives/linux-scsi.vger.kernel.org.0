@@ -1,62 +1,72 @@
-Return-Path: <linux-scsi+bounces-12470-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12472-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B62FEA44652
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Feb 2025 17:39:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54DC0A44A67
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Feb 2025 19:31:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0ACD1426F0C
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Feb 2025 16:36:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F598860C7C
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Feb 2025 18:24:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8237919259A;
-	Tue, 25 Feb 2025 16:36:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A4A1A2567;
+	Tue, 25 Feb 2025 18:22:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="szV/O/Zx"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="dkU0DeKs"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE1F175D5D;
-	Tue, 25 Feb 2025 16:36:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 756E319597F;
+	Tue, 25 Feb 2025 18:22:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740501402; cv=none; b=X4hGI+TtMZrQ8vofxnBQlh6edbxCLoApSSkud6jKHJ9B3gkpy660VRs6YqDKEClltyNUsuyOXdXCEK+HwC1A7IG6hfdQHEOZShQfIQgQO7YmwBxabdgbb9yRXbWXHQ3RQCyXpk5JDcWuOCFJ+fANKXgayHktQWRScnl7N5ZU7D8=
+	t=1740507761; cv=none; b=BlUDbhzVS/B/abLcn+GcZdflplnWP6oClU2XHsLKOJK1s2LnJk7XbrB+FsYzyT/iTnSzXHv7bBqJIEYfq7k0ybTMxlFdq0ygC++gS7QkZGKP2C9woNPc9xJBKFwImctL8TJ2+nxx+lMveNzqeMcklX4tjwQYWIwtPDAJ1wkigKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740501402; c=relaxed/simple;
-	bh=CDe7JbnlugO1bzQW+Xtm0wMRorwKjf487Z/g8QdakFc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cQ8OBMBOLS4SKqBIB30KJ/j+jpZSRoEsX3MqOw/UWHFdLUyxyoKKw3V22yGukpHmLkGGoR/99Kz4CYRWi9wFrJPX1r6d7W+hf954mhFmfl7lwgFV1JQkvijTY27+tWj9d7i3+HRNqWI4fVrd9GOl0ohqLNHY7cR/RZekyzCWc5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=szV/O/Zx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5998C4CEDD;
-	Tue, 25 Feb 2025 16:36:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740501402;
-	bh=CDe7JbnlugO1bzQW+Xtm0wMRorwKjf487Z/g8QdakFc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=szV/O/Zx/iKdYqpV/A94Tuo4+IwE39EKL/BII5M3YU0reotOKon71pu6oLFXc/VXA
-	 4zWOgEtUbeaR1KnOa4y3W9Qp1vi45ioN87AYwcyA2ntqGaEkFzcKP5Aiko7pEUARAI
-	 uPJJqVzmQXiJvQL2sTEwxwqyUmhFj0tN/Mzrz/oWNoGunzRjEi1VdHPd9hY2WKLTA7
-	 n3ZSw9lUntHnzbQXdwABwNf6FksCTVZfgOlmqoUTk2/P+YavDnQs5Tp9lk/dRTMDUj
-	 nrXisFn1WzoF7Q/cI6ZktnNGJcmI/e0VNCOSMgAAcmc3kI1dUO4bZ2rwCmsquth3RL
-	 Hk2RQ1RG6i9sA==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Yihang Li <liyihang9@huawei.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	John Garry <john.g.garry@oracle.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
-	Jason Yan <yanaijie@huawei.com>,
-	Igor Pylypiv <ipylypiv@google.com>,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: hisi: remove incorrect ACPI_PTR annotations
-Date: Tue, 25 Feb 2025 17:36:27 +0100
-Message-Id: <20250225163637.4169300-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1740507761; c=relaxed/simple;
+	bh=PNvCJg9elJfwoYtj5L3LVl7XN5WApXh77sQmP1Dbg9c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HjUU8l6DOUol1AFIDk04rC3RgkX3t++FvN5C2ryovJIrPTGq7zZJpxS40rAzZD+rb5eRTJGDvYDCW9cJ/PxDjN9y76/qaAhgX3QRvarPJntOefTilGrKOLS2j3+Fbo8JN2yIH4rS7bC/v8j7uvLY94QGEAndU5PSPtziOD+opVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=dkU0DeKs; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51PHtbtP008584;
+	Tue, 25 Feb 2025 18:22:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2023-11-20; bh=/G+22Z5klOB/BaYgo3/8FGrN8t10I
+	pNqOIARPY7xUJY=; b=dkU0DeKsROM/mZtEf2javZx2D5KeN1Q3Io1FzZ5INlqWU
+	EjOlBw66OK2reLo2njrm75c4txi/6CI3EYfXzMOzMr8yrhuq/Rk3y4spj0/utNYT
+	qe/TsvY2xl5PzkeunlttnluJuzmvFxZ3sjVcNbVyJprbpFto4EBK2CQ44O0llBV6
+	ZFtUTWqNL2bfoAhuIvaK/BEbPISpEohdP/F0kN9/ZVhMIkmhxTHPxvnz55bPZCpK
+	x1oNSxh2YChvvMB0cH7iw5fB8wTXCdY4lj3vdmiqri+1i58iXLs95KTQKba+zHfF
+	u/OaRW/9wlQ7AzkNt/U/u0j+g7gGqOSk5wVCefx8A==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44y5c2e1k0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 25 Feb 2025 18:22:34 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51PHVu0r024499;
+	Tue, 25 Feb 2025 18:22:33 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44y519n6xv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 25 Feb 2025 18:22:33 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 51PIMXe4038769;
+	Tue, 25 Feb 2025 18:22:33 GMT
+Received: from ca-dev94.us.oracle.com (ca-dev94.us.oracle.com [10.129.136.30])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 44y519n6x8-1;
+	Tue, 25 Feb 2025 18:22:32 +0000
+From: Alan Adamson <alan.adamson@oracle.com>
+To: linux-block@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org, alan.adamson@oracle.com,
+        linux-nvme@lists.infradead.org, shinichiro.kawasaki@wdc.com
+Subject: [PATCH blktests 0/1] common/xfs: verify xfs_io supports statx atomic write attributes
+Date: Tue, 25 Feb 2025 10:31:07 -0800
+Message-ID: <20250225183108.3881328-1-alan.adamson@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -64,47 +74,90 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-25_06,2025-02-25_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 adultscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2502100000 definitions=main-2502250114
+X-Proofpoint-ORIG-GUID: pffJKxOyNP69FTdj4LuhTKOWd7JakYK2
+X-Proofpoint-GUID: pffJKxOyNP69FTdj4LuhTKOWd7JakYK2
 
-From: Arnd Bergmann <arnd@arndb.de>
+The xfs_io utility is used to perform atomic pwritev2 and statx system calls.
+The atomic pwritev2 was supported in xfs_io v6.11.0 and atomic statx was
+added to v6.12.0 so _have_xfs_io_atomic_write() needs to be modified to
+check for both atomic pwritev2 (-A) and atomic statx.
 
-Building with W=1 shows a warning about sas_v2_acpi_match being unused when
-CONFIG_OF is disabled:
+TEST RESULTS
+============
+Using xfs_io version 6.11.0:
 
-    drivers/scsi/hisi_sas/hisi_sas_v2_hw.c:3635:36: error: unused variable 'sas_v2_acpi_match' [-Werror,-Wunused-const-variable]
+[root@localhost blktests.x]# ./check scsi/009
+scsi/*** => nvme0n1                                          [not run]
+    /dev/nvme0n1 is not a SCSI device
+scsi/009 => sdb (test scsi atomic writes)                    [failed]
+    runtime  0.156s  ...  0.148s
+    --- tests/scsi/009.out	2025-02-24 17:04:22.372544559 -0500
+    +++ /root/blktests.x/results/sdb/scsi/009.out.bad	2025-02-24 17:50:33.256602965 -0500
+    @@ -3,8 +3,8 @@
+     TEST 2 - check scsi_debug atomic_wr_max_length is the same as sysfs atomic_write_max_bytes - pass
+     TEST 3 - check sysfs atomic_write_unit_max_bytes <= scsi_debug atomic_wr_max_length - pass
+     TEST 4 - check sysfs atomic_write_unit_min_bytes = scsi_debug atomic_wr_gran - pass
+    -TEST 5 - check statx stx_atomic_write_unit_min - pass
+    -TEST 6 - check statx stx_atomic_write_unit_max - pass
+    +TEST 5 - check statx stx_atomic_write_unit_min - fail  - 1024
+    +TEST 6 - check statx stx_atomic_write_unit_max - fail  - 524288
+    ...
+    (Run 'diff -u tests/scsi/009.out /root/blktests.x/results/sdb/scsi/009.out.bad' to see the entire diff)
+[root@localhost blktests.x]# ./check nvme/059
+nvme/059 => nvme0n1 (test atomic writes)                     [failed]
+    runtime  0.035s  ...  0.036s
+    --- tests/nvme/059.out	2025-02-24 17:04:22.371132656 -0500
+    +++ /root/blktests.x/results/nvme0n1/nvme/059.out.bad	2025-02-24 17:50:36.383906336 -0500
+    @@ -1,8 +1,8 @@
+     Running nvme/059
+     TEST 1 - Verify sysfs attributes - pass
+     TEST 2 - Verify sysfs atomic_write_unit_max_bytes is consistent with NVMe AWUPF/NAWUPF - pass
+    -TEST 3 - Verify statx is correctly reporting atomic_unit_max_bytes - pass
+    -TEST 4 - Verify statx is correctly reporting atomic_unit_min_bytes - pass
+    +TEST 3 - Verify statx is correctly reporting atomic_unit_max_bytes - fail  - 16384
+    +TEST 4 - Verify statx is correctly reporting atomic_unit_min_bytes - fail  - 512
+    ...
+    (Run 'diff -u tests/nvme/059.out /root/blktests.x/results/nvme0n1/nvme/059.out.bad' to see the entire diff)
+[root@localhost blktests.x]# 
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/scsi/hisi_sas/hisi_sas_v1_hw.c | 2 +-
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-index bb78e53c66e2..6621d633b2cc 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-@@ -1806,7 +1806,7 @@ static struct platform_driver hisi_sas_v1_driver = {
- 	.driver = {
- 		.name = DRV_NAME,
- 		.of_match_table = sas_v1_of_match,
--		.acpi_match_table = ACPI_PTR(sas_v1_acpi_match),
-+		.acpi_match_table = sas_v1_acpi_match,
- 	},
- };
- 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index 71cd5b4450c2..3cc4cddcb655 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -3653,7 +3653,7 @@ static struct platform_driver hisi_sas_v2_driver = {
- 	.driver = {
- 		.name = DRV_NAME,
- 		.of_match_table = sas_v2_of_match,
--		.acpi_match_table = ACPI_PTR(sas_v2_acpi_match),
-+		.acpi_match_table = sas_v2_acpi_match,
- 	},
- };
- 
--- 
-2.39.5
+Testing by czhong:
+the default xfs_io version is 6.11.0 on my system,
+after applied your patch:
 
+# xfs_io -V
+xfs_io version 6.11.0
+
+# ./check scsi/009
+scsi/*** => nvme1n1                                          [not run]
+    /dev/nvme1n1 is not a SCSI device
+scsi/009 => sdb (test scsi atomic writes)                    [not run]
+    xfs_io does not support the statx atomic write fields
+# ./check nvme/059
+nvme/059 => nvme1n1 (test atomic writes)                     [not run]
+    runtime  0.081s  ...  
+    xfs_io does not support the statx atomic write fields
+and then I upgrade the xfs_io to 6.13.0:
+
+# xfs_io -V
+xfs_io version 6.13.0
+
+# ./check scsi/009
+scsi/*** => nvme1n1                                          [not run]
+    /dev/nvme1n1 is not a SCSI device
+scsi/009 => sdb (test scsi atomic writes)                    [passed]
+    runtime    ...  0.271s
+]# ./check nvme/059
+nvme/059 => nvme1n1 (test atomic writes)                     [passed]
+    runtime    ...  0.078s
+everything looks good now!!
+please merge your new patch to the repo,
+Thanks!
 
