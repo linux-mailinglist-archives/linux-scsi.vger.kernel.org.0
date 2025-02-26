@@ -1,41 +1,41 @@
-Return-Path: <linux-scsi+bounces-12515-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12512-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56CC4A457A1
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2025 09:05:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64B7CA45648
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2025 08:05:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6149216945B
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2025 08:04:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58CF33A413D
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2025 07:05:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A377258CFE;
-	Wed, 26 Feb 2025 08:04:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A522269AE6;
+	Wed, 26 Feb 2025 07:05:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="M1sany9x"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="GDaQiCWD"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-m49236.qiye.163.com (mail-m49236.qiye.163.com [45.254.49.236])
+Received: from mail-m1973183.qiye.163.com (mail-m1973183.qiye.163.com [220.197.31.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5E2258CCB;
-	Wed, 26 Feb 2025 08:04:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.236
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E643325D537;
+	Wed, 26 Feb 2025 07:05:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.83
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740557091; cv=none; b=u2iinM3ewDtgUSX/bEmBUjkfdE5mCBaxYHw+xSXXdrXOakTEGbpvHkGCF6qxRSdtIqNo9R42IVUD3mwLyArpJGdaMe82volLu7Rznh3Z6E2iRHPUJ2gwToVnAbvPvXcCqxz2v688Es5FWwbd5BZ2Gf4J7zD3hz4t6yQIOaf8w3k=
+	t=1740553505; cv=none; b=fXGwLIYkzlqw0BnliZyL8bL70j2rCK1ghPcr6CFDaQjjlhJXr/dZezVU7I/e/N+rQv9UtlvIRj8uxAsz4He9aetMRaH7Kss0CsY/h2GnHRFMWvtIrbrk5AW1MXhdDip4UchFbDiQitkC9fMcW136iUctamSqkepvgviNqxXKKk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740557091; c=relaxed/simple;
-	bh=l8E5RKP2L+w9L35Iyf+g+FiycmYARSKEIs/aumVhbF8=;
+	s=arc-20240116; t=1740553505; c=relaxed/simple;
+	bh=WLYZ9EBuwNXnwCUWsdQ1Ij0Qo8E9Crm4xrtth2ViDFE=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=HzT+vILxpjNC0TvE5yK7DqRtZLehQwW9RCk0tLTZhu+eh/WxOoqv1t8yig2WJzaLXnzSvjOaEjSHPDTOm2LGjD6w1FiRwsU3HkYrejKgQdAL7kWatBm3HN/dFOVIibnFl+wgnsNrAzxJzt8gREXAhvC+YKXCRS/ZbB3OISZLRF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=M1sany9x; arc=none smtp.client-ip=45.254.49.236
+	 In-Reply-To:Content-Type; b=i+9cqqGB9QEp3z5AoKNABJeNwUelt2y5teLyRpmmdOSYltVqiNkUFGlcWCv2mAga4On/Zrj9jIWSU9v/6Th28MERZ1tzoziFMivMRO52cF9av+1+K2KYwRU1rGFsXagOAHfqPDK6+uJGF5LkXE8Z4rC4aMLkKrZv68ENUyxJ75g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=GDaQiCWD; arc=none smtp.client-ip=220.197.31.83
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
 Received: from [172.16.12.45] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id c3c2a2d3;
-	Wed, 26 Feb 2025 14:48:58 +0800 (GMT+08:00)
-Message-ID: <a4f43d3e-2e41-4163-8938-5aa1592db371@rock-chips.com>
-Date: Wed, 26 Feb 2025 14:48:59 +0800
+	by smtp.qiye.163.com (Hmail) with ESMTP id c3c47c7b;
+	Wed, 26 Feb 2025 14:49:41 +0800 (GMT+08:00)
+Message-ID: <a18fb035-3e7f-443a-8b24-9a51cba5604a@rock-chips.com>
+Date: Wed, 26 Feb 2025 14:49:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -43,61 +43,60 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: shawn.lin@rock-chips.com, kernel-janitors@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] scsi: ufs: rockchip: Fix spelling mistake "susped"
- -> "suspend"
-To: Colin Ian King <colin.i.king@gmail.com>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>,
- Heiko Stuebner <heiko@sntech.de>, linux-scsi@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org
-References: <20250225101142.161474-1-colin.i.king@gmail.com>
+Cc: shawn.lin@rock-chips.com, martin.petersen@oracle.com, heiko@sntech.de,
+ linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Abaci Robot <abaci@linux.alibaba.com>, James.Bottomley@HansenPartnership.com
+Subject: Re: [PATCH -next] scsi: ufs: rockchip: Simplify bool conversion
+To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+References: <20250226021157.77934-1-jiapeng.chong@linux.alibaba.com>
 Content-Language: en-GB
 From: Shawn Lin <shawn.lin@rock-chips.com>
-In-Reply-To: <20250225101142.161474-1-colin.i.king@gmail.com>
+In-Reply-To: <20250226021157.77934-1-jiapeng.chong@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQkNCHlYdTBlJHhodGBpOSENWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-X-HM-Tid: 0a9541040a1509cckunmc3c2a2d3
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ0NNT1ZKH0hOS0NKHx8ZHkhWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE
+	5VSktLVUpCS0tZBg++
+X-HM-Tid: 0a954104b35509cckunmc3c47c7b
 X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ngg6PBw4UTILHQsaTh4TMzIq
-	VhkKCSNVSlVKTE9LTk5JTkhCTEpJVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
-	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUNNTjcG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Kz46Fjo*GDIKMwsDTh4qMxwW
+	VktPCRxVSlVKTE9LTk5JTkNISEtJVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUpKSU03Bg++
 DKIM-Signature:a=rsa-sha256;
-	b=M1sany9xNBK7VREkWV+9K9oI/K7EOJWY8i/mkHFni5If+uuFp4nTfsfWo9NCBVfDJdv9SDXXVnASaacyLeGHJB5rIQt9n3k0cBugM1hAYPP0B+QlPaT6e/DmwYoHFTvU8BUo6xe397yo4rW3fLRhW2Du3oV/FRStof5aetgnBqQ=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=vU92AfkXpo1upHQPW1E57oSrBRV5YkhXMeN9wMA5lys=;
+	b=GDaQiCWDoYocllNU6WqKHl5m9xRxpcznUkUedTxHBomfvOO/UfsHDYxKuNmU/5Vl7SAtbkmy79QcfIew8C3GU5v5i1+sB1KHMHcsG7KO2GgLXUbCoUht9ILjVM/mZW3hwIRmTlkOljc6BudXvicBkuIWTqQ54c2maLyOufFlvqQ=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=cvkxqloIlTXo9JLh9EsUKKF24vwSjOiMeRjag/XPRuc=;
 	h=date:mime-version:subject:message-id:from;
 
-在 2025/2/25 18:11, Colin Ian King 写道:
-> There is a spelling mistake in a dev_err message. Fix it.
+在 2025/2/26 10:11, Jiapeng Chong 写道:
+> ./drivers/ufs/host/ufs-rockchip.c:268:70-75: WARNING: conversion to bool not needed here.
 > 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=19055
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
 Acked-by: Shawn Lin <shawn.lin@rock-chips.com>
 
-Thanks Colin.
+Thanks Jiapeng.
 
 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 > ---
 >   drivers/ufs/host/ufs-rockchip.c | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/drivers/ufs/host/ufs-rockchip.c b/drivers/ufs/host/ufs-rockchip.c
-> index 5b0ea9820767..dddff5f538b9 100644
+> index 5b0ea9820767..350cb0f8d0c2 100644
 > --- a/drivers/ufs/host/ufs-rockchip.c
 > +++ b/drivers/ufs/host/ufs-rockchip.c
-> @@ -307,7 +307,7 @@ static int ufs_rockchip_system_suspend(struct device *dev)
+> @@ -265,7 +265,7 @@ static int ufs_rockchip_runtime_suspend(struct device *dev)
+>   	clk_disable_unprepare(host->ref_out_clk);
 >   
->   	err = ufshcd_system_suspend(dev);
->   	if (err) {
-> -		dev_err(hba->dev, "UFSHCD system susped failed %d\n", err);
-> +		dev_err(hba->dev, "UFSHCD system suspend failed %d\n", err);
->   		return err;
->   	}
+>   	/* Do not power down the genpd if rpm_lvl is less than level 5 */
+> -	dev_pm_genpd_rpm_always_on(dev, hba->rpm_lvl < UFS_PM_LVL_5 ? true : false);
+> +	dev_pm_genpd_rpm_always_on(dev, hba->rpm_lvl < UFS_PM_LVL_5);
 >   
+>   	return ufshcd_runtime_suspend(dev);
+>   }
 
 
