@@ -1,117 +1,103 @@
-Return-Path: <linux-scsi+bounces-12511-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12515-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 489E9A4561C
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2025 07:58:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56CC4A457A1
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2025 09:05:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E1CB7A3BEC
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2025 06:57:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6149216945B
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2025 08:04:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FDCF2698A1;
-	Wed, 26 Feb 2025 06:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A377258CFE;
+	Wed, 26 Feb 2025 08:04:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=aliyun.com header.i=@aliyun.com header.b="QI5nX0oX"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="M1sany9x"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from out30-65.freemail.mail.aliyun.com (out30-65.freemail.mail.aliyun.com [115.124.30.65])
+Received: from mail-m49236.qiye.163.com (mail-m49236.qiye.163.com [45.254.49.236])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A0E5028C;
-	Wed, 26 Feb 2025 06:58:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5E2258CCB;
+	Wed, 26 Feb 2025 08:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.236
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740553090; cv=none; b=CMKhuRNeWoy8Yx9H9UoOpam3uS1lYoOjiQfAeEqJLQ69FNyap58oKedrd76TKsxlFLfxbzVSRNOvJtStJct4QY/YBplg1hUXEPfbD34plrU1tcASrGLuwFFrcyeXYWSj3VPRxeDsYVGgSc7yxT6DPbAnnBeGP5wOe0Uti7e6MgA=
+	t=1740557091; cv=none; b=u2iinM3ewDtgUSX/bEmBUjkfdE5mCBaxYHw+xSXXdrXOakTEGbpvHkGCF6qxRSdtIqNo9R42IVUD3mwLyArpJGdaMe82volLu7Rznh3Z6E2iRHPUJ2gwToVnAbvPvXcCqxz2v688Es5FWwbd5BZ2Gf4J7zD3hz4t6yQIOaf8w3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740553090; c=relaxed/simple;
-	bh=ZsjxukEOVO5ffJ4Zs95qYyTWGKODiQNlo9YbGYFgp5c=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jPunHAosB+374UCzXYUR50whuaKEZkqhEVA8fywZcmeLpy5D9jKEXUmMcYCJn2lvZK4IgMJfDDBnfXj+w8fB1Skvkza11P40jg7cMG5XN4E3gqTrnS/qdlhX1KYkq3CiVEj6jeXcL9IvEnPTGyn7Jo0Ua7aBZa5WRB2WPmZdPh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aliyun.com; spf=pass smtp.mailfrom=aliyun.com; dkim=pass (1024-bit key) header.d=aliyun.com header.i=@aliyun.com header.b=QI5nX0oX; arc=none smtp.client-ip=115.124.30.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aliyun.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aliyun.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=aliyun.com; s=s1024;
-	t=1740553085; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=OxTo/iZCIK2ZpxP5h1M2T78BxTicPNxmRSp03rqcnX8=;
-	b=QI5nX0oXvc9YuStyjWUKIbPG4KO3kXgPkN+TNV7L/Vi1OBo4bnLsW+lof0cBzonu/cZ7njkW2q56OG2JFnogNf69bmyKw4kr80/D0UvhSh7CNWYJWDTqCfLaQPxgOkXU3wkq32QMDOSfi6P9/QgeAdgah8ZmVxr/fmc3qg1lPro=
-Received: from wdhh6.sugon.cn(mailfrom:wdhh6@aliyun.com fp:SMTPD_---0WQHDN2c_1740553084 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 26 Feb 2025 14:58:05 +0800
-From: Chaohai Chen <wdhh6@aliyun.com>
-To: James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com
-Cc: linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chaohai Chen <wdhh6@aliyun.com>
-Subject: [PATCH] scsi: stop judging after finding a VPD page expected to be processed.
-Date: Wed, 26 Feb 2025 14:58:02 +0800
-Message-Id: <20250226065802.234144-1-wdhh6@aliyun.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1740557091; c=relaxed/simple;
+	bh=l8E5RKP2L+w9L35Iyf+g+FiycmYARSKEIs/aumVhbF8=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=HzT+vILxpjNC0TvE5yK7DqRtZLehQwW9RCk0tLTZhu+eh/WxOoqv1t8yig2WJzaLXnzSvjOaEjSHPDTOm2LGjD6w1FiRwsU3HkYrejKgQdAL7kWatBm3HN/dFOVIibnFl+wgnsNrAzxJzt8gREXAhvC+YKXCRS/ZbB3OISZLRF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=M1sany9x; arc=none smtp.client-ip=45.254.49.236
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.45] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id c3c2a2d3;
+	Wed, 26 Feb 2025 14:48:58 +0800 (GMT+08:00)
+Message-ID: <a4f43d3e-2e41-4163-8938-5aa1592db371@rock-chips.com>
+Date: Wed, 26 Feb 2025 14:48:59 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: shawn.lin@rock-chips.com, kernel-janitors@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] scsi: ufs: rockchip: Fix spelling mistake "susped"
+ -> "suspend"
+To: Colin Ian King <colin.i.king@gmail.com>,
+ "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,
+ Heiko Stuebner <heiko@sntech.de>, linux-scsi@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org
+References: <20250225101142.161474-1-colin.i.king@gmail.com>
+Content-Language: en-GB
+From: Shawn Lin <shawn.lin@rock-chips.com>
+In-Reply-To: <20250225101142.161474-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQkNCHlYdTBlJHhodGBpOSENWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+X-HM-Tid: 0a9541040a1509cckunmc3c2a2d3
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ngg6PBw4UTILHQsaTh4TMzIq
+	VhkKCSNVSlVKTE9LTk5JTkhCTEpJVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUNNTjcG
+DKIM-Signature:a=rsa-sha256;
+	b=M1sany9xNBK7VREkWV+9K9oI/K7EOJWY8i/mkHFni5If+uuFp4nTfsfWo9NCBVfDJdv9SDXXVnASaacyLeGHJB5rIQt9n3k0cBugM1hAYPP0B+QlPaT6e/DmwYoHFTvU8BUo6xe397yo4rW3fLRhW2Du3oV/FRStof5aetgnBqQ=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=vU92AfkXpo1upHQPW1E57oSrBRV5YkhXMeN9wMA5lys=;
+	h=date:mime-version:subject:message-id:from;
 
-When the vpd_buf->data[i] is expected to be processed, stop other
-judgments.
+在 2025/2/25 18:11, Colin Ian King 写道:
+> There is a spelling mistake in a dev_err message. Fix it.
+> 
 
-Signed-off-by: Chaohai Chen <wdhh6@aliyun.com>
----
- drivers/scsi/scsi.c | 28 ++++++++++++++++++++--------
- 1 file changed, 20 insertions(+), 8 deletions(-)
+Acked-by: Shawn Lin <shawn.lin@rock-chips.com>
 
-diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-index a77e0499b738..53daf923ad8e 100644
---- a/drivers/scsi/scsi.c
-+++ b/drivers/scsi/scsi.c
-@@ -510,22 +510,34 @@ void scsi_attach_vpd(struct scsi_device *sdev)
- 		return;
- 
- 	for (i = 4; i < vpd_buf->len; i++) {
--		if (vpd_buf->data[i] == 0x0)
-+		switch (vpd_buf->data[i]) {
-+		case 0x0:
- 			scsi_update_vpd_page(sdev, 0x0, &sdev->vpd_pg0);
--		if (vpd_buf->data[i] == 0x80)
-+			break;
-+		case 0x80:
- 			scsi_update_vpd_page(sdev, 0x80, &sdev->vpd_pg80);
--		if (vpd_buf->data[i] == 0x83)
-+			break;
-+		case 0x83:
- 			scsi_update_vpd_page(sdev, 0x83, &sdev->vpd_pg83);
--		if (vpd_buf->data[i] == 0x89)
-+			break;
-+		case 0x89:
- 			scsi_update_vpd_page(sdev, 0x89, &sdev->vpd_pg89);
--		if (vpd_buf->data[i] == 0xb0)
-+			break;
-+		case 0xb0:
- 			scsi_update_vpd_page(sdev, 0xb0, &sdev->vpd_pgb0);
--		if (vpd_buf->data[i] == 0xb1)
-+			break;
-+		case 0xb1:
- 			scsi_update_vpd_page(sdev, 0xb1, &sdev->vpd_pgb1);
--		if (vpd_buf->data[i] == 0xb2)
-+			break;
-+		case 0xb2:
- 			scsi_update_vpd_page(sdev, 0xb2, &sdev->vpd_pgb2);
--		if (vpd_buf->data[i] == 0xb7)
-+			break;
-+		case 0xb7:
- 			scsi_update_vpd_page(sdev, 0xb7, &sdev->vpd_pgb7);
-+			break;
-+		default:
-+			break;
-+		}
- 	}
- 	kfree(vpd_buf);
- }
--- 
-2.34.1
+Thanks Colin.
+
+
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>   drivers/ufs/host/ufs-rockchip.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ufs/host/ufs-rockchip.c b/drivers/ufs/host/ufs-rockchip.c
+> index 5b0ea9820767..dddff5f538b9 100644
+> --- a/drivers/ufs/host/ufs-rockchip.c
+> +++ b/drivers/ufs/host/ufs-rockchip.c
+> @@ -307,7 +307,7 @@ static int ufs_rockchip_system_suspend(struct device *dev)
+>   
+>   	err = ufshcd_system_suspend(dev);
+>   	if (err) {
+> -		dev_err(hba->dev, "UFSHCD system susped failed %d\n", err);
+> +		dev_err(hba->dev, "UFSHCD system suspend failed %d\n", err);
+>   		return err;
+>   	}
+>   
 
 
