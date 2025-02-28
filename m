@@ -1,34 +1,34 @@
-Return-Path: <linux-scsi+bounces-12559-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12556-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C153A499CD
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2025 13:48:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43169A499C0
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2025 13:47:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E43F9188DDA5
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2025 12:48:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4B857A2D8A
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2025 12:46:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A00562620C8;
-	Fri, 28 Feb 2025 12:48:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 016E52571D3;
+	Fri, 28 Feb 2025 12:47:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="YN3d/5FU"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="stdvOKq4"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from fgw21-4.mail.saunalahti.fi (fgw21-4.mail.saunalahti.fi [62.142.5.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A991B2571D3
-	for <linux-scsi@vger.kernel.org>; Fri, 28 Feb 2025 12:48:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59864C79
+	for <linux-scsi@vger.kernel.org>; Fri, 28 Feb 2025 12:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740746904; cv=none; b=ED463vF1xkK/XM90uSxCEbKzgICUINiNKfrM8GXR1ASIScOi82zxTZ1U68pOmnMfyeXPst2Ofy7rfYzbPu+oB4KiYZU4I5q5+qjx794sRLl4qgAJFcMVhpLFKCo93iffAOje1vFHVv/r2V0IIMtozC1L3CVgP55tOAyHVN7RSHU=
+	t=1740746844; cv=none; b=IG2ZCYOzYZKHFfEb6svROWai4E4mKV34dCO4MupjDTRU8k1KiY0VTeFhILSz8y8sXaqhX6oIWhiqBEr7TASY6bSQjOPWw2P5i8A2+4sSQCiI4fgbO4yXiViLW9ZWGQKaOi4OQDoMmmVWE2aY/U2aHvbZLxm/Xy70Ba8gmTT6jZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740746904; c=relaxed/simple;
-	bh=Cx4xWLjai3z/Trs8CvRnej8uSWzYfc0+OxRmf5CtSWo=;
+	s=arc-20240116; t=1740746844; c=relaxed/simple;
+	bh=f+yCMt+1H2OzgKWZg3NHp5/A+dcDjWHoLRHDpD4mSdY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PG9c5FO5Nowx8Tma9i+/zHmsmd/tIsrawXHJKGeg4HGuPSXyxFJGId/VvmHpNE7aLGvtQQRiCCIfN3On9EHhLrEC2D4eEIBGeBQ5/AO8hsjM5CCpF7h2CGFs4mxz4Kc+n8Kgu/xqdaL7ILRzIX4B+W8E2wiWyF36q678lt+HO/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=YN3d/5FU; arc=none smtp.client-ip=62.142.5.108
+	 MIME-Version:Content-Type; b=PPLLTwDvCcAo7z1+Lkvr0j0CwYb6oxaEC008zjwJ/47QnukmAOU13nnjA5ihia1R5iuu0B2+LsBcYgiWS03L0rJ+U+aqQ1lzaKimLx7SSpjorDB3myg9GU8ixK9xNgHUbqRqDnx+JryT2T5bWw0uS/DbsBZMwK229Yk7Lu3BoKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=stdvOKq4; arc=none smtp.client-ip=62.142.5.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
@@ -37,25 +37,25 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	 message-id:date:subject:cc:to:from:from:to:cc:reply-to:subject:date:
 	 in-reply-to:references:list-archive:list-subscribe:list-unsubscribe:
 	 content-type:content-transfer-encoding:message-id;
-	bh=dAbsSwe/nKo9Dd2ujozOxODwPam0xiNglb0yJ3tcqPA=;
-	b=YN3d/5FUnw2JjWNe9Yqn5dW2pOb+ar3fFfJkieIqmd1T+67txiTZckbQBdldsugN1xNdZW92PahRA
-	 BytdqqaE2Bnau9bY5UAnjynWjr72Myg8XOHwY5f9OTTnHty+FDX2k2rqdqdJgREUXvl9zipmlkB2QY
-	 6Vc9AlZf9cMqXsg7usuoxtzHQj218w+jGK6qOLahTeS19pXDKJJ67ltwSp5Mgr5+ckuLbbBhZ+71SO
-	 5n20fwnjMHuXh9vhgMwPirwgZVzHeZcWNuPsfMwMe/lQZHT5lG7A8aNuWoTypvkNgm3k+9IF2TApZd
-	 3Tw5IVP+QNKQl2kdYWvQhVbYuFqU7QQ==
+	bh=LuXIZFzdMaUPrEI5dUMcGEK3yUP0OeFxlHe01SBV6M8=;
+	b=stdvOKq494+8ib3dsO/TylGEL0gCwfg1peKCut4Nk4PyF5VVvxzeC5kg93tb99SSjEW/NZXRLrtSR
+	 fFvU/I2lbI+R3aqGHzQaqi6fHrDoqmT4pO9xIrhh2in+AhNAM3Bd+paQdOU13s1ilg4IMsQIMEY2Ff
+	 6nMdrafWfbNa5mHm6pwTJ2pS9JOEh2H1A+c8eSA/8oiJYU3hFCpa6fQqnkCRXLaWTYkvTSk1jjQX36
+	 KXzpX3pDIqRywSnIRonJIe950ani8F7f3son5nirNLvIyN+tAeCi9/qjQKZGT2Uo80zOYMPUAYasAx
+	 IEj+9SlSoMwNDLFNaJB0bPoA3buQqSg==
 Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
 	by fgw23.mail.saunalahti.fi (Halon) with ESMTPSA
-	id 1024e7a6-f5d2-11ef-a2a5-005056bdfda7;
-	Fri, 28 Feb 2025 14:46:43 +0200 (EET)
+	id 1210cbb5-f5d2-11ef-a2a5-005056bdfda7;
+	Fri, 28 Feb 2025 14:46:46 +0200 (EET)
 From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
 To: linux-scsi@vger.kernel.org,
 	dgilbert@interlog.com
 Cc: martin.petersen@oracle.com,
 	James.Bottomley@HansenPartnership.com,
 	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
-Subject: [PATCH 2/4] scsi: scsi_debug: Different command definitions for different device types
-Date: Fri, 28 Feb 2025 14:46:24 +0200
-Message-ID: <20250228124627.177873-3-Kai.Makisara@kolumbus.fi>
+Subject: [PATCH 2/4] scsi: scsi_debug: Enable different command definitions for different device types
+Date: Fri, 28 Feb 2025 14:46:25 +0200
+Message-ID: <20250228124627.177873-4-Kai.Makisara@kolumbus.fi>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250228124627.177873-1-Kai.Makisara@kolumbus.fi>
 References: <20250228124627.177873-1-Kai.Makisara@kolumbus.fi>
@@ -68,7 +68,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add field devsel mask to the struct opcode_info_t to enable different
+Add mask field devsel to the struct opcode_info_t to enable different
 definitions for different device types. Add checking of device mask to
 command queuing and reporting of supported opcodes.
 
