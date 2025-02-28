@@ -1,61 +1,64 @@
-Return-Path: <linux-scsi+bounces-12554-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12558-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E968A499BC
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2025 13:46:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81A3AA499CC
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2025 13:48:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 068E5188FC85
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2025 12:47:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42D553AD748
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2025 12:48:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F371A3BD7;
-	Fri, 28 Feb 2025 12:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E09B26AABD;
+	Fri, 28 Feb 2025 12:48:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="w5KTY1Hj"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="bkDCm5Fj"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from fgw20-4.mail.saunalahti.fi (fgw20-4.mail.saunalahti.fi [62.142.5.107])
+Received: from fgw22-4.mail.saunalahti.fi (fgw22-4.mail.saunalahti.fi [62.142.5.109])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58FB4C79
-	for <linux-scsi@vger.kernel.org>; Fri, 28 Feb 2025 12:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4E48468
+	for <linux-scsi@vger.kernel.org>; Fri, 28 Feb 2025 12:48:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.109
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740746811; cv=none; b=e3jGjb8jXFFcS7WAH/3b3q3c2eKIpndOb5Sa8yljC5/ed7fz/NE1ZwNaZg1Sy8+9J5UHwsPAevva6x62f10JX6BqHiHDq3m+8jHtao72MoQwm654d6WMqRmiyRsgGNxK79gou1plh1wZ7HjZwn8M61ZnD7aUpbxJJ7YQidregvs=
+	t=1740746890; cv=none; b=UV9lwYifFcIm9M9Ohj5QdmVfmK/JuUtVTOH55c5gTCnph4IPKG7Vut7dbZZGKrchj4rg4SJexEQ8JG0ikO7Rz4+XK7hYsd2idXys1q6yHaD5rgZ5rQMhhQ0biHVkq9UGxwvh1uMfFR1uHhQtaqD9HEeTlq3F/AiZ5KzI2SqVE9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740746811; c=relaxed/simple;
-	bh=a845YfJ39bOuKl4deN7tFGJ4Zer/8Dh2wiyMxv2jdR0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VJzWFFa+JbLfx3zhBbtphHiLHeBO9koJ1X3P7n9+VuDaelkZ1dxD+uUHO+DjQ9+ygjL3zUbaejNah2u0u5O8kujdoSLHvn1829sa38BDqCHUxpdASv4T8xU40mb+L6dMKtgBosm36qaqwooyrzN8RNNDAqnljmo/EyjVd+I/cS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=w5KTY1Hj; arc=none smtp.client-ip=62.142.5.107
+	s=arc-20240116; t=1740746890; c=relaxed/simple;
+	bh=9cZBkjbOzXA9w4oD50XiYfddbW57vZlI9+NDJfcbiOw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ToULHcGvMBNbQFe4/pxUI6itJyQn/SSL/uKJJx2mCAouz71PNnPzZyq0/Vss+PWu1z96O4kTHTXgtMUmkglxFs5j2VN6FCs9L7mId2r/LVAKF72I6M8ctsDzmqSj8E7U3y0/PsOU4LwFa0NJ8lOv4LGJcyGI5LTg/Qv2XLMineY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=bkDCm5Fj; arc=none smtp.client-ip=62.142.5.109
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=kolumbus.fi; s=elisa1;
-	h=content-transfer-encoding:content-type:mime-version:message-id:date:subject:
-	 cc:to:from:from:to:cc:reply-to:subject:date:in-reply-to:references:
-	 list-archive:list-subscribe:list-unsubscribe:content-type:
-	 content-transfer-encoding:message-id;
-	bh=QV/j6JYikyUIfYNrSDPeCXYNXEQqIwLdPq6BpFlwhLM=;
-	b=w5KTY1HjpQus6ObzY/vZngmN5PA2V2R+U+LSDFUbWrc2DdIM0M2DQQkEZ4SNNe1vwlqf1PdsbQsg4
-	 hwobyMu2DJZk578g1b+2LqBQrjC6VSC0yxUS+91tdJw4b8iTZYVwTkLOc9GFTND++TRkIPZZhY4p3o
-	 92N/aW/abqK15qGNLlB0jOrXIjZveOBL6dHXhPN8BR9RYJ/tD/w1jPrtQU5J5qQNqbBPQkNgkl9kID
-	 lapEZlg3ze5nGSs0iK9N08aN4Shaou/v9WL+FyS2AFLM5lj8s9HaloqwUuV0hSuttremvLlnvikmjE
-	 gSs3ayiDMtSja3qsTo9GG085E0t8hBA==
+	h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
+	 message-id:date:subject:cc:to:from:from:to:cc:reply-to:subject:date:
+	 in-reply-to:references:list-archive:list-subscribe:list-unsubscribe:
+	 content-type:content-transfer-encoding:message-id;
+	bh=a/w0mrK/Uk0AbHYVvSYbEwC6m7aQ8xTf7yxIMHyuQUM=;
+	b=bkDCm5Fj2wr35aYIXTUouOIE5uKI8TDrXTvIs3GPx32RM6VOyT3+FwznnRMnJ1D0f1cL7cs8il1C/
+	 uIVVUnEMKG1TBJxdzZapqqLd2K8sh7QMgX+rfeT/N55OnsKbsOTvpOg7sYUXzGYeznUU7m8S+ims23
+	 h65rcZHITue1iQHxGXhiiHLyhpx6IreWF1UaWCfaRm5cawQOzESI+638pPuClev2siKpVER3krVHxs
+	 C/sZJh9rtCpljfeG5EWRIyDmfk3GsHASGeqWkglf4/IbfZpQ9hVFKLVdVbSc1Ob9kJnYwBOD9PtB/U
+	 pbUh9jrIucfF4L5vWoHh9Nwv+ihkZ/A==
 Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
 	by fgw23.mail.saunalahti.fi (Halon) with ESMTPSA
-	id 0bfb94af-f5d2-11ef-a2a5-005056bdfda7;
-	Fri, 28 Feb 2025 14:46:38 +0200 (EET)
+	id 0e9ed153-f5d2-11ef-a2a5-005056bdfda7;
+	Fri, 28 Feb 2025 14:46:40 +0200 (EET)
 From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
 To: linux-scsi@vger.kernel.org,
 	dgilbert@interlog.com
 Cc: martin.petersen@oracle.com,
 	James.Bottomley@HansenPartnership.com,
 	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
-Subject: [PATCH 0/4] scsi: scsi_debug: Changes to improve support for device types
-Date: Fri, 28 Feb 2025 14:46:22 +0200
-Message-ID: <20250228124627.177873-1-Kai.Makisara@kolumbus.fi>
+Subject: [PATCH 1/4] scsi: scsi_debug: Fix two typos in command definitions
+Date: Fri, 28 Feb 2025 14:46:23 +0200
+Message-ID: <20250228124627.177873-2-Kai.Makisara@kolumbus.fi>
 X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250228124627.177873-1-Kai.Makisara@kolumbus.fi>
+References: <20250228124627.177873-1-Kai.Makisara@kolumbus.fi>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -65,42 +68,37 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The patch set includes changes to better support different device types.
+Fix two command definitions:
+- flags and service action reversed in SEND DIAGNOSTIC
+- ATOMIC WRITE missing opcode
 
-The first patch fixes two obvious typos in the existing definitions.
+Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
+---
+ drivers/scsi/scsi_debug.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The second patch adds a device type mask to the command definitions (struct
-opcode_info_t). This makes possible for different command definitions for
-different device types and makes easy to add opcodes specific to certain
-device types. The mask is 32 bits wide and the bit positions are derived
-from the Peripheral Device Type field returned from INQUIRY and used in
-the struct scsi_device.
-
-In addition to the mask, the second patch adds command filtering based on
-device type to command queuing and building of the response in Report
-Supported Opcodes.
-
-The third patch splits definitions of READ(6), WRITE(6) and PRE-FETCH/READ
-POSITION to versions for tapes and for other devices.
-
-The fourth patch changes obtaining device type from sdebug_ptype to
-struct scsi_device->type whenever it is set correctly. This improves
-support for using different device types in the same debug host.
-
-The patch set applies to 6.15/scsi-staging
-
-Kai Mäkisara (4):
-  scsi: scsi_debug: Fix two typos in command definitions
-  scsi: scsi_debug: Enable different command definitions for different
-    device types
-  scsi: scsi_debug: Move some tape-specific commands to separate
-    definitions
-  scsi: scsi_debug: Use scsi_device->type instead os sdebug_ptype where
-    possible
-
- drivers/scsi/scsi_debug.c | 338 +++++++++++++++++++++-----------------
- 1 file changed, 186 insertions(+), 152 deletions(-)
-
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index 2208dcba346e..4bc0c8350b99 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -817,7 +817,7 @@ static const struct opcode_info_t opcode_info_arr[SDEB_I_LAST_ELEM_P1 + 1] = {
+ 	    {6,  0x1, 0, 0, 0, 0xc7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+ 	{0, 0, 0, F_INV_OP | FF_RESPOND, NULL, NULL, /* ATA_PT */
+ 	    {0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+-	{0, 0x1d, F_D_OUT, 0, NULL, NULL,	/* SEND DIAGNOSTIC */
++	{0, 0x1d, 0, F_D_OUT, NULL, NULL,	/* SEND DIAGNOSTIC */
+ 	    {6,  0xf7, 0, 0xff, 0xff, 0xc7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+ 	{0, 0x42, 0, F_D_OUT | FF_MEDIA_IO, resp_unmap, NULL, /* UNMAP */
+ 	    {10,  0x1, 0, 0, 0, 0, 0x3f, 0xff, 0xff, 0xc7, 0, 0, 0, 0, 0, 0} },
+@@ -852,7 +852,7 @@ static const struct opcode_info_t opcode_info_arr[SDEB_I_LAST_ELEM_P1 + 1] = {
+ 		{16,  0x0 /* SA */, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+ 		 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xbf, 0xc7} },
+ /* 32 */
+-	{0, 0x0, 0x0, F_D_OUT | FF_MEDIA_IO,
++	{0, 0x9c, 0x0, F_D_OUT | FF_MEDIA_IO,
+ 	    resp_atomic_write, NULL, /* ATOMIC WRITE 16 */
+ 		{16,  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+ 		 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff} },
 -- 
 2.43.0
 
