@@ -1,154 +1,151 @@
-Return-Path: <linux-scsi+bounces-12625-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12628-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24D72A4D448
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Mar 2025 08:08:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1813A4DABB
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Mar 2025 11:34:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3B103A9C8E
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Mar 2025 07:08:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B185B1886CF1
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Mar 2025 10:33:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB1481F63D6;
-	Tue,  4 Mar 2025 07:08:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ED451FDA7B;
+	Tue,  4 Mar 2025 10:33:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qeJd982T"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E311F585F
-	for <linux-scsi@vger.kernel.org>; Tue,  4 Mar 2025 07:08:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E10A1EF0BC;
+	Tue,  4 Mar 2025 10:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741072114; cv=none; b=R2TqTxpbQxjxDViG062tuwG1km33He6qqUoPlnlmptBetpKfSk4GzwOz7GvNsbXYiVS9JdSS8jRiKSzHs5TUcv2/5uU9BKsbkqFH3SfGGL4gwjQwuS6U5hf3kqoyIHEiKQq3d+9Rm/SHNXTb3xi1KTd83r/JXUHoOQuB3LD8Uro=
+	t=1741084422; cv=none; b=HnxA3rZfZlr8sSHzZs30W12YgXskBqmeX434D3aHdBfQWMseZL2s4zIXEPTCCcVF7JzyLj9DXou0RSeYhv2K1HA7lFCLYSPCgtqj1vMMl/Y2mjy7Xx1Liv8oPW63B7UazL5zzdfDHB96mt1v4ujdJ7NeN1UouTrDxbjOUwhXIXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741072114; c=relaxed/simple;
-	bh=4DGOATDKzfnDduyJ+tfAGO956m+iDyBukE4kgWbV86I=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Bl3ZIpX3w4S25ABHXc+jFhkPvdHDl6Ws/nAbN2PuccP5pZI/lmzjETtft/IKXtGvic6qOzY0lL+IF0ztDj8QLY68dRKbD3WhmgqVm6OHmoe/C9D1ymG34953dXV6NHbj2sS/So+ZVGcwmwdFDtJLXvO8ammXs9tNEkavc4MnA9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-3cfb20d74b5so51647995ab.3
-        for <linux-scsi@vger.kernel.org>; Mon, 03 Mar 2025 23:08:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741072112; x=1741676912;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uqiVtzwBgU1lDf2SDTYlwWX7sEeYdDO0Db14SV4FSWw=;
-        b=oH9SKf6D8yUbBAcfmoa1uCn41dmRgONOSYpxbgK+AGbcgCCmf6bN0T4PaTyGlodOad
-         Dk+kBbuq4w2H9rDdJwjZDssuL6CoRAjwTTHbnNBo1Q3HmNJlEq+6IAucPRDtr9JGpipk
-         vzs7dgW+hCkmYEoyQKpxm3vdG4OcBQWEkdsM0h/2xKMPiLbrL1URUJufpPKOwikAFena
-         CDqBaqjW7U/U9Xid1396eHfWYMiK5pkBTmsLqE5yIMLkVj3X5X3vArmo+tRo4VpUjLGd
-         7NurdlbYpY8kwtKj0ZEK8NPeAjZc86pCyDpkicbqCpWmiFp04cDWCAHETpeVPhilrP+9
-         yE4g==
-X-Forwarded-Encrypted: i=1; AJvYcCWKAGHEoy+AO8YbwOcFVkF564qK9caexueIntblLQzEWgZgDeNZNr6ftqEq3ZTFqvqKL5/qUiilW5zH@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywi4FmRlBOfUGG43pze92DBBuP7xtxl8g7W/Z6SEI8pR6BicicM
-	VfJBT67s+/Jx/qsw2S5FS1vNZvrffTgc2XJvdpoIU1PYDWb1bgM2wecHf0wD/eYsDz0o1ovRI/L
-	OL/6+p6QCwumgA+mAYsm/ytrqN+ukTVE9IxzD4jB6IQPVKS0nKBZXmFg=
-X-Google-Smtp-Source: AGHT+IH3n9eNKq3gHBYv2WmSy2sJizk2wralwXrNwx0ttRzVWb4+4vdSnOCJHssmZqxBWyl5JanXDyQSnKwynD/Dm29Hug3WxJ3F
+	s=arc-20240116; t=1741084422; c=relaxed/simple;
+	bh=YgbZcILngMRztLMEacwU5Lqg2SqhQWsX2wJDj6udQ2k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jl1F02MysZRMGpBeH+6ApEczFfw8DeQ9lPbc5YR5s1Jm1rhOITk7eqzHhzuVph/5TWO2rNZjW1bdiJ6VzD5sFJbcf8Flpo73LIURGUkert+Nno8DLUBqGJwjaVdGMMC3aC6S6JznfaXgTaZCKQErqLP2zi56PIelfXsBZUx2ZZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qeJd982T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07348C4CEE5;
+	Tue,  4 Mar 2025 10:33:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741084421;
+	bh=YgbZcILngMRztLMEacwU5Lqg2SqhQWsX2wJDj6udQ2k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qeJd982TqUnyqdTyfF5KwNTpeurNXtL6jiGOcgfBRWhHkVgx6NfqKGojIgLEm5Ptf
+	 5d3d3YiLD6KxHkbnzrHgkpBBt7dXqj7mTmwVA8jzWXl2nV1o2dKxGUVkrgUXwSwops
+	 sZOecOD8Kgq/GBSCPOjOoPdcmFWtFpG+vS9755QPTmsKi7iCY3eGEBv+wz4bGVodpL
+	 GuuqLGf7fLA7nuEHHyzeqjg2fF2TiycnJcUQ37h1p78NC5F/Q57tvqiU4h3BR7Xxf4
+	 +nwzJyXmBzBbwGw9KU9BBTDSAw+7nWxXHSB6oMvzBOF8bFXoUiFGEgtTuCAkYmtXD0
+	 IEWy7g9stPmLg==
+Date: Mon, 3 Mar 2025 14:52:06 +0100
+From: Joel Granados <joel.granados@kernel.org>
+To: nicolas.bouchinet@clip-os.org
+Cc: linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, codalist@coda.cs.cmu.edu, linux-nfs@vger.kernel.org, 
+	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, Joel Granados <j.granados@samsung.com>, 
+	Clemens Ladisch <clemens@ladisch.de>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, Jan Harkes <jaharkes@cs.cmu.edu>, 
+	Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>, Neil Brown <neilb@suse.de>, 
+	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
+	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
+	Bart Van Assche <bvanassche@acm.org>, Zhu Yanjun <yanjun.zhu@linux.dev>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v2 0/6] Fixes multiple sysctl bound checks
+Message-ID: <fdmspbwoxc7zgabdg4fnbd5tkupx3lasne2ydldvkztwh3iz2y@mnqbpm2w4ibl>
+References: <20250224095826.16458-1-nicolas.bouchinet@clip-os.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:12ea:b0:3d3:dfb6:2203 with SMTP id
- e9e14a558f8ab-3d3e6f4a094mr143335255ab.19.1741072112032; Mon, 03 Mar 2025
- 23:08:32 -0800 (PST)
-Date: Mon, 03 Mar 2025 23:08:32 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67c6a6f0.050a0220.38b91b.0001.GAE@google.com>
-Subject: [syzbot] [scsi?] BUG: sleeping function called from invalid context
- in __bio_release_pages
-From: syzbot <syzbot+4b11b8d3d29d2ced1786@syzkaller.appspotmail.com>
-To: James.Bottomley@HansenPartnership.com, dgilbert@interlog.com, 
-	linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	martin.petersen@oracle.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250224095826.16458-1-nicolas.bouchinet@clip-os.org>
 
-Hello,
+On Mon, Feb 24, 2025 at 10:58:15AM +0100, nicolas.bouchinet@clip-os.org wrote:
+> From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+> 
+> Hi,
+> 
+> This patchset adds some bound checks to sysctls to avoid negative
+> value writes.
+> 
+> The patched sysctls were storing the result of the proc_dointvec
+> proc_handler into an unsigned int data. proc_dointvec being able to
+> parse negative value, and it return value being a signed int, this could
+> lead to undefined behaviors.
+> This has led to kernel crash in the past as described in commit
+> 3b3376f222e3 ("sysctl.c: fix underflow value setting risk in vm_table")
+This patch is slightly different then what you are trying to do here.
+Notice that the issue in 3b3376f222e3 ("sysctl.c: fix underflow value
+setting risk in vm_table") was that the extra1 value was getting ignored
+because it was calling proc_dointvec; replacing it with
+proc_dointvec_minmax properly forwards the extra1 value.
+What your series is trying to do is to avoid a assignment of a negative
+value to a unsigned int.
+> 
+> They are now bounded between SYSCTL_ZERO and SYSCTL_INT_MAX.
+> The proc_handlers have thus been updated to proc_dointvec_minmax.
+> 
+> This patchset has been written over sysctl-testing branch [1].
+> See [2] for similar sysctl fixes currently in review.
+> 
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/sysctl/sysctl.git/log/?h=sysctl-testing
+> [2]: https://lore.kernel.org/all/20250115132211.25400-1-nicolas.bouchinet@clip-os.org/
+> 
+> Best regards,
+> 
+> Nicolas
 
-syzbot found the following issue on:
+In general, I would like for these patches to go into mainline through
+their individual subsystem as they would know more about what type fits
+best for the ctl_table->data variable. With that said, I'll push the
+leftovers through sysctl if there are no takers.
 
-HEAD commit:    1e15510b71c9 Merge tag 'net-6.14-rc5' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=134eca97980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b1635bf4c5557b92
-dashboard link: https://syzkaller.appspot.com/bug?extid=4b11b8d3d29d2ced1786
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+Thx for the series
+> 
+> ---
+> 
+> Changes since v1:
+> https://lore.kernel.org/all/20250127142014.37834-1-nicolas.bouchinet@clip-os.org/
+> 
+> * Detached patches 1/9, 2/9 [3] and 3/9 [4]
+> * Adapted the cover-letter message to match the reduced patchset
+> 
+> [3]: https://lore.kernel.org/all/20250129170633.88574-1-nicolas.bouchinet@clip-os.org/
+> [4]: https://lore.kernel.org/all/20250128103821.29745-1-nicolas.bouchinet@clip-os.org/
+> 
+> ---
+> 
+> Nicolas Bouchinet (6):
+>   sysctl: Fixes idmap_cache_timeout bounds
+>   sysctl: Fixes nsm_local_state bounds
+>   sysctl/coda: Fixes timeout bounds
+>   sysctl: Fixes scsi_logging_level bounds
+>   sysctl/infiniband: Fixes infiniband sysctl bounds
+>   sysctl: Fixes max-user-freq bounds
+> 
+>  drivers/char/hpet.c            | 4 +++-
+>  drivers/infiniband/core/iwcm.c | 4 +++-
+>  drivers/infiniband/core/ucma.c | 4 +++-
+>  drivers/scsi/scsi_sysctl.c     | 4 +++-
+>  fs/coda/sysctl.c               | 4 +++-
+>  fs/lockd/svc.c                 | 4 +++-
+>  fs/nfs/nfs4sysctl.c            | 4 +++-
+>  7 files changed, 21 insertions(+), 7 deletions(-)
+> 
+> -- 
+> 2.48.1
+> 
 
-Unfortunately, I don't have any reproducer for this issue yet.
+-- 
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8d3d285b4524/disk-1e15510b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/5aa6409ccccc/vmlinux-1e15510b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/c869f7ce522a/bzImage-1e15510b.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4b11b8d3d29d2ced1786@syzkaller.appspotmail.com
-
-BUG: sleeping function called from invalid context at ./include/linux/pagemap.h:1161
-in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 15472, name: kworker/0:1
-preempt_count: 1, expected: 0
-RCU nest depth: 0, expected: 0
-3 locks held by kworker/0:1/15472:
- #0: ffff88801b080d48 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x1293/0x1ba0 kernel/workqueue.c:3213
- #1: ffffc90004b7fd18 ((work_completion)(&sfp->ew.work)){+.+.}-{0:0}, at: process_one_work+0x921/0x1ba0 kernel/workqueue.c:3214
- #2: ffff88803d188080 (&sfp->rq_list_lock){..-.}-{3:3}, at: sg_remove_sfp_usercontext+0x86/0x580 drivers/scsi/sg.c:2210
-irq event stamp: 177768
-hardirqs last  enabled at (177767): [<ffffffff8b57a523>] __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:159 [inline]
-hardirqs last  enabled at (177767): [<ffffffff8b57a523>] _raw_spin_unlock_irq+0x23/0x50 kernel/locking/spinlock.c:202
-hardirqs last disabled at (177768): [<ffffffff8b57a9c2>] __raw_write_lock_irqsave include/linux/rwlock_api_smp.h:184 [inline]
-hardirqs last disabled at (177768): [<ffffffff8b57a9c2>] _raw_write_lock_irqsave+0x52/0x60 kernel/locking/spinlock.c:318
-softirqs last  enabled at (177736): [<ffffffff817c131b>] softirq_handle_end kernel/softirq.c:407 [inline]
-softirqs last  enabled at (177736): [<ffffffff817c131b>] handle_softirqs+0x5bb/0x8f0 kernel/softirq.c:589
-softirqs last disabled at (177731): [<ffffffff817c17e9>] __do_softirq kernel/softirq.c:595 [inline]
-softirqs last disabled at (177731): [<ffffffff817c17e9>] invoke_softirq kernel/softirq.c:435 [inline]
-softirqs last disabled at (177731): [<ffffffff817c17e9>] __irq_exit_rcu+0x109/0x170 kernel/softirq.c:662
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 0 UID: 0 PID: 15472 Comm: kworker/0:1 Not tainted 6.14.0-rc4-syzkaller-00169-g1e15510b71c9 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2025
-Workqueue: events sg_remove_sfp_usercontext
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
- __might_resched+0x3c0/0x5e0 kernel/sched/core.c:8767
- folio_lock include/linux/pagemap.h:1161 [inline]
- __bio_release_pages+0x310/0x3b0 block/bio.c:1066
- bio_release_pages include/linux/bio.h:441 [inline]
- blk_rq_unmap_user+0x3c0/0x990 block/blk-map.c:675
- sg_finish_rem_req+0xde/0x590 drivers/scsi/sg.c:1837
- sg_remove_sfp_usercontext+0x102/0x580 drivers/scsi/sg.c:2213
- process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3238
- process_scheduled_works kernel/workqueue.c:3319 [inline]
- worker_thread+0x6c8/0xf00 kernel/workqueue.c:3400
- kthread+0x3af/0x750 kernel/kthread.c:464
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Joel Granados
 
