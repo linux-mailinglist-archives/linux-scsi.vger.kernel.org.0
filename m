@@ -1,81 +1,77 @@
-Return-Path: <linux-scsi+bounces-12615-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12618-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2321A4D1FF
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Mar 2025 04:19:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A0A2A4D204
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Mar 2025 04:20:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDE2B1731C3
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Mar 2025 03:19:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D61F188ED43
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Mar 2025 03:20:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAF9C1D89F0;
-	Tue,  4 Mar 2025 03:19:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4833F1DB125;
+	Tue,  4 Mar 2025 03:20:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="GnF9wvJJ"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Qop5lX2M"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26155B640;
-	Tue,  4 Mar 2025 03:19:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE351EEA51
+	for <linux-scsi@vger.kernel.org>; Tue,  4 Mar 2025 03:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741058393; cv=none; b=nckGDDkyETyo6p35ZofX/l87U+rw/jFSoSDY/nmN/yOd98Ff3vN0R0/lCbYgP6xfR+o9LoX0y7oK3TWP2bMgEBYDCPivlsJKPU1CFr30Ce7B61aUK69EEFXGe27Xh9rLkUDS3510fI4b1L+W/To5/g2QdIg0QPELoGvZuAWsMzk=
+	t=1741058401; cv=none; b=ib4aCC+V9aaovy0R5Mz/PAEdxUoUtBdrH2v2eW6kOuQvwc6d5xz8ghrLMrytGDqksbhz8usvtfUEaNXYWmVrHV/ebsar6q1AtWzacOmvphlWtwQhnU3l4fTEvRyyFhDojtqfFc3iQcl0e9k8HpFQjDj0ykbJHj5OHo1pQXVXpDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741058393; c=relaxed/simple;
-	bh=etfsvUilZQK1L+JrGbi0zFhCgsTc7PDVSCBXuzZbZXU=;
+	s=arc-20240116; t=1741058401; c=relaxed/simple;
+	bh=eezJ0dUjlmd6iM3ecqjv48USRGKS4nfPbSK7jdyPeMc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h2PWrejzNxODcdblX7qvZJM6dAgBjPBQ2GeOz06wHAfVWm7mdikIadqIG7a40DI92uNQXFZHrvFtYzpn4AvjjIi13UDNSA9w2+P6axvMYK1x0ifIjC+f066NWl1czds3rQFpTFTEz3DpqGLmRn4t7GtD08ZWDEg9NXEHPld+e3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=GnF9wvJJ; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=Mx+cC4d728NBdV9aYFtirEvWDiPoCR3VwhLlh5dnBpKlAtcRGuOxkARjsCRR2P5ca/TZ+zG45T7y2mdvdXlQaMb/9ip685S+qL9ut/OmIDIQllQFU5uwhEDItoV9PQjsc0xfXip7UFV4y1Sd3XE0DENeqPqzuZMuxVFCBSKtB6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Qop5lX2M; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5241MeKX023988;
-	Tue, 4 Mar 2025 03:19:49 GMT
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5241Mou1019223;
+	Tue, 4 Mar 2025 03:19:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=B8rwV3ZzyRKSk9aLnXPg2ctjjTtTzGVuHBNqsOjD/pg=; b=
-	GnF9wvJJ2TrnraKzCPAjhur4wGYoJHbsLyYIt4WxUgeucakuVKJZQluYMiNDIaQO
-	0LuokEBP3TOolNusxNVV1PtAYfaRi59YRG9SvW0dSPyoiH4AM0gnrrHavbWBQlGS
-	9I8c4I3a6zGEwHTlsMsT6hTgqYFyz9mYhVT1HNxBU3XZ8bZ3jiW1CJFBWbimlTO+
-	WsoDTkwGskL2Ky6b3kqxwNM+EAaRdjc0BS+JleFblYQJ2e72s7jOeFEWc+oWvXO0
-	rDRKfdrlGF8WFgeMM5UEK+5SOxMfEUo7sqQNP1hDeHLePtP7a73XKAxfkL9aN2so
-	7iPwKM0scrm3veFFKrQ6bA==
+	corp-2023-11-20; bh=iR3JqEZrwpc1/R5l/vl9NF/whxqdJ8FQz4JIlWkBDHc=; b=
+	Qop5lX2MwtqskysmV0ZsR68mLvDdQ2OHQ7HyFazlmMnaacevgr84Co4toyXt5hSh
+	76uZNdkLIPiNVq18jz53/B6DiWfWFnQC5/4yEfJUcWt+lnKavSQMp2OT+ZmLSP7l
+	iRRnWJvarR+kFDP/WQ+Mx+lOOJr5wtyRw+AX6Jf9kbyOCZh8RPmmkmg6fNcs3rKN
+	7qRY/cnR5HdRclLkPMQ5hvsIeDpa0w/ixqDgIFNCAh+U9psooRBZEPqWzfuq75nn
+	rd6V6vUhpgSjMT9FVXGmj+SwnldcjKGQmVL7og+/HE2STbpGMfjM1ySGARAyCtSG
+	7yF6SsM89kmbhjt+qDaKuw==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 453u8wm1yj-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 453uavv2tm-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 04 Mar 2025 03:19:49 +0000 (GMT)
+	Tue, 04 Mar 2025 03:19:50 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5240U2HY039127;
-	Tue, 4 Mar 2025 03:19:48 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5242u2kP039768;
+	Tue, 4 Mar 2025 03:19:49 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 453rp92sff-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 453rp92sfw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 04 Mar 2025 03:19:48 +0000
+	Tue, 04 Mar 2025 03:19:49 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5243Jl4c029873;
-	Tue, 4 Mar 2025 03:19:47 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5243Jl4e029873;
+	Tue, 4 Mar 2025 03:19:48 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 453rp92set-1;
-	Tue, 04 Mar 2025 03:19:47 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 453rp92set-2;
+	Tue, 04 Mar 2025 03:19:48 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        Colin Ian King <colin.i.king@gmail.com>
+To: linux-scsi@vger.kernel.org, dgilbert@interlog.com,
+        =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: mpt3sas: Fix spelling mistake "receveid" -> "received"
-Date: Mon,  3 Mar 2025 22:19:15 -0500
-Message-ID: <174105384025.3860046.11487151743933866010.b4-ty@oracle.com>
+        James.Bottomley@HansenPartnership.com, jmeneghi@redhat.com
+Subject: Re: [PATCH v2 0/7] scsi: scsi_debug: Add more tape support
+Date: Mon,  3 Mar 2025 22:19:16 -0500
+Message-ID: <174105384018.3860046.14722073801589472586.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250221083253.77496-1-colin.i.king@gmail.com>
-References: <20250221083253.77496-1-colin.i.king@gmail.com>
+In-Reply-To: <20250213092636.2510-1-Kai.Makisara@kolumbus.fi>
+References: <20250213092636.2510-1-Kai.Makisara@kolumbus.fi>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -88,22 +84,39 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-03-04_02,2025-03-03_04,2024-11-22_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0 spamscore=0
- mlxscore=0 mlxlogscore=880 adultscore=0 malwarescore=0 bulkscore=0
+ mlxscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502100000
  definitions=main-2503040026
-X-Proofpoint-ORIG-GUID: YH8SxX585DzdPzeX_5SPuokx-Sn3gp8b
-X-Proofpoint-GUID: YH8SxX585DzdPzeX_5SPuokx-Sn3gp8b
+X-Proofpoint-GUID: AX6bxGPXSkUQII8mf7hMaoPIyzDRpTa1
+X-Proofpoint-ORIG-GUID: AX6bxGPXSkUQII8mf7hMaoPIyzDRpTa1
 
-On Fri, 21 Feb 2025 08:32:53 +0000, Colin Ian King wrote:
+On Thu, 13 Feb 2025 11:26:29 +0200, Kai Mäkisara wrote:
 
-> There is a spelling mistake in a ioc_err message. Fix it.
+> Currently, the scsi_debug driver can create tape devices and the st
+> driver attaches to those. Nothing much can be done with the tape devices
+> because scsi_debug does not have support for the tape-specific commands
+> and features. These patches add some more tape support to the scsi_debug
+> driver. The end result is simulated drives with a tape having one or two
+> partitions (one partition is created initially).
 > 
-> 
+> [...]
 
 Applied to 6.15/scsi-queue, thanks!
 
-[1/1] scsi: mpt3sas: Fix spelling mistake "receveid" -> "received"
-      https://git.kernel.org/mkp/scsi/c/c337ce64ea8a
+[1/7] scsi: scsi_debug: First fixes for tapes
+      https://git.kernel.org/mkp/scsi/c/f69da85d5d5c
+[2/7] scsi: scsi_debug: Add READ BLOCK LIMITS and modify LOAD for tapes
+      https://git.kernel.org/mkp/scsi/c/e7795366c41d
+[3/7] scsi: scsi_debug: Add write support with block lengths and 4 bytes of data
+      https://git.kernel.org/mkp/scsi/c/e1ac21310aaa
+[4/7] scsi: scsi_debug: Add read support and update locate for tapes
+      https://git.kernel.org/mkp/scsi/c/0744d3114c60
+[5/7] scsi: scsi_debug: Add compression mode page for tapes
+      https://git.kernel.org/mkp/scsi/c/568354b24c7d
+[6/7] scsi: scsi_debug: Reset tape setting at device reset
+      https://git.kernel.org/mkp/scsi/c/862a5556b1a4
+[7/7] scsi: scsi_debug: Add support for partitioning the tape
+      https://git.kernel.org/mkp/scsi/c/23f4e82bb9eb
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
