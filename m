@@ -1,393 +1,134 @@
-Return-Path: <linux-scsi+bounces-12652-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12660-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8413FA5009D
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Mar 2025 14:34:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA7D0A50285
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Mar 2025 15:46:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7511163635
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Mar 2025 13:34:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11E853A59B5
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Mar 2025 14:43:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AE1F248193;
-	Wed,  5 Mar 2025 13:34:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C99BE24EF63;
+	Wed,  5 Mar 2025 14:43:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VL8phBxE"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from gauss.telenet-ops.be (gauss.telenet-ops.be [195.130.132.49])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77AFF24888C
-	for <linux-scsi@vger.kernel.org>; Wed,  5 Mar 2025 13:34:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B72E24EA9D;
+	Wed,  5 Mar 2025 14:43:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741181668; cv=none; b=SECkghi/USy6A613x5XDRU7mYTRVuOMqyahfGXu0ZF11Dm4pidbdjqoJtQ61y0KXqLapVHzTQiDE/L7hsluhFcGbEdJEBWDaWxIKdH7+6qtek6rZS+7q7Qm7Uh06TdSvVyyhdvPhzaV+j306twZywFXvJJzrZCpwixRDggu1J8Y=
+	t=1741185833; cv=none; b=qTQUQSuuBn0ERTbBB0SmUsUojA+CfTFxDdXt9oJe7wu523ENWoi6SLCw+Ca5PlZbtfUHODNpGk6Wie5yWdkaTPFCKeHB5+4EgB/t2EtmeI+RyYrY/62K5Z5PrgoiVVsuvgGd9eIECu9CGClyhVCbBfPB+M1lZ5oe5rLr5x00T98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741181668; c=relaxed/simple;
-	bh=qgagCWP0AByktZ7QKcVCUOvAmGy3T+619wWJGYwW6v8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XCuGjgX8OlLzQxH76JAYjXmChn16pGnSu8iCPdhPwwGphy/GqLtIbaZK8cgPxDd8xGLrHToUwXS5FUkS5j5sbmYhP7ggj6/x4qVMGr/HbrQhksd4lHfaMh6U3TFT+PxKpgo5kganxoWKGzIbc1l2LBRkKGXjr8oRXfE4kWvxXxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-	by gauss.telenet-ops.be (Postfix) with ESMTPS id 4Z7D6l0r7nz4wx6H
-	for <linux-scsi@vger.kernel.org>; Wed, 05 Mar 2025 14:34:23 +0100 (CET)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:fba:8cad:3d23:9db3])
-	by xavier.telenet-ops.be with cmsmtp
-	id M1aJ2E00L0exi8p011aJlp; Wed, 05 Mar 2025 14:34:22 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1tposn-0000000Cv4F-1kOZ;
-	Wed, 05 Mar 2025 14:34:18 +0100
-Received: from geert by rox.of.borg with local (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1tpot8-00000008woo-2Ewn;
-	Wed, 05 Mar 2025 14:34:18 +0100
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: linux-scsi@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v3 7/7] scsi: ufs: renesas: Add initialization code for R-Car S4-8 ES1.2
-Date: Wed,  5 Mar 2025 14:34:15 +0100
-Message-ID: <97d83709495c764b2456d4d25846f5f48197cad0.1741179611.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1741179611.git.geert+renesas@glider.be>
-References: <cover.1741179611.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1741185833; c=relaxed/simple;
+	bh=q0jxvZ22iaWtq6NXJfvioYNnCp9yCTO3f0Gdzs+gwAA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u4NQmQkMiFG6x0LY6309d5GHHmu95+XE50KDjkNXGy2OJbEEssiekahxHmPTM4gEX5dKXNgbGzU0gGiGv/E32mRpYlvXz4Jt1/FAqczZZza82b6WhU8sBJ0bTf+pDF0yhMOdPaSauj0MwWZfZJNGm106FllJ6r/3SxfBuDICOv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VL8phBxE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B1D4C4CEEA;
+	Wed,  5 Mar 2025 14:43:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741185832;
+	bh=q0jxvZ22iaWtq6NXJfvioYNnCp9yCTO3f0Gdzs+gwAA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VL8phBxEFd5Fj6YetuiSBuA7/2QNGmEqIVa74UvUIYW80vX0LG79IILjPHeitzW0G
+	 kKgSxMzYiq0Y0dhIUiFAvFEmNQf5v5zlg8hR5+CAwnF7LKb6VLYrlpDkZ70FBzg+cP
+	 Mm45tEh6W6do3V+ZD485y4tIequsew05viWenFmNBPlgwerdWL+k8H/sRuEwZdSAbc
+	 uhKP8OFJIs49UDkeinedf+FZJIxeoWkxY1nYoStB94ZbJfOA7SycLFJW2K9rrlv3or
+	 OaJC15q8Dv7EEM3le6UMkrtmoYYbMrMgMIaY0WCc6H+v0xY66aS5CuM3eOxDUFycbm
+	 rYfVb1j4UicFQ==
+Date: Wed, 5 Mar 2025 15:43:47 +0100
+From: Joel Granados <joel.granados@kernel.org>
+To: Leon Romanovsky <leon@kernel.org>
+Cc: nicolas.bouchinet@clip-os.org, linux-kernel@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org, codalist@coda.cs.cmu.edu, 
+	linux-nfs@vger.kernel.org, Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, 
+	Joel Granados <j.granados@samsung.com>, Clemens Ladisch <clemens@ladisch.de>, 
+	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, Jan Harkes <jaharkes@cs.cmu.edu>, 
+	Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>, Neil Brown <neilb@suse.de>, 
+	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
+	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
+	Bart Van Assche <bvanassche@acm.org>, Zhu Yanjun <yanjun.zhu@linux.dev>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v2 5/6] sysctl/infiniband: Fixes infiniband sysctl bounds
+Message-ID: <i4x736hwah7vc7mjjooxyeo3t73wzcm365mah3qganrs6x6l2d@khb2a6uggrop>
+References: <20250224095826.16458-1-nicolas.bouchinet@clip-os.org>
+ <20250224095826.16458-6-nicolas.bouchinet@clip-os.org>
+ <20250224134105.GC53094@unreal>
+ <6obp2rythrcvlknqsczvxmhenhvxsosobc4cwx36iinyjjj5mr@b227ysqvp5vh>
+ <20250303185309.GA1955273@unreal>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250303185309.GA1955273@unreal>
 
-From: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+On Mon, Mar 03, 2025 at 08:53:09PM +0200, Leon Romanovsky wrote:
+> On Mon, Mar 03, 2025 at 02:57:29PM +0100, Joel Granados wrote:
+> > On Mon, Feb 24, 2025 at 03:41:05PM +0200, Leon Romanovsky wrote:
+> > > On Mon, Feb 24, 2025 at 10:58:20AM +0100, nicolas.bouchinet@clip-os.org wrote:
+> > > > From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+> > > > 
+> > > > Bound infiniband iwcm and ucma sysctl writings between SYSCTL_ZERO
+> > > > and SYSCTL_INT_MAX.
+> > > > 
+> > > > The proc_handler has thus been updated to proc_dointvec_minmax.
+> > > > 
+> > > > Signed-off-by: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+> > > > ---
+> > > >  drivers/infiniband/core/iwcm.c | 4 +++-
+> > > >  drivers/infiniband/core/ucma.c | 4 +++-
+> > > >  2 files changed, 6 insertions(+), 2 deletions(-)
+> > > > 
+> > > 
+> > > Acked-by: Leon Romanovsky <leon@kernel.org>
+> > > 
+> > > How do you want to proceed from here? Should I take to RDMA repository?
+> > > 
+> > > Thanks
+> > It would be great if we push this through RDMA. Here are a few comments:
+> > 1. Having the upper bound be SYSCTL_INT_MAX is not necessary (as it is
+> >    silently capped by proc_dointvec_minmax, but it is good to have as it
+> >    gives understanding on what the spread of the values are.
+> > 
+> > 2. Having the lower bound capped by SYSCTL_ZERO is needed as it will
+> >    prevent ppl trying to assing negative values to the unsigned integers
+> > 
+> > Please let me know if you will push this through RDMA, so I know to
+> > remove it from sysctl.
+> 
+> Applied to RDMA tree.
+> https://web.git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git/commit/?h=wip/leon-for-next&id=f33cd9b3fd03a791296ab37550ffd26213a90c4e
+Perfect. Thx.
 
-Add initialization code for R-Car S4-8 ES1.2 to improve transfer
-stability.  Using the new code requires downloading firmware and reading
-calibration data from E-FUSE.  If either fails, the driver falls back to
-the old initialization code.
+@Nicolas: pls take this one out of your next version as it is
+already on its way upstrea.
 
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Co-developed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v3:
-  - New.
----
- drivers/ufs/host/ufs-renesas.c | 199 ++++++++++++++++++++++++++++++++-
- 1 file changed, 194 insertions(+), 5 deletions(-)
+Best
+> 
+> > 
+> > Best
+> > 
+> > Reviewed-by: Joel Granados <joel.granados@kernel.org>
+> 
+> Thanks
+> 
+> > 
+> > -- 
+> > 
+> > Joel Granados
 
-diff --git a/drivers/ufs/host/ufs-renesas.c b/drivers/ufs/host/ufs-renesas.c
-index d9ba766dcd2f4de7..5bf7d0e77ad857c6 100644
---- a/drivers/ufs/host/ufs-renesas.c
-+++ b/drivers/ufs/host/ufs-renesas.c
-@@ -9,20 +9,31 @@
- #include <linux/delay.h>
- #include <linux/dma-mapping.h>
- #include <linux/err.h>
-+#include <linux/firmware.h>
- #include <linux/iopoll.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/nvmem-consumer.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-+#include <linux/sys_soc.h>
- #include <ufs/ufshcd.h>
- 
- #include "ufshcd-pltfrm.h"
- 
-+#define EFUSE_CALIB_SIZE	8
-+
- struct ufs_renesas_priv {
-+	const struct firmware *fw;
-+	void (*pre_init)(struct ufs_hba *hba);
- 	bool initialized;	/* The hardware needs initialization once */
-+	u8 calib[EFUSE_CALIB_SIZE];
- };
- 
-+#define UFS_RENESAS_FIRMWARE_NAME "r8a779f0_ufs.bin"
-+MODULE_FIRMWARE(UFS_RENESAS_FIRMWARE_NAME);
-+
- static void ufs_renesas_dbg_register_dump(struct ufs_hba *hba)
- {
- 	ufshcd_dump_regs(hba, 0xc0, 0x40, "regs: 0xc0 + ");
-@@ -116,6 +127,22 @@ static void ufs_renesas_set_phy(struct ufs_hba *hba, u32 addr16, u32 data16)
- 	ufs_renesas_write_phy(hba, addr16, data16);
- }
- 
-+static void ufs_renesas_reset_indirect_write(struct ufs_hba *hba, int gpio,
-+					     u32 addr, u32 data)
-+{
-+	ufs_renesas_write(hba, 0xf0, gpio);
-+	ufs_renesas_write_800_80c_poll(hba, addr, data);
-+}
-+
-+static void ufs_renesas_reset_indirect_update(struct ufs_hba *hba)
-+{
-+	ufs_renesas_write_d0_d4(hba, 0x0000082c, 0x0f000000);
-+	ufs_renesas_write_d0_d4(hba, 0x00000828, 0x0f000000);
-+	ufs_renesas_write(hba, 0xd0, 0x0000082c);
-+	ufs_renesas_poll(hba, 0xd4, BIT(27) | BIT(26) | BIT(24), BIT(27) | BIT(26) | BIT(24));
-+	ufs_renesas_write(hba, 0xf0, 0);
-+}
-+
- static void ufs_renesas_indirect_write(struct ufs_hba *hba, u32 gpio, u32 addr,
- 				       u32 data_800)
- {
-@@ -135,15 +162,19 @@ static void ufs_renesas_indirect_poll(struct ufs_hba *hba, u32 gpio, u32 addr,
- 	ufs_renesas_write(hba, 0xf0, 0);
- }
- 
--static void ufs_renesas_init_step1_to_3(struct ufs_hba *hba)
-+static void ufs_renesas_init_step1_to_3(struct ufs_hba *hba, bool init108)
- {
- 	ufs_renesas_write(hba, 0xc0, 0x49425308);
- 	ufs_renesas_write_d0_d4(hba, 0x00000104, 0x00000002);
-+	if (init108)
-+		ufs_renesas_write_d0_d4(hba, 0x00000108, 0x00000002);
- 	udelay(1);
- 	ufs_renesas_write_d0_d4(hba, 0x00000828, 0x00000200);
- 	udelay(1);
- 	ufs_renesas_write_d0_d4(hba, 0x00000828, 0x00000000);
- 	ufs_renesas_write_d0_d4(hba, 0x00000104, 0x00000001);
-+	if (init108)
-+		ufs_renesas_write_d0_d4(hba, 0x00000108, 0x00000001);
- 	ufs_renesas_write_d0_d4(hba, 0x00000940, 0x00000001);
- 	udelay(1);
- 	ufs_renesas_write_d0_d4(hba, 0x00000940, 0x00000000);
-@@ -207,12 +238,12 @@ static void ufs_renesas_init_compensation_and_slicers(struct ufs_hba *hba)
- 	ufs_renesas_write_phy_10ad_10af(hba, 0x0080, 0x001a);
- }
- 
--static void ufs_renesas_pre_init(struct ufs_hba *hba)
-+static void ufs_renesas_r8a779f0_es10_pre_init(struct ufs_hba *hba)
- {
- 	u32 timer_val;
- 
- 	/* This setting is for SERIES B */
--	ufs_renesas_init_step1_to_3(hba);
-+	ufs_renesas_init_step1_to_3(hba, false);
- 
- 	ufs_renesas_init_step4_to_6(hba);
- 
-@@ -283,6 +314,105 @@ static void ufs_renesas_pre_init(struct ufs_hba *hba)
- 	ufs_renesas_init_enable_timer(hba, timer_val);
- }
- 
-+static void ufs_renesas_r8a779f0_init_step3_add(struct ufs_hba *hba, bool assert)
-+{
-+	u32 val_2x = 0, val_3x = 0, val_4x = 0;
-+
-+	if (assert) {
-+		val_2x = 0x0001;
-+		val_3x = 0x0003;
-+		val_4x = 0x0001;
-+	}
-+
-+	ufs_renesas_reset_indirect_write(hba, 7, 0x20, val_2x);
-+	ufs_renesas_reset_indirect_write(hba, 7, 0x4a, val_4x);
-+	ufs_renesas_reset_indirect_write(hba, 7, 0x35, val_3x);
-+	ufs_renesas_reset_indirect_update(hba);
-+	ufs_renesas_reset_indirect_write(hba, 7, 0x21, val_2x);
-+	ufs_renesas_reset_indirect_write(hba, 7, 0x4b, val_4x);
-+	ufs_renesas_reset_indirect_write(hba, 7, 0x36, val_3x);
-+	ufs_renesas_reset_indirect_update(hba);
-+}
-+
-+static void ufs_renesas_r8a779f0_pre_init(struct ufs_hba *hba)
-+{
-+	struct ufs_renesas_priv *priv = ufshcd_get_variant(hba);
-+	u32 timer_val;
-+	u32 data;
-+	int i;
-+
-+	/* This setting is for SERIES B */
-+	ufs_renesas_init_step1_to_3(hba, true);
-+
-+	ufs_renesas_r8a779f0_init_step3_add(hba, true);
-+	ufs_renesas_reset_indirect_write(hba, 7, 0x5f, 0x0063);
-+	ufs_renesas_reset_indirect_update(hba);
-+	ufs_renesas_reset_indirect_write(hba, 7, 0x60, 0x0003);
-+	ufs_renesas_reset_indirect_update(hba);
-+	ufs_renesas_reset_indirect_write(hba, 7, 0x5b, 0x00a6);
-+	ufs_renesas_reset_indirect_update(hba);
-+	ufs_renesas_reset_indirect_write(hba, 7, 0x5c, 0x0003);
-+	ufs_renesas_reset_indirect_update(hba);
-+	ufs_renesas_r8a779f0_init_step3_add(hba, false);
-+
-+	ufs_renesas_init_step4_to_6(hba);
-+
-+	timer_val = ufs_renesas_init_disable_timer(hba);
-+
-+	ufs_renesas_indirect_write(hba, 1, 0x01, 0x001f);
-+	ufs_renesas_indirect_write(hba, 7, 0x5d, 0x0014);
-+	ufs_renesas_indirect_write(hba, 7, 0x5e, 0x0014);
-+	ufs_renesas_indirect_write(hba, 7, 0x0d, 0x0007);
-+	ufs_renesas_indirect_write(hba, 7, 0x0e, 0x0007);
-+
-+	ufs_renesas_indirect_poll(hba, 7, 0x3c, 0, BIT(7));
-+	ufs_renesas_indirect_poll(hba, 7, 0x4c, 0, BIT(4));
-+
-+	ufs_renesas_indirect_write(hba, 1, 0x32, 0x0080);
-+	ufs_renesas_indirect_write(hba, 1, 0x1f, 0x0001);
-+	ufs_renesas_indirect_write(hba, 1, 0x2c, 0x0001);
-+	ufs_renesas_indirect_write(hba, 1, 0x32, 0x0087);
-+
-+	ufs_renesas_indirect_write(hba, 1, 0x4d, priv->calib[2]);
-+	ufs_renesas_indirect_write(hba, 1, 0x4e, priv->calib[3]);
-+	ufs_renesas_indirect_write(hba, 1, 0x0d, 0x0006);
-+	ufs_renesas_indirect_write(hba, 1, 0x0e, 0x0007);
-+	ufs_renesas_write_phy(hba, 0x0028, priv->calib[3]);
-+	ufs_renesas_write_phy(hba, 0x4014, priv->calib[3]);
-+
-+	ufs_renesas_set_phy(hba, 0x401c, BIT(2));
-+
-+	ufs_renesas_write_phy(hba, 0x4000, priv->calib[6]);
-+	ufs_renesas_write_phy(hba, 0x4001, priv->calib[7]);
-+
-+	ufs_renesas_indirect_write(hba, 1, 0x14, 0x0001);
-+
-+	ufs_renesas_init_compensation_and_slicers(hba);
-+
-+	ufs_renesas_indirect_write(hba, 7, 0x79, 0x0000);
-+	ufs_renesas_indirect_write(hba, 7, 0x24, 0x000c);
-+	ufs_renesas_indirect_write(hba, 7, 0x25, 0x000c);
-+	ufs_renesas_indirect_write(hba, 7, 0x62, 0x00c0);
-+	ufs_renesas_indirect_write(hba, 7, 0x63, 0x0001);
-+
-+	for (i = 0; i < priv->fw->size / 2; i++) {
-+		data = (priv->fw->data[i * 2 + 1] << 8) | priv->fw->data[i * 2];
-+		ufs_renesas_write_phy(hba, 0xc000 + i, data);
-+	}
-+
-+	ufs_renesas_indirect_write(hba, 7, 0x0d, 0x0002);
-+	ufs_renesas_indirect_write(hba, 7, 0x0e, 0x0007);
-+
-+	ufs_renesas_indirect_write(hba, 7, 0x5d, 0x0014);
-+	ufs_renesas_indirect_write(hba, 7, 0x5e, 0x0017);
-+	ufs_renesas_indirect_write(hba, 7, 0x5d, 0x0004);
-+	ufs_renesas_indirect_write(hba, 7, 0x5e, 0x0017);
-+	ufs_renesas_indirect_poll(hba, 7, 0x55, 0, BIT(6));
-+	ufs_renesas_indirect_poll(hba, 7, 0x41, 0, BIT(7));
-+
-+	ufs_renesas_init_enable_timer(hba, timer_val);
-+}
-+
- static int ufs_renesas_hce_enable_notify(struct ufs_hba *hba,
- 					 enum ufs_notify_change_status status)
- {
-@@ -292,7 +422,7 @@ static int ufs_renesas_hce_enable_notify(struct ufs_hba *hba,
- 		return 0;
- 
- 	if (status == PRE_CHANGE)
--		ufs_renesas_pre_init(hba);
-+		priv->pre_init(hba);
- 
- 	priv->initialized = true;
- 
-@@ -310,20 +440,78 @@ static int ufs_renesas_setup_clocks(struct ufs_hba *hba, bool on,
- 	return 0;
- }
- 
-+static const struct soc_device_attribute ufs_fallback[] = {
-+	{ .soc_id = "r8a779f0", .revision = "ES1.[01]" },
-+	{ /* Sentinel */ }
-+};
-+
- static int ufs_renesas_init(struct ufs_hba *hba)
- {
-+	const struct soc_device_attribute *attr;
-+	struct nvmem_cell *cell = NULL;
-+	struct device *dev = hba->dev;
- 	struct ufs_renesas_priv *priv;
-+	u8 *data = NULL;
-+	size_t len;
-+	int ret;
- 
--	priv = devm_kzalloc(hba->dev, sizeof(*priv), GFP_KERNEL);
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
- 	ufshcd_set_variant(hba, priv);
- 
- 	hba->quirks |= UFSHCD_QUIRK_HIBERN_FASTAUTO;
- 
-+	attr = soc_device_match(ufs_fallback);
-+	if (attr)
-+		goto fallback;
-+
-+	ret = request_firmware(&priv->fw, UFS_RENESAS_FIRMWARE_NAME, dev);
-+	if (ret) {
-+		dev_warn(dev, "Failed to load firmware\n");
-+		goto fallback;
-+	}
-+
-+	cell = nvmem_cell_get(dev, "calibration");
-+	if (IS_ERR(cell)) {
-+		dev_warn(dev, "No calibration data specified\n");
-+		goto fallback;
-+	}
-+
-+	data = nvmem_cell_read(cell, &len);
-+	if (IS_ERR(data)) {
-+		dev_warn(dev, "Failed to read calibration data: %pe\n", data);
-+		goto fallback;
-+	}
-+
-+	if (len != EFUSE_CALIB_SIZE) {
-+		dev_warn(dev, "Invalid calibration data size %zu\n", len);
-+		goto fallback;
-+	}
-+
-+	memcpy(priv->calib, data, EFUSE_CALIB_SIZE);
-+	priv->pre_init = ufs_renesas_r8a779f0_pre_init;
-+	goto out;
-+
-+fallback:
-+	dev_info(dev, "Using ES1.0 init code\n");
-+	priv->pre_init = ufs_renesas_r8a779f0_es10_pre_init;
-+
-+out:
-+	kfree(data);
-+	if (!IS_ERR_OR_NULL(cell))
-+		nvmem_cell_put(cell);
-+
- 	return 0;
- }
- 
-+static void ufs_renesas_exit(struct ufs_hba *hba)
-+{
-+	struct ufs_renesas_priv *priv = ufshcd_get_variant(hba);
-+
-+	release_firmware(priv->fw);
-+}
-+
- static int ufs_renesas_set_dma_mask(struct ufs_hba *hba)
- {
- 	return dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(32));
-@@ -332,6 +520,7 @@ static int ufs_renesas_set_dma_mask(struct ufs_hba *hba)
- static const struct ufs_hba_variant_ops ufs_renesas_vops = {
- 	.name		= "renesas",
- 	.init		= ufs_renesas_init,
-+	.exit		= ufs_renesas_exit,
- 	.set_dma_mask	= ufs_renesas_set_dma_mask,
- 	.setup_clocks	= ufs_renesas_setup_clocks,
- 	.hce_enable_notify = ufs_renesas_hce_enable_notify,
 -- 
-2.43.0
 
+Joel Granados
 
