@@ -1,159 +1,112 @@
-Return-Path: <linux-scsi+bounces-12700-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12703-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D96CA599BB
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Mar 2025 16:20:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 536D3A59A83
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 Mar 2025 16:58:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF92F16EDE5
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Mar 2025 15:19:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74418188E0AF
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 Mar 2025 15:58:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3914E22F39F;
-	Mon, 10 Mar 2025 15:18:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCF2B22E403;
+	Mon, 10 Mar 2025 15:57:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K618IVTM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b="LUe8+FEw"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from fgw23-4.mail.saunalahti.fi (fgw23-4.mail.saunalahti.fi [62.142.5.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC0522DF8F;
-	Mon, 10 Mar 2025 15:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4387B22A4F6
+	for <linux-scsi@vger.kernel.org>; Mon, 10 Mar 2025 15:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.110
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741619887; cv=none; b=Si9n0iQY8q5inRQhSmBvSDSXb47Fr9ehbcI79zj3EmbyViiYVdMeNRB0W11dNw7TPPkkiQbC0/uluoRd2XJU2FCUPxVeGf6SzFdcnd6iALcB0I5zWS4+Ix8y1bM2H1RMyjkomeUq0tb3D9jwj0ROMPUV31Ri9J1w9FAp+zC9bSE=
+	t=1741622243; cv=none; b=J1uvHVSRYeTMmz6gv1QHczy0PcvhfJygnRlB2GMtdnsWeYj/m3Rq/tP5Kaxd2SFUG07ToQpq2gmrXqQo4r1oWEwdDGCDWTSVgY9Kb+xCnxEGY88d5fKdtCJ8b0/K71GgUG4u8ETWLbeKDFvhHBmPwMWNgWFjvoYkqV7wJsFA3Mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741619887; c=relaxed/simple;
-	bh=cCr6swPrHejV21H7pFXmqC8XKvmp4WhdXKPELwIzMOM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UUfzE1ueZ9xcWERay9TdbYh+ml5cyCV085OVf6TLk2smuhf+Ccqp6fHiQWE7EQX3yo2aLZwVlPPaRkzNQNJngMCVg23B2Zh0zvSaeifb6PeWihaVEBx0i2CFLronVEd5/98eYrWEV2r0Ap/4ZsdIeic4TNNgmlHhjMmyupr2WY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K618IVTM; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741619886; x=1773155886;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cCr6swPrHejV21H7pFXmqC8XKvmp4WhdXKPELwIzMOM=;
-  b=K618IVTMZyGOO4KLiKRzfSZCJrrG980YnJgI/wlOY+0i44cfTE0Px3m+
-   2trab2k8742IAeqtETEBO9MEx5bu72h4X+51H7eNShEedxk94EZ8c689F
-   w5503A+t21kgJVrxiTvgdTVCFe153e1056NOsUTMv70jSrk+Y+KXmLP/7
-   f/gkLL/lsvvJ17B6xWK4SXvSNKXPjO5TR8OVw5Gx+Gup1bhj8vycLzE5l
-   rkVJOqePHPwEw4Vl3zXPR5UwzFXvVxWwedBiRfJJSCxzueXYzB+hVXZy0
-   LE3SJsT9AaVJlWGo5IFKLX+cJ4wxT/H3COf8t47qNchCtu8Yqz8vI6GcC
-   w==;
-X-CSE-ConnectionGUID: UJCdwBgfSee/DLy5EnCIYA==
-X-CSE-MsgGUID: nPHq1KpaSBqKKjYhmf2wMQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="42656858"
-X-IronPort-AV: E=Sophos;i="6.14,236,1736841600"; 
-   d="scan'208";a="42656858"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 08:18:05 -0700
-X-CSE-ConnectionGUID: SMzo5GZDR3iRv+uNIbIeuA==
-X-CSE-MsgGUID: BmWdffciSh2Xpkpqi0attg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,236,1736841600"; 
-   d="scan'208";a="120539239"
-Received: from dnelso2-mobl.amr.corp.intel.com (HELO [10.125.111.63]) ([10.125.111.63])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 08:18:04 -0700
-Message-ID: <1fe5dc6e-3fa9-41a0-a38e-367fa2cc9475@intel.com>
-Date: Mon, 10 Mar 2025 08:18:03 -0700
+	s=arc-20240116; t=1741622243; c=relaxed/simple;
+	bh=NVLGZeTYDQdv96YTacJQOF6tnwTCdS4h1xuYjAhuydo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RLWwG9tYHxA+XM3cDmf51ncSXuEMgdiwK3xW4pnPiB4ActkwoBxiqkKPoZoutclDp3y7rhXvMGduNAfUrwMf8uMDSLMPUijy6Ck+/RfW7k9+oc1DW7VNw5tO/C7vG5zXrGmiDi2tQ8H3Wyqa9Cyw7beiEuUKNsqz1AhfwK0TQOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=LUe8+FEw; arc=none smtp.client-ip=62.142.5.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kolumbus.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kolumbus.fi
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=kolumbus.fi; s=elisa1;
+	h=content-transfer-encoding:content-type:mime-version:message-id:date:subject:
+	 cc:to:from:from:to:cc:reply-to:subject:date:in-reply-to:references:
+	 list-archive:list-subscribe:list-unsubscribe:content-type:
+	 content-transfer-encoding:message-id;
+	bh=UKigfTM+gaQ/Qw7tm/GBMcnMSnpJAjB4qFB5+bnhHZ0=;
+	b=LUe8+FEw9pbH+JoYHngMgxjy/OvsGCmsmOslMKmXo+IyGT1NjT/pYuGwVOfDn/DqqLoGxgWO63PZK
+	 1KCW8AaojNVLqSAUwyq6FOcyQBCuaxzhL32XozwaSW2O4fZGn2COL8N1cWh5nf++6ge0q3h2+p7pVI
+	 WWpEa3+MJujHNemGVPoIzQ3VUasiSVvPsJzlN2WLsfmnfE6DkHxQLnBxYnDEUwc2SdfyHojmKB6eaK
+	 LLS2L0ruJFbi5co7HHX9brnq+GdiMaHyHP6GHNKGH0ooeNkh7waOyYLY6OLANQaMkSSomGHv0wJ/6k
+	 iuQDz6/ZFlt0awS/y9vdir1TAxP8ljQ==
+Received: from kaipn1.makisara.private (85-156-116-90.elisa-laajakaista.fi [85.156.116.90])
+	by fgw21.mail.saunalahti.fi (Halon) with ESMTPSA
+	id 2ca48ff6-fdc8-11ef-839f-005056bdd08f;
+	Mon, 10 Mar 2025 17:56:06 +0200 (EET)
+From: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
+To: linux-scsi@vger.kernel.org,
+	dgilbert@interlog.com
+Cc: martin.petersen@oracle.com,
+	James.Bottomley@HansenPartnership.com,
+	=?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>
+Subject: [PATCH v2 0/5] scsi: scsi_debug: Changes to improve support for device types
+Date: Mon, 10 Mar 2025 17:55:52 +0200
+Message-ID: <20250310155557.2872-1-Kai.Makisara@kolumbus.fi>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [patch 04/10] NTB/msi: Switch MSI descriptor locking to lock
- guard()
-To: Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Jon Mason <jdmason@kudzu.us>,
- Allen Hubbe <allenbh@gmail.com>, ntb@lists.linux.dev,
- Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
- Santosh Shilimkar <ssantosh@kernel.org>, Bjorn Helgaas
- <bhelgaas@google.com>, linux-pci@vger.kernel.org,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- linux-hyperv@vger.kernel.org, Wei Huang <wei.huang2@amd.com>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org
-References: <20250309083453.900516105@linutronix.de>
- <20250309084110.394142327@linutronix.de>
-Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20250309084110.394142327@linutronix.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+The patch set includes changes to better support different device types.
 
+The first patch fixes two obvious typos in the existing definitions.
 
-On 3/9/25 1:41 AM, Thomas Gleixner wrote:
-> Convert the code to use the new guard(msi_descs_lock).
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Jon Mason <jdmason@kudzu.us>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Allen Hubbe <allenbh@gmail.com>
-> Cc: ntb@lists.linux.dev
+The second patch adds a device type mask to the command definitions (struct
+opcode_info_t). This makes possible for different command definitions for
+different device types and makes easy to add opcodes specific to certain
+device types. The mask is 32 bits wide and the bit positions are derived
+from the Peripheral Device Type field returned from INQUIRY and used in
+the struct scsi_device.
 
-Acked-by: Dave Jiang <dave.jiang@intel.com>
+In addition to the mask, the second patch adds command filtering based on
+device type to command queuing and building of the response in Report
+Supported Opcodes.
 
-> ---
->  drivers/ntb/msi.c |   22 ++++++++--------------
->  1 file changed, 8 insertions(+), 14 deletions(-)
-> 
-> --- a/drivers/ntb/msi.c
-> +++ b/drivers/ntb/msi.c
-> @@ -106,10 +106,10 @@ int ntb_msi_setup_mws(struct ntb_dev *nt
->  	if (!ntb->msi)
->  		return -EINVAL;
->  
-> -	msi_lock_descs(&ntb->pdev->dev);
-> -	desc = msi_first_desc(&ntb->pdev->dev, MSI_DESC_ASSOCIATED);
-> -	addr = desc->msg.address_lo + ((uint64_t)desc->msg.address_hi << 32);
-> -	msi_unlock_descs(&ntb->pdev->dev);
-> +	scoped_guard (msi_descs_lock, &ntb->pdev->dev) {
-> +		desc = msi_first_desc(&ntb->pdev->dev, MSI_DESC_ASSOCIATED);
-> +		addr = desc->msg.address_lo + ((uint64_t)desc->msg.address_hi << 32);
-> +	}
->  
->  	for (peer = 0; peer < ntb_peer_port_count(ntb); peer++) {
->  		peer_widx = ntb_peer_highest_mw_idx(ntb, peer);
-> @@ -289,7 +289,7 @@ int ntbm_msi_request_threaded_irq(struct
->  	if (!ntb->msi)
->  		return -EINVAL;
->  
-> -	msi_lock_descs(dev);
-> +	guard(msi_descs_lock)(dev);
->  	msi_for_each_desc(entry, dev, MSI_DESC_ASSOCIATED) {
->  		if (irq_has_action(entry->irq))
->  			continue;
-> @@ -307,17 +307,11 @@ int ntbm_msi_request_threaded_irq(struct
->  		ret = ntbm_msi_setup_callback(ntb, entry, msi_desc);
->  		if (ret) {
->  			devm_free_irq(&ntb->dev, entry->irq, dev_id);
-> -			goto unlock;
-> +			return ret;
->  		}
-> -
-> -		ret = entry->irq;
-> -		goto unlock;
-> +		return entry->irq;
->  	}
-> -	ret = -ENODEV;
-> -
-> -unlock:
-> -	msi_unlock_descs(dev);
-> -	return ret;
-> +	return -ENODEV;
->  }
->  EXPORT_SYMBOL(ntbm_msi_request_threaded_irq);
->  
-> 
+The third patch splits definitions of READ(6), WRITE(6) and PRE-FETCH/READ
+POSITION to versions for tapes and for other devices.
+
+The fourth patch changes obtaining device type from sdebug_ptype to
+struct scsi_device->type whenever it is set correctly. This improves
+support for using different device types in the same debug host.
+
+The patch set applies to 6.15/scsi-staging
+
+v2:
+- fixed devsel type in Patch 2, problem reported by the Kernel Test Robot
+- added patch 5: Add ERASE for tapes
+
+Kai Mäkisara (5):
+  scsi: scsi_debug: Fix two typos in command definitions
+  scsi: scsi_debug: Enable different command definitions for different
+    device types
+  scsi: scsi_debug: Move some tape-specific commands to separate
+    definitions
+  scsi: scsi_debug: Use scsi_device->type instead os sdebug_ptype where
+    possible
+  scsi_scsi_debug: Add ERASE for tapes
+
+ drivers/scsi/scsi_debug.c | 359 ++++++++++++++++++++++----------------
+ 1 file changed, 205 insertions(+), 154 deletions(-)
+
+-- 
+2.43.0
 
 
