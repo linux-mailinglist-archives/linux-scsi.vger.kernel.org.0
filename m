@@ -1,77 +1,77 @@
-Return-Path: <linux-scsi+bounces-12729-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12735-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD196A5B5B3
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Mar 2025 02:20:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9571BA5B5C5
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Mar 2025 02:21:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24D241893B81
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Mar 2025 01:20:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 320983AC090
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Mar 2025 01:21:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902331E3761;
-	Tue, 11 Mar 2025 01:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 879981EB19F;
+	Tue, 11 Mar 2025 01:20:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="U18SOVj7"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jJx/vPlq"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE92B1E0DE8;
-	Tue, 11 Mar 2025 01:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62A21EB180;
+	Tue, 11 Mar 2025 01:20:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741655992; cv=none; b=EeDxVvJXQvQtgkZYNslQ+y9QIjKJhsnjHqEJuid07ZEhQdFEIQg3HDlK1x8PvSnHuSo+vEvPXQi2IEYLni5n99XJR3i5LE2qMQlR5ib8JBx4Lm7RwYgWcsVRLMbfs3sTHR7xmyluTcXWXB24NwZ+vdv010Osx7fFAQrP7e7ckJ8=
+	t=1741656008; cv=none; b=EaKGM4NRyKHqnzVOa1dlN9P/EHnKR6cCrsVpEDpMvpO6zTjWXjCKboHEQer/QVmwTQ4ttHzKWg5/uG/GLk0AaaatVWIgXh+a7pIuHMuTvYpdDdLCHHMKI2jcxePjYmyY1ZvNEKs5j3WoqN2vX7jCo0SjgQ5srVE2zmoiO6sAsoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741655992; c=relaxed/simple;
-	bh=cRysWTu/ZgnC0ySgI+aRJu91jCLYtgyYkA8YrYHMMQI=;
+	s=arc-20240116; t=1741656008; c=relaxed/simple;
+	bh=vdt9UaBpmeNtU8mFUX+rh2tW850BOjZMXqdUqdTNKHg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qEAaSSmJV+Pqlls66SgHyTJs3ft3V+sw93Nbv5VffKNjyA31U6su3zXV+bBu1W4tecNzb9/wfwRYbb+Bapmw5xm6e7YHbsyG8GISz5VhYXYlf1ktIZfU4C4FNvNQL7bpRSmL9ToRBbi9nDN5my3ZK0aupkzl25Jiw07fK3aK1fk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=U18SOVj7; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=BTfym5gSAosM4D6+NR1x24bhGUYU1wbSLlymIxoojTyqPX1m/fBf366DzpvBRiPYcpalLFiOyhe2vn17rcMnYyijZPnRVSlG1xsMgrlKONhtcDJmG0WGZew2BI72lIGnbLaAxAPTKa9wWMBUEsctFARnOrbvW8uYndhWvD4rOwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=jJx/vPlq; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52ALgTxX009907;
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52ALftdU014742;
 	Tue, 11 Mar 2025 01:19:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=BPOX8QjtM4ikjrrtiAcfOMpTH31E248pB9JcFq7Mgjg=; b=
-	U18SOVj7WWMpPW8gHhJ5SuiqBC7Rmwx2267yT6oH0dkY0SetXv7KoE2dGdMt+oiu
-	l8Cypm+2UcdY3LZpXQrTrEehmvp4I727Lbb2nUHJikgMRAnKrInQl1DRmULnEd5Q
-	70MQXZ9/vcbFLWmBSwGVfy4a8RY53ERmbWaz2R6x2kHXlJWo31AOpM9aYWHtt9Iv
-	AKcNkgUIS6/NZmhAngKCWmid6eWJzNMJhuMSJ5qP7SnfgMNcZ1+xNJeHKdRnXNWR
-	4nVY7lotnhuTwI7bkD43zegKbEEg7KoWv1FH/IrtI2FyFNysD9GIef120xBeWB8i
-	e3XQF2JTm+N/snJn8qlAfw==
+	corp-2023-11-20; bh=u0DPz6MAEu7rcqUz+wc5x5MEZMdWmiHK5w/xmr9u2rU=; b=
+	jJx/vPlqb4fO6VpFjbS6b2le/bj+HmexOdgXYzEFM8yhRVtZLxshfKBY40t1TEjD
+	bHalrS9MzARz7AUEB6zrSVBjdJKsRkv2muztyHn70wCPWyXdi5oORwzaXCgHQ16x
+	6WF05mtM6lGZCdWu2fuilxseQO45omJ9Z52RCUSDDjHi5W0aXreuY2EhML8kQDtr
+	rGyoPybm4El3iXUki9NcbYaNO0vVJN1V2uAmjGqWiAYhK8NTGM9CISHrKwDwcxF5
+	nJrM+c1Skj/CgLcOifTCAuQ0zkghLNuvDiwZK/GJPgKhPQfn1NwsPFLZk/kDdbG2
+	0FmlqoQK72qDzmvx9walvQ==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 458dgt3u5w-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 458cacbvdb-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 11 Mar 2025 01:19:47 +0000 (GMT)
+	Tue, 11 Mar 2025 01:19:48 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 52ANtQkq017073;
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 52B09KMM014954;
 	Tue, 11 Mar 2025 01:19:47 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 458cbencns-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 458cbencnx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 11 Mar 2025 01:19:47 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 52B1JfrN014960;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 52B1JfrP014960;
 	Tue, 11 Mar 2025 01:19:46 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 458cbencm8-9;
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 458cbencm8-10;
 	Tue, 11 Mar 2025 01:19:46 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Thorsten Blum <thorsten.blum@linux.dev>
+To: James.Bottomley@HansenPartnership.com, Chaohai Chen <wdhh66@163.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-hardening@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] scsi: target: Replace deprecated strncpy() with strscpy()
-Date: Mon, 10 Mar 2025 21:19:08 -0400
-Message-ID: <174165505011.528513.5802380818483016300.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bvanassche@acm.org
+Subject: Re: [PATCH v2] scsi: fix missing lock protection
+Date: Mon, 10 Mar 2025 21:19:09 -0400
+Message-ID: <174165504932.528513.4044722537769473774.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250302225641.245127-2-thorsten.blum@linux.dev>
-References: <20250302225641.245127-2-thorsten.blum@linux.dev>
+In-Reply-To: <20250221030755.219277-1-wdhh66@163.com>
+References: <20250221030755.219277-1-wdhh66@163.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -84,31 +84,23 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-03-11_01,2025-03-07_03,2024-11-22_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 adultscore=0 spamscore=0
- mlxlogscore=820 malwarescore=0 suspectscore=0 mlxscore=0 bulkscore=0
+ mlxlogscore=941 malwarescore=0 suspectscore=0 mlxscore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502100000
  definitions=main-2503110007
-X-Proofpoint-GUID: Spes4Umjs7KcsA6g-EEMvnBpsvrUUmi3
-X-Proofpoint-ORIG-GUID: Spes4Umjs7KcsA6g-EEMvnBpsvrUUmi3
+X-Proofpoint-ORIG-GUID: 7sfyr7MNZSi7pjhnSbO7xEYbPveNz9cw
+X-Proofpoint-GUID: 7sfyr7MNZSi7pjhnSbO7xEYbPveNz9cw
 
-On Sun, 02 Mar 2025 23:56:41 +0100, Thorsten Blum wrote:
+On Fri, 21 Feb 2025 11:07:55 +0800, Chaohai Chen wrote:
 
-> strncpy() is deprecated for NUL-terminated destination buffers; use
-> strscpy() instead. The destination buffer db_root is only used with "%s"
-> format strings and must therefore be NUL-terminated, but not NUL-padded.
+> async_scan_lock is designed to protect the scanning_hosts list,
+> but there is no protection here.
 > 
-> Use scnprintf() because snprintf() could return a value >= DB_ROOT_LEN
-> and lead to an out-of-bounds access. This doesn't happen because count
-> is explicitly checked against DB_ROOT_LEN before. However, scnprintf()
-> always returns the number of characters actually written to the string
-> buffer, which is always within the bounds of db_root_stage, and should
-> be preferred over snprintf().
 > 
-> [...]
 
 Applied to 6.15/scsi-queue, thanks!
 
-[1/1] scsi: target: Replace deprecated strncpy() with strscpy()
-      https://git.kernel.org/mkp/scsi/c/dfb7df1ddb29
+[1/1] scsi: fix missing lock protection
+      https://git.kernel.org/mkp/scsi/c/ed3e4842224f
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
