@@ -1,132 +1,93 @@
-Return-Path: <linux-scsi+bounces-12834-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12842-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53227A606E9
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Mar 2025 02:12:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0A75A60712
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Mar 2025 02:35:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F3893B834D
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Mar 2025 01:12:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8ABA19C171A
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Mar 2025 01:35:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C64B618B482;
-	Fri, 14 Mar 2025 01:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D9E11F957;
+	Fri, 14 Mar 2025 01:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="J2IhqacH"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2835154C04;
-	Fri, 14 Mar 2025 01:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57FC31BC3C;
+	Fri, 14 Mar 2025 01:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741914625; cv=none; b=dgyhcC3LJK6H13Z47dOsG4IWVK7U/iRdEpoCKqgGvdKGZfZjbNcDBRhKmlziGY9Y8fQ+uE3q3cpVJ0K5Bp2WUuF07uWtwbUdmjTBef5p0Yp8gOujT6BLR3zeb9Tgqci/sE0wC86CS7l4pw7Iodz9CDdpR8st/mZmFm0fQRbyjFc=
+	t=1741916130; cv=none; b=QwtlVknxQH6x6GgfAriiWVfBZ3vc26iVX0yRNVpXB49l0FiM1uNHMJQsbxW6E5Vt78q4Hsw1WA7cmMsuR1ZNw0C/xMpB1++JShDXuBEYGqP2cELHbtgb4pNNlGoro7Tru7xX6tpwQWyJ77op+4Yw27Syjr4Ed8K4VlNqHUZioDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741914625; c=relaxed/simple;
-	bh=31cApgEEPr/vjgh4U3S1W4MvPj8aH5QcHE7QBy2M1Ak=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UnVAo2mswrh4vrXKYkR2L0IhCD8r+ZlX1Iv2U6GOQYbcuOEQgESxzteWqlMcTd1KS30CBU5vhBYbJHij+b+HaKoVAw9GnHTpUTCEEzAGInG4yvr0Jn6i02qyXGk/WR0xabnUYXXdIKZPbjLo2Aw8fSvt+IRP02Ywcv8fydian00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4ZDR521Tfjz1ltZq;
-	Fri, 14 Mar 2025 09:05:58 +0800 (CST)
-Received: from dggpemf500016.china.huawei.com (unknown [7.185.36.197])
-	by mail.maildlp.com (Postfix) with ESMTPS id A351B180069;
-	Fri, 14 Mar 2025 09:10:21 +0800 (CST)
-Received: from localhost.localdomain (10.175.101.6) by
- dggpemf500016.china.huawei.com (7.185.36.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 14 Mar 2025 09:10:21 +0800
-From: JiangJianJun <jiangjianjun3@huawei.com>
-To: <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-	<linux-scsi@vger.kernel.org>
-CC: <hare@suse.de>, <linux-kernel@vger.kernel.org>, <lixiaokeng@huawei.com>,
-	<jiangjianjun3@huawei.com>, <hewenliang4@huawei.com>,
-	<yangkunlin7@huawei.com>
-Subject: [RFC PATCH v3 19/19] scsi: iscsi_tcp: Add param to control LUN based error handle
-Date: Fri, 14 Mar 2025 09:29:27 +0800
-Message-ID: <20250314012927.150860-20-jiangjianjun3@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20250314012927.150860-1-jiangjianjun3@huawei.com>
-References: <20250314012927.150860-1-jiangjianjun3@huawei.com>
+	s=arc-20240116; t=1741916130; c=relaxed/simple;
+	bh=+rXvagmmqnv+l1UF0oIBQjSTsbM1a0sIGXjE1qIXr7I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BXT7QDJethYGRJVBXtYDYuS8e4HUCnDofVcfl1lkhD+4OkurNhyN2GHfiUE0+SKPfDbYujX8El5U7H61LBPgMlf6ZH5bDfU2fQCkGMfkxN/gWyzM/WRXklprmDquXHOZKwHlR0x5+ysXco95S4Gyo8e/MlhOJ79f+JXv6VOMJEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=J2IhqacH; arc=none smtp.client-ip=199.89.3.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 004.mia.mailroute.net (Postfix) with ESMTP id 4ZDRl2732Czm0ySj;
+	Fri, 14 Mar 2025 01:35:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1741916125; x=1744508126; bh=+rXvagmmqnv+l1UF0oIBQjST
+	sbM1a0sIGXjE1qIXr7I=; b=J2IhqacHlqBBmWr+s+RnzzGoZQFtYCYAJrt1nV3F
+	JIEs/XHa3NkxZrFnE+dYHnkh3+YJjMs70l+/Xj+k8b0Y9OPN7EY0Txb0H57vRDpf
+	k1zt3OnJbFPvi/r5iIrks3+MX88Jo127ICbZJVuV82qnfqEY1fBrQL5j0Vuj01mn
+	WC2iltIwQkfz+fUXHUy/LhVktFR0Uj/Dwb8ualGN/l8BF5T6JUDAghdITklZVY2t
+	fazRHpED7gnbYmGbsXMZnkaqhajCT6+a2otLz/vSMxu0N6FQWbTVcxJp+NEVV/Lr
+	kgUhwi6pP/CgswDJDPt+sPJRJjy4hEuOgjxhKJXs9xa4OQ==
+X-Virus-Scanned: by MailRoute
+Received: from 004.mia.mailroute.net ([127.0.0.1])
+ by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id 2e4iigJ2aOgj; Fri, 14 Mar 2025 01:35:25 +0000 (UTC)
+Received: from [192.168.51.14] (c-73-231-117-72.hsd1.ca.comcast.net [73.231.117.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4ZDRkt0bzbzm0djt;
+	Fri, 14 Mar 2025 01:35:16 +0000 (UTC)
+Message-ID: <0238dfce-49c2-43f0-9c71-556c7c5ffc75@acm.org>
+Date: Thu, 13 Mar 2025 18:35:15 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemf500016.china.huawei.com (7.185.36.197)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v3 09/19] scsi: core: increase/decrease target_busy
+ without check can_queue
+To: JiangJianJun <jiangjianjun3@huawei.com>, jejb@linux.ibm.com,
+ martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc: hare@suse.de, linux-kernel@vger.kernel.org, lixiaokeng@huawei.com,
+ hewenliang4@huawei.com, yangkunlin7@huawei.com
+References: <20250314012927.150860-1-jiangjianjun3@huawei.com>
+ <20250314012927.150860-10-jiangjianjun3@huawei.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20250314012927.150860-10-jiangjianjun3@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Wenchao Hao <haowenchao2@huawei.com>
+On 3/13/25 6:29 PM, JiangJianJun wrote:
+> This is preparation for a genernal target based error handle strategy
+> to check if to wake up actual error handler.
 
-Add new param lun_eh to control if enable LUN based error handler,
-since iscsi_tcp defined callback eh_target_reset, so make it
-fallback to further recover when LUN based recovery can not recover
-all error commands.
+I don't like this change because it slows down the hot path for LLD
+drivers that do not set starget->can_queue. Why is this change
+necessary? What are the alternatives?
 
-Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
----
- drivers/scsi/iscsi_tcp.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Thanks,
 
-diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
-index e81f60985193..6212d88a4259 100644
---- a/drivers/scsi/iscsi_tcp.c
-+++ b/drivers/scsi/iscsi_tcp.c
-@@ -35,6 +35,7 @@
- #include <scsi/scsi_host.h>
- #include <scsi/scsi.h>
- #include <scsi/scsi_transport_iscsi.h>
-+#include <scsi/scsi_eh.h>
- #include <trace/events/iscsi.h>
- #include <trace/events/sock.h>
- 
-@@ -63,6 +64,10 @@ module_param_named(debug_iscsi_tcp, iscsi_sw_tcp_dbg, int,
- MODULE_PARM_DESC(debug_iscsi_tcp, "Turn on debugging for iscsi_tcp module "
- 		 "Set to 1 to turn on, and zero to turn off. Default is off.");
- 
-+static bool iscsi_sw_tcp_lun_eh;
-+module_param_named(lun_eh, iscsi_sw_tcp_lun_eh, bool, 0444);
-+MODULE_PARM_DESC(lun_eh, "LUN based error handle (def=0)");
-+
- #define ISCSI_SW_TCP_DBG(_conn, dbg_fmt, arg...)		\
- 	do {							\
- 		if (iscsi_sw_tcp_dbg)				\
-@@ -1069,6 +1074,19 @@ static int iscsi_sw_tcp_sdev_configure(struct scsi_device *sdev,
- 	return 0;
- }
- 
-+static int iscsi_sw_tcp_sdev_alloc(struct scsi_device *sdev)
-+{
-+	if (iscsi_sw_tcp_lun_eh)
-+		return scsi_device_setup_eh(sdev, 1);
-+	return 0;
-+}
-+
-+static void iscsi_sw_tcp_sdev_destroy(struct scsi_device *sdev)
-+{
-+	if (iscsi_sw_tcp_lun_eh)
-+		return scsi_device_clear_eh(sdev);
-+}
-+
- static const struct scsi_host_template iscsi_sw_tcp_sht = {
- 	.module			= THIS_MODULE,
- 	.name			= "iSCSI Initiator over TCP/IP",
-@@ -1084,6 +1102,8 @@ static const struct scsi_host_template iscsi_sw_tcp_sht = {
- 	.eh_target_reset_handler = iscsi_eh_recover_target,
- 	.dma_boundary		= PAGE_SIZE - 1,
- 	.sdev_configure		= iscsi_sw_tcp_sdev_configure,
-+	.sdev_init			= iscsi_sw_tcp_sdev_alloc,
-+	.sdev_destroy		= iscsi_sw_tcp_sdev_destroy,
- 	.proc_name		= "iscsi_tcp",
- 	.this_id		= -1,
- 	.track_queue_depth	= 1,
--- 
-2.33.0
-
+Bart.
 
