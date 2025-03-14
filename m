@@ -1,223 +1,246 @@
-Return-Path: <linux-scsi+bounces-12821-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12825-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D56E7A6037C
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Mar 2025 22:36:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33B8FA606D7
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Mar 2025 02:10:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94D3C19C53BA
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Mar 2025 21:37:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76D2A46011B
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Mar 2025 01:10:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7405E1F542E;
-	Thu, 13 Mar 2025 21:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fGn7IIyi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 795C05BAF0;
+	Fri, 14 Mar 2025 01:10:19 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634851F4C83;
-	Thu, 13 Mar 2025 21:36:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E01B19BBA;
+	Fri, 14 Mar 2025 01:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741901805; cv=none; b=c9aDN1t3Q1J9wBY3pm9TpyBPYX0VQzA2CEqXVXyMACPoIBk7/7AmPNGSmvuhSe0AG75UscVuOeIj+OyO22vfWMNVRufBon/gCrWgiaBqI2WwTieqV7OIGRL0MGw2Mb+4LC4bNYPjJe04SNgNeTk0Hi4Ws9/q0ZA17f4toX7uj/U=
+	t=1741914619; cv=none; b=nmygd7G5pEihcM4HxrydnZC2Sj+oItsRt680rxyOY24/Zh+CUsqA+ZwQHzlOqP9X8V6fqujX1i19n4m+H4gDl/A79xH/CrurXSbMegFuUCQuMB4bpb/MdZpFDOKEJl8Iy172hSmZ6NcynKMCgaTyf9zZRafSk7yIBkF/eApzzy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741901805; c=relaxed/simple;
-	bh=Eqs8bJGp0lv40lbgYhiTihiy4TfvnfAjF88TY/Ar27w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=BInFkyqC0OGHbGmjidmb7v7UYYP+okeZDr/xYmFqxfMKz6zSRqk6EFep1ObdtOFH9FMFBqSoMXOzPZBu3q6nQ9tMkallR+nhPbpVVrB28NGZigZD/mVqXfZ0yzUq1hcBqgvAHp/EdN2bYOkblJDePXCsVhq/ug0FNhMu/Y1OYSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fGn7IIyi; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52DH6THf019717;
-	Thu, 13 Mar 2025 21:36:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	vKC2yzbG9UebsJ1VbEFgVRutkTrHq8RK6afAmCBtcMs=; b=fGn7IIyicUiVyiUr
-	av9A8XC/1OI+OddxR1ryC3iXOVQOOK8Q6XdZlYb5Lwz7aCMmwBwXX/6cCIPgVlsw
-	kGHg0ynn4vxD/cyw67i3E9OBFTb2WyVHdoSADkW4PT04yvSML5SEbuabWC8JvRA0
-	u8zTupEUcdK1OrieAbu83Ke/hE79UO4GLKbl9vC9e7yJU2H9xzT9Z9O/4ldKvJLa
-	Fjrm4g1tXYL8Fjtyfidj3tBXs+ZL+923mxQ0/DhGPoeJA+zzmHL1ArfR8aaw9MZz
-	HNH85ZlOeFYcVdzOPeKjwX9cvtn3S7I4x29qgri78yaoHVuE85K000NQ7Gkuc2+e
-	vgyjXg==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45bts0j9er-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 13 Mar 2025 21:36:16 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 52DLaF6Q009365
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 13 Mar 2025 21:36:15 GMT
-Received: from [10.46.162.103] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 13 Mar
- 2025 14:36:14 -0700
-Message-ID: <4c83f8c3-6cfd-81a0-afeb-3e8854fa1efc@quicinc.com>
-Date: Thu, 13 Mar 2025 14:36:14 -0700
+	s=arc-20240116; t=1741914619; c=relaxed/simple;
+	bh=U9b17+vrHZAlxaSRneFeoxRMFEIhQuHvTEtE6ILow4M=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qDn5URMf6l1hzpNQGo54qJqCrz1HTYwklgNa5nYR6wjR6JfkARfl/jzPRkzhkMzWdpz0AQbBnhusIrWYBRIfVW90+5Npy8hqBl60kx0Y7r75Ue7HAKjlDnX47c/s/QuwYGvVH0FOL/NC8ny6dTNJriuuRJ53Pa8aTtr89f+wq54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4ZDR7x67yYz1R6jj;
+	Fri, 14 Mar 2025 09:08:29 +0800 (CST)
+Received: from dggpemf500016.china.huawei.com (unknown [7.185.36.197])
+	by mail.maildlp.com (Postfix) with ESMTPS id B61BC14011D;
+	Fri, 14 Mar 2025 09:10:11 +0800 (CST)
+Received: from localhost.localdomain (10.175.101.6) by
+ dggpemf500016.china.huawei.com (7.185.36.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 14 Mar 2025 09:10:11 +0800
+From: JiangJianJun <jiangjianjun3@huawei.com>
+To: <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+	<linux-scsi@vger.kernel.org>
+CC: <hare@suse.de>, <linux-kernel@vger.kernel.org>, <lixiaokeng@huawei.com>,
+	<jiangjianjun3@huawei.com>, <hewenliang4@huawei.com>,
+	<yangkunlin7@huawei.com>
+Subject: [RFC PATCH v3 00/19] scsi: scsi_error: Introduce new error handle mechanism
+Date: Fri, 14 Mar 2025 09:29:08 +0800
+Message-ID: <20250314012927.150860-1-jiangjianjun3@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v1 1/1] scsi: ufs: core: add device level exception
- support
-Content-Language: en-US
-To: Bart Van Assche <bvanassche@acm.org>, <quic_cang@quicinc.com>,
-        <quic_nitirawa@quicinc.com>, <avri.altman@wdc.com>,
-        <peter.wang@mediatek.com>, <manivannan.sadhasivam@linaro.org>,
-        <minwoo.im@samsung.com>, <adrian.hunter@intel.com>,
-        <martin.petersen@oracle.com>
-CC: <linux-scsi@vger.kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Bean Huo
-	<beanhuo@micron.com>, Ziqi Chen <quic_ziqichen@quicinc.com>,
-        Keoseong Park
-	<keosung.park@samsung.com>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Al Viro
-	<viro@zeniv.linux.org.uk>, Eric Biggers <ebiggers@google.com>,
-        open list
-	<linux-kernel@vger.kernel.org>
-References: <772730b9a036a33bebc27cb854576a012e76ca91.1741282081.git.quic_nguyenb@quicinc.com>
- <41678800-470f-4ea2-802c-f9f4d21817f6@acm.org>
-From: "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
-In-Reply-To: <41678800-470f-4ea2-802c-f9f4d21817f6@acm.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Q0afexFiAYp-Gn5hVVujUtAR5GRi8940
-X-Authority-Analysis: v=2.4 cv=DNSP4zNb c=1 sm=1 tr=0 ts=67d34fd0 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=COk6AnOGAAAA:8 a=ChCBPZhDfTThoWy9I0sA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: Q0afexFiAYp-Gn5hVVujUtAR5GRi8940
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-13_10,2025-03-13_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 phishscore=0 malwarescore=0 mlxlogscore=999
- priorityscore=1501 mlxscore=0 spamscore=0 bulkscore=0 impostorscore=0
- suspectscore=0 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2503130166
+Content-Type: text/plain
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemf500016.china.huawei.com (7.185.36.197)
 
-On 3/13/2025 11:14 AM, Bart Van Assche wrote:
-> On 3/6/25 9:31 AM, Bao D. Nguyen wrote:
->> +What:        /sys/bus/platform/drivers/ufshcd/*/device_lvl_exception
->> +What:        /sys/bus/platform/devices/*.ufs/device_lvl_exception
->> +Date:        March 2025
->> +Contact:    Bao D. Nguyen <quic_nguyenb@quicinc.com>
->> +Description:
->> +        The device_lvl_exception is a counter indicating the number
->> +        of times the device level exceptions have occurred since the
->> +        last time this variable is reset. Read the 
->> device_lvl_exception_id
->> +        sysfs node to know more information about the exception.
->> +        The file is read only.
-> 
-> Shouldn't this sysfs attribute have a "_count" suffix to make it clear
-> that it represents a count?
-Thank you, Bart. I agree. Will make the change.
+It's unbearable for systems with large scale scsi devices share HBAs to
+block all devices' IOs when handle error commands, we need a new error
+handle mechanism to address this issue.
 
-> 
-> Additionally, here and below, please change "file" into "attribute".
-> 
->> +What:        /sys/bus/platform/drivers/ufshcd/*/device_lvl_exception_id
->> +What:        /sys/bus/platform/devices/*.ufs/device_lvl_exception_id
->> +Date:        March 2025
->> +Contact:    Bao D. Nguyen <quic_nguyenb@quicinc.com>
->> +Description:
->> +        Reading the device_lvl_exception_id returns the device JEDEC
->> +        standard's qDeviceLevelExceptionID attribute. The definition 
->> of the
->> +        qDeviceLevelExceptionID is the ufs device vendor specific 
->> design.
->> +        Refer to the device manufacturer datasheet for more information
->> +        on the meaning of the qDeviceLevelExceptionID attribute value.
->> +        The file is read only.
-> 
-> I'm not sure it is useful to export vendor-specific information to
-> sysfs.
-Because each ufs vendor defines the data differently according to the 
-device spec, we probably can't have a defined handling on this event in 
-the kernel. For some applications such as automobile, the information is 
-useful. If you have suggestions for the user applications to access this 
-data, I am all ears.
+I consulted about this issue a year ago, the discuss link can be found in
+refenence. Hannes replied about why we have to block the SCSI host
+then perform error recovery kindly. I think it's unnecessary to block
+SCSI host for all drivers and can try a small level recovery(LUN based for
+example) first to avoid block the SCSI host.
 
-> 
->> diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
->> index 90b5ab6..0248288a 100644
->> --- a/drivers/ufs/core/ufs-sysfs.c
->> +++ b/drivers/ufs/core/ufs-sysfs.c
->> @@ -466,6 +466,56 @@ static ssize_t critical_health_show(struct device 
->> *dev,
->>       return sysfs_emit(buf, "%d\n", hba->critical_health_count);
->>   }
->> +static ssize_t device_lvl_exception_show(struct device *dev,
->> +                     struct device_attribute *attr,
->> +                     char *buf)
->> +{
->> +    struct ufs_hba *hba = dev_get_drvdata(dev);
->> +
->> +    if (hba->dev_info.wspecversion < 0x410)
->> +        return -EOPNOTSUPP;
->> +
->> +    return sysfs_emit(buf, "%u\n", hba->dev_lvl_exception_count);
->> +}
-> 
-> The preferred approach for sysfs attributes that are not supported is to 
-> make these invisible rather than returning an error code.I was thinking it would be useful for the user application to know the 
-ufs device does not support this feature, so that it would not keep 
-trying to read the data.
+The new error handle mechanism introduced in this patchset has been
+developed and tested with out self developed hardware since one year
+ago, now we want this mechanism can be used by more drivers.
 
-> 
->> +static ssize_t device_lvl_exception_id_show(struct device *dev,
->> +                        struct device_attribute *attr,
->> +                        char *buf)
->> +{
->> +    struct ufs_hba *hba = dev_get_drvdata(dev);
->> +    u64 exception_id;
->> +    int err;
->> +
->> +    ufshcd_rpm_get_sync(hba);
->> +    err = ufshcd_read_device_lvl_exception_id(hba, &exception_id);
->> +    ufshcd_rpm_put_sync(hba);
->> +
->> +    if (err)
->> +        return err;
->> +
->> +    hba->dev_lvl_exception_id = exception_id;
->> +    return sysfs_emit(buf, "%llu\n", exception_id);
->> +}
-> 
-> Just like device_lvl_exception, this attribute shouldn't be visible if
-> device level exceptions are not supported.
-Same reasoning, to inform the user application the feature is not 
-supported so that it does not keep trying.
+Drivers can decide if using the new error handle mechanism and how to
+handle error commands when scsi_device are scanned,the new mechanism
+makes SCSI error handle more flexible.
 
-> 
->> +    if (status & hba->ee_drv_mask & MASK_EE_DEV_LVL_EXCEPTION) {
->> +        hba->dev_lvl_exception_count++;
->> +        sysfs_notify(&hba->dev->kobj, NULL, "device_lvl_exception");
->> +    }
-> 
-> sysfs_notify() may sleep and hence must not be called from an interrupt
-> handler.
-I will look into this.
+SCSI error recovery strategy after blocking host's IO is mainly
+following steps:
 
-Thanks, Bao
+- LUN reset
+- Target reset
+- Bus reset
+- Host reset
 
-> 
-> Thanks,
-> 
-> Bart.
+Some drivers did not implement callbacks for host reset, it's unnecessary
+to block host's IO for these drivers. For example, smartpqi only registered
+device reset, if device reset failed, it's meaningless to fallback to target
+reset, bus reset or host reset any more, because these steps would also
+failed.
+
+Here are some drivers we concerned:(there are too many kinds of drivers
+to figure out, so here I just list some drivers I am familiar with)
+
++-------------+--------------+--------------+-----------+------------+
+|  drivers    | device_reset | target_reset | bus_reset | host_reset |
++-------------+--------------+--------------+-----------+------------+
+| mpt3sas     |     Y        |     Y        |    N      |    Y       |
++-------------+--------------+--------------+-----------+------------+
+| smartpqi    |     Y        |     N        |    N      |    N       |
++-------------+--------------+--------------+-----------+------------+
+| megaraidsas |     N        |     Y        |    N      |    Y       |
++-------------+--------------+--------------+-----------+------------+
+| virtioscsi  |     Y        |     N        |    N      |    N       |
++-------------+--------------+--------------+-----------+------------+
+| iscsi_tcp   |     Y        |     Y        |    N      |    N       |
++-------------+--------------+--------------+-----------+------------+
+| hisisas     |     Y        |     Y        |    N      |    N       |
++-------------+--------------+--------------+-----------+------------+
+
+For LUN based error handle, when scsi command is classified as error,
+we would block the scsi device's IO and try to recover this scsi
+device, if still can not recover all error commands, it might
+fallback to target or host level recovery.
+
+It's same for target based error handle, but target based error handle
+would block the scsi target's IO then try to recover the error commands
+of this target.
+
+The first patch defines basic framework to support LUN/target based error
+handle mechanism, three key operations are abstracted which are:
+ - add error command
+ - wake up error handle
+ - block IOs when error command is added and recoverying.
+
+Drivers can implement these three function callbacks and setup to SCSI
+middle level; I also add a general LUN/target based error handle strategy
+which can be called directly from drivers to implement LUN/tartget based
+error handle.
+
+The changes of SCSI middle level's error handle are tested with scsi_debug
+which support single LUN error injection, the scsi_debug patches can be
+found in reference, following scenarios are tested.
+
+Scenario1: LUN based error handle is enabled:
++-----------+---------+-------------------------------------------------------+
+| lun reset | TUR     | Desired result                                        |
++ --------- + ------- + ------------------------------------------------------+
+| success   | success | retry or finish with  EIO(may offline disk)           |
++ --------- + ------- + ------------------------------------------------------+
+| success   | fail    | fallback to host  recovery, retry or finish with      |
+|           |         | EIO(may offline disk)                                 |
++ --------- + ------- + ------------------------------------------------------+
+| fail      | NA      | fallback to host  recovery, retry or finish with      |
+|           |         | EIO(may offline disk)                                 |
++ --------- + ------- + ------------------------------------------------------+
+
+Scenario2: target based error handle is enabled:
++-----------+---------+--------------+---------+------------------------------+
+| lun reset | TUR     | target reset | TUR     | Desired result               |
++-----------+---------+--------------+---------+------------------------------+
+| success   | success | NA           | NA      | retry or finish with         |
+|           |         |              |         | EIO(may offline disk)        |
++-----------+---------+--------------+---------+------------------------------+
+| success   | fail    | success      | success | retry or finish with         |
+|           |         |              |         | EIO(may offline disk)        |
++-----------+---------+--------------+---------+------------------------------+
+| fail      | NA      | success      | success | retry or finish with         |
+|           |         |              |         | EIO(may offline disk)        |
++-----------+---------+--------------+---------+------------------------------+
+| fail      | NA      | success      | fail    | fallback to host recovery,   |
+|           |         |              |         | retry or finish with EIO(may |
+|           |         |              |         | offline disk)                |
++-----------+---------+--------------+---------+------------------------------+
+| fail      | NA      | fail         | NA      | fallback to host  recovery,  |
+|           |         |              |         | retry or finish with EIO(may |
+|           |         |              |         | offline disk)                |
++-----------+---------+--------------+---------+------------------------------+
+
+Scenario3: both LUN and target based error handle are enabled:
++-----------+---------+--------------+---------+------------------------------+
+| lun reset | TUR     | target reset | TUR     | Desired result               |
++-----------+---------+--------------+---------+------------------------------+
+| success   | success | NA           | NA      | retry or finish with         |
+|           |         |              |         | EIO(may offline disk)        |
++-----------+---------+--------------+---------+------------------------------+
+| success   | fail    | success      | success | lun recovery fallback to     |
+|           |         |              |         | target recovery, retry or    |
+|           |         |              |         | finish with EIO(may offline  |
+|           |         |              |         | disk                         |
++-----------+---------+--------------+---------+------------------------------+
+| fail      | NA      | success      | success | lun recovery fallback to     |
+|           |         |              |         | target recovery, retry or    |
+|           |         |              |         | finish with EIO(may offline  |
+|           |         |              |         | disk                         |
++-----------+---------+--------------+---------+------------------------------+
+| fail      | NA      | success      | fail    | lun recovery fallback to     |
+|           |         |              |         | target recovery, then fall   |
+|           |         |              |         | back to host recovery, retry |
+|           |         |              |         | or fhinsi with EIO(may       |
+|           |         |              |         | offline disk)                |
++-----------+---------+--------------+---------+------------------------------+
+| fail      | NA      | fail         | NA      | lun recovery fallback to     |
+|           |         |              |         | target recovery, then fall   |
+|           |         |              |         | back to host recovery, retry |
+|           |         |              |         | or fhinsi with EIO(may       |
+|           |         |              |         | offline disk)                |
++-----------+---------+--------------+---------+------------------------------+
+
+References: https://lore.kernel.org/linux-scsi/20230815122316.4129333-1-haowenchao2@huawei.com/
+References: https://lore.kernel.org/linux-scsi/71e09bb4-ff0a-23fe-38b4-fe6425670efa@huawei.com/
+
+Wenchao Hao (19):
+  scsi: scsi_error: Define framework for LUN/target based error handle
+  scsi: scsi_error: Move complete variable eh_action from shost to
+    sdevice
+  scsi: scsi_error: Check if to do reset in scsi_try_xxx_reset
+  scsi: scsi_error: Add helper scsi_eh_sdev_stu to do START_UNIT
+  scsi: scsi_error: Add helper scsi_eh_sdev_reset to do lun reset
+  scsi: scsi_error: Add flags to mark error handle steps has done
+  scsi: scsi_error: Add helper to handle scsi device's error command
+    list
+  scsi: scsi_error: Add a general LUN based error handler
+  scsi: core: increase/decrease target_busy without check can_queue
+  scsi: scsi_error: Add helper to handle scsi target's error command
+    list
+  scsi: scsi_error: Add a general target based error handler
+  scsi: scsi_debug: Add param to control LUN bassed error handler
+  scsi: scsi_debug: Add param to control target based error handle
+  scsi: mpt3sas: Add param to control LUN based error handle
+  scsi: mpt3sas: Add param to control target based error handle
+  scsi: smartpqi: Add param to control LUN based error handle
+  scsi: megaraid_sas: Add param to control target based error handle
+  scsi: virtio_scsi: Add param to control LUN based error handle
+  scsi: iscsi_tcp: Add param to control LUN based error handle
+
+ drivers/scsi/iscsi_tcp.c                  |  20 +
+ drivers/scsi/megaraid/megaraid_sas_base.c |  20 +
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c      |  28 +
+ drivers/scsi/scsi_debug.c                 |  24 +
+ drivers/scsi/scsi_error.c                 | 756 ++++++++++++++++++++--
+ drivers/scsi/scsi_lib.c                   |  23 +-
+ drivers/scsi/scsi_priv.h                  |  18 +
+ drivers/scsi/smartpqi/smartpqi_init.c     |  14 +
+ drivers/scsi/virtio_scsi.c                |  16 +-
+ include/scsi/scsi_device.h                |  97 +++
+ include/scsi/scsi_eh.h                    |   8 +
+ include/scsi/scsi_host.h                  |   2 -
+ 12 files changed, 963 insertions(+), 63 deletions(-)
+
+-- 
+2.33.0
 
 
