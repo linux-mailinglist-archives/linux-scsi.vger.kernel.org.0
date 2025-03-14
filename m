@@ -1,40 +1,40 @@
-Return-Path: <linux-scsi+bounces-12841-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12833-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAD7FA606F9
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Mar 2025 02:15:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6107A60702
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Mar 2025 02:21:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F12F19C78BD
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Mar 2025 01:14:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F221916F211
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Mar 2025 01:21:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4C57D515;
-	Fri, 14 Mar 2025 01:10:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D31117C7C4;
+	Fri, 14 Mar 2025 01:10:25 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1780A1A2390;
-	Fri, 14 Mar 2025 01:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF791519B5;
+	Fri, 14 Mar 2025 01:10:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741914633; cv=none; b=NkO5FTjbiGT+MgY53W9GEsKpDUUQaWkOPPJ7tlDWYAbUOx8lH5MBhdcjwk7l9zk101wu6fC9+O+k9vsHDsmzA29A17v4LntOND4v3bHB6Jdsa9CFJecop5ebhRoRcxdRsU/rVFHG96aYHxSZN0YxpH6k3aHhiLaKfS3ES2zY6F0=
+	t=1741914625; cv=none; b=gJ/7yI6AoYwGFmMW6Mo8Lnsppw7f/ZRCR7dSdS1KRXB+f4vZoJ1JeK5DJD7MfVUc0P0V8GFFR9klsoluqi2EIqQbBxdixh3Pd75cP+44jynAMX6w0S1AGuF+o7vU1N5tSmA8SduahggnRD7Zrk0Elmzv4AM2Y0frXo80PM9Au8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741914633; c=relaxed/simple;
-	bh=J0hYHKj4MYP/FclISPNyiqtAvRygCCjd6NqZuvwhwgw=;
+	s=arc-20240116; t=1741914625; c=relaxed/simple;
+	bh=iTWeO/0L3NSvusXc+Ug/fjUBrTnenMPdKn+kG1amEKU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HuCZi7dOfbvKicDtZIi2qBL+HtqnQH2rbV1/EyHMh5vOmAE0xFjOYDkUVTAw8lO1PGQn+65Iqq7da7tKFNTC3MCYl25TYdAztsBMkv3Ru/RYJCRxTBnR9dagPOC6QrurLl4vFopZpVzH7jYMtglqNMmx9YLfgmft0h6LdKH5Prc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
+	 MIME-Version:Content-Type; b=R1UbUw1b/Wz6E2R8tJBUkh+/YHtwgp8PTlM0XEKIRWLhjFuSGVp/XdMNAAgvvBfcn8N/p8G0S+dVWrZa3q2INzF0Gm7cyiDjgkKkajODItNKXUJh4ZQ+xqKFe+arbTrzKtPZ7A7MwmZIX5KHRkIKLB+Tm82iYXKp/ETLbza54h0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4ZDRBl6pBLz27gDV;
-	Fri, 14 Mar 2025 09:10:55 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4ZDR8720Vsz1R6bW;
+	Fri, 14 Mar 2025 09:08:39 +0800 (CST)
 Received: from dggpemf500016.china.huawei.com (unknown [7.185.36.197])
-	by mail.maildlp.com (Postfix) with ESMTPS id A55CA14011D;
-	Fri, 14 Mar 2025 09:10:20 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 2ABE71402CA;
+	Fri, 14 Mar 2025 09:10:21 +0800 (CST)
 Received: from localhost.localdomain (10.175.101.6) by
  dggpemf500016.china.huawei.com (7.185.36.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -45,9 +45,9 @@ To: <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
 CC: <hare@suse.de>, <linux-kernel@vger.kernel.org>, <lixiaokeng@huawei.com>,
 	<jiangjianjun3@huawei.com>, <hewenliang4@huawei.com>,
 	<yangkunlin7@huawei.com>
-Subject: [RFC PATCH v3 17/19] scsi: megaraid_sas: Add param to control target based error handle
-Date: Fri, 14 Mar 2025 09:29:25 +0800
-Message-ID: <20250314012927.150860-18-jiangjianjun3@huawei.com>
+Subject: [RFC PATCH v3 18/19] scsi: virtio_scsi: Add param to control LUN based error handle
+Date: Fri, 14 Mar 2025 09:29:26 +0800
+Message-ID: <20250314012927.150860-19-jiangjianjun3@huawei.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20250314012927.150860-1-jiangjianjun3@huawei.com>
 References: <20250314012927.150860-1-jiangjianjun3@huawei.com>
@@ -64,69 +64,67 @@ X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
 
 From: Wenchao Hao <haowenchao2@huawei.com>
 
-Add new param target_eh to control if enable target based error
-handler, since megaraid_sas did not define callback eh_device_reset,
-so only target based error handler is enabled; and megaraid_sas
-defined eh_host_reset, so make it fallback to further recover
-when target based recovery can not recover all error commands.
+Add new param lun_eh to control if enable LUN based error handler, since
+virtio_scsi did not define other further reset callbacks, it is not
+necessary to fallback to further recover any more, so set the LUN
+error handler with fallback set to 0.
 
 Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
 ---
- drivers/scsi/megaraid/megaraid_sas_base.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ drivers/scsi/virtio_scsi.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index d85f990aec88..4ea4b754b090 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -44,6 +44,7 @@
- #include <scsi/scsi_host.h>
+diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
+index 21ce3e940192..99276ad0e441 100644
+--- a/drivers/scsi/virtio_scsi.c
++++ b/drivers/scsi/virtio_scsi.c
+@@ -28,6 +28,7 @@
+ #include <scsi/scsi_cmnd.h>
  #include <scsi/scsi_tcq.h>
- #include <scsi/scsi_dbg.h>
+ #include <scsi/scsi_devinfo.h>
 +#include <scsi/scsi_eh.h>
- #include "megaraid_sas_fusion.h"
- #include "megaraid_sas.h"
+ #include <linux/seqlock.h>
  
-@@ -126,6 +127,10 @@ int host_tagset_enable = 1;
- module_param(host_tagset_enable, int, 0444);
- MODULE_PARM_DESC(host_tagset_enable, "Shared host tagset enable/disable Default: enable(1)");
+ #include "sd.h"
+@@ -41,6 +42,10 @@ module_param(virtscsi_poll_queues, uint, 0644);
+ MODULE_PARM_DESC(virtscsi_poll_queues,
+ 		 "The number of dedicated virtqueues for polling I/O");
  
-+static bool target_eh;
-+module_param(target_eh, bool, 0444);
-+MODULE_PARM_DESC(target_eh, "target based error handle (def=0)");
++static bool lun_eh;
++module_param(lun_eh, bool, 0444);
++MODULE_PARM_DESC(lun_eh, "LUN based error handle (def=0)");
 +
- MODULE_LICENSE("GPL");
- MODULE_VERSION(MEGASAS_VERSION);
- MODULE_AUTHOR("megaraidlinux.pdl@broadcom.com");
-@@ -2176,6 +2181,19 @@ static void megasas_sdev_destroy(struct scsi_device *sdev)
- 	sdev->hostdata = NULL;
+ /* Command queue element */
+ struct virtio_scsi_cmd {
+ 	struct scsi_cmnd *sc;
+@@ -682,9 +687,18 @@ static int virtscsi_device_alloc(struct scsi_device *sdevice)
+ 	 */
+ 	sdevice->sdev_bflags = BLIST_TRY_VPD_PAGES;
+ 
++	if (lun_eh)
++		return scsi_device_setup_eh(sdevice, 0);
++
+ 	return 0;
  }
  
-+static int megasas_target_alloc(struct scsi_target *starget)
++static void virtscsi_device_destroy(struct scsi_device *sdevice)
 +{
-+	if (target_eh)
-+		return scsi_target_setup_eh(starget, 1);
-+	return 0;
++	if (lun_eh)
++		return scsi_device_clear_eh(sdevice);
 +}
 +
-+static void megasas_target_destroy(struct scsi_target *starget)
-+{
-+	if (target_eh)
-+		scsi_target_clear_eh(starget);
-+}
-+
- /*
- * megasas_complete_outstanding_ioctls - Complete outstanding ioctls after a
- *                                       kill adapter
-@@ -3524,6 +3542,8 @@ static const struct scsi_host_template megasas_template = {
- 	.change_queue_depth = scsi_change_queue_depth,
- 	.max_segment_size = 0xffffffff,
- 	.cmd_size = sizeof(struct megasas_cmd_priv),
-+	.target_alloc = megasas_target_alloc,
-+	.target_destroy = megasas_target_destroy,
- };
  
  /**
+  * virtscsi_change_queue_depth() - Change a virtscsi target's queue depth
+@@ -801,7 +815,7 @@ static const struct scsi_host_template virtscsi_host_template = {
+ 	.eh_device_reset_handler = virtscsi_device_reset,
+ 	.eh_timed_out = virtscsi_eh_timed_out,
+ 	.sdev_init = virtscsi_device_alloc,
+-
++	.sdev_destroy = virtscsi_device_destroy,
+ 	.dma_boundary = UINT_MAX,
+ 	.map_queues = virtscsi_map_queues,
+ 	.track_queue_depth = 1,
 -- 
 2.33.0
 
