@@ -1,40 +1,40 @@
-Return-Path: <linux-scsi+bounces-12840-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-12839-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 000D6A606F5
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Mar 2025 02:14:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35321A606F4
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Mar 2025 02:14:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D23C462F24
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCA10188EA73
 	for <lists+linux-scsi@lfdr.de>; Fri, 14 Mar 2025 01:14:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0AA71A317E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5561A304A;
 	Fri, 14 Mar 2025 01:10:29 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D1F19307F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67861946AA;
 	Fri, 14 Mar 2025 01:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741914629; cv=none; b=ETFo9VnZURXxVhP0u0NIAR+MLBSmyjAFA6j4kkaqARd+VivP/2i3xIZfKYrU92pzn+fReLfB+bUg0Ea/52AS5K2PWCbsJ/DGyBn/bpfXRSRiZZQ5uVxd3AE0LfwFPCVW3+g4yhUMaGyA799O+9vnpq1qWubtTV/7lWOLw3kQ6s0=
+	t=1741914629; cv=none; b=px4VF6U0iWII1+PNdh905jmKTc11DiKay0J2jPVmxM5C3k6tf+AhLRjkfpQLaueN7yWA/lSKrB/qhyruk3JAqpi75VLdU9jpTTveUGTfvSN7GVeIM5eh+zHZf13W+1fOpL0G3hv6bJwTAB/1W85Nxd5/n1ds0UnKxeIrF2dJHMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1741914629; c=relaxed/simple;
-	bh=PYuQvxkgQXGECHwGA2MVuDhfRPY04++PpqHyo5ilvPc=;
+	bh=avghMgFjPeUTvjk6WUJz3BpzKN2b/Dc6sK35L2Ty46s=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sTfpROldjqy9CDJJAGIv3V7R/QRr5HlHVZHXuBCWnicfIOhaeJyaj3MmwgJcLwuSGJlSmewAqg1pO1zC3WiF94b2CDP+yyw32fTSnxEVTg4Lu5gPG9N3AAVK42XcBZNZceCNGDUAgN/cfyFhAhE+o8nB0NsMYbh7xR/qbTFNd5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+	 MIME-Version:Content-Type; b=Cao59PtKNaPfW0CXu6lxn1+wjT98JhMn5EZm8w+o3NYQzsw9HG+GRkZNna9HY3cn/rAoVEIFc6XFHTQfPq+GYzqh1L6zs3OYrCMyymVp8rkPS0Nc4y5xvkHJGQIcBSa73cWU76Qk9R9r7xJnODTLfDAvTPzENU+Fb8E3dADWEhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4ZDR5b2gLyzvWpl;
-	Fri, 14 Mar 2025 09:06:27 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4ZDRBk3LTrz27gXH;
+	Fri, 14 Mar 2025 09:10:54 +0800 (CST)
 Received: from dggpemf500016.china.huawei.com (unknown [7.185.36.197])
-	by mail.maildlp.com (Postfix) with ESMTPS id AAA82140393;
-	Fri, 14 Mar 2025 09:10:18 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 2E35414011D;
+	Fri, 14 Mar 2025 09:10:19 +0800 (CST)
 Received: from localhost.localdomain (10.175.101.6) by
  dggpemf500016.china.huawei.com (7.185.36.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -45,9 +45,9 @@ To: <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
 CC: <hare@suse.de>, <linux-kernel@vger.kernel.org>, <lixiaokeng@huawei.com>,
 	<jiangjianjun3@huawei.com>, <hewenliang4@huawei.com>,
 	<yangkunlin7@huawei.com>
-Subject: [RFC PATCH v3 13/19] scsi: scsi_debug: Add param to control target based error handle
-Date: Fri, 14 Mar 2025 09:29:21 +0800
-Message-ID: <20250314012927.150860-14-jiangjianjun3@huawei.com>
+Subject: [RFC PATCH v3 14/19] scsi: mpt3sas: Add param to control LUN based error handle
+Date: Fri, 14 Mar 2025 09:29:22 +0800
+Message-ID: <20250314012927.150860-15-jiangjianjun3@huawei.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20250314012927.150860-1-jiangjianjun3@huawei.com>
 References: <20250314012927.150860-1-jiangjianjun3@huawei.com>
@@ -64,67 +64,55 @@ X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
 
 From: Wenchao Hao <haowenchao2@huawei.com>
 
-Add new module param target_eh to control if enable target based error
-handler, and param target_eh_fallback to control if fallback to further
-recover when target recovery can not recover all error commands.
-This is used to test the target based error handle.
+Add new module param lun_eh to control if enable LUN based
+error handler, since mpt3sas defined callback eh_host_reset
+and eh_target_reset, so make it fallback to further recover
+when LUN based recovery can not recover all error commands.
 
 Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
 ---
- drivers/scsi/scsi_debug.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 162728cca99d..5c0c2529b865 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -886,6 +886,8 @@ static bool sdebug_wp;
- static bool sdebug_allow_restart;
- static bool sdebug_lun_eh;
- static bool sdebug_lun_eh_fallback;
-+static bool sdebug_target_eh;
-+static bool sdebug_target_eh_fallback;
- static enum {
- 	BLK_ZONED_NONE	= 0,
- 	BLK_ZONED_HA	= 1,
-@@ -1195,6 +1197,9 @@ static int sdebug_target_alloc(struct scsi_target *starget)
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+index a456e5ec74d8..b3ceba3c1ea8 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -173,6 +173,10 @@ module_param(host_tagset_enable, int, 0444);
+ MODULE_PARM_DESC(host_tagset_enable,
+ 	"Shared host tagset enable/disable Default: enable(1)");
  
- 	starget->hostdata = targetip;
- 
-+	if (sdebug_target_eh)
-+		return scsi_target_setup_eh(starget, sdebug_target_eh_fallback);
++static bool lun_eh;
++module_param(lun_eh, bool, 0444);
++MODULE_PARM_DESC(lun_eh, "LUN based error handle (def=0)");
 +
- 	return 0;
- }
- 
-@@ -1210,6 +1215,9 @@ static void sdebug_target_destroy(struct scsi_target *starget)
- {
- 	struct sdebug_target_info *targetip;
- 
-+	if (sdebug_target_eh)
-+		scsi_target_clear_eh(starget);
+ /* raid transport support */
+ static struct raid_template *mpt3sas_raid_template;
+ static struct raid_template *mpt2sas_raid_template;
+@@ -2043,6 +2047,13 @@ scsih_sdev_init(struct scsi_device *sdev)
+ 	struct _sas_device *sas_device;
+ 	struct _pcie_device *pcie_device;
+ 	unsigned long flags;
++	int ret = 0;
 +
- 	targetip = (struct sdebug_target_info *)starget->hostdata;
- 	if (targetip) {
- 		starget->hostdata = NULL;
-@@ -6654,6 +6662,8 @@ module_param_named(zone_size_mb, sdeb_zbc_zone_size_mb, int, S_IRUGO);
- module_param_named(allow_restart, sdebug_allow_restart, bool, S_IRUGO | S_IWUSR);
- module_param_named(lun_eh, sdebug_lun_eh, bool, S_IRUGO);
- module_param_named(lun_eh_fallback, sdebug_lun_eh_fallback, bool, S_IRUGO);
-+module_param_named(target_eh, sdebug_target_eh, bool, S_IRUGO);
-+module_param_named(target_eh_fallback, sdebug_target_eh_fallback, bool, S_IRUGO);
++	if (lun_eh) {
++		ret = scsi_device_setup_eh(sdev, 1);
++		if (ret)
++			return ret;
++	}
  
- MODULE_AUTHOR("Eric Youngdale + Douglas Gilbert");
- MODULE_DESCRIPTION("SCSI debug adapter driver");
-@@ -6735,6 +6745,8 @@ MODULE_PARM_DESC(zone_size_mb, "Zone size in MiB (def=auto)");
- MODULE_PARM_DESC(allow_restart, "Set scsi_device's allow_restart flag(def=0)");
- MODULE_PARM_DESC(lun_eh, "LUN based error handle (def=0)");
- MODULE_PARM_DESC(lun_eh_fallback, "Fallback to further recovery if LUN recovery failed (def=0)");
-+MODULE_PARM_DESC(target_eh, "target based error handle (def=0)");
-+MODULE_PARM_DESC(target_eh_fallback, "Fallback to further recovery if target recovery failed (def=0)");
+ 	sas_device_priv_data = kzalloc(sizeof(*sas_device_priv_data),
+ 				       GFP_KERNEL);
+@@ -2121,6 +2132,9 @@ scsih_sdev_destroy(struct scsi_device *sdev)
+ 	struct _pcie_device *pcie_device;
+ 	unsigned long flags;
  
- #define SDEBUG_INFO_LEN 256
- static char sdebug_info[SDEBUG_INFO_LEN];
++	if (lun_eh)
++		scsi_device_clear_eh(sdev);
++
+ 	if (!sdev->hostdata)
+ 		return;
+ 
 -- 
 2.33.0
 
