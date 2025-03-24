@@ -1,109 +1,133 @@
-Return-Path: <linux-scsi+bounces-13033-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13035-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 346DFA6D548
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Mar 2025 08:41:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB4B5A6D69B
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Mar 2025 09:51:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B86801886212
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Mar 2025 07:41:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9320618923E6
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Mar 2025 08:52:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D27B257AC2;
-	Mon, 24 Mar 2025 07:41:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17BBB25D55A;
+	Mon, 24 Mar 2025 08:51:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="F7pw4lje"
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="C0XZuoT9";
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="v8/6KfCN"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mta-03.yadro.com (mta-03.yadro.com [89.207.88.253])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED1D257447
-	for <linux-scsi@vger.kernel.org>; Mon, 24 Mar 2025 07:41:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011041EA7C7;
+	Mon, 24 Mar 2025 08:51:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.207.88.253
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742802093; cv=none; b=TH6obbmvinAcjj9MKJ5VnA1ZnjN+k8RJf1HW7o4YaFAgQKvgnYb600JDfhk3agx00ojTSMxSj2qyBb0VP78Y61wgQkDaElDxZKtpkaic2yUlytZuhoks6XNib0ThRzuDd9mub/4+SNEMxyAKxRGK42LyRWqVwVMunb2dXAksQlU=
+	t=1742806302; cv=none; b=g+5e/5l6/zFDIU/pTi0jHM4FrRjj6bfH7Loa/BlfceheaZMncxTJgDTM7YAY0GOwkeGgCNL5SBrb4Z7qM5igrs6SVe7sZyRErq867+HGY0HGnJzq8w/ErWzdCl3W8XPV1Z0iDEU/yq4FR2+hfAqyXR7ZfXhaRIQyujNyVYdRoR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742802093; c=relaxed/simple;
-	bh=t9LuTuSgB7oSIWQS+74CbsdvDwfuBsZQt9ORVAh6Xmk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PBybfZLDNtjnxbLGz+RrQtqYTQFAsVexeN+EF8Cuw7KmVdJoQSTUAW3ksmy7zjGYf1MWH9/QTbhI0qvqU8I31y8w4Npz9/MTTQ29B6g4BljAzMPkMjrLJ3aVe8EgJ/p+Em+YvguLf6UVsNjVoTS5PhR2L7ejqoE3UvP41UHBpr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=F7pw4lje; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2ff4a4f901fso7296780a91.2
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Mar 2025 00:41:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742802091; x=1743406891; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=txguX40hwxFqsph9jZ0ZY6Gsn7G7EapqsYPb05Nyq5Q=;
-        b=F7pw4ljeuoQHAhhfW6A0Ut4AXy7WNI0IRZlxxyOs+Aqwwp+eLM7KVwGO2tzE/wB9IZ
-         nkibdzZKhyMB2tb1NC+BKu+f38ZhpFEl2buos21qw0j+68oPv1Ngpp9LVoientd/7gYr
-         vl2q4Hu0e95GOdav1BKGKZLRqZ5Vyif4OHfxR5XsmtpxPL3Aqi+tXbEuT+w6eEWfO6cX
-         qv55CEd2nJOzeDmh3F+qXvyPEmeHm2GVwPrW/DsY3Z5QNPqMX9M2VRREPdbNRr06HzVZ
-         5NaAesqh7ht9bs/DjehM5Cue7H1MYOlt/cq+t5vlSUy5yBD/ltqb7pQ9O52+yMSnwqF1
-         QVuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742802091; x=1743406891;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=txguX40hwxFqsph9jZ0ZY6Gsn7G7EapqsYPb05Nyq5Q=;
-        b=bgFRM19blbXEy5JiwfJoNc5LXtAdKkrFWvhllLiKJCo9cuuRvvkolUMVWTjbME2DMg
-         K/gemeNDA/W2mXhRuenqhTDTuHKrtWyAI+eEftOC45yt4nAQorbxJb9xOrg3+NJzOXyr
-         deF3XOTHMFAKmxYhvcwvdKN84TqBN0G2w0QqzJSt4+/SeZ+lupozq6C5z9saK74FEDvz
-         Z7bIXRn/Hy2voms+7HPl92gURtH28IV7KHjblbFtYOniNq3vg7e2o4OyCodoqzvGmaMK
-         G6Ce6JtZ+0DyMFLmx8ELmPgUHhRXJS65REokWDTKGCcyxlDncsbP/8cP/g+C/b4hDTS2
-         6aIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXV4N5DtLwwTjYtYLtAs3PbvbRFjAbLVKFOsXpOv7U4k2r9ZoUzRICOP/1nL9UdKcpF+hUZF9UI+76y@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgvNXkAYN7puYAH78sN+Z5ilkiqk0GMorCdUTc2N8dK1tctUs4
-	u+p5MFX7V/A4qc4pFMFz5sK4mHwkigiz5ZvVYsh6Cu4bMMVmpWYWVdRXh+Ycfw==
-X-Gm-Gg: ASbGnctn/c4L50YbzXBrTOxIE4ik3HSeXTy/UaUViY+2rPUslQVEwa0Vf/91rk409Yx
-	eTwJenwHiKNaS4hlDXxp4xUN58rtlKAaEki0suvQueAXvUJOoY9RX1SdvOxSW2+qkcRoHjVLJZM
-	N3N1dOR/VXgkdMGjkOBMjIcAjhVJRJGuVLFumjShxbztDHkUNkaTlMTd6pupKzumcYHtcdtTyvg
-	IJmgQDZOuoAkHBvnqgpZoO0z4ZT5Xv94g/FDiZpNC+Ic9zmtCHTtr92WIpvDDSz9prKAm5mUPHO
-	1MaqZIG6POnK917fSW0oIM9DbzbEJG+zIKrowLY2Fma31IMYwyfU39XO
-X-Google-Smtp-Source: AGHT+IEaSKdVHKBTcyVQUTB8pbjahi6HmIfbAfkDhwtDzh9LW/kbNeuedlIsscVIJH8s5eGwIkSKBQ==
-X-Received: by 2002:a17:90a:e70d:b0:2ff:698d:ef7c with SMTP id 98e67ed59e1d1-3030ff230b5mr19236244a91.29.1742802091423;
-        Mon, 24 Mar 2025 00:41:31 -0700 (PDT)
-Received: from thinkpad ([220.158.156.91])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301bf61b34dsm11460804a91.30.2025.03.24.00.41.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Mar 2025 00:41:30 -0700 (PDT)
-Date: Mon, 24 Mar 2025 13:11:26 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Manish Pandey <quic_mapa@quicinc.com>
-Cc: "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, quic_nitirawa@quicinc.com, quic_cang@quicinc.com, 
-	quic_nguyenb@quicinc.com
-Subject: Re: [PATCH V4 0/3] scsi: ufs-qcom: Enable Hibern8, MCQ, and Testbus
- registers Dump
-Message-ID: <icdzzhtobv6i3pporxca3bf4j3stomni756vuonekdmne2uk4i@wfkk7egdajy5>
-References: <20250319063043.15236-1-quic_mapa@quicinc.com>
+	s=arc-20240116; t=1742806302; c=relaxed/simple;
+	bh=to3IjdK/aZxIDidItr1Z1X98BJCv5/doq2FXz5bxzxc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EzZ4jltLFejEpBRJAgoc63Oseiob5UGAW9OCxvuzI+UwxmDVeM7GMYc1XAqJK7U5iEwL9B4u5aDjm5T+Jj+nZHLBPn+mEvhzAEsYQ8Tq7MB/IOQ5Zk0nJwgyh0S+vI+c6DqfBuLcTkB+NkWkQMQP4aMT8I3a7dG4Q/WXJdW5oN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yadro.com; spf=pass smtp.mailfrom=yadro.com; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=C0XZuoT9; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=v8/6KfCN; arc=none smtp.client-ip=89.207.88.253
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yadro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yadro.com
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-03.yadro.com 5BF36E0002
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-04;
+	t=1742806284; bh=b/coSPRwVAO18LknwNn+NW81MVSEIOnW/h0dRACfRRA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+	b=C0XZuoT9XWn+86QpBSRvmf/ZO9tF9D6XL+2Ja7DcZDA3JBoXGAIF2FpqCySk5JKs/
+	 YjSM6TnfuKNxdBUE+3c7MOB0Qj7EKCj0oZ08lBC+jatN6JJfl6gMJrV8bmjQ1mF9WG
+	 Q7/IFBmrL8xvh4dDLRaZdplN5cz0oBsCopS9hXdrsDGobgckOdR0YasGfsKCJhFF43
+	 Up/UHVyQUFdgNgy8/b7r+yfjY4xE744Gl2MUEiZ7iyvat8GAVcgDWRryByLIh2bySC
+	 5SoSnNRAYKITQAe3iIm4VRLIV3m3XjxWVvYkAPlBasVSHHKPwTL0ehVl4EMp8phkss
+	 /T+E5NLN4ZDZw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-03;
+	t=1742806284; bh=b/coSPRwVAO18LknwNn+NW81MVSEIOnW/h0dRACfRRA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+	b=v8/6KfCNj0CyebnwGEt0dKxEE2tPbgEXvAp1nPfl6gBhiYEQacUtPSK7NSXLroACI
+	 M2hkl2qKEdgnZHPgXT7Hziehc7cC3E84QPleLS33vOwCZbnUn9qc5hdGFNyhGzJAqp
+	 RY8/fEPmkfVXEBcSj9zLbBL1pvjKU7HAHzBJUo/YVzZvCa5No1/kSkGqhxh7Rqtirb
+	 W07owI7FlS26iJobRELimMS3h2D+boLyDFh4z9QKMgaMR//FVS+sp/z/Z7h51ZZ50k
+	 7DoQ91EcvhThLJal/FoyzSKVGHx1V+Kr8Qg6NGoAdVhxm+p8y7JxXrtvJc8TbwqtEU
+	 xWa4WPPPygAMQ==
+From: Anastasia Kovaleva <a.kovaleva@yadro.com>
+To: <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
+	<hare@suse.de>, <axboe@kernel.dk>
+CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux@yadro.com>
+Subject: [PATCH 0/1] Fix not fully initialized SCSI commands
+Date: Mon, 24 Mar 2025 11:49:32 +0300
+Message-ID: <20250324084933.15932-1-a.kovaleva@yadro.com>
+X-Mailer: git-send-email 2.40.3
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250319063043.15236-1-quic_mapa@quicinc.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: RTM-EXCH-04.corp.yadro.com (10.34.9.204) To
+ T-EXCH-09.corp.yadro.com (172.17.11.59)
 
-On Wed, Mar 19, 2025 at 12:00:40PM +0530, Manish Pandey wrote:
-> Adding support to enhance the debugging capabilities of the Qualcomm UFS
-> Host Controller, including HW and SW Hibern8 counts, MCQ registers, and
-> testbus registers dump.
+We have encountered the following type of logs on initiators:
 
-Why are you sending next version without concluding the comments from previous
-one? This is not going to help and just adds revisions churn.
+kernel: sd 16:0:1:84: [sdts] tag#405 timing out command, waited 720s
+kernel: sd 16:0:1:84: [sdts] tag#405 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=66636s
 
-- Mani
+The initiator uses dm-mpath for multipathing, the SCSI mid layer, and
+the QLogic FC HBA driver (qla2xxx). After debugging, the following call
+stack was identified:
 
--- 
-மணிவண்ணன் சதாசிவம்
+blk_mq_sched_dispatch_requests()
+  blk_mq_dispatch_rq_list()
+    dm_mq_queue_rq()
+      map_request()
+        ti->type->clone_and_map_rq()    // New cloned request with tag 405
+        blk_insert_cloned_request()
+          scsi_queue_rq()
+            qla2xxx_mqueuecommand()
+              qla2xxx_dif_start_scsi_mq()
+
+If qla2xxx_dif_start_scsi_mq() returns an error for any reason (e.g.,
+due to extremely heavy traffic causing the driver to exhaust its
+handles), scsi_done() -> scsi_end_request() is not called within
+qla2xxx_mqueuecommand(). As a result, the SCMD_INITIALIZED flag
+remains set. Next, map_request() releases the cloned request and
+requeues the original request. While the cloned request is released, the
+associated SCSI command retains stale data from the previous command.
+
+If all I/O traffic stops for some extended period of time, and later
+resumes, the following scenario may occur:
+
+blk_mq_sched_dispatch_requests()
+  blk_mq_dispatch_rq_list()
+    dm_mq_queue_rq()
+      map_request()
+        ti->type->clone_and_map_rq()    // New cloned request uses tag 405 again
+        blk_insert_cloned_request()
+          scsi_queue_rq()
+
+
+Within scsi_queue_rq(), the scsi_init_command() function does not call
+scsi_initialize_rq() because the SCMD_INITIALIZED flag is already set.
+Because of that, when the command completes in scsi_complete(), the
+scsi_cmd_runtime_exceeded() check returns true, causing the command to
+fail.
+
+This issue appears after the commit 4abafdc4360d ("block: remove the
+initialize_rq_fn blk_mq_ops method"). Before this change, the
+initialize_rq_fn method forcibly initialized the SCSI command in
+blk_get_request(). There may be other places where a command is queued
+in scsi_queue_rq() but scsi_done() is not called.
+
+Anastasia Kovaleva (1):
+  scsi: uninit not completed scsi cmd
+
+ drivers/scsi/scsi_lib.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+--
+2.40.3
+
 
