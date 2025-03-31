@@ -1,39 +1,39 @@
-Return-Path: <linux-scsi+bounces-13123-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13121-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F1E7A7660A
-	for <lists+linux-scsi@lfdr.de>; Mon, 31 Mar 2025 14:34:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7484A76607
+	for <lists+linux-scsi@lfdr.de>; Mon, 31 Mar 2025 14:34:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F31416A52A
-	for <lists+linux-scsi@lfdr.de>; Mon, 31 Mar 2025 12:34:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FF5E1888062
+	for <lists+linux-scsi@lfdr.de>; Mon, 31 Mar 2025 12:34:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 839ED1E5B70;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 441871E521E;
 	Mon, 31 Mar 2025 12:33:56 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9EB1E1C02;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C7291DF973;
 	Mon, 31 Mar 2025 12:33:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743424436; cv=none; b=asXO76XKrYF+6G4zUAr6Pzr7yeCrolu1/m2HOfxIzOnQRG7ecopM3I1h3ewPfwbIca0yqrCT7jtu46AJdFw+iVB0Zl9RZAY7olmJLhnOxDyiTKG0F3E+XECvqIpYT/0y0c0/xQEWvLw3RPIFSNrJ+cRoCpVAXO8/51ikXuFlE5M=
+	t=1743424436; cv=none; b=FF85t49H8SpvB2PDjxcaz9VAYvD5E9vzWeos8r5W1xeqzV6QPLgz1uvBVqb3giTij3mchrvTcvlsdvZRqlS2cu/+N1XD+aDNme/dnsj8C9K/qmL3OkJPAib6UhAA143EGdkoKRlRYoLeMWC34RIyYPsLtFjdMtw+6JdOxy8LzTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1743424436; c=relaxed/simple;
-	bh=Hgvh745+vSQv3akkleclFrfAd/tP7yhkpjTYCRGPa80=;
+	bh=SYhyciRCD6HcPvOs+YyIrEknhUE8pAVUbbxH0T6fJcg=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DbgekNLDlGabF58O6PgyXdA1NvWvRzcCWmJZixkPBaSLAHqZK3Wphmj44dNX9RjBJ8vpTmqbmvVy5qzV/2cCkchy4X9858R5yzTLgo9UJsQQC7PYLQsoo7THWFCm6Mtasrb/uNHKNdUhJtcF6Ec6VffCggCcFpMTAR3qU0HwVz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+	 MIME-Version:Content-Type; b=MZNJ/vkXHeVK8PfZKwxipHAcp3ALaROjO60IBETM7hnhqEs5Jzv0lndE7lcjchpqWb/hq24RnBVkd8UiB2hrNKpsAZ+HZ4UE3y1IWzNc+mcWNsjHli4nFyyEUhIIKdmayvfHRjOmeZgk8RqQWStEue4nJnVcYATiH7N7n7b0nRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4ZR9XL0N1Wz13LFs;
-	Mon, 31 Mar 2025 20:33:22 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4ZR9Sf2YXMzWfp0;
+	Mon, 31 Mar 2025 20:30:10 +0800 (CST)
 Received: from dggpemf100013.china.huawei.com (unknown [7.185.36.179])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6A6B01800B3;
+	by mail.maildlp.com (Postfix) with ESMTPS id 910761800B1;
 	Mon, 31 Mar 2025 20:33:51 +0800 (CST)
 Received: from localhost.huawei.com (10.50.165.33) by
  dggpemf100013.china.huawei.com (7.185.36.179) with Microsoft SMTP Server
@@ -44,9 +44,9 @@ To: <martin.petersen@oracle.com>, <James.Bottomley@HansenPartnership.com>
 CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<linuxarm@huawei.com>, <liyihang9@huawei.com>, <liuyonglong@huawei.com>,
 	<prime.zeng@hisilicon.com>
-Subject: [PATCH v2 3/4] scsi: hisi_sas: Call I_T_nexus after soft reset for SATA disk
-Date: Mon, 31 Mar 2025 20:33:48 +0800
-Message-ID: <20250331123349.99591-4-liyihang9@huawei.com>
+Subject: [PATCH v2 4/4] scsi: hisi_sas: Wait until eh is recovered
+Date: Mon, 31 Mar 2025 20:33:49 +0800
+Message-ID: <20250331123349.99591-5-liyihang9@huawei.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20250331123349.99591-1-liyihang9@huawei.com>
 References: <20250331123349.99591-1-liyihang9@huawei.com>
@@ -61,71 +61,37 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  dggpemf100013.china.huawei.com (7.185.36.179)
 
-In commit 21c7e972475e ("scsi: hisi_sas: Disable SATA disk phy for severe
-I_T nexus reset failure"), if the softreset fails upon certain conditions,
-the PHY connected to the disk is disabled directly. Manual recovery is
-required, which is inconvenient for users in actual use.
+SATA devices are lost when FLR is performed while the controller and disks
+are in suspended state.
 
-In addition, SATA disks do not support simultaneous connection of multiple
-hosts. Therefore, when multiple controllers are connected to a SATA disk
-at the same time, the controller which is connected later failed to issue
-an ATA softreset to the SATA disk. As a result, the PHY associated with
-the disk is disabled and cannot be automatically recovered.
+This is because the libata layer is called to initialize the SATA device
+during controller resuming. If FLR is executed at this time, the IDENTIFY
+command fails. As a result, the revalidate fails, and the SATA device is
+disabled by the libata layer.
 
-Now that, we will not focus on the execution result of softreset. No
-matter whether the execution is successful or not, we will directly carry
-out I_T_nexus_reset.
+So, wait until eh is recovered.
 
-Fixes: 21c7e972475e ("scsi: hisi_sas: Disable SATA disk phy for severe I_T
-nexus reset failure")
 Signed-off-by: Yihang Li <liyihang9@huawei.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_main.c | 29 +++++----------------------
- 1 file changed, 5 insertions(+), 24 deletions(-)
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 9e6ee32aa56e..f4b6d678ba72 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -1897,33 +1897,14 @@ static int hisi_sas_I_T_nexus_reset(struct domain_device *device)
- 	}
- 	hisi_sas_dereg_device(hisi_hba, device);
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index c3cbeb556440..97ff48e7fe5d 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -5130,9 +5130,11 @@ static void hisi_sas_reset_prepare_v3_hw(struct pci_dev *pdev)
+ {
+ 	struct sas_ha_struct *sha = pci_get_drvdata(pdev);
+ 	struct hisi_hba *hisi_hba = sha->lldd_ha;
++	struct Scsi_Host *shost = hisi_hba->shost;
+ 	struct device *dev = hisi_hba->dev;
+ 	int rc;
  
--	rc = hisi_sas_debug_I_T_nexus_reset(device);
--	if (rc == TMF_RESP_FUNC_COMPLETE && dev_is_sata(device)) {
--		struct sas_phy *local_phy;
--
-+	if (dev_is_sata(device)) {
- 		rc = hisi_sas_softreset_ata_disk(device);
--		switch (rc) {
--		case -ECOMM:
--			rc = -ENODEV;
--			break;
--		case TMF_RESP_FUNC_FAILED:
--		case -EMSGSIZE:
--		case -EIO:
--			local_phy = sas_get_local_phy(device);
--			rc = sas_phy_enable(local_phy, 0);
--			if (!rc) {
--				local_phy->enabled = 0;
--				dev_err(dev, "Disabled local phy of ATA disk %016llx due to softreset fail (%d)\n",
--					SAS_ADDR(device->sas_addr), rc);
--				rc = -ENODEV;
--			}
--			sas_put_local_phy(local_phy);
--			break;
--		default:
--			break;
--		}
-+		if (rc == TMF_RESP_FUNC_FAILED)
-+			dev_err(dev, "ata disk %016llx reset (%d)\n",
-+				SAS_ADDR(device->sas_addr), rc);
- 	}
- 
-+	rc = hisi_sas_debug_I_T_nexus_reset(device);
- 	if ((rc == TMF_RESP_FUNC_COMPLETE) || (rc == -ENODEV))
- 		hisi_sas_release_task(hisi_hba, device);
- 
++	wait_event(shost->host_wait, !scsi_host_in_recovery(shost));
+ 	dev_info(dev, "FLR prepare\n");
+ 	down(&hisi_hba->sem);
+ 	set_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags);
 -- 
 2.33.0
 
