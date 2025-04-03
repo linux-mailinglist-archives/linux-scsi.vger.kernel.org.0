@@ -1,67 +1,74 @@
-Return-Path: <linux-scsi+bounces-13197-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13207-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1977FA7B10F
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 23:27:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A941FA7B12F
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 23:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73231163BEA
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 21:22:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52DEC188F25E
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 21:27:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09FF22E62AF;
-	Thu,  3 Apr 2025 21:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 289CE1F584F;
+	Thu,  3 Apr 2025 21:23:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="w59Q4/b0"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="vDltzdBC"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549412E62D4
-	for <linux-scsi@vger.kernel.org>; Thu,  3 Apr 2025 21:21:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705E11F585E
+	for <linux-scsi@vger.kernel.org>; Thu,  3 Apr 2025 21:23:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743715316; cv=none; b=Q9Gt21uE0E7BYSGqVdw79MUwpx098xwSD9yA1N4o1GX9lmq0lREB8R17u9jV8A0gtZoyOMm+l95pAl53fmZaoYFMfIhhfL9RhSFFH8euQ8lLChpO8uUHULQILIkxjAomFY6G/ViQiwsqJ8av7EsdbJj2/+h2NI1eqKDgJOTe7W4=
+	t=1743715436; cv=none; b=nr3SkUs2+Dhy1IsVeaXzLJ9sJqp1hRtPlATAvMsKxWq6iQl3pdb+YH8+r82FF24rds9/tDBUQb5i6ehT2PCwFcJHhMsfmPKF3gWEkWTLD8gjMG7tzVcfufo0FdvvxAcJlXAn/9OIMPfqKJBot7h4rV3XdL8KTiRdTL8V9OzXW3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743715316; c=relaxed/simple;
-	bh=we5tJTolw5aBZ8H+WkMA9LMcMmH0F6faI3LDPAc9TzM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dn2quXFaIbHy9rkF4M8LDKKErSuvEcgNkcPX3ezLP2b093fXdVJ/AqSjgkNrqFtJSsSkXe95p7Le2Al/D6ZK35uPibsZX+WIPCCq0VRf/ZvLqErH80XTQLZGYLJoQWbPLzDjlTQa7j1yGyMyvtu2HK64L77a2AemG3cfeHkKCjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=w59Q4/b0; arc=none smtp.client-ip=199.89.3.7
+	s=arc-20240116; t=1743715436; c=relaxed/simple;
+	bh=gvMXVyHioxJoLe7MeKoQXEVxKHy+A9DSEklrOhqiXQA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=f0kXrTgzaw8XfFVtKmFhTkXE/g8YbfiqH6un0hDhOWo+pVVRK4PnmYNxXnXtMl5345b5honu3NkM9/Gc44Jb4ey0RZqLEryxkLef/slWUYY+e4ZwXSXhEx9hwyvr4umS0p2TihMvmu4EP1FrXkudjP2irYX/0PeXb2xXeoESCZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=vDltzdBC; arc=none smtp.client-ip=199.89.3.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 004.mia.mailroute.net (Postfix) with ESMTP id 4ZTF4M3Ly5zm0pKK;
-	Thu,  3 Apr 2025 21:19:47 +0000 (UTC)
+	by 004.mia.mailroute.net (Postfix) with ESMTP id 4ZTF4T1zvqzm0pKy;
+	Thu,  3 Apr 2025 21:19:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:x-mailer:message-id:date
-	:date:subject:subject:from:from:received:received; s=mr01; t=
-	1743715186; x=1746307187; bh=ONkm/VcPo7SpCBbuTYUIASGA0ESRFY4DYvB
-	n7C18rqY=; b=w59Q4/b0ca3SkACt6a2G+Wou8g/rRtli895nhbkkdNO5Uuis6o2
-	p9goysk/jUd9+aSIllCrjYOBChj5BNjRVB7yhcGFUpLunoLz07+McSi5wOArx2pH
-	3Fq4bN0Q8PSE3SVQG5wxK+chYDpFa10j4xToIizjRwlU+O3lIcoy5cGBK2qCz4fD
-	gS5jKXcpFwBonKoHEJ/PbSlSFyFRF2dvcD6SK5dv4zKwnxxOy50dttIs9oUBfap1
-	ZBjEKzEVFkNUFYlQ25jfkaHWzWtCvhC4cI/4v28LXve8Lw/De1BnG4F5XJ8Vt49w
-	+BcjPKIw16A76OyDQ+dSTwE6vtTwXzQ4NqA==
+	content-transfer-encoding:mime-version:references:in-reply-to
+	:x-mailer:message-id:date:date:subject:subject:from:from
+	:received:received; s=mr01; t=1743715191; x=1746307192; bh=cNJom
+	yGwYjKjG1gqYJoIZcPEOZ8+P+y08GVMdQ1EedA=; b=vDltzdBCEkHywYPhKMExT
+	fluH97eLfaRrxohvULVm+wG+A54Vq/VO3fYRE7/GVJiB8fP4wtNb3VH74brPiE5a
+	sg7ytax7mM3/gg6PrqXhG2CwcBGJpCokMmu5rCVkOlaq50/jjvQB7LEdKLADne40
+	54cOxo77FVhkA+1XfID1ugYFOS3e4jgetsLr1hXQ5uwKtHJZn68tsRVRI4PRCzN0
+	cRUDOrLggADwb97m89wEDfse7427MKeiPTe6VqZX6KlOkMetwdj/LbgaD01t2rTx
+	+Z8ey119UOaTXKjualoVbq0EtNhiN40Y8XVVvTHFkqan/ElZ72BGVrFGpk4oqTaH
+	A==
 X-Virus-Scanned: by MailRoute
 Received: from 004.mia.mailroute.net ([127.0.0.1])
  by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id q3fW3nPv1ySC; Thu,  3 Apr 2025 21:19:46 +0000 (UTC)
+ id Ccb-ly0ylSOJ; Thu,  3 Apr 2025 21:19:51 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.204.82])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4ZTF4J6tcZzmWRtQ;
-	Thu,  3 Apr 2025 21:19:43 +0000 (UTC)
+	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4ZTF4M4Sm1zm0ySc;
+	Thu,  3 Apr 2025 21:19:46 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
-	Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH 00/24] Optimize the hot path in the UFS driver
-Date: Thu,  3 Apr 2025 14:17:44 -0700
-Message-ID: <20250403211937.2225615-1-bvanassche@acm.org>
+	Bart Van Assche <bvanassche@acm.org>,
+	Hannes Reinecke <hare@suse.de>,
+	John Garry <john.g.garry@oracle.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH 01/24] scsi: core: Make scsi_cmd_to_rq() accept const arguments
+Date: Thu,  3 Apr 2025 14:17:45 -0700
+Message-ID: <20250403211937.2225615-2-bvanassche@acm.org>
 X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
+In-Reply-To: <20250403211937.2225615-1-bvanassche@acm.org>
+References: <20250403211937.2225615-1-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -70,60 +77,80 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Hi Martin,
+Instead of requiring the caller to cast away constness, make
+scsi_cmd_to_rq() accept const arguments.
 
-This patch series increases IOPS by 1% and reduces CPU per I/O by 10% on =
-my
-UFS 4.0 test setup. Please consider this patch series for the next merge
-window.
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: John Garry <john.g.garry@oracle.com>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/scsi/scsi_logging.c | 10 +++++-----
+ include/scsi/scsi_cmnd.h    |  9 +++++----
+ 2 files changed, 10 insertions(+), 9 deletions(-)
 
-Thanks,
-
-Bart.
-
-Bart Van Assche (23):
-  scsi: core: Make scsi_cmd_to_rq() accept const arguments
-  scsi: core: Make scsi_cmd_priv() accept const arguments
-  scsi: core: Use scsi_cmd_priv() instead of open-coding it
-  scsi: core: Introduce scsi_host_update_can_queue()
-  scsi: ufs: core: Change the type of one ufshcd_add_cmd_upiu_trace()
-    argument
-  scsi: ufs: core: Only call ufshcd_add_command_trace() for SCSI
-    commands
-  scsi: ufs: core: Change the type of one ufshcd_add_command_trace()
-    argument
-  scsi: ufs: core: Change the type of one ufshcd_send_command() argument
-  scsi: ufs: core: Only call ufshcd_should_inform_monitor() for SCSI
-    commands
-  scsi: ufs: core: Change the monitor function argument types
-  scsi: ufs: core: Rework ufshcd_mcq_compl_pending_transfer()
-  scsi: ufs: core: Rework ufshcd_eh_device_reset_handler()
-  scsi: ufs: core: Cache the DMA buffer sizes
-  scsi: ufs: core: Add an argument to ufshcd_mcq_decide_queue_depth()
-  scsi: ufs: core: Add an argument to ufshcd_alloc_mcq()
-  scsi: ufs: core: Call ufshcd_mcq_init() once
-  scsi: ufs: core: Allocate the SCSI host earlier
-  scsi: ufs: core: Call ufshcd_init_lrb() later
-  scsi: ufs: core: Use hba->reserved_slot
-  scsi: ufs: core: Allocate the reserved slot as a reserved request
-  scsi: ufs: core: Do not clear driver-private command data
-  scsi: ufs: core: Optimize the hot path
-  scsi: ufs: core: Remove the ufshcd_lrb task_tag member
-
-Hannes Reinecke (1):
-  scsi: core: Implement reserved command handling
-
- drivers/scsi/hosts.c             |   3 +
- drivers/scsi/scsi.c              |  26 ++
- drivers/scsi/scsi_lib.c          |   6 +-
- drivers/scsi/scsi_logging.c      |  10 +-
- drivers/ufs/core/ufs-mcq.c       |  31 +-
- drivers/ufs/core/ufshcd-crypto.h |  18 +-
- drivers/ufs/core/ufshcd-priv.h   |  27 +-
- drivers/ufs/core/ufshcd.c        | 660 +++++++++++++++++--------------
- include/scsi/scsi_cmnd.h         |  17 +-
- include/scsi/scsi_host.h         |  24 +-
- include/ufs/ufshcd.h             |  11 +-
- 11 files changed, 487 insertions(+), 346 deletions(-)
-
+diff --git a/drivers/scsi/scsi_logging.c b/drivers/scsi/scsi_logging.c
+index b02af340c2d3..5aaff629b999 100644
+--- a/drivers/scsi/scsi_logging.c
++++ b/drivers/scsi/scsi_logging.c
+@@ -28,7 +28,7 @@ static void scsi_log_release_buffer(char *bufptr)
+=20
+ static inline const char *scmd_name(const struct scsi_cmnd *scmd)
+ {
+-	struct request *rq =3D scsi_cmd_to_rq((struct scsi_cmnd *)scmd);
++	const struct request *rq =3D scsi_cmd_to_rq(scmd);
+=20
+ 	if (!rq->q || !rq->q->disk)
+ 		return NULL;
+@@ -94,7 +94,7 @@ void scmd_printk(const char *level, const struct scsi_c=
+mnd *scmd,
+ 	if (!logbuf)
+ 		return;
+ 	off =3D sdev_format_header(logbuf, logbuf_len, scmd_name(scmd),
+-				 scsi_cmd_to_rq((struct scsi_cmnd *)scmd)->tag);
++				 scsi_cmd_to_rq(scmd)->tag);
+ 	if (off < logbuf_len) {
+ 		va_start(args, fmt);
+ 		off +=3D vscnprintf(logbuf + off, logbuf_len - off, fmt, args);
+@@ -374,8 +374,8 @@ EXPORT_SYMBOL(__scsi_print_sense);
+ void scsi_print_sense(const struct scsi_cmnd *cmd)
+ {
+ 	scsi_log_print_sense(cmd->device, scmd_name(cmd),
+-			     scsi_cmd_to_rq((struct scsi_cmnd *)cmd)->tag,
+-			     cmd->sense_buffer, SCSI_SENSE_BUFFERSIZE);
++			     scsi_cmd_to_rq(cmd)->tag, cmd->sense_buffer,
++			     SCSI_SENSE_BUFFERSIZE);
+ }
+ EXPORT_SYMBOL(scsi_print_sense);
+=20
+@@ -393,7 +393,7 @@ void scsi_print_result(const struct scsi_cmnd *cmd, c=
+onst char *msg,
+ 		return;
+=20
+ 	off =3D sdev_format_header(logbuf, logbuf_len, scmd_name(cmd),
+-				 scsi_cmd_to_rq((struct scsi_cmnd *)cmd)->tag);
++				 scsi_cmd_to_rq(cmd)->tag);
+=20
+ 	if (off >=3D logbuf_len)
+ 		goto out_printk;
+diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
+index 8ecfb94049db..154fbb39ca0c 100644
+--- a/include/scsi/scsi_cmnd.h
++++ b/include/scsi/scsi_cmnd.h
+@@ -144,10 +144,11 @@ struct scsi_cmnd {
+ };
+=20
+ /* Variant of blk_mq_rq_from_pdu() that verifies the type of its argumen=
+t. */
+-static inline struct request *scsi_cmd_to_rq(struct scsi_cmnd *scmd)
+-{
+-	return blk_mq_rq_from_pdu(scmd);
+-}
++#define scsi_cmd_to_rq(scmd)                                       \
++	_Generic(scmd,                                             \
++		const struct scsi_cmnd *: (const struct request *) \
++			blk_mq_rq_from_pdu((void *)scmd),          \
++		struct scsi_cmnd *: blk_mq_rq_from_pdu((void *)scmd))
+=20
+ /*
+  * Return the driver private allocation behind the command.
 
