@@ -1,46 +1,46 @@
-Return-Path: <linux-scsi+bounces-13180-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13181-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53D88A7ACD8
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 21:51:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49B65A7AD0A
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 21:55:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 934763BB8EA
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 19:46:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04E9A189EEB0
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 19:51:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DCF8284B30;
-	Thu,  3 Apr 2025 19:08:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82825296145;
+	Thu,  3 Apr 2025 19:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n6vm2yjc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R5CszjiU"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2748F284B26;
-	Thu,  3 Apr 2025 19:08:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3873725A2B6;
+	Thu,  3 Apr 2025 19:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743707314; cv=none; b=mqJ+UHMVE0iOV6U1Dks5JhQdhNh91dsBrXQrFIxRm1l3Ny26h3NpsvPZt0GjdSQzg2tl5GnauaGH6N+Wk1zm/2b1orN+8LQNH4cGsc0hXQAddbVA5Or44cN1CgKcK6LTcYB5U/GULRp1jbYXfu58MiSocIOm0YyQMIl2TeNqbKg=
+	t=1743707354; cv=none; b=WP5273ofbwU2QT8VxvyAaWMHXxy4apazdpQUdCPiyoNVm0l3fsY1yThvgaG+z9KaCiqHGh7e+Nk/sS0e/4ymSNbYyvvY41o9HeRRCnffH0EKEosv3KEpAb+qWiRq/3w3FNW3J0f0inJeLR5ZmfkM5XHyxJtiZ7kk04I6uavnfQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743707314; c=relaxed/simple;
-	bh=Fbf9TFjCwvdpKswkcsJmq061YakhBha2JaLtmLXcIJg=;
+	s=arc-20240116; t=1743707354; c=relaxed/simple;
+	bh=G8uLnP8HGvNMLFX8l3YR2gDARSsgRd7Y494IOYK4GxU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QpOXNz8O4pZPyk2C/ApBHbX4uhXa/ucZK4HVd88QLOG/hMpq2h5owki7bFAv2gK6zvTcujfNuT/06mUfuF3AkNd4AK8BbPfyM+8YrBidl9kxe5qcVLfEiwD/QKQ9yP4mKqxIygHKqOwPx5fYCKxnWpMBUUjvJsylUKTg0HGzdfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n6vm2yjc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EA60C4CEEA;
-	Thu,  3 Apr 2025 19:08:33 +0000 (UTC)
+	 MIME-Version:Content-Type; b=efitTO747u7vE1wwjqqqv7i7WIuJ9DJrMfE4hsz6+8as1asud6vlm4c6TAy1bRUkADixlfmy7VZeSMj1mm5QEoxoRyBaOLpdkAQhnYk3zWyNMUJ9MSiW4ejqx570b3cV0/tkuv8O6rYj2Qof35xcOeAAk7NBvxstvU52nuYebdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R5CszjiU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30845C4CEE8;
+	Thu,  3 Apr 2025 19:09:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743707314;
-	bh=Fbf9TFjCwvdpKswkcsJmq061YakhBha2JaLtmLXcIJg=;
+	s=k20201202; t=1743707354;
+	bh=G8uLnP8HGvNMLFX8l3YR2gDARSsgRd7Y494IOYK4GxU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=n6vm2yjcdnKYVFahTnb+5OzNCiTj8skRKM46Id9xeIT9oK5WiPRfskoIOWkYfJ3Jb
-	 PVhOrtO+7OVp0MdRu0h6W7zZOM9why9l2YPOUhs1aJhR+4pzALoJBScdN6ElLlVdIY
-	 hm0Zal1S26devLVPF2pEDu+UhZbq4cJUbxYUtuwptE+H42u0SurNrYUQcj+uj2Q+rn
-	 BPLJrHss6QHEARlfB3/MGCdXgwisg13i/x/+BL0iPu2RhxtZfTbYrA2QVnBiwnH3u9
-	 QowrKL/rIsj9EalEuXRrkiNEbMEh/izcoYeGg5Br7GR8U+etg937cGMkTM8YNSP2/1
-	 bb4lp89uSovsQ==
+	b=R5CszjiUt/EaJN8jcaD/lmavP2pJlaAIgQRfbImB2RX8KLvUJUClYSkF0rqVUq3K9
+	 U+kxeRNSUG7m5CNt5N+oP7Vit33axub4idB/qtp3+gMZW/zBaA4Z8KlT8j5jTZa/CF
+	 yFK5Rdoj9iJcFAJQXxDMk0VCILPucfBgPiVunsNyuO8TxCcU9SEShpqmLeWYc8x9kc
+	 bo5dMxaSgvUQSAM8N4KJiyGG5x59X0QM+LE+3Wn8SsjWZkGq9k0rfoHHzNJsi+Uo0I
+	 B77kRpM4rshG5WbyGOhLfu1aeE9GY3aDNK2fKxmSUNBuKiD08/h1/KOBAvHgU94TXb
+	 P77N+gy21OFtw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -50,12 +50,12 @@ Cc: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
 	Sasha Levin <sashal@kernel.org>,
 	James.Bottomley@HansenPartnership.com,
 	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 21/26] scsi: st: Fix array overflow in st_setup()
-Date: Thu,  3 Apr 2025 15:07:40 -0400
-Message-Id: <20250403190745.2677620-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 13/18] scsi: st: Fix array overflow in st_setup()
+Date: Thu,  3 Apr 2025 15:08:39 -0400
+Message-Id: <20250403190845.2678025-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250403190745.2677620-1-sashal@kernel.org>
-References: <20250403190745.2677620-1-sashal@kernel.org>
+In-Reply-To: <20250403190845.2678025-1-sashal@kernel.org>
+References: <20250403190845.2678025-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -65,7 +65,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.85
+X-stable-base: Linux 6.1.132
 Content-Transfer-Encoding: 8bit
 
 From: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
@@ -85,10 +85,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
-index bdbe94f30f070..900322bad4f3b 100644
+index b3caa3b9722d1..7f107be344236 100644
 --- a/drivers/scsi/st.c
 +++ b/drivers/scsi/st.c
-@@ -4120,7 +4120,7 @@ static void validate_options(void)
+@@ -4112,7 +4112,7 @@ static void validate_options(void)
   */
  static int __init st_setup(char *str)
  {
