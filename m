@@ -1,103 +1,129 @@
-Return-Path: <linux-scsi+bounces-13184-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13197-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E51CA7AD8A
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 22:07:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1977FA7B10F
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 23:27:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C9C93B8A7E
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 20:01:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73231163BEA
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 21:22:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6A128C5D5;
-	Thu,  3 Apr 2025 19:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09FF22E62AF;
+	Thu,  3 Apr 2025 21:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qg00Y+ts"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="w59Q4/b0"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7499328C5CD;
-	Thu,  3 Apr 2025 19:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549412E62D4
+	for <linux-scsi@vger.kernel.org>; Thu,  3 Apr 2025 21:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743707460; cv=none; b=dH7Fh4zgph/vUjIHHpCZNhMI8/CJA+y18tzFEzcOVftRA22v/42XxPhtn1MeWWYwU0eJh3oG3kwi5Vavjzmc55k0vhfxy4aqSsXzwjpj2SwHi25MnMSYhsX2rAmYddeLqfXV+mEQEPCEhFRKXLeU4nu4yX8mqmH5H4WdSCiV1WE=
+	t=1743715316; cv=none; b=Q9Gt21uE0E7BYSGqVdw79MUwpx098xwSD9yA1N4o1GX9lmq0lREB8R17u9jV8A0gtZoyOMm+l95pAl53fmZaoYFMfIhhfL9RhSFFH8euQ8lLChpO8uUHULQILIkxjAomFY6G/ViQiwsqJ8av7EsdbJj2/+h2NI1eqKDgJOTe7W4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743707460; c=relaxed/simple;
-	bh=3yIRUbe0hMIpYYr+v/4lvN42VzxTKWRdxPDj7VKRCmU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uXvEKB/OMQj4akALaOwfrtAGkwIWqv8emA19jEZU798qi6Tcdp6E/3ttuaJMlVOtn5vtQ1LuhRCmAyDmejKU2k8OSmSEGwN9Ycww0AZTDDay4tuVNTlv01LWd4XUD8uYm1mAp4qYxde7QfWmX+bAGjfpXX4XDimNkFsJLjMqvnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qg00Y+ts; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14C1FC4CEEA;
-	Thu,  3 Apr 2025 19:10:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743707460;
-	bh=3yIRUbe0hMIpYYr+v/4lvN42VzxTKWRdxPDj7VKRCmU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qg00Y+tsZSGNupMzlbROiGcrgUAtVlzAHU0KjVUPS7fsicR7Ghl6B+H7XrtM8ysMk
-	 4YPdQn5DAoVcpcdqEf1ktkCCDbCLlDOT2QBWrVHDUHefHUzAJhj1naEYSrt5e85lyt
-	 cmUpU4WiU0gm9KDBWckjs/NN1tp35RNuVEkDPRUTISsJbmChm7XwvMbEd+MPfC9g9/
-	 8VF3j3EP2lE0XwGvXX56yseAuPCcoM0itBv18LpCBCfq2p/XE8P3F7Hre0IALJ23/I
-	 akK7dTrUWHUd9d/BkRqBPDuDqStDl+hiiiFOWIH8YKW9z/IbQiAkjWCb4s/7zbGcac
-	 Wk7yphH/89xPg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
-	Chenyuan Yang <chenyuan0y@gmail.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Sasha Levin <sashal@kernel.org>,
-	James.Bottomley@HansenPartnership.com,
-	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 10/14] scsi: st: Fix array overflow in st_setup()
-Date: Thu,  3 Apr 2025 15:10:32 -0400
-Message-Id: <20250403191036.2678799-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250403191036.2678799-1-sashal@kernel.org>
-References: <20250403191036.2678799-1-sashal@kernel.org>
+	s=arc-20240116; t=1743715316; c=relaxed/simple;
+	bh=we5tJTolw5aBZ8H+WkMA9LMcMmH0F6faI3LDPAc9TzM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dn2quXFaIbHy9rkF4M8LDKKErSuvEcgNkcPX3ezLP2b093fXdVJ/AqSjgkNrqFtJSsSkXe95p7Le2Al/D6ZK35uPibsZX+WIPCCq0VRf/ZvLqErH80XTQLZGYLJoQWbPLzDjlTQa7j1yGyMyvtu2HK64L77a2AemG3cfeHkKCjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=w59Q4/b0; arc=none smtp.client-ip=199.89.3.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 004.mia.mailroute.net (Postfix) with ESMTP id 4ZTF4M3Ly5zm0pKK;
+	Thu,  3 Apr 2025 21:19:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:mime-version:x-mailer:message-id:date
+	:date:subject:subject:from:from:received:received; s=mr01; t=
+	1743715186; x=1746307187; bh=ONkm/VcPo7SpCBbuTYUIASGA0ESRFY4DYvB
+	n7C18rqY=; b=w59Q4/b0ca3SkACt6a2G+Wou8g/rRtli895nhbkkdNO5Uuis6o2
+	p9goysk/jUd9+aSIllCrjYOBChj5BNjRVB7yhcGFUpLunoLz07+McSi5wOArx2pH
+	3Fq4bN0Q8PSE3SVQG5wxK+chYDpFa10j4xToIizjRwlU+O3lIcoy5cGBK2qCz4fD
+	gS5jKXcpFwBonKoHEJ/PbSlSFyFRF2dvcD6SK5dv4zKwnxxOy50dttIs9oUBfap1
+	ZBjEKzEVFkNUFYlQ25jfkaHWzWtCvhC4cI/4v28LXve8Lw/De1BnG4F5XJ8Vt49w
+	+BcjPKIw16A76OyDQ+dSTwE6vtTwXzQ4NqA==
+X-Virus-Scanned: by MailRoute
+Received: from 004.mia.mailroute.net ([127.0.0.1])
+ by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id q3fW3nPv1ySC; Thu,  3 Apr 2025 21:19:46 +0000 (UTC)
+Received: from bvanassche.mtv.corp.google.com (unknown [104.135.204.82])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4ZTF4J6tcZzmWRtQ;
+	Thu,  3 Apr 2025 21:19:43 +0000 (UTC)
+From: Bart Van Assche <bvanassche@acm.org>
+To: "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org,
+	Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH 00/24] Optimize the hot path in the UFS driver
+Date: Thu,  3 Apr 2025 14:17:44 -0700
+Message-ID: <20250403211937.2225615-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.291
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 
-From: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
+Hi Martin,
 
-[ Upstream commit a018d1cf990d0c339fe0e29b762ea5dc10567d67 ]
+This patch series increases IOPS by 1% and reduces CPU per I/O by 10% on =
+my
+UFS 4.0 test setup. Please consider this patch series for the next merge
+window.
 
-Change the array size to follow parms size instead of a fixed value.
+Thanks,
 
-Reported-by: Chenyuan Yang <chenyuan0y@gmail.com>
-Closes: https://lore.kernel.org/linux-scsi/CALGdzuoubbra4xKOJcsyThdk5Y1BrAmZs==wbqjbkAgmKS39Aw@mail.gmail.com/
-Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
-Link: https://lore.kernel.org/r/20250311112516.5548-2-Kai.Makisara@kolumbus.fi
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/st.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Bart.
 
-diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
-index 49e149d28954a..2b5e3e2ba3b8b 100644
---- a/drivers/scsi/st.c
-+++ b/drivers/scsi/st.c
-@@ -4124,7 +4124,7 @@ static void validate_options(void)
-  */
- static int __init st_setup(char *str)
- {
--	int i, len, ints[5];
-+	int i, len, ints[ARRAY_SIZE(parms) + 1];
- 	char *stp;
- 
- 	stp = get_options(str, ARRAY_SIZE(ints), ints);
--- 
-2.39.5
+Bart Van Assche (23):
+  scsi: core: Make scsi_cmd_to_rq() accept const arguments
+  scsi: core: Make scsi_cmd_priv() accept const arguments
+  scsi: core: Use scsi_cmd_priv() instead of open-coding it
+  scsi: core: Introduce scsi_host_update_can_queue()
+  scsi: ufs: core: Change the type of one ufshcd_add_cmd_upiu_trace()
+    argument
+  scsi: ufs: core: Only call ufshcd_add_command_trace() for SCSI
+    commands
+  scsi: ufs: core: Change the type of one ufshcd_add_command_trace()
+    argument
+  scsi: ufs: core: Change the type of one ufshcd_send_command() argument
+  scsi: ufs: core: Only call ufshcd_should_inform_monitor() for SCSI
+    commands
+  scsi: ufs: core: Change the monitor function argument types
+  scsi: ufs: core: Rework ufshcd_mcq_compl_pending_transfer()
+  scsi: ufs: core: Rework ufshcd_eh_device_reset_handler()
+  scsi: ufs: core: Cache the DMA buffer sizes
+  scsi: ufs: core: Add an argument to ufshcd_mcq_decide_queue_depth()
+  scsi: ufs: core: Add an argument to ufshcd_alloc_mcq()
+  scsi: ufs: core: Call ufshcd_mcq_init() once
+  scsi: ufs: core: Allocate the SCSI host earlier
+  scsi: ufs: core: Call ufshcd_init_lrb() later
+  scsi: ufs: core: Use hba->reserved_slot
+  scsi: ufs: core: Allocate the reserved slot as a reserved request
+  scsi: ufs: core: Do not clear driver-private command data
+  scsi: ufs: core: Optimize the hot path
+  scsi: ufs: core: Remove the ufshcd_lrb task_tag member
+
+Hannes Reinecke (1):
+  scsi: core: Implement reserved command handling
+
+ drivers/scsi/hosts.c             |   3 +
+ drivers/scsi/scsi.c              |  26 ++
+ drivers/scsi/scsi_lib.c          |   6 +-
+ drivers/scsi/scsi_logging.c      |  10 +-
+ drivers/ufs/core/ufs-mcq.c       |  31 +-
+ drivers/ufs/core/ufshcd-crypto.h |  18 +-
+ drivers/ufs/core/ufshcd-priv.h   |  27 +-
+ drivers/ufs/core/ufshcd.c        | 660 +++++++++++++++++--------------
+ include/scsi/scsi_cmnd.h         |  17 +-
+ include/scsi/scsi_host.h         |  24 +-
+ include/ufs/ufshcd.h             |  11 +-
+ 11 files changed, 487 insertions(+), 346 deletions(-)
 
 
