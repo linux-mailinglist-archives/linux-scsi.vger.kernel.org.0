@@ -1,61 +1,61 @@
-Return-Path: <linux-scsi+bounces-13196-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13198-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96EEEA7B0ED
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 23:25:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AC58A7B0A1
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 23:22:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0A0B188286F
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 21:22:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 593857A17B4
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Apr 2025 21:21:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF99C10E9;
-	Thu,  3 Apr 2025 21:21:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51D8B2E62BF;
+	Thu,  3 Apr 2025 21:22:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="Y4NudDzN"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="vKsYpms1"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D6C2E62A6
-	for <linux-scsi@vger.kernel.org>; Thu,  3 Apr 2025 21:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 036F210E9
+	for <linux-scsi@vger.kernel.org>; Thu,  3 Apr 2025 21:22:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743715310; cv=none; b=TfQWBvISoGMMdbj6ZqEMSVXwY9/O32KPYfkK4vHXd530fS+M6o2nHsPc1vsIbT8Ynz2Eb0a868fgEgOSiX/fH9OakoBf+6fLxQdXcN0uy4m7AA5v9xgmYbPYSf8ig4j1E5LdYIuXo6Ac5czBKfRdL4yEIg+XU6Ik1hblHOvPVSw=
+	t=1743715327; cv=none; b=rybTVQEQ690bTNF3TR/HamIYYKuTFmlkP2pxZq9JuKPu4D0PhnZJwJ+OEo54We4HNCoh7cg/qEmbtf/4rRoy7pR338hV80IJBFATsh9as5ZEprVj2ds3S3E4/FcKT7JjKQQyPOR4EM5uukFFE2zs/5CZrQICCWC6eDK/MNeZBxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743715310; c=relaxed/simple;
-	bh=vTJCdulUUgB/nMKC8oWqvi6dJ2scTzMVGI/QBHOCXEs=;
+	s=arc-20240116; t=1743715327; c=relaxed/simple;
+	bh=mhhMMlzxMc1P+BqYIS8WPbmCXrTpk3vzyH2U8EKTpBQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BMVekRllDvyBll/Wi0dJFWPtpPm5NYFdba91DujFvptPy/xHcT1NTs6GK2VAwj5tOBNEcD5Sh6/bwaHO3rBoEc7V/HD+2ZWS+3D7Dyrei1iw0X/8SILbmuutsNataDveGit9qb2pyAIEVtrTytoJGwKzwSpX2R4liC2m3mPtavY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=Y4NudDzN; arc=none smtp.client-ip=199.89.3.7
+	 MIME-Version; b=k3+pxSPDo6sM+gHKe/Pj/xD7Vp7CwdZglJi82I+L4WKtyUFHoHhH2wuW3Cn9OTD8SBi3mUY0YFCnJ8naTeW76Qf+/4oyHSAtVp6OcEc2qzJt+3ur8UH9r7B/3Q0pLz2waSIw63J19APO8duUP40rJG4NugAvGC16Zx34xV9oJys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=vKsYpms1; arc=none smtp.client-ip=199.89.3.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 004.mia.mailroute.net (Postfix) with ESMTP id 4ZTF6h05dgzm0ySc;
-	Thu,  3 Apr 2025 21:21:48 +0000 (UTC)
+	by 004.mia.mailroute.net (Postfix) with ESMTP id 4ZTF6z74HLzm0XBf;
+	Thu,  3 Apr 2025 21:22:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1743715306; x=1746307307; bh=7nOQZ
-	vqTMIsesa7cX1X/ZxbCU34NxPZiXD9ZJRLaFow=; b=Y4NudDzN0wGJ0jCTbKfrR
-	Mw5wzPrhOcjLCj/RZxN32I5yKXe7cog8mXYpzsgPG47QhSjHXskU673vYYejQYik
-	wCclu+g8pccym6s6CEVAQmVFe1T2dtJiN4aOfotARUX0fJh957mliJmAeK5oQDbH
-	9yO6VEUGGlcbGC9hiYpYXedzBR7MCKGsRnMBA+IvLbZz8lFA/YB26Cqfc0msYdsB
-	4LDy0wj85zcepevzrTEB+KQIMHe13gck7Q1EIvEeoilSs3XPy7WxIrj5IMAVKBGs
-	DHVu3fNMCE8N01c10eW5nr/4NYSoQWZsjJhePHvlOjxklT8fuwwt7ITRMlSzd98V
+	:received:received; s=mr01; t=1743715321; x=1746307322; bh=0ICoX
+	c3VTPD8Y7idmfsK0tkHDmg9Vb6bCRMyzmVyS/Q=; b=vKsYpms1iEj3WlLDCDf0N
+	SNujkbdPZo5LVz7g9p9vswnRE4bWeL/PsOKojBdjGf+zTV3yJKoZc3vcACuSNmlz
+	UqTBSEbqF3QfSwGuLRI+u4vaskWwq194/zmd17Fc2o2z4IY4v3rV7WeFQD08p2Gs
+	vbL7nokDRWRfmbB97rq3XhTeb3Qpn9GWzPJ4MnxsCNfvOMlPiHnoJYggzx6mGE+5
+	fAsb4OrMHu602bq7/d5RsEv8GDEVxoE+BeO4hll0RUTMZwdGzKTgN4eRUTJmHfeq
+	Upp/KBIf01nCZ5843hB6JJ5x70Sxg6+FkXmapIlIxLIKaNjPsc3/0WCKq9YJL2Uu
 	A==
 X-Virus-Scanned: by MailRoute
 Received: from 004.mia.mailroute.net ([127.0.0.1])
  by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id skpt2kqirmJz; Thu,  3 Apr 2025 21:21:46 +0000 (UTC)
+ id ep2mHI6WrCay; Thu,  3 Apr 2025 21:22:01 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.204.82])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4ZTF6V4cXTzm0yVk;
-	Thu,  3 Apr 2025 21:21:37 +0000 (UTC)
+	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4ZTF6n1YdQzm0yVH;
+	Thu,  3 Apr 2025 21:21:52 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
@@ -64,10 +64,13 @@ Cc: linux-scsi@vger.kernel.org,
 	Peter Wang <peter.wang@mediatek.com>,
 	Avri Altman <avri.altman@wdc.com>,
 	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>
-Subject: [PATCH 13/24] scsi: ufs: core: Rework ufshcd_eh_device_reset_handler()
-Date: Thu,  3 Apr 2025 14:17:57 -0700
-Message-ID: <20250403211937.2225615-14-bvanassche@acm.org>
+	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+	Eric Biggers <ebiggers@google.com>,
+	Can Guo <quic_cang@quicinc.com>,
+	Minwoo Im <minwoo.im@samsung.com>
+Subject: [PATCH 14/24] scsi: ufs: core: Cache the DMA buffer sizes
+Date: Thu,  3 Apr 2025 14:17:58 -0700
+Message-ID: <20250403211937.2225615-15-bvanassche@acm.org>
 X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
 In-Reply-To: <20250403211937.2225615-1-bvanassche@acm.org>
 References: <20250403211937.2225615-1-bvanassche@acm.org>
@@ -79,127 +82,153 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Merge the MCQ mode and legacy mode loops into a single loop. This patch
-prepares for optimizing the hot path by removing the direct hba->lrb[]
-accesses from ufshcd_eh_device_reset_handler().
+Prepare for supporting DMA buffer reallocation. Caching the DMA buffer
+sizes is essential because a later patch will modify hba->nutrs between
+the ufshcd_memory_alloc() and the ufshcd_memory_free() calls.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/ufs/core/ufshcd.c | 82 +++++++++++++++++----------------------
- 1 file changed, 36 insertions(+), 46 deletions(-)
+ drivers/ufs/core/ufshcd.c | 62 ++++++++++++++++++++-------------------
+ include/ufs/ufshcd.h      |  5 ++++
+ 2 files changed, 37 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index a5faf5af462e..4728cae130a7 100644
+index 4728cae130a7..26aa07712507 100644
 --- a/drivers/ufs/core/ufshcd.c
 +++ b/drivers/ufs/core/ufshcd.c
-@@ -7428,6 +7428,35 @@ int ufshcd_advanced_rpmb_req_handler(struct ufs_hb=
-a *hba, struct utp_upiu_req *r
- 	return err ? : result;
+@@ -3857,14 +3857,10 @@ static int ufshcd_get_ref_clk_gating_wait(struct =
+ufs_hba *hba)
+  */
+ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+ {
+-	size_t utmrdl_size, utrdl_size, ucdl_size;
+-
+ 	/* Allocate memory for UTP command descriptors */
+-	ucdl_size =3D ufshcd_get_ucd_size(hba) * hba->nutrs;
+-	hba->ucdl_base_addr =3D dmam_alloc_coherent(hba->dev,
+-						  ucdl_size,
+-						  &hba->ucdl_dma_addr,
+-						  GFP_KERNEL);
++	hba->ucdl_size =3D ufshcd_get_ucd_size(hba) * hba->nutrs;
++	hba->ucdl_base_addr =3D dmam_alloc_coherent(
++		hba->dev, hba->ucdl_size, &hba->ucdl_dma_addr, GFP_KERNEL);
+=20
+ 	/*
+ 	 * UFSHCI requires UTP command descriptor to be 128 byte aligned.
+@@ -3880,11 +3876,9 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba=
+)
+ 	 * Allocate memory for UTP Transfer descriptors
+ 	 * UFSHCI requires 1KB alignment of UTRD
+ 	 */
+-	utrdl_size =3D (sizeof(struct utp_transfer_req_desc) * hba->nutrs);
+-	hba->utrdl_base_addr =3D dmam_alloc_coherent(hba->dev,
+-						   utrdl_size,
+-						   &hba->utrdl_dma_addr,
+-						   GFP_KERNEL);
++	hba->utrdl_size =3D sizeof(struct utp_transfer_req_desc) * hba->nutrs;
++	hba->utrdl_base_addr =3D dmam_alloc_coherent(
++		hba->dev, hba->utrdl_size, &hba->utrdl_dma_addr, GFP_KERNEL);
+ 	if (!hba->utrdl_base_addr ||
+ 	    WARN_ON(hba->utrdl_dma_addr & (SZ_1K - 1))) {
+ 		dev_err(hba->dev,
+@@ -3896,7 +3890,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+ 	 * Skip utmrdl allocation; it may have been
+ 	 * allocated during first pass and not released during
+ 	 * MCQ memory allocation.
+-	 * See ufshcd_release_sdb_queue() and ufshcd_config_mcq()
++	 * See ufshcd_memory_free() and ufshcd_config_mcq()
+ 	 */
+ 	if (hba->utmrdl_base_addr)
+ 		goto skip_utmrdl;
+@@ -3904,11 +3898,9 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba=
+)
+ 	 * Allocate memory for UTP Task Management descriptors
+ 	 * UFSHCI requires 1KB alignment of UTMRD
+ 	 */
+-	utmrdl_size =3D sizeof(struct utp_task_req_desc) * hba->nutmrs;
+-	hba->utmrdl_base_addr =3D dmam_alloc_coherent(hba->dev,
+-						    utmrdl_size,
+-						    &hba->utmrdl_dma_addr,
+-						    GFP_KERNEL);
++	hba->utmrdl_size =3D sizeof(struct utp_task_req_desc) * hba->nutmrs;
++	hba->utmrdl_base_addr =3D dmam_alloc_coherent(
++		hba->dev, hba->utmrdl_size, &hba->utmrdl_dma_addr, GFP_KERNEL);
+ 	if (!hba->utmrdl_base_addr ||
+ 	    WARN_ON(hba->utmrdl_dma_addr & (SZ_1K - 1))) {
+ 		dev_err(hba->dev,
+@@ -8705,20 +8697,30 @@ static int ufshcd_add_lus(struct ufs_hba *hba)
+ 	return ret;
  }
 =20
-+static bool ufshcd_clear_lu_cmds(struct request *req, void *priv)
-+{
-+	struct scsi_cmnd *cmd =3D blk_mq_rq_to_pdu(req);
-+	struct scsi_device *sdev =3D cmd->device;
-+	struct Scsi_Host *shost =3D sdev->host;
-+	struct ufs_hba *hba =3D shost_priv(shost);
-+	const u64 lun =3D *(u64 *)priv;
-+	const u32 tag =3D req->tag;
-+
-+	if (sdev->lun !=3D lun)
-+		return true;
-+
-+	if (ufshcd_clear_cmd(hba, tag) < 0) {
-+		dev_err(hba->dev, "%s: failed to clear request %d\n", __func__,
-+			tag);
-+		return true;
-+	}
-+
-+	if (hba->mcq_enabled) {
-+		struct ufs_hw_queue *hwq =3D ufshcd_mcq_req_to_hwq(hba, req);
-+
-+		ufshcd_mcq_poll_cqe_lock(hba, hwq);
-+		return true;
-+	}
-+
-+	ufshcd_compl_one_cqe(hba, tag, NULL);
-+	return true;
-+}
-+
- /**
-  * ufshcd_eh_device_reset_handler() - Reset a single logical unit.
-  * @cmd: SCSI command pointer
-@@ -7436,12 +7465,8 @@ int ufshcd_advanced_rpmb_req_handler(struct ufs_hb=
-a *hba, struct utp_upiu_req *r
-  */
- static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
+-/* SDB - Single Doorbell */
+-static void ufshcd_release_sdb_queue(struct ufs_hba *hba, int nutrs)
++/*
++ * Free the memory allocated by ufshcd_memory_alloc() except the utmrdl =
+DMA
++ * memory.
++ */
++static void ufshcd_memory_free(struct ufs_hba *hba)
  {
--	unsigned long flags, pending_reqs =3D 0, not_cleared =3D 0;
- 	struct Scsi_Host *host;
- 	struct ufs_hba *hba;
--	struct ufs_hw_queue *hwq;
--	struct ufshcd_lrb *lrbp;
--	u32 pos, not_cleared_mask =3D 0;
- 	int err;
- 	u8 resp =3D 0xF, lun;
+-	size_t ucdl_size, utrdl_size;
+-
+-	ucdl_size =3D ufshcd_get_ucd_size(hba) * nutrs;
+-	dmam_free_coherent(hba->dev, ucdl_size, hba->ucdl_base_addr,
+-			   hba->ucdl_dma_addr);
++	if (hba->ucdl_base_addr) {
++		dmam_free_coherent(hba->dev, hba->ucdl_size,
++				   hba->ucdl_base_addr, hba->ucdl_dma_addr);
++		hba->ucdl_base_addr =3D NULL;
++		hba->ucdl_dma_addr =3D 0;
++	}
 =20
-@@ -7450,50 +7475,15 @@ static int ufshcd_eh_device_reset_handler(struct =
-scsi_cmnd *cmd)
+-	utrdl_size =3D sizeof(struct utp_transfer_req_desc) * nutrs;
+-	dmam_free_coherent(hba->dev, utrdl_size, hba->utrdl_base_addr,
+-			   hba->utrdl_dma_addr);
++	if (hba->utrdl_base_addr) {
++		dmam_free_coherent(hba->dev, hba->utrdl_size,
++				   hba->utrdl_base_addr, hba->utrdl_dma_addr);
++		hba->utrdl_base_addr =3D NULL;
++		hba->utrdl_dma_addr =3D 0;
++	}
 =20
- 	lun =3D ufshcd_scsi_to_upiu_lun(cmd->device->lun);
- 	err =3D ufshcd_issue_tm_cmd(hba, lun, 0, UFS_LOGICAL_RESET, &resp);
--	if (err || resp !=3D UPIU_TASK_MANAGEMENT_FUNC_COMPL) {
--		if (!err)
--			err =3D resp;
--		goto out;
--	}
--
--	if (hba->mcq_enabled) {
--		for (pos =3D 0; pos < hba->nutrs; pos++) {
--			lrbp =3D &hba->lrb[pos];
--			if (ufshcd_cmd_inflight(lrbp->cmd) &&
--			    lrbp->lun =3D=3D lun) {
--				ufshcd_clear_cmd(hba, pos);
--				hwq =3D ufshcd_mcq_req_to_hwq(hba, scsi_cmd_to_rq(lrbp->cmd));
--				ufshcd_mcq_poll_cqe_lock(hba, hwq);
--			}
--		}
--		err =3D 0;
--		goto out;
--	}
--
--	/* clear the commands that were pending for corresponding LUN */
--	spin_lock_irqsave(&hba->outstanding_lock, flags);
--	for_each_set_bit(pos, &hba->outstanding_reqs, hba->nutrs)
--		if (hba->lrb[pos].lun =3D=3D lun)
--			__set_bit(pos, &pending_reqs);
--	hba->outstanding_reqs &=3D ~pending_reqs;
--	spin_unlock_irqrestore(&hba->outstanding_lock, flags);
--
--	for_each_set_bit(pos, &pending_reqs, hba->nutrs) {
--		if (ufshcd_clear_cmd(hba, pos) < 0) {
--			spin_lock_irqsave(&hba->outstanding_lock, flags);
--			not_cleared =3D 1U << pos &
--				ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
--			hba->outstanding_reqs |=3D not_cleared;
--			not_cleared_mask |=3D not_cleared;
--			spin_unlock_irqrestore(&hba->outstanding_lock, flags);
--
--			dev_err(hba->dev, "%s: failed to clear request %d\n",
--				__func__, pos);
--		}
-+	if (err) {
-+	} else if (resp !=3D UPIU_TASK_MANAGEMENT_FUNC_COMPL) {
-+		err =3D resp;
-+	} else {
-+		/* clear the commands that were pending for corresponding LUN */
-+		blk_mq_tagset_busy_iter(&hba->host->tag_set,
-+				ufshcd_clear_lu_cmds, &cmd->device->lun);
- 	}
--	__ufshcd_transfer_req_compl(hba, pending_reqs & ~not_cleared_mask);
+-	devm_kfree(hba->dev, hba->lrb);
++	if (hba->lrb) {
++		devm_kfree(hba->dev, hba->lrb);
++		hba->lrb =3D NULL;
++	}
+ }
 =20
--out:
- 	hba->req_abort_count =3D 0;
- 	ufshcd_update_evt_hist(hba, UFS_EVT_DEV_RESET, (u32)err);
- 	if (!err) {
+ static int ufshcd_alloc_mcq(struct ufs_hba *hba)
+@@ -8740,7 +8742,7 @@ static int ufshcd_alloc_mcq(struct ufs_hba *hba)
+ 	 * Number of supported tags in MCQ mode may be larger than SDB mode.
+ 	 */
+ 	if (hba->nutrs !=3D old_nutrs) {
+-		ufshcd_release_sdb_queue(hba, old_nutrs);
++		ufshcd_memory_free(hba);
+ 		ret =3D ufshcd_memory_alloc(hba);
+ 		if (ret)
+ 			goto err;
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index e928ed0265ff..656c9b668fcc 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -847,6 +847,9 @@ enum ufshcd_mcq_opr {
+ /**
+  * struct ufs_hba - per adapter private structure
+  * @mmio_base: UFSHCI base register address
++ * @ucdl_size: Size of UFS Command Descriptor buffer
++ * @utrdl_size: Size of UTP Transfer Request Descriptor buffer
++ * @utmrdl_size: Size of UTP Task Management Descriptor buffer
+  * @ucdl_base_addr: UFS Command Descriptor base address
+  * @utrdl_base_addr: UTP Transfer Request Descriptor base address
+  * @utmrdl_base_addr: UTP Task Management Descriptor base address
+@@ -975,6 +978,8 @@ enum ufshcd_mcq_opr {
+ struct ufs_hba {
+ 	void __iomem *mmio_base;
+=20
++	u32 ucdl_size, utrdl_size, utmrdl_size;
++
+ 	/* Virtual memory reference */
+ 	struct utp_transfer_cmd_desc *ucdl_base_addr;
+ 	struct utp_transfer_req_desc *utrdl_base_addr;
 
