@@ -1,93 +1,54 @@
-Return-Path: <linux-scsi+bounces-13292-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13295-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61188A819B7
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Apr 2025 02:09:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D509DA81A81
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Apr 2025 03:29:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFE0F17F5E3
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Apr 2025 00:09:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BA843BFAC5
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Apr 2025 01:29:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4903433AD;
-	Wed,  9 Apr 2025 00:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Of+UYZp2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB40186338;
+	Wed,  9 Apr 2025 01:29:42 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8ABCA930;
-	Wed,  9 Apr 2025 00:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D18F26AF5
+	for <linux-scsi@vger.kernel.org>; Wed,  9 Apr 2025 01:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744157328; cv=none; b=aPvaSlFG9tW5uzV24nzj/53l/jkQdkFpTL7ehMPpoKc6T4tAn7uVL875cbvpL4rS86CcAL0tbomVuGAy7pCMo5tawFoii3hmymo8vAFWv4+/ce2TnA3BCnhZERRDQ9JBRqTMhR0fyvQ9NiNy8CZ1TWRXjlkPDDVIktzFCrh59fs=
+	t=1744162182; cv=none; b=pjlDX7pVhqRnOWIWEIMljKdpZIsn5asS6WBdsZ6kEQbc0hPoCk/GdAC00d//4dppxcHkLTZPbGXaY7dS/FZ3SNJBynz0rZpwNixKh5gFYIF4s10rATKnf7EPw7crBLVAflyvTKWwrw+C2qFQFD1dLo+H4MULxS75ZjgEVSbpqhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744157328; c=relaxed/simple;
-	bh=ET0ZoDUatD+fIJZqkawbH9nsPAnlPh6a5FaEfcrsqL4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BVZB9eEraRfVVnJbWM41FMXfTKR8vj/o2cV6QJaF7SGJap/1v1HFc+LcpNsih0TM1S53mOKbRwib7ccx7h3Go2pzjXkFOU0bMqaQ34PGojnpWRDhotDrkhqSpV/mHsmQnt32hBvr17uz+IHNAHVW9Kk24V1fZFBOJvCmDxCYiQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Of+UYZp2; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from romank-3650.corp.microsoft.com (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 06D292113E9F;
-	Tue,  8 Apr 2025 17:08:40 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 06D292113E9F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1744157320;
-	bh=8ek7c/V4tEPRnWDg9ne0X3d57G2QR4Kt93BNCHQvtsg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Of+UYZp2I4weN3I81NEdoIr6gHMQsX3CjbNKnmmILmhtmUf4OHR93sp3AhZBtJ2pd
-	 p1p+jiVB2MOUPwfNzvia/zk8pDwYavj+M98l9VP+2iQjxvMKZGei/TzEdRpNb6jH7A
-	 QZU2sGxZRVpouYt/yXPi/sDcuyn3Lg+7XMI11FP0=
-From: Roman Kisel <romank@linux.microsoft.com>
-To: aleksander.lobakin@intel.com,
-	andriy.shevchenko@linux.intel.com,
-	arnd@arndb.de,
-	bp@alien8.de,
-	catalin.marinas@arm.com,
-	corbet@lwn.net,
-	dakr@kernel.org,
-	dan.j.williams@intel.com,
-	dave.hansen@linux.intel.com,
-	decui@microsoft.com,
-	gregkh@linuxfoundation.org,
-	haiyangz@microsoft.com,
-	hch@lst.de,
-	hpa@zytor.com,
-	James.Bottomley@HansenPartnership.com,
-	Jonathan.Cameron@huawei.com,
-	kys@microsoft.com,
-	leon@kernel.org,
-	lukas@wunner.de,
-	luto@kernel.org,
-	m.szyprowski@samsung.com,
+	s=arc-20240116; t=1744162182; c=relaxed/simple;
+	bh=A53SRAiflstKJLcYcl4nvrnmCpFsjwmcXeakoVFrwaE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YyyZfQ9WZKn7HJrNgQCqUyFNaw/MTYDTReY69qtY3kVGgQ0koYCZ3xDtQvItR/IXINNBlTR46TXl8AuVcW3Kt9W71PpoMqNvIko4iq6uGwRiaJdAbyC0gcddwDX0oUKpA0AgJx40fu9NfJI5UAOeYZRBVAqng/MfSq3DXy5qe4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4ZXQMp34tRz4f3lff
+	for <linux-scsi@vger.kernel.org>; Wed,  9 Apr 2025 09:29:10 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 68A851A0ADC
+	for <linux-scsi@vger.kernel.org>; Wed,  9 Apr 2025 09:29:35 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.101.107])
+	by APP4 (Coremail) with SMTP id gCh0CgCnCl99zfVnMme3Iw--.5740S4;
+	Wed, 09 Apr 2025 09:29:35 +0800 (CST)
+From: Ye Bin <yebin@huaweicloud.com>
+To: lduncan@suse.com,
 	martin.petersen@oracle.com,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	quic_zijuhu@quicinc.com,
-	robin.murphy@arm.com,
-	tglx@linutronix.de,
-	wei.liu@kernel.org,
-	will@kernel.org,
-	iommu@lists.linux.dev,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
 	linux-scsi@vger.kernel.org,
-	x86@kernel.org
-Cc: apais@microsoft.com,
-	benhill@microsoft.com,
-	bperkins@microsoft.com,
-	sunilmut@microsoft.com
-Subject: [PATCH hyperv-next 6/6] drivers: SCSI: Do not bounce-bufffer for the confidential VMBus
-Date: Tue,  8 Apr 2025 17:08:35 -0700
-Message-ID: <20250409000835.285105-7-romank@linux.microsoft.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250409000835.285105-1-romank@linux.microsoft.com>
-References: <20250409000835.285105-1-romank@linux.microsoft.com>
+	michael.christie@oracle.com,
+	James.Bottomley@HansenPartnership.com,
+	open-iscsi@googlegroups.com
+Cc: cleech@redhat.com
+Subject: [PATCH] scsi: iscsi: print error info after unlock 'frwd_lock' in iscsi_check_transport_timeouts()
+Date: Wed,  9 Apr 2025 09:29:33 +0800
+Message-Id: <20250409012933.3101354-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -95,33 +56,74 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgCnCl99zfVnMme3Iw--.5740S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxJrWUZrW5XF4ktw13Ww47twb_yoW8Cw45pa
+	1Fg398JrWUZr1Sk3WkCrsrZryYqw4kJrWUKF1Dt348uFn8tFZxKr47K3s0ga42gFs2qrW3
+	XF1rWF1DCF40gw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUyKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI
+	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY
+	6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6x
+	AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+	1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUwxhLUUUUU
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
 
-The device bit that indicates that the device is capable of I/O
-with private pages lets avoid excessive copying in the Hyper-V
-SCSI driver.
+From: Ye Bin <yebin10@huawei.com>
 
-Set that bit equal to the confidential external memory one to
-not bounce buffer
+When a timeout occurs in iscsi_check_transport_timeouts(), it may be
+accompanied by many storage failures, and there may be many error logs
+printed to the serial port in a short period. In the case of a slow
+serial port, it may take a long time to output to the serial port in
+printk while holding the "&session->frwd_lock" lock. This can cause
+other processes to be unable to obtain the "&session->frwd_lock" lock,
+triggering a series of issues. To reduce the critical section of the
+"&session->frwd_lock" lock, error printing is moved outside the lock.
 
-Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
+Signed-off-by: Ye Bin <yebin10@huawei.com>
 ---
- drivers/scsi/storvsc_drv.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/libiscsi.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-index a8614e54544e..f647f8fc2f8f 100644
---- a/drivers/scsi/storvsc_drv.c
-+++ b/drivers/scsi/storvsc_drv.c
-@@ -686,6 +686,8 @@ static void handle_sc_creation(struct vmbus_channel *new_sc)
- 	struct vmstorage_channel_properties props;
- 	int ret;
+diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+index 1ddaf7228340..bbaed4eccfbf 100644
+--- a/drivers/scsi/libiscsi.c
++++ b/drivers/scsi/libiscsi.c
+@@ -2252,20 +2252,23 @@ static void iscsi_check_transport_timeouts(struct timer_list *t)
+ 	if (!recv_timeout)
+ 		goto done;
  
-+	dev->use_priv_pages_for_io = new_sc->confidential_external_memory;
+-	recv_timeout *= HZ;
+ 	last_recv = conn->last_recv;
+ 
+ 	if (iscsi_has_ping_timed_out(conn)) {
++		int ping_timeout = conn->ping_timeout;
++		unsigned long last_ping = conn->last_ping;
 +
- 	stor_device = get_out_stor_device(device);
- 	if (!stor_device)
++		spin_unlock(&session->frwd_lock);
+ 		iscsi_conn_printk(KERN_ERR, conn, "ping timeout of %d secs "
+-				  "expired, recv timeout %d, last rx %lu, "
++				  "expired, recv timeout %lu, last rx %lu, "
+ 				  "last ping %lu, now %lu\n",
+-				  conn->ping_timeout, conn->recv_timeout,
+-				  last_recv, conn->last_ping, jiffies);
+-		spin_unlock(&session->frwd_lock);
++				  ping_timeout, recv_timeout,
++				  last_recv, last_ping, jiffies);
+ 		iscsi_conn_failure(conn, ISCSI_ERR_NOP_TIMEDOUT);
  		return;
+ 	}
+ 
++	recv_timeout *= HZ;
+ 	if (time_before_eq(last_recv + recv_timeout, jiffies)) {
+ 		/* send a ping to try to provoke some traffic */
+ 		ISCSI_DBG_CONN(conn, "Sending nopout as ping\n");
 -- 
-2.43.0
+2.34.1
 
 
