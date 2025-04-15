@@ -1,49 +1,49 @@
-Return-Path: <linux-scsi+bounces-13432-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13434-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C8FEA89094
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 02:29:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6576A89099
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 02:30:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB4AA189A4E6
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 00:29:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 274E33AA394
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 00:29:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B39C417A2EE;
-	Tue, 15 Apr 2025 00:28:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E81619D88F;
+	Tue, 15 Apr 2025 00:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="KdkXj/i8"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="JTayQbEM"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A0F158535;
-	Tue, 15 Apr 2025 00:28:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA94D14A0B7;
+	Tue, 15 Apr 2025 00:28:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744676898; cv=none; b=PnTxwdrsTJPP294uoOLcygjxCd/qVjUfKlN/eYObUX6bGIVkA3h4epAEfSuMEfnzHxLMRlpXZJ/AMAVz7xgO3tdNL4ap9hjAex9eAJgD5KBpHhF7ODDQg3e+eRP80EWmHcUIFu3v9HhgemNnCuYkLwGjyx/XPpPIEL0G/JByytQ=
+	t=1744676903; cv=none; b=pgxMKY+BbO83j0kiWPsM4zcL5xv7+nXYjV2ahq8e4CnIZS7Wk0j2uctM0IhR2IzBwOeww7VdjtdapyPGtkAEdrOAxsjKQjooHKNEIhVO2OVOObJlS+F7KUZzJJMn42ECdPzjBrZQEULrG7APcJ0EpFF4jM5+RU9GCjM4yvUMKDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744676898; c=relaxed/simple;
-	bh=uwwyvOUW/QnJKlbJSloTLLrbNbLZvfCq7w/19JpgapA=;
+	s=arc-20240116; t=1744676903; c=relaxed/simple;
+	bh=S9WqlAPk15FLu4y+RDpz3a2PdBz0FRyegL/qDVKFPeA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SoKS8jBmwlQe9H2NZyapR7yXv17whXkgBpDtP+h2JePXHgahfk0TzthFYRCzB0MRxvhh3dJihAEbO1Ndea1mtd9XFXNVFpWCaOn5yQfakjiVz5VVwDSns63weNRNlwfBbT3uCK8PKbQkhdyYj3ZsPa/Qn+UaWhIy0JdDTG2IURk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=KdkXj/i8; arc=none smtp.client-ip=46.235.229.95
+	 MIME-Version; b=L5QAf5jV6UCQnnrxjMDaI7uPSDxjNRGWJQ0O0l6oUXwxuxdBj5c6lP6Ht/Ut9FhAMbMa/5FliakakXFJh+rgOJw/wXIUb7NmwAx10Esx5YmVGmXR5SmNV6hB82B77+i3HICsngzQ/U2HT+1e2P0tdiSSc+uGvQQqTe+4o/J2QCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=JTayQbEM; arc=none smtp.client-ip=46.235.229.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
 	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=EeR6PlpJ6PblJomDo7Q/40ybKoYSkZf5bhbmbd/ljwo=; b=KdkXj/i8Y0E69s7a
-	ioXBTWByznvaHYZym2LboYAxN1GgHMvJ741oSS3Hxj6kCtabHm05f4RzglU+rfvcC59VkZCbg+mAw
-	udlebSgNmCTo9XOa7w1v0PdwBfd9XBUjhobM/OKHPxcip/809Hl8OGcg5llH9dXmHKwRJnBu74A3E
-	I8Ea5lqCdqYaSoZEIu5pyYEbJY1c09hfK8oDw+40ORbLENkcCfDXepNmr0z+8LKRqD0lZIynQfKu3
-	tF72AeHQOxw3pIL/7Xf9t3gpWSO5cRz2YJHXBJgHSwEWJoNLVBF+sU75nLcaHHaAdvUMAaVGgkd5v
-	HnM9Evg5vJ1b3T3d+Q==;
+	:Subject; bh=SL0phU/G9T3j0VI5/RLTYm6D8TJuMcZGybgtCw8AavE=; b=JTayQbEMskaTOjng
+	MYlOpUDrlwNHWw5aMB9hSUwsrnE/ioanYzB5ckZE1Q0n6HDz1+gg3jBzeqC+6OmkBok0vRWJNwpi2
+	ZhZcvNeLsguRJ2P6/Wi/KTlBfPNydVRsorPiBC/m5ssQNwWTHEg7RNACIZPfldYsvRa82/Ii4Q0EM
+	KN9dQdCKDmXkU3mPr7rHM3jRq7dDQl2r7NobQ3aVqrkUbhPezZA+wF+2xj5Dl5vlYQcfvzxpVYdwt
+	Qyp9le0v9PJxZu9t6Qpa/OcyIJyExgL8bhiadovxcjNv8r6qBNDOB+3sTyjOknYnJSNN6Fe6opB5r
+	EM57eDxe3KWMnZoUHA==;
 Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
 	by mx.treblig.org with esmtp (Exim 4.96)
 	(envelope-from <linux@treblig.org>)
-	id 1u4U9n-00BSPG-21;
-	Tue, 15 Apr 2025 00:28:07 +0000
+	id 1u4U9o-00BSPG-0K;
+	Tue, 15 Apr 2025 00:28:08 +0000
 From: linux@treblig.org
 To: njavali@marvell.com,
 	GR-QLogic-Storage-Upstream@marvell.com,
@@ -52,9 +52,9 @@ To: njavali@marvell.com,
 Cc: linux-scsi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH 6/8] scsi: qla2xxx: Remove unused ql_log_qp
-Date: Tue, 15 Apr 2025 01:28:01 +0100
-Message-ID: <20250415002803.135909-7-linux@treblig.org>
+Subject: [PATCH 7/8] scsi: qla2xxx: Remove unused qla2x00_gpsc
+Date: Tue, 15 Apr 2025 01:28:02 +0100
+Message-ID: <20250415002803.135909-8-linux@treblig.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250415002803.135909-1-linux@treblig.org>
 References: <20250415002803.135909-1-linux@treblig.org>
@@ -68,97 +68,131 @@ Content-Transfer-Encoding: 8bit
 
 From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-ql_log_qp() was added in 2017 as part of
-commit 22d84726e3b8 ("scsi: qla2xxx: Add debug logging routine for qpair")
+qla2x00_gpsc() was added in 2017 as part of
+commit 726b85487067 ("qla2xxx: Add framework for async fabric discovery")
 but has remained unused.
 
 Remove it.
-(That patch also added ql_dbg_qp but that is still used so is left in).
 
 Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 ---
- drivers/scsi/qla2xxx/qla_dbg.c | 53 ----------------------------------
- drivers/scsi/qla2xxx/qla_dbg.h |  3 --
- 2 files changed, 56 deletions(-)
+ drivers/scsi/qla2xxx/qla_gbl.h |  1 -
+ drivers/scsi/qla2xxx/qla_gs.c  | 90 ----------------------------------
+ 2 files changed, 91 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_dbg.c b/drivers/scsi/qla2xxx/qla_dbg.c
-index 691ef827a5ab..5136549005e7 100644
---- a/drivers/scsi/qla2xxx/qla_dbg.c
-+++ b/drivers/scsi/qla2xxx/qla_dbg.c
-@@ -2705,59 +2705,6 @@ ql_dump_buffer(uint level, scsi_qla_host_t *vha, uint id, const void *buf,
+diff --git a/drivers/scsi/qla2xxx/qla_gbl.h b/drivers/scsi/qla2xxx/qla_gbl.h
+index 73bccd514791..a8c3a4f7862b 100644
+--- a/drivers/scsi/qla2xxx/qla_gbl.h
++++ b/drivers/scsi/qla2xxx/qla_gbl.h
+@@ -720,7 +720,6 @@ extern void *qla2x00_prep_ms_fdmi_iocb(scsi_qla_host_t *, uint32_t, uint32_t);
+ extern void *qla24xx_prep_ms_fdmi_iocb(scsi_qla_host_t *, uint32_t, uint32_t);
+ extern int qla2x00_fdmi_register(scsi_qla_host_t *);
+ extern int qla2x00_gfpn_id(scsi_qla_host_t *, sw_info_t *);
+-extern int qla2x00_gpsc(scsi_qla_host_t *, sw_info_t *);
+ extern size_t qla2x00_get_sym_node_name(scsi_qla_host_t *, uint8_t *, size_t);
+ extern int qla2x00_chk_ms_status(scsi_qla_host_t *, ms_iocb_entry_t *,
+ 	struct ct_sns_rsp *, const char *);
+diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
+index d2bddca7045a..51c7cea71f90 100644
+--- a/drivers/scsi/qla2xxx/qla_gs.c
++++ b/drivers/scsi/qla2xxx/qla_gs.c
+@@ -2625,96 +2625,6 @@ qla2x00_port_speed_capability(uint16_t speed)
  	}
  }
  
--/*
-- * This function is for formatting and logging log messages.
-- * It is to be used when vha is available. It formats the message
-- * and logs it to the messages file. All the messages will be logged
-- * irrespective of value of ql2xextended_error_logging.
-- * parameters:
-- * level: The level of the log messages to be printed in the
-- *        messages file.
-- * vha:   Pointer to the scsi_qla_host_t
-- * id:    This is a unique id for the level. It identifies the
-- *        part of the code from where the message originated.
-- * msg:   The message to be displayed.
+-/**
+- * qla2x00_gpsc() - FCS Get Port Speed Capabilities (GPSC) query.
+- * @vha: HA context
+- * @list: switch info entries to populate
+- *
+- * Returns 0 on success.
 - */
--void
--ql_log_qp(uint32_t level, struct qla_qpair *qpair, int32_t id,
--    const char *fmt, ...)
+-int
+-qla2x00_gpsc(scsi_qla_host_t *vha, sw_info_t *list)
 -{
--	va_list va;
--	struct va_format vaf;
--	char pbuf[128];
+-	int		rval;
+-	uint16_t	i;
+-	struct qla_hw_data *ha = vha->hw;
+-	ms_iocb_entry_t *ms_pkt;
+-	struct ct_sns_req	*ct_req;
+-	struct ct_sns_rsp	*ct_rsp;
+-	struct ct_arg arg;
 -
--	if (level > ql_errlev)
--		return;
+-	if (!IS_IIDMA_CAPABLE(ha))
+-		return QLA_FUNCTION_FAILED;
+-	if (!ha->flags.gpsc_supported)
+-		return QLA_FUNCTION_FAILED;
 -
--	ql_ktrace(0, level, pbuf, NULL, qpair ? qpair->vha : NULL, id, fmt);
+-	rval = qla2x00_mgmt_svr_login(vha);
+-	if (rval)
+-		return rval;
 -
--	if (!pbuf[0]) /* set by ql_ktrace */
--		ql_dbg_prefix(pbuf, ARRAY_SIZE(pbuf), NULL,
--			      qpair ? qpair->vha : NULL, id);
+-	arg.iocb = ha->ms_iocb;
+-	arg.req_dma = ha->ct_sns_dma;
+-	arg.rsp_dma = ha->ct_sns_dma;
+-	arg.req_size = GPSC_REQ_SIZE;
+-	arg.rsp_size = GPSC_RSP_SIZE;
+-	arg.nport_handle = vha->mgmt_svr_loop_id;
 -
--	va_start(va, fmt);
+-	for (i = 0; i < ha->max_fibre_devices; i++) {
+-		/* Issue GFPN_ID */
+-		/* Prepare common MS IOCB */
+-		ms_pkt = qla24xx_prep_ms_iocb(vha, &arg);
 -
--	vaf.fmt = fmt;
--	vaf.va = &va;
+-		/* Prepare CT request */
+-		ct_req = qla24xx_prep_ct_fm_req(ha->ct_sns, GPSC_CMD,
+-		    GPSC_RSP_SIZE);
+-		ct_rsp = &ha->ct_sns->p.rsp;
 -
--	switch (level) {
--	case ql_log_fatal: /* FATAL LOG */
--		pr_crit("%s%pV", pbuf, &vaf);
--		break;
--	case ql_log_warn:
--		pr_err("%s%pV", pbuf, &vaf);
--		break;
--	case ql_log_info:
--		pr_warn("%s%pV", pbuf, &vaf);
--		break;
--	default:
--		pr_info("%s%pV", pbuf, &vaf);
--		break;
+-		/* Prepare CT arguments -- port_name */
+-		memcpy(ct_req->req.gpsc.port_name, list[i].fabric_port_name,
+-		    WWN_SIZE);
+-
+-		/* Execute MS IOCB */
+-		rval = qla2x00_issue_iocb(vha, ha->ms_iocb, ha->ms_iocb_dma,
+-		    sizeof(ms_iocb_entry_t));
+-		if (rval != QLA_SUCCESS) {
+-			/*EMPTY*/
+-			ql_dbg(ql_dbg_disc, vha, 0x2059,
+-			    "GPSC issue IOCB failed (%d).\n", rval);
+-		} else if ((rval = qla2x00_chk_ms_status(vha, ms_pkt, ct_rsp,
+-		    "GPSC")) != QLA_SUCCESS) {
+-			/* FM command unsupported? */
+-			if (rval == QLA_INVALID_COMMAND &&
+-			    (ct_rsp->header.reason_code ==
+-				CT_REASON_INVALID_COMMAND_CODE ||
+-			     ct_rsp->header.reason_code ==
+-				CT_REASON_COMMAND_UNSUPPORTED)) {
+-				ql_dbg(ql_dbg_disc, vha, 0x205a,
+-				    "GPSC command unsupported, disabling "
+-				    "query.\n");
+-				ha->flags.gpsc_supported = 0;
+-				rval = QLA_FUNCTION_FAILED;
+-				break;
+-			}
+-			rval = QLA_FUNCTION_FAILED;
+-		} else {
+-			list->fp_speed = qla2x00_port_speed_capability(
+-			    be16_to_cpu(ct_rsp->rsp.gpsc.speed));
+-			ql_dbg(ql_dbg_disc, vha, 0x205b,
+-			    "GPSC ext entry - fpn "
+-			    "%8phN speeds=%04x speed=%04x.\n",
+-			    list[i].fabric_port_name,
+-			    be16_to_cpu(ct_rsp->rsp.gpsc.speeds),
+-			    be16_to_cpu(ct_rsp->rsp.gpsc.speed));
+-		}
+-
+-		/* Last device exit. */
+-		if (list[i].d_id.b.rsvd_1 != 0)
+-			break;
 -	}
 -
--	va_end(va);
+-	return (rval);
 -}
 -
- /*
-  * This function is for formatting and logging debug information.
-  * It is to be used when vha is available. It formats the message
-diff --git a/drivers/scsi/qla2xxx/qla_dbg.h b/drivers/scsi/qla2xxx/qla_dbg.h
-index 54f0a412226f..5f4a8c9ae6ba 100644
---- a/drivers/scsi/qla2xxx/qla_dbg.h
-+++ b/drivers/scsi/qla2xxx/qla_dbg.h
-@@ -334,9 +334,6 @@ ql_log(uint, scsi_qla_host_t *vha, uint, const char *fmt, ...);
- void __attribute__((format (printf, 4, 5)))
- ql_log_pci(uint, struct pci_dev *pdev, uint, const char *fmt, ...);
- 
--void __attribute__((format (printf, 4, 5)))
--ql_log_qp(uint32_t, struct qla_qpair *, int32_t, const char *fmt, ...);
--
- /* Debug Levels */
- /* The 0x40000000 is the max value any debug level can have
-  * as ql2xextended_error_logging is of type signed int
+ /**
+  * qla2x00_gff_id() - SNS Get FC-4 Features (GFF_ID) query.
+  *
 -- 
 2.49.0
 
