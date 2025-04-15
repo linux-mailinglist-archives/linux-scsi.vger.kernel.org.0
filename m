@@ -1,48 +1,48 @@
-Return-Path: <linux-scsi+bounces-13437-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13433-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D17AA890A1
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 02:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FA00A89097
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 02:30:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2303F3B7105
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 00:30:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AC1E3B3E53
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 00:29:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F325E146D53;
-	Tue, 15 Apr 2025 00:28:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0124119C546;
+	Tue, 15 Apr 2025 00:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="MLlRtVRl"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="Pprjfvtw"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B5283CC7;
-	Tue, 15 Apr 2025 00:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E84199947;
+	Tue, 15 Apr 2025 00:28:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744676935; cv=none; b=IZKhaI4Jvhf3jaGlf2q2soSx24iSRtTNbLHVG2trwg9Jb2I3WLKcs8uJy04rJBjuyVEAmVcOPFOytZ1XspoPbZpEVqqB2buYT5XBXGhPhVbzl4dMxhYokRZ3Ta/k8PjBTgB+/KjoG2TwQk9ipc4hnzuB+rufkNtI3D+6yuUcGRM=
+	t=1744676902; cv=none; b=Evs0FJ0dNYkahM4Hpsmibh254AH/H90vnI2bzKtsgTY4q67O+cBkbFdoOWFVHu1eaHPDq6auRDVggq5SmbXs79oIBL+754GYUh/e1kinduPF0HDin0kno0eILLAemdYU3S2YS5FDgVLelfAypZOObM+16BeF4AK4GugGqBKMG9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744676935; c=relaxed/simple;
-	bh=Uttts7JdIDrS240v6la2tV+Xo9cNQsrjszR7r06AUcI=;
+	s=arc-20240116; t=1744676902; c=relaxed/simple;
+	bh=LSGfBItVUsOl4mKKrLJfO5mRhDJ5Ta0Er/mWO0L1HdA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mDDEFQUFT0hrFx+VqQ5y7o+SskVSP2t0sqtCBiVVSvOH+YjMPyhmbBSefuDqAO6Wu6caotgf1UkJclpK2BYJuSXA1Hs9noz0LGBqH9/QXMsvmSxLTDWMAYxsnLBy03tYzzJh3sOCpeclV/8NwC4LXokFPs1KGygWauidjeIHZBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=MLlRtVRl; arc=none smtp.client-ip=46.235.229.95
+	 MIME-Version; b=d/6HjTYQErbNSL+yMia1BgSubqMvbGW6DCSrVOY79T3sAlt4gLOE7O/nMrrXweQUNVVBlthchaHdq2wlpzEGrI1FruKyAWeAvLG6/K4KBZfAIuc8IsRhMJiGr1ePaZN2R+bgp8k5zdZdDVpgOVBZQ7F6lRJrCrVhS3+i0KVTAjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=Pprjfvtw; arc=none smtp.client-ip=46.235.229.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
 	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=PJJjmrX1+5lAxe602v8oNDShkEnAk+8W379Gwb8stBI=; b=MLlRtVRlFHDggqcX
-	YmnLzvN/jpEnkHqVH1qtlrlyXPHT3CXuJRvJDM8kZzlnahA/7FlVFjOuw+UB4tG6Jk/uqpMJzNoR0
-	eQHsz0BSXve6Tz01TFZ4wnJDsNh0YoaHNxcAxqTa6xJlOfRKz7pvpFO6ZhFmrYOI4u6RZHczrDFev
-	HV1QOGm0Qv/KO0L6io0ssU8Bhb6fGeXuPAgbOUtELJVgQuJ38Nrm1gtHuCvpyHMyaR77pC79amJPH
-	PruqSrgwtVWVgwjKEGk/yq8RkG9kR3a3G7bLAO0cR2+5bBdrUrBol6G5KBlq2eJnayPTyJ++YusyL
-	dNiAY32opTPAMPVHuw==;
+	:Subject; bh=FvtDWiii0omRy58Xa7RJOR4M+Fmc8WqjWn2efxe+CUY=; b=PprjfvtwMOk/co1w
+	FXCFNOhT1A1y4EF/dw/wbITRtN9lq2WElmPH5bJd9g4qPHHb8XXbzn6CVucO0qB19T5NDx+EtaViQ
+	vdKE3SJhN0I9nADdyGvVvDeuS8wVMWtfIEXCHk7CJF0J7xUDGqWvOyWavxUq5XumK3bCh/VfYjxoQ
+	PmKruQDQ2/HvCt5OrvGhuHi+puSp/yLmR8QBaAXI0mCgRMIqtxEinW3uzhAwxrywDaRQEUjKrSEpm
+	tKFqykNc63uCnMEn++WLm4i6oyzKzj6fyZnARXyKoCIt5IYjGXVkXUJsB95HLxYBoXhsxmrQ5sWVi
+	pjGtGIpU39JsdejqBg==;
 Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
 	by mx.treblig.org with esmtp (Exim 4.96)
 	(envelope-from <linux@treblig.org>)
-	id 1u4U9l-00BSPG-0p;
+	id 1u4U9l-00BSPG-2V;
 	Tue, 15 Apr 2025 00:28:05 +0000
 From: linux@treblig.org
 To: njavali@marvell.com,
@@ -52,9 +52,9 @@ To: njavali@marvell.com,
 Cc: linux-scsi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH 1/8] scsi: qla2xxx: Remove unused qlt_free_qfull_cmds
-Date: Tue, 15 Apr 2025 01:27:56 +0100
-Message-ID: <20250415002803.135909-2-linux@treblig.org>
+Subject: [PATCH 2/8] scsi: qla2xxx: Remove unused qlt_fc_port_deleted
+Date: Tue, 15 Apr 2025 01:27:57 +0100
+Message-ID: <20250415002803.135909-3-linux@treblig.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250415002803.135909-1-linux@treblig.org>
 References: <20250415002803.135909-1-linux@treblig.org>
@@ -68,117 +68,85 @@ Content-Transfer-Encoding: 8bit
 
 From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-qlt_free_qfull_cmds() was added in 2014 as part of
-commit 33e799775593 ("qla2xxx: Add support for QFull throttling and Term
-Exchange retry")
-but has remained unused.
+qlt_fc_port_deleted() has been unused since the last use was removed
+by 2017's
+commit 726b85487067 ("qla2xxx: Add framework for async fabric discovery")
 
 Remove it.
 
 Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 ---
- drivers/scsi/qla2xxx/qla_target.c | 75 -------------------------------
+ drivers/scsi/qla2xxx/qla_target.c | 44 -------------------------------
  drivers/scsi/qla2xxx/qla_target.h |  1 -
- 2 files changed, 76 deletions(-)
+ 2 files changed, 45 deletions(-)
 
 diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index 11eadb3bd36e..8a892ac95417 100644
+index 8a892ac95417..15c6d95cc4f2 100644
 --- a/drivers/scsi/qla2xxx/qla_target.c
 +++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -5539,81 +5539,6 @@ qlt_alloc_qfull_cmd(struct scsi_qla_host *vha,
- 	spin_unlock_irqrestore(&vha->hw->tgt.q_full_lock, flags);
+@@ -1454,50 +1454,6 @@ static struct fc_port *qlt_create_sess(
+ 	return sess;
  }
  
--int
--qlt_free_qfull_cmds(struct qla_qpair *qpair)
+-/*
+- * max_gen - specifies maximum session generation
+- * at which this deletion requestion is still valid
+- */
+-void
+-qlt_fc_port_deleted(struct scsi_qla_host *vha, fc_port_t *fcport, int max_gen)
 -{
--	struct scsi_qla_host *vha = qpair->vha;
--	struct qla_hw_data *ha = vha->hw;
+-	struct qla_tgt *tgt = vha->vha_tgt.qla_tgt;
+-	struct fc_port *sess = fcport;
 -	unsigned long flags;
--	struct qla_tgt_cmd *cmd, *tcmd;
--	struct list_head free_list, q_full_list;
--	int rc = 0;
 -
--	if (list_empty(&ha->tgt.q_full_list))
--		return 0;
+-	if (!vha->hw->tgt.tgt_ops)
+-		return;
 -
--	INIT_LIST_HEAD(&free_list);
--	INIT_LIST_HEAD(&q_full_list);
+-	if (!tgt)
+-		return;
 -
--	spin_lock_irqsave(&vha->hw->tgt.q_full_lock, flags);
--	if (list_empty(&ha->tgt.q_full_list)) {
--		spin_unlock_irqrestore(&vha->hw->tgt.q_full_lock, flags);
--		return 0;
+-	spin_lock_irqsave(&vha->hw->tgt.sess_lock, flags);
+-	if (tgt->tgt_stop) {
+-		spin_unlock_irqrestore(&vha->hw->tgt.sess_lock, flags);
+-		return;
+-	}
+-	if (!sess->se_sess) {
+-		spin_unlock_irqrestore(&vha->hw->tgt.sess_lock, flags);
+-		return;
 -	}
 -
--	list_splice_init(&vha->hw->tgt.q_full_list, &q_full_list);
--	spin_unlock_irqrestore(&vha->hw->tgt.q_full_lock, flags);
--
--	spin_lock_irqsave(qpair->qp_lock_ptr, flags);
--	list_for_each_entry_safe(cmd, tcmd, &q_full_list, cmd_list) {
--		if (cmd->q_full)
--			/* cmd->state is a borrowed field to hold status */
--			rc = __qlt_send_busy(qpair, &cmd->atio, cmd->state);
--		else if (cmd->term_exchg)
--			rc = __qlt_send_term_exchange(qpair, NULL, &cmd->atio);
--
--		if (rc == -ENOMEM)
--			break;
--
--		if (cmd->q_full)
--			ql_dbg(ql_dbg_io, vha, 0x3006,
--			    "%s: busy sent for ox_id[%04x]\n", __func__,
--			    be16_to_cpu(cmd->atio.u.isp24.fcp_hdr.ox_id));
--		else if (cmd->term_exchg)
--			ql_dbg(ql_dbg_io, vha, 0x3007,
--			    "%s: Term exchg sent for ox_id[%04x]\n", __func__,
--			    be16_to_cpu(cmd->atio.u.isp24.fcp_hdr.ox_id));
--		else
--			ql_dbg(ql_dbg_io, vha, 0x3008,
--			    "%s: Unexpected cmd in QFull list %p\n", __func__,
--			    cmd);
--
--		list_move_tail(&cmd->cmd_list, &free_list);
--
--		/* piggy back on hardware_lock for protection */
--		vha->hw->tgt.num_qfull_cmds_alloc--;
--	}
--	spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
--
--	cmd = NULL;
--
--	list_for_each_entry_safe(cmd, tcmd, &free_list, cmd_list) {
--		list_del(&cmd->cmd_list);
--		/* This cmd was never sent to TCM.  There is no need
--		 * to schedule free or call free_cmd
--		 */
--		qlt_free_cmd(cmd);
+-	if (max_gen - sess->generation < 0) {
+-		spin_unlock_irqrestore(&vha->hw->tgt.sess_lock, flags);
+-		ql_dbg(ql_dbg_tgt_mgt, vha, 0xf092,
+-		    "Ignoring stale deletion request for se_sess %p / sess %p"
+-		    " for port %8phC, req_gen %d, sess_gen %d\n",
+-		    sess->se_sess, sess, sess->port_name, max_gen,
+-		    sess->generation);
+-		return;
 -	}
 -
--	if (!list_empty(&q_full_list)) {
--		spin_lock_irqsave(&vha->hw->tgt.q_full_lock, flags);
--		list_splice(&q_full_list, &vha->hw->tgt.q_full_list);
--		spin_unlock_irqrestore(&vha->hw->tgt.q_full_lock, flags);
--	}
+-	ql_dbg(ql_dbg_tgt_mgt, vha, 0xf008, "qla_tgt_fc_port_deleted %p", sess);
 -
--	return rc;
+-	sess->local = 1;
+-	spin_unlock_irqrestore(&vha->hw->tgt.sess_lock, flags);
+-	qlt_schedule_sess_for_deletion(sess);
 -}
 -
- static void
- qlt_send_busy(struct qla_qpair *qpair, struct atio_from_isp *atio,
-     uint16_t status)
+ static inline int test_tgt_sess_count(struct qla_tgt *tgt)
+ {
+ 	struct qla_hw_data *ha = tgt->ha;
 diff --git a/drivers/scsi/qla2xxx/qla_target.h b/drivers/scsi/qla2xxx/qla_target.h
-index 354fca2e7feb..71cf0236ea7d 100644
+index 71cf0236ea7d..453eb2f6a7c9 100644
 --- a/drivers/scsi/qla2xxx/qla_target.h
 +++ b/drivers/scsi/qla2xxx/qla_target.h
-@@ -1083,7 +1083,6 @@ extern int qlt_stop_phase1(struct qla_tgt *);
- extern void qlt_stop_phase2(struct qla_tgt *);
- extern irqreturn_t qla83xx_msix_atio_q(int, void *);
- extern void qlt_83xx_iospace_config(struct qla_hw_data *);
--extern int qlt_free_qfull_cmds(struct qla_qpair *);
- extern void qlt_logo_completion_handler(fc_port_t *, int);
- extern void qlt_do_generation_tick(struct scsi_qla_host *, int *);
- 
+@@ -1014,7 +1014,6 @@ extern int qlt_lport_register(void *, u64, u64, u64,
+ extern void qlt_lport_deregister(struct scsi_qla_host *);
+ extern void qlt_unreg_sess(struct fc_port *);
+ extern void qlt_fc_port_added(struct scsi_qla_host *, fc_port_t *);
+-extern void qlt_fc_port_deleted(struct scsi_qla_host *, fc_port_t *, int);
+ extern int __init qlt_init(void);
+ extern void qlt_exit(void);
+ extern void qlt_free_session_done(struct work_struct *);
 -- 
 2.49.0
 
