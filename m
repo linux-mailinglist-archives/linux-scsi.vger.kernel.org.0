@@ -1,49 +1,49 @@
-Return-Path: <linux-scsi+bounces-13436-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13429-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0C6BA8909D
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 02:30:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51655A8908E
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 02:29:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E02A817D236
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 00:30:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6026B168C25
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 00:29:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4862D133987;
-	Tue, 15 Apr 2025 00:28:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74EA814B08E;
+	Tue, 15 Apr 2025 00:28:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="m0hR3P2k"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="Tl8h7MzY"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E87C83CC7;
-	Tue, 15 Apr 2025 00:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC1C14A09E;
+	Tue, 15 Apr 2025 00:28:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744676927; cv=none; b=FH+xTznBwWIjCOdJGQajuMMVTPzSyhUh0QuGLUAIoqCfkdGtRHSAZDdLKV96i3U5oVgp4zcRACB7nsL2Lk5B6J2ocfe4iFNAgDRxpHI5JY2lrYZ/7bVUdCfXBcGj7HfdW11ENayxJlV1kcn1LNvzS8GOzCEi2mH4aC31Kjbaad8=
+	t=1744676895; cv=none; b=a4KrjPe/fm4BN98MqHgZoAdhi2tdbZNGmoHHwEmC4RQI3kOh6jmXnLjbM5tjI3RNv3Yi7bDnVxt/u8gy9mWIgwZ7hLOjaPIvdZzbEek7wT75vqMxBQx1i24VqPyc5KKC9hQgXYJG2rHYrs8roAFOcIwXMm47hcWEBhhgiKdvMCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744676927; c=relaxed/simple;
-	bh=43ci30IL/3d5OAqA6P7HEpDAL6J/3SN52Y02vIoTNZ8=;
+	s=arc-20240116; t=1744676895; c=relaxed/simple;
+	bh=ZeShHr8tVZKPg71XR95ertYuyXkqDwJ50Bc+xq/6+a4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Sdlvt0AN2fV7LLCVqfihJHPVIREOs0F5dFEm3OdB361j72OEe7W9prL43hmw133RTrdPukGRwHI/w4SoRY4d/YsXkX1kiWBEfx+swdVcOT9TJ64JvynIB7Ddk3M84IKIEUfKUhyK3Yq296wzfk4iBJcAub4ym/aYZhJkZ+xR2gU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=m0hR3P2k; arc=none smtp.client-ip=46.235.229.95
+	 MIME-Version; b=YSjHzzRuYZk9PJJQ8TtcQFq3GilvsCwlsxLL6v7Uc1hyB9urF5V4mvYvUFS2y/agIt/R4qn35rrnxA5kppuMEsSGOUhXNYF7eJhC4N2k+HDp1X4v7lhJVY+6hDwogkmX34FPWjiJ9qZqfInfnvySYkjJmb2V7Rs7bXiVhYmgNIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=Tl8h7MzY; arc=none smtp.client-ip=46.235.229.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
 	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=6Bto6bxa+eDsKRAjWbdTd9DlRt6aCeBtgQvfcG8fj+o=; b=m0hR3P2kZI2e7CGx
-	dvJBF8cndjjv/qzIB/zEgGncuDAKv5llpJdwwDGqgFAuhDIGI0TK//UjHSzBbaV2xgLqcKMg+V+Er
-	cZcuOiU5g27pK0B8WqtanBopeNvsxCsnst0qVEcx6rBbpmCUHJtJWDH7Tulu4O0zOiHiYwG2JV6tr
-	NFieLtUnkVEnS9dxW3nDQjR0+wm61YgzQfrJUfnF0r8GLhcDBPBRAPYCGgIvWy4IA1LXk6gvfhhGM
-	/b+0PttEIiCucRxo1Id+5sL8nOo811wCHuBgD+OjHsZFLCMd/do1CtZ3OdYA3Na0CzBLXiziuguvC
-	zgrOz+2idaagCcVAQw==;
+	:Subject; bh=8/ZZbVr4lqL8Td/j0X5Tyoi0ONfVB87bZftpxp57CzE=; b=Tl8h7MzYtPLLvM3M
+	gnLp62tlxE4vCVNQypKuesMBumgG8EJTfeJTu094h6UXeXUZNzKDvwgfoy+XazPAhuTt3980Y17Hp
+	tbeQ0UWMAER5+j3QlxHafErb6kiv1XeYAFe10nUXJ1hqXyhl+eouVlsIiae+Pm45OcwwUZfvsdk+A
+	If7in+BD/DgyLJdzd/y7ShYUlovP76Frs0Q2qQXyPT52SZ1I3s5lWFX63h8eIhb1AcNxBbvX6N+lV
+	YaeGb/m5T5eHPCuNNsFerOSaCDeAt1KfyqgWstOGe+wCg2ZGz6eybI6S63JXJ1BDbfa5hHooNxnLw
+	lHJhqsKlguSzjwJQzA==;
 Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
 	by mx.treblig.org with esmtp (Exim 4.96)
 	(envelope-from <linux@treblig.org>)
-	id 1u4U9m-00BSPG-2M;
-	Tue, 15 Apr 2025 00:28:06 +0000
+	id 1u4U9n-00BSPG-0b;
+	Tue, 15 Apr 2025 00:28:07 +0000
 From: linux@treblig.org
 To: njavali@marvell.com,
 	GR-QLogic-Storage-Upstream@marvell.com,
@@ -52,9 +52,9 @@ To: njavali@marvell.com,
 Cc: linux-scsi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH 4/8] scsi: qla2xxx: Remove unused qla82xx_pci_region_offset
-Date: Tue, 15 Apr 2025 01:27:59 +0100
-Message-ID: <20250415002803.135909-5-linux@treblig.org>
+Subject: [PATCH 5/8] scsi: qla2xxx: Remove unused qla82xx_wait_for_state_change
+Date: Tue, 15 Apr 2025 01:28:00 +0100
+Message-ID: <20250415002803.135909-6-linux@treblig.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250415002803.135909-1-linux@treblig.org>
 References: <20250415002803.135909-1-linux@treblig.org>
@@ -68,59 +68,67 @@ Content-Transfer-Encoding: 8bit
 
 From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-qla82xx_pci_region_offset() has been unused since the last use was
-removed by 2010's
-commit 3711333dfbee ("[SCSI] qla2xxx: Updates for ISP82xx.")
+qla82xx_wait_for_state_change() was added in 2010 as part of
+commit 579d12b58abb ("[SCSI] qla2xxx: Added support for quiescence mode for
+ISP82xx.")
+but has remained unused.
 
 Remove it.
 
 Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 ---
  drivers/scsi/qla2xxx/qla_gbl.h |  1 -
- drivers/scsi/qla2xxx/qla_nx.c  | 19 -------------------
- 2 files changed, 20 deletions(-)
+ drivers/scsi/qla2xxx/qla_nx.c  | 26 --------------------------
+ 2 files changed, 27 deletions(-)
 
 diff --git a/drivers/scsi/qla2xxx/qla_gbl.h b/drivers/scsi/qla2xxx/qla_gbl.h
-index e556f57c91af..ad76cf8e123d 100644
+index ad76cf8e123d..73bccd514791 100644
 --- a/drivers/scsi/qla2xxx/qla_gbl.h
 +++ b/drivers/scsi/qla2xxx/qla_gbl.h
-@@ -822,7 +822,6 @@ extern int qlafx00_rescan_isp(scsi_qla_host_t *);
- /* PCI related functions */
- extern int qla82xx_pci_config(struct scsi_qla_host *);
- extern int qla82xx_pci_mem_read_2M(struct qla_hw_data *, u64, void *, int);
--extern int qla82xx_pci_region_offset(struct pci_dev *, int);
- extern int qla82xx_iospace_config(struct qla_hw_data *);
+@@ -865,7 +865,6 @@ extern int qla82xx_rd_32(struct qla_hw_data *, ulong);
  
- /* Initialization related functions */
+ /* ISP 8021 IDC */
+ extern void qla82xx_clear_drv_active(struct qla_hw_data *);
+-extern uint32_t  qla82xx_wait_for_state_change(scsi_qla_host_t *, uint32_t);
+ extern int qla82xx_idc_lock(struct qla_hw_data *);
+ extern void qla82xx_idc_unlock(struct qla_hw_data *);
+ extern int qla82xx_device_state_handler(scsi_qla_host_t *);
 diff --git a/drivers/scsi/qla2xxx/qla_nx.c b/drivers/scsi/qla2xxx/qla_nx.c
-index 6dfb70edb9a6..1da954f446f6 100644
+index 1da954f446f6..78725bda3714 100644
 --- a/drivers/scsi/qla2xxx/qla_nx.c
 +++ b/drivers/scsi/qla2xxx/qla_nx.c
-@@ -1595,25 +1595,6 @@ qla82xx_get_fw_offs(struct qla_hw_data *ha)
- 	return (u8 *)&ha->hablob->fw->data[offset];
+@@ -2915,32 +2915,6 @@ qla82xx_need_qsnt_handler(scsi_qla_host_t *vha)
+ 	}
  }
  
--/* PCI related functions */
--int qla82xx_pci_region_offset(struct pci_dev *pdev, int region)
+-/*
+-* qla82xx_wait_for_state_change
+-*    Wait for device state to change from given current state
+-*
+-* Note:
+-*     IDC lock must not be held upon entry
+-*
+-* Return:
+-*    Changed device state.
+-*/
+-uint32_t
+-qla82xx_wait_for_state_change(scsi_qla_host_t *vha, uint32_t curr_state)
 -{
--	unsigned long val = 0;
--	u32 control;
+-	struct qla_hw_data *ha = vha->hw;
+-	uint32_t dev_state;
 -
--	switch (region) {
--	case 0:
--		val = 0;
--		break;
--	case 1:
--		pci_read_config_dword(pdev, QLA82XX_PCI_REG_MSIX_TBL, &control);
--		val = control + QLA82XX_MSIX_TBL_SPACE;
--		break;
--	}
--	return val;
+-	do {
+-		msleep(1000);
+-		qla82xx_idc_lock(ha);
+-		dev_state = qla82xx_rd_32(ha, QLA82XX_CRB_DEV_STATE);
+-		qla82xx_idc_unlock(ha);
+-	} while (dev_state == curr_state);
+-
+-	return dev_state;
 -}
 -
--
- int
- qla82xx_iospace_config(struct qla_hw_data *ha)
+ void
+ qla8xxx_dev_failed_handler(scsi_qla_host_t *vha)
  {
 -- 
 2.49.0
