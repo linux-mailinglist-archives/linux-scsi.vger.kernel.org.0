@@ -1,48 +1,49 @@
-Return-Path: <linux-scsi+bounces-13430-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13437-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35AB3A8908F
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 02:29:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D17AA890A1
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 02:31:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4514A16A9C9
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 00:29:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2303F3B7105
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 00:30:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7560914D283;
-	Tue, 15 Apr 2025 00:28:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F325E146D53;
+	Tue, 15 Apr 2025 00:28:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="Ya0Jo6rx"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="MLlRtVRl"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4C55C603;
-	Tue, 15 Apr 2025 00:28:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B5283CC7;
+	Tue, 15 Apr 2025 00:28:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744676895; cv=none; b=b2gbpU/FAjy6i+qr2tS9iEa/Iq88KcINRfEswB1y2FcH2Ouy6HLuzZMOsma7B44ldpIT7XZjv2IEchgCKItgL4/D5io9ruyo1iKWU8E1Ll88g8RtXvX2JVx8z7JDAxbRYw36s4Pvf3pfQJEpjB7zf81oKxygvxDMUv1VmOdeWUk=
+	t=1744676935; cv=none; b=IZKhaI4Jvhf3jaGlf2q2soSx24iSRtTNbLHVG2trwg9Jb2I3WLKcs8uJy04rJBjuyVEAmVcOPFOytZ1XspoPbZpEVqqB2buYT5XBXGhPhVbzl4dMxhYokRZ3Ta/k8PjBTgB+/KjoG2TwQk9ipc4hnzuB+rufkNtI3D+6yuUcGRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744676895; c=relaxed/simple;
-	bh=a7dJNOH+4tJR5SrQCOkwdoMtUN60GnmTg0hlc1xgULw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gPMAuz9/kVCBg6Oj5/O03xdBsQ+TwCpep85ZfZutcCT0oBmqUb8WVS3WkC3Ek2VrR/9K59Q94mXU2KX7fI45W8wz6zyWRyFksCzkvzBIuMzdp6DFQbQDJfrtqsnGKAj6wg2EUWsvktdlosLbGEXtrYiAtbi6q9z9K4yxFq9sVmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=Ya0Jo6rx; arc=none smtp.client-ip=46.235.229.95
+	s=arc-20240116; t=1744676935; c=relaxed/simple;
+	bh=Uttts7JdIDrS240v6la2tV+Xo9cNQsrjszR7r06AUcI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mDDEFQUFT0hrFx+VqQ5y7o+SskVSP2t0sqtCBiVVSvOH+YjMPyhmbBSefuDqAO6Wu6caotgf1UkJclpK2BYJuSXA1Hs9noz0LGBqH9/QXMsvmSxLTDWMAYxsnLBy03tYzzJh3sOCpeclV/8NwC4LXokFPs1KGygWauidjeIHZBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=MLlRtVRl; arc=none smtp.client-ip=46.235.229.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
 	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=aswSlc62fjsfBj4P+yx2x3RHzmY1+XO60LudTf6Mqe0=; b=Ya0Jo6rxJrg0mhqE
-	BDCggEwyHNtcRbDVCRi0eot/PLBBJ59sDaE4aKVKl8WynTQ7T9UQFn73h84mm+LXayj04R09YVNNO
-	3o37B2gBHOMTHSf3hvLjQFHusHJqpLGu2e/4dEoT2ogIAnRWCY9iomGQBqMItjxrl9n9CMJknLNrB
-	2kXSETqUByOFNjcLyxO1hb7bFq/dcDG/xTpauvqG/OVKHBbUV44nC9t12xF+S2JiW8Qh7kMcMyM+m
-	8Osr9uQAQ1ubMOIHSp29XfzY5IDyHh6lYy7rxkq1rmzd3/J4foVzz9jIgMepJBdahgRGRG+SuvWhT
-	9w/CuIlMWscv1g2ppA==;
+	:Subject; bh=PJJjmrX1+5lAxe602v8oNDShkEnAk+8W379Gwb8stBI=; b=MLlRtVRlFHDggqcX
+	YmnLzvN/jpEnkHqVH1qtlrlyXPHT3CXuJRvJDM8kZzlnahA/7FlVFjOuw+UB4tG6Jk/uqpMJzNoR0
+	eQHsz0BSXve6Tz01TFZ4wnJDsNh0YoaHNxcAxqTa6xJlOfRKz7pvpFO6ZhFmrYOI4u6RZHczrDFev
+	HV1QOGm0Qv/KO0L6io0ssU8Bhb6fGeXuPAgbOUtELJVgQuJ38Nrm1gtHuCvpyHMyaR77pC79amJPH
+	PruqSrgwtVWVgwjKEGk/yq8RkG9kR3a3G7bLAO0cR2+5bBdrUrBol6G5KBlq2eJnayPTyJ++YusyL
+	dNiAY32opTPAMPVHuw==;
 Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
 	by mx.treblig.org with esmtp (Exim 4.96)
 	(envelope-from <linux@treblig.org>)
-	id 1u4U9k-00BSPG-2i;
-	Tue, 15 Apr 2025 00:28:04 +0000
+	id 1u4U9l-00BSPG-0p;
+	Tue, 15 Apr 2025 00:28:05 +0000
 From: linux@treblig.org
 To: njavali@marvell.com,
 	GR-QLogic-Storage-Upstream@marvell.com,
@@ -51,10 +52,12 @@ To: njavali@marvell.com,
 Cc: linux-scsi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH 0/8] scsi: qla2xxx deadcoding
-Date: Tue, 15 Apr 2025 01:27:55 +0100
-Message-ID: <20250415002803.135909-1-linux@treblig.org>
+Subject: [PATCH 1/8] scsi: qla2xxx: Remove unused qlt_free_qfull_cmds
+Date: Tue, 15 Apr 2025 01:27:56 +0100
+Message-ID: <20250415002803.135909-2-linux@treblig.org>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250415002803.135909-1-linux@treblig.org>
+References: <20250415002803.135909-1-linux@treblig.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -65,39 +68,117 @@ Content-Transfer-Encoding: 8bit
 
 From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-Hi,
-  This is a batch of deadcoding on the qla2xxx driver.
-Note the last patch removes two unused module
-parameters, so I guess if anyone has that in some configs
-somewhere that might surprise them.
+qlt_free_qfull_cmds() was added in 2014 as part of
+commit 33e799775593 ("qla2xxx: Add support for QFull throttling and Term
+Exchange retry")
+but has remained unused.
 
-Other than that, it's all simple function deletion.
-
-Build tested only.
+Remove it.
 
 Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+---
+ drivers/scsi/qla2xxx/qla_target.c | 75 -------------------------------
+ drivers/scsi/qla2xxx/qla_target.h |  1 -
+ 2 files changed, 76 deletions(-)
 
-
-Dr. David Alan Gilbert (8):
-  scsi: qla2xxx: Remove unused qlt_free_qfull_cmds
-  scsi: qla2xxx: Remove unused qlt_fc_port_deleted
-  scsi: qla2xxx: Remove unused qlt_83xx_iospace_config
-  scsi: qla2xxx: Remove unused qla82xx_pci_region_offset
-  scsi: qla2xxx: Remove unused qla82xx_wait_for_state_change
-  scsi: qla2xxx: Remove unused ql_log_qp
-  scsi: qla2xxx: Remove unused qla2x00_gpsc
-  scsi: qla2xxx: Remove unused module parameters
-
- drivers/scsi/qla2xxx/qla_dbg.c    |  53 ------------
- drivers/scsi/qla2xxx/qla_dbg.h    |   3 -
- drivers/scsi/qla2xxx/qla_gbl.h    |   5 --
- drivers/scsi/qla2xxx/qla_gs.c     |  90 ---------------------
- drivers/scsi/qla2xxx/qla_nx.c     |  45 -----------
- drivers/scsi/qla2xxx/qla_os.c     |  12 ---
- drivers/scsi/qla2xxx/qla_target.c | 129 ------------------------------
- drivers/scsi/qla2xxx/qla_target.h |   3 -
- 8 files changed, 340 deletions(-)
-
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index 11eadb3bd36e..8a892ac95417 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -5539,81 +5539,6 @@ qlt_alloc_qfull_cmd(struct scsi_qla_host *vha,
+ 	spin_unlock_irqrestore(&vha->hw->tgt.q_full_lock, flags);
+ }
+ 
+-int
+-qlt_free_qfull_cmds(struct qla_qpair *qpair)
+-{
+-	struct scsi_qla_host *vha = qpair->vha;
+-	struct qla_hw_data *ha = vha->hw;
+-	unsigned long flags;
+-	struct qla_tgt_cmd *cmd, *tcmd;
+-	struct list_head free_list, q_full_list;
+-	int rc = 0;
+-
+-	if (list_empty(&ha->tgt.q_full_list))
+-		return 0;
+-
+-	INIT_LIST_HEAD(&free_list);
+-	INIT_LIST_HEAD(&q_full_list);
+-
+-	spin_lock_irqsave(&vha->hw->tgt.q_full_lock, flags);
+-	if (list_empty(&ha->tgt.q_full_list)) {
+-		spin_unlock_irqrestore(&vha->hw->tgt.q_full_lock, flags);
+-		return 0;
+-	}
+-
+-	list_splice_init(&vha->hw->tgt.q_full_list, &q_full_list);
+-	spin_unlock_irqrestore(&vha->hw->tgt.q_full_lock, flags);
+-
+-	spin_lock_irqsave(qpair->qp_lock_ptr, flags);
+-	list_for_each_entry_safe(cmd, tcmd, &q_full_list, cmd_list) {
+-		if (cmd->q_full)
+-			/* cmd->state is a borrowed field to hold status */
+-			rc = __qlt_send_busy(qpair, &cmd->atio, cmd->state);
+-		else if (cmd->term_exchg)
+-			rc = __qlt_send_term_exchange(qpair, NULL, &cmd->atio);
+-
+-		if (rc == -ENOMEM)
+-			break;
+-
+-		if (cmd->q_full)
+-			ql_dbg(ql_dbg_io, vha, 0x3006,
+-			    "%s: busy sent for ox_id[%04x]\n", __func__,
+-			    be16_to_cpu(cmd->atio.u.isp24.fcp_hdr.ox_id));
+-		else if (cmd->term_exchg)
+-			ql_dbg(ql_dbg_io, vha, 0x3007,
+-			    "%s: Term exchg sent for ox_id[%04x]\n", __func__,
+-			    be16_to_cpu(cmd->atio.u.isp24.fcp_hdr.ox_id));
+-		else
+-			ql_dbg(ql_dbg_io, vha, 0x3008,
+-			    "%s: Unexpected cmd in QFull list %p\n", __func__,
+-			    cmd);
+-
+-		list_move_tail(&cmd->cmd_list, &free_list);
+-
+-		/* piggy back on hardware_lock for protection */
+-		vha->hw->tgt.num_qfull_cmds_alloc--;
+-	}
+-	spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
+-
+-	cmd = NULL;
+-
+-	list_for_each_entry_safe(cmd, tcmd, &free_list, cmd_list) {
+-		list_del(&cmd->cmd_list);
+-		/* This cmd was never sent to TCM.  There is no need
+-		 * to schedule free or call free_cmd
+-		 */
+-		qlt_free_cmd(cmd);
+-	}
+-
+-	if (!list_empty(&q_full_list)) {
+-		spin_lock_irqsave(&vha->hw->tgt.q_full_lock, flags);
+-		list_splice(&q_full_list, &vha->hw->tgt.q_full_list);
+-		spin_unlock_irqrestore(&vha->hw->tgt.q_full_lock, flags);
+-	}
+-
+-	return rc;
+-}
+-
+ static void
+ qlt_send_busy(struct qla_qpair *qpair, struct atio_from_isp *atio,
+     uint16_t status)
+diff --git a/drivers/scsi/qla2xxx/qla_target.h b/drivers/scsi/qla2xxx/qla_target.h
+index 354fca2e7feb..71cf0236ea7d 100644
+--- a/drivers/scsi/qla2xxx/qla_target.h
++++ b/drivers/scsi/qla2xxx/qla_target.h
+@@ -1083,7 +1083,6 @@ extern int qlt_stop_phase1(struct qla_tgt *);
+ extern void qlt_stop_phase2(struct qla_tgt *);
+ extern irqreturn_t qla83xx_msix_atio_q(int, void *);
+ extern void qlt_83xx_iospace_config(struct qla_hw_data *);
+-extern int qlt_free_qfull_cmds(struct qla_qpair *);
+ extern void qlt_logo_completion_handler(fc_port_t *, int);
+ extern void qlt_do_generation_tick(struct scsi_qla_host *, int *);
+ 
 -- 
 2.49.0
 
