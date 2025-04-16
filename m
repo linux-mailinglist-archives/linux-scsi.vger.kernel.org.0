@@ -1,158 +1,91 @@
-Return-Path: <linux-scsi+bounces-13452-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13455-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7505DA8A930
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 22:22:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A691FA8AC9F
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Apr 2025 02:23:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 88AA3443ECB
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Apr 2025 20:22:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FF0B190318F
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Apr 2025 00:23:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AB902512C4;
-	Tue, 15 Apr 2025 20:22:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B000219DF8D;
+	Wed, 16 Apr 2025 00:23:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="B1KOvMI3"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="AgUT39X6"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3532C23F296
-	for <linux-scsi@vger.kernel.org>; Tue, 15 Apr 2025 20:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA15B1922DD;
+	Wed, 16 Apr 2025 00:22:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744748540; cv=none; b=AxnVBgIkQ80wHRALap12FWQz75wKLdvv9PY+80YNjEnD1NIAZnSpaefYTZyQ9UKpYKYJz682IPhuLtOsL2TpijoOzbI2BEkrW+DZpVofOC/8amXfvTn8QPMT2R4uTt5sH2hsFfV8+W2fWLNkYk5AgXwlzX1KMg6Vf72f0ccAnOk=
+	t=1744762980; cv=none; b=VgUY9IkyAZpZJ7fMuB7Rkf9xJIqa3p5C0sMUb5WdC7shZJ3IIkd1MIwWQOx/MUnJIY/Q0t27K7lfYhYCH6OgyBQp6vAhzD6ReXD0uT5Petf0meSwQrXHDQ2qjHuWNarul0D1LYH8o3OiQrxbnD3gfg1ie8OO/u+Un8mpN+00vkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744748540; c=relaxed/simple;
-	bh=R215ExsQbOy431UdApoQyvlg5GmopXIoWDZMHf21mWw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P/gbjMpoQPQge1McurMiY7Ew8QndtfpNnVh4NcEDmV38kGK65CrXSj2Gbkd8XRw3GnTNsYv3ybDOUIYdLo37y04zDKImNEw9T1fmt5nz+t99HsbZzvDJV+R0Q7fKxg85Oui1R4+GI5EeD8tuha5HhxPC9h56P4Msu/GC1ZoCHXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=B1KOvMI3; arc=none smtp.client-ip=199.89.3.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 004.mia.mailroute.net (Postfix) with ESMTP id 4ZcbDV09Y5zm0yTm;
-	Tue, 15 Apr 2025 20:22:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1744748536; x=1747340537; bh=ekUE/fBviJM1rxdGoDEzm0qA
-	r+Ezno7DYQ56TPGZvHw=; b=B1KOvMI3npE9tSqPyxHrOTUKa80jSXNKxOnWlTPk
-	1rZN2QkYiPgchhI3sFTyXPuK1DEI8YJ9uDpfZ/4xEI4WwBcbB5uwtvx4s1BS/k0t
-	ydzR0b6ZZ9MBg65XBJhsQ1DDE99/W1/orfaf41w0qAgRZoYqTdyEiD41KynxZTqu
-	k8fW5tY3qLoHcjC9I9B0OZW3lzX0yeyosMx1Ub4BvZDSREBQoC25Jw/LuqokYSQp
-	rsYGUarJRZLUNmjXH2RWs9k7yGKw0YoBUCs5L1mlbIHr/XeSZkLM3++lj170SdKR
-	DsjR2PwF8dt2q9XCFC12mdqTlZ+cOwo9atzrYLJXXEnmtQ==
-X-Virus-Scanned: by MailRoute
-Received: from 004.mia.mailroute.net ([127.0.0.1])
- by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id C5PlzN_iNVEk; Tue, 15 Apr 2025 20:22:16 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4ZcbDM6rmJzm0yTN;
-	Tue, 15 Apr 2025 20:22:10 +0000 (UTC)
-Message-ID: <84d20bdc-fcd9-42e4-939f-a3ec0422e646@acm.org>
-Date: Tue, 15 Apr 2025 13:22:09 -0700
+	s=arc-20240116; t=1744762980; c=relaxed/simple;
+	bh=eqTSVK0fJb93nGmyoukDCWFIAgXFKsNTr2iOnbl6pms=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ce50QFKdRFQwRWfHnwVEQEqLQaCv7UVMdazNec9Rd0VeGg7j9kMH/7xKYtCcOj+b6kjREeUqGzd8DhuvAEPcqQ8RwB8jahha1s2ZkRPO+bDF0WOBS/nRPsj+6JdVKD1C98gceutUl6BkzGYerq7AHl918RfjW+ltoEsc4hlaVAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=AgUT39X6; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
+	:Subject; bh=eFxO4nceIdBdEGm0H6ZsUqRPhFyxoqg5KX+zbJw4bnY=; b=AgUT39X6WbB1yxW7
+	nSg4FDkzSUA8Sgwd0XwG6xkDpgPFJMqtfgbmonH2/ryud2NYHcISMgOXBu7Ja8941GwE8r9bmHtf8
+	mDMgG8Kfi+GLCspIE+5Xxu2mII3YRxyjA6s91ZQpbGTQEPPzygxh+T2PDoP3prH3FxsFc/pSrjZZs
+	WdY07EGTBfC4x22dhyJE9T7hxxzxej7lZvfdFVVmbooReUi9rxl8ARobLwdSaZ7UJhtOiU8a0czec
+	efaJE+yaT7rZGHntAzRe82e3Dbshvn3aKkmqsbOpSRLEkOkgG9z77H8/cLYAscWWrueAgwjM1aOB3
+	XzGdG4aocNxl2fO02Q==;
+Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
+	by mx.treblig.org with esmtp (Exim 4.96)
+	(envelope-from <linux@treblig.org>)
+	id 1u4qY0-00Bl42-0J;
+	Wed, 16 Apr 2025 00:22:36 +0000
+From: linux@treblig.org
+To: njavali@marvell.com,
+	mrangankar@marvell.com,
+	GR-QLogic-Storage-Upstream@marvell.com,
+	James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com
+Cc: linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Dr. David Alan Gilbert" <linux@treblig.org>
+Subject: [PATCH 0/2] scsi: qedi deadcoding
+Date: Wed, 16 Apr 2025 01:22:33 +0100
+Message-ID: <20250416002235.299347-1-linux@treblig.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/24] scsi: ufs: core: Rework
- ufshcd_mcq_compl_pending_transfer()
-To: =?UTF-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= <peter.wang@mediatek.com>,
- "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-Cc: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>,
- "James.Bottomley@HansenPartnership.com"
- <James.Bottomley@HansenPartnership.com>,
- "avri.altman@wdc.com" <avri.altman@wdc.com>,
- "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>
-References: <20250403211937.2225615-1-bvanassche@acm.org>
- <20250403211937.2225615-13-bvanassche@acm.org>
- <0390adb9d0ebed4ba4b386453d20175b1f3a0709.camel@mediatek.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <0390adb9d0ebed4ba4b386453d20175b1f3a0709.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On 4/15/25 1:00 AM, Peter Wang (=E7=8E=8B=E4=BF=A1=E5=8F=8B) wrote:
->>  =C2=A0/**
->>  =C2=A0 * ufshcd_mcq_compl_pending_transfer - MCQ mode function. It is
->>  =C2=A0 * invoked from the error handler context or
->> ufshcd_host_reset_and_restore()
->> @@ -5665,38 +5703,10 @@ static int ufshcd_poll(struct Scsi_Host
->> *shost, unsigned int queue_num)
->>  =C2=A0static void ufshcd_mcq_compl_pending_transfer(struct ufs_hba *h=
-ba,
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bool force_compl)
->>  =C2=A0{
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct ufs_hw_queue *hwq;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct ufshcd_lrb *lrbp;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct scsi_cmnd *cmd;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned long flags;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int tag;
->> -
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for (tag =3D 0; tag < hba->nutrs=
-; tag++) {
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 lrbp =3D &hba->lrb[tag];
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 cmd =3D lrbp->cmd;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 if (!ufshcd_cmd_inflight(cmd) ||
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 test_bit(SCMD_STATE_COMPLETE, &cm=
-d->state))
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 continue;
->>
->=20
-> Removing this check might cause racing issues?
-> Leading to the possibility that the hwq in the subsequent function
-> could be null?
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-Hi Peter,
+Hi,
+  A couple of deadcode patches for the qdi driver.
 
-The ufshcd_cmd_inflight() check has not been removed.
-blk_mq_tagset_busy_iter() only calls the callback function that is=20
-passed as second argument for requests that have been started. The
-definition of ufshcd_cmd_inflight() is as follows:
+Build tested only.
 
-bool ufshcd_cmd_inflight(struct scsi_cmnd *cmd)
-{
-	return cmd &&
-	       blk_mq_rq_state(scsi_cmd_to_rq(cmd)) =3D=3D MQ_RQ_IN_FLIGHT;
-}
+Dave
+Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 
- From the blk_mq_tagset_busy_iter() implementation:
 
-	if (!(iter_data->flags & BT_TAG_ITER_STARTED) ||
-	    blk_mq_request_started(rq))
-		ret =3D iter_data->fn(rq, iter_data->data);
+Dr. David Alan Gilbert (2):
+  scsi: qedi: Remove unused sysfs functions
+  scsi: qedi: Remove unused qedi_get_proto_itt
 
- From blk-mq.h:
+ drivers/scsi/qedi/qedi_dbg.c  | 22 ----------------------
+ drivers/scsi/qedi/qedi_dbg.h  | 12 ------------
+ drivers/scsi/qedi/qedi_gbl.h  |  1 -
+ drivers/scsi/qedi/qedi_main.c |  8 --------
+ 4 files changed, 43 deletions(-)
 
-static inline int blk_mq_request_started(struct request *rq)
-{
-	return blk_mq_rq_state(rq) !=3D MQ_RQ_IDLE;
-}
+-- 
+2.49.0
 
-In other words, if flag BT_TAG_ITER_STARTED has not been set,
-blk_mq_tagset_busy_iter() only calls its callback function for requests
-for which blk_mq_start_request() has been called and that have not yet
-been freed.
-
-Bart.
 
