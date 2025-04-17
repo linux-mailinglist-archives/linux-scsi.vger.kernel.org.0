@@ -1,43 +1,44 @@
-Return-Path: <linux-scsi+bounces-13482-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13480-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 279D7A91361
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Apr 2025 07:55:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD3F1A9135E
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Apr 2025 07:55:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC0171899028
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Apr 2025 05:55:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7A2247A6ADC
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Apr 2025 05:53:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE3EA1E5714;
-	Thu, 17 Apr 2025 05:55:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 399581E1DEB;
+	Thu, 17 Apr 2025 05:54:57 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx2.usergate.com (unknown [46.229.79.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A816F1E1DEB;
-	Thu, 17 Apr 2025 05:55:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4421DE4FC;
+	Thu, 17 Apr 2025 05:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.229.79.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744869304; cv=none; b=meL2RgrN3fEtni2Rom5refpOWTRn9Az/5Djs+inh5ZEDR8gKcUhOh9hsIfIQxQTbAydT6E9fGHPziUDHW4F+VK2TC0FHf09N80m6Jl7INhb+Uw4k4f3P5wuHFVH03J1xcwstPWcOFoKjZFffKIRDhCeZwU7e1ICXSdfDoXmoyy4=
+	t=1744869297; cv=none; b=fxc7sPdUJrD3dqZSCB3TAqecPt+BfhqXEtiNw/FdbOjxfuBVrOKnri/7dOaYZpct8QZzJwnWTBnrJ0pO7F7J1amGzV5eGfWLNGSTp7XTBNEsf5URB76/idcko9ehr4izidUzTpXhl06zDl/ygfMWTqZXIfb+G18vr25GnIW5SD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744869304; c=relaxed/simple;
-	bh=QolKNjhVzMoUZI6l4ywmFBMt62EtnAuW+iC8PalOFIk=;
+	s=arc-20240116; t=1744869297; c=relaxed/simple;
+	bh=Od0yWLlZbKBUa36Zzz8mWeVChx1sO/abmn2CfT7dci0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HRcW2G8L6cmwV8k5NdVohCh0I+VqyE9Yz6XnTZZkSwafR+7jVnStJ3r0txCTxJ6l8EOq0tQCZbF2j4qmLyzBtuEU622CaH6MTy6FZSWnk1znlpLEROwUYMKu3Qt5+2P4PLSvqbg6YoLwvfz3cFRO4tS1JzEV159gHM5YEpZHOpg=
+	 MIME-Version:Content-Type; b=b2lCNyleSlEduZCGlRuz25utRghwGbMn57S0uBF6TQh1EfsUjE7FJl0epmpgTq+QmAIVnI9w4YWXJsB5wln8i8Q5AtyurIp+MWRQy1+Zx07R8yMBqqHfC7KeBqX2nrRwjKrz2TrlZ3yRJOX20Bwl8Kcx66LgMxe+yDJT0r8Jp8w=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=usergate.com; spf=pass smtp.mailfrom=usergate.com; arc=none smtp.client-ip=46.229.79.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=usergate.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=usergate.com
 Received: from mail.usergate.com[192.168.90.36] by mx2.usergate.com with ESMTP id
-	 1EA52C4FE87A475F88E770CC6BBE1020; Thu, 17 Apr 2025 11:20:39 +0700
+	 B4D8733438D542E28A1FEB29109F5909; Thu, 17 Apr 2025 11:20:39 +0700
 From: Boris Belyavtsev <bbelyavtsev@usergate.com>
 To: <hare@suse.org>
 CC: <linux-scsi@vger.kernel.org>,<linux-kernel@vger.kernel.org>,"Boris
  Belyavtsev" <bbelyavtsev@usergate.com>
-Subject: [PATCH 2/3] scsi: aic79xx: check for non-NULL scb in ahd_handle_pkt_busfree
-Date: Thu, 17 Apr 2025 11:20:14 +0700
-Message-ID: <20250417042015.780823-3-bbelyavtsev@usergate.com>
+Subject: [PATCH 3/3] scsi: aic79xx: check for non-NULL scb in
+	 ahd_linux_queue_abort_cmd
+Date: Thu, 17 Apr 2025 11:20:15 +0700
+Message-ID: <20250417042015.780823-4-bbelyavtsev@usergate.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250417042015.780823-1-bbelyavtsev@usergate.com>
 References: <20250417042015.780823-1-bbelyavtsev@usergate.com>
@@ -52,38 +53,35 @@ Content-Type: text/plain;
 	charset="utf-8"
 X-ClientProxiedBy: ESLSRV-EXCH-01.esafeline.com (192.168.90.36) To
  nsk02-mbx01.esafeline.com (10.10.1.35)
-X-Message-Id: 9D225A5F3469407A9B34E96E4624CC77
-X-MailFileId: D35C4025561B44B7AB63E0C5CC12AA03
+X-Message-Id: CD07E1B6428D475B95C80F94AC46F7AF
+X-MailFileId: 3A8A392F50A64BE0AC8477CCC4284E4D
 
-If hardware returns invalid scbid scb could be NULL
+possible NULL pointer dereference in case hardware returns invalid scb
+index
 
 Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
 Signed-off-by: Boris Belyavtsev <bbelyavtsev@usergate.com>
 ---
- drivers/scsi/aic7xxx/aic79xx_core.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/scsi/aic7xxx/aic79xx_osm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/aic7xxx/aic79xx_core.c b/drivers/scsi/aic7xxx/aic=
-79xx_core.c
-index ff9ae0f8e153..27ec31457e7d 100644
---- a/drivers/scsi/aic7xxx/aic79xx_core.c
-+++ b/drivers/scsi/aic7xxx/aic79xx_core.c
-@@ -2997,9 +2997,10 @@ ahd_handle_pkt_busfree(struct ahd_softc *ahd, u_int =
-busfreetime)
-                ahd_print_path(ahd, scb);
-                printk("Unexpected PKT busfree condition\n");
-                ahd_dump_card_state(ahd);
--               ahd_abort_scbs(ahd, SCB_GET_TARGET(ahd, scb), 'A',
--                              SCB_GET_LUN(scb), SCB_GET_TAG(scb),
--                              ROLE_INITIATOR, CAM_UNEXP_BUSFREE);
-+               if (scb !=3D NULL)
-+                       ahd_abort_scbs(ahd, SCB_GET_TARGET(ahd, scb), 'A',
-+                                      SCB_GET_LUN(scb), SCB_GET_TAG(scb),
-+                                      ROLE_INITIATOR, CAM_UNEXP_BUSFREE);
-
-                /* Return restarting the sequencer. */
-                return (1);
+diff --git a/drivers/scsi/aic7xxx/aic79xx_osm.c b/drivers/scsi/aic7xxx/aic7=
+9xx_osm.c
+index 17dfc3c72110..7d40c7d80411 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_osm.c
++++ b/drivers/scsi/aic7xxx/aic79xx_osm.c
+@@ -2265,7 +2265,8 @@ ahd_linux_queue_abort_cmd(struct scsi_cmnd *cmd)
+                 * and hope that the target responds.
+                 */
+                pending_scb =3D ahd_lookup_scb(ahd, active_scbptr);
+-               pending_scb->flags |=3D SCB_RECOVERY_SCB|SCB_ABORT;
++               if (pending_scb =3D=3D NULL)
++                       pending_scb->flags |=3D SCB_RECOVERY_SCB|SCB_ABORT;
+                ahd_outb(ahd, MSG_OUT, HOST_MSG);
+                ahd_outb(ahd, SCSISIGO, last_phase|ATNO);
+                scmd_printk(KERN_INFO, cmd, "Device is active, asserting AT=
+N\n");
 --
 2.43.0
 
