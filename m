@@ -1,43 +1,46 @@
-Return-Path: <linux-scsi+bounces-13475-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13477-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0257A91273
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Apr 2025 06:58:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C9BDA91276
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Apr 2025 06:58:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5B4D7A3A2A
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Apr 2025 04:57:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01CB4444D89
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Apr 2025 04:58:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C76C1DE3BA;
-	Thu, 17 Apr 2025 04:58:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F33D1DE885;
+	Thu, 17 Apr 2025 04:58:13 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx2.usergate.com (unknown [46.229.79.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A051DE889;
-	Thu, 17 Apr 2025 04:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6BB1DE4C8;
+	Thu, 17 Apr 2025 04:58:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.229.79.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744865883; cv=none; b=RlCH+wr68eCYrfbQrw3DRpbjlYa7gTHl/MMZ1I54uOkcZRzf6LDmQYm4DhJXXb6oWAO2g4u1Nems91wOOI18waVAnjtVn4w61QLz1E0zwmKHxiSWfRBgSVkWQCgaT8aKCMyY/K0VP58yC2cEoLWfJ4sbB37ZZbpVUxNjbIeJc+c=
+	t=1744865893; cv=none; b=PSy17Lj7owk0AQw9HM6hRhkPJ5asSuasVS6vIv1nXlRcryTv31GUjtISFjAEVkKMVwrtS4QyYTgWa4mAo7oSvcWOgyIORlfp5LDb0N7vR4m0PnuX44G8eKAiLelDx6n5sKnw400t1uz8Oe19gctcxzFQdbEnfSr6E6LTlR9v7FU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744865883; c=relaxed/simple;
-	bh=QUCSGN8Amri6gWsa/LlkBd+tPzIdUsEmXusdXXyHkxM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CgE+KJQ6DWT+bDtxrRNCqS/TGCsP2qYE+SxX7bhFpMFnTTWiFDAPLcDiFFLgrJB/O0DyhjT2JChR+V27tWzXEZyhZ1F1B6uldsp/GSXvTPP5q1oT3iVjpVtVWKwnvQoRjHxZu7EitrwKHg1qSGmLBExDhnkgVCylohcQHu2CuAo=
+	s=arc-20240116; t=1744865893; c=relaxed/simple;
+	bh=VYH/7Wow5L4HyEpvwlReBHdPmPzxrGo6yuuSH/jknT4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Tdo8xPFjzFAQWJbodX5zP/bKTfQr0NA5Rrx/joGTBjNxU4xcClR4GnGImBPTmsnGJJPqKGFaufwvRd2z+7F6B+Fq8E34hz82Pa0309H9ZKBGGJ4x07UoDU+Uswi8EmeyUsT0WS2sMlYqravdMMXhEWiKpMLsXvgZ2sZuPRlnsGw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=usergate.com; spf=pass smtp.mailfrom=usergate.com; arc=none smtp.client-ip=46.229.79.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=usergate.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=usergate.com
 Received: from mail.usergate.com[192.168.90.36] by mx2.usergate.com with ESMTP id
-	 A3B53BB2C54F469F8E995EE847D2F249; Thu, 17 Apr 2025 11:22:27 +0700
+	 70BAEE7064DE4059862C8CFC10E28BE8; Thu, 17 Apr 2025 11:22:27 +0700
 From: Boris Belyavtsev <bbelyavtsev@usergate.com>
 To: <hare@suse.com>
 CC: <linux-scsi@vger.kernel.org>,<linux-kernel@vger.kernel.org>,"Boris
  Belyavtsev" <bbelyavtsev@usergate.com>
-Subject: [PATCH 0/3] aic79xx: Add some non-NULL checks
-Date: Thu, 17 Apr 2025 11:22:17 +0700
-Message-ID: <20250417042220.782230-1-bbelyavtsev@usergate.com>
+Subject: [PATCH 1/3] scsi: aic79xx: check for non-NULL scb in ahd_handle_seqint
+Date: Thu, 17 Apr 2025 11:22:18 +0700
+Message-ID: <20250417042220.782230-2-bbelyavtsev@usergate.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250417042220.782230-1-bbelyavtsev@usergate.com>
+References: <20250417042220.782230-1-bbelyavtsev@usergate.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -49,23 +52,48 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: quoted-printable
 X-ClientProxiedBy: ESLSRV-EXCH-01.esafeline.com (192.168.90.36) To
  nsk02-mbx01.esafeline.com (10.10.1.35)
-X-Message-Id: 3D6BE4F57BEA488C8529B28B12F87014
-X-MailFileId: A2EA105D036349AB9667BB5F567F5B1C
+X-Message-Id: B1258AD393FE4B438A685FD2A3B479AD
+X-MailFileId: E4B55F9E1EA845278A4BE9722970FDC4
 
-Add non-NULL checks for ahd_lookup_scb return value.
-scb could be NULL if an attacker has special equipment to return
-certain values to the driver.
+NULL pointer dereference is possible when compiled with AHD_DEBUG and
+AHD_SHOW_RECOVERY is set if data in SCBPTR =D0=B8 SCBPTR+1 ports is incorre=
+ct
 
-Belyavtsev Boris (1):
-  scsi: aic79xx: check for non-NULL scb in ahd_handle_seqint
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Boris Belyavtsev (2):
-  scsi: aic79xx: check for non-NULL scb in ahd_handle_pkt_busfree
-  scsi: aic79xx: check for non-NULL scb in ahd_linux_queue_abort_cmd
+Signed-off-by: Boris Belyavtsev <bbelyavtsev@usergate.com>
+---
+ drivers/scsi/aic7xxx/aic79xx_core.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
- drivers/scsi/aic7xxx/aic79xx_core.c | 15 +++++++++------
- drivers/scsi/aic7xxx/aic79xx_osm.c  |  3 ++-
- 2 files changed, 11 insertions(+), 7 deletions(-)
+diff --git a/drivers/scsi/aic7xxx/aic79xx_core.c b/drivers/scsi/aic7xxx/aic=
+79xx_core.c
+index f9372a81cd4e..ff9ae0f8e153 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_core.c
++++ b/drivers/scsi/aic7xxx/aic79xx_core.c
+@@ -2205,14 +2205,16 @@ ahd_handle_seqint(struct ahd_softc *ahd, u_int ints=
+tat)
+                        ahd_print_path(ahd, scb);
+                        printk("data overrun detected %s.  Tag =3D=3D 0x%x.=
+\n",
+                               ahd_lookup_phase_entry(lastphase)->phasemsg,
+-                              SCB_GET_TAG(scb));
++                              scb !=3D NULL ? SCB_GET_TAG(scb) : 0);
+                        ahd_print_path(ahd, scb);
+                        printk("%s seen Data Phase.  Length =3D %ld.  "
+                               "NumSGs =3D %d.\n",
+                               ahd_inb(ahd, SEQ_FLAGS) & DPHASE
+                               ? "Have" : "Haven't",
+-                              ahd_get_transfer_length(scb), scb->sg_count)=
+;
+-                       ahd_dump_sglist(scb);
++                              scb !=3D NULL ? ahd_get_transfer_length(scb)=
+ : -1,
++                              scb !=3D NULL ? scb->sg_count : -1);
++                       if (scb !=3D NULL)
++                               ahd_dump_sglist(scb);
+                }
+ #endif
 
 --
 2.43.0
