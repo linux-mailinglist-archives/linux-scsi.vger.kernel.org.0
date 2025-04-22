@@ -1,95 +1,63 @@
-Return-Path: <linux-scsi+bounces-13581-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13583-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F30A1A95EAD
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Apr 2025 08:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 484C6A95EBC
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Apr 2025 08:58:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39654177499
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Apr 2025 06:54:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75DCB17836B
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Apr 2025 06:58:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFD721E5207;
-	Tue, 22 Apr 2025 06:54:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35CD23BD06;
+	Tue, 22 Apr 2025 06:57:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="NZDjKPR7";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="jXcFbeDQ";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="NZDjKPR7";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="jXcFbeDQ"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="Ba0XNFDY"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBACA35893
-	for <linux-scsi@vger.kernel.org>; Tue, 22 Apr 2025 06:54:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC8B238C0A;
+	Tue, 22 Apr 2025 06:57:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745304870; cv=none; b=H1GlmNDGcLG7wb6h1bY36aGd6mN3bjfdH8JFlsWVvmBi5m8YJncwsyOFG//lh56KG++IVj/6jmapNX8gQWm/ZV9qi+DmXh9IoOS4a9fc1Gzn1F/u8VkWb9vm9/YaanQsbfeMNJzytwVMlrB6NNNuWzfoIsMkTr/THiIAY++fi70=
+	t=1745305075; cv=none; b=IzePdn1t/cBbAlROUBrMinXEjJSuPgnMGcMg81AF64FOwom2gtT70T4dkbXIlq5bZyTJdzOy4bhSpqCXfVNuX60aaS0FU6PdSVdOGgwUrgmV4wgkWuLdyB07TXyJJ2s6qRp8Wi9ARxT2aRTLsP78RVmvDp7GRrEMeqdEMhtm0kM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745304870; c=relaxed/simple;
-	bh=gzCocZrO44MmvDwucXTVh4RonMn1RDyiG92ksxIUFvw=;
+	s=arc-20240116; t=1745305075; c=relaxed/simple;
+	bh=HVyax2u7ZfTCnr06WzTP2vtRB4ILGukLvzv2pmB4Bms=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AOsmdSOTU2nVktrtaSNjizyPShVL6XrufUzkmbsxZM69kH5nJ10U37Z4sDEHOsHRAF1Nmppaqi2Rl6Fs+Xw1e3Vg2mYnG/9X0kmfluseG/yu3jSkYihKaDYtb6or2cFHCT2rrxSGTvWIw+DocOWM43npM1WzEcoCIw2gJ9376OE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=NZDjKPR7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=jXcFbeDQ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=NZDjKPR7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=jXcFbeDQ; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	 In-Reply-To:Content-Type; b=tqF/NwBFzP2ovgSLRqJmxoM9wVV7v/t8KQ3rsG+3VV+5tItAypCpEiQXSnV3KxO9lTvJJvSG0OXa3RLfTfTfTJ3ITMfJ0LxnotRm6NKm63kCkU0qHaTRSKaKAZt7g585KoCV3CdzrYNymn91M6HM3Cogp3YUwvD0WrQvrWLoS5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=Ba0XNFDY; arc=none smtp.client-ip=199.89.3.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 004.mia.mailroute.net (Postfix) with ESMTP id 4ZhY2z1rPyzm0yQs;
+	Tue, 22 Apr 2025 06:57:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1745305064; x=1747897065; bh=HVyax2u7ZfTCnr06WzTP2vtR
+	B4ILGukLvzv2pmB4Bms=; b=Ba0XNFDYqSH363j+i1MsZL9t/KdGidMOjXhRwGoF
+	oBbCJ16JqvRLOA6EexgMw6KyMnL/U41L+3v48GlNjtgDSKrfbDdzKEcc0fyf1eG3
+	b+KXlkyHFt06X/6je/aaE2Pshy1YmUUNTz4cfsX295SffdXT9bqqnBeaJn3nufM1
+	kH667LqSXjO46SkCn3VioJJpjC5KJvu3kFJuLf0jo0yuOfy7aB69FgAREX26NBr3
+	gZk3u2d5jJUtK8VUenT4n8onrUTVQZ5nH42NwcEAwWu1pZeW/fZ2bdmEBAbZ06kS
+	dvdwKYelyPBWsn/W2Yl6DdPbvYXG6riiT5raZyS4lDSWTQ==
+X-Virus-Scanned: by MailRoute
+Received: from 004.mia.mailroute.net ([127.0.0.1])
+ by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id FXtzAmTMR-Nz; Tue, 22 Apr 2025 06:57:44 +0000 (UTC)
+Received: from [192.168.68.114] (84-24-150-169.cable.dynamic.v4.ziggo.nl [84.24.150.169])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id F3E641F7C1;
-	Tue, 22 Apr 2025 06:54:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1745304867; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=os+g4Vf02+g1J+zUe7A1oLIPsHzf+3Cd95/FI/obw+o=;
-	b=NZDjKPR7h+5h407CpZg3Jfm/aEn/+uEe0Qxoktf9/GGISm+PFTmwrHRdvCRRn5RFCHSQDh
-	YlClHlgjp8KUGOcqg3/Hs1vkqfGRUcZtxvPocCwdt3BC1OSHzaSOAfSSy+4rKhpz/pbb7B
-	L95NaXn7ysansDAbK8YZPdfftE3ggUc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1745304867;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=os+g4Vf02+g1J+zUe7A1oLIPsHzf+3Cd95/FI/obw+o=;
-	b=jXcFbeDQAESdg9pjecIaBwh52Y+XpruZyqW9yTP4N74J0gsGuu2X+D5thmfZe4LvC5ehS0
-	LD8jBuGq3hWxhBCA==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1745304867; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=os+g4Vf02+g1J+zUe7A1oLIPsHzf+3Cd95/FI/obw+o=;
-	b=NZDjKPR7h+5h407CpZg3Jfm/aEn/+uEe0Qxoktf9/GGISm+PFTmwrHRdvCRRn5RFCHSQDh
-	YlClHlgjp8KUGOcqg3/Hs1vkqfGRUcZtxvPocCwdt3BC1OSHzaSOAfSSy+4rKhpz/pbb7B
-	L95NaXn7ysansDAbK8YZPdfftE3ggUc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1745304867;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=os+g4Vf02+g1J+zUe7A1oLIPsHzf+3Cd95/FI/obw+o=;
-	b=jXcFbeDQAESdg9pjecIaBwh52Y+XpruZyqW9yTP4N74J0gsGuu2X+D5thmfZe4LvC5ehS0
-	LD8jBuGq3hWxhBCA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B4B14137CF;
-	Tue, 22 Apr 2025 06:54:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id L1M9KiI9B2gFMAAAD6G6ig
-	(envelope-from <hare@suse.de>); Tue, 22 Apr 2025 06:54:26 +0000
-Message-ID: <24c8a2a3-2d90-42fb-a662-fff349410101@suse.de>
-Date: Tue, 22 Apr 2025 08:54:26 +0200
+	(Authenticated sender: bvanassche@acm.org)
+	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4ZhY2g2pwwzm0ytT;
+	Tue, 22 Apr 2025 06:57:29 +0000 (UTC)
+Message-ID: <d78b244b-e032-4d6f-b6bf-87be2a98693d@acm.org>
+Date: Mon, 21 Apr 2025 23:57:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -97,68 +65,32 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/24] scsi: core: Implement reserved command handling
-To: Bart Van Assche <bvanassche@acm.org>, John Garry
- <john.g.garry@oracle.com>, "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-References: <20250403211937.2225615-1-bvanassche@acm.org>
- <20250403211937.2225615-5-bvanassche@acm.org>
- <3c2fe290-5e24-4985-833c-24d8b80b98b7@oracle.com>
- <e1cc3f08-e7e0-4eea-82a8-c5d2e7618238@acm.org>
- <bff407bb-ed99-42b1-bfc8-05b8aa76957c@oracle.com>
- <27e5c0e9-a042-45e3-9852-31adb966b781@acm.org>
- <d6b35769-e5f7-4174-b581-f6555aec1d4e@oracle.com>
- <959ed10a-27e4-4c63-b9bd-58fefc5c4775@acm.org>
+Subject: Re: [PATCH] ufs: core: add caps UFSHCD_CAP_MCQ_EN
+To: Huan Tang <tanghuan@vivo.com>, peter.wang@mediatek.com
+Cc: James.Bottomley@HansenPartnership.com, alim.akhtar@samsung.com,
+ avri.altman@wdc.com, ebiggers@google.com, linux-kernel@vger.kernel.org,
+ linux-scsi@vger.kernel.org, manivannan.sadhasivam@linaro.org,
+ martin.petersen@oracle.com, minwoo.im@samsung.com,
+ opensource.kernel@vivo.com, quic_nguyenb@quicinc.com
+References: <7619479cd692a5ef8bf3bdb8424d173b774dc146.camel@mediatek.com>
+ <20250422062555.694-1-tanghuan@vivo.com>
 Content-Language: en-US
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <959ed10a-27e4-4c63-b9bd-58fefc5c4775@acm.org>
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20250422062555.694-1-tanghuan@vivo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -4.30
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FROM_HAS_DN(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_COUNT_TWO(0.00)[2];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid,suse.de:email]
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Transfer-Encoding: 7bit
 
-On 4/17/25 23:25, Bart Van Assche wrote:
-> On 4/16/25 12:16 AM, John Garry wrote:
->> I'm not sure how that will look, but my preference is to fully 
->> implement reserved tags support which can be used by all SCSI LLDs.
-> 
-> Hi John,
-> 
-> I'm working on an implementation of this approach but it will take until
-> next month until I will have the time to post a patch series that
-> implements this approach.
-> 
-If it helps I can revisit and rebase my original patchset.
-It had been shelved as there have been issues with the 'fnic' driver,
-but as I now have a test system I can restart work on that series.
 
-Cheers,
+On 4/21/25 11:25 PM, Huan Tang wrote:
+> I found that using low-end UFS in SoCs that support MCQ may cause
+> device latency to reach extreme values.
 
-Hannes
--- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.de                                +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+Hi Huan,
+
+What is the root-cause of the high latency? If it is the time spent in
+UFS interrupt handlers, please try to switch to threaded interrupt
+handlers instead of disabling MCQ. See also
+https://lore.kernel.org/linux-scsi/20250407-topic-ufs-use-threaded-irq-v3-0-08bee980f71e@linaro.org/
+
+Bart.
 
