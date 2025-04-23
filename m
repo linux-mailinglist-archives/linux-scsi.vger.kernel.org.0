@@ -1,123 +1,138 @@
-Return-Path: <linux-scsi+bounces-13658-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13660-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CACDA98C0E
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Apr 2025 15:57:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 547D2A997F8
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Apr 2025 20:32:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E34A33B4051
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Apr 2025 13:56:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D53C4A2E2C
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Apr 2025 18:32:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472E51A83F2;
-	Wed, 23 Apr 2025 13:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F09D28BABA;
+	Wed, 23 Apr 2025 18:32:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fo+4qxsF"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="OdodJ8Cc"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECAC81A3161;
-	Wed, 23 Apr 2025 13:56:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581F214900B
+	for <linux-scsi@vger.kernel.org>; Wed, 23 Apr 2025 18:32:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745416580; cv=none; b=NWjheYi6WmQg394E3WLrBSNPHAqY7g+SdKVNvAkEvazx2PcimLzPQWJqX2ONLp24OycwnlE3CvtkwOq7GJANV2D1Ahz7ruAvnBTfdpROkpS9705evE6jl6s3EbuxGN3GuNfoosm3Zx5RelqaGnBXEDo79PmAsp+dEkvzhVlJSeI=
+	t=1745433161; cv=none; b=RlX/kskftzQk5LgebY6x0sq1OfGMKEui3JiNBZIzrBWZaTZY54NC2vOvRH3kAF3s86xsKIrbZuWgJGbuGWc+rsW77DhuD2vkGQbLRKrm/N41etgw/bWS5O8uByf81e45mAPOAJtZ524QRQZFn+dv0F6glyt/02t4Ddmi7n3/gaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745416580; c=relaxed/simple;
-	bh=TLNo+cEr9a5ZaMfW1syRuCKSQsHU8Gj546QRb+xgVrQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GRSCABhg3Tc0rHlg8nkI4cwnQtphYzNUGF7bbamaEY3F1ldsLFuc3DLEK2EOt3+sGvJho0KFUHajIWvr5f7J15uT0idchyK6dRx4CDr5hkdyVVJv9wSRAUxtmY8hVNNJGKg/yB2uGPfwtBk1aRw2Fon2xgiwx71tXfqZ9p97+nU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fo+4qxsF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B1D6C4CEE2;
-	Wed, 23 Apr 2025 13:56:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745416579;
-	bh=TLNo+cEr9a5ZaMfW1syRuCKSQsHU8Gj546QRb+xgVrQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fo+4qxsF6nP7HbesDNMloUvlp5AnUsCJmOmU5XTAJxhlZgTUXLnI+nR2n81HBU0cd
-	 EsKhcl0iyzecjZHxg1PSe/cRyIRE9BCrILh9wYu9X7b62e5+qB2x9C9p5p9Xw31spt
-	 JR7i+DGelkQMFpo7vAjjVTkbhJF30g5km5k1IjvC7FHz5p8f9j8jEduo6cO2RV9nk+
-	 MB422YGaYHw6tu4h1sAcLQnh0Uk/pk6pGGiUzQKvU91wPLxYT7WDOVdSOfU2vrzJeT
-	 A2nfMox06SpE2u3i5dUR5wMM92CvtwN/Gy5sK5WmPgAV/28DdFPuT9gcWXGQ8OvbuZ
-	 enxzzqqRc8A7w==
-Date: Wed, 23 Apr 2025 08:56:17 -0500
-From: Rob Herring <robh@kernel.org>
-To: Nitin Rawat <quic_nitirawa@quicinc.com>
-Cc: alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-	krzk+dt@kernel.org, mani@kernel.org, conor+dt@kernel.org,
-	James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com,
-	beanhuo@micron.com, peter.wang@mediatek.com,
-	linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH V1 3/3] scsi: ufs: qcom: Add support to disable UFS LPM
- Feature
-Message-ID: <20250423135617.GA227946-robh@kernel.org>
-References: <20250417124645.24456-1-quic_nitirawa@quicinc.com>
- <20250417124645.24456-4-quic_nitirawa@quicinc.com>
- <20250422124546.GB896279-robh@kernel.org>
- <06c6c892-c597-4d1f-9d28-52455d6471f9@quicinc.com>
+	s=arc-20240116; t=1745433161; c=relaxed/simple;
+	bh=8C24oquEqlFQCyJVkJrELveUXgWblfcGwF9vVLF97Eg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=um9VYiErBwcdc774wgczuZ1DJYrEykl4728acI0PjD1/93ZB2u3veRW7DT+B9RIODeGiZW//pKdqJVUr4CsCiQoNa0fmqrVeXlKHgdq1EpFaHQhvs8ZRdN9TClHoyAXJUirKbpdUHt+xcmmDHP3+ySPFjkmyv6i0WWAZr+Aa47o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=OdodJ8Cc; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1745433161; x=1776969161;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8C24oquEqlFQCyJVkJrELveUXgWblfcGwF9vVLF97Eg=;
+  b=OdodJ8CcCXK2bkY/tu6KgBer6h7o6FVJ/lCEpTCt9sk7oUSD0KQvi0sK
+   3X1MUQNN5wpmbNLUV3G2BBqKpNDPBr5vGkYRnykU/ofH6Fm0pVfwJ1aZr
+   TFe8yHzef03c0AEpkjq5K5BWhlkkV263AuiLiRH/Shr0LoalsK9EAhKzm
+   tSsJJnPZbCXOZZumDiJdxerQizGYlDAVQ7Z32NrgNx666/1O90Zq7grft
+   pd4jNi53UdvliZo9yQtJSlHpUgYk35KpvqkgskO0G71hXMQW0dwij7L34
+   N1SFFzikWur/1sZSJbiek9h2P+uaCRFImTVD1kB2dX6ALkDQPl+lnobkP
+   Q==;
+X-CSE-ConnectionGUID: M53gAtjaT4+J1rEc0EEFpA==
+X-CSE-MsgGUID: G8cCMhK1RGa0pcCXWz04ew==
+X-IronPort-AV: E=Sophos;i="6.15,233,1739862000"; 
+   d="scan'208";a="272181072"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Apr 2025 11:32:40 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Wed, 23 Apr 2025 11:32:30 -0700
+Received: from brunhilda.pdev.net (10.10.85.11) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
+ Transport; Wed, 23 Apr 2025 11:32:30 -0700
+From: Don Brace <don.brace@microchip.com>
+To: <don.brace@microchip.com>, <scott.teel@microchip.com>,
+	<scott.benesh@microchip.com>, <gerry.morong@microchip.com>,
+	<mahesh.rajashekhara@microchip.com>, <mike.mcgowen@microchip.com>,
+	<murthy.bhat@microchip.com>, <kumar.meiyappan@microchip.com>,
+	<jeremy.reeves@microchip.com>, <hch@infradead.org>,
+	<James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
+	<joseph.szczypek@hpe.com>, <POSWALD@suse.com>, <cameron.cumberland@suse.com>,
+	Yi Zhang <yi.zhang@redhat.com>
+CC: <linux-scsi@vger.kernel.org>
+Subject: [PATCH 0/5] smartpqi updates
+Date: Wed, 23 Apr 2025 13:32:24 -0500
+Message-ID: <20250423183229.538572-1-don.brace@microchip.com>
+X-Mailer: git-send-email 2.49.0.391.g4bbb303af6
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <06c6c892-c597-4d1f-9d28-52455d6471f9@quicinc.com>
+Organization: Microchip Technology Inc.
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Wed, Apr 23, 2025 at 01:14:27AM +0530, Nitin Rawat wrote:
-> 
-> 
-> On 4/22/2025 6:15 PM, Rob Herring wrote:
-> > On Thu, Apr 17, 2025 at 06:16:45PM +0530, Nitin Rawat wrote:
-> > > There are emulation FPGA platforms or other platforms where UFS low
-> > > power mode is either unsupported or power efficiency is not a critical
-> > > requirement.
-> > > 
-> > > Disable all low power mode UFS feature based on the "disable-lpm" device
-> > > tree property parsed in platform driver.
-> > > 
-> > > Signed-off-by: Nitin Rawat <quic_nitirawa@quicinc.com>
-> > > ---
-> > >   drivers/ufs/host/ufs-qcom.c | 15 ++++++++-------
-> > >   1 file changed, 8 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> > > index 1b37449fbffc..1024edf36b68 100644
-> > > --- a/drivers/ufs/host/ufs-qcom.c
-> > > +++ b/drivers/ufs/host/ufs-qcom.c
-> > > @@ -1014,13 +1014,14 @@ static void ufs_qcom_set_host_caps(struct ufs_hba *hba)
-> > > 
-> > >   static void ufs_qcom_set_caps(struct ufs_hba *hba)
-> > >   {
-> > > -	hba->caps |= UFSHCD_CAP_CLK_GATING | UFSHCD_CAP_HIBERN8_WITH_CLK_GATING;
-> > > -	hba->caps |= UFSHCD_CAP_CLK_SCALING | UFSHCD_CAP_WB_WITH_CLK_SCALING;
-> > > -	hba->caps |= UFSHCD_CAP_AUTO_BKOPS_SUSPEND;
-> > > -	hba->caps |= UFSHCD_CAP_WB_EN;
-> > > -	hba->caps |= UFSHCD_CAP_AGGR_POWER_COLLAPSE;
-> > > -	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
-> > > -
-> > > +	if (!hba->disable_lpm) {
-> > > +		hba->caps |= UFSHCD_CAP_CLK_GATING | UFSHCD_CAP_HIBERN8_WITH_CLK_GATING;
-> > > +		hba->caps |= UFSHCD_CAP_CLK_SCALING | UFSHCD_CAP_WB_WITH_CLK_SCALING;
-> > > +		hba->caps |= UFSHCD_CAP_AUTO_BKOPS_SUSPEND;
-> > > +		hba->caps |= UFSHCD_CAP_WB_EN;
-> > > +		hba->caps |= UFSHCD_CAP_AGGR_POWER_COLLAPSE;
-> > > +		hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
-> > > +	}
-> > 
-> > Doesn't RuntimePM already have userspace controls? And that's a Linux
-> > feature that shouldn't really be controlled by DT. I think this property
-> > should still to things defined by the UFS spec.
-> 
-> Hi Rob,
-> Yes userspace has runtime PM control but by the time UFS driver probes
-> completes and userspace is up, there are chances runtime PM may get kicked
-> in.
+These patches are based on Martin Petersen's 6.16/scsi-queue tree
+  https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
+  6.16/scsi-queue
 
-That sounds like a problem more than 1 device would have...
+There are two main functional changes in this patch series:
+smartpqi-take-drives-offline-when-controller-is-offline
+smartpqi-fix-smp_processor_id-call-trace-for-preemptible-kernels
 
-Rob
+The other two patches add PCI-IDs for new controllers and change the
+driver version.
+
+This set of changes consists of:
+* smartpqi-take-drives-offline-when-controller-is-offline
+     On rare occasions, the controller can lock up and the driver was
+     removing the controller instance from OS but leaving the
+     drives exposed and their state was still 'running'.
+
+     This patch sets the drive state as 'offline' to avoid confusion.
+* smartpqi-add-new-pci_ids
+     Add support for more PCI devices.
+* smartpqi-enhance_wwid-logging-logic
+     Cosmetic change for logging WWIDs for NVMe devices and for drives
+     that support the extended format.
+* smartpqi-fix-smp_processor_id-call-trace-for-preemptible-kernels
+     When preemption is enabled, there are call traces in the console
+     logs which are annoying. The call trace mentions using
+     smp_processor_id(). Since the driver is only using this function call
+     when accessing a per_cpu variable, we changed the call to
+     raw_smp_processor_id(). This patch was written by
+     Yi Zhang <yi.zhang@redhat.com> and I am posting it on his behalf.
+* smartpqi-update-driver-version-to-2.1.34-035
+     No functional changes.
+
+---
+
+David Strahan (2):
+  smartpqi: take drives offline when controller is offline
+  smartpqi: add new pci ids
+
+Don Brace (1):
+  smartpqi: update driver version to 2.1.34-035
+
+Venkatesh Emparala (1):
+  Enhance WWID Logging Logic.
+
+Yi Zhang (1):
+  smartpqi: fix smp_processor_id() call trace for preemptible kernels
+
+ drivers/scsi/smartpqi/smartpqi_init.c | 140 ++++++++++++++++++++++++--
+ 1 file changed, 130 insertions(+), 10 deletions(-)
+
+-- 
+2.49.0.391.g4bbb303af6
+
 
