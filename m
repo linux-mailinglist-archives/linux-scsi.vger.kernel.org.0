@@ -1,34 +1,34 @@
-Return-Path: <linux-scsi+bounces-13664-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13663-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D56B8A997FC
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Apr 2025 20:33:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62605A997FB
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Apr 2025 20:33:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9CC61891E12
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Apr 2025 18:33:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12C093BCF8D
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Apr 2025 18:32:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B43AB28CF7C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D6CF28BABA;
 	Wed, 23 Apr 2025 18:33:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="XtZWTE/1"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="uyc03by5"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B64226B09F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4EFD26562C
 	for <linux-scsi@vger.kernel.org>; Wed, 23 Apr 2025 18:33:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745433188; cv=none; b=R39c78A7sMC8AlZjR0Q28XhKRk15NBUpdyulS55txN8yRUHeevaMnf9cxM4ivTZZ9YHlmNPF9gJ+4cWRCvne47LyTS4MLCKRVDOtf04/Z5Up96m5SC/FICqk6GWBbXpBeMhpQoWEvC8VZT9V+LUfFtc2SOK+73sM6+X7vCOT+ZE=
+	t=1745433188; cv=none; b=FfbZgDoM2iCgESbWsUDz5OZyFwS6afh+86NY772s2sWsbSuHv2fyv/l7C/YeBiRJz2FIUo5kafI6Ugs20yUP5asXG6Ju644j4ZRM07SK5IcKTL6ygLSPlfT/XP26lIimvYs1Wg3g3Y7JpLCN51MNuR2sfCJ/KQfw8PG+7zOtgg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745433188; c=relaxed/simple;
-	bh=k6RYu4gJzGOxlL6KVTX6HkVM2RCwXu9gHX4fp6HujWc=;
+	bh=n0xt0EwP5kUz+i3RaH/wuQlIapQKYFjYfIh5C7n3hIE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kOunbytwYPQVMLMsiPgmn1wW+Kif0pzM79dd+llTFtiGDJ8pXq17jXKKgPLNGOrJqAbAdJCZol/yYIXQhBnGji8btvSqmp6P8s75F2Xw3tUVYm86aM5C0MNsch5A8scGa1r7bUwWE6kQxVcydlNhwyzT7wUxtesC8RYispLGOsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=XtZWTE/1; arc=none smtp.client-ip=68.232.153.233
+	 MIME-Version:Content-Type; b=l+HIgxSsSRhMNaJFBRtNS1LslWGdMc6gufUGVYVDb9YXn5piSvsyTWtW5X0ielJqPmTRZYiAkZVlvcV527vbV0yy9oSJI0PFdJkksq0SmBrCVGkeNPqcMuVy3ZgCDBR5PREipOyX3XkTOguJcnJgneSxr/MDbJ5ICk5tIN9+QKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=uyc03by5; arc=none smtp.client-ip=68.232.153.233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,28 +36,28 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1745433188; x=1776969188;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=k6RYu4gJzGOxlL6KVTX6HkVM2RCwXu9gHX4fp6HujWc=;
-  b=XtZWTE/1pkCEYxN1FsJSUm2Kt4fRIdYWC+xrGJs6Y8dslj7cpEBhpKvG
-   dRpl8dbbsA9/Jx9X4zDDcBdum3gRn/PEPDbeXxBdFd+zbhTiFYgB83Jqm
-   8XOYh0HQVc3117EgGk+7PhM6fB1lKx0VJGfXMUVTvJWYlysiiBip1g0Bx
-   ur66IDPj6Z6/Z6MYerkA/nCBY3hE0Ls/jPLLCl4wR9FryHoDZhgnmakhR
-   apLjcJnSVOL/VKL6WjTjiSyKSO++A2OzdyIfZkNSldxehTyrlQtf3EQEf
-   Yh+Et8aHaXr/+aDERAFqT2p+sb/USIgoYGSej3wKO7crv1yKm6TVuzgz+
-   w==;
+  bh=n0xt0EwP5kUz+i3RaH/wuQlIapQKYFjYfIh5C7n3hIE=;
+  b=uyc03by5LRxMPk6GluodOggELif2I8rrrSSN9w7zb9V90Vw3/Z0nkrNK
+   iveKS5VaRkP4n5GZWAFtaGuHAimpr0uART8HRPQqTzdpdqHrPkiy1yKsG
+   zkJXC3Z0ZnwWEi/AFQDGzXm32pwTv7jkIYxmAfTlY8QGaGDDfAnPB38dG
+   YuZMR6bdersZRCNRVyxsc4woStTyG8g1+LuJWl/OPZuyj+Yh9kGGvvi1M
+   +3OBPS+1KjVQohIsHze/EPUDJ3qgjJQK2inhR8XdVazl0RFuWgWGBI7++
+   ekBzff0S28IBYIfQdIv7GQ4oiczED3HrtR9SdLUhGb1zHxuE+Lpb/nB7Y
+   g==;
 X-CSE-ConnectionGUID: whCUM/FPRpqRy+T/Tuj6Xw==
-X-CSE-MsgGUID: mEmgiD/rQNW5IEY/Chf+rQ==
+X-CSE-MsgGUID: B3/WCib2Q2G84vT2Q+gSrw==
 X-IronPort-AV: E=Sophos;i="6.15,233,1739862000"; 
-   d="scan'208";a="40821227"
+   d="scan'208";a="40821228"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Apr 2025 11:33:07 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Wed, 23 Apr 2025 11:32:35 -0700
+ 15.1.2507.44; Wed, 23 Apr 2025 11:32:36 -0700
 Received: from brunhilda.pdev.net (10.10.85.11) by chn-vm-ex04.mchp-main.com
  (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
- Transport; Wed, 23 Apr 2025 11:32:34 -0700
+ Transport; Wed, 23 Apr 2025 11:32:35 -0700
 From: Don Brace <don.brace@microchip.com>
 To: <don.brace@microchip.com>, <scott.teel@microchip.com>,
 	<scott.benesh@microchip.com>, <gerry.morong@microchip.com>,
@@ -68,9 +68,9 @@ To: <don.brace@microchip.com>, <scott.teel@microchip.com>,
 	<joseph.szczypek@hpe.com>, <POSWALD@suse.com>, <cameron.cumberland@suse.com>,
 	Yi Zhang <yi.zhang@redhat.com>
 CC: <linux-scsi@vger.kernel.org>
-Subject: [PATCH 4/5] smartpqi: fix smp_processor_id() call trace for preemptible kernels
-Date: Wed, 23 Apr 2025 13:32:28 -0500
-Message-ID: <20250423183229.538572-5-don.brace@microchip.com>
+Subject: [PATCH 5/5] smartpqi: update driver version to 2.1.34-035
+Date: Wed, 23 Apr 2025 13:32:29 -0500
+Message-ID: <20250423183229.538572-6-don.brace@microchip.com>
 X-Mailer: git-send-email 2.49.0.391.g4bbb303af6
 In-Reply-To: <20250423183229.538572-1-don.brace@microchip.com>
 References: <20250423183229.538572-1-don.brace@microchip.com>
@@ -84,61 +84,36 @@ Organization: Microchip Technology Inc.
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-From: Yi Zhang <yi.zhang@redhat.com>
+Update driver version to  2.1.34-035.
 
-Correct kernel call trace when calling smp_processor_id() when called in
-preemptible kernels by using raw_smp_processor_id().
-
-smp_processor_id() checks to see if preemption is disabled and if not,
-issue an error message followed by a call to dump_stack().
-
-Brief example of call trace:
-kernel:  check_preemption_disabled: 436 callbacks suppressed
-kernel:  BUG: using smp_processor_id() in preemptible [00000000]
-         code: kworker/u1025:0/2354
-kernel:  caller is pqi_scsi_queue_command+0x183/0x310 [smartpqi]
-kernel:  CPU: 129 PID: 2354 Comm: kworker/u1025:0
-kernel:  ...
-kernel:  Workqueue: writeback wb_workfn (flush-253:0)
-kernel:  Call Trace:
-kernel:   <TASK>
-kernel:   dump_stack_lvl+0x34/0x48
-kernel:   check_preemption_disabled+0xdd/0xe0
-kernel:   pqi_scsi_queue_command+0x183/0x310 [smartpqi]
-kernel:  ...
-
-Fixes: 283dcc1b142e ("scsi: smartpqi: add counter for parity write stream requests")
+Reviewed-by: Gerry Morong <gerry.morong@microchip.com>
+Reviewed-by: Scott Teel <scott.teel@microchip.com>
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
-Tested-by: Don Brace <don.brace@microchip.com>
-Signed-off-by: Yi Zhang <yi.zhang@redhat.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi_init.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index efc042071ec0..e8abfc56d0f0 100644
+index e8abfc56d0f0..a7ab87220c0c 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -6003,7 +6003,7 @@ static bool pqi_is_parity_write_stream(struct pqi_ctrl_info *ctrl_info,
- 			pqi_stream_data->next_lba = rmd.first_block +
- 				rmd.block_cnt;
- 			pqi_stream_data->last_accessed = jiffies;
--			per_cpu_ptr(device->raid_io_stats, smp_processor_id())->write_stream_cnt++;
-+				per_cpu_ptr(device->raid_io_stats, raw_smp_processor_id())->write_stream_cnt++;
- 			return true;
- 		}
+@@ -32,11 +32,11 @@
+ #define BUILD_TIMESTAMP
+ #endif
  
-@@ -6082,7 +6082,7 @@ static int pqi_scsi_queue_command(struct Scsi_Host *shost, struct scsi_cmnd *scm
- 			rc = pqi_raid_bypass_submit_scsi_cmd(ctrl_info, device, scmd, queue_group);
- 			if (rc == 0 || rc == SCSI_MLQUEUE_HOST_BUSY) {
- 				raid_bypassed = true;
--				per_cpu_ptr(device->raid_io_stats, smp_processor_id())->raid_bypass_cnt++;
-+				per_cpu_ptr(device->raid_io_stats, raw_smp_processor_id())->raid_bypass_cnt++;
- 			}
- 		}
- 		if (!raid_bypassed)
+-#define DRIVER_VERSION		"2.1.30-031"
++#define DRIVER_VERSION		"2.1.34-035"
+ #define DRIVER_MAJOR		2
+ #define DRIVER_MINOR		1
+-#define DRIVER_RELEASE		30
+-#define DRIVER_REVISION		31
++#define DRIVER_RELEASE		34
++#define DRIVER_REVISION		35
+ 
+ #define DRIVER_NAME		"Microchip SmartPQI Driver (v" \
+ 				DRIVER_VERSION BUILD_TIMESTAMP ")"
 -- 
 2.49.0.391.g4bbb303af6
 
