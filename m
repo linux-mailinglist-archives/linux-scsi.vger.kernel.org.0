@@ -1,141 +1,265 @@
-Return-Path: <linux-scsi+bounces-13707-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13704-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BEDAA9D229
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Apr 2025 21:48:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC970A9D173
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Apr 2025 21:24:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79E374E099A
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Apr 2025 19:48:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E80B9A345F
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Apr 2025 19:24:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2F992165E4;
-	Fri, 25 Apr 2025 19:48:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C514A21ABB9;
+	Fri, 25 Apr 2025 19:24:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="zaNIB0em"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f75tO6U+"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59317E9
-	for <linux-scsi@vger.kernel.org>; Fri, 25 Apr 2025 19:48:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101612192E4
+	for <linux-scsi@vger.kernel.org>; Fri, 25 Apr 2025 19:24:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745610490; cv=none; b=fd5bv+6UAuVI6FKcuqSYOMjDjJqRS8u/kM+C3F+AsUKUvrBDQCzFHQe7S5FhypPYOEf9XmJjZ5dxjm+ozyZnV93/fnWqx+mQcwWhrlD38kOcvK4SChW/vD+vxbXV/so+hzaYPA/Exs6D8tZZR7u8D8YU7fbmFYgn0OJ+MkDWUbc=
+	t=1745609086; cv=none; b=WurPyreOF8aotiwGGRiPKN7kttfSFV82Dr2cE2ojl47dKPLu/bgK81J4thANMUxLCGLPxIgkvbetAcDun5nxFxusmTafK786DiMZ+75rmALkjK9kwNShpt8sIG/vEEQu/9+8IZqjRXSJpyXApuRvRxa4i2JreGCczNclB42Cyfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745610490; c=relaxed/simple;
-	bh=kaVIw/22O1GCmj11mvIUi7tcAyAUdCPPBa6yErxA9LE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=KvJlSVoaKiA9IoyUvxIREU9dHhbJ3gXU4Jimn3uC2TilGtWQg062zYZfdR0UePn59Qu0242sD3VLKTAoBISar6XztAs1M4nqjTECdZpAbnkJQPEKfot5nzidaWKiGrx+MaCoiH5jGDXyaw8iPvwtHtBQViqtQ2oQ4xcK7rT9P4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=zaNIB0em; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-39c13fa05ebso1743145f8f.0
-        for <linux-scsi@vger.kernel.org>; Fri, 25 Apr 2025 12:48:08 -0700 (PDT)
+	s=arc-20240116; t=1745609086; c=relaxed/simple;
+	bh=CRm4p7LF+pCg6J2N9r6mrSVhXUNB0AGvOgRTApIlemA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=WzaMsDOYDXqAoEF28UBDWoUBBoewFK1CyT9XksTOKZGBmxjOhSxhKI0W23Dd7Cisw5ZY4zAJa0LWroGCWV90UUEm6kuK4JKLt10wJVjXafAZgfF3SM7WbptgYZCpUZuvfPVMNnBiqH2R3S6WQmFdKIc7S09ry3c1TWnyxeCiNX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f75tO6U+; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7394945d37eso2375379b3a.3
+        for <linux-scsi@vger.kernel.org>; Fri, 25 Apr 2025 12:24:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1745610487; x=1746215287; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1745609084; x=1746213884; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9MsSm/oC6fggdpvVcy29aPeLr5GjoL3t6EBPNylpw94=;
-        b=zaNIB0emmBAYTHZYlCUPNyR/HctjwWcAWNDcqoZipMMNwfBSvSOGhr8U/oJ0u08o09
-         3qX7zeGM4xJXIViu1Vq/5SCvAMq9taIimuX3DvT7O9wi/gsPjkCZhYm/M5DS8+3BVwZg
-         aoZQWyXBRzZfSrthEElwS6edWu1CIZNcJrZZVVj8FAzy2OTo7NW9o9DRXkkhxaV/9NCX
-         FICO7HWBxUvl65Sx2OSGhIiHEpxmX5JgiTy0VYdn4z+NJ+fr9TtIB9dYK7w8dPAB5AHa
-         e2yx74oWq/XXSgVzp9ISibSHBp+8ix7ch2Rui684zGgf7J5BErSsMG5F7c/QvVn3exXH
-         0beg==
+        bh=KTKGkVCgnaqhLDMH0uVOvq4krRkqQK8k2phVHceZtBU=;
+        b=f75tO6U+UjxXFsef+BjTXEIp5Cg6eg0UKYggPkSIam2RL5kC0ZJCjvZGQrpoip5BYa
+         nMyj+1eYL/mo9g1TxfEmObPgL8K+ewp4+7zDrXuTDyxlw8+5Cy7z17a1YvjKwGhu4AiX
+         9eD+1/TSDkORrX+uAfXhOjeHObFU0zY/Gbwhqp9Jt7O6xBA6ud98dWdrX97Uu/CbasWc
+         eW8SKn5hq+W+SkekEv+yukLOvH7Ck6yBIAlTwyztpMMGQZNeJ9z7bE8zis2y0oW5WA9l
+         AZpqy0rgb3rZZXv8RucxfNXF3xkClfU2TP3r3EQBTaEvvwLM+ssJjAs1ua4ZMF/dfGsX
+         51dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745610487; x=1746215287;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9MsSm/oC6fggdpvVcy29aPeLr5GjoL3t6EBPNylpw94=;
-        b=FC3DgQJFV+Ave77vf91rxlbZPyD24DoDPF/hD+0Bcvwmbs217H72MrbGcq+MRc+vIn
-         xjItEcLkdgMrdpX3YomJuM5ZFn7qNclmbVX5jK08RIwa/0689cYacX5rZo5JjQUSqMHP
-         Ip3QORhjudP9BYldPAx3khuxW2FDtb9LeE2jc5qtBPdEFOB6PRD/5yHruJOXpVQczHu9
-         Boh+LMW6ynPeFQ1jdx+nNzBZs4UrO3onL5CrzrB+E1pb9aaR77knccAfLq1NXkJggjgG
-         WKR5h1l3uPexHhqnPHIEN8/bmWjqQAwxWSp1WB4QZ28zpCnpiDFp7vjuRoNc89NM3AjD
-         9N2A==
-X-Forwarded-Encrypted: i=1; AJvYcCUMfJdJinOSnykDuf/+SoXpvY+0x/PW6ENhhiTXzZ3M188WjTgFG50KukmMFa2o7vIyGS8xogXcPqrN@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0NHuHn9CHn8uzPIUf9Zf6sbHfRDawSy3Z4Y4gluzKM4SKwlMD
-	FYLi7Nc/S4wCmIsawzx+XScommWaLMRo55OeM3uGDQurLv3UDmrWzlGonywYuDU=
-X-Gm-Gg: ASbGncvRJchONxDaC9zAv6UWq4V1I5eJ5aJek92OPa1pBbY3dUofr8xSwIOIHW3Ny6G
-	iI4yHLd08yO0hlSeZXr5bNL0fYBEvsZ/ZDbPsjTIFCG7V+IkE0eEav9fNziOUiKZHEUE4I8BobO
-	RVPJeL6G2S4dBKvQ9UQtTLXcLkpDWvmlCZ2mFKT8VKGv9nsKiv4KQaPdZUkb5Yeixh74rMA7Q6f
-	Sm5j37aLNkQKdlF+GHrq2myhz94KOeddElsJJLxLo7jJJj81+hGRku45+hDRpIfmyB62IUamqmr
-	kHS7olmxsiwjImNDZa1M/LQHw2uTI5A3wyaf0tQoo70SZEITvJLRhvlj4yaePMisPOJEF9TTI34
-	A3UuHuihJseIpPkNna5lYYKGpT3RCqXH4nskPbDuIwQPVe6193B00SFJMYafA2ss=
-X-Google-Smtp-Source: AGHT+IHfsn5wCKhwTa0J8zfuwB8lcJPWgRUEQdZlhyrj1mUqnBM8NKHg90Ct03YfbCjHwLs/15BqRw==
-X-Received: by 2002:adf:e5c3:0:b0:39a:c467:a095 with SMTP id ffacd0b85a97d-3a07aa7545emr335807f8f.24.1745610486979;
-        Fri, 25 Apr 2025 12:48:06 -0700 (PDT)
-Received: from localhost (2a02-8388-6584-6400-d322-7350-96d2-429d.cable.dynamic.v6.surfer.at. [2a02:8388:6584:6400:d322:7350:96d2:429d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4409d2d8154sm66076505e9.30.2025.04.25.12.48.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Apr 2025 12:48:06 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1745609084; x=1746213884;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KTKGkVCgnaqhLDMH0uVOvq4krRkqQK8k2phVHceZtBU=;
+        b=d/L6RgY7Ck0nSTJ99hKCBbp2m1tMaqyx3qLZH581D6Vp348JCTpnEG2lvSDA4hiLLG
+         tBpQo5UgWk9xhmSeLk/55U4tnVWUTar2dvasthl255hM/K+UoyKUWmVuBSJ3OzpVEI/5
+         bytbowC7AVitOv5AmoVmVVQGNoBTPI+WRG4g2o3y9CQh6zF0Fcg/O7RhvBnWtUm/cITy
+         PiWO1xFsrkWhiYO3a9jINeBRUZdOo8Tpevmbs40M29XDOnrIRW84fim7+2SrtbEcrd0Z
+         AITPmVuDa0CpKbsK2QgA9byOJbNSwnHUHv5vV0c/aKGXgvRD0H9ZzXdXfZc9bRpv3plP
+         ANOw==
+X-Gm-Message-State: AOJu0Yzv+3zEG5fbGqzsuX70kwl6rR5KqbXVghk0ptkK1VEIuDOU0xTR
+	VkjjDcwJmXLFiWtNCE8r4yMn6qnn2uO1OPmjQdMMHrjMg+UHRNUhHXQSUQ==
+X-Gm-Gg: ASbGnctVD6et/dhFm/TqBSbacGyoELqg+QnkMoWRaEoRRmTtt3ZWIFrZ/ILHePbS1yZ
+	JA9MU9rDDx2wpSZ08+xGf0l/91z21X39/JXCbAPZWI+IC3q1d71h0ooEamrHgx4+VTlLztro4N5
+	w1CPODuDFbtGrC1V0aVSdjkG/FMgiwQiWeIvTHCUwghdkcrsvvsSkOK82ryHGQRJWt69M8rBLyh
+	ZsxbpjwfJZywG5LjMC92Ee3dFkS6BM1+FljU/9HWx9Upnjsf0kpONv4m+ReMKTIWJHiwbUH1GSt
+	VxL9mb3a9quABfjqzQiqaUy8/U6qfxbKz1IODBItKyF4X+SE8aUcmCxY+U6b6ipl30TO91Hd5cz
+	kvMAkk6YFMubOU0r7QnNSJqNe8B6MdhM6bzmF
+X-Google-Smtp-Source: AGHT+IEUoDmzA3+rKhXHNBt+nPcTZUu4DNc0yc6D5lApgpy/r1HNezPv6b+ld1CSQzp8ewVVlTMY4Q==
+X-Received: by 2002:a05:6a00:3d4c:b0:73e:96f:d4c1 with SMTP id d2e1a72fcca58-73ff72e40a1mr889411b3a.13.1745609084186;
+        Fri, 25 Apr 2025 12:24:44 -0700 (PDT)
+Received: from dhcp-10-231-55-133.dhcp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73e25a6a649sm3667513b3a.109.2025.04.25.12.24.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 25 Apr 2025 12:24:43 -0700 (PDT)
+From: Justin Tee <justintee8345@gmail.com>
+To: linux-scsi@vger.kernel.org
+Cc: jsmart2021@gmail.com,
+	justin.tee@broadcom.com,
+	Justin Tee <justintee8345@gmail.com>
+Subject: [PATCH 6/8] lpfc: Create lpfc_vmid_info sysfs entry
+Date: Fri, 25 Apr 2025 12:48:04 -0700
+Message-Id: <20250425194806.3585-7-justintee8345@gmail.com>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20250425194806.3585-1-justintee8345@gmail.com>
+References: <20250425194806.3585-1-justintee8345@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 25 Apr 2025 21:48:04 +0200
-Message-Id: <D9FZ9U3AEXW4.1I12FX3YQ3JPW@fairphone.com>
-To: "Ziqi Chen" <quic_ziqichen@quicinc.com>, <quic_cang@quicinc.com>,
- <bvanassche@acm.org>, <mani@kernel.org>, <beanhuo@micron.com>,
- <avri.altman@wdc.com>, <junwoo80.lee@samsung.com>,
- <martin.petersen@oracle.com>, <quic_nguyenb@quicinc.com>,
- <quic_nitirawa@quicinc.com>, <peter.wang@mediatek.com>,
- <quic_rampraka@quicinc.com>
-Cc: <linux-arm-msm@vger.kernel.org>, <linux-scsi@vger.kernel.org>, "Neil
- Armstrong" <neil.armstrong@linaro.org>, "Matthias Brugger"
- <matthias.bgg@gmail.com>, "AngeloGioacchino Del Regno"
- <angelogioacchino.delregno@collabora.com>, "open list:ARM/Mediatek SoC
- support:Keyword:mediatek" <linux-kernel@vger.kernel.org>, "moderated
- list:ARM/Mediatek SoC support:Keyword:mediatek"
- <linux-arm-kernel@lists.infradead.org>, "moderated list:ARM/Mediatek SoC
- support:Keyword:mediatek" <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v5 0/8] Support Multi-frequency scale for UFS
-From: "Luca Weiss" <luca.weiss@fairphone.com>
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a
-References: <20250213080008.2984807-1-quic_ziqichen@quicinc.com>
-In-Reply-To: <20250213080008.2984807-1-quic_ziqichen@quicinc.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Ziqi,
+A vmid_info sysfs entry is created as a convenience designed for users to
+obtain VMID information without having to log into fabrics for similar
+info.
 
-On Thu Feb 13, 2025 at 9:00 AM CET, Ziqi Chen wrote:
-> With OPP V2 enabled, devfreq can scale clocks amongst multiple frequency
-> plans. However, the gear speed is only toggled between min and max during
-> clock scaling. Enable multi-level gear scaling by mapping clock frequenci=
-es
-> to gear speeds, so that when devfreq scales clock frequencies we can put
-> the UFS link at the appropraite gear speeds accordingly.
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+---
+ drivers/scsi/lpfc/lpfc_attr.c | 134 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 134 insertions(+)
 
-I believe this series is causing issues on SM6350:
+diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
+index 397216ff2c7e..efd02c464549 100644
+--- a/drivers/scsi/lpfc/lpfc_attr.c
++++ b/drivers/scsi/lpfc/lpfc_attr.c
+@@ -291,6 +291,138 @@ lpfc_cmf_info_show(struct device *dev, struct device_attribute *attr,
+ 	return len;
+ }
+ 
++static ssize_t
++lpfc_vmid_info_show(struct device *dev, struct device_attribute *attr,
++		    char *buf)
++{
++	struct Scsi_Host  *shost = class_to_shost(dev);
++	struct lpfc_vport *vport = (struct lpfc_vport *)shost->hostdata;
++	struct lpfc_hba   *phba = vport->phba;
++	struct lpfc_vmid  *vmp;
++	int  len = 0, i, j, k, cpu;
++	char hxstr[LPFC_MAX_VMID_SIZE * 3] = {0};
++	struct timespec64 curr_tm;
++	struct lpfc_vmid_priority_range *vr;
++	u64 *lta, rct_acc = 0, max_lta = 0;
++	struct tm tm_val;
++
++	ktime_get_ts64(&curr_tm);
++
++	len += scnprintf(buf + len, PAGE_SIZE - len, "Key 'vmid':\n");
++
++	/* if enabled continue, else return */
++	if (lpfc_is_vmid_enabled(phba)) {
++		len += scnprintf(buf + len, PAGE_SIZE - len,
++				 "lpfc VMID Page: ON\n\n");
++	} else {
++		len += scnprintf(buf + len, PAGE_SIZE - len,
++				 "lpfc VMID Page: OFF\n\n");
++		return len;
++	}
++
++	/* if using priority tagging */
++	if (vport->phba->pport->vmid_flag & LPFC_VMID_TYPE_PRIO) {
++		len += scnprintf(buf + len, PAGE_SIZE - len,
++				"VMID priority ranges:\n");
++		vr = vport->vmid_priority.vmid_range;
++		for (i = 0; i < vport->vmid_priority.num_descriptors; ++i) {
++			len += scnprintf(buf + len, PAGE_SIZE - len,
++					"\t[x%x - x%x], qos: x%x\n",
++					vr->low, vr->high, vr->qos);
++			vr++;
++		}
++	}
++
++	for (i = 0; i < phba->cfg_max_vmid; i++) {
++		vmp = &vport->vmid[i];
++		max_lta = 0;
++
++		/* only if the slot is used */
++		if (!(vmp->flag & LPFC_VMID_SLOT_USED) ||
++		    !(vmp->flag & LPFC_VMID_REGISTERED))
++			continue;
++
++		/* if using priority tagging */
++		if (vport->phba->pport->vmid_flag & LPFC_VMID_TYPE_PRIO) {
++			len += scnprintf(buf + len, PAGE_SIZE - len,
++					"VEM ID: %02x:%02x:%02x:%02x:"
++					"%02x:%02x:%02x:%02x:%02x:%02x:"
++					"%02x:%02x:%02x:%02x:%02x:%02x\n",
++					vport->lpfc_vmid_host_uuid[0],
++					vport->lpfc_vmid_host_uuid[1],
++					vport->lpfc_vmid_host_uuid[2],
++					vport->lpfc_vmid_host_uuid[3],
++					vport->lpfc_vmid_host_uuid[4],
++					vport->lpfc_vmid_host_uuid[5],
++					vport->lpfc_vmid_host_uuid[6],
++					vport->lpfc_vmid_host_uuid[7],
++					vport->lpfc_vmid_host_uuid[8],
++					vport->lpfc_vmid_host_uuid[9],
++					vport->lpfc_vmid_host_uuid[10],
++					vport->lpfc_vmid_host_uuid[11],
++					vport->lpfc_vmid_host_uuid[12],
++					vport->lpfc_vmid_host_uuid[13],
++					vport->lpfc_vmid_host_uuid[14],
++					vport->lpfc_vmid_host_uuid[15]);
++		}
++
++		/* IO stats */
++		len += scnprintf(buf + len, PAGE_SIZE - len,
++				"ID00 READs:%llx WRITEs:%llx\n",
++				vmp->io_rd_cnt,
++				vmp->io_wr_cnt);
++		for (j = 0, k = 0; j < strlen(vmp->host_vmid); j++, k += 3)
++			sprintf((char *)(hxstr + k), "%2x ", vmp->host_vmid[j]);
++		/* UUIDs */
++		len += scnprintf(buf + len, PAGE_SIZE - len, "UUID:\n");
++		len += scnprintf(buf + len, PAGE_SIZE - len, "%s\n", hxstr);
++
++		len += scnprintf(buf + len, PAGE_SIZE - len, "String (%s)\n",
++				vmp->host_vmid);
++
++		if (vport->phba->pport->vmid_flag & LPFC_VMID_TYPE_PRIO)
++			len += scnprintf(buf + len, PAGE_SIZE - len,
++					"CS_CTL VMID: 0x%x\n",
++					vmp->un.cs_ctl_vmid);
++		else
++			len += scnprintf(buf + len, PAGE_SIZE - len,
++					"Application id: 0x%x\n",
++					vmp->un.app_id);
++
++		/* calculate the last access time */
++		for_each_possible_cpu(cpu) {
++			lta = per_cpu_ptr(vmp->last_io_time, cpu);
++			if (!lta)
++				continue;
++
++			/* if last access time is less than timeout */
++			if (time_after((unsigned long)*lta, jiffies))
++				continue;
++
++			if (*lta > max_lta)
++				max_lta = *lta;
++		}
++
++		rct_acc = jiffies_to_msecs(jiffies - max_lta) / 1000;
++		/* current time */
++		time64_to_tm(ktime_get_real_seconds(),
++			     -(sys_tz.tz_minuteswest * 60) - rct_acc, &tm_val);
++
++		len += scnprintf(buf + len, PAGE_SIZE - len,
++				 "Last Access Time :"
++				 "%ld-%d-%dT%02d:%02d:%02d\n\n",
++				 1900 + tm_val.tm_year, tm_val.tm_mon + 1,
++				 tm_val.tm_mday, tm_val.tm_hour,
++				 tm_val.tm_min, tm_val.tm_sec);
++
++		if (len >= PAGE_SIZE)
++			return len;
++
++		memset(hxstr, 0, LPFC_MAX_VMID_SIZE * 3);
++	}
++	return len;
++}
++
+ /**
+  * lpfc_drvr_version_show - Return the Emulex driver string with version number
+  * @dev: class unused variable.
+@@ -3011,6 +3143,7 @@ static DEVICE_ATTR(protocol, S_IRUGO, lpfc_sli4_protocol_show, NULL);
+ static DEVICE_ATTR(lpfc_xlane_supported, S_IRUGO, lpfc_oas_supported_show,
+ 		   NULL);
+ static DEVICE_ATTR(cmf_info, 0444, lpfc_cmf_info_show, NULL);
++static DEVICE_ATTR_RO(lpfc_vmid_info);
+ 
+ #define WWN_SZ 8
+ /**
+@@ -6117,6 +6250,7 @@ static struct attribute *lpfc_hba_attrs[] = {
+ 	&dev_attr_lpfc_vmid_inactivity_timeout.attr,
+ 	&dev_attr_lpfc_vmid_app_header.attr,
+ 	&dev_attr_lpfc_vmid_priority_tagging.attr,
++	&dev_attr_lpfc_vmid_info.attr,
+ 	NULL,
+ };
+ 
+-- 
+2.38.0
 
-[    0.859449] ufshcd-qcom 1d84000.ufshc: ufs_qcom_freq_to_gear_speed: Unsu=
-pported clock freq : 200000000
-[    0.886668] ufshcd-qcom 1d84000.ufshc: UNIPRO clk freq 200 MHz not suppo=
-rted
-[    0.903791] devfreq 1d84000.ufshc: dvfs failed with (-22) error
-
-That's with this patch, I actually haven't tried without on v6.15-rc3
-https://lore.kernel.org/all/20250314-sm6350-ufs-things-v1-2-3600362cc52c@fa=
-irphone.com/
-
-I believe the issue appears because core clk and unipro clk rates don't
-match on this platform, so this 200 MHz for GCC_UFS_PHY_AXI_CLK is not a
-valid unipro clock rate, but for GCC_UFS_PHY_UNIPRO_CORE_CLK it's
-specified to 150 MHz in the opp table.
-
-Regards
-Luca
-
->
-> This series has been tested on below platforms -
-> sm8550 mtp + UFS3.1
-> SM8650 MTP + UFS3.1
-> SM8750 MTP + UFS4.0
 
