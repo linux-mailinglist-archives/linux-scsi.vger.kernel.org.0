@@ -1,169 +1,120 @@
-Return-Path: <linux-scsi+bounces-13760-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13770-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9025BAA3D9B
-	for <lists+linux-scsi@lfdr.de>; Wed, 30 Apr 2025 02:03:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B986AA3FC5
+	for <lists+linux-scsi@lfdr.de>; Wed, 30 Apr 2025 02:48:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 779EB481183
-	for <lists+linux-scsi@lfdr.de>; Wed, 30 Apr 2025 00:02:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F0381A81133
+	for <lists+linux-scsi@lfdr.de>; Wed, 30 Apr 2025 00:47:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB5C32922CA;
-	Tue, 29 Apr 2025 23:51:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22CD12DC772;
+	Wed, 30 Apr 2025 00:47:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IbqOvxeH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sdy2T0GX"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CA32922C4;
-	Tue, 29 Apr 2025 23:51:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1202DC768;
+	Wed, 30 Apr 2025 00:47:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970704; cv=none; b=N0RvZUQODoXbawYb+3vZiILpD44h5AdUHzYsxmUzRpMubSEKMan1NOpK3nywakT21EVYNM9RYrdsnzVmOkN82Nn6OnNFKrCKAQD+Tb83Xfxan3R7Z1wIQXITgAXnX2LkY/n7rzY99EcKTN8aEVarpGSIN+IDnCenskK0j9MhjEY=
+	t=1745974030; cv=none; b=FdIJ0/zw5YxgOHHmX3E+ifynXwPeBKNk+6d3QMA6qi1pj2oRMXegGs8wIsmzs24Gcs5emldQzggVxAZHsFXXXMHxfsmh2ZLDbrSvkrfnlwGOzBOfh+f7+D4jNTmicVI+WaXcTgwmAn/DlMBQ5WtJULCFFigmWFLa7l/14apvFfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970704; c=relaxed/simple;
-	bh=OuPv82rWcLem94oBrXnB1UlTGA80HpJ8wilm7gvnBMU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JlyWinYtLGTNOy1A5GwaWDv0Vx2liBVMqv4EBNgglYLnKG/7b4UnFUCaJm6p2+zakLF25Zxp52yHAwK2ItAJIS93vid+DY3J9ZJ2VstUyo07oeMGq1/5Ixv8khdI3ngHrj6loU0xGrib24AecFCnsv2tsje+v9bUSE56iI/sY2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IbqOvxeH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0609EC4CEE3;
-	Tue, 29 Apr 2025 23:51:42 +0000 (UTC)
+	s=arc-20240116; t=1745974030; c=relaxed/simple;
+	bh=0y9B9wg71iPcc94hYHsLcd4ggl+XIo8SKgRXNkzmgnQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=BLBkS7F/d05XT3mAIyigOawe2eAU0Omuv29ASTLzflM+//bUq38HcT9bMWdw+9HR+Iy2/fdEXs4tmMEF+PRFTrgXCafS44mDtdl5IlQf1AZ/hbcqPh46h3ryNnXFg2BhCZRtRV9YUYweZHM3rYgYq1Eg4k81XcEX9mbCCx0tBmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sdy2T0GX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 859E7C4CEE3;
+	Wed, 30 Apr 2025 00:47:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745970704;
-	bh=OuPv82rWcLem94oBrXnB1UlTGA80HpJ8wilm7gvnBMU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IbqOvxeHT/bqSCUvGRBknbO9VAxGYS8kFBiGifxqPHJJhy62W7NiXn4J7Bg+VCA+a
-	 F9NVX920it/yOgSRy/Us8yqz2eAKgS3Nbi5ZPWT6AqWuOJhDwmJ7OOTPAgyOlVGjrH
-	 puUEuZkhKeX2aN9BS/M9xZ8TwHLeuyBeWKuslfcrEnuIeY851CWHry+JmCG6N47pJ0
-	 ZbtGMa1ax8n6Pa51djMFIAwL68MhZY+VI762sWxjvkMMFolTNq5PbEALxeDb4tMjqX
-	 2Xqa1lYXEhtCaFSFxOCHE3Hnmq6QgTP5vCOY6MmnVoIj+rB8liLjbtFi/RGZBv7Zr4
-	 ckjr9hWdCkg9A==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Manish Pandey <quic_mapa@quicinc.com>,
-	Bean Huo <beanhuo@micron.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Sasha Levin <sashal@kernel.org>,
-	James.Bottomley@HansenPartnership.com,
-	bvanassche@acm.org,
-	peter.wang@mediatek.com,
-	avri.altman@wdc.com,
-	quic_nguyenb@quicinc.com,
-	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 10/37] scsi: ufs: Introduce quirk to extend PA_HIBERN8TIME for UFS devices
-Date: Tue, 29 Apr 2025 19:50:55 -0400
-Message-Id: <20250429235122.537321-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250429235122.537321-1-sashal@kernel.org>
-References: <20250429235122.537321-1-sashal@kernel.org>
+	s=k20201202; t=1745974030;
+	bh=0y9B9wg71iPcc94hYHsLcd4ggl+XIo8SKgRXNkzmgnQ=;
+	h=From:Date:Subject:To:Cc:From;
+	b=sdy2T0GXO8CQlUN6voiRN1QFUXKDE5Aoouowjk4T3KqnfwqXPFd7eqJtTdIgVLcHk
+	 lA10dVUhAHGMVG4+hLd1ENGrYkZfVSg1LSuiP1dipodi3K8c8HhK/uH4MyGkTrzXyl
+	 9E+CG4mF7DePlUX6YBNqUzRiSs+X3ZMy1FFCNKphVe28Vs8qm4IBu9YQgcbP6giBNr
+	 kPNKOj7AebpQEVe+cYXtnNdkrY5zhmyiPiID8/OgnXrtp1UEMXGltFkm5sU0YHib3l
+	 /jwG+cUXFMAb2VasHwHokXZSApuPhVy6KxhQeaGiq8h1BvoyoNazF2b4a55xoyymQo
+	 7f/oa0t0iAisg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 29 Apr 2025 17:46:49 -0700
+Subject: [PATCH] scsi: dc395x: Remove leftover if statement in reselect()
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.25
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250429-scsi-dc395x-fix-uninit-var-v1-1-25215d481020@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAPhyEWgC/x3MMQqAMAxA0atIZgPaqlivIg4ljZqlSqMiiHe3O
+ D74/AeUk7DCUDyQ+BKVLWbUZQG0+rgwSsgGU5m2aoxDJRUMZF174yw3nlGiHHj5hFTTHPre+c4
+ GyIM9cS7++Ti97wcvjvGybAAAAA==
+X-Change-ID: 20250429-scsi-dc395x-fix-uninit-var-c1cfd889a63d
+To: Oliver Neukum <oneukum@suse.com>, Ali Akcaagac <aliakc@web.de>, 
+ Jamie Lenehan <lenehan@twibble.org>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Colin Ian King <colin.i.king@gmail.com>, linux-scsi@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1855; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=0y9B9wg71iPcc94hYHsLcd4ggl+XIo8SKgRXNkzmgnQ=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBmCxTxr1x745q7GrN2nevQjX6vWN0al5y/f3JvsWHg4Y
+ u3r5HfGHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiv3gZ/lmJf69excOhbcHE
+ fPHMXoH7qw+FKcnEXDAWvbfou3p7yFxGhpZuidc5kh9/H/r2wPyF/b6o5TKp2zOFPM7Nnf8myp/
+ tBDMA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-From: Manish Pandey <quic_mapa@quicinc.com>
+Clang warns (or errors with CONFIG_WERROR=y):
 
-[ Upstream commit 569330a34a31a52c904239439984a59972c11d28 ]
+  drivers/scsi/dc395x.c:2553:6: error: variable 'id' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+   2553 |         if (!(rsel_tar_lun_id & (IDENTIFY_BASE << 8)))
+        |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/scsi/dc395x.c:2556:22: note: uninitialized use occurs here
+   2556 |         dcb = find_dcb(acb, id, lun);
+        |                             ^~
+  drivers/scsi/dc395x.c:2553:2: note: remove the 'if' if its condition is always true
+   2553 |         if (!(rsel_tar_lun_id & (IDENTIFY_BASE << 8)))
+        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2554 |         id = rsel_tar_lun_id & 0xff;
 
-Samsung UFS devices require additional time in hibern8 mode before
-exiting, beyond the negotiated handshaking phase between the host and
-device.  Introduce a quirk to increase the PA_HIBERN8TIME parameter by
-100 µs, a value derived from experiments, to ensure a proper hibernation
-process.
+This if statement only existed for a debugging print but it was not
+removed with the debugging print in a recent cleanup, leading to id only
+being initialized when the if condition is true. Remove the if
+statement to ensure id is always initialized, clearing up the warning.
 
-Signed-off-by: Manish Pandey <quic_mapa@quicinc.com>
-Link: https://lore.kernel.org/r/20250411121630.21330-3-quic_mapa@quicinc.com
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 62b434b0db2c ("scsi: dc395x: Remove DEBUG conditional compilation")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- drivers/ufs/core/ufshcd.c | 29 +++++++++++++++++++++++++++++
- include/ufs/ufs_quirks.h  |  6 ++++++
- 2 files changed, 35 insertions(+)
+ drivers/scsi/dc395x.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 89fc0b5662919..856afd0e6a4b5 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -278,6 +278,7 @@ static const struct ufs_dev_quirk ufs_fixups[] = {
- 	  .model = UFS_ANY_MODEL,
- 	  .quirk = UFS_DEVICE_QUIRK_DELAY_BEFORE_LPM |
- 		   UFS_DEVICE_QUIRK_HOST_PA_TACTIVATE |
-+		   UFS_DEVICE_QUIRK_PA_HIBER8TIME |
- 		   UFS_DEVICE_QUIRK_RECOVERY_FROM_DL_NAC_ERRORS },
- 	{ .wmanufacturerid = UFS_VENDOR_SKHYNIX,
- 	  .model = UFS_ANY_MODEL,
-@@ -8459,6 +8460,31 @@ static int ufshcd_quirk_tune_host_pa_tactivate(struct ufs_hba *hba)
- 	return ret;
- }
- 
-+/**
-+ * ufshcd_quirk_override_pa_h8time - Ensures proper adjustment of PA_HIBERN8TIME.
-+ * @hba: per-adapter instance
-+ *
-+ * Some UFS devices require specific adjustments to the PA_HIBERN8TIME parameter
-+ * to ensure proper hibernation timing. This function retrieves the current
-+ * PA_HIBERN8TIME value and increments it by 100us.
-+ */
-+static void ufshcd_quirk_override_pa_h8time(struct ufs_hba *hba)
-+{
-+	u32 pa_h8time;
-+	int ret;
-+
-+	ret = ufshcd_dme_get(hba, UIC_ARG_MIB(PA_HIBERN8TIME), &pa_h8time);
-+	if (ret) {
-+		dev_err(hba->dev, "Failed to get PA_HIBERN8TIME: %d\n", ret);
-+		return;
-+	}
-+
-+	/* Increment by 1 to increase hibernation time by 100 µs */
-+	ret = ufshcd_dme_set(hba, UIC_ARG_MIB(PA_HIBERN8TIME), pa_h8time + 1);
-+	if (ret)
-+		dev_err(hba->dev, "Failed updating PA_HIBERN8TIME: %d\n", ret);
-+}
-+
- static void ufshcd_tune_unipro_params(struct ufs_hba *hba)
- {
- 	ufshcd_vops_apply_dev_quirks(hba);
-@@ -8469,6 +8495,9 @@ static void ufshcd_tune_unipro_params(struct ufs_hba *hba)
- 
- 	if (hba->dev_quirks & UFS_DEVICE_QUIRK_HOST_PA_TACTIVATE)
- 		ufshcd_quirk_tune_host_pa_tactivate(hba);
-+
-+	if (hba->dev_quirks & UFS_DEVICE_QUIRK_PA_HIBER8TIME)
-+		ufshcd_quirk_override_pa_h8time(hba);
- }
- 
- static void ufshcd_clear_dbg_ufs_stats(struct ufs_hba *hba)
-diff --git a/include/ufs/ufs_quirks.h b/include/ufs/ufs_quirks.h
-index 41ff44dfa1db3..f52de5ed1b3b6 100644
---- a/include/ufs/ufs_quirks.h
-+++ b/include/ufs/ufs_quirks.h
-@@ -107,4 +107,10 @@ struct ufs_dev_quirk {
-  */
- #define UFS_DEVICE_QUIRK_DELAY_AFTER_LPM        (1 << 11)
- 
-+/*
-+ * Some ufs devices may need more time to be in hibern8 before exiting.
-+ * Enable this quirk to give it an additional 100us.
-+ */
-+#define UFS_DEVICE_QUIRK_PA_HIBER8TIME          (1 << 12)
-+
- #endif /* UFS_QUIRKS_H_ */
+diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
+index 95145b9d9ce3..96b335c92603 100644
+--- a/drivers/scsi/dc395x.c
++++ b/drivers/scsi/dc395x.c
+@@ -2550,7 +2550,6 @@ static void reselect(struct AdapterCtlBlk *acb)
+ 		}
+ 	}
+ 	/* Read Reselected Target Id and LUN */
+-	if (!(rsel_tar_lun_id & (IDENTIFY_BASE << 8)))
+ 	id = rsel_tar_lun_id & 0xff;
+ 	lun = (rsel_tar_lun_id >> 8) & 7;
+ 	dcb = find_dcb(acb, id, lun);
+
+---
+base-commit: e142de4aac2aae697d7e977b01e7a889e9f454df
+change-id: 20250429-scsi-dc395x-fix-uninit-var-c1cfd889a63d
+
+Best regards,
 -- 
-2.39.5
+Nathan Chancellor <nathan@kernel.org>
 
 
