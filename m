@@ -1,131 +1,108 @@
-Return-Path: <linux-scsi+bounces-13898-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13893-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAACFAAAAFD
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 03:48:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D63CAAAE0E
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 04:48:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0F2A4C1B98
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 01:48:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A198A3B03DF
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 02:44:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 158972F54AA;
-	Mon,  5 May 2025 23:16:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36BCF36AD24;
+	Mon,  5 May 2025 22:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="svztyB5g"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TD2gon2a"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F76637A888;
-	Mon,  5 May 2025 23:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59290299523;
+	Mon,  5 May 2025 22:42:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746486148; cv=none; b=leUTq/mpbbiDdT0po6wQ8CxnPl+e92eOKmEUsqgDAvTqwx6AGraOJOVUDRdQ3lRVBVG+emwydztt3ev2iJTI/fMA3nzUgH5tj2tGtFdmzZMkw+oKtpaQWR76/A2cepCYion7hy5ZoBXw5m/6WBbaCBR7slh/OIPe1OiqtGGZ18g=
+	t=1746484960; cv=none; b=KUZCMHQEzaMz5hOJrsdPoZfH+BArkNYx5/cEpxYuKm0t5q7k4exYZ8S1kHQdJ2hpkPOvEGJy4JVg9RKt8u27TPFZYNV/LwUK01h1QsJhAbfGUTQ1dOQn5hZFE0b99xkMtelygq26QQ1BlWbr9DW8TL+b2UgNZJIHKj9NkDB3p8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746486148; c=relaxed/simple;
-	bh=y8Vu0hbKSB+CuL4BRtzTCM3l3KNzez+yZf9bGpQhOSE=;
+	s=arc-20240116; t=1746484960; c=relaxed/simple;
+	bh=xZGMbGj6sBc3Sj/fGa8SASsuV+kyncDt16qSx4L3uFw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Mj54LodtqZxtVMxHUWzYLDY2biVeGHpaDJunN87Wa111S4LZfFM6IFqnv3cPcRlfMut0VBpP310qoz/rOdnTeAjLuk0GW3vZGPS1HVcOuDdtjNBfvbo7I71XmPdx3KkyMqR+Zw1Yw4ZzBNoTco0BIoIsGPxN+6C/KAJbdiRmLjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=svztyB5g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D78FC4CEE4;
-	Mon,  5 May 2025 23:02:26 +0000 (UTC)
+	 MIME-Version:Content-Type; b=ntwBcftv86Sf1j1WQBrT6pydes5A+5Dzgx0IORCwNm3whR2bMc8oBj31+PTA6vhPJnLXqXPWAVdSYjZJqY1cCIG4F7pLSpQ/Mpp131ZmtuWqDNSF92Mc9iX0WeSdYN0XNpS/6RWTMvjOYd2+Zw3tbrSr+Ye8FLfEk3FWYt5TZXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TD2gon2a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C699C4CEED;
+	Mon,  5 May 2025 22:42:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746486147;
-	bh=y8Vu0hbKSB+CuL4BRtzTCM3l3KNzez+yZf9bGpQhOSE=;
+	s=k20201202; t=1746484959;
+	bh=xZGMbGj6sBc3Sj/fGa8SASsuV+kyncDt16qSx4L3uFw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=svztyB5g1OvsdSQ9NMA8hmSreZnUWWTqNvIJdOqv1KbE64ohxcHZ0wbjlzrx4i94Y
-	 u8nNy/o0t8a9Jowfd2aHVuPkfulWZUK/alLaZTx7XDKscphKP5tz1U/cdoR1j4+SWR
-	 1EzIkUxoA4fcA2IUi4hkaD3ltIfv1E9koRWCK+uCr21x5zUV98vkSkRtwVha4njLoh
-	 icgpw9TynFAL/i7P+uO/OQq26xGqQ73tmyGPnLfm5d4FNgvRE873JAHDEza8okKzEa
-	 JfVZX/rHHWa+1aZpgVdX7QmmZ7radf1CkCjMBl4p3vX0BM5XAg6KXhk5hnTf201Mem
-	 ED9b/bnsGjKEA==
+	b=TD2gon2aOBLy7I/n0urqB9x5WYns+YENc7NPly3LiMdwLB2UhBzq9J+CbCPi0a/Xz
+	 Wt0HhAvlRK4KbDjmw/NWjJzyRYAOU/i2PNpicHSWULhL3gasbRfuo9RE7PeFLY36HN
+	 x71kJ8EGq5aIF5PmLXDzCCQF7MbNC/PdgK4eulO/lm1d4cpeV8kXjFo0ZM/fmGQ07Z
+	 4z3ShE13KRN+iALfXkLjTDiEc08d0xG1ihGo3T9MR+GVEq4jYiEFob+e7QqlDu5CZc
+	 LuoyzH3XLAOH+mBmgROWfgU4aCvY7ISniNvMzPIpj3tgJnz1JFl3txh4I1D6MiHSTB
+	 LooJoIczjoBCw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+Cc: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Sasha Levin <sashal@kernel.org>,
-	sathya.prakash@broadcom.com,
-	sreekanth.reddy@broadcom.com,
-	suganath-prabu.subramani@broadcom.com,
 	James.Bottomley@HansenPartnership.com,
-	MPT-FusionLinux.pdl@broadcom.com,
 	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 176/294] scsi: mpt3sas: Send a diag reset if target reset fails
-Date: Mon,  5 May 2025 18:54:36 -0400
-Message-Id: <20250505225634.2688578-176-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 096/486] scsi: st: Tighten the page format heuristics with MODE SELECT
+Date: Mon,  5 May 2025 18:32:52 -0400
+Message-Id: <20250505223922.2682012-96-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505225634.2688578-1-sashal@kernel.org>
-References: <20250505225634.2688578-1-sashal@kernel.org>
+In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
+References: <20250505223922.2682012-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.89
+X-stable-base: Linux 6.12.26
 Content-Transfer-Encoding: 8bit
 
-From: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
+From: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
 
-[ Upstream commit 5612d6d51ed2634a033c95de2edec7449409cbb9 ]
+[ Upstream commit 8db816c6f176321e42254badd5c1a8df8bfcfdb4 ]
 
-When an IOCTL times out and driver issues a target reset, if firmware
-fails the task management elevate the recovery by issuing a diag reset to
-controller.
+In the days when SCSI-2 was emerging, some drives did claim SCSI-2 but did
+not correctly implement it. The st driver first tries MODE SELECT with the
+page format bit set to set the block descriptor.  If not successful, the
+non-page format is tried.
 
-Signed-off-by: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
-Link: https://lore.kernel.org/r/1739410016-27503-5-git-send-email-shivasharan.srikanteshwara@broadcom.com
+The test only tests the sense code and this triggers also from illegal
+parameter in the parameter list. The test is limited to "old" devices and
+made more strict to remove false alarms.
+
+Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
+Link: https://lore.kernel.org/r/20250311112516.5548-4-Kai.Makisara@kolumbus.fi
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/mpt3sas/mpt3sas_ctl.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/scsi/st.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-index e289f18fc7643..daef90ee431f5 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-@@ -679,6 +679,7 @@ _ctl_do_mpt_command(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command karg,
- 	size_t data_in_sz = 0;
- 	long ret;
- 	u16 device_handle = MPT3SAS_INVALID_DEVICE_HANDLE;
-+	int tm_ret;
- 
- 	issue_reset = 0;
- 
-@@ -1120,18 +1121,25 @@ _ctl_do_mpt_command(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command karg,
- 			if (pcie_device && (!ioc->tm_custom_handling) &&
- 			    (!(mpt3sas_scsih_is_pcie_scsi_device(
- 			    pcie_device->device_info))))
--				mpt3sas_scsih_issue_locked_tm(ioc,
-+				tm_ret = mpt3sas_scsih_issue_locked_tm(ioc,
- 				  le16_to_cpu(mpi_request->FunctionDependent1),
- 				  0, 0, 0,
- 				  MPI2_SCSITASKMGMT_TASKTYPE_TARGET_RESET, 0,
- 				  0, pcie_device->reset_timeout,
- 			MPI26_SCSITASKMGMT_MSGFLAGS_PROTOCOL_LVL_RST_PCIE);
- 			else
--				mpt3sas_scsih_issue_locked_tm(ioc,
-+				tm_ret = mpt3sas_scsih_issue_locked_tm(ioc,
- 				  le16_to_cpu(mpi_request->FunctionDependent1),
- 				  0, 0, 0,
- 				  MPI2_SCSITASKMGMT_TASKTYPE_TARGET_RESET, 0,
- 				  0, 30, MPI2_SCSITASKMGMT_MSGFLAGS_LINK_RESET);
-+
-+			if (tm_ret != SUCCESS) {
-+				ioc_info(ioc,
-+					 "target reset failed, issue hard reset: handle (0x%04x)\n",
-+					 le16_to_cpu(mpi_request->FunctionDependent1));
-+				mpt3sas_base_hard_reset_handler(ioc, FORCE_BIG_HAMMER);
-+			}
- 		} else
- 			mpt3sas_base_hard_reset_handler(ioc, FORCE_BIG_HAMMER);
- 	}
+diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
+index a17441635ff3a..1c0951168f646 100644
+--- a/drivers/scsi/st.c
++++ b/drivers/scsi/st.c
+@@ -3081,7 +3081,9 @@ static int st_int_ioctl(struct scsi_tape *STp, unsigned int cmd_in, unsigned lon
+ 			   cmd_in == MTSETDRVBUFFER ||
+ 			   cmd_in == SET_DENS_AND_BLK) {
+ 			if (cmdstatp->sense_hdr.sense_key == ILLEGAL_REQUEST &&
+-			    !(STp->use_pf & PF_TESTED)) {
++				cmdstatp->sense_hdr.asc == 0x24 &&
++				(STp->device)->scsi_level <= SCSI_2 &&
++				!(STp->use_pf & PF_TESTED)) {
+ 				/* Try the other possible state of Page Format if not
+ 				   already tried */
+ 				STp->use_pf = (STp->use_pf ^ USE_PF) | PF_TESTED;
 -- 
 2.39.5
 
