@@ -1,57 +1,58 @@
-Return-Path: <linux-scsi+bounces-13892-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13894-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66AE0AAADF3
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 04:46:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42047AAAE4F
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 04:54:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEBF13BD717
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 02:41:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 609BE1883BDB
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 02:50:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DB7C2C2FD8;
-	Mon,  5 May 2025 22:45:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79E9D2D8DAB;
+	Mon,  5 May 2025 22:57:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uaLi0REo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C8+7qA2V"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE540299528;
-	Mon,  5 May 2025 22:42:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D872BD91C;
+	Mon,  5 May 2025 22:46:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746484961; cv=none; b=b1UNPly+exYrmywptsxmpp3rH4iT9bk8fmF4ctMwUprHo3qrSZ+r+kAeii1Wf96r0MToQFw/h9zwtoyM5fU2EtZk3tshNI4kfnRJsJUTmWPHRLMPYYr8182qu6XogkeIpzO8lnBvGVAdRd76iu36rJpi0/fny7dU2+8CyNUZ4J4=
+	t=1746485216; cv=none; b=p5aehRpWTKlcZgk6Ynosbqiajc5YgSeY6jBpAXE2ET/P03qjRh0fBHc2P1zSC/maTebQA4MZOaU6UdVspxvMDx6Rt0+Pu+iw8O8NRXr0bUN1WUQ4kZuM4KfcMRn9Rlj/THHsb6uIwFb9wt+woOcoDO2s2D/BteH1LUXRZMXP9rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746484961; c=relaxed/simple;
-	bh=fCjaWOd3pchlGIGKJjbR2+45db094DX44m5tNadvp1Y=;
+	s=arc-20240116; t=1746485216; c=relaxed/simple;
+	bh=/IS8kiC5PDBV56uRbOcCm/cQDPQTsRPpKMG4+IvaPB8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pK/tKB1KdFdl6XUdjd4xAMm+QCT14B75azfgHlFkbm7y0BkjZk7d5lHVZ7G9lwkp3Z1+ptz7PDbmOBDYT8NQNedzgm36Iuf1rTjS0SqV7vH+xAAQppVU9b30/dUKOa8iaRPd56eidJTUZ4Bxj+k2GMrbq+rSJeq2eIaEp/AeGws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uaLi0REo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1091C4CEE4;
-	Mon,  5 May 2025 22:42:39 +0000 (UTC)
+	 MIME-Version; b=eBrS+eJS91VW2HjX442jQP5rGcXNMgAOXtQ2woki0CXa6WXhB/xum8E3e8pA0+VIkVu4T7V/R9ZRr5eL1raa4kIx6uyEfKYYqNRfZaDE5vQb35C1VoM0Uxb+vWpazELD8+KB3PjjkT+r7fV0wuIujNFWvG1AxI/GOPIu6WkrQTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C8+7qA2V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BA75C4CEEF;
+	Mon,  5 May 2025 22:46:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746484960;
-	bh=fCjaWOd3pchlGIGKJjbR2+45db094DX44m5tNadvp1Y=;
+	s=k20201202; t=1746485216;
+	bh=/IS8kiC5PDBV56uRbOcCm/cQDPQTsRPpKMG4+IvaPB8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uaLi0REocY1HEh51Tk3/7CeDOHScxkQf5flIh06rT7QpRVD8KXG8DFuscwWo5A7MA
-	 6nqiOaqSrc6Mdu7rquuT0VZHj3xbMZ3x5uCEWCRtjQWeu/r4s2YXySRNOTge11BzwN
-	 DYsmOjmVLyjzB+S3N1No8iIsCpl1Nebw33yCDj5vo3hdWH6kTuVw844tZXA4905suW
-	 mQTKCq8Qt8MiyPV+vuCrx7+jI48YNZcbFZddez27+LpA6O4s6fwyeskvDZm8Yk2i5M
-	 2ZlCgm6dYWXeTbMBZlQqwDN6Fm2XBF+QrZgGxuhB0tcYm3sBHGtW/SwZpq0xB4ae43
-	 DRJlJm7gmkqjw==
+	b=C8+7qA2VddmOA54s7Z5eOpVEvc8SjWaYPw+70irh7gs3OGc2QAN9YKmtbjg6X6jMu
+	 DajTtjV2HVeTIubObUS7nj1JaHQIudZ8RV8FAEOKbyy1w8A7m7jo0GberVzU/c/1YA
+	 deBkS/VCpQ7cMVDul3i0zpF0nm4ld0Mh7iJkuMP52YeNrkl7zr6BsutZU/JpqSVJxu
+	 sobmUrHeIUTeqhgfnfqJ6hlWJhULtPbm0IgCyBM5c+h24ngH322O5DzoLwyCptOWzc
+	 jIHs/X1xiiqRfmAO383SeA9rz3k5T91xGxP3zHo93Z/Zey6zfR0XZs7QfFkHvl1S5Z
+	 LiRIzIyCNkROA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
+Cc: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
+	Joel Granados <joel.granados@kernel.org>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Sasha Levin <sashal@kernel.org>,
 	James.Bottomley@HansenPartnership.com,
 	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 097/486] scsi: st: ERASE does not change tape location
-Date: Mon,  5 May 2025 18:32:53 -0400
-Message-Id: <20250505223922.2682012-97-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 215/486] scsi: logging: Fix scsi_logging_level bounds
+Date: Mon,  5 May 2025 18:34:51 -0400
+Message-Id: <20250505223922.2682012-215-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
 References: <20250505223922.2682012-1-sashal@kernel.org>
@@ -61,39 +62,44 @@ List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.12.26
 Content-Transfer-Encoding: 8bit
 
-From: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
+From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
 
-[ Upstream commit ad77cebf97bd42c93ab4e3bffd09f2b905c1959a ]
+[ Upstream commit 2cef5b4472c602e6c5a119aca869d9d4050586f3 ]
 
-The SCSI ERASE command erases from the current position onwards.  Don't
-clear the position variables.
+Bound scsi_logging_level sysctl writings between SYSCTL_ZERO and
+SYSCTL_INT_MAX.
 
-Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
-Link: https://lore.kernel.org/r/20250311112516.5548-3-Kai.Makisara@kolumbus.fi
+The proc_handler has thus been updated to proc_dointvec_minmax.
+
+Signed-off-by: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+Link: https://lore.kernel.org/r/20250224095826.16458-5-nicolas.bouchinet@clip-os.org
+Reviewed-by: Joel Granados <joel.granados@kernel.org>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/st.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/scsi/scsi_sysctl.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
-index 1c0951168f646..1cfd7e71dcdde 100644
---- a/drivers/scsi/st.c
-+++ b/drivers/scsi/st.c
-@@ -2894,7 +2894,6 @@ static int st_int_ioctl(struct scsi_tape *STp, unsigned int cmd_in, unsigned lon
- 			timeout = STp->long_timeout * 8;
+diff --git a/drivers/scsi/scsi_sysctl.c b/drivers/scsi/scsi_sysctl.c
+index 093774d775346..daa160459c9b3 100644
+--- a/drivers/scsi/scsi_sysctl.c
++++ b/drivers/scsi/scsi_sysctl.c
+@@ -17,7 +17,9 @@ static struct ctl_table scsi_table[] = {
+ 	  .data		= &scsi_logging_level,
+ 	  .maxlen	= sizeof(scsi_logging_level),
+ 	  .mode		= 0644,
+-	  .proc_handler	= proc_dointvec },
++	  .proc_handler	= proc_dointvec_minmax,
++	  .extra1	= SYSCTL_ZERO,
++	  .extra2	= SYSCTL_INT_MAX },
+ };
  
- 		DEBC_printk(STp, "Erasing tape.\n");
--		fileno = blkno = at_sm = 0;
- 		break;
- 	case MTSETBLK:		/* Set block length */
- 	case MTSETDENSITY:	/* Set tape density */
+ static struct ctl_table_header *scsi_table_header;
 -- 
 2.39.5
 
