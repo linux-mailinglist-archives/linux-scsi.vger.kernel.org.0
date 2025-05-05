@@ -1,61 +1,59 @@
-Return-Path: <linux-scsi+bounces-13899-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13900-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 844A8AAAC0B
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 04:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EB167AAAC45
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 04:13:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 449E64C3B62
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 02:07:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0CD916C814
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 02:11:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BDBA385433;
-	Mon,  5 May 2025 23:23:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 930183C4DA7;
+	Mon,  5 May 2025 23:25:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aD+w/2pk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PU8BtU7U"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B1F2ECE57;
-	Mon,  5 May 2025 23:10:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5118638AF27;
+	Mon,  5 May 2025 23:12:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746486650; cv=none; b=jjSveA55cI14tvl4BZ9tpfIKTDVUBhsMQE486b0/a7sqjnwctIV1UycyDG63owvoFRC+x5JfBvpRTQBuo/hyOKS+IOfZIXHlJcntdqgeV5UcsyzDeltXsQ/tRYixwY7KcyXDS92wJFU7guK70sUBlk9+uA9mmAiQ99+rDf0vP7A=
+	t=1746486776; cv=none; b=u0kmybVbOq1zkQEYdH7MUaI3P4WNp5pTcGJDjFPbZPhSCSPy7cOksADZzWDBpT22K1Es+2yXvn0FYEJ6XUth0JryvT8+gcpqilRZEFZm3mQxEvDt/ixFsBK9OWNw2IS+EENaFssDUdWbp2VRTcM9Ji7YFeNzBnaVBHMtQFkFydM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746486650; c=relaxed/simple;
-	bh=9dgeRB9RiOpL/1PMxwmzRWywCC+qvQOmB5skJqPYObU=;
+	s=arc-20240116; t=1746486776; c=relaxed/simple;
+	bh=O93GOxNWz5ji8fvhIskxfUjI+ZUwtz78F4UhBJq70aI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DZu+hS3HCXGfXuFNJtpD4DDkmBsWwJ/s3ib6sfEwediryXU6QmiqCz3ujd9aQcmIH/Tlx/iDnkhByyT82HTRJCVHtH0jvbGxm0RNDNpm0vi3KlOb4rXnfGW7Gj4axz+1ftOKdXET5jEFK9eX9tfk4iHUtpH/qTb9+UghOAc7N1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aD+w/2pk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB479C4CEF2;
-	Mon,  5 May 2025 23:10:48 +0000 (UTC)
+	 MIME-Version; b=EOhMdAiNGRqCydVXbv+aGTtheIUz3MQ+GHXTLri44uVRXroq+TH4N6ThHGegYYulgEF7Qfr09CaMsnkGVxrVd9LAfEd2slLhNqJnwDxW9CDSSeKUcTvV2l51e590nlE8l5TCiRh58XeHJdfEZaKNug7B7rtEO2p1XL0H6Lk2mAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PU8BtU7U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38D63C4CEF2;
+	Mon,  5 May 2025 23:12:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746486649;
-	bh=9dgeRB9RiOpL/1PMxwmzRWywCC+qvQOmB5skJqPYObU=;
+	s=k20201202; t=1746486775;
+	bh=O93GOxNWz5ji8fvhIskxfUjI+ZUwtz78F4UhBJq70aI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aD+w/2pkNv0ZO0ldQiPKB87meMIOS932q9oOtEysiJ5lPNPnhK3UDrYIUv6hVm8CU
-	 eFnyXz0Az8lJUapLkYcTHNuhGe6CSXc42UraUl2lk8ot+w4AIZWBz6y1l6WZKsHGFO
-	 hGyuFm/kkzsIuoNw1QS85WG2YBXN/tyVzL4GuRy8GntcQcLAasp3L//5eh6GIrpnyE
-	 VjGCTkhOaHZSKL2kkqL2vUDz40kXKpZKjJN4kt8tVqK7Dw/6aG4nw5oyi5ovvNxinK
-	 bRLbSm55irU00T9E5Cm7z9EFeOoXkQ8wjlgIW0+FYAxBSen1dwR8d08JBX1ZyT3415
-	 EP3qnwprz2OQA==
+	b=PU8BtU7Ul6tVKtU7UN5LMjl1UuQtknznTlHjzmy//E8xvubmmG+gXx/2pWNHB7/Lp
+	 yzaIE1xoaKVO1nE6TBwfnjUpbZMh8BSU1R4s9/2AaH/7+eon3ehFfrLkQ2PUnJaPu4
+	 a1OKaUAh6Vahy0rj3AMwzB2WQqP8cTRkd92XfOV+5ZEuFefbP39U8zggUIx3dwaHRY
+	 x8+Ed19k89YVmOWpu3E3cjiXz3gPWytr/8ryPHhSni1tn6CpS+NLI3TNn+iTE7U1gE
+	 840oaRIzCYHxXGbXlX1Q8gnQyVJK/vkSwfoP3nCgrMveg61Qa0Yqm+Fx1FJg7AYzbH
+	 PFgWfw+Jv+vwQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+Cc: Justin Tee <justin.tee@broadcom.com>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Sasha Levin <sashal@kernel.org>,
-	sathya.prakash@broadcom.com,
-	sreekanth.reddy@broadcom.com,
-	suganath-prabu.subramani@broadcom.com,
+	james.smart@broadcom.com,
+	dick.kennedy@broadcom.com,
 	James.Bottomley@HansenPartnership.com,
-	MPT-FusionLinux.pdl@broadcom.com,
 	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 135/212] scsi: mpt3sas: Send a diag reset if target reset fails
-Date: Mon,  5 May 2025 19:05:07 -0400
-Message-Id: <20250505230624.2692522-135-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 196/212] scsi: lpfc: Handle duplicate D_IDs in ndlp search-by D_ID routine
+Date: Mon,  5 May 2025 19:06:08 -0400
+Message-Id: <20250505230624.2692522-196-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250505230624.2692522-1-sashal@kernel.org>
 References: <20250505230624.2692522-1-sashal@kernel.org>
@@ -70,62 +68,64 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.1.136
 Content-Transfer-Encoding: 8bit
 
-From: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
+From: Justin Tee <justin.tee@broadcom.com>
 
-[ Upstream commit 5612d6d51ed2634a033c95de2edec7449409cbb9 ]
+[ Upstream commit 56c3d809b7b450379162d0b8a70bbe71ab8db706 ]
 
-When an IOCTL times out and driver issues a target reset, if firmware
-fails the task management elevate the recovery by issuing a diag reset to
-controller.
+After a port swap between separate fabrics, there may be multiple nodes in
+the vport's fc_nodes list with the same fabric well known address.
+Duplication is temporary and eventually resolves itself after dev_loss_tmo
+expires, but nameserver queries may still occur before dev_loss_tmo.  This
+possibly results in returning stale fabric ndlp objects.  Fix by adding an
+nlp_state check to ensure the ndlp search routine returns the correct newer
+allocated ndlp fabric object.
 
-Signed-off-by: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
-Link: https://lore.kernel.org/r/1739410016-27503-5-git-send-email-shivasharan.srikanteshwara@broadcom.com
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Link: https://lore.kernel.org/r/20250131000524.163662-5-justintee8345@gmail.com
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/mpt3sas/mpt3sas_ctl.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-index fc5af6a5114e3..863503e8a4d1a 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-@@ -679,6 +679,7 @@ _ctl_do_mpt_command(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command karg,
- 	size_t data_in_sz = 0;
- 	long ret;
- 	u16 device_handle = MPT3SAS_INVALID_DEVICE_HANDLE;
-+	int tm_ret;
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 57be02f8d5c18..b04112c77fcd1 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -5619,6 +5619,7 @@ static struct lpfc_nodelist *
+ __lpfc_findnode_did(struct lpfc_vport *vport, uint32_t did)
+ {
+ 	struct lpfc_nodelist *ndlp;
++	struct lpfc_nodelist *np = NULL;
+ 	uint32_t data1;
  
- 	issue_reset = 0;
- 
-@@ -1120,18 +1121,25 @@ _ctl_do_mpt_command(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command karg,
- 			if (pcie_device && (!ioc->tm_custom_handling) &&
- 			    (!(mpt3sas_scsih_is_pcie_scsi_device(
- 			    pcie_device->device_info))))
--				mpt3sas_scsih_issue_locked_tm(ioc,
-+				tm_ret = mpt3sas_scsih_issue_locked_tm(ioc,
- 				  le16_to_cpu(mpi_request->FunctionDependent1),
- 				  0, 0, 0,
- 				  MPI2_SCSITASKMGMT_TASKTYPE_TARGET_RESET, 0,
- 				  0, pcie_device->reset_timeout,
- 			MPI26_SCSITASKMGMT_MSGFLAGS_PROTOCOL_LVL_RST_PCIE);
- 			else
--				mpt3sas_scsih_issue_locked_tm(ioc,
-+				tm_ret = mpt3sas_scsih_issue_locked_tm(ioc,
- 				  le16_to_cpu(mpi_request->FunctionDependent1),
- 				  0, 0, 0,
- 				  MPI2_SCSITASKMGMT_TASKTYPE_TARGET_RESET, 0,
- 				  0, 30, MPI2_SCSITASKMGMT_MSGFLAGS_LINK_RESET);
+ 	list_for_each_entry(ndlp, &vport->fc_nodes, nlp_listp) {
+@@ -5633,14 +5634,20 @@ __lpfc_findnode_did(struct lpfc_vport *vport, uint32_t did)
+ 					 ndlp, ndlp->nlp_DID,
+ 					 ndlp->nlp_flag, data1, ndlp->nlp_rpi,
+ 					 ndlp->active_rrqs_xri_bitmap);
+-			return ndlp;
 +
-+			if (tm_ret != SUCCESS) {
-+				ioc_info(ioc,
-+					 "target reset failed, issue hard reset: handle (0x%04x)\n",
-+					 le16_to_cpu(mpi_request->FunctionDependent1));
-+				mpt3sas_base_hard_reset_handler(ioc, FORCE_BIG_HAMMER);
-+			}
- 		} else
- 			mpt3sas_base_hard_reset_handler(ioc, FORCE_BIG_HAMMER);
++			/* Check for new or potentially stale node */
++			if (ndlp->nlp_state != NLP_STE_UNUSED_NODE)
++				return ndlp;
++			np = ndlp;
+ 		}
  	}
+ 
+-	/* FIND node did <did> NOT FOUND */
+-	lpfc_printf_vlog(vport, KERN_INFO, LOG_NODE,
+-			 "0932 FIND node did x%x NOT FOUND.\n", did);
+-	return NULL;
++	if (!np)
++		/* FIND node did <did> NOT FOUND */
++		lpfc_printf_vlog(vport, KERN_INFO, LOG_NODE,
++				 "0932 FIND node did x%x NOT FOUND.\n", did);
++
++	return np;
+ }
+ 
+ struct lpfc_nodelist *
 -- 
 2.39.5
 
