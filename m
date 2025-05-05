@@ -1,58 +1,57 @@
-Return-Path: <linux-scsi+bounces-13912-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13914-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19EE0AAB62A
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 07:44:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F377CAAB666
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 07:49:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0FC21BA2988
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 05:41:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2863D7B97D2
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 05:45:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 984F932CDE7;
-	Tue,  6 May 2025 00:25:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD7A41A04E;
+	Tue,  6 May 2025 00:28:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P1M3eeYX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N3blRtbq"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 262AC376437;
-	Mon,  5 May 2025 22:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C9092D3F82;
+	Mon,  5 May 2025 22:53:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746485326; cv=none; b=jDlvf0bK1473rB0OiVVg9ALsgaTCAen6zfSUUVqAK02ixbNj+GkeqVTu4ME0ecWh8ErCq1CpMVKS6MPJX2K7HtEZBaqtB1tP9MD+RCvWt7gRx5NTu52dRnX+BF/aQtCgFsfwunSWl++u+UieoOWkzlxb/SYhHLsPsD4SYOuCMNo=
+	t=1746485593; cv=none; b=d+vmtGgbNqSnQQQ/NdjiGUm6C3eUTP6h05DZ0zD79FPDRNnOJ5bJAw9C4FlyWtPPO8kEl8pFLN44jPsy0qu0j91c+KNq/MHCV7CnTtVwOmD+wKb9JBZDTiaNs9m79heK/zy7oFWeoppsCklKmrl64nvZS2Fi8BsHmOeLDekli2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746485326; c=relaxed/simple;
-	bh=rnCYJmsgMI3AxE6O+Ahf6pwDb8CNHl9K3Yg+Q/AyQVs=;
+	s=arc-20240116; t=1746485593; c=relaxed/simple;
+	bh=/ZfG5SNQ1bIVbs6hFU7RU8RBy+koTOJxzYhRtYQ7/9A=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=urB7Y8iqmZvUlQinTwyw99whkezDN8/mMx2GXv5G51saT0LfjAABFqTsS++SPuliWRFTtZtZIuYYP6rWXrgkRDJGk/OXCZKwQLlEMGD4H59TUKxUy2O+BGM5HWsN99uvbD3qsMoNDFQSaasbpzVHg6xBf1UtC6KSFIiAc06VUsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P1M3eeYX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 297B0C4CEEE;
-	Mon,  5 May 2025 22:48:45 +0000 (UTC)
+	 MIME-Version; b=oFq+FMkqPgk3V1juc+IIfkCeHhBeLizt7xpmYbIBk9HNsqeMM4ouHDH/YSEMuknTanQkneYgFSXOLL2+KOO+/kZGJp9pwAEHb0oV1l4DFNS4YLb6GkN8IsshFxVqZiOu+54DnqS/hzx33kppNFSXA2vPU8vEUo1nJ1TxYgMiWMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N3blRtbq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13A13C4CEEE;
+	Mon,  5 May 2025 22:53:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746485326;
-	bh=rnCYJmsgMI3AxE6O+Ahf6pwDb8CNHl9K3Yg+Q/AyQVs=;
+	s=k20201202; t=1746485592;
+	bh=/ZfG5SNQ1bIVbs6hFU7RU8RBy+koTOJxzYhRtYQ7/9A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=P1M3eeYXQ1sIA8T9HgKqfFVGQtDwMbO/p360wFWONFNY9SgZM0VRFRBdOpKC5SybH
-	 gkYepihClsiSvl/6m9pc7u9CU9+p5v/4iUPOKBcxA1xycDumKapez95D2B2fGSS5re
-	 OwEWKGk7Szg2AoBwkGgOBx7NKbBKxSWq5rCG/eIcYJ5GyeMZCTtlk7Kh4Oh5M4j5Cm
-	 VhpuGy5/fAjzsU6nYIeyaAypZ4A025rc7tJi7abhPKp5/L6XvnF3x+SfIa/Md2nmtf
-	 S5mmEZ1HGUW4j4Ymfg29yr+iaskZLAFDQTthHX47x3kuvYcEjhWzV41e8dNlCUdoij
-	 I0sp/DDIQb0YA==
+	b=N3blRtbqwEmeSiwxKYSQMXGuq9B0OP5htCSql8HePd3fSfp/D4zYDc+5xW50Ukbzl
+	 mRfdlkvnN692mHU1HlOfM2wEWIvSgnlOetzPnmTnwXO9O0jAu5VCE7H0M0O3StQM9c
+	 37cvYpaheT9iVNIY9MDMhTSTB09jPEI9jmGkm7MpfCBMUc0TSU1Jl00KoIj8qiifEi
+	 mt74/brkBfgdnmgSmzhs88vKdZ4Vnr9BsqSCzngKuh1euPhw2pWRcdZIAmhvXsnaad
+	 S4SSYZWo3VfNFr3aftQjlMELvnvE1cd2BMDG/dI+5sWzhpJYZvbBFcCmsPML/7DBnh
+	 IZrEqxDyAm45A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
-	John Meneghini <jmeneghi@redhat.com>,
+Cc: Chaohai Chen <wdhh66@163.com>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Sasha Levin <sashal@kernel.org>,
-	James.Bottomley@HansenPartnership.com,
-	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 269/486] scsi: scsi_debug: First fixes for tapes
-Date: Mon,  5 May 2025 18:35:45 -0400
-Message-Id: <20250505223922.2682012-269-sashal@kernel.org>
+	linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 378/486] scsi: target: spc: Fix loop traversal in spc_rsoc_get_descr()
+Date: Mon,  5 May 2025 18:37:34 -0400
+Message-Id: <20250505223922.2682012-378-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
 References: <20250505223922.2682012-1-sashal@kernel.org>
@@ -62,166 +61,71 @@ List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.12.26
 Content-Transfer-Encoding: 8bit
 
-From: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
+From: Chaohai Chen <wdhh66@163.com>
 
-[ Upstream commit f69da85d5d5cc5b7dfb963a6c6c1ac0dd9002341 ]
+[ Upstream commit 04ad06e41d1c74cc323b20a7bd023c47bd0e0c38 ]
 
-Patch includes the following:
+Stop traversing after finding the appropriate descriptor.
 
- - Enable MODE SENSE/SELECT without actual page (to read/write only the
-   Block Descriptor)
-
- - Store the density code and block size in the Block Descriptor (only
-   short version for tapes)
-
- - Fix REWIND not to use the wrong page filling function
-
-Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
-Link: https://lore.kernel.org/r/20250213092636.2510-2-Kai.Makisara@kolumbus.fi
-Reviewed-by: John Meneghini <jmeneghi@redhat.com>
-Tested-by: John Meneghini <jmeneghi@redhat.com>
+Signed-off-by: Chaohai Chen <wdhh66@163.com>
+Link: https://lore.kernel.org/r/20250124085542.109088-1-wdhh66@163.com
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_debug.c | 55 ++++++++++++++++++++++++++++++++++-----
- 1 file changed, 49 insertions(+), 6 deletions(-)
+ drivers/target/target_core_spc.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 680ba180a6725..89a2aaccdcfce 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -173,6 +173,10 @@ static const char *sdebug_version_date = "20210520";
- #define DEF_ZBC_MAX_OPEN_ZONES	8
- #define DEF_ZBC_NR_CONV_ZONES	1
+diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
+index 61c065702350e..701dcbd7b63cf 100644
+--- a/drivers/target/target_core_spc.c
++++ b/drivers/target/target_core_spc.c
+@@ -2151,8 +2151,10 @@ spc_rsoc_get_descr(struct se_cmd *cmd, struct target_opcode_descriptor **opcode)
+ 			if (descr->serv_action_valid)
+ 				return TCM_INVALID_CDB_FIELD;
  
-+/* Default parameters for tape drives */
-+#define TAPE_DEF_DENSITY  0x0
-+#define TAPE_DEF_BLKSIZE  0
-+
- #define SDEBUG_LUN_0_VAL 0
- 
- /* bit mask values for sdebug_opts */
-@@ -363,6 +367,10 @@ struct sdebug_dev_info {
- 	ktime_t create_ts;	/* time since bootup that this device was created */
- 	struct sdeb_zone_state *zstate;
- 
-+	/* For tapes */
-+	unsigned int tape_blksize;
-+	unsigned int tape_density;
-+
- 	struct dentry *debugfs_entry;
- 	struct spinlock list_lock;
- 	struct list_head inject_err_list;
-@@ -773,7 +781,7 @@ static const struct opcode_info_t opcode_info_arr[SDEB_I_LAST_ELEM_P1 + 1] = {
- /* 20 */
- 	{0, 0x1e, 0, 0, NULL, NULL, /* ALLOW REMOVAL */
- 	    {6,  0, 0, 0, 0x3, 0xc7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
--	{0, 0x1, 0, 0, resp_start_stop, NULL, /* REWIND ?? */
-+	{0, 0x1, 0, 0, NULL, NULL, /* REWIND ?? */
- 	    {6,  0x1, 0, 0, 0, 0xc7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
- 	{0, 0, 0, F_INV_OP | FF_RESPOND, NULL, NULL, /* ATA_PT */
- 	    {0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-@@ -2742,7 +2750,7 @@ static int resp_mode_sense(struct scsi_cmnd *scp,
- 	unsigned char *ap;
- 	unsigned char *arr __free(kfree);
- 	unsigned char *cmd = scp->cmnd;
--	bool dbd, llbaa, msense_6, is_disk, is_zbc;
-+	bool dbd, llbaa, msense_6, is_disk, is_zbc, is_tape;
- 
- 	arr = kzalloc(SDEBUG_MAX_MSENSE_SZ, GFP_ATOMIC);
- 	if (!arr)
-@@ -2755,7 +2763,8 @@ static int resp_mode_sense(struct scsi_cmnd *scp,
- 	llbaa = msense_6 ? false : !!(cmd[1] & 0x10);
- 	is_disk = (sdebug_ptype == TYPE_DISK);
- 	is_zbc = devip->zoned;
--	if ((is_disk || is_zbc) && !dbd)
-+	is_tape = (sdebug_ptype == TYPE_TAPE);
-+	if ((is_disk || is_zbc || is_tape) && !dbd)
- 		bd_len = llbaa ? 16 : 8;
- 	else
- 		bd_len = 0;
-@@ -2793,15 +2802,25 @@ static int resp_mode_sense(struct scsi_cmnd *scp,
- 			put_unaligned_be32(0xffffffff, ap + 0);
- 		else
- 			put_unaligned_be32(sdebug_capacity, ap + 0);
--		put_unaligned_be16(sdebug_sector_size, ap + 6);
-+		if (is_tape) {
-+			ap[0] = devip->tape_density;
-+			put_unaligned_be16(devip->tape_blksize, ap + 6);
-+		} else
-+			put_unaligned_be16(sdebug_sector_size, ap + 6);
- 		offset += bd_len;
- 		ap = arr + offset;
- 	} else if (16 == bd_len) {
-+		if (is_tape) {
-+			mk_sense_invalid_fld(scp, SDEB_IN_DATA, 1, 4);
-+			return check_condition_result;
-+		}
- 		put_unaligned_be64((u64)sdebug_capacity, ap + 0);
- 		put_unaligned_be32(sdebug_sector_size, ap + 12);
- 		offset += bd_len;
- 		ap = arr + offset;
- 	}
-+	if (cmd[2] == 0)
-+		goto only_bd; /* Only block descriptor requested */
- 
- 	/*
- 	 * N.B. If len>0 before resp_*_pg() call, then form of that call should be:
-@@ -2902,6 +2921,7 @@ static int resp_mode_sense(struct scsi_cmnd *scp,
- 	default:
- 		goto bad_pcode;
- 	}
-+only_bd:
- 	if (msense_6)
- 		arr[0] = offset - 1;
- 	else
-@@ -2945,8 +2965,27 @@ static int resp_mode_select(struct scsi_cmnd *scp,
- 			    __func__, param_len, res);
- 	md_len = mselect6 ? (arr[0] + 1) : (get_unaligned_be16(arr + 0) + 2);
- 	bd_len = mselect6 ? arr[3] : get_unaligned_be16(arr + 6);
--	off = bd_len + (mselect6 ? 4 : 8);
--	if (md_len > 2 || off >= res) {
-+	off = (mselect6 ? 4 : 8);
-+	if (sdebug_ptype == TYPE_TAPE) {
-+		int blksize;
-+
-+		if (bd_len != 8) {
-+			mk_sense_invalid_fld(scp, SDEB_IN_DATA,
-+					mselect6 ? 3 : 6, -1);
-+			return check_condition_result;
-+		}
-+		blksize = get_unaligned_be16(arr + off + 6);
-+		if ((blksize % 4) != 0) {
-+			mk_sense_invalid_fld(scp, SDEB_IN_DATA, off + 6, -1);
-+			return check_condition_result;
-+		}
-+		devip->tape_density = arr[off];
-+		devip->tape_blksize = blksize;
-+	}
-+	off += bd_len;
-+	if (off >= res)
-+		return 0; /* No page written, just descriptors */
-+	if (md_len > 2) {
- 		mk_sense_invalid_fld(scp, SDEB_IN_DATA, 0, -1);
- 		return check_condition_result;
- 	}
-@@ -5835,6 +5874,10 @@ static struct sdebug_dev_info *sdebug_device_create(
- 		} else {
- 			devip->zoned = false;
+-			if (!descr->enabled || descr->enabled(descr, cmd))
++			if (!descr->enabled || descr->enabled(descr, cmd)) {
+ 				*opcode = descr;
++				return TCM_NO_SENSE;
++			}
+ 			break;
+ 		case 0x2:
+ 			/*
+@@ -2166,8 +2168,10 @@ spc_rsoc_get_descr(struct se_cmd *cmd, struct target_opcode_descriptor **opcode)
+ 			if (descr->serv_action_valid &&
+ 			    descr->service_action == requested_sa) {
+ 				if (!descr->enabled || descr->enabled(descr,
+-								      cmd))
++								      cmd)) {
+ 					*opcode = descr;
++					return TCM_NO_SENSE;
++				}
+ 			} else if (!descr->serv_action_valid)
+ 				return TCM_INVALID_CDB_FIELD;
+ 			break;
+@@ -2180,13 +2184,15 @@ spc_rsoc_get_descr(struct se_cmd *cmd, struct target_opcode_descriptor **opcode)
+ 			 */
+ 			if (descr->service_action == requested_sa)
+ 				if (!descr->enabled || descr->enabled(descr,
+-								      cmd))
++								      cmd)) {
+ 					*opcode = descr;
++					return TCM_NO_SENSE;
++				}
+ 			break;
  		}
-+		if (sdebug_ptype == TYPE_TAPE) {
-+			devip->tape_density = TAPE_DEF_DENSITY;
-+			devip->tape_blksize = TAPE_DEF_BLKSIZE;
-+		}
- 		devip->create_ts = ktime_get_boottime();
- 		atomic_set(&devip->stopped, (sdeb_tur_ms_to_ready > 0 ? 2 : 0));
- 		spin_lock_init(&devip->list_lock);
+ 	}
+ 
+-	return 0;
++	return TCM_NO_SENSE;
+ }
+ 
+ static sense_reason_t
 -- 
 2.39.5
 
