@@ -1,57 +1,59 @@
-Return-Path: <linux-scsi+bounces-13918-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13921-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4250FAAB703
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 08:02:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62BC5AAB36E
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 06:45:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91EEC1C2330C
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 05:58:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7491B16E019
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 04:42:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C8A6231A4D;
-	Tue,  6 May 2025 00:37:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 878B7247297;
+	Tue,  6 May 2025 00:38:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rl570EER"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qlTK/+cL"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9320395272;
-	Mon,  5 May 2025 23:04:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103B4239E60;
+	Mon,  5 May 2025 23:05:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746486270; cv=none; b=b3yxlI+GDslR59ww0P4KowxeGrs1MQOlOGNjA/M/sxIjTqO9ZTxLvco7es86GLGE0InSsMjv52PJZB3GaG4d6WxL1SUnAtxecuhdAcATgyeyefcEhckTXmyI/IXM/UJpnMb4nI38CVbwJgRa5ZfQfcZ/dBApug9xl8CU9WMZLQY=
+	t=1746486341; cv=none; b=XTXuJUAod0hiG7NATPrz07pI6QRTlN0bb7ho0cRrmvEb+BTLJouX5qj2CaF1wUgIWyUwvbD5Fx7SPWzgjU4nICzx2WmOQpABoqD8NoXEng6dmiXNzdi1zNW+GUDI2jxGjzwiSJfgGzHDxPeJb+ioNwgMhAAyeCZqwkXhI6z3N8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746486270; c=relaxed/simple;
-	bh=pezJFGNqJYcMCIUcG2oynIeI9Ofz2rix52mArlSiCCY=;
+	s=arc-20240116; t=1746486341; c=relaxed/simple;
+	bh=cRm/7xqnXlTo9yV/yrrFyHl5kBpcMoc2hVoWCjJaUbE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=V9aL00Xx3v5yZo5Q5GD2BRHEbr21gutC8zbuSENOYDIsavcBKvHde699faOfCpvrAKWxr+azMn/Ovgz+TkWRp+tOlusdkc6Fl9MZuY2PCKFuvhr8YGyD9UtQFubdeBbn98WqoEzAs9Y0/nolAtyQezVIaPbotKh9myfRYmh8HXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rl570EER; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99866C4CEED;
-	Mon,  5 May 2025 23:04:27 +0000 (UTC)
+	 MIME-Version; b=fPZb+EKTBD370oi7WdrBI85OVz7i/f1A8j4wsI73/zXhRxN3xIk+mnJ/EQs1lvcDN9YhIWEyhHy86c390O5pyXTCv8EUb5N88Id1eI2flW0XZZyLj/PZiOksZlQIYAjj8NiHjdH4kg+94GoEu4KPULNNIt7MPZyUuWFshL3SN64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qlTK/+cL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2D32C4CEEE;
+	Mon,  5 May 2025 23:05:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746486268;
-	bh=pezJFGNqJYcMCIUcG2oynIeI9Ofz2rix52mArlSiCCY=;
+	s=k20201202; t=1746486340;
+	bh=cRm/7xqnXlTo9yV/yrrFyHl5kBpcMoc2hVoWCjJaUbE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rl570EERQMGpgjHzGd0kHFrfnCzrY7tkcNIYpwvghdUGfaN6iew5KDuEdgyCzvinZ
-	 P3poznVY7VEn4F+M4nusOtc0kBNB+XXFwG58mejPDGlClelzfBzW0qqBHqDtfxdmEs
-	 2v6V+6QVlRUP4va49pAl7MnI6ssK6PFogMwOBJUKgV7lhdNusah8bxABCo/SMRCCKe
-	 KSGeprCxJ53pMGLvgPahsoSolXmNN/umEWijb/zjzX7M4a+WW22lr2qesif3IveeE4
-	 16XCZHzM38RhChHZL5GeXywg2upzULjgQR9Qz8dumTd1sd6Mj1gBMJ8gKlvaN4it/5
-	 +RVKdoXeecY2w==
+	b=qlTK/+cLDV+mAW/sNLMRFz+/Llzalb1daQ9h2Ro49A+mhKCNe+zAJ8TNPW6JyPibk
+	 59d58OPNJzoWwZ/1bffqjnoKyO9IEFvstWi5+XZ54pjlZt0VR4rzm57I6LzSXMf1kT
+	 zJeAwRaJWDNuacPotZWz2uKp2qjiayEVTdjfDzztEvHfMfJU9pwepoMCUEGOlKkKzp
+	 t6r0a4yoYdaA2nDNBfH1eY8IwtXobK9XSeB48xbXbfunBkUSqK/osRNQg475PV/18l
+	 q1MJKaf3osjw6GybMWWhrcZeWY0ueTvusijq+rq+ZjBPWbQvks3aQX0Pg/UkTY49jC
+	 F0H6g3cPr7qLQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Chaohai Chen <wdhh66@163.com>,
+Cc: Justin Tee <justin.tee@broadcom.com>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Sasha Levin <sashal@kernel.org>,
-	linux-scsi@vger.kernel.org,
-	target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 231/294] scsi: target: spc: Fix loop traversal in spc_rsoc_get_descr()
-Date: Mon,  5 May 2025 18:55:31 -0400
-Message-Id: <20250505225634.2688578-231-sashal@kernel.org>
+	james.smart@broadcom.com,
+	dick.kennedy@broadcom.com,
+	James.Bottomley@HansenPartnership.com,
+	linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6 268/294] scsi: lpfc: Handle duplicate D_IDs in ndlp search-by D_ID routine
+Date: Mon,  5 May 2025 18:56:08 -0400
+Message-Id: <20250505225634.2688578-268-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250505225634.2688578-1-sashal@kernel.org>
 References: <20250505225634.2688578-1-sashal@kernel.org>
@@ -66,66 +68,64 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6.89
 Content-Transfer-Encoding: 8bit
 
-From: Chaohai Chen <wdhh66@163.com>
+From: Justin Tee <justin.tee@broadcom.com>
 
-[ Upstream commit 04ad06e41d1c74cc323b20a7bd023c47bd0e0c38 ]
+[ Upstream commit 56c3d809b7b450379162d0b8a70bbe71ab8db706 ]
 
-Stop traversing after finding the appropriate descriptor.
+After a port swap between separate fabrics, there may be multiple nodes in
+the vport's fc_nodes list with the same fabric well known address.
+Duplication is temporary and eventually resolves itself after dev_loss_tmo
+expires, but nameserver queries may still occur before dev_loss_tmo.  This
+possibly results in returning stale fabric ndlp objects.  Fix by adding an
+nlp_state check to ensure the ndlp search routine returns the correct newer
+allocated ndlp fabric object.
 
-Signed-off-by: Chaohai Chen <wdhh66@163.com>
-Link: https://lore.kernel.org/r/20250124085542.109088-1-wdhh66@163.com
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Link: https://lore.kernel.org/r/20250131000524.163662-5-justintee8345@gmail.com
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/target/target_core_spc.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
-index f110f932ba054..675f774be1d30 100644
---- a/drivers/target/target_core_spc.c
-+++ b/drivers/target/target_core_spc.c
-@@ -2151,8 +2151,10 @@ spc_rsoc_get_descr(struct se_cmd *cmd, struct target_opcode_descriptor **opcode)
- 			if (descr->serv_action_valid)
- 				return TCM_INVALID_CDB_FIELD;
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 0ad8a10002ce3..5c9bc8af3c2df 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -5646,6 +5646,7 @@ static struct lpfc_nodelist *
+ __lpfc_findnode_did(struct lpfc_vport *vport, uint32_t did)
+ {
+ 	struct lpfc_nodelist *ndlp;
++	struct lpfc_nodelist *np = NULL;
+ 	uint32_t data1;
  
--			if (!descr->enabled || descr->enabled(descr, cmd))
-+			if (!descr->enabled || descr->enabled(descr, cmd)) {
- 				*opcode = descr;
-+				return TCM_NO_SENSE;
-+			}
- 			break;
- 		case 0x2:
- 			/*
-@@ -2166,8 +2168,10 @@ spc_rsoc_get_descr(struct se_cmd *cmd, struct target_opcode_descriptor **opcode)
- 			if (descr->serv_action_valid &&
- 			    descr->service_action == requested_sa) {
- 				if (!descr->enabled || descr->enabled(descr,
--								      cmd))
-+								      cmd)) {
- 					*opcode = descr;
-+					return TCM_NO_SENSE;
-+				}
- 			} else if (!descr->serv_action_valid)
- 				return TCM_INVALID_CDB_FIELD;
- 			break;
-@@ -2180,13 +2184,15 @@ spc_rsoc_get_descr(struct se_cmd *cmd, struct target_opcode_descriptor **opcode)
- 			 */
- 			if (descr->service_action == requested_sa)
- 				if (!descr->enabled || descr->enabled(descr,
--								      cmd))
-+								      cmd)) {
- 					*opcode = descr;
-+					return TCM_NO_SENSE;
-+				}
- 			break;
+ 	list_for_each_entry(ndlp, &vport->fc_nodes, nlp_listp) {
+@@ -5660,14 +5661,20 @@ __lpfc_findnode_did(struct lpfc_vport *vport, uint32_t did)
+ 					 ndlp, ndlp->nlp_DID,
+ 					 ndlp->nlp_flag, data1, ndlp->nlp_rpi,
+ 					 ndlp->active_rrqs_xri_bitmap);
+-			return ndlp;
++
++			/* Check for new or potentially stale node */
++			if (ndlp->nlp_state != NLP_STE_UNUSED_NODE)
++				return ndlp;
++			np = ndlp;
  		}
  	}
  
--	return 0;
-+	return TCM_NO_SENSE;
+-	/* FIND node did <did> NOT FOUND */
+-	lpfc_printf_vlog(vport, KERN_INFO, LOG_NODE,
+-			 "0932 FIND node did x%x NOT FOUND.\n", did);
+-	return NULL;
++	if (!np)
++		/* FIND node did <did> NOT FOUND */
++		lpfc_printf_vlog(vport, KERN_INFO, LOG_NODE,
++				 "0932 FIND node did x%x NOT FOUND.\n", did);
++
++	return np;
  }
  
- static sense_reason_t
+ struct lpfc_nodelist *
 -- 
 2.39.5
 
