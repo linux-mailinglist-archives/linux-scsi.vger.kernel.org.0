@@ -1,175 +1,131 @@
-Return-Path: <linux-scsi+bounces-13891-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13896-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F38EAAA770
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 02:33:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6437EAAAA2F
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 03:31:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 976C818872F1
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 00:31:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A23057A2FFC
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 01:29:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F57F3390A2;
-	Mon,  5 May 2025 22:37:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78497388C23;
+	Mon,  5 May 2025 23:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VC9aMDm0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kPbFLHGy"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F86339097;
-	Mon,  5 May 2025 22:37:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B2C3679D9;
+	Mon,  5 May 2025 22:55:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746484623; cv=none; b=DqAhFdRV15RAYwtQpZxEnhAM62yEGfFYu8LGuge0dcZ7edmQszFG+LbuUj5ZsWE8MZeduvYeQK+KaHV1kLPJ0z40fM/A/j0Isd//0yom5eXSC7yZrtOQZa7z7n9qKz13AOMq9QYzCLqMihQMckfGduTzJhtlbP/hFSwux4Is4HI=
+	t=1746485719; cv=none; b=e2PQQTEDZkY/yUE8UP3qnNVzIYLOdLQKSFlZbR/ez9ncN0N01czkc0JFxwhqK8YdVltLMo8rGJRv4aT9zXzaNEVONnxClBSUYw/0+gmSyBQOsfgcrUMGFpFoHcqdZoAblIt22XVDrzKknYSisiXtQPaQrp/tQpg/77tS41RZUtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746484623; c=relaxed/simple;
-	bh=e32HKCNMgAKfpyaf7qVVWS2dVmcDhU5ubmpdQauNCgE=;
+	s=arc-20240116; t=1746485719; c=relaxed/simple;
+	bh=dYFiojUUXBACEeNTTadNaDNxVu7HjpYUe1/WEBsn/7E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aJ8pZlx527yo5lj4Ywj0FDuQFt7HOFQe+zIZeq3JkrTa4cPpJQXbkl0ngIqCbiB4uxEuTS8UlwmPJtMgf+hGW9218CBvmY7WVg6AXy+VDLN1CgaqzzIG0LWvC8gq+nbkUdyOfQpLBGMct9JcJoPH8Sdp6gqbgVwTqpei2X588KE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VC9aMDm0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE9D0C4CEED;
-	Mon,  5 May 2025 22:37:02 +0000 (UTC)
+	 MIME-Version; b=aIBUkQ21udKlvLVQ7UVNdkBbTtcA5efYzahcVTfKvEF/+Vo0G4tHiaUYlVJB0dMKfDxBxfZPuJokvjyiZNnwqrR2k5I6YibhRaKL3A/a2p/WVg6da4rCLKDGwrWRC7GMU3LvNr6jsTS6fleAEk/gQLSYyPiw9ke08Q9DywWU32c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kPbFLHGy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B9DAC4CEE4;
+	Mon,  5 May 2025 22:55:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746484623;
-	bh=e32HKCNMgAKfpyaf7qVVWS2dVmcDhU5ubmpdQauNCgE=;
+	s=k20201202; t=1746485718;
+	bh=dYFiojUUXBACEeNTTadNaDNxVu7HjpYUe1/WEBsn/7E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VC9aMDm0dRwVFQRw15glSxxHJtwvxBKDc6wo6pMZtbnI3XJI9r0zykrAu3r0RSPkO
-	 7ZCk5kiDZBqm+umZbQ155Red+toRO36RXcTDyJ1W/lP8TQyWqcJHPrYyusmdkIm2cf
-	 Hg/OMlgdozQjKXFmzlYk7Uy+IZMwDbHKCMbWWdTHz2mwbWYlJh8XVd6geLOcQWl6sU
-	 w8BtL5uxI1KxSOG25NYCENxy/cY85rMrrXtKMQIGrFe99iHWoDAHT2JEOLT/kmZPgH
-	 qKbPM5NfKlrmAOqxphyPRYmdDIVmuc9qhaARE4O3Pm0hEEpvx03MfgfTrBMzUkeEhP
-	 sc7fdDnueyeRg==
+	b=kPbFLHGyrdgyVatp1wx4IxqYZ+bW5FClTFZOYAdYGXr8zooWEf1FZST4yppzr9jp2
+	 2Du2e/rUcyg15lv7fFbgycubRoz2qrz8APRek5vzY4ka7QZNQWWT+GnCqYjdqLndbD
+	 i9Cmhkyq7G8fFviNtLL/IjN6sWbK6se5oFdYI6rShMFVXJJMqi3zLdHTuMHZoTuiVz
+	 V63Oc8UIv7Va4htobyURxh5tYwsQHvD+pZGZVIIoXd6RK4Xpik9KX7WYUGf+MqD/RO
+	 6e8XYmAa1EusQ7saYUObBYpQSqkXV77JLdkFb6/Yzi69+wOJ0JmvHxNKBOqfxe7xH7
+	 N03AmJrEytXCA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
-	John Meneghini <jmeneghi@redhat.com>,
+Cc: Justin Tee <justin.tee@broadcom.com>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Sasha Levin <sashal@kernel.org>,
+	james.smart@broadcom.com,
+	dick.kennedy@broadcom.com,
 	James.Bottomley@HansenPartnership.com,
 	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 568/642] scsi: st: Restore some drive settings after reset
-Date: Mon,  5 May 2025 18:13:04 -0400
-Message-Id: <20250505221419.2672473-568-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 441/486] scsi: lpfc: Handle duplicate D_IDs in ndlp search-by D_ID routine
+Date: Mon,  5 May 2025 18:38:37 -0400
+Message-Id: <20250505223922.2682012-441-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505221419.2672473-1-sashal@kernel.org>
-References: <20250505221419.2672473-1-sashal@kernel.org>
+In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
+References: <20250505223922.2682012-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.5
+X-stable-base: Linux 6.12.26
 Content-Transfer-Encoding: 8bit
 
-From: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
+From: Justin Tee <justin.tee@broadcom.com>
 
-[ Upstream commit 7081dc75df79696d8322d01821c28e53416c932c ]
+[ Upstream commit 56c3d809b7b450379162d0b8a70bbe71ab8db706 ]
 
-Some of the allowed operations put the tape into a known position to
-continue operation assuming only the tape position has changed.  But reset
-sets partition, density and block size to drive default values. These
-should be restored to the values before reset.
+After a port swap between separate fabrics, there may be multiple nodes in
+the vport's fc_nodes list with the same fabric well known address.
+Duplication is temporary and eventually resolves itself after dev_loss_tmo
+expires, but nameserver queries may still occur before dev_loss_tmo.  This
+possibly results in returning stale fabric ndlp objects.  Fix by adding an
+nlp_state check to ensure the ndlp search routine returns the correct newer
+allocated ndlp fabric object.
 
-Normally the current block size and density are stored by the drive.  If
-the settings have been changed, the changed values have to be saved by the
-driver across reset.
-
-Signed-off-by: Kai Mäkisara <Kai.Makisara@kolumbus.fi>
-Link: https://lore.kernel.org/r/20250120194925.44432-2-Kai.Makisara@kolumbus.fi
-Reviewed-by: John Meneghini <jmeneghi@redhat.com>
-Tested-by: John Meneghini <jmeneghi@redhat.com>
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Link: https://lore.kernel.org/r/20250131000524.163662-5-justintee8345@gmail.com
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/st.c | 24 +++++++++++++++++++++---
- drivers/scsi/st.h |  2 ++
- 2 files changed, 23 insertions(+), 3 deletions(-)
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
-index 4add423f2f415..7dec7958344ea 100644
---- a/drivers/scsi/st.c
-+++ b/drivers/scsi/st.c
-@@ -952,7 +952,6 @@ static void reset_state(struct scsi_tape *STp)
- 		STp->partition = find_partition(STp);
- 		if (STp->partition < 0)
- 			STp->partition = 0;
--		STp->new_partition = STp->partition;
- 	}
- }
- 
-@@ -2929,14 +2928,17 @@ static int st_int_ioctl(struct scsi_tape *STp, unsigned int cmd_in, unsigned lon
- 		if (cmd_in == MTSETDENSITY) {
- 			(STp->buffer)->b_data[4] = arg;
- 			STp->density_changed = 1;	/* At least we tried ;-) */
-+			STp->changed_density = arg;
- 		} else if (cmd_in == SET_DENS_AND_BLK)
- 			(STp->buffer)->b_data[4] = arg >> 24;
- 		else
- 			(STp->buffer)->b_data[4] = STp->density;
- 		if (cmd_in == MTSETBLK || cmd_in == SET_DENS_AND_BLK) {
- 			ltmp = arg & MT_ST_BLKSIZE_MASK;
--			if (cmd_in == MTSETBLK)
-+			if (cmd_in == MTSETBLK) {
- 				STp->blksize_changed = 1; /* At least we tried ;-) */
-+				STp->changed_blksize = arg;
-+			}
- 		} else
- 			ltmp = STp->block_size;
- 		(STp->buffer)->b_data[9] = (ltmp >> 16);
-@@ -3637,9 +3639,25 @@ static long st_ioctl(struct file *file, unsigned int cmd_in, unsigned long arg)
- 				retval = (-EIO);
- 				goto out;
- 			}
--			reset_state(STp);
-+			reset_state(STp); /* Clears pos_unknown */
- 			/* remove this when the midlevel properly clears was_reset */
- 			STp->device->was_reset = 0;
-+
-+			/* Fix the device settings after reset, ignore errors */
-+			if (mtc.mt_op == MTREW || mtc.mt_op == MTSEEK ||
-+				mtc.mt_op == MTEOM) {
-+				if (STp->can_partitions) {
-+					/* STp->new_partition contains the
-+					 *  latest partition set
-+					 */
-+					STp->partition = 0;
-+					switch_partition(STp);
-+				}
-+				if (STp->density_changed)
-+					st_int_ioctl(STp, MTSETDENSITY, STp->changed_density);
-+				if (STp->blksize_changed)
-+					st_int_ioctl(STp, MTSETBLK, STp->changed_blksize);
-+			}
- 		}
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 6e8d8a96c54fb..31dcabebc9b6d 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -5622,6 +5622,7 @@ static struct lpfc_nodelist *
+ __lpfc_findnode_did(struct lpfc_vport *vport, uint32_t did)
+ {
+ 	struct lpfc_nodelist *ndlp;
++	struct lpfc_nodelist *np = NULL;
+ 	uint32_t data1;
  
- 		if (mtc.mt_op != MTNOP && mtc.mt_op != MTSETBLK &&
-diff --git a/drivers/scsi/st.h b/drivers/scsi/st.h
-index 1aaaf5369a40f..6d31b894ee84c 100644
---- a/drivers/scsi/st.h
-+++ b/drivers/scsi/st.h
-@@ -165,6 +165,7 @@ struct scsi_tape {
- 	unsigned char compression_changed;
- 	unsigned char drv_buffer;
- 	unsigned char density;
-+	unsigned char changed_density;
- 	unsigned char door_locked;
- 	unsigned char autorew_dev;   /* auto-rewind device */
- 	unsigned char rew_at_close;  /* rewind necessary at close */
-@@ -172,6 +173,7 @@ struct scsi_tape {
- 	unsigned char cleaning_req;  /* cleaning requested? */
- 	unsigned char first_tur;     /* first TEST UNIT READY */
- 	int block_size;
-+	int changed_blksize;
- 	int min_block;
- 	int max_block;
- 	int recover_count;     /* From tape opening */
+ 	list_for_each_entry(ndlp, &vport->fc_nodes, nlp_listp) {
+@@ -5636,14 +5637,20 @@ __lpfc_findnode_did(struct lpfc_vport *vport, uint32_t did)
+ 					 ndlp, ndlp->nlp_DID,
+ 					 ndlp->nlp_flag, data1, ndlp->nlp_rpi,
+ 					 ndlp->active_rrqs_xri_bitmap);
+-			return ndlp;
++
++			/* Check for new or potentially stale node */
++			if (ndlp->nlp_state != NLP_STE_UNUSED_NODE)
++				return ndlp;
++			np = ndlp;
+ 		}
+ 	}
+ 
+-	/* FIND node did <did> NOT FOUND */
+-	lpfc_printf_vlog(vport, KERN_INFO, LOG_NODE,
+-			 "0932 FIND node did x%x NOT FOUND.\n", did);
+-	return NULL;
++	if (!np)
++		/* FIND node did <did> NOT FOUND */
++		lpfc_printf_vlog(vport, KERN_INFO, LOG_NODE,
++				 "0932 FIND node did x%x NOT FOUND.\n", did);
++
++	return np;
+ }
+ 
+ struct lpfc_nodelist *
 -- 
 2.39.5
 
