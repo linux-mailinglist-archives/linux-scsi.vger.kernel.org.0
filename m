@@ -1,80 +1,76 @@
-Return-Path: <linux-scsi+bounces-13947-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13944-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C781AAB9FE
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 09:10:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B5FFAABA22
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 09:13:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D98747A8942
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 07:07:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E98051C25743
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 07:08:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1A602459DA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EE4F238C20;
 	Tue,  6 May 2025 04:39:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="nHuPdBK9"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Z9p82i6/"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2DA52D4414;
-	Tue,  6 May 2025 04:26:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 918CF2D47A2;
+	Tue,  6 May 2025 04:26:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746505564; cv=none; b=oMvfHcCxb4x3BmosIY5rGscxvltom4/HYZvJ6CW3GndPaMwGkJt2XC/1r03HeWpNWbdb7IK4AWsvWyvYq5KfGnIPiBob5Cv1OGjBNZaDwqWkKAFLFJ1ocY5U99wnC+Pk7AtRfyBLRcMULVTR9kF045r3Zmc8kP9IthCSMsVEYbE=
+	t=1746505562; cv=none; b=guNRkTV6jokV7NvGthUq8m4Hz6mSqjZWr/A0czPa1uZSEnLSS8VfRLTJEcoSRlDupXsXhFj4bwnMr1IQXphOsWjE0zd7/8uQkXfhH/x0gpf9ELH+W95u6va6Ef1aL3H9VwbaMCbAFc/JL3d6oeYpKJI9lr4db+L38Edp51sjmKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746505564; c=relaxed/simple;
-	bh=6XhzECDVUMB3Tn5K1eDHqsOmvUyFRj+/hbcpeCt5JPU=;
+	s=arc-20240116; t=1746505562; c=relaxed/simple;
+	bh=Shiy2lQKdOMsen2fuhK2vAJ6/T1Jm1YxdVvGrPZgYYk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S6K3NvbmXAFcEZXOJJQRgpz6mtjIvS7w5czRKhcFBlP4OMQcbs9yZDXo5BN86anV4HkavsWQyz4uwldjqDmBeM8/5hNWI3152h5jGvStkm2YkYEGSz4SdTjHwVC/ouZZCwfhXeu4itrXIhbELvn086HII598CqvVC3zFx5jpiGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=nHuPdBK9; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=jQeW070nAnSBBLQBt3Ti8SklgPoR9w+zUUOAnuuTVnwmLO60Jx+qpWqHoIOnj+jCcV0PICKJ60V6XDwvU5+zlv3cYBxIX+bKF44FLjVINrWW8tRxd2pWHp+IA1ArGubHeHDldI4NYx74K1w0t0Ifsm+oTTG84T8JdhioAYzZumo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Z9p82i6/; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54638Cb4002318;
-	Tue, 6 May 2025 04:25:58 GMT
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5463bO8w030301;
+	Tue, 6 May 2025 04:25:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=QO48kPvY5xCVh8WLZPWxdbiEaXfMJW3VKCmOMA+t2k0=; b=
-	nHuPdBK9z0fgOCgoe/m3/YfTZfGRDvWXgySFs8NH1UUfLZ8t/Xwipj020uS/qmDC
-	r2w8IAYLmaFcpnRbMP9Bg0blHCap8mKeGeql0j1z5Oli5iJAzhMa7/cXtqJiT6OV
-	4P7tiHRyTV0O2PLzwQGiNNXRTInCdyXLltZKBpOhtAuW5b8cJE8rByyNu7hSRf6q
-	wyAuvdXZYROPqMeciJinOvrzU1Jg1lqMZ5f8y0e7kBoRGFnA/FMpKqIhf4P6FDoG
-	tatoEpF8dCPM1XmhVi35LHYjqyzmng2RlMzGGKE1X3i73J69fN3Qbnf+bS92Y4xA
-	60V77WrfZN18FQPQejWGTg==
+	corp-2025-04-25; bh=CDDz4g7/rVndesm02zIObMA+GiB2YSh08dBfpENwTIo=; b=
+	Z9p82i6/JXd5t9o+MthD7jl6hXpjUHCx811ff2ZVWLlpEakRGVuB88wORWWtibqi
+	4JH755VGwmYrxheYlnvO1B2f2TUk4xs5fuFfAwmR58pIhd8zsWaEo6vj6cOtb4AR
+	GNaFfUFWvQ2HIP9L9ZdUAgrzdzOpZTiIbBgUQNiQLQAaS9I8Ui/EJunxo3XvD1YZ
+	ITVmWx0HchPYVb6SkCNYHkvR/UvpgeViNOSeDQQaqKO2F00/rwik2K/57u77I1OH
+	8gGwPtsNHyJPK/dmXzLNPEqq0EYGk7rqZx4IjubZ7cg+dPFWNXZUo8Kj9y7UvG4T
+	8GYkb9wdxLUdfOc84tICAA==
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46fa80r24x-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46fap1g1an-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 06 May 2025 04:25:58 +0000 (GMT)
+	Tue, 06 May 2025 04:25:59 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5461enC0036150;
-	Tue, 6 May 2025 04:25:57 GMT
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5461hr3k035320;
+	Tue, 6 May 2025 04:25:58 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 46d9k8gppj-1
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 46d9k8gppq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 06 May 2025 04:25:57 +0000
+	Tue, 06 May 2025 04:25:58 +0000
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5464Pr4C012838;
-	Tue, 6 May 2025 04:25:56 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5464Pr4E012838;
+	Tue, 6 May 2025 04:25:57 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 46d9k8gpmt-4;
-	Tue, 06 May 2025 04:25:56 +0000
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 46d9k8gpmt-5;
+	Tue, 06 May 2025 04:25:57 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Nilesh Javali <njavali@marvell.com>, Kees Cook <kees@kernel.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] scsi: qla4xxx: Remove duplicate struct crb_addr_pair
-Date: Tue,  6 May 2025 00:25:22 -0400
-Message-ID: <174649624840.3806817.4773433631061640874.b4-ty@oracle.com>
+To: linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        Mike Christie <michael.christie@oracle.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH v2 0/2] target: Remove atomics from main IO path
+Date: Tue,  6 May 2025 00:25:23 -0400
+Message-ID: <174649624852.3806817.14248579008511251110.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250426062010.work.878-kees@kernel.org>
-References: <20250426062010.work.878-kees@kernel.org>
+In-Reply-To: <20250424032741.16216-1-michael.christie@oracle.com>
+References: <20250424032741.16216-1-michael.christie@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -90,30 +86,35 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phis
  malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0 mlxscore=0
  suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2504070000 definitions=main-2505060039
-X-Authority-Analysis: v=2.4 cv=GqBC+l1C c=1 sm=1 tr=0 ts=68198f56 b=1 cx=c_pps a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=gieQ7GMfMR2A4jGg8wMA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: zUM30dJ537Ya5HC_KkWStI7SnBmh7819
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA2MDAzOSBTYWx0ZWRfX8FSdcim2BloV mrAHKVhkKXu/tkzIUhGfN0sFrRxjgwFhfj8dNC1LI+F77wJMgACHJ57sFbq9bMnI70hlR7IFHK3 K93kjdfrwVZHVKr5Sg0SprLo+l90J0LtkR8+O2kJ2UD5Yq4ASz5+kxHev243BzlMnq7oxud/Y4o
- ewHcSuwftZh64//cuZ6Dm3+Ef2Cuye+eZBzbkAHMmyPSZZ7eifoU6y2ItsrO9aiinHUBsIEvMCj O8tAScr0J498BPl6dA44KdTITLRMeMF+626i+PPEhkR4ueC9TljVHxx8733AWkQOIfk/zz2vwbJ 83sEE39ZQDo0MbkBjcEGOPVLRNCr3u7A6fqOd+x5ukCrWMEuk8EFQu1t+UH24O5WqjEntiwEfnT
- lYVSVRVsVg+IIFLeXuzaXt+NQ/shHRP1dsxBxwiUoe0H7aPHHz5LB6EnZX9jjGIc0NCLc0Nm
-X-Proofpoint-ORIG-GUID: zUM30dJ537Ya5HC_KkWStI7SnBmh7819
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA2MDAzOSBTYWx0ZWRfX+ivqmrrs+N0N T408rZ9+2W8GBGkYXAxaKAgJTGnUXzV/0XKALPUY3RPpVh1ETApSMwkODpOPRN91E4Adgxx/oXS NSER1xGSWpMx6G9sPyYWip9rmGW1kfE7ec7J15nYoQCz0KCHi+k+d/ZwNkCClrCHETb4nznfobm
+ LSC/2boxZ+yUCm+mRurrT37uycJe4K2fuzRbK8OWpDyY2oPrCCS/mPU9FfmTUZOpEZG4AcJMm22 1PSgibvJMeRZ1yKazhBm4ZGCPQQLZuoYS1j0ucDaRCZwJI86c+bHB3lOAvoYcyC8gUwujFsmk01 DOQIgOly2ALRZljD3Jbv7C/t1Wjz/KuJDWNeUEQicl4vIT+3g5RoRzW9wmQRqxgorfbbYyoE8+3
+ WzkzyM0L5QoeZeZyDV4FeBwBnftsO4pzKOcLZ9mwc25ilXBSRO6CtC2ZuXG4g3pJtC9yqADX
+X-Proofpoint-ORIG-GUID: 8CdGMytQ1k9RFfTTuyfEpVFwn65FoflD
+X-Proofpoint-GUID: 8CdGMytQ1k9RFfTTuyfEpVFwn65FoflD
+X-Authority-Analysis: v=2.4 cv=ZYgdNtVA c=1 sm=1 tr=0 ts=68198f57 b=1 cx=c_pps a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=XpW3ApKRIVQcKetVdykA:9 a=QEXdDO2ut3YA:10
 
-On Fri, 25 Apr 2025 23:20:11 -0700, Kees Cook wrote:
+On Wed, 23 Apr 2025 22:26:31 -0500, Mike Christie wrote:
 
-> In preparation for making the kmalloc family of allocators type aware,
-> we need to make sure that the returned type from the allocation matches
-> the type of the variable being assigned. (Before, the allocator would
-> always return "void *", which can be implicitly cast to any pointer type.)
+> The following patches made over Linus's tree remove the atomic use from
+> the main IO path. There was a handful of atomic_longs used just used
+> for stats and a couple atomics used for handling ordered commands. These
+> patches move the stats to per cpu, and moves the ordered tracking to a
+> per cpu counter.
 > 
-> The assigned type is "struct crb_addr_pair *" and the returned type will
-> be a _different_ "struct crb_addr_pair *", causing a warning. This really
-> stumped me for a bit. :) Drop the redundant declaration.
+> With the patches 8K IOPS increases by up to 33% when running fio
+> with numjobs >= 4 and using the vhost-scsi target with virtio-scsi
+> and virtio num_queues >= 4 (jobs and queues match, and virtqueue_size
+> and cmd_per_lun are increased to match the total iodepth of all
+> jobs).
 > 
 > [...]
 
 Applied to 6.16/scsi-queue, thanks!
 
-[1/1] scsi: qla4xxx: Remove duplicate struct crb_addr_pair
-      https://git.kernel.org/mkp/scsi/c/3d030e2feb8a
+[1/2] target: Move IO path stats to per cpu
+      https://git.kernel.org/mkp/scsi/c/9cf2317b795d
+[2/2] target: Move delayed/ordered tracking to per cpu
+      https://git.kernel.org/mkp/scsi/c/268975a87c7b
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
