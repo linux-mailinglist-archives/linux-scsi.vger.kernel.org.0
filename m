@@ -1,82 +1,76 @@
-Return-Path: <linux-scsi+bounces-13948-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13946-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D17FDAABA02
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 09:10:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6FECAABA25
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 09:13:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0B4C4C381F
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 07:08:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1DD41C26C06
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 07:09:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0412E2459FB;
-	Tue,  6 May 2025 04:39:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C6202405E8;
+	Tue,  6 May 2025 04:39:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HJeL3qAG"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eK5jeUHr"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54822D47A5
-	for <linux-scsi@vger.kernel.org>; Tue,  6 May 2025 04:26:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0F62D441D
+	for <linux-scsi@vger.kernel.org>; Tue,  6 May 2025 04:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746505567; cv=none; b=uZPwx+c11f2ZJDos+r/gU3FjJ5pLnSZg44ehtTiczgu6cIASDS6VNhjTdH0Ewd68JN1GMa+4L5Fd2vZT5s2z2jjnBhWdU/9oJZikQrH43h0L3FDsjX8/S6vum9ty87vgn09/AEEda5MlSFy+gPyBz+7s112MEFaPYnV4XPEYei8=
+	t=1746505560; cv=none; b=KkSWymPo3sgg8Skx0OyX43N3AABqumexH78dDByXPBSnlMMgjhtyMqqExr8fbe/1F86oxE0QJyLp1U14U62kTwlAmCRv0RreXv52kXb4g3xlef5LOq62Mu5GaZKdDpFUpUPSkEjA2g+EKEOhxnbo59AFuqnZYSjjUbr9U+l2PUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746505567; c=relaxed/simple;
-	bh=EaNYWgYDp2gLlKn57lJ9nA9AIPFmOugU0Bnm0N4XwsA=;
+	s=arc-20240116; t=1746505560; c=relaxed/simple;
+	bh=gYJBB6sl1hL6TUQQyyE6ckMCpXQhSSmNwyOOajPtj2o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pwdbqdaEMvoCGR2dHphmLpPEdnvm4kGVs0PgTVykFO0287bNjc5UnQj53Weir0MkZf6RRNyDxM0UXNPBIyuzRweFT0cvC/7ZRGBnjTifs2G1LuDU6zE1U9KPWx8yUTw9orraTUtD3TAcy8PO6CqQiKWqh0cZPu4R0w4gSN+ZI0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=HJeL3qAG; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=XPq7Xt7adjRSko0z7jlIOnSayjaclwn9Ned7XoYZd5M2k0KzUfyyUUE+bm/aZalul/eBNgno8gncZmAvRK0pE2JgIrxMN6iqNuh9zqfcBoW7hWpw3+GB94gdbqLo+9rSfzxyLMU0vqCKaODOVAmArMPEtcNoLRz7VQDfvOMN0L0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=eK5jeUHr; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54638Bvc002299;
-	Tue, 6 May 2025 04:25:55 GMT
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5463HPQm000532;
+	Tue, 6 May 2025 04:25:56 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=NHx/XgFQrLlS7/HqQso4GdMxNIp3KC2oHkpr/9vouHA=; b=
-	HJeL3qAGfZaEkMRWQoIYsh4XZhXA17mIAisZ7PVdGaTnNwg6UcnZP7SIfl7+bohi
-	p4G77z63G70E2W9VfPmpEvwNjjEnm3QoIZd38a/F7etgNhvE5ie3IgoqXJkGImRd
-	HclYJ9ahIUmx4OVpOmZOIcarNYLElJ7IL6MFqD0VjqRN3av3GnjjMJYHdrS5ZGCj
-	JxkhQBosYGIZgXuuh6ukDPQqRG3ksf20qnOjHHdTOwyWWnULeaAPmpdrLOq0QKWd
-	NoxNkA2fPLk3785GJOZZg1FPSlYDXjlcN0et0tHAaeTE6BrzCAV8COaBBjgq/Fzk
-	j0rpHYaJFWDlQGTcFmM98w==
+	corp-2025-04-25; bh=7y96xeNcFbPyKQrKGuDoiMgtBvvWFgSOYRZGeDTa0+I=; b=
+	eK5jeUHrvL0M/4MdmLGjYZFZbRIkUYsvQo6mHVLtUHsCJiVVM0XnD+YAYgpDtKk2
+	zG4AsCMuIEYbOI98CX7gSbBAEUdS9pccsaiai1SZRivwQTHHJodfCd12Zv7H/Utr
+	MRu5EDlc4Yzj/x7RWJPSIexO3NTZT1UEPRkvwAx1YhfzziJDn8f1J2XNK1V+Feud
+	rWum2DCvBYxkKxvuaSiI7/uWBbYsiojAmKHvOroebvqF/L95IYlJikviq+Jo/nBd
+	bvnQugaRpEvidwJ26zQf4EzRxWQc0FBMmCeZKD674Xw06cp/OLuDy3pS9bwoldSQ
+	toYM1oIrFdtM7dk7ccNLBg==
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46fa80r24u-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46facp01v3-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 06 May 2025 04:25:55 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5462CcPG036099;
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5462whXW036125;
 	Tue, 6 May 2025 04:25:54 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 46d9k8gpn6-1
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 46d9k8gpnd-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 06 May 2025 04:25:54 +0000
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5464Pr46012838;
-	Tue, 6 May 2025 04:25:53 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5464Pr48012838;
+	Tue, 6 May 2025 04:25:54 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 46d9k8gpmt-1;
-	Tue, 06 May 2025 04:25:53 +0000
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 46d9k8gpmt-2;
+	Tue, 06 May 2025 04:25:54 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: scott.teel@microchip.com, scott.benesh@microchip.com,
-        gerry.morong@microchip.com, mahesh.rajashekhara@microchip.com,
-        mike.mcgowen@microchip.com, murthy.bhat@microchip.com,
-        kumar.meiyappan@microchip.com, jeremy.reeves@microchip.com,
-        hch@infradead.org, James.Bottomley@HansenPartnership.com,
-        joseph.szczypek@hpe.com, POSWALD@suse.com, cameron.cumberland@suse.com,
-        Yi Zhang <yi.zhang@redhat.com>, Don Brace <don.brace@microchip.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 0/5] smartpqi updates
-Date: Tue,  6 May 2025 00:25:19 -0400
-Message-ID: <174649624850.3806817.16750220972374045020.b4-ty@oracle.com>
+To: linux-scsi@vger.kernel.org, Justin Tee <justintee8345@gmail.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, jsmart2021@gmail.com,
+        justin.tee@broadcom.com
+Subject: Re: [PATCH 0/8] Update lpfc to revision 14.4.0.9
+Date: Tue,  6 May 2025 00:25:20 -0400
+Message-ID: <174649624842.3806817.13493907898604040117.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250423183229.538572-1-don.brace@microchip.com>
-References: <20250423183229.538572-1-don.brace@microchip.com>
+In-Reply-To: <20250425194806.3585-1-justintee8345@gmail.com>
+References: <20250425194806.3585-1-justintee8345@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -92,37 +86,43 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phis
  malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0 mlxscore=0
  suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2504070000 definitions=main-2505060039
-X-Authority-Analysis: v=2.4 cv=GqBC+l1C c=1 sm=1 tr=0 ts=68198f53 b=1 cx=c_pps a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=3757S1Q47rFMJO7XUq4A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: uVHaSNWOBv7ulNRrwVpvCgcqnDpUIKdk
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA2MDAzOSBTYWx0ZWRfXxaa/Jf1GHUxd IWSDS+mcUe7uze1EXaBmqOuFEg+Cka/3w2zs6ur+boxoLiSiloVcusB6rGMs8s0iLJcXT+nNGFV HRShEG62bzAs+8toqdaFihpS0wRAOiQnBgW8txhbQxXkJNQgdoUW3o0BvFnJcJg7L7wn4kp2u0+
- 759kl1yQph0J9fxtvm15iMg0ISIQZKrtGXb+8C5Frv6YszMlRSRr6iW9fDFd4YSpmjpo0O3naXi pUbGjz6dJRxP3onJTaNaM7DCwVLbo3QlYeV1azZkNeGtqFCfJ7Jx4CLQjAKVgzLRoKYSdG2Dbnt klk0dWgzEK0jdChqyUdjLMjTWakdMalqefbbcCe32T8HPG8R0krnEaaHUGQwxBj8xbB2RnCAe9n
- VcH+8pXjB1PQDrcw3niezLDhfFvb4Ndzub6CfD+1adrWEpkGMSVVe+7Pqwih8vh/yrVqt+gV
-X-Proofpoint-ORIG-GUID: uVHaSNWOBv7ulNRrwVpvCgcqnDpUIKdk
+X-Proofpoint-GUID: FBGcc-sHjuB6pcu60niglKF7PiLTGhh5
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA2MDAzOSBTYWx0ZWRfX/Qe464/H5HzJ WStrxPDr/evCVqpSHljQAEKqkErvpPwPsi3ypneOpbrCmCCnBW5PifXV4RHKhm+Kn8hNjGoh+gD nAyL7rQkmF1tdjrxPX5tv2JrWl1kiYSbA2lL/tlb55dZVN5VoaxBkZ3OuaYj5wpjNDFsRyhSjcl
+ Q2aIBrlmRbXF4Gd6Rmfv4J/ZlEjDyaxPo3ykQ4NwWzly34ObNWEmHoTVTDyMuoEawNFgulOGBzP Kt1CGZkY8y0MP/b6rWGqmMBoUNMmU15KoewMdQzPipPfEdK5oCx+ZIqHoABQqeSkh1TX0wyfPgH jZbJtnuI1XkumX/lPh94QtgJN34RL3cssnPkWJqk7YSEQgAxBHWMQrfnSKABKaUqvLyTuBQuQCW
+ 6DGxEfwLhd/t0/k2YP2Sbu4qbtAAsXkt8LjQkXiMVXpiu2rZW9KbWRRPxQ1umuHzGsCnblQB
+X-Authority-Analysis: v=2.4 cv=VMbdn8PX c=1 sm=1 tr=0 ts=68198f53 b=1 cx=c_pps a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=xY7ZwogtYb6j_2XKhjIA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: FBGcc-sHjuB6pcu60niglKF7PiLTGhh5
 
-On Wed, 23 Apr 2025 13:32:24 -0500, Don Brace wrote:
+On Fri, 25 Apr 2025 12:47:58 -0700, Justin Tee wrote:
 
-> These patches are based on Martin Petersen's 6.16/scsi-queue tree
->   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
->   6.16/scsi-queue
+> Update lpfc to revision 14.4.0.9
 > 
-> There are two main functional changes in this patch series:
-> smartpqi-take-drives-offline-when-controller-is-offline
-> smartpqi-fix-smp_processor_id-call-trace-for-preemptible-kernels
+> This patch set contains fixes related to handling of WQE commands, PCI
+> function resets, firmware eratta events, ELS retries, a smatch
+> use-after-free warning, and the creation of a new VMID information entry.
+> 
+> The patches were cut against Martin's 6.16/scsi-queue tree.
 > 
 > [...]
 
 Applied to 6.16/scsi-queue, thanks!
 
-[1/5] smartpqi: take drives offline when controller is offline
-      https://git.kernel.org/mkp/scsi/c/32c79c268078
-[2/5] smartpqi: add new pci ids
-      https://git.kernel.org/mkp/scsi/c/01b8bdddcfab
-[3/5] Enhance WWID Logging Logic.
-      https://git.kernel.org/mkp/scsi/c/001164fc3082
-[4/5] smartpqi: fix smp_processor_id() call trace for preemptible kernels
-      https://git.kernel.org/mkp/scsi/c/42d033cf4b51
-[5/5] smartpqi: update driver version to 2.1.34-035
-      https://git.kernel.org/mkp/scsi/c/6e6d9e85bad2
+[1/8] lpfc: Fix lpfc_check_sli_ndlp handling for GEN_REQUEST64 commands
+      https://git.kernel.org/mkp/scsi/c/05ae6c9c7315
+[2/8] lpfc: Notify fc transport of rport disappearance during PCI fcn reset
+      https://git.kernel.org/mkp/scsi/c/8808c36b48a6
+[3/8] lpfc: Restart eratt_poll timer if HBA_SETUP flag still unset
+      https://git.kernel.org/mkp/scsi/c/19d768dca549
+[4/8] lpfc: Prevent failure to reregister with NVME transport after PRLI retry
+      https://git.kernel.org/mkp/scsi/c/df117c93f58a
+[5/8] lpfc: Avoid potential ndlp use-after-free in dev_loss_tmo_callbk
+      https://git.kernel.org/mkp/scsi/c/b5162bb6aa1e
+[6/8] lpfc: Create lpfc_vmid_info sysfs entry
+      https://git.kernel.org/mkp/scsi/c/327b110fdea1
+[7/8] lpfc: Update lpfc version to 14.4.0.9
+      https://git.kernel.org/mkp/scsi/c/773a136fc828
+[8/8] lpfc: Copyright updates for 14.4.0.9 patches
+      https://git.kernel.org/mkp/scsi/c/f65c7b81796e
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
