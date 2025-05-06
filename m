@@ -1,153 +1,126 @@
-Return-Path: <linux-scsi+bounces-13968-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-13971-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35FDFAACB33
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 18:39:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FF72AACCEF
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 20:16:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BBF49836BD
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 16:37:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 160B81C0510C
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 May 2025 18:16:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5D312857C9;
-	Tue,  6 May 2025 16:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30052286412;
+	Tue,  6 May 2025 18:16:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Kx3UI59W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FmfShspE"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A4B285406;
-	Tue,  6 May 2025 16:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2BC91917D0;
+	Tue,  6 May 2025 18:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746549468; cv=none; b=TcylBfL5rpkiH163MDNaJEqS+1D+x1xhvqlpX0TYHzKIvbRhZGs0BDe3SiIbFpZK6lYhA9aLGD8lcXj1Eny2PPxH0R1Xj7slVh/se7Mqj+cv/uqh/1OtZlVGf2RKzY3cgvk5gxiTtbCJpSU+mbSBOnbjueWZek35W8YoE5nwn/E=
+	t=1746555370; cv=none; b=KuoTfv40vP09TSIHPGDPVH7OpLDRr1upNe8/OriiEvgjDE3T/fzjzSq0+QI1QDtzAVQojHqfbTGd6ODKf6kXLsgPw163XemErUJTf/uc+l/qak/D+pgHuE+RxQTHbrfKvt4jRyCrha6z1RIkqejXljtN+O+5eh6bKdEmwHbV9gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746549468; c=relaxed/simple;
-	bh=rl+VdJnM8U54MEl4WHmsvqizGTzkQ+fz3Py8qHb+n/A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j7SRN/KduzwKMo644RwvoCCINovtd/MzeutXGX1ZJT+k2SkVxhWbm90fHUZrZXk6/ZLm+J20e03fjd7Pn6qq4Ip38ZAhLwCsyFOoK/w096rf/M+hWpRY0rG8bz+5dLFfOJCB7lxZc5AHpCON2bEJY5lLMpRCGxMbqat0z7NhNsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Kx3UI59W; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5468FFKQ013247;
-	Tue, 6 May 2025 16:37:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=AnZXfvO2F4n
-	jdN9SKiMeC1UFuBcsq368N5AF4Tbnc1M=; b=Kx3UI59W/cplb8j2ebmjukIrh6j
-	zBKZc3N/9oIDp9SEGX2jKmaEo2WfbzBIEB0iJOiiACXlfPEzyCCa3yo/CA+b9DA4
-	hXh9RN8HOhi8TcLEq4hS3SBBxLqcz3Zb0vBY2W++arYFU4QegRaiBJyp7DaQ0QIO
-	OtLE8kj6aceZEOSjUZuSB3wkulble9J180nyipr9Ud3Nd6wH/ZZyT9I3iysKffT5
-	C1DFpHuGix/vXhCf5eMw1oX2+ePKzAyGCfu4BL2S6As+FoSX5qiAjSUEp0+tZwY2
-	FNhUMPIpv1TjkcIIwqa+qIjWRs+xieU97R5/S2Ig6hd3foBbWCkSj18U2KA==
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46f5u42yn3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 06 May 2025 16:37:15 +0000 (GMT)
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 546GbCIE003142;
-	Tue, 6 May 2025 16:37:12 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 46dc7kx4mh-1;
-	Tue, 06 May 2025 16:37:12 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 546GbBdK003137;
-	Tue, 6 May 2025 16:37:12 GMT
-Received: from hu-maiyas-hyd.qualcomm.com (hu-nitirawa-hyd.qualcomm.com [10.213.109.152])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 546GbB9D003135;
-	Tue, 06 May 2025 16:37:11 +0000
-Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2342877)
-	id 185885015A9; Tue,  6 May 2025 22:07:11 +0530 (+0530)
-From: Nitin Rawat <quic_nitirawa@quicinc.com>
-To: alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        krzk+dt@kernel.org, robh@kernel.org, mani@kernel.org,
-        conor+dt@kernel.org, James.Bottomley@HansenPartnership.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        peter.wang@mediatek.com
-Cc: linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Nitin Rawat <quic_nitirawa@quicinc.com>
-Subject: [PATCH V2 3/3] scsi: ufs: qcom: Add support to disable UFS LPM Feature
-Date: Tue,  6 May 2025 22:07:05 +0530
-Message-ID: <20250506163705.31518-4-quic_nitirawa@quicinc.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250506163705.31518-1-quic_nitirawa@quicinc.com>
-References: <20250506163705.31518-1-quic_nitirawa@quicinc.com>
+	s=arc-20240116; t=1746555370; c=relaxed/simple;
+	bh=dNtQ/jpOnpZSTymrY6wNigWYOY25EWijiZO1AACKaNI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=spyHWglkr/HlhePLGqiJK5cHzfFKSuNSbDrykZ9kj9LBDCtpHDf0rdvq2mfZz/rkHO0kGdEXAdfEZgbvyMXPd18suOngQa6koDZPhiSWInMawSxrxN87KP3Qd4KkNgulgftNDMZaXyN9qrNxQKFFlvea7hL4Ro2MSVNeIAGi4Yc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FmfShspE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC57C4CEE4;
+	Tue,  6 May 2025 18:16:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746555369;
+	bh=dNtQ/jpOnpZSTymrY6wNigWYOY25EWijiZO1AACKaNI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FmfShspEphme/nslS8vv2ja//AnrqrqZIOqTw03nmCU14twtkjtU2n7JWfieUxaqM
+	 WEHtGlxM6c95i5Fcd590MooaTtug4sl5a/oWi7KXTRjN8HNObUjVQ8PErHOjV/zieO
+	 risAdzDcoSOYF/cukwPPYlx+eNyc7XCdGDMtITgVWeBo+Wqv1ufJl00C47QhIfFXL6
+	 t6d+4CKER7hGtFkbZO/CR+WFxyTQ4FX8FRmqQkQN1QZ8WBdobuxgVkHN8VN2FdryHS
+	 kDjuKzHUCN6gOZpqRGPUnL7/2Oan1vAPGV/iNnPNjUH+egy7Sf/SrjAMvDXqxORotA
+	 6Ix2qGuR4H5LA==
+Message-ID: <667e43a7-a33c-491b-83ca-fe06a2a5d9c3@kernel.org>
+Date: Tue, 6 May 2025 20:16:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=KcfSsRYD c=1 sm=1 tr=0 ts=681a3abb cx=c_pps
- a=Ou0eQOY4+eZoSc0qltEV5Q==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
- a=dt9VzEwgFbYA:10 a=COk6AnOGAAAA:8 a=xQxKfdDwmO31qOoK2vYA:9
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: Q1ylV7Bx-Ra_HMbSphY1rWezIYfnpAMv
-X-Proofpoint-ORIG-GUID: Q1ylV7Bx-Ra_HMbSphY1rWezIYfnpAMv
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA2MDE1NyBTYWx0ZWRfXzZPgNsenZhX2
- 1w/6oZRFvytp8t7yL4dYm1xEPKyk6iFlYUOvXvNV0GpiClmgy8JS0JOy6R66WvD3rm6979YK+td
- htFa1lPb6YjdNkEtVlF8zn+6pCHVIBCCJLvFHX2DynYZ+VHJOpo77DDWQJEOdULslxn6m04Pzb4
- ZGHMm63a2EGjLLDE3thGrvQBQNbzpcBcLLgs3ZJpDvDGkdAzl3kPdAreWwOmohnAaYxgBXOfA3Z
- luWtshlKcViIhAai1FNgUEpvy35NSiXHJcdMcGQ12Oapl8A68XAdkJo0/b4WYIkalDOcxDN7b3+
- i9ErGktb77pAYzsr+8kVZLgKJGX0zrS1B7mnsSrazSVMswZjtNDO75N6AEMnGa1TgBnqTR5M4UI
- wGqfZXVanODrekzsHRKpCwclS1lOyqfwkttZLL7KnTZmw/MFfdUyXVbKZUxTWuSfjWpYqf8p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-06_07,2025-05-05_01,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 spamscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
- phishscore=0 impostorscore=0 priorityscore=1501 malwarescore=0 adultscore=0
- clxscore=1015 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2505060157
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 1/3] scsi: ufs: dt-bindings: Document UFS Disable LPM
+ property
+To: Nitin Rawat <quic_nitirawa@quicinc.com>, alim.akhtar@samsung.com,
+ avri.altman@wdc.com, bvanassche@acm.org, krzk+dt@kernel.org,
+ robh@kernel.org, mani@kernel.org, conor+dt@kernel.org,
+ James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
+ beanhuo@micron.com, peter.wang@mediatek.com
+Cc: linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20250506163705.31518-1-quic_nitirawa@quicinc.com>
+ <20250506163705.31518-2-quic_nitirawa@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250506163705.31518-2-quic_nitirawa@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-There are emulation FPGA platforms or other platforms where UFS low
-power mode is either unsupported or power efficiency is not a critical
-requirement.
+On 06/05/2025 18:37, Nitin Rawat wrote:
+> Disable UFS low power mode on emulation FPGA platforms or other platforms
 
-Disable all low power mode UFS feature based on the "disable-lpm" device
-tree property parsed in platform driver.
+Why wouldn't you like to test LPM also on FPGA designs? I do not see
+here correlation.
 
-Signed-off-by: Nitin Rawat <quic_nitirawa@quicinc.com>
----
- drivers/ufs/host/ufs-qcom.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+> where it is either unsupported or power efficiency is not a critical
+> requirement.
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index c0761ccc1381..ad4974c6d08e 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -1057,12 +1057,15 @@ static void ufs_qcom_set_host_caps(struct ufs_hba *hba)
+That's a policy, not hardware, thus not suitable for DT.
 
- static void ufs_qcom_set_caps(struct ufs_hba *hba)
- {
--	hba->caps |= UFSHCD_CAP_CLK_GATING | UFSHCD_CAP_HIBERN8_WITH_CLK_GATING;
--	hba->caps |= UFSHCD_CAP_CLK_SCALING | UFSHCD_CAP_WB_WITH_CLK_SCALING;
--	hba->caps |= UFSHCD_CAP_AUTO_BKOPS_SUSPEND;
-+	if (!hba->disable_lpm) {
-+		hba->caps |= UFSHCD_CAP_CLK_GATING | UFSHCD_CAP_HIBERN8_WITH_CLK_GATING;
-+		hba->caps |= UFSHCD_CAP_CLK_SCALING | UFSHCD_CAP_WB_WITH_CLK_SCALING;
-+		hba->caps |= UFSHCD_CAP_AUTO_BKOPS_SUSPEND;
-+		hba->caps |= UFSHCD_CAP_AGGR_POWER_COLLAPSE;
-+		hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
-+	}
-+
- 	hba->caps |= UFSHCD_CAP_WB_EN;
--	hba->caps |= UFSHCD_CAP_AGGR_POWER_COLLAPSE;
--	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
-
- 	ufs_qcom_set_host_caps(hba);
- }
---
-2.48.1
-
+Best regards,
+Krzysztof
 
