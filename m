@@ -1,253 +1,251 @@
-Return-Path: <linux-scsi+bounces-14039-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-14041-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECE12AB0C60
-	for <lists+linux-scsi@lfdr.de>; Fri,  9 May 2025 09:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 28C85AB1247
+	for <lists+linux-scsi@lfdr.de>; Fri,  9 May 2025 13:36:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C43D165BF3
-	for <lists+linux-scsi@lfdr.de>; Fri,  9 May 2025 07:54:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 898F25082AC
+	for <lists+linux-scsi@lfdr.de>; Fri,  9 May 2025 11:36:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BB462741B4;
-	Fri,  9 May 2025 07:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A722822F16E;
+	Fri,  9 May 2025 11:35:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="GF9uAnVV"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="aAD2UEUj"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A589E270EDB;
-	Fri,  9 May 2025 07:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D065E22AE68
+	for <linux-scsi@vger.kernel.org>; Fri,  9 May 2025 11:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746777107; cv=none; b=sG0WbK3gW4SzBBF+wXVOopSjzVpQ2gk3Lv1rjA1HnFLZRPe6idhvGP5Bc05vbX4wkF3qX3SeODtlGuOtS2qjk1YQaewuedqucDzRSX8aJAIH4Lmqpy/yGFo4PcvLseozoSg3jzzXCrHjUrp+IejfTEsicc3LXL9WZX9QgvQi8pg=
+	t=1746790559; cv=none; b=mBc608NAnBnavbkCNOg0fGJG5ixG/+RWk98pJJr7a2a7gAKencbplNo/AQfcuJ4cE0Pa6b0Pn/KAeB4/MmV/JtqckDiJzNOciN/YSQ5Tj/aFrZR3G/GcUKgOpunbVL3HDybTq2fxQBMS2P5mkIu1Ga/AIUCq7yym4J8Wl+sePO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746777107; c=relaxed/simple;
-	bh=O/Ke2H214saq6vdzkTVaNQBrFSVbUtSCC+bCYvqq7WM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PqDs/ua08/RHpeTpN4g66z0UxIQ9nyfvQxTnp9IV20oZazysBT1ulBfDHC5k2aJhmjriQFSImRIwDIyYQDMvu6oWkobkNYZw8t168Q3p2t1CtHW8bcd6wc286ifqfaMSQoWHbLUd6KkuwZ2iubInB/LS5RPJ2sUr77uyyN+Mqas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=GF9uAnVV; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 548IYIuw021197;
-	Fri, 9 May 2025 07:51:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=JlGs1DFa0Zz
-	K/VwK9k2sHRKSQxN1aOlO7OsAseAiaHE=; b=GF9uAnVVdLPQsbwfW9dsxAs2fm9
-	T/+06yKdlUHbKCQ9dgTvlaoDBlQZeTojAFlrwgy6OaknQm7zhyh/zexUgHlhQ9ZH
-	Ts732RMxB+Zr4spSPgct+qDJu9VGHk4tOPveJsZMjYA792agSfX6XoAUsFlnhCTp
-	LkDV7sj5nHByB9rMfgJ0LszNWu2NPSOaUXyb3DEgdOmHUcKBluy7JNrhvjfFrTEL
-	zwoxPZx/bwMZ5FeadFsAo04YEn6qjnATPvIBunGhyhe0bDNneHgyTCwl23uyKjip
-	g8XajXh38UhzE8uekmFv1rO8TfPoI1DoFv089dP792DGzicwnKm/IeGkjeA==
-Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46gsdj38he-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 09 May 2025 07:51:21 +0000 (GMT)
-Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-	by APTAIPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 5497ovWj024757;
-	Fri, 9 May 2025 07:51:18 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APTAIPPMTA01.qualcomm.com (PPS) with ESMTPS id 46dc7mxnwe-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 09 May 2025 07:51:18 +0000
-Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5497pIHc025525;
-	Fri, 9 May 2025 07:51:18 GMT
-Received: from cbsp-sh-gv.ap.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
-	by APTAIPPMTA01.qualcomm.com (PPS) with ESMTPS id 5497pHSW025524
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 09 May 2025 07:51:18 +0000
-Received: by cbsp-sh-gv.ap.qualcomm.com (Postfix, from userid 393357)
-	id 07DB840D81; Fri,  9 May 2025 15:51:17 +0800 (CST)
-From: Ziqi Chen <quic_ziqichen@quicinc.com>
-To: quic_cang@quicinc.com, bvanassche@acm.org, mani@kernel.org,
-        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
-        martin.petersen@oracle.com, quic_ziqichen@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_nitirawa@quicinc.com,
-        quic_rampraka@quicinc.com, neil.armstrong@linaro.org,
-        luca.weiss@fairphone.com, konrad.dybcio@oss.qualcomm.com,
-        peter.wang@mediatek.com
-Cc: linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 3/3] scsi: ufs: qcom: Call ufs_qcom_cfg_timers() in clock scaling path
-Date: Fri,  9 May 2025 15:50:29 +0800
-Message-Id: <20250509075029.3776419-4-quic_ziqichen@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250509075029.3776419-1-quic_ziqichen@quicinc.com>
-References: <20250509075029.3776419-1-quic_ziqichen@quicinc.com>
+	s=arc-20240116; t=1746790559; c=relaxed/simple;
+	bh=b/ocDn60AZKD7DkQrGARHz1m4s5oOy4i/S4RjymqpjU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dvgDlymbPnwhtGXccsmlbXA63UWaS9K04GBU25yI1RVVXlX61R5DqCzVVv90OkGlDCWNa7o+Och8r82gc9OAPB/1R0T6/9t+E3JYymhtV+TWW/tq/tHjPihKsEBdiEX+p+zMxKoMnQTw9q2Kwknz/LLpOH1NpS7XrcHlZWKslEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=aAD2UEUj; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5493310W002620
+	for <linux-scsi@vger.kernel.org>; Fri, 9 May 2025 11:35:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	clpGEQdwMWcHuVX1s2S+PQJLA4E0hBPTvMUFRssmFE4=; b=aAD2UEUjR0E5eUUc
+	NtEkzdPATHCH3c90bsbbi4K5NgQftUd9kPGnopjSYTILXe1flpgQ/v0ieg7FHqZf
+	G0cn7icUQiV8Jy6TzEM3nCs5aUz6AWV3wNXgit1O8deAK1dmq9c78Mu1SI/8zsNW
+	p3aZEj2MwS8J5UDWtOVlC5nh38OEgFLMVwmevV9AEu/v0oVHJtLvhgQjc77439Xx
+	l3Xq9SK/taKrJw8P8sFaVm20C9HKK/oThsATHMoe1o9uKQ3NT1dd93pJcKbaeshR
+	Xq5lVFJ2CcXQr0GG3rFAK5v6906GY7UHzUxWyMZE+vPNtanuY8MACiiTtwk3CwCB
+	B1Y1qQ==
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46gnp5cfk8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-scsi@vger.kernel.org>; Fri, 09 May 2025 11:35:56 +0000 (GMT)
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-48f812db91aso5096051cf.0
+        for <linux-scsi@vger.kernel.org>; Fri, 09 May 2025 04:35:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746790556; x=1747395356;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=clpGEQdwMWcHuVX1s2S+PQJLA4E0hBPTvMUFRssmFE4=;
+        b=qXXfIcTYIUCjfjHHSbxo4JwKMrES2VPrTGRqBYK5Etmr/4uIo82jlr00hO/ZT+52YV
+         hWiMzCfz+3CjlYqSmlxhD4wZ0zlGysWd+Q82A9Xkw7Ed6XwbTLvxndGI4h1yu3b0ef9/
+         Qq1VJGdntUvjHel0bRjyNydu3kOC/+Z/o8niIbHWxKWIW8J8FtUDnkHrVf5faHAz60o+
+         cG2z34ROrZu1kY1GEcpabrKOV9SheUu6Yzm0N1eaqZ9tWDzAOugr8eJMyBPDcWpxI0gH
+         nTB0RuHEs0/HbOvCyhBxuFMZBOz47m8eswz7A63HjclLhtb1YZ+KbchC5eFx7wsRMisW
+         wCmw==
+X-Forwarded-Encrypted: i=1; AJvYcCUvRRkXq9jW9Pv9plE7/E0/YLUR8xYBN/WSB8FFjzh9N+oHDBsnF6CBcnxFVaLJRzA/76bWeLHqXkCw@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRyNjGxqjrysaUkFoX+sTPde8k1ktahlv7hxj38+hl1ETe6kGH
+	EysS+vguuCW5mNV2myOFdR9elWnCOP1la0tF3Ox3oPcoY1fHBlTkCJDONnCaA1/blajIM6TbMTq
+	/BgFCU/U/GfiyA4c45SjN9dHAofdZzycvLA0e7ZTOz4qI6u8P9vQIBi1Mu2Gp
+X-Gm-Gg: ASbGncujAXFyNPZ32xCzHT9XBSznasMMZzp9WnfROjfKgDN0bkjQ9h/H4GjVMCc6TyZ
+	ip/vks+iDb1DzHeq8lMJ/kvdGlULWy65yHSgHbdWynUsryNZBYAnby95MvPIDFCGEL2NT6qHyzM
+	m34Y/yrqNmJkfJRDup0hsmkl6D4yEJMpeGmkMM+t0dRnu3TNdc2rrGQcaOVR9pSRx0+s4W7jY1m
+	79/kGzvAl52eRJ6AtYMkB/MKqbwR8wQbCYxCg/uT6V5MILbZxs5oIYZGUPCrGeGL9m7+iC+k5D1
+	K7yAJBzKqE3Ur2/EnB1GkaNeeKUYIK/LNWzkg0VKy9fnFaqwdUCpcc2YBKQbzd/GR98=
+X-Received: by 2002:ac8:5f49:0:b0:474:e213:7480 with SMTP id d75a77b69052e-494527f40dcmr13254071cf.15.1746790555653;
+        Fri, 09 May 2025 04:35:55 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEQrKt5+ENDzVyZIaPC6bM/I1w4UI11+gCCI1inxl4cHyjOu66kgARpVBcFs8jbdIp2WkVnDQ==
+X-Received: by 2002:ac8:5f49:0:b0:474:e213:7480 with SMTP id d75a77b69052e-494527f40dcmr13253771cf.15.1746790555168;
+        Fri, 09 May 2025 04:35:55 -0700 (PDT)
+Received: from [192.168.65.105] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad21947b26bsm137062266b.86.2025.05.09.04.35.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 May 2025 04:35:54 -0700 (PDT)
+Message-ID: <780d84ca-4004-41ef-a9ae-17532053f8a5@oss.qualcomm.com>
+Date: Fri, 9 May 2025 13:35:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=PMAP+eqC c=1 sm=1 tr=0 ts=681db3f9 cx=c_pps
- a=nuhDOHQX5FNHPW3J6Bj6AA==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
- a=dt9VzEwgFbYA:10 a=COk6AnOGAAAA:8 a=6H0WHjuAAAAA:8 a=x4qbwuVvB1nHrQTLSukA:9
- a=TjNXssC_j7lpFel5tvFf:22 a=Soq9LBFxuPC4vsCAQt-j:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA5MDA3NCBTYWx0ZWRfXzjGnQLrkunFQ
- KSV+1zagd4/lQZAUsXnUMcoSIYcGJ0ZymhS6gvvKnVOtg4cC/8c+m/vkgF5t69atizj00Ktz6P1
- jmR/txGF0QhLsysxGM9KChUxrkyQKql8fJ2zeVohIeOXqaZByJIusPxtyFu9W447TgVLbpvhcH5
- +rqWKy3E9ENmaol/+nT+PByNaDoXfhHpwHiWkbpLozniQuP2BURai93X/Tl6JYByJGZoQHHLoeF
- 2Lcpn0P/X2+1IMKGGnf8yIdSC75ZwddgG2EXJAZjv4QkvLV3iN1DYUuPNIQX8TNZueEoyX7JCOd
- WcP1/6R1bnhNZ2Dp0C2ic2TVkhGglCHCXDQWu9wmJk3VCsH42lGDtgmOuLJG6GTsC7S3MDcYHCL
- YBLyVODcV7Tp1OgcIoHt5XPsc8HAd3JPmNTUZGO6lsmqx50mY+8ZVdD6pD5EEDUpx2yBn6p6
-X-Proofpoint-GUID: v_tgcNnqIyEdEqzNEyhh8udpWWFpcgQY
-X-Proofpoint-ORIG-GUID: v_tgcNnqIyEdEqzNEyhh8udpWWFpcgQY
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V4 09/11] scsi: ufs: qcom : Refactor phy_power_on/off
+ calls
+To: Nitin Rawat <quic_nitirawa@quicinc.com>, vkoul@kernel.org,
+        kishon@kernel.org, manivannan.sadhasivam@linaro.org,
+        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
+        bvanassche@acm.org, andersson@kernel.org, neil.armstrong@linaro.org
+Cc: quic_rdwivedi@quicinc.com, quic_cang@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <20250503162440.2954-1-quic_nitirawa@quicinc.com>
+ <20250503162440.2954-10-quic_nitirawa@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250503162440.2954-10-quic_nitirawa@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=XL0wSRhE c=1 sm=1 tr=0 ts=681de89c cx=c_pps
+ a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=COk6AnOGAAAA:8 a=ItZO8zVqQjmK9ylnveIA:9
+ a=QEXdDO2ut3YA:10 a=a_PwQJl-kcHnX1M80qC6:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: X1ouWpDimvcd3bcPz83TGVPs0nQaexUJ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA5MDExMiBTYWx0ZWRfX6jkpQ2nTsSje
+ QNMrjg2LN2Ax9VN2fIcqamd8kZ7MCmo103YNAsrgafZ4Qrxr7VbR5j2Kql1jAAyKTy/hz6qs9uT
+ LM5kNfy1FAXUheQIYlrwyuOhLUy8wOyfkCuVmj8tGUTOUqK4q4BpbEj4DCMbRztVuGMx8ZZ2tlK
+ Km6kKldj2k6L7RxAH8DrHSoJ9Ygd7JjvGWy1hRydWrbqfu0j94BNcUc/YhpXwXjGTFVCyHgeAeO
+ f+ENkJqAPlXWmzEBg7xR3FWw9lCDviqTYD4Lg+aIZ1yayNoJwE2jAXgFQjNHFsot4EetELP0Le2
+ Q88cxLlYTkbYLUGfAVs8FS4FmhEZkI3h9fWA2T/2P1abh1/1xyk3+aey37ptJ4MLQrmvnuI8iXF
+ sjGN0fFnwT6FMXqZnKnjQFXzjcaGK85I9dbIg8f42E6XC/sOsJ2SDAheGqzzc6QDux86eK2f
+X-Proofpoint-ORIG-GUID: X1ouWpDimvcd3bcPz83TGVPs0nQaexUJ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-09_03,2025-05-08_04,2025-02-21_01
+ definitions=2025-05-09_04,2025-05-08_04,2025-02-21_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 impostorscore=0 mlxscore=0 suspectscore=0 spamscore=0
- bulkscore=0 priorityscore=1501 clxscore=1015 lowpriorityscore=0
- mlxlogscore=999 adultscore=0 malwarescore=0 classifier=spam authscore=0
- authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2504070000 definitions=main-2505090074
+ impostorscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 priorityscore=1501 bulkscore=0
+ spamscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2505090112
 
-From: Can Guo <quic_cang@quicinc.com>
+On 5/3/25 6:24 PM, Nitin Rawat wrote:
+> Commit 3f6d1767b1a0 ("phy: ufs-qcom: Refactor all init steps into
+> phy_poweron") removes the phy_power_on/off from ufs_qcom_setup_clocks
+> to suspend/resume func.
+> 
+> To have a better power saving, remove the phy_power_on/off calls from
+> resume/suspend path and put them back to ufs_qcom_setup_clocks, so that
+> PHY regulators & clks can be turned on/off along with UFS's clocks.
+> 
+> Since phy phy_power_on is separated out from phy calibrate, make
+> separate calls to phy_power_on and phy_calibrate calls from ufs qcom
+> driver.
+> 
+> Co-developed-by: Can Guo <quic_cang@quicinc.com>
+> Signed-off-by: Can Guo <quic_cang@quicinc.com>
+> Signed-off-by: Nitin Rawat <quic_nitirawa@quicinc.com>
+> ---
+>  drivers/ufs/host/ufs-qcom.c | 55 ++++++++++++++++---------------------
+>  1 file changed, 23 insertions(+), 32 deletions(-)
+> 
+> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+> index 2cd44ee522b8..ff35cd15c72f 100644
+> --- a/drivers/ufs/host/ufs-qcom.c
+> +++ b/drivers/ufs/host/ufs-qcom.c
+> @@ -639,26 +639,17 @@ static int ufs_qcom_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
+>  	enum ufs_notify_change_status status)
+>  {
+>  	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
+> -	struct phy *phy = host->generic_phy;
+>  
+>  	if (status == PRE_CHANGE)
+>  		return 0;
+>  
+> -	if (ufs_qcom_is_link_off(hba)) {
+> -		/*
+> -		 * Disable the tx/rx lane symbol clocks before PHY is
+> -		 * powered down as the PLL source should be disabled
+> -		 * after downstream clocks are disabled.
+> -		 */
+> +	if (!ufs_qcom_is_link_active(hba))
 
-ufs_qcom_cfg_timers() is clock freq dependent like ufs_qcom_set_core_clk_
-ctrl(), hence move ufs_qcom_cfg_timers() call to clock scaling path. In
-addition, do not assume the devfreq OPP freq is always the 'core_clock'
-freq although 'core_clock' is the first clock phandle in device tree, use
-ufs_qcom_opp_freq_to_clk_freq() to find the core clk freq.
+so is_link_off and !is_link_active are not the same thing - this also allows
+for disabling the resources when in hibern8/broken states - is that intended?
 
-Signed-off-by: Can Guo <quic_cang@quicinc.com>
-Co-developed-by: Ziqi Chen <quic_ziqichen@quicinc.com>
-Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
-Tested-by: Luca Weiss <luca.weiss@fairphone.com>
+>  		ufs_qcom_disable_lane_clks(host);
+> -		phy_power_off(phy);
+>  
+> -		/* reset the connected UFS device during power down */
+> -		ufs_qcom_device_reset_ctrl(hba, true);
+>  
+> -	} else if (!ufs_qcom_is_link_active(hba)) {
+> -		ufs_qcom_disable_lane_clks(host);
+> -	}
+> +	/* reset the connected UFS device during power down */
+> +	if (ufs_qcom_is_link_off(hba) && host->device_reset)
+> +		ufs_qcom_device_reset_ctrl(hba, true);
 
----
-V2 -> V3:
-Skip calling ufs_qcom_opp_freq_to_clk_freq() if freq is ULONG_MAX to avoid
-usless error prints.
----
- drivers/ufs/host/ufs-qcom.c | 49 ++++++++++++++++++++++---------------
- 1 file changed, 29 insertions(+), 20 deletions(-)
+similarly this will not be allowed in hibern8/broken states now
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 6c054727c3bc..d23ff912fda4 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -599,13 +599,14 @@ static int ufs_qcom_hce_enable_notify(struct ufs_hba *hba,
-  *
-  * @hba: host controller instance
-  * @is_pre_scale_up: flag to check if pre scale up condition.
-+ * @freq: target opp freq
-  * Return: zero for success and non-zero in case of a failure.
-  */
--static int ufs_qcom_cfg_timers(struct ufs_hba *hba, bool is_pre_scale_up)
-+static int ufs_qcom_cfg_timers(struct ufs_hba *hba, bool is_pre_scale_up, unsigned long freq)
- {
- 	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
- 	struct ufs_clk_info *clki;
--	unsigned long core_clk_rate = 0;
-+	unsigned long clk_freq = 0;
- 	u32 core_clk_cycles_per_us;
- 
- 	/*
-@@ -617,22 +618,34 @@ static int ufs_qcom_cfg_timers(struct ufs_hba *hba, bool is_pre_scale_up)
- 	if (host->hw_ver.major < 4 && !ufshcd_is_intr_aggr_allowed(hba))
- 		return 0;
- 
-+	if (hba->use_pm_opp && freq != ULONG_MAX) {
-+		clk_freq = ufs_qcom_opp_freq_to_clk_freq(hba, freq, "core_clk");
-+		if (clk_freq)
-+			goto cfg_timers;
-+	}
-+
- 	list_for_each_entry(clki, &hba->clk_list_head, list) {
- 		if (!strcmp(clki->name, "core_clk")) {
-+			if (freq == ULONG_MAX) {
-+				clk_freq = clki->max_freq;
-+				break;
-+			}
-+
- 			if (is_pre_scale_up)
--				core_clk_rate = clki->max_freq;
-+				clk_freq = clki->max_freq;
- 			else
--				core_clk_rate = clk_get_rate(clki->clk);
-+				clk_freq = clk_get_rate(clki->clk);
- 			break;
- 		}
- 
- 	}
- 
-+cfg_timers:
- 	/* If frequency is smaller than 1MHz, set to 1MHz */
--	if (core_clk_rate < DEFAULT_CLK_RATE_HZ)
--		core_clk_rate = DEFAULT_CLK_RATE_HZ;
-+	if (clk_freq < DEFAULT_CLK_RATE_HZ)
-+		clk_freq = DEFAULT_CLK_RATE_HZ;
- 
--	core_clk_cycles_per_us = core_clk_rate / USEC_PER_SEC;
-+	core_clk_cycles_per_us = clk_freq / USEC_PER_SEC;
- 	if (ufshcd_readl(hba, REG_UFS_SYS1CLK_1US) != core_clk_cycles_per_us) {
- 		ufshcd_writel(hba, core_clk_cycles_per_us, REG_UFS_SYS1CLK_1US);
- 		/*
-@@ -652,7 +665,7 @@ static int ufs_qcom_link_startup_notify(struct ufs_hba *hba,
- 
- 	switch (status) {
- 	case PRE_CHANGE:
--		if (ufs_qcom_cfg_timers(hba, false)) {
-+		if (ufs_qcom_cfg_timers(hba, false, ULONG_MAX)) {
- 			dev_err(hba->dev, "%s: ufs_qcom_cfg_timers() failed\n",
- 				__func__);
- 			return -EINVAL;
-@@ -930,17 +943,6 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
- 
- 		break;
- 	case POST_CHANGE:
--		if (ufs_qcom_cfg_timers(hba, false)) {
--			dev_err(hba->dev, "%s: ufs_qcom_cfg_timers() failed\n",
--				__func__);
--			/*
--			 * we return error code at the end of the routine,
--			 * but continue to configure UFS_PHY_TX_LANE_ENABLE
--			 * and bus voting as usual
--			 */
--			ret = -EINVAL;
--		}
--
- 		/* cache the power mode parameters to use internally */
- 		memcpy(&host->dev_req_params,
- 				dev_req_params, sizeof(*dev_req_params));
-@@ -1492,7 +1494,7 @@ static int ufs_qcom_clk_scale_up_pre_change(struct ufs_hba *hba, unsigned long f
- {
- 	int ret;
- 
--	ret = ufs_qcom_cfg_timers(hba, true);
-+	ret = ufs_qcom_cfg_timers(hba, true, freq);
- 	if (ret) {
- 		dev_err(hba->dev, "%s ufs cfg timer failed\n", __func__);
- 		return ret;
-@@ -1529,6 +1531,13 @@ static int ufs_qcom_clk_scale_down_pre_change(struct ufs_hba *hba)
- 
- static int ufs_qcom_clk_scale_down_post_change(struct ufs_hba *hba, unsigned long freq)
- {
-+	int ret;
-+
-+	ret = ufs_qcom_cfg_timers(hba, false, freq);
-+	if (ret) {
-+		dev_err(hba->dev, "%s: ufs_qcom_cfg_timers() failed\n",	__func__);
-+		return ret;
-+	}
- 	/* set unipro core clock attributes and clear clock divider */
- 	return ufs_qcom_set_core_clk_ctrl(hba, false, freq);
- }
--- 
-2.34.1
+>  
+>  	return ufs_qcom_ice_suspend(host);
+>  }
+> @@ -666,26 +657,11 @@ static int ufs_qcom_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
+>  static int ufs_qcom_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+>  {
+>  	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
+> -	struct phy *phy = host->generic_phy;
+>  	int err;
+>  
+> -	if (ufs_qcom_is_link_off(hba)) {
+> -		err = phy_power_on(phy);
+> -		if (err) {
+> -			dev_err(hba->dev, "%s: failed PHY power on: %d\n",
+> -				__func__, err);
+> -			return err;
+> -		}
+> -
+> -		err = ufs_qcom_enable_lane_clks(host);
+> -		if (err)
+> -			return err;
+> -
+> -	} else if (!ufs_qcom_is_link_active(hba)) {
+> -		err = ufs_qcom_enable_lane_clks(host);
+> -		if (err)
+> -			return err;
+> -	}
+> +	err = ufs_qcom_enable_lane_clks(host);
+> +	if (err)
+> +		return err;
+>  
+>  	return ufs_qcom_ice_resume(host);
+>  }
+> @@ -1042,6 +1018,8 @@ static int ufs_qcom_setup_clocks(struct ufs_hba *hba, bool on,
+>  				 enum ufs_notify_change_status status)
+>  {
+>  	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
+> +	struct phy *phy = host->generic_phy;
+> +	int err;
+>  
+>  	/*
+>  	 * In case ufs_qcom_init() is not yet done, simply ignore.
+> @@ -1060,10 +1038,22 @@ static int ufs_qcom_setup_clocks(struct ufs_hba *hba, bool on,
+>  				/* disable device ref_clk */
+>  				ufs_qcom_dev_ref_clk_ctrl(host, false);
+>  			}
+> +			err = phy_power_off(phy);
 
+a newline to separate the blocks would improve readability> +			if (err) {
+> +				dev_err(hba->dev, "%s: phy power off failed, ret=%d\n",
+> +					__func__, err);
+> +					return err;
+
+please indent the return statement a tab earlier so it doesn't look
+like it's an argument to dev_err()
+
+putting PHY calls in the function that promises to toggle clocks could
+also use a comment, maybe extending the kerneldoc to say that certain
+clocks come from the PHY so it needs to be managed together
+
+Konrad
 
