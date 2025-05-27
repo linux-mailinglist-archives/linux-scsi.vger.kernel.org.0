@@ -1,244 +1,164 @@
-Return-Path: <linux-scsi+bounces-14305-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-14307-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C9E5AC4272
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 May 2025 17:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DA65AC48FC
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 May 2025 09:03:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E8413BC5DB
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 May 2025 15:40:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 727B73A6DA3
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 May 2025 07:02:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89FEC21B9CD;
-	Mon, 26 May 2025 15:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E59E1FBCB5;
+	Tue, 27 May 2025 07:02:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="UiU5DK1N"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ikjz3TI2"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B6D92192FB;
-	Mon, 26 May 2025 15:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643171D6DDD
+	for <linux-scsi@vger.kernel.org>; Tue, 27 May 2025 07:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748273939; cv=none; b=f/RyBB82GOfw5rRlCNbg2AQIwmhSiuJ6UbczhxhIaYPygPkasfgVLt0Vi0ATe7nHSnGolBPBxHV4q9lU6cBJO5M4+WZ/4SpkFu7P28/2MbyoAuPLKbPFPopWEpGYK9ewG307rSL9ntOYHe9cfSsgu36sNGt2S/L5NZ4m5TcBpak=
+	t=1748329360; cv=none; b=ERZDaTv/AvwVffzDigDF43MEnYHvBZ510rIJtd/b934WNG9FoOOxFYIddPiWgrfNky+eHyKtgIRBdV0gbu/JXxo7uu1UkP685JYaHalmQm9o60k5LWzZ3flkjIhOSF+3ijKvjpTEn8Zkvwi7qZXLAC9ln707+e4kN7wP7bjxcHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748273939; c=relaxed/simple;
-	bh=0jVTez9VqMqbb1O73iXAgJwXtEgZk1kPqSvUsoDz2cg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QmGNQp+aQs4h3M7UWPaISr7B+lu0rFPEG3zZPRgVT1zAfHgstVUCBR9u7OLP1R7ceW7O4JqLxA+fhuqy7zlB+i1udPeMdF93YcnTD4pSQomRa0bDbwr55QhQxw0r5ZkCCgdAlMd6SYAiOxUosekwrX3MMn8ZDUrrue72ZC3jHCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=UiU5DK1N; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54Q8dpW3003964;
-	Mon, 26 May 2025 15:38:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=cMlp5Uuq7pY
-	xno+xJbwnJC6yhCBdQIL7aWCca6SOgPw=; b=UiU5DK1Nn7RfPzjx8HWfxM1Ybp2
-	V6wvwC1Wx0zGNPYY8+85trK3/yhu9LpjRmNrr1iuLFIsRaT73R0QXHx0uQv1ef/Z
-	ncsqO9SJRAgW9zbh7rdwkQZhtA98HdIxIEfKp+QAnLCvgGI92vl7Qc5w/yLND3so
-	JYbBYfcVqsaGz4w7ADBHjAXlq7m/1L1nXepR2Ks6n3LJ745ehBcjT8zER5ms+zlo
-	ATakrkYd9G0jgqsYF+Cfi00x8N+E6IwncWEp0ATpCRwFiuIIpMFJqSOP4zgHhvpo
-	07ug9dVz8M+YhWKWdfr7ViCah4VVvFqw9LCjCD/OtM8mUGLHgojrW8KHopg==
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46vmyuh0m3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 26 May 2025 15:38:35 +0000 (GMT)
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 54QFcWw5032545;
-	Mon, 26 May 2025 15:38:32 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 46u76m73hy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 26 May 2025 15:38:32 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 54QFcRQT032457;
-	Mon, 26 May 2025 15:38:31 GMT
-Received: from hu-maiyas-hyd.qualcomm.com (hu-nitirawa-hyd.qualcomm.com [10.213.109.152])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 54QFcRBe032454;
-	Mon, 26 May 2025 15:38:31 +0000
-Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2342877)
-	id F08DD602733; Mon, 26 May 2025 21:08:30 +0530 (+0530)
-From: Nitin Rawat <quic_nitirawa@quicinc.com>
-To: vkoul@kernel.org, kishon@kernel.org, manivannan.sadhasivam@linaro.org,
-        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
-        bvanassche@acm.org, andersson@kernel.org, neil.armstrong@linaro.org,
-        konrad.dybcio@oss.qualcomm.com, dmitry.baryshkov@oss.qualcomm.com
-Cc: quic_rdwivedi@quicinc.com, quic_cang@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Nitin Rawat <quic_nitirawa@quicinc.com>
-Subject: [PATCH V6 10/10] scsi: ufs: qcom : Refactor phy_power_on/off calls
-Date: Mon, 26 May 2025 21:08:21 +0530
-Message-ID: <20250526153821.7918-11-quic_nitirawa@quicinc.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250526153821.7918-1-quic_nitirawa@quicinc.com>
-References: <20250526153821.7918-1-quic_nitirawa@quicinc.com>
+	s=arc-20240116; t=1748329360; c=relaxed/simple;
+	bh=uerM567QcQCVqLcNbyZwn68Uozgpe9FXmx2lyhpHDvY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lLW8upo6Gl3E/zoYE1BKP0xXZKXGKamjDIj72ogqxoIKWKT/WBp7xYTkj44XaYFqQdPYXQM8AclTu29g1MitCZomfXQTRDE4CXjfN0hWPT9DUJy5nNffdBgSwiDHQ2H6ec+98Vqa+Jj6kQ7ZQTErxuWYUPROMlyz6yVGGVx78xU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ikjz3TI2; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748329357;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lPj65lDKBn8X+w6dITxUNDiVhmFCDqyup7L8wrKjKWs=;
+	b=ikjz3TI2RNF/P/IQm7jZhhyyq/ZfulKQ2wJ5drc/IDwl7zP1qZP5RdDhfUDLrv7bmy1YAO
+	Ip/lLhyR8Vd38TcClkZZ5pVVxNzT5YTjNcgETdwbyAowODJs197GtAexiTnJnZGT/iSnQZ
+	8jnc/bZ30tStRVRL3hscPSEqz+C6bSc=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-563-UFUDdkvrO_qowi-tqjVbkg-1; Tue, 27 May 2025 03:02:34 -0400
+X-MC-Unique: UFUDdkvrO_qowi-tqjVbkg-1
+X-Mimecast-MFC-AGG-ID: UFUDdkvrO_qowi-tqjVbkg_1748329354
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3a4d51e563eso789098f8f.3
+        for <linux-scsi@vger.kernel.org>; Tue, 27 May 2025 00:02:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748329353; x=1748934153;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lPj65lDKBn8X+w6dITxUNDiVhmFCDqyup7L8wrKjKWs=;
+        b=W6tY2W6eSQgofPk37PCIw3HA7Ws6wY09sQGR+Mo23tBSbAGr5SnajGhqvlsq1RBQJ4
+         MYUjEmI1cztKvGl/EHhYbd9kzDce2hIleDKAGS7xbSpGYp2HeD1dq1FR0YPzX8vYYyla
+         v/9tTSWM42xO+Dw00JZQi6foKc6ktxnRIbVTW2lGuGTCZ/2dHnUCZ8uLvlLd2c+Q9pTC
+         Lbgv8hiYUu1l2GH340nSgEPbu2+2561mzNF1KhAdOPzQP+AU6EAu86z+8pKm+yPtHE5M
+         lqyDDE+Wx7PQGEoE3QgxeJ0AL46is0W+aYOrWI8ByvIdF1KLiyxmx9xyFqP3Whhd1ZVi
+         9jAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV463nF6TDX2vMjW3KtUGSTqlfSogCbIREqVaV+vpYj1/16LLHiPPPKEQ1NC43uRENvtuEej5HTsWmU@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhOj7MiNTURMssajfNtk4qwQB37vQXoo9MV/LRB6z6SAgGp8xn
+	TxcDr4FP60Rn5qPs328FnarAaGWeC7k29oNLRHPd5OQPvSLiMxnfAWRn82nKEzV663ubV0B2uWz
+	xjeWP+HujRJJ/SBHHX7a7BvOUprReSVEb4vBAmcclLKKSIPHZBiXV4/ljBXLBb3U=
+X-Gm-Gg: ASbGnct3XnY7dq+nG1GbaEOuFK8/7vHxmS6gldUK5uHRwOcCfGAC9JfBU9X3xWIAYvM
+	5u26PeaKVsD+VBZ2rQWNNUtHHDS6hAHKqKAoUkvLPGcbyq871KUQWg+2t050mCsPPanIESSw0mS
+	L0awGeZQn0f3q9obn/js8HNc8lI4fJmusnW++CzcaDyImKa3PTFfEfPZWbqE/cXD218gap4ZFbD
+	IqrF2NfdjfnctdZYiZFPBPNHsl7Z+rhuI1UJERG6EVmsxoh2PViWybD/0iyCnjis2deSydWIaFM
+	rVXKJE6fXmIaxDRuvotYfELOi3X6+IYIFmXI8c1DMZh/vZKUjKvQVylhnrI=
+X-Received: by 2002:a5d:5543:0:b0:3a4:cf66:efbb with SMTP id ffacd0b85a97d-3a4cf66f1f6mr7608655f8f.57.1748329353548;
+        Tue, 27 May 2025 00:02:33 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGex5mHhM/OYaq2gRKUAD/HxHUJY3MptMrHBU8jm/eQhY8uxpjEvS25/QUCzUXZRuezIVGAwQ==
+X-Received: by 2002:a5d:5543:0:b0:3a4:cf66:efbb with SMTP id ffacd0b85a97d-3a4cf66f1f6mr7608571f8f.57.1748329353087;
+        Tue, 27 May 2025 00:02:33 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:2728:e810:827d:a191:aa5f:ba2f? ([2a0d:3344:2728:e810:827d:a191:aa5f:ba2f])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a4cc52ab88sm9930473f8f.11.2025.05.27.00.02.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 May 2025 00:02:32 -0700 (PDT)
+Message-ID: <e1429351-3c9b-40e0-b50d-de6527d0a05b@redhat.com>
+Date: Tue, 27 May 2025 09:02:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI2MDEzMiBTYWx0ZWRfX7vdOBqZdWA0u
- LBcYClEcpTAcQ3dgvRFOt5h9lkU7TY0vR53Fl3ejx8FEuPONqe9wpTsSnHADPiGZ9LCzf5CM9ZI
- lEUWH4EnM8AGBNv8iAqStHoutZ2m8tcBzJrW3Ev3UIbI9+Kf8XOSSEwCg/IT0IA8tEIPrWlpTab
- cGjrspCJHKdblc1PQXa92KBeMvcNlzY/XZ2IlXAvoamPTe2nNcdCCxzWw3D+BCu1L0MUygQGUM8
- lWvswqQ15e38kDJLjV+ZUlUV8T77SNEUfk5pDV0+MkFR/N7C3KTDeSWoEWXnrO5a4zOjVQwdmPs
- c3ILBMrSkq15/um9PozZtXN5E6VMAPoXXPGkmPIrwFcHwPJ/lM4WPUCLzQBbXxWBk4ysehr4F/r
- jnLmfcaCYHOvI/fJaWHdbAbuj0/jdr72yMQ5o3ZujTVQ4w0uQGKi+aX5Y/8c8byarwHVmZ7O
-X-Authority-Analysis: v=2.4 cv=MsdS63ae c=1 sm=1 tr=0 ts=68348afb cx=c_pps
- a=Ou0eQOY4+eZoSc0qltEV5Q==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
- a=dt9VzEwgFbYA:10 a=COk6AnOGAAAA:8 a=ylzO3PbLlNu0Q4qtwUgA:9
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: kmGDCnN9ZgMl9OCxb3pUWQauMpoLAwen
-X-Proofpoint-ORIG-GUID: kmGDCnN9ZgMl9OCxb3pUWQauMpoLAwen
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-26_08,2025-05-26_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 impostorscore=0 priorityscore=1501 spamscore=0
- mlxscore=0 lowpriorityscore=0 clxscore=1015 bulkscore=0 suspectscore=0
- adultscore=0 mlxlogscore=999 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
- definitions=main-2505260132
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 8/8] net: core: Convert
+ dev_set_mac_address_user() to use struct sockaddr_storage
+To: Kees Cook <kees@kernel.org>, Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Jason Wang <jasowang@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Cosmin Ratiu <cratiu@nvidia.com>,
+ Vladimir Oltean <vladimir.oltean@nxp.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Kory Maincent <kory.maincent@bootlin.com>, Maxim Georgiev
+ <glipus@gmail.com>, netdev@vger.kernel.org,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+ Chaitanya Kulkarni <kch@nvidia.com>,
+ Mike Christie <michael.christie@oracle.com>,
+ Max Gurtovoy <mgurtovoy@nvidia.com>, Maurizio Lombardi
+ <mlombard@redhat.com>, Dmitry Bogdanov <d.bogdanov@yadro.com>,
+ Mingzhe Zou <mingzhe.zou@easystack.cn>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ "Dr. David Alan Gilbert" <linux@treblig.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, Lei Yang
+ <leiyang@redhat.com>, Ido Schimmel <idosch@nvidia.com>,
+ Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+ Paul Fertser <fercerpav@gmail.com>, Alexander Aring <alex.aring@gmail.com>,
+ Stefan Schmidt <stefan@datenfreihafen.org>,
+ Miquel Raynal <miquel.raynal@bootlin.com>, Hayes Wang
+ <hayeswang@realtek.com>, Douglas Anderson <dianders@chromium.org>,
+ Grant Grundler <grundler@chromium.org>, Jay Vosburgh <jv@jvosburgh.net>,
+ "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Jiri Pirko <jiri@resnulli.us>,
+ Aleksander Jan Bajkowski <olek2@wp.pl>, Philipp Hahn <phahn-oss@avm.de>,
+ Eric Biggers <ebiggers@google.com>, Ard Biesheuvel <ardb@kernel.org>,
+ Al Viro <viro@zeniv.linux.org.uk>, Ahmed Zaki <ahmed.zaki@intel.com>,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Xiao Liang <shaw.leon@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+ target-devel@vger.kernel.org, linux-wpan@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-hardening@vger.kernel.org
+References: <20250521204310.it.500-kees@kernel.org>
+ <20250521204619.2301870-8-kees@kernel.org>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250521204619.2301870-8-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Commit 3f6d1767b1a0 ("phy: ufs-qcom: Refactor all init steps into
-phy_poweron") moved the phy_power_on/off from ufs_qcom_setup_clocks
-to suspend/resume func.
+On 5/21/25 10:46 PM, Kees Cook wrote:
+> diff --git a/net/core/dev_ioctl.c b/net/core/dev_ioctl.c
+> index fff13a8b48f1..616479e71466 100644
+> --- a/net/core/dev_ioctl.c
+> +++ b/net/core/dev_ioctl.c
+> @@ -572,9 +572,11 @@ static int dev_ifsioc(struct net *net, struct ifreq *ifr, void __user *data,
+>  		return dev_set_mtu(dev, ifr->ifr_mtu);
+>  
+>  	case SIOCSIFHWADDR:
+> -		if (dev->addr_len > sizeof(struct sockaddr))
+> +		if (dev->addr_len > sizeof(ifr->ifr_hwaddr))
+>  			return -EINVAL;
+> -		return dev_set_mac_address_user(dev, &ifr->ifr_hwaddr, NULL);
+> +		return dev_set_mac_address_user(dev,
+> +						(struct sockaddr_storage *)&ifr->ifr_hwaddr,
+> +						NULL);
 
-To have a better power saving, remove the phy_power_on/off calls from
-resume/suspend path and put them back to ufs_qcom_setup_clocks, so that
-PHY regulators & clks can be turned on/off along with UFS's clocks.
+Side note for a possible follow-up: the above pattern is repeated a
+couple of times: IMHO consolidating it into an helper would be nice.
+Also such helper could/should explicitly convert ifr->ifr_hwaddr to
+sockaddr_storage and avoid the cast.
 
-Since phy phy_power_on is separated out from phy calibrate, make
-separate calls to phy_power_on calls from ufs qcom driver.
-
-Co-developed-by: Can Guo <quic_cang@quicinc.com>
-Signed-off-by: Can Guo <quic_cang@quicinc.com>
-Signed-off-by: Nitin Rawat <quic_nitirawa@quicinc.com>
----
- drivers/ufs/host/ufs-qcom.c | 58 +++++++++++++++++--------------------
- 1 file changed, 27 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index dfe164da3668..1b313c1c530f 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -696,26 +696,17 @@ static int ufs_qcom_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
- 	enum ufs_notify_change_status status)
- {
- 	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
--	struct phy *phy = host->generic_phy;
-
- 	if (status == PRE_CHANGE)
- 		return 0;
-
--	if (ufs_qcom_is_link_off(hba)) {
--		/*
--		 * Disable the tx/rx lane symbol clocks before PHY is
--		 * powered down as the PLL source should be disabled
--		 * after downstream clocks are disabled.
--		 */
-+	if (!ufs_qcom_is_link_active(hba))
- 		ufs_qcom_disable_lane_clks(host);
--		phy_power_off(phy);
-
--		/* reset the connected UFS device during power down */
--		ufs_qcom_device_reset_ctrl(hba, true);
-
--	} else if (!ufs_qcom_is_link_active(hba)) {
--		ufs_qcom_disable_lane_clks(host);
--	}
-+	/* reset the connected UFS device during power down */
-+	if (ufs_qcom_is_link_off(hba) && host->device_reset)
-+		ufs_qcom_device_reset_ctrl(hba, true);
-
- 	return ufs_qcom_ice_suspend(host);
- }
-@@ -723,26 +714,11 @@ static int ufs_qcom_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
- static int ufs_qcom_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- {
- 	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
--	struct phy *phy = host->generic_phy;
- 	int err;
-
--	if (ufs_qcom_is_link_off(hba)) {
--		err = phy_power_on(phy);
--		if (err) {
--			dev_err(hba->dev, "%s: failed PHY power on: %d\n",
--				__func__, err);
--			return err;
--		}
--
--		err = ufs_qcom_enable_lane_clks(host);
--		if (err)
--			return err;
--
--	} else if (!ufs_qcom_is_link_active(hba)) {
--		err = ufs_qcom_enable_lane_clks(host);
--		if (err)
--			return err;
--	}
-+	err = ufs_qcom_enable_lane_clks(host);
-+	if (err)
-+		return err;
-
- 	return ufs_qcom_ice_resume(host);
- }
-@@ -1132,12 +1108,20 @@ static void ufs_qcom_set_caps(struct ufs_hba *hba)
-  * @on: If true, enable clocks else disable them.
-  * @status: PRE_CHANGE or POST_CHANGE notify
-  *
-+ * There are certain clocks which comes from the PHY so it needs
-+ * to be managed together along with controller clocks which also
-+ * provides a better power saving. Hence keep phy_power_off/on calls
-+ * in ufs_qcom_setup_clocks, so that PHY's regulators & clks can be
-+ * turned on/off along with UFS's clocks.
-+ *
-  * Return: 0 on success, non-zero on failure.
-  */
- static int ufs_qcom_setup_clocks(struct ufs_hba *hba, bool on,
- 				 enum ufs_notify_change_status status)
- {
- 	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
-+	struct phy *phy = host->generic_phy;
-+	int err;
-
- 	/*
- 	 * In case ufs_qcom_init() is not yet done, simply ignore.
-@@ -1156,10 +1140,22 @@ static int ufs_qcom_setup_clocks(struct ufs_hba *hba, bool on,
- 				/* disable device ref_clk */
- 				ufs_qcom_dev_ref_clk_ctrl(host, false);
- 			}
-+
-+			err = phy_power_off(phy);
-+			if (err) {
-+				dev_err(hba->dev, "phy power off failed, ret=%d\n", err);
-+				return err;
-+			}
- 		}
- 		break;
- 	case POST_CHANGE:
- 		if (on) {
-+			err = phy_power_on(phy);
-+			if (err) {
-+				dev_err(hba->dev, "phy power on failed, ret = %d\n", err);
-+				return err;
-+			}
-+
- 			/* enable the device ref clock for HS mode*/
- 			if (ufshcd_is_hs_mode(&hba->pwr_info))
- 				ufs_qcom_dev_ref_clk_ctrl(host, true);
---
-2.48.1
+/P
 
 
