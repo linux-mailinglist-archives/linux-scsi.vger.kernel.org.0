@@ -1,77 +1,85 @@
-Return-Path: <linux-scsi+bounces-14351-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-14353-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F2B0ACBE88
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Jun 2025 04:36:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13509ACBE8C
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Jun 2025 04:36:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E62FF170DC3
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Jun 2025 02:36:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 521987A900C
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Jun 2025 02:35:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE98E13D8B1;
-	Tue,  3 Jun 2025 02:36:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD84D13D8B1;
+	Tue,  3 Jun 2025 02:36:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ff1qe2e2"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="sHk4yrFl"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13BE0A944;
-	Tue,  3 Jun 2025 02:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A93B42A96;
+	Tue,  3 Jun 2025 02:36:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748918181; cv=none; b=E/Z3VFJI8ryOUc12cTNVsBTL7sxOnO0NjytdzUXWLhAU0LWvKh1r5V59Q2J959XiDbd7ByLku4Od2eB2UMlZ+jxwgH3M12e4IRk4G1c0ozC4bFwidc0SaUypLj1fbm8h3P9PmKmjjIPPuWunZm8b0e5eKNAWn8wV9s9cen4/JaM=
+	t=1748918210; cv=none; b=NsW+9buLqV9ST3TuKX6LKQKhN0MY+OhRu5ctpDXmhNSXVSbteA38lE+9jrboKLC370xGo/v0eYXZzPzoKPryP9rb6AAZIwYdaw/KaMg/QgTAkvV5SV4LhEesxZIFEVU23emi3XHrETMn4zAHpBP62IIX5IV6NYOzlMLVoCzuIYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748918181; c=relaxed/simple;
-	bh=PLbrIncQTZNf25SSQJU4VBhsCLcnQYITDZamoS0zpho=;
+	s=arc-20240116; t=1748918210; c=relaxed/simple;
+	bh=sjUW6ypMsldfBfU02/42sNdN4jHydbZJG+R7r7LTS+k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ohs0vnRl0dARSGcQLLMsawT6IT9boINuSA1ld9GwJ9bj3bKz36kdq86Z4To1onAWLZXSTsnzsYbZqVHGJyReU+edjF6ltShU3yPlWdvnnl0t7LlK3J6772gdtAQLrn+7r8LhbjHCiABnETQxvjz+JHZoFapSNeozOuec3DNzSwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ff1qe2e2; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=aGecPtELJfziQbSBy7nByua+SflCBln+5IKjxUF2pz7Falfe3XFv3jxOXoJsfeYkMmMjPU8UPk936xfShN67fxxTwk9IzD7zWXsn3RUNcEAHd2DtehvlIVXBAmyBB4bNQuQrjgg2WX22gEgwGXKCPEPGRMIkCoB/V2blpeInOIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=sHk4yrFl; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 552LN0wO026935;
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 552LN9Gt009317;
 	Tue, 3 Jun 2025 02:36:16 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=D1b2SUoFaLh5N1PDzjLwDIm1J/89SDZfWxJe2iHPeRs=; b=
-	ff1qe2e2v0Egb9lVmn7ssi0UOrD0v9DaghO50HqrQdU57rbLh2MaycEiHSAJ5uKH
-	ZK//pLPoRgqF8wGgo6flgK+0b+OtPhpGI7pUavtfIJogyBCn2UHFJQD7QKb9xPI5
-	bttxzeRzIbIzqLhMY0vU2oS1pBZWiLqNa0P5zjRZr7EwPShuFgIejn8NsELevsrK
-	9DBE7hzTPL3fWXCWnrvqdnOayec0fp22eHiMCT245IzVCR13clt5CbbFDFbIND6T
-	qwo4Y7bmVPTGg08GiHw5Jq3Rn0GkAoVYiQmgkh9lJAak/RRI/CzU8Fgs50LC+DU5
-	y+yZlihmdStUSwxbaTGxbA==
+	corp-2025-04-25; bh=8s8HnXekmxu460KmqaDguCTGkEDpBp4pBzZlbNFy41M=; b=
+	sHk4yrFldiIHJa9I1R7SYONEPQofamQvcFbIE7ipi6q01ApFAH0Day9sEayZfYEC
+	MqZODiTNE85sHrcaihXmASkqwbu61V77UZ9rV6WVsZy5CJo/FZcuTv1gmCjw2Nr8
+	fyN7niV10M0CANbo+nq9GbflRPTVfBB4HhailXMGBKerDcBrm4Od05bx98s4xdAd
+	UnB0+s/2Ta1Zy34Bycp5RxQXiA3vPNP6IGK2LKMX0gdlNY+WcKPMBfR3ql/uXAvc
+	bItVsqdqXDdr7KRaSH6/lJogRi+9dqaFQFyrS5Hla9PrU/nvW3EJulp+lYZr1Q21
+	rgku74/72x3eAB7TON19HQ==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 471g8k8wgh-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 471gah8vyh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 03 Jun 2025 02:36:16 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 552Njsna030643;
-	Tue, 3 Jun 2025 02:36:14 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 552Nk7YE030717;
+	Tue, 3 Jun 2025 02:36:15 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 46yr78qkdn-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 46yr78qke1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 03 Jun 2025 02:36:14 +0000
+	Tue, 03 Jun 2025 02:36:15 +0000
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5532aEk9008766;
-	Tue, 3 Jun 2025 02:36:14 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5532aEkB008766;
+	Tue, 3 Jun 2025 02:36:15 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 46yr78qkdh-1;
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 46yr78qkdh-2;
 	Tue, 03 Jun 2025 02:36:14 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: James.Bottomley@HansenPartnership.com,
-        mrigendrachaubey <mrigendra.chaubey@gmail.com>
+To: quic_cang@quicinc.com, bvanassche@acm.org, mani@kernel.org,
+        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
+        quic_nguyenb@quicinc.com, quic_nitirawa@quicinc.com,
+        quic_rampraka@quicinc.com, neil.armstrong@linaro.org,
+        luca.weiss@fairphone.com, konrad.dybcio@oss.qualcomm.com,
+        peter.wang@mediatek.com, Ziqi Chen <quic_ziqichen@quicinc.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: scsi_devinfo: Fix typo in comment
-Date: Mon,  2 Jun 2025 22:35:47 -0400
-Message-ID: <174889162399.672400.9949610085993639164.b4-ty@oracle.com>
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] scsi: ufs: core: Don't perform UFS clkscale if host asyn scan in progress
+Date: Mon,  2 Jun 2025 22:35:48 -0400
+Message-ID: <174889162398.672400.4727862624188636298.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250524035516.27341-1-mrigendra.chaubey@gmail.com>
-References: <20250524035516.27341-1-mrigendra.chaubey@gmail.com>
+In-Reply-To: <20250522081233.2358565-1-quic_ziqichen@quicinc.com>
+References: <20250522081233.2358565-1-quic_ziqichen@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -84,28 +92,34 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-06-02_08,2025-06-02_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
- suspectscore=0 phishscore=0 adultscore=0 spamscore=0 mlxlogscore=942
+ suspectscore=0 phishscore=0 adultscore=0 spamscore=0 mlxlogscore=999
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2505160000 definitions=main-2506030021
-X-Proofpoint-GUID: ulkaTYvrqtZR2DOG7G0n4sLbdamI0ohX
-X-Proofpoint-ORIG-GUID: ulkaTYvrqtZR2DOG7G0n4sLbdamI0ohX
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjAzMDAyMSBTYWx0ZWRfXyDIcRI8gnVka mhP1r+R4cHJc33SCY5Zwc2KwRAo582f33BLGZ42p5cZBbX/nVk8xHa1RQ2UvduyJjoFj53O/BiR cXVGpztDyLqW4bm61QIXRMTmoe004mWKfqtCZuTqK+T+DwBylVkS5bMiS5K8CBimbPOOQ9h5Urv
- m2U0P7uJgGxHC2oVz5bj7Or1GN+pCLtfEvPz4vJjmhOfTZMrzTvTbiW0hzsQxpN7C+sE1fEsh9/ 06OqBugcOhUgu7VdFcfszsGPdpaTGdexlio8bENOMa/0Dh7qfl1Z34XK5CtSjs3NU0urRfx2xDE EV+/sFXNlVJMxoeK2S0hXPs4+cqPXHTPqJj1BLzGBpX4APmlHqT/n0zxkegv2Jz+P1MKcSljrQe
- NXlrsu/TueUMjDoHcjOFXaG0h4VF1NL6XQbDIGF2Sb/DkBMCHo6Ithgd4SA7liuuHKHSqYcr
-X-Authority-Analysis: v=2.4 cv=FM4bx/os c=1 sm=1 tr=0 ts=683e5fa0 b=1 cx=c_pps a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=5YornGoTVulL9ZZtH-MA:9 a=QEXdDO2ut3YA:10 cc=ntf
+X-Authority-Analysis: v=2.4 cv=aqqyCTZV c=1 sm=1 tr=0 ts=683e5fa0 b=1 cx=c_pps a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=TJ13prZXil94bmcCRCwA:9 a=QEXdDO2ut3YA:10 cc=ntf
  awl=host:14714
+X-Proofpoint-GUID: -c2OFC9XWKZZzh5c7HK2EkXGgiGQ5pvO
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjAzMDAyMSBTYWx0ZWRfX5fP/BtOIH2oX L4LxupElJW4HMGABO8V5ieJC53A+0Vm9S7DoBiHbhvQZDZgRTIPisaQ6lRkaBIyqffgggMmXMrQ 5pVWYF8ny9iI4Qcix28pPylPsXT4DmFIkkNhFXxpjX13MVRCd4FOLngf3rgM2iEro2NEfdGgltE
+ iuB3+FY+DALfpCCMEoTpYa4rG5vIqHmd45DSqJiX2TPv/kBuHMDB2mu4TrD9JAcj58zUPB+f1sW 2KXJBfmzRyaAqjV4aevinsCvbhxHS4qZfxsqbju84pqYuJxiaFtQFK1ApGeMB3mUwHPb7emdA40 RMxthfWdACpGM8v/3q2DAXUl/N0k3Z/1i/Mw2pGOPnbv2XxshWAt30N+lNbtiiXeiMN+qkGk6JP
+ PZIcpxnIlCyjJAilLzGvdlK61JyfbDbc+C6xR0gf41R+a9HkMpbXywLtHsCgfveDYDqTbIiC
+X-Proofpoint-ORIG-GUID: -c2OFC9XWKZZzh5c7HK2EkXGgiGQ5pvO
 
-On Sat, 24 May 2025 09:25:16 +0530, mrigendrachaubey wrote:
+On Thu, 22 May 2025 16:12:28 +0800, Ziqi Chen wrote:
 
-> This patch corrects a minor typo in a comment within scsi_devinfo.c,
-> replacing "compatibile" with the correct spelling "compatible".
+> When preparing for UFS clock scaling, the UFS driver will quiesce all sdevs
+> queues in the UFS SCSI host tagset list and then unquiesce them when UFS
+> clock scaling unpreparing. If the UFS SCSI host async scan is in progress
+> at this time, some LUs may be added to the tagset list between UFS clkscale
+> prepare and unprepare. This can cause two issues:
 > 
+> 1. During clock scaling, there may be IO requests issued through new added
+> queues that have not been quiesced, leading to task abort issue.
 > 
+> [...]
 
 Applied to 6.16/scsi-queue, thanks!
 
-[1/1] scsi: scsi_devinfo: Fix typo in comment
-      https://git.kernel.org/mkp/scsi/c/c8426f258a0a
+[1/1] scsi: ufs: core: Don't perform UFS clkscale if host asyn scan in progress
+      https://git.kernel.org/mkp/scsi/c/e97633492f5a
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
