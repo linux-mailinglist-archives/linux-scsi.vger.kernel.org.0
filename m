@@ -1,77 +1,81 @@
-Return-Path: <linux-scsi+bounces-14462-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-14464-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7624EAD2BBA
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Jun 2025 04:07:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F446AD2BBF
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Jun 2025 04:08:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47FC41890A9D
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Jun 2025 02:07:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69CF17A76FF
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Jun 2025 02:06:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D40419E97C;
-	Tue, 10 Jun 2025 02:07:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DFF11E47B7;
+	Tue, 10 Jun 2025 02:07:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="YBJaUz1D"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="PyPAi9X+"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A1129A0;
-	Tue, 10 Jun 2025 02:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D3E31C84DD;
+	Tue, 10 Jun 2025 02:07:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749521246; cv=none; b=X6RMSIMqjoIO0gzp0H5nZ3RIBPvQTO2pS+LzjTvIOz0Q29d6wWvO+4T+wVfXOyOtYIfxF3UiWrlI8xz8dgzU0+H3+yeFzBw1NLOrUjBk4QOWuQgxkuVZz0ckpEMsEwKfhONRK4zNaypJAgs1KL/WZ6Ja+HPXWgkBSVIODUyk0wU=
+	t=1749521248; cv=none; b=QKnguU9d6k7dezZroFhkBqDzEEvueBDegtlaAwqT9x3c2trrfcL+AoEdErKGtM16EP8FrnAAmcqwwhW1tCEY+uwufqsi+H3Y0tXl0+j904Y73ds9IB6pAmPxo3Zo8dyvdHXoH00fXqWEJroOtxzkGU4vFYP/wG/GYXmnpIifBXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749521246; c=relaxed/simple;
-	bh=e5O5KvtfwWvvvASIfXLP6mixs31hlM0v6Xm94NcQkc0=;
+	s=arc-20240116; t=1749521248; c=relaxed/simple;
+	bh=PTwP4DILR1ZgMLefVOft2PWLCZ2BmHDYdqe0+nXyBdU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nxAtrXVXH3ynNWYE6bHA/W27RvDQinb3hbTmcC8VQ29jAktU5vFNOhY4ixhCCo4So/oIOqR7dCg7Yhxe723X8Z3RiNS1SzRAfA11gZ8CcTWqhKbG4Pp2kOdQM2Fo5OgfzGIp3dULwuh7ajF2e5xSiytT/A3M2e1qPNTx/UBYsyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=YBJaUz1D; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=HNF4+dfab5A03tvvxwgllEOtQW4j/cHyLGYqmiQqeyonpHpQTqzZDlaj41p6anR9B1cCkqnXrDSG2WslROn7gjM3sIR+E6RMo2CVGAJmPq6rerO+LGAjOxSmmzEoE6yFFoJ97OEX5QYy+FDcaYEAIe6pilZjfrE34LoomQGY4Fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=PyPAi9X+; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 559FcTxx031955;
-	Tue, 10 Jun 2025 02:07:23 GMT
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 559FiTiv011582;
+	Tue, 10 Jun 2025 02:07:24 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=hyI4TvBXfKLKWM+nUb5A5Mw3PYe/GOv6hCN5q1ZmPUU=; b=
-	YBJaUz1DuzwUYRGZ/PmsJ5BMsFMUB0rNsHrANVVkreDdImyv+PlSPIq8mgn3Kyqi
-	I12QHwDtnSIieKzwiT/9mcHFTBWA/5YDwMD1UeR1va88orNsrhIcF8KspKfCuInQ
-	T3KeySS7tuulZtZT7O6jpWGPvi0lOKJ4aXtxdQEZlbICxP+s3i0DFeDaJJyraU1O
-	woQ5kHWRGto6AQ5miNdSqYuNUJ3Jwggu4xXvvZ/faWwbTD3/yHft/48tsUVJ1/93
-	oOVulENM7mWowEojvoMl4gfKPsdDoHBMdkVTbrOimM7mhBk20dUv1iw73NGTubMS
-	yG68zSKypfxnnPBboPchNQ==
+	corp-2025-04-25; bh=Hcao3oqcJiTPTivIikuH7r93UTzBCV/GTaTzIqXzKSo=; b=
+	PyPAi9X+ujv5vLKIvd9b2L9YQv6VT3vt9Rg5ESK4O5+RYoXA0ZM4mdw4WzoH2+kz
+	2e2VkjeQLRiALfm46TEBxJvNw7RizSDUlsfgv5GVs0uounTOl2pNRkuLB1/OnCU1
+	CVf6T5rKScLRoU0/GHm5J/Gw8tReBnvqePqc+uX/peQ5jzRFx6Lsn+xtF31B4rjL
+	4T/O89ElfKn7eO/7SgkXXc0CVP9uIBn3OW1Wtewm2bT5s32xjsdunG3GgmkBjDt9
+	JzgmN4mu8Wd2gU/NsCEsO+1Ttt7UyP6aDgq5Ace3iCTVMQspukPj4T77vN1UW9Dk
+	eJEWG+Ct9Hmp90gHyojIZw==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 474d1v39dh-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 474buf39bj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Jun 2025 02:07:22 +0000 (GMT)
+	Tue, 10 Jun 2025 02:07:24 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 55A0tpH0031405;
-	Tue, 10 Jun 2025 02:07:21 GMT
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 55A0jJx9031998;
+	Tue, 10 Jun 2025 02:07:23 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 474bv84jfu-1
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 474bv84jgc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Jun 2025 02:07:21 +0000
+	Tue, 10 Jun 2025 02:07:23 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 55A27Kqw016523;
-	Tue, 10 Jun 2025 02:07:21 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 55A27Kr0016523;
+	Tue, 10 Jun 2025 02:07:22 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 474bv84jet-2;
-	Tue, 10 Jun 2025 02:07:21 +0000
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 474bv84jet-3;
+	Tue, 10 Jun 2025 02:07:22 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: James.Bottomley@HansenPartnership.com,
-        Ankit Chauhan <ankitchauhan2065@gmail.com>
+To: "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Nihar Panda <niharp@linux.ibm.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: mvsas: fix typos in per-phy comments and SAS cmd port registers
-Date: Mon,  9 Jun 2025 22:06:46 -0400
-Message-ID: <174951883626.1141801.1614094922768237098.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Nihar Panda <nihar.panda@ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: [PATCH] s390/zfcp: Ensure synchronous unit_add
+Date: Mon,  9 Jun 2025 22:06:47 -0400
+Message-ID: <174951883638.1141801.4092943028769739009.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250528110604.59528-1-ankitchauhan2065@gmail.com>
-References: <20250528110604.59528-1-ankitchauhan2065@gmail.com>
+In-Reply-To: <20250603182252.2287285-2-niharp@linux.ibm.com>
+References: <20250603182252.2287285-1-niharp@linux.ibm.com> <20250603182252.2287285-2-niharp@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -84,31 +88,35 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-06-10_01,2025-06-09_02,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 suspectscore=0
- phishscore=0 malwarescore=0 mlxlogscore=929 spamscore=0 adultscore=0
+ phishscore=0 malwarescore=0 mlxlogscore=984 spamscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
  definitions=main-2506100014
-X-Proofpoint-GUID: djSOGbWYOS3DjvEjwiIKgNW4WX-4eZXB
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjEwMDAxNCBTYWx0ZWRfXz2B8OLzypap5 u2eTMpRk3qeWZL3OaoM19h9j0PxbhlStyzRWzkP7j3TP/0IFlCroqcZs1U2GMktxR3Rfs7S2YnJ GB8RkkA7KJ7KgY/6mAUiE6A2SvLEsn0ckqY2qZmWr1xAcZavEJb/aYuODdysvGjq+kslOYS8TZ1
- WR6AEziC13zsArOmHHU2FOn/QfpKJYkgs6fkwcc16kouQ9VAAqYjWFwLQdiRNQ6pm+7VEGJN1/3 w3OCd2UHNVmvOZiOpZk2X8V7wXLLV2IRqY+GQIu4QLI0OXD7UVgZk+RWalYf/xg6DSkY+F5QUGm yVNsSb/1vK5Y74C3s/ROI72twsiEWW5wnImJLF7ZFEryxdFQ4WxCg4Q1Bwh67vlhN7zm/Zqr8nJ
- wUO6EFTckRlKOG/6sUEASvomlyHehT7sy+7lP06jyhim4+eC8tdu/Qo0WkzKg/eXfjdog/Sq
-X-Proofpoint-ORIG-GUID: djSOGbWYOS3DjvEjwiIKgNW4WX-4eZXB
-X-Authority-Analysis: v=2.4 cv=d731yQjE c=1 sm=1 tr=0 ts=6847935a cx=c_pps a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=i4bYIVD2DNLvW2J3l1cA:9 a=QEXdDO2ut3YA:10
+X-Authority-Analysis: v=2.4 cv=RZGQC0tv c=1 sm=1 tr=0 ts=6847935c cx=c_pps a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=iJjEDP7nYTzMqzp7gXkA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: JWiXZBSr66StzwurPf3KoRj28AWoSXYa
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjEwMDAxNCBTYWx0ZWRfX2EXxuT/ZQmWZ FKzUm69c5mw1bHa014r/dguU1w5EaXTYoYCaf6ogvXV9V3/vpPj2XQwVu4GdDKGm1wCRauUBXw9 XU0C+S/9yacX62OEzzMqGMIGE/GPw7NmQCyovKzdgJDCXa03tqr99TaLrPFjcHP0Zl2sG0itoUb
+ ATC7afz/Q94GK+8sxHMKxHPLfcVyKLstzbZW4jc9Q+hsmdssGbFe5uWMzp9vhvQuz5iTFfAuEUQ LO8AYUIH3KAfuhS2r84wRFQZOKv3f1O3iMtX5xgWqnSjBguYilzNVUlQK+XoYSHjT0uJt3XLiq/ pJvUv0gHazI/XuJ7yopPJttsG5kvvbMPXyM+ZH7BT/x0W9uKWzuG+EhWmGG/DBR6kGbGwqMm4OR
+ b3zvAZDXw7qyBNS4O4QmaXEfw1kXAdtUIylMXmDxaNhHK/2kCyW8Nw74r/l1iDtBOilHbleo
+X-Proofpoint-ORIG-GUID: JWiXZBSr66StzwurPf3KoRj28AWoSXYa
 
-On Wed, 28 May 2025 16:36:04 +0530, Ankit Chauhan wrote:
+On Tue, 03 Jun 2025 20:21:56 +0200, Nihar Panda wrote:
 
-> Spelling fixes:
-> Deocder --> Decoder
-> Memroy --> Memory
+> Improve the usability of the unit_add sysfs attribute by ensuring that
+> the associated FCP LUN scan processing is completed synchronously.
+> This enables configuration tooling to consistently determine the end of
+> the scan process to allow for serialization of follow-on actions.
 > 
-> This is a non-functional change aimed at improving code clarity.
-> 
+> While the scan process associated with unit_add typically completes
+> synchronously, it is deferred to an asynchronous background process if
+> unit_add is used before initial remote port scanning has completed.
+> This occurs when unit_add is used immediately after setting the
+> associated FCP device online.
 > 
 > [...]
 
 Applied to 6.16/scsi-fixes, thanks!
 
-[1/1] scsi: mvsas: fix typos in per-phy comments and SAS cmd port registers
-      https://git.kernel.org/mkp/scsi/c/ad0f54842cd2
+[1/1] s390/zfcp: Ensure synchronous unit_add
+      https://git.kernel.org/mkp/scsi/c/9697ca0d53e3
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
