@@ -1,106 +1,145 @@
-Return-Path: <linux-scsi+bounces-14485-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-14488-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCE93AD5AFB
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Jun 2025 17:47:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3746AD5E2D
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Jun 2025 20:32:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 930B77A3D07
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Jun 2025 15:46:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9161A3A8D26
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Jun 2025 18:31:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A77121CAA6D;
-	Wed, 11 Jun 2025 15:46:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63D132248B8;
+	Wed, 11 Jun 2025 18:31:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="sYhCQOpf"
+	dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b="ZwI5Ool5"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
+Received: from rcdn-iport-2.cisco.com (rcdn-iport-2.cisco.com [173.37.86.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA1C1DE3C3
-	for <linux-scsi@vger.kernel.org>; Wed, 11 Jun 2025 15:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681AE1E8329;
+	Wed, 11 Jun 2025 18:31:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.37.86.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749656778; cv=none; b=dC+ADPwYLBd8gDJwzhKdwdwh8+iW7t/9i4B71rjsGtmuKtqpVCpN9lL6pnoswVn/GHWn45hUkM6S7/1BSF6EL2CgVHXB4dbk9gIzPpkPoO6MH5ss9sAm1o+sGQVWjLSDE9NrU03z2uEJft0bgaVUFx5SD/ZBC2lHdoaRjgK+7GI=
+	t=1749666718; cv=none; b=QmQAPc00p+xWtmZhClPR0Ruuvjq9e3xFy9TMwfxwXkSfOejtaipgg7APUxZSXTIz/Wl5OK8kGVkxJRMWFwkMub1Gt87tOs2JxKh51MV9q9K40IoTORHQ0YufAZ0DN9WhF/0ammct40Mi3ZgrzqWecVbEhdz01tiF2rPzMA56+mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749656778; c=relaxed/simple;
-	bh=8oNK3qitZXkrEipdiqTWBQBKfwJf3jqcij39ZN/CfVk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Cf1k51ynsJmnIhQa3JFcRXyGm0b32MBjNXlO1h/OPsjhQCNCdibBKSG3/78c4UkZtCa/DGlI9qzFjIULnTbv4QzJWTB1EqmuwLnZrg9Jpyrkjbm3+XIESB9L0s5+vX3IOGlNgY1zbJwPr3IpOXMbTjIkfu8qSxP8eBekBD83HB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=sYhCQOpf; arc=none smtp.client-ip=199.89.3.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 004.mia.mailroute.net (Postfix) with ESMTP id 4bHVPg3qnpzm0jvn;
-	Wed, 11 Jun 2025 15:46:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1749656774; x=1752248775; bh=1rWfkeVP8ZX21cLWACQfhqYC
-	NsG4a5E5DcWvPEdGc6w=; b=sYhCQOpf3jgjBrhL7MflmN/t1w1gGCSUGuoF5PLR
-	F5H0wso1JjSK6lHqCOKp8OANxW63grhufYx5lgMzN5wXS6Xy5eRH7AYOi2SfMjGB
-	jVqwPOyYCF2LItviwhgb9K9wDN7JxcOCLISaZldBA+7CX/b7oPXBammmMWdOBLSv
-	sf5z4N2gIZRuY19T01Y20auEnly1d2+1OsVJ5axFNCfDaY6jViSNRrAnJdnps+0w
-	d6rZCrwX3KhyT/qwU1mOoj2FCzhMtGro+jLdRaWaAWYACAU1UEc9L0DSgq+XE8rN
-	sXjyS4CiKAc0oVgjKNBY2hkWZkeRy7yi05++NdIqfv0EPg==
-X-Virus-Scanned: by MailRoute
-Received: from 004.mia.mailroute.net ([127.0.0.1])
- by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id baGEXOJhh4qc; Wed, 11 Jun 2025 15:46:14 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
+	s=arc-20240116; t=1749666718; c=relaxed/simple;
+	bh=MnCr9OEVlQ7GknTARTds4npHpQMQRi/DiitUYHLyMJw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L7Km6Lx7QvmUmeTzsFxetRwcD2GH7ackthP7krCEUlMTs3vTtuoYRMLX0SeUiq7e5+CTh19UrI3ZAGPSn2RJnbRd/AvB0dr2+R3EGbVKQCPPKBLKqdq42qIRiSADHf1CbL1vINHsohnJ7LFNS6XCID+FrKuJmbTKFASvjSp8VII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=ZwI5Ool5; arc=none smtp.client-ip=173.37.86.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=cisco.com; i=@cisco.com; l=980; q=dns/txt;
+  s=iport01; t=1749666716; x=1750876316;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JPGvyzDxmu2hP40yELBEjF/T5i9eYvf8QiI2IbJNsD0=;
+  b=ZwI5Ool5XbvG4dZ0Z2H2XQRWp1Uiu0SyaT6qygGaWsJ1rPrUkJg2ePWN
+   YexPNivbOdOm/7Aj6a5HQkfZXNNxsfXPyjGwFj1tOm8B/MAZiI1W6U/nd
+   ESHB2bZi69HTic82NySvaiaZn4JaKLIbRw7KfQWynRkMcb7qN0aRGfKAI
+   bBXMBbE0u38b/0tL1vrZIjuIWyORRxqmriK8E6BtQDBcRXTLfbH6tnkO5
+   iwikHs8iPZN7opvCg87awc9HhgGKeotgdUpmQ6pFdcI0egSWkZd1krxaB
+   Y0BMzc+/XpyRqZJq7TnUOvZI06WoiFe2xNrsLUSymlaJozgTADcFkpX/8
+   g==;
+X-CSE-ConnectionGUID: hk1LNjcYS5OHifG8YQVOZw==
+X-CSE-MsgGUID: 6uluQsERS7iGcyBUhk5KJQ==
+X-IPAS-Result: =?us-ascii?q?A0AnAABcyklo/4sQJK1aHAEBAQEBAQcBARIBAQQEAQGBf?=
+ =?us-ascii?q?wcBAQsBgkqBUkMZMIxwhzSgOoElA1cPAQEBD1EEAQGFB4toAiY0CQ4BAgQBA?=
+ =?us-ascii?q?QEBAwIDAQEBAQEBAQEBAQELAQEFAQEBAgEHBYEOE4YIhl0rCwFGgVCDAoJvA?=
+ =?us-ascii?q?69xgXkzgQHeN4FugUkBjUxwhHcnFQaBSUSCUIE+b4FSgjiBBoV3BIMmFKEUS?=
+ =?us-ascii?q?IEeA1ksAVUTDQoLBwWBYwM1DAsuFW4yHYINhRmCEoQphl6ESStPhSGFBSRyD?=
+ =?us-ascii?q?wc9QAMLGA1IESw3FBsGPm4HmASDcIEOgQKBPqYAoQuEJaFTGjOqYZkEqTiBa?=
+ =?us-ascii?q?DyBWTMaCBsVgyJSGQ+OLRa7VSYyPAIHCwEBAwmQF4F9AQE?=
+IronPort-Data: A9a23:2kDw7K9Gqi5PxeQEVJiCDrUDUH+TJUtcMsCJ2f8bNWPcYEJGY0x3n
+ WYfXTjUb6mJYmDxKd4jPo3lpE5TusCEnYBrTgtopHtEQiMRo6IpJzg2wmQcns+2BpeeJK6yx
+ 5xGMrEsFOhtEDmE4E3ra+G7xZVF/fngbqLmD+LZMTxGSwZhSSMw4TpugOdRbrRA2bBVOCvT/
+ 4qsyyHjEAX9gWMsbDtNs/jrRC5H5ZwehhtJ5jTSWtgT1LPuvyF9JI4SI6i3M0z5TuF8dsamR
+ /zOxa2O5WjQ+REgELuNyt4XpWVTH9Y+lSDX4pZnc/DKbipq/0Te4Y5nXBYoUnq7vh3S9zxHJ
+ HqhgrTrIeshFvWkdO3wyHC0GQkmVUFN0OevzXRSLaV/wmWeG0YAzcmCA2k2PtQ83OR8MFoT0
+ twZJh9dXym9oNCplefTpulE3qzPLeHiOIcZ/3UlxjbDALN+G9bIQr7B4plT2zJYasJmRKmFI
+ ZFHL2MxKk2bMnWjOX9PYH46tOShnGX+dzRbgFmUvqEwpWPUyWSd1ZC2b4aKI4HUFJg9ckCw+
+ H/C4l3iLysha92wwiuvz3Kv28ztpHauMG4VPPjinhJwu3Wfz2pVAxQMTVa9vfSjokq/XdtFL
+ AoT4CVGhao/9kaDStj7Qg3+oXSB+BUbXrJ4FuQg9ACLjLLZ/wuDHWUCZjlbYdciuYk9QjlC/
+ l2MktXkCjxumKeYRXKU6vGfqjbaETIYM2IYfgceQAcF6sWlq4Y25jrLT9B+AOu2g8fzFDXY3
+ T+Htm49iq8VgMpN0L+0lXjDgjSxtt3SRRU0zhvYU3jj7Q5jYoOhIYuy5jDmAe1oJYKdSByF+
+ XMDgcXbtLpIBpCWnyvLS+IIdF2028u43PTnqQYHN/EcG/6FohZPoag4DOlCGXpU
+IronPort-HdrOrdr: A9a23:AEFlZ6lGAdWDl/p4AyTwxIUIc/zpDfIf3DAbv31ZSRFFG/FwWf
+ rDoB19726XtN9/Yh8dcLy7UpVoIkmslqKdg7NxAV7KZmCP01dAR7sM0WKN+VDdMhy73vJB1K
+ tmbqh1AMD9ABxHl8rgiTPIdurIuOPmzEht7t2uqEuEimpRGsVd0zs=
+X-Talos-CUID: =?us-ascii?q?9a23=3AKbeAfGi+GMw8C4oSKfVUYeU6njJucn6E6FHSKH6?=
+ =?us-ascii?q?DVEFJSbO6GW6pxoRWjJ87?=
+X-Talos-MUID: =?us-ascii?q?9a23=3AuYhoFgzcl5delUVTXQNSHUGyufmaqPqzDF00irg?=
+ =?us-ascii?q?8gJaFGidhEQqdj2mUYLZyfw=3D=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.16,228,1744070400"; 
+   d="scan'208";a="374715695"
+Received: from alln-l-core-02.cisco.com ([173.36.16.139])
+  by rcdn-iport-2.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 11 Jun 2025 18:30:46 +0000
+Received: from fedora.lan?044cisco.com (unknown [10.188.19.134])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4bHVPc4Yl3zm1Hbf;
-	Wed, 11 Jun 2025 15:46:11 +0000 (UTC)
-Message-ID: <aca75eab-45b4-4afd-8319-e2662fd9d9e8@acm.org>
-Date: Wed, 11 Jun 2025 08:46:10 -0700
+	(Authenticated sender: kartilak@cisco.com)
+	by alln-l-core-02.cisco.com (Postfix) with ESMTPSA id 305B218000153;
+	Wed, 11 Jun 2025 18:30:45 +0000 (GMT)
+From: Karan Tilak Kumar <kartilak@cisco.com>
+To: sebaddel@cisco.com
+Cc: arulponn@cisco.com,
+	djhawar@cisco.com,
+	gcboffa@cisco.com,
+	mkai2@cisco.com,
+	satishkh@cisco.com,
+	aeasi@cisco.com,
+	jejb@linux.ibm.com,
+	martin.petersen@oracle.com,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jmeneghi@redhat.com,
+	revers@redhat.com,
+	dan.carpenter@linaro.org,
+	Karan Tilak Kumar <kartilak@cisco.com>
+Subject: [PATCH 1/5] scsi: fnic: Set appropriate logging level for log message
+Date: Wed, 11 Jun 2025 11:30:29 -0700
+Message-ID: <20250611183033.4205-1-kartilak@cisco.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] scsi: Remember if a device is an ATA device
-To: Damien Le Moal <dlemoal@kernel.org>,
- "Martin K . Petersen" <martin.petersen@oracle.com>,
- linux-scsi@vger.kernel.org
-References: <20250611093421.2901633-1-dlemoal@kernel.org>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20250611093421.2901633-1-dlemoal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Authenticated-User: kartilak@cisco.com
+X-Outbound-SMTP-Client: 10.188.19.134, [10.188.19.134]
+X-Outbound-Node: alln-l-core-02.cisco.com
 
-On 6/11/25 2:34 AM, Damien Le Moal wrote:
-> scsi_add_lun() tests the device vendor string of SCSI devices to detect
-> if a SCSI device is in fact an ATA device, in order to correctly handle
-> SATL power management. The function scsi_cdl_enable() also requires
-> knowing if a SCSI device is an ATA device to control the state of the
-> device CDL feature but this function does that by testing for the
-> presence of the VPD page 89h (ATA INFORMATION page).
-> sd_read_write_same() also has a similar test.
-> 
-> Simplify these different methods by adding the is_ata field to struct
-> scsi_device to remember that a SCSI device is in fact an ATA one based
-> on the device vendor name test. This filed can also allow low level
-> SCSI host adapter drivers to take special actions for ATA devices
-> (e.g. to better handle ATA NCQ errors).
-> 
-> With this, simplify scsi_cdl_enable() and sd_read_write_same().
-Hi Damien,
+Replace KERN_INFO with KERN_DEBUG for a log message.
 
-There is only one "if (is_ata)" check in the SCSI core as far as I can
-see. Can it be avoided that ATA code leaks into the SCSI core by
-introducing a new function pointer, e.g. in struct Scsi_Host, and by
-calling that new function pointer if it has been set from
-scsi_cdl_enable()?
+Reviewed-by: Sesidhar Baddela <sebaddel@cisco.com>
+Reviewed-by: Arulprabhu Ponnusamy <arulponn@cisco.com>
+Reviewed-by: Gian Carlo Boffa <gcboffa@cisco.com>
+Reviewed-by: Arun Easi <aeasi@cisco.com>
+Signed-off-by: Karan Tilak Kumar <kartilak@cisco.com>
+---
+ drivers/scsi/fnic/fnic_scsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
+diff --git a/drivers/scsi/fnic/fnic_scsi.c b/drivers/scsi/fnic/fnic_scsi.c
+index 7133b254cbe4..75b29a018d1f 100644
+--- a/drivers/scsi/fnic/fnic_scsi.c
++++ b/drivers/scsi/fnic/fnic_scsi.c
+@@ -1046,7 +1046,7 @@ static void fnic_fcpio_icmnd_cmpl_handler(struct fnic *fnic, unsigned int cq_ind
+ 		if (icmnd_cmpl->scsi_status == SAM_STAT_TASK_SET_FULL)
+ 			atomic64_inc(&fnic_stats->misc_stats.queue_fulls);
+ 
+-		FNIC_SCSI_DBG(KERN_INFO, fnic->host, fnic->fnic_num,
++		FNIC_SCSI_DBG(KERN_DEBUG, fnic->host, fnic->fnic_num,
+ 				"xfer_len: %llu", xfer_len);
+ 		break;
+ 
+-- 
+2.47.1
 
-Bart.
 
