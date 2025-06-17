@@ -1,46 +1,46 @@
-Return-Path: <linux-scsi+bounces-14631-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-14632-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C10AADCB53
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Jun 2025 14:25:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D77B7ADCB4E
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Jun 2025 14:25:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D151B3BCA1C
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Jun 2025 12:23:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0196172579
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Jun 2025 12:24:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81D662E06E7;
-	Tue, 17 Jun 2025 12:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083112E765F;
+	Tue, 17 Jun 2025 12:23:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ahfUjLdU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nr4rssK+"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2CB2DE1E1;
-	Tue, 17 Jun 2025 12:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5E6E2E2F02;
+	Tue, 17 Jun 2025 12:23:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750163015; cv=none; b=TQdrdefX4plc8sJcRZ+gSWLU1erjYXexGwIA430pEZMOdnuFDrwBon2K+ScICrHCEyCwgwBGaxcIg69uz61C5G+Vy3Hm7WFboK9oTa8Keo6U17uukN8EuONKs9SEJFX0CQIEQXJv/345rCriy99JLlOlX10KYIZpWClJ7hO9AB8=
+	t=1750163027; cv=none; b=PwbUNh/bRQ/tH2loIfsoz769Ru+HuYrVbUShDop680bKzYFzTTdIfosLYM37bX61M/iirGMTAan8tx+pEGPVH2+aKCyt7B/MzwQc07czJ0So5KRAYWs2AY4edFhAf+vHKqLaxjI+tfnq7hXWuM7QoE1x+R+s7/tsOvCi+UC1+sA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750163015; c=relaxed/simple;
-	bh=XNN7CiKbg6fN54Di9/cUuyokH3znB9mfS6GRj97BZEM=;
+	s=arc-20240116; t=1750163027; c=relaxed/simple;
+	bh=KjUg3Vnbefy4i8gyQa7e6DE7sCXRDz4uAsY2l9lInkM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sBDd6bVpd53b6sSLV3bPi+3mm6jav6H/F8yrUwSEdPJho/GDKp06HGL9EdbPtqiyU9yhKc5ThsAA6k6oZ99jLJmH0hZM6ZxCCEBic59mbAI6II3O9W1JrStUbL0CseyHqfC2FikW0h9yTGCgIESQlGgcGeazZkLmAq9h7dxIk7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ahfUjLdU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E21CC4CEF0;
-	Tue, 17 Jun 2025 12:23:34 +0000 (UTC)
+	 MIME-Version; b=NbO0ZEHu8Z3+hao77STcxjaYvHfmXGr/nM4wqhWhmkuXzWDhlmYS1O8gblpmQRdts/xKKNEhH5jbx5fgY46KSeiCiYMSgfaHLpD2SZlzfMBMBmVwhGAGOR15ssqT6Sf11cKuU7UBqQ4ve/1l8j5QYZEp9b4MqqobdbGIoVGHzZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nr4rssK+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 964D5C4CEF0;
+	Tue, 17 Jun 2025 12:23:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750163015;
-	bh=XNN7CiKbg6fN54Di9/cUuyokH3znB9mfS6GRj97BZEM=;
+	s=k20201202; t=1750163027;
+	bh=KjUg3Vnbefy4i8gyQa7e6DE7sCXRDz4uAsY2l9lInkM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ahfUjLdUrEQo+BkU6GrLgq2ufn0bnE9+GfHOsPcdy/6IvOIKna1PG8bqWlwnBVINp
-	 30pnKliK1vbk+P0uQSeQxPwTomOmq9ZYOSU6R5+DuRZv4ll841RYkMlFl2bKaYo2v2
-	 FGFKHYVI7RnL513CozDgsfe8Mg+JNsrgqFDBRFNakpfxQ+MswIEqRzKzYJVO6ucbWF
-	 x67FMdep4Elr7yVgiNoVp/gawSPqD3VxzBOrLwGS+mUMLwIlPxVQMfbOyH0tjiM30t
-	 AATwVXZWLOeqo9qMeS40U1dtSoodjZVicROJTDXoi9vG8dQdg3QH88rc3AdZi20goz
-	 sD8fzbyjCENjA==
+	b=nr4rssK+JtvkznC+RkOifryTfPtOjldl/HVfiAVVTw4uR2EioRtngVh+9ypBXLYP1
+	 c3s307PM4M+IMRDTmLmnoM3bQeO/9lf9NBebjVheXPbtuQHFy3kkTtg/DblcL/qG5b
+	 2LgZULDDPnR+vMBIL+J6JbV6dR2Pdc/1A4GlkXAJUJeYSlQRzXDqwUY4mP4tMMeFue
+	 PgudZhfDy2oEHvWrMa1iqevNnrmFtc6AgSfH9uPktu/5xhcv47GKSDM8UMYQFMGFmf
+	 +3TfoDPGCU6WKRWC5/p37xPVUM2A/kdq0tNVJflDh92Gy1SaTgPXDYSM8Ih3MhV225
+	 4kHrTLuXW3AAA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -51,12 +51,12 @@ Cc: Rajashekhar M A <rajs@netapp.com>,
 	Sasha Levin <sashal@kernel.org>,
 	James.Bottomley@HansenPartnership.com,
 	linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 7/8] scsi: error: alua: I/O errors for ALUA state transitions
-Date: Tue, 17 Jun 2025 08:23:20 -0400
-Message-Id: <20250617122322.1969649-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 5/6] scsi: error: alua: I/O errors for ALUA state transitions
+Date: Tue, 17 Jun 2025 08:23:36 -0400
+Message-Id: <20250617122338.1969838-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250617122322.1969649-1-sashal@kernel.org>
-References: <20250617122322.1969649-1-sashal@kernel.org>
+In-Reply-To: <20250617122338.1969838-1-sashal@kernel.org>
+References: <20250617122338.1969838-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.185
+X-stable-base: Linux 5.10.238
 Content-Transfer-Encoding: 8bit
 
 From: Rajashekhar M A <rajs@netapp.com>
@@ -177,10 +177,10 @@ making the fix important for stable kernel users.
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index 2d5dc488f5117..44795183ad120 100644
+index ffc6f3031e82b..ca2d76457f8f2 100644
 --- a/drivers/scsi/scsi_error.c
 +++ b/drivers/scsi/scsi_error.c
-@@ -619,7 +619,8 @@ enum scsi_disposition scsi_check_sense(struct scsi_cmnd *scmd)
+@@ -578,7 +578,8 @@ enum scsi_disposition scsi_check_sense(struct scsi_cmnd *scmd)
  		 * if the device is in the process of becoming ready, we
  		 * should retry.
  		 */
