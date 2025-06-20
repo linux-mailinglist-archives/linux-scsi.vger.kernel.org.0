@@ -1,78 +1,82 @@
-Return-Path: <linux-scsi+bounces-14717-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-14715-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3B16AE11B1
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Jun 2025 05:20:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 161C4AE11AC
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Jun 2025 05:19:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64B5819E0C5D
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Jun 2025 03:20:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A18C33A517F
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Jun 2025 03:19:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE4C17C21E;
-	Fri, 20 Jun 2025 03:20:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD0319ADBF;
+	Fri, 20 Jun 2025 03:19:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="c2x8uxnK"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Tqqgwn5R"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F68801;
-	Fri, 20 Jun 2025 03:20:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23AD801;
+	Fri, 20 Jun 2025 03:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750389620; cv=none; b=GRjoFTmqjx4yWB+eIg3OZ/RtSQjf1kfdaf4vsXwq5toijFgmEQsuEYC69MyFqHjaa6p6fXPNau1v1tjD9ogQyNDnvbRcYEpYsuIXKWi040qhZrozQWv805uph32o0nEIhtYMCghZOLBFJAfgGt+AeQDF1RlzoXBdguqEEPaVNow=
+	t=1750389576; cv=none; b=kikiCkf4hrCk+LrnFDiiCWVDtzO+wbxhy0CKgTrESo1EZQD/hg7/sToyNn8ATevbc7/af0hZ5v3FbtX61RheIxe7OlUS5YfRLoS343ENFsItbeVEhhP4vkmMqVcIRnDSKQAVuBVJd2Dio5DP61pC/4rWxMkmYyhwPW53pmdI2OA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750389620; c=relaxed/simple;
-	bh=FGLegPBeZc51NG7tc5zTXJlDczf81jielwYkLOFDaZc=;
+	s=arc-20240116; t=1750389576; c=relaxed/simple;
+	bh=1NNit1AAqTSwc1aYmKzBPX7EGlwXXbw90pM+2SVrN8k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a4D0vvU7di1MFw29JPjUozb5oXX8+ryWh5EVHs8piTJxs6Pz3lPDiBA2FBU04dvptn1x90xl029ej3+OOobnKIlt/vVlvPHAdF3+/E6O/l1wekUVWba5/62Q4e/SfG1megnYAknZLbX7jXigH7cwOIoYwOBS35vnqqLDAK6Qg6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=c2x8uxnK; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=BKTmrudWcQ4CfXQ0FJgkrexgqRA6q9OwwyiV1VMhsYern9t923HU0cJ4KWz5FGV2HNyb4byzgS2gUBqH6DH+D8XsdQE7zkhTafTgR3CWwY8hz6ccdSLDGqaE4532HF+AJXjvGD9n2GI8hPaB1udFgyt+U60vHFjicELy+E4l8JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Tqqgwn5R; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55K2u584018391;
-	Fri, 20 Jun 2025 03:19:09 GMT
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55K2tcWD012108;
+	Fri, 20 Jun 2025 03:19:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=R9ljl7iX0riG6nr1xVc4bm09V/rwVMsqYs7/6lM/aH4=; b=
-	c2x8uxnKoY6LJU4G8XqwXrnJ7U8fGQq5JjwZlzZDnMdKitxXWNEXCeViPZyOF7bh
-	OctarDnjz8TVfr8AeGERQTwFSD3lcoAgFsdiVeGrFLuuFwb2b2lWb0CBV148Kr0L
-	P7LKTB0h/vikLw0S4xKDnoFpjty08SiNY6Y/10LXXa1dvzwbtV4/MxY/3bNobyXz
-	kkAX+R8sNhDJXwRddFy2yE2tADqJxsDYH+j/Wy4puBzOj0cb2AMEzC+0lrWbNAdh
-	XnDUmY9Xycs7+9iEA9DKZnHLN8NDtOmFAdBZ7LFy/Y8Oy+OnzyGfq4lkzwRfz4Nr
-	OIQOwNTcNkFbGJk8EJCwEw==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 479hvna91d-1
+	corp-2025-04-25; bh=7719dfXto/ii3PpM9n0DTlAlhm8zMReQumuZGrz+3Hc=; b=
+	Tqqgwn5R/V76ZY5Tm8HkcTbfhUcgop++0InMy3wy9TlINj3KxAC4JpZlAopBrCYL
+	bJYGx0lx9ob0R69RiPbKX3U2s6oe3SsKkQ8ehjCUGaOyAHBX0ULCzq+xL294/Y1/
+	tEE4JUEJCt3nwOb6EWT/9Csqxo5yIxrOyE34ORsFfYXkuhYVc99SNxz1RT8oQMb8
+	HrTfO3fmZcx8u0x455T065//SJtz0fan/GQzBfMCXmJ4Id5Ha/2W9mtx7EjCerrH
+	kUWS814dU+uVU1UNYtGZY43NaeF1HY8jwC1eQKJh8r+14egFZ7R/DzwK+sJrKbo7
+	yZcQXyLSnI4jncdzTB8yqA==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47914etvkw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 20 Jun 2025 03:19:09 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 55K1Cctx009647;
-	Fri, 20 Jun 2025 03:19:08 GMT
+	Fri, 20 Jun 2025 03:19:32 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 55K1F26a037473;
+	Fri, 20 Jun 2025 03:19:31 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 478yhjydhb-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 478yhc7d5k-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 20 Jun 2025 03:19:08 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 55K3J7oP002814;
-	Fri, 20 Jun 2025 03:19:08 GMT
+	Fri, 20 Jun 2025 03:19:31 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 55K3JU2C013310;
+	Fri, 20 Jun 2025 03:19:30 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 478yhjydgj-3;
-	Fri, 20 Jun 2025 03:19:08 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 478yhc7d52-1;
+	Fri, 20 Jun 2025 03:19:30 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Yihang Li <liyihang9@huawei.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Thomas Fourier <fourier.thomas@gmail.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: Don't use %pK through printk
-Date: Thu, 19 Jun 2025 23:18:38 -0400
-Message-ID: <175038845869.1665414.6330710566460469653.b4-ty@oracle.com>
+        Satish Kharat <satishkh@cisco.com>,
+        Sesidhar Baddela <sebaddel@cisco.com>,
+        Karan Tilak Kumar <kartilak@cisco.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Arulprabhu Ponnusamy <arulponn@cisco.com>, Arun Easi <aeasi@cisco.com>,
+        Gian Carlo Boffa <gcboffa@cisco.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: fnic: fix missing dma mapping error in `fnic_send_frame()`
+Date: Thu, 19 Jun 2025 23:19:09 -0400
+Message-ID: <175038952907.1692313.15200129425689911215.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250611-restricted-pointers-scsi-v1-1-fe31bfbc4910@linutronix.de>
-References: <20250611-restricted-pointers-scsi-v1-1-fe31bfbc4910@linutronix.de>
+In-Reply-To: <20250618065715.14740-2-fourier.thomas@gmail.com>
+References: <20250618065715.14740-2-fourier.thomas@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -84,34 +88,28 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-06-20_01,2025-06-18_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=800 bulkscore=0
- phishscore=0 spamscore=0 suspectscore=0 malwarescore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2505160000 definitions=main-2506200024
-X-Authority-Analysis: v=2.4 cv=XeSJzJ55 c=1 sm=1 tr=0 ts=6854d32d b=1 cx=c_pps a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=_ym-YgABFaPYJePyZlUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=ZXulRonScM0A:10 a=zZCYzV9kfG8A:10 cc=ntf awl=host:14714
-X-Proofpoint-ORIG-GUID: XDiBK_qPFwaLTQhnJyzOXpKPLERsEOi2
-X-Proofpoint-GUID: XDiBK_qPFwaLTQhnJyzOXpKPLERsEOi2
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIwMDAyNCBTYWx0ZWRfX+scp1wmi7JWq fSVlyXeAODTh3PYvTpoN0c5NaFhek2NLe/RfVBMXTRm8v04h4Q/urBCsPJbVWrmtxOB2ItJy7ml EPm5J1K7dghur7szToPE3gGC76b1FnbbsR9WLIlZUPnSzetPKCCpp3xRvRdofjcDVwm/Cerdymu
- vgZNCqoBzWo+Ar4R73FUkolFmJclQLQ9G4tMfadSwqlWaM6cO80dfELOH6Cy1u0qLd7simWjVkW jSUKLKZ9+8plRICD6vNAkgVGiY5DVfRnAHtvjeqsIg+Lw7d5vtagEC2E1qyTzVzhImFgF7e84Z2 ymLjyAVR1Hwngz73OGEMJY1NNS6a9tArz3clxwo9Pp6mkskOEZdppQBF2T8sqqHaiqxjUXiwpbj
- rZ1VVH1q758nRhdqYOYleyMpYqynJSfbK2erQqmP36pqYRBWoIek1fpbSVaw3ogc6geNl40D
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 adultscore=0
+ mlxlogscore=953 spamscore=0 mlxscore=0 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
+ definitions=main-2506200024
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIwMDAyNCBTYWx0ZWRfX/EuOp1/dCCPi r6ePe7hcNRZ2YaWuZHrE5f1pj4jnlS6mb3a7KXxCY5o+CEfJKibclB6y/mFiWd3COD/8NquaGs7 qKwpDxv3WnyG0Gb1CR4SW/rFgIO0LIH2kOtvXA8SQjaPWUrImhHeLTkPGEU5vur6KNmPbbwzxC7
+ ex/56aFv/qtCJ50evEZRX2Bw695HJVwvpMQBm3b9iUl3lNB5HkIRcPuVRwVup0/ygXDkKJXVMEX aQp/c4C6UwNZokIhQJWM72VW/cToKWAel+w6QkBaytra/nJolY4s8kUTQH6oeotBal9ASmZlrsq apr4Yy36WiEds3Xfai+TpTt4kspOPeoVyh6/O1R2cwBlVO2nXGJzpH9BZfNsvuWsEDKyBylKIO7
+ /NXg+4daYoVW17tprblFD7e8xt3Pu1qAJN6ACRbfVQFPAuFDXil3G6iITsAl45F6wrDFYiKI
+X-Authority-Analysis: v=2.4 cv=U4CSDfru c=1 sm=1 tr=0 ts=6854d344 cx=c_pps a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=vwQfSl2PeIesOJjDinMA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: H_3a7CoY6wd9U79UqdzPtv7D8LGCrYU2
+X-Proofpoint-ORIG-GUID: H_3a7CoY6wd9U79UqdzPtv7D8LGCrYU2
 
-On Wed, 11 Jun 2025 11:58:06 +0200, Thomas Weißschuh wrote:
+On Wed, 18 Jun 2025 08:57:04 +0200, Thomas Fourier wrote:
 
-> In the past %pK was preferable to %p as it would not leak raw pointer
-> values into the kernel log.
-> Since commit ad67b74d2469 ("printk: hash addresses printed with %p")
-> the regular %p has been improved to avoid this issue.
-> Furthermore, restricted pointers ("%pK") were never meant to be used
-> through printk(). They can still unintentionally leak raw pointers or
-> acquire sleeping locks in atomic contexts.
+> `dma_map_XXX()` can fail and should be tested for errors with
+> `dma_mapping_error().`
 > 
-> [...]
+> 
 
-Applied to 6.17/scsi-queue, thanks!
+Applied to 6.16/scsi-fixes, thanks!
 
-[1/1] scsi: Don't use %pK through printk
-      https://git.kernel.org/mkp/scsi/c/76549adb4260
+[1/1] scsi: fnic: fix missing dma mapping error in `fnic_send_frame()`
+      https://git.kernel.org/mkp/scsi/c/85d6fbc47c30
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
