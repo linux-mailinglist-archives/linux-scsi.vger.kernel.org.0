@@ -1,291 +1,120 @@
-Return-Path: <linux-scsi+bounces-14799-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-14801-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46A51AE5454
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 Jun 2025 00:00:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 463A8AE5A84
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 Jun 2025 05:34:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1383E1894029
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Jun 2025 22:00:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55D244452CF
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 Jun 2025 03:34:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E717C2248B0;
-	Mon, 23 Jun 2025 21:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3294438FA3;
+	Tue, 24 Jun 2025 03:34:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="M/1LgzT/"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="XECnpSKp"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
+Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com [203.205.221.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1F5220686
-	for <linux-scsi@vger.kernel.org>; Mon, 23 Jun 2025 21:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABF8EC5;
+	Tue, 24 Jun 2025 03:34:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750715980; cv=none; b=Pw5Ztlz6bAD0Ww1PAh/iBjcj7FDDAnJxFyqx6CyiguVQh2UtO/3kriamkO3RDvHS0Yo6+flaHabQJWxw1k3EMIpdsoZyyu6dkRR7KMsxrbjukBjnkWjtI165al6ftpqUDbr9TnzQiUA3eW4ZXPG60Rq2Ai5kwCmDOmz7x3wr8Eo=
+	t=1750736074; cv=none; b=h0USAimUbwJfo/pmNNNLyaFhuk8Hm5UZNL9HCSwrxOW2z2qjf75uoJM3v4UiFRuTDfIHQ9alfuU6eTmdwHOVKDZ86suvlc/tUPdDaN43j8gz2Ye4YMkcj3VS8KZ0h9Uzn+4q5Eu0kR7j2tHn+6w0FiP3vvWh0MrmRTHlDpLiCtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750715980; c=relaxed/simple;
-	bh=Nj9+Si1MSliMHy4weJ0O1ybXoIBktFBUFz5sP5lRZt4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tc9OvEBENeQDeQaS/YpDbZ2Bp6krFLLrLeWVgxWTn1yArv6SjJ9a0Pul6C00lmgbtCB67LXcSItdAYilUG2NPLIbXLtcZIQso2lnIw6HHZiL9A/txy1M7EzEP5hdOroVnlIG0PnZ2HLs7dDIk2H8nYzadxQPwGTMn6Rszi3L318=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=M/1LgzT/; arc=none smtp.client-ip=199.89.3.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 004.mia.mailroute.net (Postfix) with ESMTP id 4bR26v3nDXzm0yT6;
-	Mon, 23 Jun 2025 21:59:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:x-mailer:message-id:date
-	:date:subject:subject:from:from:received:received; s=mr01; t=
-	1750715973; x=1753307974; bh=U3QF2dOgMln1UbuaXbWx4ETan33hdSiahI/
-	UNuxKV7o=; b=M/1LgzT/oddqPzrFYwwnqHQNZK529ldb+ogjdW+PjwHsdhLPRKH
-	boxvxQgnZEqkmQ+9ZTVLJ+BnEzMt3HEweQx4sIWE6BAYkh2u5DMy6mAgP+YeZCW8
-	Kk2gADtJQMgWezWNUONkjFUu//lYeQF0JdFFvMm3CVVOCmbRIFYBfSNs2wdFdm2N
-	f9nVD43RcnRUyxh8ElkxqJxuM+rJmQE17LPryhv1lf522tjmJLLcNgYzCXdHBZWr
-	WLH865CM+LwFr6Ws/Z/VvRFcPoFuscMwjaWRrDz4KLvVM6/O5QMwKGxl2RNVp7/+
-	0CeipX8psPljQbdnLXsUjdEVixDzej5Dnqg==
-X-Virus-Scanned: by MailRoute
-Received: from 004.mia.mailroute.net ([127.0.0.1])
- by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id OKDlSGXNnHt4; Mon, 23 Jun 2025 21:59:33 +0000 (UTC)
-Received: from bvanassche.mtv.corp.google.com (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4bR26m4TW2zm0ySq;
-	Mon, 23 Jun 2025 21:59:27 +0000 (UTC)
-From: Bart Van Assche <bvanassche@acm.org>
-To: "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org,
-	Bart Van Assche <bvanassche@acm.org>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Peter Wang <peter.wang@mediatek.com>,
-	Avri Altman <avri.altman@sandisk.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>
-Subject: [PATCH] scsi: ufs: core: Improve return value documentation
-Date: Mon, 23 Jun 2025 14:59:01 -0700
-Message-ID: <20250623215909.4169007-1-bvanassche@acm.org>
-X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
+	s=arc-20240116; t=1750736074; c=relaxed/simple;
+	bh=2lgsSiSDVhVvn8xEry5TEui0answQ0NLBijzCjYH/hg=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=b2XdsTmQE940Ns1gD3qOcKOEtQ7JD9SyQJumwHqxR2U4GAKzBEactDvFSryNhwkS/l4mNcHpm5PZa2NO4YrHJEVEsMDT+dN2zjkx59HjH+D6Yh92KOK/AtOvBZFkrkFh9D01QOmWE/TasviG22N99/zppBMmAiFeJ9TZS5LGyFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=XECnpSKp; arc=none smtp.client-ip=203.205.221.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1750736062; bh=e5CddSXqWu8idh7jLesbAOAwyCS96hBKVBtYhIbCOis=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=XECnpSKpRSoAgZQyQuGsY+Eum1g/7k26jZYVoe5NoqdrH4d7H3RqIGlPfb/RtvUGS
+	 y7lStmQfEKbsss8jsvz+RPVJYIw4exAYkEVaDeR12wYL5Z1UPhDe90vGVahkbPrsCo
+	 Q0k6b2j/mS+ss9OgT6u1U6lfNmLp0u3qnkp4jwA8=
+Received: from VM-222-126-tencentos.localdomain ([14.22.11.165])
+	by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
+	id 4333CCA0; Tue, 24 Jun 2025 11:16:51 +0800
+X-QQ-mid: xmsmtpt1750735011tvra48o7l
+Message-ID: <tencent_FACDDA286D6964B8EFB784FE3C4966EFDA08@qq.com>
+X-QQ-XMAILINFO: NyTsQ4JOu2J2sYoc6GuRSGi/RPtT58ss+s1XHr5nfWLCHIxKyly4svic0kOksH
+	 7zwcIW37+MpR+3wzQtAIANDUukiaOHjmoBh4GDWsbAPaHJYlO+xx9TIgPZ0on+vnq/aGjejOMJG6
+	 0gb8oc5F6MNWngAIQu+G4BItbqf+/5wbUiIsJaj0H5l4Z99NV8anfIBTyngabT79+9v8ITDgTSRr
+	 /YW61SOabi9MaGwz+Jjkensj3KWLKqSDoe3hhl6/5EjWUHK5bnfdrI3MieryVgElo77Mim+H7oUv
+	 H0kHuZmHOyXFzM3NhrUwQpe7StGdjg+YckF3SViWdgR+j54wgb48EA5A9jxwN5KRvRacs29HtU/v
+	 rFZ85eHZH1LXJ0YHNTfg88HWG8PDzNeFGRfrtfkIKFAzDlJb3kK5tLOrP1/UfVHsTYh+qk1c91Qt
+	 1d5yssHNwAfT2qSpVIq4a12EkslIPIw72mmHeGsqCsOFZD3qzmPCUSBIIU6nVKjjtzEP/ymj3wS3
+	 Ua4UrRbVBO8+HrjDOSVXnEX4XidrBcruqy85q16oGrLUjKLu0cFFm/bplXnzSR+EIP3BWdUiHRdo
+	 wMHnoByIzaeR672eOofJ7GdQ7jKXhcFb4I4yHdVxAbduZP7LaYuzthfD23Xl+oV85b44apnTfSp0
+	 DYTt0K2dGM+jDbwawuro90tYaMojOqD4v5DqSfr/I2OhTrDYFFssElKpjNe+HBEISE8A6Umf2LAg
+	 TAURUfIA/TgfxhZ8mAw/Zn1Is+KUJBx7Wdvd7oF8g0YbsJgcPDn0F8/zqo2TxeKzgAI2HXhVj0ZW
+	 MAQ6txox0Zh8TFJNsQ2LxvmxaNQK6RlHmCF9Fzmf8TMU+PLJ79GHA/qafOATPV1mNUWhi9UsWB3y
+	 e3JngoevZxkM6KkFdrYUKj/rGujKniwonhi8N7BDoZowI+rfFvTez0CrwzherPvZ0LJ58SuKcCau
+	 9JXqOZ+iUMFGvO195htvkNPI2fKlpPh5yt+riZJdbcfv30Uj/v4qv1ZgYWPR8f
+X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
+From: jackysliu <1972843537@qq.com>
+To: lkp@intel.com
+Cc: 1972843537@qq.com,
+	GR-QLogic-Storage-Upstream@marvell.com,
+	James.Bottomley@hansenpartnership.com,
+	jhasan@marvell.com,
+	linux-kernel@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	martin.petersen@oracle.com,
+	oe-kbuild-all@lists.linux.dev,
+	skashyap@marvell.com
+Subject: [PATCH] [PATCH] scsi: qedf: fix inconsistent indenting warning Fix below inconsistent indenting smatch warning. New smatch warnings: drivers/scsi/qedf/qedf_main.c:2814 qedf_prepare_sb() warn: inconsistent indenting
+Date: Tue, 24 Jun 2025 11:16:43 +0800
+X-OQ-MSGID: <20250624031643.2205842-1-1972843537@qq.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <202506240340.fv6cXpyc-lkp@intel.com>
+References: <202506240340.fv6cXpyc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Some functions return a negative value to indicate an error while other
-functions return a value !=3D 0 to indicate an error. Document the return
-value behavior where this documentation is missing and fix the return
-value documentation where necessary. Add warnings to detect mismatches
-between documentation and implementation. This matters because several
-sysfs callback functions only work correctly if a negative value is
-returned upon error.
+Old smatch warnings:
+drivers/scsi/qedf/qedf_main.c:2816 qedf_prepare_sb() warn: inconsistent indenting
 
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202506240340.fv6cXpyc-lkp@intel.com/
+
+Signed-off-by: jackysliu <1972843537@qq.com>
 ---
- drivers/ufs/core/ufshcd.c | 37 +++++++++++++++++++++++++++++--------
- 1 file changed, 29 insertions(+), 8 deletions(-)
+ drivers/scsi/qedf/qedf_main.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index c2048aca09fc..b3fe4335d56c 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -2566,7 +2566,7 @@ ufshcd_wait_for_uic_cmd(struct ufs_hba *hba, struct=
- uic_command *uic_cmd)
-  * @hba: per adapter instance
-  * @uic_cmd: UIC command
-  *
-- * Return: 0 only if success.
-+ * Return: 0 if successful; < 0 upon failure.
-  */
- static int
- __ufshcd_send_uic_cmd(struct ufs_hba *hba, struct uic_command *uic_cmd)
-@@ -3072,6 +3072,9 @@ static void ufshcd_setup_dev_cmd(struct ufs_hba *hb=
-a, struct ufshcd_lrb *lrbp,
- 	hba->dev_cmd.type =3D cmd_type;
- }
-=20
-+/*
-+ * Return: 0 upon success; < 0 upon failure.
-+ */
- static int ufshcd_compose_dev_cmd(struct ufs_hba *hba,
- 		struct ufshcd_lrb *lrbp, enum dev_cmd_type cmd_type, int tag)
- {
-@@ -3184,9 +3187,13 @@ ufshcd_dev_cmd_completion(struct ufs_hba *hba, str=
-uct ufshcd_lrb *lrbp)
- 		break;
+diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
+index 8767d9de819f..b46fc510557b 100644
+--- a/drivers/scsi/qedf/qedf_main.c
++++ b/drivers/scsi/qedf/qedf_main.c
+@@ -2810,11 +2810,11 @@ static int qedf_prepare_sb(struct qedf_ctx *qedf)
  	}
-=20
-+	WARN_ONCE(err > 0, "Incorrect return value %d > 0\n", err);
- 	return err;
+ err:
+ for (int i = 0; i < id; i++) {
+-fp = &qedf->fp_array[i];
+-if (fp->sb_info) {
+-qedf_free_sb(qedf, fp->sb_info);
+-kfree(fp->sb_info);
+-fp->sb_info = NULL;
++	fp = &qedf->fp_array[i];
++	if (fp->sb_info) {
++		qedf_free_sb(qedf, fp->sb_info);
++		kfree(fp->sb_info);
++	fp->sb_info = NULL;
  }
-=20
-+/*
-+ * Return: 0 upon success; < 0 upon failure.
-+ */
- static int ufshcd_wait_for_dev_cmd(struct ufs_hba *hba,
- 		struct ufshcd_lrb *lrbp, int max_timeout)
- {
-@@ -3261,6 +3268,7 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba *=
-hba,
- 		}
- 	}
-=20
-+	WARN_ONCE(err > 0, "Incorrect return value %d > 0\n", err);
- 	return err;
  }
-=20
-@@ -3278,6 +3286,9 @@ static void ufshcd_dev_man_unlock(struct ufs_hba *h=
-ba)
- 	ufshcd_release(hba);
- }
-=20
-+/*
-+ * Return: 0 upon success; < 0 upon failure.
-+ */
- static int ufshcd_issue_dev_cmd(struct ufs_hba *hba, struct ufshcd_lrb *=
-lrbp,
- 			  const u32 tag, int timeout)
- {
-@@ -3365,6 +3376,7 @@ static int ufshcd_query_flag_retry(struct ufs_hba *=
-hba,
- 		dev_err(hba->dev,
- 			"%s: query flag, opcode %d, idn %d, failed with error %d after %d ret=
-ries\n",
- 			__func__, opcode, idn, ret, retries);
-+	WARN_ONCE(ret > 0, "Incorrect return value %d > 0\n", ret);
- 	return ret;
- }
-=20
-@@ -3376,7 +3388,7 @@ static int ufshcd_query_flag_retry(struct ufs_hba *=
-hba,
-  * @index: flag index to access
-  * @flag_res: the flag value after the query request completes
-  *
-- * Return: 0 for success, non-zero in case of failure.
-+ * Return: 0 for success; < 0 upon failure.
-  */
- int ufshcd_query_flag(struct ufs_hba *hba, enum query_opcode opcode,
- 			enum flag_idn idn, u8 index, bool *flag_res)
-@@ -3432,6 +3444,7 @@ int ufshcd_query_flag(struct ufs_hba *hba, enum que=
-ry_opcode opcode,
-=20
- out_unlock:
- 	ufshcd_dev_man_unlock(hba);
-+	WARN_ONCE(err > 0, "Incorrect return value %d > 0\n", err);
- 	return err;
- }
-=20
-@@ -3444,7 +3457,7 @@ int ufshcd_query_flag(struct ufs_hba *hba, enum que=
-ry_opcode opcode,
-  * @selector: selector field
-  * @attr_val: the attribute value after the query request completes
-  *
-- * Return: 0 for success, non-zero in case of failure.
-+ * Return: 0 upon success; < 0 upon failure.
- */
- int ufshcd_query_attr(struct ufs_hba *hba, enum query_opcode opcode,
- 		      enum attr_idn idn, u8 index, u8 selector, u32 *attr_val)
-@@ -3493,6 +3506,7 @@ int ufshcd_query_attr(struct ufs_hba *hba, enum que=
-ry_opcode opcode,
-=20
- out_unlock:
- 	ufshcd_dev_man_unlock(hba);
-+	WARN_ONCE(err > 0, "Incorrect return value %d > 0\n", err);
- 	return err;
- }
-=20
-@@ -3507,7 +3521,7 @@ int ufshcd_query_attr(struct ufs_hba *hba, enum que=
-ry_opcode opcode,
-  * @attr_val: the attribute value after the query request
-  * completes
-  *
-- * Return: 0 for success, non-zero in case of failure.
-+ * Return: 0 for success; < 0 upon failure.
- */
- int ufshcd_query_attr_retry(struct ufs_hba *hba,
- 	enum query_opcode opcode, enum attr_idn idn, u8 index, u8 selector,
-@@ -3530,9 +3544,13 @@ int ufshcd_query_attr_retry(struct ufs_hba *hba,
- 		dev_err(hba->dev,
- 			"%s: query attribute, idn %d, failed with error %d after %d retries\n=
-",
- 			__func__, idn, ret, QUERY_REQ_RETRIES);
-+	WARN_ONCE(ret > 0, "Incorrect return value %d > 0\n", ret);
- 	return ret;
- }
-=20
-+/*
-+ * Return: 0 if successful; < 0 upon failure.
-+ */
- static int __ufshcd_query_descriptor(struct ufs_hba *hba,
- 			enum query_opcode opcode, enum desc_idn idn, u8 index,
- 			u8 selector, u8 *desc_buf, int *buf_len)
-@@ -3590,6 +3608,7 @@ static int __ufshcd_query_descriptor(struct ufs_hba=
- *hba,
- out_unlock:
- 	hba->dev_cmd.query.descriptor =3D NULL;
- 	ufshcd_dev_man_unlock(hba);
-+	WARN_ONCE(err > 0, "Incorrect return value %d > 0\n", err);
- 	return err;
- }
-=20
-@@ -3606,7 +3625,7 @@ static int __ufshcd_query_descriptor(struct ufs_hba=
- *hba,
-  * The buf_len parameter will contain, on return, the length parameter
-  * received on the response.
-  *
-- * Return: 0 for success, non-zero in case of failure.
-+ * Return: 0 for success; < 0 upon failure.
-  */
- int ufshcd_query_descriptor_retry(struct ufs_hba *hba,
- 				  enum query_opcode opcode,
-@@ -3624,6 +3643,7 @@ int ufshcd_query_descriptor_retry(struct ufs_hba *h=
-ba,
- 			break;
- 	}
-=20
-+	WARN_ONCE(err > 0, "Incorrect return value %d > 0\n", err);
- 	return err;
- }
-=20
-@@ -3636,7 +3656,7 @@ int ufshcd_query_descriptor_retry(struct ufs_hba *h=
-ba,
-  * @param_read_buf: pointer to buffer where parameter would be read
-  * @param_size: sizeof(param_read_buf)
-  *
-- * Return: 0 in case of success, non-zero otherwise.
-+ * Return: 0 in case of success; < 0 upon failure.
-  */
- int ufshcd_read_desc_param(struct ufs_hba *hba,
- 			   enum desc_idn desc_id,
-@@ -3703,6 +3723,7 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
- out:
- 	if (is_kmalloc)
- 		kfree(desc_buf);
-+	WARN_ONCE(ret > 0, "Incorrect return value %d > 0\n", ret);
- 	return ret;
- }
-=20
-@@ -3816,7 +3837,7 @@ int ufshcd_read_string_desc(struct ufs_hba *hba, u8=
- desc_index,
-  * @param_read_buf: pointer to buffer where parameter would be read
-  * @param_size: sizeof(param_read_buf)
-  *
-- * Return: 0 in case of success, non-zero otherwise.
-+ * Return: 0 in case of success; < 0 upon failure.
-  */
- static inline int ufshcd_read_unit_desc_param(struct ufs_hba *hba,
- 					      int lun,
-@@ -4794,7 +4815,7 @@ static int ufshcd_complete_dev_init(struct ufs_hba =
-*hba)
-  * 3. Program UTRL and UTMRL base address
-  * 4. Configure run-stop-registers
-  *
-- * Return: 0 on success, non-zero value on failure.
-+ * Return: 0 if successful; < 0 upon failure.
-  */
- int ufshcd_make_hba_operational(struct ufs_hba *hba)
- {
+ kfree(qedf->fp_array);
+-- 
+2.43.5
+
 
