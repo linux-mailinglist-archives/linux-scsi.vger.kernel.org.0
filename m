@@ -1,77 +1,93 @@
-Return-Path: <linux-scsi+bounces-14910-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-14913-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FBE9AED839
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 Jun 2025 11:09:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3C5EAEDAA2
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 Jun 2025 13:18:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C286176148
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 Jun 2025 09:09:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E78B018999C1
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 Jun 2025 11:19:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61ABA245033;
-	Mon, 30 Jun 2025 09:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF2F239085;
+	Mon, 30 Jun 2025 11:18:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="G1NXGnmv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lDS+86l6"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0183024293C
-	for <linux-scsi@vger.kernel.org>; Mon, 30 Jun 2025 09:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8DAB1B0435;
+	Mon, 30 Jun 2025 11:18:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751274542; cv=none; b=rgbtwxv0LTCda9Xd/pC1Bs9XiVPAErZrZyixWjcVsGmxJEM8zQTjbhMnLFWLSLzKSYicedGxhlk4Kr1NKnfICW/wNjMu6jgQGvkU3nONFj31SlcxkRMYk7uewkGfeNPPAl6HwYa9sQ1mSMddTxaD9QP8KXDhTS6wfrGsNt1bdGI=
+	t=1751282321; cv=none; b=hOeByh19ov1unuvfVez17n63AAO5as+0pDQlHO/VHLyTX0rKgdcQeIKh6ZSrPjBTz7IKU4LW9//+2nzioQNcs1qJvwoTN6R9cGwje799HQU3B2B3S2Yf9rTLeyXpXYdTckcXu8uaMZBNMeQm0S7Sesc3HGnlIA5ph8ZUAwKqs+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751274542; c=relaxed/simple;
-	bh=SGgI+2t8QSfEtCh+EmiXkpTtLijUeJGowIY2TYU10Ik=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=BXpe/x6loFtnd8E6Ynv2vLhCW09LRh01rV8Oj6xWKKlEiVPS/M+EXhuD3UaYdslMcuwNRJP4T0TCPeWfzLZf7M42PbxqpsW6abnI6piTmVdMYhZ6QolOZhrLIgQK7SywMzreVc2qoqLphbaAqatOSukUpsdUy+vtWUlAnLAzqbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=G1NXGnmv; arc=none smtp.client-ip=203.254.224.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20250630090858epoutp0398f77855710c954c63f3957eedece9c8~Nxunnjy0O1562615626epoutp03c
-	for <linux-scsi@vger.kernel.org>; Mon, 30 Jun 2025 09:08:58 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20250630090858epoutp0398f77855710c954c63f3957eedece9c8~Nxunnjy0O1562615626epoutp03c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1751274538;
-	bh=KuP4KAiQsKpw4mqMpH1zHHPSC2k3DoFrHQQ6pz0kICU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=G1NXGnmvvPfIIUuAdxOlwc0KXheU1GyCIaqWk+PZbT7ahTGC9j8S1V9AWEujWfLFF
-	 UWR2xUuquPn1MdTKM+qrcwyYhtxZSJuR+izRA+DaUjgb2GhJUgOJU/PEGthO5F9m2N
-	 Y+7Tz2BcBvspcczwKrX1Q9/HCX1BvmBqkRc131jA=
-Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
-	20250630090857epcas5p4cc423d6634783953db3ff103947b4232~NxunJau9j2849428494epcas5p4b;
-	Mon, 30 Jun 2025 09:08:57 +0000 (GMT)
-Received: from epcas5p4.samsung.com (unknown [182.195.38.182]) by
-	epsnrtp04.localdomain (Postfix) with ESMTP id 4bW0hS0Cp3z6B9m8; Mon, 30 Jun
-	2025 09:08:56 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250630090616epcas5p2a9ca118ca83586172d69213e22b635a1~NxsRQh7E41144511445epcas5p2m;
-	Mon, 30 Jun 2025 09:06:16 +0000 (GMT)
-Received: from localhost.localdomain (unknown [107.99.41.245]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250630090614epsmtip2f8167ee603d818ac154ac73d76a49336~NxsPKrF8q1134211342epsmtip2j;
-	Mon, 30 Jun 2025 09:06:14 +0000 (GMT)
-From: Anuj Gupta <anuj20.g@samsung.com>
-To: vincent.fu@samsung.com, jack@suse.cz, anuj1072538@gmail.com,
-	axboe@kernel.dk, viro@zeniv.linux.org.uk, brauner@kernel.org,
-	hch@infradead.org, martin.petersen@oracle.com, ebiggers@kernel.org,
-	adilger@dilger.ca
-Cc: linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	joshi.k@samsung.com, linux-nvme@lists.infradead.org,
-	linux-scsi@vger.kernel.org, gost.dev@samsung.com, Anuj Gupta
-	<anuj20.g@samsung.com>
-Subject: [PATCH for-next v5 4/4] fs: add ioctl to query metadata and
- protection info capabilities
-Date: Mon, 30 Jun 2025 14:35:48 +0530
-Message-Id: <20250630090548.3317-5-anuj20.g@samsung.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250630090548.3317-1-anuj20.g@samsung.com>
+	s=arc-20240116; t=1751282321; c=relaxed/simple;
+	bh=nKcIly6qaq1Nl910VPmWYltAsx8yIOGi9TwL2l47JKw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rXHA99Snx4byqIkIrTYILBseeGYf+/pIrfKC/LW5Z6qPtvSt2KTaZx6LlcS2t2SHf9lDRp2t6hy5oV3VmbEF84kkFIXQWg34z1KnHyj9xUU2OdvuI0MRTIRX9A7o2obg27FZmef5WMMhKTuy1jJTJz7uAjppQIXXHvnApo9s9uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lDS+86l6; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3a528e301b0so134901f8f.1;
+        Mon, 30 Jun 2025 04:18:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751282318; x=1751887118; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4bHSrGkiQpDnv6V2m1S1L8Uez278g9vphJNWWJac9vY=;
+        b=lDS+86l6vfroD9D2y2sVFTiIuxFSSTo0ojDmanHX4VJ6Xph8OHwS3ciflH4ia+QpiY
+         LKx80Zf6yFRKfsTkkN+rm2/3EYCpRYhwFnWnm9aGyUZaAwP3yFej4zCJZ9vUWzjSjn4f
+         E16/f/GEk8ae18QQKQ/mdnVRBzOzK/WL9/gdOYbkMf4UT/mwFqCCB7BwftHN2lZ5nUXC
+         UtyusmtT/iB0QqirS+C69MWhMpJ3k1ILLOJtIlg3zKbyablF4Ijg37L1E1Q7TtfeJVpG
+         JsOZ8AcavdzYXMW9B8UxUPO8WnDxKgEHNcKMLMe4WFBPUwHmtzWjM/sOAOciqY2rMXQm
+         DcKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751282318; x=1751887118;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4bHSrGkiQpDnv6V2m1S1L8Uez278g9vphJNWWJac9vY=;
+        b=ZjefrvQqehLwDhj+C4ITZUEnNU8AGbN0/Nx3e9ZkJVHumdkXW3nKyAO5Zr0jNslyIb
+         AMXA7sWM03opxnbiaErcuIXql77uAKFPJlGahdEACYfdFm+gTWXrZAY33y0VMC7LhhFN
+         NCkmJ98b27pht18qRornCC2OQrzeOB/WrNeTqw01Ll322A8uNzIbwkA8E+LbQXf6P273
+         D1GnZPPZn0FPVUKcHmDVsHWinMPTEJFEOUMi0oZXxCroZBZsR6T2eACCb9kSJ0XEOxd6
+         ljLjSlND8fQKHMfX6eXB4YS0TSBrUu/7mPiwLIG7V0sS/iJJT7ljUQbPb2UxD9/COUjK
+         +NKg==
+X-Forwarded-Encrypted: i=1; AJvYcCUiZmBMbGrEil1BKH+Ik2O3/19dMGoj0Fz64S4pz8usP1nrfU/QcpeyBYZJIu2/19ad8RNtTFN6bWStBsqb@vger.kernel.org, AJvYcCVUKcApRQuWvWBuaBGv17pWPJJY54dVSj792AQxYvQn+MHtdc10Dbkm8Pm+Ym3PQtGdVNNk499sRPS3oA==@vger.kernel.org, AJvYcCW9ypGJiekyf7LCzqNOQxZRUmVNTS0VLCxdGL8VzJDPkv97cfaf32D/0DpBzqkoN9cLipRTbH7pGz1eBE0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywugza07xj50pt6IhqZXiIK7sIvp6WWqe5rTY4O1rIBKp2sD+sB
+	KEnC/NAGfz6PRiDCFY2ml7MuEQchjQ83QNwLO4cc3W9OsX++j1H5N0lM
+X-Gm-Gg: ASbGncvOn4Omo4yXfGv5U5NuDJfD3WcR/vuN0Dt/N8tLvYG1FgiW8rU+TFc/QnCRG+l
+	TEZkrna/BVMXDaAZay/mV15yxeF/Z/dwb7++4B0HU1+jY3mlAExPGMjhHDS2NFcvsMH3bTy45Qk
+	HbZX7LPvOXexUVHFb2tvSBAG4D91JbO2lemtmwOBo5EcL3/1QCEPdxq61YOUrL/+MeU1BiJ8ZEV
+	Voc/NVbnVK8K9KBBUquboAm6qPbYtJGDR5BmlN9/pVQ14SPrPWfrXsluBGJ5pSqp/Z0OUlXEQIN
+	Kvz1UzwDnxE5iM9YVHm+QkMc8M+BU2gLtlb6X6LmNgxNSZNNZW97MrLysfTZf7FO/fDEQtmpAqX
+	seKUI0rUdHev7ta9akjP8mL6X
+X-Google-Smtp-Source: AGHT+IFdIa5i+fsO4DexCnu4Udg7U+ph+4pACdyaAuy7OOOpwvuoUSrPIyws5b5Rh7q2WXLZTCK1fQ==
+X-Received: by 2002:a5d:5849:0:b0:3a4:e0e1:8dc8 with SMTP id ffacd0b85a97d-3aaf4a75781mr2515514f8f.9.1751282317752;
+        Mon, 30 Jun 2025 04:18:37 -0700 (PDT)
+Received: from thomas-precision3591.imag.fr ([2001:660:5301:24:43e:be8c:f80c:622a])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a88c7ec6aesm10112826f8f.5.2025.06.30.04.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jun 2025 04:18:37 -0700 (PDT)
+From: Thomas Fourier <fourier.thomas@gmail.com>
+To: 
+Cc: Thomas Fourier <fourier.thomas@gmail.com>,
+	Tyrel Datwyler <tyreld@linux.ibm.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Nicholas Bellinger <nab@linux-iscsi.org>,
+	Steven Royer <seroyer@linux.vnet.ibm.com>,
+	"Bryant G. Ly" <bryantly@linux.vnet.ibm.com>,
+	Michael Cyr <mikecyr@linux.vnet.ibm.com>,
+	linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] ibmvscsis: Fix dma_unmap_sg() nents value
+Date: Mon, 30 Jun 2025 13:18:02 +0200
+Message-ID: <20250630111803.94389-2-fourier.thomas@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -79,260 +95,41 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250630090616epcas5p2a9ca118ca83586172d69213e22b635a1
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250630090616epcas5p2a9ca118ca83586172d69213e22b635a1
-References: <20250630090548.3317-1-anuj20.g@samsung.com>
-	<CGME20250630090616epcas5p2a9ca118ca83586172d69213e22b635a1@epcas5p2.samsung.com>
 
-Add a new ioctl, FS_IOC_GETLBMD_CAP, to query metadata and protection
-info (PI) capabilities. This ioctl returns information about the files
-integrity profile. This is useful for userspace applications to
-understand a files end-to-end data protection support and configure the
-I/O accordingly.
+The dma_unmap_sg() functions should be called with the same nents as the
+dma_map_sg(), not the value the map function returned.
 
-For now this interface is only supported by block devices. However the
-design and placement of this ioctl in generic FS ioctl space allows us
-to extend it to work over files as well. This maybe useful when
-filesystems start supporting  PI-aware layouts.
-
-A new structure struct logical_block_metadata_cap is introduced, which
-contains the following fields:
-
-1. lbmd_flags: bitmask of logical block metadata capability flags
-2. lbmd_interval: the amount of data described by each unit of logical
-block metadata
-3. lbmd_size: size in bytes of the logical block metadata associated
-with each interval
-4. lbmd_opaque_size: size in bytes of the opaque block tag associated
-with each interval
-5. lbmd_opaque_offset: offset in bytes of the opaque block tag within
-the logical block metadata
-6. lbmd_pi_size: size in bytes of the T10 PI tuple associated with each
-interval
-7. lbmd_pi_offset: offset in bytes of T10 PI tuple within the logical
-block metadata
-8. lbmd_pi_guard_tag_type: T10 PI guard tag type
-9. lbmd_pi_app_tag_size: size in bytes of the T10 PI application tag
-10. lbmd_pi_ref_tag_size: size in bytes of the T10 PI reference tag
-11. lbmd_pi_storage_tag_size: size in bytes of the T10 PI storage tag
-
-The internal logic to fetch the capability is encapsulated in a helper
-function blk_get_meta_cap(), which uses the blk_integrity profile
-associated with the device. The ioctl returns -EOPNOTSUPP, if
-CONFIG_BLK_DEV_INTEGRITY is not enabled.
-
-Suggested-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
-Signed-off-by: Kanchan Joshi <joshi.k@samsung.com>
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: 88a678bbc34c ("ibmvscsis: Initial commit of IBM VSCSI Tgt Driver")
+Signed-off-by: Thomas Fourier <fourier.thomas@gmail.com>
 ---
- block/blk-integrity.c         | 52 ++++++++++++++++++++++++++++++
- block/ioctl.c                 |  4 +++
- include/linux/blk-integrity.h |  7 +++++
- include/uapi/linux/fs.h       | 59 +++++++++++++++++++++++++++++++++++
- 4 files changed, 122 insertions(+)
+ drivers/scsi/ibmvscsi_tgt/libsrp.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/block/blk-integrity.c b/block/blk-integrity.c
-index c1102bf4cd8d..9d9dc9c32083 100644
---- a/block/blk-integrity.c
-+++ b/block/blk-integrity.c
-@@ -13,6 +13,7 @@
- #include <linux/scatterlist.h>
- #include <linux/export.h>
- #include <linux/slab.h>
-+#include <linux/t10-pi.h>
+diff --git a/drivers/scsi/ibmvscsi_tgt/libsrp.c b/drivers/scsi/ibmvscsi_tgt/libsrp.c
+index 8a0e28aec928..0ecad398ed3d 100644
+--- a/drivers/scsi/ibmvscsi_tgt/libsrp.c
++++ b/drivers/scsi/ibmvscsi_tgt/libsrp.c
+@@ -184,7 +184,8 @@ static int srp_direct_data(struct ibmvscsis_cmd *cmd, struct srp_direct_buf *md,
+ 	err = rdma_io(cmd, sg, nsg, md, 1, dir, len);
  
- #include "blk.h"
+ 	if (dma_map)
+-		dma_unmap_sg(iue->target->dev, sg, nsg, DMA_BIDIRECTIONAL);
++		dma_unmap_sg(iue->target->dev, sg, cmd->se_cmd.t_data_nents,
++			     DMA_BIDIRECTIONAL);
  
-@@ -54,6 +55,57 @@ int blk_rq_count_integrity_sg(struct request_queue *q, struct bio *bio)
- 	return segments;
+ 	return err;
  }
+@@ -256,7 +257,8 @@ static int srp_indirect_data(struct ibmvscsis_cmd *cmd, struct srp_cmd *srp_cmd,
+ 	err = rdma_io(cmd, sg, nsg, md, nmd, dir, len);
  
-+int blk_get_meta_cap(struct block_device *bdev, unsigned int cmd,
-+		     struct logical_block_metadata_cap __user *argp)
-+{
-+	struct blk_integrity *bi = blk_get_integrity(bdev->bd_disk);
-+	struct logical_block_metadata_cap meta_cap = {};
-+	size_t usize = _IOC_SIZE(cmd);
-+
-+	if (!argp)
-+		return -EINVAL;
-+	if (usize < LBMD_SIZE_VER0)
-+		return -EINVAL;
-+	if (!bi)
-+		goto out;
-+
-+	if (bi->flags & BLK_INTEGRITY_DEVICE_CAPABLE)
-+		meta_cap.lbmd_flags |= LBMD_PI_CAP_INTEGRITY;
-+	if (bi->flags & BLK_INTEGRITY_REF_TAG)
-+		meta_cap.lbmd_flags |= LBMD_PI_CAP_REFTAG;
-+	meta_cap.lbmd_interval = 1 << bi->interval_exp;
-+	meta_cap.lbmd_size = bi->metadata_size;
-+	meta_cap.lbmd_pi_size = bi->pi_tuple_size;
-+	meta_cap.lbmd_pi_offset = bi->pi_offset;
-+	meta_cap.lbmd_opaque_size = bi->metadata_size - bi->pi_tuple_size;
-+	if (meta_cap.lbmd_opaque_size && !bi->pi_offset)
-+		meta_cap.lbmd_opaque_offset = bi->pi_tuple_size;
-+
-+	meta_cap.lbmd_guard_tag_type = bi->csum_type;
-+	if (bi->csum_type != BLK_INTEGRITY_CSUM_NONE)
-+		meta_cap.lbmd_app_tag_size = 2;
-+
-+	if (bi->flags & BLK_INTEGRITY_REF_TAG) {
-+		switch (bi->csum_type) {
-+		case BLK_INTEGRITY_CSUM_CRC64:
-+			meta_cap.lbmd_ref_tag_size =
-+				sizeof_field(struct crc64_pi_tuple, ref_tag);
-+			break;
-+		case BLK_INTEGRITY_CSUM_CRC:
-+		case BLK_INTEGRITY_CSUM_IP:
-+			meta_cap.lbmd_ref_tag_size =
-+				sizeof_field(struct t10_pi_tuple, ref_tag);
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+out:
-+	return copy_struct_to_user(argp, usize, &meta_cap, sizeof(meta_cap),
-+				   NULL);
-+}
-+
- /**
-  * blk_rq_map_integrity_sg - Map integrity metadata into a scatterlist
-  * @rq:		request to map
-diff --git a/block/ioctl.c b/block/ioctl.c
-index e472cc1030c6..9ad403733e19 100644
---- a/block/ioctl.c
-+++ b/block/ioctl.c
-@@ -13,6 +13,7 @@
- #include <linux/uaccess.h>
- #include <linux/pagemap.h>
- #include <linux/io_uring/cmd.h>
-+#include <linux/blk-integrity.h>
- #include <uapi/linux/blkdev.h>
- #include "blk.h"
- #include "blk-crypto-internal.h"
-@@ -566,6 +567,9 @@ static int blkdev_common_ioctl(struct block_device *bdev, blk_mode_t mode,
- {
- 	unsigned int max_sectors;
+ 	if (dma_map)
+-		dma_unmap_sg(iue->target->dev, sg, nsg, DMA_BIDIRECTIONAL);
++		dma_unmap_sg(iue->target->dev, sg, cmd->se_cmd.t_data_nents,
++			     DMA_BIDIRECTIONAL);
  
-+	if (_IOC_NR(cmd) == _IOC_NR(FS_IOC_GETLBMD_CAP))
-+		return blk_get_meta_cap(bdev, cmd, argp);
-+
- 	switch (cmd) {
- 	case BLKFLSBUF:
- 		return blkdev_flushbuf(bdev, cmd, arg);
-diff --git a/include/linux/blk-integrity.h b/include/linux/blk-integrity.h
-index d27730da47f3..e04c6e5bf1c6 100644
---- a/include/linux/blk-integrity.h
-+++ b/include/linux/blk-integrity.h
-@@ -29,6 +29,8 @@ int blk_rq_map_integrity_sg(struct request *, struct scatterlist *);
- int blk_rq_count_integrity_sg(struct request_queue *, struct bio *);
- int blk_rq_integrity_map_user(struct request *rq, void __user *ubuf,
- 			      ssize_t bytes);
-+int blk_get_meta_cap(struct block_device *bdev, unsigned int cmd,
-+		     struct logical_block_metadata_cap __user *argp);
- 
- static inline bool
- blk_integrity_queue_supports_integrity(struct request_queue *q)
-@@ -92,6 +94,11 @@ static inline struct bio_vec rq_integrity_vec(struct request *rq)
- 				 rq->bio->bi_integrity->bip_iter);
- }
- #else /* CONFIG_BLK_DEV_INTEGRITY */
-+static inline int blk_get_meta_cap(struct block_device *bdev, unsigned int cmd,
-+				   struct logical_block_metadata_cap __user *argp)
-+{
-+	return -EOPNOTSUPP;
-+}
- static inline int blk_rq_count_integrity_sg(struct request_queue *q,
- 					    struct bio *b)
- {
-diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
-index 0098b0ce8ccb..83720a2fd20d 100644
---- a/include/uapi/linux/fs.h
-+++ b/include/uapi/linux/fs.h
-@@ -91,6 +91,63 @@ struct fs_sysfs_path {
- 	__u8			name[128];
- };
- 
-+/* Protection info capability flags */
-+#define	LBMD_PI_CAP_INTEGRITY		(1 << 0)
-+#define	LBMD_PI_CAP_REFTAG		(1 << 1)
-+
-+/* Checksum types for Protection Information */
-+#define LBMD_PI_CSUM_NONE		0
-+#define LBMD_PI_CSUM_IP			1
-+#define LBMD_PI_CSUM_CRC16_T10DIF	2
-+#define LBMD_PI_CSUM_CRC64_NVME		4
-+
-+/* sizeof first published struct */
-+#define LBMD_SIZE_VER0			16
-+
-+/*
-+ * Logical block metadata capability descriptor
-+ * If the device does not support metadata, all the fields will be zero.
-+ * Applications must check lbmd_flags to determine whether metadata is
-+ * supported or not.
-+ */
-+struct logical_block_metadata_cap {
-+	/* Bitmask of logical block metadata capability flags */
-+	__u32	lbmd_flags;
-+	/*
-+	 * The amount of data described by each unit of logical block
-+	 * metadata
-+	 */
-+	__u16	lbmd_interval;
-+	/*
-+	 * Size in bytes of the logical block metadata associated with each
-+	 * interval
-+	 */
-+	__u8	lbmd_size;
-+	/*
-+	 * Size in bytes of the opaque block tag associated with each
-+	 * interval
-+	 */
-+	__u8	lbmd_opaque_size;
-+	/*
-+	 * Offset in bytes of the opaque block tag within the logical block
-+	 * metadata
-+	 */
-+	__u8	lbmd_opaque_offset;
-+	/* Size in bytes of the T10 PI tuple associated with each interval */
-+	__u8	lbmd_pi_size;
-+	/* Offset in bytes of T10 PI tuple within the logical block metadata */
-+	__u8	lbmd_pi_offset;
-+	/* T10 PI guard tag type */
-+	__u8	lbmd_guard_tag_type;
-+	/* Size in bytes of the T10 PI application tag */
-+	__u8	lbmd_app_tag_size;
-+	/* Size in bytes of the T10 PI reference tag */
-+	__u8	lbmd_ref_tag_size;
-+	/* Size in bytes of the T10 PI storage tag */
-+	__u8	lbmd_storage_tag_size;
-+	__u8	pad;
-+};
-+
- /* extent-same (dedupe) ioctls; these MUST match the btrfs ioctl definitions */
- #define FILE_DEDUPE_RANGE_SAME		0
- #define FILE_DEDUPE_RANGE_DIFFERS	1
-@@ -247,6 +304,8 @@ struct fsxattr {
-  * also /sys/kernel/debug/ for filesystems with debugfs exports
-  */
- #define FS_IOC_GETFSSYSFSPATH		_IOR(0x15, 1, struct fs_sysfs_path)
-+/* Get logical block metadata capability details */
-+#define FS_IOC_GETLBMD_CAP		_IOWR(0x15, 2, struct logical_block_metadata_cap)
- 
- /*
-  * Inode flags (FS_IOC_GETFLAGS / FS_IOC_SETFLAGS)
+ free_mem:
+ 	if (token && dma_map) {
 -- 
-2.25.1
+2.43.0
 
 
