@@ -1,150 +1,141 @@
-Return-Path: <linux-scsi+bounces-15069-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15071-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 070BFAFD7B7
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Jul 2025 21:56:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 914A8AFD9CB
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Jul 2025 23:26:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8358A3A3749
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Jul 2025 19:56:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E38077A8257
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Jul 2025 21:24:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBBF923C8B3;
-	Tue,  8 Jul 2025 19:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96F9624676B;
+	Tue,  8 Jul 2025 21:26:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dGNb5+5N"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Ng9LlbTf"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0337623C519
-	for <linux-scsi@vger.kernel.org>; Tue,  8 Jul 2025 19:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F411B2417F0;
+	Tue,  8 Jul 2025 21:26:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752004586; cv=none; b=HcUxnWGaJtVwfjdkaXN1KKibUkd0LPPFy+pD/1umQprUwZV44vgKjAmQKdLDgBdLmmE6oaaby/TlOdaeLfCtCazPLLqJb8MyyRZhpRygrkPWF0Z/PwSqVzIdJygsBtpYa0YxAxJXBRoGvibshelGLMx1x51VdiPr6i8pkMPAHvE=
+	t=1752009964; cv=none; b=B6zAFXr0MnwXaaYFD7Er/ogU2nTy4Qb4gEoIywQrXkSs2OghYAlcLc7XCKycCLYMiT1MJA2QNLE8oWuMayiJw8NZIiteKqWAaEZsxds2c47bcv12XaIWpyZb4rp/yU6GZJ+Re0yVVvENvNKU5z3G0LmCLuydedRFhtzRyLTux1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752004586; c=relaxed/simple;
-	bh=DabBnpmSXg9VI9I0aT04IJei/1NdpLYKEMNhVfIQciM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uvxSIkAkQYYEqREJLzMFXABRLi9gFmoXQ3RcfQCcverFeqxIOQn0Py7GgPlhvOX6SKlfrqqSfduAH3jnOOB/p9ma4f9qZUjwKvF4H/mp5gP34k26F27g8WZrKlQ1d01dG3JmAt3uIIkHUSEU4p+uoobPS4kbhwdBol7/aprJQPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dGNb5+5N; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1752004583;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=flLq9xEgsNo7dffruzcue0tL5vT71IqM1MD0NVOC0iA=;
-	b=dGNb5+5N4Sm6muGNbavD2Utj+Bep/+DWcqs8h+Zguc3QCUhSrmMMTFiwMPmDe6PtlR18FY
-	CdyIntYkp7SrUWeGV8ooDThzFoiNtB62oUaHzqqIEx5EEk0y4KxDUuxXGT6E4QG4awFkVb
-	Rr8CUo0AexohnfP44t7kMn53VcyHSs8=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-262-baWVv1GFMN-8eGNAYZIXCg-1; Tue,
- 08 Jul 2025 15:56:19 -0400
-X-MC-Unique: baWVv1GFMN-8eGNAYZIXCg-1
-X-Mimecast-MFC-AGG-ID: baWVv1GFMN-8eGNAYZIXCg_1752004578
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4DEDC1801219;
-	Tue,  8 Jul 2025 19:56:17 +0000 (UTC)
-Received: from [10.22.88.48] (unknown [10.22.88.48])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 44F86195608F;
-	Tue,  8 Jul 2025 19:56:14 +0000 (UTC)
-Message-ID: <b0817e2a-1c4e-4d7d-9a84-633913d9e0e4@redhat.com>
-Date: Tue, 8 Jul 2025 15:56:13 -0400
+	s=arc-20240116; t=1752009964; c=relaxed/simple;
+	bh=Ge2/q0dY2x4bPaf9l9HQuZj2LoD3prRY/uplpE7MIX4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dy9XkO0wsyJvwHEHP/f+ZEDyZnxLBWAEyeW1L2Gw9Q2ljBDfvv2r84r9uMfT22nV4r+lndtGP6wDlWdB9T5h7jKRIOlFZhPlTi5YUomBQDRQN5v7oxDGVvhxf3nTVGRfrr1ljUUuIHecSUbYBBp3/55FBN8yD33XCs1ixs7RlJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Ng9LlbTf; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 568JNOwK017086;
+	Tue, 8 Jul 2025 21:25:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=Dg1K7w85NKq6IPBnoHn24/Vpc8sc0yNmhEo
+	/wpC8AlY=; b=Ng9LlbTfMSu0B0ME53Ji7ryUuiY26Z3+cni3UAiuEuswQmh/20N
+	YN4Wa+GMyIbOts04IdKKKRsEsVOth3srzmf7SDC/5isrxRR54pRte5obHpgSDJXF
+	5eMZMCiDBkTSjlODFneHJLOvWQ6b2uyLwbAp3mZLST2tn+0QOKN7X7p+1C3C3Xm+
+	0BCn8y2RN8cp9h+xj63vr643E2Aj6WdDsYytbANcGS65sYgfV0E5p94w1tFKFr5U
+	egMZpiUUuvayJsDNltkc/I+Vn8mJjnvSwH37BTkKWXZ1z5tBuC540CX4VoQpnmAY
+	kPsQ4zJ3WZcRLws4mg9frJKbeRszUJU1MAw==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47pvtksm2m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 08 Jul 2025 21:25:40 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 568LPb9w000876;
+	Tue, 8 Jul 2025 21:25:37 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 47pw4kvamb-1;
+	Tue, 08 Jul 2025 21:25:37 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 568LPbvF000867;
+	Tue, 8 Jul 2025 21:25:37 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-nitirawa-hyd.qualcomm.com [10.213.109.152])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 568LPbha000866;
+	Tue, 08 Jul 2025 21:25:37 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2342877)
+	id 6575557186F; Wed,  9 Jul 2025 02:55:36 +0530 (+0530)
+From: Nitin Rawat <quic_nitirawa@quicinc.com>
+To: mani@kernel.org, James.Bottomley@HansenPartnership.com,
+        martin.petersen@oracle.com, bvanassche@acm.org, avri.altman@wdc.com,
+        ebiggers@google.com, neil.armstrong@linaro.org,
+        konrad.dybcio@oss.qualcomm.com
+Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, Nitin Rawat <quic_nitirawa@quicinc.com>
+Subject: [PATCH V3 0/3] ufs: ufs-qcom: Align programming sequence as per HW spec
+Date: Wed,  9 Jul 2025 02:55:31 +0530
+Message-ID: <20250708212534.20910-1-quic_nitirawa@quicinc.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 0/6] nvme-fc: FPIN link integrity handling
-To: Hannes Reinecke <hare@suse.de>, Bryan Gurney <bgurney@redhat.com>,
- linux-nvme@lists.infradead.org, kbusch@kernel.org, hch@lst.de,
- sagi@grimberg.me, axboe@kernel.dk
-Cc: james.smart@broadcom.com, dick.kennedy@broadcom.com,
- linux-scsi@vger.kernel.org, njavali@marvell.com, muneendra737@gmail.com
-References: <20250624202020.42612-1-bgurney@redhat.com>
- <CAHhmqcTO_Q59aDr3DywC-tPF=9pe3gxbyn6J4ycdf+eYEOayHQ@mail.gmail.com>
- <19484829-0a7b-42ce-99fe-e74ccda67dce@suse.de>
-Content-Language: en-US
-From: John Meneghini <jmeneghi@redhat.com>
-Organization: RHEL Core Storge Team
-In-Reply-To: <19484829-0a7b-42ce-99fe-e74ccda67dce@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzA4MDE4MyBTYWx0ZWRfX8QnN1fdPQZda
+ tHoFJVeRB/3W8vikz2FVzru+7hrG+fC+/Lz3JL+WSRyHOfYzm3r2ozfdNIYvtDEfP+0I2ilOpeK
+ a73ZDteQx+TQcgeqButVE+rE8ZeX2APhi00G6vG0JmOJvFrhWQFdVKVfSjmPLgkxQg/dJbs+vlt
+ 9YW8RrY2DmlN6koorvfdR8zFOBwM7wCanzsHLgA4y/4EtppHBrqy8bYbAUZ8PMmoyrfR/etfwV0
+ 5r6PYFpP3kgr2ibLDuOf8p7MfMWmeLsd3ffSVfWzy9RhY/PmOrevR0HhiqmKqtcGffDVylveDAj
+ 4aFYHcLcJtBZNs2bjB03HOwJzEqjmTabtWFcOXvGo5yUNyAKLwV7DW/bTxw7dp0D1Aw1tcckRDM
+ DlRaQmTIjdXOcCCioMEbSsclvMjfg0qnEyAWahO+I3HNl0ZSrkv8owfnQxz/FsqXJsjfP9xy
+X-Authority-Analysis: v=2.4 cv=Vq0jA/2n c=1 sm=1 tr=0 ts=686d8cd5 cx=c_pps
+ a=Ou0eQOY4+eZoSc0qltEV5Q==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
+ a=Wb1JkmetP80A:10 a=iRjbf9KB49bWgsSTYZMA:9
+X-Proofpoint-ORIG-GUID: N_wlCF2DApIGwNsBdYtPD9tWnYU_aiJw
+X-Proofpoint-GUID: N_wlCF2DApIGwNsBdYtPD9tWnYU_aiJw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-08_06,2025-07-08_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 adultscore=0 bulkscore=0 phishscore=0 lowpriorityscore=0
+ clxscore=1015 mlxscore=0 malwarescore=0 mlxlogscore=759 impostorscore=0
+ suspectscore=0 priorityscore=1501 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507080183
 
-On 7/2/25 2:10 AM, Hannes Reinecke wrote:
->> During path fail testing on the numa iopolicy, I found that I/O moves
->> off of the marginal path after a first link integrity event is
->> received, but if the non-marginal path the I/O is on is disconnected,
->> the I/O is transferred onto a marginal path (in testing, sometimes
->> I've seen it go to a "marginal optimized" path, and sometimes
->> "marginal non-optimized").
->>
-> That is by design.
-> 'marginal' paths are only evaluated for the 'optimized' path selection,
-> where it's obvious that 'marginal' paths should not be selected as
-> 'optimized'.
+This patch series adds programming support for Qualcomm UFS
+to align with Hardware Specification.
 
-I think we might want to change this.  With the NUMA scheduler you can end up with
-using the non-optimized marginal path.  This happens when we test with 4 paths
-(2 optimized and 2 non-optimized) and set all 4 paths to marginal.  In this case
-the NUMA scheduler should simply choose the optimized marginal path on the closest
-numa node.  However, that's not what happens. It consistently chooses the
-non-optimized first non-optimized path.
+In this patch series below changes are taken care.
 
-> For 'non-optimized' the situation is less clear; is the 'non-optimized'
-> path preferrable to 'marginal'? Or the other way round?
-> So once the 'optimized' path selection returns no paths, _any_ of the
-> remaining paths are eligible.
+1. Enable QUnipro Internal Clock Gating
+2. Update esi_vec_mask for HW major version >= 6
 
-This is a good question for Broadcom.  I think, with all IO schedulers, as long
-as there is a non-marginal path available, that path should be used.  So
-a non-marginal non-optimized path should take precedence over a marginal optimized path.
+Changes from v2:
+1. Addressed bart's and Mani's comment to move ufshcd_dme_rmw
+   to ufshcd.c
+2. Addressed Mani's and bart's comment to avoid initialisation
+   of cfg.
+3. Addressed Mani's comment to update commit text.
 
-In the case were all paths are marginal, I think the scheduler should simply use the firt
-optimized path on the closest numa node.
-   >> The queue-depth iopolicy doesn't change its path selection based on
->> the marginal flag, but looking at nvme_queue_depth_path(), I can see
->> that there's currently no logic to handle marginal paths.  We're
->> developing a patch to address that issue in queue-depth, but we need
->> to do more testing.
->>
-> Again, by design.
-> The whole point of the marginal path patchset is that I/O should
-> be steered away from the marginal path, but the path itself should
-> not completely shut off (otherwise we just could have declared the
-> path as 'faulty' and be done with).
-> Any I/O on 'marginal' paths should have higher latencies, and higher
-> latencies should result in higher queue depths on these paths. So
-> the queue-depth based IO scheduler should to the right thing
-> automatically.
+Changes from v1:
+1. Moved ufshcd_dme_rmw to ufshcd.h as per avri's comment.
 
-I don't understand this.  The Round-robin scheduler removes marginal paths, why shouldn't the
-queue-depth and numa scheduler do the same?
+Bao D. Nguyen (1):
+  ufs: ufs-qcom: Update esi_vec_mask for HW major version >= 6
 
-> Always assuming that marginal paths should have higher latencies.
-> If they haven't then they will be happily selection for I/O.
-> But then again, if the marginal path does _not_ have highert
-> latencies why shouldn't we select it for I/O?
+Nitin Rawat (2):
+  scsi: ufs: core: Add ufshcd_dme_rmw to modify DME attributes
+  ufs: ufs-qcom: Enable QUnipro Internal Clock Gating
 
-This may be true with FPIN Congestion Signal, but we are testing Link Integrity.  With FPIN LI I think we want to simply stop using the path.
-LI has nothing to do with latency.  So unless ALL paths are marginal, the IO scheduler should not be using any marginal path.
+ drivers/ufs/core/ufshcd.c   | 24 ++++++++++++++++++++++++
+ drivers/ufs/host/ufs-qcom.c | 24 ++++++++++++++++++++++--
+ drivers/ufs/host/ufs-qcom.h |  9 +++++++++
+ include/ufs/ufshcd.h        |  1 +
+ 4 files changed, 56 insertions(+), 2 deletions(-)
 
-Do we need another state here?  There is an ask to support FPIN CS, so maybe using the term "marginal" to describe LI is wrong.
-
-Maybe we need something like "marginal_li" and "marginal_cs" to describe the difference.
-
-/John
+--
+2.48.1
 
 
