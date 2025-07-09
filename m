@@ -1,62 +1,62 @@
-Return-Path: <linux-scsi+bounces-15110-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15112-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 705CCAFF3DA
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Jul 2025 23:24:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BECADAFF3DF
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Jul 2025 23:24:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 688CF560FA7
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Jul 2025 21:23:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B0C65A6A07
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Jul 2025 21:24:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F80F239E8D;
-	Wed,  9 Jul 2025 21:23:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6341C230BC9;
+	Wed,  9 Jul 2025 21:24:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FrBvdpiA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IDwbFrWQ"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5CC1224AFE
-	for <linux-scsi@vger.kernel.org>; Wed,  9 Jul 2025 21:23:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B292231826
+	for <linux-scsi@vger.kernel.org>; Wed,  9 Jul 2025 21:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752096238; cv=none; b=QIa/qTOPIDxWE2JKYLUgLY7W9DIw3QlbTxLTHbdEPWI6xFq4TTquKA/VMrjwuBpd2Ok/ZZoYbVZBYtPc6srg1Exm5z5riJvHF4njbyGZmdLgD9Z8h7qzyk7hoVIyaf97xMbQmyYMdtfyNO8w6KbWItXX8hIbNsX2rcT2Da6mLXc=
+	t=1752096276; cv=none; b=UtkQmJUhtsKlfBr3ehbQ0OWUSBzEkcjaIYIFBDp7e/8zNn3KrGrTShAZmAJIk+MQ9Fk+vUzjsqrifjhNoVa3KYS5+wN+PWQ6LTlnQfwR7i7TIw9E5UQ+uMcLvz5ckg2hhYpFl0PhW/6skvTVLPGyxWU2kUKN+GgRexaRbyVlcyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752096238; c=relaxed/simple;
-	bh=DfTa4cHYvUpg/fm5qSrgm/2mIBOnBdC8o1pvguXORH4=;
+	s=arc-20240116; t=1752096276; c=relaxed/simple;
+	bh=py57+ep1YA7hjrdIwCahBwxZ03rdprtK6EbPayyT3Kg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QXhdCSOMyA2A0LbhofXqYJieyGtE/Z8nZSUB5guCQVu0L9TJY43UCRwx1PGyMUeLuXCZi2uDgbM2m2vPYlkFLNf24LpubH5NlB0McnCU9au7NUX0t3taYNrjLUt0uVhz+7DIb7AlozQ9tUjNl+NgNWgy35mf2OJGInoGxLtLyRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FrBvdpiA; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=jjehJwRvj9Si30cs5Ro44TvLGM0qn7Mv+meA6KCdWg9bV0ACWAjH4OnrZEADyagikAoqv6xGPuR5K5Y0xiclZbdC0hLFNuj6DLIEH16h4ZCPDusgMPSP5Fwj27bsphoJS58pFnuiLAQx1QeHWg3f9adGds+vDQjyb0m7Zv8vS30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IDwbFrWQ; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1752096235;
+	s=mimecast20190719; t=1752096273;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=p6ksLkA79cvhY+qyHntZSZe03SZlsNVKDsYlZZAFkQ4=;
-	b=FrBvdpiAfqQ38BzsSSpgLPr62cnHy+nt+gepiXOqr9tc1Fv5OrnGRVwTPCUfR5KXFLXniz
-	1w4IkJdRWuUCnmJMib9EMHusG1cxm9n1KED+mM50zOWRktsxrZy4Tc8pO9W3UleXUJbv31
-	D5eJRLxU61UbWWo6hPbe1W4m6YhSCEE=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+	bh=4Pz8FWKpJsdd6RLc/Th77/Cg2FldKi1xIHR2uJ0kz4E=;
+	b=IDwbFrWQw4LMixaiBT3TlUlzkVLqQPie8yYQzxVqAUAgsJ7gapiWn5OyRqLqjEIAPtKWK4
+	VXs1kHLIXL+i4QcX4HML1e6wI2SndT9Zkk8W8/Vccknnmw3+r+gYXRvef8FohRYQYcN/Ym
+	sdfbpO7GfeqZQy+FqfX0qjMWKpuwX/I=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-112-6Nq63D71Pp6fMwb14MqNIQ-1; Wed,
- 09 Jul 2025 17:23:50 -0400
-X-MC-Unique: 6Nq63D71Pp6fMwb14MqNIQ-1
-X-Mimecast-MFC-AGG-ID: 6Nq63D71Pp6fMwb14MqNIQ_1752096227
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-131-4_cqwEddMjSQH1Qt2Tcdtg-1; Wed,
+ 09 Jul 2025 17:24:30 -0400
+X-MC-Unique: 4_cqwEddMjSQH1Qt2Tcdtg-1
+X-Mimecast-MFC-AGG-ID: 4_cqwEddMjSQH1Qt2Tcdtg_1752096268
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9562119560B4;
-	Wed,  9 Jul 2025 21:23:47 +0000 (UTC)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C7A3B1956061;
+	Wed,  9 Jul 2025 21:24:28 +0000 (UTC)
 Received: from bgurney-thinkpadp1gen5.remote.csb (unknown [10.44.33.49])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1B3E730001B1;
-	Wed,  9 Jul 2025 21:23:41 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 50DE719560AD;
+	Wed,  9 Jul 2025 21:24:22 +0000 (UTC)
 From: Bryan Gurney <bgurney@redhat.com>
 To: linux-nvme@lists.infradead.org,
 	kbusch@kernel.org,
@@ -70,9 +70,9 @@ Cc: james.smart@broadcom.com,
 	hare@suse.de,
 	bgurney@redhat.com,
 	jmeneghi@redhat.com
-Subject: [PATCH v8 6/8] qla2xxx: enable FPIN notification for NVMe
-Date: Wed,  9 Jul 2025 17:19:17 -0400
-Message-ID: <20250709211919.49100-7-bgurney@redhat.com>
+Subject: [PATCH v8 7/8] nvme: sysfs: emit the marginal path state in show_state()
+Date: Wed,  9 Jul 2025 17:19:18 -0400
+Message-ID: <20250709211919.49100-8-bgurney@redhat.com>
 In-Reply-To: <20250709211919.49100-1-bgurney@redhat.com>
 References: <20250709211919.49100-1-bgurney@redhat.com>
 Precedence: bulk
@@ -82,33 +82,37 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-From: Hannes Reinecke <hare@kernel.org>
+If a controller has received a link integrity or congestion event, and
+has the NVME_CTRL_MARGINAL flag set, emit "marginal" in the state
+instead of "live", to identify the marginal paths.
 
-Call 'nvme_fc_fpin_rcv()' to enable FPIN notifications for NVMe.
-
-Signed-off-by: Hannes Reinecke <hare@kernel.org>
-Reviewed-by: John Meneghini <jmeneghi@redhat.com>
+Co-developed-by: John Meneghini <jmeneghi@redhat.com>
+Signed-off-by: John Meneghini <jmeneghi@redhat.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
 Tested-by: Muneendra Kumar <muneendra.kumar@broadcom.com>
+Signed-off-by: Bryan Gurney <bgurney@redhat.com>
 ---
- drivers/scsi/qla2xxx/qla_isr.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/nvme/host/sysfs.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
-index c4c6b5c6658c..f5e40e22ad7d 100644
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -46,6 +46,9 @@ qla27xx_process_purex_fpin(struct scsi_qla_host *vha, struct purex_item *item)
- 		       pkt, pkt_size);
+diff --git a/drivers/nvme/host/sysfs.c b/drivers/nvme/host/sysfs.c
+index 29430949ce2f..4a6135c2f9cb 100644
+--- a/drivers/nvme/host/sysfs.c
++++ b/drivers/nvme/host/sysfs.c
+@@ -430,7 +430,9 @@ static ssize_t nvme_sysfs_show_state(struct device *dev,
+ 	};
  
- 	fc_host_fpin_rcv(vha->host, pkt_size, (char *)pkt, 0);
-+#if (IS_ENABLED(CONFIG_NVME_FC))
-+	nvme_fc_fpin_rcv(vha->nvme_local_port, pkt_size, (char *)pkt);
-+#endif
+ 	if (state < ARRAY_SIZE(state_name) && state_name[state])
+-		return sysfs_emit(buf, "%s\n", state_name[state]);
++		return sysfs_emit(buf, "%s\n",
++			(nvme_ctrl_is_marginal(ctrl)) ? "marginal" :
++			state_name[state]);
+ 
+ 	return sysfs_emit(buf, "unknown state\n");
  }
- 
- const char *const port_state_str[] = {
 -- 
 2.50.0
 
