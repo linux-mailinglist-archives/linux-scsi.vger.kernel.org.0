@@ -1,154 +1,176 @@
-Return-Path: <linux-scsi+bounces-15133-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15142-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2EB8B00815
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Jul 2025 18:07:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFD24B01885
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Jul 2025 11:43:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD4D1188AB23
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Jul 2025 16:05:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B7854A6628
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Jul 2025 09:43:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F3C22EBDD0;
-	Thu, 10 Jul 2025 16:04:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B43263F47;
+	Fri, 11 Jul 2025 09:42:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YuwH1qLe"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="T0wswsHu"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9BDD25A357;
-	Thu, 10 Jul 2025 16:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53E8A2586DA
+	for <linux-scsi@vger.kernel.org>; Fri, 11 Jul 2025 09:42:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752163488; cv=none; b=bASF8uKeLsJSV9viVRAWaogIV8t0kzFz9OyQ19GmEi65CnG338/oekfM2hUhp5F8+XVgGuLbu6neLES8ctfKJaSVQVpZ2ojUwe6gvABFoiO0/cLcT8++/jsBZyRt2zlIjoWkU47sWAa9yPGmWQzr9wuy5erv48a2Dy0aRdbl064=
+	t=1752226974; cv=none; b=EzZDcK3M7LW1LeHLubiLZycbEBkQNwu0n7l1CLBCN0ZZulP1SJsqQo4LV224Sf6XlHSLwA2ehqOYyKu54pWEbtsLGc5P9mbumZRg4jmITvtK6r7YlemIjkEZ0IeCh+jKPdUhyIDvFR+ISUKt5wfVWOaIUiQlq+1MuxFzp+GzYG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752163488; c=relaxed/simple;
-	bh=FGf4q5hztgzVCdux+zRUILgKrtKBdehR7hBmROdpzOY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=lNXOMMj0xraRlKHUGA/UI77aWnh16TjxfY+VgDZciiQQPmlwSMyk+94nPYA/sTb08FDnZaN/aCPdOP9FxvIHx6bzGwjneCGrjFu1/Q2Ie5mnGcft/fdog9P3+zCbKRrNKjVLnfFTMGuTV/VxwIALdosZnycwww7dUHOJLeaCJNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YuwH1qLe; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56A9I82A023159;
-	Thu, 10 Jul 2025 16:04:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	QkQ24UGXdkLuRVHQusKOkOxPfLVwUbbY2M3P/F1da2I=; b=YuwH1qLe9MaWCfzT
-	AM9MC5SFsY01hhtYbsw0yOhe63mqn3H+eZgpqkfy/ipSpDv5bdXIIUua04ZHuQvk
-	9twSdGG/OiS6/YiXCAXi+l/Wmz61YiPSXA9z9IVXsDPAeZHYdb8zd4AFwMbkEYcM
-	l7xVa12JvrBMH61enE2iQhZgcaftXCvKTvcH/xpXBQtfiMn9IgBlaWpCdt1FA0Hg
-	OqAD7jsPLRNETVMvlz/ft5evBQkoxSm4HliuTLgljwBp8UVoESztALUkttrlwtpk
-	9hS5SdLdOHi/mqWkOhU03QCm5RtNKc6lT1dXGNTrQTdmt8sVJ3PYV+rzxjs4NvwA
-	cw4cHw==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47smbenkbe-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Jul 2025 16:04:34 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56AG4XaZ032030
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Jul 2025 16:04:33 GMT
-Received: from [10.216.28.220] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Thu, 10 Jul
- 2025 09:04:28 -0700
-Message-ID: <6ebad87b-1d04-432b-82b0-928349a6c78c@quicinc.com>
-Date: Thu, 10 Jul 2025 21:34:22 +0530
+	s=arc-20240116; t=1752226974; c=relaxed/simple;
+	bh=I9O0Un5tipiTE7BJl67zpVH9ZgKv1v+KjtEj27h/I0I=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=m40u8TZWOBXhA3SurSEnXG4fyabFezstxGd1Y5kBbchYAfgEG+HngQgJy9Kvbmw5Uc58sf5qvYNnCo+PQGE1miznAvlw3nfnv8ptlkJ2JRSrpwz08nXEa1INbW2+344ek0XJiJEgW5hgJYrMRzTsNDWO4KpwasCWeuxDWwoHGnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=T0wswsHu; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7490cb9a892so1209672b3a.0
+        for <linux-scsi@vger.kernel.org>; Fri, 11 Jul 2025 02:42:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1752226972; x=1752831772; darn=vger.kernel.org;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VfxM2URcquJpqnvb3+mANnD+/ukwwGYDl4TruoTMXok=;
+        b=T0wswsHuqubcrnQ7oa200sFf5QVarcnbKsfKQwRWqj5MqNM6FNtDdn4kdDq55f3NZC
+         OznxdbG+AMKCNe6mnDCKSjdNZviN/EqYe7tBswHBYph6cF734Le6XZHWaczUuXrBdAAd
+         EIUgJFeKu2A/gFdHmSPvbVQXrpKgk+ZM8h8IQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752226972; x=1752831772;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VfxM2URcquJpqnvb3+mANnD+/ukwwGYDl4TruoTMXok=;
+        b=O3jRDt5sTkQRj0Ey71GRfNPgL1sYILnWiicBHEmXL5V7FSE/52iZOZResKMxG2VJt0
+         fz6yAgOdJye5jh4rzkpYztqMx9aqJ8Soi/yv8+ktsg+9uud+WK1olnTj3Ps7yN67YCgU
+         3M2QckYY/tsZ9b8S0lHYQcGlINU4ysCNNulkzPW0jqQdWSV62H6O6zoTtSuOUuY43Ft0
+         tahwuLmns6KWt4y+687z2oWuBV+ovlqK7VZTCqCOej3jGEhayEV+5dB/0BzjUXBGTKZg
+         UXGbF+9iCA/+upPm/G2zWOqwi+I6u4t014uefCrPq4tc3cdn1y+Mi8Oi43vkCZ4jerVz
+         bNUA==
+X-Forwarded-Encrypted: i=1; AJvYcCUn2GhfDhUvOKGUDeRhzXLuoMkPBLw4hWTtvpWLWhlTOOHFPQByEov9zj+y5VGx3Q2sBG55hFij+O1Q@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPABDpuK8YCA/9h1AI9TdzMM6A70lyFeTlJ84pTYrcJUI0UF+W
+	ulKdO+fUt0cbRnRKhZ4dTnz9i7LW0kXjU4Tid07LCTlN6ndw2bDWrJKU3tAC3/pgdGtQtZZ5CpY
+	/t3Af+8rjJlmADB34c00dGnRlDIgCNcKeQUgDKiawM8TagmYZ/dBj
+X-Gm-Gg: ASbGncv68ABcCFMsd094QR9tuR8YOuNW604BDhuVV8S4Z2u7FHwFrCL3VNqBB3SsDZ5
+	DKKUj+LewAlvVR8lDikPVgettmiZA45YFt96QBeZkUF44+IidYFttCevjJEJjYdgeLmstEsOcoJ
+	mHRFCsiqDC4kCye2BIRXAvA3DH3Te21SHVYPJ3BDEreoa4GNAiuZ9vLtJWm8UUHdpP8QlsEDMrV
+	ZXdR0/jTpzOzUabyINa+OEKt/8k195Vvy93UE6J+2/uRHVvVHvKguVEgHWi4RgV7qPMQn9YJUeY
+	Je1Y3N2iCc/Q2X5eSbafT8FZeWPPtJLXZpQgKRQMS93fpDH/zvC4RT/cYipaXHy6KID4PZE80Wb
+	v/k9y5jEQo6zuvJHPfHNQDPLVG5t37nffeD1sZFGI5UsVEW1irevTrYGGcnC6BQyTuuUS8Mm0oc
+	aAHnfu
+X-Google-Smtp-Source: AGHT+IGm3ziFKwBeSmcyN3il/RxWPJpQ9gQIeSWurGWOmKmZGOROcHUyFJ9hAmY9m8N1Q0l6qqjWLg==
+X-Received: by 2002:a17:90b:48c1:b0:311:afd1:745b with SMTP id 98e67ed59e1d1-31c4ccbc409mr4086739a91.11.1752226972506;
+        Fri, 11 Jul 2025 02:42:52 -0700 (PDT)
+Received: from localhost.localdomain ([192.19.234.250])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de43411c8sm43605745ad.184.2025.07.11.02.42.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Jul 2025 02:42:51 -0700 (PDT)
+From: Muneendra Kumar <muneendra.kumar@broadcom.com>
+To: bgurney@redhat.com
+Cc: axboe@kernel.dk,
+	dick.kennedy@broadcom.com,
+	hare@suse.de,
+	hch@lst.de,
+	james.smart@broadcom.com,
+	jmeneghi@redhat.com,
+	kbusch@kernel.org,
+	linux-nvme@lists.infradead.org,
+	linux-scsi@vger.kernel.org,
+	njavali@marvell.com,
+	sagi@grimberg.me,
+	muneendra737@gmail.com
+Subject: RE: [PATCH v8 8/8] nvme-multipath: queue-depth support for marginal paths
+Date: Thu, 10 Jul 2025 19:59:25 -0700
+Message-Id: <20250711025925.1831977-1-muneendra.kumar@broadcom.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20250624202020.42612-1-bgurney@redhat.com>
+References: <20250624202020.42612-1-bgurney@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 3/3] ufs: ufs-qcom: Enable QUnipro Internal Clock
- Gating
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Avri Altman
-	<Avri.Altman@sandisk.com>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "James.Bottomley@HansenPartnership.com"
-	<James.Bottomley@HansenPartnership.com>,
-        "martin.petersen@oracle.com"
-	<martin.petersen@oracle.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "ebiggers@google.com"
-	<ebiggers@google.com>,
-        "neil.armstrong@linaro.org"
-	<neil.armstrong@linaro.org>
-CC: "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-References: <20250708212534.20910-1-quic_nitirawa@quicinc.com>
- <20250708212534.20910-4-quic_nitirawa@quicinc.com>
- <PH7PR16MB6196F9B8C676FA18AAC10F3FE549A@PH7PR16MB6196.namprd16.prod.outlook.com>
- <f4654034-a94b-473b-907a-2687acf11af4@quicinc.com>
- <90d21fe5-97f6-40e6-98e5-378a7809e8dc@oss.qualcomm.com>
-Content-Language: en-US
-From: Nitin Rawat <quic_nitirawa@quicinc.com>
-In-Reply-To: <90d21fe5-97f6-40e6-98e5-378a7809e8dc@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzEwMDEzNyBTYWx0ZWRfXx266nqUjg3O4
- ZrWWpy8434/FY05L2m5qmjUeoe7jzjazYEWFCjKuYZl/lkEp1LYwzMvPgidJ0ASuKnhV1cUh5No
- m+Ryva04ZNubhXVd5VdGnQ6R/iuEt8/YZA6FAUAL+M9+eIgWp/IP5HpFOEjB/NKV66ri+CwP9Xf
- AWS4jOGol3OUmGzTPocuI9xCIucniH4KXHr2o7M0o7j8IHZ7oK9O6uz/q2Pg8H6Ojrj+MOU4KhO
- /ysvfXflVNx2WoS5qMm1DFuTAHeB4zZmHmrzEflniCCDdYYpGMSoLKX1gb9aARKSGefz6gjyMi5
- Pkf31IS1EZTbgzS9EV6f73q+NrzeXZFwVnBRl4L2qpzCk3FUPrRRjVdrrxxmruI0BUVwHcCWIaa
- ql+PZJSokaqudwUTCJ1vbgnEvP8rX7pJhzXxnFumvg15qx8NslxA9BmsRIq2f66saIPB8I4Q
-X-Proofpoint-GUID: mJp6X7GXOykMSuXWklgRJcP5hiDFoIXt
-X-Proofpoint-ORIG-GUID: mJp6X7GXOykMSuXWklgRJcP5hiDFoIXt
-X-Authority-Analysis: v=2.4 cv=VpQjA/2n c=1 sm=1 tr=0 ts=686fe492 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10
- a=AeJAosCkvdW3Q2PLLsYA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-10_04,2025-07-09_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxscore=0 malwarescore=0 suspectscore=0 clxscore=1015 impostorscore=0
- phishscore=0 mlxlogscore=763 lowpriorityscore=0 adultscore=0
- priorityscore=1501 bulkscore=0 spamscore=0 classifier=spam authscore=0
- authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2507100137
+Content-Type: text/plain; charset="US-ASCII"
+
+Correct me if iam wrong.
+>>. In the case where 
+>> all paths are marginal and no optimized or non-optimized path is 
+>> found, we fall back to __nvme_find_path which selects the best marginal path
+
+With the current patch __nvme_find_path will allways picks the path from non-optimized path ?
+
+Regards,
+Muneendra
+
+
+>On 7/10/25 00:03, John Meneghini wrote:
+>> Hannes, this patch fixes the queue-depth scheduler.  Please take a look.
+>> 
+>> On 7/9/25 5:26 PM, Bryan Gurney wrote:
+>>> From: John Meneghini <jmeneghi@redhat.com>
+>>>
+>>> Exclude marginal paths from queue-depth io policy. In the case where 
+>>> all paths are marginal and no optimized or non-optimized path is 
+>>> found, we fall back to __nvme_find_path which selects the best marginal path.
+>>>
+>>> Tested-by: Bryan Gurney <bgurney@redhat.com>
+>>> Signed-off-by: John Meneghini <jmeneghi@redhat.com>
+>>> ---
+>>>   drivers/nvme/host/multipath.c | 7 ++++++-
+>>>   1 file changed, 6 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/ 
+>>> multipath.c index 8d4e54bb4261..767583e8454b 100644
+>>> --- a/drivers/nvme/host/multipath.c
+>>> +++ b/drivers/nvme/host/multipath.c
+>>> @@ -420,6 +420,9 @@ static struct nvme_ns 
+>>> *nvme_queue_depth_path(struct nvme_ns_head *head)
+>>>           if (nvme_path_is_disabled(ns))
+>>>               continue;
+>>> +        if (nvme_ctrl_is_marginal(ns->ctrl))
+>>> +            continue;
+>>> +
+>>>           depth = atomic_read(&ns->ctrl->nr_active);
+>>>           switch (ns->ana_state) {
+>>> @@ -443,7 +446,9 @@ static struct nvme_ns 
+>>> *nvme_queue_depth_path(struct nvme_ns_head *head)
+>>>               return best_opt;
+>>>       }
+>>> -    return best_opt ? best_opt : best_nonopt;
+>>> +    best_opt = (best_opt) ? best_opt : best_nonopt;
+>>> +
+>>> +    return best_opt ? best_opt : __nvme_find_path(head, 
+>>> +numa_node_id());
+>>>   }
+>>>   static inline bool nvme_path_is_optimized(struct nvme_ns *ns)
+>> 
+>
+>Hmm. Not convinced. I would expect a 'marginal' path to behave different
+>(performance-wise) than unaffected paths. And the queue-depth scheduler should be able to handle paths with different performance characteristics just fine.
+>(Is is possible that your results are test artifacts? I guess your tool just injects FPIN messages with no performance impact, resulting in this behaviour...)
+>
+>But if you want to exclude marginal paths from queue depth:
+>by all means, go for it.
+>
 
 
 
-On 7/10/2025 2:54 AM, Konrad Dybcio wrote:
-> On 7/9/25 11:13 PM, Nitin Rawat wrote:
->>
->>
->> On 7/9/2025 10:46 AM, Avri Altman wrote:
->>>> Enable internal clock gating for QUnipro by setting the following attributes to 1
->>>> during host controller initialization:
->>>> - DL_VS_CLK_CFG
->>>> - PA_VS_CLK_CFG_REG
->>>> - DME_VS_CORE_CLK_CTRL.DME_HW_CGC_EN
->>>>
->>>> This change is necessary to support the internal clock gating mechanism in
->>>> Qualcomm UFS host controller. This is power saving feature and hence driver
->>>> can continue to function correctly despite any error in enabling these feature.
->>> Does this change offloads clock gating?
->>> i.e. no need to set UFSHCD_CAP_CLK_GATING ?
->> No , this change does not offload sw based UFS clock gating. Host controller has its own internal clock gating mechanism
-> 
-> Does QUnipro == "the UFS controller found on Qualcomm platforms"?
-yes its same. I'll update the commit text of next patch set.
-It's applicable for all Qualcomm UFS Controller version.
-
-> 
-> If so, please use some version of the latter name to make it more
-> easily discernible
-> 
-> Konrad
-
+-- 
+This electronic communication and the information and any files transmitted 
+with it, or attached to it, are confidential and are intended solely for 
+the use of the individual or entity to whom it is addressed and may contain 
+information that is confidential, legally privileged, protected by privacy 
+laws, or otherwise restricted from disclosure to anyone else. If you are 
+not the intended recipient or the person responsible for delivering the 
+e-mail to the intended recipient, you are hereby notified that any use, 
+copying, distributing, dissemination, forwarding, printing, or copying of 
+this e-mail is strictly prohibited. If you received this e-mail in error, 
+please return the e-mail to the sender, delete it from your computer, and 
+destroy any printed copy of it.
 
