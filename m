@@ -1,82 +1,76 @@
-Return-Path: <linux-scsi+bounces-15194-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15191-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F5F9B04D9C
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Jul 2025 03:54:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94897B04D98
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Jul 2025 03:54:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F7564E18B7
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Jul 2025 01:54:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5D1B4A29FB
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Jul 2025 01:54:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CABAD2C08A1;
-	Tue, 15 Jul 2025 01:54:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9D8A2C08A1;
+	Tue, 15 Jul 2025 01:54:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Kr1dOWEZ"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="nypyY0ff"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D86C23AB88;
-	Tue, 15 Jul 2025 01:54:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4CF2A1AA
+	for <linux-scsi@vger.kernel.org>; Tue, 15 Jul 2025 01:54:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752544488; cv=none; b=BKjaNXKPJ4ZQ6FQD8bO5QEk3fPT0BdxcLvSXSBfdh2LRC76KuTVaoiWHr84KXB6rlkWjcRZhfJsa47RYLhdBtiBrJNzdX/okESWxJGPAp5wjAmq9ZXsks0thxQDFtM3+e6COOGMddXnKCrj3K6+qC2/DMJRJITKgn45sI7r5nRg=
+	t=1752544468; cv=none; b=S2+4IFe46mHanONtYrS4ZsvQYH5GqxpkQMbuad/wqppmFUJdGH5yl5Jk8cAllY1g0hUh/TnosOtStNue895LJE0lxGXoOfbtTIhHofXhmfNWbEBDCAQcQ2BoR/UpNTaBSwvoOS9AXO7KxkVCxxN+QpxHhVidaBbwYUy1BjwXARM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752544488; c=relaxed/simple;
-	bh=vRWwFAZduI2Zb0KxizMkBN7naKqbLm3HaT5m6epHxec=;
+	s=arc-20240116; t=1752544468; c=relaxed/simple;
+	bh=ZJyt+0ZFnDoe2HVHJF0zY/i+72IfDqy5nPwH7YvNHKU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e/plVC6djFGfv/jCDjgpN3inYdVAzXXkILHUI44J5bZRlF3KskQLvndeVtammaiABeQB9MAWs0+Gx2Ujc19wfKG1myfbntXk+XfdIV4ar0O5skGuNcdmMN9UzYpiaD2r+xNqtD5iUNmC7yL3v2Y5qDBzn1VhTJS18dK4+mr2vBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Kr1dOWEZ; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=ReWzwGTxRFMvlrbgXCnNv7AxFDJDhisnjXuFYdXfXP4O/i6AsOK6uJN8RUPmtICIaZZdRUjKCdvjtfDGuMuir59NOIy6gYcRsuikBCgWKWxvUxIcBza539js0tRHZ3EXadwsncsF07xbjDIcN5cK8EKKl1ua6fsSVeMsAgpgUvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=nypyY0ff; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56F1YsFk019669;
-	Tue, 15 Jul 2025 01:54:24 GMT
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56F1Yo05027905;
+	Tue, 15 Jul 2025 01:54:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=MhYbLGhqFabUGzLDsIMJ/6Lq5QQcImUyQEHrkRkgqoo=; b=
-	Kr1dOWEZzSIxy6UlKpCPfmeEgVm8DlQEfpI7L5OEdwthfQjtB7cDxiGlCIzO/A4+
-	pUY2NyS7pIFw/vC4WGJcQfThYHisB+1zsHEwPF0WA2OfsRA12W3ZJa2QYQ2OvQyE
-	7bB4Pf8OgtYsCHhZr06Qde06BLot6siTH8bcn8p43diNFHR1D/A2O06TXbCCZA9/
-	1m5VaGHTiSQCX2hjrSsd9UdHzIzhQAxLo7KfwaPxC6DNhVPzshp1zqxXxpxzqb+A
-	mIZolH9BFx5sDv3YSZiiGOmupnTyhkHckkZrlRoCFH1sTMbcSTC4ZyDVKq7TaNmE
-	TajaTDXdCuOAx+Fj6C9Wpw==
+	corp-2025-04-25; bh=wTtp40RDrkpn0d9slNSJccGgrcJTdz7zwzV8ldvlfHU=; b=
+	nypyY0ffYlwc53iq5xrGm9NMK6HMQCUXNjpLHp9BVjek4/jreWnfbqVslz8QOAIc
+	cUrZlEQ4P3NAOA7oS31Wx9P627jMx1yAOkEuaNgIo6c0i5wdG4qOL8MnBAerRkZ4
+	85o8Gnwf+2GNzy1Zi/BfvKCuVHAtg2wWylzDQ/Veq4u47yUPW9bzJBZC9B7GX69p
+	pvBBcSicOsI6VNikNr7eCEwUo+UETh9x+dJZCCNYDU71fhsPQaHEDS1MRi0m7IpK
+	GXGD1G3tFOvW1v/J8NKtXJW32ajVBNel1FY+eue896IoR+86wGtLoB+knKCj8ASl
+	TbRtzeZU7x5oV2m5SjQZNQ==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47ujy4nhws-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47uhjf60nd-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 15 Jul 2025 01:54:23 +0000 (GMT)
+	Tue, 15 Jul 2025 01:54:24 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 56F0Xasa029002;
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 56F0vRdn029770;
 	Tue, 15 Jul 2025 01:54:23 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 47ue592dxv-1
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 47ue592dy1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 15 Jul 2025 01:54:23 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 56F1sM6W002175;
-	Tue, 15 Jul 2025 01:54:22 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 56F1sM6Y002175;
+	Tue, 15 Jul 2025 01:54:23 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 47ue592dxd-1;
-	Tue, 15 Jul 2025 01:54:22 +0000
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 47ue592dxd-2;
+	Tue, 15 Jul 2025 01:54:23 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Arnd Bergmann <arnd@arndb.de>, Quinn Tran <qutran@marvell.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        "Dr. David Alan Gilbert" <linux@treblig.org>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v2] scsi: qla2xxx: avoid stack frame size warning in qla_dfs
-Date: Mon, 14 Jul 2025 21:53:48 -0400
-Message-ID: <175193808975.2586181.3549891126119956725.b4-ty@oracle.com>
+To: linux-scsi@vger.kernel.org, Justin Tee <justintee8345@gmail.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, jsmart2021@gmail.com,
+        justin.tee@broadcom.com
+Subject: Re: [PATCH 00/13] Update lpfc to revision 14.4.0.10
+Date: Mon, 14 Jul 2025 21:53:49 -0400
+Message-ID: <175193808963.2586181.5269540478621026253.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250620173232.864179-1-arnd@kernel.org>
-References: <20250620173232.864179-1-arnd@kernel.org>
+In-Reply-To: <20250618192138.124116-1-justintee8345@gmail.com>
+References: <20250618192138.124116-1-justintee8345@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -92,31 +86,53 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxs
  suspectscore=0 adultscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
  definitions=main-2507150016
-X-Proofpoint-ORIG-GUID: PCgrTv53Z-8gKqnbbK8oPryu-2bQw-nA
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE1MDAxNiBTYWx0ZWRfX4MYBKjdsWoP/ ITyPjBRhrsQp5ia3DLDLL7yvgnPxTNJay8cGjFYWGLzFrDGShOL6zZyztkp1ycu2uwuuXQczwe1 f7J9PdNl4KET4/zkI7QFFeHM1NWXRilolfLMSBdoBqyps3Vxva/6NrmpFCR07AUIcTEbkD0ogFN
- I6o24aVGMeKYRPhizZgvOnSMQZN4ze3u8WPOxgokyVFlXi95AydC0oVGsTViqFIOpuU+KkzttmP ZZRIxNNpZzBa3tfe4eGhrclr+AVl+FT3fXaG6AnFrzm2h2Todc8jM49DFokI1fDLK3ZPsxuIH6f H6eVWDzH84pBmNVF2CBj5n9BLZagvrsTRN43dRhFKpzloByBn2ZF1OACEP4Zjgxv3Hvqv5wC6Fd
- 9bXkzT5JGb9qZ1fzZfP38BB4ioH4WCeBuEsrvuIYAkzhTarbC6gG+O9K7a4n6lTXr1MHp0xI
-X-Authority-Analysis: v=2.4 cv=Xtr6OUF9 c=1 sm=1 tr=0 ts=6875b4cf cx=c_pps a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=OcqzRV0sGrcaDEt1q9IA:9 a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10
-X-Proofpoint-GUID: PCgrTv53Z-8gKqnbbK8oPryu-2bQw-nA
+X-Proofpoint-GUID: Je2erFlWNRBCLEayxRGUl0Fi0atm4J_L
+X-Authority-Analysis: v=2.4 cv=O6g5vA9W c=1 sm=1 tr=0 ts=6875b4d0 cx=c_pps a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=eNYrrxoqDexAl3KD3yMA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: Je2erFlWNRBCLEayxRGUl0Fi0atm4J_L
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE1MDAxNiBTYWx0ZWRfX+o1G2Z214g/i hKE5QAvS2hYobj7JJQyp1CyCzY42zeyS4DOTZrJPqfE+Oab8e9K39Lda61Jk5EbqQqg/ktbl3oV P4OAZJdfltYxC8wkQwQw54tKHy9r7lvary/KmiWVEgW3VLEJIP1vGvkLNM9U47+wBmAq642eniS
+ D6Rwg4fsGLc0/bwVQWQozNbVt+wa1bsgfZhqY0enaRbbNTTKyBWJE2kleoyCV7PntHss6+4WskZ u+c5xEnbFt6EtKIhpFdHlpGXscOA6WT9BrnUU9ZoI3+Y74RIO/3fNq0oG0Tg8oGeAINJcNkswwR zSYl38EJz5P7g9zMqjldEamQSncXsN1WuqSfDNWA5k09HCRjp/kWC0ZH744hVEGdrASD5yc3lA0
+ Vq2AasV2rMMHtiPknYG4nOBi4KY68+NF5qvJUT2sRQuvZNQyVdl3Kgtm0f6LO395aml/iY8x
 
-On Fri, 20 Jun 2025 19:32:22 +0200, Arnd Bergmann wrote:
+On Wed, 18 Jun 2025 12:21:25 -0700, Justin Tee wrote:
 
-> The qla2x00_dfs_tgt_port_database_show() function constructs a fake
-> fc_port_t object on the stack, which depending on the configuration
-> is large enough to exceed the stack size warning limit:
+> Update lpfc to revision 14.4.0.10
 > 
-> drivers/scsi/qla2xxx/qla_dfs.c:176:1: error: stack frame size (1392) exceeds limit (1280) in 'qla2x00_dfs_tgt_port_database_show' [-Werror,-Wframe-larger-than]
+> This patch set contains bug fixes related to diagnostic log messaging,
+> driver initialization and removal, updates to mailbox command handling,
+> and string modifications for obsolete adapter model descriptions.
 > 
-> Rework this function to no longer need the structure but instead
-> call a custom helper function that just prints the data directly
-> from the port_database_24xx structure.
+> The patches were cut against Martin's 6.17/scsi-queue tree.
 > 
 > [...]
 
 Applied to 6.17/scsi-queue, thanks!
 
-[1/1] scsi: qla2xxx: avoid stack frame size warning in qla_dfs
-      https://git.kernel.org/mkp/scsi/c/6243146bb019
+[01/13] lpfc: Revise logging format for failed CT MIB requests
+        https://git.kernel.org/mkp/scsi/c/e6d4486edd4a
+[02/13] lpfc: Update debugfs trace ring initialization messages
+        https://git.kernel.org/mkp/scsi/c/5459bd49f05f
+[03/13] lpfc: Check for hdwq null ptr when cleaning up lpfc_vport structure
+        https://git.kernel.org/mkp/scsi/c/6698796282e8
+[04/13] lpfc: Skip RSCN processing when FC_UNLOADING flag is set
+        https://git.kernel.org/mkp/scsi/c/37c893e36b1b
+[05/13] lpfc: Early return out of FDMI cmpl for locally rejected statuses
+        https://git.kernel.org/mkp/scsi/c/6b61ec3dd472
+[06/13] lpfc: Simplify error handling for failed lpfc_get_sli4_parameters cmd
+        https://git.kernel.org/mkp/scsi/c/5a00dfc58bfe
+[07/13] lpfc: Relocate clearing initial phba flags from link up to link down hdlr
+        https://git.kernel.org/mkp/scsi/c/320c3a12b40c
+[08/13] lpfc: Ensure HBA_SETUP flag is used only for SLI4 in dev_loss_tmo_callbk
+        https://git.kernel.org/mkp/scsi/c/1cced5779e7a
+[09/13] lpfc: Move clearing of HBA_SETUP flag to before lpfc_sli4_queue_unset
+        https://git.kernel.org/mkp/scsi/c/a28d10a15600
+[10/13] lpfc: Revise CQ_CREATE_SET mailbox bitfield definitions
+        https://git.kernel.org/mkp/scsi/c/5d655969100d
+[11/13] lpfc: Modify end-of-life adapters' model descriptions
+        https://git.kernel.org/mkp/scsi/c/e03bc287623f
+[12/13] lpfc: Update lpfc version to 14.4.0.10
+        https://git.kernel.org/mkp/scsi/c/81f2d701670f
+[13/13] lpfc: Copyright updates for 14.4.0.10 patches
+        https://git.kernel.org/mkp/scsi/c/f14371aceef9
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
