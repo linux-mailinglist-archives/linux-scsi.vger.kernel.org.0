@@ -1,222 +1,111 @@
-Return-Path: <linux-scsi+bounces-15223-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15230-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87319B06DA2
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jul 2025 08:08:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A71AB06DF5
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jul 2025 08:29:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93C7F3A35F1
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jul 2025 06:07:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4247B1A60314
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jul 2025 06:29:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC7F272811;
-	Wed, 16 Jul 2025 06:08:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09AF42877F9;
+	Wed, 16 Jul 2025 06:28:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vl29AnZT";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="9vQ3DX3O";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vl29AnZT";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="9vQ3DX3O"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="MCX1JKHp"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EE317A2EB
-	for <linux-scsi@vger.kernel.org>; Wed, 16 Jul 2025 06:07:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24DE2874FF
+	for <linux-scsi@vger.kernel.org>; Wed, 16 Jul 2025 06:28:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752646079; cv=none; b=YK7C0bF1+HmzmMBRPaoZNYAcLczTppZq+rD620CH6BfpJnWMvgikMyArMMIGwo5XoDTNtzWFXdP7yrSpM07bxUDOu7HTJVPXLvEYH+AWPh7DbJSZCJEYJjji2x63nn8BM/TnEJGcME7VCCzNqz+/hQDz8Tbg9T6g3aLwCuXmlcc=
+	t=1752647326; cv=none; b=FiHF2Atkm7OXzOb0MDd+CCh9eh8TdeoLYU6p3dyajpPotufFf09pyVBHZ40Xe8eq3gzO1Qgoo7ip5n2Uf0eLF5zuEPEv+7Hr3rdw6G+kMQ84c9u6oeEMZzIGzOJE7i4N2oGzGrEsFyPiPBAo5UMLoo3Q1XNrMi6RW8V8BW8q67s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752646079; c=relaxed/simple;
-	bh=QuMcMlWfsix44g7bGvuvejP/S0qgh8mFWNR9Rm6X9n0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oPEaQiPTIaBnuj8Ixe6F8xx5/B7NuMBi43UnnZ6oCHIQkuvqwsT2D1pqsTdBf7KAyvgMCrXhfLlaTUfBnAHS0c5/DA1ICXZnRSu8WE6XgQt4auA3d5eu+fKFbL9F2uN2feRO2RlXg+FcQzM7RJiTfWx8FqtLPYaFcvdd4gHlXKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vl29AnZT; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=9vQ3DX3O; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vl29AnZT; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=9vQ3DX3O; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id B74F921245;
-	Wed, 16 Jul 2025 06:07:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1752646072; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0e1SUfxNlwATJ9GKQOGvJVqQtEh7kUZtHLagVZpWars=;
-	b=vl29AnZTjxlFqmmjlZ+1TUNH4G7Z1azN8kGPXqkbBNSPNo3xi6GH4CFIJFBK244MqHJhCb
-	bUsLsEmHqh3RXxpNaemvRobvE6T0jhllyj8fuPbmGni+IU5B+ptbq3ZjGQ+t2U7zGVzh9K
-	5+WHEdpgK5S4Ko5lMuwFIAbIoPeAT3o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1752646072;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0e1SUfxNlwATJ9GKQOGvJVqQtEh7kUZtHLagVZpWars=;
-	b=9vQ3DX3OgONEYJAfFPbfu94TxdfyQ+5S4QH7MZxgl6xpXUHvjUbCzgoF7QEVVuW0B8mZ4P
-	ea90wvGE4HUhm4Bg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1752646072; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0e1SUfxNlwATJ9GKQOGvJVqQtEh7kUZtHLagVZpWars=;
-	b=vl29AnZTjxlFqmmjlZ+1TUNH4G7Z1azN8kGPXqkbBNSPNo3xi6GH4CFIJFBK244MqHJhCb
-	bUsLsEmHqh3RXxpNaemvRobvE6T0jhllyj8fuPbmGni+IU5B+ptbq3ZjGQ+t2U7zGVzh9K
-	5+WHEdpgK5S4Ko5lMuwFIAbIoPeAT3o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1752646072;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0e1SUfxNlwATJ9GKQOGvJVqQtEh7kUZtHLagVZpWars=;
-	b=9vQ3DX3OgONEYJAfFPbfu94TxdfyQ+5S4QH7MZxgl6xpXUHvjUbCzgoF7QEVVuW0B8mZ4P
-	ea90wvGE4HUhm4Bg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 53CDB138D2;
-	Wed, 16 Jul 2025 06:07:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id AiBAErhBd2hdZQAAD6G6ig
-	(envelope-from <hare@suse.de>); Wed, 16 Jul 2025 06:07:52 +0000
-Message-ID: <ccb69ee6-bd5e-4585-9ccc-0c49cb30f1a9@suse.de>
-Date: Wed, 16 Jul 2025 08:07:51 +0200
+	s=arc-20240116; t=1752647326; c=relaxed/simple;
+	bh=syL9jPcUlsPPhXDe+MDhM7KfZAEEDJeURGHpdacqDoA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=knKyIJmPMoUVmViOB11lvC5nIQFxhaNII0b9Ytve0pQpyDtSBD9u2JKAzWSqu+aWgTqwPd+Rljb9r5Sdp52Cipf23xetvg2eqFZ5H9i+KfzFgVcTbyURXJ1WJ0PSY7/RSTcVsj93x5uOIC74rgL29FkysjztcO7LFz1LQeLn4wI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=MCX1JKHp; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 1892e7f6620e11f08b7dc59d57013e23-20250716
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=lx0GhBKRDknE8K4JeiRNMVxYB7SoA83Xzs9YXSDFdDc=;
+	b=MCX1JKHp98euYGTZ4MzZ/8SEHjxPwyTk0GnxPXdrCTO2upVydnUMvH/uIsWIA1kmKotoUd+3Du8zezQBisf73ktmMetc4IZ6Vx0lHqc0FdNMgF+jjSNjD666uPE/4QbnZQXwMqB5PTuX2tDwyzk9NAzyC3WEVOWdmRnlVA6Fekw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.2,REQID:88651446-afe8-4f3f-bd3a-0377c4cbeecc,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:9eb4ff7,CLOUDID:921836df-2070-40bb-9c24-dfabef7c07f4,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:ni
+	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 1892e7f6620e11f08b7dc59d57013e23-20250716
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
+	(envelope-from <peter.wang@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1947691188; Wed, 16 Jul 2025 14:28:32 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.39; Wed, 16 Jul 2025 14:28:31 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.39 via Frontend Transport; Wed, 16 Jul 2025 14:28:31 +0800
+From: <peter.wang@mediatek.com>
+To: <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>
+CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+	<peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+	<alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
+	<chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+	<yi-fan.peng@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
+	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
+	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>
+Subject: [PATCH v1 00/10] ufs: host: mediatek: Provide features and fixes in MediaTek platforms
+Date: Wed, 16 Jul 2025 14:25:25 +0800
+Message-ID: <20250716062830.3712487-1-peter.wang@mediatek.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 7/8] nvme: sysfs: emit the marginal path state in
- show_state()
-To: Keith Busch <kbusch@kernel.org>, John Meneghini <jmeneghi@redhat.com>
-Cc: Bryan Gurney <bgurney@redhat.com>, linux-nvme@lists.infradead.org,
- hch@lst.de, sagi@grimberg.me, axboe@kernel.dk, james.smart@broadcom.com,
- dick.kennedy@broadcom.com, njavali@marvell.com, linux-scsi@vger.kernel.org
-References: <20250709211919.49100-1-bgurney@redhat.com>
- <20250709211919.49100-8-bgurney@redhat.com> <aG7pSA6TOAANYrru@kbusch-mbp>
- <35738598-0733-408c-8597-20c3599a8973@redhat.com>
- <aHa0JpsASqGuHdOA@kbusch-mbp>
-Content-Language: en-US
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <aHa0JpsASqGuHdOA@kbusch-mbp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.997];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:email,suse.de:mid]
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
+Content-Type: text/plain
+X-MTK: N
 
-On 7/15/25 22:03, Keith Busch wrote:
-> On Tue, Jul 15, 2025 at 03:42:32PM -0400, John Meneghini wrote:
->> On 7/9/25 6:12 PM, Keith Busch wrote:
->>> On Wed, Jul 09, 2025 at 05:19:18PM -0400, Bryan Gurney wrote:
->>>> If a controller has received a link integrity or congestion event, and
->>>> has the NVME_CTRL_MARGINAL flag set, emit "marginal" in the state
->>>> instead of "live", to identify the marginal paths.
->>>
->>> IMO, this attribute looks more aligned to report in the ana_state
->>> instead of overriding the controller's state.
->>>
->>
->> We can't really do this because the ANA state is a documented protocol state.
->>
->> The linux controller state is purely a linux software defined state.  Unless
- >> I am wrong, there is nothing in the NVMe specification which defines
- >> the nvme_ctrl_state.>
-> Totally correct.
->   
->> This is purely a linux definition and we should be able to change is any way we want.
-> 
-> My kneejerk reaction is against adding new controller states. We have
-> state checks sprinkled about, and special states just make that more
-> fragile.
->   
-Yeah, controller states are not a good fit. We've seen the issues when
-trying to introduce a new state for firmware update.
+From: Peter Wang <peter.wang@mediatek.com>
 
->> We debated adding a new NVME_CTRL_MARGINAL state to this data structure,
->>
->> enum nvme_ctrl_state {
->>          NVME_CTRL_NEW,
->>          NVME_CTRL_LIVE,
->>          NVME_CTRL_RESETTING,
->>          NVME_CTRL_CONNECTING,
->>          NVME_CTRL_DELETING,
->>          NVME_CTRL_DELETING_NOIO,
->>          NVME_CTRL_DEAD,
->> };
->>
->> If you don't like the flag we can do that. However, that doesn't seem worth the effort since Hannes has this working now with a flag.
-> 
-> What you're describing is a "path" state, not a controller state which
-> is why I'm suggesting the "ana_state" attribute since nothing else
-> represents the path fitness. If nvme can't describe this condition, then
-> maybe it should?
-> 
-We probably could, but that feels a bit cumbersome.
-Thing is, the FPIN LI (link integrity) message is just one a set of
-possible messages (congestion is another, but even more are defined).
-When adding a separate ANA state for that question would be raised
-how the other state would fit into that.
- From a conceptual side FPIN LI really is equivalent to a flaky
-path, which can happen at any time without any specific information
-anyway.
-Again making it questionable whether it should be specified in terms
-of ANA states.
+This series fixes some defects and provide features in MediaTek UFS drivers.
 
-> Where does this 'FPIN LI' message originate from? The end point or
-> something inbetween? If it's the endpoint (or if both sides get the same
-> message?), then an ANA state to non-optimal should be possible, no? And
-> we already have the infrastructure to react to changing ANA states, so
-> you can transition to optimal if something gets repaired.
+Peter Wang (8):
+  ufs: host: mediatek: Change return type to bool
+  ufs: host: mediatek: Add memory barrier for ref-clk control
+  ufs: host: mediatek: Change ref-clk timeout policy
+  ufs: host: mediatek: Handle broken RTC based on DTS setting
+  ufs: host: mediatek: Set IRQ affinity policy for MCQ mode
+  ufs: host: mediatek: Add clock scaling query function
+  ufs: host: mediatek: Support clock scaling with Vcore binding
+  ufs: host: mediatek: Support FDE (AES) clock scaling
 
-It's typically generated by the fabric/switch once it detects a link
-integrity problem on one of the links on a given path.
+Naomi Chu (1):
+  ufs: host: mediatek: Add DDR_EN setting
 
-As mentioned above, it really is a attempt to codify the 'flaky path'
-scenario, where occasionaly errors are generated but I/O remains
-possible. So it really is an overlay over the ANA states, as _any_
-path might be affected.
-This discussion only centered around 'optimal' paths as our path
-selectors really only care about optimized paths; non-optimized
-paths are not considered here.
-Which might skew the view of this patchset somewhat.
+Alice Chao (1):
+  ufs: host: mediatek: Add more UFSCHI hardware versions
 
-Cheers,
+ drivers/ufs/host/ufs-mediatek.c | 326 +++++++++++++++++++++++++++++---
+ drivers/ufs/host/ufs-mediatek.h |  32 ++++
+ 2 files changed, 330 insertions(+), 28 deletions(-)
 
-Hannes
 -- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.de                                +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+2.45.2
+
 
