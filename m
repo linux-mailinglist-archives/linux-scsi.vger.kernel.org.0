@@ -1,45 +1,45 @@
-Return-Path: <linux-scsi+bounces-15304-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15311-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73D82B0A029
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Jul 2025 11:55:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 181AAB0A031
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Jul 2025 11:56:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 155B51C20E99
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Jul 2025 09:56:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A33891C20C7D
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Jul 2025 09:56:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 337B229C32C;
-	Fri, 18 Jul 2025 09:55:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C837D29E0F1;
+	Fri, 18 Jul 2025 09:55:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="a9hX8vBJ"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="QQzX7LxO"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01DB29B226
-	for <linux-scsi@vger.kernel.org>; Fri, 18 Jul 2025 09:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB5229C343
+	for <linux-scsi@vger.kernel.org>; Fri, 18 Jul 2025 09:55:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752832537; cv=none; b=pqHEwVyY4Hub7SqhiG9yZk6kFy46EgZKckfmeOwwsKBFWmJklv/OVdAWS+5K+Fyw2v+7LOmQmcidXQJ5txhYjAvA14ubdwfwu9WgNdxWukTTY2dfX2p7ukylIWBqAKsajtx/GQgEp8oG5gt3Ol8z5NX8I2kSimFoO0WakPF2PyE=
+	t=1752832539; cv=none; b=S4BmoVOxSHSN794NEuQqFIxNdAlfU0I5BndEHFVemW2ahe24NRmBaRiG5uhTvQDE27RxCJJ9khNJvQxNjtO5TBElv47G0D6vVdLhaEFU4DdtmOgQjhrvQpencXhSV3sul86w3J1BC+1E7+ulxQjVJl10386KNJeLfABOw1WX0rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752832537; c=relaxed/simple;
-	bh=wWT9A027Ren3LdZKDRMc3tB/crq6APJeEz9wUVMw6uY=;
+	s=arc-20240116; t=1752832539; c=relaxed/simple;
+	bh=4PumfZJY3/leEXB2dcabLSdjOSpUIRy92VNfUEYlaYE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Vo2W1kZZVl24MGw862ysdlykH/7j9ZaalpHLM74Mz2054SKpyNbMZV7SMIxeMqBKbveNge5kHnjsoVp0L9bqhmXL682OqoH/ZTfmVl9LiobjAoCfk12hprCKdC1fyCW4XuEMvmZp88cKek/nFtb1EqNiPevpCMYf3cFg+HYBcA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=a9hX8vBJ; arc=none smtp.client-ip=210.61.82.184
+	 MIME-Version:Content-Type; b=sgpf0wUFYi/OY1PjVJV4SfdHATuaf5Eh5jvdA6qhETbVHjxI/0B2IVPMc8w3Gj3v6B7ANbREqJ3dtDWB1n/rzsTY/Apw3JZd+SyXJTdOBCCJeEIZvC8U0XASzKm8RpbL85yHjSYAEk9WWv2fdlxjelUrRHZWPegTxyrjeh2ZVuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=QQzX7LxO; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 5548dbc863bd11f0b33aeb1e7f16c2b6-20250718
+X-UUID: 554aaffc63bd11f0b33aeb1e7f16c2b6-20250718
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=jG9Ppd2qnuWgSBa/UiFctNI3f0OAqsHLFTkvkud8wLg=;
-	b=a9hX8vBJe7BiAV7kXSGDB/ACxtpKxljxm9JXw7DuZpYt/o6sEu0ZRLs3ko65p5E22d72vGbqudfq/7Fg4niVmXyS2NwtOMb9uDdFrVy/pZpme75UqF8XcUcmaDD4A/fPe3ZGJ5wqBNWokqZEwb+my77ctYc4CnkoBDUna4UoSOo=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=v6nDzmoHgCuyWSxv2A3tcmY3LGFGpHaIC2x5DgvwL24=;
+	b=QQzX7LxOGuv4JvtsvUniGMXIl8LWcaP1lgNcciaIMLS8S80ULMrL0XFUzaeF2iRFX/GXt1lIplT/zGYC7t/elxfAb6N6jLmItQoSFp+u7PVlASyGZj1rFbG+mvVqVjjM8scBAIXBLsMg1FIIPh96tU5hHGlBGPTpdL4+ahxFx1o=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.2,REQID:52210b27-8442-44ec-be94-f8bfe8b0e12c,IP:0,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:-5
-X-CID-META: VersionHash:9eb4ff7,CLOUDID:d9692773-f565-4a89-86be-304708e7ad47,B
+X-CID-O-INFO: VERSION:1.3.2,REQID:21fbdd2a-128e-49d1-8815-68dfc3690b82,IP:0,UR
+	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-25
+X-CID-META: VersionHash:9eb4ff7,CLOUDID:52d5ec0e-6968-429c-a74d-a1cce2b698bd,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
 	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
 	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
@@ -47,11 +47,11 @@ X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 5548dbc863bd11f0b33aeb1e7f16c2b6-20250718
+X-UUID: 554aaffc63bd11f0b33aeb1e7f16c2b6-20250718
 Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
 	(envelope-from <peter.wang@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1972311233; Fri, 18 Jul 2025 17:55:27 +0800
+	with ESMTP id 886627771; Fri, 18 Jul 2025 17:55:27 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -68,9 +68,9 @@ CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
 	<yi-fan.peng@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
 	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
 	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <bvanassche@acm.org>
-Subject: [PATCH v2 3/9] ufs: host: mediatek: Change ref-clk timeout policy
-Date: Fri, 18 Jul 2025 17:51:46 +0800
-Message-ID: <20250718095524.682599-4-peter.wang@mediatek.com>
+Subject: [PATCH v2 4/9] ufs: host: mediatek: Handle broken RTC based on DTS setting
+Date: Fri, 18 Jul 2025 17:51:47 +0800
+Message-ID: <20250718095524.682599-5-peter.wang@mediatek.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250718095524.682599-1-peter.wang@mediatek.com>
 References: <20250718095524.682599-1-peter.wang@mediatek.com>
@@ -86,40 +86,56 @@ X-MTK: N
 
 From: Peter Wang <peter.wang@mediatek.com>
 
-This patch updates the timeout policy for ref-clk control.
-
-- If a clock-on operation times out, it is assumed that the clock is
-  off. The system will notify TFA to perform clock-off settings.
-- If a clock-off operation times out, it is assumed that the clock
-  will eventually turn off. The 'ref_clk_enabled' flag is set directly.
+This patch introduces a mechanism to handle broken RTC by checking
+the DTS setting. The configuration is specifically required for
+legacy platform.
 
 Signed-off-by: Peter Wang <peter.wang@mediatek.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/ufs/host/ufs-mediatek.c | 8 +++++++-
+ drivers/ufs/host/ufs-mediatek.h | 2 ++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 53702e74947a..ffc4a27aae7b 100644
+index ffc4a27aae7b..5c428061ed77 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -351,7 +351,16 @@ static int ufs_mtk_setup_ref_clk(struct ufs_hba *hba, bool on)
+@@ -679,6 +679,9 @@ static void ufs_mtk_init_host_caps(struct ufs_hba *hba)
+ 	if (of_property_read_bool(np, "mediatek,ufs-rtff-mtcmos"))
+ 		host->caps |= UFS_MTK_CAP_RTFF_MTCMOS;
  
- 	dev_err(hba->dev, "missing ack of refclk req, reg: 0x%x\n", value);
++	if (of_property_read_bool(np, "mediatek,ufs-broken-rtc"))
++		host->caps |= UFS_MTK_CAP_MCQ_BROKEN_RTC;
++
+ 	dev_info(hba->dev, "caps: 0x%x", host->caps);
+ }
  
--	ufs_mtk_ref_clk_notify(host->ref_clk_enabled, POST_CHANGE, res);
-+	/*
-+	 * If clock on timeout, assume clock is off, notify tfa do clock
-+	 * off setting.(keep DIFN disable, release resource)
-+	 * If clock off timeout, assume clock will off finally,
-+	 * set ref_clk_enabled directly.(keep DIFN disable, keep resource)
-+	 */
-+	if (on)
-+		ufs_mtk_ref_clk_notify(false, POST_CHANGE, res);
-+	else
-+		host->ref_clk_enabled = false;
+@@ -1035,8 +1038,11 @@ static int ufs_mtk_init(struct ufs_hba *hba)
+ 	shost->rpm_autosuspend_delay = MTK_RPM_AUTOSUSPEND_DELAY_MS;
  
- 	return -ETIMEDOUT;
+ 	hba->quirks |= UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL;
++
+ 	hba->quirks |= UFSHCD_QUIRK_MCQ_BROKEN_INTR;
+-	hba->quirks |= UFSHCD_QUIRK_MCQ_BROKEN_RTC;
++	if (host->caps & UFS_MTK_CAP_MCQ_BROKEN_RTC)
++		hba->quirks |= UFSHCD_QUIRK_MCQ_BROKEN_RTC;
++
+ 	hba->vps->wb_flush_threshold = UFS_WB_BUF_REMAIN_PERCENT(80);
  
+ 	if (host->caps & UFS_MTK_CAP_DISABLE_AH8)
+diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
+index 474fdec0a880..d78c68676274 100644
+--- a/drivers/ufs/host/ufs-mediatek.h
++++ b/drivers/ufs/host/ufs-mediatek.h
+@@ -133,6 +133,8 @@ enum ufs_mtk_host_caps {
+ 	UFS_MTK_CAP_DISABLE_MCQ                = 1 << 8,
+ 	/* Control MTCMOS with RTFF */
+ 	UFS_MTK_CAP_RTFF_MTCMOS                = 1 << 9,
++
++	UFS_MTK_CAP_MCQ_BROKEN_RTC             = 1 << 10,
+ };
+ 
+ struct ufs_mtk_crypt_cfg {
 -- 
 2.45.2
 
