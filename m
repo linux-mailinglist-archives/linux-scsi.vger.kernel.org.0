@@ -1,80 +1,117 @@
-Return-Path: <linux-scsi+bounces-15298-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15300-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8EE2B09CCA
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Jul 2025 09:39:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B5FAB09DEA
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Jul 2025 10:28:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF1841C26F17
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Jul 2025 07:39:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FF431C44BAB
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Jul 2025 08:28:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB71222A4F6;
-	Fri, 18 Jul 2025 07:39:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32AFB293B49;
+	Fri, 18 Jul 2025 08:28:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fzAJTDnD"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="ufm+SFhk"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A7422D9E9;
-	Fri, 18 Jul 2025 07:39:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE0B21859A;
+	Fri, 18 Jul 2025 08:28:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752824356; cv=none; b=PFoMNtZrKd7VK/uNnGX+1yVqKbEDWspZA/xOyER0KtYjGfqga6DBzXgNyHRKrZCAZsX0GDsRTu+YKqR3py+1yhjSS4Y93GdLYzfftpAxr/9tzaW/uqDh45odeUKzhM3bUrvcP2tfnzSo4n22Me70IWh2DO7Fl94Ux/eJ4NaJ19w=
+	t=1752827302; cv=none; b=dgjeLN1S+bID1ytFNifFVKPVUXTAhTb9TYshr/lu+Z7Ki33JYpEwSSh1pY8wipCX45gTM6u2/uM04q6TtklJKg3btkAfRtkQVG5Hcqe4kqUHfUeDTBV+HaNnIZEPfm6uCWqpzzi4w8IvVlpjJ8375FjAPpoGLtCc5oEgsZUxais=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752824356; c=relaxed/simple;
-	bh=PyDz5g8wBHRrjg2C8+mw8LkItjWRYCEWrUQxhkLOzrk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ntz+LeENwWXeJW2HX4Gdf03v+Sg185n9pl03OPtB9PNuTIQbb3ORL6bdCwrIa/9uwcbl0OdLMpe8O31JkYzOTnKmHb4CYZBo+Nup0yozY9wiPIUpzEr2ydm3RMukg2G++dkkL4pdP8vepdnzCYmZfBkD53JUGj45/pvWamny7xU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fzAJTDnD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72875C4CEED;
-	Fri, 18 Jul 2025 07:39:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752824356;
-	bh=PyDz5g8wBHRrjg2C8+mw8LkItjWRYCEWrUQxhkLOzrk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fzAJTDnDZJ9LKezj0wG8RhpoO0A06pAsaQS9oXWCztGedI+8Bj05evsx/YvKLsSXB
-	 Kn27BeuRLB5KuToum2ZWzJ0TJ0tPNQOiL3A/TEldVOGXf1JmKWAmLXqx3XdlbM4c7G
-	 uHY1g1AWNETWXqiH7/xxluFJWyzdNWBTLTTJ1KaPeDN7iVJ7410kcYz1vGoz2w2GbQ
-	 NWkHrz5Jk6No/FbzDxBCaQfBBwrJW20nW/Gq8RVQzcbbctKrGO67N2IlYDpCM38L0Z
-	 5icKP/CQTDX7ruysI01Fz8AcnHKcrik2eG/5bNFsSKHD4KUopTY3VKDavyNr3IRU/T
-	 J3ZZPoWg4eKOg==
-Message-ID: <ad7b1c95-2b60-4ffc-930f-555105798f4d@kernel.org>
-Date: Fri, 18 Jul 2025 16:39:14 +0900
+	s=arc-20240116; t=1752827302; c=relaxed/simple;
+	bh=HbZBhh8aKvnhhix2oGCGJTp89m5dueVh/VgsyDh6rLI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jPFTeSFfAsHG0sTuQPOcxBZcRJ48z9ph4JitxlLKWF9HJu7o3iuZaiCFIYpaaAQH4f3/MffsDhYUabwzpZgrFbjjdY2yTzRvAiyzfwIeDoH1bgFauPKj6KCMWBUKNqWrxpbP4+Gcgjk0FkJN07LDqyA1eAAlUKizNWPQBA+Vjcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=ufm+SFhk; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 24f1958463b111f0b33aeb1e7f16c2b6-20250718
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=GPpm2gPg2nj0QzhFjf8hC7nhh7xr1REmHdo2vA7Y9Hs=;
+	b=ufm+SFhk52Dl4xbIp2INabMeaB8XUGraku5bsPaQytP8aPeqo+amRqWvhkBtPPmvwsfAVm5FAHGvYn96VALAQRh3lDiPnAsFlRJTMAk8q2jWu3xvKEYH1k+Ih35nozpQv8h6KzCO56KCyQX5vyFDEUUuCQ8QGFrPjiROYTMWHxo=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.2,REQID:da9e0b7a-f74c-4bd4-a871-1143ed360839,IP:0,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:-5
+X-CID-META: VersionHash:9eb4ff7,CLOUDID:5bf89484-a7ec-4748-8ac1-dca5703e241f,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:ni
+	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 24f1958463b111f0b33aeb1e7f16c2b6-20250718
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+	(envelope-from <macpaul.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 668366403; Fri, 18 Jul 2025 16:28:12 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.39; Fri, 18 Jul 2025 16:28:11 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.39 via Frontend Transport; Fri, 18 Jul 2025 16:28:11 +0800
+From: Macpaul Lin <macpaul.lin@mediatek.com>
+To: Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Peter Wang
+	<peter.wang@mediatek.com>, Stanley Jhu <chu.stanley@gmail.com>, "James E . J
+ . Bottomley" <James.Bottomley@HansenPartnership.com>, "Martin K . Petersen"
+	<martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<openembedded-core@lists.openembedded.org>, <patches@lists.linux.dev>,
+	<stable@vger.kernel.org>
+CC: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
+	Ramax Lo <ramax.lo@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>,
+	Macpaul Lin <macpaul@gmail.com>, MediaTek Chromebook Upstream
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH 1/3] scsi: ufs: ufs-mediatek: Add UFS host support for MT8195 SoC
+Date: Fri, 18 Jul 2025 16:27:16 +0800
+Message-ID: <20250718082719.653228-1-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v21 00/12] Improve write performance for zoned UFS devices
-To: Bart Van Assche <bvanassche@acm.org>, Jens Axboe <axboe@kernel.dk>
-Cc: linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
- Christoph Hellwig <hch@lst.de>
-References: <20250717205808.3292926-1-bvanassche@acm.org>
-Content-Language: en-US
-From: Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20250717205808.3292926-1-bvanassche@acm.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-On 7/18/25 05:57, Bart Van Assche wrote:
-> Changes compared to v20:
->  - Converted a struct queue_limits member variable into a queue_limits feature
->    flag.
->  - Optimized performance of blk_mq_requeue_work().
->  - Instead of splitting blk_zone_wplug_bio_work(), introduce a loop in that
->    function.
->  - Reworked patch "blk-zoned: Support pipelining of zoned writes".
->  - Dropped the null_blk driver patch.
+Add "mediatek,mt8195-ufshci" to the of_device_id table to enable
+support for MediaTek MT8195/MT8395 UFS host controller. This matches the
+device node entry in the MT8195/MT8395 device tree and allows proper driver
+binding.
 
-Why ? null_blk does not maintain submission order ?
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+---
+ drivers/ufs/host/ufs-mediatek.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
+index 182f58d0c9db..e1dbf0231c5e 100644
+--- a/drivers/ufs/host/ufs-mediatek.c
++++ b/drivers/ufs/host/ufs-mediatek.c
+@@ -50,6 +50,7 @@ static const struct ufs_dev_quirk ufs_mtk_dev_fixups[] = {
+ 
+ static const struct of_device_id ufs_mtk_of_match[] = {
+ 	{ .compatible = "mediatek,mt8183-ufshci" },
++	{ .compatible = "mediatek,mt8195-ufshci" },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, ufs_mtk_of_match);
 -- 
-Damien Le Moal
-Western Digital Research
+2.45.2
+
 
