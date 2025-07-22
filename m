@@ -1,45 +1,45 @@
-Return-Path: <linux-scsi+bounces-15366-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15368-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E953B0D00E
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Jul 2025 05:09:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61EC0B0D00D
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Jul 2025 05:09:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96811188FC59
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Jul 2025 03:09:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2B866C76B6
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Jul 2025 03:08:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 018E528BA84;
-	Tue, 22 Jul 2025 03:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E27128C01E;
+	Tue, 22 Jul 2025 03:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="tnoUH8KA"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="KQ6Y01g7"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0078C28BA85
-	for <linux-scsi@vger.kernel.org>; Tue, 22 Jul 2025 03:09:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40ACF28BAB0
+	for <linux-scsi@vger.kernel.org>; Tue, 22 Jul 2025 03:09:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753153742; cv=none; b=m50L66dfGjuS/uc3JlPiBVYjLVdIrQ21bMQFSPfisfHmPbDL6rCYe3UinHPysJtMVIXTFGbTzb/8cjpsyh2kP6sacrNFBt9ncKDad/02cS1YaiQ1KpwQnN7yxatYDu4yH7oKL6TOPSG2JWldyrVBzrueFTsmhP+g92n4OKnD65g=
+	t=1753153743; cv=none; b=DX3iJsF5ZlIt5DbFaSii7H8bMmzlX2TZkqXRnAwMW9nTMCx2X3jHqPSv+8TqYIl868b0bJTaA7M3HtH1W0GQ/WsCiA8SLBbhwzuL51ie/46BFLMiQM23HAORS3kck5OEMYhxfg/ZYJg31cE7aoLYdInAQapLLdDmrk9j9Yb/8ck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753153742; c=relaxed/simple;
-	bh=KuB8e6RuBqOzgQHtU8VfwF/UppX3XIa5iPkuD9bf2UI=;
+	s=arc-20240116; t=1753153743; c=relaxed/simple;
+	bh=MvkH86q48mYlCbiK1+aShGM34kd8m7o0xjkZBfe3Cx0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SBKMRU0KEg/z/3eHyWv0KQjs5UYtNctXftyy9hyx0HOQ1J1kLx3YosuhYSuy7w7X4eGXZwmzlzcrKdYOTB1EW4gPa9DZqq0jlRpA5WWLC/8g6Jj+vomYU9xdFGqnx6wWzDhgP+5NxWqHLmV3iW/Deral4uzl0ay39wKSED/HmvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=tnoUH8KA; arc=none smtp.client-ip=210.61.82.184
+	 MIME-Version:Content-Type; b=H93fYkJlUh7l7oIQZZYqVBnZUR5c3rWfZqB7zlpjIcTNxqExtYpxvZ+Is3nbgkEQmrsEfpowAhpu7cvJB8DxgMj4UVpGRpSG8UUT4NDGATxsASaKHz+u5++POKml/zexYRouJ1KYOWf4Gef5n9fE1mJ2cfBySY0/57lvO1fWVK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=KQ6Y01g7; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 2e9abf2066a911f0b33aeb1e7f16c2b6-20250722
+X-UUID: 2e9be58a66a911f0b33aeb1e7f16c2b6-20250722
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=dGAd9mDWgr0U8jFeJ1AUn+N6lYisgXVmxCe25k485qs=;
-	b=tnoUH8KAmzl+3uC2RlnanuS0rhx4kueklcovQxUdk3prob0zZscxtAGvb8RrlBbB3h8NgmGHVGy6XpwZzL1bf3+XCL+LeFJfHAsCzXY0Ni5SQNl48+KsQTPn7r3wn8VQp1ebYdgYEHPCP0SS0KT8ac/+dTyemR6xQbYf4URnEKI=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=x/w5Y95ZDYGlYKLn2y+WMk8U4o4cEs44DcybgpkTwS8=;
+	b=KQ6Y01g7Il4+3Z1Mie4BW0A5cS4UzZLC8KRHgbcBkWTNcCMQDrsNni1SdJV30V5uwroaCpdOpT2bJyZ89WsY8sMefJxssgu5TMQKRaoE5dod3Ys7ph9bhROFnxU8yZXc3RWMrOCjGXV66esiFBZjkL/3JLriLqQDMS2+hrCM/7E=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.2,REQID:9ec7f58f-82e2-4d51-a601-8032edd50f32,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:9eb4ff7,CLOUDID:6dce1b50-93b9-417a-b51d-915a29f1620f,B
+X-CID-O-INFO: VERSION:1.3.2,REQID:9068bdd9-8463-407b-8716-82f7961d9f7d,IP:0,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:-5
+X-CID-META: VersionHash:9eb4ff7,CLOUDID:737d080f-6968-429c-a74d-a1cce2b698bd,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
 	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
 	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
@@ -47,11 +47,11 @@ X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 2e9abf2066a911f0b33aeb1e7f16c2b6-20250722
+X-UUID: 2e9be58a66a911f0b33aeb1e7f16c2b6-20250722
 Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw02.mediatek.com
 	(envelope-from <peter.wang@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 94970658; Tue, 22 Jul 2025 11:08:46 +0800
+	with ESMTP id 111648927; Tue, 22 Jul 2025 11:08:46 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
  MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -68,9 +68,9 @@ CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
 	<yi-fan.peng@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
 	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
 	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <bvanassche@acm.org>
-Subject: [PATCH v4 2/9] ufs: host: mediatek: Add DDR_EN setting
-Date: Tue, 22 Jul 2025 11:07:17 +0800
-Message-ID: <20250722030841.1998783-3-peter.wang@mediatek.com>
+Subject: [PATCH v4 3/9] ufs: host: mediatek: Change ref-clk timeout policy
+Date: Tue, 22 Jul 2025 11:07:18 +0800
+Message-ID: <20250722030841.1998783-4-peter.wang@mediatek.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250722030841.1998783-1-peter.wang@mediatek.com>
 References: <20250722030841.1998783-1-peter.wang@mediatek.com>
@@ -84,63 +84,43 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-MTK: N
 
-From: Naomi Chu <naomi.chu@mediatek.com>
+From: Peter Wang <peter.wang@mediatek.com>
 
-On MT6989 and later platforms, control of DDR_EN has been switched from
-SPM to EMI. To prevent abnormal access to DRAM, it is necessary to wait
-for 'ddren_ack' or assert 'ddren_urgent' after sending 'ddren_req'.
+This patch updates the timeout policy for ref-clk control.
 
-This patch introduces the DDR_EN configuration in the UFS initialization
-flow, utilizing the assertion of 'ddren_urgent' to maintain performance.
+- If a clock-on operation times out, it is assumed that the clock is
+  off. The system will notify TFA to perform clock-off settings.
+- If a clock-off operation times out, it is assumed that the clock
+  will eventually turn off. The 'ref_clk_enabled' flag is set directly.
 
 Signed-off-by: Peter Wang <peter.wang@mediatek.com>
-Signed-off-by: Naomi Chu <naomi.chu@mediatek.com>
-Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 Reviewed-by: Chun-Hung Wu <chun-hung.wu@mediatek.com>
 ---
- drivers/ufs/host/ufs-mediatek.c |  7 +++++++
- drivers/ufs/host/ufs-mediatek.h | 12 ++++++++++++
- 2 files changed, 19 insertions(+)
+ drivers/ufs/host/ufs-mediatek.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 744efcde1fff..90351fff501c 100644
+index 90351fff501c..b30203d83ef1 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -267,6 +267,13 @@ static int ufs_mtk_hce_enable_notify(struct ufs_hba *hba,
- 		ufshcd_writel(hba,
- 			      ufshcd_readl(hba, REG_UFS_XOUFS_CTRL) | 0x80,
- 			      REG_UFS_XOUFS_CTRL);
-+
-+		/* DDR_EN setting */
-+		if (host->ip_ver >= IP_VER_MT6989) {
-+			ufshcd_rmwl(hba, UFS_MASK(0x7FFF, 8),
-+				0x453000, REG_UFS_MMIO_OPT_CTRL_0);
-+		}
-+
- 	}
+@@ -351,7 +351,16 @@ static int ufs_mtk_setup_ref_clk(struct ufs_hba *hba, bool on)
  
- 	return 0;
-diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
-index 05d76a6bd772..1082f761bb44 100644
---- a/drivers/ufs/host/ufs-mediatek.h
-+++ b/drivers/ufs/host/ufs-mediatek.h
-@@ -192,4 +192,16 @@ struct ufs_mtk_host {
- /* MTK RTT support number */
- #define MTK_MAX_NUM_RTT 2
+ 	dev_err(hba->dev, "missing ack of refclk req, reg: 0x%x\n", value);
  
-+/* UFSHCI MTK ip version value */
-+enum {
-+	/* UFSHCI 3.1 */
-+	IP_VER_MT6878    = 0x10420200,
-+
-+	/* UFSHCI 4.0 */
-+	IP_VER_MT6897    = 0x10440000,
-+	IP_VER_MT6989    = 0x10450000,
-+
-+	IP_VER_NONE      = 0xFFFFFFFF
-+};
-+
- #endif /* !_UFS_MEDIATEK_H */
+-	ufs_mtk_ref_clk_notify(host->ref_clk_enabled, POST_CHANGE, res);
++	/*
++	 * If clock on timeout, assume clock is off, notify tfa do clock
++	 * off setting.(keep DIFN disable, release resource)
++	 * If clock off timeout, assume clock will off finally,
++	 * set ref_clk_enabled directly.(keep DIFN disable, keep resource)
++	 */
++	if (on)
++		ufs_mtk_ref_clk_notify(false, POST_CHANGE, res);
++	else
++		host->ref_clk_enabled = false;
+ 
+ 	return -ETIMEDOUT;
+ 
 -- 
 2.45.2
 
