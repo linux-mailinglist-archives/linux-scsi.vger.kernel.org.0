@@ -1,196 +1,193 @@
-Return-Path: <linux-scsi+bounces-15400-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15402-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90ABCB0D61E
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Jul 2025 11:40:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FC96B0D6E2
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Jul 2025 12:07:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D081E3B915B
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Jul 2025 09:39:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22B2E3A6514
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Jul 2025 10:06:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D69952DEA63;
-	Tue, 22 Jul 2025 09:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 078BC2E2F10;
+	Tue, 22 Jul 2025 10:05:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="TB7pqKFX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="btDw2eRE"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1659FA937;
-	Tue, 22 Jul 2025 09:39:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9C92E06ED;
+	Tue, 22 Jul 2025 10:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753177200; cv=none; b=CWq2Sl3+wjXBvY9m2x82o3pNKiO/CZf8utdV1LvaQsj43p+CCizErhbYVOT97pk/wj8U7C2GlgwtPxkvB1sORRttiWdWCQfaZjvnzvm1Hp5h3mpf/gfp4aXCABcXD1nKY0Xau0uKtjIzoCvYjM1rUqNfXZgcdwcDKpsfzSMc/3w=
+	t=1753178744; cv=none; b=mmjA7Nkee0IL3YhxShY6OfmtUWaRsXdgd+Svcgkq5BgSGJAfuWkqw94tS7T5qIed8cpEWBc3G0SBU9XfQIhEpF79DyTbvgMe5faoLUeNaQZFIxwCKfqyji+9vsJmDtxq60AO8JHX7qOj22aEctmc6W30u+6/quuSyKJV1F8zMyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753177200; c=relaxed/simple;
-	bh=NgsL3gTGGimcOYXeYVqRXt5bTxZm1wqbVcpMtjeMMAM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aENk9utEMTc9iZKtUMut206NQ7eboc4D4+i44PVDf2wdhY/wcG/dypsZfitfNTyPKTsbF0ExdwPZPK4MiHqY700tjyF72E4fcp0FRGCzoeaTMvYYItMQETN04YdAUVUug4+dFJ7KectBQGf8aFVL8n7JqHtk02ArGuJUImi/w2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=TB7pqKFX; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1753177196;
-	bh=NgsL3gTGGimcOYXeYVqRXt5bTxZm1wqbVcpMtjeMMAM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TB7pqKFXo6MjzoRR1DOvuL2zOUx0iePTnUdN2KdM07FS19smE3tgyvm8Zodd4OvYQ
-	 zSLcPbGpAuAkk/m6GWvvjvAdSOrhmSGmK80s/w3ra+zjygL8iHDe+DhxTJnOKQXNHy
-	 ejbWgRodz04Om3d3xijshDRR0wv294QjJeEHCFRhmGJBBBUacjHVaWIopnGbCYSc7f
-	 4F7SCSK8pYgixwnP47HJ7Aw1BnTgWXnSpMdbnq8eptaXmSAHgzkx279DJ6aBdE1tA9
-	 UVBQ2zc8bxpQP9HTNiffqAH6hUmy4/zACTXpKImSjGsuYmw2mqYbk3ndeOOdkt6YDo
-	 SzVoMX2qMIgaA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 302E017E07FB;
-	Tue, 22 Jul 2025 11:39:55 +0200 (CEST)
-Message-ID: <b90956e8-adf9-4411-b6f9-9212fcd14b59@collabora.com>
-Date: Tue, 22 Jul 2025 11:39:54 +0200
+	s=arc-20240116; t=1753178744; c=relaxed/simple;
+	bh=IlLy1p8cz2ISRMPbvg4/n/abtc9H+c/qnZ5bEjePPwU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LHaWn0mR8Y9TfIB+XHz/+LKy5yziIFvq7psEuSmIqQdPqfxJvqlsHQhfMulVE4rSmKrBFch2aglhfzy1MfHligZZ8Y+5QiYyVcy6e3RWAA07sXF+I7aus7jX7Nw09JUMwvoHSbFrJH8CfNjtFDGgUkLl9WFeuB0s5veaPceeB+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=btDw2eRE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7899C4CEEB;
+	Tue, 22 Jul 2025 10:05:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753178744;
+	bh=IlLy1p8cz2ISRMPbvg4/n/abtc9H+c/qnZ5bEjePPwU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=btDw2eRExWr9siGIr/Xozyp7idZEf4Glqg6nrxtHxAJGV6UxAVFbid784++CxNqLR
+	 AiIwI6+8gI0Z03hvOVKnLiCRL8lLR44oXK7tlSZicaXaLiiHbHHZ6xQX10HdbkKnfO
+	 Q2x2B5D5QNf+V/mR8OICiAHO78w9/jlS/FWJPZAekIPjGDhQIPahef967LaSgn9KRF
+	 ADNf7PsvEGxF4jOPtegyLIexbq41U7Oo4dPkkIK6K+X6qMt6ag5YUQDOtkizjHn5sm
+	 7+4gIB53fqepnLwx9qSkLOISWjQMyk/wzjxf73F4NOU81fmHLi5I6Qob/bIVyxgVRt
+	 YgoeOjhLG18Uw==
+Date: Tue, 22 Jul 2025 12:05:38 +0200
+From: Alexey Gladkov <legion@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v4 0/7] Add generated modalias to modules.builtin.modinfo
+Message-ID: <aH9icpCpoHqBBzEm@example.org>
+References: <cover.1750511018.git.legion@kernel.org>
+ <aHUI8KqD0_dtTY3D@example.org>
+ <CAK7LNARjC_FCam14RXfTVTQ4_jtXuBKfDsdyG84_k9L1x5zJyg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] dt-bindings: ufs: mediatek,ufs: add MT8195
- compatible and update clock nodes
-To: Macpaul Lin <macpaul.lin@mediatek.com>,
- Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
- Bart Van Assche <bvanassche@acm.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- Peter Wang <peter.wang@mediatek.com>, Stanley Jhu <chu.stanley@gmail.com>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>,
- linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-Cc: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
- Ramax Lo <ramax.lo@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
- MediaTek Chromebook Upstream
- <Project_Global_Chrome_Upstream_Group@mediatek.com>
-References: <20250722085721.2062657-1-macpaul.lin@mediatek.com>
- <20250722085721.2062657-3-macpaul.lin@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20250722085721.2062657-3-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNARjC_FCam14RXfTVTQ4_jtXuBKfDsdyG84_k9L1x5zJyg@mail.gmail.com>
 
-Il 22/07/25 10:57, Macpaul Lin ha scritto:
-> Add MT8195 UFSHCI compatible string.
-> Relax the schema to allow between one to eight clocks/clock-names
-> entries for all MediaTek UFS nodes. Legacy platforms may only need
-> a few clocks, whereas newer devices such as the MT8195 require
-> additional clock-gating domains. For MT8195 specifically, enforce
-> exactly eight clocks and clock-names entries to satisfy its hardware
-> requirements.
+On Wed, Jul 16, 2025 at 01:23:26AM +0900, Masahiro Yamada wrote:
+> Hi, sorry for the delay.
 > 
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> ---
->   .../devicetree/bindings/ufs/mediatek,ufs.yaml | 42 ++++++++++++++++---
->   1 file changed, 36 insertions(+), 6 deletions(-)
+> On Mon, Jul 14, 2025 at 10:41 PM Alexey Gladkov <legion@kernel.org> wrote:
+> >
+> > On Sat, Jun 21, 2025 at 03:57:12PM +0200, Alexey Gladkov wrote:
+> > > The modules.builtin.modinfo file is used by userspace (kmod to be specific) to
+> > > get information about builtin modules. Among other information about the module,
+> > > information about module aliases is stored. This is very important to determine
+> > > that a particular modalias will be handled by a module that is inside the
+> > > kernel.
+> > >
+> > > There are several mechanisms for creating modalias for modules:
+> > >
+> > > The first is to explicitly specify the MODULE_ALIAS of the macro. In this case,
+> > > the aliases go into the '.modinfo' section of the module if it is compiled
+> > > separately or into vmlinux.o if it is builtin into the kernel.
+> > >
+> > > The second is the use of MODULE_DEVICE_TABLE followed by the use of the
+> > > modpost utility. In this case, vmlinux.o no longer has this information and
+> > > does not get it into modules.builtin.modinfo.
+> > >
+> > > For example:
+> > >
+> > > $ modinfo pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30
+> > > modinfo: ERROR: Module pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30 not found.
+> > >
+> > > $ modinfo xhci_pci
+> > > name:           xhci_pci
+> > > filename:       (builtin)
+> > > license:        GPL
+> > > file:           drivers/usb/host/xhci-pci
+> > > description:    xHCI PCI Host Controller Driver
+> > >
+> > > The builtin module is missing alias "pci:v*d*sv*sd*bc0Csc03i30*" which will be
+> > > generated by modpost if the module is built separately.
+> > >
+> > > To fix this it is necessary to add the generated by modpost modalias to
+> > > modules.builtin.modinfo.
+> > >
+> > > Fortunately modpost already generates .vmlinux.export.c for exported symbols. It
+> > > is possible to use this file to create a '.modinfo' section for builtin modules.
+> > > The modules.builtin.modinfo file becomes a composite file. One part is extracted
+> > > from vmlinux.o, the other part from .vmlinux.export.o.
+> >
+> > Masahiro Yamada, does this version of the patchset look better to you ?
 > 
-> Changes for v2:
->   - Remove duplicate minItems and maxItems as suggested in the review.
->   - Add a description of how the MT8195 hardware differs from earlier
->     platforms.
 > 
-> diff --git a/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml b/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
-> index 20f341d25ebc..1dec54fb00f3 100644
-> --- a/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
-> +++ b/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
-> @@ -9,21 +9,20 @@ title: Mediatek Universal Flash Storage (UFS) Controller
->   maintainers:
->     - Stanley Chu <stanley.chu@mediatek.com>
->   
-> -allOf:
-> -  - $ref: ufs-common.yaml
-> -
->   properties:
->     compatible:
->       enum:
->         - mediatek,mt8183-ufshci
->         - mediatek,mt8192-ufshci
-> +      - mediatek,mt8195-ufshci
->   
->     clocks:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 8
->   
->     clock-names:
-> -    items:
-> -      - const: ufs
-> +    minItems: 1
-> +    maxItems: 8
->   
->     phys:
->       maxItems: 1
-> @@ -47,6 +46,37 @@ required:
->   
->   unevaluatedProperties: false
->   
-> +allOf:
-> +  - $ref: ufs-common.yaml
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt8195-ufshci
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 8
-> +        clock-names:
-> +          items:
-> +            - const: ufs
-> +            - const: ufs_aes
-> +            - const: ufs_tick
-> +            - const: unipro_sysclk
-> +            - const: unipro_tick
-> +            - const: unipro_mp_bclk
+> Looks better, but this may break s390 build:
+> 
+> https://lore.kernel.org/linux-kbuild/202506062053.zbkFBEnJ-lkp@intel.com/
+> 
+> I have not taken a close look at it.
+> If we do not find how to fix the warning, we would
+> end up with the original solution.
 
-The unipro mp_bclk really is the ufs-sap clock; besides, the standard has clocks
-for both TX and RX symbols - and also MT8195 (and also MT6991, MT8196, and others)
-UFS controller do have both TX and RX symbol clocks.
+I think I found a problem. I just pushed fix to my branch. I'll make a new
+version of the patchset in a few days. I want to test it a bit longer.
 
-Besides, you're also missing the crypto clocks for UFS, which brings the count to
-12 total clocks for MT8195.
+> > > Notes:
+> > > - v4:
+> > >   * Rework the patchset based on top of Masahiro Yamada's patches.
+> > >   * Add removal of unnecessary __mod_device_table__* symbols to avoid symbol
+> > >     table growth in vmlinux.
+> > >   * rust code takes into account changes in __mod_device_table__*.
+> > >   * v3: https://lore.kernel.org/all/cover.1748335606.git.legion@kernel.org/
+> > >
+> > > - v3:
+> > >   * Add `Reviewed-by` tag to patches from Petr Pavlu.
+> > >   * Rebase to v6.15.
+> > >   * v2: https://lore.kernel.org/all/20250509164237.2886508-1-legion@kernel.org/
+> > >
+> > > - v2:
+> > >   * Drop patch for mfd because it was already applied and is in linux-next.
+> > >   * The generation of aliases for builtin modules has been redone as
+> > >     suggested by Masahiro Yamada.
+> > >   * Rebase to v6.15-rc5-136-g9c69f8884904
+> > >   * v1: https://lore.kernel.org/all/cover.1745591072.git.legion@kernel.org/
+> > >
+> > >
+> > > Alexey Gladkov (3):
+> > >   scsi: Always define blogic_pci_tbl structure
+> > >   modpost: Add modname to mod_device_table alias
+> > >   modpost: Create modalias for builtin modules
+> > >
+> > > Masahiro Yamada (4):
+> > >   module: remove meaningless 'name' parameter from __MODULE_INFO()
+> > >   kbuild: always create intermediate vmlinux.unstripped
+> > >   kbuild: keep .modinfo section in vmlinux.unstripped
+> > >   kbuild: extract modules.builtin.modinfo from vmlinux.unstripped
+> > >
+> > >  drivers/scsi/BusLogic.c           |  2 -
+> > >  include/asm-generic/vmlinux.lds.h |  2 +-
+> > >  include/crypto/algapi.h           |  4 +-
+> > >  include/linux/module.h            | 21 ++++-----
+> > >  include/linux/moduleparam.h       |  9 ++--
+> > >  include/net/tcp.h                 |  4 +-
+> > >  rust/kernel/device_id.rs          |  8 ++--
+> > >  scripts/Makefile.vmlinux          | 74 +++++++++++++++++++++----------
+> > >  scripts/Makefile.vmlinux_o        | 26 +----------
+> > >  scripts/mksysmap                  |  6 +++
+> > >  scripts/mod/file2alias.c          | 34 ++++++++++++--
+> > >  scripts/mod/modpost.c             | 17 ++++++-
+> > >  scripts/mod/modpost.h             |  2 +
+> > >  13 files changed, 131 insertions(+), 78 deletions(-)
+> > >
+> > > --
+> > > 2.49.0
+> > >
+> >
+> > --
+> > Rgrds, legion
+> >
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada
+> 
 
-Please, look at my old submission, which actually fixes the compatibles other than
-adding the right clocks for all UFS controllers in MediaTek platforms.
-
-https://lore.kernel.org/all/20240612074309.50278-1-angelogioacchino.delregno@collabora.com/
-
-I want to take the occasion to remind everyone that my fixes were discarded because
-the MediaTek UFS driver maintainer wants to keep the low quality of the driver in
-favor of easier downstream porting - which is *not* in any way adhering to quality
-standards that the Linux community deserves.
-
-Cheers,
-Angelo
-
-> +            - const: ufs_tx_symbol
-> +            - const: ufs_mem_sub
-> +    else:
-> +      properties:
-> +        clocks:
-> +          maxItems: 1
-> +        clock-names:
-> +          items:
-> +            - const: ufs
-> +
->   examples:
->     - |
->       #include <dt-bindings/clock/mt8183-clk.h>
-
+-- 
+Rgrds, legion
 
 
