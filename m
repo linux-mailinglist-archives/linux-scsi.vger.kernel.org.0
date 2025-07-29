@@ -1,293 +1,285 @@
-Return-Path: <linux-scsi+bounces-15644-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15646-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3051AB148B2
-	for <lists+linux-scsi@lfdr.de>; Tue, 29 Jul 2025 08:52:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BC23B14964
+	for <lists+linux-scsi@lfdr.de>; Tue, 29 Jul 2025 09:50:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD9E1544BC1
-	for <lists+linux-scsi@lfdr.de>; Tue, 29 Jul 2025 06:51:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A6714E63BB
+	for <lists+linux-scsi@lfdr.de>; Tue, 29 Jul 2025 07:50:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32B872701DF;
-	Tue, 29 Jul 2025 06:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7FE26A1B8;
+	Tue, 29 Jul 2025 07:50:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NblPqzHq"
+	dkim=pass (2048-bit key) header.d=garloff.de header.i=@garloff.de header.b="Wjvlq3/7";
+	dkim=permerror (0-bit key) header.d=garloff.de header.i=@garloff.de header.b="ZKT0bLI3"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111C426CE26;
-	Tue, 29 Jul 2025 06:50:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753771809; cv=none; b=C6PLjk5fOxPMHKrhkvIprVPtfXnPOtIi06fDqnJ1YPK81pcTs94U4i9i7aT3LLc0obXGF43jU4X1QGwuyLCeaZiT4TxsCIz3TLna9djBc8IjQJZlKYmK8S771OCso5s0ZgpafMjZPfP4P8DtuTHVJ1MUtaUIjJ2zW+T823JUWXk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753771809; c=relaxed/simple;
-	bh=8x6t2E3bvaUsqe85HBcgG0NsUSVA+YA+IiexRtuqtRY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RO1e1e3opPVZBhX/YZUdzqaFFyB1Hg3H01Maw8u61o3J6a5/ZTsg/KAbePkS9plkKQO2pPnKNYorK4VnybVeCbYAeo8Ieq8gg62CsMh6NTDU2PFD8fNi+Ius2kkpzYtt/1dwvKjF8TALZzqahkW7epApJcDP72UUQxBgOr5rsxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NblPqzHq; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3b783d851e6so2303920f8f.0;
-        Mon, 28 Jul 2025 23:50:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753771805; x=1754376605; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=a7haeLuJT5v3aQv8eOv4BBhTxNeYgMYlcDfN4H3p9Y4=;
-        b=NblPqzHq59a4jmx1B8cWyA1DiXAG784WaCDhCRqAAXHdDAZdPuisYFdtppS9h+3Lxy
-         kwTC9IcsxJ2U12LdDqKiJgXGegx5PrP5cCRfqexL1Wx8JY9p5qJ8gLtKKjC6+cKVh+Wp
-         Z8yR34REFY9kd5nRpRwVp03F7lj6yIPXx7bufmRiJBrJnaedXJDGYDS0PHBl5ZJZUH1o
-         hOFUWt0U7P8RphZ0HWbWKx4CI4jofztmyCBOl0EY9uNSZbiBYcJoOlKdODpatrJc7Zwq
-         94bE8L27hfxFuDlLvaxkKhtJgnwXlBqsh4MjiJtSB/3lFHYZMA+KmCs+RLkZlzu5GbP9
-         oO1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753771805; x=1754376605;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a7haeLuJT5v3aQv8eOv4BBhTxNeYgMYlcDfN4H3p9Y4=;
-        b=hLcu7I0DR6RFXXf7cwMQoMArp4wkWBE09HHvtPVlTE8vtuXSTgS8N70c/zRJjsRpL8
-         et8A3/i/qajsOafWxDAW7MBPqKROc/vhnl4YOe3FlbkXuwWwTg2Q8i/7qcayinmndZnM
-         QLfKQ7UYBIDfaX0jS5x7FbIfGoDZmpRHb/Znnbwp8AIWwxuTQLdumhzeqBNhqlAnzlV1
-         eL2xiB537lxApclqH0W2OYVzGhS/hx0Ls5+6DiJGK01dBTuKBR4kUjnez308oiUNYs33
-         hJgjvvNILJgMlRVUOU2D0gG23tPWK68UupNwC+T1x3Uj/7RfR+MJD9vbdM5gujK50RpM
-         I/2A==
-X-Forwarded-Encrypted: i=1; AJvYcCWPUuyrJNGmR8L/UGoygWcRCKVJgs5fBLu30YNvPy+UYIfWOTqvxZXydg9LcPeFx6NfYXdrn+aqshiNvg==@vger.kernel.org, AJvYcCXmQEQ1PahTfVTVBhPOkK6Hs/TJU6TrP3N6LKa6e+LD+C7oi4IoG+FfYDDpy1laheeOVn5D82DqNSxyrww=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7lIecoqKm8YguCAKSpoimdSYS9+6p3bvXbTwWZBG4Fbc2KHbj
-	IEAuzxTZGPjNoB/UuVOY8gD0HOPw5yYsCaa3lNMsTnTm2YVS+HkszNPr
-X-Gm-Gg: ASbGncsqyYnzQ896oGiC1jNbCB7FkHIzmd4pOXWPx5t+07UGRKoqSefLXkv7DRihBfR
-	5P5GOlxs3pg1RTg4+0pUe56eHIHJri/k7tmuskNGyj270Qnm3kOSScSwDA8D6y1FOYPdgTDtt+5
-	+va+4u+cYdz79Gyw5+hz6P9+ut+R6hvvPV6KK9iaf6TpHI8vqKFeFSVCdbO76K3ECqeM9NAIBmL
-	hVn0Ox+yVShFl3vAWLNzbcWNP1FVeY1KDvKHalwEuj3bkfKuMK8vS7YXVicrLh7oRVqMDsUVc/e
-	BR2qPyWslEx32j8KDzEOxnPz/STbMDtsH6jf/7RtaESnAnF3ekqUy7eiYpZe2EfJ4Uw0Oa/4zSc
-	W+jB+QYey+0j/4Gmm6ovQzmYwo0yhC84=
-X-Google-Smtp-Source: AGHT+IFAq6oFD9LEGvdnmvej5FK2oM8kVMdZdRvJvsrdRhsTT6J4H0UaalYv6DCU5UcaeQImu+me1w==
-X-Received: by 2002:a05:6000:4c8:b0:3b7:83c0:a9dc with SMTP id ffacd0b85a97d-3b783c0b070mr4778105f8f.48.1753771804972;
-        Mon, 28 Jul 2025 23:50:04 -0700 (PDT)
-Received: from localhost ([87.254.0.133])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4587054f27dsm182810505e9.11.2025.07.28.23.50.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jul 2025 23:50:04 -0700 (PDT)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	linux-scsi@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] scsi: scsi_debug: make read-only arrays static const
-Date: Tue, 29 Jul 2025 07:49:30 +0100
-Message-ID: <20250729064930.1659007-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.50.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2BC26A0E7
+	for <linux-scsi@vger.kernel.org>; Tue, 29 Jul 2025 07:50:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.24
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753775442; cv=pass; b=bG2vwckhL/5lJEuMLYFjz4CvX+u8n3L04WgSnyu8X8SwXQ6oth5SeU5t9Yx9EUnl6NASQhTtVndPqNjKPxTQqnrppH71Vq56bl89UbIkxIUhE2wPO+fqIPy1Cl17ALoyIMyuIC0ePtknG4XkwzCvdHstMDiEh5UmdfMjt70SL9g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753775442; c=relaxed/simple;
+	bh=tSuP/QghxMmufoBRv0tWteKNA+o0USdId8gMfdBz0Uc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sKYfATFOGDsJb237z4f78vdpHXJD7zSDyPMNljLOeXtqpOoCvR6Z1xiQFy47a3ELnOpqyjkx9/Yle8OCnJr+tTN6/RRSBm594NmfL8JPGHx9CbaaYFEZqGb0Qcf7FusOPG8h/2mT945elyB0J16O6VXWFI0B5ykISk0/GZ5Md4k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=garloff.de; spf=none smtp.mailfrom=garloff.de; dkim=pass (2048-bit key) header.d=garloff.de header.i=@garloff.de header.b=Wjvlq3/7; dkim=permerror (0-bit key) header.d=garloff.de header.i=@garloff.de header.b=ZKT0bLI3; arc=pass smtp.client-ip=85.215.255.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=garloff.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=garloff.de
+ARC-Seal: i=1; a=rsa-sha256; t=1753774350; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=s5M1FZFyxCsEhKFCF2pNfUkYHWn1V28GidyR5QOS3xgT6qwXc/RJ4McQ7VEmFqc+0V
+    bmQ455AR4jUdo4Z1IsQh8aaER55el8aIVDip/CDbIOj1/STjaebEUpRoGi3YKO98lbpl
+    ISM5jfZrmZZyce1B7Un/b3CRg7rUiKLEB9xKKgwUm1frj0NH1sPr/oWMqWz/Y5Nu6A90
+    6RJ9/27Qe0tGpziRHOyKxxb1Yyo2IDOSFwgEUW1/KblIf8HYML0UTOWsQRaVlkSA8++/
+    hHRr/rRSmhefBzw+jFF5PjRszLh1KXsDSeTz0JEiv6W06R1kPlkXv5vzaCMgBDk3G/ks
+    1MFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1753774350;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=eDdGrnqFT7izU5JS0+nvREv5vjZI14ATlu8gL/cbSD0=;
+    b=FJMUhzH2NCsWqS1Y0ittoyEQwl+MM8rmbeLKfatoDsU1o3ZYG4Pu9x9x1SJKWHB0Ne
+    WsLMrrXCWvDMLe/BaCHAVJJbSI/VL62KyS/Re8eoR2AMjVuKr8pwDMhMl+F3U7EK3Fyl
+    EN2eLbFyK00LC+7K8BOT73TgK88nCR6SuurMXfU9xSw1UWWLOrLWfgZ1xZfCao+DrNfY
+    SAK49BNf1fS0Pn6XmgMCzfGLm6TTys7junrCP9DHd/NGfvvP9O4TLUmr/aiwV2zcc6zf
+    Y7sGKq9hCEPlYWoMNSw5c4yO8J/dajCd8IZLuKlQk/wK2aBhi1guH0Pytku8unaHNw6x
+    8JGg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1753774350;
+    s=strato-dkim-0002; d=garloff.de;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=eDdGrnqFT7izU5JS0+nvREv5vjZI14ATlu8gL/cbSD0=;
+    b=Wjvlq3/7Ru3uaMyM9VLMODIcUWuLGIpGa6smHx+C2Y27lcTzCVB8E5ySDf6nFqCAtJ
+    fqySF2dZpqq04DnDTElV7cLE5PirtUyn8WLvwx4sXitJAm4StMVYliw17iRwMt3MskB7
+    xvqbBwiiYY9SigPqVO4ze1A0fDzV9XmJiHHZTxrzzCdsp1/lLjqs6ST5rhlFFoTzJ5Lv
+    OcY0p8A6y/r9Sm/ppRuYsYYpAvT7PhMnrurRc5dVJhJCl7vCtoFALOQ1RMM1/8+E1c5G
+    WMJcclbL86ROVL30uvwW7zWUwGJtSxQBmN3oQgaLMoPKNUFZaNKJHiBSBX1jj3rI4PQg
+    /1dg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1753774350;
+    s=strato-dkim-0003; d=garloff.de;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=eDdGrnqFT7izU5JS0+nvREv5vjZI14ATlu8gL/cbSD0=;
+    b=ZKT0bLI3kCKxr1NdKV1HXmvfnWr9zqe2r6C/7MtkwepHnXPmVjlQauAAaUWQAuYfUU
+    zqof/uouO1WJQ8MdCCAg==
+X-RZG-AUTH: ":J3kWYWCveu3U88BfwGxYwcN+YZ41GOdzUdLW+J8VEEt2iJSgSWY4hojoXxE="
+Received: from mail.garloff.de
+    by smtp.strato.de (RZmta 52.1.2 DYNA|AUTH)
+    with ESMTPSA id L60c3716T7WUgwU
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Tue, 29 Jul 2025 09:32:30 +0200 (CEST)
+Received: from [192.168.155.137] (ap5.garloff.de [192.168.155.10])
+	by mail.garloff.de (Postfix) with ESMTPSA id B69A562481;
+	Tue, 29 Jul 2025 09:32:29 +0200 (CEST)
+Message-ID: <ccc3be81-1c8a-4960-a340-bd424749de55@garloff.de>
+Date: Tue, 29 Jul 2025 09:32:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: Patch [0/3] Support eager_unmap for non ldpme sd devs
+To: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org
+References: <936a460e-eacd-40a8-834a-76021bf3ce8c@garloff.de>
+ <yq1ms8nlhtk.fsf@ca-mkp.ca.oracle.com>
+Content-Language: en-US
+From: Kurt Garloff <kurt@garloff.de>
+Autocrypt: addr=kurt@garloff.de; keydata=
+ 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
+In-Reply-To: <yq1ms8nlhtk.fsf@ca-mkp.ca.oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Don't populate the read-only arrays on the stack at run time, instead
-make them static const. Also reduces overall size.
+Hi Martin,
 
-before:
-   text	   data	    bss	    dec	    hex	filename
- 367439	  89582	   5952	 462973	  7107d	drivers/scsi/scsi_debug.o
+On 29.07.25 07:09, Martin K. Petersen wrote:
+>> The SCSI disk driver (sd_mod) would just claim that discard is not
+>> supported. It's not true. The NVMes support it as do the enclosures.
+> For some definition of support at least. If they can't figure out how to
+> set a single bit flag to enable the feature, then maybe their "support"
+> is not entirely trustworthy. But great that it works...
+>
+> What are your devices actually reporting in:
+>
+>    # sg_readcap -l /dev/sdN
+Read Capacity results:
+    Protection: prot_en=0, p_type=0, p_i_exponent=0
+    Logical block provisioning: lbpme=0, lbprz=0
+    Last LBA=3907029167 (0xe8e088af), Number of logical blocks=3907029168
+    Logical block length=512 bytes
+    Logical blocks per physical block exponent=0
+    Lowest aligned LBA=0
+Hence:
+    Device size: 2000398934016 bytes, 1907729.1 MiB, 2000.40 GB, 2.00 TB
 
-after:
-   text	   data	    bss	    dec	    hex	filename
- 365847	  90702	   5952	 462501	  70ea5	drivers/scsi/scsi_debug.o
+Yes, lbpme is 0.
 
-(gcc 14.2.0, x86-64)
+>    # sg_vpd -p bl /dev/sdN
+Block limits VPD page (SBC):
+   Write same non-zero (WSNZ): 0
+   Maximum compare and write length: 0 blocks [Command not implemented]
+   Optimal transfer length granularity: 1 blocks
+   Maximum transfer length: 65535 blocks
+   Optimal transfer length: 65535 blocks
+   Maximum prefetch transfer length: 0 blocks [ignored]
+   Maximum unmap LBA count: 20971520
+   Maximum unmap block descriptor count: 1
+   Optimal unmap granularity: 1 blocks
+   Unmap granularity alignment valid: false
+   Unmap granularity alignment: 0 [invalid]
+   Maximum write same length: 0 blocks [not reported]
+   Maximum atomic transfer length: 0 blocks [not reported]
+   Atomic alignment: 0 [unaligned atomic writes permitted]
+   Atomic transfer length granularity: 0 [no granularity requirement
+   Maximum atomic transfer length with atomic boundary: 0 blocks [not 
+reported]
+   Maximum atomic boundary size: 0 blocks [can only write atomic 1 block]
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/scsi/scsi_debug.c | 91 ++++++++++++++++++++++++---------------
- 1 file changed, 57 insertions(+), 34 deletions(-)
+Max 10GiB unmap at a time.
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 0847767d4d43..353cb60e1abe 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -2674,8 +2674,10 @@ static int resp_rsup_tmfs(struct scsi_cmnd *scp,
- 
- static int resp_err_recov_pg(unsigned char *p, int pcontrol, int target)
- {	/* Read-Write Error Recovery page for mode_sense */
--	unsigned char err_recov_pg[] = {0x1, 0xa, 0xc0, 11, 240, 0, 0, 0,
--					5, 0, 0xff, 0xff};
-+	static const unsigned char err_recov_pg[] = {
-+		0x1, 0xa, 0xc0, 11, 240, 0, 0, 0,
-+		5, 0, 0xff, 0xff
-+	};
- 
- 	memcpy(p, err_recov_pg, sizeof(err_recov_pg));
- 	if (1 == pcontrol)
-@@ -2685,8 +2687,10 @@ static int resp_err_recov_pg(unsigned char *p, int pcontrol, int target)
- 
- static int resp_disconnect_pg(unsigned char *p, int pcontrol, int target)
- { 	/* Disconnect-Reconnect page for mode_sense */
--	unsigned char disconnect_pg[] = {0x2, 0xe, 128, 128, 0, 10, 0, 0,
--					 0, 0, 0, 0, 0, 0, 0, 0};
-+	static const unsigned char disconnect_pg[] = {
-+		0x2, 0xe, 128, 128, 0, 10, 0, 0,
-+		0, 0, 0, 0, 0, 0, 0, 0
-+	};
- 
- 	memcpy(p, disconnect_pg, sizeof(disconnect_pg));
- 	if (1 == pcontrol)
-@@ -2696,9 +2700,11 @@ static int resp_disconnect_pg(unsigned char *p, int pcontrol, int target)
- 
- static int resp_format_pg(unsigned char *p, int pcontrol, int target)
- {       /* Format device page for mode_sense */
--	unsigned char format_pg[] = {0x3, 0x16, 0, 0, 0, 0, 0, 0,
--				     0, 0, 0, 0, 0, 0, 0, 0,
--				     0, 0, 0, 0, 0x40, 0, 0, 0};
-+	static const unsigned char format_pg[] = {
-+		0x3, 0x16, 0, 0, 0, 0, 0, 0,
-+		0, 0, 0, 0, 0, 0, 0, 0,
-+		0, 0, 0, 0, 0x40, 0, 0, 0
-+	};
- 
- 	memcpy(p, format_pg, sizeof(format_pg));
- 	put_unaligned_be16(sdebug_sectors_per, p + 10);
-@@ -2716,10 +2722,14 @@ static unsigned char caching_pg[] = {0x8, 18, 0x14, 0, 0xff, 0xff, 0, 0,
- 
- static int resp_caching_pg(unsigned char *p, int pcontrol, int target)
- { 	/* Caching page for mode_sense */
--	unsigned char ch_caching_pg[] = {/* 0x8, 18, */ 0x4, 0, 0, 0, 0, 0,
--		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
--	unsigned char d_caching_pg[] = {0x8, 18, 0x14, 0, 0xff, 0xff, 0, 0,
--		0xff, 0xff, 0xff, 0xff, 0x80, 0x14, 0, 0,     0, 0, 0, 0};
-+	static const unsigned char ch_caching_pg[] = {
-+		/* 0x8, 18, */ 0x4, 0, 0, 0, 0, 0,
-+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-+	};
-+	static const unsigned char d_caching_pg[] = {
-+		0x8, 18, 0x14, 0, 0xff, 0xff, 0, 0,
-+		0xff, 0xff, 0xff, 0xff, 0x80, 0x14, 0, 0, 0, 0, 0, 0
-+	};
- 
- 	if (SDEBUG_OPT_N_WCE & sdebug_opts)
- 		caching_pg[2] &= ~0x4;	/* set WCE=0 (default WCE=1) */
-@@ -2738,8 +2748,10 @@ static int resp_ctrl_m_pg(unsigned char *p, int pcontrol, int target)
- { 	/* Control mode page for mode_sense */
- 	unsigned char ch_ctrl_m_pg[] = {/* 0xa, 10, */ 0x6, 0, 0, 0, 0, 0,
- 					0, 0, 0, 0};
--	unsigned char d_ctrl_m_pg[] = {0xa, 10, 2, 0, 0, 0, 0, 0,
--				     0, 0, 0x2, 0x4b};
-+	static const unsigned char d_ctrl_m_pg[] = {
-+		0xa, 10, 2, 0, 0, 0, 0, 0,
-+		0, 0, 0x2, 0x4b
-+	};
- 
- 	if (sdebug_dsense)
- 		ctrl_m_pg[2] |= 0x4;
-@@ -2794,10 +2806,14 @@ static int resp_grouping_m_pg(unsigned char *p, int pcontrol, int target)
- 
- static int resp_iec_m_pg(unsigned char *p, int pcontrol, int target)
- {	/* Informational Exceptions control mode page for mode_sense */
--	unsigned char ch_iec_m_pg[] = {/* 0x1c, 0xa, */ 0x4, 0xf, 0, 0, 0, 0,
--				       0, 0, 0x0, 0x0};
--	unsigned char d_iec_m_pg[] = {0x1c, 0xa, 0x08, 0, 0, 0, 0, 0,
--				      0, 0, 0x0, 0x0};
-+	static const unsigned char ch_iec_m_pg[] = {
-+		/* 0x1c, 0xa, */ 0x4, 0xf, 0, 0, 0, 0,
-+		0, 0, 0x0, 0x0
-+	};
-+	static const unsigned char d_iec_m_pg[] = {
-+		0x1c, 0xa, 0x08, 0, 0, 0, 0, 0,
-+		0, 0, 0x0, 0x0
-+	};
- 
- 	memcpy(p, iec_m_pg, sizeof(iec_m_pg));
- 	if (1 == pcontrol)
-@@ -2809,8 +2825,9 @@ static int resp_iec_m_pg(unsigned char *p, int pcontrol, int target)
- 
- static int resp_sas_sf_m_pg(unsigned char *p, int pcontrol, int target)
- {	/* SAS SSP mode page - short format for mode_sense */
--	unsigned char sas_sf_m_pg[] = {0x19, 0x6,
--		0x6, 0x0, 0x7, 0xd0, 0x0, 0x0};
-+	static const unsigned char sas_sf_m_pg[] = {
-+		0x19, 0x6, 0x6, 0x0, 0x7, 0xd0, 0x0, 0x0
-+	};
- 
- 	memcpy(p, sas_sf_m_pg, sizeof(sas_sf_m_pg));
- 	if (1 == pcontrol)
-@@ -2854,9 +2871,10 @@ static int resp_sas_pcd_m_spg(unsigned char *p, int pcontrol, int target,
- 
- static int resp_sas_sha_m_spg(unsigned char *p, int pcontrol)
- {	/* SAS SSP shared protocol specific port mode subpage */
--	unsigned char sas_sha_m_pg[] = {0x59, 0x2, 0, 0xc, 0, 0x6, 0x10, 0,
--		    0, 0, 0, 0, 0, 0, 0, 0,
--		};
-+	static const unsigned char sas_sha_m_pg[] = {
-+		0x59, 0x2, 0, 0xc, 0, 0x6, 0x10, 0,
-+		0, 0, 0, 0, 0, 0, 0, 0,
-+	};
- 
- 	memcpy(p, sas_sha_m_pg, sizeof(sas_sha_m_pg));
- 	if (1 == pcontrol)
-@@ -2923,8 +2941,10 @@ static int process_medium_part_m_pg(struct sdebug_dev_info *devip,
- static int resp_compression_m_pg(unsigned char *p, int pcontrol, int target,
- 	unsigned char dce)
- {	/* Compression page for mode_sense (tape) */
--	unsigned char compression_pg[] = {0x0f, 14, 0x40, 0, 0, 0, 0, 0,
--		0, 0, 0, 0, 00, 00};
-+	static const unsigned char compression_pg[] = {
-+		0x0f, 14, 0x40, 0, 0, 0, 0, 0,
-+		0, 0, 0, 0, 0, 0
-+	};
- 
- 	memcpy(p, compression_pg, sizeof(compression_pg));
- 	if (dce)
-@@ -3282,9 +3302,10 @@ static int resp_mode_select(struct scsi_cmnd *scp,
- 
- static int resp_temp_l_pg(unsigned char *arr)
- {
--	unsigned char temp_l_pg[] = {0x0, 0x0, 0x3, 0x2, 0x0, 38,
--				     0x0, 0x1, 0x3, 0x2, 0x0, 65,
--		};
-+	static const unsigned char temp_l_pg[] = {
-+		0x0, 0x0, 0x3, 0x2, 0x0, 38,
-+		0x0, 0x1, 0x3, 0x2, 0x0, 65,
-+	};
- 
- 	memcpy(arr, temp_l_pg, sizeof(temp_l_pg));
- 	return sizeof(temp_l_pg);
-@@ -3292,8 +3313,9 @@ static int resp_temp_l_pg(unsigned char *arr)
- 
- static int resp_ie_l_pg(unsigned char *arr)
- {
--	unsigned char ie_l_pg[] = {0x0, 0x0, 0x3, 0x3, 0x0, 0x0, 38,
--		};
-+	static const unsigned char ie_l_pg[] = {
-+		0x0, 0x0, 0x3, 0x3, 0x0, 0x0, 38,
-+	};
- 
- 	memcpy(arr, ie_l_pg, sizeof(ie_l_pg));
- 	if (iec_m_pg[2] & 0x4) {	/* TEST bit set */
-@@ -3305,11 +3327,12 @@ static int resp_ie_l_pg(unsigned char *arr)
- 
- static int resp_env_rep_l_spg(unsigned char *arr)
- {
--	unsigned char env_rep_l_spg[] = {0x0, 0x0, 0x23, 0x8,
--					 0x0, 40, 72, 0xff, 45, 18, 0, 0,
--					 0x1, 0x0, 0x23, 0x8,
--					 0x0, 55, 72, 35, 55, 45, 0, 0,
--		};
-+	static const unsigned char env_rep_l_spg[] = {
-+		0x0, 0x0, 0x23, 0x8,
-+		0x0, 40, 72, 0xff, 45, 18, 0, 0,
-+		0x1, 0x0, 0x23, 0x8,
-+		0x0, 55, 72, 35, 55, 45, 0, 0,
-+	};
- 
- 	memcpy(arr, env_rep_l_spg, sizeof(env_rep_l_spg));
- 	return sizeof(env_rep_l_spg);
+>    # sg_vpd -p lbpv /dev/sdN
+
+Logical block provisioning VPD page (SBC):
+   Unmap command supported (LBPU): 1
+   Write same (16) with unmap bit supported (LBPWS): 0
+   Write same (10) with unmap bit supported (LBPWS10): 0
+   Logical block provisioning read zeros (LBPRZ): 0
+   Anchored LBAs supported (ANC_SUP): 0
+   Threshold exponent: 0 [threshold sets not supported]
+   Descriptor present (DP): 0
+   Minimum percentage: 0 [not reported]
+   Provisioning type: 0 (not known or fully provisioned)
+   Threshold percentage: 0 [percentages not supported]
+
+LBPU is 1.
+
+>> I have a few, though all have variants of RTL9210 chips.
+>>
+>> But sd was too conservative to let me do it.
+> Why not just have a udev rule which does:
+>
+>    echo unmap > /sys/class/scsi_disk/H:C:T:L/provisioning_mode
+>
+> ?
+>
+> Substitute "writesame_10" or "writesame_16" depending on what is
+> actually implemented.
+
+It does the job.
+
+Question, as you say, is whether supporting unmap (LBPU=1) is
+something to be trusted when the device says that Logical Block
+Provisioning Management Enable is off.
+
+Some docs mention LBPME in context of thin provisioning, which
+is not a good description of what SSDs/NVMes do.
+
+Using sg_readcap on a PCIe attached NVMe indeed does not result
+in LBPME being set either.
+
+root@framekurt(//):~ [0]# sg_readcap -l /dev/nvme0n1
+Read Capacity results:
+    Protection: prot_en=0, p_type=0, p_i_exponent=0
+    Logical block provisioning: lbpme=0, lbprz=0
+    Last LBA=8001573551 (0x1dcee52af), Number of logical blocks=8001573552
+    Logical block length=512 bytes
+    Logical blocks per physical block exponent=0
+    Lowest aligned LBA=0
+Hence:
+    Device size: 4096805658624 bytes, 3907018.3 MiB, 4096.81 GB, 4.10 TB
+
+Actually, here's the fun parts:
+- The enclosures do not seem to set the LBPME bit when doing the
+   translation to SCSI's READ_CAPACITY_16 command, as far as I
+   can see. The Linux nvme driver does not do it either nor does the
+   NVMe SCSI translation guide[*] even mention it.
+- The nvme driver just relies on the dataset management bit (which the
+   SCSI translation guide 1:1 relates to LBPU from VPD 0x82 lbpv).
+- Attaching the same PCIe device in a USB enclosure of course results in
+   the SD driver being used who does not see LBPME being set.
+- An old SATA NVMe in the same enclosure actually does report LBPME=1
+   and the (unpatched) SD driver happily uses the advertised unmap.
+
+[*] 
+https://www.nvmexpress.org/wp-content/uploads/NVM-Express-SCSI-Translation-Reference-1_1-Gold.pdf
+
+My conclusion:
+- Neither the Linux nvme driver nor USB enclosure firmware nor the
+   NVMe-SCSI translation guide seem to emulate the LBPME bit for
+   devices with unmap/ws/ws10 support.
+- SATA NVMEs do seem to set LBPME=1 and the SD driver requires it.
+
+One could argue that the NVMe-SCSI translation is incomplete and
+should be fixed, but that discussion is now many years late.
+I guess that other OS drivers do not require LBPME=1, which is
+why the translation guide and subsequently firmwares and even the
+Linux nvme driver don't care about LBPME. The SD driver probably
+should be told to not care either ...
+
+Remaining question is whether we'd recommend users to use a set of udev 
+rules to fix up or whether we have a sd_mod parameter to ignore LBPME 
+(if LBPU/LBPWS/LBPWS10 are set) or even ignore it by default (and only 
+provide an opt-out parameter).
+
+Best,
+
 -- 
-2.50.0
+Kurt Garloff <kurt@garloff.de>, Cologne
 
 
