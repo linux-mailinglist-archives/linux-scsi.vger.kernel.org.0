@@ -1,82 +1,117 @@
-Return-Path: <linux-scsi+bounces-15645-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15647-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4118BB1492B
-	for <lists+linux-scsi@lfdr.de>; Tue, 29 Jul 2025 09:32:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4ECDB14A8C
+	for <lists+linux-scsi@lfdr.de>; Tue, 29 Jul 2025 10:58:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C0E03B6D39
-	for <lists+linux-scsi@lfdr.de>; Tue, 29 Jul 2025 07:32:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B75AD16D34A
+	for <lists+linux-scsi@lfdr.de>; Tue, 29 Jul 2025 08:58:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6DF722ACF3;
-	Tue, 29 Jul 2025 07:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26D50285CA8;
+	Tue, 29 Jul 2025 08:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="p13g40gx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="maS+UQ9x"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A13C2C18A;
-	Tue, 29 Jul 2025 07:32:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D63C2586E0;
+	Tue, 29 Jul 2025 08:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753774369; cv=none; b=FROnpzNHLxdwQDlLvwb+tXtTbAtYis6NuwtMWvCExDCWbJHETpILGzOl/jS5Bi16uvB/eT5xT0IsO5mL3KIB8lrC1dGI2Lp8JhlYTQiZlGg4xQt6GGYcwKo5O4RY/FODYBlRFTcjYEzBZH3tVQ1Eh9gFNjlyE4COlwe/E3qg7ZE=
+	t=1753779503; cv=none; b=uQW5+zqjVmfop9imijkoxS9zfnbalaAVoL2HMByQ/Aq+0mjN9tkVVxSblRKzncbynEoQXntyLFCAIlFzBT+Sf3vmDx7oBIp4XyqzlQzGt3eMyKe+eErID59JUwwwWfv8mzAk9yMLAFHd9EOcehwJtaPfeg1pL1J2eR6wqE6sbyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753774369; c=relaxed/simple;
-	bh=gu9Vfn3Xnc+YB01hXHBmYpL8Kd8tfPplc9en4o/NvuI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SyJVfQRIoclQxqJItDLtt4tU75p3s2A3ulXkWKhR+g/H3YZuspRtEfzoQWBU6GYVQ5fPe1XkpJKjf6PwNqoevKBwDSEKX5KsOzXGS6V5j674+lcVe0k/YFgWvnTxNQ3jL2TekizofuW3tAYr0n1PQsX107EceuNPGTchICKYfrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=p13g40gx; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=0MWTGeSb5WN5PjPAy3ePZECj7+qyiS1J4g1426SAwvo=; b=p13g40gx2oUQ/u2Q9UTlFvBkCu
-	m0+03OcSXYkp6ifGSOcWs1wzFuuFZ5iKZAssEqubxTLtQ4Vl8mXROf4Lo9lwje/kAdyVUJK9Z5ras
-	XyiGR+QpY6eifpRmvkHZhAqnm2nNUFgm2HIRPpwZnHnQwgPrNfK7hLJZ6IlCALmz5B95JLuMswaxE
-	BZZAHBegMxMtymRX5zoGMEw4EnMqE3+w+rxObpMT+7OYGX5WM4amSWY44BzQno3jivTkG98mTQ9Ao
-	jpVW4oU+M7pkyGFTn4L4ADkLaFAzEKUXfSPHmaVFxXvBPiMN1o6wy2OjUg/YE1yqexu40hx7yTbVi
-	+5LUOE+A==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1ugepJ-0000000G7wq-2svP;
-	Tue, 29 Jul 2025 07:32:45 +0000
-Date: Tue, 29 Jul 2025 00:32:45 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Magnus Lindholm <linmag7@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-alpha@vger.kernel.org, martin.petersen@oracle.com,
-	James.Bottomley@hansenpartnership.com, hch@infradead.org,
-	macro@orcam.me.uk
-Subject: Re: [PATCH 1/1] scsi: qla1280: Make 64-bit DMA addressing a Kconfig
- option
-Message-ID: <aIh5HY1nVGusQ9Yb@infradead.org>
-References: <20250728163752.9778-1-linmag7@gmail.com>
- <20250728163752.9778-2-linmag7@gmail.com>
+	s=arc-20240116; t=1753779503; c=relaxed/simple;
+	bh=W6M54otn3SvVum5fzDoqL8d+nK/jDuDbcJdl6OhFUh4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ffu2DVys5sWcVP1mDq+752PubUw5ivkB7MoInRrXs+owoDutw51Cls6SpKezWm4y2RNkUy6TPVNfm6+uaaDSFIxKEHHyEsstiXq1YGpT1xxrshTZbRwv4cZHfoSvPC/LG/hdsqvK2o4in9j6o7XvXQhL9A2hAY5s/xmlxoyvN7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=maS+UQ9x; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-60867565fb5so8317117a12.3;
+        Tue, 29 Jul 2025 01:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753779500; x=1754384300; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9cEMDa3aLwAjGk+mYlrmS2BXToBWPi98g1WTE9orR6k=;
+        b=maS+UQ9xUGPc+6IVInGRwx68OviIj5vVZXp2icPRuowN6idoOHj/G1L/nHfG0kCjdk
+         x+ZH3FH1iwDzzeG7kRX615QQRLSpIGyUpWti59AEb8zd7ryRbZUH5IVLat+zsUqAOjM5
+         euLVlREcvX0MRcxOiuC1yPeRZ9/gbK6Us0PsOCNt1W8AMXA4pzMl+X5b3o0ZqlXYY0Lt
+         ID39yCVZwXp7452JO5TfepElaacvi7iFM7hGkPurX17R+2Gp7FOy2njLj4TtNDCf+gVK
+         pdvobG7cDS0P4QSKGbMIlCfAC5ushD5/3dMEJP48vkXDbOTHcqGGgRD+jMKWUqmc+Ctq
+         NyRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753779500; x=1754384300;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9cEMDa3aLwAjGk+mYlrmS2BXToBWPi98g1WTE9orR6k=;
+        b=qQmuvmH/p/hohLQEACQZkWFs6p9Ulee0GT3XQmJIxfHI/Uwf6NIm93r7NQXsHDOYv5
+         l8QZEsaikfWqfoz0C1hcWcJCR31o3XhRyS2M8IeYE7RCfyJVLIqV2LWnUO4A1HFAj+wJ
+         tu0qWkVnI+V6/96XttkqQj8MfPLI/1iwCzYTd6K2bWBfBZHY5uG0FRHrFtV/iI6PjhVp
+         9xjN8SEv2VS02xB4KHgZF50BKDcrQqfImHYB1AQAOSJAqkqgNXArG9ir+/Vk7W+SiI6J
+         4HfBqqBIHqImm1H7IAmtvOJ8vfJljEZXlQR5V2NkfPy8EQ0Y5Swi4vbpjRt10nuEayei
+         I7gw==
+X-Forwarded-Encrypted: i=1; AJvYcCVuXjQe1N80ytB4alxdgCUgpJM8EUQHtf3kls1uzwDZsYSpGB7JJmTPpG7z809xxHIViIO5tEDm4ZjFBw==@vger.kernel.org, AJvYcCWwyDvR3rFfjalIggC5oA1QBPX4jVxzMqdP4WVpeo9co9K5/D44GK4qI8JKXmxYzETyETdeLbLZeiRnwA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSBKWeTpFZFtgzU4kVtZ9hhpafKNQtAihICQIQUcxcuHG75o/f
+	m0T3152y1IenY+mdW3D4v8OAhuGqTtgbHmuYGgIFF3LIm70pQGAAAPxLzTwTWg1+3yiNSx2BfDj
+	L89RN+vNEE96kim5wofY6k5jLz022MAQ=
+X-Gm-Gg: ASbGncuc2gWm21386EhbXfkEQVsk0XixAb0Ey5KEdMqoy4ZP2p3KcI8aJOOtTe4cvHK
+	ziI/lPkzM4upk3OQN0xtnl9T+4/bsYTbrVDMcS/1WcdAIXHBWgu0Kxi/ayXMjPJRyoyfRsuY9h9
+	id+ZXOkklVbzUorYcoORdGbWleO3Rt/C4oj56ZrdgwZtudxsp1ObPJSpQ1IkuHM2GKSslzzYrLN
+	ieMTL7kt7fuoxVXKFA=
+X-Google-Smtp-Source: AGHT+IG6Btn4D62i61GTeahmN3XXy/fWUvLkX1tmurIgkSJZdzTcBLxz/MoFPtpfK3zY4u7/sqI2FdTEUyAlENCj+qc=
+X-Received: by 2002:a05:6402:26c9:b0:615:1072:f34d with SMTP id
+ 4fb4d7f45d1cf-6151072f736mr9191847a12.15.1753779500321; Tue, 29 Jul 2025
+ 01:58:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250728163752.9778-2-linmag7@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20250728163752.9778-1-linmag7@gmail.com> <20250728163752.9778-2-linmag7@gmail.com>
+ <aIh5HY1nVGusQ9Yb@infradead.org>
+In-Reply-To: <aIh5HY1nVGusQ9Yb@infradead.org>
+From: Magnus Lindholm <linmag7@gmail.com>
+Date: Tue, 29 Jul 2025 10:58:08 +0200
+X-Gm-Features: Ac12FXydrUc1KfbMt61O_tdNCkOAdA0oPwD-BlPeGy3YRVdpiOs72ppYE78eFck
+Message-ID: <CA+=Fv5QwEmgoHj=N-A-Ur1=XJMhP0QSoaWfdiw22RGvrGbgFdg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] scsi: qla1280: Make 64-bit DMA addressing a Kconfig option
+To: Christoph Hellwig <hch@infradead.org>
+Cc: linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-alpha@vger.kernel.org, martin.petersen@oracle.com, 
+	James.Bottomley@hansenpartnership.com, macro@orcam.me.uk
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 28, 2025 at 06:34:14PM +0200, Magnus Lindholm wrote:
-> Make 64-bit DMA addressing a Kconfig option.
-> 
-> While defaulting to 64-bit addressing, this gives the user the option
-> to revert to 32-bits when necessary without messing with the kernel
-> source. The Kconfig help text also points out the issues with tsunami
-> based alphas with more than 2GB RAM and 32-bit PCI Qlogic SCSI
-> controllers.
+On Tue, Jul 29, 2025 at 9:32=E2=80=AFAM Christoph Hellwig <hch@infradead.or=
+g> wrote:
 
-Compile time options like this are annoying as they require
-distributions to pick a default.  Why not at least a module option
-even if it just a workaround?
+>
+> Compile time options like this are annoying as they require
+> distributions to pick a default.  Why not at least a module option
+> even if it just a workaround?
+
+I see your point, I've been looking at how the driver for the NCR53C8XX
+SYM53C8XX family of PCI-SCSI controllers does things. The driver
+has a SCSI_SYM53C8XX_DMA_ADDRESSING_MOD compile time
+option for setting DMA parameters.
+
+The qla1280 driver has different code for 32-bit and 64-bit mode of
+the driver, implying that 32 or 64 bit modes need to be selected at
+compile time.
+
+However, it would work just using the 64-bit version
+of the driver but, while defaulting to a 64-bit DMA bit mask, making
+it possible to limit the DMA bit mask to 32-bit via a kernel module
+option. This would make it possible to avoid using the
+"monster window" for DMA transfers on tsunami based Alphas.
+If the driver is built in 32-bit mode, this module option would simply
+have no effect.
 
