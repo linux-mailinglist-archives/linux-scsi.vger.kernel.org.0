@@ -1,120 +1,92 @@
-Return-Path: <linux-scsi+bounces-15735-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15737-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DC53B1754A
-	for <lists+linux-scsi@lfdr.de>; Thu, 31 Jul 2025 18:53:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1464B1759F
+	for <lists+linux-scsi@lfdr.de>; Thu, 31 Jul 2025 19:32:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8039D7A44E1
-	for <lists+linux-scsi@lfdr.de>; Thu, 31 Jul 2025 16:51:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DDE41C20242
+	for <lists+linux-scsi@lfdr.de>; Thu, 31 Jul 2025 17:32:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F93423E344;
-	Thu, 31 Jul 2025 16:53:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77867241690;
+	Thu, 31 Jul 2025 17:31:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="QATD2swK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hr8y+RLR"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5331FAC48;
-	Thu, 31 Jul 2025 16:52:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D17F13D51E;
+	Thu, 31 Jul 2025 17:31:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753980782; cv=none; b=Ov8j837JtW8oteW9ix44HH6+WoqFKaS14aDt6ARODjvDVzfelbFUbtMtbGAs4NNl3xiV5wvdAGTg+ltg0+34GyPcsi+0oXUjvHdXIWlcR0J/WP+p0dNKqcH0WM/lrvd7JDpn8DnHmnx7O0jxZX/FHRXz7B46jSZH7/nrc5KOATc=
+	t=1753983117; cv=none; b=Wh8iPXOwIa0CPZc6yvsxlg8aK/S6UuU5rugMlwkDHye6DFrkbgNFqnSg7i6MMbzVlMcU1WzQ67U4RZIuwBvr1dI9H5j1C42kjiEvMuNNi4tDqG15shqvXE+7ChbJXJT+avKNTMJUOOxSVZJL0P9pvtcVA4mHNdCkn8CiUTeQBsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753980782; c=relaxed/simple;
-	bh=oM9rSevoQ7JkUN01oUeMRghVmEpm4moYN3as8s68inc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Egfp5HL7wZBC0xk7ISfVPoafQMDPV4qdwA3s9X7xkw+uN2mF+N57oCm9VLdwXd5YJc7HAqMMRYJ6oBerARwXV2V9ivgJiuAFeJZpColOEjVYc3O2H2V+TvSd2EF07TI1EeMiDz5zFxBUuczQrsbSdvomP3El8fVH1W6Lf2mfMsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=QATD2swK; arc=none smtp.client-ip=199.89.3.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 004.mia.mailroute.net (Postfix) with ESMTP id 4btFWb0G0Gzm0pKP;
-	Thu, 31 Jul 2025 16:52:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1753980776; x=1756572777; bh=q+N8OqzcjFRQTlP1J8tBBS2b
-	KX+Af+zJ2IQ7vZkBgiA=; b=QATD2swKrjfG8BEzdtfQA37NHcgBsIBlw0vIMSCu
-	DUKyfra0dNbroIY4I6OgVhyylFQ8NLJUTPLUuoAHFrn/BcjY6h5LHrhtxS4kDXlz
-	GOyi2X6i16XSwItBCbjYq738FO3nwkfx2PaF6HmCOv5x3W3eEBXpwKJ//of2FrWn
-	BlVrznNgurkAwpzuYgY1bTsbLgI7Nixnj4N2bXWHfMZ5CtGbRX2m2MOeu9P1Tqj6
-	bnopXq4Jh1rrL0Hy/7miTLMxLP3o9/VJSjqdCxplzse5TX5dtFWPO//LpZ2KDB2p
-	61UNkVtltjCTN+Q7SUpiZqb7bCM8c3EIuVKakaupNkmlBg==
-X-Virus-Scanned: by MailRoute
-Received: from 004.mia.mailroute.net ([127.0.0.1])
- by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id u58zs7n3NP8I; Thu, 31 Jul 2025 16:52:56 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4btFWM1yGczm0yVJ;
-	Thu, 31 Jul 2025 16:52:45 +0000 (UTC)
-Message-ID: <c516ed73-5947-4b18-a1d9-18a9901e30e3@acm.org>
-Date: Thu, 31 Jul 2025 09:52:44 -0700
+	s=arc-20240116; t=1753983117; c=relaxed/simple;
+	bh=q8RHvNw5haIaAD1qXQTMAcuvS12A6cc3pUZcRFKcza0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tCzci3nO7s4oyHDMbCijtT0uP87tbSEzLPumRpbfXXKvrUsroB2G9R5rCT37RQsJzQd0lCBln4M7XlBNnnHKKJcYU88RedLCxWd1sG9uvPweX5jXqHYhbXiLgW4OyFSnynsDXD7EZTJtrkKD8wffqkA/fOnJwEygs3L5qsQ9JEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hr8y+RLR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7881FC4CEEF;
+	Thu, 31 Jul 2025 17:31:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753983116;
+	bh=q8RHvNw5haIaAD1qXQTMAcuvS12A6cc3pUZcRFKcza0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hr8y+RLRa7MCWUELapOyKiuItv34f/1VkYDDXM+YrS4Zyj/0mGeNBgYOz1Fijnvud
+	 KBFQgdBI+dDTTIf7Fbe6iX0mN29loln2HYTpqCErnQEaCfF6veLF+f9FcS9jyjWVNf
+	 aFVvJXozzbgUCjXHjNR35za6w3rD6SknYE765ONGLSebZtyIuVF3NY0fs6+fFmldPj
+	 PhiT1CnYhtP1l1T8mrdl27kU23+XJXp3uk1Amkj9JEjD4v9GI5ljSZsIQ27WeHa1zn
+	 TH4diMLnCenmKJC9qdMtrgLz8YKkXZ54bkvVtVBqvygMsp2ZeF8JvyqJ44yP/Xoe6k
+	 JdGOsNUjfgocw==
+Date: Thu, 31 Jul 2025 12:31:55 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>, linux-scsi@vger.kernel.org,
+	Bjorn Andersson <andersson@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Avri Altman <avri.altman@wdc.com>,
+	Ram Kumar Dwivedi <quic_rdwivedi@quicinc.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: ufs: qcom: Split common part to
+ qcom,ufs-common.yaml
+Message-ID: <175398311503.2264608.6277120840359704565.robh@kernel.org>
+References: <20250731-dt-bindings-ufs-qcom-v2-0-53bb634bf95a@linaro.org>
+ <20250731-dt-bindings-ufs-qcom-v2-1-53bb634bf95a@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V1] ufs: core: Fix interrupt handling for MCQ Mode in
- ufshcd_intr
-To: Nitin Rawat <quic_nitirawa@quicinc.com>, alim.akhtar@samsung.com,
- avri.altman@wdc.com, James.Bottomley@HansenPartnership.com,
- huobean@gmail.com, mani@kernel.org, martin.petersen@oracle.com,
- beanhuo@micron.com, peter.wang@mediatek.com, andre.draszik@linaro.org
-Cc: linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
- linux-kernel@vger.kernel.org, Palash Kambar <quic_pkambar@quicinc.com>
-References: <20250728225711.29273-1-quic_nitirawa@quicinc.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20250728225711.29273-1-quic_nitirawa@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250731-dt-bindings-ufs-qcom-v2-1-53bb634bf95a@linaro.org>
 
-On 7/28/25 3:57 PM, Nitin Rawat wrote:
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index fd8015ed36a4..5413464d63c8 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -7145,14 +7145,19 @@ static irqreturn_t ufshcd_threaded_intr(int irq, void *__hba)
->   static irqreturn_t ufshcd_intr(int irq, void *__hba)
->   {
->   	struct ufs_hba *hba = __hba;
-> +	u32 intr_status, enabled_intr_status;
+
+On Thu, 31 Jul 2025 09:15:52 +0200, Krzysztof Kozlowski wrote:
+> The binding for Qualcomm SoC UFS controllers grew and it will grow
+> further.  It already includes several conditionals, partially for
+> difference in handling encryption block (ICE, either as phandle or as IO
+> address space) but it will further grow for MCQ.
 > 
->   	/* Move interrupt handling to thread when MCQ & ESI are not enabled */
->   	if (!hba->mcq_enabled || !hba->mcq_esi_enabled)
->   		return IRQ_WAKE_THREAD;
+> Prepare for splitting this one big binding into several ones for common
+> group of devices by defining common part for all Qualcomm UFS schemas.
 > 
-> +	intr_status = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
-> +	enabled_intr_status = intr_status & ufshcd_readl(hba, REG_INTERRUPT_ENABLE);
-> +
-> +	ufshcd_writel(hba, intr_status, REG_INTERRUPT_STATUS);
-> +
->   	/* Directly handle interrupts since MCQ ESI handlers does the hard job */
-> -	return ufshcd_sl_intr(hba, ufshcd_readl(hba, REG_INTERRUPT_STATUS) &
-> -				   ufshcd_readl(hba, REG_INTERRUPT_ENABLE));
-> +	return ufshcd_sl_intr(hba, enabled_intr_status);
->   }
+> This only moves code, no functional impact expected.
 > 
->   static int ufshcd_clear_tm_cmd(struct ufs_hba *hba, int tag)
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/ufs/qcom,ufs-common.yaml   | 67 ++++++++++++++++++++++
+>  .../devicetree/bindings/ufs/qcom,ufs.yaml          | 53 +----------------
+>  2 files changed, 68 insertions(+), 52 deletions(-)
+> 
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-Martin, this patch seems to be more popular than my "[PATCH v2] ufs:
-core: Fix interrupt handling". Please consider queuing this patch when
-this is convenient for you.
-
-Thanks,
-
-Bart.
 
