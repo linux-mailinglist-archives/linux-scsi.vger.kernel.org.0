@@ -1,82 +1,78 @@
-Return-Path: <linux-scsi+bounces-15707-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15703-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2A89B16B50
-	for <lists+linux-scsi@lfdr.de>; Thu, 31 Jul 2025 06:44:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE817B16B4B
+	for <lists+linux-scsi@lfdr.de>; Thu, 31 Jul 2025 06:44:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEBFE4E502A
-	for <lists+linux-scsi@lfdr.de>; Thu, 31 Jul 2025 04:44:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B51554E54B9
+	for <lists+linux-scsi@lfdr.de>; Thu, 31 Jul 2025 04:44:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C42B23F271;
-	Thu, 31 Jul 2025 04:44:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78D7C241671;
+	Thu, 31 Jul 2025 04:44:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="NNqs/Xf8"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HIYTJxdc"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDD4198E81
-	for <linux-scsi@vger.kernel.org>; Thu, 31 Jul 2025 04:44:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF4D24110F
+	for <linux-scsi@vger.kernel.org>; Thu, 31 Jul 2025 04:44:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753937091; cv=none; b=s7bkNfq/hlE/v/agHMXrq9WV8/G0eiJXvF2JGEnte8smA7czhRwAtLRi6UjPU8/MoTo8m4mK4qn2DhaSRkDzhlj/LrI5vF+m/XF2whli5eUJAts7dkhR6M0Irl3tH3HZZ4hA4NkVd+nZUVlzqE4sNTI9Bg/J3irlWSLcbWMX+tI=
+	t=1753937083; cv=none; b=WFlji1l4rcPQIF83BWIsy7eXX4xieLx8emmprRV9fU9usiNcx+dcpgo9FAsORFuOPRBrxsa7W9A89q0Ya1zEIkiN24IgzDZ023bNnCxV6BlIlRVPi5hVfnITK+SXxpuNOPTCxQWjViwxwq1AdiFTFWlkjBlq+6MmZe2yrNGzbpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753937091; c=relaxed/simple;
-	bh=bJJ43t5azEGyf8n/hFL7jyFulyRwBP74cezHhYiSsSA=;
+	s=arc-20240116; t=1753937083; c=relaxed/simple;
+	bh=NLkyrzstVIcBF4ypLeXw/ovkjTWN+X5dQrVseo+5nHU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oDGvzPrFbfYTy+1d6hyhHBuRKZtuhkMD3IzTwbeXCbaP09o4mUA0g/s8gX/Uoj4EhMKt83OcWxjmLsJCuKrgdhTU6oGZSbB7l1OSFarVpmV3DHsZA+gWCfRHzuCsrVgjTce8erR4TjvOhFQ633rTd/ktWmV52+7B4m7myg1S7So=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=NNqs/Xf8; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=AeCkZ+HFiQlJFtu5aXGdQUmGHFu60rF4W0b3JDKZrK9W4GxG2tuUUJCbyxX4jvjTYrRJNqYFBcvYcv7hqij2UrKZDGGcaonvMcPTWzEMGhoVj5cS2BU+dTy7LB9tpF7g38GH0HO4QUVk63DXG2axCUBklQH7X6QdFSWyIxkgFl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=HIYTJxdc; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56V2gN3Y031797;
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56V2fwwB021472;
 	Thu, 31 Jul 2025 04:44:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=xJ8iu3jZoiRrtYFwj61oSYpGXm8vhe4hBIcesrlQsFI=; b=
-	NNqs/Xf8Jell3KNpCRRlUw4zf2VQcyz/4tgqCHUHjRY7ynvfBlyveXxvYbcKWgBI
-	M5AUxWl/yZaxQhIUG3FWr3WiWS1BbsEEUoQZnE5lzNg+h6tQ8a5kaXL2DE8AgecC
-	7Zk19BCqbJr64PsocaJYmQDeQupbmrYvZh0oymUBOkr2VITWHqqcl2Rv44oDc3gj
-	wFjELXQ4rv4x73Yc2PWdikb3Cfa3hHY5w5BK3i4CthQCgtA9TFV6J24jBWV2qdbj
-	RRbHun1JJQB1NoX26gxQaoNTxbuCAxAs3wOd6Uw8EXkkFGURYWyngCJJcp5mfryr
-	vQ8+gtBOjH6c+6wzTAZm8g==
+	corp-2025-04-25; bh=QWtCz9JDHl5UYfuHu4YfYQW4q8JOaN+skjadmYjVFAE=; b=
+	HIYTJxdcwamDFICMPwOkN9Hhc1Jy+G7WwCmqX9QznV4r63vItSUR88GRknUz8Va7
+	ICNDaY5vFKD1Q/alqzhEVM153Oc8XQoV5nLhEt6Uy7EvuDUB6cbRIfBZJC1+mLOa
+	6ZHg7v9McjNOitE+ffBnRxMf0SZis/joi35u7idthXHj0XdzkAtE0b6Not0m8Tha
+	/P6KUPPiEj+wRyJ8/CmHE3yzLihxAlMunJSfDiFC2wsfjrT0fzstWs5qh6SUVgR+
+	QV/97C7k6eu+7NFwcqwflGmbi/kkN9X9nUo/Sf0sXgDbKB81veNXyjjOvCwb3vfA
+	1iqHGFIzHv0RfdlHsrSL0g==
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 484q4yk9n5-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 484q733bd7-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Thu, 31 Jul 2025 04:44:38 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 56V4eJOg016759;
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 56V149PB016739;
 	Thu, 31 Jul 2025 04:44:37 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 484nfjb2uv-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 484nfjb2v5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Thu, 31 Jul 2025 04:44:37 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 56V4iX49035411;
-	Thu, 31 Jul 2025 04:44:36 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 56V4iX4B035411;
+	Thu, 31 Jul 2025 04:44:37 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 484nfjb2tg-8;
-	Thu, 31 Jul 2025 04:44:36 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 484nfjb2tg-9;
+	Thu, 31 Jul 2025 04:44:37 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, peter.wang@mediatek.com
+To: linux-scsi@vger.kernel.org, Ranjan Kumar <ranjan.kumar@broadcom.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        wsd_upstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
-        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
-        jiajie.hao@mediatek.com, yi-fan.peng@mediatek.com,
-        qilin.tan@mediatek.com, lin.gui@mediatek.com, tun-yu.yu@mediatek.com,
-        eddie.huang@mediatek.com, naomi.chu@mediatek.com, ed.tsai@mediatek.com,
-        bvanassche@acm.org
-Subject: Re: [PATCH v4 0/9] ufs: host: mediatek: Provide features and fixes in MediaTek platforms
-Date: Thu, 31 Jul 2025 00:44:26 -0400
-Message-ID: <175375581133.455613.799244421685167637.b4-ty@oracle.com>
+        rajsekhar.chundru@broadcom.com, sathya.prakash@broadcom.com,
+        sumit.saxena@broadcom.com, chandrakanth.patil@broadcom.com,
+        prayas.patel@broadcom.com
+Subject: Re: [PATCH v1] scsi: Fix sas_user_scan() to handle wildcard and multi-channel scans
+Date: Thu, 31 Jul 2025 00:44:27 -0400
+Message-ID: <175375581119.455613.10576880936642116391.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250722030841.1998783-1-peter.wang@mediatek.com>
-References: <20250722030841.1998783-1-peter.wang@mediatek.com>
+In-Reply-To: <20250624061649.17990-1-ranjan.kumar@broadcom.com>
+References: <20250624061649.17990-1-ranjan.kumar@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -92,59 +88,39 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spams
  phishscore=0 suspectscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
  definitions=main-2507310030
-X-Proofpoint-GUID: 6FEtWkgKqFa5YhMAPJA5i4fVrs5NV5eG
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzMxMDAzMCBTYWx0ZWRfX30e6SzO6ITaZ
- QuXAP1UZ+llrR0aD37/KMlwVBUMIr+1HkPDKrx2ou3qqtHREC0SDeaqfXgD6rZ9o0DPmhUM+CFt
- 4P3Au1Sn7H/uHTFarorzuIsgymSwwFqNAFsFK0g047PYMwBDC4Qcp1IvAT0i5d1Wtt8UM/4IVmk
- O066788j2OtQ8v1WGhBAMQbE6r6RU0RUa/2DHeo+eRLZjCJnTOzKDDn2WQZHakdGwnFvut07FGi
- C3YXhcT6b82PFBffUKu5oZGzGyQnr1F7Mui0xKyvawlgV1hJklJOJlM2Y/mWTgghb1fjgx/ma/b
- 4v1ZY/0p4I2NKL4hmxQ9qGfXgurtd0Pu0wbD7WYO0whm6KUKG/ISUATzK1OFpNQnPPEvdFxEye9
- Da6Epr+11fD6CyCdDz+nhr+7gE9EBSiwlGfd89QXGEyfYvyrC6O851m12apJ8jNGnno63fSj
-X-Authority-Analysis: v=2.4 cv=ZMjXmW7b c=1 sm=1 tr=0 ts=688af4b6 b=1 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzMxMDAyOSBTYWx0ZWRfX+6GsXE16tig0
+ kurXV4G0GnDj4dz2P7GxkZQtdSylz7YwkV6WaZpLUFvSRzlhv341fuquv4gYFSTUThdUCXQP8R8
+ BDCYfJze7wwef/M10CA5tzc35cl6pKZxYX4TaT5Nh3jzpa+pHtXryNO2N7nAxNrfQOzr40KWUJy
+ rbWlV5IMigiHSvPkromuI6wsKeqMNz9kkq09scfyGUeSYMkrj7T4oFrtC08mmyOyTtMJPMCQIZP
+ w+0OKF9dAryZg452j/ZcwfEdPf0kdjOZO3V9vTCmmUdL1jSuA3FBjNkdnW5b6Xg8fEwLzwZ/fQM
+ sigoeHntWqJcdXWL/Y2wK7UXwLaHieEvuj3Ccn8L5oJfpqYRXmE+F8ASzl67JDWpZC7J4ajTmZA
+ qGuRRguOAo0zTf7EazJ/daJxMdBvu2U7WZccYe/pY9fzy0NQi8uz7jNb25PUfMHBgLr8zMYO
+X-Authority-Analysis: v=2.4 cv=ZO3XmW7b c=1 sm=1 tr=0 ts=688af4b6 b=1 cx=c_pps
  a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=mpaa-ttXAAAA:8
- a=M1Cv4AyAfq6yeDsx1bgA:9 a=QEXdDO2ut3YA:10 cc=ntf awl=host:12070
-X-Proofpoint-ORIG-GUID: 6FEtWkgKqFa5YhMAPJA5i4fVrs5NV5eG
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=IVqxFDQYhgF-jG3GFIgA:9
+ a=QEXdDO2ut3YA:10 cc=ntf awl=host:12070
+X-Proofpoint-GUID: kErO0Oqg67k7B9S61Q_FtCRnzRcUiu5o
+X-Proofpoint-ORIG-GUID: kErO0Oqg67k7B9S61Q_FtCRnzRcUiu5o
 
-On Tue, 22 Jul 2025 11:07:15 +0800, peter.wang@mediatek.com wrote:
+On Tue, 24 Jun 2025 11:46:49 +0530, Ranjan Kumar wrote:
 
-> This series fixes some defects and provide features in MediaTek UFS drivers.
+> sas_user_scan() did not fully process wildcard channel
+> scans (SCAN_WILD_CARD).When a transport-specific user_scan()
+> callback was present.Only channel 0 would be scanned via user_scan(),
+> while the remaining channels were skipped, potentially missing devices.
 > 
-> Changes since v3:
-> 1. Fix comment message in patch:
->   ufs: host: mediatek: Simplify boolean conversion
-> 
-> Peter Wang (7):
->   ufs: host: mediatek: Simplify boolean conversion
->   ufs: host: mediatek: Change ref-clk timeout policy
->   ufs: host: mediatek: Handle broken RTC based on DTS setting
->   ufs: host: mediatek: Set IRQ affinity policy for MCQ mode
->   ufs: host: mediatek: Add clock scaling query function
->   ufs: host: mediatek: Support clock scaling with Vcore binding
->   ufs: host: mediatek: Support FDE (AES) clock scaling
+> user_scan() invoke updated sas_user_scan() for channel 0,
+> and if successful,iteratively scan remaining
+> channels (1 to shost->max_channel) via scsi_scan_host_selected().
+> This ensures complete wildcard scanning without afftecting
+> transport-specific scanning behavior.
 > 
 > [...]
 
 Applied to 6.17/scsi-queue, thanks!
 
-[1/9] ufs: host: mediatek: Simplify boolean conversion
-      https://git.kernel.org/mkp/scsi/c/262893939604
-[2/9] ufs: host: mediatek: Add DDR_EN setting
-      https://git.kernel.org/mkp/scsi/c/a84a9ba7888f
-[3/9] ufs: host: mediatek: Change ref-clk timeout policy
-      https://git.kernel.org/mkp/scsi/c/16b30c7a4c56
-[4/9] ufs: host: mediatek: Handle broken RTC based on DTS setting
-      https://git.kernel.org/mkp/scsi/c/a44ff97f895b
-[5/9] ufs: host: mediatek: Set IRQ affinity policy for MCQ mode
-      https://git.kernel.org/mkp/scsi/c/66e26a4b8a77
-[6/9] ufs: host: mediatek: Add more UFSCHI hardware versions
-      https://git.kernel.org/mkp/scsi/c/7996746394df
-[7/9] ufs: host: mediatek: Add clock scaling query function
-      https://git.kernel.org/mkp/scsi/c/ff40f31216ff
-[8/9] ufs: host: mediatek: Support clock scaling with Vcore binding
-      https://git.kernel.org/mkp/scsi/c/31a20e9f7c76
-[9/9] ufs: host: mediatek: Support FDE (AES) clock scaling
-      https://git.kernel.org/mkp/scsi/c/5e5976f5242d
+[1/1] scsi: Fix sas_user_scan() to handle wildcard and multi-channel scans
+      https://git.kernel.org/mkp/scsi/c/37c4e72b0651
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
