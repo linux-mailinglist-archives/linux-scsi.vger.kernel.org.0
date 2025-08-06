@@ -1,193 +1,158 @@
-Return-Path: <linux-scsi+bounces-15840-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15842-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89F76B1C647
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Aug 2025 14:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A392B1C67B
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Aug 2025 14:57:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2729E3BD385
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Aug 2025 12:48:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F1E13A27DA
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Aug 2025 12:57:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 976AD28A73D;
-	Wed,  6 Aug 2025 12:48:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A0F287246;
+	Wed,  6 Aug 2025 12:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="Sjh58AB2"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Z/xSjPjv"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11013038.outbound.protection.outlook.com [40.107.44.38])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982A233985;
-	Wed,  6 Aug 2025 12:48:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.38
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754484494; cv=fail; b=gRNo8wN05S07ZpLW19EXECMpDMIFYGODFDtbuwgdNx/ssqent2R4Kh03SqdA4huFJTN/kCYYl6bV4DnG3sC3hvlp55s9gbdmHGtb4GiM2ilinGXxj6Ge/jnUCRTmq8SXZLcQr3UKAP9nauUJ2liCf5SZabgg7xSynJuj8d7KeRk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754484494; c=relaxed/simple;
-	bh=cwstCXRx1AbmlWLFa/bvVGB9EfIwUjVIXdrJDSkkhE0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Xk4//zfQA/EUiG84XWb0YgH/HCeCcH+3zHgj+0HUDukm9X3aev94RgyJe6gy4l2Fre9OybEpb0CdhvA/eHw+SMEQ1ItDVU8Xnjoltm4Fa3KgJ21Cm463hiyJHlHRW76pj0z2aUd3PZEG56zjN9yRzBnPfZEmNueAP8xpCmI/tfw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=Sjh58AB2; arc=fail smtp.client-ip=40.107.44.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jJynqWyWbrWR1EH5N+WEp8SEJUNRjOyMEpvFrX6WWVLRvwW02ZdcdbpgvL3aV7BUC3WqXyPRlIPinD6unPZDESs3YamEmDbJrNcQ/qFmqx5I/+0a7qImM+bQdhoAP7KNVxchuA9vAvaR418sK/H8ckX/MVC8yd/kCdEEzaL8QO4dszH1i4PRC7JoiLnls5WLk+2H0Tfpv8l2pKYIW7F4mKTpKJqDsP+GN9hEacahQhGovvJxfea3yRG04gZ9ZM/+6aF0Y/7ZMYPhXQagm2PFZCQwNemkW30OVp0Wqw24unytw1nclWCFQBguePWAwYXO2cchsbL2J5RSGVB1p+JQpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7SYELEp1663MZcR+PZyg8d+eoeD8/Aouam6k6haS5eY=;
- b=KI6BbbmyW2T58kH2juHNiGpq8YZ9FfKYNoVRCl+S9N50dc4G0YDa1tkj5ojaLon4VYYAAFnpRO6WlgSEdVlF4kbOasHXeUTB1+oW8eTLkjAimde/qW2pKWHn7/1IdpH3gPvHxUamVi2z8d7AEC5Px4/rAwIThWiwMTpAOr4i6rrvbRT/zVMGBRKNQWuUOAY4BaTEPSHDKxa44ozScnsoJKOkGukIpUpckMsV6EuBLTYg1oMTybFZNrGZ6D0eQw8Zu3beChBt9o6cHaIqjakmoiIwn3lk0Q0FrKiHueC5KD4f/jfChzSdpjY6RRppMeTSh8b7Kc9YFzL5yk/umpON3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7SYELEp1663MZcR+PZyg8d+eoeD8/Aouam6k6haS5eY=;
- b=Sjh58AB2bJiIgZrCosKjWT+2mvua32aERp2FlBgxmbr8f1JP8Ys6yTDZiJtaUP++gzp7mcI0Cq9BrPGl9yfttrt3xRmku75n0MSj0fsJUcWbWZV9A1S5NZpGdfY8VLQwYVP1iFtNsDcLV9F02oQIoyZcOcm+4avBhAxupjAzbtxYMOswS1cgdz2G5HTCkvV0JFI8tL6ZJ2KC7aW7+gYfk6V9J49nV3Q+ZEp2FHhijMgi0r7rqH9eGi31iv6IlwwNIO+xJzDvz1APROyocKCzSpmQwKCoxX9v9dhZ0grEYpMr9W8G0JjkQ0H4phDOHfzYw88pSZf46dWAl4frlzZVJA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9) by
- TYZPR06MB7283.apcprd06.prod.outlook.com (2603:1096:405:a5::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9009.14; Wed, 6 Aug 2025 12:48:09 +0000
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666]) by SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666%4]) with mapi id 15.20.8989.018; Wed, 6 Aug 2025
- 12:48:09 +0000
-From: Qianfeng Rong <rongqianfeng@vivo.com>
-To: bvanassche@acm.org,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	linux-scsi@vger.kernel.org (open list:SCSI SUBSYSTEM),
-	linux-kernel@vger.kernel.org (open list)
-Cc: Qianfeng Rong <rongqianfeng@vivo.com>
-Subject: [PATCH v3 2/2] scsi: scsi_debug: use vcalloc to simplify code
-Date: Wed,  6 Aug 2025 20:46:33 +0800
-Message-Id: <20250806124633.383426-3-rongqianfeng@vivo.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250806124633.383426-1-rongqianfeng@vivo.com>
-References: <20250806124633.383426-1-rongqianfeng@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYXPR01CA0045.jpnprd01.prod.outlook.com
- (2603:1096:403:a::15) To SI2PR06MB5140.apcprd06.prod.outlook.com
- (2603:1096:4:1af::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59131EEA31
+	for <linux-scsi@vger.kernel.org>; Wed,  6 Aug 2025 12:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754485020; cv=none; b=ahlh4MDXuYpdO5AUT20z4TJBWAtMwqVtiWq8XcgLTWiwQbASkLIhhrZ+n+cjRirEfLuO9OT+F4EERjv4gZ1WvUtUPuKlwy1DnzSSS9Dp4N2ZoBQTkZXAQTqpcLD5EkQ5CByB6JZk/TSQADRJiOJ0+9x7+onj0L/svMAZUnZEnwA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754485020; c=relaxed/simple;
+	bh=F3XHAgV/g9t9Pe4DihqURvItO9b3hVigjb6udFTYxTE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lVwWaMmXgazsPcluj8M4ywwIZYKzJV8FhQe8zGgWRZwhVNcKSenaI+yryToFEIpclwZhpSnWUiOThURs7EQliqFj+MGnJkM95TyQAFp/M/c2a7MhDNq6DXTygVHaaZfxSSK3YW+vBiFumvFqWH/sBbycGriT0zsRVwW19iCqaac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Z/xSjPjv; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5769eqVI032385
+	for <linux-scsi@vger.kernel.org>; Wed, 6 Aug 2025 12:56:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	RegKPJzk3RnagfrkfnZuONX0t7ULdD8AHnZvaN8Nsuo=; b=Z/xSjPjvslBXRNWr
+	UEpX/VOoqncvDHYoUTIcf2DyUIwIAWvmZXLNmJGnKZQpqw8WW+tKl7Qb5vlkut5W
+	6unRVwBVXQbijrgLvf5uE6ctmNqjj4yQ6U20bdQx5Uppv94Xd6HfMOFnyt2ZFjXj
+	nRPPNWsjq61r7Gy2Z/bc64BZpk8GsrBJ4XtCn4EbshvSyLHF95ZvGExbu64oviYX
+	zkUEcPpspmXsU1oKTeC7fNfZ4300cASp4ibJVacrBdkuouTenJorZT/lVrDUZ9yj
+	yhgjvELYml2UTYqGcnsQ2qdKEPh3JK9cDDZm4eIR6E3OKIFj61RcCdok3NrDioe0
+	8N6AAw==
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48bpw2ttdy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-scsi@vger.kernel.org>; Wed, 06 Aug 2025 12:56:57 +0000 (GMT)
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-7092ca7dae0so15449336d6.0
+        for <linux-scsi@vger.kernel.org>; Wed, 06 Aug 2025 05:56:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754485007; x=1755089807;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RegKPJzk3RnagfrkfnZuONX0t7ULdD8AHnZvaN8Nsuo=;
+        b=HP09dZ1RlMQ9XnFefex+SRlxTHUlTXKjCwHZEpBWSycxH41WT4gExe+RIjIfOl/yQl
+         C6Ymk3n9l7IzwBgid7pAaMNK3+n+XktGM8XphQCY1PwiL80Xomr/t0pwRtR8RZlvQB1R
+         1Hqr7U+nd6z261AgVM7TDIy6VsmS/kFjrWTTNrpK1zB+oxtc8+C2+IISb1sPdp6y8Pt5
+         yRN4FyTL0KFJJ7Vm5oo3y5RPIfblVL8Ieq79Eb7bdhaw5BY1+FOHlJeWBUa0D7u0Ek3i
+         Q4r0zfF+8rQt6NY6gig39Lu1DPilQ8wCwf+1249dhSiKPY2q2Me+OBHfDG47imhjW2d+
+         bzcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUcuuWyqDM1Vj3gqpcWCBlTp8EMGXNCpyXffcpryXYLbqUNZP1FqdXkOZyu2JyvlqAATKRORj+odQy9@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBdOttClJ/QWA/Jfi2zozJcOhgSCzVpkITyLQbycKQ/tPU/x0e
+	KosizkMA3bubwhO+cUpEXcRID+FulXytR62Yj2nT80yBaj7nPgpmBfNeY1ijyxBWbVyTnA1BYgX
+	6dSmFZuacB5GWXnyniO0+mTegsbcx22ZqfJTSMSRJAjpD0u5s5rkzfZIOIms1rBlo
+X-Gm-Gg: ASbGncvtOWQn7F3TDhsdgWCxAwb4nqtzws+N1JGchdXfSFwikQpUuT03I0X9e+xrNkn
+	h5qRxPLrMV2DroyfTmueA2MCHH4h/opOWBAAd3ZMau5E7svt2pZ/iKNEHXfWnsPe6spB1CMwXre
+	nQaHWLurFnvBXfcldb1GLM7xv7WMFHSyheXzdCbGzplzgJCkCZPFAPJKsMH4M5sI9WADg62hUgp
+	nw/CknWMvpfCrKOCAwz1E1zqdEC1opl0OTpbYsaMksT6tVLHJMKOkgZH+RcixNPKWA5umQmAJyU
+	UgenSXxp9X4hscnxYe1jG1kWpTiZtndRfjakRGhjCrtujC+0x96zC93pVsU/jjYT0DynXf5tdTp
+	YnCiv8rfBhcIAWAbRfA==
+X-Received: by 2002:a05:6214:b63:b0:707:4dcc:4f56 with SMTP id 6a1803df08f44-709796abd94mr18722296d6.8.1754485006760;
+        Wed, 06 Aug 2025 05:56:46 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFfR9Z4zfNZbubypCaNT4t6gxrEqBn7cwk8E5n1N8Nu8bR7i9WrLvmOe8gMbV59slrbJZLEPw==
+X-Received: by 2002:a05:6214:b63:b0:707:4dcc:4f56 with SMTP id 6a1803df08f44-709796abd94mr18721716d6.8.1754485005351;
+        Wed, 06 Aug 2025 05:56:45 -0700 (PDT)
+Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615a8f2d554sm10031187a12.27.2025.08.06.05.56.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Aug 2025 05:56:44 -0700 (PDT)
+Message-ID: <c62c2744-0d07-4fe8-8d2a-febc5fa8720a@oss.qualcomm.com>
+Date: Wed, 6 Aug 2025 14:56:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR06MB5140:EE_|TYZPR06MB7283:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4226017a-a3d4-424f-8475-08ddd4e77f2f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?X2G3OiKJCo6onPukRhvkxZojr49J3qDSsdfTmAc1Ivt526wU/gtfBfNOrbc5?=
- =?us-ascii?Q?3uNM0+igeg7TtQByBcMICb+qygxTMSdM0gTXBqZcYYOuuSDo/ZxtUCGhXQqB?=
- =?us-ascii?Q?vGCzpZqqeIFx7y3OljjNj5yC0Wp64BoQFdP38ena66Sqb2iXBLLFuGWW8DhE?=
- =?us-ascii?Q?VJZUuFtnsXzsGnq70mS54p0ioP8F4Wp+ylzs2kCu7xn1szbtrzDKGHObGz/X?=
- =?us-ascii?Q?5Mq0iW/XAcQCE73GINswK56KHUWftm+DcfzWx2cYT3Fuqb7R9XPVXtsskmIk?=
- =?us-ascii?Q?JM29EPsVNtusm2ReEFF4gIFvtVYldy47k3aoyaQN996qAFmEa/l/Aqw5rF/I?=
- =?us-ascii?Q?tWJlQ3eT87HHOJ1HAoE849l3OLTV2r82nwJO2+lR5wt5AKH8GQ0kfh7+zSz9?=
- =?us-ascii?Q?43pLxcEtqpHRofxueCYtP6qssaiuDkyQV/IRy/zHOufQL7HbGXZlXqAInpFx?=
- =?us-ascii?Q?KBV0ZeqzDfISCD4NZFYt6Csj2ZM4p8UdBU5a97ZJl1bFfDlJH/rlVcL1OOxY?=
- =?us-ascii?Q?bbQSJ0v5bxuPlgxudE9/l3WcF9WSecy/+hBIUsFeYsbqCujpYtpdu996f0Y8?=
- =?us-ascii?Q?tU+ufgxpxL798yeTct9cMhVFMgN0KDtwrAQj7rQnE1l4759q+2VNDo63CMrH?=
- =?us-ascii?Q?8sntxyArOtgxeVvYIyMu39HmMcprd3swhASw+rlFr0YH/Ju5jAcfXwy+IB2F?=
- =?us-ascii?Q?2OgALOWAmAea6VmRsX/KdKMifs5odH9Wv7AYI0wFbqOcN77mLfKBtwWVAlZ0?=
- =?us-ascii?Q?2fBTEX0O1WDa/ujD3Es54Wz4X5rynpjFydkCIn09pacwc0qUuSUv4Ys22fHE?=
- =?us-ascii?Q?7qozsCf61IdYoeEGU0swbou73Jop+TsUBerrvPwfrqC04FFbNVQ9fNIuSpmt?=
- =?us-ascii?Q?ULhR3s3bnnm+DOw6IljSi9nCYF/KG7y4VjDvrnH2u+/Ccf4AAvPYCrAPADcW?=
- =?us-ascii?Q?U0ltRdhYPECr/2H2iCX3ADjYnIu3L+Rg/bIaivZi8vkIOt0u+OYzJC60SQBp?=
- =?us-ascii?Q?io6q9MEUYr6qNo5xtPPHSORGIwVL78fzAaB1Dstjg3nyUXULxoNV1fn/WChH?=
- =?us-ascii?Q?MZO21yEU8pAuKAAYVQAsMKHElzQYmRjVsfwUPMECCOsa/HH+W+5iYkcfVG2N?=
- =?us-ascii?Q?B3SHax2leau+Bd8ypE4oO8iTgGoCCVz9rEWoY2VRSCeatKncLtLkvqkzbOet?=
- =?us-ascii?Q?zeRD/wrMSSs5hdUTlSYvbC8LK8dmGahgEcjoBky30rGdRWzbC7bETbVQ+keR?=
- =?us-ascii?Q?QmBPm6J9AzL4yIZTkIDePkgpLK6vQ05GZdGTFZSyAqcAuIa0gVAAgkHxOV8G?=
- =?us-ascii?Q?manMOl629kNObzCw7NIwzN+nN8fLSnPRMvSDoW3ohSyafIN1hwwCG5RWr9am?=
- =?us-ascii?Q?jHs5zbjhcd+Kj6k7SocNeVglDdEo971BTM9EKSTBkic4FInCgVecg+daQmtQ?=
- =?us-ascii?Q?6GmT48xzZXjoTTcIC16q6SWtyPyPqfGxmcsOin+tpgtyXFTCS852nQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR06MB5140.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?odihn7h4gIC9M0N5i9Yl7yYOwrB5FmJWXY/u4tW/ShbDsALOm88pMgB7d4IE?=
- =?us-ascii?Q?q8EKsj8Eqs2oOMfPgNh1n1ovqceut/SaP+Udi28TglKNbI8RkujOb4lEPh78?=
- =?us-ascii?Q?mT+k+CNxSBW4bo+JvobNKnvVRjpBs+q7T5JdLvy80W7SjJ63ycyoR9zvkJ5t?=
- =?us-ascii?Q?dh60ZB/V7t4abmlZuHvrNAUBJzGMa35bnRaU3JUNmO6XGSvUfU/Ez2Edl9FF?=
- =?us-ascii?Q?rCJihzPt7ncZYM4ad5US/yZumqWZE0wHOlswPuVky1K5WU0RJWdsG8N9TAC2?=
- =?us-ascii?Q?417wPvIGHt4Tfexs+b8uU5CFhGI2THY/Dg4wbvd4yi+k4ueUTVBpQrPiTdmR?=
- =?us-ascii?Q?W3eaniaRbiPoejtvGKuP4C38QBd6NiTaLT8lXv40nAaWeleax8M5hYRlYxzC?=
- =?us-ascii?Q?qLh5NHkMa1rtItPaw8FRrNRTwhzu4DpdSTHcVyQzFHFh7+hWFYj6zJPTaUOK?=
- =?us-ascii?Q?lp00+8MJTSQNPRx7sHss7pqwhkHq2KE2M1CIv4KpYsrm4qEYC6j0ARdFrbpI?=
- =?us-ascii?Q?Zq/AmCJpgtclxeHydXATgVqM8lW9fPayiVowrbWav4PrJxN3lgG8WmL0Im9h?=
- =?us-ascii?Q?3FUi8V2FyuvBgFp43IWx204xVbr+VRO7qSCyNNMih2lRnwlgHL6H4iy2IiLe?=
- =?us-ascii?Q?XNrvhlnZtDJFQq9Sj9magHScUd/4R9vYOzjAucoyzLVYgyRB4KtVHe0LKtrb?=
- =?us-ascii?Q?URs8r5Fhvbea/dloUjg9gFlobjUExBXIGka78ptop32uLG80oXqUGQxHwqUM?=
- =?us-ascii?Q?fTT+KF/QC5uQETl2SbzISnbRHcmeDhgBUM9ea8cjSnuze5shleXgeMojZ49f?=
- =?us-ascii?Q?KaCBHjk7R/q1qkDdNy+lPjaz2oZIfB00XeX1SLGu1N5L5cDNAqEGmK46mxD2?=
- =?us-ascii?Q?7C9MIodaU4KCRDoRzH2EUdA5UhUN+hqAOR1VBJi4djZozjUPdI57jKPWQ3dF?=
- =?us-ascii?Q?lnGE11w1ohS9JryJonM6WRLgfrnWFAqnW5u4vtoFuxVhZ5XskKDmK8tvAJDr?=
- =?us-ascii?Q?lUBfH4CG5nikcQh3P8huN7xR8ksW2JWoIz33O4x6etc1kt0JtcmBjPSzR+Y0?=
- =?us-ascii?Q?HzA2+8v0VU9WU/suzuBl3Kp9ryjmglT9uHsVly4H/IV4yO/KbWhIdnqJhPmX?=
- =?us-ascii?Q?KD31Q/MyRlZYDVzZW0iixO/CRT4WpcQW5K2z4DvM1UgRB9jZmSY9tpOJoimR?=
- =?us-ascii?Q?Pvjl9FOs+Q73s7AIWSXolgIcme+yH+iEkchfXL8UK1DoM+ptfrLM4s9xunVI?=
- =?us-ascii?Q?h6+9jPXtdgufgQNPxDRzeNGz6eaHkCw8LsWVXHUrGZlCUu3hCcAfGwdCduoE?=
- =?us-ascii?Q?K/f3C+vlGngLJgENtqeFr434TEQkPKewBcpAmR8EZaFgoWfBwGdsNQrGY7Sc?=
- =?us-ascii?Q?1ATWduyKD1vIfIVTG2j/h+f8bPiY+6FcVf0Mv+JW442y/4olq6q+XXlCU3hk?=
- =?us-ascii?Q?d5pjmwpIskqpYcdEtt8n+uHwR4xhusUEBY9ztiHgTjMpY019hFl5uZl6wq7y?=
- =?us-ascii?Q?fkaEDFaruXdfDu2i4c0QEtLLWuQ7fVLZnE7L96AwzbhwcqiZsTnB/icPk/WH?=
- =?us-ascii?Q?14H7qt5ZMQnaqYzKmC6aUyrhVkpHpiYfQ1dSDD4C?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4226017a-a3d4-424f-8475-08ddd4e77f2f
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR06MB5140.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Aug 2025 12:48:09.5073
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nCJ0pRW4GZZ+wkl7ELghLi1LCbbyTQ/C3TBS3zoY9ji0Nb+LFvfDK/xQCpAU+g++0LVOEOAqYssw9MHPsjShsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB7283
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] ufs: ufs-qcom: Align programming sequence of Shared
+ ICE for UFS controller v5
+To: Manivannan Sadhasivam <mani@kernel.org>,
+        Palash Kambar <quic_pkambar@quicinc.com>
+Cc: James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_nitirawa@quicinc.com
+References: <20250806063409.21206-1-quic_pkambar@quicinc.com>
+ <ucr4imzntw6ghcvpeioprmva7gxrqnkphjirjppnqgdpq5ghss@y5nwjzzpvluj>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <ucr4imzntw6ghcvpeioprmva7gxrqnkphjirjppnqgdpq5ghss@y5nwjzzpvluj>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=Vbz3PEp9 c=1 sm=1 tr=0 ts=68935119 cx=c_pps
+ a=UgVkIMxJMSkC9lv97toC5g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=COk6AnOGAAAA:8 a=CykVZ_nljMR9ycAI1QEA:9
+ a=QEXdDO2ut3YA:10 a=1HOtulTD9v-eNWfpl4qZ:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: cZ80nXKsBB9O6R2ccg8nG8YtKW4cE7f2
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA2MDAwOCBTYWx0ZWRfX68EOub3cDl2R
+ pWKr+LMh7ZLG+lUGz///auw+cEzdmGb4RnJD1XmKp1pndUs1xQWjdZS97DakwudAEM4oA4I2H+A
+ gzCK+KpvT8oZT3dpMHSEGlsGYjNw0dgi5BFCazBf54z90NXS36hFCqC13GZaBalUUJWoVvbfW9k
+ B1sp07s8BMQnnLzj5c/YDqROoKyUQ+xRVNtysjslqWTazmT25xet/Qmn6iQI+eB9pAnOKAibcF/
+ Onnn48Om5wuFuHVKOq9icedya5BLF2KXRxWwIuvY1KfGYtlATeSYkK/CfWuYII7Enn6o5Ni8UWP
+ WECsv1z7xlTmvNjAFgnCg2jCFrMlcT6jsBIjj40zrauYmbd8OEz+r/yhn3c7dXO1B8e3hiy4Ce9
+ 0S+QmQEi
+X-Proofpoint-GUID: cZ80nXKsBB9O6R2ccg8nG8YtKW4cE7f2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-06_03,2025-08-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 malwarescore=0 adultscore=0 suspectscore=0 bulkscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508060008
 
-Use vcalloc() instead of vmalloc() followed by bitmap_zero() to simplify
-the function sdebug_add_store().
+On 8/6/25 1:14 PM, Manivannan Sadhasivam wrote:
+> On Wed, Aug 06, 2025 at 12:04:09PM GMT, Palash Kambar wrote:
+>> Disable of AES core in Shared ICE is not supported during power
+>> collapse for UFS Host Controller V5.0.
+>>
+>> Hence follow below steps to reset the ICE upon exiting power collapse
+>> and align with Hw programming guide.
+>>
+>> a. Write 0x18 to UFS_MEM_ICE_CFG
+>> b. Write 0x0 to UFS_MEM_ICE_CFG
+>>
+>> Signed-off-by: Palash Kambar <quic_pkambar@quicinc.com>
+>> ---
 
-Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
----
- drivers/scsi/scsi_debug.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+[...]
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 353cb60e1abe..14e2d6e94dd2 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -8805,8 +8805,8 @@ static int sdebug_add_store(void)
- 	/* Logical Block Provisioning */
- 	if (scsi_debug_lbp()) {
- 		map_size = lba_to_map_index(sdebug_store_sectors - 1) + 1;
--		sip->map_storep = vmalloc(array_size(sizeof(long),
--						     BITS_TO_LONGS(map_size)));
-+		sip->map_storep = vcalloc(BITS_TO_LONGS(map_size),
-+					  sizeof(long));
- 
- 		pr_info("%lu provisioning blocks\n", map_size);
- 
-@@ -8815,8 +8815,6 @@ static int sdebug_add_store(void)
- 			goto err;
- 		}
- 
--		bitmap_zero(sip->map_storep, map_size);
--
- 		/* Map first 1KB for partition table */
- 		if (sdebug_num_parts)
- 			map_region(sip, 0, 2);
--- 
-2.34.1
+> 
+>> +		ufshcd_readl(hba, UFS_MEM_ICE);
+>> +		ufshcd_writel(hba, 0x0, UFS_MEM_ICE);
+>> +		ufshcd_readl(hba, UFS_MEM_ICE);
+> 
+> Why do you need readl()? Writes to device memory won't get reordered.
 
+I'm not sure if we need a delay between them, otherwise they'll happen
+within a couple cycles of each other which may not be enough since this
+is a synchronous reset and the clock period is 20-50ns when running at
+XO (19.2 / 38.4 MHz) rate
+
+Konrad
 
