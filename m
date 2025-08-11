@@ -1,79 +1,71 @@
-Return-Path: <linux-scsi+bounces-15900-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15903-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4433DB209D9
-	for <lists+linux-scsi@lfdr.de>; Mon, 11 Aug 2025 15:15:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8557AB20BF1
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 Aug 2025 16:33:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 007E43AA1EB
-	for <lists+linux-scsi@lfdr.de>; Mon, 11 Aug 2025 13:15:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAE6A1883C7B
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 Aug 2025 14:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BA272DE709;
-	Mon, 11 Aug 2025 13:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0210A255F59;
+	Mon, 11 Aug 2025 14:32:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="kE4INCTb"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="R194GU3s"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52BFE2D3EDC
-	for <linux-scsi@vger.kernel.org>; Mon, 11 Aug 2025 13:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03261253954;
+	Mon, 11 Aug 2025 14:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754918079; cv=none; b=U5xf2spAEzdORewg+JqYD1CCF6819f2nxLd+mXBDUXiMTMhWhJAaarFrI8r69MJ5+KovkVPCYFykoOmClJxapz7l7LYdZ1IrUdbyoY/gEjFid36iUSuXsfj58JZPpFrvmaWDmqdnKZFibeSFVwXzlEi/YY/XaJoAPPhtAv/43zI=
+	t=1754922733; cv=none; b=hcfIWO+ituYg8RD5Jhi8vLI+XdQwEhuwl8fWdgZlEk24NaYIDbrlcE3Z4ynwfmTLac5zgmCVu2Q80NocQAtQK6tS7VpZq5qwdQvUnGob+nB5QIOaofnKVeddHDIl+N/bcfLh8Fa/h4IqStYryeDyEMxkGjrwV3bJl4FcTZdo1Vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754918079; c=relaxed/simple;
-	bh=e0roZKxtyVWFGL/OFg+Z8JCmn+67YcIvENHj6LqL/4w=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UeRrtGCEeZghe/z6nQA+Yzh70bK7Lk5TzRtDNvpugGu1WJx1nCtbc1zxr+SU5d8+l4uR2whJ8vK7YdlutpF0g5HK93Y23rlpzSbVhWPQkyG/WKFouYfo/IjYZqhHe6CXqic4GGoNZ8N6kbZ1V92xZBWITBecmo9y2rhZ1jYc218=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=kE4INCTb; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 1b74738e76b511f08729452bf625a8b4-20250811
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=sqa4p3dUd5BTvnVb/OAREuaE4bvk8Dmdvj1S8yQ4u2E=;
-	b=kE4INCTbySE3WPv5wMq3ZQuXg1t4ncXHaTFHv5WBNGQCZdueKHIjriYJ5AYWmzMfF+3ZnVk6n2pwe/EYV00KHJ7MC6atqQkCsnzGe+9Swox5ARYySd8Lrxp1xgaSfJxSq5rjWj+qWwfL3036A4yxRL3d07ZTvNbUetXFU461FLY=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.3,REQID:f8329041-90ed-4fb3-9412-8755d89cc8d4,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:f1326cf,CLOUDID:78a549ce-1ac4-40cd-97d9-e8f32bab97d5,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:-5,Content:0|15|50,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 3,DMD|SSN|SDN
-X-CID-BAS: 3,DMD|SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 1b74738e76b511f08729452bf625a8b4-20250811
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-	(envelope-from <peter.wang@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 932514578; Mon, 11 Aug 2025 21:14:27 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
+	s=arc-20240116; t=1754922733; c=relaxed/simple;
+	bh=HsA/94xQfgSMGsZ4fw4F7HfPfgVBgxfap1XShbrhYAI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uoBmTGCWxNzp4Ares9rgF5HUEEnzBWbRAzQuPxS/U5v+xEL+ry9OwAdX6u0lc0DGOE/R4W7GXAQYyp123ON59HG4nGF8bIX2rDCFwqMosEMjPBTmcpQrM/7ggMSIDysOxnP/Ew8diUOqH4xPNBQ+61wF0W4imZ6+bIWagBKaflQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=R194GU3s; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57B9dHsN005228;
+	Mon, 11 Aug 2025 14:31:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=hprZG84kFc+PbnEQxbInW0
+	GI4dBPm0+mI23eGZXztU8=; b=R194GU3scjdKiiy4WIvUAuyhlUJ3TjwCZuvziw
+	D8Qn/DESH/ICPdqifgpX31CyVT7SrVn4dpVmbuCuTqrgv+YVuj9XwH+FY7Wqsh45
+	+WZwpiBW+XYYFvNRop0JxiPO4prRfF+g0JELW5lPH60I6lohq0ofvaC+Zi43/xiN
+	t9UFzhPOCfcXOWsQ+ysDPNJyjLEewavXi7HFqAqWe/hi7j0J9CEyAfDHpPrcmXrf
+	/LsrD4sZs7Bc6H7fDz0foBHpbqfn5RdBiWoumElOtMpl+vTTt9JBjAWjRthbmu6A
+	spcpRiLKwprOGUbN8m9UXyjOPJGPIrcB5uXGHp0/rfhd1xfA==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48eqhx2xt0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 Aug 2025 14:31:59 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 57BEVwmd019797
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 Aug 2025 14:31:58 GMT
+Received: from hu-rdwivedi-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.39; Mon, 11 Aug 2025 21:14:26 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.39 via Frontend Transport; Mon, 11 Aug 2025 21:14:26 +0800
-From: <peter.wang@mediatek.com>
-To: <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>
-CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
-	<peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-	<alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
-	<chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-	<yi-fan.peng@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
-	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
-	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <bvanassche@acm.org>
-Subject: [PATCH v1 10/10] ufs: host: mediatek: Fix invalid access in vccqx handling
-Date: Mon, 11 Aug 2025 21:11:26 +0800
-Message-ID: <20250811131423.3444014-11-peter.wang@mediatek.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250811131423.3444014-1-peter.wang@mediatek.com>
-References: <20250811131423.3444014-1-peter.wang@mediatek.com>
+ 15.2.1748.10; Mon, 11 Aug 2025 07:31:53 -0700
+From: Ram Kumar Dwivedi <quic_rdwivedi@quicinc.com>
+To: <mani@kernel.org>, <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
+        <bvanassche@acm.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <andersson@kernel.org>,
+        <konradybcio@kernel.org>, <agross@kernel.org>,
+        <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH V2 0/4] Enable UFS MCQ support for SM8650 and SM8750
+Date: Mon, 11 Aug 2025 20:01:35 +0530
+Message-ID: <20250811143139.16422-1-quic_rdwivedi@quicinc.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -82,37 +74,70 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-MTK: N
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODEwMDA1NyBTYWx0ZWRfXwHoGF2zpl0yl
+ 80DDtz1hn0CIHrFls3/PhQJW8gcdK78zkspGeit9ddfNz2A33R1Uc66HK+N3AarxaZFILxAeOfz
+ 6znXRsAcTU60Z07eeDM+ZasxHK+0g8XK9Q9X6X2AgJkmaboP9vVH1e9hmXsGQln4B66VEP5Z3gJ
+ oFM7KLdtZqVyD2DLE2Noze6kkdeSOjJd6PgTv6miAlaa1M5juk9Qo0h5NWz2pZRv385WusFfhT3
+ 1qAmayi3StIG2qCRhGAioxo9+Dmk5fiu3JAUis9NHyGJ1YcW7Yyokc+bAzJpOHPy3HRrzAI1NoF
+ BRUJetamhisgpIz1BtLMd2zjANckc1uARnVYF+oKylj9sLjHjxCpMmoWnsbj+MiiyawI2+cRnoO
+ z7xCC6cM
+X-Proofpoint-GUID: GopPQZ17NuoxlOJSOHpGHZ6Y1CB0qgXS
+X-Authority-Analysis: v=2.4 cv=aYNhnQot c=1 sm=1 tr=0 ts=6899fedf cx=c_pps
+ a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=GEpy-HfZoHoA:10 a=2OwXVqhp2XgA:10 a=rqdb9q47H7dJNthdBScA:9
+X-Proofpoint-ORIG-GUID: GopPQZ17NuoxlOJSOHpGHZ6Y1CB0qgXS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-11_03,2025-08-11_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 adultscore=0 priorityscore=1501 suspectscore=0 phishscore=0
+ impostorscore=0 bulkscore=0 malwarescore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508100057
 
-From: Alice Chao <alice.chao@mediatek.com>
+This patch series enables Multi-Circular Queue (MCQ) support for the UFS 
+host controller on Qualcomm SM8650 and SM8750 platforms. MCQ is a modern
+queuing model that improves performance and scalability by allowing
+multiple hardware queues.
 
-This patch adds a NULL check before accessing the 'vccqx' pointer
-to prevent invalid memory access. This ensures that the function
-safely handles cases where 'vccq' and 'vccq2' are not initialized,
-improving the robustness of the power management code.
+Patch 1 updates the device tree bindings to allow the additional register
+regions and reg-names required for MCQ operation.
 
-Signed-off-by: Peter Wang <peter.wang@mediatek.com>
-Signed-off-by: Alice Chao <alice.chao@mediatek.com>
-Reviewed-by: Peter Wang <peter.wang@mediatek.com>
----
- drivers/ufs/host/ufs-mediatek.c | 3 +++
- 1 file changed, 3 insertions(+)
+Patches 2 and 3 update the device trees for SM8650 and SM8750 respectively
+to enable MCQ by adding the necessary register mappings and MSI parent.
 
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index ae458c4a7a46..5ef0ba4527e4 100644
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1629,6 +1629,9 @@ static void ufs_mtk_vccqx_set_lpm(struct ufs_hba *hba, bool lpm)
- {
- 	struct ufs_vreg *vccqx = NULL;
- 
-+	if (!hba->vreg_info.vccq && !hba->vreg_info.vccq2)
-+		return;
-+
- 	if (hba->vreg_info.vccq)
- 		vccqx = hba->vreg_info.vccq;
- 	else
+Patch 4 is streamlining UFS MCQ resource mapping with a single MCQ region
+mapping.
+
+Tested on SM8650 and SM8750.
+
+Changes from v1: 
+1. As per Krzysztof's suggestion, replaced mcq_vs and mcq_sqd DT mappings
+   with a single MCQ region mapping.
+2. Minor changes in commit messge as per Krzysztof's suggestion.
+
+Nitin Rawat (1):
+  ufs: ufs-qcom: Streamline UFS MCQ resource mapping
+
+Palash Kambar (1):
+  arm64: dts: qcom: sm8750: Enable MCQ support for UFS controller
+
+Ram Kumar Dwivedi (2):
+  dt-bindings: ufs: qcom: Document MCQ register space for UFS
+  arm64: dts: qcom: sm8650: Enable MCQ support for UFS controller
+
+ .../devicetree/bindings/ufs/qcom,ufs.yaml     |  16 +-
+ arch/arm64/boot/dts/qcom/sm8650.dtsi          |   7 +-
+ arch/arm64/boot/dts/qcom/sm8750.dtsi          |   8 +-
+ drivers/ufs/host/ufs-qcom.c                   | 146 +++++++-----------
+ drivers/ufs/host/ufs-qcom.h                   |  21 ++-
+ 5 files changed, 94 insertions(+), 104 deletions(-)
+
 -- 
-2.45.2
+2.50.1
 
 
