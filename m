@@ -1,45 +1,45 @@
-Return-Path: <linux-scsi+bounces-15899-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-15895-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06561B209D8
-	for <lists+linux-scsi@lfdr.de>; Mon, 11 Aug 2025 15:15:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F64AB209DF
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 Aug 2025 15:16:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B40783AA1ED
-	for <lists+linux-scsi@lfdr.de>; Mon, 11 Aug 2025 13:15:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1F1A7B0FFC
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 Aug 2025 13:13:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A03C12DE6F7;
-	Mon, 11 Aug 2025 13:14:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0EE32DE1F0;
+	Mon, 11 Aug 2025 13:14:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="SvAIKENP"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Ve4req1S"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DADC2DCF6C
-	for <linux-scsi@vger.kernel.org>; Mon, 11 Aug 2025 13:14:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6AA32DAFDA
+	for <linux-scsi@vger.kernel.org>; Mon, 11 Aug 2025 13:14:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754918078; cv=none; b=RlMYVdeiPtpil/DpWBSdWRFy5RDPeMsFtBI6QFZWmmVMUK6SfO0Xuuy6hALCLOegvHKkv5xEQT0g1VJGJjAOvuNBQs8stqtwRlr0Yw7YNU2DH9ubV7vbDS5QR6C5Cu+oWeMrUWDKcsF+cQ7EiQm7cXZs6/QKh4EeSwI2gxmF8L4=
+	t=1754918077; cv=none; b=GblZtDfXlPPoWvRmqNY/URpj4pOn4G4lxlberaDYZX6g/Cpl+ySJd6S6YrZhPstOk5AHrfc9Dg3h4RWlZtHN4umEkimcvpKmCYVSUNsYQAHMOiOCPcAsVBQNVzZMd9XelUhqnYmjhBvuAlNEG5CFudW5ibGIBh6i5CJmv2Fqlbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754918078; c=relaxed/simple;
-	bh=AmTCNXIY67PYnNYcVpqFQJX8MCVSS/9hCbR2mqOCyKw=;
+	s=arc-20240116; t=1754918077; c=relaxed/simple;
+	bh=79rLqh1bMOnjFlgr4WuezJduyZqhEipL2yBNtim/YFA=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LNZI64IVRTu7Mf7gx9Yb+odZJV9yiRAVfb4kkhtn3bIzKgH8Ysb8r1Nz53wDTausu2WfDig0WoBBVwDyIW5K/JfBwfudoNWuT74EjXfG/TI9vvggtioWIS1SQyE+J/ulctgxo2VqrpUd+v2XQcAYv9bTzuWSnHROq1uEfdOIslM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=SvAIKENP; arc=none smtp.client-ip=210.61.82.184
+	 MIME-Version:Content-Type; b=fR8vZ4M3Tz6B2ARbLmb56E1VUeqgGCGLnFs26CdTcMkbgrVb6VXx0W9dk71P8FC4zpU1vo8dElsg9Zz/TkE7AioLfPbxPX5P4ulqQOGLs7B4tyq/HFGMIrle/K6sjZVzDK7V7mBkFMcV7uhVnHl4x+oLxohivfayDg3qThGGFc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=Ve4req1S; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 1ac34c1c76b511f0b33aeb1e7f16c2b6-20250811
+X-UUID: 1ac461ce76b511f0b33aeb1e7f16c2b6-20250811
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=8ccB9MQly4klStRXD4xKsnoHFEl4apXZflGejcFCrqc=;
-	b=SvAIKENPgQfGOZPmAnB1Hvz/SBH7+oOQyDH8hnmAW7L9cfQYy27fLiH5GX+gs3iu1vCRCkVmN9KlYuIBEJg1pFjUAzg5KKnFae6C34DOOjVjGF7GJK+NzE53QMRUDC8RAOht+mFczzRsYnN/P6g78Km5se0tb+wkJNYtwl8Gfqo=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=0aNP92JqaijV5VE7pQrVe5uMTtVsWwMm88oJ8BoLAd8=;
+	b=Ve4req1SXIZKk2vSQj1MyFoz2KPtj4gF52XPaU4bJcdT0l++gjbDX6O0ODleAUnjrQ/tUxL6L1pavyKrVJ+EnGdByPfSFPTkb0KPC5V8BU94zvP5ZElHpCwH6+psDGz9rTK/fCY7dXjUJ9n4FK8Wwc249Jxj15AgCDVVq8UVFQk=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.3,REQID:fd344436-d606-4fc7-9562-7a6c5ab7d98a,IP:0,UR
-	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-25
-X-CID-META: VersionHash:f1326cf,CLOUDID:996bd29d-7ad4-4169-ab95-78e9164f00fe,B
+X-CID-O-INFO: VERSION:1.3.3,REQID:c41aa74b-56fb-4b03-b8af-9c61ee3afe68,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:f1326cf,CLOUDID:6edb4fa1-1800-4e4f-b665-a3d622db32cf,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:-5,Content:0|15|50,EDM:
 	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
 	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
@@ -47,11 +47,11 @@ X-CID-BVR: 3,DMD|SSN|SDN
 X-CID-BAS: 3,DMD|SSN|SDN,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 1ac34c1c76b511f0b33aeb1e7f16c2b6-20250811
+X-UUID: 1ac461ce76b511f0b33aeb1e7f16c2b6-20250811
 Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw02.mediatek.com
 	(envelope-from <peter.wang@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 425173395; Mon, 11 Aug 2025 21:14:25 +0800
+	with ESMTP id 1936759441; Mon, 11 Aug 2025 21:14:25 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
  MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -68,9 +68,9 @@ CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
 	<yi-fan.peng@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
 	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
 	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <bvanassche@acm.org>
-Subject: [PATCH v1 05/10] ufs: host: mediatek: Fix PWM mode switch issue
-Date: Mon, 11 Aug 2025 21:11:21 +0800
-Message-ID: <20250811131423.3444014-6-peter.wang@mediatek.com>
+Subject: [PATCH v1 06/10] ufs: host: mediatek: Assign power mode userdata before FASTAUTO mode change
+Date: Mon, 11 Aug 2025 21:11:22 +0800
+Message-ID: <20250811131423.3444014-7-peter.wang@mediatek.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250811131423.3444014-1-peter.wang@mediatek.com>
 References: <20250811131423.3444014-1-peter.wang@mediatek.com>
@@ -84,71 +84,53 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-MTK: N
 
-From: Peter Wang <peter.wang@mediatek.com>
+From: Alice Chao <alice.chao@mediatek.com>
 
-This patch addresses a failure in switching to PWM mode by
-ensuring proper configuration of power modes and adaptation
-settings. The changes include checks for SLOW_MODE and
-adjustments to the desired working mode and adaptation
-configuration based on the device's power mode and hardware
-version.
+This patch assigns power mode userdata settings before transitioning
+to FASTAUTO power mode. It ensures that default timeout values are
+set for various parameters, enhancing the reliability and performance
+of the power mode change process.
 
 Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+Signed-off-by: Alice Chao <alice.chao@mediatek.com>
+Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 25 ++++++++++++++++++++++---
- 1 file changed, 22 insertions(+), 3 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 31fe8efa5778..e0a51b86469c 100644
+index e0a51b86469c..517c26362ac6 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1321,6 +1321,10 @@ static bool ufs_mtk_pmc_via_fastauto(struct ufs_hba *hba,
- 	    dev_req_params->gear_rx < UFS_HS_G4)
- 		return false;
+@@ -1367,6 +1367,28 @@ static int ufs_mtk_pre_pwr_change(struct ufs_hba *hba,
+ 		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_TXHSADAPTTYPE),
+ 			       PA_NO_ADAPT);
  
-+	if (dev_req_params->pwr_tx == SLOW_MODE ||
-+	    dev_req_params->pwr_rx == SLOW_MODE)
-+		return false;
++		if (!(hba->quirks & UFSHCD_QUIRK_SKIP_DEF_UNIPRO_TIMEOUT_SETTING)) {
++			ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA0),
++					DL_FC0ProtectionTimeOutVal_Default);
++			ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA1),
++					DL_TC0ReplayTimeOutVal_Default);
++			ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA2),
++					DL_AFC0ReqTimeOutVal_Default);
++			ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA3),
++					DL_FC1ProtectionTimeOutVal_Default);
++			ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA4),
++					DL_TC1ReplayTimeOutVal_Default);
++			ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA5),
++					DL_AFC1ReqTimeOutVal_Default);
 +
- 	return true;
- }
- 
-@@ -1336,6 +1340,10 @@ static int ufs_mtk_pre_pwr_change(struct ufs_hba *hba,
- 	host_params.hs_rx_gear = UFS_HS_G5;
- 	host_params.hs_tx_gear = UFS_HS_G5;
- 
-+	if (dev_max_params->pwr_rx == SLOW_MODE ||
-+	    dev_max_params->pwr_tx == SLOW_MODE)
-+		host_params.desired_working_mode = UFS_PWM_MODE;
-+
- 	ret = ufshcd_negotiate_pwr_params(&host_params, dev_max_params, dev_req_params);
- 	if (ret) {
- 		pr_info("%s: failed to determine capabilities\n",
-@@ -1368,10 +1376,21 @@ static int ufs_mtk_pre_pwr_change(struct ufs_hba *hba,
- 		}
- 	}
- 
--	if (host->hw_ver.major >= 3) {
-+	if (dev_req_params->pwr_rx == FAST_MODE ||
-+	    dev_req_params->pwr_rx == FASTAUTO_MODE) {
-+		if (host->hw_ver.major >= 3) {
-+			ret = ufshcd_dme_configure_adapt(hba,
-+						   dev_req_params->gear_tx,
-+						   PA_INITIAL_ADAPT);
-+		} else {
-+			ret = ufshcd_dme_configure_adapt(hba,
-+				   dev_req_params->gear_tx,
-+				   PA_NO_ADAPT);
++			ufshcd_dme_set(hba, UIC_ARG_MIB(DME_LocalFC0ProtectionTimeOutVal),
++					DL_FC0ProtectionTimeOutVal_Default);
++			ufshcd_dme_set(hba, UIC_ARG_MIB(DME_LocalTC0ReplayTimeOutVal),
++					DL_TC0ReplayTimeOutVal_Default);
++			ufshcd_dme_set(hba, UIC_ARG_MIB(DME_LocalAFC0ReqTimeOutVal),
++					DL_AFC0ReqTimeOutVal_Default);
 +		}
-+	} else {
- 		ret = ufshcd_dme_configure_adapt(hba,
--					   dev_req_params->gear_tx,
--					   PA_INITIAL_ADAPT);
-+			   dev_req_params->gear_tx,
-+			   PA_NO_ADAPT);
- 	}
++
+ 		ret = ufshcd_uic_change_pwr_mode(hba,
+ 					FASTAUTO_MODE << 4 | FASTAUTO_MODE);
  
- 	return ret;
 -- 
 2.45.2
 
