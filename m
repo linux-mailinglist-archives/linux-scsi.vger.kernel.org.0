@@ -1,89 +1,50 @@
-Return-Path: <linux-scsi+bounces-16021-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-16023-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BD95B240A3
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Aug 2025 07:51:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F3CDB24341
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Aug 2025 09:53:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACF41170085
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Aug 2025 05:50:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BDFF16809D
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Aug 2025 07:51:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9E2F2D028A;
-	Wed, 13 Aug 2025 05:49:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MmliNpgi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 681CC2D4B6F;
+	Wed, 13 Aug 2025 07:51:50 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98DA12D0C8E
-	for <linux-scsi@vger.kernel.org>; Wed, 13 Aug 2025 05:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8528427E05E
+	for <linux-scsi@vger.kernel.org>; Wed, 13 Aug 2025 07:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755064155; cv=none; b=dhFP8z3GJ50ktAA58YmDSEVJxZGoGWnDPcPAORslT/JiXMR/IG3yM6wrqS6yh7LlhcFrE4oTWDg8uvHnHCp/br8bsvCpwQ00F4K9IlXGNPzUCm8Jkf+quSA7g5koaO+l4En4KLyhR5qFPvVra38XMJk8Isjg5ri1GNRzrLmqYUs=
+	t=1755071510; cv=none; b=eM1B7KHwsyg8EFFSMncJk0MAkhkzM1cMZhMgoE5JIcMpi4ipi7yEX/8g1XBrS4Cco+cHR6R/WPx8TvjiN5SjCuOWEwnW0xRlqQ46LgSPAFU++VN7L0sk3jKxwb7Q92x39Dcg5A0E2kw1QCOTz1R8UITiZM0c9TCNHcUnCS8fuwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755064155; c=relaxed/simple;
-	bh=5XEzjMGKnaeMJFhQb3Nwzbat+idzevLzr/emeLMFnok=;
+	s=arc-20240116; t=1755071510; c=relaxed/simple;
+	bh=75rO32DYnWfh+6Moc/iat2lWnh9dn/TYGo9H8GWor48=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Drqic3y1WSI4NibVb/bzzZB+vHg547wn1RtZ2AsXfDJZzA5RPacZAMwLazW4Z3BRDQn4QIEJbKbvR87DpU95eVY8FcBF7LVx6Z7M0RlPzW27MEDNlMq0Zkjkt9KJHtlEFas7rmRE0TjeUxbDBGpU4puRbVCdQ//VXdU4WvNMnXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MmliNpgi; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3b913a76ba9so1204933f8f.3
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Aug 2025 22:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755064152; x=1755668952; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1NATFWYnL9FpvCQHaSEVWqiysmgBFz5wmTJhKI3JDuA=;
-        b=MmliNpgiE/VmRLHxzAL0+iYkaLFqIm9XMYYpGoXkcCzDp1VE3K+5MqRTwqY2MKT0Q9
-         UYnD9ZkOVjPAp4HTLJhXxtFsHVPDPteUtVL/XEwK3O76gkIdu9eIPT8chZnbMMee3UDe
-         kgfaTZBLJdvKhFVU6dosQTRlRlIFc912tK4LVFnWyAw6pZtbi0yQDPY1v1ISCAOfI7qI
-         c53Ibvhg6ZSTjr9Rh/495y5pbY4h6pNnxfBCweBdFFFAXJgmYckQe62/un09B3tv8zBJ
-         TV+9qAhEu1s+WIJTCdJkixR601r0p2yuSpfkuLxbJuhRu6RFSnVIe+O+Zd+YqWP+xh4I
-         38fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755064152; x=1755668952;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1NATFWYnL9FpvCQHaSEVWqiysmgBFz5wmTJhKI3JDuA=;
-        b=WwcPeugRfza/b5VC2vqqziU+4/1bjIMrmr8HaZ03mpJ2WdcYCZvFcQwpv4EL2nWtuS
-         oH/gaz0ers0sKNBLago2X1Ig4OTWCNGGnfNoj4x+7Ak1Yaz9Veg6mTxfMOylYhfqKoWk
-         tLGgP3MAW84sKFjaWgq6W5zTuVqlUdaZOHZiVa0zakReB3H1M9vz6QtNuzqKZPXfTyeI
-         m4yxpDxfMdhWtxJSojuhdIkHOstJZRXC6/r+7u4FJMQ2j8S7PA52Xej8zix8bl3Sik2z
-         6m8s7eESV5CivawP4QjTUN3nGIL1odw005SrtwVK1pcrIc8Hbh+ZC3dAqCGXz6lYZltS
-         WuXw==
-X-Forwarded-Encrypted: i=1; AJvYcCXtU0BT0Dde+29OWybp92FTXm7tIfEAePLrNJ+m5Or/pyinW3tZT9pVYCXvCzvlqJ5JNb9DiEZJnOVP@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnbsByOE9TYw7D1o9IiR4orzCV+t1E05eoIOX5YXXmGLy7Gdxs
-	1ctSMfiw3b4a0OL896f0p/TqKDHI5YPd7U34eYC5Mw0z4pLwFpB+ckTMSr0Ym+dtH8U=
-X-Gm-Gg: ASbGnctI4cPEzrB69j8xWF6MNm4cakEuQklvk9clUhM49ZLHPY+2L4Vws4qn8w3M0n9
-	rdkrIV9ngpe7KJHQ9WAXN+jREmgDuDJI+Cg8iZSH/sLgVdmj69l0IpJ1p4k94EmCwWp9U/pu7B5
-	C1WtE6R/hxjBkn79OiUL3NLCPSuKU/YuVBQADzLG8bxfsUVk7wxRNV9qzMgMTtma9SB9CqfPZuZ
-	VoFS/Ql6GxnnxDmJJD3KPi0eCXzQ1WEqkCgKXG5mu/RzEGDmKXd2CBXHIpJrfqtbcyMscSMXCtg
-	+FeztWo7BEG36DyIfZSTXXVRAbXm+z/5dLqHiHzCL9gih/GYgwa7LY3doXPYK2XfmaLNKwaZzCJ
-	y11F5h5RbpqiI3D/29JMdO7pw4TY0NM1fK/vkAQ==
-X-Google-Smtp-Source: AGHT+IFDvLxnIU17Hp8mu8s/hfxqo91PU/ydIDKmiqnIJjDK4g9R/0BJmMQ3yTeiQ09ZscNds3uIlA==
-X-Received: by 2002:a05:6000:4205:b0:3b8:d493:31f4 with SMTP id ffacd0b85a97d-3b917eb6c5bmr1136780f8f.48.1755064151797;
-        Tue, 12 Aug 2025 22:49:11 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3b79c4696c8sm45376480f8f.55.2025.08.12.22.49.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Aug 2025 22:49:11 -0700 (PDT)
-Date: Wed, 13 Aug 2025 08:49:08 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Mike Christie <michaelc@cs.wisc.edu>
-Cc: Nilesh Javali <njavali@marvell.com>,
-	Manish Rangankar <mrangankar@marvell.com>,
-	GR-QLogic-Storage-Upstream@marvell.com,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	James Bottomley <JBottomley@parallels.com>,
-	Ravi Anand <ravi.anand@qlogic.com>, linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] scsi: qla4xxx: Prevent a potential error pointer dereference
-Message-ID: <aJwnVKS9tHsw1tEu@stanley.mountain>
+	 Content-Disposition; b=t1z5T9owrKn4J1leg7YRPamqaDbygY5qwatST3+mS4u+mgHJYb6zxG4Suq5VsIFoDRvQ34aNsJ2fJdwmzxadOJ2HxRCjcA0jTsgj3RQr1rpZzkiRd3Kq+8DWsybcO6rdZdSUKvp5UviDsArChQ58WWHdUlOl5U3P2CcI1opDuSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.95.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id E45242C06659;
+	Wed, 13 Aug 2025 09:43:22 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id DDFD737D921; Wed, 13 Aug 2025 09:43:22 +0200 (CEST)
+Date: Wed, 13 Aug 2025 09:43:22 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: James Smart <james.smart@broadcom.com>,
+	Ram Vegesna <ram.vegesna@broadcom.com>
+Cc: linux-scsi@vger.kernel.org
+Subject: Bouncing maintainer address for Emulex/Broadcom LPFC SCSI driver
+Message-ID: <aJxCGi-am1N_UcVd@wunner.de>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -92,33 +53,30 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
 
-The qla4xxx_get_ep_fwdb() function is supposed to return NULL on error,
-but qla4xxx_ep_connect() returns error pointers.  Propagating the error
-pointers will lead to an Oops in the caller, so change the error
-pointers to NULL.
+Dear James, Dear Ram,
 
-Fixes: 13483730a13b ("[SCSI] qla4xxx: fix flash/ddb support")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/scsi/qla4xxx/ql4_os.c | 2 ++
- 1 file changed, 2 insertions(+)
+The e-mail address of Dick Kennedy listed in this MAINTAINERS entry ...
 
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index a39f1da4ce47..a761c0aa5127 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -6606,6 +6606,8 @@ static struct iscsi_endpoint *qla4xxx_get_ep_fwdb(struct scsi_qla_host *ha,
- 
- 	ep = qla4xxx_ep_connect(ha->host, (struct sockaddr *)dst_addr, 0);
- 	vfree(dst_addr);
-+	if (IS_ERR(ep))
-+		return NULL;
- 	return ep;
- }
- 
--- 
-2.47.2
+    EMULEX/BROADCOM LPFC FC/FCOE SCSI DRIVER
+    M:	James Smart <james.smart@broadcom.com>
+    M:	Dick Kennedy <dick.kennedy@broadcom.com>
+    L:	linux-scsi@vger.kernel.org
+    S:	Supported
+    W:	http://www.broadcom.com
+    F:	drivers/scsi/lpfc/
 
+... is bouncing:
+
+    Your message wasn't delivered to dick.kennedy@broadcom.com because the address couldn't be found, or is unable to receive mail.
+    Learn more here: https://support.google.com/mail/?p=NoSuchUser
+    The response was:
+    The email account that you tried to reach does not exist. Please try double-checking the recipient's email address for typos or unnecessary spaces.
+
+Please consider replacing the bouncing address in MAINTAINERS at your
+earliest convenience.
+
+Thanks!
+
+Lukas
 
