@@ -1,71 +1,71 @@
-Return-Path: <linux-scsi+bounces-16188-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-16190-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 931D7B2878E
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Aug 2025 23:15:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE970B2878F
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Aug 2025 23:15:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5309EAE416E
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Aug 2025 21:15:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E857AE429A
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Aug 2025 21:15:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A666B2367D3;
-	Fri, 15 Aug 2025 21:15:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F37B242D6A;
+	Fri, 15 Aug 2025 21:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MsteTNY/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TvW4Oid2"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED4E18B12
-	for <linux-scsi@vger.kernel.org>; Fri, 15 Aug 2025 21:15:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A2B2405FD
+	for <linux-scsi@vger.kernel.org>; Fri, 15 Aug 2025 21:15:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755292546; cv=none; b=R9Ca88kOnjsERUIv/DkCOpJ/pQTv1JPdbQ4/tcmjue9o1XnZFtaOMqcN1Vfi4sZFJ2+kFD845hiF6qNhPxV5KMXPAHk6ZHraKHOO2iLC6f0GIi1giJQCYNFktreM2+HEjegczy2gM7TWsgq32ugsQj2wCtCnwM8kn2tdca/sLaQ=
+	t=1755292548; cv=none; b=TcGWSLsiqCYRVbTHXdwa/kz4iGBxre+dyrS7gcCp/9t4qCaipv29//58l62OA15JEiJjBPKp8TMfwKzoZyM/IhCNIqTT5a89rLNvMbena8wsHl25VZ78NcAUk1FwzeCKbuFDqM5a8PVD5yJFlDUgVekLcVl6DjfQajD3lwDcywM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755292546; c=relaxed/simple;
-	bh=9gJwc2rZeW/t55fmHp5OQkNInGF5BsEul3iFTcOuuVc=;
+	s=arc-20240116; t=1755292548; c=relaxed/simple;
+	bh=dwBwSm78Va9WXRETOZhayCxHsxgMz93bjn5BUx5839c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iF7a8YNS8MvxlymR+sNb5/UutjtkC8wb5bQkq5HKh/EAyw/OvEKsk3ikxRewnm4j8O6DoCQYqQYfmPh7j1Uawgv+W4jNM9fBu7gf+Uxqmgm+W3RTJeqSLkwH+Ep+wSbUr7OpMaAuC2VIEVTjsHKeU0bIBJDkjmMsW5dzBjPvhC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MsteTNY/; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=YX8hh2KMVokNWJ+bEyCLpbW4uK8mJ1aK87eNpz7mV73AFz+OMyjiAsUXIZIaie6YFKNHbSk4cRQjNGO7OKAKVoioWV3K/FqWQyptj4QL+AoDibK+A+ujg8gPltyHM/vTLAUJIzwn8ggviHKuwvahpxZDK/WLrmdjQWdx8mPxJO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TvW4Oid2; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755292541;
+	s=mimecast20190719; t=1755292545;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4Mqzvys+AEq/qf22KPN1CDpo1NgXc7AOUZpX375dkC8=;
-	b=MsteTNY/D5F55hPd1YzdFBY+p8doG0aANoh/v5uV+Ev0qBVtRNHupe6OM06VhUfLO7a2S0
-	au2bjok4LdXLOdy4Deay3GySLb11GWzMeKBLCB0G1cogVqHi2YGzy1a+497O+pzsllxJyH
-	hYYkrVtziVFKOAF5rS39y8PEqEqwsuQ=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=82UryjMgImZCV8v0PMIvZRq9pjyaY5Ce8+rPK0PEh/w=;
+	b=TvW4Oid2dij4Cv3PwV3kPDFF5ecmq6Kwuj2hmCl/L1emVQDbz3usEgCf3898TNIr8ZejUa
+	5tLhYPqZxqsbeJbZ7ZT6IC69XKgnImeaM+XFAzawYay471sXVzO8gkjS/BV9MjhCIRcFSo
+	6jl4PHR7AnRW2Pj+p4R4jmSudOMUvTI=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-267-l_u320FoOru2BbWwpfheAQ-1; Fri,
- 15 Aug 2025 17:15:38 -0400
-X-MC-Unique: l_u320FoOru2BbWwpfheAQ-1
-X-Mimecast-MFC-AGG-ID: l_u320FoOru2BbWwpfheAQ_1755292536
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-345-lhH-q124PRuz2PEzzB48sw-1; Fri,
+ 15 Aug 2025 17:15:39 -0400
+X-MC-Unique: lhH-q124PRuz2PEzzB48sw-1
+X-Mimecast-MFC-AGG-ID: lhH-q124PRuz2PEzzB48sw_1755292538
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BA7EC19560B3;
-	Fri, 15 Aug 2025 21:15:36 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 60987180048E;
+	Fri, 15 Aug 2025 21:15:38 +0000 (UTC)
 Received: from emilne-na.westford.csb (unknown [10.22.65.61])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7B64119327C0;
-	Fri, 15 Aug 2025 21:15:35 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 08E7519A4C9C;
+	Fri, 15 Aug 2025 21:15:36 +0000 (UTC)
 From: "Ewan D. Milne" <emilne@redhat.com>
 To: linux-scsi@vger.kernel.org
 Cc: michael.christie@oracle.com,
 	dgilbert@interlog.com,
 	bvanassche@acm.org,
 	dlemoal@kernel.org
-Subject: [PATCH v3 5/8] scsi: sd: Remove checks for -EOVERFLOW in sd_read_capacity()
-Date: Fri, 15 Aug 2025 17:15:22 -0400
-Message-ID: <20250815211525.1524254-6-emilne@redhat.com>
+Subject: [PATCH v3 6/8] scsi: sd: Check for and retry in case of READ_CAPCITY(10)/(16) returning no data
+Date: Fri, 15 Aug 2025 17:15:23 -0400
+Message-ID: <20250815211525.1524254-7-emilne@redhat.com>
 In-Reply-To: <20250815211525.1524254-1-emilne@redhat.com>
 References: <20250815211525.1524254-1-emilne@redhat.com>
 Precedence: bulk
@@ -77,36 +77,148 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Remove checks for -EOVERFLOW in sd_read_capacity() because this value has not
-been returned to it since commit 72deb455b5ec ("block: remove CONFIG_LBDAF").
+sd_read_capacity_10() and sd_read_capacity_16() do not check for underflow
+and can extract invalid (e.g. zero) data when a malfunctioning device does
+not actually transfer any data, but returnes a good status otherwise.
+Check for this and retry, and log a message and return -EINVAL if we can't
+get the capacity information.
+
+We encountered a device that did this once but returned good data afterwards.
+
+See similar commit 5cd3bbfad088 ("[SCSI] retry with missing data for INQUIRY")
 
 Signed-off-by: Ewan D. Milne <emilne@redhat.com>
 ---
- drivers/scsi/sd.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/scsi/sd.c | 61 ++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 53 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index d465609a66e3..acd79e9a0d82 100644
+index acd79e9a0d82..6066f5c92c74 100644
 --- a/drivers/scsi/sd.c
 +++ b/drivers/scsi/sd.c
-@@ -2863,8 +2863,6 @@ sd_read_capacity(struct scsi_disk *sdkp, struct queue_limits *lim,
+@@ -2638,6 +2638,7 @@ static int read_capacity_16(struct scsi_disk *sdkp, struct scsi_device *sdp,
+ 		[13] = RC16_LEN,
+ 	};
+ 	struct scsi_sense_hdr sshdr;
++	int count, resid;
+ 	struct scsi_failure failure_defs[] = {
+ 		/*
+ 		 * Do not retry Invalid Command Operation Code or Invalid
+@@ -2688,6 +2689,7 @@ static int read_capacity_16(struct scsi_disk *sdkp, struct scsi_device *sdp,
+ 	};
+ 	const struct scsi_exec_args exec_args = {
+ 		.sshdr = &sshdr,
++		.resid = &resid,
+ 		.failures = &failures,
+ 	};
+ 	int sense_valid = 0;
+@@ -2699,11 +2701,23 @@ static int read_capacity_16(struct scsi_disk *sdkp, struct scsi_device *sdp,
+ 	if (sdp->no_read_capacity_16)
+ 		return -EINVAL;
  
- 	if (sd_try_rc16_first(sdp)) {
- 		sector_size = read_capacity_16(sdkp, sdp, lim, buffer);
--		if (sector_size == -EOVERFLOW)
--			goto got_data;
- 		if (sector_size == -ENODEV)
- 			return;
- 		if (sector_size < 0)
-@@ -2873,8 +2871,6 @@ sd_read_capacity(struct scsi_disk *sdkp, struct queue_limits *lim,
- 			return;
- 	} else {
- 		sector_size = read_capacity_10(sdkp, sdp, buffer);
--		if (sector_size == -EOVERFLOW)
--			goto got_data;
- 		if (sector_size < 0)
- 			return;
- 		if ((sizeof(sdkp->capacity) > 4) &&
+-	memset(buffer, 0, RC16_LEN);
++	for (count = 0; count < 3; ++count) {
++		memset(buffer, 0, RC16_LEN);
+ 
+-	the_result = scsi_execute_cmd(sdp, cmd, REQ_OP_DRV_IN, buffer,
+-				      RC16_LEN, SD_TIMEOUT, sdkp->max_retries,
+-				      &exec_args);
++		the_result = scsi_execute_cmd(sdp, cmd, REQ_OP_DRV_IN,
++					      buffer, RC16_LEN, SD_TIMEOUT,
++					      sdkp->max_retries, &exec_args);
++
++		if (the_result == 0 && resid == RC16_LEN) {
++			/*
++			 * if nothing was transferred, we try
++			 * again. It's a workaround for a broken
++			 * device.
++			 */
++			continue;
++		}
++		break;
++	}
+ 
+ 	if (the_result > 0) {
+ 		if (media_not_present(sdkp, &sshdr))
+@@ -2727,6 +2741,12 @@ static int read_capacity_16(struct scsi_disk *sdkp, struct scsi_device *sdp,
+ 		return -EINVAL;
+ 	}
+ 
++	if (resid == RC16_LEN) {
++		sd_printk(KERN_ERR, sdkp,
++			  "Read Capacity(16) returned good status but no data");
++		return -EINVAL;
++	}
++
+ 	sector_size = get_unaligned_be32(&buffer[8]);
+ 	lba = get_unaligned_be64(&buffer[0]);
+ 
+@@ -2759,11 +2779,17 @@ static int read_capacity_16(struct scsi_disk *sdkp, struct scsi_device *sdp,
+ 	return sector_size;
+ }
+ 
++#define RC10_LEN 8
++#if RC10_LEN > SD_BUF_SIZE
++#error RC10_LEN must not be more than SD_BUF_SIZE
++#endif
++
+ static int read_capacity_10(struct scsi_disk *sdkp, struct scsi_device *sdp,
+ 						unsigned char *buffer)
+ {
+ 	static const u8 cmd[10] = { READ_CAPACITY };
+ 	struct scsi_sense_hdr sshdr;
++	int count, resid;
+ 	struct scsi_failure failure_defs[] = {
+ 		/* Do not retry Medium Not Present */
+ 		{
+@@ -2798,17 +2824,30 @@ static int read_capacity_10(struct scsi_disk *sdkp, struct scsi_device *sdp,
+ 	};
+ 	const struct scsi_exec_args exec_args = {
+ 		.sshdr = &sshdr,
++		.resid = &resid,
+ 		.failures = &failures,
+ 	};
+ 	int the_result;
+ 	sector_t lba;
+ 	unsigned sector_size;
+ 
+-	memset(buffer, 0, 8);
++	for (count = 0; count < 3; ++count) {
++		memset(buffer, 0, RC10_LEN);
+ 
+-	the_result = scsi_execute_cmd(sdp, cmd, REQ_OP_DRV_IN, buffer,
+-				      8, SD_TIMEOUT, sdkp->max_retries,
+-				      &exec_args);
++		the_result = scsi_execute_cmd(sdp, cmd, REQ_OP_DRV_IN,
++					      buffer, RC10_LEN, SD_TIMEOUT,
++					      sdkp->max_retries, &exec_args);
++
++		if (the_result == 0 && resid == RC10_LEN) {
++			/*
++			 * if nothing was transferred, we try
++			 * again. It's a workaround for a broken
++			 * device.
++			 */
++			continue;
++		}
++		break;
++	}
+ 
+ 	if (the_result > 0) {
+ 		if (media_not_present(sdkp, &sshdr))
+@@ -2821,6 +2860,12 @@ static int read_capacity_10(struct scsi_disk *sdkp, struct scsi_device *sdp,
+ 		return -EINVAL;
+ 	}
+ 
++	if (resid == RC10_LEN) {
++		sd_printk(KERN_ERR, sdkp,
++			  "Read Capacity(10) returned good status but no data");
++		return -EINVAL;
++	}
++
+ 	sector_size = get_unaligned_be32(&buffer[4]);
+ 	lba = get_unaligned_be32(&buffer[0]);
+ 
 -- 
 2.47.1
 
