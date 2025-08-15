@@ -1,71 +1,71 @@
-Return-Path: <linux-scsi+bounces-16185-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-16193-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99450B2878B
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Aug 2025 23:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B839B287A6
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Aug 2025 23:20:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA35C56800B
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Aug 2025 21:15:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E570603430
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Aug 2025 21:20:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6691D2405FD;
-	Fri, 15 Aug 2025 21:15:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D3582561C2;
+	Fri, 15 Aug 2025 21:20:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b5FPDzxr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fPIZD3x7"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C379F2836F
-	for <linux-scsi@vger.kernel.org>; Fri, 15 Aug 2025 21:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F96257431
+	for <linux-scsi@vger.kernel.org>; Fri, 15 Aug 2025 21:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755292538; cv=none; b=Yed8hMuAviuKynXNIIN3R26b9F/rc55mggPtRdv5tibldUp0k4eYG/qqGimgDn4Npo8iNuKH+pktYBN1r82Jtv6wHhZsXup0oAXd44aHy7IK3J7rZmwks7LPfFlSROa3U3RqP6XPdt1iSG1qA6jlObtZh/Vq5nhihQ12W09717U=
+	t=1755292800; cv=none; b=CY3e4eMGEq2NfmYJ1jQtaiM1GkmSio1/IbGk0MYR6eWXOvPpgFZHlbKlvlPa/LfAmpGvBe4RfORVLlFuK4TzyAXpc183Hux0JwNGZvzuyhfwnM6zxNqR5ePaWy+8FyPWFtulRYfsPd0KXXoru8KAQtiBj4p3rWs6U0/0cvDWELw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755292538; c=relaxed/simple;
-	bh=53T2nta0oYWE9uUPGGKUzFMVFFtqHTKj24e5AWGmA6A=;
+	s=arc-20240116; t=1755292800; c=relaxed/simple;
+	bh=98sAuCFuJ+Oizmz6saInVdEF6IQ6y4P5D1CesQ+PROw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SsohJBWOPAczVkdlniMufeCPYEirCOJNsIJqnlz/D652gwBJMe1j0kzH/PEDAdPmQW9UpV/Rdo9wVWcRefZ4b9kBxAWnYd70M4b3hXgFR8/TtcjZDrhooa0bcK0oRJFtvelH89M3Z1U8cVNOn4dfJ06ZaO6BH//WV6ZhVHaws/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b5FPDzxr; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=bgA/4QGSxJQIiuSN2ywRq7+uxDiypFjUG19Ed8wZDiCtoH6xLovAdJ8XSHcA9OtX0UVcqnl9Z+vhTvcxEGyOPfK3iT8urJZtfdtRwTYnDMoRVldPfLQpdW6MhWAX1GWYNCHw8CyE8GNTBqJLXXyv1RYps+H4Yem1YvNVFC9+vN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fPIZD3x7; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755292534;
+	s=mimecast20190719; t=1755292797;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Gocn/7hpql95UK491SYXtCL4s2osIrDGn+cZF2NJ9t8=;
-	b=b5FPDzxrTZ09ZgBEfhL5UlgJYVuOcHIqQLZYIU5Xn/mxwZg8+sMtvp+/XEb1gVWgIkKr8u
-	wPC+ug6nII2qQoqubfm4sxVsLjnmD6q4xoPimHYa7C9SynBvQ8LrrbDUKQJ0klK6qtaJ3P
-	+1RsLGkbZoPcJ+SXTWBTESzwpslMr/k=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=sI5CHEdf+aFpSSMkEaA25jNGCkPHgFNpcfT29HfNTwY=;
+	b=fPIZD3x77eFOnqAz1SU1ewQicqX+8TggJFTpn+nsxwJFZc/VY3kB/2JQxFJ850iFmOtyn0
+	6Je06ACof6H3gnGqDFstj21Tn35bEC0yKHH97VohwGZgQc1B25369F4PJS8glmHaq+O/O0
+	Ed4NOyRtgyhU8YRH1OcZai/OJnkJIWA=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-681-20jARxOsN5-ScXouBQsPZw-1; Fri,
- 15 Aug 2025 17:15:31 -0400
-X-MC-Unique: 20jARxOsN5-ScXouBQsPZw-1
-X-Mimecast-MFC-AGG-ID: 20jARxOsN5-ScXouBQsPZw_1755292530
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-492-7MEmsmAvMxqCrEMr8zobXQ-1; Fri,
+ 15 Aug 2025 17:15:33 -0400
+X-MC-Unique: 7MEmsmAvMxqCrEMr8zobXQ-1
+X-Mimecast-MFC-AGG-ID: 7MEmsmAvMxqCrEMr8zobXQ_1755292532
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 00D751800340;
-	Fri, 15 Aug 2025 21:15:30 +0000 (UTC)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CE5ED1954B13;
+	Fri, 15 Aug 2025 21:15:31 +0000 (UTC)
 Received: from emilne-na.westford.csb (unknown [10.22.65.61])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9DBFA19327C0;
-	Fri, 15 Aug 2025 21:15:28 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 657A419327C0;
+	Fri, 15 Aug 2025 21:15:30 +0000 (UTC)
 From: "Ewan D. Milne" <emilne@redhat.com>
 To: linux-scsi@vger.kernel.org
 Cc: michael.christie@oracle.com,
 	dgilbert@interlog.com,
 	bvanassche@acm.org,
 	dlemoal@kernel.org
-Subject: [PATCH v3 1/8] scsi: Explicitly specify .ascq = 0x00 for ASC 0x28/0x29 scsi_failures
-Date: Fri, 15 Aug 2025 17:15:18 -0400
-Message-ID: <20250815211525.1524254-2-emilne@redhat.com>
+Subject: [PATCH v3 2/8] scsi: sd: Explicitly specify .ascq = SCMD_FAILURE_ASCQ_ANY for ASC 0x3a
+Date: Fri, 15 Aug 2025 17:15:19 -0400
+Message-ID: <20250815211525.1524254-3-emilne@redhat.com>
 In-Reply-To: <20250815211525.1524254-1-emilne@redhat.com>
 References: <20250815211525.1524254-1-emilne@redhat.com>
 Precedence: bulk
@@ -77,47 +77,35 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-This does not change any behavior (since .ascq was initialized to 0 by
-the compiler) but makes explicit that the entry in the scsi_failures
-array does not handle cases where ASCQ is nonzero, consistent with other
-usage.
+This makes the handling in read_capacity_10() consistent with other
+cases, e.g. sd_spinup_disk().  Omitting .ascq in scsi_failure did not
+result in wildcard matching, it only handled ASCQ 0x00.  This patch
+changes the retry behavior, we no longer retry 3 times on ASC 0x3a
+if a nonzero ASCQ is ever returned.
 
 Signed-off-by: Ewan D. Milne <emilne@redhat.com>
 ---
- drivers/scsi/scsi_scan.c | 2 ++
- drivers/scsi/sd.c        | 1 +
- 2 files changed, 3 insertions(+)
+ drivers/scsi/sd.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 3c6e089e80c3..c754b1d566e0 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -660,11 +660,13 @@ static int scsi_probe_lun(struct scsi_device *sdev, unsigned char *inq_result,
- 		{
- 			.sense = UNIT_ATTENTION,
- 			.asc = 0x28,
-+			.ascq = 0x00,
- 			.result = SAM_STAT_CHECK_CONDITION,
- 		},
- 		{
- 			.sense = UNIT_ATTENTION,
- 			.asc = 0x29,
-+			.ascq = 0x00,
- 			.result = SAM_STAT_CHECK_CONDITION,
- 		},
- 		{
 diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 5b8668accf8e..78f5903cc8d0 100644
+index 78f5903cc8d0..e3b802b26f0e 100644
 --- a/drivers/scsi/sd.c
 +++ b/drivers/scsi/sd.c
-@@ -2740,6 +2740,7 @@ static int read_capacity_10(struct scsi_disk *sdkp, struct scsi_device *sdp,
+@@ -2729,11 +2729,13 @@ static int read_capacity_10(struct scsi_disk *sdkp, struct scsi_device *sdp,
  		{
  			.sense = UNIT_ATTENTION,
- 			.asc = 0x29,
-+			.ascq = 0x00,
- 			.allowed = READ_CAPACITY_RETRIES_ON_RESET,
+ 			.asc = 0x3A,
++			.ascq = SCMD_FAILURE_ASCQ_ANY,
  			.result = SAM_STAT_CHECK_CONDITION,
  		},
+ 		{
+ 			.sense = NOT_READY,
+ 			.asc = 0x3A,
++			.ascq = SCMD_FAILURE_ASCQ_ANY,
+ 			.result = SAM_STAT_CHECK_CONDITION,
+ 		},
+ 		 /* Device reset might occur several times so retry a lot */
 -- 
 2.47.1
 
