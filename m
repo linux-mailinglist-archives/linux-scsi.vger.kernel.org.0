@@ -1,48 +1,48 @@
-Return-Path: <linux-scsi+bounces-16195-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-16196-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF21AB2895E
-	for <lists+linux-scsi@lfdr.de>; Sat, 16 Aug 2025 02:37:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56C85B28961
+	for <lists+linux-scsi@lfdr.de>; Sat, 16 Aug 2025 02:42:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AA871D03F57
-	for <lists+linux-scsi@lfdr.de>; Sat, 16 Aug 2025 00:38:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6CF01D033B4
+	for <lists+linux-scsi@lfdr.de>; Sat, 16 Aug 2025 00:42:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C82A7171C9;
-	Sat, 16 Aug 2025 00:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D63581548C;
+	Sat, 16 Aug 2025 00:42:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JgWNbyuj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oXUkOTeM"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8723BC133
-	for <linux-scsi@vger.kernel.org>; Sat, 16 Aug 2025 00:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D0EC133
+	for <linux-scsi@vger.kernel.org>; Sat, 16 Aug 2025 00:42:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755304672; cv=none; b=JzUjPCQDe/I72zHuozeYCjQndC5NF7ZMJ26u70bw7mLt5yDzd5vxyfeLL9BHbyaZusIip/RhE9fLQQH0QMIexYSIIzp0BRgPXZgy9TS+0b7Jurkuk7pFB0RKCtWeEnC9Ne72h5SmNso1tTHZL8qoCqBVbiJuvp3i3P8r6rRWvgE=
+	t=1755304954; cv=none; b=KqkF9xPyC4oaCC5qe/mdnhufmuFvuES8ps43vXCC+BELqhn8e0g73WgJVnl4AesqAX7Y+Xg7PLxlZO4Z50gOk99i0ObD9xsPGhNdK/9vlriWqAsncCVWyRGjS4JLFTwQiBwWTqTyAjW8/ohHk9YaUEFpQwR5eCvptTwheu2i5SM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755304672; c=relaxed/simple;
-	bh=RTvYUx4rV6XB/IKy13QH35rXdpkZCLNUGimUny/waKw=;
+	s=arc-20240116; t=1755304954; c=relaxed/simple;
+	bh=gnfYzxcIQFPulF1J3vBdgC7u2fzQGkuNnNJXINCyvvQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X3zXJ5S3ilHRwkIFJLMHLqFQ0wwEFzbPJTIL2Zy6VeeWgreYlrTaNpHHasZMzWYQR4IkfKuHisQ5vcaIsXq4DjD7cw4EJmEdW69OrXO4bmIgesQ8v5F//WqCy8403CcXHAqC6nE7e8cqQDITjRqQN5Bg7ELUKmEyzEMKaRJj2rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JgWNbyuj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77D02C4CEEB;
-	Sat, 16 Aug 2025 00:37:51 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=NzCJcGMbLT/+3xV8CLnG8/ti1V+8zTJiOEMQtTeFdrrJUXjpabCFY03iuub4Sgb9MA88v55HqmPGZRSGqb548URzoDP6jucChSCdlWLutWpsxBuogmCPSiI/BNDm6aW8I5NF1ZP9EjrK6bNf4byp+H2LcbnhARhlxmt/KYfoqPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oXUkOTeM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CBEBC4CEEB;
+	Sat, 16 Aug 2025 00:42:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755304672;
-	bh=RTvYUx4rV6XB/IKy13QH35rXdpkZCLNUGimUny/waKw=;
+	s=k20201202; t=1755304954;
+	bh=gnfYzxcIQFPulF1J3vBdgC7u2fzQGkuNnNJXINCyvvQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JgWNbyujq5XX06Ga1RgayyRPDWhXF7AHnj7h6j7yFiSZSupt64HHeg6MWxChTg18Z
-	 aPTPufhYuJb6eRH+cN+NNii8UgiyPSNw6fn1JaXQenCGGk30/XnRdb0U3ULhiEPcIQ
-	 lpX3sFCtGiiYPNEomXa42DzuCIY5ZBcmRcEYEAi4gOsgvtX/yPpibJGTDeiBbxdkAE
-	 AtNoCqzdsdQI+Dp9ukuKKRTPg2JFkQN/6zaSZsz2Zx2djpgB9MLFHkxbSKlJAR4gHX
-	 v1cvJGPv3eWyVkNxS0phtnQLfqcTm9+7R7zc/tW+n3xzc2SvolrM9TmuajlRjSOarm
-	 UhgUczdEsx+qg==
-Message-ID: <2eb5d892-e75c-41a5-95ec-9cec01d9634e@kernel.org>
-Date: Sat, 16 Aug 2025 09:37:50 +0900
+	b=oXUkOTeMwO0Xk4bcUeFD+9rkggdh/YQRR6vKstUla/7Gwp7PWWrnumM0v5y7lG1es
+	 QchMcesjCgbu8gIPXqEt1YhQ72QzMZP3UTlfvHOfppQd2bCI77nL510OjRG588vxZG
+	 c8QIzhqWrQKifHrNVp9B99oCP28R40/OhinZf3ApNLaTTO3gekDs70AiUDOWMzvcPJ
+	 R90P1BsBjVW2h9fqTmACZ9rFHRAWbkhBblhbXhYOjYQCQYPsfR0d9k+lg8QjJHkuby
+	 UMpDb3s3ryKT76tVr0Lm3yeNPEfNmaveTqXQ94HR4uFYBqbA0G49CMMljXne8WRAF1
+	 FJWmqiVshqdrw==
+Message-ID: <1b764459-791c-410b-adb3-bbea8a43cd29@kernel.org>
+Date: Sat, 16 Aug 2025 09:42:32 +0900
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -50,25 +50,41 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/8] scsi: sd: Explicitly specify .ascq =
- SCMD_FAILURE_ASCQ_ANY for ASC 0x3a
+Subject: Re: [PATCH v3 3/8] scsi: sd: Have scsi-ml retry read_capacity_16
+ errors
 To: "Ewan D. Milne" <emilne@redhat.com>, linux-scsi@vger.kernel.org
 Cc: michael.christie@oracle.com, dgilbert@interlog.com, bvanassche@acm.org
 References: <20250815211525.1524254-1-emilne@redhat.com>
- <20250815211525.1524254-3-emilne@redhat.com>
+ <20250815211525.1524254-4-emilne@redhat.com>
 Content-Language: en-US
 From: Damien Le Moal <dlemoal@kernel.org>
 Organization: Western Digital Research
-In-Reply-To: <20250815211525.1524254-3-emilne@redhat.com>
+In-Reply-To: <20250815211525.1524254-4-emilne@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 8/16/25 06:15, Ewan D. Milne wrote:
-> This makes the handling in read_capacity_10() consistent with other
-> cases, e.g. sd_spinup_disk().  Omitting .ascq in scsi_failure did not
-> result in wildcard matching, it only handled ASCQ 0x00.  This patch
-> changes the retry behavior, we no longer retry 3 times on ASC 0x3a
-> if a nonzero ASCQ is ever returned.
+> This has read_capacity_16 have scsi-ml retry errors instead of driving
+> them itself.
+> 
+> There are 2 behavior changes with this patch:
+> 1. There is one behavior change where we no longer retry when
+> scsi_execute_cmd returns < 0, but we should be ok. We don't need to retry
+> for failures like the queue being removed, and for the case where there
+> are no tags/reqs since the block layer waits/retries for us. For possible
+> memory allocation failures from blk_rq_map_kern we use GFP_NOIO, so
+> retrying will probably not help.
+> 2. For the specific UAs we checked for and retried, we would get
+> READ_CAPACITY_RETRIES_ON_RESET retries plus whatever retries were left
+> from the main loop's retries. Each UA now gets
+> READ_CAPACITY_RETRIES_ON_RESET reties, and the other errors get up to 3
+> retries. This is most likely ok, because READ_CAPACITY_RETRIES_ON_RESET
+> is already 10 and is not based on anything specific like a spec or
+> device, so the extra 3 we got from the main loop was probably just an
+> accident and is not going to help.
+> 
+> Original patch by Mike Christie <michael.christie@oracle.com> modified
+> based upon review comments for an earlier version of this patch.
 > 
 > Signed-off-by: Ewan D. Milne <emilne@redhat.com>
 
