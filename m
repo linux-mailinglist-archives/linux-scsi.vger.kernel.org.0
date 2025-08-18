@@ -1,132 +1,78 @@
-Return-Path: <linux-scsi+bounces-16249-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-16246-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 162FCB2989E
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Aug 2025 06:47:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32743B29737
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Aug 2025 05:07:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA2D53A7220
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Aug 2025 04:45:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27EDD17BACB
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Aug 2025 03:07:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC45726563B;
-	Mon, 18 Aug 2025 04:45:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="t0UpTZsp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D208425CC40;
+	Mon, 18 Aug 2025 03:07:29 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C718A263F49
-	for <linux-scsi@vger.kernel.org>; Mon, 18 Aug 2025 04:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8137F8632B
+	for <linux-scsi@vger.kernel.org>; Mon, 18 Aug 2025 03:07:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755492308; cv=none; b=Ie7LdTXe/b1c9xitVBqD44f/LbIZUTh3IRvzVT7z+MOlPb6oXBud3BwirroeQz90fLseFxZtH4+ICD3D0sFnvxAidK+q9/KRdTdqypEWvLIZfJgclYvPtbctnYZ+7uW1iQAMES34vqFMK2sWyekQ16Mq06F5AHAGPH4AHf7OsnM=
+	t=1755486449; cv=none; b=FShtxRGjgTEf5U/UC40VOSHt2K5XGslQFPjViktMFzgIYYcmpX+5TPPYlV1Vlv3Zy9jnZ8D90jvdicN6qHTvSGuiqxFkU5Oam4wz3vIki08ZugZl0EORcaP3VRbLgEnDAE1FxRg7kN1bg/eM/gYbqgreL4wv0ThuQRQWVNaK36c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755492308; c=relaxed/simple;
-	bh=DRCAhp3rYLP0JzJGeCCRdhoZ4VHZzQUTtR9AnEAnOJ4=;
-	h=Mime-Version:Subject:From:To:CC:In-Reply-To:Message-ID:Date:
-	 Content-Type:References; b=D3v+lZbHhVPmCVgL8keECbZoZiMNdVAq3LsLWeHIc0fXJfzW0syXULSY9tvTRYRMhJsGuot3NrAR8Y5r1Kr+BKd65eKpmIfFj5M/qGthmzfWYrpfNyLqiAbqhOU+109egwNFt0fxEF5RuAweZb9Le4Rz/clQ5VmzhUMGuXf2iW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=t0UpTZsp; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250818044503epoutp0285f67313ce42b5908de80d53cb213474~cwvL3cWi52404024040epoutp02V
-	for <linux-scsi@vger.kernel.org>; Mon, 18 Aug 2025 04:45:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250818044503epoutp0285f67313ce42b5908de80d53cb213474~cwvL3cWi52404024040epoutp02V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1755492303;
-	bh=DRCAhp3rYLP0JzJGeCCRdhoZ4VHZzQUTtR9AnEAnOJ4=;
-	h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-	b=t0UpTZspREa4QIu8nBSgswBZ9myLr6ngC5wlAKJO9AgsyLhX1j2p+sAcq1gvM3w7L
-	 EmKDtjSo271ejcoVFCjj48c8bEUmicHQNYaG3HYhBfA9n6Ac2J5iAKZQstJyxYCvcU
-	 p36f9dWxRsTbwoeN9FQBZJXHa4GNdLHZ4v0z38W0=
-Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
-	epcas2p1.samsung.com (KnoxPortal) with ESMTPS id
-	20250818044502epcas2p1583cb94e933d0253acf1d26b0298ac34~cwvLKW6iT1332913329epcas2p1r;
-	Mon, 18 Aug 2025 04:45:02 +0000 (GMT)
-Received: from epcpadp1new (unknown [182.195.40.141]) by
-	epsnrtp04.localdomain (Postfix) with ESMTP id 4c50WL5QTGz6B9m6; Mon, 18 Aug
-	2025 04:45:02 +0000 (GMT)
+	s=arc-20240116; t=1755486449; c=relaxed/simple;
+	bh=Wwt1JDVe6knZRt4ngR2UNWkiCmpBmCDEOCWIiUaS014=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=HtIarpBXxCkzK895LXKRb2i05EDl9hn1gRmSdPJjvUGfCYYHEWbLx70gPR6u6GwIw6M+GdQmiJBc4Z8wui/Y3aMut2wQgVSDvvn8nmkXCaEkwbh8zMufhgUohenhmo27sM1zMT0BIIFvEsHqGkA17Vh4DXs8UTtPfOGCbW9zhcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4c4yFd3fbmzdcM3;
+	Mon, 18 Aug 2025 11:03:01 +0800 (CST)
+Received: from dggpemf500002.china.huawei.com (unknown [7.185.36.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8054C1401F0;
+	Mon, 18 Aug 2025 11:07:23 +0800 (CST)
+Received: from [10.174.176.253] (10.174.176.253) by
+ dggpemf500002.china.huawei.com (7.185.36.57) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 18 Aug 2025 11:07:22 +0800
+Message-ID: <7180a7f0-4bc2-4e82-8b3f-60b9bc6f6d0f@huawei.com>
+Date: Mon, 18 Aug 2025 11:07:21 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Subject: RE: [PATCH] ufs: core: Only collect timestamps if the monitoring
- functionality is enabled
-Reply-To: daejun7.park@samsung.com
-Sender: Daejun Park <daejun7.park@samsung.com>
-From: Daejun Park <daejun7.park@samsung.com>
-To: Bart Van Assche <bvanassche@acm.org>, "Martin K . Petersen"
-	<martin.petersen@oracle.com>
-CC: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>, Can Guo
-	<cang@codeaurora.org>, Bean Huo <beanhuo@micron.com>, "James E.J. Bottomley"
-	<James.Bottomley@HansenPartnership.com>, Peter Wang
-	<peter.wang@mediatek.com>, Avri Altman <avri.altman@sandisk.com>, "Bao D.
- Nguyen" <quic_nguyenb@quicinc.com>, Adrian Hunter <adrian.hunter@intel.com>,
-	Daejun Park <daejun7.park@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20250815160049.473550-1-bvanassche@acm.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <1891546521.01755492302739.JavaMail.epsvc@epcpadp1new>
-Date: Mon, 18 Aug 2025 11:36:32 +0900
-X-CMS-MailID: 20250818023632epcms2p80b5dce104f1d1caa1b2f9c68f347c00a
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20250815160114epcas2p43832aa1b9ad0b0efb98ec59f5b568c96
-References: <20250815160049.473550-1-bvanassche@acm.org>
-	<CGME20250815160114epcas2p43832aa1b9ad0b0efb98ec59f5b568c96@epcms2p8>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 03/10] scsi: libsas: Add dev_parent_is_expander()
+ helper
+To: Niklas Cassel <cassel@kernel.org>, John Garry <john.g.garry@oracle.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, "Martin K.
+ Petersen" <martin.petersen@oracle.com>
+CC: Damien Le Moal <dlemoal@kernel.org>, <linux-scsi@vger.kernel.org>
+References: <20250814173215.1765055-12-cassel@kernel.org>
+ <20250814173215.1765055-15-cassel@kernel.org>
+From: Jason Yan <yanaijie@huawei.com>
+In-Reply-To: <20250814173215.1765055-15-cassel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ dggpemf500002.china.huawei.com (7.185.36.57)
 
-Hi Bart,
-
-> Every ktime_get() call in the hot path has a measurable impact on IOPS. H=
-ence,
-> only collect timestamps if the monitoring functionality is enabled.
->=20
-> See also commit 1d8613a23f3c ("scsi: ufs: core: Introduce HBA performance
-> monitor sysfs nodes"; v5.14).
->=20
-> Cc: Can Guo <cang@codeaurora.org>
-> Cc: Bean Huo <beanhuo@micron.com>
-> Cc: Daejun Park <daejun7.park@samsung.com>
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+在 2025/8/15 1:32, Niklas Cassel 写道:
+> Many libsas drivers check if the parent of the device is an expander.
+> Create a helper that the libsas drivers will use in follow up commits.
+> 
+> Suggested-by: Damien Le Moal<dlemoal@kernel.org>
+> Signed-off-by: Niklas Cassel<cassel@kernel.org>
 > ---
-> drivers/ufs/core/ufshcd.c 16 ++++++++++------
-> 1 file changed, 10 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index 714d9966431e..027dc0355ae6 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -2357,10 +2357,12 @@ void ufshcd_send_command(struct ufs_hba *hba, uns=
-igned int task_tag,
-> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct ufshcd_lrb *lrbp =3D &hba->lrb[t=
-ask_tag];
-> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0unsigned long flags;
->=20
-> - =C2=A0 =C2=A0 =C2=A0 =C2=A0lrbp->issue_time_stamp =3D ktime_get();
-> - =C2=A0 =C2=A0 =C2=A0 =C2=A0lrbp->issue_time_stamp_local_clock =3D local=
-_clock();
-> - =C2=A0 =C2=A0 =C2=A0 =C2=A0lrbp->compl_time_stamp =3D ktime_set(0, 0);
-> - =C2=A0 =C2=A0 =C2=A0 =C2=A0lrbp->compl_time_stamp_local_clock =3D 0;
+>   drivers/scsi/libsas/sas_expander.c | 5 +----
+>   include/scsi/libsas.h              | 8 ++++++++
+>   2 files changed, 9 insertions(+), 4 deletions(-)
 
-How about modifying ufshcd_compl_one_cqe() to skip updating compl_time_stam=
-p?
-
-Thanks,
-
-Daejun
+Reviewed-by: Jason Yan <yanaijie@huawei.com>
 
