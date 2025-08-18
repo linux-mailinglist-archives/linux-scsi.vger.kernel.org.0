@@ -1,181 +1,132 @@
-Return-Path: <linux-scsi+bounces-16245-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-16249-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4789BB296E0
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Aug 2025 04:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 162FCB2989E
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Aug 2025 06:47:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F05F3AD295
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Aug 2025 02:17:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA2D53A7220
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Aug 2025 04:45:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8F60247280;
-	Mon, 18 Aug 2025 02:17:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC45726563B;
+	Mon, 18 Aug 2025 04:45:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="t0UpTZsp"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401762451F3;
-	Mon, 18 Aug 2025 02:17:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C718A263F49
+	for <linux-scsi@vger.kernel.org>; Mon, 18 Aug 2025 04:45:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755483444; cv=none; b=Prsks4geCLjHTGPV0KFBxbTPN4tRy8Yl4+a7u1iQdUAZivEHTmx2vyXyJS0g+/ymC0oboI5SOzuKF5QLG1yPoFmZfg43xV+4Yf4tBfrtoSTTz+0FSvMnpZQ//a9b6/3W5gdiPJXs833LjMf/7ljWDQQdtnoqXM0b6DtEDPzOvRY=
+	t=1755492308; cv=none; b=Ie7LdTXe/b1c9xitVBqD44f/LbIZUTh3IRvzVT7z+MOlPb6oXBud3BwirroeQz90fLseFxZtH4+ICD3D0sFnvxAidK+q9/KRdTdqypEWvLIZfJgclYvPtbctnYZ+7uW1iQAMES34vqFMK2sWyekQ16Mq06F5AHAGPH4AHf7OsnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755483444; c=relaxed/simple;
-	bh=COjrbNnCxCKV2KBfhnMvvRq/a1syyPCm/kWdX9F8Huk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L35DsqvjeC5MqOPZYyvmE0aiABL/C47Acuqczr1G97K4ZsBY2qAiWHQApZ6RKTV07VAsnDJv0RrHnj7ILxD8YhdwLgASVzGOlC93/BvU0G6zzY8SwgsHRho/Rz2HkJu7ojjamMqLR1eqN3EZZGw/4VTVLN2k/FrzhDG2hcpBlR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4c4xDv2Lm8zYQtxK;
-	Mon, 18 Aug 2025 10:17:19 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id DE9E81A15CF;
-	Mon, 18 Aug 2025 10:17:17 +0800 (CST)
-Received: from [10.174.179.80] (unknown [10.174.179.80])
-	by APP4 (Coremail) with SMTP id gCh0CgBHERIqjaJoBpM4EA--.3972S3;
-	Mon, 18 Aug 2025 10:17:16 +0800 (CST)
-Message-ID: <4798d44a-4aa5-4b95-a3f4-25be3d8ee35a@huaweicloud.com>
-Date: Mon, 18 Aug 2025 10:17:14 +0800
+	s=arc-20240116; t=1755492308; c=relaxed/simple;
+	bh=DRCAhp3rYLP0JzJGeCCRdhoZ4VHZzQUTtR9AnEAnOJ4=;
+	h=Mime-Version:Subject:From:To:CC:In-Reply-To:Message-ID:Date:
+	 Content-Type:References; b=D3v+lZbHhVPmCVgL8keECbZoZiMNdVAq3LsLWeHIc0fXJfzW0syXULSY9tvTRYRMhJsGuot3NrAR8Y5r1Kr+BKd65eKpmIfFj5M/qGthmzfWYrpfNyLqiAbqhOU+109egwNFt0fxEF5RuAweZb9Le4Rz/clQ5VmzhUMGuXf2iW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=t0UpTZsp; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250818044503epoutp0285f67313ce42b5908de80d53cb213474~cwvL3cWi52404024040epoutp02V
+	for <linux-scsi@vger.kernel.org>; Mon, 18 Aug 2025 04:45:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250818044503epoutp0285f67313ce42b5908de80d53cb213474~cwvL3cWi52404024040epoutp02V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1755492303;
+	bh=DRCAhp3rYLP0JzJGeCCRdhoZ4VHZzQUTtR9AnEAnOJ4=;
+	h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+	b=t0UpTZspREa4QIu8nBSgswBZ9myLr6ngC5wlAKJO9AgsyLhX1j2p+sAcq1gvM3w7L
+	 EmKDtjSo271ejcoVFCjj48c8bEUmicHQNYaG3HYhBfA9n6Ac2J5iAKZQstJyxYCvcU
+	 p36f9dWxRsTbwoeN9FQBZJXHa4GNdLHZ4v0z38W0=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas2p1.samsung.com (KnoxPortal) with ESMTPS id
+	20250818044502epcas2p1583cb94e933d0253acf1d26b0298ac34~cwvLKW6iT1332913329epcas2p1r;
+	Mon, 18 Aug 2025 04:45:02 +0000 (GMT)
+Received: from epcpadp1new (unknown [182.195.40.141]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4c50WL5QTGz6B9m6; Mon, 18 Aug
+	2025 04:45:02 +0000 (GMT)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH util-linux v2] fallocate: add FALLOC_FL_WRITE_ZEROES
- support
-To: "Darrick J. Wong" <djwong@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
- dm-devel@lists.linux.dev, linux-nvme@lists.infradead.org,
- linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-api@vger.kernel.org, hch@lst.de, tytso@mit.edu, bmarzins@redhat.com,
- chaitanyak@nvidia.com, shinichiro.kawasaki@wdc.com, brauner@kernel.org,
- martin.petersen@oracle.com, yi.zhang@huawei.com, chengzhihao1@huawei.com,
- yukuai3@huawei.com, yangerkun@huawei.com
-References: <20250813024015.2502234-1-yi.zhang@huaweicloud.com>
- <20250814165218.GQ7942@frogsfrogsfrogs>
- <a0eda581-ae6c-4b49-8b4f-7bb039b17487@huaweicloud.com>
- <20250815142908.GG7981@frogsfrogsfrogs>
-Content-Language: en-US
-From: Zhang Yi <yi.zhang@huaweicloud.com>
-In-Reply-To: <20250815142908.GG7981@frogsfrogsfrogs>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgBHERIqjaJoBpM4EA--.3972S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxCr4UXw4UCrWkXw13Jr4Utwb_yoW5Kr47pa
-	y3JF1Utr48KF17G3s2v3WkuF1Fyws7trWxWr4Igr1kZrnI9F1xKF4UWr1Y9F97Wr1kCa1j
-	vr4IvFy3uF1UAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	s2-5UUUUU==
-X-CM-SenderInfo: d1lo6xhdqjqx5xdzvxpfor3voofrz/
+Mime-Version: 1.0
+Subject: RE: [PATCH] ufs: core: Only collect timestamps if the monitoring
+ functionality is enabled
+Reply-To: daejun7.park@samsung.com
+Sender: Daejun Park <daejun7.park@samsung.com>
+From: Daejun Park <daejun7.park@samsung.com>
+To: Bart Van Assche <bvanassche@acm.org>, "Martin K . Petersen"
+	<martin.petersen@oracle.com>
+CC: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>, Can Guo
+	<cang@codeaurora.org>, Bean Huo <beanhuo@micron.com>, "James E.J. Bottomley"
+	<James.Bottomley@HansenPartnership.com>, Peter Wang
+	<peter.wang@mediatek.com>, Avri Altman <avri.altman@sandisk.com>, "Bao D.
+ Nguyen" <quic_nguyenb@quicinc.com>, Adrian Hunter <adrian.hunter@intel.com>,
+	Daejun Park <daejun7.park@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20250815160049.473550-1-bvanassche@acm.org>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1891546521.01755492302739.JavaMail.epsvc@epcpadp1new>
+Date: Mon, 18 Aug 2025 11:36:32 +0900
+X-CMS-MailID: 20250818023632epcms2p80b5dce104f1d1caa1b2f9c68f347c00a
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20250815160114epcas2p43832aa1b9ad0b0efb98ec59f5b568c96
+References: <20250815160049.473550-1-bvanassche@acm.org>
+	<CGME20250815160114epcas2p43832aa1b9ad0b0efb98ec59f5b568c96@epcms2p8>
 
-On 8/15/2025 10:29 PM, Darrick J. Wong wrote:
-> On Fri, Aug 15, 2025 at 05:29:19PM +0800, Zhang Yi wrote:
->> Thank you for your review comments!
->>
->> On 2025/8/15 0:52, Darrick J. Wong wrote:
->>> On Wed, Aug 13, 2025 at 10:40:15AM +0800, Zhang Yi wrote:
->>>> From: Zhang Yi <yi.zhang@huawei.com>
->>>>
->>>> The Linux kernel (since version 6.17) supports FALLOC_FL_WRITE_ZEROES in
->>>> fallocate(2). Add support for FALLOC_FL_WRITE_ZEROES to the fallocate
->>>> utility by introducing a new option -w|--write-zeroes.
->>>>
->>>> Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=278c7d9b5e0c
->>>> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
->>>> ---
->>>> v1->v2:
->>>>  - Minor description modification to align with the kernel.
->>>>
->>>>  sys-utils/fallocate.1.adoc | 11 +++++++++--
->>>>  sys-utils/fallocate.c      | 20 ++++++++++++++++----
->>>>  2 files changed, 25 insertions(+), 6 deletions(-)
->>>>
->>>> diff --git a/sys-utils/fallocate.1.adoc b/sys-utils/fallocate.1.adoc
->>>> index 44ee0ef4c..0ec9ff9a9 100644
->>>> --- a/sys-utils/fallocate.1.adoc
->>>> +++ b/sys-utils/fallocate.1.adoc
->>>> @@ -12,7 +12,7 @@ fallocate - preallocate or deallocate space to a file
->>>
->>> <snip all the long lines>
->>>
->>>> +*-w*, *--write-zeroes*::
->>>> +Zeroes space in the byte range starting at _offset_ and continuing
->>>> for _length_ bytes. Within the specified range, blocks are
->>>> preallocated for the regions that span the holes in the file. After a
->>>> successful call, subsequent reads from this range will return zeroes,
->>>> subsequent writes to that range do not require further changes to the
->>>> file mapping metadata.
->>>
->>> "...will return zeroes and subsequent writes to that range..." ?
->>>
->>
->> Yeah.
->>
->>>> ++
->>>> +Zeroing is done within the filesystem by preferably submitting write
->>>
->>> I think we should say less about what the filesystem actually does to
->>> preserve some flexibility:
->>>
->>> "Zeroing is done within the filesystem. The filesystem may use a
->>> hardware accelerated zeroing command, or it may submit regular writes.
->>> The behavior depends on the filesystem design and available hardware."
->>>
->>
->> Sure.
->>
->>>> zeores commands, the alternative way is submitting actual zeroed data,
->>>> the specified range will be converted into written extents. The write
->>>> zeroes command is typically faster than write actual data if the
->>>> device supports unmap write zeroes, the specified range will not be
->>>> physically zeroed out on the device.
->>>> ++
->>>> +Options *--keep-size* can not be specified for the write-zeroes
->>>> operation.
->>>> +
->>>>  include::man-common/help-version.adoc[]
->>>>  
->>>>  == AUTHORS
->> [..]
->>>> @@ -429,6 +438,9 @@ int main(int argc, char **argv)
->>>>  			else if (mode & FALLOC_FL_ZERO_RANGE)
->>>>  				fprintf(stdout, _("%s: %s (%ju bytes) zeroed.\n"),
->>>>  								filename, str, length);
->>>> +			else if (mode & FALLOC_FL_WRITE_ZEROES)
->>>> +				fprintf(stdout, _("%s: %s (%ju bytes) write zeroed.\n"),
->>>
->>> "write zeroed" is a little strange, but I don't have a better
->>> suggestion. :)
->>>
->>
->> Hmm... What about simply using "zeroed", the same to FALLOC_FL_ZERO_RANGE?
->> Users should be aware of the parameters they have passed to fallocate(),
->> so they should not use this print for further differentiation.
-> 
-> No thanks, different inputs should produce different outputs. :)
-> 
+Hi Bart,
 
-OK. perhaps "written as zeros." ? Sounds OK?
+> Every ktime_get() call in the hot path has a measurable impact on IOPS. H=
+ence,
+> only collect timestamps if the monitoring functionality is enabled.
+>=20
+> See also commit 1d8613a23f3c ("scsi: ufs: core: Introduce HBA performance
+> monitor sysfs nodes"; v5.14).
+>=20
+> Cc: Can Guo <cang@codeaurora.org>
+> Cc: Bean Huo <beanhuo@micron.com>
+> Cc: Daejun Park <daejun7.park@samsung.com>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> ---
+> drivers/ufs/core/ufshcd.c 16 ++++++++++------
+> 1 file changed, 10 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index 714d9966431e..027dc0355ae6 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -2357,10 +2357,12 @@ void ufshcd_send_command(struct ufs_hba *hba, uns=
+igned int task_tag,
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct ufshcd_lrb *lrbp =3D &hba->lrb[t=
+ask_tag];
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0unsigned long flags;
+>=20
+> - =C2=A0 =C2=A0 =C2=A0 =C2=A0lrbp->issue_time_stamp =3D ktime_get();
+> - =C2=A0 =C2=A0 =C2=A0 =C2=A0lrbp->issue_time_stamp_local_clock =3D local=
+_clock();
+> - =C2=A0 =C2=A0 =C2=A0 =C2=A0lrbp->compl_time_stamp =3D ktime_set(0, 0);
+> - =C2=A0 =C2=A0 =C2=A0 =C2=A0lrbp->compl_time_stamp_local_clock =3D 0;
+
+How about modifying ufshcd_compl_one_cqe() to skip updating compl_time_stam=
+p?
 
 Thanks,
-Yi.
 
-
+Daejun
 
