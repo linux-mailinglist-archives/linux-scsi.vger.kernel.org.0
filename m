@@ -1,98 +1,137 @@
-Return-Path: <linux-scsi+bounces-16428-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-16430-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A99E1B31106
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Aug 2025 10:02:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49D4CB31171
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Aug 2025 10:17:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5ADE1BC6811
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Aug 2025 08:00:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A414562072F
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Aug 2025 08:15:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4F1D2EB86C;
-	Fri, 22 Aug 2025 07:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF5B12EBBA6;
+	Fri, 22 Aug 2025 08:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="XKfzn3o3"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 871FD2EA48B;
-	Fri, 22 Aug 2025 07:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF7C2EB5D4;
+	Fri, 22 Aug 2025 08:15:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755849599; cv=none; b=Yxgk8tnrkV+CJtvqahFi3eNbC14rKhq8xqXoil4kUt5DGhF/6yMKcmAqRS7ztqiNAR8h61rKScNy6OtM55I4/9prTpPtoytKaHiNdFV3tYWbkEmIBlO80c6zTcJMVrQhf8yPirnzAp9O1a6U/unpaEI5k5ZA69iBK6XLfylvZ2s=
+	t=1755850512; cv=none; b=VYLwDmxcHHAMMAuJwYnVOHizHowppV5TYukMThX998cSzT6PiihjEHQMyOiQinhFRQd5yBOzU41xNqrMrPHl169b5bNovvytCaZe/lShpsemNYs/U2gkP5vkoMEJznRR543sIJcACsmx/NJdD3ACumNtwu69bJvaenwnFkl3r5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755849599; c=relaxed/simple;
-	bh=nsZJ2eg5NO/9LP5H5mGlr9Mh6ZEFV6Uo7z/Dvs2ySYU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ttNKCDaMlBLgAnom1gxz679plqLog14P8+cKYNpYY/zuBrNy/JfXj2XEzXfeGh6I6RhOLNTKaiOMgaOfmtg8P3T7Wlin+9shn3bg5m5XcUSHF9Y8m6FBckXcbP1c7A4wHPSNQBnhIUjaiV0YZu3AiV0y0VX4e3w7xXdqil/cbFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com; spf=pass smtp.mailfrom=h-partners.com; arc=none smtp.client-ip=45.249.212.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4c7XYG1BkWzdcKP;
-	Fri, 22 Aug 2025 15:55:30 +0800 (CST)
-Received: from kwepemh200005.china.huawei.com (unknown [7.202.181.112])
-	by mail.maildlp.com (Postfix) with ESMTPS id 014F71400CD;
-	Fri, 22 Aug 2025 15:59:54 +0800 (CST)
-Received: from localhost.localdomain (10.50.165.33) by
- kwepemh200005.china.huawei.com (7.202.181.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 22 Aug 2025 15:59:53 +0800
-From: Yihang Li <liyihang9@h-partners.com>
-To: <martin.petersen@oracle.com>, <James.Bottomley@HansenPartnership.com>
-CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <liyihang9@huawei.com>, <liuyonglong@huawei.com>,
-	<prime.zeng@hisilicon.com>
-Subject: [PATCH 4/4] scsi: hisi_sas: Remove unused hisi_sas_sync_poll_cqs()
-Date: Fri, 22 Aug 2025 15:59:51 +0800
-Message-ID: <20250822075951.2051639-5-liyihang9@h-partners.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20250822075951.2051639-1-liyihang9@h-partners.com>
-References: <20250822075951.2051639-1-liyihang9@h-partners.com>
+	s=arc-20240116; t=1755850512; c=relaxed/simple;
+	bh=iW6JuuuxXN6ElMSrMPtjEUWiwHeZF5nAmyFgQWPZVJg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=B5UcPz81ifbhOni1oP9MoEl8/3DQi318CGUDvXFJFDHSD2PYQAN1Il2jPb8k7+MpHlDGQCxhKHFov1eR24S3u1PoVyfSyQm1O2KJ03SnxmdF5s3UGW7b/AJI+x/G2yHwKzReSCT0Y8LJj3BOha6BnOMfY7J/W/FUfuct99BbWl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=XKfzn3o3; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250822081507euoutp011eb6e04748c75467354f864a5b13dcb2~eCLvKXWHt0802008020euoutp01T;
+	Fri, 22 Aug 2025 08:15:07 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250822081507euoutp011eb6e04748c75467354f864a5b13dcb2~eCLvKXWHt0802008020euoutp01T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1755850507;
+	bh=8D7LpAOoviBYk7WIQ6GdtJERZ5Q8as878mTjAUnE/1s=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=XKfzn3o3WVKTQX9bE3/cpVfy9yW+H778T92W7lBVbU6kRm4mXQcKAfiloG9SVAIl1
+	 DBMfdB7LnCnsIfysL99KcFBB0FogAV6kQBHI3K43plBR35f6vTvEXBvPziUq5zs0kR
+	 Az18+L1Qjna/KGD88qj7IvZXFIdKHX7QWAyUJp50=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250822081507eucas1p2f6977174baf330e1c895de7ac7b91cc1~eCLu2KEdp1444414444eucas1p2a;
+	Fri, 22 Aug 2025 08:15:07 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250822081502eusmtip2e6ed6d47d5194e587353269471a8bda2~eCLqth-G50411104111eusmtip2L;
+	Fri, 22 Aug 2025 08:15:02 +0000 (GMT)
+Message-ID: <debc61e1-683c-4fcc-9040-d55324f096f7@samsung.com>
+Date: Fri, 22 Aug 2025 10:15:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemh200005.china.huawei.com (7.202.181.112)
+User-Agent: Betterbird (Windows)
+Subject: Re: [PATCH RFC 22/35] dma-remap: drop nth_page() in
+ dma_common_contiguous_remap()
+To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc: Robin Murphy <robin.murphy@arm.com>, Alexander Potapenko
+	<glider@google.com>, Andrew Morton <akpm@linux-foundation.org>, Brendan
+	Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>, Dennis
+	Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	iommu@lists.linux.dev, io-uring@vger.kernel.org, Jason Gunthorpe
+	<jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>, Johannes Weiner
+	<hannes@cmpxchg.org>, John Hubbard <jhubbard@nvidia.com>,
+	kasan-dev@googlegroups.com, kvm@vger.kernel.org, "Liam R. Howlett"
+	<Liam.Howlett@oracle.com>, Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-arm-kernel@axis.com, linux-arm-kernel@lists.infradead.org,
+	linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Marco Elver <elver@google.com>, Michal Hocko <mhocko@suse.com>, Mike
+	Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>,
+	netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>, Peter Xu
+	<peterx@redhat.com>, Suren Baghdasaryan <surenb@google.com>, Tejun Heo
+	<tj@kernel.org>, virtualization@lists.linux.dev, Vlastimil Babka
+	<vbabka@suse.cz>, wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan
+	<ziy@nvidia.com>
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20250821200701.1329277-23-david@redhat.com>
+Content-Transfer-Encoding: 7bit
+X-CMS-MailID: 20250822081507eucas1p2f6977174baf330e1c895de7ac7b91cc1
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250821200816eucas1p1924e60579da49c1dfed300c945894d83
+X-EPHeader: CA
+X-CMS-RootMailID: 20250821200816eucas1p1924e60579da49c1dfed300c945894d83
+References: <20250821200701.1329277-1-david@redhat.com>
+	<CGME20250821200816eucas1p1924e60579da49c1dfed300c945894d83@eucas1p1.samsung.com>
+	<20250821200701.1329277-23-david@redhat.com>
 
-hisi_sas_sync_poll_cqs() is no longer used anywhere, so remove it.
+On 21.08.2025 22:06, David Hildenbrand wrote:
+> dma_common_contiguous_remap() is used to remap an "allocated contiguous
+> region". Within a single allocation, there is no need to use nth_page()
+> anymore.
+>
+> Neither the buddy, nor hugetlb, nor CMA will hand out problematic page
+> ranges.
+>
+> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> ---
+>   kernel/dma/remap.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/dma/remap.c b/kernel/dma/remap.c
+> index 9e2afad1c6152..b7c1c0c92d0c8 100644
+> --- a/kernel/dma/remap.c
+> +++ b/kernel/dma/remap.c
+> @@ -49,7 +49,7 @@ void *dma_common_contiguous_remap(struct page *page, size_t size,
+>   	if (!pages)
+>   		return NULL;
+>   	for (i = 0; i < count; i++)
+> -		pages[i] = nth_page(page, i);
+> +		pages[i] = page++;
+>   	vaddr = vmap(pages, count, VM_DMA_COHERENT, prot);
+>   	kvfree(pages);
+>   
 
-Signed-off-by: Yihang Li <liyihang9@h-partners.com>
----
- drivers/scsi/hisi_sas/hisi_sas_main.c | 13 -------------
- 1 file changed, 13 deletions(-)
-
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index cd24b7d4ef0f..4296fa45da22 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -751,19 +751,6 @@ static void hisi_sas_sync_cq(struct hisi_sas_cq *cq)
- 		tasklet_kill(&cq->tasklet);
- }
- 
--void hisi_sas_sync_poll_cqs(struct hisi_hba *hisi_hba)
--{
--	int i;
--
--	for (i = 0; i < hisi_hba->queue_count; i++) {
--		struct hisi_sas_cq *cq = &hisi_hba->cq[i];
--
--		if (hisi_sas_queue_is_poll(cq))
--			hisi_sas_sync_poll_cq(cq);
--	}
--}
--EXPORT_SYMBOL_GPL(hisi_sas_sync_poll_cqs);
--
- void hisi_sas_sync_cqs(struct hisi_hba *hisi_hba)
- {
- 	int i;
+Best regards
 -- 
-2.33.0
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
 
