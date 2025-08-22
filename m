@@ -1,40 +1,40 @@
-Return-Path: <linux-scsi+bounces-16429-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-16426-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EE48B31107
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Aug 2025 10:02:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B8DDB310FC
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Aug 2025 10:00:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E24021BC694D
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Aug 2025 08:00:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82DE87B6879
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Aug 2025 07:58:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F342EB879;
-	Fri, 22 Aug 2025 07:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65BD22EAB7B;
+	Fri, 22 Aug 2025 07:59:58 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D6C2D249A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DD92E7BDF;
 	Fri, 22 Aug 2025 07:59:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755849599; cv=none; b=G95TitsEWIYREBGNEi+zpO2gCa0WIz7Z/gVweD+U48G8+JrysK8xP1+SxTvfdAZ71XYXeKXmThdHoswlaH4Q8V+wF2sXTpj6/9P/ZPpuKll2WYWkBY/T2hKPq3itdqRUorJUzWKmAN8zV739V2ejWxLepZsbZs+YkzRkcwN4lcI=
+	t=1755849598; cv=none; b=n0BpErQjN7Kz9+ea5+qgz6CeeQWqZPJWy5JLLljmxyYYjqBDYOXNfZarFyDMm9LAL5uUvlXvHhjvFxIIDsxjxs5SoQhjw9wzclfAlpQLa4gdvubp9DO+qKz1FoUfObHqAyRubS9okUXdQniIBYZq1ltUJWExkMlY8WHDyZU6+qA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755849599; c=relaxed/simple;
-	bh=ctM+YoZw4/ZxbDDzVBuf5gyabHtTS0tWuMfb+jMkbDk=;
+	s=arc-20240116; t=1755849598; c=relaxed/simple;
+	bh=xFCNNOvk+CIvgtSwTkc8/AB+SBLiFCFcgMeEscR6wQM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=khHa+QA46ANh2GLXM+byH2/PGHTuvy22/D/NcPkppZ7bPATbP5+XAcKZXKl7o4rL+evmq2d+UJGk4+HdibuUkI3Je4AorbE5kM0C6lCpGMBsiW2uSx9zOfXd84BH/4uv/z09R3jH1vI02EMuYPDnsVZ1Lohkl9jOTka2VsbWe7w=
+	 MIME-Version:Content-Type; b=EZO9bTKnqY0qy1mIrFrFxrGXNvP7zluFxmP3LoJKmSvclQcr9/3uJe8ECK+EeEQPUcAJmSYZ+1caVQN6NqAn8qzdglk0qhsJHwVFy7HIBvl45PESN0dIlCT/E6lRMUdSQDq2oU9U7PH/daebB7WH+SHar9u2oeDJklbhy+4ZYzg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com; spf=pass smtp.mailfrom=h-partners.com; arc=none smtp.client-ip=45.249.212.191
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4c7Xb15W7Gz2Dc4D;
-	Fri, 22 Aug 2025 15:57:01 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4c7XZz2JyBz1R8s9;
+	Fri, 22 Aug 2025 15:56:59 +0800 (CST)
 Received: from kwepemh200005.china.huawei.com (unknown [7.202.181.112])
-	by mail.maildlp.com (Postfix) with ESMTPS id D3D3E140258;
-	Fri, 22 Aug 2025 15:59:52 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 3A56A1A016C;
+	Fri, 22 Aug 2025 15:59:53 +0800 (CST)
 Received: from localhost.localdomain (10.50.165.33) by
  kwepemh200005.china.huawei.com (7.202.181.112) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -44,9 +44,9 @@ To: <martin.petersen@oracle.com>, <James.Bottomley@HansenPartnership.com>
 CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<linuxarm@huawei.com>, <liyihang9@huawei.com>, <liuyonglong@huawei.com>,
 	<prime.zeng@hisilicon.com>
-Subject: [PATCH 1/4] scsi: hisi_sas: Use tasklet to process CQ interrupts
-Date: Fri, 22 Aug 2025 15:59:48 +0800
-Message-ID: <20250822075951.2051639-2-liyihang9@h-partners.com>
+Subject: [PATCH 2/4] scsi: hisi_sas: replace spin_lock/spin_unlock with spin_lock_irqsave/spin_unlock_restore
+Date: Fri, 22 Aug 2025 15:59:49 +0800
+Message-ID: <20250822075951.2051639-3-liyihang9@h-partners.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20250822075951.2051639-1-liyihang9@h-partners.com>
 References: <20250822075951.2051639-1-liyihang9@h-partners.com>
@@ -61,275 +61,291 @@ Content-Type: text/plain
 X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
  kwepemh200005.china.huawei.com (7.202.181.112)
 
-Since commit 81f338e9709d ("scsi: hisi_sas: use threaded irq to process
-CQ interrupts") hisi_sas driver has been using threaded irq to process CQ
-interrupts. However, we found that when the CPU handling the interrupt
-thread is occupied by other high-priority processes, the interrupt thread
-will not be scheduled. This results in the response of IO commands issued
-through the hisi_sas driver not being effectively processed, triggering
-the timeout mechanism at the SCSI layer and leading to the SCSI error
-handler being invoked.
-
-We believe that the method of handling CQ interrupts through threaded irq
-will inevitably encounter this issue, where the CPU bound to the interrupt
-thread cannot be scheduled to handle other processes/threads when occupied
-by high-priority processes or tasks. Therefore, we have reverted the
-interrupt handling in the hisi_sas driver back to tasklet.
+After changing threaded irq to tasklet, some critical resources are used
+on interrupt or bottom half of interrupt, so replace spin_lock/spin_unlock
+with spin_lock_irqsave/spin_unlock_restore to protect those critical
+resources.
 
 Signed-off-by: Yihang Li <liyihang9@h-partners.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas.h       |  2 +-
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 16 ++++++------
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 36 ++++++++++++++++----------
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 27 ++++++++++---------
- 4 files changed, 45 insertions(+), 36 deletions(-)
+ drivers/scsi/hisi_sas/hisi_sas_main.c  | 47 +++++++++++++++-----------
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 12 ++++---
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 15 ++++----
+ 3 files changed, 44 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas.h b/drivers/scsi/hisi_sas/hisi_sas.h
-index 1323ed8aa717..493a1b2124d1 100644
---- a/drivers/scsi/hisi_sas/hisi_sas.h
-+++ b/drivers/scsi/hisi_sas/hisi_sas.h
-@@ -214,9 +214,9 @@ struct hisi_sas_port {
- struct hisi_sas_cq {
- 	struct hisi_hba *hisi_hba;
- 	const struct cpumask *irq_mask;
-+	struct tasklet_struct tasklet;
- 	int	rd_point;
- 	int	id;
--	int	irq_no;
- 	spinlock_t poll_lock;
- };
- 
 diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 30a9c6612651..693198b7027e 100644
+index 693198b7027e..cd24b7d4ef0f 100644
 --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
 +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -740,7 +740,7 @@ static void hisi_sas_sync_cq(struct hisi_sas_cq *cq)
- 	if (hisi_sas_queue_is_poll(cq))
- 		hisi_sas_sync_poll_cq(cq);
- 	else
--		synchronize_irq(cq->irq_no);
-+		tasklet_kill(&cq->tasklet);
+@@ -193,11 +193,13 @@ static void hisi_sas_slot_index_clear(struct hisi_hba *hisi_hba, int slot_idx)
+ 
+ static void hisi_sas_slot_index_free(struct hisi_hba *hisi_hba, int slot_idx)
+ {
++	unsigned long flags;
++
+ 	if (hisi_hba->hw->slot_index_alloc ||
+ 	    slot_idx < HISI_SAS_RESERVED_IPTT) {
+-		spin_lock(&hisi_hba->lock);
++		spin_lock_irqsave(&hisi_hba->lock, flags);
+ 		hisi_sas_slot_index_clear(hisi_hba, slot_idx);
+-		spin_unlock(&hisi_hba->lock);
++		spin_unlock_irqrestore(&hisi_hba->lock, flags);
+ 	}
  }
  
- void hisi_sas_sync_poll_cqs(struct hisi_hba *hisi_hba)
-@@ -779,7 +779,7 @@ static void hisi_sas_tmf_aborted(struct sas_task *task)
- 		struct hisi_sas_cq *cq =
- 			   &hisi_hba->cq[slot->dlvry_queue];
- 		/*
--		 * sync irq or poll queue to avoid free'ing task
-+		 * flush tasklet or poll queue to avoid free'ing task
- 		 * before using task in IO completion
- 		 */
- 		hisi_sas_sync_cq(cq);
-@@ -1705,8 +1705,8 @@ static int hisi_sas_abort_task(struct sas_task *task)
+@@ -213,11 +215,12 @@ static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba,
+ {
+ 	int index;
+ 	void *bitmap = hisi_hba->slot_index_tags;
++	unsigned long flags;
  
- 		if (slot) {
- 			/*
--			 * sync irq or poll queue to avoid free'ing task
--			 * before using task in IO completion
-+			 * flush tasklet or poll queue to avoid free'ing
-+			 * task before using task in IO completion
- 			 */
- 			cq = &hisi_hba->cq[slot->dlvry_queue];
- 			hisi_sas_sync_cq(cq);
-@@ -1779,8 +1779,8 @@ static int hisi_sas_abort_task(struct sas_task *task)
- 		if (((rc < 0) || (rc == TMF_RESP_FUNC_FAILED)) &&
- 					task->lldd_task) {
- 			/*
--			 * sync irq or poll queue to avoid free'ing task
--			 * before using task in IO completion
-+			 * flush tasklet or poll queue to avoid free'ing
-+			 * task before using task in IO completion
- 			 */
- 			hisi_sas_sync_cq(cq);
- 			slot->task = NULL;
-@@ -2042,8 +2042,8 @@ static bool hisi_sas_internal_abort_timeout(struct sas_task *task,
- 			struct hisi_sas_cq *cq =
- 				&hisi_hba->cq[slot->dlvry_queue];
- 			/*
--			 * sync irq or poll queue to avoid free'ing task
--			 * before using task in IO completion
-+			 * flush tasklet or poll queue to avoid free'ing
-+			 * task before using task in IO completion
- 			 */
- 			hisi_sas_sync_cq(cq);
- 			slot->task = NULL;
+ 	if (rq)
+ 		return rq->tag + HISI_SAS_RESERVED_IPTT;
+ 
+-	spin_lock(&hisi_hba->lock);
++	spin_lock_irqsave(&hisi_hba->lock, flags);
+ 	index = find_next_zero_bit(bitmap, HISI_SAS_RESERVED_IPTT,
+ 				   hisi_hba->last_slot_index + 1);
+ 	if (index >= HISI_SAS_RESERVED_IPTT) {
+@@ -225,13 +228,13 @@ static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba,
+ 				HISI_SAS_RESERVED_IPTT,
+ 				0);
+ 		if (index >= HISI_SAS_RESERVED_IPTT) {
+-			spin_unlock(&hisi_hba->lock);
++			spin_unlock_irqrestore(&hisi_hba->lock, flags);
+ 			return -SAS_QUEUE_FULL;
+ 		}
+ 	}
+ 	hisi_sas_slot_index_set(hisi_hba, index);
+ 	hisi_hba->last_slot_index = index;
+-	spin_unlock(&hisi_hba->lock);
++	spin_unlock_irqrestore(&hisi_hba->lock, flags);
+ 
+ 	return index;
+ }
+@@ -239,6 +242,7 @@ static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba,
+ void hisi_sas_slot_task_free(struct hisi_hba *hisi_hba, struct sas_task *task,
+ 			     struct hisi_sas_slot *slot, bool need_lock)
+ {
++	unsigned long flags;
+ 	int device_id = slot->device_id;
+ 	struct hisi_sas_device *sas_dev = &hisi_hba->devices[device_id];
+ 
+@@ -272,9 +276,9 @@ void hisi_sas_slot_task_free(struct hisi_hba *hisi_hba, struct sas_task *task,
+ 	}
+ 
+ 	if (need_lock) {
+-		spin_lock(&sas_dev->lock);
++		spin_lock_irqsave(&sas_dev->lock, flags);
+ 		list_del_init(&slot->entry);
+-		spin_unlock(&sas_dev->lock);
++		spin_unlock_irqrestore(&sas_dev->lock, flags);
+ 	} else {
+ 		list_del_init(&slot->entry);
+ 	}
+@@ -436,15 +440,16 @@ void hisi_sas_task_deliver(struct hisi_hba *hisi_hba,
+ 	int dlvry_queue_slot, dlvry_queue;
+ 	struct sas_task *task = slot->task;
+ 	int wr_q_index;
++	unsigned long flags;
+ 
+-	spin_lock(&dq->lock);
++	spin_lock_irqsave(&dq->lock, flags);
+ 	wr_q_index = dq->wr_point;
+ 	dq->wr_point = (dq->wr_point + 1) % HISI_SAS_QUEUE_SLOTS;
+ 	list_add_tail(&slot->delivery, &dq->list);
+-	spin_unlock(&dq->lock);
+-	spin_lock(&sas_dev->lock);
++	spin_unlock_irqrestore(&dq->lock, flags);
++	spin_lock_irqsave(&sas_dev->lock, flags);
+ 	list_add_tail(&slot->entry, &sas_dev->list);
+-	spin_unlock(&sas_dev->lock);
++	spin_unlock_irqrestore(&sas_dev->lock, flags);
+ 
+ 	dlvry_queue = dq->id;
+ 	dlvry_queue_slot = wr_q_index;
+@@ -485,9 +490,9 @@ void hisi_sas_task_deliver(struct hisi_hba *hisi_hba,
+ 	smp_wmb();
+ 	WRITE_ONCE(slot->ready, 1);
+ 
+-	spin_lock(&dq->lock);
++	spin_lock_irqsave(&dq->lock, flags);
+ 	hisi_hba->hw->start_delivery(dq);
+-	spin_unlock(&dq->lock);
++	spin_unlock_irqrestore(&dq->lock, flags);
+ }
+ 
+ static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
+@@ -690,11 +695,12 @@ static struct hisi_sas_device *hisi_sas_alloc_dev(struct domain_device *device)
+ {
+ 	struct hisi_hba *hisi_hba = dev_to_hisi_hba(device);
+ 	struct hisi_sas_device *sas_dev = NULL;
++	unsigned long flags;
+ 	int last = hisi_hba->last_dev_id;
+ 	int first = (hisi_hba->last_dev_id + 1) % HISI_SAS_MAX_DEVICES;
+ 	int i;
+ 
+-	spin_lock(&hisi_hba->lock);
++	spin_lock_irqsave(&hisi_hba->lock, flags);
+ 	for (i = first; i != last; i %= HISI_SAS_MAX_DEVICES) {
+ 		if (hisi_hba->devices[i].dev_type == SAS_PHY_UNUSED) {
+ 			int queue = i % hisi_hba->queue_count;
+@@ -714,16 +720,18 @@ static struct hisi_sas_device *hisi_sas_alloc_dev(struct domain_device *device)
+ 		i++;
+ 	}
+ 	hisi_hba->last_dev_id = i;
+-	spin_unlock(&hisi_hba->lock);
++	spin_unlock_irqrestore(&hisi_hba->lock, flags);
+ 
+ 	return sas_dev;
+ }
+ 
+ static void hisi_sas_sync_poll_cq(struct hisi_sas_cq *cq)
+ {
++	unsigned long flags;
++
+ 	/* make sure CQ entries being processed are processed to completion */
+-	spin_lock(&cq->poll_lock);
+-	spin_unlock(&cq->poll_lock);
++	spin_lock_irqsave(&cq->poll_lock, flags);
++	spin_unlock_irqrestore(&cq->poll_lock, flags);
+ }
+ 
+ static bool hisi_sas_queue_is_poll(struct hisi_sas_cq *cq)
+@@ -1155,12 +1163,13 @@ static void hisi_sas_release_task(struct hisi_hba *hisi_hba,
+ {
+ 	struct hisi_sas_slot *slot, *slot2;
+ 	struct hisi_sas_device *sas_dev = device->lldd_dev;
++	unsigned long flags;
+ 
+-	spin_lock(&sas_dev->lock);
++	spin_lock_irqsave(&sas_dev->lock, flags);
+ 	list_for_each_entry_safe(slot, slot2, &sas_dev->list, entry)
+ 		hisi_sas_do_release_task(hisi_hba, slot->task, slot, false);
+ 
+-	spin_unlock(&sas_dev->lock);
++	spin_unlock_irqrestore(&sas_dev->lock, flags);
+ }
+ 
+ void hisi_sas_release_tasks(struct hisi_hba *hisi_hba)
 diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index f3516a0611dd..4c7d026a44a8 100644
+index 4c7d026a44a8..d2d226ac4164 100644
 --- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
 +++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -3110,9 +3110,9 @@ static irqreturn_t fatal_axi_int_v2_hw(int irq_no, void *p)
- 	return IRQ_HANDLED;
- }
+@@ -773,6 +773,7 @@ slot_index_alloc_quirk_v2_hw(struct hisi_hba *hisi_hba,
+ 	struct hisi_sas_device *sas_dev = device->lldd_dev;
+ 	int sata_idx = sas_dev->sata_idx;
+ 	int start, end;
++	unsigned long flags;
  
--static irqreturn_t cq_thread_v2_hw(int irq_no, void *p)
-+static void cq_tasklet_v2_hw(unsigned long val)
- {
--	struct hisi_sas_cq *cq = p;
-+	struct hisi_sas_cq *cq = (struct hisi_sas_cq *)val;
- 	struct hisi_hba *hisi_hba = cq->hisi_hba;
- 	struct hisi_sas_slot *slot;
- 	struct hisi_sas_itct *itct;
-@@ -3180,8 +3180,6 @@ static irqreturn_t cq_thread_v2_hw(int irq_no, void *p)
- 	/* update rd_point */
- 	cq->rd_point = rd_point;
- 	hisi_sas_write32(hisi_hba, COMPL_Q_0_RD_PTR + (0x14 * queue), rd_point);
--
--	return IRQ_HANDLED;
- }
- 
- static irqreturn_t cq_interrupt_v2_hw(int irq_no, void *p)
-@@ -3191,8 +3189,9 @@ static irqreturn_t cq_interrupt_v2_hw(int irq_no, void *p)
- 	int queue = cq->id;
- 
- 	hisi_sas_write32(hisi_hba, OQ_INT_SRC, 1 << queue);
-+	tasklet_schedule(&cq->tasklet);
- 
--	return IRQ_WAKE_THREAD;
-+	return IRQ_HANDLED;
- }
- 
- static irqreturn_t sata_int_v2_hw(int irq_no, void *p)
-@@ -3373,19 +3372,20 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 
- 	for (queue_no = 0; queue_no < hisi_hba->cq_nvecs; queue_no++) {
- 		struct hisi_sas_cq *cq = &hisi_hba->cq[queue_no];
-+		struct tasklet_struct *t = &cq->tasklet;
- 
--		cq->irq_no = hisi_hba->irq_map[queue_no + 96];
--		rc = devm_request_threaded_irq(dev, cq->irq_no,
--					       cq_interrupt_v2_hw,
--					       cq_thread_v2_hw, IRQF_ONESHOT,
--					       DRV_NAME " cq", cq);
-+		irq = hisi_hba->irq_map[queue_no + 96];
-+		rc = devm_request_irq(dev, irq, cq_interrupt_v2_hw, 0,
-+				      DRV_NAME " cq", cq);
- 		if (rc) {
- 			dev_err(dev, "irq init: could not request cq interrupt %d, rc=%d\n",
--					cq->irq_no, rc);
-+					irq, rc);
- 			rc = -ENOENT;
- 			goto err_out;
- 		}
--		cq->irq_mask = irq_get_affinity_mask(cq->irq_no);
-+
-+		cq->irq_mask = irq_get_affinity_mask(irq);
-+		tasklet_init(t, cq_tasklet_v2_hw, (unsigned long)cq);
+ 	if (!sata_dev) {
+ 		/*
+@@ -796,12 +797,12 @@ slot_index_alloc_quirk_v2_hw(struct hisi_hba *hisi_hba,
+ 		end = 64 * (sata_idx + 2);
  	}
- err_out:
- 	return rc;
-@@ -3443,6 +3443,7 @@ static int soft_reset_v2_hw(struct hisi_hba *hisi_hba)
  
- 	interrupt_disable_v2_hw(hisi_hba);
- 	hisi_sas_write32(hisi_hba, DLVRY_QUEUE_ENABLE, 0x0);
-+	hisi_sas_sync_cqs(hisi_hba);
+-	spin_lock(&hisi_hba->lock);
++	spin_lock_irqsave(&hisi_hba->lock, flags);
+ 	while (1) {
+ 		start = find_next_zero_bit(bitmap,
+ 					hisi_hba->slot_index_count, start);
+ 		if (start >= end) {
+-			spin_unlock(&hisi_hba->lock);
++			spin_unlock_irqrestore(&hisi_hba->lock, flags);
+ 			return -SAS_QUEUE_FULL;
+ 		}
+ 		/*
+@@ -813,7 +814,7 @@ slot_index_alloc_quirk_v2_hw(struct hisi_hba *hisi_hba,
+ 	}
  
- 	hisi_sas_stop_phys(hisi_hba);
- 
-@@ -3635,6 +3636,15 @@ static int hisi_sas_v2_probe(struct platform_device *pdev)
- 	return hisi_sas_probe(pdev, &hisi_sas_v2_hw);
+ 	set_bit(start, bitmap);
+-	spin_unlock(&hisi_hba->lock);
++	spin_unlock_irqrestore(&hisi_hba->lock, flags);
+ 	return start;
  }
  
-+static void hisi_sas_v2_remove(struct platform_device *pdev)
-+{
-+	struct sas_ha_struct *sha = platform_get_drvdata(pdev);
-+	struct hisi_hba *hisi_hba = sha->lldd_ha;
-+
-+	hisi_sas_sync_cqs(hisi_hba);
-+	hisi_sas_remove(pdev);
-+}
-+
- static const struct of_device_id sas_v2_of_match[] = {
- 	{ .compatible = "hisilicon,hip06-sas-v2",},
- 	{ .compatible = "hisilicon,hip07-sas-v2",},
-@@ -3651,7 +3661,7 @@ MODULE_DEVICE_TABLE(acpi, sas_v2_acpi_match);
+@@ -842,8 +843,9 @@ hisi_sas_device *alloc_dev_quirk_v2_hw(struct domain_device *device)
+ 	struct hisi_sas_device *sas_dev = NULL;
+ 	int i, sata_dev = dev_is_sata(device);
+ 	int sata_idx = -1;
++	unsigned long flags;
  
- static struct platform_driver hisi_sas_v2_driver = {
- 	.probe = hisi_sas_v2_probe,
--	.remove = hisi_sas_remove,
-+	.remove = hisi_sas_v2_remove,
- 	.driver = {
- 		.name = DRV_NAME,
- 		.of_match_table = sas_v2_of_match,
+-	spin_lock(&hisi_hba->lock);
++	spin_lock_irqsave(&hisi_hba->lock, flags);
+ 
+ 	if (sata_dev)
+ 		if (!sata_index_alloc_v2_hw(hisi_hba, &sata_idx))
+@@ -874,7 +876,7 @@ hisi_sas_device *alloc_dev_quirk_v2_hw(struct domain_device *device)
+ 	}
+ 
+ out:
+-	spin_unlock(&hisi_hba->lock);
++	spin_unlock_irqrestore(&hisi_hba->lock, flags);
+ 
+ 	return sas_dev;
+ }
 diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 2f9e01717ef3..2778ebe117bb 100644
+index 2778ebe117bb..967cf5181fed 100644
 --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
 +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -2569,13 +2569,11 @@ static int queue_complete_v3_hw(struct Scsi_Host *shost, unsigned int queue)
- 	return completed;
- }
+@@ -954,10 +954,11 @@ static void dereg_device_v3_hw(struct hisi_hba *hisi_hba,
+ 	struct hisi_sas_slot *slot, *slot2;
+ 	struct hisi_sas_device *sas_dev = device->lldd_dev;
+ 	u32 cfg_abt_set_query_iptt;
++	unsigned long flags;
  
--static irqreturn_t cq_thread_v3_hw(int irq_no, void *p)
-+static void cq_tasklet_v3_hw(unsigned long val)
- {
--	struct hisi_sas_cq *cq = p;
-+	struct hisi_sas_cq *cq = (struct hisi_sas_cq *)val;
+ 	cfg_abt_set_query_iptt = hisi_sas_read32(hisi_hba,
+ 		CFG_ABT_SET_QUERY_IPTT);
+-	spin_lock(&sas_dev->lock);
++	spin_lock_irqsave(&sas_dev->lock, flags);
+ 	list_for_each_entry_safe(slot, slot2, &sas_dev->list, entry) {
+ 		cfg_abt_set_query_iptt &= ~CFG_SET_ABORTED_IPTT_MSK;
+ 		cfg_abt_set_query_iptt |= (1 << CFG_SET_ABORTED_EN_OFF) |
+@@ -965,7 +966,7 @@ static void dereg_device_v3_hw(struct hisi_hba *hisi_hba,
+ 		hisi_sas_write32(hisi_hba, CFG_ABT_SET_QUERY_IPTT,
+ 			cfg_abt_set_query_iptt);
+ 	}
+-	spin_unlock(&sas_dev->lock);
++	spin_unlock_irqrestore(&sas_dev->lock, flags);
+ 	cfg_abt_set_query_iptt &= ~(1 << CFG_SET_ABORTED_EN_OFF);
+ 	hisi_sas_write32(hisi_hba, CFG_ABT_SET_QUERY_IPTT,
+ 		cfg_abt_set_query_iptt);
+@@ -1587,6 +1588,7 @@ static irqreturn_t phy_up_v3_hw(int phy_no, struct hisi_hba *hisi_hba)
+ 	struct hisi_sas_phy *phy = &hisi_hba->phy[phy_no];
+ 	struct asd_sas_phy *sas_phy = &phy->sas_phy;
+ 	struct device *dev = hisi_hba->dev;
++	unsigned long flags;
  
- 	complete_v3_hw(cq);
--
--	return IRQ_HANDLED;
- }
+ 	hisi_sas_phy_write32(hisi_hba, phy_no, PHYCTRL_PHY_ENA_MSK, 1);
  
- static irqreturn_t cq_interrupt_v3_hw(int irq_no, void *p)
-@@ -2585,8 +2583,9 @@ static irqreturn_t cq_interrupt_v3_hw(int irq_no, void *p)
- 	int queue = cq->id;
- 
- 	hisi_sas_write32(hisi_hba, OQ_INT_SRC, 1 << queue);
-+	tasklet_schedule(&cq->tasklet);
- 
--	return IRQ_WAKE_THREAD;
-+	return IRQ_HANDLED;
- }
- 
- static void hisi_sas_v3_free_vectors(void *data)
-@@ -2657,16 +2656,13 @@ static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
- 
- 	for (i = 0; i < hisi_hba->cq_nvecs; i++) {
- 		struct hisi_sas_cq *cq = &hisi_hba->cq[i];
-+		struct tasklet_struct *t = &cq->tasklet;
- 		int nr = hisi_sas_intr_conv ? BASE_VECTORS_V3_HW :
- 					      BASE_VECTORS_V3_HW + i;
--		unsigned long irqflags = hisi_sas_intr_conv ? IRQF_SHARED :
--							      IRQF_ONESHOT;
--
--		cq->irq_no = pci_irq_vector(pdev, nr);
--		rc = devm_request_threaded_irq(dev, cq->irq_no,
--				      cq_interrupt_v3_hw,
--				      cq_thread_v3_hw,
--				      irqflags,
-+		unsigned long irqflags = hisi_sas_intr_conv ? IRQF_SHARED : 0;
-+
-+		rc = devm_request_irq(dev, pci_irq_vector(pdev, nr),
-+				      cq_interrupt_v3_hw, irqflags,
- 				      DRV_NAME " cq", cq);
- 		if (rc) {
- 			dev_err(dev, "could not request cq%d interrupt, rc=%d\n",
-@@ -2678,6 +2674,8 @@ static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
- 			dev_err(dev, "could not get cq%d irq affinity!\n", i);
- 			return -ENOENT;
- 		}
-+
-+		tasklet_init(t, cq_tasklet_v3_hw, (unsigned long)cq);
+@@ -1664,11 +1666,11 @@ static irqreturn_t phy_up_v3_hw(int phy_no, struct hisi_hba *hisi_hba)
  	}
  
- 	return 0;
-@@ -2750,8 +2748,8 @@ static int disable_host_v3_hw(struct hisi_hba *hisi_hba)
- 	u32 status, reg_val;
- 	int rc;
+ 	phy->port_id = port_id;
+-	spin_lock(&phy->lock);
++	spin_lock_irqsave(&phy->lock, flags);
+ 	/* Delete timer and set phy_attached atomically */
+ 	timer_delete(&phy->timer);
+ 	phy->phy_attached = 1;
+-	spin_unlock(&phy->lock);
++	spin_unlock_irqrestore(&phy->lock, flags);
  
--	hisi_sas_sync_poll_cqs(hisi_hba);
- 	hisi_sas_write32(hisi_hba, DLVRY_QUEUE_ENABLE, 0x0);
-+	hisi_sas_sync_cqs(hisi_hba);
+ 	/*
+ 	 * Call pm_runtime_get_noresume() which pairs with
+@@ -2560,11 +2562,12 @@ static int queue_complete_v3_hw(struct Scsi_Host *shost, unsigned int queue)
+ {
+ 	struct hisi_hba *hisi_hba = shost_priv(shost);
+ 	struct hisi_sas_cq *cq = &hisi_hba->cq[queue];
++	unsigned long flags;
+ 	int completed;
  
- 	hisi_sas_stop_phys(hisi_hba);
+-	spin_lock(&cq->poll_lock);
++	spin_lock_irqsave(&cq->poll_lock, flags);
+ 	completed = complete_v3_hw(cq);
+-	spin_unlock(&cq->poll_lock);
++	spin_unlock_irqrestore(&cq->poll_lock, flags);
  
-@@ -5100,6 +5098,7 @@ static void hisi_sas_v3_remove(struct pci_dev *pdev)
- 	sas_remove_host(shost);
- 
- 	hisi_sas_v3_destroy_irqs(pdev, hisi_hba);
-+	hisi_sas_sync_cqs(hisi_hba);
- 	hisi_sas_free(hisi_hba);
- 	scsi_host_put(shost);
+ 	return completed;
  }
 -- 
 2.33.0
