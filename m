@@ -1,84 +1,80 @@
-Return-Path: <linux-scsi+bounces-16510-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-16508-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74AD8B351C1
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 04:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ABF0DB351BD
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 04:35:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14E4F200D48
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 02:35:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80C1024119D
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 02:34:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 663AA238C0A;
-	Tue, 26 Aug 2025 02:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98B32279335;
+	Tue, 26 Aug 2025 02:34:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mkquoqMy"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="pl/RYWQP"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E1E2114
-	for <linux-scsi@vger.kernel.org>; Tue, 26 Aug 2025 02:34:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B08276058;
+	Tue, 26 Aug 2025 02:34:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756175666; cv=none; b=M+hyPQ2P90NxVNKNWQ1bgE/BKmHCNE6rr0uzSTva74WJNJYuyLyXOQNpclSO5mECuW31KIjs4WlYacI1w+RR8GoEGRTDNPznSEiZTZonnTRlThgL5oN9x6zk3HsS67je4yYSgopatwkavU4yt86sjQaTrLRGSlYA1M4tmRs5w7c=
+	t=1756175653; cv=none; b=dJYedwffQoKiDvEm6kdqMCN2jsKhaaPLzFrXwoA7k1Cokx+hmUYujXOWkJAhEL4ejkU3Q1LsA0Gtjvay+/gVqwC0EhiBte4Oaj9pPtHFUtJclVxxqrOSMPJFm6kZKeltA/18gri7C3N75TJaEWj2w/GEQoc+2FMQe4FTZqi43Hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756175666; c=relaxed/simple;
-	bh=pvq8g9SKYxWNrBjtysuBfMm4r6dc/f3cNso0zqrssPI=;
+	s=arc-20240116; t=1756175653; c=relaxed/simple;
+	bh=7bqzoo9uz0c++Yk+LmiBQRxdNpY6//K6bsy7Ob6RZaA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=r2vMYApg8TTn46ynQcRFQGDMaPDHx7RZM94AljK5Jyolr3n7TOqIAkUq2/ecp81V2BT6lAXpEj/ATYk6WHh5Pfdk5PkrQfG70vq2vNyCKWIbaxfiwrLEeh2TGBqBYB5eiO9sXJQ2iMWchI2KTrlGPevjBucXHugwGNG98efuRmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=mkquoqMy; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=MblzUPMpj6mlbunH964BPyonImH68Po5d5k2tSoxyfYoTWBFIro6/fb+KMJ6COBF5FOTyI0z9+eshYc7I2n1hKXYS7BdkaSoZAepbI1eJZm3jyn7WDS9uS7bm+ONlgQ6+KhGia2mk0QrOzEI0+bt6HyqRIZlRUDWS3lp3s5tZHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=pl/RYWQP; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57Q1BnV6027507;
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57Q2WFEP001937;
 	Tue, 26 Aug 2025 02:34:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=pfasYzKUMKYZZMe/HUBGvxeaarCbG7a9jsR4Wry7S7g=; b=
-	mkquoqMy1oVt+ZBgICU5Wmmef+8UXvLT5+yAPoBukjlHA/8LpTcwT3inqxfo51k7
-	CxyQ2CP58ccW5cYB+QgyxwNWNYOdw4M77rTEszEHdj9M12BuEUmYBgEKJVyRwQsm
-	wf8sNtL/omPCLqkUiQs9Yar2cmzw12Q9lEREw2ulqz3k20e5w09kPp6PzN3JTNCa
-	A8CHB0Ihat/POM9SW+wSDIrE5vN86ug1qmVAxDQ6y30za0YFbJV0K4rIlxfHU5gc
-	x17l81PsqsHgfMU1en5+cAcIUSPcZal9dL21if1OJ6rv0yA+uWD/UqU3EW4GkdPJ
-	98U1yJ362adi48O9A6Kt2w==
+	corp-2025-04-25; bh=kgJjoWTU9YSPTeEYNe0qMYzga/t00pxXHMEwVeJ7fxo=; b=
+	pl/RYWQPI3UGqJCxs4KRpmJpvTREgnFCYYEn+fkUOEKbQtKhfdrCCZ6MqJl45wY2
+	O/GXa4l/+dZAwIMw3BHHQLfvo2KtFvqHzxHcmU0+47vOCUZ9pck15t3HOdM2o+gI
+	mshE1QAIOB86/xymEsU0KD9Ytb/qYlloxlrgebuPVnsKynXE4FqCiS6CoGpkzld9
+	uj9C7NxFs8tgeTibvEGbR9Y5bVpq/FlkdCBPtbfQWPih3YRYhdyIgILUbLY3I3+8
+	+5+vstRPdjtAElexa1//qHVVBAYTeA7PRPh0e66X9t3mAr4VnlEpe5p5zIsNjFuK
+	mtCgMtqrwucmccYIEAQ7jQ==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48q48ekhj6-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48q4jakefy-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 26 Aug 2025 02:34:05 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 57Q0VRK2012351;
-	Tue, 26 Aug 2025 02:34:03 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 57Q1QuwC012230;
+	Tue, 26 Aug 2025 02:34:04 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 48q438xc35-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 48q438xc41-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 26 Aug 2025 02:34:03 +0000
+	Tue, 26 Aug 2025 02:34:04 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 57Q2Y2s2010861;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 57Q2Y2s4010861;
 	Tue, 26 Aug 2025 02:34:03 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 48q438xc0n-2;
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 48q438xc0n-3;
 	Tue, 26 Aug 2025 02:34:03 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Yihang Li <liyihang9@h-partners.com>,
+To: Don Brace <don.brace@microchip.com>,
         "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>,
-        Terrence Adams <tadamsjr@google.com>,
-        Igor Pylypiv <ipylypiv@google.com>,
-        Salomon Dushimirimana <salomondush@google.com>,
-        Deepak Ukey <deepak.ukey@microsemi.com>,
-        Viswas G <Viswas.G@microsemi.com>, Niklas Cassel <cassel@kernel.org>
+        Cryolitia PukNgae <cryolitia@uniontech.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jack Wang <jinpu.wang@profitbricks.com>, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v2 00/10] scsi: pm80xx: Fix expander support
-Date: Mon, 25 Aug 2025 22:33:54 -0400
-Message-ID: <175613417222.1984137.6870869642050987098.b4-ty@oracle.com>
+        storagedev@microchip.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wangyuli@uniontech.com,
+        zhanjun@uniontech.com, guanwentao@uniontech.com
+Subject: Re: [PATCH] scsi: hpsa: fix incorrect comment format
+Date: Mon, 25 Aug 2025 22:33:55 -0400
+Message-ID: <175613417227.1984137.3595488011495758582.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250814173215.1765055-12-cassel@kernel.org>
-References: <20250814173215.1765055-12-cassel@kernel.org>
+In-Reply-To: <20250806-scsi_typo-v1-1-ec353a303b31@uniontech.com>
+References: <20250806-scsi_typo-v1-1-ec353a303b31@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -91,57 +87,33 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-08-26_01,2025-08-20_03,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 bulkscore=0
- adultscore=0 mlxlogscore=832 spamscore=0 phishscore=0 suspectscore=0
+ adultscore=0 mlxlogscore=700 spamscore=0 phishscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2508110000
  definitions=main-2508260021
-X-Proofpoint-GUID: _egI4bswKqWnFsdCeB3gdwtsbqZebiWc
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIzMDAxNCBTYWx0ZWRfX9IOzec6KY2ZX
- vOMcle05cO9F8RxvGg0Ez2Uw30O6LwH4Vu8FhpyTHTe0bFGTWRFAvJo/zJ8fRz5xcHrC6MN81fg
- lTk+SbIyABU/t/AtIh+h1x/pUKECnsbmSEVJJ0Feic5K4K+huSjec3hDG76B2l8m/VLPLC15g0s
- ON2hEh+6Ek7p8mXYgaK+Dx5/tpxqJI7DZGa5gIgMXvs8S2yK21QbeaA99CfEJqrRwIDePmB4Dk3
- GMj3ig8eUx6Ymp8YqzuqyG5nsck7C40ojUH1Wyjahh0vvTz8EYNw6YPoSNSdNaxcZAQHdIKemqA
- 2SoyojKuB/wOFXz8Fpd4bp8+O1YeWmSBgrlNAJTXMDE8CD5FY1kBUTA6rACkomJ0Pkkvhg2THfs
- 7DYD5B1Bdmj6FpgYts1a/Ij2aKV9eA==
-X-Authority-Analysis: v=2.4 cv=FtgF/3rq c=1 sm=1 tr=0 ts=68ad1d1d b=1 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIzMDAxOCBTYWx0ZWRfX2TK8/kTN54YD
+ ptSZfB4dP7fC/fDyspVESZdhg7TWoGmb78qgGStlu4tdxEvmlxvLsZIEDRP1U55mRfl/vE+5yTs
+ 8Tub/lqQZirhOb/yMrkgwOoXHMJdyNcp2MwKp/8wDGYIij+GYGMlMOzfnyO41mCNHP6EEOvCcXL
+ WkNXcVn1k2w86efKsFaTH6twQcRH72gQRSfAmYiotcI2NW4KOiPRLIOXVdRdWzEVrb8uKGZNixz
+ VDwO1MbaUiOUubb1EJhRbqYO6lt+Uhne1BAi/nTRM8X22OhcU7vLRdgdEUHWlmoejDzAEhfFnAE
+ HVi1G6zhX8306VTdS/AhKmRevzdupnzysylfbaq1ZK3vFhWaoyrjTJK7UrburQ79bm0cu5XDMX7
+ NnIIz6g01bJ+uipxEAvfSS8kgD4+SQ==
+X-Proofpoint-GUID: aEBrAAkTa_UC3oVv0ZusyV9BErsGQ3NW
+X-Authority-Analysis: v=2.4 cv=IZWHWXqa c=1 sm=1 tr=0 ts=68ad1d1d b=1 cx=c_pps
  a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=rHCXdx7icpoE5c1uHeYA:9
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=bSXfQp6gECA6npzpU4cA:9
  a=QEXdDO2ut3YA:10 cc=ntf awl=host:12070
-X-Proofpoint-ORIG-GUID: _egI4bswKqWnFsdCeB3gdwtsbqZebiWc
+X-Proofpoint-ORIG-GUID: aEBrAAkTa_UC3oVv0ZusyV9BErsGQ3NW
 
-On Thu, 14 Aug 2025 19:32:15 +0200, Niklas Cassel wrote:
+On Wed, 06 Aug 2025 11:13:16 +0800, Cryolitia PukNgae wrote:
 
-> Some recent patches broke expander support for the pm80xx driver.
+> Comments should not have a leading plus sign.
 > 
-> The first two patches in this series make sure that expanders work with
-> the pm80xx driver again.
 > 
-> It also fixes a bug in pm8001_abort_task() that was found through code
-> review.
-> 
-> [...]
 
 Applied to 6.18/scsi-queue, thanks!
 
-[01/10] scsi: pm80xx: Restore support for expanders
-        https://git.kernel.org/mkp/scsi/c/eeee1086073e
-[02/10] scsi: pm80xx: Fix array-index-out-of-of-bounds on rmmod
-        https://git.kernel.org/mkp/scsi/c/251be2f6037f
-[03/10] scsi: libsas: Add dev_parent_is_expander() helper
-        https://git.kernel.org/mkp/scsi/c/e5eb72c92eb7
-[04/10] scsi: hisi_sas: Use dev_parent_is_expander() helper
-        https://git.kernel.org/mkp/scsi/c/0c0188dd200e
-[05/10] scsi: isci: Use dev_parent_is_expander() helper
-        https://git.kernel.org/mkp/scsi/c/ad6ae22927a7
-[06/10] scsi: mvsas: Use dev_parent_is_expander() helper
-        https://git.kernel.org/mkp/scsi/c/3adf77948983
-[07/10] scsi: pm80xx: Use dev_parent_is_expander() helper
-        https://git.kernel.org/mkp/scsi/c/35e388696c3f
-[08/10] scsi: pm80xx: Add helper function to get the local phy id
-        https://git.kernel.org/mkp/scsi/c/b4ec98303f9f
-[09/10] scsi: pm80xx: Fix pm8001_abort_task() for chip_8006 when using an expander
-        https://git.kernel.org/mkp/scsi/c/ad70c6bc776b
-[10/10] scsi: pm80xx: Use pm80xx_get_local_phy_id() to access phy array
-        https://git.kernel.org/mkp/scsi/c/03f69351b63e
+[1/1] scsi: hpsa: fix incorrect comment format
+      https://git.kernel.org/mkp/scsi/c/e115d3d70ecc
 
 -- 
 Martin K. Petersen
