@@ -1,45 +1,45 @@
-Return-Path: <linux-scsi+bounces-16519-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-16521-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69F8CB35479
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 08:24:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A865B35484
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 08:25:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F27D5687520
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 06:23:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6978188330F
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 06:24:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F8162F6191;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAF472F6574;
 	Tue, 26 Aug 2025 06:23:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="N6b3ftuX"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="L7aiUnmN"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5872F60D5
-	for <linux-scsi@vger.kernel.org>; Tue, 26 Aug 2025 06:23:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA602F6168
+	for <linux-scsi@vger.kernel.org>; Tue, 26 Aug 2025 06:23:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756189411; cv=none; b=QkYgvhREcrGFKOCK2SJiIHQKY+inPRSIZP0DkAURA0ZEMgek2fU3RNjsfy8Gruaujlg+9ZNjFjzYGkNZbGc2d8V614uRmo9gwftSEdK+epBbnyvZvPyHbh8/6+69V4E8dSFqnSp03FtfMb9Xupry9SpT/Eyds84ekFcC2PJGafU=
+	t=1756189412; cv=none; b=ZbD2hEMdYsHfN4XdPwl+CEvcx8eFfYtwHv+ypnhdbvt+AOae7UxsHhv37+WC5mhlyN8/53uTSY3KmB+LiJoEHTx2GvJMbFYuwg8oeZcRFnJaehS8MUnFEEaLTC1z0DDq0QojGMYH3mJtEZIzihHiiNwdC8Cuo1f2y+rtbvyGDSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756189411; c=relaxed/simple;
-	bh=3M+wvvfHoN4alfhppCN2qJS+NUvX72cwJAkXt5tFzSw=;
+	s=arc-20240116; t=1756189412; c=relaxed/simple;
+	bh=djx3jefhiHixCyA/HRiSQsqHSmxJJPL+gkEdFOfv4/I=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KIqzcQg8/jeRT1Hapq5nNHKunsxH6CCDM9mWl/H80R9vcFxwUdY7qtHjFiVgKphG0fsajN4C42LLvPk+dRi6ptX2rs3kJwonXPqISRE09wlebBWJwBOdL1fJiwNBi9VLOuhATjoAYhojB1Tq173MDPQOfENXxbRtRjYsFa+K3Jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=N6b3ftuX; arc=none smtp.client-ip=60.244.123.138
+	 MIME-Version:Content-Type; b=Ax4gF5k2oLJDeU3aMEJ2wvcJ0aAICUji/3NoqG3UHbbgAGV2C48DuhfL1TItuyfxx76ZiUuvqvE03PnQhzgbsZOvgjr1DtB/iu7fw7RTDxFISsl9lGC1a4jmDyJbvF3S3kw0f+sRA4MfE+oX4/fkS1GPJ3MWVNqqbKkZmalrhEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=L7aiUnmN; arc=none smtp.client-ip=60.244.123.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 289eb934824511f0b2125946c7b33498-20250826
+X-UUID: 28a0015e824511f0b2125946c7b33498-20250826
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=h12/ows64GHjHHBRLoCe+kdnRDeB4MkjXFhZVaqj/gM=;
-	b=N6b3ftuX2pXIBga+r3wO26dIj1PmiRo6qYVZtPIuDaCojf1bBNZ567Q0impHIN+FEOsNLdcxz7POimYKVq98hL1OByzHTtMRqDQfJf2MfZMUFWTWbTQ9yr+zjwbeqpcQr32lotLvXl6UM3xGwqlbWNvGHQX6cLZNsnZnYwkor5I=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=dsBQTWT6oTlw0J4E7huShQnOrzlUhx7A4QbdvoqLunY=;
+	b=L7aiUnmNvl5K7/8G0Z4qHhjoz6AurKuGYm2cVgwPm8vaE44RJU91h/mYAxAgAVfIlHVNc7+lViqCUXaNv5TNCAQJTRF2Z2aCFVCdTQKRoefGJud6eB+Jg9MrCctEd8JXl8AiQCAXToB8/JLsbo3l1lupNvpbzggaBMl/gACJgS4=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.3,REQID:ff4b5f96-dcdc-4686-b8c8-18e16c3d3eae,IP:0,UR
-	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-25
-X-CID-META: VersionHash:f1326cf,CLOUDID:375a8320-786d-4870-a017-e7b4f3839b3f,B
+X-CID-O-INFO: VERSION:1.3.3,REQID:a79c5127-4935-4652-a821-9c2f8bc20feb,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:f1326cf,CLOUDID:74c7877a-966c-41bd-96b5-7d0b3c22e782,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:-5,Content:0|15|50,EDM:
 	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
 	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
@@ -47,11 +47,11 @@ X-CID-BVR: 3,DMD|SSN|SDN
 X-CID-BAS: 3,DMD|SSN|SDN,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 289eb934824511f0b2125946c7b33498-20250826
+X-UUID: 28a0015e824511f0b2125946c7b33498-20250826
 Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
 	(envelope-from <peter.wang@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 551746440; Tue, 26 Aug 2025 14:23:19 +0800
+	with ESMTP id 250100594; Tue, 26 Aug 2025 14:23:19 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -69,9 +69,9 @@ CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
 	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
 	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <sanjeev.y@mediatek.com>,
 	<bvanassche@acm.org>
-Subject: [PATCH v2 05/10] ufs: host: mediatek: Support UFS PHY runtime PM and correct sequence
-Date: Tue, 26 Aug 2025 14:22:19 +0800
-Message-ID: <20250826062314.3070425-6-peter.wang@mediatek.com>
+Subject: [PATCH v2 06/10] ufs: host: mediatek: Disable auto-hibern8 during power mode changes
+Date: Tue, 26 Aug 2025 14:22:20 +0800
+Message-ID: <20250826062314.3070425-7-peter.wang@mediatek.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250826062314.3070425-1-peter.wang@mediatek.com>
 References: <20250826062314.3070425-1-peter.wang@mediatek.com>
@@ -87,132 +87,101 @@ X-MTK: N
 
 From: Peter Wang <peter.wang@mediatek.com>
 
-This patch adds support for UFS PHY runtime power management by
-probing the PHY device and enabling its runtime PM. It ensures the
-correct sequence of operations during suspend and resume:
-PHY suspend -> UFS suspend -> UFS resume -> PHY resume.
-This enhancement improves power management efficiency and system
-stability.
+This patch ensures that auto-hibern8 is disabled when changing power
+modes to prevent unintended entry into auto-hibern8 during these
+transitions. The original auto-hibern8 timer value is restored
+after the power mode change is complete, maintaining system stability
+and preventing potential issues during power state transitions.
 
 Signed-off-by: Peter Wang <peter.wang@mediatek.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 53 +++++++++++++++++++++++++++++----
- drivers/ufs/host/ufs-mediatek.h |  1 +
- 2 files changed, 48 insertions(+), 6 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 53 +++++++++++++++++++--------------
+ 1 file changed, 30 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index a47713a047c1..5d2de4fc370b 100644
+index 5d2de4fc370b..e42e9b97810c 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -2243,10 +2243,12 @@ static const struct ufs_hba_variant_ops ufs_hba_mtk_vops = {
- static int ufs_mtk_probe(struct platform_device *pdev)
- {
- 	int err;
--	struct device *dev = &pdev->dev;
--	struct device_node *reset_node;
--	struct platform_device *reset_pdev;
-+	struct device *dev = &pdev->dev, *phy_dev = NULL;
-+	struct device_node *reset_node, *phy_node = NULL;
-+	struct platform_device *reset_pdev, *phy_pdev = NULL;
- 	struct device_link *link;
-+	struct ufs_hba *hba;
-+	struct ufs_mtk_host *host;
- 
- 	reset_node = of_find_compatible_node(NULL, NULL,
- 					     "ti,syscon-reset");
-@@ -2273,13 +2275,44 @@ static int ufs_mtk_probe(struct platform_device *pdev)
- 	}
- 
- skip_reset:
-+	/* find phy node */
-+	phy_node = of_parse_phandle(dev->of_node, "phys", 0);
-+
-+	if (phy_node) {
-+		phy_pdev = of_find_device_by_node(phy_node);
-+		if (!phy_pdev)
-+			goto skip_phy;
-+		phy_dev = &phy_pdev->dev;
-+
-+		pm_runtime_set_active(phy_dev);
-+		pm_runtime_enable(phy_dev);
-+		pm_runtime_get_sync(phy_dev);
-+
-+		put_device(phy_dev);
-+		dev_info(dev, "phys node found\n");
-+	} else {
-+		dev_notice(dev, "phys node not found\n");
-+	}
-+
-+skip_phy:
- 	/* perform generic probe */
- 	err = ufshcd_pltfrm_init(pdev, &ufs_hba_mtk_vops);
--
--out:
--	if (err)
-+	if (err) {
- 		dev_err(dev, "probe failed %d\n", err);
-+		goto out;
-+	}
-+
-+	hba = platform_get_drvdata(pdev);
-+	if (!hba)
-+		goto out;
-+
-+	if (phy_node && phy_dev) {
-+		host = ufshcd_get_variant(hba);
-+		host->phy_dev = phy_dev;
-+	}
- 
-+out:
-+	of_node_put(phy_node);
- 	of_node_put(reset_node);
- 	return err;
+@@ -1429,19 +1429,49 @@ static int ufs_mtk_pre_pwr_change(struct ufs_hba *hba,
+ 	return ret;
  }
-@@ -2343,6 +2376,7 @@ static int ufs_mtk_system_resume(struct device *dev)
- static int ufs_mtk_runtime_suspend(struct device *dev)
+ 
++static int ufs_mtk_auto_hibern8_disable(struct ufs_hba *hba)
++{
++	int ret;
++
++	/* disable auto-hibern8 */
++	ufshcd_writel(hba, 0, REG_AUTO_HIBERNATE_IDLE_TIMER);
++
++	/* wait host return to idle state when auto-hibern8 off */
++	ufs_mtk_wait_idle_state(hba, 5);
++
++	ret = ufs_mtk_wait_link_state(hba, VS_LINK_UP, 100);
++	if (ret) {
++		dev_warn(hba->dev, "exit h8 state fail, ret=%d\n", ret);
++
++		ufshcd_force_error_recovery(hba);
++
++		/* trigger error handler and break suspend */
++		ret = -EBUSY;
++	}
++
++	return ret;
++}
++
+ static int ufs_mtk_pwr_change_notify(struct ufs_hba *hba,
+ 				enum ufs_notify_change_status stage,
+ 				const struct ufs_pa_layer_attr *dev_max_params,
+ 				struct ufs_pa_layer_attr *dev_req_params)
  {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
-+	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
- 	struct arm_smccc_res res;
  	int ret = 0;
++	static u32 reg;
  
-@@ -2355,17 +2389,24 @@ static int ufs_mtk_runtime_suspend(struct device *dev)
- 	if (ufs_mtk_is_rtff_mtcmos(hba))
- 		ufs_mtk_mtcmos_ctrl(false, res);
- 
-+	if (host->phy_dev)
-+		pm_runtime_put_sync(host->phy_dev);
-+
- 	return 0;
+ 	switch (stage) {
+ 	case PRE_CHANGE:
++		if (ufshcd_is_auto_hibern8_supported(hba)) {
++			reg = ufshcd_readl(hba, REG_AUTO_HIBERNATE_IDLE_TIMER);
++			ufs_mtk_auto_hibern8_disable(hba);
++		}
+ 		ret = ufs_mtk_pre_pwr_change(hba, dev_max_params,
+ 					     dev_req_params);
+ 		break;
+ 	case POST_CHANGE:
++		if (ufshcd_is_auto_hibern8_supported(hba))
++			ufshcd_writel(hba, reg, REG_AUTO_HIBERNATE_IDLE_TIMER);
+ 		break;
+ 	default:
+ 		ret = -EINVAL;
+@@ -1686,29 +1716,6 @@ static void ufs_mtk_dev_vreg_set_lpm(struct ufs_hba *hba, bool lpm)
+ 	}
  }
  
- static int ufs_mtk_runtime_resume(struct device *dev)
+-static int ufs_mtk_auto_hibern8_disable(struct ufs_hba *hba)
+-{
+-	int ret;
+-
+-	/* disable auto-hibern8 */
+-	ufshcd_writel(hba, 0, REG_AUTO_HIBERNATE_IDLE_TIMER);
+-
+-	/* wait host return to idle state when auto-hibern8 off */
+-	ufs_mtk_wait_idle_state(hba, 5);
+-
+-	ret = ufs_mtk_wait_link_state(hba, VS_LINK_UP, 100);
+-	if (ret) {
+-		dev_warn(hba->dev, "exit h8 state fail, ret=%d\n", ret);
+-
+-		ufshcd_force_error_recovery(hba);
+-
+-		/* trigger error handler and break suspend */
+-		ret = -EBUSY;
+-	}
+-
+-	return ret;
+-}
+-
+ static int ufs_mtk_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
+ 	enum ufs_notify_change_status status)
  {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
-+	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
- 	struct arm_smccc_res res;
- 
- 	if (ufs_mtk_is_rtff_mtcmos(hba))
- 		ufs_mtk_mtcmos_ctrl(true, res);
- 
-+	if (host->phy_dev)
-+		pm_runtime_get_sync(host->phy_dev);
-+
- 	ufs_mtk_dev_vreg_set_lpm(hba, false);
- 
- 	return ufshcd_runtime_resume(dev);
-diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
-index e46dc5fa209d..dfbf78bd8664 100644
---- a/drivers/ufs/host/ufs-mediatek.h
-+++ b/drivers/ufs/host/ufs-mediatek.h
-@@ -193,6 +193,7 @@ struct ufs_mtk_host {
- 	bool is_mcq_intr_enabled;
- 	int mcq_nr_intr;
- 	struct ufs_mtk_mcq_intr_info mcq_intr_info[UFSHCD_MAX_Q_NR];
-+	struct device *phy_dev;
- };
- 
- /* MTK delay of autosuspend: 500 ms */
 -- 
 2.45.2
 
