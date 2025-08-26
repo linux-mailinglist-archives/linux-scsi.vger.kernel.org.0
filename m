@@ -1,45 +1,45 @@
-Return-Path: <linux-scsi+bounces-16524-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-16520-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 811D4B35476
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 08:24:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E3D4B3547B
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 08:25:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90107245D94
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 06:24:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9716C68774C
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 06:23:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086D12F7445;
-	Tue, 26 Aug 2025 06:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACA3B2F656C;
+	Tue, 26 Aug 2025 06:23:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="hTjugeWC"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="awqt/9my"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 342FE2F657A
-	for <linux-scsi@vger.kernel.org>; Tue, 26 Aug 2025 06:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9E92F6164
+	for <linux-scsi@vger.kernel.org>; Tue, 26 Aug 2025 06:23:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756189414; cv=none; b=GJp/aDkQ3M882/eJRyHSfFMBvoQ1b4993NfZUEguh1f2zK4oPCz4YZsN5DcoqimWAd8k9KLbGVzdXG7srZucaNMjc9KA/ziCV9AQersHpjcRkarTsxJ5zn3cUoWqe8Pp7VaCY/JURlQpq9qQVwEYbpcIZ1ZO1DbXdEeJFEf7/es=
+	t=1756189412; cv=none; b=CZLOwxB/nAtPbgLZ8VzI7avoEnKbgVFKaqeb6N6u/QHsrxtez6JZfl/Hiy233foLSIebocfT8eGwINGatpu2Kw0ee1+u+nmu/rYOEQHgERaHL8sj2Y17M86SJc8v/taE0dHRTFsUDamXSG36kVvv2RJ3CfaNXqoWHBJGZdg4Qqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756189414; c=relaxed/simple;
-	bh=dh2PWuGqdiaJiP5wETRcZgKZmrrG69pRvNK2rCjyqIg=;
+	s=arc-20240116; t=1756189412; c=relaxed/simple;
+	bh=YLRwI6BHgvwUKGeq5o9UJBYPBEAd1QDVZJ9eyweghpQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dzzIt0LRYLBPDk/xIM1/n+29ZZ/5wkbZNgbA+isoHvWj9x674e3eOOPjSZmXazQ+fSZcvplMG4y33RJ+52XcRHpKOSCDh3Q8Oa0l71rH/3vO3PxCSkg5Q02p4P4HCdJTRK47FmVvldlBSM8tLqSONRNgtEWtb8y3XrLeT3KY6Tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=hTjugeWC; arc=none smtp.client-ip=60.244.123.138
+	 MIME-Version:Content-Type; b=G6zSzk/KMEoMv0LjgHiHbATFKA0mD7TYOmb6eYyU7heFHi36dO8wssLnHatQBtTTFRlF77v63CBTF3Zb/rM0xH3GMHQwEu5++nM1D6Jg9axuJX1LhOzaN5nj5GzgfvTQrXQacJWus5NmhMwVAhuYILyZT/UUrZjnf78C6JsWbtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=awqt/9my; arc=none smtp.client-ip=60.244.123.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 28a38626824511f0b2125946c7b33498-20250826
+X-UUID: 28a4aaa6824511f0b2125946c7b33498-20250826
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=M48CFblWzNfJZwxWjPwDyIHvbOpeJKFs3QwHpUFncII=;
-	b=hTjugeWCEf6kWyk6YaA6FMKxJTNy3WmJQ+PjS8DSE/l+4oVq+o+OWj/7ejnVBzPHWAVg/CQCN5ODii78ptSncpoM4oUPkrmwMgNBSMCuyAzT1LQwrU+D0y/yXJs0hwob4Cae17Kwt0MRWEwhW5cpqYbTKifHfnMaySywzLfjNEo=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=3s6gwBrD3rmyl0bovRc9IX9GcPd2zgMDwRhR97ekBng=;
+	b=awqt/9myU4diwVx1u5iZ3EQDXG5B1RCPBnioEG+k2TpfQ70tIJBrLHhGvQBuANTvUH4RJ/TOjU0Q/e0ugn3K/fA0YHXQwi/fMHoAPiWSI4tugapJvPRBCtlKxTH6+fJtxF2wlCF0VjR/s9wCLgjIxwyxF9v7giHpSDFfgZcxsEk=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.3,REQID:1894babf-ed65-430f-8b1d-9549d61d1fe3,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:f1326cf,CLOUDID:a7e09d6d-c2f4-47a6-876f-59a53e9ecc6e,B
+X-CID-O-INFO: VERSION:1.3.3,REQID:ee1ff076-ec23-49d6-88d6-18527f89679d,IP:0,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:-5
+X-CID-META: VersionHash:f1326cf,CLOUDID:a2e09d6d-c2f4-47a6-876f-59a53e9ecc6e,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:-5,Content:0|15|50,EDM:
 	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
 	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
@@ -47,11 +47,11 @@ X-CID-BVR: 3,DMD|SSN|SDN
 X-CID-BAS: 3,DMD|SSN|SDN,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 28a38626824511f0b2125946c7b33498-20250826
+X-UUID: 28a4aaa6824511f0b2125946c7b33498-20250826
 Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
 	(envelope-from <peter.wang@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1895173783; Tue, 26 Aug 2025 14:23:19 +0800
+	with ESMTP id 1941481803; Tue, 26 Aug 2025 14:23:19 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -69,9 +69,9 @@ CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
 	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
 	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <sanjeev.y@mediatek.com>,
 	<bvanassche@acm.org>
-Subject: [PATCH v2 09/10] ufs: host: mediatek: Fix unbalanced IRQ enable issue
-Date: Tue, 26 Aug 2025 14:22:23 +0800
-Message-ID: <20250826062314.3070425-10-peter.wang@mediatek.com>
+Subject: [PATCH v2 10/10] ufs: host: mediatek: Fix device power control
+Date: Tue, 26 Aug 2025 14:22:24 +0800
+Message-ID: <20250826062314.3070425-11-peter.wang@mediatek.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250826062314.3070425-1-peter.wang@mediatek.com>
 References: <20250826062314.3070425-1-peter.wang@mediatek.com>
@@ -87,28 +87,34 @@ X-MTK: N
 
 From: Peter Wang <peter.wang@mediatek.com>
 
-This patch resolves the issue of unbalanced IRQ enablement by setting
-the 'is_mcq_intr_enabled' flag after the first successful IRQ
-enablement. This ensures proper tracking of the IRQ state and prevents
-potential mismatches in IRQ handling.
+This patch adjusts the timing of device power control to ensure
+that low power mode (LPM) is entered only after VCC is turned off.
+This change prevents VCCQ/VCCQ2 from entering LPM prematurely,
+ensuring proper power management and device stability.
 
 Signed-off-by: Peter Wang <peter.wang@mediatek.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/ufs/host/ufs-mediatek.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 1342fe7d8e2b..af5574ac0b3c 100644
+index af5574ac0b3c..758a393a9de1 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -2190,6 +2190,7 @@ static int ufs_mtk_config_mcq_irq(struct ufs_hba *hba)
- 			return ret;
- 		}
+@@ -2342,6 +2342,13 @@ static int ufs_mtk_probe(struct platform_device *pdev)
+ 		host->phy_dev = phy_dev;
  	}
-+	host->is_mcq_intr_enabled = true;
  
- 	return 0;
- }
++	/*
++	 * Because the default power setting of VSx (the upper layer of
++	 * VCCQ/VCCQ2) is HWLP, we need to prevent VCCQ/VCCQ2 from
++	 * entering LPM.
++	 */
++	ufs_mtk_dev_vreg_set_lpm(hba, false);
++
+ out:
+ 	of_node_put(phy_node);
+ 	of_node_put(reset_node);
 -- 
 2.45.2
 
