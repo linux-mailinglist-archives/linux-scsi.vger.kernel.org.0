@@ -1,121 +1,94 @@
-Return-Path: <linux-scsi+bounces-16520-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-16526-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E3D4B3547B
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 08:25:04 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B95DCB35790
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 10:47:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9716C68774C
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 06:23:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 88C194E18BF
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 08:47:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACA3B2F656C;
-	Tue, 26 Aug 2025 06:23:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="awqt/9my"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1D6B29ACCD;
+	Tue, 26 Aug 2025 08:47:52 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9E92F6164
-	for <linux-scsi@vger.kernel.org>; Tue, 26 Aug 2025 06:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1C528D8ED;
+	Tue, 26 Aug 2025 08:47:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756189412; cv=none; b=CZLOwxB/nAtPbgLZ8VzI7avoEnKbgVFKaqeb6N6u/QHsrxtez6JZfl/Hiy233foLSIebocfT8eGwINGatpu2Kw0ee1+u+nmu/rYOEQHgERaHL8sj2Y17M86SJc8v/taE0dHRTFsUDamXSG36kVvv2RJ3CfaNXqoWHBJGZdg4Qqk=
+	t=1756198072; cv=none; b=McwDZDp8Q6yDKEvtnVfjPBjSGqJuB+U8DusAXwSRVS2mmGn6mSjYTK++3kBU/8EdEYoL6e7jp9/4bJ/UYB/Rpdr7QcleRuq/iRZq2E0C5UfeyxHKvuChNjyq2EPZvABCFOyLCvzs9c5Bsygc5I3pjgKNpvCXJjsR+5KjtG+78Y0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756189412; c=relaxed/simple;
-	bh=YLRwI6BHgvwUKGeq5o9UJBYPBEAd1QDVZJ9eyweghpQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=G6zSzk/KMEoMv0LjgHiHbATFKA0mD7TYOmb6eYyU7heFHi36dO8wssLnHatQBtTTFRlF77v63CBTF3Zb/rM0xH3GMHQwEu5++nM1D6Jg9axuJX1LhOzaN5nj5GzgfvTQrXQacJWus5NmhMwVAhuYILyZT/UUrZjnf78C6JsWbtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=awqt/9my; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 28a4aaa6824511f0b2125946c7b33498-20250826
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=3s6gwBrD3rmyl0bovRc9IX9GcPd2zgMDwRhR97ekBng=;
-	b=awqt/9myU4diwVx1u5iZ3EQDXG5B1RCPBnioEG+k2TpfQ70tIJBrLHhGvQBuANTvUH4RJ/TOjU0Q/e0ugn3K/fA0YHXQwi/fMHoAPiWSI4tugapJvPRBCtlKxTH6+fJtxF2wlCF0VjR/s9wCLgjIxwyxF9v7giHpSDFfgZcxsEk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.3,REQID:ee1ff076-ec23-49d6-88d6-18527f89679d,IP:0,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:-5
-X-CID-META: VersionHash:f1326cf,CLOUDID:a2e09d6d-c2f4-47a6-876f-59a53e9ecc6e,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:-5,Content:0|15|50,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 3,DMD|SSN|SDN
-X-CID-BAS: 3,DMD|SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 28a4aaa6824511f0b2125946c7b33498-20250826
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
-	(envelope-from <peter.wang@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1941481803; Tue, 26 Aug 2025 14:23:19 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
+	s=arc-20240116; t=1756198072; c=relaxed/simple;
+	bh=Gwo0aKyr9J8G5DjEjiGm/JVgVdLbWa/sI/d4yxPg5O4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=gIVHnqxmdgY5mKw0PjB4ajFfyHrVEhncxGj3d7lyuH/Tm9BiaszdKYX8bbmeq5yUNLs1kpaJQ/cINBo59hB0cR2hDvMg0tVVixnjEuJIW7em2WYuwQXg7eMPT9eEs1JpF+QjzSwYVei+6JgpOXFwFRN+FuU5ujQGdDR7t1NLQnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4cB1RR6NN6z13NVY;
+	Tue, 26 Aug 2025 16:44:03 +0800 (CST)
+Received: from dggpemf500002.china.huawei.com (unknown [7.185.36.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id D3D67180087;
+	Tue, 26 Aug 2025 16:47:44 +0800 (CST)
+Received: from [10.174.176.253] (10.174.176.253) by
+ dggpemf500002.china.huawei.com (7.185.36.57) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.39; Tue, 26 Aug 2025 14:23:18 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.39 via Frontend Transport; Tue, 26 Aug 2025 14:23:18 +0800
-From: <peter.wang@mediatek.com>
-To: <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>
-CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
-	<peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-	<alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
-	<chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-	<yi-fan.peng@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
-	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
-	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <sanjeev.y@mediatek.com>,
-	<bvanassche@acm.org>
-Subject: [PATCH v2 10/10] ufs: host: mediatek: Fix device power control
-Date: Tue, 26 Aug 2025 14:22:24 +0800
-Message-ID: <20250826062314.3070425-11-peter.wang@mediatek.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250826062314.3070425-1-peter.wang@mediatek.com>
-References: <20250826062314.3070425-1-peter.wang@mediatek.com>
+ 15.2.1544.11; Tue, 26 Aug 2025 16:47:43 +0800
+Message-ID: <41077713-8119-4898-8307-731a0d8f346e@huawei.com>
+Date: Tue, 26 Aug 2025 16:47:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/4] scsi: hisi_sas: Switch to use tasklet over threaded
+ irq handling
+To: Yihang Li <liyihang9@h-partners.com>, Bart Van Assche
+	<bvanassche@acm.org>, <martin.petersen@oracle.com>,
+	<James.Bottomley@HansenPartnership.com>
+CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@huawei.com>, <liuyonglong@huawei.com>, <prime.zeng@hisilicon.com>
+References: <20250822075951.2051639-1-liyihang9@h-partners.com>
+ <f02e9bb8-3477-4fa7-8b20-72bd518407ed@acm.org>
+ <2f2e5534-a368-547d-dedf-78f8ca2fc999@h-partners.com>
+From: Jason Yan <yanaijie@huawei.com>
+In-Reply-To: <2f2e5534-a368-547d-dedf-78f8ca2fc999@h-partners.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ dggpemf500002.china.huawei.com (7.185.36.57)
 
-From: Peter Wang <peter.wang@mediatek.com>
+在 2025/8/25 9:42, Yihang Li 写道:
+> Hi Bart,
+> 
+> On 2025/8/22 23:17, Bart Van Assche wrote:
+>> On 8/22/25 12:59 AM, Yihang Li wrote:
+>>> We found that when the CPU handling the interrupt thread is occupied by
+>>> other high-priority processes, the interrupt thread will not be scheduled.
+>>> So there is a change to switch the driver to use tasklet over threaded
+>>> interrupt handling.
+>> Tasklets have severe disadvantages and hence their removal has been
+>> proposed several times. See e.g. https://lwn.net/Articles/960041/.
+>> There must be a better solution than switching to tasklets.
+>>
+> 
+> Thanks you for your reply. I will consider some other solution.
+> Additionally, do you have any good suggestions?
 
-This patch adjusts the timing of device power control to ensure
-that low power mode (LPM) is entered only after VCC is turned off.
-This change prevents VCCQ/VCCQ2 from entering LPM prematurely,
-ensuring proper power management and device stability.
+It seems the official replacement of tasklets is WQ_BH. However there 
+are very few users now. I'm not sure if the stability and performance 
+can meet our requirements.
 
-Signed-off-by: Peter Wang <peter.wang@mediatek.com>
----
- drivers/ufs/host/ufs-mediatek.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index af5574ac0b3c..758a393a9de1 100644
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -2342,6 +2342,13 @@ static int ufs_mtk_probe(struct platform_device *pdev)
- 		host->phy_dev = phy_dev;
- 	}
- 
-+	/*
-+	 * Because the default power setting of VSx (the upper layer of
-+	 * VCCQ/VCCQ2) is HWLP, we need to prevent VCCQ/VCCQ2 from
-+	 * entering LPM.
-+	 */
-+	ufs_mtk_dev_vreg_set_lpm(hba, false);
-+
- out:
- 	of_node_put(phy_node);
- 	of_node_put(reset_node);
--- 
-2.45.2
-
+> 
+>> Bart.
+>> .
+>>
+> 
 
