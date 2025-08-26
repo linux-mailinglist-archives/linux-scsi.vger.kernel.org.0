@@ -1,45 +1,45 @@
-Return-Path: <linux-scsi+bounces-16523-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-16525-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B866AB35473
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 08:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5865BB35478
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 08:24:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 218C6245CF8
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 06:24:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F40524636A
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Aug 2025 06:24:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F5822F6591;
-	Tue, 26 Aug 2025 06:23:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0586B2F7462;
+	Tue, 26 Aug 2025 06:23:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="HWMrwTdo"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="dkKfcQUZ"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C3C52F6560
-	for <linux-scsi@vger.kernel.org>; Tue, 26 Aug 2025 06:23:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221762F6590
+	for <linux-scsi@vger.kernel.org>; Tue, 26 Aug 2025 06:23:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756189414; cv=none; b=oh04idmWQXkKXe2Z7Zt6YJV8JhxHJamQEz2RaFL3LqfsnnD+96Jpczl7Uf6tBDkAiUzM+PgXW3OlJwPebpn0KrF2fQigbgzdthz3a4lul4b/xV71Ck918AO+nXdEweo4uBaxLOQefO71hnXU5KGLTDMgDoqjfktqc7ON2x5jUek=
+	t=1756189415; cv=none; b=k8otR9VzEKGoJpOj8XzjBHqH3PCGPFoJx9Ds/GhIKuiWa5Lqx5NMFz+sSstYpwBaG+/XA0gmISFta0LU1zAqwCRILpUxxg2pHLkRoMHqp3GUD8NQV8gm3NuuVrgqLm7AAqStrFH8tQsr0tRD1PasZ8cdTC19ldqte7YV6JSBhZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756189414; c=relaxed/simple;
-	bh=5/kpayBNXNdb4Xg7DcSWrHXGOR9tyD0piYVTb8nJg38=;
+	s=arc-20240116; t=1756189415; c=relaxed/simple;
+	bh=PfwLed/f4/CDK4LKLVvMWe9apNKsvCuPyDdyPG6ei1E=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YtJTSYw+2UqRKqhJMogqrBfT/nDiDNTLBCn85i9fHKGVREFaIN+BVRxLzOKZA7yjTnVrRiHgkQa1EVWuEzPUaMN7jtasj779h1CAflizusA9u8wPhudKH5d8q5CN1gOoyGceZl390YxAk3wktybPanPndqj1u4f0t1reDbu8/zI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=HWMrwTdo; arc=none smtp.client-ip=60.244.123.138
+	 MIME-Version:Content-Type; b=Tz/V/rzfyEupRN3L6bel2nN4pW2C+Sc8+XMVwXq/rrA1WswYSUQAWdq4onGH6xXkphyKRshSk6it5104SfI25zJZFWgYdWJlrY9ocssxDxbgxeGYc6HhwNhkGjOrKVA/TjaFMP+XJAmsITDxxrPtTNFw9YavqMT0O3rd0JWRUhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=dkKfcQUZ; arc=none smtp.client-ip=60.244.123.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 28a2466c824511f0b2125946c7b33498-20250826
+X-UUID: 28a14046824511f0b2125946c7b33498-20250826
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=eUVlV+vhLjIQrP3bbkKeQ0Jq6SHWLpYiSeav6Y7dNZM=;
-	b=HWMrwTdoLkGtLLgv0iZ09k+GDOB3fKKV4nEWe1DP9oR3xZcQ3vIQtVXr0lOh2RvJNrPSHD/fHabPQ/ZHR19mga9N/PFyoDGo4bztZARDzH2XQoalhuVk5oIQusasHuL2KoX9/wncgx+e2umoh1EDyFKUdPNwzAjYTOqML72qvzc=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ijrT0jwd9zxSdfUaWVtis7trkc+f2nnBLIWNiEhbTHM=;
+	b=dkKfcQUZ+1RyspQN2GkLpz2LvK1zNITaYnbYsOm7zt51fguxMk4sGvuyn/F8F2U5heOUA/z0NaYczbIjZgZ62iMvcjQXQ9Z3mGGoB+pjp/4BQijFQPQfhjKjaCtfCwFqbmtcdL8XiEsLUybHGyrSz4CAT80qf8HZhafXNXbzrjo=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.3,REQID:697eaf00-3832-4dca-bea8-4272c3173c4d,IP:0,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:-5
-X-CID-META: VersionHash:f1326cf,CLOUDID:7b70df44-18c5-4075-a135-4c0afe29f9d6,B
+X-CID-O-INFO: VERSION:1.3.3,REQID:f6727c44-04c9-4b3d-b8ed-79e5241330fb,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:f1326cf,CLOUDID:365a8320-786d-4870-a017-e7b4f3839b3f,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:-5,Content:0|15|50,EDM:
 	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
 	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
@@ -47,11 +47,11 @@ X-CID-BVR: 3,DMD|SSN|SDN
 X-CID-BAS: 3,DMD|SSN|SDN,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 28a2466c824511f0b2125946c7b33498-20250826
+X-UUID: 28a14046824511f0b2125946c7b33498-20250826
 Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
 	(envelope-from <peter.wang@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1660607134; Tue, 26 Aug 2025 14:23:19 +0800
+	with ESMTP id 1922687517; Tue, 26 Aug 2025 14:23:19 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -69,9 +69,9 @@ CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
 	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
 	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <sanjeev.y@mediatek.com>,
 	<bvanassche@acm.org>
-Subject: [PATCH v2 07/10] ufs: host: mediatek: Return error directly on idle wait timeout
-Date: Tue, 26 Aug 2025 14:22:21 +0800
-Message-ID: <20250826062314.3070425-8-peter.wang@mediatek.com>
+Subject: [PATCH v2 08/10] ufs: host: mediatek: Fix adapt issue after PA_Init
+Date: Tue, 26 Aug 2025 14:22:22 +0800
+Message-ID: <20250826062314.3070425-9-peter.wang@mediatek.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250826062314.3070425-1-peter.wang@mediatek.com>
 References: <20250826062314.3070425-1-peter.wang@mediatek.com>
@@ -85,76 +85,45 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-MTK: N
 
-From: Sanjeev Y <sanjeev.y@mediatek.com>
+From: Alice Chao <alice.chao@mediatek.com>
 
-This patch optimizes the recovery flow by returning an error code
-immediately if a wait idle timeout occurs, rather than proceeding
-to wait for the link to reach the up state. This change shortens
-the recovery process and improves error handling efficiency when
-idle state transitions fail.
+This patch addresses the issue where the host does not send adapt
+to the device after PA_Init success.
+It ensures that the adapt process is correctly initiated for devices
+with IP version MT6899 and above, resolving communication issues
+between the host and device.
 
 Signed-off-by: Peter Wang <peter.wang@mediatek.com>
-Signed-off-by: Sanjeev Y <sanjeev.y@mediatek.com>
+Signed-off-by: Alice Chao <alice.chao@mediatek.com>
 Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index e42e9b97810c..a6f812713345 100644
+index a6f812713345..1342fe7d8e2b 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -416,7 +416,7 @@ static void ufs_mtk_dbg_sel(struct ufs_hba *hba)
- 	}
- }
+@@ -1551,8 +1551,19 @@ static int ufs_mtk_pre_link(struct ufs_hba *hba)
  
--static void ufs_mtk_wait_idle_state(struct ufs_hba *hba,
-+static int ufs_mtk_wait_idle_state(struct ufs_hba *hba,
- 			    unsigned long retry_ms)
+ 	return ret;
+ }
++
+ static void ufs_mtk_post_link(struct ufs_hba *hba)
  {
- 	u64 timeout, time_checked;
-@@ -452,8 +452,12 @@ static void ufs_mtk_wait_idle_state(struct ufs_hba *hba,
- 			break;
- 	} while (time_checked < timeout);
- 
--	if (wait_idle && sm != VS_HCE_BASE)
-+	if (wait_idle && sm != VS_HCE_BASE) {
- 		dev_info(hba->dev, "wait idle tmo: 0x%x\n", val);
-+		return -ETIMEDOUT;
++	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
++	u32 tmp;
++
++	/* fix device PA_INIT no adapt */
++	if (host->ip_ver >= IP_VER_MT6899) {
++		ufshcd_dme_get(hba, UIC_ARG_MIB(VS_DEBUGOMC), &tmp);
++		tmp |= 0x100;
++		ufshcd_dme_set(hba, UIC_ARG_MIB(VS_DEBUGOMC), tmp);
 +	}
 +
-+	return 0;
+ 	/* enable unipro clock gating feature */
+ 	ufs_mtk_cfg_unipro_cg(hba, true);
  }
- 
- static int ufs_mtk_wait_link_state(struct ufs_hba *hba, u32 state,
-@@ -1437,9 +1441,13 @@ static int ufs_mtk_auto_hibern8_disable(struct ufs_hba *hba)
- 	ufshcd_writel(hba, 0, REG_AUTO_HIBERNATE_IDLE_TIMER);
- 
- 	/* wait host return to idle state when auto-hibern8 off */
--	ufs_mtk_wait_idle_state(hba, 5);
-+	ret = ufs_mtk_wait_idle_state(hba, 5);
-+	if (ret)
-+		goto out;
- 
- 	ret = ufs_mtk_wait_link_state(hba, VS_LINK_UP, 100);
-+
-+out:
- 	if (ret) {
- 		dev_warn(hba->dev, "exit h8 state fail, ret=%d\n", ret);
- 
-@@ -1614,7 +1622,11 @@ static int ufs_mtk_link_set_hpm(struct ufs_hba *hba)
- 		return err;
- 
- 	/* Check link state to make sure exit h8 success */
--	ufs_mtk_wait_idle_state(hba, 5);
-+	err = ufs_mtk_wait_idle_state(hba, 5);
-+	if (err) {
-+		dev_warn(hba->dev, "wait idle fail, err=%d\n", err);
-+		return err;
-+	}
- 	err = ufs_mtk_wait_link_state(hba, VS_LINK_UP, 100);
- 	if (err) {
- 		dev_warn(hba->dev, "exit h8 state fail, err=%d\n", err);
 -- 
 2.45.2
 
