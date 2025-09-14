@@ -1,39 +1,39 @@
-Return-Path: <linux-scsi+bounces-17209-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17211-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72E34B567A7
-	for <lists+linux-scsi@lfdr.de>; Sun, 14 Sep 2025 12:12:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC5DCB567AC
+	for <lists+linux-scsi@lfdr.de>; Sun, 14 Sep 2025 12:13:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04F517AFB55
-	for <lists+linux-scsi@lfdr.de>; Sun, 14 Sep 2025 10:10:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55F09421A51
+	for <lists+linux-scsi@lfdr.de>; Sun, 14 Sep 2025 10:12:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61DA424CEEA;
-	Sun, 14 Sep 2025 10:11:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4793B262FCD;
+	Sun, 14 Sep 2025 10:11:31 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C1A234973;
-	Sun, 14 Sep 2025 10:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE76245014;
+	Sun, 14 Sep 2025 10:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757844689; cv=none; b=Q8v2AKBopM+HtUqr7ZNaXjdIbVBBDGNkojOaQD9IWbb2Z1B1PAb2JrrhYq//hPC2WfDSCyBePMaeYjKKOWil5gD9o9LqrR9c6FtcTMqUAk39fWUwOADhOrv4U/zhj5FEBXkULFzVDt6heqC2OGZ0H2vO2T6pzPqHebvGOWYJSzo=
+	t=1757844691; cv=none; b=Evz1E/6DMxe8SdiAWQdOynamtxe8s3XBVGTlfTeYKynE3BXB5S4fhdVsd5Y38a31jHpPE3pE4vsInzKDtyOynA2D6iNrm6Ci9Nh0fUiAHDe0XpPNxvTf/8EfoizZRrIcMgJgNyejm+1xnQQ8qgxfC2JHs4DPW6TOHEj/Sn8FcvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757844689; c=relaxed/simple;
-	bh=Lnr6tGUtlbXLP+Z/ARbSnGTNMadVel0cOI/IQcIzfJU=;
+	s=arc-20240116; t=1757844691; c=relaxed/simple;
+	bh=hRKhAeq9hGdXXPUYg7nH8gwzAO+Il/3zJ4PB9RB80aE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ldNti6EDLcHv37ddaFKZ1Buij0kWklXY0o2dWQimfq35ZZTlA+yyBo029Y3xVN7NOh6BfQjnXDuWbM4B9pnjoYSzfUtyuqwNcIhJmf9vQBN2u5mFX50E4gX87n1EDGUCsntPhLRthEjYy2vZJcbBdXQW4sqaBk0WzM9+xrWWN+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; arc=none smtp.client-ip=45.249.212.188
+	 MIME-Version:Content-Type; b=FPr3A51EwucSiyWFkaGQaPo8KMbc/gLBqbWKi5dKnqFFC7+aYueP1eVp7nDRof+8kSOLfn+c+/05uMR5hsbRbu5Zn8Ei65VmKwb7izv8SDfkOYKuMJ02Xl1e/Fl1JgUmmSzA/J2SkcvHr2o3PlGnDUV5Kg8x1J5025a5FiFMRME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; arc=none smtp.client-ip=45.249.212.187
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4cPkSJ4jpTztTSW;
-	Sun, 14 Sep 2025 18:10:24 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4cPkNf15nBz13N7W;
+	Sun, 14 Sep 2025 18:07:14 +0800 (CST)
 Received: from kwepemk500001.china.huawei.com (unknown [7.202.194.86])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1D954140275;
+	by mail.maildlp.com (Postfix) with ESMTPS id BF8561401F4;
 	Sun, 14 Sep 2025 18:11:19 +0800 (CST)
 Received: from localhost.localdomain (10.175.104.170) by
  kwepemk500001.china.huawei.com (7.202.194.86) with Microsoft SMTP Server
@@ -45,9 +45,9 @@ To: <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
 CC: <linux-kernel@vger.kernel.org>, <hare@suse.de>, <dlemoal@kernel.org>,
 	<hewenliang4@huawei.com>, <yangyun50@huawei.com>, <wuyifeng10@huawei.com>,
 	<yangxingui@h-partners.com>
-Subject: [RFC PATCH v4 5/9] scsi: scsi_error: Add helper scsi_eh_sdev_reset to do lun reset
-Date: Sun, 14 Sep 2025 18:41:41 +0800
-Message-ID: <20250914104145.2239901-6-jiangjianjun3@huawei.com>
+Subject: [RFC PATCH v4 6/9] scsi: scsi_error: Add flags to mark error handle steps has done
+Date: Sun, 14 Sep 2025 18:41:42 +0800
+Message-ID: <20250914104145.2239901-7-jiangjianjun3@huawei.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20250914104145.2239901-1-jiangjianjun3@huawei.com>
 References: <17230842-0a7a-403e-abc7-a15e3aa5d424@suse.de>
@@ -65,99 +65,134 @@ X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
 
 From: Wenchao Hao <haowenchao2@huawei.com>
 
-Add helper function scsi_eh_sdev_reset() to perform lun reset and check
-if to finish some error commands.
+LUN based error handle would mainly do three steps to recover
+commands which are check sense, start unit, and reset lun. It might
+fallback to host based error handler which would do these steps
+too.
 
-This is preparation for a genernal LUN based error handle
-strategy and did not change original logic.
+Add some flags to mark these steps are done to avoid repeating
+these steps.
+
+The flags should be cleared when LUN based error handler is waked up
+or when host based error handler finished, and set when fallback to
+host based error handle.
+
+scsi_eh_get_sense, scsi_eh_stu, scsi_eh_bus_device_reset would check
+these flags before actually action.
 
 Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
 Co-developed-by: JiangJianJun <jiangjianjun3@huawei.com>
 Signed-off-by: JiangJianJun <jiangjianjun3@huawei.com>
 ---
- drivers/scsi/scsi_error.c | 54 +++++++++++++++++++++++----------------
- 1 file changed, 32 insertions(+), 22 deletions(-)
+ drivers/scsi/scsi_error.c  | 33 +++++++++++++++++++++++++++++++++
+ include/scsi/scsi_device.h | 18 ++++++++++++++++++
+ 2 files changed, 51 insertions(+)
 
 diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index a1b700dbb0ec..f58aad351463 100644
+index f58aad351463..239f8231c3ff 100644
 --- a/drivers/scsi/scsi_error.c
 +++ b/drivers/scsi/scsi_error.c
-@@ -1630,6 +1630,34 @@ static int scsi_eh_stu(struct Scsi_Host *shost,
- 	return list_empty(work_q);
- }
+@@ -57,10 +57,36 @@
+ #define BUS_RESET_SETTLE_TIME   (10)
+ #define HOST_RESET_SETTLE_TIME  (10)
  
-+static int scsi_eh_sdev_reset(struct scsi_cmnd *scmd,
-+			      struct list_head *work_q,
-+			      struct list_head *done_q)
-+{
-+	struct scsi_cmnd *next;
-+	struct scsi_device *sdev = scmd->device;
-+	enum scsi_disposition rtn;
-+
-+	SCSI_LOG_ERROR_RECOVERY(3, sdev_printk(KERN_INFO, sdev,
-+			     "%s: Sending BDR\n", current->comm));
-+
-+	rtn = scsi_try_bus_device_reset(scmd);
-+	if (rtn != SUCCESS && rtn != FAST_IO_FAIL) {
-+		SCSI_LOG_ERROR_RECOVERY(3,
-+			sdev_printk(KERN_INFO, sdev,
-+				    "%s: BDR failed\n", current->comm));
-+		return 0;
-+	}
-+
-+	if (!scsi_device_online(sdev) || rtn == FAST_IO_FAIL ||
-+	    !scsi_eh_tur(scmd))
-+		list_for_each_entry_safe(scmd, next, work_q, eh_entry)
-+			if (scmd->device == sdev &&
-+			    scsi_eh_action(scmd, rtn) != FAILED)
-+				scsi_eh_finish_cmd(scmd, done_q);
-+
-+	return list_empty(work_q);
++#define sdev_flags_done(flag)					\
++static inline int sdev_##flag(struct scsi_device *sdev)		\
++{								\
++	struct scsi_device_eh *eh = sdev->eh;			\
++	if (!eh)						\
++		return 0;					\
++	return eh->flag;					\
 +}
++
+ static int scsi_eh_try_stu(struct scsi_cmnd *scmd);
+ static enum scsi_disposition scsi_try_to_abort_cmd(const struct scsi_host_template *,
+ 						   struct scsi_cmnd *);
  
- /**
-  * scsi_eh_bus_device_reset - send bdr if needed
-@@ -1647,9 +1675,8 @@ static int scsi_eh_bus_device_reset(struct Scsi_Host *shost,
- 				    struct list_head *work_q,
- 				    struct list_head *done_q)
++sdev_flags_done(get_sense_done);
++sdev_flags_done(stu_done);
++sdev_flags_done(reset_done);
++
++static inline void shost_clear_eh_done(struct Scsi_Host *shost)
++{
++	struct scsi_device *sdev;
++
++	shost_for_each_device(sdev, shost) {
++		if (!sdev->eh)
++			continue;
++		sdev->eh->get_sense_done = 0;
++		sdev->eh->stu_done	 = 0;
++		sdev->eh->reset_done	 = 0;
++	}
++}
++
+ void scsi_eh_wakeup(struct Scsi_Host *shost, unsigned int busy)
  {
--	struct scsi_cmnd *scmd, *bdr_scmd, *next;
-+	struct scsi_cmnd *scmd, *bdr_scmd;
- 	struct scsi_device *sdev;
--	enum scsi_disposition rtn;
+ 	lockdep_assert_held(shost->host_lock);
+@@ -1397,6 +1423,8 @@ int scsi_eh_get_sense(struct list_head *work_q,
+ 					     current->comm));
+ 			break;
+ 		}
++		if (sdev_get_sense_done(scmd->device))
++			continue;
+ 		if (!scsi_status_is_check_condition(scmd->result))
+ 			/*
+ 			 * don't request sense if there's no check condition
+@@ -1610,6 +1638,8 @@ static int scsi_eh_stu(struct Scsi_Host *shost,
+ 			scsi_device_put(sdev);
+ 			break;
+ 		}
++		if (sdev_stu_done(sdev))
++			continue;
+ 		stu_scmd = NULL;
+ 		list_for_each_entry(scmd, work_q, eh_entry)
+ 			if (scmd->device == sdev && SCSI_SENSE_VALID(scmd) &&
+@@ -1693,6 +1723,8 @@ static int scsi_eh_bus_device_reset(struct Scsi_Host *shost,
+ 				bdr_scmd = scmd;
+ 				break;
+ 			}
++		if (sdev_reset_done(sdev))
++			continue;
  
- 	shost_for_each_device(sdev, shost) {
- 		if (scsi_host_eh_past_deadline(shost)) {
-@@ -1670,26 +1697,9 @@ static int scsi_eh_bus_device_reset(struct Scsi_Host *shost,
  		if (!bdr_scmd)
  			continue;
+@@ -2357,6 +2389,7 @@ static void scsi_unjam_host(struct Scsi_Host *shost)
+ 	if (!scsi_eh_get_sense(&eh_work_q, &eh_done_q))
+ 		scsi_eh_ready_devs(shost, &eh_work_q, &eh_done_q);
  
--		SCSI_LOG_ERROR_RECOVERY(3,
--			sdev_printk(KERN_INFO, sdev,
--				     "%s: Sending BDR\n", current->comm));
--		rtn = scsi_try_bus_device_reset(bdr_scmd);
--		if (rtn == SUCCESS || rtn == FAST_IO_FAIL) {
--			if (!scsi_device_online(sdev) ||
--			    rtn == FAST_IO_FAIL ||
--			    !scsi_eh_tur(bdr_scmd)) {
--				list_for_each_entry_safe(scmd, next,
--							 work_q, eh_entry) {
--					if (scmd->device == sdev &&
--					    scsi_eh_action(scmd, rtn) != FAILED)
--						scsi_eh_finish_cmd(scmd,
--								   done_q);
--				}
--			}
--		} else {
--			SCSI_LOG_ERROR_RECOVERY(3,
--				sdev_printk(KERN_INFO, sdev,
--					    "%s: BDR failed\n", current->comm));
-+		if (scsi_eh_sdev_reset(bdr_scmd, work_q, done_q)) {
-+			scsi_device_put(sdev);
-+			break;
- 		}
- 	}
++	shost_clear_eh_done(shost);
+ 	spin_lock_irqsave(shost->host_lock, flags);
+ 	if (shost->eh_deadline != -1)
+ 		shost->last_reset = 0;
+diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
+index 9d42858035ed..9fc052e48a3b 100644
+--- a/include/scsi/scsi_device.h
++++ b/include/scsi/scsi_device.h
+@@ -103,6 +103,24 @@ struct scsi_vpd {
+ struct scsi_device;
  
+ struct scsi_device_eh {
++	/*
++	 * LUN rebased error handle would mainly do three
++	 * steps to recovery commands which are
++	 *   check sense
++	 *   start unit
++	 *   reset lun
++	 * While we would fallback to host based error handler which would
++	 * do these steps too. Add flags to mark thes steps are done to
++	 * avoid repeating these steps.
++	 *
++	 * The flags should be cleared when LUN based error handler is
++	 * wakedup or when host based error handler finished, set when
++	 * fallback to host based error handle.
++	 */
++	unsigned get_sense_done:1;
++	unsigned stu_done:1;
++	unsigned reset_done:1;
++
+ 	/*
+ 	 * add scsi command to error handler so it would be handuled by
+ 	 * driver's error handle strategy
 -- 
 2.33.0
 
