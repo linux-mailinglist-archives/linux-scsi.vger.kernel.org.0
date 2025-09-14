@@ -1,40 +1,40 @@
-Return-Path: <linux-scsi+bounces-17204-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17207-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBD45B5679D
-	for <lists+linux-scsi@lfdr.de>; Sun, 14 Sep 2025 12:11:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A74FB567A1
+	for <lists+linux-scsi@lfdr.de>; Sun, 14 Sep 2025 12:11:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F9E3189097C
-	for <lists+linux-scsi@lfdr.de>; Sun, 14 Sep 2025 10:11:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71D6F1891A63
+	for <lists+linux-scsi@lfdr.de>; Sun, 14 Sep 2025 10:12:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC5E23AB8B;
-	Sun, 14 Sep 2025 10:11:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 436A92417D9;
+	Sun, 14 Sep 2025 10:11:28 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7B6A1C5496;
-	Sun, 14 Sep 2025 10:11:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15516235063;
+	Sun, 14 Sep 2025 10:11:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757844686; cv=none; b=e3ZhyarjwyRegpQhJ2tQB75QDOHicBdcnUe9EJqFS+VAXl4vpJOrq1p6KSfDHLa/R4dIbPhmrPaMJZ8e0WSCpXdB38vy0hap7HVBWAJsC8ug+RCklVA9WxSUl9WPpuYHlfRIDnjQIOSmWp/yeWsGuXq8/ZTyuSPFtyPPytTYQg8=
+	t=1757844688; cv=none; b=eQCGNBW1In8W+67d2IGZxUpzXGVyY4Kc+G3vJgmUff7TSJl9vxN3aa18RwJfBw0vOond0IttvLyotyhdTbhUzxaVKyhqu/g+L5RiEQ8fkVVSpvorFxgDx778RxB/0PeGxPAnkLLzpotEYrAqf8v2+gJrshih1JcHSP+yAJ31S+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757844686; c=relaxed/simple;
-	bh=onoab6PpBgIgGqMZ5cSo33JVzJIuK0Xb7SYU04LrUSA=;
+	s=arc-20240116; t=1757844688; c=relaxed/simple;
+	bh=dGMhuHtWhO6mFY5j8wH09YxCtZDEgNPiyFnCcKgMkaM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ECGlFQrkXZA2jeNBwHOPS/jZCALWxORCBZIrOgs6Whkf6gB5tPxUpWBiE1J+mGOsiHSaDzASRJxzYIJeePsMfreMi+JK8DmiHF+Q3djW/yEIhti9T3JsBuXSJCZ/H0nzPCGThvHw9R6Xren+DB7q9sHE+E9S7FNFKE13zxspUL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; arc=none smtp.client-ip=45.249.212.190
+	 MIME-Version:Content-Type; b=r3KRktsDl6uSyscUgJNl35Px4aqP+0ZDNzbpBX9N06hIpRKQDwRUJqE9SQsIPF4XGFY2XgPayvoAbeYBtkq896yePMF95LYoeYUVHOKIPmnOiN8+6CUIp+QZKigHNVBoDH/OvSGj+JQTdvuWFKXfhMxnk1KNUiCgvMKZVVL6IiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; arc=none smtp.client-ip=45.249.212.187
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4cPkN16CTKz2Cg5J;
-	Sun, 14 Sep 2025 18:06:41 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4cPkT13HQRz14MbG;
+	Sun, 14 Sep 2025 18:11:01 +0800 (CST)
 Received: from kwepemk500001.china.huawei.com (unknown [7.202.194.86])
-	by mail.maildlp.com (Postfix) with ESMTPS id DBED6140145;
-	Sun, 14 Sep 2025 18:11:15 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 7E71418006C;
+	Sun, 14 Sep 2025 18:11:16 +0800 (CST)
 Received: from localhost.localdomain (10.175.104.170) by
  kwepemk500001.china.huawei.com (7.202.194.86) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -45,12 +45,13 @@ To: <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
 CC: <linux-kernel@vger.kernel.org>, <hare@suse.de>, <dlemoal@kernel.org>,
 	<hewenliang4@huawei.com>, <yangyun50@huawei.com>, <wuyifeng10@huawei.com>,
 	<yangxingui@h-partners.com>
-Subject: [RFC PATCH v4 0/9] scsi: scsi_error: Introduce new error handle mechanism
-Date: Sun, 14 Sep 2025 18:41:36 +0800
-Message-ID: <20250914104145.2239901-1-jiangjianjun3@huawei.com>
+Subject: [RFC PATCH v4 1/9] scsi: scsi_error: Define framework for LUN based error handle
+Date: Sun, 14 Sep 2025 18:41:37 +0800
+Message-ID: <20250914104145.2239901-2-jiangjianjun3@huawei.com>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <17230842-0a7a-403e-abc7-a15e3aa5d424@suse.de>
+In-Reply-To: <20250914104145.2239901-1-jiangjianjun3@huawei.com>
 References: <17230842-0a7a-403e-abc7-a15e3aa5d424@suse.de>
+ <20250914104145.2239901-1-jiangjianjun3@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -62,50 +63,210 @@ Content-Type: text/plain
 X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
  kwepemk500001.china.huawei.com (7.202.194.86)
 
-> Additionally: TARGET RESET TMF is dead, and has been removed from SAM
-> since several years. It really is not worthwhile implementing.
+From: Wenchao Hao <haowenchao2@huawei.com>
 
-Hannes suggested removing the faulty handler on the target, so I revised
-a version and submitted it as a proposal.
+The old scsi error handle logic is based on host, once a scsi command
+in one LUN of this host is classfied as failed, SCSI mid-level would
+set the whole host to recovery state, and no IO can be submitted to
+all LUNs of this host any more before recovery finished, while the
+recovery process might take a long time to finish.
+It's unreasonable when there are a lot of LUNs in one host.
 
-> Also, was this all tested with libata and libsas attached devices as well ?
-> They all depend on scsi EH.
+This change introduce a way for driver to implement its own
+error handle logic which can be based on scsi LUN as minimum unit.
 
-And I removed the settings for iscsi_tcp and virtio_scsi, maybe that
-adding this proposal to specific drivers before the plan is finalized is
-not appropriate. Keep the setting of scsi_debug for test the solution.
+scsi_device_eh is defined for error handle based on scsi LUN, and
+pointer struct scsi_device_eh "eh" is added in scsi_device, which
+is NULL by default.
+LLDs can initialize the sdev->eh in hostt->slave_alloc to implement an
+scsi LUN based error handle. If this member is not NULL, SCSI mid-level
+would branch to drivers' error handler rather than the old one which
+block whole host's IO.
 
-The introduction can be simplified as follows: This tmf only blocks IO
-on the current device and does not interfere with IO or tmf on other
-devices. 
+Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
+Co-developed-by: JiangJianJun <jiangjianjun3@huawei.com>
+Signed-off-by: JiangJianJun <jiangjianjun3@huawei.com>
+---
+ drivers/scsi/scsi_error.c  | 42 +++++++++++++++++++++++++++++++++++---
+ drivers/scsi/scsi_lib.c    |  7 +++++++
+ drivers/scsi/scsi_priv.h   |  8 ++++++++
+ include/scsi/scsi_device.h | 29 ++++++++++++++++++++++++++
+ 4 files changed, 83 insertions(+), 3 deletions(-)
 
-
-JiangJianJun (1):
-  scsi: scsi_debug: Add params for configuring the error handler
-
-Wenchao Hao (8):
-  scsi: scsi_error: Define framework for LUN based error handle
-  scsi: scsi_error: Move complete variable eh_action from shost to
-    sdevice
-  scsi: scsi_error: Check if to do reset in scsi_try_xxx_reset
-  scsi: scsi_error: Add helper scsi_eh_sdev_stu to do START_UNIT
-  scsi: scsi_error: Add helper scsi_eh_sdev_reset to do lun reset
-  scsi: scsi_error: Add flags to mark error handle steps has done
-  scsi: scsi_error: Add helper to handle scsi device's error command
-    list
-  scsi: scsi_error: Add a general LUN based error handler
-
- drivers/scsi/scsi_debug.c  |  15 +-
- drivers/scsi/scsi_error.c  | 422 ++++++++++++++++++++++++++++++++-----
- drivers/scsi/scsi_lib.c    |   7 +
- drivers/scsi/scsi_priv.h   |   8 +
- drivers/scsi/scsi_scan.c   |   7 +
- drivers/scsi/scsi_sysfs.c  |   2 +
- include/scsi/scsi_device.h |  49 +++++
- include/scsi/scsi_eh.h     |   4 +
- include/scsi/scsi_host.h   |  18 +-
- 9 files changed, 476 insertions(+), 56 deletions(-)
-
+diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+index 746ff6a1f309..b5b04f2c5d62 100644
+--- a/drivers/scsi/scsi_error.c
++++ b/drivers/scsi/scsi_error.c
+@@ -291,11 +291,28 @@ static void scsi_eh_inc_host_failed(struct rcu_head *head)
+ 	spin_unlock_irqrestore(shost->host_lock, flags);
+ }
+ 
++static bool scsi_eh_scmd_add_sdev(struct scsi_cmnd *scmd)
++{
++	struct scsi_device *sdev = scmd->device;
++	struct scsi_device_eh *eh = sdev->eh;
++
++	if (!eh || !eh->add_cmnd)
++		return true;
++
++	scsi_eh_reset(scmd);
++	eh->add_cmnd(scmd);
++
++	if (eh->wakeup)
++		eh->wakeup(sdev);
++
++	return false;
++}
++
+ /**
+- * scsi_eh_scmd_add - add scsi cmd to error handling.
+- * @scmd:	scmd to run eh on.
++ * Add scsi cmd to error handling of Scsi_Host.
++ * This is default action of error handle.
+  */
+-void scsi_eh_scmd_add(struct scsi_cmnd *scmd)
++static void scsi_eh_scmd_add_shost(struct scsi_cmnd *scmd)
+ {
+ 	struct Scsi_Host *shost = scmd->device->host;
+ 	unsigned long flags;
+@@ -322,6 +339,25 @@ void scsi_eh_scmd_add(struct scsi_cmnd *scmd)
+ 	call_rcu_hurry(&scmd->rcu, scsi_eh_inc_host_failed);
+ }
+ 
++/**
++ * scsi_eh_scmd_add - add scsi cmd to error handling.
++ * @scmd:	scmd to run eh on.
++ */
++void scsi_eh_scmd_add(struct scsi_cmnd *scmd)
++{
++	struct Scsi_Host *shost = scmd->device->host;
++
++	if (unlikely(scsi_host_in_recovery(shost)) ||
++		scsi_eh_scmd_add_sdev(scmd))
++		scsi_eh_scmd_add_shost(scmd);
++}
++
++void scsi_eh_try_wakeup_sdev(struct scsi_device *sdev)
++{
++	if (sdev->eh && sdev->eh->wakeup)
++		sdev->eh->wakeup(sdev);
++}
++
+ /**
+  * scsi_timeout - Timeout function for normal scsi commands.
+  * @req:	request that is timing out.
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 0c65ecfedfbd..ac8fb801aa82 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -398,6 +398,8 @@ void scsi_device_unbusy(struct scsi_device *sdev, struct scsi_cmnd *cmd)
+ 
+ 	sbitmap_put(&sdev->budget_map, cmd->budget_token);
+ 	cmd->budget_token = -1;
++
++	scsi_eh_try_wakeup_sdev(sdev);
+ }
+ 
+ /*
+@@ -1360,6 +1362,9 @@ static inline int scsi_dev_queue_ready(struct request_queue *q,
+ {
+ 	int token;
+ 
++	if (scsi_device_in_recovery(sdev))
++		return -1;
++
+ 	token = sbitmap_get(&sdev->budget_map);
+ 	if (token < 0)
+ 		return -1;
+@@ -1374,6 +1379,7 @@ static inline int scsi_dev_queue_ready(struct request_queue *q,
+ 	if (scsi_device_busy(sdev) > 1 ||
+ 	    atomic_dec_return(&sdev->device_blocked) > 0) {
+ 		sbitmap_put(&sdev->budget_map, token);
++		scsi_eh_try_wakeup_sdev(sdev);
+ 		return -1;
+ 	}
+ 
+@@ -1882,6 +1888,7 @@ static blk_status_t scsi_queue_rq(struct blk_mq_hw_ctx *hctx,
+ out_put_budget:
+ 	scsi_mq_put_budget(q, cmd->budget_token);
+ 	cmd->budget_token = -1;
++	scsi_eh_try_wakeup_sdev(sdev);
+ 	switch (ret) {
+ 	case BLK_STS_OK:
+ 		break;
+diff --git a/drivers/scsi/scsi_priv.h b/drivers/scsi/scsi_priv.h
+index 5b2b19f5e8ec..906f090d917c 100644
+--- a/drivers/scsi/scsi_priv.h
++++ b/drivers/scsi/scsi_priv.h
+@@ -92,6 +92,7 @@ extern int scsi_error_handler(void *host);
+ extern enum scsi_disposition scsi_decide_disposition(struct scsi_cmnd *cmd);
+ extern void scsi_eh_wakeup(struct Scsi_Host *shost, unsigned int busy);
+ extern void scsi_eh_scmd_add(struct scsi_cmnd *);
++extern void scsi_eh_try_wakeup_sdev(struct scsi_device *sdev);
+ void scsi_eh_ready_devs(struct Scsi_Host *shost,
+ 			struct list_head *work_q,
+ 			struct list_head *done_q);
+@@ -191,6 +192,13 @@ static inline void scsi_dh_add_device(struct scsi_device *sdev) { }
+ static inline void scsi_dh_release_device(struct scsi_device *sdev) { }
+ #endif
+ 
++static inline bool scsi_device_in_recovery(struct scsi_device *sdev)
++{
++	struct scsi_device_eh *eh = sdev->eh;
++
++	return eh && eh->is_busy && eh->is_busy(sdev);
++}
++
+ struct bsg_device *scsi_bsg_register_queue(struct scsi_device *sdev);
+ 
+ extern int scsi_device_max_queue_depth(struct scsi_device *sdev);
+diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
+index 6d6500148c4b..c21b0a84bbd2 100644
+--- a/include/scsi/scsi_device.h
++++ b/include/scsi/scsi_device.h
+@@ -100,6 +100,34 @@ struct scsi_vpd {
+ 	unsigned char	data[];
+ };
+ 
++struct scsi_device;
++
++struct scsi_device_eh {
++	/*
++	 * add scsi command to error handler so it would be handuled by
++	 * driver's error handle strategy
++	 */
++	void (*add_cmnd)(struct scsi_cmnd *scmd);
++
++	/*
++	 * to judge if the device is busy handling errors, called before
++	 * dispatch scsi cmnd
++	 *
++	 * return 0 if it's ready to accepy scsi cmnd
++	 * return 1 if it's in error handle, command's would not be dispatched
++	 */
++	bool (*is_busy)(struct scsi_device *sdev);
++
++	/*
++	 * wakeup device's error handle
++	 *
++	 * usually the error handler strategy would not run at once when
++	 * error command is added. This function would be called when any
++	 * scsi cmnd is finished or when scsi cmnd is added.
++	 */
++	void (*wakeup)(struct scsi_device *sdev);
++};
++
+ struct scsi_device {
+ 	struct Scsi_Host *host;
+ 	struct request_queue *request_queue;
+@@ -289,6 +317,7 @@ struct scsi_device {
+ 	struct mutex		state_mutex;
+ 	enum scsi_device_state sdev_state;
+ 	struct task_struct	*quiesced_by;
++	struct scsi_device_eh	*eh;
+ 	unsigned long		sdev_data[];
+ } __attribute__((aligned(sizeof(unsigned long))));
+ 
 -- 
 2.33.0
 
