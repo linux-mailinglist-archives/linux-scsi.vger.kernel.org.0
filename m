@@ -1,135 +1,146 @@
-Return-Path: <linux-scsi+bounces-17242-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17244-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9926FB586BA
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Sep 2025 23:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 09108B586F0
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Sep 2025 23:49:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61D81173DA9
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Sep 2025 21:27:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1BF12A3863
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Sep 2025 21:49:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA3A2C08AA;
-	Mon, 15 Sep 2025 21:26:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B59C42C08C8;
+	Mon, 15 Sep 2025 21:49:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="wkvea9OY"
+	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="VncFdBPa"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD062DC78E;
-	Mon, 15 Sep 2025 21:26:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757971612; cv=none; b=h+PhxaotZcCeXwn5E3InePPIaISAbyk5XO0JtRtZHT2W/P9yF2Qs4b5GAtbfatmkq0gGbrRslzdshdScz35lsSFqCqp4NEKD92IQQhZOHZzRQ0kEagG9SmLjDQV1gYKpHwvrztjhmOEXw5Nr9ayS9OekPRxgC8mSYHO86QhEMo0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757971612; c=relaxed/simple;
-	bh=F1ipfS8UGPGTKCo2J4DQxAs8vmHs6cZPnkAiHnP/5Hg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=UoCDZL23NdMf7/9WGJcJK2KTB+YR+PmVGFHfzeMssT55706lmrS+RFqQ/0bA+x07OUKMsJXqCyQzSBVTF2Ind3vHiQjFFxd/mgAylbs2xpt719C6UEQkPrqmjEuL+FQXPuozoVGu2CtxyZMTwjEtYldtu2Q47MKuGiIBNN9E8vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=wkvea9OY; arc=none smtp.client-ip=199.89.3.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 004.mia.mailroute.net (Postfix) with ESMTP id 4cQdQK606Vzm0ySc;
-	Mon, 15 Sep 2025 21:26:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1757971607; x=1760563608; bh=23miGv/7QuDmfuZP+/ZrmchU
-	VWkCWSYajP4qSG4TBvQ=; b=wkvea9OYD7LrQtPQZS+KNEDFppoqKn1W/cjEM0q5
-	ZuPeio2I25eY5AGxpk5XMasEYEwIUI9/547r2FOruI9PYelB1PKKA4iKezmP0N68
-	A15uemDg1FK2vfFCa6iYWftjQwsXeuk6tP2cyELgBN9cfQ+FQIKaBrRh6iMvla7j
-	91NxQa0g7E7XlqtIS77eQenkEv/UvetMICX+tKIxMt1tdLmjLuy6s8L3k+Ka9QiG
-	Y+If7nWmgX4nkFz1/ZjPxr9oXtl/xQELWy5Z4AjqZXHdG29dVVrLPtfk9FPMrCBX
-	E3nyrheu/lSgb6/c03+OwBd0gwpwsrs4LuqZLqiZEJitnA==
-X-Virus-Scanned: by MailRoute
-Received: from 004.mia.mailroute.net ([127.0.0.1])
- by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id BaI7MOOtGWAV; Mon, 15 Sep 2025 21:26:47 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4cQdQ51p48zm0yT2;
-	Mon, 15 Sep 2025 21:26:35 +0000 (UTC)
-Message-ID: <191ca54f-0faa-4615-967a-7b4c86d59e0e@acm.org>
-Date: Mon, 15 Sep 2025 14:26:34 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC421F5825;
+	Mon, 15 Sep 2025 21:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.165
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757972976; cv=pass; b=my1DNlGvN7C1X1V2G9knpina6UFPSEfwsvMwhG1NPmat1PjhzwrpS6SLQ8bFAMH6jikTNBr5B5SOCbrPFBCQu28uLNG6v3f3lTw5I067hjgLeW/yE71odNworr1n2hvUDXriG0SYwg2dLo4E5Mh/0rIhB5wX4YhiBJvKjdGfFzE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757972976; c=relaxed/simple;
+	bh=aem3w5dJ8jtSdXRiJkDmPpe0FDO+4ZZBlR/Rti8YPtw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=us3+xjhcayemGdwB6Qf3Gt8Zmn/tcfxU625/SoHYEWP+OjWdhdliFglHCgz99q9tqVmPKVJCYddu2l9y8xrgEu1JX0wpqx34AsGS2z0/Pw4HS8N5YDcr3wkTcuI4A4eREJYczMjrbWQ4WxVTAAH9dTKJmX5tc1Cp3nM98rZplls=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=VncFdBPa; arc=pass smtp.client-ip=81.169.146.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iokpp.de
+ARC-Seal: i=1; a=rsa-sha256; t=1757972782; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=RORpRm/yX/Vgx2ww0IzvPvVqSK4co/BWgUKkgnvqKYFkx68IkGWS68pvzzpRp5XWUY
+    St1VjgtmduSzslS6EZj/5mFGbvS/9CwiBTK91GfNXuo9IngnUErT4xOZSuHXFMUig4Qj
+    LlomNh4EwiSE3X2CYDqYfCEaxCEcfOnUAIyaz4/u/KkPafJT7e606s3tBVn5RqhcvYWQ
+    duOw0Eb4q9TdFhS/pOden/bJrRo6v42b8GfDJmNAG1j3Y26PZ5JUVRjAjflLFxiNXj2T
+    4o2CBVhYwFpV762Z+xZi7KqPwWxL/2M2DfHYEK3Z4aUDl2FlBLJbg5kPm78cgIaKl7kZ
+    KXAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1757972782;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=OpG4vBIZIuUMmX6ew05j+tKlXmLkE7t2VjeHBsSWkds=;
+    b=eyvBsEA2cNbMk4+aLUKH4rTEpsT/BwRjNR+VtDbw73SNMISjWTMhuKLeJAfqj3i5Ob
+    zYo/ID+6G0S/j3rBSgUa/yfUQoIEGFlLEKKvDZsIQGxmRQbDAjoR8sL4fuJGShBjx3k8
+    wI51iK8eKE6VGUCdqX0Y9T9/dGqnC1D/Av2rwIBAGZWOU7Ck9NueREYlBCdF8P7C7h+Y
+    F2/ALLIsjMf8L8qRfjqIz4YERmTZbgqWCjmfUsBEcP5e7JoewEdw6eXa1+ukXl8MwhQl
+    eXZgBwoiXoosm68Tt0PnEgrzapkDKMlzQmSQ26A4P+gbonxZ6Dxe3B7eVi4uFnjC76kE
+    W2/Q==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1757972782;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=OpG4vBIZIuUMmX6ew05j+tKlXmLkE7t2VjeHBsSWkds=;
+    b=VncFdBPa2qRqvt//s9SK1QEYTnxwzWzP5XY+3lANEuTF2hTmyYPWnd+2STU40rCGtN
+    UJlRJbKR9eLYknu/M14NWAtpZdhEDnlWXSC1KkfnPrz1tovDSNpI2gYQcZbXPXltBQbj
+    6yXqWin87n5SmFWq7ocM+C1thStJl3DW4b7Uz6oN0IqDKTDOnr0tHwQzWA7BQcNk9Sa1
+    1H7wmrgjpi7Ft2I0lU94RIHNWNVMqh/OFThGtnRs5Tpa/oGqAomGxfW9WpaKRDtYqQOs
+    V0tJfxrrLmOM8RO571O7Tf1ZSTQdnaKrh2wZg+gvHA4xKO4i91H30f/ryQBx80rf05K6
+    jy8w==
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSfNuhhDSDt3O256fJ4HnWXON1RCg6IWQdI9ZW5fgNTLz+ViCLXbUTDqukxFTraA="
+Received: from Munilab01-lab.speedport.ip
+    by smtp.strato.de (RZmta 52.1.2 AUTH)
+    with ESMTPSA id z039d318FLkL3HC
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Mon, 15 Sep 2025 23:46:21 +0200 (CEST)
+From: Bean Huo <beanhuo@iokpp.de>
+To: avri.altman@wdc.com,
+	bvanassche@acm.org,
+	alim.akhtar@samsung.com,
+	jejb@linux.ibm.com,
+	martin.petersen@oracle.com,
+	can.guo@oss.qualcomm.com,
+	ulf.hansson@linaro.org,
+	jens.wiklander@linaro.org
+Cc: linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	mikebi@micron.com,
+	lporzio@micron.com,
+	Bean Huo <beanhuo@iokpp.de>
+Subject: [RFC PATCH v1 0/2] Add OP-TEE based RPMB driver for UFS devices
+Date: Mon, 15 Sep 2025 23:46:12 +0200
+Message-Id: <20250915214614.179313-1-beanhuo@iokpp.de>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] block: add support for device frequency PM QoS tuning
-To: Wang Jianzheng <wangjianzheng@vivo.com>, Jens Axboe <axboe@kernel.dk>,
- Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Peter Wang
- <peter.wang@mediatek.com>, Bean Huo <beanhuo@micron.com>,
- "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
- Adrian Hunter <adrian.hunter@intel.com>, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250914114549.650671-1-wangjianzheng@vivo.com>
- <20250914114549.650671-3-wangjianzheng@vivo.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20250914114549.650671-3-wangjianzheng@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
 
-On 9/14/25 4:45 AM, Wang Jianzheng wrote:
-> +#ifdef CONFIG_PM
-> +static void blk_mq_dev_frequency_work(struct work_struct *work)
-> +{
-> +	struct request_queue *q =
-> +			container_of(work, struct request_queue, dev_freq_work.work);
-> +	unsigned long timeout;
-> +	struct dev_pm_qos_request *qos = q->dev_freq_qos;
-> +
-> +	timeout = msecs_to_jiffies(q->disk->dev_freq_timeout);
-> +	if (!q || IS_ERR_OR_NULL(q->dev) || IS_ERR_OR_NULL(qos))
-> +		return;
-> +
-> +	if (q->pm_qos_status == PM_QOS_ACTIVE) {
-> +		q->pm_qos_status = PM_QOS_FREQ_SET;
-> +		dev_pm_qos_add_request(q->dev, qos, DEV_PM_QOS_MIN_FREQUENCY,
-> +				       FREQ_QOS_MAX_DEFAULT_VALUE);
-> +	} else {
-> +		if (time_after(jiffies, READ_ONCE(q->last_active) + timeout))
-> +			q->pm_qos_status = PM_QOS_FREQ_REMOV;
-> +	}
-> +
-> +	if (q->pm_qos_status == PM_QOS_FREQ_REMOV) {
-> +		dev_pm_qos_remove_request(qos);
-> +		q->pm_qos_status = PM_QOS_ACTIVE;
-> +	} else {
-> +		schedule_delayed_work(&q->dev_freq_work,
-> +				      q->last_active + timeout - jiffies);
-> +	}
-> +}
+This patch series introduces OP-TEE based RPMB (Replay Protected Memory Block)
+support for UFS devices, extending the kernel-level secure storage capabilities
+that are currently available for eMMC devices.
 
-The above code is similar in nature to the activity detection by the
-run-time power management (RPM) code. Why a new timer mechanism instead
-of adding more code in the UFS driver RPM callbacks?
+Background:
+Previously, OP-TEE required a userspace supplicant to access RPMB partitions,
+which created complex dependencies and reliability issues, especially during
+early boot scenarios. Recent work by Linaro has moved core supplicant
+functionality directly into the Linux kernel for eMMC devices, eliminating
+userspace dependencies and enabling immediate secure storage access.
 
-> @@ -3161,6 +3211,8 @@ void blk_mq_submit_bio(struct bio *bio)
->   		goto queue_exit;
->   	}
->   
-> +	blk_pm_qos_dev_freq_update(q, bio);
+This series extends that same approach to UFS devices, which are becoming
+increasingly common in enterprise and mobile applications that require secure
+storage capabilities.
 
-Good luck with adding power-management code in the block layer hot path
-... I'm not sure anyone will be enthusiast seeing code being added in
-blk_mq_submit_bio().
+Benefits:
+- Eliminates dependency on userspace supplicant for UFS RPMB access
+- Enables early boot secure storage access (e.g., fTPM, secure UEFI variables)
+- Provides kernel-level RPMB access as soon as UFS driver is initialized
+- Removes complex initramfs dependencies and boot ordering requirements
+- Ensures reliable and deterministic secure storage operations
+- Supports both built-in and modular fTPM configurations
 
-Thanks,
+The implementation follows the same pattern as the existing eMMC RPMB driver
+and currently supports RPMB region0 only. Support for additional UFS RPMB regions
+will be added in future versions after updating optee core structure.
 
-Bart.
+
+Bean Huo (2):
+  rpmb: move rpmb_frame struct and constants to common header
+  scsi: ufs: core: Add OP-TEE based RPMB driver for UFS devices
+
+ drivers/misc/Kconfig           |   2 +-
+ drivers/mmc/core/block.c       |  42 --------
+ drivers/ufs/core/Makefile      |   1 +
+ drivers/ufs/core/ufs-rpmb.c    | 174 +++++++++++++++++++++++++++++++++
+ drivers/ufs/core/ufshcd-priv.h |  13 +++
+ drivers/ufs/core/ufshcd.c      |  34 +++++--
+ include/linux/rpmb.h           |  42 ++++++++
+ include/ufs/ufs.h              |   4 +
+ include/ufs/ufshcd.h           |   1 +
+ 9 files changed, 264 insertions(+), 49 deletions(-)
+ create mode 100644 drivers/ufs/core/ufs-rpmb.c
+
+-- 
+2.34.1
+
 
