@@ -1,100 +1,100 @@
-Return-Path: <linux-scsi+bounces-17300-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17298-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42EC6B82210
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Sep 2025 00:14:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E83B82202
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Sep 2025 00:14:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA69C1C803F2
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Sep 2025 22:14:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BCED48834B
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Sep 2025 22:13:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9350B30C110;
-	Wed, 17 Sep 2025 22:14:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB5BD30DEBF;
+	Wed, 17 Sep 2025 22:13:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="GtIzpswM";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="vgQyLZot"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="QYuTxKWT";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Ja8iAmt5"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A92830E0C2;
-	Wed, 17 Sep 2025 22:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3972DCBF7;
+	Wed, 17 Sep 2025 22:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758147241; cv=fail; b=Xt+lFZgU8kuyY8fyk46oC+vt1NgGWVklKRtxe4RzQPFelij2z1JLmpfDfVP+DJc8Lk7GMcC63oDDforxbknj9t4Ur1xAOCA4tYl8hoanTs327ChYjZABz0hl/isj0EVKspoCwiGhK4HLKZwvx0vQcSHH2eY19jZAknRB5/K6nDE=
+	t=1758147235; cv=fail; b=JqsAMhpOsneaET7zzJ/4PXBYtkWwjm/ATVHNd/jkV7ZcPawClAsGzwS8RfV+QfHJqIYu2P8P8ezVs+CFyFe2vxrj8jPEjUqxCyrLNIX/3BBEPRvzFT0sa/WSkLQ6OIOd/+kQVojdytvgQztUPRtpS+JSICnYZrul3ZuqnJrTx4U=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758147241; c=relaxed/simple;
-	bh=Ran45c7btJ4LrKrkLWH7661+NhkNwDK+CYvZ7sQSmsU=;
+	s=arc-20240116; t=1758147235; c=relaxed/simple;
+	bh=nrxkWTuRaElC7+WsaXcwpUEm7shmPLTwNVUjtiA/Ykg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XVtKZRbRPqzJsX2Ibs2+tyA+mePfI0kk6B9OUM3UjNaTFaPP60u8gV8odVL/7ccPNBpomYoZgsHlJBZG3+hD3QVU3B2QdrSoaLl8QQakk0v7wDbp976u7y/Ly3f7hO8fzVH/7vr6kNFeCilGKIMm5QooCFxvPCTptbICtMDsimk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=GtIzpswM; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=vgQyLZot; arc=fail smtp.client-ip=205.220.177.32
+	 Content-Type:MIME-Version; b=cpNkgGMgMRwM/CYlqNF17ixonktrdJkQmmT/tgKPOaFcFNlXILlEq7gWnJpwyuwqCymDYB9cO/e4cEG3jYEzmOJ+DZMTrCL2Y3D9rUNyVoj0eQ0plToFeidIBleiAlajQeDr2HPW+0ZVDnGvFrIGbAikURde3Aij3/p/C4S4JhM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=QYuTxKWT; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Ja8iAmt5; arc=fail smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58HEIRs2001799;
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58HEITdl007388;
 	Wed, 17 Sep 2025 22:13:47 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=MaQ//hIu3jw24uthCZJWiJCm7NAwgtpWe5BnfcJ9r3I=; b=
-	GtIzpswMazctOXimj6IBueatbYE6Npl6uhZVQtiIbjHtYyuUh9QW2E2VkKQCUH4s
-	9GQ+lZadrFnqiwWOav2XfKDBmxNW9NPA/P4b6R1Nf/wY4WxcfsX+03gnmN/gSnZB
-	TQhz5NikLoMe75uG5XnuZyBK1iTMzWJYZbD3gh6PqXDcxxAe67yDUIU5Lldl1RQD
-	70MMkQGv73vcYg5uTGR4s1YoC0bATEyAn+wLKfPy5rzJrLPxyVIC9pBc0IYdzMVn
-	OaZI1iBYVtBsYBR7WktXCm1yybEMvpa04hm5lFVi/bAc7NYHNH+dSppZBnO0Nf+g
-	yiGmY0XE+IEXBWAJSpkVZQ==
+	corp-2025-04-25; bh=DiDTUkik2k0m4+iQFRCz9lSJV6/byn2WTUpsXgGdP1w=; b=
+	QYuTxKWTBcpjvW53Xjg/nm4dp++pZTvyhHGDTQbVqPEzBLbhxW1q5coWKraA4+fk
+	SclfLX4EGfIWpCkQSm5SqqwEyM7VpT75KN+hGzv/THBL0Y8YGrUYWmpQ8CAfgrHf
+	7P+T8taOeLVaIGAztA8YhcqIGfY+YCZxcZNoeouL+6na6lEg8wUr35D9AM2v9msn
+	+c4nYAmm/m5fJo5R0xccNG2BZYXb1FqoIz/9SAtwmDqwldGzIuGFYXTOKV2998IT
+	uuEhviaSLwAuttfmXVLqgQbkFX3U3N48GGWM45f1/R1HcWyV25nhplP1TbSXZPZN
+	PqtwoGlHWJ5cSfU76jIDVw==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 497fxd29fm-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 497fx9295m-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Wed, 17 Sep 2025 22:13:46 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 58HJocRZ028809;
-	Wed, 17 Sep 2025 22:13:45 GMT
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 58HJocRa028809;
+	Wed, 17 Sep 2025 22:13:46 GMT
 Received: from sj2pr03cu001.outbound.protection.outlook.com (mail-westusazon11012070.outbound.protection.outlook.com [52.101.43.70])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 494y2eaq33-2
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 494y2eaq33-3
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 17 Sep 2025 22:13:45 +0000
+	Wed, 17 Sep 2025 22:13:46 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Y3k9iz8pp1vM6XIpRKZizwG2yvENVQaRmhshRL47eZ4nlNkXHbPzRDPR+ehMEpJv6NvWrvJHymBKgu3fpaqpFMZcuSbOkCpfVbcNhive9EdoqvrxR+YWijXUsC6UD4jIIJPuJUEgLeGg+65wQ1St0v+fG3HH4DRN70wVdU9bY7lDDF6AL4W9aGvucxIJjzFB0RgrzUQM501w7GEfkN67z+MRpwc8kzBBjRe7jgz5j/aIyJ1d+igudZFyRSE49Nxop65V6V+0Tzo7zRu9xDUlACVRUqbUGeGZZvbzw4QryWuxlT/JWRv/MPnvawXUSPdZ0OESJO0k4sRTV0qh7bHtfw==
+ b=RRhx9b2owOSJwLncL2mYfrpdMXKW5oWSYKsMwKG5kUjaH6sx+YgslVnc2rD4vCldI6weEvtgkQGfJeXizZ7yPwlIfC4Iu9myGK9vPWZRuXgTbMl0uaqcK+ykXqcGLphr1VvnfqcE8f+5mx64hLhXhfa6iLP3BwAFFhNpGbPXTKNL2oeFxwz9NtCDUFnqZ8s0/7bL+c1ACY3Bh9wUtwBqpoRJSWHLr2vV5W+uiHhitgQocDMjUC/+aT4lRICeOBkjGNLgwOEDgoR54iuAFA6c/9rwroTD0PDJYOqyfrV6cXZ0SRRLq1OXqPVkndypCRJF0BCtSqzU3ab1K+cHh2gwPQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MaQ//hIu3jw24uthCZJWiJCm7NAwgtpWe5BnfcJ9r3I=;
- b=QHJnery3D/iNbjk9mGqIGHqMmgXoiONDnHmlFFimqCcd/+OuzlumD1iT+IwHrhmJzIoQnPVrWyjDSfmwlF1VIekdQNljZ8D8bdtoe8FjuwWlF+YdLD8d4PeK4nSUflqJ1rn8qllcAujw5NVs998REggxEPOdkLvfVIVyT+0+i0zOAdB+rGYmZFxLX7gTKCSV8V6pmUvSEF3tmw71AYLP57L+6IxAa89/xPFtVJJ+Jr3Zwe+h3Cd4ULTO3mQfacgZa1TlDMJeavK0WIEh30Wb5cNaeEsiFmGdmbgfYDKztF2xGpWNarRsb5NR82sXrAEnIR1yw+BKhGno8P0x8I2CtA==
+ bh=DiDTUkik2k0m4+iQFRCz9lSJV6/byn2WTUpsXgGdP1w=;
+ b=ZLnb+WTboG1PGfqs2AzmmE51KTAZMhl6Bnl1Dc0dCq2QHLaEIynkOuqNC1CLfwn//cZaZlhKokjSfcJlzKhI9S8/n/f55lSb+tvkcriXMbrZ0j4Qz7zxeGkfIB7nSXyJUyM1iuhof1YxH/SzBE5CIaUrE6M9W6PxkLRcGL3BgfzX8kf06JkSl1f2pwqClQDM7lLuGaZAtiXAQZbuV9bNG+PqXyhjB3jPhQoIbwMAo4N9QwlKiE1plnnXar5ylf1/250AcFLq1VlxNtDpmDmBtP0DHBdQeVg8iYBzSyprZMJarUmWtlF9GIiRdEtAp83/YN5X4NbsOjfvbXHFieCchg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MaQ//hIu3jw24uthCZJWiJCm7NAwgtpWe5BnfcJ9r3I=;
- b=vgQyLZotrsv4yHqYHF8XahiGkhySED9kulGSFcOaVMYeQPOupjnWGCMNn35GcQYbeNKzZ33m6cUt2jr75aqDWmz8sPqVZGaHKQCVhtzcFbRuHNnC/3h0mD3k0qcGo1WnudWTOYwWJEnEM5623VjtnGzH8jUSbbDD3bqblzvinYk=
+ bh=DiDTUkik2k0m4+iQFRCz9lSJV6/byn2WTUpsXgGdP1w=;
+ b=Ja8iAmt52jXHJucy0w2XfFwjOxptIEi4twmLWLbzyaElLK3W5kVtsEdP4WGsc9QuFcC3bvs1UBglanjvAslKN7Z7yjRwgLAr92nEqLUSr0lj6K6+Sx1HJ+qnqp9146V/nccetX4Cbip1J6SauGWQB7QO+gM3X1uI73vxRfQF9xM=
 Received: from CY8PR10MB7243.namprd10.prod.outlook.com (2603:10b6:930:7c::10)
  by CH3PR10MB7564.namprd10.prod.outlook.com (2603:10b6:610:17d::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.18; Wed, 17 Sep
- 2025 22:13:42 +0000
+ 2025 22:13:44 +0000
 Received: from CY8PR10MB7243.namprd10.prod.outlook.com
  ([fe80::b779:d0be:9e3a:34f0]) by CY8PR10MB7243.namprd10.prod.outlook.com
  ([fe80::b779:d0be:9e3a:34f0%7]) with mapi id 15.20.9137.012; Wed, 17 Sep 2025
- 22:13:42 +0000
+ 22:13:44 +0000
 From: Mike Christie <michael.christie@oracle.com>
 To: mlombard@redhat.com, martin.petersen@oracle.com, d.bogdanov@yadro.com,
         bvanassche@acm.org, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org
 Cc: Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH v3 1/3] scsi: target: Fix lun/device R/W and total command stats
-Date: Wed, 17 Sep 2025 17:12:53 -0500
-Message-ID: <20250917221338.14813-2-michael.christie@oracle.com>
+Subject: [PATCH v3 2/3] scsi: target: Create and use macro helpers for per CPU stats
+Date: Wed, 17 Sep 2025 17:12:54 -0500
+Message-ID: <20250917221338.14813-3-michael.christie@oracle.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250917221338.14813-1-michael.christie@oracle.com>
 References: <20250917221338.14813-1-michael.christie@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: DM6PR18CA0018.namprd18.prod.outlook.com
- (2603:10b6:5:15b::31) To CY8PR10MB7243.namprd10.prod.outlook.com
+X-ClientProxiedBy: DS7PR07CA0019.namprd07.prod.outlook.com
+ (2603:10b6:5:3af::7) To CY8PR10MB7243.namprd10.prod.outlook.com
  (2603:10b6:930:7c::10)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -104,81 +104,81 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: CY8PR10MB7243:EE_|CH3PR10MB7564:EE_
-X-MS-Office365-Filtering-Correlation-Id: a2cc35c5-1453-48c8-d900-08ddf6377627
+X-MS-Office365-Filtering-Correlation-Id: 2a29dca4-b514-46b3-f9ec-08ddf637771f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?K8IE83Hc47Lf703q/xpxHXju8GVmpbql+XpvOblvH4QIkX2sRcL6+JqGbtPx?=
- =?us-ascii?Q?houwLr9ZaPceJDYBisx1ta6qTcILsRM6a3GjXomMDtUdWhzyQTiqGXHWgR4u?=
- =?us-ascii?Q?dnK8P6a4KUOPJYOLtSDTGI8cgsqjQXilYbPIFnhISw8EOuy3H9RUWcWo61jS?=
- =?us-ascii?Q?ptoXKOI/ZVXGM+cqBmmFJ1pMMPhU0N1/oLI0jNPy2FIq6DhoYVRfhLhKdaHT?=
- =?us-ascii?Q?PYjjAdP0AL5IXZ0Z+wh201Vm2ak66iLL3bYr7RonWjJq4OF/KBG1J7seRqWX?=
- =?us-ascii?Q?1H+ql7eBluG/BMGueaqaC4KFDNtSJE7dvrqd5SmQYFOP7LoJmz8vorCdF1hH?=
- =?us-ascii?Q?22IRqpZwV5fskUaJBoGOepHsY4/VHcxk4RlKgnGkDsSvmN8L3577ErooeeNf?=
- =?us-ascii?Q?AW9egkv6ZNi9n1Ul6sTSzHzPfA9vBt7+r+VWqwazPar2VlVtXGLTaMqZyZSo?=
- =?us-ascii?Q?jtofhGSmVpdQcNIkkZUkbZmKxvxFVS+tHPCrzpOQWVKHxuBdQU/9WMsvCFrc?=
- =?us-ascii?Q?8cyx23KTyPlNur1s2XuCNGV/m217kuL3UHqRgObmcOENehc+CTchcd9psN/7?=
- =?us-ascii?Q?NicYvYbBxDQlz9zDRkPxvycCWWtHziq3SnMJnl/qcORmQL5AchWWE7ufwFqS?=
- =?us-ascii?Q?XP7qhYady8KtCKuYf4cWMmntFD4wpUFPnzHpGgTjQbkaxsXrvygHr8+Ehj/t?=
- =?us-ascii?Q?k6mSZxzUW1BhZkblNUxHPeGnA4BwxKCaj8Tg9/owQM5yqXaJm/23Gblo+PKm?=
- =?us-ascii?Q?mpdZ0CuJRXC++VoM3oPGb/Cws6Uq+FvSznIyPQuFugeBNAfVNjBjCOnaIXge?=
- =?us-ascii?Q?702hUbqCNPr6DAmQrEMD8Zwqafg2999ulHK8fWj9OCC1Xeq6/aMdr/XN9A0O?=
- =?us-ascii?Q?7v3dqiA2l9iOqj6RcxxcGhGzmcbD6r1+oymTMFahfTyQn8h3ibG+6whHLABI?=
- =?us-ascii?Q?3WEQ3TDtq70R2MDjKvN50HF7RcIyn65IXXebxDHqJC3yoZFLwGFZOp0BiRIh?=
- =?us-ascii?Q?k3aUr5qfR9n2OG4X4R9PXCQ3YEX0+nQBeEPbz964z5VjqaD3P3Zm15NZgrUv?=
- =?us-ascii?Q?PggoszvPDR1kdzibY6Mq/6cDOro6n0gE8YZ6322+NYj0S+Nf0KSYncDRqZsF?=
- =?us-ascii?Q?Wa9bcWkWxlcPDWhNq6MycE6YSdWt9vfgj8iovwVweeYuo6SkIVShflax0GDk?=
- =?us-ascii?Q?kN7K+jQv0Bd9qZiZ2SqA28C58ruFA8cbhJZY8eUzGUBBpiJ34r3MUjSTkEEr?=
- =?us-ascii?Q?BzaufzDSdj9/gwm1hzwKgOaLBoRXmbsr4fF5UFtiMZ2xpvkz1bMiYDRNOBpW?=
- =?us-ascii?Q?rXU0d+uB120IpJKwenXAkrTkMbDUNN/3yzK9RZZZ4LVtvwCh5oMYHA1a1aNP?=
- =?us-ascii?Q?s6NegHI5j2gCyWSnk389gHrhJQCMULc/I+xWoOlVlBbh6ZAb0VrYAHUx38os?=
- =?us-ascii?Q?rIvllcS5kr4=3D?=
+	=?us-ascii?Q?JwnsIbVF5fteOhOr/IOm5HhxDZp9q6u5SpMhlT2/VI5V8evhXiZo22o42GKH?=
+ =?us-ascii?Q?gqHrqcTs47sjnppXeIBcMTRZxZ4zweQ59lv54E4zw14BAmgMdeoxr91VawQ+?=
+ =?us-ascii?Q?bz17H1iK9s53qirJUD4OG6s+z3k+UBaqb2DKB4eRy4GTAoqTzuTNTkHRRTGv?=
+ =?us-ascii?Q?eEKH3UoLbVjA9bjcGEQssbCTFcVD1DKA6OSB9anYnbPQKpsJk/O8Yegl04Al?=
+ =?us-ascii?Q?pFBeaPCQNeOmsJ5tU6b3ydHaoDxIk41Cz/LM2q9sumKKpegK0c4t4iPEHi2T?=
+ =?us-ascii?Q?+jB2t7fqUPPQEcpV7MZ9G7kCg2T5CLejJAh8ntDzFLTV5tXQQpequIgvHOvH?=
+ =?us-ascii?Q?97hVfN584ENNVgAmC3IOKqBr/l3X32VzJeHVq/DNgMl2z7KPm2bCBXoK3tDJ?=
+ =?us-ascii?Q?qaA2QgeV5txzm1yAf2BDbf9586MaCZ1KNgj5iBlk6/3hFjIRcMSAA5xOUomO?=
+ =?us-ascii?Q?qj+hInct6bMmbC7hmOnUcoSKblGJu22dzUhm0LDRs9YSy5HBiuOau/y/e259?=
+ =?us-ascii?Q?dYoIqr/oJ2R8dgM2NnvMtQlDpyyhwRgnBHIg3B3hFCTDP3qrxG3c0QihvtWL?=
+ =?us-ascii?Q?6oVyInfkm5OBIIzSqxDfuE47jym+f11782TW6dp//ZuFV+1MIcOwlHkj47Z2?=
+ =?us-ascii?Q?O6GNC2d8j9gdIFBu9+DTqVZKWfW0IHzk361+g5zfLTEv+acxEay2FU7kRz3m?=
+ =?us-ascii?Q?XuQZb9G3SvV0Xm+MrExyeN1z0zpbjG1VMurWOex5ngbaUNvA2r79gti8oFx+?=
+ =?us-ascii?Q?FzxXO9CbAKHh64x0EDrk5HNO4hCZSzEC8KT2wxysh5/EJeNqjgrKJUmDMPAL?=
+ =?us-ascii?Q?e+gVysBeqsXSSiumgfFXRhU8IxnS6AK7kFnB4ZQC9705Q51yCQDn5RlBxVvB?=
+ =?us-ascii?Q?wDokvVPp06t9oeB14H3lHwErSRk96Gcx16shY+Z42tA36/kiRF+U1BoPq23C?=
+ =?us-ascii?Q?Qo0Pk8KmuSPnnSzOysUi0bVpO5Tw82eSj3VKgP7pv8i5l5tI+Nr1mayOHpUN?=
+ =?us-ascii?Q?xgcUUMLmzYlW4QP8/LwbQxuZ1hXsPIseAhgP4mjk/qKT0Lx3j8fGPWqnwsBN?=
+ =?us-ascii?Q?gv1JJJZxXCq+T7N3FIce8LlzLbc3Z0STTkP+2657IJfrA19HvPhegzRZEhaK?=
+ =?us-ascii?Q?zn623JnDhfUMoExTxg/dGZa0uobGQ5IfLW7XgP17rWT8O/gk5UQA8Y28uLGw?=
+ =?us-ascii?Q?GEaDe+xcxyrTzI9A9QfuDMNm59SFJqu3rPCxRZaymLh4SN7h6Y5RNkO25JUN?=
+ =?us-ascii?Q?O/a3MK9AzWyvSfJdXd6bG1XAKyqP3JoSNbzgy9HefHbMuW6Wg4CvyKf7m4KY?=
+ =?us-ascii?Q?VJ7RFDDWgkQwbhFZgS2iD73r/FxRQUQAaeo2NM0H8DDOqz1Nqt823etoWyz8?=
+ =?us-ascii?Q?yzRRVSB5vkZb/m7vAUdDajz3CNQi4yeShEViADhIULtN8yxdav+JIYClxn9D?=
+ =?us-ascii?Q?Q7wAGz4MfQ0=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR10MB7243.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?qkuoKNBdYU1Kb73mRL7XrLbG3pWf8dPsylz26Nu/jQYwD6vp+/k2M8TwVRlw?=
- =?us-ascii?Q?LJtWa2Pddko+KjF9jzkT3U8kMO45SEdllM4bGWEruYf5Xm1P8ZvFizMyGjg0?=
- =?us-ascii?Q?0QRuXthl6SL2f+kTRXBftmb6w8EcwUQZ0JO3Q1k61jzeyCXkZpea8iMgjkve?=
- =?us-ascii?Q?cIO1AZzYOUB7DgOtX2jG2evHtNp5srLs2tYQ2sXe5pseYID7X57D/VVbvqq/?=
- =?us-ascii?Q?BqGU36INhvQ2VuyX5y7Y3aToZR8TtM+9Hicva1X8v0P6+nOXoj2ZFR7qwN8J?=
- =?us-ascii?Q?y8+qn196F8vk1XTg1VO3SvfrDqhZ+ilcGW4XrmYv3LuE5ru9Ynaah3zqKcbL?=
- =?us-ascii?Q?KJtHE9dmBGprbGsziyNRCAn737FlBEbbdBkvoV8ohJCkAJBWcRXr7JDy71YF?=
- =?us-ascii?Q?i1pZ4qE5n7P+ktWaGd5APLOJDfQjBkF1k4Lqezv7P2tjwGDK66fx87DThcZR?=
- =?us-ascii?Q?RI5Gv+8s6UtvTxhMA479TGAhnzRZqi+iObzIGKlsNUQQkx4jr4ycsSZaEmUN?=
- =?us-ascii?Q?PMaLPYxa+T4ckFy24Adk9IOh1QHUv5YnFfTKsIia2FYLPWM+i0iyXuAGwo/9?=
- =?us-ascii?Q?iDhhRvzm0FBy4xP7GKHTcdtNJnPHks08LuxSDE77xdjTfLUL8tjvsKdyGVIx?=
- =?us-ascii?Q?OJ/6nhJHzTlrLmSEj4C92wAWpavhZPJe+yh/2e0fT8Y+kFScNQRlSkPKj8c2?=
- =?us-ascii?Q?C6+Dmd4wD0C6kaHaN8nX+GRMw+n56dHeJ6LURRes9IOcICCd60jz29XMzn1N?=
- =?us-ascii?Q?xXGO1agM4FN2/aXRoxIqan6H7tB1XL45uRYTl16SUV8j7REUHDrdehyzi7B6?=
- =?us-ascii?Q?FOuVpgfln7IIkQJSVxOG2lXMOlmH1IQOoxBMvpu0xTWrjbDYe48bScqsJ1n6?=
- =?us-ascii?Q?42MQ3GKNHxiGdPGLhnrozKBHOJMfOPuJZkdtHtF+TUX8EpCVDSvF7Ksg0a3S?=
- =?us-ascii?Q?+/0SZVVb4j4Bv+Mzsit0UVbWjzk3LKeq4ojKGJM71Qs5jeMkHNIs+qg92PKr?=
- =?us-ascii?Q?fHJProQ8DWgQyBjotgcHbMhh16XLhhn6mtfHHYmGH57SjOalMrt5uUvCshnL?=
- =?us-ascii?Q?GtW8VnXi0ngrUCWJgqf36X/GLOOmmalmCKAtOF/aqLz0EaVENe72UE1Bb8uQ?=
- =?us-ascii?Q?C8c6QoN7hT7ZQlddF3XmdmAJGI6SWan4mUf31gm4qVM+ddqFA+OQ/k6C26Bw?=
- =?us-ascii?Q?gfwXe6NEUM0H2ktrsuP4/q+ujHJlrupwP/F7RmbLJvW5mCbMHUq/3sgkBFWU?=
- =?us-ascii?Q?iQk6gtGNmBj8Lku3u+ByqnsFEbBITK9nlnO17ME7ZExOQhx+T28eXNnBMwnu?=
- =?us-ascii?Q?NZljbD7/+3fpt7SKvxOCxG0f8/s49dqo3CfZEyxcZ34/Zj6LQjbszQl4uH0H?=
- =?us-ascii?Q?kE5TT4NprTCZdEjq202ytKJ/Kmr5tE2Bsu04R5bZ0XWbZ1tAXGfGgC7gj1hE?=
- =?us-ascii?Q?19SriMtyxRFUqi9WbnvD30CHqFLroIxjiiGNd9vY7Xon9SHLLRO2nC2qabMS?=
- =?us-ascii?Q?R1kj1FAUlaaJHB1W08KWDNS1GkeyV5EVc6kOPKrJv8pQCCxj4vJHQQha1jJd?=
- =?us-ascii?Q?Pk7GgM3f0+jOq1n7Y3y7LS64UVn+ue8BZFXGZH/qPQC5Nyr0Ko2/xtfPFpxw?=
- =?us-ascii?Q?Eg=3D=3D?=
+	=?us-ascii?Q?hqocf5vgDiGbPn0ScOivI9PKba5ExbPrgfb1J7FMZI7Gumw7ZW0ydx/dfsbP?=
+ =?us-ascii?Q?6spJFtVS/Kz7Y4jAZfMx/Xy2dLiMvJR5mvO2Om0YE/kv5RNIgiLAk+zQhSfG?=
+ =?us-ascii?Q?jXAHNdJ8XgxFNhQDW3VgnGPG8bG+hokGJ9OPFQAFetKfCrYrNe+qVt9Hedvb?=
+ =?us-ascii?Q?VsiopMpqcKo1ig7pqC2QvV8TLYd9jPyECwkuy6GJq1k9JvjBCa/S2OKdyFJ3?=
+ =?us-ascii?Q?cfv9cFO+IC/LoLMzgIQxBy+Pb5uoJh2OVmsy5d0tqIGMqaOD7O2fOYEvbKry?=
+ =?us-ascii?Q?ZDCnGzUxETRJHt1AoTyXHIKjswRORKymDtzJQ9dugeUY5qEw0Jq2MlyiPxB1?=
+ =?us-ascii?Q?wzSWdc73hYv/fH0nRA5QrUd2iGWunxZb/uy+mFietKk6tgu+GLGP3iA+16Pu?=
+ =?us-ascii?Q?loxkLcyNX7RXuZ/B7xgLWfFEn9qJKzR6BLugISntUTUHkKNi6+io4oboSeJh?=
+ =?us-ascii?Q?yQJReRFNgx8hSJ1roGdvA0Z+HdJ+pzPLsMGRf5bFRq/Da0kmbc9V1D63AAWh?=
+ =?us-ascii?Q?hIsVlblzC4zdhTUoFPS4YuZx8a5nGHFzODsFIGCJis3XbH1x+X3QxzSigp2a?=
+ =?us-ascii?Q?1gKYxhJeK4xgZRMO+ry7G8XEsxIfCw4OX3OQRKlkxEjQIlYEQH6ghhUWzSUh?=
+ =?us-ascii?Q?lZSSwF0Muw5s2l6I1chHwVoiCzGcNSqeHNqZRdNNZ4v6LccNsG7q6v60Pmor?=
+ =?us-ascii?Q?OBzs0+nYR8cb+aG9tmCao+Dj7LeavD8Es4DCBod2I9jauFvc4r7lXkNyWCrB?=
+ =?us-ascii?Q?EzwO5zSyw/ZXsZCKYOvjTS/MrJgXfHu+P5Ywf7OQpBa6Mk2TZ8jQHxgJPlkt?=
+ =?us-ascii?Q?QIlg0tUOfVUZvo/vr3bS/hWaaKJGI9nKEjgJNVaKD1vl57KmFVugC2kt6CtL?=
+ =?us-ascii?Q?rANLK8sGDBoPiE5pR5F9ylcMotPJ6N7lFACTXCcokF0+Qgd/M9j+yyRQ5NLN?=
+ =?us-ascii?Q?+MwH5HavEecU1ejBDGjdNKqEvU+Acv6myfBF8rqDpUP1Ln32iv2rEPZkZfVM?=
+ =?us-ascii?Q?cOQ+osOGI689UOf+macieJiHBOUz3xYz8HsPGo7FHRMns0muptniVSmots/7?=
+ =?us-ascii?Q?BB57caBD66dC+aIDBPbt/W1U613XdmjDhzNRsN5LDsvIO1ANdQgM517V8W5a?=
+ =?us-ascii?Q?KYUcATpzqs/Cuz9EhhN3psySIVWK1hvHc+DzcJyln3Xxwy1JyQQkOmVKBuIf?=
+ =?us-ascii?Q?15S+Z3wcQfw37QnNQ1FeeOmviXvHsXFqaS8/2TfqCoAkfq3xOpxSTweb28T9?=
+ =?us-ascii?Q?V6Ve5xxHK67xgho5cwTXGoysvtxJhToHxwGkNUbCl9KKgtZ7TfgnOTJhoYy7?=
+ =?us-ascii?Q?APPpdexcDXaX753h/b2RAYE7oN/+vnBkzyk3egeWkvcFfWcTukdwTEgOCYxz?=
+ =?us-ascii?Q?oBjg3aGKi8+kmU5PGEpZvg3tS4yIk5DZXNLjbovlKrygiI+75QP0NpiLg6hG?=
+ =?us-ascii?Q?fnZhhotz5MXKJbROtlEoNOq0jZ5qON8HuiKFfeHTCYdVhSJOPCywpFBUj513?=
+ =?us-ascii?Q?RezWCpOMOE908rL8fUaBv2z1xdf6atdQgp+vGEfRO2/Pszk/nQzVH2UepSWB?=
+ =?us-ascii?Q?3Kt9q85wB+Z4Fd7ikPOcgTPm5HeebEBl/50UcIkK7Xzw51pvAEy8kfxDU5qO?=
+ =?us-ascii?Q?rA=3D=3D?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	EgwPyj05IyWpNTlQeoo2XFty1LM6Dr6B8d23H7BZnCRFiOmdtW2zJq2AQS8M2Kv47DMR2LBAP7ALhqAO+wzg9C+WnR096H8eZ2LH6mtvKqugue1FidctMpKWT7/+NePp3XKZcE2x77/D9jZovAJT4iDP8Fcg9fH++mCGFzKH1FECC4bbKatzg0PqRhr4SSCCilbpff8WL4rLXRXR/piX6Sutve07UdF9IkU6DhCFtTAx1mLczKSVuDrPg2LMmzqci1KOObgoJA7HtTAZ2zcDPordFZ89Vf4/cej1yWN/AIm7SUigiA7qf2om5dYfkjnaIlbbW7kiyHdUnZtkoIHCP7js0BczV2rPB1SskD7M/JxUqB+icqsNQOrd1pKFIYGcMHS0ZhY5HVCTYPAU54DpnNOV9aNKZ5XqO8sQn6hRYf52tuza+kaiurRI1hFd3WnalYhe8ZRu5obUMhWiOcBMUsleNjkHeEz76/Y1Zt3T6vQbaT9GJ8pamrseEIR58+ZnGwPF0Ya1KTgWB4CKflQ4u7HSKJsnFQRbpk9qfv7eLnZM6WIBVb7VyoL0U2RmhrTEGV4K+xO+beuqIsza6q69aYC3pFV3resHfPf2HC6wxQo=
+	vJWA96ZGVyXgxyFa4spVbFhkTWn+N8axyrNEwqphyTSxoQ3Spi8zXMAN0+ESv/Is5vuHKSCOuP1J9J+UFEBFTrpL/bk/v4V22Dggnjl6wg6hAU4SRFdeRRNA3HwiXiW5gy2GQHrT4KrElpqbiL6YtI64gB8cb3850D49RppBiKfLfoORnH+GkCNiRmGrRNcgyIh2N3KHt4n6D2aao1JO5iIS0CXsAgJZQeKVgOuMI6yxmm5qmYJeIFvlqZYgE++PfMXDrGK5sNHljDXJ5Nn4tHXymIT/AKNJQyyut8rm1BrCEVHCSOSkKjNTrnk79aOnb1iVxP5kuPotn0cMDalw0/G6jwX9kz45RAppkENKJ1eav1qPwuq08sGLBs/imCdGHhUPdLQFzXnAkNEGq2hjkqLY7mIlceQWeZQRJWeKe5n2PR/sQK9Q5BZOKYnLhA5yuOAl8OlvwuU6qESD+Y0C2am72cXpJiRZZPJA8+CuS/wbT4WbSkh/6SmKXJ+aYMHPfoa5acGZvDdDgYzPIbBxB1ry8N17HnRUfKXDr7g5aL5LIPzArIJF/hoznphZ+z/rSVN4GxlareEXGHs1u5QPB0FjFc6RMTbBQ2nbniZ1Oc8=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a2cc35c5-1453-48c8-d900-08ddf6377627
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a29dca4-b514-46b3-f9ec-08ddf637771f
 X-MS-Exchange-CrossTenant-AuthSource: CY8PR10MB7243.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2025 22:13:42.3979
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2025 22:13:43.9854
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zcTzMtWIFXoikXw8QldywiVbSIU/P5ZzSq38CpAVf6XXMLLAYMS0PVhxrNA9A5qFvtfDlMqf3BvhMV1iPg5frLZZcwIwME2wNcRfCG2zElM=
+X-MS-Exchange-CrossTenant-UserPrincipalName: fzRarhAKLftudjdYRWDPfcUvvchig793O5iioU4GafR7MqopOECumhpIU80hmUHLYRUTOS/xnB7+IhGHc99NZQboEzw0KSs4X5cl33jJ+jU=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB7564
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
@@ -187,183 +187,253 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 sp
  bulkscore=0 mlxscore=0 suspectscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2508110000
  definitions=main-2509170215
-X-Proofpoint-GUID: 3oYyhiTotH7DO_m-e4jxIl4WUGNAruFD
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwMiBTYWx0ZWRfX8d/pP3aFavF4
- bCYoCwtt8XNo9Y3ac2u/hKZ95yPlJyAB798gnhWxNl0uRI0XJt1vJ/Ok/RNBi2q8sXLHBh+mZct
- JTh0n9gacpezjmhBJjidDNRMEa6L4FGGdllNZcYSiE1o1rXI2J8gkvAK4gKEYhHREfclC5sLWN5
- ApLShBj+29pNiXYZ7PzAru7BcGSmFW9fu8Du0U9V/oJypOuoRrbVNakUgmxX6BAqq47gpdrDQXR
- hzftfxupPa4fs8OkUJOBFsXPyo2Fxo0YdohUUAHj22p7codme1Qshdk1QtKDU7EtwENpBY7Lo/+
- rQDGIWWseZHFXQKv2sZxHwcIH/3Trpt1ze1lZm0s3iJ9iEDCRQ2QMNaoheJF6Lw7TNZ1aIWWQGW
- HVpfPk5o
-X-Authority-Analysis: v=2.4 cv=cerSrmDM c=1 sm=1 tr=0 ts=68cb329b cx=c_pps
+X-Proofpoint-ORIG-GUID: E9_4vouZmm_uK5SvNSlkJFAIzd54lgFw
+X-Proofpoint-GUID: E9_4vouZmm_uK5SvNSlkJFAIzd54lgFw
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwMiBTYWx0ZWRfX9ZmuwHuMeHc8
+ U4/ZOs/NQGaPntgSbh+4Sh/z7wlyPiXnPOpLiPtmDUmoYa0XJ20JKW3wFSVcgIpkG+r8cirY9Mu
+ PPbgdw7C118Mk0ZVA7ncxQsN1DVe+7uyj3m+Zo531UUi3Fs8To0vMOc9xqonSLOvivGRbYq+8P9
+ byutLfw3Wa6kQocHKZm6UuHEvOKjgYSPy5GiB6nVDoYYzQOjURflRYNExH8uBOijksVEyUHziX1
+ nt5zfqZQ1x6wl/EJuq3lhPbHtKGJFL1BS0stz1Kb1hIrnxmwm00sJUyh2YGVVsu6tkawh2bUWHN
+ 1sG03gkUlJHsNPvs4mfW19E5L+duMk/EVeX0gG2CIneZJv3x08yXRDl970LC+2HImaieM7HFEFH
+ qjAr7ULL
+X-Authority-Analysis: v=2.4 cv=N/QpF39B c=1 sm=1 tr=0 ts=68cb329b cx=c_pps
  a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
  a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
  a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=yJojWOMRYYMA:10
- a=GoEa3M9JfhUA:10 a=yPCof4ZbAAAA:8 a=-c9VzbpeAAAA:8 a=3cnjVR_UEJ30e8tU16oA:9
+ a=GoEa3M9JfhUA:10 a=yPCof4ZbAAAA:8 a=-c9VzbpeAAAA:8 a=2nhI7uIJQZ1U3olpLWUA:9
  a=WAq88MDkwfy8HpmZFCM0:22
-X-Proofpoint-ORIG-GUID: 3oYyhiTotH7DO_m-e4jxIl4WUGNAruFD
 
-In
+This creates some macros to reduce code duplication for when we handle
+per CPU stats. It them converts the existing LUN and auth cases.
 
-commit 9cf2317b795d ("scsi: target: Move I/O path stats to per CPU")
+Note: This is similar to percpu_counters but they only support s64 since
+they are also used for non-stat counters where you need to handle/prevent
+rollover more gracefully. Our use is just for stats where the spec
+defines u64 use plus we already have some files exporting u64 values so
+it's not possible to directly use percpu_counters.
 
-I saw we sometimes use %u and also misread the spec. As a result I
-thought all the stats were supposed to be 32 bit only. However, for
-the majority of cases we support currently, the spec specifies u64 bit
-stats. This patch converts the stats changed in the commit above to
-u64.
-
-Fixes: 9cf2317b795d ("scsi: target: Move I/O path stats to per CPU")
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 Reviewed-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
 ---
- drivers/target/target_core_stat.c | 24 ++++++++++++------------
- include/target/target_core_base.h | 12 ++++++------
- 2 files changed, 18 insertions(+), 18 deletions(-)
+ drivers/target/target_core_stat.c | 197 +++++++++---------------------
+ 1 file changed, 61 insertions(+), 136 deletions(-)
 
 diff --git a/drivers/target/target_core_stat.c b/drivers/target/target_core_stat.c
-index 6bdf2d8bd694..4fdc307ea38b 100644
+index 4fdc307ea38b..e29d43dacaf7 100644
 --- a/drivers/target/target_core_stat.c
 +++ b/drivers/target/target_core_stat.c
-@@ -282,7 +282,7 @@ static ssize_t target_stat_lu_num_cmds_show(struct config_item *item,
- 	struct se_device *dev = to_stat_lu_dev(item);
- 	struct se_dev_io_stats *stats;
- 	unsigned int cpu;
--	u32 cmds = 0;
-+	u64 cmds = 0;
- 
- 	for_each_possible_cpu(cpu) {
- 		stats = per_cpu_ptr(dev->stats, cpu);
-@@ -290,7 +290,7 @@ static ssize_t target_stat_lu_num_cmds_show(struct config_item *item,
- 	}
- 
- 	/* scsiLuNumCommands */
--	return snprintf(page, PAGE_SIZE, "%u\n", cmds);
-+	return snprintf(page, PAGE_SIZE, "%llu\n", cmds);
+@@ -276,56 +276,39 @@ static ssize_t target_stat_lu_state_bit_show(struct config_item *item,
+ 	return snprintf(page, PAGE_SIZE, "exposed\n");
  }
  
- static ssize_t target_stat_lu_read_mbytes_show(struct config_item *item,
-@@ -299,7 +299,7 @@ static ssize_t target_stat_lu_read_mbytes_show(struct config_item *item,
- 	struct se_device *dev = to_stat_lu_dev(item);
- 	struct se_dev_io_stats *stats;
- 	unsigned int cpu;
--	u32 bytes = 0;
-+	u64 bytes = 0;
- 
- 	for_each_possible_cpu(cpu) {
- 		stats = per_cpu_ptr(dev->stats, cpu);
-@@ -307,7 +307,7 @@ static ssize_t target_stat_lu_read_mbytes_show(struct config_item *item,
- 	}
- 
- 	/* scsiLuReadMegaBytes */
--	return snprintf(page, PAGE_SIZE, "%u\n", bytes >> 20);
-+	return snprintf(page, PAGE_SIZE, "%llu\n", bytes >> 20);
- }
- 
- static ssize_t target_stat_lu_write_mbytes_show(struct config_item *item,
-@@ -316,7 +316,7 @@ static ssize_t target_stat_lu_write_mbytes_show(struct config_item *item,
- 	struct se_device *dev = to_stat_lu_dev(item);
- 	struct se_dev_io_stats *stats;
- 	unsigned int cpu;
--	u32 bytes = 0;
-+	u64 bytes = 0;
- 
- 	for_each_possible_cpu(cpu) {
- 		stats = per_cpu_ptr(dev->stats, cpu);
-@@ -324,7 +324,7 @@ static ssize_t target_stat_lu_write_mbytes_show(struct config_item *item,
- 	}
- 
- 	/* scsiLuWrittenMegaBytes */
--	return snprintf(page, PAGE_SIZE, "%u\n", bytes >> 20);
-+	return snprintf(page, PAGE_SIZE, "%llu\n", bytes >> 20);
- }
+-static ssize_t target_stat_lu_num_cmds_show(struct config_item *item,
+-		char *page)
+-{
+-	struct se_device *dev = to_stat_lu_dev(item);
+-	struct se_dev_io_stats *stats;
+-	unsigned int cpu;
+-	u64 cmds = 0;
+-
+-	for_each_possible_cpu(cpu) {
+-		stats = per_cpu_ptr(dev->stats, cpu);
+-		cmds += stats->total_cmds;
+-	}
+-
+-	/* scsiLuNumCommands */
+-	return snprintf(page, PAGE_SIZE, "%llu\n", cmds);
+-}
+-
+-static ssize_t target_stat_lu_read_mbytes_show(struct config_item *item,
+-		char *page)
+-{
+-	struct se_device *dev = to_stat_lu_dev(item);
+-	struct se_dev_io_stats *stats;
+-	unsigned int cpu;
+-	u64 bytes = 0;
+-
+-	for_each_possible_cpu(cpu) {
+-		stats = per_cpu_ptr(dev->stats, cpu);
+-		bytes += stats->read_bytes;
+-	}
+-
+-	/* scsiLuReadMegaBytes */
+-	return snprintf(page, PAGE_SIZE, "%llu\n", bytes >> 20);
+-}
+-
+-static ssize_t target_stat_lu_write_mbytes_show(struct config_item *item,
+-		char *page)
+-{
+-	struct se_device *dev = to_stat_lu_dev(item);
+-	struct se_dev_io_stats *stats;
+-	unsigned int cpu;
+-	u64 bytes = 0;
+-
+-	for_each_possible_cpu(cpu) {
+-		stats = per_cpu_ptr(dev->stats, cpu);
+-		bytes += stats->write_bytes;
+-	}
+-
+-	/* scsiLuWrittenMegaBytes */
+-	return snprintf(page, PAGE_SIZE, "%llu\n", bytes >> 20);
+-}
++#define per_cpu_stat_snprintf(stats_struct, prefix, field, shift)	\
++static ssize_t								\
++per_cpu_stat_##prefix##_snprintf(struct stats_struct __percpu *per_cpu_stats, \
++				 char *page)				\
++{									\
++	struct stats_struct *stats;					\
++	unsigned int cpu;						\
++	u64 sum = 0;							\
++									\
++	for_each_possible_cpu(cpu) {					\
++		stats = per_cpu_ptr(per_cpu_stats, cpu);		\
++		sum += stats->field;					\
++	}								\
++									\
++	return snprintf(page, PAGE_SIZE, "%llu\n", sum >> shift);	\
++}
++
++#define lu_show_per_cpu_stat(prefix, field, shift)			\
++per_cpu_stat_snprintf(se_dev_io_stats, prefix, field, shift);		\
++static ssize_t								\
++target_stat_##prefix##_show(struct config_item *item, char *page)	\
++{									\
++	struct se_device *dev = to_stat_lu_dev(item);			\
++									\
++	return per_cpu_stat_##prefix##_snprintf(dev->stats, page);	\
++}									\
++
++/* scsiLuNumCommands */
++lu_show_per_cpu_stat(lu_num_cmds, total_cmds, 0);
++/* scsiLuReadMegaBytes */
++lu_show_per_cpu_stat(lu_read_mbytes, read_bytes, 20);
++/* scsiLuWrittenMegaBytes */
++lu_show_per_cpu_stat(lu_write_mbytes, write_bytes, 20);
  
  static ssize_t target_stat_lu_resets_show(struct config_item *item, char *page)
-@@ -1044,7 +1044,7 @@ static ssize_t target_stat_auth_num_cmds_show(struct config_item *item,
- 	struct se_dev_entry *deve;
- 	unsigned int cpu;
- 	ssize_t ret;
--	u32 cmds = 0;
-+	u64 cmds = 0;
- 
- 	rcu_read_lock();
- 	deve = target_nacl_find_deve(nacl, lacl->mapped_lun);
-@@ -1059,7 +1059,7 @@ static ssize_t target_stat_auth_num_cmds_show(struct config_item *item,
- 	}
- 
- 	/* scsiAuthIntrOutCommands */
--	ret = snprintf(page, PAGE_SIZE, "%u\n", cmds);
-+	ret = snprintf(page, PAGE_SIZE, "%llu\n", cmds);
- 	rcu_read_unlock();
+ {
+@@ -1035,92 +1018,34 @@ static ssize_t target_stat_auth_att_count_show(struct config_item *item,
  	return ret;
  }
-@@ -1073,7 +1073,7 @@ static ssize_t target_stat_auth_read_mbytes_show(struct config_item *item,
- 	struct se_dev_entry *deve;
- 	unsigned int cpu;
- 	ssize_t ret;
--	u32 bytes = 0;
-+	u64 bytes = 0;
  
- 	rcu_read_lock();
- 	deve = target_nacl_find_deve(nacl, lacl->mapped_lun);
-@@ -1088,7 +1088,7 @@ static ssize_t target_stat_auth_read_mbytes_show(struct config_item *item,
- 	}
+-static ssize_t target_stat_auth_num_cmds_show(struct config_item *item,
+-		char *page)
+-{
+-	struct se_lun_acl *lacl = auth_to_lacl(item);
+-	struct se_node_acl *nacl = lacl->se_lun_nacl;
+-	struct se_dev_entry_io_stats *stats;
+-	struct se_dev_entry *deve;
+-	unsigned int cpu;
+-	ssize_t ret;
+-	u64 cmds = 0;
+-
+-	rcu_read_lock();
+-	deve = target_nacl_find_deve(nacl, lacl->mapped_lun);
+-	if (!deve) {
+-		rcu_read_unlock();
+-		return -ENODEV;
+-	}
+-
+-	for_each_possible_cpu(cpu) {
+-		stats = per_cpu_ptr(deve->stats, cpu);
+-		cmds += stats->total_cmds;
+-	}
+-
+-	/* scsiAuthIntrOutCommands */
+-	ret = snprintf(page, PAGE_SIZE, "%llu\n", cmds);
+-	rcu_read_unlock();
+-	return ret;
+-}
+-
+-static ssize_t target_stat_auth_read_mbytes_show(struct config_item *item,
+-		char *page)
+-{
+-	struct se_lun_acl *lacl = auth_to_lacl(item);
+-	struct se_node_acl *nacl = lacl->se_lun_nacl;
+-	struct se_dev_entry_io_stats *stats;
+-	struct se_dev_entry *deve;
+-	unsigned int cpu;
+-	ssize_t ret;
+-	u64 bytes = 0;
+-
+-	rcu_read_lock();
+-	deve = target_nacl_find_deve(nacl, lacl->mapped_lun);
+-	if (!deve) {
+-		rcu_read_unlock();
+-		return -ENODEV;
+-	}
+-
+-	for_each_possible_cpu(cpu) {
+-		stats = per_cpu_ptr(deve->stats, cpu);
+-		bytes += stats->read_bytes;
+-	}
+-
+-	/* scsiAuthIntrReadMegaBytes */
+-	ret = snprintf(page, PAGE_SIZE, "%llu\n", bytes >> 20);
+-	rcu_read_unlock();
+-	return ret;
+-}
+-
+-static ssize_t target_stat_auth_write_mbytes_show(struct config_item *item,
+-		char *page)
+-{
+-	struct se_lun_acl *lacl = auth_to_lacl(item);
+-	struct se_node_acl *nacl = lacl->se_lun_nacl;
+-	struct se_dev_entry_io_stats *stats;
+-	struct se_dev_entry *deve;
+-	unsigned int cpu;
+-	ssize_t ret;
+-	u64 bytes = 0;
+-
+-	rcu_read_lock();
+-	deve = target_nacl_find_deve(nacl, lacl->mapped_lun);
+-	if (!deve) {
+-		rcu_read_unlock();
+-		return -ENODEV;
+-	}
+-
+-	for_each_possible_cpu(cpu) {
+-		stats = per_cpu_ptr(deve->stats, cpu);
+-		bytes += stats->write_bytes;
+-	}
+-
+-	/* scsiAuthIntrWrittenMegaBytes */
+-	ret = snprintf(page, PAGE_SIZE, "%llu\n", bytes >> 20);
+-	rcu_read_unlock();
+-	return ret;
+-}
++#define auth_show_per_cpu_stat(prefix, field, shift)			\
++per_cpu_stat_snprintf(se_dev_entry_io_stats, prefix, field, shift);	\
++static ssize_t								\
++target_stat_##prefix##_show(struct config_item *item, char *page)	\
++{									\
++	struct se_lun_acl *lacl = auth_to_lacl(item);			\
++	struct se_node_acl *nacl = lacl->se_lun_nacl;			\
++	struct se_dev_entry *deve;					\
++	int ret;							\
++									\
++	rcu_read_lock();						\
++	deve = target_nacl_find_deve(nacl, lacl->mapped_lun);		\
++	if (!deve) {							\
++		rcu_read_unlock();					\
++		return -ENODEV;						\
++	}								\
++									\
++	ret = per_cpu_stat_##prefix##_snprintf(deve->stats, page);	\
++	rcu_read_unlock();						\
++	return ret;							\
++}
++
++/* scsiAuthIntrOutCommands */
++auth_show_per_cpu_stat(auth_num_cmds, total_cmds, 0);
++/* scsiAuthIntrReadMegaBytes */
++auth_show_per_cpu_stat(auth_read_mbytes, read_bytes, 20);
++/* scsiAuthIntrWrittenMegaBytes */
++auth_show_per_cpu_stat(auth_write_mbytes, write_bytes, 20);
  
- 	/* scsiAuthIntrReadMegaBytes */
--	ret = snprintf(page, PAGE_SIZE, "%u\n", bytes >> 20);
-+	ret = snprintf(page, PAGE_SIZE, "%llu\n", bytes >> 20);
- 	rcu_read_unlock();
- 	return ret;
- }
-@@ -1102,7 +1102,7 @@ static ssize_t target_stat_auth_write_mbytes_show(struct config_item *item,
- 	struct se_dev_entry *deve;
- 	unsigned int cpu;
- 	ssize_t ret;
--	u32 bytes = 0;
-+	u64 bytes = 0;
- 
- 	rcu_read_lock();
- 	deve = target_nacl_find_deve(nacl, lacl->mapped_lun);
-@@ -1117,7 +1117,7 @@ static ssize_t target_stat_auth_write_mbytes_show(struct config_item *item,
- 	}
- 
- 	/* scsiAuthIntrWrittenMegaBytes */
--	ret = snprintf(page, PAGE_SIZE, "%u\n", bytes >> 20);
-+	ret = snprintf(page, PAGE_SIZE, "%llu\n", bytes >> 20);
- 	rcu_read_unlock();
- 	return ret;
- }
-diff --git a/include/target/target_core_base.h b/include/target/target_core_base.h
-index c4d9116904aa..27e1f9d5f0c6 100644
---- a/include/target/target_core_base.h
-+++ b/include/target/target_core_base.h
-@@ -671,9 +671,9 @@ struct se_lun_acl {
- };
- 
- struct se_dev_entry_io_stats {
--	u32			total_cmds;
--	u32			read_bytes;
--	u32			write_bytes;
-+	u64			total_cmds;
-+	u64			read_bytes;
-+	u64			write_bytes;
- };
- 
- struct se_dev_entry {
-@@ -806,9 +806,9 @@ struct se_device_queue {
- };
- 
- struct se_dev_io_stats {
--	u32			total_cmds;
--	u32			read_bytes;
--	u32			write_bytes;
-+	u64			total_cmds;
-+	u64			read_bytes;
-+	u64			write_bytes;
- };
- 
- struct se_device {
+ static ssize_t target_stat_auth_hs_num_cmds_show(struct config_item *item,
+ 		char *page)
 -- 
 2.47.1
 
