@@ -1,45 +1,45 @@
-Return-Path: <linux-scsi+bounces-17324-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17321-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15C57B8427A
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Sep 2025 12:41:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 472BDB84274
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Sep 2025 12:40:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73DC51894A53
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Sep 2025 10:40:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A5243A7425
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Sep 2025 10:40:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A23F62F3621;
-	Thu, 18 Sep 2025 10:40:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B5262E040C;
+	Thu, 18 Sep 2025 10:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="nL9+YuWf"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="fe8OlNm8"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2971D2DEA78
-	for <linux-scsi@vger.kernel.org>; Thu, 18 Sep 2025 10:40:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7F728643D
+	for <linux-scsi@vger.kernel.org>; Thu, 18 Sep 2025 10:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758192017; cv=none; b=N/hCVwZzEf1y0g62U03L1Jf+E1Tj6Zhdclai50yiTqjN4g3XTr0fxTac++VtgGE3fLxCFuLu5N+SjYpDy05JjuqlVGohdtPA+Jo9Hqx2xMZ8x/RvM/nLbHwOr6v5Yn5jivB/ln5hQtvn7DSjWhG0YOb2U+5s2NTZ+ClkRTsR79Q=
+	t=1758192015; cv=none; b=d6RSu5t2bW94Xg24YEyjifUQUoyydeHaVo6SYK3tQ95yyE8fLQcog+mTB7MkbVG+e+iJuPPIL9ZNCPIImNK4o+qWpdENl6XHiPSb4K4sUgiwjUJ9PM54oL+HT3bc/MbLu8AdNN9sYUEHFpqbr2p2Qar3QfPNlVJlbyboE6lMtBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758192017; c=relaxed/simple;
-	bh=0P0Jw3aTNJi2hj6hkL6MQNVbjuawevwbYCiHEhmqvTI=;
+	s=arc-20240116; t=1758192015; c=relaxed/simple;
+	bh=/WcbqRQ4HWhIxLkXgc/RvHZfa+GIT7noheWzN4+2ehI=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=X/V+CjzJI6krXX8RVO/MUjmW81NoUgm62b/VoZr/JMLljDePGepsGkKWPJJl/CpluEdlHFyM5GWr8RvvvNkraxcMkjDEE3QU597FaZOoZ1/T3Fmik6gjgEoeE88fDMWxA1wD9Vc5iRYGNShb4vUW0fz3Tvb4ebw01e08GPQbQwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=nL9+YuWf; arc=none smtp.client-ip=210.61.82.184
+	 MIME-Version:Content-Type; b=sKOLyofvc+ITvG4Y/n7biEgA09AlslioulhpcWd44hqVZn5+o1RvmWjfvzwmlTXyyQMum+44tCRMEbuKXqXAHc/pfhgAa0l3VewscfDp7d7BLdo+YVPyeCZh/eb90Xkx6apX0oYYDnP07vdp2omPsI4axMTQKuKd4KJo14zvOgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=fe8OlNm8; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: d608d1d4947b11f0b33aeb1e7f16c2b6-20250918
+X-UUID: d60a5090947b11f0b33aeb1e7f16c2b6-20250918
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=p7EKyydxDduJ9nnXEi7w/3LXd5OTabCSYGgV1urwhHQ=;
-	b=nL9+YuWf0DI1Sw8jySF1MpR4qfM5Od5TwVBO0dKJJZasYx5Kxg4VEIMVGFkzCMxeTDYd+t4KqUYFm7rbZXzp27oM2T7eNSeNjZHJwaX+xZpv+fTuy8WkzuBXr0LdKjtgLQKaR/L0uQJuwmv/+snrYr3cwLx9KhtIZ9qhaVcYMwA=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=tIOZ/aBoJHg0vN6VfoHsX1ue68C2gI8xUzBPNxwF8Fs=;
+	b=fe8OlNm8ypNcld1i1HJPKJUMplIAfLvNc0ouexbuHqgkDQKUaxwJyoK6S9qHhc3S/V8DmM36IXheNNp55fUW3l/jStp9XWL/5hOoeck12i6Qg4IqF2reYAa2nZNzju2l4ABToIHzxnYAsVxbHC5cGSvyR34aDIk8LyY01i/lljQ=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.4,REQID:a4e7e41b-415c-4bc0-a9bf-ad5383ca1557,IP:0,UR
-	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-25
-X-CID-META: VersionHash:1ca6b93,CLOUDID:fa28b26c-8443-424b-b119-dc42e68239b0,B
+X-CID-O-INFO: VERSION:1.3.4,REQID:dfad3e8a-19ba-46f3-99d4-735ef2c85cd1,IP:0,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:-5
+X-CID-META: VersionHash:1ca6b93,CLOUDID:f628b26c-8443-424b-b119-dc42e68239b0,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|836|888|898,TC:-5,Content:
 	0|15|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,
 	OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
@@ -47,11 +47,11 @@ X-CID-BVR: 3,DMD|SSN|SDN
 X-CID-BAS: 3,DMD|SSN|SDN,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: d608d1d4947b11f0b33aeb1e7f16c2b6-20250918
+X-UUID: d60a5090947b11f0b33aeb1e7f16c2b6-20250918
 Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw02.mediatek.com
 	(envelope-from <peter.wang@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 2018556980; Thu, 18 Sep 2025 18:40:04 +0800
+	with ESMTP id 1042423363; Thu, 18 Sep 2025 18:40:04 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -68,9 +68,9 @@ CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
 	<yi-fan.peng@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
 	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
 	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <bvanassche@acm.org>
-Subject: [PATCH v1 02/10] ufs: host: mediatek: Correct clock scaling with PM QoS flow
-Date: Thu, 18 Sep 2025 18:36:12 +0800
-Message-ID: <20250918104000.208856-3-peter.wang@mediatek.com>
+Subject: [PATCH v1 03/10] ufs: host: mediatek: Adjust clock scaling for PM flow
+Date: Thu, 18 Sep 2025 18:36:13 +0800
+Message-ID: <20250918104000.208856-4-peter.wang@mediatek.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250918104000.208856-1-peter.wang@mediatek.com>
 References: <20250918104000.208856-1-peter.wang@mediatek.com>
@@ -86,91 +86,48 @@ X-MTK: N
 
 From: Peter Wang <peter.wang@mediatek.com>
 
-Correct clock scaling with PM QoS during suspend and resume.
-Ensure PM QoS is released during suspend if scaling up and
-re-applied after resume. This prevents performance issues
-and maintains proper power management.
+Adjust clock scaling during suspend and resume in the UFS
+Mediatek driver. Ensure that the clock scales down during
+suspend if it was scaled up, and scales up again after resume.
+This adjustment maintains proper power management.
 
 Signed-off-by: Peter Wang <peter.wang@mediatek.com>
 ---
- drivers/ufs/core/ufshcd.c       |  3 ++-
- drivers/ufs/host/ufs-mediatek.c | 10 ++++++++++
- include/ufs/ufshcd.h            |  1 +
- 3 files changed, 13 insertions(+), 1 deletion(-)
+ drivers/ufs/host/ufs-mediatek.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index c7a12748e479..4e0de3a6d9b6 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -1063,13 +1063,14 @@ void ufshcd_pm_qos_exit(struct ufs_hba *hba)
-  * @hba: per adapter instance
-  * @on: If True, vote for perf PM QoS mode otherwise power save mode
-  */
--static void ufshcd_pm_qos_update(struct ufs_hba *hba, bool on)
-+void ufshcd_pm_qos_update(struct ufs_hba *hba, bool on)
- {
- 	if (!hba->pm_qos_enabled)
- 		return;
- 
- 	cpu_latency_qos_update_request(&hba->pm_qos_req, on ? 0 : PM_QOS_DEFAULT_VALUE);
- }
-+EXPORT_SYMBOL_GPL(ufshcd_pm_qos_update);
- 
- /**
-  * ufshcd_set_clk_freq - set UFS controller clock frequencies
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index b1797386668c..e3d8e0fdbbe3 100644
+index e3d8e0fdbbe3..f445bc720a5e 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1744,6 +1744,7 @@ static int ufs_mtk_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
- {
- 	int err;
- 	struct arm_smccc_res res;
-+	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
- 
- 	if (status == PRE_CHANGE) {
- 		if (!ufshcd_is_auto_hibern8_supported(hba))
-@@ -1779,6 +1780,10 @@ static int ufs_mtk_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
+@@ -1780,9 +1780,11 @@ static int ufs_mtk_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
  
  	ufs_mtk_sram_pwr_ctrl(false, res);
  
-+	/* Release pm_qos if in scale-up mode during suspend */
-+	if (ufshcd_is_clkscaling_supported(hba) && (host->clk_scale_up))
-+		ufshcd_pm_qos_update(hba, false);
-+
+-	/* Release pm_qos if in scale-up mode during suspend */
+-	if (ufshcd_is_clkscaling_supported(hba) && (host->clk_scale_up))
++	/* Release pm_qos/clk if in scale-up mode during suspend */
++	if (ufshcd_is_clkscaling_supported(hba) && (host->clk_scale_up)) {
+ 		ufshcd_pm_qos_update(hba, false);
++		_ufs_mtk_clk_scale(hba, false);
++	}
+ 
  	return 0;
  fail:
- 	/*
-@@ -1794,6 +1799,7 @@ static int ufs_mtk_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- {
- 	int err;
- 	struct arm_smccc_res res;
-+	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
- 
- 	if (hba->ufshcd_state != UFSHCD_STATE_OPERATIONAL)
- 		ufs_mtk_dev_vreg_set_lpm(hba, false);
-@@ -1804,6 +1810,10 @@ static int ufs_mtk_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+@@ -1810,9 +1812,11 @@ static int ufs_mtk_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
  	if (err)
  		goto fail;
  
-+	/* Request pm_qos if in scale-up mode after resume */
-+	if (ufshcd_is_clkscaling_supported(hba) && (host->clk_scale_up))
-+		ufshcd_pm_qos_update(hba, true);
-+
+-	/* Request pm_qos if in scale-up mode after resume */
+-	if (ufshcd_is_clkscaling_supported(hba) && (host->clk_scale_up))
++	/* Request pm_qos/clk if in scale-up mode after resume */
++	if (ufshcd_is_clkscaling_supported(hba) && (host->clk_scale_up)) {
+ 		ufshcd_pm_qos_update(hba, true);
++		_ufs_mtk_clk_scale(hba, true);
++	}
+ 
  	if (ufshcd_is_link_hibern8(hba)) {
  		err = ufs_mtk_link_set_hpm(hba);
- 		if (err)
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 45e2ca65de90..a6ed7aa59533 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1495,5 +1495,6 @@ int ufshcd_write_ee_control(struct ufs_hba *hba);
- int ufshcd_update_ee_control(struct ufs_hba *hba, u16 *mask,
- 			     const u16 *other_mask, u16 set, u16 clr);
- void ufshcd_force_error_recovery(struct ufs_hba *hba);
-+void ufshcd_pm_qos_update(struct ufs_hba *hba, bool on);
- 
- #endif /* End of Header */
 -- 
 2.45.2
 
