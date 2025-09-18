@@ -1,98 +1,123 @@
-Return-Path: <linux-scsi+bounces-17319-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17323-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 737D5B83EF7
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Sep 2025 11:57:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82D7BB84265
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Sep 2025 12:40:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31D093A75B0
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Sep 2025 09:57:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E28B6179C35
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Sep 2025 10:40:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD9C72D9EC9;
-	Thu, 18 Sep 2025 09:57:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9355C213237;
+	Thu, 18 Sep 2025 10:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nQCOvLPY"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="G3vfInSD"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AAE02E2EFC
-	for <linux-scsi@vger.kernel.org>; Thu, 18 Sep 2025 09:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557A42DA757
+	for <linux-scsi@vger.kernel.org>; Thu, 18 Sep 2025 10:40:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758189451; cv=none; b=eJBpQmZypzOHyVjErkXp2dA5wYnDp4fmQKD9J9j3PDulZ0i7D25ycXvxhiayRU6cAWew9GDnZ87U9/G/dn48Rk87tFBMSLOfy3heWDF5btAC55piSl6ra6/RUAGhuIo8OtLdqE+7ozlV/AT6Hr2R977dSEt2evEF+HTymQIHatM=
+	t=1758192016; cv=none; b=A9LSWg/6+zbGl/kMNR9xILSOHdiVhIoJBnxqPpSBqcrYVUv3iLKTi7dG9EnDT89Qs4pmuueFrreSXzKH1HSjvnrbtUznI1Id8kCbYzObaMvKzYdrHQeg4d4F7P5iVIPWmWvcbNsJb0i34/OUt8gxyJOLQ9bv9z2MMdHxlor+0+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758189451; c=relaxed/simple;
-	bh=DqU1N+O/wes0P065QC+RNWMhMh08T+1GH6wdnFBI8GU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Qk0BV/zuBQOmqHY7Vi4jM+vFTLPdFyVWUkma120cVsxEIBPETVPdH2CcF7IpxMR7M9klkhYYJTGmoMQ/GHJ1/axGYMEWAzQtZgn5o/5WEGx+wHXGXoPQ2XJu8/BljYwgcUJENbG7RN2LmmKAKX4u75IPHLDbDhy3WepHKET0dvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nQCOvLPY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F3AAAC4CEF7
-	for <linux-scsi@vger.kernel.org>; Thu, 18 Sep 2025 09:57:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758189451;
-	bh=DqU1N+O/wes0P065QC+RNWMhMh08T+1GH6wdnFBI8GU=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=nQCOvLPYfkQfsvNb33kdjsKmQoABoeCoQ0h4zh5DNXWOplfckaCASxCX0fYiTvrLW
-	 KS0Rp32nf4Knx3Lv8E6UA2VNWQNtud52cTnfsvaPXuDZvEhOradz268V050DIup+rF
-	 1BV+Rd2/mxtl2VLMfoO14D7xcQeSYHwFVhi6KXODKR72foHWvQE8bhTY8yP/twK8a0
-	 8wb+yrkbNyMpHMzChIXP1lk180rWWWS2hVGXZ44p3t7N0MqhZ660ww9JDSkVJwRlJ1
-	 NZULyQw4YFoHXsf+WcJWuRbrhJa3oPF3RnzbOnr7lR36+lnDH4bu34tWyzHdqcXrc7
-	 dZz6/JEEzR4MQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id E4B01C53BC5; Thu, 18 Sep 2025 09:57:30 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-scsi@vger.kernel.org
-Subject: [Bug 85101] hpsa + P410 does not show connected HP SAS port
- expanders
-Date: Thu, 18 Sep 2025 09:57:30 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Product: SCSI Drivers
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: dmmnychl123@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DOCUMENTED
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-85101-11613-hbW5sYmPBY@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-85101-11613@https.bugzilla.kernel.org/>
-References: <bug-85101-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1758192016; c=relaxed/simple;
+	bh=5FHc2zggsPVJb9d/IIVzskfR3KWn+U9k3uCAzHvFWdc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uwhUF6DuARvrhRfzOULEKcS2M/V/UShOPPCSTsSPpOa+XjlToCROEZe6CPHtS4PnbEDAFVQaekuESGu6aKmPoy4pm8yVE7JX+3i8mquh8hSTjGORgXm8YwXsZoEOWNiikqODcfqKNw2LkOTlVjHjyGJ01aK1qgb3FDKpGk2hSWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=G3vfInSD; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: d6059c62947b11f0b33aeb1e7f16c2b6-20250918
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=89KtbKiNREmrdsQot1mJ4yJfL+mn0r1STI29XAdntf4=;
+	b=G3vfInSD6oji6AqkB8yZR3XX5IAo62ynhx38g649DvTBLrLeWKHo9hSvyTBrFOXGsJnHTtuo4OMk3KO9ZKXes55nc8K7L365WFbUC40sR76vp2XHygI0gZf+FY2q2k9Z8zcWpQ0Y7EIbpw+vdJWXhdJVj5G6prShMSPbBGBZ3AI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.4,REQID:4923eb3e-c90f-489c-be04-f764796df879,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:1ca6b93,CLOUDID:b7fd1891-68e1-4022-b848-86f5c49a6751,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|836|888|898,TC:-5,Content:0|15|5
+	0,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,
+	OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 3,DMD|SSN|SDN
+X-CID-BAS: 3,DMD|SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: d6059c62947b11f0b33aeb1e7f16c2b6-20250918
+Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw02.mediatek.com
+	(envelope-from <peter.wang@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1753932643; Thu, 18 Sep 2025 18:40:04 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.39; Thu, 18 Sep 2025 18:40:02 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.39 via Frontend Transport; Thu, 18 Sep 2025 18:40:02 +0800
+From: <peter.wang@mediatek.com>
+To: <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>
+CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+	<peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+	<alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
+	<chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+	<yi-fan.peng@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
+	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
+	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <bvanassche@acm.org>
+Subject: [PATCH v1 00/10] Enhance UFS Mediatek Driver
+Date: Thu, 18 Sep 2025 18:36:10 +0800
+Message-ID: <20250918104000.208856-1-peter.wang@mediatek.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D85101
+From: Peter Wang <peter.wang@mediatek.com>
 
-Emma Alva (dmmnychl123@gmail.com) changed:
+Improves the UFS Mediatek driver by fixing runtime suspend
+deadlocks, correcting clock scaling with PM QoS, and adjusting
+power management flows. It addresses shutdown/suspend race 
+conditions, enables MCQ mode interrupts, and removes redundant
+functions. Support for new platforms is added with the 
+MMIO_OTSD_CTRL register, and MT6991 performance is optimized
+with MRTT and random improvements. These changes collectively 
+enhance driver performance, stability, and compatibility.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |dmmnychl123@gmail.com
+Peter Wang (8):
+  ufs: host: mediatek: Fix runtime suspend error deadlock
+  ufs: host: mediatek: Correct clock scaling with PM QoS flow
+  ufs: host: mediatek: Adjust clock scaling for PM flow
+  ufs: host: mediatek: Handle clock scaling for high gear in PM flow
+  ufs: host: mediatek: Adjust sync length for FASTAUTO mode
+  ufs: host: mediatek: Fix shutdown/suspend race condition
+  ufs: host: mediatek: Remove duplicate function
+  ufs: host: mediatek: Add support for new platform with MMIO_OTSD_CTR
 
---- Comment #11 from Emma Alva (dmmnychl123@gmail.com) ---
-Try booting the system with no peripherals connected first, then add one
-expander, followed by two, and finally connect drives to the expanders.
-https://tinyfishing.co
+Alice Chao (1):
+  ufs: host: mediatek: Enable interrupts for MCQ mode
 
---=20
-You may reply to this email to add a comment.
+Naomi Chu (1):
+  ufs: host: mediatek: Support new feature for MT6991
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+ drivers/ufs/core/ufs-sysfs.c    |   3 +-
+ drivers/ufs/core/ufshcd-priv.h  |   5 --
+ drivers/ufs/core/ufshcd.c       |  18 +----
+ drivers/ufs/host/ufs-mediatek.c | 134 ++++++++++++++++++++++++++------
+ drivers/ufs/host/ufs-mediatek.h |   7 ++
+ include/ufs/ufshcd.h            |  20 +++++
+ include/ufs/unipro.h            |   7 +-
+ 7 files changed, 150 insertions(+), 44 deletions(-)
+
+-- 
+2.45.2
+
 
