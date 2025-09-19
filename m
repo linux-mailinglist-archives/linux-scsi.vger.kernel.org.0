@@ -1,82 +1,82 @@
-Return-Path: <linux-scsi+bounces-17394-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17390-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03DD3B897D1
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Sep 2025 14:39:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27B0AB897AA
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Sep 2025 14:39:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2BF44E5854
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Sep 2025 12:39:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D72E31C8813D
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Sep 2025 12:39:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 418721F4297;
-	Fri, 19 Sep 2025 12:39:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBB451E766E;
+	Fri, 19 Sep 2025 12:39:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="nNLpclH6"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="kjOMvuE6"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012008.outbound.protection.outlook.com [40.107.209.8])
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010029.outbound.protection.outlook.com [52.101.193.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D57F1F03C9;
-	Fri, 19 Sep 2025 12:39:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8671A9FAB;
+	Fri, 19 Sep 2025 12:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.29
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758285568; cv=fail; b=J2tFv0NOZwFuOfxDRjLyI3Zqy3JIypAeiktiLFoeY/+l20Johz5ERAcjzDFHoogKaYIOZUVzUS3T5tVVaSk4pTqVP0TbT97VyXmTWpfConJeZrO2XKxK9RyUzNq9owi0bmiVwsmskK+oxeYDMmdzxoeWriS4kZp18/IrmarOkiY=
+	t=1758285551; cv=fail; b=hTZJJHnCW4QCMpEWWQmZTV7B42gr7pkjRh5EtvqAEv8x/kgETuDjDjPyIMyhhBDEXjwKSPxoxYciFLwocGyXtcQAXK0Mq3ljWVFaelDmWNQrUfqDioSEnmeCbxz306Q6Jle4bDIa+DAzuegAzhl44r5wAYanYeaQrAdUur4kpb4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758285568; c=relaxed/simple;
-	bh=uP06c6mq5A9YOglf/0b/I1EU9dGXSAuqtLJE965/G+Q=;
+	s=arc-20240116; t=1758285551; c=relaxed/simple;
+	bh=kJ7JN2/JLkUQFWq1hYS7fhiZ8Z6tj1e8ohJN2UkZKOE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BdEBzDti31fDvBCndXSr4NShFyurIAJxv9Y+JTISM90Za/iUjjK2QZiN1WofbtXYUy9+BqO8a1cyRlAiH3vfxElHJHiXmAb6qWRbA0I2Wh7pcKt86ZMo1U6KpMwulWKt7yVh99LEE6Cvrf6TzhgypmmmUuHhQByYR7B7pjZ0fYI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=nNLpclH6; arc=fail smtp.client-ip=40.107.209.8
+	 MIME-Version:Content-Type; b=ugLQ2LrlaYv9255wPZETC1A4Nmc8cs5+ijd4bGWMqH4k4wTo/v/mbFyd0b722rJXsCcjtVwtHO3KiB+lc/TB66dId7GY3z56M5FtwfHkUB4DGO8Fj3jQBaqfDx3Kn7HNe05QVViLXR0+9JKfBrwQx1sBu6H9ewvazARuVbeSGEI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=kjOMvuE6; arc=fail smtp.client-ip=52.101.193.29
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=aK4YQyE58TVENA5wk4OOQuMJoan49o+spazyHavJESp/HzFQPlY4XBcQj5bqPxjRdUa/CoYBntQY+YAcshTsWvRzHU4PJ3ue8HgxwB0GotwzYG7sLciyXXwVRkxUZe4hgImKH2jEt4Uy68h2nignSCiXlrTKWSXh/IEWgGJWfpCGAwwK46T25Mja1PWN0HEmjxNJb2mdExbnHADcj/O6dD8q+Az14NhA1cfda6O0RVgkEAzAay4VoFV2iBPHRStfdYT5HA6JjNqeXETEVlkXjATUet3Tu+IoZ17DG81VU7B6zoVeSS4qL4EbhdKIcGV33UkahxPv9gZG7RdFNsv1jA==
+ b=lk2SYAJlAKjOGnxJRXxnmcaBRiTO0bmsmPM20WRV1Z41D1yglMUuXHQdfKqEoZ+mH1WjfmQfe4GirDHJ9zRimMFZ7GZBPRtJfEwYlD504jX31Ec4T1NZhZnP40HtfGonDKTNlYsKz/jOwYvLCT4wCH6AbaUwmNXv+L4vV8Rm48v04VlAfiVI+BFXJ3sIj+i6HtHxzxPHEob9agloyPQcX/HwF8YnaPkDpyK/EhhTRBORhntqexSTAIl5J4GE8d31ZuQbF8UtZp6e4mGkduRySj8DipmkKu2fCraYxs9fyoAzYrPXTQ3BKSWOyL15JSBb8x7l1mbDX1Up+UmDdCToEw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2HwuEX2TxXQ7K1ipLH9axZYQ++AauEm05TATAZ/jdq4=;
- b=GTfM2JbmNbzr8NvARjg6PXEICmSp8tI1iB0uWnv2kMplnaCaHNGtZqpYinbya6NWUtdYbMvDNPYmuhQvPwSNAxO3ndwsqy2JcvchSGMF2eCsHcf0LE8re6ZoAHlYhXneu64IUzeo6h6tr5j0rkVTgyhJlz0k/cCHAdy/20kI/qlEBFKOYfMb0LJiRqIyDzY/wu8NQkPnN9i5ym9lyWQK03ag6JK0N5sSBHgUQxte2bB1MJLMEa5qO9lKNEyWP4N+KQ2Nk8scgPcibajdnGj0LjCHuAl5vdldl50nbuScOOtWZX2nNJcDOoOT8Mgqq8ciPiLqkso+HIaCzVHcofkJow==
+ bh=8QAP9Jweiz6mJRKe8HWf+P2/sHpWKsRImOFG6QbquNI=;
+ b=muF9LHraMHi6b2e49nm4WaX4Yqo0Kp51LL/TOR1/iSD+yJIMBSVATH0C5k/CkcKtvodcgJiDhxJrxWu0e87yIIb6R0UkxoBPzcYGzVCv0X+dm0rcIevQ/wLY2PIXzC57VqWJJlPW6242FCXPzlc3FQ1KZm0I/Vkxz91ItXlhisqM2Cx5Dk9xpaSuJz9cwIm/l3fhETVvkdegObdI6G8QxIfVrBugYhsiGRqUDu23z8Whe16QJ2J9+8Ugh5+FSQY6/zukQfP5wBGkXWvN2FYqIx6cg+fKAGHkfiQ55087kDmyHL7iv49KAb1ieZtAjuKoW8jKPJnZNJyp463Rj80ssw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=oracle.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2HwuEX2TxXQ7K1ipLH9axZYQ++AauEm05TATAZ/jdq4=;
- b=nNLpclH6wooJ9JiGc3eSdBGWZI6IiAqZ3WNw354AgO7WLok1pT01v2KNhR4/bR7dssw1aP3OQ8WS2OQzMPkUqypuYXKCJszUqBgFNk79hbtWNyYxjKSm0qdtOcKxzJpgegrkyhjYy/nTNGRJhlX3wBXiYxrtCWMknbCoc0mppSw=
-Received: from SJ0PR03CA0048.namprd03.prod.outlook.com (2603:10b6:a03:33e::23)
- by PH7PR12MB8425.namprd12.prod.outlook.com (2603:10b6:510:240::13) with
+ bh=8QAP9Jweiz6mJRKe8HWf+P2/sHpWKsRImOFG6QbquNI=;
+ b=kjOMvuE644nF2Y89fNrr4kWKdMJrVFwjq5j6MXgmSVa8I54Sv8y8R36weMKSbs7LZFCSqkiBT+JSA/cRfVz7AEMAzgRfyidwELvmbGV+3hyPwU5dxxuLJVlD9WaZyVCSMYlUAHFE/wgi17st3fI8cWiHkveTqqc8hWYvPSLY7Y0=
+Received: from BY5PR13CA0003.namprd13.prod.outlook.com (2603:10b6:a03:180::16)
+ by CH1PR12MB9720.namprd12.prod.outlook.com (2603:10b6:610:2b2::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.19; Fri, 19 Sep
- 2025 12:39:21 +0000
-Received: from MWH0EPF000971E8.namprd02.prod.outlook.com
- (2603:10b6:a03:33e:cafe::50) by SJ0PR03CA0048.outlook.office365.com
- (2603:10b6:a03:33e::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.14; Fri, 19 Sep
+ 2025 12:39:07 +0000
+Received: from SN1PEPF0002529F.namprd05.prod.outlook.com
+ (2603:10b6:a03:180:cafe::48) by BY5PR13CA0003.outlook.office365.com
+ (2603:10b6:a03:180::16) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.14 via Frontend Transport; Fri,
- 19 Sep 2025 12:39:21 +0000
+ 19 Sep 2025 12:39:07 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
-Received: from satlexmb08.amd.com (165.204.84.17) by
- MWH0EPF000971E8.mail.protection.outlook.com (10.167.243.68) with Microsoft
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ SN1PEPF0002529F.mail.protection.outlook.com (10.167.242.6) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9137.12 via Frontend Transport; Fri, 19 Sep 2025 12:39:21 +0000
-Received: from satlexmb10.amd.com (10.181.42.219) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.9137.12 via Frontend Transport; Fri, 19 Sep 2025 12:39:07 +0000
+Received: from satlexmb10.amd.com (10.181.42.219) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Fri, 19 Sep
- 2025 05:38:56 -0700
+ 2025 05:39:02 -0700
 Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb10.amd.com
  (10.181.42.219) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Fri, 19 Sep
- 2025 05:38:55 -0700
+ 2025 05:39:01 -0700
 Received: from xhdharinik40.xilinx.com (10.180.168.240) by satlexmb08.amd.com
  (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Fri, 19 Sep 2025 05:38:50 -0700
+ Transport; Fri, 19 Sep 2025 05:38:56 -0700
 From: Ajay Neeli <ajay.neeli@amd.com>
 To: <martin.petersen@oracle.com>, <James.Bottomley@HansenPartnership.com>,
 	<robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
@@ -84,11 +84,10 @@ To: <martin.petersen@oracle.com>, <James.Bottomley@HansenPartnership.com>,
 CC: <alim.akhtar@samsung.com>, <avri.altman@wdc.com>, <bvanassche@acm.org>,
 	<linux-scsi@vger.kernel.org>, <devicetree@vger.kernel.org>, <git@amd.com>,
 	<michal.simek@amd.com>, <srinivas.goud@amd.com>,
-	<radhey.shyam.pandey@amd.com>, Izhar Ameer Shaikh
-	<izhar.ameer.shaikh@amd.com>, Ajay Neeli <ajay.neeli@amd.com>
-Subject: [PATCH 2/5] firmware: xilinx: Add support for secure read/write ioctl interface
-Date: Fri, 19 Sep 2025 18:08:32 +0530
-Message-ID: <20250919123835.17899-3-ajay.neeli@amd.com>
+	<radhey.shyam.pandey@amd.com>, Ajay Neeli <ajay.neeli@amd.com>
+Subject: [PATCH 3/5] firmware: xilinx: Add APIs for UFS PHY initialization
+Date: Fri, 19 Sep 2025 18:08:33 +0530
+Message-ID: <20250919123835.17899-4-ajay.neeli@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20250919123835.17899-1-ajay.neeli@amd.com>
 References: <20250919123835.17899-1-ajay.neeli@amd.com>
@@ -101,176 +100,260 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000971E8:EE_|PH7PR12MB8425:EE_
-X-MS-Office365-Filtering-Correlation-Id: 10bd480d-f85d-4b2d-717e-08ddf7798e9b
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002529F:EE_|CH1PR12MB9720:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0cf65b47-408e-4e8d-e8d4-08ddf7798631
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|36860700013|7416014|82310400026;
+	BCL:0;ARA:13230040|82310400026|7416014|376014|36860700013|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?BNemHXunCeMxaRTcdY92srQhihmkoe7xFiBErlv81XJvrL846FZy5HR0aASf?=
- =?us-ascii?Q?xZxu4lvy3FG48Kk1u80GlT7t/QzYb8l7JPVuJa+O3P7CQfbCjW8nVyxKdGhx?=
- =?us-ascii?Q?2V6SsU7f0MgZzIZLeg+/7tCcJn+8wWnFS/lMdh/sGblzcMc9dknjWVGGYDQc?=
- =?us-ascii?Q?Oh3igDZd93Toou6tOGqja8w2Ti17zDmeu3vbbjKG83XtkpDwX5pNs6rZquxc?=
- =?us-ascii?Q?t1gotSPY7utEyQS3pKwNlp6+95NY6mIrYEoAm7bWW2tmHADiX2Vl22WdO8dM?=
- =?us-ascii?Q?/+j+WjSWDzhccbYrsAxO1yoyDgp/P94kc5okQOWi76dFIl1Hz+67qzohgq6p?=
- =?us-ascii?Q?SkUKfoOJDg5ZFjBu88nsfHde1rT4r4nJDgtOQho3P44dA295WYqvwWuKAYWl?=
- =?us-ascii?Q?hsxq4ZmuIQ/8i/Sl18H7ZDdj69+NcQvfo8Ox6KineC7Z57Qydfk8UuPHeVGe?=
- =?us-ascii?Q?U8GfgTsqwQMBWOo+xUzsVOQv+deVZsnGPlC+uvf+7k1gLajHZPGgdZkWXKYp?=
- =?us-ascii?Q?qZu7PZTv5ksxYdup5tfzBgi50w4cfWL5tDjrGBCMNEU+hM1kUaaBITQWCmz/?=
- =?us-ascii?Q?a2v0WU0+f2IkofXwTeoOW5yKfPdWFwPPTKsoqxtqDFPgD4zMs5ccJ5V/65ES?=
- =?us-ascii?Q?0mXeJYB5QbHOpqywG/CxbG/4D1s8zcD4uDO+nFDsrP/YKcDHmEJpMtXNxvHh?=
- =?us-ascii?Q?160WWNnhVpMfQre5KzF1xu/fqoxcs0d3mOjF31andS5+tDzp2vySQ/kfT67Z?=
- =?us-ascii?Q?LEd1gP3iW9FIRn1bZQ2N1si6Ni2KDzkZQrsawBdh8UuZLW7WTp0xBGGq5BFo?=
- =?us-ascii?Q?qjfcPozRxq3u+GXHpnsyo45arMCBJ0+hApKLIfW9+O9KKt61+F6vwgzFRdZd?=
- =?us-ascii?Q?y/Cc1BbJcrUehPCg7PuUENtqeBrAac1MDAPiCTgYZeGlrsZCmuCFypiKQQ+7?=
- =?us-ascii?Q?0wKxTYLpy5vNLYu+rji3Y4iSIHACAkEYs+4r2hhHAwrfAkAiG67Zb/rlFZxf?=
- =?us-ascii?Q?Zr+ENjm92spP1JXkcHUJC4MHradq28T1lOxlE51YzTA2TX7TipNuKOyGFvYy?=
- =?us-ascii?Q?tcdZRLMxIRedbFztNY0TGOVMt8rih8zOK17AJqkKXlRIEdzQImBaVc4j2Rsd?=
- =?us-ascii?Q?wp+kRwol0yoW/vatD7zP7pMi9GKgL9oxArtzyb7VXb1+wiUkCzmMv1Um7SSn?=
- =?us-ascii?Q?VT6YecAumkgMiE1NxeQUDhKVE3kIUUSz9EiSZaAB61pPOkZhuNfB22rHUImv?=
- =?us-ascii?Q?4B0mznaF+j+fsM37pMPZzTAHahdAt7Es1Rn+/5F4XezEQUHfsBWrkdTqvyBU?=
- =?us-ascii?Q?qQaEV4ya54YtMyuull2gJy/sL6/G7zZOC8SRhhnSvnyF7WwgOZGYmZgqAIxg?=
- =?us-ascii?Q?Zuwy5h55PF9e2pFsObwAgqV3fWJOW31oCtuLAcMoqnoSMxaDip8mlZ7stvna?=
- =?us-ascii?Q?AnL2OkXdDHzQT0QyQJ3QHf5m3iZ56NBqjYzP1pMp1a5OURYhYnMKWFixtybX?=
- =?us-ascii?Q?qkgHAQKNUOY5xhlZA/anLiYC6YTFXJw2ClPe?=
+	=?us-ascii?Q?2SBMk8vchxxSsr3BHM65wZZ3C1I3vSLeS3w2ingIaMG4czYtoQIt7oy6Ojdo?=
+ =?us-ascii?Q?ZarThnFcqpw/ENBBobxmEGXu5Oedy74hl4YhXV/n6+rMvP3BMk32gGo7u2O2?=
+ =?us-ascii?Q?7QQXWaR5uTS57T1dZUAh91RuEsPPDK+Cp7sqk9foopmcompaWJCme1VRzhPR?=
+ =?us-ascii?Q?5hzT2qFZ12sGcPmxirQrSgRbUV+iUCPdwodU5oaHYL+GIG/urFfSIQPwqcjF?=
+ =?us-ascii?Q?Eo6Qc6Tjr1N5PjiMC70nKIPAvZ5QnhCh38R+riCdzlBpn9kSatRFQ4XsVOGK?=
+ =?us-ascii?Q?5i+Mf6VPIvZ4S8VNzNMhspwhs6jfXe8UxUCOZykEckyytYwG5UBxxw/5HHY5?=
+ =?us-ascii?Q?Dtl+Wb2q4hTxPKCO0DtPbXH+G0J3rDGuYq/krUBFF8LheolpkR38OyPXx3Wr?=
+ =?us-ascii?Q?sK6wmu7UATB9iMZxRBZHs+DGHNisnLj8Txl5u9Sy7d9owhqPeDPzf7Ft8g8S?=
+ =?us-ascii?Q?zlcnlGJmKFDH+H4QAz3gRdOChExeiJbzKRIfJJoYBHrEd5uN1REyZ47bll9r?=
+ =?us-ascii?Q?NIC1Tz9GwrQn6+sqm8hG7PGBZtVztKeyJAutKnTTy7jyJtf9wHBwo/Ul4+tx?=
+ =?us-ascii?Q?7Jr51NT/iLv2H5VbjGQZJTU6lODL7ck+xExB6P8wgzRaPYDMOm8clsVL7MgX?=
+ =?us-ascii?Q?S93xD2DYatXLhb5CV9jVBhQ17038AaZJzDKkxVHDJ4P8A5i+eFonCfa5N961?=
+ =?us-ascii?Q?jnEJoJiMUC8tezR8mTAGRfANAfBKfB/oGb2xvV6Uwrrv4WJn2lNZr/JhxZQg?=
+ =?us-ascii?Q?/by2oLnUply+6m3cIU8G/CIsohCMhmVXiUke5MKP9ybsv3/HqpGCbDwxVLwL?=
+ =?us-ascii?Q?U83aZM7wqGWKNB9M14RPxA8SWC0xhsn8ba1QPkMJ2FZG/4ELPQuxMi+PWmNP?=
+ =?us-ascii?Q?82XmCqgmPptQZQoKbEL41nG3AprXGpg1ChwvdTZKoWcStbL6pFYckJdUwS9a?=
+ =?us-ascii?Q?jvo5R5xNTabqJpOROgYfyKBlrA84wROSD/Snlhd30Z4kLqDLy2BQjj925b0g?=
+ =?us-ascii?Q?LAPb4AYp4SRsdJVLrDUmSUoDSI6kuo2ZJlS2jHzlVTzhfEmwhkrJu50i5E2G?=
+ =?us-ascii?Q?lfrbAaUWSVOGDDhO+KXpirfKMXOQ6uEgrcD8Gy6CQNk4mcu05pUMrrAlpNZE?=
+ =?us-ascii?Q?0OrMfTcHbGdyEsN2HoUQXlX2ThNr6ubFPzEx+ChAl6FLgORMMlqkB3GsgiFY?=
+ =?us-ascii?Q?IuBS+Re6gqpfKbrmVHU7OMyI+vCqPGyw78DBaOZ9Q/EqFk1hI8wd5f+K1/6q?=
+ =?us-ascii?Q?tzFOpvPWn2BghfSb3V4tHGzJjyYpcCEERotrI3u+CtTKvgViJcGRwi0QKzsu?=
+ =?us-ascii?Q?Q5XAomKQcBn+mXWDyr2MuHztIplPUkLklLWhcW/eHUwU8ioDjsi6MimpFbdM?=
+ =?us-ascii?Q?OBLNmAJK9bMn7X83BqYcwFGB1AtF1CdNuBUfZd7NM/YFSHkr4tzgFcgTCB+e?=
+ =?us-ascii?Q?DHNSpkeh63MKHMgz/ud5iaoK6OZg0HOv7xNQ88/OpeLv74zVbcZiOPPQ1QBz?=
+ =?us-ascii?Q?gNC7Vzn+K81fsT89KzrJSie6SB7NOrdtVNvF?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700013)(7416014)(82310400026);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(376014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2025 12:39:21.0786
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2025 12:39:07.0297
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10bd480d-f85d-4b2d-717e-08ddf7798e9b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0cf65b47-408e-4e8d-e8d4-08ddf7798631
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000971E8.namprd02.prod.outlook.com
+	SN1PEPF0002529F.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8425
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH1PR12MB9720
 
-From: Izhar Ameer Shaikh <izhar.ameer.shaikh@amd.com>
+- Add APIs for UFS PHY initialization.
+- Verify M-PHY TX-RX configuration readiness.
+- Confirm SRAM initialization and Set SRAM bypass.
+- Retrieve UFS calibration values.
 
-Add support for a generic ioctl read/write interface using which users
-can request firmware to perform read/write operations on a protected and
-secure address space.
-
-The functionality is introduced through the means of two new IOCTL IDs
-which extend the existing PM_IOCTL EEMI API:
- - IOCTL_READ_REG
- - IOCTL_MASK_WRITE_REG
-
-The caller only passes the node id of the given device and an offset.
-The base address is not exposed to the caller and internally retrieved
-by the firmware. Firmware will enforce an access policy on the incoming
-read/write request.
-
-Signed-off-by: Izhar Ameer Shaikh <izhar.ameer.shaikh@amd.com>
-Reviewed-by: Tanmay Shah <tanmay.shah@amd.com>
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
 Signed-off-by: Ajay Neeli <ajay.neeli@amd.com>
 Acked-by: Senthil Nathan Thangaraj <senthilnathan.thangaraj@amd.com>
 ---
- drivers/firmware/xilinx/zynqmp.c     | 46 ++++++++++++++++++++++++++++++++++++
- include/linux/firmware/xlnx-zynqmp.h | 15 ++++++++++++
- 2 files changed, 61 insertions(+)
+ drivers/firmware/xilinx/Makefile         |   2 +-
+ drivers/firmware/xilinx/zynqmp-ufs.c     | 118 +++++++++++++++++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp-ufs.h |  38 ++++++++++
+ include/linux/firmware/xlnx-zynqmp.h     |   1 +
+ 4 files changed, 158 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/firmware/xilinx/zynqmp-ufs.c
+ create mode 100644 include/linux/firmware/xlnx-zynqmp-ufs.h
 
-diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
-index 7356e86..2422922 100644
---- a/drivers/firmware/xilinx/zynqmp.c
-+++ b/drivers/firmware/xilinx/zynqmp.c
-@@ -1617,6 +1617,52 @@ int zynqmp_pm_get_feature_config(enum pm_feature_config_id id,
- }
+diff --git a/drivers/firmware/xilinx/Makefile b/drivers/firmware/xilinx/Makefile
+index 875a537..70f8f02 100644
+--- a/drivers/firmware/xilinx/Makefile
++++ b/drivers/firmware/xilinx/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for Xilinx firmwares
  
- /**
-+ * zynqmp_pm_sec_read_reg - PM call to securely read from given offset
-+ *		of the node
-+ * @node_id:	Node Id of the device
-+ * @offset:	Offset to be used (20-bit)
-+ * @ret_value:	Output data read from the given offset after
-+ *		firmware access policy is successfully enforced
+-obj-$(CONFIG_ZYNQMP_FIRMWARE) += zynqmp.o
++obj-$(CONFIG_ZYNQMP_FIRMWARE) += zynqmp.o zynqmp-ufs.o
+ obj-$(CONFIG_ZYNQMP_FIRMWARE_DEBUG) += zynqmp-debug.o
+diff --git a/drivers/firmware/xilinx/zynqmp-ufs.c b/drivers/firmware/xilinx/zynqmp-ufs.c
+new file mode 100644
+index 0000000..85da8a8
+--- /dev/null
++++ b/drivers/firmware/xilinx/zynqmp-ufs.c
+@@ -0,0 +1,118 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Firmware Layer for UFS APIs
 + *
-+ * Return:	Returns 0 on success or error value on failure
++ * Copyright (C) 2025 Advanced Micro Devices, Inc.
 + */
-+int zynqmp_pm_sec_read_reg(u32 node_id, u32 offset, u32 *ret_value)
++
++#include <linux/firmware/xlnx-zynqmp.h>
++#include <linux/module.h>
++
++/* Register Node IDs */
++#define PM_REGNODE_PMC_IOU_SLCR		0x30000002 /* PMC IOU SLCR */
++#define PM_REGNODE_EFUSE_CACHE		0x30000003 /* EFUSE Cache */
++
++/* Register Offsets for PMC IOU SLCR */
++#define SRAM_CSR_OFFSET			0x104C /* SRAM Control and Status */
++#define TXRX_CFGRDY_OFFSET		0x1054 /* M-PHY TX-RX Config ready */
++
++/* Masks for SRAM Control and Status Register */
++#define SRAM_CSR_INIT_DONE_MASK		BIT(0) /* SRAM initialization done */
++#define SRAM_CSR_EXT_LD_DONE_MASK	BIT(1) /* SRAM External load done */
++#define SRAM_CSR_BYPASS_MASK		BIT(2) /* Bypass SRAM interface */
++
++/* Mask to check M-PHY TX-RX configuration readiness */
++#define TX_RX_CFG_RDY_MASK		GENMASK(3, 0)
++
++/* Register Offsets for EFUSE Cache */
++#define UFS_CAL_1_OFFSET		0xBE8 /* UFS Calibration Value */
++
++/**
++ * zynqmp_pm_is_mphy_tx_rx_config_ready - check M-PHY TX-RX config readiness
++ * @is_ready:	Store output status (true/false)
++ *
++ * Return:	Returns 0 on success or error value on failure.
++ */
++int zynqmp_pm_is_mphy_tx_rx_config_ready(bool *is_ready)
 +{
-+	u32 ret_payload[PAYLOAD_ARG_CNT];
-+	u32 count = 1;
++	u32 regval;
 +	int ret;
 +
-+	if (!ret_value)
++	if (!is_ready)
 +		return -EINVAL;
 +
-+	ret = zynqmp_pm_invoke_fn(PM_IOCTL, ret_payload, 4, node_id, IOCTL_READ_REG,
-+				  offset, count);
++	ret = zynqmp_pm_sec_read_reg(PM_REGNODE_PMC_IOU_SLCR, TXRX_CFGRDY_OFFSET, &regval);
++	if (ret)
++		return ret;
 +
-+	*ret_value = ret_payload[1];
++	regval &= TX_RX_CFG_RDY_MASK;
++	if (regval)
++		*is_ready = true;
++	else
++		*is_ready = false;
 +
 +	return ret;
 +}
-+EXPORT_SYMBOL_GPL(zynqmp_pm_sec_read_reg);
++EXPORT_SYMBOL_GPL(zynqmp_pm_is_mphy_tx_rx_config_ready);
 +
 +/**
-+ * zynqmp_pm_sec_mask_write_reg - PM call to securely write to given offset
-+ *		of the node
-+ * @node_id:	Node Id of the device
-+ * @offset:	Offset to be used (20-bit)
-+ * @mask:	Mask to be used
-+ * @value:	Value to be written
++ * zynqmp_pm_is_sram_init_done - check SRAM initialization
++ * @is_done:	Store output status (true/false)
 + *
-+ * Return:	Returns 0 on success or error value on failure
++ * Return:	Returns 0 on success or error value on failure.
 + */
-+int zynqmp_pm_sec_mask_write_reg(const u32 node_id, const u32 offset, u32 mask,
-+				 u32 value)
++int zynqmp_pm_is_sram_init_done(bool *is_done)
 +{
-+	return zynqmp_pm_invoke_fn(PM_IOCTL, NULL, 5, node_id, IOCTL_MASK_WRITE_REG,
-+				   offset, mask, value);
++	u32 regval;
++	int ret;
++
++	if (!is_done)
++		return -EINVAL;
++
++	ret = zynqmp_pm_sec_read_reg(PM_REGNODE_PMC_IOU_SLCR, SRAM_CSR_OFFSET, &regval);
++	if (ret)
++		return ret;
++
++	regval &= SRAM_CSR_INIT_DONE_MASK;
++	if (regval)
++		*is_done = true;
++	else
++		*is_done = false;
++
++	return ret;
 +}
-+EXPORT_SYMBOL_GPL(zynqmp_pm_sec_mask_write_reg);
++EXPORT_SYMBOL_GPL(zynqmp_pm_is_sram_init_done);
 +
 +/**
-  * zynqmp_pm_set_sd_config - PM call to set value of SD config registers
-  * @node:	SD node ID
-  * @config:	The config type of SD registers
++ * zynqmp_pm_set_sram_bypass - Set SRAM bypass Control
++ *
++ * Return:	Returns 0 on success or error value on failure.
++ */
++int zynqmp_pm_set_sram_bypass(void)
++{
++	u32 sram_csr;
++	int ret;
++
++	ret = zynqmp_pm_sec_read_reg(PM_REGNODE_PMC_IOU_SLCR, SRAM_CSR_OFFSET, &sram_csr);
++	if (ret)
++		return ret;
++
++	sram_csr &= ~SRAM_CSR_EXT_LD_DONE_MASK;
++	sram_csr |= SRAM_CSR_BYPASS_MASK;
++
++	return zynqmp_pm_sec_mask_write_reg(PM_REGNODE_PMC_IOU_SLCR, SRAM_CSR_OFFSET,
++					    GENMASK(2, 1), sram_csr);
++}
++EXPORT_SYMBOL_GPL(zynqmp_pm_set_sram_bypass);
++
++/**
++ * zynqmp_pm_get_ufs_calibration_values - Read UFS calibration values
++ * @val:	Store the calibration value
++ *
++ * Return:	Returns 0 on success or error value on failure.
++ */
++int zynqmp_pm_get_ufs_calibration_values(u32 *val)
++{
++	return zynqmp_pm_sec_read_reg(PM_REGNODE_EFUSE_CACHE, UFS_CAL_1_OFFSET, val);
++}
++EXPORT_SYMBOL_GPL(zynqmp_pm_get_ufs_calibration_values);
+diff --git a/include/linux/firmware/xlnx-zynqmp-ufs.h b/include/linux/firmware/xlnx-zynqmp-ufs.h
+new file mode 100644
+index 0000000..d3538dd
+--- /dev/null
++++ b/include/linux/firmware/xlnx-zynqmp-ufs.h
+@@ -0,0 +1,38 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Firmware layer for UFS APIs.
++ *
++ * Copyright (c) 2025 Advanced Micro Devices, Inc.
++ */
++
++#ifndef __FIRMWARE_XLNX_ZYNQMP_UFS_H__
++#define __FIRMWARE_XLNX_ZYNQMP_UFS_H__
++
++#if IS_REACHABLE(CONFIG_ZYNQMP_FIRMWARE)
++int zynqmp_pm_is_mphy_tx_rx_config_ready(bool *is_ready);
++int zynqmp_pm_is_sram_init_done(bool *is_done);
++int zynqmp_pm_set_sram_bypass(void);
++int zynqmp_pm_get_ufs_calibration_values(u32 *val);
++#else
++static inline int zynqmp_pm_is_mphy_tx_rx_config_ready(bool *is_ready)
++{
++	return -ENODEV;
++}
++
++static inline int zynqmp_pm_is_sram_init_done(bool *is_done)
++{
++	return -ENODEV;
++}
++
++static inline int zynqmp_pm_set_sram_bypass(void)
++{
++	return -ENODEV;
++}
++
++static inline int zynqmp_pm_get_ufs_calibration_values(u32 *val)
++{
++	return -ENODEV;
++}
++#endif
++
++#endif /* __FIRMWARE_XLNX_ZYNQMP_UFS_H__ */
 diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
-index 6d4dbc1..f441eea 100644
+index f441eea..604a03f 100644
 --- a/include/linux/firmware/xlnx-zynqmp.h
 +++ b/include/linux/firmware/xlnx-zynqmp.h
-@@ -241,6 +241,7 @@ enum pm_ioctl_id {
- 	IOCTL_GET_FEATURE_CONFIG = 27,
- 	/* IOCTL for Secure Read/Write Interface */
- 	IOCTL_READ_REG = 28,
-+	IOCTL_MASK_WRITE_REG = 29,
- 	/* Dynamic SD/GEM configuration */
- 	IOCTL_SET_SD_CONFIG = 30,
- 	IOCTL_SET_GEM_CONFIG = 31,
-@@ -620,6 +621,9 @@ int zynqmp_pm_register_notifier(const u32 node, const u32 event,
- int zynqmp_pm_is_function_supported(const u32 api_id, const u32 id);
- int zynqmp_pm_set_feature_config(enum pm_feature_config_id id, u32 value);
- int zynqmp_pm_get_feature_config(enum pm_feature_config_id id, u32 *payload);
-+int zynqmp_pm_sec_read_reg(u32 node_id, u32 offset, u32 *ret_value);
-+int zynqmp_pm_sec_mask_write_reg(const u32 node_id, const u32 offset,
-+				 u32 mask, u32 value);
- int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset);
- int zynqmp_pm_force_pwrdwn(const u32 target,
- 			   const enum zynqmp_pm_request_ack ack);
-@@ -922,6 +926,17 @@ static inline int zynqmp_pm_request_wake(const u32 node,
- 	return -ENODEV;
- }
+@@ -16,6 +16,7 @@
+ #include <linux/types.h>
  
-+static inline int zynqmp_pm_sec_read_reg(u32 node_id, u32 offset, u32 *ret_value)
-+{
-+	return -ENODEV;
-+}
-+
-+static inline int zynqmp_pm_sec_mask_write_reg(const u32 node_id, const u32 offset,
-+					       u32 mask, u32 value)
-+{
-+	return -ENODEV;
-+}
-+
- static inline int zynqmp_pm_get_rpu_mode(u32 node_id, enum rpu_oper_mode *rpu_mode)
- {
- 	return -ENODEV;
+ #include <linux/err.h>
++#include <linux/firmware/xlnx-zynqmp-ufs.h>
+ 
+ #define ZYNQMP_PM_VERSION_MAJOR	1
+ #define ZYNQMP_PM_VERSION_MINOR	0
 -- 
 1.8.3.1
 
