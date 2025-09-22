@@ -1,47 +1,47 @@
-Return-Path: <linux-scsi+bounces-17441-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17442-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1006FB91C8C
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Sep 2025 16:45:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 871C0B91EDE
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Sep 2025 17:30:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE58318934BD
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Sep 2025 14:45:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0EADF16BB2D
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Sep 2025 15:29:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1672C285040;
-	Mon, 22 Sep 2025 14:45:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 605792E2EE4;
+	Mon, 22 Sep 2025 15:28:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyano.uk header.i=@cyano.uk header.b="dBhXMRCA"
+	dkim=pass (2048-bit key) header.d=cyano.uk header.i=@cyano.uk header.b="tUOuC2v+"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from jupiter.guys.cyano.uk (jupiter.guys.cyano.uk [45.63.120.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC85F270575;
-	Mon, 22 Sep 2025 14:45:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C59B2E2EF0;
+	Mon, 22 Sep 2025 15:28:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.63.120.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758552330; cv=none; b=oj1RtcM3BLTh8UnQDc2h1viIgQercs73vqcQvXfOAz9316Bsb2h6hbvhBdGeq4qVtd56IU1mto1XD08UttEd9jq1Z5XXaBpYin9VlcbFfIdok6UrByV7tSKnpB62MInxJHu218T4U77hM4zgibQib8BTMGxVwWXtpG9cWHz1dLo=
+	t=1758554900; cv=none; b=hmdy7Jxn3hnhEng2uRqyfPPbmpCelbQO6gTo5lzocn9ptXglXlfK1nspNzCozrUHVpwl6B1lN9rgMkBcyD1infH5GwBA+FIlUcygoiuJuvhz9hLgH4GrjQuob6b79Hnc6iLGfedpAl6K6eNrLHJQAOqg+4voFIGNkvLLpS8fEh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758552330; c=relaxed/simple;
-	bh=d2mMnZSYt/0QmdgJDvPlJQuYTeSOPwcauhZznvRBvLM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HdfLdC/Jdl8BUN/03ARiB10wC60ixP3Ahm8FwNeEDkSvbOeD6mDDkQ/4Phzmrqydz1fWfDW326MCzeW70fUxCNdkVgAax5xpWPi+oK4Zviu7AddOTz6TYu/hdFjDVmdd7na/pVGjoAdhvH8ZXIimSkg1cqrDifKWh1txypMJuOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cyano.uk; spf=pass smtp.mailfrom=cyano.uk; dkim=pass (2048-bit key) header.d=cyano.uk header.i=@cyano.uk header.b=dBhXMRCA; arc=none smtp.client-ip=45.63.120.176
+	s=arc-20240116; t=1758554900; c=relaxed/simple;
+	bh=XHSCUTanGtCRbEHdPAn8oxyZAecdpBrHzSnvSqDFdgE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=S/EXi59Sb2uUtA77fDHXZNTwRbq8ZL4f7oujDspSPSN8tonoHHBJo0ohhz0Q3Bwh5VWZz0qs5RfKtsR6cBbn/EjWTXRgrs62XI8eHrPF+HYKKH2f7WRPl4b8l2WvUVsQKE0zJFSK7ZujIuMsJFAISlQrEbUUWk2uqEOVSuPr+/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cyano.uk; spf=pass smtp.mailfrom=cyano.uk; dkim=pass (2048-bit key) header.d=cyano.uk header.i=@cyano.uk header.b=tUOuC2v+; arc=none smtp.client-ip=45.63.120.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cyano.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyano.uk
 From: Xinhui Yang <cyan@cyano.uk>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyano.uk; s=dkim;
-	t=1758551852;
+	t=1758554895;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=jJB3CodlCdQSfnz45CZ5KOyNJWuDIISVpH/Ds+KGYBE=;
-	b=dBhXMRCAU2B1StqCmMIyux7XHP5EsuaykQFQ+SyayqI8GyO0cyf07nsaVOD3Kg6K0GMN3W
-	DzhMEWNOZ0Pw3n+4qA72crZvqwGFq6Ph/RVcnBgxZ+ClFViQwQK5ouAhGn8E5xdSdoOyUV
-	8c8towRjaAsVJkhxQ/17BsVEBYXeQlYNuwmI1SWKbBZj65herck+sc9HYQGq9nytSA11Vn
-	4QoVmsM7KCQi7wiBq8vwIjY5/KI4i8ebyxF1sybzeG8lKMeqhLahxcDaS+NmlHeRJy963m
-	bcwsA8zIw9axePe3YMG+9px6m3cljPSjS7R2ix3RpDdW+nxqsBrMaEmcnTKoag==
+	bh=5+VQLc5Bk8KM/HhHN/dIMbUbv2CwDDwUBSUL5xfEoFY=;
+	b=tUOuC2v+Hrrb6aaaVi1PVtgfHwXsYwHXSRhm/5UCL89BBnTa7X+V1OodQHq8Zicsno4G+y
+	2gnO9uc2SpOruokkL0YPD4lXv69uaHPlWEq4E0mGvNdSH+n+oIDg1wgqQqiVuV9CP6qptH
+	8AYeM7Lb6SemnY87WeMJ4gOiDjGUOCjzpponP402SGJd4IV6xzs5LAydh1RV2X3z8mln9/
+	RWsvsnj4Kao3NSlWf/KrH2bTGWHMKO6wgZ//JRHw3MfwUf4dWSeuxNMDR22Tkhhd6nlNj6
+	lMH0Ay1ehl9ncYP06y3ifxDE1Xj1WghtW34dhq3Vqtx7ATRC9seSDPzSrtMAxg==
 Authentication-Results: jupiter.guys.cyano.uk;
 	auth=pass smtp.mailfrom=cyan@cyano.uk
 To: linux-scsi@vger.kernel.org
@@ -55,9 +55,9 @@ Cc: stable@vger.kernel.org,
 	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
 	"Martin K. Petersen" <martin.petersen@oracle.com>,
 	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] scsi: dc395x: correctly discard the return value in certain reads
-Date: Mon, 22 Sep 2025 22:36:19 +0800
-Message-ID: <20250922143619.824129-1-cyan@cyano.uk>
+Subject: [PATCH v2] scsi: dc395x: correctly discard the return value in certain reads
+Date: Mon, 22 Sep 2025 23:26:08 +0800
+Message-ID: <20250922152609.827311-1-cyan@cyano.uk>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -92,7 +92,18 @@ Create a new macro DC395x_peek8() to deliberately cast the return value
 to void, which tells the compiler we really don't need the return value
 of such read operations.
 
+Other changes:
+* Also slightly modify the formatting of the DC395x_* macros.
+
+Cc: stable@vger.kernel.org
 Signed-off-by: Xinhui Yang <cyan@cyano.uk>
+
+---
+Changes since v1 [1]:
+- Add Cc: tag to include this patch to the stable tree.
+- Add additional description about the formatting changes.
+
+[1]: https://lore.kernel.org/linux-scsi/20250922143619.824129-1-cyan@cyano.uk
 ---
  drivers/scsi/dc395x.c | 34 ++++++++++++++++++++--------------
  1 file changed, 20 insertions(+), 14 deletions(-)
