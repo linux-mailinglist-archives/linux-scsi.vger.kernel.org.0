@@ -1,74 +1,74 @@
-Return-Path: <linux-scsi+bounces-17461-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17463-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBC56B96A26
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Sep 2025 17:45:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 044E1B96A95
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Sep 2025 17:51:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6E321896266
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Sep 2025 15:45:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B15C64A0241
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Sep 2025 15:51:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62A2724635E;
-	Tue, 23 Sep 2025 15:45:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25FE9264A65;
+	Tue, 23 Sep 2025 15:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="tRrIZ3KR"
+	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="GUUEGTlm"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.170])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B9A42AA9;
-	Tue, 23 Sep 2025 15:45:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F0F25CC74;
+	Tue, 23 Sep 2025 15:51:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.171
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758642324; cv=pass; b=I5Aqk4BsHhMJgZ84pvC0d4dsUhG6+doRaG7a/Wxj8OH75gsUUgagusFAiu04wAZWOrAiyjRbNGaeKeae0DLll2baROFqkfbAwJwLhja1Qc8jrPwhDYco/8vXEp0tngmBzha+kUrPYJU57qopr3z3pHfWVuqqGzTLO5Qk5GmhSL4=
+	t=1758642681; cv=pass; b=qNhtR67TwoliaTXVVD7KsfXNcl2McQ8ieH/2fUGYKXqZ41B9ueXQMOKPZ1LDAbuAA5/1nFjaOkdZSbUd4OA23lzdyPXc7P8YG3oPGkc449rOT/1ABrIpqw8ACu66M09LHWeEY5h+wkVDKCM/sOMaOpfkYiHWKIHF31n60P54A9M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758642324; c=relaxed/simple;
-	bh=FLlDR2tziC5LTTUj1fqGz3p0kuBMiGN78op6NHzyngI=;
+	s=arc-20240116; t=1758642681; c=relaxed/simple;
+	bh=58ojsysFvPaNnj9sdPpwywdliL+WLSYvNAkP9FwIt58=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AYQtXAUT0ZfqG9DAlR97Df+2IydanDzDsyJhTyTrmPQ5Y/pF6Y6axBb7ktkZllOK3lEi6QsN+8UWOZcDGkMQ1me09ockw3Uz36l5JRfRzMMrk2suLu8vUPfyncWqZATpfcEOnF7khk6mXWdQDj/sPJmbjn2BJ33vpqRkNLXV0CE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=tRrIZ3KR; arc=pass smtp.client-ip=81.169.146.170
+	 MIME-Version:Content-Type; b=Md5Vcgq3nuorAVYxzX15/pHgt960CzVb0MI9QgYIIJpj1XO+COxfY7lwpqPX0aqSDju5uQ3U3CIGkjA/bHSqkriPCH8lvjRLTmjw2EogX3O6t0v6Fs1v6Ba9w+Tt2V6FRyGZ8J8GzW7LjLsr+kGxrtAJ/anFTVO887hjRahBW7Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=GUUEGTlm; arc=pass smtp.client-ip=81.169.146.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iokpp.de
-ARC-Seal: i=1; a=rsa-sha256; t=1758641958; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1758641959; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=EnA2qV5Fe+WQXOdCUu1usyLbMD46OhfMVO/cJmnv05t4/piuF347OoGVFsdObirf2y
-    npisyOF17X8sGWls7Xnhtnkkc6r+/KC1YwveLWkoKiktu2fi8DlkX7QAKogNNupKqlIf
-    Csv7tvVvktFyaUATu/vYS5He3Ius8Sj7X9xl+AYS+gKHbF7uDpA9/CB6TUp0BfLiP33F
-    CPpin4QddhWjga2wqdvcnANIKtzXt41tFM37Y47wc3qvYVFCbYTDXcz5O8GOlKDlyIm1
-    7QEISSBHtVi7ZhItIdufR6zT6EGWeSrnqq1fn9hQAkykIYQNXAdfYVGLCv3gRlIwIOTU
-    ps1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1758641958;
+    b=mXmE2DEYzaPKrEImY96+pugrCqid+K5CAsCZWlySu/bucf/kNGmkI650SngzgQHn5Y
+    Z+E7UcA+MC/lpUUgheZQZTYdQWH0P0ZlGGw+4Fr38TqFAkUTLYX4KdDN8R3QuH9q+eKd
+    PQhMvrqA6I4WqyDp074NbFaDDEkd9cgtDNysdHZpzSoI8f2cctUkTBWkKpCNM7p6S33y
+    8jt+0XshhMJORkd76QLA3EZUxqEbFirc0ojikfs1QFLgfRaLQczx6vkl7afEpBlQNVcc
+    kEEEGzCE0pAraj2+dqv8rn4cZlc2PwmvGM7c9gryymnetRbJ1LUKjN7DBx6yjKAwzsUI
+    ntag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1758641959;
     s=strato-dkim-0002; d=strato.com;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=a+70373e+Lz+vAR2nKUbEkjl5RTJbQlaVGE7sifvdQI=;
-    b=IBQjiN95Pzmy4TvXlx5dRJo1daANv2c5nfneLgP15ApzMcWMFagqnJmOBT5vvxoptk
-    zRN6qg+OcWWE7cVUkxkEA3MfgZ8x6zQfEN5DJjV055aN6cayVKydsIVxRZRGWF9zalqr
-    pY0NKl8dEnYWFXQ9MlRcKw2NpMPDwQg1LibsowU1uaTTtkHwS9bT2nsI685x25zwcPXu
-    Zj49hpvDDTy22sDE0M0nCP1KxNaqHwNzRIVCZIJSSYe1Vi3r8y00YPCPU8fyY21Nz/vz
-    K4KCTGDmkDR/5N9X8KvQdC+8nP3bPeFwa0CmAw3LeMpn0zV7QK7PBLCCG3eiGajbepgx
-    IEnw==
+    bh=WeENfocnqtAAgNP8w7OEafJmaxgWIsIDh4ZeyeasUqY=;
+    b=XXde7krp64AgGN6c9sw4uIjwET0YrV8QbQHDW9XdHDRlk/VgBHOHD4j5lzPqaGh2R9
+    Y21zzCawARK9X0BYAHSMj2FPO6tvOFIZJesq6DKwKAX1IAPT3Dn0nAqMOporgnOPIqYP
+    A7en+wZwCM59Mn1Jk9rZiT3eKr8YaNVrN+fQZTQNy7UM0dGN/ip5zuo+beH5DgPad16c
+    fltyBoSWxDYTxt/bQ5nbjIee1h2bKb7mTZdTyvDPVyS9sSKOw7UHfuNW5B+rOKRAYcYC
+    uQmIoFqcv32eHXSXBw1ObsETOgd2ySHupy8XRLG46l5bcybJVtx4EcsQKcIQ8VfDS8JD
+    2J6g==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1758641958;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1758641959;
     s=strato-dkim-0002; d=iokpp.de;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=a+70373e+Lz+vAR2nKUbEkjl5RTJbQlaVGE7sifvdQI=;
-    b=tRrIZ3KR9CrtNDEyjXImjIJv6r7YULGOnNva3CU6K245zsMn2DNNSjkklBgkH50mEc
-    OEOwFafjU2gG/a5swGgt6OsHLpBx3aUvwg/x0KDRDro4spF+V2pW9dwObMOiNCp56jHO
-    XK7zXj1cVbB9dg9g7BkApm//R1veQGizXkbsjJYQkrVL8N7RxFAPoeQ6uo/wXBMCiSmZ
-    92pMg3sw0LUth6YDrz+lXecY/kungr8zFCbfw17Ok7I62cuvEVMYJCx8F/4M3qfI3hjt
-    NQZ+0EBHoW3d6N3xhyT9Hg6wkVkmkv6nqVxs09JcC0esoIXICUBoE+HvYVxE9Y91xVPY
-    cqHw==
+    bh=WeENfocnqtAAgNP8w7OEafJmaxgWIsIDh4ZeyeasUqY=;
+    b=GUUEGTlml6tXQKR0DfmPXSKwRKHCXhKZX5rZpqknknwZA2+Q5epdaA0OY+pc8V0LNJ
+    +gG1DIYj4ULjauEgaK4rogG9e9jAs5uGh+8r1vVfvW44hmH5DfklINYhSz3jRoeDISXx
+    VxHKLemOk6Lsh9obu7gaEqlcjc86Sp9+xno1SJpTVX+/5JVwOYjbUnJI1FotUudLFxMl
+    hfpDbS/pY5t1HVuO6GJNVILWRJWikLLAc7Mcqj6t8Ig9E09o8BF1wMIkv1PTmPjahJCv
+    yQMKmBg8LVEDhpk7XkJpjbLAZwVIKNfQD6XkmqOt1E6NwJyieBr7MphUFVM1wojOuCHd
+    Qt2g==
 X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSfNuhhDSDt3O2J2YOom0XQaPis+nU/5K"
 Received: from Munilab01-lab.micron.com
     by smtp.strato.de (RZmta 53.3.2 AUTH)
-    with ESMTPSA id z9ebc618NFdI3eQ
+    with ESMTPSA id z9ebc618NFdI3eR
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
     Tue, 23 Sep 2025 17:39:18 +0200 (CEST)
@@ -84,9 +84,9 @@ To: avri.altman@wdc.com,
 	jens.wiklander@linaro.org
 Cc: linux-scsi@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/3] rpmb: move rpmb_frame struct and constants to common header
-Date: Tue, 23 Sep 2025 17:39:04 +0200
-Message-Id: <20250923153906.1751813-2-beanhuo@iokpp.de>
+Subject: [PATCH v1 2/3] scsi: ufs: core: fix incorrect buffer duplication in ufshcd_read_string_desc()
+Date: Tue, 23 Sep 2025 17:39:05 +0200
+Message-Id: <20250923153906.1751813-3-beanhuo@iokpp.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250923153906.1751813-1-beanhuo@iokpp.de>
 References: <20250923153906.1751813-1-beanhuo@iokpp.de>
@@ -96,129 +96,38 @@ List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
 
 From: Bean Huo <beanhuo@micron.com>
 
-Move struct rpmb_frame and RPMB operation constants from MMC block
-driver to include/linux/rpmb.h for reuse across different RPMB
-implementations (UFS, NVMe, etc.).
+The function ufshcd_read_string_desc() was duplicating memory starting
+from the beginning of struct uc_string_id, which included the length
+and type fields. As a result, the allocated buffer contained unwanted
+metadata in addition to the string itself.
+
+The correct behavior is to duplicate only the Unicode character array in
+the structure. Update the code so that only the actual string content is
+copied into the new buffer.
 
 Signed-off-by: Bean Huo <beanhuo@micron.com>
 ---
- drivers/mmc/core/block.c | 42 --------------------------------------
- include/linux/rpmb.h     | 44 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 44 insertions(+), 42 deletions(-)
+ drivers/ufs/core/ufshcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index b32eefcca4b7..bd5f6fcb03af 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -79,48 +79,6 @@ MODULE_ALIAS("mmc:block");
- #define MMC_EXTRACT_INDEX_FROM_ARG(x) ((x & 0x00FF0000) >> 16)
- #define MMC_EXTRACT_VALUE_FROM_ARG(x) ((x & 0x0000FF00) >> 8)
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 2e1fa8cf83f5..79c7588be28a 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -3823,7 +3823,7 @@ int ufshcd_read_string_desc(struct ufs_hba *hba, u8 desc_index,
+ 		str[ret++] = '\0';
  
--/**
-- * struct rpmb_frame - rpmb frame as defined by eMMC 5.1 (JESD84-B51)
-- *
-- * @stuff        : stuff bytes
-- * @key_mac      : The authentication key or the message authentication
-- *                 code (MAC) depending on the request/response type.
-- *                 The MAC will be delivered in the last (or the only)
-- *                 block of data.
-- * @data         : Data to be written or read by signed access.
-- * @nonce        : Random number generated by the host for the requests
-- *                 and copied to the response by the RPMB engine.
-- * @write_counter: Counter value for the total amount of the successful
-- *                 authenticated data write requests made by the host.
-- * @addr         : Address of the data to be programmed to or read
-- *                 from the RPMB. Address is the serial number of
-- *                 the accessed block (half sector 256B).
-- * @block_count  : Number of blocks (half sectors, 256B) requested to be
-- *                 read/programmed.
-- * @result       : Includes information about the status of the write counter
-- *                 (valid, expired) and result of the access made to the RPMB.
-- * @req_resp     : Defines the type of request and response to/from the memory.
-- *
-- * The stuff bytes and big-endian properties are modeled to fit to the spec.
-- */
--struct rpmb_frame {
--	u8     stuff[196];
--	u8     key_mac[32];
--	u8     data[256];
--	u8     nonce[16];
--	__be32 write_counter;
--	__be16 addr;
--	__be16 block_count;
--	__be16 result;
--	__be16 req_resp;
--} __packed;
--
--#define RPMB_PROGRAM_KEY       0x1    /* Program RPMB Authentication Key */
--#define RPMB_GET_WRITE_COUNTER 0x2    /* Read RPMB write counter */
--#define RPMB_WRITE_DATA        0x3    /* Write data to RPMB partition */
--#define RPMB_READ_DATA         0x4    /* Read data from RPMB partition */
--#define RPMB_RESULT_READ       0x5    /* Read result request  (Internal) */
--
- #define RPMB_FRAME_SIZE        sizeof(struct rpmb_frame)
- #define CHECK_SIZE_NEQ(val) ((val) != sizeof(struct rpmb_frame))
- #define CHECK_SIZE_ALIGNED(val) IS_ALIGNED((val), sizeof(struct rpmb_frame))
-diff --git a/include/linux/rpmb.h b/include/linux/rpmb.h
-index cccda73eea4d..1415ceb458fe 100644
---- a/include/linux/rpmb.h
-+++ b/include/linux/rpmb.h
-@@ -61,6 +61,50 @@ struct rpmb_dev {
- 
- #define to_rpmb_dev(x)		container_of((x), struct rpmb_dev, dev)
- 
-+/**
-+ * struct rpmb_frame - RPMB frame structure for authenticated access
-+ *
-+ * @stuff        : stuff bytes, a padding/reserved area of 196 bytes at the
-+ *                 beginning of the RPMB frame. They don’t carry meaningful
-+ *                 data but are required to make the frame exactly 512 bytes.
-+ * @key_mac      : The authentication key or the message authentication
-+ *                 code (MAC) depending on the request/response type.
-+ *                 The MAC will be delivered in the last (or the only)
-+ *                 block of data.
-+ * @data         : Data to be written or read by signed access.
-+ * @nonce        : Random number generated by the host for the requests
-+ *                 and copied to the response by the RPMB engine.
-+ * @write_counter: Counter value for the total amount of the successful
-+ *                 authenticated data write requests made by the host.
-+ * @addr         : Address of the data to be programmed to or read
-+ *                 from the RPMB. Address is the serial number of
-+ *                 the accessed block (half sector 256B).
-+ * @block_count  : Number of blocks (half sectors, 256B) requested to be
-+ *                 read/programmed.
-+ * @result       : Includes information about the status of the write counter
-+ *                 (valid, expired) and result of the access made to the RPMB.
-+ * @req_resp     : Defines the type of request and response to/from the memory.
-+ *
-+ * The stuff bytes and big-endian properties are modeled to fit to the spec.
-+ */
-+struct rpmb_frame {
-+	u8     stuff[196];
-+	u8     key_mac[32];
-+	u8     data[256];
-+	u8     nonce[16];
-+	__be32 write_counter	__packed;
-+	__be16 addr		__packed;
-+	__be16 block_count	__packed;
-+	__be16 result		__packed;
-+	__be16 req_resp		__packed;
-+};
-+
-+#define RPMB_PROGRAM_KEY       0x1    /* Program RPMB Authentication Key */
-+#define RPMB_GET_WRITE_COUNTER 0x2    /* Read RPMB write counter */
-+#define RPMB_WRITE_DATA        0x3    /* Write data to RPMB partition */
-+#define RPMB_READ_DATA         0x4    /* Read data from RPMB partition */
-+#define RPMB_RESULT_READ       0x5    /* Read result request  (Internal) */
-+
- #if IS_ENABLED(CONFIG_RPMB)
- struct rpmb_dev *rpmb_dev_get(struct rpmb_dev *rdev);
- void rpmb_dev_put(struct rpmb_dev *rdev);
+ 	} else {
+-		str = kmemdup(uc_str, uc_str->len, GFP_KERNEL);
++		str = kmemdup(uc_str->uc, uc_str->len, GFP_KERNEL);
+ 		if (!str) {
+ 			ret = -ENOMEM;
+ 			goto out;
 -- 
 2.34.1
 
