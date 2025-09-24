@@ -1,89 +1,129 @@
-Return-Path: <linux-scsi+bounces-17474-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17475-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A85DB97EDC
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Sep 2025 02:44:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 995C3B98511
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Sep 2025 07:57:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B9604C16DA
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Sep 2025 00:44:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6025F2A0270
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Sep 2025 05:57:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA841C8629;
-	Wed, 24 Sep 2025 00:44:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82F1623D7EE;
+	Wed, 24 Sep 2025 05:57:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=maguitec.com.mx header.i=@maguitec.com.mx header.b="c5e6TRla"
+	dkim=pass (2048-bit key) header.d=cyano.uk header.i=@cyano.uk header.b="Khj/wg8z"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from sender4-g3-154.zohomail360.com (sender4-g3-154.zohomail360.com [136.143.188.154])
+Received: from jupiter.guys.cyano.uk (jupiter.guys.cyano.uk [45.63.120.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD6B1B6D06
-	for <linux-scsi@vger.kernel.org>; Wed, 24 Sep 2025 00:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.154
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758674645; cv=pass; b=krUeRMS9XpRw61Hhpmd/WOev12dfuIzNYXJVrwVU1nZrVSdhsqy2FagivbAPKTJduBI8wA75cF8JnCXh6nXl+oHevtO9NHIwpPzwAsYf339Ui+CMD9BBy1xWoqfCw+SomVLnKm2SG2Ulp7fw5xbLCNVDmLu3bkkUgbf9pLeZH5M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758674645; c=relaxed/simple;
-	bh=lDyEitQV9bDZhJu0i2I5qfrBKEYYJs7SwHJwp+ziUHo=;
-	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type; b=KDYC2D9cSdBQss/x9gDFQ0fGo5FkPSl5OJIK0RNwC43fmJTusqbYTrlbKjTV0LXNc5UbqozS4JRe2N/gidKKhuT9IdKfNnTHyW3yM/iUKSq8OTDJZKEDhPIorMpxzy1+oNin5z0TzO+ZodpdVE43hew9GudclUZjJ6+w9Ue+QqE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=maguitec.com.mx; spf=pass smtp.mailfrom=bounce-zem.maguitec.com.mx; dkim=pass (1024-bit key) header.d=maguitec.com.mx header.i=@maguitec.com.mx header.b=c5e6TRla; arc=pass smtp.client-ip=136.143.188.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=maguitec.com.mx
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bounce-zem.maguitec.com.mx
-ARC-Seal: i=1; a=rsa-sha256; t=1758674643; cv=none; 
-	d=us.zohomail360.com; s=zohoarc; 
-	b=M0YLIfd7tBDqqfvKxhvTHFXqbHIfv083vQLeVTDN/vod7B9GMfUOHfng6U04AgQlU0pvimkWU69WKh9Ki2oUWhXVKNBFg1cNhtKq/EMiFUdLlNe+AnxZpA/wg1LH/bNRoEQxTtqf1fJwtAkAfyBNgDmNSP6MEk/2PxVKvC12C4I=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=us.zohomail360.com; s=zohoarc; 
-	t=1758674643; h=Content-Type:Content-Transfer-Encoding:Date:Date:From:From:MIME-Version:Message-ID:Reply-To:Reply-To:Subject:Subject:To:To:Message-Id:Cc; 
-	bh=lDyEitQV9bDZhJu0i2I5qfrBKEYYJs7SwHJwp+ziUHo=; 
-	b=P234gn5YShS9JrQ8RpEhrGq4s75js+6cVX4xFANZXWKNG9jMe5/lmXW2ndLAY4fmB5dEUbwQqRqd/uEdHLnhaCeG21g30asN9AoA8GMcKKx/in9omprYGH04pNhevDEovlLP1yb51NU66ojA7Jbf4wMlFZxlIj+bjSOIaJ8s5+s=
-ARC-Authentication-Results: i=1; mx.us.zohomail360.com;
-	dkim=pass  header.i=maguitec.com.mx;
-	spf=pass  smtp.mailfrom=investorrelations+9ab53490-98d8-11f0-ace3-525400721611_vt1@bounce-zem.maguitec.com.mx;
-	dmarc=pass header.from=<investorrelations@maguitec.com.mx>
-Received: by mx.zohomail.com with SMTPS id 175867165324018.224299141755637;
-	Tue, 23 Sep 2025 16:54:13 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; b=c5e6TRlaMkGfsLMs2JIq58ggu19VKvsVk2F/0gYkG8YmqlXchjc5+9fmD4MLsmd66V1vTk2NR5bOQJMEw8bW/RQa3zyMVHqOGsB+VUj7Jz3URE76c39wNntrkdgw+4/0QH9YFzW2jOsjKNwh8O/XU/6zA2lAusnL0+6B6yQHdVA=; c=relaxed/relaxed; s=15205840; d=maguitec.com.mx; v=1; bh=lDyEitQV9bDZhJu0i2I5qfrBKEYYJs7SwHJwp+ziUHo=; h=date:from:reply-to:to:message-id:subject:mime-version:content-type:content-transfer-encoding:date:from:reply-to:to:message-id:subject;
-Date: Tue, 23 Sep 2025 16:54:13 -0700 (PDT)
-From: Al Sayyid Sultan <investorrelations@maguitec.com.mx>
-Reply-To: investorrelations@alhaitham-investment.ae
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B88C1E5201;
+	Wed, 24 Sep 2025 05:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.63.120.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758693460; cv=none; b=Anx73uhOGvGgmHMaOPIzEc6Vnma7Yj1nM+EdslMNfnnbGsgniAQIHhmT6m76861lED3+ODsN4FIurkZw+utyUKHSiXRCwg2ywrtWEEUZzeNe3ZG/O55DDHZ/irJ3RwWrufzJON21IAXucO0St3H+JUmlbvk212+i8srrVsIdvzg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758693460; c=relaxed/simple;
+	bh=gWtaD8J/MmBzlfSJfuf9O1PVbCH067bQX5NwH2uFFUc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Vf8fhgaNyy+Rn1D2tzqSb2p8uzoLvfrVSW9d7B+XT31gAhWx03eYtaYdo7IvmOFtW24dcxdwBVDCaQ9ndnCBUPwF4qkwi9973Yw1TkOjz1LNZuWX7YjVx2Z3+K4CZCVRuH/TR765BLhLWaWGuCTe5KKPG1L0pbV62q2lql3KJPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cyano.uk; spf=pass smtp.mailfrom=cyano.uk; dkim=pass (2048-bit key) header.d=cyano.uk header.i=@cyano.uk header.b=Khj/wg8z; arc=none smtp.client-ip=45.63.120.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cyano.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyano.uk
+From: Xinhui Yang <cyan@cyano.uk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyano.uk; s=dkim;
+	t=1758693450;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vELpMf9fZyufUspIux90dzw4JTMd+gKytB4HMgzT97g=;
+	b=Khj/wg8zzsCfp3fjMbMAroHbiKE2MFj0Yr6s/WFXtXWj/q20P4zMXG3JWcGXT+nnNoRGYR
+	b+IMbsw9bCI3h3Kf6yRXw616z4I3im4EIcpyQ1IVezu6zV1RyLAkGWpqrVxaEQ9Lb730vZ
+	hA5IOWJhb3rsARpImVVmiqbJsMuQXTJGWuKpvayJW/o5ssh602AKFK14xEY+ErAU2wmNxv
+	MmDStMNnyDVbTlDir7J/1PxY0HIXSDh/2eiGw2wwcs+T4jWOQz3/hJNxAaKj7p+vxWMLMY
+	J+9WDmkDWQ3XRArhkU5y00Yw2lwDoBOIdtZNKbGEAHo4RmQnXzSLxsts2mU9ZQ==
+Authentication-Results: jupiter.guys.cyano.uk;
+	auth=pass smtp.mailfrom=cyan@cyano.uk
 To: linux-scsi@vger.kernel.org
-Message-ID: <2d6f.1aedd99b146bc1ac.m1.9ab53490-98d8-11f0-ace3-525400721611.19978ffc659@bounce-zem.maguitec.com.mx>
-Subject: Thematic Funds Letter Of Intent
+Cc: stable@vger.kernel.org,
+	Mingcong Bai <jeffbai@aosc.io>,
+	Kexy Biscuit <kexybiscuit@aosc.io>,
+	Xinhui Yang <cyan@cyano.uk>,
+	Oliver Neukum <oliver@neukum.org>,
+	Ali Akcaagac <aliakc@web.de>,
+	Jamie Lenehan <lenehan@twibble.org>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v4 0/2] dc395x: fix compiler warnings and improve formatting of the macros
+Date: Wed, 24 Sep 2025 13:56:25 +0800
+Message-ID: <20250924055628.1929177-1-cyan@cyano.uk>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-content-transfer-encoding-Orig: quoted-printable
-content-type-Orig: text/plain;\r\n\tcharset="utf-8"
-Original-Envelope-Id: 2d6f.1aedd99b146bc1ac.m1.9ab53490-98d8-11f0-ace3-525400721611.19978ffc659
-X-JID: 2d6f.1aedd99b146bc1ac.s1.9ab53490-98d8-11f0-ace3-525400721611.19978ffc659
-TM-MAIL-JID: 2d6f.1aedd99b146bc1ac.m1.9ab53490-98d8-11f0-ace3-525400721611.19978ffc659
-X-App-Message-ID: 2d6f.1aedd99b146bc1ac.m1.9ab53490-98d8-11f0-ace3-525400721611.19978ffc659
-X-Report-Abuse: <abuse+2d6f.1aedd99b146bc1ac.m1.9ab53490-98d8-11f0-ace3-525400721611.19978ffc659@zeptomail.com>
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: /
 
-To: linux-scsi@vger.kernel.org
-Date: 24-09-2025
-Thematic Funds Letter Of Intent
+This series of patches clears the compiler warnings for the dc395x
+driver.
 
-It's a pleasure to connect with you
+The first patch introduces a new macro that casts the value returned by
+a read operation to void, since some values returned by some specific
+read operations (which just simply clears the FIFO buffer or resets the
+interrupt status) can be ignored. Creating a new macro that casts the
+return value to void to fix the warning.
 
-Having been referred to your investment by my team, we would be=20
-honored to review your available investment projects for onward=20
-referral to my principal investors who can allocate capital for=20
-the financing of it.
+During the fix, checkpatch.pl complained about missing white space
+between macro arguments and missing parentheses around complex
+expressions. To align with the changes in the first patch, the
+formatting of macros above and below the introduced macro are also
+fixed.
 
-kindly advise at your convenience
+Since in Patch v2 [2] Bart pointed out that such change can't be made
+to the stable tree, the patch is split to two parts.
 
-Best Regards,
+---
+Changes since v3 [1]:
+- Undo some mistakes in the patch 2 of the patch v2 where extra
+  parentheses are added around function calls.
+- Remove the unnecessary casts from the inb(), inw() and inl() calls,
+  so that extra parentheses are no longer required. They are now returns
+  the type it was being casted to, as James pointed out.
 
-Respectfully,
-Al Sayyid Sultan Yarub Al Busaidi
-Director
+Changes since v2 [2]:
+- Split the patch into two parts, the first one fixes the warning, and
+  the second one improves the formatting of the surrounding macros.
+- Make the description of the formatting changes more clear.
+
+Changes since v1 [3]:
+- Add Cc: tag to include this patch to the stable tree.
+- Add additional description about the formatting changes.
+
+[1]: https://lore.kernel.org/linux-scsi/20250923125226.1883391-1-cyan@cyano.uk/
+[2]: https://lore.kernel.org/linux-scsi/20250922152609.827311-1-cyan@cyano.uk/
+[3]: https://lore.kernel.org/linux-scsi/20250922143619.824129-1-cyan@cyano.uk/
+
+---
+Xinhui Yang (2):
+  scsi: dc395x: correctly discard the return value in certain reads
+  scsi: dc395x: improve code formatting for the macros
+
+ drivers/scsi/dc395x.c | 34 ++++++++++++++++++++--------------
+ 1 file changed, 20 insertions(+), 14 deletions(-)
+
+---
+Xinhui Yang (2):
+  scsi: dc395x: correctly discard the return value in certain reads
+  scsi: dc395x: improve code formatting for the macros
+
+ drivers/scsi/dc395x.c | 34 ++++++++++++++++++++--------------
+ 1 file changed, 20 insertions(+), 14 deletions(-)
+
+-- 
+2.51.0
+
 
