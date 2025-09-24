@@ -1,61 +1,61 @@
-Return-Path: <linux-scsi+bounces-17518-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17520-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAB2EB9C08F
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Sep 2025 22:33:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BEFBB9C125
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Sep 2025 22:35:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 569957A2962
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Sep 2025 20:32:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D38863AF7AF
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Sep 2025 20:34:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CB0532A83A;
-	Wed, 24 Sep 2025 20:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD3532A82F;
+	Wed, 24 Sep 2025 20:32:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="fId7ZuAt"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="EMz2ED4u"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 003.mia.mailroute.net (003.mia.mailroute.net [199.89.3.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75FB532A809
-	for <linux-scsi@vger.kernel.org>; Wed, 24 Sep 2025 20:32:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22AC32BF54
+	for <linux-scsi@vger.kernel.org>; Wed, 24 Sep 2025 20:32:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758745969; cv=none; b=HeJ40+e4eQup0BvxWoGGtiFY0x+s9BdtvolK4KdAQzBgxAJaKXkWaMq8Dg+e+TQSbU1NlfYQ+MLypeRuceru5xXwy1PyHZgDAGDEKCM0DdI/k1/0ylim8GhKdKqvn9HJfr4uY7PkfIfRhs8DtdJfZ+6ni6zh87FGguAHRLXfono=
+	t=1758745977; cv=none; b=riyskEzXdu50dXAE4IvQaOXToNiCfWxZ+SQ5hw8QjpTZz0Ig3Z5yRom/deYApZIx3kKf0BrEnLTimi65RrEUhe/QWiL8Fl4ZmjZMg26MPFw6BKH94S+o6/Jcy/zjl/A+Rqn7q8b95CqPl0bLqwVJNj4JCr4acLjAIodd9L06JP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758745969; c=relaxed/simple;
-	bh=KaiHorPoPtbtnNsEf7Ovyp6Wo6AKoJPpdgrV6b/hhX8=;
+	s=arc-20240116; t=1758745977; c=relaxed/simple;
+	bh=nCedrCeDBo2CZKg923h80VSYng8+ckDQ3LJxubaldtg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fedZpCgj00dj/kVNSrfW6vWh0bsU52AUAhSbgTcTTezF0bLTVcGsI2EcYndCw5dTKyla/tGP0frsXXgrMr1m3cndtMFMgwZtVV0LfohepS3WFLcaT2DL5KHYe7yPXaAdpgwL5U0KZuxlyqAKsEvSpDlGt8A5DAqUz82V/33AcBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=fId7ZuAt; arc=none smtp.client-ip=199.89.3.6
+	 MIME-Version; b=nUOV23z1NQafKEjW85oBc8IkAb2llWEzpofW7gfdNQrvMrD91XSqVz1bjmvWxEvu0u27V26+yNqHF+s5IdtuWNSYdjKfEbHqiw45+YASj2sqQuoWE7yeIM6OKF5AG5Z7nWvHji7nm2mJmnL0cDfn7KJSzSXwwPvsjALpGkj6BkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=EMz2ED4u; arc=none smtp.client-ip=199.89.3.6
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 003.mia.mailroute.net (Postfix) with ESMTP id 4cX7np5XYzzlgqyg;
-	Wed, 24 Sep 2025 20:32:46 +0000 (UTC)
+	by 003.mia.mailroute.net (Postfix) with ESMTP id 4cX7nz0TH2zlgqyg;
+	Wed, 24 Sep 2025 20:32:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1758745964; x=1761337965; bh=VguU2
-	ijypgVhM70tTusF2MKhwweeU1dvuAv9ct541FA=; b=fId7ZuAtOkKPpvzdDlpwc
-	7ihAPROTL1DvH3InBacs7JmuQ+laAFVKyy7aXE9oqxKMCP1yxQTi+6oHatxjPuT9
-	KnRcDBCi4RV0Lv3ghB/FZvnVtox/Dgb8jqqey5itsrh/tA8jedQPYHzYpgsAkoKZ
-	gF744RnGy6/cCMpGfKql4GcbbpKzE2yv5NagmJzUq+4EH3d3IGY41rnTgHTOYRvq
-	fL9hbr6UCISnb9u2UudSAnWm0P7VmT8pQAd/FnmeGe/6tFZyuXJJikP+8PdCM9Ny
-	triiJpxmoXCCEjGXrOdIBCTAwco6OpV6T3xEIqRcEELhr+9EQE3B4uao+7iZIp7J
+	:received:received; s=mr01; t=1758745973; x=1761337974; bh=YRIOx
+	OnQnQ5ZRzpXiHuCzWGMCbhKzy2iOtlaLiaQ0gg=; b=EMz2ED4u+ZZeNIM2qVow+
+	imUrXhjLR+TWb0CNNcPYuKmmrim0M4yKEmvhEZdq4ceH698c/NBtGcOzOoSfV9Tf
+	955r3L5SKBEdNxEi879HuW+eFB8TD8Ezfl+9c97ex6JeKu88qyiuWkdSAF3HouAL
+	Ai+0abC9bxRTbMP1gwTKfp9sFgLbzV41OP7Q+YObW8eh39Le+n8115pRwRwPS/71
+	uz7DikflTve59d3F7hf7Zk6NU6W7eWoqR3O3gSL6PSLrdf5BXjFUEaEQLwz0HXZS
+	Rflhy68Y/sI2fWsWP0C/qZ0y4gtTDQCsB5mEvmeXOMEBRLUpLzAFZb24OryRmszz
 	A==
 X-Virus-Scanned: by MailRoute
 Received: from 003.mia.mailroute.net ([127.0.0.1])
  by localhost (003.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id Gn0eWDZPCDwy; Wed, 24 Sep 2025 20:32:44 +0000 (UTC)
+ id RcMMrBfHejcg; Wed, 24 Sep 2025 20:32:53 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 003.mia.mailroute.net (Postfix) with ESMTPSA id 4cX7ng2pkpzlgqyG;
-	Wed, 24 Sep 2025 20:32:38 +0000 (UTC)
+	by 003.mia.mailroute.net (Postfix) with ESMTPSA id 4cX7nq500XzlgqyB;
+	Wed, 24 Sep 2025 20:32:46 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
@@ -66,9 +66,9 @@ Cc: linux-scsi@vger.kernel.org,
 	Matthias Brugger <matthias.bgg@gmail.com>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	Bean Huo <beanhuo@micron.com>
-Subject: [PATCH v5 09/28] ufs: core: Change the type of one ufshcd_add_cmd_upiu_trace() argument
-Date: Wed, 24 Sep 2025 13:30:28 -0700
-Message-ID: <20250924203142.4073403-10-bvanassche@acm.org>
+Subject: [PATCH v5 10/28] ufs: core: Only call ufshcd_add_command_trace() for SCSI commands
+Date: Wed, 24 Sep 2025 13:30:29 -0700
+Message-ID: <20250924203142.4073403-11-bvanassche@acm.org>
 X-Mailer: git-send-email 2.51.0.536.g15c5d4f767-goog
 In-Reply-To: <20250924203142.4073403-1-bvanassche@acm.org>
 References: <20250924203142.4073403-1-bvanassche@acm.org>
@@ -80,55 +80,45 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Change the 'tag' argument into an LRB pointer. This patch prepares for th=
-e
-removal of the hba->lrb[] array.
+Instead of checking inside ufshcd_add_command_trace() whether 'cmd' point=
+s
+at a SCSI command, let the caller perform that check. This patch prepares
+for removing the lrbp->cmd pointer.
 
 Reviewed-by: Avri Altman <avri.altman@sandisk.com>
 Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/ufs/core/ufshcd.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/ufs/core/ufshcd.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index cfc149f8238e..fa3d5a0a7db7 100644
+index fa3d5a0a7db7..394cc1b5719b 100644
 --- a/drivers/ufs/core/ufshcd.c
 +++ b/drivers/ufs/core/ufshcd.c
-@@ -408,10 +408,11 @@ static void ufshcd_configure_wb(struct ufs_hba *hba=
-)
- 		ufshcd_wb_toggle_buf_flush(hba, true);
- }
-=20
--static void ufshcd_add_cmd_upiu_trace(struct ufs_hba *hba, unsigned int =
-tag,
-+static void ufshcd_add_cmd_upiu_trace(struct ufs_hba *hba,
-+				      struct ufshcd_lrb *lrb,
- 				      enum ufs_trace_str_t str_t)
- {
--	struct utp_upiu_req *rq =3D hba->lrb[tag].ucd_req_ptr;
-+	struct utp_upiu_req *rq =3D lrb->ucd_req_ptr;
- 	struct utp_upiu_header *header;
-=20
- 	if (!trace_ufshcd_upiu_enabled())
-@@ -420,7 +421,7 @@ static void ufshcd_add_cmd_upiu_trace(struct ufs_hba =
-*hba, unsigned int tag,
- 	if (str_t =3D=3D UFS_CMD_SEND)
- 		header =3D &rq->header;
- 	else
--		header =3D &hba->lrb[tag].ucd_rsp_ptr->header;
-+		header =3D &lrb->ucd_rsp_ptr->header;
-=20
- 	trace_ufshcd_upiu(hba, str_t, header, &rq->sc.cdb,
- 			  UFS_TSF_CDB);
-@@ -494,7 +495,7 @@ static void ufshcd_add_command_trace(struct ufs_hba *=
+@@ -491,9 +491,6 @@ static void ufshcd_add_command_trace(struct ufs_hba *=
 hba, unsigned int tag,
- 		return;
+ 	struct request *rq =3D scsi_cmd_to_rq(cmd);
+ 	int transfer_len =3D -1;
 =20
+-	if (!cmd)
+-		return;
+-
  	/* trace UPIU also */
--	ufshcd_add_cmd_upiu_trace(hba, tag, str_t);
-+	ufshcd_add_cmd_upiu_trace(hba, lrbp, str_t);
+ 	ufshcd_add_cmd_upiu_trace(hba, lrbp, str_t);
  	if (!trace_ufshcd_command_enabled())
- 		return;
+@@ -2368,9 +2365,10 @@ void ufshcd_send_command(struct ufs_hba *hba, unsi=
+gned int task_tag,
+ 		lrbp->compl_time_stamp =3D ktime_set(0, 0);
+ 		lrbp->compl_time_stamp_local_clock =3D 0;
+ 	}
+-	ufshcd_add_command_trace(hba, task_tag, UFS_CMD_SEND);
+-	if (lrbp->cmd)
++	if (lrbp->cmd) {
++		ufshcd_add_command_trace(hba, task_tag, UFS_CMD_SEND);
+ 		ufshcd_clk_scaling_start_busy(hba);
++	}
+ 	if (unlikely(ufshcd_should_inform_monitor(hba, lrbp)))
+ 		ufshcd_start_monitor(hba, lrbp);
 =20
 
