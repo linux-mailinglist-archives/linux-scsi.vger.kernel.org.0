@@ -1,45 +1,45 @@
-Return-Path: <linux-scsi+bounces-17484-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17490-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7629FB99389
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Sep 2025 11:45:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4B0BB9939E
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Sep 2025 11:46:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A5A7171862
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Sep 2025 09:45:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B417B1B24476
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Sep 2025 09:46:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D70EA2D94A5;
-	Wed, 24 Sep 2025 09:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 841F12D97AC;
+	Wed, 24 Sep 2025 09:45:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="gcxZM7jI"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="VBgJEDz8"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 764E72D5957
-	for <linux-scsi@vger.kernel.org>; Wed, 24 Sep 2025 09:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DEA92D97AA
+	for <linux-scsi@vger.kernel.org>; Wed, 24 Sep 2025 09:45:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758707142; cv=none; b=PwSqg7x3O0NIh0RuCjr/pMUtOPl5R7cbORzO04lMwPAWq1+N2GDl1BXYbPnDi0M98xTHawh+kqYi3E2u6CSLQfZexFyMhZWU87aaCPWf4ouiM41BKzLRsX2kqz5T5AUE2yK2iMEFtLSLCF5++AjFEl4ft2JtyoxdDGT8VNvit/c=
+	t=1758707147; cv=none; b=nXykdQ0DqHKW0KQQjtPxvY0GXeqIaqs/b1/SLmz7YgDLLVIjFGRp/HcbaHFNA+qZK1EDscQ5IS0+i/GujA2dt0GGPS0ND8Tpxj87S441ZZVX/F//cY7iRTkyNmQ3HWhPYA+aaZAqwmOTFiMhhm58oparyIBo9uRMEESlTrf4xDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758707142; c=relaxed/simple;
-	bh=0rcW9T/6PmIE12dAyVYRxweZM/jKTXYzf2LTCrXQQL4=;
+	s=arc-20240116; t=1758707147; c=relaxed/simple;
+	bh=PLVGumJUU9hKZvM8NWnon0rEFhRQ2y36lAKwS2Cv2YY=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mQtkxaeQfIykltCPoC9koYzkGJLCJJt9AMbjkC+zoKel/72Ccb/EPIPbhK2uKfR1JrpxpoNVSy5MEsTKmQcNv156dEsNt86ezsI5ezI0ZqY1ULc3bE2OPhaMugveVfbsg13+vXknga2PP7Sd5lM/GN8DxfBXiUbzjZY0kKgFmRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=gcxZM7jI; arc=none smtp.client-ip=210.61.82.184
+	 MIME-Version:Content-Type; b=D64EFPnFlVZ6t20iPYA3xJ/EAQMBB+CAVegK0n+JukVVMyL67t0tv3s9z3NC+Q7IyUgF3XqnlnTZavv6sxOXmbkTWH2Z+6xiI+ZRYy1sgEiDp4UM5Tyjv4Ydrd2y/iD9UGB4Ua4OC7k/GMqnHqd9RK4onsMdeiQH88lsKdAyEGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=VBgJEDz8; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 3522e4c6992b11f0b33aeb1e7f16c2b6-20250924
+X-UUID: 35d592a6992b11f0b33aeb1e7f16c2b6-20250924
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=PEtB/jeXGm36SGW9vystyOKcTh+yx2yGuulGhP8QtBc=;
-	b=gcxZM7jICqzQObbMB/R41yV/krgDu4XDdnDI7O+CxFUFTxtxCO9f83XlDtJ7wPRkFtHeRIS8SD5X4kmLbeDMO5U1OzKHF5cZJO/HmsPP1kLcTc1PYPiG/ZJUdDowdOSC2AGhpbV0NKyzOgVyPKkwUlQZazNChivsYk8fOfZ9a2k=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=si3j8d5cgVjUsmGkTpHa4AhEh9vW1KoViw9giBVSot4=;
+	b=VBgJEDz8QI7FqPP/L6rGDF3YqOvy3UjARIN0sgC2apd+0C79ds/Hpgts7cYTpvtvCdvRLT9TRkMsycu+PBmNebb3YjUqTxLAUbqvmB5lPBnOnKfD58N2JbLxtK7lXB/QwMepxBCjRSvIPF3NzykN3ufAd6Fof6ESZymkta9CzNs=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.4,REQID:7705ae98-b619-46cb-b674-d571c29f660b,IP:0,UR
-	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-25
-X-CID-META: VersionHash:1ca6b93,CLOUDID:c4decc21-c299-443d-bb51-d77d2f000e20,B
+X-CID-O-INFO: VERSION:1.3.4,REQID:28a4d135-bf63-4b56-95d6-e6e93568cdec,IP:0,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:-5
+X-CID-META: VersionHash:1ca6b93,CLOUDID:0c3ce56c-8443-424b-b119-dc42e68239b0,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|836|888|898,TC:-5,Content:
 	0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,
 	OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
@@ -47,13 +47,13 @@ X-CID-BVR: 3,DMD|SSN|SDN
 X-CID-BAS: 3,DMD|SSN|SDN,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 3522e4c6992b11f0b33aeb1e7f16c2b6-20250924
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+X-UUID: 35d592a6992b11f0b33aeb1e7f16c2b6-20250924
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
 	(envelope-from <peter.wang@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 2118368908; Wed, 24 Sep 2025 17:45:30 +0800
+	with ESMTP id 1212084665; Wed, 24 Sep 2025 17:45:31 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
+ MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.1748.10; Wed, 24 Sep 2025 17:45:29 +0800
 Received: from mtksitap99.mediatek.inc (10.233.130.16) by
@@ -68,9 +68,9 @@ CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
 	<yi-fan.peng@mediatek.com>, <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
 	<tun-yu.yu@mediatek.com>, <eddie.huang@mediatek.com>,
 	<naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>, <bvanassche@acm.org>
-Subject: [PATCH v2 6/8] ufs: host: mediatek: Remove duplicate function
-Date: Wed, 24 Sep 2025 17:43:28 +0800
-Message-ID: <20250924094527.2992256-7-peter.wang@mediatek.com>
+Subject: [PATCH v2 7/8] ufs: host: mediatek: Add support for new platform with MMIO_OTSD_CTR
+Date: Wed, 24 Sep 2025 17:43:29 +0800
+Message-ID: <20250924094527.2992256-8-peter.wang@mediatek.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250924094527.2992256-1-peter.wang@mediatek.com>
 References: <20250924094527.2992256-1-peter.wang@mediatek.com>
@@ -86,83 +86,135 @@ X-MTK: N
 
 From: Peter Wang <peter.wang@mediatek.com>
 
-Remove the duplicate ufs_mtk_us_to_ahit function in the UFS
-Mediatek driver and export the existing ufshcd_us_to_ahit
-function for shared use. This change reduces redundancy
-and maintains consistency across the codebase.
+Introduce support for a new UFS Mediatek platform by adding
+the REG_UFS_UFS_MMIO_OTSD_CTRL register. This update includes
+checks for legacy platforms and uses the new register to
+replace debug selection and handle specific operations.
+The changes ensure compatibility across different hardware
+versions and prevent potential issues with debug usage on
+newer platforms.
+
+Additional updates include error logging improvements
+during link setup for newer and legacy platforms, ensuring
+proper event logging and debugging.
 
 Signed-off-by: Peter Wang <peter.wang@mediatek.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/ufs/core/ufs-sysfs.c    |  3 ++-
- drivers/ufs/host/ufs-mediatek.c | 14 +-------------
- include/ufs/ufshcd.h            |  1 +
- 3 files changed, 4 insertions(+), 14 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 42 +++++++++++++++++++++++++++------
+ drivers/ufs/host/ufs-mediatek.h |  1 +
+ 2 files changed, 36 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
-index 4bd7d491e3c5..0fb236ce7f4c 100644
---- a/drivers/ufs/core/ufs-sysfs.c
-+++ b/drivers/ufs/core/ufs-sysfs.c
-@@ -235,7 +235,7 @@ static int ufshcd_ahit_to_us(u32 ahit)
- }
- 
- /* Convert microseconds to Auto-Hibernate Idle Timer register value */
--static u32 ufshcd_us_to_ahit(unsigned int timer)
-+u32 ufshcd_us_to_ahit(unsigned int timer)
- {
- 	unsigned int scale;
- 
-@@ -245,6 +245,7 @@ static u32 ufshcd_us_to_ahit(unsigned int timer)
- 	return FIELD_PREP(UFSHCI_AHIBERN8_TIMER_MASK, timer) |
- 	       FIELD_PREP(UFSHCI_AHIBERN8_SCALE_MASK, scale);
- }
-+EXPORT_SYMBOL_GPL(ufshcd_us_to_ahit);
- 
- static int ufshcd_read_hci_reg(struct ufs_hba *hba, u32 *val, unsigned int reg)
- {
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index c00e62adbbda..3e54154d5547 100644
+index 3e54154d5547..8498e95e263a 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1109,18 +1109,6 @@ static void ufs_mtk_setup_clk_gating(struct ufs_hba *hba)
- 	}
- }
+@@ -280,6 +280,9 @@ static int ufs_mtk_hce_enable_notify(struct ufs_hba *hba,
+ 			      ufshcd_readl(hba, REG_UFS_XOUFS_CTRL) | 0x80,
+ 			      REG_UFS_XOUFS_CTRL);
  
--/* Convert microseconds to Auto-Hibernate Idle Timer register value */
--static u32 ufs_mtk_us_to_ahit(unsigned int timer)
--{
--	unsigned int scale;
--
--	for (scale = 0; timer > UFSHCI_AHIBERN8_TIMER_MASK; ++scale)
--		timer /= UFSHCI_AHIBERN8_SCALE_FACTOR;
--
--	return FIELD_PREP(UFSHCI_AHIBERN8_TIMER_MASK, timer) |
--	       FIELD_PREP(UFSHCI_AHIBERN8_SCALE_MASK, scale);
--}
--
- static void ufs_mtk_fix_ahit(struct ufs_hba *hba)
++		if (host->legacy_ip_ver)
++			return 0;
++
+ 		/* DDR_EN setting */
+ 		if (host->ip_ver >= IP_VER_MT6989) {
+ 			ufshcd_rmwl(hba, UFS_MASK(0x7FFF, 8),
+@@ -405,7 +408,7 @@ static void ufs_mtk_dbg_sel(struct ufs_hba *hba)
  {
- 	unsigned int us;
-@@ -1143,7 +1131,7 @@ static void ufs_mtk_fix_ahit(struct ufs_hba *hba)
- 			break;
- 		}
+ 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
  
--		hba->ahit = ufs_mtk_us_to_ahit(us);
-+		hba->ahit = ufshcd_us_to_ahit(us);
- 	}
+-	if (((host->ip_ver >> 16) & 0xFF) >= 0x36) {
++	if (!host->legacy_ip_ver && host->ip_ver >= IP_VER_MT6983) {
+ 		ufshcd_writel(hba, 0x820820, REG_UFS_DEBUG_SEL);
+ 		ufshcd_writel(hba, 0x0, REG_UFS_DEBUG_SEL_B0);
+ 		ufshcd_writel(hba, 0x55555555, REG_UFS_DEBUG_SEL_B1);
+@@ -422,6 +425,7 @@ static int ufs_mtk_wait_idle_state(struct ufs_hba *hba,
+ 	u64 timeout, time_checked;
+ 	u32 val, sm;
+ 	bool wait_idle;
++	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
  
- 	ufs_mtk_setup_clk_gating(hba);
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 53b837b024ce..ff0143502413 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1484,5 +1484,6 @@ int ufshcd_update_ee_control(struct ufs_hba *hba, u16 *mask,
- 			     const u16 *other_mask, u16 set, u16 clr);
- void ufshcd_force_error_recovery(struct ufs_hba *hba);
- void ufshcd_pm_qos_update(struct ufs_hba *hba, bool on);
-+u32 ufshcd_us_to_ahit(unsigned int timer);
+ 	/* cannot use plain ktime_get() in suspend */
+ 	timeout = ktime_get_mono_fast_ns() + retry_ms * 1000000UL;
+@@ -432,8 +436,13 @@ static int ufs_mtk_wait_idle_state(struct ufs_hba *hba,
  
- #endif /* End of Header */
+ 	do {
+ 		time_checked = ktime_get_mono_fast_ns();
+-		ufs_mtk_dbg_sel(hba);
+-		val = ufshcd_readl(hba, REG_UFS_PROBE);
++		if (host->legacy_ip_ver || host->ip_ver < IP_VER_MT6899) {
++			ufs_mtk_dbg_sel(hba);
++			val = ufshcd_readl(hba, REG_UFS_PROBE);
++		} else {
++			val = ufshcd_readl(hba, REG_UFS_UFS_MMIO_OTSD_CTRL);
++			val = val >> 16;
++		}
+ 
+ 		sm = val & 0x1f;
+ 
+@@ -465,13 +474,20 @@ static int ufs_mtk_wait_link_state(struct ufs_hba *hba, u32 state,
+ {
+ 	ktime_t timeout, time_checked;
+ 	u32 val;
++	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
+ 
+ 	timeout = ktime_add_ms(ktime_get(), max_wait_ms);
+ 	do {
+ 		time_checked = ktime_get();
+-		ufs_mtk_dbg_sel(hba);
+-		val = ufshcd_readl(hba, REG_UFS_PROBE);
+-		val = val >> 28;
++
++		if (host->legacy_ip_ver || host->ip_ver < IP_VER_MT6899) {
++			ufs_mtk_dbg_sel(hba);
++			val = ufshcd_readl(hba, REG_UFS_PROBE);
++			val = val >> 28;
++		} else {
++			val = ufshcd_readl(hba, REG_UFS_UFS_MMIO_OTSD_CTRL);
++			val = val >> 24;
++		}
+ 
+ 		if (val == state)
+ 			return 0;
+@@ -1639,14 +1655,26 @@ static int ufs_mtk_device_reset(struct ufs_hba *hba)
+ static int ufs_mtk_link_set_hpm(struct ufs_hba *hba)
+ {
+ 	int err;
++	u32 val;
++	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
+ 
+ 	err = ufshcd_hba_enable(hba);
+ 	if (err)
+ 		return err;
+ 
+ 	err = ufs_mtk_unipro_set_lpm(hba, false);
+-	if (err)
++	if (err) {
++		if (host->ip_ver < IP_VER_MT6899) {
++			ufs_mtk_dbg_sel(hba);
++			val = ufshcd_readl(hba, REG_UFS_PROBE);
++		} else {
++			val = ufshcd_readl(hba, REG_UFS_UFS_MMIO_OTSD_CTRL);
++		}
++		ufshcd_update_evt_hist(hba, UFS_EVT_RESUME_ERR, (u32)val);
++		val = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
++		ufshcd_update_evt_hist(hba, UFS_EVT_RESUME_ERR, (u32)val);
+ 		return err;
++	}
+ 
+ 	err = ufshcd_uic_hibern8_exit(hba);
+ 	if (err)
+diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
+index dfbf78bd8664..f96fd032371d 100644
+--- a/drivers/ufs/host/ufs-mediatek.h
++++ b/drivers/ufs/host/ufs-mediatek.h
+@@ -28,6 +28,7 @@
+  */
+ #define REG_UFS_XOUFS_CTRL          0x140
+ #define REG_UFS_REFCLK_CTRL         0x144
++#define REG_UFS_UFS_MMIO_OTSD_CTRL  0x14C
+ #define REG_UFS_MMIO_OPT_CTRL_0     0x160
+ #define REG_UFS_EXTREG              0x2100
+ #define REG_UFS_MPHYCTRL            0x2200
 -- 
 2.45.2
 
