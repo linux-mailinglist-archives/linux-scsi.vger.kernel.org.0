@@ -1,62 +1,62 @@
-Return-Path: <linux-scsi+bounces-17590-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17592-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64194BA2032
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Sep 2025 02:02:30 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F6EBBA2038
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Sep 2025 02:02:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 522234E2DBA
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Sep 2025 00:02:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CDE324E055E
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Sep 2025 00:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD08C34BA3F;
-	Fri, 26 Sep 2025 00:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD2034BA4D;
+	Fri, 26 Sep 2025 00:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TpUXTlty"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fKVYRqSC"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0312D11712
-	for <linux-scsi@vger.kernel.org>; Fri, 26 Sep 2025 00:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7AABC8FE
+	for <linux-scsi@vger.kernel.org>; Fri, 26 Sep 2025 00:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758844948; cv=none; b=QZuLk8nX5HnEIkyuxGszEMgf9/M99ecAoWEf8rP2VAtLYVJcFSZCgVyRUt5+dt1LyRxnWQS1QmvmuTQbgrPzGVTVr52NO4xkuxjTsPR1YaPE3fyyqw4MdfUuKbzC5l1dKwCTYpNYxH9c0I/mNM0bnOgdRvp4yiDtebdv2ZT7Wh4=
+	t=1758844954; cv=none; b=iPiQtzxZ71Bw3Qr/Glm3/o6f42+38jK8WOxEQel1DXSuFjDNwkWmmacv0BfeYmod7JAxfn2sEo3crk08wWn7EeMDUDie9kTmf7bK0q09GdYrDoOyJPIN1wdGcdK9lg4wHKtB4J53KtQjVVGlaJwHd5pYFEOIuodLP0yYjtYlnV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758844948; c=relaxed/simple;
-	bh=lXxztFXLbRkKjFp5h0JfLivhxUtWR/+R1fM4+hTrvV4=;
+	s=arc-20240116; t=1758844954; c=relaxed/simple;
+	bh=f3iGYrIuNGvLeOs66a9538IX58L0sm5VY+ILY6RQzuE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-type; b=WrQAs3YHThbe2v5mYNGGIuotxxYmcY8VAZvySnBxaMCjYGxjDCR6SyH0Q/dL4tV6S2miG6nkklUgb65lC4nCSFgew3muIz1S3zajE1yHwOhmFb++i03TZHLOWB/C1GqDNXJehqq9tuDvHCcaZo/yKCm7vLmrJB1DXkNG1ek0DNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TpUXTlty; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version:Content-type; b=RRRk8b4ezqF7B/te9114XH+JqiwTVpNqbAIE1OfBm41Plp5Kb9Z51zsmGQ9EBTftcf1HAKMIlUJEiNLFwLqzDDBUZHqstgKdM0v++4wBgu8r8Vef9mwQhm2awJp8qv/qqxCOO8w0s8ggsshA5LksMKNFa+juSwEVyGAJ2pHJ4oM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fKVYRqSC; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758844946;
+	s=mimecast20190719; t=1758844951;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=f0ro65iXKpEktawGScfWsoklq1awzhrvk2EM85X8+MM=;
-	b=TpUXTltyRcMXJG+8D470iUN52MmddFcDqFktNbVIFZXzEPk5gcXz9S0vAHIF5ZeFSiigqr
-	C+OEpizoodCxQjPsun/CcBpyXRb2SKzorWb3bjIN1zumccBY2o/fAEevg9bQwwrjmUMCkB
-	YA4TB2gIY1YlbKIP42AxoUdLrRuOwcY=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=Z8UOaEZ4LKBa8Cv2fc/mU20txsuLs1wNE0HmjUnkxUE=;
+	b=fKVYRqSCdNiUOx9/biAwGoHsnpBU3GxmW1CLvJpsdWnGqTw6RlRuEe0jVa0kbwhXouBg5r
+	A1XGdAv2DPB9aDpB43ITZX8ucZckp8LfZ0YdCdTOkXtRq93LATnPVDufw4ur+HHkF303B2
+	z8sDrd6gMAKENrM6VoFzD1of80bHQUc=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-133-2hmoVebIOrWF8X3XH5__jQ-1; Thu,
- 25 Sep 2025 20:02:21 -0400
-X-MC-Unique: 2hmoVebIOrWF8X3XH5__jQ-1
-X-Mimecast-MFC-AGG-ID: 2hmoVebIOrWF8X3XH5__jQ_1758844938
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-92-uqh2yhIIM-eYr4vqpNqVeQ-1; Thu,
+ 25 Sep 2025 20:02:25 -0400
+X-MC-Unique: uqh2yhIIM-eYr4vqpNqVeQ-1
+X-Mimecast-MFC-AGG-ID: uqh2yhIIM-eYr4vqpNqVeQ_1758844942
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5F99C195E916;
-	Fri, 26 Sep 2025 00:02:18 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 29F3D1800371;
+	Fri, 26 Sep 2025 00:02:22 +0000 (UTC)
 Received: from jmeneghi-thinkpadp1gen7.rmtusnh.csb (unknown [10.22.81.200])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 73A7A1800579;
-	Fri, 26 Sep 2025 00:02:14 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id ABBCF180035E;
+	Fri, 26 Sep 2025 00:02:18 +0000 (UTC)
 From: John Meneghini <jmeneghi@redhat.com>
 To: hare@suse.de,
 	kbusch@kernel.org,
@@ -74,9 +74,9 @@ Cc: bgurney@redhat.com,
 	linux-hardening@vger.kernel.org,
 	njavali@marvell.com,
 	sagi@grimberg.me
-Subject: [PATCH v10 03/11] nvme-fc: marginal path handling
-Date: Thu, 25 Sep 2025 20:01:52 -0400
-Message-ID: <20250926000200.837025-4-jmeneghi@redhat.com>
+Subject: [PATCH v10 04/11] nvme: sysfs: emit the marginal path state in show_state()
+Date: Thu, 25 Sep 2025 20:01:53 -0400
+Message-ID: <20250926000200.837025-5-jmeneghi@redhat.com>
 In-Reply-To: <20250926000200.837025-1-jmeneghi@redhat.com>
 References: <20250926000200.837025-1-jmeneghi@redhat.com>
 Precedence: bulk
@@ -89,85 +89,37 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-From: Hannes Reinecke <hare@kernel.org>
+From: Bryan Gurney <bgurney@redhat.com>
 
-FPIN LI (link integrity) messages are received when the attached
-fabric detects hardware errors. In response to these messages I/O
-should be directed away from the affected ports, and only used
-if the 'optimized' paths are unavailable.
-To handle this a new controller flag 'NVME_CTRL_MARGINAL' is added
-which will cause the multipath scheduler to skip these paths when
-checking for 'optimized' paths. They are, however, still eligible
-for non-optimized path selected. The flag is cleared upon reset as then the
-faulty hardware might be replaced.
+If a controller has received a link integrity or congestion event, and
+has the NVME_CTRL_MARGINAL flag set, emit "marginal" in the state
+instead of "live", to identify the marginal paths.
 
-Signed-off-by: Hannes Reinecke <hare@kernel.org>
-Tested-by: Bryan Gurney <bgurney@redhat.com>
-Reviewed-by: John Meneghini <jmeneghi@redhat.com>
+Co-developed-by: John Meneghini <jmeneghi@redhat.com>
+Signed-off-by: John Meneghini <jmeneghi@redhat.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
 Tested-by: Muneendra Kumar <muneendra.kumar@broadcom.com>
+Signed-off-by: Bryan Gurney <bgurney@redhat.com>
 ---
- drivers/nvme/host/fc.c        |  4 ++++
- drivers/nvme/host/multipath.c | 17 +++++++++++------
- 2 files changed, 15 insertions(+), 6 deletions(-)
+ drivers/nvme/host/sysfs.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
-index 03987f497a5b..5091927c2176 100644
---- a/drivers/nvme/host/fc.c
-+++ b/drivers/nvme/host/fc.c
-@@ -786,6 +786,10 @@ nvme_fc_ctrl_connectivity_loss(struct nvme_fc_ctrl *ctrl)
- 		"Reconnect", ctrl->cnum);
+diff --git a/drivers/nvme/host/sysfs.c b/drivers/nvme/host/sysfs.c
+index 29430949ce2f..4a6135c2f9cb 100644
+--- a/drivers/nvme/host/sysfs.c
++++ b/drivers/nvme/host/sysfs.c
+@@ -430,7 +430,9 @@ static ssize_t nvme_sysfs_show_state(struct device *dev,
+ 	};
  
- 	set_bit(ASSOC_FAILED, &ctrl->flags);
-+
-+	/* clear 'marginal' flag as controller will be reset */
-+	clear_bit(NVME_CTRL_MARGINAL, &ctrl->flags);
-+
- 	nvme_reset_ctrl(&ctrl->ctrl);
+ 	if (state < ARRAY_SIZE(state_name) && state_name[state])
+-		return sysfs_emit(buf, "%s\n", state_name[state]);
++		return sysfs_emit(buf, "%s\n",
++			(nvme_ctrl_is_marginal(ctrl)) ? "marginal" :
++			state_name[state]);
+ 
+ 	return sysfs_emit(buf, "unknown state\n");
  }
- 
-diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
-index 3da980dc60d9..c042a9a11ce3 100644
---- a/drivers/nvme/host/multipath.c
-+++ b/drivers/nvme/host/multipath.c
-@@ -324,11 +324,14 @@ static struct nvme_ns *__nvme_find_path(struct nvme_ns_head *head, int node)
- 
- 		switch (ns->ana_state) {
- 		case NVME_ANA_OPTIMIZED:
--			if (distance < found_distance) {
--				found_distance = distance;
--				found = ns;
-+			if (!nvme_ctrl_is_marginal(ns->ctrl)) {
-+				if (distance < found_distance) {
-+					found_distance = distance;
-+					found = ns;
-+				}
-+				break;
- 			}
--			break;
-+			fallthrough;
- 		case NVME_ANA_NONOPTIMIZED:
- 			if (distance < fallback_distance) {
- 				fallback_distance = distance;
-@@ -381,7 +384,8 @@ static struct nvme_ns *nvme_round_robin_path(struct nvme_ns_head *head)
- 
- 		if (ns->ana_state == NVME_ANA_OPTIMIZED) {
- 			found = ns;
--			goto out;
-+			if (!nvme_ctrl_is_marginal(ns->ctrl))
-+				goto out;
- 		}
- 		if (ns->ana_state == NVME_ANA_NONOPTIMIZED)
- 			found = ns;
-@@ -445,7 +449,8 @@ static struct nvme_ns *nvme_queue_depth_path(struct nvme_ns_head *head)
- static inline bool nvme_path_is_optimized(struct nvme_ns *ns)
- {
- 	return nvme_ctrl_state(ns->ctrl) == NVME_CTRL_LIVE &&
--		ns->ana_state == NVME_ANA_OPTIMIZED;
-+		ns->ana_state == NVME_ANA_OPTIMIZED &&
-+		!nvme_ctrl_is_marginal(ns->ctrl);
- }
- 
- static struct nvme_ns *nvme_numa_path(struct nvme_ns_head *head)
 -- 
 2.51.0
 
