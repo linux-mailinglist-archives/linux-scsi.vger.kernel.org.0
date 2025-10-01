@@ -1,107 +1,148 @@
-Return-Path: <linux-scsi+bounces-17690-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17693-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E439BAED64
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Oct 2025 02:02:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB692BAF318
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Oct 2025 08:13:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35F12188ECD5
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Oct 2025 00:02:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 988791C7FDA
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Oct 2025 06:13:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF26D33997;
-	Wed,  1 Oct 2025 00:01:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B12E22DECBD;
+	Wed,  1 Oct 2025 06:11:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ksftohVl"
+	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="Ig82TzVB"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE013FFD;
-	Wed,  1 Oct 2025 00:01:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759276919; cv=none; b=Sbx/1SU7bfbYt+FsrWdigQVFB4FbSc/bAsKFos7vIvPG+htAGRzuoMZ6FWbBuetVjrmY6stW8NB24oegcL6LVCrT80fpejKi5YvcPlfXa8XYHaMbL65gUYUFNGlzGqVQoSIZj4tS4zIvdJNQyXzyJQEgwfHXglaLHX+4vbaACOE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759276919; c=relaxed/simple;
-	bh=3y68Tqy6cDtlcmDOr/T5Y/n7dmVkzFZcMAywC6/1zAo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EaBGHTp7aQTCowQILQrKUthgKsb+dZq0RdRYGHcEXJ75xsenpVtp82yFcM3Hi6abzCwdLxoqCciIThj6v6zRFn4fRVQsKQjX6Hjd2V7IeuND7jvlAa6x7JSXShrmCyTveslUX0mehI9ISF6IVg2VXoARRc8xdBD3aUsEj9O4B1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ksftohVl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD063C113D0;
-	Wed,  1 Oct 2025 00:01:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759276919;
-	bh=3y68Tqy6cDtlcmDOr/T5Y/n7dmVkzFZcMAywC6/1zAo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ksftohVl2Qo0dLrp1wRNv9/74o1Fs7lEIRefjQh7LKdfvCLUMg9xMh1ELfqzluFRi
-	 qsENQ2370Fzn0agVtBXxyPDE3Zb0sknD/K0DnzraIyszsT6PwomnKkQVAFjZB4RAbG
-	 f0WWr3hw8EZlihgHXFMr0EcrJSfUQrxCKSLiFBM50iwiryha4eDBX7cC0c0u4Smb+M
-	 g2mg5N2i+VED0wcsKCG+/wkoMwOSkZQjyWXNVov94eNZKaWnpLYE8vrXVaoWH1SYZW
-	 HqweboEtW61q7LNtIDeEt4mfkkga0AiDYtNv35UcHtsD6HOfCp7xR5t4D4klBB4W7W
-	 2DaB5l93yFmFw==
-Date: Wed, 1 Oct 2025 00:01:57 +0000
-From: Wei Liu <wei.liu@kernel.org>
-To: Mukesh Rathor <mrathor@linux.microsoft.com>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-	linux-arch@vger.kernel.org, virtualization@lists.linux.dev,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-	jikos@kernel.org, bentiss@kernel.org, kys@microsoft.com,
-	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-	dmitry.torokhov@gmail.com, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, bhelgaas@google.com,
-	James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com,
-	gregkh@linuxfoundation.org, deller@gmx.de, arnd@arndb.de,
-	sgarzare@redhat.com, horms@kernel.org
-Subject: Re: [PATCH v2 0/2] Fix CONFIG_HYPERV and vmbus related anamoly
-Message-ID: <aNxvde1KTtLeZEKy@liuwe-devbox-ubuntu-v2.lamzopl0uupeniq2etz1fddiyg.xx.internal.cloudapp.net>
-References: <20250915234604.3256611-1-mrathor@linux.microsoft.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAF62DC781;
+	Wed,  1 Oct 2025 06:11:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.167
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759299095; cv=pass; b=Zr6pdOcujysXnbvBRdpwSu5quC+AqpoWMo02/kbTmwvTTwXmA539MWF4SHFNu2BvTsPbsT+eSXe/DAHrWTgisjYAHVJGDKMabGGT8rijObmfjYgEoWaDqwuI4Kn7bnn2eJh5/A6QtXGjKzjKKl2mwsRCPa4O7Z4vqxSLgHqum0I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759299095; c=relaxed/simple;
+	bh=HDws+0WHACs7h+lgatRJcrzTD8NRfGEzmeUc4oV7kVw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=nFZpy/blneg9aSjRO5rv+bHxJ+NTorpxxk+hTx+owyk8r1WMLdXopmyd812JQyEcdiXdfF5SIb1F0slY0Mu18NuoeRrPiZaAZkUEY4ntuQX02TRs5mr9BempdLh0G7Axnre3xWbLoDB9wvcd0M2G0n17Y8ccKxNFQEvZvgGmjCU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=Ig82TzVB; arc=pass smtp.client-ip=81.169.146.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iokpp.de
+ARC-Seal: i=1; a=rsa-sha256; t=1759298897; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=enf3ITdm3r/+U8NCFFhW3QiG2wIePf+GxClWXngRzsVNSEWQl/GJCeJ6dWS2jTGihh
+    Nlk23Vu39cYitlHcIFrmLd55X6nF7gkNd94t7pQ+XCIyqfARbxxOq5kAE8DJ18hOvt4X
+    7hGB8lp9uRdgb2QMLFmcO25XD8ZJCrz9QO+E9ae6N7PeKg+r589DLUdndmO/pL+JLZe1
+    iyhoJL80oDV7Qa5Yw449qY3sR8k+lKrrdTJlr9DKjYobrV/rGoBSkFKhGDmhXOmlzUp4
+    AFTbnXGAojsRZPgpxVA3JKXDF5j9walgH/QOFpeFnCF6saw5h2fLKEmE5Qafdhmr9sN7
+    NzTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1759298897;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=DNRE7d9XoF6Bh3ymYMMqBGHCU94maYTRPui1GHqUTdo=;
+    b=FPFAODbbNxlGX1jdVwf2+9R1Ut3qZ152LVQXtvLZ+CRX88ubN+ZPy0EOQaxgu3AD9k
+    1acyHnLQxxXRbYzxdNkB/JHfXJU9Do4HpW+RJn9GJfD4IkZ0GsiRbvxsieHKzVI7uGb/
+    mmJq+iUdOulWIXxtvvtpgLuNytl/GbHkf7XlOazREDW4jgLYyolRK7XgqQy3jjTZFt4I
+    Rj9D/Nl359/qTwZMvpnUOYCYE6+HFpDlJoWsaGgdEOSWbeZGii4HM+DF171McoaJ9wGW
+    RZRYPVSVf+blaoh2Vvir5B5/0H6ZsxFoJTHrXSuhVwhEP/sn00FdfbHKczEycaZ0z15Z
+    yLVw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1759298897;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=DNRE7d9XoF6Bh3ymYMMqBGHCU94maYTRPui1GHqUTdo=;
+    b=Ig82TzVBqfQTN+aRVVI5Z3tC1jPh6OL1kxdGgEjkE398dULrLJrwWoaF+EyWxVy5Pv
+    GZRTAEfVgt2vqjq+DyaJ3UgSZOES2TKU59IlBsqWfzsoREn4yUtxgxYz1VGAuQTCqmQh
+    MnNFeMR3Iw775cINhbiP3OUHkQYTb3p7t3hX/0p/NvJXDYHrMMVuUauDKJDxiWfJ1scP
+    63glXidYdKm4HiSKqOF/O/gKSqrrP+5BMVWBeEMV+2/JCaYLgnY9ore+eCaurFABXb11
+    RHLzXgcVhR2shx/qgebIy7LMUDTyzsYobTwriMg32hAIy+WkgdLUBKEAX1b5119Nf6vm
+    G+ow==
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSfNuhhDSDt3O2JmZOo2yQsAdmCB+Gw=="
+Received: from Munilab01-lab.fritz.box
+    by smtp.strato.de (RZmta 53.3.2 AUTH)
+    with ESMTPSA id z9ebc619168GY7G
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Wed, 1 Oct 2025 08:08:16 +0200 (CEST)
+From: Bean Huo <beanhuo@iokpp.de>
+To: avri.altman@wdc.com,
+	bvanassche@acm.org,
+	alim.akhtar@samsung.com,
+	jejb@linux.ibm.com,
+	martin.petersen@oracle.com,
+	can.guo@oss.qualcomm.com,
+	ulf.hansson@linaro.org,
+	beanhuo@micron.com,
+	jens.wiklander@linaro.org
+Cc: linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Bean Huo <beanhuo@iokpp.de>
+Subject: [PATCH v2 0/3] Add OP-TEE based RPMB driver for UFS devices
+Date: Wed,  1 Oct 2025 08:08:02 +0200
+Message-Id: <20251001060805.26462-1-beanhuo@iokpp.de>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250915234604.3256611-1-mrathor@linux.microsoft.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
 
-On Mon, Sep 15, 2025 at 04:46:02PM -0700, Mukesh Rathor wrote:
-> At present, drivers/Makefile will subst =m to =y for CONFIG_HYPERV
-> for hv subdir. Also, drivers/hv/Makefile replaces =m to =y to build in
-> hv_common.c that is needed for the drivers. Moreover, vmbus driver is
-> built if CONFIG_HYPER is set, either loadable or builtin.
-> 
-> This is not a good approach. CONFIG_HYPERV is really an umbrella
-> config that encompasses builtin code and various other things and not
-> a dedicated config option for VMBus. VMBus should really have a config
-> option just like CONFIG_HYPERV_BALLOON etc. This small series introduces
-> CONFIG_HYPERV_VMBUS to build VMBus driver and make that distinction
-> explicit. With that CONFIG_HYPERV could be changed to bool.
-> 
-> For now, hv_common.c is left as is to reduce conflicts for upcoming
-> patches, but once merges are mostly done, that and some others should
-> be moved to virt/hyperv directory.
-> 
-> V2:
->  o rebased on hyper-next: commit 553d825fb2f0 
->         ("x86/hyperv: Switch to msi_create_parent_irq_domain()")
-> 
-> V1:
->  o Change subject from hyper-v to "Drivers: hv:"
->  o Rewrite commit messages paying attention to VMBus and not vmbus
->  o Change some wordings in Kconfig
->  o Make new VMBUS config option default to HYPERV option for a smoother
->    transition
-> 
-> Mukesh Rathor (2):
->   Driver: hv: Add CONFIG_HYPERV_VMBUS option
+This patch series introduces OP-TEE based RPMB (Replay Protected Memory Block)
+support for UFS devices, extending the kernel-level secure storage capabilities
+that are currently available for eMMC devices.
 
-I changed Driver to Drivers and applied both patches. Thanks.
+Previously, OP-TEE required a userspace supplicant to access RPMB partitions,
+which created complex dependencies and reliability issues, especially during
+early boot scenarios. Recent work by Linaro has moved core supplicant
+functionality directly into the Linux kernel for eMMC devices, eliminating
+userspace dependencies and enabling immediate secure storage access. This series
+extends the same approach to UFS devices, which are used in enterprise and mobile
+applications that require secure storage capabilities.
+
+Benefits:
+- Eliminates dependency on userspace supplicant for UFS RPMB access
+- Enables early boot secure storage access (e.g., fTPM, secure UEFI variables)
+- Provides kernel-level RPMB access as soon as UFS driver is initialized
+- Removes complex initramfs dependencies and boot ordering requirements
+- Ensures reliable and deterministic secure storage operations
+- Supports both built-in and modular fTPM configurations.
+
+v1 -- v2:
+	1. Added fix tag for patch [2/3]
+	2. Incorporated feedback and suggestions from Bart
+
+RFC v1 -- v1:
+        1. Added support for all UFS RPMB regions based on https://github.com/OP-TEE/optee_os/issues/7532
+        2. Incorporated feedback and suggestions from Bart
+
+
+Bean Huo (3):
+  rpmb: move rpmb_frame struct and constants to common header
+  scsi: ufs: core: fix incorrect buffer duplication in
+    ufshcd_read_string_desc()
+  scsi: ufs: core: Add OP-TEE based RPMB driver for UFS devices
+
+ drivers/misc/Kconfig           |   2 +-
+ drivers/mmc/core/block.c       |  42 ------
+ drivers/ufs/core/Makefile      |   1 +
+ drivers/ufs/core/ufs-rpmb.c    | 253 +++++++++++++++++++++++++++++++++
+ drivers/ufs/core/ufshcd-priv.h |  13 ++
+ drivers/ufs/core/ufshcd.c      |  32 ++++-
+ include/linux/rpmb.h           |  44 ++++++
+ include/ufs/ufs.h              |   4 +
+ include/ufs/ufshcd.h           |   3 +
+ 9 files changed, 346 insertions(+), 48 deletions(-)
+ create mode 100644 drivers/ufs/core/ufs-rpmb.c
+
+-- 
+2.34.1
+
 
