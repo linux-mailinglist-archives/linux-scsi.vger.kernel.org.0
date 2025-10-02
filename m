@@ -1,113 +1,99 @@
-Return-Path: <linux-scsi+bounces-17724-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17726-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7D4BBB411F
-	for <lists+linux-scsi@lfdr.de>; Thu, 02 Oct 2025 15:39:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A820BB4808
+	for <lists+linux-scsi@lfdr.de>; Thu, 02 Oct 2025 18:20:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 674E8189DEA6
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Oct 2025 13:39:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0C33163B0E
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Oct 2025 16:20:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8877130E84F;
-	Thu,  2 Oct 2025 13:39:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C92B525FA10;
+	Thu,  2 Oct 2025 16:18:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="U0JtkGlm"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="fYhbQHa5"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.169])
+Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3111E2BF000;
-	Thu,  2 Oct 2025 13:39:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759412352; cv=pass; b=JRUEdj+5rVMvRNMTPbNhe+HC6jT3yC2iqTLEJEj/aVcihNlpSdV9z/Vzh3reMbhDN7LquhCbRbOgCvj3lLAbliMIDYtsvu9M/iX3gcffDFwtEwM0fE1VkRpLANfZXWth5VLC2sx1jde8MhyTKPH7AMECEKG+gX1wyKOy6rkoRng=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759412352; c=relaxed/simple;
-	bh=ok0oABOTAz4IqjL/jhSwhVG08CIXLzEnY/S7FooKACA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=leH8Vlky5v+u2X36V7DpT1AijduCUh3sGNcsWP9BL+DQzsnjjmb8sZ1YDtCUugBcmFfM6BUrPZt29iZQClvgSC0CWe7eACg5hXHVR/a78HJrDhqFcI2yZxD13tfysvUe/daZqk7xIofzd17wvVqVbVp1DbCATmTiVqc6DTQtn0w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=U0JtkGlm; arc=pass smtp.client-ip=81.169.146.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iokpp.de
-ARC-Seal: i=1; a=rsa-sha256; t=1759412341; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=pdSd5BJAS1ICTCI7us36KavG6qSzkhVtwOxCdJvWK171UA22cznORI/E4mPvCYeYsY
-    KWWAF6e8bMsUhsWb//ZQe+BnVy4reLyT5y9FH8e9DXYELyMiYLVOU2jCuulcRj94o1A5
-    6VD0nc5uJN/7IyMX169q2JJ99yiRLjediRm4vrpz7AAmbpvMUBxIs/JHiXwEfNcpwKuz
-    e4bdu4n3+uGfux6Wg10VK8hJ1bcWlVl0/6erXd2yfLYTgFo77bYGropOlR4CH4agcCNx
-    A3WeWDV23UQZtEiAG/GpVluFyVEX+gbnDmlrZEQpOgSkcx257eNreDhY8YIBsgEXHUnO
-    m6bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1759412341;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ok0oABOTAz4IqjL/jhSwhVG08CIXLzEnY/S7FooKACA=;
-    b=Esjs3CzB9gJdsBCFjlRl1o7DpAIWMcdj+TNP7YvefiANcIzIyVx2jw0imqunqxosfn
-    VRtM0+/VDAyK8JD2+FNrN042Lno1npuoRZmOyqPcBOB8osxIHQ4Az6PDBPZrrN0ycL2C
-    +yDaJ+RylH6s9oC2TLqv2Uckp6l5AlfXxQa7QJxhhmVTL4Kvk8qLM4X/yx1bIIcrQL2N
-    97K0/+DCWRGhD2vwpJBRMO2isE/Id2PSY8lIUg+NXElvh8WCFiKjMNmX3DBqvQ6kdtTQ
-    Ifgv22K5OpyTSJilO/J8nLHAYPsxdag9+mnFIO45UwOVWND+2P7H3y6IkTlWdz4jz2mY
-    97ZQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1759412341;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ok0oABOTAz4IqjL/jhSwhVG08CIXLzEnY/S7FooKACA=;
-    b=U0JtkGlmrp/t/CCTqMNFD/V/YkaBmboFe7DkcA0ODF8YljpYtfCAn1e5wVAkQZqU1t
-    d2ZY8HCiKqE07+vT2ZNL2Q756GOaIoDhYi5O/JH+cdwLsyoN0Q5PEoz8AWANc+mGQGcU
-    ijDWTJBX/3JrOAW8oYVs+qRzKG8izChIRHNuFCchuEC7c9At4mgXYKp5T3PUbFicTJ7w
-    crqAOP67qDMnK0p0hKTZujRsL7vzNhYkXbhsg0bGt3v9uvAKllSNoxLjy1+O1Yi6EXCj
-    bxUy6gEue+uEB5RSyDP0Vk+M9LPuaTKwWyNjBke3cfW68P/t+ijQbhCK/xG7Fdfs6NwA
-    KTvg==
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSe9tgBDSDt0V0zJolXBtbIoYhB+fa1AL9w=="
-Received: from [192.168.226.211]
-    by smtp.strato.de (RZmta 53.3.2 AUTH)
-    with ESMTPSA id z9ebc6192DcxfSZ
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Thu, 2 Oct 2025 15:38:59 +0200 (CEST)
-Message-ID: <a2aeae41e7ebcb56f339e563d21a676d0f44c23f.camel@iokpp.de>
-Subject: Re: [PATCH v2 3/3] scsi: ufs: core: Add OP-TEE based RPMB driver
- for UFS devices
-From: Bean Huo <beanhuo@iokpp.de>
-To: Bart Van Assche <bvanassche@acm.org>, avri.altman@wdc.com, 
-	alim.akhtar@samsung.com, jejb@linux.ibm.com, martin.petersen@oracle.com, 
-	can.guo@oss.qualcomm.com, ulf.hansson@linaro.org, beanhuo@micron.com, 
-	jens.wiklander@linaro.org
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 02 Oct 2025 15:38:57 +0200
-In-Reply-To: <00a30e2e-a137-4365-9478-91ecbabf07e7@acm.org>
-References: <20251001060805.26462-1-beanhuo@iokpp.de>
-	 <20251001060805.26462-4-beanhuo@iokpp.de>
-	 <00a30e2e-a137-4365-9478-91ecbabf07e7@acm.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8CE254B18;
+	Thu,  2 Oct 2025 16:18:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759421928; cv=none; b=iYcauDFfFcxnGXxKg35pPetCWo/2ipQO0Jx4Ugf5ipINBTf/1AKVk1M9NoMhjlVyd0Jkcb3HrAngzLLyiZSTCwuAzyujBheIjARzMlVh0YtvXH370EZc1djvC/2FqZb/H4to5GGlaqOPLiPkxR/4P9RIIEU4W45hVFmVFZwkkAc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759421928; c=relaxed/simple;
+	bh=Xpb0UrjdBAyJ3z38h4AY6vd6b5j/oH3Du6AYnBhX4Gk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=qIgxhjK1PnU8l90w4w2hhHWxO1qm6s8YLbNGRofqUZYw4IIJZGcWEdbS2CzOIWlGQLvVf/e5o3U8gZ0ybDo353As6LscUhqX8oGV88DRfx+whD613jSvPZXNSxHka49I/u/3fU1W1dNyRvA00DwCZjWzHN7M/yDj4xmg7e4jPdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=fYhbQHa5; arc=none smtp.client-ip=199.89.3.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 004.mia.mailroute.net (Postfix) with ESMTP id 4ccxn16Pzpzm16kp;
+	Thu,  2 Oct 2025 16:18:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1759421924; x=1762013925; bh=7bhvhhJ4JLF206lcr1wauf4d
+	j7rGe65pQmQJK6fM2+w=; b=fYhbQHa5xMCdyTKQc5fqLHry5o/Xr+W5VJucRfcX
+	DuEQdNS3vA2O8tdFIrwxU79HFSrr53KOIpIqdiwibtKTlQn+M+8kdiaGpd7b3xuw
+	jPGV5l3XPXp+FQ70B3oU2/e+taKlwozuYKnF4cKXYJw4upS3oN6LoyLReF9i1zkR
+	iwthy6deQrdsyTABIu80q0NX+c4wl6yAENM8OZTPKSwTZqCaXly6eYzMSGj2lCWM
+	cWuW35MBFACWUMHJGSq/iuPzzuLxvDbIJPcN2tOs82QakeiXotjbQEtEmRW7+ppI
+	G8LpjuCRk8sse9UhOeECNceP6/FgB4yiAovETl3aD2AwhQ==
+X-Virus-Scanned: by MailRoute
+Received: from 004.mia.mailroute.net ([127.0.0.1])
+ by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id 6LkNq16KtErJ; Thu,  2 Oct 2025 16:18:44 +0000 (UTC)
+Received: from [100.119.48.131] (unknown [104.135.180.219])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4ccxmw2bDTzm16lN;
+	Thu,  2 Oct 2025 16:18:38 +0000 (UTC)
+Message-ID: <900c7e79-2cc9-407f-92cb-c6544cbc86c1@acm.org>
+Date: Thu, 2 Oct 2025 09:18:38 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] ufs: core: Initialize a variable mode for PA_PWRMODE
+To: Wonkon Kim <wkon.kim@samsung.com>, James.Bottomley@HansenPartnership.com,
+ martin.petersen@oracle.com, peter.wang@mediatek.com,
+ linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CGME20251002070057epcas1p49ac487359f24f6813ba8f9f44bcf0924@epcas1p4.samsung.com>
+ <20251002070027.228638-1-wkon.kim@samsung.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20251002070027.228638-1-wkon.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, 2025-10-01 at 12:51 -0700, Bart Van Assche wrote:
-> On 9/30/25 11:08 PM, Bean Huo wrote:
-> > +MODULE_DESCRIPTION("OP-TEE RPMB subsystem based UFS RPMB driver");
->=20
-> Hmm ... "OP-TEE UFS RPMB driver" is probably more clear and still
-> unambiguous. Anyway:
+On 10/2/25 12:00 AM, Wonkon Kim wrote:
+>   static bool ufshcd_is_pwr_mode_restore_needed(struct ufs_hba *hba)
+>   {
+>   	struct ufs_pa_layer_attr *pwr_info = &hba->pwr_info;
+> -	u32 mode;
+> +	u32 mode = 0;
+>   
+>   	ufshcd_dme_get(hba, UIC_ARG_MIB(PA_PWRMODE), &mode);
 
-Bart,
+Wouldn't it be better to check the ufshcd_dme_get() return value rather
+than to zero-initialize 'mode'? I think that would make 
+ufshcd_is_pwr_mode_restore_needed() easier to read compared to applying
+the above patch.
 
-ok, I will change to it in next version.
+Thanks,
 
-Kind regards,
-Bean
+Bart.
+
 
 
