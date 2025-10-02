@@ -1,254 +1,192 @@
-Return-Path: <linux-scsi+bounces-17738-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17740-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 093FDBB4FE5
-	for <lists+linux-scsi@lfdr.de>; Thu, 02 Oct 2025 21:25:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA3B4BB5246
+	for <lists+linux-scsi@lfdr.de>; Thu, 02 Oct 2025 22:44:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DF0B19E2B6B
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Oct 2025 19:26:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63F6F3C691F
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Oct 2025 20:44:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F05F2283146;
-	Thu,  2 Oct 2025 19:25:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1949275871;
+	Thu,  2 Oct 2025 20:44:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ULHT5E7p"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LXqyk+09"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1808E28507E
-	for <linux-scsi@vger.kernel.org>; Thu,  2 Oct 2025 19:25:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE4E279DA1
+	for <linux-scsi@vger.kernel.org>; Thu,  2 Oct 2025 20:44:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759433133; cv=none; b=ZkMsB8X23BUKpBWYQfSSttHLq4Siw6S4tH2PPUigdDaY3i6TogccIBM1teiSpM+nY9qG7ZHO0B8X/ehm44z+OuChH1LR7RtdLJf/AQgB9fpsYnua64/KCjWNrUfnplsq+wA/ZetHlelrBrfcQTMbdB3fqYFB91a3rmr8Hwz5fAs=
+	t=1759437851; cv=none; b=AM8vaDDB12EG/iZgaax8N9CvyRvRN3u0PKtYzezexaaJjVZgjKCVyAUK3qXQ1hssSpSuW2hyzJhrbOEc8ShPKZjfmOSdM0qNin9Pa6uhSFzMblOCQX4/zYxvq8nFQ5tGiJ/RKg8QaVouROi8actej4vz0tz+OqjKvaZFk/c6PsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759433133; c=relaxed/simple;
-	bh=MRuQBqOhpq+/gGBDPLnMxyGYEjxumfkpaDSIX4W9Ucs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uKtCi4W5+t1FnpaIrSrEkAFb4Bfc3UIYaxFZsc3/CH087RIYtewO6uATYhrD03FQ2vrmQiDjMul1RtslOAxUQsJRsmqqt4AtfvkT3kXd5kEOkI6y73ADReRCcvfPg6XiTKhQYNbjl1EK1kGvJ1aUSZ7kwfGkYgjm/xEpC4d9k3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ULHT5E7p; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1759437851; c=relaxed/simple;
+	bh=gOhQHnFNNIRBurl3ntNcPJa2Mmt22yZFAJnutuZIgR4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Da35XwJAuY07NpqaQA9yR9bz6wvSXdK+eed5AU/4OdzTDRnX93eHjkNkgLI4DuTaR+/a9WOZa8qUprXpnindlIiXytKtVeNBvndoBNwqYUpfXvKOVIXI/DZLkdlAy9C4X8CAfLVq0WdxrNc685QGdsRo0/8CcY7fJMFWVsIlntk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LXqyk+09; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1759433131;
+	s=mimecast20190719; t=1759437847;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xAE5xJoSMFPSXuKmIQAnn8y8nULwMA1WK/o6yTOpQkc=;
-	b=ULHT5E7pTGUssjGFGkvl6FsXqM613s54aej6SOQzysuYe/m2ZSZZj6CEH7jc1o71d6RwmN
-	4axscKLQk9iZh9vZE4lWKkYsY0zAzt0ye86TJzUQnN6coRvVqAuRnZyvoNz2IB91FjTrRn
-	hkn8/zPDeqbnBEpxoip0TAj76SfgA0Q=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-561-HPN-mRj0Om6uIS_rkGpTuw-1; Thu,
- 02 Oct 2025 15:25:28 -0400
-X-MC-Unique: HPN-mRj0Om6uIS_rkGpTuw-1
-X-Mimecast-MFC-AGG-ID: HPN-mRj0Om6uIS_rkGpTuw_1759433127
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DBB28180057F;
-	Thu,  2 Oct 2025 19:25:26 +0000 (UTC)
-Received: from emilne-na.ibmlowe.csb (unknown [10.17.17.93])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AC5121955F19;
-	Thu,  2 Oct 2025 19:25:25 +0000 (UTC)
-From: "Ewan D. Milne" <emilne@redhat.com>
-To: linux-scsi@vger.kernel.org
-Cc: michael.christie@oracle.com,
-	dgilbert@interlog.com,
-	bvanassche@acm.org,
-	dlemoal@kernel.org,
-	hare@suse.de
-Subject: [PATCH v4 9/9] scsi: scsi_debug: Add "only_once" module option to inject an error one time
-Date: Thu,  2 Oct 2025 15:25:10 -0400
-Message-ID: <20251002192510.1922731-10-emilne@redhat.com>
-In-Reply-To: <20251002192510.1922731-1-emilne@redhat.com>
-References: <20251002192510.1922731-1-emilne@redhat.com>
+	bh=q/h9DuP41W+s41OnyipZ8gQ7revK9O5DUHKIW3LVxL8=;
+	b=LXqyk+09TLH5umIWT4cy6ch+Z22cW/fZPnyBtoY/xl9Zztu17LtQfKK6j65e/OwjGRccrf
+	j/o2HWHOUDNBp7NlLGgydcnHfqr+9LMsDNwi9WtgZzR3O2Il+nfT0KZx10Rj4TUZ1fm9Yb
+	bCT80bNMcT7VJPMHeTwRlI/zVKiPMZ8=
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
+ [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-68-3CyGw6p5MOSn4IzIWOa5hA-1; Thu, 02 Oct 2025 16:44:06 -0400
+X-MC-Unique: 3CyGw6p5MOSn4IzIWOa5hA-1
+X-Mimecast-MFC-AGG-ID: 3CyGw6p5MOSn4IzIWOa5hA_1759437846
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-7448a11535aso19762307b3.3
+        for <linux-scsi@vger.kernel.org>; Thu, 02 Oct 2025 13:44:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759437845; x=1760042645;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q/h9DuP41W+s41OnyipZ8gQ7revK9O5DUHKIW3LVxL8=;
+        b=AfFeY+XFDrzr7VvDnYZzePHnuThhoh4NXNfBFw2/ex0F/NA2fMvR9Q+Uyn2g0i6bRj
+         om0+RvETa0eRmj7fhAgdW4Dcr2G0r7maddpoH7KK2bZV2UgfA4Eb40hfXMyfllBbubwl
+         BnXfZp3YVwWnX5VHVw/BZVyJLtTYmHyPKCcxkXfUgU1M1TC3tjbbs96ox+gqb/soROVH
+         IkLaadKb5eLzbY2seqBTjEFovIFd31HA8mU7Jx+emqqlZ8GWmGDZqtV9go1rFYLpR22z
+         vpFwfuPONyWx3uzd6cH8b9W5TSzI6JpkxIEsh2vgwxGHVwucgpH5ISKDRbiE2u+DNgnd
+         mzng==
+X-Gm-Message-State: AOJu0YyY+NdRpHUd+ahIy/h3WIUsdt7l2EM6XmhVRkS/QqpdgO6pvbWH
+	5PXSjM2ENp9J2/r7wPXddxbgexuuYjyqVn1vd3Kt8HTaWLWl/sEB6N6xGGfwPb6olFT/5Irg64O
+	k2eClsZC0oc76AhP+mQPDNpjXQqUAYGZi8OpDmmDj1KtKVZaYDdJj46WdUsmZL+H/+v1YyaYAav
+	SPJIMowkFRNSOelB3+n1WBt+LRJ32uQrJNYeywv2usUj2yLQ==
+X-Gm-Gg: ASbGncs/XAmwX98QkaLVEKiaKqsyYFontNV8jQl1WIQ+Mws0zif60h7UEmhYQTtdMdT
+	+7nKhW4SCJ0nfN8KATMMEj+/mI7kcJ6EONG4qkqO5PU6j+H+VpZc9CmOIg8GZ7LgGbOb2+4KXvX
+	SFF1t0wPp49g6xg9AyECaMt8ktCS0=
+X-Received: by 2002:a05:690e:159a:20b0:629:e2b6:1302 with SMTP id 956f58d0204a3-63b9a07171emr627916d50.17.1759437845517;
+        Thu, 02 Oct 2025 13:44:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGvuUsKIeu7AOarxkJ6D4a1q6sZn8PjzdUHygy8oua/52fXE+M0cOvxe3ih+62fSys/4ZE74qWgOHt3+cLDY+U=
+X-Received: by 2002:a05:690e:159a:20b0:629:e2b6:1302 with SMTP id
+ 956f58d0204a3-63b9a07171emr627894d50.17.1759437845084; Thu, 02 Oct 2025
+ 13:44:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+References: <E7947463-9D29-494A-9044-460DD40CEA90@ibm.com> <B5CCED31-E0A4-4F2A-B317-E8EE56F7430C@ibm.com>
+In-Reply-To: <B5CCED31-E0A4-4F2A-B317-E8EE56F7430C@ibm.com>
+From: Ewan Milne <emilne@redhat.com>
+Date: Thu, 2 Oct 2025 16:43:54 -0400
+X-Gm-Features: AS18NWChDY0CqFvQzU_0anOFQJ7nv6rB6HAhr-zW_6yzhAUbqhfgHjBMZG1x1YY
+Message-ID: <CAGtn9rmfeSRuCiX6=iCi5QwUdQXHwF_AKkY6Ood7OERmf7g2qg@mail.gmail.com>
+Subject: Re: SG driver duplicating requests
+To: Mauricio de Jesus Cardenas Hernandez <mcardenas@ibm.com>
+Cc: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The "every_nth" module option allows either periodic injection of errors
-every N commands, or injection of errors on all commands after N commands.
-It does not allow injection of a single error after N commands, which is
-useful for testing things like code in the device probe path.
+I seem to recall a problem report similar to this way back that had to
+do with a restarted system call.
 
-Add a new "only_once" module option that allows injection of a single error.
-The "every_nth" module options are still used to control when the error
-is injected, to simplify the code.
+It is problematic behavior with sequential access devices like tapes.
 
-Signed-off-by: Ewan D. Milne <emilne@redhat.com>
----
- drivers/scsi/scsi_debug.c | 50 +++++++++++++++++++++++++++++++++------
- 1 file changed, 43 insertions(+), 7 deletions(-)
+-Ewan
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 2c49aadaef80..cbe022142b60 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -134,6 +134,7 @@ static const char *sdebug_version_date = "20210520";
- #define DEF_PER_HOST_STORE false
- #define DEF_D_SENSE   0
- #define DEF_EVERY_NTH   0
-+#define DEF_ONLY_ONCE 0
- #define DEF_FAKE_RW	0
- #define DEF_GUARD 0
- #define DEF_HOST_LOCK 0
-@@ -909,6 +910,7 @@ static int sdebug_dif = DEF_DIF;
- static int sdebug_dix = DEF_DIX;
- static int sdebug_dsense = DEF_D_SENSE;
- static int sdebug_every_nth = DEF_EVERY_NTH;
-+static bool sdebug_only_once = DEF_ONLY_ONCE;
- static int sdebug_fake_rw = DEF_FAKE_RW;
- static unsigned int sdebug_guard = DEF_GUARD;
- static int sdebug_host_max_queue;	/* per host */
-@@ -1005,6 +1007,8 @@ static int dix_writes;
- static int dix_reads;
- static int dif_errors;
- 
-+static bool injected;
-+
- /* ZBC global data */
- static bool sdeb_zbc_in_use;	/* true for host-aware and host-managed disks */
- static int sdeb_zbc_zone_cap_mb;
-@@ -7161,7 +7165,7 @@ static void clear_queue_stats(void)
- 
- static bool inject_on_this_cmd(void)
- {
--	if (sdebug_every_nth == 0)
-+	if (sdebug_every_nth == 0 || (sdebug_only_once && injected))
- 		return false;
- 	return (atomic_read(&sdebug_cmnd_count) % abs(sdebug_every_nth)) == 0;
- }
-@@ -7205,7 +7209,9 @@ static int schedule_resp(struct scsi_cmnd *cmnd, struct sdebug_dev_info *devip,
- 
- 		if ((num_in_q == qdepth) &&
- 		    (atomic_inc_return(&sdebug_a_tsf) >=
--		     abs(sdebug_every_nth))) {
-+		     abs(sdebug_every_nth)) &&
-+		    !(sdebug_only_once && injected)) {
-+			injected = true;
- 			atomic_set(&sdebug_a_tsf, 0);
- 			scsi_result = device_qfull_result;
- 
-@@ -7341,6 +7347,7 @@ module_param_named(dif, sdebug_dif, int, S_IRUGO);
- module_param_named(dix, sdebug_dix, int, S_IRUGO);
- module_param_named(dsense, sdebug_dsense, int, S_IRUGO | S_IWUSR);
- module_param_named(every_nth, sdebug_every_nth, int, S_IRUGO | S_IWUSR);
-+module_param_named(only_once, sdebug_only_once, bool, S_IRUGO | S_IWUSR);
- module_param_named(fake_rw, sdebug_fake_rw, int, S_IRUGO | S_IWUSR);
- module_param_named(guard, sdebug_guard, uint, S_IRUGO);
- module_param_named(host_lock, sdebug_host_lock, bool, S_IRUGO | S_IWUSR);
-@@ -7424,6 +7431,7 @@ MODULE_PARM_DESC(dif, "data integrity field type: 0-3 (def=0)");
- MODULE_PARM_DESC(dix, "data integrity extensions mask (def=0)");
- MODULE_PARM_DESC(dsense, "use descriptor sense format(def=0 -> fixed)");
- MODULE_PARM_DESC(every_nth, "timeout every nth command(def=0)");
-+MODULE_PARM_DESC(only_once, "timeout only once after the nth command(def=0)");
- MODULE_PARM_DESC(fake_rw, "fake reads/writes instead of copying (def=0)");
- MODULE_PARM_DESC(guard, "protection checksum: 0=crc, 1=ip (def=0)");
- MODULE_PARM_DESC(host_lock, "host_lock is ignored (def=0)");
-@@ -7567,9 +7575,9 @@ static int scsi_debug_show_info(struct seq_file *m, struct Scsi_Host *host)
- 	seq_printf(m, "num_tgts=%d, %ssize=%d MB, opts=0x%x, every_nth=%d\n",
- 		   sdebug_num_tgts, "shared (ram) ", sdebug_dev_size_mb,
- 		   sdebug_opts, sdebug_every_nth);
--	seq_printf(m, "delay=%d, ndelay=%d, max_luns=%d, sector_size=%d %s\n",
-+	seq_printf(m, "delay=%d, ndelay=%d, max_luns=%d, sector_size=%d %s, only_once=%d\n",
- 		   sdebug_jdelay, sdebug_ndelay, sdebug_max_luns,
--		   sdebug_sector_size, "bytes");
-+		   sdebug_sector_size, "bytes", sdebug_only_once);
- 	seq_printf(m, "cylinders=%d, heads=%d, sectors=%d, command aborts=%d\n",
- 		   sdebug_cylinders_per, sdebug_heads, sdebug_sectors_per,
- 		   num_aborts);
-@@ -7933,6 +7941,24 @@ static ssize_t every_nth_store(struct device_driver *ddp, const char *buf,
- }
- static DRIVER_ATTR_RW(every_nth);
- 
-+static ssize_t only_once_show(struct device_driver *ddp, char *buf)
-+{
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", !!sdebug_only_once);
-+}
-+static ssize_t only_once_store(struct device_driver *ddp, const char *buf,
-+			       size_t count)
-+{
-+	int n;
-+
-+	if ((count > 0) && (1 == sscanf(buf, "%d", &n)) && (n >= 0)) {
-+		sdebug_only_once = (n > 0);
-+		injected = false;
-+		return count;
-+	}
-+	return -EINVAL;
-+}
-+static DRIVER_ATTR_RW(only_once);
-+
- static ssize_t lun_format_show(struct device_driver *ddp, char *buf)
- {
- 	return scnprintf(buf, PAGE_SIZE, "%d\n", (int)sdebug_lun_am);
-@@ -8440,6 +8466,7 @@ static struct attribute *sdebug_drv_attrs[] = {
- 	&driver_attr_dev_size_mb.attr,
- 	&driver_attr_num_parts.attr,
- 	&driver_attr_every_nth.attr,
-+	&driver_attr_only_once.attr,
- 	&driver_attr_lun_format.attr,
- 	&driver_attr_max_luns.attr,
- 	&driver_attr_max_queue.attr,
-@@ -8997,6 +9024,9 @@ static int sdebug_change_qdepth(struct scsi_device *sdev, int qdepth)
- 
- static bool fake_timeout(struct scsi_cmnd *scp)
- {
-+	if (sdebug_only_once && injected)
-+		return false;
-+
- 	if (0 == (atomic_read(&sdebug_cmnd_count) % abs(sdebug_every_nth))) {
- 		if (sdebug_every_nth < -1)
- 			sdebug_every_nth = -1;
-@@ -9297,8 +9327,10 @@ static int scsi_debug_queuecommand(struct Scsi_Host *shost,
- 		sdev_printk(KERN_INFO, sdp, "%s: tag=%#x, cmd %s\n", my_name,
- 			    blk_mq_unique_tag(scsi_cmd_to_rq(scp)), b);
- 	}
--	if (unlikely(inject_now && (sdebug_opts & SDEBUG_OPT_HOST_BUSY)))
-+	if (unlikely(inject_now && (sdebug_opts & SDEBUG_OPT_HOST_BUSY))) {
-+		injected = true;
- 		return SCSI_MLQUEUE_HOST_BUSY;
-+	}
- 	has_wlun_rl = (sdp->lun == SCSI_W_LUN_REPORT_LUNS);
- 	if (unlikely(lun_index >= sdebug_max_luns && !has_wlun_rl))
- 		goto err_out;
-@@ -9334,8 +9366,10 @@ static int scsi_debug_queuecommand(struct Scsi_Host *shost,
- 		return ret;
- 	}
- 
--	if (unlikely(inject_now && !atomic_read(&sdeb_inject_pending)))
-+	if (unlikely(inject_now && !atomic_read(&sdeb_inject_pending))) {
-+		injected = true;
- 		atomic_set(&sdeb_inject_pending, 1);
-+	}
- 
- 	na = oip->num_attached;
- 	r_pfp = oip->pfp;
-@@ -9412,8 +9446,10 @@ static int scsi_debug_queuecommand(struct Scsi_Host *shost,
- 	if (sdebug_fake_rw && (F_FAKE_RW & flags))
- 		goto fini;
- 	if (unlikely(sdebug_every_nth)) {
--		if (fake_timeout(scp))
-+		if (fake_timeout(scp)) {
-+			injected = true;
- 			return 0;	/* ignore command: make trouble */
-+		}
- 	}
- 	if (likely(oip->pfp))
- 		pfp = oip->pfp;	/* calls a resp_* function */
--- 
-2.47.1
+On Wed, Oct 1, 2025 at 11:54=E2=80=AFPM Mauricio de Jesus Cardenas Hernande=
+z
+<mcardenas@ibm.com> wrote:
+>
+> Hello everyone.
+> I=E2=80=99m sorry if this is not the way to talk about these issues but I=
+=E2=80=99m new to all of this.
+>
+> When sending a write request into a sg device it seems that a request is =
+duplicated. Specifically stopping the program on write and then continuing.=
+ In a real case scenario this is happening with system-tap. I haven't repli=
+cated this problem using system-tap but it seems that it sends a SIGSTOP si=
+gnal to the process and then it continues.
+>
+> Independently of system-tap, I made this code that also shows this behavi=
+or:
+>
+> int tape_write(size_t count, uint8_t* data) {
+>   sg_io_hdr_t request =3D {0};
+>   uint8_t sb[32] =3D {0};
+>   uint8_t cdb[6] =3D {0};
+>   cdb[0] =3D 0x0a;  // Write
+>   cdb[2] =3D (count >> 16) & 0xff;
+>   cdb[3] =3D (count >> 8) & 0xff;
+>   cdb[4] =3D count & 0xff;
+>
+>   memset(&request, 0, sizeof(request));
+>   request.dxfer_direction =3D SG_DXFER_TO_DEV;
+>   request.cmdp =3D cdb;
+>   request.cmd_len =3D sizeof(cdb);
+>   request.interface_id =3D 'S';
+>   request.mx_sb_len =3D sizeof(sb);
+>   request.sbp =3D sb;
+>   request.dxferp =3D data;
+>   request.dxfer_len =3D count;
+>
+>   if (ioctl(fd, SG_IO, &request) < 0) {
+>     return errno;
+>   }
+>
+>   if (request.masked_status !=3D 0) {
+>     // print_sense_buffer(sb);
+>     return 1;
+>   }
+>
+>   return 0;
+> }
+>
+> =E2=80=A6
+>
+> // This is running on main after unit is ready and set the position to 0
+> for (int i =3D 0; i < 10000; i++) {
+>   char c =3D (i % 26) + 65;
+>   if (tape_write(1, (uint8_t*)&c) !=3D 0) {
+>     printf("Failed to write to tape drive\n");
+>     return 1;
+>   }
+> }
+>
+>
+> If I ran this and SIGSTOP it using this following script:
+>
+> ./program &
+> PID=3D$!
+> sleep 0.4
+> kill -SIGSTOP $PID
+> sleep 1
+> kill -SIGCONT $PID
+> wait
+>
+> It will ran successfully but a block on tape will be replicated:
+>
+> Data on tape:
+> ABCDEFGHIJKLMNOPQRSTUVWXYZ=E2=80=A6
+> ABCDEEFGHIJKLMNOPQRSTUVWXYZ
+> =E2=80=A6ABCDEFGHIJKLMNOPQRSTUVWXYZ...
+>
+> As you can see the block that contains the E is duplicated.
+> I don=E2=80=99t know if this is an issue regarding the sg driver or the k=
+ernel.
+> Can somebody point to me what is going on here? It seems that is happenin=
+g a lot on a IBM=E2=80=99s product that it=E2=80=99s using this driver.
+>
+> Thanks for your time.
+> Best regards.
+> Mauricio Cardenas
+>
+>
+>
 
 
