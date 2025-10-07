@@ -1,135 +1,189 @@
-Return-Path: <linux-scsi+bounces-17867-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17870-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A10A8BC1FFB
-	for <lists+linux-scsi@lfdr.de>; Tue, 07 Oct 2025 17:56:39 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBA57BC23BD
+	for <lists+linux-scsi@lfdr.de>; Tue, 07 Oct 2025 19:16:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 658894EBBFF
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Oct 2025 15:56:38 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DF0B04EAC6E
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Oct 2025 17:16:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 214342E54A7;
-	Tue,  7 Oct 2025 15:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 369022DFA40;
+	Tue,  7 Oct 2025 17:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="L922AMHs"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="SgXeFwx1"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 195FA1F12F8
-	for <linux-scsi@vger.kernel.org>; Tue,  7 Oct 2025 15:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B691734BA34;
+	Tue,  7 Oct 2025 17:16:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759852592; cv=none; b=JoMYMScwpWtwsZCLKiVSQ/8pXEN/QCmDh657HKu3r7yYTKyCVxkhZcu/sqLVNvRObJV2lvvsPO7wPMiaZLl/70rFga1gm9IXC7xqH3vxx6j7KRmFGdEYPos1Fal2Ho8X0uKZ5mmQ/dVyYa5/IS5nQQHzaPwsFl9IWSLdAxIcxAg=
+	t=1759857403; cv=none; b=p7yHd4rvmORoE9l2nU4YOhE4JTFnf0CbHKBSEayqZzqI1NDghN8vgS7JLVAyRNOwd4/ccbB9gQxsVTF7yDZYTcXgxrG7GOiUpGXIXwGG4i3MvwUSZ2seW3KSNHhhJ9OpbzT15eotxypLzfiIpJ/Vdg1H5H9mP5buewKgD73/Dk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759852592; c=relaxed/simple;
-	bh=2PS1aw7dfUT0k1FWYcqJDnEg5AxccGVN6SkNj7bMjuk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=iIzxSz/QTK5zFb3ycHNR/UvdS87BTD3mo8XLaiUAHn/tJAivoFrAOmYX84RQkleIn2ENDrVTVvAvKseOia1STMjhQJ81CVwMJqgJoRvquO22IjYyYRl1SrJHi21QTe+Bu8XphyFEZNMacUU08lpB9tuauiQRvBxNVzpPP7jCKx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=L922AMHs; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-afcb7ae6ed0so1088693066b.3
-        for <linux-scsi@vger.kernel.org>; Tue, 07 Oct 2025 08:56:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1759852589; x=1760457389; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9iDWqoWfueHqY1DQn3UROh93hmAu+K7Xh14JdQEHAgE=;
-        b=L922AMHsQ5AJuI4epf0tAPOTsp3RJtAOWMo36afQ1pEbLGwffIShfXVmlPk+lLQQ93
-         EeBXopkUAMHLZuemTVYSEJ7m6jnIOVXykOyCs3FEBC0RlVwTrxkJEke+nEDN4W+l8P0u
-         aoA9rbAVUARM1+xA/n6y583bzIQ7LWOgAX0H/5SbCLYHdr5fwZYCodBd1+ZZeurkrw6A
-         Q3/1Xwy02u/BVJ8rroIOgYduqg082iHUNr5enYcJeaieueNxmVgNdxEHnlVE03tLzdb7
-         3TE+G3s+NmYwfC0d2WY46vBYIir3+5fizW/8OQuh3f2Xd2kH0Yt303aTmFk15RzrS437
-         8bew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759852589; x=1760457389;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9iDWqoWfueHqY1DQn3UROh93hmAu+K7Xh14JdQEHAgE=;
-        b=k1ZX2X/jNFUWs1oWN43VSk2s9Z0YCJNg8k859vlG83uK9nazUvKyKC/KB6biTtmSFw
-         Vbsyj8rNHKh4kMi/KAzP1cX5YrT3TciCAEH9a5f8Foy+FkWF6KCze7tnvnV2zkUwcUsc
-         agvGwZcwXaX5hRlZr/vB7RODlbVIzQJNAVhYgS9kHtAb+9agkwOYWY47e1dnsiCK1GPn
-         J4mE749bWVLTjFDZDibG4jAgaB8hBY6izdUvddWTZ5lZdOeT6HMhLql6ejSEc3XegBck
-         BcZquRWr3CG+lQ2v+OD1Hbsgry6LprgY07eMLw8hf7Lt2HEr3pxeeQ4UB4UtcHtVCLvr
-         Da1w==
-X-Forwarded-Encrypted: i=1; AJvYcCWdAwdyBKOG231ykhPgl8+7lzVWHVaFtukgdTCGvEXOSedLZ8V8D2IOUzUJaxQ8ErYmqneFZT4YCAkC@vger.kernel.org
-X-Gm-Message-State: AOJu0YxERxh94/LueVj/ZfO+mVJQ0a99vW9NkoWprHdr+4ztPDfxYMU0
-	RKB4b3DMaK2p1whiirlBMx/BwmHa7T/Q5/OWDwKUj6bkY8Nfg+V4qIAB2UJQQqZaLgM=
-X-Gm-Gg: ASbGnctGiJju3sKJnGGvqBwdfruO4O13Jh3aLVPRAaYNaio+APRbEUBB3xvNlNqUEan
-	tLErhlGnB9WDjSOi4ui0uj/3f6sPDRmo8XbvoGIcnzRJVnuCZBgfrP8I4VDFtjzj9FxTFqv2+uq
-	qrnqwPu319fImmnf9bhfUQgd8C24yQcXY1K1aRFjB1vWQr4Ax2Jdfgq8wTz9CZ397CVORVQhnqQ
-	L6/s5cqX8uCJyrF4TnmJ0x99kLYnaMFX3guD5K/IzeUkr/0dj0r4aj3mdu2LnFdsS0SrMJYh5eZ
-	CwUWqIuTzGDQNHk4dM9yV+TBuRWYZReqhASRceQvfTlfRAfn4rB4o1ebWuyOdt5sUtpXEk27EJl
-	+Zcit8qtuLu0QP5hybtpklkqyRY3InIm2255a0q94/uzSiWluaamG9dpaTpx6d71+lOXJ2CRoz3
-	tbHyblwpVGTcXCnjFD6+XsuGXsnPD91oic+eZC4DUR
-X-Google-Smtp-Source: AGHT+IE9IcJVSPedWcpAGpdnmJW4z9APNCOE9dq2vD2s6GXK/hxjPEw6IveEriVdGAIUqOpPhoFZSg==
-X-Received: by 2002:a17:907:934a:b0:b48:730:dbb3 with SMTP id a640c23a62f3a-b50ac1cc3eemr13165366b.32.1759852589395;
-        Tue, 07 Oct 2025 08:56:29 -0700 (PDT)
-Received: from puffmais2.c.googlers.com (224.138.204.35.bc.googleusercontent.com. [35.204.138.224])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b486a173a5dsm1428820166b.85.2025.10.07.08.56.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Oct 2025 08:56:29 -0700 (PDT)
-From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Tue, 07 Oct 2025 16:56:28 +0100
-Subject: [PATCH] scsi: ufs: dt-bindings: exynos: add power-domains
+	s=arc-20240116; t=1759857403; c=relaxed/simple;
+	bh=DJtZSdCijPbQbaB6CVjS9lgp06ac4tI/pgBmbGCdqLg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VZNGAFWTsMDztsj9jkQWI+VPUF83H9pj+FynYvHhpshEH8oX4AKmlUwnD5YZEzETSTkG7U/dqjxu7Nn9Fv9fmE2SczNp3ysM8Q7WMxFbtyLeLRW28xC1zfy9YFoTubpS4+ANmKg/nWvXpfuYBpn/uuGYF561b/g7W9TupkoFdUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=SgXeFwx1; arc=none smtp.client-ip=35.89.44.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+Received: from eig-obgw-6005b.ext.cloudfilter.net ([10.0.30.162])
+	by cmsmtp with ESMTPS
+	id 692WvC42geNqi6BIgv7Q3V; Tue, 07 Oct 2025 17:16:34 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id 6BIfvkA0uLidY6BIgvklnz; Tue, 07 Oct 2025 17:16:34 +0000
+X-Authority-Analysis: v=2.4 cv=bq1MBFai c=1 sm=1 tr=0 ts=68e54af2
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=4oHATN8Nx7vVUZJYxp75bA==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=7T7KSl7uo7wA:10
+ a=vrm2DYtl0a66eygLWCQA:9 a=QEXdDO2ut3YA:10 a=xYX6OU9JNrHFPr8prv8u:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=k/RQCbk5TNZtW25tKPudmPz+XPlOL4k+2HIoGg8Wmrs=; b=SgXeFwx1/TNoyhrIv/+05jHO4j
+	JOfaWjWYUSCsNofzRqCxyS3IYzkVypY3V3ulpnWUYXYsK2KanWd/Acl3t+NpMAT8nxuhHKpk0z7sZ
+	BlGiKkXpY/88lFgkadHkLp9gnkHBhISlVVu7E3xb/PeQtNaur/moLzBgBcSGb7ju1ScpKgJWS3V5g
+	Uh4JGuNBot+whOESBVoKTByOCZHPvChXQX8ta0qC0Kay6ucy366slpWUZKAeXivAS6mkb8FZdWvqw
+	5HTLoZ1zdi2WnyrNpTmeJ4ilmZil8uoapxbNpJu+8KtK+c/NBLzzlPi2OFZw9qhukr2/U5LwgXDey
+	hH+WW4Tg==;
+Received: from [185.134.146.81] (port=39130 helo=[10.21.53.44])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.98.1)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1v68WM-00000004Ij5-3a69;
+	Tue, 07 Oct 2025 09:18:31 -0500
+Message-ID: <5b23ae5a-bd47-49c7-bca7-7019abc631f7@embeddedor.com>
+Date: Tue, 7 Oct 2025 15:18:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20251007-power-domains-scsi-ufs-dt-bindings-exynos-v1-1-1acfa81a887a@linaro.org>
-X-B4-Tracking: v=1; b=H4sIACs45WgC/x3NPQ6DMAxA4asgz7UUoBVVr4I6kNihHuqgmF8h7
- t6o47e8d4JxFjZ4VSdkXsUkaUF9qyB8Bh0ZhYqhcc2jdq7DKW2ckdJ3EDW0YIJLNKQZvSiJjoa
- 8H5oMnx21HLxv491D6U2Zo+z/V/++rh/PMByuewAAAA==
-X-Change-ID: 20251007-power-domains-scsi-ufs-dt-bindings-exynos-87d3ecbb3f4b
-To: Alim Akhtar <alim.akhtar@samsung.com>, 
- Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: Peter Griffin <peter.griffin@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
- linux-scsi@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-X-Mailer: b4 0.14.2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2][next] scsi: megaraid_sas: Avoid a couple
+ -Wflex-array-member-not-at-end warnings
+To: James Bottomley <James.Bottomley@HansenPartnership.com>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Kashyap Desai <kashyap.desai@broadcom.com>,
+ Sumit Saxena <sumit.saxena@broadcom.com>,
+ Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+ Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <aM1E7Xa8qYdZ598N@kspp>
+ <3a80fd1d-5a05-4db3-9dda-3ad38bedfb38@embeddedor.com>
+ <4cf727c56c4fda8d28df920214b3824c9739bc8f.camel@HansenPartnership.com>
+Content-Language: en-US
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <4cf727c56c4fda8d28df920214b3824c9739bc8f.camel@HansenPartnership.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 185.134.146.81
+X-Source-L: No
+X-Exim-ID: 1v68WM-00000004Ij5-3a69
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([10.21.53.44]) [185.134.146.81]:39130
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 0
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfGfy7KbgiuUIq3hS3QH+o6ct9JNHwov5sHq/kqKxxdb5fg+yXkDbV+xad4nsQqsMrNnQrZQ1xD9O6bP7hss5uk0GAXJHRqJtelNFENiBymZFwXhD44kA
+ XLlFMVgmWejL9KJDFmvCEpQOd3f7LXP43hzjYooeNFSI0cIpWYNRL8wFT9LglmWxth6bi+EcCheru6ltn2hariLgjFUnvXxonrYOmUpG7ZLOKu7Xi4pxFFHN
+ eDSWfrSZXT0XDcR2TrMeHv7HN1e1YVNaJsQcJkArsoo=
 
-The UFS controller can be part of a power domain, so we need to allow
-the relevant property 'power-domains'.
 
-Signed-off-by: André Draszik <andre.draszik@linaro.org>
----
- Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml b/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
-index b4e744ebffd10aa237e01a675039f173e29c888a..a7eb7ad85a94e588473eab896e48934cd5f72313 100644
---- a/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
-+++ b/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
-@@ -61,6 +61,9 @@ properties:
-   phy-names:
-     const: ufs-phy
- 
-+  power-domains:
-+    maxItems: 1
-+
-   samsung,sysreg:
-     $ref: /schemas/types.yaml#/definitions/phandle-array
-     items:
+On 10/7/25 12:59, James Bottomley wrote:
+> On Tue, 2025-10-07 at 11:43 +0100, Gustavo A. R. Silva wrote:
+>> Hi all,
+>>
+>> Friendly ping: who can take this, please?
+> 
+> After what happened with the qla2xxx driver, everyone is a bit wary of
+> these changes, particularly when they affect structures shared with the
+> hardware. Megaraid is a broadcom acquisition so although maintained it
+> might take them a while to check this.
 
----
-base-commit: 3b9b1f8df454caa453c7fb07689064edb2eda90a
-change-id: 20251007-power-domains-scsi-ufs-dt-bindings-exynos-87d3ecbb3f4b
+I've been in constant communication with the people involved. So far,
+none of them has expressed any concerns about this to me. However, I
+appreciate your feedback.
 
-Best regards,
--- 
-André Draszik <andre.draszik@linaro.org>
+In any case, I promptly submitted a bugfix minutes after getting the
+report.
+
+> 
+> However, you could help us with this: as I understand it (there is a
+> bit of a no documentation problem here), the TRAILING_OVERLAP formalism
+> merely gets the compiler not to warn about the situation rather than
+> actually changing anything in the layout of the structure?  In which
+> case you should be able to demonstrate the binary produced before and
+> after this patch is the same, which would very much reduce the risk of
+> taking it.
+
+This is quite simple. Here you go the pahole output before and after
+changes.
+
+BEFORE CHANGES:
+
+pahole -C MR_FW_RAID_MAP_ALL drivers/scsi/megaraid/megaraid_sas_fp.o
+struct MR_FW_RAID_MAP_ALL {
+         struct MR_FW_RAID_MAP      raidMap;              /*     0 10408 */
+         /* --- cacheline 162 boundary (10368 bytes) was 40 bytes ago --- */
+         struct MR_LD_SPAN_MAP      ldSpanMap[64];        /* 10408 161792 */
+
+         /* size: 172200, cachelines: 2691, members: 2 */
+         /* last cacheline: 40 bytes */
+};
+
+AFTER CHANGES:
+
+pahole -C MR_FW_RAID_MAP_ALL drivers/scsi/megaraid/megaraid_sas_fp.o
+struct MR_FW_RAID_MAP_ALL {
+         union {
+                 struct MR_FW_RAID_MAP raidMap;           /*     0 10408 */
+                 struct {
+                         unsigned char __offset_to_FAM[10408]; /*     0 10408 */
+                         /* --- cacheline 162 boundary (10368 bytes) was 40 bytes ago --- */
+                         struct MR_LD_SPAN_MAP ldSpanMap[64]; /* 10408 161792 */
+                 };                                       /*     0 172200 */
+         };                                               /*     0 172200 */
+
+         /* size: 172200, cachelines: 2691, members: 1 */
+         /* last cacheline: 40 bytes */
+};
+
+As you can see, the size is exactly the same, as are the offsets for both
+members raidMap and ldSpanMap. The trick is that, thanks to the union and
+__offset_to_FAM, the flexible-array member raidMap.ldSpanMap[] now appears
+as the last member instead of somewhere in the middle.
+
+So both ldSpanMap and raidMap.ldSpanMap[] now cleanly overlap, as seems to
+have been intended.
+
+(Exactly the same applies for struct MR_DRV_RAID_MAP_ALL)
+
+I can include this explanation to the changelog text if you'd like.
+
+Thanks
+-Gustavo
+
 
 
