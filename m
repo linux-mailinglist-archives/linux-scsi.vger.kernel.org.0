@@ -1,139 +1,146 @@
-Return-Path: <linux-scsi+bounces-17856-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17858-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D20FBC0093
-	for <lists+linux-scsi@lfdr.de>; Tue, 07 Oct 2025 04:38:56 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A3C3BC04FA
+	for <lists+linux-scsi@lfdr.de>; Tue, 07 Oct 2025 08:18:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3AFFE4EA5CB
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Oct 2025 02:38:52 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 667764F077D
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Oct 2025 06:18:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9AED1F582C;
-	Tue,  7 Oct 2025 02:38:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DB5521CC58;
+	Tue,  7 Oct 2025 06:18:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="rGjX1Bkk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yu2bINoj"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DAE11A0712;
-	Tue,  7 Oct 2025 02:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F1413B284
+	for <linux-scsi@vger.kernel.org>; Tue,  7 Oct 2025 06:18:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759804726; cv=none; b=Hdfr2vTC/mZCImUX5SJTfgwx4Quz+Oxrn4ieiEnnjeKH/W/6OvmpJX5amLHlD0m6wBgwxoaWuZALtoyYt+DFp0elW9LLG8IwJIwXsF+0W6NYLLo8T+Hr4kb+j//xiR5rf71xV1C2zNReFr2YMsRhoz9xbw5BcK8DWi7jpYBQCm0=
+	t=1759817916; cv=none; b=gGqbaj0ieyMnaZ1LIMBc282VwsBQWOhLeo1oVcYa9Mv9wHhVhZF6hjzZy/ba2PDPASzZK6+Pr5vZnmPf97PEiUYqNmJedNJkZiTou2Mz4TNdhYrtU++QahEEsdt5sNJkRePBd6jEl3V/foCapq1bKTUNWc2ejDVMuBywUBKG3vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759804726; c=relaxed/simple;
-	bh=qvqbhabbqNdj3zI0s/BIypEvxrHCHVSTNX18AEcaOGg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Xr8w47j/qVdWYd1K3mvwCnYSpo1rDhxrAps5A4tbhOaOFdeEm/WgaMIywXd8dSNBJEuLV0rqaSOWb8Qoo6ULTXh5wXhhQau//ufuezCH5GSeu/Rb2b3DZxO1Bmx4dl7BOzgllE6AwU5aVajiXnAJ+prrxW95xq35H/Ddy3yyWwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=rGjX1Bkk; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5971C20G008089;
-	Tue, 7 Oct 2025 02:38:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=3AN5YGseDlWLx5BbOTtRQeEDE0upcMqfW7ZhTuw4mSc=; b=
-	rGjX1BkkUXRsIxQ3Sq1z1FedN3DEMh3oYBFEoiwgRPHLEmCiZVoXheEFtXzULcaQ
-	ibXI8sXvABrjsMHc3zixN2WSthnTT1zlu5mGaBcZu0TVFgWX27b1UVmSnkj2tTnS
-	WvUrVXHjI5MueinHaGaRabgYVRK3kCcPHcOjB7bu3BIZMIR6CDeWwvm0tPGlsblY
-	XiLfl27uoKAZ0ZSocZIZ/OleA96GX5kEGQOC7gBd9lh5jLV23SnoQ7PRfkyjjQ45
-	U7IOxorlJovSmIXWYr13JP/j3khpaejq7OCukBxmqihQx3tKvc/ZZG1wWV0SBREJ
-	xSI/sMIIuPKT2chTS7Vpig==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 49mq6mg6jj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 07 Oct 2025 02:38:35 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 596NB8C0029855;
-	Tue, 7 Oct 2025 02:38:35 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 49jt17ktvc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 07 Oct 2025 02:38:35 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5972cYWF013646;
-	Tue, 7 Oct 2025 02:38:34 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 49jt17ktuv-2;
-	Tue, 07 Oct 2025 02:38:34 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        beanhuo@micron.com, bvanassche@acm.org, kwangwon.min@samsung.com,
-        kwmad.kim@samsung.com, cpgs@samsung.com, h10.kim@samsung.com,
-        HOYOUNG SEO <hy50.seo@samsung.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v2] scsi: ufs: core: Include UTP error in INT_FATAL_ERRORS
-Date: Mon,  6 Oct 2025 22:38:29 -0400
-Message-ID: <175980238056.149901.2679786294881236536.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250930061428.617955-1-hy50.seo@samsung.com>
-References: <CGME20250930061604epcas2p3f341c32c50f267aa6bd3ae0e82adfbf3@epcas2p3.samsung.com> <20250930061428.617955-1-hy50.seo@samsung.com>
+	s=arc-20240116; t=1759817916; c=relaxed/simple;
+	bh=WSad1HugXe52q/g05va5eYGyhewLw2wPoyXwmeqSge4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sle+6+kHyHrncIHLZP5urFOW+VYjuE1syTDPbzFX3nSoUXAVOdXjJz7v/VI/0UqARVB0LGfdcPRXiNgrQxKQ6wYul8+y30EP5ocTqoXmpan3fv8adPhpeIuq1kdeeDPXDor75bYiXg+f2SsoBtfjW1iCElFBa/SRe47N2/oGh3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yu2bINoj; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-26983b5411aso38483185ad.1
+        for <linux-scsi@vger.kernel.org>; Mon, 06 Oct 2025 23:18:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759817914; x=1760422714; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CDwAkbaDlWUjevGfq4nyNlKuzcgWszmvXZ9ur/30uOQ=;
+        b=Yu2bINojm2JN+k2n+PPRbpV4xPVuQRuH2HYMRduhiMIsv+wRwppZCERPDTS9+TasIl
+         9G00DVWGCUBM6S+qtQ5z1oC9GkJo23hri2/8qLwMHmC8ze5tXdt0+CvoXnWYjYKPLtdU
+         0P+uWTPm+mz0JDh/zlUdrEQ2HCEj63YJWT0ca0AT2tDCJLHhMOGR7JRf9NH5kzbeV9qV
+         m+uV/amDaLKhV9E1/nibRnNdE6nnQhQqEaHp2N/DkVfhDi9i5PXztzbJcThZQxJXZGrk
+         2W0y/Rf9OczQmHwVLAyK73LCz3fnG2qnC5fkiilHfUH19IPQhj6ssO2o4fYpxHX+7HED
+         uEUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759817914; x=1760422714;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CDwAkbaDlWUjevGfq4nyNlKuzcgWszmvXZ9ur/30uOQ=;
+        b=h6Bmt7/VgRTmszSNyLQp6MRiks+Jm+xOouMTexFI6rxl4mQnGtMvKkwx0R/N4mUaVt
+         plI1iUHTAyQe82OgTRBgHiti7YY542VPqSYvAiogyrRqaBthRytrgb4YMeLeUwn38dYt
+         OmN6lC5TZO9UsJmTig4n29DTionly4wqv2CwOhRPHT9fdLy50LeIGqWVJwTC7Gx2DaRb
+         lM2NuR+UNELz6HAraUetsfqOoKvlDO4uHQS3zoHSVAlbMZNrBQPvdrlhlKx5h+tAevDV
+         ihIiOBYgszcAOmgF0jYqW/uhLmd97SSCTP1QfITjcXO2w17mY31QpGPk7YJTO+2oUfOT
+         PZDw==
+X-Forwarded-Encrypted: i=1; AJvYcCUhDk3ltlzwIwrFjq7gOdjCeINo+wT6JP+1zbmaZExXmK3uRnj5iAmlTSmqHAWkifXyvupQ/aafMkrm@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyx4+tnBoWfFd7/M43f3th6UEEwwCZvrMnyA6xzGPACYKl6/Mp1
+	1x2y4ADpHxjhENuOpXHcgcqiB4V0NWMZNvhsApBdPXYYKtsGM7dbxEX1
+X-Gm-Gg: ASbGnct8sqppFH/1MK5VKkWk4RumJuKzYJMNHm98ga8uDU+AQFPeOaTSsTNDYkSyDN1
+	WtBlpnnY5+4qKdJVpKEDwyxgHys/eVzdcTs60TEF+vj3/ieq37zZ4+a15zvp35mGQ4jxdCGvWPJ
+	r7yeaNnXx5G8LjESqQUZqqyF+nu1eXUf1AfDnknsYnGDoIawNwmDBk7DaOfN+sJ85XIuo1kIJkM
+	VFbpQJXrXDGDTyzYtuMCjtsbxcrAmdKqCV/GwM99nENUT9TXjMqkJkIqIhX3cXBypt5UrAOIaCK
+	pvF1hOZ4jz0vff9HGX1YeKPqe0oebp0vYq0yZ/HD3jtRcbXs5fS0YLWFay73ziVeudFKjDtjtAe
+	qFvtsY2dcbypFeP30QuRVfWDVME8zGx4F0gUuUdBk/wzfB0niQX3qboBs7LKR3hAjVMk=
+X-Google-Smtp-Source: AGHT+IFEB4BT03PGibT8CSd70pTCt7zClhc5w3shhrha8qeF8hont0hAokJ8+q/qQmhqQ/KGp8jHnw==
+X-Received: by 2002:a17:903:1aa7:b0:27e:ec72:f67 with SMTP id d9443c01a7336-28e9a54ee5dmr208134585ad.6.1759817913969;
+        Mon, 06 Oct 2025 23:18:33 -0700 (PDT)
+Received: from [10.0.2.15] ([14.98.178.155])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-28e8d11191bsm152771835ad.11.2025.10.06.23.18.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Oct 2025 23:18:33 -0700 (PDT)
+Message-ID: <3ab53f69-4e1f-4f76-8605-e95d7516a97d@gmail.com>
+Date: Tue, 7 Oct 2025 11:48:29 +0530
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] scsi: Use kmalloc_array to prevent overflow of dynamic
+ size calculation
+To: Niklas Cassel <cassel@kernel.org>
+Cc: James Bottomley <James.Bottomley@hansenpartnership.com>,
+ Don Brace <don.brace@microchip.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,
+ storagedev@microchip.com, linux-scsi@vger.kernel.org,
+ linux-kernel-mentees@lists.linuxfoundation.org, skhan@linuxfoundation.org,
+ david.hunter.linux@gmail.com, bhanuseshukumar@gmail.com
+References: <20251001113935.52596-1-bhanuseshukumar@gmail.com>
+ <7761904f64c554821e71e30b205e092fc2f8478e.camel@HansenPartnership.com>
+ <1c6cceec-da16-4867-88e0-c629accbb35c@gmail.com> <aOOn8TFTseukaZlS@ryzen>
+Content-Language: en-US
+From: Bhanu Seshu Kumar Valluri <bhanuseshukumar@gmail.com>
+In-Reply-To: <aOOn8TFTseukaZlS@ryzen>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-06_07,2025-10-06_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- phishscore=0 mlxscore=0 suspectscore=0 bulkscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2509150000 definitions=main-2510070020
-X-Proofpoint-GUID: EKLeStZWejjI4qQGiYSkRJR8_lEHhWDR
-X-Proofpoint-ORIG-GUID: EKLeStZWejjI4qQGiYSkRJR8_lEHhWDR
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDA2MDE4MyBTYWx0ZWRfX2DcZ1kw34PnU
- ZfMUImQB1iauA878gI+Z7fhsospDIrXrKTzJW2cWoaI0fVoeSJ8EqemtGJvHMKFaGL5ZmdtaR7I
- pb1UbfwYAnL8p2CXZrkUDbvAjnalBrz7vMyztDtZSgDpGFPUSluwJ4mPQQjNH8Ln2TvtGEKnXvL
- VsZHjyhYdbK8SdGMTDFMYaNK25c/DoWWXzxB3g67yw1fnot1/ncr1O8BehjwvKlKfR7nW0ECmoA
- GSgzq46sSvay0aoQ/pDmtM9D/dcreJqbMFJY4380hRksPWnEijB+5DhCG1IAiv1vdWmXJsCpvBD
- 6Iy3/ggTzlwCIlSDGynKAUMlnocojU6UxR+cDcYSVliPtUyUjEGzcU8/LNxHFivp3KSoQ00Qc7i
- M18mMhk9U1cPigI06BYJXqILfRKcEDlc4q1Wz4GO9DY47+cjJlg=
-X-Authority-Analysis: v=2.4 cv=Ue1ciaSN c=1 sm=1 tr=0 ts=68e47d2b b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VwQbUJbxAAAA:8 a=y78s6vJUZ22gG4-LBH0A:9
- a=QEXdDO2ut3YA:10 cc=ntf awl=host:13625
 
-On Tue, 30 Sep 2025 15:14:28 +0900, HOYOUNG SEO wrote:
-
-> If the UTP error occurs alone, the UFS is not recovered.
-> It does not check for error and only generates io timeout or OCS error.
-> This is because UTP error is not defined in error handler.
-> To fixed this, added UTP error flag in FATAL_ERROR.
-> So UFS will reset is performed when a UTP error occurs.
+On 06/10/25 16:58, Niklas Cassel wrote:
+> On Sat, Oct 04, 2025 at 09:55:22AM +0530, Bhanu Seshu Kumar Valluri wrote:
+>> On 03/10/25 20:23, James Bottomley wrote:
+>>> On Wed, 2025-10-01 at 17:09 +0530, Bhanu Seshu Kumar Valluri wrote:
+>>>> Use kmalloc_array to avoid potential overflow during dynamic size
+>>>> calculation inside kmalloc.
+>>>
+>>> This description isn't correct.
+>>>
+>>> Given this check
+>>>
+>>>>  
+>>>> -	host_memory_descriptor->host_chunk_virt_address =
+>>>> kmalloc(sg_count * sizeof(void *), GFP_KERNEL);
+>>>
+>>> How is it possible that this allocation could ever overflow?
+>>>
+>>> If you want to change the description to say using kmalloc_array is
+>>> better practice or something (and the maintainer concurs) that's fine,
+>>> but we can't have a false justification in the kernel git log.
+>>>
+>>> Regards,
+>>>
+>>> James
+>>>
+>> Hi,
+>>
+>> Thank you for your helpful comment. 
+>> I will await till maintainer confirms if it is ok to push this change as v2 with
+>> subject line similar what you have suggested.
 > 
-> sd 0:0:0:0: [sda] tag#38 UNKNOWN(0x2003) Result: hostbyte=0x07
-> driverbyte=DRIVER_OK cmd_age=0s
-> sd 0:0:0:0: [sda] tag#38 CDB: opcode=0x28 28 00 00 51 24 e2 00 00 08 00
-> I/O error, dev sda, sector 42542864 op 0x0:(READ) flags 0x80700 phys_seg
-> 8 prio class 2
-> OCS error from controller = 9 for tag 39
-> pa_err[1] = 0x80000010 at 2667224756 us
-> pa_err: total cnt=2
-> dl_err[0] = 0x80000002 at 2667148060 us
-> dl_err[1] = 0x80002000 at 2667282844 us
-> No record of nl_err
-> No record of tl_err
-> No record of dme_err
-> No record of auto_hibern8_err
-> fatal_err[0] = 0x804 at 2667282836 us
+> You misinterpreted James' reply ("and the maintainer concurs").
 > 
-> [...]
+> James is one of the two SCSI maintainers, so there is no need to
+> delay sending a V2.
 
-Applied to 6.18/scsi-queue, thanks!
+Hi Niklas,
 
-[1/1] scsi: ufs: core: Include UTP error in INT_FATAL_ERRORS
-      https://git.kernel.org/mkp/scsi/c/558ae4579810
+Thanks for clarifying  that. I will send v2 patch.
 
--- 
-Martin K. Petersen
+Regards,
+Bhanu Seshu Kumar Valluri
+
 
