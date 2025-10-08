@@ -1,77 +1,77 @@
-Return-Path: <linux-scsi+bounces-17899-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17901-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0892BC580C
-	for <lists+linux-scsi@lfdr.de>; Wed, 08 Oct 2025 17:02:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BB63BC582D
+	for <lists+linux-scsi@lfdr.de>; Wed, 08 Oct 2025 17:05:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC0BB19E03EB
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Oct 2025 15:02:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AAB019E1634
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Oct 2025 15:05:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8693286413;
-	Wed,  8 Oct 2025 15:02:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80525286413;
+	Wed,  8 Oct 2025 15:05:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="m81EBU09"
+	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="VC/nwP0b"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700FB1AA1D2;
-	Wed,  8 Oct 2025 15:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17EC1AA1D2;
+	Wed,  8 Oct 2025 15:05:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.168
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759935736; cv=pass; b=KQfnBwYBOpKg0/MLNh67dln1Zex1+qFspI9Z3//HezrJN6fB79k/hL4eqcT8dXfrSpc0G0FYUjpfQzQNzsUxXGCHfuWI0xufeVcytLPH6XrvCPp2LbUdg468O42ebdQ7O5TgbEtkrjFJUiO75quTWbNCYdGFM89AGlFwtteh698=
+	t=1759935915; cv=pass; b=j3FWN28/UZeWec6QyVtgzKngDjOSQinAYWatXTOKA7xZNIGXf/eql/OU+fY8qkh1HGG+XDIGfa565Ey9CNIy7BTuT/KjIe26XBed47SEdcT9zNbZwXjCVDBOKz9Rt9EMGm1/f6AmpWJyd9j6Lh36NECKDzbZLgByw9/NZ9KMpDo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759935736; c=relaxed/simple;
-	bh=rDIfWA0GjmrAqzYaHNfIeUzV0LxtUFu+8TFUIiy8UOM=;
+	s=arc-20240116; t=1759935915; c=relaxed/simple;
+	bh=EW8R3PGwU2ywdbrcvYkyavqowdbwUHSEkch1ThA0QOI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JSNNaL4l9s9s5AIfg8JNpBI4IKc43d8LTARtzdy7h3i1QIC/SjzoUSNiB+ySVV+1k+OXp80QFUdOKamaP4dlUJaTedpkHRwalawsO3PjswRS4QNvv82Un7oq4S/ofS89HLd9MarUrheMKbyey0LvrT7JbCIlaU6nt4zyk8dUlqc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=m81EBU09; arc=pass smtp.client-ip=81.169.146.168
+	 MIME-Version:Content-Type; b=QunzYqg/k4/7PvCRfaPXk0Ttv0zeX44od8p4vOFX2RwCRD3tYA488lI5o+xAqhQ08i2++NCLFQ9JjLF2PNvjYia8azYUeUfSZaLNxv5JCyCN0FMcCoWmySD2uPqZ4Ecq7LmgVA1FS9lpRW0Da9nZ8FcnR2N4JPC/1W1qZcBz2gg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=VC/nwP0b; arc=pass smtp.client-ip=81.169.146.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iokpp.de
-ARC-Seal: i=1; a=rsa-sha256; t=1759935548; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1759935549; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=cE9RFA4kMhZYAFDGf0QQzaeZq21BRAccYxk/BZVL9lY1/BYi0hdGS3N0LAUDITmIy3
-    gzmcmnZX8wf4hUWUGJj6Qnoe2pZ4bBs9e9Bw5P3eJEz+9Z2mICFrhcngusiyrdWrVOGT
-    iNn9J9Iw8bHSaRlwyEB604tDTdHEMFKZm3ln0k7F6UxePDdYSPZCapQGSvofnGGPZyjr
-    O01ltKuMW8w0T+XR3uIxOhRaaY8AWDxwmYnZBZ4h2kUE57SxBrJAZRGFjgfm3MJz5Jn6
-    GDm6K+cHfkhsAI4cp6E7nSbg9OiOZafKKAEQojZuFHGTdxcbFoGfjawwR6wVGzM0RrTv
-    jeKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1759935548;
+    b=d8Khem4UmKn+wduoh9GU9MWe9Gs6VpS+RWrsFgsGeT27SJZ3XcopZTlAxZEHpcCiya
+    bfi0M//o8QxOlUesUvISKG+yUI7OdTTmnkDksnpMcGAE/BPmEcJa8kgS1psm3NAjcigc
+    LBvJ8PyYBgqDD/dhf5JZxZCtYUAnp0Y6bKi1UZnN0S+Uen//K+2e2KuwE8zzP7dx0vY4
+    YGywgimF8Mh2YygW0NnPIRdOcdLXz9tpk4yTUsTjZO2Ud0UlUrAumQPgx7nr0kGGU23O
+    elQtl5Q65HZyOYReYIJUIAp3R8EjChIn94RpBtT3W0DfcvjhyHh0lJccoH8xK3+NK8B0
+    kQbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1759935549;
     s=strato-dkim-0002; d=strato.com;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=krhcCaDEBGrRzyaLw1CjLPfRgbcCwT33TM7M7vbW/D8=;
-    b=Q8O80fxHk06Ipeu7sGqaIlOIUfcXgYOoDo/X5zd4a5F040P65kF9ffY1NUBfQLRcvT
-    0hdSI05jykBeOvwctzYl+KRHUnOlNTM6KjrOkB/SeuUQdntNtlwtt7eqPDp7oZXUqxTE
-    wjWyERH7TmF5Iyt0gHuf/4a+rUvp6iBtHL6nQyzGuf03pQeXyfyCUr31s2WGObKPXP2A
-    nAfg4qadXnXSDGOSjlFh4lJ7xsrni1Tg79gvs2LdlvKlEbTkngP2YVM+CDUTGrWx1+oC
-    warNO7FfmPqtv20wa6HwCPOqROxObEIZDhTTddCTywE4GnNvn2fdiBbfk0oRkQXV0nK3
-    G4/Q==
+    bh=gnYEC5iu1A7kycLvhBP+UswZjufkKOz7lGn1felAzeg=;
+    b=IKFZEXqeSWBSf2ZMlMGP0JZdR4KpCF7mzkFdk4VU57PyA9Kxq35lhHuV4QsEF3yyPw
+    7GPnD7UrlIjSVBk472VaOlv4Zkj0ZjWp5dawLGtvp8ueSu6PtGOCh7WTP+JiAY13SrE/
+    CRFf38InsdLRx9/C0M6czefztqlBoMkg+EhFcgnvqZjaz12ZszxfhNvxkEGty7qe3tSS
+    MLBRvwtCy//EED6bVLIMpdsxUgctyyxQiFZP5OClzrXVcl5LTqsSDikIcpYjnbjKagkA
+    9Vp6ZTrMC3LtI8ACjBaQcYKvEH5f1sj5ZdHGIBFNoy6TJisRCa3igJ5aDakxcf5CbKZR
+    irLQ==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1759935548;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1759935549;
     s=strato-dkim-0002; d=iokpp.de;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=krhcCaDEBGrRzyaLw1CjLPfRgbcCwT33TM7M7vbW/D8=;
-    b=m81EBU09DGA6g1ymsIgZMs5V6iYmP/8fPaALfGGQp2v+OG/luWTUnjjIevSAPUmPuT
-    Rvpyphvs/GxKIrbvbCuv3CgQym0XUxTGqxmm4DClJJfew2eLdsTlYuPY8qTSdNgIKuty
-    54u+eCYXI5hv3fe0OaWPkvCbUUatswc0+w0jmjv26GqEItiORmWMPGPVqv53gWQvO4fT
-    IbW3aeWdgXPWrypOO4wlA62ifK43Ry3KjEHVSVYrDDoy/XO0ap0VnpCiJBIcz+C7CoKZ
-    EoI30PiBNd207XgSsxZ3+WmhORfEkaDH5oZQDxULVHIQypWnzqRFs1pC/9IZlxzRkzS7
-    UYbg==
+    bh=gnYEC5iu1A7kycLvhBP+UswZjufkKOz7lGn1felAzeg=;
+    b=VC/nwP0b5rK/aAtaAlVIaVSIq7rpmHtKvBY/uVHbBsADBDpIL5eijC1DKC8Ed6hVCk
+    u8kBtF2kfNdZYvga2fr3oKAUV+dtO4D9+8MtEceNXZEaQOweWScMYCMG6/IEb8nQxRtA
+    BhlAI7zDx7pElIN7dmxDS6icNeFJB1V5MlWOZMLpxmTpPVrHZcz4IFAksMoaiAInmNjb
+    DhSKP4pr7ejZ5Tmf0X+FLu6tHUDd2VEhKdDqqqYuDG+Bgbyckr1m0d2yXNMIBKd80t9Y
+    XyRFIaXaasXENN58JK8sMgJon8B2K1noPc+yB7ZF/Te7Q7ZwkTwYwn6bc4j3RJsKElta
+    tJ+Q==
 X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSfNuhhDSDt3O2J2YOom0XQaPis+nU/5K"
 Received: from Munilab01-lab.micron.com
     by smtp.strato.de (RZmta 53.4.2 AUTH)
-    with ESMTPSA id z293fb198Ex82Te
+    with ESMTPSA id z293fb198Ex92Tf
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Wed, 8 Oct 2025 16:59:08 +0200 (CEST)
+    Wed, 8 Oct 2025 16:59:09 +0200 (CEST)
 From: Bean Huo <beanhuo@iokpp.de>
 To: avri.altman@wdc.com,
 	avri.altman@sandisk.com,
@@ -84,11 +84,10 @@ To: avri.altman@wdc.com,
 	beanhuo@micron.com,
 	jens.wiklander@linaro.org
 Cc: linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Avri Altman <Avri.Altman@sandisk.com>
-Subject: [PATCH v3 1/3] scsi: ufs: core: Remove duplicate macro definitions
-Date: Wed,  8 Oct 2025 16:58:52 +0200
-Message-Id: <20251008145854.68510-2-beanhuo@iokpp.de>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 2/3] scsi: ufs: core: fix incorrect buffer duplication in ufshcd_read_string_desc()
+Date: Wed,  8 Oct 2025 16:58:53 +0200
+Message-Id: <20251008145854.68510-3-beanhuo@iokpp.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251008145854.68510-1-beanhuo@iokpp.de>
 References: <20251008145854.68510-1-beanhuo@iokpp.de>
@@ -103,29 +102,36 @@ Content-Type: text/plain; charset="us-ascii"
 
 From: Bean Huo <beanhuo@micron.com>
 
-Remove duplicate definitions of SD_ASCII_STD and SD_RAW macros from
-ufshcd-priv.h as they are already defined in include/ufs/ufshcd.h.
+The function ufshcd_read_string_desc() was duplicating memory starting
+from the beginning of struct uc_string_id, which included the length
+and type fields. As a result, the allocated buffer contained unwanted
+metadata in addition to the string itself.
 
-Suggested-by: Avri Altman <Avri.Altman@sandisk.com>
+The correct behavior is to duplicate only the Unicode character array in
+the structure. Update the code so that only the actual string content is
+copied into the new buffer.
+
+Fixes: 5f57704dbcfe ("scsi: ufs: Use kmemdup in ufshcd_read_string_desc()")
+Reviewed-by: Avri Altman <avri.altman@sandisk.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 Signed-off-by: Bean Huo <beanhuo@micron.com>
 ---
- drivers/ufs/core/ufshcd-priv.h | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/ufs/core/ufshcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
-index d0a2c963a27d..cadee685eb5e 100644
---- a/drivers/ufs/core/ufshcd-priv.h
-+++ b/drivers/ufs/core/ufshcd-priv.h
-@@ -77,9 +77,6 @@ int ufshcd_mcq_abort(struct scsi_cmnd *cmd);
- int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
- void ufshcd_release_scsi_cmd(struct ufs_hba *hba,
- 			     struct ufshcd_lrb *lrbp);
--
--#define SD_ASCII_STD true
--#define SD_RAW false
- int ufshcd_read_string_desc(struct ufs_hba *hba, u8 desc_index,
- 			    u8 **buf, bool ascii);
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 2e1fa8cf83f5..79c7588be28a 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -3823,7 +3823,7 @@ int ufshcd_read_string_desc(struct ufs_hba *hba, u8 desc_index,
+ 		str[ret++] = '\0';
  
+ 	} else {
+-		str = kmemdup(uc_str, uc_str->len, GFP_KERNEL);
++		str = kmemdup(uc_str->uc, uc_str->len, GFP_KERNEL);
+ 		if (!str) {
+ 			ret = -ENOMEM;
+ 			goto out;
 -- 
 2.34.1
 
