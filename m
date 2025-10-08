@@ -1,147 +1,155 @@
-Return-Path: <linux-scsi+bounces-17897-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17900-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40CA8BC4F85
-	for <lists+linux-scsi@lfdr.de>; Wed, 08 Oct 2025 14:50:11 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D67EEBC5815
+	for <lists+linux-scsi@lfdr.de>; Wed, 08 Oct 2025 17:02:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 04D504F20D1
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Oct 2025 12:50:10 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DB7E94EC912
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Oct 2025 15:02:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BA5E25392D;
-	Wed,  8 Oct 2025 12:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF29288513;
+	Wed,  8 Oct 2025 15:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="UP5ZgToN"
+	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="a4xm/TU/"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A4120C023
-	for <linux-scsi@vger.kernel.org>; Wed,  8 Oct 2025 12:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C4320B81B;
+	Wed,  8 Oct 2025 15:02:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.167
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759927802; cv=pass; b=BBA5rCUEpcTFZL6ezgsPiWvrz/FEPpzJkgUCbm3xDlkR0RCLQ14yXQ4LlZncFWuvW00yH2pOtmIqN9gUbUYj03vW7xZKheMqMbmBs0DeJOCwCHAaQghzBjfgZe29mAiyMRwOzzYt3LwLkFhSnqo8bkuiS6zdI3lR3+j3kIrIUQ8=
+	t=1759935745; cv=pass; b=XG1sre7TyciEhTomCPCbHT4Mg9IWdIO4rBOzCZrPVSteaJQw/o6UXHtRAI7gcRcOsvAu+7RcpKcuh5iel4cai9yZd0lh7RJwK28EeYgMepSiIQAtjYEep5D0VSkZE96wboc+Q7qRF0uh07TMWZetYv5FxuI6BGZbuSu5V1XBclk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759927802; c=relaxed/simple;
-	bh=86LeVZqUMDCPqcayTtleHC+BsNU1cMntipizGt0Wkf0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BqQkeGSaKbj2FWvJr6hfac3X+G9gEHtSSVhNaVuG7r+dTM/NNREK7CrcCHjAIW4CP/7psA+2l1+0rYujvy9kCjHVdMcUZyREu2NYsB5zAFJ3vqQqURnfei9zKsHTJrYbXUiWdlJdjRCvbx+DT7mHIr5w+Vc8yuwKp+G2iCyq5xg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=UP5ZgToN; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1759927776; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=KdeOqQBy1s/rXDOxVKE/EpMT7YUxpRQgth+lGCzGWxz1KrncHCtI2m6sMQEsYnq0qLDtgcVlRCd37w3XuWPd+5MzjIzoVXtfmYTHNuIUhan7FU+FzjukKWGtG2zS1vCJbZj4gj1aiydeCbCv0oFN1wxW12BjBQavn72Ati2jYlE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1759927776; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=pEIXafHhPnF6u0AUO9A/qOXV/dRlWW+OdRdhJfEgMDQ=; 
-	b=bdENLcrjWdE0wAvNq84yxFP+k4jOK6zs0aIFF8Q5JB+RqTDyNpXu0wIk4zTEJNyKT5obT9+Ad9H0pXQ2eXxHckIhli4BL+X7YJBNwbe8WIscGgV77uqDavvf3pxaQjDFebqjTRuGlqx4s9avUqtTPqrR7jxTmWTwmcg+Vg8HxSs=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1759927776;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=pEIXafHhPnF6u0AUO9A/qOXV/dRlWW+OdRdhJfEgMDQ=;
-	b=UP5ZgToNwh9kJ0rTD+sVnNzoKBAI8drQ7jYDWuo0/C4vrpoQuLmwZ6hFw2jN9Yqt
-	2OoRd1kFFFgAmRimkshwPujR9A+DkMVqMI4SIcoqbAAiDO1MSpFavE3p4JqSPWJSVb1
-	Wkx6gWyV4fjNmQWsvERzzhzaAbq89QT3kkCMXa34=
-Received: by mx.zohomail.com with SMTPS id 1759927772766375.8601126489972;
-	Wed, 8 Oct 2025 05:49:32 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id 3A922182747; Wed, 08 Oct 2025 14:49:25 +0200 (CEST)
-Date: Wed, 8 Oct 2025 14:49:25 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Ming Lei <ming.lei@redhat.com>, Bart Van Assche <bvanassche@acm.org>, 
-	"Martin K . Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org, Jens Axboe <axboe@kernel.dk>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>
-Subject: Re: [PATCH] scsi: core: Fix a regression triggered by
- scsi_host_busy()
-Message-ID: <lrembxwyytccmsry2rztqtgglpgrbkdj6vjk7mmjtawxmodavx@mi7xfyemrvbl>
-References: <20251007214800.1678255-1-bvanassche@acm.org>
- <CAFj5m9K1L7n3C9mL0zgNXmzhttD-B-64LBNbcp=HCPYPNvgjMg@mail.gmail.com>
- <aOX7krhcR7DB7T6a@infradead.org>
+	s=arc-20240116; t=1759935745; c=relaxed/simple;
+	bh=8BYdubcN33XQRMwNL5x11GZOJ9KL7az6VFbYgDGsnJU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Si6/0LfZqIofMChzrh/CSmzpgDm+d4cI7rx2fDbDG/f8AazNyjtoljtTQFNJ7L8ZiejRFidZMnufIa/J5aHUgms/E9EtgrWOoltkLxB2BUFryIGyD7LNESEEmEZUTJPEJLtnpg6z/KEaxd/SxZn7M/kfBXDDYZD9eWKr9SZal4E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=a4xm/TU/; arc=pass smtp.client-ip=81.169.146.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iokpp.de
+ARC-Seal: i=1; a=rsa-sha256; t=1759935548; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=fJ8qvLwFGOH8CzID6kGiQuZgg+ECo7VcpwYSSzKZ8YY5Nhh6N76F9P8zV5F60PZHUr
+    iZQdfcsBmnCAeUmhDWcVWKHZmlQEUzAf7KGxKEUDlxGPUVdEAx49T9A+VMDcx3qyL4re
+    h16nhwqy0hvUBUgKpBxTscPHJADb5QplEfYyJ1gewBgubmqB+1cnxt4AGopRpHVbrGOg
+    TDpJWCuoWQXUTWrWP+QOKOiBKBsYc0onvAYaCq4KzHjNM32AgGAQN5GLlCDmI5lr2bnX
+    XP4NNeOfMC6Y6UB0G74WbrlyRps7xWUaDwz6G1vd4+4+ilCrrfQCvLo/BnNAue413KYX
+    vB2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1759935548;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=pZuTfJt990kgMbXjxTaGe/0IevJB83uAIgP/D8Hi6Rk=;
+    b=F3auZ+sRGx8/UDCrDPHW9Zg0Qv/WMv8Pz8tMQIwpUUz3H1uqJ5OPW3Pg41R5jVsxKI
+    Va/puzVwqczPwEDkOnOca04hYMGP0hv8IcFPGReD7j7suObYj1bs3NABM0jU2liMY7nj
+    dFknW+Bgq0WXBBE4JirDB4YWjnAXyl0oRGlv1GedXifkJyhPIyXIKliMUChKpDlLlSyE
+    Dw2GMxsSVNc2mmk+QjzKfpYMpNQnbXIKCBI5HrPa38V88qF1HMLp5AVLdOXMSoYgd1vj
+    +zLfkxZlaVk3RhrS8gqPRgdyRP9doRsyHMqQg2W0MyhAZMpwBVxNAyHVBecNH5CWHzt5
+    GiNw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1759935548;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=pZuTfJt990kgMbXjxTaGe/0IevJB83uAIgP/D8Hi6Rk=;
+    b=a4xm/TU/1E8QlvM4vK+LE8EFzCPoxTwQh+WV1qGHUimHgClNiosMugfS4PNWDelzJR
+    1aACH6OxrDk61nF/bQ0WYAFZ7ts4lcgwTAoSZ+LkO42UEv+l4i1x30HSCkznf+7imGBg
+    52l49OBRCvEDZaOHNCSL1M4WiLihjmmLmd8lI5ryliSVniUKqcrGJSTvVbnYWqVH5Z3a
+    Raoqr2eiXdF7tIQtLQG54zRisrC2VXFZtibuNnlPAlLZAlla5jLid46O87FQMAMiFPP0
+    yK8G2+jW44n/1I++eIHgrlfZirJ9Gf5BQWnERFoe9U3jINP6+vQJ8lPtLY7aB0ifYRr/
+    W85w==
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSfNuhhDSDt3O2J2YOom0XQaPis+nU/5K"
+Received: from Munilab01-lab.micron.com
+    by smtp.strato.de (RZmta 53.4.2 AUTH)
+    with ESMTPSA id z293fb198Ex72Tc
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Wed, 8 Oct 2025 16:59:07 +0200 (CEST)
+From: Bean Huo <beanhuo@iokpp.de>
+To: avri.altman@wdc.com,
+	avri.altman@sandisk.com,
+	bvanassche@acm.org,
+	alim.akhtar@samsung.com,
+	jejb@linux.ibm.com,
+	martin.petersen@oracle.com,
+	can.guo@oss.qualcomm.com,
+	ulf.hansson@linaro.org,
+	beanhuo@micron.com,
+	jens.wiklander@linaro.org
+Cc: linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] Add OP-TEE based RPMB driver for UFS devices
+Date: Wed,  8 Oct 2025 16:58:51 +0200
+Message-Id: <20251008145854.68510-1-beanhuo@iokpp.de>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aOX7krhcR7DB7T6a@infradead.org>
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
 
-Hi,
+From: Bean Huo <beanhuo@micron.com>
 
-On Tue, Oct 07, 2025 at 10:50:10PM -0700, Christoph Hellwig wrote:
-> On Wed, Oct 08, 2025 at 11:17:18AM +0800, Ming Lei wrote:
-> > Long term, the UFS driver need to be fixed, this or most of scsi core
-> > APIs should
-> > have been called after the scsi host is initialized.
-> 
-> Please fix ufs now.  Otherwise we'll be stuck with these hacks forever
-> as they never get cleaned up.
+This patch series introduces OP-TEE based RPMB (Replay Protected Memory Block)
+support for UFS devices, extending the kernel-level secure storage capabilities
+that are currently available for eMMC devices.
 
-The Rock 4D has a pluggable UFS module. UFS is described in the
-system's device-tree, but the affected system itself does not
-have a module plugged in resulting in UFS erroring out early.
+Previously, OP-TEE required a userspace supplicant to access RPMB partitions,
+which created complex dependencies and reliability issues, especially during
+early boot scenarios. Recent work by Linaro has moved core supplicant
+functionality directly into the Linux kernel for eMMC devices, eliminating
+userspace dependencies and enabling immediate secure storage access. This series
+extends the same approach to UFS devices, which are used in enterprise and mobile
+applications that require secure storage capabilities.
 
-To have an idea - the following is logged at error level because
-no UFS module is plugged:
+Benefits:
+- Eliminates dependency on userspace supplicant for UFS RPMB access
+- Enables early boot secure storage access (e.g., fTPM, secure UEFI variables)
+- Provides kernel-level RPMB access as soon as UFS driver is initialized
+- Removes complex initramfs dependencies and boot ordering requirements
+- Ensures reliable and deterministic secure storage operations
+- Supports both built-in and modular fTPM configurations.
 
-[    2.731721] ufshcd-rockchip 2a2d0000.ufshc: link startup failed 1
-[    2.732311] ufshcd-rockchip 2a2d0000.ufshc: UFS Host state=0
-[    2.732812] ufshcd-rockchip 2a2d0000.ufshc: 0 outstanding reqs, tasks=0x0
-[    2.733410] ufshcd-rockchip 2a2d0000.ufshc: saved_err=0x0, saved_uic_err=0x0
-[    2.734030] ufshcd-rockchip 2a2d0000.ufshc: Device power mode=1, UIC link state=0
-[    2.734687] ufshcd-rockchip 2a2d0000.ufshc: PM in progress=0, sys. suspended=0
-[    2.735320] ufshcd-rockchip 2a2d0000.ufshc: Auto BKOPS=0, Host self-block=0
-[    2.735931] ufshcd-rockchip 2a2d0000.ufshc: Clk gate=0
-[    2.736396] ufshcd-rockchip 2a2d0000.ufshc: last_hibern8_exit_tstamp at 0 us, hibern8_exit_cnt=0
-[    2.737166] ufshcd-rockchip 2a2d0000.ufshc: error handling flags=0x0, req. abort count=0
-[    2.737875] ufshcd-rockchip 2a2d0000.ufshc: hba->ufs_version=0x200, Host capabilities=0x187011f, caps=0x48c
-[    2.738727] ufshcd-rockchip 2a2d0000.ufshc: quirks=0x2000, dev. quirks=0x0
-[    2.739349] host_regs: 00000000: 0187011f 00000000 00000200 00000000
-[    2.739910] host_regs: 00000010: 00000000 000005e6 00000000 00000000
-[    2.740480] host_regs: 00000020: 00000000 00000470 00000000 00000000
-[    2.741039] host_regs: 00000030: 00000008 00000001 00000000 00000000
-[    2.741598] host_regs: 00000040: 00000000 00000000 00000000 00000000
-[    2.742156] host_regs: 00000050: 00000000 00000000 00000000 00000000
-[    2.742715] host_regs: 00000060: 00000000 00000000 00000000 00000000
-[    2.743273] host_regs: 00000070: 00000000 00000000 00000000 00000000
-[    2.743831] host_regs: 00000080: 00000000 00000000 00000000 00000000
-[    2.744398] host_regs: 00000090: 00000016 00000000 00000001 00000000
-[    2.744959] ufshcd-rockchip 2a2d0000.ufshc: No record of pa_err
-[    2.745480] ufshcd-rockchip 2a2d0000.ufshc: No record of dl_err
-[    2.746000] ufshcd-rockchip 2a2d0000.ufshc: No record of nl_err
-[    2.746520] ufshcd-rockchip 2a2d0000.ufshc: No record of tl_err
-[    2.747040] ufshcd-rockchip 2a2d0000.ufshc: No record of dme_err
-[    2.747568] ufshcd-rockchip 2a2d0000.ufshc: No record of auto_hibern8_err
-[    2.748174] ufshcd-rockchip 2a2d0000.ufshc: No record of fatal_err
-[    2.748716] ufshcd-rockchip 2a2d0000.ufshc: link_startup_fail[0] = 0x1 at 2731713 us
-[    2.749398] ufshcd-rockchip 2a2d0000.ufshc: link_startup_fail: total cnt=1
-[    2.750001] ufshcd-rockchip 2a2d0000.ufshc: No record of resume_fail
-[    2.750559] ufshcd-rockchip 2a2d0000.ufshc: No record of suspend_fail
-[    2.751125] ufshcd-rockchip 2a2d0000.ufshc: No record of wlun resume_fail
-[    2.751721] ufshcd-rockchip 2a2d0000.ufshc: No record of wlun suspend_fail
-[    2.752332] ufshcd-rockchip 2a2d0000.ufshc: dev_reset[0] = 0x0 at 2297266 us
-[    2.752953] ufshcd-rockchip 2a2d0000.ufshc: dev_reset: total cnt=1
-[    2.753497] ufshcd-rockchip 2a2d0000.ufshc: No record of host_reset
-[    2.754047] ufshcd-rockchip 2a2d0000.ufshc: No record of task_abort
-[    2.755475] ufshcd-rockchip 2a2d0000.ufshc: error 000000000dbbd97c: Initialization failed with error 1
-[    2.756358] ufshcd-rockchip 2a2d0000.ufshc: error 000000000dbbd97c: ufshcd_pltfrm_init failed
-[    2.757115] ufshcd-rockchip 2a2d0000.ufshc: probe with driver ufshcd-rockchip failed with error 1
+v2 -- v3:
+	1. Removed patch "rpmb: move rpmb_frame struct and constants to common header". since it
+	   has been queued in mmc tree, and add anew patch:
+	   "scsi: ufs: core: Remove duplicate macro definitions"
+	2. Incorporated suggestions from Jens
+        3. Added check if Advanced RPMB is enabled, if enabled we will not register UFS OP-TEE RPMB.
 
-I think the best solution would be to avoid this huge error print
-in the first place for a completley missing device, but I haven't
-checked the details.
+v1 -- v2:
+	1. Added fix tag for patch [2/3]
+	2. Incorporated feedback and suggestions from Bart
 
-Greetings,
+RFC v1 -- v1:
+        1. Added support for all UFS RPMB regions based on https://github.com/OP-TEE/optee_os/issues/7532
+        2. Incorporated feedback and suggestions from Bart
 
--- Sebastian
+
+Bean Huo (3):
+  scsi: ufs: core: Remove duplicate macro definitions
+  scsi: ufs: core: fix incorrect buffer duplication in
+    ufshcd_read_string_desc()
+  scsi: ufs: core: Add OP-TEE based RPMB driver for UFS devices
+
+ drivers/misc/Kconfig           |   2 +-
+ drivers/ufs/core/Makefile      |   1 +
+ drivers/ufs/core/ufs-rpmb.c    | 249 +++++++++++++++++++++++++++++++++
+ drivers/ufs/core/ufshcd-priv.h |  16 ++-
+ drivers/ufs/core/ufshcd.c      |  32 ++++-
+ include/ufs/ufs.h              |   4 +
+ include/ufs/ufshcd.h           |   8 +-
+ 7 files changed, 301 insertions(+), 11 deletions(-)
+ create mode 100644 drivers/ufs/core/ufs-rpmb.c
+
+-- 
+2.34.1
+
 
