@@ -1,230 +1,145 @@
-Return-Path: <linux-scsi+bounces-17973-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-17976-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A646BC95D5
-	for <lists+linux-scsi@lfdr.de>; Thu, 09 Oct 2025 15:48:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8BA2BCAC6B
+	for <lists+linux-scsi@lfdr.de>; Thu, 09 Oct 2025 22:16:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B6EA14F2313
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Oct 2025 13:48:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0308B19E2157
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Oct 2025 20:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 968DC2E8E0C;
-	Thu,  9 Oct 2025 13:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AB8226F2AB;
+	Thu,  9 Oct 2025 20:16:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b="Ko5GMo+M"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pKsHcFtd"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E462E6CA5
-	for <linux-scsi@vger.kernel.org>; Thu,  9 Oct 2025 13:48:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8860226E70B;
+	Thu,  9 Oct 2025 20:16:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760017697; cv=none; b=fkPMwwvO8+G+VgzNiXbJbO+zf+oC53yj6PaTRFbh1EpHyT0KWL/GU6INsGO8zOpAUiHCaCrr4NYqRW9EdJD0WB06EpNAQ9CJ/6rWRj+vyv/RigBGB77+3HxNGnI+csYoxFD+bWwPhVsiS7snlRQvgaCli2FJ2kJ77+SaDSelOpg=
+	t=1760040985; cv=none; b=IgmSLHiJ3a0VQ9uajjXzyACFyl7yQSApKweC/wtTXApm9tfy9wxdFTrauBLY/WT8qT76fug/pbd8X6q+wDaijg6cY7XYieTBI1YR/QzfaQu/diex9s2csIduDnZjHr6uEG8DJ7XlOCHJx3L1CLoA1EwztdANhCNzZjPfYg2pN/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760017697; c=relaxed/simple;
-	bh=uMTYl0l0bgRiFOYdD2SO3Mgit4uamyS2BKPDM62RoPw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dz03vS6L3qI206+SZ2ACoLaWNOPScijuc5V7TCGDdafv+2ehPRTz5mjr5tiII6PF1TrqGOUVBY70bjhhqdMU9lk7uT7PNC6ROxpTDH6rdIk6Gr9n7owItTBGOSSLshHSdVObWvEd3BzBaQT7QGuTiAcx0wzdIc2kYFZ5KyDH1C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=Ko5GMo+M; arc=none smtp.client-ip=185.67.36.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.de
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id 283C0240101
-	for <linux-scsi@vger.kernel.org>; Thu,  9 Oct 2025 15:48:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.de; s=2017;
-	t=1760017692; bh=2DCj6qFoCxBp2NDx0KA/+MnCcq+JdNn8e5RmKU2/pbs=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:Autocrypt:OpenPGP:From;
-	b=Ko5GMo+Mk8iG/F965pPGt/5Q+/oe29ORbJ594XdvcVdEu0RhTLynHS+BYwElaKqDf
-	 glzCuIyj8GTWBoy7uFkV62225AiUC17JmDrK0yd0/kG7PKw9YOoncMXI2vpsU82gzP
-	 uKGP1zEuiWt5lgJ0bEmqCuPP81DUJAJ4/CLGjFkW/JUIoOJv/kraoVLPclzCYNPnhg
-	 dK3uR8fsRr0J8S4qTlDntt18dqrDHc0f6P5ONErLfTpB3I5FC98xdqI+2lxubCebnM
-	 kzYkP9SjLjA7QNyjBn0H4i8rdBPHhQUyeAoVqT2Yw3IV3eFKh6UC/Kjs/d2qHMlH8k
-	 cLPFSLKQd+75g==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4cjB631b7lz6twC;
-	Thu,  9 Oct 2025 15:48:11 +0200 (CEST)
-Message-ID: <5900cfcea7e5f8bc0f100be4afeced9e203c3e9f.camel@posteo.de>
-Subject: Re: [PATCH v2 2/2] ata: Use ACPI methods to power on ata ports
-From: Markus Probst <markus.probst@posteo.de>
-To: Niklas Cassel <cassel@kernel.org>
-Cc: Damien Le Moal <dlemoal@kernel.org>, "James E . J . Bottomley"
-	 <James.Bottomley@hansenpartnership.com>, "Martin K . Petersen"
-	 <martin.petersen@oracle.com>, linux-ide@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 09 Oct 2025 13:48:11 +0000
-In-Reply-To: <aOejov5d_TlVkueH@ryzen>
-References: <8c3cb28c57462f9665b08fdaa022e6abc57fcd9e.camel@posteo.de>
-	 <20251009112433.108643-1-markus.probst@posteo.de>
-	 <20251009112433.108643-3-markus.probst@posteo.de> <aOejov5d_TlVkueH@ryzen>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1760040985; c=relaxed/simple;
+	bh=8h0yu2pV7uQOX+9yJMn/3FbXWLNjoFlGlRNrtc9pOcM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SsVG+8pUlecUE7bVX4ludHf08e/ZL+vO88bQPraTb04wTSdAM/5csY/WQAqjFRiyPjubhO+OyVp5Hme68ExqCb30JM41LPZ645Kk6rKrqBO/Jl1Iq/xYmaVapmx7ti1wGebJn1665EajcFXGfOqUBP+6WnTdfOFR7staoR+f7X8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pKsHcFtd; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 599EIOxQ014054;
+	Thu, 9 Oct 2025 20:11:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:message-id:mime-version:subject:to; s=
+	qcppdkim1; bh=f0Z6sFSRwksfBZQlXTFw+3+zEZbAZaUN0TuayQVteiY=; b=pK
+	sHcFtdOQwL6pntzVrA7Ht/NcAaQKasWUMYPGN6q93J1GRd+H56fugCwfQXnMiiuP
+	8wOM3WE0CrIPIEjX1SGLVj+zoHU9pch2t9uHfAsnpk3ZGbSz6qRuzzNQb3DS1Tgo
+	omVMaNy+tfAXvXYFbAgIr5oT3xOwIzRSpmPTPbmJLDP0mbu6t2sjMwQmtZVu2+tb
+	lNNqSHKw8xz/xn/UC+YitxUkYtiXQxVbemPgKpSLDLG4AnuJSVs5Jw9Odc3G+Vxh
+	kkBC2HIccb1Wh3kz/nkacv4uuBR/wz/ib0Idp/jUQeLvrZc3ftzd46FDXdFV2DXI
+	enGSU8R5/e9P5kxZYmrQ==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49nv4km70r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 09 Oct 2025 20:11:10 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 599KBATN002953
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 9 Oct 2025 20:11:10 GMT
+Received: from stor-berry.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.24; Thu, 9 Oct 2025 13:11:09 -0700
+From: "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+To: <quic_cang@quicinc.com>, <quic_nitirawa@quicinc.com>, <bvanassche@acm.org>,
+        <avri.altman@wdc.com>, <peter.wang@mediatek.com>,
+        <adrian.hunter@intel.com>, <martin.petersen@oracle.com>
+CC: <linux-scsi@vger.kernel.org>, "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>,
+        "open list:ARM/Mediatek SoC
+ support:Keyword:mediatek" <linux-kernel@vger.kernel.org>,
+        "moderated
+ list:ARM/Mediatek SoC support:Keyword:mediatek"
+	<linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC
+ support:Keyword:mediatek" <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v2 0/2] *** Remove UFS_DEVICE_QUIRK_DELAY_AFTER_LPM quirk ***
+Date: Thu, 9 Oct 2025 13:10:57 -0700
+Message-ID: <cover.1760039554.git.quic_nguyenb@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Autocrypt: addr=markus.probst@posteo.de; prefer-encrypt=mutual;
-  keydata=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
-  aBeNN4ijKZchBXHPgVx+YtWRHfcm4l8=
-OpenPGP: url=https://posteo.de/keys/markus.probst@posteo.de.asc; preference=encrypt
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=dojWylg4 c=1 sm=1 tr=0 ts=68e816de cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=x6icFKpwvdMA:10 a=EGZWyozpdK3AfW_iKrYA:9
+ a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-GUID: X1k8RkBjTGYHt1tHE3U4UbrVs3m654S0
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDA4MDEyMSBTYWx0ZWRfX+E5yWUxx6HgG
+ 7HPLgXeR1x7Gp5xOWCjS2dQ8qG0LRB3a1alhNiSqs6qQhBT7Wq5J3xI2TE4IK5vBs6oJ5nI7tmM
+ gSHRhGn7DBlUZWNvWqzvydon+Fy8IkLEvHOvng1vd3Z0O4713/NM6hvxyu9d7dQRZa88hbd1OIO
+ tB5NfR3mtEHo7gCS/r1le9g1fXSEoBwHjDXZjeoNjhYxJvwTDoph01vQuXkEM7pwHLA/LiGSFSZ
+ eYNtfgvJZVZcIo8ttv57IiZJxdjaD3zAVymkkT2XJQQiSnhPK+Qe69H4FRLbuq+Am2WKQbBi4vj
+ HM7/wCid0ug05+pMC1OjYCFjQSLxETC8O2DqyaUZc3nck4USx1OGxJ+aLcG99W9A+Tu+3gXiFQE
+ 1VPfPHjoksvFCRifkRHeuI8gYmC43A==
+X-Proofpoint-ORIG-GUID: X1k8RkBjTGYHt1tHE3U4UbrVs3m654S0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-09_07,2025-10-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 impostorscore=0 suspectscore=0 lowpriorityscore=0 adultscore=0
+ bulkscore=0 spamscore=0 priorityscore=1501 phishscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510080121
 
-On Thu, 2025-10-09 at 13:59 +0200, Niklas Cassel wrote:
-> On Thu, Oct 09, 2025 at 11:24:49AM +0000, Markus Probst wrote:
-> > Some embedded devices, including many Synology NAS devices, have
-> > the
-> > ability to control whether a ATA port has power or not.
->=20
-> In V1, you mentioned that it was to control the SATA power supply,
-> now you mention the ATA port. I am confused.
-The power supply associated with the ata port (or to be more precise,
-it controls the power gate to the SATA Power connector for the specific
-disk, at least in the synology example). It sets the power state
-defined in ACPI on the ata port. I might need to update the wording
-used in the patches to make it more clear.
+Multiple ufs device manufacturers request support for the
+UFS_DEVICE_QUIRK_DELAY_AFTER_LPM quirk in the Qualcomm's platform driver.
+After checking further with the major UFS manufacturers engineering teams
+such as Samsung, Kioxia, SK Hynix and Micron, all the manufacturers require
+this quirk. Since the quirk is needed by all the ufs device manufacturers,
+remove the quirk in the ufs core driver and implement a universal delay
+for all the ufs devices.
 
->=20
-> If it is for the ATA port, then SATA already has support for this,
-> using PxSCTL.
->=20
-> How does this ACPI way to control power interact with the regular
-> way to control power for a port using PxSCTL?
->=20
->=20
-> >=20
-> > Add a new function, ata_acpi_dev_manage_restart(), that will be
-> > used to
-> > determine if a disk should be stopped before restarting the system.
-> > If a
-> > usable ACPI power resource has been found, it is assumed that the
-> > disk
-> > will lose power after a restart and should be stopped to avoid a
-> > power
-> > failure. Also add a new function, ata_acpi_port_set_power_state(),
-> > that
-> > will be used to power on an ata port if usable ACPI power resources
-> > are
-> > found. It will be called right before probing the port, therefore
-> > the port
-> > will be powered on just in time.
-> >=20
-> > Signed-off-by: Markus Probst <markus.probst@posteo.de>
-> > ---
-> > =C2=A0drivers/ata/libata-acpi.c | 70
-> > +++++++++++++++++++++++++++++++++++++++
-> > =C2=A0drivers/ata/libata-core.c |=C2=A0 2 ++
-> > =C2=A0drivers/ata/libata-scsi.c |=C2=A0 1 +
-> > =C2=A0drivers/ata/libata.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 4 +++
-> > =C2=A04 files changed, 77 insertions(+)
-> >=20
-> > diff --git a/drivers/ata/libata-acpi.c b/drivers/ata/libata-acpi.c
-> > index f2140fc06ba0..bba5ef49f055 100644
-> > --- a/drivers/ata/libata-acpi.c
-> > +++ b/drivers/ata/libata-acpi.c
-> > @@ -245,6 +245,76 @@ void ata_acpi_bind_dev(struct ata_device *dev)
-> > =C2=A0				=C2=A0=C2=A0 ata_acpi_dev_uevent);
-> > =C2=A0}
-> > =C2=A0
-> > +/**
-> > + * ata_acpi_dev_manage_restart - if the disk should be stopped
-> > (spin down) on
-> > + * system restart.
-> > + * @dev: target ATA device
-> > + *
-> > + * RETURNS:
-> > + * true if the disk should be stopped, otherwise false
-> > + */
-> > +bool ata_acpi_dev_manage_restart(struct ata_device *dev)
-> > +{
-> > +	// If the device is power manageable and we assume the
-> > disk loses power
-> > +	// on reboot.
->=20
-> Like Damien mentioned earlier, please no C++ style comments.
->=20
->=20
-> Kind regards,
-> Niklas
+In addition to verifying with the public device's datasheets, the ufs
+device manufacturer's engineering teams confirmed the required vcc
+power-off time for the devices is a minimum of 1ms before vcc can be
+powered on again. The existing 5ms delay implemented in the ufs core
+driver seems too conservative, so replace the hard coded 5ms delay with a
+variable default to 5ms setting and allow the platform drivers
+to override this setting as needed to improve the system resume latency.
 
-Also for the questions sent to the v1 patch:
+v1 -> v2:
+	- Added a check for vcc's always_on to skip the delay if the vcc
+	  is an always-on regulator (Peter's comment)
+	- Added a sleep_post_vcc_off variable to allow platform drivers to
+	  override the default core driver's setting as needed (Bart and Peter's comments)
 
-> Since this patch implements something similar to DevSleep, but
-> rather,
-> IIUC, for the SATA power itself?
+Bao D. Nguyen (2):
+  scsi: ufs: core: Remove UFS_DEVICE_QUIRK_DELAY_AFTER_LPM quirk
+  scsi: ufs: core: Replace hard coded vcc-off delay with a variable
 
-Yes
+ drivers/ufs/core/ufshcd.c       | 15 +++++++++++----
+ drivers/ufs/host/ufs-mediatek.c | 11 ++++-------
+ drivers/ufs/host/ufs-qcom.c     |  3 ---
+ include/ufs/ufs_quirks.h        |  7 -------
+ include/ufs/ufshcd.h            |  2 ++
+ 5 files changed, 17 insertions(+), 21 deletions(-)
 
+-- 
+2.7.4
 
-> How is SATA power supplied tied to a port in ACPI? If you have a
-desktop
-> you have a PSU, and don't really know which supply is for which port.
-
-It is not for desktop computers, but for embedded devices.
-
-
-> So, considering how many ways we already have to disable/power off a
-port,
-> you might understand why I think it is extra important that you
-document
-> exactly how, and why we need yet another way to disable/power on/off
-a port.
-
-In this case,
-- According to ACPI spec, if a device has a power resource defined it
-has to be turned on before we are able send commands to the device
-- Because there is hardware out there, that is perfectly capable of
-running upstream linux, which doesn't use one of the methods you
-mentioned for controlling the power. Same did apply for the USB VBus
-power, despite there being "USB_PORT_FEAT_POWER" in the spec and it
-also got in the kernel, see commit
-f7ac7787ad361e31a7972e2854ed8dc2eedfac3b.
-
-I will try to add a short version of the reason written above in the
-commit message.
-
-
-Thanks,
-- Markus Probst
 
