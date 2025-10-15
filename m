@@ -1,230 +1,93 @@
-Return-Path: <linux-scsi+bounces-18117-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18119-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90B8BBDDEAA
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Oct 2025 12:08:37 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C88B9BDF23F
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Oct 2025 16:43:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E2643E3770
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Oct 2025 10:08:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C49984F28D5
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Oct 2025 14:43:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B464131B804;
-	Wed, 15 Oct 2025 10:08:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29145284B2E;
+	Wed, 15 Oct 2025 14:43:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RnSAVYbX"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D456A31BC94
-	for <linux-scsi@vger.kernel.org>; Wed, 15 Oct 2025 10:08:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFDD17B50F;
+	Wed, 15 Oct 2025 14:43:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760522891; cv=none; b=mwJTMmZotxeycC0LWJ6L2pM+PDDevEkhn5j+UwR5HSZqVuUkpxRYhI9DsVT7z/Wk7diLhb8zak9Hq9ude/tVfzI6WAK0lYr8CxN1cCzNKZjB69oHGg3cXouyQnOs9emOZVyX7TJhm5Ot08P39NHcW64B7VvqPfzcQaWj5AteLww=
+	t=1760539432; cv=none; b=nhQJSmAO0X7v1BFoyZRMQW767WYmf9UVgH2LOg/lvbJzR2m7az3lhvQQvM4rVSTheuGO5MbMsUyaEqlT0/lzdkM26i4KtdF8k+vOL13+MicBy0fJHlPIYFctwbXPrlzsbsbPD1QTFPUtXL42yCOhK0gJf8vyqnPCtvZX1X2hXtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760522891; c=relaxed/simple;
-	bh=zRHulXzKkomfeepMTC5Jx8qgKTmBkwJfiPgL1AWRJC8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Fm1KY5DR2oE9sHKR616LXY0r2YVzdywjsMoDi1/EJ2e4wqcU1hF0rCltSNKOXXtMXvgxGbDA1JTmqk64/FN2UPN4m4Vku6z8jv6paupx3VXhDkfXRUydkF3uw+sE1bbEnbcBGYyZk4X7PQlrcSPwsYjjVN00wcockv/K0NTkfuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1v8yPu-00057X-NE; Wed, 15 Oct 2025 12:07:34 +0200
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1v8yPt-003hk2-23;
-	Wed, 15 Oct 2025 12:07:33 +0200
-Received: from pza by lupine with local (Exim 4.98.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1v8yPt-000000007Ix-2FwJ;
-	Wed, 15 Oct 2025 12:07:33 +0200
-Message-ID: <6bea63bb14f2be814762fa719d3d7944bad39b6e.camel@pengutronix.de>
-Subject: Re: [PATCH 5/5] scsi: ufs: mediatek: Rework resets
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, Alim Akhtar	
- <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>, Bart Van
- Assche	 <bvanassche@acm.org>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski	 <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Matthias Brugger	 <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno	
- <angelogioacchino.delregno@collabora.com>, Stanley Chu	
- <stanley.chu@mediatek.com>, Chunfeng Yun <chunfeng.yun@mediatek.com>, Vinod
- Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Peter
- Wang	 <peter.wang@mediatek.com>, Stanley Jhu <chu.stanley@gmail.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, "Martin K.
- Petersen" <martin.petersen@oracle.com>
-Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>, 
-	kernel@collabora.com, linux-scsi@vger.kernel.org,
- devicetree@vger.kernel.org, 	linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, 	linux-mediatek@lists.infradead.org,
- linux-phy@lists.infradead.org
-Date: Wed, 15 Oct 2025 12:07:33 +0200
-In-Reply-To: <20251014-mt8196-ufs-v1-5-195dceb83bc8@collabora.com>
-References: <20251014-mt8196-ufs-v1-0-195dceb83bc8@collabora.com>
-	 <20251014-mt8196-ufs-v1-5-195dceb83bc8@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1-1 
+	s=arc-20240116; t=1760539432; c=relaxed/simple;
+	bh=BdVewfzADni3rA+uLXMhw0FIoVYxSlv8WO8HdhDGEeg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fMJKoSYMNT8wntGNxSjbyQbMUGL6AJyK1BQoPQ3wMryelCuOPC2DOd/iomaSSnqBtqw89EJ3GLJOAc5D3Dk0IgcvORu3szq2qyAs3gpPxrVxfgVhagFhSW7dt5NthB9ObGFJApxuRGG2t5VwXYeha6iLGxhgcMlDSCc5q8JqI1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RnSAVYbX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33AFDC4CEF8;
+	Wed, 15 Oct 2025 14:43:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760539431;
+	bh=BdVewfzADni3rA+uLXMhw0FIoVYxSlv8WO8HdhDGEeg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RnSAVYbX0pa/TbdwnqgAHLNi46jSc10fCqckm8meRRNlXCmzpes/MSgltOMJe09Ug
+	 JxdyInJGKhLHxSlIgFJYP5d1DMa/AN+TmOb6ZU2mngBuBTa4kiL0a7IlbiS/i8S+En
+	 /g4iXr3ZZjsFXgBInBqjDkI8vQ+S34EDoT113jIB013olFZ4zSjfvHAcPKJhj9WFs4
+	 m4yFWLccda0qiXQeUmNJq6scITEXvAsc57cu+xGApgTtwsq6T+ZXd60XHE0JrriWE+
+	 DDvL41D7J1pPoPbzucyHLUzWqhosGqSBeUrK2nvYQ0B3z5PDNtoU2YzTocZjSKawIk
+	 hvNZK+1DARCAA==
+Date: Wed, 15 Oct 2025 09:43:49 -0500
+From: Rob Herring <robh@kernel.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Ritesh Kumar <quic_riteshk@quicinc.com>, robin.clark@oss.qualcomm.com,
+	lumag@kernel.org, abhinav.kumar@linux.dev,
+	jessica.zhang@oss.qualcomm.com, sean@poorly.run,
+	marijn.suijten@somainline.org, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
+	simona@ffwll.ch, krzk+dt@kernel.org, conor+dt@kernel.org,
+	quic_mahap@quicinc.com, andersson@kernel.org,
+	konradybcio@kernel.org, mani@kernel.org,
+	James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com,
+	vkoul@kernel.org, kishon@kernel.org,
+	cros-qcom-dts-watchers@chromium.org, linux-phy@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+	quic_vproddut@quicinc.com
+Subject: Re: [PATCH v2 1/3] dt-bindings: phy: qcom-edp: Add edp ref clk for
+ sa8775p
+Message-ID: <20251015144349.GA3302193-robh@kernel.org>
+References: <20251013104806.6599-1-quic_riteshk@quicinc.com>
+ <20251013104806.6599-2-quic_riteshk@quicinc.com>
+ <xofvrsdi2s37qefp2fr6av67c5nokvlw3jm6w3nznphm3x223f@yyatwo5cur6u>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xofvrsdi2s37qefp2fr6av67c5nokvlw3jm6w3nznphm3x223f@yyatwo5cur6u>
 
-Hi Nicolas,
+On Mon, Oct 13, 2025 at 03:37:47PM +0300, Dmitry Baryshkov wrote:
+> On Mon, Oct 13, 2025 at 04:18:04PM +0530, Ritesh Kumar wrote:
+> > Add edp reference clock for sa8775p edp phy.
+> 
+> eDP, PHY.
+> 
+> I'd probably ask to squash both DT binding patches together, but this
+> might cause cross-subsystem merge issues. I'll leave this to DT
+> maintainers discretion, whether to require a non-warning-adding patch or
+> two patches with warnings in the middle of the series.
 
-On Di, 2025-10-14 at 17:10 +0200, Nicolas Frattaroli wrote:
-> Rework the reset control getting in the driver's probe function to use
-> the "_optional" function instead of defaulting to NULL on IS_ERR, so
-> that actual real errors (as opposed to missing resets) can be handled as
-> errors in the probe function.
->=20
-> Also move the MPHY reset into the PHY driver, where it should live, and
-> remove all remnants of it ever having been in this driver.
+One patch.
 
-Part of that happened in the previous patch.
+Rob
 
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
->  drivers/ufs/host/ufs-mediatek-sip.h |  8 -----
->  drivers/ufs/host/ufs-mediatek.c     | 67 +++++++++++++++++++++----------=
-------
->  drivers/ufs/host/ufs-mediatek.h     |  1 -
->  3 files changed, 38 insertions(+), 38 deletions(-)
->=20
-> diff --git a/drivers/ufs/host/ufs-mediatek-sip.h b/drivers/ufs/host/ufs-m=
-ediatek-sip.h
-> index d627dfb4a766..256598cc3b5b 100644
-> --- a/drivers/ufs/host/ufs-mediatek-sip.h
-> +++ b/drivers/ufs/host/ufs-mediatek-sip.h
-> @@ -31,11 +31,6 @@ enum ufs_mtk_vcc_num {
->  	UFS_VCC_MAX
->  };
-> =20
-> -enum ufs_mtk_mphy_op {
-> -	UFS_MPHY_BACKUP =3D 0,
-> -	UFS_MPHY_RESTORE
-> -};
-> -
->  /*
->   * SMC call wrapper function
->   */
-> @@ -84,9 +79,6 @@ static inline void _ufs_mtk_smc(struct ufs_mtk_smc_arg =
-s)
->  #define ufs_mtk_device_pwr_ctrl(on, ufs_version, res) \
->  	ufs_mtk_smc(UFS_MTK_SIP_DEVICE_PWR_CTRL, &(res), on, ufs_version)
-> =20
-> -#define ufs_mtk_mphy_ctrl(op, res) \
-> -	ufs_mtk_smc(UFS_MTK_SIP_MPHY_CTRL, &(res), op)
-> -
->  #define ufs_mtk_mtcmos_ctrl(op, res) \
->  	ufs_mtk_smc(UFS_MTK_SIP_MTCMOS_CTRL, &(res), op)
-> =20
-> diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-media=
-tek.c
-> index 758a393a9de1..ac40d4a3a800 100644
-> --- a/drivers/ufs/host/ufs-mediatek.c
-> +++ b/drivers/ufs/host/ufs-mediatek.c
-> @@ -204,49 +204,60 @@ static void ufs_mtk_crypto_enable(struct ufs_hba *h=
-ba)
->  static void ufs_mtk_host_reset(struct ufs_hba *hba)
->  {
->  	struct ufs_mtk_host *host =3D ufshcd_get_variant(hba);
-> -	struct arm_smccc_res res;
-> +	int ret;
-> =20
->  	reset_control_assert(host->hci_reset);
->  	reset_control_assert(host->crypto_reset);
->  	reset_control_assert(host->unipro_reset);
-> -	reset_control_assert(host->mphy_reset);
-> =20
-> -	usleep_range(100, 110);
-> +	ret =3D phy_reset(host->mphy);
-> +
-> +	/*
-> +	 * Only sleep if MPHY doesn't have a reset implemented (which already
-> +	 * sleeps) or the PHY reset function failed somehow, just to be safe
-> +	 */
-> +	if (ret) {
-> +		usleep_range(100, 110);
-> +		if (ret !=3D -EOPNOTSUPP)
-> +			dev_warn(hba->dev, "PHY reset failed: %pe\n", ERR_PTR(ret));
-> +	}
-> =20
->  	reset_control_deassert(host->unipro_reset);
->  	reset_control_deassert(host->crypto_reset);
->  	reset_control_deassert(host->hci_reset);
-> -	reset_control_deassert(host->mphy_reset);
-> -
-> -	/* restore mphy setting aftre mphy reset */
-> -	if (host->mphy_reset)
-> -		ufs_mtk_mphy_ctrl(UFS_MPHY_RESTORE, res);
->  }
-> =20
-> -static void ufs_mtk_init_reset_control(struct ufs_hba *hba,
-> -				       struct reset_control **rc,
-> -				       char *str)
-> +static int ufs_mtk_init_reset_control(struct ufs_hba *hba,
-> +				      struct reset_control **rc,
-> +				      const char *str)
->  {
-> -	*rc =3D devm_reset_control_get(hba->dev, str);
-> +	*rc =3D devm_reset_control_get_optional(hba->dev, str);
-
-Please use
-
-	devm_reset_control_get_optional_exclusive()
-
-directly, or see below for an alternative suggestion.
-
->  	if (IS_ERR(*rc)) {
-> -		dev_info(hba->dev, "Failed to get reset control %s: %ld\n",
-> -			 str, PTR_ERR(*rc));
-> -		*rc =3D NULL;
-> +		dev_err(hba->dev, "Failed to get reset control %s: %pe\n", str, *rc);
-> +		return PTR_ERR(*rc);
->  	}
-> +
-> +	return 0;
->  }
-> =20
-> -static void ufs_mtk_init_reset(struct ufs_hba *hba)
-> +static int ufs_mtk_init_reset(struct ufs_hba *hba)
->  {
->  	struct ufs_mtk_host *host =3D ufshcd_get_variant(hba);
-> +	int ret;
-> +
-> +	ret =3D ufs_mtk_init_reset_control(hba, &host->hci_reset, "hci_rst");
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D ufs_mtk_init_reset_control(hba, &host->unipro_reset, "unipro_rs=
-t");
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D ufs_mtk_init_reset_control(hba, &host->crypto_reset, "crypto_rs=
-t");
-> +	if (ret)
-> +		return ret;
-
-It looks to me like you could combine these into a
-
-	devm_reset_control_bulk_get_optional_exclusive()
-
-and operate the three resets with reset_control_bulk_assert/deassert().
-
-
-regards
-Philipp
 
