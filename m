@@ -1,213 +1,417 @@
-Return-Path: <linux-scsi+bounces-18196-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18186-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49C0CBE7B7A
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Oct 2025 11:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F314BE79D0
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Oct 2025 11:22:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E09E5420158
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Oct 2025 09:27:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBB7B625326
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Oct 2025 09:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B03DF320A02;
-	Fri, 17 Oct 2025 09:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D90F332E752;
+	Fri, 17 Oct 2025 09:11:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="bJS3ICkf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="suwLOruR"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.12.53.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61062D5C61;
-	Fri, 17 Oct 2025 09:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.12.53.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 823DD32E73C
+	for <linux-scsi@vger.kernel.org>; Fri, 17 Oct 2025 09:11:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760692439; cv=none; b=IlotQHUxK8JFOw7wo2R9RioC8VuM4MBkv3dNpwy9S8sVw0Q/9Bg6K9Gx5zXnNUQzMaTrko02/nVuWZNjgWSPR95a3j0dQLovm9sxaOqCWrqQD2JeE6WO1dvdMi1J+msFZUysZ99gQPD58UnDz1R9J8C/M2aWRiMVGJpnQeYBVb4=
+	t=1760692304; cv=none; b=Al4QKLa4ED6GlzqNUq+VoYlBQjaE220dP+gd6wcVh6IsslERyh/EVWsSuZ0zHxuQ4bi6scAJtSwOrfgsAVE3fyoFFSKPVsCh5Ed9WBRIewyvrcBrPEJ3yQH1/YGxYDBwfzKNLqPqmoqpNXcQ0hJa6jENqdbtPN+p29UcIlrV/tM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760692439; c=relaxed/simple;
-	bh=V2L3IilwofpV6SrsfVTvut5ipDXkokIOm+dTBT4i7eQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lTPQYymuzYxTI6aUIqLNn3C7DWqhHhv+yoldiyMM8P6cN7tmPggW6jZVoXmAIV1J9/uZDuHAr65iaGbD8JAt1xdyydf0nXZXfTmH1Z0+S+fk248PIj0/ZQ6UmHO6vxBXeXE/rKf+VXLdxhBCsJuBgCSWTf0Y0va0V5X6NmK9YKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=bJS3ICkf; arc=none smtp.client-ip=52.12.53.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1760692304; c=relaxed/simple;
+	bh=jDNmrH9oV5nkGCy3Ijf3en6eclIB3X+9GBUJsrncXfs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NRlWgf2nZ/8fl/L7TkAIs/9LoNPz5ZdySKXuxwGib2Ri8cmEEdAgWAWq17A1xyYWd+SySfvy2S8030qd4OKQDNxRKXyYhI4HMp3yolYC4V3s2rsyfelZohm2TWBHU0Z0GuQVluOa6oiCz6Z7Pv7XT9xUQ0uPRt/H9tBSdHFC9RI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=suwLOruR; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-78113fdfd07so15518417b3.2
+        for <linux-scsi@vger.kernel.org>; Fri, 17 Oct 2025 02:11:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1760692437; x=1792228437;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=k0dUe76w+6n5/NfsPbyefGVCom+xh3GGcFcV3Olhmks=;
-  b=bJS3ICkfgFedWl5t3te0XuFgDXWz8nBqHQTRTXEmWIJKuL6qSBM8S6lo
-   qWlp8IVFhGYjuCljEi8GOfcSbqH+tmKEEZvbtP9V9wWtn/s5gI8gv7//Y
-   zdnpZRxAiJ8nFsb7eC7GNe9Gm8l5PF74pM1VygYGU+pIPA6e11ygckgM+
-   gEApLlTUZ6QclTdRegSo2bp6laPl8PmAE7Cl5kNabPBce5Sboj/z22O+k
-   J+7XV0D5JnsdfIKqakhgqjO4qtfEpn5U89qoIbQeK6i3YQvX0obdlg2UM
-   pKCy7KqUeL7mvB26xraicOcxVnM+0ZFcv0+KspA0RfR1N8nH756RouAHI
-   w==;
-X-CSE-ConnectionGUID: RXTPyYArTMCGpEZ+E8Xbcw==
-X-CSE-MsgGUID: BWj3QBi9SQOiPxp1KjHzOA==
-X-IronPort-AV: E=Sophos;i="6.19,236,1754956800"; 
-   d="scan'208";a="4952411"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2025 09:13:57 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.234:21527]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.17.61:2525] with esmtp (Farcaster)
- id 6e4c0a13-2687-46e7-b791-5c0ff5190e98; Fri, 17 Oct 2025 09:13:57 +0000 (UTC)
-X-Farcaster-Flow-ID: 6e4c0a13-2687-46e7-b791-5c0ff5190e98
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Fri, 17 Oct 2025 09:13:56 +0000
-Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Fri, 17 Oct 2025
- 09:13:41 +0000
-From: Eliav Farber <farbere@amazon.com>
-To: <gregkh@linuxfoundation.org>, <stable@vger.kernel.org>,
-	<linux@armlinux.org.uk>, <jdike@addtoit.com>, <richard@nod.at>,
-	<anton.ivanov@cambridgegreys.com>, <dave.hansen@linux.intel.com>,
-	<luto@kernel.org>, <peterz@infradead.org>, <tglx@linutronix.de>,
-	<mingo@redhat.com>, <bp@alien8.de>, <x86@kernel.org>, <hpa@zytor.com>,
-	<tony.luck@intel.com>, <qiuxu.zhuo@intel.com>, <mchehab@kernel.org>,
-	<james.morse@arm.com>, <rric@kernel.org>, <harry.wentland@amd.com>,
-	<sunpeng.li@amd.com>, <alexander.deucher@amd.com>,
-	<christian.koenig@amd.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-	<evan.quan@amd.com>, <james.qian.wang@arm.com>, <liviu.dudau@arm.com>,
-	<mihail.atanassov@arm.com>, <brian.starkey@arm.com>,
-	<maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-	<tzimmermann@suse.de>, <robdclark@gmail.com>, <sean@poorly.run>,
-	<jdelvare@suse.com>, <linux@roeck-us.net>, <fery@cypress.com>,
-	<dmitry.torokhov@gmail.com>, <agk@redhat.com>, <snitzer@redhat.com>,
-	<dm-devel@redhat.com>, <rajur@chelsio.com>, <davem@davemloft.net>,
-	<kuba@kernel.org>, <peppe.cavallaro@st.com>, <alexandre.torgue@st.com>,
-	<joabreu@synopsys.com>, <mcoquelin.stm32@gmail.com>, <malattia@linux.it>,
-	<hdegoede@redhat.com>, <mgross@linux.intel.com>, <intel-linux-scu@intel.com>,
-	<artur.paszkiewicz@intel.com>, <jejb@linux.ibm.com>,
-	<martin.petersen@oracle.com>, <sakari.ailus@linux.intel.com>, <clm@fb.com>,
-	<josef@toxicpanda.com>, <dsterba@suse.com>, <xiang@kernel.org>,
-	<chao@kernel.org>, <jack@suse.com>, <tytso@mit.edu>,
-	<adilger.kernel@dilger.ca>, <dushistov@mail.ru>,
-	<luc.vanoostenryck@gmail.com>, <rostedt@goodmis.org>, <pmladek@suse.com>,
-	<sergey.senozhatsky@gmail.com>, <andriy.shevchenko@linux.intel.com>,
-	<linux@rasmusvillemoes.dk>, <minchan@kernel.org>, <ngupta@vflare.org>,
-	<akpm@linux-foundation.org>, <kuznet@ms2.inr.ac.ru>,
-	<yoshfuji@linux-ipv6.org>, <pablo@netfilter.org>, <kadlec@netfilter.org>,
-	<fw@strlen.de>, <jmaloy@redhat.com>, <ying.xue@windriver.com>,
-	<willy@infradead.org>, <farbere@amazon.com>, <sashal@kernel.org>,
-	<ruanjinjie@huawei.com>, <David.Laight@ACULAB.COM>,
-	<herve.codina@bootlin.com>, <Jason@zx2c4.com>, <keescook@chromium.org>,
-	<kbusch@kernel.org>, <nathan@kernel.org>, <bvanassche@acm.org>,
-	<ndesaulniers@google.com>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-um@lists.infradead.org>,
-	<linux-edac@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>,
-	<dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-	<freedreno@lists.freedesktop.org>, <linux-hwmon@vger.kernel.org>,
-	<linux-input@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
-	<platform-driver-x86@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-	<linux-staging@lists.linux.dev>, <linux-btrfs@vger.kernel.org>,
-	<linux-erofs@lists.ozlabs.org>, <linux-ext4@vger.kernel.org>,
-	<linux-sparse@vger.kernel.org>, <linux-mm@kvack.org>,
-	<netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
-	<tipc-discussion@lists.sourceforge.net>
-CC: Arnd Bergmann <arnd@kernel.org>, Christoph Hellwig <hch@infradead.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>, Jens Axboe <axboe@kernel.dk>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Mateusz Guzik
-	<mjguzik@gmail.com>, Pedro Falcato <pedro.falcato@gmail.com>
-Subject: [PATCH v2 27/27 5.10.y] minmax.h: remove some #defines that are only expanded once
-Date: Fri, 17 Oct 2025 09:05:19 +0000
-Message-ID: <20251017090519.46992-28-farbere@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251017090519.46992-1-farbere@amazon.com>
-References: <20251017090519.46992-1-farbere@amazon.com>
+        d=linaro.org; s=google; t=1760692301; x=1761297101; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/1GYl/yk6Sam9fIBoG9SiK34nTP0Coo0lGyUV9dWqdQ=;
+        b=suwLOruR+T8VipgHqllDI4GA6sjkphTAMkThe4M+/WboInG/+oF+2+XN64/jQke9Jh
+         LHoxy1IcOqKt5B3rq3h1NKFDiKj6556ioFq4SVXkl3K8M+3yDH+9b9qvgLmtRURZplQJ
+         9K0wShrVxun/MwjSxQ5wV1ntujC2wYr1MBA0Wt5UTr17DYaJknApMaIS3/PFsMB3n+uo
+         Db6J+vni4Jd/aybVVxnvTvrDaPdHwlv3q0zLkVyjdDm+032fC2aSMUm8Seh0uc15FdYk
+         Xt1EQlzeNIu+wjj0VGZLAWy7PRSryVPBsnBhgIa+DCxHdPhhY94OTIGhOHFcJw6nx8vo
+         ScEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760692301; x=1761297101;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/1GYl/yk6Sam9fIBoG9SiK34nTP0Coo0lGyUV9dWqdQ=;
+        b=xVVBDU64jgAHv1zN+XPveR5UGzSblbJvDabnqupEW4iyeyq9LkQNJ6/ihF4RHwoR6z
+         pop/pux46+JdEnJwEbyzAJXTtvxLZNC0y6VTBKJLF+RRRyzXt8/wxUpTeX4EO02t+k6I
+         p4c+FZz9qQYj5mW5SR37GOPUNk1UiNV/EPHSP6PMcxx+IrlWPYaLrsQD7P/AM8CY11mQ
+         zRgPcyr5lx6n16nhf/WWsn1yF2bdiLvPQyQLcDcOwt6gWanmhjv4mL84qy/XVPwhmjDf
+         eRTggIFLJEqvDK0zoPMVnkvCVjwk8aV81mrSNandodX9gt8cpQykNIQhekowEDXboNCT
+         ZEWA==
+X-Forwarded-Encrypted: i=1; AJvYcCWNliP3vWKP5BlZNg8Lvnqpxcb7oV0pKhxIN7weEQYieQa3u2Xl0T1/gcXBDvvg3nGW+DvPKm+lpB05@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfV6UEZQSFUrcJ1e+cVmT/fCovT8Wl6a92St8IVKVWeFNq5Q3T
+	HcY3R1MyF97kmGIefqUvgn9CZlZDTEkumZ5ATuLP/16E2L6SH8jj9K7k6nxQ7R5jPVwsG/asIxm
+	ljva4pu3mTIKgakGNHAXy1mZs/yPyjYQTzPK6sZfBZA==
+X-Gm-Gg: ASbGnctArHcwY4i56hhaE1LLZ8NexgD9+7ZbnCDAWEUWJMJ3DHbAMOOTOGg1Gtgb6x5
+	XvYjaK0l4eaJ41TGYA/acG2vZgNVZSpDcaPSjVPWWlZ9uYbJ9lfj/k1MKRBvDBcOnIP5ia4PdL3
+	RZZkTaTpKMC/p7jShigXNbJpqMMN6/U2tv52yRmv6WGHlLJJqEzkY4l9iwt5RoJLoZYXDwyXlf4
+	2mCS61m6IkysBfcdCh5pv/9tc8IQ94+l4agZ2nETQDyAOF/oQPOOGHxJ412ymtyGnKhqo5N
+X-Google-Smtp-Source: AGHT+IFLZ4nEbY8U1Ah0P65zbEh1FjU5spwfwgSTYseWxsnhjwkZWWax3YH1ox6L+1KmT+1tTJ7UvpXLIqSJVbTZxZ0=
+X-Received: by 2002:a05:690e:4192:b0:636:1b01:63df with SMTP id
+ 956f58d0204a3-63e16168e5emr2752552d50.14.1760692301408; Fri, 17 Oct 2025
+ 02:11:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D040UWA001.ant.amazon.com (10.13.139.22) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+References: <20251008201920.89575-4-beanhuo@iokpp.de> <202510100521.pnAPqTFK-lkp@intel.com>
+ <eccb18abe33299edde64f96e0c3de88c4183cb78.camel@gmail.com>
+In-Reply-To: <eccb18abe33299edde64f96e0c3de88c4183cb78.camel@gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 17 Oct 2025 11:11:05 +0200
+X-Gm-Features: AS18NWA13YCigGWxYOYCDJShDi86eKoyREH8N9l4JY9xKwqxKwxeG5LwjHlJHpk
+Message-ID: <CAPDyKFrsMxyD5ASGmsQ8658eBR0vHOSUqJ4axuSpAXuue6d5Uw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] scsi: ufs: core: Add OP-TEE based RPMB driver for
+ UFS devices
+To: Bean Huo <huobean@gmail.com>
+Cc: kernel test robot <lkp@intel.com>, avri.altman@wdc.com, avri.altman@sandisk.com, 
+	bvanassche@acm.org, alim.akhtar@samsung.com, jejb@linux.ibm.com, 
+	martin.petersen@oracle.com, can.guo@oss.qualcomm.com, beanhuo@micron.com, 
+	jens.wiklander@linaro.org, oe-kbuild-all@lists.linux.dev, 
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: David Laight <David.Laight@ACULAB.COM>
+On Fri, 10 Oct 2025 at 10:19, Bean Huo <huobean@gmail.com> wrote:
+>
+>
+> since the patch "rpmb: move rpmb_frame struct and constants to common header"
+> has been queued in mmc git tree, I didn't add it patch in scsi tree for this
+> version:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git/commit/?h=next
+>
+>
+> do I need to add this queued patch for scsi tree as well?
 
-[ Upstream commit 2b97aaf74ed534fb838d09867d09a3ca5d795208 ]
+I have just sent the patch to Linus to get included in rc2. Sorry, I
+failed to send it for rc1.
 
-The bodies of __signed_type_use() and __unsigned_type_use() are much the
-same size as their names - so put the bodies in the only line that expands
-them.
+That said, if you re-spin a version of the series that is based on rc2
+on Monday that should work, I think.
 
-Similarly __signed_type() is defined separately for 64bit and then used
-exactly once just below.
+Kind regards
+Uffe
 
-Change the test for __signed_type from CONFIG_64BIT to one based on gcc
-defined macros so that the code is valid if it gets used outside of a
-kernel build.
-
-Link: https://lkml.kernel.org/r/9386d1ebb8974fbabbed2635160c3975@AcuMS.aculab.com
-Signed-off-by: David Laight <david.laight@aculab.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Arnd Bergmann <arnd@kernel.org>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Mateusz Guzik <mjguzik@gmail.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Pedro Falcato <pedro.falcato@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Eliav Farber <farbere@amazon.com>
----
- include/linux/minmax.h | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-index 2bbdd5b5e07e..eaaf5c008e4d 100644
---- a/include/linux/minmax.h
-+++ b/include/linux/minmax.h
-@@ -46,10 +46,8 @@
-  * comparison, and these expressions only need to be careful to not cause
-  * warnings for pointer use.
-  */
--#define __signed_type_use(ux) (2 + __is_nonneg(ux))
--#define __unsigned_type_use(ux) (1 + 2 * (sizeof(ux) < 4))
- #define __sign_use(ux) (is_signed_type(typeof(ux)) ? \
--	__signed_type_use(ux) : __unsigned_type_use(ux))
-+	(2 + __is_nonneg(ux)) : (1 + 2 * (sizeof(ux) < 4)))
- 
- /*
-  * Check whether a signed value is always non-negative.
-@@ -57,7 +55,7 @@
-  * A cast is needed to avoid any warnings from values that aren't signed
-  * integer types (in which case the result doesn't matter).
-  *
-- * On 64-bit any integer or pointer type can safely be cast to 'long'.
-+ * On 64-bit any integer or pointer type can safely be cast to 'long long'.
-  * But on 32-bit we need to avoid warnings about casting pointers to integers
-  * of different sizes without truncating 64-bit values so 'long' or 'long long'
-  * must be used depending on the size of the value.
-@@ -66,12 +64,12 @@
-  * them, but we do not use s128 types in the kernel (we do use 'u128',
-  * but they are handled by the !is_signed_type() case).
-  */
--#ifdef CONFIG_64BIT
--  #define __signed_type(ux) long
-+#if __SIZEOF_POINTER__ == __SIZEOF_LONG_LONG__
-+#define __is_nonneg(ux) statically_true((long long)(ux) >= 0)
- #else
--  #define __signed_type(ux) typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL, 1L))
-+#define __is_nonneg(ux) statically_true( \
-+	(typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL, 1L)))(ux) >= 0)
- #endif
--#define __is_nonneg(ux) statically_true((__signed_type(ux))(ux) >= 0)
- 
- #define __types_ok(ux, uy) \
- 	(__sign_use(ux) & __sign_use(uy))
--- 
-2.47.3
-
+>
+>
+> Kind regards,
+> Bean
+>
+>
+> On Fri, 2025-10-10 at 05:36 +0800, kernel test robot wrote:
+> > Hi Bean,
+> >
+> > kernel test robot noticed the following build errors:
+> >
+> > [auto build test ERROR on v6.17]
+> > [also build test ERROR on next-20251009]
+> > [cannot apply to mkp-scsi/for-next jejb-scsi/for-next char-misc/char-misc-
+> > testing char-misc/char-misc-next char-misc/char-misc-linus linus/master]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >
+> > url:
+> > https://github.com/intel-lab-lkp/linux/commits/Bean-Huo/scsi-ufs-core-Convert-string-descriptor-format-macros-to-enum/20251009-204745
+> > base:   v6.17
+> > patch link:
+> > https://lore.kernel.org/r/20251008201920.89575-4-beanhuo%40iokpp.de
+> > patch subject: [PATCH v4 3/3] scsi: ufs: core: Add OP-TEE based RPMB driver
+> > for UFS devices
+> > config: sh-randconfig-002-20251010
+> > (https://download.01.org/0day-ci/archive/20251010/202510100521.pnAPqTFK-lkp@in
+> > tel.com/config)
+> > compiler: sh4-linux-gcc (GCC) 15.1.0
+> > reproduce (this is a W=1 build):
+> > (https://download.01.org/0day-ci/archive/20251010/202510100521.pnAPqTFK-lkp@in
+> > tel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version
+> > of
+> > the same patch/commit), kindly add following tags
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Closes:
+> > > https://lore.kernel.org/oe-kbuild-all/202510100521.pnAPqTFK-lkp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> >    In file included from include/linux/byteorder/big_endian.h:5,
+> >                     from arch/sh/include/uapi/asm/byteorder.h:8,
+> >                     from arch/sh/include/asm/bitops.h:10,
+> >                     from include/linux/bitops.h:67,
+> >                     from include/linux/log2.h:12,
+> >                     from include/asm-generic/div64.h:55,
+> >                     from ./arch/sh/include/generated/asm/div64.h:1,
+> >                     from include/linux/math.h:6,
+> >                     from include/linux/math64.h:6,
+> >                     from include/linux/time.h:6,
+> >                     from include/linux/stat.h:19,
+> >                     from include/linux/module.h:13,
+> >                     from drivers/ufs/core/ufs-rpmb.c:13:
+> >    drivers/ufs/core/ufs-rpmb.c: In function 'ufs_rpmb_route_frames':
+> >    drivers/ufs/core/ufs-rpmb.c:72:39: error: invalid use of undefined type
+> > 'struct rpmb_frame'
+> >       72 |         req_type = be16_to_cpu(frm_out->req_resp);
+> >          |                                       ^~
+> >    include/uapi/linux/byteorder/big_endian.h:43:51: note: in definition of
+> > macro '__be16_to_cpu'
+> >       43 | #define __be16_to_cpu(x) ((__force __u16)(__be16)(x))
+> >          |                                                   ^
+> >    drivers/ufs/core/ufs-rpmb.c:72:20: note: in expansion of macro
+> > 'be16_to_cpu'
+> >       72 |         req_type = be16_to_cpu(frm_out->req_resp);
+> >          |                    ^~~~~~~~~~~
+> >    drivers/ufs/core/ufs-rpmb.c:75:14: error: 'RPMB_PROGRAM_KEY' undeclared
+> > (first use in this function)
+> >       75 |         case RPMB_PROGRAM_KEY:
+> >          |              ^~~~~~~~~~~~~~~~
+> >    drivers/ufs/core/ufs-rpmb.c:75:14: note: each undeclared identifier is
+> > reported only once for each function it appears in
+> >    drivers/ufs/core/ufs-rpmb.c:76:39: error: invalid application of 'sizeof'
+> > to incomplete type 'struct rpmb_frame'
+> >       76 |                 if (req_len != sizeof(struct rpmb_frame) ||
+> > resp_len != sizeof(struct rpmb_frame))
+> >          |                                       ^~~~~~
+> >    drivers/ufs/core/ufs-rpmb.c:76:80: error: invalid application of 'sizeof'
+> > to incomplete type 'struct rpmb_frame'
+> >       76 |                 if (req_len != sizeof(struct rpmb_frame) ||
+> > resp_len != sizeof(struct rpmb_frame))
+> >
+> > |
+> >    ^~~~~~
+> >    drivers/ufs/core/ufs-rpmb.c:79:14: error: 'RPMB_GET_WRITE_COUNTER'
+> > undeclared (first use in this function)
+> >       79 |         case RPMB_GET_WRITE_COUNTER:
+> >          |              ^~~~~~~~~~~~~~~~~~~~~~
+> >    drivers/ufs/core/ufs-rpmb.c:80:39: error: invalid application of 'sizeof'
+> > to incomplete type 'struct rpmb_frame'
+> >       80 |                 if (req_len != sizeof(struct rpmb_frame) ||
+> > resp_len != sizeof(struct rpmb_frame))
+> >          |                                       ^~~~~~
+> >    drivers/ufs/core/ufs-rpmb.c:80:80: error: invalid application of 'sizeof'
+> > to incomplete type 'struct rpmb_frame'
+> >       80 |                 if (req_len != sizeof(struct rpmb_frame) ||
+> > resp_len != sizeof(struct rpmb_frame))
+> >
+> > |
+> >    ^~~~~~
+> >    drivers/ufs/core/ufs-rpmb.c:84:14: error: 'RPMB_WRITE_DATA' undeclared
+> > (first use in this function)
+> >       84 |         case RPMB_WRITE_DATA:
+> >          |              ^~~~~~~~~~~~~~~
+> >    drivers/ufs/core/ufs-rpmb.c:85:38: error: invalid application of 'sizeof'
+> > to incomplete type 'struct rpmb_frame'
+> >       85 |                 if (req_len % sizeof(struct rpmb_frame) || resp_len
+> > != sizeof(struct rpmb_frame))
+> >          |                                      ^~~~~~
+> >    drivers/ufs/core/ufs-rpmb.c:85:79: error: invalid application of 'sizeof'
+> > to incomplete type 'struct rpmb_frame'
+> >       85 |                 if (req_len % sizeof(struct rpmb_frame) || resp_len
+> > != sizeof(struct rpmb_frame))
+> >
+> > |
+> >   ^~~~~~
+> >    drivers/ufs/core/ufs-rpmb.c:88:14: error: 'RPMB_READ_DATA' undeclared
+> > (first use in this function); did you mean 'D_REAL_DATA'?
+> >       88 |         case RPMB_READ_DATA:
+> >          |              ^~~~~~~~~~~~~~
+> >          |              D_REAL_DATA
+> >    drivers/ufs/core/ufs-rpmb.c:89:39: error: invalid application of 'sizeof'
+> > to incomplete type 'struct rpmb_frame'
+> >       89 |                 if (req_len != sizeof(struct rpmb_frame) ||
+> > resp_len % sizeof(struct rpmb_frame))
+> >          |                                       ^~~~~~
+> >    drivers/ufs/core/ufs-rpmb.c:89:79: error: invalid application of 'sizeof'
+> > to incomplete type 'struct rpmb_frame'
+> >       89 |                 if (req_len != sizeof(struct rpmb_frame) ||
+> > resp_len % sizeof(struct rpmb_frame))
+> >
+> > |
+> >   ^~~~~~
+> >    drivers/ufs/core/ufs-rpmb.c:109:43: error: invalid application of 'sizeof'
+> > to incomplete type 'struct rpmb_frame'
+> >      109 |                 memset(frm_resp, 0, sizeof(*frm_resp));
+> >          |                                           ^
+> >    drivers/ufs/core/ufs-rpmb.c:110:25: error: invalid use of undefined type
+> > 'struct rpmb_frame'
+> >      110 |                 frm_resp->req_resp = cpu_to_be16(RPMB_RESULT_READ);
+> >          |                         ^~
+> >    drivers/ufs/core/ufs-rpmb.c:110:50: error: 'RPMB_RESULT_READ' undeclared
+> > (first use in this function)
+> >      110 |                 frm_resp->req_resp = cpu_to_be16(RPMB_RESULT_READ);
+> >          |                                                  ^~~~~~~~~~~~~~~~
+> >    include/uapi/linux/byteorder/big_endian.h:42:51: note: in definition of
+> > macro '__cpu_to_be16'
+> >       42 | #define __cpu_to_be16(x) ((__force __be16)(__u16)(x))
+> >          |                                                   ^
+> >    drivers/ufs/core/ufs-rpmb.c:110:38: note: in expansion of macro
+> > 'cpu_to_be16'
+> >      110 |                 frm_resp->req_resp = cpu_to_be16(RPMB_RESULT_READ);
+> >          |                                      ^~~~~~~~~~~
+> >    drivers/ufs/core/ufs-rpmb.c: At top level:
+> > > > drivers/ufs/core/ufs-rpmb.c:135:5: error: redefinition of 'ufs_rpmb_probe'
+> >      135 | int ufs_rpmb_probe(struct ufs_hba *hba)
+> >          |     ^~~~~~~~~~~~~~
+> >    In file included from drivers/ufs/core/ufs-rpmb.c:22:
+> >    drivers/ufs/core/ufshcd-priv.h:424:19: note: previous definition of
+> > 'ufs_rpmb_probe' with type 'int(struct ufs_hba *)'
+> >      424 | static inline int ufs_rpmb_probe(struct ufs_hba *hba)
+> >          |                   ^~~~~~~~~~~~~~
+> > > > drivers/ufs/core/ufs-rpmb.c:229:6: error: redefinition of
+> > > > 'ufs_rpmb_remove'
+> >      229 | void ufs_rpmb_remove(struct ufs_hba *hba)
+> >          |      ^~~~~~~~~~~~~~~
+> >    drivers/ufs/core/ufshcd-priv.h:428:20: note: previous definition of
+> > 'ufs_rpmb_remove' with type 'void(struct ufs_hba *)'
+> >      428 | static inline void ufs_rpmb_remove(struct ufs_hba *hba)
+> >          |                    ^~~~~~~~~~~~~~~
+> >
+> >
+> > vim +/ufs_rpmb_probe +135 drivers/ufs/core/ufs-rpmb.c
+> >
+> >    133
+> >    134  /* UFS RPMB device registration */
+> >  > 135  int ufs_rpmb_probe(struct ufs_hba *hba)
+> >    136  {
+> >    137          struct ufs_rpmb_dev *ufs_rpmb, *it, *tmp;
+> >    138          struct rpmb_dev *rdev;
+> >    139          u8 cid[16] = { };
+> >    140          int region;
+> >    141          u8 *sn;
+> >    142          u32 cap;
+> >    143          int ret;
+> >    144
+> >    145          if (!hba->ufs_rpmb_wlun || hba->dev_info.b_advanced_rpmb_en) {
+> >    146                  dev_info(hba->dev, "Skip OP-TEE RPMB registration\n");
+> >    147                  return -ENODEV;
+> >    148          }
+> >    149
+> >    150          /* Get the UNICODE serial number data */
+> >    151          sn = hba->dev_info.serial_number;
+> >    152          if (!sn) {
+> >    153                  dev_err(hba->dev, "Serial number not available\n");
+> >    154                  return -EINVAL;
+> >    155          }
+> >    156
+> >    157          INIT_LIST_HEAD(&hba->rpmbs);
+> >    158
+> >    159          /* Copy serial number into device ID (max 15 chars + NUL). */
+> >    160          strscpy(cid, sn);
+> >    161
+> >    162          struct rpmb_descr descr = {
+> >    163                  .type = RPMB_TYPE_UFS,
+> >    164                  .route_frames = ufs_rpmb_route_frames,
+> >    165                  .dev_id_len = sizeof(cid),
+> >    166                  .reliable_wr_count = hba->dev_info.rpmb_io_size,
+> >    167          };
+> >    168
+> >    169          for (region = 0; region < ARRAY_SIZE(hba-
+> > >dev_info.rpmb_region_size); region++) {
+> >    170                  cap = hba->dev_info.rpmb_region_size[region];
+> >    171                  if (!cap)
+> >    172                          continue;
+> >    173
+> >    174                  ufs_rpmb = devm_kzalloc(hba->dev, sizeof(*ufs_rpmb),
+> > GFP_KERNEL);
+> >    175                  if (!ufs_rpmb) {
+> >    176                          ret = -ENOMEM;
+> >    177                          goto err_out;
+> >    178                  }
+> >    179
+> >    180                  ufs_rpmb->hba = hba;
+> >    181                  ufs_rpmb->dev.parent = &hba->ufs_rpmb_wlun-
+> > >sdev_gendev;
+> >    182                  ufs_rpmb->dev.bus = &ufs_rpmb_bus_type;
+> >    183                  ufs_rpmb->dev.release = ufs_rpmb_device_release;
+> >    184                  dev_set_name(&ufs_rpmb->dev, "ufs_rpmb%d", region);
+> >    185
+> >    186                  /* Set driver data BEFORE device_register */
+> >    187                  dev_set_drvdata(&ufs_rpmb->dev, ufs_rpmb);
+> >    188
+> >    189                  ret = device_register(&ufs_rpmb->dev);
+> >    190                  if (ret) {
+> >    191                          dev_err(hba->dev, "Failed to register UFS RPMB
+> > device %d\n", region);
+> >    192                          put_device(&ufs_rpmb->dev);
+> >    193                          goto err_out;
+> >    194                  }
+> >    195
+> >    196                  /* Make CID unique for this region by appending region
+> > numbe */
+> >    197                  cid[sizeof(cid) - 1] = region;
+> >    198                  descr.dev_id = cid;
+> >    199                  descr.capacity = cap;
+> >    200
+> >    201                  /* Register RPMB device */
+> >    202                  rdev = rpmb_dev_register(&ufs_rpmb->dev, &descr);
+> >    203                  if (IS_ERR(rdev)) {
+> >    204                          dev_err(hba->dev, "Failed to register UFS RPMB
+> > device.\n");
+> >    205                          device_unregister(&ufs_rpmb->dev);
+> >    206                          ret = PTR_ERR(rdev);
+> >    207                          goto err_out;
+> >    208                  }
+> >    209
+> >    210                  ufs_rpmb->rdev = rdev;
+> >    211                  ufs_rpmb->region_id = region;
+> >    212
+> >    213                  list_add_tail(&ufs_rpmb->node, &hba->rpmbs);
+> >    214
+> >    215                  dev_info(hba->dev, "UFS RPMB region %d registered
+> > (capacity=%u)\n", region, cap);
+> >    216          }
+> >    217
+> >    218          return 0;
+> >    219  err_out:
+> >    220          list_for_each_entry_safe(it, tmp, &hba->rpmbs, node) {
+> >    221                  list_del(&it->node);
+> >    222                  device_unregister(&it->dev);
+> >    223          }
+> >    224
+> >    225          return ret;
+> >    226  }
+> >    227
+> >    228  /* UFS RPMB remove handler */
+> >  > 229  void ufs_rpmb_remove(struct ufs_hba *hba)
+> >    230  {
+> >    231          struct ufs_rpmb_dev *ufs_rpmb, *tmp;
+> >    232
+> >    233          if (list_empty(&hba->rpmbs))
+> >    234                  return;
+> >    235
+> >    236          /* Remove all registered RPMB devices */
+> >    237          list_for_each_entry_safe(ufs_rpmb, tmp, &hba->rpmbs, node) {
+> >    238                  dev_info(hba->dev, "Removing UFS RPMB region %d\n",
+> > ufs_rpmb->region_id);
+> >    239                  /* Remove from list first */
+> >    240                  list_del(&ufs_rpmb->node);
+> >    241                  /* Unregister device */
+> >    242                  device_unregister(&ufs_rpmb->dev);
+> >    243          }
+> >    244
+> >    245          dev_info(hba->dev, "All UFS RPMB devices unregistered\n");
+> >    246  }
+> >    247
+> >
+>
 
