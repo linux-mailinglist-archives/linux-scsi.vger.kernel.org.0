@@ -1,59 +1,59 @@
-Return-Path: <linux-scsi+bounces-18345-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18347-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9F3CC03435
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:56:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A0BDC03402
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:55:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42B133B3FF4
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:54:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 000B71A681A2
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:55:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E98CC351FC8;
-	Thu, 23 Oct 2025 19:53:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EC5934E765;
+	Thu, 23 Oct 2025 19:53:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="IALLLXg+"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="MHK8hjH0"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB8E34DCCF;
-	Thu, 23 Oct 2025 19:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A2E34EEEE;
+	Thu, 23 Oct 2025 19:53:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761249191; cv=pass; b=e5QAPAhHc9MzbmmHLi7OZ4QFkpcYExzHKfmbyZA+I8rDJcT1ZwMu4AVkhptRXo7S53O0OjhRRBe+sc9fUeo+h1ZSpyL5x69+zRu3xavXK5rF+LSNNINu2G95SAVYwSCfWTK5BQj+4UJY6OQuJmiTxXfeN2KAWqFLnPEccX+0HXg=
+	t=1761249201; cv=pass; b=qK97eXCZS3Rb/w+U5KRx5hmqBOJb4lyZCPm8wT9SB8n6DFf4AcCTupmYs8aO+fHIdVx0WMCQDPm22buXNKRBGJ+pWCr8MHr5gzec14ZpvmoWhyUH9RNrzUGWOmf2wQkUtmRWQBFAsM3ngTfIaAI5MxrqUwBsk8uD9PtZMuXkrUM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761249191; c=relaxed/simple;
-	bh=EIjt0ioo8i5WPXM7sX++TM6iE/2wJJ67e0SlFtqBMNs=;
+	s=arc-20240116; t=1761249201; c=relaxed/simple;
+	bh=1Xiid1B8nVCdVMd8sYaXgMXKY34HQVRPtEFg+4H0ME8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MzN5jYdjItn2VlJewjisZarqnnDAEwFR8aREiwZWWoHoJ9zbfDRAgcWOYV63h6jaDgOvTtEDNKmnmF4J27O4kWTPigBDX8/XADPjFZlB4k7mvJWP1xDZ/FB1Z3g/TzIbPnDwESLoEFotGs6Kw1TkQhwh+vWjX6A6uTTFuXCWEdY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=IALLLXg+; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=dcQNYk8pv1NPb+yc3y9L57kE8te2aeJdjPmmuNHzlLJfqA3HgMukV8uxwbYAays2oXOU+8Pv0OJl7StqbTKeWVJSU37amDghyI3LI87A1N93UNsKTEJHU79HjoyyuVDEX6a4KOWApRQL9abV/V1Z0SRXn5ReCMInDZs7mjHzSQg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=MHK8hjH0; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1761249046; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1761249052; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=VZ7GWreo75ZUbL9NNCfxPCVpi7qyPKbN5E0qEVlsDRuM1OJUevGcgYWgYk/bYOukdONnZvCNbL+e8uW1tiCysgXW/ieBPelR2KWD154JyT4YM3MRRwlvT+EiPwui/6RAnEQX4b9UbFZrIO53IPycfb5FwhQIsU54on7NjUcyHdE=
+	b=LzjEc9JDjYWiAsKRZYbo8+uE+E94+4o/WF9MkhGaMHJeQEypB2v3nBmBOoY79b9QBc+egKC+5K9YxpSaTIDJ4ILcSFbaYZjGaYMYet5BeYUoVnjt7ObQsrQ0u51ODZ2bZKFRLiugBd23iaPY+0iKJ3H/pv+kBTdCvvhd9t0acBA=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1761249046; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=PhIaBIZ7am8ZgbVJpVk9cc5jOr1kEQ9WXXGWhedx1UE=; 
-	b=I/Zj7AFuhWqpfE6z5dtPqUJH5+6TOpR9KF5JEXXBoJqAdhmZfSZrHGhI4pPNsmG+7XNzyisTh0WFpDWDATkWBrd8mpvaeCx0gAFPevwZ/2y4dlWnx8qH1+GuoM5PiDsRzcaGpGFU5CQDeUL2tgsY6KH/M05jOR4ZfyjY5TDJtxY=
+	t=1761249052; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=I4U1ehMdHeVX+Woo+Nu4R4xW88SvpyUPRZX3hLh+ZSI=; 
+	b=cKnD6q3kXfpgq7O7pnYJD4vvtH7LDRnJ+qOAb4I7D6P6s04eATLI4GgKFaIHHK9c0bGbWTWRo7kUgSRkCgm2wLVYKqMpBbo7+Y0C2bN0xwUT8Eis6jT4PuG02iL4fqMbqSC5f6ip8ZfXBDASalckN5ZVAFNjMFhjd4pxStHx2fM=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249046;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249052;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=PhIaBIZ7am8ZgbVJpVk9cc5jOr1kEQ9WXXGWhedx1UE=;
-	b=IALLLXg+O8N+V3C97iwKeh7iHsM7TGErkWmo/47PLIFXc2yebmstjPJ1CSoXpNYo
-	Ov2VtN5wqY4FCjsU/ns6+FBukuoX4HRFJjXA6vEeGSyX97vi2hKyWa/iizmxgeWVpHV
-	aU7YT+d5LRPf8D89CJD+Upnd+J73YPsj77ajWa+Q=
-Received: by mx.zohomail.com with SMTPS id 1761249044423531.8145925936169;
-	Thu, 23 Oct 2025 12:50:44 -0700 (PDT)
+	bh=I4U1ehMdHeVX+Woo+Nu4R4xW88SvpyUPRZX3hLh+ZSI=;
+	b=MHK8hjH0f0JV/cb2En53Ufg8nJoDvHRBwROMhZvT9bfPBMSGjbXdzFEJ2Tu0JToK
+	pT7n6hH+XoK0gv28Kzo+FrO+HEYoAQ7bHhEIsg7GCBV1q2Nja9nnLxT76G0toC9D3Wu
+	kJq6LVQIyT392hXdZ3zBI7wwSjhfwhCkZjOdMhWQ=
+Received: by mx.zohomail.com with SMTPS id 1761249050626982.7046680477819;
+	Thu, 23 Oct 2025 12:50:50 -0700 (PDT)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Thu, 23 Oct 2025 21:49:23 +0200
-Subject: [PATCH v3 05/24] phy: mediatek: ufs: Add support for resets
+Date: Thu, 23 Oct 2025 21:49:24 +0200
+Subject: [PATCH v3 06/24] scsi: ufs: mediatek: Rework resets
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251023-mt8196-ufs-v3-5-0f04b4a795ff@collabora.com>
+Message-Id: <20251023-mt8196-ufs-v3-6-0f04b4a795ff@collabora.com>
 References: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
 In-Reply-To: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
 To: Alim Akhtar <alim.akhtar@samsung.com>, 
@@ -86,146 +86,193 @@ Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.3
 
-The MediaTek UFS PHY supports PHY resets. Until now, they've been
-implemented in the UFS host driver. Since they were never documented in
-the UFS HCI node's DT bindings, and no mainline DT uses it, it's fine if
-it's moved to the correct location, which is the PHY driver.
+Rework the reset control getting in the driver's probe function to use
+the bulk reset APIs. Use the optional variant instead of defaulting to
+NULL if the resets fail, so that absent resets can be distinguished from
+erroneous resets.
 
-Implement the MPHY reset logic in this driver and expose it through the
-phy subsystem's reset op. The reset itself is optional, as judging by
-other mainline devices that use this hardware, it's not required for the
-device to function.
+Also remove all remnants of the MPHY reset ever having lived in this
+driver.
 
-If no reset is present, the reset op returns -EOPNOTSUPP, which means
-that the ufshci driver can detect it's present and not double sleep in
-its own reset function, where it will call the phy reset.
-
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Peter Wang <peter.wang@mediatek.com>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/phy/mediatek/phy-mtk-ufs.c | 71 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ drivers/ufs/host/ufs-mediatek-sip.h |  8 ----
+ drivers/ufs/host/ufs-mediatek.c     | 78 ++++++++++++++++++-------------------
+ drivers/ufs/host/ufs-mediatek.h     |  7 ++--
+ 3 files changed, 42 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/phy/mediatek/phy-mtk-ufs.c b/drivers/phy/mediatek/phy-mtk-ufs.c
-index 0cb5a25b1b7a..d77ba689ebc8 100644
---- a/drivers/phy/mediatek/phy-mtk-ufs.c
-+++ b/drivers/phy/mediatek/phy-mtk-ufs.c
-@@ -4,6 +4,7 @@
-  * Author: Stanley Chu <stanley.chu@mediatek.com>
-  */
- 
-+#include <linux/arm-smccc.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/io.h>
-@@ -11,6 +12,8 @@
- #include <linux/module.h>
- #include <linux/phy/phy.h>
- #include <linux/platform_device.h>
-+#include <linux/reset.h>
-+#include <linux/soc/mediatek/mtk_sip_svc.h>
- 
- #include "phy-mtk-io.h"
- 
-@@ -36,9 +39,17 @@
- 
- #define UFSPHY_CLKS_CNT    2
- 
-+#define UFS_MTK_SIP_MPHY_CTRL       BIT(8)
-+
-+enum ufs_mtk_mphy_op {
-+	UFS_MPHY_BACKUP = 0,
-+	UFS_MPHY_RESTORE
-+};
-+
- struct ufs_mtk_phy {
- 	struct device *dev;
- 	void __iomem *mmio;
-+	struct reset_control *reset;
- 	struct clk_bulk_data clks[UFSPHY_CLKS_CNT];
+diff --git a/drivers/ufs/host/ufs-mediatek-sip.h b/drivers/ufs/host/ufs-mediatek-sip.h
+index d627dfb4a766..256598cc3b5b 100644
+--- a/drivers/ufs/host/ufs-mediatek-sip.h
++++ b/drivers/ufs/host/ufs-mediatek-sip.h
+@@ -31,11 +31,6 @@ enum ufs_mtk_vcc_num {
+ 	UFS_VCC_MAX
  };
  
-@@ -141,9 +152,59 @@ static int ufs_mtk_phy_power_off(struct phy *generic_phy)
- 	return 0;
+-enum ufs_mtk_mphy_op {
+-	UFS_MPHY_BACKUP = 0,
+-	UFS_MPHY_RESTORE
+-};
+-
+ /*
+  * SMC call wrapper function
+  */
+@@ -84,9 +79,6 @@ static inline void _ufs_mtk_smc(struct ufs_mtk_smc_arg s)
+ #define ufs_mtk_device_pwr_ctrl(on, ufs_version, res) \
+ 	ufs_mtk_smc(UFS_MTK_SIP_DEVICE_PWR_CTRL, &(res), on, ufs_version)
+ 
+-#define ufs_mtk_mphy_ctrl(op, res) \
+-	ufs_mtk_smc(UFS_MTK_SIP_MPHY_CTRL, &(res), op)
+-
+ #define ufs_mtk_mtcmos_ctrl(op, res) \
+ 	ufs_mtk_smc(UFS_MTK_SIP_MTCMOS_CTRL, &(res), op)
+ 
+diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
+index ecbbf52bf734..d1554701793e 100644
+--- a/drivers/ufs/host/ufs-mediatek.c
++++ b/drivers/ufs/host/ufs-mediatek.c
+@@ -93,6 +93,12 @@ static const char *const ufs_uic_dl_err_str[] = {
+ 	"PA_INIT"
+ };
+ 
++static const char *const ufs_reset_names[] = {
++	"unipro",
++	"crypto",
++	"hci",
++};
++
+ static bool ufs_mtk_is_boost_crypt_enabled(struct ufs_hba *hba)
+ {
+ 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
+@@ -203,49 +209,45 @@ static void ufs_mtk_crypto_enable(struct ufs_hba *hba)
+ static void ufs_mtk_host_reset(struct ufs_hba *hba)
+ {
+ 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
+-	struct arm_smccc_res res;
+-
+-	reset_control_assert(host->hci_reset);
+-	reset_control_assert(host->crypto_reset);
+-	reset_control_assert(host->unipro_reset);
+-	reset_control_assert(host->mphy_reset);
+-
+-	usleep_range(100, 110);
++	int ret;
+ 
+-	reset_control_deassert(host->unipro_reset);
+-	reset_control_deassert(host->crypto_reset);
+-	reset_control_deassert(host->hci_reset);
+-	reset_control_deassert(host->mphy_reset);
++	ret = reset_control_bulk_assert(MTK_UFS_NUM_RESETS, host->resets);
++	if (ret)
++		dev_warn(hba->dev, "Host reset assert failed: %pe\n", ERR_PTR(ret));
+ 
+-	/* restore mphy setting aftre mphy reset */
+-	if (host->mphy_reset)
+-		ufs_mtk_mphy_ctrl(UFS_MPHY_RESTORE, res);
+-}
++	ret = phy_reset(host->mphy);
+ 
+-static void ufs_mtk_init_reset_control(struct ufs_hba *hba,
+-				       struct reset_control **rc,
+-				       char *str)
+-{
+-	*rc = devm_reset_control_get(hba->dev, str);
+-	if (IS_ERR(*rc)) {
+-		dev_info(hba->dev, "Failed to get reset control %s: %ld\n",
+-			 str, PTR_ERR(*rc));
+-		*rc = NULL;
++	/*
++	 * Only sleep if MPHY doesn't have a reset implemented (which already
++	 * sleeps) or the PHY reset function failed somehow, just to be safe
++	 */
++	if (ret) {
++		usleep_range(100, 110);
++		if (ret != -EOPNOTSUPP)
++			dev_warn(hba->dev, "PHY reset failed: %pe\n", ERR_PTR(ret));
+ 	}
++
++	ret = reset_control_bulk_deassert(MTK_UFS_NUM_RESETS, host->resets);
++	if (ret)
++		dev_warn(hba->dev, "Host reset deassert failed: %pe\n", ERR_PTR(ret));
  }
  
-+static int ufs_mtk_phy_ctrl(struct ufs_mtk_phy *phy, enum ufs_mtk_mphy_op op)
-+{
-+	struct arm_smccc_res res;
+-static void ufs_mtk_init_reset(struct ufs_hba *hba)
++static int ufs_mtk_init_reset(struct ufs_hba *hba)
+ {
+ 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
++	int ret, i;
 +
-+	arm_smccc_smc(MTK_SIP_UFS_CONTROL, UFS_MTK_SIP_MPHY_CTRL, op,
-+		      0, 0, 0, 0, 0, &res);
-+
-+	switch (res.a0) {
-+	case SMCCC_RET_NOT_SUPPORTED:
-+		return -EOPNOTSUPP;
-+	case SMCCC_RET_INVALID_PARAMETER:
-+		return -EINVAL;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int ufs_mtk_phy_reset(struct phy *generic_phy)
-+{
-+	struct ufs_mtk_phy *phy = get_ufs_mtk_phy(generic_phy);
-+	int ret;
-+
-+	if (!phy->reset)
-+		return -EOPNOTSUPP;
-+
-+	ret = reset_control_assert(phy->reset);
-+	if (ret)
-+		return ret;
-+
-+	usleep_range(100, 110);
-+
-+	ret = reset_control_deassert(phy->reset);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * To avoid double-sleep and other unintended side-effects in the ufshci
-+	 * driver, don't return the phy_ctrl retval here, but just return -EPROTO.
-+	 */
-+	ret = ufs_mtk_phy_ctrl(phy, UFS_MPHY_RESTORE);
++	for (i = 0; i < MTK_UFS_NUM_RESETS; i++)
++		host->resets[i].id = ufs_reset_names[i];
+ 
+-	ufs_mtk_init_reset_control(hba, &host->hci_reset,
+-				   "hci_rst");
+-	ufs_mtk_init_reset_control(hba, &host->unipro_reset,
+-				   "unipro_rst");
+-	ufs_mtk_init_reset_control(hba, &host->crypto_reset,
+-				   "crypto_rst");
+-	ufs_mtk_init_reset_control(hba, &host->mphy_reset,
+-				   "mphy_rst");
++	ret = devm_reset_control_bulk_get_optional_exclusive(hba->dev, MTK_UFS_NUM_RESETS,
++							     host->resets);
 +	if (ret) {
-+		dev_err(phy->dev, "UFS_MPHY_RESTORE SMC command failed: %pe\n",
-+			ERR_PTR(ret));
-+		return -EPROTO;
++		dev_err(hba->dev, "Failed to get resets: %pe\n", ERR_PTR(ret));
++		return ret;
 +	}
 +
 +	return 0;
-+}
-+
- static const struct phy_ops ufs_mtk_phy_ops = {
- 	.power_on       = ufs_mtk_phy_power_on,
- 	.power_off      = ufs_mtk_phy_power_off,
-+	.reset          = ufs_mtk_phy_reset,
- 	.owner          = THIS_MODULE,
- };
+ }
  
-@@ -163,8 +224,18 @@ static int ufs_mtk_phy_probe(struct platform_device *pdev)
- 	if (IS_ERR(phy->mmio))
- 		return PTR_ERR(phy->mmio);
+ static int ufs_mtk_hce_enable_notify(struct ufs_hba *hba,
+@@ -1247,11 +1249,9 @@ static int ufs_mtk_init(struct ufs_hba *hba)
+ 	if (err)
+ 		goto out_variant_clear;
  
-+	phy->reset = devm_reset_control_get_optional(dev, NULL);
-+	if (IS_ERR(phy->reset))
-+		return dev_err_probe(dev, PTR_ERR(phy->reset), "Failed to get reset\n");
-+
- 	phy->dev = dev;
+-	ufs_mtk_init_reset(hba);
+-
+-	/* backup mphy setting if mphy can reset */
+-	if (host->mphy_reset)
+-		ufs_mtk_mphy_ctrl(UFS_MPHY_BACKUP, res);
++	err = ufs_mtk_init_reset(hba);
++	if (err)
++		goto out_variant_clear;
  
-+	if (phy->reset) {
-+		ret = ufs_mtk_phy_ctrl(phy, UFS_MPHY_BACKUP);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "Failed to back up MPHY\n");
-+	}
-+
- 	ret = ufs_mtk_phy_clk_init(phy);
- 	if (ret)
- 		return ret;
+ 	/* Enable runtime autosuspend */
+ 	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
+diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
+index 9747277f11e8..4fce29d131d1 100644
+--- a/drivers/ufs/host/ufs-mediatek.h
++++ b/drivers/ufs/host/ufs-mediatek.h
+@@ -7,12 +7,14 @@
+ #define _UFS_MEDIATEK_H
+ 
+ #include <linux/bitops.h>
++#include <linux/reset.h>
+ 
+ /*
+  * MCQ define and struct
+  */
+ #define UFSHCD_MAX_Q_NR 8
+ #define MTK_MCQ_INVALID_IRQ	0xFFFF
++#define MTK_UFS_NUM_RESETS 3
+ 
+ /* REG_UFS_MMIO_OPT_CTRL_0 160h */
+ #define EHS_EN                  BIT(0)
+@@ -175,10 +177,7 @@ struct ufs_mtk_mcq_intr_info {
+ struct ufs_mtk_host {
+ 	struct phy *mphy;
+ 	struct regulator *reg_va09;
+-	struct reset_control *hci_reset;
+-	struct reset_control *unipro_reset;
+-	struct reset_control *crypto_reset;
+-	struct reset_control *mphy_reset;
++	struct reset_control_bulk_data resets[MTK_UFS_NUM_RESETS];
+ 	struct ufs_hba *hba;
+ 	struct ufs_mtk_crypt_cfg *crypt;
+ 	struct ufs_mtk_clk mclk;
 
 -- 
 2.51.1.dirty
