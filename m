@@ -1,59 +1,59 @@
-Return-Path: <linux-scsi+bounces-18359-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18351-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76AB6C03486
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:59:13 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 315CBC0342F
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:56:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5D6619C0CB1
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:58:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DEF0850202B
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:56:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71C3C34FF41;
-	Thu, 23 Oct 2025 19:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67DB334E77A;
+	Thu, 23 Oct 2025 19:54:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="Zv4MOrKn"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="EfYbZfF7"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3993570CD;
-	Thu, 23 Oct 2025 19:55:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83EE434EEE0;
+	Thu, 23 Oct 2025 19:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761249334; cv=pass; b=DlACW97YRZndEujgxmaw4KQIsWgu/G26u1se3atm3w6xTb57gN6NQy178MBhwFC1Z1RNTWTdKkgIyuVo6Ykv/ZevOLXen/IXJqtuwfUXqngGEViioXp3c4DjJvvNQ0Jwyk9sWfIGxI3vwYQlQ5VI2+urv+92GVl2KhZSjoo6UxI=
+	t=1761249298; cv=pass; b=b0oCWPW4j3gIVYaYBlXanHB9bb5hmcAzwR1VztzJr9HB71WVgtWjE81WULg/uzbnQmnv8LilzdF5DNcr6CRv75fpaTEhB60EI5N+dQf1XQN4vvyVdb3VyeC7/yKX/mxQ7NMFcC1d0wrpK8kyNcEAUeijfVjY2kxslnCF9LjmV0I=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761249334; c=relaxed/simple;
-	bh=JeFKi7qccnoOO4MrHzHsoqcWA38+VyjzLzZHUFKpaW0=;
+	s=arc-20240116; t=1761249298; c=relaxed/simple;
+	bh=Z2YmR7PkMS1YSbm0iLpHQBQSgJiGkM4/ruXx4rHJCcU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LevAMQfp3wFgS6Ho4h+K9pYW7JMcYrrcmYsC6s6ctxrwakUy+IrhpgCwvJ2pc7pNiy0oCLkkiZwbkdUqhBzfpRnf+j2z5gs3mjMo/HFJeKP8phAfziPSKy48/3FxNW6a2e6sNaILVUEagJxayHP9YBWC6toWQ3Fy1Q+6XmhDRWA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=Zv4MOrKn; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=lq0cVod8GQM6nYHptiVwRveQVcuwn1cv43LYN5dGu8veyE0Xe7vthu0omwr+ULSqNgiKtUpRM/GZfcf6LXIuWhv2h/rSmOO4qjpfCixSlnb1KfbEtczEneJNSc7I6G4aP6y3jSpaAZx7ih3f6n0aX2ryIul/GS+TRi6xsOfV7vM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=EfYbZfF7; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1761249064; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1761249070; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=j8TPr1raiaiGVwFd2scEfxIvXznQGjP/bwE+MpSZarIK15pg+ZO8R9rmLQx3xKv3ZPWu6KxpajGNbVntSvym+oUXDJzf5GzUOtAWAFc+PUKPI4r9l8vZhjTyUQQ/IIvpZhsb46UmU74nj8GZ8dzjpl+DHI64m1pYZ9+Q3d5ddsk=
+	b=kh2DOk86wNOd/SNL8t9Y2k595JSm+vN0O7rsHjVHuHBlUNJIS/kxMXKVRs74WO4tek3YKaxg8RoREl5LhWL+CBiU0T6nmaRsZRLM9aw+QVCrqmyh5aPCZPQOsokpIjxY04TyRLFyrq0/Ffm0ux32HHPKurCZ1JJYCiIYkOxhJHw=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1761249064; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=sC4S4OgvI8rYow2KhwwhYEnTyWYds7Q2RbkM5QQk8rM=; 
-	b=LECtg6z+Z5h2IS8wKz6CMGyGjerYBGQQD+7NSlgdcvU3rP91WFekPgcZEcFlUJK4wkCnjKPuBFXCERwypkffzrP6PQLIAghz4Ph3WmYFPC4+kqnSRCslEifAoOen8UyI2g7jeb16GB04l4PyEJXFI2/bEnYb2cYDumuZ+P6A9vU=
+	t=1761249070; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=b6NzRNKiv3Nyg0F/aRgR7DPEXa3XyvQBX/ydFnGvTNg=; 
+	b=b9PAMB9hZVZp+CMz92vuH+nQqtqyyOeC/CA1ognpgJD1el6s4X8mry96g+ZtB0qs9VjQwxdQu/cA6xAN9Adz12W+52ZunD/yPyp5wMUEIlauG0raE++QPom/1bz8DXjznSVCJ4//SmTjySoEWf41AOlkIfxGTIpsV7c1Pzvfbjo=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249064;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249070;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=sC4S4OgvI8rYow2KhwwhYEnTyWYds7Q2RbkM5QQk8rM=;
-	b=Zv4MOrKniMIGtMnmt6iOln+TEQ79dc3VScoA//1eetuvPJ3hh1iTiWCDimYLvbvw
-	RiO1DeuqilsCHSqIKuPvLNrtz522CjXSVmtCk18vs+IUArn0KgSquBJtEp/RBuPHjVb
-	0WJFK9Gf3MqDneUs9wDICSRsWMkPQ1HooLCA1C9I=
-Received: by mx.zohomail.com with SMTPS id 1761249062931154.5897707928499;
-	Thu, 23 Oct 2025 12:51:02 -0700 (PDT)
+	bh=b6NzRNKiv3Nyg0F/aRgR7DPEXa3XyvQBX/ydFnGvTNg=;
+	b=EfYbZfF7gbLSTnK6tv97bD76v7y0QIB01K1i5OyKHvmuTUmY9dbLD3Q6OWAKoApW
+	Ic30PWMym9eQiR0bCwQQUktstXeON5E7F3hdiA0g7CQWc5Jw26xcvQZTSn8IdkD4t5K
+	9L/bMuUrCXdDqNn4CecSOumeQepgXbdb0WzBmPpw=
+Received: by mx.zohomail.com with SMTPS id 1761249069163707.8494877333445;
+	Thu, 23 Oct 2025 12:51:09 -0700 (PDT)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Thu, 23 Oct 2025 21:49:26 +0200
-Subject: [PATCH v3 08/24] scsi: ufs: mediatek: Rework init function
+Date: Thu, 23 Oct 2025 21:49:27 +0200
+Subject: [PATCH v3 09/24] scsi: ufs: mediatek: Rework the crypt-boost stuff
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251023-mt8196-ufs-v3-8-0f04b4a795ff@collabora.com>
+Message-Id: <20251023-mt8196-ufs-v3-9-0f04b4a795ff@collabora.com>
 References: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
 In-Reply-To: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
 To: Alim Akhtar <alim.akhtar@samsung.com>, 
@@ -86,72 +86,143 @@ Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.3
 
-Printing an error message on ENOMEM is pointless. The print will not
-work because there is no memory.
+I don't know whether the crypt-boost functionality as it is currently
+implemented is even appropriate for mainline. It might be better done in
+some generic way. But what I do know is that I can rework the code to
+make it less obtuse.
 
-Adding an of_match_device to the init function is pointless. Why would a
-different device with a different probe function ever use the same init
-function? Get rid of it.
-
-zero-initialising an error variable just so you can then goto a bare
-return statement with that error variable to signal success is also
-pointless, just return directly, there's no unwind being done.
+Prefix the boost stuff with the appropriate vendor prefix, remove the
+pointless clock wrappers, and rework the function.
 
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 19 ++++---------------
- 1 file changed, 4 insertions(+), 15 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 91 +++++++++++++++--------------------------
+ 1 file changed, 32 insertions(+), 59 deletions(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index a7aab2332ef2..131f71145a12 100644
+index 131f71145a12..9c0ac72d6e43 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1248,29 +1248,19 @@ static int ufs_mtk_get_supplies(struct ufs_mtk_host *host)
-  */
- static int ufs_mtk_init(struct ufs_hba *hba)
- {
--	const struct of_device_id *id;
- 	struct device *dev = hba->dev;
- 	struct ufs_mtk_host *host;
- 	struct Scsi_Host *shost = hba->host;
--	int err = 0;
-+	int err;
- 	struct arm_smccc_res res;
- 
- 	host = devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
--	if (!host) {
--		err = -ENOMEM;
--		dev_info(dev, "%s: no memory for mtk ufs host\n", __func__);
--		goto out;
--	}
-+	if (!host)
-+		return -ENOMEM;
- 
- 	host->hba = hba;
- 	ufshcd_set_variant(hba, host);
- 
--	id = of_match_device(ufs_mtk_of_match, dev);
--	if (!id) {
--		err = -EINVAL;
--		goto out;
--	}
--
- 	/* Initialize host capability */
- 	ufs_mtk_init_host_caps(hba);
- 
-@@ -1344,11 +1334,10 @@ static int ufs_mtk_init(struct ufs_hba *hba)
- 
- 	ufs_mtk_get_hw_ip_version(hba);
- 
--	goto out;
-+	return 0;
- 
- out_variant_clear:
- 	ufshcd_set_variant(hba, NULL);
--out:
- 	return err;
+@@ -562,21 +562,6 @@ static int ufs_mtk_mphy_power_on(struct ufs_hba *hba, bool on)
+ 	return 0;
  }
  
+-static int ufs_mtk_get_host_clk(struct device *dev, const char *name,
+-				struct clk **clk_out)
+-{
+-	struct clk *clk;
+-	int err = 0;
+-
+-	clk = devm_clk_get(dev, name);
+-	if (IS_ERR(clk))
+-		err = PTR_ERR(clk);
+-	else
+-		*clk_out = clk;
+-
+-	return err;
+-}
+-
+ static void ufs_mtk_boost_crypt(struct ufs_hba *hba, bool boost)
+ {
+ 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
+@@ -633,65 +618,53 @@ static void ufs_mtk_boost_crypt(struct ufs_hba *hba, bool boost)
+ 	clk_disable_unprepare(cfg->clk_crypt_mux);
+ }
+ 
+-static int ufs_mtk_init_host_clk(struct ufs_hba *hba, const char *name,
+-				 struct clk **clk)
+-{
+-	int ret;
+-
+-	ret = ufs_mtk_get_host_clk(hba->dev, name, clk);
+-	if (ret) {
+-		dev_info(hba->dev, "%s: failed to get %s: %d", __func__,
+-			 name, ret);
+-	}
+-
+-	return ret;
+-}
+-
+-static void ufs_mtk_init_boost_crypt(struct ufs_hba *hba)
++static int ufs_mtk_init_boost_crypt(struct ufs_hba *hba)
+ {
+ 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
+ 	struct ufs_mtk_crypt_cfg *cfg;
+ 	struct device *dev = hba->dev;
+-	struct regulator *reg;
+-	u32 volt;
++	int ret;
+ 
+-	host->crypt = devm_kzalloc(dev, sizeof(*(host->crypt)),
+-				   GFP_KERNEL);
+-	if (!host->crypt)
+-		goto disable_caps;
++	cfg = devm_kzalloc(dev, sizeof(*cfg), GFP_KERNEL);
++	if (!cfg)
++		return -ENOMEM;
+ 
+-	reg = devm_regulator_get_optional(dev, "dvfsrc-vcore");
+-	if (IS_ERR(reg)) {
+-		dev_info(dev, "failed to get dvfsrc-vcore: %ld",
+-			 PTR_ERR(reg));
+-		goto disable_caps;
++	cfg->reg_vcore = devm_regulator_get_optional(dev, "dvfsrc-vcore");
++	if (IS_ERR(cfg->reg_vcore)) {
++		dev_err(dev, "Failed to get dvfsrc-vcore: %pe", cfg->reg_vcore);
++		return PTR_ERR(cfg->reg_vcore);
+ 	}
+ 
+-	if (of_property_read_u32(dev->of_node, "boost-crypt-vcore-min",
+-				 &volt)) {
+-		dev_info(dev, "failed to get boost-crypt-vcore-min");
+-		goto disable_caps;
++	ret = of_property_read_u32(dev->of_node, "mediatek,boost-crypt-vcore-min",
++				   &cfg->vcore_volt);
++	if (ret) {
++		dev_err(dev, "Failed to get mediatek,boost-crypt-vcore-min: %pe\n",
++			ERR_PTR(ret));
++		return ret;
+ 	}
+ 
+-	cfg = host->crypt;
+-	if (ufs_mtk_init_host_clk(hba, "crypt_mux",
+-				  &cfg->clk_crypt_mux))
+-		goto disable_caps;
++	cfg->clk_crypt_mux = devm_clk_get(dev, "crypt_mux");
++	if (IS_ERR(cfg->clk_crypt_mux)) {
++		dev_err(dev, "Failed to get clock crypt_mux: %pe\n", cfg->clk_crypt_mux);
++		return PTR_ERR(cfg->clk_crypt_mux);
++	}
+ 
+-	if (ufs_mtk_init_host_clk(hba, "crypt_lp",
+-				  &cfg->clk_crypt_lp))
+-		goto disable_caps;
++	cfg->clk_crypt_lp = devm_clk_get(dev, "crypt_lp");
++	if (IS_ERR(cfg->clk_crypt_lp)) {
++		dev_err(dev, "Failed to get clock crypt_lp: %pe\n", cfg->clk_crypt_lp);
++		return PTR_ERR(cfg->clk_crypt_lp);
++	}
+ 
+-	if (ufs_mtk_init_host_clk(hba, "crypt_perf",
+-				  &cfg->clk_crypt_perf))
+-		goto disable_caps;
++	cfg->clk_crypt_perf = devm_clk_get(dev, "crypt_perf");
++	if (IS_ERR(cfg->clk_crypt_perf)) {
++		dev_err(dev, "Failed to get clock crypt_perf: %pe\n", cfg->clk_crypt_perf);
++		return PTR_ERR(cfg->clk_crypt_perf);
++	}
+ 
+-	cfg->reg_vcore = reg;
+-	cfg->vcore_volt = volt;
++	host->crypt = cfg;
+ 	host->caps |= UFS_MTK_CAP_BOOST_CRYPT_ENGINE;
+ 
+-disable_caps:
+-	return;
++	return 0;
+ }
+ 
+ static void ufs_mtk_init_host_caps(struct ufs_hba *hba)
 
 -- 
 2.51.1.dirty
