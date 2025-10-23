@@ -1,60 +1,60 @@
-Return-Path: <linux-scsi+bounces-18357-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18338-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00209C03471
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:58:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7668FC033C3
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:53:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F032B19C0F3C
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:58:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D4763B3417
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:52:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0695D3563D1;
-	Thu, 23 Oct 2025 19:55:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B69C134EF0D;
+	Thu, 23 Oct 2025 19:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="AUU/Z/tf"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="YU8Bib3X"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210D035581B;
-	Thu, 23 Oct 2025 19:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0444334EEF2;
+	Thu, 23 Oct 2025 19:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761249323; cv=pass; b=NlC9BoWm+USKNUsWM8vXP7wBjKLrTJzVAT8dx0nOhT7Kl9jH4xcoQSemGwBilN7C4gqMy1tUY48Oi6fXY9ldeCoYnXQ6yHlxHU2/k8Q2Vq4M8vrqGSMu6GjcTXFdFhxOtEBeQV7XeIooY/I00DZ8yDu3SN9avjUOQgUWgMMAh0Y=
+	t=1761249148; cv=pass; b=tw9IfNu9dAAak+cVxR3tbvaIJmU6QyxGc72C8KijwQqQ+L0heEir/Un0mA2OPN1SBHqwqIK6TlAbSO/vf61LNzednLOt2btM5ilWp7GpC3f2RHveFX0y9umtPqJp5t6HOJmvs4oPosFeE4F6YrX2YiBR6s6fjxbI12e9TVyD0gI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761249323; c=relaxed/simple;
-	bh=rj/4m5FhRA1T9Eph1W2qdgaRwmrU+RpZvDZfU/wS+sI=;
+	s=arc-20240116; t=1761249148; c=relaxed/simple;
+	bh=X9Ap6F0nmCQQBL+Gx1ZG1/O5oBTR6MvZxuks/CNJoo0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Wc2DT+JzRgC6YVSHGynWjHTirifYN6tDNrbISLPFiypELbErOGBVDIxjs90sTbg2B7V5KB/Vl4qH+jUUkygidh518sPjBkCYeXdumT0JfwQfcDR6lr++zLo5EcWXvdMUs0qHp6AxWN+HVQ9ySk0C3Ot2Od4HOhPkr5pBUpFK09Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=AUU/Z/tf; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=GXBqR3WfAECzVryUxgiJhx/JkejXGK2kXQoukQNSSIn1mSqgZ33FBdwi837LoiQdy/MBfJ7chmFfaaNknbS2BhMlCii/vCbWRQbxYYHQMbuAT3/7GvlCaw9G4wdC+RVIkj3xfv7/yWy4+GSrxzrcKEWTxrTRSxUbWY3ei8DCH00=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=YU8Bib3X; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1761249108; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1761249114; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=UjYck4NtCRh07bo3PLr54WhHz9HjjPWD9/RO5RcsuofaTM3XS2OnqkfKfER7HmJ0x2mOnJ0kymJwOF/7HDuNWVkGQIPoaxYzCZSDzbMT7OlsqlqjgoZ8jc/M3DAWHtfZMId0tuwbfbSMV2sLjZ0X9pTZ5yViwKBc0y+154Qr5sA=
+	b=WaxXirPEazk8bjUvbT1e94tfNHkfnDb/YMN6Lh+8h7iQIqONf2p8UL/kaHVTtL+dGSlQXQj3Hm/MCzxmNWIUjEKW7jtmaySiui3pkxKve0skiBPM3uGcodgnkNi2TAGvoe054nV9NHzvZNkGk5PQOvbkD6WpZsHIJhT1uyBO5fw=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1761249108; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=2aDKj6WNDWNLHF3f3XJYCSyGQVnYFF06NugjrW7Y14w=; 
-	b=SrZPIDKNJpJAw6FYX6n1AavMV8N6sO+ErxWW9OOEyX0FjNaI5nQATkDTPY5zBhW3NSWJ9Ce3DoMl8dACAUi/7dgeIZqSRY5fGjWGXElKsfvUjlCuz5X2UTPGes8/4/yfu2t18X4uy22aRF2SzOCOY4l4qMSfEP8zF2eScdl/KR4=
+	t=1761249114; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=wdgnhdw/Mw698xqGaERI0Yc6xoNppjlBNBAYGnT56uY=; 
+	b=ZN29Y/9w7GPQWpMo9YB44rSwdNhvnL69YT2fywuEB6dip55GI/ybFOW1CYoHnuGHyIGmBPgCzfXKqpGDyC4+Y/AdQ/INobWAPB5xueMoX5hbZha0pP/oZpG8JBVySJWXCbMrgmZILKgnxk0sefCAfAEfTnMCg/bcWghyJcb2Cys=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249108;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249114;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=2aDKj6WNDWNLHF3f3XJYCSyGQVnYFF06NugjrW7Y14w=;
-	b=AUU/Z/tf+JwCpPfvqGN7ErU9Hcl/M9Iy6LHsBA6OXHA1Bt2NORmkShfXvxilfSE7
-	CHZq2eAu/fBeM8UCN9YNBFiYrfdP9/h2wdJfRqRMjxWTpyuEWLpbo6jk5+uJbw1rM9E
-	RrYp0lTiqLYkH6DCy6vt+lL+0jE2fGCHJNYo0XAs=
-Received: by mx.zohomail.com with SMTPS id 1761249106241227.6363113071401;
-	Thu, 23 Oct 2025 12:51:46 -0700 (PDT)
+	bh=wdgnhdw/Mw698xqGaERI0Yc6xoNppjlBNBAYGnT56uY=;
+	b=YU8Bib3XbAo+fHBH4bkDRlGa0w9eOdrt9oM5pSOBjRws/FuQ3lcbwekorLHJBKNp
+	4ACAWBVMMo3kku1XngEHTHyAjuOvlUuPoguY3G//6HXsdYN4MUMUt/MwaDdSu9RP6wu
+	q52QTvCQFYSaCa4qNwwFj7lDK91faB4svMEzNmuI=
+Received: by mx.zohomail.com with SMTPS id 1761249112427642.1241395414302;
+	Thu, 23 Oct 2025 12:51:52 -0700 (PDT)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Thu, 23 Oct 2025 21:49:33 +0200
-Subject: [PATCH v3 15/24] scsi: ufs: mediatek: Rework _ufs_mtk_clk_scale
- error paths
+Date: Thu, 23 Oct 2025 21:49:34 +0200
+Subject: [PATCH v3 16/24] scsi: ufs: mediatek: Add vendor prefix to
+ clk-scale-up-vcore-min
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251023-mt8196-ufs-v3-15-0f04b4a795ff@collabora.com>
+Message-Id: <20251023-mt8196-ufs-v3-16-0f04b4a795ff@collabora.com>
 References: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
 In-Reply-To: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
 To: Alim Akhtar <alim.akhtar@samsung.com>, 
@@ -87,111 +87,37 @@ Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.3
 
-Errors should be printed at the correct log level. Additionally, it
-looks like some "goto out"'s were omitted in the scale up case, which
-looks like a mistake, as the scale down branch of the code does use
-them.
+Device Tree properties other than the standard properties must be
+prefixed with the vendor's name. The "clk-scale-up-vcore-min" property,
+which this driver uses, and the binding did not previously document,
+lacked a vendor prefix.
 
-Rework the error messages to make them nicer and at the correct
-verbosity, and add the missing gotos.
+Add the missing "mediatek," vendor prefix and clean up the error print.
+No judgements are made regarding the use the property itself, it may
+turn out to be implementing something that it should do through a
+different way (e.g. OPPs).
 
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 41 +++++++++++++++++++----------------------
- 1 file changed, 19 insertions(+), 22 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 44676ba4c392..7a890302c240 100644
+index 7a890302c240..20db25efd634 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1948,16 +1948,16 @@ static void _ufs_mtk_clk_scale(struct ufs_hba *hba, bool scale_up)
- 
- 	ret = clk_prepare_enable(clki->clk);
- 	if (ret) {
--		dev_info(hba->dev,
--			 "clk_prepare_enable() fail, ret: %d\n", ret);
-+		dev_err(hba->dev, "%s: Failed to enable clock: %pe\n", __func__, ERR_PTR(ret));
+@@ -958,9 +958,9 @@ static void ufs_mtk_init_clocks(struct ufs_hba *hba)
  		return;
  	}
  
- 	if (clk_fde_scale) {
- 		ret = clk_prepare_enable(fde_clki->clk);
- 		if (ret) {
--			dev_info(hba->dev,
--				 "fde clk_prepare_enable() fail, ret: %d\n", ret);
-+			dev_err(hba->dev, "%s: Failed to enable FDE clock: %pe\n",
-+				__func__, ERR_PTR(ret));
-+			clk_disable_unprepare(clki->clk);
- 			return;
- 		}
+-	if (of_property_read_u32(dev->of_node, "clk-scale-up-vcore-min",
++	if (of_property_read_u32(dev->of_node, "mediatek,clk-scale-up-vcore-min",
+ 				 &volt)) {
+-		dev_info(dev, "failed to get clk-scale-up-vcore-min");
++		dev_err(dev, "Failed to get mediatek,clk-scale-up-vcore-min\n");
+ 		return;
  	}
-@@ -1966,51 +1966,48 @@ static void _ufs_mtk_clk_scale(struct ufs_hba *hba, bool scale_up)
- 		if (clk_bind_vcore) {
- 			ret = regulator_set_voltage(reg, volt, INT_MAX);
- 			if (ret) {
--				dev_info(hba->dev,
--					"Failed to set vcore to %d\n", volt);
-+				dev_err(hba->dev, "Failed to set vcore to %d\n", volt);
- 				goto out;
- 			}
- 		}
  
- 		ret = clk_set_parent(clki->clk, mclk->ufs_sel_max_clki->clk);
- 		if (ret) {
--			dev_info(hba->dev, "Failed to set clk mux, ret = %d\n",
--				ret);
-+			dev_err(hba->dev, "%s: Failed to set clock mux: %pe\n",
-+				__func__, ERR_PTR(ret));
-+			goto out;
- 		}
- 
- 		if (clk_fde_scale) {
--			ret = clk_set_parent(fde_clki->clk,
--				mclk->ufs_fde_max_clki->clk);
-+			ret = clk_set_parent(fde_clki->clk, mclk->ufs_fde_max_clki->clk);
- 			if (ret) {
--				dev_info(hba->dev,
--					"Failed to set fde clk mux, ret = %d\n",
--					ret);
-+				dev_err(hba->dev, "%s: Failed to set fde clock mux: %pe\n",
-+					__func__, ERR_PTR(ret));
-+				goto out;
- 			}
- 		}
- 	} else {
- 		if (clk_fde_scale) {
--			ret = clk_set_parent(fde_clki->clk,
--				mclk->ufs_fde_min_clki->clk);
-+			ret = clk_set_parent(fde_clki->clk, mclk->ufs_fde_min_clki->clk);
- 			if (ret) {
--				dev_info(hba->dev,
--					"Failed to set fde clk mux, ret = %d\n",
--					ret);
-+				dev_err(hba->dev, "%s: Failed to set fde clock mux: %pe\n",
-+					__func__, ERR_PTR(ret));
- 				goto out;
- 			}
- 		}
- 
- 		ret = clk_set_parent(clki->clk, mclk->ufs_sel_min_clki->clk);
- 		if (ret) {
--			dev_info(hba->dev, "Failed to set clk mux, ret = %d\n",
--				ret);
-+			dev_err(hba->dev, "%s: Failed to set clock mux: %pe\n",
-+				__func__, ERR_PTR(ret));
- 			goto out;
- 		}
- 
- 		if (clk_bind_vcore) {
- 			ret = regulator_set_voltage(reg, 0, INT_MAX);
- 			if (ret) {
--				dev_info(hba->dev,
--					"failed to set vcore to MIN\n");
-+				dev_err(hba->dev, "%s: Failed to set vcore to minimum: %pe\n",
-+					__func__, ERR_PTR(ret));
- 			}
- 		}
- 	}
 
 -- 
 2.51.1.dirty
