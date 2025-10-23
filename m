@@ -1,59 +1,60 @@
-Return-Path: <linux-scsi+bounces-18352-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18362-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C5A7C0348C
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:59:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79E5CC034DB
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 22:02:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62FE63B62B6
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:56:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1D403B5AFC
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:59:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C121351FA5;
-	Thu, 23 Oct 2025 19:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9617350297;
+	Thu, 23 Oct 2025 19:55:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="EIQgZEjY"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="aIq5dM6r"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1AB350A3A;
-	Thu, 23 Oct 2025 19:55:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F9C35772A;
+	Thu, 23 Oct 2025 19:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761249302; cv=pass; b=ffu5mrYkBb5d03Lzoa1x5dAsvrcFP5FDGT7JUTmR32FRettfPt9Y4aB0wuYVHN4HrQA7HZKIeffbytiBgN3ycfaizPO47AZeL6J3DDVydG8qhY4lV4Jh+TKwR+GhING35qb9KboI2atKhq2RCRq+L6k7EK1FqR1PiMBUxvOZgkk=
+	t=1761249349; cv=pass; b=LUKc+7e56jduBXy6NbYMjyc7aFYZAO2/4TgpL+Wg2T3o6qCF1J41+spA6mgLAveWQICtJZlD30kQj6e67swFtGub9urUhCNaOTNCGzHS/o1S/x1kKR5L7PF9EABOarTvvsaxdFRCZ0yQd1LfXwNuy495bVcwDO9D+8W0abOat2c=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761249302; c=relaxed/simple;
-	bh=bNXYdVKA0oOn4jh4Ekytcoysrluz6vAp3cnySpPMrts=;
+	s=arc-20240116; t=1761249349; c=relaxed/simple;
+	bh=QczUBR3WK7WGfSrc18dzYzgZcngCfhKDTcFvq3zx69c=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IDScoNRRwhlyZhhP5gb6wwd16N9ktepKIBHQ2RVJldIO6LnOX34ma/mFsBaqygkqRrQD/FMKA3gL2xdXFZQQrZPCE194qo5YDRunLDqWPyN24DEF4A7Kfb8vrpNwyH298uFsiN9wc2gLy5Jpvm1VdD4SF+VemTHOOpguL4AVHjw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=EIQgZEjY; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=iTHtbt/jEBSvZOEeX/YiPtZe+xhy2PWASZ1HGzoHUktp6+3LYLjxC4XSY0Foajpew5cgl1ZUa1iuw6m/3QRf861E9suJFC/BlWUeUZpAl5QqA+XNJY/lAE+VtOnzYyuLUa99cpizr/vkC3msBVzeI05uGp+VgTuYRN774HyMnjo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=aIq5dM6r; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1761249076; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1761249082; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=BDXph1ibxYFNEdrzdjj1BzFaiDkYUeLARSE8JiJ1kFn/W9BI7Zm1WNKz4sTY9fhmIOKFgkUzeRpV7CTNYWpX9b7G7cDwGgPLqIQoMvDtCVIoQ0tKzBKmOBzO6A7aXvX2BEz+LEPI/+6Lch3uKCccXRqlF7jNi7AShDyePbnX6HE=
+	b=g0+HrGzukyTNmfv9iajcoUKvtb68rR4ixxbSLax5eFWGM0nALrQVoJwHJyIo8DZsI/ereeIdf2f4Rx5x9hqScS2zJcnd6IkjcNpnxafSh33ZAIEZzBSWYdJFNIYwciBNI+Z9aAJqLu640gVTcn+Yg4spIscNCRiriIa6VcpyktE=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1761249076; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=PDPciPWq8/egMPa32WzZoh6RyF6o/jlJ1rEE5BDVlXM=; 
-	b=KKIMFtvrGTQ0O+c/+8sB4Zh8fiXN3cA3S9gRkB0Lgrw8ruHS33aSypojhncitUG4MwOyXCKRx9ewfI8fBYuouKr+XEbkAswiAtpLXcyjo5SlR8X9R4c1IiFOVIeWqWp5ZuU7W4KrhvNpxiGQSO1ZDfZ1thoXwAPbDH1YsggEie4=
+	t=1761249082; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=1GZIjhOXMFgw2wm5k6PRrTOSuSUNAdLH8Bv7e6b5Eq8=; 
+	b=WRmNZCcSQVV6WhWdUzX+dvPLG7yE/y2DYYxmBsvpMzImgEkeIBkwXAiLZ3Udn2LDJ5M6/0rVlg1QmZvGcVBCoQipBai4tgglWsaUPRmFaqnXDOHuMeK945BGuaHCPIoengE/+kG7eKidnWFOfRD6VW/xLx88QG9Q2p7k+GJ2+YQ=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249076;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249082;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=PDPciPWq8/egMPa32WzZoh6RyF6o/jlJ1rEE5BDVlXM=;
-	b=EIQgZEjYYZ53loLETsS0AVyQos9N6d8TL06yBkPIXXD3UwYjLhtLvdJGAojES4ZA
-	EAtMFgBdzQ4w86xIX47MZ9PlFfHeZHxrvEyYM4vT6PvkFpZS1Ng3GONFkpTBDPRyWt4
-	fNeSCPgYF/TECyJnWanugZQNlN/mhIw+CnhB+hoM=
-Received: by mx.zohomail.com with SMTPS id 1761249075467309.24031300806837;
-	Thu, 23 Oct 2025 12:51:15 -0700 (PDT)
+	bh=1GZIjhOXMFgw2wm5k6PRrTOSuSUNAdLH8Bv7e6b5Eq8=;
+	b=aIq5dM6r/xVPFyAgI+pLZOneGyLiE1ymzzjblBmCJ/BY8Bm5a1nfqfgsBaPMFQzb
+	nws7K5YU2Fd42xaMSDoaBh+x8CH1IaZJj7oYsz/6PvG7IkMTgek/EpoRseQ+IoATuId
+	VSPrpsYyDWmrN+09+6/l88JeGBaAqI2EbA7XrzA0=
+Received: by mx.zohomail.com with SMTPS id 1761249081608317.81143627241147;
+	Thu, 23 Oct 2025 12:51:21 -0700 (PDT)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Thu, 23 Oct 2025 21:49:28 +0200
-Subject: [PATCH v3 10/24] scsi: ufs: mediatek: Rework probe function
+Date: Thu, 23 Oct 2025 21:49:29 +0200
+Subject: [PATCH v3 11/24] scsi: ufs: mediatek: Remove vendor kernel quirks
+ cruft
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -62,7 +63,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251023-mt8196-ufs-v3-10-0f04b4a795ff@collabora.com>
+Message-Id: <20251023-mt8196-ufs-v3-11-0f04b4a795ff@collabora.com>
 References: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
 In-Reply-To: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
 To: Alim Akhtar <alim.akhtar@samsung.com>, 
@@ -86,141 +87,102 @@ Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.3
 
-Remove the ti,syscon-reset cruft.
-
-Make PHY mandatory. All the compatibles supported by the binding make it
-mandatory.
-
-Entertain this driver's insistence on playing with the PHY's RPM, but at
-least fix the part where it doesn't increase the reference count, which
-would lead to use-after-free.
+Both ufs_mtk_vreg_fix_vcc and ufs_mtk_vreg_fix_vccqx look like they are
+vendor kernel hacks to work around existing downstream device trees.
+Mainline does not need or want them, so remove them.
 
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 87 +++++++++++++++--------------------------
- 1 file changed, 32 insertions(+), 55 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 69 -----------------------------------------
+ 1 file changed, 69 deletions(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 9c0ac72d6e43..889a1d58a041 100644
+index 889a1d58a041..6b26b952df42 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -2353,74 +2353,49 @@ MODULE_DEVICE_TABLE(of, ufs_mtk_of_match);
-  */
- static int ufs_mtk_probe(struct platform_device *pdev)
- {
--	int err;
--	struct device *dev = &pdev->dev, *phy_dev = NULL;
--	struct device_node *reset_node, *phy_node = NULL;
--	struct platform_device *reset_pdev, *phy_pdev = NULL;
--	struct device_link *link;
--	struct ufs_hba *hba;
-+	struct platform_device *phy_pdev;
-+	struct device *dev = &pdev->dev;
-+	struct device_node *phy_node;
- 	struct ufs_mtk_host *host;
-+	struct device *phy_dev;
-+	struct ufs_hba *hba;
-+	int err;
- 
--	reset_node = of_find_compatible_node(NULL, NULL,
--					     "ti,syscon-reset");
--	if (!reset_node) {
--		dev_notice(dev, "find ti,syscon-reset fail\n");
--		goto skip_reset;
--	}
--	reset_pdev = of_find_device_by_node(reset_node);
--	if (!reset_pdev) {
--		dev_notice(dev, "find reset_pdev fail\n");
--		goto skip_reset;
--	}
--	link = device_link_add(dev, &reset_pdev->dev,
--		DL_FLAG_AUTOPROBE_CONSUMER);
--	put_device(&reset_pdev->dev);
--	if (!link) {
--		dev_notice(dev, "add reset device_link fail\n");
--		goto skip_reset;
--	}
--	/* supplier is not probed */
--	if (link->status == DL_STATE_DORMANT) {
--		err = -EPROBE_DEFER;
--		goto out;
--	}
--
--skip_reset:
- 	/* find phy node */
- 	phy_node = of_parse_phandle(dev->of_node, "phys", 0);
-+	if (!phy_node)
-+		return dev_err_probe(dev, -ENOENT, "No PHY node found\n");
- 
--	if (phy_node) {
--		phy_pdev = of_find_device_by_node(phy_node);
--		if (!phy_pdev)
--			goto skip_phy;
--		phy_dev = &phy_pdev->dev;
-+	phy_pdev = of_find_device_by_node(phy_node);
-+	of_node_put(phy_node);
-+	if (!phy_pdev)
-+		return dev_err_probe(dev, -ENODEV, "No PHY device found\n");
- 
--		pm_runtime_set_active(phy_dev);
--		pm_runtime_enable(phy_dev);
--		pm_runtime_get_sync(phy_dev);
-+	phy_dev = &phy_pdev->dev;
- 
--		put_device(phy_dev);
--		dev_info(dev, "phys node found\n");
--	} else {
--		dev_notice(dev, "phys node not found\n");
-+	err = pm_runtime_set_active(phy_dev);
-+	if (err) {
-+		dev_err_probe(dev, err, "Failed to activate PHY RPM\n");
-+		goto err_put_phy;
-+	}
-+	pm_runtime_enable(phy_dev);
-+	err = pm_runtime_get_sync(phy_dev);
-+	if (err) {
-+		dev_err_probe(dev, err, "Failed to power on PHY\n");
-+		goto err_put_phy;
+@@ -1017,73 +1017,6 @@ static void ufs_mtk_init_clocks(struct ufs_hba *hba)
  	}
- 
--skip_phy:
- 	/* perform generic probe */
- 	err = ufshcd_pltfrm_init(pdev, &ufs_hba_mtk_vops);
- 	if (err) {
--		dev_err(dev, "probe failed %d\n", err);
--		goto out;
-+		dev_err_probe(dev, err, "Generic platform probe failed\n");
-+		goto err_put_phy;
- 	}
- 
- 	hba = platform_get_drvdata(pdev);
--	if (!hba)
--		goto out;
- 
--	if (phy_node && phy_dev) {
--		host = ufshcd_get_variant(hba);
--		host->phy_dev = phy_dev;
--	}
-+	host = ufshcd_get_variant(hba);
-+	host->phy_dev = phy_dev;
- 
- 	/*
- 	 * Because the default power setting of VSx (the upper layer of
-@@ -2429,9 +2404,11 @@ static int ufs_mtk_probe(struct platform_device *pdev)
- 	 */
- 	ufs_mtk_dev_vreg_set_lpm(hba, false);
- 
--out:
--	of_node_put(phy_node);
--	of_node_put(reset_node);
-+	return 0;
-+
-+err_put_phy:
-+	put_device(phy_dev);
-+
- 	return err;
  }
  
+-#define MAX_VCC_NAME 30
+-static int ufs_mtk_vreg_fix_vcc(struct ufs_hba *hba)
+-{
+-	struct ufs_vreg_info *info = &hba->vreg_info;
+-	struct device_node *np = hba->dev->of_node;
+-	struct device *dev = hba->dev;
+-	char vcc_name[MAX_VCC_NAME];
+-	struct arm_smccc_res res;
+-	int err, ver;
+-
+-	if (info->vcc)
+-		return 0;
+-
+-	if (of_property_read_bool(np, "mediatek,ufs-vcc-by-num")) {
+-		ufs_mtk_get_vcc_num(res);
+-		if (res.a1 > UFS_VCC_NONE && res.a1 < UFS_VCC_MAX)
+-			snprintf(vcc_name, MAX_VCC_NAME, "vcc-opt%lu", res.a1);
+-		else
+-			return -ENODEV;
+-	} else if (of_property_read_bool(np, "mediatek,ufs-vcc-by-ver")) {
+-		ver = (hba->dev_info.wspecversion & 0xF00) >> 8;
+-		snprintf(vcc_name, MAX_VCC_NAME, "vcc-ufs%u", ver);
+-	} else {
+-		return 0;
+-	}
+-
+-	err = ufshcd_populate_vreg(dev, vcc_name, &info->vcc, false);
+-	if (err)
+-		return err;
+-
+-	err = ufshcd_get_vreg(dev, info->vcc);
+-	if (err)
+-		return err;
+-
+-	err = regulator_enable(info->vcc->reg);
+-	if (!err) {
+-		info->vcc->enabled = true;
+-		dev_info(dev, "%s: %s enabled\n", __func__, vcc_name);
+-	}
+-
+-	return err;
+-}
+-
+-static void ufs_mtk_vreg_fix_vccqx(struct ufs_hba *hba)
+-{
+-	struct ufs_vreg_info *info = &hba->vreg_info;
+-	struct ufs_vreg **vreg_on, **vreg_off;
+-
+-	if (hba->dev_info.wspecversion >= 0x0300) {
+-		vreg_on = &info->vccq;
+-		vreg_off = &info->vccq2;
+-	} else {
+-		vreg_on = &info->vccq2;
+-		vreg_off = &info->vccq;
+-	}
+-
+-	if (*vreg_on)
+-		(*vreg_on)->always_on = true;
+-
+-	if (*vreg_off) {
+-		regulator_disable((*vreg_off)->reg);
+-		devm_kfree(hba->dev, (*vreg_off)->name);
+-		devm_kfree(hba->dev, *vreg_off);
+-		*vreg_off = NULL;
+-	}
+-}
+-
+ static void ufs_mtk_setup_clk_gating(struct ufs_hba *hba)
+ {
+ 	unsigned long flags;
+@@ -1968,8 +1901,6 @@ static void ufs_mtk_fixup_dev_quirks(struct ufs_hba *hba)
+ 		hba->dev_quirks &= ~UFS_DEVICE_QUIRK_DELAY_BEFORE_LPM;
+ 	}
+ 
+-	ufs_mtk_vreg_fix_vcc(hba);
+-	ufs_mtk_vreg_fix_vccqx(hba);
+ 	ufs_mtk_fix_ahit(hba);
+ 	ufs_mtk_fix_clock_scaling(hba);
+ }
 
 -- 
 2.51.1.dirty
