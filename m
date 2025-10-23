@@ -1,60 +1,60 @@
-Return-Path: <linux-scsi+bounces-18348-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18346-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54BB5C03453
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:57:39 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67288C03403
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:55:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A6D53B2F5E
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:55:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9F5D44FD0DD
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:54:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49AAE34DB53;
-	Thu, 23 Oct 2025 19:53:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DD3D351FCB;
+	Thu, 23 Oct 2025 19:53:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="ZSz8t0zv"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="WJRUPPwN"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF9434DB49;
-	Thu, 23 Oct 2025 19:53:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2C934E74A;
+	Thu, 23 Oct 2025 19:53:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761249233; cv=pass; b=RihezGTlzdu/IYFN2Q8reH+eVeBy9K3/Eh4VMm2Fatnt/WS8VsfrtWfc296JDA9/aNYURyMvssZgyuywaSbVw4S+GYJXKigbV0HvUtfqS/xIW+0mBHXSEcFtjZslSR1hw7cHJkCax5aMDNkzbLPWUpY/EB8Vw7yPzYeBN548RNo=
+	t=1761249191; cv=pass; b=CkHH3Pd4ROt8/yfvHJoFpmeoGj6AP+CjXYRrjIbb86buB+lOebj4mhoEx59JzIfCIQe+kcZcY7y2wKJybX/Nze6ItSvpTeylvH4ryEr7/htnSpwNuJyJT5irZx9p3iYmKC4NBYzN4TTWZP/UWrqKdXnXwaAm5g+jX/icrMKO8PU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761249233; c=relaxed/simple;
-	bh=RJKqgYJDQpByKFyC/umaJEMyUSuuOvfyraab9N4JGRg=;
+	s=arc-20240116; t=1761249191; c=relaxed/simple;
+	bh=o1TvjoihnRAbox+LWz+sl8f3Tnuapjv05AjOE7DYgwg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UA1X82n7pEVrR87P7AdgLgPNm0xYdoMzdTPpm4mgzBOEYlFQI0NJ6HKFFJZ9qbrNzYvzjnQn4P5X9sIbkR60nYFEGw2JY4iQd2XtV63CXNfOr6o0TKqswQ26AW/kO4MpwUO66MnXeAu3QU60+EdJMk7V8cNxSrjd9V9bBCMS7tA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=ZSz8t0zv; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=e/waetuwDLHPjTKNL4trbNpwP7ZH2KojwixhRNjnXkml++F9rFeCmpsKeMv+UHCmlAUBidiAVbOAFhzJDVKnHx0TI6q477f1p3UZVedwhqL0eMFKI79TTTVdpiORIubGJ/jt6LnjcZG4hTfmG3+rWmay29c4M+hlmYtVx97fuyc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=WJRUPPwN; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1761249156; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1761249162; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=VcyPy4Bav5XBRMuJwuVfXrS7rWxpP2Nv2aRhGOFw/blf+P8e5vNrjLrLW+Fiumn3fzDPV+W+B9sW5cKeGxQWWriLwG2CmD1Owj6xfNnLKfx6hd75GkX9nurHjiNa557kNiOr35/7nNjJGNWWHb0A9fVWHgA0wQlqjJXfUB1eCAs=
+	b=VDR01vSCP6/d2x3JWBeIXcm/obWd21GdvcoOT1oDD3u1LpCOExNV2RVCtyjZzxEoer+JwQLN76ABjNzNKhrR24GbLeCYCFlt5DOuvdkhF49oeNHVETaUx0HODTPXHDYKb+/EVcxQB1BA32scoLtZMsWuex4ZkVppWyKcBQ9L9bk=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1761249156; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=gacBwfWTKcgjQcO0gdGshUooCsAPU+CoMskbVUWweZo=; 
-	b=J5625+6oUf6Bxdxgt8sg1wIDbDjcFF3LwX4oJv5vGldN+S0sY+UfPpiRlstpaj7GgfwxnjsIaXSyc+XLA+l6+EX+AWIly3ejsGzN6UFTpT07HqFUy12PpYN1MaJ+p0YidfGc6zy9ugsEthAmEG6DH5XcY4C9zqm8RXwXfWMzVMk=
+	t=1761249162; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=uqLnB78neSi6OXDSm/nO57Oj4cmBaz+P1PW4hSeUDCY=; 
+	b=hJCURP6gO9NAdmEcVyWowbmXcSerqqJ0BKwBHOZFa0MIJ49OJdESThMh/j7c15csbkx17X89NDoiwZ2msC4vBkKPPSPLpUGFd3xhcvWpPZHS6CqqaEwrKGDLdmwVPV9b8fI1h8fnbiNkQNXkXwcLSs9BHHNGMMl8VrX9UEnhUyQ=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249156;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249162;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=gacBwfWTKcgjQcO0gdGshUooCsAPU+CoMskbVUWweZo=;
-	b=ZSz8t0zvSnRhRpZaAvu+eIRNTsO04/fK/wMw/EhoQnKXclBDECTnmDBBOJsGyZY4
-	DaGw8dZkO/BnbNeOzeV7Rg0tEhY0Xu0nBrlzh0WljjMP/4fjIsrqQUqdHgalkouZLHA
-	bjsTRCpYeWcBTv8iOZk03Fm/YjVG+7jsnQG+J4jY=
-Received: by mx.zohomail.com with SMTPS id 1761249155845262.54753612291915;
-	Thu, 23 Oct 2025 12:52:35 -0700 (PDT)
+	bh=uqLnB78neSi6OXDSm/nO57Oj4cmBaz+P1PW4hSeUDCY=;
+	b=WJRUPPwNg+Itu0vdCkczL1rirjBcaDYTIy3Cr/Q3QDob5UYk6/nr8oj8kQDwmiPT
+	EgJ3Dgu1BnJB5zGUc81d/NmVot3XscJpseC8nAb8v59Xs6o+yNmH9F54vdvn7JYycGa
+	iObirYkGSTQ2KLTLTD85XuyGVQ3WkSiCX9yUza3o=
+Received: by mx.zohomail.com with SMTPS id 1761249161979886.3318559681989;
+	Thu, 23 Oct 2025 12:52:41 -0700 (PDT)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Thu, 23 Oct 2025 21:49:41 +0200
-Subject: [PATCH v3 23/24] scsi: ufs: mediatek: Remove ret local from
- link_startup_notify
+Date: Thu, 23 Oct 2025 21:49:42 +0200
+Subject: [PATCH v3 24/24] scsi: ufs: mediatek: Add MT8196 compatible,
+ update copyright
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251023-mt8196-ufs-v3-23-0f04b4a795ff@collabora.com>
+Message-Id: <20251023-mt8196-ufs-v3-24-0f04b4a795ff@collabora.com>
 References: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
 In-Reply-To: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
 To: Alim Akhtar <alim.akhtar@samsung.com>, 
@@ -87,47 +87,52 @@ Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.3
 
-Remove the "ret" local variable from ufs_mtk_link_startup_notify, as
-it's pointless; in all cases it is assigned, it is returned right after
-without being read first.
+THe MT8196's UFS controller has a new compatible. Add the necessary
+struct definitions to support it.
 
-Rework the code to just return directly, and get rid of the default
-branch while at it.
+Also update the copyrights and authors, without tabs following spaces to
+avoid checkpatch errors, to list myself as having contributed to this
+driver after the preceding rework patches.
 
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 5f5ebaf61ae0..932d1fdfdc65 100644
+index 932d1fdfdc65..49ab92acf3db 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1487,21 +1487,15 @@ static void ufs_mtk_post_link(struct ufs_hba *hba)
- static int ufs_mtk_link_startup_notify(struct ufs_hba *hba,
- 				       enum ufs_notify_change_status stage)
- {
--	int ret = 0;
--
- 	switch (stage) {
- 	case PRE_CHANGE:
--		ret = ufs_mtk_pre_link(hba);
--		break;
-+		return ufs_mtk_pre_link(hba);
- 	case POST_CHANGE:
- 		ufs_mtk_post_link(hba);
--		break;
--	default:
--		ret = -EINVAL;
--		break;
-+		return 0;
- 	}
+@@ -1,9 +1,11 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+  * Copyright (C) 2019 MediaTek Inc.
++ * Copyright (C) 2025 Collabora Ltd.
+  * Authors:
+- *	Stanley Chu <stanley.chu@mediatek.com>
+- *	Peter Wang <peter.wang@mediatek.com>
++ *      Stanley Chu <stanley.chu@mediatek.com>
++ *      Peter Wang <peter.wang@mediatek.com>
++ *      Nicolas Frattaroli <nicolas.frattaroli@collabora.com> (Major cleanups)
+  */
  
--	return ret;
-+	return -EINVAL;
- }
+ #include <linux/arm-smccc.h>
+@@ -2202,10 +2204,15 @@ static const struct ufs_mtk_soc_data mt8183_data = {
+ 	.has_avdd09 = true,
+ };
  
- static int ufs_mtk_device_reset(struct ufs_hba *hba)
++static const struct ufs_mtk_soc_data mt8196_data = {
++	.has_avdd09 = true,
++};
++
+ static const struct of_device_id ufs_mtk_of_match[] = {
+ 	{ .compatible = "mediatek,mt8183-ufshci", .data = &mt8183_data },
+ 	{ .compatible = "mediatek,mt8192-ufshci" },
+ 	{ .compatible = "mediatek,mt8195-ufshci" },
++	{ .compatible = "mediatek,mt8196-ufshci", .data = &mt8196_data },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, ufs_mtk_of_match);
 
 -- 
 2.51.1.dirty
