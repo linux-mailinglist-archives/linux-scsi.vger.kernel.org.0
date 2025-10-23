@@ -1,59 +1,60 @@
-Return-Path: <linux-scsi+bounces-18344-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18349-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9900C033FC
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:54:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74698C03414
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:55:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 113C3504CA6
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:54:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D0451A68363
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF7723502A9;
-	Thu, 23 Oct 2025 19:53:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A7C34F278;
+	Thu, 23 Oct 2025 19:53:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="aoKIIAIl"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="T4XaKuCv"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C2534FF6E;
-	Thu, 23 Oct 2025 19:53:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3DB6262815;
+	Thu, 23 Oct 2025 19:53:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761249187; cv=pass; b=BQsm0KqIme4/JeJZ9IqUhmHNp2AhbaQsywsjK49kAMCBczeh5CredM21OZ2r82NHb9Sw0G/kbCiqMQQbnqCYlPDq10v/BVfa0GobxnO8QjCD6bP36xdKZqgn2jpDbTUHAwWboQemqBUgsRhs04y/lz2UVY227oEnYzVGtbmPLOQ=
+	t=1761249234; cv=pass; b=ZHyl0s/ZGyXUJxDTpDEUcw3zy8QrBMTbXrXrnotNLtVBv5smF6Kl3kEAk84VF8RLmnuk/d3YyzMjKYFyA/kl1wuX/pR9uimGggZEtwivszy8M477scZ9wsjMzJkl8LDr2IF6Ma8RKU+cQNy9wMdxOc5NrXmpiKiGNio6jBzos7U=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761249187; c=relaxed/simple;
-	bh=ybe8GvS4IXSum1YbT//6+2TH9wDaTSPw2KVSRpEa3jc=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=F9Y+yC9fv4kriUEFXitKdarJuS38mw+8MoXOEcWr3nRnmi8648jyoO1CDMx/RSHALpPQTAUNMhXhWvwPkdx5e3hsbeBEGSQiOHrV9Y5UsNrCbcesziGpPtqFGL3/8asCjRnahpqHc8r/vOxg5gjgaQ0iRyIKA4lNt70QmiA6BLg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=aoKIIAIl; arc=pass smtp.client-ip=136.143.188.112
+	s=arc-20240116; t=1761249234; c=relaxed/simple;
+	bh=zDs7D3Dqz+MlMt0cSf7lZfvEiiibZYvwmtT3oJFECtA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=aTNx38ydBPTutLisdopb+8tcLZeXxZZvrKvg79pqDQVMqYMI+6jo9rKmEw7a6PC0KpzCiaJXA1byup3CvJOkif/aHEzxMX3yNxrUVvMz7Y7Za1Ahktrl0b7s5ttEOQX2qGZWhwHvy3YzCRJ7/S9jiJdSzjPNiORJMEwp1dWDpZo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=T4XaKuCv; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1761249014; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1761249020; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=ho87PT3dCkvouPFOWzH7THguM+jZR1FMkLFJkno6XwXP3pukEl/ZXpJzpMwh3hEOr2V5gBZdNlpGjTU5/EOk05fsyXqnzTsJ/UIO2SnD8xQ6vutp0FdHCiUmpeD/Wkx0GfQI5lkJ/+qxU8gI4SZ5UDPL2+CjISH545EPQmN5fkc=
+	b=W3BUB7khhifPpZWDA7eK0J/bWerErbID1PcQ6BtjXrA4rrrFHZW9hwOi7cBQ+WJlbhBDCCpLHzb3CpSZukR3noLUFuoFOfatqviE4rjuGAGCw5Qgx4pkKVkuuyrU8MonRMxJK9PVFuxMt3vrPxCPKLg5kFtapaLCBTKFHg9Yoso=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1761249014; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=yY00MRaGZJKQVqmTEqvL4/4Frt/VqsFNgh9CjLnUkm0=; 
-	b=KqcIGg5CwaXsSyl1bHxTQ4eRDXJJF/+hnDAKOp5DBUycTor9AYjJSW3PQnbx3ctm+Qc9ijWkvX938hYPH4v54dTVdEvJg9r9dUxlwiN6lR+O8tXQ5LOZypG9vq1vSENKgK1Pz8kqNNtgWometnds1PwjHHNqE3QS9QkDC0GBxcs=
+	t=1761249020; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=T8IO34R0JKJXQ+IBz9tFNngJ2MQyQjiOHTpva5wqLo0=; 
+	b=AbAXck/Mi8yQLGMVGsbIw1WHvNXKcxlba/3N7Y7sySHmS+XdtCHJc2koM02SH4t/M9IEzg2xN+/ruONlEmZBSZidYFWVZZBnwHtvs28a/GD3PxzpcPd7X91oSWWCrGXuvY3vrmFkB2sATyISYBAVaqwfDvOvDVPE1Gvel+T/EyY=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249014;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249020;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:To:To:Cc:Cc:Reply-To;
-	bh=yY00MRaGZJKQVqmTEqvL4/4Frt/VqsFNgh9CjLnUkm0=;
-	b=aoKIIAIlhmSiUXEFb1gMK6i8Ip+292MyRBivKosdtoE/4Zrp4jFmzCVomkenbnzi
-	Ow7nsJzBKOrz3CJa4rwZgct2JbA5mLNfXGzgaWXX5MZCgrR5a9azK1fmsBGKbCsCidf
-	4R+yqVpSegsKD3eJ2mzylW0zvVcAjnv19/y4uz6A=
-Received: by mx.zohomail.com with SMTPS id 1761249012363518.5992664462382;
-	Thu, 23 Oct 2025 12:50:12 -0700 (PDT)
+	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
+	bh=T8IO34R0JKJXQ+IBz9tFNngJ2MQyQjiOHTpva5wqLo0=;
+	b=T4XaKuCvP2OOJa1VFRAIKPpKORA7rONGcGSdI33bAU2PzyOQxyF3b9HC0rWOs9XB
+	2ovUvMNeOV3Opp8oLQW9o3caDC45lPCKPtha493tJgsqjjP2YJb8GD4XolTKliLSzVG
+	3FW2/LrlN3teBqiwFAC5SHlVqHAnZVqJx24fBpfk=
+Received: by mx.zohomail.com with SMTPS id 1761249019669371.3549099959822;
+	Thu, 23 Oct 2025 12:50:19 -0700 (PDT)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Subject: [PATCH v3 00/24] MediaTek UFS Cleanup and MT8196 Enablement
-Date: Thu, 23 Oct 2025 21:49:18 +0200
-Message-Id: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
+Date: Thu, 23 Oct 2025 21:49:19 +0200
+Subject: [PATCH v3 01/24] dt-bindings: phy: Add mediatek,mt8196-ufsphy
+ variant
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -62,11 +63,9 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAL6G+mgC/23OTQ7CIBCG4as0rMUU6P/KexgXMJ1aElsUaFPT9
- O4i3ahx+ZE877ASh1ajI02yEouzdtqMYYhDQqCX4xWpbsMmPOU5S1lGB1+xuqBT5yggZKqWdYm
- 5IAHcLXZ6ibHzZd8WH1No+v2RKOmQghkG7ZtkxMXTvcsFeYNeO2/sM35mZlH8uzszmlJW5y2gq
- oSC6gTmdpPKWHkM8Zia+ScvvjgPHEQpKpFBhqX85du2vQADStefGAEAAA==
-X-Change-ID: 20251014-mt8196-ufs-cec4b9a97e53
+Message-Id: <20251023-mt8196-ufs-v3-1-0f04b4a795ff@collabora.com>
+References: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
+In-Reply-To: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
 To: Alim Akhtar <alim.akhtar@samsung.com>, 
  Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -88,98 +87,63 @@ Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.3
 
-In this series, the existing MediaTek UFS binding is expanded and
-completed to correctly describe not just the existing compatibles, but
-also to introduce a new compatible in the from of the MT8196 SoC.
+The MediaTek MT8196 SoC includes an M-PHY compatible with the already
+existing mt8183 binding.
 
-The resets, which until now were completely absent from both the UFS
-host controller binding and the UFS PHY binding, are introduced to both.
-This also means the driver's undocumented and, in mainline, unused reset
-logic is reworked. In particular, the PHY reset is no longer a reset of
-the host controller node, but of the PHY node.
+However, one omission from the original binding was that all of these
+variants may have an optional reset.
 
-This means the host controller can reset the PHY through the common PHY
-framework.
+Add the new compatible, and also the resets property, with an example.
 
-The resets remain optional.
-
-Additionally, a massive number of driver cleanups are introduced. These
-were prompted by me inspecting the driver more closely as I was
-adjusting it to correspond to the binding.
-
-The driver still implements vendor properties that are undocumented in
-the binding. I did not touch most of those, as I neither want to
-convince the bindings maintainers that they are needed without knowing
-precisely what they're for, nor do I want to argue with the driver
-authors when removing them.
-
-Due to the "Marie Kondo with a chainsaw" nature of the driver cleanup
-patches, I humbly request that reviewers do not comment on displeasing
-code they see in the context portion of a patch before they've read the
-whole patch series, as that displeasing code may in fact be reworked in
-a subsequent patch of this series. Please keep comments focused on the
-changed lines of the diff; I know there's more that can be done, but it
-doesn't necessarily need to be part of this series.
-
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
-Changes in v3:
-- Split mediatek,ufs bindings change into two patches, one for
-  completing the existing binding, one for the MT8196
-- Add over a dozen driver cleanup patches
-- Add explicit support for the MT8196 compatible to the driver
-- Note: next-20251023, on which I based this, currently has a broken
-  build due to an unrelated OPP core change that was merged with no
-  build testing. I can't use next-20251022 either, as that lacks the
-  recent mediatek UFS changes. It is what it is.
-- Link to v2: https://lore.kernel.org/r/20251016-mt8196-ufs-v2-0-c373834c4e7a@collabora.com
+ .../devicetree/bindings/phy/mediatek,ufs-phy.yaml        | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Changes in v2:
-- Reorder define in mtk_sip_svc.h
-- Use bulk reset APIs in UFS host driver
-- Link to v1: https://lore.kernel.org/r/20251014-mt8196-ufs-v1-0-195dceb83bc8@collabora.com
+diff --git a/Documentation/devicetree/bindings/phy/mediatek,ufs-phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,ufs-phy.yaml
+index 3e62b5d4da61..f414aaa18997 100644
+--- a/Documentation/devicetree/bindings/phy/mediatek,ufs-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/mediatek,ufs-phy.yaml
+@@ -26,6 +26,7 @@ properties:
+       - items:
+           - enum:
+               - mediatek,mt8195-ufsphy
++              - mediatek,mt8196-ufsphy
+           - const: mediatek,mt8183-ufsphy
+       - const: mediatek,mt8183-ufsphy
+ 
+@@ -42,6 +43,10 @@ properties:
+       - const: unipro
+       - const: mp
+ 
++  resets:
++    items:
++      - description: Optional UFS M-PHY reset.
++
+   "#phy-cells":
+     const: 0
+ 
+@@ -65,5 +70,16 @@ examples:
+         clock-names = "unipro", "mp";
+         #phy-cells = <0>;
+     };
++  - |
++    #include <dt-bindings/reset/mediatek,mt8196-resets.h>
++    ufs-phy@16800000 {
++        compatible = "mediatek,mt8196-ufsphy", "mediatek,mt8183-ufsphy";
++        reg = <0x16800000 0x10000>;
++        clocks = <&ufs_ao_clk 3>,
++                 <&ufs_ao_clk 5>;
++        clock-names = "unipro", "mp";
++        resets = <&ufs_ao_clk MT8196_UFSAO_RST0_UFS_MPHY>;
++        #phy-cells = <0>;
++    };
+ 
+ ...
 
----
-Nicolas Frattaroli (24):
-      dt-bindings: phy: Add mediatek,mt8196-ufsphy variant
-      dt-bindings: ufs: mediatek,ufs: Complete the binding
-      dt-bindings: ufs: mediatek,ufs: Add mt8196 variant
-      scsi: ufs: mediatek: Move MTK_SIP_UFS_CONTROL to mtk_sip_svc.h
-      phy: mediatek: ufs: Add support for resets
-      scsi: ufs: mediatek: Rework resets
-      scsi: ufs: mediatek: Rework 0.9V regulator
-      scsi: ufs: mediatek: Rework init function
-      scsi: ufs: mediatek: Rework the crypt-boost stuff
-      scsi: ufs: mediatek: Rework probe function
-      scsi: ufs: mediatek: Remove vendor kernel quirks cruft
-      scsi: ufs: mediatek: Use the common PHY framework
-      scsi: ufs: mediatek: Switch to newer PM ops helpers
-      scsi: ufs: mediatek: Remove mediatek,ufs-broken-rtc property
-      scsi: ufs: mediatek: Rework _ufs_mtk_clk_scale error paths
-      scsi: ufs: mediatek: Add vendor prefix to clk-scale-up-vcore-min
-      scsi: ufs: mediatek: Clean up logging prints
-      scsi: ufs: mediatek: Rework ufs_mtk_wait_idle_state
-      scsi: ufs: mediatek: Don't acquire dvfsrc-vcore twice
-      scsi: ufs: mediatek: Rework hardware version reading
-      scsi: ufs: mediatek: Back up idle timer in per-instance struct
-      scsi: ufs: mediatek: Make scale_us in setup_clk_gating const
-      scsi: ufs: mediatek: Remove ret local from link_startup_notify
-      scsi: ufs: mediatek: Add MT8196 compatible, update copyright
-
- .../devicetree/bindings/phy/mediatek,ufs-phy.yaml  |  16 +
- .../devicetree/bindings/ufs/mediatek,ufs.yaml      | 196 ++++-
- drivers/phy/mediatek/phy-mtk-ufs.c                 |  71 ++
- drivers/ufs/host/ufs-mediatek-sip.h                |   9 -
- drivers/ufs/host/ufs-mediatek.c                    | 935 +++++++++------------
- drivers/ufs/host/ufs-mediatek.h                    |  17 +-
- include/linux/soc/mediatek/mtk_sip_svc.h           |   3 +
- 7 files changed, 650 insertions(+), 597 deletions(-)
----
-base-commit: a92c761bcac3d5042559107fa7679470727a4bcb
-change-id: 20251014-mt8196-ufs-cec4b9a97e53
-
-Best regards,
 -- 
-Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+2.51.1.dirty
 
 
