@@ -1,140 +1,218 @@
-Return-Path: <linux-scsi+bounces-18346-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18363-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67288C03403
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:55:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92EA7C036D1
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 22:49:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9F5D44FD0DD
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:54:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C2F11A66FF3
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 20:49:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DD3D351FCB;
-	Thu, 23 Oct 2025 19:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09B53270EBB;
+	Thu, 23 Oct 2025 20:49:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="WJRUPPwN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T/6vLuiD"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2C934E74A;
-	Thu, 23 Oct 2025 19:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761249191; cv=pass; b=CkHH3Pd4ROt8/yfvHJoFpmeoGj6AP+CjXYRrjIbb86buB+lOebj4mhoEx59JzIfCIQe+kcZcY7y2wKJybX/Nze6ItSvpTeylvH4ryEr7/htnSpwNuJyJT5irZx9p3iYmKC4NBYzN4TTWZP/UWrqKdXnXwaAm5g+jX/icrMKO8PU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761249191; c=relaxed/simple;
-	bh=o1TvjoihnRAbox+LWz+sl8f3Tnuapjv05AjOE7DYgwg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=e/waetuwDLHPjTKNL4trbNpwP7ZH2KojwixhRNjnXkml++F9rFeCmpsKeMv+UHCmlAUBidiAVbOAFhzJDVKnHx0TI6q477f1p3UZVedwhqL0eMFKI79TTTVdpiORIubGJ/jt6LnjcZG4hTfmG3+rWmay29c4M+hlmYtVx97fuyc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=WJRUPPwN; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1761249162; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=VDR01vSCP6/d2x3JWBeIXcm/obWd21GdvcoOT1oDD3u1LpCOExNV2RVCtyjZzxEoer+JwQLN76ABjNzNKhrR24GbLeCYCFlt5DOuvdkhF49oeNHVETaUx0HODTPXHDYKb+/EVcxQB1BA32scoLtZMsWuex4ZkVppWyKcBQ9L9bk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1761249162; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=uqLnB78neSi6OXDSm/nO57Oj4cmBaz+P1PW4hSeUDCY=; 
-	b=hJCURP6gO9NAdmEcVyWowbmXcSerqqJ0BKwBHOZFa0MIJ49OJdESThMh/j7c15csbkx17X89NDoiwZ2msC4vBkKPPSPLpUGFd3xhcvWpPZHS6CqqaEwrKGDLdmwVPV9b8fI1h8fnbiNkQNXkXwcLSs9BHHNGMMl8VrX9UEnhUyQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249162;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=uqLnB78neSi6OXDSm/nO57Oj4cmBaz+P1PW4hSeUDCY=;
-	b=WJRUPPwNg+Itu0vdCkczL1rirjBcaDYTIy3Cr/Q3QDob5UYk6/nr8oj8kQDwmiPT
-	EgJ3Dgu1BnJB5zGUc81d/NmVot3XscJpseC8nAb8v59Xs6o+yNmH9F54vdvn7JYycGa
-	iObirYkGSTQ2KLTLTD85XuyGVQ3WkSiCX9yUza3o=
-Received: by mx.zohomail.com with SMTPS id 1761249161979886.3318559681989;
-	Thu, 23 Oct 2025 12:52:41 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Thu, 23 Oct 2025 21:49:42 +0200
-Subject: [PATCH v3 24/24] scsi: ufs: mediatek: Add MT8196 compatible,
- update copyright
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AC5221DB1;
+	Thu, 23 Oct 2025 20:49:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761252558; cv=none; b=eF4JFHPozXFO22LqM9cxMd0PzGwokZ2YuLJKgmrWvnziV9WoNkLikMQfLfnyFyLVQgGSU3gQxgf2YiKyQR1wppY52LgLOYyEfRPQ7VWtUAOQ+6VxVWcVrjdaj3XY6nt629/qMfpx0Lcti3Vp0fzF9CsYHNYhAh2FyeusRmjgvZA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761252558; c=relaxed/simple;
+	bh=rTnxbfw78lgnyUm0E2PF8Vgl+6eU7Ji3n5U9PshCkZM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VewiRMl6OVUzfs3ekXkqcxeWrlLleTTIVDZlSsF+ppDn3VtTMpv3IPvOXWsQfPs3voUyyyqhXdeVyiudD8i91yptk4lztzWtP4OAyLV/iLXCLtcMIzEFdnrj1eXKn3IdewbL75s0O1bzQadVUZQbLg2BfW0Ih898j7YKoe+DO5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T/6vLuiD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B02CFC4CEE7;
+	Thu, 23 Oct 2025 20:49:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761252557;
+	bh=rTnxbfw78lgnyUm0E2PF8Vgl+6eU7Ji3n5U9PshCkZM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=T/6vLuiDda8wdXfAaqDeo6kJVlaQNYkpvw9SgAUUi1vpPcgU+olmHDdmvQqsScnpc
+	 5QSOl4nLYE23eixIZJV/rNfTLabBES6pT69Q4XhhP+F6xy0vjt+TCILbTHp6dBVInP
+	 bMe+tiYwatAO7yzvhvPIpqIhXC+tzzzf2acvv2lOsjyPG9QixndcnrAVHBR6H3wSc5
+	 AT+B6J1baHrlilynl999eFA830Si28I3NBCMbgzLS1LNb26p+jpTplSk9vRvVK2gbG
+	 IsHJ8HcAiWcA1DuchcPPjQZ+KmiaF6J1HiOG+aofJZHYObJzpc2itCs44ZFgcZEway
+	 yL6rtfxoNtvrg==
+Message-ID: <8efdeaad-4f69-44d5-90d7-f5af005d8abf@kernel.org>
+Date: Thu, 23 Oct 2025 13:49:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/3] ata: stop disk on restart if ACPI power resources
+ are found
+To: Markus Probst <markus.probst@posteo.de>, Niklas Cassel
+ <cassel@kernel.org>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251023165151.722252-1-markus.probst@posteo.de>
+ <20251023165151.722252-3-markus.probst@posteo.de>
+From: Damien Le Moal <dlemoal@kernel.org>
+Content-Language: en-US
+Organization: Western Digital Research
+In-Reply-To: <20251023165151.722252-3-markus.probst@posteo.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251023-mt8196-ufs-v3-24-0f04b4a795ff@collabora.com>
-References: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
-In-Reply-To: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
-To: Alim Akhtar <alim.akhtar@samsung.com>, 
- Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Chunfeng Yun <chunfeng.yun@mediatek.com>, Vinod Koul <vkoul@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Peter Wang <peter.wang@mediatek.com>, Stanley Jhu <chu.stanley@gmail.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, Liam Girdwood <lgirdwood@gmail.com>, 
- Mark Brown <broonie@kernel.org>
-Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>, 
- kernel@collabora.com, linux-scsi@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- linux-phy@lists.infradead.org, 
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-X-Mailer: b4 0.14.3
 
-THe MT8196's UFS controller has a new compatible. Add the necessary
-struct definitions to support it.
+On 2025/10/23 9:52, Markus Probst wrote:
+> Some embedded devices have the ability to control whether power is
+> provided to the disks via the SATA power connector or not. ACPI power
+> resources are usually off by default, thus making it unclear if the
+> specific power resource will retain its state after a restart. If power
+> resources are defined on ATA ports / devices in ACPI, we should stop the
+> disk on SYSTEM_RESTART, to ensure the disk will not lose power while
+> active.
+> 
+> Add a new function, ata_acpi_dev_manage_restart(), that will be used to
+> determine if a disk should be stopped before restarting the system. If a
+> usable ACPI power resource has been found, it is assumed that the disk
+> will lose power after a restart and should be stopped to avoid a power
+> failure.
+> 
+> Signed-off-by: Markus Probst <markus.probst@posteo.de>
+> ---
+>  drivers/ata/libata-acpi.c | 28 ++++++++++++++++++++++++++++
+>  drivers/ata/libata-scsi.c |  1 +
+>  drivers/ata/libata.h      |  2 ++
+>  3 files changed, 31 insertions(+)
+> 
+> diff --git a/drivers/ata/libata-acpi.c b/drivers/ata/libata-acpi.c
+> index f2140fc06ba0..f05c247d25bc 100644
+> --- a/drivers/ata/libata-acpi.c
+> +++ b/drivers/ata/libata-acpi.c
+> @@ -245,6 +245,34 @@ void ata_acpi_bind_dev(struct ata_device *dev)
+>  				   ata_acpi_dev_uevent);
+>  }
+>  
+> +/**
+> + * ata_acpi_dev_manage_restart - if the disk should be stopped (spun down) on
+> + * system restart.
 
-Also update the copyrights and authors, without tabs following spaces to
-avoid checkpatch errors, to list myself as having contributed to this
-driver after the preceding rework patches.
+Please align "system restart" to the "if" above.
 
-Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
----
- drivers/ufs/host/ufs-mediatek.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+> + * @dev: target ATA device
+> + *
+> + * RETURNS:
+> + * 1 if the disk should be stopped, otherwise 0
 
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 932d1fdfdc65..49ab92acf3db 100644
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1,9 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-  * Copyright (C) 2019 MediaTek Inc.
-+ * Copyright (C) 2025 Collabora Ltd.
-  * Authors:
-- *	Stanley Chu <stanley.chu@mediatek.com>
-- *	Peter Wang <peter.wang@mediatek.com>
-+ *      Stanley Chu <stanley.chu@mediatek.com>
-+ *      Peter Wang <peter.wang@mediatek.com>
-+ *      Nicolas Frattaroli <nicolas.frattaroli@collabora.com> (Major cleanups)
-  */
- 
- #include <linux/arm-smccc.h>
-@@ -2202,10 +2204,15 @@ static const struct ufs_mtk_soc_data mt8183_data = {
- 	.has_avdd09 = true,
- };
- 
-+static const struct ufs_mtk_soc_data mt8196_data = {
-+	.has_avdd09 = true,
-+};
-+
- static const struct of_device_id ufs_mtk_of_match[] = {
- 	{ .compatible = "mediatek,mt8183-ufshci", .data = &mt8183_data },
- 	{ .compatible = "mediatek,mt8192-ufshci" },
- 	{ .compatible = "mediatek,mt8195-ufshci" },
-+	{ .compatible = "mediatek,mt8196-ufshci", .data = &mt8196_data },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, ufs_mtk_of_match);
+s/1/true
+s/0/false
+
+And please terminate sentences with a period.
+
+> + */
+> +bool ata_acpi_dev_manage_restart(struct ata_device *dev)
+> +{
+> +	/* If the device is power manageable, we assume the disk loses power on
+> +	 * reboot.
+> +	 */
+
+And then ? This seems incomplete...
+Also please adhere to the normal multi-line comment style by starting the
+multi-line comment block with "/*".
+
+	/*
+	 * If the device is power manageable, we assume the disk loses power on
+	 * reboot.
+	 */
+
+> +
+> +	/* If `ATA_FLAG_ACPI_SATA` is set, the acpi fwnode is attached to the
+> +	 * `ata_device` instead of the `ata_port`.
+> +	 */
+
+No need for all the quote marks here.
+
+> +	if (dev->link->ap->flags & ATA_FLAG_ACPI_SATA) {
+> +		if (!is_acpi_device_node(dev->tdev.fwnode))
+> +			return 0;
+
+			return false;
+
+> +		return acpi_bus_power_manageable(ACPI_HANDLE(&dev->tdev));
+> +	}
+> +
+> +	if (!is_acpi_device_node(dev->link->ap->tdev.fwnode))
+> +		return 0;
+
+		return false;
+
+> +	return acpi_bus_power_manageable(ACPI_HANDLE(&dev->link->ap->tdev));
+> +}
+
+Overall, I think the following is cleaner and simpler as it doe not repeat code:
+
+bool ata_acpi_dev_manage_restart(struct ata_device *dev)
+{
+	struct device *tdev;
+
+	/*
+	 * If ATA_FLAG_ACPI_SATA is set, the acpi fwnode is attached to the
+	 * ATA device instead of the port.
+	 */
+	if (dev->link->ap->flags & ATA_FLAG_ACPI_SATA)
+		tdev = &dev->tdev;
+	else
+		tdev = &dev->link->ap->tdev;
+
+	if (!is_acpi_device_node(tdev->fwnode))
+		return false;
+
+	return acpi_bus_power_manageable(ACPI_HANDLE(tdev));
+}
+
+> +
+>  /**
+>   * ata_acpi_dissociate - dissociate ATA host from ACPI objects
+>   * @host: target ATA host
+> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+> index b43a3196e2be..026122bb6f2f 100644
+> --- a/drivers/ata/libata-scsi.c
+> +++ b/drivers/ata/libata-scsi.c
+> @@ -1095,6 +1095,7 @@ int ata_scsi_dev_config(struct scsi_device *sdev, struct queue_limits *lim,
+>  		 */
+>  		sdev->manage_runtime_start_stop = 1;
+>  		sdev->manage_shutdown = 1;
+> +		sdev->manage_restart = ata_acpi_dev_manage_restart(dev);
+>  		sdev->force_runtime_start_on_system_start = 1;
+>  	}
+>  
+> diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
+> index e5b977a8d3e1..af08bb9b40d0 100644
+> --- a/drivers/ata/libata.h
+> +++ b/drivers/ata/libata.h
+> @@ -130,6 +130,7 @@ extern void ata_acpi_on_disable(struct ata_device *dev);
+>  extern void ata_acpi_set_state(struct ata_port *ap, pm_message_t state);
+>  extern void ata_acpi_bind_port(struct ata_port *ap);
+>  extern void ata_acpi_bind_dev(struct ata_device *dev);
+> +extern bool ata_acpi_dev_manage_restart(struct ata_device *dev);
+>  extern acpi_handle ata_dev_acpi_handle(struct ata_device *dev);
+>  #else
+>  static inline void ata_acpi_dissociate(struct ata_host *host) { }
+> @@ -140,6 +141,7 @@ static inline void ata_acpi_set_state(struct ata_port *ap,
+>  				      pm_message_t state) { }
+>  static inline void ata_acpi_bind_port(struct ata_port *ap) {}
+>  static inline void ata_acpi_bind_dev(struct ata_device *dev) {}
+> +static inline bool ata_acpi_dev_manage_restart(struct ata_device *dev) { return 0; }
+>  #endif
+>  
+>  /* libata-scsi.c */
+
 
 -- 
-2.51.1.dirty
-
+Damien Le Moal
+Western Digital Research
 
