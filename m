@@ -1,60 +1,60 @@
-Return-Path: <linux-scsi+bounces-18341-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18348-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22CD3C033E1
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:54:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54BB5C03453
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 21:57:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D5B184FD19D
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:53:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A6D53B2F5E
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Oct 2025 19:55:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C876E34FF55;
-	Thu, 23 Oct 2025 19:53:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49AAE34DB53;
+	Thu, 23 Oct 2025 19:53:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="SSWhn1m5"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="ZSz8t0zv"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53AE34DB5C;
-	Thu, 23 Oct 2025 19:53:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF9434DB49;
+	Thu, 23 Oct 2025 19:53:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761249184; cv=pass; b=lQbNVM3lVDmKZYHrSy2GvMnDgxtIgsFL4frC+EVe+e1x6iOPQ7jTcqYrgJMV3+1poqMcLFSk/tRq6GAq6LU9bSeNKOxXhYYbHOZSUBFrVpakkF3KsSLusakc6VWjmDYl+1/2Syq9rv++shpaBlH4mthgYJVLKyzUIDzxbgCA8v0=
+	t=1761249233; cv=pass; b=RihezGTlzdu/IYFN2Q8reH+eVeBy9K3/Eh4VMm2Fatnt/WS8VsfrtWfc296JDA9/aNYURyMvssZgyuywaSbVw4S+GYJXKigbV0HvUtfqS/xIW+0mBHXSEcFtjZslSR1hw7cHJkCax5aMDNkzbLPWUpY/EB8Vw7yPzYeBN548RNo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761249184; c=relaxed/simple;
-	bh=O02uzN9yjf1RGvGRKLeJ4SraHanlFlEJnAnE16WVrsw=;
+	s=arc-20240116; t=1761249233; c=relaxed/simple;
+	bh=RJKqgYJDQpByKFyC/umaJEMyUSuuOvfyraab9N4JGRg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AYwzQf0QD0FTFpUfvGOmdQNOgFOS2wzuhdqqbePZHdLvlhgDZYkcEHbLus15Tt+6Tzmgb06qDr/edKPr7UNL3zXBb1f8+BHpR2W2Iis7SNxdm5nL3BPuh+/kTaXXfNlExlOPjGhQg9ajowRqEl1jf/kstIfUBfOSpgK5f2FTUXs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=SSWhn1m5; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=UA1X82n7pEVrR87P7AdgLgPNm0xYdoMzdTPpm4mgzBOEYlFQI0NJ6HKFFJZ9qbrNzYvzjnQn4P5X9sIbkR60nYFEGw2JY4iQd2XtV63CXNfOr6o0TKqswQ26AW/kO4MpwUO66MnXeAu3QU60+EdJMk7V8cNxSrjd9V9bBCMS7tA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=ZSz8t0zv; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1761249150; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1761249156; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=OvSSNLHStUlrCORQ9PchBe6O40+m7u6B/rckCMgFy0eHwNA27p/khkj3ToOxtAqHZUx9NNYAvts7gMz+13f0zbYP/vaA7VwiqFhY9KJS/VO4YaQLWGrD915tRZp8CZL/dkWD5E+GHBFNzE3CK1lZJIEEE2mAi9JReGqV5472tWM=
+	b=VcyPy4Bav5XBRMuJwuVfXrS7rWxpP2Nv2aRhGOFw/blf+P8e5vNrjLrLW+Fiumn3fzDPV+W+B9sW5cKeGxQWWriLwG2CmD1Owj6xfNnLKfx6hd75GkX9nurHjiNa557kNiOr35/7nNjJGNWWHb0A9fVWHgA0wQlqjJXfUB1eCAs=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1761249150; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=jOfAQy6zSU9ALbpL1BWUFEG7xOjI+5Wynrtljel5J2E=; 
-	b=f44fxNE2GKwvoB360EzCyCi8e3JJTg0V5MnAFe2XrfasWO0mWqCg8D4OOX3VDf0en7GstPozmmwbuii86Wu81nzA5SX+uJ4jQBg5wMOkmCTtsehPuL0J/+cx5o6pyJdmladw8LjffqNU+Ykz2Ug65BlUPcfVkXcp4M8tpLKum9E=
+	t=1761249156; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=gacBwfWTKcgjQcO0gdGshUooCsAPU+CoMskbVUWweZo=; 
+	b=J5625+6oUf6Bxdxgt8sg1wIDbDjcFF3LwX4oJv5vGldN+S0sY+UfPpiRlstpaj7GgfwxnjsIaXSyc+XLA+l6+EX+AWIly3ejsGzN6UFTpT07HqFUy12PpYN1MaJ+p0YidfGc6zy9ugsEthAmEG6DH5XcY4C9zqm8RXwXfWMzVMk=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249150;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761249156;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=jOfAQy6zSU9ALbpL1BWUFEG7xOjI+5Wynrtljel5J2E=;
-	b=SSWhn1m5RDIPEWeXMnuakcnTctbnXu6PjKtibIJBDa2adzOH0oDZBaG2hFICID5q
-	8VpMhqflL7gBeijxRiKoLr1mpEf+SaIPzo0SRHQScjs6PjB5T1XxpchDcDAzke5DEDb
-	lxKk/HQRx0mYz63SgVMsOcy2Cp8tCs1XA797Up0g=
-Received: by mx.zohomail.com with SMTPS id 1761249149624289.98114903850785;
-	Thu, 23 Oct 2025 12:52:29 -0700 (PDT)
+	bh=gacBwfWTKcgjQcO0gdGshUooCsAPU+CoMskbVUWweZo=;
+	b=ZSz8t0zvSnRhRpZaAvu+eIRNTsO04/fK/wMw/EhoQnKXclBDECTnmDBBOJsGyZY4
+	DaGw8dZkO/BnbNeOzeV7Rg0tEhY0Xu0nBrlzh0WljjMP/4fjIsrqQUqdHgalkouZLHA
+	bjsTRCpYeWcBTv8iOZk03Fm/YjVG+7jsnQG+J4jY=
+Received: by mx.zohomail.com with SMTPS id 1761249155845262.54753612291915;
+	Thu, 23 Oct 2025 12:52:35 -0700 (PDT)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Thu, 23 Oct 2025 21:49:40 +0200
-Subject: [PATCH v3 22/24] scsi: ufs: mediatek: Make scale_us in
- setup_clk_gating const
+Date: Thu, 23 Oct 2025 21:49:41 +0200
+Subject: [PATCH v3 23/24] scsi: ufs: mediatek: Remove ret local from
+ link_startup_notify
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251023-mt8196-ufs-v3-22-0f04b4a795ff@collabora.com>
+Message-Id: <20251023-mt8196-ufs-v3-23-0f04b4a795ff@collabora.com>
 References: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
 In-Reply-To: <20251023-mt8196-ufs-v3-0-0f04b4a795ff@collabora.com>
 To: Alim Akhtar <alim.akhtar@samsung.com>, 
@@ -87,43 +87,47 @@ Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.3
 
-The scale_us values are constant, and should be declared as such. Do
-this, and use ARRAY_SIZE instead of a fixed <= comparison before
-accessing members of the array, to avoid possible future mistakes.
+Remove the "ret" local variable from ufs_mtk_link_startup_notify, as
+it's pointless; in all cases it is assigned, it is returned right after
+without being read first.
 
-This results in the same assembly with clang, so there is no functional
-change, but it makes me feel better.
+Rework the code to just return directly, and get rid of the default
+branch while at it.
 
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 38698fbbd228..5f5ebaf61ae0 100644
+index 5f5ebaf61ae0..932d1fdfdc65 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -940,10 +940,10 @@ static void ufs_mtk_init_clocks(struct ufs_hba *hba)
- 
- static void ufs_mtk_setup_clk_gating(struct ufs_hba *hba)
+@@ -1487,21 +1487,15 @@ static void ufs_mtk_post_link(struct ufs_hba *hba)
+ static int ufs_mtk_link_startup_notify(struct ufs_hba *hba,
+ 				       enum ufs_notify_change_status stage)
  {
-+	const u32 scale_us[] = {1, 10, 100, 1000, 10000, 100000};
- 	unsigned long flags;
- 	u32 ah_ms = 10;
- 	u32 ah_scale, ah_timer;
--	u32 scale_us[] = {1, 10, 100, 1000, 10000, 100000};
+-	int ret = 0;
+-
+ 	switch (stage) {
+ 	case PRE_CHANGE:
+-		ret = ufs_mtk_pre_link(hba);
+-		break;
++		return ufs_mtk_pre_link(hba);
+ 	case POST_CHANGE:
+ 		ufs_mtk_post_link(hba);
+-		break;
+-	default:
+-		ret = -EINVAL;
+-		break;
++		return 0;
+ 	}
  
- 	if (ufshcd_is_clkgating_allowed(hba)) {
- 		if (ufshcd_is_auto_hibern8_supported(hba) && hba->ahit) {
-@@ -951,7 +951,7 @@ static void ufs_mtk_setup_clk_gating(struct ufs_hba *hba)
- 					  hba->ahit);
- 			ah_timer = FIELD_GET(UFSHCI_AHIBERN8_TIMER_MASK,
- 					  hba->ahit);
--			if (ah_scale <= 5)
-+			if (ah_scale < ARRAY_SIZE(scale_us))
- 				ah_ms = ah_timer * scale_us[ah_scale] / 1000;
- 		}
+-	return ret;
++	return -EINVAL;
+ }
  
+ static int ufs_mtk_device_reset(struct ufs_hba *hba)
 
 -- 
 2.51.1.dirty
