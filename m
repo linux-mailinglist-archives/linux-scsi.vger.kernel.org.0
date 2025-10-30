@@ -1,79 +1,89 @@
-Return-Path: <linux-scsi+bounces-18524-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18519-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C8EC1E52D
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Oct 2025 05:06:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F9ABC1E359
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Oct 2025 04:33:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B78904E5500
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Oct 2025 04:06:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 795BA188DD96
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Oct 2025 03:33:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77BE62E284B;
-	Thu, 30 Oct 2025 04:06:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C53B62848BA;
+	Thu, 30 Oct 2025 03:33:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="VqBo1wa3"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="rQftAsYX"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8932D63E8
-	for <linux-scsi@vger.kernel.org>; Thu, 30 Oct 2025 04:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0D42750FB
+	for <linux-scsi@vger.kernel.org>; Thu, 30 Oct 2025 03:33:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761797179; cv=none; b=jPKW7tSWBla1/V8t77Eo9AlzULw2CGUXZ1uvPJ+09CykhARrXUnxfnZdDIs5t4/d3Pu79XdLbFiMYKT6QSYYywuv186gXsDlXGeBdez0CLqlU3LVGAO+/kU8KBJHt82n4GDeeY29a5VJ5UF3BbfGZZuxsdBqDxh3h5YpOel/pv0=
+	t=1761795199; cv=none; b=WZYRUwUcvvfqq0qHC82LkgF9TRzWAkx8lkIWcDcY+ZVZg3K0J4o/Tl8AeMDROwGPGQDporAUOuQDWN34BrDMmeVw3Gmg2TL5dEeSxeW+fUWTJDFMKg/N8BIEldeD/jNhMhdxXPDfVlvOYQ5UR/Jx8P0R9fjBBu2jg/gRkdnY81s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761797179; c=relaxed/simple;
-	bh=uCzNU7kM6rCDsU1AHKgO5YABIxClQC3Sz2cbubnxLE8=;
+	s=arc-20240116; t=1761795199; c=relaxed/simple;
+	bh=OG20UJrRzmQmN/Kq0bMN4CqSEz0Ri5LEHy2e3ZHArGE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=icxPYl77dc2iazCo4Mw3WOzGi5X7w1S6EXFRZeqRpXhrEnn7VadrYR0vsjpNWz5RV+fJZwcUIbMAAadirkCbqLhh9TUXw6eIF3GNcpUkx72z0U0ZBXrLxIxH13JSE2vACWzY8a1BPxwEAhaSiFfuRnZGaGsz1RDkyvTGERNyWrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=VqBo1wa3; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=g2TGGFmEIknCdSt5mUTqFc0Ldx6nmZjwZ1LaMY3Uf4e/DjReJG7uwSMWWoxFe5bvpZwVKFOvi7IEIk3FBzWUOu9eB8/IOeqUMrVUCcH07GWYqqSMcgBWGCGOnnCXJQjSf8gpgQx8bfKY65giWpaduA9j+Uv86fzaO0Z0Q8D3j90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=rQftAsYX; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59U36R2O001339;
-	Thu, 30 Oct 2025 03:33:02 GMT
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59U29pNH019205;
+	Thu, 30 Oct 2025 03:33:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=l84/v2HJ4tS/lQku5RuFnZgms2yPnnR6GB8rZdy4tQ0=; b=
-	VqBo1wa3qUGNQ5WGFF38LWPfP0800C5g/VrmJfdcbJKvh+D85pcIx3pWreuXegZD
-	ouxHhJw1Y9y5HCXX7oA9oJvM4Ens0zb9IaEP2cFTw4hcGeLtNCzX0D/k7a0OPbWz
-	ChE/x1PF0fvlV2EL2KLg+SfKNJSHyzmdjDz+H266kPkd3AMj9todnoS02ol8aUge
-	Sl2ogMjW3Idc2zS/0fnOt6euBrzLB17LlCBOcV7hzgqzCFPMJRGlrOPk9JSTCRKa
-	gehLhOFrAdMI3gp7aiAadKE5fkg60+PJEgeRmEd22haux8pEEij4zwP0Phx2tJj/
-	M0bsOMDXB7v0Ezb2gBj00g==
+	corp-2025-04-25; bh=7MQeG9jT4kOvSXqiNKcxxDRd3q/jMMa8Ca7QXt5h1os=; b=
+	rQftAsYXPFkfp6ecl1e0v2gwq6xiWHOF1LmEy926LBAF+fN9dgHGVWpU0nXnZPYP
+	hHMb0YQ10eU1tnE9ai0Vilo2mCWrFfzCD8drScL3851xOGgJ+7ZBkj+bmnlj4WJX
+	VScd/Ccpbt/Z6vbbzZs9M/rIKF8dmfQ+qXnU9FARyX4WyerLgmRNTZG+Jzuy4xfy
+	LDuHfkIGRyicz+g0qNutjZScyDgeFdMDoDcwRjgbScxwHvWDgp1OXQL4Uwuw1Q4g
+	A1vebNMc/1BRdYSey/f8E4e21HkxcQgGttd/jaByVdrF+wUpWdpe2X+9UI7FOMBb
+	kDVVl/qo6sm4901oVD6C5Q==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a3y02g2ff-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a3y02g2tu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 30 Oct 2025 03:33:02 +0000 (GMT)
+	Thu, 30 Oct 2025 03:33:04 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 59U0uCxi007744;
-	Thu, 30 Oct 2025 03:33:01 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 59U0P53X007666;
+	Thu, 30 Oct 2025 03:33:03 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4a33wm1kv1-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4a33wm1kvn-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 30 Oct 2025 03:33:01 +0000
+	Thu, 30 Oct 2025 03:33:03 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 59U3X1nN023116;
-	Thu, 30 Oct 2025 03:33:01 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 59U3X1nP023116;
+	Thu, 30 Oct 2025 03:33:03 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4a33wm1ku9-1;
-	Thu, 30 Oct 2025 03:33:01 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4a33wm1ku9-2;
+	Thu, 30 Oct 2025 03:33:02 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Adrian Hunter <adrian.hunter@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James EJ Bottomley <James.Bottomley@HansenPartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH V2 0/4] scsi: ufs: PM fixes Intel host controllers
-Date: Wed, 29 Oct 2025 23:32:56 -0400
-Message-ID: <176179516245.2050237.3254847944175771560.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, Daniel Lee <chullee@google.com>,
+        Peter Wang <peter.wang@mediatek.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        Huan Tang <tanghuan@vivo.com>, Avri Altman <avri.altman@wdc.com>,
+        Liu Song <liu.song13@zte.com.cn>,
+        Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>,
+        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+        Bean Huo <huobean@gmail.com>, Adrian Hunter <adrian.hunter@intel.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Gwendal Grignou <gwendal@chromium.org>
+Subject: Re: [PATCH] ufs: core: Revert "Make HID attributes visible"
+Date: Wed, 29 Oct 2025 23:32:57 -0400
+Message-ID: <176179516243.2050237.11349123845566493377.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251024085918.31825-1-adrian.hunter@intel.com>
-References: <20251024085918.31825-1-adrian.hunter@intel.com>
+In-Reply-To: <20251028222433.1108299-1-bvanassche@acm.org>
+References: <20251028222433.1108299-1-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -86,46 +96,40 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-10-30_01,2025-10-29_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 suspectscore=0
- malwarescore=0 mlxlogscore=999 adultscore=0 mlxscore=0 phishscore=0
+ malwarescore=0 mlxlogscore=762 adultscore=0 mlxscore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
  definitions=main-2510300025
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDMwMDAxNCBTYWx0ZWRfX/hTyx/R3EE3w
- 8nHuihjY8gTetFq9fUQ47Eh1MvOstPtlFouWLIcLXmsFudnp/kYDxf72whFbVh6EddDI+qAQhXd
- yYQM/nGvPFiQNb3KLiJG/ITls87LjEwptGCTpFMFA9QuNIEuxNMqKvSXNJ8gxqKFBqxh3PTQXvI
- KUwLSdeZp4GJ+30Mq4aIQOJ3k8AzksKf6c8sLd0v+qbYu3z6GuP0c9SU/c0opBUsGdYYbAnX/oa
- M0h2jSvQezdA/forDc04gZS8G00g4Ant5syzXFzZP0YGf8x+ER+l+2n+y1/OK4clewuP3RCXnVy
- v5DIgazea6yEYSJ+Vz6WZvJGvAYs/YdFzmZsR//qslziTupwsGvEwDixvDKXeVU20GeB0NvGoIh
- DMg6P4XR3YYtLJfNKS7A1y+rQhrE9g==
-X-Authority-Analysis: v=2.4 cv=PbfyRyhd c=1 sm=1 tr=0 ts=6902dc6e cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDMwMDAxNSBTYWx0ZWRfX+CwCqQjfLlhi
+ Y8Xcr33OlHU/e/0yspr1lX08vUtfOIGZu44PWtN7fgnPmwDVDDFXap25M91ELzP+FjfCi0AaY/W
+ UvLupnDrQZjp3xtNSWxmuOivdU1qhSZng/XZ9BYXhIiQEtV4uJxIGK66G2y38k45eIvlMYVZUz2
+ 45yXyenSoLZNqh8Fe9MUoeXDaZj7G1K5XbJK8l+5TPZR/+jix3lgje2mx1QXypCMrPNXL/P+/J9
+ N3WwJ1SIy10DUgvDlGxwPiqnGSw7NkfovF1dD8MYKoVvkazOAaYXd0ezTwhykf/MdgZx8C4KBko
+ qMYNQQq0/wx3nYfWoilPlA7rcZowx9H0E1Gj5slW2ARtuH7NeCuaX++TPMZo4olr39+vTQzX3aD
+ 691h8Tg1ooZAVLPtk8WVBizxqqLHfw==
+X-Proofpoint-ORIG-GUID: KfBYRSjPZUyvRfNpevKTQ6lgMx2TPnPq
+X-Authority-Analysis: v=2.4 cv=Vs4uwu2n c=1 sm=1 tr=0 ts=6902dc70 cx=c_pps
  a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
  a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=TYY7r4AlfqQ7HXVRb7oA:9 a=QEXdDO2ut3YA:10
+ a=VwQbUJbxAAAA:8 a=7iX1HaTYTDlj_WLJQgIA:9 a=QEXdDO2ut3YA:10
  a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-ORIG-GUID: Vy-YFpAhq5upNktDpEj2g9l7C_VFmE7_
-X-Proofpoint-GUID: Vy-YFpAhq5upNktDpEj2g9l7C_VFmE7_
+X-Proofpoint-GUID: KfBYRSjPZUyvRfNpevKTQ6lgMx2TPnPq
 
-On Fri, 24 Oct 2025 11:59:14 +0300, Adrian Hunter wrote:
+On Tue, 28 Oct 2025 15:24:24 -0700, Bart Van Assche wrote:
 
-> Here are fixes related to power management on Intel host controllers,
-> primarily ones based on Intel Alder Lake.
-> 
-> Patches are based on 6.18/scsi-fixes
-> 
-> 
-> Changes in V2:
+> Patch "Make HID attributes visible" is needed for older kernel versions
+> (e.g. 6.12) where ufs_get_device_desc() is called from ufshcd_probe_hba().
+> In these older kernel versions ufshcd_get_device_desc() may be called
+> after the sysfs attributes have been added. In the upstream kernel however
+> ufshcd_get_device_desc() is called before ufs_sysfs_add_nodes(). See also
+> the ufshcd_device_params_init() call from ufshcd_init(). Hence, calling
+> sysfs_update_group() is not necessary.
 > 
 > [...]
 
 Applied to 6.18/scsi-fixes, thanks!
 
-[1/4] scsi: ufs: ufs-pci: Fix S0ix/S3 for Intel controllers
-      https://git.kernel.org/mkp/scsi/c/bb44826c3bdb
-[2/4] scsi: ufs: core: Add a quirk to suppress link_startup_again
-      https://git.kernel.org/mkp/scsi/c/d34caa89a132
-[3/4] scsi: ufs: ufs-pci: Set UFSHCD_QUIRK_PERFORM_LINK_STARTUP_ONCE for Intel ADL
-      https://git.kernel.org/mkp/scsi/c/d968e99488c4
-[4/4] scsi: ufs: core: Fix invalid probe error return value
-      https://git.kernel.org/mkp/scsi/c/a2b32bc1d9e3
+[1/1] ufs: core: Revert "Make HID attributes visible"
+      https://git.kernel.org/mkp/scsi/c/f838d624fd11
 
 -- 
 Martin K. Petersen
