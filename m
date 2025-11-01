@@ -1,98 +1,112 @@
-Return-Path: <linux-scsi+bounces-18643-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18645-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5768BC279DF
-	for <lists+linux-scsi@lfdr.de>; Sat, 01 Nov 2025 09:46:06 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6A69C2806B
+	for <lists+linux-scsi@lfdr.de>; Sat, 01 Nov 2025 14:57:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D414A4E41F6
-	for <lists+linux-scsi@lfdr.de>; Sat,  1 Nov 2025 08:46:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5804C4E65D7
+	for <lists+linux-scsi@lfdr.de>; Sat,  1 Nov 2025 13:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DC791E2858;
-	Sat,  1 Nov 2025 08:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="KKMesCfN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28D481D5CC9;
+	Sat,  1 Nov 2025 13:56:53 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from forward101d.mail.yandex.net (forward101d.mail.yandex.net [178.154.239.212])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570631FC8;
-	Sat,  1 Nov 2025 08:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.212
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.90])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064D534D3B6;
+	Sat,  1 Nov 2025 13:56:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=118.143.206.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761986761; cv=none; b=Drndw2Oc670B34nj1BoEOl+4jKKW9Dih00FDuofSdsOb6PFwXZtNrhQI+TrICNiBjZM6FinHUBQsFi814ZKUS2YGfBSh80fhVJ2GUrcnO3Cf43i7cfv1lxIYFe4OfsqFTkLWYzexiH5CGzDiyyxQqDxyx69G+XFhHXVisFwtc5I=
+	t=1762005413; cv=none; b=AHkgrgIFdkdI+F0lh9PweMB7biP5THo6D4LMtMeekuy6CWYcnIpzsyxlYyU/UvuKcTci2p3aTC7MfdUqN1ua2MyW9k7635S/dOsxoFusWcg84hyk6p6nNiPHdfaZdsm40vRHItmCIQJx8htVMVL013uPWFBDOTZcp5ypY/RdXkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761986761; c=relaxed/simple;
-	bh=Y1noY9CvrxGRZeqr35Q+ZHBFe9VsTLyVDn1Dg4u7/i0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MuELFtR38zJ2v2e1H6xcnnHLFzWyN9lXqrP7/ToEGmLWAmYDJx3cwRYQkds6HwSP+/HqwbApWhs8SGwsugBXxYRtLhNdBxtCVAnfDRvlxe5bfSkgGMulu60t80xSRXPumc+EUQq6MQmS0AnjNklPSGZ8ZO3DknJs3MqChnxtAJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=KKMesCfN; arc=none smtp.client-ip=178.154.239.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
-Received: from mail-nwsmtp-smtp-production-main-95.klg.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-95.klg.yp-c.yandex.net [IPv6:2a02:6b8:c42:2a21:0:640:9c41:0])
-	by forward101d.mail.yandex.net (Yandex) with ESMTPS id 57546C00B6;
-	Sat, 01 Nov 2025 11:45:55 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-95.klg.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id rjcvGoBLIGk0-fZbYDg8S;
-	Sat, 01 Nov 2025 11:45:55 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
-	t=1761986755; bh=t0hknyYZZGrBj+vfI+v18u3S29MxewAG3anb01IvVhU=;
-	h=Message-ID:Date:In-Reply-To:Cc:Subject:References:To:From;
-	b=KKMesCfN1/jfQ3Og5SoEhV976lffvx1Ipnh5zgv2eft9uLl59nJcK70u24wAGZXRY
-	 wLuI16g1G73LXow+x4XwzeInY1sB3bImeNz8kBYcawJBgtmyDNfGM55mU7tGbGW1ZI
-	 wH/QyJkQ6fUj5pNauZZrs7Rym9RFEyi5+ba5Gl+Y=
-Authentication-Results: mail-nwsmtp-smtp-production-main-95.klg.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-From: Dmitry Antipov <dmantipov@yandex.ru>
-To: "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org,
-	target-devel@vger.kernel.org,
-	Dmitry Antipov <dmantipov@yandex.ru>
-Subject: [PATCH] scsi: target: iscsi: simplify lio_target_call_addnptotpg()
-Date: Sat,  1 Nov 2025 11:45:50 +0300
-Message-ID: <20251101084550.383624-2-dmantipov@yandex.ru>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251101084550.383624-1-dmantipov@yandex.ru>
-References: <20251101084550.383624-1-dmantipov@yandex.ru>
+	s=arc-20240116; t=1762005413; c=relaxed/simple;
+	bh=54YFvUQyKiUBXLsSAVClXBwjoW43bRWANDi9bisFiVU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BeUVeHZ6uNyA0GBdi0tORr9GBjhMRUNt+kxysppBJrdG+qhGimNeCixWZsqtPsCrOyC5TmVY+pnbfLyq8RkpAwKwN+h5wKVzXgEawbKxM/1NDW8UNaJp5UTK9X+5abZRl4k4Hh7eCGkX32+pmvHur5VCSRJugJOcnCTXRyrMO2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=118.143.206.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
+X-CSE-ConnectionGUID: wpOrwVv0TfGh+FJzZcbPPQ==
+X-CSE-MsgGUID: SFIU6wynT+iEPt/G+F7yQw==
+X-IronPort-AV: E=Sophos;i="6.19,272,1754928000"; 
+   d="scan'208";a="131247206"
+Date: Sat, 1 Nov 2025 21:55:22 +0800
+From: Owen Gu <guhuinan@xiaomi.com>
+To: Oliver Neukum <oneukum@suse.com>
+CC: Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+	<linux-scsi@vger.kernel.org>, <usb-storage@lists.one-eyed-alien.net>,
+	<linux-kernel@vger.kernel.org>, Yu Chen <chenyu45@xiaomi.com>, Michal Pecio
+	<michal.pecio@gmail.com>
+Subject: Re: [PATCH v2] usb: uas: fix urb unmapping issue when the uas device
+ is remove during ongoing data transfer
+Message-ID: <aQYRIgg2lyFhd7Lf@oa-guhuinan-2.localdomain>
+References: <20251015153157.11870-1-guhuinan@xiaomi.com>
+ <aP8Llz04UH8Sbq5Q@oa-guhuinan-2.localdomain>
+ <8de18ee2-ccdd-4cdd-ae49-48600ad30ed4@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <8de18ee2-ccdd-4cdd-ae49-48600ad30ed4@suse.com>
+X-ClientProxiedBy: BJ-MBX07.mioffice.cn (10.237.8.127) To BJ-MBX05.mioffice.cn
+ (10.237.8.125)
 
-In 'lio_target_call_addnptotpg()', use 'strscpy()' to perform both
-copying and buffer size check at once, and adjust error message to
-make it somewhat more subject-specific.
+On Mon, Oct 27, 2025 at 02:35:37PM +0100, Oliver Neukum wrote:
+> Hi,
+> 
+> I think I was unclear the first time.
+> Sorry for that.
+> 
+> On 27.10.25 07:05, Owen Gu wrote:
+> > Hi Oliver,
+> > 
+> 
+> > > This patch modifies the error condition check in the uas_submit_urbs()
+> > > function. When a UAS device is removed but one or more URBs have already
+> > > been successfully submitted to USB, it avoids immediately invoking
+> > > scsi_done() and save the cmnd to devinfo->cmnd array. If the successfully
+> > > submitted URBs is completed before devinfo->resetting being set, then
+> > > the scsi_done() function will be called within uas_try_complete() after
+> 
+> This requires that uas_try_complete() is called.
+> 
+> And I am afraid uas_stat_cmplt() cannot guarantee that in the error case.
+> I think the following sequence of events is possible:
+> 
+> CPU A						CPU B
+> 
+> uas_queuecommand_lck() calls uas_submit_urbs()
+> COMMAND_INFLIGHT is set and URB submitted
+> 						URB gets an error
+> 						status = -EBABBLE (just an example)
+> 						uas_stat_cmplt is called
+> 						resetting is not set
+> 						if (status)
+> 							goto out;
+> 
+> 						uas_try_complete _not_ called
+> 
+> The scsi command runs for indeterminate amount of time.
+> It seems to me that if you want to use your approach you also
+> need to change error handling in uas_stat_cmplt()
+> 
+> 	Regards
+> 		Oliver
+> 
+>
+Hi Oliver,
+I think the error handling only takes effect when uas_queuecommand_lck() calls
+uas_submit_urbs() and returns the error value -ENODEV . In this case, the device is
+disconnected, and the flow proceeds to uas_disconnect(), where uas_zap_pending() is
+invoked to call uas_try_complete().
 
-Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
----
- drivers/target/iscsi/iscsi_target_configfs.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/target/iscsi/iscsi_target_configfs.c b/drivers/target/iscsi/iscsi_target_configfs.c
-index efe8cdb20060..fe4d6d3faa88 100644
---- a/drivers/target/iscsi/iscsi_target_configfs.c
-+++ b/drivers/target/iscsi/iscsi_target_configfs.c
-@@ -163,12 +163,11 @@ static struct se_tpg_np *lio_target_call_addnptotpg(
- 	int ret;
- 	char buf[MAX_PORTAL_LEN + 1] = { };
- 
--	if (strlen(name) > MAX_PORTAL_LEN) {
--		pr_err("strlen(name): %d exceeds MAX_PORTAL_LEN: %d\n",
--			(int)strlen(name), MAX_PORTAL_LEN);
-+	if (strscpy(buf, name, sizeof(buf)) < 0) {
-+		pr_err("IPv6 iSCSI network portal address"
-+		       " '%s' is too long\n", name);
- 		return ERR_PTR(-EOVERFLOW);
- 	}
--	snprintf(buf, MAX_PORTAL_LEN + 1, "%s", name);
- 
- 	str = strstr(buf, "[");
- 	if (str) {
--- 
-2.51.0
+Regards
+Owen
 
 
