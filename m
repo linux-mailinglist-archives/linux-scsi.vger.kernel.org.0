@@ -1,126 +1,122 @@
-Return-Path: <linux-scsi+bounces-18653-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18655-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42D1CC29F64
-	for <lists+linux-scsi@lfdr.de>; Mon, 03 Nov 2025 04:29:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19FADC2A184
+	for <lists+linux-scsi@lfdr.de>; Mon, 03 Nov 2025 06:52:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA576188F071
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Nov 2025 03:29:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4558E3AA929
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Nov 2025 05:52:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 137CF28850B;
-	Mon,  3 Nov 2025 03:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB70A288C2B;
+	Mon,  3 Nov 2025 05:52:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ofREGU/b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jTVi7sYX"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC2127FB12;
-	Mon,  3 Nov 2025 03:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609B8286D60;
+	Mon,  3 Nov 2025 05:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762140565; cv=none; b=pjGv+tRJeGdrtYIGJHMQom+ZTq6lTdiVi3NfwUlInLCu/K+tT3xhG478TxZS6iGYNhY0SgXhfx3ll5R27adb+g/zv9vfD/JY4CJQg88oUaLsCqq8rqRa+ckj7KmcYHZYQqhasfMsQrdXmsrOjVW/tMKR6Khoe0cynfqFX5ih0Q8=
+	t=1762149122; cv=none; b=OiYo/olNFVK4TxDnFJHKDPplvktAmdoOQ+RV3CQ5wzmoIxqdGQsa4ZcAoBsWsawvEkfC4V/hw2kkAn+ABF9yHlr7l0ZRv3wpewk/1j8KWxZfegPboaD5DVoma9We4YbKxfWi2yQrS8NkMORp1CPMsYo9TuSTwSTFU5/LQP4sEAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762140565; c=relaxed/simple;
-	bh=tqmitF/29Z4qlmJwQbxhrvzFFGjOil8856TO5Q4MXJo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gv86jzygGBp10v6xCq0PL7x9f9gExDG0g1csBjozTObd3Btgnl9Kklna+eTBSp+OZmzcGoYHuiA3S925J6Pu+BZ1YmybaTi508mf8pMqDTUxZ40OYGNnhPHyz0yUrlHW8Pj4e+SQOu+C3kPC/A8Szg+xA/IvIrgbVA7TgHyjFXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ofREGU/b; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A33P1YP026448;
-	Mon, 3 Nov 2025 03:29:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=X/229lv+AJ3iI3m1nNDbvqrCsH8Cak0URuZG25qwuOk=; b=
-	ofREGU/b52VhUyfDOLAORZWRW4tdZRNTSqb0677WoH2aChlx53RJLh+JOcIVJR15
-	hi8icCsi5+/uMAphFvVF9tCEKlEamqEIDP6lo0qGKKC+PXX59ZTGcxctbmw8ZVku
-	NXcfsN4Yb1gF7Y0MIEt4N6Q6e10WKpQjNm5syS+Vst/z8qIQiI0rsmpR1T2uzWIx
-	mGf+yTDUM8Qi8iRedwIt5tOenH4kRsX3OykZKMuYwBxHeGvm6NjVoENIQ0RYJBub
-	cYF8SeK/fFvo4v+XjHQOg3zJbfzExrdbGcB8cVs6MuuMCgdZSwn1ZnwcoSomsDL4
-	6uE83vEfkXUWLIaeUjjNJQ==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a6mf6g0cj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 03 Nov 2025 03:29:15 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5A302BYv017316;
-	Mon, 3 Nov 2025 03:29:14 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4a58n7av8a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 03 Nov 2025 03:29:14 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5A33TCcr011931;
-	Mon, 3 Nov 2025 03:29:14 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4a58n7av6s-2;
-	Mon, 03 Nov 2025 03:29:13 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>, Andy Gross <agross@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] dt-bindings: ufs: qcom: Drop redundant "reg" constraints
-Date: Sun,  2 Nov 2025 22:29:07 -0500
-Message-ID: <176213716994.2123602.16843780415769421339.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251027113107.75835-2-krzysztof.kozlowski@linaro.org>
-References: <20251027113107.75835-2-krzysztof.kozlowski@linaro.org>
+	s=arc-20240116; t=1762149122; c=relaxed/simple;
+	bh=oxQXBcHnc/6qR2epkavIMIgHRy691/rhW8NxiXt8CoI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=O0wgU8srqBB0wfYMhgjpU3xpYywXQ/aM+jSKwNgokW8TWR27SYHALZqdHY/E1PK68mmGKbT85Tb8zkWye/hSaDqmNNWdVZpsvlx7WGaO7NkUu7ZKw6wckrZLVEvfiVJmqQ/XJsW+X5wcOSeHlrWoXHSNJ24i+eNTnZ87zmB8yNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jTVi7sYX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AADD5C4CEE7;
+	Mon,  3 Nov 2025 05:51:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762149120;
+	bh=oxQXBcHnc/6qR2epkavIMIgHRy691/rhW8NxiXt8CoI=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=jTVi7sYXkcHQhPjE/Buo3fxpB19O1VbODJ3EXpO8SGXi/OITbcTFvdjtKMvrtbm1O
+	 4Ssd2IXFKo8l1cV3gMTphDB8noMJnfpi+6sN3XtuUYq5HqTVDuT/zB9/d5xj5EsHvT
+	 omCSwnuC+7Vi0+/vLKfRUJhDnCxme3xxOwe3NgiQgy3NH+Zg5IOrITnIYZ36w37A7+
+	 DlVr7F0lKNI1oDIB7AMFkkiqnYC6a+5V6txUA1NFnWtUZ0jg66PIyqB0zUHsFgD0pj
+	 8aE8Ua1HS57b3aBY1JkluR7H7PgSvwANVrjTO/zkqg6rtBNKMbOlR+Nl/D8Nwfmlv8
+	 hsKYmwhLwhShA==
+Message-ID: <b675e291-c369-4c7e-8fa2-1470ce90f001@kernel.org>
+Date: Mon, 3 Nov 2025 14:51:57 +0900
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-02_02,2025-10-29_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 suspectscore=0
- mlxlogscore=815 malwarescore=0 spamscore=0 adultscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
- definitions=main-2511030029
-X-Proofpoint-ORIG-GUID: MyYMB18UIcZUsSklm7lIqfu-nJzz1MS2
-X-Proofpoint-GUID: MyYMB18UIcZUsSklm7lIqfu-nJzz1MS2
-X-Authority-Analysis: v=2.4 cv=Xp73+FF9 c=1 sm=1 tr=0 ts=6908218b cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=A0Ky7YohR1HiQrBXehkA:9 a=QEXdDO2ut3YA:10
- a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAzMDAyOSBTYWx0ZWRfX30U56Y9Yv6fy
- D2xWjzSvB8XDvNJtg+ODC7VhAuR6251pzddB4hLkguD6XKyF1thq4VaFGfE8NujRdFsOOyz0nQF
- u91D5FOYAhDy1VMT+DqqJ1p6qL/c3ACNE9gA8QycPNzFnB+Rl9mxCoDf4Qw5ZZiFxdrCC83ZC/m
- LDwp6jv94hheMPPoAL6rSmpRyUwxAbIfnqxLASODImTMr8V51m9+FtwMrqdsVXEVy1lndIxWMrs
- uAF9LT6imOLwmAV0WOD6+eU3IBtemlM0ojJnsY4rxT3mRfbrmLcsQc5ZCrhOcILdEBS1MACK2dl
- RYEA6T3WvgmGKUOUD9+6Q8t3mzday36qqGi8OYoIKaivzO7WgbtZ8NINhz4aP6cP4elRWyWP14m
- iVqtGjIyt77+xC6W0I641Tie+/WMDg==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 10/13] block: introduce BLKREPORTZONESV2 ioctl
+To: Bart Van Assche <bvanassche@acm.org>, Jens Axboe <axboe@kernel.dk>,
+ linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+ Keith Busch <keith.busch@wdc.com>, Christoph Hellwig <hch@lst.de>,
+ dm-devel@lists.linux.dev, Mike Snitzer <snitzer@kernel.org>,
+ Mikulas Patocka <mpatocka@redhat.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,
+ linux-scsi@vger.kernel.org, linux-xfs@vger.kernel.org,
+ Carlos Maiolino <cem@kernel.org>, linux-btrfs@vger.kernel.org,
+ David Sterba <dsterba@suse.com>
+References: <20251031061307.185513-1-dlemoal@kernel.org>
+ <20251031061307.185513-11-dlemoal@kernel.org>
+ <5ca96ffd-9e60-49d3-a136-c7a9eb7bce10@acm.org>
+Content-Language: en-US
+From: Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <5ca96ffd-9e60-49d3-a136-c7a9eb7bce10@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 27 Oct 2025 12:31:08 +0100, Krzysztof Kozlowski wrote:
-
-> The "reg" in top-level has maxItems:2, thus repeating this in "if:then:"
-> blocks is redundant.  Similarly number of items cannot be less than 1.
+On 11/1/25 01:52, Bart Van Assche wrote:
+>> +	case BLKREPORTZONEV2:
+>> +		if (rep.flags & ~BLK_ZONE_REPV2_INPUT_FLAGS)
+>> +			return -EINVAL;
 > 
+> -EINVAL probably should be changed into something that indicates "not
+> supported" rather than "invalid argument"?
+
+Not supported could be confused with the cached report zones not being
+supported. It is, but the user cannot specify input flags that are not defined.
+This is to ensure that undefined flags are always 0 and that we can use these
+going forward when we need to define a new flag.
+So EINVAL seems appropriate to me.
+
 > 
+>> index dab5d9700898..1441d79a6173 100644
+>> --- a/include/uapi/linux/blkzoned.h
+>> +++ b/include/uapi/linux/blkzoned.h
+>> @@ -82,10 +82,20 @@ enum blk_zone_cond {
+>>   /**
+>>    * enum blk_zone_report_flags - Feature flags of reported zone descriptors.
+>>    *
+>> - * @BLK_ZONE_REP_CAPACITY: Zone descriptor has capacity field.
+>> + * @BLK_ZONE_REP_CAPACITY: Output only. Indicates that zone descriptors in a
+>> + *			   zone report have a valid capacity field.
+>> + * @BLK_ZONE_REP_CACHED: Input only. Indicates that the zone report should be
+>> + *			 generated using cached zone information. In this case,
+>> + *			 the implicit open, explicit open and closed zone
+>> + *			 conditions are all reported with the
+>> + *			 BLK_ZONE_COND_ACTIVE condition.
+>>    */
+>>   enum blk_zone_report_flags {
+>> +	/* Output flags */
+>>   	BLK_ZONE_REP_CAPACITY	= (1 << 0),
+>> +
+>> +	/* Input flags */
+>> +	BLK_ZONE_REP_CACHED	= (1 << 31),
+>>   };
+> 
+> Why 1 << 31 instead of 1 << 1?
 
-Applied to 6.19/scsi-queue, thanks!
+Why not ? That separates input and output flags instead of mixing them in
+tighter definition.
 
-[1/1] dt-bindings: ufs: qcom: Drop redundant "reg" constraints
-      https://git.kernel.org/mkp/scsi/c/525a411f9a5f
+
 
 -- 
-Martin K. Petersen
+Damien Le Moal
+Western Digital Research
 
