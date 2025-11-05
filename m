@@ -1,123 +1,146 @@
-Return-Path: <linux-scsi+bounces-18842-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18844-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF310C355DF
-	for <lists+linux-scsi@lfdr.de>; Wed, 05 Nov 2025 12:31:41 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16E7EC3600C
+	for <lists+linux-scsi@lfdr.de>; Wed, 05 Nov 2025 15:15:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F25753BD267
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Nov 2025 11:26:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8054C34EDD0
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Nov 2025 14:15:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E717F2FB087;
-	Wed,  5 Nov 2025 11:26:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 864C3329C54;
+	Wed,  5 Nov 2025 14:14:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="XOT9zaP0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iBjdmEZt"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3129E25C6F1
-	for <linux-scsi@vger.kernel.org>; Wed,  5 Nov 2025 11:26:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D3E2C0282
+	for <linux-scsi@vger.kernel.org>; Wed,  5 Nov 2025 14:14:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762342014; cv=none; b=iNni//CEOgD3t60o/95WccYNiQb/cpeXBr6UsvnCTfTomduf16JQfPvh58wYjqnDfBSAyZvFCohjGgNymtZFj6zOfyZQSCy0Ost/t/vVnxdcxe664d2a61uVEh0FualQw33jMI6LS207Vmz0rIX89pK3yMiNLDmLZt2IZf9nOV4=
+	t=1762352092; cv=none; b=uMEzuvVNeFHpFj8Xlp5N8ZjnyEU7sDNmWozAuLRIzoB9YYeEIxzRM9e+CaOPxs6cwwn1xaMOHv+dol8bBrMYqBsG9g40y9cJ+s4T5PyBA+disBB5wHia/uhfsC5uJmux8N4++/mX6aiNtNqFPa8e9Gmq6/RZiFfRIW2Dd65f3tQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762342014; c=relaxed/simple;
-	bh=lnLHz4GA8+8YXZRlXyloiFq/qFqW00pgYvfIRW38KzE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GC2sqoSYRIO2j2+2Hsw3/u9JcW92bHrGdic7s9ksrrz8NPjBpCKvw7sEVcRymtBEr6GsEQHKLuHlxmhgFU6ey0VwycDZvpEmsTeKsMmtPrhbW+uzENvhfqcIoXI/meaFiyCDJq2ri/fqyT9MQeGIAWjBm+Rgec3ccsamVO29yxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=XOT9zaP0; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=92JC27mDPJloZ1mOGLQV9cMWKdZ2iVdLNF4HlThwsBo=;
-	b=XOT9zaP0ZU6YyK71RY5H+dVuqdqk0qcVGMGMxcP1CAPfg9BI9kNX/MvK7I37pvWhgIb+nXAsQ
-	yTnjoDh2xXNsz5JQN54mMxDCqLg+Z7yitBzncQW4jW4e034NrGrntgrEPo/OWgZcrgRhQopfYvf
-	jLUyWWa9AO7L2t+O/8ZMfpM=
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4d1jfc62tZzcZyG;
-	Wed,  5 Nov 2025 19:25:12 +0800 (CST)
-Received: from kwepemk500001.china.huawei.com (unknown [7.202.194.86])
-	by mail.maildlp.com (Postfix) with ESMTPS id A242C14010D;
-	Wed,  5 Nov 2025 19:26:49 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.170) by
- kwepemk500001.china.huawei.com (7.202.194.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 5 Nov 2025 19:26:48 +0800
-From: JiangJianJun <jiangjianjun3@huawei.com>
-To: <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
-	<linux-scsi@vger.kernel.org>
-CC: <bvanassche@acm.org>, <john.g.garry@oracle.com>, <hewenliang4@huawei.com>,
-	<yangyun50@huawei.com>, <wuyifeng10@huawei.com>
-Subject: [PATCH] scsi: scsi_debug: make timeout faults by set delay to maximum value
-Date: Wed, 5 Nov 2025 20:01:18 +0800
-Message-ID: <20251105120118.1639685-1-jiangjianjun3@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20250224115517.495899-5-john.g.garry@oracle.com>
-References: <20250224115517.495899-5-john.g.garry@oracle.com>
+	s=arc-20240116; t=1762352092; c=relaxed/simple;
+	bh=mJxls0L6MjDLzDQonIfLUUpMj8pgWbeFfC6UPwa7zxU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=F71GoPwpojUnVIUu50YNf2JqGcAwgpJc2B8Wxwm7w+t535++P5UQgaQnZ1OHUhErtgDPw8nYTFOIfwL+Z5K8fgWDany+G591srVToIZCVf+9IMuQjpqwrqMr8ofrPWYpG1yTn5Lox5TME5Z5arwlt7EVo9WIVgu7u5pWhYIz0W0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iBjdmEZt; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7acd9a03ba9so1740548b3a.1
+        for <linux-scsi@vger.kernel.org>; Wed, 05 Nov 2025 06:14:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762352090; x=1762956890; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uVOvJXaWSxDtfYehskh8E4BDAZD7pJCUnmkX9Zw9K7k=;
+        b=iBjdmEZt+REbVkvwmKIN22/5yfjx1gwgxoHyVbSwu+Zp/q6TvTAv2CqURZ6Qk7mT4/
+         ZSH0hFC3mTJDUvHO6gF8d80A1TtROWyK5r/sWL+UgjPY3CPRCpJ5GWE6DHqE9bJ0+d1T
+         vJzRan4jzzgih4ClZO5upYrvqjzIDHc3C4BUi6B6nzxptIZMUGtX0WgUsDIXxveli3Um
+         eqAzZ7I07DEYqRzAYSrhrP5NVreJH7lEjMc0FiBgeA1ySkEG/y2ryoO9zXXcbSez/3DT
+         Rj2nH92tnA3J3CTH9o/Gj5TcboVQGGpi2gUygtPHY4nv68QGj024YJ79Hdhi3qB7akbb
+         mzoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762352090; x=1762956890;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uVOvJXaWSxDtfYehskh8E4BDAZD7pJCUnmkX9Zw9K7k=;
+        b=ZcjfF6HeADKABC0dzbwVc0mLxE2D/x4FSu23+4MhhDteQA5iqR6jLkKqo0oxohL329
+         AM7BHwwzmlzzl1PHlUl3fEaov7dvqrPiS2dObgNRUk4vVeLUJzufERk26Zo/DytTnPlg
+         DjDyt0CioIRqDL/asuYGR18RqqvUv7tLWEK36b33UkQ/9tO0WdwgWRWOVsP9ku+tcrEp
+         Bkq4oLkvLUOwt9AFtNF2VV5EnXq8s5EvTZB4PLQqDnWa0Hl1x4TrR6Jz2HYj3z/uWnWR
+         cBXw9bUxTKFvuvqb/STApPvxH3pm+wCMzPqIV2zt3UNidTsD075c7Cw5cZZOLuBPrwoR
+         P2IA==
+X-Gm-Message-State: AOJu0YwKfw3zW7u7PeUhAFeVAtPG+Tt6FvOG2CKMepuomBjLTFOayVVX
+	AhXIS5C+dV9SQZFB2f3ntd2UeW2RRHLQJVcO/ec9MgIH8BnHRF8ahYI0
+X-Gm-Gg: ASbGncumYaoMTkzhmTp2UPLXCl1DNx9gz6lB11kKdEJKafR0MDzxxaAjVK6LY9lASAj
+	GCPjJr8ySecQedzjVmjP8ZTLYIg2OnJlTsXkvobN7B0++SM7epeQuk4JPsCvSxucONX9s2sQGx8
+	ZGF7n3NHoUeQ24RX0fpj6DoYKQwAGu9+DPF+gIO2z5aYM8+zRtDFa+mm+A4KLqpcIu4cXenrsRL
+	/I7PD/mnMme/porIfGWaZwgVyM0sm1AmE5K/l5FMaBFS8KAJq33SgQsWeBDI6NnswibvUOiyHvq
+	66ph364/siTdeRw6vLwfGv6I4ZYLnWsB7gZolaAm0Qqu5Bpa4R5lT8SozutoEj3ZTkRNsim8zQw
+	28nhkaicZQUSy/z+iliWqGfK6tmCf+DvUFNoBTEl2qnV28yg0sXEE7As2g+bXZVQA2/N/yZgabu
+	Q=
+X-Google-Smtp-Source: AGHT+IEPkfZnunnyTLP4kMjyBd6sKE6DJzNwoAB7AKeujS0KY5CfB36Ljlq3waBtxiMTG8JdaqBBKw==
+X-Received: by 2002:a05:6a20:12c3:b0:341:8609:3bb4 with SMTP id adf61e73a8af0-34f83d0f7afmr4219467637.21.1762352089969;
+        Wed, 05 Nov 2025 06:14:49 -0800 (PST)
+Received: from aheev.home ([2401:4900:88f4:f6c4:1d39:8dd:58db:2cee])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7acd382ab30sm6518754b3a.24.2025.11.05.06.14.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Nov 2025 06:14:49 -0800 (PST)
+From: Ally Heev <allyheev@gmail.com>
+Date: Wed, 05 Nov 2025 19:44:43 +0530
+Subject: [PATCH] scsi: fix uninitialized pointers with free attr
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemk500001.china.huawei.com (7.202.194.86)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251105-aheev-uninitialized-free-attr-scsi-v1-1-d28435a0a7ea@gmail.com>
+X-B4-Tracking: v=1; b=H4sIANJbC2kC/x3NQQrCMBBG4auUWTuQpAmoVxEXofnTDkiUSSzF0
+ rsbuvw27+1UoYJK92EnxSpV3qXDXgaallhmsKRucsYFa03guAArf4sUaRJf8kPirADH1pTrVIV
+ TyM7fxuvojace+iiybOfk8TyOP4VFxIZ0AAAA
+X-Change-ID: 20251105-aheev-uninitialized-free-attr-scsi-d5f249383404
+To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Dan Carpenter <dan.carpenter@linaro.org>, Ally Heev <allyheev@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1567; i=allyheev@gmail.com;
+ h=from:subject:message-id; bh=mJxls0L6MjDLzDQonIfLUUpMj8pgWbeFfC6UPwa7zxU=;
+ b=owGbwMvMwCU2zXbRFfvr1TKMp9WSGDK5o6+tlV1zbfFK+c9Lxa5/4Jk2Ny5PW8UwXbU4oo1NU
+ ihWoN+8o5SFQYyLQVZMkYVRVMpPb5PUhLjDSd9g5rAygQxh4OIUgIksVWJkeJYbcfzVjs/z/98x
+ +x0uwrOP9xjTCmPPpsi1e+6mvavovsHI0HDky7W4AG/GiX2Tb8kIq5SGmma9YNfJlZqT6Zx6et4
+ 0bgA=
+X-Developer-Key: i=allyheev@gmail.com; a=openpgp;
+ fpr=01151A4E2EB21A905EC362F6963DA2D43FD77B1C
 
-The injection of timeout faults is achieved by directly discarding the
-SCSI command.
+Uninitialized pointers with `__free` attribute can cause undefined
+behaviour as the memory assigned(randomly) to the pointer is freed
+automatically when the pointer goes out of scope
 
-However, after the timeout, the SCSI mid-layer cancels the SCSI command.
-At this point, if the command is checked during cancellation, it will result
-in a "not found" outcome, making it impossible to cancel the command properly.
+scsi doesn't have any bugs related to this as of now, but
+it is better to initialize and assign pointers with `__free` attr
+in one statement to ensure proper scope-based cleanup
 
-Therefore, the approach has been changed to avoid direct cancellation, and the
-delay is set to the maximum value(0x7FFFFFFF).
-
-Signed-off-by: JiangJianJun <jiangjianjun3@huawei.com>
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/all/aPiG_F5EBQUjZqsl@stanley.mountain/
+Signed-off-by: Ally Heev <allyheev@gmail.com>
 ---
- drivers/scsi/scsi_debug.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/scsi/scsi_debug.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 353cb60e1abe..7d86a6f10130 100644
+index b2ab97be5db3d43d5a5647968623b8db72448379..89b36d65926bdd15c0ae93a6bd2ea968e25c0e74 100644
 --- a/drivers/scsi/scsi_debug.c
 +++ b/drivers/scsi/scsi_debug.c
-@@ -9249,6 +9249,7 @@ static int scsi_debug_queuecommand(struct Scsi_Host *shost,
- 	bool inject_now;
- 	int ret = 0;
- 	struct sdebug_err_inject err;
-+	bool timeout = false;
+@@ -2961,11 +2961,11 @@ static int resp_mode_sense(struct scsi_cmnd *scp,
+ 	int target_dev_id;
+ 	int target = scp->device->id;
+ 	unsigned char *ap;
+-	unsigned char *arr __free(kfree);
+ 	unsigned char *cmd = scp->cmnd;
+ 	bool dbd, llbaa, msense_6, is_disk, is_zbc, is_tape;
  
- 	scsi_set_resid(scp, 0);
- 	if (sdebug_statistics) {
-@@ -9291,7 +9292,7 @@ static int scsi_debug_queuecommand(struct Scsi_Host *shost,
- 
- 	if (sdebug_timeout_cmd(scp)) {
- 		scmd_printk(KERN_INFO, scp, "timeout command 0x%x\n", opcode);
--		return 0;
-+		timeout = true;
- 	}
- 
- 	ret = sdebug_fail_queue_cmd(scp);
-@@ -9398,7 +9399,9 @@ static int scsi_debug_queuecommand(struct Scsi_Host *shost,
- 		pfp = r_pfp;    /* if leaf function ptr NULL, try the root's */
- 
- fini:
--	if (F_DELAY_OVERR & flags)	/* cmds like INQUIRY respond asap */
-+	if (unlikely(timeout)) /* inject timeout */
-+		return schedule_resp(scp, devip, errsts, pfp, 0x7FFFFFFF, 0x7FFFFFFF);
-+	else if (F_DELAY_OVERR & flags)	/* cmds like INQUIRY respond asap */
- 		return schedule_resp(scp, devip, errsts, pfp, 0, 0);
- 	else if ((flags & F_LONG_DELAY) && (sdebug_jdelay > 0 ||
- 					    sdebug_ndelay > 10000)) {
+-	arr = kzalloc(SDEBUG_MAX_MSENSE_SZ, GFP_ATOMIC);
++	unsigned char *arr __free(kfree) = kzalloc(SDEBUG_MAX_MSENSE_SZ, GFP_ATOMIC);
++
+ 	if (!arr)
+ 		return -ENOMEM;
+ 	dbd = !!(cmd[1] & 0x8);		/* disable block descriptors */
+
+---
+base-commit: c9cfc122f03711a5124b4aafab3211cf4d35a2ac
+change-id: 20251105-aheev-uninitialized-free-attr-scsi-d5f249383404
+
+Best regards,
 -- 
-2.33.0
+Ally Heev <allyheev@gmail.com>
 
 
