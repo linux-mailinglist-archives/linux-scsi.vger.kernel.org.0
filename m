@@ -1,99 +1,94 @@
-Return-Path: <linux-scsi+bounces-18902-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-18904-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A0BFC4081D
-	for <lists+linux-scsi@lfdr.de>; Fri, 07 Nov 2025 16:03:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B28BC40875
+	for <lists+linux-scsi@lfdr.de>; Fri, 07 Nov 2025 16:06:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CDE5C4F40D8
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Nov 2025 15:02:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C17E51A4443B
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Nov 2025 15:06:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1220D32B9AC;
-	Fri,  7 Nov 2025 15:02:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E73432862F;
+	Fri,  7 Nov 2025 15:06:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QAlQa3Z6"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gt2nUuvM"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78DF32ABE1
-	for <linux-scsi@vger.kernel.org>; Fri,  7 Nov 2025 15:02:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD0730C61C
+	for <linux-scsi@vger.kernel.org>; Fri,  7 Nov 2025 15:06:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762527729; cv=none; b=QbmzTseksGt5FRfvKyqYyqj94FZgjPp4I08GL2wCunaTzhj4sswWD1r61lc2+y5Ny4aG/D3VFTf4ujNRPtXDBqS+imgEh+BctRzA2TIqedPUdk/fqfHvO1w3QkJV20UJzYcGKQjRpMM5qsZlXZRUAXlSP0D2bKV+z3P1PkO9Sas=
+	t=1762527979; cv=none; b=VK7k5QjIqpjNgrgbdTvK0tnRjmy2TrGRU8SFfxHmAWRHsSxkg+NMuCL5+WBsU/JAAPd0mE9xeof+w/6QuDOwpeS3Lbzi/paqAE0QZacc4ZdQlA1GYCxeWyiqKMkoblPa3qvNWWRrK6mPlhfBp0w5npD8Rof7nfLUtDG0O+P/pfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762527729; c=relaxed/simple;
-	bh=neIM7QVQVzi+YLKvjx9mqdZ6zG6p4nF2fOHuVl49jL8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lzoFV5X07R+PDuu3qdsK0zr0EiOWLaMc68hSDgvGKAMuU3GEcwJYfC7wZUhU6hzdtNr37511id7/XHLc5yAsDFzpQoFw8eklqvQsTj11VnRZG+NYEchrk5cO9y96SZlUq3jVWUaXb22bcIpd5GMsbKmDHu8Qhj3qyBWCG6YrrSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QAlQa3Z6; arc=none smtp.client-ip=209.85.128.48
+	s=arc-20240116; t=1762527979; c=relaxed/simple;
+	bh=I1uyF94YPCgRaFvl8OfqcySKhRO4bX53+vRKo3KnpXs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FJVGCEOe6AYgQPJyeE2WGAVtWeBzQkux3iJdljX+PSR7FLLFQGzqiH4NBEgnQCN8eITMhzOymgML5Oo3C9janTcbe9jUybHx1e7BAbV+V5B5FjqAOd75GZ/HtCmuOYhO+D/ct+Lk0byM7f5HIkqE/phn1J/sW1Z4e2O/KG8s9AU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gt2nUuvM; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-471191ac79dso9508875e9.3
-        for <linux-scsi@vger.kernel.org>; Fri, 07 Nov 2025 07:02:07 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-471191ac79dso9559735e9.3
+        for <linux-scsi@vger.kernel.org>; Fri, 07 Nov 2025 07:06:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1762527726; x=1763132526; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O69j8p6POFkrpweTBOpwpVXxQ7WR8S2t/JBSoUi6DYU=;
-        b=QAlQa3Z6xe/zc8yAFPJRLiNzwI4/aDxC4lqc4e+R+2EO/F7uawzAn+BmpXFFZ+wt5P
-         YdEYHMEkeb/kZrsPrQbghJyTnyAq8DtIcw+muGs4DJkYz/tXOzdAXKSZjB1xN4D7DfLQ
-         /J5PpM+1smoNAOueqh26io/+Im7Fjqkdtx4vRo4nkvrnui4jL7VeAjmpgRHQRZNU3x4b
-         7lg1We606uAa00SWIFKRGO4SBTRCOiWBQnuoImRaJ4p2hbKuzpKWtfcMXQon4DAN8uov
-         lFA7aZ6e6OYwfWmNqlt0POpLz0vkoCzn+jebOmvbrldiLscx2H8h/9K178ab2Psb0b7u
-         cGtA==
+        d=suse.com; s=google; t=1762527976; x=1763132776; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=py75GPFijQsPUx0jpTbres5/IKDk4ZsE3rbUHQbz/Yc=;
+        b=gt2nUuvM5rjYgTZZJBN5l2FbDqDK3nccnSq7jgvNxILnZU1egU2dqqhBon1hVv53sn
+         SVY5SC9brsdMEG2ESLfsVyh9ak1dYlJhsQORGe5446FIHOsmBqQKUdXSAXkLyqLmHi6/
+         MfeDgN3f660kyJ2fPtpXn4M4kBG5s8N/FXX0xBZdbwOFNOmD/YR4eAYj5VxCyDVkb3Ez
+         kCCexMNXuyfTtg8kEo/AXBFQoRQTL08pjR+6iT+QmCTeL27/uSPAG1Gcwh3foS2AlQSh
+         23Wx2+H24P/lN/lfW+i2332bD4FsEAQ3inBXdVZJuH4jpbHnjIXhQaXRYca8xKCKSLvz
+         90Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762527726; x=1763132526;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=O69j8p6POFkrpweTBOpwpVXxQ7WR8S2t/JBSoUi6DYU=;
-        b=NXFfUVDslVOFeZ6qqPb3SK3S9fNfdRfoT7iN98abwaIDN9vv83hg5D2Qg5WEulVAoG
-         yjeF/g9VrEu00oXb/8oditBa8dNu8ZFexZ2rVT/u8ayAb8i0UE5DtI0j5dTJ6S6PEFvD
-         wg1/nq+Nhkd7tPnSS9CEc4rpAaZl41XMbEhEe2+WM6M7/wo23fUQf3Fy8HjP7JwrHwPs
-         CRqMrO4smbPlQtIafsnJ7Jd8R0iSVqcsMfM+WnxegZ509zEn+L8POCtRBANTclKJDKoz
-         DkrAdVw+iLwRLNyJ+OAB/+aH8aqscBT+kjnbLTPb7H4OXTQAHV0DiCKtWfnd0Z3r7AZw
-         nygQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXKrO3VZGcUj4GvO5LKnn5E7HzAo3UhxP5X/E+ZHnTxF0GdhgGdIFbWjtKZm4XcCeav+cTc7zY9x7tc@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlyNGsMRfrwdC6UaYkWjzZfYoFxCfzfInFaY7nn+1jGlA3AHjD
-	0V3FQK5YEWKNjX8CgCWbue7Bof02LAcFPOXv2nWpy7XyXEZd0ezQtCqwcuyhbaX1Esc=
-X-Gm-Gg: ASbGncsr6gb3WqfeZQZE30XWyHwy2PdNaGkFYnYDFzRdXX15JMumuhe1gpILcPxqkpr
-	6WLw1Nhedxvo/W4m7s/6kpvXRYJH3vRo0USLeb1p0ezbmuICgYRL5yemuYTXVZUML6Tu3hVpFVd
-	B+RoGM3kziMpBrWzX2xE4V5K5rJthA/CzaM4ueSm+wHRboniu3W/Ha6kDSxSLnj6IHhhQ3xOoaW
-	GTIFh0BMKu18m6Ei5cTG/MflprHFsJuiTqxtHNWhYTgcpI1JB7zqFvGCU1qitr7KVi3CvW0KHkU
-	UeXFd25EOM/TRoxfn9cdb7G+9tKQDR+0r9O8aseSDFOtIT7b+vW36V3OuBsDgb5LuJO0Oelc0sa
-	QQQLlVo121KTJ45Newe2J+V7kkejQU3cdZND8ufHL0+0nEUrrMTv6UXrM02Y/IavDqFTvFydZ+X
-	x/oDx/OAeivdIJAYpj/2peINUS
-X-Google-Smtp-Source: AGHT+IHjMq1QJ7HYQ/kS/Qhb3uXFesgKIN2s46CxCh7W140FLJQZ4eDZpV2W+DDmBxiZua0HLfkCFg==
-X-Received: by 2002:a05:600c:4694:b0:471:13fa:1b84 with SMTP id 5b1f17b1804b1-4776bc959f6mr29006635e9.12.1762527725719;
-        Fri, 07 Nov 2025 07:02:05 -0800 (PST)
+        d=1e100.net; s=20230601; t=1762527976; x=1763132776;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=py75GPFijQsPUx0jpTbres5/IKDk4ZsE3rbUHQbz/Yc=;
+        b=NzMn5QDVr1nOJCRI6dscphcEOcP1N6oDx4tjDATyczHLNADBrCZ4Nn0Zt5jxZXkKW/
+         YCCWWDDkGccmRe+WrH1srhkAQrSPVfNdTKEYDdtmkLoS19PW13FfgSmkeyQsRbF/nnXD
+         XAxtO1Wyrk2wKd3h/0Rl3cDGbZrNAi26CoE/TqtQlVj8BTkPC7nqdtjH2zVbFWyEEv/m
+         abTO67hfKCEzb1p7I8IRccxwf7qRNfYS4OaN+j9s4m1+qoDSrjNWCgcysbTF0FhEm8nH
+         7ZSCUCC8MugW96cnK9DRxsgcXkV6Z0BQweqMVGi51MFn2P0OCW2x11YwwnKslHP0mVYO
+         t88g==
+X-Forwarded-Encrypted: i=1; AJvYcCVEsx/Xv42oZH4L07eDu5uTVOwdtMrfXXmSEzcgTbP7I8+TfkG0Q0xG9Bvdmy/LBBE8k6XFERPxF1fM@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzrc/7maRlp+y7ffuSOkT8QEE9gT/KUQ0El1zLHv0PvTUpxsejI
+	a6ViAQjRe5C52rtTBxANXZT0srOT76AQ2B43cSqgRAG4cD6Y0G4GuetYiTJOUGQWg5w=
+X-Gm-Gg: ASbGnctz4BHH5asD7ATaLTchlc7woZV7Rgck0e/gOHIFE6WjBRveBjXH47VP/ZXzbjt
+	/Ks/30KH4JPFT/Ph3tD4HmRsk8FZoqUhv6Exd9jCzUBunIcb4MVX17BOx2nOIHGOGHladGbPhRt
+	K0EeA3ug2gM2ZyNydR/epk+Dff99WoXueX4RstdxXYW9tYNTl4pJo2B7YD1/4szVgNRQ+MYOcIr
+	tZa4hiRbRhdFb38y0MrFNXxUMEzPywQHjKcdfq0U0xe98p8qaCWjak6n95MJtTTCeJNSH6mm0ST
+	vmw/ggLStHflZYDgcbJsHpxU/Lmv6XNLZDItULLUymp4O+FiVPCE3doqBGR8wFQjuMat3CYz514
+	TXLsjUy8+7sxYw/vTtS9h8X5024QVLH8p2DKbEoyq4AXpU5bogjnaclhNLGVfYSxOH/3DQJvZ8m
+	1FYnJVmOlcvE99csWjTPfgYwoO
+X-Google-Smtp-Source: AGHT+IGz8YM6333JLm588AFc5cKs16RWmjvD1JWcT1yqGgw96JtcAIFnCIm4vEabRZZUth0PEEmaSg==
+X-Received: by 2002:a05:600c:4f53:b0:475:df91:ddf0 with SMTP id 5b1f17b1804b1-4776bcc5494mr28930715e9.33.1762527976212;
+        Fri, 07 Nov 2025 07:06:16 -0800 (PST)
 Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42ac675ca52sm5777830f8f.25.2025.11.07.07.02.04
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42ac677b41csm5666982f8f.34.2025.11.07.07.06.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Nov 2025 07:02:05 -0800 (PST)
+        Fri, 07 Nov 2025 07:06:15 -0800 (PST)
 From: Marco Crivellari <marco.crivellari@suse.com>
 To: linux-kernel@vger.kernel.org,
-	linux-scsi@vger.kernel.org
+	linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org
 Cc: Tejun Heo <tj@kernel.org>,
 	Lai Jiangshan <jiangshanlai@gmail.com>,
 	Frederic Weisbecker <frederic@kernel.org>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	Marco Crivellari <marco.crivellari@suse.com>,
 	Michal Hocko <mhocko@suse.com>,
-	Saurav Kashyap <skashyap@marvell.com>,
-	Javed Hasan <jhasan@marvell.com>,
-	GR-QLogic-Storage-Upstream@marvell.com,
+	Tyrel Datwyler <tyreld@linux.ibm.com>,
 	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 2/2] scsi: qedf: add WQ_PERCPU to alloc_workqueue users
-Date: Fri,  7 Nov 2025 16:01:55 +0100
-Message-ID: <20251107150155.267651-3-marco.crivellari@suse.com>
+Subject: [PATCH] scsi: ibmvscsi_tgt: add WQ_PERCPU to alloc_workqueue users
+Date: Fri,  7 Nov 2025 16:05:42 +0100
+Message-ID: <20251107150542.271229-1-marco.crivellari@suse.com>
 X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251107150155.267651-1-marco.crivellari@suse.com>
-References: <20251107150155.267651-1-marco.crivellari@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -136,63 +131,23 @@ become the implicit default.
 Suggested-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
 ---
- drivers/scsi/qedf/qedf_main.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
-index 6b1ebab36fa3..7792e00800ae 100644
---- a/drivers/scsi/qedf/qedf_main.c
-+++ b/drivers/scsi/qedf/qedf_main.c
-@@ -3374,7 +3374,8 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
- 	QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_INFO, "qedf->io_mempool=%p.\n",
- 	    qedf->io_mempool);
+diff --git a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
+index 5a3787f27369..f259746bc804 100644
+--- a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
++++ b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
+@@ -3533,7 +3533,8 @@ static int ibmvscsis_probe(struct vio_dev *vdev,
+ 	init_completion(&vscsi->wait_idle);
+ 	init_completion(&vscsi->unconfig);
  
--	qedf->link_update_wq = alloc_workqueue("qedf_%u_link", WQ_MEM_RECLAIM,
-+	qedf->link_update_wq = alloc_workqueue("qedf_%u_link",
-+					       WQ_MEM_RECLAIM | WQ_PERCPU,
- 					       1, qedf->lport->host->host_no);
- 	INIT_DELAYED_WORK(&qedf->link_update, qedf_handle_link_update);
- 	INIT_DELAYED_WORK(&qedf->link_recovery, qedf_link_recovery);
-@@ -3585,7 +3586,8 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
- 	ether_addr_copy(params.ll2_mac_address, qedf->mac);
- 
- 	/* Start LL2 processing thread */
--	qedf->ll2_recv_wq = alloc_workqueue("qedf_%d_ll2", WQ_MEM_RECLAIM, 1,
-+	qedf->ll2_recv_wq = alloc_workqueue("qedf_%d_ll2",
-+					    WQ_MEM_RECLAIM | WQ_PERCPU, 1,
- 					    host->host_no);
- 	if (!qedf->ll2_recv_wq) {
- 		QEDF_ERR(&(qedf->dbg_ctx), "Failed to LL2 workqueue.\n");
-@@ -3628,7 +3630,8 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
- 	}
- 
- 	qedf->timer_work_queue = alloc_workqueue("qedf_%u_timer",
--				WQ_MEM_RECLAIM, 1, qedf->lport->host->host_no);
-+				WQ_MEM_RECLAIM | WQ_PERCPU, 1,
-+				qedf->lport->host->host_no);
- 	if (!qedf->timer_work_queue) {
- 		QEDF_ERR(&(qedf->dbg_ctx), "Failed to start timer "
- 			  "workqueue.\n");
-@@ -3641,7 +3644,8 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
- 		sprintf(host_buf, "qedf_%u_dpc",
- 		    qedf->lport->host->host_no);
- 		qedf->dpc_wq =
--			alloc_workqueue("%s", WQ_MEM_RECLAIM, 1, host_buf);
-+			alloc_workqueue("%s", WQ_MEM_RECLAIM | WQ_PERCPU, 1,
-+					host_buf);
- 	}
- 	INIT_DELAYED_WORK(&qedf->recovery_work, qedf_recovery_handler);
- 
-@@ -4177,7 +4181,8 @@ static int __init qedf_init(void)
- 		goto err3;
- 	}
- 
--	qedf_io_wq = alloc_workqueue("%s", WQ_MEM_RECLAIM, 1, "qedf_io_wq");
-+	qedf_io_wq = alloc_workqueue("%s", WQ_MEM_RECLAIM | WQ_PERCPU, 1,
-+				     "qedf_io_wq");
- 	if (!qedf_io_wq) {
- 		QEDF_ERR(NULL, "Could not create qedf_io_wq.\n");
- 		goto err4;
+-	vscsi->work_q = alloc_workqueue("ibmvscsis%s", WQ_MEM_RECLAIM, 1,
++	vscsi->work_q = alloc_workqueue("ibmvscsis%s",
++					WQ_MEM_RECLAIM | WQ_PERCPU, 1,
+ 					dev_name(&vdev->dev));
+ 	if (!vscsi->work_q) {
+ 		rc = -ENOMEM;
 -- 
 2.51.1
 
