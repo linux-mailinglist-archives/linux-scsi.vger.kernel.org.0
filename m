@@ -1,65 +1,65 @@
-Return-Path: <linux-scsi+bounces-18997-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19002-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBE02C48CEB
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Nov 2025 19:58:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D94C3C48D64
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 Nov 2025 20:02:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3187D4F13D0
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Nov 2025 18:56:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31B7E1893F91
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 Nov 2025 18:59:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7813344041;
-	Mon, 10 Nov 2025 18:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D9B834889E;
+	Mon, 10 Nov 2025 18:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SWtbDKj8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CSAntfIL"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3242733F372;
-	Mon, 10 Nov 2025 18:48:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5512D3446BC;
+	Mon, 10 Nov 2025 18:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762800489; cv=none; b=gVcglp2zXtb42XL/UacA5B90etn6mup15/hmD4UFxqIy4/XcfaDw5waV/aCe5oakwbsyo6gmhxUlbk8A5QsIFnO72Njke278rZ2UhRqQxXNsyJZXFk7fdAxjnSslv4f2n6n851SFYyNIMu1SLz444D8lN7FezkZG1a2Fn9zeDXY=
+	t=1762800494; cv=none; b=jbXe6v7yXkNtuK74b6m6RiJIlIYPjbMTq0pGSbzI5paA4uAFyDRpwzi8io+LWmk28Xz2LQeCzbhBj7qwcSI9kTtALQDAVYFHJI/5kFInHJY4lHOmsVzBcRiz4GBYsfTvqNCDHwoxL3Aq/D20Fy20zl5spM4/T7WsN8RzK1SxNgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762800489; c=relaxed/simple;
-	bh=/jrYLjDfZzQMPUrwgBXX7noMOw5eDva5SlIg2j2SoEQ=;
+	s=arc-20240116; t=1762800494; c=relaxed/simple;
+	bh=QGRUCvRhLj/TwbX4dQMKGketmqckWUD9lEEl/Hr0Xm0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hB9WW9tgl35mCVGkCruhGgDiaJNFabOIDmYDLs7pa1KXM3WZ0eUi17KwM5f+9rzNdxYmfuWXUBwK8fuieHrDnQfOLYlOHzQxV7Y/o5vrwvDhRiNa+Dh3cEAePwLN0LymCC9ygcfa/3izpTvXaQLC/Vz7z/g01GweZkB7ZH2WiHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SWtbDKj8; arc=none smtp.client-ip=192.198.163.12
+	 MIME-Version; b=gBpULCbnZ6ehCcT/fHb7NZO0xg2MrK5Ts7qq+flfK6+dKA/+JN3By+YL4XlMFFCl4VgMiXmZCM8jll4UdOnjz+IcG02XTvHhH1/fGUo6+rAp/omc8G5G6yTiTC0jPK5BBcB02MPeqsB+G1bgrheSfdQKtFVVI3o+4/hR9UkTHp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CSAntfIL; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762800487; x=1794336487;
+  t=1762800492; x=1794336492;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=/jrYLjDfZzQMPUrwgBXX7noMOw5eDva5SlIg2j2SoEQ=;
-  b=SWtbDKj83fijC3v3u5aD7e+hKc1DS8itsAl3/dul0DnPAG8EoPaBnC8r
-   KfDLBM7zKjDh2mPJAgb55KmEBYMTVPUckVUawTCRBsDv37wjH7/jqyfaD
-   ziPasgfJLiPK+UIprZY05MlURgVQPh7wAo4Ijl1+3C1qpkPsc3LxG/J3v
-   KnIArLrRTDxKLVA0JWp0WmpdOTQOCVeMhyp8ccpupJOIPnd8Jaa4L06HN
-   hI1uDEpH+E0KumeRrcrPp0q4GiHfTD7XBK8mXaM+f5pfhuflWPVp+2E7c
-   tRLcn7pIEOa2a7zjaWWjuKVUXs4pnQLe1oA2XEfmItGwTHFKGs7VorZk3
-   Q==;
-X-CSE-ConnectionGUID: cTZNZpXjQSqOEUgjMltwVw==
-X-CSE-MsgGUID: 2JJENxZtTA22FI9r2SO5xA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="68714894"
+  bh=QGRUCvRhLj/TwbX4dQMKGketmqckWUD9lEEl/Hr0Xm0=;
+  b=CSAntfILWO1t0SrnZlyFwtpWk4mN60vR8UKSSWY3hn5Rj6naeDKRYOBJ
+   wEvR27fYztlMx1lOHLYcFpHXUEJGjnssq1+EQ0+zT29TP81HxINpE+HvZ
+   SMdK+BWOl5BS3QtYuuRSjoxDSCg+1k0sW29Gr0IbRcONnO4FONpiY9/0s
+   WzD4oqJWAePpnpjZSVtKlqmdrc8NsfQY81yn6+uZYPRYKRLp2wWxcr1o3
+   Dtplgmu/WD1O/g5hh04Qv6wNOllv03TAvv7vXx2aSE5Ec6rswXaItt4/n
+   FhtkL4Akkx0RGWrqURtNqPSu/OqZeyTthnDIVvygsrsc+8s+d6D+rI9IY
+   w==;
+X-CSE-ConnectionGUID: Utsz/uvmTp+sk/kHIDmQzg==
+X-CSE-MsgGUID: apoJc5YQSSyLr0KONSI2fA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="52415107"
 X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
-   d="scan'208";a="68714894"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 10:48:06 -0800
-X-CSE-ConnectionGUID: tQxkWAukTcCWsmo5RGoj9w==
-X-CSE-MsgGUID: 5oUCymEZTJWvji6oAMQPvQ==
+   d="scan'208";a="52415107"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 10:48:08 -0800
+X-CSE-ConnectionGUID: nY+7EE6iTdmlvdOdF/MRgA==
+X-CSE-MsgGUID: ur4itLZhTBu7r9UEfABuHA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
-   d="scan'208";a="188985837"
+   d="scan'208";a="219402036"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa008.fm.intel.com with ESMTP; 10 Nov 2025 10:47:57 -0800
+  by orviesa002.jf.intel.com with ESMTP; 10 Nov 2025 10:47:58 -0800
 Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 6B742A7; Mon, 10 Nov 2025 19:47:29 +0100 (CET)
+	id 78395A9; Mon, 10 Nov 2025 19:47:29 +0100 (CET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Corey Minyard <corey@minyard.net>,
 	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
@@ -157,9 +157,9 @@ Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Jaroslav Kysela <perex@perex.cz>,
 	Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH v1 18/23] pps: Switch to use %ptSp
-Date: Mon, 10 Nov 2025 19:40:37 +0100
-Message-ID: <20251110184727.666591-19-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 20/23] s390/dasd: Switch to use %ptSp
+Date: Mon, 10 Nov 2025 19:40:39 +0100
+Message-ID: <20251110184727.666591-21-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20251110184727.666591-1-andriy.shevchenko@linux.intel.com>
 References: <20251110184727.666591-1-andriy.shevchenko@linux.intel.com>
@@ -176,38 +176,23 @@ struct timespec64 in human readable format.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pps/generators/pps_gen_parport.c | 3 +--
- drivers/pps/kapi.c                       | 3 +--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ drivers/s390/block/dasd.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/pps/generators/pps_gen_parport.c b/drivers/pps/generators/pps_gen_parport.c
-index f5eeb4dd01ad..05bbf8d30ef1 100644
---- a/drivers/pps/generators/pps_gen_parport.c
-+++ b/drivers/pps/generators/pps_gen_parport.c
-@@ -80,8 +80,7 @@ static enum hrtimer_restart hrtimer_event(struct hrtimer *timer)
- 	/* check if we are late */
- 	if (expire_time.tv_sec != ts1.tv_sec || ts1.tv_nsec > lim) {
- 		local_irq_restore(flags);
--		pr_err("we are late this time %lld.%09ld\n",
--				(s64)ts1.tv_sec, ts1.tv_nsec);
-+		pr_err("we are late this time %ptSp\n", &ts1);
- 		goto done;
- 	}
- 
-diff --git a/drivers/pps/kapi.c b/drivers/pps/kapi.c
-index e9389876229e..6985c34de2ce 100644
---- a/drivers/pps/kapi.c
-+++ b/drivers/pps/kapi.c
-@@ -163,8 +163,7 @@ void pps_event(struct pps_device *pps, struct pps_event_time *ts, int event,
- 	/* check event type */
- 	BUG_ON((event & (PPS_CAPTUREASSERT | PPS_CAPTURECLEAR)) == 0);
- 
--	dev_dbg(&pps->dev, "PPS event at %lld.%09ld\n",
--			(s64)ts->ts_real.tv_sec, ts->ts_real.tv_nsec);
-+	dev_dbg(&pps->dev, "PPS event at %ptSp\n", &ts->ts_real);
- 
- 	timespec_to_pps_ktime(&ts_real, ts->ts_real);
- 
+diff --git a/drivers/s390/block/dasd.c b/drivers/s390/block/dasd.c
+index 7765e40f7cea..97dcc70f669e 100644
+--- a/drivers/s390/block/dasd.c
++++ b/drivers/s390/block/dasd.c
+@@ -974,8 +974,7 @@ static void dasd_stats_array(struct seq_file *m, unsigned int *array)
+ static void dasd_stats_seq_print(struct seq_file *m,
+ 				 struct dasd_profile_info *data)
+ {
+-	seq_printf(m, "start_time %lld.%09ld\n",
+-		   (s64)data->starttod.tv_sec, data->starttod.tv_nsec);
++	seq_printf(m, "start_time %ptSp\n", &data->starttod);
+ 	seq_printf(m, "total_requests %u\n", data->dasd_io_reqs);
+ 	seq_printf(m, "total_sectors %u\n", data->dasd_io_sects);
+ 	seq_printf(m, "total_pav %u\n", data->dasd_io_alias);
 -- 
 2.50.1
 
