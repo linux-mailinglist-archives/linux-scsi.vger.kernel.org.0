@@ -1,79 +1,86 @@
-Return-Path: <linux-scsi+bounces-19089-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19094-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 181B1C55771
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Nov 2025 03:47:43 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0535C55777
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Nov 2025 03:48:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58A0E3AA8D8
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Nov 2025 02:47:31 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 67A9B34745D
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Nov 2025 02:48:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64E2126980F;
-	Thu, 13 Nov 2025 02:47:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75D7E27F4F5;
+	Thu, 13 Nov 2025 02:47:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BHECX7KE"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Hzh33el4"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7994246333;
-	Thu, 13 Nov 2025 02:47:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09AE26980F;
+	Thu, 13 Nov 2025 02:47:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763002043; cv=none; b=Wlr5qzeLCvTZuxt7E7SyuRTLxFYkofZ8T3VKsmoYWK2sb8LX0fn/6ixybBJYR89raYBBPqp/o/uVUKPCbkL1Cdfrpp0gdbPFoegmFbX4rRBWY+4mOYfjxeMcH0p3JvK8dMSWcbuE5unRRhGchvdyaCfbPj47Wwq79qhORC7CfX4=
+	t=1763002059; cv=none; b=WkryujiM0/tNcxO6kGdj8Jxe1lmgUJtbn0y+LulO3rG/0cPQDm/JpybCiMkV3uTsOvd/mzX6HOBA3KAatpY8KcmrG80vFIvm3uxOwk7NEo9llOOPfGQ5k5dldcWqhbHLIrg+088MORiYEDkuKXTdtavtA0Zi7EBkFVqprxWuyHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763002043; c=relaxed/simple;
-	bh=7TG16jts3HrD1hpIz+SdCBGZsmsniurVExjce6yyTVM=;
+	s=arc-20240116; t=1763002059; c=relaxed/simple;
+	bh=FWzhZoXDYdhehysd0N/Y0Ocbz/rgArBbWTS465/380s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=r5eO/yrIDtq3zxtLiPkCyokohenPkF9R94x+syya3+gmLW5jlOAtYb+/FNtTBK6Mo7NTabUtho0XkaQnjDRMBD/FZ+qSkC+xVE11QTzFDUdg3n5K+Zeo0eU8R5D1wtqagTgoSh3ZtQYGAYqphGKfLwarEypy7Pn3rFItsVwt8Gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=BHECX7KE; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=gZGRAqv6m72vaQLtX+HsRpir20DSUL3gm+bv8qs8YRyE+xk43p9xx9E+43ti1Bjigugn0WdiIzdkCTv4+ZcdN6ztGsOlxUUPt2eFXDd7Hq0By7Gzd4F4ecVqPkgs/qNTQWEcOTHN8tLYtNuUtaax4LOQ+Ca7vMcbzZMCuItbp24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Hzh33el4; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AD1gejG023286;
-	Thu, 13 Nov 2025 02:47:14 GMT
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AD1hkxu024043;
+	Thu, 13 Nov 2025 02:47:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=fTE2ui0ZWFw+GHvsee6pfdSEQ86xGOf84pLW2R1Onxw=; b=
-	BHECX7KEYYjDljiFL72b11PzgL3sVOmUNDzQSfrFiYIAw4guFav7R8hCpDuJ4h7S
-	2wa0xCWJnZkltV8e2CMJnPknjFW1xUmC0Ur7vMZfChLRDmIs475EmPVpgXFVw6Lg
-	c65EwiMrJpR+aB1dJ1I8mC2gOY665tbAjlnFUc2L470/XG4nwueVCYKBCEMS5lNc
-	tAjT8vvnLwIWMqSUqVNcAAo1gcqMbKQ94tcB0C3vCAdN9i0dhwwAAEc/6T9kufsm
-	+87DI+pdVEPohlu6No1EsteIsUN/j9K9cMM5Bal2XhyqA0O+6U0zH/maLcLdJP88
-	bgqn129aaJ64rc6crZcpEg==
+	corp-2025-04-25; bh=1sHGTjdI5nQJA3D1GLCj0xQo44LivYH21QX3rDb+TUM=; b=
+	Hzh33el4Y+nT36Z0VrbtaAD5HFlzKjd/SEGtfUnf2Rk15Z7upJSq79FIk+8OQJQr
+	g+aaSqeDRGGGyb/1ComZPolN8bbq19AcYehgnomNyH9AeXTnHaZnJX9ZuLUKaYvp
+	EGEutrLZoe8a/M9JeJUUpgTCf4XWu2F26gQWzQdoBhxAFARatzy4IhyeiLhVEOmM
+	JIGB+227d/ejhnmn3iYwwjwwFnKcE+d8bOXiMCDnfHPduXT4mvgW/T7aUQDgWd3V
+	X2GZPanY2J9CaMG/bZCfmsJ2811tiWgWSqz/9bBWCElCPCw4hK5xrs0Xea+acP1U
+	o95fdf0QI5vnESzgUSN+8w==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4acybqrscn-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4acxpngvwq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 13 Nov 2025 02:47:13 +0000 (GMT)
+	Thu, 13 Nov 2025 02:47:15 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AD0OLjN032518;
-	Thu, 13 Nov 2025 02:47:13 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AD0qNLZ032481;
+	Thu, 13 Nov 2025 02:47:14 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4a9van9qbv-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4a9van9qcd-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 13 Nov 2025 02:47:13 +0000
+	Thu, 13 Nov 2025 02:47:14 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5AD2lB8L038323;
-	Thu, 13 Nov 2025 02:47:12 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5AD2lB8N038323;
+	Thu, 13 Nov 2025 02:47:13 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4a9van9qab-5;
-	Thu, 13 Nov 2025 02:47:12 +0000
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4a9van9qab-6;
+	Thu, 13 Nov 2025 02:47:13 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Markus Probst <markus.probst@posteo.de>
+To: linux-scsi@vger.kernel.org, peter.wang@mediatek.com
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/3] Support power resources defined in acpi on ata
-Date: Wed, 12 Nov 2025 21:46:54 -0500
-Message-ID: <176298170747.2933492.1138307568642008557.b4-ty@oracle.com>
+        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, jejb@linux.ibm.com, lgirdwood@gmail.com,
+        broonie@kernel.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, wenst@chromium.org,
+        conor.dooley@microchip.com, chu.stanley@gmail.com,
+        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
+        naomi.chu@mediatek.com, ed.tsai@mediatek.com,
+        chunfeng.yun@mediatek.com
+Subject: Re: [PATCH v1] dt-bindings: phy: mediatek,ufs-phy: Update maintainer information in mediatek,ufs-phy.yaml
+Date: Wed, 12 Nov 2025 21:46:55 -0500
+Message-ID: <176298170716.2933492.7751949109863545912.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251104142413.322347-1-markus.probst@posteo.de>
-References: <20251104142413.322347-1-markus.probst@posteo.de>
+In-Reply-To: <20251103115808.3771214-1-peter.wang@mediatek.com>
+References: <20251103115808.3771214-1-peter.wang@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -86,46 +93,35 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-11-12_06,2025-11-12_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 mlxscore=0
- phishscore=0 mlxlogscore=837 spamscore=0 bulkscore=0 malwarescore=0
+ phishscore=0 mlxlogscore=924 spamscore=0 bulkscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
  definitions=main-2511130017
-X-Proofpoint-GUID: tCSgM7zqdqWUM03A24EvGtKiBepTVcVQ
-X-Proofpoint-ORIG-GUID: tCSgM7zqdqWUM03A24EvGtKiBepTVcVQ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEyMDE0NyBTYWx0ZWRfXyp4CJlRJ51Yi
- 3W4MaNr/8JWPc+/bvvapYG+/Z49NZuq1t4V6P9kK0Gil5nk+EJWtz7URGY2MmGJ+Q16X4HqHLv7
- hNFDS/LuegVHU+t9u/lvH3Oz7r9/UlKOtXqBAmnTv7QGUQIOwGUhjYPyzqTtowk1dRBP3Ftr8fb
- wagf5/5cggvjKdupe4/zb+dfmCWrtG4YapPBYaHyT/F72f3DD925tkOqaWUoGZwkzZga3hya6bZ
- 38d1gBRnsFv85CWSl8W+CT6EWjKicV3MRHNpMtdePQ/l0ttO10oJouN+1+14ZUpeA11ITj9aveS
- Tl9KvzmtxROZXuVDwHldCYb2RLct0AYm3NjylRUb+MC+c2vXA0uufdOIxHalJCeIf/RnRk2A+sv
- ceGJms4m6Sz1FCifKs3lLSUQUX0sDy4GTq52ceR4nZAkH0PtTe4=
-X-Authority-Analysis: v=2.4 cv=X7hf6WTe c=1 sm=1 tr=0 ts=691546b1 b=1 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=Criys34D c=1 sm=1 tr=0 ts=691546b3 b=1 cx=c_pps
  a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
  a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=KwMgZv5xIcckdayViMQA:9 a=QEXdDO2ut3YA:10 cc=ntf
- awl=host:12100
+ a=VwQbUJbxAAAA:8 a=mpaa-ttXAAAA:8 a=8d0GUG1h20LVvl_VnrYA:9 a=QEXdDO2ut3YA:10
+ cc=ntf awl=host:12100
+X-Proofpoint-GUID: IeOeuSWTlTrpHkCLnld7n0QRG4Xbhs5D
+X-Proofpoint-ORIG-GUID: IeOeuSWTlTrpHkCLnld7n0QRG4Xbhs5D
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEyMDE0MSBTYWx0ZWRfX9hbFk6XYutWW
+ Yw7di95yWfu4YBraVPukJnMQ3rL3LgBLjU45S3j4/On0OocZqamzibfRHrN25ewELf036lHNgZb
+ ocRqjtcAmEFBstn5lkCHBt92p8nYFTiKKCu+UjganwOUDFl2rNPVr+uqMhmHgAi0rKTdS5uuucZ
+ Nakmo6jG4CS72zn6vgTFbhWHuXu9rehqhT3IbiX3V09g3QZ5Mhbug5odUW/PCZTuQDk4zCIVybs
+ RtL5XI13vbVCNvz+zqxVjU9lnrm7y5yq4R+DmHdrYM19V0iFjHpJ5DsS7Zgvlu282zdwdM7dIow
+ vYuwk+pAfUwdZsqF62XLSQm6uKlJW5H7U7k/LDpAvpht/EaATwJQf3acFLFUHb3E0cNhRuxZzwP
+ VrS0lDd+Zwu3TNzsGErQDLAcV67CglrMjT1PRHOz5TiCmo0YLFE=
 
-On Tue, 04 Nov 2025 14:24:31 +0000, Markus Probst wrote:
+On Mon, 03 Nov 2025 19:57:36 +0800, peter.wang@mediatek.com wrote:
 
-> This series adds support for power resources defined in acpi on ata
-> ports/devices. A device can define a power resource in an ata port/device,
-> which then gets powered on right before the port is probed. This can be
-> useful for devices, which have sata power connectors that are:
->   a: powered down by default
->   b: can be individually powered on
-> like in some synology nas devices. If thats the case it will be assumed,
-> that the power resource won't survive reboots and therefore the disk will
-> be stopped.
+> Replace Stanley Chu with me and Chaotian in the maintainers field,
+> since his email address is no longer active.
 > 
-> [...]
+> 
 
 Applied to 6.19/scsi-queue, thanks!
 
-[1/3] scsi: sd: Add manage_restart device attribute to scsi_disk
-      https://git.kernel.org/mkp/scsi/c/8fdfdb148816
-[2/3] ata: Use ACPI methods to power on disks
-      https://git.kernel.org/mkp/scsi/c/ce6d26b5330c
-[3/3] ata: stop disk on restart if ACPI power resources are found
-      https://git.kernel.org/mkp/scsi/c/8c59fc1c90df
+[1/1] dt-bindings: phy: mediatek,ufs-phy: Update maintainer information in mediatek,ufs-phy.yaml
+      https://git.kernel.org/mkp/scsi/c/ad4716ad48d4
 
 -- 
 Martin K. Petersen
