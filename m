@@ -1,108 +1,187 @@
-Return-Path: <linux-scsi+bounces-19217-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19219-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CA96C6AFAB
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Nov 2025 18:32:13 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6810DC6B47D
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Nov 2025 19:50:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 705C92B9B6
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Nov 2025 17:32:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id 0146C29138
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Nov 2025 18:50:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B82533C19D;
-	Tue, 18 Nov 2025 17:32:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9217E2DE1FA;
+	Tue, 18 Nov 2025 18:50:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="zKZ+YgB+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LIQ0xxrX"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 003.mia.mailroute.net (003.mia.mailroute.net [199.89.3.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC14933C189;
-	Tue, 18 Nov 2025 17:32:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312512DF71B
+	for <linux-scsi@vger.kernel.org>; Tue, 18 Nov 2025 18:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763487127; cv=none; b=CXa3U3/xbvhKS0tkJymifS+AWtS2ND2g5nbwx0XoTj70ZOWcfALfMvz7deON1E9NyTnYQ/4lUXxtyY7amdkLi8bs2txF2+6CLOGaxnE5ynR2k6kpChDvHSiTG3UFQmsA0X9570MONgPh6r0K+u7Wo+ekqWLPNuCdhz6G0kZt6Gs=
+	t=1763491831; cv=none; b=U/2NGNBXHD1E3FRwUKASe3imaS4aeR2xutdhx/UVZozN8Z+wJj8TXv9t/Oc0TDoq+Gv5VdlEKoSOetLZVtLIwHFHcE8Tx1CajHk/h6ppZsN1dsTGIhKvdEgJ1kx8U+lBQDENPQI+nyLjmFBTpjnGpZhn1oB3NM2s54jw+klitA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763487127; c=relaxed/simple;
-	bh=iKbJl8xVpniMCgJ5orBlSij/L73PPQUhbimiUfXkh+w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=LR3f1IlSWqVUgNsxL3SLnf2bVfk2HBaSR4lImfbjtHs31uXu+1H84Jnis23VCC9UjcfHbUJQfqZ4j5pRPqe71KFTi/XV0qf+oI/8E8YnWI5+98U4XgtBhcKPCW3nC4iJ4ggijsek2S6Zhxjk2fPQDo9E0iCzAlUwLvQzY7z3x2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=zKZ+YgB+; arc=none smtp.client-ip=199.89.3.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 003.mia.mailroute.net (Postfix) with ESMTP id 4d9s9w4snJzltMVZ;
-	Tue, 18 Nov 2025 17:32:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1763487123; x=1766079124; bh=iKbJl8xVpniMCgJ5orBlSij/
-	L73PPQUhbimiUfXkh+w=; b=zKZ+YgB+oBDs4bb2xuVJFIvPQ264tEiTVch343DB
-	OJaR0yWy8AoMbNm/VfqRSyV/ubh5IJumnBTHdMrLXj5aU3k+jjTJtfDa0AgOPU54
-	yClpOHr4GX1wIPXBpuSiE0z2QtJEeES5nCcm9QiX+DMEgwxiepwGbAbEd5xuKman
-	n2292U3gwUt0wO2SMJ95pde+tDBYT1ecWgoM5fBOekS1fCSfMnIT/PgJ5yadw9v7
-	CVxbg0qqZAnseUSQVaqg2fQzNF3Nb7DT/Wv43pRpLEVvCHq9r3TYNsWrrFx0y/eU
-	RwbpzR/WtYzbVIKbk40chtqnE34+g6T+lemXMTqEPAEPDw==
-X-Virus-Scanned: by MailRoute
-Received: from 003.mia.mailroute.net ([127.0.0.1])
- by localhost (003.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id x6kDp3IJ6Rms; Tue, 18 Nov 2025 17:32:03 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 003.mia.mailroute.net (Postfix) with ESMTPSA id 4d9s9r1x5Bzlh3sX;
-	Tue, 18 Nov 2025 17:31:58 +0000 (UTC)
-Message-ID: <64bbe1aa-db10-4766-bcde-71a36d853987@acm.org>
-Date: Tue, 18 Nov 2025 09:31:57 -0800
+	s=arc-20240116; t=1763491831; c=relaxed/simple;
+	bh=FHR1vghh3/Ry94P21SXhw8smish6xFij+qwri1zqTjg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P+rtfUEm6Qtmg0uBkmpureumkjs9EbpUQZE6HJfYPb1vhV08TBwQn47amrkfAnBvWit0wuwFW+4Arkbc+hyfTeqAM77i+7TxTEYmUK8vPsXOMDFbUQgpsfSKWk1f31VV4ApiS7wuR1dAm7B2gNFziCi+loVn/Bn1V//W8ShNP74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LIQ0xxrX; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4779fd615a3so2277445e9.0
+        for <linux-scsi@vger.kernel.org>; Tue, 18 Nov 2025 10:50:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763491827; x=1764096627; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/xelqTh0MJxdYizhebw3VTy7C2C4gWnDlrkViLNdgoU=;
+        b=LIQ0xxrXQWQtmEb6OWHzz4PyETg0i3Uw21zC8mPfIRT7zfrT9WATNk/f5o5HFWqSw3
+         GHZa+BEy2LfmeNkJ6Ghqu9WoGVm3+cqnzv+jIoUiy1hpcCJnFST3f9SdFwCimVJWpYpO
+         nOYdofIi5m0ZJyu8Ci9mPqxbTLduex4Qv1vT0z23xsPBY1XA1YsY/aECC1lvl86KDILB
+         jMV8gXDK5dGx0puOyOuAnZWQAjt294/94HSjMWYlLvmnjNh4Q3Dg+0VLRyYc/oJB4J0P
+         /qwVF8RrWsNLKDUzz6fYvmYz20m81WCCyCmtDqOcVpwLWSjIKGtM4jjJmqS1q+ZSJgRe
+         aPOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763491827; x=1764096627;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/xelqTh0MJxdYizhebw3VTy7C2C4gWnDlrkViLNdgoU=;
+        b=v/rbGOaSttHy9aWja7ou9Uv4oaRhgzgeUNA/7i0noezFRtPTQBNiCT50uAF4tkZjZ3
+         MnvaVDFsFFy/KbhbZeS99rIZzY4n/jygQfKsRZ5xHomrRDmYGjuAj7v3cAWMPbrh7B/0
+         XPvHVIKar9Y5uibPqdQgr3BgEDbJJkmLnym7W/gN/X+XnnaFCfwhOTfBRk7yHGA+w1Tt
+         PuWWWLZx/leUTBR1Y590fB0J5puvuVKlm9N8SWjOP+rJeFvNmr2tfO5z27Dve+CvwmW8
+         qf1fh756YRqdq0Gq05qHLDW3SwJttTOW/g91Tx5QdXgn8vLlCNMV+3ApNcyRUHbo/Pyw
+         zwaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUxz72p+4sCuI+jGiDhNVK/KhrUycKnWn+UozlZNSYiV2YJM4LV0EKXpdu98PeP2VfzqZzF//TW0Voa@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYCNauRboweQeB79C8SKwD6vUQeh3ZjD1tY3GvyMTRTamZOltl
+	MV4SMvO73feA6J/jyFtEfGcvMLQVqXS0iuDfq6KkWLtHFCjijaqkAIct
+X-Gm-Gg: ASbGnctNUBK4dNz9YeGhHQWlzlhNHehi2q5iTsK79Xld4C6CMFC4afUPOHpWT5JzXI0
+	o6HW691ONC/Tw0P6/IH3rKjTAcy24CdFw40u0nldxaRB4dYZ+milVsK7RjAMin++2CfCw+8EByD
+	3taE9GzdKjvHTh1vtY/nmoHq8Wp/C+z4SqxN0Glo9U2veBffzefQyY4L2f9wgf9ZCotXONbE6Ys
+	wDlT5SjQo8d+F6SX56N0QPimJaqntIcd2MrJKG8WUDLw2BXKIgJYqLfKmWH3RzgKAFIVgStiM+t
+	1dKuR4tchGEzbd3R9NglHNymMyubdok93VLWM9uT0JY9B+e/2C9Dk+uQzjn7CkXVLJRTyGfgbEo
+	z/YMkej23XVBFfgQumjdTlX1KVf3uT7Ex1Fbf52eD0i4jvitoXt2bUm4WgB0adCphvvGg48io+o
+	ME+qxFn5CvnpX5
+X-Google-Smtp-Source: AGHT+IHx6i4VYWR6pSTcXtSoFlN4Y9U/3Z/PI54PVyQA5JnsfbBaJwpdM3LzkIBKtiuh5JtXbYxanA==
+X-Received: by 2002:a05:600c:1547:b0:477:5c70:e14e with SMTP id 5b1f17b1804b1-4778feabadamr87966605e9.5.1763491827278;
+        Tue, 18 Nov 2025 10:50:27 -0800 (PST)
+Received: from skbuf ([2a02:2f04:d106:d600:9ac1:9a91:7d1:a813])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477a9df99d3sm22110705e9.12.2025.11.18.10.50.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Nov 2025 10:50:23 -0800 (PST)
+Date: Tue, 18 Nov 2025 20:50:17 +0200
+From: Vladimir Oltean <olteanv@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Corey Minyard <corey@minyard.net>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Rob Clark <robin.clark@oss.qualcomm.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	Vitaly Lifshits <vitaly.lifshits@intel.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>, Calvin Owens <calvin@wbinvd.org>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Sagi Maimon <maimon.sagi@gmail.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Karan Tilak Kumar <kartilak@cisco.com>,
+	Hans Verkuil <hverkuil+cisco@kernel.org>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Viacheslav Dubeyko <Slava.Dubeyko@ibm.com>,
+	Max Kellermann <max.kellermann@ionos.com>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	openipmi-developer@lists.sourceforge.net,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
+	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org, linux-mmc@vger.kernel.org,
+	netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+	linux-pci@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+	ceph-devel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Gustavo Padovan <gustavo@padovan.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Andrew Lunn <andrew@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Rodolfo Giometti <giometti@enneenne.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Stefan Haberland <sth@linux.ibm.com>,
+	Jan Hoeppner <hoeppner@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Satish Kharat <satishkh@cisco.com>,
+	Sesidhar Baddela <sebaddel@cisco.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3 14/21] net: dsa: sja1105: Switch to use %ptSp
+Message-ID: <20251118185017.kk7binsumhh27n7x@skbuf>
+References: <20251113150217.3030010-1-andriy.shevchenko@linux.intel.com>
+ <20251113150217.3030010-15-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] UFS: Make TM command timeout configurable from host side
-To: =?UTF-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= <peter.wang@mediatek.com>,
- "sh043.lee@samsung.com" <sh043.lee@samsung.com>,
- "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-References: <CGME20251106012702epcas1p28fdeed020ea44f18dcc751c283fbbcc2@epcas1p2.samsung.com>
- <20251106012654.4094-1-sh043.lee@samsung.com>
- <e98df6a1b10d185358bdadf98cb3a940e5322dcb.camel@mediatek.com>
- <009401dc52e7$5d042cf0$170c86d0$@samsung.com>
- <f3b1641b9e611f2e4cac55e20a6410f9a9a88fa3.camel@mediatek.com>
- <be4dc430-ce62-46a8-bd42-16eb0c23c0a0@acm.org>
- <8d239f26e1011eee49b7c678ba07fd4d9ca81d24.camel@mediatek.com>
- <1bf9f247-8cd7-400e-a5c8-6f3936927dfc@acm.org>
- <b83804a8419f0e8cc1a6263144fbaf1583bab2ed.camel@mediatek.com>
- <000001dc5791$5f2ea880$1d8bf980$@samsung.com>
- <e3dcb711-990d-4e4e-a128-8a0cd0ce8886@acm.org>
- <a89ccf64710deeadfce9cba08e28867f88463c77.camel@mediatek.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <a89ccf64710deeadfce9cba08e28867f88463c77.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251113150217.3030010-15-andriy.shevchenko@linux.intel.com>
 
-On 11/17/25 9:55 PM, Peter Wang (=E7=8E=8B=E4=BF=A1=E5=8F=8B) wrote:
-> However, in extreme cases, it=E2=80=99s possible that after a 30-second
-> timeout, the device just send a response, and at the same time,
-> when the host receives the response, the IRQ is pending by system.
-> (other irq is executing or spin_lock_irq, etc)
+Hi Andy,
 
-It is not clear to me how this could happen? If a response is not
-received in time from the UFS device, an abort TMF is sent. If the
-device does not respond to the abort TMF, the UFS device is reset
-(ufshcd_device_reset() is called if ufshcd_abort_all() fails). This
-prevents that a response can be received after the error handler has
-finished, isn't it?
+On Thu, Nov 13, 2025 at 03:32:28PM +0100, Andy Shevchenko wrote:
+> Use %ptSp instead of open coded variants to print content of
+> struct timespec64 in human readable format.
+> 
+> Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
 
-Thanks,
+Acked-by: Vladimir Oltean <olteanv@gmail.com>
+Tested-by: Vladimir Oltean <olteanv@gmail.com>
 
-Bart.
+Thanks!
+
+This is a rarely modified portion of the SJA1105 driver, and it doesn't
+conflict with other changes that I have planned, so from my PoV there is
+no problem with the patch being picked up via other trees.
 
