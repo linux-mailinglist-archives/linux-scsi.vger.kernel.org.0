@@ -1,107 +1,118 @@
-Return-Path: <linux-scsi+bounces-19239-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19241-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 644AAC7155E
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Nov 2025 23:46:39 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11253C716A9
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Nov 2025 00:09:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 671562FD56
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Nov 2025 22:46:38 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8FDB8348D41
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Nov 2025 23:09:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FEE1335BB4;
-	Wed, 19 Nov 2025 22:42:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6538329375;
+	Wed, 19 Nov 2025 23:09:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="XpU1b4FH"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="3d1LRML4"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from 003.mia.mailroute.net (003.mia.mailroute.net [199.89.3.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 912DF332EBD
-	for <linux-scsi@vger.kernel.org>; Wed, 19 Nov 2025 22:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5F431B822;
+	Wed, 19 Nov 2025 23:09:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763592173; cv=none; b=rYCD16/dW/whbDi0dnt1wRjlJd55YDyq8CFD/UDDnPqZcRvgo+9ztM5qS9Y5wW4xVnB8+R9FtHNtv9Vw7thkOgUZL1HqE08Wa0p3QLc2H0jfqN8O+OaKyTPpTvf96tQDvV89IGxgcwoCSir+NGbfM6V9EidwAFQXJrR4dx6kD0c=
+	t=1763593760; cv=none; b=jcAnARb/T4BB7WaNtRTSEThJKycu1mKpOFBHCwz+5ghhzkTRz7/+7tmD5zef054EB9QuRyPzsqjXkv/+aUogt+lwAT8xZRiujjUup9lLDjlhDqrTtOAAB8lhfTDe4Dxyx5iM+BD/cZOMk/wGq+PFwDf3vhnRd58aAp/gCCr+yWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763592173; c=relaxed/simple;
-	bh=B/BgXU5jGXqJ8fx8DyMLnoTeMyEquDEs1wZn5Q9FMGU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JfnSorkM9QadexTVN00TpkIJv55jFOvVd2eofuS0/tFYg2c96ogI9CASnCje24JnFUQ+s3QzcFhap5h98k2wdqAELxggNHZ5BOhigucKXyHgrrabuyoUsMwga8Z+M6qEc9CAFvgsoDfjZ3pYiw2kuYpQNCXKDcjVaB+9lEo44Bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=XpU1b4FH; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1vLqsz-006kxE-PT; Wed, 19 Nov 2025 23:42:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
-	:Message-Id:Date:Subject:Cc:To:From;
-	bh=7Jg96M0LjfV6/eOJGD1SEnq9R+t62GdGi4Bj0LyUpIg=; b=XpU1b4FHNKlpt6uwtsYlM79geS
-	N2oR9Qnt6KgDPVal4oFlF7GAgyv8JNyloJjV3NA88L0/vKvVHgLzHwi/MSf9LjntyiGon647xG7Rm
-	/m4I8QSpM7TsIPNRzOmL5V1/LQqGuQbkWlGWoZdoxHoMuSLnRH5YXICQ3v7jPbYhTbVQba/374OEo
-	7TJ7q3meKGbrzxZvuKVxB6w3lqAJpjK49sWeZh96FNwyGm6m5vNjJkYQsOtRTosh509xr3Z6B+q6e
-	CCa0pLHG+2ZnIylMoZrwON/A+JT0LK68d8lxpJPphtgysMjCmry62l4tagrDn9hqNjQA0/ld3QaDb
-	fkrqhZGw==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1vLqsz-00086G-H3; Wed, 19 Nov 2025 23:42:49 +0100
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vLqsh-00Fos6-4t; Wed, 19 Nov 2025 23:42:31 +0100
-From: david.laight.linux@gmail.com
-To: linux-kernel@vger.kernel.org,
-	linux-scsi@vger.kernel.org
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	David Laight <david.laight.linux@gmail.com>
-Subject: [PATCH 26/44] drivers/scsi: use min() instead of min_t()
-Date: Wed, 19 Nov 2025 22:41:22 +0000
-Message-Id: <20251119224140.8616-27-david.laight.linux@gmail.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20251119224140.8616-1-david.laight.linux@gmail.com>
-References: <20251119224140.8616-1-david.laight.linux@gmail.com>
+	s=arc-20240116; t=1763593760; c=relaxed/simple;
+	bh=48U3P296JngEYZDwTM1DjxIEBD3kVyCsdLXj322BcB8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PRPWoBQWzEBi10a5h7Qp7iWbHh0CATYvZnlroLHy0kwKZI7T89Mhm48dsCoGIZpTnZslOk60P+Y6ynqkQNkD4f0WOTm62Bmzc0c1exJ/V7Zs9OWqLn5N37IGvwO9j6I32jV1GowY5/tQsy89txkKDENhEPQwei7wvRKxFTUhqXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=3d1LRML4; arc=none smtp.client-ip=199.89.3.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 003.mia.mailroute.net (Postfix) with ESMTP id 4dBccQ2mDfzlvBxP;
+	Wed, 19 Nov 2025 23:09:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1763593749; x=1766185750; bh=koVPuGOvUsw69MMbphSKyma6
+	aYRpMsCzH/YNtIFlZx8=; b=3d1LRML4gWV4OZjTJS9ug+nYzEi/2AnhGMQ5bSV2
+	vHHQFDX4ssxLpNNkNEi/C13GRfpY5NAnRovfbFq9QCwlo2Hc5VUWWlHtBlDodHdD
+	Tf6x0DpVM2wrzkRfXBPKLHZWHjZ87Xs1M9Z5YIlCKGAVb1QKzmNfD8SIBFPmt9cY
+	WRHnwmUxQvCVmgimTITgmaphh2S31omjj6e85iWhTrb/fPXAb5YxVnd5HNbAnb8Q
+	mVXN4PyJg3dXVZstt5YtBtRIRC9PkR8idP1LL0K4FWVZHxh7PK1xnbDClw5o0OXh
+	4cRlVVX5lGU+XFuXAoNJqKldgz+IGmAaDIzLe2qGFCro4w==
+X-Virus-Scanned: by MailRoute
+Received: from 003.mia.mailroute.net ([127.0.0.1])
+ by localhost (003.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id oATAiD0aMpiL; Wed, 19 Nov 2025 23:09:09 +0000 (UTC)
+Received: from [100.119.48.131] (unknown [104.135.180.219])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 003.mia.mailroute.net (Postfix) with ESMTPSA id 4dBccJ02BpzlvDRD;
+	Wed, 19 Nov 2025 23:09:03 +0000 (UTC)
+Message-ID: <2a8c62e1-6e29-4ac6-b661-7b5ec1763288@acm.org>
+Date: Wed, 19 Nov 2025 15:09:02 -0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 26/44] drivers/scsi: use min() instead of min_t()
+To: david.laight.linux@gmail.com, linux-kernel@vger.kernel.org,
+ linux-scsi@vger.kernel.org
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <20251119224140.8616-1-david.laight.linux@gmail.com>
+ <20251119224140.8616-27-david.laight.linux@gmail.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20251119224140.8616-27-david.laight.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: David Laight <david.laight.linux@gmail.com>
+On 11/19/25 2:41 PM, david.laight.linux@gmail.com wrote:
+> From: David Laight <david.laight.linux@gmail.com>
+> 
+> min_t(unsigned int, a, b) casts an 'unsigned long' to 'unsigned int'.
+> Use min(a, b) instead as it promotes any 'unsigned int' to 'unsigned long'
+> and so cannot discard significant bits.
+> 
+> In this case the 'unsigned long' value is small enough that the result
+> is ok.
+> 
+> Detected by an extra check added to min_t().
+> 
+> Signed-off-by: David Laight <david.laight.linux@gmail.com>
+> ---
+>   drivers/scsi/hosts.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
+> index 17173239301e..b15896560cf6 100644
+> --- a/drivers/scsi/hosts.c
+> +++ b/drivers/scsi/hosts.c
+> @@ -247,7 +247,7 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
+>   	shost->dma_dev = dma_dev;
+>   
+>   	if (dma_dev->dma_mask) {
+> -		shost->max_sectors = min_t(unsigned int, shost->max_sectors,
+> +		shost->max_sectors = min(shost->max_sectors,
+>   				dma_max_mapping_size(dma_dev) >> SECTOR_SHIFT);
+>   	}
 
-min_t(unsigned int, a, b) casts an 'unsigned long' to 'unsigned int'.
-Use min(a, b) instead as it promotes any 'unsigned int' to 'unsigned long'
-and so cannot discard significant bits.
+So instead of the type cast performed by min_t() potentially discarding
+bits, the assignment potentially discards bits. I'm not sure this is an
+improvement.
 
-In this case the 'unsigned long' value is small enough that the result
-is ok.
+Thanks,
 
-Detected by an extra check added to min_t().
-
-Signed-off-by: David Laight <david.laight.linux@gmail.com>
----
- drivers/scsi/hosts.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index 17173239301e..b15896560cf6 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -247,7 +247,7 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
- 	shost->dma_dev = dma_dev;
- 
- 	if (dma_dev->dma_mask) {
--		shost->max_sectors = min_t(unsigned int, shost->max_sectors,
-+		shost->max_sectors = min(shost->max_sectors,
- 				dma_max_mapping_size(dma_dev) >> SECTOR_SHIFT);
- 	}
- 
--- 
-2.39.5
-
+Bart.
 
