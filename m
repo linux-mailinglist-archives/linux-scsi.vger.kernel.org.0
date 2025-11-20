@@ -1,81 +1,78 @@
-Return-Path: <linux-scsi+bounces-19268-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19258-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBC95C722BF
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Nov 2025 05:21:35 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2960BC7227A
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Nov 2025 05:17:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D48693538AA
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Nov 2025 04:19:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C55004E4E2E
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Nov 2025 04:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C61331062D;
-	Thu, 20 Nov 2025 04:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E778E28FFE7;
+	Thu, 20 Nov 2025 04:16:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BAWsJUH5"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="R/llkZ8i"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9DF430AD04;
-	Thu, 20 Nov 2025 04:16:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188D62C0F73;
+	Thu, 20 Nov 2025 04:16:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763612216; cv=none; b=R5Jx4jTt9v4d0zwb858ljJQrQSAbdDqItXUMktRx1OnJk0uYLAVBKzYWlUzJCIe8/tuN6Wb53/A28TYHXlOOMoRiBs63fDmX48MevJ7KI3FAR2Wlis/dENa8hcv7b7IDDCFfbfe9K1Yv6Ksup6By+jsxy9KIOIBENTzialVXdZ0=
+	t=1763612204; cv=none; b=iSXbjbfET2gazysACW7tf4zG0gbEZm/quJRRmCLPvDRg7IRQP0Ff0jK31JqZQpY65WpGhTrI/ExGw5XVw7EIuSDuiRB2/d37A5kR4vRJLuGy2sYEXXOvaCP5dt5ul+eZzmfpPtmG+roo97cmBir5qEz5bO4u8wRhDgbj6N1pMj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763612216; c=relaxed/simple;
-	bh=B2WM4/nTzlSaSPqQMZXWxCORe/W5qIV0EUlH9xWJJEM=;
+	s=arc-20240116; t=1763612204; c=relaxed/simple;
+	bh=2+R7WWApY8TWGd2c9bP1RaQKspmfGyy6mhjQCc3vCzI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ElzfsKV7zpYoyyERFa0lY4VMEC7YQf7OvtsLR5Wj3pY4Zg5rds866AjCLvof11kf0ADyh89fOeBWeLnESdwBO3hGgV6XR539TyQme6aQq47w+wmVMZxvmqHdDId0BF1lEXEKeo/th9k5PvX7o/Cve+nZrwQC8uZVIYuj2D5ySOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=BAWsJUH5; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=fdhM8Rukqsy5Mi2wUvLGsUFcp3hd4k4Kbs5imf3FiHasYCCG1/IVShMBz0j5WMuV31a1ZAtmkdRlfatxoXN4Oqge5WDtlR70nzLdf/USx8PYW+HAtCJQswZ1sMbBT4GIeZoh0Th1/C61UHo9N9zHaFxzPy3Dp0uvo0lIYKIx2nI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=R/llkZ8i; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK1OgpS031011;
-	Thu, 20 Nov 2025 04:16:36 GMT
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK1NVSG013261;
+	Thu, 20 Nov 2025 04:16:37 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=1hK2YgKHTrvuCLZIfV7VQYEh5NGYOdrmguFQip+ZnDM=; b=
-	BAWsJUH5VwOSTzcU87mCMZROLSncXmUCG/6XfHiUaPoBzfMXdotE2rZUxRho5rJ2
-	kLFxaAU/9B0qDHHx48U96eb/tIIamne+2K+JZC9jkihAm41NkRlQuTMEI5bZw1WK
-	Zb8B+sCy7cO15yWczEOqaG7Lsvt8JLIwodqZtKPPzNiwk8Qg7C61IQ+V0ZfGl4rO
-	MN7c3qG6h8HzM+wiLeoV8/lulFu4nXFwTkF17UOC0BSml3oMrTz3K6X2GZFrLCZ9
-	B8r4vVDEHVpRgjAB4T5wCYJxGeWjMBV1skK2KA5H7yFDY5P3IbowG62ouQpgwfoI
-	nuyQtke88YhorzXVnuDfug==
+	corp-2025-04-25; bh=uKJDSIG1l3qAAwUwQnYUyhPgHI+AfOXiCycqQ8h9e7Q=; b=
+	R/llkZ8irJLEGQlcnD63IC/un3n2XfOPnXXRgd+AEXIOU7rGf1ylkjLEffo31tPw
+	988T2FqvV0AjjpQaw6rRi9HQReG1IXWRyQRyvEravj2ayQNTBUWKKobZKw5wej1D
+	WCahd2+Q5oL/v3iD7kxaM2IhXLuXAUxdQcarDDpjzXl71hCpT028MYbmvohy1X94
+	PSdK10EvVy9++b7dGxmzNu/AmrLEL0fCBOoYhsvlvyD5hfMsm6Nf69K20chyq4tg
+	t0wF+3nZuT+CwlmxyqtRF4SlBYCzymJG8PsW/1bxSL9xXcG/hrXwE3n8PM/VqpQ0
+	GlkSO8+5Xuo60U6lziJtqA==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4aej968bhy-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4aejbur8wx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Nov 2025 04:16:36 +0000 (GMT)
+	Thu, 20 Nov 2025 04:16:37 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK2fkwW007189;
-	Thu, 20 Nov 2025 04:16:35 GMT
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK2RGMq007200;
+	Thu, 20 Nov 2025 04:16:36 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4aefybh4d7-1
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4aefybh4dk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Nov 2025 04:16:35 +0000
+	Thu, 20 Nov 2025 04:16:36 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5AK4GKPp012546;
-	Thu, 20 Nov 2025 04:16:34 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5AK4GKPr012546;
+	Thu, 20 Nov 2025 04:16:35 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4aefybh471-13;
-	Thu, 20 Nov 2025 04:16:34 +0000
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4aefybh471-14;
+	Thu, 20 Nov 2025 04:16:35 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-kernel@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Marco Crivellari <marco.crivellari@suse.com>
+To: "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        moonafterrain@outlook.com
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH] scsi: target: add WQ_PERCPU to alloc_workqueue users
-Date: Wed, 19 Nov 2025 23:16:02 -0500
-Message-ID: <176357169059.3229299.5787079886006984139.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Yuhao Jiang <danisjiang@gmail.com>
+Subject: Re: [PATCH] scsi: aic94xx: fix use-after-free in device removal path
+Date: Wed, 19 Nov 2025 23:16:03 -0500
+Message-ID: <176357169020.3229299.14175005699966083724.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20251107154008.304127-1-marco.crivellari@suse.com>
-References: <20251107154008.304127-1-marco.crivellari@suse.com>
+In-Reply-To: <ME2PR01MB3156AB7DCACA206C845FC7E8AFFDA@ME2PR01MB3156.ausprd01.prod.outlook.com>
+References: <ME2PR01MB3156AB7DCACA206C845FC7E8AFFDA@ME2PR01MB3156.ausprd01.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -88,38 +85,40 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-11-20_01,2025-11-18_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 bulkscore=0
- mlxscore=0 malwarescore=0 adultscore=0 mlxlogscore=999 suspectscore=0
+ mlxscore=0 malwarescore=0 adultscore=0 mlxlogscore=487 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
  definitions=main-2511200020
-X-Authority-Analysis: v=2.4 cv=DYoaa/tW c=1 sm=1 tr=0 ts=691e9624 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfXwy6xlBWwn3VL
+ ixw5f4RTVVF9sRRFthxugKIfxTN541zqhizi0sG9zhlfzeoLbx8KWDTKRpgiHCkdS0dL0+CQbC6
+ 2624GR3D65cLDM8BHa6iK6zynPRSg9tG/qV2RD0UFe33ai2ysL2zUJOHNr9jzwqWudtiXRpEXrM
+ y3zl6lbxi7vsT5hggoiQfZtHEIIwrvtj9DIm7C0eQyN7oM2SNvaenGTGvv11rffCYZ/K4VS1t/R
+ n7sIxkx5A5azblSO8jdtIn035zhq8wSJqlsJb6ohMBWi+EhiMXbS7fuIqZ4mvDcCkx8sg7vBhSj
+ 5brvu1TEo+kKlzWdUeur/U1bOamsKqMd79IgiRYR9Di8cjUMQF7RxP/CZMy88oos7OwWbflhHbD
+ 4aCv6BUb9Je/ft+BU9Q+l1BgV+9oUg==
+X-Proofpoint-GUID: Yse-u4KPXFgJEaPX_tg-VI0OeH2lR45M
+X-Proofpoint-ORIG-GUID: Yse-u4KPXFgJEaPX_tg-VI0OeH2lR45M
+X-Authority-Analysis: v=2.4 cv=Rdydyltv c=1 sm=1 tr=0 ts=691e9625 cx=c_pps
  a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
  a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=_suGTTe_43wmAZudwJ8A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: nnseIGoZyAabOqfZRThHhAKSGGYmnE2M
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMSBTYWx0ZWRfX6WN9lZgSFhLX
- /tUls+rl+z5NqGNYV25poSmcBhb87lX4EgQFDp+90HIlUFlINe/scpEr0a0RhRovgw90tV54MFa
- 4zhKdMQrAcjKJHtb9dyn117b9pR0gtODMNs+qhvAoL+UVIxxeFlzxe7jqCSpJQf1PIBuk3ali7x
- tix8u2ksY1bz+tZBi0VKHEaMDyOmvpxtGlOFh5vEZ+FXio9g24eUvhDu4Q2kLzXI/uhquBhSEIC
- o3TVL7K7fLT8d6Q/KcGlJrkkJpEc9/MYjX0Uq1if8oFbjMdWch0AnW37/Q+zErHXNkRuZvji244
- J677yY7F0dtvmNIWfHTWrG2r2TYRmvIAjJudUTFoBmOxE/ryCU1jAOYikAPaylyeRCj9hK0J3nz
- 5LOQGr2Pe+Okv+XKXix8JyPv9/z8sw==
-X-Proofpoint-ORIG-GUID: nnseIGoZyAabOqfZRThHhAKSGGYmnE2M
+ a=VwQbUJbxAAAA:8 a=UqCG9HQmAAAA:8 a=-IL5odScx_SrRfHQifgA:9 a=QEXdDO2ut3YA:10
 
-On Fri, 07 Nov 2025 16:40:08 +0100, Marco Crivellari wrote:
+On Wed, 29 Oct 2025 00:29:04 +0800, moonafterrain@outlook.com wrote:
 
-> Currently if a user enqueues a work item using schedule_delayed_work() the
-> used wq is "system_wq" (per-cpu wq) while queue_delayed_work() use
-> WORK_CPU_UNBOUND (used when a cpu is not specified). The same applies to
-> schedule_work() that is using system_wq and queue_work(), that makes use
-> again of WORK_CPU_UNBOUND.
-> This lack of consistency cannot be addressed without refactoring the API.
+> The asd_pci_remove() function fails to synchronize with pending tasklets
+> before freeing the asd_ha structure, leading to a potential use-after-free
+> vulnerability.
+> 
+> When a device removal is triggered (via hot-unplug or module unload), race condition can occur.
+> 
+> The fix adds tasklet_kill() before freeing the asd_ha structure, ensuring
+> all scheduled tasklets complete before cleanup proceeds.
 > 
 > [...]
 
 Applied to 6.19/scsi-queue, thanks!
 
-[1/1] scsi: target: add WQ_PERCPU to alloc_workqueue users
-      https://git.kernel.org/mkp/scsi/c/2e2e559390db
+[1/1] scsi: aic94xx: fix use-after-free in device removal path
+      https://git.kernel.org/mkp/scsi/c/f6ab594672d4
 
 -- 
 Martin K. Petersen
