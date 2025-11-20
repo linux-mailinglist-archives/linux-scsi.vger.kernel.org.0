@@ -1,82 +1,84 @@
-Return-Path: <linux-scsi+bounces-19264-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19267-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 620DCC7229B
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Nov 2025 05:18:36 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E32EC722B6
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Nov 2025 05:20:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9F531352728
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Nov 2025 04:18:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7A7AE4E4ED1
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Nov 2025 04:18:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9798D3081B8;
-	Thu, 20 Nov 2025 04:16:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C1FB30CDB4;
+	Thu, 20 Nov 2025 04:16:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="KF6d1iGo"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="AnVump8u"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51AAE3054DF;
-	Thu, 20 Nov 2025 04:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3832DEA6B;
+	Thu, 20 Nov 2025 04:16:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763612213; cv=none; b=LmNHheqhAR3cAyT4zeLEYAVS+pVvjqVUPhqSaREVChgFxfRKbEWZwlXAPyj61q+hhbrDFrs00j+GhzL3KekRjY7KheMJ2CijeoOQMxXIlb86eSG0sLUm9Ad7oC004Jl7chtLR6kwIIzJdx+5NySH0vP6tlV3Sl3WnxLKQ5CLTAk=
+	t=1763612215; cv=none; b=R0Ez1zNjoGZop9n5jjNdZJRCVN9k62mJMBuZei+9vlHAUg6flrlXu7kh0TOA6kE/TDb/AlHRzilGa051NdsHs6FoUiWZjoqQu2Lp1RTNQWKXspwXutxyGVcHoQPN/fEtWw59vK9vYt+7GLn7kh8Pxa2BXBIqik7E74e+T9wFX6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763612213; c=relaxed/simple;
-	bh=hoY04vuzntzWqYXNiRq3TYQVLQL4mXds1UWNF5uaqyA=;
+	s=arc-20240116; t=1763612215; c=relaxed/simple;
+	bh=bgSYNU2aCMwq3fR7x7MfYGW0c/eL9t4xja8xK3SRf14=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QSDgD7SnFswJzFvc6GX752bbyKTuvdn7Ptdrc6cOKsWg4XiuOv4N/KmJRBZD0QfhffxbP3qLoxlJB0GxYgqwmYa3JTxmDYHAWwLA8Aw+53gDW1OevoZxvhQNrxf//1bsXGU+nwNRCbqcVhxCVUgPstfX+hHYMfnFft8JS0tGSVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=KF6d1iGo; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=H+Nr1CiZeIkh1sbykDuayDR5Wj4BVxoC3CTthk7B3jE4d/QCYNCT022jqt6vKwHDbx4J9/PlpFirE5DA2WMtsgHTKy00R6Fd4naodDlRsqzk+vhAQ7s6cua9cCcBnn5cyIbdEJyX7y4p7bV5xLal/7zsGrIxPoZxrOujC+zs//w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=AnVump8u; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK1NOvS029790;
-	Thu, 20 Nov 2025 04:16:31 GMT
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK1NwDs013793;
+	Thu, 20 Nov 2025 04:16:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=nucd/UvULR7AQa5eal63eJ57OKRhYlWvv9/fN0MLPkY=; b=
-	KF6d1iGoXmOgprC9XWnH/iTOfMuXJFtEReYRlymuFwZgEoKz1i23Hg2VDvjSf2Be
-	Z4DmVv0XLwAyXIKp47CZRMoceJieq3cbw9mSlEcpKJQmPOwTQ/MqcnBl60wbAQa6
-	x68RkK87nzvrvFkcP0RMu1LtSu9OcUZ81mmST9obYD0U5bLNAnH7U3GCFw01g9sx
-	rtmDGqfsXAavNudoPHoSEcd9avGShpFSUzjgrpHfijfF/cgnAJveaFSM6+txao8u
-	BilHhSFZ9/ZMxHh5+DlfA/cr+hK8tk+QdpQCv3smPcAjm8epDal2a/r1nfygVPR5
-	wzjw9vgsIZgH3O983XFohg==
+	corp-2025-04-25; bh=Evob1+0Xjc9tofuifMtusEp1SLihO2tyVA1l9BhU4Gc=; b=
+	AnVump8uBW9dfi0iN/nM3A7Bt8zVQD4mkgO8GC+grK/xHlNk/p8n3D6VJnwKoX1I
+	gFdDZc3D4zOVt1qn8yBOZtjIhkhsBfvcEdbXP5wouSwe1To5LPukAj97vhI5SI2q
+	f8JqzLICm5MXGFqvs4algRbqyg9R7qVlvv0/OHrtdDb9EAOW1Cl0F7Imm0fGSh4M
+	pAJBiQUnUnv9/b0o/0e7to1Dvk477h2ldS4mEETFwpBWmzcFsUtD8yZhLh70skj1
+	Q+nrAU+NdxlsJS6pcN4zfBUkhPWbCRm1m6lorjdx/f+1F+sLo7s4W+LFNpRI618Y
+	9OtcCBNNoYQm74Zt7rNv1Q==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4aej968bhv-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4aejbur8wu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Nov 2025 04:16:30 +0000 (GMT)
+	Thu, 20 Nov 2025 04:16:32 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK2KoeX007938;
-	Thu, 20 Nov 2025 04:16:30 GMT
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK2cpt6007231;
+	Thu, 20 Nov 2025 04:16:31 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4aefybh4bu-1
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4aefybh4ca-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Nov 2025 04:16:30 +0000
+	Thu, 20 Nov 2025 04:16:31 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5AK4GKPh012546;
-	Thu, 20 Nov 2025 04:16:29 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5AK4GKPj012546;
+	Thu, 20 Nov 2025 04:16:31 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4aefybh471-9;
-	Thu, 20 Nov 2025 04:16:29 +0000
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4aefybh471-10;
+	Thu, 20 Nov 2025 04:16:30 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+To: linux-kernel@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org,
         Marco Crivellari <marco.crivellari@suse.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
         Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
         Frederic Weisbecker <frederic@kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Michal Hocko <mhocko@suse.com>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Justin Tee <justin.tee@broadcom.com>, Paul Ely <paul.ely@broadcom.com>
-Subject: Re: [PATCH] scsi: lpfc: WQ_PERCPU added to alloc_workqueue users
-Date: Wed, 19 Nov 2025 23:15:58 -0500
-Message-ID: <176357169044.3229299.16284873382507442071.b4-ty@oracle.com>
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
+Subject: Re: [PATCH] scsi: message: fusion: add WQ_PERCPU to alloc_workqueue users
+Date: Wed, 19 Nov 2025 23:15:59 -0500
+Message-ID: <176357169048.3229299.14597102223382788221.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20251104110808.123424-1-marco.crivellari@suse.com>
-References: <20251104110808.123424-1-marco.crivellari@suse.com>
+In-Reply-To: <20251107141458.225119-1-marco.crivellari@suse.com>
+References: <20251107141458.225119-1-marco.crivellari@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -92,35 +94,35 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phish
  mlxscore=0 malwarescore=0 adultscore=0 mlxlogscore=999 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
  definitions=main-2511200020
-X-Authority-Analysis: v=2.4 cv=DYoaa/tW c=1 sm=1 tr=0 ts=691e961e cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfX+xU3U+ds8BmA
+ QQ6KgpqyLa1tKKXQlO7YvalS+poIgJ80I5RXoFa8A61j5Q6Fqh56cy2EIMg1008v1wl03pkKcX1
+ 8a/VvYbP+SM2gyG5K4R3tz3YQiSpQTT/dDkpwuwb58U736HhN8zGsQNgUwg9L+/xJWfEy1xz6Oi
+ 2Zm+MpR89oam5ucBD0D1BKnNCZQ4tY6Hgmpx0G42krXvMz65qsErLGQQIjfNrAwgVkXNP9tIJlM
+ mCJmKp17fjI9Ots6xBNGGZaX4TIVEQ+ovzheVCMybf97G4oiRYt/Xj14zigjMLcUknwB3ACd+Sh
+ XLqrG9Jh2C4+5buz2cDp++NCS5NVy8hCo+0E0GTSMCqRpapZ3o0AsEuToAvZzZP9Bsa2SImANpc
+ k1atkHakqtqlDtk3NbM6Tnx/skIQWQ==
+X-Proofpoint-GUID: gmY4UG__bdRibtFs281PvdwxBI8k0tUa
+X-Proofpoint-ORIG-GUID: gmY4UG__bdRibtFs281PvdwxBI8k0tUa
+X-Authority-Analysis: v=2.4 cv=Rdydyltv c=1 sm=1 tr=0 ts=691e9620 cx=c_pps
  a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
  a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
  a=VwQbUJbxAAAA:8 a=_suGTTe_43wmAZudwJ8A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: fRsVot2gvmxLcEoHH-erH5knOy944Zlu
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMSBTYWx0ZWRfXw8PBQTJW+z5h
- KfWBAiu9186uvxj5na+EpIzVimFiBdVkJaSOyihCo2i49au92226+lW8O3hm4ROxjKLu0Quaqph
- 0m2vkMP8ffswuNX0bO+zXW8kRpS1qrbFtG1lxiof4/06HTB82YgNJ+HN3Pm+2jg8/aSm4ukPgQL
- C/Pf2Xrby0rAPGQBJ1SsWrGOyB6G5TdMmM/1Hq6jia8QjxSRMydsajU74Kij6r8t4a7Fe0h0LmC
- 86uRD7OpP4gwoFE0jPKRsSHF8MkU7Yw1J93RSE+gVxMsbsdMqFIeSqvN4TLGXMiSMKHoiPX4Ki6
- 028y4MS3gwaXPFTgS8cQCABd+Aj3AD3QDTSqOPHIDrWcN/ASJXay33hhh2JHndGaW+CurjU5UT5
- G5WXRi6fEK0YPQla7+yo6LEHmSnnSA==
-X-Proofpoint-ORIG-GUID: fRsVot2gvmxLcEoHH-erH5knOy944Zlu
 
-On Tue, 04 Nov 2025 12:08:08 +0100, Marco Crivellari wrote:
+On Fri, 07 Nov 2025 15:14:58 +0100, Marco Crivellari wrote:
 
-> Currently if a user enqueue a work item using schedule_delayed_work() the
+> Currently if a user enqueues a work item using schedule_delayed_work() the
 > used wq is "system_wq" (per-cpu wq) while queue_delayed_work() use
 > WORK_CPU_UNBOUND (used when a cpu is not specified). The same applies to
 > schedule_work() that is using system_wq and queue_work(), that makes use
 > again of WORK_CPU_UNBOUND.
-> This lack of consistentcy cannot be addressed without refactoring the API.
+> This lack of consistency cannot be addressed without refactoring the API.
 > 
 > [...]
 
 Applied to 6.19/scsi-queue, thanks!
 
-[1/1] scsi: lpfc: WQ_PERCPU added to alloc_workqueue users
-      https://git.kernel.org/mkp/scsi/c/84150ef06f89
+[1/1] scsi: message: fusion: add WQ_PERCPU to alloc_workqueue users
+      https://git.kernel.org/mkp/scsi/c/f0dc44177ac0
 
 -- 
 Martin K. Petersen
