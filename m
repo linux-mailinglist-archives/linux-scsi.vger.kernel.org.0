@@ -1,76 +1,83 @@
-Return-Path: <linux-scsi+bounces-19255-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19261-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CF2EC72267
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Nov 2025 05:16:49 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C0D2C72286
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Nov 2025 05:17:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 40D994E49DB
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Nov 2025 04:16:44 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CCAAB3528F5
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Nov 2025 04:17:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CC462D8DC2;
-	Thu, 20 Nov 2025 04:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6B403002D3;
+	Thu, 20 Nov 2025 04:16:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="bj3lN1XY"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="JmlYGOuf"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E15289824
-	for <linux-scsi@vger.kernel.org>; Thu, 20 Nov 2025 04:16:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C97D2F1FCA;
+	Thu, 20 Nov 2025 04:16:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763612189; cv=none; b=ofZXDTVxs7bSZrHCS23x0P95/Y9XKq9hLrsbiVpcTjnufodSCTvxPazvYAD63qdbqNtU09bDfXOyVX6FalpSgMHPjlBqJRV5lKHY309v8ukHBBe7rHFZhvN1Uuv+8qhJIkCRE3Z806PX6j4TBh8eTNfFH3kr3e/syCGEkFNL67M=
+	t=1763612208; cv=none; b=IoxtI26LN7dJNIBCsv6YoEPupz+R+BnKmUCnCURF+MU43uKYSaWY7CMIjJXwJRDcsce5hfmfKXWLebdhnWBbvEhjr0PEdD59BEV1M66kMJW7ppRp55al/7Z8UkhmKz0Sj2MC9KNtI0mibAwJzd4A3HQHMJyQxMUcMvDvfi5vmD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763612189; c=relaxed/simple;
-	bh=30zL/yTx8fvLdlXRX6xIaSIDrWQcqP7dqU9hhe+qdFQ=;
+	s=arc-20240116; t=1763612208; c=relaxed/simple;
+	bh=dNxRrWGwSd7o4FFHjvTcIl2GWgnpdBMQaHTRaQvpIm4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kdJAssF4MSxxmKtWVABqOCdGwWYA2JWIhSpJtgtmqr3OJm0FHA6vFrfdNhfL3kR1DMGgDVrv7k8y7KyWTmx0TN0qXuN4/jWyZO5WeXdeDjHKRnAX0lp7l8g4FqUc2yGb1cQKZlNuX1C2auRZHdR/jKNd1oDVjJDz/30bNXK9I6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=bj3lN1XY; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=UhBPg2ZNNpqACczHjCk86Qi3/xo8hg2r9uVxQJ2ne1obEzkcRaIwV14Tu4AxMrg84ZkXAcm0sfin2VcnD1h6YzaDaBE21ejAPAnitmmIqO1Fd+NKI3ajYYrBsiNFYFW6pcC8QAR+mMQuQM8IyZLNuRkOW/yRfdY4wjb57p5O60E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=JmlYGOuf; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK1OgpR031011;
-	Thu, 20 Nov 2025 04:16:23 GMT
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK1NTo6006811;
+	Thu, 20 Nov 2025 04:16:24 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=qnfj0YTCpeiLQ6IVmSCTtVtDpWsoMkOM0S7dQALl5ys=; b=
-	bj3lN1XYKFdrjK7JVbS6RkIgP4NF8iqh5/gt1kIzEvqPXTEr9K5Ag9UAj6ZJe9fn
-	ywelVBp8g5KenlK4rTSNqG8TFC81idVXWlmm3/viQtoR598aIwmCkNL00hYLMopP
-	h9FSTXwA5O371qa/MmkqaGm7LCtcvmn5NrffN4gcnLoofYkBN+F/LYZi9iBk1ftW
-	G3Gi1GdMwR2bzqwIqbe3hMBMnQbd2ijmE/janmuiEXTjZ1Jj92wbr1uz+ae+rq/a
-	rWbwvxy8v4elU6rVqLDZaBi3R3ra6eVzY3JVYUwinj3ajR5GG7M7ahhBsB38y3GC
-	Vk8XQ2P9BMb1xSE/rybf7g==
+	corp-2025-04-25; bh=EfY00sq3wBLEslCoYcfPxdS2r5JfYW//pvy8RIl+6rQ=; b=
+	JmlYGOufaoxiaYkEst4C/7tSN29fDQ29wM/OlZljTPmFFHh/cPaCtMFQj+kU6+1P
+	Ud5nw54tXReF741+MktJ+GtZXMWQz+wPr+AEB96aAIEpvVDZI8Cl7eDcHhujMhqc
+	S59+Yf6B6WNGcJXP1vc6LAz0x7Cxi31Cz/bRSs3EmA9wPhkXf20pqq3I6XT3mMaZ
+	aVbvAQOhhvffc+fSxdjyEPj/HgnJ27vWBtM2qeo7HzcVuM+CG6hOynsd/onlho34
+	Sm5fq0lwirEzItzll6wBct7hzhRXijW4LN5WuMudpp4BTBu8jxBR83tYdV1bCUZY
+	8HEFyyGLgj1AYePZtyD0kQ==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4aej968bhp-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4aejd1ga3e-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Nov 2025 04:16:23 +0000 (GMT)
+	Thu, 20 Nov 2025 04:16:24 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK2drQF007212;
-	Thu, 20 Nov 2025 04:16:22 GMT
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK28lZh007971;
+	Thu, 20 Nov 2025 04:16:23 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4aefybh49j-1
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4aefybh49w-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Nov 2025 04:16:22 +0000
+	Thu, 20 Nov 2025 04:16:23 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5AK4GKPV012546;
-	Thu, 20 Nov 2025 04:16:21 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5AK4GKPX012546;
+	Thu, 20 Nov 2025 04:16:23 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4aefybh471-3;
-	Thu, 20 Nov 2025 04:16:21 +0000
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4aefybh471-4;
+	Thu, 20 Nov 2025 04:16:23 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Bart Van Assche <bvanassche@acm.org>
+To: linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Marco Crivellari <marco.crivellari@suse.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v8 00/28] Optimize the hot path in the UFS driver
-Date: Wed, 19 Nov 2025 23:15:52 -0500
-Message-ID: <176357169010.3229299.17397404904114047362.b4-ty@oracle.com>
+        Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Michal Hocko <mhocko@suse.com>, Saurav Kashyap <skashyap@marvell.com>,
+        Javed Hasan <jhasan@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>
+Subject: Re: [PATCH 0/2] add WQ_PERCPU to alloc_workqueue
+Date: Wed, 19 Nov 2025 23:15:53 -0500
+Message-ID: <176357169053.3229299.12133106434264079182.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20251031204029.2883185-1-bvanassche@acm.org>
-References: <20251031204029.2883185-1-bvanassche@acm.org>
+In-Reply-To: <20251107150155.267651-1-marco.crivellari@suse.com>
+References: <20251107150155.267651-1-marco.crivellari@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -83,100 +90,42 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-11-20_01,2025-11-18_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 bulkscore=0
- mlxscore=0 malwarescore=0 adultscore=0 mlxlogscore=894 suspectscore=0
+ mlxscore=0 malwarescore=0 adultscore=0 mlxlogscore=848 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
  definitions=main-2511200020
-X-Authority-Analysis: v=2.4 cv=DYoaa/tW c=1 sm=1 tr=0 ts=691e9617 cx=c_pps
+X-Proofpoint-GUID: jmMDco2C-BtwDlwuOvrp4bTs0LHZZAyu
+X-Authority-Analysis: v=2.4 cv=Z/jh3XRA c=1 sm=1 tr=0 ts=691e9618 cx=c_pps
  a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
  a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=lEJPKUlkNUVdK2lYoccA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: egGmx6simXFSWOC4dcQyUOUbzrDWzxlX
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMSBTYWx0ZWRfX0imFPPbZm3/Y
- WhY+fBYlyAcNO1qBQxnFQ7M1F/NmA77r38XZel7YZmWaBAZ7LY91IIYp7+zH0KAlUPz2lvwgsPC
- wVZvfLj727KnevGt2da6FJm3jW3TlsidZyGEzRZ7t1HyRukOSomDXbdJZnoKFkcmxiC5Hw5NNkK
- gbf8ydn5bDwoD3AjvTwHuEnlFPNTJxuntK+Wi44KHZSPvplpRuUujRrhHrToSYvpSJEuyrm7ebi
- OlW+dECopB5ip3gVEMhlPs/lvhhwtuKUtAuVuK0rF20DOSw1hyfvNoH7s1/ve4BsXtyMSEqjcy5
- 9DnvTjIZQAcSNomLQbeaqQm8+wrhSVIKBzEUxXdxKvToMDjy4v/j+uwFps/lUU9M0JmDnsQuojx
- 0XbLwRxqHO+y7PvO4paNUlhf14M5Nw==
-X-Proofpoint-ORIG-GUID: egGmx6simXFSWOC4dcQyUOUbzrDWzxlX
+ a=VwQbUJbxAAAA:8 a=_LVgOtpX0SWOOce4EqEA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMSBTYWx0ZWRfXzkwYph6tF8vz
+ Qcz9GW7g6nP+xnNop+UDFkjQ5FNUHVIIGy2zi2btOYxFux3NaBx5vwLozbMigtBIEaXChPtTx4H
+ VfkblwAVVYRhkZIx6r8RJB1+I7qeP762lJTEVptjb9p2U+v5xXag6pKxEEGLZZPVVTKvxBMdNl4
+ W/DH9ckXyNb3f9A+oYvSTViN8AYAJpcouRrScFAHF5RvGoD3cgruNaExKxQ5w1npoX/ehWC9wpO
+ n5QSRP0d2+BaLo1LEnQeE9F2zg3IuJ+03B0tA3tCxJ+CDMHqgrsxOHBTKAWPPNECH9ZJEwXHbwP
+ eoDaisXQZjImhZEDzPUPiCIvswaxIN0X4uJ3jofK6ycPZfQRs0BuW96JDA6QVbR1TteJ2eVb4Vd
+ 6LdVyZl7PbogZ84OBn/zuIlLvtdm8g==
+X-Proofpoint-ORIG-GUID: jmMDco2C-BtwDlwuOvrp4bTs0LHZZAyu
 
-On Fri, 31 Oct 2025 13:39:08 -0700, Bart Van Assche wrote:
+On Fri, 07 Nov 2025 16:01:53 +0100, Marco Crivellari wrote:
 
-> This patch series optimizes the hot path of the UFS driver by making
-> struct scsi_cmnd and struct ufshcd_lrb adjacent. Making these two data
-> structures adjacent is realized as follows:
+> === Current situation: problems ===
 > 
-> @@ -9040,6 +9046,7 @@ static const struct scsi_host_template ufshcd_driver_template = {
->      .name           = UFSHCD,
->      .proc_name      = UFSHCD,
->      .map_queues     = ufshcd_map_queues,
-> +    .cmd_size       = sizeof(struct ufshcd_lrb),
->      .init_cmd_priv  = ufshcd_init_cmd_priv,
->      .queuecommand   = ufshcd_queuecommand,
->      .mq_poll        = ufshcd_poll,
+> Let's consider a nohz_full system with isolated CPUs: wq_unbound_cpumask is
+> set to the housekeeping CPUs, for !WQ_UNBOUND the local CPU is selected.
+> 
+> This leads to different scenarios if a work item is scheduled on an
+> isolated CPU where "delay" value is 0 or greater then 0:
+>         schedule_delayed_work(, 0);
 > 
 > [...]
 
 Applied to 6.19/scsi-queue, thanks!
 
-[00/28] Optimize the hot path in the UFS driver
-        https://git.kernel.org/mkp/scsi/c/ab57a18665a2
-[01/28] scsi: core: Support allocating reserved commands
-        https://git.kernel.org/mkp/scsi/c/d604e1ec246d
-[02/28] scsi: core: Move two statements
-        https://git.kernel.org/mkp/scsi/c/21008cabc5d9
-[03/28] scsi: core: Make the budget map optional
-        https://git.kernel.org/mkp/scsi/c/a47c7bef5785
-[04/28] scsi: core: Support allocating a pseudo SCSI device
-        https://git.kernel.org/mkp/scsi/c/d630fbf6fc8c
-[05/28] scsi: core: Introduce .queue_reserved_command()
-        https://git.kernel.org/mkp/scsi/c/11ea1de3fc4b
-[06/28] scsi: core: Add scsi_{get,put}_internal_cmd() helpers
-        https://git.kernel.org/mkp/scsi/c/a2ab4e33286d
-[07/28] scsi_debug: Abort SCSI commands via an internal command
-        https://git.kernel.org/mkp/scsi/c/581ca490353c
-[08/28] ufs: core: Move an assignment in ufshcd_mcq_process_cqe()
-        https://git.kernel.org/mkp/scsi/c/dd4299af9b04
-[09/28] ufs: core: Change the type of one ufshcd_add_cmd_upiu_trace() argument
-        https://git.kernel.org/mkp/scsi/c/9f8e09230f53
-[10/28] ufs: core: Only call ufshcd_add_command_trace() for SCSI commands
-        https://git.kernel.org/mkp/scsi/c/60a1f6a8ad33
-[11/28] ufs: core: Change the type of one ufshcd_add_command_trace() argument
-        https://git.kernel.org/mkp/scsi/c/ffa5d8c15300
-[12/28] ufs: core: Change the type of one ufshcd_send_command() argument
-        https://git.kernel.org/mkp/scsi/c/3e7fff3fee5b
-[13/28] ufs: core: Only call ufshcd_should_inform_monitor() for SCSI commands
-        https://git.kernel.org/mkp/scsi/c/ae7bf255b10e
-[14/28] ufs: core: Change the monitor function argument types
-        https://git.kernel.org/mkp/scsi/c/f59568f4e27a
-[15/28] ufs: core: Rework ufshcd_mcq_compl_pending_transfer()
-        https://git.kernel.org/mkp/scsi/c/63a5b959c854
-[16/28] ufs: core: Rework ufshcd_eh_device_reset_handler()
-        https://git.kernel.org/mkp/scsi/c/f18fac1e2b72
-[17/28] ufs: core: Rework the SCSI host queue depth calculation code
-        https://git.kernel.org/mkp/scsi/c/e8ea985a8314
-[18/28] ufs: core: Allocate the SCSI host earlier
-        https://git.kernel.org/mkp/scsi/c/f46b9a595fa9
-[19/28] ufs: core: Call ufshcd_init_lrb() later
-        https://git.kernel.org/mkp/scsi/c/45e636ea1294
-[20/28] ufs: core: Use hba->reserved_slot
-        https://git.kernel.org/mkp/scsi/c/d3fd0fd77686
-[21/28] ufs: core: Make the reserved slot a reserved request
-        https://git.kernel.org/mkp/scsi/c/1d0af94ffb5d
-[22/28] ufs: core: Do not clear driver-private command data
-        https://git.kernel.org/mkp/scsi/c/e5f9cc2af9a8
-[23/28] ufs: core: Optimize the hot path
-        https://git.kernel.org/mkp/scsi/c/22089c218037
-[24/28] ufs: core: Pass a SCSI pointer instead of an LRB pointer
-        https://git.kernel.org/mkp/scsi/c/176b93004c34
-[25/28] ufs: core: Remove the ufshcd_lrb task_tag member
-        https://git.kernel.org/mkp/scsi/c/9a2c9500921d
-[26/28] ufs: core: Make blk_mq_tagset_busy_iter() skip reserved requests
-        https://git.kernel.org/mkp/scsi/c/4b6c0d9cca35
-[27/28] ufs: core: Move code out of ufshcd_wait_for_dev_cmd()
-        https://git.kernel.org/mkp/scsi/c/a11c015c8a4f
-[28/28] ufs: core: Switch to scsi_get_internal_cmd()
-        https://git.kernel.org/mkp/scsi/c/08b12cda6c44
+[1/2] scsi: bnx2fc: add WQ_PERCPU to alloc_workqueue users
+      https://git.kernel.org/mkp/scsi/c/a43a2e48d534
+[2/2] scsi: qedf: add WQ_PERCPU to alloc_workqueue users
+      https://git.kernel.org/mkp/scsi/c/e036dadf78f8
 
 -- 
 Martin K. Petersen
