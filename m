@@ -1,79 +1,77 @@
-Return-Path: <linux-scsi+bounces-19342-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19344-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F08B6C8A615
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Nov 2025 15:40:39 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EB85C8AFEC
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Nov 2025 17:36:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85B6C3A8A7C
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Nov 2025 14:40:38 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A0439356AE6
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Nov 2025 16:36:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 671FD303A05;
-	Wed, 26 Nov 2025 14:40:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29E0624468C;
+	Wed, 26 Nov 2025 16:36:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="WhV68p1i"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hobafREM"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303E230276A
-	for <linux-scsi@vger.kernel.org>; Wed, 26 Nov 2025 14:40:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1751257851
+	for <linux-scsi@vger.kernel.org>; Wed, 26 Nov 2025 16:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764168036; cv=none; b=LfrKA7YZf9YiemEpY2cq93m/adtauEErcyV5FGAfI6RFnnJUYtmpBYvwFfAAlUJjSvIw3QtCVWxmPLAMF7S6yitosAE7dRP9zNuwoSm1INdSmNwMk03zey8+T8AXcYknPT94CLrGfoaVV6/6v3XkgtrMkOqmMEK1teRIAPSCWqM=
+	t=1764174974; cv=none; b=omoSrm1VafwcdoXjr1Je/u2fj9dqFqMPNS3AiyCoZXi8w3zls6qnUpyowLT6QsC1cROerEhPTKnCVI7gMkmCZwQvYQQ6BtuG2OK+h2ilLbQmOGhyqbLBrbg+Lm5KTDEeK+vgqzAG7Y/nuyFP0llTs4G37HURkYmYsWX35ik5+Mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764168036; c=relaxed/simple;
-	bh=CYyddyXviv3taKXdklE7V5boCf+1M5slFXkIIMFjpkQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OQzFpwGPIuPzb6u2IP24ErnVm7S3vLQQiGGvlkEKmFGa9lmiPdkRLXBgFVcNm/rOB+zZ1Ysp33z2jyGsVoGsgN+iSx3oLBuEf07FFYCWMDB3Dotur0HbkrNuOr1t6w/Ujrlapw+e5TNaq6+hLjUtTGZZrq8ZNcAlXSGxmG+6mrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=WhV68p1i; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AQB1YI7025641;
-	Wed, 26 Nov 2025 14:40:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=wN3Cm5pluYfMPObrIUmZCsNh8jqHP4Qjw9OiaVPaN
-	9I=; b=WhV68p1iuaMMcxnQaFrBD0tlKSPy+mo5W0mUmWz0ZlFBXRTVE/KhPW5sy
-	GaZHAb9FGRH/wt3DQoyskhcCOYvIR8qwJh+O/fKEemwnKQ5iOR0kirJijUQr7GYR
-	sea9o58tvivdW/J1vjwEbaPHgmT/77oIAcwDdmyg6WRuEM5PxRZcbifdw55jt2j1
-	acjdh3EvQ8JZTyi+iGXiN8wYfgzneN3ySOnQSPS8uuGPYuRl0eyjkAYz94iCDGiR
-	IO1mV2t2aT07OTtoKU5jD6Q0yta1RxF4ORIz4owi7d1sBsjvnK4q2p/svjmsMn6J
-	XxFfo+VVWnz+eT1yQTy+xlkUiCACA==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ak2kq3vec-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Nov 2025 14:40:29 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AQE0xiu030759;
-	Wed, 26 Nov 2025 14:40:29 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4akqgsk6r2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Nov 2025 14:40:28 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AQEeRUv26018530
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 26 Nov 2025 14:40:27 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 61D902004F;
-	Wed, 26 Nov 2025 14:40:27 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 42AF220040;
-	Wed, 26 Nov 2025 14:40:27 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 26 Nov 2025 14:40:27 +0000 (GMT)
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Chris Boot <bootc@bootc.net>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org
-Subject: [PATCH] scsi: target: sbp: Remove KMSG_COMPONENT macro
-Date: Wed, 26 Nov 2025 15:40:27 +0100
-Message-ID: <20251126144027.2213895-1-hca@linux.ibm.com>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1764174974; c=relaxed/simple;
+	bh=t1WBGDn4nkjwC+1pkvMnmGCaagP+vHBvMlJD6YiLB7o=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=oz5kEU2Xo4g8UBiZ5u3PnnphaxOSmAEhAo4pDgY/DMv0qJI1iMTNgzakS1uoPp+q0seHXmNmGPu92sAaoF48uzUr/7bAjXV6JYkWYOoUDNfwDRlA3L/cXqGxmIkYuVq3QKTqYcJFmO85BTbEIvfsxFGtnE0TTjLJGZTWh6HbEYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hobafREM; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1764174971;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=DoS6Oj4etNgwsMajVTmJIqYHnPKCCag9vshgTAQJXtY=;
+	b=hobafREMPpFSKDbIN5G7HJol221sluHq2EJzxfpunADNZPgX3LhXmifhRLLUutUtJ/1urN
+	A0Y91YbpLN0yyTCkGIG3dGsAIcPLWdlc1h7fm8eD/BGKOOHb3i66683Zc0mTF8+4b2C00G
+	cZILyjHWs4TZKIHToJuYsFDTgKpbM6c=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-623-nquCTKv3Ox2_N7An0300BA-1; Wed,
+ 26 Nov 2025 11:36:06 -0500
+X-MC-Unique: nquCTKv3Ox2_N7An0300BA-1
+X-Mimecast-MFC-AGG-ID: nquCTKv3Ox2_N7An0300BA_1764174964
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E366B18001FE;
+	Wed, 26 Nov 2025 16:36:03 +0000 (UTC)
+Received: from localhost (unknown [10.2.16.50])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B9D3A18002A6;
+	Wed, 26 Nov 2025 16:36:01 +0000 (UTC)
+From: Stefan Hajnoczi <stefanha@redhat.com>
+To: linux-block@vger.kernel.org
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
+	linux-kernel@vger.kernel.org,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Mike Christie <michael.christie@oracle.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	linux-nvme@lists.infradead.org,
+	Keith Busch <kbusch@kernel.org>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	linux-scsi@vger.kernel.org,
+	Christoph Hellwig <hch@lst.de>,
+	Stefan Hajnoczi <stefanha@redhat.com>
+Subject: [PATCH 0/4] block: add IOC_PR_READ_KEYS and IOC_PR_READ_RESERVATION ioctls
+Date: Wed, 26 Nov 2025 11:35:56 -0500
+Message-ID: <20251126163600.583036-1-stefanha@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -81,65 +79,34 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTIyMDAwMCBTYWx0ZWRfX2rPxd1X9SmeV
- Q3fIBhUbZVtfQSsOqVpV9rouGKZYpXtyTzlAkcrVgwa4uOTMnMBRx8QaV2JIYXr6WRIxoaJwdgv
- AYdkJKA9pqsUPW7zHUaPhBEGJmAAeRCvc6sC0rn6W8V/pmY/d/zkmE+DRIXGQkCbsislooo6lc7
- T82/ja+dIjVPYHzEzhBeHo6QArdJ4c6s1r8/qmFHTGMv391iPX5N36Y+eBW8xgszo5tBHORNRxw
- D2Fy0vTdARo0CfZoS6PJOEjGlpwCIyqY02BzBcEy46AF90Zy4Cw50hV7ulu5s7Y+nuxmockeCii
- +l4JDTy+aS9Jq3oHKaeuocaY8YLHJXTZ4vurRZ7vvHrJc9EeUjrKG9QWP3pHBOSmuwb7EE9WMNN
- ogm6nqTilM7A+PZnn7WQjsP/qGZKkw==
-X-Authority-Analysis: v=2.4 cv=fJM0HJae c=1 sm=1 tr=0 ts=6927115d cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=07d9gI8wAAAA:8 a=VnNF1IyMAAAA:8
- a=bVn-44OEAAAA:8 a=M9wc2OgTsJqKPhFCr0sA:9 a=e2CUPOnPG4QKp8I52DXD:22
- a=wc5UUqwVB_nuYuPpUnYO:22
-X-Proofpoint-GUID: rlv61v5r8y6G12MQXqXfk_3YAb_StCxj
-X-Proofpoint-ORIG-GUID: rlv61v5r8y6G12MQXqXfk_3YAb_StCxj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-25_02,2025-11-26_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 phishscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 suspectscore=0 malwarescore=0 adultscore=0 bulkscore=0
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2510240000
- definitions=main-2511220000
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-The KMSG_COMPONENT macro is a leftover of the s390 specific "kernel message
-catalog" from 2008 [1] which never made it upstream.
+This series exposes struct pr_ops pr_read_keys() and pr_read_reservations() to
+userspace as ioctls, making it possible to list registered reservation keys and
+report the current reservation on a block device.
 
-The macro was added to s390 code to allow for an out-of-tree patch which
-used this to generate unique message ids. Also this out-of-tree doesn't
-exist anymore.
+The new ioctls are needed by applications or cluster managers that rely on
+inspecting the PR state. This is something that has been possible with SCSI-
+and NVME-specific commands but not with the PR ioctls. I hope to move QEMU from
+SG_IO to PR ioctls so that NVMe host block devices can be supported alongside
+SCSI devices without protocol-specific commands.
 
-The pattern of how the KMSG_COMPONENT is used was partially also used for
-non s390 specific code, for whatever reasons.
+These ioctls will also make troubleshooting possible with the blkpr(8)
+util-linux tool, for which I have prepared a separate patch series.
 
-Remove the macro in order to get rid of a pointless indirection.
+Stefan Hajnoczi (4):
+  scsi: sd: reject invalid pr_read_keys() num_keys values
+  nvme: reject invalid pr_read_keys() num_keys values
+  block: add IOC_PR_READ_KEYS ioctl
+  block: add IOC_PR_READ_RESERVATION ioctl
 
-[1] https://lwn.net/Articles/292650/
+ include/uapi/linux/pr.h | 14 ++++++++
+ block/ioctl.c           | 79 +++++++++++++++++++++++++++++++++++++++++
+ drivers/nvme/host/pr.c  |  5 +++
+ drivers/scsi/sd.c       | 11 +++++-
+ 4 files changed, 108 insertions(+), 1 deletion(-)
 
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
----
- drivers/target/sbp/sbp_target.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/target/sbp/sbp_target.c b/drivers/target/sbp/sbp_target.c
-index 3b89b5a70331..e0472b4dbd90 100644
---- a/drivers/target/sbp/sbp_target.c
-+++ b/drivers/target/sbp/sbp_target.c
-@@ -5,8 +5,7 @@
-  * Copyright (C) 2011  Chris Boot <bootc@bootc.net>
-  */
- 
--#define KMSG_COMPONENT "sbp_target"
--#define pr_fmt(fmt) KMSG_COMPONENT ": " fmt
-+#define pr_fmt(fmt) "sbp_target: " fmt
- 
- #include <linux/kernel.h>
- #include <linux/module.h>
 -- 
-2.51.0
+2.52.0
 
 
