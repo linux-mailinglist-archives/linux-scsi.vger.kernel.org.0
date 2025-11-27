@@ -1,96 +1,55 @@
-Return-Path: <linux-scsi+bounces-19355-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19359-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31516C8CFFA
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Nov 2025 08:08:01 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4FD5C8D11B
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Nov 2025 08:22:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF9D53A90B7
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Nov 2025 07:07:59 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5E62F34DE0C
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Nov 2025 07:22:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0683314A6B;
-	Thu, 27 Nov 2025 07:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63C8C2D948F;
+	Thu, 27 Nov 2025 07:22:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="P+Gaf5wc";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="TTYm7y4G";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="P+Gaf5wc";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="TTYm7y4G"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="b/iliIG2"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15133313529
-	for <linux-scsi@vger.kernel.org>; Thu, 27 Nov 2025 07:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8EF136358;
+	Thu, 27 Nov 2025 07:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764227277; cv=none; b=KDALXBmfAykyvBTXRrr9oJWB+W4eBY1o7ScbhS4fcsqO2B1C8a9ry8XoGDNt07NP6rdVg+B9thV0BZ4/AG/KO21TgY9StWyz3QVhxpbb0TKTeboMhTEop+3W8Jmm9eEWqaN9xpBQzD1PFCGZKFaLh0PX24W4Mq+oiVvFqmw4mrU=
+	t=1764228125; cv=none; b=W290fk7HlvyQleiUe592f5qBJ+l+z0gzkDhD6CJalps5ea4B7kjIXfiZL+xy204M4+4sbXKftVaa1GUrt20/naVvZ9AIqPKrLVX44dAP/CU/HUwNl+1fHmZ6pRsalD7QfEaj28OtgsBnOgtkUMAmKePGYHP69yZzFXVrc3D786I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764227277; c=relaxed/simple;
-	bh=gnT74m22lzfBx6uRJGriIbQr4/cmzQTeuv/tw5r84Qc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p4NDokqpnV6CBGAsHAg4KIPMIoiOs2dVU3KFJydN2p2KuNWskXtsumEkBpQH9rzjkj7yzJyauzWM7XdvejTyJm7Jdd63aRhXqP81wbsmoi/V59uIG71qX7rqurTIHonK7isZy+o0n0OeBRJgRKkUli26D/3WIPK47V9lA5YxiGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=P+Gaf5wc; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=TTYm7y4G; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=P+Gaf5wc; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=TTYm7y4G; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 247735BCC4;
-	Thu, 27 Nov 2025 07:07:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1764227274; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FxH/K4xBnPW3Iqo9dVisbX3HnJSJaYk0+vOsyJRDm54=;
-	b=P+Gaf5wcjYAsVrFWf/W+zBNHIGQrKRDpztAkgHv1Kok+RNLSFqQTsBzRrdvE/hwct9pg/b
-	2u2GmhTMG9MI9XWcdhwZtup6mZ+kOmWUEnOXpCoqf2eFMajgWW3+Z4U/MWEIqHN72TlHlm
-	64IGHdGEDvx3Bh8husmKUNVEMieRVXk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1764227274;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FxH/K4xBnPW3Iqo9dVisbX3HnJSJaYk0+vOsyJRDm54=;
-	b=TTYm7y4GhTBLXldK7PxlSrKL9IjT2R8fUwB13oCOrkEWk/tzqoXWjC+K+ggrBjl8vfvKQQ
-	pxMLQaI4W0GfOnDA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=P+Gaf5wc;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=TTYm7y4G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1764227274; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FxH/K4xBnPW3Iqo9dVisbX3HnJSJaYk0+vOsyJRDm54=;
-	b=P+Gaf5wcjYAsVrFWf/W+zBNHIGQrKRDpztAkgHv1Kok+RNLSFqQTsBzRrdvE/hwct9pg/b
-	2u2GmhTMG9MI9XWcdhwZtup6mZ+kOmWUEnOXpCoqf2eFMajgWW3+Z4U/MWEIqHN72TlHlm
-	64IGHdGEDvx3Bh8husmKUNVEMieRVXk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1764227274;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FxH/K4xBnPW3Iqo9dVisbX3HnJSJaYk0+vOsyJRDm54=;
-	b=TTYm7y4GhTBLXldK7PxlSrKL9IjT2R8fUwB13oCOrkEWk/tzqoXWjC+K+ggrBjl8vfvKQQ
-	pxMLQaI4W0GfOnDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A36823EA63;
-	Thu, 27 Nov 2025 07:07:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id NpkXJsn4J2mkWwAAD6G6ig
-	(envelope-from <hare@suse.de>); Thu, 27 Nov 2025 07:07:53 +0000
-Message-ID: <1379c3f9-cdde-4733-b1e9-7e761628d0d3@suse.de>
-Date: Thu, 27 Nov 2025 08:07:53 +0100
+	s=arc-20240116; t=1764228125; c=relaxed/simple;
+	bh=1MUdi9zNgzjb5r442NgP1pK7YpipZBe1VVvy/+gfWHA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=BGKC7npDPp/Du8w8fiIJgDVm+VbndYEvnpx/U5IQc8y/Oo47EBAq2Pm8/8JFOACMqrthl5U5ckznKE4LKLA+gTAdpuHyrpO3OwTnJwym6NwFDZFLWiobolzdfayt5Dr5jnuAHs/Dj+jkIuAYbEn2xZlRZYMQMyIG7bYx/OvrLrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=b/iliIG2; arc=none smtp.client-ip=113.46.200.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=MGDDaaY90/tRMb+TKTq7JegsZuVfQL0ENBqbKUPaqys=;
+	b=b/iliIG2D3wyQgIqx3fDqiVQrNe6YMono7wZg7kfjnPQ4AeaAq004SNCwEDdJ7YlvXj0YEpNU
+	g93sGhjg4pB/Z1+hbTper688MoE2J/LmHH1EI4HXn0bAjKsyEtxOAUgiMX5WR0+hmnsCSuQ2iOP
+	KbiMIcGnzO9CsX5I5tFbVYw=
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4dH79j5rhmzLlSX;
+	Thu, 27 Nov 2025 15:20:09 +0800 (CST)
+Received: from dggpemf500002.china.huawei.com (unknown [7.185.36.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id 031ED140296;
+	Thu, 27 Nov 2025 15:21:58 +0800 (CST)
+Received: from [10.174.176.253] (10.174.176.253) by
+ dggpemf500002.china.huawei.com (7.185.36.57) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 27 Nov 2025 15:21:57 +0800
+Message-ID: <19929526-cc46-4337-b6e2-5305002565a4@huawei.com>
+Date: Thu, 27 Nov 2025 15:21:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -98,76 +57,62 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] block: add IOC_PR_READ_RESERVATION ioctl
-To: Stefan Hajnoczi <stefanha@redhat.com>, linux-block@vger.kernel.org
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
- linux-kernel@vger.kernel.org,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Mike Christie <michael.christie@oracle.com>, Jens Axboe <axboe@kernel.dk>,
- linux-nvme@lists.infradead.org, Keith Busch <kbusch@kernel.org>,
- Sagi Grimberg <sagi@grimberg.me>, linux-scsi@vger.kernel.org,
- Christoph Hellwig <hch@lst.de>
-References: <20251126163600.583036-1-stefanha@redhat.com>
- <20251126163600.583036-5-stefanha@redhat.com>
-Content-Language: en-US
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20251126163600.583036-5-stefanha@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH] Revert "scsi: libsas: Fix exp-attached device scan after
+ probe failure scanned in again after probe failed"
+To: Xingui Yang <yangxingui@huawei.com>, <john.g.garry@oracle.com>,
+	<jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@huawei.com>, <liyihang9@h-partners.com>, <liuyonglong@huawei.com>,
+	<kangfenglong@huawei.com>
+References: <20251021073438.3441934-1-yangxingui@huawei.com>
+From: Jason Yan <yanaijie@huawei.com>
+In-Reply-To: <20251021073438.3441934-1-yangxingui@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:dkim,suse.de:email];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Level: 
-X-Spam-Score: -4.51
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: 247735BCC4
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ dggpemf500002.china.huawei.com (7.185.36.57)
 
-On 11/26/25 17:36, Stefan Hajnoczi wrote:
-> Add a Persistent Reservations ioctl to read the current reservation.
-> This calls the pr_ops->read_reservation() function that was previously
-> added in commit c787f1baa503 ("block: Add PR callouts for read keys and
-> reservation") but was only used by the in-kernel SCSI target so far.
+在 2025/10/21 15:34, Xingui Yang 写道:
+> This reverts commit ab2068a6fb84751836a84c26ca72b3beb349619d.
 > 
-> The IOC_PR_READ_RESERVATION ioctl is necessary so that userspace
-> applications that rely on Persistent Reservations ioctls have a way of
-> inspecting the current state. Cluster managers and validation tests need
-> this functionality.
+> As the disk may fall into an abnormal loop of probe when it fails to probe
+> due to physical reasons and cannot be repaired.
 > 
-> Signed-off-by: Stefan Hajnoczi <stefanha@redhat.com>
+> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
 > ---
->   include/uapi/linux/pr.h |  7 +++++++
->   block/ioctl.c           | 28 ++++++++++++++++++++++++++++
->   2 files changed, 35 insertions(+)
+>   drivers/scsi/libsas/sas_internal.h | 14 --------------
+>   1 file changed, 14 deletions(-)
 > 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+> diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
+> index 03d6ec1eb970..85948963fb97 100644
+> --- a/drivers/scsi/libsas/sas_internal.h
+> +++ b/drivers/scsi/libsas/sas_internal.h
+> @@ -145,20 +145,6 @@ static inline void sas_fail_probe(struct domain_device *dev, const char *func, i
+>   		func, dev->parent ? "exp-attached" :
+>   		"direct-attached",
+>   		SAS_ADDR(dev->sas_addr), err);
+> -
+> -	/*
+> -	 * If the device probe failed, the expander phy attached address
+> -	 * needs to be reset so that the phy will not be treated as flutter
+> -	 * in the next revalidation
+> -	 */
+> -	if (dev->parent && !dev_is_expander(dev->dev_type)) {
+> -		struct sas_phy *phy = dev->phy;
+> -		struct domain_device *parent = dev->parent;
+> -		struct ex_phy *ex_phy = &parent->ex_dev.ex_phy[phy->number];
+> -
+> -		memset(ex_phy->attached_sas_addr, 0, SAS_ADDR_SIZE);
+> -	}
 
-Cheers,
+You need to track probe failed times, and if probe failed more than 3 
+times, stop trying to probe this phy.
 
-Hannes
--- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.de                                +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+Jaosn
+祝一切顺利
+
+> -
+>   	sas_unregister_dev(dev->port, dev);
+>   }
+>   
 
