@@ -1,124 +1,130 @@
-Return-Path: <linux-scsi+bounces-19389-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19393-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF6D0C93736
-	for <lists+linux-scsi@lfdr.de>; Sat, 29 Nov 2025 04:30:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5313DC9380C
+	for <lists+linux-scsi@lfdr.de>; Sat, 29 Nov 2025 05:24:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8A66A349D16
-	for <lists+linux-scsi@lfdr.de>; Sat, 29 Nov 2025 03:30:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13BEA3A8806
+	for <lists+linux-scsi@lfdr.de>; Sat, 29 Nov 2025 04:24:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE07D188CC9;
-	Sat, 29 Nov 2025 03:30:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="dqtPXF6X"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F03621DED40;
+	Sat, 29 Nov 2025 04:24:16 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67964A23;
-	Sat, 29 Nov 2025 03:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248C0883F
+	for <linux-scsi@vger.kernel.org>; Sat, 29 Nov 2025 04:24:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764387037; cv=none; b=bSAYeF/stDsOi42RFMmXmHqFyM0E2a0qpkTRzQVEdLVNxmpeqpzBJwOQhV+bGKDFYBhiZ3IYn6MbvrQxuAXQe0GcW48txjn7EX3D9rDybvQTymHj50odN5E//Np0YcZbQ+E+674IUb4HImFhrfDiwJ0RyBZc8+NyR3QtOvmQbkA=
+	t=1764390256; cv=none; b=pw0DkwNZfMHyLvj3spJg7npmflay2TSkDnPocORVMvZ3xNfVMqMFC2GwyEnOl75z+t/b7o6FooUYZv2QmBptBbA9ERTX2vzrcx/J3TxLG3wPHdBlF6IpY89jgA9/qpNbOkfdC1jsf87cz8gxhzlsnZDhqn/mZROXGcUGkY7Vg5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764387037; c=relaxed/simple;
-	bh=4DlvwCplMgwm0kuZ2rU73Qn7BFvMivUYSvU90ACrNL8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pHoyd2TgrF0rWLpAX6cD1cB7rgcIE4qR/oGXxqviFHEZ+Wpia+cSsUSUrdPpQ/CrBIPJ+vHvi/9rIVyOZLLxuW04kUVYEksG70e45+VQtRNAH9JGfDwkVKvG2cVLEFbNRbIn06hZ7MOj3VjKlnIefaeDLcYqI6FToWBtROK4+A4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=dqtPXF6X; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AT3MV3c804549;
-	Sat, 29 Nov 2025 03:30:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=cVH5p1F5RaTGWBSnZK2psExOjVQZUNECA2zV6BuVo9w=; b=
-	dqtPXF6XPjay1OyEjlAFHLsn1e3DEf/enFOuLh7DjsF73DXZviWOCUD8OGvruE75
-	DfRhCJ2Bo90kdeLgg4gWs8X2baTFjbXGpWKuCy6CRXXQvHcsj0LsuRfx7fxfjC/g
-	1QZelTXTbV9krpTgu8wcxTq3XGrYGM6VJ6UufL+gFAluYk7u/Fq1zQTroYSaNVYO
-	0ZHwmwJhgfDhMUf+RyO03SvysK1By+G9M/FdyRk8dYFTGxgp8Ope4/DJOCdyjDpg
-	h1QizLGYl3vvnUwLjMbgleKjUgu5Pr5j0W1ZRRiRNwDi+Cm8TD1jrZnU/LH7bmG6
-	QFxiiXVZJoYph//tforSYw==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4aqrvc003d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 29 Nov 2025 03:30:21 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AT1Xa7a031965;
-	Sat, 29 Nov 2025 03:30:21 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4aqq961nb5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 29 Nov 2025 03:30:20 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5AT3UEpP015090;
-	Sat, 29 Nov 2025 03:30:20 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4aqq961n85-7;
-	Sat, 29 Nov 2025 03:30:20 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: njavali@marvell.com, Zilin Guan <zilin@seu.edu.cn>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        James.Bottomley@HansenPartnership.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jianhao.xu@seu.edu.cn
-Subject: Re: [PATCH] scsi: qla2xxx: Fix improper freeing of purex item
-Date: Fri, 28 Nov 2025 22:30:06 -0500
-Message-ID: <176438479590.3682470.14841073923853792072.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20251113151246.762510-1-zilin@seu.edu.cn>
-References: <20251113151246.762510-1-zilin@seu.edu.cn>
+	s=arc-20240116; t=1764390256; c=relaxed/simple;
+	bh=nn6jsh1bpVDmqtk/NIx+mMCz1c5oxMsCpAGmjg9X0rE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KjwBJUf9IOV/N7O89Eu8EtSdV/eZX98WXrfwjO7/cT9N7fMwmvSAiJsc8eUYVYZgdnTYjjB11OVNmkzKsvaZrjEQDDe6CBtPbbVKFASnEz0XIQekEcRhfFIN1gD809umOpRGIA2Xje2lS/0l+EPAz9POe7eLQWR/xfUtHXI10tI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-78a835353e4so25730397b3.2
+        for <linux-scsi@vger.kernel.org>; Fri, 28 Nov 2025 20:24:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764390254; x=1764995054;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nn6jsh1bpVDmqtk/NIx+mMCz1c5oxMsCpAGmjg9X0rE=;
+        b=oyiixmiFztO++Qv+hh1pdhUJm3jMJ7RfEXSnUW76Dbxdb94M2rSehGaeYcHIEtx0A7
+         5GnXcdihVBAw58nzB7+ihe+bU7VylLqlhT2Cbg6EulB2h7GMNlAwhPy7scjhuz74JBS7
+         rW3m01/SZluN6+SOOMne1V61ogG7ctO0pQZwimh+HeWAiGk6GkBH/PZdbvuvrX0FblDq
+         0Zd2N4CO4MDqk8wCgtVNTo4r5OXbrAgdPyA4PxvKWcn83ZIfJ31zhnT1iTckCrJKwI71
+         EzqLFldFx4oKj/ssJJsEzTZhjkNMt49PiuytkQtXXVAw3xUvAvbNJpAODMWbKnRUL63M
+         Nm8w==
+X-Forwarded-Encrypted: i=1; AJvYcCUBK3z0vd7eXVsqcwTBdbOrtNFgTjyqk6niadRPl+y4LScrIeKKfAbLM6AsCIYg0LCTW0DjwlwjU0fg@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBrtreWbBvzdWKECiXYnp9J/SWoSJQSkFa3/8PiAj7gpulADLY
+	NHF0r+1l/Wl5LsuD3qhqrysM6RAlZgWYx2AJ9Uzd3iEWUozs+/gEwT5Zdthhag==
+X-Gm-Gg: ASbGncsfYcnq/iSRSyA7deWOZH8JcJQRHzaAnyNswspmXdZb2h9rszFv/9/taVbAgqB
+	MhErCrE+lve5hfhhygbsGnNewVv7ZiMvKMTloEVlCi6NRdjVAvC0PYwf6Fw7wPRu1Vq+NNdGvLV
+	u6V+Eg047FLs0X/x3OyMmh2svB83rbvV4XgYldJq4pjXmVuddYQ9PTeYg72lHDAyHqt1i9MqFDi
+	KFYIe4wVAKXO8AV9ndfpvFTuu+eOeaydE/KGxRkTxdXp51+AQhGosmE6GnXTM0iQR/TD5h7PozA
+	2aKA4d4VrVTtppoOk0rDbVs8qY0BZ8gmB5GJ/+sq94yrBE5KLryfLDq48S8+Ty5tKLXAjxj4reu
+	pA6zoGWDFWUAaB1TcEeF1BU8T9rRytwcIzjuREWBAbJ/NmyK+++I9/BjUSx2AqP7kQemq40vOo4
+	2xYPn8Ljy+P1Q87PLrY60SK1BaqdQ46UaWrhRZpZwwYraLADHgg+Ir
+X-Google-Smtp-Source: AGHT+IEc6vhoAtjrSOsCfNZUQ3akeHtCVPdDemy0MUcQzenAV9O7HFGH+gHbYuGf+S/KShHUuCWMDQ==
+X-Received: by 2002:a05:690c:4989:b0:788:1cde:cac0 with SMTP id 00721157ae682-78a8b479b3emr247320907b3.1.1764390253710;
+        Fri, 28 Nov 2025 20:24:13 -0800 (PST)
+Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com. [74.125.224.42])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78ad0d4179csm21957567b3.11.2025.11.28.20.24.13
+        for <linux-scsi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Nov 2025 20:24:13 -0800 (PST)
+Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-63fc6115d65so1999442d50.0
+        for <linux-scsi@vger.kernel.org>; Fri, 28 Nov 2025 20:24:13 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXr5JGp+vemGsDMfMbrlVJLB44BZh0bWZU1MAbwM60raOybj8WcPbejrUql/KOdbVjjDSsINwLfLUQ/@vger.kernel.org
+X-Received: by 2002:a05:690c:61c3:b0:78a:8251:8476 with SMTP id
+ 00721157ae682-78a8b4953f2mr269176467b3.24.1764390253181; Fri, 28 Nov 2025
+ 20:24:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-28_08,2025-11-27_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0 spamscore=0
- bulkscore=0 suspectscore=0 mlxscore=0 phishscore=0 mlxlogscore=886
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
- definitions=main-2511290024
-X-Authority-Analysis: v=2.4 cv=ZeYQ98VA c=1 sm=1 tr=0 ts=692a68ce cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=adQosAKi50IBXOjU6NIA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI5MDAyMyBTYWx0ZWRfX1+y5Z0QswS7M
- 6IrKCsZ4H8bphfFh4OMm2s7L/sYeGMeX8vQm4cJX7qkDJ126c9JqBvGP23tHQ15EGkN75xucp6n
- AwiVpfuNBvbgLoMGFgZGGm8n8LGnfBdKaWHPkeMrx910Ss9prXRntA7gPfDW0NSI50qHjrUnOhR
- 2X85yY6AXXGJc3fEJ634uRAEeDJgxZrlsLeoLoeFpgFe/1KcyF7peySwru5HgWD+yXs4Ow/a5qn
- 3Ibs8Pkx/clb91enyRiu1zWKcBuoVBNSmGjlYlSLVCLDG54Rkv/VzonxqD0YDmliO6WIExn4Zvk
- /CifinCX17qX1pCjcvTAW08LOUk3066KneKsAykFvvgXhrx834CnOCh3z4eMbiraJpYnKvg2XVl
- OSacvM4lRBcWSXrr0tfhDASjfo4xPw==
-X-Proofpoint-ORIG-GUID: d9WTMUSLb_FkdBqD8tSoz-JzcFc7ku9R
-X-Proofpoint-GUID: d9WTMUSLb_FkdBqD8tSoz-JzcFc7ku9R
+References: <CAEQ9gE=Yo71Aji02a5uGdv7uZ+fJcCa1TKAEZskdM_-VZedTqQ@mail.gmail.com>
+ <cb777f15-1017-4183-91a8-b7e968d0df9c@acm.org>
+In-Reply-To: <cb777f15-1017-4183-91a8-b7e968d0df9c@acm.org>
+From: Roger Shimizu <rosh@debian.org>
+Date: Fri, 28 Nov 2025 20:24:02 -0800
+X-Gmail-Original-Message-ID: <CAEQ9gEnYYBEHMFczvcx4mggOM5ydjsQeMRaBd3gQnjisJtXE6A@mail.gmail.com>
+X-Gm-Features: AWmQ_bl0nAXwowbEB-c9sP8HCaOH34_OsmMyuH8qM-e1WZaJrV9P4OX5byzVG1s
+Message-ID: <CAEQ9gEnYYBEHMFczvcx4mggOM5ydjsQeMRaBd3gQnjisJtXE6A@mail.gmail.com>
+Subject: Re: [PATCH v8 21/28] ufs: core: Make the reserved slot a reserved request
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: mani@kernel.org, James.Bottomley@hansenpartnership.com, 
+	adrian.hunter@intel.com, avri.altman@sandisk.com, beanhuo@micron.com, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, linux-scsi@vger.kernel.org, 
+	martin.petersen@oracle.com, peter.wang@mediatek.com, quic_nguyenb@quicinc.com, 
+	Hongyang Zhao <hongyang.zhao@thundersoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 13 Nov 2025 15:12:46 +0000, Zilin Guan wrote:
+On Fri, Nov 28, 2025 at 6:44=E2=80=AFPM Bart Van Assche <bvanassche@acm.org=
+> wrote:
+>
+> On 11/28/25 12:12 AM, Roger Shimizu wrote:
+> > While testing Rubik Pi 3 [2], I found the above UFS issue, too.
+> > for next-20251121, I used the revert cmd below to workaround:
+> > $ git revert 7ff1cca -m 1
+> >
+> > for next-20251128, I used cmd below, and there's a conflict to resolve.
+> > $ git revert f10ce81 -m 1
+>
+> Does your kernel tree include this patch:
+> https://lore.kernel.org/linux-scsi/20251114193406.3097237-1-bvanassche@ac=
+m.org/?
 
-> In qla2xxx_process_purls_iocb(), an item is allocated via
-> qla27xx_copy_multiple_pkt(), which internally calls
-> qla24xx_alloc_purex_item().
-> 
-> The qla24xx_alloc_purex_item() function may return a pre-allocated item
-> from a per-adapter pool for small allocations, instead of dynamically
-> allocating memory with kzalloc().
-> 
-> [...]
+Yes, both "next-20251121" and "next-20251128" already included the
+patch mentioned.
+And "next-20251128" is the latest from AFAIK.
 
-Applied to 6.19/scsi-queue, thanks!
+> If not, please try a more recent for-next
+> kernel. If your kernel tree includes that patch, please share the
+> kernel log.
 
-[1/1] scsi: qla2xxx: Fix improper freeing of purex item
-      https://git.kernel.org/mkp/scsi/c/78b1a242fe61
+You can find the serial log here: https://people.debian.org/~rosh/next-2025=
+1128/
+* serial_6.18.0-rc7-next-20251128.txt: boot stuck.
+* serial_6.18.0-rc7-next-20251128_revert-c1ec7dc.txt: reverted
+[c1ec7dc], so boot OK.
 
--- 
-Martin K. Petersen
+Thank you!
+-Roger
+
+>
+> Thanks,
+>
+> Bart.
 
