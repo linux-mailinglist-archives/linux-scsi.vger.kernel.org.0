@@ -1,140 +1,163 @@
-Return-Path: <linux-scsi+bounces-19489-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19491-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BA8CC9C235
-	for <lists+linux-scsi@lfdr.de>; Tue, 02 Dec 2025 17:11:44 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25AEFC9C37D
+	for <lists+linux-scsi@lfdr.de>; Tue, 02 Dec 2025 17:32:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF1B43AC4BB
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Dec 2025 16:08:03 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BC3EA343F14
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Dec 2025 16:32:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C58FB281508;
-	Tue,  2 Dec 2025 16:07:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCF343FC2;
+	Tue,  2 Dec 2025 16:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="e53UJcKj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D2JI24jo"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87ACB2737E0
-	for <linux-scsi@vger.kernel.org>; Tue,  2 Dec 2025 16:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5E054774
+	for <linux-scsi@vger.kernel.org>; Tue,  2 Dec 2025 16:32:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764691676; cv=none; b=WnCE7FFfTYMWxS1i6vcvWH17E0+/JSkxUNX4zcmULdlyeA3ZtJciUqGonnexWlbnhCyPnCfOqClzcrLnsT75/o7iBoE+mmBGWq6QcJG+TL3a6FZ2MGk/zY/MhK4zr8yEiwivLxwni+OWLNB8gSdQkb4GneAxyVcbjqCwMYEQojE=
+	t=1764693171; cv=none; b=FdDFDE7VBy15jGVyosZ5IK7CDwkuVzdjfqe+pUzhkC7Cmvp1bfMuJweS6CZpAXypklnAOB6mYBmq6t5gQW4YN53z9Wk2f1dSIuVWJzDuQe7Hkr4THZfzt8YUDmqhe1X6u5lBMZlfv6IskmCHgTC0mobR0rw+ilWPmfNfs9eeiCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764691676; c=relaxed/simple;
-	bh=ufgKqIgP8UmQ1bSZZ8ZffS0nEZq/QlRpfZabK2nFt34=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hK+o2BXLLOABF/2GSO0pxX9GLvoS3Xo39OhICVXjZXS6NnFBGFiLS7v3y1TJ95ZxLDpb06Njxa+LD98ZGSBWtq6LDFyvW9W6xg0xBRPZq9zO0n4kjb44Woyf8UFEO2nxCZdez/dhV1WJqVx8cnKXzU2LBYKfnx3/kcnn8Db4xTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=e53UJcKj; arc=none smtp.client-ip=209.85.161.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-657523b5db0so1149889eaf.2
-        for <linux-scsi@vger.kernel.org>; Tue, 02 Dec 2025 08:07:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764691673; x=1765296473; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JVDxhncTLUZzAxeGgQ+/Pff5dWdNRIlWaEJ3XUBhP6k=;
-        b=e53UJcKjdKQZ/cksNKiEeoCT40uYUr0fZ8Trz7irawBHVjk+5FAQoS3KzGNlBkABIT
-         TOyj97OLNGGE1Gh50kCUFB7k5/jJgLqn4IsrRA1zgO+glnO8I/h596kHiDU0Hv2WoUpl
-         XyUTeD3Kx3iWO3hmfebavZobYS4Nd/b8zd+WOLi1dO+3zmVFh45LyAz5TePcrk3xYG2J
-         wlEBTtFjfB/jgIVXdUn4TtS/el7aOBntSrOkMmG4Cu8/pTyI2pOwbmhYU/Ys2//ZJfc9
-         xVlFmDSS+X03mGHY6zM9RwBoas6sNOHbcAyKoDo93idtm7uEJ3zY+zBi05aCyTtWId4B
-         Lk6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764691673; x=1765296473;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=JVDxhncTLUZzAxeGgQ+/Pff5dWdNRIlWaEJ3XUBhP6k=;
-        b=U09wQy3bPsG0TR63rxYp5CbJPBN13sP7d77A+XHXGSNIflQtlJRaQJ7vHP/IT005Jy
-         udWEhxcxpyhyUGh+yoSRyEM4hl//QPzfciNYBXSOUHjgoKit8+Ym+xURxlUVztu6Wb9u
-         Dj798nioFUrR+a2X64npRp4ujpP+ikauurdogLMMwEulRMVyflGG642RfLcYGfh4ekvF
-         jErEva4WtCfWP9FRX7tNTMjcrHcVLpVGuhmxf9SU5z9c0cLwOkyjYByT2v5tWYcNGp/h
-         qzty6b6OT2xpJCXCrcY2tR8OWxvAnLkkqvC9vt4kqoG9TQkGrTxI6IeLM33bB/+aVPLI
-         /aLg==
-X-Forwarded-Encrypted: i=1; AJvYcCVN2O1K8F2yOXZjjP7dLCvWGhKQL0w/pMyXq8M6s5U6xwoqsvooGLGEuZyZxHOA4HxbnUAa+jJ84gcM@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVakTVSP0xnV8RkwUF4z5vPeB+Z7vBujMwc2EyMycCc16jNO7h
-	Hfn/DqgpaxkknNRKwoxF9bSxBiWl1yTrJIvYNLeHeU9wIRS7Lb4ZBJOBELFGfyjTFFpYOGW4E+a
-	WeePfCRHaNNb2qyvxIwbTyCbGiqIat8QV/B5E/SAdVw==
-X-Gm-Gg: ASbGnct6D9Bf56665g79C728W8sHYSTRf4C/wuHyICnG7mFopp8Q72O6W4HSn41WX2S
-	+GIURR00p8x1DgMYwO2CCn4BzqzLvndjoqN1sEaSOW+XJHBaSKb5D4XeQlqtJJm4Logc0LwGeYX
-	hl4flJhFzPkSBCTs7NVoS0sUJ3GSj438cvu7NkRHWY0rPHSHB1JpfJPOqL7fIlifxiPmDdoRFcq
-	w4emFm1oG2rtSexz2M5xmH+M72pQOoPsVlcuTYYNL34c1t3kn2RVcXIcPzwD6TjVRQJqmaenDRk
-	6nu5cP01oHGMFV8WMNuFEVc4Tg==
-X-Google-Smtp-Source: AGHT+IEAiZ2W76nI1phpEJedFLponDc7da5KHHni6vqnhnXsJDr+bXEokB0K3rN1LiUhm0iZiuLz1GMvmjYG9CgVCFc=
-X-Received: by 2002:a05:6820:2285:b0:657:17a5:b314 with SMTP id
- 006d021491bc7-659702eb91amr89387eaf.0.1764691671883; Tue, 02 Dec 2025
- 08:07:51 -0800 (PST)
+	s=arc-20240116; t=1764693171; c=relaxed/simple;
+	bh=CgnCv99rlYoTBKkc5OEI0pqXEVZN/epw59T/1Slob5c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FIuX4XEEkX2ydSYpspRhagU6tgNb7OKtKkQlr/1DYAEG33wnoja7SqSD9rODo+Laq2nqHjuYaR5Uo2+vUjDjkKmpRDjZcE3ihxq0k1DDbiXeC4tCtxWNZYkX5wYxNLjyUngtS8RKDZkCmPTvXbpvxcvX6UG1NbVklOk20lyS+wY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D2JI24jo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95328C4CEF1;
+	Tue,  2 Dec 2025 16:32:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764693171;
+	bh=CgnCv99rlYoTBKkc5OEI0pqXEVZN/epw59T/1Slob5c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=D2JI24joDNVrSU4TxzLTfOEGttVGrylZbTk/C08BWnXY2vsCVO/fObC4KkIt/QZvI
+	 2krmcvaEwbA4Oy1dfq2wL6Npkx9dk7jfHnK1RpMEA8cn5KrpK4aZnXaUSLFi8ttkIC
+	 HIwEo+S3p96tFiD2o4WNstRltvxqYSwxpXAlx34O03JaTLwJiGcy4fpLsSdWN3ylDQ
+	 mKlwiAkhgxRsOXNcDn4zsZepXjn4HlfjFxcOhBaJSebHpyj482DgstGUqKrMFkmMIO
+	 T1iWWrTz5aT6xY09NrKXbebCvFX590gnx6PlF9nvOtoMwnYKASWT1EBMe3AOOx1fHU
+	 xasgRZofFkwQw==
+Date: Tue, 2 Dec 2025 22:02:43 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, 
+	linux-scsi@vger.kernel.org, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	Peter Wang <peter.wang@mediatek.com>, Avri Altman <avri.altman@sandisk.com>, 
+	Bean Huo <beanhuo@micron.com>, "Bao D. Nguyen" <quic_nguyenb@quicinc.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Roger Shimizu <rosh@debian.org>, Nitin Rawat <nitin.rawat@oss.qualcomm.com>
+Subject: Re: [PATCH v8 21/28] ufs: core: Make the reserved slot a reserved
+ request
+Message-ID: <jay3lhd7onhvt7ws2nuqzkuzxygnzirdtbyok4xcvbw45yamqz@54pndmmutftu>
+References: <20251031204029.2883185-1-bvanassche@acm.org>
+ <20251031204029.2883185-22-bvanassche@acm.org>
+ <ehorjaflathzab5oekx2nae2zss5vi2r36yqkqsfjb2fgsifz2@yk3us5g3igow>
+ <5f75d98a-2c0a-4fdf-a2a9-89bfe09fe751@acm.org>
+ <6fw4oikdxwkzbamtvu55fn2gqxr3ngfzymvxr6nxcrjpnpdb2s@v325mijraxmg>
+ <75cf6698-9ce9-4e6d-8b3c-64a7f9ef8cfc@acm.org>
+ <in3muo5gco75eenvfjif3bcauyj2ilx3d6qgriifwnyj657fyq@eftlas3z3jiu>
+ <d7579c22-40d0-4228-b539-4dfe4e25b771@acm.org>
+ <nso6f36ozpad36yd3dlrqoujsxcvz4znvr6snqwgxihb3uxyya@gs6vuu76n6sx>
+ <5c142a9d-7b41-422a-bbff-638fda1939dc@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251202155138.2607210-1-beanhuo@iokpp.de>
-In-Reply-To: <20251202155138.2607210-1-beanhuo@iokpp.de>
-From: Jens Wiklander <jens.wiklander@linaro.org>
-Date: Tue, 2 Dec 2025 17:07:39 +0100
-X-Gm-Features: AWmQ_bnXEdWDGnxkCaMKzIHZ2ZGQX7qmxnor3PEI72ODA58NJAKSwySxqjDIqw8
-Message-ID: <CAHUa44HapG7pb-Fh8RORZ7mDmGvENSAf1qbH2Ge62Dko9gpwqw@mail.gmail.com>
-Subject: Re: [PATCH v1] scsi: ufs: Fix RPMB link error by reversing Kconfig dependencies
-To: Bean Huo <beanhuo@iokpp.de>
-Cc: avri.altman@wdc.com, avri.altman@sandisk.com, bvanassche@acm.org, 
-	alim.akhtar@samsung.com, jejb@linux.ibm.com, martin.petersen@oracle.com, 
-	can.guo@oss.qualcomm.com, ulf.hansson@linaro.org, beanhuo@micron.com, 
-	arnd@arndb.de, linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5c142a9d-7b41-422a-bbff-638fda1939dc@acm.org>
 
-On Tue, Dec 2, 2025 at 4:52=E2=80=AFPM Bean Huo <beanhuo@iokpp.de> wrote:
->
-> From: Bean Huo <beanhuo@micron.com>
->
-> When CONFIG_SCSI_UFSHCD=3Dy and CONFIG_RPMB=3Dm, the kernel fails to link
-> with undefined references to ufs_rpmb_probe() and ufs_rpmb_remove():
->
-> ld: drivers/ufs/core/ufshcd.c:8950: undefined reference to `ufs_rpmb_prob=
-e'
-> ld: drivers/ufs/core/ufshcd.c:10505: undefined reference to `ufs_rpmb_rem=
-ove'
->
-> The issue is that RPMB depends on its consumers (MMC, UFS) in Kconfig, wh=
-ich
-> is backwards. This prevents proper module dependency handling when the li=
-brary
-> is modular but consumers are built-in.
->
-> Fix by reversing the dependency:
-> - Remove 'depends on MMC || SCSI_UFSHCD' from RPMB Kconfig
-> - Add 'depends on RPMB || !RPMB' to SCSI_UFSHCD Kconfig
->
-> This allows RPMB to be an independent library while ensuring correct
-> linking in all module/built-in combinations.
->
-> Fixes: b06b8c421485 ("scsi: ufs: core: Add OP-TEE based RPMB driver for U=
-FS devices")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202511300443.h7sotuL0-lkp@i=
-ntel.com/
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Cc: Bart Van Assche <bvanassche@acm.org>
-> Cc: Jens Wiklander <jens.wiklander@linaro.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Bean Huo <beanhuo@micron.com>
-> ---
->  drivers/misc/Kconfig | 1 -
->  drivers/ufs/Kconfig  | 1 +
->  2 files changed, 1 insertion(+), 1 deletion(-)
+On Tue, Dec 02, 2025 at 06:03:40AM -1000, Bart Van Assche wrote:
+> On 12/1/25 10:51 PM, Manivannan Sadhasivam wrote:
+> > Please share a fix on top of scsi-next or next/master.
+> Before a fix can be developed, the root cause needs to be identified.
+> We just learned that commit 1d0af94ffb5d ("scsi: ufs: core: Make the
+> reserved slot a reserved request") is not the root cause of the boot
+> hang.
+> 
+> Can you please help with the following:
+> * Verify whether or not Martin's for-next branch boots fine on the
+>   Qcom RB3Gen2 board (I expect this not to be the case). Martin's
+>   Linux kernel git repository is available at
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git.
 
-Looks good:
-Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+If linux-next is broken and if I can revert patches that came from scsi-next and
+found it to fix the issue, then it implies that scsi-next would be broken too.
 
-Cheers,
-Jens
+> * If Martin's for-next branch boots fine, bisect linux-next.
+> * If the boot hang is reproducible with Martin's for-next branch,
+>   bisect that branch. After every bisection step, apply the patch
+>   below to work around bisectability issues in this patch series.
+
+This is insane. How can you make a 28 patch series not bisectable? If anyone is
+doing a bisect in the future for any issue, are you expecting them to apply the
+below fix to fix the failures?
+
+This rule is clearly mentioned in the process documentation:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst#n190
+
+- Mani
+
+>   If any part of that patch fails to apply, ignore the failures.
+>   We already know that the boot hang does not occur with commit
+>   1d0af94ffb5d ("scsi: ufs: core: Make the reserved slot a reserved
+>   request"). There are only 35 UFS patches on Martin's for-next branch
+>   past that commit:
+>   $ git log 1d0af94ffb5d..mkp-scsi/for-next */ufs|grep -c ^commit
+>   35
+> 
+> Thanks,
+> 
+> Bart.
+> 
+> 
+> diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
+> index 1b3fbd328277..ef7d6969ef06 100644
+> --- a/drivers/scsi/hosts.c
+> +++ b/drivers/scsi/hosts.c
+> @@ -231,12 +231,6 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost,
+> struct device *dev,
+>  		goto fail;
+>  	}
+> 
+> -	if (shost->nr_reserved_cmds && !sht->queue_reserved_command) {
+> -		shost_printk(KERN_ERR, shost,
+> -			     "nr_reserved_cmds set but no method to queue\n");
+> -		goto fail;
+> -	}
+> -
+>  	/* Use min_t(int, ...) in case shost->can_queue exceeds SHRT_MAX */
+>  	shost->cmd_per_lun = min_t(int, shost->cmd_per_lun,
+>  				   shost->can_queue);
+> diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
+> index 7d6d19361af9..4259f499382f 100644
+> --- a/drivers/ufs/core/ufshcd-priv.h
+> +++ b/drivers/ufs/core/ufshcd-priv.h
+> @@ -374,7 +374,12 @@ static inline bool ufs_is_valid_unit_desc_lun(struct
+> ufs_dev_info *dev_info, u8
+>   */
+>  static inline struct scsi_cmnd *ufshcd_tag_to_cmd(struct ufs_hba *hba, u32
+> tag)
+>  {
+> -	struct blk_mq_tags *tags = hba->host->tag_set.shared_tags;
+> +	/*
+> +	 * Host-wide tags are enabled in MCQ mode only. See also the
+> +	 * host->host_tagset assignment in ufs-mcq.c.
+> +	 */
+> +	struct blk_mq_tags *tags = hba->host->tag_set.shared_tags ?:
+> +					   hba->host->tag_set.tags[0];
+>  	struct request *rq = blk_mq_tag_to_rq(tags, tag);
+> 
+>  	if (WARN_ON_ONCE(!rq))
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
 
