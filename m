@@ -1,83 +1,76 @@
-Return-Path: <linux-scsi+bounces-19598-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19595-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 215AECAECC0
-	for <lists+linux-scsi@lfdr.de>; Tue, 09 Dec 2025 04:23:40 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4A00CAECB4
+	for <lists+linux-scsi@lfdr.de>; Tue, 09 Dec 2025 04:22:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4B18430A42E3
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Dec 2025 03:21:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BA9D93083134
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Dec 2025 03:21:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB2D9301002;
-	Tue,  9 Dec 2025 03:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1176C30148D;
+	Tue,  9 Dec 2025 03:21:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="P6VEsJ/n"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="dXuPcGjz"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B7A2F1FCF;
-	Tue,  9 Dec 2025 03:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC9D30146C;
+	Tue,  9 Dec 2025 03:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765250501; cv=none; b=OqOKSk9aCcMn8mpKWte0vi03WgTSdCNNfWtJIbrlzF3+nSz1M3AbtlD7uCnAJD7IAKth2RTi7fvNZmFiA3Kk3Hbew5ZuslkvhNmd9xMf0NQ7eEnYy8l9ovERt0+xMbmu6+fVxgKOcCLcJApibmlilKaWNhy9mgPGQ1zYAzQPdk0=
+	t=1765250487; cv=none; b=eEzod+8dcBdU5pNeYwnas9yzoMQtIgdDEEgKVmf85Bz5b5njquEwzuedgYnQiIbejR1dIqFS0Yyck6jaY8bQpo6F3l0XV37E0dfUs5mWot7i01PIxdIEowuerbbpUHvZY8VX249+eGKio7DomVJddyH+LCVA/ZEh1UQO8yXpDt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765250501; c=relaxed/simple;
-	bh=eKFhJiqZFxo8PTR6+JuK53u7kbiTh2gp2gD9aHPN8rU=;
+	s=arc-20240116; t=1765250487; c=relaxed/simple;
+	bh=1uKzdL+7291xLk02/UwsVPxNOoBC6RW0QT8AUviuRKg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Vpm1Fs3vrFvn1wTKoV0LQXwL99YhElMv3ZL8IYNTOb/gbGxTb11v/mujudrPvNwtVR3jy3cJomyPtTPnRnXPg9qgVjWcWjc3anf65EINQT+7UJet9Ni+w65ayarCnOUf8/XKyex0fpWOe4OGhvY5xY1BeAA6Uoa3T7XLD4+C+Jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=P6VEsJ/n; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=i0OVUrZ17ALekJTPib0sEBE5YML/XnFr6YNpBEUwlo1H90haM7ea0tngnjyL4qTFCwnITKRg3eTz9ixxmS5axi81ju7PZAWVY+SvpIIOO91kvfhMn+eOGV1aGSYxV5TB6pXwcKhU3zEFlvzxe3jtxDenpn4ohhhK2w/K77Za+GU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=dXuPcGjz; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B91gBAF3845410;
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B91vJ1f3883315;
 	Tue, 9 Dec 2025 03:21:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=+a7Vr7dwegJAu+1nCYofM+Nha4IOoeAG6WJHVb+01G0=; b=
-	P6VEsJ/njyRaug1cOvgnc/+24Ul59AvA9esPkhGDwMAa265g/2AnrTedTfxFAowR
-	27ERD9C4TGHi1ZOe4uXUaoLDxR8o9PCskIdAyffLMy2F25IT/84dQFvpc6Meab8E
-	XQhhkgxJ1iKtlBFRnHDMEDRrhqVfZit5rYIPnRqQA3z2upXs2c3w4ldUyBDtnItO
-	ngVlaOKok6Bb6TGMyEOGyJC+uejpCrR/+XGveopeqH9bZy9pssHHQL5hcls/k4qN
-	KN47CIM/t3ikogpnQpo499hFppRVE6xfwsidRDIWvv+/CvLmxDz8JClVILA9e55r
-	lM01G0O5SZwqgJfXgX1XMw==
+	corp-2025-04-25; bh=Fh9Yf5aMPzzQWV6DqYkZ3Z4x0vfjCRcp4nB+XAvfXDo=; b=
+	dXuPcGjz96Er2c3ug65LTbKoklC+SydYMQGye0MsPcHLlmnfC5L1ISCOw/baacpe
+	KavrNWsUkTQOJ/cd2G/7o7g8+C96eFKqHhf4o/m+GReXD0k/naGPfrCkwDaKqjDW
+	3bwqKDlmWkPzVCmHvxl0kN3QRckJxvHzgauoB8O53SCx016NfLulHOKFRbridUEE
+	+qd1+NV2fyvtPHt1Dp1pFCMxQCCu+W5cbPM5IMR44hwi4MudrcZ9k5z0AXtUATP5
+	k66K5rhuBw+0ptE/bxxTDuHNiUTtdjrPhJcK9eH3k3MPikZT+uSZXKaGErkWgC42
+	Piy9BVYmlFny6sU/6QNx0w==
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4ax9c684n0-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4axaj6g1yw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 09 Dec 2025 03:21:22 +0000 (GMT)
+	Tue, 09 Dec 2025 03:21:23 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5B92AthO038112;
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5B91WAu5038445;
 	Tue, 9 Dec 2025 03:21:22 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4avax8j024-1
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4avax8j02c-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 09 Dec 2025 03:21:21 +0000
+	Tue, 09 Dec 2025 03:21:22 +0000
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5B93I4Fa022652;
-	Tue, 9 Dec 2025 03:21:21 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5B93I4Fc022652;
+	Tue, 9 Dec 2025 03:21:22 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4avax8hyys-7;
-	Tue, 09 Dec 2025 03:21:21 +0000
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4avax8hyys-8;
+	Tue, 09 Dec 2025 03:21:22 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Po-Wen Kao <powenkao@google.com>
+To: linux-scsi@vger.kernel.org, stable@vger.kernel.org,
+        Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Peter Wang <peter.wang@mediatek.com>, Bean Huo <beanhuo@micron.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "open list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER" <linux-scsi@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] scsi: ufs: core: Fix EH failure after wlun resume error
-Date: Mon,  8 Dec 2025 22:21:06 -0500
-Message-ID: <176524933116.418581.12440014725918073406.b4-ty@oracle.com>
+        sathya.prakash@broadcom.com, ranjan.kumar@broadcom.com,
+        chandrakanth.patil@broadcom.com
+Subject: Re: [PATCH] mpi3mr: Prevent duplicate SAS/SATA device entries in channel 1
+Date: Mon,  8 Dec 2025 22:21:07 -0500
+Message-ID: <176524933124.418581.4165861558099763589.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20251112063214.1195761-1-powenkao@google.com>
-References: <20251112063214.1195761-1-powenkao@google.com>
+In-Reply-To: <20251120071955.463475-1-suganath-prabu.subramani@broadcom.com>
+References: <20251120071955.463475-1-suganath-prabu.subramani@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -90,43 +83,35 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-12-08_07,2025-12-04_04,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
- mlxlogscore=916 bulkscore=0 spamscore=0 adultscore=0 phishscore=0
+ mlxlogscore=876 bulkscore=0 spamscore=0 adultscore=0 phishscore=0
  suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2510240000 definitions=main-2512090023
-X-Authority-Analysis: v=2.4 cv=aKD9aL9m c=1 sm=1 tr=0 ts=693795b2 b=1 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA5MDAyMyBTYWx0ZWRfX8Hp38NQwZw7u
+ eoFsoaNg3zUcnkDZBYdob3LPMHmbZcIojcsgawy82GaUhN7AqyGle985k2edkN+vP0XtGuMzyCx
+ vflAbFBkrGf3ACSpIaYfBoya5zO2nJ9VonEk76B752ATeUC1CKG4CDwKhtyoDwK0/R+jJeLA2Z7
+ oAb7VvBMuAIVUcVV7/yGQ8NUBP1H5ZcXKbl7ElmcHHpFzIbB/48vciT7Q7lFzJTCSgZkKq30zOl
+ apr6WcNisg1jaR5M2hJ8D/gWJXy2Q3cCDSHWrsJnfDswIx3pWp8jNvoqxu4E5LqYuEiVI9VxSb8
+ EdwBUZjZJwElG6Mz17atEIhBkiuibLunEMO7vNTPRd5NM0hghSA+eoaGoyJetTSmGWJebL0mFq6
+ EHVDzezamCqIhvN/l7gTPtv0ghzsSw==
+X-Proofpoint-ORIG-GUID: Schw4QMt3R6OpI48h3RcDiJvPkpc8NsH
+X-Authority-Analysis: v=2.4 cv=cs+WUl4i c=1 sm=1 tr=0 ts=693795b3 b=1 cx=c_pps
  a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
  a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=ZX29RaMUgQc0Or7nvOEA:9 a=QEXdDO2ut3YA:10 a=ZXulRonScM0A:10
-X-Proofpoint-ORIG-GUID: gfFULa4lMWKyKtVtXc1_r-RHWiBXdCce
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA5MDAyMyBTYWx0ZWRfX6hE2uoaresPw
- IIRS18gf33ydrIeJ1YhO2B/9+LgLeFdiNySzN0wnj5kHvUgFcbNOOrhP3DBxamzN0LRPqsNM0MC
- HCZ+WMqmd/zxpkwbbmHJfxQVBySUMHrxKfp8a+HtLUWqll9psRR5Wuc/vHKxCJASsEjI+qWu3fq
- xZl9ccyTiNAd9sVTYKC0b11H3irK+lSre7C7eA3LbRM5XK4bqu3X18/qkBXAZk0KQSuhzut5vSh
- lF+MgOIq78OcsLnSwylKqIdCxUWMhK0c0GxsUKR3qYFdMMROM64RDyE5H77MBQWYyh0bX5pe09I
- FVmAWO17KE3ulmqZMUMWo+XuYpvAvVPaltf70CavngCGWE27iis8tMtWsgFXvdI+nectbpJNYc6
- 2a7/GG9u1QldgMC+f9IaEWlmodv8EQ==
-X-Proofpoint-GUID: gfFULa4lMWKyKtVtXc1_r-RHWiBXdCce
+ a=VwQbUJbxAAAA:8 a=bwOc7vOLZU9KT1K-0XsA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: Schw4QMt3R6OpI48h3RcDiJvPkpc8NsH
 
-On Wed, 12 Nov 2025 06:32:02 +0000, Po-Wen Kao wrote:
+On Thu, 20 Nov 2025 12:49:55 +0530, Suganath Prabu S wrote:
 
-> When a W-LUN resume fails, its parent devices in the SCSI hierarchy,
-> including the scsi_target, may be runtime suspended. Subsequently, the
-> error handler in ufshcd_recover_pm_error() fails to set the W-LUN
-> device back to active because the parent target is not active.
-> This results in the following errors:
+>  This fix avoids scanning of SAS/SATA devices in channel 1
+>  when SAS transport is enabled as the SAS/SATA devices are
+>  exposed through channel 0 when SAS transport is enabled.
 > 
->   google-ufshcd 3c2d0000.ufs: ufshcd_err_handler started; HBA state eh_fatal; ...
->   ufs_device_wlun 0:0:0:49488: START_STOP failed for power mode: 1, result 40000
->   ufs_device_wlun 0:0:0:49488: ufshcd_wl_runtime_resume failed: -5
->   ...
->   ufs_device_wlun 0:0:0:49488: runtime PM trying to activate child device 0:0:0:49488 but parent (target0:0:0) is not active
 > 
-> [...]
 
 Applied to 6.19/scsi-queue, thanks!
 
-[1/1] scsi: ufs: core: Fix EH failure after wlun resume error
-      https://git.kernel.org/mkp/scsi/c/b4bb6daf4ac4
+[1/1] mpi3mr: Prevent duplicate SAS/SATA device entries in channel 1
+      https://git.kernel.org/mkp/scsi/c/4588e65cfd66
 
 -- 
 Martin K. Petersen
