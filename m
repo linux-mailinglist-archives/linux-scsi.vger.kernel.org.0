@@ -1,74 +1,74 @@
-Return-Path: <linux-scsi+bounces-19591-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19594-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4E52CAEC93
-	for <lists+linux-scsi@lfdr.de>; Tue, 09 Dec 2025 04:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C20EBCAECA5
+	for <lists+linux-scsi@lfdr.de>; Tue, 09 Dec 2025 04:22:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 323E930285CE
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Dec 2025 03:21:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7D4503057591
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Dec 2025 03:21:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 154582E8E1F;
-	Tue,  9 Dec 2025 03:21:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4395C2E8E1F;
+	Tue,  9 Dec 2025 03:21:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="cZzOStrW"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="nF18Z0nV"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 489CC19005E;
-	Tue,  9 Dec 2025 03:21:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95E7230146C
+	for <linux-scsi@vger.kernel.org>; Tue,  9 Dec 2025 03:21:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765250482; cv=none; b=ABTPFVD19j2bgiDYFDkhFh79UFs/zI7ilbzb3FZTq3tr0yaxT8z7ssURYvUqqfotkvgE0urtzAqqqacfA/2M4qBSmPgrsoyj7EL0InlNwG+IVtLzenFyJLYbdTLPcMu+iiOBsa53ZxbCA+M9YyfzuIOYWc2SIWy6udX3Hs7kRXg=
+	t=1765250485; cv=none; b=QwwxSQ6wQGTBhPtJWpzn1lHBkAg4/9LWK2bNddIlD0HS2Hs8PtRx1kplCzqVK94WwOP8tPR16cb9bokg0/YN9yElRPBuGv3j3obsJCNdR8VMEQ8bQD3ZzINtQi1SuAQ83TmHi3ubpN/kHkfXdWJ4/0eRVrAk4eRW8GGIIvTZ8MQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765250482; c=relaxed/simple;
-	bh=1D9qaaNm9ZeVgekeiBfYyTYwWUys3RJUvPZ8lCVs+pI=;
+	s=arc-20240116; t=1765250485; c=relaxed/simple;
+	bh=zmd+gpIRLmMD8+E9+NOOPx5zgn6cWYGVy3Lz1Ys807U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k9O2hGsTWswQmmbUZSz0wjAJMmqvPHtX0Og/7K4/H0ezCft1U8xYEmStW3NIhxAlagp8xOXwcBjNTOv4a3pFSlGa59u+1XZY8mOAkNGEtvbuPROsbxWVavqk8KH2nOujzS2XMy7EHIfXXR2JtfDTGk88m5u2kdPEEMj7xh+7wIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=cZzOStrW; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=JP/I8tWuiJQ78DwtauGst4LIQe52YaXmESGB/kveUmUFRPSV1O2seVwj3WCSAYSTBHajvzygW8q/X4M1gjUUWQr6ORm0cp+T1CNGd+jI/HJHsDdOoUjWUsO9Bm+eK11vRcGsB8B8LO036g6APcwltJgPSkSNqbOWo9zJSkH4434=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=nF18Z0nV; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B91gJQ43845566;
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B93BTG13981448;
 	Tue, 9 Dec 2025 03:21:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=ZjfTuaNB/XY8mIjqNihzx0WcIDc35PfzXllb9c/tYtM=; b=
-	cZzOStrW6LcJC6Bk8PDl9SouzUFJcMZDrQbaeXGeArwKIJiJI90lyRPcCX19lYmr
-	XPW2MwIwjfJNeBR4iJfSsJi69OXNMpyX0a7gySPKqXUmtDMigUaj7yBRyzj9kTqR
-	NO7Wi5lCirAo1CSd+KidAUib30porrTan3krUG8hxiay+kjfeOjiQtU+iKKLNORg
-	sQ+MUqLPqHW5ts80LkJIL0W5UzsAg0t0XQ5NZXbCGDnOkYg2so0iIcAS7GbCY0RQ
-	/3+cJsdkanoel0i637WzGYH+c9AU+6cSlESHHQX+/zmbzWXlhMkasHVgHkyVvGlp
-	nKqW10H4D002r2Ym85QQ4w==
+	corp-2025-04-25; bh=ouKHCH45vdMR0dNJm2Sav6r8kbe1nNY6sAvINzwasdQ=; b=
+	nF18Z0nV1m8U2NWRd4hvBPX89in/pZrT/F2J46Ksj38/MmFfeFfpxtnW85RNK7wP
+	RByTRUoBAI/KqoO3MX6AExMQcNSnFkAykXX2Q7q52Iudwiy0IAmi8vyzKNcGBcJa
+	dKlw5fkLpQo3y/Pkcji83DcKSSofEfWtv0DzLY5OSv+pyqOxW/0vLhcNt7i+3vFq
+	OFzX1JXOoIbCi77UUzvqc6nERe/2din5HOh1yvbPu8jpl+WEAO8u+du7a2OINvLT
+	NTG53sjdZdnZzClj83kDkVGixJy74X3MIxySMC0u3pSjSSEy04JNWMF4RvLhhsnZ
+	EqxWt6otxqUu4TKWDIfyxA==
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4ax9c684mw-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4axbn7r08a-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 09 Dec 2025 03:21:18 +0000 (GMT)
+	Tue, 09 Dec 2025 03:21:19 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5B91FZbN038209;
-	Tue, 9 Dec 2025 03:21:17 GMT
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5B92AthM038112;
+	Tue, 9 Dec 2025 03:21:18 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4avax8j00t-1
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4avax8j012-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 09 Dec 2025 03:21:17 +0000
+	Tue, 09 Dec 2025 03:21:18 +0000
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5B93I4FS022652;
-	Tue, 9 Dec 2025 03:21:17 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5B93I4FU022652;
+	Tue, 9 Dec 2025 03:21:18 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4avax8hyys-3;
-	Tue, 09 Dec 2025 03:21:17 +0000
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4avax8hyys-4;
+	Tue, 09 Dec 2025 03:21:18 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+To: Chris Boot <bootc@bootc.net>, Heiko Carstens <hca@linux.ibm.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, James.Bottomley@HansenPartnership.com
-Subject: Re: [PATCH] scsi: imm: fix use-after-free bugs caused by unfinished delayed work
-Date: Mon,  8 Dec 2025 22:21:02 -0500
-Message-ID: <176524933130.418581.8604572296942599990.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: target: sbp: Remove KMSG_COMPONENT macro
+Date: Mon,  8 Dec 2025 22:21:03 -0500
+Message-ID: <176524933129.418581.13940667675808206575.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20251028100149.40721-1-duoming@zju.edu.cn>
-References: <20251028100149.40721-1-duoming@zju.edu.cn>
+In-Reply-To: <20251126144027.2213895-1-hca@linux.ibm.com>
+References: <20251126144027.2213895-1-hca@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -81,41 +81,38 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-12-08_07,2025-12-04_04,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
- mlxlogscore=999 bulkscore=0 spamscore=0 adultscore=0 phishscore=0
+ mlxlogscore=915 bulkscore=0 spamscore=0 adultscore=0 phishscore=0
  suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2510240000 definitions=main-2512090023
-X-Authority-Analysis: v=2.4 cv=aKD9aL9m c=1 sm=1 tr=0 ts=693795ae b=1 cx=c_pps
+X-Proofpoint-ORIG-GUID: mzkQg3Z6EBZw8XZRq6XkGpOkg93WIPdd
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA5MDAyMyBTYWx0ZWRfX60M3kBCGzCaZ
+ GisGaF9hMCAtUBrGAwCcpRWfZlfu5fxn8arb1l9c99XvlipW1NIwnOrvmDuoYeeRXUiLDt6riTl
+ dSRWd0lsFDtY3Rtl2ygD6lbiAlas8J7O2+8ORPBBBiLATzV0YsWynFn8uR6+QqhWZJmCMWxqgan
+ qBh8B8FyDbYx1i/ePP6evhY6HtiL/ykhmbUoiMkuxcBKIJhw6hhzPcc7SfmH8/91PQ9RXzCIYFP
+ orrLA7afQ0Uc7eL94AdEt5J9kFcs4bdi7nMNZxQo1QdD7a6AUvJdfS7zVwK63mRSEfPoQcYXt5X
+ UBGGNMBA7Sm+SiCqEKTD0907HHQHC79U+ko0b6WG8yTwNhOAPC0HxHB7fq904g7Pi9BLzZeToJK
+ lkAEFTMKNS2MEzqrPU2Vvx/ot71TTg==
+X-Authority-Analysis: v=2.4 cv=NtncssdJ c=1 sm=1 tr=0 ts=693795af b=1 cx=c_pps
  a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
  a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=cBp7PEOAEHQrr6jRSKsA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: lW9KrC91eA9WrWTCraNo-YZe3A0VWDln
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA5MDAyMyBTYWx0ZWRfX+u3QSDkOML/g
- qmkLFdD2IAZNVqdPQ4e4poZN82c+GxUm8j/m7x3VHr/A/0w6LKJ89ksM7zCJPdd78li6hdnhuUg
- QkFc3/QwKGBQYdIh7XGK7Lv81wkbmr5yuM2hJvb+RuWxsYS2xhpZrUJ0rTgtViG9A4Cb7rTuk1o
- 3TDgF+lav6NOcPWOUs9aQ+5v2ovz0Ly/rlAl+pe4tibMjXX5B+Vt3k2EQFJdPB1xt1Mv2Fw9bwY
- IE0ilwrNk/qIUTtzB3dE3PFdYemZtfXoppUpg+Mg778/mIJ2X+zaAX+Y4i98aXfLsJP8a+4PoOm
- 9MFebn3bycHbf6j3Cosb/6Lbqg3hH1XNauL/Y47rA1xChZMMrKp6tdaHrbevzlR3wIwgT9WpNBv
- CTYop1ckscpr/bcPX+0pVw8Vv5dLFQ==
-X-Proofpoint-GUID: lW9KrC91eA9WrWTCraNo-YZe3A0VWDln
+ a=VwQbUJbxAAAA:8 a=UzYemIi4oM-TtD-D_kAA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: mzkQg3Z6EBZw8XZRq6XkGpOkg93WIPdd
 
-On Tue, 28 Oct 2025 18:01:49 +0800, Duoming Zhou wrote:
+On Wed, 26 Nov 2025 15:40:27 +0100, Heiko Carstens wrote:
 
-> The delayed work item imm_tq is initialized in imm_attach() and
-> scheduled via imm_queuecommand() for processing SCSI commands.
-> When the IMM parallel port SCSI host adapter is detached through
-> imm_detach(), the imm_struct device instance is deallocated.
+> The KMSG_COMPONENT macro is a leftover of the s390 specific "kernel message
+> catalog" from 2008 [1] which never made it upstream.
 > 
-> However, the delayed work might still be pending or executing
-> when imm_detach() is called, leading to use-after-free bugs
-> when the work function imm_interrupt() accesses the already
-> freed imm_struct memory.
+> The macro was added to s390 code to allow for an out-of-tree patch which
+> used this to generate unique message ids. Also this out-of-tree doesn't
+> exist anymore.
 > 
 > [...]
 
 Applied to 6.19/scsi-queue, thanks!
 
-[1/1] scsi: imm: fix use-after-free bugs caused by unfinished delayed work
-      https://git.kernel.org/mkp/scsi/c/ab58153ec64f
+[1/1] scsi: target: sbp: Remove KMSG_COMPONENT macro
+      https://git.kernel.org/mkp/scsi/c/971bb08704e2
 
 -- 
 Martin K. Petersen
