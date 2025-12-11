@@ -1,97 +1,82 @@
-Return-Path: <linux-scsi+bounces-19671-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19678-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id F181BCB3D22
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Dec 2025 20:06:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12CD6CB4739
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Dec 2025 02:43:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EC467300E822
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Dec 2025 19:06:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4B353300C0F2
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Dec 2025 01:43:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C9CA28505E;
-	Wed, 10 Dec 2025 19:06:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB57223185E;
+	Thu, 11 Dec 2025 01:43:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="dOVR9coe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hClWqQpU"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-yx1-f100.google.com (mail-yx1-f100.google.com [74.125.224.100])
+Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C131E376C
-	for <linux-scsi@vger.kernel.org>; Wed, 10 Dec 2025 19:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD731CDFCA
+	for <linux-scsi@vger.kernel.org>; Thu, 11 Dec 2025 01:43:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765393618; cv=none; b=YCC+lBQfCFD48nYRyhWU7vEary0ZeeMUe5ILjiZw1HEpHWgcBqpvgyFulhBWfSEu63bW020XlEsYkC/b1dZ5cbNlcOEBMcQWFJY63oFGkN/dKyukHbtBZbyX2jMYe82fjn/JDj2gqlDkKZl0zsqYV+pYzhL3Yn20Xm0JGSX8jHw=
+	t=1765417406; cv=none; b=uNq2mN7DwQbjaP60EhEdscKADVBBYgUWr9sLyimx0yBG8067hdqE/nfZcX9cSD8y7CpCg7JS8ABo2hx/gsHeTM2OISM8kjXyhLTVhQsDKa9SnyffhBynV9OMZ6HPVsHmG5ltwM0YNYBMVM/lgvCnvw/ozR7G6O1fJY77E3RHVqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765393618; c=relaxed/simple;
-	bh=M910zPYCc8Xj/Y4kIrtPF4owFsRLDo2SrbCALfoImwQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X9PUNdyIg4oTVpwmGFh2slQbVyCTHMqDKIcEkHAvC8tBJXS+or8SEIY/LyUClmDkVWQgCFfUED+mrQusjpEqCFXceKvEWrHwN11x8uQ3LHe/mNxZn8NEHMvsmIQmaM+QIcaixpE1MU6y/oaOtpU1h4CxMwDnYVVGn3qRa4E4RcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=dOVR9coe; arc=none smtp.client-ip=74.125.224.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-yx1-f100.google.com with SMTP id 956f58d0204a3-6446c1a7a1cso128459d50.3
-        for <linux-scsi@vger.kernel.org>; Wed, 10 Dec 2025 11:06:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765393616; x=1765998416;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kF0ZTPTh6C8GEz16r9dHrE7VVMeg5FEEbJe17ZjuCwQ=;
-        b=fDryqXcY8RKeqgCVSFNIOIZMnOP/V9KgkNNw0OoFgZk+iC7s5DKvbGIczAdNaGgB94
-         NT8nueO2QOsgQskI2YNaUVobIGPfu4a4OJDbnf/8MjHoYF8TxBmzgsk1qIiVGb/xeNKa
-         ajdy+LSXkrDVGJyT3aj+ai9itq6sG4/LI+zFx/Gy6K7uxheURSzcUbaXAnFUMNrvPGuA
-         AdxT2bu2U9xPFEn5VoG0H/TepS0bD0YBB0oKK1LF5MTowus6SJRRy3vHFHC7W6z+hCfU
-         a1bxDDJvnv78ROq4qexdCshU9YMEcDZS3KqFxY8FSeMbKELfRYqp447VNf8oFBXyi+RI
-         cHUw==
-X-Gm-Message-State: AOJu0YyLYIrXGMFW6ftsO8OYSNgdDlBgq21/B/X8e8kXbmscj/ErVLaB
-	o7sWJbOyur+JyoX2g6Lxn13d1odgyAzHgrBsc77PHm1Qf+7srv4wRVx9rJ/dnEvMPXKVE0lvbtp
-	h+v0BDM4YqAaJVN9awnyt9/Pm6e9mEVsqu6CyEeA+1CQOWAcDFnYHIiH2AoLF70rH6A61S9NHYL
-	2A9hzED2pKeGhere/BdQg2ETt/eaRQm/17m3HfjhlRMQN56hXBpGYWwuKoCoazV3DydSxuAuJnN
-	z7NlIERfI+6buOCRA7bE6G4
-X-Gm-Gg: AY/fxX6k+qdwisuNDpG179T/E7MCEdf5rvgb8gnoGTMT8+Rv6dCtfATNmdNG2+RD3Ia
-	SVS7XghTXqS+QpGIcddPEuKz+/por6xjK6ksUmTY6VwkN3ux/FaTLDa953oZ5TubdJKMfvqxwWY
-	Po5cWS9DS2xcx6DqOBWTWeDiB0p3Qo8bNav7FbMN3vntG2FnsTdSvW4YWzgjHukywbCvxzA+J9o
-	P3BqMtHf/UZp4hfhvpvH/wjUZerZJ6vJCYOLJ+S7pzI8ddnILs7SHM8X4u5ctWgB+4leuFPei6O
-	VhFLLmIpv7BWfbyBCn4UPy1b6/iAxOkr7F1T94OmDviiu7adhDTrYR7C2dk8bRu2dYbCYgYmXT0
-	sN4Asf71Jbn7FvIWEPIKVBRBXWlqu2aM4nX0u+3x8eC8jh11Ug2Oe4rgSFMtV+YXoik7Fqt2joB
-	Ebqp0//wK/q6S9c7qOTomdymnHIthOZPmfRahVoBhdB5Z+TLegQvZu
-X-Google-Smtp-Source: AGHT+IFKT7zFaTuekI1HlDPlKQgNtPI7LO2LWFuv+tBynHNVQ2HGJr0bHTpfuhCZrgrgLOo+hVFXPORe1PA/
-X-Received: by 2002:a05:690c:c1a:b0:78c:57c1:70d9 with SMTP id 00721157ae682-78c9d7e9e18mr26303967b3.37.1765393615720;
-        Wed, 10 Dec 2025 11:06:55 -0800 (PST)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-11.dlp.protect.broadcom.com. [144.49.247.11])
-        by smtp-relay.gmail.com with ESMTPS id 00721157ae682-78d69e63047sm367337b3.31.2025.12.10.11.06.55
-        for <linux-scsi@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 10 Dec 2025 11:06:55 -0800 (PST)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-7c240728e2aso199701b3a.3
-        for <linux-scsi@vger.kernel.org>; Wed, 10 Dec 2025 11:06:55 -0800 (PST)
+	s=arc-20240116; t=1765417406; c=relaxed/simple;
+	bh=xrWDGO8Bu+TNV0i2MKifgX+FrHrf+hXPL09zGZFhmY4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RTxWbCSnhyT2Ve96WnSqIRbYCwvV6qMLYOlkKhkrSovUhJYXYMgWSmDWJ22GTgEWr0Mt+zmRhvRgSwv74qjXOiFXrUORnqCITdRl5PFO0fGEnFv5l/6qSeB9umR3jkqY67MOVzo8M+17r423FolmUoUuvxo9Gxf86Rw3WanNCDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hClWqQpU; arc=none smtp.client-ip=209.85.210.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-7ba55660769so329488b3a.1
+        for <linux-scsi@vger.kernel.org>; Wed, 10 Dec 2025 17:43:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1765393614; x=1765998414; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765417404; x=1766022204; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kF0ZTPTh6C8GEz16r9dHrE7VVMeg5FEEbJe17ZjuCwQ=;
-        b=dOVR9coewYVjoADpQ1WVWYWMhssvEgX2TvDZbSyoJqJPOzDxrZVyAE3g7EGQ+N282b
-         KVpCbzrv73MsLwjcmRVi22Phisk/MRs/bDx0YTCvO/ULEbpbvwylmNSrzAakZTCqo9Fb
-         IRjzfr7SPg+80JXYD99ng8vnB2/nFlwAtfyfg=
-X-Received: by 2002:a05:6a20:94c7:b0:34a:f63:59dd with SMTP id adf61e73a8af0-366e2b8df78mr3542731637.51.1765393614060;
-        Wed, 10 Dec 2025 11:06:54 -0800 (PST)
-X-Received: by 2002:a05:6a20:94c7:b0:34a:f63:59dd with SMTP id adf61e73a8af0-366e2b8df78mr3542697637.51.1765393613541;
-        Wed, 10 Dec 2025 11:06:53 -0800 (PST)
-Received: from dhcp-10-123-98-253.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7f4c22842dasm277337b3a.12.2025.12.10.11.06.51
+        bh=H67pqGEvrZPQpldVYXefn/pIpv1C8G/3O8zvSEm0qzo=;
+        b=hClWqQpU6mw75UYM2B9TqbgrAw8mLmN/JfIF5ywEnbgfXT6kjwkVYdhGm8e9QvVT2R
+         l2NA+PgpvsQEDIhXtwQb9AWiuZhsrzgRy9YFYrcXgtvliFpU9KlgJ72NZutOUF6VuN4A
+         CiihARP6PRqHbzzMFsLoM/C1miwUycG/nXFvIHNzwYEG3i8cDLfVFzgqvXfBgjb/UhIu
+         olKhkhqGPQ9cGdsIUGm5Frb9bisytiidCHPgOtt6Hp7FEUgzcg4WtgZMWXuZEV3ujDRr
+         rJA6qKjqs1AYSI+p94y+/r2QfRIc0yk0sOUhHuWfGQUAX+r1eVTKjSt6rIsui3/25cPh
+         fzYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765417404; x=1766022204;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H67pqGEvrZPQpldVYXefn/pIpv1C8G/3O8zvSEm0qzo=;
+        b=UbCXkXP+pPDViP0jdt+bkDcri/UUOfwUKcK5Csffagwu9DMWDzPjL8kfWbpRxJPkdW
+         UFLmRm3hTqXjqhcub5QMSQtcOvT1j6MbUeRuikbQm5DBxH7bG8Sh93n0pIwfEfs7GUHm
+         f0dFXo3mbh02XX4ipvDQQkwEkLlZjMhPxTqLGf2ELO9YNpvVeOQJmAksiV37ID/J+g9Z
+         7YPWGbCYzTZSSB5N7tovnxM+wwy+ydL4CxOqlaPv4pw+JXRfKGagYUFNDtho/vpAirBB
+         O4RrnLOEb/aXmpxVJIfa39twX4k4JVy+YsDDLIhgUH5AaIog2vlDUTAj2p98k2WaJrzm
+         6Yxg==
+X-Gm-Message-State: AOJu0Yy88BIvf2nQKBZ25IxwPTQ//EbOh6mKVgYjy69o13EH7gQWP2gG
+	hASofDXMDWOcB6na5HsglOhMu+7KkFYCCxdPrYsVgfRLkJrHTYRun140hYt3N+Xouhs3dQ==
+X-Gm-Gg: ASbGncu8geIOGyr3cfPsHrjsACcrutEusxFhHZtZ1fy3McSbyPEWoHtnQzUJoI2uP08
+	s2c8X33JS2CaIw5MFr4C9/9Hzp4l8GPv5fOV2hdxY+wL4j2WEiocI9mGYhvBfnml+HVhsO0R34l
+	Yf68VVEbTh7X9YFFGTwFOyBk3wpR6hhrbDbrKfGOc2z9fE0DcJkm+ZTP4h0Z3Qh/djib+9JzRUr
+	5qw+LoFVJUz8fQ/ayIVXSblW2lmXAw3YXi/e4PfFbZ11ST/Z0KVRPWvjNTI4kNeqGV5WgKgLaoG
+	f3EnVtRQsZOeNj/YDBUzwWcseh5afyqysPjUPzb9vB5LDS6uWsVvP0hDG60/wlhrCRWeBHe/CjN
+	KP0uofsGCBT7p3RjvCaUcWBegqd3rFMG9QQvzpPEjOo1BS40H+dBW7wCeLVsI+ZOqQL8Y7/tUL3
+	Oho5hiSLjfXABOmw5zEwCrkjunqSVDgNEaelYq6flRZJTPGYctW8tHkGFRs+Pv5uNmDNwhePX8L
+	1PN
+X-Google-Smtp-Source: AGHT+IHKm1B8+dqiSRwtDCu77EUWtjs/Dq+WIel9xHlliXpCPULzDgiEIpwgAeJ52Gced4FhgIjKbA==
+X-Received: by 2002:a05:7022:984:b0:119:e56b:91f6 with SMTP id a92af1059eb24-11f296b3ed0mr3384387c88.39.1765417404301;
+        Wed, 10 Dec 2025 17:43:24 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f2e1bb3b4sm3273748c88.4.2025.12.10.17.43.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Dec 2025 11:06:53 -0800 (PST)
-From: Chandrakanth Patil <chandrakanth.patil@broadcom.com>
+        Wed, 10 Dec 2025 17:43:24 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 To: linux-scsi@vger.kernel.org
-Cc: sathya.prakash@broadcom.com,
-	ranjan.kumar@broadcom.com,
-	Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] mpi3mr: Read missing IOCFacts flag for reply queue full overflow
-Date: Thu, 11 Dec 2025 05:59:29 +0530
-Message-ID: <20251211002929.22071-1-chandrakanth.patil@broadcom.com>
-X-Mailer: git-send-email 2.47.3
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Subject: [PATCH] scsi: remove several unused functions
+Date: Wed, 10 Dec 2025 17:42:44 -0800
+Message-ID: <20251211014246.38423-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -99,47 +84,301 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 
-The driver was not reading the MAX_REQ_PER_REPLY_QUEUE_LIMIT
-IOCFacts flag, so the reply-queue-full handling was never enabled
-even on firmware that supports it. Reading this flag enables the
-feature and prevents reply queue overflow
-
-Fixes: f08b24d82749 ("scsi: mpi3mr: Avoid reply queue full condition")
-Cc: stable@vger.kernel.org
-Signed-off-by: Chandrakanth Patil <chandrakanth.patil@broadcom.com>
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 ---
- drivers/scsi/mpi3mr/mpi/mpi30_ioc.h | 1 +
- drivers/scsi/mpi3mr/mpi3mr_fw.c     | 2 ++
- 2 files changed, 3 insertions(+)
+ drivers/scsi/aic7xxx/aic79xx_core.c   | 89 ---------------------------
+ drivers/scsi/aic7xxx/aic79xx_inline.h | 10 ---
+ drivers/scsi/aic7xxx/aic79xx_osm.c    | 16 -----
+ drivers/scsi/aic7xxx/aic7xxx_core.c   | 35 -----------
+ drivers/scsi/nsp32.c                  | 14 -----
+ drivers/scsi/ses.c                    | 19 ------
+ 6 files changed, 183 deletions(-)
 
-diff --git a/drivers/scsi/mpi3mr/mpi/mpi30_ioc.h b/drivers/scsi/mpi3mr/mpi/mpi30_ioc.h
-index b42933fcd423..6561f98c3cb2 100644
---- a/drivers/scsi/mpi3mr/mpi/mpi30_ioc.h
-+++ b/drivers/scsi/mpi3mr/mpi/mpi30_ioc.h
-@@ -166,6 +166,7 @@ struct mpi3_ioc_facts_data {
- #define MPI3_IOCFACTS_FLAGS_SIGNED_NVDATA_REQUIRED            (0x00010000)
- #define MPI3_IOCFACTS_FLAGS_DMA_ADDRESS_WIDTH_MASK            (0x0000ff00)
- #define MPI3_IOCFACTS_FLAGS_DMA_ADDRESS_WIDTH_SHIFT           (8)
-+#define MPI3_IOCFACTS_FLAGS_MAX_REQ_PER_REPLY_QUEUE_LIMIT     (0x00000040)
- #define MPI3_IOCFACTS_FLAGS_INITIAL_PORT_ENABLE_MASK          (0x00000030)
- #define MPI3_IOCFACTS_FLAGS_INITIAL_PORT_ENABLE_SHIFT		(4)
- #define MPI3_IOCFACTS_FLAGS_INITIAL_PORT_ENABLE_NOT_STARTED   (0x00000000)
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_fw.c b/drivers/scsi/mpi3mr/mpi3mr_fw.c
-index 8fe6e0bf342e..8c4bb7169a87 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_fw.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_fw.c
-@@ -3158,6 +3158,8 @@ static void mpi3mr_process_factsdata(struct mpi3mr_ioc *mrioc,
- 	mrioc->facts.dma_mask = (facts_flags &
- 	    MPI3_IOCFACTS_FLAGS_DMA_ADDRESS_WIDTH_MASK) >>
- 	    MPI3_IOCFACTS_FLAGS_DMA_ADDRESS_WIDTH_SHIFT;
-+	mrioc->facts.max_req_limit = (facts_flags &
-+			MPI3_IOCFACTS_FLAGS_MAX_REQ_PER_REPLY_QUEUE_LIMIT);
- 	mrioc->facts.protocol_flags = facts_data->protocol_flags;
- 	mrioc->facts.mpi_version = le32_to_cpu(facts_data->mpi_version.word);
- 	mrioc->facts.max_reqs = le16_to_cpu(facts_data->max_outstanding_requests);
+diff --git a/drivers/scsi/aic7xxx/aic79xx_core.c b/drivers/scsi/aic7xxx/aic79xx_core.c
+index 6b87ea004e53..a6f1c23f5a38 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_core.c
++++ b/drivers/scsi/aic7xxx/aic79xx_core.c
+@@ -659,28 +659,12 @@ ahd_set_scbptr(struct ahd_softc *ahd, u_int scbptr)
+ 	ahd_outb(ahd, SCBPTR+1, (scbptr >> 8) & 0xFF);
+ }
+ 
+-#if 0 /* unused */
+-static u_int
+-ahd_get_hnscb_qoff(struct ahd_softc *ahd)
+-{
+-	return (ahd_inw_atomic(ahd, HNSCB_QOFF));
+-}
+-#endif
+-
+ static void
+ ahd_set_hnscb_qoff(struct ahd_softc *ahd, u_int value)
+ {
+ 	ahd_outw_atomic(ahd, HNSCB_QOFF, value);
+ }
+ 
+-#if 0 /* unused */
+-static u_int
+-ahd_get_hescb_qoff(struct ahd_softc *ahd)
+-{
+-	return (ahd_inb(ahd, HESCB_QOFF));
+-}
+-#endif
+-
+ static void
+ ahd_set_hescb_qoff(struct ahd_softc *ahd, u_int value)
+ {
+@@ -705,15 +689,6 @@ ahd_set_snscb_qoff(struct ahd_softc *ahd, u_int value)
+ 	ahd_outw(ahd, SNSCB_QOFF, value);
+ }
+ 
+-#if 0 /* unused */
+-static u_int
+-ahd_get_sescb_qoff(struct ahd_softc *ahd)
+-{
+-	AHD_ASSERT_MODES(ahd, AHD_MODE_CCHAN_MSK, AHD_MODE_CCHAN_MSK);
+-	return (ahd_inb(ahd, SESCB_QOFF));
+-}
+-#endif
+-
+ static void
+ ahd_set_sescb_qoff(struct ahd_softc *ahd, u_int value)
+ {
+@@ -721,15 +696,6 @@ ahd_set_sescb_qoff(struct ahd_softc *ahd, u_int value)
+ 	ahd_outb(ahd, SESCB_QOFF, value);
+ }
+ 
+-#if 0 /* unused */
+-static u_int
+-ahd_get_sdscb_qoff(struct ahd_softc *ahd)
+-{
+-	AHD_ASSERT_MODES(ahd, AHD_MODE_CCHAN_MSK, AHD_MODE_CCHAN_MSK);
+-	return (ahd_inb(ahd, SDSCB_QOFF) | (ahd_inb(ahd, SDSCB_QOFF + 1) << 8));
+-}
+-#endif
+-
+ static void
+ ahd_set_sdscb_qoff(struct ahd_softc *ahd, u_int value)
+ {
+@@ -3560,33 +3526,6 @@ ahd_clear_intstat(struct ahd_softc *ahd)
+ uint32_t ahd_debug = AHD_DEBUG_OPTS;
+ #endif
+ 
+-#if 0
+-void
+-ahd_print_scb(struct scb *scb)
+-{
+-	struct hardware_scb *hscb;
+-	int i;
+-
+-	hscb = scb->hscb;
+-	printk("scb:%p control:0x%x scsiid:0x%x lun:%d cdb_len:%d\n",
+-	       (void *)scb,
+-	       hscb->control,
+-	       hscb->scsiid,
+-	       hscb->lun,
+-	       hscb->cdb_len);
+-	printk("Shared Data: ");
+-	for (i = 0; i < sizeof(hscb->shared_data.idata.cdb); i++)
+-		printk("%#02x", hscb->shared_data.idata.cdb[i]);
+-	printk("        dataptr:%#x%x datacnt:%#x sgptr:%#x tag:%#x\n",
+-	       (uint32_t)((ahd_le64toh(hscb->dataptr) >> 32) & 0xFFFFFFFF),
+-	       (uint32_t)(ahd_le64toh(hscb->dataptr) & 0xFFFFFFFF),
+-	       ahd_le32toh(hscb->datacnt),
+-	       ahd_le32toh(hscb->sgptr),
+-	       SCB_GET_TAG(scb));
+-	ahd_dump_sglist(scb);
+-}
+-#endif  /*  0  */
+-
+ /************************* Transfer Negotiation *******************************/
+ /*
+  * Allocate per target mode instance (ID we respond to as a target)
+@@ -9889,34 +9828,6 @@ ahd_dump_card_state(struct ahd_softc *ahd)
+ 		ahd_unpause(ahd);
+ }
+ 
+-#if 0
+-void
+-ahd_dump_scbs(struct ahd_softc *ahd)
+-{
+-	ahd_mode_state saved_modes;
+-	u_int	       saved_scb_index;
+-	int	       i;
+-
+-	saved_modes = ahd_save_modes(ahd);
+-	ahd_set_modes(ahd, AHD_MODE_SCSI, AHD_MODE_SCSI);
+-	saved_scb_index = ahd_get_scbptr(ahd);
+-	for (i = 0; i < AHD_SCB_MAX; i++) {
+-		ahd_set_scbptr(ahd, i);
+-		printk("%3d", i);
+-		printk("(CTRL 0x%x ID 0x%x N 0x%x N2 0x%x SG 0x%x, RSG 0x%x)\n",
+-		       ahd_inb_scbram(ahd, SCB_CONTROL),
+-		       ahd_inb_scbram(ahd, SCB_SCSIID),
+-		       ahd_inw_scbram(ahd, SCB_NEXT),
+-		       ahd_inw_scbram(ahd, SCB_NEXT2),
+-		       ahd_inl_scbram(ahd, SCB_SGPTR),
+-		       ahd_inl_scbram(ahd, SCB_RESIDUAL_SGPTR));
+-	}
+-	printk("\n");
+-	ahd_set_scbptr(ahd, saved_scb_index);
+-	ahd_restore_modes(ahd, saved_modes);
+-}
+-#endif  /*  0  */
+-
+ /**************************** Flexport Logic **********************************/
+ /*
+  * Read count 16bit words from 16bit word address start_addr from the
+diff --git a/drivers/scsi/aic7xxx/aic79xx_inline.h b/drivers/scsi/aic7xxx/aic79xx_inline.h
+index 09335a3c8691..dca13159b2ce 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_inline.h
++++ b/drivers/scsi/aic7xxx/aic79xx_inline.h
+@@ -144,16 +144,6 @@ static inline uint8_t *ahd_get_sense_buf(struct ahd_softc *ahd,
+ static inline uint32_t ahd_get_sense_bufaddr(struct ahd_softc *ahd,
+ 					      struct scb *scb);
+ 
+-#if 0 /* unused */
+-
+-#define AHD_COPY_COL_IDX(dst, src)				\
+-do {								\
+-	dst->hscb->scsiid = src->hscb->scsiid;			\
+-	dst->hscb->lun = src->hscb->lun;			\
+-} while (0)
+-
+-#endif
+-
+ static inline uint8_t *
+ ahd_get_sense_buf(struct ahd_softc *ahd, struct scb *scb)
+ {
+diff --git a/drivers/scsi/aic7xxx/aic79xx_osm.c b/drivers/scsi/aic7xxx/aic79xx_osm.c
+index c3d1b9dd24ae..82a5c0d4e3f9 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_osm.c
++++ b/drivers/scsi/aic7xxx/aic79xx_osm.c
+@@ -411,22 +411,6 @@ ahd_inb(struct ahd_softc * ahd, long port)
+ 	return (x);
+ }
+ 
+-#if 0 /* unused */
+-static uint16_t
+-ahd_inw_atomic(struct ahd_softc * ahd, long port)
+-{
+-	uint8_t x;
+-
+-	if (ahd->tags[0] == BUS_SPACE_MEMIO) {
+-		x = readw(ahd->bshs[0].maddr + port);
+-	} else {
+-		x = inw(ahd->bshs[(port) >> 8].ioport + ((port) & 0xFF));
+-	}
+-	mb();
+-	return (x);
+-}
+-#endif
+-
+ void
+ ahd_outb(struct ahd_softc * ahd, long port, uint8_t val)
+ {
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_core.c b/drivers/scsi/aic7xxx/aic7xxx_core.c
+index a396f048a031..d55e2a321a7c 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_core.c
++++ b/drivers/scsi/aic7xxx/aic7xxx_core.c
+@@ -2072,41 +2072,6 @@ ahc_clear_intstat(struct ahc_softc *ahc)
+ uint32_t ahc_debug = AHC_DEBUG_OPTS;
+ #endif
+ 
+-#if 0 /* unused */
+-static void
+-ahc_print_scb(struct scb *scb)
+-{
+-	int i;
+-
+-	struct hardware_scb *hscb = scb->hscb;
+-
+-	printk("scb:%p control:0x%x scsiid:0x%x lun:%d cdb_len:%d\n",
+-	       (void *)scb,
+-	       hscb->control,
+-	       hscb->scsiid,
+-	       hscb->lun,
+-	       hscb->cdb_len);
+-	printk("Shared Data: ");
+-	for (i = 0; i < sizeof(hscb->shared_data.cdb); i++)
+-		printk("%#02x", hscb->shared_data.cdb[i]);
+-	printk("        dataptr:%#x datacnt:%#x sgptr:%#x tag:%#x\n",
+-		ahc_le32toh(hscb->dataptr),
+-		ahc_le32toh(hscb->datacnt),
+-		ahc_le32toh(hscb->sgptr),
+-		hscb->tag);
+-	if (scb->sg_count > 0) {
+-		for (i = 0; i < scb->sg_count; i++) {
+-			printk("sg[%d] - Addr 0x%x%x : Length %d\n",
+-			       i,
+-			       (ahc_le32toh(scb->sg_list[i].len) >> 24
+-				& SG_HIGH_ADDR_BITS),
+-			       ahc_le32toh(scb->sg_list[i].addr),
+-			       ahc_le32toh(scb->sg_list[i].len));
+-		}
+-	}
+-}
+-#endif
+-
+ /************************* Transfer Negotiation *******************************/
+ /*
+  * Allocate per target mode instance (ID we respond to as a target)
+diff --git a/drivers/scsi/nsp32.c b/drivers/scsi/nsp32.c
+index abc4ce9eae74..fd6dc06e1f20 100644
+--- a/drivers/scsi/nsp32.c
++++ b/drivers/scsi/nsp32.c
+@@ -427,20 +427,6 @@ static void nsp32_build_reject(struct scsi_cmnd *SCpnt)
+ /*
+  * timer
+  */
+-#if 0
+-static void nsp32_start_timer(struct scsi_cmnd *SCpnt, int time)
+-{
+-	unsigned int base = SCpnt->host->io_port;
+-
+-	nsp32_dbg(NSP32_DEBUG_INTR, "timer=%d", time);
+-
+-	if (time & (~TIMER_CNT_MASK)) {
+-		nsp32_dbg(NSP32_DEBUG_INTR, "timer set overflow");
+-	}
+-
+-	nsp32_write2(base, TIMER_SET, time & TIMER_CNT_MASK);
+-}
+-#endif
+ 
+ 
+ /*
+diff --git a/drivers/scsi/ses.c b/drivers/scsi/ses.c
+index 2c61624cb4b0..ddc1e6662f3f 100644
+--- a/drivers/scsi/ses.c
++++ b/drivers/scsi/ses.c
+@@ -446,25 +446,6 @@ struct ses_host_edev {
+ 	struct enclosure_device *edev;
+ };
+ 
+-#if 0
+-int ses_match_host(struct enclosure_device *edev, void *data)
+-{
+-	struct ses_host_edev *sed = data;
+-	struct scsi_device *sdev;
+-
+-	if (!scsi_is_sdev_device(edev->edev.parent))
+-		return 0;
+-
+-	sdev = to_scsi_device(edev->edev.parent);
+-
+-	if (sdev->host != sed->shost)
+-		return 0;
+-
+-	sed->edev = edev;
+-	return 1;
+-}
+-#endif  /*  0  */
+-
+ static int ses_process_descriptor(struct enclosure_component *ecomp,
+ 				   unsigned char *desc, int max_desc_len)
+ {
 -- 
-2.47.1
+2.43.0
 
 
