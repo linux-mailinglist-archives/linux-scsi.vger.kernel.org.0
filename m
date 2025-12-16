@@ -1,133 +1,142 @@
-Return-Path: <linux-scsi+bounces-19716-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19718-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3F36CBF137
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Dec 2025 17:58:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C52ADCC10D8
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Dec 2025 07:04:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A6EF63030C8C
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Dec 2025 16:57:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 15FAA3033D52
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Dec 2025 06:02:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA026330B3A;
-	Mon, 15 Dec 2025 16:47:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF987335564;
+	Tue, 16 Dec 2025 06:02:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="laAGiZKS"
+	dkim=pass (1024-bit key) header.d=darknavy.com header.i=@darknavy.com header.b="gX3/Z5mD"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833D6309EF7;
-	Mon, 15 Dec 2025 16:47:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03EC31ED7D;
+	Tue, 16 Dec 2025 06:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765817256; cv=none; b=Ljco0CIh5TPOtQGnXZw5woaB83H4rCDekcxfYpVn99Q4gH8WbNa7tCjFildt5ReQbU4FH/ArPI7hXzxdlyMZvqiXQxr6uGWC9KGm0RgWG0M8glpY6NhFZbrp2MC8xjyYzIfXEvb+hG3F59FklN6TUUtLi6JTR9O3EWqMg1jT+wI=
+	t=1765864970; cv=none; b=EniKoRLsBnZf8RcllNbnJfnfiJZTL4vK9YWRMVG7rSHc/GrUWVFbh3SAg/nZpRVFWn9qPLYROzC5rHBQIlfThxGFYWRocp/uZuhYtjBDaMGxM17YsvXe4f/I5EI53E+7nZvpy+XjPtaUJ7V9pIvhGvnqJYXeeKLmYF4H4UabEA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765817256; c=relaxed/simple;
-	bh=A8/a4u7TzuNfkMN93bTIkVRRbuTknk1QkfYBjexj6MQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hILbEMfWSboA8il6kvpxzBLsp2JdpF5eSLgMX2OebbOr1QmthyZXY+A6JDxWzjzznoyzGI2ti0M1CvSFpMGxw7nEyYbAUrf9fKGD5MHl9PmA8LDngVFSKDQ/q4JP9yopauVGwEpbJSIN6G6RDHNGYvw19bkdWozE1qVQa+yW//8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=laAGiZKS; arc=none smtp.client-ip=199.89.1.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4dVQvz0q8kz1XMM2X;
-	Mon, 15 Dec 2025 16:47:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1765817245; x=1768409246; bh=nk9TH875DI0tB7LDOR4Zcx1p
-	30Up18YMJO/6J1I24go=; b=laAGiZKSJt/SJWbd43G4foKj3QQhhennBS0KNP72
-	h0/UYlFe1wnGcLaCudolhZuJugKev3kWASefRQTmXNuQNOJJ4RBbaqzmYUN/cf07
-	4kalnz5a2+/+ZP/MCguQoJF9B4Rak3FBcjhoM6QOQ7rIJrh98n8j596LtonTgPFC
-	3rgeNeTTrOQAff/BFEAkjbIbIbnRGrJX5w5czOFEzAMgFfRgE6vIUaTLPEQV9rPH
-	5MMeVQo7JpgNmrJLN3mpi4LPPA4Fsa8cfsPj1M+rbdqlFzc5P4LnBirXil9BbC9f
-	Uz1BrywF0JxA4TzWNcoMu/Ul5WDMEz+csRRiVOfOjicARg==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id cOCvOqV3CnPd; Mon, 15 Dec 2025 16:47:25 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4dVQvw20GVz1XMKfh;
-	Mon, 15 Dec 2025 16:47:23 +0000 (UTC)
-Message-ID: <54d824db-ec39-447c-8eab-6c2ce4ca87a6@acm.org>
-Date: Mon, 15 Dec 2025 08:47:03 -0800
+	s=arc-20240116; t=1765864970; c=relaxed/simple;
+	bh=NTag5p1OwLdRWQTEcZqMl0+EEI8hwNbQ1UnmrelULX8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ovMqP3rEGEOe3jveiywfz+2c+7hmJkXNzJfOzzpkS1cfeleeYubijCFpglLYaMRqfzzp8+SO0/bidYjLztJzR2qhTd8WIAFvB03LJzr2NcuTmI3cbcT287wrxSsvkLYYn1cH9SSyAaKJ19kVka3hoLUhIAMkN5j/eL/S83ed/24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=darknavy.com; spf=pass smtp.mailfrom=darknavy.com; dkim=pass (1024-bit key) header.d=darknavy.com header.i=@darknavy.com header.b=gX3/Z5mD; arc=none smtp.client-ip=18.169.211.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=darknavy.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=darknavy.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=darknavy.com;
+	s=litx2311; t=1765864925;
+	bh=sfAJjUo1Z7X5qtx9c8xhODUynGVaR9dGyYBf7HTeAvg=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=gX3/Z5mDmJdZ6aHK0f4UGcaRp5kGDCVZy//Y2TwVNpG0ekJGNvxc64NBwbq/UrjNs
+	 r0WCI0qNpJ6K+TdgdjO60Rt/wWgl9VHX/qH15PJ8AXwsYg5ZW2AKWIH8ohMOR09L6q
+	 C7GQllExWrnBUV2bOkB5uATL3lFbBcekA7JK8yK4=
+X-QQ-mid: esmtpsz20t1765864919ta8e176f3
+X-QQ-Originating-IP: yXwUjgHgjOTee6x1YqVrhfsHcuyTMPPgX0/Aw10PWug=
+Received: from localhost.localdomain ( [223.166.168.213])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 16 Dec 2025 14:01:57 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 2682504126983098805
+EX-QQ-RecipientCnt: 7
+From: Shipei Qu <qu@darknavy.com>
+To: Adam Radford <aradford@gmail.com>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Shipei Qu <qu@darknavy.com>,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	DARKNAVY <vr@darknavy.com>
+Subject: [PATCH v2] scsi: 3w-sas: validate request_id reported by controller
+Date: Tue, 16 Dec 2025 14:01:53 +0800
+Message-Id: <20251216060156.41320-1-qu@darknavy.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] scsi: ufs: core: Fix error handler encryption support
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Po-Wen Kao <powenkao@google.com>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- "open list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER"
- <linux-scsi@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-References: <20251208025232.4068621-1-powenkao@google.com>
- <aTkXqslvwMOz2TUG@infradead.org>
- <955ba65e-424b-4968-9541-ab235a7bafd3@acm.org>
- <aT-jjQpp1UfaiZIU@infradead.org>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <aT-jjQpp1UfaiZIU@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:darknavy.com:qybglogicsvrsz:qybglogicsvrsz4b-0
+X-QQ-XMAILINFO: NfYhHxTlaBDtCuINKghGKxfYUwji1iovcq7w4eNkun1CokO6PckWM7Nq
+	AjBZoxPcPKZowgJbXCONbvhRLLRybaKSevdI+TEJrN9MJfj6aymUf+DssKRz6Oz/xfrfFWy
+	TqxyPHEes3roov/WcyxDu/y4k4EwYTRpKbfwpllY55alXo9RsMcE9ews7vy+MlqMwAz4ODz
+	LBWev0gC2mQ15pM86EWAr/KhiQM1vlTFvL5wNrX9SqCcqP4nrgYvrIUfuzMdX0ffQqYCOOF
+	+bzQAiQFe41yDftIgLLa5duogwrJdBec5A+vF9q/IMd6LPuvPaGmS/LncZGrCqQvr7UKcxO
+	PYJnFmVLFTo98yUFiMS6WhapkHNxIjs1g9qKva1EgtkkMULS+MU5H0STqbmjPh0r7gJwkEP
+	OkAQa9ekhJ2PshMn5uPJ+pqIzBPcFoVgGhchmz6qF5amK98RYYpx3MNQswx0fV4BRQbE2E5
+	vghjfnTnH8ihWePZ4q6MysUIwNGnBRNTTsXhfQVv4T5HvFO18Eg9x3CwnNC14fYZvZl/EBP
+	AXMH8AA3soZ6V5Vi8jqh4Tm6bQoIINucSP+LZ1FNGvdYt+1Nd4GdpNRAn7defLp/f7IpW0p
+	cXzRaSE9+OgrAF8drpt9rdHn+8aP03M1+f01/AoNM/5zIDerNiGRvPJTsPEYY+jj5L0CPx/
+	Z8oE+xw0u+fnYV2MTxhEIj4i+i3ywCKjqaOjZg/AbSxylY3vQ5DKrvulKXldSz3Ta2prkVF
+	TUAGiaorYxxFQJgxO1NkmAddK3Jv8nQgrMx4mGb77IcJXzvtqM5dMV1L/Btnc9m406imP2m
+	tslcQPn+GPGHJzpX9TK9TGZ1lfBU31HIy+rVeX2j0hsfc2Lyog4eqwDyzI1uX2p9DzC0VvM
+	dpouO6b76Bt7eZemg0yyEXGso/3PAibXwiZV/23SnuC/aVNUfv89Ti5Bswlfm0OabenG9Ja
+	Ii4HLIziqNebYFP7dEsnk4Jrn5ZUOT9DrZkPii2FNqOXCcjlZe7ex09QS
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+X-QQ-RECHKSPAM: 0
 
-On 12/14/25 9:58 PM, Christoph Hellwig wrote:
-> On Wed, Dec 10, 2025 at 09:44:52AM -0800, Bart Van Assche wrote:
->> On 12/9/25 10:48 PM, Christoph Hellwig wrote:
->>> As mentioned last round, why are you even calling into the crypto
->>> code here?  Calling that for a request without a crypt context,
->>> which includes all of them that do not transfer any data makes no
->>> sense to start with.
->>
->> ufshcd_prepare_lrbp_crypto() only has one caller. Moving the new test
->> from inside ufshcd_prepare_lrbp_crypto() into its caller should be easy.
-> 
-> I don't think callers vs calle is the important part here.  It is to
-> check if any actual data is tranferred instead of special casing EH
-> commands.
+Hi,
 
-Hi Christoph,
+resending with a correctly generated diff (the previous email had a malformed
+patch header). The content is unchanged: while testing 3w-sas with an emulated
+3ware 9750-compatible controller we noticed that the driver trusts the
+request_id field reported by the controller in the completion path and uses it
+as an index into several TW_Q_LENGTH-sized arrays without validating the range.
+A bogus value can lead to out-of-bounds accesses and crashes.
 
-Do you agree with the following?
+For example, a malicious PCIe/Thunderbolt-attached device that emulates a
+3ware controller can return crafted completions and drive the driver out of
+bounds in this way. We have a small QEMU-based PoC that reproduces the problem
+and can share it if that would be helpful.
 
-(a) There is code in the SCSI error handler that submits SCSI commands
-     with a data buffer. Hence, disabling encryption if and only if the
-     data buffer length is zero can't fix the reported problem. From
-     scsi_eh_prep_cmnd() in drivers/scsi/scsi_error.c:
+This driver is enabled by default in common distributions (e.g. Ubuntu), so a
+misbehaving or emulated controller can trigger this on a stock installation.
+The same pattern is present in current mainline kernels.
 
-		scmd->sdb.length = min_t(unsigned, SCSI_SENSE_BUFFERSIZE,
-					 sense_bytes);
-		sg_init_one(&ses->sense_sgl, scmd->sense_buffer,
-			    scmd->sdb.length);
-		scmd->sdb.table.sgl = &ses->sense_sgl;
+This issue was first reported via security@kernel.org. The kernel security team
+replied that, under the usual upstream threat model (only trusted
+PCIe/Thunderbolt devices are allowed to bind to such drivers), it should be
+treated as a normal robustness bug rather than a security issue, and asked us
+to send fixes to the relevant development lists. This email follows that
+guidance.
 
-(b) In general in the Linux kernel it is strongly preferred to fix the
-     root cause of a bug rather than to implement a workaround. This is
-     preferred because it makes kernel code easier to maintain and
-     reduces the chance that new bugs are introduced.
+The fix is to reject out-of-range request_id values before indexing the
+per-request arrays in the interrupt handler.
 
-(c) Disabling encryption in the UFS driver if a command has been
-     submitted by the SCSI error handler is a workaround. Patch [1] fixes
-     the root cause of the problem, namely the SCSI error handler not
-     setting the encryption fields in struct request correctly. We prefer
-     [1] because UFS devices that support one million IOPS are expected
-     to arrive soon (early 2026). Hence the importance of keeping the hot
-     path in the UFS driver fast.
+Reported-by: DARKNAVY (@DarkNavyOrg) <vr@darknavy.com>
+Signed-off-by: Shipei Qu <qu@darknavy.com>
+---
+ drivers/scsi/3w-sas.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Thanks,
-
-Bart.
-
-[1] [PATCH v2 1/1] scsi: core: Fix error handler encryption support
-  
-(https://lore.kernel.org/linux-scsi/20251203073310.2248956-1-powenkao@google.com/)
+diff --git a/drivers/scsi/3w-sas.c b/drivers/scsi/3w-sas.c
+index e319be7d3..4d1c31c04 100644
+--- a/drivers/scsi/3w-sas.c
++++ b/drivers/scsi/3w-sas.c
+@@ -1184,6 +1184,15 @@ static irqreturn_t twl_interrupt(int irq, void *dev_instance)
+ 		} else
+ 			request_id = TW_RESID_OUT(response);
+ 
++		if (request_id >= TW_Q_LENGTH) {
++			TW_PRINTK(tw_dev->host, TW_DRIVER, 0x10,
++				  "Received out-of-range request id %u",
++				  request_id);
++			TWL_MASK_INTERRUPTS(tw_dev);
++			/* let the reset / error handling path deal with it */
++			goto twl_interrupt_bail;
++		}
++
+ 		full_command_packet = tw_dev->command_packet_virt[request_id];
+ 
+ 		/* Check for correct state */
+-- 
+2.45.1
 
