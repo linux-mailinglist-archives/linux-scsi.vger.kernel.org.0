@@ -1,58 +1,58 @@
-Return-Path: <linux-scsi+bounces-19783-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19785-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D351CCBEF6
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Dec 2025 14:11:55 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F14BCCBF17
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Dec 2025 14:14:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B43D630C6B34
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Dec 2025 13:07:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D21E230FF6C6
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Dec 2025 13:08:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24BC6339B56;
-	Thu, 18 Dec 2025 12:57:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5F1233A9D7;
+	Thu, 18 Dec 2025 12:57:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="AitEfXcu"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="TXrbXtvn"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E80339873;
-	Thu, 18 Dec 2025 12:57:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58653370EA;
+	Thu, 18 Dec 2025 12:57:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766062650; cv=pass; b=NXbdlc3vdXiaFjoXLBA7NL3jOFI7x6wGp2zr42ZbZdH/5NA4MsspKiS/cxQtBKHq0yLnPGg5BDkFyzIAQmWu+U3NQKv1dOMwLuIthize2lpwf5bTJu/Ym5U8SbMANc08QMEIL14HomBdw3zwKOxB/Gt+OR2MV/lJqzfEjud2aGI=
+	t=1766062659; cv=pass; b=qyuIx+0MCla5wrwYQ1AY2FnVN3KTwAa0wqGwAcTFDQuu6h8rRTxH2XtGflmGfmsGimCPBTAseLWVT/54U+n7t9sarBXeHevoMdyZQspHhsZwUXJXcayvXKcqjRxCJSBBVBGJ5HR+dU3iuURqrLEIbAd3NGnbxFzo2gLVKLoYrvU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766062650; c=relaxed/simple;
-	bh=L8w8RVa4qzIWNy8DkTficoFYbDeYPrdzagDZBJwvt5k=;
+	s=arc-20240116; t=1766062659; c=relaxed/simple;
+	bh=OhyXKyAFJpuSTSsofnPVbGPDrhi87+maaOR/rBKZgwA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZYhxdKVJRvoshyvJBdGC8MIrvLNekl0IIB1GnMrVKKLrAaG3b3hx1MZBRYH2lzSTpTD/3LlRzAUOh7WENogKa3EPDVLW3lgVsojpv3A70w5zu6qrng/VdG/1ZFaNXsAjTEMHrWMK+EaIcyOabuFcP43Hkvi2yt0GGG3GPx6dk6M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=AitEfXcu; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=qwZ5zwsNHqS+lqVAGXJpS84u7IA2o4c3ndyPI5cFix59J/EJej3ijmIqg58gRboVLsujwFGHw8JkrKO5nUpWBY81m51DhlInopgT/N4z49q7SiyeE4aqwnJvGwiyFL9uwfEa2BVicjQ54JSbywmgB0k/lYQ1+M2QLNd0ea09yxA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=TXrbXtvn; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1766062622; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1766062628; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=mFZU0mXAEBTM1cj5jtcS3U/+8MRgphTsB4g1W/RRyTJxnMKpZFvwFh269eiNyN4EtPxFtFPxeT401R+Qagv6LoDDseIB0oTbLretXR6Ii7Dph9yMRB7OlvTOW7XHNMoAJwrAkFuXUA6pp+reZNGtk+DWpADLR+JR3nU/C8GBVC0=
+	b=a3RznC4ewP125V3q7BziIQCrVaMVP537rFCNtBU9hfZuB8XUzFmnSHCuxXGBXen0aP8RgAafC5+sEI8gbvTuCNSEPdJk0tEQOImYhfHBBpI4J9WWsgE2/RVgpQ6XOtKgFSkBFmOxLflpMt26cXz6upwJxiqfvVDahyoHbu4ztN4=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1766062622; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=60JlsHuRXLbXd5Pexm7Q9dFe3pq5uxcyNe5DGlL9XFE=; 
-	b=D0LUVZ0b60JC37gCgz31oMGPxy8zqI4pkxFg3k12SjWcwFmXhFoLtIy8PJ2MH0UR9QKjf71l6OztqKneAP/UnCxF/hWF88b7iXkFetvLaudRhzhlcVspE/x6aL/WIjcT4MKTMsx8tOLKDnnrYfbnyw8dhzJVTHiYArVIlNvqVck=
+	t=1766062628; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=tBDcvlSJdqaE/FhBeajz0HQZsvPrdYdKBwg6m1HcfQ0=; 
+	b=g0AsiAY3iih1z2uxpdQcCKuOVFoNNQ0ahhib8I0XzBqSX52wGRE6KABU3DFm6f2QNc77t2X/ZQ+pu0xqrzZR+x5qe/E3NR8ZaHAzVks6xUiyNfb+T6hganHpYAWaw7WLCAHDrPzApnYHaEnL+jUWTvHrUOyaMO2bcQm5hBIJnCE=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1766062622;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1766062628;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=60JlsHuRXLbXd5Pexm7Q9dFe3pq5uxcyNe5DGlL9XFE=;
-	b=AitEfXcuM7OO9SCx0cok6nieLMV/ptKscnMiXFPdP2jXdLgZYEZEZ+UPSUfGCtHn
-	Jd0aboy/v619/6JkNPmglrcryoZp2GMWsIrS1wgSSmC+vVQweh5iP3cccLd26lzkjl4
-	gXaJ1kOqRrGaZpFZ5/xZDUhpjOPedETAa4q0XolE=
-Received: by mx.zohomail.com with SMTPS id 176606262047881.2669190579021;
-	Thu, 18 Dec 2025 04:57:00 -0800 (PST)
+	bh=tBDcvlSJdqaE/FhBeajz0HQZsvPrdYdKBwg6m1HcfQ0=;
+	b=TXrbXtvn4RVxLZPS40ooO+3NTCHPKCUHj0XQ/fixHp9L/9PfpLUsuFxOKCF+Gcer
+	iN7DXc1baXOuGZCpHpHEdW0Wyfin8iwY0sAxlok+lBjyWXJGbDc7KLUOPVjxD9ghX/Z
+	hun4PI8LAciEyqaZDXG3/13iiRuAJc3K2efPgjsk=
+Received: by mx.zohomail.com with SMTPS id 176606262695595.52766682896265;
+	Thu, 18 Dec 2025 04:57:06 -0800 (PST)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Thu, 18 Dec 2025 13:55:04 +0100
-Subject: [PATCH v4 14/25] scsi: ufs: mediatek: Switch to newer PM ops
- helpers
+Date: Thu, 18 Dec 2025 13:55:05 +0100
+Subject: [PATCH v4 15/25] scsi: ufs: mediatek: Remove
+ mediatek,ufs-broken-rtc property
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -61,7 +61,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251218-mt8196-ufs-v4-14-ddec7a369dd2@collabora.com>
+Message-Id: <20251218-mt8196-ufs-v4-15-ddec7a369dd2@collabora.com>
 References: <20251218-mt8196-ufs-v4-0-ddec7a369dd2@collabora.com>
 In-Reply-To: <20251218-mt8196-ufs-v4-0-ddec7a369dd2@collabora.com>
 To: Alim Akhtar <alim.akhtar@samsung.com>, 
@@ -86,64 +86,57 @@ Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.3
 
-SET_SYSTEM_SLEEP_PM_OPS and SET_RUNTIME_PM_OPS are deprecated.
+This flag property was never described in the binding, and its
+capability wrapper seems pointless.
 
-Switch to the non-deprecated variants, and pm_ptr, removing the
-ifdeffery in the process. This allows the compiler visibility into those
-functions.
+If one of the MediaTek SoCs needs the ufshcd quirk applied, then this
+can be done per-compatible, without needing to give the device tree
+author the option to forget to set it.
+
+Remove it and the associated capability flag wrapping code.
 
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 5 -----
+ drivers/ufs/host/ufs-mediatek.h | 2 --
+ 2 files changed, 7 deletions(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index b3fb87bd1c75..89e3fa5d7d10 100644
+index 89e3fa5d7d10..ffd52b8c295a 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -2349,7 +2349,6 @@ static void ufs_mtk_remove(struct platform_device *pdev)
- 	ufshcd_pltfrm_remove(pdev);
+@@ -657,9 +657,6 @@ static void ufs_mtk_init_host_caps(struct ufs_hba *hba)
+ 	if (of_property_read_bool(np, "mediatek,ufs-rtff-mtcmos"))
+ 		host->caps |= UFS_MTK_CAP_RTFF_MTCMOS;
+ 
+-	if (of_property_read_bool(np, "mediatek,ufs-broken-rtc"))
+-		host->caps |= UFS_MTK_CAP_MCQ_BROKEN_RTC;
+-
+ 	dev_info(hba->dev, "caps: 0x%x", host->caps);
  }
  
--#ifdef CONFIG_PM_SLEEP
- static int ufs_mtk_system_suspend(struct device *dev)
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
-@@ -2396,9 +2395,7 @@ static int ufs_mtk_system_resume(struct device *dev)
+@@ -1203,8 +1200,6 @@ static int ufs_mtk_init(struct ufs_hba *hba)
+ 	hba->quirks |= UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL;
  
- 	return ret;
- }
--#endif
+ 	hba->quirks |= UFSHCD_QUIRK_MCQ_BROKEN_INTR;
+-	if (host->caps & UFS_MTK_CAP_MCQ_BROKEN_RTC)
+-		hba->quirks |= UFSHCD_QUIRK_MCQ_BROKEN_RTC;
  
--#ifdef CONFIG_PM
- static int ufs_mtk_runtime_suspend(struct device *dev)
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
-@@ -2442,13 +2439,10 @@ static int ufs_mtk_runtime_resume(struct device *dev)
+ 	hba->vps->wb_flush_threshold = UFS_WB_BUF_REMAIN_PERCENT(80);
  
- 	return ufshcd_runtime_resume(dev);
- }
--#endif
- 
- static const struct dev_pm_ops ufs_mtk_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(ufs_mtk_system_suspend,
--				ufs_mtk_system_resume)
--	SET_RUNTIME_PM_OPS(ufs_mtk_runtime_suspend,
--			   ufs_mtk_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(ufs_mtk_system_suspend, ufs_mtk_system_resume)
-+	RUNTIME_PM_OPS(ufs_mtk_runtime_suspend, ufs_mtk_runtime_resume, NULL)
- 	.prepare	 = ufshcd_suspend_prepare,
- 	.complete	 = ufshcd_resume_complete,
+diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
+index bf8122af69f0..5f096ed3f850 100644
+--- a/drivers/ufs/host/ufs-mediatek.h
++++ b/drivers/ufs/host/ufs-mediatek.h
+@@ -138,8 +138,6 @@ enum ufs_mtk_host_caps {
+ 	UFS_MTK_CAP_DISABLE_MCQ                = 1 << 8,
+ 	/* Control MTCMOS with RTFF */
+ 	UFS_MTK_CAP_RTFF_MTCMOS                = 1 << 9,
+-
+-	UFS_MTK_CAP_MCQ_BROKEN_RTC             = 1 << 10,
  };
-@@ -2458,7 +2452,7 @@ static struct platform_driver ufs_mtk_pltform = {
- 	.remove = ufs_mtk_remove,
- 	.driver = {
- 		.name   = "ufshcd-mtk",
--		.pm     = &ufs_mtk_pm_ops,
-+		.pm     = pm_ptr(&ufs_mtk_pm_ops),
- 		.of_match_table = ufs_mtk_of_match,
- 	},
- };
+ 
+ struct ufs_mtk_crypt_cfg {
 
 -- 
 2.52.0
