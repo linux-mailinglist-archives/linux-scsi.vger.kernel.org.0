@@ -1,102 +1,109 @@
-Return-Path: <linux-scsi+bounces-19883-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19886-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B12D8CE61A1
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Dec 2025 08:16:21 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE161CE627D
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Dec 2025 08:37:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 7A10D3005F1C
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Dec 2025 07:15:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B4FCE3014BF2
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Dec 2025 07:35:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 068F92E6CCD;
-	Mon, 29 Dec 2025 07:15:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C47F1265CDD;
+	Mon, 29 Dec 2025 07:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="SueoOfV2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YoFkSicr"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27222E7BB6;
-	Mon, 29 Dec 2025 07:15:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7177C259CB2;
+	Mon, 29 Dec 2025 07:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766992546; cv=none; b=BlEGkUV/TmhddwvwtuG2pENg2aSM3oBtMCVH7aiY2RI9QTwBC827OaGLIPQgJLqFWtGjarnBv/gn6/yoE3rcuI9Mruw4G6l0lIm5FAUulN4K6IPueJ+X1YQF3IXuNx8Lspnlw/dj6OibSo1gQY/cUPaaE8vClCQYxqepywtAK7Q=
+	t=1766993719; cv=none; b=kWYOC8nlCGiFCQP5DDL4SRm5nHpB5BUpNJT8fDGQ+IwNzyYuNRaQjEauZFjpllL1Gy6X2BV5Uh7MYKLbpQj0G5AFkdlQbr5VfCTQdDaQUJQcAGZ6OvwQYY9h0/g0XdixxSaMAO/EtMwL//wBZzyHx5VNlLuK0SJ+1+oonMhhKQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766992546; c=relaxed/simple;
-	bh=F1Zd7PK5qv/Q3FCmkouzGY2//UDeMu1s9JuoGaeqCTM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FGCph1s6zRCbjWa2krD6vwu+3E6JEInh0LILSRiXSletsX8JCuzz5KGfb7ksICmPCgxW8JzgVRATcDPsxlTHA5R3ZAqlS7wD/xDk1qnQCUsUTw9qe92IAKxMZPN3F19Im/hQqtXr/bLIZdhetMWJzoZB+NFoYhkUaN5B5L18WAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=SueoOfV2; arc=none smtp.client-ip=45.254.49.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
-Received: from LAPTOP-N070L597.localdomain (unknown [58.241.16.34])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 2edd68851;
-	Mon, 29 Dec 2025 15:15:37 +0800 (GMT+08:00)
-From: Zilin Guan <zilin@seu.edu.cn>
-To: justin.tee@broadcom.com
-Cc: paul.ely@broadcom.com,
-	James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	jianhao.xu@seu.edu.cn,
-	Zilin Guan <zilin@seu.edu.cn>
-Subject: [PATCH 3/3] scsi: lpfc: Fix memory leak in lpfc_cmpl_plogi_plogi_issue()
-Date: Mon, 29 Dec 2025 07:15:15 +0000
-Message-Id: <20251229071515.155412-4-zilin@seu.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251229071515.155412-1-zilin@seu.edu.cn>
-References: <20251229071515.155412-1-zilin@seu.edu.cn>
+	s=arc-20240116; t=1766993719; c=relaxed/simple;
+	bh=9gGsY8j2iqa8tDRFxRRfXgvI09YVE/FYZqJ+DuGo3OQ=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=aXBF/wCYLsneFP7qxKGbgqSJoTrbng55MH8FpbFXyn9oWyRK6wY1ZFAynILf00nXZakC2kuAPOOXvRpu5peC7/u2LkEafRtMpmWyAcV7Q85sk8mbfAzk/ulrLCy95tEnnRo3S5S7IcgNL6PDQijHfoqt4Kbpx979kjDiOHYdZ18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YoFkSicr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCA24C4CEF7;
+	Mon, 29 Dec 2025 07:35:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766993719;
+	bh=9gGsY8j2iqa8tDRFxRRfXgvI09YVE/FYZqJ+DuGo3OQ=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=YoFkSicraWcgpoHFTi8BXEa3xPeWRLnN4ppMRKEdjaD1P9kFQcXBbdVj/REH7G9DQ
+	 AOxhgmBJjjWrUU05REicYgs8nbrcmB3I5wLGv/6givFHYrUiwQxwvTf8gS5zsHVeNk
+	 S6U440YjxlDQw/dzYvtu1iRKFP77XuHavJFh/U/c7X6z+hqCHvNNWBgG1JUVkL+TEB
+	 x4nWOiHN6zft5Jfks0+KbZWQLeIHFE+49TIIPNPpZL1LZfgL+fte31W700ll5KuMNV
+	 4YhNrOWcYH3B8qyZWkUdp/rArAmjFA7aCyDiXrpQhLqMhROY1oQPYNRj/66222xAb1
+	 M5vr3fG9BUTPQ==
+Date: Mon, 29 Dec 2025 01:35:17 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9b68f6665003a1kunmcfb873511111db
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZHkxDVh1NGB4eH0oaHhkZSVYeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlOQ1VJT0pVSk1VSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSUJDQ0xVSktLVUtZBg
-	++
-DKIM-Signature: a=rsa-sha256;
-	b=SueoOfV2zdB0Tey/H0+1BOHJAAWrFRHIqkt47J/dmXootwDMELRBHp6tOPCj9MHktC/4KrUNSE6Lnn7iFp91HmYYQGU0loFx3kxmRdt+zywuNhFMoI33+WOicbpWut6jgOp3MMDfobCRuaKLysIAyDaYF3Vx162ddUlmN/WJcJ8=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
-	bh=sDdO+nwO8UMsubRHt9hljG4K4gbAZAqcwzGsSX6eUh4=;
-	h=date:mime-version:subject:message-id:from;
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: linux-kernel@vger.kernel.org, conor+dt@kernel.org, 
+ martin.petersen@oracle.com, andersson@kernel.org, 
+ taniya.das@oss.qualcomm.com, dmitry.baryshkov@oss.qualcomm.com, 
+ krzk+dt@kernel.org, linux-scsi@vger.kernel.org, devicetree@vger.kernel.org, 
+ vkoul@kernel.org, linux-arm-msm@vger.kernel.org, 
+ nitin.rawat@oss.qualcomm.com, konradybcio@kernel.org, 
+ linux-phy@lists.infradead.org, neil.armstrong@linaro.org
+To: Pradeep P V K <pradeep.pragallapati@oss.qualcomm.com>
+In-Reply-To: <20251229060642.2807165-3-pradeep.pragallapati@oss.qualcomm.com>
+References: <20251229060642.2807165-1-pradeep.pragallapati@oss.qualcomm.com>
+ <20251229060642.2807165-3-pradeep.pragallapati@oss.qualcomm.com>
+Message-Id: <176699371795.453334.1254086534957374498.robh@kernel.org>
+Subject: Re: [PATCH V1 2/4] scsi: ufs: qcom: dt-bindings: Add UFSHC
+ compatible for Hamoa
 
-In lpfc_cmpl_plogi_plogi_issue(), mbox is allocated via
-mempool_alloc() and initialized. However, if lpfc_nlp_get() fails,
-the mbox and its resources are not freed.
 
-Fix this by using lpfc_mbox_rsrc_cleanup() to free the mailbox and
-its associated resources.
+On Mon, 29 Dec 2025 11:36:40 +0530, Pradeep P V K wrote:
+> Document the UFSHC compatible for Qualcomm Hamoa SoC. Use fallback
+> to indicate the compatibility of UFSHC on Hamoa with that on the
+> SM8550.
+> 
+> Signed-off-by: Pradeep P V K <pradeep.pragallapati@oss.qualcomm.com>
+> ---
+>  .../devicetree/bindings/ufs/qcom,sc7180-ufshc.yaml          | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
 
-Fixes: 4430f7fd09ec ("scsi: lpfc: Rework locations of ndlp reference taking")
-Co-developed-by: Jianhao Xu <jianhao.xu@seu.edu.cn>
-Signed-off-by: Jianhao Xu <jianhao.xu@seu.edu.cn>
-Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
----
- drivers/scsi/lpfc/lpfc_nportdisc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+My bot found errors running 'make dt_binding_check' on your patch:
 
-diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
-index 8240d59f4120..e81640223276 100644
---- a/drivers/scsi/lpfc/lpfc_nportdisc.c
-+++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
-@@ -1505,8 +1505,10 @@ lpfc_cmpl_plogi_plogi_issue(struct lpfc_vport *vport,
- 		}
- 
- 		mbox->ctx_ndlp = lpfc_nlp_get(ndlp);
--		if (!mbox->ctx_ndlp)
-+		if (!mbox->ctx_ndlp) {
-+			lpfc_mbox_rsrc_cleanup(phba, mbox, MBOX_THD_UNLOCKED);
- 			goto out;
-+		}
- 
- 		mbox->vport = vport;
- 		if (lpfc_sli_issue_mbox(phba, mbox, MBX_NOWAIT)
--- 
-2.34.1
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,sc7180-ufshc.example.dtb: ufs@1d84000 (qcom,sm8450-ufshc): compatible: 'oneOf' conditional failed, one must be fixed:
+	['qcom,sm8450-ufshc', 'qcom,ufshc', 'jedec,ufs-2.0'] is too long
+	'qcom,sm8450-ufshc' is not one of ['qcom,hamoa-ufshc']
+	'qcom,ufshc' was expected
+	'jedec,ufs-2.0' was expected
+	'qcom,sm8550-ufshc' was expected
+	from schema $id: http://devicetree.org/schemas/ufs/qcom,sc7180-ufshc.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.kernel.org/project/devicetree/patch/20251229060642.2807165-3-pradeep.pragallapati@oss.qualcomm.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
