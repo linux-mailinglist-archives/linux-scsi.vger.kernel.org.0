@@ -1,37 +1,37 @@
-Return-Path: <linux-scsi+bounces-19885-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19883-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9076FCE61B0
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Dec 2025 08:16:40 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B12D8CE61A1
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Dec 2025 08:16:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7954E3017F06
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Dec 2025 07:15:53 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 7A10D3005F1C
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Dec 2025 07:15:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A629A2E9EDA;
-	Mon, 29 Dec 2025 07:15:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 068F92E6CCD;
+	Mon, 29 Dec 2025 07:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="as+yXnsu"
+	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="SueoOfV2"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-m49198.qiye.163.com (mail-m49198.qiye.163.com [45.254.49.198])
+Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA612E6CC7;
-	Mon, 29 Dec 2025 07:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27222E7BB6;
+	Mon, 29 Dec 2025 07:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766992549; cv=none; b=IUm+8i/D9xqvuSyj/D41c54QQHU6Bw/2E9GXLXTZlq2rgGVJ7RBOyPQZBROAnheyiRXhTA2amBefAUt/EmT4JHNDzxXNHztV9AHsU/Ww5wBY9xWZlmPZAJbXHnsMKlbfRufA4mKr/phn501JfACGkxxd+t8kIH3/Bjdpn2vQ0jo=
+	t=1766992546; cv=none; b=BlEGkUV/TmhddwvwtuG2pENg2aSM3oBtMCVH7aiY2RI9QTwBC827OaGLIPQgJLqFWtGjarnBv/gn6/yoE3rcuI9Mruw4G6l0lIm5FAUulN4K6IPueJ+X1YQF3IXuNx8Lspnlw/dj6OibSo1gQY/cUPaaE8vClCQYxqepywtAK7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766992549; c=relaxed/simple;
-	bh=ySk+QENIyvJ9tWxSP98h2d4oXdoSisbprOADCnkwu8w=;
+	s=arc-20240116; t=1766992546; c=relaxed/simple;
+	bh=F1Zd7PK5qv/Q3FCmkouzGY2//UDeMu1s9JuoGaeqCTM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Gq4KQRwXef7Eg1BZ0qcUx/Xpd1YsDzWRqB6VnhFQPAFwqbeyYpyozsQ8js5o7Im35wSjEznfqUQIbgDc2oguPWHBUyKjiefsHtOgjzYvdihVWS+DJMuYsw3SBm4ze4U2l+97isyyX1tmoUepH6QHErJqaVaWwn+EfYAixbIE7hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=as+yXnsu; arc=none smtp.client-ip=45.254.49.198
+	 MIME-Version; b=FGCph1s6zRCbjWa2krD6vwu+3E6JEInh0LILSRiXSletsX8JCuzz5KGfb7ksICmPCgxW8JzgVRATcDPsxlTHA5R3ZAqlS7wD/xDk1qnQCUsUTw9qe92IAKxMZPN3F19Im/hQqtXr/bLIZdhetMWJzoZB+NFoYhkUaN5B5L18WAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=SueoOfV2; arc=none smtp.client-ip=45.254.49.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
 Received: from LAPTOP-N070L597.localdomain (unknown [58.241.16.34])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 2edd6884c;
-	Mon, 29 Dec 2025 15:15:35 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 2edd68851;
+	Mon, 29 Dec 2025 15:15:37 +0800 (GMT+08:00)
 From: Zilin Guan <zilin@seu.edu.cn>
 To: justin.tee@broadcom.com
 Cc: paul.ely@broadcom.com,
@@ -41,9 +41,9 @@ Cc: paul.ely@broadcom.com,
 	linux-kernel@vger.kernel.org,
 	jianhao.xu@seu.edu.cn,
 	Zilin Guan <zilin@seu.edu.cn>
-Subject: [PATCH 2/3] scsi: lpfc: Fix memory leak in lpfc_sli4_driver_resource_setup()
-Date: Mon, 29 Dec 2025 07:15:14 +0000
-Message-Id: <20251229071515.155412-3-zilin@seu.edu.cn>
+Subject: [PATCH 3/3] scsi: lpfc: Fix memory leak in lpfc_cmpl_plogi_plogi_issue()
+Date: Mon, 29 Dec 2025 07:15:15 +0000
+Message-Id: <20251229071515.155412-4-zilin@seu.edu.cn>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251229071515.155412-1-zilin@seu.edu.cn>
 References: <20251229071515.155412-1-zilin@seu.edu.cn>
@@ -54,51 +54,48 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9b68f65e9303a1kunmcfb873511111ce
+X-HM-Tid: 0a9b68f6665003a1kunmcfb873511111db
 X-HM-MType: 10
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCHkMeVh5LHxlLGR5NT0MYSlYeHw5VEwETFhoSFy
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZHkxDVh1NGB4eH0oaHhkZSVYeHw5VEwETFhoSFy
 	QUDg9ZV1kYEgtZQVlOQ1VJT0pVSk1VSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSUJDQ0xVSktLVUtZBg
 	++
 DKIM-Signature: a=rsa-sha256;
-	b=as+yXnsu4tSTeH5akUqoJ3aL0TO1z22cUkKo0oTLtafv4ba3G/RyhXIySMZ7Dwd3whaqryC6Ivckfu2Vda8BlLgY2lLq3UyE2feVX08P8ArRLayAm0WOEjUS7rdrEYJTgcZLNAcsugpP9ULNaqRiPiNvjlT42aEtAjZBQSfICtw=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
-	bh=vnSddw+NE9uBTb17hEurbXcfC7FM2Vw1cP3jHFURIaE=;
+	b=SueoOfV2zdB0Tey/H0+1BOHJAAWrFRHIqkt47J/dmXootwDMELRBHp6tOPCj9MHktC/4KrUNSE6Lnn7iFp91HmYYQGU0loFx3kxmRdt+zywuNhFMoI33+WOicbpWut6jgOp3MMDfobCRuaKLysIAyDaYF3Vx162ddUlmN/WJcJ8=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
+	bh=sDdO+nwO8UMsubRHt9hljG4K4gbAZAqcwzGsSX6eUh4=;
 	h=date:mime-version:subject:message-id:from;
 
-In lpfc_sli4_driver_resource_setup(), mboxq is allocated via
-mempool_alloc() but is not freed when the allocation of
-phba->lpfc_sg_dma_buf_pool or phba->lpfc_cmd_rsp_buf_pool fails.
+In lpfc_cmpl_plogi_plogi_issue(), mbox is allocated via
+mempool_alloc() and initialized. However, if lpfc_nlp_get() fails,
+the mbox and its resources are not freed.
 
-Fix this by adding mempool_free() in the error paths.
+Fix this by using lpfc_mbox_rsrc_cleanup() to free the mailbox and
+its associated resources.
 
-Fixes: d79c9e9d4b3d ("scsi: lpfc: Support dynamic unbounded SGL lists on G7 hardware.")
+Fixes: 4430f7fd09ec ("scsi: lpfc: Rework locations of ndlp reference taking")
 Co-developed-by: Jianhao Xu <jianhao.xu@seu.edu.cn>
 Signed-off-by: Jianhao Xu <jianhao.xu@seu.edu.cn>
 Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
 ---
- drivers/scsi/lpfc/lpfc_init.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/lpfc/lpfc_nportdisc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index bc2e55f6a50f..760e38b778fb 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -8297,6 +8297,7 @@ lpfc_sli4_driver_resource_setup(struct lpfc_hba *phba)
- 					i, 0);
- 	if (!phba->lpfc_sg_dma_buf_pool) {
- 		rc = -ENOMEM;
-+		mempool_free(mboxq, phba->mbox_mem_pool);
- 		goto out_free_bsmbx;
- 	}
+diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
+index 8240d59f4120..e81640223276 100644
+--- a/drivers/scsi/lpfc/lpfc_nportdisc.c
++++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
+@@ -1505,8 +1505,10 @@ lpfc_cmpl_plogi_plogi_issue(struct lpfc_vport *vport,
+ 		}
  
-@@ -8308,6 +8309,7 @@ lpfc_sli4_driver_resource_setup(struct lpfc_hba *phba)
- 					i, 0);
- 	if (!phba->lpfc_cmd_rsp_buf_pool) {
- 		rc = -ENOMEM;
-+		mempool_free(mboxq, phba->mbox_mem_pool);
- 		goto out_free_sg_dma_buf;
- 	}
+ 		mbox->ctx_ndlp = lpfc_nlp_get(ndlp);
+-		if (!mbox->ctx_ndlp)
++		if (!mbox->ctx_ndlp) {
++			lpfc_mbox_rsrc_cleanup(phba, mbox, MBOX_THD_UNLOCKED);
+ 			goto out;
++		}
  
+ 		mbox->vport = vport;
+ 		if (lpfc_sli_issue_mbox(phba, mbox, MBX_NOWAIT)
 -- 
 2.34.1
 
