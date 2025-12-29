@@ -1,36 +1,37 @@
-Return-Path: <linux-scsi+bounces-19882-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19884-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4989CE6198
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Dec 2025 08:15:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5F62CE61A7
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Dec 2025 08:16:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E4343300663C
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Dec 2025 07:15:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CD4A13013EF9
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Dec 2025 07:15:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EF052E6CD0;
-	Mon, 29 Dec 2025 07:15:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDD7F2E6CC5;
+	Mon, 29 Dec 2025 07:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="IgBni0y0"
+	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="Cmi+TNVt"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
+Received: from mail-m49198.qiye.163.com (mail-m49198.qiye.163.com [45.254.49.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA482E7BAD;
-	Mon, 29 Dec 2025 07:15:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE3926E719;
+	Mon, 29 Dec 2025 07:15:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766992532; cv=none; b=pGisLloRTCsxyW2esT5pJJ/b2KqGbFxCmXOrnEk84gr+vCOjynWFiKdm333TJecW3yz5nqW2VkohJThdAVr6msfXhcynJ99vq+KiCKOLjrIyWzalezMXLsPF5/GUWhNXK3rQT10LH802GcTrWyx2KY4BqFsZNJzw0qiiMhESJPY=
+	t=1766992547; cv=none; b=bK8CE2hl2WNktWkHUKKx/9zR1L9Mkg7NDFPA71nUaSPnZ82LF3klWXfxHVE/0sMYk5yMVqVlYu+rU9wXdrfR94/xJJoCWO1v+GYep9FRK6RZ67kD2qwKOiNzP1qI2RNKOsavt4VmJuDu424HlkLmlnahXntTWIE7o4k6/Qek2LI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766992532; c=relaxed/simple;
-	bh=Cnrw/Hxzd3mpKr4f3Y0o6JzIOchme2EAgMetMJGz87A=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=io5llZ0+eUXwwDeRAJEDFQC3+z9Pe0AW24cGv5AJWPNvkIRhhYOCpaEI6BuvVkPxaXIow2qdJt0g/ecWDbiJYLYP1IMvSezGjg06+pXCYzOpEfcGY4Mu3WUSOsayHGLUg22T5Q9bT9VNE32ULDHvk17WMwH/+6qqdcs5PIh/BMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=IgBni0y0; arc=none smtp.client-ip=101.71.155.101
+	s=arc-20240116; t=1766992547; c=relaxed/simple;
+	bh=O+QciBJbADSaEJqqa17FzaO5KFlVsl5nHJn1HU0YpT4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=uwamqmuBBn7/M/kC5SLDLWOTdVgiRhk/IzD21SXlzGoEYjxZARHnwvl5BB5MnFIatzKT5n9MsmJRMPJ/4nH0df9zEwltOOCCXnXXkFcitaYdki239BoSVW5wZ1oW5Cl1yWZYOck+Hs0lc8L2nFh0HG4Q6fyyKOLEBlqu97j4isM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=Cmi+TNVt; arc=none smtp.client-ip=45.254.49.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
 Received: from LAPTOP-N070L597.localdomain (unknown [58.241.16.34])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 2edd68846;
-	Mon, 29 Dec 2025 15:15:20 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 2edd6884b;
+	Mon, 29 Dec 2025 15:15:33 +0800 (GMT+08:00)
 From: Zilin Guan <zilin@seu.edu.cn>
 To: justin.tee@broadcom.com
 Cc: paul.ely@broadcom.com,
@@ -40,10 +41,12 @@ Cc: paul.ely@broadcom.com,
 	linux-kernel@vger.kernel.org,
 	jianhao.xu@seu.edu.cn,
 	Zilin Guan <zilin@seu.edu.cn>
-Subject: [PATCH 0/3] scsi: lpfc: Fix multiple memory leaks in error paths
-Date: Mon, 29 Dec 2025 07:15:12 +0000
-Message-Id: <20251229071515.155412-1-zilin@seu.edu.cn>
+Subject: [PATCH 1/3] scsi: lpfc: Fix memory leak in lpfc_config_port_post()
+Date: Mon, 29 Dec 2025 07:15:13 +0000
+Message-Id: <20251229071515.155412-2-zilin@seu.edu.cn>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251229071515.155412-1-zilin@seu.edu.cn>
+References: <20251229071515.155412-1-zilin@seu.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -51,32 +54,42 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9b68f6245f03a1kunmcfb8735111118d
+X-HM-Tid: 0a9b68f6573903a1kunmcfb873511111c8
 X-HM-MType: 10
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaQ0pPVkwaQ0MfThkZS0pNGFYeHw5VEwETFhoSFy
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaHU1PVh5NQkhPH00ZSh9PT1YeHw5VEwETFhoSFy
 	QUDg9ZV1kYEgtZQVlOQ1VJT0pVSk1VSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSUJDQ0xVSktLVUtZBg
 	++
 DKIM-Signature: a=rsa-sha256;
-	b=IgBni0y0bvgmIK7sBMuwUglFtrHACF82a4mX/QnjlahmaXu/tywSstWGvIB7p6fFMWb84I6cMtM3XXok9ciVgXmy7yxHxSigcUGFDf3dR5Vqcq/neZINeL6qbzZ+6Y1alggfVCnsTA2B+WVVgA9G457F+RmNU3IUarJDay8kSwo=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
-	bh=gdH1Ttj8FutuwQ86NRe6aVMjVgjHdXE7yfZOdznV3FY=;
+	b=Cmi+TNVtUWpBuhm/QVL6QC2/u32+4WYvxJ3ah5EIuNC1m3BuTiYHqQhAN2NVmL1SoPzS/VoIdxJTbCf0wxmZEFrYk8Tr/4By2r+bH7Im8JIO1Jd8lGqGMcnR0+mlNXEaaKS8iijvwVRJq8P4eg2DhuUI/C3viaLAUEi0lfkbEao=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
+	bh=EZTrvzY9XgD6F14g5xRiljsY3FD1vszdcu/ygLBH/qc=;
 	h=date:mime-version:subject:message-id:from;
 
-This series fixes three independent memory leaks in the lpfc driver.
-All of them occur in error handling paths where allocated memory
-was not properly freed before returning.
+In lpfc_config_port_post(), pmb is allocated via mempool_alloc() but
+is not freed when lpfc_readl() fails.
 
-These issues were identified during static analysis.
+Fix this by adding mempool_free() in the error path.
 
-Zilin Guan (3):
-  scsi: lpfc: Fix memory leak in lpfc_config_port_post()
-  scsi: lpfc: Fix memory leak in lpfc_sli4_driver_resource_setup()
-  scsi: lpfc: Fix memory leak in lpfc_cmpl_plogi_plogi_issue()
+Fixes: 9940b97bb30d ("[SCSI] lpfc 8.3.22: Add support for PCI Adapter Failure")
+Co-developed-by: Jianhao Xu <jianhao.xu@seu.edu.cn>
+Signed-off-by: Jianhao Xu <jianhao.xu@seu.edu.cn>
+Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
+---
+ drivers/scsi/lpfc/lpfc_init.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- drivers/scsi/lpfc/lpfc_init.c      | 3 +++
- drivers/scsi/lpfc/lpfc_nportdisc.c | 4 +++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index b1460b16dd91..bc2e55f6a50f 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -572,6 +572,7 @@ lpfc_config_port_post(struct lpfc_hba *phba)
+ 	/* Enable appropriate host interrupts */
+ 	if (lpfc_readl(phba->HCregaddr, &status)) {
+ 		spin_unlock_irq(&phba->hbalock);
++		mempool_free(pmb, phba->mbox_mem_pool);
+ 		return -EIO;
+ 	}
+ 	status |= HC_MBINT_ENA | HC_ERINT_ENA | HC_LAINT_ENA;
 -- 
 2.34.1
 
