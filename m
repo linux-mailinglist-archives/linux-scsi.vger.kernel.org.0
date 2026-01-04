@@ -1,82 +1,78 @@
-Return-Path: <linux-scsi+bounces-19997-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-19999-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C867FCF15BF
-	for <lists+linux-scsi@lfdr.de>; Sun, 04 Jan 2026 22:43:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 627FECF15CB
+	for <lists+linux-scsi@lfdr.de>; Sun, 04 Jan 2026 22:43:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A631E300D154
-	for <lists+linux-scsi@lfdr.de>; Sun,  4 Jan 2026 21:43:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5F2B1300D4B2
+	for <lists+linux-scsi@lfdr.de>; Sun,  4 Jan 2026 21:43:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2959A314D28;
-	Sun,  4 Jan 2026 21:43:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6EF3315767;
+	Sun,  4 Jan 2026 21:43:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="gKRYdO5E"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="petTseuc"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 160362F616C;
-	Sun,  4 Jan 2026 21:43:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8A5314B90;
+	Sun,  4 Jan 2026 21:43:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767562988; cv=none; b=h+Cktl8cRNdDqa1eeRn94jG5/jIs93bb1R0dK9/SjecfUTuueQFz+hI+uM5493n5woXnRmJXviWD35yiNLBx+3gp16ruOUxMQH7v/v6tELswrR9ey9amXQV7B6y8RtUEQtaZCG6DWvHfSKs0hWMQHFkD4dztNQRuInpKr1cyFiE=
+	t=1767562994; cv=none; b=EmQ7uekmzkIbDZD9zmAVy8IGJl6s5CKhPjQYylNGPMt4ahT1r2jVjzYm1Rex0rOnND9aicGq9EQxr5NKXCph1mnRe8H7obUaPNj1hRUqTYOMDj9Wdhr5uxzZgpRp5Yz+WjO4iMearg4gs3wCujR71zitFBww2iKWw5B7bKID3b4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767562988; c=relaxed/simple;
-	bh=aVZq4eYpp/hO8f6f5uVbLUJTYB3zneT7EFk08mmeOLs=;
+	s=arc-20240116; t=1767562994; c=relaxed/simple;
+	bh=mlu6UnNt9UVureZ0gtVAZzjrk2RoPaGxml2yY+5wHN0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JbAhClLXOWU0Qt5Zkr6nJUSz7fRAAy28Z8cNNP6oFg2ywvS+QTQoOoKgyHxIpAfnHVA5aO3pihX8LAjq6iw/qr6KiDAQi8dQoDWbNi+ajNauZaAZeo9+owIZNHOlZyRIV9RgzYetTf/mFdV8SThExu+DNS2/5sfGfz9NLhwTvq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=gKRYdO5E; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=iwk9C0K4MM8adn/bLoOKp1e6ICkETNsA1TMy4P76ZM8K283ahnZ+KCFuNtjI/MH7a62e7T35VWXPx3e+raX2d2i/pHdMIFonZHLmRxEmLQgsNzh3mnc9n6Hp8ShRmVvdpOsT3DezbWb4WNun3y9a1FChpF1AfzQCLTtX8qWU388=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=petTseuc; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 604L3MdA4144301;
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 604LcLAo480698;
 	Sun, 4 Jan 2026 21:42:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=kJ9hvaIgQkb2Ldds6KzrQ1Gqe9ey1L/CjFXEAMQEWtM=; b=
-	gKRYdO5Ei96WSxyfQ75p5+FfyGkrcQ177jtCrBpf7NZpmR7DBRtudBI6ApxHWtAK
-	2dxEwa9doM0SN28POZsv/q+PHWmZzeOwjV5wSKw8Z2bcpnxBbeZkaBOY5JIBRR79
-	QfphensM58H5pmyuUd96XVykZ1TfRdINy/Nds9KhKRddeX37c2k4nMYDLEI5eYKB
-	a86rQA1t5u3olrmuZnD1cFDcQ46vjna0xkGjMHuT+HseJciGxhLN0HYqZlunYdea
-	b/I1Gzel9ae1M66FNjkV7W2bpzd/8592RQgfwW2e+i6wio8Em5celMIzmBP3SOHF
-	qPmVI5z0Z+Zlg1uh3uywCw==
+	corp-2025-04-25; bh=0kGzEkBJOcp5Doc/C3iO3BihiF0PK9PF4rXcyUauY9E=; b=
+	petTseucxev+pxbMvWCnF7q3dk6B+ckvSrHQAd0CbmWrWZrYccntl+0wH4aflAJV
+	e72KYeDoxqdnjMPW4aZ3Zi8D3SrIkbhzICUnXTUxAUWznjoZSgxyye17Bfrwp1+W
+	JA0ymem/BI48N+9yd2dh3AeaPpXdVkfruGi97KVQKxaMxBxPo759SlKr/FZ3lWqC
+	eDmxlwNmqHl/RhxxPIlx4GXcgmr0uFcL4561VbP6XECUwCvSv8YFa3IBG3hRFjTQ
+	3Jsb93eTk75/QbrGDV/md9pNzsSRZC+HpVEnQMlxxsC6eCk2RK435fx8W1kP3Jkd
+	kt+PJLWX5JsFh/f78LCieg==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4bev6ngxwk-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4bev2jgynx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Sun, 04 Jan 2026 21:42:53 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 604GXW1O030837;
-	Sun, 4 Jan 2026 21:42:52 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 604GVRhv030640;
+	Sun, 4 Jan 2026 21:42:53 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4besjarf2x-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4besjarf32-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 04 Jan 2026 21:42:52 +0000
+	Sun, 04 Jan 2026 21:42:53 +0000
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 604LgpIo034017;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 604LgpIq034017;
 	Sun, 4 Jan 2026 21:42:52 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4besjarf2n-2;
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4besjarf2n-3;
 	Sun, 04 Jan 2026 21:42:52 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Peter Wang <peter.wang@mediatek.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Stanley Jhu <chu.stanley@gmail.com>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        linux-scsi@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Colin Ian King <colin.i.king@gmail.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] scsi: ufs: host: mediatek: make read-only array scale_us static const
-Date: Sun,  4 Jan 2026 16:42:42 -0500
-Message-ID: <176756271713.1812936.16233360275459977513.b4-ty@oracle.com>
+To: Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, yunbolyu@smu.edu.sg,
+        kexinsun@smail.nju.edu.cn, ratnadiraw@smu.edu.sg, xutong.ma@inria.fr,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] bfa: update outdated comment
+Date: Sun,  4 Jan 2026 16:42:43 -0500
+Message-ID: <176756271706.1812936.376740831263740736.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20251219214428.492744-1-colin.i.king@gmail.com>
-References: <20251219214428.492744-1-colin.i.king@gmail.com>
+In-Reply-To: <20251231165027.142443-1-Julia.Lawall@inria.fr>
+References: <20251231165027.142443-1-Julia.Lawall@inria.fr>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -92,33 +88,35 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phish
  malwarescore=0 suspectscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2512120000
  definitions=main-2601040199
-X-Proofpoint-ORIG-GUID: rdbf5b7C6LSRjtelOVvQBuVBo-52Jzyo
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA0MDIwMCBTYWx0ZWRfX3DMDsQH9i3eP
- K72TDB1rXgB+fizy4hpq6EU+U3E6Hdl6X+QRag1hlF+e8+II1ZIfstSvs+4uzL1jAQXhOzn+z1v
- wT3GZENzc4EMcb2zTmYgm0pchMQez3G/U49L16XJUI/Q8ap2CAevhXncIDQJSA5TXs2ZO1pPCHv
- i8mxxDcvPz3Xg/NAvsM61GwHUaz+M+PnGrSovnQmr90GmScAa6TOnmQZUX/2dUYqoUWGpEnQRmS
- uWVBUz6e2R07fJU+PyaEfgoxOT9VDTg0vr20lg1ArOhzZbpz0i+4lrA+yFcwN4ul3gtdEMrEhdr
- DdSnmsHtR3tyNxyHFpxn8TNGwzQjQMj4HX4Dfp4IYrmIB5+HBraRlnADxDPzqC7HvU1eAVGBty8
- bvlSZaj+BD95SgwyPHGuYn9ZJmwJtO+S7ce9cZd9PAw/M6uHIF5w444ebR5Eu89KMlbROYGRwNh
- YY9ea6DMOYxttU3kh26Tx0X2D1ymHpuvv2AaWB9k=
-X-Proofpoint-GUID: rdbf5b7C6LSRjtelOVvQBuVBo-52Jzyo
-X-Authority-Analysis: v=2.4 cv=QtFTHFyd c=1 sm=1 tr=0 ts=695adedd b=1 cx=c_pps
+X-Proofpoint-ORIG-GUID: UQGws7oNUiVJLHMHTTQf4JYTVUEWOHUm
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA0MDIwMCBTYWx0ZWRfXw15ygf2woWQr
+ 64ttcOIIbQ76mFurgV8UVJpowpMxX3S6Z48nonPdhOyP6WnqU/58rvDUbH97hgBP/Jta8LKa3i9
+ a9qSZH+veeeeMt15dZEStiDmWC6qC6rFGCOPE5qDM0TcvjXWD2+M6EZwmK69kspYhMVi47AhzPG
+ GXx4U1xlk/KwleXCVxhxq5c5lag2Np3wYrUO11/V4hBOqwPE2xnkknbZr9nt3WSx39Tgm1bfn2z
+ 9cfqdvOBekEWGbBip1AeKlDrE+4IbIQIWzT9z0nC1Ct1/mpldKF8W0GHDVpExLm3K6e90jwZj0C
+ wFCEjug9x3YooxEh3RJJPF78aVP2JkHplM7HQHM81DMe7MbclSTiyalcvpbHYA7HUnw8JM/tirE
+ t5q5lD+IpwteeIWLgPhhigRmF/UuBsdh+XGOMMDziRnsoXW6gw4IIHNHHVhN2nmRylR3wct0uix
+ 07n9CpveMTxDDdpzyAAtIMoqeTRX3UAPS4vOuJIs=
+X-Authority-Analysis: v=2.4 cv=A9hh/qWG c=1 sm=1 tr=0 ts=695adedd b=1 cx=c_pps
  a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
  a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=ymggwW1gcb6NkITVt5gA:9 a=QEXdDO2ut3YA:10 cc=ntf
+ a=VwQbUJbxAAAA:8 a=X6Wkoi8ibonHgqKz5goA:9 a=QEXdDO2ut3YA:10 cc=ntf
  awl=host:13654
+X-Proofpoint-GUID: UQGws7oNUiVJLHMHTTQf4JYTVUEWOHUm
 
-On Fri, 19 Dec 2025 21:44:28 +0000, Colin Ian King wrote:
+On Wed, 31 Dec 2025 17:50:27 +0100, Julia Lawall wrote:
 
-> Don't populate the read-only array scale_us on the stack at run time,
-> instead make it static const.
+> The function bfa_lps_is_brcd_fabric() was eliminated, being a one-line
+> function, in commit f7f73812e950 ("[SCSI] bfa: clean up one line
+> functions").  Replace the call in the comment by its inlined
+> counterpart, referring to the parameter of the subsequent function.
 > 
 > 
 
 Applied to 6.19/scsi-fixes, thanks!
 
-[1/1] scsi: ufs: host: mediatek: make read-only array scale_us static const
-      https://git.kernel.org/mkp/scsi/c/309a29b5965a
+[1/1] bfa: update outdated comment
+      https://git.kernel.org/mkp/scsi/c/d0f6cfb49192
 
 -- 
 Martin K. Petersen
