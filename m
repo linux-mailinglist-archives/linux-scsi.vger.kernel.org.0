@@ -1,76 +1,74 @@
-Return-Path: <linux-scsi+bounces-20006-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20003-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FF4ACF15F2
-	for <lists+linux-scsi@lfdr.de>; Sun, 04 Jan 2026 22:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 58567CF15E9
+	for <lists+linux-scsi@lfdr.de>; Sun, 04 Jan 2026 22:46:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E842D3014BEB
-	for <lists+linux-scsi@lfdr.de>; Sun,  4 Jan 2026 21:43:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 57817304280B
+	for <lists+linux-scsi@lfdr.de>; Sun,  4 Jan 2026 21:43:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2C75316194;
-	Sun,  4 Jan 2026 21:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF10C3161A8;
+	Sun,  4 Jan 2026 21:43:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="CFh1QSoN"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="qAENVFi+"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E787D314B8E
-	for <linux-scsi@vger.kernel.org>; Sun,  4 Jan 2026 21:43:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F93314D15;
+	Sun,  4 Jan 2026 21:43:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767563015; cv=none; b=Jvx90aR/N2UytltMo0hUYk8/m9GIisA8e250iX2Ia5xdzLteN6GSGQckVaIi8tmANZuhFJ8N4RSQrCW6oFDm4G9o5Oh2GRpUhb2Kjg1fbU9mbGxbV2UuczX+XS2tF/OpI/95jUklJx6HIx2e8cvNSWtrZvaSboUfNb7iIfIcQcw=
+	t=1767563012; cv=none; b=Pcq5RPRdljdHIkhzQ3JV89djJZfwjiyRR/T9BA4krDLGaGGWmqspOW+cCt2N531p+dw2DswzTVCBsCgtpdKQx0KZ7wDUi9kwZhmv9mqoTYqGRVt5/sMvaol1jUv1tQLO1t1rAhX4laJ0yp1iN1J9UU3h9sIyxQ6wYbhZW6NMufk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767563015; c=relaxed/simple;
-	bh=v0E6o+t3iXkcUQJy7TzgbCYbVS8yaZonTAlgX1mBVsY=;
+	s=arc-20240116; t=1767563012; c=relaxed/simple;
+	bh=ajlSs3fZGY1pvLcPj2DVYGlWoPc+75W7+DMe5+Wxe+M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=c7G7KUUJp4Di4CctkGV0k/xSgY72BoK+NmGvQvzExfetkOqLIJLJICzbkfXivXeIDq6oRMqtMmMbsgZLQRzcXMeTTOQ3I37ypyL/nj0e0+QnXHA9q2M41kAgbtWIfuLk85rJFyBpCtN5o/NurvEmbjVy+S/sPNhyv24Q9e86GO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=CFh1QSoN; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=XixX47pYlwfe2z0TNiU8zd3EZ44wbnBxyJMKt4qJmLndF54TIRo7mAczspFuyaHcedlOVLdOmGGUJN3OIbFuc4EXOPbNpBOiU7G2ozTj2mfVP/FKDIpKPM/lDGp7zH8Yqi8fuELh/4fdmoKaaSmJadldGH31S9OlbxB0R4LrEkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=qAENVFi+; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 604LfbM4071179;
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 604LhSHm488499;
 	Sun, 4 Jan 2026 21:43:28 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=WbUSdNjOONGLXaBfYpWvoEGsfcS0J0Q2BeVrSQEQfQ4=; b=
-	CFh1QSoNMyY5RVGfSWuwr9D+3Di4xqxdEO0kF/y4smebgmNM3cifObmr8B6zM9f/
-	SAO0jmOZtXbFQPUZT7VwVbgjurVY8kVZmkDdAlANRBokryqemxjrvGv0Wcb/xokB
-	g4h3Wy2wznkjLN9KCKtdmgsPA5dFtGPd4PmRBMTgFfJBZN9/Ho5niUVc1QNqgx0R
-	oEg0dCanMXZ+GwMqEsYwW9jdeSJTHZWCzqPLtnvYFQrwd9Kruk1M6f9OfK02xYo3
-	2TRvvWFp5O0cl3DqEvQnuRXic3pMuCcFjhp0TXJushS/QmqAaeczWT9109mkFO+W
-	5ikLu3NwVD0cyyVScuF5oQ==
+	corp-2025-04-25; bh=ReUQC4yztGXP0SOAc66uyxdWYITC6g6sGGq9DW57a90=; b=
+	qAENVFi+I54fUd5ch5ArcIVpc3nDmtl9K+oNuX0Q3TwmGKE0irFh7MV+Kt4COdt0
+	KxsXi/wiTiTPngllpRQE+WXftGudxgub3tGJvcDgXzN+OvMKmlMlF+TPSCeh3hD9
+	Xbk8e6eoOLbHGigiGNEEMN0RaGC87r4rhg+hMNhQcWfDVtxIwPzY0L8j2qTSTTSz
+	N+EZ4Vb9AbhxXWAbEYLD8pqu27UXFGCLLvypmPXLAfaDJHhDtN4PzdX/ct2hwt3P
+	wmw0v9tEzP1fmp4c5ri2GHP/Xp539IRThrJy4jMWo7j7kV3UhS6HHmKibKngFT78
+	vKmw+GrBrl9BnskQr2PqpQ==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4bev1qry23-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4bev2jgyp3-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Sun, 04 Jan 2026 21:43:28 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 604H0aPm026793;
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 604H1GGc027366;
 	Sun, 4 Jan 2026 21:43:26 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4besj6gbgg-1
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4besj6gbgm-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Sun, 04 Jan 2026 21:43:26 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 604LhPoN007658;
-	Sun, 4 Jan 2026 21:43:25 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 604LhPoO007658;
+	Sun, 4 Jan 2026 21:43:26 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4besj6gbf9-1;
-	Sun, 04 Jan 2026 21:43:25 +0000
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4besj6gbf9-2;
+	Sun, 04 Jan 2026 21:43:26 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, John Garry <john.g.garry@oracle.com>,
-        Hannes Reinecke <hare@suse.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: Re: [PATCH] scsi: core: Introduce an enumeration type for the SCSI_MLQUEUE constants
-Date: Sun,  4 Jan 2026 16:43:07 -0500
-Message-ID: <176755562249.1327406.4682859725529959025.b4-ty@oracle.com>
+To: john.g.garry@oracle.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, Gulam Mohamed <gulam.mohamed@oracle.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH V3 6.19/scsi-queue] scsi: target: core: Add emulation for REPORT_IDENTIFYING_INFORMATION
+Date: Sun,  4 Jan 2026 16:43:08 -0500
+Message-ID: <176755562228.1327406.689464773638662127.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20251113181730.1109331-1-bvanassche@acm.org>
-References: <20251113181730.1109331-1-bvanassche@acm.org>
+In-Reply-To: <20251201110716.227588-1-gulam.mohamed@oracle.com>
+References: <20251201110716.227588-1-gulam.mohamed@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -83,39 +81,40 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2026-01-04_06,2025-12-31_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 suspectscore=0
- mlxscore=0 spamscore=0 mlxlogscore=916 adultscore=0 malwarescore=0
+ mlxscore=0 spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2512120000
  definitions=main-2601040200
-X-Proofpoint-GUID: M10fBHJvaqSaqBsiNw4fSY8le7WLWQKv
-X-Authority-Analysis: v=2.4 cv=Ec7FgfmC c=1 sm=1 tr=0 ts=695adf00 cx=c_pps
+X-Proofpoint-ORIG-GUID: s-clf9BiXjSUAXPel_RhqJfrbYtSOB8f
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA0MDIwMCBTYWx0ZWRfX+/udLYvrZXW0
+ ce7Le7X3zvmQqg0v2FNEf1ZkCxWukBeg0mvvmIsYrYX5R2IHp8k5QffgfOc6onBqaKnJmnByx1Y
+ 4t8vI5hPvbG2EJ2ap6ufzI63to7z+Whi/iUZxk1nvx/35GbtfOIk0803vhXmZwTicnPMrmL/xuC
+ UJat2s157nwYNoLvl0tUHrhzdJvZoCJ4VnYhoq+60W5x/lJ7vqTu7vE7vuXiqpb6EjxK2PuOip+
+ TO458Mqo3CLJL3HOv9VuqKo+NL6ij5NhsL3THm2NXLfaSNPH8X0HNs0JzKzImqNPU8qAv/so0oh
+ YcPNzN65o/JLpPqmLUNS7hYtopWhRUTahczohcmdcgp/sdjy0efp4Bomg1KkSxg/IaAuvY93vmD
+ mORKEQL60sPBpok0K2UclHvJXGcsXOhCWcBCtg5EW7H4askmtRwyYbRo1CiaNS4/a0Lz7DanTEz
+ Jxa6Y0zOKnxC3w2bufg==
+X-Authority-Analysis: v=2.4 cv=A9hh/qWG c=1 sm=1 tr=0 ts=695adf00 cx=c_pps
  a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
  a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=dcZ9_LPyjrzRaMayYEEA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: M10fBHJvaqSaqBsiNw4fSY8le7WLWQKv
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA0MDIwMCBTYWx0ZWRfXzqj7aC5g+MHm
- LD4bAsREGms3x4RSnrXChRoiarDy5P3LazwRX5SnpeqF08mdgYoWM2JPOGuXHmBQQj4UywbK4qZ
- IQ2z5e9dMm0+v6lkAO6+QxK63A3CF7h0jOA4XnXsYsFpegu5OM60TWTgWCyYT/WMVVpibR/wzru
- PLjvJqDMIaVelvyvpY2Fr5IPOgYWF7P7+cZLyxZk6Ab12z4sYgUHdkxwUuDV4FMgt4j3ty76hnS
- W4NscTXcbWXA3HqvQeIkE/HT5K8DbY3Vbqk74NYen1EsRF7zgase6Z3NwK1hgBfVuDqbLTC1p/l
- PGxn6EVod9zdNG1VaqHsZTwadYtPZAZlf35n898LCIbFYI63MRgeroE4jPamG2fyK9wTxGUsd1/
- vnPH86Sefazt4dy5/89ukUfRLz30ZVOihB40Oe82ogxv670NFuoS3tdQyjgeMb3G8mNFYTiEYIS
- OinMsEjzV459gDqOr3g==
+ a=VwQbUJbxAAAA:8 a=w2h7RB53Uq-13jtNowoA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: s-clf9BiXjSUAXPel_RhqJfrbYtSOB8f
 
-On Thu, 13 Nov 2025 10:17:30 -0800, Bart Van Assche wrote:
+On Mon, 01 Dec 2025 11:07:16 +0000, Gulam Mohamed wrote:
 
-> Multiple functions in the SCSI core accept an 'int reason' argument.
-> The 'int' type of these arguments doesn't make it clear what values are
-> acceptable for these arguments. Document which values are supported for
-> these arguments by introducing the enumeration type scsi_qc_status. 'qc'
-> in the type name stands for 'queuecommand' since the values passed as the
-> 'reason' argument are the .queuecommand() return values.
+> Add the emulation for REPORT_IDENTIFYING_INFORMATION command using the
+> configfs file pd_text_id_info in target core module. The configfs file is
+> created in /sys/kernel/config/target/core/<backend type>/
+> <backing_store_name>/wwn/. The user can set the peripheral device text
+> identification string to the file pd_text_id_info. An emulation function
+> "spc_emulate_report_id_info()" is defined in target_core_spc.c which
+> returns the device text id whenever the user requests the same.
 > 
 > [...]
 
 Applied to 6.20/scsi-queue, thanks!
 
-[1/1] scsi: core: Introduce an enumeration type for the SCSI_MLQUEUE constants
-      https://git.kernel.org/mkp/scsi/c/0f9c4be787f7
+[1/1] scsi: target: core: Add emulation for REPORT_IDENTIFYING_INFORMATION
+      https://git.kernel.org/mkp/scsi/c/7011e8aafe8c
 
 -- 
 Martin K. Petersen
