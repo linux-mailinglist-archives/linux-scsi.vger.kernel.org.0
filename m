@@ -1,116 +1,131 @@
-Return-Path: <linux-scsi+bounces-20088-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20090-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02993CF97B0
-	for <lists+linux-scsi@lfdr.de>; Tue, 06 Jan 2026 17:57:13 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33AFDCFA60E
+	for <lists+linux-scsi@lfdr.de>; Tue, 06 Jan 2026 19:57:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E039830D15BD
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jan 2026 16:51:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 86FD2304EBFD
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jan 2026 18:57:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F84833342C;
-	Tue,  6 Jan 2026 16:41:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E95F2773E5;
+	Tue,  6 Jan 2026 18:57:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SptdqJ7H"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="u9lF8e7p"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43CD93BB48;
-	Tue,  6 Jan 2026 16:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6201B237713
+	for <linux-scsi@vger.kernel.org>; Tue,  6 Jan 2026 18:57:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767717719; cv=none; b=ZLOMNwZbQV4RGmPtyRs1K551pXSkD30B0K3d1awTkGLuW4I2KwlCBSwSedtJHbihnkl5//SNtnOp7ZrzUxEO91PexepS/76SQbuJsqOlKbfU8yfmq5Y3voHJ1ogwglZuQ3gEtF5t6gfNf25LO+apkHy9rC+9dQxuCPHQqAMKeBg=
+	t=1767725831; cv=none; b=ZeGvHiuwhe6ZQMBAnOUFzsUg+3p3VT+vdHAfBAdtV7mSUyln40MQ4u6MMnJ4b2MZJakrUBDBi9VD88a7MIzc8CoHH+iUeZs3so1tpVzeP/dSfb0XlKJoiixiiqClcSqZndr3NZ4FXWhgeSGrE10sJjQZcBZB6nr+2FwpdpGPYxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767717719; c=relaxed/simple;
-	bh=5gY7fsBr9ub+zNkpZCbnrzp3q8QYMx0byeMr42X7x3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ovDI1iUO+XQqFttD/VxQsdAKV49SAJDxtCWSQ9Omt9eg7lze6dB19+CFJu6K+cguKmBN367EVnfNi4Uc5lpgyohM2wBad0M5/dl+nU1kupwKaw/xnWfzvipkGsD1Hqr9OnXXJcSq9Yu0YmCctd6w9OVHtL3UMsQVZ8CJAEPjv8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SptdqJ7H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF87AC116C6;
-	Tue,  6 Jan 2026 16:41:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767717719;
-	bh=5gY7fsBr9ub+zNkpZCbnrzp3q8QYMx0byeMr42X7x3o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SptdqJ7Hh+gwiBxEisM0+nE3hLFXLv0kxiifAk+aJZa/j9MqYbSarzPSZuI51n82f
-	 w3EpKLcePo5HG//jvEIzO/1XVRESqxcLDWmgOuLIJXZ1QaN6GRqSM18zxU10CXkgWg
-	 Q+TG9uZkW4mX9kxtD1RPW53kJZaLnBi3ND9MjUBNE1eFrIu+8nbFV0bXRz7lrTT9rs
-	 FXQFSJJ+Pj88u1BAObuQ21Qwb3hLn2kiVv/Dbj1p8sCLEXBAAvMSzDm/VWmSjFpRYh
-	 0RIskqNZWtDg+GPELpm6LdxFAHwX7xBPSjeQc9T0gZoatTsXbSwFXMnnE1iiNM8Bwg
-	 BvJ0tCu502GNQ==
-Date: Tue, 6 Jan 2026 10:41:56 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Pradeep Pragallapati <pradeep.pragallapati@oss.qualcomm.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, vkoul@kernel.org, 
-	neil.armstrong@linaro.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	martin.petersen@oracle.com, konradybcio@kernel.org, taniya.das@oss.qualcomm.com, 
-	manivannan.sadhasivam@oss.qualcomm.com, linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	nitin.rawat@oss.qualcomm.com
-Subject: Re: [PATCH V3 0/4] Add UFS support for x1e80100 SoC
-Message-ID: <l67bnlyrrirb3rnz7izqpe4soqjuvkbi2xawit5w2wrcc74vdo@exo4mbpac244>
-References: <20260105144643.669344-1-pradeep.pragallapati@oss.qualcomm.com>
- <y7lm6zqgbhk4243diyotvox75tcmzhgbkypbkaskrtjcjbruwm@ar7kjmiyv2wr>
- <0689ae93-0684-4bf8-9bce-f9f32e56fe06@oss.qualcomm.com>
+	s=arc-20240116; t=1767725831; c=relaxed/simple;
+	bh=iPKU0SHlCj6fXg7MFISWJUxTAVXSYA1H5ay7IpKSX9E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TcuTgmMhHsA5C2c0C/iMc/GHwOWM0j5VXMYRimKLlDJDX0u4Dlom2QkFAZx3IX6Rz7vrc5+yUeDWXAqnAl840PbPx5YBuL3z2YvRllphGGiqZsdCF65BHilnQA/DUpmLDBn0+HBAmUx8fJ5D936841mUf/z5NY63RKy2z4JzEo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=u9lF8e7p; arc=none smtp.client-ip=199.89.1.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4dm0lS51gfz1XNnxZ;
+	Tue,  6 Jan 2026 18:57:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:mime-version:x-mailer:message-id:date
+	:date:subject:subject:from:from:received:received; s=mr01; t=
+	1767725826; x=1770317827; bh=U28yaJ3T//qo98wwQLBcOv5gROZRNzTB8/B
+	ydiUHHRk=; b=u9lF8e7pJlWsesflOC/wh0iJ6yP4UXbGxGVPTtPY6OxYnUvFUxh
+	rRXA3r5JQcWRO84QYJkN8o78tVmtNipe+5mBOmRBbwORNZljqGpL0cz8HL3m9Qkt
+	Voz3Psae/qWhL9ckDzvUkqkZ5bukvdbJSiX8UbotNeTYBhjAhTimjlTEuUAp60+w
+	6JX3QOwynz4vHHFrAKe8Sj2BAN8qjBGDn5c5PP0CT5ulqIsYOQwnNQOV71D5Slr4
+	d4soBglYIWTK1QuNK9jqgPcC6VGrZ+zjBWqXnVWdy1jkGWjNaMqd8qMv8aipdGZI
+	xda9K6daO3HpCv+xmGcr8R7/sQqK9s3c3RQ==
+X-Virus-Scanned: by MailRoute
+Received: from 011.lax.mailroute.net ([127.0.0.1])
+ by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id m0hupYS3jCU4; Tue,  6 Jan 2026 18:57:06 +0000 (UTC)
+Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4dm0lP1ZWtz1XM6J7;
+	Tue,  6 Jan 2026 18:57:04 +0000 (UTC)
+From: Bart Van Assche <bvanassche@acm.org>
+To: "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org,
+	Bart Van Assche <bvanassche@acm.org>,
+	Ranjan Kumar <ranjan.kumar@broadcom.com>,
+	Sathya Prakash <sathya.prakash@broadcom.com>,
+	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH] scsi: mpt3sas: Simplify the workqueue allocation code
+Date: Tue,  6 Jan 2026 11:56:54 -0700
+Message-ID: <20260106185655.2526800-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.52.0.351.gbe84eed79e-goog
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0689ae93-0684-4bf8-9bce-f9f32e56fe06@oss.qualcomm.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 06, 2026 at 06:33:19PM +0530, Pradeep Pragallapati wrote:
-> 
-> 
-> On 1/6/2026 3:50 AM, Dmitry Baryshkov wrote:
-> > On Mon, Jan 05, 2026 at 08:16:39PM +0530, Pradeep P V K wrote:
-> > > Add UFSPHY, UFSHC compatible binding names and UFS devicetree
-> > > enablement changes for Qualcomm x1e80100 SoC.
-> > > 
-> > > Changes in V3:
-> > > - Update all dt-bindings commit messages with concise and informative
-> > >    statements [Krzysztof]
-> > > - keep the QMP UFS PHY order by last compatible in numerical ascending
-> > >    order [Krzysztof]
-> > > - Remove qcom,x1e80100-ufshc from select: enum: list of
-> > >    qcom,sc7180-ufshc.yaml file [Krzysztof]
-> > > - Update subject prefix for all dt-bindings [Krzysztof]
-> > > - Add RB-by for SoC dtsi [Konrad, Abel, Taniya]
-> > > - Add RB-by for board dts [Konrad]
-> > > - Link to V2:
-> > >    https://lore.kernel.org/all/20251231101951.1026163-1-pradeep.pragallapati@oss.qualcomm.com
-> > 
-> > Where did the previous changelog go?
-> i missed to amend, i will update all changelog in my next patchset.
+Let alloc_ordered_workqueue() format the workqueue name instead of
+calling scnprintf() explicitly. Compile-tested only.
 
-Please just adopt b4, go/upstream provides the documentation you need.
+Cc: Ranjan Kumar <ranjan.kumar@broadcom.com>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 5 +----
+ drivers/scsi/mpt3sas/mpt3sas_base.h | 6 ++----
+ 2 files changed, 3 insertions(+), 8 deletions(-)
 
-Regards,
-Bjorn
-
-> > 
-> > > 
-> > > ---
-> > > Pradeep P V K (4):
-> > >    dt-bindings: phy: qcom,sc8280xp-qmp-ufs-phy: Add QMP UFS PHY
-> > >      compatible
-> > >    dt-bindings: ufs: qcom,sc7180-ufshc: Add UFSHC compatible for x1e80100
-> > >    arm64: dts: qcom: hamoa: Add UFS nodes for x1e80100 SoC
-> > >    arm64: dts: qcom: hamoa-iot-evk: Enable UFS
-> > > 
-> > >   .../phy/qcom,sc8280xp-qmp-ufs-phy.yaml        |   4 +
-> > >   .../bindings/ufs/qcom,sc7180-ufshc.yaml       |  37 +++---
-> > >   arch/arm64/boot/dts/qcom/hamoa-iot-evk.dts    |  18 +++
-> > >   arch/arm64/boot/dts/qcom/hamoa.dtsi           | 123 +++++++++++++++++-
-> > >   4 files changed, 164 insertions(+), 18 deletions(-)
-> > > 
-> > > -- 
-> > > 2.34.1
-> > > 
-> > 
-> 
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/m=
+pt3sas_base.c
+index e4e22cb0e277..2f2183f405c9 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -843,11 +843,8 @@ mpt3sas_base_start_watchdog(struct MPT3SAS_ADAPTER *=
+ioc)
+ 	/* initialize fault polling */
+=20
+ 	INIT_DELAYED_WORK(&ioc->fault_reset_work, _base_fault_reset_work);
+-	scnprintf(ioc->fault_reset_work_q_name,
+-	    sizeof(ioc->fault_reset_work_q_name), "poll_%s%d_status",
+-	    ioc->driver_name, ioc->id);
+ 	ioc->fault_reset_work_q =3D alloc_ordered_workqueue(
+-		"%s", WQ_MEM_RECLAIM, ioc->fault_reset_work_q_name);
++		"poll_%s%d_status", WQ_MEM_RECLAIM, ioc->driver_name, ioc->id);
+ 	if (!ioc->fault_reset_work_q) {
+ 		ioc_err(ioc, "%s: failed (line=3D%d)\n", __func__, __LINE__);
+ 		return;
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/m=
+pt3sas_base.h
+index de37fa5ac073..d4597d058705 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.h
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
+@@ -1163,9 +1163,8 @@ typedef void (*MPT3SAS_FLUSH_RUNNING_CMDS)(struct M=
+PT3SAS_ADAPTER *ioc);
+  * @mask_interrupts: ignore interrupt
+  * @pci_access_mutex: Mutex to synchronize ioctl, sysfs show path and
+  *			pci resource handling
+- * @fault_reset_work_q_name: fw fault work queue
+- * @fault_reset_work_q: ""
+- * @fault_reset_work: ""
++ * @fault_reset_work_q: fw fault workqueue
++ * @fault_reset_work: fw fault work
+  * @firmware_event_thread: fw event work queue
+  * @fw_event_lock:
+  * @fw_event_list: list of fw events
+@@ -1349,7 +1348,6 @@ struct MPT3SAS_ADAPTER {
+ 	u8		mask_interrupts;
+=20
+ 	/* fw fault handler */
+-	char		fault_reset_work_q_name[20];
+ 	struct workqueue_struct *fault_reset_work_q;
+ 	struct delayed_work fault_reset_work;
+=20
 
