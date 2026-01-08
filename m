@@ -1,152 +1,169 @@
-Return-Path: <linux-scsi+bounces-20169-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20180-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C87D3D03D21
-	for <lists+linux-scsi@lfdr.de>; Thu, 08 Jan 2026 16:26:42 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4251DD03BCC
+	for <lists+linux-scsi@lfdr.de>; Thu, 08 Jan 2026 16:18:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 493F53042B05
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Jan 2026 15:20:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 34E67303B213
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Jan 2026 15:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3F13A1CEE;
-	Thu,  8 Jan 2026 10:52:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCA2E496F6E;
+	Thu,  8 Jan 2026 12:16:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="ZKIYKlwG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e2agQWWf"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1236364E8A;
-	Thu,  8 Jan 2026 10:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767869519; cv=pass; b=M1GUsxVbew/sEX8R9kuC8D1Zb4zvbraymK9EJGLVALkARkKCzhzGGnEAcyJNNoEh9ldNxdOiI0vUG6BbdkLwKZ+fbga7ejXtVAou7Wqo7y+rSuRywqBK9nb9HMmPx3T+yWiovMixHrmuM1YIXOl9Yvsf3972LgkL9EC8yhsxtks=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767869519; c=relaxed/simple;
-	bh=UhtPaGwuFlEFDj2CCUlrPu8e8xx653WtlROBXEBmR68=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qZ2FNqrBP1E68QQnHk7ARi/8Rc+Nm4irEZuXuVQn8PmvhZ48xvm4cThpGuqMEDv1scNXh+4dBc2wmhSoltQHo/5ISVE0ulIhWA6EXNTQsi8AQYLfKOVKL4P6f1PXPaU2IGIMF/EqqSXE0P6pnj1stw86mANDrY65qkVrYYOoNPE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=ZKIYKlwG; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1767869481; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=HiV3nOJbOSyePZPF2aan+Y3WdRmtWJncRFz4/hdjovhOJTMNj4TQ2fq3JEwWOsIC+hwMFOxVrGxrr4X2g4+KW6GPodKwB08aLJc7Na+1Ozy9xknWW4LzLKZDnUzx+0zV/TslU27MOrHLABEB+L7ZTgmq7WqC3kmK3nnizFJ0oHw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1767869481; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=QMwNSkM5XSH2k8a3Oq36FB58kMKzIsImX1FaHSGQhBs=; 
-	b=NFIrzRxeyER08dnFudF9BU7FizaRiU7FM3s7Bhy20CTlzrZzTLyNDZX1Cc3JWzVAg8JJqB3djxgSKjDmCjqbmRImcudiVqyiM/reu2RrZPlCLPvfxACUuU4Tc2VsZSJGo3eMR6PV79LuaZZjRHWR5OV2MaaPAFH3OVsn9iXMneg=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1767869481;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=QMwNSkM5XSH2k8a3Oq36FB58kMKzIsImX1FaHSGQhBs=;
-	b=ZKIYKlwGrGW1in365Z3vvayzCyHcVDGzLouN1wz2Az0Tw8nTsifo1lqnrwZ3nrKO
-	BaOQfi08PmqwZSbpf4HoVuFTuPinUII2vqrLAAcvvsE8lPWMPT1tDhK6nJkYuh85cC/
-	GB69iijIu5r9bnAZiS65xCHCDO5Z9lQlNJmGmHWk=
-Received: by mx.zohomail.com with SMTPS id 1767869479482350.55806833022723;
-	Thu, 8 Jan 2026 02:51:19 -0800 (PST)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Thu, 08 Jan 2026 11:49:33 +0100
-Subject: [PATCH v5 14/24] scsi: ufs: mediatek: Switch to newer PM ops
- helpers
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1544496F40;
+	Thu,  8 Jan 2026 12:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767874571; cv=none; b=UZHofmtn2MC3/29LeD7tVnmqTEUQUIlA2HMjDUpm8eDU8jsqwFKWeVaKOKSl6eg10TR49KUNCZI1aHsKtN6SFmemqC2jpSmGaphIPpaHulK3dNkPBPH5WCc2k3Zk07c76wPOSe2hPowaZIq2HTC3NIOVI4wk7APptcnSA2VHflY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767874571; c=relaxed/simple;
+	bh=FcopaEUh/j7G1ACOGZTfkC61bb/blGywpKi5bSo0NTM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Q69IvTtOe9gK9b4qSAD+4DZigrhPV0uk/ldRsrsgd4q1fhXrdC81YqFnEZOKBOyYagGhLzDT7hYK3jNPC0OVK1btsv0a8At84ACGsyVDV2sPQWqpHgEd4DoLBvbhbUTnPKR6q65IEVpBmG1+witWUqZHR86fUEfFQOOWYStHP+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e2agQWWf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AFD2C116C6;
+	Thu,  8 Jan 2026 12:16:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767874568;
+	bh=FcopaEUh/j7G1ACOGZTfkC61bb/blGywpKi5bSo0NTM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=e2agQWWfAtizhDQSZCJTNXtaNkT5LV2Z0EWCjw8kfVryLzQayfwB0n00mrJBwhgRJ
+	 R9fAYsIhwH0FkYip5EN4CC5954T/VK0LebJMfdgexSmXC4WjFfcE777uh23w9PC0MI
+	 WykVQ2gGkVluNvX00bFbLyUvTYycunGQ3DjCREqG7SVWYb91kpgKye1yEyOZtdZ2X1
+	 AOP/seaVmOf1AjuZv2BGb198x1wGDkliTY9CtP83X3PXIfLkBx58d2VJwg3S7f+LXt
+	 6Frj1gyde74ryyGzp83h0xBn3Albs9k1e/xt60b++YYJMSEzQJ9q1Iils+sMBEeJWB
+	 UnwGDoM88Tt5Q==
+Message-ID: <512d7012-971a-4626-bcf7-cfbd7a9e6296@kernel.org>
+Date: Thu, 8 Jan 2026 13:16:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260108-mt8196-ufs-v5-14-49215157ec41@collabora.com>
-References: <20260108-mt8196-ufs-v5-0-49215157ec41@collabora.com>
-In-Reply-To: <20260108-mt8196-ufs-v5-0-49215157ec41@collabora.com>
-To: Alim Akhtar <alim.akhtar@samsung.com>, 
- Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Chunfeng Yun <chunfeng.yun@mediatek.com>, Vinod Koul <vkoul@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Peter Wang <peter.wang@mediatek.com>, Stanley Jhu <chu.stanley@gmail.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, Liam Girdwood <lgirdwood@gmail.com>, 
- Mark Brown <broonie@kernel.org>, Chaotian Jing <Chaotian.Jing@mediatek.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>, 
- kernel@collabora.com, linux-scsi@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- linux-phy@lists.infradead.org, 
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-X-Mailer: b4 0.14.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 12/25] scsi: ufs: mediatek: Remove vendor kernel quirks
+ cruft
+To: =?UTF-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= <peter.wang@mediatek.com>,
+ "chu.stanley@gmail.com" <chu.stanley@gmail.com>,
+ "robh@kernel.org" <robh@kernel.org>,
+ =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= <Chunfeng.Yun@mediatek.com>,
+ "kishon@kernel.org" <kishon@kernel.org>,
+ "James.Bottomley@HansenPartnership.com"
+ <James.Bottomley@HansenPartnership.com>,
+ "bvanassche@acm.org" <bvanassche@acm.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ =?UTF-8?B?Q2hhb3RpYW4gSmluZyAo5LqV5pyd5aSpKQ==?=
+ <Chaotian.Jing@mediatek.com>, "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+ "nicolas.frattaroli@collabora.com" <nicolas.frattaroli@collabora.com>,
+ "vkoul@kernel.org" <vkoul@kernel.org>,
+ "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+ "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+ "avri.altman@wdc.com" <avri.altman@wdc.com>,
+ "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+ "broonie@kernel.org" <broonie@kernel.org>
+Cc: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+ "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+ Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
+ "kernel@collabora.com" <kernel@collabora.com>
+References: <20251218-mt8196-ufs-v4-0-ddec7a369dd2@collabora.com>
+ <20251218-mt8196-ufs-v4-12-ddec7a369dd2@collabora.com>
+ <1bbc263bafe14343b2d60a230ae6ce5dadffbf7c.camel@mediatek.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <1bbc263bafe14343b2d60a230ae6ce5dadffbf7c.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-SET_SYSTEM_SLEEP_PM_OPS and SET_RUNTIME_PM_OPS are deprecated.
+On 06/01/2026 14:25, Peter Wang (王信友) wrote:
+> On Thu, 2025-12-18 at 13:55 +0100, Nicolas Frattaroli wrote:
+>>
+>> Both ufs_mtk_vreg_fix_vcc and ufs_mtk_vreg_fix_vccqx look like they
+>> are
+>> vendor kernel hacks to work around existing downstream device trees.
+>> Mainline does not need or want them, so remove them.
+>>
+> 
+> Hi Nicolas,
+> 
+> This is a flexible approach to implement one software supporting
+> multiple
+> hardware configurations. Because you cannot guarantee that your SOC
+> will 
 
-Switch to the non-deprecated variants, and pm_ptr, removing the
-ifdeffery in the process. This allows the compiler visibility into those
-functions.
+We do not store dead code for your vendor, downstream kernel. We already
+discussed it months ago where you were pushing same agenda.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
----
- drivers/ufs/host/ufs-mediatek.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+Stop with this downstream approach and understand that your downstream
+absolutely does not matter and does not exist for us.
 
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 3250c27cb91f..230e11533eac 100644
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -2325,7 +2325,6 @@ static void ufs_mtk_remove(struct platform_device *pdev)
- 	ufshcd_pltfrm_remove(pdev);
- }
- 
--#ifdef CONFIG_PM_SLEEP
- static int ufs_mtk_system_suspend(struct device *dev)
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
-@@ -2372,9 +2371,7 @@ static int ufs_mtk_system_resume(struct device *dev)
- 
- 	return ret;
- }
--#endif
- 
--#ifdef CONFIG_PM
- static int ufs_mtk_runtime_suspend(struct device *dev)
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
-@@ -2418,13 +2415,10 @@ static int ufs_mtk_runtime_resume(struct device *dev)
- 
- 	return ufshcd_runtime_resume(dev);
- }
--#endif
- 
- static const struct dev_pm_ops ufs_mtk_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(ufs_mtk_system_suspend,
--				ufs_mtk_system_resume)
--	SET_RUNTIME_PM_OPS(ufs_mtk_runtime_suspend,
--			   ufs_mtk_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(ufs_mtk_system_suspend, ufs_mtk_system_resume)
-+	RUNTIME_PM_OPS(ufs_mtk_runtime_suspend, ufs_mtk_runtime_resume, NULL)
- 	.prepare	 = ufshcd_suspend_prepare,
- 	.complete	 = ufshcd_resume_complete,
- };
-@@ -2434,7 +2428,7 @@ static struct platform_driver ufs_mtk_pltform = {
- 	.remove = ufs_mtk_remove,
- 	.driver = {
- 		.name   = "ufshcd-mtk",
--		.pm     = &ufs_mtk_pm_ops,
-+		.pm     = pm_ptr(&ufs_mtk_pm_ops),
- 		.of_match_table = ufs_mtk_of_match,
- 	},
- };
+> always use UFS 2.0 or UFS 3.0, or that the PMIC you use will only have
+> one set.
+> 
+> Thanks
+> Peter
+> 
+> 
 
--- 
-2.52.0
 
+Best regards,
+Krzysztof
 
