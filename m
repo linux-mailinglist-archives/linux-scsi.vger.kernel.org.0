@@ -1,207 +1,139 @@
-Return-Path: <linux-scsi+bounces-20157-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20181-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5805D03272
-	for <lists+linux-scsi@lfdr.de>; Thu, 08 Jan 2026 14:50:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E5E8D0372D
+	for <lists+linux-scsi@lfdr.de>; Thu, 08 Jan 2026 15:44:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D91D0310ED87
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Jan 2026 13:41:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0631F327968E
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Jan 2026 14:28:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36F3C4B07E6;
-	Thu,  8 Jan 2026 10:50:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AD96496F40;
+	Thu,  8 Jan 2026 12:16:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="Q1I0qCEr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PGhHcJEA"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5E534963B0;
-	Thu,  8 Jan 2026 10:50:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767869447; cv=pass; b=oG7cVZu91hAIgg4cHAQr2Rk3+CljJL39Tn1NDRWPdA+UfHIRP0W0lrYEd0QR7IAS8nxsmy5KAKa/pxStRIgkMR+g7EhEYzy04WnD5EVwhqAPILQQ4daRmoSuoyDVFCvzU6uqZMBqZCgyk101kYoRVBSUryragBmTro9Jz9LcPFk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767869447; c=relaxed/simple;
-	bh=Tk0oAS6OhREK6lUdo3KbLA7MC7i6rRFzjAfUWj2AeYk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HvWQNCjP0p4Oq3wo49tRvrKV0ZUWgyJl3NNnHOXZt9d6IlFfAEN29jozmhqRrj5xj3ACpe66skCUCl7X5SV+ouRVY0wr8kHHo1pFXPDnNTD8OCA5cUaBsHePNfBFKc+KChO9iWdLLpO2qhsqHWYMHjpGJqQjabcaU24yGow0mJ8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=Q1I0qCEr; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1767869410; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Hb0bqOACXjW9nULnVnocMyiRCQLSdACvLmGVUeP96pi/m99TjeYW0aIa6ipT/vMV3tw6S8wkSnF9mfitRXouFzSKBE3o2WdKAEIJGKC6bhXMXbgjRzmAneWWoZL79UK7/XMdR+PCw8OtqpCryI2DwfIT2t7T0tuBYzrgETAkT2c=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1767869410; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=FX729w6H6Nqv4wBPOyEK7eBO51Uitkvy4i1Pv/OOpY4=; 
-	b=VRsgeL03VJ7TychzbYNgFfb4XfFb7Vx1XrQY5kmJvHzf+6/NjExH8kzIrRPNhP7JeOl7avJZpasa9tDyeRedWALX3w9+5oHfqYmo45HEyk60Lj2ReQjIHC27rnMVh3NacX0ChtB7qRMqJlthlPM4G4iUg+m0gGRWlGKwunUDzJc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1767869410;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=FX729w6H6Nqv4wBPOyEK7eBO51Uitkvy4i1Pv/OOpY4=;
-	b=Q1I0qCEr7bO0oXKwQniaS9NDBRKW5ZbG8ynjk8r0WADRMmrMKwe2HWDkvW0BaLBN
-	r85urNDLh0GngW5j6LXwHKQbXk1Pel/AWd4evVJQRfAgBToNz7Novgv8CSGWRoanZkR
-	dmIDapDpEQyPlOvt+woyzUplixnygvfYWcbzAlEE=
-Received: by mx.zohomail.com with SMTPS id 1767869409673349.5310051421236;
-	Thu, 8 Jan 2026 02:50:09 -0800 (PST)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Thu, 08 Jan 2026 11:49:22 +0100
-Subject: [PATCH v5 03/24] dt-bindings: ufs: mediatek,ufs: Add mt8196
- variant
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE9B2DB7B4;
+	Thu,  8 Jan 2026 12:16:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767874610; cv=none; b=st6Ub7P4lpEQ90pQbCiu6BA7kFWDSv03qyPSIzgC0YedKmBjX4b+EaY5+X8/1GMiHgzK5lMTINKyFZUsMGVhmSWCJLjaYKsvW3W9hdB2erf7ClQIR0HHSrFT/3xT/MWs+TrLOrWgdG2YWQ48R1meDhCtqmUDMTL54dBXIaauU3I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767874610; c=relaxed/simple;
+	bh=gEl+IGUFdOf6I39ZmGq4+GhoNGeNRIouAWMgiu49Weo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F2uiMfYB4xPkI9y0TUtISH6giEAhm84Zvfygm7ueVoio09OObfV5HuJab6El/qVVkcrOp+8nzIAUUds/Rg8UviM47W+MsEdRvWM61RQoB552vBQzp/SoCPGRjcFHB0aGvhOxxXXPTtRwKjpg2jR8FEh95lkQxkmMGFYV/WvNqN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PGhHcJEA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A40CC116C6;
+	Thu,  8 Jan 2026 12:16:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767874608;
+	bh=gEl+IGUFdOf6I39ZmGq4+GhoNGeNRIouAWMgiu49Weo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PGhHcJEAbS/6jLBB7EsrbLkPZX8hpLX39bYjJVL9QCNdp2ehUw3hQnd8TIhOXlfHU
+	 NtgVZAiyoPKtMtgQKyhH4I6fqU8aVfLwfF9PwsKCD+XJtAvcNTyed51WFT30cJ1lx/
+	 X7AWIy3LSOojhFOlrZ/4/08Ie2K/UJoM2ww49dXo2RSYPnCkehQrYiDlWK8oRsFocK
+	 ivv9FGKYZvk/jHf/y5Mnt8LgBty+SUTV602plm3pkhUTGu5Bux7acdBJywp/zkr5s7
+	 z4SlRUnoYanXPLaBvv1ULCzMv3vF+LorjCeZBpC73klvLQbggUNHrh5/6+HJpt6Bv9
+	 UUnTlEOKDI/Pw==
+Message-ID: <b562c545-fabf-4e30-8397-e2d75633e03a@kernel.org>
+Date: Thu, 8 Jan 2026 13:16:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260108-mt8196-ufs-v5-3-49215157ec41@collabora.com>
-References: <20260108-mt8196-ufs-v5-0-49215157ec41@collabora.com>
-In-Reply-To: <20260108-mt8196-ufs-v5-0-49215157ec41@collabora.com>
-To: Alim Akhtar <alim.akhtar@samsung.com>, 
- Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Chunfeng Yun <chunfeng.yun@mediatek.com>, Vinod Koul <vkoul@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Peter Wang <peter.wang@mediatek.com>, Stanley Jhu <chu.stanley@gmail.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, Liam Girdwood <lgirdwood@gmail.com>, 
- Mark Brown <broonie@kernel.org>, Chaotian Jing <Chaotian.Jing@mediatek.com>, 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 12/24] scsi: ufs: mediatek: Remove vendor kernel quirks
+ cruft
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Bart Van Assche <bvanassche@acm.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Chunfeng Yun <chunfeng.yun@mediatek.com>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>,
+ Peter Wang <peter.wang@mediatek.com>, Stanley Jhu <chu.stanley@gmail.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Chaotian Jing <Chaotian.Jing@mediatek.com>,
  Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>, 
- kernel@collabora.com, linux-scsi@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- linux-phy@lists.infradead.org, 
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
- Conor Dooley <conor.dooley@microchip.com>
-X-Mailer: b4 0.14.3
+Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
+ kernel@collabora.com, linux-scsi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-phy@lists.infradead.org
+References: <20260108-mt8196-ufs-v5-0-49215157ec41@collabora.com>
+ <20260108-mt8196-ufs-v5-12-49215157ec41@collabora.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20260108-mt8196-ufs-v5-12-49215157ec41@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The MediaTek MT8196 SoC's UFS controller uses three additional clocks
-compared to the MT8195, and a different set of supplies. It is therefore
-not compatible with the MT8195.
+On 08/01/2026 11:49, Nicolas Frattaroli wrote:
+> Both ufs_mtk_vreg_fix_vcc and ufs_mtk_vreg_fix_vccqx look like they are
+> vendor kernel hacks to work around existing downstream device trees.
+> Mainline does not need or want them, so remove them.
+> 
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
-While it does have a AVDD09_UFS_1 pin in addition to the AVDD09_UFS pin,
-it appears that these two pins are commoned together, as the board
-schematic I have access to uses the same supply for both, and the
-downstream driver does not distinguish between the two supplies either.
+Just in case Mediatek again promotes their downstream vendor kernel as
+justification for upstream (which is really unacceptable and was told to
+Mediatek more than once):
 
-Add a compatible for it, and modify the binding correspondingly.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Acked-by: Vinod Koul <vkoul@kernel.org>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
----
- .../devicetree/bindings/ufs/mediatek,ufs.yaml      | 58 +++++++++++++++++++++-
- 1 file changed, 57 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml b/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
-index e0aef3e5f56b..a82119ecbfe8 100644
---- a/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
-+++ b/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
-@@ -16,10 +16,11 @@ properties:
-       - mediatek,mt8183-ufshci
-       - mediatek,mt8192-ufshci
-       - mediatek,mt8195-ufshci
-+      - mediatek,mt8196-ufshci
- 
-   clocks:
-     minItems: 1
--    maxItems: 13
-+    maxItems: 16
- 
-   clock-names:
-     minItems: 1
-@@ -37,6 +38,9 @@ properties:
-       - const: crypt_perf
-       - const: ufs_rx_symbol0
-       - const: ufs_rx_symbol1
-+      - const: ufs_sel
-+      - const: ufs_sel_min_src
-+      - const: ufs_sel_max_src
- 
-   operating-points-v2: true
- 
-@@ -131,9 +135,27 @@ allOf:
-       properties:
-         clocks:
-           minItems: 13
-+          maxItems: 13
-         clock-names:
-           minItems: 13
-+          maxItems: 13
-         avdd09-supply: false
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: mediatek,mt8196-ufshci
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 16
-+          maxItems: 16
-+        clock-names:
-+          minItems: 16
-+          maxItems: 16
-+        avdd18-supply: false
-+      required:
-+        - operating-points-v2
- 
- examples:
-   - |
-@@ -183,3 +205,37 @@ examples:
- 
-         mediatek,ufs-disable-mcq;
-     };
-+  - |
-+    #include <dt-bindings/reset/mediatek,mt8196-resets.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    ufshci@16810000 {
-+        compatible = "mediatek,mt8196-ufshci";
-+        reg = <0x16810000 0x2a00>;
-+        interrupts = <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>;
-+
-+        clocks = <&ufs_ao_clk 6>, <&ufs_ao_clk 7>, <&clk26m>, <&ufs_ao_clk 3>,
-+                 <&clk26m>, <&ufs_ao_clk 4>, <&ufs_ao_clk 0>,
-+                 <&topckgen 7>, <&topckgen 41>, <&topckgen 105>, <&topckgen 83>,
-+                 <&ufs_ao_clk 1>, <&ufs_ao_clk 2>, <&topckgen 42>,
-+                 <&topckgen 84>, <&topckgen 102>;
-+        clock-names = "ufs", "ufs_aes", "ufs_tick", "unipro_sysclk",
-+                      "unipro_tick", "unipro_mp_bclk", "ufs_tx_symbol",
-+                      "ufs_mem_sub", "crypt_mux", "crypt_lp", "crypt_perf",
-+                      "ufs_rx_symbol0", "ufs_rx_symbol1", "ufs_sel",
-+                      "ufs_sel_min_src", "ufs_sel_max_src";
-+
-+        operating-points-v2 = <&ufs_opp_table>;
-+
-+        phys = <&ufsphy>;
-+
-+        avdd09-supply = <&mt6363_vsram_modem>;
-+        vcc-supply = <&mt6363_vemc>;
-+        vccq-supply = <&mt6363_vufs12>;
-+
-+        resets = <&ufs_ao_clk MT8196_UFSAO_RST1_UFS_UNIPRO>,
-+                 <&ufs_ao_clk MT8196_UFSAO_RST1_UFS_CRYPTO>,
-+                 <&ufs_ao_clk MT8196_UFSAO_RST1_UFSHCI>;
-+        reset-names = "unipro", "crypto", "hci";
-+        mediatek,ufs-disable-mcq;
-+    };
-
--- 
-2.52.0
-
+Best regards,
+Krzysztof
 
