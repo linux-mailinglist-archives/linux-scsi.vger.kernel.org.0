@@ -1,46 +1,46 @@
-Return-Path: <linux-scsi+bounces-20182-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20184-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58832D02C12
-	for <lists+linux-scsi@lfdr.de>; Thu, 08 Jan 2026 13:53:10 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D5BCD02A95
+	for <lists+linux-scsi@lfdr.de>; Thu, 08 Jan 2026 13:36:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D1ACA302E16D
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Jan 2026 12:47:56 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 733173009D65
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Jan 2026 12:36:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9FF4A1E11;
-	Thu,  8 Jan 2026 12:19:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B68BC4DC539;
+	Thu,  8 Jan 2026 12:26:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lOKxG2p/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qj28Hd9V"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E91428FFF;
-	Thu,  8 Jan 2026 12:19:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C9D4DC533;
+	Thu,  8 Jan 2026 12:26:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767874758; cv=none; b=AY1ZOMXF/XBoVCuO0chEzeTq897eFrV4ORt8tECDJT7qZ+L3vCG4+OjVg4L2TGoSnhNrTIxqjI8Y5is740stsKbxkxMZCf6kQvdQBxOhYUAZq+o/UgkmsEgU/dvhYnI0xCNNNv2OV3Z1J7th92xXNXQjo1fCkMqN+NaovU5CqeE=
+	t=1767875162; cv=none; b=bPhebqDBzTW32aDMLNMeoLgE+NLV8pTYbaovCUXHdClkNkX68zJ2o970+bFFZoKuqtq1arm7AvGjsnBn3QoTEycULc5iquLKz4QXJacHOXNyzFuam9jvRPmuuzGFHv3SF58Mmvgsv01+htB/PpddwkvKiT9f094U2bQ6Trc+n2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767874758; c=relaxed/simple;
-	bh=KjsGhf6tGBRyqz1EhCK1fS6iJsnkXaTR6w1ZlTXKRDw=;
+	s=arc-20240116; t=1767875162; c=relaxed/simple;
+	bh=C1Hx9DZE+cLMPMvB83ODtiSQ434Om43RczbKH8nThXY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZqKjGIlnZzmVOXPIdbMNMfeqwRpuFZgcbzIeVbiIsMpE410ilNNjffdDqGqB3/rEoNuuhyJBsdhuCzum64do2FHD0AYgWfiScSRFuV9gKE9RZCMIyYIkMEvhjzarNx3QVpTLHBW7yy63bos8prnVtq5SKx0QDO9WcfUw1QbMnuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lOKxG2p/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D9FC116C6;
-	Thu,  8 Jan 2026 12:19:12 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=mYyvx1TTyF5KCkWgcfGa/ZDXgq/hj/0bZi39isXTypQqgbwAfLquFkX6uwzKSqyakNv241bsgURI8YUOwj6ASdjrP9g07jOWWSK8l+XdSfQpbC2hh8cpGMdWzmuFqvRy2VWHQb5AXctgS0q7u68ganNFHOi1bfYYd1D+/Mu4qpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qj28Hd9V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95F90C116C6;
+	Thu,  8 Jan 2026 12:25:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767874758;
-	bh=KjsGhf6tGBRyqz1EhCK1fS6iJsnkXaTR6w1ZlTXKRDw=;
+	s=k20201202; t=1767875162;
+	bh=C1Hx9DZE+cLMPMvB83ODtiSQ434Om43RczbKH8nThXY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lOKxG2p/FRgp+8OYkLzrCnvz55qNyj0cbW2YWwbQ94LJ1/hC83S5W/bsGtt04ww6j
-	 OQNa0gvzOihQscBfKpdPgpsJek3Kd0XDIzzeyFMu+IxfCfkZUfzQc4RWAcr57Fc6Vp
-	 BdbWBl+gCb7bJTaXG3rxguTciSC/rMZ/e8xN1VSBD/xi26HEjDp3qHHPI7dlh/YExT
-	 /CrFzx1kZuu/0jVn+5iy0r64NaC8zj6as7Kxf8VNEoeee3Uai2IfOwqNjkzGB1O1q1
-	 LryGj12kuCHnZKG/XPysK0cVhxut6TMQ5eAFKE5K1inrUxhOVOYuUtX0SF5quA1BBq
-	 K/UwGXsuYSOWg==
-Message-ID: <1e365223-8e20-4519-b290-d8ecff548d84@kernel.org>
-Date: Thu, 8 Jan 2026 13:19:10 +0100
+	b=Qj28Hd9VfukTH9PBfE+A/TLhre/AAPY78mHIWO6VGQb8Ryo99Buvf3a/chE8K7v9r
+	 fK5EaHqlAI6FjIKPHVQE5v4irRvkEVd6jUtgNc0baKqbZIGgoeJRpwtfgP138HgODO
+	 SMLRFE02tdJhnrGtgDr5XSuHwBk1t96mDqjOj169PCF4pgaJTSLFTmjQeNnNv4m3z2
+	 2M4hnmwS5u/cu/vYGZLcaZe5u53Z0ewaZYpUPmMDWNjwSey4DEV84pAmoDKFTfbEIw
+	 65lJAvcO1ePWu/jZY8CkyisS5jenVt5g3pwWZ0JpL6DiNn8vw3VgeijjUOsOAOSpoS
+	 6qbBh3d/3Mv2w==
+Message-ID: <81ed17eb-2170-4e97-b56d-488b5335ff5c@kernel.org>
+Date: Thu, 8 Jan 2026 13:25:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -48,41 +48,28 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 11/25] scsi: ufs: mediatek: Rework probe function
-To: =?UTF-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= <peter.wang@mediatek.com>,
- "chu.stanley@gmail.com" <chu.stanley@gmail.com>,
- "robh@kernel.org" <robh@kernel.org>,
- =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= <Chunfeng.Yun@mediatek.com>,
- "kishon@kernel.org" <kishon@kernel.org>,
- "James.Bottomley@HansenPartnership.com"
- <James.Bottomley@HansenPartnership.com>,
- "bvanassche@acm.org" <bvanassche@acm.org>,
+Subject: Re: [PATCH v5 11/24] scsi: ufs: mediatek: Rework probe function
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Bart Van Assche <bvanassche@acm.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
  AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- =?UTF-8?B?Q2hhb3RpYW4gSmluZyAo5LqV5pyd5aSpKQ==?=
- <Chaotian.Jing@mediatek.com>, "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
- "nicolas.frattaroli@collabora.com" <nicolas.frattaroli@collabora.com>,
- "vkoul@kernel.org" <vkoul@kernel.org>,
- "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
- "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
- "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
- "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
- "avri.altman@wdc.com" <avri.altman@wdc.com>,
- "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
- "broonie@kernel.org" <broonie@kernel.org>
-Cc: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
- "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
- Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
- "kernel@collabora.com" <kernel@collabora.com>
-References: <20251218-mt8196-ufs-v4-0-ddec7a369dd2@collabora.com>
- <20251218-mt8196-ufs-v4-11-ddec7a369dd2@collabora.com>
- <213d3077835fc86d15579c0a0a91f64fd84b1059.camel@mediatek.com>
+ Chunfeng Yun <chunfeng.yun@mediatek.com>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>,
+ Peter Wang <peter.wang@mediatek.com>, Stanley Jhu <chu.stanley@gmail.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Chaotian Jing <Chaotian.Jing@mediatek.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
+ kernel@collabora.com, linux-scsi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-phy@lists.infradead.org
+References: <20260108-mt8196-ufs-v5-0-49215157ec41@collabora.com>
+ <20260108-mt8196-ufs-v5-11-49215157ec41@collabora.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -128,27 +115,18 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <213d3077835fc86d15579c0a0a91f64fd84b1059.camel@mediatek.com>
+In-Reply-To: <20260108-mt8196-ufs-v5-11-49215157ec41@collabora.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 06/01/2026 14:23, Peter Wang (王信友) wrote:
-> On Thu, 2025-12-18 at 13:55 +0100, Nicolas Frattaroli wrote:
->>
->> Remove the ti,syscon-reset cruft.
->>
-> 
-> Hi Nicolas,
-> 
-> Why do we need to remove the reset node? If an error occurs and the
+On 08/01/2026 11:49, Nicolas Frattaroli wrote:
+> Remove the ti,syscon-reset cruft.
 
-Commit msg should be improved and provide the reason, e.g. because it is
-undocumented and unused ABI.
+Please provide here reason, e.g. undocumented ABI. Normally I would ask
+about ABI impact, but considering this is was just copied from some
+downstream code I would just not care.
 
-> host 
-> does not perform a reset, it could lead to error recovery failure.
-
-This is not a reason to use undocumented ABI.
+Mediatek should really stop and rethink their upstream process.
 
 Best regards,
 Krzysztof
