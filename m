@@ -1,107 +1,145 @@
-Return-Path: <linux-scsi+bounces-20151-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20154-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CD74D01668
-	for <lists+linux-scsi@lfdr.de>; Thu, 08 Jan 2026 08:33:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95F3ED0219A
+	for <lists+linux-scsi@lfdr.de>; Thu, 08 Jan 2026 11:23:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 31F4E301D5FE
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Jan 2026 07:33:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 91FB130EE88A
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Jan 2026 10:16:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD74D24A047;
-	Thu,  8 Jan 2026 07:33:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDE2243F497;
+	Thu,  8 Jan 2026 09:29:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="EMi4Ylvr"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 443FF1A23A0;
-	Thu,  8 Jan 2026 07:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767857585; cv=none; b=eLkx+QKdDW9hqDDjboOM8RSANa7hlEbAbj10vvKeVhLIow9qERU4Zw7Bk02NlEaC6fuQt02FDGP45ZlSxORYdw4p/HUnjGQW/+41dqtjlVrIXRJAa5YblwoPZVL19/jfNvPDChMMhsX1L1FtzGT0RK10XLVVuGsZVWxsevS6olA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767857585; c=relaxed/simple;
-	bh=4PRYlzB6lFF66PN5L2LiJHO/AHqcK6tDfxBZ1YF0ZbY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LcYk7OfJkuENx9yIwmKE/Cd/OpoicJnuOgdd9DJwXaxoSMFBYefiAjktv4rkmBwentjf0jb6RE38c2VbFUUh3tBCC4icbOd5KCKMpx/G744itLeU7ntxgHVz/+YSa+DZL5BZFtqFZfU9xf9NLFTYW5cICYLwhcvAxNEuUIjnryI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
-Received: from localhost.localdomain (unknown [36.112.3.223])
-	by APP-05 (Coremail) with SMTP id zQCowAA3yg2kXV9pnwv4Aw--.12628S2;
-	Thu, 08 Jan 2026 15:32:52 +0800 (CST)
-From: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
-To: don.brace@microchip.com,
-	James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com,
-	jbottomley@parallels.com,
-	scameron@beardog.cce.hp.com
-Cc: storagedev@microchip.com,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] hpsa: fix a memory leak in hpsa_find_cfgtables()
-Date: Thu,  8 Jan 2026 15:32:51 +0800
-Message-Id: <20260108073251.315271-1-lihaoxiang@isrc.iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2169B445EEC;
+	Thu,  8 Jan 2026 09:29:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767864549; cv=pass; b=OckLdplCvvbzoPGXNVbK+Jsk0GHNhNSb1daTmnFjxdUj6QVZCqzyLvSo8AZVSE2+Fqo/sBfE2KTUNvRefULZ0Lo1KK13TXcXFBIe15sxy12NEuq77rA6vV+Htbh75Z6ld9dx9X61/xBFsRwRLa86544eWY6vTO7hdFMVKVZuI70=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767864549; c=relaxed/simple;
+	bh=Bl8Y617sotQ73GVR2T1Q+Wa4KgXyXDvatmz5tMSVID0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=a96bvtZ7dRZD9GQDZ7HKH5vItnjR1sMv9dL7hmQRnOsGm6OAzUtrB52uP/H3SgAb8AeyJYLqLBCe4LI1o4DgbeXcMcmGZqzKqJwnBu08xULNWzQ1I3wRFGkCn7BqwasI2ftHsVESGQdvtTUuHWMzCctSW1kkcVfFowHSezUjCa0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=EMi4Ylvr; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1767864492; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=cRYqTaLZu9/Cz2hhALQrG+OnVMloqPR07D0g1j0Oj9gkB4WLvXduBwrjy3/Wrhd7HTdNahdARXVh3jZkJXhrahAbGx2emEh0OkPisxok95vWOGzXFxQwP3XSRadmpuwr7ZYfUofpWWFfDgjjvvoAYNt7v0R8LFHb53fxacceiPA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1767864492; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Bl8Y617sotQ73GVR2T1Q+Wa4KgXyXDvatmz5tMSVID0=; 
+	b=V2NJcv8cA0trLQndvEx48Dgk0YZc9ADKFw6EoIY0bseVk0qkxp4ze4zlhtsFMh1lQsxO7Rq6n5Jf31OvLVvRsYvmUpD8b9BOVpB63CuDVgkCWQRUuQnb+kztY7fbwZTxN8FiOE4MVob+48K6Z/EBH/Od85N0aIfALnHE8DAr2Oc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1767864491;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=Bl8Y617sotQ73GVR2T1Q+Wa4KgXyXDvatmz5tMSVID0=;
+	b=EMi4YlvrwckuoEXWDPE+n0476n6VI0HuybuzhMEgHluL/U0bj8xY8nYDWEvDWeqU
+	DocuVYtiK0A/HWw/vhT9xhQ6ClQ+SJPEblKV28C7BZ2NuAmZT1L+tk9xXQqt7R/a7+k
+	7F1/FjbybBegbC6pPGEQ6eT0VbpqCIHSzPEgsrS8=
+Received: by mx.zohomail.com with SMTPS id 1767864489427365.0551721336526;
+	Thu, 8 Jan 2026 01:28:09 -0800 (PST)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: "chu.stanley@gmail.com" <chu.stanley@gmail.com>,
+ "robh@kernel.org" <robh@kernel.org>,
+ Chunfeng Yun =?UTF-8?B?KOS6keaYpeWzsCk=?= <Chunfeng.Yun@mediatek.com>,
+ "kishon@kernel.org" <kishon@kernel.org>,
+ "James.Bottomley@HansenPartnership.com"
+ <James.Bottomley@hansenpartnership.com>,
+ "bvanassche@acm.org" <bvanassche@acm.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ Chaotian Jing =?UTF-8?B?KOS6leacneWkqSk=?= <Chaotian.Jing@mediatek.com>,
+ "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+ "vkoul@kernel.org" <vkoul@kernel.org>,
+ "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+ "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+ "avri.altman@wdc.com" <avri.altman@wdc.com>,
+ "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+ "broonie@kernel.org" <broonie@kernel.org>,
+ Peter Wang =?UTF-8?B?KOeOi+S/oeWPiyk=?= <peter.wang@mediatek.com>
+Cc: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+ "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+ Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
+ "kernel@collabora.com" <kernel@collabora.com>
+Subject:
+ Re: [PATCH v4 12/25] scsi: ufs: mediatek: Remove vendor kernel quirks cruft
+Date: Thu, 08 Jan 2026 10:28:00 +0100
+Message-ID: <13960383.uLZWGnKmhe@workhorse>
+In-Reply-To: <1bbc263bafe14343b2d60a230ae6ce5dadffbf7c.camel@mediatek.com>
+References:
+ <20251218-mt8196-ufs-v4-0-ddec7a369dd2@collabora.com>
+ <20251218-mt8196-ufs-v4-12-ddec7a369dd2@collabora.com>
+ <1bbc263bafe14343b2d60a230ae6ce5dadffbf7c.camel@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowAA3yg2kXV9pnwv4Aw--.12628S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jw17ZF4xZry5ur47Jw1DKFg_yoWDurc_ua
-	yj9rnFq3yDKFsFkw13AF93ZFya9F4UXr109rnIqa4ayw1rXrnFvryDZr95Zr48WF48Jr1D
-	Ww1DJ3yak3WUAjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
-	1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-	jxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-	n2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-	AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-	17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-	IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4l
-	IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-	C2KfnxnUUI43ZEXa7VUb_Ma5UUUUU==
-X-CM-SenderInfo: 5olkt0x0ld0ww6lv2u4olvutnvoduhdfq/1tbiDAUBE2lfT9MtJgAAs6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-If write_driver_ver_to_cfgtable() fails, add iounmap() to
-release the memory allocated by remap_pci_mem().
+On Tuesday, 6 January 2026 14:25:22 Central European Standard Time Peter Wa=
+ng (=E7=8E=8B=E4=BF=A1=E5=8F=8B) wrote:
+> On Thu, 2025-12-18 at 13:55 +0100, Nicolas Frattaroli wrote:
+> >=20
+> > Both ufs_mtk_vreg_fix_vcc and ufs_mtk_vreg_fix_vccqx look like they
+> > are
+> > vendor kernel hacks to work around existing downstream device trees.
+> > Mainline does not need or want them, so remove them.
+> >=20
+>=20
+> Hi Nicolas,
+>=20
+> This is a flexible approach to implement one software supporting
+> multiple
+> hardware configurations. Because you cannot guarantee that your SOC
+> will=20
+> always use UFS 2.0 or UFS 3.0, or that the PMIC you use will only have
+> one set.
 
-Found by manual static code review.
+By "one software supporting multiple hardware configurations", do you
+mean one device tree? Because if so, I don't think that's a good idea.
+Device tree is meant to describe non-enumerable hardware.
 
-Fixes: 580ada3c1e2f ("[SCSI] hpsa: do a better job of detecting controller reset failure")
-Cc: stable@vger.kernel.org
-Signed-off-by: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
----
-Changes in v2:
-- replace iounmap with unified release method. Thanks, Greg!
----
- drivers/scsi/hpsa.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Even if you want to make it easier for your customers to ship one image
+for several SKUs, there's better ways to do this than having drivers
+fix up individual DT nodes. The platform firmware like u-boot can choose
+a DT based on differences it can probe. E.g. on Radxa ROCK 5B/5B+ boards,
+we have u-boot choose between the 5B and 5B+ DT based on whether LPDDR5
+is present, as 5B does not have LPDDR5, so as long as u-boot is told it's
+either a ROCK 5B or ROCK 5B+, it can figure out which one specifically based
+on that. Similarly, for whichever boards this is for, there may be
+differences that can be probed to disambiguate between several SKUs of the
+board as long as it's known it must be at least one of those SKUs.
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index 3654b12c5d5a..e38d4a7488f8 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -7646,8 +7646,10 @@ static int hpsa_find_cfgtables(struct ctlr_info *h)
- 		return -ENOMEM;
- 	}
- 	rc = write_driver_ver_to_cfgtable(h->cfgtable);
--	if (rc)
-+	if (rc) {
-+		hpsa_free_cfgtables(h);
- 		return rc;
-+	}
- 	/* Find performant mode table. */
- 	trans_offset = readl(&h->cfgtable->TransMethodOffset);
- 	h->transtable = remap_pci_mem(pci_resource_start(h->pdev,
--- 
-2.25.1
+>=20
+> Thanks
+> Peter
+>=20
+>=20
+>=20
+
+
+
 
 
