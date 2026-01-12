@@ -1,119 +1,123 @@
-Return-Path: <linux-scsi+bounces-20241-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20243-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D0C5D1072B
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Jan 2026 04:16:53 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C842D11015
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Jan 2026 08:57:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 52654303F9AF
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Jan 2026 03:16:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9CEED3033672
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Jan 2026 07:56:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BC71242D9B;
-	Mon, 12 Jan 2026 03:16:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 012FD33B6E9;
+	Mon, 12 Jan 2026 07:56:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Rgez9qbS"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="Vc4pdsMm"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2141B6D1A;
-	Mon, 12 Jan 2026 03:16:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D1C33AD93
+	for <linux-scsi@vger.kernel.org>; Mon, 12 Jan 2026 07:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768187766; cv=none; b=LNZR7nd30YzwZNTOaSyvKacWYvNd4V7JG0zty/Lc52611pVyn/EdV5SIgiP/7MrRhLOeaCw8bBXyBd1/f1/h/kzxHOX2n9xAv08ELh0smfDqCzzrY68NrLIFKwZaO6JKZj+Ged7KFCh/yQ7EmdssTbndYgSMfIlng8tIALolPAI=
+	t=1768204598; cv=none; b=gbxYF+t7Upcyq//N74/wbm729y/V3rhVJzvq6YGXrZVjjxQXzT/DoS0LZX4gNW+6EHGuiGj8BLznmHtJylrxtGsx4CYGym+ekDd1qga65fd1jcbBCOPoIMM3LhV/PWTwd/A94lhSZ4gv9HgmRmHJ6XKVZ8OVpW2kBnUWjun0Cqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768187766; c=relaxed/simple;
-	bh=TS+3novlhGRrH+SL0263S8yq3/kh+1r0DyQ117/mbS4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tLVKU/ptWBmuJH2e/oj8A+xxXvz5DgTu6+qVNkP4u2//UMfRW67SeOhBHp47cZb69rst+vXj4EZsR1WJrDmGQwnO5YlqErRoLxBO4jhsY67fZuFId+kJESAzYgExoBzy5aGlsjBHGyBVdl5HrwtQB4x9kwSQg3eg0E/2JBijc4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Rgez9qbS; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60C1m3DU317258;
-	Mon, 12 Jan 2026 03:15:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=jcyDN/1syuZvlQ1e9ZIJvi/MlU37FEU0BszLkg2Kpss=; b=
-	Rgez9qbSKx9DLpJMdfR71bRRUDB/06ZRvla9BW25HRtw7k1PWGuAP4RHcHvY1Pny
-	Is3woakV/OeE0ghu0HvP3mtJYGKSbHdYx9i4b87evZXU/KBAux5aV0d0k3D4iuzv
-	U74ww+KiD34fcneQ7Jw6bZQIfAdQEgXr6/YBmw/8PvAmJJrduRbAX31PRvMDNqTI
-	NJP7jURXPYUwIT9NNsPpOh29oRY0LKGPv+6uWkskZTns4TwVmnVYH16/fgASuAkS
-	pp2Xcgqyt8DGg0Y6z1S6SyISILGa95Eh9sIGW1gF66chFaH6mLbvw/4YrNvqYq5t
-	Px7wSDQct6RFjBdGRNDboA==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4bkrgnrync-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 12 Jan 2026 03:15:57 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 60BM1Ded004517;
-	Mon, 12 Jan 2026 03:15:56 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4bkd76wg9k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 12 Jan 2026 03:15:56 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 60C3FfU3028327;
-	Mon, 12 Jan 2026 03:15:56 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4bkd76wg97-1;
-	Mon, 12 Jan 2026 03:15:55 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: jgross@suse.com, Abdun Nihaal <nihaal@cse.iitm.ac.in>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, sstabellini@kernel.org,
-        oleksandr_tyshchenko@epam.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] xen/scsiback: fix potential memory leak in scsiback_remove()
-Date: Sun, 11 Jan 2026 22:15:52 -0500
-Message-ID: <176818774316.2142396.1807300605417048424.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20251223063012.119035-1-nihaal@cse.iitm.ac.in>
-References: <20251223063012.119035-1-nihaal@cse.iitm.ac.in>
+	s=arc-20240116; t=1768204598; c=relaxed/simple;
+	bh=Gf3lltzd84X9dIvu2pA3a5Jkaw8Zcskzh0E99P0ou0M=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=RApxzfrPqOjRPmDOhIsTKNxsz/Eyy/VN5gEl5P0Cbf8nnHwxuyYKZ9hTldJzF+c8/2Wnul0LuD3Ih+WcQvr0fP5Xi9Nbfxw/d3wEU4IfKbnWPZ7pL9thHQAQCfnyv7lWRRCHRlHyIax1GAR+JcM9seE5yjjyR8MOOcasSbVgw14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=Vc4pdsMm; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-650854c473fso591124a12.1
+        for <linux-scsi@vger.kernel.org>; Sun, 11 Jan 2026 23:56:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1768204593; x=1768809393; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gf3lltzd84X9dIvu2pA3a5Jkaw8Zcskzh0E99P0ou0M=;
+        b=Vc4pdsMmRyBsv3KmX3r5ZIySQolJAgqRaFfxfs5i+FqGpZqoIAWuL9cVnXzOk6RvYP
+         qyqldHPIqJPgztVszC4cxUnKrunSQY6yPRdDNjyXsvHgZXc6px2Kf9xoqhhFynkdahY3
+         s6AJuqC/TUmo/6wJBsZtvdxbsTt6PPaC4KBItv/ZB/bJa1Bg/K9hBCt++OAZZi3ANnEB
+         1zL/eTE9oelWCQYNNLW9oRUvft97VDRdF0HfQQrPCJDuqg0YlCH0wO1X0vY4N5jdpZxf
+         DGt8NYxDcmPeNNzyuflmO1d6dubmrRjQcIaWzQdzdp08ze7hDU6DarWRTkaqkuFo1WkE
+         A47w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768204593; x=1768809393;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gf3lltzd84X9dIvu2pA3a5Jkaw8Zcskzh0E99P0ou0M=;
+        b=CFv3s8HqZdaLRJg64jWMOgUC99IFyKkOxkj6TEfV9d3rVvX0qVATxrTo/HINQU3sMI
+         +73USj4LgbgDLJ7zhDw2ysNE9TkTJYV018zhsRHYQDaxHeTlKKD6QDFhZxAeYBt/lV2I
+         vmBwug+AB1bpKQftwt4iX26MwhZRl022azPuDE8qezZopXqKKAoHyzpmFe6Xzbc5hvcw
+         4jtl3Xj8r02xenD5BJYEvolpEEna4sM2NrNAov03NuKI85Js/Tpf7nspruByeU/YU+WX
+         hNj8NSZxMp8bL9p9Ue+ehThd+VdcnVez2XqaQuUHjYF4Lsq3f2EI6w/gWW/wUDPuzor1
+         RXdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXDPgls887MyfATfnIYSkdd9+7UoOGRem5iYchAvF3w4jhWY+RfNAtH8he/FDhAaHXXlk1iXM5KIJ5c@vger.kernel.org
+X-Gm-Message-State: AOJu0YzF/HGe4SYT8f95VcmeOHSX05zxV6Bitv3WBYVRelRxco5VokwN
+	0N0WCQI36JE9/v3VMsH42MCILR1vvhQsbRa1Yxkc9DxMVHmCj8iCSk77wVcxwZc/swI=
+X-Gm-Gg: AY/fxX61YoRSzvBeWglakvcDXXwqLYuniZUwxzsI1gYeHamdfS82fLO3Bj3/rugJ2zc
+	Iit0STPhVfZMmoF5AlodQ0YaXC1WhT6WcsOTnXJ4ZnKiU01QW+K6/ohkf7K9/7vCfzoJSW2dj3T
+	REsgaSb4LrEhogqvsYmX/PAbI3AoU+ZaRnT2D/MquqeUMtloQHPxsB4EexZxVrwwvVtZZvYiHjq
+	oR/fwmRPFkcOcAZBS+B4TqXVcLr5JcAw0H/mHZj/Q2T3cFOM9w5q2ZzR6Xn/xMjS5iRBaTuD8WO
+	aRUygM/CNU4R8JgxLT7jcbqgJLY5pqIhCxjUG0G/mtFwUZjH1s9+ilYEtUk4MeJD+knQ6aIDrXE
+	xeU1vlqCM7IWXTueStBAia6ZiyYCxx0wvVGL4/s1RRx4Az/8zljmIm5qBKfDf5gAdTguG0c2cvq
+	up5+YAnFLwOGlhcapt7HZv5XqB9HnZShYXJgsZsOcMEogElRdLAE4vqN1q
+X-Google-Smtp-Source: AGHT+IF4Co8aoQPdp/p5ff/3fLI8tNtSvixQwidRJsMSeJbryeMgmiZxjL+AqiLpgmcJiIOYnaXZoQ==
+X-Received: by 2002:a05:6402:34d1:b0:636:2699:3812 with SMTP id 4fb4d7f45d1cf-650977df5e8mr17217698a12.0.1768204592725;
+        Sun, 11 Jan 2026 23:56:32 -0800 (PST)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6507b9d4c0asm17138294a12.9.2026.01.11.23.56.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Jan 2026 23:56:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-11_09,2026-01-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
- mlxlogscore=814 adultscore=0 suspectscore=0 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2512120000
- definitions=main-2601120025
-X-Authority-Analysis: v=2.4 cv=B/G0EetM c=1 sm=1 tr=0 ts=6964676d cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=TgcThs-rK0sH0xVyTD4A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: RSjlYI_kFhNetxXyFY5M8UI7SGNlPTEz
-X-Proofpoint-ORIG-GUID: RSjlYI_kFhNetxXyFY5M8UI7SGNlPTEz
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEyMDAyNSBTYWx0ZWRfX042egyt5mwKQ
- dFb+SOyDHPKXPHTcV51hfu4QhtLqUWqAl6UQkW3sQJR7eDPbpG9tV+lhKeeDExpImdH5sPBIXQL
- BkUCISJysNTiun65474KkHr3paNTt6C3FSqyfiMDkeN0BMp341L3jyvu3mJl/2JGChRJVsdIwkf
- RmbDKs59cSlAsIqS+J2lvHw6Bbk0+lh/popao3BAnqvu1w7ngF2CITNigwqTAQ3BSoYbkjBr/Bc
- j5+j+BMy5m3cY59ipyZ15YivRklIa7wGMSGRrFeUegaxO+zk6+uguEa3e78xxdxPQrdavLXMM3y
- pQGdEQRafANehIwx8SB35ZZbuQovUAEfT7KXPNCHP/EgjqwBxEIbDul6cYQbRpaHr/+ptUmwiHK
- lpqZkgdMxuzse6N4tN6kdSrGAjVV6T3yObbWKlStDIeoxjRl3zhmwxNWwFU2MVOtYAApYYWnD3v
- lLZA+4UCooGCMh3+WqQ==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 12 Jan 2026 08:56:31 +0100
+Message-Id: <DFMG7RK9BACS.1LM96XH56V2VL@fairphone.com>
+Cc: "Herbert Xu" <herbert@gondor.apana.org.au>, "David S. Miller"
+ <davem@davemloft.net>, "Rob Herring" <robh@kernel.org>, "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Bjorn Andersson" <andersson@kernel.org>, "Alim Akhtar"
+ <alim.akhtar@samsung.com>, "Avri Altman" <avri.altman@wdc.com>, "Bart Van
+ Assche" <bvanassche@acm.org>, "Vinod Koul" <vkoul@kernel.org>, "Neil
+ Armstrong" <neil.armstrong@linaro.org>, "Konrad Dybcio"
+ <konradybcio@kernel.org>, <phone-devel@vger.kernel.org>,
+ <linux-arm-msm@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-scsi@vger.kernel.org>, <linux-phy@lists.infradead.org>
+Subject: Re: [PATCH 5/6] arm64: dts: qcom: milos: Add UFS nodes
+From: "Luca Weiss" <luca.weiss@fairphone.com>
+To: "Martin K. Petersen" <martin.petersen@oracle.com>, "Luca Weiss"
+ <luca.weiss@fairphone.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260107-milos-ufs-v1-0-6982ab20d0ac@fairphone.com>
+ <20260107-milos-ufs-v1-5-6982ab20d0ac@fairphone.com>
+ <yq1a4yj5ysp.fsf@ca-mkp.ca.oracle.com>
+In-Reply-To: <yq1a4yj5ysp.fsf@ca-mkp.ca.oracle.com>
 
-On Tue, 23 Dec 2025 12:00:11 +0530, Abdun Nihaal wrote:
+Hi Martin,
 
-> Memory allocated for struct vscsiblk_info in scsiback_probe() is not
-> freed in scsiback_remove() leading to potential memory leaks on remove,
-> as well as in the scsiback_probe() error paths. Fix that by freeing it
-> in scsiback_remove().
-> 
-> 
+On Mon Jan 12, 2026 at 3:52 AM CET, Martin K. Petersen wrote:
+>
+> Hi Luca!
+>
+>> Add the nodes for the UFS PHY and UFS host controller, along with the
+>> ICE used for UFS.
+>
+> arch/arm64/boot/dts/qcom/milos.dtsi isn't present in v6.19-rc1 so I am
+> unable to apply this.
 
-Applied to 6.19/scsi-fixes, thanks!
+This patch is based on linux-next where milos.dtsi exists, but any arm64
+qcom dts is for Bjorn to pick up, so please ignore this patch.
 
-[1/1] xen/scsiback: fix potential memory leak in scsiback_remove()
-      https://git.kernel.org/mkp/scsi/c/901a5f309dab
-
--- 
-Martin K. Petersen
+Regards
+Luca
 
