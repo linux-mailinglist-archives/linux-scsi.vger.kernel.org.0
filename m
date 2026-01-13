@@ -1,77 +1,77 @@
-Return-Path: <linux-scsi+bounces-20301-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20303-lists+linux-scsi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EBB6D19A5E
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Jan 2026 15:57:31 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC506D19A76
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Jan 2026 15:57:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 984B530034B4
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Jan 2026 14:57:27 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D1EB6302928E
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Jan 2026 14:57:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DA902D6E78;
-	Tue, 13 Jan 2026 14:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A65E02D738F;
+	Tue, 13 Jan 2026 14:57:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YJ843/1R"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Cl2/F/HY"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E4E2D6E6C
-	for <linux-scsi@vger.kernel.org>; Tue, 13 Jan 2026 14:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF21A2C3266
+	for <linux-scsi@vger.kernel.org>; Tue, 13 Jan 2026 14:57:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768316244; cv=none; b=Lee1I2d20XSdQx2QyS+25hHmv/mfkt7Ekc9nPWxJuIa2OAp0W7msBRBn44iDcbyjC65U/MPlFLrHWo8zdxKTCVeWpXnbKawrjEylIQoVFE+vgAwDdNeyFMmzF5L6WoIEzcXW3F80fw9k73YfzJftX+pqfZCM7TEncziOLfshaNk=
+	t=1768316245; cv=none; b=ruOnFov5/s5PTbq7qFQrGmPbtyoNYsl2bmBEc32F6eJL1ryZ8Ex9Bpph1IV3+qqJWPkMZQm1QCB/PETUhhD4Ph2NIIeJF/+6eN0cU4UUHhTi4I4QPeZQ9EtgVmYVpGvWiQumWC4Tm4+h4wOoK/IqGdiFbCl+jhAR+EMpJJpXFkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768316244; c=relaxed/simple;
-	bh=xUVY+Dz6mtf+yKcFsJ+m8+y0vbeY6ptF4xjYL+qR6Bo=;
+	s=arc-20240116; t=1768316245; c=relaxed/simple;
+	bh=JkhvLC5J3/ByLcBxuC9nR+WqQsVC+JllxZdmDZB3+o8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fWmHfwfYsaI5+HqrEGfsE982Lea9yfoncUfrTN6q+LynGt+UyN2uYgzKWHUAdSyynkNgPykRBT71geImoPRjl/lk87jojxZJEHloUwDkFggSFAMB2g8fpqsN07IB3ecYzA4MGUmkS6gI+/9+PqhK3ol3Mb5WGXoAII3+G7462Jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YJ843/1R; arc=none smtp.client-ip=209.85.128.65
+	 MIME-Version:Content-Type; b=RRE2TCHgS8EFIwUjmWmLpOoJkPoLpEC8yv71j5++vNN5Ue+XtoluQ8hdNdlmX1Ubs/8FyWYXANrbsnvyG1/W91cARhaKejFXhPpL1kQp6iqv/vZzACewL58dKipY/S9m8YkEUSWSJ1Ddrtk8ov0kj8wlP747QovRRvIdwCiv3C0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Cl2/F/HY; arc=none smtp.client-ip=209.85.128.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-47ee0291921so2940595e9.3
-        for <linux-scsi@vger.kernel.org>; Tue, 13 Jan 2026 06:57:22 -0800 (PST)
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-4779adb38d3so52301775e9.2
+        for <linux-scsi@vger.kernel.org>; Tue, 13 Jan 2026 06:57:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1768316241; x=1768921041; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1768316242; x=1768921042; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0hFLKxCgg4DVA2BYQnPzZOCKSccnjmY1LCX1KgVFeNM=;
-        b=YJ843/1Rd5vWcOwiINGbUgbELktX3nyeanKuSiOiiLWvimsu6uU/FV55bHMCXuD5Bi
-         I4YzqeieiMNB29BSZZQrdc7VwhwBWKR+XV08skp7r7UmHDQhoi2VjlOjphMWFwA/H0vj
-         FOB98uX6UTfeg/to0SfE3PWfOInLsqTs9ZubE/64FBiwuWbSV1YdSwHVkZAERHRCqSri
-         Dve0RYUgzXtrwKTmjJKF/vuFu9JDbWcdQunpq5r4qr8w1WaHUpDWrd28QtyA3wgf9lMg
-         lD1nbYCpduZuIlwCnPH6sAQwZcHm8MIrq3PdjaT+YbAxtCz1oxskf5O78ACI9COMVvoQ
-         GG2g==
+        bh=0aTvAr1gUcADfL4GDDEP86r73OtKJHoDxRoL3RshDXY=;
+        b=Cl2/F/HYKvUSHt+HlLjWzM6Jqgm1E0fg5nZG08lswTfyQkA1EenCDbUQ0J9xkGQn/q
+         PhEeMjKisjHimu8KEvwF+HbcFxni8WkdQeyo4eMz3Z36CwgXWj4eI8UUlGqlHa852e7z
+         4iqtX14BpB3qjPeH2fT8hHNf23EcgXR+ZT8BMkqQeCqzqKmAm5n5VwZ2c6KLtZ2G9JcD
+         Gk2J89SayhC0ETz4Zhj/KvbWpg+ORiaUApaMyvHf1L9sMyuPc7M6P/l1+HCEuLY6a5W4
+         19MUYRI6rZMkQwFjibkEVQttckiED5O5ZEw/LXsoeYmqezpUejSqfLDl9p5AIUKtIU1u
+         0n7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768316241; x=1768921041;
+        d=1e100.net; s=20230601; t=1768316242; x=1768921042;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=0hFLKxCgg4DVA2BYQnPzZOCKSccnjmY1LCX1KgVFeNM=;
-        b=pikbr7GGJTIk0I3FmJLZ3rOQVSxNmJ+viYMy92H6rOuc38fZoXhoedhM6zX8YATh9Z
-         RX2Eg1IU6FnR8q2T0PW+zULNui4y5s1IO7f+JU4DDuyZgBs+fy7hldaz1B5B/cI511ZP
-         ouOgwhziIQ3/EIX83HGf/UUrqFwLguG8QBNTwnFB5P68YIp8r1kFuDrKwVnNEK6DmlN+
-         Sf2CsWmCToVakflqkf1W6MT3AOetrZYEJh8S7ptzOpaemp6Hc5lgWawjjCBaBfCOhrl6
-         lIW2D8zaIeXbsLji5wvyr7eSyhCfaQ3V3uRqc3uEyGzc0PCkib4xwjfGI2sSxXsAut4Z
-         yKlg==
-X-Forwarded-Encrypted: i=1; AJvYcCXlw41xjbtVl37ZIxKlCyvXxwCn0i7KKmZA3EMfTu1h2nXXvF5fY3inooJ21Lk9YkTWRljTA2cFTjVS@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZwfa+ozSha77gZS3GylpiOQn+pO1Ti+S5q1iYmZEuwKThi8AP
-	F8cSYr+5xHY5btRK26v2P3ONOP4DCzmt4YVU+fTsVpS3RjTlCu/kdOQBjUxgkGjpLZc=
-X-Gm-Gg: AY/fxX5pG8giYVx7T9C3skofgYox4is1ZSNioBuAqZXK2fZ/ls8NakFkB2TiIESTrZw
-	X8hKeEqHlIqsygK6ObpzX5nkVM6dODevAUr6UMJ9vqBMdk2x/G8f5E/2rtRZAQ3SVFPMpPJwUAd
-	zSR+4FVjdg6ovJ989fcm+5kRlsLLSUhmBJs9n+PlfITXz6f0O520ewJiA80qwZEczd088BSOOE/
-	jxjeSxHRy5w8IiiguuX0alqRG7BT+VxL+OQXdUqzMcgtpf8uSSFDHvewG5g1I8v+HJn40cHXyvK
-	KZQ6MZFur8ouv5f8+rL6uiU512ETGsTiYFs2fbLPCsOAA1h079hoXQrjKweX1TJ8HkuPLlLBjD4
-	JK40LoYJ2aD8fdguTvmYAR2xlWk7QBuzhF6BFCLhmSlYt67isRgWawS5E6b1sv+C02ZkocGTSyG
-	a35SVu6IXpgRJNh+KLMvZ3UpqmqGVNaDWH+Tc=
-X-Google-Smtp-Source: AGHT+IGMKYMnsBy5q3lHF2caHx7b+bcLkDOwakSbhNrSSUaKe0WsXPIA2WZy7D3r1wdP6LfTKyqHUg==
-X-Received: by 2002:a05:600c:8b57:b0:477:54f9:6ac2 with SMTP id 5b1f17b1804b1-47d849bdfa7mr237829425e9.0.1768316240959;
-        Tue, 13 Jan 2026 06:57:20 -0800 (PST)
+        bh=0aTvAr1gUcADfL4GDDEP86r73OtKJHoDxRoL3RshDXY=;
+        b=b7ECLdczShaqnc4xgJRGV41dGm2mvxghbL1qE9pYJF20Y5L/FDjZwIUCwqypkhwekM
+         dECoptwFY74LACNrqz8NF3Ow5qlbJv/tAOS0fV+MsIw/9IdE64ikjcaZ7pNDJn52E2+p
+         oJuNonEwziczAJEKTVzWtbL4lzHhqbVDEbZQ8PA0tc+XoAqcivvFmdzCMh4/MbIANIbl
+         wJ6LkRS3ZaXpTOpEuu0V2oP08nsNwiFLtTf5V/OjnnRY8JniM2xuLDuK8S5yE1yHydmY
+         jMt+gr+KhudE6TmszJLkVlAa4ZIj1OB1V6bXnWGVapHx3YIr8Hirc7wGgXBdfIOsI0Qj
+         3JSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWX+9Rq7v0wzLOHRm+7UIxrYCcEg19IQH/+p2KwbnImNUY4gc50F1Z0c7Y+g9TEkuEbwzHum52beBK8@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6NUyRxpMwfxrw+HrTTSvUMjRuGzdP2E2CEcNG+AdFkNtRiJXM
+	KnfPM7tELdVJRmZyvMYf+gxGUD2HtlL7Uox5FXuv6TxUhrN4ZMMK0qFr7kGF6atoOTE=
+X-Gm-Gg: AY/fxX7KTAq6OKuhzb7vb6oBEo/hjh0hWxxt2djGi71qFHN5RJLzimnrRPbKResfzXm
+	tV14ea9TTCd4IVeUlUYMti3rHG4JJJUjNg6Ljn5AZNAeA8/7EQB3Ut488em2EYOb/e41c8bY6E+
+	YuTelAV03fgDOvz3p6JKK7J8VgHx9RBqppwcZ6Hc7lIXt7G33z4OTijqlzFYVK72zyP7bvKh13E
+	QIz0OlN2DfnwANrEEjLhceEU2QsUYLZ+3Mi10G3RIRB36gu4rZ4w5ypQfwtY6MisCjaxvQxxnxU
+	G7QCWqECYxH/N4Ejj6AKwGaqijchAcMOj6GP1GPo3s9c0H+XV1x+W6jO1243LjpwIeLpwGW3aj7
+	UTJ1Jrv7UZO0K01NbfQef1u6dOn4KBmGjbCyYnu7wWq83iM+dohO2+bcmQJQSfRpjF4aQnOWJec
+	MZIIm5Pn4w7dBVHYUtdJhU7pu11IUvzF7bxW0=
+X-Google-Smtp-Source: AGHT+IEmifR2V2qsCCKDhF7TtW4lDyqRYQgAVIIVPUscIKnOYxWvD6YPD+5xUu47DUK68kvULGa9cA==
+X-Received: by 2002:a05:600c:8b84:b0:47e:e20e:bbbf with SMTP id 5b1f17b1804b1-47ee20ebdfbmr1897995e9.24.1768316242039;
+        Tue, 13 Jan 2026 06:57:22 -0800 (PST)
 Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47ecf6a5466sm128498565e9.11.2026.01.13.06.57.20
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47ecf6a5466sm128498565e9.11.2026.01.13.06.57.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 06:57:20 -0800 (PST)
+        Tue, 13 Jan 2026 06:57:21 -0800 (PST)
 From: Marco Crivellari <marco.crivellari@suse.com>
 To: linux-kernel@vger.kernel.org,
 	linux-scsi@vger.kernel.org
@@ -85,9 +85,9 @@ Cc: Tejun Heo <tj@kernel.org>,
 	GR-QLogic-Storage-Upstream@marvell.com,
 	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 1/3] scsi: qla4xxx: add WQ_PERCPU to alloc_workqueue users
-Date: Tue, 13 Jan 2026 15:57:09 +0100
-Message-ID: <20260113145711.242316-2-marco.crivellari@suse.com>
+Subject: [PATCH 2/3] scsi: qla2xxx: add WQ_PERCPU to alloc_workqueue users
+Date: Tue, 13 Jan 2026 15:57:10 +0100
+Message-ID: <20260113145711.242316-3-marco.crivellari@suse.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260113145711.242316-1-marco.crivellari@suse.com>
 References: <20260113145711.242316-1-marco.crivellari@suse.com>
@@ -120,22 +120,22 @@ Link: https://lore.kernel.org/all/20250221112003.1dSuoGyc@linutronix.de/
 Suggested-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
 ---
- drivers/scsi/qla4xxx/ql4_os.c | 2 +-
+ drivers/scsi/qla2xxx/tcm_qla2xxx.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index 97329c97332f..125967e5c548 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -8819,7 +8819,7 @@ static int qla4xxx_probe_adapter(struct pci_dev *pdev,
- 	}
- 	INIT_WORK(&ha->dpc_work, qla4xxx_do_dpc);
+diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+index 2fff68935338..b00ae7a664da 100644
+--- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
++++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+@@ -1901,7 +1901,7 @@ static int tcm_qla2xxx_register_configfs(void)
+ 		goto out_fabric;
  
--	ha->task_wq = alloc_workqueue("qla4xxx_%lu_task", WQ_MEM_RECLAIM, 1,
-+	ha->task_wq = alloc_workqueue("qla4xxx_%lu_task", WQ_MEM_RECLAIM | WQ_PERCPU, 1,
- 				      ha->host_no);
- 	if (!ha->task_wq) {
- 		ql4_printk(KERN_WARNING, ha, "Unable to start task thread!\n");
+ 	tcm_qla2xxx_free_wq = alloc_workqueue("tcm_qla2xxx_free",
+-						WQ_MEM_RECLAIM, 0);
++						WQ_MEM_RECLAIM | WQ_PERCPU, 0);
+ 	if (!tcm_qla2xxx_free_wq) {
+ 		ret = -ENOMEM;
+ 		goto out_fabric_npiv;
 -- 
 2.52.0
 
