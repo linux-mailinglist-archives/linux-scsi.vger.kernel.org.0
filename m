@@ -1,173 +1,262 @@
-Return-Path: <linux-scsi+bounces-20439-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20429-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eKIVL9LSb2mgMQAAu9opvQ
-	(envelope-from <linux-scsi+bounces-20439-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 20 Jan 2026 20:09:06 +0100
+	id 2AQVLMGLcWkLJAAAu9opvQ
+	(envelope-from <linux-scsi+bounces-20429-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Jan 2026 03:30:25 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 726CD4A0A1
-	for <lists+linux-scsi@lfdr.de>; Tue, 20 Jan 2026 20:09:06 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FA9760F21
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Jan 2026 03:30:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 352E378A1AC
-	for <lists+linux-scsi@lfdr.de>; Tue, 20 Jan 2026 16:47:47 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 090BD72BFC0
+	for <lists+linux-scsi@lfdr.de>; Tue, 20 Jan 2026 12:19:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 139B943CEC7;
-	Tue, 20 Jan 2026 16:39:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2231B3876CB;
+	Tue, 20 Jan 2026 12:19:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jfoHaV43"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hCXhxA1C"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E57D33123A
-	for <linux-scsi@vger.kernel.org>; Tue, 20 Jan 2026 16:39:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768927180; cv=pass; b=seJFkoy7Az26N9L8TnbzIOYnUwrlEDAtbv1D+lqli4i5lb80fCZXcG9fN01JPTgcKxyUpl2RKQdzPBBhfmffNK0Bvujd0j8UQr3GXOU1MeWyJ3PU7ckIiPpAcDq/gGyRAMLTtjOpTMMcpEAfDV09SeAUeS4g2M95fq5JuCIqJLw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768927180; c=relaxed/simple;
-	bh=NaCvwwv+xnOpT1PJncRUH9O5joA2zwi80d6Vd18hunY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jZkXwzrlNMGP2VWFS7A9+FsKJpQp3w04ZvbKMg7OwwnX12vR7NRRqlRJRN4TCI6DMmH1Jc8nuGfeW09UvHXZxqqCzj59q6EsaRCIv5lb96spH1O0/XxkjEALW2fxdPjSy7X/Y6laq1dfx9Wk9SOPVmy+APcKi1Bz+je1CUqZxYQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jfoHaV43; arc=pass smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B5E2BEC30
+	for <linux-scsi@vger.kernel.org>; Tue, 20 Jan 2026 12:19:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768911564; cv=none; b=LDf+AyHEDxOtR1lKo0C12YmfX6DMQGc8078mUZcQkWGf7euk2eVdAAnqWIGRZibUeKdr4sCGyHnQEI0lJSGiXPzmc3T4e+08QKLwpz0t9HtDr1ATCxoqJL3pxFlcEs/elFtjYkhynj4dLxZL2mwPaeZd7Voax4JTvSy4FVZbhbo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768911564; c=relaxed/simple;
+	bh=2KvCyCocUvhozP0lgfo4QP6VQ+LksXXCA70hLkKAC+M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=UPgFDBaOR1kzKM27EpXp1eRvWrNXTqImpqicPgQakMs3gSoSu5Qil0k6e0rdo4ZYv7aUrw6s2E6Oyb1TG1Bg6nnM4YTtVcODwo1LZM1uq7IXjLMYhE4yyi6ME8SJSpjvqCTR6yz20iC4w6H7VQ7PWqDQYMiGp8EWQ3sLeiJHGa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hCXhxA1C; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-64b5eb14e88so863517a12.2
-        for <linux-scsi@vger.kernel.org>; Tue, 20 Jan 2026 08:39:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768927178; cv=none;
-        d=google.com; s=arc-20240605;
-        b=eosfZBlPJcbeg3uNfcDriP9V1OJcIYcogoMcXDEUrzX34dvz7ySGXRGFDpHxwqG2kI
-         HBly4PsYYZtkv2nWrhk0F2l+8dxud/aLUyChmNu5BzlPS6ezfaz4f031R3Er21x+dMfp
-         oyoYiLsveETyUDZrbgFtgN4NpGukt7VoyMu93BnZcW46GZVNsY8p9RGu5n6KaR3OamBR
-         NELp9D1qBVW78lk7qw/5GiAT9lVRSRdPgFRzqP+iyj5H4a24A7NfcELOtWI+hQKy1U95
-         4LcoaNFrQOhRAuknI03vAdDeabE8v57g6klRrkXxeiUcokZr9h/psXkhQLZyLdVejO5Z
-         qCrA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=V/ZdpWXMG+JU47TGO6sM35o1HNuN2rVurUmmqUb6qdk=;
-        fh=JlBXWf3RVpgpda9yy9yCsA3wJ3EtqfoNfXFm3WBAybc=;
-        b=IvInrFKfYkUQ69OGoJpzl33ixE0rK06JBNd63v8NYoqUeHpUHa3A5MAiJwwEwT160+
-         fK+LLovb9yW6PDksbs3PbhqH7DXb7Z0Gz2q5u1NxvHCXg8sd/RAfzlzKi7g41Dik3Ot2
-         4OO2zjSxCttEqey+mO7qaGuvivEdMAWsEzaawlFa1XhR/OsixYcNfjUfXrrzFHFje5Bw
-         /whNjSjWIFPRc1OUy9DUHKAzl9U/lyqIdrpL+UepbriexgL1/maMKv7nexTJsC4bQBuF
-         2MSRJyXKoVegw3etArMiCKWwe9/rSovpdVIK6l+xMSvXmyKdZbPijggj1cIegIbt6YFC
-         5o7Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b876c0d5318so715008466b.0
+        for <linux-scsi@vger.kernel.org>; Tue, 20 Jan 2026 04:19:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768927178; x=1769531978; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=V/ZdpWXMG+JU47TGO6sM35o1HNuN2rVurUmmqUb6qdk=;
-        b=jfoHaV43TXgXJ+DI69gsdMzpFggzzcaj900mQJEiHBYzsGApFG4P3xM3F0XNvamvRQ
-         DEgtIQeEE+KsBLIQlPhQ3aXa9k6wtIK//SM9/2G7BD0cFyvUBQNRePlUh4/9OAu/K7gh
-         1LF9yRyy4muLdsMHWch/AH4/YBvrrz6KEMc6QN/DZ7wWtuPkAqscQrXwLINOADFEppGA
-         xVl3txDgwCztuyPjkpZwZnz8ODW9Fs0NCFgWVtLDGYAC1r032HtvxSF5tbbQ4G/FBY93
-         xZH4GyoakK0nHuWfGruYUwgTPOtFkVHhv2WGkEbqeoVuIdF9KUJMKUUimztDLITArY90
-         0LoQ==
+        d=gmail.com; s=20230601; t=1768911562; x=1769516362; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=bTlH6sfXE1zg5nhlIgaNXQfsuF1mmB4Q6IbEq4Q5plo=;
+        b=hCXhxA1C3MO/MGTe9gpm+glp8alCQpzSdH7ovE+HO+kyvOEVjBDQDymhzORRQb/T8g
+         ms8LzfRFjTEtlzd2AFmdztgXiTvwQYNGbo4RLWMhxdNMq3S6fPG2agPGFQGql/L4GLFd
+         yrt8VObRIlVXy4gbIG1N0mzGk3Fba8hNiaSCLDk64rWV4qgZnoJ7goMIoJrZesTFclul
+         6btS1Y4hLNmqLPnLgG68GN9HxT1LlgcPKc535Gyu7AgELvaPQ7JzGqGl265HjC3SSCSR
+         OsQfXnXNGCJuSHOJIpzVNsk07mV/p7VCK3LzRotYi+xavHRyeS0LpVYjsjsPk2QrFh+N
+         NwBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768927178; x=1769531978;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V/ZdpWXMG+JU47TGO6sM35o1HNuN2rVurUmmqUb6qdk=;
-        b=SGp1AclbpJXyuu0Q7Zrt7g1dwMXuNHrKc2XkKpP0QW+cN1df92DbFknKOw0T7wARsc
-         RmH5EwsfiuYXswXEHX1uTHeISl0HG99REYEJlekmgGgnYc94j3WBqeFakldl/kdkYqkp
-         mtyBaiUz6u7svB9Zg4LXNkjJgGQajbXiQX7BOeoZ0I/j64vpfNX2/gHmJv93zc0Ukkes
-         OsjY2e2DrJL892Sz42XWVfhD6fI2LWSukpiAewwk+WjiN/sga5GK0oijV68+0NSyYMvF
-         IW3F30VWlvM1s/0gZCReZc9he6M7vuOxB35zOj3GF62lVrHeUVmBCuntBH7fed1iu98f
-         htWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVEf5h6/kd3aRwWBwOaf0aX8NqtPg3CP12Ju89a/jC7mshG+MhHGl9T+qIarAkSzPHEe9YPHUjoRJMJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNddIwX+MaXrAW0M0aNinZZA2denp/WU5c6rd4TleOWuRQL7/y
-	x0yqi2epWuGplgW5s6JJxj57GQngVO81hWXiMSSBnc3iJZmF+2cq3hnVrYCql2SGFo8oCaMsiFh
-	W5ErWOyfe3wleYR9iYrl6i7PfrtgGWjg=
-X-Gm-Gg: AZuq6aINbegHJR+nOW6J3MPTm8m9/ypUEmGE9KYMAc1aV7Jzlw5SrZcpNEQtRj9Ag0R
-	iWuuEshTTSIMt6plAAtunv+k3i96FgkJFEfSpOrgiJ6M+4wnSO/s9WkzCmBXfNqPaNS+2OwTFnt
-	wG2CMeJvH7P6kTnrnYjePaXfM2/QKGD9MeXvUeWf4MZ8Oo+Q3sOMsNBUPt2Y+px1eQNagN/z5BL
-	lfmO3RR6gOSBX27OHNeWmuQUZ3hhQWhrlthDYg2u3siObEbyPbwo5SpTAL6ezPlZKRYUQhg
-X-Received: by 2002:a05:6402:1ec4:b0:64d:23ac:6ca6 with SMTP id
- 4fb4d7f45d1cf-657f947ba43mr1639474a12.4.1768927177433; Tue, 20 Jan 2026
- 08:39:37 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768911562; x=1769516362;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bTlH6sfXE1zg5nhlIgaNXQfsuF1mmB4Q6IbEq4Q5plo=;
+        b=svSdpcGPTX2/tcenXxibVwrqbCQIgWUml/15b2QL+ASAJwtPHapymT8oUJ2ySOqP/s
+         YDQns7LpshAsIUmEQ4zgK99XnZlPDGte1HmWIE+qjyeBNn/U5OsyX3LuL1Kj8mhJGO8q
+         G6m5gbyTdzXpYBV2rGYfr6vortQeYk/qdk4l515Fqqyl5yG2tPwK6RHlPpVW2EAq4VN1
+         Kb/qTvRGDla4tJUFsMYtSVHQh3CwtsuuRV0yv8PFQxNVmQhSw6YtTrSvGQhslE1kToLv
+         rGH1HHVdLS9Qa7lryALrfNZfFA6k/4TvENN3qa9P2q1QE6y+D3JF+udtn6afUg0c3I4T
+         KPUA==
+X-Forwarded-Encrypted: i=1; AJvYcCVqCZmCffvFxqn7ox8S16cxeTt7hb0hv8wtfaSk5ObWQgmFEMcoXkUXIPUQjAWN/jlIYlEFDe33khtj@vger.kernel.org
+X-Gm-Message-State: AOJu0YwO/Ye5Nm7vbZ0c9oblIXsr8z2dC+yVL5Gv67QgHs9GL5wUTILK
+	wrp+VU1bK0+5U/i4sqHRlKcGosC/K75YgL1gA0ukTGGqWmJuFzYzywrp4RMk6A==
+X-Gm-Gg: AZuq6aKMln4x/ichY3yzR9mQG53de9HvLOWmNmfU9APJKT1FrxtAvqv+4CvLVfWvp2o
+	GBpq17pHkBqTdmb8uKGaPM+a3VPTewMJXgzZ5hHchHY7n7vMYkCsevXwHn1jjtUZ6scf7EhZ/Cd
+	7k+FrajwEx+qlwjBVXVopVXqWzdpiHXBHMb96a5+B4JhdyVva0CBsT9JgAFzdDiLj/sot123xZ5
+	tZOwCe98nWq9SqSw933Ii86vREPUVu0/GrJ7xzp1BhsGwQYR89a01fLnuxMdESLxTZFa7LVlALt
+	l7rVfyI8mGDM2hz/Km7O2Ih1WQ59kCBLPBYGN7r4u7osHYatbjc0VT02ciSVNXXk1H7dUfNBjel
+	GY+lOhVr66aUBZZg23OvPzP6GOOCZmZfvYr+mPxZlAE/6SXtjvUS0RdJv2cUzbAD3/1HnV+qdUH
+	b9SxDk7skgfJtbdJU7kqpBmpf+JJW/nWnSOlC29Q==
+X-Received: by 2002:a17:907:94c8:b0:b87:28f7:d3b6 with SMTP id a640c23a62f3a-b8800260af7mr140708966b.19.1768911561198;
+        Tue, 20 Jan 2026 04:19:21 -0800 (PST)
+Received: from [172.16.40.202] ([193.207.183.155])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8795168e6asm1466245466b.22.2026.01.20.04.19.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jan 2026 04:19:20 -0800 (PST)
+Message-ID: <04811e0b-efc5-47ff-ac16-a97f49280bb7@gmail.com>
+Date: Tue, 20 Jan 2026 13:19:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260117101948.297411-1-dg573847474@gmail.com>
- <ae5cae8b3c4e71cf23b6f48453797ac48bea5914.camel@HansenPartnership.com>
- <CAAo+4rUkmuOruVVVNYePyfqu5OgxUxWupEBwvJg7Aus3g7WDqA@mail.gmail.com>
- <d7040eecadcc3557c04c27f0c74ce40b2885c311.camel@HansenPartnership.com>
- <CAAo+4rX8HT_3zKEQ3vULN-B8StnwsT-7DQPoFCOedZLrMngASQ@mail.gmail.com> <b03e802fce29c90bbc4342e7254c3adb9f48bbf7.camel@HansenPartnership.com>
-In-Reply-To: <b03e802fce29c90bbc4342e7254c3adb9f48bbf7.camel@HansenPartnership.com>
-From: Chengfeng Ye <dg573847474@gmail.com>
-Date: Wed, 21 Jan 2026 00:39:26 +0800
-X-Gm-Features: AZwV_QgqmPIPzxNJ3zfLmiE-dCtjMNPbA2k8Z4jkwoKs2XtYNrItWfbSCti7HS8
-Message-ID: <CAAo+4rXdBpPTVu0XQvKwUwQUakNgP2ihdfOcz3zO=16wyVnSWw@mail.gmail.com>
-Subject: Re: [PATCH] scsi: pm8001: Fix potential TOCTOU race in pm8001_find_tag
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, Jack Wang <jinpu.wang@cloud.ionos.com>, 
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-1.96 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+User-Agent: Mozilla Thunderbird
+Subject: Re: Sd card race on resume with filesystem errors (possible data
+ loss?)
+To: Bart Van Assche <bvanassche@acm.org>, linux-scsi@vger.kernel.org
+References: <3bb03946-eb11-4e28-a72b-e958833bb5cc@gmail.com>
+ <fe070d43-f9b2-45b2-95d8-477154b28dea@acm.org>
+From: Sergio Callegari <sergio.callegari@gmail.com>
+Content-Language: en-US
+In-Reply-To: <fe070d43-f9b2-45b2-95d8-477154b28dea@acm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: lfdr
+X-Spamd-Result: default: False [-0.96 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DATE_IN_PAST(1.00)[38];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-20439-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-20429-lists,linux-scsi=lfdr.de];
 	DMARC_POLICY_ALLOW(0.00)[gmail.com,none];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	R_SPF_SOFTFAIL(0.00)[~all];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dg573847474@gmail.com,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[sergiocallegari@gmail.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
+	R_SPF_SOFTFAIL(0.00)[~all:c];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: 726CD4A0A1
+	SUBJECT_HAS_QUESTION(0.00)[]
+X-Rspamd-Queue-Id: 2FA9760F21
 X-Rspamd-Action: no action
-X-Rspamd-Server: lfdr
 
-> But this too is a problem: fixes aren't free.  In fact a portion of the
-> patches sold as a bug fix eventually turn out to introduce a bug ...
-> and that new bug is one we didn't have before.  This is just a sad
-> consequence of the fact that all code produced by humans contains bugs.
-> The longer code is used, the more chance the bugs are found and the
-> less buggy it becomes (even with the bug fixes introducing bugs).  So
-> for really old drivers we assume most of the significant bugs have been
-> found and we try not to perturb the code base to avoid introducing new
-> bugs that, given the small and decreasing user base, will take ages to
-> find and eliminate.
->
-> On the scale of serious problems in older drivers, theoretical data
-> races that cause a crash don't rank highly simply because if the race
-> window were significant we'd already have seen it (the detection signal
-> is obvious and users aren't shy about reporting driver crashes). That
-> makes the probability of encountering the issue in the field way lower
-> than the probability that any fix will introduce a new bug.  So the
-> balance of risks argues against applying any fix.
 
-Thank you indeed for the detailed response. It helps a lot, appreciate
-much of the insightful reply that clarifies my long-standing
-confusion...
 
-Best regards,
-Chengfeng
+On 09/01/2026 21:57, Bart Van Assche wrote:
+> 
+> Please post the patch on the linux-scsi mailing list if you want it
+> included in the upstream kernel.
+> 
+
+Hi and thanks.
+Before posting the patch, I would like to provide more info about the 
+situation. This is what I am experiencing after resume from sleep (as 
+seen on the system logs):
+
+These are the lines that follow "PM: suspend exit"
+
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: I/O error, dev sda, sector 2470304 op 
+0x1:(WRITE) flags 0x1800 phys_seg 2 prio class 1
+Jan 19 11:56:43 coccobill kernel: BTRFS error (device dm-0): bdev 
+/dev/mapper/luks-7223e129-f73a-4877-98fc-bc00384ce937 errs: wr 1, rd 0, 
+flush 0, corrupt 0, gen 0
+Jan 19 11:56:43 coccobill kernel: BTRFS error (device dm-0): bdev 
+/dev/mapper/luks-7223e129-f73a-4877-98fc-bc00384ce937 errs: wr 2, rd 0, 
+flush 0, corrupt 0, gen 0
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: I/O error, dev sda, sector 337600 op 
+0x1:(WRITE) flags 0x1800 phys_seg 3 prio class 1
+Jan 19 11:56:43 coccobill kernel: BTRFS error (device dm-0): bdev 
+/dev/mapper/luks-7223e129-f73a-4877-98fc-bc00384ce937 errs: wr 3, rd 0, 
+flush 0, corrupt 0, gen 0
+Jan 19 11:56:43 coccobill kernel: BTRFS error (device dm-0): bdev 
+/dev/mapper/luks-7223e129-f73a-4877-98fc-bc00384ce937 errs: wr 4, rd 0, 
+flush 0, corrupt 0, gen 0
+Jan 19 11:56:43 coccobill kernel: BTRFS error (device dm-0): bdev 
+/dev/mapper/luks-7223e129-f73a-4877-98fc-bc00384ce937 errs: wr 5, rd 0, 
+flush 0, corrupt 0, gen 0
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: I/O error, dev sda, sector 346752 op 
+0x1:(WRITE) flags 0x1800 phys_seg 3 prio class 1
+Jan 19 11:56:43 coccobill kernel: BTRFS error (device dm-0): bdev 
+/dev/mapper/luks-7223e129-f73a-4877-98fc-bc00384ce937 errs: wr 6, rd 0, 
+flush 0, corrupt 0, gen 0
+Jan 19 11:56:43 coccobill kernel: BTRFS error (device dm-0): bdev 
+/dev/mapper/luks-7223e129-f73a-4877-98fc-bc00384ce937 errs: wr 7, rd 0, 
+flush 0, corrupt 0, gen 0
+Jan 19 11:56:43 coccobill kernel: BTRFS error (device dm-0): bdev 
+/dev/mapper/luks-7223e129-f73a-4877-98fc-bc00384ce937 errs: wr 8, rd 0, 
+flush 0, corrupt 0, gen 0
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: I/O error, dev sda, sector 373120 op 
+0x1:(WRITE) flags 0x1800 phys_seg 1 prio class 1
+Jan 19 11:56:43 coccobill kernel: BTRFS error (device dm-0): bdev 
+/dev/mapper/luks-7223e129-f73a-4877-98fc-bc00384ce937 errs: wr 9, rd 0, 
+flush 0, corrupt 0, gen 0
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: I/O error, dev sda, sector 378528 op 
+0x1:(WRITE) flags 0x1800 phys_seg 3 prio class 1
+Jan 19 11:56:43 coccobill kernel: BTRFS error (device dm-0): bdev 
+/dev/mapper/luks-7223e129-f73a-4877-98fc-bc00384ce937 errs: wr 10, rd 0, 
+flush 0, corrupt 0, gen 0
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: I/O error, dev sda, sector 378848 op 
+0x1:(WRITE) flags 0x1800 phys_seg 4 prio class 1
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: I/O error, dev sda, sector 389600 op 
+0x1:(WRITE) flags 0x1800 phys_seg 3 prio class 1
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: I/O error, dev sda, sector 390016 op 
+0x1:(WRITE) flags 0x1800 phys_seg 6 prio class 1
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: I/O error, dev sda, sector 2434752 op 
+0x1:(WRITE) flags 0x1800 phys_seg 3 prio class 1
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: I/O error, dev sda, sector 2443904 op 
+0x1:(WRITE) flags 0x1800 phys_seg 3 prio class 1
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: sd 2:0:0:0: [sda] tag#0 device offline 
+or changed
+Jan 19 11:56:43 coccobill kernel: BTRFS: error (device dm-0) in 
+btrfs_commit_transaction:2535: errno=-5 IO failure (Error while writing 
+out transaction)
+Jan 19 11:56:43 coccobill kernel: BTRFS info (device dm-0 state E): 
+forced readonly
+
+In this case the errors are serious enough to cause btrfs to get to RO mode.
+
+Let me recall that sda is my sd-card that works with the usb-storage 
+module, and that I have layered btrfs over luks encryption on it.
+
+The errors are related to the resume from sleep as they come out *only* 
+after "PM: suspend exit". There are no errors for the device in normal 
+operation.
+
+Before getting to the patch, I have also made more experiments:
+
+- Trying to modify the usb-storage delay_use parameter has no effect on 
+the issue.
+
+This looks strange to me since this parameter should specifically 
+control how much time the kernel waits before using the sd-card on my 
+system.
+
+Trying to modify the /sys/block/sda/events_poll_msecs also makes no 
+difference at all (normally it is -1, I have tried to change that from 
+100 ms to 2 s).
+
+Thanks for the attention,
+
+Best
+Sergio
+
 
