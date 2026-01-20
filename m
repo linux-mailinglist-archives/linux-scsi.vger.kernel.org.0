@@ -1,68 +1,68 @@
-Return-Path: <linux-scsi+bounces-20434-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20440-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OL2DIgVUcWkKCQAAu9opvQ
-	(envelope-from <linux-scsi+bounces-20434-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 21 Jan 2026 23:32:37 +0100
+	id MG51BU7gb2n8RwAAu9opvQ
+	(envelope-from <linux-scsi+bounces-20440-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 20 Jan 2026 21:06:38 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D1B75ED49
-	for <lists+linux-scsi@lfdr.de>; Wed, 21 Jan 2026 23:32:36 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9617C4AFE9
+	for <lists+linux-scsi@lfdr.de>; Tue, 20 Jan 2026 21:06:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 916F39207CF
-	for <lists+linux-scsi@lfdr.de>; Tue, 20 Jan 2026 13:50:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C859C90CF26
+	for <lists+linux-scsi@lfdr.de>; Tue, 20 Jan 2026 17:44:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 644F343CECC;
-	Tue, 20 Jan 2026 13:48:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57A6142EEB7;
+	Tue, 20 Jan 2026 17:44:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="HTe8UjMP"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="pq6r8SCH"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
+Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A249543634B;
-	Tue, 20 Jan 2026 13:48:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3EE42B73F;
+	Tue, 20 Jan 2026 17:44:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768916907; cv=none; b=EAhEvJaVCXDqrhSgu2h32lBKtSiLKjGFIyGwPbDaaywYvFIvM9aTSw6jggvO+xN216JLUOYB7XIN/xY2M3K1uUqxdy7ProNy+vHp/wEpeWFk3goRyavSTPCijUrxJ1dvmD87SOgjNK6PEtFkUBe1HdkoxbyN/5BVbzPCEpWfukk=
+	t=1768931086; cv=none; b=k9eXgppivc7W4kLFEyvmlnxZQ9cKhRfy8Su764v2gP26klhBA2tHv5GpkPmYh6q1spMuIcwm8Lqo8no0SaXmc09W816rhUQcJbrZZbKZiqO0eM2wdiwK21h/p7TWIbnRMYP8laNlv+1kKKpVsuo4f1BP2RlQCrr35q4SAekHeM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768916907; c=relaxed/simple;
-	bh=DdCeDquolF/w7F6B01lbUF/rIeGCTbJAYlhr8LWHkJ0=;
+	s=arc-20240116; t=1768931086; c=relaxed/simple;
+	bh=rAL6Wr3kK2sfuIOQLxh2BNLuJGx6cQHRQ++WrUiVuBA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KNI2YjCQxUYqED0XJSTECT7G4YqRxOszl2iv+IdTAnr86H7tGGK1M+v/mbsh9Yqo1yTW03Efr4h1Jycz4WxKK4oQn1VT719u5NGwJDUPTOopUm8gcsqEiyFWIwg8kiNEnIpNMVykMFCwbAxzT7IOEkDMh3q4wgXWU/7uTGw4WJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=HTe8UjMP; arc=none smtp.client-ip=199.89.1.16
+	 In-Reply-To:Content-Type; b=J43gttLBRkiOp0K3/DnwLtfkaWPv7WfTJjnUra/k2VaR3fwiCR2J1vysS5ysjkqc7EwLqdmlnSZPw1dEmOzDxgCzPSoB8s8/fO917w3yvY10dC64E+3RLTOz0Oo9fvKv0AJR5qRdagbzBVfbzZDmuDi392nxr03Sj0u0CunJVdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=pq6r8SCH; arc=none smtp.client-ip=199.89.1.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4dwTDn1j0Jzlfl8N;
-	Tue, 20 Jan 2026 13:48:25 +0000 (UTC)
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4dwZTR5PLfz1XM0nq;
+	Tue, 20 Jan 2026 17:44:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:content-type:content-type:in-reply-to
 	:from:from:content-language:references:subject:subject
 	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1768916902; x=1771508903; bh=SOAdpbDm0eHpipCEaZSPiJYY
-	fuJseVJynyq5vsxpEV0=; b=HTe8UjMPTjFI9fuDL/EbKshTsyDMz8UC31uq9k1O
-	Cfy33tTlYI5lLEnOH0qyyH1qVdEMv+/PgjXJ8bQKvhgP9DNWjIhegnWrnqd6He9q
-	lGjsPcxa63+y29eQGndXn5GOzJ1Fav8lDjmnjcxuSo/j0FlHmMojrSR1Pn0z4WUx
-	OFvKWP7SRWTB4vZ/j2dsu/aujjuu8Mv4+wtauAAGawlQvAmKtOrrGFfqqltPyxSF
-	yzPSkobUXBU0Jrz5rNnsCRI51UVfEXB116vMtHoaqYO2R2g1YzqveQbNHCX1bBd/
-	e7q5iMjhhmSSpyGE9opMZ/+oJhBRldiPMP+4q64iaxhGQg==
+	 s=mr01; t=1768931081; x=1771523082; bh=jSVp0+GqBqVYbXvWwMsku3Rn
+	5OOybZ+l8MKCb477KGY=; b=pq6r8SCHkeRLsxJulK8m7wdsq7JxNce89K6lyAW6
+	XraVAkzRlbOn0TS04ClnCXVE864VQtGCz9KLlOjkoPQsiWVojM3syjAatBGPd62Z
+	jm/PlEhxJeT50V+F+tkUmdIFmNgG4/uhsRlxVjgZ5PX/oylUYSDKrTLQh3wsYKD7
+	i8t7S5noxJcpsLuXToYJMAbqoAmF4BLoONN014II1clr63GE/o4MftYHrwtRPa1x
+	PPltVGAwlawoBocQrjENozY10A0SLnHnQwCwdUCfmLGWfK97TtrGEKeFucztbOtq
+	rBoTG+DTfBs+uj/dBvy0lSSONZddbvlLSmbydUSB2VKF2Q==
 X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id TM8u1GgFmxyU; Tue, 20 Jan 2026 13:48:22 +0000 (UTC)
-Received: from [192.168.50.14] (c-73-231-117-72.hsd1.ca.comcast.net [73.231.117.72])
+Received: from 011.lax.mailroute.net ([127.0.0.1])
+ by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id KYOagl7B8MUb; Tue, 20 Jan 2026 17:44:41 +0000 (UTC)
+Received: from [100.119.48.131] (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4dwTDf2ftVzlfpMC;
-	Tue, 20 Jan 2026 13:48:18 +0000 (UTC)
-Message-ID: <ac604919-1620-4fea-9401-869fd15f3533@acm.org>
-Date: Tue, 20 Jan 2026 05:48:16 -0800
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4dwZTL27pmz1XM5jn;
+	Tue, 20 Jan 2026 17:44:38 +0000 (UTC)
+Message-ID: <b815dd96-5518-4667-9fde-d23391102717@acm.org>
+Date: Tue, 20 Jan 2026 09:44:37 -0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -70,69 +70,63 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: target: Fix recursive locking in
- __configfs_open_file()
-To: Prithvi <activprithvi@gmail.com>
-Cc: martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
- target-devel@vger.kernel.org, linux-kernel@vger.kernel.org, hch@lst.de,
- jlbec@evilplan.org, linux-fsdevel@vger.kernel.org,
- linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org,
- david.hunter.linux@gmail.com, khalid@kernel.org,
- syzbot+f6e8174215573a84b797@syzkaller.appspotmail.com, stable@vger.kernel.org
-References: <20260108191523.303114-1-activprithvi@gmail.com>
- <2f88aa9b-b1c2-4b02-81e8-1c43b982db1b@acm.org>
- <20260119185049.mvcjjntdkmtdk4je@inspiron>
+Subject: Re: [PATCH V5 3/4] scsi: ufs: core Enforce minimum pm level for sysfs
+ configuration
+To: Ram Kumar Dwivedi <ram.dwivedi@oss.qualcomm.com>, mani@kernel.org,
+ alim.akhtar@samsung.com, avri.altman@wdc.com, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org,
+ James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com
+Cc: linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260113080046.284089-1-ram.dwivedi@oss.qualcomm.com>
+ <20260113080046.284089-4-ram.dwivedi@oss.qualcomm.com>
 Content-Language: en-US
 From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260119185049.mvcjjntdkmtdk4je@inspiron>
+In-Reply-To: <20260113080046.284089-4-ram.dwivedi@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.54 / 15.00];
+X-Spamd-Result: default: False [-0.46 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DATE_IN_PAST(1.00)[32];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_POLICY_ALLOW(0.00)[acm.org,reject];
-	TAGGED_FROM(0.00)[bounces-20434-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-20440-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[oracle.com,vger.kernel.org,lst.de,evilplan.org,lists.linux.dev,linuxfoundation.org,gmail.com,kernel.org,syzkaller.appspotmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[acm.org,reject];
+	DKIM_TRACE(0.00)[acm.org:+];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[acm.org:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-scsi,f6e8174215573a84b797];
+	TAGGED_RCPT(0.00)[linux-scsi,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8D1B75ED49
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo]
+X-Rspamd-Queue-Id: 9617C4AFE9
 X-Rspamd-Action: no action
+X-Rspamd-Server: lfdr
 
-On 1/19/26 10:50 AM, Prithvi wrote:
->   Possible unsafe locking scenario:
+On 1/13/26 12:00 AM, Ram Kumar Dwivedi wrote:
+> Some UFS platforms only support a limited subset of power levels.
+> Currently, the sysfs interface allows users to set any pm level
+> without validating the minimum supported value. If an unsupported
+> level is selected, suspend may fail.
 > 
->         CPU0
->         ----
->    lock(&p->frag_sem);
->    lock(&p->frag_sem);
-The least intrusive way to suppress this type of lockdep complaints is
-by using lockdep_register_key() and lockdep_unregister_key().
+> Introduce an pm_lvl_min field in the ufs_hba structure and use it
+> to clamp the pm level requested via sysfs so that only supported
+> levels are accepted. Platforms that require a minimum pm level
+> can set this field during probe.
 
-Thanks,
-
-Bart.
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
