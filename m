@@ -1,45 +1,45 @@
-Return-Path: <linux-scsi+bounces-20555-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20553-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eAoAFGNvd2m8gAEAu9opvQ
-	(envelope-from <linux-scsi+bounces-20555-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jan 2026 14:42:59 +0100
+	id aO/yAM1vd2m8gAEAu9opvQ
+	(envelope-from <linux-scsi+bounces-20553-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jan 2026 14:44:45 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7F6D89050
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jan 2026 14:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FD9B8909E
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jan 2026 14:44:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4EC3C31B7C24
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jan 2026 13:37:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BA6AE303A6F0
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jan 2026 13:37:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED1C433A9D8;
-	Mon, 26 Jan 2026 13:36:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC9A433A9EB;
+	Mon, 26 Jan 2026 13:36:54 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B2233A9E7
-	for <linux-scsi@vger.kernel.org>; Mon, 26 Jan 2026 13:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3823382C1
+	for <linux-scsi@vger.kernel.org>; Mon, 26 Jan 2026 13:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769434617; cv=none; b=ctV6kSCZ7zAGLhcb48hLJal/XedTieoaEbhk3vjkskeTFy1G+1WM44x43nEyc3mlf8wL8RgZpltpAuqtozrmaMNLFr1J1B7uy0Ys7gUodLU/EbLMcotCFdzvHVWwqMfdDmcLLeonZMr7j26NvgOUqr7gtJzfnIWAjgmbW4XQCQg=
+	t=1769434614; cv=none; b=cn4zhbngC2C8xWL6O1lm1om4ftS0zhdpsFK7K6zTaIAV3S0kl4YkASnQkJZKpX2B7lL1x0+166R2nM5ie1IU/UmSuL8hUH0EmGsz7/umQI/SOTAhsxhaFeizmhMD7lb2wVVuzhuH/TNQaOW+HrZ6LFFnYM/duMU+1wsutm4Wpxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769434617; c=relaxed/simple;
-	bh=LqPBx/IXdMbj7TekwKXowj6omzxFA8KE/hketbp1lGY=;
+	s=arc-20240116; t=1769434614; c=relaxed/simple;
+	bh=rhTcv8Qf5RTv+q2PX9SygFLF3fstP0LFr9VvLmMt9vs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OnJe2sRzkXToPTna/VamsKOJ7kn0PGn56bHqNS9XFEmKCrEUUrNPgG26zfPsI1GZQawKrWq7PuH01+XvdLiRc1nfbo/6pw/M0YQj39wTycii0xLbzOnSks23p7ymVb2yDqxgPoSdbTeYkTVID6w6a6y9XAO0FjpDqlL5eeFUv5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=PhEH4yvQxp1cdfM/qzpsFEpIz9ulDdX36m2idHkZ1kDk8UX9pb6JSFpwHuqNYfAk6L7/JKrnYxK03p4XIFI+wbi/SpMXhDRKAEfAbLXiqDMWJNuOz9EvTTkrxxB88rHlneGWlyrXCTfs1aCNvpBVQEfG2XpWQfn0WHVzIZPk02Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4f08gx22hWzYQv0t
-	for <linux-scsi@vger.kernel.org>; Mon, 26 Jan 2026 21:36:13 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4f08hP6BvPzKHMbD
+	for <linux-scsi@vger.kernel.org>; Mon, 26 Jan 2026 21:36:37 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 3F3DA40539
+	by mail.maildlp.com (Postfix) with ESMTP id 57A3E4058C
 	for <linux-scsi@vger.kernel.org>; Mon, 26 Jan 2026 21:36:47 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.50.87.129])
-	by APP1 (Coremail) with SMTP id cCh0CgA3pOnrbXdpsyh1FA--.8226S6;
+	by APP1 (Coremail) with SMTP id cCh0CgA3pOnrbXdpsyh1FA--.8226S7;
 	Mon, 26 Jan 2026 21:36:47 +0800 (CST)
 From: Yang Erkun <yangerkun@huawei.com>
 To: dgilbert@interlog.com,
@@ -48,9 +48,9 @@ To: dgilbert@interlog.com,
 	linux-scsi@vger.kernel.org
 Cc: yangerkun@huawei.com,
 	yangerkun@huaweicloud.com
-Subject: [PATCH 2/3] scsi: sg: Resolve soft lockup issue when opening /dev/sgX
-Date: Mon, 26 Jan 2026 21:27:44 +0800
-Message-Id: <20260126132745.1830629-3-yangerkun@huawei.com>
+Subject: [PATCH 3/3] scsi: sg: Remove deprecated sg-big-buff
+Date: Mon, 26 Jan 2026 21:27:45 +0800
+Message-Id: <20260126132745.1830629-4-yangerkun@huawei.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20260126132745.1830629-1-yangerkun@huawei.com>
 References: <20260126132745.1830629-1-yangerkun@huawei.com>
@@ -61,12 +61,12 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgA3pOnrbXdpsyh1FA--.8226S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxJry3Gr18AF15XF18WFy8Krg_yoW8Kr4kpF
-	WxJFy5urWUGrsFgr4aqrWUAas8uasavrW2kFZaq343ZFnxX34Svr18JFy5ZrW5GrZ5Wr1U
-	tF1qvw1ruay7JFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHSb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+X-CM-TRANSID:cCh0CgA3pOnrbXdpsyh1FA--.8226S7
+X-Coremail-Antispam: 1UD129KBjvJXoWxCF1rtw4fAr4UuFW8Aw43KFg_yoWrKry7pF
+	Wa9r4IvrW5Wr1UGrs8tFWDAFy5uasrt3429FZrZ34avF1UGr9IqF1fJFyIqFW3GrZ5Ga18
+	Jw1DXa4ru3yUJaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUHSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
 	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
 	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
 	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
@@ -78,7 +78,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxJry3Gr18AF15XF18WFy8Krg_yoW8Kr4kpF
 	AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCI
 	c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
 	AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_
-	Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUnUKsU
+	Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0MKZJ
 	UUUUU==
 Sender: yangerkun@huaweicloud.com
 X-CM-SenderInfo: 51dqwvhunx0q5kxd4v5lfo033gof0z/
@@ -97,7 +97,7 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-20555-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-20553-lists,linux-scsi=lfdr.de];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	R_DKIM_NA(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[yangerkun@huawei.com,linux-scsi@vger.kernel.org];
@@ -108,88 +108,147 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[6];
 	NEURAL_HAM(-0.00)[-0.989];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:mid,huawei.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A7F6D89050
+X-Rspamd-Queue-Id: 4FD9B8909E
 X-Rspamd-Action: no action
 
-A soft lockup occurs after executing the following commands:
+These deprecated sysctl has been gone since commit 26d1c80fd61e5
+("scsi/sg: move sg-big-buff sysctl to scsi/sg.c") and nobody has found
+this. I believe it's time to remove them, which will allow us to clean
+up a significant amount of code.
 
-echo -1 > /sys/module/sg/parameters/def_reserved_size
-exec 4<> /dev/sg0
-
-watchdog: BUG: soft lockup - CPU#5 stuck for 26 seconds! [bash:537]
-Modules loaded:
-CPU: 5 UID: 0 PID: 537 Command: bash, kernel version 6.19.0-rc3+ #134,
-PREEMPT disabled
-Hardware: QEMU Standard PC (i440FX + PIIX, 1996), BIOS version
-1.16.1-2.fc37 dated 04/01/2014
-...
-Call Trace:
-
-  sg_build_reserve+0x5c/0xa0
-  sg_add_sfp+0x168/0x270
-  sg_open+0x16e/0x340
-  chrdev_open+0xbe/0x230
-  do_dentry_open+0x175/0x480
-  vfs_open+0x34/0xf0
-  do_open+0x265/0x3d0
-  path_openat+0x110/0x290
-  do_filp_open+0xc3/0x170
-  do_sys_openat2+0x71/0xe0
-  __x64_sys_openat+0x6d/0xa0
-  do_syscall_64+0x62/0x310
-  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-
-The solution is to use module_param_cb to validate and reject invalid
-values for def_reserved_size.
-
-Fixes: 6460e75a104d ("[SCSI] sg: fixes for large page_size")
 Signed-off-by: Yang Erkun <yangerkun@huawei.com>
 ---
- drivers/scsi/sg.c | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+ drivers/scsi/sg.c | 59 +++++++++--------------------------------------
+ 1 file changed, 11 insertions(+), 48 deletions(-)
 
 diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index c93cc9323f56..9e42618e20d5 100644
+index 9e42618e20d5..b3bc95f6c2f7 100644
 --- a/drivers/scsi/sg.c
 +++ b/drivers/scsi/sg.c
-@@ -1621,10 +1621,35 @@ sg_remove_device(struct device *cl_dev)
+@@ -81,14 +81,14 @@ static int sg_proc_init(void);
+ 
+ #define SG_DEFAULT_TIMEOUT mult_frac(SG_DEFAULT_TIMEOUT_USER, HZ, USER_HZ)
+ 
+-static int sg_big_buff = SG_DEF_RESERVED_SIZE;
+ /* N.B. This variable is readable and writeable via
+-   /proc/scsi/sg/def_reserved_size . Each time sg_open() is called a buffer
+-   of this size (or less if there is not enough memory) will be reserved
+-   for use by this file descriptor. [Deprecated usage: this variable is also
+-   readable via /proc/sys/kernel/sg-big-buff if the sg driver is built into
+-   the kernel (i.e. it is not a module).] */
+-static int def_reserved_size = -1;	/* picks up init parameter */
++ * /proc/scsi/sg/def_reserved_size . Each time sg_open() is called a buffer
++ * of this size (or less if there is not enough memory) will be reserved
++ * for use by this file descriptor.
++ */
++
++/* picks up init parameter */
++static int def_reserved_size = SG_DEF_RESERVED_SIZE;
+ static int sg_allow_dio = SG_ALLOW_DIO_DEF;
+ 
+ static int scatter_elem_sz = SG_SCATTER_SZ;
+@@ -1661,35 +1661,6 @@ MODULE_PARM_DESC(scatter_elem_sz, "scatter gather element "
+ MODULE_PARM_DESC(def_reserved_size, "size of buffer reserved for each fd");
+ MODULE_PARM_DESC(allow_dio, "allow direct I/O (default: 0 (disallow))");
+ 
+-#ifdef CONFIG_SYSCTL
+-#include <linux/sysctl.h>
+-
+-static const struct ctl_table sg_sysctls[] = {
+-	{
+-		.procname	= "sg-big-buff",
+-		.data		= &sg_big_buff,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0444,
+-		.proc_handler	= proc_dointvec,
+-	},
+-};
+-
+-static struct ctl_table_header *hdr;
+-static void register_sg_sysctls(void)
+-{
+-	if (!hdr)
+-		hdr = register_sysctl("kernel", sg_sysctls);
+-}
+-
+-static void unregister_sg_sysctls(void)
+-{
+-	unregister_sysctl_table(hdr);
+-}
+-#else
+-#define register_sg_sysctls() do { } while (0)
+-#define unregister_sg_sysctls() do { } while (0)
+-#endif /* CONFIG_SYSCTL */
+-
+ static int __init
+ init_sg(void)
+ {
+@@ -1699,10 +1670,6 @@ init_sg(void)
+ 		scatter_elem_sz = PAGE_SIZE;
+ 		scatter_elem_sz_prev = scatter_elem_sz;
+ 	}
+-	if (def_reserved_size >= 0)
+-		sg_big_buff = def_reserved_size;
+-	else
+-		def_reserved_size = sg_big_buff;
+ 
+ 	rc = register_chrdev_region(MKDEV(SCSI_GENERIC_MAJOR, 0), 
+ 				    SG_MAX_DEVS, "sg");
+@@ -1714,7 +1681,6 @@ init_sg(void)
+ 	sg_sysfs_valid = 1;
+ 	rc = scsi_register_interface(&sg_interface);
+ 	if (0 == rc) {
+-		register_sg_sysctls();
+ #ifdef CONFIG_SCSI_PROC_FS
+ 		sg_proc_init();
+ #endif				/* CONFIG_SCSI_PROC_FS */
+@@ -1729,7 +1695,6 @@ init_sg(void)
+ static void __exit
+ exit_sg(void)
+ {
+-	unregister_sg_sysctls();
+ #ifdef CONFIG_SCSI_PROC_FS
+ 	remove_proc_subtree("scsi/sg", NULL);
+ #endif				/* CONFIG_SCSI_PROC_FS */
+@@ -2205,10 +2170,8 @@ sg_add_sfp(Sg_device * sdp)
+ 	write_unlock_irqrestore(&sdp->sfd_lock, iflags);
+ 	SCSI_LOG_TIMEOUT(3, sg_printk(KERN_INFO, sdp,
+ 				      "sg_add_sfp: sfp=0x%p\n", sfp));
+-	if (unlikely(sg_big_buff != def_reserved_size))
+-		sg_big_buff = def_reserved_size;
+ 
+-	bufflen = min_t(int, sg_big_buff,
++	bufflen = min_t(int, def_reserved_size,
+ 			max_sectors_bytes(sdp->device->request_queue));
+ 	sg_build_reserve(sfp, bufflen);
+ 	SCSI_LOG_TIMEOUT(3, sg_printk(KERN_INFO, sdp,
+@@ -2436,7 +2399,7 @@ sg_proc_write_adio(struct file *filp, const char __user *buffer,
+ 
+ static int sg_proc_single_open_dressz(struct inode *inode, struct file *file)
+ {
+-	return single_open(file, sg_proc_seq_show_int, &sg_big_buff);
++	return single_open(file, sg_proc_seq_show_int, &def_reserved_size);
  }
  
- module_param_named(scatter_elem_sz, scatter_elem_sz, int, S_IRUGO | S_IWUSR);
--module_param_named(def_reserved_size, def_reserved_size, int,
--		   S_IRUGO | S_IWUSR);
- module_param_named(allow_dio, sg_allow_dio, int, S_IRUGO | S_IWUSR);
+ static ssize_t 
+@@ -2453,7 +2416,7 @@ sg_proc_write_dressz(struct file *filp, const char __user *buffer,
+ 	if (err)
+ 		return err;
+ 	if (k <= 1048576) {	/* limit "big buff" to 1 MB */
+-		sg_big_buff = k;
++		def_reserved_size = k;
+ 		return count;
+ 	}
+ 	return -ERANGE;
+@@ -2626,7 +2589,7 @@ static int sg_proc_seq_show_debug(struct seq_file *s, void *v)
  
-+static int def_reserved_size_set(const char *val, const struct kernel_param *kp)
-+{
-+	int size, ret;
-+
-+	if (!val)
-+		return -EINVAL;
-+
-+	ret = kstrtoint(val, 0, &size);
-+	if (ret)
-+		return ret;
-+
-+	/* limit "big buff" to 1 MB */
-+	if (size < 0 || size > 1048576)
-+		return -ERANGE;
-+
-+	def_reserved_size = size;
-+	return 0;
-+}
-+
-+static const struct kernel_param_ops def_reserved_size_ops = {
-+	.set	= def_reserved_size_set,
-+	.get	= param_get_int,
-+};
-+
-+module_param_cb(def_reserved_size, &def_reserved_size_ops, &def_reserved_size,
-+		   S_IRUGO | S_IWUSR);
-+
- MODULE_AUTHOR("Douglas Gilbert");
- MODULE_DESCRIPTION("SCSI generic (sg) driver");
- MODULE_LICENSE("GPL");
+ 	if (it && (0 == it->index))
+ 		seq_printf(s, "max_active_device=%d  def_reserved_size=%d\n",
+-			   (int)it->max, sg_big_buff);
++			   (int)it->max, def_reserved_size);
+ 
+ 	read_lock_irqsave(&sg_index_lock, iflags);
+ 	sdp = it ? sg_lookup_dev(it->index) : NULL;
 -- 
 2.39.2
 
