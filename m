@@ -1,255 +1,144 @@
-Return-Path: <linux-scsi+bounces-20553-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20556-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aO/yAM1vd2m8gAEAu9opvQ
-	(envelope-from <linux-scsi+bounces-20553-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jan 2026 14:44:45 +0100
+	id qCTXC+N/d2m9hgEAu9opvQ
+	(envelope-from <linux-scsi+bounces-20556-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jan 2026 15:53:23 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FD9B8909E
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jan 2026 14:44:44 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C15589C16
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jan 2026 15:53:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BA6AE303A6F0
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jan 2026 13:37:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 897C4301D32D
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jan 2026 14:53:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC9A433A9EB;
-	Mon, 26 Jan 2026 13:36:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1937432ED2A;
+	Mon, 26 Jan 2026 14:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="evbz8Uvy"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3823382C1
-	for <linux-scsi@vger.kernel.org>; Mon, 26 Jan 2026 13:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2452FF151;
+	Mon, 26 Jan 2026 14:53:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769434614; cv=none; b=cn4zhbngC2C8xWL6O1lm1om4ftS0zhdpsFK7K6zTaIAV3S0kl4YkASnQkJZKpX2B7lL1x0+166R2nM5ie1IU/UmSuL8hUH0EmGsz7/umQI/SOTAhsxhaFeizmhMD7lb2wVVuzhuH/TNQaOW+HrZ6LFFnYM/duMU+1wsutm4Wpxc=
+	t=1769439187; cv=none; b=BU8T3D4Yn3aoo0xQpFXzRaIK14c0/MCquOgkVF2CSdtHDI0/i+8LEnlxP6J/aKFFAFQCID0WaoSq9XKiZWiU0k89IcwZmsLraoc66KENhPg0LSm13hsdg176yjouJZUpj+etXXUuvrWrQ6SefyLEUwZL9+RgxPi/sFtSlLcrZc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769434614; c=relaxed/simple;
-	bh=rhTcv8Qf5RTv+q2PX9SygFLF3fstP0LFr9VvLmMt9vs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PhEH4yvQxp1cdfM/qzpsFEpIz9ulDdX36m2idHkZ1kDk8UX9pb6JSFpwHuqNYfAk6L7/JKrnYxK03p4XIFI+wbi/SpMXhDRKAEfAbLXiqDMWJNuOz9EvTTkrxxB88rHlneGWlyrXCTfs1aCNvpBVQEfG2XpWQfn0WHVzIZPk02Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4f08hP6BvPzKHMbD
-	for <linux-scsi@vger.kernel.org>; Mon, 26 Jan 2026 21:36:37 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 57A3E4058C
-	for <linux-scsi@vger.kernel.org>; Mon, 26 Jan 2026 21:36:47 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.50.87.129])
-	by APP1 (Coremail) with SMTP id cCh0CgA3pOnrbXdpsyh1FA--.8226S7;
-	Mon, 26 Jan 2026 21:36:47 +0800 (CST)
-From: Yang Erkun <yangerkun@huawei.com>
-To: dgilbert@interlog.com,
-	James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com,
-	linux-scsi@vger.kernel.org
-Cc: yangerkun@huawei.com,
-	yangerkun@huaweicloud.com
-Subject: [PATCH 3/3] scsi: sg: Remove deprecated sg-big-buff
-Date: Mon, 26 Jan 2026 21:27:45 +0800
-Message-Id: <20260126132745.1830629-4-yangerkun@huawei.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20260126132745.1830629-1-yangerkun@huawei.com>
-References: <20260126132745.1830629-1-yangerkun@huawei.com>
+	s=arc-20240116; t=1769439187; c=relaxed/simple;
+	bh=GT4929KDy5PqpA3gBq0fVgekZu4eZCi/voc1Cx4I1as=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=koYJ5BNyvw2c7PPLOL7WD2OaIVUa5s5epV5g6UdvsYXnloP1v9w0vLbcP6De/3fDD8x6GFLGvtH+qZoAmKNGrAiXo9wRgvli18/mrnOrQMWrJU6cBQd/R8nN2CUyniFXn83HNUBN3sy/ojOhbekYwPztGXd66ZW1eN/qXAOqyFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=evbz8Uvy; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1769439184;
+	bh=GT4929KDy5PqpA3gBq0fVgekZu4eZCi/voc1Cx4I1as=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=evbz8UvyEOzZnE8SFDytJikkrW3Jv2+T+Upwsc0bmWbMVnRwWI/rL4PzxBGPqGN67
+	 TqgPDewslKzVt5kjkQMlif7DE78SRyG4ieTFEjvsnvrD2P3gO7TNZ2EqRZOGpN/lKT
+	 a04mgYXnvWsY1w7Yp9R+ApIwHVODnC7irlYBch/EJPGoF+lyGCQl08VOvfcVdLgCcT
+	 8cBFewH2kEjmq9STmuVf5zY0VkGEG428LwE0vwd2NQLuMAthnSK2UhzH8uTqiE7OZt
+	 EC23/BpmiXZKrYi22uo8waLPT5IP1IZTOG8eeJ0Q03es8v55ZOlgevD+NhrWjwvZBW
+	 Lk+a0XH20hbbQ==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 50B0117E0E6C;
+	Mon, 26 Jan 2026 15:53:03 +0100 (CET)
+Message-ID: <0fe71377-df0a-4e8e-a787-73455eddc133@collabora.com>
+Date: Mon, 26 Jan 2026 15:53:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgA3pOnrbXdpsyh1FA--.8226S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF1rtw4fAr4UuFW8Aw43KFg_yoWrKry7pF
-	Wa9r4IvrW5Wr1UGrs8tFWDAFy5uasrt3429FZrZ34avF1UGr9IqF1fJFyIqFW3GrZ5Ga18
-	Jw1DXa4ru3yUJaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkE
-	bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjsIEF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I
-	0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxAIw28IcVAKzI0EY4vE52x082I5MxAq
-	zxv26xkF7I0En4kS14v26r4a6rW5MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
-	AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCI
-	c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
-	AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_
-	Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0MKZJ
-	UUUUU==
-Sender: yangerkun@huaweicloud.com
-X-CM-SenderInfo: 51dqwvhunx0q5kxd4v5lfo033gof0z/
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 23/24] scsi: ufs: mediatek: Remove undocumented
+ "clk-scale-up-vcore-min"
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Bart Van Assche <bvanassche@acm.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ Chunfeng Yun <chunfeng.yun@mediatek.com>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>,
+ Peter Wang <peter.wang@mediatek.com>, Stanley Jhu <chu.stanley@gmail.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Chaotian Jing <Chaotian.Jing@mediatek.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
+ kernel@collabora.com, linux-scsi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-phy@lists.infradead.org
+References: <20260124-mt8196-ufs-v6-0-e7c005b60028@collabora.com>
+ <20260124-mt8196-ufs-v6-23-e7c005b60028@collabora.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20260124-mt8196-ufs-v6-23-e7c005b60028@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.54 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
+	R_DKIM_ALLOW(-0.20)[collabora.com:s=mail];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-20556-lists,linux-scsi=lfdr.de];
+	FREEMAIL_TO(0.00)[collabora.com,samsung.com,wdc.com,acm.org,kernel.org,gmail.com,mediatek.com,HansenPartnership.com,oracle.com,pengutronix.de,linaro.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[28];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-20553-lists,linux-scsi=lfdr.de];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	R_DKIM_NA(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yangerkun@huawei.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	TO_DN_NONE(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	NEURAL_HAM(-0.00)[-0.989];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:mid,huawei.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4FD9B8909E
+	FROM_NEQ_ENVFROM(0.00)[angelogioacchino.delregno@collabora.com,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[collabora.com:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi,dt];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 9C15589C16
 X-Rspamd-Action: no action
 
-These deprecated sysctl has been gone since commit 26d1c80fd61e5
-("scsi/sg: move sg-big-buff sysctl to scsi/sg.c") and nobody has found
-this. I believe it's time to remove them, which will allow us to clean
-up a significant amount of code.
+Il 24/01/26 13:01, Nicolas Frattaroli ha scritto:
+> The MediaTek UFS driver contains support for an undocumented,
+> non-vendor-prefixed u32 property named "clk-scale-up-vcore-min".
+> 
+> Since it is not part of any binding, and would not pass a bindings
+> review in its current form, remove it.
+> 
+> To return this functionality, it needs to be resubmitted in a series
+> that also introduces it to the binding, and justifies what it is used
+> for. Compatibility with downstream device trees is not a valid
+> justification for its existence.
+> 
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
-Signed-off-by: Yang Erkun <yangerkun@huawei.com>
----
- drivers/scsi/sg.c | 59 +++++++++--------------------------------------
- 1 file changed, 11 insertions(+), 48 deletions(-)
+Not sure what this is used for, because then UFS DVFS for gears should be managed
+with OPPs (either dynamic or static) anyway, so the vcore (I guess this is the scp
+vcore in dvfsrc regulators) should be scaled like so, without ugly init hacks like
+the one that you just removed.
 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 9e42618e20d5..b3bc95f6c2f7 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -81,14 +81,14 @@ static int sg_proc_init(void);
- 
- #define SG_DEFAULT_TIMEOUT mult_frac(SG_DEFAULT_TIMEOUT_USER, HZ, USER_HZ)
- 
--static int sg_big_buff = SG_DEF_RESERVED_SIZE;
- /* N.B. This variable is readable and writeable via
--   /proc/scsi/sg/def_reserved_size . Each time sg_open() is called a buffer
--   of this size (or less if there is not enough memory) will be reserved
--   for use by this file descriptor. [Deprecated usage: this variable is also
--   readable via /proc/sys/kernel/sg-big-buff if the sg driver is built into
--   the kernel (i.e. it is not a module).] */
--static int def_reserved_size = -1;	/* picks up init parameter */
-+ * /proc/scsi/sg/def_reserved_size . Each time sg_open() is called a buffer
-+ * of this size (or less if there is not enough memory) will be reserved
-+ * for use by this file descriptor.
-+ */
-+
-+/* picks up init parameter */
-+static int def_reserved_size = SG_DEF_RESERVED_SIZE;
- static int sg_allow_dio = SG_ALLOW_DIO_DEF;
- 
- static int scatter_elem_sz = SG_SCATTER_SZ;
-@@ -1661,35 +1661,6 @@ MODULE_PARM_DESC(scatter_elem_sz, "scatter gather element "
- MODULE_PARM_DESC(def_reserved_size, "size of buffer reserved for each fd");
- MODULE_PARM_DESC(allow_dio, "allow direct I/O (default: 0 (disallow))");
- 
--#ifdef CONFIG_SYSCTL
--#include <linux/sysctl.h>
--
--static const struct ctl_table sg_sysctls[] = {
--	{
--		.procname	= "sg-big-buff",
--		.data		= &sg_big_buff,
--		.maxlen		= sizeof(int),
--		.mode		= 0444,
--		.proc_handler	= proc_dointvec,
--	},
--};
--
--static struct ctl_table_header *hdr;
--static void register_sg_sysctls(void)
--{
--	if (!hdr)
--		hdr = register_sysctl("kernel", sg_sysctls);
--}
--
--static void unregister_sg_sysctls(void)
--{
--	unregister_sysctl_table(hdr);
--}
--#else
--#define register_sg_sysctls() do { } while (0)
--#define unregister_sg_sysctls() do { } while (0)
--#endif /* CONFIG_SYSCTL */
--
- static int __init
- init_sg(void)
- {
-@@ -1699,10 +1670,6 @@ init_sg(void)
- 		scatter_elem_sz = PAGE_SIZE;
- 		scatter_elem_sz_prev = scatter_elem_sz;
- 	}
--	if (def_reserved_size >= 0)
--		sg_big_buff = def_reserved_size;
--	else
--		def_reserved_size = sg_big_buff;
- 
- 	rc = register_chrdev_region(MKDEV(SCSI_GENERIC_MAJOR, 0), 
- 				    SG_MAX_DEVS, "sg");
-@@ -1714,7 +1681,6 @@ init_sg(void)
- 	sg_sysfs_valid = 1;
- 	rc = scsi_register_interface(&sg_interface);
- 	if (0 == rc) {
--		register_sg_sysctls();
- #ifdef CONFIG_SCSI_PROC_FS
- 		sg_proc_init();
- #endif				/* CONFIG_SCSI_PROC_FS */
-@@ -1729,7 +1695,6 @@ init_sg(void)
- static void __exit
- exit_sg(void)
- {
--	unregister_sg_sysctls();
- #ifdef CONFIG_SCSI_PROC_FS
- 	remove_proc_subtree("scsi/sg", NULL);
- #endif				/* CONFIG_SCSI_PROC_FS */
-@@ -2205,10 +2170,8 @@ sg_add_sfp(Sg_device * sdp)
- 	write_unlock_irqrestore(&sdp->sfd_lock, iflags);
- 	SCSI_LOG_TIMEOUT(3, sg_printk(KERN_INFO, sdp,
- 				      "sg_add_sfp: sfp=0x%p\n", sfp));
--	if (unlikely(sg_big_buff != def_reserved_size))
--		sg_big_buff = def_reserved_size;
- 
--	bufflen = min_t(int, sg_big_buff,
-+	bufflen = min_t(int, def_reserved_size,
- 			max_sectors_bytes(sdp->device->request_queue));
- 	sg_build_reserve(sfp, bufflen);
- 	SCSI_LOG_TIMEOUT(3, sg_printk(KERN_INFO, sdp,
-@@ -2436,7 +2399,7 @@ sg_proc_write_adio(struct file *filp, const char __user *buffer,
- 
- static int sg_proc_single_open_dressz(struct inode *inode, struct file *file)
- {
--	return single_open(file, sg_proc_seq_show_int, &sg_big_buff);
-+	return single_open(file, sg_proc_seq_show_int, &def_reserved_size);
- }
- 
- static ssize_t 
-@@ -2453,7 +2416,7 @@ sg_proc_write_dressz(struct file *filp, const char __user *buffer,
- 	if (err)
- 		return err;
- 	if (k <= 1048576) {	/* limit "big buff" to 1 MB */
--		sg_big_buff = k;
-+		def_reserved_size = k;
- 		return count;
- 	}
- 	return -ERANGE;
-@@ -2626,7 +2589,7 @@ static int sg_proc_seq_show_debug(struct seq_file *s, void *v)
- 
- 	if (it && (0 == it->index))
- 		seq_printf(s, "max_active_device=%d  def_reserved_size=%d\n",
--			   (int)it->max, sg_big_buff);
-+			   (int)it->max, def_reserved_size);
- 
- 	read_lock_irqsave(&sg_index_lock, iflags);
- 	sdp = it ? sg_lookup_dev(it->index) : NULL;
--- 
-2.39.2
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
 
 
