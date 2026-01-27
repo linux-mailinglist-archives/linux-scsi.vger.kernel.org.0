@@ -1,136 +1,123 @@
-Return-Path: <linux-scsi+bounces-20568-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20569-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oE01LbsUeGkynwEAu9opvQ
-	(envelope-from <linux-scsi+bounces-20568-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Jan 2026 02:28:27 +0100
+	id kIynLCwVeGkynwEAu9opvQ
+	(envelope-from <linux-scsi+bounces-20569-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Jan 2026 02:30:20 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 322028EB7E
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Jan 2026 02:28:26 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0F8E8EBAB
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Jan 2026 02:30:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 201033022918
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Jan 2026 01:28:25 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 73A943004DB1
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Jan 2026 01:30:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6A8243951;
-	Tue, 27 Jan 2026 01:28:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1657B21772A;
+	Tue, 27 Jan 2026 01:30:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="eMXvxAH7"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jBkeQEAT"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D076B242D95
-	for <linux-scsi@vger.kernel.org>; Tue, 27 Jan 2026 01:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA66265CD9
+	for <linux-scsi@vger.kernel.org>; Tue, 27 Jan 2026 01:30:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769477304; cv=none; b=WUDvAQ/JRleLTZgjsQp8ZGhrZogYYkbqSALHYpVRXW9YDzmEafctDXHZwyEntkSS2l1xI3Y9dQqwajJAMJHVQdNoI9XM2rtBwSFCTL//7+wZ/6Qqmsf++sYVUo/fh6Zt0RqsDlXa4w/byJBfFO1KCShCsV4FzPp2DArN+j8NhQc=
+	t=1769477413; cv=none; b=gBjKneva0ybo2jAQL6uDXXwMb+HpoWi6X0iBNAbtEGJ16qWwYSK0n5TJ0OKx/Sl7ZWRO3L7QUs4xFOpyXL3kPzoTinD/uIXXalXmYRm6D/MfAbL+GbEDfIbFxWUO/sMEUWPl8Ou24L3QootUXYI9Z2YStayESlG3rHIp6KhAnZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769477304; c=relaxed/simple;
-	bh=kV1ouKrGgN0Nws59Szu9Iuwqf0dmCVo7j2vAMed0VSU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=crz6X2n50f+7/K2Oh3hreY1aa9KEkeXuSKplTG8BZ7vkqlXyP4Lq+V46fznGfKsNt1RbvfjjsbD2BxqGDGsn6q2AfEGhY1jVIPOrT2KjcnCCDH9MWu7vSFT2910vg6MoKKTMSVAZvb/nwXm4tISBkbpTclCJPkXQcbvdSi8rXmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=eMXvxAH7; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=UWsAF1m8O2HmowHSefxy2QegEGgnsXUF75vuLsUbrU0=;
-	b=eMXvxAH7gwy9qSH9NJLtt6EBsCEjxiDnSapOnNGXMuQ58HLIdt4UpgghJEiUpND52ihXnLBQ8
-	Ryx098lhuTe0+WUCXMJ4/ooljCctxsRGTX8b4wBfnQCGuVzUYQ9qwE4Sag/wjSkuj5GdKND33eT
-	PSsg1mR25UDkkmpcJewl/5A=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4f0SNp4f1Vzcb0H;
-	Tue, 27 Jan 2026 09:24:10 +0800 (CST)
-Received: from kwepemf100006.china.huawei.com (unknown [7.202.181.220])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1E8E240537;
-	Tue, 27 Jan 2026 09:28:18 +0800 (CST)
-Received: from [10.174.179.194] (10.174.179.194) by
- kwepemf100006.china.huawei.com (7.202.181.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.36; Tue, 27 Jan 2026 09:28:17 +0800
-Message-ID: <bba1750d-075f-f72b-8765-bcd1cee0a513@huawei.com>
-Date: Tue, 27 Jan 2026 09:28:17 +0800
+	s=arc-20240116; t=1769477413; c=relaxed/simple;
+	bh=HJf5STadY0mu5NC3cR1V8sYWw2EyO8GWe8YZOYQKYyw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lnjxOR+cgXYs6AsWO7Jh3ZceGxhdpP9RFZw0QN9767EXVBk0fueV7AEU0YCPlPIO36pk6P7t6NNzp8Z4M2SQ9dEaVPuxZiyw1oyYaQtOteaoi08/b/HaWMaIXORt/cN8h3DmNpU+I9x5v6TrW70gH/pthh0ZnBwih10H+Lf1SNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jBkeQEAT; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769477408;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=kCmR2iE1OIGu/ZxmC8f/nJ9sAuqOxLg/8zr1I5FkpE8=;
+	b=jBkeQEATL0IuCRMF9uQVymXlM7ofWroOajuYwcRKxhed30BskwnMxyLJWk5rNF1KqilQrM
+	hcK7/h1dM5plcG7uuhVjGI2WsXOjcrBcR3LFNGqOvC7eM/7HmRgcODscTcYQElI8lVvQAW
+	Gp2/3FkAbsj1DTay2o5A41f5nmumYag=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: Khalid Aziz <khalid@gonehiking.org>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] platform/surface: Replace deprecated strcpy + strcat in blogic_rdconfig
+Date: Tue, 27 Jan 2026 02:29:54 +0100
+Message-ID: <20260127012955.432671-1-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 2/3] scsi: sg: Resolve soft lockup issue when opening
- /dev/sgX
-To: Bart Van Assche <bvanassche@acm.org>, <dgilbert@interlog.com>,
-	<James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
-	<linux-scsi@vger.kernel.org>
-CC: <yangerkun@huaweicloud.com>
-References: <20260126132745.1830629-1-yangerkun@huawei.com>
- <20260126132745.1830629-3-yangerkun@huawei.com>
- <1f5708a2-b00a-4be1-a005-c5137ce5863b@acm.org>
-From: yangerkun <yangerkun@huawei.com>
-In-Reply-To: <1f5708a2-b00a-4be1-a005-c5137ce5863b@acm.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemf100006.china.huawei.com (7.202.181.220)
+X-Migadu-Flow: FLOW_OUT
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-20568-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-20569-lists,linux-scsi=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[huawei.com:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yangerkun@huawei.com,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[thorsten.blum@linux.dev,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[linux.dev:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:mid,huawei.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,tldp.org:url]
-X-Rspamd-Queue-Id: 322028EB7E
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.dev:email,linux.dev:dkim,linux.dev:mid]
+X-Rspamd-Queue-Id: E0F8E8EBAB
 X-Rspamd-Action: no action
 
+strcpy() is deprecated [1] and using strcat() is discouraged. Replace
+them with scnprintf().  No functional changes.
 
+Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strcpy [1]
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+ drivers/scsi/BusLogic.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-在 2026/1/27 1:04, Bart Van Assche 写道:
-> On 1/26/26 5:27 AM, Yang Erkun wrote:
->> +    /* limit "big buff" to 1 MB */
->> +    if (size < 0 || size > 1048576)
->> +        return -ERANGE;
-> 
-> Why 1 MB? Please explain this in the patch description.
+diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
+index 865fcbac8fa1..82e436a8f012 100644
+--- a/drivers/scsi/BusLogic.c
++++ b/drivers/scsi/BusLogic.c
+@@ -1631,8 +1631,8 @@ static bool __init blogic_rdconfig(struct blogic_adapter *adapter)
+ 	/*
+ 	   Initialize the Host Adapter Full Model Name from the Model Name.
+ 	 */
+-	strcpy(adapter->full_model, "BusLogic ");
+-	strcat(adapter->full_model, adapter->model);
++	scnprintf(adapter->full_model, sizeof(adapter->full_model),
++		  "BusLogic %s", adapter->model);
+ 	/*
+ 	   Select an appropriate value for the Tagged Queue Depth either from a
+ 	   BusLogic Driver Options specification, or based on whether this Host
+-- 
+Thorsten Blum <thorsten.blum@linux.dev>
+GPG: 1D60 735E 8AEF 3BE4 73B6  9D84 7336 78FD 8DFE EAD4
 
-Hi,
-
-Thank you very much for your review! I obtained this limit from the
-function sg_proc_write_dressz, which states to "limit 'big buff' to 1
-MB." Additionally, https://tldp.org/HOWTO/SCSI-Generic-HOWTO/proc.html
-also mentions that "values between 0 and 1,048,576 (which is 2 ** 20)
-are accepted."
-
-Thanks again for your feedback! All your suggestions will be update in
-the next version.
-
-Thanks,
-Erkun.
-
-> 
-> Thanks,
-> 
-> Bart.
 
