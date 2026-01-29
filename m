@@ -1,155 +1,131 @@
-Return-Path: <linux-scsi+bounces-20606-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20608-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oGK/CyjSemlX+wEAu9opvQ
-	(envelope-from <linux-scsi+bounces-20606-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jan 2026 04:21:12 +0100
+	id iJzaBbDUemlX+wEAu9opvQ
+	(envelope-from <linux-scsi+bounces-20608-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jan 2026 04:32:00 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B677DAB64A
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jan 2026 04:21:11 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86E64AB752
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jan 2026 04:31:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EB1EB30233CA
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jan 2026 03:20:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4126A302C32B
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jan 2026 03:31:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 588873590DB;
-	Thu, 29 Jan 2026 03:20:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A8C63596E5;
+	Thu, 29 Jan 2026 03:31:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="jgSwf5/P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cX5LrfTt"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B0C13590B9
-	for <linux-scsi@vger.kernel.org>; Thu, 29 Jan 2026 03:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5D835B654;
+	Thu, 29 Jan 2026 03:31:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769656833; cv=none; b=PuAdO5eeLl5eXD9Zsg4GXIsnZ6nRVbeoD6WRH6Z99Hrq9gTkInsRfu3BqZBrgC8AwHmjjMgripTCbOEDyvbyW3r7QGMn4KviZV/Vd1AfRpAmNLBzteAiY3OnK3VptVguBTen05kFKik5pgIuvggNVrQqk7A0Nzuv/Ik0M7OrGAA=
+	t=1769657512; cv=none; b=rVqF5hCEmN6kk+wJ8IVCL9XOcT1ufiMlhUDVaB3S+PNdEh/4hs0Y0PF7HYx7lUKLhC6akfSDV1bFRcRz4QO+ZStu+AcqYgpiaDBBqgO1gyYn/KgMuNDTk7sI8kkFL8sjysVVFUldg200RddyHczhK5LIQFDSdTM4Yyh4jtc7SWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769656833; c=relaxed/simple;
-	bh=r1zZE+GFEgHS9vmoV/VN0hnRqc/Nv5C4HJKaBSOzL68=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=q7LoVcHCKz6umr5sWu77z9P84ZeBAlTIhhOTgeB/DdMy+OUiVD05OkYqE2XCn/FDIl4DA3xf3kwA+zAgyDq71KbP0Q7TE/n4teuwIlgz+LvYMlclNQEidKukpwneVqTzai+bA/S+Nv2sNG0HQHxFWzknq6ZgxWnVNoMSaWU/Cag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=jgSwf5/P; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20260129032030epoutp043d52066e77e408a780bc8c33a993d80f~PFYLK3K-W0460104601epoutp04B
-	for <linux-scsi@vger.kernel.org>; Thu, 29 Jan 2026 03:20:30 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20260129032030epoutp043d52066e77e408a780bc8c33a993d80f~PFYLK3K-W0460104601epoutp04B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1769656830;
-	bh=BKwBvGTDSaYD6Jv5WgtOt+tOGgb83G4qiTZTJ/o76pY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jgSwf5/PkIOBGCJ5sJYxZ6pmjtUU02rwJKj3+NAK3SIKeLLB8CGE3dJkikJPjbMlU
-	 nDZQu9Rub1+lhHitLkMT7iwh4vbXPxaEVkDG/1Xp9Sk52mDvrLdCSaqIe/vkW2LGfY
-	 +wwoMr6SOPFhyz7QrZWb9x37P+/Ix+vxxAGOx5x4=
-Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
-	20260129032029epcas5p4f70191b8b27d31e1e31b0698609fe213~PFYKrbDwq0559805598epcas5p4O;
-	Thu, 29 Jan 2026 03:20:29 +0000 (GMT)
-Received: from epcas5p2.samsung.com (unknown [182.195.38.92]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4f1kt449Kmz2SSKf; Thu, 29 Jan
-	2026 03:20:28 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20260129031046epcas5p2e13b31bc0b4c47b82020e08c45cb32ca~PFPrwIEEu2896328963epcas5p2M;
-	Thu, 29 Jan 2026 03:10:46 +0000 (GMT)
-Received: from testpc12933.samsungds.net (unknown [109.105.129.33]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20260129031045epsmtip17448d004f7400b2b0da9061c72d99843~PFPqw-bZV0450604506epsmtip1S;
-	Thu, 29 Jan 2026 03:10:45 +0000 (GMT)
-From: "zheng.gong" <zheng.gong@samsung.com>
-To: linux-scsi@vger.kernel.org
-Cc: avri.altman@wdc.com, bvanassche@acm.org, quic_cang@quicinc.com,
-	alim.akhtar@samsung.com, martin.petersen@oracle.com, ebiggers@kernel.org,
-	linux-kernel@vger.kernel.org, "zheng.gong" <zheng.gong@samsung.com>
-Subject: [PATCH v4 3/3] dt-bindings: ufs: Add binding for ufs-keyslot-offset
-Date: Thu, 29 Jan 2026 11:10:33 +0800
-Message-ID: <20260129031033.3428295-4-zheng.gong@samsung.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260129031033.3428295-1-zheng.gong@samsung.com>
+	s=arc-20240116; t=1769657512; c=relaxed/simple;
+	bh=L3CYYnxH7rMmNN6PUUb3m9dtTAhsGVfencgw6kW6wXc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YLlwrp3usbXlFPmpoRKN1B/CVjAdeAsKvi8v6YgqFHh2DEwcI2pxpt2d/avv3IKmo2ehI70Ri9x+zH3sJC9FilhEsvHLfaalYCryNTO/0PF8/WDn36Vt8xQR2ubI8e6vMt1OEql+dt7rJy5XRgmTxH/dS8CnjDhov8pDl642pUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cX5LrfTt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A0DCC116D0;
+	Thu, 29 Jan 2026 03:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769657510;
+	bh=L3CYYnxH7rMmNN6PUUb3m9dtTAhsGVfencgw6kW6wXc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cX5LrfTtA1ZFfO2h8kHxSV1HJbpy/tmPjbH4KwGozekQMHo2s6Jqo6uRPgcZlkPBb
+	 GfOKx+c2SEfPmyvuL7DJjJws3qI1U5JRg67rYOVxmmXTNp8rroHuMrDLfAkJeofKaF
+	 vqVooz52aU8jad/39pYkGLAde3eUPbI0G9VqCF7Duajusi4QUuHlw1G9EVc70iEe/W
+	 Gnxv1xHsR2uA6RpdEspnARUi1THsoFMr8Fx4KGzWcdqxcBXIkMkDo35pakJDx63ij0
+	 kcPAsGcgclbyc+u6vswnllmGFfbd8ceF1q1n8MVQBMtnsseEZtBI8JS5O/nZbo6ZHD
+	 Y1rBbj9ZI6a0Q==
+Date: Wed, 28 Jan 2026 19:31:16 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: "zheng.gong" <zheng.gong@samsung.com>
+Cc: linux-scsi@vger.kernel.org, avri.altman@wdc.com, bvanassche@acm.org,
+	quic_cang@quicinc.com, alim.akhtar@samsung.com,
+	martin.petersen@oracle.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] scsi: ufs: Add crypto_keyslot_remap support
+Message-ID: <20260129033116.GA68575@sol>
+References: <20251112031035.GA2832160@google.com>
+ <CGME20260129031038epcas5p3975b1f66414a7393b85c362523ebe1b8@epcas5p3.samsung.com>
+ <20260129031033.3428295-1-zheng.gong@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20260129031046epcas5p2e13b31bc0b4c47b82020e08c45cb32ca
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-505,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20260129031046epcas5p2e13b31bc0b4c47b82020e08c45cb32ca
-References: <20251112031035.GA2832160@google.com>
-	<20260129031033.3428295-1-zheng.gong@samsung.com>
-	<CGME20260129031046epcas5p2e13b31bc0b4c47b82020e08c45cb32ca@epcas5p2.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260129031033.3428295-1-zheng.gong@samsung.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
-	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[samsung.com:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-20606-lists,linux-scsi=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,samsung.com:email,samsung.com:dkim,samsung.com:mid];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zheng.gong@samsung.com,linux-scsi@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-20608-lists,linux-scsi=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ebiggers@kernel.org,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[8]
-X-Rspamd-Queue-Id: B677DAB64A
+	TAGGED_RCPT(0.00)[linux-scsi];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 86E64AB752
 X-Rspamd-Action: no action
 
-Document the new 'ufs-keyslot-offset' dt property used to configure
-a fixed offset for crypto keyslot remapping in UFS host controllers.
+On Thu, Jan 29, 2026 at 11:10:30AM +0800, zheng.gong wrote:
+> Hello Eric,
+> 
+> Sorry for late due to other affairs.
+> 
+> Readjuest the patchset adds support for platform-specific crypto keyslot
+> remapping in the exynos UFS host driver.
+> 
+> The 1st patch raise a new variant op:
+>   ufs_hba_variant_ops::crypto_keyslot_remap
+> which allows platforms to adjust the keyslot index at io request period.
+> 
+> The 2nd patch adds a real, upstream user in ufs-exynos.c that supports
+> remapping via device tree. This makes the hook justifiable for mainline
+> inclusion.
+> 
+> The 3rd patch adds DT binding description for the new property
+> 'ufs-keyslot-offset'.
 
-This is useful in virtualized or multi-domain environments where keyslot
-layout is partitioned (e.g., per-VM isolation). If the property is not
-present, the keyslot is used as-is (identity mapping).
+I don't think it's plausible that this actually works, considering that
+ufs-exynos.c installs a custom blk_crypto_profile that doesn't have any
+keyslots.  (It does that because the Exynos UFS host controller takes
+the raw key directly in the PRDT on a per-block basis.)  With no
+keyslots, the concept of remapping them is meaningless.
 
-The binding is used by the exynos UFS driver to support secure inline
-encryption in domain-isolated scenarios.
+Could you clarify what exactly this patchset is meant to do, and how you
+tested it?
 
-Signed-off-by: zheng.gong <zheng.gong@samsung.com>
----
- .../devicetree/bindings/ufs/samsung,exynos-ufs.yaml          | 5 +++++
- 1 file changed, 5 insertions(+)
+Do you perhaps have additional patches that this depends on?  Perhaps
+patches that add support for a version of the Exynos UFS host controller
+that does have keyslots?
 
-diff --git a/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml b/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
-index b4e744ebffd1..0ed60bbd959e 100644
---- a/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
-+++ b/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
-@@ -72,6 +72,11 @@ properties:
- 
-   dma-coherent: true
- 
-+  ufs-keyslot-offset:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      Offset added to logical crypto keyslot for multi-domain isolation.
-+
- required:
-   - compatible
-   - reg
--- 
-2.50.1
-
+- Eric
 
