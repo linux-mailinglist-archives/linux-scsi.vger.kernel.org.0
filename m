@@ -1,170 +1,168 @@
-Return-Path: <linux-scsi+bounces-20692-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20695-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IAPSKJ3CgmkpaAMAu9opvQ
-	(envelope-from <linux-scsi+bounces-20692-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 04 Feb 2026 04:53:01 +0100
+	id mDVRBGgFg2lLgwMAu9opvQ
+	(envelope-from <linux-scsi+bounces-20695-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 04 Feb 2026 09:38:00 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F20CAE1637
-	for <lists+linux-scsi@lfdr.de>; Wed, 04 Feb 2026 04:53:00 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D277E33B5
+	for <lists+linux-scsi@lfdr.de>; Wed, 04 Feb 2026 09:37:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 05E7A3061760
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Feb 2026 03:52:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4461D300CC80
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Feb 2026 08:37:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3F13273809;
-	Wed,  4 Feb 2026 03:52:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC29B39448F;
+	Wed,  4 Feb 2026 08:37:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HS7kExs4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BmyYo5Yc"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE82328B7DB
-	for <linux-scsi@vger.kernel.org>; Wed,  4 Feb 2026 03:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56879394481
+	for <linux-scsi@vger.kernel.org>; Wed,  4 Feb 2026 08:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770177176; cv=none; b=tG+NbXMzB655vim7CUhNxtD0HkK6UHMypowKByYKn3d/g9CIIMH6PPHR2xnoSDdLubeDJ3ChzTflVadk+qS1I6eqnfkQo9V2WtumQ1FFVDzmFaBySGoPlqHFpgKOI1RzwZsw3oe3hUKE7Gj76CTZUHp6Ryfk/8B8mvuxVSOYTYk=
+	t=1770194276; cv=none; b=T8G8wxTXyjipEi5VLqwPBh7vRiMKSVh5WPx2Pq74wo8IgldrhkciuRGGBgNV/LyQwmj9eswwv50jTrkazp1VpVP+FQjFjeH7Y0yCGtq7dmVosLLdWzG18FCjIsyJxatFO6cqhOmQAd7GLH0CPEaThceEgwr8eNcMCuXkMMYV3wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770177176; c=relaxed/simple;
-	bh=1icDyqPwbbHqNvfgBvAczi/5pv8lF+2w86Op0tjfJ4E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZsAck4QXnqN4jTg9Yn+3onJypO0h0Lmh0RuU3p976g819mAJdackDs1Kw91hbTbTEtNzk/zEPP7QuFDWjOC3MZyqcmk48wTbkFie62ORYHOw2kSUBhnWO4JrbvdzU+OlHuZSL/ZeywQunMst6nlr3CGcB3+ygCZ0yUmxVU4Qv1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=HS7kExs4; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 613IuJAP4161566;
-	Wed, 4 Feb 2026 03:52:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=8NEJ+YgZWU8i5yzE5g0Sdo8KNbVJ2t5OAgdmvg9aJJ4=; b=
-	HS7kExs4JYfR+/ZbojGIojOTlT44F8eHy0UfH133xGcgs8gQw9074wQupgTxo3Z4
-	XZF4cFdj3nIF7X7UaeBL9xirrZnSuZnTVXcoJImo3+b6/QVAz06PWT0/MR+aIm3G
-	oZYCApH9INoJ9ccZozOCh7y0Lcb/1SewAI8si/V6HSayGzsDCo8vs2OG4TO5/Hxe
-	e/v9+8muDoqMvng+y9P1ws6L5H3XpRj666m1PA/PoDuDsFT2P1IVn/JWnyYlKA0i
-	cMxJLR28WXfp96tJCp4dyHQ4YD+ESOIZDAYLiyWhFjHX9NvOVMK2Ts7d3WLINHDU
-	eGbC3SpvrX+jQ0vCgfxC/w==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4c3j8uh6d1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 04 Feb 2026 03:52:50 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61414KKT018713;
-	Wed, 4 Feb 2026 03:52:49 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4c186nd330-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 04 Feb 2026 03:52:49 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 6143qllt024698;
-	Wed, 4 Feb 2026 03:52:48 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4c186nd32a-4;
-	Wed, 04 Feb 2026 03:52:48 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, Ranjan Kumar <ranjan.kumar@broadcom.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        rajsekhar.chundru@broadcom.com, sathya.prakash@broadcom.com,
-        chandrakanth.patil@broadcom.com, prayas.patel@broadcom.com,
-        salomondush@google.com
-Subject: Re: [PATCH v2 0/8] mpi3mr: Enhancements for mpi3mr
-Date: Tue,  3 Feb 2026 22:52:43 -0500
-Message-ID: <177000116191.3467927.15486886375351802104.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20260116060719.32937-1-ranjan.kumar@broadcom.com>
-References: <20260116060719.32937-1-ranjan.kumar@broadcom.com>
+	s=arc-20240116; t=1770194276; c=relaxed/simple;
+	bh=YdGqnKEXZqPfejPy+MWDZJlt5n9n5NEiIZZsEFwyGbI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=h6Dq0/w0Rae2+RuRStpHMXUA2rRv+8S10vSbxlAR2QTgbeYUI/vuFYExLoQXU4pn7mo/PxxW/UHVoOgTv/Bb1aFoyhfH1A9bAYzLbSU1oX+QF6uF2W7JxRkZEhehbGLM9QR3wxiOhKS4HCJBy68Spf7D+m3E+9OaSpL4TT0EUpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BmyYo5Yc; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-435a517be33so3897920f8f.0
+        for <linux-scsi@vger.kernel.org>; Wed, 04 Feb 2026 00:37:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770194275; x=1770799075; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YdGqnKEXZqPfejPy+MWDZJlt5n9n5NEiIZZsEFwyGbI=;
+        b=BmyYo5Yc+5frcx3oQ8iRzs7iSTpsXLh3VAmvVJf6i6XsSgQYrkNjrgtkkMoYpSP/HI
+         FnHpHuSxoM7qexfaew2PxolAsGWMSVft7hG1BrF9tkkHubIAuijpD95UOMeETLMir3ZL
+         5tjxePJimm8JTGZOcYiRAvGKCOUFgJciqumH8CaZLf+s5YOJ9AsFTgfgQmZqRCPf69xf
+         TrPw7uEz525z5ySMLttoESHqeUnQw09eaCUUrQifgWhioU47YoXlT5jb/nQuKOsmKKle
+         x6ETjMfPJRMKeKZjlb2CkFKJZO3mEnyBBqVOcr3iju16J4x4f7ZZgudvfzcbVyDdZtLw
+         KYIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770194275; x=1770799075;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YdGqnKEXZqPfejPy+MWDZJlt5n9n5NEiIZZsEFwyGbI=;
+        b=P7OfbEjqQQ04klH34mr4TS1ttb31NYdKJbujNAne1UoSz/6WF08rPzbV5WxSCchjL8
+         5UBupfuYb02lRERLX+PoflM6R2kL3psc99e2yJjeGBnmmdYZtk5a2FadG/+8x2WrR6o/
+         bCfiYkzqkjUJlg7+wvQwM55TnAtKgkwaTXX9BUgzsWGLA0g6fP8O2kvYbJXVcskRl6kS
+         VFyNwWwPuPqbhkWWrItk33sW/eCF1DYaQZMDWxin9ueW9cs5a7xfqAvn3+5ZD3PvvpW4
+         JYUNM1MEdcVmCoRcvbDDr6HUbmKt/7gK+eAmEeJMIVR5d8glIVgvTkGGXtDK51ST1mK4
+         ov4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWT8t90zeIOgE94xBoJlfi10TjwrfITV/1WCwZ0TiU4A/rCQYAravkEgBUgbfbkoe1lBVdeP8f8Y123@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaH00j00Pb4Hh+rHbEv7dkhOB1zsfVs6foqmwY8Qe8P0BxPnZM
+	MD1zaMP44BBMqWDTea36BMwpqYYorPGQ1h8ynXXlbuls2hNF9ZoFAMY+
+X-Gm-Gg: AZuq6aLa/XKU+wvG4v8JtETfWgzY4JWJqZQmrKLvqrmB7xzI/Wu1vK1cviiHx+3PJ0R
+	oqBWigM+Y0kv5IXILIyLEleXoFazF/0BXbvcm1lWYVj4TRLCxlOnpsnojRsQ9IjkD44t3nRMEJQ
+	4vX1DrMtZzrgPJDYpuFNYrEKc4OzXkggPkxp2nhy9Q4+M+RfWmuOKbNazhY/ehjEwaOQdv4hVjm
+	39cDGS1nTz4TOklRbECf1OXAgx2JSSh1OGvNE5UjMW5GduTPcPP6DU3P3p071pFZ6m23tmpbsYC
+	8/w7LTOjiWIdRoXkd6ju2C2queo2EkrXCRLqU2U0iDXbB7MW1b8l51KsuNAcgZRc2GXTcX3dFO2
+	+HCoqT6gfvyQb55eUSWggaWXfKx2r+jVeKnhSuyNxhhQCinBYe4Q/jeGajLmOpnGS/qFxVklZHR
+	gMBssvo2vgoQEbiw==
+X-Received: by 2002:a05:6000:1885:b0:425:769e:515a with SMTP id ffacd0b85a97d-4361805c0famr3038165f8f.42.1770194274302;
+        Wed, 04 Feb 2026 00:37:54 -0800 (PST)
+Received: from [10.176.235.211] ([137.201.254.43])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43617e38e38sm4832086f8f.11.2026.02.04.00.37.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Feb 2026 00:37:53 -0800 (PST)
+Message-ID: <a729a7d1b63d0b7e78806bfec238d8db2705c693.camel@gmail.com>
+Subject: Re: [PATCH] scsi: ufs: core: Fix RPMB region size detection for UFS
+ 2.2
+From: Bean Huo <huobean@gmail.com>
+To: Alexey Charkov <alchark@flipper.net>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman
+ <avri.altman@wdc.com>,  Bart Van Assche <bvanassche@acm.org>, "James E.J.
+ Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen"
+ <martin.petersen@oracle.com>, Bean Huo <beanhuo@micron.com>, Can Guo
+ <can.guo@oss.qualcomm.com>,  linux-scsi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Date: Wed, 04 Feb 2026 09:37:51 +0100
+In-Reply-To: <CAKTNdwG_RycHp++Z++D5HzcybSyQwvKbb++AhtXhNgE6sOoThQ@mail.gmail.com>
+References: <20260129-ufs-rpmb-v1-1-691534ab723f@flipper.net>
+	 <8149b8cb5a7b36a1543ca05666f33a6373674e0e.camel@gmail.com>
+	 <CAKTNdwG=He3iJ8cPo4fFbcEwQQRrt_SGzoviMhi2a3kMXAO8hA@mail.gmail.com>
+	 <ad7e2d0e5b219b4b2ef2aa7ab342513a2c66171f.camel@gmail.com>
+	 <CAKTNdwG_RycHp++Z++D5HzcybSyQwvKbb++AhtXhNgE6sOoThQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2.1 
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-03_07,2026-02-03_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
- suspectscore=0 mlxlogscore=965 adultscore=0 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2601150000
- definitions=main-2602040023
-X-Proofpoint-GUID: 7U7nPfKvzg11Tv-6ChgdnyajWgyz9KZ3
-X-Proofpoint-ORIG-GUID: 7U7nPfKvzg11Tv-6ChgdnyajWgyz9KZ3
-X-Authority-Analysis: v=2.4 cv=BJS+bVQG c=1 sm=1 tr=0 ts=6982c292 b=1 cx=c_pps
- a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=7sb09Ph35mA_NJgvtq4A:9 a=QEXdDO2ut3YA:10 cc=ntf
- awl=host:12103
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA0MDAyNCBTYWx0ZWRfX8JxZ2y8Dj6V0
- 7kX3req2Tw+W87afbAQRHS7UVkGOct1OQNgoKvk1XIdfzzmaLmbqn8qpPrIcCEhPbolINYnRWRU
- YZLPJnFge4dwR6iZc1ALweUGYw38bLf4ULE9VZUVGJ+iSr9VklJ/6RLykVx3J4OKrkaf1xJgQG8
- op2HRwvW3+1XSeIlfa+5wspKABmEg2U2y33cMJP4Yc9GWYo0MqSAjfcYAi/WK2SQCbvIUQqmner
- S6ZY+OB4BU+Azyxk6LO4rIVou6AKx1m8hU3N2HK7PLLtBBoFkqDf8IOQ3Gnp01MZax68mNH4ClN
- kPDZEap6FaN6s8tCijvIxUeTJ7TDzKch5iakQm/yG/yAeagfs/O+JHnEHZ84FyunYEwyovqC4Gm
- uTpXCZ3F1x9kXO7qZ41e1F4Qxv4ABCmQggO9SXpTF2P1C+tadwM2LZfAlUBdNXWsqUPhhQZnKRY
- /rdvhiacTBVmrRo+gjjFBgElZdm+kNBeSMym5DDk=
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[oracle.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-20692-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oracle.com:mid,oracle.com:dkim];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_FROM(0.00)[bounces-20695-lists,linux-scsi=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[huobean@gmail.com,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: F20CAE1637
+	RCPT_COUNT_SEVEN(0.00)[11];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6D277E33B5
 X-Rspamd-Action: no action
 
-On Fri, 16 Jan 2026 11:37:11 +0530, Ranjan Kumar wrote:
+On Fri, 2026-01-30 at 18:49 +0400, Alexey Charkov wrote:
+> > > The spec says it can only be up to 16MB maximum (see section 12.4.3.1
+> > > RPMB Resources), so it should always fit. Happy to add a comment abou=
+t
+> > > that.
+> > >=20
+> > > Best regards,
+> > > Alexey
+> >=20
+> > Hi Alexey,
+> >=20
+> > Thanks for the clarification on the 16MB RPMB limit - that addresses th=
+e
+> > overflow concern.
+> >=20
+> >=20
+> > In your above operation, why not use SZ_128K to avoid the magic number?
+> > BTW, please update your comment.
+>=20
+> Good point, thanks Bean! Will amend in v2.
+>=20
+> Best regards,
+> Alexey
 
-> Enhancements for mpi3mr driver
-> 
-> Changes since v1:
-> - Fixed test robot build warning
-> - Fixed W=1 warning
-> - Addressed review comments from Damien Le Moal
-> 
-> [...]
+Alexey,=20
 
-Applied to 6.20/scsi-queue, thanks!
+did you send your new version patch?
 
-[1/8] mpi3mr: Add module parameter to control threaded IRQ polling
-      https://git.kernel.org/mkp/scsi/c/24de8b1d243b
-[2/8] mpi3mr: Rename log data save helper to reflect threaded/BH context
-      https://git.kernel.org/mkp/scsi/c/d0d19250ed81
-[3/8] mpi3mr: Avoid redundant diag-fault resets
-      https://git.kernel.org/mkp/scsi/c/7a67d9262288
-[4/8] mpi3mr: Use negotiated link rate from DevicePage0
-      https://git.kernel.org/mkp/scsi/c/c273c14b0294
-[5/8] mpi3mr: Update MPI Headers to revision 39
-      https://git.kernel.org/mkp/scsi/c/d0654335d900
-[6/8] mpi3mr: Record and report controller firmware faults
-      https://git.kernel.org/mkp/scsi/c/ec54b348f274
-[7/8] mpi3mr: Fixed the W=1 compilation warning
-      https://git.kernel.org/mkp/scsi/c/8612d94348f4
-[8/8] mpi3mr: Driver version update to 8.17.0.3.50
-      https://git.kernel.org/mkp/scsi/c/943e9049e84a
+Kind regards,
+Bean
 
--- 
-Martin K. Petersen
 
