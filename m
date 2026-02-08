@@ -1,84 +1,84 @@
-Return-Path: <linux-scsi+bounces-20725-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20729-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cDJzNaPuh2mUfQQAu9opvQ
-	(envelope-from <linux-scsi+bounces-20725-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sun, 08 Feb 2026 03:02:11 +0100
+	id QLEJMr7uh2mUfQQAu9opvQ
+	(envelope-from <linux-scsi+bounces-20729-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sun, 08 Feb 2026 03:02:38 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B585107977
-	for <lists+linux-scsi@lfdr.de>; Sun, 08 Feb 2026 03:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 94D6B10799B
+	for <lists+linux-scsi@lfdr.de>; Sun, 08 Feb 2026 03:02:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C65DD3004F35
-	for <lists+linux-scsi@lfdr.de>; Sun,  8 Feb 2026 02:02:10 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7BFE8300B9D7
+	for <lists+linux-scsi@lfdr.de>; Sun,  8 Feb 2026 02:02:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CAFF3019B2;
-	Sun,  8 Feb 2026 02:02:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C44CC30B536;
+	Sun,  8 Feb 2026 02:02:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="B2y0b2h5"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="LxdSF/WB"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D75302C0268
-	for <linux-scsi@vger.kernel.org>; Sun,  8 Feb 2026 02:02:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66AEC30E82D;
+	Sun,  8 Feb 2026 02:02:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770516127; cv=none; b=Wn9pD5+pfYCAzugnwKh/RJomQo/lzCsTaTD7xL9+asXkaYu6F+MO2tISHHphI0/zjif4OwAR8kLjb5qd/+4kPmoaQ103KxP9LvTDaOCYGGK4hJ9g0Zo+V+9jLFaSzlLtGfXXIUoLKniPh3aR3fc8XloRadf7jb3KYES4NLAi3fg=
+	t=1770516135; cv=none; b=Mc2+UpkElCJOMV7xJdJqgu3PMuHpADxV7LBHYM/1E5r9uzbsFlQfk6XHfDZbyahrM+20FIlDRaCcGXLuDXMAotJ17yGqC1DoscLSXwQbV57n7Tj4czVrAS34qZMbtPi7s/pDNRIV1T1iF/u6QzyZyDst1krUrm7sdxHmtf+Ikag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770516127; c=relaxed/simple;
-	bh=rlB/9QCTEcbrvRkE3Zz89nNjR23ygwPKGNbYvLCS4Q0=;
+	s=arc-20240116; t=1770516135; c=relaxed/simple;
+	bh=4Lrx1EtQFQifq1diasU4u2zA3TbWSHFLtNsKCF8mbk0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aQwiM/12+8GhKmokSTZuYol57gOiWyTCoVoacr02jIqKjlnSKEIFAirTN5YraseEbN3PXZ2on94V+r2pumSQpp+QLKTN3ONveincrrOsZkkQ2s076QerY2NxPH2G/EvFhYziWwEpCxIoDOFLRMWA55A2wJdNLDp5LwfQEEecYAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=B2y0b2h5; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=aOhSeXXfHp3VMF641zJR5lZFTg8dlvue2sDyZHdeU4uExSqXE2Qmk7iO2hzOxToQvsOL54zOlOa+P8F8I4U4ZJqPMrHHUOiXWtziX2I8iFN+/BJ+kHVXWyp94lztPr2NE/U19giRLfurrgeHVYqv7LrOVegGJ3U2gwHRtoPsQ14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=LxdSF/WB; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6181j2731948907;
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 618201bX2356226;
 	Sun, 8 Feb 2026 02:02:00 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=CYAAcD2fFeHMTXwA6IIa1xUIdkoAsE+se4wBC2eRRtY=; b=
-	B2y0b2h5dDZwK+43+7I3X1VgSf/b1LkctZu71E37WYGPfr/4fBczpeRwz8Z7TmNo
-	gFJ5NORWdqpONSngTsgjmq+8heLrTFE2r61/3U0D1Jq+3ASaYrNUsSPivlBTY6n7
-	nGzetMj2S0D1rdHes6AQKkpwqtVFvx3HvSyc+S91YBLZ0iAbGEqLV9jzP/cc0uMh
-	IleIbw+YvmXf7DCzsqL98OK8V0AiudpBxZixG66OVNxIW53wFSwScJtuEbOOdFN2
-	LIk94RJVX9Yj4RUPtDy0Ok2jHckf7+5mtJ/Q8GbQT24OEKkzhsZTq+8EIzJWkPvT
-	E+A2OG736TpWaeBRFQ9+0g==
+	corp-2025-04-25; bh=57iwP16dFKb7q9jWmMyZKem0IMWNehQjqkTVygfhWdM=; b=
+	LxdSF/WBwqBBtB3Zm+N0u7NwLcGl7SBGkCqo60PAU3QRXQxOmRUCyZlvwGG8zbTw
+	xM7RJc+3ypXVVvTHvFf4h06lfpGXPAcOaOGX3Fyf8aDz6rLJQVmsEbdf16VFHfJX
+	2FLFA15MwuI4o7in1kSjox0Hsh3JjUUj9SIC4Bhg/nM2UEU71kQ5v5dWYmvoYvo+
+	L0gZsKxQCakYXz9ku3pw5Y9vSmUt6yIIw9VE2ImEgliRnP3aFvhYTutnvAcXfvn2
+	AqDgVyGBip80fafFlPr/60zMOMquPEiet/IehVGCn9HvUkK+6LPOoGM2856HCP/Z
+	N6Zx4QkyepmgUWAVaNNgig==
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4c5xes0hyr-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4c5xh8rhmb-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 08 Feb 2026 02:01:59 +0000 (GMT)
+	Sun, 08 Feb 2026 02:02:00 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 6181A7dG006552;
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 617JNKG5006400;
 	Sun, 8 Feb 2026 02:01:58 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4c5uubuk5a-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4c5uubuk5d-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Sun, 08 Feb 2026 02:01:58 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61821sxV016745;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61821sxX016745;
 	Sun, 8 Feb 2026 02:01:58 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4c5uubuk3y-6;
-	Sun, 08 Feb 2026 02:01:57 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4c5uubuk3y-7;
+	Sun, 08 Feb 2026 02:01:58 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Guixin Liu <kanie@linux.alibaba.com>
+To: Peter Wang <peter.wang@mediatek.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Keita Morisaki <keita.morisaki@tier4.jp>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        mpi3mr-linuxdrv.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: mpi3mr: Make driver probing asynchronously
-Date: Sat,  7 Feb 2026 21:01:47 -0500
-Message-ID: <177051564488.3805738.987932524511486331.b4-ty@oracle.com>
+        Stanley Jhu <chu.stanley@gmail.com>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-scsi@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: ufs: mediatek: Fix page faults in ufs_mtk_clk_scale trace event
+Date: Sat,  7 Feb 2026 21:01:48 -0500
+Message-ID: <177051564499.3805738.14840607971686063797.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20260130080207.90053-1-kanie@linux.alibaba.com>
-References: <20260130080207.90053-1-kanie@linux.alibaba.com>
+In-Reply-To: <20260202024526.122515-1-keita.morisaki@tier4.jp>
+References: <20260202024526.122515-1-keita.morisaki@tier4.jp>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -91,68 +91,73 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-02-08_01,2026-02-05_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
- bulkscore=0 mlxlogscore=698 suspectscore=0 mlxscore=0 malwarescore=0
+ bulkscore=0 mlxlogscore=971 suspectscore=0 mlxscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2601150000
  definitions=main-2602080015
-X-Authority-Analysis: v=2.4 cv=KaTfcAYD c=1 sm=1 tr=0 ts=6987ee97 b=1 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=YbOwJgRf c=1 sm=1 tr=0 ts=6987ee98 b=1 cx=c_pps
  a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
  a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
  a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
- a=Hvy75GJ01QyooZ2wtikA:9 a=QEXdDO2ut3YA:10 cc=ntf awl=host:12103
-X-Proofpoint-GUID: w898CH4JHu-fkaZ0y2PPuhNBDEuwuuwG
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA4MDAxNSBTYWx0ZWRfX/B4Klk1Em78i
- ULTUZ7ozVCExBHGILcMGyrDUFTHN1wGew244VY2TkfNCQ8jzOiFuDPv3Y4jvfjU9idoolVi/qHa
- ljJr47v3tO023scSaEVeuQFVsgk/K38UmRzjvwxsicKW3/uXUbyDiapejSXx0zTu6FRC4lsqzvg
- 5ublVosyOanwz8D/5kpZvSIG2+WuqaqDWjqdRg4/yE6asZ5Wj64gFW1QJS1BgMYAL+GGhzRPZSG
- I6OCQaMLWPraWHcKu/4ntvENyQcmdfRI92fiDsGgezf0ikQawdpfd3dCVTRje+mVVoaZs2HeKHU
- F3o4wByUMt1e+keuY0R9wYHRmarFqN1mE+Q8HvLmOJWCHZac9UuyY0k2PJxVK3Xkq1cAZt9juwb
- htP6cLGIeIguqH+YH7ua4+cRqZmAFcbSMxs5oEffl8tHc3yS5Q5zhI4mgtx6VfhuzDAeqF5MNw5
- 8lg8oqJmzaSWZnLP4SU073WvXmHw8OcQQwhhIeoA=
-X-Proofpoint-ORIG-GUID: w898CH4JHu-fkaZ0y2PPuhNBDEuwuuwG
+ a=oJja_GqfWbNoQn7F-NsA:9 a=QEXdDO2ut3YA:10 cc=ntf awl=host:12103
+X-Proofpoint-ORIG-GUID: gkp4bpy5HEp7zU6fLQyTzOi1hHSXMLgG
+X-Proofpoint-GUID: gkp4bpy5HEp7zU6fLQyTzOi1hHSXMLgG
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA4MDAxNSBTYWx0ZWRfX994PBvR0ddI7
+ eyes3mOVbqlTanTnQZ1gXRCzxEFU0e2ZoJclJDUxy+vMmZ5yyHGHYOupEX5lpaW1HX4YNZ9nId3
+ OhWpL9NejK2m3yoQnLBMEIHl4+C7cRvsoN4zd0nuJXs3c+33CqBNl0dX2AimsMugx5HLSoJiTHo
+ o4D46cMmxXTuPBl2jMJpgRITKAXWQdZIy+5CVOAcQNtVHiCk/1rgVjd7XqtYgDO9bO4rEHgC/MP
+ XM48D1T1KUIBtTNffRg1sahq7tzunwJWeDytJvpPtrPfNy/W/AIRIywETJvxUc/L2Drs+CEzM5V
+ hOaK9RC20H1m2/pauUra516wnEDf5uaVZwiNWVwatxqLY0WhwvzFxWS3b4a27ZOB/5QwqB3KecW
+ FkmBAmEELD2FT2wG0yiQtNMmbzygXLI/AALjjh/1tegKCrIVl0uFgy9bhVZs3kss0rgUG54An1U
+ yNex0lKUGDdxTOnR1H1iJEkgYC4P/O1Upb9KzQxg=
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
 	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[oracle.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[oracle.com,gmail.com,HansenPartnership.com,vger.kernel.org,lists.infradead.org];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-20725-lists,linux-scsi=lfdr.de];
+	DKIM_TRACE(0.00)[oracle.com:+];
+	TAGGED_FROM(0.00)[bounces-20729-lists,linux-scsi=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:mid,oracle.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-0.999];
 	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: 7B585107977
+X-Rspamd-Queue-Id: 94D6B10799B
 X-Rspamd-Action: no action
 
-On Fri, 30 Jan 2026 16:02:07 +0800, Guixin Liu wrote:
+On Mon, 02 Feb 2026 11:45:26 +0900, Keita Morisaki wrote:
 
-> Speed up the boot process by using the asynchronous probing feature
-> supported by the kernel.
+> The ufs_mtk_clk_scale trace event currently stores the address of the
+> name string directly via __field(const char *, name). This pointer may
+> become invalid after the module is unloaded, causing page faults when
+> the trace buffer is subsequently accessed.
 > 
-> Set the PROBE_PREFER_ASYNCHRONOUS flag in the device_driver
-> structure so that the driver core probes in parallel.
-> 
+> This can occur because the MediaTek UFS driver can be configured as a
+> loadable module (tristate in Kconfig), meaning the name string passed
+> to the trace event may reside in module memory that becomes invalid
+> after module unload.
 > 
 > [...]
 
 Applied to 6.20/scsi-queue, thanks!
 
-[1/1] scsi: mpi3mr: Make driver probing asynchronously
-      https://git.kernel.org/mkp/scsi/c/21a16f0f0226
+[1/1] scsi: ufs: mediatek: Fix page faults in ufs_mtk_clk_scale trace event
+      https://git.kernel.org/mkp/scsi/c/9672ed3de7d7
 
 -- 
 Martin K. Petersen
