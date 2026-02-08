@@ -1,160 +1,159 @@
-Return-Path: <linux-scsi+bounces-20724-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20727-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oMPCLqZthmlaNAQAu9opvQ
-	(envelope-from <linux-scsi+bounces-20724-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Feb 2026 23:39:34 +0100
+	id KM6BBb/uh2mUfQQAu9opvQ
+	(envelope-from <linux-scsi+bounces-20727-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sun, 08 Feb 2026 03:02:39 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B3AB103EB3
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Feb 2026 23:39:34 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id B052610799C
+	for <lists+linux-scsi@lfdr.de>; Sun, 08 Feb 2026 03:02:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 41A23303CD0A
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Feb 2026 22:38:26 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DD85A3022552
+	for <lists+linux-scsi@lfdr.de>; Sun,  8 Feb 2026 02:02:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C06BC30C371;
-	Fri,  6 Feb 2026 22:38:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42B4D30C373;
+	Sun,  8 Feb 2026 02:02:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="liqzkMWI"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BJFgV/l4"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE8C3043D7;
-	Fri,  6 Feb 2026 22:38:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B772630BB8E;
+	Sun,  8 Feb 2026 02:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770417504; cv=none; b=eEmaRQHO2xHsRvgwMdTrYEK8nEwnsR5F4iMlRyKwriUddVHvy72Mht9h+zqrHr5HXRzydEQ4mZc5ipEordR04fC24MIs+ps8qHSLZcFdolMY5miMqwli/xWubjLlqzxghxby/InTF7qcgyZViL9QIMZdDZR9M2OndpnHM6Vt9vU=
+	t=1770516130; cv=none; b=MIH345o8OgExevz9wwnsLThFZuHJzdvcjczngkQO7iCRIykC+Ng8E9JrDtSPquAN+iDHZBXzyeoGSMdnu1pzQMrT6OQjEBN23FSom4xM/qGhayV6o0iNcp8zXNjDsToZFzRxWRqVxQ2VTwTO0nst2qKGeS069yq+zidB1acrgmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770417504; c=relaxed/simple;
-	bh=Bbw6VXoNApPGgxUT2nfFc0/wHQooiDOMNJ4U0eo4hJE=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=bRpvFatAPZnRCCoxYj+GLdwR701ccZ4R0/Cs3qAYlcgzpvlQzM+oCaym0iaGJY7X6fzuh9bjUoGZZNsl6sHIEklyDGHtsMSasQ4eCRHpUXB1DQ+1iKSAbCkHOCtCynjtFpKwvcBYFkIjnmbSsB62qejnPeHsTi8dY0dzmAv05Wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=liqzkMWI; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfout.phl.internal (Postfix) with ESMTP id ACE2FEC00B1;
-	Fri,  6 Feb 2026 17:38:22 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Fri, 06 Feb 2026 17:38:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1770417502; x=1770503902; bh=TOe6tBoZ94gvWUM5HNpF1Y5kR38DOrSzRwj
-	4lmrYzFE=; b=liqzkMWI2o6lmVZkic1bmZQBYB1Wm9kJTC2pdTtDXU8OhW6DvCp
-	y5lYzgpyixYHhrvcoVp7F2+u9G7MmMmIeAmOsG9uucStcMNVBcbqx3GkfwHDvjC2
-	jTl4jg+wnpPvRirEqnHrR9eeZ1qWP2ppJSoPR8dW7smPdGpmxJcuLAjNXaEeqHI4
-	W3sETnr7Nv4NmEu6FE1dTr+l+XX0lrVOoNoiTmWRWOTx6J6Pa8OcjE91SlAbBjmO
-	U9/eg5FRzIl0fLXeHH19XTbHdjSKKfYDpVfLDUpeOKXkY0tzXDUD2Xt65X7BjKep
-	n0qCEH4y8mNhJ1VTPi+ysOPPFkOqFxxSI5A==
-X-ME-Sender: <xms:Xm2GaZJtEaTWxoE5dQxXaeVlgM8lw6Lymae5BggK1gsWuC68pFAA-Q>
-    <xme:Xm2GaeEscSZ_n_ffVKVWF8y8OunTm6vuCsYf9D4Hdeoy6OFaM9boK4pNiRbyY2bRX
-    AWtYczPYIcew-EHRIw502zCE54QnFiGhAW8FuUv-dO6_SgO-yF88XI>
-X-ME-Received: <xmr:Xm2GadSJJ-Cd3BhLLl1oDQJpG8tnvlnAxAH9jbiUq_FoMHK5mp04P-bfvy_3>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddukeelfeelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcuvfhh
-    rghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtth
-    gvrhhnpeelueehleehkefgueevtdevteejkefhffekfeffffdtgfejveekgeefvdeuheeu
-    leenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfth
-    hhrghinheslhhinhhugidqmheikehkrdhorhhgpdhnsggprhgtphhtthhopeehpdhmohgu
-    vgepshhmthhpohhuthdprhgtphhtthhopegujhifohhngheskhgvrhhnvghlrdhorhhgpd
-    hrtghpthhtohepjhgrmhgvshdrsghothhtohhmlhgvhieshhgrnhhsvghnphgrrhhtnhgv
-    rhhshhhiphdrtghomhdprhgtphhtthhopehlihhnuhigqdhstghsihesvhhgvghrrdhkvg
-    hrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgslhhotghksehvghgvrhdrkhgv
-    rhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqfhhsuggvvhgvlhesvhhgvghrrd
-    hkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:Xm2Gaadoi9VU5l4Rt4ViIHjceh6k1fWZs92-LS1Z4ECSNDEdbdl_Cw>
-    <xmx:Xm2GacrzGMEsEnoKqMjqQAGQeq8QhiWMm0ph9wLX_3YxMfbSipLHoA>
-    <xmx:Xm2Gab-4zHCp0mcKkpK08x7KccbukYJNJfDTbkX8T_XDyfIcz6WLFA>
-    <xmx:Xm2GaYcSsE3piS4lvU9UptTvQrOk4X1jv3t0c5PQAAQprDsksXqI3g>
-    <xmx:Xm2GaU_lcluMy6f64WLj3G8hzLByEop2ylf5m0D7h0DlCS71Xlmzor_J>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 6 Feb 2026 17:38:20 -0500 (EST)
-Date: Sat, 7 Feb 2026 09:38:48 +1100 (AEDT)
-From: Finn Thain <fthain@linux-m68k.org>
-To: "Darrick J. Wong" <djwong@kernel.org>
-cc: James Bottomley <James.Bottomley@hansenpartnership.com>, 
-    "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>, 
-    "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>, 
-    linux-fsdevel@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] Documenting the correct pushback on AI inspired
- (and other) fixes in older drivers
-In-Reply-To: <20260206051847.GC7693@frogsfrogsfrogs>
-Message-ID: <2f1cd352-44d8-d014-240c-8b264c1ba95c@linux-m68k.org>
-References: <32e620691c0ecf76f469a21bffaba396f207ccb9.camel@HansenPartnership.com> <5938441c-aaa9-c405-a78a-a66f387a5370@linux-m68k.org> <20260206051847.GC7693@frogsfrogsfrogs>
+	s=arc-20240116; t=1770516130; c=relaxed/simple;
+	bh=mQhp9S8xvyS1ptk26aX4IOWrR5hWIQ5P/n+WaFpS3hk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aFtTKwVAnAj4043ZhwGTumzV0jAdDqvjYdCFEor07PoNl0NLuWnhaiqKhRkkk9fNYEGZIPYkQ7gbILeKK7uqKoGeAogpDoxyzwRU16/T6X0xsaFWOBGOQQE8oND1fyA8brs7gAR99CUvnakl5a+DF/1fJCQCsIFh4TbJnJmSWhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=BJFgV/l4; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6181k3YT2334074;
+	Sun, 8 Feb 2026 02:01:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=8SZ0XWmGVVZ4NvN0huBGWfu3wRmrPlrKiGTm8cokbmw=; b=
+	BJFgV/l493ez6tC+Gq05zTMvuzy2HG45eAjd3tHN+HbwtnpXj1+ETpmHGdtel4af
+	PTDCZsxP5UsmKACOVs0RjhiMkWGfSzNo0eLX/CQdAO9X6sbEru1VC9PJ9daq1eJ2
+	v75XGet7ja1ruvaHgXVUx+f1Lxe4Gi0lBoBYSBFdvPkLg77SYSMKN2SEXSXV7p0V
+	/ulvsI6h98JlbbkMUfq4H21iJ3S1Ec4xhx4HXqNQtxY9DLjle4IrsVuB2GWILgU5
+	ohk+lVC1r0ak7PQXKD705+6Fed3U1jEnioHsvYJ0QD0xgGTm2EOJ8nFCpzXfkdUM
+	60ZPPR2WwgF7AgO476U7sQ==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4c5xh8rhm8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 08 Feb 2026 02:01:56 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 617JLExh006492;
+	Sun, 8 Feb 2026 02:01:54 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4c5uubuk44-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 08 Feb 2026 02:01:54 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61821sxK016745;
+	Sun, 8 Feb 2026 02:01:54 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4c5uubuk3y-1;
+	Sun, 08 Feb 2026 02:01:54 +0000
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+To: Khalid Aziz <khalid@gonehiking.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>, Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, Bart Van Assche <bvanassche@acm.org>,
+        Alexey Gladkov <legion@kernel.org>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] SCSI: buslogic: reduce stack usage
+Date: Sat,  7 Feb 2026 21:01:42 -0500
+Message-ID: <177051564508.3805738.636294649190494202.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.51.2
+In-Reply-To: <20260203163321.2598593-1-arnd@kernel.org>
+References: <20260203163321.2598593-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-08_01,2026-02-05_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
+ bulkscore=0 mlxlogscore=953 suspectscore=0 mlxscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2601150000
+ definitions=main-2602080015
+X-Authority-Analysis: v=2.4 cv=YbOwJgRf c=1 sm=1 tr=0 ts=6987ee94 b=1 cx=c_pps
+ a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
+ a=6lXOnaECx-6xDiqIlNEA:9 a=QEXdDO2ut3YA:10 cc=ntf awl=host:12103
+X-Proofpoint-ORIG-GUID: FeXZkRzLSuHwgZloNpLRvmCL0wqCCKyx
+X-Proofpoint-GUID: FeXZkRzLSuHwgZloNpLRvmCL0wqCCKyx
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA4MDAxNSBTYWx0ZWRfXyyOaJc2RAQgg
+ Zgn1FNDA2hKAzXJ2zM7g1+STFTSIFGNts0kjmNqVIvXk677wotWJsvfCyqrBovenF70DhX9eGG5
+ xZ98TgpfRa1YeS4lXfpEsdjsfn5wOvp4eNQmjDwgphfmUBSYpcgXsWHjcbm9TnBg1hvuQMnbWTC
+ Ha2lCSrOksTvxTGvhFBy/f8fhTCitykY7va9katw5nBK988zF3cbv8a1+GHBAAFfaTQK3OvKcdE
+ vv4IXqNLg2eTo/XOTTBg0i+m3BUdnN9ZaxpE1w0GXji/N/0y0n0Y9rFFAJ/jcI+RB91D/veDNx3
+ 2R1gdqzmrUG8UZp01M/xZS8I2n++pVZPJBCGgUi0lFdHyv6yNJusVRUaqno15b9Ib0AgR5Fcl+S
+ sIfbIiLtG8VuSuSDodRNo9MAHMSvcB6pYewvniiDkWkR8GpxSJz4NJqqJau8h+wuRcAK1ygRv9E
+ aWxYtg16PAGLsbvcpLmKQ9SkxYxEv75vN27dcxpk=
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[messagingengine.com:s=fm3];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-20724-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	DKIM_TRACE(0.00)[messagingengine.com:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[oracle.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[fthain@linux-m68k.org,linux-scsi@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.996];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-20727-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:mid,oracle.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
 	TAGGED_RCPT(0.00)[linux-scsi];
+	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux-m68k.org:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,messagingengine.com:dkim]
-X-Rspamd-Queue-Id: 4B3AB103EB3
+	NEURAL_HAM(-0.00)[-0.999];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_COUNT_SEVEN(0.00)[9]
+X-Rspamd-Queue-Id: B052610799C
 X-Rspamd-Action: no action
 
+On Tue, 03 Feb 2026 17:33:15 +0100, Arnd Bergmann wrote:
 
-On Thu, 5 Feb 2026, Darrick J. Wong wrote:
-
-> On Fri, Feb 06, 2026 at 09:57:45AM +1100, Finn Thain wrote:
-> > 
-> > On Thu, 5 Feb 2026, James Bottomley wrote:
-> > 
-> > > To set the stage, we in SCSI have seen an uptick in patches to older 
-> > > drivers mostly fixing missing free (data leak) and data race 
-> > > problems. I'm not even sure they're all AI found, but we don't 
-> > > really need to know that.
-> > 
-> > If I may predict the next scene, by extrapolating only a little, we 
-> > are approaching the point where it will be feasible to request that an 
-> > AI simply generate a new driver, based on chip datasheets plus all of 
-> > the open source drivers available for training, rather than patch the 
-> > bugs in an existing driver.
-> > 
-> > At that point, what use is a maintainer? I think we can still add 
-> > value if
+> Some randconfig builds run into excessive stack usage with gcc-14 or
+> higher, which use __attribute__((cold)) where earlier versions did
+> not do that:
 > 
-> Being a magic sources of datasheets obtained through murky means, 
-> obviously.  What /was/ grandpa doing when he came home with a bunch of 
-> weird machinery at 3am in 1957??  :P
+> drivers/scsi/BusLogic.c: In function 'blogic_init':
+> drivers/scsi/BusLogic.c:2398:1: error: the frame size of 1680 bytes is larger than 1536 bytes [-Werror=frame-larger-than=]
 > 
+> [...]
 
-I'm told he was building a steam-powered flying saucer. I don't know 
-whether he was more interested in the question, how did we get here or to 
-where might we go.
+Applied to 6.20/scsi-queue, thanks!
+
+[1/1] SCSI: buslogic: reduce stack usage
+      https://git.kernel.org/mkp/scsi/c/e17f0d4cc006
+
+-- 
+Martin K. Petersen
 
