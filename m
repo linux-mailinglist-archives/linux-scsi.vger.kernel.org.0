@@ -1,146 +1,165 @@
-Return-Path: <linux-scsi+bounces-20763-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20758-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WI6PIIjZimnrOAAAu9opvQ
-	(envelope-from <linux-scsi+bounces-20763-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Feb 2026 08:08:56 +0100
+	id aDWlEszWimnrOAAAu9opvQ
+	(envelope-from <linux-scsi+bounces-20758-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Feb 2026 07:57:16 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D079117AD3
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Feb 2026 08:08:56 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id E58671178D4
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Feb 2026 07:57:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3594530209CD
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Feb 2026 07:08:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9CB1E3039F52
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Feb 2026 06:57:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B48D33066A;
-	Tue, 10 Feb 2026 07:08:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1407932ED37;
+	Tue, 10 Feb 2026 06:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="lciTENTK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D3UICiD0"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B3B32FA1E
-	for <linux-scsi@vger.kernel.org>; Tue, 10 Feb 2026 07:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3AA2EA151;
+	Tue, 10 Feb 2026 06:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770707327; cv=none; b=UEFdZyNqLdry8Bb5ctq14FXevB7X02ymJ/lucOhbToCJCSB+53Y/4sQtlW2pwhLUoFXC19LqYFTM84HCQx/cE+wvdfOY0DLweWtgLkNKJyvI+qXlAbwHgW/2stRRACTRsN8YIhMM8nVSA1JD3euKi6FttrwzFEFVSThqzBm69jw=
+	t=1770706618; cv=none; b=kQ/5IlSmPLhqwqnvgFuZ6AflnBRk7G0CffXd0yQhuZZkgCnN9m6dNHvVQN6hLVJX3nGdFMc9AAWZ6ZjYsxGhvU2nLJzyFq8QhqqbmoR904+j7gPbwAVGdHhiOn6HwOqY7AjV0xNsXr+rH73rGLFLpObznY15KFfe31GCw9S/VyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770707327; c=relaxed/simple;
-	bh=tci7v2/wQTTIxNhWNESlUdGSCNVzxUUpG/hqElOpV+A=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hV8TsVVu9tSCOyV7dYqybeo1FpMQ60n+SlzwL96ALU+DyElmT00zH7f+iy8RCf+8V0a972iYZ8Eswoswmz4/tR3SRB/kbzlJ6VUBpWvUUFVSstZ8g1D7Z9+cpc1Lk599IymLXayU91FJOo4fDmaCt6KpXLBbp55VHXJ2q9Y+iR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=lciTENTK; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 53fc2f74064f11f1b7fc4fdb8733b2bc-20260210
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=zBbgwfdwqkk84YzciCaVx0h7HtDk3xYdkMUNRbsDpew=;
-	b=lciTENTKsQsRAxa+1fOxDiJr1Q28SIQkWBJu85A42Q2IWyIVwVuyP2KkcNTwFdhnJbMJLCuejvID3u64h0zMtAa6JTMFIU/YkoHTyaLwGcThLyApHm8jR5FwRRcO1ZxC5o9DvOTL6mNNPTR1Ie2bX/PAto8hzrO+R38gQdQ+7dI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.11,REQID:ae86ffe9-f60f-41ae-8ff4-51f94690903e,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:89c9d04,CLOUDID:b85e215b-a957-4259-bcca-d3af718d7034,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|123|836|888|898,TC:-5,Cont
-	ent:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:-1,COL:0
-	,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 53fc2f74064f11f1b7fc4fdb8733b2bc-20260210
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-	(envelope-from <peter.wang@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1201784323; Tue, 10 Feb 2026 15:08:40 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Tue, 10 Feb 2026 15:08:40 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.2562.29 via Frontend Transport; Tue, 10 Feb 2026 15:08:40 +0800
-From: <peter.wang@mediatek.com>
-To: <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-	<avri.altman@sandisk.com>, <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
-CC: <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
-	<peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-	<alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
-	<chaotian.jing@mediatek.com>, <tun-yu.yu@mediatek.com>,
-	<eddie.huang@mediatek.com>, <naomi.chu@mediatek.com>, <ed.tsai@mediatek.com>,
-	<bvanassche@acm.org>
-Subject: [PATCH v2 2/2] ufs: core: add debug log for mcq command timeout
-Date: Tue, 10 Feb 2026 14:41:44 +0800
-Message-ID: <20260210070837.1820710-3-peter.wang@mediatek.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20260210070837.1820710-1-peter.wang@mediatek.com>
-References: <20260210070837.1820710-1-peter.wang@mediatek.com>
+	s=arc-20240116; t=1770706618; c=relaxed/simple;
+	bh=14eJu/e65Krl0O98yiBCxz41S1FxvvsUyw5DkWoDIB8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uUZcPQpDPb6r8f7/+Pb2htrRiYsHLLr47DT7fb3n1UBuX/CvUgq5dqiMgiFQBtmEBuF4oRXGpYndbx5wgMkXhsPw+bPdz705w4tFUkBWwvdlvv6z+f3/4UEbV/xNqdFbmIMbPxyL8ROA8x4CIxHrd8ADTsH/ByZZJD4WL5GXb5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D3UICiD0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5ED95C19421;
+	Tue, 10 Feb 2026 06:56:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770706618;
+	bh=14eJu/e65Krl0O98yiBCxz41S1FxvvsUyw5DkWoDIB8=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=D3UICiD0BGyRJ5b8KqMi13pRqwt+2ffVcb/neP3YqVmfhRBITdz06vpS/6DsGzqjM
+	 rqcMhHDfkT2iDm/ZQoRqV8/fSUnxcZNyi0H4O2ocd1oWjMIA69j/EATGUy7gaAEIaj
+	 CzEDS1+uBEgJBXaeBG778YzAYqDO4FGJwa/9jPzKOVLuG8HFI+5IwyJ72SDD6DMRs8
+	 nLJQSDVXwjI+UUKQdyHSNxKCzCkoLHjDbPXwJZtR1AxUPa7vSHSG49R9xJ002f2jGd
+	 dyerFQR/vFQSZQJrxmNIE6hPBGsQ4h8d29s0z3ADIYZyg1L7JXPmnBd+4jPmFKPIKy
+	 oOFkkE8kUQl4Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45086EA3F11;
+	Tue, 10 Feb 2026 06:56:58 +0000 (UTC)
+From: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>
+Subject: [PATCH v2 0/4] soc: qcom: ice: Remove platform_driver support and
+ expose as a pure library
+Date: Tue, 10 Feb 2026 12:26:49 +0530
+Message-Id: <20260210-qcom-ice-fix-v2-0-9c1ab5d6502c@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALHWimkC/x2MQQqAIBAAvxJ7bsHW6tBXooPpVntISyEC8e9Jx
+ xmYyZA4CieYmgyRH0kSfAVqG7CH8TujuMpAikZFncLbhhPFMm7yoiOjjeqHVZODmlyRq/5381L
+ KBwYdpUJeAAAA
+X-Change-ID: 20260210-qcom-ice-fix-d2a3a045b32d
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, Abel Vesa <abel.vesa@linaro.org>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, 
+ Manivannan Sadhasivam <mani@kernel.org>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ Sumit Garg <sumit.garg@oss.qualcomm.com>, mani@kernel.org, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
+ stable@vger.kernel.org, Abel Vesa <abel.vesa@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1328;
+ i=manivannan.sadhasivam@oss.qualcomm.com; h=from:subject:message-id;
+ bh=14eJu/e65Krl0O98yiBCxz41S1FxvvsUyw5DkWoDIB8=;
+ b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBpitaz5wD+GT+GNV8a016Lvwg57YK23bFzxBP4T
+ liFCTBMpFiJATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaYrWswAKCRBVnxHm/pHO
+ 9crvB/44ZaWUxDpDQJq9WmevFXzgclsf03FlbKbk890kwx9abXvj9q2xOGnKtNy9W2zK+MKIPPN
+ skq61LCzs7pwGsfrnRWI2TmJCVFnEVqppxWy8YDoFpRMCbUdNBPq12xxP5I3WSoCBOAh/ygugw7
+ KUy+CKxs/EqzCqWrVkltMw5+tYDZQoyghuSHZ29LvRNYmiZRdVwENkmtuK4K7WhL7iTc/uEs+/r
+ DUJUp5uzcnJ06ioX1J0W5hzr5quhoyXmd/vlpz4I2gutArY9InQyvxkqY2sKMQo7L2fpLuhXkOe
+ J6wmCiokkV8CBUJpVsk/dRe7SaNffe42WDTQlgjarZSZ6l3b
+X-Developer-Key: i=manivannan.sadhasivam@oss.qualcomm.com; a=openpgp;
+ fpr=C668AEC3C3188E4C611465E7488550E901166008
+X-Endpoint-Received: by B4 Relay for
+ manivannan.sadhasivam@oss.qualcomm.com/default with auth_id=461
+X-Original-From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+Reply-To: manivannan.sadhasivam@oss.qualcomm.com
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[mediatek.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[mediatek.com:s=dk];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-20763-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-20758-lists,linux-scsi=lfdr.de,manivannan.sadhasivam.oss.qualcomm.com];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[mediatek.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FROM_NO_DN(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.wang@mediatek.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	TO_DN_NONE(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[17];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mediatek.com:mid,mediatek.com:dkim,mediatek.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 2D079117AD3
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	HAS_REPLYTO(0.00)[manivannan.sadhasivam@oss.qualcomm.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,oss.qualcomm.com:mid,oss.qualcomm.com:replyto,qualcomm.com:email]
+X-Rspamd-Queue-Id: E58671178D4
 X-Rspamd-Action: no action
 
-From: Peter Wang <peter.wang@mediatek.com>
+Hi,
 
-It is difficult to debug situations where a mcq command timeout
-occurs, the corresponding CQ tag response is received, but the
-request is not completed.
-Add a one-line log to indicate when the CQ entry is abnormal.
+This series removes the platform_driver support from Qcom ICE driver and
+exposes it as a pure library to the clients to avoid race conditions with ICE
+SCM call availability.
 
-Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+Merge Strategy
+==============
+
+ICE patches (1,2) through Qcom tree and MMC/UFS patches (3,4) through respective
+subsystem trees as there is no dependency.
+
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 ---
- drivers/ufs/core/ufs-mcq.c | 2 ++
- 1 file changed, 2 insertions(+)
+Changes in v2:
 
-diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-index 9ab91b4c05b0..ad0ada57959a 100644
---- a/drivers/ufs/core/ufs-mcq.c
-+++ b/drivers/ufs/core/ufs-mcq.c
-@@ -301,6 +301,8 @@ static void ufshcd_mcq_process_cqe(struct ufs_hba *hba,
- 		ufshcd_compl_one_cqe(hba, tag, cqe);
- 		/* After processed the cqe, mark it empty (invalid) entry */
- 		cqe->command_desc_base_addr = 0;
-+	} else {
-+		dev_err(hba->dev, "Abnormal CQ entry!\n");
- 	}
- }
- 
+* Added MODULE_* macros back
+* Removed spurious platform_device_put()
+* Added patches to remove NULL return
+
+---
+Manivannan Sadhasivam (4):
+      soc: qcom: ice: Remove platform_driver support and expose as a pure library
+      soc: qcom: ice: Return proper error codes from devm_of_qcom_ice_get() instead of NULL
+      mmc: sdhci-msm: Remove NULL check from devm_of_qcom_ice_get()
+      scsi: ufs: ufs-qcom: Remove NULL check from devm_of_qcom_ice_get()
+
+ drivers/mmc/host/sdhci-msm.c |  10 ++--
+ drivers/soc/qcom/ice.c       | 127 ++++++++++++++++---------------------------
+ drivers/ufs/host/ufs-qcom.c  |  10 ++--
+ 3 files changed, 58 insertions(+), 89 deletions(-)
+---
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+change-id: 20260210-qcom-ice-fix-d2a3a045b32d
+
+Best regards,
 -- 
-2.45.2
+Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+
 
 
