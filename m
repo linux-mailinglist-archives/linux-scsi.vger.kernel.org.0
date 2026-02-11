@@ -1,167 +1,197 @@
-Return-Path: <linux-scsi+bounces-20788-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20795-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WL09Gybhi2kVcgAAu9opvQ
-	(envelope-from <linux-scsi+bounces-20788-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Feb 2026 02:53:42 +0100
+	id 8AcXKGFejGmWlwAAu9opvQ
+	(envelope-from <linux-scsi+bounces-20795-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Feb 2026 11:48:01 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D40F51208FB
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Feb 2026 02:53:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23DF8123965
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Feb 2026 11:48:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EBE583097DB7
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Feb 2026 01:51:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F0A1430A705E
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Feb 2026 10:43:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AFE02C237F;
-	Wed, 11 Feb 2026 01:51:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27DA2369982;
+	Wed, 11 Feb 2026 10:43:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O6YMjUZj"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="EeF4nGas"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 666982C11CD
-	for <linux-scsi@vger.kernel.org>; Wed, 11 Feb 2026 01:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1D8331A5C
+	for <linux-scsi@vger.kernel.org>; Wed, 11 Feb 2026 10:43:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770774707; cv=none; b=G9DaMngvk1Ut4rUguD6ryu5gMgYcMEoC7gHoaI8jS12VQGggcQUYVyt2sH8OSYJ8oL9vUCRNh9Bc/2WKpKFCBKvxAPkYlIXVCHKotoshPnIPhEP8Yf8i7TVBrGEPRq6WCy4t0ENVYTgzmPyYtzkTzLuhsNQAH7XdfhC7Lfw4Tvg=
+	t=1770806586; cv=none; b=QojhjGoJSHGBfjKHfWsvl240vpAUFnkWIJVAbUj3xXGsGEu0ioyt6p45NaS7D3ExK+Y2FD3oFCSbTflHYwv2sCMWP04KlJTkhvodvB/zTEcS2Lfjxv2w1jt1Es0k8nwr2yU7pRffmNPqVgX88qYckuVsiLu7KsGmvOvuK1jPbjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770774707; c=relaxed/simple;
-	bh=20+9y7YQsMaYpLIF1xi4kLOE4zsZSv0FqYAUVC9dCIo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EAmFcGo2zCslI01JJwaztxRFRb7A5OgJKn0Xe+8Oe/z17TDWT6MYCjj8rWTN6FQXsa324PGxqEVif5MnVVBrxcUX4ctmJ0pi1xbOGPlQFeHy0Rgl/se/spGnzsOa15hMpysTn4vojRJiVCMn+mKDr33C6J6SlTw2aDRi5aACZ/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O6YMjUZj; arc=none smtp.client-ip=74.125.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-64aefa98fe6so1650326d50.1
-        for <linux-scsi@vger.kernel.org>; Tue, 10 Feb 2026 17:51:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770774704; x=1771379504; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EwRohyCczQP5APpYBp0ujf2bOM2ndalqngFoPQX4NTc=;
-        b=O6YMjUZjBulL2QD9hcq1wZ2RPyQrCTjIhHQoumE9VwTDjbKisEwP2U6hhqevnavVRW
-         qR3M+ZtwLMH6KoWxyWI3hdvCYViW8pzQ62qEkpEuxTDJ4tDczcb2YwiBOEvQm1BiG8pl
-         0jpQlJEXeYfOO336ewW0TXJGzv/ejZMYAxKhqsR3/ireIdyUDE0Ae7Mm4untvjwN57Wv
-         vt9+arXyGWSt35zAaERDcckLhN6OSij3QwNoi/kDoCJuJ+XoCunyjCCIuNekobz11S5N
-         g2uZYcGmtWrac/S77fB4tKKwC32v/Sv2ooowEKVP3jEdgqbAW3mLep+jyokVRFGZA8zG
-         lfSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770774704; x=1771379504;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EwRohyCczQP5APpYBp0ujf2bOM2ndalqngFoPQX4NTc=;
-        b=w0Tm9s30PNEe9Kjm4bYaCdtPVDwquynvSPk+83gyeNxDHNbogOkmr8AV8YhRJtsRHg
-         fe7e0l4Gm8foyjFY0KkZeDUNOUQsKkJ1kkwu3q9MyZAbTsvaRMcUGlbQIhCc2sSbV7C7
-         fjhfENq4yIPDfzCVeRKNs3hggmdeKefGtpKN1KvhNmhcT7Nc5C9lx1+caIkRM7jz4qN+
-         BxuSMqW6GCiZqxIJbcH2frOUgNTwrW+mm/F9gYF5D8mzysjyBuUlAI5Z0kFOCzX9nRy1
-         ZEo5nxFy3DOBBYPH0ZL5tox9oAhRE1PPdiiM/VDilUVSjt0/70WWa9WHEdGBbDjTNj9c
-         ljHw==
-X-Forwarded-Encrypted: i=1; AJvYcCXB/bkFMQomrSpdsLoRrA5cn7hiYVk1vO/ZC3pQ60KbysMfYJA7iZFAabP7uOHkAYL9cCLBdaln8h/M@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5h+99ZX03K/3TZTe0PR5NLMD/ZbTC449R9mO/0fyU0Og+QWso
-	L8W6gX0IydlYuvUESoTg5CoptjbfF6b+RlkalOVq0JFXwhCEftbHcR0X
-X-Gm-Gg: AZuq6aLx8ejnBMn4x24U9YhU2ZFBWzW52iCxh/OG7UGouHoDwS7M2YwnftBAvz41J8e
-	4PXM3mYtDiEexWe0eMowXZMZyrIvVZujoW9r1zzGZO5dJHVG+Hg8fg26rytgJDfNpYyxI+aaX/x
-	Tc3Z7chM8yhiiU8SSn4q4+pOp/WAnEYOd+H/71soKrK3kgLIWeTt0o5i01wH9If2kjVnneGG46h
-	9uHJ2rGHA9h2ejw8Ce0tO5lU6u2AKwz+lPhkLFvYv12DIMpllZhdmML7/zYZOaZh1b8cGDvXuxD
-	ZW8Ejs0Pyz/KqJus0//YgXzaHe4MVTwp4BUR3yJWp0QMZM91qY6u+SFqc6g3lZUewscb5bnwTUx
-	L76Wes2xUjhg91u79y8klCQoYmQ7l7uRowbxbxdYMb0ew+uujZl3kv/nTfmocEQH0kNn7fkJr+F
-	z9a2TfeojuP1wnaRH/fSE65U5/nXlL2UhhMjBWzTGTtr1Smac=
-X-Received: by 2002:a05:690c:46c7:b0:796:4ab9:f29b with SMTP id 00721157ae682-7964ab9f356mr151505747b3.39.1770774704462;
-        Tue, 10 Feb 2026 17:51:44 -0800 (PST)
-Received: from 5163NRD-SPRABHU.ssi.samsung.com ([50.205.20.42])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7966c16e7c6sm3751557b3.1.2026.02.10.17.51.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 17:51:44 -0800 (PST)
-From: sw.prabhu6@gmail.com
-To: James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com,
-	linux-scsi@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	mcgrof@kernel.org,
-	pankaj.raghav@linux.dev,
-	bvanassche@acm.org,
-	dlemoal@kernel.org,
-	Swarna Prabhu <s.prabhu@samsung.com>
-Subject: [PATCH 2/2] scsi: scsi_debug: enable sdebug_sector_size > PAGE_SIZE
-Date: Tue, 10 Feb 2026 17:50:43 -0800
-Message-Id: <20260211015043.2608866-3-sw.prabhu6@gmail.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20260211015043.2608866-1-sw.prabhu6@gmail.com>
-References: <20260211015043.2608866-1-sw.prabhu6@gmail.com>
+	s=arc-20240116; t=1770806586; c=relaxed/simple;
+	bh=oiXlhEhSc3ODva3u3zw7qVJD6DIHZKiA1TeIN5Pbl3g=;
+	h=Mime-Version:Subject:From:To:Message-ID:Date:Content-Type:
+	 References; b=hsMlh9oG5MLcCTZwfL4HucZGr6D8Rcn+M2ML7tJak+zTmIJEKdHB1zQILa5ENrecTqkXFjCHhnkY+7TFjrCr8lOjIxmaoBECpB95EjmdcwK3I7on8p0SEGH9WyQBVJ30fqC0ES+sIpkaXsyNHeVzugeCiQ/8t5CKDOTMunXLGUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=EeF4nGas; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20260211104302epoutp040436297673fb45cb5d1a67e3c30b36fd~TKzRoV7LE3010530105epoutp04V
+	for <linux-scsi@vger.kernel.org>; Wed, 11 Feb 2026 10:43:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20260211104302epoutp040436297673fb45cb5d1a67e3c30b36fd~TKzRoV7LE3010530105epoutp04V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1770806582;
+	bh=P+9bSnNZidIRKl52K0MBBcXgyVJ+kSFTX+XtpHnd3Yg=;
+	h=Subject:Reply-To:From:To:Date:References:From;
+	b=EeF4nGasbJeruH95F1ZNbXzmz4Lz3e0c0aFLq/Lg3hJbLM6UF2gUvOOvjxnUr98oy
+	 247qeqUD74V8BbLij2UWpiMFfrxrpOb1ilMHPSPHvGvkIJjiXOOTPuot58I6AcZVAt
+	 7lG4yiScAsatilYMnXacgxV9wy/F7F3CoP1BB7cM=
+Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
+	epcas2p3.samsung.com (KnoxPortal) with ESMTPS id
+	20260211104302epcas2p3a848ce2458cf0c333708e558c74b3147~TKzRH2tmS3086330863epcas2p3i;
+	Wed, 11 Feb 2026 10:43:02 +0000 (GMT)
+Received: from epcpadp2new (unknown [182.195.40.142]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4f9w4j72zCz2SSKb; Wed, 11 Feb
+	2026 10:43:01 +0000 (GMT)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Subject: [PATCH] scsi: ufs: core: Reset urgent_bkops_lvl to allow runtime PM
+ power mode
+Reply-To: wone.jung@samsung.com
+Sender: Won Jung <wone.jung@samsung.com>
+From: Won Jung <wone.jung@samsung.com>
+To: ALIM AKHTAR <alim.akhtar@samsung.com>, "avri.altman@wdc.com"
+	<avri.altman@wdc.com>, "bvanassche@acm.org" <bvanassche@acm.org>,
+	"James.Bottomley@HansenPartnership.com"
+	<James.Bottomley@HansenPartnership.com>, "martin.petersen@oracle.com"
+	<martin.petersen@oracle.com>, "peter.wang@mediatek.com"
+	<peter.wang@mediatek.com>, "beanhuo@micron.com" <beanhuo@micron.com>,
+	"adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+	"quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
+	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Jinyoung Choi
+	<j-young.choi@samsung.com>, Jeuk Kim <jeuk20.kim@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1891546521.01770806581968.JavaMail.epsvc@epcpadp2new>
+Date: Wed, 11 Feb 2026 15:01:05 +0900
+X-CMS-MailID: 20260211060105epcms2p6631646c964afae761c5d8b93db5a476d
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20260211060105epcms2p6631646c964afae761c5d8b93db5a476d
+References: <CGME20260211060105epcms2p6631646c964afae761c5d8b93db5a476d@epcms2p6>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
+	MV_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-20788-lists,linux-scsi=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[swprabhu6@gmail.com,linux-scsi@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FROM_NO_DN(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-20795-lists,linux-scsi=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	HAS_X_PRIO_THREE(0.00)[3];
+	MIME_TRACE(0.00)[0:+];
+	REPLYTO_DOM_EQ_TO_DOM(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[wone.jung@samsung.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[samsung.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,samsung.com:email]
-X-Rspamd-Queue-Id: D40F51208FB
+	PRECEDENCE_BULK(0.00)[];
+	HAS_REPLYTO(0.00)[wone.jung@samsung.com];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[samsung.com:replyto,samsung.com:dkim,samsung.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 23DF8123965
 X-Rspamd-Action: no action
 
-From: Swarna Prabhu <s.prabhu@samsung.com>
+This patch ensures that UFS Runtime PM can achieve power saving
+after System PM suspend by resetting hba->urgent_bkops_lvl.
+It also modifies ufshcd_bkops_exception_event_handler to avoid
+setting urgent_bkops_lvl when status is 0, which helps maintain
+optimal power management.
 
-Now that block layer can support block size > PAGE_SIZE
-and the issue with WRITE_SAME(16) and WRITE_SAME(10) are
-fixed for sector sizes > PAGE_SIZE, enable sdebug_sector_size
-> PAGE_SIZE in scsi_debug.
+On UFS devices supporting UFSHCD_CAP_AUTO_BKOPS_SUSPEND,
+a BKOPS exception event can lead to a situation
+where UFS Runtime PM can't enter low-power mode states even
+after the BKOPS exception has been resolved.
 
-Signed-off-by: Swarna Prabhu <s.prabhu@samsung.com>
+BKOPS exception with bkops status 0 occurs, the driver logs:
+"ufshcd_bkops_exception_event_handler:
+device raised urgent BKOPS exception for bkops status 0"
+
+When a BKOPS exception occurs, `ufshcd_bkops_exception_event_handler()`
+reads the BKOPS status and sets `hba->urgent_bkops_lvl` to
+BKOPS_STATUS_NO_OP(0). This allows the device to perform Runtime PM
+without changing the UFS power mode.
+(`__ufshcd_wl_suspend(hba, UFS_RUNTIME_PM)`)
+
+During system PM suspend, `ufshcd_disable_auto_bkops()` is called,
+disabling auto bkops. After UFS System PM Resume,
+when runtime PM attempts to suspend again,
+`ufshcd_urgent_bkops()` is invoked. Since `hba->urgent_bkops_lvl`
+remains at BKOPS_STATUS_NO_OP(0), `ufshcd_enable_auto_bkops()`
+is triggered.
+
+However, in `ufshcd_bkops_ctrl()`,
+the driver compares the current BKOPS status with
+`hba->urgent_bkops_lvl`, and only enables auto bkops
+if `curr_status >= hba->urgent_bkops_lvl`.
+Since both values are 0, the condition is met
+
+As a result, `__ufshcd_wl_suspend(hba, UFS_RUNTIME_PM)` skips power mode
+transitions and remains in an active state, preventing power saving even
+though no urgent BKOPS condition exists.
+
+Signed-off-by: wone.jung <wone.jung@samsung.com>
 ---
- drivers/scsi/scsi_debug.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/ufs/core/ufshcd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index c5085e6d2e75..91f42b7e68aa 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -8508,13 +8508,7 @@ static int __init scsi_debug_init(void)
- 	} else if (sdebug_ndelay > 0)
- 		sdebug_jdelay = JDELAY_OVERRIDDEN;
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 604043a7533d..e2d3e834ccba 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -5959,6 +5959,7 @@ static int ufshcd_disable_auto_bkops(struct ufs_hba *hba)
  
--	switch (sdebug_sector_size) {
--	case  512:
--	case 1024:
--	case 2048:
--	case 4096:
--		break;
--	default:
-+	if (blk_validate_block_size(sdebug_sector_size)) {
- 		pr_err("invalid sector_size %d\n", sdebug_sector_size);
- 		return -EINVAL;
- 	}
+ 	hba->auto_bkops_enabled = false;
+ 	trace_ufshcd_auto_bkops_state(hba, "Disabled");
++	hba->urgent_bkops_lvl = BKOPS_STATUS_PERF_IMPACT;
+ 	hba->is_urgent_bkops_lvl_checked = false;
+ out:
+ 	return err;
+@@ -6062,7 +6063,7 @@ static void ufshcd_bkops_exception_event_handler(struct ufs_hba *hba)
+ 	 * impacted or critical. Handle these device by determining their urgent
+ 	 * bkops status at runtime.
+ 	 */
+-	if (curr_status < BKOPS_STATUS_PERF_IMPACT) {
++	if ((curr_status > BKOPS_STATUS_NO_OP) && (curr_status < BKOPS_STATUS_PERF_IMPACT)) {
+ 		dev_err(hba->dev, "%s: device raised urgent BKOPS exception for bkops status %d\n",
+ 				__func__, curr_status);
+ 		/* update the current status as the urgent bkops level */
 -- 
-2.39.5
-
+2.17.1
 
