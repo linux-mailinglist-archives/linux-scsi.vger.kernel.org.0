@@ -1,282 +1,212 @@
-Return-Path: <linux-scsi+bounces-20871-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20907-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iCTzGT+3kmlDwwEAu9opvQ
-	(envelope-from <linux-scsi+bounces-20871-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Feb 2026 07:20:47 +0100
+	id iLoaOedHk2mi3AEAu9opvQ
+	(envelope-from <linux-scsi+bounces-20907-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Feb 2026 17:37:59 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C45401411BA
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Feb 2026 07:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CEE814641E
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Feb 2026 17:37:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1CE4F301111C
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Feb 2026 06:20:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CD79A3041787
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Feb 2026 16:32:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 605842DF134;
-	Mon, 16 Feb 2026 06:20:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9CB9329E53;
+	Mon, 16 Feb 2026 16:32:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ALAEpDBW"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="jJq/b2C/";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="me4ILhSV";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="jJq/b2C/";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="me4ILhSV"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256AC1BD035
-	for <linux-scsi@vger.kernel.org>; Mon, 16 Feb 2026 06:20:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568052DB7BA
+	for <linux-scsi@vger.kernel.org>; Mon, 16 Feb 2026 16:32:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771222829; cv=none; b=rgSXzSUdZcHuJfVUf7+SJIRXllBweYcht6lziFQWw2HB3NMawgf7FDdYbyXHuQymenoYQWHqWPvzIj9I/lCh21Fuwti5aj9cioF5XF0HX/AoGjfOQ/HOb3rqtXBhcjMN8kzp1i804glvVrxpLttYdKx/N+mSrCjhHdfhs3qaxLE=
+	t=1771259547; cv=none; b=n5mPk9ZDSWUVzqsF+L6tTYpCp1CIF6NJ3G/VkYX455V7UoMsIvyfsC5f798hu/dLktxCjWa4pZYMYZDosHC2NauzVokpeWrKwcoM5hDCO95qSM5HWi2Uu3rBp/f9iF32ZBdu2bFLUSTke2jtQkLegCtJcMCvLcdkYwT15+E4FOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771222829; c=relaxed/simple;
-	bh=lweh5wTqdn5NyXCEB1iITaZxpjD9zsXuEt4pDx+EBK4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DLQyXdc0/KrmYc8+74/i+5PVBtUYB6EFasHmN9+QppeyyCOgBc05yA0UdDO6P+Xty25punySKk5CTctIZnWmLWcmNNaopahS7QkTOp24NhZY8/Zb55wJwUA2isCaZL92Mkd3vCol2cgPr9QYzNQmSp4kfKKlgYbNOEAg3IG/jFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ALAEpDBW; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-824af5e5c81so2694240b3a.0
-        for <linux-scsi@vger.kernel.org>; Sun, 15 Feb 2026 22:20:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771222826; x=1771827626; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gq3u6/pH6XaIhkLYyxC209miQpGjF2eS8OFp0J3cin8=;
-        b=ALAEpDBWJxUjzuwSWKAnp/tMqGNmMxFuwNAjeuQXGFVfxHaXlhJ+ZT8cxJX/qPwao/
-         hYz0pxajX5pN/xjXORvEfNN8AMMFd1LiRivuBTmv693BuH7gqJwWHgcVVtwgqwvgxQn0
-         x2h9k0gSCiHgWYDMOXBhrU9pbVgRj8k42Z3X325TwHdOLJQg+/9BMlq0X69+nC8M/NNb
-         gy63Ha8sdQnw+PL5ePrmGT6RaMGKuQbCtxmQxVgy6y0HaHfmJ2rOagsVynAN6t27zh7F
-         TMXqpTMeTHwOqXee/2AhBRUwg9lVJEzsXhkWbY3XvE2l2OLfNOxJW9IRe5Phn+xYd33u
-         MwzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771222826; x=1771827626;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gq3u6/pH6XaIhkLYyxC209miQpGjF2eS8OFp0J3cin8=;
-        b=O/pQ7ypF6UaNOfCyg1ntPWTjTYlMdxBT6I5x0qUG5NETtmmvQYY3toqhDcPvP6MJEX
-         YhvLG+Xq90Gypbd98PGT5VHrDf5DRyEMypUFwqhrLJz/v4Vh7VwA0vNCcG/zL//+fz13
-         pa9HEAX76/szOXhDzGZB2l6PqnboIMc5QJaBj11/SoHPPv+OU3Q/sDlSyqZ6YBZb/kfM
-         jFtX70GSqSKURA6EZKdvTfT0uRd5GGvWeAeyj7iII3bOY932F7K1i5OWAHVp43yvHujy
-         n15QZObV/PHrZAHzd8npqz0VcNTw/BZgMpXsBXaItncSTG4blZh8VZ5I4rCA6qORbX69
-         VxLg==
-X-Gm-Message-State: AOJu0YzHKzvzJdRjD6jZolpkOCNvpFDcqmKNvs7w6daqdzrAED//uyxQ
-	nIZyKJ8dA1zZ/KNBc1bN64HHFeMNdhr3eXpyKmjeJXfxKOmXXP6aWbdd
-X-Gm-Gg: AZuq6aI9T1SnuL+FRU8sZC7iSVoE/YaHDW4fGeihuF1NMkudFry8WzNdeC4/WO3D4rU
-	2E2ouWU7BRlO+P1aAwxlXZrpLq/J54QYLdAO9ynanVkXH7zWDh3EkOkud4aW8WwtBKCPSilEUA7
-	BCCzteUW4frqot0gxB0JpZtpjbrpFp+bA4KZ0yEBPHvTnJkbMvEhll7RhHewxRv4tyS2QU+3j/m
-	3wRIrPEV2VWkXR2ogsR+Tn2lHaD/ARr8m9EYNQ9Fr6/26s0iWLZNr4y9j1nBxN6XHM3QfmSMvFd
-	ZzAtmmrvAsPLx5KDRrJdfWZVhXKPPXKYiV8R2Vpq/jJ1fKOakZs0Ox+xiNHH7dq9hctqVYcVQYw
-	1YTjnudCrytktPC6xAdRCetZQZLll6qlIxgK+ZXzRaiPE3Ty/AMVJt+y5pIf3kIvz1slhWOYgml
-	dFxv6fnEScIkkIR4lvZPIDSNrdWxSxBZo+OpBqhA==
-X-Received: by 2002:a05:6a00:7543:b0:81e:12f1:d83 with SMTP id d2e1a72fcca58-824c6102ba1mr7161063b3a.42.1771222826432;
-        Sun, 15 Feb 2026 22:20:26 -0800 (PST)
-Received: from localhost.localdomain ([114.79.136.20])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6a626bfsm8992768b3a.28.2026.02.15.22.20.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Feb 2026 22:20:26 -0800 (PST)
-From: Prithvi Tambewagh <activprithvi@gmail.com>
-To: martin.petersen@oracle.com,
-	d.bogdanov@yadro.com,
-	bvanassche@acm.org,
-	viro@zeniv.linux.org.uk
-Cc: linux-scsi@vger.kernel.org,
-	target-devel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev,
-	skhan@linuxfoundation.org,
-	david.hunter.linux@gmail.com,
-	khalid@kernel.org,
-	Prithvi Tambewagh <activprithvi@gmail.com>,
-	syzbot+f6e8174215573a84b797@syzkaller.appspotmail.com,
-	stable@vger.kernel.org
-Subject: [PATCH v4] scsi: target: fix recursive locking in __configfs_open_file()
-Date: Mon, 16 Feb 2026 11:50:02 +0530
-Message-Id: <20260216062002.61937-1-activprithvi@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1771259547; c=relaxed/simple;
+	bh=AvRD2J9IHtyHe0iyt1Pa0Aq7UxnwZUwQ4OhSsM5wRFU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=BsDiq5MF2DLuIq+feHUH7v4H8xu1mweTQEE8A6xYIGNvJytsuTsBK29ylaY+rF5dq7yGQrM+E8IgdU7MPKYPlQf/B4hQXeYsqSDiDhfmmECvbdHypMxv4W7VOWAXLxWdHlKXDdU0pVkG1j2niH65J3GN4Nw8ZZjdl2+BXdrvLUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=jJq/b2C/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=me4ILhSV; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=jJq/b2C/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=me4ILhSV; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id AC08B3E6D3;
+	Mon, 16 Feb 2026 16:32:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1771259544; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5qZ+gncTo83Pa/tlAU8PPmKc8PzepOWLFBYa3C1pQmQ=;
+	b=jJq/b2C/I2XPMvN3uIRDVQcRWqp9Dn73JK65HPxnaFT6II6+9LYOXgu1c/18fbsEemVvPM
+	BPfeNDjesZ2D+O+J3m+75Ywl6bQbHCLHG8BGeVYfPbqk5ohm8o3qa8VMx+s7M//zlfA5jC
+	sNwwXk/U0o3zpG5WqrvATVYTtWg/8io=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1771259544;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5qZ+gncTo83Pa/tlAU8PPmKc8PzepOWLFBYa3C1pQmQ=;
+	b=me4ILhSVIq1ZwTrHb2MFHngFrsbUsHKMXpVZAQ//BnKttEgrUxekf4/YKxyCbbCLZdW40B
+	/Dv7cOMFGrPjD0DA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="jJq/b2C/";
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=me4ILhSV
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1771259544; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5qZ+gncTo83Pa/tlAU8PPmKc8PzepOWLFBYa3C1pQmQ=;
+	b=jJq/b2C/I2XPMvN3uIRDVQcRWqp9Dn73JK65HPxnaFT6II6+9LYOXgu1c/18fbsEemVvPM
+	BPfeNDjesZ2D+O+J3m+75Ywl6bQbHCLHG8BGeVYfPbqk5ohm8o3qa8VMx+s7M//zlfA5jC
+	sNwwXk/U0o3zpG5WqrvATVYTtWg/8io=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1771259544;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5qZ+gncTo83Pa/tlAU8PPmKc8PzepOWLFBYa3C1pQmQ=;
+	b=me4ILhSVIq1ZwTrHb2MFHngFrsbUsHKMXpVZAQ//BnKttEgrUxekf4/YKxyCbbCLZdW40B
+	/Dv7cOMFGrPjD0DA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 667BA3EA62;
+	Mon, 16 Feb 2026 16:32:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id zaAdFphGk2lEKwAAD6G6ig
+	(envelope-from <hare@suse.de>); Mon, 16 Feb 2026 16:32:24 +0000
+Message-ID: <784d3f14-99a0-4661-afde-b412d44572ab@suse.de>
+Date: Mon, 16 Feb 2026 08:26:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [LSF/MM/BPF TOPIC] Native SCSI multipath support
+To: John Garry <john.g.garry@oracle.com>, lsf-pc@lists.linux-foundation.org,
+ linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+ linux-scsi@vger.kernel.org
+References: <69349b51-72c2-47f9-948f-f89843af62e4@oracle.com>
+ <b598c5c9-6732-4661-85b2-7ab10a0830d4@suse.de>
+ <dbf5fbdd-8894-40b7-b574-0c6385995ec2@oracle.com>
+Content-Language: en-US
+From: Hannes Reinecke <hare@suse.de>
+X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0;
+ attachmentreminder=0; deliveryformat=0
+X-Identity-Key: id3
+Fcc: imap://hare%40Thunderbird_lenient@imap.suse.de/INBOX/Sent
+In-Reply-To: <dbf5fbdd-8894-40b7-b574-0c6385995ec2@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spam-Score: -4.51
+X-Spam-Level: 
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=e854293d7f44b5a5];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-20871-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,linuxfoundation.org,gmail.com,kernel.org,syzkaller.appspotmail.com];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[activprithvi@gmail.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-20907-lists,linux-scsi=lfdr.de];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi,f6e8174215573a84b797];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hare@suse.de,linux-scsi@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,syzkaller.appspot.com:url,appspotmail.com:email]
-X-Rspamd-Queue-Id: C45401411BA
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:dkim,suse.de:email,lst.de:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6CEE814641E
 X-Rspamd-Action: no action
 
-In flush_write_buffer, &p->frag_sem is acquired and then the loaded store
-function is called, which, here, is target_core_item_dbroot_store().
-This function called filp_open(), following which these functions were
-called (in reverse order), according to the call trace:
+On 2/14/26 10:42, John Garry wrote:
+> On 13/02/2026 17:21, Hannes Reinecke wrote:
+>>> At ALPSS 25 I presented a proposal for Native SCSI multipath support. 
+>>> Let's discuss this topic at LSFMM.
+>>>
+>>> The idea for this is that SCSI could natively support multipath, like 
+>>> how NVMe host driver does today. It is intended as an alternative to 
+>>> dm- multipath support.
+>>>
+>>> I have been working on the implementation and I plan to post patches 
+>>> in the next cycle. I am looking at a 3-stage approach:
+>>> a. create a driver-agnostic multipath library, very heavily based on 
+>>> NVMe host multipath support.
+>>> The library would support features such as path management, path 
+>>> selection/iopolicy, failover recovery, PR, delayed removal, gendisk 
+>>> management etc.
+>>> b. switch NVMe over to use this library
+>>> c. add native SCSI multipath support based on this common library
+>>>
+>> Go for it, John!
+>>
+>> I'd be very interested in that.
+> 
+> cheers, in the meantime, I have some comments:
+> 
+> - I need to test PRs for both NVMe and SCSI, any advice on that would be 
+> good. I don't think that blktests covers it. I did see Christoph mention 
+> a testsuite at: https://lore.kernel.org/linux-nvme/1438672271-11309-1- 
+> git-send-email-hch@lst.de/ - I can check that.
+> 
+Well, you might have seen the discussion on the device-mapper list, 
+where stefanha is implementing generic PRs for dm-multipathing.
+Or rather, trying to. We might need to revisit that and see what we
+could be doing on the SCSI side.
+Maybe we should be having a session about PRs at LSF?
 
-down_read
-__configfs_open_file
-do_dentry_open
-vfs_open
-do_open
-path_openat
-do_filp_open
-file_open_name
-filp_open
-target_core_item_dbroot_store
-flush_write_buffer
-configfs_write_iter
+> - I am still not sure on whether we require a multipath version of sg. 
+> We can still have per-path sg. NVMe does have a multipath nvme-generic 
+> dev, but that just handles IOCTLs/uring cmd, and nothing like sg read/ 
+> write fops
+> 
+'sg' is primarily for testing 'raw' SCSI commands. (And dastardly 
+complex to boot). I really would keep it in it's current form, and not
+try to mimick something with SCSI multipathing.
 
-target_core_item_dbroot_store() tries to validate the new file path by
-trying to open the file path provided to it; however, in this case,
-the bug report shows:
+> - I have not tried to detangle ALUA support from SCSI DH, so no ALUA 
+> support yet
+> 
+Ouch. But that is the key point of the implementation; ALUA provides
+_all_ the information required for multipathing, so how can you _not_
+have support for it?
 
-db_root: not a directory: /sys/kernel/config/target/dbroot
+Cheers,
 
-indicating that the same configfs file was tried to be opened, on which
-it is currently working on. Thus, it is trying to acquire frag_sem
-semaphore of the same file of which it already holds the semaphore obtained
-in flush_write_buffer(), leading to acquiring the semaphore in a nested
-manner and a possibility of recursive locking.
-
-Fix this by modifying target_core_item_dbroot_store() to use kern_path()
-instead of filp_open() to avoid opening the file using filesystem-specific
-function __configfs_open_file(), and further modifying it to make this
-fix compatible.
-
-Reported-by: syzbot+f6e8174215573a84b797@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=f6e8174215573a84b797
-Tested-by: syzbot+f6e8174215573a84b797@syzkaller.appspotmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Prithvi Tambewagh <activprithvi@gmail.com>
-Reviewed-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
----
-Changes since v3:
- - Add LOOKUP_DIRECTORY flag in call to kern_path() so as to check presence 
-   of directory checks more efficiently
-
-v3 link: https://lore.kernel.org/all/20260205162624.117957-1-activprithvi@gmail.com/T/#m175d152067817dd6e9dc1821b6fbf626e47a4007
-
-
-Note:
-I checked out and found that when I try to test on commit 3a8660878839faadb4f1a6dd72c3179c1df56787
-(latest commit on which bug dashboard reports the bug on, in upstream repository) 
-syzbot uses, in its kernel config:
-
-CONFIG_CC_VERSION_TEXT="gcc (Debian 12.2.0-14+deb12u1) 12.2.0"
-
-Ref: https://syzkaller.appspot.com/x/.config?x=e854293d7f44b5a5
-Syzbot Reply: https://lore.kernel.org/all/6767d8ea.050a0220.226966.0021.GAE@google.com/T/#m62bc76de5549460ae98e843bb120712548489794
-
-While when #syz test (i.e. on HEAD commit of upstream) is used, it uses, in
-its kernel config:
-
-CONFIG_CC_VERSION_TEXT="gcc (Debian 14.2.0-19) 14.2.0"
-
-Ref: https://syzkaller.appspot.com/x/.config?x=99ac58566e9eb044
-Syzbot reply: https://lore.kernel.org/all/6767d8ea.050a0220.226966.0021.GAE@google.com/T/#me8b79610e4c18a8d8a7d8d6bc249d1c7cf2f8819
-
-However in both cases it uses:
-
-gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
-
-Probably due to mismatch in compiler version which syzbot actually uses and 
-whats present in kernel config, the build fails for the first case. However, 
-the patch succeeds in fixing the bug in second case.
-
-Earlier for v1 patch (sine v2 patch involved minor change to commit message 
-and v3 involved adding a missed out Reviewed-by tag) patch the kernel builds 
-as well as testing succeeded since syzbot used this in its kernel config:
-
-CONFIG_CC_VERSION_TEXT="gcc (Debian 12.2.0-14+deb12u1) 12.2.0"
-
-as well as used the compiler:
-
-gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40 
-
-Changes since v2:
- - Add Reviewed-by tag received from Dmitry Bogdanov, which was accidentally
-   left to be added in v2 patch.
-
-v2 link: https://lore.kernel.org/linux-scsi/20260122154051.64132-1-activprithvi@gmail.com/T/#u
-Reference for Reviewed-by Tag: https://lore.kernel.org/all/20260108191523.303114-1-activprithvi@gmail.com/T/#mb22d0fc06e747e2b2df8320a15afd2a0670fd0e7
-
-
-Changes since v1:
- - Update commit message to reflect the fact that same file, which code was 
-   currently operating on, was tried to be opened again, leading to 
-   acquiring the same semaphore in nested manner & possibility of recursive
-   locking.
-
-v1 link: https://lore.kernel.org/all/20260108191523.303114-1-activprithvi@gmail.com/T/
-
- drivers/target/target_core_configfs.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
-index b19acd662726..f94c242eff97 100644
---- a/drivers/target/target_core_configfs.c
-+++ b/drivers/target/target_core_configfs.c
-@@ -108,8 +108,8 @@ static ssize_t target_core_item_dbroot_store(struct config_item *item,
- 					const char *page, size_t count)
- {
- 	ssize_t read_bytes;
--	struct file *fp;
- 	ssize_t r = -EINVAL;
-+	struct path path = {};
- 
- 	mutex_lock(&target_devices_lock);
- 	if (target_devices) {
-@@ -131,17 +131,14 @@ static ssize_t target_core_item_dbroot_store(struct config_item *item,
- 		db_root_stage[read_bytes - 1] = '\0';
- 
- 	/* validate new db root before accepting it */
--	fp = filp_open(db_root_stage, O_RDONLY, 0);
--	if (IS_ERR(fp)) {
-+	r = kern_path(db_root_stage, LOOKUP_FOLLOW | LOOKUP_DIRECTORY, &path);
-+	if (r) {
- 		pr_err("db_root: cannot open: %s\n", db_root_stage);
-+		if (r == -ENOTDIR)
-+			pr_err("db_root: not a directory: %s\n", db_root_stage);
- 		goto unlock;
- 	}
--	if (!S_ISDIR(file_inode(fp)->i_mode)) {
--		filp_close(fp, NULL);
--		pr_err("db_root: not a directory: %s\n", db_root_stage);
--		goto unlock;
--	}
--	filp_close(fp, NULL);
-+	path_put(&path);
- 
- 	strscpy(db_root, db_root_stage);
- 	pr_debug("Target_Core_ConfigFS: db_root set to %s\n", db_root);
-
-base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+Hannes
 -- 
-2.34.1
-
+Dr. Hannes Reinecke                  Kernel Storage Architect
+hare@suse.de                                +49 911 74053 688
+SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
+HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
 
