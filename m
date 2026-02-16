@@ -1,127 +1,207 @@
-Return-Path: <linux-scsi+bounces-20904-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-20906-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iNM/Baspk2kI2AEAu9opvQ
-	(envelope-from <linux-scsi+bounces-20904-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Feb 2026 15:28:59 +0100
+	id oKRyFtpHk2mi3AEAu9opvQ
+	(envelope-from <linux-scsi+bounces-20906-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Feb 2026 17:37:46 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C05A144AAF
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Feb 2026 15:28:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE14414640F
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Feb 2026 17:37:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3C1E83057EB7
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Feb 2026 14:25:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6FF2A3042B7E
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Feb 2026 16:32:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E38153115B8;
-	Mon, 16 Feb 2026 14:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A425318EFB;
+	Mon, 16 Feb 2026 16:32:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="th7wjGTX"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="fViQDg7Q";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="vYB6yA03";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="fViQDg7Q";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="vYB6yA03"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3EBD1E32CF;
-	Mon, 16 Feb 2026 14:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB64F310644
+	for <linux-scsi@vger.kernel.org>; Mon, 16 Feb 2026 16:32:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771251918; cv=none; b=DVfNabD832NGY8ShzSLZQgKpPlz5MVGx1xczikiTawOpo92jEXg0lmjqcc3C5RjBfuNalRbSTVwcEEcr+MMG7USDik4Uy8kNuz6amTzAZ9L73Eo9g7uyrGQFjOmZAsQ8W2jbfWE0j/vCOGS7E/CxhILfBe0z0TasL3g+N0k0hAY=
+	t=1771259530; cv=none; b=bDlgOAQkOHPVcIEZOAkY/Mm1wG2N2GQN13fM7QmkIG3t3frgVcqNfraYRgGwBFNJSxyaZMmDUHgTejDhSFdAOen3YZ0cAIQbgaz5SiKV4+1/xol6uQASQK9c282DvyAU5Fv9FMnpkoA9bLC3NffzVOo3sJcilImpw29LaBajxfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771251918; c=relaxed/simple;
-	bh=kCGqJIaDX5f6yv6thjxkoZ3TawsKPgZ0E8IC+FDXC/s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p6qHhm+2pgLBalEl51YEpr4mIzjUOTW6MNAnNHnv06rJfXJ+UUATc4/1wLYnmP/NLX7PYUucuSkiJwQ+cpFZ3deunkq88rf+vptlUNeYNq/RwSQ0QYa0mHZG0Nh9mB9tZII994h2cDmpu3w/37N2rP9px/2/u4cUgmyIXO84auE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=th7wjGTX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCA21C116C6;
-	Mon, 16 Feb 2026 14:25:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771251918;
-	bh=kCGqJIaDX5f6yv6thjxkoZ3TawsKPgZ0E8IC+FDXC/s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=th7wjGTXhr5+033pNx2RNmqJOLEwrDpNHhH1xpvmxoIOtpbE5xKkvTy7mepwc3dF6
-	 S10itHpIrMEe1Z/gww83Hw5Mb4Yjb58gmZqfx03wRUX3efqs+FxtIEoy/ho4/kkFp4
-	 XWafKuyReQvzDqlRzl9fzeMo9gxUEblLS4V1u9dw2af6zU9LJHDYXrv5NB0UdBYye7
-	 B7rhgBV1BIuhG00cuZkCb6iJs2HYgfGgMD96ObgR/RbAHbagGHkREfdCyAtztNrRch
-	 KpZHhaq1KUGkRG0pEFSFKHtDiokVYiTXwW0AOwP8rtBnG0FN0tkBVhR4gnjfBIr74Z
-	 M5Ar+FD9JGQsQ==
-Date: Mon, 16 Feb 2026 15:25:13 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-block@vger.kernel.org, linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-nvme@lists.infradead.org, bpf@vger.kernel.org
-Cc: lsf-pc@lists.linux-foundation.org, linux-kernel@vger.kernel.org, 
-	lwn@lwn.net
-Subject: Re: LSF/MM/BPF: 2026: Call for Proposals
-Message-ID: <20260216-ruhelosigkeit-umlegen-548e2a107686@brauner>
-References: <20260110-lsfmm-2026-cfp-ae970765d60e@brauner>
- <20260119-bagger-desaster-e11c27458c49@brauner>
- <20260129-beidseitig-unwohl-9ae543e9f9f5@brauner>
+	s=arc-20240116; t=1771259530; c=relaxed/simple;
+	bh=AvRD2J9IHtyHe0iyt1Pa0Aq7UxnwZUwQ4OhSsM5wRFU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ntTVKvGmVCeWFaznttRmsqTMYg+SQgLjdxpJN85zYnCq2pdMZde9ymHRvSi1gW3Pl90rRmJv8XxUNdC43i5JtDGdjDclBfjFbFRtX9zvjNwaPrdt6RaQr7Ly2z8rKZGajAGkTQn1eDLLnvxMVwCjZcRjr44RH7oEI73ANeksNLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=fViQDg7Q; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=vYB6yA03; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=fViQDg7Q; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=vYB6yA03; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 15C5A5BEAF;
+	Mon, 16 Feb 2026 16:32:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1771259527; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5qZ+gncTo83Pa/tlAU8PPmKc8PzepOWLFBYa3C1pQmQ=;
+	b=fViQDg7Qdz9huI0oulDTwoA0x6hHSJFIoyRdmeiLDYIBaik91tSR7FXJ9EpGuv3onDYThw
+	br04eWdvnosi/gJ/6B0LujgPZXC45O6nwhiK0tsK8wRVvMNi2OFM9a7QNEPrz5R+Pm8+Sy
+	F3bJF5SwDcXSfy2nFjXtdBWeKtv8CIM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1771259527;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5qZ+gncTo83Pa/tlAU8PPmKc8PzepOWLFBYa3C1pQmQ=;
+	b=vYB6yA03PcbPIEDTwNCvsQH8ZZ8hFwkOhCBzN1sXpi8CQnnGCnVTMq8BHDY2/2ucwcGaSo
+	KE5ytuzaPc4gPeAw==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1771259527; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5qZ+gncTo83Pa/tlAU8PPmKc8PzepOWLFBYa3C1pQmQ=;
+	b=fViQDg7Qdz9huI0oulDTwoA0x6hHSJFIoyRdmeiLDYIBaik91tSR7FXJ9EpGuv3onDYThw
+	br04eWdvnosi/gJ/6B0LujgPZXC45O6nwhiK0tsK8wRVvMNi2OFM9a7QNEPrz5R+Pm8+Sy
+	F3bJF5SwDcXSfy2nFjXtdBWeKtv8CIM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1771259527;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5qZ+gncTo83Pa/tlAU8PPmKc8PzepOWLFBYa3C1pQmQ=;
+	b=vYB6yA03PcbPIEDTwNCvsQH8ZZ8hFwkOhCBzN1sXpi8CQnnGCnVTMq8BHDY2/2ucwcGaSo
+	KE5ytuzaPc4gPeAw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C83E93EA62;
+	Mon, 16 Feb 2026 16:32:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Km20IYZGk2kxKwAAD6G6ig
+	(envelope-from <hare@suse.de>); Mon, 16 Feb 2026 16:32:06 +0000
+Message-ID: <a5a0aa42-33e4-401f-ad94-8104cff9368c@suse.de>
+Date: Mon, 16 Feb 2026 17:32:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260129-beidseitig-unwohl-9ae543e9f9f5@brauner>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [LSF/MM/BPF TOPIC] Native SCSI multipath support
+To: John Garry <john.g.garry@oracle.com>, lsf-pc@lists.linux-foundation.org,
+ linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+ linux-scsi@vger.kernel.org
+References: <69349b51-72c2-47f9-948f-f89843af62e4@oracle.com>
+ <b598c5c9-6732-4661-85b2-7ab10a0830d4@suse.de>
+ <dbf5fbdd-8894-40b7-b574-0c6385995ec2@oracle.com>
+Content-Language: en-US
+From: Hannes Reinecke <hare@suse.de>
+In-Reply-To: <dbf5fbdd-8894-40b7-b574-0c6385995ec2@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -4.30
+X-Spam-Level: 
+X-Spam-Flag: NO
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_FROM(0.00)[bounces-20906-lists,linux-scsi=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-20904-lists,linux-scsi=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_NONE(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brauner@kernel.org,linux-scsi@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hare@suse.de,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,forms.gle:url]
-X-Rspamd-Queue-Id: 6C05A144AAF
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lst.de:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.de:mid,suse.de:dkim,suse.de:email]
+X-Rspamd-Queue-Id: AE14414640F
 X-Rspamd-Action: no action
 
-On Thu, Jan 29, 2026 at 05:13:52PM +0100, Christian Brauner wrote:
-> On Mon, Jan 19, 2026 at 03:26:39PM +0100, Christian Brauner wrote:
-> > > (1) Fill out the following Google form to request attendance and
-> > >     suggest any topics for discussion:
-> > > 
-> > >           https://forms.gle/hUgiEksr8CA1migCA
-> > > 
-> > >     If advance notice is required for visa applications, please point
-> > >     that out in your proposal or request to attend, and submit the topic
-> > >     as soon as possible.
+On 2/14/26 10:42, John Garry wrote:
+> On 13/02/2026 17:21, Hannes Reinecke wrote:
+>>> At ALPSS 25 I presented a proposal for Native SCSI multipath support. 
+>>> Let's discuss this topic at LSFMM.
+>>>
+>>> The idea for this is that SCSI could natively support multipath, like 
+>>> how NVMe host driver does today. It is intended as an alternative to 
+>>> dm- multipath support.
+>>>
+>>> I have been working on the implementation and I plan to post patches 
+>>> in the next cycle. I am looking at a 3-stage approach:
+>>> a. create a driver-agnostic multipath library, very heavily based on 
+>>> NVMe host multipath support.
+>>> The library would support features such as path management, path 
+>>> selection/iopolicy, failover recovery, PR, delayed removal, gendisk 
+>>> management etc.
+>>> b. switch NVMe over to use this library
+>>> c. add native SCSI multipath support based on this common library
+>>>
+>> Go for it, John!
+>>
+>> I'd be very interested in that.
+> 
+> cheers, in the meantime, I have some comments:
+> 
+> - I need to test PRs for both NVMe and SCSI, any advice on that would be 
+> good. I don't think that blktests covers it. I did see Christoph mention 
+> a testsuite at: https://lore.kernel.org/linux-nvme/1438672271-11309-1- 
+> git-send-email-hch@lst.de/ - I can check that.
+> 
+Well, you might have seen the discussion on the device-mapper list, 
+where stefanha is implementing generic PRs for dm-multipathing.
+Or rather, trying to. We might need to revisit that and see what we
+could be doing on the SCSI side.
+Maybe we should be having a session about PRs at LSF?
 
-This is (likely) the final reminder to put in your invitation request!
-The invitation request form closes this Friday, 20th February.
+> - I am still not sure on whether we require a multipath version of sg. 
+> We can still have per-path sg. NVMe does have a multipath nvme-generic 
+> dev, but that just handles IOCTLs/uring cmd, and nothing like sg read/ 
+> write fops
+> 
+'sg' is primarily for testing 'raw' SCSI commands. (And dastardly 
+complex to boot). I really would keep it in it's current form, and not
+try to mimick something with SCSI multipathing.
 
-Fever has struck me down so all you get is a bad limerick:
+> - I have not tried to detangle ALUA support from SCSI DH, so no ALUA 
+> support yet
+> 
+Ouch. But that is the key point of the implementation; ALUA provides
+_all_ the information required for multipathing, so how can you _not_
+have support for it?
 
-There's a conference called LSFMM,
-Where maintainers debate and condemn,
-They argue till dawn
-What's merged or withdrawn,
-Then next year do it over again!
+Cheers,
 
-Don't forget to pester^wask^wremind your respective organizations to
-sponsor LSF/MM/BPF 2026! If it helps, you can tell them that we're
-considering renaming it LSF/MM/BPF/AI.
-
-Thanks!
-Christian
+Hannes
+-- 
+Dr. Hannes Reinecke                  Kernel Storage Architect
+hare@suse.de                                +49 911 74053 688
+SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
+HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
 
