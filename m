@@ -1,84 +1,82 @@
-Return-Path: <linux-scsi+bounces-21031-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21027-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eIhdAQDXnWk0SQQAu9opvQ
-	(envelope-from <linux-scsi+bounces-21031-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 Feb 2026 17:51:12 +0100
+	id 6ImUMFrYnWk0SQQAu9opvQ
+	(envelope-from <linux-scsi+bounces-21027-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 Feb 2026 17:56:58 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CEA918A128
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 Feb 2026 17:51:11 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D459318A297
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 Feb 2026 17:56:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C89F8307E674
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 Feb 2026 16:48:31 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3E69230490A0
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 Feb 2026 16:48:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FF0C3A9D9D;
-	Tue, 24 Feb 2026 16:48:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 732DF3A9015;
+	Tue, 24 Feb 2026 16:48:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="bpR66Fl8"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="rNlD2Sa2"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CB53A9D8E;
-	Tue, 24 Feb 2026 16:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F405326B756;
+	Tue, 24 Feb 2026 16:48:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771951691; cv=none; b=HvAVbbZcXZlLNW+6kahgWWbuHjfCTI7Yx8bykyyd1JeWIsLWQrD5WhBa6LKwClk2JY1AIOGqtIEEWtSmJSRK8uyVDdEvyprM/hOmsoHa4YZ2Kl1g1E6sZdwRHq7SfSjenTTY7veFEQ9ciUfmhfF2GAcqQROlBs4cs7BfYzLEHxQ=
+	t=1771951682; cv=none; b=Sh9Uax89pf6D4Nj6t/Y1n6QqogsyRW8haFrd1Z6dLsHKKJWojHIkH69T26eyDL+PMZ8Tx5wWYeotAPXHOoNvtHCCSwMrLDoNELTx6EBjaxnKHoZO0VwuuSXlb8uLGy869T+sxfsiVtEmQeO56I1IlyMsb9lnTjMNYUy+VoWkjHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771951691; c=relaxed/simple;
-	bh=Drcpfxi2W/uFtI1HUq88rybKzuTYyfxEXhCD/AqKnBI=;
+	s=arc-20240116; t=1771951682; c=relaxed/simple;
+	bh=YZqzSUw9Wsmmvx6DZhyaILgyldMKVArTOO15zAMamuo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PMS+vHbuTHGDMZwiK83yZd2O9pQbf0Kst3T2FCI+GW4YckHrKFCjhlpr7NqwaMJ0YkDv5DxOEvs/KP+iigrShPnmPo16Ip1zFMQVS+RZ7y+R4skDrjURY7Bn+2kDIZEN2W1cX4dzCMtGaHuYQxgcPZZGdpwVKqUZxdwrffNH2Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=bpR66Fl8; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=K1Y6WxoerWl0HGif0mcJv4dm14hhM/ZgEKWnv9LnsSbYVcwsn+gwTF6zVtLI/42KUovE0ca5m9+wQP1TKN9zsve6/WIRJB0gX82KYWd3v9r2ZZ9z/+DVe6u1Ht+mrfzonZNgcxFYWs43eH9hKtJddYIztGrgDepNJfQPnF0N1bA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=rNlD2Sa2; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61OEMrF6087200;
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61OENrlr4098666;
 	Tue, 24 Feb 2026 16:47:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=aerDdRzNTwzTKGdx6j+kihSNk+XITPeccx8fqrE5OKY=; b=
-	bpR66Fl8LuTy9EbOhnv08VkTnFN27KXHt1arjD68hgHGCD04b4czfb51xRmwlS/H
-	FT+MqTamEKjjDc4bnRxBuDn06Rqc1JQm+mgBgpVM5G8prx2KMDUVnPMTLzQeYsQX
-	LEo1oJIf6dA4LTb4GbosuEVnStJEVEx1/5R5anW3PL1aU0ImgHWQp1xlcSPYmJCq
-	W8SLWf4B3/2J3GkAk7Ho33ox7rfYTYhr7SlSJTOK6mIUGW+HJPMNW4jaIZyL0mOU
-	5nXJfJRhFLzra0V34wrTDy91Xka63OG08akha+LiK+tEwQ7qrdSAj6/Qlf1tQWhm
-	RH4F0PU9g2WTkYBu1xDf7Q==
+	corp-2025-04-25; bh=o+xcm4B0TSnuCRn1PCXPpkS2lcTD13W5V31ViWtmr/s=; b=
+	rNlD2Sa2RGosMqJ3CwMUaj+GErjAumj1ONt+v2KVu6OnU9tMYmI3ttJA9oH6/kAP
+	qar8zX76dL3C41A2iJn1Yg5TyB6+yPUyYAlEWChPvlMKKx13WO5vRHPy3j9MKaYo
+	WyxEQf43wa9VTbcySpxIfe0pUUCVsIxaC4aVJg1WtwvsCh2FXRvwnlPxwbptkJXE
+	5Z8uSyKRB/u6xUnFjeLmhQj9R0TFd8IW/SantU3Gmc6nB2lzutQAWlgKNzESRKB2
+	sUicBab5ssko4RlI9vgRUtuoaSucCaQXHbuOH4HhuBk+6hMQqn+sJUYxGKqVD0PW
+	WaWo+tjiQRt23ycBPp4PvQ==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cf3g3mn4y-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cf4k5vhh4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 24 Feb 2026 16:47:56 +0000 (GMT)
+	Tue, 24 Feb 2026 16:47:57 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61OFxGVb015689;
-	Tue, 24 Feb 2026 16:47:55 GMT
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61OGACm2015907;
+	Tue, 24 Feb 2026 16:47:56 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cf35a6kk9-1
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cf35a6km4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 24 Feb 2026 16:47:55 +0000
+	Tue, 24 Feb 2026 16:47:56 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61OGlt4d012936;
-	Tue, 24 Feb 2026 16:47:55 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61OGlt4f012936;
+	Tue, 24 Feb 2026 16:47:56 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4cf35a6kjb-1;
-	Tue, 24 Feb 2026 16:47:54 +0000
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4cf35a6kjb-2;
+	Tue, 24 Feb 2026 16:47:55 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Bean Huo <beanhuo@micron.com>, Can Guo <can.guo@oss.qualcomm.com>,
-        Alexey Charkov <alchark@flipper.net>
+To: Thomas Fourier <fourier.thomas@gmail.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v3] scsi: ufs: core: Fix RPMB region size detection for UFS 2.2
-Date: Tue, 24 Feb 2026 11:47:40 -0500
-Message-ID: <177195161175.1154639.14825050984153004588.b4-ty@oracle.com>
+        Karan Tilak Kumar <kartilak@cisco.com>,
+        Sesidhar Baddela <sebaddel@cisco.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: snic: Remove unused linkstatus
+Date: Tue, 24 Feb 2026 11:47:41 -0500
+Message-ID: <177195161255.1154639.15799618915676793518.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260209-ufs-rpmb-v3-1-b1804e71bd38@flipper.net>
-References: <20260209-ufs-rpmb-v3-1-b1804e71bd38@flipper.net>
+In-Reply-To: <20260216141056.59429-2-fourier.thomas@gmail.com>
+References: <20260216141056.59429-2-fourier.thomas@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -91,70 +89,68 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-02-24_02,2026-02-23_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 malwarescore=0
- spamscore=0 bulkscore=0 mlxlogscore=676 suspectscore=0 adultscore=0
+ spamscore=0 bulkscore=0 mlxlogscore=672 suspectscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
  definitions=main-2602240139
-X-Authority-Analysis: v=2.4 cv=Y6r1cxeN c=1 sm=1 tr=0 ts=699dd63c cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDEzOSBTYWx0ZWRfX8Ya5RnpJBJAU
+ mRTQ5AI5INxFcExKDNkKpzoJYZTqdAKacBZH6oKIe9rWnsogzgDoG9152wwmJPuNulMwFv7Zl5B
+ p5zwkDP57tSLduGu4GD7rnLBH1o9g3LEVdwHIxv4usBVd7nYDk3D2QNKY5TLFSMPvHQzTy0mG1o
+ 0aUmKO9X/p5G/cm+h5+qay71SObZKClwb5FZsXIdrEMg0isBayvsOU8ODnteRg468E8Q4EGX/6n
+ G2LvkuqQR3CxdEhWrqYMqH9r6U2QRuiAu1SpU7CEF0brqY1SJiZmXBydn+IsdRTppGdCf3sYpap
+ ydtAHG57FKtMxq8AcUuzclpxXYf7a6XCNP9IKkiMFICvRx8fbEGXNVdi4pwXt7/gvyfY4p0fS/7
+ OQHELxTC45hh1ep0rXylPTIEKAV6K1SX2W3P8m+uhfqThHkft498CXsRoeL6zDHQ067D6c2RCre
+ f6VhLHx6GQuu0y2vX4Q==
+X-Proofpoint-GUID: u8jHnFFBaHEtIjuiWKEHPTJWnqSHdChj
+X-Authority-Analysis: v=2.4 cv=b9C/I9Gx c=1 sm=1 tr=0 ts=699dd63d cx=c_pps
  a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
  a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
  a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
- a=WpOT6c3oHlBwd_VzIKoA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: OAI26Lfgsre45pj7kprhQoHFlNqMmHyy
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDE0MCBTYWx0ZWRfXw74xnOpNU3c+
- owGvCl1NxBZo5EYqbBmEKErYOAY7ycCOwVaQSgLVdso9taR3o3o4HtJGTtWaf3iCt0k73NJw4wi
- c1g5f8qAuYOP1SzsLK04TX/q3Nmrmw1eeEkEoFv1ObrRXwiGGARGVk6IR/NQfvcIcu1cN+9FEAA
- 52JALmdKIS8SBQw+FFkRpeqQsIcpAnr23vE64jNmVD/yhA49Zr1gza4nkRSo3m67jzfEAgyE4ld
- h5Hb1FB58Ua7bqRzADzweGl4+No0BptAjBZ+5MmBv4GXus9rH8mscJ4lkE6vaN3yzH6bRf4ETkU
- Fzo8+qLLmPkOLIS3B5YTWFUR4O4VVCNg71oelSb8OaL3DlqZiPRj0mmPbLbt0jcGy5rTvpNK7YM
- zvBVkK5l34bPhjtW6sIR0HXBuWMRDEfM4rqlVcZzPwoZvFfUYgI4cLigW0bm5tKIXtF38LCkww2
- MHFUmob0l+meb0hBhvA==
-X-Proofpoint-GUID: OAI26Lfgsre45pj7kprhQoHFlNqMmHyy
+ a=FypdnLkI3WuhgSNUjt8A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: u8jHnFFBaHEtIjuiWKEHPTJWnqSHdChj
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[oracle.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21031-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,oracle.com:mid,oracle.com:dkim];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-21027-lists,linux-scsi=lfdr.de];
+	DKIM_TRACE(0.00)[oracle.com:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,oracle.com:mid,oracle.com:dkim];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.999];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: 9CEA918A128
+X-Rspamd-Queue-Id: D459318A297
 X-Rspamd-Action: no action
 
-On Mon, 09 Feb 2026 19:17:34 +0400, Alexey Charkov wrote:
+On Mon, 16 Feb 2026 15:10:55 +0100, Thomas Fourier wrote:
 
-> Older UFS spec devices (2.2 and earlier) do not expose per-region RPMB
-> sizes, as only one RPMB region is supported. In such cases, the size of
-> the single RPMB region can be deduced from the Logical Block Count and
-> Logical Block Size fields in the RPMB Unit Descriptor.
+> The (struct vnic_dev).linkstatus buffer is freed in
+> svnic_dev_unregister() and referenced in svnic_dev_link_status() but
+> never alloc'd. This means (struct vnic_dev).linkstatus is always null
+> and the dealloc the reference in svnic_dev_link_status() is dead code.
 > 
-> Add a fallback mechanism to calculate the RPMB region size from these
-> fields if the device implements an older spec, so that the RPMB driver
-> can work with such devices - otherwise it silently skips the whole RPMB.
 > 
-> [...]
 
 Applied to 7.0/scsi-fixes, thanks!
 
-[1/1] scsi: ufs: core: Fix RPMB region size detection for UFS 2.2
-      https://git.kernel.org/mkp/scsi/c/2e6b5cd6a4b3
+[1/1] scsi: snic: Remove unused linkstatus
+      https://git.kernel.org/mkp/scsi/c/af3973e7b4fd
 
 -- 
 Martin K. Petersen
