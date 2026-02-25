@@ -1,98 +1,98 @@
-Return-Path: <linux-scsi+bounces-21076-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21077-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aDtWHxTLnmm0XQQAu9opvQ
-	(envelope-from <linux-scsi+bounces-21076-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Feb 2026 11:12:36 +0100
+	id kJMEBcTLnmm0XQQAu9opvQ
+	(envelope-from <linux-scsi+bounces-21077-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Feb 2026 11:15:32 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4CB2195905
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Feb 2026 11:12:35 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA1D91959B4
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Feb 2026 11:15:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 46EF23127886
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Feb 2026 10:08:14 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E19C1300E2A1
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Feb 2026 10:15:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8DE338F22D;
-	Wed, 25 Feb 2026 10:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BD5138F23B;
+	Wed, 25 Feb 2026 10:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b="EHUjEWbA"
+	dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b="UwmxbtOV"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0538335BBB
-	for <linux-scsi@vger.kernel.org>; Wed, 25 Feb 2026 10:08:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD4839281B
+	for <linux-scsi@vger.kernel.org>; Wed, 25 Feb 2026 10:15:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772014093; cv=pass; b=TVjc/+O44Vm2MpQ3IeUmbiF/qrDM31vuU/e1vwzy6QD5I+/Uwbc3VKMeNWr8EP1KyhtZQ0uxZOZObswyMQ2bEyY2oc7GV7RDt7p9VI09fyyg+4cyavVk8PEt+vmJUvYOtlg3qXKo2v5kdmPH5jI67ZI5iA48RpWKaMtx85MJaso=
+	t=1772014528; cv=pass; b=Hhyhqw3/OoHUPmTHJ3KyTGBYqQA4I5nw2FvdJ+uLLwIvo5r/VSDZ1CDADUfBGM5zNTtdiGHdD2pv6k4xVM3z4mQbNlNLC3imSmYxATQXAHdRlJn1BJFtkB2d7nZuce5mBCAE5wWvqz6nzAEgGCFTk3F1SYxmbxpPW/JqTBIozyI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772014093; c=relaxed/simple;
-	bh=P+nn7GxNNTTR4z83VRm4nDPbYz8l5IDhZ9xoBNCdUfk=;
+	s=arc-20240116; t=1772014528; c=relaxed/simple;
+	bh=cEhN1Iv+3+5AHAwjY+4bbx1KSfiXSQ19i96bxSRH5p0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mWWL+r636/GQ7zdUdpDy5ed7fClkIUpt7H3808kmorXEkrM54PfRAAX3W84G04LMGFmY+DIFKqcGCBdt1OiBXs591n4PcvnU15JJU35j0SlxQSs2EW60S0RqQ16F2wlFUaj+jMtIsHTkIC5M2UaC7FTJZNH2V0Iu+S1+SzL1TNU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ionos.com; spf=pass smtp.mailfrom=ionos.com; dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b=EHUjEWbA; arc=pass smtp.client-ip=209.85.208.182
+	 To:Cc:Content-Type; b=jV5EzN8ioqqP0InfIYUO8PGWJFeNsYTiHl8vjAAdVPLG8PgUuaGs2P5GjHQd+SLntOhjUr1Eo9u7l6tg6sHhfGwQLiVGH/2vntU2wccUG8S+hTcalRz0xJ4M24A7s8mFiwxBh8/jZZbOiq2yuTs5Oy8do1LpQpXtPP4fFszC4Gc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ionos.com; spf=pass smtp.mailfrom=ionos.com; dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b=UwmxbtOV; arc=pass smtp.client-ip=209.85.208.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ionos.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ionos.com
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-38707d4c8b9so75244211fa.2
-        for <linux-scsi@vger.kernel.org>; Wed, 25 Feb 2026 02:08:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772014090; cv=none;
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-38706b63929so56563891fa.3
+        for <linux-scsi@vger.kernel.org>; Wed, 25 Feb 2026 02:15:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772014522; cv=none;
         d=google.com; s=arc-20240605;
-        b=SkYtvihq53HXO49JQvDFcxxKJOffi+zFes5eR7AmFBom1XkwA4aoG8X0k+lGWnroLh
-         qG1PgNA9C1f44tJGocBBwuENWBaofIq61DFQyHpDy7cvDKw/XAd7uigPgVGy+Cj2IGBm
-         WPhdRcZ89AICLGU7+Ze48HLOh/IUJFk7jzzgwwpM6WNYqpIh2i3yuySVEKmwwvjssGHo
-         Zny8/60Ms3zs1ilGKLTDF3sLu619KT+lQnzPTbN6z+yauoEi1qQ6z5+sIDtTt0Pu12Hy
-         /JxqXeo8JJKreLJqYDr4HplbADcVA7GWEyzBvPbBB+7ulyP8MHsY0yukW2BkKtK2oOan
-         MYCg==
+        b=KOF9VCdN5z8ich+Aewy4ft6KuNFaKKKUj+PS+T0rZlCSlj3YUQOLxtbLOAsVn80n//
+         kdU5YbNTU9YkMANWtsF6lF+7TtFwG/cE6WcRyBdbhtqHCst0gZRJHghtvoclLnt3ytY0
+         MOh68rQsxpGOfAurmvbDUfpqfNF7/TKkSIU13B9Reb0hNLAThySERrpPLqln3X5yiuro
+         /zN7QHGmcWnrYxX5eV7uaKMkNzEW9WvRwf/Uj9bNb1Ff1SZkcXuWNHcRJkhxLrLosb4x
+         gegOne8HyYWrmyO7yPHH/TdzqlqjAkD52UxZsuW/2uFIojmx4cpfp3t2ngBNTbJ8z68K
+         en7A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=P+nn7GxNNTTR4z83VRm4nDPbYz8l5IDhZ9xoBNCdUfk=;
-        fh=9Ab1KV54WsEAzp8jv+SfsdMPDqZwWhyEuEPbQ/uWm5Q=;
-        b=Vy24/2/1nOk4jUATIWHI5lLLEndEghLsDud2jn0lOoNpze9HrUmoQpzm48zvr7RF1K
-         rj4P/Qc8BhJi4gMVRvHi8s1eqlu6GLMNmH+5neL16eMnIZOH8lqi6bGFFG5LxYnD99la
-         f0Fqa1EG4Z329h8HnV6OzFTDXuIoF02oP8JOPqCRxvxjm7sK2o87/xIpgSAhc8YiVnGB
-         ACLBFC3vJbVaJYuWPMdPZn82urybPJyd3sZIMwxIgQB7uEOUbB01CFDcbSWtgCvSp41Z
-         IW0wYAUE8qDDku+p0u/GGepB29bmrUdXW3bpJTNs7Jt0aZRb0dLHUTYj6fceDDC51upn
-         2ClQ==;
+        bh=2wbI3HVGAdmJBOB+Q2PfG58Jqhmlw+640Tj7L991s1k=;
+        fh=cu3q4RKoNWXG+nFGS9UbTce9OqJSBw4FMVSlGqJMlME=;
+        b=KTRdBX35BU58h0H48fANP26Tmv61xJi+G+TkQ0sbmGWr3LHeNNP4kxGqJUKTaOy2N9
+         VSoT3bfaOUHm9Bp341QobWvoJXNmfihjeyb0RFgbfztiqcXS9Y6frxuYPPu/qqqzc2BX
+         gX4YRhG4xFbARI8P97fcyXoY+2ZJqwSJEPDfaPlNHKqNcE/AVp0bK19qMG7kQ3psp33/
+         /1qYP+wwZ7zQcjggjWuY4eTE//ZF4hh66b2ZzkvQMK/1l0qWS48NxdnXsBwbryy2xxDN
+         HF6TJHM64fMCSlbW2igJDmU0YJd7Zp7vT8B+pcTVqxM2Z+64/660MPQ0uHVmFEvy8GAF
+         EWmw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1772014090; x=1772618890; darn=vger.kernel.org;
+        d=ionos.com; s=google; t=1772014522; x=1772619322; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P+nn7GxNNTTR4z83VRm4nDPbYz8l5IDhZ9xoBNCdUfk=;
-        b=EHUjEWbAmES8Sf83245PgtIM8NbuFiFAiI2agIi42ooPvjuPeMZUkyJ6AL1iZlIuM9
-         RxbLTm1ut57NfxMO9zTSXN9FCCWRkA2iprpqJrHj+T1WdSbxDVmZ4XfSBZnj2U/yT7TJ
-         70SmgInM23E8fCP/TeHF0vozWxBM7MBDmTghms4xq3LLRV9kBG5cVy8eCeZHQM1Cz3EB
-         LaMbglT25bSg/I9OZKB72d8o68aD/Zy/MxbNxHTXTCFS3Ltf191tavlga03a25E31ZKm
-         vkIn+7uBgHpOEiNYN2ZRKMzWMdHJj1vtC3uUg/TtA/+Ik/urSZ7Wr1RVDn0C+0NqcAU2
-         UcVg==
+        bh=2wbI3HVGAdmJBOB+Q2PfG58Jqhmlw+640Tj7L991s1k=;
+        b=UwmxbtOV/nmBYuGKi6UEDOpjEpvqRBEHYzg6GXhGFuCv6F2c0ln5jRhSEuGWXMEIas
+         ZGbF66mk1OBxyZTgEzdiq9SqaR6dkIUffoTe3ofa+8HgaJFzpC/yLt32HJBx73UmMB9r
+         RlGPIsC6Gt32pLnpp4Ek19kkYGsNPcGCZFrBt+WLj4sBWaioDuOe+1Vh7oBMuIAUmyLX
+         2Ss/ANz3rtwZUZsvzXZjGAYkhtTJSKsvR62bhCpCJkMlOXGSPYAgCMgc/ooJRgfRkVTI
+         Zp/Sm1X3mB4H/9EnvLBwsS8QH2ewFtV+LLo5BYzDGJiBRc+AyHg042erl0IVfydZyCM7
+         1Ssg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772014090; x=1772618890;
+        d=1e100.net; s=20230601; t=1772014522; x=1772619322;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=P+nn7GxNNTTR4z83VRm4nDPbYz8l5IDhZ9xoBNCdUfk=;
-        b=Nj2gxrifdYEDAfk9df0+BjQcf71YRHLSWdoLnvKDpXytSRoBI8Z8SdlVUR0GE7iKn9
-         rnYprHdAKg6/xYpVgTPBpn4wHIOks3byhKZ5+mXqrd5eS879xan7ToOmQs+WwyWBP+j+
-         X8mpTpktSEhncBQsYS+k0LMQAA/hnHi/LX3CF8YAprY3PWanYEDvAXCfg6fTuev9RE5T
-         6CWN7un5VrFVUwT0EAk+JR1RtEzGdoXLeYadvm/pf95FHJS/Gs8As+nGvYqVEiwgKBcW
-         APePu9+7ovSu9ZhVoFWP0/II4th9Aako4SYbFSeV0INBg0aSLx329A/+wYCVS5gg0TgS
-         yTzA==
-X-Forwarded-Encrypted: i=1; AJvYcCXM3rn9R5nWYpEwA3pFiUuffRqVC3SgYXXTG06+EzHgCttlJO0QIKZ18wfPeN0knIvLXiRu0J2UgZqE@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnP2pdtG++/Dw7/R58YL7yCBNLEwBe3lZ6P7MQ4sj1Pr0/LL3k
-	RQrZrhSIn1kSHpgqbUxdryipkqleqL/8VRlBn0KxaE/sHauRz3l6aHOgfk7uKJt4aOX92491ed4
-	a555bBJrZNVB/xBGz/auQtqLW9OlCPQed34AQ14A9LQ==
-X-Gm-Gg: ATEYQzw3zJljxHG3qnDUElfVZTzVHnZtNSPZkUpy1cq51/J2HBpDq0UBYcOWyVeVq7d
-	N8jSlXwtYj0WD+3C/lqGuFIDEl4Elvbi27IJI3Qh32k9llDh74h8f3eM2a2suQpPc5mvlQpIL6x
-	aNVWPIInEMUrTveVz2u/MZuH+yK8f7mQYlSts8X5SJJc/zVdQGlemVtb76xDIsoQrAIRJAZeEC4
-	b8pRthnt9iEBnSe8oz+Mbz6pR7mVziiqSRObPm4vG/n7fJszrBNeQeS0OjO8R/q+P/jNPYAr5/6
-	1azmLrXWmYaxiqK4KJjuh9J8JzvGShcT/ef/qagu05u3K3UWySoUwecs7nY4aWOcv+T7
-X-Received: by 2002:a05:651c:324e:b0:387:421c:3cc with SMTP id
- 38308e7fff4ca-389e2bb0ca7mr6069021fa.16.1772014089948; Wed, 25 Feb 2026
- 02:08:09 -0800 (PST)
+        bh=2wbI3HVGAdmJBOB+Q2PfG58Jqhmlw+640Tj7L991s1k=;
+        b=EO4Argl9iWi0EJSu6WPZ5u+Be6Bpjq2VVZfOSy46IKQax1j02Qyk8D3449hrejlG3B
+         QbxqpD2dqIzqXtY/D7XrAk/zUKbatLb4kE7gdDOammmqV95GiMyNb0ExKAWP/FeEpdps
+         tgzwAPTWLEzVIcpPX7n+kU6OeQk+1eIV8cD1+OHoqmQ8pb6sXObijNuRAqfrBICiFGka
+         wWNPrheJXPwJURQswkZ9JaCw+4pLKluglFqoQ4pCmm+IPplbx9NyLtiqB7YZuc+sNkq2
+         AIZkl+O7G70LpT6+0ABZnmnAwpKqP01LHQtGP/eOacTgX/0Q7kkDvS7dF5s3HGFhy9Vz
+         ACIA==
+X-Forwarded-Encrypted: i=1; AJvYcCX8k/2r2GeQY4EnfH8bqlaCGepKwjhV2+ZmG+aU6iF/WiMXU5XJisdS0jCawH2cf0UnWbJDu/5d4ix1@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywwi58s1LXQ6Xe9W5S9wuD2DdXSyY8zdmiipWjn7RmNZ7VEoL7y
+	cvHgOTr2Rr48rniB8V7RJGU3CELjMgav7aSKkewxUTJBpT3teVWhZ5oHsYysGdZi0roaijOT4PN
+	ZT+NcE+3EGG916rvSSxLp1Fu26YeDb57pmr9n8HlvXA==
+X-Gm-Gg: ATEYQzzIS2WFmifn/QiR6zVwL//bJK+LYkRMKIu9vITt4BqNt96CG3y8+4dEsg8pRrj
+	WYrR88xt20XM+YES7S0G4h926+84E/HzcAoXqnXCQdHPztaJingcjIrjCGWywzcaAdoIlFIEoN6
+	getOdbp0FJfxzns3i/C7hHg+B9GfmhcqX2tNqBvFtQuYbWGI62dYoMIoLrykJ0XQxCRY2zizL/o
+	Nboq5MVwf9APyXlcFjjUtLf/8f7HvDs2KF5m/jdGXe+7cvWjFFeeUAQoJfOYVPdtvRjhYzj74IZ
+	446FHpDLdtLvoFyqSIXZILfxaMnqYfdouJY6cPCGy8hvE/5i0Uv9kicEEsxnZffYeyxQ
+X-Received: by 2002:a05:651c:981:b0:385:9b50:91a8 with SMTP id
+ 38308e7fff4ca-389a5d4e691mr49137391fa.15.1772014521621; Wed, 25 Feb 2026
+ 02:15:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -101,23 +101,23 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <31a2a4c2-8c33-429a-a2b1-e1f3a0e90d72@nvidia.com>
  <459953fa-5330-4eb1-a1b4-7683b04e3d45@flourine.local> <aY77ogf5nATlJUg_@shinmob>
- <CAJpMwyis1iZB2dQMC4VC8stVhRhOg0mfauCWQd_Nv8Ojb+X-Yw@mail.gmail.com> <40edeeec-dbc3-4aef-ac86-691e1ed2ed06@acm.org>
-In-Reply-To: <40edeeec-dbc3-4aef-ac86-691e1ed2ed06@acm.org>
+ <CAJpMwyis1iZB2dQMC4VC8stVhRhOg0mfauCWQd_Nv8Ojb+X-Yw@mail.gmail.com> <ae47ef06-3f66-4aab-b4ab-f3ae2b634f87@wdc.com>
+In-Reply-To: <ae47ef06-3f66-4aab-b4ab-f3ae2b634f87@wdc.com>
 From: Haris Iqbal <haris.iqbal@ionos.com>
-Date: Wed, 25 Feb 2026 11:07:58 +0100
-X-Gm-Features: AaiRm53Zv-ldie7aCzcsDbQaCCWr2F8I9cWxTChkMF5C5q2noC0qJ-esR5e6yic
-Message-ID: <CAJpMwygzTcBnKVp=bJWZpW9X5JdcP9Lj4H1BRBu2bNV_kGyDQQ@mail.gmail.com>
+Date: Wed, 25 Feb 2026 11:15:10 +0100
+X-Gm-Features: AaiRm526FWUEGWm_hy7H18Kx_R9h0RTFeFOS6FCw0pCWHIRaUmeSA-DegrV6Fgs
+Message-ID: <CAJpMwyiys85=WG-EQtsioo3OOiRDToUh1jE18Uj2Be2JdzNXDA@mail.gmail.com>
 Subject: Re: [LSF/MM/BPF ATTEND][LSF/MM/BPF TOPIC] : blktests: status,
  expansion plan for the storage stack test framework
-To: Bart Van Assche <bvanassche@acm.org>
+To: Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
 Cc: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>, Daniel Wagner <dwagner@suse.de>, 
 	Chaitanya Kulkarni <chaitanyak@nvidia.com>, 
 	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>, 
 	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>, 
 	"linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>, 
-	"lsf-pc@lists.linux-foundation.org" <lsf-pc@lists.linux-foundation.org>, Hannes Reinecke <hare@suse.de>, hch <hch@lst.de>, 
-	Jens Axboe <axboe@kernel.dk>, "sagi@grimberg.me" <sagi@grimberg.me>, "tytso@mit.edu" <tytso@mit.edu>, 
-	Johannes Thumshirn <Johannes.Thumshirn@wdc.com>, Christian Brauner <brauner@kernel.org>, 
+	"lsf-pc@lists.linux-foundation.org" <lsf-pc@lists.linux-foundation.org>, Bart Van Assche <bvanassche@acm.org>, 
+	Hannes Reinecke <hare@suse.de>, hch <hch@lst.de>, Jens Axboe <axboe@kernel.dk>, 
+	"sagi@grimberg.me" <sagi@grimberg.me>, "tytso@mit.edu" <tytso@mit.edu>, Christian Brauner <brauner@kernel.org>, 
 	"Martin K. Petersen" <martin.petersen@oracle.com>, 
 	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, =?UTF-8?Q?Javier_Gonz=C3=A1lez?= <javier@javigon.com>, 
 	"willy@infradead.org" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
@@ -128,16 +128,16 @@ X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[ionos.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[ionos.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21076-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21077-lists,linux-scsi=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[wdc.com,suse.de,nvidia.com,vger.kernel.org,lists.infradead.org,lists.linux-foundation.org,lst.de,kernel.dk,grimberg.me,mit.edu,kernel.org,oracle.com,javigon.com,infradead.org,suse.cz,gmail.com];
+	FREEMAIL_CC(0.00)[wdc.com,suse.de,nvidia.com,vger.kernel.org,lists.infradead.org,lists.linux-foundation.org,acm.org,lst.de,kernel.dk,grimberg.me,mit.edu,kernel.org,oracle.com,javigon.com,infradead.org,suse.cz,gmail.com];
 	RCPT_COUNT_TWELVE(0.00)[23];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -147,37 +147,76 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[haris.iqbal@ionos.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[ionos.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.999];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid,acm.org:email]
-X-Rspamd-Queue-Id: D4CB2195905
+	DBL_BLOCKED_OPENRESOLVER(0.00)[wdc.com:email,mail.gmail.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,run-fstests.sh:url]
+X-Rspamd-Queue-Id: AA1D91959B4
 X-Rspamd-Action: no action
 
-On Mon, Feb 23, 2026 at 6:08=E2=80=AFPM Bart Van Assche <bvanassche@acm.org=
-> wrote:
+On Mon, Feb 23, 2026 at 8:44=E2=80=AFAM Johannes Thumshirn
+<Johannes.Thumshirn@wdc.com> wrote:
 >
-> On 2/15/26 1:18 PM, Haris Iqbal wrote:
+> On 2/15/26 10:18 PM, Haris Iqbal wrote:
+> >>  From my view, blktests keep on finding kernel bugs. I think it demons=
+trates the
+> >> value of this community effort, and I'm happy about it. Said that, I f=
+ind what
+> >> blktests can improve more, of course. Here I share the list of improve=
+ment
+> >> opportunities from my view point (I already mentioned the first three =
+items).
 > > A possible feature for blktest could be integration with something
 > > like virtme-ng.
 > > Running on VM can be versatile and fast. The run can be made parallel
 > > too, by spawning multiple VMs simultaneously.
-> Hmm ... this probably would break tests that measure performance and
-> also tests that modify data or reservations of a physical storage
-> device.
+>
+> This is actually rather trivial to solve I have some pre-made things for
+> fstests and that can be adopted for blktests as well:
+>
+> vng \
+>      --user=3Droot -v --name vng-tcmu-runner \
+>      -a loglevel=3D3 \
+>      --run $KDIR \
+>      --cpus=3D8 --memory=3D8G \
+>      --exec "~johannes/src/ci/run-fstests.sh" \
+>      --qemu-opts=3D"-device virtio-scsi,id=3Dscsi0 -drive
+> file=3D/dev/sda,format=3Draw,if=3Dnone,id=3Dzbc0 -device
+> scsi-block,bus=3Dscsi0.0,drive=3Dzbc0" \
+>      --qemu-opts=3D"-device virtio-scsi,id=3Dscsi1 -drive
+> file=3D/dev/sdb,format=3Draw,if=3Dnone,id=3Dzbc1 -device
+> scsi-block,bus=3Dscsi1.0,drive=3Dzbc1"
+>
+> and run-fstests.sh is:
+>
+> #!/bin/sh
+> # SPDX-License-Identifier: GPL-2.0
+>
+> DIR=3D"/tmp/"
+> MKFS=3D"mkfs.btrfs -f"
+> FSTESTS_DIR=3D"/home/johannes/src/fstests"
+> HOSTCONF=3D"$FSTESTS_DIR/configs/$(hostname -s)"
+> TESTDEV=3D"$(grep TEST_DEV $HOSTCONF | cut -d '=3D' -f 2)"
+>
+> mkdir -p $DIR/{test,scratch,results}
+> $MKFS $TESTDEV
+>
+> cd $FSTESTS_DIR
+> ./check -x raid
+>
+> I'm not sure it'll make sense to include this into blktests other than
+> maybe providing an example in the README.
 
-Performance related tests can be skipped when running in a virtual environm=
-ent.
-Regarding data modification, if the tests do not involve any crash or
-reboot, then the VMs can be started in "snapshot" mode. This gives a
-number of advantages.
-a) Data modifications will not persist once the VM is shut down. This
-means the disk will be clean for the next test cycle.
-b) Using just a single set of qcow files, one can bring up any number
-of VMs in snapshot mode. The data written while the VM is running can
-be safely read/modified, but it disappears after a reboot.
+You're right. It is pretty trivial to run on VMs, but only after
+everything is set up.
+Adding it to blktests would allow this setup to be done (and run tests
+after that) on any system by running just a couple of commands.
 
 >
-> Bart.
+>
+> Byte,
+>
+>      Johannes
+>
 
