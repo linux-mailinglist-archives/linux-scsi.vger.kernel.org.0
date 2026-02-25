@@ -1,157 +1,174 @@
-Return-Path: <linux-scsi+bounces-21053-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21056-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CFfADTdcnmlrUwQAu9opvQ
-	(envelope-from <linux-scsi+bounces-21053-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Feb 2026 03:19:35 +0100
+	id QERPGJ9enmmaUwQAu9opvQ
+	(envelope-from <linux-scsi+bounces-21056-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Feb 2026 03:29:51 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD4F4190D3D
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Feb 2026 03:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B69FD190E54
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Feb 2026 03:29:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EE4E63022F8E
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Feb 2026 02:08:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 50076300AB10
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Feb 2026 02:29:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B21E826ED2A;
-	Wed, 25 Feb 2026 02:08:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6B2B2798E5;
+	Wed, 25 Feb 2026 02:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="dzqsBBPe"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="axGZ/tB1"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB8326560A
-	for <linux-scsi@vger.kernel.org>; Wed, 25 Feb 2026 02:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE85230BEC
+	for <linux-scsi@vger.kernel.org>; Wed, 25 Feb 2026 02:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771985327; cv=none; b=T+b2G9SEOxh2kOdeQK00PwMQ5UtXljWSj2BcL3p0fSxfrBghO1mb5MtSEACOFvttpFODYa4tEyVNhaW0W0fLsUVVOQFLZgSUV+ot/UATHB1DQ/bBWwlqvop3vJ5x6uCamhD2wKoUtxbZ5VlJNW+5lsJmYuopfQ20xdoT902lY7I=
+	t=1771986587; cv=none; b=EzZuregEM8Y6VeOz54zbHgoC/JeK+v9rV+G6kdfPedrAf/GZAt8Ny4y1gFz8iPzUGHcU//VK8QVWtVZy3pZAbptpGj/f0R/25P4R7iaHJ/DkEH94IhLW/BcXVshoWtxoK1E0IZGaqmmOGwC0+k2Wp7ofr10CbFS7XDCXucTPnoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771985327; c=relaxed/simple;
-	bh=VkCuI/G0u0qDhrNtxgAgKWRQp06DJJXTgxTu8OXKRwQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OmIVvXMIs5zQ67c1tN0Uwoqv1PfUumz+MemiRrFxiqYQX+6UaWScC3wCkSOLU6YIKGvLq0Q+yCf+k9Chb5VkxUjH2wQUbHakaOHbTcen01xh1EG2f12X60OODVxE6KhkoUPUvPfVzbh41aovV01k5KsRUkpkkiLvKDJ8FSfELAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=dzqsBBPe; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61OItxKI553150;
-	Wed, 25 Feb 2026 02:08:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=jexq13pqC2EZm52QNf6VPpZ2ZXjEAlCveI75dZSxQO8=; b=
-	dzqsBBPe9ClHvPbOdNVm6dvQnJd/OB7sOmayIiLW8DRu6wTanxU5QXVxEDoOqgDX
-	3DRMU7lmx77gMOuIdtblk5KYGfW2c324uOmbpnyA46V3MHxUEzH3Cqc1RidxF46t
-	3lWCuzl3CDRPLVsJkoktlw+5e6xB9mt0U28YGvdBxmISAgua4OOyR7mvxB2U+sbb
-	DWjZShBaOgoUUq1fwD4AEcvIq8ai22KUaCSauEWa7hNmbmmk6MprCodxk15gF3sy
-	3WA39Eu4tmdagTCYhckus6c7SIcwRsSfN+mZdfRTTM1BIUKD8mYZal+aOc3FzFdm
-	+UlkiLYt8OHR7CS73DP1jg==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cf3g3nejk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 25 Feb 2026 02:08:38 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61P10oi5015743;
-	Wed, 25 Feb 2026 02:08:37 GMT
+	s=arc-20240116; t=1771986587; c=relaxed/simple;
+	bh=hyGuGqa+A3vJ103t+nW2zNah2pH/Mk+mJMQFXMU5nww=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=grCdaS0u5RrYCeAYUzQbaCAl5BqHcpX8obJXhHgEBb8JseWJqcPoqWZGT78yWH7ijH+wWse6qkUCJT64yYO7YTcOGIdXfdu6GYCfapAErlwUqKNSO6+pIwLJDlKeeblfqeHq1Y6Ge3OSECqYmd0Bh1mVu8km+jJj54ybsf1ECK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=axGZ/tB1; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61OLuTrJ061750;
+	Wed, 25 Feb 2026 02:29:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=OWBCv6OP7G8lrHHGLKXxnH+CDtJPy4N6elr
+	6WuTVStQ=; b=axGZ/tB18sFpJsD+GJamPHMJHVMrTTAQeN5bF3/ab5Jq5MUMGTW
+	nXMp6nxSQN1MzDRS5OTaVzjfe30HkmnxLjrHs35LGa2SEipMrNpZrSwpyf3G2wrz
+	AXB4uhnngf5zAZ+r1/PY4MpwLb1wf9BmxTZ7b0dxjKm0ys82kq6Q+5WmTZnNzfyT
+	JuT0lMp61vKmAE7ohZ4oGESYRLhm8d/NapgaH1JiJJgiWNVDcsWF/6Ct95y47bWx
+	xiUc5s53HVi3kpSKPrupKL30iTqUDkDeZe/FXp8S7M3MzxsBbsp60+rCOZa7MlNq
+	dPGvqu1uM8h7zN2xMkjt6t7Q53usEOlPauQ==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cherja0a3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Feb 2026 02:29:44 +0000 (GMT)
+Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 61P2TiDZ024752;
+	Wed, 25 Feb 2026 02:29:44 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cf35ar24v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 25 Feb 2026 02:08:37 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61P28YNT029537;
-	Wed, 25 Feb 2026 02:08:37 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4cf35ar1yt-3;
-	Wed, 25 Feb 2026 02:08:37 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        WangShuaiwei <wangshuaiwei1@xiaomi.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>, linux-scsi@vger.kernel.org,
-        wanghui33@xiaomi.com
-Subject: Re: [PATCH] scsi: ufs: core: Fix shift out of bounds when MAXQ=32
-Date: Tue, 24 Feb 2026 21:08:05 -0500
-Message-ID: <177198526957.1649777.17327613686157442002.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260224063228.50112-1-wangshuaiwei1@xiaomi.com>
-References: <20260224063228.50112-1-wangshuaiwei1@xiaomi.com>
+	by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 4chmqjhmfm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Feb 2026 02:29:44 +0000
+Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61P2TiEV024746;
+	Wed, 25 Feb 2026 02:29:44 GMT
+Received: from hu-devc-lv-u22-c.qualcomm.com (hu-cang-lv.qualcomm.com [10.81.25.255])
+	by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 61P2Thc3024742
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Feb 2026 02:29:44 +0000
+Received: by hu-devc-lv-u22-c.qualcomm.com (Postfix, from userid 359480)
+	id D8ECE5A5; Tue, 24 Feb 2026 18:29:43 -0800 (PST)
+From: Can Guo <can.guo@oss.qualcomm.com>
+To: martin.petersen@oracle.com
+Cc: linux-scsi@vger.kernel.org, Can Guo <can.guo@oss.qualcomm.com>
+Subject: [PATCH v2 0/2] Add sysfs entries to facilitate UFS UniPro QoS monitoring
+Date: Tue, 24 Feb 2026 18:29:40 -0800
+Message-Id: <20260225022942.345564-1-can.guo@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI1MDAyMSBTYWx0ZWRfXyznBaF4eITcK
+ qGZRe14ve/B64NYsRtE/P9wT6eTilXqfoXcIOLEg67y+lgCbxGDSVQx3e2Ch0a8DQV7Ongmayop
+ 7ks4Fv97U9qC2PYIZSnZTGaMGtqoM/OUPMPdLYUSG+gido1jpSph1DW5Af/hnH7KmRxC9PPhPHD
+ vxRA1jH6OROKQmYH0K0MgvIfT1xCe4KNYmu2xImswAZzmHc0zk7pni6VCCMWoNOH9020AWoIpWc
+ hjaX7RmihkgbEPiMLT2fcu/syf4rZOCB37T+fMO8zYgHE+S8rGGiDPBOGR4E26zdYPMEUZ6MnEh
+ n1vBL05ADmCrVyyxdo0nIKdgb2DfRitZNfoDAI4WUfxqdu5O/TH7PSBxF40AkdpG6P6rsoxgNWg
+ WCA2OnhYccQNV5OUx6xeyGC7At8fHuXaIWC/SFnNgokodJcCWdB785eZROFCgch3rESyIJkw/QF
+ DKPajMXaAKywtAcbpJA==
+X-Proofpoint-GUID: BtXODpM4BVb5bWbkzgwW9zy8czdmZD03
+X-Proofpoint-ORIG-GUID: BtXODpM4BVb5bWbkzgwW9zy8czdmZD03
+X-Authority-Analysis: v=2.4 cv=NeDrFmD4 c=1 sm=1 tr=0 ts=699e5e98 cx=c_pps
+ a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
+ a=DJpcGTmdVt4CTyJn9g5Z:22 a=DoZd3WRFHSi2sOIFn6IA:9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-02-24_03,2026-02-23_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 malwarescore=0
- spamscore=0 bulkscore=0 mlxlogscore=841 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
- definitions=main-2602250018
-X-Authority-Analysis: v=2.4 cv=Y6r1cxeN c=1 sm=1 tr=0 ts=699e59a6 cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
- a=nKQEoseQ2CVAKv_AYDcA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: L4SPIvcXtUEpUKzc8838cIOZX_JG3ehx
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI1MDAxOCBTYWx0ZWRfX1b9LS1aY34vI
- UtIKVQBjBc2GRlOUUX7aFRECVVf83Pw5bhvRsqWIBWiBgEEs10tdpWaurobyduacNrBZKH254GJ
- u4C458AU4VY+hLN/bjyxaL1fV+2r7mSiiHBAwCx4FtgxJHpOwSJcK6ukLleTGBTlA70kitk/HXL
- +W4LofjOiUMkPqfEh5xbJTkDZBEpuXmYrM82GV8UzOLNb0XwRSEPS/L2cjWGhXCimz1xk7GzpG5
- TYKbSIXXp4LOECRYEwrYqxJKEsg6CzdT5oGONYGXxGbwMqNo9G0ASz8BKd6cOdSLPpPS/WmZ6s/
- ixShqXL6eLgcFiPuviskp7rISkE6vkAAkDCrZUJAmbJdW0jakDpo35ZwEmxSsRnlXve5NhPjXt7
- JMp2kNmhPGvzYy6mld+ezX9/TREprmsk+IO+G1Dx1HxK2pho0xWGAOsZZRYZb4Zirl+B90w+cMM
- rI0VsfYytf4vAYjVUuQ==
-X-Proofpoint-GUID: L4SPIvcXtUEpUKzc8838cIOZX_JG3ehx
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 bulkscore=0 adultscore=0 spamscore=0 priorityscore=1501
+ suspectscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602250021
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21053-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[oracle.com:+]
-X-Rspamd-Queue-Id: AD4F4190D3D
+	RCPT_COUNT_THREE(0.00)[3];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-21056-lists,linux-scsi=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[10]
+X-Rspamd-Queue-Id: B69FD190E54
 X-Rspamd-Action: no action
 
-On Tue, 24 Feb 2026 14:32:28 +0800, WangShuaiwei wrote:
+This series introduces two sysfs entries to the UFS core to improve the
+observability of UFS Link and HBA states from userspace.
 
-> According to JESD223F, the maximum number of queues (MAXQ) is 32. When
-> MCQ is enabled and ESI is disabled, nr_hw_queues=32 causes a shift overflow
-> problem.
-> 
-> Fix this by using 64-bit intermediate values to handle the nr_hw_queues=32
-> case safely.
-> 
-> [...]
+While userspace can currently configure UniPro QoS monitoring via UFS BSG,
+tracking events requires constant polling of UniPro attributes. This series
+enables event-driven monitoring by using sysfs_notify_dirent(), allowing
+the driver to proactively signal userspace via poll() whenever a DME QoS
+interrupt occurs.
 
-Applied to 7.0/scsi-fixes, thanks!
+Additionally, UFS host or device resets triggered by error handling can
+reset UniPro QoS monitoring attributes. The second patch introduces a
+ufshcd_state sysfs entry, allowing userspace to monitor the HBA state
+and determine when a re-configuration of QoS attributes is necessary
+following a reset.
 
-[1/1] scsi: ufs: core: Fix shift out of bounds when MAXQ=32
-      https://git.kernel.org/mkp/scsi/c/2f38fd99c000
+Together, these changes provide an efficient, low-overhead mechanism for
+userspace to perform real-time link quality monitoring and reporting.
+
+v1 -> v2:
+  1. Removed a blank line in the first patch in v1.
+  2. Updated texts in cover letter.
+
+Can Guo (2):
+  scsi: ufs: core: Add support to notify userspace of UniPro QoS events
+  scsi: ufs: core: Add a sysfs entry for ufshcd_state
+
+ Documentation/ABI/testing/sysfs-driver-ufs | 19 +++++++++
+ drivers/ufs/core/ufs-sysfs.c               | 48 ++++++++++++++++++++++
+ drivers/ufs/core/ufshcd-priv.h             |  6 +++
+ drivers/ufs/core/ufshcd.c                  | 17 ++++++--
+ include/ufs/ufshcd.h                       |  6 +++
+ include/ufs/ufshci.h                       |  1 +
+ 6 files changed, 94 insertions(+), 3 deletions(-)
 
 -- 
-Martin K. Petersen
+2.34.1
+
 
