@@ -1,123 +1,193 @@
-Return-Path: <linux-scsi+bounces-21209-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21211-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EHchG2+QoGllkwQAu9opvQ
-	(envelope-from <linux-scsi+bounces-21209-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Feb 2026 19:26:55 +0100
+	id YBWjCpuwoGnUlgQAu9opvQ
+	(envelope-from <linux-scsi+bounces-21211-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Feb 2026 21:44:11 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 115381AD977
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Feb 2026 19:26:54 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98E101AF41E
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Feb 2026 21:44:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 22FF43030525
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Feb 2026 18:15:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 04E78303E757
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Feb 2026 20:44:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6DB3387596;
-	Thu, 26 Feb 2026 18:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D158346AF1D;
+	Thu, 26 Feb 2026 20:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nQCJVlF5"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="QNJfoq2B"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD6C23A9B3
-	for <linux-scsi@vger.kernel.org>; Thu, 26 Feb 2026 18:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6856844CAE2;
+	Thu, 26 Feb 2026 20:44:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772129721; cv=none; b=thWYFvy/4e+9y0GP8vuzmlUm5X+j5+ZQF9kCPR3zzLsyaN1yHFZBcyDEDQEm/yf+i/AcoaE8Ind3fIH+PMQcH/xyriEg2m+2w82yKBLoTNnAgp9LHRv+9yfaEsVVrlBpOfoWzjaJEofO/626vZRCnFCoZEGeoYGStGKlRn7OJeA=
+	t=1772138642; cv=none; b=GSNUCinjCFDmEC79G/nRydDQPVbbGBIDn6rQGPiC0t/FOHHioziCfdyEg2oPsUdyfK03L8jOX9QkJwq8fSIFL9LinaTqdc4L3H5DrhOvkbw+Ur915SCapHLpNFcFVQQ8a3oKxvIQ12LDQCg4ojRd5mx2PiI+QyIc8GkFeq1Wl8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772129721; c=relaxed/simple;
-	bh=MEpTSyjNRJ1W/nhZpu80wpvFIoWLaZGQNhVRqRoIJIc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TkdlZcOKD7UiVU/Km0fnnZH/9FWJ7jnLpJ9cT0QxHPTX7181vsvx2J8TnyY+lC9j6UDtk+h3NFuvml/IL+u57MF2LmGIHZFnbHjYE/p79EKY4xR1d8r73BWgqrSBwBKJs7XmlABlWOuxw+lvsVHAFB+UqRZgd2DeXRZXAk13lGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nQCJVlF5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C39C116C6;
-	Thu, 26 Feb 2026 18:15:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772129721;
-	bh=MEpTSyjNRJ1W/nhZpu80wpvFIoWLaZGQNhVRqRoIJIc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nQCJVlF56ElQbLw0Amw24fH3uaB/IhI++rV66xhuKkiNWed1UDzN4vhKbXeWVjpwU
-	 S60EeAZBiZ1MhjUvr9CsS8m88MRnDwNtMkHQKANwWkiZtZDbCsC95qQ4WgVVekHtQv
-	 URyKkwrvKDWZ9CZcyiVStalXpqVJIu6Ag5wuDuI8I3AXEsRfPzPTxu9AoKiRtArmyJ
-	 pz1X8pxhj74a0LKnYNoJ3kPhtV3MQAavzuNggTfsjp3Iud+Ijn294gJDnsMBNcztDz
-	 ckIn4VVDxVeJ9hQwaj57zghiPn/i9os9THVForBKs6vwkq26NEonlYYwXcT3GqpW5i
-	 pZmROTL5AH0sw==
-Date: Thu, 26 Feb 2026 11:15:18 -0700
-From: Keith Busch <kbusch@kernel.org>
-To: John Meneghini <jmeneghi@redhat.com>
-Cc: Maurizio Lombardi <mlombard@arkamax.eu>,
-	Maurizio Lombardi <mlombard@redhat.com>, hch@lst.de, hare@suse.de,
-	chaitanyak@nvidia.com, bvanassche@acm.org,
-	linux-scsi@vger.kernel.org, linux-nvme@lists.infradead.org,
-	James.Bottomley@hansenpartnership.com, emilne@redhat.com,
-	bgurney@redhat.com
-Subject: Re: [PATCH V3 0/3] Ensure ordered namespace registration during
- async scan
-Message-ID: <aaCNtpPzP9TIDNjE@kbusch-mbp>
-References: <20260225161203.76168-1-mlombard@redhat.com>
- <aZ9sjbZ3CEW_1rW1@kbusch-mbp>
- <DGOQMFJJ6K5P.3KLF45WQT2SAS@arkamax.eu>
- <e43b914c-2ca5-455e-b0fe-3ce2eb0c64bd@redhat.com>
+	s=arc-20240116; t=1772138642; c=relaxed/simple;
+	bh=Y7JfbH+ztCrlYdAyB618i6lDAzmJpIuBqLu1FWi92u8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JLevgeglYqaEv+WSiO1LYuUDGiuSkjSVqE0f6suo7lRxwcl8SvzCekc2ayB4QfcJlBrKkakwMqFs1h38pbLIQWrdtaxaDMxZMFom0xiEx8PrrgG/aendAvRF3ouxhuRWdd99gYmiVWiTBCvrElurVgu2FXUuQ3RPf0HZpCoxyz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=QNJfoq2B; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61QExECj2347002;
+	Thu, 26 Feb 2026 20:43:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=L/pl8e0Ab6W8Nh9zOWFA+VaDN8oP4VGd2DbfLEsY3
+	/s=; b=QNJfoq2BAPC/xpNGoIYyeu8rkfeof2kXkOZnmJg7nILqdRvcMZZnshNUg
+	uuNxrrjzdZr0P4iAVpwcEWoWc5ARb7sBjnh5U5/K1vA2k8Viy34UykjpyhwVsTAm
+	k/qG0lGr90enqkiywk9+qTaRyAehMV2TefcwpXdtmfNkygtBMMfQxkkVJX+xTGin
+	lAVt5F1KIHikxjp6NN6FddnFk9IwXqM2FymSJ732ZE3UlJh0UVXtvYC6KtIROp1Y
+	blerymq9DLl59dJEp0ccv504O3A/Z1b+YSpLdtFgc1H59S6ltlm1xWVeg1cxveCe
+	rTgGRQHwe5x1WC/SnG20NDUUHrOpg==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ch858xd77-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 26 Feb 2026 20:43:51 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61QIYgsm030414;
+	Thu, 26 Feb 2026 20:43:50 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cfrhknxrd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 26 Feb 2026 20:43:49 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61QKhjiJ30146976
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 26 Feb 2026 20:43:46 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E14E02004B;
+	Thu, 26 Feb 2026 20:43:45 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B5E3720040;
+	Thu, 26 Feb 2026 20:43:45 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with SMTP;
+	Thu, 26 Feb 2026 20:43:45 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 56370)
+	id 9E837E0BEB; Thu, 26 Feb 2026 21:43:45 +0100 (CET)
+From: Joshua Daley <jdaley@linux.ibm.com>
+To: linux-scsi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+        jdaley@linux.ibm.com, mst@redhat.com, jasowang@redhat.com,
+        pbonzini@redhat.com, stefanha@redhat.com, eperezma@redhat.com,
+        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
+        mjrosato@linux.ibm.com, farman@linux.ibm.com, frankja@linux.ibm.com
+Subject: [PATCH 0/1] scsi: virtio_scsi: move INIT_WORK calls to virtscsi_init
+Date: Thu, 26 Feb 2026 21:43:44 +0100
+Message-ID: <20260226204345.1904786-1-jdaley@linux.ibm.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e43b914c-2ca5-455e-b0fe-3ce2eb0c64bd@redhat.com>
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI2MDE4NCBTYWx0ZWRfXxrzJtN95SkO9
+ vz7GgFHlWCYYYwOeV82TDDxVCv6gt29NyBeZF/DlPb7Ouu1HIBJ9x6rsc/Smi5Czhbow1HxZD6w
+ hCZ/aXUKY3zNXLqxuB04WBibSun8FR5ALzDigpFxN9gqNSvFuqsPhX4tEbUUZdjBV735/uSZn0F
+ WimnVmKSkIfU+OPowxX1+JHDwm+Tq86H3wIr3L3sNUidMMjq3BY7yFfCoy8Pw/6B6SeOIwlHzlQ
+ KZd1UVrYnOcIMPag9mQtTm7XHXmCuSPi7zpkpS8ew81jPq+z/Ay2IHs9z7R5eSi83B5MqMvAciX
+ pjbzlvHyo6DGFfao2VPvRdX9yAz1vZrO4QFEkULyqdUirXDZXVXf+E1IoirrRhuWO2/xRVZLYW2
+ a5v53ybkP6I3bwT2ZYF7pfaw5NYpMnEPM1gL+pJ9XaZZEOIGfm0sbOJDbIO9FaF42i6BbyjFkLr
+ dwNHXoX7y3vGPVnfcMw==
+X-Proofpoint-GUID: ThtvA5rGUu0M2tlVNBEYvJ9GZb2jLnuZ
+X-Authority-Analysis: v=2.4 cv=S4HUAYsP c=1 sm=1 tr=0 ts=69a0b087 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
+ a=GgsMoib0sEa3-_RKJdDe:22 a=QsrBqZypJrsHG3eT-GAA:9
+X-Proofpoint-ORIG-GUID: ThtvA5rGUu0M2tlVNBEYvJ9GZb2jLnuZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-26_02,2026-02-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 clxscore=1015 impostorscore=0 malwarescore=0 bulkscore=0
+ phishscore=0 adultscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602260184
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-21211-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TO_DN_NONE(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21209-lists,linux-scsi=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jdaley@linux.ibm.com,linux-scsi@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kbusch@kernel.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_TWELVE(0.00)[12];
+	DKIM_TRACE(0.00)[ibm.com:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 115381AD977
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 98E101AF41E
 X-Rspamd-Action: no action
 
-On Thu, Feb 26, 2026 at 11:35:15AM -0500, John Meneghini wrote:
-> It's worse than this.  Yes, in RHEL we carry out of tree patches to tun off the async scanning with SCSI,
-> and we reverted this async namespace scanning patch in NVMe.
-> 
-> We had to do this because, as soon as we turned these async scanning mechanisms on, we immediately
-> received customer escalations. Customer were not able to upgrade their systems. We have customer issues
-> and complaints open about this and we see this async namespace scanning as a barrier to adoption with NVMEe -
-> especially with NVME-OF which tends to have many more Namespaces than PCIe.
+This patch avoids a kernel warning that may occur if a virtio_scsi
+controller is detached immediately following a disk detach. See the
+commit message for details. The following are instructions to
+produce the warning (without the proposed patch).
 
-Sounds like some people just don't know how to use labels or persistent
-names. Relying on /dev/nvmeXnY or /dev/sdX to always be a handle to the
-same device is a fragile solution.
- 
-> And yes, the PCIe async discovery stuff does cause some problems.  The difference is: the PCIe bus configuration does
-> not change nearly as often as, e.g., the nvme namespace configuration in a fabric, so customers don't notice the changing pci ids.
-> Unless some one is going lots of hot unplugging and plugging with their PCI bus, the PCI ids typically don't change at all.
+Timing matters--if all event work items call INIT_WORK before they are
+flushed by cancel_work_sync, then the warning will not occur.
 
-It's not about the PCI topology changing. The async probe makes it
-non-deterministic as to which PCI device is going to claim which
-instance out of the nvme ida since they all try to run concurrently.
+The warning will occur consistently if a sleep is added in
+virtscsi_kick_event before the INIT_WORK call, like so:
+
+#include <linux/delay.h>
+
+static int virtscsi_kick_event(struct virtio_scsi *vscsi,
+			       struct virtio_scsi_event_node *event_node)
+{
+    int err;
+    struct scatterlist sg;
+    unsigned long flags;
+
+ -> msleep(1000);
+    INIT_WORK(&event_node->work, virtscsi_handle_event);
+=09
+    ...
+}
+
+Then, just detach a disk and its controller in quick succession:
+
+virsh detach-device --domain <domain> disk.xml; \
+virsh detach-device --domain <domain> controller.xml
+
+where disk.xml and controller.xml are text files containing the XML
+of the disk and controller.
+
+Or, with the libvirt python module:
+
+domain.detachDevice(str(disk_xml))
+domain.detachDevice(str(controller_xml))
+
+Joshua Daley (1):
+  scsi: virtio_scsi: move INIT_WORK calls to virtscsi_init
+
+ drivers/scsi/virtio_scsi.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+--=20
+2.34.1
+
 
