@@ -1,81 +1,84 @@
-Return-Path: <linux-scsi+bounces-21220-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21223-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +F61EVfDoWkVwQQAu9opvQ
-	(envelope-from <linux-scsi+bounces-21220-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Feb 2026 17:16:23 +0100
+	id MH0+LYrDoWkVwQQAu9opvQ
+	(envelope-from <linux-scsi+bounces-21223-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Feb 2026 17:17:14 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B43601BAAF0
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Feb 2026 17:16:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 576191BAB1E
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Feb 2026 17:17:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3088530EFAD8
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Feb 2026 16:09:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D383A3188091
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Feb 2026 16:09:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27E7544B69F;
-	Fri, 27 Feb 2026 16:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2872044CF29;
+	Fri, 27 Feb 2026 16:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Y/gfsV1p"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Qn1cWD1r"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9277844BCA4;
-	Fri, 27 Feb 2026 16:09:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917C844CAC2;
+	Fri, 27 Feb 2026 16:09:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772208546; cv=none; b=UmzQdzKUkdIiiMUjzn2vTgqd/Ob/HzQ8Jy4vCULLr+E2+M3b1PGOejfZ3MRrCGKXo0WHRasJCOgDHzipTnrnhCHk8jjFzmYw4P9z0rW3klDnkhKF7dOcUaJs6f19F0H648ZtKNBylqISlxf43VSCycMrZqcV/++QYHUy1Is8CNU=
+	t=1772208562; cv=none; b=ujPuCpxR4w6hcW+gYbpsAL/mVWuHnDgaU6DoXLoY393kHJXIew8Xyg87AhneYLk/VwVpAxMxXXzI3J1/Amt6b7G1J5XN+XYI9zgItZ+pSYqynbU+DvnlTprl3rRbvyvyF5eXinA0z99d8cSjP00nZsozBDpF1bFdIiNybNYhHPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772208546; c=relaxed/simple;
-	bh=fo5cKDrlESNKGVRvBja+N0oEZ3SKTHQgkvdRBOAXSVA=;
+	s=arc-20240116; t=1772208562; c=relaxed/simple;
+	bh=q7+7V5f13NsTaMVYlxwTcIsmDrjAqpbh4AEvuNkw+uM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=hdZy/aCKbAtO8jlhv6+Phqpkoyo7oYhgx8b0bekEeEnyOZIBVYF1c+2UpXpDFWH/VgaMEW4VTDosTOJ7F3SoXAnpGYJ6Aogk9mGfxKGTUT9OU+Atlu96lRfEX5z+10/j2FSgd5p3BJt7Jt03UFN+a33a4uoqZT0ehcARTq9nUNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Y/gfsV1p; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version; b=fHNvkJGcVqplqxW19nf3iBmtwoHUrITRDlehE4VPIZB/TxZSB5bmNorHr0gmWbMNQkjQt2GiigA/e9VSsK7ggJbtIlq06KyfEvTjFkfucw8+wBymMzVqJAReKvGwIogo0ulxpIdcYnS9xpU6iWjaqsGE+aKZcRPblJ66Hi1rzSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Qn1cWD1r; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61REa6QD4010533;
-	Fri, 27 Feb 2026 16:08:56 GMT
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61REaGBJ3181974;
+	Fri, 27 Feb 2026 16:09:10 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=sSGdJ3pOZQP
-	ubDXObwwGVEtV+Urb+RJu0cNiZ6+wYrE=; b=Y/gfsV1pD6CnaznIXR4XY1esL8u
-	5fc+yfCa6VA+yBTlz0mQ9rUTmguVsodw7BB7RZfAH7qVfhI4LKw7DJJYZAT2LGdh
-	nA7eP0eSyVeC/17osB7vrakxLtnqdZTekBM4frePycn0W/t0NKA37OyDyhFWhLQ6
-	BcMXo8a08PUcn9mO/f+pyJzNVUAIZ9TOGg4//jhc2BhaNzKNd71wJcxncWYEirBj
-	LmQ0Nq5Kzv+QWRbI9EyqDMZocXoq0lTyIUOdtvTp6n5PACI8Czu9KlKoZdRjhAMa
-	bwZYt8gGEB15ABKM6/cfvgeNOk7tzcXMoEMpDHeQ9u4hWwFR7ih7psTFD8g==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ck43ra719-1
+	:mime-version:references:subject:to; s=qcppdkim1; bh=bBvPRgeAwCK
+	NSHgwctlqPIrrDc+24VnqnvGxjKPy0Js=; b=Qn1cWD1rr7zebHOxcXJauXvGPE4
+	pttsWTm0rmwR9Xpoy67PsUYOvVhpzaeE15kCYO0Qs1qFZ2ptV2ThQaaHUpM+w6d/
+	/SeNuwvk38duKm/N9vl6THw21tbvVp95BYwHQmqzfJFYqFkWUH6K0hQ2939jyEn+
+	fEGPYwYWGqhc6wdKQ0kJkhI/TEG4xTNpoDVuxOHLjE+OoL+WGQcz1hqvUMGQ/DSw
+	WIoHV8pdSpkFHkvpt6ic0UUFycvx4q0RbU77Xr6IfViQGPJz9Xx7XXIHLOlajCHl
+	nywA5XFcQZFC/kqe1ZBKJyoq/5drLbLR2npXgDPW9Y617d75ImnlSYrwt2g==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cjt99va5p-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 27 Feb 2026 16:08:56 +0000 (GMT)
-Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 61RG6rHO007485;
-	Fri, 27 Feb 2026 16:08:55 GMT
+	Fri, 27 Feb 2026 16:09:10 +0000 (GMT)
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 61RG8ZPb024025;
+	Fri, 27 Feb 2026 16:09:10 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 4cjx30h5xj-1
+	by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 4cjf89aact-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 27 Feb 2026 16:08:55 +0000
-Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61RG8tnD011750;
-	Fri, 27 Feb 2026 16:08:55 GMT
+	Fri, 27 Feb 2026 16:09:10 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61RG99CT024495;
+	Fri, 27 Feb 2026 16:09:09 GMT
 Received: from hu-devc-lv-u22-c.qualcomm.com (hu-cang-lv.qualcomm.com [10.81.25.255])
-	by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 61RG8tVu011749
+	by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 61RG992e024494
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 27 Feb 2026 16:08:55 +0000
+	Fri, 27 Feb 2026 16:09:09 +0000
 Received: by hu-devc-lv-u22-c.qualcomm.com (Postfix, from userid 359480)
-	id 67D285A0; Fri, 27 Feb 2026 08:08:55 -0800 (PST)
+	id 8773A5A0; Fri, 27 Feb 2026 08:09:09 -0800 (PST)
 From: Can Guo <can.guo@oss.qualcomm.com>
 To: avri.altman@wdc.com, bvanassche@acm.org, beanhuo@micron.com,
         martin.petersen@oracle.com
 Cc: linux-scsi@vger.kernel.org, Can Guo <can.guo@oss.qualcomm.com>,
         Alim Akhtar <alim.akhtar@samsung.com>,
         "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Peter Wang <peter.wang@mediatek.com>,
+        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 05/11] scsi: ufs: core: Add debugfs entries for TX Equalization params
-Date: Fri, 27 Feb 2026 08:08:02 -0800
-Message-Id: <20260227160809.2620598-6-can.guo@oss.qualcomm.com>
+Subject: [PATCH 06/11] scsi: ufs: core: Add support to retrain TX Equalization via debugfs
+Date: Fri, 27 Feb 2026 08:08:03 -0800
+Message-Id: <20260227160809.2620598-7-can.guo@oss.qualcomm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260227160809.2620598-1-can.guo@oss.qualcomm.com>
 References: <20260227160809.2620598-1-can.guo@oss.qualcomm.com>
@@ -90,313 +93,304 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: rSUXm-A69WoZxklmUnMYwXocMDTBKgfZ
-X-Proofpoint-GUID: rSUXm-A69WoZxklmUnMYwXocMDTBKgfZ
-X-Authority-Analysis: v=2.4 cv=DOqCIiNb c=1 sm=1 tr=0 ts=69a1c198 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=IZWKmGqa c=1 sm=1 tr=0 ts=69a1c1a6 cx=c_pps
  a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
  a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
- a=eoimf2acIAo5FJnRuUoq:22 a=EUspDBNiAAAA:8 a=mp4iZCQd9jxi9ekHby0A:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI3MDE0NCBTYWx0ZWRfX9lSmW8aovYkp
- lhvb2z3Urb+qrtXy62k0b1foms/33ae5YakDyn5KbD4LzqP27KPirOsIaFI6y18t4qJhw7orBYb
- 9wXkMbqGmCB1eINreQfGqIa58JVUxUmS353MrXiMXSOHCjbFr1vaco9SYto0pI3g5tYuWPnBAdo
- HPFd4yT8UjTSrz2FnHV4Z/EmIymardrcyDUhyGaVlieTv5BJ1fLECevF+Lufn/KZMG+ZMkdt0Rx
- +vgusPOfxLVKdMQtOKQ+k93rEXIS2tKzIqWqXYEFt1lPGlKrh3IY9OLuRMsx9vjIjCw4cp9eVhl
- /IYaAoXqKpeaJn/7Oh01T9bmg8kKnrzqvtLQU5OzmGqjfve3SESTYLZ1erjCf5Jwh8FhO8qwJfB
- fNvFE4ETiOLMnoG2e90oWgc/mv6FJXOM69PUm1p1fF9ARaJKToFUAdfSJALIgroQ9AAMx0dAKMu
- a7cB8+pAdt1JK+/yJEQ==
+ a=YMgV9FUhrdKAYTUUvYB2:22 a=EUspDBNiAAAA:8 a=ufAJUjbdAAAA:8
+ a=c6kORSdi7RHHljI5AK8A:9 a=rB1ygNaI0PWiOa_UD5GD:22
+X-Proofpoint-GUID: 7nWyb2-gmr8-V5SDvt8slWlHXv9DPyVR
+X-Proofpoint-ORIG-GUID: 7nWyb2-gmr8-V5SDvt8slWlHXv9DPyVR
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI3MDE0NCBTYWx0ZWRfX+L/EgxJUvIpB
+ hhXDGOOOWy+NpjEf9Nw+DGfhKNEZm+hqIjaZ4SIxy8Ld6Lk53f6TJ0nxIQxltPv1RdSyKnXjyO7
+ lLV14HvXO696YTKO7bIuTzcMij78iswDLsDRU7WnPM8gsX9H+o949Lvlei8ZC0J6vWfU+ueYKNB
+ EYH6FkcbkZYe5/xi6Tqar4g3dDaYsMIJxzvrbA/CPiqsajXPktzkW5upMFJNQA9os3IHWwAYIW7
+ o6cC9Rp8I4n8VzqAnf9/DSjalVIVohakjmCYtoRJk+AcQ4/7+l3WqT50JKrvG9ouWLLjez2Hpr8
+ qZMcZwuWXHly4U5w7SRUgrHCDwlJJRCLitAzRzaBa1EFDyKknrPdscJTTOgmsA6VcV/qoLICLuV
+ F3DNblVD9FVUk6b2eDCsy+VRdDv4eaGTVEG8WqM5kkWCkTNob1xjaSL1nZjpvyKAeb9UV1O+M6X
+ fazkfLbrB9bpmGM3nOw==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-02-27_03,2026-02-27_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 phishscore=0 malwarescore=0 adultscore=0 priorityscore=1501
- clxscore=1011 suspectscore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0
+ bulkscore=0 impostorscore=0 clxscore=1015 adultscore=0 lowpriorityscore=0
+ priorityscore=1501 suspectscore=0 malwarescore=0 spamscore=0 phishscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602270144
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
 	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21220-lists,linux-scsi=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,oss.qualcomm.com:mid];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-21223-lists,linux-scsi=lfdr.de];
+	DKIM_TRACE(0.00)[qualcomm.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[qualcomm.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oss.qualcomm.com:mid];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[10]
-X-Rspamd-Queue-Id: B43601BAAF0
+X-Rspamd-Queue-Id: 576191BAB1E
 X-Rspamd-Action: no action
 
-Add debugfs support for UFS TX Equalization feature to enable runtime
-inspection of TX Equalization parameters. This provides visibility into
-both host and device TX Equalization settings as well as TX Equalization
-Training records for debugging and optimization purposes.
+When environmental changes happen too much and too fast during runtime,
+e.g., temperature, it might be required to retrain TX Equalization to find
+the new optimal TX EQ settings to compensate. Add support to retrain TX
+Equalization via debugfs, so that userspace can decide when to trigger it.
 
 Signed-off-by: Can Guo <can.guo@oss.qualcomm.com>
 ---
- drivers/ufs/core/ufs-debugfs.c | 206 +++++++++++++++++++++++++++++++++
- include/ufs/ufshcd.h           |   2 +
- 2 files changed, 208 insertions(+)
+ drivers/ufs/core/ufs-debugfs.c | 32 ++++++++++++
+ drivers/ufs/core/ufs-txeq.c    | 89 +++++++++++++++++++++++++++++++++-
+ drivers/ufs/core/ufshcd-priv.h |  6 ++-
+ drivers/ufs/core/ufshcd.c      | 10 ++--
+ 4 files changed, 127 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/ufs/core/ufs-debugfs.c b/drivers/ufs/core/ufs-debugfs.c
-index e3baed6c70bd..53deb8b2d1ea 100644
+index 53deb8b2d1ea..5a52c2ad44f5 100644
 --- a/drivers/ufs/core/ufs-debugfs.c
 +++ b/drivers/ufs/core/ufs-debugfs.c
-@@ -209,6 +209,203 @@ static const struct ufs_debugfs_attr ufs_attrs[] = {
- 	{ }
- };
+@@ -230,6 +230,36 @@ static int tx_eq_gear_set(void *data, u64 val)
  
-+static int tx_eq_gear_get(void *data, u64 *val)
+ DEFINE_DEBUGFS_ATTRIBUTE(tx_eq_gear_fops, tx_eq_gear_get, tx_eq_gear_set, "%#llx\n");
+ 
++static int retrain_tx_eq_set(void *data, u64 val)
 +{
 +	struct ufs_hba *hba = data;
++	struct ufs_pa_layer_attr *pwr_info = &hba->max_pwr_info.info;
++	u32 gear = (u32)val;
++	int err;
 +
-+	*val = (u64)hba->debugfs_tx_eq_gear;
-+	return 0;
-+}
++	if (hba->ufshcd_state != UFSHCD_STATE_OPERATIONAL)
++		return -EBUSY;
 +
-+static int tx_eq_gear_set(void *data, u64 val)
-+{
-+	struct ufs_hba *hba = data;
++	if (!hba->ufs_device_wlun)
++		return -ENODEV;
 +
-+	if (val < UFS_HS_G1 || val >= UFS_HS_GEAR_MAX)
++	if (gear < UFS_HS_G1 || gear >= UFS_HS_GEAR_MAX ||
++	    !hba->max_pwr_info.is_valid || gear > pwr_info->gear_tx)
 +		return -EINVAL;
 +
-+	hba->debugfs_tx_eq_gear = (u32)val;
-+	return 0;
++	err = ufs_debugfs_get_user_access(hba);
++	if (err)
++		return err;
++	ufshcd_hold(hba);
++	err = ufshcd_retrain_tx_eq(hba, gear);
++	ufshcd_release(hba);
++	ufs_debugfs_put_user_access(hba);
++
++	return err;
 +}
 +
-+DEFINE_DEBUGFS_ATTRIBUTE(tx_eq_gear_fops, tx_eq_gear_get, tx_eq_gear_set, "%#llx\n");
++DEFINE_DEBUGFS_ATTRIBUTE(retrain_tx_eq_fops, NULL, retrain_tx_eq_set, "%#llx\n");
 +
-+static int ufs_tx_eq_params_show(struct seq_file *s, void *data)
-+{
-+	struct ufs_debugfs_attr *attr = s->private;
-+	struct ufs_hba *hba = hba_from_file(s->file);
-+	struct ufshcd_tx_eq_settings *settings;
-+	struct ufshcd_tx_eq_params *params;
-+	u32 gear = hba->debugfs_tx_eq_gear;
-+	u32 rate = hba->pwr_info.hs_rate;
-+	u32 num_lanes;
-+	int lane;
-+
-+	if (!ufshcd_is_tx_eq_supported(hba))
-+		return -EOPNOTSUPP;
-+
-+	if (gear < UFS_HS_G1 || gear >= UFS_HS_GEAR_MAX) {
-+		seq_printf(s, "Invalid gear selected: %u\n", gear);
-+		return 0;
-+	}
-+
-+	params = &hba->tx_eq_params[gear - 1];
-+	if (!params->is_valid) {
-+		seq_printf(s, "TX EQ params are invalid for HS-G%u, Rate-%s\n",
-+			   gear, UFS_HS_RATE_STRING(rate));
-+		return 0;
-+	}
-+
-+	if (strcmp(attr->name, "host_tx_eq_params") == 0) {
-+		settings = params->host;
-+		num_lanes = params->tx_lanes;
-+		seq_printf(s, "Host TX EQ PreShoot Cap: 0x%02x, DeEmphasis Cap: 0x%02x\n",
-+			   hba->host_preshoot_cap, hba->host_deemphasis_cap);
-+	} else if (strcmp(attr->name, "device_tx_eq_params") == 0) {
-+		settings = params->device;
-+		num_lanes = params->rx_lanes;
-+		seq_printf(s, "Device TX EQ PreShoot Cap: 0x%02x, DeEmphasis Cap: 0x%02x\n",
-+			   hba->device_preshoot_cap, hba->device_deemphasis_cap);
-+	} else {
-+		return -ENOENT;
-+	}
-+
-+	seq_printf(s, "TX EQ setting for HS-G%u, Rate-%s:\n", gear,
-+		   UFS_HS_RATE_STRING(rate));
-+	for (lane = 0; lane < num_lanes; lane++)
-+		seq_printf(s, "TX Lane %d - PreShoot: %d, DeEmphasis: %d, Pre-Coding %senabled\n",
-+			   lane, settings[lane].preshoot,
-+			   settings[lane].deemphasis,
-+			   settings[lane].precode_en ? "" : "not ");
-+
-+	return 0;
-+}
-+
-+static int ufs_tx_eq_params_open(struct inode *inode, struct file *file)
-+{
-+	return single_open(file, ufs_tx_eq_params_show, inode->i_private);
-+}
-+
-+static const struct file_operations ufs_tx_eq_params_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= ufs_tx_eq_params_open,
-+	.read		= seq_read,
-+	.llseek		= seq_lseek,
-+	.release	= single_release,
-+};
-+
-+static int ufs_tx_eqtr_record_show(struct seq_file *s, void *data)
-+{
-+	struct ufs_debugfs_attr *attr = s->private;
-+	struct ufs_hba *hba = hba_from_file(s->file);
-+	struct ufshcd_tx_eq_params *params;
-+	unsigned long preshoot_bitmap, deemphasis_bitmap;
-+	unsigned int preshoot, deemphasis;
-+	u32 (*record)[TX_HS_NUM_PRESHOOT][TX_HS_NUM_DEEMPHASIS];
-+	u32 gear = hba->debugfs_tx_eq_gear;
-+	u32 rate = hba->pwr_info.hs_rate;
-+	u32 num_lanes;
-+	int lane;
-+	char name[32];
-+
-+	if (!ufshcd_is_tx_eq_supported(hba))
-+		return -EOPNOTSUPP;
-+
-+	if (gear < UFS_HS_G1 || gear >= UFS_HS_GEAR_MAX) {
-+		seq_printf(s, "Invalid gear selected: %u\n", gear);
-+		return 0;
-+	}
-+
-+	params = &hba->tx_eq_params[gear - 1];
-+	if (!params->is_valid) {
-+		seq_printf(s, "TX EQ params are invalid for HS-G%u, Rate-%s\n",
-+			   gear, UFS_HS_RATE_STRING(rate));
-+		return 0;
-+	}
-+
-+	if (!params->num_eqtr_records) {
-+		seq_printf(s, "No TX EQTR records found for HS-G%u, Rate-%s.\n",
-+			   gear, UFS_HS_RATE_STRING(rate));
-+		return 0;
-+	}
-+
-+	if (strcmp(attr->name, "host_tx_eqtr_record") == 0) {
-+		record = params->host_eqtr_record;
-+		preshoot_bitmap = (hba->host_preshoot_cap << 0x1) | 0x1;
-+		deemphasis_bitmap = (hba->host_deemphasis_cap << 0x1) | 0x1;
-+		num_lanes = params->tx_lanes;
-+		snprintf(name, 32, "%s", "Host");
-+	} else if (strcmp(attr->name, "device_tx_eqtr_record") == 0) {
-+		record = params->device_eqtr_record;
-+		preshoot_bitmap = (hba->device_preshoot_cap << 0x1) | 0x1;
-+		deemphasis_bitmap = (hba->device_deemphasis_cap << 0x1) | 0x1;
-+		num_lanes = params->rx_lanes;
-+		snprintf(name, 32, "%s", "Device");
-+	} else {
-+		return -ENOENT;
-+	}
-+
-+	seq_printf(s, "%s TX EQTR record summary -\n", name);
-+	seq_printf(s, "Target Power Mode: HS-G%u, Rate-%s\n", gear,
-+		   UFS_HS_RATE_STRING(rate));
-+	seq_printf(s, "Number of records: %d\n", params->num_eqtr_records);
-+	seq_printf(s, "Last record timestamp: %llu us\n",
-+		   ktime_to_us(params->last_eqtr_ts));
-+
-+	for (lane = 0; lane < num_lanes; lane++) {
-+		seq_printf(s, "\nTX Lane %d: %s\n", lane, "PreShoot\\DeEmphasis");
-+		seq_puts(s, "\\");
-+		/* Print DeEmphasis header as X-axis. */
-+		for (deemphasis = 0; deemphasis < TX_HS_NUM_DEEMPHASIS; deemphasis++)
-+			seq_printf(s, "%8d%s", deemphasis, " ");
-+		seq_puts(s, "\n");
-+		/* Print matrix rows with PreShoot as Y-axis. */
-+		for (preshoot = 0; preshoot < TX_HS_NUM_PRESHOOT; preshoot++) {
-+			seq_printf(s, "%d", preshoot);
-+			for (deemphasis = 0; deemphasis < TX_HS_NUM_DEEMPHASIS; deemphasis++) {
-+				if (test_bit(preshoot, &preshoot_bitmap) &&
-+				    test_bit(deemphasis, &deemphasis_bitmap)) {
-+					u32 fom = record[lane][preshoot][deemphasis];
-+					u32 fom_val = fom & RX_FOM_VALUE_MASK;
-+					bool precode_en = !!(fom & RX_FOM_PRECODING_EN_MASK);
-+
-+					if (fom == 0xFFFFFFFF)
-+						seq_printf(s, "%8s%s", "-", " ");
-+					else
-+						seq_printf(s, "%8u%s", fom_val,
-+							   precode_en ? "*" : " ");
-+				} else {
-+					seq_printf(s, "%8s%s", "x", " ");
-+				}
-+			}
-+			seq_puts(s, "\n");
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int ufs_tx_eqtr_record_open(struct inode *inode, struct file *file)
-+{
-+	return single_open(file, ufs_tx_eqtr_record_show, inode->i_private);
-+}
-+
-+static const struct file_operations ufs_tx_eqtr_record_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= ufs_tx_eqtr_record_open,
-+	.read		= seq_read,
-+	.llseek		= seq_lseek,
-+	.release	= single_release,
-+};
-+
-+static const struct ufs_debugfs_attr ufs_tx_eq_attrs[] = {
-+	{ "host_tx_eq_params", 0400, &ufs_tx_eq_params_fops },
-+	{ "device_tx_eq_params", 0400, &ufs_tx_eq_params_fops },
-+	{ "host_tx_eqtr_record", 0400, &ufs_tx_eqtr_record_fops },
-+	{ "device_tx_eqtr_record", 0400, &ufs_tx_eqtr_record_fops },
-+	{ }
-+};
-+
- void ufs_debugfs_hba_init(struct ufs_hba *hba)
+ static int ufs_tx_eq_params_show(struct seq_file *s, void *data)
  {
- 	const struct ufs_debugfs_attr *attr;
-@@ -230,6 +427,15 @@ void ufs_debugfs_hba_init(struct ufs_hba *hba)
- 			    hba, &ee_usr_mask_fops);
- 	debugfs_create_u32("exception_event_rate_limit_ms", 0600, hba->debugfs_root,
- 			   &hba->debugfs_ee_rate_limit_ms);
-+
-+	if (!(hba->caps & UFSHCD_CAP_TX_EQUALIZATION))
-+		return;
-+	hba->debugfs_tx_eq_gear = UFS_HS_GEAR_MAX - 1;
-+	debugfs_create_file("tx_eq_gear_sel", 0600, hba->debugfs_root, hba,
-+			    &tx_eq_gear_fops);
-+	for (attr = ufs_tx_eq_attrs; attr->name; attr++)
-+		debugfs_create_file(attr->name, attr->mode, root, (void *)attr,
-+				    attr->fops);
- }
- 
- void ufs_debugfs_hba_exit(struct ufs_hba *hba)
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 696db71d68bc..56455b137f10 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1038,6 +1038,7 @@ enum ufshcd_mcq_opr {
-  * @host_deemphasis_cap: host TX DeEmphasis capability
-  * @device_preshoot_cap: device TX PreShoot capability
-  * @device_deemphasis_cap: device TX DeEmphasis capability
-+ * @debugfs_tx_eq_gear: used to select Gear for TX Equalization debugfs entries
-  * @tx_eq_params: TX Equalization settings
+ 	struct ufs_debugfs_attr *attr = s->private;
+@@ -433,6 +463,8 @@ void ufs_debugfs_hba_init(struct ufs_hba *hba)
+ 	hba->debugfs_tx_eq_gear = UFS_HS_GEAR_MAX - 1;
+ 	debugfs_create_file("tx_eq_gear_sel", 0600, hba->debugfs_root, hba,
+ 			    &tx_eq_gear_fops);
++	debugfs_create_file("retrain_tx_eq", 0200, hba->debugfs_root, hba,
++			    &retrain_tx_eq_fops);
+ 	for (attr = ufs_tx_eq_attrs; attr->name; attr++)
+ 		debugfs_create_file(attr->name, attr->mode, root, (void *)attr,
+ 				    attr->fops);
+diff --git a/drivers/ufs/core/ufs-txeq.c b/drivers/ufs/core/ufs-txeq.c
+index 1eaaca7c34a4..55d8d4f49146 100644
+--- a/drivers/ufs/core/ufs-txeq.c
++++ b/drivers/ufs/core/ufs-txeq.c
+@@ -1075,6 +1075,7 @@ static int ufshcd_tx_eqtr(struct ufs_hba *hba,
+  * ufshcd_config_tx_eq_settings - Configure TX Equalization settings
+  * @hba: per adapter instance
+  * @pwr_mode: target power mode containing gear and rate information
++ * @force_tx_eqtr: do a TX EQTR regardless
+  *
+  * This function finds and sets the TX Equalization settings for the given
+  * target power mode.
+@@ -1082,7 +1083,8 @@ static int ufshcd_tx_eqtr(struct ufs_hba *hba,
+  * Returns 0 on success, error code otherwise
   */
- struct ufs_hba {
-@@ -1217,6 +1218,7 @@ struct ufs_hba {
- 	u32 host_deemphasis_cap;
- 	u32 device_preshoot_cap;
- 	u32 device_deemphasis_cap;
-+	u32 debugfs_tx_eq_gear;
- 	struct ufshcd_tx_eq_params tx_eq_params[UFS_HS_GEAR_MAX - 1];
- };
+ int ufshcd_config_tx_eq_settings(struct ufs_hba *hba,
+-				 struct ufs_pa_layer_attr *pwr_mode)
++				 struct ufs_pa_layer_attr *pwr_mode,
++				 bool force_tx_eqtr)
+ {
+ 	struct ufshcd_tx_eq_params *params;
+ 	u32 gear, rate;
+@@ -1118,7 +1120,7 @@ int ufshcd_config_tx_eq_settings(struct ufs_hba *hba,
+ 	if (gear < UFS_HS_G4)
+ 		goto apply_tx_eq_settings;
  
+-	if (!params->is_valid) {
++	if (!params->is_valid || force_tx_eqtr) {
+ 		ret = ufshcd_tx_eqtr(hba, params, pwr_mode);
+ 		if (ret) {
+ 			dev_err(hba->dev, "Failed to train TX Equalization for HS-G%u, Rate-%s: %d\n",
+@@ -1178,3 +1180,86 @@ void ufshcd_apply_valid_tx_eq_settings(struct ufs_hba *hba)
+ 		}
+ 	}
+ }
++
++static int ufshcd_retrain_tx_eq_prepare(struct ufs_hba *hba)
++{
++	int ret = 0;
++
++	mutex_lock(&hba->host->scan_mutex);
++	blk_mq_quiesce_tagset(&hba->host->tag_set);
++	down_write(&hba->clk_scaling_lock);
++
++	if (ufshcd_wait_for_pending_cmds(hba, 1 * USEC_PER_SEC)) {
++		ret = -EBUSY;
++		up_write(&hba->clk_scaling_lock);
++		blk_mq_unquiesce_tagset(&hba->host->tag_set);
++		mutex_unlock(&hba->host->scan_mutex);
++		goto out;
++	}
++
++	ufshcd_hold(hba);
++
++out:
++	return ret;
++}
++
++static void ufshcd_retrain_tx_eq_unprepare(struct ufs_hba *hba)
++{
++	up_write(&hba->clk_scaling_lock);
++	blk_mq_unquiesce_tagset(&hba->host->tag_set);
++	mutex_unlock(&hba->host->scan_mutex);
++	ufshcd_release(hba);
++}
++
++int ufshcd_retrain_tx_eq(struct ufs_hba *hba, u32 gear)
++{
++	struct ufs_pa_layer_attr new_pwr_info, final_params = { 0 };
++	int ret;
++
++	if (!ufshcd_is_tx_eq_supported(hba) || !use_adaptive_txeq)
++		return -EOPNOTSUPP;
++
++	if (gear < adaptive_txeq_gear)
++		return -ETOOSMALL;
++
++	ret = ufshcd_retrain_tx_eq_prepare(hba);
++	if (ret)
++		return ret;
++
++	/* scale up clocks to max frequency before TX EQTR */
++	if (ufshcd_is_clkscaling_supported(hba))
++		ufshcd_scale_clks(hba, ULONG_MAX, true);
++
++	new_pwr_info = hba->pwr_info;
++	new_pwr_info.gear_tx = gear;
++	new_pwr_info.gear_rx = gear;
++
++	ret = ufshcd_vops_negotiate_pwr_mode(hba, &new_pwr_info, &final_params);
++	if (ret)
++		memcpy(&final_params, &new_pwr_info, sizeof(final_params));
++
++	if (final_params.gear_tx != gear) {
++		dev_err(hba->dev, "%s: Negotiated Gear (%u) does not match target Gear (%u)\n",
++			__func__, final_params.gear_tx, gear);
++		goto out;
++	}
++
++	ret = ufshcd_config_tx_eq_settings(hba, &final_params, true);
++	if (ret) {
++		dev_err(hba->dev, "%s: Failed to configure TX Equalization settings for HS-G%u, Rate-%s: %d\n",
++			__func__, final_params.gear_tx,
++			UFS_HS_RATE_STRING(final_params.hs_rate), ret);
++		goto out;
++	}
++
++	/* Change Power Mode to apply the new TX EQ settings */
++	ret = ufshcd_change_power_mode(hba, &final_params, /*force_pmc=*/true);
++	if (ret)
++		dev_err(hba->dev, "%s: Failed to change Power Mode to HS-G%u, Rate-%s: %d\n",
++			__func__, final_params.gear_tx,
++			UFS_HS_RATE_STRING(final_params.hs_rate), ret);
++
++out:
++	ufshcd_retrain_tx_eq_unprepare(hba);
++	return ret;
++}
+diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
+index 87777d3f4326..95503fb3235d 100644
+--- a/drivers/ufs/core/ufshcd-priv.h
++++ b/drivers/ufs/core/ufshcd-priv.h
+@@ -102,12 +102,16 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
+ 
+ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable);
+ int ufshcd_read_device_lvl_exception_id(struct ufs_hba *hba, u64 *exception_id);
++int ufshcd_wait_for_pending_cmds(struct ufs_hba *hba, u64 wait_timeout_us);
++int ufshcd_scale_clks(struct ufs_hba *hba, unsigned long freq, bool scale_up);
+ 
+ int ufshcd_trigger_tx_eqtr(struct ufs_hba *hba, int gear);
+ void ufshcd_apply_valid_tx_eq_settings(struct ufs_hba *hba);
+ int ufshcd_config_tx_eq_settings(struct ufs_hba *hba,
+-				 struct ufs_pa_layer_attr *pwr_mode);
++				 struct ufs_pa_layer_attr *pwr_mode,
++				 bool force_tx_eqtr);
+ void ufshcd_print_tx_eq_params(struct ufs_hba *hba);
++int ufshcd_retrain_tx_eq(struct ufs_hba *hba, u32 target_gear);
+ 
+ /* Wrapper functions for safely calling variant operations */
+ static inline const char *ufshcd_get_var_name(struct ufs_hba *hba)
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index ed6793b1b7a1..0cdd61a980c3 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -332,8 +332,6 @@ static inline void ufshcd_add_delay_before_dme_cmd(struct ufs_hba *hba);
+ static int ufshcd_host_reset_and_restore(struct ufs_hba *hba);
+ static void ufshcd_resume_clkscaling(struct ufs_hba *hba);
+ static void ufshcd_suspend_clkscaling(struct ufs_hba *hba);
+-static int ufshcd_scale_clks(struct ufs_hba *hba, unsigned long freq,
+-			     bool scale_up);
+ static irqreturn_t ufshcd_intr(int irq, void *__hba);
+ static int ufshcd_setup_hba_vreg(struct ufs_hba *hba, bool on);
+ static int ufshcd_setup_vreg(struct ufs_hba *hba, bool on);
+@@ -1208,8 +1206,7 @@ static int ufshcd_opp_set_rate(struct ufs_hba *hba, unsigned long freq)
+  *
+  * Return: 0 if successful; < 0 upon failure.
+  */
+-static int ufshcd_scale_clks(struct ufs_hba *hba, unsigned long freq,
+-			     bool scale_up)
++int ufshcd_scale_clks(struct ufs_hba *hba, unsigned long freq, bool scale_up)
+ {
+ 	int ret = 0;
+ 	ktime_t start = ktime_get();
+@@ -1308,8 +1305,7 @@ static u32 ufshcd_pending_cmds(struct ufs_hba *hba)
+  *
+  * Return: 0 upon success; -EBUSY upon timeout.
+  */
+-static int ufshcd_wait_for_pending_cmds(struct ufs_hba *hba,
+-					u64 wait_timeout_us)
++int ufshcd_wait_for_pending_cmds(struct ufs_hba *hba, u64 wait_timeout_us)
+ {
+ 	int ret = 0;
+ 	u32 tm_doorbell;
+@@ -4812,7 +4808,7 @@ int ufshcd_config_pwr_mode(struct ufs_hba *hba,
+ 	if (ret)
+ 		memcpy(&final_params, desired_pwr_mode, sizeof(final_params));
+ 
+-	ret = ufshcd_config_tx_eq_settings(hba, &final_params);
++	ret = ufshcd_config_tx_eq_settings(hba, &final_params, false);
+ 	if (ret) {
+ 		dev_err(hba->dev, "Failed to configure TX Equalization settings for HS-G%u, Rate-%s: %d\n",
+ 			final_params.gear_tx,
 -- 
 2.34.1
 
