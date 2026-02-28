@@ -1,69 +1,69 @@
-Return-Path: <linux-scsi+bounces-21245-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21244-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IIR/E3Rro2mACgUAu9opvQ
-	(envelope-from <linux-scsi+bounces-21245-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 28 Feb 2026 23:25:56 +0100
+	id 6Fj/I7hqo2mACgUAu9opvQ
+	(envelope-from <linux-scsi+bounces-21244-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 28 Feb 2026 23:22:48 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A448B1C97E4
-	for <lists+linux-scsi@lfdr.de>; Sat, 28 Feb 2026 23:25:55 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BC961C978B
+	for <lists+linux-scsi@lfdr.de>; Sat, 28 Feb 2026 23:22:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2303430C99A8
-	for <lists+linux-scsi@lfdr.de>; Sat, 28 Feb 2026 22:22:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E175F3016487
+	for <lists+linux-scsi@lfdr.de>; Sat, 28 Feb 2026 22:22:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC94363089;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2285527B32C;
 	Sat, 28 Feb 2026 22:22:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="T5lPbJnk"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ZurTbsg0"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529E5330D32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A6A34DCD2
 	for <linux-scsi@vger.kernel.org>; Sat, 28 Feb 2026 22:22:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772317357; cv=none; b=fi65tAIaNPm8j1y8XRhMqX//MUn7Gx5neBEqeOQuGv2E5Y3/Yj+CjXiV2XNobT3k+JHLzxHadfLunnsE4bpe+S8ffPmZ5lr/YZZs4q2+mSC973HrwbmD4Yge7K8ACc+GLD75Rd3fgTTmHioMRD6lU9/OwIxBQtIdr7UwnXB1pmo=
+	t=1772317356; cv=none; b=Ms68Wj+DGM82brFQEfAZNXFvNFk07TBQs2W07+UnpUJAbfq7sHE/2WtJNT0QC8y9xvXhTtvFzcLUDKJpYyiaIOplNiTPlFpmnuFIyRyOruEuC0oXnpu88JnWLqJxGNelnrRliGF0t/m+LWJo55q09R+8h0aW54e4wFIBCEmGfWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772317357; c=relaxed/simple;
-	bh=XGiINfkEsGyzZGSn5oX15cr+pRH1xZr0pjda9uRVWxQ=;
+	s=arc-20240116; t=1772317356; c=relaxed/simple;
+	bh=MC3W+xnaMfJ7Chl2dXLXZHGosbDRHS0evtyTpQriHB4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qMXqV336albQmqmHm9l+Hg/9zs4k0ikdiJxVyzVhRz5PaR28c9s2SWlQ6ztz2lnOkDshNFVOKl4VPbnF4wg8TUH80rhnlWgZIr0Sz8XYnTc64WcMF+/4fqv5NRd7JMVHYd5le4Kpttv0f3lUG3Zaf5AgLdLbCpm/wYrNL2ub2UI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=T5lPbJnk; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=mzpLsB+Yhlws85J106rXTbxsEro8rmRSJ2VRLDe78cUx8ycYO4rz+E/Sr3rkuvgP2xdOeyiLUOoW79Au4ZWh2wK0AssGTRDshrhMNc8cXdQ/0gMWidAnObFyHADV79jiUaxKePRnmO/QEIr29aF+4yfDJz3XFLOxPwuk1tXaPIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ZurTbsg0; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61SKx9Vl2599266;
-	Sat, 28 Feb 2026 22:22:17 GMT
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61SL98iu3793294;
+	Sat, 28 Feb 2026 22:22:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=Ns0lXggDC2aX4UrHTXUvjJ7IDX6kAfcdiSwFXxMJNIs=; b=
-	T5lPbJnk2o3wS+4nQn5TEnXeJMSeH3rH66rTLT02k6MyEsFbwdiQBAfTEqVEgv4G
-	nb9S59knMFjR3i9MdAKHMdA8g1viH/CAUyrXDaoEYKcykzRx75/R9MgOqUZFz9N6
-	4mU4h9yxMd7MspyUV4BO30KyzG0FJXrG/heskEPKiVNgVPijajz/EXQZ6rqBZd2D
-	MTdHdxNZxZ7YJlbgbv2Y1wi/cWQWgjq5y5sABZOkz9z7cXnHkc3IPAyWme6QoaQR
-	4+QlMCzsQ06gbLAfg3Us2fjG2vq9XLpE/VaZUNy4KyDm/r7wXjc1VocD69NlrKH5
-	bgOFp5s3cL4h++XH+9ASug==
+	corp-2025-04-25; bh=bwUkbaTki6TTnhaRVp0leO5Xd4rs/qy/Oc0xfqrFu94=; b=
+	ZurTbsg01mltRI1cdZCb6R4ksFE2rHSmN/fGWIBxEPw8B6kPUGgh8qqPUEe8tPRZ
+	uMN7UIM2M39sBhiyaeQSIG0BIXtgNyozvyO6ebV63uLzAsQcBqa+hmWYFaYlRTE6
+	XTdLjid7iMDy5pyteRdEQcBlNmUXRSFY/gb61+xZup5JkasHWHNdktBDrI246Cnf
+	2mtv3VXKlVg/YUTeaeyObCiTHaYZHIAzWv7P2ay1g9eNXd8KL+CDE8ojIapl7ebq
+	biQXykHAw7+oZeFUTqfFAzffQSUF517lOEelcLjRPeMmdUuqRB8Yzn+BXcOdQPUH
+	f2hmCPBPFaeJ6a1Vb2q9kA==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4ckshmgk78-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4ckshbrkf4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 28 Feb 2026 22:22:17 +0000 (GMT)
+	Sat, 28 Feb 2026 22:22:18 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61SL0gRB036929;
-	Sat, 28 Feb 2026 22:22:16 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61SL0h8H036986;
+	Sat, 28 Feb 2026 22:22:18 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4ckpt7bhdt-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4ckpt7bhe9-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 28 Feb 2026 22:22:16 +0000
+	Sat, 28 Feb 2026 22:22:18 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61SMHlvZ018394;
-	Sat, 28 Feb 2026 22:22:15 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61SMHlvb018394;
+	Sat, 28 Feb 2026 22:22:17 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4ckpt7bhc9-4;
-	Sat, 28 Feb 2026 22:22:15 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4ckpt7bhc9-5;
+	Sat, 28 Feb 2026 22:22:17 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
 To: linux-scsi@vger.kernel.org, avri.altman@sandisk.com,
         alim.akhtar@samsung.com, jejb@linux.ibm.com, peter.wang@mediatek.com
@@ -73,12 +73,12 @@ Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
         cc.chou@mediatek.com, chaotian.jing@mediatek.com,
         tun-yu.yu@mediatek.com, eddie.huang@mediatek.com,
         naomi.chu@mediatek.com, ed.tsai@mediatek.com, bvanassche@acm.org
-Subject: Re: [PATCH v2 0/2] add debug log for command timeout
-Date: Sat, 28 Feb 2026 17:22:04 -0500
-Message-ID: <177231727973.1778274.12344057374101536805.b4-ty@oracle.com>
+Subject: Re: [PATCH v2] ufs: core: support UFSHCI 4.1 CQ entry tag
+Date: Sat, 28 Feb 2026 17:22:05 -0500
+Message-ID: <177231727974.1778274.1876634781735565722.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260210070837.1820710-1-peter.wang@mediatek.com>
-References: <20260210070837.1820710-1-peter.wang@mediatek.com>
+In-Reply-To: <20260210071834.1837878-1-peter.wang@mediatek.com>
+References: <20260210071834.1837878-1-peter.wang@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -94,70 +94,61 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishs
  spamscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
  definitions=main-2602280208
-X-Proofpoint-ORIG-GUID: CrlQ1SF_jI4AVdsC__TEvnQX6WGh-UkY
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI4MDIwOSBTYWx0ZWRfXyzPtp1E07t24
- bY0M6luYICdlqI0V70A0/77dzsDNYs1CJAY7JxghG43wh6SUNlv+f7CWH9ZEFhe5iRt2ShvzoIp
- UM6Lyzgo5A2AVP3Ofyz97XWai7ivs5ZzCkynD+SobNAoWDB+TZlMrbAs7Ie2IaEuRBVaUuTHPQo
- TsfVjJjiAT+LCK9Rc12BtxEb9EDeHH9RiY1Fla4TVnALw/1AbazBT9QmRpfWi6Eoit9lwywPRl0
- YieuL1wUHB1M8DldvBuQZ5PhHsYsKyH+ubufAgM7dAYt8vjjmvMqvzUA3KEO8LQ3K36OFPn9UzI
- JFT5B/a282aYF0F0UbwqqCHBc/MT1tftcdG5djX9eIfH1E2/qIg3GMne0M7cc2ffA7TmamAhWpG
- jCS61VMlCLiJ0fh9lxkSuDTVJtaASrpU98GnDs3OqRw/l099vtXMR8vxnoO59cKgNE+oq7VqgEI
- I93jCJ2xxqQEJqsho1Q==
-X-Proofpoint-GUID: CrlQ1SF_jI4AVdsC__TEvnQX6WGh-UkY
-X-Authority-Analysis: v=2.4 cv=Urlu9uwB c=1 sm=1 tr=0 ts=69a36a99 cx=c_pps
+X-Proofpoint-GUID: 3VOD1ymBdAtUzsH06FX_sysFlP3o3V0W
+X-Proofpoint-ORIG-GUID: 3VOD1ymBdAtUzsH06FX_sysFlP3o3V0W
+X-Authority-Analysis: v=2.4 cv=Qaxrf8bv c=1 sm=1 tr=0 ts=69a36a9b cx=c_pps
  a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
  a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=3I1J8UUJPc9JN9BFgKH3:22 a=VwQbUJbxAAAA:8
- a=mpaa-ttXAAAA:8 a=0BTOhgosUMHOF3p0MAAA:9 a=QEXdDO2ut3YA:10
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=BqU2WV_vvsyTyxaotp0D:22 a=VwQbUJbxAAAA:8
+ a=mpaa-ttXAAAA:8 a=QqvJkLw1XXo513EEspsA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI4MDIwOSBTYWx0ZWRfX4GdiTL/4Gpk+
+ /KRhDWc1HCxXZqzToOL7iAcMboAsrMfWyL2s6xflIYFZs7QQ4BfQu9aGtN/0o2tZN5DZp07OO3v
+ XHhRu+CQtxTPad3cBE/Ii6XbXtHjXuE1/lsoeWa0TwPIOv8xb2uFSkCqmJ9SjOQwhzwS0R5i0+u
+ OGyORTayGyDLueJ8x7dqRlgFojARt+5AVf/MP+yTLBrtadC64KguXZaIiuQwYYs7Ua6OHSecIoM
+ dXn2DNA0B0f8UktQG78qJTFP4I3atD5LqFTMgiHWTG6kuLm5tJjhCtoOuCNQatAr+6ypWV7HIz0
+ repL6Qy+7Ne3HNx6JEYmd/IHYhT0o+0Ia6450iCLMoK1jDqz3jzmi2SQdquiJ60XC/TTikf39Kj
+ Mky00SPmDgaVPRHbXChfv62h50uaqf7QDDIoWQjVGB3rMmAvSnlvPvPN9QMFSrbo47p4JrltXxw
+ Rj2UpxGgpIp7eeNWRQQ==
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[17];
-	TAGGED_FROM(0.00)[bounces-21245-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21244-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[oracle.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oracle.com:mid,oracle.com:dkim];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:mid,oracle.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
 	TO_DN_SOME(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	PRECEDENCE_BULK(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: A448B1C97E4
+X-Rspamd-Queue-Id: 0BC961C978B
 X-Rspamd-Action: no action
 
-On Tue, 10 Feb 2026 14:41:42 +0800, peter.wang@mediatek.com wrote:
+On Tue, 10 Feb 2026 15:17:30 +0800, peter.wang@mediatek.com wrote:
 
-> Add some logs to make it easier to debug after a command timeout.
+> The UFSHCI 4.1 specification introduces a new completion queue(CQ)
+> entry format, allowing the tag to be obtained directly.
 > 
-> Changes since v1:
-> 1. Fix typos in the cover letter and commit message title.
-> 2. Improve log clarity.
 > 
-> Peter Wang (2):
->   ufs: core: add debug log for uic command timeout
->   ufs: core: add debug log for mcq command timeout
-> 
-> [...]
 
 Applied to 7.1/scsi-queue, thanks!
 
-[1/2] ufs: core: add debug log for uic command timeout
-      https://git.kernel.org/mkp/scsi/c/01517654bc25
-[2/2] ufs: core: add debug log for mcq command timeout
-      https://git.kernel.org/mkp/scsi/c/3abe4113e784
+[1/1] ufs: core: support UFSHCI 4.1 CQ entry tag
+      https://git.kernel.org/mkp/scsi/c/f707860ebc84
 
 -- 
 Martin K. Petersen
