@@ -1,83 +1,84 @@
-Return-Path: <linux-scsi+bounces-21242-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21245-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iO55BStro2mACgUAu9opvQ
-	(envelope-from <linux-scsi+bounces-21242-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 28 Feb 2026 23:24:43 +0100
+	id IIR/E3Rro2mACgUAu9opvQ
+	(envelope-from <linux-scsi+bounces-21245-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 28 Feb 2026 23:25:56 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E3781C97CC
-	for <lists+linux-scsi@lfdr.de>; Sat, 28 Feb 2026 23:24:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A448B1C97E4
+	for <lists+linux-scsi@lfdr.de>; Sat, 28 Feb 2026 23:25:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DBAED3055DF5
-	for <lists+linux-scsi@lfdr.de>; Sat, 28 Feb 2026 22:22:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2303430C99A8
+	for <lists+linux-scsi@lfdr.de>; Sat, 28 Feb 2026 22:22:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBAC434DCD2;
-	Sat, 28 Feb 2026 22:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC94363089;
+	Sat, 28 Feb 2026 22:22:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="STEEit80"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="T5lPbJnk"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740142571D7;
-	Sat, 28 Feb 2026 22:22:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529E5330D32
+	for <linux-scsi@vger.kernel.org>; Sat, 28 Feb 2026 22:22:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772317346; cv=none; b=dwocXHw73jSw20S4XLdUQpgnaAXRK8nPeF1bXRA0x122T66RPCzApjYN62pwzR1CJ8mzfto0B8rE0zQ8HSudzvR4TgkzB7qpiorwOLsxMd+6Oh8/ti2w3g99GEQg+evNC8MgtKda1FjHMk3WIQJlNu+nHGuZGFTgql+P3CBvgJc=
+	t=1772317357; cv=none; b=fi65tAIaNPm8j1y8XRhMqX//MUn7Gx5neBEqeOQuGv2E5Y3/Yj+CjXiV2XNobT3k+JHLzxHadfLunnsE4bpe+S8ffPmZ5lr/YZZs4q2+mSC973HrwbmD4Yge7K8ACc+GLD75Rd3fgTTmHioMRD6lU9/OwIxBQtIdr7UwnXB1pmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772317346; c=relaxed/simple;
-	bh=fJZTwkE3P3m2ok+sM+wYSuZiMIzmevdJuIvhbT5f9k0=;
+	s=arc-20240116; t=1772317357; c=relaxed/simple;
+	bh=XGiINfkEsGyzZGSn5oX15cr+pRH1xZr0pjda9uRVWxQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aXPxbnkvf9dxMVs3XUb4Cv/XG3/sPi50+K7PxX5PzDw25HYfDbX7orAExMrSK4ypoCoRVQjgJP9eqK/vvO8C7P/ur15BbTiDCAK5CA90SpKf0ky8QaxUjHQlQDBSrRYGP/vy2h01OkZaxheRVPnbO2GE86l14HlERMudLXN6tdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=STEEit80; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=qMXqV336albQmqmHm9l+Hg/9zs4k0ikdiJxVyzVhRz5PaR28c9s2SWlQ6ztz2lnOkDshNFVOKl4VPbnF4wg8TUH80rhnlWgZIr0Sz8XYnTc64WcMF+/4fqv5NRd7JMVHYd5le4Kpttv0f3lUG3Zaf5AgLdLbCpm/wYrNL2ub2UI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=T5lPbJnk; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61SJJ6E92145042;
-	Sat, 28 Feb 2026 22:22:16 GMT
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61SKx9Vl2599266;
+	Sat, 28 Feb 2026 22:22:17 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=3vuVSVh28n28th73eyGAjigTNMpQssx3NIOnyrKZKA8=; b=
-	STEEit80jmO2b+oYtVifbXP/foEnA1OYnf2jgFDeMf7VfySLpnm8MP2BuWrNUk6F
-	J5tXj4wCgSh6vDYrfzzIGzJmwmuN7HEZ13Cle+dwqv7MoS5uEBiMkzy8WUF7smnp
-	PMv2jaXYudoauhjlJfw+djyJ1bxk/9dKngiBl+r4mwGFb4YhIBuATNJUX7HL0qNK
-	iYG/gIbYJ755t6YcUsoACv2T5881ytPQbOJ8LB2m++3MMq9k2oiI6cJBc82hl5W4
-	qK3qtzyHFQoG09ycmsIIZldpd9/VDMz9GjjttiSVCjMaGvhHipEVWDQE4KNCCTx9
-	5RK4lq30ZsonEppFsEUxQw==
+	corp-2025-04-25; bh=Ns0lXggDC2aX4UrHTXUvjJ7IDX6kAfcdiSwFXxMJNIs=; b=
+	T5lPbJnk2o3wS+4nQn5TEnXeJMSeH3rH66rTLT02k6MyEsFbwdiQBAfTEqVEgv4G
+	nb9S59knMFjR3i9MdAKHMdA8g1viH/CAUyrXDaoEYKcykzRx75/R9MgOqUZFz9N6
+	4mU4h9yxMd7MspyUV4BO30KyzG0FJXrG/heskEPKiVNgVPijajz/EXQZ6rqBZd2D
+	MTdHdxNZxZ7YJlbgbv2Y1wi/cWQWgjq5y5sABZOkz9z7cXnHkc3IPAyWme6QoaQR
+	4+QlMCzsQ06gbLAfg3Us2fjG2vq9XLpE/VaZUNy4KyDm/r7wXjc1VocD69NlrKH5
+	bgOFp5s3cL4h++XH+9ASug==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4ckshn0k6q-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4ckshmgk78-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 28 Feb 2026 22:22:15 +0000 (GMT)
+	Sat, 28 Feb 2026 22:22:17 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61SL0iv3037177;
-	Sat, 28 Feb 2026 22:22:14 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61SL0gRB036929;
+	Sat, 28 Feb 2026 22:22:16 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4ckpt7bhdj-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4ckpt7bhdt-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 28 Feb 2026 22:22:14 +0000
+	Sat, 28 Feb 2026 22:22:16 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61SMHlvX018394;
-	Sat, 28 Feb 2026 22:22:14 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61SMHlvZ018394;
+	Sat, 28 Feb 2026 22:22:15 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4ckpt7bhc9-3;
-	Sat, 28 Feb 2026 22:22:13 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4ckpt7bhc9-4;
+	Sat, 28 Feb 2026 22:22:15 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: sebaddel@cisco.com, Karan Tilak Kumar <kartilak@cisco.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, arulponn@cisco.com,
-        djhawar@cisco.com, gcboffa@cisco.com, aeasi@cisco.com, mkai2@cisco.com,
-        satishkh@cisco.com, jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jmeneghi@redhat.com, revers@redhat.com,
-        dan.carpenter@linaro.org, Hannes Reinecke <hare@suse.de>,
-        Hannes Reinecke <hare@kernel.org>
-Subject: Re: [PATCH 1/5] scsi: fnic: Use mempool for receive frames
-Date: Sat, 28 Feb 2026 17:22:03 -0500
-Message-ID: <177231727985.1778274.8891985262905640044.b4-ty@oracle.com>
+To: linux-scsi@vger.kernel.org, avri.altman@sandisk.com,
+        alim.akhtar@samsung.com, jejb@linux.ibm.com, peter.wang@mediatek.com
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        wsd_upstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
+        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
+        tun-yu.yu@mediatek.com, eddie.huang@mediatek.com,
+        naomi.chu@mediatek.com, ed.tsai@mediatek.com, bvanassche@acm.org
+Subject: Re: [PATCH v2 0/2] add debug log for command timeout
+Date: Sat, 28 Feb 2026 17:22:04 -0500
+Message-ID: <177231727973.1778274.12344057374101536805.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260217223943.7938-1-kartilak@cisco.com>
-References: <20260217223943.7938-1-kartilak@cisco.com>
+In-Reply-To: <20260210070837.1820710-1-peter.wang@mediatek.com>
+References: <20260210070837.1820710-1-peter.wang@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -90,36 +91,36 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-02-28_07,2026-02-27_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=0
- spamscore=0 malwarescore=0 bulkscore=0 mlxlogscore=936 adultscore=0
+ spamscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
  definitions=main-2602280208
-X-Authority-Analysis: v=2.4 cv=RsPI7SmK c=1 sm=1 tr=0 ts=69a36a97 cx=c_pps
+X-Proofpoint-ORIG-GUID: CrlQ1SF_jI4AVdsC__TEvnQX6WGh-UkY
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI4MDIwOSBTYWx0ZWRfXyzPtp1E07t24
+ bY0M6luYICdlqI0V70A0/77dzsDNYs1CJAY7JxghG43wh6SUNlv+f7CWH9ZEFhe5iRt2ShvzoIp
+ UM6Lyzgo5A2AVP3Ofyz97XWai7ivs5ZzCkynD+SobNAoWDB+TZlMrbAs7Ie2IaEuRBVaUuTHPQo
+ TsfVjJjiAT+LCK9Rc12BtxEb9EDeHH9RiY1Fla4TVnALw/1AbazBT9QmRpfWi6Eoit9lwywPRl0
+ YieuL1wUHB1M8DldvBuQZ5PhHsYsKyH+ubufAgM7dAYt8vjjmvMqvzUA3KEO8LQ3K36OFPn9UzI
+ JFT5B/a282aYF0F0UbwqqCHBc/MT1tftcdG5djX9eIfH1E2/qIg3GMne0M7cc2ffA7TmamAhWpG
+ jCS61VMlCLiJ0fh9lxkSuDTVJtaASrpU98GnDs3OqRw/l099vtXMR8vxnoO59cKgNE+oq7VqgEI
+ I93jCJ2xxqQEJqsho1Q==
+X-Proofpoint-GUID: CrlQ1SF_jI4AVdsC__TEvnQX6WGh-UkY
+X-Authority-Analysis: v=2.4 cv=Urlu9uwB c=1 sm=1 tr=0 ts=69a36a99 cx=c_pps
  a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
  a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=o5oIOnhZENCTenyL_yNV:22 a=VwQbUJbxAAAA:8
- a=MKO0JlC4SyYoFBfRIWkA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: vCAcJpouNKqrgLl1XBNEd9KpXObgxJvX
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI4MDIwOSBTYWx0ZWRfX6zN1fghHSfqm
- QOyKJO1exQdxTnZ+N3vNl8lnXsCDWHQv1URIGlxqSvpjp2P52YskRpNJLWhSh6wRSxI37v3nykA
- Dm2VnxHnshp5iJpyF//kKFxlUsco9eKGm1bvkH3u3ksuDC0vhGTByLcrst4La1kgP4AykV0OTx3
- 6oDHuUhw32NwN7nlN++oXenm2Pasy+fsNdQnoBSKfdE4QHVKVRXj5ZSfupVBaqDbehmSoU9SxMt
- fOfVZpwuz+Y9qLojuCp++D/XcYXOQdd1H68ZroYM5ZQQqmBXLvgrG2v/aaJAaQe4VP/rWa4fLeb
- aFvfNMOzE/JWQtOl/V8MVoAVgJy0nrV8K2IQidzdZMHpyIyG45WYkOLjTgtIvFQNYejAAehAtyH
- KpTg+WHwpjHdWU89FC/CvK0eg9U6gNKkWoWtB/Bvlpf39XEyVFeDCsEzSeDawX8e7iemOqXUcSX
- dE+RMLrxnDXuIETDpJQ==
-X-Proofpoint-ORIG-GUID: vCAcJpouNKqrgLl1XBNEd9KpXObgxJvX
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=3I1J8UUJPc9JN9BFgKH3:22 a=VwQbUJbxAAAA:8
+ a=mpaa-ttXAAAA:8 a=0BTOhgosUMHOF3p0MAAA:9 a=QEXdDO2ut3YA:10
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[17];
-	TAGGED_FROM(0.00)[bounces-21242-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21245-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[oracle.com:+];
@@ -128,38 +129,35 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TO_DN_SOME(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	PRECEDENCE_BULK(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: 6E3781C97CC
+X-Rspamd-Queue-Id: A448B1C97E4
 X-Rspamd-Action: no action
 
-On Tue, 17 Feb 2026 14:39:39 -0800, Karan Tilak Kumar wrote:
+On Tue, 10 Feb 2026 14:41:42 +0800, peter.wang@mediatek.com wrote:
 
-> The receive frames are constantly replenished so we should rather
-> use a mempool here.
+> Add some logs to make it easier to debug after a command timeout.
 > 
-> fip_frame_queue is an rxq. De-alloc it in fnic_free_rxq.
-> Incorporate review comments from Hannes:
->     Modify fnic_free_txq to have same arguments as fnic_free_rxq
+> Changes since v1:
+> 1. Fix typos in the cover letter and commit message title.
+> 2. Improve log clarity.
+> 
+> Peter Wang (2):
+>   ufs: core: add debug log for uic command timeout
+>   ufs: core: add debug log for mcq command timeout
 > 
 > [...]
 
 Applied to 7.1/scsi-queue, thanks!
 
-[1/5] scsi: fnic: Use mempool for receive frames
-      https://git.kernel.org/mkp/scsi/c/0e07baae55bc
-[2/5] scsi: fnic: Do not use GFP_ZERO for mempools
-      https://git.kernel.org/mkp/scsi/c/a59d1caf1ded
-[3/5] scsi: fnic: Rename fnic_scsi_fcpio_reset()
-      https://git.kernel.org/mkp/scsi/c/31eda39bfd46
-[4/5] scsi: fnic: Refactor in_remove flag and call to fnic_fcpio_reset()
-      https://git.kernel.org/mkp/scsi/c/927b5282df64
-[5/5] scsi: fnic: Bump up version number
-      https://git.kernel.org/mkp/scsi/c/47e088c9d1a0
+[1/2] ufs: core: add debug log for uic command timeout
+      https://git.kernel.org/mkp/scsi/c/01517654bc25
+[2/2] ufs: core: add debug log for mcq command timeout
+      https://git.kernel.org/mkp/scsi/c/3abe4113e784
 
 -- 
 Martin K. Petersen
