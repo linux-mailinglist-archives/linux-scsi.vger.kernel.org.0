@@ -1,48 +1,48 @@
-Return-Path: <linux-scsi+bounces-21254-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21256-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MM3TC1Slo2mWJAUAu9opvQ
-	(envelope-from <linux-scsi+bounces-21254-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sun, 01 Mar 2026 03:32:52 +0100
+	id mEWsJX+co2k3IQUAu9opvQ
+	(envelope-from <linux-scsi+bounces-21256-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sun, 01 Mar 2026 02:55:11 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B63F1CDA9F
-	for <lists+linux-scsi@lfdr.de>; Sun, 01 Mar 2026 03:32:51 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A89DB1CC3F8
+	for <lists+linux-scsi@lfdr.de>; Sun, 01 Mar 2026 02:55:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A658731669D6
-	for <lists+linux-scsi@lfdr.de>; Sun,  1 Mar 2026 01:25:47 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B624830515A7
+	for <lists+linux-scsi@lfdr.de>; Sun,  1 Mar 2026 01:37:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70310284693;
-	Sun,  1 Mar 2026 01:25:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D5C2DE6E6;
+	Sun,  1 Mar 2026 01:36:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LMuhY1yS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lw8VzEQo"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DD6274B42;
-	Sun,  1 Mar 2026 01:25:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 372DE13B58A;
+	Sun,  1 Mar 2026 01:36:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772328347; cv=none; b=bxDUvSIORFAVLSa6ZJHv5ti8PobN5qs64gwCURMUy6JP0bVSLDdrt2JDL1Nawma0S6piK/8ZRDxeVSx4cNxnHK+uzqMaK7FtPYlq6qd/RZJcK3uEpk8AcN7Wgh9JjlWlLHr2yTmyWh25hiJY65ReJO/nxHYra/QdUpAUgZRVhFU=
+	t=1772328981; cv=none; b=NCzhLvzyPHkdSCIFXAnspoS8lhCKBs+2BJm6M1SY4igzjtOgD3QHW07HGshG3FMyGDhwyVwZYa6pOtG8yuRJfc5jY3HSWb/ScPrBelosdA6YQzkpARVKFH2EWlvC7mVbTgQhCDUV/tXRrBivJsEcbEJhJWSUbSI/zOAnNhyAd3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772328347; c=relaxed/simple;
-	bh=jHUj4j0OlZX3qQ+irl9wtqpBEGMbY23kRfObPdjCQiI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LHmli4D69T6OXy2jl23nFBWbBBoCZ8Czx/PyPWu3mfJjJuHuDzb9elty98gTJizPd0CsUDQthA+QQ+fJmuTnGXp8A3cTUByRRFL/ah9P2tA6TXhwA3k9eZy9eiKuN2In7IDx/xjJx89fO6o5N8JCYaPGbjCSZ7qfxcrURYJmugo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LMuhY1yS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0F79C19421;
-	Sun,  1 Mar 2026 01:25:45 +0000 (UTC)
+	s=arc-20240116; t=1772328981; c=relaxed/simple;
+	bh=tRcoHPL1SnJU0xLlCrcYeFzmKPCMpkkyxCC7E+YL23Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MYaBeWFX1gekFXWQs9hxwK+fjDilydc7n315gnyfe1Xsio9DmiBZG4wsenjiDt906XoCjjf3ZFL7202+II8uPAemC/NgnRiUH4T81wrbeH5qTzmJuvUlQKkCDjq7xLBy7D4N1q3hDlcOlTvgwCzyATgTw160IpBHPfp5rlCOk5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lw8VzEQo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E136C19421;
+	Sun,  1 Mar 2026 01:36:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772328346;
-	bh=jHUj4j0OlZX3qQ+irl9wtqpBEGMbY23kRfObPdjCQiI=;
+	s=k20201202; t=1772328981;
+	bh=tRcoHPL1SnJU0xLlCrcYeFzmKPCMpkkyxCC7E+YL23Q=;
 	h=From:To:Cc:Subject:Date:From;
-	b=LMuhY1ySRjCmDIEEH3GXIdzw4QlNqv+31NjwA/SwPlN5JUwMTjsnqgd/W7eXOI5Db
-	 lCFhrNzIdGjOSbJu80uupmfSHmhg2qFzbbMfUsxgxGyJ1PiWRRWRV3zWen4McoTu0t
-	 P2ANUWluujN7qbC07QXw25pGS/YPwAmH+4KY5WbyIpG0IrJRNYtFoVMS+l6a7t0SJi
-	 2epINfZMlBqz0JP4M/B3cVd7v4rn144vBKRO30ay6FqfcvPucQvqV4NWWgig3zLRa/
-	 aO82U8OMdEvYTYgN7cM+/leVLO4cV4dFjiarSvgmqcX3Qcwt6HOpzWH2qz0L9izxmK
-	 aym1x1cGSHjdQ==
+	b=Lw8VzEQoN8fC/NrFfeDjHTHBOXIrjM6u2Z3sCo8oZC3oTI1uevOANXWGD2gy8fAIL
+	 hkQe7670ICAroJZxd40NP76fsD341ICkWZe4J2ng6A3gTGT3IAtU1pTocv88BxlMUM
+	 YdcSEeyiW4UPNU3xllzvCIyfFG32cJ7Jq4jEBcTskKhwiD+3BH+osEKzppJKi+paOB
+	 qy+NN6lwlEKJRaNVG7ueXuLZXMRVyWbTbtQFlwbCSioNTQ6kLACjmB4EfkdfZvMceU
+	 0dVOYMzBvl7iDBpCWDEa+LvVFM2CL/Ej1JPRQY+4AHEMOEBuUfSkVuVcNKwRgQCFVt
+	 vcD6UXONojG5Q==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	thomasyen@google.com
@@ -52,9 +52,9 @@ Cc: Peter Wang <peter.wang@mediatek.com>,
 	linux-scsi@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
-Subject: FAILED: Patch "scsi: ufs: core: Flush exception handling work when RPM level is zero" failed to apply to 6.12-stable tree
-Date: Sat, 28 Feb 2026 20:25:44 -0500
-Message-ID: <20260301012544.1682971-1-sashal@kernel.org>
+Subject: FAILED: Patch "scsi: ufs: core: Flush exception handling work when RPM level is zero" failed to apply to 6.6-stable tree
+Date: Sat, 28 Feb 2026 20:36:18 -0500
+Message-ID: <20260301013619.1696250-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -71,13 +71,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21254-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21256-lists,linux-scsi=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
@@ -91,12 +91,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,msgid.link:url,oracle.com:email,mediatek.com:email]
-X-Rspamd-Queue-Id: 8B63F1CDA9F
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mediatek.com:email,oracle.com:email,acm.org:email,msgid.link:url,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A89DB1CC3F8
 X-Rspamd-Action: no action
 
-The patch below does not apply to the 6.12-stable tree.
+The patch below does not apply to the 6.6-stable tree.
 If someone wants it applied there, or to any other stable or longterm
 tree, then please email the backport, including the original git commit
 id to <stable@vger.kernel.org>.
