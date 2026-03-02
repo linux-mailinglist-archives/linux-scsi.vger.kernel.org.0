@@ -1,140 +1,191 @@
-Return-Path: <linux-scsi+bounces-21294-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21296-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kE7QGQk0pWmh5gUAu9opvQ
-	(envelope-from <linux-scsi+bounces-21294-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 02 Mar 2026 07:54:01 +0100
+	id oHGzF006pWnt5wUAu9opvQ
+	(envelope-from <linux-scsi+bounces-21296-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 02 Mar 2026 08:20:45 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E5DC1D396A
-	for <lists+linux-scsi@lfdr.de>; Mon, 02 Mar 2026 07:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BBAC71D3CD2
+	for <lists+linux-scsi@lfdr.de>; Mon, 02 Mar 2026 08:20:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 45F5E303CD23
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Mar 2026 06:51:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9D6DD30214E2
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Mar 2026 07:16:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA7B6366055;
-	Mon,  2 Mar 2026 06:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5528273D77;
+	Mon,  2 Mar 2026 07:16:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="WM/DmGAu"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="BjRPlgtS";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="q0TaBDcO";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="BjRPlgtS";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="q0TaBDcO"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A28EE37FF5A;
-	Mon,  2 Mar 2026 06:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507A61A2C0B
+	for <linux-scsi@vger.kernel.org>; Mon,  2 Mar 2026 07:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772434316; cv=none; b=lBHDRbLu1kVtfxbYdEiQmqttoNl3trcUak765k0lPhPVkKO7rgApszfMc3x0gsFCucswCGAu8PIHbai3Uv4eBm7ZEkRs0KBJkP2tyWZfaMse9fyHQPbN6V/2tXBquRVQSuAX7liiXzzkwD1gNwwIr8yAOP9j3WV00pUDzQx4jus=
+	t=1772435783; cv=none; b=i54zReTT7qf76HYzQlKIUTWRE0+s8yTI7whIHR6M07PiBKF9ulF1oJ4XF3BzMMDclzH3ct6xIX6dIAmkxO8kqol00OLEzAeEDfOj4dcRu4pLcomGWUJwC/004pjcM7jt+o0PVMhCuCmK7c9IZi+t1haEXHVjwuXAC4KhqzBgLJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772434316; c=relaxed/simple;
-	bh=gOOUmEidWugFLrAOFqpFlVsAFFE67AjmXaoJeKiLGto=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tpiSJWRBGkHU5tWHvwSoyOxmBPBGWYnzgJJHFaAwpTXj2DYTtL3fQthkK98nQlPXUYCBIaUssczz0Ju1UXp/E6RpYxPRpMbC/xRtAZxuJZld4HgEvWbsgvZz6GG3HEGq+1Wwt+GlbpaxnwfAOGoxTT/gkcmm9npboWhRKzbNL60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=WM/DmGAu; arc=none smtp.client-ip=113.46.200.227
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=x96wp+U8AgQxI7Ntyo5v9hm0QtD55MbMieSRSZ4rJ0o=;
-	b=WM/DmGAulW8eqjUr7m3SFab1RS1knOGSAE8B1TUfKdq0Vv7Pn4kazeNDT8Cbs/m7qit//9RYn
-	q5/nuk278hIwHTgMbF7RPlZwpkRxmH9IGZgQSQ+iez9ajRfAVK5ZZAwiHOjl3fvb5UdDAGXRqnM
-	MzJeJiqWB1rdqqlNfOIQack=
-Received: from mail.maildlp.com (unknown [172.19.162.92])
-	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fPTxn2Ds7znTW0;
-	Mon,  2 Mar 2026 14:47:09 +0800 (CST)
-Received: from kwepemj100018.china.huawei.com (unknown [7.202.194.12])
-	by mail.maildlp.com (Postfix) with ESMTPS id 30E6640562;
-	Mon,  2 Mar 2026 14:51:47 +0800 (CST)
-Received: from localhost.huawei.com (10.90.31.46) by
- kwepemj100018.china.huawei.com (7.202.194.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.36; Mon, 2 Mar 2026 14:51:46 +0800
-From: Xingui Yang <yangxingui@huawei.com>
-To: <martin.petersen@oracle.com>, <James.Bottomley@HansenPartnership.com>
-CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<yangxingui@huawei.com>, <linuxarm@huawei.com>, <prime.zeng@huawei.com>,
-	<liyihang9@huawei.com>, <liuyonglong@huawei.com>, <kangfenglong@huawei.com>
-Subject: [PATCH 2/2] scsi: hisi_sas: Fixed the risk of overflow in bitwise logical operations
-Date: Mon, 2 Mar 2026 14:51:35 +0800
-Message-ID: <20260302065135.841653-3-yangxingui@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20260302065135.841653-1-yangxingui@huawei.com>
-References: <20260302065135.841653-1-yangxingui@huawei.com>
+	s=arc-20240116; t=1772435783; c=relaxed/simple;
+	bh=eAfgthzZSTrv1ZxGJXosR3AGpKJxPnsDOEEZrJwSro0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tgfYhCdH+5AkVfGzbPLk7wo5ulB0+PDl6a0duG3gGZ7azVScmlMNdxtdTwPGlTreY32msqhuD8oagX3DaUnadtDog4kOtsI1E/wp3KBNun5S+nE4XHXDx06EF85HOfZSjydYxT4wsRGtWWhVLlPKXRWvrYxoZ7sdEkzmQ+/W4zQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=BjRPlgtS; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=q0TaBDcO; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=BjRPlgtS; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=q0TaBDcO; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 7E98F5BD15;
+	Mon,  2 Mar 2026 07:16:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1772435780; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AfYSDuCA2CAmpRBvPIVlJRBA8l2SvAi2++c+EQu0aU4=;
+	b=BjRPlgtS7UEePYDpEfGgxj64kF0Mgw5h74XpDh3+xNOryG6FV6xYQwyAxWtFO08a6/hVuJ
+	7WUZ6NqVcoHuFvu1mdHhSIZ8jhA1QEe9jnlMc/R2/iuSQQCVf/knbI/3QSmX29ea/ll6tt
+	xCC8ExW7UiiZDj2usAjNftRZ4QZt4rc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1772435780;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AfYSDuCA2CAmpRBvPIVlJRBA8l2SvAi2++c+EQu0aU4=;
+	b=q0TaBDcOUUYZUlXMbznEjIV4WvqHz1e5AjxQiuBxqTI+q/cECHfXNhlmz5bmxGK4GYsksa
+	N07pYCHOEuwe61Cg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1772435780; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AfYSDuCA2CAmpRBvPIVlJRBA8l2SvAi2++c+EQu0aU4=;
+	b=BjRPlgtS7UEePYDpEfGgxj64kF0Mgw5h74XpDh3+xNOryG6FV6xYQwyAxWtFO08a6/hVuJ
+	7WUZ6NqVcoHuFvu1mdHhSIZ8jhA1QEe9jnlMc/R2/iuSQQCVf/knbI/3QSmX29ea/ll6tt
+	xCC8ExW7UiiZDj2usAjNftRZ4QZt4rc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1772435780;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AfYSDuCA2CAmpRBvPIVlJRBA8l2SvAi2++c+EQu0aU4=;
+	b=q0TaBDcOUUYZUlXMbznEjIV4WvqHz1e5AjxQiuBxqTI+q/cECHfXNhlmz5bmxGK4GYsksa
+	N07pYCHOEuwe61Cg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2BA6D3EA69;
+	Mon,  2 Mar 2026 07:16:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id WsoZCUQ5pWnhZgAAD6G6ig
+	(envelope-from <hare@suse.de>); Mon, 02 Mar 2026 07:16:20 +0000
+Message-ID: <869034b1-c7e8-4e35-b153-43fd787a8edd@suse.de>
+Date: Mon, 2 Mar 2026 08:16:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3 0/3] Ensure ordered namespace registration during async
+ scan
+To: Keith Busch <kbusch@kernel.org>, John Meneghini <jmeneghi@redhat.com>
+Cc: Maurizio Lombardi <mlombard@arkamax.eu>,
+ Maurizio Lombardi <mlombard@redhat.com>, hch@lst.de, chaitanyak@nvidia.com,
+ bvanassche@acm.org, linux-scsi@vger.kernel.org,
+ linux-nvme@lists.infradead.org, James.Bottomley@hansenpartnership.com,
+ emilne@redhat.com, bgurney@redhat.com
+References: <20260225161203.76168-1-mlombard@redhat.com>
+ <aZ9sjbZ3CEW_1rW1@kbusch-mbp> <DGOQMFJJ6K5P.3KLF45WQT2SAS@arkamax.eu>
+ <e43b914c-2ca5-455e-b0fe-3ce2eb0c64bd@redhat.com>
+ <aaCNtpPzP9TIDNjE@kbusch-mbp>
+Content-Language: en-US
+From: Hannes Reinecke <hare@suse.de>
+In-Reply-To: <aaCNtpPzP9TIDNjE@kbusch-mbp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemj100018.china.huawei.com (7.202.194.12)
+X-Spam-Score: -4.30
+X-Spam-Level: 
+X-Spam-Flag: NO
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),quarantine];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[h-partners.com:s=dkim];
+	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[yangxingui@huawei.com,linux-scsi@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-21294-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[h-partners.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	RCVD_COUNT_FIVE(0.00)[6];
 	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,huawei.com:mid,huawei.com:email,h-partners.com:dkim]
-X-Rspamd-Queue-Id: 8E5DC1D396A
+	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-21296-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hare@suse.de,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.de:mid,suse.de:dkim,suse.de:email]
+X-Rspamd-Queue-Id: BBAC71D3CD2
 X-Rspamd-Action: no action
 
-From: Yihang Li <liyihang9@huawei.com>
+On 2/26/26 19:15, Keith Busch wrote:
+> On Thu, Feb 26, 2026 at 11:35:15AM -0500, John Meneghini wrote:
+>> It's worse than this.  Yes, in RHEL we carry out of tree patches to tun off the async scanning with SCSI,
+>> and we reverted this async namespace scanning patch in NVMe.
+>>
+>> We had to do this because, as soon as we turned these async scanning mechanisms on, we immediately
+>> received customer escalations. Customer were not able to upgrade their systems. We have customer issues
+>> and complaints open about this and we see this async namespace scanning as a barrier to adoption with NVMEe -
+>> especially with NVME-OF which tends to have many more Namespaces than PCIe.
+> 
+> Sounds like some people just don't know how to use labels or persistent
+> names. Relying on /dev/nvmeXnY or /dev/sdX to always be a handle to the
+> same device is a fragile solution.
+>   
+Yeah. We have undergone this (admittedly, rather painful) process quite 
+some time back for SLES (with the switch from SLES12 to SLES15 if memory
+serves correctly). Since then our customer seem to be happy with using
+persistent device links.
 
-Fixed a few constants defined via macros that had overflow risks.
+>> And yes, the PCIe async discovery stuff does cause some problems.  The difference is: the PCIe bus configuration does
+>> not change nearly as often as, e.g., the nvme namespace configuration in a fabric, so customers don't notice the changing pci ids.
+>> Unless some one is going lots of hot unplugging and plugging with their PCI bus, the PCI ids typically don't change at all.
+> 
+> It's not about the PCI topology changing. The async probe makes it
+> non-deterministic as to which PCI device is going to claim which
+> instance out of the nvme ida since they all try to run concurrently.
 
-Signed-off-by: Yihang Li <liyihang9@huawei.com>
-Signed-off-by: Xingui Yang <yangxingui@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I really would like to go with the nsid based solution from Keith.
+That would avoid quite some cumbersome code here.
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 6a841d53bb10..ba9d6877483a 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -432,7 +432,7 @@
- #define CMPLT_HDR_IPTT_OFF		0
- #define CMPLT_HDR_IPTT_MSK		(0xffff << CMPLT_HDR_IPTT_OFF)
- #define CMPLT_HDR_DEV_ID_OFF		16
--#define CMPLT_HDR_DEV_ID_MSK		(0xffff << CMPLT_HDR_DEV_ID_OFF)
-+#define CMPLT_HDR_DEV_ID_MSK		(0xffffU << CMPLT_HDR_DEV_ID_OFF)
- /* dw3 */
- #define SATA_DISK_IN_ERROR_STATUS_OFF	8
- #define SATA_DISK_IN_ERROR_STATUS_MSK	(0x1 << SATA_DISK_IN_ERROR_STATUS_OFF)
-@@ -444,7 +444,7 @@
- #define FIS_ATA_STATUS_ERR_OFF		18
- #define FIS_ATA_STATUS_ERR_MSK		(0x1 << FIS_ATA_STATUS_ERR_OFF)
- #define FIS_TYPE_SDB_OFF		31
--#define FIS_TYPE_SDB_MSK		(0x1 << FIS_TYPE_SDB_OFF)
-+#define FIS_TYPE_SDB_MSK		(0x1U << FIS_TYPE_SDB_OFF)
- 
- /* ITCT header */
- /* qw0 */
+Cheers,
+
+Hannes
 -- 
-2.33.0
-
+Dr. Hannes Reinecke                  Kernel Storage Architect
+hare@suse.de                                +49 911 74053 688
+SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
+HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
 
