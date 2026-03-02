@@ -1,200 +1,180 @@
-Return-Path: <linux-scsi+bounces-21327-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21330-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CHumOk6JpWmWDQYAu9opvQ
-	(envelope-from <linux-scsi+bounces-21327-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 02 Mar 2026 13:57:50 +0100
+	id iCc2LnaKpWk4DgYAu9opvQ
+	(envelope-from <linux-scsi+bounces-21330-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 02 Mar 2026 14:02:46 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id E870B1D94AC
-	for <lists+linux-scsi@lfdr.de>; Mon, 02 Mar 2026 13:57:49 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 114811D9635
+	for <lists+linux-scsi@lfdr.de>; Mon, 02 Mar 2026 14:02:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 78F8A300C7DD
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Mar 2026 12:57:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 51F1A301E4BC
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Mar 2026 13:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C4213B52EE;
-	Mon,  2 Mar 2026 12:57:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A42CF3E0C46;
+	Mon,  2 Mar 2026 13:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="j1HJk5Mi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t+Hvlnia"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19BC93630B1;
-	Mon,  2 Mar 2026 12:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 565653D7D73;
+	Mon,  2 Mar 2026 13:00:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772456261; cv=none; b=B8BKQwoIMewfYeSfT72Thz+xsBZyNf+8ivIifTeUFGeTDCYHB/6BS/FnEx6lkYoVDLtosVOx3mlnzoo3JbHMg0YEf+QrN0JwTzf0HRrUHVnxOi3L3szXc0/Pax2vYErPyRZ7rD7PrWCLtgLycDMxCmjgcznCI6H8u41BTBt48A0=
+	t=1772456437; cv=none; b=RgIvxfZuXX/cMhZOC6BO+lAa6lR+ZP33D6eTa5ADhaBeRO+RVoy8ZvPxi87kSfJ+S+wm5Z/ZRgWL6t4RTadtfO5Wzn+LeNe6TFWli9f20zNaOeHVaKvfzm+rbiA/WglYf9mCiCBm5WGQaYsLXCGOAxhkjKHHCqOpZ8oWnby8YVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772456261; c=relaxed/simple;
-	bh=hvLSZiQsLnWzNs6WZ5wabnubTCSvxN70/ljhaRbQ3sU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pBbRw73fDkZmY5Jr9SXjneNrRIt4fmV+wY55jEuGMh1mZl1F8VOkN/3AGIc7Ihxpx6QZpnSVV5xcpZYCkMjJK3lBbkygUSv3pKbq7iqj1akyIf/Q39kliSO6Q+suKd5k+4gYFljE4uKPV+b53G0vuXzy+kvC27QJjkW51r9dAVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=j1HJk5Mi; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 621KiDCG1941479;
-	Mon, 2 Mar 2026 12:57:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=HGxsnL
-	Yfy9kHPdT/nhG4VlprNXrSE18ZkeT+apwbbHo=; b=j1HJk5Micy3UEBWVybBLb4
-	y/CoykrpD+y5spqD4mq7pRQ4RqYy/VdMN+op1dnRE5kCwDPk4FP4/r4WOa+ywACw
-	9924BaKbvbomfZ2M48lB+8TIPsi2Tt25IFvNw48O/v9czGCuqoS6xh+oMElnkFJg
-	lFnaeN0UxC7wxbgCZ6jTBasRb+7EH5j905TQxls3Gnp6ehgiVb/qyR6q2k+7ziYh
-	lrk+xgUDlpBeBLRPBnpKjE6b1WBeC1QucUSC/W8PVVRFD9MgtnmKQsYBEfNVZI/D
-	K7xAFibvHzzq4RNxtqSCOUEl6TwFuDb1/TdBktnuJr5sDg8PCChEh/M0T0eMKGLg
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ckssmef16-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 02 Mar 2026 12:57:19 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 622AOjTE027704;
-	Mon, 2 Mar 2026 12:57:19 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cmcwj5w68-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 02 Mar 2026 12:57:19 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 622CvI4162718236
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 2 Mar 2026 12:57:18 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0CA325805E;
-	Mon,  2 Mar 2026 12:57:18 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AFC635805C;
-	Mon,  2 Mar 2026 12:57:12 +0000 (GMT)
-Received: from [9.79.192.112] (unknown [9.79.192.112])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  2 Mar 2026 12:57:12 +0000 (GMT)
-Message-ID: <bfc2bfa4-a28d-47dc-9362-b9ff6680cfab@linux.ibm.com>
-Date: Mon, 2 Mar 2026 18:27:11 +0530
+	s=arc-20240116; t=1772456437; c=relaxed/simple;
+	bh=toZY+oHCDLL1wXEJv++Eb8dGjU5O3Nr+hFpL9dqNUo0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Tb22Y6uK5+mS6SoLq/zVo6JGsMhU4KI4rGGwJZFvjR7/EHbLIqBIO6fcz9B8BM1WfTr6v84qMI+Ke2AnNddDHNZI0xo1wyr1yuiy7M4YJenJqFSUnW1t9Riib8CuJIpavya12smfBZv2eXveevWyHD61zbk26oH6F1iIypctxrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t+Hvlnia; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EE7AFC19423;
+	Mon,  2 Mar 2026 13:00:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772456437;
+	bh=toZY+oHCDLL1wXEJv++Eb8dGjU5O3Nr+hFpL9dqNUo0=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=t+HvlniaXWWsxWpK358ar+AC+j+xPZPX0Vqj46VNm0gTUZvCxSqCB3kcVBKAqj3iU
+	 noSetieG9cFF0OLJyqB6iZ2jwW3Vtml6Hhu6N5hZXB7TWVQdzd//ChW/oZD11h8gND
+	 mpLnxfREfwlIOCQN5BQkixpFCuvO9AVxsvupAb3onRX508szddBCIprTJgFZnguh1F
+	 0Qmvg1EkcqhDCn4jIg7dVpI+zbPrcbPjggXDcWVQjPG/S0fNCV/skDwTkB+EHnQyHc
+	 UliohtGm7jMsY/qn9ilOmSncdbv1NRblZA9ucLr8mFTwqD79Yx+7Cj3NjJyYCyso8Z
+	 goZSeSKnSoeeQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6FF8E9B37D;
+	Mon,  2 Mar 2026 13:00:36 +0000 (UTC)
+From: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>
+Subject: [PATCH v4 0/5] soc: qcom: ice: Fix race between qcom_ice_probe()
+ and of_qcom_ice_get()
+Date: Mon, 02 Mar 2026 18:30:17 +0530
+Message-Id: <20260302-qcom-ice-fix-v4-0-0e65740a5dcc@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 19/19] nvme-multipath: switch to use libmultipath
-To: John Garry <john.g.garry@oracle.com>, hch@lst.de, kbusch@kernel.org,
-        sagi@grimberg.me, axboe@fb.com, martin.petersen@oracle.com,
-        james.bottomley@hansenpartnership.com, hare@suse.com
-Cc: jmeneghi@redhat.com, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org, michael.christie@oracle.com,
-        snitzer@kernel.org, bmarzins@redhat.com, dm-devel@lists.linux.dev,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260225154007.1033735-1-john.g.garry@oracle.com>
- <20260225154007.1033735-20-john.g.garry@oracle.com>
-Content-Language: en-US
-From: Nilay Shroff <nilay@linux.ibm.com>
-In-Reply-To: <20260225154007.1033735-20-john.g.garry@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAyMDEwNiBTYWx0ZWRfX08ZG4mfYdE6+
- Pgtc0Q/jGKa+jDQNE0D+GrQjHKgMnFzoHCqSu1ifqjMpkeREbPJtmEaIO9GDdlyqoix0A4iKnHM
- cWPTqmGukRD+IAgnETbDg4A6HsMmzcl3mFPG7whALYPLnrPwsfSmk1d1HmZsuB3/sJnjvrcC+ws
- jrR24Dv2Nb41sT1mxJEx7tjCxkwzHlmsRf/oGegnyhGZfHMj7tY/ZXlIJfTJgNj+4eYSdTHnN23
- VToJkQiBTVF7qOd756gghV+boAmuRDWm+lRlynZeh1XKhyAQJZ4pBkmcVgZ7y/gwxByv15H44fi
- ih3mFr+3mKU1Jx+t5maDc4pBFEK1wLhsR/5WxfDXr+lGl9dlfVYLVIU354rQFSrtrdOF+X+vi1s
- /jrdGPpTmejHF9fPkuh+jbj3TYi0P2fTwTjgcFf7fs9l9egIJER25DB/fhJCYN66PvOFOO/v2yQ
- I6RLWIDDP3LRYFqC9Xw==
-X-Proofpoint-ORIG-GUID: 9hUb9hBF3IRM0ca70u5en9RE3Z-TTG7C
-X-Proofpoint-GUID: 9hUb9hBF3IRM0ca70u5en9RE3Z-TTG7C
-X-Authority-Analysis: v=2.4 cv=AobjHe9P c=1 sm=1 tr=0 ts=69a58930 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=CpEX-UuAubdY51wu2XgA:9
- a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-02_03,2026-02-27_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0 malwarescore=0
- spamscore=0 clxscore=1015 suspectscore=0 adultscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603020106
+X-B4-Tracking: v=1; b=H4sIAOGJpWkC/3XMQQ6CMBAF0KuQrh1SprSKK+9hXJS2ShOh0mqjI
+ dzdgZUxupnk//x5E0suepfYvphYdNknHwYK9aZgptPDxYG3lBlyVBwrDqMJPXjj4OyfYFELzWv
+ ZCrSMXm7RUb1yxxPlzqd7iK9Vz7i0f6CMwKExlW6lVZKjOYSUyvGhr7TqSzps8bL4MFB8GYIMZ
+ bTc1Upgc97+MOZ5fgNkwVjE8wAAAA==
+X-Change-ID: 20260210-qcom-ice-fix-d2a3a045b32d
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, 
+ Manivannan Sadhasivam <mani@kernel.org>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ Abel Vesa <abelvesa@kernel.org>, Abel Vesa <abelvesa@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ Sumit Garg <sumit.garg@oss.qualcomm.com>, mani@kernel.org, 
+ Neeraj Soni <neeraj.soni@oss.qualcomm.com>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
+ stable@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1908;
+ i=manivannan.sadhasivam@oss.qualcomm.com; h=from:subject:message-id;
+ bh=toZY+oHCDLL1wXEJv++Eb8dGjU5O3Nr+hFpL9dqNUo0=;
+ b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBppYnyEWxqDOk0BM6sKUfi4886zLwu99WWtrO2C
+ n4tV2enwR2JATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaaWJ8gAKCRBVnxHm/pHO
+ 9U65B/4ouVogJ2VGvK0uAwP5EfJq2GG6FeMRa61ZJo0S+5+Z57OA4Vjl35RaDiCgGHdHRpPnqek
+ Zi7JGgXlv2/4AaXiDcJtEcR4SziGZOCiIMzU+q6TOy5IUxPQA7gTEsL5bjMjceTRWCevd9s44zO
+ VsGqRyz/Y0/B9jQg2rTNIiYpdh4pFR9WBJbL/SxG4kHRnFXOa7RTdr/RMXinT3g6RTYokwcQpLA
+ UI6p0JiD89+oQJSWF5/WBCS5Pc1LgcWZs4ANxFplvp3UarbT8o6J795qCMuW0UDcqVayfUV5NNd
+ iUdzFitWZCUeSX7HdG55V9ViQL6/AYT3707chqN1jblwC3Du
+X-Developer-Key: i=manivannan.sadhasivam@oss.qualcomm.com; a=openpgp;
+ fpr=C668AEC3C3188E4C611465E7488550E901166008
+X-Endpoint-Received: by B4 Relay for
+ manivannan.sadhasivam@oss.qualcomm.com/default with auth_id=461
+X-Original-From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+Reply-To: manivannan.sadhasivam@oss.qualcomm.com
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	TAGGED_FROM(0.00)[bounces-21327-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-21330-lists,linux-scsi=lfdr.de,manivannan.sadhasivam.oss.qualcomm.com];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[ibm.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.ibm.com:mid];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nilay@linux.ibm.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	RCVD_COUNT_SEVEN(0.00)[11]
-X-Rspamd-Queue-Id: E870B1D94AC
+	HAS_REPLYTO(0.00)[manivannan.sadhasivam@oss.qualcomm.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,oss.qualcomm.com:mid,oss.qualcomm.com:replyto,qualcomm.com:email]
+X-Rspamd-Queue-Id: 114811D9635
 X-Rspamd-Action: no action
 
-On 2/25/26 9:10 PM, John Garry wrote:
->   void nvme_mpath_clear_ctrl_paths(struct nvme_ctrl *ctrl)
-> @@ -277,30 +279,35 @@ void nvme_mpath_clear_ctrl_paths(struct nvme_ctrl *ctrl)
->   	srcu_idx = srcu_read_lock(&ctrl->srcu);
->   	list_for_each_entry_srcu(ns, &ctrl->namespaces, list,
->   				 srcu_read_lock_held(&ctrl->srcu)) {
-> +		struct nvme_ns_head *head = ns->head;
-> +		struct mpath_disk *mpath_disk = head->mpath_disk;
-> +
-> +		if (!mpath_disk)
-> +			continue;
-> +
->   		nvme_mpath_clear_current_path(ns);
-> -		kblockd_schedule_work(&ns->head->requeue_work);
-> +		kblockd_schedule_work(&mpath_disk->mpath_head->requeue_work);
->   	}
->   	srcu_read_unlock(&ctrl->srcu, srcu_idx);
->   }
->   
-> +static void nvme_mpath_revalidate_paths_cb(struct mpath_device *mpath_device,
-> +					sector_t capacity)
-> +{
-> +	struct nvme_ns *ns = nvme_mpath_to_ns(mpath_device);
-> +
-> +	if (capacity != get_capacity(ns->disk))
-> +		clear_bit(NVME_NS_READY, &ns->flags);
-> +}
-> +
+Hi,
 
-I don't quite understand the intent of the above function.
-Here I see that we compare mpath_disk capacity with per-path
-disk. Do we really have sectors allocated for mpath_disk?
+This series fixes the race betwen qcom_ice_probe() and of_qcom_ice_get()
+but synchronizing the two APIs and properly propagating the error codes to
+clients.
 
-Overall, IMO abstracting out common multipath function into
-a separate library is a good move. But then I just want to
-understand layering here with libmultipath. Does it sit above
-the driver or below? I see in some places we have back and forth
-callbacks from driver to libmultipath and then back to the
-driver, for instance:
-nvme_mpath_add_disk          => driver
-  -> mpath_device_set_live    => libmultipath
-   -> mpath_head_add_cdev     => libmultipath
-     -> nvme_mpath_add_cdev   => driver
+Merge Strategy
+==============
 
-Does this intentional? Or am I missing overall picture...
+Due to dependency, all patches should go through Qcom SoC tree.
 
-Thanks,
---Nilay
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+---
+Changes in v4:
+- For supporting multi-ice instances in a SoC, stored the err ptr in platform
+  drvdata instead of in a global pointer.
+- Link to v3: https://lore.kernel.org/r/20260223-qcom-ice-fix-v3-0-6ca5846329f7@oss.qualcomm.com
+
+Changes in v3:
+- Dropped the platform driver removal patch and used the ice_handle to pass
+  error codes. This was done as I learned that we need to have the platform
+  driver design going forward and also removing it introduces other issues.
+- Link to v2: https://lore.kernel.org/r/20260210-qcom-ice-fix-v2-0-9c1ab5d6502c@oss.qualcomm.com
+
+Changes in v2:
+
+- Added MODULE_* macros back
+- Removed spurious platform_device_put()
+- Added patches to remove NULL return
+
+---
+Manivannan Sadhasivam (5):
+      soc: qcom: ice: Fix race between qcom_ice_probe() and of_qcom_ice_get()
+      soc: qcom: ice: Return -ENODEV if the ICE platform device is not found
+      soc: qcom: ice: Return proper error codes from devm_of_qcom_ice_get() instead of NULL
+      mmc: sdhci-msm: Remove NULL check from devm_of_qcom_ice_get()
+      scsi: ufs: ufs-qcom: Remove NULL check from devm_of_qcom_ice_get()
+
+ drivers/mmc/host/sdhci-msm.c | 10 +++++-----
+ drivers/soc/qcom/ice.c       | 33 ++++++++++++++++++++++-----------
+ drivers/ufs/host/ufs-qcom.c  | 10 +++++-----
+ 3 files changed, 32 insertions(+), 21 deletions(-)
+---
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+change-id: 20260210-qcom-ice-fix-d2a3a045b32d
+
+Best regards,
+-- 
+Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+
 
 
