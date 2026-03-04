@@ -1,180 +1,125 @@
-Return-Path: <linux-scsi+bounces-21425-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21427-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GGkTIMw7qGl6rQAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21425-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 04 Mar 2026 15:03:56 +0100
+	id mDeEM2xFqGlOrwAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21427-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 04 Mar 2026 15:45:00 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14A08200EBE
-	for <lists+linux-scsi@lfdr.de>; Wed, 04 Mar 2026 15:03:56 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD5CA201D99
+	for <lists+linux-scsi@lfdr.de>; Wed, 04 Mar 2026 15:44:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 54F403079FED
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Mar 2026 13:55:30 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 54986306E18E
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Mar 2026 14:25:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07E3F3B3BE1;
-	Wed,  4 Mar 2026 13:54:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E09C32773F0;
+	Wed,  4 Mar 2026 14:25:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Xbzb4BhV"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="klIvLfhE"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4455372EF3;
-	Wed,  4 Mar 2026 13:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69FC33368AC;
+	Wed,  4 Mar 2026 14:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772632486; cv=none; b=ZhFJp0bYnPXLZizBNjozzWwD4YQd/M/PTmX9g6ItcGO9lN4kD2uDRNJIZOo0nJic5jJTCXUR4U5pHvVCYoQGJDtUb9F0H5Z6gCbF8LIYY+PkighK39HzR9onYZKudV04G1E5gk5jGM7dsPrPhBcr0iSJOxtZNgWxGZ4SoYc7pVI=
+	t=1772634330; cv=none; b=cLqlE8ocWAsbLVmVaoX49hRZcle/wHx05UExFxAFBsSbrZ0afxFcVz354alZKc8cO4omYmYmTO40nWP6yxvC8FpfxjicN+SFqvPejTwVTxIoH5ghElhUazMdBvjO3P/mxoXdBYj7F2okbaUreVI38oJuT95kC6Ls6ndOm5PJ0gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772632486; c=relaxed/simple;
-	bh=JRGFTf79ClODTZ/nXNk5BzmYlFMeGnRnTTk6pXWQTlM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=s56UZ1y3r2tub2ITxoV/PieW6qm/nxGxpdAQEHGxTLDeUF5o5/q08T1ZYIJqDBvhZ0pjScHY+jiQPTnPpZCCuRopZqhoVGCciKoQhkkO++9szKOoxW+yMfzLo1RfuZuhN5Gu6udzwAkRjlQDkAj9qvs0H5voamqft5Ybw9n3qg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Xbzb4BhV; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 624CNpev3114139;
-	Wed, 4 Mar 2026 13:54:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=cWkfVnI4uEC
-	njLobwNAdnwEGx6KRH8vnwO6yscSALXs=; b=Xbzb4BhVDUAN4+Gog6nWDLzEGSf
-	GKDcxwOHfJRUlJyeu80Dw2luopoeYAHFlbqRNScDDI6Uncmf6f6MhTlesdGDcavY
-	V4aHqphtpoIIJz93uya4mCRcM6RJ/8DVMCKFDnMLh7jovkWCCF4PlRkrEb32p/R0
-	opgrBRKLGVo2ab0IdA9rwhnlVaZvi4l7GHCEyde1+i90P5T5jYjWqWy4+jsRPCJQ
-	YMSJJpEqmJn3iu9Ua+H3otSrL4wAIxf5RKLfzenPDbn2YCU4+EtszSP6RNjnvsik
-	fC1VBEY+DzV1dddeQBqi2zzK/HSeby2oSgTqAyXwT1MPkSpVfD6tgbeTMyg==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cp5h2bbnb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Mar 2026 13:54:33 +0000 (GMT)
-Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 624DsWMR020563;
-	Wed, 4 Mar 2026 13:54:32 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 4cpf4wmm44-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Mar 2026 13:54:32 +0000
-Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 624DsWgP020558;
-	Wed, 4 Mar 2026 13:54:32 GMT
-Received: from hu-devc-lv-u22-c.qualcomm.com (hu-cang-lv.qualcomm.com [10.81.25.255])
-	by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 624DsWdC020556
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Mar 2026 13:54:32 +0000
-Received: by hu-devc-lv-u22-c.qualcomm.com (Postfix, from userid 359480)
-	id 247075A7; Wed,  4 Mar 2026 05:54:32 -0800 (PST)
-From: Can Guo <can.guo@oss.qualcomm.com>
-To: avri.altman@wdc.com, bvanassche@acm.org, beanhuo@micron.com,
-        martin.petersen@oracle.com
-Cc: linux-scsi@vger.kernel.org, Can Guo <can.guo@oss.qualcomm.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        linux-arm-msm@vger.kernel.org (open list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER...),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 11/11] scsi: ufs: ufs-qcom: Enable TX Equalization
-Date: Wed,  4 Mar 2026 05:53:13 -0800
-Message-Id: <20260304135313.413688-12-can.guo@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260304135313.413688-1-can.guo@oss.qualcomm.com>
-References: <20260304135313.413688-1-can.guo@oss.qualcomm.com>
+	s=arc-20240116; t=1772634330; c=relaxed/simple;
+	bh=CYYZFBXwN5hLcJjmD8p9NlVeHj6KIPNb+aqcEn3zFCk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W5QDoPGFsP+0n5LXy5nn6W0M6eqbi0ujCe/t5V7XxATYHvg4I3IyIf/KorVok0uSilTh5Ad8pUAazPkihE/9bggbpgpWxJgJdN1KM8PrxTl06KZ+cbI/2ks6ebq/2rcZIL2tAMw+i6CegUtKQEw8pC2DZq+dzquaCB4Fdmj73i4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=klIvLfhE; arc=none smtp.client-ip=199.89.1.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4fQw1b5Y0Tz1XM0p0;
+	Wed,  4 Mar 2026 14:25:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1772634320; x=1775226321; bh=qpoPRz9xGGc6k6Tqitayjjgp
+	f15CFuUVlTQ3OPtZlN4=; b=klIvLfhEjv06rb2GrjvASjYxqjUjDXTRs/4Z+N0W
+	jQnJLLqRb3YI2L+UUWCkvnq+YtTDrKaWAfYHhE7A7g4LNXdfuAwWVRbBMtn4tRSO
+	KkKZhG0RTV4CMKgOa6v1A4iP2dE4p66/jssODvnFVCS5WCl99fpq7xebWWS90G6s
+	JTgptm06v2eQdBEJNETXhyoAmcX/c2DB5SKNBrGPy+gh2egkGE8x6uKFmTlo+Mgk
+	BsSSbit3E0HkL//ERVqRWFS7Jv3D/kpC3jiEY1Gk/8js1g5jKloK+seOIDZPHbP9
+	v5YU1szZmNOVtjhrGebnpCyFaE90e1djRc9N3q+ezCh/Gw==
+X-Virus-Scanned: by MailRoute
+Received: from 011.lax.mailroute.net ([127.0.0.1])
+ by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id 6Q-RK_rdm3_S; Wed,  4 Mar 2026 14:25:20 +0000 (UTC)
+Received: from [192.168.132.187] (unknown [12.150.89.26])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4fQw1V0GThz1XM6JV;
+	Wed,  4 Mar 2026 14:25:17 +0000 (UTC)
+Message-ID: <3d9c22b4-1b1f-4432-a6ed-eaa2494e4ace@acm.org>
+Date: Wed, 4 Mar 2026 08:25:16 -0600
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=JqL8bc4C c=1 sm=1 tr=0 ts=69a83999 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
- a=_K5XuSEh1TEqbUxoQ0s3:22 a=EUspDBNiAAAA:8 a=ENi0XzU5rTanaItzT-wA:9
-X-Proofpoint-ORIG-GUID: FFvow9c4tjWJFnZNEI5YwDvlJ3xa8YZm
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA0MDExMiBTYWx0ZWRfXxG1bNCdPtiRn
- 6/SFAHBloCeHXoBtG0+Vm1yfGxaNf1ZLRZIlDUdfKUilTuTwxxHgvEB7cxfAO5zebQ0/1ae27CJ
- zhhE4SU7O7Ex4cwSc2LIaPxQmgEsrfNN7UIwwFYbeQ8WrSgsj7WO28mPBIFMUADpcMACUXIgt4a
- lfBogL+35ksoYMVrlzoHYl3D84aN5p9GfdAGkbvGH0OJ4zECMnFvHPeMxlFOnlVUcCccX2KG6UL
- I3SyoTI66Jb/B4brDjINyd7h2zds2OEymOmExAx6sreHF02ZdrxcrFqD/SOVWOjG0DQAtJEif/p
- koVgTQDJYGBafTgcHhDsPTzVx+PbtTVwBE4q7Q8JQA1qGfbc3Oa6nybLS4g2DrXLQnB/x8Wo078
- XQxeBLfhKAd4uzsqF4my4NknSDNggKM3C+pid91Pxmf4wrX7jjxJcgkWfkyW/OhdCxnIRQiQ9oO
- WyWra7NliqgNxhO72zg==
-X-Proofpoint-GUID: FFvow9c4tjWJFnZNEI5YwDvlJ3xa8YZm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-04_06,2026-03-03_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
- clxscore=1015 phishscore=0 spamscore=0 suspectscore=0 malwarescore=0
- bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
- definitions=main-2603040112
-X-Rspamd-Queue-Id: 14A08200EBE
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] scsi: core: Fix async_scan race condition with
+ READ_ONCE/WRITE_ONCE
+To: Chaohai Chen <wdhh6@aliyun.com>, James.Bottomley@HansenPartnership.com,
+ martin.petersen@oracle.com, dlemoal@kernel.org, hch@infradead.org
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260304092939.3092102-1-wdhh6@aliyun.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20260304092939.3092102-1-wdhh6@aliyun.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: DD5CA201D99
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1];
+	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21425-lists,linux-scsi=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,qualcomm.com:dkim,qualcomm.com:email,oss.qualcomm.com:mid];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-21427-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FREEMAIL_TO(0.00)[aliyun.com,HansenPartnership.com,oracle.com,kernel.org,infradead.org];
+	DKIM_TRACE(0.00)[acm.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[qualcomm.com:+];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[10]
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,acm.org:dkim,acm.org:mid]
 X-Rspamd-Action: no action
 
-Enable TX Equalization for hosts with HW version 0x7 and onwards.
 
-Signed-off-by: Can Guo <can.guo@oss.qualcomm.com>
----
- drivers/ufs/host/ufs-qcom.c | 5 +++++
- 1 file changed, 5 insertions(+)
+On 3/4/26 3:29 AM, Chaohai Chen wrote:
+> -	if (!shost->async_scan) {
+> +	if (!READ_ONCE(shost->async_scan)) {
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 89bea823a08b..3dee1d5f9e6f 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -1391,6 +1391,8 @@ static void ufs_qcom_set_host_caps(struct ufs_hba *hba)
- 
- static void ufs_qcom_set_caps(struct ufs_hba *hba)
- {
-+	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
-+
- 	hba->caps |= UFSHCD_CAP_CLK_GATING | UFSHCD_CAP_HIBERN8_WITH_CLK_GATING;
- 	hba->caps |= UFSHCD_CAP_CLK_SCALING | UFSHCD_CAP_WB_WITH_CLK_SCALING;
- 	hba->caps |= UFSHCD_CAP_AUTO_BKOPS_SUSPEND;
-@@ -1398,6 +1400,9 @@ static void ufs_qcom_set_caps(struct ufs_hba *hba)
- 	hba->caps |= UFSHCD_CAP_AGGR_POWER_COLLAPSE;
- 	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
- 
-+	if (host->hw_ver.major >= 0x7)
-+		hba->caps |= UFSHCD_CAP_TX_EQUALIZATION;
-+
- 	ufs_qcom_set_host_caps(hba);
- }
- 
--- 
-2.34.1
+Yikes. I'm not aware of any other kernel code that uses READ_ONCE() /
+WRITE_ONCE() to access a member variable protected by a mutex. Please
+annotate the async_scan member variable with __guarded_by() and drop the
+READ_ONCE() and WRITE_ONCE() invocations introduced by this patch.
 
+Bart.
 
