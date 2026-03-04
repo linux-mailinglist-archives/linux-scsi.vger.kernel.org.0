@@ -1,62 +1,63 @@
-Return-Path: <linux-scsi+bounces-21440-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21442-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wHLsIeNJqGmvsgAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21440-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 04 Mar 2026 16:04:03 +0100
+	id 8CviGu5KqGmvsgAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21442-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 04 Mar 2026 16:08:30 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E50392022C3
-	for <lists+linux-scsi@lfdr.de>; Wed, 04 Mar 2026 16:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D1B41202425
+	for <lists+linux-scsi@lfdr.de>; Wed, 04 Mar 2026 16:08:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 88EAC31159FD
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Mar 2026 14:55:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A4E0A311A4D7
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Mar 2026 14:56:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2794C3B95FB;
-	Wed,  4 Mar 2026 14:54:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E13273B893B;
+	Wed,  4 Mar 2026 14:54:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="bSatu8Yv"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="U7NPW9L2"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14072222D0;
-	Wed,  4 Mar 2026 14:54:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AFB23B4EAE;
+	Wed,  4 Mar 2026 14:54:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772636087; cv=pass; b=fuosPET8a2K4A28TzdUUz0g+MOB3GAPuqjiLx3lx17ZsHulfAYqHCPafMGn6Bf676UqkuXVZxGoFVc8ZFZvEKWtuczNfKCX3KLnGvhGEEnLDYeIImFfFi/M2iismLMolsUzdn9w9O6MzDyN65zn4lmLj9v5Qjq0AZ7JDH2XPE6g=
+	t=1772636099; cv=pass; b=kj1TH1zM0GBjc8Y4PbML2+5HaVV38p0dGWnX9+rlc1YFQ4r4fnSZuWX0jyv4YIIWb+xMotY1Pg79iwMKdJ0ueOSF8uG1xNJSCqIRz8RESx4T6BmVBsxguqMSoXty4VEJwte7TsPrTZErVr+/1e7il7bEgGrZ7yO2C/14+1PqzkQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772636087; c=relaxed/simple;
-	bh=1byh+QNyIU6Im/7/tyaBmyXiQQLdswLRTD9BEVw7R0Y=;
+	s=arc-20240116; t=1772636099; c=relaxed/simple;
+	bh=PIJwcg7b7PGyxpfg72fGBTChA7MxXYqq/VCQrBvntZA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Bp8e0gvrGvZYoXKbtIcoENJweJcLQ3woPBBN9gZGrNGI4mr6ulHBFLfPZj1uMiYDVDSbrvE2roZFhonJk1O9ZabfdZuoPrlx1gqVb/khqObeu63QuvmFrtC/kunSpg0zfiZQYaDbBYdupeuJgT5SIxR+TsLMTmbJR+w8lfigSEg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=bSatu8Yv; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=Ca10uaD044I0TacG2ADPEUJRw4iN3jOizK05pF7sqABxubh9AOczo9ED4K9oS00iofgQ2y82RdthnEq+s/hfnaxX5OS62FT0Q0PlfyPl0beWSUEvOf7VklUCdQIj3XLEsUYhu4Wd0IExuIkMtWMKnejAqfHx4XpZgJf3vrpvM0A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=U7NPW9L2; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1772636060; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1772636066; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=IkFcR+ACxOSuZ6h08RP7eOUQjM5pRmMGNIAXyzmK3q3ozi+c4vcaC1evXiMnFXJHnHBu1TWS7JVRa0bTO7StJioHlNlEnZXQd5Mq6VX4EwYBsHG1GKlRMWIbUS2TjnY+JXWzSQwpAOuOsckQyUJ52lg4SMg6xAlGHCGMewxrwUg=
+	b=d2B/rEvfwn0Vr3OIyoBDAZ2/l8srjdki+mgn12kp4OKcQI/shFEj56cSRiSVPJRg5Cfm2BlSD37VuKsRX0q0fHUrwk2/cRiujOUHt0vUr23zTwH1keebE8i5E9YLdqOoxoJzA1o39lYLl1aLPTZCWKEVjOWjGLEvb6nd9UwPbFA=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1772636060; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=d9XFO+6vVicvKYzyxt4XDXnPuWzQjPnCjS9mL4eNcmY=; 
-	b=VMLQsFW5/wxar6i7Nl5IDtS/CWB4lTWMMoZ9oFC/Ng6MBj3ez5wgN+x6ZYiCtOYBC9GVxHo6ZaFF1tu8GTWQ6OyM68YwEJObssTiGa53GRLcukTJS4Daj7lcgHVYQ6DD734hZkfwmqLh4FrorpUPtcENnmyKmgbsdpMHt282TPU=
+	t=1772636066; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=5Xyy8e3p/cq+P8guK42rqsXIPHr3owm/c/IQ70yQSTU=; 
+	b=YZ5wh96zo9uW9INL3ICUR4EDDDfKKNzoGIpHTYamCBk0+NLysXPw5k8AJl+VMIOEaCHx2JkbSqGAE8BqqQIA/5zawswiOd3TH4lJQLjy4IQB6yTfC/AdVWfKvR33UfQ3gzKqCScgriMZVsg2jIO00tPxShzPbZAiHa+R8i3Xs/g=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1772636060;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1772636066;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=d9XFO+6vVicvKYzyxt4XDXnPuWzQjPnCjS9mL4eNcmY=;
-	b=bSatu8YvAk28dzdcFy/mda8+yHmI1/mw9xCAoafMo1+CRkYj+XdKYGCAL559ba51
-	O1oVLvm1EJJ3l5cNmJcuquEnVew7D0udzlX3Ye1UU8ZsgKdTDCeQwQ3HEW7rN07sSov
-	cHXn346VL9RQ3Q5P6qSveYX6L3qxn4dt8zn+7ST0=
-Received: by mx.zohomail.com with SMTPS id 1772636059013903.2401021804582;
-	Wed, 4 Mar 2026 06:54:19 -0800 (PST)
+	bh=5Xyy8e3p/cq+P8guK42rqsXIPHr3owm/c/IQ70yQSTU=;
+	b=U7NPW9L2RdoZdZPHY+3XASYV3PcSTdbzuChLW3rgrrXECXbfnrcdMXSRG587T+2s
+	dNd+8WE0kRs/FzOBSRji/dUkmjJeY55hjixhhYcq4PqejHReFzOCsqJtpwJ9/JBcCgQ
+	GFONdHHg8UAzzuX3q6MP7/HjGR3SWvz7Zfh7vnRY=
+Received: by mx.zohomail.com with SMTPS id 1772636064505251.67738212898576;
+	Wed, 4 Mar 2026 06:54:24 -0800 (PST)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Wed, 04 Mar 2026 15:53:14 +0100
-Subject: [PATCH v8 09/23] scsi: ufs: mediatek: Rework the crypt-boost stuff
+Date: Wed, 04 Mar 2026 15:53:15 +0100
+Subject: [PATCH v8 10/23] scsi: ufs: mediatek: Handle misc host voltage
+ regulators
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -64,8 +65,8 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260304-mt8196-ufs-v8-9-5b0eac23314f@collabora.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260304-mt8196-ufs-v8-10-5b0eac23314f@collabora.com>
 References: <20260304-mt8196-ufs-v8-0-5b0eac23314f@collabora.com>
 In-Reply-To: <20260304-mt8196-ufs-v8-0-5b0eac23314f@collabora.com>
 To: Alim Akhtar <alim.akhtar@samsung.com>, 
@@ -89,7 +90,7 @@ Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
  linux-phy@lists.infradead.org, 
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.3
-X-Rspamd-Queue-Id: E50392022C3
+X-Rspamd-Queue-Id: D1B41202425
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -101,7 +102,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21440-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21442-lists,linux-scsi=lfdr.de];
 	FREEMAIL_TO(0.00)[samsung.com,wdc.com,acm.org,kernel.org,gmail.com,collabora.com,mediatek.com,HansenPartnership.com,oracle.com,pengutronix.de,linaro.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
@@ -117,146 +118,93 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-scsi,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,collabora.com:dkim,collabora.com:email,collabora.com:mid,mediatek.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[collabora.com:dkim,collabora.com:email,collabora.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,mediatek.com:email]
 X-Rspamd-Action: no action
 
-I don't know whether the crypt-boost functionality as it is currently
-implemented is even appropriate for mainline. It might be better done in
-some generic way. But what I do know is that I can rework the code to
-make it less obtuse.
+MediaTek SoCs handled by this driver contain a per-SoC specific set of
+miscellaneous supplies. These feed parts of the UFS controller silicon
+inside the SoC, as opposed to the UFS card.
 
-Prefix the boost stuff with the appropriate vendor prefix, remove the
-pointless clock wrappers, and rework the function.
+Add the necessary driver code to acquire these supplies using the
+regulator bulk API. They should be kept on during suspend, so enable
+them when acquiring.
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Peter Wang (王信友) <peter.wang@mediatek.com>
+Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 89 ++++++++++++++---------------------------
- 1 file changed, 30 insertions(+), 59 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 37 ++++++++++++++++++++++++++++++++++---
+ 1 file changed, 34 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 392383e03ab0..9b7d7e4ba4ba 100644
+index 9b7d7e4ba4ba..3282b2d2d498 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -562,21 +562,6 @@ static int ufs_mtk_mphy_power_on(struct ufs_hba *hba, bool on)
- 	return 0;
- }
+@@ -40,6 +40,8 @@ static void _ufs_mtk_clk_scale(struct ufs_hba *hba, bool scale_up);
  
--static int ufs_mtk_get_host_clk(struct device *dev, const char *name,
--				struct clk **clk_out)
--{
--	struct clk *clk;
--	int err = 0;
--
--	clk = devm_clk_get(dev, name);
--	if (IS_ERR(clk))
--		err = PTR_ERR(clk);
--	else
--		*clk_out = clk;
--
--	return err;
--}
--
- static void ufs_mtk_boost_crypt(struct ufs_hba *hba, bool boost)
- {
- 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
-@@ -633,65 +618,51 @@ static void ufs_mtk_boost_crypt(struct ufs_hba *hba, bool boost)
- 	clk_disable_unprepare(cfg->clk_crypt_mux);
- }
+ struct ufs_mtk_soc_data {
+ 	bool has_avdd09;
++	u8 num_reg_names;
++	const char *const *reg_names;
+ };
  
--static int ufs_mtk_init_host_clk(struct ufs_hba *hba, const char *name,
--				 struct clk **clk)
--{
--	int ret;
--
--	ret = ufs_mtk_get_host_clk(hba->dev, name, clk);
--	if (ret) {
--		dev_info(hba->dev, "%s: failed to get %s: %d", __func__,
--			 name, ret);
--	}
--
--	return ret;
--}
--
- static void ufs_mtk_init_boost_crypt(struct ufs_hba *hba)
+ static const struct ufs_dev_quirk ufs_mtk_dev_fixups[] = {
+@@ -1188,8 +1190,21 @@ static int ufs_mtk_get_supplies(struct ufs_mtk_host *host)
  {
- 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
- 	struct ufs_mtk_crypt_cfg *cfg;
- 	struct device *dev = hba->dev;
--	struct regulator *reg;
--	u32 volt;
+ 	struct device *dev = host->hba->dev;
+ 	const struct ufs_mtk_soc_data *data = of_device_get_match_data(dev);
 +	int ret;
- 
--	host->crypt = devm_kzalloc(dev, sizeof(*(host->crypt)),
--				   GFP_KERNEL);
--	if (!host->crypt)
--		goto disable_caps;
-+	cfg = devm_kzalloc(dev, sizeof(*cfg), GFP_KERNEL);
-+	if (!cfg)
-+		return;
- 
--	reg = devm_regulator_get_optional(dev, "dvfsrc-vcore");
--	if (IS_ERR(reg)) {
--		dev_info(dev, "failed to get dvfsrc-vcore: %ld",
--			 PTR_ERR(reg));
--		goto disable_caps;
-+	cfg->reg_vcore = devm_regulator_get_optional(dev, "dvfsrc-vcore");
-+	if (IS_ERR(cfg->reg_vcore)) {
-+		dev_err(dev, "Failed to get dvfsrc-vcore: %pe", cfg->reg_vcore);
-+		return;
- 	}
- 
--	if (of_property_read_u32(dev->of_node, "boost-crypt-vcore-min",
--				 &volt)) {
--		dev_info(dev, "failed to get boost-crypt-vcore-min");
--		goto disable_caps;
-+	ret = of_property_read_u32(dev->of_node, "mediatek,boost-crypt-vcore-min",
-+				   &cfg->vcore_volt);
-+	if (ret) {
-+		dev_err(dev, "Failed to get mediatek,boost-crypt-vcore-min: %pe\n",
-+			ERR_PTR(ret));
-+		return;
- 	}
- 
--	cfg = host->crypt;
--	if (ufs_mtk_init_host_clk(hba, "crypt_mux",
--				  &cfg->clk_crypt_mux))
--		goto disable_caps;
-+	cfg->clk_crypt_mux = devm_clk_get(dev, "crypt_mux");
-+	if (IS_ERR(cfg->clk_crypt_mux)) {
-+		dev_err(dev, "Failed to get clock crypt_mux: %pe\n", cfg->clk_crypt_mux);
-+		return;
++
++	if (!data)
++		return 0;
++
++	if (data->num_reg_names) {
++		ret = devm_regulator_bulk_get_enable(dev, data->num_reg_names,
++						     data->reg_names);
++		if (ret) {
++			dev_err(dev, "Failed to get misc regulators: %pe\n", ERR_PTR(ret));
++			return ret;
++		}
 +	}
  
--	if (ufs_mtk_init_host_clk(hba, "crypt_lp",
--				  &cfg->clk_crypt_lp))
--		goto disable_caps;
-+	cfg->clk_crypt_lp = devm_clk_get(dev, "crypt_lp");
-+	if (IS_ERR(cfg->clk_crypt_lp)) {
-+		dev_err(dev, "Failed to get clock crypt_lp: %pe\n", cfg->clk_crypt_lp);
-+		return;
-+	}
+-	if (!data || !data->has_avdd09)
++	if (!data->has_avdd09)
+ 		return 0;
  
--	if (ufs_mtk_init_host_clk(hba, "crypt_perf",
--				  &cfg->clk_crypt_perf))
--		goto disable_caps;
-+	cfg->clk_crypt_perf = devm_clk_get(dev, "crypt_perf");
-+	if (IS_ERR(cfg->clk_crypt_perf)) {
-+		dev_err(dev, "Failed to get clock crypt_perf: %pe\n", cfg->clk_crypt_perf);
-+		return;
-+	}
+ 	host->reg_avdd09 = devm_regulator_get_optional(dev, "avdd09");
+@@ -2331,14 +2346,30 @@ static const struct ufs_hba_variant_ops ufs_hba_mtk_vops = {
+ 	.config_scsi_dev     = ufs_mtk_config_scsi_dev,
+ };
  
--	cfg->reg_vcore = reg;
--	cfg->vcore_volt = volt;
-+	host->crypt = cfg;
- 	host->caps |= UFS_MTK_CAP_BOOST_CRYPT_ENGINE;
--
--disable_caps:
--	return;
- }
++static const char *const ufs_mtk_regs_avdd12_avdd18[] = {
++	"avdd12", "avdd18"
++};
++
++static const char *const ufs_mtk_regs_avdd12_ckbuf_avdd18[] = {
++	"avdd12", "avdd12-ckbuf", "avdd18"
++};
++
+ static const struct ufs_mtk_soc_data mt8183_data = {
+ 	.has_avdd09 = true,
++	.reg_names = ufs_mtk_regs_avdd12_avdd18,
++	.num_reg_names = ARRAY_SIZE(ufs_mtk_regs_avdd12_avdd18),
++};
++
++static const struct ufs_mtk_soc_data mt8192_8195_data = {
++	.has_avdd09 = false,
++	.reg_names = ufs_mtk_regs_avdd12_ckbuf_avdd18,
++	.num_reg_names = ARRAY_SIZE(ufs_mtk_regs_avdd12_ckbuf_avdd18),
+ };
  
- static void ufs_mtk_init_host_caps(struct ufs_hba *hba)
+ static const struct of_device_id ufs_mtk_of_match[] = {
+ 	{ .compatible = "mediatek,mt8183-ufshci", .data = &mt8183_data },
+-	{ .compatible = "mediatek,mt8192-ufshci" },
+-	{ .compatible = "mediatek,mt8195-ufshci" },
++	{ .compatible = "mediatek,mt8192-ufshci", .data = &mt8192_8195_data },
++	{ .compatible = "mediatek,mt8195-ufshci", .data = &mt8192_8195_data },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, ufs_mtk_of_match);
 
 -- 
 2.53.0
