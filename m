@@ -1,59 +1,62 @@
-Return-Path: <linux-scsi+bounces-21395-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21397-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QKnhKvnlp2mrlAAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21395-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 04 Mar 2026 08:57:45 +0100
+	id AAwnDqvnp2mDlgAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21397-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 04 Mar 2026 09:04:59 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A3E41FC119
-	for <lists+linux-scsi@lfdr.de>; Wed, 04 Mar 2026 08:57:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7C1B1FC245
+	for <lists+linux-scsi@lfdr.de>; Wed, 04 Mar 2026 09:04:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D9A2A303B4F4
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Mar 2026 07:57:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D13CE30557E8
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Mar 2026 08:04:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2890A381AE3;
-	Wed,  4 Mar 2026 07:57:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3604F388E72;
+	Wed,  4 Mar 2026 08:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=aliyun.com header.i=@aliyun.com header.b="eDrys2js"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="bfQ4q8YB"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from out30-65.freemail.mail.aliyun.com (out30-65.freemail.mail.aliyun.com [115.124.30.65])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34375382F31;
-	Wed,  4 Mar 2026 07:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3A7389106;
+	Wed,  4 Mar 2026 08:04:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772611049; cv=none; b=rKvHDOUZTKT7iUcQJ5xlTpCs+cAFPslJs+vsO4BxVI9LI6oLEqDRs9fqEHrzh4f9S7YJic2pz9oju0PiB4NORwkWpv0g66qSnsBfxAIGIeCBkbADJTx5J2w4caoqLtBzxcj7U9n9H6+uOZk/cyhTM8/C3wnxRNi626WKziBVyw8=
+	t=1772611449; cv=none; b=HVJKfSyGVFLAyN1USVVgRWGowPPtgzlEioT+hox4pgZXkgjC+I/vH0TwNYuq7SjcfdpO5uy2UP1ql7OafSjOFQjAHPiPxuOM0VNKEEBp65rJ3NvmcmHOAjr8Up8TTivcvL7RuGdQAhX7NQRQX5GDwlbYCTeRr5afFz08E3XyPso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772611049; c=relaxed/simple;
-	bh=Jys2tm4wdsFkaXHimIspWlP8VMjjv8Lce2XRhukObyI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H4YwQcMhjW0m++DrtNvO7rS+3Z9iWY2CKf7+fxA7yUiCzaUwyWhzjjrt6AexQ74rlrrIXOYn1Y06XqscRSuQxWmfZGR6usunw0dDJiZcvIqvMF557PeBCbULyCICkLSdcz4OJHLqWonfiSh2mTFdwm/S683S7nzMu+K1d6HnhHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aliyun.com; spf=pass smtp.mailfrom=aliyun.com; dkim=pass (1024-bit key) header.d=aliyun.com header.i=@aliyun.com header.b=eDrys2js; arc=none smtp.client-ip=115.124.30.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aliyun.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aliyun.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=aliyun.com; s=s1024;
-	t=1772611039; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=kKWlY/Al6Bn7Vqp7QnoBuuIAht21Xl6dFtbJrhF04P8=;
-	b=eDrys2js/DSJc88uI8TIHnZIQSuFe7qD5UWT2o2Qt748VSC4lk7cT4/8QhryxP+5hLtiYwPpeva+esTIfFgXiLBhmXcWEvE7stFEM4pn1uU81WcnQOrmLAALk4jyGkteGKwiuwHyOBV3FVs3X1dGBVwwi6lFclnlpuHOxUfX8uU=
-Received: from localhost.localdomain(mailfrom:wdhh6@aliyun.com fp:SMTPD_---0X-DNxS7_1772611034 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 04 Mar 2026 15:57:18 +0800
-From: Chaohai Chen <wdhh6@aliyun.com>
-To: James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com,
-	dlemoal@kernel.org,
-	bvanassche@acm.org,
-	hch@infradead.org
-Cc: linux-scsi@vger.kernel.org,
+	s=arc-20240116; t=1772611449; c=relaxed/simple;
+	bh=zZOgqHVM9pWLQP4Ykc5XwSDoVzuR3cQEJFlNLrBCK4M=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uEJIzNThFIkicVN6gMqPQAkjuPwhsMk9Fa/fwHfmMf7Bqe9OnzFZjQL/WTfFAo0Xrnlm/HrUtG7EnVwZRo7ld5z60+9J/QaLHI4J6Ggbhu5oQiHBkxixSXSLQcenDNrYZMUZsRhNOrKfeiO6e/DHKPNfle8ZMkcmBMBXuMUAlCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=bfQ4q8YB; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Qr
+	9amUivXQzVorKOnDSOzZFaDMUuPQCR/oV7gsbMtxU=; b=bfQ4q8YBO/6taqtAjd
+	/NmtqWDUtHiBU8SmwFtrF1tZuSMPzeAukK/46W9oFtJ1O9nZHAtz8JBo7tgYCkbH
+	KsQ9lBm4eHdC5K2hTLYbORAKKQxybVNL86Mt6cQ58xiwVslwQQVPdnKJPaT2swoK
+	VZUfdRnXrx9Ym/jCyZ4Q3o11Y=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wD3CvhD56dpCDV7PA--.26869S2;
+	Wed, 04 Mar 2026 16:03:16 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: fujita.tomonori@lab.ntt.co.jp,
+	axboe@kernel.dk,
+	James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com
+Cc: bvanassche@acm.org,
+	linux-scsi@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Chaohai Chen <wdhh6@aliyun.com>
-Subject: [PATCH v3] scsi: core: Fix async_scan race condition with READ_ONCE/WRITE_ONCE
-Date: Wed,  4 Mar 2026 15:57:12 +0800
-Message-ID: <20260304075712.3039960-1-wdhh6@aliyun.com>
-X-Mailer: git-send-email 2.43.7
+	Yang Xiuwei <yangxiuwei@kylinos.cn>
+Subject: [PATCH v5 0/3] bsg: add io_uring command support for SCSI passthrough
+Date: Wed,  4 Mar 2026 16:03:10 +0800
+Message-Id: <20260304080313.675768-1-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -61,176 +64,110 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 1A3E41FC119
+X-CM-TRANSID:_____wD3CvhD56dpCDV7PA--.26869S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWF13Ar13Xw4DKry3WryDWrg_yoW5GF48pF
+	WFgFnxJr4UC3WftFyfAa1DWFyYq3s3CF47G342q34kArn8AF9Fgr1DtF45XFZrAw17ta4U
+	Xr1jvrWDC3WkAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j1mhwUUUUU=
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbCwQZP32mn50ZYdAAA3U
+X-Rspamd-Queue-Id: D7C1B1FC245
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[aliyun.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[aliyun.com:s=s1024];
+	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-21395-lists,linux-scsi=lfdr.de];
-	FREEMAIL_CC(0.00)[vger.kernel.org,aliyun.com];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-21397-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[aliyun.com];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wdhh6@aliyun.com,linux-scsi@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[kylinos.cn];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[163.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[aliyun.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,aliyun.com:dkim,aliyun.com:email,aliyun.com:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Previously, host_lock was used to prevent bit-set conflicts in async_scan,
-but this approach introduced naked reads in some code paths.
+This series adds io_uring command support to the BSG SCSI passthrough
+path.
 
-Convert async_scan from a bitfield to a bool type to eliminate bit-level
-conflicts entirely. Use READ_ONCE() and WRITE_ONCE() to ensure proper
-memory ordering on Alpha and satisfy KCSAN requirements.
+The goal is to allow userspace to submit SCSI passthrough commands via
+IORING_OP_URING_CMD, in addition to the existing sg_io interface.
+The io_uring path mirrors the existing BSG behaviour: it currently only
+supports BSG_PROTOCOL_SCSI + BSG_SUB_PROTOCOL_SCSI_CMD and does not
+support BIDI transfers.
 
-Signed-off-by: Chaohai Chen <wdhh6@aliyun.com>
----
+Patch 1 defines struct bsg_uring_cmd in the UAPI so that userspace can
+describe SCSI passthrough requests for io_uring.
 
-v1->v3:
-use READ_ONCE()/WRITE_ONCE() to fix the issue (Christoph Hellwig, Damien Le Moal)
+Patch 2 extends the generic BSG layer with an .uring_cmd file operation
+and a bsg_uring_cmd_fn callback, allowing transport-specific handlers to
+be registered.
 
-v1: https://lore.kernel.org/all/20260302121343.1630837-1-wdhh6@aliyun.com/
+Patch 3 implements the SCSI BSG io_uring handler. It builds a SCSI
+request from struct bsg_uring_cmd, maps user buffers (including fixed
+buffers), and completes asynchronously via a request end_io callback and
+task_work. Completion returns SCSI device/host/driver status, residual
+length and sense data length packed into the CQE result.
 
- drivers/scsi/scsi_scan.c | 22 ++++++++--------------
- include/scsi/scsi_host.h |  6 +++---
- 2 files changed, 11 insertions(+), 17 deletions(-)
+Compared to the earlier RFC v4 series [1], this version only includes
+minor code cleanups (mainly comments and wording), without changing the
+behaviour or logic of the implementation.
 
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 60c06fa4ec32..892be54dacc6 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -1298,7 +1298,7 @@ static int scsi_probe_and_add_lun(struct scsi_target *starget,
- 		goto out_free_result;
- 	}
- 
--	res = scsi_add_lun(sdev, result, &bflags, shost->async_scan);
-+	res = scsi_add_lun(sdev, result, &bflags, READ_ONCE(shost->async_scan));
- 	if (res == SCSI_SCAN_LUN_PRESENT) {
- 		if (bflags & BLIST_KEY) {
- 			sdev->lockable = 0;
-@@ -1629,7 +1629,7 @@ struct scsi_device *__scsi_add_device(struct Scsi_Host *shost, uint channel,
- 	scsi_autopm_get_target(starget);
- 
- 	mutex_lock(&shost->scan_mutex);
--	if (!shost->async_scan)
-+	if (!READ_ONCE(shost->async_scan))
- 		scsi_complete_async_scans();
- 
- 	if (scsi_host_scan_allowed(shost) && scsi_autopm_get_host(shost) == 0) {
-@@ -1839,7 +1839,7 @@ void scsi_scan_target(struct device *parent, unsigned int channel,
- 		return;
- 
- 	mutex_lock(&shost->scan_mutex);
--	if (!shost->async_scan)
-+	if (!READ_ONCE(shost->async_scan))
- 		scsi_complete_async_scans();
- 
- 	if (scsi_host_scan_allowed(shost) && scsi_autopm_get_host(shost) == 0) {
-@@ -1896,7 +1896,7 @@ int scsi_scan_host_selected(struct Scsi_Host *shost, unsigned int channel,
- 		return -EINVAL;
- 
- 	mutex_lock(&shost->scan_mutex);
--	if (!shost->async_scan)
-+	if (!READ_ONCE(shost->async_scan))
- 		scsi_complete_async_scans();
- 
- 	if (scsi_host_scan_allowed(shost) && scsi_autopm_get_host(shost) == 0) {
-@@ -1943,13 +1943,12 @@ static void scsi_sysfs_add_devices(struct Scsi_Host *shost)
- static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
- {
- 	struct async_scan_data *data = NULL;
--	unsigned long flags;
- 
- 	if (strncmp(scsi_scan_type, "sync", 4) == 0)
- 		return NULL;
- 
- 	mutex_lock(&shost->scan_mutex);
--	if (shost->async_scan) {
-+	if (READ_ONCE(shost->async_scan)) {
- 		shost_printk(KERN_DEBUG, shost, "%s called twice\n", __func__);
- 		goto err;
- 	}
-@@ -1962,9 +1961,7 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
- 		goto err;
- 	init_completion(&data->prev_finished);
- 
--	spin_lock_irqsave(shost->host_lock, flags);
--	shost->async_scan = 1;
--	spin_unlock_irqrestore(shost->host_lock, flags);
-+	WRITE_ONCE(shost->async_scan, true);
- 	mutex_unlock(&shost->scan_mutex);
- 
- 	spin_lock(&async_scan_lock);
-@@ -1992,7 +1989,6 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
- static void scsi_finish_async_scan(struct async_scan_data *data)
- {
- 	struct Scsi_Host *shost;
--	unsigned long flags;
- 
- 	if (!data)
- 		return;
-@@ -2001,7 +1997,7 @@ static void scsi_finish_async_scan(struct async_scan_data *data)
- 
- 	mutex_lock(&shost->scan_mutex);
- 
--	if (!shost->async_scan) {
-+	if (!READ_ONCE(shost->async_scan)) {
- 		shost_printk(KERN_INFO, shost, "%s called twice\n", __func__);
- 		dump_stack();
- 		mutex_unlock(&shost->scan_mutex);
-@@ -2012,9 +2008,7 @@ static void scsi_finish_async_scan(struct async_scan_data *data)
- 
- 	scsi_sysfs_add_devices(shost);
- 
--	spin_lock_irqsave(shost->host_lock, flags);
--	shost->async_scan = 0;
--	spin_unlock_irqrestore(shost->host_lock, flags);
-+	WRITE_ONCE(shost->async_scan, false);
- 
- 	mutex_unlock(&shost->scan_mutex);
- 
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index f6e12565a81d..668ec9a1b33c 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -678,9 +678,6 @@ struct Scsi_Host {
- 	/* Task mgmt function in progress */
- 	unsigned tmf_in_progress:1;
- 
--	/* Asynchronous scan in progress */
--	unsigned async_scan:1;
--
- 	/* Don't resume host in EH */
- 	unsigned eh_noresume:1;
- 
-@@ -699,6 +696,9 @@ struct Scsi_Host {
- 	/* The transport requires the LUN bits NOT to be stored in CDB[1] */
- 	unsigned no_scsi2_lun_in_cdb:1;
- 
-+	/* Asynchronous scan in progress */
-+	bool async_scan;
-+
- 	/*
- 	 * Optional work queue to be utilized by the transport
- 	 */
+[1] https://lore.kernel.org/linux-block/20260122015653.703188-1-yangxiuwei@kylinos.cn/
+
+Testing
+-------
+Testing was done inside a VM on a disk with:
+  /sys/block/sdd/mq/0/nr_tags     = 1024
+  /sys/block/sdd/queue/nr_requests = 256
+
+The following SCSI INQUIRY micro-benchmark was run with N=100000:
+
+  sg+SG_IO (v3), /dev/sg4:
+    avg = 139.0 us, p50 = 128.9 us, p90 = 149.7 us, p99 = 301.0 us
+
+  bsg+SG_IO (v4), /dev/bsg/2:0:0:0:
+    avg = 97.2 us,  p50 = 92.7 us,  p90 = 111.5 us, p99 = 150.9 us
+
+  bsg+io_uring, /dev/bsg/2:0:0:0:
+    avg = 105.9 us, p50 = 95.4 us,  p90 = 116.2 us, p99 = 175.0 us
+
+  bsg+io_uring (batch=64), /dev/bsg/2:0:0:0:
+    avg = 61.9 us,  p50 = 60.9 us,  p90 = 63.9 us,  p99 = 94.6 us
+
+These results show that the new io_uring path is comparable to the
+existing BSG SG_IO interface for single-command workloads, and that
+batched io_uring submission can significantly improve latency for
+high-concurrency workloads when the device supports sufficient queue
+depth.
+
+Yang Xiuwei (3):
+  bsg: add bsg_uring_cmd uapi structure
+  bsg: add io_uring command support to generic layer
+  scsi: bsg: add io_uring passthrough handler
+
+ block/bsg-lib.c          |   2 +-
+ block/bsg.c              |  32 +++++-
+ drivers/scsi/scsi_bsg.c  | 206 ++++++++++++++++++++++++++++++++++++++-
+ include/linux/bsg.h      |   6 +-
+ include/uapi/linux/bsg.h |  21 ++++
+ 5 files changed, 263 insertions(+), 4 deletions(-)
+
 -- 
-2.43.7
+2.25.1
 
 
