@@ -1,66 +1,66 @@
-Return-Path: <linux-scsi+bounces-21503-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21504-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OBVvKt2KqWl3/AAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21503-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 14:53:33 +0100
+	id SLx9MjeLqWl3/AAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21504-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 14:55:03 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C904212D0C
-	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 14:53:32 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DF73212D88
+	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 14:55:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BF1AC303122B
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2026 13:53:31 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5EF9D30417EE
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2026 13:54:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A58D39C639;
-	Thu,  5 Mar 2026 13:53:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 565213A63F7;
+	Thu,  5 Mar 2026 13:54:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="olw44j3B"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="EFzj3HnW"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF26439F17C;
-	Thu,  5 Mar 2026 13:53:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02083A5E7F;
+	Thu,  5 Mar 2026 13:54:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772718808; cv=none; b=hiwvsslzXUMcZ+shwStx1qzafJoVPGcolrvSLh8V6+jioQf5AF4jkxz8254Du5IxgLaaq6SozKm5BvFsSPa303qggkyviVHSEbFR/OkacOyAEXuZdtY1EllJ+JodDzp9XxLSrG54KYpTBwc1R0Jim/2yA3QL/YJq76pyURcZcD4=
+	t=1772718874; cv=none; b=DhgB3ULLT8upq07t5Dk28nXZQKf8vq4yMnMUpU1aDwwfXEd9/uVUx6PrJyWoYXBsud9M8kwQuv0HgMMbXOehESvPHRlBbJHms1JmbxhhmmwdkK1v3A4nBDWsHBr7Bxx0vS0a9ATWvf91bL8VpYBpanUJ9kM6sVb9OlGFw/55fKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772718808; c=relaxed/simple;
-	bh=l4mnk7JRJnH1eIXJtGFypS8eyK95ypn2RyU1FkY/pwc=;
+	s=arc-20240116; t=1772718874; c=relaxed/simple;
+	bh=/hKt5BDhyW9yM588yoTUagXA5FfNFstWtYDs5omLlwk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I66A82pEAvyxrOpA/siLXon3b1YFwezXbtZLvxY/M4SakyeMUCP7Kam2zqvyg/PTMSnX23tiFwc8sYQZlgcFbYHRtEYQkh+gSQQQWnDirxLN7XEL5CGxTNPPNzUQ47NeQQR72fgP9RDZWXKyU34KsG831wI/8EBlrrmsWkxN/dA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=olw44j3B; arc=none smtp.client-ip=199.89.1.14
+	 In-Reply-To:Content-Type; b=YghKvxWdP9YyLYHVWfv24DbPdhQfjpTNrDD02SnDkEy6GNMTVhK2VLcqSOnYuuWNbV985BJgVMsbUZQUdmWv2VUlfScuIlnmK5RavKRfESm64sJfDFH8KNbjAxDNvSwLXYDDA/d5v9tBtogrIjhqzPVCMIt2ky9qvRS1kUQEw5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=EFzj3HnW; arc=none smtp.client-ip=199.89.1.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4fRWGG2fmtz1XM0pg;
-	Thu,  5 Mar 2026 13:53:26 +0000 (UTC)
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4fRWHY1bNtz1XM0pg;
+	Thu,  5 Mar 2026 13:54:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:content-type:content-type:in-reply-to
 	:from:from:content-language:references:subject:subject
 	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1772718803; x=1775310804; bh=l4mnk7JRJnH1eIXJtGFypS8e
-	yK95ypn2RyU1FkY/pwc=; b=olw44j3BBGk3sY2d8AjfOQmI6HfUf/GG1bSNGwWh
-	xx41O/ufHoGsOXC4rrQa/VU+Xm4psJKS7zUCE1+FaITD9R3k3GvgyqDJqCcETf6/
-	VN4Hd49cPWXw50seHvBLp3D8Tv98kg3WuyLyag8vhHxDKGrlIBkn5s2PpvrSxAR3
-	rtOcd+gd+CEorDn+potL4/EBYDp+nyZZgiiQGb3gqTFKcYVQyAYBUKlylbc7FMGf
-	NHBPk7/gZudrE+WXmuywjAjiONMAvhp4c9C45HdESqUwRiX/D6PL2gF8Ndn6/iNV
-	aYywhdANVAb1l39gL09/+oVeNwXKgmBZWYKjKAbXrhQECQ==
+	 s=mr01; t=1772718868; x=1775310869; bh=/hKt5BDhyW9yM588yoTUagXA
+	5FfNFstWtYDs5omLlwk=; b=EFzj3HnWvXhbUj3B3jC4Hb0An2q3FTP/D339jvGI
+	o8EtthBrfP3mBni8yaP09QCRAHjDeqOaWp92hJ/Ji2xzptHqJYE6xnZ/8kzawZeP
+	o0PuCiiGejHjKK+wU1+i6ESIVUYOJNQIqFgvZkGINFp749JZYlzD0hxQpDVkXGbO
+	rkBxbTHT/aSQgjpu5JyeZrVNcYFY5k6Fy1DefW1i6TkR6s9b0EMAY5j6AcpyBBbC
+	rSFro1FNZTDkTtEsBycCLi1arTGgTXyMviMA1kx4JfxilXaKASjvwIeoZQ05o3xQ
+	DLaQjEKyEm8NY9BNctUuLS+mkXzkOAiuY8v1hU1NJLTAug==
 X-Virus-Scanned: by MailRoute
 Received: from 011.lax.mailroute.net ([127.0.0.1])
  by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id M7R5GB0v-hUK; Thu,  5 Mar 2026 13:53:23 +0000 (UTC)
+ id Ym1e3RrmrHOh; Thu,  5 Mar 2026 13:54:28 +0000 (UTC)
 Received: from [192.168.132.187] (unknown [12.150.89.26])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4fRWG765Mxz1XM5kD;
-	Thu,  5 Mar 2026 13:53:19 +0000 (UTC)
-Message-ID: <5a047d62-5e45-485f-a44a-dc3c011e9a76@acm.org>
-Date: Thu, 5 Mar 2026 07:53:17 -0600
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4fRWHP1wnbz1XM5kD;
+	Thu,  5 Mar 2026 13:54:24 +0000 (UTC)
+Message-ID: <6be71e9b-f26d-4c50-a5f5-1f34f01f02ef@acm.org>
+Date: Thu, 5 Mar 2026 07:54:23 -0600
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -68,54 +68,58 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 03/11] scsi: ufs: core: Add UFS_HS_G6 and
- UFS_HS_GEAR_MAX to enum ufs_hs_gear_tag
+Subject: Re: [PATCH v2 02/11] scsi: ufs: core: Pass force_pmc to
+ ufshcd_config_pwr_mode() as a parameter
 To: Can Guo <can.guo@oss.qualcomm.com>, avri.altman@wdc.com,
  beanhuo@micron.com, martin.petersen@oracle.com
 Cc: linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
  "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Peter Wang <peter.wang@mediatek.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+ Archana Patni <archana.patni@intel.com>,
  open list <linux-kernel@vger.kernel.org>
 References: <20260304135313.413688-1-can.guo@oss.qualcomm.com>
- <20260304135313.413688-4-can.guo@oss.qualcomm.com>
+ <20260304135313.413688-3-can.guo@oss.qualcomm.com>
 Content-Language: en-US
 From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260304135313.413688-4-can.guo@oss.qualcomm.com>
+In-Reply-To: <20260304135313.413688-3-can.guo@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 9C904212D0C
+X-Rspamd-Queue-Id: 1DF73212D88
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[acm.org:+];
-	TAGGED_FROM(0.00)[bounces-21503-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21504-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[acm.org:+];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,acm.org:dkim,acm.org:email,acm.org:mid]
 X-Rspamd-Action: no action
 
 On 3/4/26 7:53 AM, Can Guo wrote:
-> Add UFS_HS_G6 to enum ufs_hs_gear_tag. In addition, add UFS_HS_GEAR_MAX to
-> enum ufs_hs_gear_tag to facilitate iteration over valid High Speed Gears.
+> Currently, callers must manually toggle hba->force_pmc before and after
+> calling ufshcd_config_pwr_mode() to force a Power Mode change. Refactor
+> ufshcd_config_pwr_mode() to accept force_pmc as a parameter.
 
 Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
