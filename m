@@ -1,202 +1,212 @@
-Return-Path: <linux-scsi+bounces-21525-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21526-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0MIBDJL9qWkbJQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-21525-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 23:02:58 +0100
+	id YEBbO78Lqmn0KAEAu9opvQ
+	(envelope-from <linux-scsi+bounces-21526-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 00:03:27 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32F07218BFE
-	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 23:02:56 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 521F121927B
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 00:03:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E71903009E35
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2026 22:02:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 00DE830480E0
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2026 23:01:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDA88350D46;
-	Thu,  5 Mar 2026 22:02:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E99D6282F19;
+	Thu,  5 Mar 2026 23:01:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="ohgSwQLS";
-	dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="K746Mkm1"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HOIfHqAO"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.169])
+Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E914C3033E6;
-	Thu,  5 Mar 2026 22:02:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772748171; cv=pass; b=MHghO81sC+RedTvBdYNgqSYu4BZNnp5I79BqJqtbS/PIqZlRLMcroD9DirEjehUDxruIyGtCWVFznK/SA7CI27PouashJJbgrGN3B7JpmVK3BjNLIDRYR7C6MfG5QE3Tzi6/gOV5mKroLJWdKMm7EL++hXHmKH/+GslSpWHSa7I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772748171; c=relaxed/simple;
-	bh=5HPVDRnbKdZj2bwJhIpl77iEYmg4hR5fTyCpCyySCFk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pb3lqlx9I/sPj5U+xw5dO4FHxfy+tnv4+gQIJp6DFJ3IrfdJe4OWn87MoLokd7hppMcbmlOmO3nGGVzlGzImsn0CbPjVcdIUVxIbjg5JPFhG4CQdm/XnpO71Rgqb/icQ9IAyQYLklA1Wf8xdjQEhU93JoGads5dh2UxsCI57wz4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=ohgSwQLS; dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=K746Mkm1; arc=pass smtp.client-ip=81.169.146.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iokpp.de
-ARC-Seal: i=1; a=rsa-sha256; t=1772747445; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=RjPIfuFrn/fi/VrIfO1a+Ar2Wt6vM18J9qMIrCUhyrzq5SD6CAnTvGbK6YazLYhhw2
-    fKd2bJVzMAyTAtyaW8L1g7A1UmOMK3AE+WjjE2Wp7mNT4xDGahTP7uIvGpFQ0V5eCj2n
-    nvY69B0eiS0fFN8qzM1mF86IQoKlUmm3ER5i4I4IUKHvHTdKM/RD2sMIJI6mAsRVvaZT
-    nAUYAkZtJiI0a3YP+WRaFktTCCm1PiMrz/jmMuSj3VRuIo6XsSA5foMT15901Hy1fRQN
-    GasH7mLnUghUOh3EoZEdtWGJCKLwj9RO9he9mFVkrprPCmJ9VdWt7+gqaNlOeYu3VUIL
-    OY5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1772747445;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=5HPVDRnbKdZj2bwJhIpl77iEYmg4hR5fTyCpCyySCFk=;
-    b=XLjmm28BvKE9Ljf9BL5zVV0ZPd+mmWOJ+e9xaHGk0WnOxXMS70jb7ifs7iIpEmjX+V
-    Mg92uGEkuSFZCbPf0M43q7Le3A34eglHZovm/1EkHsBJZg8+zq3ZIquLTDP8p068xhbj
-    pLL39RMaogOuSPeyNL4JojvjbC89cohPDXpJy5gaFeEkUQS780PPH+osCGNAc39SIKDT
-    34PjJbTYTt+4p9Bm8jvtVT29szgbk/0vM+LPb9uCLCKfH+llGe7eZ85XmTiJaU1GUYqP
-    tE2o/Yc5kOlmCmb8AxV2pM3t3x0x0r1KuJSNhbn+RBsobetFHB55U5NRgSHxBC6FG3Qj
-    aGsg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1772747445;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=5HPVDRnbKdZj2bwJhIpl77iEYmg4hR5fTyCpCyySCFk=;
-    b=ohgSwQLSk2WLTOBQQgFf28/Yp0N54JuNhnRdxd2W5oxAV6BuZKk9vPRqC8NmOExlrc
-    tUUC/Zh3DzQQMFHAOthA68j1nJrwpHrHpjxLukDstaPA3EoaPrFpIc0/JRY78FDCCeK/
-    Do5rSHZCpqh50UP1a6gBuZCrBCV+/o1DxlMmLzKQjMcn07cg0Erp30cdmR5zjesYjdn/
-    7DZO+i/DyUKI5XDqyopygxIdUya0NfIsly71KNQw/Gx+FM+XGXQwglV0mlpOpsUK4Noj
-    FQdMp18TNj67N2ApMkSB2o4U1EggSrhX1KAWONvwcsKxBBUONs9m1GU13ruxtV65skzQ
-    /3IA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1772747445;
-    s=strato-dkim-0003; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=5HPVDRnbKdZj2bwJhIpl77iEYmg4hR5fTyCpCyySCFk=;
-    b=K746Mkm1mYOLyWWE5sUbeGRsadfOwHmaaPVNLC9j8CQ9Yd1F91p3WYMdyIHv8lcSxs
-    schp4TR4Bh5cC3V8yiBw==
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSe9tgBDSDt0V0zNriHg+YfT0rGSTpN/lG4EkH1OcwzJ11G3m+XGf4kwpD3TrkAw="
-Received: from p200300c58703fb9bfc647aebea4a424d.dip0.t-ipconnect.de
-    by smtp.strato.de (RZmta 55.0.1 AUTH)
-    with ESMTPSA id z79345225Loi7SL
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Thu, 5 Mar 2026 22:50:44 +0100 (CET)
-Message-ID: <5f998c89c2939baa2939a1ad8942b015d3ccccfc.camel@iokpp.de>
-Subject: Re: [PATCH v2 04/11] scsi: ufs: core: Add support for TX
- Equalization
-From: Bean Huo <beanhuo@iokpp.de>
-To: Can Guo <can.guo@oss.qualcomm.com>, avri.altman@wdc.com,
- bvanassche@acm.org,  beanhuo@micron.com, martin.petersen@oracle.com
-Cc: linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Peter Wang
- <peter.wang@mediatek.com>, "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
- Adrian Hunter <adrian.hunter@intel.com>, open list
- <linux-kernel@vger.kernel.org>
-Date: Thu, 05 Mar 2026 22:50:43 +0100
-In-Reply-To: <20260304135313.413688-5-can.guo@oss.qualcomm.com>
-References: <20260304135313.413688-1-can.guo@oss.qualcomm.com>
-	 <20260304135313.413688-5-can.guo@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4-0ubuntu2.1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9CC1F4CA9;
+	Thu,  5 Mar 2026 23:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772751709; cv=none; b=OnJghLrQtKtswbc4ARAZwp1kGH0HUeJjewgNZo9GtseJ236u/IMd2/nDxgt6gaz43JF04ODu9eOhqNu9HxUOOzTTRWqkopuOYPgvNGJcj5O1FD0qD0Ti5mJuDu+8+CsbTVKj8I4R+TDK+b0BK9SJJ4kzQ3bJyVwqq7nChlEkGQw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772751709; c=relaxed/simple;
+	bh=XETZmt/ZEJx0r+XYBiPTgV9mCSBd3IrEzAmVWfBnZsg=;
+	h=To:Cc:Message-ID:From:Subject:Date; b=PC/9B4BKWGFDv0nZZHCeDtuxiNwiiJzFWyYnilpXrEAXESxGSh2sBbV+yw7PfWYI+IRWJMT1M49+BMt6xQpF9gnNlbKAVuxAdejlabEvqn4F5jfcLEMZdpyp8GFd3QSQaSiS9eLPgCGyHpk72GlEswPXK31LVmFdackBgms3Vb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HOIfHqAO; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 9D8E2EC0084;
+	Thu,  5 Mar 2026 18:01:45 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Thu, 05 Mar 2026 18:01:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:message-id:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1772751705; x=1772838105; bh=tJRv/tg4/k+69VMmc6YQYggL3mVU
+	mTf0EUVNr4buHhs=; b=HOIfHqAOuf5vZeNXDJlDNOdSq0IuXRPNiYm4x+PgISYh
+	VlXyaeVGxI8MLER7DYKmV0e9mPHhsZDUCq0Bs1FzQF9ACa6AfNVXoR7KeBLXDNFw
+	Kwc9OIp7DO2tVxNfM/sBt2fup5ywIJyVYTW2md1wOj+gXjyxx0LFICOZRFw01aIx
+	DDK/eltnRagNaEqnUtsDlNgbYsErSoYBFzrFgoyss/1XXlv/l0OFcsdXwUTnk2ao
+	FnMupSi4EHcjLY5N3a7rTsyJJBghDt3EePpMysMSekPzAA6Rmv/VORPQTn/OvQRV
+	+QQJzvbWSf/HqiAWDlMfEKODsKgZMaEbbpxY+Gw2SQ==
+X-ME-Sender: <xms:WAuqaWyFCI_4w0NDu0NX5NJ9oWjHFM6lHp6PX7Lo7zNmLSrO77OJBQ>
+    <xme:WAuqaYROEg9U_yaxfTp48lskL3YoQBIWA9_IdQZt46GGRuopAk46OlUBWT9_4aIcj
+    ueUDRD3VqeCQDmtie-BPIgC3rZbXOvSElNoPK9MMFtzx8Oorb1F04U>
+X-ME-Received: <xmr:WAuqaTJvxkrIgTlhtySk3ouPaTq975RP10_lXNXMedDC8VlJ0kfUPQ-qnAsyCwOzZfEfhRgfOc0k4Tj-tysXFqLCXhYepDlIEF4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvieejieejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepvfevkffhufffsedttdertddttddtnecuhfhrohhmpefhihhnnhcuvfhhrghinhcu
+    oehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtthgvrhhnpe
+    ekffejgfehheehkeekffffveekteevvddvveelhffgffetteefgfeutdehleetheenucff
+    ohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepfhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrghdp
+    nhgspghrtghpthhtohepuddtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehnjh
+    grvhgrlhhisehmrghrvhgvlhhlrdgtohhmpdhrtghpthhtohepghhrqdhqlhhoghhitgdq
+    shhtohhrrghgvgdquhhpshhtrhgvrghmsehmrghrvhgvlhhlrdgtohhmpdhrtghpthhtoh
+    epjhgrmhgvshdrsghothhtohhmlhgvhieshhgrnhhsvghnphgrrhhtnhgvrhhshhhiphdr
+    tghomhdprhgtphhtthhopehmrghrthhinhdrphgvthgvrhhsvghnsehorhgrtghlvgdrtg
+    homhdprhgtphhtthhopehtohhnhigssegthigsvghrnhgvthhitghsrdgtohhmpdhrtghp
+    thhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtth
+    hopegrrhhnugesrghrnhgusgdruggvpdhrtghpthhtoheplhhinhhugidqmheikehksehl
+    ihhsthhsrdhlihhnuhigqdhmieekkhdrohhrghdprhgtphhtthhopehlihhnuhigqdhstg
+    hsihesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:WAuqafVU7r5pjIQGszhIDxtolC-VQG4u3ngRZL6m4FPiVXAq0KNJzA>
+    <xmx:WAuqaXQMJb0VJyYVzdKLezkq4z45kDHgP2DPlAKshlc50M3CYZsDpQ>
+    <xmx:WAuqaXALX0duMlYG8CLwptbHsE59OLUyprgXjnlPVYflJksbFz4XNw>
+    <xmx:WAuqaWLCTGpQraCgQkaP24YpPDfLK1RzGCxpCCJvWltaP_sKU1yMog>
+    <xmx:WQuqabE4ZgHZ4wcTxWXu_3LPVnen2tdNM1G6bjrOiAE2H6oIfQUPJt8t>
+Feedback-ID: i58a146ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 5 Mar 2026 18:01:42 -0500 (EST)
+To: Nilesh Javali <njavali@marvell.com>,
+    GR-QLogic-Storage-Upstream@marvell.com,
+    "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+    "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Tony Battersby <tonyb@cybernetics.com>,
+    Andrew Morton <akpm@linux-foundation.org>,
+    Arnd Bergmann <arnd@arndb.de>,
+    linux-m68k@lists.linux-m68k.org,
+    linux-scsi@vger.kernel.org,
+    linux-kernel@vger.kernel.org
+Message-ID: <550e7d7bb8c2620ca4f6c9e809a4f853bdfa4c67.1772751689.git.fthain@linux-m68k.org>
+From: Finn Thain <fthain@linux-m68k.org>
+Subject: [PATCH] scsi: qla2xxx: Remove problematic BUILD_BUG_ON() assertion
+Date: Fri, 06 Mar 2026 10:01:29 +1100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Rspamd-Queue-Id: 32F07218BFE
+X-Rspamd-Queue-Id: 521F121927B
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.06 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[iokpp.de,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[iokpp.de:s=strato-dkim-0002,iokpp.de:s=strato-dkim-0003];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[messagingengine.com:s=fm1];
 	MAILLIST(-0.15)[generic];
-	MIME_BASE64_TEXT(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-21525-lists,linux-scsi=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-21526-lists,linux-scsi=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[beanhuo@iokpp.de,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[iokpp.de:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	DMARC_NA(0.00)[linux-m68k.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[messagingengine.com:+];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[fthain@linux-m68k.org,linux-scsi@vger.kernel.org];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[6];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,iokpp.de:dkim,iokpp.de:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linux-m68k.org:mid,linux-m68k.org:email,messagingengine.com:dkim,intel.com:email,cybernetics.com:email,arndb.de:email,linux-foundation.org:email]
 X-Rspamd-Action: no action
 
-T24gV2VkLCAyMDI2LTAzLTA0IGF0IDA1OjUzIC0wODAwLCBDYW4gR3VvIHdyb3RlOgo+ICsgKi8K
-PiArc3RhdGljIGludCB1ZnNoY2RfdHhfZXF0cl9kYXRhX2luaXQoc3RydWN0IHVmc19oYmEgKmhi
-YSwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IHVmc2hjZF90eF9lcV9wYXJhbXMgKnBhcmFtcywKPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgc3RydWN0IHR4X2VxdHJfaXRlciAqaF9pdGVyLAo+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBz
-dHJ1Y3QgdHhfZXF0cl9pdGVyICpkX2l0ZXIpCj4gK3sKPiArwqDCoMKgwqDCoMKgwqB1MzIgY2Fw
-Owo+ICvCoMKgwqDCoMKgwqDCoGludCByZXQ7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGlmICghaGJh
-LT5ob3N0X3ByZXNob290X2NhcCkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBy
-ZXQgPSB1ZnNoY2RfZG1lX2dldChoYmEsCj4gVUlDX0FSR19NSUIoVFhfSFNfUFJFU0hPT1RfU0VU
-VElOR19DQVApLCAmY2FwKTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHJl
-dCkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVy
-biByZXQ7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBoYmEtPmhvc3RfcHJl
-c2hvb3RfY2FwID0gY2FwICYgVFhfRVFUUl9DQVBfTUFTSzsKPiArwqDCoMKgwqDCoMKgwqB9Cj4g
-Kwo+ICvCoMKgwqDCoMKgwqDCoGlmICghaGJhLT5ob3N0X2RlZW1waGFzaXNfY2FwKSB7Cj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldCA9IHVmc2hjZF9kbWVfZ2V0KGhiYSwKPiBV
-SUNfQVJHX01JQihUWF9IU19ERUVNUEhBU0lTX1NFVFRJTkdfQ0FQKSwgJmNhcCk7Cj4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmIChyZXQpCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gcmV0Owo+ICsKPiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgaGJhLT5ob3N0X2RlZW1waGFzaXNfY2FwID0gY2FwICYgVFhfRVFU
-Ul9DQVBfTUFTSzsKPiArwqDCoMKgwqDCoMKgwqB9Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGlmICgh
-aGJhLT5kZXZpY2VfcHJlc2hvb3RfY2FwKSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoHJldCA9IHVmc2hjZF9kbWVfcGVlcl9nZXQoaGJhLAo+IFVJQ19BUkdfTUlCKFRYX0hTX1BS
-RVNIT09UX1NFVFRJTkdfQ0FQKSwgJmNhcCk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoGlmIChyZXQpCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqByZXR1cm4gcmV0Owo+ICsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaGJh
-LT5kZXZpY2VfcHJlc2hvb3RfY2FwID0gY2FwICYgVFhfRVFUUl9DQVBfTUFTSzsKPiArwqDCoMKg
-wqDCoMKgwqB9Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGlmICghaGJhLT5kZXZpY2VfZGVlbXBoYXNp
-c19jYXApIHsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0ID0gdWZzaGNkX2Rt
-ZV9wZWVyX2dldChoYmEsCj4gVUlDX0FSR19NSUIoVFhfSFNfREVFTVBIQVNJU19TRVRUSU5HX0NB
-UCksICZjYXApOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAocmV0KQo+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHJldDsK
-PiArCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGhiYS0+ZGV2aWNlX2RlZW1waGFz
-aXNfY2FwID0gY2FwICYgVFhfRVFUUl9DQVBfTUFTSzsKPiArwqDCoMKgwqDCoMKgwqB9Cj4gKwo+
-ICvCoMKgwqDCoMKgwqDCoG1lbXNldChwYXJhbXMtPmhvc3QsIDAsIHNpemVvZihwYXJhbXMtPmhv
-c3QpKTsKPiArwqDCoMKgwqDCoMKgwqBtZW1zZXQocGFyYW1zLT5kZXZpY2UsIDAsIHNpemVvZihw
-YXJhbXMtPmRldmljZSkpOwo+ICvCoMKgwqDCoMKgwqDCoG1lbXNldChwYXJhbXMtPmhvc3RfZXF0
-cl9yZWNvcmQsIDB4RkYsIHNpemVvZihwYXJhbXMtCj4gPmhvc3RfZXF0cl9yZWNvcmQpKTsKPiAr
-wqDCoMKgwqDCoMKgwqBtZW1zZXQocGFyYW1zLT5kZXZpY2VfZXF0cl9yZWNvcmQsIDB4RkYsIHNp
-emVvZihwYXJhbXMtCj4gPmRldmljZV9lcXRyX3JlY29yZCkpOwo+ICsKPiArwqDCoMKgwqDCoMKg
-wqBtZW1zZXQoaF9pdGVyLCAwLCBzaXplb2Yoc3RydWN0IHR4X2VxdHJfaXRlcikpOwo+ICvCoMKg
-wqDCoMKgwqDCoG1lbXNldChkX2l0ZXIsIDAsIHNpemVvZihzdHJ1Y3QgdHhfZXF0cl9pdGVyKSk7
-Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGhfaXRlci0+bnVtX2xhbmVzID0gcGFyYW1zLT50eF9sYW5l
-czsKPiArwqDCoMKgwqDCoMKgwqBkX2l0ZXItPm51bV9sYW5lcyA9IHBhcmFtcy0+cnhfbGFuZXM7
-Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoC8qCj4gK8KgwqDCoMKgwqDCoMKgICogU3VwcG9ydCBQcmVT
-aG9vdCAmIERlRW1waGFzaXMgb2YgdmFsdWUgMCBpcyBtYW5kYXRvcnksIGhlbmNlIHRoZXkKPiBh
-cmUKPiArwqDCoMKgwqDCoMKgwqAgKiBub3QgcmVmbGVjdGVkIGluIFByZVNob290L0RlRW1waGFz
-aXMgY2FwYWJpbGl0aWVzLiBMZWZ0IHNoaWZ0IHRoZQo+ICvCoMKgwqDCoMKgwqDCoCAqIGNhcGFi
-aWxpdHkgYml0bWFwIGJ5IDEgYW5kIHNldCBiaXRbMF0gdG8gcmVmbGVjdCB2YWx1ZSAwIGlzCj4g
-K8KgwqDCoMKgwqDCoMKgICogc3VwcG9ydGVkLCBzdWNoIHRoYXQgdGVzdF9iaXQoKSBjYW4gYmUg
-dXNlZCBsYXRlciBmb3IgY29udmVuaWVuY2UuCj4gK8KgwqDCoMKgwqDCoMKgICovCj4gK8KgwqDC
-oMKgwqDCoMKgaF9pdGVyLT5wcmVzaG9vdF9iaXRtYXAgPSAoaGJhLT5ob3N0X3ByZXNob290X2Nh
-cCA8PCAweDEpIHwgMHgxOwo+ICvCoMKgwqDCoMKgwqDCoGhfaXRlci0+ZGVlbXBoYXNpc19iaXRt
-YXAgPSAoaGJhLT5ob3N0X2RlZW1waGFzaXNfY2FwIDw8IDB4MSkgfCAweDE7Cj4gK8KgwqDCoMKg
-wqDCoMKgZF9pdGVyLT5wcmVzaG9vdF9iaXRtYXAgPSAoaGJhLT5kZXZpY2VfcHJlc2hvb3RfY2Fw
-IDw8IDB4MSkgfCAweDE7Cj4gK8KgwqDCoMKgwqDCoMKgZF9pdGVyLT5kZWVtcGhhc2lzX2JpdG1h
-cCA9IChoYmEtPmRldmljZV9kZWVtcGhhc2lzX2NhcCA8PCAweDEpIHwgMHgxOwo+ICsKPiArwqDC
-oMKgwqDCoMKgwqByZXR1cm4gcmV0OwoKCnJldCBpcyByZXR1cm5lZCB3aXRob3V0IGd1YXJhbnRl
-ZWQgaW5pdGlhbGl6YXRpb24gd2hlbiBjYXBzIGFyZSBhbHJlYWR5IGNhY2hlZC4KCj4gK30KCg==
+The LKP bot reported a build failure with CONFIG_COLDFIRE=y together with
+CONFIG_SCSI_QLA_FC=y, that's attributable to the BUILD_BUG_ON() in
+qlt_queue_unknown_atio().
+
+That function uses kzalloc() to obtain memory for the following struct,
+plus some extra bytes at the end.
+
+struct qla_tgt_sess_op {
+        struct scsi_qla_host *vha;
+        uint32_t chip_reset;
+        struct work_struct work;
+        struct list_head cmd_list;
+        bool aborted;
+        struct rsp_que *rsp;
+
+        struct atio_from_isp atio;
+        /* DO NOT ADD ANYTHING ELSE HERE - atio must be last member */
+};
+
+The location of the 'atio' member is subsequently used as the destination
+for a memcpy() that's expected to fill in the extra bytes beyond the end
+of the struct.
+
+That explains the loud warning in the comment above, which ought to be
+sufficient to prevent some newly-added member from accidentally getting
+clobbered. But, in case that warning was missed somehow, we also have the
+failing assertion,
+
+BUILD_BUG_ON(offsetof(struct qla_tgt_sess_op, atio) + sizeof(u->atio) !=
+             sizeof(*u));
+
+Unfortunately, this size assertion doesn't guarantee that 'atio' is the
+last member. Indeed, adding a zero-length array member at the end does
+not increase the struct size.
+
+Moreover, this assertion can fail even when 'atio' really is the last
+member, and that's what happened with commit e428b013d9df ("atomic:
+specify alignment for atomic_t and atomic64_t"), which added 2 bytes of
+harmless padding to the end of the struct.
+
+Remove the problematic assertion. The comments alone should be enough to
+prevent mistakes.
+
+Cc: Tony Battersby <tonyb@cybernetics.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-m68k@lists.linux-m68k.org
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202603030747.VX0v4otS-lkp@intel.com/
+Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+---
+I don't know of a good way to encode an invariant like "the last member of
+struct qla_tgt_sess_op is named atio" such that it might be statically
+checked. But perhaps there is a good way to do that (?)
+
+There's no Fixes tag here because there's no need to backport.
+The BUILD_BUG_ON() comes from commit 091719c21d5a ("scsi: qla2xxx: target:
+Fix invalid memory access with big CDBs") which appeared in v6.19-rc1.
+The build failure first appeared in v7.0-rc1 with commit e428b013d9df
+("atomic: specify alignment for atomic_t and atomic64_t").
+---
+ drivers/scsi/qla2xxx/qla_target.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index d772136984c9..06c1f3b577c4 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -213,7 +213,6 @@ static void qlt_queue_unknown_atio(scsi_qla_host_t *vha,
+ 	unsigned int add_cdb_len = 0;
+ 
+ 	/* atio must be the last member of qla_tgt_sess_op for add_cdb_len */
+-	BUILD_BUG_ON(offsetof(struct qla_tgt_sess_op, atio) + sizeof(u->atio) != sizeof(*u));
+ 
+ 	if (tgt->tgt_stop) {
+ 		ql_dbg(ql_dbg_async, vha, 0x502c,
+-- 
+2.49.1
 
 
