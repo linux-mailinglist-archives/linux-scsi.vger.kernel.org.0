@@ -1,156 +1,182 @@
-Return-Path: <linux-scsi+bounces-21469-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21473-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cGtcGCG+qGmXwwAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21469-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 00:20:01 +0100
+	id mAbYFfTcqGnGxwAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21473-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 02:31:32 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E2E0208EEC
-	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 00:20:00 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61E95209D91
+	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 02:31:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B8A98303E3A3
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Mar 2026 23:19:55 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id BDDA7304BB1F
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2026 01:30:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 252C9366835;
-	Wed,  4 Mar 2026 23:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00EF1225788;
+	Thu,  5 Mar 2026 01:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Edjxpkd+"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="jcgYLnkA"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64FB35DA50;
-	Wed,  4 Mar 2026 23:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3486920ED;
+	Thu,  5 Mar 2026 01:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772666390; cv=none; b=RFUEw86UWTSXDQlguCcbbQM/5kBT2B/KqCkTf1MJTMsmcIuHh4XQVBYc2zlanTAcFNhiHAfa+J5IK8A9vetrXl2JBW8EpSbZbP5o1ppz0WMP6viHo2Rjf+1rJn02iRDscipE8fbliIOKcPSk9W1hJbhLI4ijf7/eoYsTVFDldfg=
+	t=1772674211; cv=none; b=KxN5upXh8envW0MHAaKVZdDUkST1zkL0a9byZ7CN/DG/mcqw9zPnfzEV+tHtyh054q98erUtcItV8j84LE/N5kATD4+DnGPlSdI8t1qkdOxcwHYkYmPTn2ihU0LwhTjBSkpx0c/aaqRVxkutJdStnTPW2ZXxvS/+QbybhtDcHWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772666390; c=relaxed/simple;
-	bh=gmB/622tq9mZd/Wm9Ty746uquKblIhpsL7ubn7iZpxo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JHY7uwhgoZruYXB9jT4Z35wBuwYWUzXzj+2CKf14sHzJIQiF+v0UYNR3av03iiLX7E7hrVWQqTzveGgHFU1cUQuT+8JNvP1kAhl2uKGWXxftf/MOvmpz35SvNwqBN/LQ1h6Pek8A6UyPpAbusFchscXseAFGLZELMIkSBlVOesw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Edjxpkd+; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772666390; x=1804202390;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gmB/622tq9mZd/Wm9Ty746uquKblIhpsL7ubn7iZpxo=;
-  b=Edjxpkd+kMWd1a0s8uKyh/FGHCoKcMgL2p4wiSYCIDu3tNS0/Xtl4LO5
-   VHvES1clvW90Y7eavfflTgzC3MiXFlf+Suh6YxrqcQBTWXvOSCGa0uiIB
-   30V2v2TqzjgXUeEzDohZYpyY1TTi6xM3irknUXHgHNKcLwhnUkXgw/Kfo
-   TZeCFyz1xwpKdVmPDd8CfP5DFyIq9OU0Ezl3Fcgm/u0RprHO+wz6QqZa3
-   aICbWTq1d9XiJXEs2hx8X/JXgqerbfbnqyRlsSF15w5vJ6JUZsEqGY8cA
-   qnuDxYwMmz7It8VZoiQPfhB26a1/ItFGsPVJY8Dob1FMqI2uEoxIsA4+Y
-   Q==;
-X-CSE-ConnectionGUID: HhSLpo7UTtmLZgogItv5RA==
-X-CSE-MsgGUID: 4uIwoHyHST6l77U0jJ0+Uw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="73649278"
-X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="73649278"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 15:19:46 -0800
-X-CSE-ConnectionGUID: D2ooWo0dSpunHAYZCODyJg==
-X-CSE-MsgGUID: WxW7KA5DRn+vSMbpBddQ/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="245061410"
-Received: from lkp-server01.sh.intel.com (HELO f27a57aa7a36) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 04 Mar 2026 15:19:42 -0800
-Received: from kbuild by f27a57aa7a36 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vxvVD-000000004ff-0RKh;
-	Wed, 04 Mar 2026 23:19:39 +0000
-Date: Thu, 5 Mar 2026 07:18:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Can Guo <can.guo@oss.qualcomm.com>, avri.altman@wdc.com,
-	bvanassche@acm.org, beanhuo@micron.com, martin.petersen@oracle.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-scsi@vger.kernel.org,
-	Can Guo <can.guo@oss.qualcomm.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Peter Wang <peter.wang@mediatek.com>,
-	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/11] scsi: ufs: core: Add support for TX Equalization
-Message-ID: <202603050737.IgToFD5G-lkp@intel.com>
-References: <20260304135313.413688-5-can.guo@oss.qualcomm.com>
+	s=arc-20240116; t=1772674211; c=relaxed/simple;
+	bh=dV/FPRteY1wulI6CA5N2gnWp2+JTFOt8V+6zE8RHQ+0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=KIM9q33XU8c+e5zO8/Sa17sBa/xbzLIhebssqhY2zqh3Qldrhi6Sn44fAt14l3S8ZpcNi806qCPn3skgN+du/FtIPyRmKqFN5aKx3edTS3KESvAcvpYc7iIlXj8t2nljT3ni2pQnCKDOgb72dhfqRGY/xZCRRH9c7kdaThfg9oE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=jcgYLnkA; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=T6
+	3Vv00CV8w3oQ42GU98ZAmfpnNbI05s+0v60yzo/hI=; b=jcgYLnkAHsm5AXxDfA
+	97cMJd8WdoGQisRv2oPMcZGCM6A6dvw54CzqzmfRdUSovaFWMFrqQYhf/grbkFXU
+	azNgmfmxSqWn6DbvSvF96HbumjVq4CDEnRo4DsAb2NI1ch/en/Dx3lcgr7Q3ToFb
+	B2Wfqqj9Bl0sKpENdehOABGQk=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wBXMO9b3Khp6W63OA--.24976S2;
+	Thu, 05 Mar 2026 09:29:01 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: fujita.tomonori@lab.ntt.co.jp,
+	axboe@kernel.dk,
+	James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com
+Cc: bvanassche@acm.org,
+	linux-scsi@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yang Xiuwei <yangxiuwei@kylinos.cn>
+Subject: [PATCH v6 0/3] bsg: add io_uring command support for SCSI passthrough
+Date: Thu,  5 Mar 2026 09:28:54 +0800
+Message-Id: <20260305012857.2136525-1-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260304080313.675768-1-yangxiuwei@kylinos.cn>
+References: <20260304080313.675768-1-yangxiuwei@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260304135313.413688-5-can.guo@oss.qualcomm.com>
-X-Rspamd-Queue-Id: 1E2E0208EEC
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBXMO9b3Khp6W63OA--.24976S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWF13Ar13Xw4DKry3WryDWrg_yoW5WFy8pF
+	WYgFnxJrWUC3WftFyfAF4DWFyYq3s3Ca1xG347Z34kArn8AF9Fgr1DKF45XFZrCw129a4U
+	Xr12vrZ8u3WDAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j1HqcUUUUU=
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6R-SY2mo3F+X1wAA3F
+X-Rspamd-Queue-Id: 61E95209D91
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-21469-lists,linux-scsi=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-21473-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[kylinos.cn];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
+	DKIM_TRACE(0.00)[163.com:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[git-scm.com:url,01.org:url,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,intel.com:dkim,intel.com:email,intel.com:mid]
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[kylinos.cn:mid]
 X-Rspamd-Action: no action
 
-Hi Can,
+This series adds io_uring command support to the BSG SCSI passthrough
+path.
 
-kernel test robot noticed the following build warnings:
+The goal is to allow userspace to submit SCSI passthrough commands via
+IORING_OP_URING_CMD, in addition to the existing sg_io interface.
+The io_uring path mirrors the existing BSG behaviour: it currently only
+supports BSG_PROTOCOL_SCSI + BSG_SUB_PROTOCOL_SCSI_CMD and does not
+support BIDI transfers.
 
-[auto build test WARNING on mkp-scsi/for-next]
-[also build test WARNING on jejb-scsi/for-next krzk/for-next linus/master v7.0-rc2 next-20260303]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Patch 1 defines struct bsg_uring_cmd in the UAPI so that userspace can
+describe SCSI passthrough requests for io_uring.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Can-Guo/scsi-ufs-core-Introduce-a-new-ufshcd-vops-negotiate_pwr_mode/20260304-220245
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20260304135313.413688-5-can.guo%40oss.qualcomm.com
-patch subject: [PATCH v2 04/11] scsi: ufs: core: Add support for TX Equalization
-config: i386-randconfig-r071-20260305 (https://download.01.org/0day-ci/archive/20260305/202603050737.IgToFD5G-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-smatch: v0.5.0-9004-gb810ac53
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603050737.IgToFD5G-lkp@intel.com/reproduce)
+Patch 2 extends the generic BSG layer with an .uring_cmd file operation
+and a bsg_uring_cmd_fn callback, allowing transport-specific handlers to
+be registered.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603050737.IgToFD5G-lkp@intel.com/
+Patch 3 implements the SCSI BSG io_uring handler. It builds a SCSI
+request from struct bsg_uring_cmd, maps user buffers (including fixed
+buffers), and completes asynchronously via a request end_io callback and
+task_work. Completion returns SCSI device/host/driver status, residual
+length and sense data length packed into the CQE result.
 
-All warnings (new ones prefixed by >>):
+Changes since v5:
+- Fixed compilation errors:
+  * Use io_uring_sqe128_cmd() instead of io_uring_sqe_cmd()
+  * Update scsi_bsg_uring_cmd_done() signature to match rq_end_io_fn typedef
 
->> Warning: drivers/ufs/core/ufs-txeq.c:56 cannot understand function prototype: 'const struct __ufs_tx_eq_preset'
->> Warning: drivers/ufs/core/ufs-txeq.c:77 cannot understand function prototype: 'const u32 pa_peer_rx_adapt_initial[UFS_HS_GEAR_MAX] ='
->> Warning: drivers/ufs/core/ufs-txeq.c:91 cannot understand function prototype: 'const u32 rx_adapt_initial_cap[UFS_HS_GEAR_MAX] ='
->> Warning: drivers/ufs/core/ufs-txeq.c:104 cannot understand function prototype: 'const u32 pa_tx_eq_setting[UFS_HS_GEAR_MAX] ='
+Compared to the earlier RFC v4 series [1], this version only includes
+minor code cleanups (mainly comments and wording), without changing the
+behaviour or logic of the implementation.
 
+[1] https://lore.kernel.org/linux-block/20260122015653.703188-1-yangxiuwei@kylinos.cn/
+
+Testing
+-------
+Testing was done inside a VM on a disk with:
+  /sys/block/sdd/mq/0/nr_tags     = 1024
+  /sys/block/sdd/queue/nr_requests = 256
+
+The following SCSI INQUIRY micro-benchmark was run with N=100000:
+
+  sg+SG_IO (v3), /dev/sg4:
+    avg = 139.0 us, p50 = 128.9 us, p90 = 149.7 us, p99 = 301.0 us
+
+  bsg+SG_IO (v4), /dev/bsg/2:0:0:0:
+    avg = 97.2 us,  p50 = 92.7 us,  p90 = 111.5 us, p99 = 150.9 us
+
+  bsg+io_uring, /dev/bsg/2:0:0:0:
+    avg = 105.9 us, p50 = 95.4 us,  p90 = 116.2 us, p99 = 175.0 us
+
+  bsg+io_uring (batch=64), /dev/bsg/2:0:0:0:
+    avg = 61.9 us,  p50 = 60.9 us,  p90 = 63.9 us,  p99 = 94.6 us
+
+These results show that the new io_uring path is comparable to the
+existing BSG SG_IO interface for single-command workloads, and that
+batched io_uring submission can significantly improve latency for
+high-concurrency workloads when the device supports sufficient queue
+depth.
+
+Yang Xiuwei (3):
+  bsg: add bsg_uring_cmd uapi structure
+  bsg: add io_uring command support to generic layer
+  scsi: bsg: add io_uring passthrough handler
+
+ block/bsg-lib.c          |   2 +-
+ block/bsg.c              |  32 +++++-
+ drivers/scsi/scsi_bsg.c  | 207 ++++++++++++++++++++++++++++++++++++++-
+ include/linux/bsg.h      |   6 +-
+ include/uapi/linux/bsg.h |  21 ++++
+ 5 files changed, 264 insertions(+), 4 deletions(-)
+
+base-commit: af4e9ef3d78420feb8fe58cd9a1ab80c501b3c08
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
 
