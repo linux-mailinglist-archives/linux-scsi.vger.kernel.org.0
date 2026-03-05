@@ -1,66 +1,66 @@
-Return-Path: <linux-scsi+bounces-21507-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21508-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2HBqBvadqWmLBAEAu9opvQ
-	(envelope-from <linux-scsi+bounces-21507-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 16:15:02 +0100
+	id EJhVB1WeqWnGAwEAu9opvQ
+	(envelope-from <linux-scsi+bounces-21508-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 16:16:37 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D571214471
-	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 16:15:01 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B44762144CC
+	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 16:16:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5A3AA30882C1
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2026 15:09:45 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 64B67307D548
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2026 15:13:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6F1F3BD65B;
-	Thu,  5 Mar 2026 15:09:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340983BED15;
+	Thu,  5 Mar 2026 15:12:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="tLBmLqbp"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="qr9pFu64"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D9283BE152;
-	Thu,  5 Mar 2026 15:09:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4641636683F;
+	Thu,  5 Mar 2026 15:12:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772723376; cv=none; b=QfwgvgRrVdsfs+EXQ0lmBEcdapObnaKOThGoSwwD6oGox4iMOllyREGrt5TL6eS8433NnpJdNNjo9LTDKHb5J4KfXAxjV37Z4kwmnA36UiqBxXFlw+LYrTROcjPEs+jxPlxgY+MfdRplne8HqYPoKSeOjtOX1u3UDypFUUmWpXA=
+	t=1772723542; cv=none; b=rqbKUj79A9IYPJZ6jqi6mYJ8xX29gBRRa0Eg/ezJ1vr6yWqMm0zkunb0ds/AZkM3SklNvRIEaz6vhI7MUfik5PIAWi5QYUhpr6/uH+mux9hVg+3SZL1vgKbx0phAYzQmcE+QcanQ/c8sjhV9IutLAEuUG66n4JwKcRNRujNwI/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772723376; c=relaxed/simple;
-	bh=AG27g/pYKkhHjykF6hoYrdKaNW7tQIlXDNEE528BQ74=;
+	s=arc-20240116; t=1772723542; c=relaxed/simple;
+	bh=r0DH9G4+3Q2vzRVNT75pQmyphKPzro1jFxZsWt/Ntx0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aP/sEkMz0nTLDxBcojJcalSxpB/kzWyWG8/RVp9c6WcIsLi2Z07A0O69QbBU+Vqaa0qNzuFmAfhQe9hqKIhuXBIxztMYlYJmrzzDXNEPxwa8VcdsRlApLrSM9esJWHbprsbINbug4oLTW/GAcZVvkxiOistLWC+wactSDxMU+fI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=tLBmLqbp; arc=none smtp.client-ip=199.89.1.14
+	 In-Reply-To:Content-Type; b=kSPgUCgXUZT9qe21o10i86zDYi/aaipIyD02VI5g7Zy4F5uR1ry5UgVqWNSBESBz9YGQB+46waTA4rIIO7/Xfw0K61UwmBoJvbOGyIFQ8k78XofWqApGIqZm1CZdpecTOJZv/3LbAyy95laRJdHRqWkZLR/3xQhgSruA6393FZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=qr9pFu64; arc=none smtp.client-ip=199.89.1.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4fRXy12k9cz1XLyhV;
-	Thu,  5 Mar 2026 15:09:29 +0000 (UTC)
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4fRY1H40ZWz1XM0pg;
+	Thu,  5 Mar 2026 15:12:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:content-type:content-type:in-reply-to
 	:from:from:content-language:references:subject:subject
 	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1772723365; x=1775315366; bh=2mcONpsihCbAmYppqWbdXkKp
-	w85o35S8Fs8XYCgwWeI=; b=tLBmLqbpTYtogeZCu3c6+11T07pNiNhBBOWLmltv
-	Dp22zmCKd5UQcGpWtLubDKS+2U9ikAajV26eC6VBXt9Mus8Dea93SgOSocalldc7
-	GuSin0WHxupAth9TXO1lGKAs9OcNxpEfn9QoV/VLfoTLaymlG8FmpAqTqsz28lxl
-	AXWStff21Lw73tC7jXzYu7GwsxxfG2ZA/DHuzvMDY7/4r5UcU2gEoMMFP92Bh5kX
-	+Q5xPEIcHIdooCdCM33DOJQB6vw4bF71uanC+nqygE8YvPmSrzCHV2Bu6yn7LYBB
-	O+0jgWvjtDlvMO3jffeeT4SBxeFcJW4NJpLl5my0Xt5jgA==
+	 s=mr01; t=1772723535; x=1775315536; bh=r0DH9G4+3Q2vzRVNT75pQmyp
+	hKPzro1jFxZsWt/Ntx0=; b=qr9pFu64ct3q6eK4+TbmOLnQ7afp75JGfS7DfjIK
+	oln5R6mk4LA7ddbY7bVw9Nc3NIThbL92Ktc8/AbkKFcWbx1kS2SKaLggE/I6v0Tj
+	uVy7wyx0sqKF+8VHTRPL58A2X54A+byMRARGX126UDFoZjtqqQESFjxptpKMT4u0
+	ciP3MQOowzVrHIK7QItdr9fSl/He2fgn2BoDtrE0wHQIbJwoBJ8uDw5ccW9/Xz9S
+	hZACt6ZyuxoOgailHQdz6ygaugA3d42kDYGKhfQfdeFzm2xTLWxcSL9i9eNRSCkY
+	I/8xPfpFRfLas59Qg5i07ejlbOI04g5sLmoHdgVFxKrLdw==
 X-Virus-Scanned: by MailRoute
 Received: from 011.lax.mailroute.net ([127.0.0.1])
  by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id zPLxizGFfs2e; Thu,  5 Mar 2026 15:09:25 +0000 (UTC)
+ id vuN-4LTns2oG; Thu,  5 Mar 2026 15:12:15 +0000 (UTC)
 Received: from [192.168.132.187] (unknown [12.150.89.26])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4fRXxv2wfJz1XM0pg;
-	Thu,  5 Mar 2026 15:09:23 +0000 (UTC)
-Message-ID: <089ec667-4daf-4de0-b986-551f74d98208@acm.org>
-Date: Thu, 5 Mar 2026 09:09:20 -0600
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4fRY183dj8z1XM6JR;
+	Thu,  5 Mar 2026 15:12:12 +0000 (UTC)
+Message-ID: <3ce6f611-330c-4705-9842-f85eb9a13556@acm.org>
+Date: Thu, 5 Mar 2026 09:12:09 -0600
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -68,57 +68,59 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] scsi: core: Drop using the host_lock to protect
- async_scan race condition
-To: Chaohai Chen <wdhh6@aliyun.com>, James.Bottomley@HansenPartnership.com,
- martin.petersen@oracle.com, dlemoal@kernel.org, hch@infradead.org
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260305025125.3649517-1-wdhh6@aliyun.com>
+Subject: Re: [PATCH v6 0/3] bsg: add io_uring command support for SCSI
+ passthrough
+To: Yang Xiuwei <yangxiuwei@kylinos.cn>, fujita.tomonori@lab.ntt.co.jp,
+ axboe@kernel.dk, James.Bottomley@HansenPartnership.com,
+ martin.petersen@oracle.com
+Cc: linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+ io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260304080313.675768-1-yangxiuwei@kylinos.cn>
+ <20260305012857.2136525-1-yangxiuwei@kylinos.cn>
 Content-Language: en-US
 From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260305025125.3649517-1-wdhh6@aliyun.com>
+In-Reply-To: <20260305012857.2136525-1-yangxiuwei@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 9D571214471
+X-Rspamd-Queue-Id: B44762144CC
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-21507-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FREEMAIL_TO(0.00)[aliyun.com,HansenPartnership.com,oracle.com,kernel.org,infradead.org];
 	DKIM_TRACE(0.00)[acm.org:+];
+	TAGGED_FROM(0.00)[bounces-21508-lists,linux-scsi=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[acm.org:dkim,acm.org:email,acm.org:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,acm.org:dkim,acm.org:mid]
 X-Rspamd-Action: no action
 
-On 3/4/26 8:51 PM, Chaohai Chen wrote:
-> +	/* Asynchronous scan in progress */
-> +	bool async_scan __guarded_by(&scan_mutex);
+On 3/4/26 7:28 PM, Yang Xiuwei wrote:
+> This series adds io_uring command support to the BSG SCSI passthrough
+> path.
 
-The __guarded_by() is ignored because CONTEXT_ANALYSIS has not yet been
-set in the drivers/scsi/Makefile. This is something I plan to do if
-nobody else does it first. Anyway:
+Please send a new version of a patch series as a new email thread.
+Otherwise the new version may get overlooked.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Thanks,
 
+Bart.
 
