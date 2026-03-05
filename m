@@ -1,338 +1,156 @@
-Return-Path: <linux-scsi+bounces-21472-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21474-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +Dh/IubcqGnGxwAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21472-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 02:31:18 +0100
+	id kGGxL3vsqGnnygAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21474-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 03:37:47 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8F0B209D88
-	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 02:31:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B10C20A3D3
+	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 03:37:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C1AA0304A13A
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2026 01:30:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0429E3061AFF
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2026 02:37:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 861EE1607A4;
-	Thu,  5 Mar 2026 01:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44041263F5E;
+	Thu,  5 Mar 2026 02:37:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Pjzy+3gB"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WkVZ2TIo"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5A91BBBE5;
-	Thu,  5 Mar 2026 01:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE5A625DD1E
+	for <linux-scsi@vger.kernel.org>; Thu,  5 Mar 2026 02:37:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772674211; cv=none; b=b+Un4PtfaS3nDu0cuNVhPv10VUrG/s0Ne1Y9ya2y5nJBTyQiHFAykP8tSrtHAfN/hr5N3kGZq6atEDOx/OQ8YDXt4syT/f7KWT91H7V8mf5MARpuHD80pwZ7MmfJKXAAfLZBBxgUgpXi4jWcnrelZWByYXRhva+6nJIPgmrU0Qk=
+	t=1772678252; cv=none; b=tSHAPBHFfKS4pCwcJEzsqx1LRNAu3pnq3cxQaAk2JayGXMz23Udy0v8yWronnKB0KcrTOeUXnrvVx37WnCoEIVGBVm3AFqsuCmN/SQLSsll5JK/G7J5NsCSE82qyCgTxKL01hnspMlNHEio1AmsdCu1uPMAEZFkQI3ZKWVP2PLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772674211; c=relaxed/simple;
-	bh=7h7iAgaehaGowJLub2iWzs5bBaTqpodKb57T5p22y/w=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZaWS2ECl385rIg8QiaNfCFLHIL+Q92SCnrFDb4mYA97daqFqY5ZsGVuFOePQ5lEiHACB63Thew7rraXHHkHvSPmHXvQzqsCukPk8i0X+U73K+rz/VRmJE3dvNcSsk8Fw1MzC7QobahMsh8UEEAiFPEbmXxMQnEMB8A848vEFapY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Pjzy+3gB; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=iV
-	IzEj15OBqZg8q5GF/ie6nbLyMrr9zGDb0IgIwmMms=; b=Pjzy+3gBWSsAJ3fzlt
-	izGQ8Stp1cV2XljPUYcGfmgr54zgxc8yDOSit12XtMws2PHqeiXC71ytikoViTz3
-	FbiU6CFNppXHWj/iwh1PaH3J6LCzH2TzYuq3SxcfDeFwHOqtcQYEfyw43WhT+dXC
-	+eI/f1Hpw4y+ReV9BkY8Pd/N0=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wBXMO9b3Khp6W63OA--.24976S5;
-	Thu, 05 Mar 2026 09:29:07 +0800 (CST)
-From: Yang Xiuwei <yangxiuwei@kylinos.cn>
-To: fujita.tomonori@lab.ntt.co.jp,
-	axboe@kernel.dk,
-	James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com
-Cc: bvanassche@acm.org,
-	linux-scsi@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yang Xiuwei <yangxiuwei@kylinos.cn>
-Subject: [PATCH v6 3/3] scsi: bsg: add io_uring passthrough handler
-Date: Thu,  5 Mar 2026 09:28:57 +0800
-Message-Id: <20260305012857.2136525-4-yangxiuwei@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260305012857.2136525-1-yangxiuwei@kylinos.cn>
-References: <20260304080313.675768-1-yangxiuwei@kylinos.cn>
- <20260305012857.2136525-1-yangxiuwei@kylinos.cn>
+	s=arc-20240116; t=1772678252; c=relaxed/simple;
+	bh=Zrg3xQuzRFUmRFcIu7kcHq6e2o8cqc90mKbBofbKzTI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b1jOJzfQv7EYlWRCtPV+PaUuD8fDfVLRvWQomkr9f5/4i5T0xFBk535NlFyfB2SJJUQZmV4SmgaVTHmAaldEbHtQR/enerzPf71X0dpXqe5SWC/gc7R4AWNlDGJ0W0tkCwP8pFhcQ5y5A1riPS05fwen0IgfGKHIa5KdqguDYdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WkVZ2TIo; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772678249;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yBUhNsBoeECXQ2g42ZbRUoURW/9mr3wjydrCeND0ozI=;
+	b=WkVZ2TIos7vMR8datonuO+xUMd5g68v0iIl7OkrywObdeGPWib0vi9+A8peTwq3UGM/E9A
+	HXU/V7rrtBYvtNmG94NaXaIO7cVNlw+MMg7wvJey5u5tXR+TFA1J5fi+kQVBizczgB6adB
+	IhPtQwd2/bko5uPmlVIkqBE1Oy7p8Jg=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-408-gnIwOrr_MGynkDKdRAbF8A-1; Wed,
+ 04 Mar 2026 21:37:26 -0500
+X-MC-Unique: gnIwOrr_MGynkDKdRAbF8A-1
+X-Mimecast-MFC-AGG-ID: gnIwOrr_MGynkDKdRAbF8A_1772678244
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 19BF119560A5;
+	Thu,  5 Mar 2026 02:37:23 +0000 (UTC)
+Received: from bmarzins-01.fast.eng.rdu2.dc.redhat.com (unknown [10.6.23.247])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DEF321800671;
+	Thu,  5 Mar 2026 02:37:21 +0000 (UTC)
+Received: from bmarzins-01.fast.eng.rdu2.dc.redhat.com (localhost [127.0.0.1])
+	by bmarzins-01.fast.eng.rdu2.dc.redhat.com (8.18.1/8.17.1) with ESMTPS id 6252bKqD1952898
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Wed, 4 Mar 2026 21:37:20 -0500
+Received: (from bmarzins@localhost)
+	by bmarzins-01.fast.eng.rdu2.dc.redhat.com (8.18.1/8.18.1/Submit) id 6252bIIF1952897;
+	Wed, 4 Mar 2026 21:37:18 -0500
+Date: Wed, 4 Mar 2026 21:37:18 -0500
+From: Benjamin Marzinski <bmarzins@redhat.com>
+To: John Garry <john.g.garry@oracle.com>
+Cc: hch@lst.de, kbusch@kernel.org, sagi@grimberg.me, axboe@fb.com,
+        martin.petersen@oracle.com, james.bottomley@hansenpartnership.com,
+        hare@suse.com, jmeneghi@redhat.com, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, michael.christie@oracle.com,
+        snitzer@kernel.org, dm-devel@lists.linux.dev,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/24] scsi-multipath: add
+ scsi_mpath_{start,end}_request()
+Message-ID: <aajsXqau3gHFIqVG@redhat.com>
+References: <20260225153627.1032500-1-john.g.garry@oracle.com>
+ <20260225153627.1032500-11-john.g.garry@oracle.com>
+ <aafNnO6o2yoeLjPs@redhat.com>
+ <93752514-3225-4cdf-b9a5-e0964d693b5b@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBXMO9b3Khp6W63OA--.24976S5
-X-Coremail-Antispam: 1Uf129KBjvJXoW3GrWfGrWrXr18urW3Zr13urg_yoW3JF48pF
-	W5tw4YvrW5Wr4I9FZayrZ8CFyYqws5Ca47KFW3uw4fGr1UCr9a93W8KF10qF1fArWkAa47
-	XF4vqFW5CFyqq37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jceOJUUUUU=
-Sender: yangxiuwei2025@163.com
-X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6QPTZGmo3GOYRAAA3-
-X-Rspamd-Queue-Id: C8F0B209D88
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <93752514-3225-4cdf-b9a5-e0964d693b5b@oracle.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Rspamd-Queue-Id: 6B10C20A3D3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-21472-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21474-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[kylinos.cn];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[163.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bmarzins@redhat.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[kylinos.cn:mid,kylinos.cn:email]
+	RCVD_COUNT_SEVEN(0.00)[8]
 X-Rspamd-Action: no action
 
-Implement the SCSI-specific io_uring command handler for BSG using
-struct bsg_uring_cmd.
+On Wed, Mar 04, 2026 at 11:11:08AM +0000, John Garry wrote:
+> On 04/03/2026 06:13, Benjamin Marzinski wrote:
+> > > +	scsi_mpath_end_request(req);
+> > > +
+> > >   	/*
+> > >   	 * In the MQ case the command gets freed by __blk_mq_end_request,
+> > >   	 * so we have to do all cleanup that depends on it earlier.
+> > This looks wrong. We start accounting in scsi_queue_rq(), and we need to
+> > end it whenever we complete or requeue the request, otherwise the
+> > accounting will get off. But not all requests go through
+> > scsi_end_request(). scsi_mpath_failover_req(), for instance, calls
+> > blk_mq_end_request() directly, and other functions, like
+> > scsi_queue_insert() call blk_mq_requeue_request(). I'm pretty sure that
+> > this should go in scsi_complete(), as well in the error path of
+> > scsi_queue_rq().
+> 
+> ok, let me check that further.
+> 
 
-The handler builds a SCSI request from the io_uring command, maps user
-buffers (including fixed buffers), and completes asynchronously via a
-request end_io callback and task_work. Completion returns a 32-bit
-status and packed residual/sense information via CQE res and res2, and
-supports IO_URING_F_NONBLOCK.
+I think I was a little hasty here. Looking at sd_mpath_start_command()
+and sd_mpath_end_command() in patch 17, I can see that they protect
+against repeat calls, so requeueing the request should be o.k. There's
+still a problem when scsi_mpath_failover_req() calls blk_mq_end_request()
+directly, and when scsi_queue_rq() exits with a failure where the
+request won't requeued (all the returns except BLK_STS_OK,
+BLK_STS_RESOURCE, and BLK_STS_DEV_RESOURCE).
 
-Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
----
- drivers/scsi/scsi_bsg.c | 199 +++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 198 insertions(+), 1 deletion(-)
+-Ben
 
-diff --git a/drivers/scsi/scsi_bsg.c b/drivers/scsi/scsi_bsg.c
-index 4d57e524e141..5b6ed15b8b19 100644
---- a/drivers/scsi/scsi_bsg.c
-+++ b/drivers/scsi/scsi_bsg.c
-@@ -10,10 +10,207 @@
- 
- #define uptr64(val) ((void __user *)(uintptr_t)(val))
- 
-+/*
-+ * Per-command BSG SCSI PDU stored in io_uring_cmd.pdu[32].
-+ * Holds temporary state between submission, completion and task_work.
-+ */
-+struct scsi_bsg_uring_cmd_pdu {
-+	struct bio *bio;		/* mapped user buffer, unmap in task work */
-+	struct request *req;		/* block request, freed in task work */
-+	u64 response_addr;		/* user space response buffer address */
-+	u32 resid_len;			/* residual transfer length */
-+	/* Protocol-specific status fields using union for extensibility */
-+	union {
-+		struct {
-+			u8 device_status;	/* SCSI device status (low 8 bits of result) */
-+			u8 driver_status;	/* SCSI driver status (DRIVER_SENSE if check) */
-+			u8 host_status;		/* SCSI host status (host_byte of result) */
-+			u8 sense_len_wr;	/* actual sense data length written */
-+		} scsi;
-+		/* Future protocols can add their own status layouts here */
-+	};
-+};
-+
-+static inline struct scsi_bsg_uring_cmd_pdu *scsi_bsg_uring_cmd_pdu(
-+	struct io_uring_cmd *ioucmd)
-+{
-+	return io_uring_cmd_to_pdu(ioucmd, struct scsi_bsg_uring_cmd_pdu);
-+}
-+
-+/*
-+ * Task work callback executed in process context.
-+ * Builds res2 with status information and copies sense data to user space.
-+ * res2 layout (64-bit):
-+ *   0-7:   device_status
-+ *   8-15:  driver_status
-+ *   16-23: host_status
-+ *   24-31: sense_len_wr
-+ *   32-63: resid_len
-+ */
-+static void scsi_bsg_uring_task_cb(struct io_tw_req tw_req, io_tw_token_t tw)
-+{
-+	struct io_uring_cmd *ioucmd = io_uring_cmd_from_tw(tw_req);
-+	struct scsi_bsg_uring_cmd_pdu *pdu = scsi_bsg_uring_cmd_pdu(ioucmd);
-+	struct scsi_cmnd *scmd;
-+	struct request *rq = pdu->req;
-+	int ret = 0;
-+	u64 res2;
-+
-+	scmd = blk_mq_rq_to_pdu(rq);
-+
-+	if (pdu->bio)
-+		blk_rq_unmap_user(pdu->bio);
-+
-+	/* Build res2 with status information */
-+	res2 = ((u64)pdu->resid_len << 32) |
-+	       ((u64)(pdu->scsi.sense_len_wr & 0xff) << 24) |
-+	       ((u64)(pdu->scsi.host_status & 0xff) << 16) |
-+	       ((u64)(pdu->scsi.driver_status & 0xff) << 8) |
-+	       (pdu->scsi.device_status & 0xff);
-+
-+	if (pdu->scsi.sense_len_wr && pdu->response_addr) {
-+		if (copy_to_user(uptr64(pdu->response_addr), scmd->sense_buffer,
-+				 pdu->scsi.sense_len_wr))
-+			ret = -EFAULT;
-+	}
-+
-+	blk_mq_free_request(rq);
-+	io_uring_cmd_done32(ioucmd, ret, res2,
-+			    IO_URING_CMD_TASK_WORK_ISSUE_FLAGS);
-+}
-+
-+static enum rq_end_io_ret scsi_bsg_uring_cmd_done(struct request *req,
-+						  blk_status_t status,
-+						  const struct io_comp_batch *iocb)
-+{
-+	struct io_uring_cmd *ioucmd = req->end_io_data;
-+	struct scsi_bsg_uring_cmd_pdu *pdu = scsi_bsg_uring_cmd_pdu(ioucmd);
-+	struct scsi_cmnd *scmd = blk_mq_rq_to_pdu(req);
-+
-+	/* Pack SCSI status fields into union */
-+	pdu->scsi.device_status = scmd->result & 0xff;
-+	pdu->scsi.host_status = host_byte(scmd->result);
-+	pdu->scsi.driver_status = 0;
-+	pdu->scsi.sense_len_wr = 0;
-+
-+	if (scsi_status_is_check_condition(scmd->result)) {
-+		pdu->scsi.driver_status = DRIVER_SENSE;
-+		if (pdu->response_addr)
-+			pdu->scsi.sense_len_wr = min_t(u8, scmd->sense_len, SCSI_SENSE_BUFFERSIZE);
-+	}
-+
-+	pdu->resid_len = scmd->resid_len;
-+
-+	io_uring_cmd_do_in_task_lazy(ioucmd, scsi_bsg_uring_task_cb);
-+	return RQ_END_IO_NONE;
-+}
-+
-+static int scsi_bsg_map_user_buffer(struct request *req,
-+				    struct io_uring_cmd *ioucmd,
-+				    unsigned int issue_flags, gfp_t gfp_mask)
-+{
-+	const struct bsg_uring_cmd *cmd = io_uring_sqe128_cmd(ioucmd->sqe, struct bsg_uring_cmd);
-+	struct iov_iter iter;
-+	bool is_write = cmd->dout_xfer_len > 0;
-+	u64 buf_addr = is_write ? cmd->dout_xferp : cmd->din_xferp;
-+	unsigned long buf_len = is_write ? cmd->dout_xfer_len : cmd->din_xfer_len;
-+	int ret;
-+
-+	if (ioucmd->flags & IORING_URING_CMD_FIXED) {
-+		ret = io_uring_cmd_import_fixed(buf_addr, buf_len,
-+						is_write ? WRITE : READ,
-+						&iter, ioucmd, issue_flags);
-+		if (ret < 0)
-+			return ret;
-+		ret = blk_rq_map_user_iov(req->q, req, NULL, &iter, gfp_mask);
-+	} else {
-+		ret = blk_rq_map_user(req->q, req, NULL, uptr64(buf_addr),
-+				      buf_len, gfp_mask);
-+	}
-+
-+	return ret;
-+}
-+
- static int scsi_bsg_uring_cmd(struct request_queue *q, struct io_uring_cmd *ioucmd,
- 			       unsigned int issue_flags, bool open_for_write)
- {
--	return -EOPNOTSUPP;
-+	struct scsi_bsg_uring_cmd_pdu *pdu = scsi_bsg_uring_cmd_pdu(ioucmd);
-+	const struct bsg_uring_cmd *cmd = io_uring_sqe128_cmd(ioucmd->sqe, struct bsg_uring_cmd);
-+	struct scsi_cmnd *scmd;
-+	struct request *req;
-+	blk_mq_req_flags_t blk_flags = 0;
-+	gfp_t gfp_mask = GFP_KERNEL;
-+	int ret = 0;
-+
-+	if (cmd->protocol != BSG_PROTOCOL_SCSI ||
-+	    cmd->subprotocol != BSG_SUB_PROTOCOL_SCSI_CMD)
-+		return -EINVAL;
-+
-+	if (!cmd->request || cmd->request_len == 0)
-+		return -EINVAL;
-+
-+	if (cmd->dout_xfer_len && cmd->din_xfer_len) {
-+		pr_warn_once("BIDI support in bsg has been removed.\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	if (cmd->dout_iovec_count > 0 || cmd->din_iovec_count > 0)
-+		return -EOPNOTSUPP;
-+
-+	if (issue_flags & IO_URING_F_NONBLOCK) {
-+		blk_flags = BLK_MQ_REQ_NOWAIT;
-+		gfp_mask = GFP_NOWAIT;
-+	}
-+
-+	req = scsi_alloc_request(q, cmd->dout_xfer_len ?
-+				 REQ_OP_DRV_OUT : REQ_OP_DRV_IN, blk_flags);
-+	if (IS_ERR(req))
-+		return PTR_ERR(req);
-+
-+	scmd = blk_mq_rq_to_pdu(req);
-+	scmd->cmd_len = cmd->request_len;
-+	if (scmd->cmd_len > sizeof(scmd->cmnd)) {
-+		ret = -EINVAL;
-+		goto out_free_req;
-+	}
-+	scmd->allowed = SG_DEFAULT_RETRIES;
-+
-+	if (copy_from_user(scmd->cmnd, uptr64(cmd->request), cmd->request_len)) {
-+		ret = -EFAULT;
-+		goto out_free_req;
-+	}
-+
-+	if (!scsi_cmd_allowed(scmd->cmnd, open_for_write)) {
-+		ret = -EPERM;
-+		goto out_free_req;
-+	}
-+
-+	pdu->response_addr = cmd->response;
-+	scmd->sense_len = cmd->max_response_len ?
-+		min(cmd->max_response_len, SCSI_SENSE_BUFFERSIZE) : SCSI_SENSE_BUFFERSIZE;
-+
-+	if (cmd->dout_xfer_len || cmd->din_xfer_len) {
-+		ret = scsi_bsg_map_user_buffer(req, ioucmd, issue_flags, gfp_mask);
-+		if (ret)
-+			goto out_free_req;
-+		pdu->bio = req->bio;
-+	} else {
-+		pdu->bio = NULL;
-+	}
-+
-+	req->timeout = cmd->timeout_ms ?
-+		msecs_to_jiffies(cmd->timeout_ms) : BLK_DEFAULT_SG_TIMEOUT;
-+
-+	req->end_io = scsi_bsg_uring_cmd_done;
-+	req->end_io_data = ioucmd;
-+	pdu->req = req;
-+
-+	blk_execute_rq_nowait(req, false);
-+	return -EIOCBQUEUED;
-+
-+out_free_req:
-+	blk_mq_free_request(req);
-+	return ret;
- }
- 
- static int scsi_bsg_sg_io_fn(struct request_queue *q, struct sg_io_v4 *hdr,
--- 
-2.25.1
+> Thanks for the notice.
 
 
