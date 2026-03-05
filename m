@@ -1,191 +1,124 @@
-Return-Path: <linux-scsi+bounces-21511-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21507-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yE8QAKOjqWl5BQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-21511-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 16:39:15 +0100
+	id 2HBqBvadqWmLBAEAu9opvQ
+	(envelope-from <linux-scsi+bounces-21507-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 16:15:02 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D46E214AEB
-	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 16:39:14 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D571214471
+	for <lists+linux-scsi@lfdr.de>; Thu, 05 Mar 2026 16:15:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 393F03048C93
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2026 15:28:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5A3AA30882C1
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2026 15:09:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F2D23C1996;
-	Thu,  5 Mar 2026 15:28:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6F1F3BD65B;
+	Thu,  5 Mar 2026 15:09:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="Ivu5PIdL";
-	dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="UwRwlIrv"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="tLBmLqbp"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F08E381B05;
-	Thu,  5 Mar 2026 15:28:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.167
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772724528; cv=pass; b=TEXwPXc1BIFl8A3CbdxS2g0V4MNNjhahiWDDZTpOF9LGLPPmMQtCSfZEsgw4F+6yNWIvim5YmpkQ1ENAvN3dd7jhrfz0urRWRk6hp3/TQdi5Hc8hCWSYyXMeFMjTq+SUKjRyAY7ZI/oxULsBQBW6k92yk+bYxszzHr1CiLZZLP8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772724528; c=relaxed/simple;
-	bh=GyfEWDA4WY/JVJH+sN9E8894942o4AuX6wqzVKR7s0o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=idcP+lj1+8lNw5w5FFDHL2eLkceZbPNjKLzNDykUr1EwI024sJuGFrPU3mukUjhMHjZYzx3HbGOUAuODeT+m7UrqX4QrISmoSQ1rYh3I0Cw4DHZ9VsyESvuLhH9JX0oH9Y+ihviqgQo0Pk2Zpcn57THrkwv2l7InhQj2rreCVCI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=Ivu5PIdL; dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=UwRwlIrv; arc=pass smtp.client-ip=81.169.146.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iokpp.de
-ARC-Seal: i=1; a=rsa-sha256; t=1772723084; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=cw4m37SOvk8u7b9ffp1hw9PhdWe11RmUm9AziYiNGzXYouhmCt9WhPUIIRjdNPXjJq
-    6PHfaodLGvgSyf7mKWV62+fqql0Ks+6szfCtMr1I+gdiZYSOJs4TgBIrrlDdsnwZAG2r
-    aYDhUmpoKVe5mcGCo+zng3cvNgchf53GHRZRdLyItCF8bzkSQ08KmBxO9s8G+HlDFT5V
-    tUoVqEU9LFvNGHc71KBdTeLO0++63QtmaRI95p21GjY7ndFqOxLm3j/mVr+QiVDIRRAT
-    WyIh1Pqk2ZSrKdb+oF4qoZ5MrDrQn833OyOu6Q9Tx02jSvI5vcZ6P9nwZjkY9LHHMHzl
-    ON8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1772723084;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=GyfEWDA4WY/JVJH+sN9E8894942o4AuX6wqzVKR7s0o=;
-    b=SzhKspfABu22MxjYbpof4D4qXJH077/WPXs+E6FSiwuXMU/1oxDLqdjJyLtk1ObXKk
-    Qy7RQwUFkq4U1y6b0jicRWmqEcYtZKkbGWGtBD9QouNhpf7wNmWfTuxOMcHtQHO1gxWg
-    DNEXZug4l9cSZz/pRoSue0cRllLhwA0jUKvyUwiCA+HTb7Fq8rx5jQr8TyrJNhgqDFs6
-    Mq+cQwmMMEYdq2G+RQJPAYfC3MlwCfX4IgDg49X2yF7pkd7o4QQIevl7+keUieRE1n+S
-    KGKmXvWcTyG+HWMhTESKBXmlQ/rfvm0M+T70eDl4qPGLA+pJEDRFOBl6LpxD+0QIVj2h
-    jD3w==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1772723084;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=GyfEWDA4WY/JVJH+sN9E8894942o4AuX6wqzVKR7s0o=;
-    b=Ivu5PIdLe657vURoySW9zhV5BcRkIGzQS9+Q5Xt9ocPIW1Te2r0gwnf1P6Uy/DW9u0
-    Nb+/8EEaf0LdB00bTXANLcGq48MpPQEBekNLakrA7vcRDxutObNxfb747fqhPYN6wOqm
-    wa5sTTIuduFF80x6p75uQXiOqV1mwUVcZmFC68R4ap7TvCDwz7oEDtiGvtHREm0X0KKt
-    EiMZIG9F/8Nvl7ssut917fGxPGYuZwOhx0Kdu1YMdvpSdWPnz9vDAh6FEeQhcIqO/Ydq
-    HkUIm3nFVO3gTK4YckgXWMjdzPLXabl1RbLF9UX4OVKQG0Q3Ng3pwuuOYwkS0UdIwN38
-    HIzA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1772723084;
-    s=strato-dkim-0003; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=GyfEWDA4WY/JVJH+sN9E8894942o4AuX6wqzVKR7s0o=;
-    b=UwRwlIrvUlqsxvhWnwFKEUi5e7iADlH5h+t66RJbZEC+WpmOsIRA7DyMrjSQAOBfNk
-    tG6MBjwHM+9Mxc3tuGAQ==
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSe9tgBDSDt0V0DBslXBtZUxPOub3IZqk"
-Received: from [10.176.235.211]
-    by smtp.strato.de (RZmta 55.0.1 AUTH)
-    with ESMTPSA id z79345225F4h63E
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Thu, 5 Mar 2026 16:04:43 +0100 (CET)
-Message-ID: <e116e78ad9590f5845aaaf7d4e26833a7a0194d0.camel@iokpp.de>
-Subject: Re: [PATCH v2 00/11] scsi: ufs: Add TX Equalization support for UFS
- 5.0
-From: Bean Huo <beanhuo@iokpp.de>
-To: Can Guo <can.guo@oss.qualcomm.com>, avri.altman@wdc.com,
- bvanassche@acm.org,  beanhuo@micron.com, martin.petersen@oracle.com
-Cc: linux-scsi@vger.kernel.org, Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, "open
- list:ARM/Mediatek SoC support:Keyword:mediatek"
- <linux-kernel@vger.kernel.org>, "moderated list:ARM/Mediatek SoC
- support:Keyword:mediatek" <linux-arm-kernel@lists.infradead.org>,
- "moderated list:ARM/Mediatek SoC support:Keyword:mediatek"
- <linux-mediatek@lists.infradead.org>
-Date: Thu, 05 Mar 2026 16:04:43 +0100
-In-Reply-To: <20260304135313.413688-1-can.guo@oss.qualcomm.com>
-References: <20260304135313.413688-1-can.guo@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2.1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D9283BE152;
+	Thu,  5 Mar 2026 15:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772723376; cv=none; b=QfwgvgRrVdsfs+EXQ0lmBEcdapObnaKOThGoSwwD6oGox4iMOllyREGrt5TL6eS8433NnpJdNNjo9LTDKHb5J4KfXAxjV37Z4kwmnA36UiqBxXFlw+LYrTROcjPEs+jxPlxgY+MfdRplne8HqYPoKSeOjtOX1u3UDypFUUmWpXA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772723376; c=relaxed/simple;
+	bh=AG27g/pYKkhHjykF6hoYrdKaNW7tQIlXDNEE528BQ74=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aP/sEkMz0nTLDxBcojJcalSxpB/kzWyWG8/RVp9c6WcIsLi2Z07A0O69QbBU+Vqaa0qNzuFmAfhQe9hqKIhuXBIxztMYlYJmrzzDXNEPxwa8VcdsRlApLrSM9esJWHbprsbINbug4oLTW/GAcZVvkxiOistLWC+wactSDxMU+fI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=tLBmLqbp; arc=none smtp.client-ip=199.89.1.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4fRXy12k9cz1XLyhV;
+	Thu,  5 Mar 2026 15:09:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1772723365; x=1775315366; bh=2mcONpsihCbAmYppqWbdXkKp
+	w85o35S8Fs8XYCgwWeI=; b=tLBmLqbpTYtogeZCu3c6+11T07pNiNhBBOWLmltv
+	Dp22zmCKd5UQcGpWtLubDKS+2U9ikAajV26eC6VBXt9Mus8Dea93SgOSocalldc7
+	GuSin0WHxupAth9TXO1lGKAs9OcNxpEfn9QoV/VLfoTLaymlG8FmpAqTqsz28lxl
+	AXWStff21Lw73tC7jXzYu7GwsxxfG2ZA/DHuzvMDY7/4r5UcU2gEoMMFP92Bh5kX
+	+Q5xPEIcHIdooCdCM33DOJQB6vw4bF71uanC+nqygE8YvPmSrzCHV2Bu6yn7LYBB
+	O+0jgWvjtDlvMO3jffeeT4SBxeFcJW4NJpLl5my0Xt5jgA==
+X-Virus-Scanned: by MailRoute
+Received: from 011.lax.mailroute.net ([127.0.0.1])
+ by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id zPLxizGFfs2e; Thu,  5 Mar 2026 15:09:25 +0000 (UTC)
+Received: from [192.168.132.187] (unknown [12.150.89.26])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4fRXxv2wfJz1XM0pg;
+	Thu,  5 Mar 2026 15:09:23 +0000 (UTC)
+Message-ID: <089ec667-4daf-4de0-b986-551f74d98208@acm.org>
+Date: Thu, 5 Mar 2026 09:09:20 -0600
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 0D46E214AEB
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5] scsi: core: Drop using the host_lock to protect
+ async_scan race condition
+To: Chaohai Chen <wdhh6@aliyun.com>, James.Bottomley@HansenPartnership.com,
+ martin.petersen@oracle.com, dlemoal@kernel.org, hch@infradead.org
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260305025125.3649517-1-wdhh6@aliyun.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20260305025125.3649517-1-wdhh6@aliyun.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 9D571214471
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[iokpp.de,reject];
-	R_DKIM_ALLOW(-0.20)[iokpp.de:s=strato-dkim-0002,iokpp.de:s=strato-dkim-0003];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,collabora.com,lists.infradead.org];
-	TAGGED_FROM(0.00)[bounces-21511-lists,linux-scsi=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[beanhuo@iokpp.de,linux-scsi@vger.kernel.org];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-21507-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FREEMAIL_TO(0.00)[aliyun.com,HansenPartnership.com,oracle.com,kernel.org,infradead.org];
+	DKIM_TRACE(0.00)[acm.org:+];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[iokpp.de:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	RCPT_COUNT_SEVEN(0.00)[11];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,iokpp.de:dkim,iokpp.de:mid]
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[acm.org:dkim,acm.org:email,acm.org:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Can,=20
+On 3/4/26 8:51 PM, Chaohai Chen wrote:
+> +	/* Asynchronous scan in progress */
+> +	bool async_scan __guarded_by(&scan_mutex);
 
-On Wed, 2026-03-04 at 05:53 -0800, Can Guo wrote:
-> Hi,
->=20
-> The UFS 5.0 standard was published today,=C2=A0
+The __guarded_by() is ignored because CONTEXT_ANALYSIS has not yet been
+set in the drivers/scsi/Makefile. This is something I plan to do if
+nobody else does it first. Anyway:
 
-Myabe replace time sensitive wording =E2=80=9Cpublished today=E2=80=9D with=
- stable wording?
-
-
-> introducing support for HS-G6
-> (23.2 Gbps per lane) through the new UniPro V3.0 interconnect layer and
-> M-PHY V6.0 physical layer specifications. To achieve reliable operation
-> at these higher speeds, UniPro V3.0 introduces TX Equalization and
-> Pre-Coding mechanisms that are essential for signal integrity.
->=20
-> This patch series implements TX Equalization support in the UFS core
-> driver as specified in UFSHCI v5.0, along with the necessary vendor
-> operations and a reference implementation for Qualcomm UFS host
-> controllers.
->=20
-> Background
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->=20
-> TX Equalization is a signal conditioning technique that compensates for
-> channel impairments at high data rates (HS-G4 through HS-G6). It works
-> by adjusting two key parameters:
->=20
-> - PreShoot: Pre-emphasis applied before the main signal transition
-> - DeEmphasis: De-emphasis applied after the main signal transition
->=20
-> UniPro V3.0 defines TX Equalization Training (EQTR) procedure to
-> automatically discover optimal TX Equalization settings. The EQTR
-> procedure:
->=20
-> 1. Starts from the most reliable link state (HS-G1)
-> 2. Iterates through all possible PreShoot and DeEmphasis combinations
-> 3. Evaluates signal quality using Figure of Merit (FOM) measurements
-> 4. Selects the best settings for both host and device TX lanes
->=20
-
-what happens when EQTR fails, mabye you have this comments in the patch.
-
-Kind regards,
-Bean
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
 
