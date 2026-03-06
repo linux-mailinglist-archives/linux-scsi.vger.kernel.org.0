@@ -1,178 +1,176 @@
-Return-Path: <linux-scsi+bounces-21585-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21582-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eOafJOoEq2nDZQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-21585-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 17:46:34 +0100
+	id mHSdAN4Bq2msZQEAu9opvQ
+	(envelope-from <linux-scsi+bounces-21582-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 17:33:34 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED3D5225510
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 17:46:33 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0835B224F56
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 17:33:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1C3AF30C29FE
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2026 16:44:31 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 4490730095C9
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2026 16:33:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1813F23CF;
-	Fri,  6 Mar 2026 16:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF288322768;
+	Fri,  6 Mar 2026 16:33:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cybernetics.com header.i=@cybernetics.com header.b="jS9FPzow"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CfhEK+zV"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail.cybernetics.com (mail.cybernetics.com [72.215.153.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08673EDABE
-	for <linux-scsi@vger.kernel.org>; Fri,  6 Mar 2026 16:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=72.215.153.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8274429B781;
+	Fri,  6 Mar 2026 16:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772815463; cv=none; b=SZ/m7xrt05F0aaOmZSKCQBchdYi+fvLMMTQtvqtTOqltDznnEMgLHOw4W18AdWR1Ja2eaJ50fDSjqGuW7wg9NZrVBooo+bSDjXDp90mLcxWLZpLHnX/973eY674IitsTu3WrrBdl26SjZSiCYtPVlP8Ze6LAQ0gKFhfEv/rSLmo=
+	t=1772814787; cv=none; b=KO6ozikKAnzDchMaKpu8IY4fBOEgDhLQiS4yVxlqZf3L43moiQVf1V5fx6aiaIbxQXitzioR3E9DU6HDG/59KMGxg2O5AFSzLxTBdRUwJaZcW1CsMOCxLLcwxo2gask5+Gxls4qbNL4LBp5w912fcNPcVlid0z0HQDzPFP/sgzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772815463; c=relaxed/simple;
-	bh=cOQutnMuWPDAVk3zo7eIzYx5aU00kd5NNsyvvZTBtjQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o5nM/hZriLudzOcMX5PUCq5GClmWLmNNUWgZeksRlqJmpur8U8HvFDnn2z+QuJYWQHhDrsI5eJoxuwmW7lllTAB7k21f5tT9Mh4PAJSV8XrndVr+UAxjx74C+VUjgYUZkxgdssevBM6WynQugAnUctEkMkASvDT1OZRGkmOzMKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cybernetics.com; spf=pass smtp.mailfrom=cybernetics.com; dkim=pass (1024-bit key) header.d=cybernetics.com header.i=@cybernetics.com header.b=jS9FPzow; arc=none smtp.client-ip=72.215.153.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cybernetics.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cybernetics.com
-Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id QaDvRB5Ucpny5hxR; Fri, 06 Mar 2026 11:32:57 -0500 (EST)
-X-Barracuda-Envelope-From: tonyb@cybernetics.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.10.4.126
-X-ASG-Whitelist: Client
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
-	bh=8wEmeU1zB6chAGv2cB+8/88qXb3hAbn3QwMt0KRm3GY=;
-	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:Cc:To:
-	Content-Language:Subject:MIME-Version:Date:Message-ID; b=jS9FPzowI2w9nRwmpVq3
-	HNcQFr+HjOWoEy/4ijHxZCfXkUEjJZ19FSjFkK/3Uy6TNBCIEl1tWiN6BEY34UMVVUCpHlsNLQO3R
-	NmXRSN/qnESzTPlCFy6yhmuwTn1NoOEuZEvScKyardUanESTTkBLlPH02irJmNSUv12njHjJdw=
-Received: from [10.157.2.224] (HELO [192.168.200.1])
-  by cybernetics.com (CommuniGate SPEC SMTP 8.0.5)
-  with ESMTPS id 14447498; Fri, 06 Mar 2026 11:32:57 -0500
-Message-ID: <ac99d3b6-0537-49c2-826b-118694056b93@cybernetics.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.157.2.224
-Date: Fri, 6 Mar 2026 11:32:57 -0500
+	s=arc-20240116; t=1772814787; c=relaxed/simple;
+	bh=CnQoePDGbm0PHXBOJYOu5eMNk8PFbwki0J91SPH+ipw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YBPwdKtodLorY6HcUUXGS3AN+ihWeSLB/DweI5yv6hoxg00DbtSRXh0zLqGh5UwsziPDSvFw2LIfudY6rJr4G1AjzoubkT7bPXxhL9m/UGcgD3ky8XgfRwgFNmsB6itZNJvIUtFoF8RznKgBCj/pLFiqlhW4XVyAapxcAFK5NH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CfhEK+zV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC168C4CEF7;
+	Fri,  6 Mar 2026 16:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772814787;
+	bh=CnQoePDGbm0PHXBOJYOu5eMNk8PFbwki0J91SPH+ipw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CfhEK+zVvjIgeRlPT1wuB79AM2+Dd9id+GxlsrUhswzSVDVUu9UDDm4qe2NH9faZG
+	 9H1TXikDsT4sJaDwGccf/iVUWw1WaLTxkkO5CtoF6payK6po9/yuH3tALljqDQBrnh
+	 qI+ZmpGDndHmXj60/uJMWHmrWkVwRhNHKVIlSOnAE0ZEXhW4QnGHTpdcm29b5sKceW
+	 wS58IrVfEBLrFojjoFgbGC4bvmXP2TJCpE3FfalC7meebPH8WyEfQpfGAtVd55i5pf
+	 B8FYa3oY6Sgq+SWcqf1mDZ+H49BzKN42/3/e03c0lTfooVRXt7laYoN6DoDk/6KRYH
+	 fOJ+dWIRF9Yog==
+Date: Fri, 6 Mar 2026 10:33:05 -0600
+From: Rob Herring <robh@kernel.org>
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Chunfeng Yun <chunfeng.yun@mediatek.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Peter Wang <peter.wang@mediatek.com>,
+	Stanley Jhu <chu.stanley@gmail.com>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Chaotian Jing <Chaotian.Jing@mediatek.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
+	kernel@collabora.com, linux-scsi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v9 03/23] dt-bindings: ufs: mediatek,ufs: Add mt8196
+ variant
+Message-ID: <20260306163305.GA2680515-robh@kernel.org>
+References: <20260306-mt8196-ufs-v9-0-55b073f7a830@collabora.com>
+ <20260306-mt8196-ufs-v9-3-55b073f7a830@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: qla2xxx: Remove problematic BUILD_BUG_ON()
- assertion
-Content-Language: en-US
-X-ASG-Orig-Subj: Re: [PATCH] scsi: qla2xxx: Remove problematic BUILD_BUG_ON()
- assertion
-To: Finn Thain <fthain@linux-m68k.org>, Nilesh Javali <njavali@marvell.com>,
- GR-QLogic-Storage-Upstream@marvell.com,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>,
- linux-m68k@lists.linux-m68k.org, linux-scsi@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <550e7d7bb8c2620ca4f6c9e809a4f853bdfa4c67.1772751689.git.fthain@linux-m68k.org>
-From: Tony Battersby <tonyb@cybernetics.com>
-In-Reply-To: <550e7d7bb8c2620ca4f6c9e809a4f853bdfa4c67.1772751689.git.fthain@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Barracuda-Connect: UNKNOWN[10.10.4.126]
-X-Barracuda-Start-Time: 1772814777
-X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
-X-Barracuda-BRTS-Status: 0
-X-Virus-Scanned: by bsmtpd at cybernetics.com
-X-Barracuda-Scan-Msg-Size: 2423
-X-ASG-Debug-ID: 1772814777-1cf43940a6a58f0001-ziuLRu
-X-Rspamd-Queue-Id: ED3D5225510
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260306-mt8196-ufs-v9-3-55b073f7a830@collabora.com>
+X-Rspamd-Queue-Id: 0835B224F56
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[cybernetics.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[cybernetics.com:s=mail];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[cybernetics.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21585-lists,linux-scsi=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[29];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FREEMAIL_CC(0.00)[samsung.com,wdc.com,acm.org,kernel.org,gmail.com,collabora.com,mediatek.com,hansenpartnership.com,oracle.com,pengutronix.de,linaro.org,vger.kernel.org,lists.infradead.org,microchip.com];
+	TAGGED_FROM(0.00)[bounces-21582-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tonyb@cybernetics.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.945];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	NEURAL_HAM(-0.00)[-0.986];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-scsi,dt];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[collabora.com:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,microchip.com:email]
 X-Rspamd-Action: no action
 
-On 3/5/26 18:01, Finn Thain wrote:
-> The LKP bot reported a build failure with CONFIG_COLDFIRE=y together with
-> CONFIG_SCSI_QLA_FC=y, that's attributable to the BUILD_BUG_ON() in
-> qlt_queue_unknown_atio().
->
-> That function uses kzalloc() to obtain memory for the following struct,
-> plus some extra bytes at the end.
->
-> struct qla_tgt_sess_op {
->         struct scsi_qla_host *vha;
->         uint32_t chip_reset;
->         struct work_struct work;
->         struct list_head cmd_list;
->         bool aborted;
->         struct rsp_que *rsp;
->
->         struct atio_from_isp atio;
->         /* DO NOT ADD ANYTHING ELSE HERE - atio must be last member */
-> };
->
-> The location of the 'atio' member is subsequently used as the destination
-> for a memcpy() that's expected to fill in the extra bytes beyond the end
-> of the struct.
->
-> That explains the loud warning in the comment above, which ought to be
-> sufficient to prevent some newly-added member from accidentally getting
-> clobbered. But, in case that warning was missed somehow, we also have the
-> failing assertion,
->
-> BUILD_BUG_ON(offsetof(struct qla_tgt_sess_op, atio) + sizeof(u->atio) !=
->              sizeof(*u));
->
-> Unfortunately, this size assertion doesn't guarantee that 'atio' is the
-> last member. Indeed, adding a zero-length array member at the end does
-> not increase the struct size.
->
-> Moreover, this assertion can fail even when 'atio' really is the last
-> member, and that's what happened with commit e428b013d9df ("atomic:
-> specify alignment for atomic_t and atomic64_t"), which added 2 bytes of
-> harmless padding to the end of the struct.
-...
-> I don't know of a good way to encode an invariant like "the last member of
-> struct qla_tgt_sess_op is named atio" such that it might be statically
-> checked. But perhaps there is a good way to do that (?)
+On Fri, Mar 06, 2026 at 02:24:44PM +0100, Nicolas Frattaroli wrote:
+> The MediaTek MT8196 SoC's UFS controller uses three additional clocks
+> compared to the MT8195, and a different set of supplies. It is therefore
+> not compatible with the MT8195.
+> 
+> While it does have a AVDD09_UFS_1 pin in addition to the AVDD09_UFS pin,
+> it appears that these two pins are commoned together, as the board
+> schematic I have access to uses the same supply for both, and the
+> downstream driver does not distinguish between the two supplies either.
+> 
+> Add a compatible for it, and modify the binding correspondingly.
+> 
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Acked-by: Vinod Koul <vkoul@kernel.org>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> ---
+>  .../devicetree/bindings/ufs/mediatek,ufs.yaml      | 58 +++++++++++++++++++++-
+>  1 file changed, 57 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml b/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
+> index e0aef3e5f56b..a82119ecbfe8 100644
+> --- a/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
+> +++ b/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
+> @@ -16,10 +16,11 @@ properties:
+>        - mediatek,mt8183-ufshci
+>        - mediatek,mt8192-ufshci
+>        - mediatek,mt8195-ufshci
+> +      - mediatek,mt8196-ufshci
+>  
+>    clocks:
+>      minItems: 1
+> -    maxItems: 13
+> +    maxItems: 16
+>  
+>    clock-names:
+>      minItems: 1
+> @@ -37,6 +38,9 @@ properties:
+>        - const: crypt_perf
+>        - const: ufs_rx_symbol0
+>        - const: ufs_rx_symbol1
+> +      - const: ufs_sel
 
-It might work better to add a flex array:
+"ufs" is redundant as all the clocks are for UFS. Same comment on prior 
+patch.
 
-struct qla_tgt_sess_op {
-	...
+> +      - const: ufs_sel_min_src
+> +      - const: ufs_sel_max_src
 
-	struct atio_from_isp atio;
-	/*
-	atio.u.isp24.fcp_cmnd.add_cdb may extend past end of atio;
-	DO NOT DELETE; DO NOT ADD ANYTHING ELSE HERE.
-	*/
-	uint8_t atio_isp24_fcp_cmnd_add_cdb[];
-};
+"src" sounds like a parent clock? If so, probably shouldn't be in the 
+clocks list. 'assigned-clocks' is for dealing with parent clocks.
 
-/* atio_isp24_fcp_cmnd_add_cdb must come immediately after atio */
-BUILD_BUG_ON(offsetof(struct qla_tgt_sess_op, atio) +
-             sizeof(struct atio_from_isp) !=
-             offsetof(struct qla_tgt_sess_op, atio_isp24_fcp_cmnd_add_cdb));
-
-Tony Battersby
+Rob
 
