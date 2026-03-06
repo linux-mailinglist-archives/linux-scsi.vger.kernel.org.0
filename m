@@ -1,63 +1,63 @@
-Return-Path: <linux-scsi+bounces-21567-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21574-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cCEEBt3XqmnmXgEAu9opvQ
-	(envelope-from <linux-scsi+bounces-21567-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 14:34:21 +0100
+	id qHIELJLXqmnyXgEAu9opvQ
+	(envelope-from <linux-scsi+bounces-21574-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 14:33:06 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70742221BAE
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 14:34:20 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFEDB221B42
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 14:33:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id ECFBA31C75FE
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2026 13:27:57 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3159D305D2AC
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2026 13:29:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD66239A7F3;
-	Fri,  6 Mar 2026 13:27:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F95D3A1A3D;
+	Fri,  6 Mar 2026 13:28:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="PCm5n0K+"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="O1Bae6cz"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5399839A07A;
-	Fri,  6 Mar 2026 13:27:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8353A0EB8;
+	Fri,  6 Mar 2026 13:28:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772803673; cv=pass; b=I8czfzDOy/hadwBrMstQVhF/Io5U6wIdqh+nxzHJFQvLzrO8l4YpifhNxwhXo5qCGUOfm3apeQTt/kJxUOu1UG7Wg6gJ9JW8VasJhohz4GXun/Eh4RO1KwqbgBiFAPF4g1ZLBRVEEoRDaFL93ukFcDPPZ70FgrygAI8l2R63+uM=
+	t=1772803685; cv=pass; b=BR2HSoE5KCcYgbCWI9KwUQdwPn8czfcBHSxc3F4haiUTjLyEU1wAJJvkK91bItmFLZ8P1ocdZJHX8lB1PYzUQ65k/tbQeubrhD+Vii1ZGYh2wb6xGrecykIrUwLkAG5XaM3MCzqdLlq/uHVajSR4IrhCUvXnb6vn8eiIsic07DI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772803673; c=relaxed/simple;
-	bh=25+iV2Au5DtMz96R754wxjUHPhs70Lf9nLBCTgqmmxE=;
+	s=arc-20240116; t=1772803685; c=relaxed/simple;
+	bh=8EXwgghg7NSeWHxeSIknm7SjCpsdHsPbYKSu9Ir89po=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FqDUQ38ze9KDPG0rrlp6ucJjQp/aATazsNCKSNeMiiBuUkkSSZSu6lf0IcyFm/+yLTzwgQaT/LdITVRepEDiWja/l+tSgZek6m0eHAzNBHcsEVwLluWiUmEhlFXiPjXEEQX9bRsdS0ZNNrCz9+2VoaIbCgG0fprsUk+owGZFxYo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=PCm5n0K+; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=NhOBoem+Tt1UmQ+cMhJkVQ6JhO9//Hi/84zj3yjjQT+zQbRg7Y+K5XjguseERTxtOQsW0CHii1WKV85/tNlihBzkCPfZh6nTR5kGJt7tAT9ZHUkIOEmIE6lHmj0a2nxnYKA3uqz9X3O24IBOKotdVerpxBR5t+b8JOCmCi70LOk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=O1Bae6cz; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1772803640; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1772803646; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=IPRCzkVxE6M4aDhgBlXimsImFAvM3nc/Ogv8hn2yUwyhmhbLOuYqj7aiP/dhPZiweLejYERnnUigepDRlAxaGxniRWBsIKEN5tiW6E3b66wCGZRQ4w35znuKHVKGlQ06ECexzIlcHIN5l/xKAYqlzQr8FLqKzEmrBxvl4eVJkIk=
+	b=KoyNx/w0Vs7amI/6bZflkFPStzak6EpCjmtYCW/hQAYMW/q0YJmNehbiDWEf6mlzL1MVEQ6GuuvJ4tmiVLPBoy7LIbvNnQtV1urqb1m+1GIcupMJq1SIvIqz2Cm5EZ4r+KgF5hIi6uu4WG0k/Sg+7RDTjBTTlErTd2LEgN4JTPo=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1772803640; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=ZHQPBt/sMVRGZaNIxvx/Z2lE1RPR2Q3ZOvgh4mDSFHM=; 
-	b=A5R3F6CKGbe+lSt9y0wwZlYfQ0k0r6dsx8NA05pOSyV4DLQ1wVaBbnFRtoeuYkJf3cTGudGlmqdb2kFjj4wp9MHJZRsZGDsX/FNSPfd7UihjslmNd35qh3/vXKl/wABRonwLPj4W7gcgUSlT5kht2LMvh0TsIe4p/M3910uI8Nw=
+	t=1772803646; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=uAtgn+OLzAwzOQTrhyuxrmnbjBStnsD707TveSFV8UU=; 
+	b=ntfT9ocKoz2t8nPQMKRj/91zQEVO9dB/Kb4o2ENSWKk6WeBSD7/uLVN6i39voAyPEgB7hep0PSfEjRjnFshW8uBzLMkjZGoz4O2cZoZDILWWMUtuYMw6F0KrGGNNoQlY93tpWfemeJRwc6GwOlKdQ/CNZoc3ZlZTbAm6Hl0VJug=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1772803640;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1772803646;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=ZHQPBt/sMVRGZaNIxvx/Z2lE1RPR2Q3ZOvgh4mDSFHM=;
-	b=PCm5n0K+WKIimvgUMe9biPXhV8+XCSZ3IAoeo4smSXKcNlLsbTjcv7tL/P3S03UE
-	iRvx3Zl4xHVeJUNEwv+ClqFnvHYTrBCTf+FfRtDf8YnGokb8qDbAaOYv1khbjxA7lUF
-	R3Scl96aHuHBCE08aDY7KyJFxMQqhw+QC3TVHu3Y=
-Received: by mx.zohomail.com with SMTPS id 1772803637392630.491848334385;
-	Fri, 6 Mar 2026 05:27:17 -0800 (PST)
+	bh=uAtgn+OLzAwzOQTrhyuxrmnbjBStnsD707TveSFV8UU=;
+	b=O1Bae6cz91ZVSdlg8gbtLeaPxQ+83DgJnws74h2NCWNKk5aEWZ0oVM8AzE8gJisf
+	TAlbi6gaH8TsrG5BedCnO2owaAQGGtFJrT8huRpcfxk3tAowtiRPf0uf9vjM5dW9XMm
+	1WsWg3gnlVhuoAiuMCqLzi8rJjyNiKRHFi+QAZRc=
+Received: by mx.zohomail.com with SMTPS id 1772803643983232.48689785335853;
+	Fri, 6 Mar 2026 05:27:23 -0800 (PST)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Fri, 06 Mar 2026 14:25:03 +0100
-Subject: [PATCH v9 22/23] scsi: ufs: mediatek: Remove undocumented
- "clk-scale-up-vcore-min"
+Date: Fri, 06 Mar 2026 14:25:04 +0100
+Subject: [PATCH v9 23/23] scsi: ufs: mediatek: Add MT8196 compatible,
+ update copyright
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260306-mt8196-ufs-v9-22-55b073f7a830@collabora.com>
+Message-Id: <20260306-mt8196-ufs-v9-23-55b073f7a830@collabora.com>
 References: <20260306-mt8196-ufs-v9-0-55b073f7a830@collabora.com>
 In-Reply-To: <20260306-mt8196-ufs-v9-0-55b073f7a830@collabora.com>
 To: Alim Akhtar <alim.akhtar@samsung.com>, 
@@ -90,19 +90,19 @@ Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
  linux-phy@lists.infradead.org, 
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.3
-X-Rspamd-Queue-Id: 70742221BAE
+X-Rspamd-Queue-Id: BFEDB221B42
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
 	R_DKIM_ALLOW(-0.20)[collabora.com:s=zohomail];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21567-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21574-lists,linux-scsi=lfdr.de];
 	FREEMAIL_TO(0.00)[samsung.com,wdc.com,acm.org,kernel.org,gmail.com,collabora.com,mediatek.com,HansenPartnership.com,oracle.com,pengutronix.de,linaro.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
@@ -117,65 +117,71 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-scsi,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[collabora.com:dkim,collabora.com:email,collabora.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,mediatek.com:email,collabora.com:dkim,collabora.com:email,collabora.com:mid]
 X-Rspamd-Action: no action
 
-The MediaTek UFS driver contains support for an undocumented,
-non-vendor-prefixed u32 property named "clk-scale-up-vcore-min".
+THe MT8196's UFS controller has a new compatible. Add the necessary
+struct definitions to support it.
 
-Since it is not part of any binding, and would not pass a bindings
-review in its current form, remove it.
-
-To return this functionality, it needs to be resubmitted in a series
-that also introduces it to the binding, and justifies what it is used
-for. Compatibility with downstream device trees is not a valid
-justification for its existence.
+Also update the copyrights and authors, without tabs following spaces to
+avoid checkpatch errors, to list myself as having contributed to this
+driver after the preceding rework patches.
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 19 -------------------
- 1 file changed, 19 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index ae6735683f76..1dfc299b93b5 100644
+index 1dfc299b93b5..cc9357e90958 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -880,8 +880,6 @@ static void ufs_mtk_init_clocks(struct ufs_hba *hba)
- 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
- 	struct list_head *head = &hba->clk_list_head;
- 	struct ufs_clk_info *clki, *clki_tmp;
--	struct device *dev = hba->dev;
--	u32 volt;
+@@ -1,9 +1,11 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+  * Copyright (C) 2019 MediaTek Inc.
++ * Copyright (C) 2025 Collabora Ltd.
+  * Authors:
+- *	Stanley Chu <stanley.chu@mediatek.com>
+- *	Peter Wang <peter.wang@mediatek.com>
++ *      Stanley Chu <stanley.chu@mediatek.com>
++ *      Peter Wang <peter.wang@mediatek.com>
++ *      Nicolas Frattaroli <nicolas.frattaroli@collabora.com> (Major cleanups)
+  */
  
- 	/*
- 	 * Find private clocks and store them in struct ufs_mtk_clk.
-@@ -918,24 +916,7 @@ static void ufs_mtk_init_clocks(struct ufs_hba *hba)
- 	if (!ufs_mtk_is_clk_scale_ready(hba)) {
- 		hba->caps &= ~UFSHCD_CAP_CLK_SCALING;
- 		dev_info(hba->dev, "%s: Clock scaling unavailable", __func__);
--		return;
--	}
--
--	if (!host->reg_vcore)
--		return;
--
--	if (of_property_read_u32(dev->of_node, "clk-scale-up-vcore-min",
--				 &volt)) {
--		dev_info(dev, "failed to get clk-scale-up-vcore-min");
--		return;
- 	}
--
--	host->mclk.vcore_volt = volt;
--
--	/* If default boot is max gear, request vcore */
--	if (volt && host->clk_scale_up)
--		if (regulator_set_voltage(host->reg_vcore, volt, INT_MAX))
--			dev_err(hba->dev, "Failed to set vcore to %d\n", volt);
- }
+ #include <linux/arm-smccc.h>
+@@ -2200,6 +2202,10 @@ static const char *const ufs_mtk_regs_avdd12_ckbuf_avdd18[] = {
+ 	"avdd12", "avdd12-ckbuf", "avdd18"
+ };
  
- static void ufs_mtk_setup_clk_gating(struct ufs_hba *hba)
++static const char *const ufs_mtk_regs_avdd12_ckbuf[] = {
++	"avdd12", "avdd12-ckbuf"
++};
++
+ static const struct ufs_mtk_soc_data mt8183_data = {
+ 	.has_avdd09 = true,
+ 	.reg_names = ufs_mtk_regs_avdd12_avdd18,
+@@ -2212,10 +2218,17 @@ static const struct ufs_mtk_soc_data mt8192_8195_data = {
+ 	.num_reg_names = ARRAY_SIZE(ufs_mtk_regs_avdd12_ckbuf_avdd18),
+ };
+ 
++static const struct ufs_mtk_soc_data mt8196_data = {
++	.has_avdd09 = true,
++	.reg_names = ufs_mtk_regs_avdd12_ckbuf,
++	.num_reg_names = ARRAY_SIZE(ufs_mtk_regs_avdd12_ckbuf),
++};
++
+ static const struct of_device_id ufs_mtk_of_match[] = {
+ 	{ .compatible = "mediatek,mt8183-ufshci", .data = &mt8183_data },
+ 	{ .compatible = "mediatek,mt8192-ufshci", .data = &mt8192_8195_data },
+ 	{ .compatible = "mediatek,mt8195-ufshci", .data = &mt8192_8195_data },
++	{ .compatible = "mediatek,mt8196-ufshci", .data = &mt8196_data },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, ufs_mtk_of_match);
 
 -- 
 2.53.0
