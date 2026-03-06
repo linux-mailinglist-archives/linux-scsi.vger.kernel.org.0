@@ -1,214 +1,178 @@
-Return-Path: <linux-scsi+bounces-21581-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21585-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oOo7OZcAq2mVZQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-21581-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 17:28:07 +0100
+	id eOafJOoEq2nDZQEAu9opvQ
+	(envelope-from <linux-scsi+bounces-21585-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 17:46:34 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41DB2224E50
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 17:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ED3D5225510
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 17:46:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 756EE30AD8BF
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2026 16:23:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1C3AF30C29FE
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2026 16:44:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0CDE3ED10D;
-	Fri,  6 Mar 2026 16:23:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1813F23CF;
+	Fri,  6 Mar 2026 16:44:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zMoC2u9C"
+	dkim=pass (1024-bit key) header.d=cybernetics.com header.i=@cybernetics.com header.b="jS9FPzow"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.cybernetics.com (mail.cybernetics.com [72.215.153.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA9D3EBF37
-	for <linux-scsi@vger.kernel.org>; Fri,  6 Mar 2026 16:23:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772814189; cv=pass; b=YaoJo2mp2pa5eHx6rN9PerTZe4DOMmvyhVNde38oi5L7sni1bGRDdTZ2uYsuxncrp9Vrrgkf5WQaFwQT8kplRM9VMYrFYboRcr1wzi9dYA7VAud1KMIg4igUogokKZLIXuFBL08jYP4HpB4Kka9TBNgWo6Y6VUAehsByQTLVvyc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772814189; c=relaxed/simple;
-	bh=IbZsvgrBS6qG9+ONh351wVbKqsdzZem/iGnupFSfxjY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LOlV1h71lGhvGsyhooVksvk3Q3SjzXiLew+ArZwULaI3klnTI5e0lQaU3HW9NjYk8J5Ww12xVXBpnK0yuZN1JhPwlTLtRZ/keFcb4Jg0pGdV3WSE3Kh09NjBHEYoZ7QhPSBPt3SOyRQaXo+cynwXOSmwfOHdK6yXSRgQxvsgT9w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zMoC2u9C; arc=pass smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-5069a785ed2so465521cf.1
-        for <linux-scsi@vger.kernel.org>; Fri, 06 Mar 2026 08:23:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772814187; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QJYodNr7/kRUbnt0OhpLJpB6f4FDj8UznmxKpUm0jMW91pgpfYg+HbQqaKrMtlYMG/
-         kw1JfduEAbjPPcpqdK2S4M/v82LNrG+OPNyo6vXXuoTgXktuMRIpGk/7DH0kwYKPlmGc
-         pYKovHTu8sV0jQSlXcT4CGkCYLjlce79yGJFYw+izv+osOfopJ/JyR13sYuPUEQcEWOc
-         W2a2ed9deZaWo2CqPVjQfdHZjF8n2SbVHfPCCSiVbdKawBuPzuDgTlw8nMhmHWO1uU9v
-         U28nEhFCD34BQZ1/nAfaoB5rZJq/N+bzzbHMG8/ejmCm86Djl2E3b3r5s/9rHNemDif8
-         OhCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2DZ/CDFVfoeP8qynByzEZbDrTtlY+jSYJfWbSadwVH8=;
-        fh=zLXkBjMJYwE60GUIwVszea9gBAsa/A1eM8se/NCKrCc=;
-        b=B5igrO5iDFRSGcyHY6IaFxeztusV66KWq2MwkMchh2Sihj6SGtsPd91j38CoETQYmU
-         WH2rqC1etE1oiRauXJkT1GvcGTq7n+PNSdzzviZb5u0x5Euiab0sm8SFUEzidfeJ08Zg
-         EhXFvJ5pVlRfHtwVZ60/ck0sFJcWr13Up1st/3gMVsr4P454nSkNBgkw7mrSyyFG14aC
-         C0YZuYwF6AaaOd64tYfxv6u//NUILCbLxWje2O6sGfl1XKQF8FJs5mvmA7ek16qM9d29
-         cQZUimiIrnaQfnLUevx+hC5E/cMgER4iMnD2M2jyTMfiQ6F5hcDHMd353hxwyzGQSs5a
-         sYJQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772814187; x=1773418987; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2DZ/CDFVfoeP8qynByzEZbDrTtlY+jSYJfWbSadwVH8=;
-        b=zMoC2u9CTCUEA/YD12k5F4P7X8QsDxh4MJK8LD2cqPUqqGJ7Dees1ESCxifahCsUjS
-         rz+MoyaRUmfZ+4Ybc44SXyUqnISGxU1d5lbJwAU3B1PSV22wsY8qfLECJ2JJW/QAPDSU
-         CWQc4zfActQ2KiIymgJ5Za0RCxzCMPdVxaL+pEc1XtZYsL7BxEGneFpzmH6du2dqyOHc
-         I0WZXNSeR+X4SqBzGB8pGrQoBZTXwdnAMZb/XB3/BqOS08C4PhCSB936tQMIAA53TIDw
-         +TBiYCFA2wFXdCEIB9dEyMMuFt0HYrfaGkIaSLoLvH72kOC3h6AWzAcXQipYdX7b/5D9
-         J/jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772814187; x=1773418987;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=2DZ/CDFVfoeP8qynByzEZbDrTtlY+jSYJfWbSadwVH8=;
-        b=WCMJB9GR46dGK7zR0hIe8WlnvjUkhEH7q5x3jExuRgtIKvKNlZ4iAS+iqRMYAt1sw9
-         fHDIq1rasNfTdVlYFzrUQ84Xy/aBJvKCdKJPFbk/53ydZEzw8qbqrr7i9wqvxq1JBKa4
-         rP2OVwa+COvx1s8jTibKzs6zGDGpIKv/R6HrlfYfz5zuAk3pkDNktUMqccCFnFn8VwY8
-         OBWYbSAuvED9Qm60S6SkzmyN9gegbGLzbkWnXItenDlYldxUGCxfHiozvWu3j+0vZmk0
-         1KBWnTIsHgKPYKVQckJ0JhM6kNHvEhuRyX5gjn67M1OKi9WS9a55HFKDMoO1SKmlIUrK
-         UKuA==
-X-Forwarded-Encrypted: i=1; AJvYcCUax8F6lwdGfYPDPkSaJdahLZQ5J0R5HTTORsYi5DqVfGfYoWvwZOENvYFuaG2SeZPWPSKmU4pIVyVN@vger.kernel.org
-X-Gm-Message-State: AOJu0YyADvb8n5a+JpHDamgRQT/3Zmx044YCZ412ZyK22KlsUB6Ih9Wt
-	6JXpNULa4U6FvdHE++YmO5qGHyKR3UOpUXVtcjVZ4w6hHwPOLPfIo8BiXXfE5ALnIuKtF7GjDYN
-	k7U3OUDbY2b+QRkqjXcZ3w/G1IYCFbLNi16emMRK3
-X-Gm-Gg: ATEYQzwuYv37XiGvvViqBUWLLnupHDho8P4DV9Ai4FTGcyBrJajl8mqVqeAWVUcYdVX
-	ZAMRzCHStbX8Ui3ADMrN2on6NWTIQsdAgJXkmbUvKN86GQ8nwlaNn6ELLF7yxEPmMLwQk2Wp8tX
-	tJnJqD1DHj0phqtqdflACAicrzSyltvbjgiwiH4lu4mSqr/0jwRWmrtUnj4D+EcG25klhy+VGel
-	HYOyS54dglkpxiE7etySXqAEzHcCtPsSymB5pRMiRadEOrWi7IhBYb8SGOsIJmUdYabl4wFP+uB
-	Lybtz214B+8ZjisLb7m84T+LUqS0Mzz7Mk2G/UGIRQ==
-X-Received: by 2002:a05:622a:91:b0:501:3e46:6bd5 with SMTP id
- d75a77b69052e-508f3a8dbd1mr4339751cf.19.1772814186599; Fri, 06 Mar 2026
- 08:23:06 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08673EDABE
+	for <linux-scsi@vger.kernel.org>; Fri,  6 Mar 2026 16:44:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=72.215.153.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772815463; cv=none; b=SZ/m7xrt05F0aaOmZSKCQBchdYi+fvLMMTQtvqtTOqltDznnEMgLHOw4W18AdWR1Ja2eaJ50fDSjqGuW7wg9NZrVBooo+bSDjXDp90mLcxWLZpLHnX/973eY674IitsTu3WrrBdl26SjZSiCYtPVlP8Ze6LAQ0gKFhfEv/rSLmo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772815463; c=relaxed/simple;
+	bh=cOQutnMuWPDAVk3zo7eIzYx5aU00kd5NNsyvvZTBtjQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=o5nM/hZriLudzOcMX5PUCq5GClmWLmNNUWgZeksRlqJmpur8U8HvFDnn2z+QuJYWQHhDrsI5eJoxuwmW7lllTAB7k21f5tT9Mh4PAJSV8XrndVr+UAxjx74C+VUjgYUZkxgdssevBM6WynQugAnUctEkMkASvDT1OZRGkmOzMKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cybernetics.com; spf=pass smtp.mailfrom=cybernetics.com; dkim=pass (1024-bit key) header.d=cybernetics.com header.i=@cybernetics.com header.b=jS9FPzow; arc=none smtp.client-ip=72.215.153.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cybernetics.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cybernetics.com
+Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id QaDvRB5Ucpny5hxR; Fri, 06 Mar 2026 11:32:57 -0500 (EST)
+X-Barracuda-Envelope-From: tonyb@cybernetics.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.10.4.126
+X-ASG-Whitelist: Client
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
+	bh=8wEmeU1zB6chAGv2cB+8/88qXb3hAbn3QwMt0KRm3GY=;
+	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:Cc:To:
+	Content-Language:Subject:MIME-Version:Date:Message-ID; b=jS9FPzowI2w9nRwmpVq3
+	HNcQFr+HjOWoEy/4ijHxZCfXkUEjJZ19FSjFkK/3Uy6TNBCIEl1tWiN6BEY34UMVVUCpHlsNLQO3R
+	NmXRSN/qnESzTPlCFy6yhmuwTn1NoOEuZEvScKyardUanESTTkBLlPH02irJmNSUv12njHjJdw=
+Received: from [10.157.2.224] (HELO [192.168.200.1])
+  by cybernetics.com (CommuniGate SPEC SMTP 8.0.5)
+  with ESMTPS id 14447498; Fri, 06 Mar 2026 11:32:57 -0500
+Message-ID: <ac99d3b6-0537-49c2-826b-118694056b93@cybernetics.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.157.2.224
+Date: Fri, 6 Mar 2026 11:32:57 -0500
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260302180117.2797184-1-vamshigajjela@google.com>
- <1fa500fdfbfff7d43bea1839ce1992fb4283c5eb.camel@mediatek.com>
- <2cdc620b-b521-4058-a802-87591aa4c253@acm.org> <151ef927de40cd3e663b816194761a029c07ab23.camel@mediatek.com>
- <c18581fb-d44a-4aff-973c-27cdcc9683fa@acm.org> <8b1faf1871c067c28e25f1248d0f358facde38b7.camel@mediatek.com>
-In-Reply-To: <8b1faf1871c067c28e25f1248d0f358facde38b7.camel@mediatek.com>
-From: VAMSHI GAJJELA <vamshigajjela@google.com>
-Date: Fri, 6 Mar 2026 21:52:54 +0530
-X-Gm-Features: AaiRm50PUgJhFxKijtOCoFghbJDJHsYjfFHSQWZkFqmlT3pK29eDMbJhD7Y1Sc0
-Message-ID: <CAMTSyjo1LzUwqW8wnoJka=V_whC3-2VBtUQko6P-BOtoeNhjXg@mail.gmail.com>
-Subject: Re: [PATCH] scsi: ufs: core: Handle MCQ IAG events
-To: =?UTF-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= <peter.wang@mediatek.com>
-Cc: "James.Bottomley@HansenPartnership.com" <James.Bottomley@hansenpartnership.com>, 
-	"bvanassche@acm.org" <bvanassche@acm.org>, "avri.altman@wdc.com" <avri.altman@wdc.com>, 
-	"martin.petersen@oracle.com" <martin.petersen@oracle.com>, 
-	"alim.akhtar@samsung.com" <alim.akhtar@samsung.com>, "beanhuo@micron.com" <beanhuo@micron.com>, 
-	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>, 
-	"adrian.hunter@intel.com" <adrian.hunter@intel.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>, 
-	"arthur.simchaev@sandisk.com" <arthur.simchaev@sandisk.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 41DB2224E50
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] scsi: qla2xxx: Remove problematic BUILD_BUG_ON()
+ assertion
+Content-Language: en-US
+X-ASG-Orig-Subj: Re: [PATCH] scsi: qla2xxx: Remove problematic BUILD_BUG_ON()
+ assertion
+To: Finn Thain <fthain@linux-m68k.org>, Nilesh Javali <njavali@marvell.com>,
+ GR-QLogic-Storage-Upstream@marvell.com,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>,
+ linux-m68k@lists.linux-m68k.org, linux-scsi@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <550e7d7bb8c2620ca4f6c9e809a4f853bdfa4c67.1772751689.git.fthain@linux-m68k.org>
+From: Tony Battersby <tonyb@cybernetics.com>
+In-Reply-To: <550e7d7bb8c2620ca4f6c9e809a4f853bdfa4c67.1772751689.git.fthain@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Barracuda-Connect: UNKNOWN[10.10.4.126]
+X-Barracuda-Start-Time: 1772814777
+X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
+X-Barracuda-BRTS-Status: 0
+X-Virus-Scanned: by bsmtpd at cybernetics.com
+X-Barracuda-Scan-Msg-Size: 2423
+X-ASG-Debug-ID: 1772814777-1cf43940a6a58f0001-ziuLRu
+X-Rspamd-Queue-Id: ED3D5225510
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[cybernetics.com,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[cybernetics.com:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-21581-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	DKIM_TRACE(0.00)[google.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[vamshigajjela@google.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[cybernetics.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	NEURAL_HAM(-0.00)[-0.949];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-21585-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,mail.gmail.com:mid]
+	FROM_HAS_DN(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tonyb@cybernetics.com,linux-scsi@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.945];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
- or
-
-On Fri, Mar 6, 2026 at 9:19=E2=80=AFAM Peter Wang (=E7=8E=8B=E4=BF=A1=E5=8F=
-=8B) <peter.wang@mediatek.com> wrote:
+On 3/5/26 18:01, Finn Thain wrote:
+> The LKP bot reported a build failure with CONFIG_COLDFIRE=y together with
+> CONFIG_SCSI_QLA_FC=y, that's attributable to the BUILD_BUG_ON() in
+> qlt_queue_unknown_atio().
 >
-> On Thu, 2026-03-05 at 06:07 -0600, Bart Van Assche wrote
-> >
-> > Hi Peter,
-> >
-> > It is not clear to me why the above code is considered confusing?
-> >
-> > UFS controllers are the only storage controllers I know of
-> > that generate different interrupts depending on whether or not
-> > interrupt
-> > aggregation is enabled. All other storage controllers I know of use
-> > the
-> > same completion interrupt whether or not interrupt aggregation is
-> > enabled.
-> >
-> > To me the above code means that whether or not interrupt aggregation
-> > is
-> > enabled, ufshcd_handle_mcq_cq_events() is called to process the
-> > pending
-> > completions.
-> >
-> > Thanks,
-> >
-> > Bart.
+> That function uses kzalloc() to obtain memory for the following struct,
+> plus some extra bytes at the end.
 >
-> Hi Bart,
+> struct qla_tgt_sess_op {
+>         struct scsi_qla_host *vha;
+>         uint32_t chip_reset;
+>         struct work_struct work;
+>         struct list_head cmd_list;
+>         bool aborted;
+>         struct rsp_que *rsp;
 >
-> Sorry, I may not have explained it clearly enough. Normally,
-> the logic is to handle A when receiving A event, and handle B
-> when receiving B event. But now, the code seems to be hnadle A
-> when receiving B event.
-> If not familiar with this hardware logic, it=E2=80=99s easy to
-> misunderstand.
+>         struct atio_from_isp atio;
+>         /* DO NOT ADD ANYTHING ELSE HERE - atio must be last member */
+> };
 >
-> Thanks
-> Peter
+> The location of the 'atio' member is subsequently used as the destination
+> for a memcpy() that's expected to fill in the extra bytes beyond the end
+> of the struct.
+>
+> That explains the loud warning in the comment above, which ought to be
+> sufficient to prevent some newly-added member from accidentally getting
+> clobbered. But, in case that warning was missed somehow, we also have the
+> failing assertion,
+>
+> BUILD_BUG_ON(offsetof(struct qla_tgt_sess_op, atio) + sizeof(u->atio) !=
+>              sizeof(*u));
+>
+> Unfortunately, this size assertion doesn't guarantee that 'atio' is the
+> last member. Indeed, adding a zero-length array member at the end does
+> not increase the struct size.
+>
+> Moreover, this assertion can fail even when 'atio' really is the last
+> member, and that's what happened with commit e428b013d9df ("atomic:
+> specify alignment for atomic_t and atomic64_t"), which added 2 bytes of
+> harmless padding to the end of the struct.
+...
+> I don't know of a good way to encode an invariant like "the last member of
+> struct qla_tgt_sess_op is named atio" such that it might be statically
+> checked. But perhaps there is a good way to do that (?)
 
-Hi Peter and Bart, thanks for the feedback and discussion
+It might work better to add a flex array:
 
-Bart: I agree that renaming the boolean flag to reset_iag improves clarity,
-and I will address this in the next version of the patch
+struct qla_tgt_sess_op {
+	...
 
-Peter:  I understand your concern about the readability when calling
-ufshcd_handle_mcq_cq_events for both the events. As said, either
-MCQ_CQ_EVENT_STATUS or MCQ_IAG_EVENT_STATUS, we are
-essentially handling Completion Queue events. The only extra step in
-the IAG path is clearing the counters/timers.
+	struct atio_from_isp atio;
+	/*
+	atio.u.isp24.fcp_cmnd.add_cdb may extend past end of atio;
+	DO NOT DELETE; DO NOT ADD ANYTHING ELSE HERE.
+	*/
+	uint8_t atio_isp24_fcp_cmnd_add_cdb[];
+};
 
-Sticking to ufshcd_handle_mcq_cq_events and adding the agreed-upon
-descriptive argument reset_iag should help the readability IMO.
+/* atio_isp24_fcp_cmnd_add_cdb must come immediately after atio */
+BUILD_BUG_ON(offsetof(struct qla_tgt_sess_op, atio) +
+             sizeof(struct atio_from_isp) !=
+             offsetof(struct qla_tgt_sess_op, atio_isp24_fcp_cmnd_add_cdb));
 
-Do you think a more detailed comments right before those two function
-calls would be beneficial?
-
-Regards,
-Vamshi G.
+Tony Battersby
 
