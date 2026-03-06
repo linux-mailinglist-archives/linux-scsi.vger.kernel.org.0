@@ -1,63 +1,63 @@
-Return-Path: <linux-scsi+bounces-21573-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21571-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EPRbO0jYqmnmXgEAu9opvQ
-	(envelope-from <linux-scsi+bounces-21573-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 14:36:08 +0100
+	id aD0PD3PZqmnmXgEAu9opvQ
+	(envelope-from <linux-scsi+bounces-21571-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 14:41:07 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B14A7221C91
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 14:36:08 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3C5A221EC2
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 14:41:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2CAE430DB189
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2026 13:28:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 06D9731CC99C
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2026 13:28:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5325239C628;
-	Fri,  6 Mar 2026 13:28:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7743739E6F3;
+	Fri,  6 Mar 2026 13:27:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="YWnHIjrB"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="J9rc1v3N"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF8F3A0EBF;
-	Fri,  6 Mar 2026 13:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1158739C64C;
+	Fri,  6 Mar 2026 13:27:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772803685; cv=pass; b=DXd/f0q4ncBBjLbruhjcBw8IYG8IrNJswRvq+SySKhwdBETsz6C4TWMN2IQYUlJKfjI0htP1I6AQBIBRDWhRZiyt6r7iV6dkVHNVeySeCZilJ5IcPP1piwT8d3o0qVTjFxI+wF/zD/Yl8tz9Qh1yfpLDxEAcSARM48guORTIFe0=
+	t=1772803676; cv=pass; b=aKNUeia9bmhNlh5OTPQarOnZsrQlHjvtwYf7MwNk9Rg4DrMs3B45TA0AWNuQa0UaK+8J12McSZ9CoP2c2BPHIgmZklmHOmxZFNbK95GDFrmXeaWA7/Xfsq02rhHfPWMbCJAfqdspRYBs8linglCdwoT/LU3BBzyVS2jogpgmfJU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772803685; c=relaxed/simple;
-	bh=RiUoOoscMB6JIhHljdCIS4+vWOUgz5MkSHFfJZV611E=;
+	s=arc-20240116; t=1772803676; c=relaxed/simple;
+	bh=Cz4dcQFlns3VcmmTD4S7DSKiIEs7T8ImNRB4+hCK9d8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P/WXk5+nT2zPDXw86lN5U1vFmBYZMgDoxhidFk5wBovd8fQN74sNFuisR+ulk3hoqZBY/rvh6wrzzfaHoGkG5oeykh+YGK20+CpYUIeXJW93DmET9otJXNs78TUCUKQlTLm0v4s+pY5G1p8XC8oqOV4m+NLZrXr7mFqoSbe6bKo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=YWnHIjrB; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=ZnPFb3YKFRRwkTGLJi5PGtzSxC93PZU9rSAtQRhAuSmUDhAzC5W0IEO4K1pYzQ4ypwfEwwDpjIxJ1nqBm8xCFQimzXkm96ORYDKj+lE/PFKSiLVTxdMLN8NjxYPIpBAK3NfYz+1RPmzDXEgzSNqi2I3sWZgq/LP9pGrtHJ1oSEQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=J9rc1v3N; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1772803628; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1772803634; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=b+2T+E3pBdHAcaTERaqKvcaSqY7yg2FLPiCMTpoffB3USLW499Ox90fXyzVSmO04xxgjaieUXyzIcSxQZOdrFRxc7QkXEISL9R0pwp0080GqGvfdaB7kFaCYl5+sJOKYT3YIeG/v5xVJZgbAioHxA6tg764dRABvNrZ4AH+64B0=
+	b=RM8FmPZ0an9ClIy9+fdKjiHbQbosb61cmebxa0KrEgpRaMBL5hj9SvNGpZjJKcYNeMGzVsuKjvWe0G2ooQYmaodabaXZuy1f1KtIDckjviaFHvlbg39OEal8YFOT/p32T3xTlOLxedSyubxfTPoyGIyxuBVdIBS26QB9cStoI+g=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1772803628; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=vHGev/SVJHjtM5KJlxdcEOTZoj6KMMDvqCC47rp4HM0=; 
-	b=lOllQD+nUl534GajLJG4I2NvzitjCjtaaZNp3sjRsqGyp71lj93XC2I3eF7QrbXbXOBy85IdqfmM9Txp2bGsI+0SQPwFmp4YqNVsv+lXQxviTDmVro1x8NosufNNrA8XbL7VzRF4zTmDTdFOc2XZbwaK69SP9pjoBN4QyrmNp4g=
+	t=1772803634; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=moRuN0w2NC5jTkrD1uaa7csSkun/1arTKV+2+61wd5k=; 
+	b=fQ1JUxLde90SII3OWelge1km9GEIVh/xDyVAOY+1AoD2K8v5Po9/AkBwLF9hFFsSb3lM/kJAmsQJJKm66sPDL0e5fd9+0mc3kV55zWFcI6d1L34gYgMtY6lwTiPX4jhpz98rJCrxQaQxzdHJU37sc94A2gg0gEh1Au7u6e1sIu8=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1772803628;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1772803633;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=vHGev/SVJHjtM5KJlxdcEOTZoj6KMMDvqCC47rp4HM0=;
-	b=YWnHIjrBeM9MpqXxZWyFswF7+EvZWWjF2/GX7ylbPAC+8CR8K0U7hA8LfqdcryZp
-	qBEK5ImjP05WQKA+clNzw8Bv6VzVTpsEDB59thUl9IzqkHAPYE9H5f+e6Kx7zTrWidZ
-	B0R6M1wquZmiJ0iUylioZDD5jDcNYnJkGX63elGY=
-Received: by mx.zohomail.com with SMTPS id 1772803626023697.5615829679394;
-	Fri, 6 Mar 2026 05:27:06 -0800 (PST)
+	bh=moRuN0w2NC5jTkrD1uaa7csSkun/1arTKV+2+61wd5k=;
+	b=J9rc1v3N5pL/YSZJcb1M0O5UYbq5jROop1ymZYJkVkP+vKSeTegrwJfbdWL5QM9k
+	cXQC87jaUl60yix2XHL/A7fNMHWnGHluhDvLVq8uS6nh9I1OnfGMClOypqFe9E0/xgQ
+	+ouLrzAEKXfl/KtvXIRBFCkV6nq+Auo/AlNNT2/Q=
+Received: by mx.zohomail.com with SMTPS id 1772803631706599.5015520021933;
+	Fri, 6 Mar 2026 05:27:11 -0800 (PST)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Fri, 06 Mar 2026 14:25:01 +0100
-Subject: [PATCH v9 20/23] scsi: ufs: mediatek: Back up idle timer in
- per-instance struct
+Date: Fri, 06 Mar 2026 14:25:02 +0100
+Subject: [PATCH v9 21/23] scsi: ufs: mediatek: Remove ret local from
+ link_startup_notify
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260306-mt8196-ufs-v9-20-55b073f7a830@collabora.com>
+Message-Id: <20260306-mt8196-ufs-v9-21-55b073f7a830@collabora.com>
 References: <20260306-mt8196-ufs-v9-0-55b073f7a830@collabora.com>
 In-Reply-To: <20260306-mt8196-ufs-v9-0-55b073f7a830@collabora.com>
 To: Alim Akhtar <alim.akhtar@samsung.com>, 
@@ -90,19 +90,19 @@ Cc: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
  linux-phy@lists.infradead.org, 
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.3
-X-Rspamd-Queue-Id: B14A7221C91
+X-Rspamd-Queue-Id: B3C5A221EC2
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
 	R_DKIM_ALLOW(-0.20)[collabora.com:s=zohomail];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21573-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21571-lists,linux-scsi=lfdr.de];
 	FREEMAIL_TO(0.00)[samsung.com,wdc.com,acm.org,kernel.org,gmail.com,collabora.com,mediatek.com,HansenPartnership.com,oracle.com,pengutronix.de,linaro.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
@@ -117,62 +117,45 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-scsi,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[collabora.com:dkim,collabora.com:email,collabora.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,mediatek.com:email,collabora.com:dkim,collabora.com:email,collabora.com:mid]
 X-Rspamd-Action: no action
 
-The MediaTek UFS driver uses a function-scope static variable to back up
-a hardware register across a power change in the
-ufs_mtk_pwr_change_notify function. This is dangerous, as it's only
-correct if only ever one instance of the driver is loaded, which isn't
-true if there's more than one device on a SoC that needs it, or it
-otherwise gets loaded a second time.
+Remove the "ret" local variable from ufs_mtk_link_startup_notify, as
+it's pointless; in all cases it is assigned, it is returned right after
+without being read first.
 
-Back it up into a member of the host struct instead, as this struct is
-per-instance. Rework the function to not use a pointless "ret" local as
-well.
+Rework the code to just return directly, and get rid of the default
+branch while at it.
 
-Fixes: f5ca8d0c7a63 ("scsi: ufs: host: mediatek: Disable auto-hibern8 during power mode changes")
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 20 ++++++++------------
- drivers/ufs/host/ufs-mediatek.h |  1 +
- 2 files changed, 9 insertions(+), 12 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index c4e70fb99e82..2198271a269a 100644
+index 2198271a269a..ae6735683f76 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1398,28 +1398,24 @@ static int ufs_mtk_pwr_change_notify(struct ufs_hba *hba,
- 				const struct ufs_pa_layer_attr *dev_max_params,
- 				struct ufs_pa_layer_attr *dev_req_params)
+@@ -1500,21 +1500,15 @@ static void ufs_mtk_post_link(struct ufs_hba *hba)
+ static int ufs_mtk_link_startup_notify(struct ufs_hba *hba,
+ 				       enum ufs_notify_change_status stage)
  {
 -	int ret = 0;
--	static u32 reg;
-+	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
- 
+-
  	switch (stage) {
  	case PRE_CHANGE:
- 		if (ufshcd_is_auto_hibern8_supported(hba)) {
--			reg = ufshcd_readl(hba, REG_AUTO_HIBERNATE_IDLE_TIMER);
-+			host->ahit = ufshcd_readl(
-+				hba, REG_AUTO_HIBERNATE_IDLE_TIMER);
- 			ufs_mtk_auto_hibern8_disable(hba);
- 		}
--		ret = ufs_mtk_pre_pwr_change(hba, dev_max_params,
--					     dev_req_params);
+-		ret = ufs_mtk_pre_link(hba);
 -		break;
-+		return ufs_mtk_pre_pwr_change(hba, dev_max_params, dev_req_params);
++		return ufs_mtk_pre_link(hba);
  	case POST_CHANGE:
- 		if (ufshcd_is_auto_hibern8_supported(hba))
--			ufshcd_writel(hba, reg, REG_AUTO_HIBERNATE_IDLE_TIMER);
+ 		ufs_mtk_post_link(hba);
 -		break;
 -	default:
 -		ret = -EINVAL;
 -		break;
-+			ufshcd_writel(hba, host->ahit,
-+				      REG_AUTO_HIBERNATE_IDLE_TIMER);
 +		return 0;
  	}
  
@@ -180,19 +163,7 @@ index c4e70fb99e82..2198271a269a 100644
 +	return -EINVAL;
  }
  
- static int ufs_mtk_unipro_set_lpm(struct ufs_hba *hba, bool lpm)
-diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
-index fa27ab4d6d6c..2349d9b9375c 100644
---- a/drivers/ufs/host/ufs-mediatek.h
-+++ b/drivers/ufs/host/ufs-mediatek.h
-@@ -187,6 +187,7 @@ struct ufs_mtk_host {
- 	u16 ref_clk_gating_wait_us;
- 	u32 ip_ver;
- 	bool legacy_ip_ver;
-+	u32 ahit;
- 
- 	bool mcq_set_intr;
- 	bool is_mcq_intr_enabled;
+ static int ufs_mtk_device_reset(struct ufs_hba *hba)
 
 -- 
 2.53.0
