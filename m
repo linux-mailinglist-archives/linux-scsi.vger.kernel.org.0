@@ -1,66 +1,66 @@
-Return-Path: <linux-scsi+bounces-21529-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21528-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4DzCAqQ5qmnUNQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-21529-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 03:19:16 +0100
+	id 0Iw+LRQ5qmnUNQEAu9opvQ
+	(envelope-from <linux-scsi+bounces-21528-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 03:16:52 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 016F221A8AA
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 03:19:14 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FFB621A84E
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 03:16:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 17552300C7E4
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2026 02:19:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2BA77302418E
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2026 02:16:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD0FD331A5E;
-	Fri,  6 Mar 2026 02:19:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D5D532E68F;
+	Fri,  6 Mar 2026 02:16:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="JVocAbDc"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="Fmb6MmUO"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7242E2FD1B6;
-	Fri,  6 Mar 2026 02:19:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1CD2C237C;
+	Fri,  6 Mar 2026 02:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772763550; cv=none; b=GC0vGlx+tO8wBks80zjn2T82X9L6N/WLecoeVoVR7w210KdwDCgE2r6SBlNqqMyUuVH1CDkYwBAc8m8v2GaPTK4T/+Iyr7qVRlm+gZCWfhOe86hyevnT81yH3bDOgO8FXnLAoYSulDuUqEx8waD6brSqwkHDksj9InkCz33504Y=
+	t=1772763408; cv=none; b=F2v0CLcKwQZVRlanEBj3KSKlV0YVKm0gk+DQpHPzf4ynIP/9yDgK9zTbJ2oi0xM2du1ucGvcR8nxgL6dxvRKlLYUOCeGJ0fNfWqRgQkYcsbmLzgytoEifxZgzdFGJaqynp6FZusb0BfhrUXBCzoPw8OFyjFiDNwYzH5xIgPluEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772763550; c=relaxed/simple;
-	bh=QQzhNc04McOCTp4ZWH0zZtCOyhhtw3rBPEi5ryyYZDs=;
+	s=arc-20240116; t=1772763408; c=relaxed/simple;
+	bh=TgGMYh2DP+ijYv+4mXIdHZZry/vv5D3g9hz3pz4gUUg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SW+pCDbjS0yea4cL925nEWOTcQw1V6QltqUcRu5nv216wqjahf1S0wCP9oyM3XW11TdOP+WahZZ+S+b2goyR4ICj4fr8g6nzzL+MlgBM/+7NWGtNz5Xc89JBS+o89EULjG90IkwJwHUqTK89FmUODxo6KExhBCjW4hQMy31F2ZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=JVocAbDc; arc=none smtp.client-ip=199.89.1.14
+	 In-Reply-To:Content-Type; b=Nbnf4v4liHXeq3QfnAHs+GbGsMIGGXAtHhH8op1UqlZXMrG+pQALBpyJJ5QVJAO5KLtmelOPzi06wXLH1k999hiqG9sgw/YcIP8PvUQ7muR0UiHojMPlTHDukCotxFKGIrjTyA+A52f35i+rS9yiSN45M8SaeQYiMZFMH0qwCy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=Fmb6MmUO; arc=none smtp.client-ip=199.89.1.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4fRqkq3gjdz1XLyhj;
-	Fri,  6 Mar 2026 02:15:47 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fRqlz0NRJzlh1TC;
+	Fri,  6 Mar 2026 02:16:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:content-type:content-type:in-reply-to
 	:from:from:content-language:references:subject:subject
 	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1772763341; x=1775355342; bh=QQzhNc04McOCTp4ZWH0zZtCO
-	yhhtw3rBPEi5ryyYZDs=; b=JVocAbDcPCawaLdZUbGJ/JA5LZXFqCklWhrTCayZ
-	+PFOMpYsRetddtYRypn1ESePaMZTi6OD+Z1i7/xXGEzOBZxYwfWsAmsaj5CGwgRY
-	xhnTN37ra7EojpmRd5/rhEXtFSSIqw35jTrvhFtZwHIXmhf5MvhYZqldLW45B6n5
-	/ommnXVv+teANBYAKlJh79scM91RgXGVAwuNegFiAuoIhfJMD02uTPocuOAsDvqe
-	Msoqjo8A7nHcIu1CM4UAaSM4Dmd+LzYxgOxCc/yUe8a+BJO50HArwpMuVl5a/OZN
-	q3/Aiwori8z5C7rpzcHsEk3C5syk0Uc+rfUfqSGQEjF0BQ==
+	 s=mr01; t=1772763403; x=1775355404; bh=TgGMYh2DP+ijYv+4mXIdHZZr
+	y/vv5D3g9hz3pz4gUUg=; b=Fmb6MmUO9RTAb/zAArlRKoTXh9EVLjQQzSsAWOQX
+	hslDxghfplk0YRi2ns3vbTRjmbfnlpQ0LTJ4v6vGFvOy4/3BTRybHKm6AKIOqltW
+	RtXPOJIerQqy0HkY4hdpNGvXK1c41t20+3Hc9HHM1EA03h1Xgya7FPx9+qAY5Krb
+	Ux/78eLp4OSGk14UMrsd3p8Y+VEY/NPhnJ8RQa9c/XmvXE2gcFBrXRTDwRQ+Hbh/
+	xzqDxnhzm3ixaVNOJ/sTzdMbTudP9sd/takMpHJRuXozGZiOdW+W4bcLykgRFMIE
+	KirPeiOul0KqYwrY3r6+YlIcGWyony6nwL7/+qKDvOWN/g==
 X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id XSnpNyjx8kaO; Fri,  6 Mar 2026 02:15:41 +0000 (UTC)
+Received: from 013.lax.mailroute.net ([127.0.0.1])
+ by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id OMO8-5YPHm93; Fri,  6 Mar 2026 02:16:43 +0000 (UTC)
 Received: from [192.168.132.187] (unknown [12.150.89.26])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4fRqkf112nz1XLyhh;
-	Fri,  6 Mar 2026 02:15:37 +0000 (UTC)
-Message-ID: <0c793e57-ee29-4322-8cf9-0a4a859b9981@acm.org>
-Date: Thu, 5 Mar 2026 20:15:36 -0600
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fRqlr0VCrzlh1TF;
+	Fri,  6 Mar 2026 02:16:39 +0000 (UTC)
+Message-ID: <fee27e1f-ce3f-4a32-9eb1-4b97f6cde0fc@acm.org>
+Date: Thu, 5 Mar 2026 20:16:38 -0600
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -69,92 +69,59 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/2] ufs: core: Add quriks for VCC ramp-up delay
-To: =?UTF-8?B?RWQgVHNhaSAo6JSh5a6X6LuSKQ==?= <Ed.Tsai@mediatek.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- "James.Bottomley@HansenPartnership.com"
- <James.Bottomley@HansenPartnership.com>,
- "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
- "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
- "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
- "avri.altman@wdc.com" <avri.altman@wdc.com>
-Cc: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
- =?UTF-8?B?Q2h1bi1IdW5nIFd1ICjlt6vpp7/lro8p?= <Chun-hung.Wu@mediatek.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- =?UTF-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= <peter.wang@mediatek.com>
+To: ed.tsai@mediatek.com, Alim Akhtar <alim.akhtar@samsung.com>,
+ Avri Altman <avri.altman@wdc.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
 References: <20260305083610.2672344-1-ed.tsai@mediatek.com>
  <20260305083610.2672344-2-ed.tsai@mediatek.com>
- <fd1fb573-6d02-433e-a74a-1a015c64e3be@acm.org>
- <0e812b2b96603f69467b57ae6e9836ef8b4bd1ff.camel@mediatek.com>
 Content-Language: en-US
 From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <0e812b2b96603f69467b57ae6e9836ef8b4bd1ff.camel@mediatek.com>
+In-Reply-To: <20260305083610.2672344-2-ed.tsai@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 016F221A8AA
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 2FFB621A84E
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21529-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FREEMAIL_TO(0.00)[mediatek.com,collabora.com,HansenPartnership.com,gmail.com,samsung.com,oracle.com,wdc.com];
-	RCPT_COUNT_TWELVE(0.00)[13];
+	FREEMAIL_TO(0.00)[mediatek.com,samsung.com,wdc.com,HansenPartnership.com,oracle.com,gmail.com,collabora.com];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-21528-lists,linux-scsi=lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[acm.org:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,acm.org:dkim,acm.org:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,mediatek.com:email,acm.org:dkim,acm.org:email,acm.org:mid]
 X-Rspamd-Action: no action
 
-On 3/5/26 6:19 PM, Ed Tsai (=E8=94=A1=E5=AE=97=E8=BB=92) wrote:
-> On Thu, 2026-03-05 at 06:24 -0600, Bart Van Assche wrote:
->> On 3/5/26 2:29 AM, ed.tsai@mediatek.com=C2=A0wrote:
->>> +=C2=A0=C2=A0=C2=A0=C2=A0 /*
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * On platforms with a slow VCC ramp-u=
-p, a delay is needed
->>> after
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * turning on VCC to ensure the voltag=
-e is stable before the
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * reference clock is enabled.
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->>> +=C2=A0=C2=A0=C2=A0=C2=A0 if (hba->quirks & UFSHCD_QUIRK_VCC_ON_DELAY=
- && !ret && vcc_on
->>> &&
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 hba->vreg_info.vcc =
-&& !hba->vreg_info.vcc->always_on)
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 usleep_range(1000, 1100);
->>
->> Since the value of the delay is platform-dependent, has it been
->> considered to introduce a new vendor operation (vop)?
->
-> A vop does feel a bit heavyweight for a simple sleep. How about we add
-> a new configurable variable, similar to the approach used for the VCC
-> off delay?
+On 3/5/26 2:29 AM, ed.tsai@mediatek.com wrote:
+> On some platforms, the VCC regulator has a slow ramp-up time. Add a
+> delay after enabling VCC to ensure voltage has fully stabilized before
+> we enable the clocks.
 
-Let's postpone introducing such a configuration variable until there is
-a real need for such a configuration variable.
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
-Bart.
 
