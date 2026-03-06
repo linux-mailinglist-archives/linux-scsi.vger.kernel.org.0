@@ -1,127 +1,114 @@
-Return-Path: <linux-scsi+bounces-21528-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21530-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0Iw+LRQ5qmnUNQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-21528-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 03:16:52 +0100
+	id gPM9F2pAqmnGNwEAu9opvQ
+	(envelope-from <linux-scsi+bounces-21530-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 03:48:10 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FFB621A84E
-	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 03:16:52 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB5C421AB94
+	for <lists+linux-scsi@lfdr.de>; Fri, 06 Mar 2026 03:48:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2BA77302418E
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2026 02:16:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C8C373047015
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2026 02:47:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D5D532E68F;
-	Fri,  6 Mar 2026 02:16:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 255E935E93E;
+	Fri,  6 Mar 2026 02:47:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="Fmb6MmUO"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="qUPRU+T5"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1CD2C237C;
-	Fri,  6 Mar 2026 02:16:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E072833E363;
+	Fri,  6 Mar 2026 02:47:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772763408; cv=none; b=F2v0CLcKwQZVRlanEBj3KSKlV0YVKm0gk+DQpHPzf4ynIP/9yDgK9zTbJ2oi0xM2du1ucGvcR8nxgL6dxvRKlLYUOCeGJ0fNfWqRgQkYcsbmLzgytoEifxZgzdFGJaqynp6FZusb0BfhrUXBCzoPw8OFyjFiDNwYzH5xIgPluEg=
+	t=1772765252; cv=none; b=FCJFY6zkvOmXAcA+1Bk22EqDlE6Bd73ke7iZV4NMZAeNQdC+YkzrJodiUC2PohOsO7mIQ2LaoFploJfiFMfuekan1kqyRk5Ioulb1PCwWbDxIeVyAKyIil/s3unSlma5L484el0HXpoIauqeNB0kAF7k2MUcI4grfJCH8vQXpqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772763408; c=relaxed/simple;
-	bh=TgGMYh2DP+ijYv+4mXIdHZZry/vv5D3g9hz3pz4gUUg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nbnf4v4liHXeq3QfnAHs+GbGsMIGGXAtHhH8op1UqlZXMrG+pQALBpyJJ5QVJAO5KLtmelOPzi06wXLH1k999hiqG9sgw/YcIP8PvUQ7muR0UiHojMPlTHDukCotxFKGIrjTyA+A52f35i+rS9yiSN45M8SaeQYiMZFMH0qwCy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=Fmb6MmUO; arc=none smtp.client-ip=199.89.1.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fRqlz0NRJzlh1TC;
-	Fri,  6 Mar 2026 02:16:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1772763403; x=1775355404; bh=TgGMYh2DP+ijYv+4mXIdHZZr
-	y/vv5D3g9hz3pz4gUUg=; b=Fmb6MmUO9RTAb/zAArlRKoTXh9EVLjQQzSsAWOQX
-	hslDxghfplk0YRi2ns3vbTRjmbfnlpQ0LTJ4v6vGFvOy4/3BTRybHKm6AKIOqltW
-	RtXPOJIerQqy0HkY4hdpNGvXK1c41t20+3Hc9HHM1EA03h1Xgya7FPx9+qAY5Krb
-	Ux/78eLp4OSGk14UMrsd3p8Y+VEY/NPhnJ8RQa9c/XmvXE2gcFBrXRTDwRQ+Hbh/
-	xzqDxnhzm3ixaVNOJ/sTzdMbTudP9sd/takMpHJRuXozGZiOdW+W4bcLykgRFMIE
-	KirPeiOul0KqYwrY3r6+YlIcGWyony6nwL7/+qKDvOWN/g==
-X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id OMO8-5YPHm93; Fri,  6 Mar 2026 02:16:43 +0000 (UTC)
-Received: from [192.168.132.187] (unknown [12.150.89.26])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fRqlr0VCrzlh1TF;
-	Fri,  6 Mar 2026 02:16:39 +0000 (UTC)
-Message-ID: <fee27e1f-ce3f-4a32-9eb1-4b97f6cde0fc@acm.org>
-Date: Thu, 5 Mar 2026 20:16:38 -0600
+	s=arc-20240116; t=1772765252; c=relaxed/simple;
+	bh=ss1qzT2zGltopR2HmNiT0A8layIVs3at5mlgB6wi2U4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=TKF6uoaIq7bsC/OBDD/a+LWocWeZZdATRSz0q7E34xp9IqOOPJLQwq/j4PdHzW/4cYr9EW5K1QoSEYgADu9ZbpSe82mpfmRA9W0eLv3mc0a5xctZyGkZ/wLxIDmdC1sAFYMdnHlyTPi8XCbV2pH91o99dCO2UhPGwKlgexLCSGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=qUPRU+T5; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=ss
+	1qzT2zGltopR2HmNiT0A8layIVs3at5mlgB6wi2U4=; b=qUPRU+T5lBV8hRVgez
+	S4iAmjixh3FqBZ1l4bfhzxeJDzLpICg8CpxGonEE3VIp5u53jenTVFBNGa07CCrr
+	eExwnkbX+9WHE+o0rZTlEo5x0WY4FOVkohhgZuAVnP5c9n4ONFsRy97qyXZ/XZ4s
+	cr4MhMD3rt3OEOkr8+tn1jwnM=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wDXPv0DQKppel3WPQ--.833S2;
+	Fri, 06 Mar 2026 10:46:29 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: bvanassche@acm.org
+Cc: fujita.tomonori@lab.ntt.co.jp,
+	axboe@kernel.dk,
+	James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com,
+	yangxiuwei@kylinos.cn,
+	linux-scsi@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/3] bsg: add io_uring command support for SCSI passthrough
+Date: Fri,  6 Mar 2026 10:46:27 +0800
+Message-Id: <20260306024627.58267-1-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <3ce6f611-330c-4705-9842-f85eb9a13556@acm.org>
+References: <3ce6f611-330c-4705-9842-f85eb9a13556@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] ufs: core: Add quriks for VCC ramp-up delay
-To: ed.tsai@mediatek.com, Alim Akhtar <alim.akhtar@samsung.com>,
- Avri Altman <avri.altman@wdc.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-References: <20260305083610.2672344-1-ed.tsai@mediatek.com>
- <20260305083610.2672344-2-ed.tsai@mediatek.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260305083610.2672344-2-ed.tsai@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 2FFB621A84E
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDXPv0DQKppel3WPQ--.833S2
+X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUo38eUUUUU
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6QUWpmmqQAW72wAA36
+X-Rspamd-Queue-Id: AB5C421AB94
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[mediatek.com,samsung.com,wdc.com,HansenPartnership.com,oracle.com,gmail.com,collabora.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-21528-lists,linux-scsi=lfdr.de];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-21530-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[acm.org:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_COUNT_THREE(0.00)[4];
+	DMARC_NA(0.00)[kylinos.cn];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[163.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_NONE(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MIME_TRACE(0.00)[0:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,mediatek.com:email,acm.org:dkim,acm.org:email,acm.org:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On 3/5/26 2:29 AM, ed.tsai@mediatek.com wrote:
-> On some platforms, the VCC regulator has a slow ramp-up time. Add a
-> delay after enabling VCC to ensure voltage has fully stabilized before
-> we enable the clocks.
+On 2026-03-05 15:12, Bart Van Assche wrote:
+> Please send a new version of a patch series as a new email thread.
+> Otherwise the new version may get overlooked.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Thanks for the reminder. I'll send v7 as a new thread.
+
+Best regards,
+Yang Xiuwei
 
 
