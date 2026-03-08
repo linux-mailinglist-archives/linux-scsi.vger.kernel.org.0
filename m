@@ -1,84 +1,81 @@
-Return-Path: <linux-scsi+bounces-21616-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21614-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cG2iL0uTrWlH4gEAu9opvQ
-	(envelope-from <linux-scsi+bounces-21616-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sun, 08 Mar 2026 16:18:35 +0100
+	id iNKsIASTrWlH4gEAu9opvQ
+	(envelope-from <linux-scsi+bounces-21614-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sun, 08 Mar 2026 16:17:24 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C48F230E8B
-	for <lists+linux-scsi@lfdr.de>; Sun, 08 Mar 2026 16:18:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D826B230E6D
+	for <lists+linux-scsi@lfdr.de>; Sun, 08 Mar 2026 16:17:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9B309305BA96
-	for <lists+linux-scsi@lfdr.de>; Sun,  8 Mar 2026 15:15:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 012793047511
+	for <lists+linux-scsi@lfdr.de>; Sun,  8 Mar 2026 15:15:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1BA129BD91;
-	Sun,  8 Mar 2026 15:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8834127F00A;
+	Sun,  8 Mar 2026 15:15:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="SGm0LjuF"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Ji2ngwPs"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED76E27F00A;
-	Sun,  8 Mar 2026 15:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8EE26056C;
+	Sun,  8 Mar 2026 15:15:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772982923; cv=none; b=d5aP1p4yT8aLBp31gZZMc/Hh8dFfR6/33hb6FXrswlbz/QNpuilAYmwSYBke0QnCVOTZpj3fRf2feYi8zs7Zz9Q+wL6cxbFKNNfxHL7kIJ9V5jvgVynbLgttyrSHm2yilYfFwYfe0IlYs/83OP1vZewYPl8NNyEo8O7rpolBems=
+	t=1772982918; cv=none; b=EcwiUwcf3+M46rt3cz88ecm2N2X20j/JiBS6ZPS8aNY7Cqyr4NTQUENqR9ssMkmym1cD+zbOEsN68v23MoVxErTcYZUnoZM3w2vFxa40Bp+iUR25nCs9shDGEGXgJz4b9iTyy25Y/ngF6Ycm4LmGwu9JSDwz53XOi/VA1/918NU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772982923; c=relaxed/simple;
-	bh=dTNDo8dbjiHZE4ZBOcBGmYUa4Wv6j7z0Wjd9YlxX3Sg=;
+	s=arc-20240116; t=1772982918; c=relaxed/simple;
+	bh=6U1ByCKD0RiIPAsh2xWbwFNVuLnQSeRg/n/1ImYGAPA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fIKsX2lsOTg45rRON1q9Z7mMJjvQBsuZY2ejPcEnqGje8CBK0PEHqcEIg14tQZxGSI2bi+ov7ho+AslDJeO+8PyRcN+N50cr2UK2wEG3m/xAFJQLZaFG3YhdQr6JCMN0Y2PfuilvtHB6smxzRmfuUYpl52bPM8wHHiT0Pz9d2ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=SGm0LjuF; arc=none smtp.client-ip=205.220.180.131
+	 MIME-Version; b=HkejzrAUQXf2SnqvZe8LFwjrWG8F+uBWmgXka6yOmVfIytrp7tb79vmnhT4/W52xo2J2kee6hF/fNEJpXEw9e+o374t9XBty6Yrwn8+SGn2sWPuO76wZptKrE7/ML6rtc4uUEmUcNHDXRCkK+5fWa62hCzp2m/oLAIpHpjtTwEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Ji2ngwPs; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
 Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 628CT6dX1756853;
-	Sun, 8 Mar 2026 15:15:06 GMT
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 628CKc2l1741546;
+	Sun, 8 Mar 2026 15:15:08 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=XiQlo4Zej0x
-	ooEE/mrRzIQ9CRxVeOMDTZJG35Q9y2I4=; b=SGm0LjuFVobeid+1mHEQZmMqKpL
-	njjkRQDlcIQipKZCEp7yZTFSgRXu+oOpTcZ9ijPb4UMovUEvKnUcUTszaPLB4KAQ
-	If36vrhWIBJ1smkk6mn1I1P7cYgE7AwH+l1lsfhKfY288LgFRMsCNzxTKvQXV6tU
-	hVse8tQIT2MxmEJMvBWGFis+I3FEUdi1VCxlQRWgisi5EfaioAIfosXeU+tT+dgD
-	Rh+wS0xrnvmyfzehhjtiPfR3b41BrJWXouohlnuYs6Ck0HYqfQ/7GOUPScS//WEE
-	0mtEaOuFwHcoWayO2oF6zA77KOlZiBxd+VmTqIMMKPeVMNjGYXmkz2I8ZtQ==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4crbkxtrm8-1
+	:mime-version:references:subject:to; s=qcppdkim1; bh=A7acaMLlZXp
+	3ba/EbwhQt7QTT1yPPYCXBLizvNPc1Io=; b=Ji2ngwPs6OAiGsqTYDSkGbqYlPJ
+	pAbSgkLDLTh/GKQH57KyB2RbecPmSflX6nY2aLr0IHSZ7Ef+W4BK4OJKTzBP39Cn
+	Obc925jswVPZEiIiXWJ8Mad9RPKZVMguwCbXJ6k8y+0RnPlurFmvHKY7zC7SI33y
+	13pMZB9ipRZ7u94dKzwLW38E61rjHtVLL4OWIh3IlUuxEHl4gdzHI7RPBiJY9ICd
+	/H2aEgb9TvdNFejBdB9ST1c1qonwShzjC3ChQuqLEOBHKgKOPoo/6xgUNIHYsQX+
+	89dsJjkW1v+w0IEXqmiFZx23xNNdGPzQIOQPfJqFORlfXAujAz85e6jkrig==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4crbkxtrma-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 08 Mar 2026 15:15:06 +0000 (GMT)
-Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 628FF5QF029820;
-	Sun, 8 Mar 2026 15:15:05 GMT
+	Sun, 08 Mar 2026 15:15:07 +0000 (GMT)
+Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 628FF6tc021205;
+	Sun, 8 Mar 2026 15:15:06 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 4crd3mjvfp-1
+	by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 4crd45jvf8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 08 Mar 2026 15:15:05 +0000
-Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 628FF4Tq029810;
-	Sun, 8 Mar 2026 15:15:04 GMT
+	Sun, 08 Mar 2026 15:15:06 +0000
+Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 628FF6wu021189;
+	Sun, 8 Mar 2026 15:15:06 GMT
 Received: from hu-devc-lv-u22-c.qualcomm.com (hu-cang-lv.qualcomm.com [10.81.25.255])
-	by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 628FF4AZ029807
+	by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 628FF6DV021186
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 08 Mar 2026 15:15:04 +0000
+	Sun, 08 Mar 2026 15:15:06 +0000
 Received: by hu-devc-lv-u22-c.qualcomm.com (Postfix, from userid 359480)
-	id 9DCC65A4; Sun,  8 Mar 2026 08:15:04 -0700 (PDT)
+	id 5B3FF5A4; Sun,  8 Mar 2026 08:15:06 -0700 (PDT)
 From: Can Guo <can.guo@oss.qualcomm.com>
 To: avri.altman@wdc.com, bvanassche@acm.org, beanhuo@micron.com,
         martin.petersen@oracle.com, mani@kernel.org
 Cc: linux-scsi@vger.kernel.org, Can Guo <can.guo@oss.qualcomm.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
         "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-arm-msm@vger.kernel.org (open list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER...),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 07/12] scsi: ufs: core: Add support to refresh TX Equalization via debugfs
-Date: Sun,  8 Mar 2026 08:14:04 -0700
-Message-Id: <20260308151409.3779137-8-can.guo@oss.qualcomm.com>
+Subject: [PATCH v3 08/12] scsi: ufs: ufs-qcom: Fixup PAM-4 TX L0_L1_L2_L3 adaptation pattern length
+Date: Sun,  8 Mar 2026 08:14:05 -0700
+Message-Id: <20260308151409.3779137-9-can.guo@oss.qualcomm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260308151409.3779137-1-can.guo@oss.qualcomm.com>
 References: <20260308151409.3779137-1-can.guo@oss.qualcomm.com>
@@ -93,20 +90,21 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA4MDE0MCBTYWx0ZWRfX8GNgeuObT3V4
- BcAXCLs2XjaAWJAmKTDVyhx4kDZ5tvVWrEfnMP3vt4t9vdd8l7i4qpz8SlIDOlzjWrD98NC935p
- cCSuL5RlcK8FTPnrsD5tPm82aA/RUVQwGqwbW1nProweX+4Z9ve8jLD6Gvq4zhruooNlmPBBTiu
- CL7OASoIDkATtgpr5muq9SvAIu6GFIoszloFAAovLXl/sSTa+w0mzdKYsbl4q0jSOqHUlKit98j
- b/fIhqFkIOeyrOa5B8GkdA3TBwhCvUdkRaluV8hpb5cFqXHXWALgF1JdEc+xhAOocGUVOoxg+SP
- WI1MQ9BASdkKQq17E0xvP23tNI57HlXe+ifMlpcLa0VknYHwK/WaRd5eOW4+ClZKS0eHhx/ddIN
- 34MRCwBX+simk/xONQl4Awa2nZFfPi+Ogy37A/9ojARDyrg+tbdSDyPJtErWLNXLRh6eZRgyuTt
- cvloH+rIzxZvzPOANOg==
-X-Proofpoint-ORIG-GUID: vEdT5QHK4IaqBniwc9uo3S5hIBNC-aiw
-X-Proofpoint-GUID: vEdT5QHK4IaqBniwc9uo3S5hIBNC-aiw
-X-Authority-Analysis: v=2.4 cv=LOprgZW9 c=1 sm=1 tr=0 ts=69ad927a cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA4MDE0MCBTYWx0ZWRfX5YyXS9Pl27yy
+ 2UHLV9iTwqSJ0wZxn1uuaAgK2G5iqQiSZxhNclH87+2nhIzkSrSm8ar9UPLiBciYAwl5bfCl73c
+ 2l5Zzw8RoWFcrJT7792e8TBkL3iBlIzfv+aGd6PuJvJg1RslYfv4I1ekapdIWxUfDkL0zOWHl9U
+ 5TWLbowQpAU98VNer8MwPJB5Yjum4T3CyeQ3VGRs1eKPzY3Yc2+xfKN+t5s61hGW7Ck70hoxvDD
+ S3e1Tbb7dMEbHMcxMBpeq+vD5TF842nrNVCLezF+NfgsHjlC8rPSbt269lBsnWRTtVMSdqpFEZl
+ 0TEHkKR8dLHrH0Rkg5XUf6cERyyVlA7UJ2v6QA6D5eH/iD4LAPy8aPbxeMoJMV0yC1dp4TQ+Vr5
+ uQNPUY+Wd5kgNjH21CnSh2ouem644we5yW/9/eWWsChKYgL80g8v7mVIA5M6KYQW/MUUpOx5/nR
+ QQEtcbxf1pUzAtF0GGg==
+X-Proofpoint-ORIG-GUID: 62XxsYAv0hKgDeuDHcw2CG0Zdkv4RJjH
+X-Proofpoint-GUID: 62XxsYAv0hKgDeuDHcw2CG0Zdkv4RJjH
+X-Authority-Analysis: v=2.4 cv=LOprgZW9 c=1 sm=1 tr=0 ts=69ad927b cx=c_pps
  a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
  a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
- a=3WHJM1ZQz_JShphwDgj5:22 a=EUspDBNiAAAA:8 a=r2bqU_pdSQlm8wuFfEYA:9
+ a=3WHJM1ZQz_JShphwDgj5:22 a=EUspDBNiAAAA:8 a=ufAJUjbdAAAA:8
+ a=cO0rteuSJtlgQIAbmOkA:9 a=rB1ygNaI0PWiOa_UD5GD:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-03-08_04,2026-03-06_02,2025-10-01_01
@@ -116,316 +114,255 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
  spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
  adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
  definitions=main-2603080140
-X-Rspamd-Queue-Id: 3C48F230E8B
+X-Rspamd-Queue-Id: D826B230E6D
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21616-lists,linux-scsi=lfdr.de];
-	DKIM_TRACE(0.00)[qualcomm.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-21614-lists,linux-scsi=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,qualcomm.com:dkim,qualcomm.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-0.985];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,qualcomm.com:dkim,qualcomm.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	NEURAL_HAM(-0.00)[-0.988];
+	DKIM_TRACE(0.00)[qualcomm.com:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[10]
 X-Rspamd-Action: no action
 
-Drastic environmental changes, such as significant temperature shifts, can
-impact link signal integrity. In such cases, refreshing TX Equalization is
-necessary to compensate for these environmental changes.
+If HS-G6 Power Mode change handshake is successful and outbound data Lanes
+are expected to transmit ADAPT, M-TX Lanes shall be configured as
 
-Add a debugfs entry, 'tx_eq_ctrl', to allow userspace to manually trigger
-the TX Equalization training (EQTR) procedure and apply the identified
-optimal settings on the fly. These entries are created on a per-gear basis
-for High Speed Gear 4 (HS-G4) and above, as TX EQTR is not supported for
-lower gears.
+if (Adapt Type == REFRESH)
+  TX_HS_ADAPT_LENGTH_L0_L1_L2_L3 = PA_PeerRxHsG6AdaptRefreshL0L1L2L3.
+else if (Adapt Type == INITIAL)
+  TX_HS_ADAPT_LENGTH_L0_L1_L2_L3 = PA_PeerRxHsG6AdaptInitialL0L1L2L3.
 
-The 'tx_eq_ctrl' entry currently accepts the 'refresh' command to initiate
-the procedure. The interface is designed to be scalable to support
-additional commands in the future.
+On some platforms, the ADAPT_L0_L1_L2_L3 duration on Host TX Lanes is only
+a half of theoretical ADAPT_L0_L1_L2_L3 duration TADAPT_L0_L1_L2_L3 (in
+PAM-4 UI) calculated from TX_HS_ADAPT_LENGTH_L0_L1_L2_L3.
 
-Reading the 'tx_eq_ctrl' entry provides a usage hint to the user,
-ensuring the interface is self-documenting.
-
-The ufshcd's debugfs folder structure will look like below:
-
-/sys/kernel/debug/ufshcd/*ufs*/
-|--tx_eq_hs_gear1/
-|  |--device_tx_eq_params
-|  |--host_tx_eq_params
-|--tx_eq_hs_gear2/
-|--tx_eq_hs_gear3/
-|--tx_eq_hs_gear4/
-|--tx_eq_hs_gear5/
-|--tx_eq_hs_gear6/
-   |--device_tx_eq_params
-   |--device_tx_eqtr_record
-   |--host_tx_eq_params
-   |--host_tx_eqtr_record
-   |--tx_eq_ctrl
+For such platforms, the workaround is to double the ADAPT_L0_L1_L2_L3
+duration by uplifting TX_HS_ADAPT_LENGTH_L0_L1_L2_L3. UniPro initializes
+TX_HS_ADAPT_LENGTH_L0_L1_L2_L3 during HS-G6 Power Mode change handshake,
+it would be too late for SW to update TX_HS_ADAPT_LENGTH_L0_L1_L2_L3 post
+HS-G6 Power Mode change. Update PA_PeerRxHsG6AdaptRefreshL0L1L2L3 and
+PA_PeerRxHsG6AdaptInitialL0L1L2L3 post Link Startup and before HS-G6
+Power Mode change, so that the UniPro would use the updated value during
+HS-G6 Power Mode change handshake.
 
 Signed-off-by: Can Guo <can.guo@oss.qualcomm.com>
 ---
- drivers/ufs/core/ufs-debugfs.c | 61 ++++++++++++++++++++++++++
- drivers/ufs/core/ufs-txeq.c    | 78 +++++++++++++++++++++++++++++++++-
- drivers/ufs/core/ufshcd-priv.h |  5 ++-
- drivers/ufs/core/ufshcd.c      |  7 +--
- 4 files changed, 143 insertions(+), 8 deletions(-)
+ drivers/ufs/host/ufs-qcom.c | 178 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 178 insertions(+)
 
-diff --git a/drivers/ufs/core/ufs-debugfs.c b/drivers/ufs/core/ufs-debugfs.c
-index 6f7562846f5b..b3bb2c850ad2 100644
---- a/drivers/ufs/core/ufs-debugfs.c
-+++ b/drivers/ufs/core/ufs-debugfs.c
-@@ -383,9 +383,70 @@ static const struct file_operations ufs_tx_eqtr_record_fops = {
- 	.release	= single_release,
- };
- 
-+static ssize_t ufs_tx_eq_ctrl_write(struct file *file, const char __user *buf,
-+				    size_t count, loff_t *ppos)
-+{
-+	u32 gear = (u32)(uintptr_t)file->f_inode->i_private;
-+	struct ufs_hba *hba = hba_from_file(file);
-+	char kbuf[32];
-+	int ret;
-+
-+	if (count >= sizeof(kbuf))
-+		return -EINVAL;
-+
-+	if (copy_from_user(kbuf, buf, count))
-+		return -EFAULT;
-+
-+	kbuf[count] = '\0';
-+
-+	if (!ufshcd_is_tx_eq_supported(hba))
-+		return -EOPNOTSUPP;
-+
-+	if (hba->ufshcd_state != UFSHCD_STATE_OPERATIONAL ||
-+	    !hba->max_pwr_info.is_valid)
-+		return -EBUSY;
-+
-+	if (!hba->ufs_device_wlun)
-+		return -ENODEV;
-+
-+	if (sysfs_streq(kbuf, "refresh")) {
-+		ret = ufs_debugfs_get_user_access(hba);
-+		if (ret)
-+			return ret;
-+		ret = ufshcd_refresh_tx_eq(hba, gear);
-+		ufs_debugfs_put_user_access(hba);
-+	} else {
-+		/* Unknown operation */
-+		return -EINVAL;
-+	}
-+
-+	return ret ? ret : count;
-+}
-+
-+static int ufs_tx_eq_ctrl_show(struct seq_file *s, void *data)
-+{
-+	seq_puts(s, "write 'refresh' to refresh TX Equalization settings\n");
-+	return 0;
-+}
-+
-+static int ufs_tx_eq_ctrl_open(struct inode *inode, struct file *file)
-+{
-+	return single_open(file, ufs_tx_eq_ctrl_show, inode->i_private);
-+}
-+
-+static const struct file_operations ufs_tx_eq_ctrl_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= ufs_tx_eq_ctrl_open,
-+	.read		= seq_read,
-+	.llseek		= seq_lseek,
-+	.write		= ufs_tx_eq_ctrl_write,
-+	.release	= single_release,
-+};
-+
- static const struct ufs_debugfs_attr ufs_tx_eqtr_attrs[] = {
- 	{ "host_tx_eqtr_record", 0400, &ufs_tx_eqtr_record_fops },
- 	{ "device_tx_eqtr_record", 0400, &ufs_tx_eqtr_record_fops },
-+	{ "tx_eq_ctrl", 0600, &ufs_tx_eq_ctrl_fops },
- 	{ }
- };
- 
-diff --git a/drivers/ufs/core/ufs-txeq.c b/drivers/ufs/core/ufs-txeq.c
-index d77fa3f5e16d..c68b232b1598 100644
---- a/drivers/ufs/core/ufs-txeq.c
-+++ b/drivers/ufs/core/ufs-txeq.c
-@@ -1099,6 +1099,7 @@ static int ufshcd_tx_eqtr(struct ufs_hba *hba,
-  * ufshcd_config_tx_eq_settings - Configure TX Equalization settings
-  * @hba: per adapter instance
-  * @pwr_mode: target power mode containing gear and rate information
-+ * @force_tx_eqtr: execute the TX EQTR procedure
-  *
-  * This function finds and sets the TX Equalization settings for the given
-  * target power mode.
-@@ -1106,7 +1107,8 @@ static int ufshcd_tx_eqtr(struct ufs_hba *hba,
-  * Returns 0 on success, error code otherwise
-  */
- int ufshcd_config_tx_eq_settings(struct ufs_hba *hba,
--				 struct ufs_pa_layer_attr *pwr_mode)
-+				 struct ufs_pa_layer_attr *pwr_mode,
-+				 bool force_tx_eqtr)
- {
- 	struct ufshcd_tx_eq_params *params;
- 	u32 gear, rate;
-@@ -1141,7 +1143,7 @@ int ufshcd_config_tx_eq_settings(struct ufs_hba *hba,
- 	if (gear < UFS_HS_G4)
- 		goto apply_tx_eq_settings;
- 
--	if (!params->is_valid) {
-+	if (!params->is_valid || force_tx_eqtr) {
- 		int ret;
- 
- 		ret = ufshcd_tx_eqtr(hba, params, pwr_mode);
-@@ -1212,3 +1214,75 @@ void ufshcd_apply_valid_tx_eq_settings(struct ufs_hba *hba)
- 		}
- 	}
+diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+index 5eb12a999eb1..eb57b06f95b5 100644
+--- a/drivers/ufs/host/ufs-qcom.c
++++ b/drivers/ufs/host/ufs-qcom.c
+@@ -1079,10 +1079,188 @@ static void ufs_qcom_override_pa_tx_hsg1_sync_len(struct ufs_hba *hba)
+ 		dev_err(hba->dev, "Failed (%d) set PA_TX_HSG1_SYNC_LENGTH\n", err);
  }
-+
+ 
 +/**
-+ * ufshcd_refresh_tx_eq - Retrain TX Equalization and apply new settings
-+ * @hba: per-adapter instance
-+ * @gear: target High-Speed (HS) gear for retraining
++ * ufs_qcom_double_t_adapt_l0l1l2l3 - Create a new adapt that doubles the
++ * adaptation duration TADAPT_L0_L1_L2_L3 derived from the old adapt.
 + *
-+ * This function initiates a refresh of the TX Equalization settings for a
-+ * specific HS gear. It scales the clocks to maximum frequency, negotiates the
-+ * power mode with the device, retrains TX EQ and applies new TX EQ settings
-+ * through a Power Mode change.
++ * @old_adapt: Original ADAPT_L0_L1_L2_L3 capability
 + *
-+ * Returns 0 on success, non-zero error code otherwise
++ * ADAPT_length_L0_L1_L2_L3 formula from M-PHY spec:
++ * if (ADAPT_range_L0_L1_L2_L3 == COARSE) {
++ *   ADAPT_length_L0_L1_L2_L3 = [0, 12]
++ *   ADAPT_L0_L1_L2_L3 = 215 x 2^ADAPT_length_L0_L1_L2_L3
++ * } else if (ADAPT_range_L0_L1_L2_L3 == FINE) {
++ *   ADAPT_length_L0_L1_L2_L3 = [0, 127]
++ *   TADAPT_L0_L1_L2_L3 = 215 x (ADAPT_length_L0_L1_L2_L3 + 1)
++ * }
++ *
++ * To double the adaptation duration TADAPT_L0_L1_L2_L3:
++ * 1. If adapt range is COARSE (1'b1), new adapt = old adapt + 1.
++ * 2. If adapt range is FINE (1'b0):
++ *   a) If old adapt length is < 64, (new adapt + 1) = 2 * (old adapt + 1).
++ *   b) If old adapt length is >= 64, set new adapt to 0x88 using COARSE
++ *      range, because new adapt get from equation in a) shall exceed 127.
++ *
++ * Examples:
++ * ADAPT_range_L0_L1_L2_L3 | ADAPT_length_L0_L1_L2_L3 | TADAPT_L0_L1_L2_L3 (PAM-4 UI)
++ *		0			3			131072
++ *		0			7			262144
++ *		0			63			2097152
++ *		0			64			2129920
++ *		0			127			4194304
++ *		1			8			8388608
++ *		1			9			16777216
++ *		1			10			33554432
++ *		1			11			67108864
++ *		1			12			134217728
++ *
++ * Return: new adapt.
 + */
-+int ufshcd_refresh_tx_eq(struct ufs_hba *hba, u32 gear)
++static u32 ufs_qcom_double_t_adapt_l0l1l2l3(u32 old_adapt)
 +{
-+	struct ufs_pa_layer_attr new_pwr_info, final_params = {};
-+	int ret;
++	u32 adapt_length = old_adapt & ADAPT_LENGTH_MASK;
++	u32 new_adapt;
 +
-+	if (!ufshcd_is_tx_eq_supported(hba) || !use_adaptive_txeq)
-+		return -EOPNOTSUPP;
-+
-+	if (gear < adaptive_txeq_gear)
-+		return -ERANGE;
-+
-+	ufshcd_hold(hba);
-+
-+	ret = ufshcd_pause_command_processing(hba, 1 * USEC_PER_SEC);
-+	if (ret) {
-+		ufshcd_release(hba);
-+		return ret;
++	if (IS_ADAPT_RANGE_COARSE(old_adapt)) {
++		new_adapt = (adapt_length + 1) | ADAPT_RANGE_BIT;
++	} else {
++		if (adapt_length < 64)
++			new_adapt = (adapt_length << 1) + 1;
++		else
++			/*
++			 * 0x88 is the very coarse Adapt value which is two
++			 * times of the largest fine Adapt value (0x7F)
++			 */
++			new_adapt = 0x88;
 +	}
 +
-+	/* scale up clocks to max frequency before TX EQTR */
-+	if (ufshcd_is_clkscaling_supported(hba))
-+		ufshcd_scale_clks(hba, ULONG_MAX, true);
++	return new_adapt;
++}
 +
-+	new_pwr_info = hba->pwr_info;
-+	new_pwr_info.gear_tx = gear;
-+	new_pwr_info.gear_rx = gear;
++static void ufs_qcom_limit_max_gear(struct ufs_hba *hba,
++				    enum ufs_hs_gear_tag gear)
++{
++	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
++	struct ufs_pa_layer_attr *pwr_info = &hba->max_pwr_info.info;
++	struct ufs_host_params *host_params = &host->host_params;
 +
-+	ret = ufshcd_vops_negotiate_pwr_mode(hba, &new_pwr_info, &final_params);
-+	if (ret)
-+		memcpy(&final_params, &new_pwr_info, sizeof(final_params));
++	host_params->hs_tx_gear = gear;
++	host_params->hs_rx_gear = gear;
++	pwr_info->gear_tx = gear;
++	pwr_info->gear_rx = gear;
 +
-+	if (final_params.gear_tx != gear) {
-+		dev_err(hba->dev, "Negotiated Gear (%u) does not match target Gear (%u)\n",
-+			final_params.gear_tx, gear);
++	dev_warn(hba->dev, "Limited max gear of host and device to HS-G%d\n", gear);
++}
++
++static void ufs_qcom_fixup_tx_adapt_l0l1l2l3(struct ufs_hba *hba)
++{
++	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
++	struct ufs_pa_layer_attr *pwr_info = &hba->max_pwr_info.info;
++	struct ufs_host_params *host_params = &host->host_params;
++	u32 old_adapt, new_adapt, actual_adapt;
++	bool limit_speed = false;
++	int err;
++
++	if (host->hw_ver.major != 0x7 || host->hw_ver.minor > 0x1 ||
++	    host_params->hs_tx_gear <= UFS_HS_G5 ||
++	    pwr_info->gear_tx <= UFS_HS_G5)
++		return;
++
++	err = ufshcd_dme_get(hba, UIC_ARG_MIB(PA_PEERRXHSG6ADAPTINITIALL0L1L2L3), &old_adapt);
++	if (err)
++		goto out;
++
++	if (old_adapt > ADAPT_L0L1L2L3_LENGTH_MAX) {
++		dev_err(hba->dev, "PA_PeerRxHsG6AdaptInitialL0L1L2L3 value (0x%x) exceeds MAX\n",
++			old_adapt);
++		err = -ERANGE;
 +		goto out;
 +	}
 +
-+	ret = ufshcd_config_tx_eq_settings(hba, &final_params, true);
-+	if (ret) {
-+		dev_err(hba->dev, "Failed to config TX Equalization for HS-G%u, Rate-%s: %d\n",
-+			final_params.gear_tx,
-+			UFS_HS_RATE_STRING(final_params.hs_rate), ret);
++	new_adapt = ufs_qcom_double_t_adapt_l0l1l2l3(old_adapt);
++	dev_dbg(hba->dev, "Original PA_PeerRxHsG6AdaptInitialL0L1L2L3 = 0x%x, new value = 0x%x\n",
++		old_adapt, new_adapt);
++
++	/*
++	 * 0x8C is the max possible value allowed by UniPro v3.0 spec, some HWs
++	 * can accept 0x8D but some cannot.
++	 */
++	if (new_adapt <= ADAPT_L0L1L2L3_LENGTH_MAX ||
++	    (new_adapt == ADAPT_L0L1L2L3_LENGTH_MAX + 1 && host->hw_ver.minor == 0x1)) {
++		err = ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PEERRXHSG6ADAPTINITIALL0L1L2L3),
++				     new_adapt);
++		if (err)
++			goto out;
++
++		err = ufshcd_dme_get(hba, UIC_ARG_MIB(PA_PEERRXHSG6ADAPTINITIALL0L1L2L3),
++				     &actual_adapt);
++		if (err)
++			goto out;
++
++		if (actual_adapt != new_adapt) {
++			limit_speed = true;
++			dev_warn(hba->dev, "PA_PeerRxHsG6AdaptInitialL0L1L2L3 0x%x, expect 0x%x\n",
++				 actual_adapt, new_adapt);
++		}
++	} else {
++		limit_speed = true;
++		dev_warn(hba->dev, "New PA_PeerRxHsG6AdaptInitialL0L1L2L3 (0x%x) is too large!\n",
++			 new_adapt);
++	}
++
++	err = ufshcd_dme_get(hba, UIC_ARG_MIB(PA_PEERRXHSG6ADAPTREFRESHL0L1L2L3), &old_adapt);
++	if (err)
++		goto out;
++
++	if (old_adapt > ADAPT_L0L1L2L3_LENGTH_MAX) {
++		dev_err(hba->dev, "PA_PeerRxHsG6AdaptRefreshL0L1L2L3 value (0x%x) exceeds MAX\n",
++			old_adapt);
++		err = -ERANGE;
 +		goto out;
 +	}
 +
-+	/* Change Power Mode to apply the new TX EQ settings */
-+	ret = ufshcd_change_power_mode(hba, &final_params,
-+				       UFSHCD_PMC_POLICY_FORCE);
-+	if (ret)
-+		dev_err(hba->dev, "%s: Failed to change Power Mode to HS-G%u, Rate-%s: %d\n",
-+			__func__, final_params.gear_tx,
-+			UFS_HS_RATE_STRING(final_params.hs_rate), ret);
++	new_adapt = ufs_qcom_double_t_adapt_l0l1l2l3(old_adapt);
++	dev_dbg(hba->dev, "Original PA_PeerRxHsG6AdaptRefreshL0L1L2L3 = 0x%x, new value = 0x%x\n",
++		old_adapt, new_adapt);
++
++	/*
++	 * 0x8C is the max possible value allowed by UniPro v3.0 spec, some HWs
++	 * can accept 0x8D but some cannot.
++	 */
++	if (new_adapt <= ADAPT_L0L1L2L3_LENGTH_MAX ||
++	    (new_adapt == ADAPT_L0L1L2L3_LENGTH_MAX + 1 && host->hw_ver.minor == 0x1)) {
++		err = ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PEERRXHSG6ADAPTREFRESHL0L1L2L3),
++				     new_adapt);
++		if (err)
++			goto out;
++
++		err = ufshcd_dme_get(hba, UIC_ARG_MIB(PA_PEERRXHSG6ADAPTREFRESHL0L1L2L3),
++				     &actual_adapt);
++		if (err)
++			goto out;
++
++		if (actual_adapt != new_adapt) {
++			limit_speed = true;
++			dev_warn(hba->dev, "PA_PeerRxHsG6AdaptRefreshL0L1L2L3 0x%x, expect 0x%x\n",
++				 new_adapt, actual_adapt);
++		}
++	} else {
++		limit_speed = true;
++		dev_warn(hba->dev, "New PA_PeerRxHsG6AdaptRefreshL0L1L2L3 (0x%x) is too large!\n",
++			 new_adapt);
++	}
 +
 +out:
-+	ufshcd_resume_command_processing(hba);
-+	ufshcd_release(hba);
-+
-+	return ret;
++	if (limit_speed || err)
++		ufs_qcom_limit_max_gear(hba, UFS_HS_G5);
 +}
-diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
-index 2303d57bf874..fa5419e33d54 100644
---- a/drivers/ufs/core/ufshcd-priv.h
-+++ b/drivers/ufs/core/ufshcd-priv.h
-@@ -80,6 +80,7 @@ int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
- void ufshcd_release_scsi_cmd(struct ufs_hba *hba, struct scsi_cmnd *cmd);
- int ufshcd_pause_command_processing(struct ufs_hba *hba, u64 timeout_us);
- void ufshcd_resume_command_processing(struct ufs_hba *hba);
-+int ufshcd_scale_clks(struct ufs_hba *hba, unsigned long freq, bool scale_up);
- 
- /**
-  * enum ufs_descr_fmt - UFS string descriptor format
-@@ -108,8 +109,10 @@ int ufshcd_read_device_lvl_exception_id(struct ufs_hba *hba, u64 *exception_id);
- int ufshcd_uic_tx_eqtr(struct ufs_hba *hba, int gear);
- void ufshcd_apply_valid_tx_eq_settings(struct ufs_hba *hba);
- int ufshcd_config_tx_eq_settings(struct ufs_hba *hba,
--				 struct ufs_pa_layer_attr *pwr_mode);
-+				 struct ufs_pa_layer_attr *pwr_mode,
-+				 bool force_tx_eqtr);
- void ufshcd_print_tx_eq_params(struct ufs_hba *hba);
-+int ufshcd_refresh_tx_eq(struct ufs_hba *hba, u32 target_gear);
- 
- /* Wrapper functions for safely calling variant operations */
- static inline const char *ufshcd_get_var_name(struct ufs_hba *hba)
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 6fef24612be1..f2846ac49775 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -332,8 +332,6 @@ static inline void ufshcd_add_delay_before_dme_cmd(struct ufs_hba *hba);
- static int ufshcd_host_reset_and_restore(struct ufs_hba *hba);
- static void ufshcd_resume_clkscaling(struct ufs_hba *hba);
- static void ufshcd_suspend_clkscaling(struct ufs_hba *hba);
--static int ufshcd_scale_clks(struct ufs_hba *hba, unsigned long freq,
--			     bool scale_up);
- static irqreturn_t ufshcd_intr(int irq, void *__hba);
- static int ufshcd_setup_hba_vreg(struct ufs_hba *hba, bool on);
- static int ufshcd_setup_vreg(struct ufs_hba *hba, bool on);
-@@ -1208,8 +1206,7 @@ static int ufshcd_opp_set_rate(struct ufs_hba *hba, unsigned long freq)
-  *
-  * Return: 0 if successful; < 0 upon failure.
-  */
--static int ufshcd_scale_clks(struct ufs_hba *hba, unsigned long freq,
--			     bool scale_up)
-+int ufshcd_scale_clks(struct ufs_hba *hba, unsigned long freq, bool scale_up)
++
+ static int ufs_qcom_apply_dev_quirks(struct ufs_hba *hba)
  {
- 	int ret = 0;
- 	ktime_t start = ktime_get();
-@@ -4887,7 +4884,7 @@ int ufshcd_config_pwr_mode(struct ufs_hba *hba,
- 	if (ret)
- 		memcpy(&final_params, desired_pwr_mode, sizeof(final_params));
+ 	int err = 0;
  
--	ret = ufshcd_config_tx_eq_settings(hba, &final_params);
-+	ret = ufshcd_config_tx_eq_settings(hba, &final_params, false);
- 	if (ret)
- 		dev_warn(hba->dev, "Failed to configure TX Equalization for HS-G%u, Rate-%s: %d\n",
- 			 final_params.gear_tx,
++	ufs_qcom_fixup_tx_adapt_l0l1l2l3(hba);
++
+ 	if (hba->dev_quirks & UFS_DEVICE_QUIRK_HOST_PA_SAVECONFIGTIME)
+ 		err = ufs_qcom_quirk_host_pa_saveconfigtime(hba);
+ 
 -- 
 2.34.1
 
