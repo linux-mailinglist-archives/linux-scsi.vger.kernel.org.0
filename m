@@ -1,61 +1,60 @@
-Return-Path: <linux-scsi+bounces-21850-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21851-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OI15JXxrsWnsugIAu9opvQ
-	(envelope-from <linux-scsi+bounces-21850-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 14:17:48 +0100
+	id yL5XOh9qsWnsugIAu9opvQ
+	(envelope-from <linux-scsi+bounces-21851-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 14:11:59 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C2B62644AA
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 14:17:47 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 842DE264343
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 14:11:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0B57D301C8CD
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 13:10:52 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 405623025E1F
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 13:11:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 710412E4257;
-	Wed, 11 Mar 2026 13:10:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F93A3016E3;
+	Wed, 11 Mar 2026 13:11:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gXrDLokL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ttt/97pI"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34811234984;
-	Wed, 11 Mar 2026 13:10:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E627D2E4257;
+	Wed, 11 Mar 2026 13:11:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773234648; cv=none; b=DF4fYK6tQZppJS99NZwAggIEjpmslf62fqsS4Bv8Jwtj5bu4ObstWfJku8Gzo06RVic2muVu2/frNfe4V09VMg2I2wX5ULPq5iKS6DcvqIwLAWsaIUWVLjVHljeNrdjlqfTaesPpPnAgxxPYNFd9p28Tu0ZelHwTmxuosczHBYk=
+	t=1773234710; cv=none; b=CRZkrIbtI6FYrq5HZMrstVlC8ZbptnA1S/D4GKM/85uOiw/Y1tPnrCur8GFC3yqcts5clqCeSsOlE7NDOhMLkPyxdDj0/97dNyBtR2iVeoOsByA8wmzlcl9J+QuAfc5i0/1jCsEz+EwudA+2C9PAy2MInomk7e9pvqjMSYFS6Cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773234648; c=relaxed/simple;
-	bh=I1WbPQA5NEIo1AGI5Oi8bYm76YQx+F1VeHq/ntSHCZ4=;
+	s=arc-20240116; t=1773234710; c=relaxed/simple;
+	bh=qPtMt/NDDpi3DbxzDPM6BCFcXuiXe2i5KCuPaNa5B+I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FwQOcKpwjyVO3l6xcE2lXFgD8pQcUvXrv+TmpeRrtuGe/ivcEjEqWOYP8F35voQur+BtuLwmvNPoXR2LZ5ELk4zJIVoiJqIXpyISAcRkoH2sxpq49t+1h3kl/ZVp2xhbhXqo7YIB62G7GvUeIyy2q+ND/xCYmTHgUHp/GB12ES4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gXrDLokL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BA1FC4CEF7;
-	Wed, 11 Mar 2026 13:10:47 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=P5lusMxOxN0eDMoItQ3cBn+s+5sCnXHBJwGi5B4gj12feKD/PDL0D9oaUno+rptL7sbfJUCwUFH08T9wLdlco9No6wczJxSVvrkY5W0Qybq3zyn21vXK9b21n1n6kGhBtBfZZopTBrsd/o7r96lESb7i483FIeqeV8wEI9JXiLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ttt/97pI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00DCFC4CEF7;
+	Wed, 11 Mar 2026 13:11:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773234647;
-	bh=I1WbPQA5NEIo1AGI5Oi8bYm76YQx+F1VeHq/ntSHCZ4=;
+	s=k20201202; t=1773234709;
+	bh=qPtMt/NDDpi3DbxzDPM6BCFcXuiXe2i5KCuPaNa5B+I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gXrDLokLmDYfK9g+e3VHMWaQdVmejzQpJg5uErLMgOSalsrGXf9T7mbaRXkwXrJjL
-	 2O9SoczvAdFdUA6tJ0Fbi8BL4/KI+y4Pg7daOEb4X60iUw8yUMLHCpUzigu69mnPBQ
-	 UBCqCWvQqtsu6m8BOwpT53MnLbFI3lAN4s4oG43unJnFL2BWdxyz5M7nCaHJYD0Pkr
-	 yufuUq72l0UBqiGt8eU2/JpnPeCnT4Gvr8fdNgWNDwGZQX7dOvdw4PrDim0OepWkoX
-	 C3DJ+QTs9VxiPiPmJHDkkaaOU4joVE21dvMHYjg+pB6NaDNzUShxiM4rHR+N8iPYY+
-	 B0981YH066GgA==
-Date: Wed, 11 Mar 2026 14:10:45 +0100
+	b=Ttt/97pIEHQaV+021Sj8MuKvLia3b+6j+4auauCOYe8HSyBPTANWY33nHQgKMrGNJ
+	 5dYc/d2nLfWHl5KNNYHUZu/WrO4MkwjLxdF/WyUzscd8+CIvl7OpkHPjuKbZqLEEIB
+	 kSy/MBMn1XguE5oeSxYuQp23H6ER7Iwo4P/ltjDV3qo6HDUGAuLOnEkGLDZygFqB+r
+	 wLgj0akn7WwzZ+q6mjKxU8U3epB9+K4T3pxU1Yn/PUSS323hjRR3zSbmZl88S3zqHK
+	 oCC3cThbkYGdCpZHgADo9k2y2nBoZNrbREynxN7ASO7rhG0SK75ZMqi+q1GGEnBDR0
+	 Jmig8zVnL5BxA==
+Date: Wed, 11 Mar 2026 14:11:46 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Shawn Lin <shawn.lin@rock-chips.com>
 Cc: "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
 	"Martin K . Petersen" <martin.petersen@oracle.com>, Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, 
 	linux-scsi@vger.kernel.org, linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 1/2] scsi: ufs: drockchip,rk3576-ufshc: dt-bindings: Add
- new mphy reset item
-Message-ID: <20260311-ultraviolet-shrew-of-management-ca536b@quoll>
+Subject: Re: [PATCH 2/2] arm64: dts: rockchip: Add mphy reset to ufshc node
+Message-ID: <20260311-rich-colorful-vicugna-abb4f7@quoll>
 References: <1773193218-215988-1-git-send-email-shawn.lin@rock-chips.com>
- <1773193218-215988-2-git-send-email-shawn.lin@rock-chips.com>
+ <1773193218-215988-3-git-send-email-shawn.lin@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -64,8 +63,8 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1773193218-215988-2-git-send-email-shawn.lin@rock-chips.com>
-X-Rspamd-Queue-Id: 6C2B62644AA
+In-Reply-To: <1773193218-215988-3-git-send-email-shawn.lin@rock-chips.com>
+X-Rspamd-Queue-Id: 842DE264343
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -73,11 +72,11 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-21850-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21851-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -93,45 +92,23 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,rock-chips.com:email]
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[rock-chips.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Wed, Mar 11, 2026 at 09:40:17AM +0800, Shawn Lin wrote:
-> Add the mphy reset property to the devicetree bindings for the Rockchip
-> RK3576 UFS host controller. The mphy reset signal is used to reset the
-> physical adapter. Resetting other components while leaving the mphy
-> unreset may occasionally prevent the UFS controller from successfully
-> linking up with the device.
+On Wed, Mar 11, 2026 at 09:40:18AM +0800, Shawn Lin wrote:
+> Add mphy reset to ufshc node to fully reset the whole UFS blocks
+> if needed. Otherwise, it may occasionally prevent the UFS controller
+> from successfully linking up with the device.
 > 
 > Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
 > ---
 > 
->  Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml b/Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
-> index c7d17cf4..e738153 100644
-> --- a/Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
-> +++ b/Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
-> @@ -41,7 +41,7 @@ properties:
->      maxItems: 1
->  
->    resets:
-> -    maxItems: 4
-> +    maxItems: 5
->  
->    reset-names:
->      items:
-> @@ -49,6 +49,7 @@ properties:
->        - const: sys
->        - const: ufs
->        - const: grf
-> +      - const: mphy
 
-ABI break here and in the driver. Considering this was merged year ago,
-so for sure it was tested and was working. Otherwise commit msg would
-explain the actual bug affecting users.
+You must not combine DTS changes with patchset targetting SCSI/UFS,
+because they apply entire set and this DTS CANNOT go there.
+
+NAK
 
 Best regards,
 Krzysztof
