@@ -1,144 +1,128 @@
-Return-Path: <linux-scsi+bounces-21829-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21830-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QOn6K3QrsWkBrgIAu9opvQ
-	(envelope-from <linux-scsi+bounces-21829-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 09:44:36 +0100
+	id wDQUJEAxsWm0rwIAu9opvQ
+	(envelope-from <linux-scsi+bounces-21830-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 10:09:20 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F22D025F959
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 09:44:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 015FD260061
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 10:09:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6F9B132B89D1
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 08:37:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9220132612E0
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 09:02:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771503C6A3F;
-	Wed, 11 Mar 2026 08:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sYMUODGg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33FC83B6352;
+	Wed, 11 Mar 2026 09:02:35 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from arkamax.eu (128-116-240-228.dyn.eolo.it [128.116.240.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CBE135AC37;
-	Wed, 11 Mar 2026 08:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD08B3C73E4;
+	Wed, 11 Mar 2026 09:02:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.116.240.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773217986; cv=none; b=Iml4ZiHAD0cCuamtRUP0tj6p0MaSwNxN8jkEvWjo4jQYgNC6Q0Y4MXpKpwPIlAydco/vp1ysSDlFPiJuHTdelhTWNsa8cnhpydL9siBWnb/Bh0XzLQIO/T0B05BuVVK4pWXjDyZjLYhSSgyTjxDIkPTjS9PzjCT0Gu4PwBKbKu4=
+	t=1773219754; cv=none; b=QE3knk74k5TwTM63onJb4b6J0Z3sAtbhGbJEWqeBwDy9C40cBHNwZqdtFWZoQAlPwo34Q9UZ6pFmntV4NamcVjpQTa+Pk99binzkLam1xF6r//NuH1CFbbRct6qM6Ha2pCo9tQ7KcuxW5sKkmKluX8dzcJWKSo+6bKsdVhgYL7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773217986; c=relaxed/simple;
-	bh=Qo+PJNpHJ9Md7YVDAK1mnfNEfOfjGMzCvy0YD3nVYtU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i/Lsi2VjEYKrz6Qr/SwFoiF3M0wfIt3XOgcsA7KngJgs+WiM3d80J0dWe7vXH+7atSyQxa+RBlEetyf3IXDERORT4sbsw/VGAZZhnuvt8e1Q2NAiHc3lTLceHvJ45sVj4qvnPMUcQh4UoEYs/q26RzqBDksW4gIHxp+OoZNXM4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sYMUODGg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA189C2BC86;
-	Wed, 11 Mar 2026 08:33:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773217986;
-	bh=Qo+PJNpHJ9Md7YVDAK1mnfNEfOfjGMzCvy0YD3nVYtU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sYMUODGgHsE+8SiVUWHGQIG96yOMSBo6lDZtP6oClHLNa3fYFEnAkd71mhxfItj5r
-	 /wLogqOLZ506XX9xemlt9SFV9y3b/KykU4qsbELkpuMtcYKKunrHjgqINQYHq3+TEH
-	 hFRNXV+FfBL9Lgq/an182cPlFRvWXkWBItDkYFLuZikXKCH0l4mtb1pQKujsu2fYRf
-	 ZtAVo36VCysN0qVxuYzNvPOJXgzgAYQxl/qYFBGvTeMUXgf6o/y7Ceaw34YC4qxZMw
-	 xvof/CHdzhvHRk2FPLZ/KfACqHN1DgG0r2BtfpdByZJ2wuSvo/ZHwLrH/BFQItCb/3
-	 mSGWCpt0tjyEw==
-Date: Wed, 11 Mar 2026 09:33:03 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Abel Vesa <abel.vesa@oss.qualcomm.com>
-Cc: Manivannan Sadhasivam <mani@kernel.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>, 
-	Bart Van Assche <bvanassche@acm.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] scsi: ufs: qcom: dt-bindings: Document the Eliza UFS
- controller
-Message-ID: <20260311-radical-bold-catfish-d7ccca@quoll>
-References: <20260310-eliza-bindings-ufs-v2-1-1fe14fc9009c@oss.qualcomm.com>
+	s=arc-20240116; t=1773219754; c=relaxed/simple;
+	bh=jIs1IR+nAIAo0v4hnk+3f8YoL3lzNXLtYM7TSazbQF4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=oidOrQG0V62He9SdPFh7KtYMGOxqSNPsQ9IYKYhKnzT2+QiOx32+5WVy+YO6nJ+fL5YXb2DeNgrzgZjJxolUMCr/kLwRUe737uY7TuHbOvsRZnOjQlYuLKhh33/RDi64lZ815bcFJoP4HvkiOlFlbW4Dnf8O4G6R22/z4c3dogo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=arkamax.eu; spf=pass smtp.mailfrom=arkamax.eu; arc=none smtp.client-ip=128.116.240.228
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=arkamax.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arkamax.eu
+Received: from localhost (128-116-240-228.dyn.eolo.it [128.116.240.228])
+	by arkamax.eu (OpenSMTPD) with ESMTPSA id 7f0d0655 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Wed, 11 Mar 2026 10:02:21 +0100 (CET)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260310-eliza-bindings-ufs-v2-1-1fe14fc9009c@oss.qualcomm.com>
-X-Rspamd-Queue-Id: F22D025F959
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 11 Mar 2026 10:02:21 +0100
+Message-Id: <DGZTXRKSHBPC.2B318HF53ZRSN@arkamax.eu>
+Cc: "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+ "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+ "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+ "nbd@other.debian.org" <nbd@other.debian.org>, "linux-rdma@vger.kernel.org"
+ <linux-rdma@vger.kernel.org>
+Subject: Re: blktests failures with v7.0-rc1 kernel
+From: "Maurizio Lombardi" <mlombard@arkamax.eu>
+To: "Maurizio Lombardi" <mlombard@arkamax.eu>, "Yi Zhang"
+ <yi.zhang@redhat.com>, "Shinichiro Kawasaki" <shinichiro.kawasaki@wdc.com>
+X-Mailer: aerc 0.21.0
+References: <aZ_-cH8euZLySxdD@shinmob>
+ <CAHj4cs8mzSZez+n2qLu5931YAuQ4=RxNt6D6YJCsMEwGrm4UtA@mail.gmail.com>
+ <DGZRYXTKC049.1I6QFQSMSD88H@arkamax.eu>
+In-Reply-To: <DGZRYXTKC049.1I6QFQSMSD88H@arkamax.eu>
+X-Rspamd-Queue-Id: 015FD260061
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.96 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MV_CASE(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-21830-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21829-lists,linux-scsi=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	FROM_HAS_DN(0.00)[];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[arkamax.eu];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	MIME_TRACE(0.00)[0:+];
+	NEURAL_HAM(-0.00)[-0.970];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	R_DKIM_NA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-scsi,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[mlombard@arkamax.eu,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,msgid.link:url]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,arkamax.eu:mid]
 X-Rspamd-Action: no action
 
-On Tue, Mar 10, 2026 at 12:44:42PM +0200, Abel Vesa wrote:
-> Document the UFS Controller on the Eliza Platform.
-> 
-> The IP block version here is 6.0.0, exactly the same as on SM8650.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
-> ---
-> Changes in v2:
-> - Rebased on next-20260309.
-> - Mentioned the IP revision, as Manivannan requested.
-> - Link to v1: https://patch.msgid.link/20260223-eliza-bindings-ufs-v1-1-c4059596337f@oss.qualcomm.com
-> ---
->  Documentation/devicetree/bindings/ufs/qcom,sm8650-ufshc.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/ufs/qcom,sm8650-ufshc.yaml b/Documentation/devicetree/bindings/ufs/qcom,sm8650-ufshc.yaml
-> index cea84ab2204f..80550144f932 100644
-> --- a/Documentation/devicetree/bindings/ufs/qcom,sm8650-ufshc.yaml
-> +++ b/Documentation/devicetree/bindings/ufs/qcom,sm8650-ufshc.yaml
-> @@ -15,6 +15,7 @@ select:
->      compatible:
->        contains:
->          enum:
-> +          - qcom,eliza-ufshc
->            - qcom,kaanapali-ufshc
->            - qcom,sm8650-ufshc
->            - qcom,sm8750-ufshc
-> @@ -25,6 +26,7 @@ properties:
->    compatible:
->      items:
->        - enum:
-> +          - qcom,eliza-ufshc
->            - qcom,kaanapali-ufshc
->            - qcom,sm8650-ufshc
->            - qcom,sm8750-ufshc
+On Wed Mar 11, 2026 at 8:29 AM CET, Maurizio Lombardi wrote:
+> On Wed Mar 11, 2026 at 1:35 AM CET, Yi Zhang wrote:
+>
+> If nvmet_rdma_rw_ctx_init() fails, shouldn't it call
+> nvmet_req_free_sgls() before returning an error?
 
-You need constraints for minItems: 2 for reg and reg-names. MCQ is
-required. The mistake was doone for Kaanapali, but that patch was
-applied without review, so it is not a correct example to base on.
+Possible fix, not tested:
 
-Best regards,
-Krzysztof
+diff --git a/drivers/nvme/target/rdma.c b/drivers/nvme/target/rdma.c
+index 2d6eb89f98af..79ae743bb405 100644
+--- a/drivers/nvme/target/rdma.c
++++ b/drivers/nvme/target/rdma.c
+@@ -892,7 +892,7 @@ static u16 nvmet_rdma_map_sgl_keyed(struct nvmet_rdma_r=
+sp *rsp,
 
+ 	ret =3D nvmet_rdma_rw_ctx_init(rsp, addr, key, &sig_attrs);
+ 	if (unlikely(ret < 0))
+-		goto error_out;
++		goto error_free_sgl;
+ 	rsp->n_rdma +=3D ret;
+
+ 	if (invalidate)
+@@ -900,6 +900,8 @@ static u16 nvmet_rdma_map_sgl_keyed(struct nvmet_rdma_r=
+sp *rsp,
+
+ 	return 0;
+
++error_free_sgl:
++	nvmet_req_free_sgls(&rsp->req);
+ error_out:
+ 	rsp->req.transfer_len =3D 0;
+ 	return NVME_SC_INTERNAL;
+
+Maurizio
 
