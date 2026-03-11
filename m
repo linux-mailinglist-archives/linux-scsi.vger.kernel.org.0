@@ -1,80 +1,81 @@
-Return-Path: <linux-scsi+bounces-21806-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21808-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IOMHE4nOsGkKnQIAu9opvQ
-	(envelope-from <linux-scsi+bounces-21806-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 03:08:09 +0100
+	id YB4QA5zOsGkKnQIAu9opvQ
+	(envelope-from <linux-scsi+bounces-21808-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 03:08:28 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE57325AA6A
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 03:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 783B325AA78
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 03:08:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 14C4231E5916
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 02:06:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 652EA315807A
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2026 02:06:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87C7B13FEE;
-	Wed, 11 Mar 2026 02:06:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9DD9322B74;
+	Wed, 11 Mar 2026 02:06:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="W+Ee+oe7"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="H7QEsWpd"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278AB326D44
-	for <linux-scsi@vger.kernel.org>; Wed, 11 Mar 2026 02:06:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600D22DECBF;
+	Wed, 11 Mar 2026 02:06:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773194797; cv=none; b=gjiSgCJUN3qyb0ndAxheqhqmYomRfuVcMyL7X+PUZeHfBianxuQNeqx61dOgfnv//wzEmPUqzNwBpQXiaO05nnx7NV89Z1IsjduOkwIJZYC94tTtaz8biL5xLOeIYiLL5nVOc4qOY92ND+B5ZrTKX8MFYIi0UXtpu+I69Zs21wY=
+	t=1773194806; cv=none; b=P8+oMsic58fypSzfCHPsi+BR45+z3zLXyxv/1hFokUgPfK9dxGtxmSEPmmYSFVqx+LOe+EV2tIpVK2/RV3eB9C/ctQILPiLvfsqL+DK2fo/MK6C4vZhgTjgzrsk5kXKKxk/LGKA80E8BqT89sMpL2SHJp/CO1AwJOrEOkIZ/CmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773194797; c=relaxed/simple;
-	bh=u4j/KJWVI9hg6aw3+noCoZaAXphOZkCZ830XpHMA+0o=;
+	s=arc-20240116; t=1773194806; c=relaxed/simple;
+	bh=muskFpltGwGmxl1QAAOv16y0ehqc4s/A6VHnrjh6gUk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NNc/GlyqRTKeFtwiDq4UohQN6SlAOa7hepkbZoBRg5rDxAXsrnhr/DRZThO97hBWSgTcazKY6l2yefliaCONciUqYKMpxyuax/c8DMCq1+SaiDTw7Ny25slK+F+dVw953wNy/BdgaMSTXPiQylE6UEXkutKPgzApJ2XvPf2GjV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=W+Ee+oe7; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=I6vf58NC7jb0P7YeY0cBUc9EYMdRubDPRSXIhvOD8v4R7o25mMm5XV0aCBNU0bY5pwpqpUsKwFummlyZO/X0L4ucf8YBTXFvSHH0TMSRkCefXJFq/ig8UBTm8xanB5TUPs8gsxT5UPZcu4Y3W9Ms90kCWLfTDYp6xHhbKGXRtP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=H7QEsWpd; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62AJDUgb2773037;
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62AIo1cp094045;
 	Wed, 11 Mar 2026 02:06:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=zRC/6xyncbUgHkSBn8kjqvlQZ/wa/hbZsxrHVcoP5kg=; b=
-	W+Ee+oe7TT1zNgOI0qbxhwF+uXMV+k0q2CZNIkMJJjN0yTiNnkKqBXjcEHp5tgx0
-	hKf5qGKgsLDAZUf+26qx9dNvYumB61fDh805melEbrATZsGwudJ3xW/y6g6dkq3z
-	r0WCFMbZXCNZTyuJByJG40hIGQ0jSmcPuQ6f8+4FLixD7VUk5a8luDfViXHZ9/se
-	ICD1ianptdHySJTJghE+WX0XZCIy6xF4qQX1eiiQmEqcfqegFHp2HABAz+S4J6y7
-	LXNvahjnkvUeyxjdzhklVFwb6QKNVvuY0HyJQWLVWbPtFIGXdpZ55qLkWXU4akaW
-	lUdsBf86E27MwsrYbD6oHQ==
+	corp-2025-04-25; bh=M2mL5OZ0G0yoICFGwiOvJEt27kYgWpBwyIrkpBqDVGI=; b=
+	H7QEsWpd9E5MZF8zlY9eM+Ci5tRidp3dxgT2q3JBzzZFKstmaMvTAWDxdTP8j9oq
+	1JLQGUh0lt2rkCy9sBb0C9WOVl0G2/Izoex7Y41aAGtSZvkqaYVcS1I0gJiroaWl
+	V6Y6zG9VxgfHODrPzJVypmjIiEtCjHy2L/R26yDbxzLuGbz3vetwpqtLxQt8Y0gB
+	X5IF8iQd/PXWeJCD/TciJLpRzM4YAMPbJeueRw/74Ri/LODNHV5sE28SbNS19gap
+	o4YjN4XZkr4On2jV4n5czLcruRjvg6vfBSL6wIL20I7IExmO+tnKkYj36w2YYkbw
+	MZ8xgjhjylWdPXbI5kvUIQ==
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4csjnum3v6-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4csmdkm432-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Wed, 11 Mar 2026 02:06:25 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62B07sP3020331;
-	Wed, 11 Mar 2026 02:06:24 GMT
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62B204iw020274;
+	Wed, 11 Mar 2026 02:06:25 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4crafewwkh-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4crafewwkm-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 11 Mar 2026 02:06:24 +0000
+	Wed, 11 Mar 2026 02:06:25 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62B26M5P002770;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62B26M5R002770;
 	Wed, 11 Mar 2026 02:06:24 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4crafewwj6-5;
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4crafewwj6-6;
 	Wed, 11 Mar 2026 02:06:24 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+To: James.Bottomley@HansenPartnership.com, linux-scsi@vger.kernel.org,
+        sw.prabhu6@gmail.com
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Justin Tee <justin.tee@broadcom.com>, Paul Ely <paul.ely@broadcom.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: Re: [PATCH] scsi: lpfc: eliminate kernel-doc warnings in lpfc.h
-Date: Tue, 10 Mar 2026 22:06:16 -0400
-Message-ID: <177289787689.2131580.17746882537078983809.b4-ty@oracle.com>
+        linux-kernel@vger.kernel.org, mcgrof@kernel.org,
+        pankaj.raghav@linux.dev, bvanassche@acm.org, dlemoal@kernel.org
+Subject: Re: (subset) [PATCH v4 0/2] enable sector size > PAGE_SIZE for scsi
+Date: Tue, 10 Mar 2026 22:06:17 -0400
+Message-ID: <177289787699.2131580.15221991163805183568.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260224234954.3606638-1-rdunlap@infradead.org>
-References: <20260224234954.3606638-1-rdunlap@infradead.org>
+In-Reply-To: <20260219043741.276729-1-sw.prabhu6@gmail.com>
+References: <20260219043741.276729-1-sw.prabhu6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -87,28 +88,29 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-03-10_05,2026-03-09_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 mlxscore=0
- mlxlogscore=750 adultscore=0 phishscore=0 suspectscore=0 spamscore=0
+ mlxlogscore=769 adultscore=0 phishscore=0 suspectscore=0 spamscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
  definitions=main-2603110016
-X-Proofpoint-GUID: yec5cvINBEXQ2sJIxW3HmcF9urB8heVv
-X-Authority-Analysis: v=2.4 cv=c7WmgB9l c=1 sm=1 tr=0 ts=69b0ce21 b=1 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=MuBfKmae c=1 sm=1 tr=0 ts=69b0ce21 b=1 cx=c_pps
  a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
  a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=x4eqshVgHu-cdnggieHk:22 a=VwQbUJbxAAAA:8
- a=7scuzT8Q6j0CDX229_UA:9 a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10 cc=ntf
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=BqU2WV_vvsyTyxaotp0D:22 a=VwQbUJbxAAAA:8
+ a=pGLkceISAAAA:8 a=cgAREEJgfldQBbQSYj8A:9 a=QEXdDO2ut3YA:10 cc=ntf
  awl=host:12272
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzExMDAxNiBTYWx0ZWRfX5+Tv0HDVCj1n
- AqtXiqQvrvzKVCXfflSbyYS0HW+cP8nRyo4wxLNFF++jhcWP0oMs1NwKn4TO0NHP0nbBgF1E0J1
- oVUX+eQRsD8lSvVoTavTp/O7PzO6V0YPyMSGr+KAdFRSYjmzR7KGy7zYrxt254jq8pPilyI01uJ
- LnYYm24wFe5U8dqe0wWEZPgKzXpqiITW8cL2Vmfh7K3NQchWl1JlhpPXxa6Je+MbiBo2o+OphS0
- +0kY04n8IuzlBnEjjM+EX7/I8V2ri23H3N/E/1VJgeAdu14NoOWZ5wlWltnhYoGOq9eaSTl3/cr
- WiAgEpWfJ7LVvWskjtZZvSkeEc+aIFVXLWjS2OIO+qofwHDCtx00Zt2SbG2Ev0zl5UZxlh0nsAP
- JPNYAZcuyet1cLm5W7yh8g2AcIGwiAfojI2ph95bgcvEBmvmJoJD9Sxi5vLnyGR0aHLysmUQ4iG
- tub5UDEUdQtRh/rv1PBiDUaw0vJy7utYhUKNaSCw=
-X-Proofpoint-ORIG-GUID: yec5cvINBEXQ2sJIxW3HmcF9urB8heVv
-X-Rspamd-Queue-Id: CE57325AA6A
+X-Proofpoint-ORIG-GUID: Mk-WMoaiufGiQ3eHUqfyTrz1MBm1Yq1L
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzExMDAxNiBTYWx0ZWRfX1o9+PYF6Qb/J
+ +B3l1RgiUqsj0Jy4sw3UX+9uw21LUWw7zqmDDJujFWQ6Bngdkjc5/HzU0ATuRj/r+RYGjdZor3z
+ zT0PsIpYNpiJ3DknwXC6gujTc6Di8HITp6PoYEq9Qrwq7IsTGEBPKTMCkSsPhXE4A7OalbT6hWW
+ SpB2rwb9Cl8kfcwg+bn/5s/fWcX7auYnWjzdSSaMPYRjQ0o71U50K3SEZIW5SAwjwyaqRU94GMI
+ ry/pGP0qRNGP1xnXKCEVKJc/32+xyex2cwPfvMipUo8jRowvWBITAOh/rI5QNfHzyeGGoi6P6SU
+ /zG8Ea7tVhK4xzX5jU58jcmuzPmwYEbP+fcGgqJMPaqhjvyhjjCFWQScZIl3DGUVTNnLsUk05Jz
+ BI4pi13pIlI8Ze5zpFHvJ1bjvXNDmnQMhSR7cLUBmpebsT7TZzat9Vw9fQp/Lz9BP/NNOiZWHIE
+ gKzK3/r3JPjxJAVQz98WcEl76VkbYT7XpOOn5aSI=
+X-Proofpoint-GUID: Mk-WMoaiufGiQ3eHUqfyTrz1MBm1Yq1L
+X-Rspamd-Queue-Id: 783B325AA78
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
@@ -116,40 +118,46 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21806-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[HansenPartnership.com,vger.kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-21808-lists,linux-scsi=lfdr.de];
 	DKIM_TRACE(0.00)[oracle.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:dkim,oracle.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
-	RCPT_COUNT_FIVE(0.00)[6];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[9]
 X-Rspamd-Action: no action
 
-On Tue, 24 Feb 2026 15:49:54 -0800, Randy Dunlap wrote:
+On Wed, 18 Feb 2026 20:37:40 -0800, sw.prabhu6@gmail.com wrote:
 
-> Avoid all kernel-doc warnings in lpfc.h:
-> - use the correct function parameter name
-> - add a '*' to a kernel-doc line
-> - repair the function Returns: comments
+> This is v4 series sent based on the review comments received on v3 [1].
+> This patchset enables sector sizes > PAGE_SIZE for
+> sd driver and scsi_debug driver since block layer can support block
+> size > PAGE_SIZE. There was one issue with write_same16 and write_same10
+> command, which is fixed as a part of the series.
 > 
-> Fixes these warnings:
+> Changes since v2:
+>  - Added reviewed by tag for scsi sd driver and scsi_debug patch.
+>  - Modified the helper function name used for safe creation and destruction
+>    of the large page mempool.
+>  - No functional changes.
 > 
 > [...]
 
 Applied to 7.1/scsi-queue, thanks!
 
-[1/1] scsi: lpfc: eliminate kernel-doc warnings in lpfc.h
-      https://git.kernel.org/mkp/scsi/c/5e0d4fdb98f3
+[1/2] scsi: sd: enable sector size > PAGE_SIZE in scsi sd driver
+      https://git.kernel.org/mkp/scsi/c/7179e626b76e
 
 -- 
 Martin K. Petersen
