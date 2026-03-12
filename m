@@ -1,76 +1,75 @@
-Return-Path: <linux-scsi+bounces-21955-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21960-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qAqTHoMts2ksSwAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21955-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:17:55 +0100
+	id OGtUOpIts2ksSwAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21960-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:18:10 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B529279E08
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:17:55 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0415279E3C
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:18:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 822E33013440
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 21:17:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C289030698F8
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 21:17:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C18E63B7B63;
-	Thu, 12 Mar 2026 21:17:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2EEE3C456A;
+	Thu, 12 Mar 2026 21:17:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="0WVodrNX"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="PJonqPcC"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552D026B2DA
-	for <linux-scsi@vger.kernel.org>; Thu, 12 Mar 2026 21:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 193B6336895
+	for <linux-scsi@vger.kernel.org>; Thu, 12 Mar 2026 21:17:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773350271; cv=none; b=sMHgY9z/MNEHDwpL9XarxZcDsra8fMba6C525wIJGJlk63TYauXcUHT4Z21EKk+Ww9drS/CroeAAWrulZjq9LHa7KCoHhcOg7WAsRMCpFr3b1PKI55zfV4pcQIN80CcHjagEcLxDxXn9CxXFkrvDlCqMadXRkdnCnhUX4g7VNLs=
+	t=1773350278; cv=none; b=oQtxzGI/RtrmgU8Dp5O+5zI+L709/4mA/JlDbeQp0hyt3mveK0QOTeGTxe0xyYQa5ZPAstASjIlwwNxybKLOGcFT5X7gQbJ2K2jqk2V1axChemK1P7V0lOANL87JrZO6OMBfX4hYi6kKmTJOPTs2Go+tRoo/+Y5O8e4twcly6Ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773350271; c=relaxed/simple;
-	bh=FWi4CpMql4IDN9cjoUOz6G0qNH11lTfYDDTVq7sGsAA=;
+	s=arc-20240116; t=1773350278; c=relaxed/simple;
+	bh=pTf5sl9idN4m+8GYmDfwFk709pYBv9ihQO6OLrMda+Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ozPc+xcRqJ8TRQK/oRB7zh0pzCepWoxdAl6Uaap2mjP0G7NX8xb7jcoloSXPlPOJze92p57eOHZL5BkVqe/au1qvTSBI4ic4qHQeDKh/6bFlEpUzfWGkwoni5Ll5n+rwhoFLTcmcPTi/uS1W7VvcYsizuMXcbHtDztItwnxcPjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=0WVodrNX; arc=none smtp.client-ip=199.89.1.16
+	 MIME-Version; b=tInYpemYogvq+roHuoMQdolKdvftso/dLewQn1ROq6o4JDaC52mk84vLZBZ1Megh0vPw5UmpQWO6LY46/qbHFmtk/WnqLsHD2nCdg9Ggr51pSCxNPrsOIiPXhE7vTeHxQYVbHF4Qj5Og8ThNT/o4mFRaxC0cQkj1qy4Y1ApJaLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=PJonqPcC; arc=none smtp.client-ip=199.89.1.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fX0nn6Snczlfl5x;
-	Thu, 12 Mar 2026 21:17:49 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fX0nw6QlVzlfl5V;
+	Thu, 12 Mar 2026 21:17:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1773350261; x=1775942262; bh=0moX7
-	Fk7pisfRkF3+ASiubNDm8RjddB1G/uOnZNp354=; b=0WVodrNXRwmzMITQQsaaN
-	fJbG06yv8p+AtYHLDeVg9grlHg6HdAZftu/aL6b0B7HT+uTKR43liW/RglF6iI3k
-	clo6crQoFsyuQD97b/Zc7WBi9Ou3YE3KnCESqQygsnW3Dh/S8GGxskOyoaU3iw3g
-	eVqBiqpiKbExxgpW5ILyn0JTLHI+FfTWrfPl0KmDNvkM0Qzm5AMIfSZzjBW2jMk9
-	fxB4TkGj50kkxWXXS1zuoi85bUUtvR9PaG2fKSzXUujCyN98kVRgU3ZmPUlrAwyp
-	MkZ+pu0ieF0dEt5v8VOAiz2LtWEYSHLSepu8VdRrVQrYZ+b4f4JsCYvQjQZT1ojy
+	:received:received; s=mr01; t=1773350263; x=1775942264; bh=FwGND
+	/JQHNORezOGsynSxmq2ejX3zTfDCOGQBUXJS0w=; b=PJonqPcCjSq7Y9ZaYjqqV
+	yqMiu995JLhOTT3X7LIUS0AnVuFIgslZNADtN6TdFwJI7mmByZnlFSI4e17eNUTT
+	gapOkD0seNonmL/Vjj3flNXy3Br8hHkZabI9Vum6aFQ1MNO/iQFygj5X+lUhGvRr
+	BBKxJmCHk3GJkqPfgwbaM4zoTSRPLKPSy9ScOJ88KVjg3ooFYxH8PQf7VUqf1BTG
+	ZoI9VFE8ZaFluK6kCZ2nhLd48Gm1BY7j97OLG4wKnjQv8rMwLlSEEJn8CAfv8WX3
+	6u8ZVJz1PZjzYZSXsTDT+m/2zdIxoWXKcX+ZdUS5HtfxQ5gee1jyyr38FyDYMf+s
 	w==
 X-Virus-Scanned: by MailRoute
 Received: from 013.lax.mailroute.net ([127.0.0.1])
  by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id wJ9qLQS3cBma; Thu, 12 Mar 2026 21:17:41 +0000 (UTC)
+ id wbdIOgvIAIq1; Thu, 12 Mar 2026 21:17:43 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fX0nb4Cymzlfl7l;
-	Thu, 12 Mar 2026 21:17:39 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fX0nf013pzlfl8L;
+	Thu, 12 Mar 2026 21:17:41 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	Bart Van Assche <bvanassche@acm.org>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Colin Ian King <colin.i.king@gmail.com>
-Subject: [PATCH 15/36] scsi: csiostor: Prepare for enabling lock context analysis
-Date: Thu, 12 Mar 2026 14:15:26 -0700
-Message-ID: <20260312211636.3245119-16-bvanassche@acm.org>
+	Satish Kharat <satishkh@cisco.com>,
+	Sesidhar Baddela <sebaddel@cisco.com>,
+	Karan Tilak Kumar <kartilak@cisco.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH 16/36] scsi: fnic: Prepare for enabling lock context analysis
+Date: Thu, 12 Mar 2026 14:15:27 -0700
+Message-ID: <20260312211636.3245119-17-bvanassche@acm.org>
 X-Mailer: git-send-email 2.53.0.851.ga537e3e6e9-goog
 In-Reply-To: <20260312211636.3245119-1-bvanassche@acm.org>
 References: <20260312211636.3245119-1-bvanassche@acm.org>
@@ -81,294 +80,549 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,acm.org,HansenPartnership.com,kernel.org,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21955-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21960-lists,linux-scsi=lfdr.de];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	PRECEDENCE_BULK(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[acm.org:+];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[acm.org:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	RCPT_COUNT_SEVEN(0.00)[8];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 1B529279E08
+X-Rspamd-Queue-Id: A0415279E3C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Document lock context requirements with __must_hold().
+Document locking requirements with __must_hold(). Suppress complaints
+about conditional locking in fnic_device_reset() with __acquire() and
+__release().
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/csiostor/csio_hw.c    | 12 ++++++++++++
- drivers/scsi/csiostor/csio_lnode.c |  3 +++
- drivers/scsi/csiostor/csio_rnode.c |  6 ++++++
- drivers/scsi/csiostor/csio_scsi.c  |  6 ++++++
- 4 files changed, 27 insertions(+)
+ drivers/scsi/fnic/fdls_disc.c | 52 +++++++++++++++++++++++++++++++++--
+ drivers/scsi/fnic/fip.c       |  2 ++
+ drivers/scsi/fnic/fnic_fcs.c  |  6 ++++
+ drivers/scsi/fnic/fnic_scsi.c |  4 +++
+ 4 files changed, 62 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/csiostor/csio_hw.c b/drivers/scsi/csiostor/csio=
-_hw.c
-index df9f81f29950..4b4d3c42667f 100644
---- a/drivers/scsi/csiostor/csio_hw.c
-+++ b/drivers/scsi/csiostor/csio_hw.c
-@@ -914,6 +914,7 @@ csio_hw_dev_ready(struct csio_hw *hw)
-  */
- static int
- csio_do_hello(struct csio_hw *hw, enum csio_dev_state *state)
-+	__must_hold(&hw->lock)
- {
- 	struct csio_mb	*mbp;
- 	int	rv =3D 0;
-@@ -2050,6 +2051,7 @@ csio_hw_flash_config(struct csio_hw *hw, u32 *fw_cf=
-g_param, char *path)
-  */
- static int
- csio_hw_use_fwconfig(struct csio_hw *hw, int reset, u32 *fw_cfg_param)
-+	__must_hold(&hw->lock)
- {
- 	struct csio_mb	*mbp =3D NULL;
- 	struct fw_caps_config_cmd *caps_cmd;
-@@ -2475,6 +2477,7 @@ static int csio_hw_check_fwver(struct csio_hw *hw)
-  */
- static void
- csio_hw_configure(struct csio_hw *hw)
-+	__must_hold(&hw->lock)
- {
- 	int reset =3D 1;
- 	int rv;
-@@ -2604,6 +2607,7 @@ csio_hw_configure(struct csio_hw *hw)
-  */
- static void
- csio_hw_initialize(struct csio_hw *hw)
-+	__must_hold(&hw->lock)
- {
- 	struct csio_mb	*mbp;
- 	enum fw_retval retval;
-@@ -2778,6 +2782,7 @@ csio_hw_fatal_err(struct csio_hw *hw)
-  */
- static void
- csio_hws_uninit(struct csio_hw *hw, enum csio_hw_ev evt)
-+	__must_hold(&hw->lock)
- {
- 	hw->prev_evt =3D hw->cur_evt;
- 	hw->cur_evt =3D evt;
-@@ -2803,6 +2808,7 @@ csio_hws_uninit(struct csio_hw *hw, enum csio_hw_ev=
- evt)
-  */
- static void
- csio_hws_configuring(struct csio_hw *hw, enum csio_hw_ev evt)
-+	__must_hold(&hw->lock)
- {
- 	hw->prev_evt =3D hw->cur_evt;
- 	hw->cur_evt =3D evt;
-@@ -2988,6 +2994,7 @@ csio_hws_quiescing(struct csio_hw *hw, enum csio_hw=
-_ev evt)
-  */
- static void
- csio_hws_quiesced(struct csio_hw *hw, enum csio_hw_ev evt)
-+	__must_hold(&hw->lock)
- {
- 	hw->prev_evt =3D hw->cur_evt;
- 	hw->cur_evt =3D evt;
-@@ -3013,6 +3020,7 @@ csio_hws_quiesced(struct csio_hw *hw, enum csio_hw_=
-ev evt)
-  */
- static void
- csio_hws_resetting(struct csio_hw *hw, enum csio_hw_ev evt)
-+	__must_hold(&hw->lock)
- {
- 	hw->prev_evt =3D hw->cur_evt;
- 	hw->cur_evt =3D evt;
-@@ -3074,6 +3082,7 @@ csio_hws_removing(struct csio_hw *hw, enum csio_hw_=
-ev evt)
-  */
- static void
- csio_hws_pcierr(struct csio_hw *hw, enum csio_hw_ev evt)
-+	__must_hold(&hw->lock)
- {
- 	hw->prev_evt =3D hw->cur_evt;
- 	hw->cur_evt =3D evt;
-@@ -3763,6 +3772,7 @@ csio_hw_mb_timer(struct timer_list *t)
-  */
- static void
- csio_hw_mbm_cleanup(struct csio_hw *hw)
-+	__must_hold(&hw->lock)
- {
- 	LIST_HEAD(cbfn_q);
+diff --git a/drivers/scsi/fnic/fdls_disc.c b/drivers/scsi/fnic/fdls_disc.=
+c
+index 554dea767885..0ac12edb7df1 100644
+--- a/drivers/scsi/fnic/fdls_disc.c
++++ b/drivers/scsi/fnic/fdls_disc.c
+@@ -391,6 +391,7 @@ static void fdls_reset_oxid_pool(struct fnic_iport_s =
+*iport)
+ }
 =20
-@@ -3883,6 +3893,7 @@ csio_free_evt(struct csio_hw *hw, struct csio_evt_m=
-sg *evt_entry)
+ void fnic_del_fabric_timer_sync(struct fnic *fnic)
++	__must_hold(&fnic->fnic_lock)
+ {
+ 	fnic->iport.fabric.del_timer_inprogress =3D 1;
+ 	spin_unlock_irqrestore(&fnic->fnic_lock, fnic->lock_flags);
+@@ -399,8 +400,8 @@ void fnic_del_fabric_timer_sync(struct fnic *fnic)
+ 	fnic->iport.fabric.del_timer_inprogress =3D 0;
+ }
 =20
+-void fnic_del_tport_timer_sync(struct fnic *fnic,
+-						struct fnic_tport_s *tport)
++void fnic_del_tport_timer_sync(struct fnic *fnic, struct fnic_tport_s *t=
+port)
++	__must_hold(&fnic->fnic_lock)
+ {
+ 	tport->del_timer_inprogress =3D 1;
+ 	spin_unlock_irqrestore(&fnic->fnic_lock, fnic->lock_flags);
+@@ -411,6 +412,7 @@ void fnic_del_tport_timer_sync(struct fnic *fnic,
+=20
+ static void
+ fdls_start_fabric_timer(struct fnic_iport_s *iport, int timeout)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	u64 fabric_tov;
+ 	struct fnic *fnic =3D iport->fnic;
+@@ -436,6 +438,7 @@ fdls_start_fabric_timer(struct fnic_iport_s *iport, i=
+nt timeout)
+ static void
+ fdls_start_tport_timer(struct fnic_iport_s *iport,
+ 					   struct fnic_tport_s *tport, int timeout)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	u64 fabric_tov;
+ 	struct fnic *fnic =3D iport->fnic;
+@@ -631,6 +634,7 @@ fdls_send_logo_resp(struct fnic_iport_s *iport,
  void
- csio_evtq_flush(struct csio_hw *hw)
-+	__must_hold(&hw->lock)
+ fdls_send_tport_abts(struct fnic_iport_s *iport,
+ 					 struct fnic_tport_s *tport)
++	__must_hold(&iport->fnic->fnic_lock)
  {
- 	uint32_t count;
- 	count =3D 30;
-@@ -4142,6 +4153,7 @@ csio_mgmt_tmo_handler(struct timer_list *t)
+ 	uint8_t *frame;
+ 	uint8_t s_id[3];
+@@ -674,7 +678,9 @@ fdls_send_tport_abts(struct fnic_iport_s *iport,
+ 	/* Even if fnic_send_fcoe_frame() fails we want to retry after timeout =
+*/
+ 	fdls_start_tport_timer(iport, tport, 2 * iport->e_d_tov);
+ }
++
+ static void fdls_send_fabric_abts(struct fnic_iport_s *iport)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	uint8_t *frame;
+ 	uint8_t s_id[3];
+@@ -846,6 +852,7 @@ static void fdls_send_fdmi_abts(struct fnic_iport_s *=
+iport)
+ }
+=20
+ static void fdls_send_fabric_flogi(struct fnic_iport_s *iport)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	uint8_t *frame;
+ 	struct fc_std_flogi *pflogi;
+@@ -906,6 +913,7 @@ static void fdls_send_fabric_flogi(struct fnic_iport_=
+s *iport)
+ }
+=20
+ static void fdls_send_fabric_plogi(struct fnic_iport_s *iport)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	uint8_t *frame;
+ 	struct fc_std_flogi *pplogi;
+@@ -998,6 +1006,7 @@ static void fdls_send_fdmi_plogi(struct fnic_iport_s=
+ *iport)
+ }
+=20
+ static void fdls_send_rpn_id(struct fnic_iport_s *iport)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	uint8_t *frame;
+ 	struct fc_std_rpn_id *prpn_id;
+@@ -1057,6 +1066,7 @@ static void fdls_send_rpn_id(struct fnic_iport_s *i=
+port)
+ }
+=20
+ static void fdls_send_scr(struct fnic_iport_s *iport)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	uint8_t *frame;
+ 	struct fc_std_scr *pscr;
+@@ -1112,6 +1122,7 @@ static void fdls_send_scr(struct fnic_iport_s *ipor=
+t)
+ }
+=20
+ static void fdls_send_gpn_ft(struct fnic_iport_s *iport, int fdls_state)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	uint8_t *frame;
+ 	struct fc_std_gpn_ft *pgpn_ft;
+@@ -1171,6 +1182,7 @@ static void fdls_send_gpn_ft(struct fnic_iport_s *i=
+port, int fdls_state)
 =20
  static void
- csio_mgmtm_cleanup(struct csio_mgmtm *mgmtm)
-+	__must_hold(&mgmtm->hw->lock)
+ fdls_send_tgt_adisc(struct fnic_iport_s *iport, struct fnic_tport_s *tpo=
+rt)
++	__must_hold(&iport->fnic->fnic_lock)
  {
- 	struct csio_hw *hw =3D mgmtm->hw;
- 	struct csio_ioreq *io_req;
-diff --git a/drivers/scsi/csiostor/csio_lnode.c b/drivers/scsi/csiostor/c=
-sio_lnode.c
-index 78d5ecd14f65..161973957976 100644
---- a/drivers/scsi/csiostor/csio_lnode.c
-+++ b/drivers/scsi/csiostor/csio_lnode.c
-@@ -872,6 +872,7 @@ csio_ln_read_fcf_entry(struct csio_lnode *ln,
- static void
- csio_handle_link_up(struct csio_hw *hw, uint8_t portid, uint32_t fcfi,
- 		    uint32_t vnpi)
-+	__must_hold(&hw->lock)
- {
- 	struct csio_lnode *ln =3D NULL;
+ 	uint8_t *frame;
+ 	struct fc_std_els_adisc *padisc;
+@@ -1236,6 +1248,7 @@ fdls_send_tgt_adisc(struct fnic_iport_s *iport, str=
+uct fnic_tport_s *tport)
+ }
 =20
-@@ -1165,6 +1166,7 @@ csio_lns_uninit(struct csio_lnode *ln, enum csio_ln=
-_ev evt)
-  */
- static void
- csio_lns_online(struct csio_lnode *ln, enum csio_ln_ev evt)
-+	__must_hold(&csio_lnode_to_hw(ln)->lock)
+ bool fdls_delete_tport(struct fnic_iport_s *iport, struct fnic_tport_s *=
+tport)
++	__must_hold(&iport->fnic->fnic_lock)
  {
- 	struct csio_hw *hw =3D csio_lnode_to_hw(ln);
-=20
-@@ -1216,6 +1218,7 @@ csio_lns_online(struct csio_lnode *ln, enum csio_ln=
-_ev evt)
-  */
- static void
- csio_lns_ready(struct csio_lnode *ln, enum csio_ln_ev evt)
-+	__must_hold(&csio_lnode_to_hw(ln)->lock)
- {
- 	struct csio_hw *hw =3D csio_lnode_to_hw(ln);
-=20
-diff --git a/drivers/scsi/csiostor/csio_rnode.c b/drivers/scsi/csiostor/c=
-sio_rnode.c
-index 713e13adf4dc..74ef1e858cf3 100644
---- a/drivers/scsi/csiostor/csio_rnode.c
-+++ b/drivers/scsi/csiostor/csio_rnode.c
-@@ -546,6 +546,7 @@ csio_rn_verify_rparams(struct csio_lnode *ln, struct =
-csio_rnode *rn,
+ 	struct fnic_tport_event_s *tport_del_evt;
+ 	struct fnic *fnic =3D iport->fnic;
+@@ -1293,6 +1306,7 @@ bool fdls_delete_tport(struct fnic_iport_s *iport, =
+struct fnic_tport_s *tport)
 =20
  static void
- __csio_reg_rnode(struct csio_rnode *rn)
-+	__must_hold(&csio_lnode_to_hw(csio_rnode_to_lnode(rn))->lock)
+ fdls_send_tgt_plogi(struct fnic_iport_s *iport, struct fnic_tport_s *tpo=
+rt)
++	__must_hold(&iport->fnic->fnic_lock)
  {
- 	struct csio_lnode *ln =3D csio_rnode_to_lnode(rn);
- 	struct csio_hw *hw =3D csio_lnode_to_hw(ln);
-@@ -563,6 +564,7 @@ __csio_reg_rnode(struct csio_rnode *rn)
+ 	uint8_t *frame;
+ 	struct fc_std_flogi *pplogi;
+@@ -1361,6 +1375,7 @@ fnic_fc_plogi_rsp_rdf(struct fnic_iport_s *iport,
+ }
+=20
+ static void fdls_send_register_fc4_types(struct fnic_iport_s *iport)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	uint8_t *frame;
+ 	struct fc_std_rft_id *prft_id;
+@@ -1421,6 +1436,7 @@ static void fdls_send_register_fc4_types(struct fni=
+c_iport_s *iport)
+ }
+=20
+ static void fdls_send_register_fc4_features(struct fnic_iport_s *iport)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	uint8_t *frame;
+ 	struct fc_std_rff_id *prff_id;
+@@ -1480,6 +1496,7 @@ static void fdls_send_register_fc4_features(struct =
+fnic_iport_s *iport)
 =20
  static void
- __csio_unreg_rnode(struct csio_rnode *rn)
-+	__must_hold(&csio_lnode_to_hw(csio_rnode_to_lnode(rn))->lock)
+ fdls_send_tgt_prli(struct fnic_iport_s *iport, struct fnic_tport_s *tpor=
+t)
++	__must_hold(&iport->fnic->fnic_lock)
  {
- 	struct csio_lnode *ln =3D csio_rnode_to_lnode(rn);
- 	struct csio_hw *hw =3D csio_lnode_to_hw(ln);
-@@ -602,6 +604,7 @@ __csio_unreg_rnode(struct csio_rnode *rn)
+ 	uint8_t *frame;
+ 	struct fc_std_els_prli *pprli;
+@@ -1553,6 +1570,7 @@ fdls_send_tgt_prli(struct fnic_iport_s *iport, stru=
+ct fnic_tport_s *tport)
+  * Currently this assumes to be called with fnic lock held.
   */
+ void fdls_send_fabric_logo(struct fnic_iport_s *iport)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	uint8_t *frame;
+ 	struct fc_std_logo *plogo;
+@@ -1652,6 +1670,7 @@ void fdls_tgt_logout(struct fnic_iport_s *iport, st=
+ruct fnic_tport_s *tport)
+ }
+=20
+ static void fdls_tgt_discovery_start(struct fnic_iport_s *iport)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fnic_tport_s *tport, *next;
+ 	u32 old_link_down_cnt =3D iport->fnic->link_down_cnt;
+@@ -1702,6 +1721,7 @@ static void fdls_tgt_discovery_start(struct fnic_ip=
+ort_s *iport)
+  * pointing to it will be freed later
+  */
+ static void fdls_target_restart_nexus(struct fnic_tport_s *tport)
++	__must_hold(&((struct fnic_iport_s *)tport->iport)->fnic->fnic_lock)
+ {
+ 	struct fnic_iport_s *iport =3D tport->iport;
+ 	struct fnic_tport_s *new_tport =3D NULL;
+@@ -2482,6 +2502,7 @@ static void fdls_tport_timer_callback(struct timer_=
+list *t)
+ }
+=20
+ static void fnic_fdls_start_flogi(struct fnic_iport_s *iport)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	iport->fabric.retry_counter =3D 0;
+ 	fdls_send_fabric_flogi(iport);
+@@ -2490,6 +2511,7 @@ static void fnic_fdls_start_flogi(struct fnic_iport=
+_s *iport)
+ }
+=20
+ static void fnic_fdls_start_plogi(struct fnic_iport_s *iport)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	iport->fabric.retry_counter =3D 0;
+ 	fdls_send_fabric_plogi(iport);
+@@ -2508,6 +2530,7 @@ static void fnic_fdls_start_plogi(struct fnic_iport=
+_s *iport)
  static void
- csio_rns_uninit(struct csio_rnode *rn, enum csio_rn_ev evt)
-+	__must_hold(&csio_rnode_to_lnode(rn)->hwp->lock)
+ fdls_process_tgt_adisc_rsp(struct fnic_iport_s *iport,
+ 			   struct fc_frame_header *fchdr)
++	__must_hold(&iport->fnic->fnic_lock)
  {
- 	struct csio_lnode *ln =3D csio_rnode_to_lnode(rn);
- 	int ret =3D 0;
-@@ -642,6 +645,7 @@ csio_rns_uninit(struct csio_rnode *rn, enum csio_rn_e=
-v evt)
-  */
+ 	uint32_t tgt_fcid;
+ 	struct fnic_tport_s *tport;
+@@ -2598,6 +2621,7 @@ fdls_process_tgt_adisc_rsp(struct fnic_iport_s *ipo=
+rt,
  static void
- csio_rns_ready(struct csio_rnode *rn, enum csio_rn_ev evt)
-+	__must_hold(&csio_rnode_to_lnode(rn)->hwp->lock)
+ fdls_process_tgt_plogi_rsp(struct fnic_iport_s *iport,
+ 			   struct fc_frame_header *fchdr)
++	__must_hold(&iport->fnic->fnic_lock)
  {
- 	struct csio_lnode *ln =3D csio_rnode_to_lnode(rn);
- 	int ret =3D 0;
-@@ -727,6 +731,7 @@ csio_rns_ready(struct csio_rnode *rn, enum csio_rn_ev=
- evt)
-  */
+ 	uint32_t tgt_fcid;
+ 	struct fnic_tport_s *tport;
+@@ -2632,6 +2656,8 @@ fdls_process_tgt_plogi_rsp(struct fnic_iport_s *ipo=
+rt,
+ 	if (tport->state !=3D FDLS_TGT_STATE_PLOGI) {
+ 		FNIC_FCS_DBG(KERN_INFO, fnic->host, fnic->fnic_num,
+ 			     "PLOGI rsp recvd in wrong state. Drop the frame and restart nexu=
+s");
++		/* Tell the compiler that tport->iport =3D=3D iport. */
++		__assume_ctx_lock(&((struct fnic_iport_s *)tport->iport)->fnic->fnic_l=
+ock);
+ 		fdls_target_restart_nexus(tport);
+ 		return;
+ 	}
+@@ -2719,9 +2745,11 @@ fdls_process_tgt_plogi_rsp(struct fnic_iport_s *ip=
+ort,
+ 	fdls_set_tport_state(tport, FDLS_TGT_STATE_PRLI);
+ 	fdls_send_tgt_prli(iport, tport);
+ }
++
  static void
- csio_rns_offline(struct csio_rnode *rn, enum csio_rn_ev evt)
-+	__must_hold(&csio_rnode_to_lnode(rn)->hwp->lock)
+ fdls_process_tgt_prli_rsp(struct fnic_iport_s *iport,
+ 			  struct fc_frame_header *fchdr)
++	__must_hold(&iport->fnic->fnic_lock)
  {
- 	struct csio_lnode *ln =3D csio_rnode_to_lnode(rn);
- 	int ret =3D 0;
-@@ -786,6 +791,7 @@ csio_rns_offline(struct csio_rnode *rn, enum csio_rn_=
-ev evt)
-  */
+ 	uint32_t tgt_fcid;
+ 	struct fnic_tport_s *tport;
+@@ -2758,6 +2786,8 @@ fdls_process_tgt_prli_rsp(struct fnic_iport_s *ipor=
+t,
+ 	if (tport->state !=3D FDLS_TGT_STATE_PRLI) {
+ 		FNIC_FCS_DBG(KERN_INFO, fnic->host, fnic->fnic_num,
+ 			     "PRLI rsp recvd in wrong state. Drop frame. Restarting nexus");
++		/* Tell the compiler that tport->iport =3D=3D iport. */
++		__assume_ctx_lock(&((struct fnic_iport_s *)tport->iport)->fnic->fnic_l=
+ock);
+ 		fdls_target_restart_nexus(tport);
+ 		return;
+ 	}
+@@ -2872,6 +2902,7 @@ fdls_process_tgt_prli_rsp(struct fnic_iport_s *ipor=
+t,
  static void
- csio_rns_disappeared(struct csio_rnode *rn, enum csio_rn_ev evt)
-+	__must_hold(&csio_rnode_to_lnode(rn)->hwp->lock)
+ fdls_process_rff_id_rsp(struct fnic_iport_s *iport,
+ 			struct fc_frame_header *fchdr)
++	__must_hold(&iport->fnic->fnic_lock)
  {
- 	struct csio_lnode *ln =3D csio_rnode_to_lnode(rn);
- 	int ret =3D 0;
-diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/cs=
-io_scsi.c
-index b1de615cf316..b74fed463640 100644
---- a/drivers/scsi/csiostor/csio_scsi.c
-+++ b/drivers/scsi/csiostor/csio_scsi.c
-@@ -1157,6 +1157,7 @@ csio_scsi_cmpl_handler(struct csio_hw *hw, void *wr=
-, uint32_t len,
+ 	struct fnic *fnic =3D iport->fnic;
+ 	struct fnic_fdls_fabric_s *fdls =3D &iport->fabric;
+@@ -2945,6 +2976,7 @@ fdls_process_rff_id_rsp(struct fnic_iport_s *iport,
+ static void
+ fdls_process_rft_id_rsp(struct fnic_iport_s *iport,
+ 			struct fc_frame_header *fchdr)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fnic_fdls_fabric_s *fdls =3D &iport->fabric;
+ 	struct fc_std_rft_id *rft_rsp =3D (struct fc_std_rft_id *) fchdr;
+@@ -3020,6 +3052,7 @@ fdls_process_rft_id_rsp(struct fnic_iport_s *iport,
+ static void
+ fdls_process_rpn_id_rsp(struct fnic_iport_s *iport,
+ 			struct fc_frame_header *fchdr)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fnic_fdls_fabric_s *fdls =3D &iport->fabric;
+ 	struct fc_std_rpn_id *rpn_rsp =3D (struct fc_std_rpn_id *) fchdr;
+@@ -3090,6 +3123,7 @@ fdls_process_rpn_id_rsp(struct fnic_iport_s *iport,
+ static void
+ fdls_process_scr_rsp(struct fnic_iport_s *iport,
+ 		     struct fc_frame_header *fchdr)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fnic_fdls_fabric_s *fdls =3D &iport->fabric;
+ 	struct fc_std_scr *scr_rsp =3D (struct fc_std_scr *) fchdr;
+@@ -3162,6 +3196,7 @@ fdls_process_scr_rsp(struct fnic_iport_s *iport,
+ static void
+ fdls_process_gpn_ft_tgt_list(struct fnic_iport_s *iport,
+ 			     struct fc_frame_header *fchdr, int len)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fc_gpn_ft_rsp_iu *gpn_ft_tgt;
+ 	struct fnic_tport_s *tport, *next;
+@@ -3260,6 +3295,7 @@ fdls_process_gpn_ft_tgt_list(struct fnic_iport_s *i=
+port,
+ static void
+ fdls_process_gpn_ft_rsp(struct fnic_iport_s *iport,
+ 			struct fc_frame_header *fchdr, int len)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fnic_fdls_fabric_s *fdls =3D &iport->fabric;
+ 	struct fc_std_gpn_ft *gpn_ft_rsp =3D (struct fc_std_gpn_ft *) fchdr;
+@@ -3396,6 +3432,7 @@ fdls_process_gpn_ft_rsp(struct fnic_iport_s *iport,
+ static void
+ fdls_process_fabric_logo_rsp(struct fnic_iport_s *iport,
+ 			     struct fc_frame_header *fchdr)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fc_std_flogi *flogo_rsp =3D (struct fc_std_flogi *) fchdr;
+ 	struct fnic_fdls_fabric_s *fdls =3D &iport->fabric;
+@@ -3449,6 +3486,7 @@ fdls_process_fabric_logo_rsp(struct fnic_iport_s *i=
+port,
+ static void
+ fdls_process_flogi_rsp(struct fnic_iport_s *iport,
+ 		       struct fc_frame_header *fchdr, void *rx_frame)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fnic_fdls_fabric_s *fabric =3D &iport->fabric;
+ 	struct fc_std_flogi *flogi_rsp =3D (struct fc_std_flogi *) fchdr;
+@@ -3586,6 +3624,7 @@ fdls_process_flogi_rsp(struct fnic_iport_s *iport,
+ static void
+ fdls_process_fabric_plogi_rsp(struct fnic_iport_s *iport,
+ 			      struct fc_frame_header *fchdr)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fc_std_flogi *plogi_rsp =3D (struct fc_std_flogi *) fchdr;
+ 	struct fc_std_els_rjt_rsp *els_rjt =3D (struct fc_std_els_rjt_rsp *) fc=
+hdr;
+@@ -3847,6 +3886,7 @@ static void fdls_process_fdmi_abts_rsp(struct fnic_=
+iport_s *iport,
+ static void
+ fdls_process_fabric_abts_rsp(struct fnic_iport_s *iport,
+ 			     struct fc_frame_header *fchdr)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	uint32_t s_id;
+ 	struct fc_std_abts_ba_acc *ba_acc =3D (struct fc_std_abts_ba_acc *)fchd=
+r;
+@@ -4204,6 +4244,7 @@ fdls_process_els_req(struct fnic_iport_s *iport, st=
+ruct fc_frame_header *fchdr,
+ static void
+ fdls_process_tgt_abts_rsp(struct fnic_iport_s *iport,
+ 			  struct fc_frame_header *fchdr)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	uint32_t s_id;
+ 	struct fnic_tport_s *tport;
+@@ -4393,6 +4434,7 @@ fdls_process_plogi_req(struct fnic_iport_s *iport,
+=20
+ static void
+ fdls_process_logo_req(struct fnic_iport_s *iport, struct fc_frame_header=
+ *fchdr)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fc_std_logo *logo =3D (struct fc_std_logo *)fchdr;
+ 	uint32_t nport_id;
+@@ -4433,6 +4475,8 @@ fdls_process_logo_req(struct fnic_iport_s *iport, s=
+truct fc_frame_header *fchdr)
+ 		FNIC_FCS_DBG(KERN_ERR, fnic->host, fnic->fnic_num,
+ 					 "tport fcid 0x%x: Canceling disc timer\n",
+ 					 tport->fcid);
++		/* Tell the compiler that tport->iport =3D=3D iport. */
++		__assume_ctx_lock(&((struct fnic_iport_s *)tport->iport)->fnic->fnic_l=
+ock);
+ 		fnic_del_tport_timer_sync(fnic, tport);
+ 		tport->timer_pending =3D 0;
+ 	}
+@@ -4470,6 +4514,7 @@ fdls_process_logo_req(struct fnic_iport_s *iport, s=
+truct fc_frame_header *fchdr)
+=20
+ static void
+ fdls_process_rscn(struct fnic_iport_s *iport, struct fc_frame_header *fc=
+hdr)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fc_std_rscn *rscn;
+ 	struct fc_els_rscn_page *rscn_port =3D NULL;
+@@ -4603,6 +4648,7 @@ fdls_process_rscn(struct fnic_iport_s *iport, struc=
+t fc_frame_header *fchdr)
+ }
+=20
+ void fnic_fdls_disc_start(struct fnic_iport_s *iport)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fnic *fnic =3D iport->fnic;
+=20
+@@ -4943,6 +4989,7 @@ fnic_fdls_validate_and_get_frame_type(struct fnic_i=
+port_s *iport,
+=20
+ void fnic_fdls_recv_frame(struct fnic_iport_s *iport, void *rx_frame,
+ 						  int len, int fchdr_offset)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fc_frame_header *fchdr;
+ 	uint32_t s_id =3D 0;
+@@ -5061,6 +5108,7 @@ void fnic_fdls_disc_init(struct fnic_iport_s *iport=
+)
+ }
+=20
+ void fnic_fdls_link_down(struct fnic_iport_s *iport)
++	__must_hold(&iport->fnic->fnic_lock)
+ {
+ 	struct fnic_tport_s *tport, *next;
+ 	struct fnic *fnic =3D iport->fnic;
+diff --git a/drivers/scsi/fnic/fip.c b/drivers/scsi/fnic/fip.c
+index 132f00512ee1..da8a8e9ffea4 100644
+--- a/drivers/scsi/fnic/fip.c
++++ b/drivers/scsi/fnic/fip.c
+@@ -610,6 +610,7 @@ void fnic_common_fip_cleanup(struct fnic *fnic)
+  * and clean up and restart the vlan discovery.
   */
+ void fnic_fcoe_process_cvl(struct fnic *fnic, struct fip_header *fiph)
++	__must_hold(&fnic->fnic_lock)
+ {
+ 	struct fnic_iport_s *iport =3D &fnic->iport;
+ 	struct fip_cvl *cvl_msg =3D (struct fip_cvl *)fiph;
+@@ -687,6 +688,7 @@ void fnic_fcoe_process_cvl(struct fnic *fnic, struct =
+fip_header *fiph)
+  * @frame: Received ethernet frame
+  */
+ int fdls_fip_recv_frame(struct fnic *fnic, void *frame)
++	__must_hold(&fnic->fnic_lock)
+ {
+ 	struct ethhdr *eth =3D (struct ethhdr *)frame;
+ 	struct fip_header *fiph;
+diff --git a/drivers/scsi/fnic/fnic_fcs.c b/drivers/scsi/fnic/fnic_fcs.c
+index 063eb864a5cd..99f9fe13dfe4 100644
+--- a/drivers/scsi/fnic/fnic_fcs.c
++++ b/drivers/scsi/fnic/fnic_fcs.c
+@@ -925,6 +925,7 @@ void fnic_free_wq_buf(struct vnic_wq *wq, struct vnic=
+_wq_buf *buf)
  void
- csio_scsi_cleanup_io_q(struct csio_scsim *scm, struct list_head *q)
-+	__must_hold(&scm->hw->lock)
+ fnic_fdls_add_tport(struct fnic_iport_s *iport, struct fnic_tport_s *tpo=
+rt,
+ 					unsigned long flags)
++	__must_hold(&iport->fnic->fnic_lock)
  {
- 	struct csio_hw *hw =3D scm->hw;
- 	struct csio_ioreq *ioreq;
-@@ -1231,6 +1232,7 @@ csio_abrt_cls(struct csio_ioreq *ioreq, struct scsi=
-_cmnd *scmnd)
-  */
- static int
- csio_scsi_abort_io_q(struct csio_scsim *scm, struct list_head *q, uint32=
-_t tmo)
-+	__must_hold(&scm->hw->lock)
+ 	struct fnic *fnic =3D iport->fnic;
+ 	struct fc_rport *rport;
+@@ -964,6 +965,7 @@ fnic_fdls_add_tport(struct fnic_iport_s *iport, struc=
+t fnic_tport_s *tport,
+ void
+ fnic_fdls_remove_tport(struct fnic_iport_s *iport,
+ 					   struct fnic_tport_s *tport, unsigned long flags)
++	__must_hold(&iport->fnic->fnic_lock)
  {
- 	struct csio_hw *hw =3D scm->hw;
- 	struct list_head *tmp, *next;
-@@ -1271,6 +1273,7 @@ csio_scsi_abort_io_q(struct csio_scsim *scm, struct=
- list_head *q, uint32_t tmo)
-  */
- int
- csio_scsim_cleanup_io(struct csio_scsim *scm, bool abort)
-+	__must_hold(&scm->hw->lock)
- {
- 	struct csio_hw *hw =3D scm->hw;
- 	int rv =3D 0;
-@@ -1316,6 +1319,7 @@ csio_scsim_cleanup_io(struct csio_scsim *scm, bool =
-abort)
-  */
- int
- csio_scsim_cleanup_io_lnode(struct csio_scsim *scm, struct csio_lnode *l=
-n)
-+	__must_hold(&scm->hw->lock)
- {
- 	struct csio_hw *hw =3D scm->hw;
- 	struct csio_scsi_level_data sld;
-@@ -2192,6 +2196,8 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
- 	 * completes, we gather pending I/Os after the LUN reset.
- 	 */
- 	spin_lock_irq(&hw->lock);
-+	/* Tell the compiler that scsim->hw =3D=3D hw. */
-+	__assume_ctx_lock(&scsim->hw->lock);
- 	csio_scsi_gather_active_ios(scsim, &sld, &local_q);
+ 	struct fnic *fnic =3D iport->fnic;
+ 	struct rport_dd_data_s *rdd_data;
+@@ -1013,6 +1015,8 @@ void fnic_delete_fcp_tports(struct fnic *fnic)
+ 	unsigned long flags;
 =20
- 	retval =3D csio_scsi_abort_io_q(scsim, &local_q, 30000);
+ 	spin_lock_irqsave(&fnic->fnic_lock, flags);
++	/* Tell the compiler that fnic->iport.fnic =3D=3D fnic. */
++	__assume_ctx_lock(&fnic->iport.fnic->fnic_lock);
+ 	list_for_each_entry_safe(tport, next, &fnic->iport.tport_list, links) {
+ 		FNIC_FCS_DBG(KERN_INFO, fnic->host, fnic->fnic_num,
+ 					 "removing fcp rport fcid: 0x%x", tport->fcid);
+@@ -1037,6 +1041,8 @@ void fnic_tport_event_handler(struct work_struct *w=
+ork)
+ 	struct fnic_tport_s *tport;
+=20
+ 	spin_lock_irqsave(&fnic->fnic_lock, flags);
++	/* Tell the compiler that fnic->iport.fnic =3D=3D fnic. */
++	__assume_ctx_lock(&fnic->iport.fnic->fnic_lock);
+ 	list_for_each_entry_safe(cur_evt, next, &fnic->tport_event_list, links)=
+ {
+ 		tport =3D cur_evt->arg1;
+ 		switch (cur_evt->event) {
+diff --git a/drivers/scsi/fnic/fnic_scsi.c b/drivers/scsi/fnic/fnic_scsi.=
+c
+index 6ee3c559e129..a757b20756ad 100644
+--- a/drivers/scsi/fnic/fnic_scsi.c
++++ b/drivers/scsi/fnic/fnic_scsi.c
+@@ -2617,6 +2617,8 @@ int fnic_device_reset(struct scsi_cmnd *sc)
+ 		 * allocated by mid layer.
+ 		 */
+ 		mutex_lock(&fnic->sgreset_mutex);
++		/* Fake __release() to keep the lock context analyzer happy. */
++		__release(&fnic->sgreset_mutex);
+ 		mqtag =3D fnic->fnic_max_tag_id;
+ 		new_sc =3D 1;
+ 	}  else {
+@@ -2803,6 +2805,8 @@ int fnic_device_reset(struct scsi_cmnd *sc)
+=20
+ 	if (new_sc) {
+ 		fnic->sgreset_sc =3D NULL;
++		/* Fake __acquire() to keep the lock context analyzer happy. */
++		__acquire(&fnic->sgreset_mutex);
+ 		mutex_unlock(&fnic->sgreset_mutex);
+ 	}
+=20
 
