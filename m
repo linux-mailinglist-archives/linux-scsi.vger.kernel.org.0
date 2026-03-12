@@ -1,73 +1,73 @@
-Return-Path: <linux-scsi+bounces-21959-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21958-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yLeSH48ts2ksSwAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21959-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:18:07 +0100
+	id wMZmNYwts2ksSwAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21958-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:18:04 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4043D279E34
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:18:07 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49C8D279E25
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:18:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B5BE8302736D
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 21:17:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A931D3056E55
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 21:17:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 507C526B2DA;
-	Thu, 12 Mar 2026 21:17:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AAF63C13EA;
+	Thu, 12 Mar 2026 21:17:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="aofsSTJq"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="FR3kL4fO"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F045C3B7B63
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352A53CAE8E
 	for <linux-scsi@vger.kernel.org>; Thu, 12 Mar 2026 21:17:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773350277; cv=none; b=a2NPZq76eXYAlH+j/E+nIkM8OPeWF/6NY+tWLE/8jj8WrzFEYSnaf9i0Nw+Vom7HNQX9djcoQ4f8nai/mU0/uey5Nx6gx9oW6Ruo04nm1vscXVZybpq0VyOGQIuRN7wFv/S/hKqlJj2KwrZFZWv4Go/HbswStn7DlI0TjOHYxvY=
+	t=1773350276; cv=none; b=SAfYUBHC1xR8riEZ4Pl1ig98QL1Mxd/uE6qDN17bSZW2hlKKRmFQFALlWDx+y5msdJeCyOW8x8oQHXKITP2Jth/KtucBae7aalHJ7KEdQN8mF7eGVYeqjqOlnYp0qIqXD8VGOC0Stv+EnOFcY6cvgLTes6zf5aWgAP4EwCHUWNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773350277; c=relaxed/simple;
-	bh=zKlmRllY1GRHMRkgvISnURJUQ5oahKVBIUY7Gd7FSJ4=;
+	s=arc-20240116; t=1773350276; c=relaxed/simple;
+	bh=DOnvxuBA9tgzrDEA2GQWusZumAAFkWXu7Wx5D7CTj9c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Fym3uAjaswrQyJJt1Y6vTotrCD3OkvrvI74SbitGfTECsu7XZ9NKvVsKWKV9JlixgXvToElQ0x1HamelaU7f2ZYyPYRRdrW+d87IhyfJOD6+bTWF6ao8DLUzSqw+Kje9u3hULSGfSOvFlnaNy2P4OD1foXW8kvlQb2wzfBXMmUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=aofsSTJq; arc=none smtp.client-ip=199.89.1.16
+	 MIME-Version; b=aX1YqZtO2Sxbcy38ROyWB8R2q2Jq55udOI98ZvUDFG8OVqfMILLFuRcCyUj2pVA4zsPQEICFv3QQoi4XO08f6BllUmfAFHmnou0+rpWsjO/x9Qk3NBC9P+2sRc3SBa3x/Y6AnMHYgAwJ3tArAAn1EpUqEFAzXQyXdPjrdaMQKQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=FR3kL4fO; arc=none smtp.client-ip=199.89.1.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fX0nv5YRxzlfl5l;
-	Thu, 12 Mar 2026 21:17:55 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fX0nt5trdzlfl5V;
+	Thu, 12 Mar 2026 21:17:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1773350272; x=1775942273; bh=rb5VA
-	Qd70xgHjzh7L4c/OcrwtIyf3ixZHza4Czi/Qpg=; b=aofsSTJqBkxrIxbyVF5Hh
-	GqEomq04jrKiS5nzEg8V9UbvZYvBoTdqoVZjIcDgnb2ANkIZlR55kV38mhikVW9O
-	j244W7xdvjWkvyWru+rddbSMskBXcAlMEZRqeetgapkw2xp7pIrJ7Pu+fnDvVINx
-	0kzW5uwVKmWLclyHri/CICLE0le0GILDzIiN7J1LUMicKzC0dj+6U5pI27Nxi8LT
-	neZv6WTPyxfBAdvZew8hQYHpwWJmK9CqdXniN7pMtIo6NwO2x3erJmMoXU2EIH/B
-	d+83ou2nQleEtSISKKW/Qg74kto3ty86f4U5E2hDc3fjXQFwfX2SOHs0u2WqsQY4
-	g==
+	:received:received; s=mr01; t=1773350272; x=1775942273; bh=2hn5S
+	QbAWE7a24Fv4He10plUnzSimUKiz04laKm4XWI=; b=FR3kL4fOBsv1JidxXmsV2
+	Oi+2UPS2QNxS+a/GDNBeIgR5ONKEhx5T8i4YvLatTB7y/pGz1hvnLgxaEbubF2uj
+	XiBVOPuQwnqlVBcdQh1yi6Xo7x+G6D6MyXBir35nvVky0xse824DrBUEVV+Q/Ikj
+	tNdxNr/F8x8kd+T7hA+0wPh/DwzT1tsXPqzRWczDeaCdozP+J2PXRM4VvEDlvKEg
+	9wFvBRMKaagfnYYzYlsCZ0EHMbmdvJNhGwDa9HTNVG5o04qNrr0iDPvUnqg0ZdzA
+	r4tTu79zDmaAZXcGUjJQLSk8ErtAufb8T64ndid/Mykmh084kH7Ht9LGl8mlkqOM
+	Q==
 X-Virus-Scanned: by MailRoute
 Received: from 013.lax.mailroute.net ([127.0.0.1])
  by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id oycbhg00RXyu; Thu, 12 Mar 2026 21:17:52 +0000 (UTC)
+ id c6cWkXOerpBf; Thu, 12 Mar 2026 21:17:52 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fX0nk6pwszlfl5h;
-	Thu, 12 Mar 2026 21:17:46 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fX0nm2v2Wzlfl5l;
+	Thu, 12 Mar 2026 21:17:48 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	Bart Van Assche <bvanassche@acm.org>,
-	Brian King <brking@us.ibm.com>,
+	Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
 	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH 19/36] scsi: ipr: Prepare for enabling lock context analysis
-Date: Thu, 12 Mar 2026 14:15:30 -0700
-Message-ID: <20260312211636.3245119-20-bvanassche@acm.org>
+Subject: [PATCH 20/36] scsi: ips: Prepare for enabling lock context analysis
+Date: Thu, 12 Mar 2026 14:15:31 -0700
+Message-ID: <20260312211636.3245119-21-bvanassche@acm.org>
 X-Mailer: git-send-email 2.53.0.851.ga537e3e6e9-goog
 In-Reply-To: <20260312211636.3245119-1-bvanassche@acm.org>
 References: <20260312211636.3245119-1-bvanassche@acm.org>
@@ -83,18 +83,18 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21959-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21958-lists,linux-scsi=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
@@ -105,85 +105,29 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	RCPT_COUNT_FIVE(0.00)[5];
 	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 4043D279E34
+X-Rspamd-Queue-Id: 49C8D279E25
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Document locking requirements with __must_hold().
+Annotate ips_next() with __no_context_analysis because it performs
+conditional locking.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/ipr.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/scsi/ips.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
-index d207e5e81afe..51092834876c 100644
---- a/drivers/scsi/ipr.c
-+++ b/drivers/scsi/ipr.c
-@@ -1016,6 +1016,7 @@ static void ipr_init_ioadl(struct ipr_cmnd *ipr_cmd=
-, dma_addr_t dma_addr,
- static void ipr_send_blocking_cmd(struct ipr_cmnd *ipr_cmd,
- 				  void (*timeout_func) (struct timer_list *),
- 				  u32 timeout)
-+	__must_hold(ipr_cmd->ioa_cfg->host->host_lock)
+diff --git a/drivers/scsi/ips.c b/drivers/scsi/ips.c
+index 41ed73966a48..3de7b90a2e56 100644
+--- a/drivers/scsi/ips.c
++++ b/drivers/scsi/ips.c
+@@ -2506,6 +2506,7 @@ ips_hainit(ips_ha_t * ha)
+ /***********************************************************************=
+*****/
+ static void
+ ips_next(ips_ha_t * ha, int intr)
++	__no_context_analysis /* conditional locking */
  {
- 	struct ipr_ioa_cfg *ioa_cfg =3D ipr_cmd->ioa_cfg;
-=20
-@@ -5012,6 +5013,7 @@ static int ipr_eh_host_reset(struct scsi_cmnd *cmd)
-  **/
- static int ipr_device_reset(struct ipr_ioa_cfg *ioa_cfg,
- 			    struct ipr_resource_entry *res)
-+	__must_hold(ioa_cfg->host->host_lock)
- {
- 	struct ipr_cmnd *ipr_cmd;
- 	struct ipr_ioarcb *ioarcb;
-@@ -5020,6 +5022,8 @@ static int ipr_device_reset(struct ipr_ioa_cfg *ioa=
-_cfg,
-=20
- 	ENTER;
- 	ipr_cmd =3D ipr_get_free_ipr_cmnd(ioa_cfg);
-+	/* Tell the compiler that ipr_cmd->ioa_cfg =3D=3D ioa_cfg. */
-+	__assume_ctx_lock(ipr_cmd->ioa_cfg->host->host_lock);
- 	ioarcb =3D &ipr_cmd->ioarcb;
- 	cmd_pkt =3D &ioarcb->cmd_pkt;
-=20
-@@ -5050,6 +5054,7 @@ static int ipr_device_reset(struct ipr_ioa_cfg *ioa=
-_cfg,
-  *	SUCCESS / FAILED
-  **/
- static int __ipr_eh_dev_reset(struct scsi_cmnd *scsi_cmd)
-+	__must_hold(scsi_cmd->device->host->host_lock)
- {
- 	struct ipr_ioa_cfg *ioa_cfg;
- 	struct ipr_resource_entry *res;
-@@ -5069,6 +5074,9 @@ static int __ipr_eh_dev_reset(struct scsi_cmnd *scs=
-i_cmd)
- 	if (ioa_cfg->hrrq[IPR_INIT_HRRQ].ioa_is_dead)
- 		return FAILED;
-=20
-+	/* Tell the compiler that ioa_cfg->host =3D=3D scsi_cmd->device->host. =
-*/
-+	__assume_ctx_lock(ioa_cfg->host->host_lock);
-+
- 	res->resetting_device =3D 1;
- 	scmd_printk(KERN_ERR, scsi_cmd, "Resetting device\n");
-=20
-@@ -5189,6 +5197,7 @@ static void ipr_abort_timeout(struct timer_list *t)
-  *	SUCCESS / FAILED
-  **/
- static int ipr_cancel_op(struct scsi_cmnd *scsi_cmd)
-+	__must_hold(scsi_cmd->device->host->host_lock)
- {
- 	struct ipr_cmnd *ipr_cmd;
- 	struct ipr_ioa_cfg *ioa_cfg;
-@@ -5239,6 +5248,8 @@ static int ipr_cancel_op(struct scsi_cmnd *scsi_cmd=
-)
- 		return SUCCESS;
-=20
- 	ipr_cmd =3D ipr_get_free_ipr_cmnd(ioa_cfg);
-+	/* Tell the compiler that ipr_cmd->ioa_cfg =3D=3D ioa_cfg. */
-+	__assume_ctx_lock(ipr_cmd->ioa_cfg->host->host_lock);
- 	ipr_cmd->ioarcb.res_handle =3D res->res_handle;
- 	cmd_pkt =3D &ipr_cmd->ioarcb.cmd_pkt;
- 	cmd_pkt->request_type =3D IPR_RQTYPE_IOACMD;
+ 	ips_scb_t *scb;
+ 	struct scsi_cmnd *SC;
 
