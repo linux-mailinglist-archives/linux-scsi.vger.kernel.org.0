@@ -1,72 +1,73 @@
-Return-Path: <linux-scsi+bounces-21941-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21943-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qJd5FLkts2ksSwAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21941-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:18:49 +0100
+	id AOdHDckts2ksSwAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21943-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:19:05 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DABF7279EA8
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CFA8D279EC4
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:19:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E03F730E5758
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 21:17:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A990D314FBEA
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 21:17:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B98913C5532;
-	Thu, 12 Mar 2026 21:17:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 630833C552D;
+	Thu, 12 Mar 2026 21:17:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="iayU+U0h"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="InVEH3hu"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0CA3C5DC3
-	for <linux-scsi@vger.kernel.org>; Thu, 12 Mar 2026 21:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD2D13C554A
+	for <linux-scsi@vger.kernel.org>; Thu, 12 Mar 2026 21:17:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773350234; cv=none; b=rr9rKkzrHrFgWAyq1B/wOQtHMowBaF4bTB5nHDeIo8eIfIhk214QJmM1Ip9K+PLOkEGwgm71aAzsTAIIipnkvXbLwKyCniCtbzUh50TfVVx5DJxgrjKjsq+Ut8kabA5bGARcWr5fdKdOv6ixMBzctDQgRmVJMDHjeJOvb5dkUE4=
+	t=1773350237; cv=none; b=IHDPzOaqTStutebpppD+Oa3P6eCHbExUOq6SRglgriiQocgmG5rS4qd6VE9RHgSra0BeuR3DoguUsU6WbrAfBnYGg5Si/b2d3N77s0R6b+ewBUms5QqPElVYwHiS0gZ61caSApnh4GqZsn8JSJsCqSEuYgC2SGKuhgW7WttvgJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773350234; c=relaxed/simple;
-	bh=UYXON/bYynAx4ajJsMxUeHNaE5k0FciU3xcRCWDZHBA=;
+	s=arc-20240116; t=1773350237; c=relaxed/simple;
+	bh=/HNMT+XaQWjs58/l/fA2ncetkNi/ja3HZ3UNSYqxvZQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uaxLozGAQoz33GD4LHa0MXratrIJSznKTGNd5DJYy2dAaCRB85RhW6GujUmeOPq2IGFK30W7Zdf/mZzmkt3+laNLBnknkw8zDsUWHX2mO28T+zcU9Ynv0vv4KyOde5N1AURhttR94UgwCIoLjcSdHUxZPpzopncIniFiyMbjJ/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=iayU+U0h; arc=none smtp.client-ip=199.89.1.16
+	 MIME-Version; b=Q/71wt0bs+CToag6j16uF1Aw6y+i2gYcn+CjDBpGidq1BMibaJENzTxJs/15rW/xGsh3mDtHqSyoVB0IBg61VsjpcFOStymooRB2I4l14jxPNo4K1KFQMprVeldQOEIlvotqLe8Rk08/j8wyV2UNDV5vlC1NE4y8joxBPxwk6pw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=InVEH3hu; arc=none smtp.client-ip=199.89.1.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fX0n45VB0zlfl5h;
-	Thu, 12 Mar 2026 21:17:12 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fX0n73zpVzlfl7l;
+	Thu, 12 Mar 2026 21:17:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1773350229; x=1775942230; bh=EfpWM
-	UrnOrwSLOCGGrPuxxfEPr2aa7Sd2A+17kt8baw=; b=iayU+U0hjJ9I0C7YOLS5T
-	ViCzpFYhUb9862xTQnIKK1ontMh3PNrFGuywE/l468VvWn9ebL8Sj3w4B0qWmlVl
-	VphZpUK/S4QUtPjgI1TeSyFro1VlSep9b5eVcj4rz7OU2GvrYyz7OcQd+jJZ0Cls
-	nC0Taair1tkAGv9BUWdARGClXrrsiFNSVKaYEWSHAg6+77UhJv51fmJJcF4M9Dra
-	0Ua2Yl627aB1gfv6TpyQEwAmhCPiVXU4CddQ361ymUjtnj26MXezeHeQXGXNsw6u
-	yulbvWdsWZ1vsurR2smJvUkLdEJC6DnhIxGdMQFC2CnsIm5opJ9Jnf9eNvQGUy39
-	w==
+	:received:received; s=mr01; t=1773350231; x=1775942232; bh=DSacz
+	+4XT25BCwkCqXJR6DRQNPYD3kN8f+iDqS6vQJ0=; b=InVEH3huLwXiAkMjzoQBq
+	aK4baVYNPVvtYXIKaIKCX8Kk2/oGFqbVpFKVxSQOXmdeOEMF8UO/3tATlJ0A039k
+	NFZTpCfEUiXVlLffIaCh+veJEprNmooX2pkLe3Zflu1q+1pgu/OJnzkw0a0u6+ny
+	+kxo0mYEpFvOZJp/M/Athk1NxfDluPX6nfv05Tcm/cq0DnoxbrZJY1CHFeIi+O8t
+	hfmOdhthp6hB1zW47AYKlGCqPiiZWSBMRo0fkfVJqUYSBv9l+3xdIPD9HPdLf3pT
+	gUfcmuOuxf/laonwWZnC4tj8/wynH2vlbZrSNFKo3rlzdziTMhuKEJycBtmZ/y1/
+	A==
 X-Virus-Scanned: by MailRoute
 Received: from 013.lax.mailroute.net ([127.0.0.1])
  by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id lwOeSohwVvMB; Thu, 12 Mar 2026 21:17:09 +0000 (UTC)
+ id Im7FSE4a-8LZ; Thu, 12 Mar 2026 21:17:11 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fX0n04nVzzlfl8L;
-	Thu, 12 Mar 2026 21:17:08 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fX0n21B8Mzlfl5V;
+	Thu, 12 Mar 2026 21:17:09 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	Bart Van Assche <bvanassche@acm.org>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH 01/36] scsi: core: Prepare for enabling lock context analysis
-Date: Thu, 12 Mar 2026 14:15:12 -0700
-Message-ID: <20260312211636.3245119-2-bvanassche@acm.org>
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 02/36] scsi: scsi_debug: Prepare for enabling lock context analysis
+Date: Thu, 12 Mar 2026 14:15:13 -0700
+Message-ID: <20260312211636.3245119-3-bvanassche@acm.org>
 X-Mailer: git-send-email 2.53.0.851.ga537e3e6e9-goog
 In-Reply-To: <20260312211636.3245119-1-bvanassche@acm.org>
 References: <20260312211636.3245119-1-bvanassche@acm.org>
@@ -82,19 +83,19 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21941-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21943-lists,linux-scsi=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
@@ -102,109 +103,156 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: DABF7279EA8
+X-Rspamd-Queue-Id: CFA8D279EC4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Document which functions expect that shost->scan_mutex is held. Inform
-the compiler about synchronization object aliases with __assume_ctx_lock(=
-).
+Annotate the functions that perform conditional locking with
+__no_context_analysis to prevent that the Clang thread-safety analyzer
+complains about these functions.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/scsi_scan.c | 12 ++++++++++++
- include/scsi/scsi_host.h |  2 ++
- 2 files changed, 14 insertions(+)
+ drivers/scsi/scsi_debug.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index efcaf85ff699..738822d547f3 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -1185,6 +1185,7 @@ static int scsi_probe_and_add_lun(struct scsi_targe=
-t *starget,
- 				  struct scsi_device **sdevp,
- 				  enum scsi_scan_mode rescan,
- 				  void *hostdata)
-+	__must_hold(&dev_to_shost(starget->dev.parent)->scan_mutex)
- {
- 	struct scsi_device *sdev;
- 	unsigned char *result;
-@@ -1341,6 +1342,7 @@ static int scsi_probe_and_add_lun(struct scsi_targe=
-t *starget,
- static void scsi_sequential_lun_scan(struct scsi_target *starget,
- 				     blist_flags_t bflags, int scsi_level,
- 				     enum scsi_scan_mode rescan)
-+	__must_hold(&dev_to_shost(starget->dev.parent)->scan_mutex)
- {
- 	uint max_dev_lun;
- 	u64 sparse_lun, lun;
-@@ -1432,6 +1434,7 @@ static void scsi_sequential_lun_scan(struct scsi_ta=
-rget *starget,
-  **/
- static int scsi_report_lun_scan(struct scsi_target *starget, blist_flags=
-_t bflags,
- 				enum scsi_scan_mode rescan)
-+	__must_hold(&dev_to_shost(starget->dev.parent)->scan_mutex)
- {
- 	unsigned char scsi_cmd[MAX_COMMAND_SIZE];
- 	unsigned int length;
-@@ -1629,6 +1632,8 @@ struct scsi_device *__scsi_add_device(struct Scsi_H=
-ost *shost, uint channel,
- 	scsi_autopm_get_target(starget);
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index 1515495fd9ea..bec09a67a915 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -4014,6 +4014,7 @@ static inline struct sdeb_store_info *devip2sip(str=
+uct sdebug_dev_info *devip,
 =20
- 	mutex_lock(&shost->scan_mutex);
-+	/* Tell the compiler that dev_to_shost(...) =3D=3D shost. */
-+	__assume_ctx_lock(&dev_to_shost(starget->dev.parent)->scan_mutex);
- 	if (!shost->async_scan)
- 		scsi_complete_async_scans();
-=20
-@@ -1757,6 +1762,7 @@ EXPORT_SYMBOL(scsi_rescan_device);
-=20
- static void __scsi_scan_target(struct device *parent, unsigned int chann=
-el,
- 		unsigned int id, u64 lun, enum scsi_scan_mode rescan)
-+	__must_hold(&dev_to_shost(parent)->scan_mutex)
+ static inline void
+ sdeb_read_lock(rwlock_t *lock)
++	__no_context_analysis /* conditional locking */
  {
- 	struct Scsi_Host *shost =3D dev_to_shost(parent);
- 	blist_flags_t bflags =3D 0;
-@@ -1772,6 +1778,8 @@ static void __scsi_scan_target(struct device *paren=
-t, unsigned int channel,
- 	starget =3D scsi_alloc_target(parent, channel, id);
- 	if (!starget)
- 		return;
-+	/* Tell the compiler that dev_to_shost(...) =3D=3D shost. */
-+	__assume_ctx_lock(&dev_to_shost(starget->dev.parent)->scan_mutex);
- 	scsi_autopm_get_target(starget);
+ 	if (sdebug_no_rwlock)
+ 		__acquire(lock);
+@@ -4023,6 +4024,7 @@ sdeb_read_lock(rwlock_t *lock)
 =20
- 	if (lun !=3D SCAN_WILD_CARD) {
-@@ -1853,9 +1861,13 @@ EXPORT_SYMBOL(scsi_scan_target);
- static void scsi_scan_channel(struct Scsi_Host *shost, unsigned int chan=
-nel,
- 			      unsigned int id, u64 lun,
- 			      enum scsi_scan_mode rescan)
-+	__must_hold(&shost->scan_mutex)
+ static inline void
+ sdeb_read_unlock(rwlock_t *lock)
++	__no_context_analysis /* conditional locking */
  {
- 	uint order_id;
+ 	if (sdebug_no_rwlock)
+ 		__release(lock);
+@@ -4032,6 +4034,7 @@ sdeb_read_unlock(rwlock_t *lock)
 =20
-+	/* Tell the compiler that dev_to_shost(...) =3D=3D shost. */
-+	__assume_ctx_lock(&dev_to_shost(&shost->shost_gendev)->scan_mutex);
-+
- 	if (id =3D=3D SCAN_WILD_CARD)
- 		for (id =3D 0; id < shost->max_id; ++id) {
- 			/*
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index 7e2011830ba4..2bbe7cb0060b 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -534,6 +534,8 @@ struct scsi_host_template {
- 		enum scsi_qc_status rc;					\
- 									\
- 		spin_lock_irqsave(shost->host_lock, irq_flags);		\
-+		/* Tell the compiler that cmd->device->host =3D=3D shost. */\
-+		__assume_ctx_lock(cmd->device->host->host_lock);	\
- 		rc =3D func_name##_lck(cmd);				\
- 		spin_unlock_irqrestore(shost->host_lock, irq_flags);	\
- 		return rc;						\
+ static inline void
+ sdeb_write_lock(rwlock_t *lock)
++	__no_context_analysis /* conditional locking */
+ {
+ 	if (sdebug_no_rwlock)
+ 		__acquire(lock);
+@@ -4041,6 +4044,7 @@ sdeb_write_lock(rwlock_t *lock)
+=20
+ static inline void
+ sdeb_write_unlock(rwlock_t *lock)
++	__no_context_analysis /* conditional locking */
+ {
+ 	if (sdebug_no_rwlock)
+ 		__release(lock);
+@@ -4050,6 +4054,7 @@ sdeb_write_unlock(rwlock_t *lock)
+=20
+ static inline void
+ sdeb_data_read_lock(struct sdeb_store_info *sip)
++	__no_context_analysis /* conditional locking */
+ {
+ 	BUG_ON(!sip);
+=20
+@@ -4058,6 +4063,7 @@ sdeb_data_read_lock(struct sdeb_store_info *sip)
+=20
+ static inline void
+ sdeb_data_read_unlock(struct sdeb_store_info *sip)
++	__no_context_analysis /* conditional locking */
+ {
+ 	BUG_ON(!sip);
+=20
+@@ -4066,6 +4072,7 @@ sdeb_data_read_unlock(struct sdeb_store_info *sip)
+=20
+ static inline void
+ sdeb_data_write_lock(struct sdeb_store_info *sip)
++	__no_context_analysis /* conditional locking */
+ {
+ 	BUG_ON(!sip);
+=20
+@@ -4074,6 +4081,7 @@ sdeb_data_write_lock(struct sdeb_store_info *sip)
+=20
+ static inline void
+ sdeb_data_write_unlock(struct sdeb_store_info *sip)
++	__no_context_analysis /* conditional locking */
+ {
+ 	BUG_ON(!sip);
+=20
+@@ -4082,6 +4090,7 @@ sdeb_data_write_unlock(struct sdeb_store_info *sip)
+=20
+ static inline void
+ sdeb_data_sector_read_lock(struct sdeb_store_info *sip)
++	__no_context_analysis /* conditional locking */
+ {
+ 	BUG_ON(!sip);
+=20
+@@ -4090,6 +4099,7 @@ sdeb_data_sector_read_lock(struct sdeb_store_info *=
+sip)
+=20
+ static inline void
+ sdeb_data_sector_read_unlock(struct sdeb_store_info *sip)
++	__no_context_analysis /* conditional locking */
+ {
+ 	BUG_ON(!sip);
+=20
+@@ -4098,6 +4108,7 @@ sdeb_data_sector_read_unlock(struct sdeb_store_info=
+ *sip)
+=20
+ static inline void
+ sdeb_data_sector_write_lock(struct sdeb_store_info *sip)
++	__no_context_analysis /* conditional locking */
+ {
+ 	BUG_ON(!sip);
+=20
+@@ -4106,6 +4117,7 @@ sdeb_data_sector_write_lock(struct sdeb_store_info =
+*sip)
+=20
+ static inline void
+ sdeb_data_sector_write_unlock(struct sdeb_store_info *sip)
++	__no_context_analysis /* conditional locking */
+ {
+ 	BUG_ON(!sip);
+=20
+@@ -4164,6 +4176,7 @@ sdeb_data_sector_unlock(struct sdeb_store_info *sip=
+, bool do_write)
+=20
+ static inline void
+ sdeb_meta_read_lock(struct sdeb_store_info *sip)
++	__no_context_analysis /* conditional locking */
+ {
+ 	if (sdebug_no_rwlock) {
+ 		if (sip)
+@@ -4180,6 +4193,7 @@ sdeb_meta_read_lock(struct sdeb_store_info *sip)
+=20
+ static inline void
+ sdeb_meta_read_unlock(struct sdeb_store_info *sip)
++	__no_context_analysis /* conditional locking */
+ {
+ 	if (sdebug_no_rwlock) {
+ 		if (sip)
+@@ -4196,6 +4210,7 @@ sdeb_meta_read_unlock(struct sdeb_store_info *sip)
+=20
+ static inline void
+ sdeb_meta_write_lock(struct sdeb_store_info *sip)
++	__no_context_analysis /* conditional locking */
+ {
+ 	if (sdebug_no_rwlock) {
+ 		if (sip)
+@@ -4212,6 +4227,7 @@ sdeb_meta_write_lock(struct sdeb_store_info *sip)
+=20
+ static inline void
+ sdeb_meta_write_unlock(struct sdeb_store_info *sip)
++	__no_context_analysis /* conditional locking */
+ {
+ 	if (sdebug_no_rwlock) {
+ 		if (sip)
 
