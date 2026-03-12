@@ -1,309 +1,180 @@
-Return-Path: <linux-scsi+bounces-21881-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21885-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cPrbLLaGsml4NQAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21881-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 10:26:14 +0100
+	id MDVXFpi4smmYOwAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21885-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 13:59:04 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 197C526F81C
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 10:26:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 044A4272200
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 13:59:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2ABF1307F2A1
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 09:23:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 42F60315789F
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 12:57:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 532743AF662;
-	Thu, 12 Mar 2026 09:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C855E3C5DC1;
+	Thu, 12 Mar 2026 12:57:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="V7dQzazl"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="fHqxjqGD"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3DF37FF40;
-	Thu, 12 Mar 2026 09:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B09293C3C01
+	for <linux-scsi@vger.kernel.org>; Thu, 12 Mar 2026 12:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773307430; cv=none; b=rpVfAnKVHDo6wdWlvk9L5Ye0rQf0YfHUCvyo0MwJ+nN5hoc7kMjhD+aXD5aqYnJpbrOSrpH4VzUphXiPSNQIusrG8dffmy7gyG/GPfMfng9joWh78B/Ul55gFhGlZG0vjJumfw5UhF3yr+jcwDnD72wNWvU3kpiFlGes30ZeV4U=
+	t=1773320257; cv=none; b=hC9eGQEWA8PsFL9ciBKOb2VbzdPnGghX3K8Dve/VMYNR4bfkPOvDuBVLRUylgx1sWEjGkv055oIcJ+8xtJL6NaGXZj1o3hkRKXGf2trk+nnG0+lYFuqcY2x0SpyYZt+WXEbNiB+eXuQXqfWxNvB2369DwlX7vO+16Q2Job8yiOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773307430; c=relaxed/simple;
-	bh=Kj/Y/yQQZ5BLFyUlx3xf4nEjuSnC3yVF2gJhCMqUvwE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=bkRMfQ5GEUF6nI7IJFHVj3x18Vg2pn5eTYgIT4ZskzzOue6iHe1x3bhKZ0dB5cSBxrUqSCcMYtaCJuGknv78s0NAcAEhivC/3brEENEBl4v5/Gs59Ml+m5KI2RynufiYlUrdo+TfKGeZFmMOqonb+ymVhP1CqqoaSSS3bi4HYz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=V7dQzazl; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=S9
-	v7nWdhoHXfofkJyPk18O7W6VJpwd66E99N56vD11k=; b=V7dQzazlMbAgCHGHr1
-	vvavaK9raaEdmCdvUf3BnKNGz746sHCoqDeSV4zzEdeYzJmBd941H13dAMNfYPv1
-	FWsDc9WNjQ/jZqkqmGdNS65hcVjSYpHkk7vYhVS7l3qjyJR8i4zDFf2uKXhkcdq3
-	WgOFYxGoOBJwFyfDgVE9XRU/Y=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wDn0tbfhbJpu7uqAQ--.55S5;
-	Thu, 12 Mar 2026 17:22:53 +0800 (CST)
-From: Yang Xiuwei <yangxiuwei@kylinos.cn>
-To: axboe@kernel.dk,
-	fujita.tomonori@lab.ntt.co.jp,
-	James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com
-Cc: linux-block@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	bvanassche@acm.org,
-	Yang Xiuwei <yangxiuwei@kylinos.cn>
-Subject: [PATCH v7 3/3] scsi: bsg: add io_uring passthrough handler
-Date: Thu, 12 Mar 2026 17:22:37 +0800
-Message-Id: <20260312092237.2464560-4-yangxiuwei@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260312092237.2464560-1-yangxiuwei@kylinos.cn>
-References: <20260312092237.2464560-1-yangxiuwei@kylinos.cn>
+	s=arc-20240116; t=1773320257; c=relaxed/simple;
+	bh=Rr1jkAP22lZkLvo3o90a9fRSWh9+kilNKtAarSScWFY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oJI5n+aVpjQyl0zTECMn/uIU6ubbfYsRMb82XyHZsooEhpwafpnPgxIkxdDVA5Y8wssuQTaS9lpwWvtgNNREuhlLr2mTtySVQdr6OHf4VFR5yeCIb683M56l7DxJ4QyFKaJ4cKA1Oa3gMX1QB9uHkZEp6YHulz7rUS+0ja6lkTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=fHqxjqGD; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-8cb40149037so106172285a.2
+        for <linux-scsi@vger.kernel.org>; Thu, 12 Mar 2026 05:57:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1773320252; x=1773925052; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=J1SF1XBHkHR0j7NZVucv0LxpGoGXl67PUefLsfwpAbo=;
+        b=fHqxjqGD7mReR8MT2yBowt9MuNKPAKQc++mWcb4ZOttX6YldICO+OnnxWIQjO0C8L5
+         wjOw0Gg7MqV4U+G9pES+s6h1NtZIjaKrBXMW81hrLyc8SxWYHtvQK3FlTjqiyroZskXE
+         jYj0kUENL7Yhu5zg+0UQ91XYlYYlozX9U8uAqBEFaih0fSnDo8kprjTDRYJ58gzKRExo
+         MSUW+Q+e0P2WpZGotx0DuVRaUqq4vGsUUSX1YbPnOxmRUKlXFY/aNRmXMXDbAEfx0Lnn
+         e41FpuPSZjTSuTkWfTMW8e1MvewVXC2p6zLd4GrSZjvSKS4Q06nDQYaSimUW3qR5RhoY
+         JV6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773320252; x=1773925052;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J1SF1XBHkHR0j7NZVucv0LxpGoGXl67PUefLsfwpAbo=;
+        b=le5I7y/4krAS4WejZ0FKk2wKLDIq6pZC2Ysh81EOUG0DTfnFiq7iTbmt6cnRP/fJ7V
+         13omanURY+1VykmCjlYlXYN7n5x1oR9OgZV3RIWbo0dvYqcATfGYohCZXotP8lJ3oV/Z
+         GYm4hoIejaSFqsEPTVQM1afdrPSQ1oGCL5c3k2jlMhvDcm0Lo99HOmN5yM3pmILrWknF
+         ZW545aiMkEfzpomkyebc4SIhTbjGh5tgzTzxJyyJD7iN2GTtNsuBoINP1uazHX7i3aXt
+         +fSMtCauuhsLdW/L5fQRzrMc/+cNbEicgBFLl5x8lmZvjFIFcGBzaw2tTE3VJnXrmN82
+         aCnA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOZ3wcevWIzI5+mGnTbnDqC/xNaiEyXx7X2lRkYeVcBCCildei2hSikVLFLCQP3d8bQGmptHJmXDEb@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvFCCFHeA28yR5uVQDmgbvYr3E2MqSDFCZQm1Q9S8pT3jBfw/w
+	8JsN9HdCVtbidEs9pDKQm2MrHaTMOGY1jWZ91WKvz3Id/m0b1IYRW6j8I3Y7A05fEIg=
+X-Gm-Gg: ATEYQzwSPYLHbZWrGD3SGqUbUvMuzs0Y3TYr+VqB6uXU4JxC00pv3433mgUGIr/KCuD
+	p2rY88QFr8Z6qyW65y4dUfo5U0jXYA2EuAcJ0rSZ5LCJsEtvpCDRnmAtjO/XwlnWSKDyO41/A23
+	IcStjfEjyOWQYYR2I7RElim5LbDwoTEhg80S02R/D5V+/S6rwUHGIEWAVc86MekDg/UEjYErBuZ
+	QA8eXDr8epAFnzb8hzfhQeSFUw/EekZfO78bDWcATrx+gVETqg4WsZnurPpA4p05GqG5FXigMz+
+	7wq0KTB3zeb5QtrVsh1cwUYkWbbq6Lo3MDM8KY5prT1X/bWVLVxcEe90S8zpAclr0eXAI2xC75C
+	rYp1hSoVxITkxnP/Z0VTlKwrgN7WKe0hMqtieoOoLtVqP6DAwPKxiVDSZp5iwXkbTK848Sxp4QL
+	TzBolFn0GuKNYTOLSmM1Jc3gDxshCfrIWABN/5RHka7EXxG8mUIhOV7833WBhrsZ5atKyMm9IQC
+	z3trYt9
+X-Received: by 2002:ac8:5d4d:0:b0:509:cbc:127b with SMTP id d75a77b69052e-5093a1bd58fmr77950521cf.60.1773320251710;
+        Thu, 12 Mar 2026 05:57:31 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a65bd318fsm33341196d6.8.2026.03.12.05.57.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2026 05:57:31 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1w0fbW-00000006fKD-1POa;
+	Thu, 12 Mar 2026 09:57:30 -0300
+Date: Thu, 12 Mar 2026 09:57:30 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Kuan-Wei Chiu <visitorckw@gmail.com>
+Cc: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org,
+	apparmor@lists.ubuntu.com, bpf@vger.kernel.org,
+	ceph-devel@vger.kernel.org, cocci@inria.fr,
+	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
+	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
+	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+	linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
+	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+	ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
+	sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
+	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev
+Subject: Re: [PATCH 00/61] treewide: Use IS_ERR_OR_NULL over manual NULL
+ check - refactor
+Message-ID: <20260312125730.GI1469476@ziepe.ca>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+ <abBlpGKO842B3yl9@google.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDn0tbfhbJpu7uqAQ--.55S5
-X-Coremail-Antispam: 1Uf129KBjvJXoW3GrWfGrW3KFyUuFy5Gr47CFg_yoWxJFWfpF
-	W5tw4YvrW5Wr1I9FZYy398uFWYvw4kC3W7KFW5uw43Ar1UCr9ag3W0kF10qFyfArWkAa42
-	qr4vgFZ8Cr1jq37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jaeHDUUUUU=
-Sender: yangxiuwei2025@163.com
-X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbCwg2jNGmyhe2hcQAA37
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <abBlpGKO842B3yl9@google.com>
 X-Spamd-Result: default: False [-0.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[ziepe.ca:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-21881-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[kylinos.cn];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[163.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[ziepe.ca:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[ziepe.ca];
+	TAGGED_FROM(0.00)[bounces-21885-lists,linux-scsi=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	FROM_NEQ_ENVFROM(0.00)[jgg@ziepe.ca,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_GT_50(0.00)[55];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[kylinos.cn:email,kylinos.cn:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 197C526F81C
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ziepe.ca:dkim,ziepe.ca:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 044A4272200
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Implement the SCSI-specific io_uring command handler for BSG using
-struct bsg_uring_cmd.
+On Wed, Mar 11, 2026 at 02:40:36AM +0800, Kuan-Wei Chiu wrote:
 
-The handler builds a SCSI request from the io_uring command, maps user
-buffers (including fixed buffers), and completes asynchronously via a
-request end_io callback and task_work. Completion returns a 32-bit
-status and packed residual/sense information via CQE res and res2, and
-supports IO_URING_F_NONBLOCK.
+> IMHO, the necessity of IS_ERR_OR_NULL() often highlights a confusing or
+> flawed API design. It usually implies that the caller is unsure whether
+> a failure results in an error pointer or a NULL pointer. 
 
-Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
----
- drivers/scsi/scsi_bsg.c | 173 +++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 172 insertions(+), 1 deletion(-)
++1
 
-diff --git a/drivers/scsi/scsi_bsg.c b/drivers/scsi/scsi_bsg.c
-index 4d57e524e141..da227fa890e0 100644
---- a/drivers/scsi/scsi_bsg.c
-+++ b/drivers/scsi/scsi_bsg.c
-@@ -10,10 +10,181 @@
- 
- #define uptr64(val) ((void __user *)(uintptr_t)(val))
- 
-+/*
-+ * Per-command BSG SCSI PDU stored in io_uring_cmd.pdu[32].
-+ * Holds temporary state between submission, completion and task_work.
-+ */
-+struct scsi_bsg_uring_cmd_pdu {
-+	struct bio *bio;		/* mapped user buffer, unmap in task work */
-+	struct request *req;		/* block request, freed in task work */
-+	u64 response_addr;		/* user space response buffer address */
-+};
-+
-+static inline struct scsi_bsg_uring_cmd_pdu *scsi_bsg_uring_cmd_pdu(
-+	struct io_uring_cmd *ioucmd)
-+{
-+	return io_uring_cmd_to_pdu(ioucmd, struct scsi_bsg_uring_cmd_pdu);
-+}
-+
-+/* Task work: build res2 (layout in uapi/linux/bsg.h) and copy sense to user. */
-+static void scsi_bsg_uring_task_cb(struct io_tw_req tw_req, io_tw_token_t tw)
-+{
-+	struct scsi_bsg_uring_cmd_pdu *pdu;
-+	struct io_uring_cmd *ioucmd = io_uring_cmd_from_tw(tw_req);
-+	struct scsi_cmnd *scmd;
-+	struct request *rq;
-+	u64 res2;
-+	int ret = 0;
-+	u8 driver_status = 0;
-+	u8 sense_len_wr = 0;
-+
-+	pdu = scsi_bsg_uring_cmd_pdu(ioucmd);
-+	rq = pdu->req;
-+	scmd = blk_mq_rq_to_pdu(rq);
-+
-+	if (pdu->bio)
-+		blk_rq_unmap_user(pdu->bio);
-+
-+	if (scsi_status_is_check_condition(scmd->result)) {
-+		driver_status = DRIVER_SENSE;
-+		if (pdu->response_addr)
-+			sense_len_wr = min_t(u8, scmd->sense_len,
-+					     SCSI_SENSE_BUFFERSIZE);
-+	}
-+
-+	if (sense_len_wr) {
-+		if (copy_to_user(uptr64(pdu->response_addr), scmd->sense_buffer,
-+				 sense_len_wr))
-+			ret = -EFAULT;
-+	}
-+
-+	res2 = BSG_SCSI_RES2_BUILD(status_byte(scmd->result), driver_status,
-+				  host_byte(scmd->result), sense_len_wr,
-+				  scmd->resid_len);
-+
-+	blk_mq_free_request(rq);
-+	io_uring_cmd_done32(ioucmd, ret, res2,
-+			    IO_URING_CMD_TASK_WORK_ISSUE_FLAGS);
-+}
-+
-+static enum rq_end_io_ret scsi_bsg_uring_cmd_done(struct request *req,
-+						  blk_status_t status,
-+						  const struct io_comp_batch *iocb)
-+{
-+	struct io_uring_cmd *ioucmd = req->end_io_data;
-+
-+	io_uring_cmd_do_in_task_lazy(ioucmd, scsi_bsg_uring_task_cb);
-+	return RQ_END_IO_NONE;
-+}
-+
-+static int scsi_bsg_map_user_buffer(struct request *req,
-+				    struct io_uring_cmd *ioucmd,
-+				    unsigned int issue_flags, gfp_t gfp_mask)
-+{
-+	const struct bsg_uring_cmd *cmd = io_uring_sqe128_cmd(ioucmd->sqe, struct bsg_uring_cmd);
-+	struct iov_iter iter;
-+	unsigned long buf_len;
-+	bool is_write = cmd->dout_xfer_len > 0;
-+	u64 buf_addr = is_write ? cmd->dout_xferp : cmd->din_xferp;
-+	int ret;
-+
-+	buf_len = is_write ? cmd->dout_xfer_len : cmd->din_xfer_len;
-+
-+	if (ioucmd->flags & IORING_URING_CMD_FIXED) {
-+		ret = io_uring_cmd_import_fixed(buf_addr, buf_len,
-+						is_write ? WRITE : READ,
-+						&iter, ioucmd, issue_flags);
-+		if (ret < 0)
-+			return ret;
-+		ret = blk_rq_map_user_iov(req->q, req, NULL, &iter, gfp_mask);
-+	} else {
-+		ret = blk_rq_map_user(req->q, req, NULL, uptr64(buf_addr),
-+				      buf_len, gfp_mask);
-+	}
-+
-+	return ret;
-+}
-+
- static int scsi_bsg_uring_cmd(struct request_queue *q, struct io_uring_cmd *ioucmd,
- 			       unsigned int issue_flags, bool open_for_write)
- {
--	return -EOPNOTSUPP;
-+	struct scsi_bsg_uring_cmd_pdu *pdu = scsi_bsg_uring_cmd_pdu(ioucmd);
-+	const struct bsg_uring_cmd *cmd = io_uring_sqe128_cmd(ioucmd->sqe, struct bsg_uring_cmd);
-+	struct scsi_cmnd *scmd;
-+	blk_mq_req_flags_t blk_flags = 0;
-+	struct request *req;
-+	gfp_t gfp_mask = GFP_KERNEL;
-+	int ret = 0;
-+
-+	if (cmd->protocol != BSG_PROTOCOL_SCSI ||
-+	    cmd->subprotocol != BSG_SUB_PROTOCOL_SCSI_CMD)
-+		return -EINVAL;
-+
-+	if (!cmd->request || cmd->request_len == 0)
-+		return -EINVAL;
-+
-+	if (cmd->dout_xfer_len && cmd->din_xfer_len) {
-+		pr_warn_once("BIDI support in bsg has been removed.\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	if (cmd->dout_iovec_count > 0 || cmd->din_iovec_count > 0)
-+		return -EOPNOTSUPP;
-+
-+	if (issue_flags & IO_URING_F_NONBLOCK) {
-+		blk_flags = BLK_MQ_REQ_NOWAIT;
-+		gfp_mask = GFP_NOWAIT;
-+	}
-+
-+	req = scsi_alloc_request(q, cmd->dout_xfer_len ?
-+				 REQ_OP_DRV_OUT : REQ_OP_DRV_IN, blk_flags);
-+	if (IS_ERR(req))
-+		return PTR_ERR(req);
-+
-+	scmd = blk_mq_rq_to_pdu(req);
-+	scmd->cmd_len = cmd->request_len;
-+	if (scmd->cmd_len > sizeof(scmd->cmnd)) {
-+		ret = -EINVAL;
-+		goto out_free_req;
-+	}
-+	scmd->allowed = SG_DEFAULT_RETRIES;
-+
-+	if (copy_from_user(scmd->cmnd, uptr64(cmd->request), cmd->request_len)) {
-+		ret = -EFAULT;
-+		goto out_free_req;
-+	}
-+
-+	if (!scsi_cmd_allowed(scmd->cmnd, open_for_write)) {
-+		ret = -EPERM;
-+		goto out_free_req;
-+	}
-+
-+	pdu->response_addr = cmd->response;
-+	scmd->sense_len = cmd->max_response_len ?
-+		min(cmd->max_response_len, SCSI_SENSE_BUFFERSIZE) : SCSI_SENSE_BUFFERSIZE;
-+
-+	if (cmd->dout_xfer_len || cmd->din_xfer_len) {
-+		ret = scsi_bsg_map_user_buffer(req, ioucmd, issue_flags, gfp_mask);
-+		if (ret)
-+			goto out_free_req;
-+		pdu->bio = req->bio;
-+	} else {
-+		pdu->bio = NULL;
-+	}
-+
-+	req->timeout = cmd->timeout_ms ?
-+		msecs_to_jiffies(cmd->timeout_ms) : BLK_DEFAULT_SG_TIMEOUT;
-+
-+	req->end_io = scsi_bsg_uring_cmd_done;
-+	req->end_io_data = ioucmd;
-+	pdu->req = req;
-+
-+	blk_execute_rq_nowait(req, false);
-+	return -EIOCBQUEUED;
-+
-+out_free_req:
-+	blk_mq_free_request(req);
-+	return ret;
- }
- 
- static int scsi_bsg_sg_io_fn(struct request_queue *q, struct sg_io_v4 *hdr,
--- 
-2.25.1
+IS_ERR_OR_NULL() should always be looked on with suspicion. Very
+little should be returning some tri-state 'ERR' 'NULL' 'SUCCESS'
+pointer. What does the middle condition even mean? IS_ERR_OR_NULL()
+implies ERR and NULL are semanticly the same, so fix the things to
+always use ERR.
 
+If you want to improve things work to get rid of the NULL checks this
+script identifies. Remove ERR or NULL because only one can ever
+happen, or fix the source to consistently return ERR.
+
+Jason
 
