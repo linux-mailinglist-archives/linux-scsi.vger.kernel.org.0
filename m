@@ -1,362 +1,124 @@
-Return-Path: <linux-scsi+bounces-21975-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21977-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cJ6dKwwus2ksSwAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21975-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:20:12 +0100
+	id iNXeIigvs2nYSwAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21977-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:24:56 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A68B279F1F
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 241B9279FA0
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 22:24:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9B7543042243
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 21:19:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0AF4B30B00DA
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 21:23:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EAA03AA514;
-	Thu, 12 Mar 2026 21:19:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 483BC3CF045;
+	Thu, 12 Mar 2026 21:23:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="REE+M8BW"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="EYhKsPwq"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B067F26B2DA
-	for <linux-scsi@vger.kernel.org>; Thu, 12 Mar 2026 21:19:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E224F3C5DB3;
+	Thu, 12 Mar 2026 21:23:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773350358; cv=none; b=IKyJim5eWT2/BnuYXHt+ytXKjfxt+T8/YC8V2kbSP0o4Yvq4AP6pPxDCkbszP3PZAsAMrlJJH2Yf2ayThjvzPJL6ZOgE3NdfBg9C5IE56U/WZQB7Lg9U4xnJcKBHOn2O9J6N+csLXwiwD5pLeBlkJUYTldt+JdDa+nYK7BYCXpU=
+	t=1773350600; cv=none; b=J1TKLbEnR7f2+pzyHgqsTUcNPc+V9lCZ4ka5B54XXPVZZm4GXsy1Vf5WQCe2dQeNwpYQamzdvZHOHyAbUEb7AwXZ6bWy8z9vR7c9nibksCJ9id5/TIeeRIydKCVqm1AvW9R7NL1ZRlcGE/+l62KkyFt8L0A74GIEZfWLTQj1S7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773350358; c=relaxed/simple;
-	bh=9rWhgHR7Qh7Xk1kCaLWP5kSAx8gRiD6qeUptlhxcPzY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WsehvtKAFj8CMJvgSOUAz4w9UOO/IjMS2ykb+kxDMOAn+usTDX5M2XcywTwaZEkghcr7FJ3ar+eK1dvvfzSTVLbYZ/p+BhBOPg9XBmQ0cVyo8i7zsOsd+Bf+Bhy2SkroYdv6LE1gtxpKJyvINjL5s/e5+F4P6KQrVcP6AgkfKi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=REE+M8BW; arc=none smtp.client-ip=199.89.1.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fX0qS256xzlfl5W;
-	Thu, 12 Mar 2026 21:19:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:references:in-reply-to
-	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1773350338; x=1775942339; bh=WPg0O
-	TGqjAzdF/jKdIDRSIFfK8r+0nwHvzP1/99eBcw=; b=REE+M8BWndXQ5CFiNMbVs
-	4M369d2gIijQAkZ1CsxpuV+ICfVdEJWmCc/c3f4NYZC1RoeIU7aYsgUVBZ7Yb8k0
-	mxX3a2EihCANB5m1dYAduqEysAZlzGl1f9rCblmIHQ2N8neTaF3l7b9FYPSQP0Bt
-	X9yvzwRZzx9gGxdHnDDuKwT1TOfnSva4jaJfPwZNZY6AzOQBFmUkgUe9DmuOsPyE
-	n5fc6+EMj+ZIGclOXr3X6UEubvBTovtbMW3r4JOHIFaYjc7a0Hw251OqCIYOUhQo
-	YPwrKhdPOXr7gqCCFGrGuvMpuGdYU4yVGzhU6h8d9KLfVSLncOOfqD5LPFMyTuXi
-	Q==
-X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id QCWLWGfb2ft2; Thu, 12 Mar 2026 21:18:58 +0000 (UTC)
-Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fX0q24vZNzlfl5V;
-	Thu, 12 Mar 2026 21:18:54 +0000 (UTC)
-From: Bart Van Assche <bvanassche@acm.org>
-To: "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org,
-	Bart Van Assche <bvanassche@acm.org>,
-	Jianzhou Zhao <luckd0g@163.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Kashyap Desai <kashyap.desai@broadcom.com>,
-	Sumit Saxena <sumit.saxena@broadcom.com>,
-	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-	Chandrakanth patil <chandrakanth.patil@broadcom.com>,
-	Sathya Prakash <sathya.prakash@broadcom.com>,
-	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-	Ranjan Kumar <ranjan.kumar@broadcom.com>,
-	Nilesh Javali <njavali@marvell.com>,
-	Manish Rangankar <mrangankar@marvell.com>,
-	GR-QLogic-Storage-Upstream@marvell.com
-Subject: [PATCH 36/36] scsi: core: Protect host state changes with the host lock
-Date: Thu, 12 Mar 2026 14:15:47 -0700
-Message-ID: <20260312211636.3245119-37-bvanassche@acm.org>
-X-Mailer: git-send-email 2.53.0.851.ga537e3e6e9-goog
-In-Reply-To: <20260312211636.3245119-1-bvanassche@acm.org>
-References: <20260312211636.3245119-1-bvanassche@acm.org>
+	s=arc-20240116; t=1773350600; c=relaxed/simple;
+	bh=HZSrZjttw5gIUDbdiKoMciwBk/FMfdKMYI3liALwtx4=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=hmD1xpX7+TF7pjPHVouCUZ3hMrbiCpFqZu+OK2n789aHVc0HsVocP+cV1XBCAHDp5IB3I6boqru9CdsdkHaEmRqdxFvvcoBcr456RuRros8qv9G6tcxGKi7LwnNVJbdxladA39wWmnyD/u0NHts5MNZnNl2Y8X2uAe5sR2CAErk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=EYhKsPwq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 740EDC4CEF7;
+	Thu, 12 Mar 2026 21:23:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1773350599;
+	bh=HZSrZjttw5gIUDbdiKoMciwBk/FMfdKMYI3liALwtx4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EYhKsPwqoBLREVvoZGgMgVZ6fu+bk+U2fKxToofPR2Up6V9uTgSYZfuyjhIb7C3ZE
+	 7oPxkujHeeUdd441hNsgqAm8c7M0uwByLtnOWXAMkXuUFJ05Rb/GBA1Y8B9jmAfc8h
+	 IikXAtFu3AD5I04crV7xx4fJQZ2Bm8TZEbEULr8U=
+Date: Thu, 12 Mar 2026 14:23:14 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, Clemens Ladisch <clemens@ladisch.de>,
+ Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, "K . Y . Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>, Maxime Coquelin
+ <mcoquelin.stm32@gmail.com>, Alexandre Torgue
+ <alexandre.torgue@foss.st.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Bodo Stroesser <bostroesser@gmail.com>, "Martin K . Petersen"
+ <martin.petersen@oracle.com>, David Howells <dhowells@redhat.com>, Marc
+ Dionne <marc.dionne@auristor.com>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara
+ <jack@suse.cz>, David Hildenbrand <david@kernel.org>, "Liam R . Howlett"
+ <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, Mike
+ Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal
+ Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, Pedro Falcato
+ <pfalcato@suse.de>, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-mtd@lists.infradead.org,
+ linux-staging@lists.linux.dev, linux-scsi@vger.kernel.org,
+ target-devel@vger.kernel.org, linux-afs@lists.infradead.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, Ryan Roberts
+ <ryan.roberts@arm.com>
+Subject: Re: [PATCH 00/15] mm: expand mmap_prepare functionality and usage
+Message-Id: <20260312142314.0f7fc516c0ebaffa6ec9fa7c@linux-foundation.org>
+In-Reply-To: <cover.1773346620.git.ljs@kernel.org>
+References: <cover.1773346620.git.ljs@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
+	MV_CASE(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+	R_DKIM_ALLOW(-0.20)[linux-foundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,acm.org,163.com,HansenPartnership.com,broadcom.com,marvell.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-21975-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-21977-lists,linux-scsi=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[linux-foundation.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[lwn.net,ladisch.de,arndb.de,linuxfoundation.org,microsoft.com,kernel.org,linux.intel.com,gmail.com,foss.st.com,bootlin.com,nod.at,ti.com,oracle.com,redhat.com,auristor.com,zeniv.linux.org.uk,suse.cz,google.com,suse.com,suse.de,vger.kernel.org,st-md-mailman.stormreply.com,lists.infradead.org,lists.linux.dev,kvack.org,arm.com];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	MID_RHS_MATCH_FROM(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[acm.org:+];
+	FROM_NEQ_ENVFROM(0.00)[akpm@linux-foundation.org,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux-foundation.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 4A68B279F1F
+	RCPT_COUNT_TWELVE(0.00)[44];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 241B9279FA0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Some but not all SCSI host state changes are protected with the SCSI
-host lock. Annotate the SCSI host state with __guarded_by(&host_lock),
-protect all SCSI host state changes with the SCSI host lock and use
-READ_ONCE() for all SCSI host state reads. This patch prevents that
-KCSAN complains about data races when accessing the SCSI host state.
+On Thu, 12 Mar 2026 20:27:15 +0000 "Lorenzo Stoakes (Oracle)" <ljs@kernel.org> wrote:
 
-Reported-by: Jianzhou Zhao <luckd0g@163.com>
-Closes: https://lore.kernel.org/all/36d59d0e.6db0.19cdbeee01b.Coremail.lu=
-ckd0g@163.com/
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/hosts.c                      | 13 ++++++++-----
- drivers/scsi/megaraid/megaraid_sas_base.c |  2 +-
- drivers/scsi/mpt3sas/mpt3sas_scsih.c      |  2 +-
- drivers/scsi/qla4xxx/ql4_os.c             |  6 ++----
- drivers/scsi/scsi_lib.c                   |  3 +--
- drivers/scsi/scsi_sysfs.c                 |  7 ++++---
- include/scsi/scsi_host.h                  | 23 ++++++++++++++++-------
- 7 files changed, 33 insertions(+), 23 deletions(-)
+> This series expands the mmap_prepare functionality, which is intended to
+> replace the deprecated f_op->mmap hook which has been the source of bugs
+> and security issues for some time.
 
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index e047747d4ecf..7482ae7777c8 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -278,7 +278,8 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, s=
-truct device *dev,
- 	if (error)
- 		goto out_disable_runtime_pm;
-=20
--	scsi_host_set_state(shost, SHOST_RUNNING);
-+	scoped_guard(spinlock_irq, shost->host_lock)
-+		scsi_host_set_state(shost, SHOST_RUNNING);
- 	get_device(shost->shost_gendev.parent);
-=20
- 	device_enable_async_suspend(&shost->shost_dev);
-@@ -352,6 +353,7 @@ EXPORT_SYMBOL(scsi_add_host_with_dma);
- static void scsi_host_dev_release(struct device *dev)
- {
- 	struct Scsi_Host *shost =3D dev_to_shost(dev);
-+	enum scsi_host_state host_state =3D scsi_get_host_state(shost);
- 	struct device *parent =3D dev->parent;
-=20
- 	/* Wait for functions invoked through call_rcu(&scmd->rcu, ...) */
-@@ -364,7 +366,7 @@ static void scsi_host_dev_release(struct device *dev)
- 	if (shost->work_q)
- 		destroy_workqueue(shost->work_q);
-=20
--	if (shost->shost_state =3D=3D SHOST_CREATED) {
-+	if (host_state =3D=3D SHOST_CREATED) {
- 		/*
- 		 * Free the shost_dev device name and remove the proc host dir
- 		 * here if scsi_host_{alloc,put}() have been called but neither
-@@ -380,7 +382,7 @@ static void scsi_host_dev_release(struct device *dev)
-=20
- 	ida_free(&host_index_ida, shost->host_no);
-=20
--	if (shost->shost_state !=3D SHOST_CREATED)
-+	if (host_state !=3D SHOST_CREATED)
- 		put_device(parent);
- 	kfree(shost);
- }
-@@ -414,7 +416,8 @@ struct Scsi_Host *scsi_host_alloc(const struct scsi_h=
-ost_template *sht, int priv
-=20
- 	shost->host_lock =3D &shost->default_lock;
- 	spin_lock_init(shost->host_lock);
--	shost->shost_state =3D SHOST_CREATED;
-+	scoped_guard(spinlock_init, shost->host_lock)
-+		shost->shost_state =3D SHOST_CREATED;
- 	INIT_LIST_HEAD(&shost->__devices);
- 	INIT_LIST_HEAD(&shost->__targets);
- 	INIT_LIST_HEAD(&shost->eh_abort_list);
-@@ -600,7 +603,7 @@ EXPORT_SYMBOL(scsi_host_lookup);
-  **/
- struct Scsi_Host *scsi_host_get(struct Scsi_Host *shost)
- {
--	if ((shost->shost_state =3D=3D SHOST_DEL) ||
-+	if (scsi_get_host_state(shost) =3D=3D SHOST_DEL ||
- 		!get_device(&shost->shost_gendev))
- 		return NULL;
- 	return shost;
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/meg=
-araid/megaraid_sas_base.c
-index ccefe5841a17..97a81a86db82 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -3075,7 +3075,7 @@ static int megasas_reset_bus_host(struct scsi_cmnd =
-*scmd)
-=20
- 	scmd_printk(KERN_INFO, scmd,
- 		"SCSI host state: %d  SCSI host busy: %d  FW outstanding: %d\n",
--		scmd->device->host->shost_state,
-+		scsi_get_host_state(scmd->device->host),
- 		scsi_host_busy(scmd->device->host),
- 		atomic_read(&instance->fw_outstanding));
- 	/*
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/=
-mpt3sas_scsih.c
-index 6ff788557294..e40913d2479e 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-@@ -5460,7 +5460,7 @@ static enum scsi_qc_status scsih_qcmd(struct Scsi_H=
-ost *shost,
- 	 * Avoid error handling escallation when device is disconnected
- 	 */
- 	if (handle =3D=3D MPT3SAS_INVALID_DEVICE_HANDLE || sas_device_priv_data=
-->block) {
--		if (scmd->device->host->shost_state =3D=3D SHOST_RECOVERY &&
-+		if (scsi_get_host_state(scmd->device->host) =3D=3D SHOST_RECOVERY &&
- 		    scmd->cmnd[0] =3D=3D TEST_UNIT_READY) {
- 			scsi_build_sense(scmd, 0, UNIT_ATTENTION, 0x29, 0x07);
- 			scsi_done(scmd);
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.=
-c
-index d598ab4126f8..c9d9fc7c81fb 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -9411,11 +9411,9 @@ static int qla4xxx_eh_target_reset(struct scsi_cmn=
-d *cmd)
-  * This routine finds that if reset host is called in EH
-  * scenario or from some application like sg_reset
-  **/
--static int qla4xxx_is_eh_active(struct Scsi_Host *shost)
-+static bool qla4xxx_is_eh_active(struct Scsi_Host *shost)
- {
--	if (shost->shost_state =3D=3D SHOST_RECOVERY)
--		return 1;
--	return 0;
-+	return scsi_get_host_state(shost) =3D=3D SHOST_RECOVERY;
- }
-=20
- /**
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 6e8c7a42603e..5f7580b089e9 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1638,10 +1638,9 @@ static enum scsi_qc_status scsi_dispatch_cmd(struc=
-t scsi_cmnd *cmd)
- 		goto done;
- 	}
-=20
--	if (unlikely(host->shost_state =3D=3D SHOST_DEL)) {
-+	if (scsi_get_host_state(host) =3D=3D SHOST_DEL) {
- 		cmd->result =3D (DID_NO_CONNECT << 16);
- 		goto done;
--
- 	}
-=20
- 	trace_scsi_dispatch_cmd_start(cmd);
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index dfc3559e7e04..9480432f650b 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -214,8 +214,9 @@ store_shost_state(struct device *dev, struct device_a=
-ttribute *attr,
- 	if (!state)
- 		return -EINVAL;
-=20
--	if (scsi_host_set_state(shost, state))
--		return -EINVAL;
-+	scoped_guard(spinlock_irq, shost->host_lock)
-+		if (scsi_host_set_state(shost, state))
-+			return -EINVAL;
- 	return count;
- }
-=20
-@@ -223,7 +224,7 @@ static ssize_t
- show_shost_state(struct device *dev, struct device_attribute *attr, char=
- *buf)
- {
- 	struct Scsi_Host *shost =3D class_to_shost(dev);
--	const char *name =3D scsi_host_state_name(shost->shost_state);
-+	const char *name =3D scsi_host_state_name(scsi_get_host_state(shost));
-=20
- 	if (!name)
- 		return -EINVAL;
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index 2bbe7cb0060b..9841402e8bdf 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -729,7 +729,7 @@ struct Scsi_Host {
- 	unsigned int  irq;
- =09
-=20
--	enum scsi_host_state shost_state;
-+	enum scsi_host_state shost_state __guarded_by(&host_lock);
-=20
- 	/* ldm bits */
- 	struct device		shost_gendev, shost_dev;
-@@ -787,11 +787,18 @@ static inline struct Scsi_Host *dev_to_shost(struct=
- device *dev)
- 	return container_of(dev, struct Scsi_Host, shost_gendev);
- }
-=20
-+static inline enum scsi_host_state scsi_get_host_state(struct Scsi_Host =
-*shost)
-+{
-+	return context_unsafe(READ_ONCE(shost->shost_state));
-+}
-+
- static inline int scsi_host_in_recovery(struct Scsi_Host *shost)
- {
--	return shost->shost_state =3D=3D SHOST_RECOVERY ||
--		shost->shost_state =3D=3D SHOST_CANCEL_RECOVERY ||
--		shost->shost_state =3D=3D SHOST_DEL_RECOVERY ||
-+	enum scsi_host_state state =3D scsi_get_host_state(shost);
-+
-+	return state =3D=3D SHOST_RECOVERY ||
-+		state =3D=3D SHOST_CANCEL_RECOVERY ||
-+		state =3D=3D SHOST_DEL_RECOVERY ||
- 		shost->tmf_in_progress;
- }
-=20
-@@ -837,8 +844,9 @@ static inline struct device *scsi_get_device(struct S=
-csi_Host *shost)
-  **/
- static inline int scsi_host_scan_allowed(struct Scsi_Host *shost)
- {
--	return shost->shost_state =3D=3D SHOST_RUNNING ||
--	       shost->shost_state =3D=3D SHOST_RECOVERY;
-+	enum scsi_host_state state =3D scsi_get_host_state(shost);
-+
-+	return state =3D=3D SHOST_RUNNING || state =3D=3D SHOST_RECOVERY;
- }
-=20
- extern void scsi_unblock_requests(struct Scsi_Host *);
-@@ -942,6 +950,7 @@ static inline unsigned char scsi_host_get_guard(struc=
-t Scsi_Host *shost)
- 	return shost->prot_guard_type;
- }
-=20
--extern int scsi_host_set_state(struct Scsi_Host *, enum scsi_host_state)=
-;
-+int scsi_host_set_state(struct Scsi_Host *shost, enum scsi_host_state st=
-ate)
-+	__must_hold(&shost->host_lock);
-=20
- #endif /* _SCSI_SCSI_HOST_H */
+Thanks, I've added this to mm.git's mm-new branch.
 
