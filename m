@@ -1,212 +1,140 @@
-Return-Path: <linux-scsi+bounces-21913-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21917-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AGBgFzP7smmLRAAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21913-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:43:15 +0100
+	id KCktIi//smmQRQAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21917-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 19:00:15 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09C75276B51
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:43:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5D1D276EE3
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 19:00:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3C6193031348
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 17:43:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 53AD6319B679
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 17:57:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEA503FCB11;
-	Thu, 12 Mar 2026 17:43:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F513FEB05;
+	Thu, 12 Mar 2026 17:57:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Cmx36UKV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hE8pKgrb"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92BC2390C94;
-	Thu, 12 Mar 2026 17:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A8E3FE66E;
+	Thu, 12 Mar 2026 17:57:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773337388; cv=none; b=GxayO60vbizNJm9lZTC2WwjEwcUfOwWqhh0GjxN4NrUDsI3+RCBPXfwZhCmEIJKsRdXQlQb6KCl5I7EsfgNZLtKp15usE4ZcvFgqhV11dgrx1xQEOE3Dj20Je63GFe+CPTLLkFhxH7qHjH90K9naZPoI8xb1u+lvXSF2105TxFI=
+	t=1773338222; cv=none; b=S9jkeltGSYeBBOqf8WFl/0bhH4/aQy4D1X4mZajfhEkv2CZaHwEe4YBqv+PGacmA8C/KT+giGtNQ+dPP9UAhAd72Dy/RvxT9huI6GPW8hY7iYmmJ6p6mvjUXmmiXDS2xOguU2++c4JefNbIYAzdDFY6kyQBGTUXoAWB5BDK/fIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773337388; c=relaxed/simple;
-	bh=jwM/MniTRVmIXLeYQ2P9xoLGtegag48iMmbWdWKoTL8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eNIlzvwv5CnaFsVkSPfLnzUPlbXSnrrhxJUGhUyb1jaJEW//a+ccPjBtrUV9t8n6NG3RSiyLpasB02JAjEKuc8MtqV8LqTRadRjNIK97JYljoPwlIz7s1XNFQn6c4IwO39ruLQSkW+OPDIW+p1P6Ym0UjWwjKrYGiNFFHKXzo1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Cmx36UKV; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62CECoqr2208560;
-	Thu, 12 Mar 2026 17:43:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=bJphuA7b4KVgB2pgv
-	Zd/duGPXnMyROJyjB5SLezQs+o=; b=Cmx36UKVN4Y3I0lQoXr21sOUggFirYB47
-	eUhKgOhZ4ajJmkq1bgnfJPICIqOsK3ZVVUYvoxlHVjy9ZDYpga0XxhqwDR7jArrB
-	T15oBhis+MMoFLTVTDkh9moBEQjOw5nWGdh0fyYAyVnQPJXLNcWKqcx6wRU1mM8Y
-	IebQqW44gpTzJN6n3cEy/RRPLPxyOfRe6PCZ8aRGMF2qQd3SRJ4q8IgWnc5neSm6
-	fnzYitzBECWZnLt/DIvLCiGhyop9GgCwYFZ3E/+71BkLIKdL8tKe0IPfRaLc11GP
-	WnBFLbtrCvXJ5jTahxUJBGzVb3zctO/ab35bx0ONNjvHVaiQH+4oA==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh98bwxb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Mar 2026 17:43:01 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62CEc24m014634;
-	Thu, 12 Mar 2026 17:43:01 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cuha8bd5q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Mar 2026 17:43:01 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62CHgvoU52298238
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 12 Mar 2026 17:42:57 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 241DC20065;
-	Thu, 12 Mar 2026 17:42:57 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E549E2004E;
-	Thu, 12 Mar 2026 17:42:56 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with SMTP;
-	Thu, 12 Mar 2026 17:42:56 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 56370)
-	id CD222E0903; Thu, 12 Mar 2026 18:42:56 +0100 (CET)
-From: Joshua Daley <jdaley@linux.ibm.com>
-To: linux-scsi@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
-        jdaley@linux.ibm.com, mst@redhat.com, jasowang@redhat.com,
-        pbonzini@redhat.com, stefanha@redhat.com, eperezma@redhat.com,
-        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
-        mjrosato@linux.ibm.com, farman@linux.ibm.com, frankja@linux.ibm.com
-Subject: [PATCH v2 3/3] scsi: virtio_scsi: move INIT_WORK calls to virtscsi_init
-Date: Thu, 12 Mar 2026 18:42:56 +0100
-Message-ID: <20260312174256.1557045-4-jdaley@linux.ibm.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260312174256.1557045-1-jdaley@linux.ibm.com>
-References: <20260312174256.1557045-1-jdaley@linux.ibm.com>
+	s=arc-20240116; t=1773338222; c=relaxed/simple;
+	bh=n8tbDoaegI9nZrcwUj1qP9UTA3xZzlsGFevGXWPREIA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D6e7ab81VmRM8iAZXrljC/2tlBPnMcUbi13G2o0dDfbQoyaCjIKM0oz/8HO1dJXTNSrfSh9tDekOtRU2OhghE4pzY270SLISUBGvPRxgLz/iZrX+FmB/av5DFQt8Do9WlfxRS1YbdSyn7v/Fqv7wJ07vGHsKWiCzABHVnbJGixg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hE8pKgrb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69BC5C4CEF7;
+	Thu, 12 Mar 2026 17:56:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773338221;
+	bh=n8tbDoaegI9nZrcwUj1qP9UTA3xZzlsGFevGXWPREIA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hE8pKgrbVvgKUy70OM/dwNRdNFcsAr3w1fRIFXZJ+nYRusrZLimTHtDcUUr4tPP6L
+	 7BiWK20rDWZBFgEFkctsfFypMVlvIo3FlDhLUCEhOxkW2h0CHmvXhjhT7dXRXemXki
+	 CAd3rRNRGPwElaVvy2ximO9No3pNC1PVtsN6HRmJ6d94jA6inS6ppmADy5pbbxiJDx
+	 zrKvP68qJneVUbU+Kyprtj95f4aqy/rOhCy6yqKWpdeQYI8fOOhBN/yHeaP4J1AnvE
+	 Vh67CZq+Utw4srWPEFVustMuQDdGVeOr6DTRWxQua69Fmcrje56nB7LRK2iFw59dxe
+	 v4SbyaDhezx/g==
+Date: Thu, 12 Mar 2026 17:56:57 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: Shawn Lin <shawn.lin@rock-chips.com>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v2] scsi: ufs: drockchip,rk3576-ufshc: dt-bindings: Add
+ new mphy reset item
+Message-ID: <20260312-twister-going-dffa25440fe8@spud>
+References: <1773276707-24857-1-git-send-email-shawn.lin@rock-chips.com>
+ <b9024d90-6df7-4a2c-85fe-7f5178e7d1cf@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=M+pA6iws c=1 sm=1 tr=0 ts=69b2fb25 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=V8glGbnc2Ofi9Qvn3v5h:22 a=VnNF1IyMAAAA:8 a=v7jRQeFWwknd2TLyXd4A:9
-X-Proofpoint-GUID: x0J7iJTjVmdT6oE_TWUYtGlQ7ZPjBA6z
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEyMDE0MSBTYWx0ZWRfX6wuocgTNF0/R
- PxyEfKc4cLjz3F0RzBbpKbcwQJsNlrRSAw+L9sGV2wmq21IxqI+74JKvMUhvVxnwNggPdM9x4Th
- Q0wJk3b2dYRCYL55LK0VWVNluLytdSlLRIXyBCEZaFKBplWAQto/GUWyIVGFsd6l36gHZ/mmkdo
- E0PRIcpZGHkNGFx49QoO9THpIhd1EHQbW3t29N94EL+u8R5frCrZS4KpwXaKNT327yNpFDwiDrI
- H2J6/l/40drxXi0urthX6wCsf5D99IoFmbSlKhSFrxAZdXeX5+woIdppYze2Ts0sjta396H2uPq
- pIxsnhhsN0RZUpgEw9kkKLtkM3NXeP11eFb1oJIYI3MRXE6NQmrfkzwi1eGfUt1n1/0Ikeiab0q
- 1xLE/oSyQxMBdZld1Ot9xS3NOQRr27XAvcxUqpDuU3bjhA9WE2uUhljC/IOmMC66xgfQBxa+sCD
- 9FZz/fIUfReEb51tgqQ==
-X-Proofpoint-ORIG-GUID: x0J7iJTjVmdT6oE_TWUYtGlQ7ZPjBA6z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-12_02,2026-03-12_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 spamscore=0 suspectscore=0 priorityscore=1501
- impostorscore=0 phishscore=0 clxscore=1015 bulkscore=0 adultscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
- definitions=main-2603120141
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="tHJwJyPGKV9Baxma"
+Content-Disposition: inline
+In-Reply-To: <b9024d90-6df7-4a2c-85fe-7f5178e7d1cf@acm.org>
+X-Spamd-Result: default: False [-2.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[jdaley@linux.ibm.com,linux-scsi@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-21913-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-21917-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_TWELVE(0.00)[12];
-	DKIM_TRACE(0.00)[ibm.com:+];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 09C75276B51
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E5D1D276EE3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The last step of virtscsi_handle_event is to call virtscsi_kick_event,
-which calls INIT_WORK on it's own work item. INIT_WORK resets the
-work item's data bits to 0.
 
-If this occurs while the work item is being flushed by
-cancel_work_sync, then kernel/workqueue.c/work_offqd_enable triggers a
-kernel warning, as it expects the "disable" bit to be 1:
+--tHJwJyPGKV9Baxma
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[   21.450115] workqueue: work disable count underflowed
-[   21.450117] WARNING: CPU: 1 PID: 56 at kernel/workqueue.c:4328 enable_=
-work+0x10a/0x120
-...
-[   21.450171] Call Trace:
-[   21.450173]  [<000003db2e5bdc3e>] enable_work+0x10e/0x120
-[   21.450176] ([<000003db2e5bdc3a>] enable_work+0x10a/0x120)
-[   21.450178]  [<000003db2e5bdd86>] cancel_work_sync+0x86/0xa0
-[   21.450181]  [<000003daae97d9e4>] virtscsi_remove+0xb4/0xd0 [virtio_sc=
-si]
-[   21.450184]  [<000003db2ef3b5ca>] virtio_dev_remove+0x6a/0xd0
-[   21.450186]  [<000003db2ef9106c>] device_release_driver_internal+0x1ac=
-/0x260
-[   21.450190]  [<000003db2ef8edc8>] bus_remove_device+0xf8/0x190
-[   21.450192]  [<000003db2ef88d72>] device_del+0x142/0x340
-[   21.450194]  [<000003db2ef88fa0>] device_unregister+0x30/0xa0
-[   21.450196]  [<000003db2ef3b2fa>] unregister_virtio_device+0x2a/0x40
+On Thu, Mar 12, 2026 at 07:27:37AM -0700, Bart Van Assche wrote:
+>=20
+> On 3/11/26 5:51 PM, Shawn Lin wrote:
+> > Add the mphy reset property to the devicetree bindings for the Rockchip
+> > RK3576 UFS host controller. The mphy reset signal is used to reset the
+> > physical adapter. Resetting other components while leaving the mphy
+> > unreset may occasionally prevent the UFS controller from successfully
+> > linking up with the device.
+>=20
+> I see "drockchip" in the patch subject instead of "rockchip". Is that
+> perhaps a typo?
+>=20
+The whole $subject is a bit of a mess I feel. "scsi: ufs: dt-bindings"
+is fine, a few subsystems use that instead of "dt-bindings: scsi: ufs",
+but putting the compatible/filename before "dt-bindings:" is not right.
 
-This warning may occur if a controller is detached immediately
-following a disk detach.
 
-Move the INIT_WORK call to prevent this. Don't re-init event list
-work items in virtscsi_kick_event, init them only once in
-virtscsi_init instead.
+--tHJwJyPGKV9Baxma
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Signed-off-by: Joshua Daley <jdaley@linux.ibm.com>
----
- drivers/scsi/virtio_scsi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
-index 6efbeaa30f65..fe1bf37f1317 100644
---- a/drivers/scsi/virtio_scsi.c
-+++ b/drivers/scsi/virtio_scsi.c
-@@ -240,7 +240,6 @@ static int virtscsi_kick_event(struct virtio_scsi *vs=
-csi,
- 	struct scatterlist sg;
- 	unsigned long flags;
-=20
--	INIT_WORK(&event_node->work, virtscsi_handle_event);
- 	sg_init_one(&sg, event_node->event, sizeof(struct virtio_scsi_event));
-=20
- 	spin_lock_irqsave(&vscsi->event_vq.vq_lock, flags);
-@@ -896,6 +895,9 @@ static int virtscsi_init(struct virtio_device *vdev,
- 	virtscsi_config_set(vdev, cdb_size, VIRTIO_SCSI_CDB_SIZE);
- 	virtscsi_config_set(vdev, sense_size, VIRTIO_SCSI_SENSE_SIZE);
-=20
-+	for (i =3D 0; i < VIRTIO_SCSI_EVENT_LEN; i++)
-+		INIT_WORK(&vscsi->event_list[i].work, virtscsi_handle_event);
-+
- 	err =3D 0;
-=20
- out:
---=20
-2.34.1
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCabL+aQAKCRB4tDGHoIJi
+0trDAQDpMPE/2K3nkbJwA4CqqvVfyBPfDW2OEaSNZpABGF442wD/arcdxkDxcf48
+URc8etfB/a+yIM/265RQOAyx87Qrowo=
+=Owlm
+-----END PGP SIGNATURE-----
 
+--tHJwJyPGKV9Baxma--
 
