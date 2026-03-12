@@ -1,76 +1,77 @@
-Return-Path: <linux-scsi+bounces-21914-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21916-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OLucEGP7smmPRQAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21914-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:44:03 +0100
+	id aBgSE3v7smmQRQAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21916-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:44:27 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41084276B9A
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:44:02 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D978276BB7
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:44:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 100E63040FE5
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 17:43:15 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 87374303DA81
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 17:43:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05CAB3FE642;
-	Thu, 12 Mar 2026 17:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 143413FE670;
+	Thu, 12 Mar 2026 17:43:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gx1Qwn/T"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EtAKtr6C"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB9B53A5427;
-	Thu, 12 Mar 2026 17:43:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60243FE37A;
+	Thu, 12 Mar 2026 17:43:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773337389; cv=none; b=Xf9CVa9QS7MGpSl0Gfe/gjnbapyvMpeCeBMdCtPs5dfiYQCdB3FAqhAgFK+gJ127bIGSZEe+SbPPhotP2f+l7Tk3pRODqlLsRmJZWkIlxcYzCSJ0gTsC9WCzdN821DFn/3OI/8j/efj4IVNaOFs/ag7b0sIho8FWl83mTKIFR2A=
+	t=1773337390; cv=none; b=oA7YSeKSUpBhvOprTShojCeklnwXVH8JLjpiMU8syuzjkK1D3Vo16ZZMi0/G7K4C1zyrG3JAWQqhsZDR03WeBzOoOPkPamcz++P1cQMXcAaa9jmEhABwTtExHTwZZYH3hNx5AUqgzh7qDdsmLtjD2WBk0zR9s6gJRj2onS8o/iI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773337389; c=relaxed/simple;
-	bh=QJkYOr1cfybF5EYNJZEH/LzMfpNz7HR2eQgVbuSZJCA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=suiKSQIWlEAbEPq1glmCpPMKUuO1Ouwmt86XtHVFBJXfjuaTgtY0KwolMbNOQa5n0JR1cGvQARwEF9hbpYVcxq/4eu/z1FQQLl2qprBHErQ6NKuXQBA9R1xYTp0Nygi2cDjoYKNbrsh4ugHd8PBVQp3VWGM+o3Jax6+ZOYuy5m8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gx1Qwn/T; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1773337390; c=relaxed/simple;
+	bh=cQpRzyP7bOHomQ5KjgVTuBu3n+2i+LcUgTPd1n+Pk8s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RH7pxJhd/bqvAKdZNEFIa1Rp5A1HTCCuLe08DBbKCVSuvzffq9CFqzW2xL2+gls82op53P2DZwSNOsyGPa+bRebdfCqSX04HyJ/QMrtcRPPT1EU4yNYJWiHgMvPeIXppD6M/laqD1156S4S9vMihBUajRAtodB53YoPv2KqouP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=EtAKtr6C; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62CEmNQ32279397;
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62CE4dFf2277871;
 	Thu, 12 Mar 2026 17:43:02 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=ZjWGqEdyicZGNnfr4p1/dwSs1y1szPTKIKJQ2+bbt
-	vM=; b=gx1Qwn/TKdG12ra4cvL75d85Iy9YFsH0sxKNAyUHmfmO4DloU5cXd1BI7
-	cvsSIn97sKNMKnUAIfGhTo9Bc17WbDGIudw1fibKPNrrKlTItVKs4G37TGATcDqx
-	V9dMVaLAuwROsK6usAAT8GpBlbOB0j6XeAjMGl8ooV4QeqrnQ0WoybgRz2foNNwQ
-	AkSrWGzdK5v5QqL1BFMCqoSUczgyRJK/c1zxY/ZhdatMMc1yZZL1cxqAIA6slI1+
-	zjlV5k0O4x1lYKS+3P76K8xyP6hNWtVqJuqC9lKyTEuL5gGfkJ5VUJpLlomd/fB/
-	/93X7hvtNA+qUPa0dWlOYhheyoSww==
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=/0vLc6q/LATwN62xa
+	8S6UogsUfCoBr/42ZN+uaUWM08=; b=EtAKtr6C8xSo452FU/MjOwW0DcJD84ZLt
+	VvFdzco7MuVYT+aM53TaUE+bwSQgv5ew0VNSfLJdQmpbTjI1pTeBvx+jBv65f7T5
+	s3AGgm3AOr0/k5nsLMA6Yt8dt+nPyH/l5h9+OruHIFJScfcJ/CdY5ihayNU95ows
+	NJZM5VfwkuB8u3nJLxlHfTHJV7RvxjenKBj0cMsHZXHJKXKsMFykQypsZtfmIlL6
+	u2fsPmN/TOoZw4a5EuhXLB7Xmq5uUOLE6K75jAWgUNMygcZr3Ty5mgjGHaV+NNgi
+	8voAmEItnRE4a/2duyHTNadeFdR/1ZclUk9GX67erf/pKu2F3ziXw==
 Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh91m2y2-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh91m2y1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Thu, 12 Mar 2026 17:43:02 +0000 (GMT)
 Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62CESg4s014631;
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62CEQQPT014667;
 	Thu, 12 Mar 2026 17:43:01 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cuha8bd5p-1
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cuha8bd5n-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Thu, 12 Mar 2026 17:43:01 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62CHgvq860162358
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62CHgvCC44630366
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Thu, 12 Mar 2026 17:42:57 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 13E792006A;
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2975E20063;
 	Thu, 12 Mar 2026 17:42:57 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DD6BF20063;
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E3CCF2004F;
 	Thu, 12 Mar 2026 17:42:56 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with SMTP;
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with SMTP;
 	Thu, 12 Mar 2026 17:42:56 +0000 (GMT)
 Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 56370)
-	id C63F9E033C; Thu, 12 Mar 2026 18:42:56 +0100 (CET)
+	id C7B6AE02A3; Thu, 12 Mar 2026 18:42:56 +0100 (CET)
 From: Joshua Daley <jdaley@linux.ibm.com>
 To: linux-scsi@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
@@ -78,10 +79,12 @@ Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
         pbonzini@redhat.com, stefanha@redhat.com, eperezma@redhat.com,
         James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
         mjrosato@linux.ibm.com, farman@linux.ibm.com, frankja@linux.ibm.com
-Subject: [PATCH v2 0/3] scsi: virtio_scsi: move INIT_WORK calls to virtscsi_init
-Date: Thu, 12 Mar 2026 18:42:53 +0100
-Message-ID: <20260312174256.1557045-1-jdaley@linux.ibm.com>
+Subject: [PATCH v2 1/3] scsi: virtio_scsi: kick event_list unconditionally
+Date: Thu, 12 Mar 2026 18:42:54 +0100
+Message-ID: <20260312174256.1557045-2-jdaley@linux.ibm.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260312174256.1557045-1-jdaley@linux.ibm.com>
+References: <20260312174256.1557045-1-jdaley@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -90,21 +93,21 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: V2lfBuRxhH8Su_6MpVKgPX8NXKiEOhtp
+X-Proofpoint-GUID: vnTWpdV3tDX2TUJGsogrJNYxyCwCIux7
 X-Authority-Analysis: v=2.4 cv=E6/AZKdl c=1 sm=1 tr=0 ts=69b2fb26 cx=c_pps
  a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
  a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
  a=uAbxVGIbfxUO_5tXvNgY:22 a=20KFwNOVAAAA:8 a=VnNF1IyMAAAA:8
- a=CFRfbv1PXe9UI1TNNxIA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEyMDE0MSBTYWx0ZWRfX8RyZeTvNFY2n
- u7LrnmtYK5dFcj3vIZrbd7e7tptBic2m7hcb4WkO4b90Zhlb3VSZctAQSEzOb5d/F4sPMeIHlSJ
- q5UR20WdLfwsSAhSu5IFNXjtXxk8TiLsbTbs3gYAaLfpxt4/3ebMbTKzgc0Jmc4LnOkRvrAjpxb
- wgqJv6GsOJWYVFqdaTOwW24FKTSYSXTs+tY8ZVa0sa+/RmMTK3fEiv+JIog2vsAm7+7Sbf/rcMn
- IZpJD9RMskqxY1QJM7v49seSFESaeHGQ/z1zdsRh9qL648dC5+kSKI4qom10W3s5B38hjjZPACM
- daoHd8w8x6GaDpnM6Pa8k+XEnnwhupgqMMkduNGmp0A4XIK6vInlm3mU73z0p8frDmkC7G23xRx
- q4+yNc1pzV8MMmMW4isDJck2ppKhSmULKVSYKt0nls7hvFuBdJgRWBKpM1zdc1QpjP0BPmPBatp
- lnak9yynmH0vjobz37A==
-X-Proofpoint-ORIG-GUID: V2lfBuRxhH8Su_6MpVKgPX8NXKiEOhtp
+ a=fOgkfDuy17jzwl4HYOQA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEyMDE0MSBTYWx0ZWRfX5PRkPhAiUyJ6
+ 1u5hBB34YniR5WKQoNAJE701yh54neWMUtO36lbvB8cQrPKUBYIte2bCvqfF6n7pbrq5A0yVWLK
+ Qi4SdGh5qY67DWRwnz+JyunQO+zQY8I82b7vY0t1wtKgYmOyQl1+PpxNRjflUDgrhlzTVYuz6X7
+ W7b2hLFuyejv8Te50jtgIAzWlzD1TX1X1x941V9RIfLPFiy3NTbDZfVFhIkrmlitkgaOAoCPXba
+ DyEeDJ4LkPIWrQCJO3c72rXHbfjFSPeuLiZRcIAKpiT0+mkWj+qoa9hiLh045KhVsxpIc9ZQQI8
+ t+XbDGEm8nnaoDTDCMj79OWVGKklwo44MxA1MtvbvkebO5UnKRjSQEQWSBb8lveYx4V8hiSJPCH
+ ue/Hu9j8qKdFGKg2zYnwvFFscfNPkmZadyR+YQn0lEYQvdUX2anQnfFvGGnmxUuWvdN2KQjZIAA
+ zzw900nFMhXaAwlp7zQ==
+X-Proofpoint-ORIG-GUID: vnTWpdV3tDX2TUJGsogrJNYxyCwCIux7
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-03-12_02,2026-03-12_01,2025-10-01_01
@@ -119,12 +122,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_NEQ_ENVFROM(0.00)[jdaley@linux.ibm.com,linux-scsi@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-21914-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21916-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -135,78 +138,61 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_COUNT_TWELVE(0.00)[12];
 	DKIM_TRACE(0.00)[ibm.com:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	RCPT_COUNT_TWELVE(0.00)[14];
 	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 41084276B9A
+X-Rspamd-Queue-Id: 8D978276BB7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Changelog v1 -> v2:
+The event_list processes non-hotplug events (such as LUN capacity
+changes), so remove the conditions that guard the initial kicks in
+_probe() and _restore(), as well as the work cancellation in _remove().
 
-- Added 2 additional patches:
-  - [PATCH v2 1/3] scsi: virtio_scsi: kick event_list unconditionally
-    - Removes the conditions surrounding event_list operations (suggested=
- by Stefan Hajnoczi <stefanha@redhat.com>)
-  - [PATCH v2 2/3] scsi: virtio_scsi: remove unnecessary fn declaration
-    - Removes virtscsi_handle_event() prototype (suggested by Eric Farman=
- <farman@linux.ibm.com>)
+Suggested-by: Stefan Hajnoczi <stefanha@redhat.com>
+Signed-off-by: Joshua Daley <jdaley@linux.ibm.com>
+---
+ drivers/scsi/virtio_scsi.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-- [PATCH 1/1] -> [PATCH v2 3/3] scsi: virtio_scsi: move INIT_WORK calls t=
-o virtscsi_init
-  - Removed the condition surrounding INIT_WORK calls
-
------
-
-v1 cover letter:
-
-This patch avoids a kernel warning that may occur if a virtio_scsi
-controller is detached immediately following a disk detach. See the
-commit message for details. The following are instructions to
-produce the warning (without the proposed patch).
-
-Timing matters--if all event work items call INIT_WORK before they are
-flushed by cancel_work_sync, then the warning will not occur.
-
-The warning will occur consistently if a sleep is added in
-virtscsi_kick_event before the INIT_WORK call, like so:
-
-#include <linux/delay.h>
-
-static int virtscsi_kick_event(struct virtio_scsi *vscsi,
-			       struct virtio_scsi_event_node *event_node)
-{
-    int err;
-    struct scatterlist sg;
-    unsigned long flags;
-
- -> msleep(1000);
-    INIT_WORK(&event_node->work, virtscsi_handle_event);
-=09
-    ...
-}
-
-Then, just detach a disk and its controller in quick succession:
-
-virsh detach-device --domain <domain> disk.xml; \
-virsh detach-device --domain <domain> controller.xml
-
-where disk.xml and controller.xml are text files containing the XML
-of the disk and controller.
-
-Or, with the libvirt python module:
-
-domain.detachDevice(str(disk_xml))
-domain.detachDevice(str(controller_xml))
-
-Joshua Daley (3):
-  scsi: virtio_scsi: kick event_list unconditionally
-  scsi: virtio_scsi: remove unnecessary fn declaration
-  scsi: virtio_scsi: move INIT_WORK calls to virtscsi_init
-
- drivers/scsi/virtio_scsi.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
-
+diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
+index 0ed8558dad72..982f49bc6c69 100644
+--- a/drivers/scsi/virtio_scsi.c
++++ b/drivers/scsi/virtio_scsi.c
+@@ -983,9 +983,7 @@ static int virtscsi_probe(struct virtio_device *vdev)
+ 		goto scsi_add_host_failed;
+=20
+ 	virtio_device_ready(vdev);
+-
+-	if (virtio_has_feature(vdev, VIRTIO_SCSI_F_HOTPLUG))
+-		virtscsi_kick_event_all(vscsi);
++	virtscsi_kick_event_all(vscsi);
+=20
+ 	scsi_scan_host(shost);
+ 	return 0;
+@@ -1002,8 +1000,7 @@ static void virtscsi_remove(struct virtio_device *v=
+dev)
+ 	struct Scsi_Host *shost =3D virtio_scsi_host(vdev);
+ 	struct virtio_scsi *vscsi =3D shost_priv(shost);
+=20
+-	if (virtio_has_feature(vdev, VIRTIO_SCSI_F_HOTPLUG))
+-		virtscsi_cancel_event_work(vscsi);
++	virtscsi_cancel_event_work(vscsi);
+=20
+ 	scsi_remove_host(shost);
+ 	virtscsi_remove_vqs(vdev);
+@@ -1028,9 +1025,7 @@ static int virtscsi_restore(struct virtio_device *v=
+dev)
+ 		return err;
+=20
+ 	virtio_device_ready(vdev);
+-
+-	if (virtio_has_feature(vdev, VIRTIO_SCSI_F_HOTPLUG))
+-		virtscsi_kick_event_all(vscsi);
++	virtscsi_kick_event_all(vscsi);
+=20
+ 	return err;
+ }
 --=20
 2.34.1
 
