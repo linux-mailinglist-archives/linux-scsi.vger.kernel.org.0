@@ -1,77 +1,77 @@
-Return-Path: <linux-scsi+bounces-21916-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21915-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aBgSE3v7smmQRQAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21916-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:44:27 +0100
+	id uJPvBWP7smmPRQAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21915-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:44:03 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D978276BB7
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:44:26 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE5AA276B9B
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:44:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 87374303DA81
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 17:43:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2C3E2308933B
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 17:43:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 143413FE670;
-	Thu, 12 Mar 2026 17:43:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BAA13FE650;
+	Thu, 12 Mar 2026 17:43:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EtAKtr6C"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="N+j2+Rhy"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60243FE37A;
-	Thu, 12 Mar 2026 17:43:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05D33F87E4;
+	Thu, 12 Mar 2026 17:43:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773337390; cv=none; b=oA7YSeKSUpBhvOprTShojCeklnwXVH8JLjpiMU8syuzjkK1D3Vo16ZZMi0/G7K4C1zyrG3JAWQqhsZDR03WeBzOoOPkPamcz++P1cQMXcAaa9jmEhABwTtExHTwZZYH3hNx5AUqgzh7qDdsmLtjD2WBk0zR9s6gJRj2onS8o/iI=
+	t=1773337390; cv=none; b=QnAS3FdalmcHrZGppwbuBwEeoaV5ACCELQ0lUB0EYiUaLSwDNIxxxXq6L9Ev0fCVQ8BhdFNK90wQaddCsBeomMHz8O7h4YyMIYu2zA6X4p0f64tQ0228TgMS+ijTTK3+auaHQCsFshSvLe+ddHqp51o/qUawIiEty5rjz177LNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773337390; c=relaxed/simple;
-	bh=cQpRzyP7bOHomQ5KjgVTuBu3n+2i+LcUgTPd1n+Pk8s=;
+	bh=rV7hYDYh0vh7ByzQDh7/paYzBSUOZ8W/0rqSdJJbkV0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RH7pxJhd/bqvAKdZNEFIa1Rp5A1HTCCuLe08DBbKCVSuvzffq9CFqzW2xL2+gls82op53P2DZwSNOsyGPa+bRebdfCqSX04HyJ/QMrtcRPPT1EU4yNYJWiHgMvPeIXppD6M/laqD1156S4S9vMihBUajRAtodB53YoPv2KqouP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=EtAKtr6C; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=kEaUQABtNje3NCh4HrLYCgL5D1Nso0b3qXqRDvwBP+maydr1sSD4C8S0xFX4QhMzdLPxXnda0GmWtIERhK9Ck96Fw0WME/S9DyGIz1Q50J9qfgmtlcXhRN7YaHQQXapwew4MmagLn1nuECnqOc6hvWKGE8TsdjrIfe8PW4ZwJMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=N+j2+Rhy; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62CE4dFf2277871;
-	Thu, 12 Mar 2026 17:43:02 GMT
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62CEJJsp2581579;
+	Thu, 12 Mar 2026 17:43:01 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=/0vLc6q/LATwN62xa
-	8S6UogsUfCoBr/42ZN+uaUWM08=; b=EtAKtr6C8xSo452FU/MjOwW0DcJD84ZLt
-	VvFdzco7MuVYT+aM53TaUE+bwSQgv5ew0VNSfLJdQmpbTjI1pTeBvx+jBv65f7T5
-	s3AGgm3AOr0/k5nsLMA6Yt8dt+nPyH/l5h9+OruHIFJScfcJ/CdY5ihayNU95ows
-	NJZM5VfwkuB8u3nJLxlHfTHJV7RvxjenKBj0cMsHZXHJKXKsMFykQypsZtfmIlL6
-	u2fsPmN/TOoZw4a5EuhXLB7Xmq5uUOLE6K75jAWgUNMygcZr3Ty5mgjGHaV+NNgi
-	8voAmEItnRE4a/2duyHTNadeFdR/1ZclUk9GX67erf/pKu2F3ziXw==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh91m2y1-1
+	:mime-version:references:subject:to; s=pp1; bh=xHiV9w+d5jY9RB+bX
+	U1SSOhAnxXqY0dSDPV0DmaES+4=; b=N+j2+Rhyu79cL0rRxkr3qV+eCUvGGfT2s
+	hSwleJDRp3bwtdJeNuMnLDugpEz7XT/avy9iM7Jl8N/7sj5L0uQnIIvPmKixH0HL
+	7+8Ryv1cQ34lgKMM1PNfolOEcsP0m21+7ZnLQ1lOm7lLbAej98iXNxtiHK0iPQnH
+	u+SQc+j5MxLTMeVL9UYAj1DRz7RizSu+mbny5QmmGHPCnfZL0iFN9nWnmPXez9Ly
+	B2XSe7F1hWHxGSpStsRsWQjzzFVEC/6hjathmHZLoKqtKGg0h/wizaxABxhuWndr
+	vRpHv/rjwYNeti8iq5qp3KHoo04tV/Pmsay6t9+ETSU8HLFAADQgQ==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh94v3y9-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Mar 2026 17:43:02 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62CEQQPT014667;
-	Thu, 12 Mar 2026 17:43:01 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cuha8bd5n-1
+	Thu, 12 Mar 2026 17:43:01 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62CEPjmp025765;
+	Thu, 12 Mar 2026 17:43:00 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cuha8bd6d-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Mar 2026 17:43:01 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62CHgvCC44630366
+	Thu, 12 Mar 2026 17:43:00 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62CHgvsV60359074
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Thu, 12 Mar 2026 17:42:57 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2975E20063;
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 17BF22006C;
 	Thu, 12 Mar 2026 17:42:57 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E3CCF2004F;
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E0D9D20065;
 	Thu, 12 Mar 2026 17:42:56 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with SMTP;
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with SMTP;
 	Thu, 12 Mar 2026 17:42:56 +0000 (GMT)
 Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 56370)
-	id C7B6AE02A3; Thu, 12 Mar 2026 18:42:56 +0100 (CET)
+	id CA8D0E0900; Thu, 12 Mar 2026 18:42:56 +0100 (CET)
 From: Joshua Daley <jdaley@linux.ibm.com>
 To: linux-scsi@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
@@ -79,9 +79,9 @@ Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
         pbonzini@redhat.com, stefanha@redhat.com, eperezma@redhat.com,
         James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
         mjrosato@linux.ibm.com, farman@linux.ibm.com, frankja@linux.ibm.com
-Subject: [PATCH v2 1/3] scsi: virtio_scsi: kick event_list unconditionally
-Date: Thu, 12 Mar 2026 18:42:54 +0100
-Message-ID: <20260312174256.1557045-2-jdaley@linux.ibm.com>
+Subject: [PATCH v2 2/3] scsi: virtio_scsi: remove unnecessary fn declaration
+Date: Thu, 12 Mar 2026 18:42:55 +0100
+Message-ID: <20260312174256.1557045-3-jdaley@linux.ibm.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260312174256.1557045-1-jdaley@linux.ibm.com>
 References: <20260312174256.1557045-1-jdaley@linux.ibm.com>
@@ -93,41 +93,42 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vnTWpdV3tDX2TUJGsogrJNYxyCwCIux7
-X-Authority-Analysis: v=2.4 cv=E6/AZKdl c=1 sm=1 tr=0 ts=69b2fb26 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+X-Authority-Analysis: v=2.4 cv=QKtlhwLL c=1 sm=1 tr=0 ts=69b2fb25 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
  a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=uAbxVGIbfxUO_5tXvNgY:22 a=20KFwNOVAAAA:8 a=VnNF1IyMAAAA:8
- a=fOgkfDuy17jzwl4HYOQA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEyMDE0MSBTYWx0ZWRfX5PRkPhAiUyJ6
- 1u5hBB34YniR5WKQoNAJE701yh54neWMUtO36lbvB8cQrPKUBYIte2bCvqfF6n7pbrq5A0yVWLK
- Qi4SdGh5qY67DWRwnz+JyunQO+zQY8I82b7vY0t1wtKgYmOyQl1+PpxNRjflUDgrhlzTVYuz6X7
- W7b2hLFuyejv8Te50jtgIAzWlzD1TX1X1x941V9RIfLPFiy3NTbDZfVFhIkrmlitkgaOAoCPXba
- DyEeDJ4LkPIWrQCJO3c72rXHbfjFSPeuLiZRcIAKpiT0+mkWj+qoa9hiLh045KhVsxpIc9ZQQI8
- t+XbDGEm8nnaoDTDCMj79OWVGKklwo44MxA1MtvbvkebO5UnKRjSQEQWSBb8lveYx4V8hiSJPCH
- ue/Hu9j8qKdFGKg2zYnwvFFscfNPkmZadyR+YQn0lEYQvdUX2anQnfFvGGnmxUuWvdN2KQjZIAA
- zzw900nFMhXaAwlp7zQ==
-X-Proofpoint-ORIG-GUID: vnTWpdV3tDX2TUJGsogrJNYxyCwCIux7
+ a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8 a=23WZjCL68Duz3tq5-14A:9
+ a=NqO74GWdXPXpGKcKHaDJD/ajO6k=:19
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEyMDE0MSBTYWx0ZWRfX/gQBadpSTGSr
+ aY8xXJWDp9Wz2vKPm4c9FZKwTSjhS7iZJ3nZp/KN1SDUW2IF+dAzyf6N11W6a42PYRVjtUH7eo3
+ AqYDiALQ17xks0qefBNx/pInPOSeJOUme+e3rR+sJUNsVlEWenIHgnSf6ynGnfHcC/5u6B/ZI6g
+ jUrKqqfnEp4NNY1xRQh8CKG14LrwQ0YNBkiFregvv4CIr5G4Tg+shxi2YCK0/+frghVMgixSiIl
+ k2cV7RG42PgAEr3G+K3gOE7OTjiLnG7rfeEht6Fet4ot4w0iyWsWQ9k927VZx4MN6rC8AL+JcMp
+ y26nrsyQ7ob7I0lPuBJdHEdTVAF3cwooeIEXQQAmROSdmtCtsrE9dtOUjcenk/Y6Lj3oCHEOmtt
+ x4UClCm0qWT6hpRTfH17/tbX1TrSAA6JwQ/XbZr0zraOMxaJraqkwiHLZvAcWRTcHs7Uu1pzX+s
+ CQtTgTZ2Q1xb8u/GsUg==
+X-Proofpoint-ORIG-GUID: v-7gOpwj65IM8HUc-PWF8zYrl8wPAF99
+X-Proofpoint-GUID: v-7gOpwj65IM8HUc-PWF8zYrl8wPAF99
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-03-12_02,2026-03-12_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 impostorscore=0 clxscore=1015 malwarescore=0 phishscore=0
- suspectscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603120141
+ malwarescore=0 suspectscore=0 impostorscore=0 clxscore=1015
+ priorityscore=1501 bulkscore=0 adultscore=0 phishscore=0 spamscore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
+ definitions=main-2603120141
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_NEQ_ENVFROM(0.00)[jdaley@linux.ibm.com,linux-scsi@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-21916-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-21915-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -138,61 +139,35 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_COUNT_TWELVE(0.00)[12];
 	DKIM_TRACE(0.00)[ibm.com:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCPT_COUNT_TWELVE(0.00)[14];
 	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 8D978276BB7
+X-Rspamd-Queue-Id: BE5AA276B9B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The event_list processes non-hotplug events (such as LUN capacity
-changes), so remove the conditions that guard the initial kicks in
-_probe() and _restore(), as well as the work cancellation in _remove().
+virtscsi_handle_event() is not used before its definition, so remove
+a prior declaration.
 
-Suggested-by: Stefan Hajnoczi <stefanha@redhat.com>
+Suggested-by: Eric Farman <farman@linux.ibm.com>
 Signed-off-by: Joshua Daley <jdaley@linux.ibm.com>
 ---
- drivers/scsi/virtio_scsi.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+ drivers/scsi/virtio_scsi.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
-index 0ed8558dad72..982f49bc6c69 100644
+index 982f49bc6c69..6efbeaa30f65 100644
 --- a/drivers/scsi/virtio_scsi.c
 +++ b/drivers/scsi/virtio_scsi.c
-@@ -983,9 +983,7 @@ static int virtscsi_probe(struct virtio_device *vdev)
- 		goto scsi_add_host_failed;
+@@ -233,8 +233,6 @@ static void virtscsi_ctrl_done(struct virtqueue *vq)
+ 	virtscsi_vq_done(vscsi, &vscsi->ctrl_vq, virtscsi_complete_free);
+ };
 =20
- 	virtio_device_ready(vdev);
+-static void virtscsi_handle_event(struct work_struct *work);
 -
--	if (virtio_has_feature(vdev, VIRTIO_SCSI_F_HOTPLUG))
--		virtscsi_kick_event_all(vscsi);
-+	virtscsi_kick_event_all(vscsi);
-=20
- 	scsi_scan_host(shost);
- 	return 0;
-@@ -1002,8 +1000,7 @@ static void virtscsi_remove(struct virtio_device *v=
-dev)
- 	struct Scsi_Host *shost =3D virtio_scsi_host(vdev);
- 	struct virtio_scsi *vscsi =3D shost_priv(shost);
-=20
--	if (virtio_has_feature(vdev, VIRTIO_SCSI_F_HOTPLUG))
--		virtscsi_cancel_event_work(vscsi);
-+	virtscsi_cancel_event_work(vscsi);
-=20
- 	scsi_remove_host(shost);
- 	virtscsi_remove_vqs(vdev);
-@@ -1028,9 +1025,7 @@ static int virtscsi_restore(struct virtio_device *v=
-dev)
- 		return err;
-=20
- 	virtio_device_ready(vdev);
--
--	if (virtio_has_feature(vdev, VIRTIO_SCSI_F_HOTPLUG))
--		virtscsi_kick_event_all(vscsi);
-+	virtscsi_kick_event_all(vscsi);
-=20
- 	return err;
- }
+ static int virtscsi_kick_event(struct virtio_scsi *vscsi,
+ 			       struct virtio_scsi_event_node *event_node)
+ {
 --=20
 2.34.1
 
