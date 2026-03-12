@@ -1,163 +1,213 @@
-Return-Path: <linux-scsi+bounces-21912-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21914-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2EPHF97ysmmLRAAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21912-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:07:42 +0100
+	id OLucEGP7smmPRQAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21914-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:44:03 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B98D9276607
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:07:41 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41084276B9A
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 18:44:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E68EA31F0775
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 17:03:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 100E63040FE5
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 17:43:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AF443FBEA1;
-	Thu, 12 Mar 2026 17:03:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05CAB3FE642;
+	Thu, 12 Mar 2026 17:43:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gx1Qwn/T"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC483CAE8E;
-	Thu, 12 Mar 2026 17:03:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB9B53A5427;
+	Thu, 12 Mar 2026 17:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773334994; cv=none; b=Z1Eq/3mfRpiSpvWNOYoUQ8ZKK1P8HvXTz2NtP+Xv1zsJkMcofw7flwCwoi0FM/kRyNsQfMU6wn9om8HDP6aC9z2wxkkQcsGJ2juDTjr+KWckbhLzGPcYZxvq3z2C7z1QqPtXwoVYUbQtphtxcrrz1cJa+8genGi/8y4RunMBzZg=
+	t=1773337389; cv=none; b=Xf9CVa9QS7MGpSl0Gfe/gjnbapyvMpeCeBMdCtPs5dfiYQCdB3FAqhAgFK+gJ127bIGSZEe+SbPPhotP2f+l7Tk3pRODqlLsRmJZWkIlxcYzCSJ0gTsC9WCzdN821DFn/3OI/8j/efj4IVNaOFs/ag7b0sIho8FWl83mTKIFR2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773334994; c=relaxed/simple;
-	bh=gymGM9n7wddVYvwk2Iyj0H5MpRVhidPG4DavbVCxGds=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bG5ihaMsPFngmAGcyqHMa3B9ZoapeLoaVI2NFNAQrywHYRSIQxXK47QHdcQ7aNptbfaYdg3o3iPRxnbGyhW4Jtq3/QdpzYQLXJ3DmNV7BcMAx6gQ8z3wJv7sNV9ikDehbn+CiygWxQx652HzkVxH970Jv5kCIYI+467JO4fstnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id B37CD8B479;
-	Thu, 12 Mar 2026 17:03:07 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf03.hostedemail.com (Postfix) with ESMTPA id 1BAFA6000C;
-	Thu, 12 Mar 2026 17:02:41 +0000 (UTC)
-Date: Thu, 12 Mar 2026 13:02:55 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Vineeth Remanan Pillai <vineeth@bitbyteword.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Peter Zijlstra <peterz@infradead.org>,
- Dmitry Ilvokhin <d@ilvokhin.com>, Masami Hiramatsu <mhiramat@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
- io-uring@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Marcelo Ricardo Leitner
- <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, Jon Maloy
- <jmaloy@redhat.com>, Aaron Conole <aconole@redhat.com>, Eelco Chaudron
- <echaudro@redhat.com>, Ilya Maximets <i.maximets@ovn.org>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-sctp@vger.kernel.org,
- tipc-discussion@lists.sourceforge.net, dev@openvswitch.org, Oded Gabbay
- <ogabbay@kernel.org>, Koby Elbaz <koby.elbaz@intel.com>,
- dri-devel@lists.freedesktop.org, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, "Gautham R. Shenoy"
- <gautham.shenoy@amd.com>, Huang Rui <ray.huang@amd.com>, Mario Limonciello
- <mario.limonciello@amd.com>, Len Brown <lenb@kernel.org>, Srinivas
- Pandruvada <srinivas.pandruvada@linux.intel.com>, linux-pm@vger.kernel.org,
- MyungJoo Ham <myungjoo.ham@samsung.com>, Kyungmin Park
- <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Sumit Semwal
- <sumit.semwal@linaro.org>, linaro-mm-sig@lists.linaro.org, Eddie James
- <eajames@linux.ibm.com>, Andrew Jeffery <andrew@codeconstruct.com.au>, Joel
- Stanley <joel@jms.id.au>, linux-fsi@lists.ozlabs.org, David Airlie
- <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Alex Deucher
- <alexander.deucher@amd.com>, Danilo Krummrich <dakr@kernel.org>, Matthew
- Brost <matthew.brost@intel.com>, Philipp Stanner <phasta@kernel.org>, Harry
- Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>,
- amd-gfx@lists.freedesktop.org, Jiri Kosina <jikos@kernel.org>, Benjamin
- Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org, Mark Brown
- <broonie@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>,
- Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K.
- Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org, Chris
- Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
- linux-btrfs@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/15] tracepoint: Avoid double static_branch evaluation
- at guarded call sites
-Message-ID: <20260312130255.6476e560@gandalf.local.home>
-In-Reply-To: <CAEf4BzbnfyhCqp0ne=2gRnVxp-mdGmuZwDeFRyhRYH+eDcz2-w@mail.gmail.com>
-References: <20260312150523.2054552-1-vineeth@bitbyteword.org>
-	<1e3c2830-765e-4271-89f7-0b6784b37597@efficios.com>
-	<20260312112354.3dd99e36@gandalf.local.home>
-	<219d015d-076b-4c80-8f63-88569115fdad@efficios.com>
-	<20260312114041.5193c729@gandalf.local.home>
-	<1becdbce-2c01-468a-bbab-42b5dea9fdf8@efficios.com>
-	<CAO7JXPjnnruhM5oC6xMgnYaQ9efzYFqMCFiJLNM3HCQ+ZeCiJw@mail.gmail.com>
-	<CAEf4BzbnfyhCqp0ne=2gRnVxp-mdGmuZwDeFRyhRYH+eDcz2-w@mail.gmail.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1773337389; c=relaxed/simple;
+	bh=QJkYOr1cfybF5EYNJZEH/LzMfpNz7HR2eQgVbuSZJCA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=suiKSQIWlEAbEPq1glmCpPMKUuO1Ouwmt86XtHVFBJXfjuaTgtY0KwolMbNOQa5n0JR1cGvQARwEF9hbpYVcxq/4eu/z1FQQLl2qprBHErQ6NKuXQBA9R1xYTp0Nygi2cDjoYKNbrsh4ugHd8PBVQp3VWGM+o3Jax6+ZOYuy5m8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gx1Qwn/T; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62CEmNQ32279397;
+	Thu, 12 Mar 2026 17:43:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=ZjWGqEdyicZGNnfr4p1/dwSs1y1szPTKIKJQ2+bbt
+	vM=; b=gx1Qwn/TKdG12ra4cvL75d85Iy9YFsH0sxKNAyUHmfmO4DloU5cXd1BI7
+	cvsSIn97sKNMKnUAIfGhTo9Bc17WbDGIudw1fibKPNrrKlTItVKs4G37TGATcDqx
+	V9dMVaLAuwROsK6usAAT8GpBlbOB0j6XeAjMGl8ooV4QeqrnQ0WoybgRz2foNNwQ
+	AkSrWGzdK5v5QqL1BFMCqoSUczgyRJK/c1zxY/ZhdatMMc1yZZL1cxqAIA6slI1+
+	zjlV5k0O4x1lYKS+3P76K8xyP6hNWtVqJuqC9lKyTEuL5gGfkJ5VUJpLlomd/fB/
+	/93X7hvtNA+qUPa0dWlOYhheyoSww==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cuh91m2y2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Mar 2026 17:43:02 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62CESg4s014631;
+	Thu, 12 Mar 2026 17:43:01 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cuha8bd5p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Mar 2026 17:43:01 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62CHgvq860162358
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 12 Mar 2026 17:42:57 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 13E792006A;
+	Thu, 12 Mar 2026 17:42:57 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DD6BF20063;
+	Thu, 12 Mar 2026 17:42:56 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with SMTP;
+	Thu, 12 Mar 2026 17:42:56 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 56370)
+	id C63F9E033C; Thu, 12 Mar 2026 18:42:56 +0100 (CET)
+From: Joshua Daley <jdaley@linux.ibm.com>
+To: linux-scsi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+        jdaley@linux.ibm.com, mst@redhat.com, jasowang@redhat.com,
+        pbonzini@redhat.com, stefanha@redhat.com, eperezma@redhat.com,
+        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
+        mjrosato@linux.ibm.com, farman@linux.ibm.com, frankja@linux.ibm.com
+Subject: [PATCH v2 0/3] scsi: virtio_scsi: move INIT_WORK calls to virtscsi_init
+Date: Thu, 12 Mar 2026 18:42:53 +0100
+Message-ID: <20260312174256.1557045-1-jdaley@linux.ibm.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: kfs6qijpbuferuuhtorb6b835ny66tin
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18gNtqVqUvpV9OuqznTYLgQxysBeUr1V4g=
-X-HE-Tag: 1773334961-101407
-X-HE-Meta: U2FsdGVkX18nBBc/wjwt+Uq/UDhPM+TvyqJ3PzJ7XTdg8zJwcAeVzhmYzxHLf7pqvroMwwz3w+ZMve24FXDlwN4Al9l18e+sIMsly59QHs1WIGUGFWD+n9vC0YFBju5YF4U2cW8usaKA9ACod/DJfkWwChqILC7YI5fjo0jn+MDRzWgSUtcRWc+1ACqufST8GE1+cVaguSIGVLtHO49AgMgvbvjSqwoHR4+HUaDb14GsztIWWkzSI6t3CvJZWLJ62JKH4l1NZ0cseEdgq33l48qG8hnnyAiEMhQWmONsALjOWujHAfplawqsGy97HetKzPQbnSWVIVPTZt4F/YmoVmEIzpjR6X9B
-X-Spamd-Result: default: False [0.14 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: V2lfBuRxhH8Su_6MpVKgPX8NXKiEOhtp
+X-Authority-Analysis: v=2.4 cv=E6/AZKdl c=1 sm=1 tr=0 ts=69b2fb26 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=uAbxVGIbfxUO_5tXvNgY:22 a=20KFwNOVAAAA:8 a=VnNF1IyMAAAA:8
+ a=CFRfbv1PXe9UI1TNNxIA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEyMDE0MSBTYWx0ZWRfX8RyZeTvNFY2n
+ u7LrnmtYK5dFcj3vIZrbd7e7tptBic2m7hcb4WkO4b90Zhlb3VSZctAQSEzOb5d/F4sPMeIHlSJ
+ q5UR20WdLfwsSAhSu5IFNXjtXxk8TiLsbTbs3gYAaLfpxt4/3ebMbTKzgc0Jmc4LnOkRvrAjpxb
+ wgqJv6GsOJWYVFqdaTOwW24FKTSYSXTs+tY8ZVa0sa+/RmMTK3fEiv+JIog2vsAm7+7Sbf/rcMn
+ IZpJD9RMskqxY1QJM7v49seSFESaeHGQ/z1zdsRh9qL648dC5+kSKI4qom10W3s5B38hjjZPACM
+ daoHd8w8x6GaDpnM6Pa8k+XEnnwhupgqMMkduNGmp0A4XIK6vInlm3mU73z0p8frDmkC7G23xRx
+ q4+yNc1pzV8MMmMW4isDJck2ppKhSmULKVSYKt0nls7hvFuBdJgRWBKpM1zdc1QpjP0BPmPBatp
+ lnak9yynmH0vjobz37A==
+X-Proofpoint-ORIG-GUID: V2lfBuRxhH8Su_6MpVKgPX8NXKiEOhtp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-12_02,2026-03-12_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 impostorscore=0 clxscore=1015 malwarescore=0 phishscore=0
+ suspectscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603120141
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[goodmis.org : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[bitbyteword.org,efficios.com,infradead.org,ilvokhin.com,kernel.org,redhat.com,kernel.dk,vger.kernel.org,davemloft.net,google.com,iogearbox.net,gmail.com,ovn.org,lists.sourceforge.net,openvswitch.org,intel.com,lists.freedesktop.org,linaro.org,amd.com,linux.intel.com,samsung.com,lists.linaro.org,linux.ibm.com,codeconstruct.com.au,jms.id.au,lists.ozlabs.org,ffwll.ch,sang-engineering.com,analog.com,hansenpartnership.com,oracle.com,fb.com,suse.com];
-	TAGGED_FROM(0.00)[bounces-21912-lists,linux-scsi=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
+	FROM_NEQ_ENVFROM(0.00)[jdaley@linux.ibm.com,linux-scsi@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-21914-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rostedt@goodmis.org,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_GT_50(0.00)[73];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.991];
-	TAGGED_RCPT(0.00)[linux-scsi,renesas];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,gandalf.local.home:mid]
-X-Rspamd-Queue-Id: B98D9276607
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_NONE(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_TWELVE(0.00)[12];
+	DKIM_TRACE(0.00)[ibm.com:+];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: 41084276B9A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 12 Mar 2026 09:54:29 -0700
-Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+Changelog v1 -> v2:
 
-> > > emit_trace_foo()
-> > > __trace_foo()  
-> 
-> this seems like the best approach, IMO. double-underscored variants
-> are usually used for some specialized/internal version of a function
-> when we know that some conditions are correct (e.g., lock is already
-> taken, or something like that). Which fits here: trace_xxx() will
-> check if tracepoint is enabled, while __trace_xxx() will not check and
-> just invoke the tracepoint? It's short, it's distinct, and it says "I
-> know what I am doing".
+- Added 2 additional patches:
+  - [PATCH v2 1/3] scsi: virtio_scsi: kick event_list unconditionally
+    - Removes the conditions surrounding event_list operations (suggested=
+ by Stefan Hajnoczi <stefanha@redhat.com>)
+  - [PATCH v2 2/3] scsi: virtio_scsi: remove unnecessary fn declaration
+    - Removes virtscsi_handle_event() prototype (suggested by Eric Farman=
+ <farman@linux.ibm.com>)
 
-Honestly, I consider double underscore as internal only and not something
-anyone but the subsystem maintainers use.
+- [PATCH 1/1] -> [PATCH v2 3/3] scsi: virtio_scsi: move INIT_WORK calls t=
+o virtscsi_init
+  - Removed the condition surrounding INIT_WORK calls
 
-This, is a normal function where it's just saying: If you have it already
-enabled, then you can use this. Thus, I don't think it qualifies as a "you
-know what you are doing".
+-----
 
-Perhaps: call_trace_foo() ?
+v1 cover letter:
 
--- Steve
+This patch avoids a kernel warning that may occur if a virtio_scsi
+controller is detached immediately following a disk detach. See the
+commit message for details. The following are instructions to
+produce the warning (without the proposed patch).
+
+Timing matters--if all event work items call INIT_WORK before they are
+flushed by cancel_work_sync, then the warning will not occur.
+
+The warning will occur consistently if a sleep is added in
+virtscsi_kick_event before the INIT_WORK call, like so:
+
+#include <linux/delay.h>
+
+static int virtscsi_kick_event(struct virtio_scsi *vscsi,
+			       struct virtio_scsi_event_node *event_node)
+{
+    int err;
+    struct scatterlist sg;
+    unsigned long flags;
+
+ -> msleep(1000);
+    INIT_WORK(&event_node->work, virtscsi_handle_event);
+=09
+    ...
+}
+
+Then, just detach a disk and its controller in quick succession:
+
+virsh detach-device --domain <domain> disk.xml; \
+virsh detach-device --domain <domain> controller.xml
+
+where disk.xml and controller.xml are text files containing the XML
+of the disk and controller.
+
+Or, with the libvirt python module:
+
+domain.detachDevice(str(disk_xml))
+domain.detachDevice(str(controller_xml))
+
+Joshua Daley (3):
+  scsi: virtio_scsi: kick event_list unconditionally
+  scsi: virtio_scsi: remove unnecessary fn declaration
+  scsi: virtio_scsi: move INIT_WORK calls to virtscsi_init
+
+ drivers/scsi/virtio_scsi.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
+
+--=20
+2.34.1
+
 
