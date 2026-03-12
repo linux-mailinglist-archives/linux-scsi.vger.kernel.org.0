@@ -1,246 +1,188 @@
-Return-Path: <linux-scsi+bounces-21880-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21883-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id FhhsLRZwsmmuMgAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21880-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 08:49:42 +0100
+	id WE7gN8eGsml4NQAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21883-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 10:26:31 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09E5E26E715
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 08:49:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8249F26F831
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 10:26:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 95BD53071421
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 07:49:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CA9573189DF9
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2026 09:23:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDDA63AD501;
-	Thu, 12 Mar 2026 07:49:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84ABF3B4E98;
+	Thu, 12 Mar 2026 09:23:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="VHNeg5IN"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFFEA59
-	for <linux-scsi@vger.kernel.org>; Thu, 12 Mar 2026 07:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 131673B388D;
+	Thu, 12 Mar 2026 09:23:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773301778; cv=none; b=Zpo9T46k7oPIlcN/e3UovL9EhA3n1b9npY2oD/J3egj7FYYEUIw7hOuIekit5ABY/Hs2MlnxybqJUV2XJnPT9cTqBETFHw5y+IWHfgB3Q92q8ZOcV7r9op33hrRzD369dGBLmZE8ZBVhfPeBWDRPIqsfLqwYAVkztNt2vYtM8lc=
+	t=1773307436; cv=none; b=Yd6z5oluZU6g9PwhQ49Pk4VTb21TmgYpbt0LFas1dIR7fnolVXCIW7R24EJp0PH1yzR+WBdO3/Wcqt1YQ+pFITxZLA+rSUoE41A6KF5N7vayhDItM6mDT7KkG8NeEog8DVTrplkylDk/NJ12Zcqx3yVGQcuEHS9BHRVFzLzGHfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773301778; c=relaxed/simple;
-	bh=r2PdE6HYGVzZYpXyEn5kett8unUMILRQGQuMPOiuUPo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Vx8j3Spcadre4AN6nTGKPsy9cBWFmUJ7uttD2jUiTFTzUa+V2eu+dFEwuu79maRCsXBCdIpllAk0BgDLSH9Ww8HjhL6rWH0wxxzCxqjGLnwaYXAPZ3ni7MPEsUftDxyJYOm+4zMoLg4U66d3/jrrpDN+iJVT9G3w0NTkTNNmFK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3591cc98871so351455a91.3
-        for <linux-scsi@vger.kernel.org>; Thu, 12 Mar 2026 00:49:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773301776; x=1773906576;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/LhKuHInA3JH1whpdNQPR6DLSzWmpT0VhZEHTHtHiaY=;
-        b=ahxA3hE0i9P7yVky2O1spxLa18ukL9jQ/sYNkGpl28CpkBXw48pbqtXAQio/3i+Tq6
-         MDCTJBPpQVlYqtHVwK/edjnR0FC/IkkOIio8pPR7pMEXEG9HJq6c2MV+XreCCDsre7jl
-         r+2dDbk8TtUOQO0hiuctWGyORi/+8NGuLfp/cVYky2kgSPvVba+bZpi0hR+cRD9ZcC83
-         q0/tNVGm+bEUCO+tRyJmPTQFW/q8omicdiMDlsZZb1xyBK+4u+ol42JtAbazZoBvYE4E
-         29IcPMcSd6QiELoVDxBWzOlGQwepwV4SzPXCBmVLMXfv2ESEl0ZeA4WvBu1Pr0kdMEWM
-         mzxw==
-X-Forwarded-Encrypted: i=1; AJvYcCXf2ZyXHmC0PfdJAHw5YSyt51suewfE86e6Wa/34VPqu6d/YxiiDt5ENdKzUcBBGtvHOyjTle8IJyMZ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2sjbnaQ+Fkgc6QzVcOR0lrNeNJef7VhisxUNmoeQgyl91hubt
-	Z74BAMS+gIVW5u6sAbzwqqis7g/+Vqc2LpEyvhqFDn3cay/Ij61VtILFPbcJrhZ941p2Ag==
-X-Gm-Gg: ATEYQzx/tDkfnaIi0Ru/wF2fgP3CWvj6qCloXYqyJzazynTM4xIbIKdgGiRPqjsUuuO
-	qQvYNR6tnkCAaTHFQ5XqW1im80ASNQgasytyqHUDoed9MflaZ0i9ssg4TaD6G6x5Pta8c8fB+Wg
-	JdhAWzDMBg2mjorpIMZk1a0BIwvXbxt/9TLIsoaHHuzzybOhxwQkEaC8/3E+lWKz+tLPI3soMnP
-	X+lbFocvoDsMdh/ic/0WPAZNBrj4IqdvLc/KJNfnM8DoADmeC6Umt3HR87v+DIoRmOU9KGpPABw
-	nxMaOcD7WSFeJhbBB9DHbaQTEHtSikbqRsXm6TtbcIj+eO9oo85gfLEI1h4EE8ugg3E5HunUl1P
-	LoOgcMGTro8ddl14kSlI9e4ABDxwKwUhyg//QTUlVWM/lWRBWTgFwKqd3IVeVG5dmxKvvsGZVos
-	nH1GqbvVs9+3PWu96JTxazO0FJMXhv5Dw01nJu8B4jPNimL6GZOYI1/LUg7yupK8Q=
-X-Received: by 2002:a17:90b:3d82:b0:359:2204:a29 with SMTP id 98e67ed59e1d1-35a0133cf11mr5298709a91.27.1773301775620;
-        Thu, 12 Mar 2026 00:49:35 -0700 (PDT)
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com. [74.125.82.178])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-359f06ff204sm8349987a91.7.2026.03.12.00.49.35
-        for <linux-scsi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Mar 2026 00:49:35 -0700 (PDT)
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2be4781d2baso1849479eec.0
-        for <linux-scsi@vger.kernel.org>; Thu, 12 Mar 2026 00:49:35 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXoEU1e2JXvjXZpjl0fwKMBf2ZR5HeSd0Yxz+hl/JTqDTvSRN41yiG9YmngzadkRjyHZdixwsEPNLa6@vger.kernel.org
-X-Received: by 2002:a05:6122:1b0f:b0:56a:9f03:1719 with SMTP id
- 71dfb90a1353d-56b47483c0fmr2043365e0c.7.1773301414536; Thu, 12 Mar 2026
- 00:43:34 -0700 (PDT)
+	s=arc-20240116; t=1773307436; c=relaxed/simple;
+	bh=Cyh7holeRYbbSsQsyZtjI/2MnZ3B4q203MLDUmbI5+E=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hYIz7AmYvKb0YQzFRXf/gNiiP0vbfP8rZWFsmbr982X1SDozwOZr+tteLU8YufG45g9ZfJEpnDe1u+Q/VXv/AF7NdCHlxJ8OsZw6avNANYgYtNkoA1lHXMyyj57KnhQOYTMxWXm+ROQ2SF7rtZk0cODoCmz0kOaWTp8h1sRmcnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=VHNeg5IN; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=QT
+	KglbMOm/LQ0bBYqA6cIhYpmiFwBM4t/W1Wp6m+yGs=; b=VHNeg5INaQAPhJqMsq
+	iYJZ79t3oxI4CkdCrT5MMdCKnhMC2Kg/sJX1Z5pPt3q43eLqTUTlPb5nrji3MK/k
+	gouBphzR0lLZcX6K8nyOmgFmwMdwJ/0NZB+prAZZkKYKk7wbp4mvd0jhZN5jyvpy
+	8qeH3y90tkZWmlG+94HYLuvkk=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wDn0tbfhbJpu7uqAQ--.55S2;
+	Thu, 12 Mar 2026 17:22:48 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: axboe@kernel.dk,
+	fujita.tomonori@lab.ntt.co.jp,
+	James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com
+Cc: linux-block@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	bvanassche@acm.org,
+	Yang Xiuwei <yangxiuwei@kylinos.cn>
+Subject: [PATCH v7 0/3] bsg: add io_uring command support for SCSI passthrough
+Date: Thu, 12 Mar 2026 17:22:34 +0800
+Message-Id: <20260312092237.2464560-1-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310153506.5181-1-fmancera@suse.de> <20260310153506.5181-2-fmancera@suse.de>
-In-Reply-To: <20260310153506.5181-2-fmancera@suse.de>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 12 Mar 2026 08:43:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWj-7J5bMq=wpv12CGaV7xtq7=O3nLHLvOT_odxOE4ueA@mail.gmail.com>
-X-Gm-Features: AaiRm50vZ50YS2w5-6lod2s5W_kA6Ap8FK_nMN9HyVzDzz2AFRy7FAD50ZqnaYU
-Message-ID: <CAMuHMdWj-7J5bMq=wpv12CGaV7xtq7=O3nLHLvOT_odxOE4ueA@mail.gmail.com>
-Subject: Re: [PATCH 01/10 net-next v2] ipv6: convert CONFIG_IPV6 to built-in
- only and clean up Kconfigs
-To: Fernando Fernandez Mancera <fmancera@suse.de>
-Cc: netdev@vger.kernel.org, rbm@suse.com, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Leon Romanovsky <leon@kernel.org>, Selvin Xavier <selvin.xavier@broadcom.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>, Simon Horman <horms@kernel.org>, 
-	Saurav Kashyap <skashyap@marvell.com>, Javed Hasan <jhasan@marvell.com>, 
-	"maintainer:BROADCOM BNX2FC 10 GIGABIT FCOE DRIVER" <GR-QLogic-Storage-Upstream@marvell.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, Nilesh Javali <njavali@marvell.com>, 
-	Manish Rangankar <mrangankar@marvell.com>, Varun Prakash <varun@chelsio.com>, 
-	Alexander Aring <aahringo@redhat.com>, David Teigland <teigland@redhat.com>, 
-	Andreas Gruenbacher <agruenba@redhat.com>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	David Ahern <dsahern@kernel.org>, Pablo Neira Ayuso <pablo@netfilter.org>, 
-	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>, David Howells <dhowells@redhat.com>, 
-	Marc Dionne <marc.dionne@auristor.com>, 
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
-	Jon Maloy <jmaloy@redhat.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
-	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Eric Biggers <ebiggers@kernel.org>, Michal Simek <michal.simek@amd.com>, 
-	Luca Weiss <luca.weiss@fairphone.com>, Sven Peter <sven@kernel.org>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Gow <david@davidgow.net>, 
-	Kuan-Wei Chiu <visitorckw@gmail.com>, Ryota Sakamoto <sakamo.ryota@gmail.com>, 
-	Kir Chou <note351@hotmail.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Vikas Gupta <vikas.gupta@broadcom.com>, 
-	Bhargava Marreddy <bhargava.marreddy@broadcom.com>, 
-	Rajashekar Hudumula <rajashekar.hudumula@broadcom.com>, =?UTF-8?Q?Markus_Bl=C3=B6chl?= <markus@blochl.de>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>, 
-	"open list:INFINIBAND SUBSYSTEM" <linux-rdma@vger.kernel.org>, 
-	"open list:NETRONOME ETHERNET DRIVERS" <oss-drivers@corigine.com>, 
-	"open list:BROADCOM BNX2FC 10 GIGABIT FCOE DRIVER" <linux-scsi@vger.kernel.org>, 
-	"open list:DISTRIBUTED LOCK MANAGER (DLM)" <gfs2@lists.linux.dev>, "open list:ETHERNET BRIDGE" <bridge@lists.linux.dev>, 
-	"open list:NETFILTER" <netfilter-devel@vger.kernel.org>, 
-	"open list:NETFILTER" <coreteam@netfilter.org>, 
-	"open list:RXRPC SOCKETS (AF_RXRPC)" <linux-afs@lists.infradead.org>, 
-	"open list:SCTP PROTOCOL" <linux-sctp@vger.kernel.org>, 
-	"open list:TIPC NETWORK LAYER" <tipc-discussion@lists.sourceforge.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [0.04 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDn0tbfhbJpu7uqAQ--.55S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWF13Ar13Xw4kJrW3JF1kKrg_yoW5uw15pF
+	WYgFn8Gr4UC3WftF93Zr4DuFyaqwn3Gay8G347X340yr15ZFnFqr1DKF4Yqa9rCw17Ka4j
+	vr1jvrZ8C3WkAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jOGYdUUUUU=
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbCwQmiM2myhenWZAAA3c
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,suse.com,ziepe.ca,kernel.org,broadcom.com,lunn.ch,davemloft.net,google.com,redhat.com,nvidia.com,marvell.com,hansenpartnership.com,oracle.com,chelsio.com,blackwall.org,netfilter.org,strlen.de,nwl.cc,auristor.com,gmail.com,oss.qualcomm.com,arndb.de,amd.com,fairphone.com,bp.renesas.com,renesas.com,linux-foundation.org,davidgow.net,hotmail.com,gondor.apana.org.au,blochl.de,lists.linux-m68k.org,corigine.com,lists.linux.dev,lists.infradead.org,lists.sourceforge.net];
-	TAGGED_FROM(0.00)[bounces-21880-lists,linux-scsi=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
+	TAGGED_FROM(0.00)[bounces-21883-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DMARC_NA(0.00)[kylinos.cn];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[163.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_GT_50(0.00)[68];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	TAGGED_RCPT(0.00)[linux-scsi,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid,linux-m68k.org:email,linux-m68k.org:url]
-X-Rspamd-Queue-Id: 09E5E26E715
+	RCPT_COUNT_SEVEN(0.00)[8];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[kylinos.cn:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8249F26F831
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Fernando,
+This series adds io_uring command support to the BSG SCSI passthrough path.
 
-On Tue, 10 Mar 2026 at 16:37, Fernando Fernandez Mancera
-<fmancera@suse.de> wrote:
-> Maintaining a modular IPv6 stack offers image size and memory savings
-> for specific setups, this benefit is outweighed by the architectural
-> burden it imposes on the subsystems on implementation and maintenance.
-> Therefore, drop it.
->
-> Change CONFIG_IPV6 from tristate to bool. Remove all Kconfig
-> dependencies across the tree that explicitly checked for IPV6=m. In
-> addition, remove MODULE_DESCRIPTION(), MODULE_ALIAS(), MODULE_AUTHOR()
-> and MODULE_LICENSE().
->
-> This is also replacing module_init() by device_initcall(). It is not
-> possible to use fs_initcall() as IPv4 does because that creates a race
-> condition on IPv6 addrconf.
->
-> Finally, modify the default configs from CONFIG_IPV6=m to CONFIG_IPV6=y
-> except for m68k as according to the bloat-o-meter the image is
-> increasing by 330KB~ and that isn't acceptable. Instead, disable IPv6 on
-> this architecture by default. This is aligned with m68k RAM requirements
-> and recommendations [1].
->
-> [1] http://www.linux-m68k.org/faq/ram.html
->
-> Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+The goal is to allow userspace to submit SCSI passthrough commands via
+IORING_OP_URING_CMD, in addition to the existing sg_io interface.
+The io_uring path mirrors the existing BSG behaviour: it currently only
+supports BSG_PROTOCOL_SCSI + BSG_SUB_PROTOCOL_SCSI_CMD and does not
+support BIDI transfers.
 
-Thanks for your patch!
+Patch 1 defines struct bsg_uring_cmd in the UAPI and documents the CQE
+res2 layout with extraction/assembly macros for userspace.
 
->  arch/m68k/configs/amiga_defconfig           | 45 +-------------------
->  arch/m68k/configs/apollo_defconfig          | 46 +-------------------
->  arch/m68k/configs/atari_defconfig           | 45 +-------------------
->  arch/m68k/configs/bvme6000_defconfig        | 45 +-------------------
->  arch/m68k/configs/hp300_defconfig           | 47 +--------------------
->  arch/m68k/configs/mac_defconfig             | 45 +-------------------
->  arch/m68k/configs/multi_defconfig           | 45 +-------------------
->  arch/m68k/configs/mvme147_defconfig         | 45 +-------------------
->  arch/m68k/configs/mvme16x_defconfig         | 45 +-------------------
->  arch/m68k/configs/q40_defconfig             | 45 +-------------------
->  arch/m68k/configs/sun3_defconfig            | 45 +-------------------
->  arch/m68k/configs/sun3x_defconfig           | 45 +-------------------
+Patch 2 extends the generic BSG layer with an .uring_cmd file operation
+and a bsg_uring_cmd_fn callback, allowing transport-specific handlers to
+be registered.
 
-Why are the stats not the same for each file?
+Patch 3 implements the SCSI BSG io_uring handler. It builds a SCSI
+request from struct bsg_uring_cmd, maps user buffers (including fixed
+buffers), and completes asynchronously via a request end_io callback and
+task_work. Completion returns SCSI device/host/driver status, residual
+length and sense length packed into CQE res2; status is read from
+scmd->result in task_work.
 
-> --- a/arch/m68k/configs/apollo_defconfig
-> +++ b/arch/m68k/configs/apollo_defconfig
+Changes since v6 [2]:
 
-> @@ -384,7 +343,6 @@ CONFIG_FB=y
->  CONFIG_FRAMEBUFFER_CONSOLE=y
->  CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION=y
->  CONFIG_LOGO=y
-> -# CONFIG_LOGO_LINUX_VGA16 is not set
+  [1/3] bsg_uring_cmd UAPI
+  - Removed the flags field (Bart).
+  - Documented CQE res2 layout and added BSG_SCSI_RES2_* macros for userspace (me).
+  - Added BSG_SCSI_RES2_BUILD() in UAPI (me).
 
-Unrelated change.
+  [2/3] generic BSG layer
+  - Reordered variable declarations (longest to shortest) (Bart).
+  - Use early return when uring_cmd_fn is not set (Bart).
 
->  # CONFIG_LOGO_LINUX_CLUT224 is not set
->  CONFIG_HID=m
->  CONFIG_HIDRAW=y
+  [3/3] SCSI BSG io_uring handler
+  - Read device/host/driver status from scmd->result in task_work (Bart).
+  - Use status_byte() and host_byte() instead of open-coding (Bart).
+  - Removed superfluous " & 0xff" from u8 expressions (Bart).
 
-> --- a/arch/m68k/configs/hp300_defconfig
-> +++ b/arch/m68k/configs/hp300_defconfig
+Compared to the earlier RFC v4 series [1], this version only includes
+minor code cleanups (mainly comments and wording), without changing the
+behaviour or logic of the implementation.
 
-> @@ -386,8 +345,6 @@ CONFIG_FB=y
->  CONFIG_FRAMEBUFFER_CONSOLE=y
->  CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION=y
->  CONFIG_LOGO=y
-> -# CONFIG_LOGO_LINUX_MONO is not set
-> -# CONFIG_LOGO_LINUX_VGA16 is not set
+[1] https://lore.kernel.org/linux-block/20260122015653.703188-1-yangxiuwei@kylinos.cn/
+[2] https://lore.kernel.org/linux-block/20260305012857.2136525-1-yangxiuwei@kylinos.cn/
 
-Two more.
+Testing
+-------
+Testing was done inside a VM on a disk with:
+  /sys/block/sdd/mq/0/nr_tags     = 1024
+  /sys/block/sdd/queue/nr_requests = 256
 
->  CONFIG_HID=m
->  CONFIG_HIDRAW=y
->  CONFIG_UHID=m
+The following SCSI INQUIRY micro-benchmark was run with N=100000:
 
-Gr{oetje,eeting}s,
+  sg+SG_IO (v3), /dev/sg4:
+    avg = 139.0 us, p50 = 128.9 us, p90 = 149.7 us, p99 = 301.0 us
 
-                        Geert
+  bsg+SG_IO (v4), /dev/bsg/2:0:0:0:
+    avg = 97.2 us,  p50 = 92.7 us,  p90 = 111.5 us, p99 = 150.9 us
+
+  bsg+io_uring, /dev/bsg/2:0:0:0:
+    avg = 105.9 us, p50 = 95.4 us,  p90 = 116.2 us, p99 = 175.0 us
+
+  bsg+io_uring (batch=64), /dev/bsg/2:0:0:0:
+    avg = 61.9 us,  p50 = 60.9 us,  p90 = 63.9 us,  p99 = 94.6 us
+
+These results show that the new io_uring path is comparable to the
+existing BSG SG_IO interface for single-command workloads, and that
+batched io_uring submission can significantly improve latency for
+high-concurrency workloads when the device supports sufficient queue
+depth.
+
+Yang Xiuwei (3):
+  bsg: add bsg_uring_cmd uapi structure
+  bsg: add io_uring command support to generic layer
+  scsi: bsg: add io_uring passthrough handler
+
+ block/bsg-lib.c          |   2 +-
+ block/bsg.c              |  36 +++++++-
+ drivers/scsi/scsi_bsg.c  | 181 ++++++++++++++++++++++++++++++++++++++-
+ include/linux/bsg.h      |   6 +-
+ include/uapi/linux/bsg.h |  50 +++++++++++
+ 5 files changed, 271 insertions(+), 4 deletions(-)
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.25.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
