@@ -1,186 +1,177 @@
-Return-Path: <linux-scsi+bounces-21985-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21987-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8PrsHWa8s2nEaQAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21985-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 08:27:34 +0100
+	id IDPKKD2+s2kCagAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21987-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 08:35:25 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C0BF27EC93
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 08:27:34 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AA9D27ED7B
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 08:35:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 970033030D02
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 07:27:32 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 75E2D3030A1E
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 07:35:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 310972BEC23;
-	Fri, 13 Mar 2026 07:27:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90566366DB6;
+	Fri, 13 Mar 2026 07:35:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="13rCpoGf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="razSU0PI";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="13rCpoGf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="razSU0PI"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="N+e8PPZR"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 402BE34C9A3
-	for <linux-scsi@vger.kernel.org>; Fri, 13 Mar 2026 07:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B87B20B80B;
+	Fri, 13 Mar 2026 07:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773386848; cv=none; b=soG62VVKSz+ZSVmcsEWydA7UcRRVFQawkBUoytPfLuNnDbMtEJqhi9ILAhCOHbkJbOdLNr4+TU9kg0l4q7qMxfdIKTwx6isgnS92vR2BJU56BfvBFsBDfnluUuQnRfW3+MGr6flRxLYsnYpeQHurolz8yEpckOkupLz1R9w0hxw=
+	t=1773387322; cv=none; b=coV9pcdWKBeDSRLDKZhpuqA53pV9b86w1fGCRh3ADCJXQ0wjTjK7aTEd7w39aBvWPJyrZprNpPAAKp+SKsriLhGwP+C1/rQ1xM8W6O0TyH7MHvK+WGmoFh1FRl1f9zDebkxrOGtBh/93D8v7500m9cO/X466VUXNkA+ogSiAbn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773386848; c=relaxed/simple;
-	bh=nZPUejzNrAkefoVwg6LcRK0u9rv96Cs2afDeNZj3ZXE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ol/GHbpBJat1ypgtqPN5/9r+Edzw9AaTCtEPaLe+sTXPANsI5OHkGfWLBOCzqYF0nJhiPUn8e/HHXK416L9sSL9UgjZ4b8RHN2s3SrH7/aIjrI2Yrjc7SwqdPFYll/b2QJki0TxTb9q0jkO7niCeEyRT2a8jTWTKMyyqX0+z4ho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=13rCpoGf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=razSU0PI; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=13rCpoGf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=razSU0PI; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 7A5D74DAF5;
-	Fri, 13 Mar 2026 07:27:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773386843; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PIRG0Q/yVpHyaLAU9pL+Vyg4xtL6PGs8lb8PXQchdt0=;
-	b=13rCpoGfAnjoME3eGB25p0kS8h+Ltq37cq5tW9tNbkG4AI3znzcB+OzAVAxgCBZaYyltTY
-	lAvNuOckjZogaBoUZc/UjD7VvXTNTgvaxG3E2+U/6DUVL7hYbbt9KFK/O2MNrx+3UjOVa/
-	aGP+yW3r5kck3P9TsoKOST3gXuZ9aqY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773386843;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PIRG0Q/yVpHyaLAU9pL+Vyg4xtL6PGs8lb8PXQchdt0=;
-	b=razSU0PISaW+d4P9HQ6Oa63i45jRZGfuIx8k0Ytrp3u65tjAZC03LZZdzAZb8mEI0kIHD+
-	oA3vsYhuajOMk+BA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1773386843; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PIRG0Q/yVpHyaLAU9pL+Vyg4xtL6PGs8lb8PXQchdt0=;
-	b=13rCpoGfAnjoME3eGB25p0kS8h+Ltq37cq5tW9tNbkG4AI3znzcB+OzAVAxgCBZaYyltTY
-	lAvNuOckjZogaBoUZc/UjD7VvXTNTgvaxG3E2+U/6DUVL7hYbbt9KFK/O2MNrx+3UjOVa/
-	aGP+yW3r5kck3P9TsoKOST3gXuZ9aqY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1773386843;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PIRG0Q/yVpHyaLAU9pL+Vyg4xtL6PGs8lb8PXQchdt0=;
-	b=razSU0PISaW+d4P9HQ6Oa63i45jRZGfuIx8k0Ytrp3u65tjAZC03LZZdzAZb8mEI0kIHD+
-	oA3vsYhuajOMk+BA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4FF13403E1;
-	Fri, 13 Mar 2026 07:27:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id WtNjElu8s2kEAwAAD6G6ig
-	(envelope-from <hare@suse.de>); Fri, 13 Mar 2026 07:27:23 +0000
-Message-ID: <99dd055b-c3ec-4235-b959-2869f5eacaf7@suse.de>
-Date: Fri, 13 Mar 2026 08:27:18 +0100
+	s=arc-20240116; t=1773387322; c=relaxed/simple;
+	bh=ELtaWFtgGSdldQHlSy0RDS1LYT4DQan8C8w1loMCkcc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=e1BlUMBymWMVTQFgZFC07Qexfk1l2cjvr3PpsRK3g0HQwMNG36UQef5ugIHbPY86Ews88+AO98WVF8ieQXZVp3zn/E8RkV4YxNAXYpRe2cgMx+kbWwtwAIujEsBPUGr2tRDcHlzRqEQsZLPUfLlZ3ZcTRns7CygcoHBmmV4wDW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=N+e8PPZR; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=R2
+	51S6F6HhAdMKrusKTkWEQRW4kowbIzmGaUkWV/1mA=; b=N+e8PPZRZFAN69jOja
+	18+MVaS4zeWdJ97yOdA/WNKjL43kdYCbHVgeBOrPHK0IsXhtGrrS1C53JeFwkl76
+	m/3VxXnouBUvghIRbHbgzFel/rZpDIdQdGetSBl5nYqy4PA6rURgMD514ypZh+n6
+	L4jaX0sqHO7SrVlYivCx5SkH8=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD3H5P4vbNpeSPcAg--.42535S2;
+	Fri, 13 Mar 2026 15:34:17 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: bvanassche@acm.org
+Cc: axboe@kernel.dk,
+	fujita.tomonori@lab.ntt.co.jp,
+	James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com,
+	linux-block@vger.kernel.org,
+	linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v7 1/3] bsg: add bsg_uring_cmd uapi structure
+Date: Fri, 13 Mar 2026 15:34:13 +0800
+Message-Id: <20260313073415.102437-1-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <574620fd-903b-4fd3-8cbb-22a3cefda645@acm.org>
+References: <20260312092237.2464560-1-yangxiuwei@kylinos.cn> <20260312092237.2464560-2-yangxiuwei@kylinos.cn> <574620fd-903b-4fd3-8cbb-22a3cefda645@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: ses: Handle positive SCSI error from
- ses_recv_diag()
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-scsi@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>, stable <stable@kernel.org>
-References: <2026022301-bony-overstock-a07f@gregkh>
-Content-Language: en-US
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <2026022301-bony-overstock-a07f@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-CM-TRANSID:_____wD3H5P4vbNpeSPcAg--.42535S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCF17CryrCw15JFWruF1DAwb_yoW5ZFy5pF
+	W5ta10yrW5WF12kr47ZasrArWYvr48Ja42gFWUXwnrua1jvF10kF1qkFWftayxX395Ary0
+	vrnFqa4rGwn7taDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRN4SwUUUUU=
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbCwhr0hWmzvfpCPwAA3J
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21985-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-21987-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hare@suse.de,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_COUNT_THREE(0.00)[4];
+	DMARC_NA(0.00)[kylinos.cn];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[163.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
 	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MIME_TRACE(0.00)[0:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,suse.de:mid,linuxfoundation.org:email,oracle.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 2C0BF27EC93
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,kylinos.cn:mid]
+X-Rspamd-Queue-Id: 4AA9D27ED7B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 2/23/26 16:44, Greg Kroah-Hartman wrote:
-> ses_recv_diag() can return a positive value, which also means that an
-> error happened, so do not only test for negative values.
-> 
-> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> Cc: stable <stable@kernel.org>
-> Assisted-by: gkh_clanker_2000
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->   drivers/scsi/ses.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/ses.c b/drivers/scsi/ses.c
-> index 35101e9b7ba7..128042c734cc 100644
-> --- a/drivers/scsi/ses.c
-> +++ b/drivers/scsi/ses.c
-> @@ -215,7 +215,7 @@ static unsigned char *ses_get_page2_descriptor(struct enclosure_device *edev,
->   	unsigned char *type_ptr = ses_dev->page1_types;
->   	unsigned char *desc_ptr = ses_dev->page2 + 8;
->   
-> -	if (ses_recv_diag(sdev, 2, ses_dev->page2, ses_dev->page2_len) < 0)
-> +	if (ses_recv_diag(sdev, 2, ses_dev->page2, ses_dev->page2_len))
->   		return NULL;
->   
->   	for (i = 0; i < ses_dev->page1_num_types; i++, type_ptr += 4) {
+Hi Bart,
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+On 3/12/26 7:29 PM, Bart Van Assche wrote:
+> On 3/12/26 2:22 AM, Yang Xiuwei wrote:
+>> +struct bsg_uring_cmd {
+>> +	__u64 request;		/* [i], [*i] command descriptor address */
+>> +	__u32 request_len;	/* [i] command descriptor length in bytes */
+>> +	__u32 protocol;		/* [i] protocol type (BSG_PROTOCOL_*) */
+>> +	__u32 subprotocol;	/* [i] subprotocol type (BSG_SUB_PROTOCOL_*) */
+>> +	__u32 max_response_len;	/* [i] response buffer size in bytes */
+>> +
+>> +	__u64 response;		/* [i], [*o] response data address */
+>> +	__u64 dout_xferp;	/* [i], [*i] */
+>> +	__u32 dout_xfer_len;	/* [i] bytes to be transferred to device */
+>> +	__u32 dout_iovec_count;	/* [i] 0 -> "flat" dout transfer else
+>> +				 * dout_xferp points to array of iovec
+>> +				 */
+>> +	__u64 din_xferp;	/* [i], [*o] */
+>> +	__u32 din_xfer_len;	/* [i] bytes to be transferred from device */
+>> +	__u32 din_iovec_count;	/* [i] 0 -> "flat" din transfer */
+>> +
+>> +	__u32 timeout_ms;	/* [i] timeout in milliseconds */
+>> +	__u8  reserved[12];	/* reserved for future extension */
+>> +};
+>
+> Please consider adding a static_assert() statement that verifies the
+> size of this data structure at compile time. Such a statement is useful
+> to document the size of the data structure, helps with verifying that
+> the size is the same on all architectures and helps with verifying that
+> the size doesn't change if a reserved byte is taken in use.
 
-Cheers,
+Good point. In v8 I plan to define BSG_URING_CMD_SIZE in the UAPI header and
+add a static_assert in drivers/scsi/scsi_bsg.c to verify at compile time that
+sizeof(struct bsg_uring_cmd) matches that macro, e.g.:
 
-Hannes
--- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.de                                +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+	/* include/uapi/linux/bsg.h */
+	#define BSG_URING_CMD_SIZE	80
+
+	/* drivers/scsi/scsi_bsg.c */
+	static_assert(sizeof(struct bsg_uring_cmd) == BSG_URING_CMD_SIZE);
+
+Does this arrangement look reasonable to you?
+
+>> +#define BSG_SCSI_RES2_DEVICE_STATUS(res2)   ((__u8)((__u64)(res2) & 0xff))
+>> +#define BSG_SCSI_RES2_DRIVER_STATUS(res2)   ((__u8)((__u64)(res2) >> 8))
+>> +#define BSG_SCSI_RES2_HOST_STATUS(res2)     ((__u8)((__u64)(res2) >> 16))
+>> +#define BSG_SCSI_RES2_SENSE_LEN(res2)       ((__u8)((__u64)(res2) >> 24))
+>> +#define BSG_SCSI_RES2_RESID_LEN(res2)       ((__u32)((__u64)(res2) >> 32))
+>> +
+>> +#define BSG_SCSI_RES2_BUILD(device_status, driver_status, host_status,   \
+>> +			    sense_len_wr, resid_len)			\
+>> +	(((__u64)(__u32)(resid_len) << 32) |				\
+>> +	 ((__u64)(__u8)(sense_len_wr) << 24) |				\
+>> +	 ((__u64)(__u8)(host_status) << 16) |				\
+>> +	 ((__u64)(__u8)(driver_status) << 8) |				\
+>> +	 ((__u64)(__u8)(device_status)))
+>
+> Please convert all the above macros into inline functions because that
+> will result in removal of most of the typecasts. I think that inline
+> functions are allowed in uapi headers:
+>
+> $ git grep 'static.*inline' include/uapi | wc -l
+> 354
+
+Done. I have replaced the BSG_SCSI_RES2_* macros with static inline
+functions (bsg_scsi_res2_device_status(), bsg_scsi_res2_driver_status(),
+bsg_scsi_res2_host_status(), bsg_scsi_res2_sense_len(),
+bsg_scsi_res2_resid_len(), and bsg_scsi_res2_build()) in the UAPI header
+to improve type safety and remove redundant type casts as suggested.
+
+Best regards,
+Yang Xiuwei
+
 
