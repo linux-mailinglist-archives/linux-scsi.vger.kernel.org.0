@@ -1,47 +1,47 @@
-Return-Path: <linux-scsi+bounces-21986-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21988-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +PGmBXO+s2kCagAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21986-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 08:36:19 +0100
+	id iMS1Eba+s2kCagAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21988-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 08:37:26 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DC4C27ED9A
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 08:36:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC64F27EDAA
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 08:37:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5FE23307E869
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 07:34:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DA9C330EE7B5
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 07:35:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 361B335F61F;
-	Fri, 13 Mar 2026 07:34:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91CAE347BA7;
+	Fri, 13 Mar 2026 07:35:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="nmqTLBlT"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="oYlKDHXj"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF2A36C0B3;
-	Fri, 13 Mar 2026 07:34:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25F3340A51;
+	Fri, 13 Mar 2026 07:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773387298; cv=none; b=cdAl6jxZzix1T4QbcYyE/xeqVc73xBzCtBiZfgaJ26Ulv2EN+S6zKlpYxNuBRK+LcUvbb4ZxFwYhVKy2rlLlqGIqOk4BQEkP/53XhKofVEHrnwsfJrRgnqXBXQStCEHiiyjMQTF2dB1vcb17846g7RfqZtK2amj1K0FzJlgonDI=
+	t=1773387324; cv=none; b=iD67mXxEVuLCB6wQhqLGGY4a2sbfpNp7gsNdAmifHLtCwYx9oC6os2MRVRWdF6f1SYmBUlazO/Z82A8PJhILga5mg0dqjOzaTt0/LRoPaYt5GKHTyYqDgrcTT19qiaC77g9oBJXp6VgT0WjN3Zgxt1X7i4/IPO1qaY7ZC1wFVvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773387298; c=relaxed/simple;
-	bh=PypqsTt1fvRM7AmLMYfHt0aHeG4hP+rkSLLtDFEi9Qs=;
+	s=arc-20240116; t=1773387324; c=relaxed/simple;
+	bh=4Ue++4Hb/qJaxI72Mrzhg0z9YGqNtKMwSslQ1SN+qTc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jvKCl4XMwC95KtB8QbxUt0U+MLm+4ewYR9p/mzc091SJyUh+ti7hxb6eRMXRcQpEKMPKnNoynrJG0iVwUPeOoQk1MKFlR/v0WkE5VfFNUpZVA6U9NK1UXBStsVUbZ7dMZG6dCEySQbudnSGQd9Q7XEES0E2bEu2tAUBRg9mwJFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=nmqTLBlT; arc=none smtp.client-ip=220.197.31.2
+	 MIME-Version:Content-Type; b=jAnuFMXy6J8ezHk/HyUu6kbFvJOtHbjg1dxKIVDeeaZehbCxrJd66IDu5wSVB2YB0A/R9Z9pX7RvG9uO+Rmhk8Lg4jtmOWKRbTN2NkoW5uzBf65ZaxNNWseQ29XrTXxZH6CXVoKCZeLojgdBRvKBaR3l4v53IsQxgvmKOpOC2YU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=oYlKDHXj; arc=none smtp.client-ip=117.135.210.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=kG
-	labob2fDnXAyXzBWkkDwb8eKGkdDcTZFDT0kAEQJo=; b=nmqTLBlToCd4EM4hMl
-	dr4M/u1tPLeykDIMrCOmRQLqqvt3/hD21j4v1WPZw5/+yl2M+7lEqBMHzGybQzzw
-	9FTXuJi8ibOwFMPcILG6BJaFypYPbZrPzEwcotM59Si2aXkU3iVqsvLhgjEK9IG/
-	RJAv4aLoXmD+ByA6JYH90nyA0=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version:
+	Content-Type; bh=yCpoBGZSziwxHEFh5uCWzsxZiLinKocXMAN0ScbxSq0=;
+	b=oYlKDHXjXYU63wqIxf2/JXeJcuoabY8S2aw/mWbAiIL7nS6V6q7uR+R4hDK9dO
+	QeG7Neo1ReDiG4yRwEcBQOSlUSpG6ScEjcrj5WmG+0arDK8ubHHZniTe/gc3Uukf
+	WlN9ugaL+uTMNZIbfaBQ9d33THlWaSqYGlpHi8NEAjqjk=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD3H5P4vbNpeSPcAg--.42535S3;
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD3H5P4vbNpeSPcAg--.42535S4;
 	Fri, 13 Mar 2026 15:34:18 +0800 (CST)
 From: Yang Xiuwei <yangxiuwei@kylinos.cn>
 To: bvanassche@acm.org
@@ -51,91 +51,121 @@ Cc: axboe@kernel.dk,
 	martin.petersen@oracle.com,
 	linux-block@vger.kernel.org,
 	linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v7 2/3] bsg: add io_uring command support to generic layer
-Date: Fri, 13 Mar 2026 15:34:14 +0800
-Message-Id: <20260313073415.102437-2-yangxiuwei@kylinos.cn>
+Subject: Re: [PATCH v7 3/3] scsi: bsg: add io_uring passthrough handler
+Date: Fri, 13 Mar 2026 15:34:15 +0800
+Message-Id: <20260313073415.102437-3-yangxiuwei@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <96545a0f-2cdf-47ae-bf15-bfb33a35c799@acm.org>
-References: <20260312092237.2464560-1-yangxiuwei@kylinos.cn> <20260312092237.2464560-2-yangxiuwei@kylinos.cn> <96545a0f-2cdf-47ae-bf15-bfb33a35c799@acm.org>
+In-Reply-To: <e6167003-82e4-4814-9e11-d1609681b5a9@acm.org>
+References: <20260312092237.2464560-1-yangxiuwei@kylinos.cn> <20260312092237.2464560-4-yangxiuwei@kylinos.cn> <e6167003-82e4-4814-9e11-d1609681b5a9@acm.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3H5P4vbNpeSPcAg--.42535S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Gr1fKF18Kry7AF1DGrWDXFb_yoW8Jr48pF
-	WrWayjyas2gr18CFy0ya17urnYq3s7Gw48JrWF9a4rKwn0krnY9Fy09r4j9FZ7ZrZ7WFWF
-	gF42k34DWw1qv3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UmzuZUUUUU=
+X-CM-TRANSID:_____wD3H5P4vbNpeSPcAg--.42535S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGFW8Wry7ZFW7Kr4rtFW3Awb_yoW5Jw1kpF
+	W5Ka1UJF4DWr1F9Fnrtw4DuFyfZws5C3W3KFW5Cw4UCr1DAr929F4UKF18ZF1avrnrCFyI
+	qr4vvFWqkr1qva7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UBCJQUUUUU=
 Sender: yangxiuwei2025@163.com
-X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6hr0hWmzvfqQ7AAA3g
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbCwRr0hWmzvfqLFgAA3q
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-21986-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	DMARC_NA(0.00)[kylinos.cn];
-	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-21988-lists,linux-scsi=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[163.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
-	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_NONE(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_NONE(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,kylinos.cn:mid]
-X-Rspamd-Queue-Id: 6DC4C27ED9A
+X-Rspamd-Queue-Id: AC64F27EDAA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 Hi Bart,
 
-On 3/12/26 7:33 PM, Bart Van Assche wrote:
+On 3/12/26 7:41 PM, Bart Van Assche wrote:
 > On 3/12/26 2:22 AM, Yang Xiuwei wrote:
->> +static int bsg_uring_cmd(struct io_uring_cmd *ioucmd, unsigned int issue_flags)
->> +{
->> +	struct request_queue *q;
->> +	struct bsg_device *bd;
->> +	bool open_for_write = ioucmd->file->f_mode & FMODE_WRITE;
->> +	int ret;
->> +
->> +	bd = to_bsg_device(file_inode(ioucmd->file));
->> +	q = bd->queue;
->>
->> Please combine the above assignments with the declarations of the
->> modified variables.
+>> +/*
+>> + * Per-command BSG SCSI PDU stored in io_uring_cmd.pdu[32].
+>> + * Holds temporary state between submission, completion and task_work.
+>> + */
+>> +struct scsi_bsg_uring_cmd_pdu {
+>> +	struct bio *bio;		/* mapped user buffer, unmap in task work */
+>> +	struct request *req;		/* block request, freed in task work */
+>> +	u64 response_addr;		/* user space response buffer address */
+>> +};
+>
+> A static_assert() that verifies that sizeof(struct
+> scsi_bsg_uring_cmd_pdu) is less than or equal to the size of
+> ((struct io_uring_cmd *)NULL)->pdu seems appropriate here.
 >
 
-To follow your suggestion, I now combine the declarations with the
-initializations, but I had to keep the dependency order between `bd`
-and `q`, since `q` is initialized from `bd->queue`. The current version
-looks like this:
+Will add a static_assert() in scsi_bsg.c to ensure the PDU fits in
+io_uring_cmd->pdu, e.g.:
 
-        struct bsg_device *bd = to_bsg_device(file_inode(ioucmd->file));
-        bool open_for_write = ioucmd->file->f_mode & FMODE_WRITE;
-        struct request_queue *q = bd->queue;
-        int ret;
-		
-This way we respect the declaration+initialization style and keep the
-data dependency clear, while following the reverse Christmas tree style
-as far as it does not conflict with the dependency.
-Does this arrangement look reasonable to you, or would you prefer a
-different ordering here?
+        static_assert(sizeof(struct scsi_bsg_uring_cmd_pdu) <=
+                      sizeof_field(struct io_uring_cmd, pdu));
 
-Thanks,
+>> +struct scsi_bsg_uring_cmd_pdu *pdu;
+>> +struct io_uring_cmd *ioucmd = io_uring_cmd_from_tw(tw_req);
+>> +struct scsi_cmnd *scmd;
+>> +struct request *rq;
+>> +u64 res2;
+>> +int ret = 0;
+>> +u8 driver_status = 0;
+>> +u8 sense_len_wr = 0;
+>> +
+>> +pdu = scsi_bsg_uring_cmd_pdu(ioucmd);
+>> +rq = pdu->req;
+>> +scmd = blk_mq_rq_to_pdu(rq);
+>
+> Please combine the above three assignments with the above declarations
+> since that is the style followed by most kernel code.
+>
+
+Sorry for the noise here — in v6 I did not change this part, but in v7
+I took the liberty to tweak the ordering myself. Done. I will combine
+the declarations with initializers in scsi_bsg_uring_task_cb() in v8
+while keeping the data dependency and reverse Christmas tree style, e.g.:
+
+	struct io_uring_cmd *ioucmd = io_uring_cmd_from_tw(tw_req);
+	struct scsi_bsg_uring_cmd_pdu *pdu = scsi_bsg_uring_cmd_pdu(ioucmd);
+	struct request *rq = pdu->req;
+	struct scsi_cmnd *scmd = blk_mq_rq_to_pdu(rq);
+
+Additionally, for the `scsi_bsg_map_user_buffer()` helper in v7 I tried
+to follow the same principle (dependency first, then length) when
+ordering the initializations around `cmd`, `is_write`, `buf_addr` and
+`buf_len`. If you think the current ordering there should be adjusted as
+well, I'm happy to rework that in v8. In particular, when there is a
+tension between keeping the reverse Christmas tree order and making
+data/control dependencies explicit in the declaration order, I would
+very much appreciate your advice on how to handle such cases, so that I
+can do better here and in future patches.
+
+Thanks for the review.
+
+Best regards,
 Yang Xiuwei
 
 
