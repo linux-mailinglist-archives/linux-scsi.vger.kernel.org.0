@@ -1,171 +1,116 @@
-Return-Path: <linux-scsi+bounces-21988-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-21989-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iMS1Eba+s2kCagAAu9opvQ
-	(envelope-from <linux-scsi+bounces-21988-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 08:37:26 +0100
+	id cMMMFRjHs2kqawAAu9opvQ
+	(envelope-from <linux-scsi+bounces-21989-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 09:13:12 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC64F27EDAA
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 08:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E5A6127F633
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 09:13:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DA9C330EE7B5
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 07:35:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8B5C531D286F
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2026 08:00:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91CAE347BA7;
-	Fri, 13 Mar 2026 07:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A51FE372682;
+	Fri, 13 Mar 2026 08:00:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="oYlKDHXj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MRldbB/c"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25F3340A51;
-	Fri, 13 Mar 2026 07:35:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD4E370D42;
+	Fri, 13 Mar 2026 08:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773387324; cv=none; b=iD67mXxEVuLCB6wQhqLGGY4a2sbfpNp7gsNdAmifHLtCwYx9oC6os2MRVRWdF6f1SYmBUlazO/Z82A8PJhILga5mg0dqjOzaTt0/LRoPaYt5GKHTyYqDgrcTT19qiaC77g9oBJXp6VgT0WjN3Zgxt1X7i4/IPO1qaY7ZC1wFVvk=
+	t=1773388812; cv=none; b=u0fSUl+h3DKQgBRrn2qOi/W7yNasIw6I1nrGmCFsmj7n+BDRKZn2K129Y9+0OFEUj6qQvC+u+YrmtyAnxO7WbfCfJg0uL/PAuATg9VFMraxssKrpTcPtf7Ldnp8bJCcsx9XTvxEQBBcMuRz6sPDzMpXSmAh52DO1iYSwm6T6b8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773387324; c=relaxed/simple;
-	bh=4Ue++4Hb/qJaxI72Mrzhg0z9YGqNtKMwSslQ1SN+qTc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jAnuFMXy6J8ezHk/HyUu6kbFvJOtHbjg1dxKIVDeeaZehbCxrJd66IDu5wSVB2YB0A/R9Z9pX7RvG9uO+Rmhk8Lg4jtmOWKRbTN2NkoW5uzBf65ZaxNNWseQ29XrTXxZH6CXVoKCZeLojgdBRvKBaR3l4v53IsQxgvmKOpOC2YU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=oYlKDHXj; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version:
-	Content-Type; bh=yCpoBGZSziwxHEFh5uCWzsxZiLinKocXMAN0ScbxSq0=;
-	b=oYlKDHXjXYU63wqIxf2/JXeJcuoabY8S2aw/mWbAiIL7nS6V6q7uR+R4hDK9dO
-	QeG7Neo1ReDiG4yRwEcBQOSlUSpG6ScEjcrj5WmG+0arDK8ubHHZniTe/gc3Uukf
-	WlN9ugaL+uTMNZIbfaBQ9d33THlWaSqYGlpHi8NEAjqjk=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD3H5P4vbNpeSPcAg--.42535S4;
-	Fri, 13 Mar 2026 15:34:18 +0800 (CST)
-From: Yang Xiuwei <yangxiuwei@kylinos.cn>
-To: bvanassche@acm.org
-Cc: axboe@kernel.dk,
-	fujita.tomonori@lab.ntt.co.jp,
-	James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com,
-	linux-block@vger.kernel.org,
-	linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v7 3/3] scsi: bsg: add io_uring passthrough handler
-Date: Fri, 13 Mar 2026 15:34:15 +0800
-Message-Id: <20260313073415.102437-3-yangxiuwei@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <e6167003-82e4-4814-9e11-d1609681b5a9@acm.org>
-References: <20260312092237.2464560-1-yangxiuwei@kylinos.cn> <20260312092237.2464560-4-yangxiuwei@kylinos.cn> <e6167003-82e4-4814-9e11-d1609681b5a9@acm.org>
+	s=arc-20240116; t=1773388812; c=relaxed/simple;
+	bh=rPbyzzyhYcYuyC2z700AcTwx4hrO+t7fLbt3hPQWmWw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W0KJHZuOG6Xk1TmO0PMNZSNShFEdE0dXAH88i58anqno6PRljCMw1PpTHjhZdxwHBoObscgHFgh3UI+TteY8FU/Ebtn+o/J6dIEDY+LyxTu33H5k0GlZR8X3JCHRzz60YO14LdqkfEJV+hSs+hzr6dCbbrT6CiS9J5mOnJZECcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MRldbB/c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13669C2BCB4;
+	Fri, 13 Mar 2026 08:00:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773388811;
+	bh=rPbyzzyhYcYuyC2z700AcTwx4hrO+t7fLbt3hPQWmWw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MRldbB/clocZ3MiaQeG2MEMUwOwno35Qbr5d6owUcUsQU3nnPLSiYXhhRtNpCX5DD
+	 I1Kd+izohXccq7pXZGHtGi6k8VdeEzmsmVbu6GuKgBp1qWPcDswRRQTmKdc8aS3Ruc
+	 yKGNYYN/6Ci12muBvEHhz4C9n/89im4BpHgTFRDpZ9IC85U5ugBFi3WN9zXp3C9dHp
+	 I/t/nFiPJ9UvT40ain6ZkWmc0nunASZHU8r1ZoIs7NO6V37axjFCrWkvAfn9241ca7
+	 goMPCFibDYG0UFfVmIhoe0gVa6NvLoeqfE++aYovQ7hb6OXet5ofzNQL9ckiGVhoyf
+	 L3K9Vl7PNPOLQ==
+Date: Fri, 13 Mar 2026 09:00:08 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Abel Vesa <abel.vesa@oss.qualcomm.com>
+Cc: Manivannan Sadhasivam <mani@kernel.org>, 
+	Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>, 
+	Bart Van Assche <bvanassche@acm.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] scsi: ufs: qcom: dt-bindings: Document the Eliza UFS
+ controller
+Message-ID: <20260313-classy-pogona-of-dignity-edb617@quoll>
+References: <20260311-eliza-bindings-ufs-v3-1-498b26864182@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3H5P4vbNpeSPcAg--.42535S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGFW8Wry7ZFW7Kr4rtFW3Awb_yoW5Jw1kpF
-	W5Ka1UJF4DWr1F9Fnrtw4DuFyfZws5C3W3KFW5Cw4UCr1DAr929F4UKF18ZF1avrnrCFyI
-	qr4vvFWqkr1qva7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UBCJQUUUUU=
-Sender: yangxiuwei2025@163.com
-X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbCwRr0hWmzvfqLFgAA3q
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260311-eliza-bindings-ufs-v3-1-498b26864182@oss.qualcomm.com>
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_NA(0.00)[kylinos.cn];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-21988-lists,linux-scsi=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[163.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-21989-lists,linux-scsi=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_NONE(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,kylinos.cn:mid]
-X-Rspamd-Queue-Id: AC64F27EDAA
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-scsi,dt];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email]
+X-Rspamd-Queue-Id: E5A6127F633
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Bart,
+On Wed, Mar 11, 2026 at 03:04:04PM +0200, Abel Vesa wrote:
+> Document the UFS Controller on the Eliza Platform.
+> 
+> The IP block version here is 6.0.0, exactly the same as on SM8650.
+> 
+> While MCQ reg range is also available on the already documented
+> platforms, enforce only starting with Eliza.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
 
-On 3/12/26 7:41 PM, Bart Van Assche wrote:
-> On 3/12/26 2:22 AM, Yang Xiuwei wrote:
->> +/*
->> + * Per-command BSG SCSI PDU stored in io_uring_cmd.pdu[32].
->> + * Holds temporary state between submission, completion and task_work.
->> + */
->> +struct scsi_bsg_uring_cmd_pdu {
->> +	struct bio *bio;		/* mapped user buffer, unmap in task work */
->> +	struct request *req;		/* block request, freed in task work */
->> +	u64 response_addr;		/* user space response buffer address */
->> +};
->
-> A static_assert() that verifies that sizeof(struct
-> scsi_bsg_uring_cmd_pdu) is less than or equal to the size of
-> ((struct io_uring_cmd *)NULL)->pdu seems appropriate here.
->
-
-Will add a static_assert() in scsi_bsg.c to ensure the PDU fits in
-io_uring_cmd->pdu, e.g.:
-
-        static_assert(sizeof(struct scsi_bsg_uring_cmd_pdu) <=
-                      sizeof_field(struct io_uring_cmd, pdu));
-
->> +struct scsi_bsg_uring_cmd_pdu *pdu;
->> +struct io_uring_cmd *ioucmd = io_uring_cmd_from_tw(tw_req);
->> +struct scsi_cmnd *scmd;
->> +struct request *rq;
->> +u64 res2;
->> +int ret = 0;
->> +u8 driver_status = 0;
->> +u8 sense_len_wr = 0;
->> +
->> +pdu = scsi_bsg_uring_cmd_pdu(ioucmd);
->> +rq = pdu->req;
->> +scmd = blk_mq_rq_to_pdu(rq);
->
-> Please combine the above three assignments with the above declarations
-> since that is the style followed by most kernel code.
->
-
-Sorry for the noise here — in v6 I did not change this part, but in v7
-I took the liberty to tweak the ordering myself. Done. I will combine
-the declarations with initializers in scsi_bsg_uring_task_cb() in v8
-while keeping the data dependency and reverse Christmas tree style, e.g.:
-
-	struct io_uring_cmd *ioucmd = io_uring_cmd_from_tw(tw_req);
-	struct scsi_bsg_uring_cmd_pdu *pdu = scsi_bsg_uring_cmd_pdu(ioucmd);
-	struct request *rq = pdu->req;
-	struct scsi_cmnd *scmd = blk_mq_rq_to_pdu(rq);
-
-Additionally, for the `scsi_bsg_map_user_buffer()` helper in v7 I tried
-to follow the same principle (dependency first, then length) when
-ordering the initializations around `cmd`, `is_write`, `buf_addr` and
-`buf_len`. If you think the current ordering there should be adjusted as
-well, I'm happy to rework that in v8. In particular, when there is a
-tension between keeping the reverse Christmas tree order and making
-data/control dependencies explicit in the declaration order, I would
-very much appreciate your advice on how to handle such cases, so that I
-can do better here and in future patches.
-
-Thanks for the review.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
 Best regards,
-Yang Xiuwei
+Krzysztof
 
 
