@@ -1,66 +1,66 @@
-Return-Path: <linux-scsi+bounces-22062-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22063-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cJrVBpY3uGkDagEAu9opvQ
-	(envelope-from <linux-scsi+bounces-22062-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2026 18:02:14 +0100
+	id MLpVJAc6uGmpagEAu9opvQ
+	(envelope-from <linux-scsi+bounces-22063-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2026 18:12:39 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CC5829DC79
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2026 18:02:08 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3503029DE4F
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2026 18:12:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3BFB8302C5E9
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2026 16:55:28 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8F0D330255F4
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2026 17:12:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 393A13B7B83;
-	Mon, 16 Mar 2026 16:55:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 745B93B5821;
+	Mon, 16 Mar 2026 17:12:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="IhwZ6kYP"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="VYNL61aR"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E48B91DB34C;
-	Mon, 16 Mar 2026 16:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD7A13A3ED;
+	Mon, 16 Mar 2026 17:12:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773680127; cv=none; b=kTnJBHH1Ry4bpwEdbctnINzKMkBSv4/Ie5WlWWjknPA0bnraV9P2k8UMgwZQmaaX8OMp0j1p7NmCiTmxCc9xz3BR0pS81Sgo26u6rN32cCGogI4WiI9uG6+h4ThcpyIocBPwOX7it5JlFlr6XTMqVzOIZ4lfe/SNfWQSUqrj9+c=
+	t=1773681156; cv=none; b=VCeSxWpjRv112o/6WvI1BN22DncMoVVp0cgYLhL+5VMzYQ9/uM6QeStM3It52aauFspXVOnAffwSX6fQexdC9pjQPIXCJEQOqsKYwC/h2Sni9dbV+z7A/xWI7H/CaLba4G0H3Vpe6M1GNX+t6vsYLNekhaKkUe2bguDcD4Oz1Os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773680127; c=relaxed/simple;
-	bh=86/oiW96a2oRxea6IqDn4waOy3HNSwpXJd9luCb/3BU=;
+	s=arc-20240116; t=1773681156; c=relaxed/simple;
+	bh=Aw5NgfydFWJy+QC4rwr0YhOYLBPi89zLyGA6LcHIR7E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CCX7Q/QKM86q6TZLtw2o6RvY6XdEpqy4LzaF95rwEXgWOiLD5IwmW1ZmhxN9ghZRYa7Fu7Flc6mZPUoNT7KkKx95NlB0OpBnzPB667WZcW3nqpX4OG45uS68Z4GyjwR2EXn05+nvKSVBZEwGpJyh3tzTBxNlII4uV38+MF7Jkh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=IhwZ6kYP; arc=none smtp.client-ip=199.89.1.14
+	 In-Reply-To:Content-Type; b=uWF1lBPNv8V5yyHartXHFrch9lSujhzmv6AMOJwjf2pDJfuLPXMlx6w3Q1KTMejSvmBYM+KGhqyxZwupaV/YtvuTnIx+8hq8KUOVYS+zd+nLu4WAtm1ldN+a7mNmxjE67w+J3GFvpKk0t/xUR8uy8JG6avOezidVK0Nm1xYiWcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=VYNL61aR; arc=none smtp.client-ip=199.89.1.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4fZLn93225z1XM6Jf;
-	Mon, 16 Mar 2026 16:55:25 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fZM8y4gLkzlh1TD;
+	Mon, 16 Mar 2026 17:12:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:content-type:content-type:in-reply-to
 	:from:from:content-language:references:subject:subject
 	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1773680119; x=1776272120; bh=N5xJV1auUKLqK1aiwXrFseGv
-	yE58Sv385xx9JF9x9SU=; b=IhwZ6kYPF6oPkrJ8S02lZgUfT/ym2FDiCh4chKvn
-	57lyWzw7q0LtbTz11RmtM3t8lj7TzCbbuj0UgAWGQpeWybcf+gJe7N9h7cu6LJ1f
-	ovhU0vxJnr31XCybvxmqitWTZx5wNiBAISDNQ81C3zgj1HiVdoTBHCzabZplcOJE
-	K3AnOgcJnVLd255p7M2YRY5Wfdn+yhDjTLq2//K8Db2wqJl5UDNu0fEWS3DYJdgg
-	iym9MJf6TuZErjdV42qMHqMWTSOf/jKG5xWOXEJVHmyN7m5Gnu78VAZYp4q1ICWN
-	xZIqXswB2Kw5RBJl6z90vQ99yMCteQXQnV9iXCIBrk9l5A==
+	 s=mr01; t=1773681150; x=1776273151; bh=Aw5NgfydFWJy+QC4rwr0YhOY
+	LBPi89zLyGA6LcHIR7E=; b=VYNL61aRR8rC2IC9lAC/itt3IWf5xLr7qT9l08oM
+	JRyvJ4rUM7SDzfZzl/REseboLzh8A/H0nzDQo2qmqWTKawl7oWcwUhAmaNI57276
+	0maV7lP3BLrV4gDfpOWUJiuw8JToTEQpV/LMffQ0FR+2PJc5mObrHF6fSa1vKqu5
+	Pwvh7LYeOTc8tK3y898Zd5JvT37LtOdIPctffGwcfTC2JdpS5wP54WB8bJlcM7n/
+	oJfNn6AuUhD6S5XZm0QDXL2sfNoK5McdNVS2SxK2K8yIm/hH+5U9PnW/JpqL4Pr7
+	6MUt/SX46HgGHFYrpHWq8/PYyjhsMfxc3B1BWNL/zDs9cg==
 X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id GlluTZhepq_e; Mon, 16 Mar 2026 16:55:19 +0000 (UTC)
+Received: from 013.lax.mailroute.net ([127.0.0.1])
+ by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id 9YuiwlQCdQCj; Mon, 16 Mar 2026 17:12:30 +0000 (UTC)
 Received: from [100.119.48.131] (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4fZLn009Jjz1XM6Hv;
-	Mon, 16 Mar 2026 16:55:15 +0000 (UTC)
-Message-ID: <16e4ee41-c156-4f09-80cb-e0e7918c87bf@acm.org>
-Date: Mon, 16 Mar 2026 09:55:15 -0700
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fZM8r213xzlgwNC;
+	Mon, 16 Mar 2026 17:12:28 +0000 (UTC)
+Message-ID: <ddba7b38-d156-4ba6-a678-14c9c6d80331@acm.org>
+Date: Mon, 16 Mar 2026 10:12:27 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -68,7 +68,8 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 04/12] scsi: ufs: core: Add support for TX Equalization
+Subject: Re: [PATCH v3 06/12] scsi: ufs: core: Add helpers to pause and resume
+ command processing
 To: Can Guo <can.guo@oss.qualcomm.com>, avri.altman@wdc.com,
  beanhuo@micron.com, martin.petersen@oracle.com, mani@kernel.org
 Cc: linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
@@ -78,92 +79,49 @@ Cc: linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
  Adrian Hunter <adrian.hunter@intel.com>,
  open list <linux-kernel@vger.kernel.org>
 References: <20260308151409.3779137-1-can.guo@oss.qualcomm.com>
- <20260308151409.3779137-5-can.guo@oss.qualcomm.com>
- <c44cc56f-513e-457b-96de-203d4b534496@acm.org>
- <f88d9fc6-4227-4cd3-a124-0e93122e1d85@oss.qualcomm.com>
- <6e07208c-a94b-44dc-8f7e-ccbb0ff8840e@oss.qualcomm.com>
+ <20260308151409.3779137-7-can.guo@oss.qualcomm.com>
+ <edaac4ff-4d8d-498e-a38d-6474b9d39743@acm.org>
+ <8c992c0c-6694-4b30-8e57-3bf12323dd77@oss.qualcomm.com>
 Content-Language: en-US
 From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <6e07208c-a94b-44dc-8f7e-ccbb0ff8840e@oss.qualcomm.com>
+In-Reply-To: <8c992c0c-6694-4b30-8e57-3bf12323dd77@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	ASN_FAIL(0.00)[1.2.3.5.c.f.2.1.0.0.0.0.0.0.0.0.b.d.0.0.1.0.0.e.a.0.c.3.0.0.6.2.asn6.rspamd.com:query timed out];
-	TAGGED_FROM(0.00)[bounces-22062-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-22063-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[acm.org:+];
-	FROM_HAS_DN(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 5CC5829DC79
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,acm.org:dkim,acm.org:mid]
+X-Rspamd-Queue-Id: 3503029DE4F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 3/14/26 2:33 AM, Can Guo wrote:
->=20
->=20
-> On 3/14/2026 4:19 PM, Can Guo wrote:
->>
->>
->> On 3/14/2026 6:19 AM, Bart Van Assche wrote:
->>> On 3/8/26 8:14 AM, Can Guo wrote:
->>>> +static int txeq_gear_set(const char *val, const struct kernel_param=
-=20
->>>> *kp)
->>>> +{
->>>> +=C2=A0=C2=A0=C2=A0 return param_set_uint_minmax(val, kp, UFS_HS_G1,=
- UFS_HS_G6);
->>>> +}
->>>
->>> Why UFS_HS_G6 instead of UFS_HS_GEAR_MAX?
->> I will use 'UFS_HS_GEAR_MAX - 1' in next version.
-> On second thought, to make the code more readable and scalable, I will=20
-> use UFS_HS_GEAR_MAX
-> here. To achieve so, I am going to tweak the code like below:
->=20
-> enum ufs_hs_gear_tag {
->  =C2=A0 =C2=A0 =C2=A0 =C2=A0 UFS_HS_DONT_CHANGE,=C2=A0 =C2=A0 =C2=A0/* =
-Don't change Gear */
->  =C2=A0 =C2=A0 =C2=A0 =C2=A0 UFS_HS_G1,=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 /* HS Gear 1 (default for reset) */
->  =C2=A0 =C2=A0 =C2=A0 =C2=A0 UFS_HS_G2,=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 /* HS Gear 2 */
->  =C2=A0 =C2=A0 =C2=A0 =C2=A0 UFS_HS_G3,=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 /* HS Gear 3 */
->  =C2=A0 =C2=A0 =C2=A0 =C2=A0 UFS_HS_G4,=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 /* HS Gear 4 */
->  =C2=A0 =C2=A0 =C2=A0 =C2=A0 UFS_HS_G5,=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 /* HS Gear 5 */
-> +=C2=A0 =C2=A0 =C2=A0 UFS_HS_G6,=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 /* HS Gear 6 */
-> +=C2=A0 =C2=A0 =C2=A0 UFS_HS_GEAR_MAX_INVALID,
-> };
-> +
-> + #define UFS_HS_GEAR_MAX=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0UFS_HS_GEAR_=
-MAX_INVALID - 1
-Will UFS_HS_GEAR_MAX_INVALID be used anywhere? If not, please leave it
-out and add the following past UFS_HS_G6 instead of just
-"UFS_HS_GEAR_MAX":
+On 3/14/26 3:38 AM, Can Guo wrote:
+> Can we do it later as a separate patch and with enough testing conducted?
 
-	UFS_HS_GEAR_MAX =3D UFS_HS_G6,
+That sounds good to me.
 
 Thanks,
 
