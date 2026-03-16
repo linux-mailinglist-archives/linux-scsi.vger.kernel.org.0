@@ -1,80 +1,81 @@
-Return-Path: <linux-scsi+bounces-22030-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22033-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GJHXGuJgt2nZQQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-22030-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2026 02:46:10 +0100
+	id 0L6cFYtht2l5QgEAu9opvQ
+	(envelope-from <linux-scsi+bounces-22033-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2026 02:48:59 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F284D293950
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2026 02:46:09 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 614BB293A1C
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2026 02:48:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id ABA633037901
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2026 01:41:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id CDD603040A86
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2026 01:42:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 095D325B2FA;
-	Mon, 16 Mar 2026 01:41:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3283B26ED3E;
+	Mon, 16 Mar 2026 01:41:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="AO1lkaSe"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="lWLg6KOL"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DF624501B
-	for <linux-scsi@vger.kernel.org>; Mon, 16 Mar 2026 01:41:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2637269B1C;
+	Mon, 16 Mar 2026 01:41:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773625301; cv=none; b=U67XCm33Sxm99X9FdMUjggyqz15TMAnL/1rSNIGGv4umIwq3gZAUzJJQTajLmZl8pKHZogJvRzxLUUE1gkETaU+Car41B5ebF8vAX0qzuzi0AilsvRqj9tHnZjxoES2uPlyLuNkeCVQoT+PAmoD1xoaaOq4X6dwvbC99quYvvrc=
+	t=1773625319; cv=none; b=Z0wwJzALIatVSLaRUC+bIvAYB1n9TlzBYBhARC/7TVISAIC6LaT0aXqaM+f/A1z3C8xzrlJ53sC8RiRt8YfV3KpI8EnlNQLe8DMs28GCRYk6eaBJi+yzJ8TFvsm9IvC/Fk+As8I///XvQwZIXg5EvYBgyU+IrP7FN40qwhPwpQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773625301; c=relaxed/simple;
-	bh=lWgcbWZJ8lDK30wWSy9NhivcOmIfCJjRUmSVUIdccDk=;
+	s=arc-20240116; t=1773625319; c=relaxed/simple;
+	bh=G9N3pxDYCtXEU8gkiju0jj29AZABVvgW+Lq/+PRTTGU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MvgIeLsZg1Geixt+c+gAC9Ik/YTiQXGDaUNXrWAo43yzFX7SKGQ/vyV/HMVXSsdyCD3/Jdweev3iHyZ3dfJmmCguickxUw/MorbOaifhQ11ORwNAuo3JYgTmg0g5bBwS4qjtDIWE2lBK6bEDmHY7JHLh1B0BWYGRs/MZW9TNy5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=AO1lkaSe; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=FpVkVA7gFpS4qJQb80MylaWxOL5B1MxkuYFvza3eLggOeJNh4GD3f4qJBMNTqfUW5l0nAsPBioaTakBQWzoJEvT0M6qG5mW+nAs8j1VZTJJRYtW+jxCDQqXdxhHiyO4TFdj3UjYpLLyL1TRjtF2Gu40xTGWtshFAEW2ydNdpjXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=lWLg6KOL; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62G0hemA3005786;
-	Mon, 16 Mar 2026 01:41:34 GMT
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62G0sH7x186601;
+	Mon, 16 Mar 2026 01:41:36 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=6bYAbt3uWYATV1Dn7lWcJ/Nn6mUWVLAho9MMePD7aXo=; b=
-	AO1lkaSe5fXJhqL8gysYBEc7RkToAynvgYhFG/S+WVGjkw2O2Wj3Bu65zszDWaP/
-	pGxMs8dUndXefTapvcPFapqoS0Q+sKAPLjxA7beDUuDMenEZXTeBqLOm9VRet0/6
-	zBCcyoGgnJhZ3I5tEFyBrkWMWi//irY1vVfVHwww0EWfs3aqPMk9nsJ/BBDl7312
-	Ng/3ZRNwfd+JjPPE487a8G2YgAARihUb+asxncuaZZJGRlvXU174gFnnofBSLYym
-	R9xb9t0+pzCCClqgkCUEYgC3dD0Cr94ScwhrGsNDWUD6GxYsFKan5qBL+WPDD8A1
-	BcGyKOYI55h34mk09lKDmQ==
+	corp-2025-04-25; bh=suO7F5vGzZA48m7KKs3KaYW/V1xP8XrXB6W+a/oGxlc=; b=
+	lWLg6KOLPT4kFOfI+43n9UGClbyzULyNHnwicszinAdunddPuaimolARDVPYBHPv
+	6PH54xDI7Cv7A2xohjUGjueFt1lKYfdZii3P3BZ+arGgm8ZP9xA+ntVoCIVU8FWg
+	oms/gi+fLGLjiLT633uI38e9KInJcXBsQybzik4nQXlB5xo3REEoBqznIIA3p0eI
+	lUvaZeWEDclkHfeCEw47ALA3W8DLUxh2gU1vQ1Bwv2h/nWjMZsLC0oITkcZnCbtV
+	1IZ4FcrVAmTZGl3aVLWc0q4/PQWttyP3XdMc0B2RcYdsoN3x6pU7QMn0EpWKFxTj
+	01UivGCv6MwbR8xzmW47gg==
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cvyqbsb4n-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cw07r9aqr-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 16 Mar 2026 01:41:34 +0000 (GMT)
+	Mon, 16 Mar 2026 01:41:36 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62FL0THJ002788;
-	Mon, 16 Mar 2026 01:41:34 GMT
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62FLi4Xb002902;
+	Mon, 16 Mar 2026 01:41:35 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4cvx4j86my-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4cvx4j86n7-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 16 Mar 2026 01:41:34 +0000
+	Mon, 16 Mar 2026 01:41:35 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62G1fXhN032070;
-	Mon, 16 Mar 2026 01:41:33 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62G1fXhR032070;
+	Mon, 16 Mar 2026 01:41:34 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4cvx4j86mp-2;
-	Mon, 16 Mar 2026 01:41:33 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4cvx4j86mp-4;
+	Mon, 16 Mar 2026 01:41:34 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: avri.altman@wdc.com, bvanassche@acm.org, beanhuo@micron.com,
-        Can Guo <can.guo@oss.qualcomm.com>
+To: James.Bottomley@HansenPartnership.com, Yihang Li <liyihang9@huawei.com>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v4 0/1] Add sysfs entries to facilitate UFS UniPro QoS monitoring
-Date: Sun, 15 Mar 2026 21:41:21 -0400
-Message-ID: <177362524468.2599440.6758239022546905006.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yangxingui@h-partners.com, linuxarm@huawei.com, prime.zeng@huawei.com,
+        liyihang9@h-partners.com, liuyonglong@huawei.com
+Subject: Re: [RESEND PATCH 0/2] Clean up the hisi_sas driver source code
+Date: Sun, 15 Mar 2026 21:41:23 -0400
+Message-ID: <177362524484.2599440.11472669101588910168.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260305110856.959211-1-can.guo@oss.qualcomm.com>
-References: <20260305110856.959211-1-can.guo@oss.qualcomm.com>
+In-Reply-To: <20260305064700.116033-1-liyihang9@huawei.com>
+References: <20260305064700.116033-1-liyihang9@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -87,73 +88,71 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-03-16_01,2026-03-13_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 spamscore=0
- adultscore=0 malwarescore=0 mlxlogscore=872 suspectscore=0 bulkscore=0
+ adultscore=0 malwarescore=0 mlxlogscore=554 suspectscore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
  definitions=main-2603160011
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE2MDAxMSBTYWx0ZWRfX+LGxzOL3qmDJ
- rqw/5BorMrFsPpnv8Zx20k8W0XdR0vdpFXWarwMCys8wudJZCKypE3n6a+hHCTmDTpOWCww90Kv
- A+j+6K4W+eGhXMyO/5VC33bMiMHbgeaWDaTWlQwCW+uSXutU5907/k574MyVZFxxvgxnbjVdEL9
- ztwGaiz9PPsPEd+03IAsa7Jdhwu9l9qokQhl8EM+knXCCnMDEwp7g0whHmiH+CVlKwgKhXxrFFB
- eV5uoUL2VVNDYA2NPF6tOb0dvTHrLRE/yDB6e215wz8JhSHHaZxNmAn7XJSAjLJQ5Nub4k0yL8V
- 3pujZoDwMBXxfjFXTuhQXcY9/UDGkRkNGWlYiA+d0POLR4evVPCN4eUfgmR1Q5GtrCh7sA2Y9Se
- khPzQRnKDhl6Z7LS6U3BkK1XL8cROaiKdWpni8nBuUoC45q/k3/JVwN6JPVhBZldtShr8QmsYkV
- sb5RSVYNumL1TTeURjSuWNuvyIH1HpOp8q703+OI=
-X-Authority-Analysis: v=2.4 cv=J8WnLQnS c=1 sm=1 tr=0 ts=69b75fce b=1 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=HcsZjyE8 c=1 sm=1 tr=0 ts=69b75fd0 b=1 cx=c_pps
  a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
  a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=BqU2WV_vvsyTyxaotp0D:22 a=VwQbUJbxAAAA:8
- a=8-nQ6o3H6mdb75LgHhIA:9 a=QEXdDO2ut3YA:10 cc=ntf awl=host:12271
-X-Proofpoint-GUID: DgXeaf0C-XAjkLNgaRI6FtvAP0Nv7orw
-X-Proofpoint-ORIG-GUID: DgXeaf0C-XAjkLNgaRI6FtvAP0Nv7orw
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=7Gl3-_t3PgB9XO-mQDs3:22 a=VwQbUJbxAAAA:8
+ a=XK1gqvEq3fAbpJyagg4A:9 a=QEXdDO2ut3YA:10 cc=ntf awl=host:12271
+X-Proofpoint-ORIG-GUID: 50AJ1yQkRsrl84FqTZJIn_YMlXg-l1RJ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE2MDAxMSBTYWx0ZWRfX80YMmdWxcnL2
+ 7Mw5BIJtSRopD+ZVDyXMODzV885uxvHlJBWzfvHO04kQ0zEIkvilavko5YvVpGjX+JHAlds3UCr
+ tcAvga/jCXZy+nqtVNExb6nU7c03VPZ4LPI4TQdF7Y4liUzAWCpl1C4IfRsN00atuo/72150u9j
+ VObh69IsK8xComoCRFnNuPiTTFoab+b59cqe6As9yGnTpXcHTkCz/Wfn7Xuu/O3MqXWVbW7oDhd
+ Le/s0Lz3Cdhv3S9oTME+PpoL5t0tgwY4pt/Q6/RCShFKA2/a1KW1P4Uj7Tkd6YVOMkhGCH9KGLG
+ lC/nIVNqYhDhKUFXqsY1yJ2cUtNX61n3jVnUP4Gwg1dRWmk3ZCPO4tDJGt4mYCM2ZHgGBc/O9+t
+ A5fTzZ49pU6DpVeZFZqp304IKJbg0883rCCyblzohYEmnPRp8uN/pE+2mX78dpw7gpXOioYyQtN
+ 6rebwmROGI0ZijV9wl7yMW7pp9lLvS8+foJ/LxLM=
+X-Proofpoint-GUID: 50AJ1yQkRsrl84FqTZJIn_YMlXg-l1RJ
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22030-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[oracle.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:dkim,oracle.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	RCPT_COUNT_FIVE(0.00)[6];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-22033-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:dkim,oracle.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: F284D293950
+X-Rspamd-Queue-Id: 614BB293A1C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 05 Mar 2026 03:08:55 -0800, Can Guo wrote:
+On Thu, 05 Mar 2026 14:46:58 +0800, Yihang Li wrote:
 
-> While userspace can currently configure UniPro Quality of Service (QoS)
-> monitoring via UFS BSG, tracking events requires constant polling of
-> UniPro attributes. Additionally, UFS host reset caused by err handling or
-> resuming (from LPM) can reset UniPro QoS monitoring attributes.
+> This series mainly consists of some minor cleanups, printing format issue
+> and risk of overflow in bitwise logical. No functional changes overall.
 > 
-> This series introduces a sysfs attribute to the UFS core to improve the
-> observability of DME QoS monitoring. Userspace can configure and enable
-> UniPro QoS monitor via UniPro QoS Attributes (using UFS BSG) and get
-> notified by the proposed dme_qos_notification attribute without polling
-> UniPro QoS Status attribute. The dme_qos_notification attribute is a
-> bitfield with the following bit assignments:
+> Yihang Li (2):
+>   scsi: hisi_sas: Correct the printing format issues
+>   scsi: hisi_sas: Fixed the risk of overflow in bitwise logical
+>     operations
 > 
 > [...]
 
 Applied to 7.1/scsi-queue, thanks!
 
-[1/1] scsi: ufs: core: Add support to notify userspace of UniPro QoS events
-      https://git.kernel.org/mkp/scsi/c/b5e21a29fe94
+[1/2] scsi: hisi_sas: Correct the printing format issues
+      https://git.kernel.org/mkp/scsi/c/87a629fd5e37
+[2/2] scsi: hisi_sas: Fixed the risk of overflow in bitwise logical operations
+      https://git.kernel.org/mkp/scsi/c/c420f7c4ac7e
 
 -- 
 Martin K. Petersen
