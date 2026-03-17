@@ -1,233 +1,198 @@
-Return-Path: <linux-scsi+bounces-22100-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22103-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mD1IKPr8uGl/mwEAu9opvQ
-	(envelope-from <linux-scsi+bounces-22100-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 08:04:26 +0100
+	id cK21MZcBuWkxnAEAu9opvQ
+	(envelope-from <linux-scsi+bounces-22103-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 08:24:07 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 471FE2A4909
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 08:04:25 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64D2A2A4BAE
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 08:24:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3BE05303AF2D
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 07:04:24 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4C1EE303CEDF
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 07:24:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4471345725;
-	Tue, 17 Mar 2026 07:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 373DF38CFE9;
+	Tue, 17 Mar 2026 07:24:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="JUIixCwD";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="AaYxVNYa"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="aNVnjBOk"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB75303A07
-	for <linux-scsi@vger.kernel.org>; Tue, 17 Mar 2026 07:04:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57DBC946C;
+	Tue, 17 Mar 2026 07:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773731062; cv=none; b=n++vVUCBIWHRHi2isO451wBP38Wlc5ffeFb2IwR7RR/NO5l0vk6LderY5XP2D4SAuF7Pv97jt0s0ZohPSmvSEkOzxcC18JBR0vxO1WL22QkKus+hDIHSj70Ue1fIZU4xFyKONwZ6I9mqqeM/xjX66pXC3kn67FbmpRwHgO7SrhY=
+	t=1773732243; cv=none; b=lx25msCghs4nOvBz1qCPn8lOyOVxTtyEHPYcPdFLv4Lp471kNkPrKSyMIIWxOlph+TkxhBmEk6pmzOgS4sWrmeu6ui9jE3gV67vTRbTO22gUiYGero1hQ8yMeCtU80F8QWy19K6yhFrQmNfTMEpn8X85NJ0aZr1WhvsBQLqdTlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773731062; c=relaxed/simple;
-	bh=Pj0AescwKQKugE0oUPQYGMX8mPyxhjBvNONkzt4D0uE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dhe/jWTI10JUoxQaCloXXx3C7fi1etFc211KXKKvM3DsfmKR4ih1xj5fd9Bxlel9Ryr8XtBHGeMP7/D7WdGHwWssqu4kZQfXP83Z0JZTjjiz8S4U0/eEzElkjRu1Y8dhmVDx3vn1qMKTGPj0xbz6kCPp8MTC+yiYHCereyYQgJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=JUIixCwD; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=AaYxVNYa; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62H5E6R91428842
-	for <linux-scsi@vger.kernel.org>; Tue, 17 Mar 2026 07:04:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	fQNtTToqGV4iqPYhKUIsqJXXPCuv1iHkfFdTRqxCiQo=; b=JUIixCwDas5DFYMy
-	EDuIAFeBUMMY/9dhI2upXEXxoVyLDhxYr6ONiiqFQkmr4PHCjKApeEs0zs73bqNW
-	pwanfaX6myV6EHZyNZR74IG/Pa/sLSeRIuGoobUcb8i4RX/HNkqyiv0W20IpAziF
-	Ljonbkl47NZhzpXWzt1fjy8z3oUVQdm0FG3ObsH1ojJD+YnQITc5sPSoGAwyN+nP
-	7PYD6sIdin9L6f6ZXYEJ4JFi+DYnIr1kJme/c+6kNGC+9BvihX4zE0j0pAB1M8lg
-	vwD3w5wlFGmRvlCPX7giByaVg6wGIbR9X5bR2L8W5RpVFpoOxF5GaoiqhKOkj2QY
-	JFg0ag==
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cxh99bkc8-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-scsi@vger.kernel.org>; Tue, 17 Mar 2026 07:04:20 +0000 (GMT)
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-359fe4e9ea7so4639972a91.0
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Mar 2026 00:04:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1773731060; x=1774335860; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fQNtTToqGV4iqPYhKUIsqJXXPCuv1iHkfFdTRqxCiQo=;
-        b=AaYxVNYa4stq3qwaM/4kFjEi49URmJn9mC5zrNAWe2kAASn+joszKVnzuPhF6df0IJ
-         JDV3SpsbGEvuqflHUSC8nTVxNXD1DW2h6NBpiOMmVWTBjCjOBoPQHla970RVak2gnWsP
-         mCEaz8pu2hZpkKrNrNv8rdSK5tAj4bXLi5lCpKfCzMCpJBM6Z0sYkly8iUjhtB6VlXMA
-         rTKzAjsFREIEWM3cazyg6iSD3ctjhmbkotqHOaWRFG4IqfA4i+jDZheSG09IJAPjPb1A
-         p5TP98jzHcZjEBrAjgA8orsf/6XYN4kCSvKGyUuXoMbOdd8WTiMmBPpaNcrp7lobH6UC
-         osSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773731060; x=1774335860;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fQNtTToqGV4iqPYhKUIsqJXXPCuv1iHkfFdTRqxCiQo=;
-        b=E8WOwpfBgiTOuOqhN9ZQGkZA8QwhXQwk/GQ3zNVfM1sB/u22Z53cUJue7NdjftgzxF
-         JEaDgxhdVI6Wpgw6dKFzfsl8CYjDmH+XWbZ92SRXn39SebEBYSs81zdImCtbiHH1SETR
-         9HAbm+qoYcCDpoxAacAtkjqxpmCr75ilq/zj5zD4VyrA+b4D9nsBWB7Lqrrzap48iJ7s
-         PMvF6R565cbKgnsosCyOdMjhSBGW5Xm66TpLmt2/dcERj56XcRenfmemIBwMOk1KKtGl
-         j6ePjISb7DOMov42PwChC0fbqvC3MIam1k8BXn0evQm9ggJEytLcV5NcFfZ7s0WKizSd
-         hLMg==
-X-Gm-Message-State: AOJu0YyaLXV24iiPG8t51jocgw/t/hlogzT5XJim2ltvKw1nnINT5R+4
-	YHBwhio3EB+qEM06LizufeUBVfgy2VUURfa47kZD3a4H9Vn7yIRegs9cETlYlZSEC+46fBUAKnA
-	vsRHht/FbkyXXjnWeHrDGAGrY78hrg75XB9cz6XTtKuqJ5PwzWjT6jKtIHNsa/PpW
-X-Gm-Gg: ATEYQzxpAHvq4kdPaGlW51xkgxL7BfvbB2xDM4rjS4YsD1rJ3ZvLM9aerJJnbKxcwlA
-	6tgi+V0AZtyt5RjW62U9E6SYEwIGHvvzu4CqwEitCLAzmWu3jRHqL7dmTLszKFoEIdeq9ZHIppH
-	N2zQYYdFJ9hrHDmKUmUQltgqeubpkjZhPpmkVSMmlA1xnfhG5Oqwy0/PWSxsZrKkv7k+J5W2y36
-	bQZf11DQWB4fyZD77dYdgj/jF6Jcff2cJiHQXBGY4+Q5IbFumR+x18riope5F69mxznt9SR4gch
-	4xFqkQNx9kpQrj2Ey28t61SWLO0012iwu3JuPG1Ne2xcZZTDlb9M34nvtXc4Ef1U9JaY9imsWGB
-	EaPaSolVnwjlvKOtWktOeT3Sd2MIHKRXAKfIKFcK8CHUGgbPVu+HFRWT2TSpZLl9c9ExcP1h/SY
-	qRTRFWSBz+sQ==
-X-Received: by 2002:a05:6a20:5499:b0:398:795c:26c7 with SMTP id adf61e73a8af0-398eca24ad9mr14692430637.3.1773731059911;
-        Tue, 17 Mar 2026 00:04:19 -0700 (PDT)
-X-Received: by 2002:a05:6a20:5499:b0:398:795c:26c7 with SMTP id adf61e73a8af0-398eca24ad9mr14692405637.3.1773731059390;
-        Tue, 17 Mar 2026 00:04:19 -0700 (PDT)
-Received: from [10.133.33.84] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c73ebb6336bsm12409470a12.21.2026.03.17.00.04.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Mar 2026 00:04:19 -0700 (PDT)
-Message-ID: <fca5317f-78c5-46d9-b93d-de65a603c395@oss.qualcomm.com>
-Date: Tue, 17 Mar 2026 15:04:12 +0800
+	s=arc-20240116; t=1773732243; c=relaxed/simple;
+	bh=2aQL3h4vAZqhe8FLytscr8ZspWkcLAwcnVrlKO6R1g8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZVArC48UV3sUxax1nHBTlNS3l4X8YNU3apFOkv1nSNcSRj3nojTjP5u9oRsCi6dBMzMStM6q9vu8ZcVRMXW+tUiAhdw//EbP6O/hjlg/aAg6+rdr+VSKUhMww3DyvNuNMDfyLk8jZmkV5waE9uEb+B+G5jqNKn8bpX7EEqzjFpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=aNVnjBOk; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=iS
+	pE/xcjVj3VAtaQdAmaqk6iLKGTZA1Yrm3dTSt/P64=; b=aNVnjBOkB48sedJcCF
+	fGRLNQqj3Qeh19pX/AfKgCxj0yMxqu6GIopFjEth+W2usC6A3iUSeg5YArb1AVdu
+	MPT73tji6Dwu0sYjiz3/SrIsPfQnHkVqBRUd5ggTJxGxFZrRWFA4TB4/NDK9J20i
+	No4i/r3Y/Ve+z4hJDeyf1wnZA=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgCnhdw1AblpkrBDWA--.58229S2;
+	Tue, 17 Mar 2026 15:22:30 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: axboe@kernel.dk,
+	fujita.tomonori@lab.ntt.co.jp,
+	James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com
+Cc: linux-block@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	bvanassche@acm.org,
+	Yang Xiuwei <yangxiuwei@kylinos.cn>
+Subject: [PATCH v8 0/3] bsg: add io_uring command support for SCSI passthrough
+Date: Tue, 17 Mar 2026 15:22:23 +0800
+Message-Id: <20260317072226.2598233-1-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 04/12] scsi: ufs: core: Add support for TX Equalization
-To: Bart Van Assche <bvanassche@acm.org>, avri.altman@wdc.com,
-        beanhuo@micron.com, martin.petersen@oracle.com, mani@kernel.org
-Cc: linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20260308151409.3779137-1-can.guo@oss.qualcomm.com>
- <20260308151409.3779137-5-can.guo@oss.qualcomm.com>
- <c44cc56f-513e-457b-96de-203d4b534496@acm.org>
- <f88d9fc6-4227-4cd3-a124-0e93122e1d85@oss.qualcomm.com>
- <6e07208c-a94b-44dc-8f7e-ccbb0ff8840e@oss.qualcomm.com>
- <16e4ee41-c156-4f09-80cb-e0e7918c87bf@acm.org>
-Content-Language: en-US
-From: Can Guo <can.guo@oss.qualcomm.com>
-In-Reply-To: <16e4ee41-c156-4f09-80cb-e0e7918c87bf@acm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=RJ++3oi+ c=1 sm=1 tr=0 ts=69b8fcf4 cx=c_pps
- a=RP+M6JBNLl+fLTcSJhASfg==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=yOCtJkima9RkubShWh1s:22
- a=utLGG-T327fd-dhq7TkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=iS9zxrgQBfv6-_F4QbHw:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE3MDA2MCBTYWx0ZWRfX8nPrliO/BDg2
- s8vttrzj9ZtTHhm//Cg886G5n2/25ysXb1UEm7QGmbEHaM61X51R6FVU92JcLqZoM+Qtu0KIGb3
- mGnNWIe2xtKiunojPjnuFVS6UdAc7/hbcg6e7P4RfHurmPKhAlG6XDm2fw9zuOrZmUEft/fHsJ2
- dXmLQxf6EwdQaSII6Wl/4A3F2c4wjdcGyvzYz65pDSCgVwxI7SjntvCJijS+731ICeRK6os3apC
- z5mwz41KnhL83uFjJt8o30fvruxOA20eI3xnrcsqW4SjYQTCT7P+Q/cgW6Gr8NvIHX+vzYhj5gh
- ziuqlltI6RdALnY4qJ45vjNd/N82h5aBmSkaDNBZOOB2d4NiNv0ynZkJaSnkOPdTiqCxvMQHQKu
- RuUWV0qhDzB5ZQnjOdAsLS5nkrYP3JjqZady7olOJbrp2O767VCXPKdX8bkFVHNa7Rio64pbAhO
- r4NM+s6MTTSWSHUxHVA==
-X-Proofpoint-ORIG-GUID: Akch-YVnw2yCz1Utwt3gxCq2GtOlGzMJ
-X-Proofpoint-GUID: Akch-YVnw2yCz1Utwt3gxCq2GtOlGzMJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-17_01,2026-03-16_06,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 clxscore=1015 spamscore=0 malwarescore=0
- lowpriorityscore=0 phishscore=0 bulkscore=0 suspectscore=0 adultscore=0
- impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
- definitions=main-2603170060
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-CM-TRANSID:PSgvCgCnhdw1AblpkrBDWA--.58229S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWF13Ar13Xw4kJrW3JF1kKrg_yoWrGFW3pF
+	WjgFs8Kr4UCF1xtFyfAr4DZFyYqwn3GayxG3y7X3y0yF1UZFnrXr4DKF43JFsrury7CFyj
+	qrnFqr4DC3WkA37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jOGYdUUUUU=
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6hgXp2m5ATjchAAA3z
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	TAGGED_FROM(0.00)[bounces-22100-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-22103-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,oss.qualcomm.com:dkim,oss.qualcomm.com:mid];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[kylinos.cn];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[163.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 471FE2A4909
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,kylinos.cn:mid]
+X-Rspamd-Queue-Id: 64D2A2A4BAE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+This series adds io_uring command support to the BSG SCSI passthrough path.
 
+The goal is to allow userspace to submit SCSI passthrough commands via
+IORING_OP_URING_CMD, in addition to the existing sg_io interface.
+The io_uring path mirrors the existing BSG behaviour: it currently only
+supports BSG_PROTOCOL_SCSI + BSG_SUB_PROTOCOL_SCSI_CMD and does not
+support BIDI transfers.
 
-On 3/17/2026 12:55 AM, Bart Van Assche wrote:
-> On 3/14/26 2:33 AM, Can Guo wrote:
->>
->>
->> On 3/14/2026 4:19 PM, Can Guo wrote:
->>>
->>>
->>> On 3/14/2026 6:19 AM, Bart Van Assche wrote:
->>>> On 3/8/26 8:14 AM, Can Guo wrote:
->>>>> +static int txeq_gear_set(const char *val, const struct 
->>>>> kernel_param *kp)
->>>>> +{
->>>>> +    return param_set_uint_minmax(val, kp, UFS_HS_G1, UFS_HS_G6);
->>>>> +}
->>>>
->>>> Why UFS_HS_G6 instead of UFS_HS_GEAR_MAX?
->>> I will use 'UFS_HS_GEAR_MAX - 1' in next version.
->> On second thought, to make the code more readable and scalable, I 
->> will use UFS_HS_GEAR_MAX
->> here. To achieve so, I am going to tweak the code like below:
->>
->> enum ufs_hs_gear_tag {
->>          UFS_HS_DONT_CHANGE,     /* Don't change Gear */
->>          UFS_HS_G1,              /* HS Gear 1 (default for reset) */
->>          UFS_HS_G2,              /* HS Gear 2 */
->>          UFS_HS_G3,              /* HS Gear 3 */
->>          UFS_HS_G4,              /* HS Gear 4 */
->>          UFS_HS_G5,              /* HS Gear 5 */
->> +      UFS_HS_G6,              /* HS Gear 6 */
->> +      UFS_HS_GEAR_MAX_INVALID,
->> };
->> +
->> + #define UFS_HS_GEAR_MAX         UFS_HS_GEAR_MAX_INVALID - 1
-> Will UFS_HS_GEAR_MAX_INVALID be used anywhere? If not, please leave it
-> out and add the following past UFS_HS_G6 instead of just
-> "UFS_HS_GEAR_MAX":
->
->     UFS_HS_GEAR_MAX = UFS_HS_G6,
-OK.
+Patch 1 defines struct bsg_uring_cmd in the UAPI and documents the CQE
+res2 layout with extraction/assembly macros for userspace.
 
-Thanks,
-Can Guo.
->
-> Thanks,
->
-> Bart.
+Patch 2 extends the generic BSG layer with an .uring_cmd file operation
+and a bsg_uring_cmd_fn callback, allowing transport-specific handlers to
+be registered.
+
+Patch 3 implements the SCSI BSG io_uring handler. It builds a SCSI
+request from struct bsg_uring_cmd, maps user buffers (including fixed
+buffers), and completes asynchronously via a request end_io callback and
+task_work. Completion returns SCSI device/host/driver status, residual
+length and sense length packed into CQE res2; status is read from
+scmd->result in task_work.
+
+Changes since v7 [3]:
+
+  [1/3] bsg_uring_cmd UAPI
+  - Add a static_assert() to document and verify the size of struct bsg_uring_cmd (Bart).
+  - Convert BSG_SCSI_RES2_* macros into static inline helpers in the UAPI header (Bart).
+
+  [2/3] generic BSG layer
+  - Combine variable declarations with their initializations in bsg_uring_cmd() (Bart).
+
+  [3/3] SCSI BSG io_uring handler
+  - Add a static_assert() to validate that the per-command PDU fits into io_uring_cmd.pdu (Bart).
+  - Combine several variable declarations with their initializations in the task_work callback (Bart).
+
+No behavioural or functional changes are intended in v8 compared to v7.
+
+Changes since v6 [2]:
+
+  [1/3] bsg_uring_cmd UAPI
+  - Removed the flags field (Bart).
+  - Documented CQE res2 layout and added BSG_SCSI_RES2_* macros for userspace (me).
+  - Added BSG_SCSI_RES2_BUILD() in UAPI (me).
+
+  [2/3] generic BSG layer
+  - Reordered variable declarations (longest to shortest) (Bart).
+  - Use early return when uring_cmd_fn is not set (Bart).
+
+  [3/3] SCSI BSG io_uring handler
+  - Read device/host/driver status from scmd->result in task_work (Bart).
+  - Use status_byte() and host_byte() instead of open-coding (Bart).
+  - Removed superfluous " & 0xff" from u8 expressions (Bart).
+
+Compared to the earlier RFC v4 series [1], this version only includes
+minor code cleanups (mainly comments and wording), without changing the
+behaviour or logic of the implementation.
+
+[1] https://lore.kernel.org/linux-block/20260122015653.703188-1-yangxiuwei@kylinos.cn/
+[2] https://lore.kernel.org/linux-block/20260305012857.2136525-1-yangxiuwei@kylinos.cn/
+[3] https://lore.kernel.org/linux-block/20260312092237.2464560-1-yangxiuwei@kylinos.cn/
+
+Testing
+-------
+Testing was done inside a VM on a disk with:
+  /sys/block/sdd/mq/0/nr_tags      = 1024
+  /sys/block/sdd/queue/nr_requests = 256
+
+The following SCSI INQUIRY micro-benchmark was run with N=100000:
+
+  sg+SG_IO (v3), /dev/sg4:
+    avg = 139.0 us, p50 = 128.9 us, p90 = 149.7 us, p99 = 301.0 us
+
+  bsg+SG_IO (v4), /dev/bsg/2:0:0:0:
+    avg = 97.2 us,  p50 = 92.7 us,  p90 = 111.5 us, p99 = 150.9 us
+
+  bsg+io_uring, /dev/bsg/2:0:0:0:
+    avg = 105.9 us, p50 = 95.4 us,  p90 = 116.2 us, p99 = 175.0 us
+
+  bsg+io_uring (batch=64), /dev/bsg/2:0:0:0:
+    avg = 61.9 us,  p50 = 60.9 us,  p90 = 63.9 us,  p99 = 94.6 us
+
+Yang Xiuwei (3):
+  bsg: add bsg_uring_cmd uapi structure
+  bsg: add io_uring command support to generic layer
+  scsi: bsg: add io_uring passthrough handler
+
+ block/bsg-lib.c          |   2 +-
+ block/bsg.c              |  33 +++++++-
+ drivers/scsi/scsi_bsg.c  | 176 ++++++++++++++++++++++++++++++++++++++-
+ include/linux/bsg.h      |   6 +-
+ include/uapi/linux/bsg.h |  75 +++++++++++++++++
+ 5 files changed, 288 insertions(+), 4 deletions(-)
+
+-- 
+2.25.1
 
 
