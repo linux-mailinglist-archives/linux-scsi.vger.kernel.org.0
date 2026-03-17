@@ -1,48 +1,48 @@
-Return-Path: <linux-scsi+bounces-22105-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22102-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SD4FCwkCuWmEnAEAu9opvQ
-	(envelope-from <linux-scsi+bounces-22105-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 08:26:01 +0100
+	id XH21JYQBuWlsnAEAu9opvQ
+	(envelope-from <linux-scsi+bounces-22102-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 08:23:48 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7F692A4BE4
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 08:26:00 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9D2C2A4B98
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 08:23:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 50A85301AD00
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 07:25:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A35CC303D659
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 07:23:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8177138CFEA;
-	Tue, 17 Mar 2026 07:25:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB0B438CFF8;
+	Tue, 17 Mar 2026 07:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="B2/B/tRX"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="HiCV+QKN"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B873A946C;
-	Tue, 17 Mar 2026 07:25:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E4438C428;
+	Tue, 17 Mar 2026 07:23:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773732343; cv=none; b=pRQ5XYbRkUVTywUZDHyGDjM7brmEMNa5hgY5/L/lSKRJN4zmbf64xjKUO9b7mG3OHplmiNKRdNkrml+uBdonx3qUTmiQAFMRwr5ue9/mkcVpJb664e/QtcALTs131XrtNLxLINn3o8cpA05vFictAvWIhaix8U7BwvaJ4GtDi7k=
+	t=1773732223; cv=none; b=gYI5Ndour0dH5tyq3MwlfHWBd71ORKhQiFH771LQL9egP/L0H6oYwM+R0sXQDyuNXplKMOHDqc+6mdZ1Jmm7FwHT1UIcb037SGDf5WcFqUEDv6v/6JfwsCAoZOiporEEMLspXPgYRnnXDa2jsycxyjAWph6DJnquL0jTq32JuDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773732343; c=relaxed/simple;
-	bh=RYu/Hlzy4M1NMLc3Xhe8UGrQf4l5omMwfSrz1Eps63w=;
+	s=arc-20240116; t=1773732223; c=relaxed/simple;
+	bh=94kV+YyGbPZOnbSyDlcl8B4SY4FtvRNWeUcVSiwZ+nU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=upjxlRVVaXmWkB3STpf19lsFSOsNoDLIJodBoHyA0xJ55MbZzjsloMIBuRhxaP7BqITfG+J5JaOCnmfICmJx/Y06pWaCO2EZXyKTP/ERE7WeLn7kgNJqAaISxv/zqHf+/PG+6bCG0+EzQcI9nf+sWYaQkhCEUYXecQ3DQH8K02o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=B2/B/tRX; arc=none smtp.client-ip=220.197.31.3
+	 MIME-Version; b=r0uRgGVShIRs/ibqhD6Mz6o8racDbMcg6aYWV1Vp7YMcyAFfRXGV1o8NhfWtP6a8gIrMayX66rr8xGwaHq5oFVXtTQD7/XjU8gBgTGWrnkbCGriCDV+8hEmDWZPNsHaMzb18UVFEz1nWAEk9FACYz4rqRRHQhDVefKXl8zKxnx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=HiCV+QKN; arc=none smtp.client-ip=117.135.210.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=VV
-	Awc+xdn6yxKxTFGsxyf3leIZLjYYGFor99fkx3VcY=; b=B2/B/tRXLqRU3I6JI1
-	nHtyO0tNTNiJHdb/Q/jSIbQFETEb1gblYnPNEhAb7NgqSA/g1wijUDUwe4Ee8vmt
-	3I1jLZhztTaNOmUmMaa9jZ/xTepvKI4dsDiD10xOt/3iqlCPjHbkaimvlzZwQ1UQ
-	l05QyjVVHFaqbF36Um1GCaeCk=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=9R
+	qBGzMKagNYReOeRIu2ZbercOTEKpe3p1vmTXLqjDo=; b=HiCV+QKNvPnneDcO5f
+	5Uf3LxXgnvXdmayX63zkHszmpHL0R/1KuptdKDpL8aUERRGO1Su3ANBnHkuFzkTG
+	rv4k5edw7NFvDfwizMukmCe1gUb7wfd7OPQOZuqB/yY4WdD3mdt8YbqW/grz2wLN
+	G1rQdZP2apBtS18TMgrg5Zik0=
 Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgCnhdw1AblpkrBDWA--.58229S3;
-	Tue, 17 Mar 2026 15:22:33 +0800 (CST)
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgCnhdw1AblpkrBDWA--.58229S4;
+	Tue, 17 Mar 2026 15:22:34 +0800 (CST)
 From: Yang Xiuwei <yangxiuwei@kylinos.cn>
 To: axboe@kernel.dk,
 	fujita.tomonori@lab.ntt.co.jp,
@@ -52,9 +52,9 @@ Cc: linux-block@vger.kernel.org,
 	linux-scsi@vger.kernel.org,
 	bvanassche@acm.org,
 	Yang Xiuwei <yangxiuwei@kylinos.cn>
-Subject: [PATCH v8 1/3] bsg: add bsg_uring_cmd uapi structure
-Date: Tue, 17 Mar 2026 15:22:24 +0800
-Message-Id: <20260317072226.2598233-2-yangxiuwei@kylinos.cn>
+Subject: [PATCH v8 2/3] bsg: add io_uring command support to generic layer
+Date: Tue, 17 Mar 2026 15:22:25 +0800
+Message-Id: <20260317072226.2598233-3-yangxiuwei@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260317072226.2598233-1-yangxiuwei@kylinos.cn>
 References: <20260317072226.2598233-1-yangxiuwei@kylinos.cn>
@@ -65,30 +65,30 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgCnhdw1AblpkrBDWA--.58229S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCr4xGry7Zw43Kw17tF1fWFg_yoW5ZFWxpF
-	Z8Kw43JFWUWw1fZrW3Ja4UCFW5Zr18Ja47Kay7Wwnak3W5tryrA3WjkryjqF48X39Yy34a
-	v3W7trW5C3yktw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jexRDUUUUU=
+X-CM-TRANSID:PSgvCgCnhdw1AblpkrBDWA--.58229S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxKFW7ZrykGry8KFyxWFWDCFg_yoW7Cry3pF
+	WrXa15JrWFgr4xuFZ8JFs8Ar9Iqw48K3yxJFyI9345KrnFyr9aqr1kWFy8tFWrJrWkCayY
+	qanYqrWDCr1UAw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j-sqAUUUUU=
 Sender: yangxiuwei2025@163.com
-X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbCwhkXp2m5ATmARwAA3E
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6hoXp2m5ATrc0AAA3n
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-22105-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-22102-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DMARC_NA(0.00)[kylinos.cn];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[163.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
@@ -97,111 +97,171 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[8];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,kylinos.cn:email,kylinos.cn:mid]
-X-Rspamd-Queue-Id: C7F692A4BE4
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A9D2C2A4B98
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add the bsg_uring_cmd structure to the BSG UAPI header to support
-io_uring-based SCSI passthrough operations via IORING_OP_URING_CMD.
+Add an io_uring command handler to the generic BSG layer. The new
+.uring_cmd file operation validates io_uring features and delegates
+handling to a per-queue bsg_uring_cmd_fn callback.
+
+Extend bsg_register_queue() so transport drivers can register both
+sg_io and io_uring command handlers.
 
 Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
 ---
- include/uapi/linux/bsg.h | 75 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ block/bsg-lib.c         |  2 +-
+ block/bsg.c             | 33 ++++++++++++++++++++++++++++++++-
+ drivers/scsi/scsi_bsg.c | 10 +++++++++-
+ include/linux/bsg.h     |  6 +++++-
+ 4 files changed, 47 insertions(+), 4 deletions(-)
 
-diff --git a/include/uapi/linux/bsg.h b/include/uapi/linux/bsg.h
-index cd6302def5ed..6cff77f5b857 100644
---- a/include/uapi/linux/bsg.h
-+++ b/include/uapi/linux/bsg.h
-@@ -2,6 +2,9 @@
- #ifndef _UAPIBSG_H
- #define _UAPIBSG_H
+diff --git a/block/bsg-lib.c b/block/bsg-lib.c
+index 20cd0ef3c394..fdb4b290ca68 100644
+--- a/block/bsg-lib.c
++++ b/block/bsg-lib.c
+@@ -393,7 +393,7 @@ struct request_queue *bsg_setup_queue(struct device *dev, const char *name,
  
-+#ifdef __KERNEL__
-+#include <linux/build_bug.h>
-+#endif /* __KERNEL__ */
- #include <linux/types.h>
+ 	blk_queue_rq_timeout(q, BLK_DEFAULT_SG_TIMEOUT);
  
- #define BSG_PROTOCOL_SCSI		0
-@@ -63,5 +66,77 @@ struct sg_io_v4 {
- 	__u32 padding;
+-	bset->bd = bsg_register_queue(q, dev, name, bsg_transport_sg_io_fn);
++	bset->bd = bsg_register_queue(q, dev, name, bsg_transport_sg_io_fn, NULL);
+ 	if (IS_ERR(bset->bd)) {
+ 		ret = PTR_ERR(bset->bd);
+ 		goto out_cleanup_queue;
+diff --git a/block/bsg.c b/block/bsg.c
+index e0af6206ed28..82aaf3cee582 100644
+--- a/block/bsg.c
++++ b/block/bsg.c
+@@ -12,6 +12,7 @@
+ #include <linux/idr.h>
+ #include <linux/bsg.h>
+ #include <linux/slab.h>
++#include <linux/io_uring/cmd.h>
+ 
+ #include <scsi/scsi.h>
+ #include <scsi/scsi_ioctl.h>
+@@ -28,6 +29,7 @@ struct bsg_device {
+ 	unsigned int timeout;
+ 	unsigned int reserved_size;
+ 	bsg_sg_io_fn *sg_io_fn;
++	bsg_uring_cmd_fn *uring_cmd_fn;
  };
  
-+struct bsg_uring_cmd {
-+	__u64 request;		/* [i], [*i] command descriptor address */
-+	__u32 request_len;	/* [i] command descriptor length in bytes */
-+	__u32 protocol;		/* [i] protocol type (BSG_PROTOCOL_*) */
-+	__u32 subprotocol;	/* [i] subprotocol type (BSG_SUB_PROTOCOL_*) */
-+	__u32 max_response_len;	/* [i] response buffer size in bytes */
-+
-+	__u64 response;		/* [i], [*o] response data address */
-+	__u64 dout_xferp;	/* [i], [*i] */
-+	__u32 dout_xfer_len;	/* [i] bytes to be transferred to device */
-+	__u32 dout_iovec_count;	/* [i] 0 -> "flat" dout transfer else
-+				 * dout_xferp points to array of iovec
-+				 */
-+	__u64 din_xferp;	/* [i], [*o] */
-+	__u32 din_xfer_len;	/* [i] bytes to be transferred from device */
-+	__u32 din_iovec_count;	/* [i] 0 -> "flat" din transfer */
-+
-+	__u32 timeout_ms;	/* [i] timeout in milliseconds */
-+	__u8  reserved[12];	/* reserved for future extension */
-+};
-+
-+#ifdef __KERNEL__
-+/* Must match IORING_OP_URING_CMD payload size (e.g. SQE128). */
-+static_assert(sizeof(struct bsg_uring_cmd) == 80);
-+#endif /* __KERNEL__ */
-+
-+
-+/*
-+ * SCSI BSG io_uring completion (res2, 64-bit)
-+ *
-+ * When using BSG_PROTOCOL_SCSI + BSG_SUB_PROTOCOL_SCSI_CMD with
-+ * IORING_OP_URING_CMD, the completion queue entry (CQE) contains:
-+ *   - result: errno (0 on success)
-+ *   - res2: packed SCSI status
-+ *
-+ * res2 bit layout:
-+ *   [0..7]   device_status  (SCSI status byte, e.g. CHECK_CONDITION)
-+ *   [8..15]  driver_status  (e.g. DRIVER_SENSE when sense data is valid)
-+ *   [16..23] host_status    (e.g. DID_OK, DID_TIME_OUT)
-+ *   [24..31] sense_len_wr   (bytes of sense data written to response buffer)
-+ *   [32..63] resid_len      (residual transfer length)
-+ */
-+static inline __u8 bsg_scsi_res2_device_status(__u64 res2)
-+{
-+	return res2 & 0xff;
-+}
-+static inline __u8 bsg_scsi_res2_driver_status(__u64 res2)
-+{
-+	return res2 >> 8;
-+}
-+static inline __u8 bsg_scsi_res2_host_status(__u64 res2)
-+{
-+	return res2 >> 16;
-+}
-+static inline __u8 bsg_scsi_res2_sense_len(__u64 res2)
-+{
-+	return res2 >> 24;
-+}
-+static inline __u32 bsg_scsi_res2_resid_len(__u64 res2)
-+{
-+	return res2 >> 32;
-+}
-+static inline __u64 bsg_scsi_res2_build(__u8 device_status, __u8 driver_status,
-+					__u8 host_status, __u8 sense_len_wr,
-+					__u32 resid_len)
-+{
-+	return ((__u64)(__u32)(resid_len) << 32) |
-+		((__u64)sense_len_wr << 24) |
-+		((__u64)host_status << 16) |
-+		((__u64)driver_status << 8) |
-+		(__u64)device_status;
-+}
+ static inline struct bsg_device *to_bsg_device(struct inode *inode)
+@@ -158,11 +160,38 @@ static long bsg_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 	}
+ }
  
- #endif /* _UAPIBSG_H */
++static int bsg_check_uring_features(unsigned int issue_flags)
++{
++	/* BSG passthrough requires big SQE/CQE support */
++	if ((issue_flags & (IO_URING_F_SQE128|IO_URING_F_CQE32)) !=
++	    (IO_URING_F_SQE128|IO_URING_F_CQE32))
++		return -EOPNOTSUPP;
++	return 0;
++}
++
++static int bsg_uring_cmd(struct io_uring_cmd *ioucmd, unsigned int issue_flags)
++{
++	struct bsg_device *bd = to_bsg_device(file_inode(ioucmd->file));
++	bool open_for_write = ioucmd->file->f_mode & FMODE_WRITE;
++	struct request_queue *q = bd->queue;
++	int ret;
++
++	ret = bsg_check_uring_features(issue_flags);
++	if (ret)
++		return ret;
++
++	if (!bd->uring_cmd_fn)
++		return -EOPNOTSUPP;
++
++	return bd->uring_cmd_fn(q, ioucmd, issue_flags, open_for_write);
++}
++
+ static const struct file_operations bsg_fops = {
+ 	.open		=	bsg_open,
+ 	.release	=	bsg_release,
+ 	.unlocked_ioctl	=	bsg_ioctl,
+ 	.compat_ioctl	=	compat_ptr_ioctl,
++	.uring_cmd	=	bsg_uring_cmd,
+ 	.owner		=	THIS_MODULE,
+ 	.llseek		=	default_llseek,
+ };
+@@ -187,7 +216,8 @@ void bsg_unregister_queue(struct bsg_device *bd)
+ EXPORT_SYMBOL_GPL(bsg_unregister_queue);
+ 
+ struct bsg_device *bsg_register_queue(struct request_queue *q,
+-		struct device *parent, const char *name, bsg_sg_io_fn *sg_io_fn)
++		struct device *parent, const char *name, bsg_sg_io_fn *sg_io_fn,
++		bsg_uring_cmd_fn *uring_cmd_fn)
+ {
+ 	struct bsg_device *bd;
+ 	int ret;
+@@ -199,6 +229,7 @@ struct bsg_device *bsg_register_queue(struct request_queue *q,
+ 	bd->reserved_size = INT_MAX;
+ 	bd->queue = q;
+ 	bd->sg_io_fn = sg_io_fn;
++	bd->uring_cmd_fn = uring_cmd_fn;
+ 
+ 	ret = ida_alloc_max(&bsg_minor_ida, BSG_MAX_DEVS - 1, GFP_KERNEL);
+ 	if (ret < 0) {
+diff --git a/drivers/scsi/scsi_bsg.c b/drivers/scsi/scsi_bsg.c
+index a9a9ec086a7e..4d57e524e141 100644
+--- a/drivers/scsi/scsi_bsg.c
++++ b/drivers/scsi/scsi_bsg.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/bsg.h>
++#include <linux/io_uring/cmd.h>
+ #include <scsi/scsi.h>
+ #include <scsi/scsi_ioctl.h>
+ #include <scsi/scsi_cmnd.h>
+@@ -9,6 +10,12 @@
+ 
+ #define uptr64(val) ((void __user *)(uintptr_t)(val))
+ 
++static int scsi_bsg_uring_cmd(struct request_queue *q, struct io_uring_cmd *ioucmd,
++			       unsigned int issue_flags, bool open_for_write)
++{
++	return -EOPNOTSUPP;
++}
++
+ static int scsi_bsg_sg_io_fn(struct request_queue *q, struct sg_io_v4 *hdr,
+ 		bool open_for_write, unsigned int timeout)
+ {
+@@ -99,5 +106,6 @@ static int scsi_bsg_sg_io_fn(struct request_queue *q, struct sg_io_v4 *hdr,
+ struct bsg_device *scsi_bsg_register_queue(struct scsi_device *sdev)
+ {
+ 	return bsg_register_queue(sdev->request_queue, &sdev->sdev_gendev,
+-			dev_name(&sdev->sdev_gendev), scsi_bsg_sg_io_fn);
++			dev_name(&sdev->sdev_gendev), scsi_bsg_sg_io_fn,
++			scsi_bsg_uring_cmd);
+ }
+diff --git a/include/linux/bsg.h b/include/linux/bsg.h
+index ee2df73edf83..162730bfc2d8 100644
+--- a/include/linux/bsg.h
++++ b/include/linux/bsg.h
+@@ -7,13 +7,17 @@
+ struct bsg_device;
+ struct device;
+ struct request_queue;
++struct io_uring_cmd;
+ 
+ typedef int (bsg_sg_io_fn)(struct request_queue *, struct sg_io_v4 *hdr,
+ 		bool open_for_write, unsigned int timeout);
+ 
++typedef int (bsg_uring_cmd_fn)(struct request_queue *q, struct io_uring_cmd *ioucmd,
++			       unsigned int issue_flags, bool open_for_write);
++
+ struct bsg_device *bsg_register_queue(struct request_queue *q,
+ 		struct device *parent, const char *name,
+-		bsg_sg_io_fn *sg_io_fn);
++		bsg_sg_io_fn *sg_io_fn, bsg_uring_cmd_fn *uring_cmd_fn);
+ void bsg_unregister_queue(struct bsg_device *bcd);
+ 
+ #endif /* _LINUX_BSG_H */
 -- 
 2.25.1
 
