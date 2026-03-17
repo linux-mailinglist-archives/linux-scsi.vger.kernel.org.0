@@ -1,124 +1,136 @@
-Return-Path: <linux-scsi+bounces-22097-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22098-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EJxMOavzuGkNmQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-22097-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 07:24:43 +0100
+	id CAX9E2/1uGk5mQEAu9opvQ
+	(envelope-from <linux-scsi+bounces-22098-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 07:32:15 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80CD92A4477
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 07:24:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B275A2A44FC
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 07:32:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7B4B23025154
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 06:24:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4E72430214C1
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Mar 2026 06:31:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A808737F740;
-	Tue, 17 Mar 2026 06:24:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8752478F4A;
+	Tue, 17 Mar 2026 06:31:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="Yfv8PkSk"
+	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="N6hkBi5T"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE263559F5;
-	Tue, 17 Mar 2026 06:24:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C805F57C9F;
+	Tue, 17 Mar 2026 06:31:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773728679; cv=none; b=FPJ67UFOx6Ao+sDGHmHoEnquhkOyF+gkdsLO93usw8Y/mQekcjN6n1V8RCJRFtxMbJZWhr11vssioPoe/cvRGIyTVzfPbOAkZzvji2XO346M159FCVW1uWgJ/mHeAv5OGkwNvgGWShzHVEFP+RMOU1E770q3gZ+5F+qON0ns38Y=
+	t=1773729113; cv=none; b=kkQe3FMNlaNLiK/dW0TqPClMFW+79trKt9Z3UIjHzBDPxklmqzH+8M1uT5MbpHkxmpuvyar7+1yeFcCH2VPLX1ma774/NOt9MZGYU85NtPswVVmp6HHd6tkndJnz38plxBS2AmGrtCYwv+uRZ6dKNhDoyy2MidDqgS2DzV4L6IA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773728679; c=relaxed/simple;
-	bh=GjedUynhRQ0OoszqlHV63oJsqymHHHB/b4DaWxO4kZg=;
-	h=Subject:To:References:CC:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=YdE24bjH5bdUY5AM1Eow9+IbtG+MVcRL/De5XWYqUL+9PumC1++tBLy4270zr9FGip3TZv0M5kH3APF2RB+X6Tqq1BA0kGAnnoHUS+Om6Uy19m+6AEWkzFKWZim0hwVBpork2fM6ZzUnazV7mQKcQxS8QoahEaPRoXD9JY3bKyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=Yfv8PkSk; arc=none smtp.client-ip=113.46.200.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com
+	s=arc-20240116; t=1773729113; c=relaxed/simple;
+	bh=xFpxtfQWsOl0eADu+u7R/CP5uFKMnuScRUkOaIVjXf4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pse245SXhCWAftkLsUy9ef3vKi3Ox8OxbxYHMO544uTwf4keU00u0IdSfeY8PGhZlCwpiBtvcChcLBqGdBPSZOfyx9g1IqBXkvZTiA0Hn+inmDmWlE8k8OdtPvz7BV5YVn5gyT2PMv1MVVph6Mvh5SpBveajdOB5TpS9rE4nr2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=N6hkBi5T; arc=none smtp.client-ip=113.46.200.217
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
 dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=IceBJOdOJ0Wo5kaiil1rI3bIeydEAyJ779iXcpPW8ZU=;
-	b=Yfv8PkSkgihcqgAbfVpdFYS2i9Ra2yMWm2yRSanCj8/AYBs5TZWUwMwOSuev/CKWEoH8k0t+m
-	GAP+Vwb7CUePAW1hW4DrvivVqB5JCp6zU53nAfWDnP0v/JPxrPhPL/FDLpOCtc4jQxvJ8JhxJZT
-	AmsyssgQUKYCj1IbkqD+2AY=
-Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4fZhcP5mpDz12LdJ;
-	Tue, 17 Mar 2026 14:19:01 +0800 (CST)
+	bh=iQyOCq8GwaOJiuW0nvRx/DrISeQSdWsR1+v0iNg4ULk=;
+	b=N6hkBi5TQmUIZ8bzNxhDUaNITm0YtC0N88dMOivzWbcHMLTxIudE/UdeXZ464vQ32IbU4ASSk
+	Yv8JdXvRAa6yR2aNkVcOPwV1LemoEmRektGThRFTRL1Ril+K10q9pBVZJTKQw2FWCwSai0sAwsd
+	S3WCEwRQHshj43dX1ecOilE=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4fZhmg0C4dzcb4k;
+	Tue, 17 Mar 2026 14:26:11 +0800 (CST)
 Received: from kwepemh200005.china.huawei.com (unknown [7.202.181.112])
-	by mail.maildlp.com (Postfix) with ESMTPS id D2499404AD;
-	Tue, 17 Mar 2026 14:24:33 +0800 (CST)
-Received: from [10.67.120.126] (10.67.120.126) by
+	by mail.maildlp.com (Postfix) with ESMTPS id 1381140538;
+	Tue, 17 Mar 2026 14:31:48 +0800 (CST)
+Received: from localhost.localdomain (10.50.163.32) by
  kwepemh200005.china.huawei.com (7.202.181.112) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 17 Mar 2026 14:24:33 +0800
-Subject: Re: [PATCH] scsi: Fix the maximum channel scanning issue
-To: Bart Van Assche <bvanassche@acm.org>, Yihang Li <liyihang9@huawei.com>,
-	<martin.petersen@oracle.com>, <James.Bottomley@HansenPartnership.com>,
+ 15.2.1544.11; Tue, 17 Mar 2026 14:31:47 +0800
+From: Yihang Li <liyihang9@huawei.com>
+To: <martin.petersen@oracle.com>, <James.Bottomley@HansenPartnership.com>,
 	<ranjan.kumar@broadcom.com>
-References: <20260313023057.4151105-1-liyihang9@huawei.com>
- <6103e5cd-12e2-4527-8aee-985c2a75f255@acm.org>
 CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<liuyonglong@huawei.com>, <linuxarm@huawei.com>, <liyihang9@huawei.com>
-From: Yihang Li <liyihang9@h-partners.com>
-Message-ID: <bea1f556-75bb-aedb-61fd-553841c9aadd@h-partners.com>
-Date: Tue, 17 Mar 2026 14:24:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+	<liyihang9@huawei.com>, <liuyonglong@huawei.com>, <linuxarm@huawei.com>
+Subject: [PATCH v2] scsi: scsi_transport_sas: Fix the maximum channel scanning issue
+Date: Tue, 17 Mar 2026 14:31:47 +0800
+Message-ID: <20260317063147.2182562-1-liyihang9@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <6103e5cd-12e2-4527-8aee-985c2a75f255@acm.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
  kwepemh200005.china.huawei.com (7.202.181.112)
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),quarantine];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[h-partners.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[h-partners.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FROM_NEQ_ENVFROM(0.00)[liyihang9@huawei.com,linux-scsi@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-22098-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[h-partners.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22097-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[liyihang9@h-partners.com,linux-scsi@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 80CD92A4477
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	RCVD_COUNT_FIVE(0.00)[6];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,h-partners.com:dkim]
+X-Rspamd-Queue-Id: B275A2A44FC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi, Bart
+After the commit 37c4e72b0651 ("scsi: Fix sas_user_scan() to handle
+wildcard and multi-channel scans"), if the device supports multiple
+channels (0 to shost->max_channel), user_scan() invokes updated
+sas_user_scan() to perform the scan behavior for a specific transfer.
+However, when the user specifies shost->max_channel, it will return
+-EINVAL, which is not expected.
 
-On 2026/3/17 1:22, Bart Van Assche wrote:
-> On 3/12/26 7:30 PM, Yihang Li wrote:
->> Fix and support specifying the scan shost->max_channel for scanning.
-> 
-> A more specific prefix than "scsi:" should be used for SAS patches. In
-> the kernel log I found the following examples:
-> * scsi: transport: sas:
-> * scsi: scsi_transport_sas:
-> 
-> I'm not sure what prefix is preferred.
+Fix and support specifying the scan shost->max_channel for scanning.
 
-Thank you for your reply. I will carefully consider this suggestion.
+Changes since v1:
+- Add the prefix "scsi_transport_sas".
 
-Thanks,
-Yihang
+Fixes: 37c4e72b0651 ("scsi: Fix sas_user_scan() to handle wildcard and multi-channel scans")
+Signed-off-by: Yihang Li <liyihang9@huawei.com>
+---
+ drivers/scsi/scsi_transport_sas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/scsi_transport_sas.c b/drivers/scsi/scsi_transport_sas.c
+index 12124f9d5ccd..13412702188e 100644
+--- a/drivers/scsi/scsi_transport_sas.c
++++ b/drivers/scsi/scsi_transport_sas.c
+@@ -1734,7 +1734,7 @@ static int sas_user_scan(struct Scsi_Host *shost, uint channel,
+ 		break;
+ 
+ 	default:
+-		if (channel < shost->max_channel) {
++		if (channel <= shost->max_channel) {
+ 			res = scsi_scan_host_selected(shost, channel, id, lun,
+ 						      SCSI_SCAN_MANUAL);
+ 		} else {
+-- 
+2.33.0
+
 
