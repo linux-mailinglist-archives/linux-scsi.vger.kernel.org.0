@@ -1,82 +1,79 @@
-Return-Path: <linux-scsi+bounces-22306-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22305-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IPTvGRSzvGn32AIAu9opvQ
-	(envelope-from <linux-scsi+bounces-22306-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2026 03:38:12 +0100
+	id OHkdJwyzvGn32AIAu9opvQ
+	(envelope-from <linux-scsi+bounces-22305-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2026 03:38:04 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDA0A2D52D4
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2026 03:38:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F25D2D52CD
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2026 03:38:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CF3513059F0F
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2026 02:37:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 17E8230E9AD9
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2026 02:36:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C8A328507E;
-	Fri, 20 Mar 2026 02:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1296247280;
+	Fri, 20 Mar 2026 02:36:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="oR/uqy1l"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="NafOMorg"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D671FF1C7;
-	Fri, 20 Mar 2026 02:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1851FF1C7;
+	Fri, 20 Mar 2026 02:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773974227; cv=none; b=XjqDkPNvuTz2U0t9hvLGD2USD5lOwG90NOyjQLeSk2n7O+5igEMhGerZp6y3aLEL6miNoDxD4lnqXzKcPx+j/4/bQh0vR53Rt7v0/zL4ZLfoMbqjcMVs2MBsSWf+qCMyAP9DxualBYO+n2w3xDow0IKDLIR4yf/Tt+b1s+FtS8A=
+	t=1773974215; cv=none; b=d/qgN6LNcPAVHodRHSuzr28uKlzTmVpTAH70sfChh7FFox0+pkmXAiHxelLQlw9gdjKtfAGAFSmt0wsjoTD567luwYYSVII4QRxmeUqCoJoKUsP7oOn437VuOP7TUTngaX6XplVMwVdMNXOOH60vg5zyQh4dZvoqXjTxOYiNG6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773974227; c=relaxed/simple;
-	bh=RssIeHhVbvBpdoBKs8o38zT+df3pz8geSBV2NPAL4dE=;
+	s=arc-20240116; t=1773974215; c=relaxed/simple;
+	bh=c7qBdSsRfy5COr0XMFNBn/zBTWyIIx6y8s+ZvywmDAc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YqWiSNYQF2QcSgr+cQESsjSoU57fhkjlVWtK2Y9EruFEYaeusaov0WIPz9dPMuy9VxMn07XoqazpvtPVrn4gtgYyfwgd+JCNvaI+/p/vr3ahbzA3C9gGufpoXWAqrCxVsGUORausGlDtTcaaqRKMmDHDeS1NzGbGmRJjtK2djnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=oR/uqy1l; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=MA3JqNrjrsZRB7g6gSKSD4cysxwdBOxF8BuckSeYbOuQO6mIiSCcwLzLauRr+YPc6f3z5usFEdgIwhrI/jILpzLduYyq3+ihB1+HG5+vVwqyxcWOVddQj08M+j3cWU8ojXrjiMdN9y9d/C8ErLlDcQOYj1dfp8dWp1W0Tsk7BDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=NafOMorg; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62JFpE9R313531;
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62JGEAHh2009238;
 	Fri, 20 Mar 2026 02:36:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=w1Gk0oESh7NdIUQp7mbqUwqsOc9aBJiU/lM2AKx0YME=; b=
-	oR/uqy1lnQko/MRfBJPSNoO5AIpZbyw61+DoXKMmlnzlGL4VqOAc742h0XTXLBKv
-	0nrAPUVmvomw3KjGLO27YOq/e/9tf8XQAvrWX8SFI2ZNSPDmJ8Qaqj4c5TxXAcat
-	xJJrgZFDRefz+tZIFyTP3WW2h67UNMC68UyMFuCjqfnKEqW0ufG2YFtHTHLDL1sZ
-	R1pti3dPHBloSaOpIbLW+o9xzLnUXosb77YjFbuY0y/rY7ToOfVt4TR9wkXHDmP+
-	3nUNnz0cs7eYVgfQ9E9E2sM97G72o0ri6xvgY4QcmUvZraw82xeJrV4ONDp1/+5c
-	LSPgsnYr6fN3FMpzNepAAw==
+	corp-2025-04-25; bh=5h9/9hUjHwJlW8GHjK2I9vk4Hx+/2Gju8NLEoZ1l6B4=; b=
+	NafOMorgpRN/r4A/CxMULY9fRWLkW5nQsi8Lt1zl4e6+z2dS6dHPVNJr+fcaUbkG
+	/aJQiSJlQo0Y+3Ohu6lgVp1rks6pLHCMZzrOBYjRa2CguSJcifDCQv9lXr5BLDlx
+	MnCilitB449PZ6LB5ILayf1CoYave3vLQVkQ6++w25tn7k8YXy5ouLMD9QC0mdeB
+	MWwwCtlf/7I4SIBdoSWplKRjePyLsV5ddlq0KOpn6SWZufn3aHNgBXNtgp6xUoOF
+	76yVppHpp1ssG1UsoaT/IuqpGKD8wyF0Bex3qXDc1uFUpwEKWNOcorHmP/hGknVa
+	S05KXdOOiNrXVeA3NGJ7jw==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cvy9s0sgs-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cvyqc0v46-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 20 Mar 2026 02:36:14 +0000 (GMT)
+	Fri, 20 Mar 2026 02:36:15 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62K0BXMG001131;
-	Fri, 20 Mar 2026 02:36:13 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62JNGYvo003336;
+	Fri, 20 Mar 2026 02:36:14 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cvx4dp7by-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cvx4dp7c6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 20 Mar 2026 02:36:13 +0000
+	Fri, 20 Mar 2026 02:36:14 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62K2aDRJ020555;
-	Fri, 20 Mar 2026 02:36:13 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62K2aDRL020555;
+	Fri, 20 Mar 2026 02:36:14 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4cvx4dp7bq-1;
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4cvx4dp7bq-2;
 	Fri, 20 Mar 2026 02:36:13 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        stable <stable@kernel.org>
-Subject: Re: [PATCH] scsi: ses: Handle positive SCSI error from ses_recv_diag()
-Date: Thu, 19 Mar 2026 22:36:00 -0400
-Message-ID: <177397393944.2929898.5492898463128783556.b4-ty@oracle.com>
+To: linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        Josef Bacik <josef@toxicpanda.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] scsi: target: tcm_loop: drain commands in target_reset handler
+Date: Thu, 19 Mar 2026 22:36:01 -0400
+Message-ID: <177397393954.2929898.7554458925697922587.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <2026022301-bony-overstock-a07f@gregkh>
-References: <2026022301-bony-overstock-a07f@gregkh>
+In-Reply-To: <27011aa34c8f6b1b94d2e3cf5655b6d037f53428.1773706803.git.josef@toxicpanda.com>
+References: <27011aa34c8f6b1b94d2e3cf5655b6d037f53428.1773706803.git.josef@toxicpanda.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -88,65 +85,70 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-03-19_04,2026-03-19_05,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=749
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=826
  adultscore=0 phishscore=0 malwarescore=0 suspectscore=0 mlxscore=0
  spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2603050001 definitions=main-2603200019
-X-Authority-Analysis: v=2.4 cv=X5Vf6WTe c=1 sm=1 tr=0 ts=69bcb29e cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzIwMDAxOSBTYWx0ZWRfX7wrDyZujsUir
+ qHE1PMdUeTRtNudAGDDkXH0PUM1AE7OBSkMYx4E9a23CvuQYmDV6IXwNv49vks13OhoZgfCDM7R
+ YU8f6Fp5MMv1FCLZnOKWtGRe2tKK4rQJisgaE8t4Cp6jQ8lrdNdYlJKZeeflHQcvQwAfm1Rchu3
+ 46/rZbmnausQIaPyQ6M4HjBOWsS31ydypSlagK3C5WNHe5l/o+0vh3msBvIQUqKd9STcbyO8RfM
+ OKaPyJyI61Nqfd6znO3AuULAWFO5xLCdgcemOhc5bkcJ9IsFABriaz31cTgZydBJcNDIUA02p5b
+ FiDDEzJpqCmfEJctAlUe9NPTJsMrtoPlypixJ59+yy2Tl7ZuyJ4tyoiOxB/UdSmYefKdA4U9XPX
+ 3HBUHiLX3+Z0oPPtN59tfm8MIa2ix3hDUmM9DTjz9zteOl4hgjjMijsLAf7/ymbBazhflbL+0I2
+ Ad5AeLcFyqxScm+MpYg==
+X-Authority-Analysis: v=2.4 cv=J8WnLQnS c=1 sm=1 tr=0 ts=69bcb29f cx=c_pps
  a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
  a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=3I1J8UUJPc9JN9BFgKH3:22 a=VwQbUJbxAAAA:8
- a=tzoFckrENWJE1e--0mkA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzIwMDAxOSBTYWx0ZWRfX7M9E62M15Tyq
- LXzTbd0kEwLtbDbSulkf44QyOgL88HWOhKLKVtRTevSBnxQUzTMRRCjtEEvE3h16JBFIMJ9/01S
- b9eD86mxtqqHf0NcBvz7jFSxcokpiX6gou8kWg5tUv5mx8hoAC70A+59owwccaDHF4tt4XDF22u
- VviVVD1/zqpy2orPjDCqNtZk07KraunOULsCSxlkXy1s8EKASP5cxoUBsk8xLXK5++DKYwhdA9J
- QktIpA3wFl7tFXd5M8tlT9njJ16CBZ6q4uosqhgj2O2xCVl9HsjN9XKDt2b3Cp4igF+XJYTf1pF
- I/iS37tLmMzzKopGOGEn/AshH23Pxgfd3+TAV3BIEFF3DRbPegKXOMddFXaiqXArWaRQcvb86CU
- doNZ4EGD+PECTxv9uezasW+FazpQ4l+MPJE8UZY9NGklKpRdek6JwjLJ+vSj27S6kik4sPq3l4Y
- 1tloiDn3B47SgIHOWoQ==
-X-Proofpoint-GUID: n-1q0_Zf3pkcFsago0eYtIRG2cqTE_dA
-X-Proofpoint-ORIG-GUID: n-1q0_Zf3pkcFsago0eYtIRG2cqTE_dA
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=BqU2WV_vvsyTyxaotp0D:22 a=VwQbUJbxAAAA:8
+ a=tgYQ3KPRjoK8v3f40AkA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: iCNyUhyGggWiYLZ2D6bKYXaPnkemGyEi
+X-Proofpoint-ORIG-GUID: iCNyUhyGggWiYLZ2D6bKYXaPnkemGyEi
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22306-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-22305-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[oracle.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oracle.com:dkim,oracle.com:mid];
-	RCPT_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_FIVE(0.00)[5];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	PRECEDENCE_BULK(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: CDA0A2D52D4
+X-Rspamd-Queue-Id: 3F25D2D52CD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, 23 Feb 2026 16:44:59 +0100, Greg Kroah-Hartman wrote:
+On Mon, 16 Mar 2026 20:23:29 -0400, Josef Bacik wrote:
 
-> ses_recv_diag() can return a positive value, which also means that an
-> error happened, so do not only test for negative values.
+> tcm_loop_target_reset() violates the SCSI EH contract: it returns
+> SUCCESS without draining any in-flight commands.  The SCSI EH
+> documentation (scsi_eh.rst) requires that when a reset handler returns
+> SUCCESS the driver has made lower layers "forget about timed out scmds"
+> and is ready for new commands.  Every other SCSI LLD (virtio_scsi,
+> mpt3sas, ipr, scsi_debug, mpi3mr) enforces this by draining or
+> completing outstanding commands before returning SUCCESS.
 > 
-> 
+> [...]
 
 Applied to 7.0/scsi-fixes, thanks!
 
-[1/1] scsi: ses: Handle positive SCSI error from ses_recv_diag()
-      https://git.kernel.org/mkp/scsi/c/7a9f448d4412
+[1/1] scsi: target: tcm_loop: drain commands in target_reset handler
+      https://git.kernel.org/mkp/scsi/c/1333eee56cdf
 
 -- 
 Martin K. Petersen
