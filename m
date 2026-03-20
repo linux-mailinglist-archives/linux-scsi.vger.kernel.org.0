@@ -1,165 +1,206 @@
-Return-Path: <linux-scsi+bounces-22304-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22308-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IB4TEwWzvGn32AIAu9opvQ
-	(envelope-from <linux-scsi+bounces-22304-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2026 03:37:57 +0100
+	id EO6eMBrJvGmQ2wIAu9opvQ
+	(envelope-from <linux-scsi+bounces-22308-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2026 05:12:10 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA5A32D52BF
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2026 03:37:56 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B3F82D5B92
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2026 05:12:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 04BE9304E82F
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2026 02:36:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C198D304E817
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2026 04:12:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DBAA26F2BE;
-	Fri, 20 Mar 2026 02:36:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC05C2D9EE4;
+	Fri, 20 Mar 2026 04:12:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="U7BIXB1B"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SJIazOiv"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF11229B12;
-	Fri, 20 Mar 2026 02:36:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DEF231829
+	for <linux-scsi@vger.kernel.org>; Fri, 20 Mar 2026 04:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773974214; cv=none; b=Bw80DcSLALMPqdII7EhXGGwaH+Z+Nahq+Q2AIRV7ydWt4D36tEd421ON+GbGF0Zh5Tkx8ecgUpEA5HN5VCmZ7PVex2Xa505OpQujQVOHBChZvNhklUDR64fwlcEzoKZDBPB/ewW6ul03u8IZ0+meFHPSTz6YeSb/wjQ64MBKdb0=
+	t=1773979926; cv=none; b=sbs726izU/j90++yu9DEoiJ4256ZVhMtOWJ+VfMDNvHnbU3NjDbujZ9PbfG9zroYVi0nHJT0gHxYm6y4M/80WGAksuOORngR7Jog5Umk8MLS4jJxsWGJl9eBGyR+U/ScrBCSFvERsVSnCMqb9k5j/JXr3oan8XLoeVDX4+hMPzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773974214; c=relaxed/simple;
-	bh=QvD24xrW6XsNCfohBkSUAkLfVS9Y4DL0WSF9zNCjAag=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aXazp+cs0T5ix+NCUSufuSJCVnF/23ZmYaDDyPG11oFYFgwM9fBxcY8tywCqCuL3WroFZj8CDu8MmvHKIgJ6/qjxeifYNHYMDHf4xDMMxuSEFDGkxODZqRIy3j9fNje2CM28hpbIwSnwj+McDbX/qJaH6bollPH/BFAMoKRxezg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=U7BIXB1B; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62K0xker536248;
-	Fri, 20 Mar 2026 02:36:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=MqXfRDBGG87/SrtLAFzhwTQX9IwNVcNXwmFPCp3BRPI=; b=
-	U7BIXB1BCDeOOrd0ASDnLAtkDAVrPAnv2IzQmBIXuGGAhZ1RjITy112dlJjrXtBN
-	r8ecnRI96TKVcdAZTCQDdmN7A9FZVVbffIQxtjvphDrycHgPZo93uXwiG6ox3BI7
-	5G1/G8Hc5pYMUrIpdhv+LyHjAO6IRfCVjWwfjslFmkXH2wYyKsiihApLcQ/IUOVC
-	d2LDYaVRmLt2aAG8+zLM/EzJThLtM/YeMH6yRa3qcK5tWNS3Ja5SfQjIjFfOutQd
-	bSKFqhtQVGVV/X+si9eW1Ia8/cN8Czet18gEYb1tZGzldCfpIwVpIjYKuAt2LjEm
-	BOLHXf3U4lEVR6vfW0E8Gw==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cvyqc0v54-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 20 Mar 2026 02:36:36 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62K0GBZk014272;
-	Fri, 20 Mar 2026 02:36:35 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cvx4dnkfb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 20 Mar 2026 02:36:35 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62K2aIsL027944;
-	Fri, 20 Mar 2026 02:36:35 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4cvx4dnkeh-2;
-	Fri, 20 Mar 2026 02:36:35 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Heiko Stuebner <heiko@sntech.de>, Bart Van Assche <bvanassche@acm.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v3] scsi: ufs: rockchip,rk3576-ufshc: dt-bindings: Add new mphy reset item
-Date: Thu, 19 Mar 2026 22:36:31 -0400
-Message-ID: <177397022246.2845275.8137897176689873586.b4-ty@oracle.com>
+	s=arc-20240116; t=1773979926; c=relaxed/simple;
+	bh=cKZ9DA8d7AqMDYmuVI90xfeG8zhHCOGpAlGVK6XL3Nw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qg50ZGMSO67AKAfHDT/AIoSD8/yNOcPd/Lqc8bgzeGEuM9bRWvmc55uG4HNapl7jwxNmM9NJ91RxtITeUUJHXWoFXrMlR3dwb0mQ6Z+4j4Hqlj63ah8k5jid+YdmyFIQ4bQmaGABDbTcArZYXcEFQ+TiAH1B5/0s/3GZQdphxlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SJIazOiv; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-794719afcd4so12277337b3.1
+        for <linux-scsi@vger.kernel.org>; Thu, 19 Mar 2026 21:12:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773979924; x=1774584724; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QfUjsYd7dbRw2uqaXUlO8/PTLsP2ayWwRNJQy8iJQ8Y=;
+        b=SJIazOivsFRTZtr9cJTGqVb5ZgVCT7nrlN+pKrR7XJQ1oBzUVKFlixGg14X36AJidC
+         DLRhKpdtfddj6hcgPCA3aiJiqbawE+QhiyrigMH2bpA84FcUqUycy6pFSf9mQF22PDPY
+         rxdCTVI1QJ99sxBQE1P6ZZ6crLhwLW62q8Igk2EtrLwJxVhGH7loy1TN59Tz64xXCREz
+         niK5hVlBnryL+leKeC19AjjS/j4VRst1c2Xy9gz6PesFm1YxSJRI/h3uQGS15DUJfK9f
+         n2lKP3FHIUu674DQhVIbq1SaxKJ44RtGXZpSVOHkRWfTxQQmacoK68fvBShqvZhoOVqY
+         72pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773979924; x=1774584724;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QfUjsYd7dbRw2uqaXUlO8/PTLsP2ayWwRNJQy8iJQ8Y=;
+        b=bCO1vQQbaGF1+OIG0bANtAmxW9FNnfaa7eMRlPyejHYpUJ4WrRimLWemje7gEZPHNK
+         h5fImc9k4pKkDRnYJBCqgMN4akfbA6nYuv4m6EO26+2ByiRlyvsGr2CZXmKblWHGqKQ9
+         SpR0xHubvBzGkqDqLGaNofoAqQfw/SPeOFALh33alPAvNgsJVq+iyaRAcTEwwZNwpyhD
+         EO7AfvBboCVRjW7cfoz9fnxczIkEszWV+QeLe1VbL2QX8KRZe/s7aphBh2UtShjOU93x
+         6ziOzyNNGjP3aYyD4PGATKXN5+AP7iOxvasybPh9/bHrgMS2OHR8JIauDyE2KgUWTz4M
+         a1FA==
+X-Gm-Message-State: AOJu0YxTY13nqTP7zSBcpZoxNVtYLkIZX1dTJnB71KebcKMay/w87X8B
+	wLKFFGGxHOdg7zhH/iVXH9S/IzngxW21Wc/DW2wTxdK0PXaIgBaU36XB3ThCxSqK
+X-Gm-Gg: ATEYQzy9d5dGAr0wcf4nO8/Ue78SSo7AVVlCG/Lz1m3Js9fH9MIaWVjbPvSUd1bppOT
+	jmwPpSEL4Ceh/r8Qc/um1kEpfo6FsgELPhUZYDraVZsxr4DsyQj4/OIsssTcDFlwnOK/QoPpkGe
+	NTwJIiqmVR332hZ4iGPhToUrCc2KfjH9wu5JwzCeWLAh9W6gYN7bk/xBTGyXmgPlSFHGdB/BOWZ
+	9SvFeO8ziKD4ioMpeGjVVuMgc96ELVqS//0tLyYUHAAThD8VDTRV0VtRsmwII+C9jtsVYft1xmW
+	j2zc4E9Z3Dso5y6lU2EsollDQJoIKB1P/PpNDXqVAzzq0CmdBRNNWNrrO1MbtOoG3OOMOgAz5Ok
+	yp9PTAJzNItN96xGFvMKVraSu8GR+khgXLzH7OeOZaAMFoKvz53WfGZHtOb+i4mdes/Kcl9gnfI
+	ILLJfrTydu0NVDQMq62ap2yRikzwNKssXzuPkKInW2GLakHSMkx4HUvYU=
+X-Received: by 2002:a05:690c:1a:b0:79a:67a0:adeb with SMTP id 00721157ae682-79a90c26448mr17621307b3.50.1773979924411;
+        Thu, 19 Mar 2026 21:12:04 -0700 (PDT)
+Received: from ryzen ([2601:644:8000:5b5d::8bd])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64eabe7e343sm719089d50.11.2026.03.19.21.12.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Mar 2026 21:12:03 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-scsi@vger.kernel.org
+Cc: Saurav Kashyap <skashyap@marvell.com>,
+	Javed Hasan <jhasan@marvell.com>,
+	GR-QLogic-Storage-Upstream@marvell.com (maintainer:BROADCOM BNX2FC 10 GIGABIT FCOE DRIVER),
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] scsi: bx2fc: use kzalloc_flex
+Date: Thu, 19 Mar 2026 21:11:46 -0700
+Message-ID: <20260320041146.46873-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <1773368467-109650-1-git-send-email-shawn.lin@rock-chips.com>
-References: <1773368467-109650-1-git-send-email-shawn.lin@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-19_04,2026-03-19_05,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 bulkscore=0
- phishscore=0 mlxscore=0 mlxlogscore=984 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
- definitions=main-2603200019
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzIwMDAxOSBTYWx0ZWRfX/qgaAJtOaN03
- jC14RcM1IXiaqoxIasGPyIwXgKR7YLYx9YIMTh4W7/pc5LgFxz8F1/kvh4MuAdA6fLNNs83cmK8
- uOTCRmvB2ULRoJSKmvSVgkdY+vSCZ4tVu0MzPJexd7BAH+9oTm8XWNlZnN4jYvE8VQYDSXtF3yK
- cNKpJEyUZHVPBLpWqKyGIiwL5ECoBYhi9Xl5Q7wWFZ1O4eTDmIvTYOo5wEqwq5FyxJgynWHS5KA
- 74dLFcBhfI0lzuCrbn/StaF1BT7F0f0Aj9IEdFtdsXm7Qa/29E4aQxjNdFIdRHCqNa1np1akczU
- UCgjsN9g94jPPk8B3Xh/Q33RGFlrrihFohtO1acjcaQS2bbEV5Ktu0MGscm6Nz492YkMURkNV/W
- PyaIh/Yy/cXPYaL5u8RcyGqzEK3wGS7uuosT3o/6yssR+jGW2+355wTBiQJBSeLDvxI0YrYPemd
- CVb6+e0mlQsbwgrwNlA==
-X-Authority-Analysis: v=2.4 cv=J8WnLQnS c=1 sm=1 tr=0 ts=69bcb2b4 cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=BqU2WV_vvsyTyxaotp0D:22 a=VwQbUJbxAAAA:8
- a=g6HomjI_0XDERytIjeEA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: uUqhXOy5OC20BEI76Y1a1ynCUPQ1vyUV
-X-Proofpoint-ORIG-GUID: uUqhXOy5OC20BEI76Y1a1ynCUPQ1vyUV
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-22308-lists,linux-scsi=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[oracle.com:+];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22304-lists,linux-scsi=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oracle.com:dkim,oracle.com:mid];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.994];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi,dt];
-	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: AA5A32D52BF
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rosenp@gmail.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-0.958];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 2B3F82D5B92
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, 13 Mar 2026 10:21:07 +0800, Shawn Lin wrote:
+Avoid calculating sizes manually.
 
-> Add the mphy reset property to the devicetree bindings for the Rockchip
-> RK3576 UFS host controller. The mphy reset signal is used to reset the
-> physical adapter. Resetting other components while leaving the mphy
-> unreset may occasionally prevent the UFS controller from successfully
-> linking up with the device.
-> 
-> This addresses an intermittent hardware bug where the UFS link fails to
-> establish under specific timing conditions with certain chips. While
-> difficult to reproduce initially, this issue was consistently observed in
-> downstream testing and requires explicit mphy reset control for full
-> stability.
-> 
-> [...]
+Switch to flexible array member so that it works properly.
 
-Applied to 7.1/scsi-queue, thanks!
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ drivers/scsi/bnx2fc/bnx2fc.h    |  2 +-
+ drivers/scsi/bnx2fc/bnx2fc_io.c | 14 +++-----------
+ 2 files changed, 4 insertions(+), 12 deletions(-)
 
-[1/1] scsi: ufs: rockchip,rk3576-ufshc: dt-bindings: Add new mphy reset item
-      https://git.kernel.org/mkp/scsi/c/bdce3a69c578
-
+diff --git a/drivers/scsi/bnx2fc/bnx2fc.h b/drivers/scsi/bnx2fc/bnx2fc.h
+index 8c8968ec8cb4..30d8b563db0c 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc.h
++++ b/drivers/scsi/bnx2fc/bnx2fc.h
+@@ -281,7 +281,7 @@ struct bnx2fc_cmd_mgr {
+ 	struct list_head *free_list;
+ 	spinlock_t *free_list_lock;
+ 	struct io_bdt **io_bdt_pool;
+-	struct bnx2fc_cmd **cmds;
++	struct bnx2fc_cmd *cmds[];
+ };
+ 
+ struct bnx2fc_rport {
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_io.c b/drivers/scsi/bnx2fc/bnx2fc_io.c
+index 9c7a541a4523..dd1c4b3232e1 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_io.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_io.c
+@@ -213,8 +213,6 @@ struct bnx2fc_cmd_mgr *bnx2fc_cmd_mgr_alloc(struct bnx2fc_hba *hba)
+ 	struct bnx2fc_cmd_mgr *cmgr;
+ 	struct io_bdt *bdt_info;
+ 	struct bnx2fc_cmd *io_req;
+-	size_t len;
+-	u32 mem_size;
+ 	u16 xid;
+ 	int i;
+ 	int num_ios, num_pri_ios;
+@@ -231,10 +229,8 @@ struct bnx2fc_cmd_mgr *bnx2fc_cmd_mgr_alloc(struct bnx2fc_hba *hba)
+ 	BNX2FC_MISC_DBG("min xid 0x%x, max xid 0x%x\n", min_xid, max_xid);
+ 
+ 	num_ios = max_xid - min_xid + 1;
+-	len = (num_ios * (sizeof(struct bnx2fc_cmd *)));
+-	len += sizeof(struct bnx2fc_cmd_mgr);
+ 
+-	cmgr = kzalloc(len, GFP_KERNEL);
++	cmgr = kzalloc_flex(*cmgr, cmds, num_ios);
+ 	if (!cmgr) {
+ 		printk(KERN_ERR PFX "failed to alloc cmgr\n");
+ 		return NULL;
+@@ -255,8 +251,6 @@ struct bnx2fc_cmd_mgr *bnx2fc_cmd_mgr_alloc(struct bnx2fc_hba *hba)
+ 		goto mem_err;
+ 	}
+ 
+-	cmgr->cmds = (struct bnx2fc_cmd **)(cmgr + 1);
+-
+ 	for (i = 0; i < arr_sz; i++)  {
+ 		INIT_LIST_HEAD(&cmgr->free_list[i]);
+ 		spin_lock_init(&cmgr->free_list_lock[i]);
+@@ -292,16 +286,14 @@ struct bnx2fc_cmd_mgr *bnx2fc_cmd_mgr_alloc(struct bnx2fc_hba *hba)
+ 	}
+ 
+ 	/* Allocate pool of io_bdts - one for each bnx2fc_cmd */
+-	mem_size = num_ios * sizeof(struct io_bdt *);
+-	cmgr->io_bdt_pool = kzalloc(mem_size, GFP_KERNEL);
++	cmgr->io_bdt_pool = kzalloc_objs(struct io_bdt *, num_ios);
+ 	if (!cmgr->io_bdt_pool) {
+ 		printk(KERN_ERR PFX "failed to alloc io_bdt_pool\n");
+ 		goto mem_err;
+ 	}
+ 
+-	mem_size = sizeof(struct io_bdt);
+ 	for (i = 0; i < num_ios; i++) {
+-		cmgr->io_bdt_pool[i] = kmalloc(mem_size, GFP_KERNEL);
++		cmgr->io_bdt_pool[i] = kmalloc_obj(struct io_bdt);
+ 		if (!cmgr->io_bdt_pool[i]) {
+ 			printk(KERN_ERR PFX "failed to alloc "
+ 				"io_bdt_pool[%d]\n", i);
 -- 
-Martin K. Petersen
+2.53.0
+
 
