@@ -1,329 +1,189 @@
-Return-Path: <linux-scsi+bounces-22407-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22420-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QFhiNxkswWmbRAQAu9opvQ
-	(envelope-from <linux-scsi+bounces-22407-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 13:03:37 +0100
+	id kGTqG0hnwWliSwQAu9opvQ
+	(envelope-from <linux-scsi+bounces-22420-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 17:16:08 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 579262F199F
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 13:03:37 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14D3F2F7D36
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 17:16:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B02183061204
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 12:00:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2232D30D8C38
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 15:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1040339B97C;
-	Mon, 23 Mar 2026 11:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FCBE3B634C;
+	Mon, 23 Mar 2026 15:38:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eYK0Xdvw";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="UNYNkIPK"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="mgU9aFrC"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774763AC00;
-	Mon, 23 Mar 2026 11:59:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774267193; cv=fail; b=SegZZj08qsrVUIdCVw6FO5u5isTs3enoh2wR844HjKnM6oWXhW8wCSlGfmZhtDlEjciVqVDJOXz6RlU3pOB+QSGfoir4KWbouDwJPinUQxzQSS2sYKuUso1XbXZYYTHk7a81Tk/qxB3mOt1P5fD8dLn5auk5jT8U1vtjdKZ7zL0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774267193; c=relaxed/simple;
-	bh=KHFOG8avcp1yF8JRyhuz4CU7+lnI57cXaSnL2tnSk/U=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=CGcE+Qsj3bRHkdQVIjCI8ygrkmhTnYLqeLWmRXNgBeckvZiU6hQ4QuBKpgAS6PLccm6vGlpoD+8J5VkCYFDpJZgqEAsLKG+7HnY9/d9gK2ahEVJ5MoqGbS+HQ9KraGFp7E10d5sNjsyA6YrsqgMUBmGs4GzKOW/68oPJMe9HCds=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=eYK0Xdvw; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=UNYNkIPK; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62N1Sxqp411577;
-	Mon, 23 Mar 2026 11:59:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=YtSXgVYhdwpLrLm8I2X047nIgDZXiG0RLApxAaRT+Fc=; b=
-	eYK0Xdvw1/gunjyXmHhZtp+P6LmBsShioN2nATttsaJfje25m1qK5Gb4qY2R6s0J
-	kp+7oXDsThSVA2UuraX10C9RWbaVi6mOdPTn/Q2ExirSxKZUdCs8F9BVCGEirakn
-	OXS2vE5U03Zt0BYZcCOqYkBH3faHttLJfPze2gqOT8gZv0tt/RA2iiGPOvXe7Vtj
-	dF7Q6QJ+s0ZjxQYwDToHNi7j/8Sp5jQ+kvedstrwNMk1Kn+trZUBX02MXe4p1tLE
-	RKSjxiBA12QFasQmLIiKGleciKUGFPSHSSoSr1TtALYBfs67RQ6Qmmg9zNuXNGOf
-	ywiUdxUSxZ3FNSnyEA+qRg==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d1kvnj1bh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 23 Mar 2026 11:59:34 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62NBCNIN038940;
-	Mon, 23 Mar 2026 11:59:33 GMT
-Received: from bn1pr04cu002.outbound.protection.outlook.com (mail-eastus2azon11010060.outbound.protection.outlook.com [52.101.56.60])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4d1hs8exrq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 23 Mar 2026 11:59:33 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XH0bFJzn6X1YFvZh8dfLn2fPP88sqBcdhXk1DASg4UZEhOQUni6kHZ6Cgmy1atadLAp3jpMTVAIqEcQeD5THIv/zwn3ucGFcRedAV68Yt/Yu48i5K7JBvWZsQHGkuBZ1Kaui6A3UVSdLiDKLjtTm4jkzS11vtbM1mPGsCjTeXptzPbaM8svlxbfN2PdS85CYz8QlwBRY3aUVPS84zt9gDxRlJm3GvjiW8gn6PUxOEZnFUNDxtT3oDJOrMkcbiC1RWhz//j4XzStj1sWoIOyr7h42MvW38XdKo9wkQVx05az67QBGtWYLw2Qu01KDzO+2MlHI1Nv9T5jh2BO0nvYfBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YtSXgVYhdwpLrLm8I2X047nIgDZXiG0RLApxAaRT+Fc=;
- b=laUQJQLcJ5U/XEYuJEPH+cWAfqdiKV+56fXHR2uuDJzQVRPdz3neTpP3Ez4dPNBfsqphi5hOV18bjhXRySgDIWFlZHOZOkKLuB1sV7jhUHVZtxPo250Uu9lXoVX+ZuxLfoNtK+5JiYg3eArnofPYGnsycJQJevWoLgaEN7U8uRmKi/GlWPOuaQm6S4CuAwUlBsWR5aR19RAmquE1cdhHta/RcoRK/zXuB7Q4owDvHujvsl+swh/vkv0qS2fRZ6lvCpLKbdQeP8UWQqbk4u4dNaw2fi2GkJo25bhZ3MYvtuJCp98+etdZAPiZRXWJFDAR+U9yo0tW+KVdwt0CR+W1Dw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YtSXgVYhdwpLrLm8I2X047nIgDZXiG0RLApxAaRT+Fc=;
- b=UNYNkIPK7j0VH3YNN7aP9KPvmrzi2GoDJenq0uBUlcygczCIBgjTRgS6+xJe3FbhAV/1Pftw5ykUzmP/jiIyWr+KSQn5FNSXHDpDL66iWzEKopHFRyQ3jaJ0q8kkbnOWjbKKQhY/bRTzlR00A8SFNSZHe7Jny7rBVXANSAmvHmU=
-Received: from DS4PPFEAFA21C69.namprd10.prod.outlook.com
- (2603:10b6:f:fc00::d54) by MW6PR10MB7592.namprd10.prod.outlook.com
- (2603:10b6:303:242::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.25; Mon, 23 Mar
- 2026 11:59:30 +0000
-Received: from DS4PPFEAFA21C69.namprd10.prod.outlook.com
- ([fe80::5266:1601:5598:3f0a]) by DS4PPFEAFA21C69.namprd10.prod.outlook.com
- ([fe80::5266:1601:5598:3f0a%5]) with mapi id 15.20.9723.030; Mon, 23 Mar 2026
- 11:59:30 +0000
-Message-ID: <cdb891d6-3f5f-4bcc-8d91-fb46dbd1fe55@oracle.com>
-Date: Mon, 23 Mar 2026 11:59:22 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/13] scsi: scsi_dh_alua: Switch to use core support
-To: Benjamin Marzinski <bmarzins@redhat.com>
-Cc: martin.petersen@oracle.com, james.bottomley@hansenpartnership.com,
-        hare@suse.com, jmeneghi@redhat.com, linux-scsi@vger.kernel.org,
-        michael.christie@oracle.com, snitzer@kernel.org,
-        dm-devel@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20260317120703.3702387-1-john.g.garry@oracle.com>
- <20260317120703.3702387-13-john.g.garry@oracle.com>
- <acCbsAISEJC2VfwO@redhat.com>
-Content-Language: en-US
-From: John Garry <john.g.garry@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <acCbsAISEJC2VfwO@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DX0P273CA0088.AREP273.PROD.OUTLOOK.COM
- (2603:1086:300:5d::8) To DS4PPFEAFA21C69.namprd10.prod.outlook.com
- (2603:10b6:f:fc00::d54)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC56D3B5846
+	for <linux-scsi@vger.kernel.org>; Mon, 23 Mar 2026 15:38:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774280287; cv=none; b=ajGw3t6BB4RoZN0du723cU4f4SMiFay7Ig9pVJx2xE39jJcoZFvJG/fbvNtn/63h8YUCFnN0Cj3Ol45G8dc+U4y/Yej5+53j7nmHoIQFsZ74TgC55ihHChr1pwI5VukwaxLWIc+q46hORx4wJP2NHxhUYCBVZ++pZ9EQzZ0rQ6o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774280287; c=relaxed/simple;
+	bh=vToF1UbNvL4l1OkVwlOI7+XcnxHkjKZMzjHswh/EJ+k=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=kzfm7YwHYdrYW2Jzwm+IaAzJNBdjtDLW/PSB5T/BOP98Q3bi/cru4eBnDfV1d5YB18qLkpshVVfF2NAPsReMOyvy9NLl9J7lKRsBrVtWizwdaDE0RSZsk0miy3maflExjQrKZ7jGRLLqEheDDBQpVuZ0EqDsxSlym2sVDX1IPlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=mgU9aFrC; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20260323153802epoutp027af906a4094077a23c2a19673d987c62~fgoREF4ms1733617336epoutp02z
+	for <linux-scsi@vger.kernel.org>; Mon, 23 Mar 2026 15:38:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20260323153802epoutp027af906a4094077a23c2a19673d987c62~fgoREF4ms1733617336epoutp02z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1774280282;
+	bh=MYU9K1BczlLtBMfJPDu28QIk9pzoA+hXl3yf17nC2HI=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=mgU9aFrC+5Kx+21CCBQ48vtUtevP0XGV5aHjupTGFTw7s0wbx2FYZ7piHu2gEGNx9
+	 7FiJ9iRzTsn7N6OtZVcQFwqx9+/yRy1FbPgDJReQh76dJWCUi3xQdbS9llr9OgF8ia
+	 3KFTDuksHm5/ZDwJUU6SICm8wW+RY1yai4quNiMM=
+Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20260323153802epcas5p1bb1e979594c5257c037cdf6411e7a177~fgoQZrLX82373723737epcas5p1t;
+	Mon, 23 Mar 2026 15:38:02 +0000 (GMT)
+Received: from epcpadp2new (unknown [182.195.40.142]) by
+	epsnrtp03.localdomain (Postfix) with ESMTP id 4ffckf0KMvz3hhT4; Mon, 23 Mar
+	2026 15:38:02 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20260323123542epcas5p349d0e7c45d02ccaa06c84dbdf1777126~feJElRtj12139221392epcas5p34;
+	Mon, 23 Mar 2026 12:35:42 +0000 (GMT)
+Received: from INBRO002756 (unknown [107.122.3.168]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20260323123538epsmtip2099c850de3b514ee4ac3f5a0092dd02a~feJAkDKG92361023610epsmtip2P;
+	Mon, 23 Mar 2026 12:35:38 +0000 (GMT)
+From: "Alim Akhtar" <alim.akhtar@samsung.com>
+To: "'Vladimir Oltean'" <vladimir.oltean@nxp.com>, "'Martin K. Petersen'"
+	<martin.petersen@oracle.com>
+Cc: <linux-phy@lists.infradead.org>, "'Vinod Koul'" <vkoul@kernel.org>,
+	"'Neil	Armstrong'" <neil.armstrong@linaro.org>,
+	<dri-devel@lists.freedesktop.org>, <freedreno@lists.freedesktop.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
+	<linux-can@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+	<linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+	<linux-renesas-soc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<linux-rockchip@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-scsi@vger.kernel.org>, <linux-sunxi@lists.linux.dev>,
+	<linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <spacemit@lists.linux.dev>,
+	<UNGLinuxDriver@microchip.com>, "'Bart Van Assche'" <bvanassche@acm.org>,
+	"'Peter Griffin'" <peter.griffin@linaro.org>, "'James E.J. Bottomley'"
+	<James.Bottomley@HansenPartnership.com>, "'Krzysztof	Kozlowski'"
+	<krzk@kernel.org>, "'Chanho Park'" <chanho61.park@samsung.com>
+In-Reply-To: <20260323115848.ghdu4sbk75tvggfb@skbuf>
+Subject: RE: [PATCH v5 phy-next 09/27] scsi: ufs: exynos: stop poking into
+ struct phy guts
+Date: Mon, 23 Mar 2026 18:05:36 +0530
+Message-ID: <1891546521.01774280282025.JavaMail.epsvc@epcpadp2new>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS4PPFEAFA21C69:EE_|MW6PR10MB7592:EE_
-X-MS-Office365-Filtering-Correlation-Id: d51a1131-ddde-41ee-28fa-08de88d3a3e2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|366016|1800799024|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	nghQfpJDf62CMSvebag4Fyu1KRoxtTTl93H9m6N+q5XzpodNgdK/94IbpvHuzoHbyq0qELBlspGA9WtPJoQnnsqwgyTlA1QtH6gM4mxdw4AfdZ2SbWG1f2fQs3ToCdxHF1/0bYksUExvEUaPBfDHeTmwvtxr7a0ItRdaqfCxjr4wuUcID+JRF/oVgv9hqkhjRzMocmMv0wIh2ynaYD29tD0tv/MRgyYu5QV3ivej/6fuXxW55JIc0Gl9bdAvXSJVZjsEp1cRg1vZKEFxdAWilBANSPclM1sF7jFBACTJqxvZZaBiqu20lZ6GP/rBagpNgghSmc0wSe3AqI66VtW4EgWfoAblQz6VV6QiRbSEp30rxjO/wL8/w7uz2HSZ8RX0HYih4oTSmVwTsAyXgdSF4m7m/OB1i0n5zvLAGK6DK9Tkm/8GgNfNnVvA7KE3v/pm8v9it5AfaBLwwdLVyLQorBfieHrQLCtHeW+EWvYsCPoM0S6zTHCEF/J0IEHKR597zHCw3rCb74l2i2aBE68rSkHa2oCjJFOuWih+7fb/27Ly/YavuAxBZ7OxUsYXZCMuz0Ark7u+PHFwvYFpbcbHkBDaEzKexg+oJuXd8pY0zlUYOZiMGeCMhNkQuUHLSUkjqO4pS2Cwl9whaCPJlKdbY2aCNioT7lPrxw+vN1IhcQAKoF0Rb0jPkHXmKlZDkQRXcVXlZoX9CH37yUw+nizXtWlmm1mg8wafCkOvjLY1F5g=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS4PPFEAFA21C69.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VXpXLzBEV2pqenJJeVdBVWVPZjZpK0o4bzdpVVE0c3hrOFp5Q0V2bjBGTWlp?=
- =?utf-8?B?SElPS2ZuMkE0WnZpL3lXV3dVZnFMKzhqL2JjUWMrQmY1MmlFOVdVaWxnV21E?=
- =?utf-8?B?NWdYbVV6OFN3UUVmNGZWQitHNGFaRDhPZzhick1rVXpOeDlrbGxDZWZuemxt?=
- =?utf-8?B?MnRWR1IvUEhlVnZDeUh5cW93WlZSNnpNb2JPZjdmM1ErMzRrMmV6MTRSdDht?=
- =?utf-8?B?Njk0ZFFsb3dxTEhwMWZFT1B2SERWVXJ4OXplbmlTeVpMaU9kOWdPK05HY1lK?=
- =?utf-8?B?WSs5RTEzSjJNVHlRRE9NMitIT01ORVR5bytlSmdEVUtrOEEySlY4WnM5RDlW?=
- =?utf-8?B?eUZlZFVhNXNhRlJmckU4SVM2UGpYc0pBeWpjbjhYeEJrK0oybGFTTWZybURm?=
- =?utf-8?B?Y0VqdG9EWXlpRnF4U0NtNHBybjMrbUd2dnl6ekdtS2lQa1BoWE1tTVNIckg1?=
- =?utf-8?B?eHhPdmlMSTNyMGEvaTVaK1Bya0VBTkJ6WDdIc04vLzdVT0lIcnZja2ZacEsv?=
- =?utf-8?B?Mk42T09pc2h0bUw1R0NiOFBIZzh3dnJaTEJ3V1p5UGdZeWtkMzNzcFA3MVhl?=
- =?utf-8?B?c1pNVVpXZWxjcXBrK1lLY1V4U015L1B3QVdBSmFSV0IrUCtHWi9jc0lGRWwy?=
- =?utf-8?B?bEl0M2drakFWVmh6azJSS216ejY1UkVTVXhOdEJFdG1vekR1a29kekdjVy90?=
- =?utf-8?B?WElkdDM4YzdHSG03S251ak5IOEorUTRsOXNUYktQUW5EWDhQeFAzbitQOGpn?=
- =?utf-8?B?Q0o1bkhjK2FnRUVYZnBJd0xFMVFrK0hhd0paYXZYSXFYMVNtYUVtUDF0SlNX?=
- =?utf-8?B?UkdnbkhjTGxZbHVPNEI3cW5BenAxRmlWZXBKRStpaW14MWRwSjhLY0JKeWV5?=
- =?utf-8?B?cEZFN2RKRGdTVGpURlRFRTY4d2d4eTYwanpkeU5GTXFXQ0xPemJtYlBnK1By?=
- =?utf-8?B?U3d0UUQvWVRvTXh3R2wzTE9qaHNWUWhtdmZwZGViTzlSSG10UTZ4WTNsS1RU?=
- =?utf-8?B?SjFZTzF6OEJmUlVGMnZuK013QnZqVW1TaFl6ZFJrbHB4M2VuTlFLdGVGcnN1?=
- =?utf-8?B?eHdwRE81dEtEWlhMZDQyM3ZWdHVDa2JNRVh4Mndvcnk2QTZJbG9MOGNZWStL?=
- =?utf-8?B?QmRqNGxwWFBYZWtrd0RTbmNnRkgrWUlKMTVqK09aZEM3aUlGMkgrcjd1NTB1?=
- =?utf-8?B?RVBZMC9INnNYMW1vK1VSVlNHQk93Q3ptcGxjVFViNXFsaXlRS3cyTVJKNXlS?=
- =?utf-8?B?RUNFQWN2aDFCNUZ0TDhhRGM1Rk1ZMHVxa0g4T1pZMCtEVlBIUUxQbURTK0tY?=
- =?utf-8?B?c1o1bnA5V3g0YndCSDN5TTcxc3FrTlBwYmY5MkVUR2ZTdU5RZVhGV2JPb0l5?=
- =?utf-8?B?Q2JnSEtNY0tIeEJTYUZzVmc3aUVXMzVrenIyTWxJZHU5Z21LajQ1a1h2d2py?=
- =?utf-8?B?NXVVR1JaMythSXFnaHo5NkVSSUY1bEpvaWR2KzVPaTNwUFFMRlZ3WWdIU3hp?=
- =?utf-8?B?T0VoRzVENW9YdkJ4NmEwYWdPRFg4Vkg5ZjMxNVl4K2lTOTZvbC9GZ0l4OE91?=
- =?utf-8?B?TjZiVncrQU8yeEdvT016cjhncHFISW1uLytOZisybUtWVW9ubFNEV011TTNG?=
- =?utf-8?B?WGdBTjdmdGFoMkhiWmJmcXNGY2I1K2VvRG1WeTM4emZXZTJzNmlJTkJIZ1FP?=
- =?utf-8?B?eE5FM21vRGM2QTlIUXdFbXBMYW56NkRNODduTkJ3QVNxcnZrVWFZVVovd2Y5?=
- =?utf-8?B?WkV3OFZLQlJKTml1SjdKM0lVQTN5NUNyL1k2MFdIU2ZObmJLTzdtcnQzTFBv?=
- =?utf-8?B?cmdZMnlCaUJCQkZLYmtGRkh4bHozYlQyM3FVZlo3eDVQVHdXTExtUGhZazdW?=
- =?utf-8?B?cXhOeEZMUVFIcTBtU1FLV3NnYkVxQUJxYXRaa0RqZUhrUFpTYVRGQktIaGEz?=
- =?utf-8?B?d1hwSnhzcVFtQUZBamd5bjRPOGtNVU1EK2kxUy9lKzFBb2hwUWNHZTdsNW55?=
- =?utf-8?B?WDNUNUlUL2pmZjhMQXdkTTljRHBieUNiWDk4Z1Z5ZCtBMDFJSkMzVDl0S2x3?=
- =?utf-8?B?ckdQOWZkL3BDVjQ3MmQ5V3huWnd0WGdhQmlDdW5NUC9mellrUHZKWTdjR1Zy?=
- =?utf-8?B?cDZROWlHRm1YOGpvSGd0WC9LUVROTEx1ZHNYdDdyT2dkQU1BUGc4VkUxWUV0?=
- =?utf-8?B?QzJWamR4ekg5eUc3bGlvZkxlV2dPbDVERGROZlQxMGlXTU16dDBta2U2ZkQv?=
- =?utf-8?B?dlB0Q1B6SGdUMkdwQ2JrZ3hRZlZDaSttbEpvNng4RHZoZW1aRDlFc2ZBRzhP?=
- =?utf-8?B?Vk9KN0JyOVZ6TzEvZHY2ZmhpY3AzcHpMQ3ZrYzVFbjhQeFVBOW0rQT09?=
-X-Exchange-RoutingPolicyChecked:
-	L2L1XnKaSYdfxuS4FnnUhb9TN5yYHTGZ9Nd5sa27vVV7dSzwa5Pz9IkRkV24/Nnh0TvaSRo2VUTHqSH7F4r1TbyiKP5m80XiFrwgIqSzie2DJaA8Jp3o//t6SKmhgKsjRtrDGAGmjApj8NZXG32ux9ulRZUGUX+GDeDTaW7fP+xKCb4eKoI2AoBzSbuJAFd3/eMoKbhEGbu6KYykKy8cL4jmaBbfWzyQtFptEXPofbHgbi5tAAXMbZav+otKI/teuTS2H361tyeHJWwq6jHTOOmdBGGr1Yvm9najc5c1fwAW30/8TVKj9JROAszUBxhJ4YsO4bglQLCPVpNEt4y2kw==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	t3xcDVRU1OrKDbh5KwNHE0piapM1QX2GaUvkvmiImOeqaH1IxS4yfgZ5soeVjnhAguiSa7r18a3CB6GspBsxGuTpYcM8Tsj3FxH/BiqgAi5Nz7bFF37sAlmswQ7LkWDnhNPDT6ZCKtcbGym7t2nC2CV6nPavknpOiCsrOHjrXP29GvOySHlCOykB37bLLBebADjKggGFNfX9b5tXwv2SC7RAYaakXEYSvK6M3O3rBf81a17L59stCR2gGjis7LCP71mHvgQYq1DsX4d1aghPFCsj718s0t1BKsSlJVAxQonW708jURm10w6FTbqX9aYhCXaxpSDP03o46n7JKid4lSwTp97PJvfpHBVmoyBtn9WDG9VXbF5/nHhjVjrkOMbPAPscLsKtKcr5P+6yleJ4ga1xfT1KaWZD7kzgCaSHH6IviP0cBrnJwU4Lx1j9g0UWoL9q9Vw3OTCe23plZbV7iQe3qM9oly5HmoQIKRH50EdGVz/YC0xOqUE+7n8v8SjplITz7OoiM1M+oAOMBzJunvWQwJ+c2vs+Hw/HaxEmmMUS8Wps7Q9Q7pccAWDUGjPLb9qj/mh2WEUCHncTj50IsHA7vWjOxYlygrwpPChdt5A=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d51a1131-ddde-41ee-28fa-08de88d3a3e2
-X-MS-Exchange-CrossTenant-AuthSource: DS4PPFEAFA21C69.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 11:59:30.5782
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l2vPkN2B1dw7OjLmN/jLjFlm9/xnNixirg0x6f4vDzZUgAvIec4x4D1OpVxbnEp0UbSU6O7XqIycecXGQFtinA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR10MB7592
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-23_03,2026-03-20_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 mlxscore=0
- adultscore=0 suspectscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
- definitions=main-2603230093
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzIzMDA5MyBTYWx0ZWRfX0YtQT7fmVDno
- 3dt/Dz55ChL5ROZqdrJ5XCPElCrt3aQMSmbyIyfdBINPv+E23IA8xjihCEGSHOOk0ZjX3Y3PNnq
- Y8BnEtChoSOa/mfSysnextVxLAPSbuf6D5fOKDIUPvjgObV7ZzoJqqRMY1Ish2nO34Ia3Ln8wru
- elQrhxd4IcC/lIUPlJJDQporRrBR/03WVYEy0vzknMJ5J3WN2nj9QrEPjxAhT4rY6jAm6560x+7
- DVU53ktiqU0lvJNU9IgbmdQ50WtmrMzzj8BQjthcGcmzkAQJ80HTqs1KCjkP19YKEe3O8XSMVX9
- YekCj+U+AXaqySfoPpzPT3/NCOXAoDNnaknj0ehr2ViebIMsZqswjSWaFMfaUSueCvfUFtOqxdV
- qonaCAnjvXEerGfJ92ohCLML+u+ZTYHvEdNTvX1hDndPsFEtUZHl48BsDeUVcZxWD+hDhLeO9q8
- 52lX8SpjODuG1Hi/GTcnzH2tga+16t30DtP9abo0=
-X-Proofpoint-GUID: tLtV08hGFbwDnLgLbGXo2Ci7bpYeqtTI
-X-Authority-Analysis: v=2.4 cv=GrtPO01C c=1 sm=1 tr=0 ts=69c12b27 b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=Yq5XynenixoA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=7Gl3-_t3PgB9XO-mQDs3:22 a=2znJukxa2pHsbButfqsA:9
- a=QEXdDO2ut3YA:10 cc=ntf awl=host:13824
-X-Proofpoint-ORIG-GUID: tLtV08hGFbwDnLgLbGXo2Ci7bpYeqtTI
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJoz1sM+EbPjkyDopxrfJVWkMJWdwI9AyWpAaSC6pgB9ZOp/gJXIgBltGJxFXA=
+Content-Language: en-us
+X-CMS-MailID: 20260323123542epcas5p349d0e7c45d02ccaa06c84dbdf1777126
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20260323115859epcas5p10177db12a2e8aee9578271ff1411137b
+References: <20260319223241.1351137-1-vladimir.oltean@nxp.com>
+	<20260319223241.1351137-10-vladimir.oltean@nxp.com>
+	<yq1a4w3l04g.fsf@ca-mkp.ca.oracle.com>
+	<CGME20260323115859epcas5p10177db12a2e8aee9578271ff1411137b@epcas5p1.samsung.com>
+	<20260323115848.ghdu4sbk75tvggfb@skbuf>
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
+	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-22407-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,oracle.com:dkim,oracle.com:mid,oracle.onmicrosoft.com:dkim];
+	TAGGED_FROM(0.00)[bounces-22420-lists,linux-scsi=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
 	MIME_TRACE(0.00)[0:+];
-	HAS_ORG_HEADER(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[31];
+	DKIM_TRACE(0.00)[samsung.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alim.akhtar@samsung.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: 579262F199F
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[8]
+X-Rspamd-Queue-Id: 14D3F2F7D36
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 23/03/2026 01:47, Benjamin Marzinski wrote:
->>   static void alua_rtpg_work(struct work_struct *work)
->>   {
->>   	struct alua_dh_data *h =
->> @@ -670,56 +179,41 @@ static void alua_rtpg_work(struct work_struct *work)
->>   	int err = SCSI_DH_OK;
->>   	struct alua_queue_data *qdata, *tmp;
->>   	unsigned long flags;
->> +	int ret;
->>   
->>   	spin_lock_irqsave(&h->lock, flags);
->>   	h->flags |= ALUA_PG_RUNNING;
->>   	if (h->flags & ALUA_PG_RUN_RTPG) {
->> -		int state = h->state;
->>   
->>   		h->flags &= ~ALUA_PG_RUN_RTPG;
->>   		spin_unlock_irqrestore(&h->lock, flags);
->> -		if (state == SCSI_ACCESS_STATE_TRANSITIONING) {
->> -			if (alua_tur(sdev) == SCSI_DH_RETRY) {
->> -				spin_lock_irqsave(&h->lock, flags);
->> -				h->flags &= ~ALUA_PG_RUNNING;
->> -				h->flags |= ALUA_PG_RUN_RTPG;
->> -				if (!h->interval)
->> -					h->interval = ALUA_RTPG_RETRY_DELAY;
->> -				spin_unlock_irqrestore(&h->lock, flags);
->> -				queue_delayed_work(kaluad_wq, &h->rtpg_work,
->> -						   h->interval * HZ);
->> -				return;
->> -			}
->> -			/* Send RTPG on failure or if TUR indicates SUCCESS */
->> -		}
->> -		err = alua_rtpg(sdev);
->> -		spin_lock_irqsave(&h->lock, flags);
->> -
->> -		if (err == SCSI_DH_RETRY || h->flags & ALUA_PG_RUN_RTPG) {
->> +		ret = scsi_alua_rtpg_run(sdev);
->> +		if (ret == -EAGAIN) {
-> This no longer handles the case where you want to trigger a new rtpg as
-> soon as the running one finishes. I think it should be checking
-> (ret == -EAGAIN || h->flags & ALUA_PG_RUN_RTPG)
-> with a spinlock held.
+Hi Vladimir
+
+> -----Original Message-----
+> From: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Sent: Monday, March 23, 2026 5:29 PM
+> To: Martin K. Petersen <martin.petersen@oracle.com>
+> Cc: linux-phy@lists.infradead.org; Vinod Koul <vkoul@kernel.org>; Neil
+> Armstrong <neil.armstrong@linaro.org>; dri-devel@lists.freedesktop.org;
+> freedreno@lists.freedesktop.org; linux-arm-kernel@lists.infradead.org;
+> linux-arm-msm@vger.kernel.org; linux-can@vger.kernel.org; linux-
+> gpio@vger.kernel.org; linux-ide@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-media@vger.kernel.org; linux-
+> pci@vger.kernel.org; linux-renesas-soc@vger.kernel.org; linux-
+> riscv@lists.infradead.org; linux-rockchip@lists.infradead.org;
+linux-samsung-
+> soc@vger.kernel.org; linux-scsi@vger.kernel.org;
+linux-sunxi@lists.linux.dev;
+> linux-tegra@vger.kernel.org; linux-usb@vger.kernel.org;
+> netdev@vger.kernel.org; spacemit@lists.linux.dev;
+> UNGLinuxDriver@microchip.com; Bart Van Assche <bvanassche@acm.org>;
+> Alim Akhtar <alim.akhtar@samsung.com>; Peter Griffin
+> <peter.griffin@linaro.org>; James E.J. Bottomley
+> <James.Bottomley@HansenPartnership.com>; Krzysztof Kozlowski
+> <krzk@kernel.org>; Chanho Park <chanho61.park@samsung.com>
+> Subject: Re: [PATCH v5 phy-next 09/27] scsi: ufs: exynos: stop poking into
+> struct phy guts
 > 
-
-Yeah, this is all tricky to handle, as the code in scsi_dh_alua.c was 
-handling the error codes with the state machine, and I want to move the 
-error handling into the core driver.
-
-As for your specific point, I think that ALUA_PG_RUN_RTPG can only now 
-be set from outside this work handler, and that should also trigger the 
-work (so the check on ALUA_PG_RUN_RTPG was not really required). But, I 
-think that I can just have as before (with the h->flags & 
-ALUA_PG_RUN_RTPG check)
-
->> +			spin_lock_irqsave(&h->lock, flags);
->>   			h->flags &= ~ALUA_PG_RUNNING;
->> -			if (err == SCSI_DH_IMM_RETRY)
->> -				h->interval = 0;
->> -			else if (!h->interval && !(h->flags & ALUA_PG_RUN_RTPG))
->> -				h->interval = ALUA_RTPG_RETRY_DELAY;
->>   			h->flags |= ALUA_PG_RUN_RTPG;
->>   			spin_unlock_irqrestore(&h->lock, flags);
->> -			goto queue_rtpg;
->> +			queue_delayed_work(kaluad_wq, &h->rtpg_work,
->> +							   sdev->alua->interval * HZ);
->> +			return;
->>   		}
->> -		if (err != SCSI_DH_OK)
->> -			h->flags &= ~ALUA_PG_RUN_STPG;
->> +		if (err != 0)
->> +				h->flags &= ~ALUA_PG_RUN_STPG;
->>   	}
->> +	spin_lock_irqsave(&h->lock, flags);
-> If h->flags & ALUA_PG_RUN_RTPG is false above, h->lock will already be
-> locked.
+> On Thu, Mar 19, 2026 at 10:15:17PM -0400, Martin K. Petersen wrote:
+> > Vladimir,
+> >
+> > > The Exynos host controller driver is clearly a PHY consumer (gets
+> > > the
+> > > ufs->phy using devm_phy_get()), but pokes into the guts of struct
+> > > ufs->phy
+> > > to get the generic_phy->power_count.
+> >
+> > Ah, newer version. Would still like an ack from Samsung.
+> >
+> > And I hit the wrong key, I did not actually apply this...
 > 
+> I will have to resend v6 because of an armv7 build error I've caused for
+ufs-
+> qcom.c (which doesn't #include <linux/interrupt.h>, and relies on a
+transitive
+> inclusion from <linux/phy/phy.h>). It would be nice to get the ack from
+> Samsung, but I'll send the next version in the upcoming hours regardless.
+Will review and possibly test on one of the board later tonight
 
-Right, that is a bug
 
->>   	if (h->flags & ALUA_PG_RUN_STPG) {
->>   		h->flags &= ~ALUA_PG_RUN_STPG;
->>   		spin_unlock_irqrestore(&h->lock, flags);
->> -		err = alua_stpg(sdev);
->> -		spin_lock_irqsave(&h->lock, flags);
->> -		if (err == SCSI_DH_RETRY || h->flags & ALUA_PG_RUN_RTPG) {
->> +		ret = scsi_alua_stpg_run(sdev, h->flags & ALUA_OPTIMIZE_STPG);
->> +		if (err == -EAGAIN || h->flags & ALUA_PG_RUN_RTPG) {
-> To avoid a race with resetting ALUA_PG_RUN_RTPG, this check needs to be
-> done with the spinlock held.
-
-Yes,
-
-Thanks,
-John
 
 
