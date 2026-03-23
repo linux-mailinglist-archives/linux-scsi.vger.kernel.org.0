@@ -1,145 +1,350 @@
-Return-Path: <linux-scsi+bounces-22398-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22404-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eDxAAUwIwWmtPwQAu9opvQ
-	(envelope-from <linux-scsi+bounces-22398-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 10:30:52 +0100
+	id QEEeAesRwWnHQQQAu9opvQ
+	(envelope-from <linux-scsi+bounces-22404-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 11:11:55 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6C3E2EF192
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 10:30:51 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6A582EFC6C
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 11:11:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7CC6A3019457
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 09:25:18 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 22894300DCFF
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 10:10:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F216D38655F;
-	Mon, 23 Mar 2026 09:25:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="C4K50jfl";
-	dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="VhCA2s1/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26B0A38AC75;
+	Mon, 23 Mar 2026 10:10:31 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.100])
+Received: from arkamax.eu (128-116-240-228.dyn.eolo.it [128.116.240.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4516B370D48;
-	Mon, 23 Mar 2026 09:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.100
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774257914; cv=pass; b=L2rXcaHKzoQLkhGNqeaj+1v44e5w39uHA31jUjOSgzkNwR46Om0WWUxBFhGmB1k/GKBR1M/ZfwdzUXrptujxKT8zqIvsCBuiqI0Gtx7a5gkSSpQw+8bx24SdYObUWh+kq3tCT7ZDjSuX/36F6HwWO8J4RbELffuJAKueTQPFfOw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774257914; c=relaxed/simple;
-	bh=TL2pAP58JGbXAJYSWIcnzBdfKYxlVXtPUI89vibJ+O4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mPfowvrjLCFSB1Td8n9stV9jchnoM5iAzsK1x4WyBz5xmoTOCeZ34tQ9Ca+g0Dt4lbfIog3Xm8IHLp/3dsT/l2p6vsmZRVJwzGA5FKyJrPobsZg70jdrO68hdETclwsZ/ziXsqu730lDPKIQAfEvby4jX1ZSorGy2ll5FOqncKw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=C4K50jfl; dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=VhCA2s1/; arc=pass smtp.client-ip=85.215.255.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iokpp.de
-ARC-Seal: i=1; a=rsa-sha256; t=1774257907; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=CYnq/foWF0ea18K7GXv4UYI9nwzGNXgxY6Napq9McF9Nlo09uILxr9bv4jDvXMyf2F
-    G8dBW1g1H4C90cWUZv6xL+smiTA2CmW5T4iplvGbn3Mqa2/jS5KIhzvZmoPJFHUM0Ubn
-    u2hBRciCJexIxPTMbEyjUew7N2EEGm30EgBx5R7MI0s0wuk6t0NiUEla1utB/tnWxQ+N
-    yX3mr/bjxOf/S2tnXIKNiKXbpSh4M3Yq0sqX/wd7ujhvuGOzgkaQgsv4wdBRx9crLaoa
-    5qpiPwvY0b7qaNFzdyFhvjIdaPGUw6f3x9xqfPHzcMZSpn2fc1pzKvEOIFnnX2ooZv4t
-    Dk/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1774257907;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=TL2pAP58JGbXAJYSWIcnzBdfKYxlVXtPUI89vibJ+O4=;
-    b=JNpan1qt+SmL2WkGLTZEeSFaduzlfLdtUZGpVwH1oR6YcZp4wNpDEdL9Zcp0Q0zevV
-    Xbi7DxfUE5LBs+FSROiUcPmOVmipPVs9jceIvmaM8IXDfIYW6XrK3og6opK6OQhyG6xc
-    9YRFltQjOoUL/H0mCiQ6961jTzfN3vb+ZiMS19MP11VlfPH7KgK+8ry+nzMHbRryVIaM
-    2TdVZ3m7+e8gUGlSB66bmOg4fI5GDb+umSGrdS23SqFZ4OyJUuXjQGGxoPeYN0VlOXAE
-    NIqYBLqmDwON+hdD12wbUCFcRmyX2e29BaVgE15rCgVYunbhz7tluGTAMMF4EGnW5YOf
-    3Bag==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo03
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1774257907;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=TL2pAP58JGbXAJYSWIcnzBdfKYxlVXtPUI89vibJ+O4=;
-    b=C4K50jfliln1nZ5NKDuyUCb/GjL/WYiT6TIej4X0mVqR3xwznX851WuqmdgKEpC/ox
-    zVhD3nYcXB1xDfqPbTpsZwMH5Qh6EpKWkWz1/Gz9pdI46z4SvCCvIJouT5+TYgHkHTx8
-    hWvHoR1c3tUlfJ4gq5OJKkGmbwCNIcyOgLkMnc1y8dhcZibfgXFCXbYNyYywJ0EIqEyq
-    Hc69bgvedK41WxMFtLiDJcuC5fKalfsk7bvHg2AOwG8ZFhqWupOHTeq1vNv9Q/1GFsGm
-    Nz/dn17UfqJ9dtinsZJAPv3LrAeI2siU7q8QGRj69CLE09Ps2H5U5lx6uv+duVfTWeW4
-    7U6w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1774257907;
-    s=strato-dkim-0003; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=TL2pAP58JGbXAJYSWIcnzBdfKYxlVXtPUI89vibJ+O4=;
-    b=VhCA2s1/iiVN8bSomJNntiWXz0EE0upa5v6SglAmON8Hvl5/IuvqHgga4EkkUJSeye
-    riBIDR+DuP5c/qS5d9DQ==
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSe9tgBDSDt0V0DBslXBtZUxPOub3IZqk"
-Received: from [10.176.235.211]
-    by smtp.strato.de (RZmta 55.0.1 AUTH)
-    with ESMTPSA id z7934522N9P6QPD
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Mon, 23 Mar 2026 10:25:06 +0100 (CET)
-Message-ID: <b10d327bd48c0513fd78d208f79b62c1dc7bdc21.camel@iokpp.de>
-Subject: Re: [PATCH v4 12/12] scsi: ufs: ufs-qcom: Enable TX Equalization
-From: Bean Huo <beanhuo@iokpp.de>
-To: Can Guo <can.guo@oss.qualcomm.com>, avri.altman@wdc.com,
- bvanassche@acm.org,  beanhuo@micron.com, peter.wang@mediatek.com,
- martin.petersen@oracle.com,  mani@kernel.org
-Cc: linux-scsi@vger.kernel.org, "James E.J. Bottomley"
-	 <James.Bottomley@HansenPartnership.com>, "open list:UNIVERSAL FLASH
-	STORAGE HOST CONTROLLER DRIVER..."
-	 <linux-arm-msm@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Date: Mon, 23 Mar 2026 10:25:06 +0100
-In-Reply-To: <20260321031021.1722459-13-can.guo@oss.qualcomm.com>
-References: <20260321031021.1722459-1-can.guo@oss.qualcomm.com>
-	 <20260321031021.1722459-13-can.guo@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2.1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C4438AC79;
+	Mon, 23 Mar 2026 10:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.116.240.228
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774260630; cv=none; b=A38gYXsg+Q0rsD3789klkZrh5vbjRMzxxFi6skcvLC6t8B0OlRFYQF7H7xX4J87STA2k6RvbZuqzf6KYywACQdE8GVeidodHiafElSd9vuNa2FQqMjIrxNp9J2Nq6cJ0RBAdwJjS26BMEurYMY/JK6v/lJvUzUWKv61mhQUq0C4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774260630; c=relaxed/simple;
+	bh=nKARx96LL90HGJciwaB/J+Mf9CdmUGOJzDBKGLoVhS8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=GvPkvC/1Cm3RytioBoh0/0RwWlwStIHRu7HvrCy1RdUyyySN/EG262+0zG9a0d1yLeI1QcxZznXu1bhuhPoLZ/73fzgEN1JlfksO5oMmuq/jc8+gZzXKb3Ol43AdC+FDrSO8gbM2rHI4ZnNJVt/iRJNrrWqwYIasi5ICJA7TasQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=arkamax.eu; spf=pass smtp.mailfrom=arkamax.eu; arc=none smtp.client-ip=128.116.240.228
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=arkamax.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arkamax.eu
+Received: from localhost (128-116-240-228.dyn.eolo.it [128.116.240.228])
+	by arkamax.eu (OpenSMTPD) with ESMTPSA id 52cee889 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Mon, 23 Mar 2026 10:43:44 +0100 (CET)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[iokpp.de,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[iokpp.de:s=strato-dkim-0002,iokpp.de:s=strato-dkim-0003];
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 23 Mar 2026 10:43:44 +0100
+Message-Id: <DHA2BZE56U6E.3V6HEWOPLHAXX@arkamax.eu>
+Cc: "Tarun Sahu" <tarunsahu@google.com>, "Pasha Tatashin"
+ <tatashin@google.com>, =?utf-8?q?Micha=C5=82_C=C5=82api=C5=84ski?=
+ <mclapinski@google.com>, "Jordan Richards" <jordanrichards@google.com>,
+ "Ewan Milne" <emilne@redhat.com>, "John Meneghini" <jmeneghi@redhat.com>,
+ "Lombardi, Maurizio" <mlombard@redhat.com>, "Stuart Hayes"
+ <stuart.w.hayes@gmail.com>, "Laurence Oberman" <loberman@redhat.com>, "Bart
+ Van Assche" <bvanassche@acm.org>, "Bjorn Helgaas" <helgaas@kernel.org>
+Subject: Re: [PATCH 3/5] driver core: async device shutdown infrastructure
+From: "Maurizio Lombardi" <mlombard@arkamax.eu>
+To: "David Jeffery" <djeffery@redhat.com>, <linux-kernel@vger.kernel.org>,
+ <driver-core@lists.linux.dev>, <linux-pci@vger.kernel.org>,
+ <linux-scsi@vger.kernel.org>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ "Danilo Krummrich" <dakr@kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20260319141142.5781-1-djeffery@redhat.com>
+ <20260319141142.5781-4-djeffery@redhat.com>
+In-Reply-To: <20260319141142.5781-4-djeffery@redhat.com>
+X-Spamd-Result: default: False [0.54 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MV_CASE(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-22398-lists,linux-scsi=lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-22404-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[iokpp.de:+];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
+	DMARC_NA(0.00)[arkamax.eu];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[google.com,redhat.com,gmail.com,acm.org,kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
+	R_DKIM_NA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[beanhuo@iokpp.de,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[mlombard@arkamax.eu,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	RCPT_COUNT_SEVEN(0.00)[11];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[micron.com:email,iokpp.de:dkim,iokpp.de:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qualcomm.com:email]
-X-Rspamd-Queue-Id: B6C3E2EF192
+	TAGGED_RCPT(0.00)[linux-scsi];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B6A582EFC6C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, 2026-03-20 at 20:10 -0700, Can Guo wrote:
-> Enable TX Equalization for hosts with HW version 0x7 and onwards.
->=20
-> Signed-off-by: Can Guo <can.guo@oss.qualcomm.com>
+On Thu Mar 19, 2026 at 3:11 PM CET, David Jeffery wrote:
+> Patterned after async suspend, allow devices to mark themselves as wantin=
+g
+> to perform async shutdown. Devices using async shutdown wait only for the=
+ir
+> dependencies to shutdown before executing their shutdown routine.
+>
+> Sync shutdown devices are shut down one at a time and will only wait for =
+an
+> async shutdown device if the async device is a dependency.
+>
+> Signed-off-by: David Jeffery <djeffery@redhat.com>
+> Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
+> Tested-by: Laurence Oberman <loberman@redhat.com>
+> ---
+>  drivers/base/base.h    |   2 +
+>  drivers/base/core.c    | 104 ++++++++++++++++++++++++++++++++++++++++-
+>  include/linux/device.h |  13 ++++++
+>  3 files changed, 118 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/base/base.h b/drivers/base/base.h
+> index 79d031d2d845..ea2a039e7907 100644
+> --- a/drivers/base/base.h
+> +++ b/drivers/base/base.h
+> @@ -113,6 +113,7 @@ struct driver_type {
+>   * @device - pointer back to the struct device that this structure is
+>   * associated with.
+>   * @driver_type - The type of the bound Rust driver.
+> + * @complete - completion for device shutdown ordering
+>   * @dead - This device is currently either in the process of or has been
+>   *	removed from the system. Any asynchronous events scheduled for this
+>   *	device should exit without taking any action.
+> @@ -132,6 +133,7 @@ struct device_private {
+>  #ifdef CONFIG_RUST
+>  	struct driver_type driver_type;
+>  #endif
+> +	struct completion complete;
+>  	u8 dead:1;
+>  };
+>  #define to_device_private_parent(obj)	\
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 2e9094f5c5aa..53568b820a13 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -9,6 +9,7 @@
+>   */
+> =20
+>  #include <linux/acpi.h>
+> +#include <linux/async.h>
+>  #include <linux/blkdev.h>
+>  #include <linux/cleanup.h>
+>  #include <linux/cpufreq.h>
+> @@ -37,6 +38,10 @@
+>  #include "physical_location.h"
+>  #include "power/power.h"
+> =20
+> +static bool async_shutdown =3D true;
+> +module_param(async_shutdown, bool, 0644);
+> +MODULE_PARM_DESC(async_shutdown, "Enable asynchronous device shutdown su=
+pport");
+> +
+>  /* Device links support. */
+>  static LIST_HEAD(deferred_sync);
+>  static unsigned int defer_sync_state_count =3D 1;
+> @@ -3538,6 +3543,7 @@ static int device_private_init(struct device *dev)
+>  	klist_init(&dev->p->klist_children, klist_children_get,
+>  		   klist_children_put);
+>  	INIT_LIST_HEAD(&dev->p->deferred_probe);
+> +	init_completion(&dev->p->complete);
+>  	return 0;
+>  }
+> =20
+> @@ -4782,6 +4788,37 @@ int device_change_owner(struct device *dev, kuid_t=
+ kuid, kgid_t kgid)
+>  	return error;
+>  }
+> =20
+> +static bool wants_async_shutdown(struct device *dev)
+> +{
+> +	return async_shutdown && dev->async_shutdown;
+> +}
+> +
+> +static int wait_for_device_shutdown(struct device *dev, void *data)
+> +{
+> +	bool async =3D *(bool *)data;
+> +
+> +	if (async || wants_async_shutdown(dev))
+> +		wait_for_completion(&dev->p->complete);
+> +
+> +	return 0;
+> +}
+> +
+> +static void wait_for_shutdown_dependencies(struct device *dev, bool asyn=
+c)
+> +{
+> +	struct device_link *link;
+> +	int idx;
+> +
+> +	device_for_each_child(dev, &async, wait_for_device_shutdown);
+> +
+> +	idx =3D device_links_read_lock();
+> +
+> +	dev_for_each_link_to_consumer(link, dev)
+> +		if (!device_link_flag_is_sync_state_only(link->flags))
+> +			wait_for_device_shutdown(link->consumer, &async);
+> +
+> +	device_links_read_unlock(idx);
+> +}
+> +
+>  static void __shutdown_one_device(struct device *dev)
+>  {
+>  	device_lock(dev);
+> @@ -4805,6 +4842,8 @@ static void __shutdown_one_device(struct device *de=
+v)
+>  		dev->driver->shutdown(dev);
+>  	}
+> =20
+> +	complete_all(&dev->p->complete);
+> +
+>  	device_unlock(dev);
+>  }
+> =20
+> @@ -4823,6 +4862,58 @@ static void shutdown_one_device(struct device *dev=
+)
+>  	put_device(dev);
+>  }
+> =20
+> +static void async_shutdown_handler(void *data, async_cookie_t cookie)
+> +{
+> +	struct device *dev =3D data;
+> +
+> +	wait_for_shutdown_dependencies(dev, true);
+> +	shutdown_one_device(dev);
+> +}
+> +
+> +static bool shutdown_device_async(struct device *dev)
+> +{
+> +	if (async_schedule_dev_nocall(async_shutdown_handler, dev))
+> +		return true;
+> +	return false;
+> +}
+> +
+> +
+> +static void early_async_shutdown_devices(void)
+> +{
+> +	struct device *dev, *next, *needs_put =3D NULL;
+> +
+> +	if (!async_shutdown)
+> +		return;
+> +
+> +	spin_lock(&devices_kset->list_lock);
+> +
+> +	list_for_each_entry_safe_reverse(dev, next, &devices_kset->list,
+> +					 kobj.entry) {
+> +		if (wants_async_shutdown(dev)) {
+> +			get_device(dev->parent);
+> +			get_device(dev);
+> +
+> +			if (shutdown_device_async(dev)) {
+> +				list_del_init(&dev->kobj.entry);
+> +			} else {
+> +				/*
+> +				 * async failed, clean up extra references
+> +				 * and run from the standard shutdown loop
+> +				 */
+> +				needs_put =3D dev;
+> +				break;
+> +			}
+> +		}
+> +	}
+> +
+> +	spin_unlock(&devices_kset->list_lock);
+> +
+> +	if (needs_put) {
+> +		put_device(needs_put->parent);
+> +		put_device(needs_put);
+> +	}
+> +}
+> +
+>  /**
+>   * device_shutdown - call ->shutdown() on each device to shutdown.
+>   */
+> @@ -4835,6 +4926,12 @@ void device_shutdown(void)
+> =20
+>  	cpufreq_suspend();
+> =20
+> +	/*
+> +	 * Start async device threads where possible to maximize potential
+> +	 * parallelism and minimize false dependency on unrelated sync devices
+> +	 */
+> +	early_async_shutdown_devices();
+> +
+>  	spin_lock(&devices_kset->list_lock);
+>  	/*
+>  	 * Walk the devices list backward, shutting down each in turn.
+> @@ -4859,11 +4956,16 @@ void device_shutdown(void)
+>  		list_del_init(&dev->kobj.entry);
+>  		spin_unlock(&devices_kset->list_lock);
+> =20
+> -		shutdown_one_device(dev);
+> +		if (!wants_async_shutdown(dev) || !shutdown_device_async(dev)) {
+> +			wait_for_shutdown_dependencies(dev, false);
+> +			shutdown_one_device(dev);
+> +		}
+> =20
+>  		spin_lock(&devices_kset->list_lock);
+>  	}
+>  	spin_unlock(&devices_kset->list_lock);
+> +
+> +	async_synchronize_full();
+>  }
+> =20
+>  /*
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index 0be95294b6e6..da1db7d235c9 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -551,6 +551,8 @@ struct device_physical_location {
+>   * @dma_skip_sync: DMA sync operations can be skipped for coherent buffe=
+rs.
+>   * @dma_iommu: Device is using default IOMMU implementation for DMA and
+>   *		doesn't rely on dma_ops structure.
+> + * @async_shutdown: Device shutdown may be run asynchronously and in par=
+allel
+> + *		to the shutdown of unrelated devices
+>   *
+>   * At the lowest level, every device in a Linux system is represented by=
+ an
+>   * instance of struct device. The device structure contains the informat=
+ion
+> @@ -669,6 +671,7 @@ struct device {
+>  #ifdef CONFIG_IOMMU_DMA
+>  	bool			dma_iommu:1;
+>  #endif
+> +	bool			async_shutdown:1;
+>  };
+> =20
+>  /**
+> @@ -824,6 +827,16 @@ static inline bool device_async_suspend_enabled(stru=
+ct device *dev)
+>  	return !!dev->power.async_suspend;
+>  }
+> =20
+> +static inline bool device_enable_async_shutdown(struct device *dev)
+> +{
+> +	return dev->async_shutdown =3D true;
+> +}
 
-Reviewed-by: Bean Huo <beanhuo@micron.com>
+Shouldn't this function just return void?
+
+Maurizio
 
