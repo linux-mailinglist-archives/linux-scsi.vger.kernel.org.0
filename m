@@ -1,350 +1,272 @@
-Return-Path: <linux-scsi+bounces-22404-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22402-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QEEeAesRwWnHQQQAu9opvQ
-	(envelope-from <linux-scsi+bounces-22404-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 11:11:55 +0100
+	id 0KK+HkcPwWk7QQQAu9opvQ
+	(envelope-from <linux-scsi+bounces-22402-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 11:00:39 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6A582EFC6C
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 11:11:54 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A3B22EF8C1
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 11:00:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 22894300DCFF
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 10:10:47 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 1D233301071B
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 09:57:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26B0A38AC75;
-	Mon, 23 Mar 2026 10:10:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037973890E0;
+	Mon, 23 Mar 2026 09:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HHb2lkBS";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="JW/13TG+"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from arkamax.eu (128-116-240-228.dyn.eolo.it [128.116.240.228])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C4438AC79;
-	Mon, 23 Mar 2026 10:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.116.240.228
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774260630; cv=none; b=A38gYXsg+Q0rsD3789klkZrh5vbjRMzxxFi6skcvLC6t8B0OlRFYQF7H7xX4J87STA2k6RvbZuqzf6KYywACQdE8GVeidodHiafElSd9vuNa2FQqMjIrxNp9J2Nq6cJ0RBAdwJjS26BMEurYMY/JK6v/lJvUzUWKv61mhQUq0C4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774260630; c=relaxed/simple;
-	bh=nKARx96LL90HGJciwaB/J+Mf9CdmUGOJzDBKGLoVhS8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=GvPkvC/1Cm3RytioBoh0/0RwWlwStIHRu7HvrCy1RdUyyySN/EG262+0zG9a0d1yLeI1QcxZznXu1bhuhPoLZ/73fzgEN1JlfksO5oMmuq/jc8+gZzXKb3Ol43AdC+FDrSO8gbM2rHI4ZnNJVt/iRJNrrWqwYIasi5ICJA7TasQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=arkamax.eu; spf=pass smtp.mailfrom=arkamax.eu; arc=none smtp.client-ip=128.116.240.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=arkamax.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arkamax.eu
-Received: from localhost (128-116-240-228.dyn.eolo.it [128.116.240.228])
-	by arkamax.eu (OpenSMTPD) with ESMTPSA id 52cee889 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Mon, 23 Mar 2026 10:43:44 +0100 (CET)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A0138838D;
+	Mon, 23 Mar 2026 09:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774259857; cv=fail; b=XdwpFaXu22La501zQGrGZzCI18ONRHdjBaHIyUCkDzgId+Z7/czAPZ+ao9oe/UPCttimRjW2Kpmh+qBJ9oNeHdV/ozAEhRWTCyO/eIw5N9tFVXwHeIis2M6bZu8snHX5qLvPcwnvvn83g9B8VMCgv418LCeTHaw55q/aSv5eh10=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774259857; c=relaxed/simple;
+	bh=Dto0jo/al3SXdqj2vX1oIKtgJ60DYuJyNuCezgRbsr8=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ZvfIQYtuRakE1TMWiKT5Hv9ZjbfKfRW8YN+Uaj5I1hVM6t+9S51eCeXOSSVk2WK1pmS51yQEgVwNatpbwzAu5Qw7Pv+CtEfZCFIps9XixEgA/7JThdM6YYcQ6ODsdhjKhpLQO5/k1lGc85AwfeAVL5ILhYJxVP7xuTwM/7ppLh4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=HHb2lkBS; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=JW/13TG+; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62MMdPMV3143003;
+	Mon, 23 Mar 2026 09:57:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=Sm7mFuJg6s0fRm7gJniH2EnKJ5Si1ont45Kb9GuZun0=; b=
+	HHb2lkBSWxjfY0oXmh+SHvvARB2ojldu/F4h8RbRkIGhHsfysl3x+yPkgUJK+pD5
+	Gf8wUCySROw+NzL5MGAo9l14RBrnki7zKVbatejsiHHYOsHus0aKJXy4aAvyE05o
+	0sPrcV4+xJ4I8uWwxl5ZdZ07nS/PmkzKDRpX4V00jOVEheGsRm8K080sQPHX+Jey
+	RPq9y1e62PIBsKkBtmQZ20ztlE8X6N+xNtIFZwnKh3gzqsEr/GOSEKBH7ezbTA83
+	nBA8OSX2Os8fkNIZZxK5Tmj+qYx7e9ZIGQ40hy/8BvzA75XdwY78wEMovbhkeML4
+	SDHynHL0fs+pqZktt0XYBw==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d1khvsy6t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 23 Mar 2026 09:57:22 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62N7K5Yr000619;
+	Mon, 23 Mar 2026 09:57:22 GMT
+Received: from byapr05cu005.outbound.protection.outlook.com (mail-westusazon11010058.outbound.protection.outlook.com [52.101.85.58])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4d1hs892cb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 23 Mar 2026 09:57:22 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oAeQILmG7Pvnpc1KkVFoPqe9X6l37pyclJdpeptoEOvzEbIwqrYdhGk+i2nKV3/x98Hy7Fx/8SXEidYG+SkzH6Jsgb+jB8hk+N++puaNxzSZaeODn134UYfv9UW5chBlYaav4o93O3m14yntbCeZczCR+iaCTvp0pk2xItPX4/gZ/32KwWqnKk6AcJhSpFhyI2E3qkTFWGlH/mfU/GLVw+LJIklAVGKlM9+6+EglQj7UKOimXgILmnph0nmprNoi8uM2tszX6k2kmmxj8OcZQvLAxupnPEERNCJZAIESj3lz+SB/p49XcXRxQx81qkeyw4DQeQ+ceICh98F/5Ti6yg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Sm7mFuJg6s0fRm7gJniH2EnKJ5Si1ont45Kb9GuZun0=;
+ b=MkvlgCRllbLvUpzE0HFTmFTifnydO8UWBCZgLDCH++9C7a6m8oNSG7ggLT2k5IJKt9qDImlOcwAPVBTto+1HcSCixnHn25ziqeurF56OpXgIHeaXoMWOAX0+w4ziu9pcqXw1vNL8788t8dZc0xpcN2hjFUzSN02oBTxbTeF7dilvijUB7jCIvIeuyccoSKKrT2bsjMCdKG+ljWm4SGWrPfIz5gKjrtiZTxQ/JLPsPoC/nm5GpTdCUx+840GdG2QRb4ZycmCLkSwSxjX0RZCP+FxTCPWH3NZ3GR1DxW1kjar7iHWXgFeGFuY/lS5uWKgVcnQe7tXt8mkQiIjUihuL1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Sm7mFuJg6s0fRm7gJniH2EnKJ5Si1ont45Kb9GuZun0=;
+ b=JW/13TG+o84gVtAQ8Pte/UJpYv0w7oaOH+0WdA0gTbIR2UagjsIz1rCxJq6/PCD5K/26fZHlaYgmB8Oe8DHZ2fhXP4TTawybzWFlsJ79CTYeiYuqTFkIl17qECglfwY0lAh87+qiTo0CfZmgY3HA7/Cp9CayVwsdptrag4Px1Hs=
+Received: from DS4PPFEAFA21C69.namprd10.prod.outlook.com
+ (2603:10b6:f:fc00::d54) by SA2PR10MB4746.namprd10.prod.outlook.com
+ (2603:10b6:806:11c::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31; Mon, 23 Mar
+ 2026 09:57:19 +0000
+Received: from DS4PPFEAFA21C69.namprd10.prod.outlook.com
+ ([fe80::5266:1601:5598:3f0a]) by DS4PPFEAFA21C69.namprd10.prod.outlook.com
+ ([fe80::5266:1601:5598:3f0a%5]) with mapi id 15.20.9723.030; Mon, 23 Mar 2026
+ 09:57:18 +0000
+Message-ID: <f72bc385-fdc1-4f4b-8567-bee083818400@oracle.com>
+Date: Mon, 23 Mar 2026 09:57:15 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/13] scsi: Core ALUA driver
+To: Benjamin Marzinski <bmarzins@redhat.com>
+Cc: martin.petersen@oracle.com, james.bottomley@hansenpartnership.com,
+        hare@suse.com, jmeneghi@redhat.com, linux-scsi@vger.kernel.org,
+        michael.christie@oracle.com, snitzer@kernel.org,
+        dm-devel@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20260317120703.3702387-1-john.g.garry@oracle.com>
+ <acAo0hr4BxXueQFM@redhat.com>
+Content-Language: en-US
+From: John Garry <john.g.garry@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <acAo0hr4BxXueQFM@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0063.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2af::16) To DS4PPFEAFA21C69.namprd10.prod.outlook.com
+ (2603:10b6:f:fc00::d54)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Mar 2026 10:43:44 +0100
-Message-Id: <DHA2BZE56U6E.3V6HEWOPLHAXX@arkamax.eu>
-Cc: "Tarun Sahu" <tarunsahu@google.com>, "Pasha Tatashin"
- <tatashin@google.com>, =?utf-8?q?Micha=C5=82_C=C5=82api=C5=84ski?=
- <mclapinski@google.com>, "Jordan Richards" <jordanrichards@google.com>,
- "Ewan Milne" <emilne@redhat.com>, "John Meneghini" <jmeneghi@redhat.com>,
- "Lombardi, Maurizio" <mlombard@redhat.com>, "Stuart Hayes"
- <stuart.w.hayes@gmail.com>, "Laurence Oberman" <loberman@redhat.com>, "Bart
- Van Assche" <bvanassche@acm.org>, "Bjorn Helgaas" <helgaas@kernel.org>
-Subject: Re: [PATCH 3/5] driver core: async device shutdown infrastructure
-From: "Maurizio Lombardi" <mlombard@arkamax.eu>
-To: "David Jeffery" <djeffery@redhat.com>, <linux-kernel@vger.kernel.org>,
- <driver-core@lists.linux.dev>, <linux-pci@vger.kernel.org>,
- <linux-scsi@vger.kernel.org>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- "Danilo Krummrich" <dakr@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260319141142.5781-1-djeffery@redhat.com>
- <20260319141142.5781-4-djeffery@redhat.com>
-In-Reply-To: <20260319141142.5781-4-djeffery@redhat.com>
-X-Spamd-Result: default: False [0.54 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS4PPFEAFA21C69:EE_|SA2PR10MB4746:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a6f4680-9b9a-4a53-6da4-08de88c291dc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	vk97wjOkSUVlvrxl4Wrez5SuKkis8wf/sQUnWISWpaHB5nE26ANmrD2Ey737v/hi6ot1IhxYpTqSfiAX/R4cjRrWhbXi6DRJ7FQX04uaxTqoknmh5I5OIk3UByXtul8jqpVDLhP/otw1M2uwNcabv02VBznkBkiZbMwOkyW/zw3tPag5PJzBnlcJWva8kUVzlZCAYDltK1QFpz3LaIv0Ok56fnNXle2Ko6pmHLDb1N3y0TjOel92RBLtqKR5WmR5/HjvfsZARfhm3lI+eoN3DfJQHiAZvUKGthoZvsEs0Cu6GUxVsRFykmhjEdtF7JRLBl58/aH1r61XB3UToDppM6eGEtNwVDWS1ttg0nm9D3sE++Sz9Ulv/fOJf8pkdAeSV3C+Lr7iQIpu96aZ8s2bMMOdoTm8YIr09nAS9kl7L6YdUIqUr6XoYNgAkvyUMdoHTYLzrFfTqlMuMLt1rWPv4f0ool6LE4nAFKwYPz+dPmLIfWFyvbs3GDuVgXwrxnKEnC/OlvhCL/zc5dz1nP6O/e7GGAhB8n2660jMLBtzDmvnaY80bVtuRCsSlhbuJcuvjUgeyZy9uZVg7LBUwn38FrIeNlQX10AZ0j2q79ow6BWmmV5PljlG65LfZLF5yYUSP7pl/YvPD48BpKvHKKhRl1JFjBnYp63z2vkOynH4EPZzMyOv8BssVfXFLEsjuZwgTkDP6SwiadnKEgsfDnZzmump5kDIQO39nz5526KTKoE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS4PPFEAFA21C69.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?b0VoV0kyRjQ2ekxHZmxtRFI4RVFHRlFNMk1pbHIyOVhSemJ3QW9jUXVIWTk0?=
+ =?utf-8?B?UlB3dWpiQnJaV1djT2FpTTBqZG94NnRZTk8wRWU3NElmZy82WFhZRXlzTWk4?=
+ =?utf-8?B?SWszOHBQWG0xWExzWDZKajF5TnIxRmpOTnF6TEwwNFJIcHJ3R2FKUFpCUmxh?=
+ =?utf-8?B?R1p0ZmtxK1dwQ0I0TFRNMm5KRVdzd0Z4N0NYVi9JRnQ2Y3RncVpBanp1ZW40?=
+ =?utf-8?B?Y1ZKemIrSUhHT3I0UE04RlBIMWdxZDlnWTgrQndxOEtzd3gyU1VjSXlkdVg2?=
+ =?utf-8?B?R1pFbmlyVmtBOEVYQ0hiK0h6SGZ3Q3dNRmk2V3Mzd2t0cWxlYkovUWFWTm9v?=
+ =?utf-8?B?YjhrWFVVNEpoclBTTlRZZkt2bVZhRGoxdEtQVjlvT2xWWE41TmJKRmZiNE1h?=
+ =?utf-8?B?RDMxV3FydVI4a3V0b3JXZnJERG9ZUzhWdnFqb0QxYXBxRXI3eTJsRmRZVC85?=
+ =?utf-8?B?d2pvSWdUNms5SGtId2c0REhxdThDNVdxOWN6dkZiL0VtRi9BbTMyUytBaHdP?=
+ =?utf-8?B?bTkyM1JSODBxb2NHRkc1ZHYyb1dsMHB4ZlFUMlVCT2E4ZlgxWHdteVFMVzhV?=
+ =?utf-8?B?Um5FaEpFbXFmcWV5UTJtaUtUakxGNU9TajdZRkFCNlNETkJaVDF5L0FKTE1O?=
+ =?utf-8?B?dCsrd1lSa1RyWE5IdjdLdU9iZzhxTFZ2UGtuVGlKaWhwbk1QU3dveWRZUHcv?=
+ =?utf-8?B?Y1NxVWJlOWhmNWI2RzQ5TmdteU5wSXcxOVZTQjdEYTlhU3RKQlNlMjZTYW1N?=
+ =?utf-8?B?ejVpbk1MRS9wTEZCODE0YmIvWTA5N3RQUEpzc2xqUmZVZlA0MmhpZi9HV1RV?=
+ =?utf-8?B?ekUvYjFVZG1UemtFRXNQZUFLdVl5aXJMd1dTVUNNdUNFMHBpK0dJaEVHcE10?=
+ =?utf-8?B?clBEU25mUENLamlCMHQxbjdkMTVjUkdnRllLTm1Xd0ptS0JQWU1TK3l5MCsx?=
+ =?utf-8?B?TVBCd3ZNbGJNUmZKSDRocHBRYVhaWkZrYmJTMkY3eFZqbHpMSm5UbHpoaytU?=
+ =?utf-8?B?WmtITDRzbE1vQUJDZFU3Y25aSHVRc2l4b0tYZDczVnA5alZCMU5PSTRncmdk?=
+ =?utf-8?B?ZGpMcnpZYWUybHA0bXZ3YmNPS2cwc2drTkF0U1dKUTQyZ2dBZjI1SjJiNFpJ?=
+ =?utf-8?B?WGdOV3hyenBGN1c0Nnd5OXlSVjhBVTVTY1c2N0phSUtuQUhiSzV2NzF2UEdt?=
+ =?utf-8?B?dkdMbWhzQ0liUitjempBT1dVdDlTdFpuZG9NT2F5OVlSeVhlYVN5T01Yb0Zi?=
+ =?utf-8?B?V3REUWl1RENDNDlnVDArSWNJS2VwY3YxSy9GbERldk5CbHd2dlc2SVY3UlFY?=
+ =?utf-8?B?VVpQaHF2V2FrS2c2cFNZTjRpU2VEZEFvWWlJQkZPN3M2REdXNUsvMERnRXV3?=
+ =?utf-8?B?MGdvZG1XOHYwbmJrSklMbGtESDJuTmdVbWthVHRxRXd3cTJMNGJaQk8rdXFu?=
+ =?utf-8?B?MEpLYXlLalJ1K0I1djFrZmIwSW9reUtpOEtLSldLcFpVcjAwQnNOTG1UUEZR?=
+ =?utf-8?B?dTI2am9nYUdqZVJYU0trd3ZqUkNRQUErQUM0d0grdVI4OWNzMWxjZldSclh3?=
+ =?utf-8?B?VkRiZy8zSWQxTEo3eU44SHZPTFVhR250cDFqZFM5cDk5WkNDUXZYN2tIU1dY?=
+ =?utf-8?B?T0VVeXlzT0xoY211LzhjbnpyUU9XdW5waVVveE01ZWdqUHMwcTBTekUxR2xz?=
+ =?utf-8?B?TnduUzRzNjdJR0pTV3NTNVNnWUpSN2NRTkdycFFiaEdCMlAvV3lqditlTXdx?=
+ =?utf-8?B?NGxXMjQvZUM3TWh1R0NnUURWbnNkdDVBbEpKN2lqMnVoQTZac05LcjMwV2Vp?=
+ =?utf-8?B?Nm9JbkM3TXhzblpET1ByTDFDek5hL2RLTXdRSDdET1JQcThwTVVFR2llYS9R?=
+ =?utf-8?B?eXE0Q3ZtenFrdlpJRHJZWHhTbTU4d0tURFY4Tm9jQVR2cUo1eGZVS0lObVpQ?=
+ =?utf-8?B?YTkwT0hCd0doclQyTUtjUlJSY3pBamNnbVZmOEl5b2E2cjc0ZlY4VVBLdk1y?=
+ =?utf-8?B?N0E3emxJL21UdndaTG52Nk5FRElxUWVkK2NuU1oweFVsaFBqSS9sNTBoWXhj?=
+ =?utf-8?B?TTlZZEpFQzkzZjFnbUVQcTIxNjgwbmZIZ2l3V1VjVGh4T08rcWQ5eDVxVVZR?=
+ =?utf-8?B?VHlLWnNUMDZvSnQvcittR2NLY2lZRmNDZkNDbnlNa2Z2eFlaY3lodkNIRHd5?=
+ =?utf-8?B?dnZlZkNGcFQ1Rzh6R3ZzMUlBbS9vY0plTXBSNVYyMGl3d2JFNm56dEZtY0RG?=
+ =?utf-8?B?eko3WUE1aUZlTW5UVFp5dEg2VGt3TzlySlhMblpkUTkzbjloRmRxL3UvWUlE?=
+ =?utf-8?B?WmEyVDVWV3FLbUE0TUdVMlNaYjhZblpEZDdaUmtzaUU5SWY4MGYvdz09?=
+X-Exchange-RoutingPolicyChecked:
+	X6Y5gvK5DUeoW8VS1b07ZsInLVj+gaKIPNUn85gCuH/qxjL267CrdshvsXj8pVusaA+wUtauM9A+waXrL3M7JIfSh1vIixONanJ7wp2UquLXtKSS/o6yKpKJgEI30xv9GkxZo1/mCaGKHwChawEbdDEPgxsaws/FqhFGPHPiCsc/UvGPJ/PK2eEIb3m0/4ImEOSN2MNcYo/+0wGoijpPmNWmiUsFxQnbdH/k/UjOxTCer04FkvPfmweXrj7+fgjCUBfhnSQr5+oQX7svtk+T1vuf7MaT2SOmqhlulpvDF1XINNvLaJD4XH1dFEcWD+wS2aZmWwtr1zQkW4jETLiKbA==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	C8RFv3CmLafwTdDN7U2oiMpV4oOIPMxA7W9P2zC0nPVy88/GpWUFjb9sTfO+FpqsyR7TB7iuFTxTGjNbJHTnqDuNO6c0I1vlAJY+FyFlXKXY6j4UJhrMrMVbSOXUk4rKAPWhQDp2FgXPH7AuPVyIuCj7RLMoorzfxapktZyL3lmpw+MC2+L/IBKjiRV7Y9O+Z2i0DbhlFijxp93JoeyZAL40LnvySFDFWCjFbHQm8hBchlRsZIaN/wngLrUFI09nt2vFJk3lwNmeTM0h/pxJ/M+OsDJRpmmWbQnUUH8oGooMZJTb7EXsPrRgmwuRCyIogTZuOChraLyXI53VeUUiyq1h+EC0EEFbloFcRXXvz/kHQx2Q3EuzpEC3tfJefdope/YdF6g2+O1wM/AdAKpsHcvOAW1Ee/TFOLQ5TWHPehNxAg42e2uKiCnSZRCc8uw1bK7/r6avEw+ohpjW4rHnoHr8iHgaIzmY1LOsoTYhXf/Zm8de4wf7p0wT15FhQwqhAAny/seouTrTPawBV0DN43wkSSapJhVf7Xy9Vfcwvc47Denx3ahfaFEgMu9+BvdczaMca0ZjAvD2T1dFdUCRGJ8RqGJ/m5iLxt1ft/Mr1do=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a6f4680-9b9a-4a53-6da4-08de88c291dc
+X-MS-Exchange-CrossTenant-AuthSource: DS4PPFEAFA21C69.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 09:57:18.7623
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sp9aLsQOEasPfQ3ORpS4OrNmIYTGUqQ7uuQYFh18gUumVzNftNXfy4I/G8BZ3ZuANox+icRj3yXI4yhW3cdifg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4746
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-23_03,2026-03-20_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 mlxscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 mlxlogscore=989 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
+ definitions=main-2603230076
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzIzMDA3NiBTYWx0ZWRfX229Qoe/ahMBT
+ y1j4+uJca6/lfgPSuKzRckJm5ZPaz6Z2YpOzMUIlaV9cEPlg2L5D79Gigr9ICxOBZDXyDwd7tb4
+ XB8UYRpKJ4BN/0kuEa9BMTLw7IBKwXD5G4stouKJjd95sYj7OVhr0tylXh/5Fg88bZJDXpjFgGE
+ tWygHR7IprLPuQ8q18pwLy9u2oEQbOy0QHdyDhc0eiM+VNZ3uiCbMikUN5eKPvz2b/cWREhWFWW
+ UMhQInxeQZTROwlOccFy5VyUFPCsmr2lk9wTEM4bnvL510vjo/gjpV6GjfmbGnKZYk/d+ogQrJm
+ 3Sh9qk6pzKvFOofoOAz/GXYlzHDEkd6xT3AI6CNQlb3muCRgOIvd5QaIcyMrTuAH6HRktYvpngR
+ dsMqgvlbZCiVe0OoG2R5yIEnRr2q0RBIW5y3Wa/ihJeCs5u3lCru8bQBX4QngFDB98xJrF/AXDh
+ Ml8jX4oozXbFpDBeebw==
+X-Authority-Analysis: v=2.4 cv=VIXQXtPX c=1 sm=1 tr=0 ts=69c10e83 cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Yq5XynenixoA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=BqU2WV_vvsyTyxaotp0D:22 a=B9RD5g75Ysv-OWcPL7UA:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: MQh7xqq_Hhuk0awXQ7NEiRjhUdgv5Hpe
+X-Proofpoint-ORIG-GUID: MQh7xqq_Hhuk0awXQ7NEiRjhUdgv5Hpe
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
+	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22404-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-22402-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[arkamax.eu];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[19];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,oracle.com:dkim,oracle.com:mid];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[google.com,redhat.com,gmail.com,acm.org,kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	R_DKIM_NA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mlombard@arkamax.eu,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	HAS_ORG_HEADER(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: B6A582EFC6C
+	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	RCVD_COUNT_SEVEN(0.00)[9]
+X-Rspamd-Queue-Id: 9A3B22EF8C1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu Mar 19, 2026 at 3:11 PM CET, David Jeffery wrote:
-> Patterned after async suspend, allow devices to mark themselves as wantin=
-g
-> to perform async shutdown. Devices using async shutdown wait only for the=
-ir
-> dependencies to shutdown before executing their shutdown routine.
->
-> Sync shutdown devices are shut down one at a time and will only wait for =
-an
-> async shutdown device if the async device is a dependency.
->
-> Signed-off-by: David Jeffery <djeffery@redhat.com>
-> Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
-> Tested-by: Laurence Oberman <loberman@redhat.com>
-> ---
->  drivers/base/base.h    |   2 +
->  drivers/base/core.c    | 104 ++++++++++++++++++++++++++++++++++++++++-
->  include/linux/device.h |  13 ++++++
->  3 files changed, 118 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/base/base.h b/drivers/base/base.h
-> index 79d031d2d845..ea2a039e7907 100644
-> --- a/drivers/base/base.h
-> +++ b/drivers/base/base.h
-> @@ -113,6 +113,7 @@ struct driver_type {
->   * @device - pointer back to the struct device that this structure is
->   * associated with.
->   * @driver_type - The type of the bound Rust driver.
-> + * @complete - completion for device shutdown ordering
->   * @dead - This device is currently either in the process of or has been
->   *	removed from the system. Any asynchronous events scheduled for this
->   *	device should exit without taking any action.
-> @@ -132,6 +133,7 @@ struct device_private {
->  #ifdef CONFIG_RUST
->  	struct driver_type driver_type;
->  #endif
-> +	struct completion complete;
->  	u8 dead:1;
->  };
->  #define to_device_private_parent(obj)	\
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 2e9094f5c5aa..53568b820a13 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -9,6 +9,7 @@
->   */
-> =20
->  #include <linux/acpi.h>
-> +#include <linux/async.h>
->  #include <linux/blkdev.h>
->  #include <linux/cleanup.h>
->  #include <linux/cpufreq.h>
-> @@ -37,6 +38,10 @@
->  #include "physical_location.h"
->  #include "power/power.h"
-> =20
-> +static bool async_shutdown =3D true;
-> +module_param(async_shutdown, bool, 0644);
-> +MODULE_PARM_DESC(async_shutdown, "Enable asynchronous device shutdown su=
-pport");
-> +
->  /* Device links support. */
->  static LIST_HEAD(deferred_sync);
->  static unsigned int defer_sync_state_count =3D 1;
-> @@ -3538,6 +3543,7 @@ static int device_private_init(struct device *dev)
->  	klist_init(&dev->p->klist_children, klist_children_get,
->  		   klist_children_put);
->  	INIT_LIST_HEAD(&dev->p->deferred_probe);
-> +	init_completion(&dev->p->complete);
->  	return 0;
->  }
-> =20
-> @@ -4782,6 +4788,37 @@ int device_change_owner(struct device *dev, kuid_t=
- kuid, kgid_t kgid)
->  	return error;
->  }
-> =20
-> +static bool wants_async_shutdown(struct device *dev)
-> +{
-> +	return async_shutdown && dev->async_shutdown;
-> +}
-> +
-> +static int wait_for_device_shutdown(struct device *dev, void *data)
-> +{
-> +	bool async =3D *(bool *)data;
-> +
-> +	if (async || wants_async_shutdown(dev))
-> +		wait_for_completion(&dev->p->complete);
-> +
-> +	return 0;
-> +}
-> +
-> +static void wait_for_shutdown_dependencies(struct device *dev, bool asyn=
-c)
-> +{
-> +	struct device_link *link;
-> +	int idx;
-> +
-> +	device_for_each_child(dev, &async, wait_for_device_shutdown);
-> +
-> +	idx =3D device_links_read_lock();
-> +
-> +	dev_for_each_link_to_consumer(link, dev)
-> +		if (!device_link_flag_is_sync_state_only(link->flags))
-> +			wait_for_device_shutdown(link->consumer, &async);
-> +
-> +	device_links_read_unlock(idx);
-> +}
-> +
->  static void __shutdown_one_device(struct device *dev)
->  {
->  	device_lock(dev);
-> @@ -4805,6 +4842,8 @@ static void __shutdown_one_device(struct device *de=
-v)
->  		dev->driver->shutdown(dev);
->  	}
-> =20
-> +	complete_all(&dev->p->complete);
-> +
->  	device_unlock(dev);
->  }
-> =20
-> @@ -4823,6 +4862,58 @@ static void shutdown_one_device(struct device *dev=
-)
->  	put_device(dev);
->  }
-> =20
-> +static void async_shutdown_handler(void *data, async_cookie_t cookie)
-> +{
-> +	struct device *dev =3D data;
-> +
-> +	wait_for_shutdown_dependencies(dev, true);
-> +	shutdown_one_device(dev);
-> +}
-> +
-> +static bool shutdown_device_async(struct device *dev)
-> +{
-> +	if (async_schedule_dev_nocall(async_shutdown_handler, dev))
-> +		return true;
-> +	return false;
-> +}
-> +
-> +
-> +static void early_async_shutdown_devices(void)
-> +{
-> +	struct device *dev, *next, *needs_put =3D NULL;
-> +
-> +	if (!async_shutdown)
-> +		return;
-> +
-> +	spin_lock(&devices_kset->list_lock);
-> +
-> +	list_for_each_entry_safe_reverse(dev, next, &devices_kset->list,
-> +					 kobj.entry) {
-> +		if (wants_async_shutdown(dev)) {
-> +			get_device(dev->parent);
-> +			get_device(dev);
-> +
-> +			if (shutdown_device_async(dev)) {
-> +				list_del_init(&dev->kobj.entry);
-> +			} else {
-> +				/*
-> +				 * async failed, clean up extra references
-> +				 * and run from the standard shutdown loop
-> +				 */
-> +				needs_put =3D dev;
-> +				break;
-> +			}
-> +		}
-> +	}
-> +
-> +	spin_unlock(&devices_kset->list_lock);
-> +
-> +	if (needs_put) {
-> +		put_device(needs_put->parent);
-> +		put_device(needs_put);
-> +	}
-> +}
-> +
->  /**
->   * device_shutdown - call ->shutdown() on each device to shutdown.
->   */
-> @@ -4835,6 +4926,12 @@ void device_shutdown(void)
-> =20
->  	cpufreq_suspend();
-> =20
-> +	/*
-> +	 * Start async device threads where possible to maximize potential
-> +	 * parallelism and minimize false dependency on unrelated sync devices
-> +	 */
-> +	early_async_shutdown_devices();
-> +
->  	spin_lock(&devices_kset->list_lock);
->  	/*
->  	 * Walk the devices list backward, shutting down each in turn.
-> @@ -4859,11 +4956,16 @@ void device_shutdown(void)
->  		list_del_init(&dev->kobj.entry);
->  		spin_unlock(&devices_kset->list_lock);
-> =20
-> -		shutdown_one_device(dev);
-> +		if (!wants_async_shutdown(dev) || !shutdown_device_async(dev)) {
-> +			wait_for_shutdown_dependencies(dev, false);
-> +			shutdown_one_device(dev);
-> +		}
-> =20
->  		spin_lock(&devices_kset->list_lock);
->  	}
->  	spin_unlock(&devices_kset->list_lock);
-> +
-> +	async_synchronize_full();
->  }
-> =20
->  /*
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 0be95294b6e6..da1db7d235c9 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -551,6 +551,8 @@ struct device_physical_location {
->   * @dma_skip_sync: DMA sync operations can be skipped for coherent buffe=
-rs.
->   * @dma_iommu: Device is using default IOMMU implementation for DMA and
->   *		doesn't rely on dma_ops structure.
-> + * @async_shutdown: Device shutdown may be run asynchronously and in par=
-allel
-> + *		to the shutdown of unrelated devices
->   *
->   * At the lowest level, every device in a Linux system is represented by=
- an
->   * instance of struct device. The device structure contains the informat=
-ion
-> @@ -669,6 +671,7 @@ struct device {
->  #ifdef CONFIG_IOMMU_DMA
->  	bool			dma_iommu:1;
->  #endif
-> +	bool			async_shutdown:1;
->  };
-> =20
->  /**
-> @@ -824,6 +827,16 @@ static inline bool device_async_suspend_enabled(stru=
-ct device *dev)
->  	return !!dev->power.async_suspend;
->  }
-> =20
-> +static inline bool device_enable_async_shutdown(struct device *dev)
-> +{
-> +	return dev->async_shutdown =3D true;
-> +}
+On 22/03/2026 17:37, Benjamin Marzinski wrote:
+>> I think that this work is a real regression possibility for
+>> dm-multipath, so we need to be careful.
+> At the risk of showing just how limited my SCSI knowledge is, I need to
+> ask, Is any of this actually necessary to get native scsi multipath
+> working with Implicit ALUA?
+> 
+> If the goal is to limit this to IMPLICT ALUA only, I was expecting that
+> you could just leave the scsi_dh_alua code completely alone. If native
+> scsi multipathing didn't disable the device handler, it seemed that this
+> would basically just work. With the device handler attached,
 
-Shouldn't this function just return void?
+We only get the scsi_dh_activate() -> alua_activate() call from 
+dm-mpath.c, and that callchain could not happen for native SCSI 
+multipath. But, yes, we do the alua_rtpg_queue() call from a rescan, but 
+we should be checking if the path is available first (and not rely on a 
+rescan).
 
-Maurizio
+> when the
+> array updates the ALUA state, that should, at least I believe, trigger a
+> unit attention that will fire off a RTPG command. That should update the
+> sdev->access_state, which the multipath code could use to pick the
+> correct path. Right? What am I missing here?
+> Is this just a parallel
+> exercise to overhaul the ALUA code?
+
+The SCSI community would rather not see more usage for device handlers.
+
+How we then get ALUA support for native SCSI multipath is the question. 
+My original series just really duplicated the scsi_dh_alua.c RTPG 
+support for native SCSI multipath into a limited "core" driver. Hannes 
+thinks that a core ALUA driver to also support DH would be better 
+(IIUC), which I am attempting in this series. I will re-iterate that I 
+would rather not touch scsi_dh_alua.c, unless the changes are simple and 
+obvious(ly correct).
+
+Thanks,
+John
 
