@@ -1,103 +1,103 @@
-Return-Path: <linux-scsi+bounces-22399-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22396-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OD23D1MHwWmtPwQAu9opvQ
-	(envelope-from <linux-scsi+bounces-22399-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 10:26:43 +0100
+	id 6NItEhYIwWmtPwQAu9opvQ
+	(envelope-from <linux-scsi+bounces-22396-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 10:29:58 +0100
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A592A2EF066
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 10:26:42 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD1762EF156
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 10:29:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D317230075D2
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 09:26:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B6D2B3028F4C
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Mar 2026 09:24:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04A3B3859DD;
-	Mon, 23 Mar 2026 09:26:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97D1B37F01B;
+	Mon, 23 Mar 2026 09:24:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="L88YD3Mc";
-	dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="k4nHYFKt"
+	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="U4e/Ar8R";
+	dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="NrBz2eFV"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.100])
+Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [81.169.146.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482503803C7;
-	Mon, 23 Mar 2026 09:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2922EBBAF;
+	Mon, 23 Mar 2026 09:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.172
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774257996; cv=pass; b=EbFZboO5oxldAcSzkGe8P2qZa1yPIEBvaZ9Aax9mDgwFoqqHYrhXknsrhZZ6l2dv9UDmtWSFpXr9tZPLML4Ii9iCJrWr0B1ww9MeNLCl0e01NxkANeYHo4zw7jNpmxgGlCEBXex8G2DkVRtmle8rpcSIRDqjyGdM3cBXVzHDp8o=
+	t=1774257877; cv=pass; b=nEubdobq0fkrcQAPz8W0VlnFBDxHg7Kbt6hUVw+TLXcsuA7VpRooooMx6y05eJTIqGbzIiM/YUc96O6Hy1WChI5i/jiGUr1R49X+JbFtlR5Zzon/tFetMkmv11NkTYXfdlJDcUUOkj5mMjy6uWDs2SsAPElf2zOZ8sXAV+6qCxs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774257996; c=relaxed/simple;
-	bh=jz69uyUwGakrpmRYC+wtRgveOX3LIKMiUdjPcO7KpWs=;
+	s=arc-20240116; t=1774257877; c=relaxed/simple;
+	bh=hiSOVJqwIcyS4VFBMsQFo2gPlp7wLRMjStn4C8xySDY=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZcncuUf1u3+2Fw6zUg9PkAmWejipmUHT75kriKcB+0Y3QXQoNOdtCAZuAFiI+3ePYs/ke9nj0KvDZWcpFdtPoxyR7ohvZJNb+2u6NjH3Bm7FuGspCXFq1bLUwuZ2jdHvnDe+vlLHuv5qPHAXiTd8aEyzfyzaPH3LrzhrGY/rEIk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=L88YD3Mc; dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=k4nHYFKt; arc=pass smtp.client-ip=85.215.255.100
+	 Content-Type:MIME-Version; b=oVwNm9ybb3WVNXI7KgszlfLivswQLJzKxCiQZkNH6pFH1qPyQEZDONHuJBqvr+0CuUweAp52w/A9lc5WOB4b2HOooyqcx24WPl2PlgS3nc+ipLsVxom+IZtdbtFi2D73hMIJUgZrwZmm8oVuKdoa/ldR+R+rxT448vlG/OIa040=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=U4e/Ar8R; dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=NrBz2eFV; arc=pass smtp.client-ip=81.169.146.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iokpp.de
-ARC-Seal: i=1; a=rsa-sha256; t=1774257811; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1774257866; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=TCH+GsKHAmSoyGjxZXTn2+Pe7YK9ZDkOD3r/2tIb0cERx7a08lQxecCR+yTWeQzf44
-    CVdKzHyVLh4JdyWTsgoIRvhOVo/7fpeITAB3bNBigx9aDLP1+6G0v5KAWT4rtszOPH3O
-    TyNBl56cd14Z8ZRoJWmIve8IcpKiGIvfpEAAL5SOZ0dC9X8npjcAaAcOvCwacNGvYiiP
-    /5H/pxZCs9PZwXuAyyrN3lqg64EZscgLP2smzUnGuA5M7uZ4c2LALjwzVYT56dM+k9Qu
-    cGkh4djc1B2ZmvSvM+0Hw0NxwwBOXG9sZ80SyZSWP/TirzHxoS9W/RB+w6Z4fvshnqri
-    KdHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1774257811;
+    b=UAbHx9D3zuHVDIyxVqdKDtRe6oj4lLZltTf3DSxfCnQYb+6mJVUuKRnZJvAM44pvoT
+    Fk8W9TcLUVETOxqs/SqJYf+0kZy89/wJzxuIK6P10DC2mj7MuziXMm8gsQkEPA0FlFZ6
+    adKL+wIsECIkbtlNlsHXrND2MUYH0EXklco4lsivMa1+i4xJ5hAx/W4io6Qdl/GJyaxz
+    fTHvNhBzTr3gMtfJVrFWO0M0dRCDz9RvMvD4QqKCjlbVYiLK4g0LliD4kE7wS8xmzbG+
+    ScHv7Sqel54iGqjYM/eNrgtpu4r3/EACNhKVLgnmjLmCETzinrUxrhYLSbIf7VHayJWJ
+    TABQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1774257866;
     s=strato-dkim-0002; d=strato.com;
     h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=jz69uyUwGakrpmRYC+wtRgveOX3LIKMiUdjPcO7KpWs=;
-    b=LP+3th9ztuKI2ehEzn1Nj7wzHgTcgvI09qp/A8AAB1QZeJPU7Z1im5OBEDesR9FP0+
-    6Bcg4Nk5ULpkZvHJPULYjX9Rb9jv7u2zwEjcGpq4wZ5H5d3xFyDjylQ14yFzmrs168MR
-    TbCK4Aql+cn0VybSdv+iK8OBf5hZVIyAy0gSQBUx7jbTDuTcy3E6jXzVyNvMpSAs2srA
-    FD9U3ofos+C7Y1DnMiwTU+J6FurJNQA73PccLdLvFvC1PH3SHox3HHXHhHEdM4QZa7SX
-    CxfwXxJTp9fkN7RzXV4RhkKtQw4Dcvj0MxlWFgYvxCOJoCentR8Wm9suNX91Tqqx4lJK
-    U3cw==
+    bh=hiSOVJqwIcyS4VFBMsQFo2gPlp7wLRMjStn4C8xySDY=;
+    b=nHNnK3AsJV+IfRsh2YgprZykYbeBpQYNZdMU0JlLvQLV5/5KiekZ8yqHn8IjRAeIm5
+    R2KcLTb9QXUBw15Fi26O3nDiXun0LQFRHkiRGSjlBTLDPkUySYUDixyDYmdO/jQxKysF
+    4GtRhft7HyPJwxsAZ1qrHfsFijBSu/GMz0ND59NPBUO3y4r74X9E/lin64VSHnHHNLlF
+    d3hjL5Kf5Hf+Ch6qnxuqrK8PwKUB/0EILgfKWVAwHBgLklcRDMvY4NEMd2x7SQdEQJtJ
+    CvgM9NDdXH73PfvnuogLXbcT/aQjhjHPOi4pls9wi9nDBRKo/BlCdoK4VqqnSS3wlb10
+    nbYA==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo03
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1774257811;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1774257866;
     s=strato-dkim-0002; d=iokpp.de;
     h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=jz69uyUwGakrpmRYC+wtRgveOX3LIKMiUdjPcO7KpWs=;
-    b=L88YD3Mchi3UHeb0G7M6ImtoRNJ06X0edwwNkcZHp+zlwb63MpRRblH1eIunCvuMbC
-    WWdSXpP397ddkjImVFI1uUYCl+hQUjPRsToHSIpJYmgTm8yCREgnfYXVZpKtBQ/DOZNA
-    7sdKedSIVZOJKKyXZCckj1lp9b36i2QSb3Fxtf6fxR4QXQSg/Qcw5+ybbKAcz7nhkTAp
-    dKKtNL5SSxSVRqsXgyB/4gMjtGauY5rbXyoWHxc973QPT9VYhwRAZeglP2PZGK5TKaOA
-    xRvI0f0dcAY4xTNhmyPD9oisG+q56RyTbNoH8S80qndAkFndabwHnt/Vuoq1J5nC+q5p
-    jxxw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1774257811;
+    bh=hiSOVJqwIcyS4VFBMsQFo2gPlp7wLRMjStn4C8xySDY=;
+    b=U4e/Ar8Rze0CHu0gpo5tQxRNw/f9E/8YHAmvCMFxM83LKzeBpX2wJe/RrEfho/7BMA
+    WA6GX3qu/jO8s+mUbEG+D0ZjU/YjvcUy3pm0qjjlMbQsi+aIAla+Egpn19gd9PRt1xJz
+    c2k8UNG9L8mBxI+Ejb/ZxA2ySPq3HjFe0VKItgFC5EUydxbh/87YXqj2pzNWA/3Ry2L5
+    TqZ9FYM2JgQBfUmoLplxzOLqGQHm2Mill6LKeVqTAh89VLSB2nksrkdkyHvPlFNZdqWi
+    UmOcZAlw2N3hGKIJWh53NWypZYtMejdTfcGc9OcCS4SoTnmN5wUf0h8R0UUqNuKRl544
+    wBpA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1774257866;
     s=strato-dkim-0003; d=iokpp.de;
     h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=jz69uyUwGakrpmRYC+wtRgveOX3LIKMiUdjPcO7KpWs=;
-    b=k4nHYFKt5DTPJLN2WNipCR6IYo5EYmz4OqpP9TbK2FbkOZXFZPSWzZif8GphvbTQ1M
-    c9q4yxzB4yeqh36cE9Bg==
+    bh=hiSOVJqwIcyS4VFBMsQFo2gPlp7wLRMjStn4C8xySDY=;
+    b=NrBz2eFV/UoQPFlQkqdr3tXh/Okgel6MpEqEMzliQxJRqEop881mSXY8HKc/dEW60Y
+    Ns3c1hvvGxSh0DdnKGDA==
 X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSe9tgBDSDt0V0DBslXBtZUxPOub3IZqk"
 Received: from [10.176.235.211]
     by smtp.strato.de (RZmta 55.0.1 AUTH)
-    with ESMTPSA id z7934522N9NUQOa
+    with ESMTPSA id z7934522N9OPQP0
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Mon, 23 Mar 2026 10:23:30 +0100 (CET)
-Message-ID: <3983cd37bc49045de7354b659f441730c1660db3.camel@iokpp.de>
-Subject: Re: [PATCH v4 09/12] scsi: ufs: ufs-qcom: Implement vops
- tx_eqtr_notify()
+    Mon, 23 Mar 2026 10:24:25 +0100 (CET)
+Message-ID: <143043f520f3c08bbad69ef11bf098b183e13bb7.camel@iokpp.de>
+Subject: Re: [PATCH v4 10/12] scsi: ufs: ufs-qcom: Implement vops
+ get_rx_fom()
 From: Bean Huo <beanhuo@iokpp.de>
 To: Can Guo <can.guo@oss.qualcomm.com>, avri.altman@wdc.com,
  bvanassche@acm.org,  beanhuo@micron.com, peter.wang@mediatek.com,
  martin.petersen@oracle.com,  mani@kernel.org
-Cc: linux-scsi@vger.kernel.org, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, "open list:ARM/QUALCOMM MAILING
- LIST" <linux-arm-msm@vger.kernel.org>, open list
- <linux-kernel@vger.kernel.org>
-Date: Mon, 23 Mar 2026 10:23:29 +0100
-In-Reply-To: <20260321031021.1722459-10-can.guo@oss.qualcomm.com>
+Cc: linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, open list
+ <linux-kernel@vger.kernel.org>, "open list:UNIVERSAL FLASH STORAGE HOST
+ CONTROLLER DRIVER..." <linux-arm-msm@vger.kernel.org>
+Date: Mon, 23 Mar 2026 10:24:24 +0100
+In-Reply-To: <20260321031021.1722459-11-can.guo@oss.qualcomm.com>
 References: <20260321031021.1722459-1-can.guo@oss.qualcomm.com>
-	 <20260321031021.1722459-10-can.guo@oss.qualcomm.com>
+	 <20260321031021.1722459-11-can.guo@oss.qualcomm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.44.4-0ubuntu2.1 
@@ -110,43 +110,42 @@ MIME-Version: 1.0
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[iokpp.de,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[iokpp.de:s=strato-dkim-0002,iokpp.de:s=strato-dkim-0003];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-22399-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[iokpp.de:+];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-22396-lists,linux-scsi=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	DKIM_TRACE(0.00)[iokpp.de:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[beanhuo@iokpp.de,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,iokpp.de:dkim,iokpp.de:mid,micron.com:email]
-X-Rspamd-Queue-Id: A592A2EF066
+	DBL_BLOCKED_OPENRESOLVER(0.00)[micron.com:email,iokpp.de:dkim,iokpp.de:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qualcomm.com:email]
+X-Rspamd-Queue-Id: CD1762EF156
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 On Fri, 2026-03-20 at 20:10 -0700, Can Guo wrote:
-> On some platforms, HW does not support triggering TX EQTR from the most
-> reliable High-Speed (HS) Gear (HS Gear1), but only allows to trigger TX
-> EQTR for the target HS Gear from the same HS Gear. To work around the HW
-> limitation, implement vops tx_eqtr_notify() to change Power Mode to the
-> target TX EQTR HS Gear prior to TX EQTR procedure and change Power Mode
-> back to HS Gear1 (the most reliable gear) post TX EQTR procedure.
+> On some platforms, host's M-PHY RX_FOM Attribute always reads 0, meaning
+> SW cannot rely on Figure of Merit (FOM) to identify the optimal TX
+> Equalization settings for device's TX Lanes. Implement the vops
+> ufs_qcom_get_rx_fom() such that SW can utilize the UFS Eye Opening Monito=
+r
+> (EOM) to evaluate the TX Equalization settings for device's TX Lanes.
 >=20
 > Signed-off-by: Can Guo <can.guo@oss.qualcomm.com>
-
 
 Reviewed-by: Bean Huo <beanhuo@micron.com>
 
