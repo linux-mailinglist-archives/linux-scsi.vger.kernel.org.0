@@ -1,52 +1,56 @@
-Return-Path: <linux-scsi+bounces-22589-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22591-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +C6MLieYyGklnwUAu9opvQ
-	(envelope-from <linux-scsi+bounces-22589-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sun, 29 Mar 2026 05:10:31 +0200
+	id gGVLOouZyGlinwUAu9opvQ
+	(envelope-from <linux-scsi+bounces-22591-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sun, 29 Mar 2026 05:16:27 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F46E35087A
-	for <lists+linux-scsi@lfdr.de>; Sun, 29 Mar 2026 05:10:30 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 363A03508DF
+	for <lists+linux-scsi@lfdr.de>; Sun, 29 Mar 2026 05:16:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1E83C301C921
-	for <lists+linux-scsi@lfdr.de>; Sun, 29 Mar 2026 03:10:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AFD0D301E203
+	for <lists+linux-scsi@lfdr.de>; Sun, 29 Mar 2026 03:16:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C708925A2B5;
-	Sun, 29 Mar 2026 03:09:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FDBC32C8B;
+	Sun, 29 Mar 2026 03:16:22 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
 	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FEA22F77B;
-	Sun, 29 Mar 2026 03:09:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8B927442;
+	Sun, 29 Mar 2026 03:16:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774753799; cv=none; b=bzYDR8nJGRQc9oEf1niO5DyUoo6R9brVTaOleL8o0fOWtdqIdeNletrjlDWnoM54pIjgEvtC1SxN00lFnA2e9YolwtGXdnaemFDQHtjTJ4GuuSkEfF7t5HWVBH8CGq7XnUyMzseYcLmfJN8NiyF8eneyHLUoQoLEYYGg3sxaBA0=
+	t=1774754182; cv=none; b=GBhrhwFMps3j3xaR7Ib4pJrUPsruv3vJwbryeJEUiD/GboYWtTpwCum8w298ZSQIbT+Rc+7XfWOh5yxquhQASdP8KZctMIUYkQha0BhwuNTVsopCXac3PSOcZHOYE8RXxVoKdP5mlRW04dcdC7okbq4sN+wColBm9RKw4ipyBlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774753799; c=relaxed/simple;
-	bh=1ypui5SWBO1NNiClej+/mdKywGLKHZSGRgzd6GrhxaU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FkEaQ0Tw0nSUa2yA5vn1AxObLSy5U4z+ixSzvQaJxDw5zuvWYEMM1F1n9ewH05ygh6Wiq1KjZgt9l7c3M8IIZgNqr4BD9cRU7Z+wDMO4pAV0nxEAGd68fuBNJcuj5kpQpCyT6y3U6Xor/osAbOoS5zim+KJfhZggomu2fXHi1rs=
+	s=arc-20240116; t=1774754182; c=relaxed/simple;
+	bh=kxI31Q6x/h6gFBTpOFUYOBNbqQwFfLhXRao4rZoUv40=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S6DZZcpdZFF3h7DJJrYwGvbY0ZvpzEKk9KGmUpDU5p1SuaM62iRWXXujeCvpFoIDXmM0It0EnqmBgg4G4W2bWJhBjKPQkuMBnToRD6yZJxhOr1xvpbpKIxEhosRGAOeDLc0qS90JHYSEuW3SLEsZFKPZWrfw8/ZJDAfOlgVOo70=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
 Received: from localhost.localdomain (unknown [111.196.245.197])
-	by APP-01 (Coremail) with SMTP id qwCowAB3Hmr4l8hpied8Cw--.15793S2;
-	Sun, 29 Mar 2026 11:09:45 +0800 (CST)
+	by APP-01 (Coremail) with SMTP id qwCowABXAW37l8hppOd8Cw--.811S2;
+	Sun, 29 Mar 2026 11:09:47 +0800 (CST)
 From: Pengpeng Hou <pengpeng@iscas.ac.cn>
-To: anil.gurumurthy@qlogic.com,
-	sudarsana.kalluru@qlogic.com,
+To: don.brace@microchip.com,
 	James.Bottomley@HansenPartnership.com,
 	martin.petersen@oracle.com
-Cc: kgudipat@brocade.com,
-	JBottomley@Parallels.com,
+Cc: elliott@hp.com,
+	kevin.barnett@pmcs.com,
+	JBottomley@Odin.com,
+	thenzl@redhat.com,
+	scott.teel@pmcs.com,
+	hare@Suse.de,
+	storagedev@microchip.com,
 	linux-scsi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	pengpeng@iscas.ac.cn
-Subject: [PATCH] scsi: bfa: reject unterminated adapter name payloads
-Date: Sun, 29 Mar 2026 11:09:44 +0800
-Message-ID: <20260329030944.30334-1-pengpeng@iscas.ac.cn>
+Subject: [PATCH] scsi: hpsa: use bounded formatting for controller and IRQ names
+Date: Sun, 29 Mar 2026 11:09:47 +0800
+Message-ID: <20260329030947.32427-1-pengpeng@iscas.ac.cn>
 X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -55,87 +59,131 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qwCowAB3Hmr4l8hpied8Cw--.15793S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF4rZFyrGF15Cr4fZF1fWFg_yoW8XFykpa
-	y3Xas8ur1UJr10ya1rArWrZa98Ca1xKrWDGFWrZas5C3Wvvr9rZF1rJFy0qFn3GF18K39x
-	XF4kt34UXFy8JrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+X-CM-TRANSID:qwCowABXAW37l8hppOd8Cw--.811S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCrWxCw1rJry3Jw43Cr47CFg_yoW5AFW7p3
+	y3XFWagrs7Kr12g39Ivw1UZr4fC395Ja47Kr4Dtas7ZFn7uryYvF4rCry8XFZ7GrWxZr4Y
+	kF45XFyUG3WUGrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
 	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-	0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_
-	Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67
-	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
-	v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
-	JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoWlkDU
-	UUU
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+	1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+	6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+	8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFV
+	Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
+	x4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r
+	4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
+	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+	BIdaVFxhVjvjDU0xZFpf9x0JUL0edUUUUU=
 X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
 X-Spamd-Result: default: False [0.04 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	RCVD_COUNT_THREE(0.00)[4];
 	TAGGED_RCPT(0.00)[linux-scsi];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	DMARC_NA(0.00)[iscas.ac.cn];
-	R_DKIM_NA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[pengpeng@iscas.ac.cn,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	R_DKIM_NA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22589-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-22591-lists,linux-scsi=lfdr.de];
 	TO_DN_NONE(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[]
-X-Rspamd-Queue-Id: 0F46E35087A
+X-Rspamd-Queue-Id: 363A03508DF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-bfad_iocmd_ioc_set_name() copies the fixed-length BSG request name field into equally sized kernel buffers with strcpy(). The request path validates the payload size, but it does not require the source field itself to be NUL terminated.
+hpsa stores the controller name in h->devname[8] and derives fixed
+16-byte interrupt names from it with sprintf(). Once host_no reaches
+four digits, h->devname no longer fits and the derived IRQ names then
+build on top of that already overlong string.
 
-Reject full-length unterminated names and copy accepted names with strscpy() instead of strcpy().
+Switch these name builders to scnprintf() so they stay inside the fixed buffers.
 
-Fixes: f2ee76017b30 ("[SCSI] bfa: Extend BSG to support more user commands")
+Fixes: 2946e82bdd76 ("hpsa: use scsi host_no as hpsa controller number")
+Fixes: 8b47004a5512 ("hpsa: add interrupt number to /proc/interrupts interrupt name")
 Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
 ---
- drivers/scsi/bfa/bfad_bsg.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/scsi/hpsa.c | 31 ++++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/scsi/bfa/bfad_bsg.c b/drivers/scsi/bfa/bfad_bsg.c
-index 292bc9aa43f1..4a78de3cb0ab 100644
---- a/drivers/scsi/bfa/bfad_bsg.c
-+++ b/drivers/scsi/bfa/bfad_bsg.c
-@@ -199,10 +199,18 @@ bfad_iocmd_ioc_set_name(struct bfad_s *bfad, void *cmd, unsigned int v_cmd)
- {
- 	struct bfa_bsg_ioc_name_s *iocmd = (struct bfa_bsg_ioc_name_s *) cmd;
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index a1b116cd4723..479abb23c536 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -8100,16 +8100,16 @@ static int hpsa_request_irqs(struct ctlr_info *h,
+ 	if (h->intr_mode == PERF_MODE_INT && h->msix_vectors > 0) {
+ 		/* If performant mode and MSI-X, use multiple reply queues */
+ 		for (i = 0; i < h->msix_vectors; i++) {
+-			sprintf(h->intrname[i], "%s-msix%d", h->devname, i);
++			scnprintf(h->intrname[i], sizeof(h->intrname[i]),
++				  "%s-msix%d", h->devname, i);
+ 			rc = request_irq(pci_irq_vector(h->pdev, i), msixhandler,
+-					0, h->intrname[i],
+-					&h->q[i]);
++					 0, h->intrname[i], &h->q[i]);
+ 			if (rc) {
+ 				int j;
  
-+	if (strnlen(iocmd->name, BFA_ADAPTER_SYM_NAME_LEN) >=
-+	    BFA_ADAPTER_SYM_NAME_LEN) {
-+		iocmd->status = BFA_STATUS_EINVAL;
-+		return 0;
-+	}
-+
- 	if (v_cmd == IOCMD_IOC_SET_ADAPTER_NAME)
--		strcpy(bfad->adapter_name, iocmd->name);
-+		strscpy(bfad->adapter_name, iocmd->name,
-+			sizeof(bfad->adapter_name));
- 	else if (v_cmd == IOCMD_IOC_SET_PORT_NAME)
--		strcpy(bfad->port_name, iocmd->name);
-+		strscpy(bfad->port_name, iocmd->name,
-+			sizeof(bfad->port_name));
+ 				dev_err(&h->pdev->dev,
+ 					"failed to get irq %d for %s\n",
+-				       pci_irq_vector(h->pdev, i), h->devname);
++					pci_irq_vector(h->pdev, i), h->devname);
+ 				for (j = 0; j < i; j++) {
+ 					free_irq(pci_irq_vector(h->pdev, j), &h->q[j]);
+ 					h->q[j] = 0;
+@@ -8122,19 +8122,19 @@ static int hpsa_request_irqs(struct ctlr_info *h,
+ 	} else {
+ 		/* Use single reply pool */
+ 		if (h->msix_vectors > 0 || h->pdev->msi_enabled) {
+-			sprintf(h->intrname[0], "%s-msi%s", h->devname,
+-				h->msix_vectors ? "x" : "");
++			scnprintf(h->intrname[0], sizeof(h->intrname[0]),
++				  "%s-msi%s", h->devname,
++				  h->msix_vectors ? "x" : "");
+ 			rc = request_irq(pci_irq_vector(h->pdev, irq_vector),
+-				msixhandler, 0,
+-				h->intrname[0],
+-				&h->q[h->intr_mode]);
++					 msixhandler, 0, h->intrname[0],
++					 &h->q[h->intr_mode]);
+ 		} else {
+-			sprintf(h->intrname[h->intr_mode],
+-				"%s-intx", h->devname);
++			scnprintf(h->intrname[h->intr_mode],
++				  sizeof(h->intrname[h->intr_mode]),
++				  "%s-intx", h->devname);
+ 			rc = request_irq(pci_irq_vector(h->pdev, irq_vector),
+-				intxhandler, IRQF_SHARED,
+-				h->intrname[0],
+-				&h->q[h->intr_mode]);
++					 intxhandler, IRQF_SHARED,
++					 h->intrname[0], &h->q[h->intr_mode]);
+ 		}
+ 	}
+ 	if (rc) {
+@@ -8715,7 +8715,8 @@ static int hpsa_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	if (rc)
+ 		goto clean2_5;	/* pci, lu, aer/h */
  
- 	iocmd->status = BFA_STATUS_OK;
- 	return 0;
+-	sprintf(h->devname, HPSA "%d", h->scsi_host->host_no);
++	scnprintf(h->devname, sizeof(h->devname), HPSA "%d",
++		  h->scsi_host->host_no);
+ 	h->ctlr = number_of_controllers;
+ 	number_of_controllers++;
+ 
 -- 
 2.50.1 (Apple Git-155)
 
