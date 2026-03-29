@@ -1,55 +1,70 @@
-Return-Path: <linux-scsi+bounces-22590-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22592-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uGwmMj2YyGklnwUAu9opvQ
-	(envelope-from <linux-scsi+bounces-22590-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sun, 29 Mar 2026 05:10:53 +0200
+	id KMeQGzhxyWl9yAUAu9opvQ
+	(envelope-from <linux-scsi+bounces-22592-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sun, 29 Mar 2026 20:36:40 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 801E835088A
-	for <lists+linux-scsi@lfdr.de>; Sun, 29 Mar 2026 05:10:53 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E63163539EB
+	for <lists+linux-scsi@lfdr.de>; Sun, 29 Mar 2026 20:36:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 55E013021D1A
-	for <lists+linux-scsi@lfdr.de>; Sun, 29 Mar 2026 03:10:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 488A93019079
+	for <lists+linux-scsi@lfdr.de>; Sun, 29 Mar 2026 18:35:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F297C26A1A7;
-	Sun, 29 Mar 2026 03:09:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7221838553C;
+	Sun, 29 Mar 2026 18:35:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b="eDwXr71O"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from sender-of-o57.zoho.eu (sender-of-o57.zoho.eu [136.143.169.57])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7EF2BAF7;
-	Sun, 29 Mar 2026 03:09:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774753799; cv=none; b=AbrM2rBfEMZ2Jt78U+bFcfFMqzbC8pea2wm+TD8Qc44ch7BAPsw7IVmSj/wTIF+6FOTUJORJg++5Xt9GYPBh/tZJULQOYOcE6uhouOD56/mEb8THKnw+RtvdrjUoEgZzUMpirwolq1kc14S5j2b5mfXLS7P6t2ETxnsQbLSy0L8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774753799; c=relaxed/simple;
-	bh=pWYUMfATEtczgIcRkqJvLNJcPdisI0R/YuTy1DN/Xk4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u7uhZfbyNWH97Z8DUmRMmemMZ7kVDOa2HwU0wp6jE/41xnXqdyvG25J0vCXVAnE0l7ljIZVaf393CkZLYGlYqj1s8dv/auopvNbF/zZ+Rmos+nVXQ282ep6LilPbL+culTpDB2D7dxcAQVuY0Gk08HBKVVwtUYnY22/BwYbRPPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost.localdomain (unknown [111.196.245.197])
-	by APP-01 (Coremail) with SMTP id qwCowAD3n2v8l8hpp+d8Cw--.16991S2;
-	Sun, 29 Mar 2026 11:09:48 +0800 (CST)
-From: Pengpeng Hou <pengpeng@iscas.ac.cn>
-To: njavali@marvell.com,
-	mrangankar@marvell.com,
-	James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com
-Cc: GR-QLogic-Storage-Upstream@marvell.com,
-	chad.dupuis@cavium.com,
-	hare@suse.de,
-	arun.easi@cavium.com,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F3F292B44;
+	Sun, 29 Mar 2026 18:35:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774809346; cv=pass; b=CkJcEPGobOH3aieuyF+i6Y6QcyRfBxuQFTXYz4Mtw9YVrcSdYJI4bswWWNL8vb2CIDDjRytnpM032WoytyD03foQamhZBuCq0OrskVIgkPyprdnKaMJr1dU+37XXJvNcaa+YZ5qmBNKUVR1iIg6rVXMbPT/2OoMVmc2VDq1UY4c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774809346; c=relaxed/simple;
+	bh=KluLD3an1m/I8Sen+H17GNazb32lFETpVx6pJs3U9ME=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=d1aG2cAl4qiUbsgvE3qh2JBIYxBIqGXM47g3iVntF1iv+2p81c6ETN/t6SaUyMAOhqmpNT7hHaqBMlreT/R2aS/h5MnAS6epqbwrkdH7AGwuPduvQauwvS3dFIL66JCj1syrKkhhXNBEFPQqyhGbFsqD+kEt4UlL8TNoIk9ou80=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org; spf=pass smtp.mailfrom=objecting.org; dkim=pass (1024-bit key) header.d=objecting.org header.i=objecting@objecting.org header.b=eDwXr71O; arc=pass smtp.client-ip=136.143.169.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=objecting.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=objecting.org
+ARC-Seal: i=1; a=rsa-sha256; t=1774809319; cv=none; 
+	d=zohomail.eu; s=zohoarc; 
+	b=Xlgf/zP4Zhg3LL2LW0Op0TSG9Nm5hWiYheaXbjH+NN/hGPyHIfgMoGfZZZah/tnsF5l4Cu/8qfuz4T6HOnNF76dpJmUjvAoKaRUDibX+B3W9bVvmZr7/PT604iSnNfIuUkVDzf0T+u7oXwgUrRnWVHshJiCqVa821ZETXecFUU8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
+	t=1774809319; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=P5Yc396NflXhsxNKiiVfi/eLQprdlVd89Ih6i/8GNks=; 
+	b=bG/FJSMztF6SpPZb6xQdBynzPuetwgETeOxzOrtwn244Tz8snqCW4dwV3wttPa9Bp8USDDdR14pm2sdYfcRnIE9AMnIUUC87iHH7I3Z9+iBMGg99jlFcpQQoQo68UOFps+IRAuhX8uLBbGPDdIHWfpIqYh+6pXLW727i4JNNIMA=
+ARC-Authentication-Results: i=1; mx.zohomail.eu;
+	dkim=pass  header.i=objecting.org;
+	spf=pass  smtp.mailfrom=objecting@objecting.org;
+	dmarc=pass header.from=<objecting@objecting.org>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1774809319;
+	s=zmail; d=objecting.org; i=objecting@objecting.org;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+	bh=P5Yc396NflXhsxNKiiVfi/eLQprdlVd89Ih6i/8GNks=;
+	b=eDwXr71OS+h9uUzgbiwPai8/lq8kFoAy6Ev9E75kzC3IiI/JQKgkS3AXVyYXXurl
+	mb6YTEABYN8aXRY68gKXLp9NRouzpEcj9Brvje6XJ0k3cxS0i/rmbpENATZQGLwORbG
+	fI7KtmgmlRg+hp4AAfnSCLxjroRMscxnoLrfriHA=
+Received: by mx.zoho.eu with SMTPS id 17748093160311013.9868925616536;
+	Sun, 29 Mar 2026 20:35:16 +0200 (CEST)
+From: Josh Law <objecting@objecting.org>
+To: Manivannan Sadhasivam <mani@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: linux-arm-msm@vger.kernel.org,
 	linux-scsi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	pengpeng@iscas.ac.cn
-Subject: [PATCH] scsi: qedi: bound UIO TX packet length before copying
-Date: Sun, 29 Mar 2026 11:09:47 +0800
-Message-ID: <20260329030947.32451-1-pengpeng@iscas.ac.cn>
-X-Mailer: git-send-email 2.50.1
+	Josh Law <objecting@objecting.org>
+Subject: [PATCH] scsi: ufs: qcom: stop ignoring hibern8 exit failures
+Date: Sun, 29 Mar 2026 18:35:14 +0000
+Message-Id: <20260329183514.133412-1-objecting@objecting.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -57,92 +72,64 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qwCowAD3n2v8l8hpp+d8Cw--.16991S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr15WryUur47uF47trW8WFg_yoW8XF43pF
-	WftayYyay5CF4YgF9rJw1UJF1Fka4kZFW2gF9rZw18ZryfG3yqkF1rGa4UZr10q3Z7AwsF
-	yw1qqa4UGF9FqF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-	6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-	1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-	6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
-	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-	8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFV
-	Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
-	x4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r
-	4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
-	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-	BIdaVFxhVjvjDU0xZFpf9x0JUgXocUUUUU=
-X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
-X-Spamd-Result: default: False [0.04 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-ZohoMailClient: External
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[objecting.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[objecting.org:s=zmail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	NEURAL_HAM(-0.00)[-1.000];
-	DMARC_NA(0.00)[iscas.ac.cn];
-	R_DKIM_NA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pengpeng@iscas.ac.cn,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22590-lists,linux-scsi=lfdr.de];
-	TO_DN_NONE(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[]
-X-Rspamd-Queue-Id: 801E835088A
+	TAGGED_FROM(0.00)[bounces-22592-lists,linux-scsi=lfdr.de];
+	DKIM_TRACE(0.00)[objecting.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[objecting@objecting.org,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[objecting.org:dkim,objecting.org:email,objecting.org:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E63163539EB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-qedi_data_avail() trusts the userspace-written host_tx_pkt_len field and
-uses it to size an skb and memcpy() from udev->tx_pkt. qedi_alloc_uio()
-lays out udev->tx_pkt and udev->rx_pkt one qedi_ll2_buf_size slot apart
-in the shared LL2 buffer, but qedi_data_avail() does not currently
-verify that host_tx_pkt_len stays within that TX slot.
+Right now, we're blindly returning success even if waking the link fails during clock scaling. This is a mess because the core then tries to send SCSI commands to a dead link, causing huge timeouts.
 
-Reject oversized host_tx_pkt_len values before allocating and copying the packet.
+Just return the actual error so the core can catch the failure and roll back properly.
 
-Fixes: ace7f46ba5fd ("scsi: qedi: Add QLogic FastLinQ offload iSCSI driver framework.")
-Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
+Signed-off-by: Josh Law <objecting@objecting.org>
 ---
- drivers/scsi/qedi/qedi_iscsi.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/ufs/host/ufs-qcom.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qedi/qedi_iscsi.c b/drivers/scsi/qedi/qedi_iscsi.c
-index 6ab3a989d281..83200bd063df 100644
---- a/drivers/scsi/qedi/qedi_iscsi.c
-+++ b/drivers/scsi/qedi/qedi_iscsi.c
-@@ -1219,6 +1219,7 @@ static int qedi_data_avail(struct qedi_ctx *qedi, u16 vlanid)
- 	struct qedi_uio_dev *udev;
- 	struct qedi_uio_ctrl *uctrl;
- 	struct sk_buff *skb;
-+	size_t tx_slot_len;
- 	u32 len;
- 	int rc = 0;
+diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+index 375fd24ba458..5d33a921a22f 100644
+--- a/drivers/ufs/host/ufs-qcom.c
++++ b/drivers/ufs/host/ufs-qcom.c
+@@ -1750,10 +1750,10 @@ static int ufs_qcom_clk_scale_notify(struct ufs_hba *hba, bool scale_up,
+ 		}
  
-@@ -1240,6 +1241,12 @@ static int qedi_data_avail(struct qedi_ctx *qedi, u16 vlanid)
- 		return -EINVAL;
+ 		ufs_qcom_icc_update_bw(host);
+-		ufshcd_uic_hibern8_exit(hba);
++		err = ufshcd_uic_hibern8_exit(hba);
  	}
  
-+	tx_slot_len = (char *)udev->rx_pkt - (char *)udev->tx_pkt;
-+	if (len > tx_slot_len) {
-+		QEDI_ERR(&qedi->dbg_ctx, "Invalid tx packet len %u\n", len);
-+		return -EINVAL;
-+	}
-+
- 	skb = alloc_skb(len, GFP_ATOMIC);
- 	if (!skb) {
- 		QEDI_ERR(&qedi->dbg_ctx, "alloc_skb failed\n");
+-	return 0;
++	return err;
+ }
+ 
+ static void ufs_qcom_enable_test_bus(struct ufs_qcom_host *host)
 -- 
-2.50.1 (Apple Git-155)
+2.34.1
 
 
