@@ -1,59 +1,85 @@
-Return-Path: <linux-scsi+bounces-22655-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22656-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oIhBGHUSzWmMZwYAu9opvQ
-	(envelope-from <linux-scsi+bounces-22655-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Apr 2026 14:41:25 +0200
+	id gPaHFYgVzWmMZwYAu9opvQ
+	(envelope-from <linux-scsi+bounces-22656-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Apr 2026 14:54:32 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C89637A991
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Apr 2026 14:41:24 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96EB237ACBE
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Apr 2026 14:54:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7D79C3138024
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Apr 2026 12:29:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D0A9E30E2978
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Apr 2026 12:29:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 517C940757F;
-	Wed,  1 Apr 2026 12:29:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086F040F8C2;
+	Wed,  1 Apr 2026 12:29:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8A3xcAp"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ow5ot4/7";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qOp4tiVP"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139663F7E93;
-	Wed,  1 Apr 2026 12:29:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61056408237;
+	Wed,  1 Apr 2026 12:29:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775046549; cv=none; b=XnLd6OjYZG9rUMgXXxLblD8f/vbcod8qPGXLTE98exnLI5BJ90jm4R6KnQh9bPBpZQIYmONiMi1rT5OqNvZjWJBIaQ7DfJ1bu9Tmh1jNu0BzK91roxZsfrI+raAkGgeul+efIXMzQWzg95CvmJllFW67tc+N2KzNear+JpTy2KE=
+	t=1775046554; cv=none; b=BHWGSY0Kfrf74kvlDvtakFzGZ68ocFFT8g51GkHVaxFf1t180cNwqRPrd5ECAlpnsui30pscdEDfxoyH795+tGIq4fqK1Z3KbArVF97fUlH5iJW1JZG3q4XA3X1tN/VtLRLYCQG0GTpegaYSMsMGx+7Oya/7TmH2M1S7XJdFzOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775046549; c=relaxed/simple;
-	bh=NvgNkEMAN52LEQ4N0hlij8TYcV+8I2cZgNeTB7K/fJk=;
+	s=arc-20240116; t=1775046554; c=relaxed/simple;
+	bh=pM9A3xWVLYKkCp+v4Zndq3piKQEjl5Ao/07hnkVmhfI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OxQ5KWvO3vQOpnx+XmSwt3ZLpW5OIHhhXFkRXNrj5XZb6lYRabRkaw+HdB+cDlOiXZn5imsmcpFXpBc5BZn2jsKygEyMbZhDUnM++3l9xJKov3Ni3AfVD6poD1Dmt1d+YGkrAlt9bVsoMqez+qS+feF/mzI4CBMau8/goZtCrVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8A3xcAp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36036C4CEF7;
-	Wed,  1 Apr 2026 12:29:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775046548;
-	bh=NvgNkEMAN52LEQ4N0hlij8TYcV+8I2cZgNeTB7K/fJk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=I8A3xcAp19J7C3Xq7hDDhs29w1fBgvrJxUzMTiATHfo83y6qixx/OtOlIz4gsNNlV
-	 t9kI+WT9osbrw3iPmqkHIYOCwn/ebzfsLhlrfPaXFUn/oW1KSUjkxUVeOTPwtsTlPw
-	 2UiLE0tfsSfbsVQMNC2mVZ0cMMZlOUdj2onG7DfhFbvSs0MloXFTNnQ/h8pXwmWWIl
-	 8ZJvkdtZeh06N9R1OUQd0tcEy5NNXfT8OoW+0al4pVaDhuqanGENKddGYG4ezBf0cm
-	 FgOOEyWAJ3f4fUF9T/4v1o1FeLGvElNCB5BPc0ucot+PO53jgRnUu0PWDVz/oNzGE9
-	 idVNg2ikk+cYQ==
-Date: Wed, 1 Apr 2026 17:59:01 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K . Petersen" <martin.petersen@oracle.com>, linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] scsi: ufs: ufs-qcom: Fix spelling mistake "retore"
- -> "restore"
-Message-ID: <sfyaonr2izg2xynwuwh7xvxvn4jmml7talyp2ntx3asv3eoujq@ryi6p6sliwam>
-References: <20260331153049.1344957-1-colin.i.king@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lNBpqvmZAKZ43QiiiqBnJr144xBmAqAgLXcovTm+Qp2BEY9OyKHdo2cMjY0CLKsrKyvDNPEthhBZL2J5UotKkkMybMCiY5wcWYhY9BPxP0ldD4NzDKKMdk/vdPArXCYqN8lAJZTmAtC26YIkhz3/qNd9jZkEc+lkXQk1R2/Ga7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ow5ot4/7; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qOp4tiVP; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Wed, 1 Apr 2026 14:29:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1775046550;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Pz9yqm2xW/wCQ4BGxlKJbUUSrjAgVJCbne2YOojl5Rw=;
+	b=ow5ot4/7H/V7sxugopOVzfq11RiQLgEIk56AtHOX8C9k31weT2EEv8mH8fvgN6XwYwTQqZ
+	tdJI0PSbur5wNsxwwoc6yijnh24YFaQv8uIxVAKyEwSnQEWHH6l0giXU8QkfojzVYXXVqu
+	v2KZBOOZFLZ6wrdW0zffbyoO2S9QMlAyMxmOUFcJCi1MXikAtg86Zrb9LaUMzpD/CsUh6l
+	cD3dMQ+SsLhhXvq3TCeq1lI9B/827qksmzgVsCvkcpwssOiEkUj4uSBuuQmee/AiBPD0fs
+	84szdnT0eeoe4HOWtjS56WEmQsRSlTkhaKTxK0ecWHlqA4R53xIx+ybnBi6gtg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1775046550;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Pz9yqm2xW/wCQ4BGxlKJbUUSrjAgVJCbne2YOojl5Rw=;
+	b=qOp4tiVPsDEo2clqFhCTqobVu13lAnk+NbJ72USET8+2h2SlZW/GB06+cnnw27aZZhJtqQ
+	3AXCmSfon7P8jrCw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Aaron Tomlin <atomlin@atomlin.com>
+Cc: axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+	mst@redhat.com, aacraid@microsemi.com,
+	James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com,
+	liyihang9@h-partners.com, kashyap.desai@broadcom.com,
+	sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
+	chandrakanth.patil@broadcom.com, sathya.prakash@broadcom.com,
+	sreekanth.reddy@broadcom.com, suganath-prabu.subramani@broadcom.com,
+	ranjan.kumar@broadcom.com, jinpu.wang@cloud.ionos.com,
+	tglx@kernel.org, mingo@redhat.com, peterz@infradead.org,
+	juri.lelli@redhat.com, vincent.guittot@linaro.org,
+	akpm@linux-foundation.org, maz@kernel.org, ruanjinjie@huawei.com,
+	yphbchou0911@gmail.com, wagi@kernel.org, frederic@kernel.org,
+	longman@redhat.com, chenridong@huawei.com, hare@suse.de,
+	kch@nvidia.com, ming.lei@redhat.com, steve@abita.co, sean@ashe.io,
+	chjohnst@gmail.com, neelx@suse.com, mproche@gmail.com,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-nvme@lists.infradead.org,
+	linux-scsi@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
+	mpi3mr-linuxdrv.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com
+Subject: Re: [PATCH v9 02/13] lib/group_cpus: remove dead !SMP code
+Message-ID: <20260401122908.hxUnR63u@linutronix.de>
+References: <20260330221047.630206-1-atomlin@atomlin.com>
+ <20260330221047.630206-3-atomlin@atomlin.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -62,71 +88,57 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260331153049.1344957-1-colin.i.king@gmail.com>
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+In-Reply-To: <20260330221047.630206-3-atomlin@atomlin.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
+	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-22656-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22655-lists,linux-scsi=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
+	SUBJECT_HAS_EXCLAIM(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.dk,kernel.org,lst.de,grimberg.me,redhat.com,microsemi.com,hansenpartnership.com,oracle.com,h-partners.com,broadcom.com,cloud.ionos.com,infradead.org,linaro.org,linux-foundation.org,huawei.com,gmail.com,suse.de,nvidia.com,abita.co,ashe.io,suse.com,vger.kernel.org,lists.linux.dev,lists.infradead.org];
+	RCPT_COUNT_TWELVE(0.00)[48];
+	RCVD_COUNT_THREE(0.00)[3];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mani@kernel.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0C89637A991
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bigeasy@linutronix.de,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[linutronix.de:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linutronix.de:dkim,linutronix.de:mid,suse.de:email]
+X-Rspamd-Queue-Id: 96EB237ACBE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Mar 31, 2026 at 04:30:49PM +0100, Colin Ian King wrote:
-> There is a spelling mistake in a dev_err message. Fix it.
+On 2026-03-30 18:10:36 [-0400], Aaron Tomlin wrote:
+> From: Daniel Wagner <wagi@kernel.org>
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> The support for the !SMP configuration has been removed from the core by
+> commit cac5cefbade9 ("sched/smp: Make SMP unconditional").
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+!SMP is not dead code here. You can very much compile a !SMP kernel at
+which point the code below will be used. It is more that the sched
+department decided that scheduler's maintenance will be easier since we
+don't have to deal with !SMP case anymore.
 
-- Mani
+If you wish to remove the !SMP case here you need to argue as such.
 
-> ---
->  drivers/ufs/host/ufs-qcom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> index 5a58ffef3d27..bc037db46624 100644
-> --- a/drivers/ufs/host/ufs-qcom.c
-> +++ b/drivers/ufs/host/ufs-qcom.c
-> @@ -2810,7 +2810,7 @@ static int ufs_qcom_get_rx_fom(struct ufs_hba *hba,
->  	/* Restore Power Mode. */
->  	ret = ufshcd_change_power_mode(hba, &old_pwr_info, UFSHCD_PMC_POLICY_FORCE);
->  	if (ret) {
-> -		dev_err(hba->dev, "%s: Failed to retore power mode to HS-G%u: %d\n",
-> +		dev_err(hba->dev, "%s: Failed to restore power mode to HS-G%u: %d\n",
->  			__func__, old_pwr_info.gear_tx, ret);
->  		return ret;
->  	}
-> -- 
-> 2.53.0
-> 
+> Signed-off-by: Daniel Wagner <wagi@kernel.org>
+> Reviewed-by: Hannes Reinecke <hare@suse.de>
 
--- 
-மணிவண்ணன் சதாசிவம்
+The previous patch, this one and probably the following lack a
+Signed-off-by line with your name.
+
+Sebastian
 
