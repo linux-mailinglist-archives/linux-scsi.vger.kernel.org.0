@@ -1,79 +1,73 @@
-Return-Path: <linux-scsi+bounces-22724-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22723-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0G5oEv6lzmlZpAYAu9opvQ
-	(envelope-from <linux-scsi+bounces-22724-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 02 Apr 2026 19:23:10 +0200
+	id sAkJH22lzmlZpAYAu9opvQ
+	(envelope-from <linux-scsi+bounces-22723-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 02 Apr 2026 19:20:45 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FF3538C803
-	for <lists+linux-scsi@lfdr.de>; Thu, 02 Apr 2026 19:23:09 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF0A438C7B1
+	for <lists+linux-scsi@lfdr.de>; Thu, 02 Apr 2026 19:20:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 62ADB302C993
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Apr 2026 17:14:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 53196302B77A
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Apr 2026 17:14:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E5D3EFD3E;
-	Thu,  2 Apr 2026 17:14:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600CE3F075D;
+	Thu,  2 Apr 2026 17:14:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="M/U8efY7"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="tp/JeVbW"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504A73C3C1E
-	for <linux-scsi@vger.kernel.org>; Thu,  2 Apr 2026 17:14:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9993D7D67
+	for <linux-scsi@vger.kernel.org>; Thu,  2 Apr 2026 17:14:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775150077; cv=none; b=Y4y7FxQumT19nPvyryNnLYNTxyt+89V239bnxCHkeAlvkD3dq6aQK7QiAH4CbHFvNmptbe1MdeLtv0tc3pOkUFY1okYrX/0ES5Qdxt+ol2mY6kqR15E1mZPRc3iCPGkHVNVEdhpdt/ofm1YLZe69dhOKGIi+EASyIv/x/g5Tun0=
+	t=1775150074; cv=none; b=jQlwqj9F0QnSID2LmoSRTbzct3klcBqdgYFAVELe91dQ2YTsFLSWiXqlrPfgbmJk9fmPTMnBghvKHOJ4sefCPm5mg8Scr1AgyqrR9OWqq5NTO5j1VtID4w08v0UJC3Jrr6QozJofOw2958lbOXGyO8LsCaAOGzb3dKomYGisF+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775150077; c=relaxed/simple;
-	bh=QWne1j+v+jIhqnxmUvQ+UcmNGqb+WNuTuuxuuiWFfcM=;
+	s=arc-20240116; t=1775150074; c=relaxed/simple;
+	bh=aBg0kVG3+WCOuu+gX8HAdyE4pt30MMUuHlRDgHlBV0k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Fx4V+t7qtmBCM4i6hjLZHyIvqsE9HhzDXBOyrkaxpO1WmPmE3MkVUFZvc+cfhZ8S+1UWoyu6+BK/e0FH2FQq7GAHZaCQ7WxDgLpoWgcw0JqB/dRWp3q59xCwQP4xY6x5pRjwD2tsH5vnRIZ2zEQlkN5ivCldvR8x3NqMfs4Khco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=M/U8efY7; arc=none smtp.client-ip=199.89.1.14
+	 MIME-Version; b=emaKwYkS9mrxoslO6gmQeWoiTByUDEn8CHYLYsAM+Ng9wBhw5hiaGEMrbUFEO72ARFrKNDhX3sKv/fcFwSUvfrSvfctufjrmem2OXNZjB+miTxHIc3wwxNlsTEY+YRuOXOm/vG4lY3+Uwy1oXiJuDaCG9CPSEQF5i3Tt6aMcQes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=tp/JeVbW; arc=none smtp.client-ip=199.89.1.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4fmpPK6Q7Lz1XM6Jb;
-	Thu,  2 Apr 2026 17:14:29 +0000 (UTC)
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4fmpPH5d8Pz1XM6Jc;
+	Thu,  2 Apr 2026 17:14:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1775150061; x=1777742062; bh=i5Toa
-	KazAuQcQ2err7ibxsYWSeVlfkfFhsdu1Pfkt7I=; b=M/U8efY7aneuMUA1ulhxo
-	Jvd0a9D9pjV7BXABDwIuiBEKXAJVrY4azK6AbzwtaEjk28/6fldlDxjS8tV8uciL
-	fcE1TVWJSf2Wzv9cMqpjs04USD9xjaipctjGB2bgb60vlXaZwPW0jI8RRngb0UcF
-	sEzXLjhk002UI0Gi+JpvYT+9GgQ4o1YRy8Img1eqMomsIS7u88zfgC8E//Rvxzl8
-	WUvVhnP1jj6iwr5Dvb4P5pAJEv6vI6PZe9MiqtU8mE3sICM+Gck++u37kcwwYo/3
-	9/HH+dddJpPd1SxpmvApRDdMEdN6apclBxCdW6d/8aLgvqJT8MacnzL4x35th5vJ
-	Q==
+	:received:received; s=mr01; t=1775150063; x=1777742064; bh=zSOQD
+	9pRWNA1gh0mwO3uk3uOqFI0A7+9pUeJ0RRwuVI=; b=tp/JeVbWCHw4QE32MWc+A
+	Iish3lPqbGYpu3BY9Eg8qu7/axf/kB1DvVSz94BlDPUjgagGlHGyYFIjm5O6ln4J
+	pZwmbW0QrsUwPfLJzbM6ofN6ilRRImBYPc1VG9fB3BzWELppkRVJRxK3U6rNjX24
+	yf0nzx3/xK3immOR2saOox0f/900BElLfbUUZgFOXsbka/w0Vh0PqsgUAUq+Qmpl
+	dZBy2CNN2g1OgradHo4DrcQ4iJrKF3Ij27Q5FSP814niDRIzjQNksQPjlqbBrNlr
+	u+bJsR//tG4c3dRoIkPgaOCt1RUmwfxIv2QydRZJjfr0kAq87diwMTFkLRTaa5Dh
+	g==
 X-Virus-Scanned: by MailRoute
 Received: from 011.lax.mailroute.net ([127.0.0.1])
  by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 7E_z0VxHeLfg; Thu,  2 Apr 2026 17:14:21 +0000 (UTC)
+ id 90ezATQjw04P; Thu,  2 Apr 2026 17:14:23 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4fmpP61kB9z1XM6JQ;
-	Thu,  2 Apr 2026 17:14:17 +0000 (UTC)
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4fmpPB1s2Rz1XM6Jb;
+	Thu,  2 Apr 2026 17:14:21 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	Bart Van Assche <bvanassche@acm.org>,
-	Peter Wang <peter.wang@mediatek.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	vamshi gajjela <vamshigajjela@google.com>,
-	Alok Tiwari <alok.a.tiwari@oracle.com>,
-	Chenyuan Yang <chenyuan0y@gmail.com>,
-	"ping.gao" <ping.gao@samsung.com>
-Subject: [PATCH v2 1/2] ufs: core: Introduce ufshcd_mcq_poll_n_cqe_lock()
-Date: Thu,  2 Apr 2026 10:14:01 -0700
-Message-ID: <20260402171404.3008494-2-bvanassche@acm.org>
+	Manivannan Sadhasivam <mani@kernel.org>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH v2 2/2] ufs: qcom: Reduce interrupt latency
+Date: Thu,  2 Apr 2026 10:14:02 -0700
+Message-ID: <20260402171404.3008494-3-bvanassche@acm.org>
 X-Mailer: git-send-email 2.53.0.1213.gd9a14994de-goog
 In-Reply-To: <20260402171404.3008494-1-bvanassche@acm.org>
 References: <20260402171404.3008494-1-bvanassche@acm.org>
@@ -84,107 +78,109 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,acm.org,mediatek.com,HansenPartnership.com,gmail.com,collabora.com,google.com,oracle.com,samsung.com];
-	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22724-lists,linux-scsi=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[acm.org:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-22723-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DKIM_TRACE(0.00)[acm.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mediatek.com:email]
-X-Rspamd-Queue-Id: 3FF3538C803
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: CF0A438C7B1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Introduce a new function for processing completions that accepts an
-upper limit for the number of completions to poll. Tell
-ufshcd_mcq_poll_cqe_lock() to poll at most hwq->max_entries. This is
-sufficient to poll all pending completions since there are never more
-than hwq->max_entries - 1 completions on a completion queue. This patch
-prepares for reducing the interrupt latency.
+Defer completion processing to thread context on slower CPU cores to
+prevent interrupt latency spikes. On the fastest CPU cores, keep
+processing all completions in interrupt context.
 
-Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/ufs/core/ufs-mcq.c | 14 +++++++++++---
- include/ufs/ufshcd.h       |  3 +++
- 2 files changed, 14 insertions(+), 3 deletions(-)
+ drivers/ufs/host/ufs-qcom.c | 33 +++++++++++++++++++++++++++++----
+ 1 file changed, 29 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-index 1b3062577945..e6081b97ed74 100644
---- a/drivers/ufs/core/ufs-mcq.c
-+++ b/drivers/ufs/core/ufs-mcq.c
-@@ -340,15 +340,16 @@ void ufshcd_mcq_compl_all_cqes_lock(struct ufs_hba =
-*hba,
- 	spin_unlock_irqrestore(&hwq->cq_lock, flags);
- }
+diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+index 5a58ffef3d27..4aabbd14631e 100644
+--- a/drivers/ufs/host/ufs-qcom.c
++++ b/drivers/ufs/host/ufs-qcom.c
+@@ -2370,6 +2370,16 @@ struct ufs_qcom_irq {
+ 	struct ufs_hba		*hba;
+ };
 =20
--unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
--				       struct ufs_hw_queue *hwq)
-+unsigned long ufshcd_mcq_poll_n_cqe_lock(struct ufs_hba *hba,
-+					 struct ufs_hw_queue *hwq,
-+					 unsigned int max_compl)
- {
- 	unsigned long completed_reqs =3D 0;
- 	unsigned long flags;
-=20
- 	spin_lock_irqsave(&hwq->cq_lock, flags);
- 	ufshcd_mcq_update_cq_tail_slot(hwq);
--	while (!ufshcd_mcq_is_cq_empty(hwq)) {
-+	while (!ufshcd_mcq_is_cq_empty(hwq) && completed_reqs < max_compl) {
- 		ufshcd_mcq_process_cqe(hba, hwq);
- 		ufshcd_mcq_inc_cq_head_slot(hwq);
- 		completed_reqs++;
-@@ -360,6 +361,13 @@ unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hb=
-a *hba,
-=20
- 	return completed_reqs;
- }
-+EXPORT_SYMBOL_GPL(ufshcd_mcq_poll_n_cqe_lock);
-+
-+unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
-+				       struct ufs_hw_queue *hwq)
++static irqreturn_t ufs_qcom_mcq_threaded_esi_handler(int irq, void *data=
+)
 +{
-+	return ufshcd_mcq_poll_n_cqe_lock(hba, hwq, hwq->max_entries);
++	struct ufs_qcom_irq *qi =3D data;
++	struct ufs_hba *hba =3D qi->hba;
++
++	ufshcd_mcq_poll_cqe_lock(hba, &hba->uhq[qi->idx]);
++
++	return IRQ_HANDLED;
 +}
- EXPORT_SYMBOL_GPL(ufshcd_mcq_poll_cqe_lock);
++
+ static irqreturn_t ufs_qcom_mcq_esi_handler(int irq, void *data)
+ {
+ 	struct ufs_qcom_irq *qi =3D data;
+@@ -2377,9 +2387,22 @@ static irqreturn_t ufs_qcom_mcq_esi_handler(int ir=
+q, void *data)
+ 	struct ufs_hw_queue *hwq =3D &hba->uhq[qi->idx];
 =20
- void ufshcd_mcq_make_queues_operational(struct ufs_hba *hba)
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index cfbc75d8df83..aa5f9b31ea86 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1475,6 +1475,9 @@ void ufshcd_mcq_config_mac(struct ufs_hba *hba, u32=
- max_active_cmds);
- unsigned int ufshcd_mcq_queue_cfg_addr(struct ufs_hba *hba);
- u32 ufshcd_mcq_read_cqis(struct ufs_hba *hba, int i);
- void ufshcd_mcq_write_cqis(struct ufs_hba *hba, u32 val, int i);
-+unsigned long ufshcd_mcq_poll_n_cqe_lock(struct ufs_hba *hba,
-+					 struct ufs_hw_queue *hwq,
-+					 unsigned int max_compl);
- unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
- 					 struct ufs_hw_queue *hwq);
- void ufshcd_mcq_make_queues_operational(struct ufs_hba *hba);
+ 	ufshcd_mcq_write_cqis(hba, 0x1, qi->idx);
+-	ufshcd_mcq_poll_cqe_lock(hba, hwq);
+=20
+-	return IRQ_HANDLED;
++	if (arch_scale_cpu_capacity(raw_smp_processor_id()) =3D=3D
++	    SCHED_CAPACITY_SCALE) {
++		ufshcd_mcq_poll_cqe_lock(hba, hwq);
++		return IRQ_HANDLED;
++	}
++
++	if (ufshcd_mcq_poll_n_cqe_lock(hba, hwq, 4) < 4)
++		return IRQ_HANDLED;
++
++	/*
++	 * Defer further completion processing to thread context because
++	 * processing a large number of completions in interrupt context on
++	 * slower CPU cores can result in unacceptably high interrupt latencies=
+.
++	 */
++	return IRQ_WAKE_THREAD;
+ }
+=20
+ static int ufs_qcom_config_esi(struct ufs_hba *hba)
+@@ -2415,8 +2438,10 @@ static int ufs_qcom_config_esi(struct ufs_hba *hba=
+)
+ 		qi[idx].idx =3D idx;
+ 		qi[idx].hba =3D hba;
+=20
+-		ret =3D devm_request_irq(hba->dev, qi[idx].irq, ufs_qcom_mcq_esi_handl=
+er,
+-				       IRQF_SHARED, "qcom-mcq-esi", qi + idx);
++		ret =3D devm_request_threaded_irq(hba->dev, qi[idx].irq,
++			ufs_qcom_mcq_esi_handler,
++			ufs_qcom_mcq_threaded_esi_handler,
++			IRQF_SHARED | IRQF_ONESHOT, "qcom-mcq-esi", qi + idx);
+ 		if (ret) {
+ 			dev_err(hba->dev, "%s: Failed to request IRQ for %d, err =3D %d\n",
+ 				__func__, qi[idx].irq, ret);
 
