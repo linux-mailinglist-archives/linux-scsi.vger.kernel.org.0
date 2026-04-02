@@ -1,186 +1,229 @@
-Return-Path: <linux-scsi+bounces-22723-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22725-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sAkJH22lzmlZpAYAu9opvQ
-	(envelope-from <linux-scsi+bounces-22723-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 02 Apr 2026 19:20:45 +0200
+	id cLzhCuWwzml+pQYAu9opvQ
+	(envelope-from <linux-scsi+bounces-22725-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 02 Apr 2026 20:09:41 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF0A438C7B1
-	for <lists+linux-scsi@lfdr.de>; Thu, 02 Apr 2026 19:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B566438CE8F
+	for <lists+linux-scsi@lfdr.de>; Thu, 02 Apr 2026 20:09:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 53196302B77A
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Apr 2026 17:14:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 415773095D62
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Apr 2026 18:04:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600CE3F075D;
-	Thu,  2 Apr 2026 17:14:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D40BD371CE1;
+	Thu,  2 Apr 2026 18:04:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="tp/JeVbW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="il1dJTWi"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9993D7D67
-	for <linux-scsi@vger.kernel.org>; Thu,  2 Apr 2026 17:14:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0EF7370D75
+	for <linux-scsi@vger.kernel.org>; Thu,  2 Apr 2026 18:04:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775150074; cv=none; b=jQlwqj9F0QnSID2LmoSRTbzct3klcBqdgYFAVELe91dQ2YTsFLSWiXqlrPfgbmJk9fmPTMnBghvKHOJ4sefCPm5mg8Scr1AgyqrR9OWqq5NTO5j1VtID4w08v0UJC3Jrr6QozJofOw2958lbOXGyO8LsCaAOGzb3dKomYGisF+8=
+	t=1775153055; cv=none; b=josAXeSZ6MI3P6sScZ1rbQ5MggU0N7jL6X5V6d5UT5dp8RMZEPgRn9QKX47QC5OBNRnK9Wds4l8w23HmcbOJWAGelzJM+Px2g5rNK7EfASYXTekHxp6kQHzQQ+/t3b+pYGyloWE/Vd6O8sDmOh6AmTOkhDc0i9M6nrprpY7Kzns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775150074; c=relaxed/simple;
-	bh=aBg0kVG3+WCOuu+gX8HAdyE4pt30MMUuHlRDgHlBV0k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=emaKwYkS9mrxoslO6gmQeWoiTByUDEn8CHYLYsAM+Ng9wBhw5hiaGEMrbUFEO72ARFrKNDhX3sKv/fcFwSUvfrSvfctufjrmem2OXNZjB+miTxHIc3wwxNlsTEY+YRuOXOm/vG4lY3+Uwy1oXiJuDaCG9CPSEQF5i3Tt6aMcQes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=tp/JeVbW; arc=none smtp.client-ip=199.89.1.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4fmpPH5d8Pz1XM6Jc;
-	Thu,  2 Apr 2026 17:14:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:references:in-reply-to
-	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1775150063; x=1777742064; bh=zSOQD
-	9pRWNA1gh0mwO3uk3uOqFI0A7+9pUeJ0RRwuVI=; b=tp/JeVbWCHw4QE32MWc+A
-	Iish3lPqbGYpu3BY9Eg8qu7/axf/kB1DvVSz94BlDPUjgagGlHGyYFIjm5O6ln4J
-	pZwmbW0QrsUwPfLJzbM6ofN6ilRRImBYPc1VG9fB3BzWELppkRVJRxK3U6rNjX24
-	yf0nzx3/xK3immOR2saOox0f/900BElLfbUUZgFOXsbka/w0Vh0PqsgUAUq+Qmpl
-	dZBy2CNN2g1OgradHo4DrcQ4iJrKF3Ij27Q5FSP814niDRIzjQNksQPjlqbBrNlr
-	u+bJsR//tG4c3dRoIkPgaOCt1RUmwfxIv2QydRZJjfr0kAq87diwMTFkLRTaa5Dh
-	g==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 90ezATQjw04P; Thu,  2 Apr 2026 17:14:23 +0000 (UTC)
-Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
+	s=arc-20240116; t=1775153055; c=relaxed/simple;
+	bh=F4DsrgIwCXh1HXEg5g9pfI4vm/MPlqNk9kwFD7OT3bE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DQLbQ4uaWYY0MQg1DguELDrakOroPsEsnvdKx7/ZrNsqZW38JBJMKkUJeiZVftVuh/gGQjQy2D1h0rtppktAM1Pr4ZaqC8ZRY6C5XvO7o801jn/NZdO1b1yKEEWQ9PBKD2Hur5BcC6cTKZg05KHYoiO8v/2PK8p2VBa3lz31nAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=il1dJTWi; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1775153052;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=h7yOigxXZpZsVMssh+mLEedTpd1BlUZc6Kc/zzGuCvY=;
+	b=il1dJTWirRg13EJnJEXqu9/VT8qdEL/Vvz1fPAvj68gNCZX0DPw8OvPEoTRoz8FdiaSjuF
+	uV15AhCBSueOSMhPkycVgdJJcuBDM81kkUbPcYairqXMg2+SvDaNTww9nLAg/HoerUepsU
+	MGeMslceN77OJvaWLaPSfHU4hi29KF4=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-610-bafMvKWtM46D7vCCfgvvrA-1; Thu,
+ 02 Apr 2026 14:04:08 -0400
+X-MC-Unique: bafMvKWtM46D7vCCfgvvrA-1
+X-Mimecast-MFC-AGG-ID: bafMvKWtM46D7vCCfgvvrA_1775153047
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4fmpPB1s2Rz1XM6Jb;
-	Thu,  2 Apr 2026 17:14:21 +0000 (UTC)
-From: Bart Van Assche <bvanassche@acm.org>
-To: "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org,
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 37F28195609F;
+	Thu,  2 Apr 2026 18:04:07 +0000 (UTC)
+Received: from localhost (unknown [10.44.32.37])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 20B1C30030D1;
+	Thu,  2 Apr 2026 18:04:05 +0000 (UTC)
+From: Stefan Hajnoczi <stefanha@redhat.com>
+To: target-devel@vger.kernel.org
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
+	linux-scsi@vger.kernel.org,
 	Bart Van Assche <bvanassche@acm.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH v2 2/2] ufs: qcom: Reduce interrupt latency
-Date: Thu,  2 Apr 2026 10:14:02 -0700
-Message-ID: <20260402171404.3008494-3-bvanassche@acm.org>
-X-Mailer: git-send-email 2.53.0.1213.gd9a14994de-goog
-In-Reply-To: <20260402171404.3008494-1-bvanassche@acm.org>
-References: <20260402171404.3008494-1-bvanassche@acm.org>
+	linux-kernel@vger.kernel.org,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	Maurizio Lombardi <mlombard@redhat.com>,
+	Dmitry Bogdanov <d.bogdanov@yadro.com>
+Subject: [PATCH] scsi: target: don't validate ignored fields in PROUT PREEMPT
+Date: Thu,  2 Apr 2026 14:03:42 -0400
+Message-ID: <20260402180342.126583-1-stefanha@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22723-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[redhat.com:+];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	DKIM_TRACE(0.00)[acm.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-22725-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stefanha@redhat.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: CF0A438C7B1
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,yadro.com:email]
+X-Rspamd-Queue-Id: B566438CE8F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Defer completion processing to thread context on slower CPU cores to
-prevent interrupt latency spikes. On the fastest CPU cores, keep
-processing all completions in interrupt context.
+The PERSISTENT RESERVE OUT command's PREEMPT service action provides two
+different functions: 1. preempting persistent reservations and 2.
+removing registrations. In the latter case the spec says:
 
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+  b) ignore the contents of the SCOPE field and the TYPE field;
+
+The code currently validates the SCOPE and TYPE fields even when PREEMPT
+is called to remove registrations.
+
+This patch achieves spec compliance by validating the SCOPE and TYPE
+fields only when they will actually be used.
+
+To confirm my interpretation of the specification I tested against HPE
+3PAR storage and found the TYPE field is indeed ignored in this case.
+
+Cc: Maurizio Lombardi <mlombard@redhat.com>
+Cc: Dmitry Bogdanov <d.bogdanov@yadro.com>
+Signed-off-by: Stefan Hajnoczi <stefanha@redhat.com>
 ---
- drivers/ufs/host/ufs-qcom.c | 33 +++++++++++++++++++++++++++++----
- 1 file changed, 29 insertions(+), 4 deletions(-)
+ drivers/target/target_core_pr.c | 59 ++++++++++++++++++---------------
+ 1 file changed, 32 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 5a58ffef3d27..4aabbd14631e 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -2370,6 +2370,16 @@ struct ufs_qcom_irq {
- 	struct ufs_hba		*hba;
- };
-=20
-+static irqreturn_t ufs_qcom_mcq_threaded_esi_handler(int irq, void *data=
-)
-+{
-+	struct ufs_qcom_irq *qi =3D data;
-+	struct ufs_hba *hba =3D qi->hba;
-+
-+	ufshcd_mcq_poll_cqe_lock(hba, &hba->uhq[qi->idx]);
-+
-+	return IRQ_HANDLED;
-+}
-+
- static irqreturn_t ufs_qcom_mcq_esi_handler(int irq, void *data)
+diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
+index f88e63aefcd84..11790f2c5d80f 100644
+--- a/drivers/target/target_core_pr.c
++++ b/drivers/target/target_core_pr.c
+@@ -2809,7 +2809,7 @@ static void core_scsi3_release_preempt_and_abort(
+ }
+ 
+ static sense_reason_t
+-core_scsi3_pro_preempt(struct se_cmd *cmd, int type, int scope, u64 res_key,
++core_scsi3_emulate_pro_preempt(struct se_cmd *cmd, int type, int scope, u64 res_key,
+ 		u64 sa_res_key, enum preempt_type preempt_type)
  {
- 	struct ufs_qcom_irq *qi =3D data;
-@@ -2377,9 +2387,22 @@ static irqreturn_t ufs_qcom_mcq_esi_handler(int ir=
-q, void *data)
- 	struct ufs_hw_queue *hwq =3D &hba->uhq[qi->idx];
-=20
- 	ufshcd_mcq_write_cqis(hba, 0x1, qi->idx);
--	ufshcd_mcq_poll_cqe_lock(hba, hwq);
-=20
--	return IRQ_HANDLED;
-+	if (arch_scale_cpu_capacity(raw_smp_processor_id()) =3D=3D
-+	    SCHED_CAPACITY_SCALE) {
-+		ufshcd_mcq_poll_cqe_lock(hba, hwq);
-+		return IRQ_HANDLED;
+ 	struct se_device *dev = cmd->se_dev;
+@@ -2838,11 +2838,6 @@ core_scsi3_pro_preempt(struct se_cmd *cmd, int type, int scope, u64 res_key,
+ 		core_scsi3_put_pr_reg(pr_reg_n);
+ 		return TCM_RESERVATION_CONFLICT;
+ 	}
+-	if (scope != PR_SCOPE_LU_SCOPE) {
+-		pr_err("SPC-3 PR: Illegal SCOPE: 0x%02x\n", scope);
+-		core_scsi3_put_pr_reg(pr_reg_n);
+-		return TCM_INVALID_PARAMETER_LIST;
+-	}
+ 
+ 	spin_lock(&dev->dev_reservation_lock);
+ 	pr_res_holder = dev->dev_pr_res_holder;
+@@ -2856,6 +2851,37 @@ core_scsi3_pro_preempt(struct se_cmd *cmd, int type, int scope, u64 res_key,
+ 		core_scsi3_put_pr_reg(pr_reg_n);
+ 		return TCM_INVALID_PARAMETER_LIST;
+ 	}
++
++	/* Validate TYPE and SCOPE fields if they will be used */
++	if (pr_res_holder &&
++	    (pr_res_holder->pr_res_key == sa_res_key ||
++	     (all_reg && !sa_res_key))) {
++		switch (type) {
++		case PR_TYPE_WRITE_EXCLUSIVE:
++		case PR_TYPE_EXCLUSIVE_ACCESS:
++		case PR_TYPE_WRITE_EXCLUSIVE_REGONLY:
++		case PR_TYPE_EXCLUSIVE_ACCESS_REGONLY:
++		case PR_TYPE_WRITE_EXCLUSIVE_ALLREG:
++		case PR_TYPE_EXCLUSIVE_ACCESS_ALLREG:
++			break;
++		default:
++			pr_err("SPC-3 PR: Unknown Service Action PREEMPT%s"
++				" Type: 0x%02x\n",
++				(preempt_type == PREEMPT_AND_ABORT) ?
++				"_AND_ABORT" : "", type);
++			spin_unlock(&dev->dev_reservation_lock);
++			core_scsi3_put_pr_reg(pr_reg_n);
++			return TCM_INVALID_CDB_FIELD;
++		}
++
++		if (scope != PR_SCOPE_LU_SCOPE) {
++			pr_err("SPC-3 PR: Illegal SCOPE: 0x%02x\n", scope);
++			spin_unlock(&dev->dev_reservation_lock);
++			core_scsi3_put_pr_reg(pr_reg_n);
++			return TCM_INVALID_PARAMETER_LIST;
++		}
 +	}
 +
-+	if (ufshcd_mcq_poll_n_cqe_lock(hba, hwq, 4) < 4)
-+		return IRQ_HANDLED;
-+
-+	/*
-+	 * Defer further completion processing to thread context because
-+	 * processing a large number of completions in interrupt context on
-+	 * slower CPU cores can result in unacceptably high interrupt latencies=
-.
-+	 */
-+	return IRQ_WAKE_THREAD;
+ 	/*
+ 	 * From spc4r17, section 5.7.11.4.4 Removing Registrations:
+ 	 *
+@@ -3118,27 +3144,6 @@ core_scsi3_pro_preempt(struct se_cmd *cmd, int type, int scope, u64 res_key,
+ 	return 0;
  }
-=20
- static int ufs_qcom_config_esi(struct ufs_hba *hba)
-@@ -2415,8 +2438,10 @@ static int ufs_qcom_config_esi(struct ufs_hba *hba=
-)
- 		qi[idx].idx =3D idx;
- 		qi[idx].hba =3D hba;
-=20
--		ret =3D devm_request_irq(hba->dev, qi[idx].irq, ufs_qcom_mcq_esi_handl=
-er,
--				       IRQF_SHARED, "qcom-mcq-esi", qi + idx);
-+		ret =3D devm_request_threaded_irq(hba->dev, qi[idx].irq,
-+			ufs_qcom_mcq_esi_handler,
-+			ufs_qcom_mcq_threaded_esi_handler,
-+			IRQF_SHARED | IRQF_ONESHOT, "qcom-mcq-esi", qi + idx);
- 		if (ret) {
- 			dev_err(hba->dev, "%s: Failed to request IRQ for %d, err =3D %d\n",
- 				__func__, qi[idx].irq, ret);
+ 
+-static sense_reason_t
+-core_scsi3_emulate_pro_preempt(struct se_cmd *cmd, int type, int scope,
+-		u64 res_key, u64 sa_res_key, enum preempt_type preempt_type)
+-{
+-	switch (type) {
+-	case PR_TYPE_WRITE_EXCLUSIVE:
+-	case PR_TYPE_EXCLUSIVE_ACCESS:
+-	case PR_TYPE_WRITE_EXCLUSIVE_REGONLY:
+-	case PR_TYPE_EXCLUSIVE_ACCESS_REGONLY:
+-	case PR_TYPE_WRITE_EXCLUSIVE_ALLREG:
+-	case PR_TYPE_EXCLUSIVE_ACCESS_ALLREG:
+-		return core_scsi3_pro_preempt(cmd, type, scope, res_key,
+-					      sa_res_key, preempt_type);
+-	default:
+-		pr_err("SPC-3 PR: Unknown Service Action PREEMPT%s"
+-			" Type: 0x%02x\n", (preempt_type == PREEMPT_AND_ABORT) ? "_AND_ABORT" : "", type);
+-		return TCM_INVALID_CDB_FIELD;
+-	}
+-}
+-
+-
+ static sense_reason_t
+ core_scsi3_emulate_pro_register_and_move(struct se_cmd *cmd, u64 res_key,
+ 		u64 sa_res_key, int aptpl, int unreg)
+-- 
+2.53.0
+
 
