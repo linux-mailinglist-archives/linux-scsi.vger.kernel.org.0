@@ -1,175 +1,148 @@
-Return-Path: <linux-scsi+bounces-22703-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22707-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yCOaBqUZzmmnkgYAu9opvQ
-	(envelope-from <linux-scsi+bounces-22703-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 02 Apr 2026 09:24:21 +0200
+	id CM1lCwAizmnElAYAu9opvQ
+	(envelope-from <linux-scsi+bounces-22707-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 02 Apr 2026 10:00:00 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A784385185
-	for <lists+linux-scsi@lfdr.de>; Thu, 02 Apr 2026 09:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DAB673858CA
+	for <lists+linux-scsi@lfdr.de>; Thu, 02 Apr 2026 09:59:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6CF473142CD6
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Apr 2026 07:17:51 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 69E1830475BF
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Apr 2026 07:58:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9622C3876BB;
-	Thu,  2 Apr 2026 07:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C602D38AC78;
+	Thu,  2 Apr 2026 07:58:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="f9qvXdtz"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2VGbfWPi";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="RCSzIAOv"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-qv1-f99.google.com (mail-qv1-f99.google.com [209.85.219.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2823F362143
-	for <linux-scsi@vger.kernel.org>; Thu,  2 Apr 2026 07:17:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723E9235C01;
+	Thu,  2 Apr 2026 07:58:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775114260; cv=none; b=u+f2NsRKffOnckYpNoBblkeMeIkJ9GJEs3qeDg6Ry3MqkOY0rPRyCYEdBCbv0NpBPXHxOE71v6N3jJkXxc0YcKTmad1/3/7dnqG4HwKIQ/C/N35PUQWSTWylGH6Wm19Gf1h0MYUVCkAcvi755aWpNbqJXmPZ7dcaxgwhWiSKjEY=
+	t=1775116695; cv=none; b=XcFU43zjnPlDoL63xUsTxEAOe0K/LfEuyGfbMYBp68skpgQ7boWbhtU29KJURvjEnxqz8/3CgOKperW3ubbs9XtUJsG6K9a28yvB26O/Pblv6hEu8fIGwGOQWDXEBqc3l0GWWGvgAp9v955SpNnl8c9Qz9dyaAqT76c2bF6Sowg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775114260; c=relaxed/simple;
-	bh=1gdV0SawydOTOqfq2ZqweOb9opxXVWy34LHBBXGq3jE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Bnyr5g9dXU/UarNY3TdDZVwovCBTpkgP5hAnnfcyemp1+UecPrhFbJ1oUzytwE7fP3/vqw/YXENjOb6dgSgeKgYCFvP4Ro9itDNsprDAB5EMsq9l3RAx6/RRX76MhwoNVJB6Ha8ly8mIJHAoSk5oxM/AxQGHYtPJR+mxSZ+4niM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=f9qvXdtz; arc=none smtp.client-ip=209.85.219.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-qv1-f99.google.com with SMTP id 6a1803df08f44-8a4b8c3a30bso7858156d6.3
-        for <linux-scsi@vger.kernel.org>; Thu, 02 Apr 2026 00:17:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775114258; x=1775719058;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:dkim-signature:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iANOw+j+FFixYv8CP4Q0aUKUIdpvufgAkkTBaFaBfMM=;
-        b=LQ5ZNGh8JwD6Ym2NzcqP3jqDWjpZ7x+NeHL5n3mqQoaEldsgUDXQagQTlblwe4dLdh
-         PFFCB79KrOgaVZkdfg1NDzTKF3kS6KLQ2H1/flJki6zCQBNVcrpq2TRtmgC+vjycwme7
-         +sFw4FyRiAuUsWqPrTDffmhqGsWjjxz3+UcZjHn6tbmupfCnFMyc256xzc60rj+91Ekq
-         vYojPOs4Gpu3N8HZpOlrRljZX1DjxF2MyXwrGoZeUxMqqOjWYMZutrZbncikmcH5fdSp
-         aB2OKGjAIX/v0hUuCcPXew9IRIGtnJwyA2VBPonRkSL4C39OzXRhdRQz+FzCju4Y9rw/
-         E84A==
-X-Gm-Message-State: AOJu0YxfFzWdAlFO3SMZrKuwED/y0AF5kUhtlQth/rnUJgYyZnmWiJ57
-	N+0FS4lriFxjWEDn5AkfBANZBV9RefUejJPjOKvkoSCF1AU4j1PvftQes6dKxQhcOJuGdYq6oae
-	bv5NFXXaJAEmYurCn3Bi5PrMfxDdCHI0iE3jgXTPt9e12BuOjoKBx8bQxFoUz66V22UmXwxl9+R
-	FcopuIEcgzMwvdPRmZrvvQqp0Pi3zlIruyDkUAZfQ42RJudO11RuIIkcr2dzWxoNSbb4AeG+5+/
-	jyzRRCBEIP2iJag
-X-Gm-Gg: ATEYQzwoedwADUpRCg3JWM5fvAKQekl+xqpkwx4Nvcyi2g8iAXw21mBwN+GrieSsqZH
-	1O1LBZwMB3tf2kVnSiFQX7YUDhR+XSHtOXrBTjwUYyQDkAOvJQNGekv/QSxoFj+GCm2eAErgzJU
-	DV+mZsmI22PYKghVue8Qlhgmgikwx1k6yNF1743xmULWo5x+YvkXz9Q6inkqqDvwv9SsPFYXSTJ
-	/j1wmd53a5dXZUXZHMrjdgDl6AO9luLuhfKL8e9NmumVp2N+GMQGI84cXAIdmdh/hoao81jFZ1u
-	HbXossDhMg7kJT+drzYYcSDqbeOtwQF2qIhmaUdLmCZD3JACTIbwUvA6r4Tl3vY8sYG8OKTnQ6O
-	rrztbfUHPJSBwEbMmkHv3XGUm24BYLYZuRR+yKsBL+ou1TevWC0Exnl3IrO2o/RaubG62Hqt248
-	BrhCqWoUG3TUpHAw57d9YytGQ4QfhcIpM1uJn9cNWD5tapeHgHlr6ZZGLc/is=
-X-Received: by 2002:a05:6214:43c4:b0:89c:e44c:1b9e with SMTP id 6a1803df08f44-8a5a16b5fb5mr35803696d6.41.1775114258029;
-        Thu, 02 Apr 2026 00:17:38 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-118.dlp.protect.broadcom.com. [144.49.247.118])
-        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-8a593ceedd4sm2137136d6.10.2026.04.02.00.17.37
-        for <linux-scsi@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 Apr 2026 00:17:38 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2b23af7d7e8so17179415ad.0
-        for <linux-scsi@vger.kernel.org>; Thu, 02 Apr 2026 00:17:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1775114256; x=1775719056; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iANOw+j+FFixYv8CP4Q0aUKUIdpvufgAkkTBaFaBfMM=;
-        b=f9qvXdtzvQVlY0SP5FBqiswyZ7ffWHFiAJNw0lKwK1NBVfmfgTR/LB+5jlwsZ5/oqP
-         kaicCgBGDKcEjAiOQLsHz7nrHe+cFAjXhZaoKcpe8syaS4m3Y2VfD5fC2kTjX7u9ulB9
-         jNsPKk7mqkhB5WVRRZW9ZpFE2WK2nxiUUvde0=
-X-Received: by 2002:a17:903:1a2f:b0:2b2:4e5a:9471 with SMTP id d9443c01a7336-2b2758c365cmr20897065ad.22.1775114256617;
-        Thu, 02 Apr 2026 00:17:36 -0700 (PDT)
-X-Received: by 2002:a17:903:1a2f:b0:2b2:4e5a:9471 with SMTP id d9443c01a7336-2b2758c365cmr20896855ad.22.1775114256232;
-        Thu, 02 Apr 2026 00:17:36 -0700 (PDT)
-Received: from sumit_ws.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27477c54bsm24612825ad.27.2026.04.02.00.17.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 00:17:35 -0700 (PDT)
-From: Sumit Saxena <sumit.saxena@broadcom.com>
-To: martin.petersen@oracle.com,
-	axboe@kernel.dk
-Cc: linux-scsi@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	mpi3mr-linuxdrv.pdl@broadcom.com,
-	James Rizzo <james.rizzo@broadcom.com>,
-	Sumit Saxena <sumit.saxena@broadcom.com>
-Subject: [PATCH 3/3] scsi: align scsi_device iodone_cnt to avoid cache line contention
-Date: Thu,  2 Apr 2026 13:16:37 +0530
-Message-ID: <20260402074637.92417-4-sumit.saxena@broadcom.com>
-X-Mailer: git-send-email 2.43.7
-In-Reply-To: <20260402074637.92417-1-sumit.saxena@broadcom.com>
-References: <20260402074637.92417-1-sumit.saxena@broadcom.com>
+	s=arc-20240116; t=1775116695; c=relaxed/simple;
+	bh=vHibcFiXOv8GrYg6f/bqFV+bVmQHYs2HrK6rxD8gKiU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IJJDPIsoQj65HEVmkL+LVgNjlYH8/sMdDQmV9M8Q6UtHmD+JYJMN6UgBL5MZ7U6v4I6qDGZGKeuSYp9adp6rZsoI/ZoTRvhZZPsyReN+JZPqSea66cKiim7iM7/Ie5dpf/+ppOAyIe1cIesrKjf7bO3WM2KrGp58J2WGwohtrMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2VGbfWPi; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=RCSzIAOv; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Thu, 2 Apr 2026 09:58:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1775116692;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8ds3u4+6LAQIo5JXRSrJAOTU+FbNVAjarQWEAuaA6KI=;
+	b=2VGbfWPiuvIl7w8Nm7Vgl/McrfOt8PG119L5zLfE6KMnhE2hHWKESbQsFDcFTHLjuYKwQS
+	Wi1quhUFsXmA4k/me9cksXxi4JcuROmE6HgQDaBYkaqnq0Wb1wJZsxYt4qjmJ1hGTZJ8I7
+	8jpOs1/qSDlEVPLNCtXPo3bEM33sh4phWlQMT44Hcq3W6TyjRH5pOpeWOTdLYAhOK0zcNy
+	k+1v8X7OjaUweZYskkitoDEBSEPqj52PBfX6Xlh1DV1LziwRpHiyHBa8uWdfkyXvjb4/fJ
+	e0RUpvyouMdKCc93cNwUHYKHlGIgHDtjMpicuVtsTfY1BIxq8Y97/kuZAonMrw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1775116692;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8ds3u4+6LAQIo5JXRSrJAOTU+FbNVAjarQWEAuaA6KI=;
+	b=RCSzIAOvGwKMDpOL3oHmxXQbRFkbngSE2GOk9Z6lL7gUflAeNOI03DkohbZb4f4Y/KLJvz
+	vCwwY7N6gwweLsDw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Waiman Long <longman@redhat.com>
+Cc: Aaron Tomlin <atomlin@atomlin.com>, axboe@kernel.dk, kbusch@kernel.org,
+	hch@lst.de, sagi@grimberg.me, mst@redhat.com, aacraid@microsemi.com,
+	James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com,
+	liyihang9@h-partners.com, kashyap.desai@broadcom.com,
+	sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
+	chandrakanth.patil@broadcom.com, sathya.prakash@broadcom.com,
+	sreekanth.reddy@broadcom.com, suganath-prabu.subramani@broadcom.com,
+	ranjan.kumar@broadcom.com, jinpu.wang@cloud.ionos.com,
+	tglx@kernel.org, mingo@redhat.com, peterz@infradead.org,
+	juri.lelli@redhat.com, vincent.guittot@linaro.org,
+	akpm@linux-foundation.org, maz@kernel.org, ruanjinjie@huawei.com,
+	yphbchou0911@gmail.com, wagi@kernel.org, frederic@kernel.org,
+	chenridong@huawei.com, hare@suse.de, kch@nvidia.com,
+	ming.lei@redhat.com, steve@abita.co, sean@ashe.io,
+	chjohnst@gmail.com, neelx@suse.com, mproche@gmail.com,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-nvme@lists.infradead.org,
+	linux-scsi@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
+	mpi3mr-linuxdrv.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com
+Subject: Re: [PATCH v9 09/13] isolation: Introduce io_queue isolcpus type
+Message-ID: <20260402075810.w0GVbX0Z@linutronix.de>
+References: <20260330221047.630206-1-atomlin@atomlin.com>
+ <20260330221047.630206-10-atomlin@atomlin.com>
+ <20260401124947.-d4D5Cr-@linutronix.de>
+ <5e6aa61e-0ad0-4027-bba9-cd906ab0d7e8@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5e6aa61e-0ad0-4027-bba9-cd906ab0d7e8@redhat.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[broadcom.com,reject];
-	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[broadcom.com:s=google];
+	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[broadcom.com:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22703-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-22707-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sumit.saxena@broadcom.com,linux-scsi@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[3];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[atomlin.com,kernel.dk,kernel.org,lst.de,grimberg.me,redhat.com,microsemi.com,hansenpartnership.com,oracle.com,h-partners.com,broadcom.com,cloud.ionos.com,infradead.org,linaro.org,linux-foundation.org,huawei.com,gmail.com,suse.de,nvidia.com,abita.co,ashe.io,suse.com,vger.kernel.org,lists.linux.dev,lists.infradead.org];
+	RCPT_COUNT_TWELVE(0.00)[48];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[broadcom.com:dkim,broadcom.com:email,broadcom.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bigeasy@linutronix.de,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[linutronix.de:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 7A784385185
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linutronix.de:dkim,linutronix.de:mid]
+X-Rspamd-Queue-Id: DAB673858CA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: James Rizzo <james.rizzo@broadcom.com>
+On 2026-04-01 15:05:21 [-0400], Waiman Long wrote:
+> > Could we please clarify whether we want to keep it and this
+> > additionally or if managed_irq could be used instead. This adds another
+> > bit. If networking folks jump in on managed_irqs, would they need to
+> > duplicate this with their net sub flag?
+> 
+> Yes, I will very much prefer to reuse an existing HK cpumask like
+> managed_irqs for this purpose, if possible, rather than adding another
+> cpumask that we need to manage. Note that we are in the process of making
+> these housekeeping cpumasks modifiable at run time in the near future.
 
-Place iodone_cnt on its own cache line so it does not share a cache line
-with iorequest_cnt, avoiding significant performance hits from false
-sharing when request and completion paths update these counters on some
-CPU architectures.
+Now if you want to change it at run time, it would mean to reconfigure
+the interrupts, device and so on. Not sure if this useful _or_ if it
+would be "easier" to just the tell upper layer (block in case of I/O)
+not to perform any request on this CPU. Then we would have an interrupt
+on that CPU but it wouldn't do anything.
+It would only become a problem if you would have less queues than CPUs
+and you would like to migrate things.
 
-Signed-off-by: James Rizzo <james.rizzo@broadcom.com>
-Signed-off-by: Sumit Saxena <sumit.saxena@broadcom.com>
----
- include/scsi/scsi_device.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> Cheers,
+> Longman
 
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index 9c2a7bbe5891..86c2a3a6b206 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -272,7 +272,9 @@ struct scsi_device {
- #define SCSI_DEFAULT_DEVICE_BLOCKED	3
- 
- 	atomic_t iorequest_cnt;
--	atomic_t iodone_cnt;
-+	/* ensure iorequest_cnt and iodone_cnt are on different cache lines to avoid significant
-+	   performance hits on cache line contention on some CPU architectures */
-+	atomic_t iodone_cnt ____cacheline_aligned_in_smp;
- 	atomic_t ioerr_cnt;
- 	atomic_t iotmo_cnt;
- 
--- 
-2.43.7
-
+Sebastian
 
