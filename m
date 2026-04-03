@@ -1,83 +1,80 @@
-Return-Path: <linux-scsi+bounces-22745-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22743-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AChSDeIgz2latAYAu9opvQ
-	(envelope-from <linux-scsi+bounces-22745-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Apr 2026 04:07:30 +0200
+	id yB/QC7cgz2latAYAu9opvQ
+	(envelope-from <linux-scsi+bounces-22743-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 03 Apr 2026 04:06:47 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2F52390482
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Apr 2026 04:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A3E6390448
+	for <lists+linux-scsi@lfdr.de>; Fri, 03 Apr 2026 04:06:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C4BFC30786C6
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Apr 2026 02:06:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 74F6C3050B84
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Apr 2026 02:05:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27967351C0C;
-	Fri,  3 Apr 2026 02:05:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6B0934C12B;
+	Fri,  3 Apr 2026 02:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="n4Fk6BmJ"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jCqOGlTV"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F2C34EEED;
-	Fri,  3 Apr 2026 02:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E982FD69A;
+	Fri,  3 Apr 2026 02:05:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775181952; cv=none; b=tXy/BrG6hzpzJUVQMyKFbGdQ5VeJOTBJagtCXpqxmx6VlwYeTPWu0TZ63sonKt3/BH+r7mx9rPm+1x9I2BkCcFcAZdigoLUoUYvdtEJUbRt5uZGfb1tUzimFA+KMyJu410XG2qp5SUI1nViG0vxnpgBV0GvJfAHyTRrZWxm7o+I=
+	t=1775181950; cv=none; b=NzZnuQ+Rsdu3TUCuPnXObg8IdHwUYWm+KsXExemQ84LTOBqxalvpCqfv535AlrnXVmfkXpMn/+fOlUfJpoYYi9Sf9537PNJtC3X16P7Jdndtx8J5TlPeDUe3RATuDg+hLP7tA/hHF66m1Y1OjCfUhmk+opmoGiw90b/V9HIauFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775181952; c=relaxed/simple;
-	bh=eaCcfsqQeEz09XbHGljuOKpgFS7kHZhREdNc+Cgj7vY=;
+	s=arc-20240116; t=1775181950; c=relaxed/simple;
+	bh=5V9QkxKPbuXvjEVL/pPgQZQDPdMzGhVMa4EoBzK/pg8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UU78caNyoduA+2t9UI5Ir2gf+u1YdFZidD78zyzJQnvkOffRLGTW4Boy4Nnb+AIDvprgaVFRj+1Sw4sIeATCza/6O3UsbEiUQWrNlMY0MVKFR9hbNUlzwmdK5oqamBbSnmoxA+6Ct6+mgin9oEr4ZM1ba5Ss2AtnLmxtBtYyoJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=n4Fk6BmJ; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=eZtPzEVsD123UsdiAE/wtlpyMc0AHuvJbFk9k1gMv8LvptomHLvKnyd5Vj+xBE4TbHY7XYc2m5UQm7EQWrBKN5e0ZEMZHUQLXgasYbrBX6p07fER5OUXIQSFl9ARbBmtG3T5RHymPH7dvT5Q4zIcBYvRd25zZgYCoySpLAGS44g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=jCqOGlTV; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6331tjHB3352247;
-	Fri, 3 Apr 2026 02:05:45 GMT
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 632FBr3r2879390;
+	Fri, 3 Apr 2026 02:05:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=dbL8DPCPfuBjA2tdM4zpeLWVjLV1ez+T/gaJsc4Ynq0=; b=
-	n4Fk6BmJIUte6tHwc3V7fZr0JF4fD/R5N7RecCgIXVE9vQqFf01qAOunrvRR5p17
-	NLnl3zagb0djzcB7U/dCnp4iOvHLIyqCU40G09ov1X9V4NduQCd+Wd2ZIckux2Q7
-	mCanSUuZ60XFGRyvwuf2IgZp0uzUubEE22N67qnZvZ33lG6RuGLQhncBoKhUaTyW
-	gWy2uZr5UdptqRTyL2DpBwuU5hppbc3IdoVfvf6bH9S8ltLDKlA+7j/fnFA5T/iK
-	kBkMbCjuBcSDxnnbZcRnJk8x7BAOVxEvTN9oJcP8NEjRQ+lQ9B5xu3aNt6b+yqOl
-	+RB9/5TBBvNx+3EPWXAj/A==
+	corp-2025-04-25; bh=1NvQBbpSWlfXcgtrlLhfPayDq+mNWdEUvHf8YGAmFlU=; b=
+	jCqOGlTV1HduDMun13VVNj6iMaJzogNelNm7OeWmdV8USjHvBkP8tDnj5xq5LkJG
+	m+mcF+TmB5U4JIcYW3hAx8yymBEAxZ4OhiNkLu57bvkibvNV7vtg0M8DJxvjK+kE
+	dCkzjt/8kxWG1ZAVDj2GEdyBcUjUVNeY7bHaF4ijdqq1BGZRxMiK0up1d2VYrBjs
+	P0wEKbwVij/gJCG7eXA6gYcekBMHrc0ws8foCPvc3J9XJWT2U0TnKYrjaMrHg9c0
+	X5MT7OkuryCACwcNIrsdGOf9ZpWj6IVync7675DZrW034Fq/mbnP7SMB6h54L2Zn
+	JB8Pew7tYQue4GpeyVCeew==
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d65w7hgew-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d65s11gae-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 03 Apr 2026 02:05:44 +0000 (GMT)
+	Fri, 03 Apr 2026 02:05:45 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 63313VnZ029102;
-	Fri, 3 Apr 2026 02:05:44 GMT
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 6330qqGa029103;
+	Fri, 3 Apr 2026 02:05:45 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4d65eddp5f-1
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4d65eddp5m-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 03 Apr 2026 02:05:44 +0000
+	Fri, 03 Apr 2026 02:05:45 +0000
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 63325cqf017364;
-	Fri, 3 Apr 2026 02:05:43 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 63325cqh017364;
+	Fri, 3 Apr 2026 02:05:44 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4d65eddp33-5;
-	Fri, 03 Apr 2026 02:05:43 +0000
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4d65eddp33-6;
+	Fri, 03 Apr 2026 02:05:44 +0000
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, Joshua Daley <jdaley@linux.ibm.com>
+To: Kees Cook <kees@kernel.org>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
-        mst@redhat.com, jasowang@redhat.com, pbonzini@redhat.com,
-        stefanha@redhat.com, eperezma@redhat.com,
-        James.Bottomley@HansenPartnership.com, mjrosato@linux.ibm.com,
-        farman@linux.ibm.com, frankja@linux.ibm.com
-Subject: Re: [PATCH v4 0/2] scsi: virtio_scsi: move INIT_WORK calls to virtscsi_probe
-Date: Thu,  2 Apr 2026 22:05:28 -0400
-Message-ID: <177517593441.3522679.16294248305538999842.b4-ty@oracle.com>
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] scsi: target: Replace strncpy() with strscpy() in VPD dump functions
+Date: Thu,  2 Apr 2026 22:05:29 -0400
+Message-ID: <177517593431.3522679.14923158633747124728.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260325180857.3675854-1-jdaley@linux.ibm.com>
-References: <20260325180857.3675854-1-jdaley@linux.ibm.com>
+In-Reply-To: <20260323171311.work.101-kees@kernel.org>
+References: <20260323171311.work.101-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -93,66 +90,68 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulksc
  malwarescore=0 mlxlogscore=999 phishscore=0 suspectscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
  definitions=main-2604030017
-X-Proofpoint-GUID: TfSpiJb9Ynd09kTO66-VP66KDKLyf8HN
-X-Proofpoint-ORIG-GUID: TfSpiJb9Ynd09kTO66-VP66KDKLyf8HN
-X-Authority-Analysis: v=2.4 cv=DKSCIiNb c=1 sm=1 tr=0 ts=69cf2079 b=1 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAzMDAxNyBTYWx0ZWRfX2/6qBNHAa1dO
+ XBWRskRD/IG1HEXBVINGpXUhizN1q3NVAEswZLFN/YLcjatrcRLybkw3l9/k5JoeMg8qpLEgSEb
+ zXgO1CUatA0n1212whyyTyJK4lZcIgxK9WI43IxRoTD/C73zk7YD//zLu82AgdXO9DRO6iOv5BL
+ NqM5dsdzWXR8lKCTs6afuh1KiwB+Js/iTdmTrXfi48Iq9lzJJ3pz75xMQ2hcqCxY6PYmRecXoIS
+ klokMB9A53sT//Bju7IOlaKIP+xs4narSd+1WBL+clOGqmD9ku/WGO0d9GHfdBgqwDt4ww+JQ4q
+ 44Oc0HgREw3lL4NFPBXfk7Ouy5IGTCxpWTaejnYKbdY+tqDEKewW2Uuv5nOWJ7aIgoDGA8cXaTJ
+ uvLLdCMslMgyHGwM4DQ0jeYeyfDKHawlxrOKrGDRNWYmsZ76AN4yxU4TzhOcrCjinRmMkLScONg
+ Cqc/RZO+gm38Qljut+w==
+X-Proofpoint-ORIG-GUID: EjeZY0bpFmKaAvai252AZPzNypnUxqIb
+X-Authority-Analysis: v=2.4 cv=BvOQAIX5 c=1 sm=1 tr=0 ts=69cf207a b=1 cx=c_pps
  a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
  a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=x0eKOSpe3m1H3M0S9YoZ:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=8wEe_oM4oWijXggTasMA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAzMDAxNyBTYWx0ZWRfX/J9FmuorzI4r
- 45kse0J0ZZPZV8ZJvoFa8eMblG2f0wU/2RMBGtYLtuiep2z91La9yHYaqkSNE0B7rbPYMI1nxr1
- 4lYTLGhxdeRGGQXZ9+FoeuFvQcP5Mu+rR4MLSf9r/h/3tLCpkva4qX3EDNM/ffnpfBDM3nHP2hy
- daXjI+a2bves4ScdAPkPukJeN9x1MZMF07hnp0wg1XXJ5zG5gyJnD6EAqEd3QBKGfPmyyaX7fsN
- jXzEPT+bUb7ijzFbGoNtjZEZSMK3vUWI30Cnrkf/aaIMbTyCD6eSPHFRBNDSsvG3oplRQ89/f95
- BoDyrbZJkTVSlXBfE8nPJy9XDqVK3YAq+dbNL8BaNmbxy1cGS6NCrq6ibqoED1x2CIcuWRmT5Fy
- bY3PSyk+YXl9qIoZYv1RyPccWN1ysMYhJeosK4Z/3ikqvyYjwzIvpxba8n3eWRJEr/5ryA148BS
- uANwcLygvRrKJ4nYedw==
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=o5oIOnhZENCTenyL_yNV:22 a=VwQbUJbxAAAA:8
+ a=0OMCWzbaks6jYXudNfoA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: EjeZY0bpFmKaAvai252AZPzNypnUxqIb
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[9];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
 	TAGGED_RCPT(0.00)[linux-scsi];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[9];
+	RCVD_TLS_LAST(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22745-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-22743-lists,linux-scsi=lfdr.de];
 	DKIM_TRACE(0.00)[oracle.com:+]
-X-Rspamd-Queue-Id: C2F52390482
+X-Rspamd-Queue-Id: 9A3E6390448
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, 25 Mar 2026 19:08:55 +0100, Joshua Daley wrote:
+On Mon, 23 Mar 2026 10:13:15 -0700, Kees Cook wrote:
 
-> TITLE CHANGED! Original series title:
-> "scsi: virtio_scsi: move INIT_WORK calls to virtscsi_init"
-> Previous version:
-> https://lore.kernel.org/linux-scsi/4a93583c-47a1-4700-a7bb-da75fbd231dc@linux.ibm.com/T/#t
+> Replace the deprecated[1] strncpy() with strscpy() in
+> transport_dump_vpd_proto_id(), transport_dump_vpd_assoc(),
+> transport_dump_vpd_ident_type(), and transport_dump_vpd_ident().
 > 
-> Changelog v3 -> v4:
+> All four functions follow the same pattern: a local
+> buf[VPD_TMP_BUF_SIZE] (254 bytes) is zeroed with memset(), populated
+> via sprintf()/snprintf() (always NUL-terminated), then conditionally
+> copied to p_buf with strncpy(). The p_buf destination is used as a
+> C string by all callers in target_core_configfs.c: strlen(buf) and
+> sprintf(page+len, "%s", buf) to build sysfs output.
 > 
 > [...]
 
 Applied to 7.1/scsi-queue, thanks!
 
-[1/2] scsi: virtio_scsi: move INIT_WORK calls to virtscsi_probe
-      https://git.kernel.org/mkp/scsi/c/da3159a3b3fd
-[2/2] scsi: virtio_scsi: kick event_list unconditionally
-      https://git.kernel.org/mkp/scsi/c/0019a3a5756b
+[1/1] scsi: target: Replace strncpy() with strscpy() in VPD dump functions
+      https://git.kernel.org/mkp/scsi/c/665fb6a64319
 
 -- 
 Martin K. Petersen
