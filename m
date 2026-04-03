@@ -1,156 +1,153 @@
-Return-Path: <linux-scsi+bounces-22741-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22744-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YMbWBwgez2kjtAYAu9opvQ
-	(envelope-from <linux-scsi+bounces-22741-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Apr 2026 03:55:20 +0200
+	id CDRjGssgz2latAYAu9opvQ
+	(envelope-from <linux-scsi+bounces-22744-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 03 Apr 2026 04:07:07 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B01E5390305
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Apr 2026 03:55:19 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCC0A39046D
+	for <lists+linux-scsi@lfdr.de>; Fri, 03 Apr 2026 04:07:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A7FC430087CB
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Apr 2026 01:55:18 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1ECB9306413A
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Apr 2026 02:06:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6728B33C51A;
-	Fri,  3 Apr 2026 01:55:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D295D34EEF1;
+	Fri,  3 Apr 2026 02:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BWKnfdWU"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="cG44+wdK"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD21239E6C
-	for <linux-scsi@vger.kernel.org>; Fri,  3 Apr 2026 01:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8582C34A3A5;
+	Fri,  3 Apr 2026 02:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775181317; cv=none; b=i58fqzIFSqBrrlMK4Y5M36cF1wAWGXXeFYOXw6XgnRnFi3RsmgXRS7HtFOghslR9DoQqCLECdmdt2yXXxiRYdYZCcA01FPHJ3hcjnk50lMUx2nsCE/LBu8U1pTD+8oXR5nlbDsMlp/8wIcaS8VRVknsYu62KGX30EWAAWa3M67E=
+	t=1775181951; cv=none; b=dPr7fjCALjP+0OHNO9tRt5VtujUUxVPB5TJPM5sHp79nsNoIRDne05YMBZ6nUS5LxgfWbC/uN5lNsTqqLpAIpd1x17jXUhrwyyfqLI+Y+cDxdMvCFmncu2tTDZY0ZYt2Vp4wMUdHAMQa87j3l7y8lMYa+ORUa20xpFSrgGaJ+Xk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775181317; c=relaxed/simple;
-	bh=WceCMgAM9hb0LmVATzakSRIMaK1LNusiIxhocIwwHiQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EYr6njv5Nc2StojbvJilxOKDv0lafT44d7EhYzQpU121r80ntUn29JgXVdQHm+7f12UMdvwpT7uuZrYaTxqmpK65qEKu0N+NUEgg5lHp39iIGWdf98R3P2UYxiVNtUCyEcVCT59CyzWDwMkP35pNeae+PkP1iw4Y2h0Mni8ne+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BWKnfdWU; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775181315;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZrMSG5WhqiegT+A0sFDzBwpum3aJGNMaHDmV5z7yNwo=;
-	b=BWKnfdWU6Ajv8TmsT+fAkPMrbD+5SwakVt9sdZpe4MKBuEojL6B5+BNHnpQwyO60pevD9E
-	FO4xGJkzPI1wNraTW1aS1Mx9kE7T6oK+HztqvTR86hxuxTWi/ceZVhL/SSJJ72bdsmN9aA
-	PnPdcBMfCYGKMS6cxV/xBvgA2VHcLhk=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-402-NvGV8eYKMJmendw6hIzqCQ-1; Thu,
- 02 Apr 2026 21:55:11 -0400
-X-MC-Unique: NvGV8eYKMJmendw6hIzqCQ-1
-X-Mimecast-MFC-AGG-ID: NvGV8eYKMJmendw6hIzqCQ_1775181307
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 270C4195608F;
-	Fri,  3 Apr 2026 01:55:05 +0000 (UTC)
-Received: from [10.22.88.243] (unknown [10.22.88.243])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0EAEF1800361;
-	Fri,  3 Apr 2026 01:54:55 +0000 (UTC)
-Message-ID: <57ccc69b-2f4b-40ae-b7a5-feb99e34789a@redhat.com>
-Date: Thu, 2 Apr 2026 21:54:55 -0400
+	s=arc-20240116; t=1775181951; c=relaxed/simple;
+	bh=nqwkAcOnzHmrD/ajw3/lsejsASmiSiOVHUoKji0CiUk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gVStefixgl5bgzusZ4wvVjTEI/d/ZXZq8QOIkRbI8e/qAWKNLYYYEGJBzAlUHxPTpArkSh2GKvghcJqbCM9ard2PJFbS9nm3YtRwgoaY5tKHoEK87Z7BacU2ZFVVw+662rFdpEF5TLAgS8TOu47228sK1ORKPWNvlZm9VS+cfug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=cG44+wdK; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6330P58C3150600;
+	Fri, 3 Apr 2026 02:05:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=va8tZAzcik9ibYN5dhcgHo1/7Og0KTYznIgjG96zuQE=; b=
+	cG44+wdKf6Tsvz0CAm7MuabTvueoPrpy1HHvc/ZKaE8kiPo23/Adrj05ikf7xlvO
+	BWgibIrWmphiREqrrWVL7zNnweIFafwIsLdqQzsq/DcQ6/4d6IZYVI3+a0h79Ejm
+	vbJtOOS0Gm76gQDYw+eKCapRF+amu60ueEp66+ZiIN3g48+fNqqx31Rq9Ruk/rPm
+	sPtgVUk3bpqj/RDEMB7s4m7Q1Z9JtNt5uJRNnkDbRdotbBySjwlnNJ2gxEAvLSpo
+	iUPZ+4Lu7O0FDRV1PfFtTYHkpl3cYRpsllpwYl1TCwif6O7JPSnzzqBwLclIL1KD
+	Ty4zObYB9q1v5UpD6yz2iw==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d66v5se65-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 03 Apr 2026 02:05:40 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 6331A5Lk028960;
+	Fri, 3 Apr 2026 02:05:39 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4d65eddp3b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 03 Apr 2026 02:05:39 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 63325cqX017364;
+	Fri, 3 Apr 2026 02:05:38 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4d65eddp33-1;
+	Fri, 03 Apr 2026 02:05:38 +0000
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+To: Shawn Lin <shawn.lin@rock-chips.com>, linux-scsi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH v1 1/1] scsi: ufs: rockchip: Drop unused include
+Date: Thu,  2 Apr 2026 22:05:24 -0400
+Message-ID: <177517593422.3522679.1544975066978972395.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260320215606.3236516-1-andriy.shevchenko@linux.intel.com>
+References: <20260320215606.3236516-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 09/13] isolation: Introduce io_queue isolcpus type
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Aaron Tomlin <atomlin@atomlin.com>, axboe@kernel.dk, kbusch@kernel.org,
- hch@lst.de, sagi@grimberg.me, mst@redhat.com, aacraid@microsemi.com,
- James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com,
- liyihang9@h-partners.com, kashyap.desai@broadcom.com,
- sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
- chandrakanth.patil@broadcom.com, sathya.prakash@broadcom.com,
- sreekanth.reddy@broadcom.com, suganath-prabu.subramani@broadcom.com,
- ranjan.kumar@broadcom.com, jinpu.wang@cloud.ionos.com, tglx@kernel.org,
- mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
- vincent.guittot@linaro.org, akpm@linux-foundation.org, maz@kernel.org,
- ruanjinjie@huawei.com, yphbchou0911@gmail.com, wagi@kernel.org,
- frederic@kernel.org, chenridong@huawei.com, hare@suse.de, kch@nvidia.com,
- ming.lei@redhat.com, steve@abita.co, sean@ashe.io, chjohnst@gmail.com,
- neelx@suse.com, mproche@gmail.com, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
- linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
- megaraidlinux.pdl@broadcom.com, mpi3mr-linuxdrv.pdl@broadcom.com,
- MPT-FusionLinux.pdl@broadcom.com
-References: <20260330221047.630206-1-atomlin@atomlin.com>
- <20260330221047.630206-10-atomlin@atomlin.com>
- <20260401124947.-d4D5Cr-@linutronix.de>
- <5e6aa61e-0ad0-4027-bba9-cd906ab0d7e8@redhat.com>
- <20260402075810.w0GVbX0Z@linutronix.de>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <20260402075810.w0GVbX0Z@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-02_04,2026-04-02_05,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 mlxlogscore=624 phishscore=0 suspectscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
+ definitions=main-2604030017
+X-Proofpoint-GUID: jMrp97DojdWvgtypZ3hTaCcxL8mvjgnP
+X-Authority-Analysis: v=2.4 cv=G7cR0tk5 c=1 sm=1 tr=0 ts=69cf2074 b=1 cx=c_pps
+ a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=EIcjfB9IiI4px24ztqRk:22 a=VwQbUJbxAAAA:8
+ a=kJSQstGPYqi19cbqO5EA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: jMrp97DojdWvgtypZ3hTaCcxL8mvjgnP
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAzMDAxNyBTYWx0ZWRfXz6/IPjs5Ksft
+ sSMZS7rSwfShxry1hbwSuS85VcpGz4EIl5J86V0o5m6H4LIFZPl9CmPNlFpz8W/VSIvFlazZOLR
+ +V7bmKsBhgEAccXO/n61oIvZJ1Ktvrv/kQonJhbQaE7nni/5ZGpWpu3aUW7hnRO12QTiCEcUBoz
+ mr0ikJethsbC3wPqrx+LV6e+RMbrl1Yp0ny2W597zfZnRzAWsaXW+RIj+H1ELsbeRf2oxoXXGK9
+ OFij43Xc0i7JUNsbhU5wzAZUBchXzJIPr1dzbtffK6jnIwDE3TGZu/mrKgcIqk8h1jEZzHsT4qz
+ i/vn/sdvMEd94CByE59icH9rApmIIYA/aBY+4AUWNZCSRTVqS2dnVr3ZTVPg35SUU5p+fnH3Df0
+ 146YNgToR9XRIAcVx8Vu0GiCpTYViqLWpQHjYchK0Qsom4F7Ujckq8kItgbl6nxfUbXEh6xbbx9
+ 5SIuXISiMP9YV4UcEEA==
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
+	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
+	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[atomlin.com,kernel.dk,kernel.org,lst.de,grimberg.me,redhat.com,microsemi.com,hansenpartnership.com,oracle.com,h-partners.com,broadcom.com,cloud.ionos.com,infradead.org,linaro.org,linux-foundation.org,huawei.com,gmail.com,suse.de,nvidia.com,abita.co,ashe.io,suse.com,vger.kernel.org,lists.linux.dev,lists.infradead.org];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22741-lists,linux-scsi=lfdr.de];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[48];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[longman@redhat.com,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: B01E5390305
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-22744-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[oracle.com:+]
+X-Rspamd-Queue-Id: DCC0A39046D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 4/2/26 3:58 AM, Sebastian Andrzej Siewior wrote:
-> On 2026-04-01 15:05:21 [-0400], Waiman Long wrote:
->>> Could we please clarify whether we want to keep it and this
->>> additionally or if managed_irq could be used instead. This adds another
->>> bit. If networking folks jump in on managed_irqs, would they need to
->>> duplicate this with their net sub flag?
->> Yes, I will very much prefer to reuse an existing HK cpumask like
->> managed_irqs for this purpose, if possible, rather than adding another
->> cpumask that we need to manage. Note that we are in the process of making
->> these housekeeping cpumasks modifiable at run time in the near future.
-> Now if you want to change it at run time, it would mean to reconfigure
-> the interrupts, device and so on. Not sure if this useful _or_ if it
-> would be "easier" to just the tell upper layer (block in case of I/O)
-> not to perform any request on this CPU. Then we would have an interrupt
-> on that CPU but it wouldn't do anything.
-> It would only become a problem if you would have less queues than CPUs
-> and you would like to migrate things.
+On Fri, 20 Mar 2026 22:56:06 +0100, Andy Shevchenko wrote:
 
-I know that it will not be easy. Anyway, I will let this patch reaching 
-a good compromise and get merged first before thinking about that.
+> This driver includes the legacy header <linux/gpio.h> but does
+> not use any symbols from it. Drop the inclusion.
+> 
+> 
 
-Cheers,
-Longman
+Applied to 7.1/scsi-queue, thanks!
 
+[1/1] scsi: ufs: rockchip: Drop unused include
+      https://git.kernel.org/mkp/scsi/c/8ad1ddc50d15
+
+-- 
+Martin K. Petersen
 
