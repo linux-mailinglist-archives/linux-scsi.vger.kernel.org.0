@@ -1,105 +1,65 @@
-Return-Path: <linux-scsi+bounces-22770-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22773-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yS9OBnsY0GlE3QYAu9opvQ
-	(envelope-from <linux-scsi+bounces-22770-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Apr 2026 21:43:55 +0200
+	id KJKoFSFt0Gkd7gYAu9opvQ
+	(envelope-from <linux-scsi+bounces-22773-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 04 Apr 2026 03:45:05 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B299B397D4C
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Apr 2026 21:43:54 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0138B399839
+	for <lists+linux-scsi@lfdr.de>; Sat, 04 Apr 2026 03:45:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0B33E30AAD06
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Apr 2026 19:41:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6FF15303FDCA
+	for <lists+linux-scsi@lfdr.de>; Sat,  4 Apr 2026 01:44:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8960B3D88FE;
-	Fri,  3 Apr 2026 19:41:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 743AE287246;
+	Sat,  4 Apr 2026 01:44:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="JvULn3uO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DfttzlZg"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-dy1-f225.google.com (mail-dy1-f225.google.com [74.125.82.225])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0934F3D6CB4
-	for <linux-scsi@vger.kernel.org>; Fri,  3 Apr 2026 19:41:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 362D81D63E4;
+	Sat,  4 Apr 2026 01:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775245286; cv=none; b=aNAWp5/6j3bZysOPgmxOhPgawKLlA17t5igbIJTGXpZoq4eU+SXmcVmaN+LL7D0irESPZw7YE+ybcJMkEvEv/i8mpOgGe9iU0JLMxOdx2gziNuYSdYPZzxzC4HKoI2/OBwgXv4FiwEVl7j2KorVUGQyvjV+adcwDJkSSK3Irn9I=
+	t=1775267074; cv=none; b=bCJbRixr3ROcAOe/dwpBEQSkoL75YemIFqx41BZlzLiFfelF9vOxzASkUZut3ulc0YaM2pijq06wcrtOxLE4ImNjUzKO9NzHn1rzW66XQRZE0EWccWPfG3OfsomS9kw/jrVfnXx9x6ZHCmPiAYgM4QpgwMaSbJdRiCSc4KYNY/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775245286; c=relaxed/simple;
-	bh=dXB9nsSEQr0UD6HILmUJ3dO6tL18AphRTyOEKOREPnw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NXppmzJ7d+6IGJbxQnW+NTxAgQNf/Dj1V4xYwY+11EuSq+IEQm/WuVguX3eeXednVqP3Zjp4IfSgrebYvYcxESQIinaMNU/ClfwaKkXF8JnqfI8hNb9Wpgb66kJIVv3VkG7A1VmJlaEB0YMINOoSnodDSgtKypit9uB5xxclMHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=JvULn3uO; arc=none smtp.client-ip=74.125.82.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-dy1-f225.google.com with SMTP id 5a478bee46e88-2bd801b40dbso209333eec.0
-        for <linux-scsi@vger.kernel.org>; Fri, 03 Apr 2026 12:41:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1775245282; x=1775850082; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i7Uy8gUL8icrsg5BG6MoYGthlOT8yOCeEWU7Db5146I=;
-        b=JvULn3uOwkKUaQaHqiJT+f+UAp8ILB924uzwY7yoeg21GuaTAkNMfn7WUgSTmCkyyC
-         smp36/0PpdPHWDotyaAGL/JbIpK+JlJaBVTYquHkH154ucK+3pSS95gCSapl3kKo9uf4
-         CwKtYFWipRUDso/ZR6Q+7MeTxbp66XDGH5FaEwhIQQf5KAHfzO4HRx5Ch2hcidmiMls7
-         wASCAkOrzJBIOCxCNniqYnNrUCX2PDkSp054MqK0XYeRm+Mhy60OSUv9gYlxEKXOSt89
-         AFrDjNx/epWcUHg7nLd6JKf0zEH5JSKt8eVcdbCrM6HrP6YF+DCiIQzbi/HLtM+sOnOx
-         w5wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775245282; x=1775850082;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=i7Uy8gUL8icrsg5BG6MoYGthlOT8yOCeEWU7Db5146I=;
-        b=ZZOiWUraRr/saDb1JjltJ+OUkxUa+XpCZdGgr47sUWuu2UN3yH6NatsopinWNI6N1z
-         aN0uhfSTe1qNrvPGb502KL2LZ84gpbfTGuzUJOvuuiWOOitBDvAtu7INRGr9uMPfKxVh
-         YiJSf3D13HC2mdJzpt2qUC/UemWc2nbm5Ylqc8oIEnysFKxXbKknwjCjt0klh+6tb2s9
-         MRI37vzqKmzH1A3qGYhx1cuV3SBAQZNRewjAh7cpbIQinOaOj1cIQXTeu9Ots0N+nr5x
-         MSLZ8Ghxc3E3CgBHaaSwyT+o+jrgPTwFiNHUqSuApJ38oSnfbflOUiCw+77T7+cRqUjP
-         pdaw==
-X-Forwarded-Encrypted: i=1; AJvYcCXeEmJKoMlZN9AMtnrfAxjQ5apQyAFIu0wVjBceHbcU5FAfOmXPE5JbqHmI38Fg2Ic9Uo7FcH3ol/i4@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJQkHs5Fb3331ZeCGJAAhLNY+KuH3iFGXZOjuNYPoaLFJ8qcR+
-	JFfTFmDfKAIvUshxoTcSqPQRT2h7BwxubJVvAZdnp0b4Lg3H/zeDrXvEc8IvnQkvfaKSN0tUkHa
-	NaVsNSARSBqJNzTJhS+n5nu1Cxixg/zXmhO2s
-X-Gm-Gg: AeBDiete8mielr/tjrdfN3JblRyGZ/RJrJ35viNvEX//vQbfGvxRlMPVTvSUKSwF6Y1
-	yV/3x6O5VWltPBrrpV6/9Df7fUo9vltAJT+2+wOrGBEGRjQ3DM171I37i+GGatGrwJGwcAqMPhN
-	8dnQ913hVCfkgQfclfYFY+ttaBAJJdZDG6bk1m5QS2UcgI8tMMOgSxygvl5GuwaQhqJOI6WXobP
-	8yk4313kAXvcH/yXi6TfTfjuUbVTR9hONTwFCJDZGXUJhI/ZhywuoFS1x0HEMSzI4lc5lOAvxI2
-	9Z+GuBqmxb3Kei2QIrlOpWS504Gm5KcBSoc9w4ym6cDtYVOafWXNgnhhEItItct46HObZCga++Q
-	D5qlp/KfRUm/zfrABRhBvj7P/HYizHdMLy7W40U3wlTwBmOFBhfRR9A==
-X-Received: by 2002:a05:7301:6093:b0:2c0:c55c:156f with SMTP id 5a478bee46e88-2cbfbc82969mr870935eec.4.1775245282274;
-        Fri, 03 Apr 2026 12:41:22 -0700 (PDT)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id 5a478bee46e88-2cb61750eb8sm339741eec.29.2026.04.03.12.41.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2026 12:41:22 -0700 (PDT)
-X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.29.101])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 7623D34014E;
-	Fri,  3 Apr 2026 13:41:21 -0600 (MDT)
-Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 6CCCEE41AC2; Fri,  3 Apr 2026 13:41:21 -0600 (MDT)
-From: Caleb Sander Mateos <csander@purestorage.com>
-To: Jens Axboe <axboe@kernel.dk>,
-	Christoph Hellwig <hch@lst.de>,
-	Sagi Grimberg <sagi@grimberg.me>,
-	Chaitanya Kulkarni <kch@nvidia.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-nvme@lists.infradead.org,
+	s=arc-20240116; t=1775267074; c=relaxed/simple;
+	bh=kGncH5QPq8GPbAkI+RMuvBe8TFeVXXpzYhHP07Hvrw0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qZ/ozKXlEkWjcT/6CWjREFqFF7UfXqwlaQOMKgOT0u5muBKlTDf/8XEa8+lr1PWPqs1tcGuUTULHHm1nsDlL6m5OReXztfYagWeorPXUYG8ykWsoorsDM2xfi96IuinlX1iASukej1WY/EA0YbWERhLRktoMP0RuueLIGv5CT50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DfttzlZg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A181EC4CEF7;
+	Sat,  4 Apr 2026 01:44:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775267074;
+	bh=kGncH5QPq8GPbAkI+RMuvBe8TFeVXXpzYhHP07Hvrw0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=DfttzlZgVj6qgVps+jnHVeu3qnxnoZDZy8gdcgJEGGq5RO0rrfVLQdy88LIDXmfog
+	 corCzZGq6EAHPOzlLy+GmGtzodTIj/Y8ab0sz7kWi7J6Z8C0Iycl9vtvve7wzjPAkv
+	 djQm3ioipAhHp/J5x/a6L+yxFwm8S49D3tRC5YC+DPHGVKJB/Ps0l7rxx7b5EKIwu7
+	 sBITT9BjQ9t7dqVFN+DXsGht/nFoeNxT+V6JH8XV9CA49KPhgnRb9aCvB8v5myzlL3
+	 0HjG4VCcYCKvrmtUa/pubM2yf3OtQSBDfglMkAftPXfIDCzv0+A4cGCOsTXN6GSefs
+	 +f9RcCGZs+6Cw==
+From: carlos.bilbao@kernel.org
+To: martin.petersen@oracle.com,
+	kees@kernel.org
+Cc: pabeni@redhat.com,
+	mlombard@redhat.com,
+	kuniyu@google.com,
+	d.bogdanov@yadro.com,
+	michael.christie@oracle.com,
 	linux-scsi@vger.kernel.org,
 	target-devel@vger.kernel.org,
-	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH 6/6] target: use bio_integrity_intervals() helper
-Date: Fri,  3 Apr 2026 13:41:09 -0600
-Message-ID: <20260403194109.2255933-7-csander@purestorage.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20260403194109.2255933-1-csander@purestorage.com>
-References: <20260403194109.2255933-1-csander@purestorage.com>
+	linux-kernel@vger.kernel.org,
+	bilbao@vt.edu,
+	Carlos Bilbao <carlos.bilbao@kernel.org>
+Subject: [PATCH] scsi: target: iscsi: reject zero-length Extended CDB AHS
+Date: Fri,  3 Apr 2026 18:44:29 -0700
+Message-ID: <20260404014429.115807-1-carlos.bilbao@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -108,82 +68,97 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[purestorage.com,quarantine];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[purestorage.com:s=google2022];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22770-lists,linux-scsi=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[purestorage.com:dkim,purestorage.com:email,purestorage.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	TAGGED_FROM(0.00)[bounces-22773-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[csander@purestorage.com,linux-scsi@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	RCVD_COUNT_THREE(0.00)[4];
+	FROM_NO_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
 	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[purestorage.com:+];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[carlos.bilbao@kernel.org,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: B299B397D4C
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 0138B399839
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Use bio_integrity_intervals() to convert bio->bi_iter.bi_sector to
-integrity intervals to reduce code duplication. Make the same change in
-the nvmet code that appears to have been copied from the target code.
+From: Carlos Bilbao <carlos.bilbao@kernel.org>
 
-Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+If ecdb_ahdr->ahslength is zero, two bugs follow:
+
+  kmalloc(be16_to_cpu(ecdb_ahdr->ahslength) + 15, ...)
+
+allocates 15 bytes, but the immediately following memcpy writes
+ISCSI_CDB_SIZE (16) bytes into it, a one-byte heap overflow. Also:
+
+  memcpy(cdb + ISCSI_CDB_SIZE, ecdb_ahdr->ecdb,
+           be16_to_cpu(ecdb_ahdr->ahslength) - 1);
+
+(u16)0 - 1 promotes to (int)-1 which converts to SIZE_MAX as size_t,
+causing a massive out-of-bounds write.
+
+Reject ahslength == 0 with ISCSI_REASON_PROTOCOL_ERROR before the kmalloc.
+
+Fixes: 8f1f7d297bce ("scsi: target: iscsi: Add support for extended CDB AHS")
+Signed-off-by: Carlos Bilbao (Lambda) <carlos.bilbao@kernel.org>
 ---
- drivers/nvme/target/io-cmd-bdev.c   | 3 +--
- drivers/target/target_core_iblock.c | 3 +--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ drivers/target/iscsi/iscsi_target.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/nvme/target/io-cmd-bdev.c b/drivers/nvme/target/io-cmd-bdev.c
-index f2d9e8901df4..dcf273360015 100644
---- a/drivers/nvme/target/io-cmd-bdev.c
-+++ b/drivers/nvme/target/io-cmd-bdev.c
-@@ -218,12 +218,11 @@ static int nvmet_bdev_alloc_bip(struct nvmet_req *req, struct bio *bio,
- 		pr_err("Unable to allocate bio_integrity_payload\n");
- 		return PTR_ERR(bip);
+diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
+index e80449f6ce15..8db24d35c762 100644
+--- a/drivers/target/iscsi/iscsi_target.c
++++ b/drivers/target/iscsi/iscsi_target.c
+@@ -1100,6 +1100,8 @@ int iscsit_setup_scsi_cmd(struct iscsit_conn *conn, struct iscsit_cmd *cmd,
+ 	cdb = hdr->cdb;
+ 
+ 	if (hdr->hlength) {
++		u16 ahslength;
++
+ 		ecdb_ahdr = (struct iscsi_ecdb_ahdr *) (hdr + 1);
+ 		if (ecdb_ahdr->ahstype != ISCSI_AHSTYPE_CDB) {
+ 			pr_err("Additional Header Segment type %d not supported!\n",
+@@ -1108,14 +1110,19 @@ int iscsit_setup_scsi_cmd(struct iscsit_conn *conn, struct iscsit_cmd *cmd,
+ 				ISCSI_REASON_CMD_NOT_SUPPORTED, buf);
+ 		}
+ 
+-		cdb = kmalloc(be16_to_cpu(ecdb_ahdr->ahslength) + 15,
+-			      GFP_KERNEL);
++		ahslength = be16_to_cpu(ecdb_ahdr->ahslength);
++		if (!ahslength) {
++			pr_err("Extended CDB AHS with zero length, protocol error.\n");
++			return iscsit_add_reject_cmd(cmd,
++				ISCSI_REASON_PROTOCOL_ERROR, buf);
++		}
++
++		cdb = kmalloc(ahslength + 15, GFP_KERNEL);
+ 		if (cdb == NULL)
+ 			return iscsit_add_reject_cmd(cmd,
+ 				ISCSI_REASON_BOOKMARK_NO_RESOURCES, buf);
+ 		memcpy(cdb, hdr->cdb, ISCSI_CDB_SIZE);
+-		memcpy(cdb + ISCSI_CDB_SIZE, ecdb_ahdr->ecdb,
+-		       be16_to_cpu(ecdb_ahdr->ahslength) - 1);
++		memcpy(cdb + ISCSI_CDB_SIZE, ecdb_ahdr->ecdb, ahslength - 1);
  	}
  
- 	/* virtual start sector must be in integrity interval units */
--	bip_set_seed(bip, bio->bi_iter.bi_sector >>
--		     (bi->interval_exp - SECTOR_SHIFT));
-+	bip_set_seed(bip, bio_integrity_intervals(bi, bio->bi_iter.bi_sector));
- 
- 	resid = bio_integrity_bytes(bi, bio_sectors(bio));
- 	while (resid > 0 && sg_miter_next(miter)) {
- 		len = min_t(size_t, miter->length, resid);
- 		rc = bio_integrity_add_page(bio, miter->page, len,
-diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
-index 1087d1d17c36..434ef2b0b120 100644
---- a/drivers/target/target_core_iblock.c
-+++ b/drivers/target/target_core_iblock.c
-@@ -706,12 +706,11 @@ iblock_alloc_bip(struct se_cmd *cmd, struct bio *bio,
- 		pr_err("Unable to allocate bio_integrity_payload\n");
- 		return PTR_ERR(bip);
- 	}
- 
- 	/* virtual start sector must be in integrity interval units */
--	bip_set_seed(bip, bio->bi_iter.bi_sector >>
--				  (bi->interval_exp - SECTOR_SHIFT));
-+	bip_set_seed(bip, bio_integrity_intervals(bi, bio->bi_iter.bi_sector));
- 
- 	pr_debug("IBLOCK BIP Size: %u Sector: %llu\n", bip->bip_iter.bi_size,
- 		 (unsigned long long)bip->bip_iter.bi_sector);
- 
- 	resid = bio_integrity_bytes(bi, bio_sectors(bio));
+ 	data_direction = (hdr->flags & ISCSI_FLAG_CMD_WRITE) ? DMA_TO_DEVICE :
 -- 
-2.45.2
+2.43.0
 
 
