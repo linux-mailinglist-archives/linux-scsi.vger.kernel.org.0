@@ -1,132 +1,150 @@
-Return-Path: <linux-scsi+bounces-22793-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22794-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 36KXAR9r02lViAcAu9opvQ
-	(envelope-from <linux-scsi+bounces-22793-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Apr 2026 10:13:19 +0200
+	id iNxjHkrZ02nUnAcAu9opvQ
+	(envelope-from <linux-scsi+bounces-22794-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Apr 2026 18:03:22 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A0F83A2276
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Apr 2026 10:13:18 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 752B23A50D3
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Apr 2026 18:03:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 89B3B300EF4E
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Apr 2026 08:08:05 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 95D4530074EF
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Apr 2026 16:03:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D9E2F39B9;
-	Mon,  6 Apr 2026 08:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6199A332EBB;
+	Mon,  6 Apr 2026 16:03:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linknsell.com header.i=@linknsell.com header.b="mOd9A54y";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=bom1.rp.oracleemaildelivery.com header.i=@bom1.rp.oracleemaildelivery.com header.b="BfpnDAq7"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="lzvw7pwp"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from aib29agb125.bom1.oracleemaildelivery.com (aib29agb125.bom1.oracleemaildelivery.com [192.29.172.125])
+Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477F714AD20
-	for <linux-scsi@vger.kernel.org>; Mon,  6 Apr 2026 08:08:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.29.172.125
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13093446B0
+	for <linux-scsi@vger.kernel.org>; Mon,  6 Apr 2026 16:03:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775462883; cv=none; b=ePE9CsuBvBGQFJMHciGPuqm/BcwW15PAo+WLr3htDXnOCPdY9ueXNt6eS1aGdzQ3shMliiTAdDNyIcziztL/42DxUhQ/Zyv2355IZ5EN3mh9OW6m37RqAtBYzxHCX07KeOGj6qM/kFQfQ3I78fxiYyR8nH6m9J4Q/qh8dF4/WtE=
+	t=1775491395; cv=none; b=loUcin1HSxigwdq9iIO2NM0d7qEqbp3wA+jXjc02PitmEJJKIA6NlTYjW3n0yuj4AXJK+GmjYDduYZMqLenkdp6VM7wbH9SF/2qcM7tutteZvP/G+ByYeKikASL0h7223ewH/F2zoLOXKdZFOd0/lrX0aaQtCai/P0w5TDh/IsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775462883; c=relaxed/simple;
-	bh=DOGNxOuGnChhZQLwlrQLOpL2pK7O5LofYIVDLE+YYWc=;
-	h=From:To:Subject:Date:Message-id:MIME-version:Content-type; b=O3u+jH2TEAvQ2VRUrlzTm7hfvLtdsj32vCzEpOCZyS0PNxOZIaTs1dL7JGAc9wfNL4lUOc86i78NYwp4sw06LbbP3Ce34BjWjyDpacEOM/RZfA6+DxHhKZuexyBdPpnGUapyr7G+ojQTTsPCo0ywTY4LLFV2YyG1h9Vh8PnN6v4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=linknsell.com; spf=pass smtp.mailfrom=bom1.rp.oracleemaildelivery.com; dkim=pass (2048-bit key) header.d=linknsell.com header.i=@linknsell.com header.b=mOd9A54y; dkim=pass (2048-bit key) header.d=bom1.rp.oracleemaildelivery.com header.i=@bom1.rp.oracleemaildelivery.com header.b=BfpnDAq7; arc=none smtp.client-ip=192.29.172.125
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=linknsell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bom1.rp.oracleemaildelivery.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=smtp.linknsell.com.20250508;
- d=linknsell.com;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender:List-Unsubscribe:List-Unsubscribe-Post;
- bh=DOGNxOuGnChhZQLwlrQLOpL2pK7O5LofYIVDLE+YYWc=;
- b=mOd9A54yjFC57cLF8ctpOS+aDlAY7cIQHH1RWkvx72crgrbBP8QcajkOaydjq6tly0moC7RZlirn
-   /+DytqGOD1Gr2/UIVUd3FlOnY8tvjpFfGcllsmH/Ib67rwIs1+B5bAikm1LKsXY01HAfpvqKc7Y7
-   vOEXt7Hfm/6/2UDuvr18pSserS4wgHyUhK5vc5P6g1kZ4Lv3pRdN+MsSirvYUgsvgJWa56LLwj6O
-   5gs0l9yDUwlCy8MG2x6tCP7EV5qnHJAVu1o15Svxy3Cx0VVK1SIxNBB3VkVth05eHgtsT7hquITE
-   HNT3r9dyMJ0//1RX5xh4W3Izabes+dHT2RI9gA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=prod-bom-20200207;
- d=bom1.rp.oracleemaildelivery.com;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender:List-Unsubscribe:List-Unsubscribe-Post;
- bh=DOGNxOuGnChhZQLwlrQLOpL2pK7O5LofYIVDLE+YYWc=;
- b=BfpnDAq799cUPmqhDSbuzNx901kE5ad/4ZubELdvrWqQoh6grPq0Itbe9nVvcXqemeY5w88WxiGp
-   vgfrR/hbZ9+tVrVAWBB8q3NHM/jlXjDzghDz1qCjmpHAC/EhKhRksJX7ypa6bIGKtqpHNg4HSCcc
-   S6uFeMkEqrwbBXvbERWdMmsAB+DAA4uz5cH5plvIgPZsTWS0M1RYGw6EmG4SrjQeD3n3it8dgRk8
-   BSUCsxOEQLl7pfSh50SnqPuAypj98GM5CgfLfZ2bfKZWUtIzfREw7BFDi6WjykrEXqIpSNEac24C
-   n6dPnPMrtluwlAYn9KG2XJcN1sMErJoWznL1zw==
-Received: by omta-ad1-fd2-402-ap-mumbai-1.omtaad1.vcndpbom.oraclevcn.com
- (Oracle Communications Messaging Server 8.1.0.1.20260212 64bit (built Feb 12
- 2026))
- with ESMTPS id <0TD200HPFBXC2A70@omta-ad1-fd2-402-ap-mumbai-1.omtaad1.vcndpbom.oraclevcn.com> for
- linux-scsi@vger.kernel.org; Mon, 06 Apr 2026 08:08:00 +0000 (GMT)
-List-Unsubscribe-Post: List-Unsubscribe=One-Click
-Reply-to: jisunlee@gmilweb.com
-From: Jisun Lee <NoReply@linknsell.com>
-To: linux-scsi@vger.kernel.org
-Subject: I need your help
-Date: 6 Apr 2026 09:07:56 +0100
-Message-id: <20260406075048.2801BF596C915189@linknsell.com>
+	s=arc-20240116; t=1775491395; c=relaxed/simple;
+	bh=mJlDBtTeKqrQ9h3u4VySl+p+8x7msIpWv/ppenA1xaM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZCJGC1+HefNxylHxsgi3+2BsmlbynPDFo5UQBUZCfRE3KbW4jaMOYiYHWLf1Ntt/rWYouVdS9QXVcNWlLO6NE8bzg7C9F6kEdmhOcj6NEbiV3+QDzuupTJJ4gHwat4B25aoZZDlfu1kkdGa06Zgk7Qmay+U3pICG7u3Ob0+1HZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=lzvw7pwp; arc=none smtp.client-ip=199.89.1.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fqDd748mkzlfgPZ;
+	Mon,  6 Apr 2026 16:03:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1775491382; x=1778083383; bh=2YX6l5gPOTneaURa/iciaJz7
+	zpAXjKfSGte17sq40CM=; b=lzvw7pwpbSAuP52DXvBzXROWIYojvTOZ1QWuaAtn
+	xdn6AuMyWWdr2n5TWeq7VZcZ+gnNAtpi9bTZZEdTi40+IVyLoSmaT1+NoXHBXdlm
+	asqVukBPvYM5l52WaYGFREZOwnm9hmQRTPO+Kd7n8ZsTvhJdAtOQ2GV88K3sUovV
+	6f19GU9+rpescD89KyN+no884Z3mmFN9pUOOwlSILfVhR0aDprxbf+N/34gu7Q7j
+	O0S6sPgph5fbJteQ1qRsHLSXpySMjSKdQLYQI1YfrBiGH4xeClsWIIco2xzdnKLL
+	zyEKE4FiUnEMwdmIY8Govh7HCl3LlQPJjXj0xDYHJ5lnfQ==
+X-Virus-Scanned: by MailRoute
+Received: from 013.lax.mailroute.net ([127.0.0.1])
+ by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id pncVTJuHuXI4; Mon,  6 Apr 2026 16:03:02 +0000 (UTC)
+Received: from [100.119.48.131] (unknown [104.135.180.219])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fqDd12F6Yzlgy20;
+	Mon,  6 Apr 2026 16:03:01 +0000 (UTC)
+Message-ID: <7312936a-bd21-4c4d-a307-eb03c55af825@acm.org>
+Date: Mon, 6 Apr 2026 09:02:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-version: 1.0
-Content-type: text/plain;	charset="utf-8"
-Content-transfer-encoding: quoted-printable
-Reporting-Meta:
- AAFZ4Qxoyrv5K+2lYPZC9Mh2LCb8XPU7SkRF9j5w46KRuwxTYk0FUeFx2TevgHPv
- TnL/HTAqCHykhcMUTrDaSXL6V6yQSjsidAkPAtsGBTkrWHlODCBmlMvByXhkvNzR
- 9tKMosH0KJ89c5AYZTLBTfzrlBzLL76nhu17Qiwa5s7R+EXMx7ADo16mgAgNpGzu
- sRb6v3DXPnGg+hz584sCApepDgwBUhXeeeikzQue8cgj6na1YKBJSMuY58jxJUZv
- ZL8PDTwKhkiJ/2DRBvLffabMMN0fYTaDr+t25Rwg1U17iQaxJTYBmX8dhG23ZAOW
- jk9/iCV9dzzMTSURAnR95lTvYXe4mFvzQK2OefjBrcMRswDpJxdHZK2GaqREkw6x
- NBj6w2lLsF+nbXfyHH7PPCpqN4q7dDqWhObqI+Vh5vYwq/bbfByVIUFDmP4ZdyVa
- od0OSr7D1kO3e504/M71O1Dqa+K1RWMEKv3cY6PLD6PVxr8E2hjwpIObIw==
-X-Spamd-Result: default: False [14.34 / 15.00];
-	FUZZY_DENIED(12.00)[1:12657554b7:1.00:bin];
-	DMARC_POLICY_QUARANTINE(1.50)[linknsell.com : SPF not aligned (relaxed),quarantine];
-	R_DKIM_REJECT(1.00)[linknsell.com:s=smtp.linknsell.com.20250508,bom1.rp.oracleemaildelivery.com:s=prod-bom-20200207];
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] ufs: qcom: Reduce interrupt latency
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+ Nitin Rawat <quic_nitirawa@quicinc.com>, linux-scsi@vger.kernel.org,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>
+References: <20260330183311.1941942-1-bvanassche@acm.org>
+ <20260330183311.1941942-4-bvanassche@acm.org>
+ <fg4i4d3fjpjvwp5xe5zvzwjlhq5dlmiauchh62fka5lujmolcm@pzzbd7h3se3e>
+ <99c8b626-4c06-411b-bc01-6324df5b3137@acm.org>
+ <pvualeorhaopbphb7vvvw2qbxibsupddl642jzrxa43jveyxze@bs2ixsupmbuz>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <pvualeorhaopbphb7vvvw2qbxibsupddl642jzrxa43jveyxze@bs2ixsupmbuz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
 	MAILLIST(-0.15)[generic];
-	BAD_REP_POLICIES(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-22793-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
-	GREYLIST(0.00)[pass,body];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-22794-lists,linux-scsi=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_ONE(0.00)[1];
-	DKIM_TRACE(0.00)[linknsell.com:-,bom1.rp.oracleemaildelivery.com:-];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[acm.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	HAS_REPLYTO(0.00)[jisunlee@gmilweb.com];
-	TO_DN_NONE(0.00)[];
-	NEURAL_HAM(-0.00)[-0.911];
-	FROM_NEQ_ENVFROM(0.00)[NoReply@linknsell.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_SPF_ALLOW(0.00)[+ip6:2600:3c0a:e001:db::/64:c];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[gmilweb.com:replyto,linknsell.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4A0F83A2276
-X-Rspamd-Action: add header
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,acm.org:dkim,acm.org:mid]
+X-Rspamd-Queue-Id: 752B23A50D3
+X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spam: Yes
 
-Dear Beloved
 
-My ex Husband Song Lee refuse to pay our divorce settlement
-funds. =E2=80=8BI need your help to recover Assets from the bank for=20
-healthcare and child support
-=E2=80=8Bpurposes, diagnosed with (bladder cancer).
+On 4/3/26 8:11 PM, Manivannan Sadhasivam wrote:
+> I'm not too familiar with Android internals, but isn't that Android has some
+> irqbalance or similar utilities that manage the UFS interrupts based on system
+> load?
 
-=E2=80=8BI need your advise and support
+It seems to me that irqbalance or any similar software is not compatible
+with the Android goal of saving energy. An important goal in Android on
+systems with heterogeneous CPU cores is to wake up the larger CPU cores
+as infrequently as possible since larger CPU cores use more power.
+irqbalance might assign interrupts to a larger CPU core even if a little
+core can handle the workload.
 
-=E2=80=8BThank You
-Jisun Lee
+ > Managed interrupts work better if we want the interrupts to be 
+managed> by the kernel, without user intervention. Not sure if that's 
+what we really want
+> for UFS.
+
+All blk-mq drivers I'm familiar with use managed interrupts. Why should
+the UFS driver use a different approach? When using managed interrupts,
+if the number of completion queues is larger than or equal to the number
+of CPU cores and if rq_affinity=2, the completion interrupt will be sent
+to the CPU core that submitted the I/O. With this approach the number of
+cache misses triggered by the I/O completion code is minimized. Data
+that is needed by the completion handler, e.g. struct scsi_cmnd, is
+most likely still present in the cache of the CPU core that handles the
+completion when the completion is handled.
+
+Thanks,
+
+Bart.
+
+
 
