@@ -1,65 +1,65 @@
-Return-Path: <linux-scsi+bounces-22803-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22804-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +EkOI/Qm1WnB1gcAu9opvQ
-	(envelope-from <linux-scsi+bounces-22803-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 07 Apr 2026 17:47:00 +0200
+	id 6CB6GE4m1WnB1gcAu9opvQ
+	(envelope-from <linux-scsi+bounces-22804-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 07 Apr 2026 17:44:14 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DFE13B13FF
-	for <lists+linux-scsi@lfdr.de>; Tue, 07 Apr 2026 17:46:59 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1741A3B1387
+	for <lists+linux-scsi@lfdr.de>; Tue, 07 Apr 2026 17:44:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C3B3E3133D41
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Apr 2026 15:37:16 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1895530EE1FF
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Apr 2026 15:37:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F89D3C73DE;
-	Tue,  7 Apr 2026 15:36:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A7973C8723;
+	Tue,  7 Apr 2026 15:36:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GOtDmQPZ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L3p8hNcD"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1D03C457A
-	for <linux-scsi@vger.kernel.org>; Tue,  7 Apr 2026 15:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B133C198C
+	for <linux-scsi@vger.kernel.org>; Tue,  7 Apr 2026 15:36:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775576184; cv=none; b=j7VdeSsDq+4j2siuLJhsgoQCI8F0/DJWS31Y2mbAKas3g4U1a3ED5my9MFoZOo5IOKbm9HOMCjwv6PJzFFfY4pzfgAJ4FCBjyOKEHfVqZ6rNV4agz1p09QN/vTK34HC1vD9sfVwhTJyDntkKhxLszAOU0z/HWbZ9uOSZkEgwPVc=
+	t=1775576188; cv=none; b=mAIgnyimtSmkvf9I8prMaJgCKoce4lb7wJ6KC01PHp9PttEfKoEfm8DOR/jXsX1Y+KiactTLx4hAb/hd6q1HdtRTgRziEcBnKxUia4cCLFRRT/8ldWG8ReCAi6OSFUyaa0cwUUtiQl5PEuAtY4BWc6Zi8eY6gdu4m/JOoHZ7PNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775576184; c=relaxed/simple;
-	bh=4vvr+xDrAWxMxjnNh4nkvtXpBMA19u1S8MdxP1fEm4s=;
+	s=arc-20240116; t=1775576188; c=relaxed/simple;
+	bh=hX445ynibnXiIWMEjocw1AVTzkgY1FNORC7rREkeDJw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AxOhWvY2M0DKrfcDJVTrWsvvmMTXDZ5q/M76dclNWjhbthcRtTsCR//x8GTCNdrbyFlUli6MI4S2djkm8TPFe2dLh/1zja7hJGPbUwh8ACKEJsoIiAkrTEiqS0TrayMSi3Vwsfzc50uzdr7phYaY2GbmsYmJqkZYdJsC6vVXZ+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GOtDmQPZ; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=tDYPC8Y19BOhmquWlqa5aCGG9W2NgrQ23x0Kh1RrBoY+8qvn/oSFfmQ2tGM4mPTddIycWR6bEeV3O3M2ISC65KkOx76wPri5euVaJ8Dt7YoE24L/Q8yqsAwhWQBV2xYoG8MFS/WAtQTgDjw0QnlAY2RdKx41TGYF6r4eDEb2EgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L3p8hNcD; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775576171;
+	s=mimecast20190719; t=1775576176;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=jQvaSb3MuBGeMbb7vK8Mg571zM++WUT9vxPRh2XvaDA=;
-	b=GOtDmQPZMaCwTO4NF7kJikuPLBWq2P5pu/2gZhto+hmt3mqOErV22licFHYSP3Wn1aFCxn
-	X1yV5IVuGeDPME4tL+kxErT7TWxsjQj7kMikfjzlQe16GdJARfdqDrUgT+YZqArOlEVIRE
-	MbSvxV+HCbj7A6T69Ue06IcINZOOfIA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=BQUsDl+61brgBW+bmtwfnTQiS3JcRbzE4Uc2abCpuBs=;
+	b=L3p8hNcDjunEEeyhkIHm8WyBL+mBHp2d2gOgdVC+gAJo+f2hVbwyL0dhaIsft315wxUpVG
+	VLS7ieRqq5XPJ04zF/9CsUtzXv/MlLagVlV8MVPR/kK2tKNwgtwYoFLG+AQZB8eUg2LpSW
+	S+Wjb81alMllKorWGww2aFXU27A169E=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-399-6dRSMBbgMj25xFQfNtrPEA-1; Tue,
- 07 Apr 2026 11:36:08 -0400
-X-MC-Unique: 6dRSMBbgMj25xFQfNtrPEA-1
-X-Mimecast-MFC-AGG-ID: 6dRSMBbgMj25xFQfNtrPEA_1775576166
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-542-i3a9Ot2dP1qh06s5bqKUUw-1; Tue,
+ 07 Apr 2026 11:36:13 -0400
+X-MC-Unique: i3a9Ot2dP1qh06s5bqKUUw-1
+X-Mimecast-MFC-AGG-ID: i3a9Ot2dP1qh06s5bqKUUw_1775576171
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 59E7818005B6;
-	Tue,  7 Apr 2026 15:36:06 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EDCEE195608C;
+	Tue,  7 Apr 2026 15:36:10 +0000 (UTC)
 Received: from fedora-work.redhat.com (unknown [10.22.80.127])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2F51E180035F;
-	Tue,  7 Apr 2026 15:36:02 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D1C3D1800594;
+	Tue,  7 Apr 2026 15:36:06 +0000 (UTC)
 From: David Jeffery <djeffery@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	driver-core@lists.linux.dev,
@@ -81,9 +81,9 @@ Cc: Tarun Sahu <tarunsahu@google.com>,
 	Bjorn Helgaas <helgaas@kernel.org>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	David Jeffery <djeffery@redhat.com>
-Subject: [PATCH 4/5] PCI: Enable async shutdown support
-Date: Tue,  7 Apr 2026 11:35:31 -0400
-Message-ID: <20260407153532.6395-5-djeffery@redhat.com>
+Subject: [PATCH 5/5] scsi: enable async shutdown support
+Date: Tue,  7 Apr 2026 11:35:32 -0400
+Message-ID: <20260407153532.6395-6-djeffery@redhat.com>
 In-Reply-To: <20260407153532.6395-1-djeffery@redhat.com>
 References: <20260407153532.6395-1-djeffery@redhat.com>
 Precedence: bulk
@@ -100,7 +100,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -108,7 +108,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FREEMAIL_CC(0.00)[google.com,redhat.com,gmail.com,acm.org,kernel.org,oracle.com];
 	RCPT_COUNT_TWELVE(0.00)[20];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-22803-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-22804-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	MISSING_XM_UA(0.00)[];
@@ -121,42 +121,101 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	NEURAL_HAM(-0.00)[-0.998];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1DFE13B13FF
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,oracle.com:email]
+X-Rspamd-Queue-Id: 1741A3B1387
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Like its async suspend support, allow PCI device shutdown to be performed
-asynchronously to reduce shutdown time.
+Like scsi's async suspend support, allow scsi devices to be shut down
+asynchronously to reduce system shutdown time.
 
 Signed-off-by: David Jeffery <djeffery@redhat.com>
 Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
 Tested-by: Laurence Oberman <loberman@redhat.com>
+Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
 ---
- drivers/pci/probe.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/hosts.c      | 3 +++
+ drivers/scsi/scsi_scan.c  | 1 +
+ drivers/scsi/scsi_sysfs.c | 4 ++++
+ 3 files changed, 8 insertions(+)
 
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index bccc7a4bdd79..4d98bab2163d 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -1040,6 +1040,7 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
+index e047747d4ecf..dfb38a82c0bf 100644
+--- a/drivers/scsi/hosts.c
++++ b/drivers/scsi/hosts.c
+@@ -273,6 +273,7 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
+ 	pm_runtime_set_active(&shost->shost_gendev);
+ 	pm_runtime_enable(&shost->shost_gendev);
+ 	device_enable_async_suspend(&shost->shost_gendev);
++	device_enable_async_shutdown(&shost->shost_gendev);
  
- 	bus->bridge = get_device(&bridge->dev);
- 	device_enable_async_suspend(bus->bridge);
-+	device_enable_async_shutdown(bus->bridge);
- 	pci_set_bus_of_node(bus);
- 	pci_set_bus_msi_domain(bus);
- 	if (bridge->msi_domain && !dev_get_msi_domain(&bus->dev) &&
-@@ -2749,6 +2750,7 @@ void pci_device_add(struct pci_dev *dev, struct pci_bus *bus)
- 	pci_reassigndev_resource_alignment(dev);
+ 	error = device_add(&shost->shost_gendev);
+ 	if (error)
+@@ -282,6 +283,7 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
+ 	get_device(shost->shost_gendev.parent);
  
- 	pci_init_capabilities(dev);
-+	device_enable_async_shutdown(&dev->dev);
+ 	device_enable_async_suspend(&shost->shost_dev);
++	device_enable_async_shutdown(&shost->shost_dev);
  
- 	/*
- 	 * Add the device to our list of discovered devices
+ 	get_device(&shost->shost_gendev);
+ 	error = device_add(&shost->shost_dev);
+@@ -519,6 +521,7 @@ struct Scsi_Host *scsi_host_alloc(const struct scsi_host_template *sht, int priv
+ 	shost->shost_gendev.bus = &scsi_bus_type;
+ 	shost->shost_gendev.type = &scsi_host_type;
+ 	scsi_enable_async_suspend(&shost->shost_gendev);
++	device_enable_async_shutdown(&shost->shost_gendev);
+ 
+ 	device_initialize(&shost->shost_dev);
+ 	shost->shost_dev.parent = &shost->shost_gendev;
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index 7b11bc7de0e3..72f30db8609a 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -515,6 +515,7 @@ static struct scsi_target *scsi_alloc_target(struct device *parent,
+ 	dev->bus = &scsi_bus_type;
+ 	dev->type = &scsi_target_type;
+ 	scsi_enable_async_suspend(dev);
++	device_enable_async_shutdown(dev);
+ 	starget->id = id;
+ 	starget->channel = channel;
+ 	starget->can_queue = 0;
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index 6b8c5c05f294..c76ba17b206f 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -1370,6 +1370,7 @@ static int scsi_target_add(struct scsi_target *starget)
+ 	pm_runtime_set_active(&starget->dev);
+ 	pm_runtime_enable(&starget->dev);
+ 	device_enable_async_suspend(&starget->dev);
++	device_enable_async_shutdown(&starget->dev);
+ 
+ 	return 0;
+ }
+@@ -1396,6 +1397,7 @@ int scsi_sysfs_add_sdev(struct scsi_device *sdev)
+ 	transport_configure_device(&starget->dev);
+ 
+ 	device_enable_async_suspend(&sdev->sdev_gendev);
++	device_enable_async_shutdown(&sdev->sdev_gendev);
+ 	scsi_autopm_get_target(starget);
+ 	pm_runtime_set_active(&sdev->sdev_gendev);
+ 	if (!sdev->rpm_autosuspend)
+@@ -1415,6 +1417,7 @@ int scsi_sysfs_add_sdev(struct scsi_device *sdev)
+ 	}
+ 
+ 	device_enable_async_suspend(&sdev->sdev_dev);
++	device_enable_async_shutdown(&sdev->sdev_dev);
+ 	error = device_add(&sdev->sdev_dev);
+ 	if (error) {
+ 		sdev_printk(KERN_INFO, sdev,
+@@ -1670,6 +1673,7 @@ void scsi_sysfs_device_initialize(struct scsi_device *sdev)
+ 	sdev->sdev_gendev.bus = &scsi_bus_type;
+ 	sdev->sdev_gendev.type = &scsi_dev_type;
+ 	scsi_enable_async_suspend(&sdev->sdev_gendev);
++	device_enable_async_shutdown(&sdev->sdev_gendev);
+ 	dev_set_name(&sdev->sdev_gendev, "%d:%d:%d:%llu",
+ 		     sdev->host->host_no, sdev->channel, sdev->id, sdev->lun);
+ 	sdev->sdev_gendev.groups = hostt->sdev_groups;
 -- 
 2.53.0
 
