@@ -1,141 +1,171 @@
-Return-Path: <linux-scsi+bounces-22818-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22820-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CPcXAv2I1mmwFwgAu9opvQ
-	(envelope-from <linux-scsi+bounces-22818-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 08 Apr 2026 18:57:33 +0200
+	id qLPxGwCM1mnzGAgAu9opvQ
+	(envelope-from <linux-scsi+bounces-22820-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 08 Apr 2026 19:10:24 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CDC73BF308
-	for <lists+linux-scsi@lfdr.de>; Wed, 08 Apr 2026 18:57:32 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6C133BF531
+	for <lists+linux-scsi@lfdr.de>; Wed, 08 Apr 2026 19:10:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1E28A303A244
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Apr 2026 16:55:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 96E27303663D
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Apr 2026 17:07:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2D543D47DD;
-	Wed,  8 Apr 2026 16:55:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD9FD3D3487;
+	Wed,  8 Apr 2026 17:07:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Pb3rU9Qw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ju7yLbI5"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 153603D4131;
-	Wed,  8 Apr 2026 16:55:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A79D32ED3A;
+	Wed,  8 Apr 2026 17:07:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775667303; cv=none; b=tWZTxt1MEoX2oiT/SxDt/Ls5uRiv7EMOBC51YRPyq2GFW2yx0DbjeqmlcPUp8CJkCx4brWuBrvxEZb9jLVbywBgtYdvrdsJgSZl2HH2sugON0BIWjO4c9PwthK5E4Gie5GkDGWn/mngbsFaNPKBJQTGMxoZMBbRZJvDF7Og3LQ4=
+	t=1775668069; cv=none; b=n0ER5eILMyO6WfxKbIt+GzdOwVyAv6OpNvVi66NlyyZOLr0UVt+OZP4WGxCMcax1DvV4U4SwNu3nyCxScNpu/Lfw/cQ1QdU+zPMjYIh1DN+GDkkU6BWWUHDwcEzkgzART3rectRJZv0+liM1h19Qjva7QJ8ICbuh48k/uI3H9aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775667303; c=relaxed/simple;
-	bh=l9DP0GH9MCurTbEQAjdMKc4uZTFoMdfijB0YEpGLnNY=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=qbgfCl769l3lP3lkS9nPh/oPud23HDdAQ4miU4ohrR72KRbSXMEN3lGGiM/rxPHVVwFaZV8GqIxuRAsPjpbZ3nA/hvBmt5CgEKFLL9QYURFCJO2n3W1E4Dcq1Wbfz3/qAKK69XPN4RFNtFgQwSjiu5E+OoSRG7GgUyexH0M7ujg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Pb3rU9Qw; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.17.145.186] (unknown [4.194.122.170])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 234D120B710C;
-	Wed,  8 Apr 2026 09:54:54 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 234D120B710C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1775667301;
-	bh=mD29zgGmHKg3hWcuJVIIaqH6LjpveyUTNfBgAyLvtHE=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=Pb3rU9QwvNHEwiYOVAh5gJPGtC33xq6v0fUTu3ZF84PMTL+oHXI7Di3V/rI70cZeq
-	 499g33dTbLEdxy70aRYL2GJXyBJoYlmRt98XSg0m4WEFQqsV+M2LtoXhfuRDeGIdM3
-	 MWqOTmVnp3BJ+DIZvXdkDj6A1P+jeFWoW/QYkHj8=
-Message-ID: <2a80b7a6-2cfe-4bd0-a799-ff855df7bd41@linux.microsoft.com>
-Date: Wed, 8 Apr 2026 09:54:52 -0700
+	s=arc-20240116; t=1775668069; c=relaxed/simple;
+	bh=/V2YOh5dun+k/7gXehbcIbYcHTsZqq3ru5OdAAq4JmM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UmaxntJ5lYaK0wV00aTg6oNcvofMFKGIUYtjDbbtnRq+d6hQZDWUypM/GVx5cqas7yN2OUAQqZ6tayRDw6GExPyRvzo7xKDYgqgH3H84Y+snEZHvLFIl3rKjrnAlBLxT3PAqB+jDTwqZ/UllBUw6KMYmmcvLqriMd0ZEV8iHFHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ju7yLbI5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F438C19421;
+	Wed,  8 Apr 2026 17:07:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775668069;
+	bh=/V2YOh5dun+k/7gXehbcIbYcHTsZqq3ru5OdAAq4JmM=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=Ju7yLbI5yeQ/hhmR7cx/t5N99/R8XvSyfYmVQb4Pj1VDyXwi8l1IdDzyhVmW8Wf/g
+	 fV0Pu1mhKtWWtnIdgi7iyKHdycmyHgd1+iIvPsfu8FMrYWs0oTZDV5FEzF4YBmPvRe
+	 WGjy9RxiUYllEQzjWlhursZcyopsYJNqbfmzvrknhTw+MZh1zmMplw8fi2+9Lhmvgv
+	 BB51I0E56b03esTviAiUwutNSxu63s23k3HTY/tw2CgTHnfKJ+txDlg1mrRJRVnVwj
+	 0RELnJHM02PVuq157FSgDArjqZrekWSYHVscNppe14YiR7TWmMgxvZEbWkGPVdHJf1
+	 Ks5GNa6Lk+rvQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C4FE10F995E;
+	Wed,  8 Apr 2026 17:07:49 +0000 (UTC)
+From: Dave Marquardt via B4 Relay <devnull+davemarq.linux.ibm.com@kernel.org>
+Subject: [PATCH 0/5] ibmvfc: make ibmvfc support FPIN messages
+Date: Wed, 08 Apr 2026 12:07:41 -0500
+Message-Id: <20260408-ibmvfc-fpin-support-v1-0-52b06c464e03@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
- decui@microsoft.com, longli@microsoft.com,
- James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
- apais@microsoft.com, easwar.hariharan@linux.microsoft.com,
- Tianyu Lan <tiala@microsoft.com>, linux-hyperv@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org, vdso@hexbites.dev,
- mhklinux@outlook.com
-Subject: Re: [PATCH] x86/VMBus: Confidential VMBus for dynamic DMA transfers
-To: Tianyu Lan <ltykernel@gmail.com>
-References: <20260408073105.272255-1-tiala@microsoft.com>
-From: Easwar Hariharan <easwar.hariharan@linux.microsoft.com>
-Content-Language: en-US
-In-Reply-To: <20260408073105.272255-1-tiala@microsoft.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMTQqDMBBA4avIrB2IQSv1KuIiP5N2Co0hoyKId
+ ze1y2/x3gFCmUlgqA7ItLHwHAuaugL3NvFFyL4YtNIP1aoe2X634DAkjihrSnNe0D5t13fOa28
+ aKGXKFHi/r+P0t6z2Q275reA8L2blqjx3AAAA
+X-Change-ID: 20260407-ibmvfc-fpin-support-b9b575cd2da1
+To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+ Tyrel Datwyler <tyreld@linux.ibm.com>
+Cc: linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ linuxppc-dev@lists.ozlabs.org, Brian King <brking@linux.ibm.com>, 
+ Greg Joyce <gjoyce@linux.ibm.com>, Kyle Mahlkuch <kmahlkuc@linux.ibm.com>, 
+ Dave Marquardt <davemarq@linux.ibm.com>
+X-Mailer: b4 0.15.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775668068; l=2115;
+ i=davemarq@linux.ibm.com; s=20260216; h=from:subject:message-id;
+ bh=/V2YOh5dun+k/7gXehbcIbYcHTsZqq3ru5OdAAq4JmM=;
+ b=Mr24O9zSJQyULVQH6pUlEtKtf3Ixdd5fISCF3k9bRs8Nd14sBiYHWx9RAd7MDndQVe75RHmY2
+ O98bO8dMcP+DgCdPydXjIZMA/eTM13TMjvoBlFd7t4Hk/Vc0mtxQKa+
+X-Developer-Key: i=davemarq@linux.ibm.com; a=ed25519;
+ pk=vy0/nfobrje6EqZxuyw6a3ZstytG8WK2vf5Y3xtGrEg=
+X-Endpoint-Received: by B4 Relay for davemarq@linux.ibm.com/20260216 with
+ auth_id=689
+X-Original-From: Dave Marquardt <davemarq@linux.ibm.com>
+Reply-To: davemarq@linux.ibm.com
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linux.microsoft.com,none];
-	R_DKIM_ALLOW(-0.20)[linux.microsoft.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-22818-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-22820-lists,linux-scsi=lfdr.de,davemarq.linux.ibm.com];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[microsoft.com,kernel.org,HansenPartnership.com,oracle.com,linux.microsoft.com,vger.kernel.org,hexbites.dev,outlook.com];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[HansenPartnership.com,oracle.com,linux.ibm.com,ellerman.id.au,gmail.com,kernel.org];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	HAS_REPLYTO(0.00)[davemarq@linux.ibm.com];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[easwar.hariharan@linux.microsoft.com,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[linux.microsoft.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[openvmm.dev:url,linux.microsoft.com:dkim,linux.microsoft.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8CDC73BF308
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.ibm.com:replyto,linux.ibm.com:mid]
+X-Rspamd-Queue-Id: C6C133BF531
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 4/8/2026 12:31 AM, Tianyu Lan wrote:
-> Hyper-V provides Confidential VMBus to communicate between
-> device model and device guest driver via encrypted/private
-> memory in Confidential VM. The device model is in OpenHCL
-> (https://openvmm.dev/guide/user_guide/openhcl.html) that
-> plays the paravisor role.
-> 
-> For a VMBus device, there are two communication methods to
-> talk with Host/Hypervisor. 1) VMBUS Ring buffer 2) Dynamic
-> DMA transfer.
-> 
-> The Confidential VMBus Ring buffer has been upstreamed by
-> Roman Kisel(commit 6802d8af47d1).
-> 
-> The dynamic DMA transition of VMBus device normally goes
-> through DMA core and it uses SWIOTLB as bounce buffer in
-> a CoCo VM.
-> 
-> The Confidential VMBus device can do DMA directly to
-> private/encrypted memory. Because the swiotlb is decrypted
-> memory, the DMA transfer must not be bounced through the
-> swiotlb, so as to preserve confidentiality. This is different
-> from the default for Linux CoCo VMs, so not use DMA(SWIOTLB)
-> API in VMBus driver when confidential dynamic DMA transfers
-> capability is present.
-> 
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
->  drivers/scsi/storvsc_drv.c | 28 +++++++++++++++++++++-------
->  include/linux/hyperv.h     |  1 +
->  2 files changed, 22 insertions(+), 7 deletions(-)
-> 
+This patch series adds FPIN (fabric performance impact notification)
+support to the ibmvfc (IBM Virtual Fibre Channel) driver. This comes
+in three flavors:
 
-Does netvsc not need this same sort of patch?
+- basic, to recognize existing FPIN messages from the virtual I/O
+  server (VIOS) (patch 1)
+- full, supporting additional information and using its own
+  asynchronous sub-queue and interrupt (patches 2-4)
+- extended, supporting FC-LS-5 (patch 5)
 
-Thanks,
-Easwar (he/him)
+Full and extended FPIN support requires a new asynchronous sub-queue
+with its own interrupt. The asynchronous sub-queue support requires
+ibmvfc to also support
+
+- a new VFC_NOOP command, which the driver recognizes and
+  ignores (patch 2)
+- fabric login, to login separately to the fabric through messages
+  exchanged with VIOS rather than doing fabric login through the
+  existing NPIV login (patch 3)
+
+All three modes convert an incoming FPIN message from VIOS to an FC
+extended link service message, with basic and full FPIN support using
+default values for information not provided by the VIOS FPIN message
+but expected in the FC ELS message. This FC ELS message is passed to
+fc_host_rcv_fpin for updating statistics and sending the information
+upstream by netlink multicast, where it may be caught by listeners
+including the DM multipath daemon "multipathd."
+
+Signed-off-by: Dave Marquardt <davemarq@linux.ibm.com>
+---
+Dave Marquardt (5):
+      ibmvfc: add basic FPIN support
+      ibmvfc: Add NOOP command support
+      ibmvfc: make ibmvfc login to fabric
+      ibmvfc: use async sub-queue for FPIN messages
+      ibmvfc: handle extended FPIN events
+
+ drivers/scsi/Kconfig                 |  10 +
+ drivers/scsi/ibmvscsi/Makefile       |   1 +
+ drivers/scsi/ibmvscsi/ibmvfc.c       | 668 +++++++++++++++++++++++++++++++++--
+ drivers/scsi/ibmvscsi/ibmvfc.h       | 102 +++++-
+ drivers/scsi/ibmvscsi/ibmvfc_kunit.c | 219 ++++++++++++
+ 5 files changed, 961 insertions(+), 39 deletions(-)
+---
+base-commit: 927722dcfe0a5294433bb087387cc52a46cbf675
+change-id: 20260407-ibmvfc-fpin-support-b9b575cd2da1
+
+Best regards,
+--  
+Dave Marquardt <davemarq@linux.ibm.com>
 
 
 
