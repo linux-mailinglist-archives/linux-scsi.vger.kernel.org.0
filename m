@@ -1,51 +1,58 @@
-Return-Path: <linux-scsi+bounces-22895-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22896-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IC94GqJM22nO/ggAu9opvQ
-	(envelope-from <linux-scsi+bounces-22895-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2026 09:41:22 +0200
+	id GC0oMy3122lTJgkAu9opvQ
+	(envelope-from <linux-scsi+bounces-22896-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2026 21:40:29 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64BD63E30B3
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2026 09:41:21 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36A073E5BEB
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2026 21:40:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4C32F300BCB4
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2026 07:41:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0D92F30097EF
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2026 19:40:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C4AE305057;
-	Sun, 12 Apr 2026 07:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 438C436605A;
+	Sun, 12 Apr 2026 19:40:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BI9rAeLY"
+	dkim=pass (1024-bit key) header.d=philpem.me.uk header.i=@philpem.me.uk header.b="dqQCg4kG"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from nick.sneptech.io (nick.sneptech.io [178.62.38.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E92642AA9;
-	Sun, 12 Apr 2026 07:41:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F92B233704;
+	Sun, 12 Apr 2026 19:40:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.38.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775979671; cv=none; b=fSpin9cQJc5sSo+OJBrd3qQBEf7NJybpyyRSKX5wc5x3ej8HM6iXmpyU4COCXnhF8I1z0ZMKzG5TbPcJNTkC21GJnPsSdilv02jLsjpCD0MQuqZ0CqTdAzy74YQmTdPlg7JCM4FW4pXm2wmTvhcwXc5Ut0b2LwM9ameugtZjpbo=
+	t=1776022824; cv=none; b=oPL43pUZTHqsxEc9O7COteVRUizTQjRCU4FjPMAbFS1r4AIQWWBj9W5V4zXcD7NaJBBOqMi7bpz2EXrZJK3NPMBYcWlxuqs0Cy/VX0iuLlieKtOYzT0VcHG++GR9yq0cKLhKQNs/MkcwXb12mtYVqIVHHKRh4fyPwigdN+8uZlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775979671; c=relaxed/simple;
-	bh=t+fxPRduy+kLlBrpzBK0AZzm4tYLYBcjiNRxQEXXe94=;
+	s=arc-20240116; t=1776022824; c=relaxed/simple;
+	bh=IDCjVmbBRFYiqoQOS3yQvnMEln4UpziD65rMTyjw+SU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WHZJpBvYtng13HMkpnF03wwNaPdBCRz+lhe5VPoha19mRtuNJjti/FQaBRuuZziZDJRBvY/MaBK1WLJ6H72d6Vr4G4nJTaC6bZSx2yA0eiGVA+cVS1nYv51PUcl4if42c1r7frf9U5S2HaSNqDBNICKp+y+5nJqCUyifk7EfgPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BI9rAeLY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D3ECC19424;
-	Sun, 12 Apr 2026 07:41:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775979671;
-	bh=t+fxPRduy+kLlBrpzBK0AZzm4tYLYBcjiNRxQEXXe94=;
+	 In-Reply-To:Content-Type; b=fBM657lbaG6f/efrL5GdTHPAXMjD6rqRJpXevsiMYK91qdnJ63Zns9Z7h5bRY92/If4eMl8gO1SUd3DlEviG7sA50bnLiHeb0QLmwvYthZK1dA4LgqYTKzT1EuIhpG7AgFpgHf4Xt6+sjYlWAZhm1MmlwVALCy7sdfyOBML+vsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=philpem.me.uk; spf=pass smtp.mailfrom=philpem.me.uk; dkim=pass (1024-bit key) header.d=philpem.me.uk header.i=@philpem.me.uk header.b=dqQCg4kG; arc=none smtp.client-ip=178.62.38.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=philpem.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=philpem.me.uk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=philpem.me.uk;
+	s=mail; t=1776022815;
+	bh=IDCjVmbBRFYiqoQOS3yQvnMEln4UpziD65rMTyjw+SU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BI9rAeLY2FdRh42ALHbBG+mcxSQe8VZ6F1KV7CJ2MnhmKdcRU7wDWT8PGKd4DFYkj
-	 OkTWdzwm+ZjF2KX2WNYetttKY5KNmNU7fVql50PZ+h4w2P2WRV+6ZXxoyp5dBnoHEy
-	 R1rlxT0zgxwh6GUC4dKTgar0tJm7MFq3z8gSSMwpSWbBUMLjhBYx6PSTN02clomA5k
-	 UEkwZZx/IXq2sIQPjhkBzfla1YZW3LYEKobbSP/UKu3r+S4rktR/S+XmxFI77K00SD
-	 GIEpE/uvyjIDu3//NJvtMZltfhme7MeEvAZgVldIvVQoacsFCjZJM+2UO/K1ugQ/FR
-	 xMmYUnIHUP25Q==
-Message-ID: <2eee9241-8910-431a-9305-b5919937c826@kernel.org>
-Date: Sun, 12 Apr 2026 09:41:07 +0200
+	b=dqQCg4kGX9yU3yd6xb+uKT3e1wBfwiarPzdjCYQ7SogeoQSzzitvSbIKKg/PgcwHF
+	 Y5VKvja7jjOQSRNKBAMqJbjMYyeB7tZORhgzU+VcxVUnvgqdTzhw2EzfMutUAxw9jY
+	 +jgg61AZJ2czYzKBkT1lpaWX67GlqCpVyXVCEctU=
+Received: from wolf.philpem.me.uk (81-187-163-148.ip4.reverse-dns.uk [81.187.163.148])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	(Authenticated sender: mailrelay_wolf@philpem.me.uk)
+	by nick.sneptech.io (Postfix) with ESMTPSA id 4CBD0BE5E1;
+	Sun, 12 Apr 2026 19:40:15 +0000 (UTC)
+Received: from [10.0.0.32] (cheetah.homenet.philpem.me.uk [10.0.0.32])
+	by wolf.philpem.me.uk (Postfix) with ESMTPSA id 0826D5FADC;
+	Sun, 12 Apr 2026 20:40:15 +0100 (BST)
+Message-ID: <f57b1b0f-4425-40be-8c8b-437fd609ed46@philpem.me.uk>
+Date: Sun, 12 Apr 2026 20:40:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -53,129 +60,124 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] ata: libata-scsi: probe additional LUNs for multi-LUN
- ATAPI devices
-To: Phil Pemberton <philpem@philpem.me.uk>, cassel@kernel.org,
+Subject: Re: [PATCH 2/3] ata: libata-scsi: enable multi-LUN support for ATAPI
+ devices
+To: Damien Le Moal <dlemoal@kernel.org>, cassel@kernel.org,
  James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com
 Cc: linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260409210559.155864-1-philpem@philpem.me.uk>
- <20260409210559.155864-4-philpem@philpem.me.uk>
-Content-Language: en-US
-From: Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20260409210559.155864-4-philpem@philpem.me.uk>
-Content-Type: text/plain; charset=UTF-8
+ <20260409210559.155864-3-philpem@philpem.me.uk>
+ <c62f11f0-6127-41c6-98c6-cb6794125e70@kernel.org>
+Content-Language: en-GB
+From: Phil Pemberton <philpem@philpem.me.uk>
+In-Reply-To: <c62f11f0-6127-41c6-98c6-cb6794125e70@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[philpem.me.uk,reject];
+	R_DKIM_ALLOW(-0.20)[philpem.me.uk:s=mail];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-22895-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	HAS_ORG_HEADER(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[philpem.me.uk:+];
 	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	TAGGED_FROM(0.00)[bounces-22896-lists,linux-scsi=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[philpem.me.uk:email]
-X-Rspamd-Queue-Id: 64BD63E30B3
+	TAGGED_RCPT(0.00)[linux-scsi];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[philpem@philpem.me.uk,linux-scsi@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[philpem.me.uk:dkim,philpem.me.uk:mid,philpem.me.uk:email,philpem.me.uk:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 36A073E5BEB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 4/9/26 23:05, Phil Pemberton wrote:
-> Some ATAPI devices (e.g. the Panasonic PD/CD combo drives) implement
-> multiple logical units. For instance the aforementioned PD/CD has a CD
-> drive on LUN 0 and the rewritable Phase-change Dual (PD) block device on
-> LUN 1.
+On 12/04/2026 08:38, Damien Le Moal wrote:
+> On 4/9/26 23:05, Phil Pemberton wrote:
+>>    - Raises max_lun from 1 to 8 (matching the SCSI host default).
+>>      Sequential LUN scanning stops at the first non-responding LUN, so
+>>      single-LUN devices are unaffected.
 > 
-> ata_scsi_scan_host() previously only scanned LUN 0 via
-> __scsi_add_device(). With the multi-LUN work now in place, extend this
-> scan to probe for additional LUNs on devices which have BLIST_FORCELUN
-> set in the SCSI device info table.
-> 
-> Scanning stops when __scsi_add_device() fails, or the device reports
-> device type 0x1f (unknown or no device type). The PD drive returns this
-> for unimplemented LUNs.
-> 
-> The aforementioned BLIST_FORCELUN guard prevents non-multilun devices
-> from being affected.
-> 
-> Tested with a Panasonic LF-1195C PD/CD with Compaq firmware, which now
-> correctly enumerates as a CD drive (sr) and PD optical drive (sd).
-> 
-> Also tested with a LITE-ON iHAS124 DVD drive, which has a single LUN and
-> ignores the LUN parameter in the CDB. As a result, without the
-> BLIST_FORCELUN guard, this drive would pop up as eight separate devices.
-> 
-> Assisted-by: Claude:claude-opus-4-6
-> Signed-off-by: Phil Pemberton <philpem@philpem.me.uk>
-> ---
->  drivers/ata/libata-scsi.c | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-> index dc6829e60fb3..0a7ce44118fe 100644
-> --- a/drivers/ata/libata-scsi.c
-> +++ b/drivers/ata/libata-scsi.c
-> @@ -4732,6 +4732,35 @@ void ata_scsi_scan_host(struct ata_port *ap, int sync)
->  			if (!IS_ERR(sdev)) {
->  				dev->sdev = sdev;
->  				ata_scsi_assign_ofnode(dev, ap);
-> +				/*
-> +				 * Multi-LUN ATAPI devices (e.g. PD/CD combo
-> +				 * drives) are flagged BLIST_FORCELUN in
-> +				 * scsi_devinfo.  Probe additional LUNs when
-> +				 * the flag is set.
-> +				 */
-> +				if (dev->class == ATA_DEV_ATAPI &&
-> +				    (sdev->sdev_bflags & BLIST_FORCELUN)) {
-> +					u64 lun;
-> +
-> +					for (lun = 1; lun < ap->scsi_host->max_lun;
-> +					     lun++) {
-> +						struct scsi_device *extra;
-> +
-> +						extra = __scsi_add_device(
-> +							ap->scsi_host,
-> +							channel, id, lun,
-> +							NULL);
-> +						if (IS_ERR(extra))
-> +							break;
-> +						/* PDT 0x1f: no device type */
-> +						if (extra->type == 0x1f) {
-> +							scsi_remove_device(extra);
-> +							scsi_device_put(extra);
-> +							break;
-> +						}
-> +						scsi_device_put(extra);
-> +					}
-> +				}
+> If the only case that we can encounter with libata are these special ATAPI
+> devices with 2 LUNs, I would limit the maximum to 2.
 
-It would be a lot nicer and more readable to have this hunk as a helper
-function, e.g.: ata_scsi_scan_atapi_luns().
+I'm inclined to agree, but there are devices with higher LUN counts: the 
+Nakamichi CD changers. The MJ-4.4 and MJ-5.16 were available in an ATAPI 
+variant which exposed a LUN for each disc in the changer stack. There's 
+a Cathode Ray Dude video demonstrating the latter.
 
->  				scsi_device_put(sdev);
->  			} else {
->  				dev->sdev = NULL;
+I like the idea of the lower LUN cap for compatibility, but I think I'd 
+hedge bets by also having a module parameter (e.g. libata.atapi_max_lun) 
+to override it. Default 2 seems like a good compromise.
+
+In any case, the BLIST_FORCELUN gate should limit things to one LUN for 
+any device which isn't on the device list.
+
+
+>>    - ata_scsi_dev_config() previously assigned dev->sdev = sdev for every
+>>      LUN configured.  With multiple LUNs sharing one ata_device, this
+>>      caused dev->sdev to be overwritten by each non-LUN-0 sdev.  Restrict
+>>      the assignment to LUN 0 so that dev->sdev always tracks the
+>>      canonical scsi_device for the underlying ATA device.
+> 
+> Special casing this does not seem nice at all. Why not simply increasing the
+> sdev reference count when it is assigned to a LUN that is not LUN 0 ? And drop
+> that reference when the LUN is torn down ? That will remove any dependency on
+> the order in which LUNs are torn down too.
+
+The if (sdev->lun == 0) guard isn't about teardown ordering; it's about 
+which device dev->sdev points at.
+
+dev->sdev is a single pointer, but with multi-LUN ATAPI there are now 
+multiple sdevs sharing one ata_device. Without the guard, each call to 
+ata_scsi_dev_config() overwrites the pointer, so it ends up tracking the 
+last-configured LUN (likely the highest-numbered one).
+
+This is really made clear by ata_scsi_sdev_destroy(). It uses
+   dev->sdev == sdev
+to decide when to schedule ATA-level detach. If the pointer has been 
+overwritten, destroying the higher LUN will tear down the whole device, 
+and destroying LUN 0 won't trigger a detach.
+
+Refcounting keeps whichever sdev is stored there alive, but it doesn't 
+decide which one should be stored in the first place. Picking LUN 0 
+keeps the existing invariant intact for single-LUN devices, and the 
+other users of dev->sdev (scsi_remove_device() in ata_port_detach(), 
+ACPI uevents, zpodd) continue to operate on a stable, well-defined sdev.
+
+Happy to add scsi_device_get() on the LUN-0 sdev when a higher LUN is 
+configured, and the matching put in sdev_destroy, so LUN 0 can't be 
+freed while higher LUNs still exist. That gives you the ordering 
+guarantee on top of the pointer-stability guarantee.
+
+>>    - ata_scsi_sdev_destroy() detached the entire ATA device whenever
+>>      dev->sdev was non-NULL.  When a spurious multi-LUN scan result was
+>>      removed, this incorrectly tore down the underlying device.  Detach
+>>      only when the canonical (LUN 0) sdev is being destroyed.
+> 
+> This should not happen with the reference count change suggested above.
+> 
+> This is a lot of changes for one patch. So I also suggest splitting this patch.
+
+Will do.
+
+All other comments acked.
 
 
 -- 
-Damien Le Moal
-Western Digital Research
+Phil.
+philpem@philpem.me.uk
+https://www.philpem.me.uk/
 
