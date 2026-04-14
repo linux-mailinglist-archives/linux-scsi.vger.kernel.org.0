@@ -1,81 +1,81 @@
-Return-Path: <linux-scsi+bounces-22909-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22914-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SE6EJjyk3Wl8hAkAu9opvQ
-	(envelope-from <linux-scsi+bounces-22909-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2026 04:19:40 +0200
+	id WBWDFKWk3Wl8hAkAu9opvQ
+	(envelope-from <linux-scsi+bounces-22914-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2026 04:21:25 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49B373F4F52
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2026 04:19:40 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6401F3F4FAC
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2026 04:21:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id AA125300E296
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2026 02:19:39 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6FB35301C58A
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2026 02:19:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01D3C2D8391;
-	Tue, 14 Apr 2026 02:19:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38AA730DEA2;
+	Tue, 14 Apr 2026 02:19:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Gx5ipQbG"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="GuuqPOzZ"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A83025EF9C;
-	Tue, 14 Apr 2026 02:19:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2992773CA;
+	Tue, 14 Apr 2026 02:19:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776133175; cv=none; b=GL/kuW48EijvZvFeNqymYlbEjqi34UOPb7qzKxfJPbSair+/uS1NO9TM7k6pJA7FOVQo+AQcTmbBKgaSlMHXhgKyTTTK3xfaCaq+4ukwure0JvC+5lwzxuOlhZjNjcxIPnLXWEcXbyy7rr/Sce0BX5OqVHzXW6+VSIYK6VfjmMk=
+	t=1776133182; cv=none; b=CYAKuZFJNDOTKEltqmZgI6a+GkA6Cw4kyxRX5lP426Feb7k18q//XcPNnD7wSsoWCZcjhXwtEX/+CEO59DExdisLJTemopSTYzy0sJXsvTvrfFLdRnoQ/rDq28xO/fLGdTfEkVcoPjtyXcZBmvjtUzaX3XF2xcfVv+7OmRGP9EA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776133175; c=relaxed/simple;
-	bh=XY+z507e4fk5BQpmikDUss4cL6L7pvvwxKegbAN/5Tc=;
+	s=arc-20240116; t=1776133182; c=relaxed/simple;
+	bh=J988FrqOfj37DtaHq5A3tApusV+EG20CdTTupQyPVxU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KLEPGNpdhNEPnCvnlktA+7AFPmA54garW63g3kU6TZOcazor5WMFtUuKUQfJWomX5reSsTqb261pqpKETB1t1nC5cTrG4KUDxr+SKD+32FaFofvP/tr1K2MiUMKJvU9bCVPIsqLxsZL5fNBDzdNIYXa/jiGfOSKQhsbmJRE+ld4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Gx5ipQbG; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=EqYv1z7abBkwaahw4uSf30SvHcXtIdHserLMuLJd5MuvbEDw/EWs+xdvlLO3vgYMPWVB56Wtpio8tN/DTrtBOlKYDLl8WeVfGN4XkdEhMQEScbsn+8PqggxSgELtvnS2X66iHFhgpELJU6ODLZgN8lpf9d691tWEi4DohcSHMaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=GuuqPOzZ; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63DLETW53851331;
-	Tue, 14 Apr 2026 02:19:31 GMT
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63E0hE1I229106;
+	Tue, 14 Apr 2026 02:19:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=GzkZCIT8bQRvayh4Hw0lMdnOXy2MQwutxZmDeZNrohw=; b=
-	Gx5ipQbGHDirzOHaYYguZElrILukXr4QmI1bdKqbdQ5Pl4ebv2oZtlwxs+27sQCG
-	tcIedNCc1WkLMBGkPWwQHHS5Vhb5AWmInlzb6lsFqnkjwChHOtYdJwTtmPsqxJt5
-	mbwNY6USA0VvMvYfWwpqEQHHvykn/u+A5mlaZtnnvPvaB8YIjiNFCk6/qX23mnEK
-	EMCyjADW0fqOJjznj+MVXKei+CHxSIugSsIRV/v/TcukayHmduSLB0oAcjRkz8S4
-	5x67wdXwRkIU+fcS9o7Mmu43REb4EyJ5cLWRVtfX8IQrd4QnXjTp7kIQBpLYfk8G
-	tbsyuaydG8SC9idmwCydiw==
+	corp-2025-04-25; bh=3I1dNO+Z2/bWkprC8/rg65abK71JbiLKPYM39la8XwI=; b=
+	GuuqPOzZntoZrMRZGAv4c8qYMDv8AtyTnK7qolS6C4uNEOMfHrqdGV8eGdX11/yk
+	W9lrgYSjF/E0eyC6QiXcgnY054pY5aDlFQWE3dOwpJwmLSvok8kPKqgpAfENk0tz
+	XFttxnwfzLPFcU0uut5ceupnuCY8BkhvE6sk87fJyjQB8qmBvd18cSzICfMKIcXI
+	uWspmWP9kI8EATXCVeyf0MSK+pynS0WbkCOX1qEfKKyuHwVxgkhAPn6Fyi2aLqyN
+	fAiAkwvUkxoYXRmHrOXJYasjfVGnBk1FpNn7qzi+i3JbcTy7QErpJ3dcjJhWR2EJ
+	gU2uOe2u+mrx6/JSbxnvEA==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dh87m8ag3-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dh85q8bd2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 14 Apr 2026 02:19:32 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 63E2EKhs023619;
+	Tue, 14 Apr 2026 02:19:31 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4dh7nj0nsq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 14 Apr 2026 02:19:31 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 63E2EJq5023532;
-	Tue, 14 Apr 2026 02:19:30 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4dh7nj0ns7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 14 Apr 2026 02:19:30 +0000 (GMT)
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 63E2JTjd036955;
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 63E2JTje036955;
 	Tue, 14 Apr 2026 02:19:30 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4dh7nj0nr0-2;
-	Tue, 14 Apr 2026 02:19:29 +0000 (GMT)
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4dh7nj0nr0-3;
+	Tue, 14 Apr 2026 02:19:30 +0000 (GMT)
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org,
+To: John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>,
         "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Eric Biggers <ebiggers@kernel.org>
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: iscsi_tcp: Remove unneeded selections of CRYPTO and CRYPTO_MD5
-Date: Mon, 13 Apr 2026 22:19:16 -0400
-Message-ID: <177595422510.3963380.2387618551172566258.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: libsas: Delete unused to_dom_device() and to_dev_attr()
+Date: Mon, 13 Apr 2026 22:19:17 -0400
+Message-ID: <177595422519.3963380.11566205898261844197.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260404203003.33738-1-ebiggers@kernel.org>
-References: <20260404203003.33738-1-ebiggers@kernel.org>
+In-Reply-To: <20260408-libsas-cleanup-v1-1-826325bbc0ba@weissschuh.net>
+References: <20260408-libsas-cleanup-v1-1-826325bbc0ba@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -88,68 +88,64 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-13_03,2026-04-13_04,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- malwarescore=0 phishscore=0 mlxscore=0 mlxlogscore=866 spamscore=0
+ malwarescore=0 phishscore=0 mlxscore=0 mlxlogscore=871 spamscore=0
  lowpriorityscore=0 adultscore=0 suspectscore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.19.0-2604070000 definitions=main-2604140019
-X-Authority-Analysis: v=2.4 cv=JKYLdcKb c=1 sm=1 tr=0 ts=69dda433 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDAyMCBTYWx0ZWRfX0UZf3Gm2mV9L
+ WNsQSzapN4Lrd9P2KnUPZPx8Or9eZa09DrK7jfVsDcTuoaAVi8FqTFMgDVzF4+5bNfIUk5ns5aj
+ /CGvw6tsghQqv2yIriu0qQ3Z5jZecL7yYqtbSpIPYS7ptC4QDep1RXgJfK8MjLwOwJfYrFsiFHH
+ am/CARAfbi7zsDFNwNTE6orJgZT2KQuHnQVeeF4kBYFCi0V0mshO2XbedHXu4CQHIMRaRp8maam
+ vZkUtGIrVlLtChwk5Lx6OLwrhFr3aj+9m1D0nKFBcWooxp/GAjQlJc86Iz11rSeUYEYA4sasLHw
+ ca+erQdaSuqLgcvZPfSYptinVEKSXPy5Z8tOzoXDahv7foLaz8j22PjgQPQmvbEwBJTv0KZu0nx
+ Ere7FBvVsxMy2/CAx5RRbobxVyL2inm3h0N7W9LwnpVWeSyBPGHTBDXOdiPjm4GJfnpKUNyRCtF
+ bx9A2i/2xFt/lYhPCAg==
+X-Proofpoint-GUID: z31RJ4OQXbkz2XrgiHw77Pj6VvFC-Ob2
+X-Authority-Analysis: v=2.4 cv=V49NF+ni c=1 sm=1 tr=0 ts=69dda434 cx=c_pps
  a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
  a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=7Gl3-_t3PgB9XO-mQDs3:22 a=VwQbUJbxAAAA:8
- a=GCFWr-IWmwxHsq0_GSEA:9 a=QEXdDO2ut3YA:10 a=0lgtpPvCYYIA:10
-X-Proofpoint-ORIG-GUID: Rw8XG_HQ4wu_buWrahayxPpi80bqcw58
-X-Proofpoint-GUID: Rw8XG_HQ4wu_buWrahayxPpi80bqcw58
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDAyMCBTYWx0ZWRfXyLOZtcprATq5
- 8WqNc38PAyBCI3KbigtsBZdfZSW0NNVA2ZGQV+2Zjtfci3MXtEwD3hTs1SNhR2qaibOmu8D9L09
- 9oyVHWNrVMfsR+ZUvKsNGkZEf+9pI2lo97ov64jXMxHiY2YoTAXLatKcgB/EmCCwtr7QPFAy0PM
- tbOVFE9oGO/B9gNjvybJACiGY/PjZ2KHk4QzFGB+lk7fwCyu35rYOCNJE8DhoVUuiXs/mo1qD2+
- FWJWmUvLnJex8zA75qPv83Xv+RHflXntgvj2NFDcrnsvE92QdDoRhgM31VRqoXXD/6M0bpQC/ye
- WY+2GgliXrHMlwlgHqQ6eXDgr/e2LmNwUuO9bL8Vg7D+hxhxnTayjYZrsmOqgwU58Mk2jviBavy
- D/p82JakthLaB06RY1ROc1NjLQp7oaVj2EYIEKumbivQWGrhIt/HFUfO5GWwad2AcHpg2CvDJ1H
- 7EuVY+QZG9NzAhmQgsQ==
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=RD47p0oAkeU5bO7t-o6f:22 a=VwQbUJbxAAAA:8
+ a=rnqhmTZGhccT-vtqXCwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: z31RJ4OQXbkz2XrgiHw77Pj6VvFC-Ob2
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22909-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[oracle.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,oracle.com:dkim,oracle.com:mid];
-	RCPT_COUNT_FIVE(0.00)[5];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-22914-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:dkim,oracle.com:mid];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: 49B373F4F52
+X-Rspamd-Queue-Id: 6401F3F4FAC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sat, 04 Apr 2026 13:30:03 -0700, Eric Biggers wrote:
+On Wed, 08 Apr 2026 20:28:00 +0200, Thomas Weißschuh wrote:
 
-> As far as I can tell, CRYPTO_MD5 has been unnecessary here ever since it
-> was added by commit c899e4ef96f0 ("[SCSI] open-iscsi/linux-iscsi-5
-> Initiator: Kconfig update") in 2005.
+> These macros are unused and to_dev_attr() will conflict with an upcoming
+> centralization of general attribute macros.
 > 
-> CRYPTO was needed until commit 92186c1455a2 ("scsi: iscsi_tcp: Switch to
-> using the crc32c library"), but is no longer needed.
 > 
-> [...]
 
 Applied to 7.1/scsi-queue, thanks!
 
-[1/1] scsi: iscsi_tcp: Remove unneeded selections of CRYPTO and CRYPTO_MD5
-      https://git.kernel.org/mkp/scsi/c/7aa0f56d4b48
+[1/1] scsi: libsas: Delete unused to_dom_device() and to_dev_attr()
+      https://git.kernel.org/mkp/scsi/c/1a2f61970a63
 
 -- 
 Martin K. Petersen
