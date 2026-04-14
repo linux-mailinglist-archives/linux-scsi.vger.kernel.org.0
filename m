@@ -1,81 +1,81 @@
-Return-Path: <linux-scsi+bounces-22914-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-22910-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WBWDFKWk3Wl8hAkAu9opvQ
-	(envelope-from <linux-scsi+bounces-22914-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2026 04:21:25 +0200
+	id WN/fBkWk3Wl8hAkAu9opvQ
+	(envelope-from <linux-scsi+bounces-22910-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2026 04:19:49 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6401F3F4FAC
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2026 04:21:24 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A47F13F4F61
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2026 04:19:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 6FB35301C58A
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2026 02:19:56 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 1A66C3012B7B
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2026 02:19:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38AA730DEA2;
-	Tue, 14 Apr 2026 02:19:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 574BA3126D7;
+	Tue, 14 Apr 2026 02:19:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="GuuqPOzZ"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="emCbZ+/k"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2992773CA;
-	Tue, 14 Apr 2026 02:19:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1576230EF6C
+	for <linux-scsi@vger.kernel.org>; Tue, 14 Apr 2026 02:19:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776133182; cv=none; b=CYAKuZFJNDOTKEltqmZgI6a+GkA6Cw4kyxRX5lP426Feb7k18q//XcPNnD7wSsoWCZcjhXwtEX/+CEO59DExdisLJTemopSTYzy0sJXsvTvrfFLdRnoQ/rDq28xO/fLGdTfEkVcoPjtyXcZBmvjtUzaX3XF2xcfVv+7OmRGP9EA=
+	t=1776133178; cv=none; b=iKAHamokQY8oxiYnhKXqPUQacYUyYAM3dkAUrscE6/Rrr3bFJujRgXutj93tdiy1WfIXVpCF4Y2x3pXFFRHb6OrTJ/lEWH5QCRiPJLxFdYon84wwybm12ftUCd5vCcTFol7PxlCIrG3B1JsrEwRz29tgIKyDZe9SD/2I7+POo84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776133182; c=relaxed/simple;
-	bh=J988FrqOfj37DtaHq5A3tApusV+EG20CdTTupQyPVxU=;
+	s=arc-20240116; t=1776133178; c=relaxed/simple;
+	bh=CbLF+wunbjohe2LNJ3BQ980wWChJkplbqjAJCnbAtkg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EqYv1z7abBkwaahw4uSf30SvHcXtIdHserLMuLJd5MuvbEDw/EWs+xdvlLO3vgYMPWVB56Wtpio8tN/DTrtBOlKYDLl8WeVfGN4XkdEhMQEScbsn+8PqggxSgELtvnS2X66iHFhgpELJU6ODLZgN8lpf9d691tWEi4DohcSHMaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=GuuqPOzZ; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=GzcSmy45y+SgsmZIotG1YyA+NGjG7OOVCwL/6CBwC/Ea955ntcZ7DuKKxR0igva5fFUPdJCXVRU8IdRlJjs05r1UGN0gqWiklmFebmP4OFa7hTtxaQMZFPLfGnN6qkX6imcyfbZ/k+IbJorBqEHQaCJCz5akAhv7681FNFWB5Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=emCbZ+/k; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63E0hE1I229106;
-	Tue, 14 Apr 2026 02:19:32 GMT
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63DLESXG3851326;
+	Tue, 14 Apr 2026 02:19:33 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=3I1dNO+Z2/bWkprC8/rg65abK71JbiLKPYM39la8XwI=; b=
-	GuuqPOzZntoZrMRZGAv4c8qYMDv8AtyTnK7qolS6C4uNEOMfHrqdGV8eGdX11/yk
-	W9lrgYSjF/E0eyC6QiXcgnY054pY5aDlFQWE3dOwpJwmLSvok8kPKqgpAfENk0tz
-	XFttxnwfzLPFcU0uut5ceupnuCY8BkhvE6sk87fJyjQB8qmBvd18cSzICfMKIcXI
-	uWspmWP9kI8EATXCVeyf0MSK+pynS0WbkCOX1qEfKKyuHwVxgkhAPn6Fyi2aLqyN
-	fAiAkwvUkxoYXRmHrOXJYasjfVGnBk1FpNn7qzi+i3JbcTy7QErpJ3dcjJhWR2EJ
-	gU2uOe2u+mrx6/JSbxnvEA==
+	corp-2025-04-25; bh=wO6w9BmSdjFIRWgWIdSbc3glrtnLi46DjH8jipkp/Mo=; b=
+	emCbZ+/kPb0VMN66fyTwWLs59IC3iKkN6MAOiZ0GvXPkQRTAGlWV0jAUVr2bu9BF
+	SUos2UDixR8xuWiAr17zL77jUQX8WFNLYKPxymL9ZTBXcISBBX3THufUxJstCMEW
+	iarEOvIb7cS7ECRJY8wLWBrqODrUu9cBWzfRPrxr7tHDlaIzf5vS/g/QCsozeYQr
+	YIut/RP7fNwKLpq0pdv4O6RfCC6LhLTX054oxP+FtXuQt09dtDmfvtZd1/rti/4e
+	fXNSzvjyAXuPIHWDaPUMYp9N1xCDVjO91aGb64izvjA8yeJagNuj5xwDpQNzH8k+
+	2y40GxL9NNgsKMosXMzp7Q==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dh85q8bd2-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dh87m8ag4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 14 Apr 2026 02:19:32 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 63E2EKhs023619;
-	Tue, 14 Apr 2026 02:19:31 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 63E2EK0P023590;
+	Tue, 14 Apr 2026 02:19:32 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4dh7nj0nsq-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4dh7nj0nte-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 14 Apr 2026 02:19:31 +0000 (GMT)
+	Tue, 14 Apr 2026 02:19:32 +0000 (GMT)
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 63E2JTje036955;
-	Tue, 14 Apr 2026 02:19:30 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 63E2JTjh036955;
+	Tue, 14 Apr 2026 02:19:31 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4dh7nj0nr0-3;
-	Tue, 14 Apr 2026 02:19:30 +0000 (GMT)
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4dh7nj0nr0-4;
+	Tue, 14 Apr 2026 02:19:31 +0000 (GMT)
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: John Garry <john.g.garry@oracle.com>, Jason Yan <yanaijie@huawei.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: libsas: Delete unused to_dom_device() and to_dev_attr()
-Date: Mon, 13 Apr 2026 22:19:17 -0400
-Message-ID: <177595422519.3963380.11566205898261844197.b4-ty@oracle.com>
+To: Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-scsi@vger.kernel.org, lirongqing <lirongqing@baidu.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH] scsi: qla2xxx: Use nr_cpu_ids instead of NR_CPUS for qp_cpu_map allocation
+Date: Mon, 13 Apr 2026 22:19:18 -0400
+Message-ID: <177595422535.3963380.14788785659785183.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260408-libsas-cleanup-v1-1-826325bbc0ba@weissschuh.net>
-References: <20260408-libsas-cleanup-v1-1-826325bbc0ba@weissschuh.net>
+In-Reply-To: <20260331053245.1839-1-lirongqing@baidu.com>
+References: <20260331053245.1839-1-lirongqing@baidu.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -88,64 +88,66 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-13_03,2026-04-13_04,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- malwarescore=0 phishscore=0 mlxscore=0 mlxlogscore=871 spamscore=0
+ malwarescore=0 phishscore=0 mlxscore=0 mlxlogscore=821 spamscore=0
  lowpriorityscore=0 adultscore=0 suspectscore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.19.0-2604070000 definitions=main-2604140019
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDAyMCBTYWx0ZWRfX0UZf3Gm2mV9L
- WNsQSzapN4Lrd9P2KnUPZPx8Or9eZa09DrK7jfVsDcTuoaAVi8FqTFMgDVzF4+5bNfIUk5ns5aj
- /CGvw6tsghQqv2yIriu0qQ3Z5jZecL7yYqtbSpIPYS7ptC4QDep1RXgJfK8MjLwOwJfYrFsiFHH
- am/CARAfbi7zsDFNwNTE6orJgZT2KQuHnQVeeF4kBYFCi0V0mshO2XbedHXu4CQHIMRaRp8maam
- vZkUtGIrVlLtChwk5Lx6OLwrhFr3aj+9m1D0nKFBcWooxp/GAjQlJc86Iz11rSeUYEYA4sasLHw
- ca+erQdaSuqLgcvZPfSYptinVEKSXPy5Z8tOzoXDahv7foLaz8j22PjgQPQmvbEwBJTv0KZu0nx
- Ere7FBvVsxMy2/CAx5RRbobxVyL2inm3h0N7W9LwnpVWeSyBPGHTBDXOdiPjm4GJfnpKUNyRCtF
- bx9A2i/2xFt/lYhPCAg==
-X-Proofpoint-GUID: z31RJ4OQXbkz2XrgiHw77Pj6VvFC-Ob2
-X-Authority-Analysis: v=2.4 cv=V49NF+ni c=1 sm=1 tr=0 ts=69dda434 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=JKYLdcKb c=1 sm=1 tr=0 ts=69dda435 cx=c_pps
  a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
  a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=RD47p0oAkeU5bO7t-o6f:22 a=VwQbUJbxAAAA:8
- a=rnqhmTZGhccT-vtqXCwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: z31RJ4OQXbkz2XrgiHw77Pj6VvFC-Ob2
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=7Gl3-_t3PgB9XO-mQDs3:22 a=VwQbUJbxAAAA:8
+ a=IVV1xvooITwB7EEMI5UA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: _XrMFYJmMLbLMSyc3GYDgFL6ZUYcALvZ
+X-Proofpoint-GUID: _XrMFYJmMLbLMSyc3GYDgFL6ZUYcALvZ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDAyMCBTYWx0ZWRfXwP4+MiwCbIbI
+ HTHI3CeGhh5dJW4unCGHOjp23Q8e2bvBgX307EeKZNW+Hos00Z9Av/7x9PI0tzgIB7Zi5RGgcpx
+ TDGCYLJmLR6VzNZCb5akPn5EJVzxZ8ND0W1tMaE+RVB62wJOQdhChgDZM9CmaGtWVTkIUZAMYz6
+ XHP7w0Hl3Pz85G6M1ChFiNxL46jOUL5AODqhueLRh5WhC7CG1hfaN4jgEzfpJxAo8+hJW40fArb
+ L3PwT6vnc8ao0B73ZLrbDL6wKUz8q2kxAwlUEcP7Rwvw+rv2JbnoW42a1RnQVN9oaOxOJ/baNNQ
+ lhgFTLBk/JRpViPyIjbQDyUhkdEycx5se0vUAAccScj4WYXN3vl7XqBK6iVJDJLbZNP4o8laGf1
+ 8R6ssqutl1BVajAOVbVQMaphh0AR2S7KNE0trFMWl3zaz2wktr2ngOnp+2B8U+AHfaUyGBMfzs4
+ Rw6Lqpvxp15rnH6s0aw==
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-22910-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[oracle.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-22914-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:dkim,oracle.com:mid];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,oracle.com:dkim,oracle.com:mid];
+	RCPT_COUNT_FIVE(0.00)[6];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	PRECEDENCE_BULK(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: 6401F3F4FAC
+X-Rspamd-Queue-Id: A47F13F4F61
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, 08 Apr 2026 20:28:00 +0200, Thomas Weißschuh wrote:
+On Tue, 31 Mar 2026 01:32:45 -0400, lirongqing wrote:
 
-> These macros are unused and to_dev_attr() will conflict with an upcoming
-> centralization of general attribute macros.
+> Change the memory allocation for qp_cpu_map to use the actual number
+> of CPUs (`nr_cpu_ids`) instead of the maximum possible CPUs (`NR_CPUS`).
+> This saves memory on systems where the maximum CPU limit is much higher
+> than the active CPU count.
 > 
 > 
 
 Applied to 7.1/scsi-queue, thanks!
 
-[1/1] scsi: libsas: Delete unused to_dom_device() and to_dev_attr()
-      https://git.kernel.org/mkp/scsi/c/1a2f61970a63
+[1/1] scsi: qla2xxx: Use nr_cpu_ids instead of NR_CPUS for qp_cpu_map allocation
+      https://git.kernel.org/mkp/scsi/c/271aeff266c9
 
 -- 
 Martin K. Petersen
