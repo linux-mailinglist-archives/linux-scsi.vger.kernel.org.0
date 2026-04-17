@@ -1,75 +1,77 @@
-Return-Path: <linux-scsi+bounces-23042-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23043-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QLONFYAg4mlX1wAAu9opvQ
-	(envelope-from <linux-scsi+bounces-23042-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Apr 2026 13:58:56 +0200
+	id MGyqGIgh4mlX1wAAu9opvQ
+	(envelope-from <linux-scsi+bounces-23043-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Apr 2026 14:03:20 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F069E41B00A
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Apr 2026 13:58:51 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E1541B0BF
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Apr 2026 14:03:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B5DFC3053BE6
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Apr 2026 11:58:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 26BB6301FD41
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Apr 2026 11:58:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C93039A041;
-	Fri, 17 Apr 2026 11:58:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28D1939478F;
+	Fri, 17 Apr 2026 11:58:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="fdPaiD8Z"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="h61PXVi8"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D5B30EF9B
-	for <linux-scsi@vger.kernel.org>; Fri, 17 Apr 2026 11:58:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA39F2D5923
+	for <linux-scsi@vger.kernel.org>; Fri, 17 Apr 2026 11:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776427114; cv=none; b=hpuIRDmAR/ghsvLmQGf6MNzxLAMp/znzZmhd1lf895P5r6gqG46AjPFzvBZq+9MgtgLZmu+A3xrZ/K0yNWLNKw6hNgBB8eOwfAnVVrKXWc7pWBk9YIJGFHbUEyQrZhVKNGPtVIhS8h+/V37/FgXQiT2fKG+naB65my7BxHPy4LU=
+	t=1776427127; cv=none; b=pJOcUQmOEq1Ha6OruRKl1j+2eUDqNOW8ldC4pZJc2qBw/G+xd5b18ZD3Q0d1u8KoSrKq1Gl2sqkhwRlkUK1ZWXa9xoTX0909jTJw1UAW7eF4iUNpfLCigRPGsayk3C7rk4hLzuI+wVDtBSGamihl5Vl77CxOrckF62HGGO+KIAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776427114; c=relaxed/simple;
-	bh=9JIyl//kwjCYLNOV2103lot1jY0NX1t9FFIgbTT2W08=;
+	s=arc-20240116; t=1776427127; c=relaxed/simple;
+	bh=jVP74l+d42j9pCUDaqYNMTl1xTEGiV9aQbUauEXrTAw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=dGx3Mbti7ahST14LuLPmRCNuj/jNZCJoRpAbacaUv49jLJFMbLXTGdgKBCfTW0DJE3lnCvv/G0acojbk+nO0LgyGfvZ+RWOsx/pjeL51IbWnzHpnLg/8Ddh6IsrA6FjqoqKWXaqO6OrUmkiX3TbDxcvGJ3xZwnsdIHodSey0yOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=fdPaiD8Z; arc=none smtp.client-ip=203.254.224.24
+	 Content-Type:References; b=MF6BlMdGLFv4jIP37Nmxgm2/acaPoftZdv6mboUWMG8FIKl3vytgHqRiiyOBcbkP0CpvsY1dm5lGmnQdvgu36lWcmV8igqIr22IC8ql38z49B7JCOxZYM03YKWA5NDP3HCTj4lgJ7mud6rXR062zvA5OSa22ZWrEu9FOreG91vM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=h61PXVi8; arc=none smtp.client-ip=203.254.224.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20260417115828epoutp01ab2ce5e72b6aea8c4940e9e55b4a961b~nIwsJw2-o2937029370epoutp01d
-	for <linux-scsi@vger.kernel.org>; Fri, 17 Apr 2026 11:58:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20260417115828epoutp01ab2ce5e72b6aea8c4940e9e55b4a961b~nIwsJw2-o2937029370epoutp01d
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20260417115844epoutp0373e6e062fc23a832c98797716d3745b6~nIw7fh5Aq0474704747epoutp036
+	for <linux-scsi@vger.kernel.org>; Fri, 17 Apr 2026 11:58:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20260417115844epoutp0373e6e062fc23a832c98797716d3745b6~nIw7fh5Aq0474704747epoutp036
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1776427108;
-	bh=tAtME2oAeGw1VYgG3bdSyu5+5ymiofHX2zHNHbOWdQw=;
+	s=mail20170921; t=1776427124;
+	bh=WkxI4lMMv9ujNsKgYtnd5P0MBRZIO8gABKqtfUpxztA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fdPaiD8Zx/vk4Hv+SzdixP1t337+RoRvRzCGIB42UtelLLg7XWrrRAjO7wDGcW8uJ
-	 yPE4dcd725YVSCLRlgkDfHlrAPOenRNUplFz0OyeaNWNnlui4DHaSXYeySEAaaYC3W
-	 5EbHIih47OJeWpCwCZOYJlTDoOLR8sswmYujvgKg=
-Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20260417115827epcas5p1678828b1a8e4c5476548edc8396421ad~nIwrOzL0R1376213762epcas5p1b;
-	Fri, 17 Apr 2026 11:58:27 +0000 (GMT)
-Received: from epcas5p2.samsung.com (unknown [182.195.38.95]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4fxtgk2M8Bz6B9m4; Fri, 17 Apr
-	2026 11:58:26 +0000 (GMT)
+	b=h61PXVi8G0+H2750ZHfGfrG2zYaKLBad6btBGrfYgqG5Ab6suGhWy0W9mBH1zUQmd
+	 PbIuK12V6deFuON+zh95+mW2ED+mNPv7GSJ+r9yX/ki9Z5FdSUR8WCeZIKfeS9aGhK
+	 n3C5+12A35e5Oyutfbh9JH2AqkTXwKm62Pb4xtgc=
+Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
+	20260417115844epcas5p29a61996d89574b77c465771620720399~nIw6y05mB1627016270epcas5p2O;
+	Fri, 17 Apr 2026 11:58:44 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.93]) by
+	epsnrtp03.localdomain (Postfix) with ESMTP id 4fxth30btmz3hhT9; Fri, 17 Apr
+	2026 11:58:43 +0000 (GMT)
 Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
 	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20260417115825epcas5p15b81597e14c7ffcee59293e181f1ae1d~nIwpxwWSL0070100701epcas5p16;
-	Fri, 17 Apr 2026 11:58:25 +0000 (GMT)
+	20260417115842epcas5p1fb06d6f1663b97b1eae3aafaa6a3de0b~nIw5XBmH10152301523epcas5p1L;
+	Fri, 17 Apr 2026 11:58:42 +0000 (GMT)
 Received: from bose.samsungds.net (unknown [107.108.83.9]) by
 	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20260417115819epsmtip2516c61249898d4b5efdf1361d9c0ede9~nIwj4foTf0979909799epsmtip2h;
-	Fri, 17 Apr 2026 11:58:19 +0000 (GMT)
+	20260417115836epsmtip25d8f2f024f7e0c2a04f1f016c96fbc41~nIw0LImmL1009810098epsmtip2D;
+	Fri, 17 Apr 2026 11:58:36 +0000 (GMT)
 From: Alim Akhtar <alim.akhtar@samsung.com>
 To: avri.altman@wdc.com, bvanassche@acm.org, robh@kernel.org,
 	martin.petersen@oracle.com, krzk+dt@kernel.org
 Cc: sowon.na@samsung.com, peter.griffin@linaro.org,
 	linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org, Alim Akhtar
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org, Krzysztof
+	Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar
 	<alim.akhtar@samsung.com>
-Subject: [PATCH v2 1/4] arm64: dts: exynosautov920: Add syscon hsi2 node
-Date: Fri, 17 Apr 2026 17:44:49 +0530
-Message-Id: <20260417121452.827054-2-alim.akhtar@samsung.com>
+Subject: [PATCH v2 2/4] dt-bindings: ufs: exynos: add ExynosAutov920
+ compatible string
+Date: Fri, 17 Apr 2026 17:44:50 +0530
+Message-Id: <20260417121452.827054-3-alim.akhtar@samsung.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260417121452.827054-1-alim.akhtar@samsung.com>
 Precedence: bulk
@@ -79,32 +81,32 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20260417115825epcas5p15b81597e14c7ffcee59293e181f1ae1d
+X-CMS-MailID: 20260417115842epcas5p1fb06d6f1663b97b1eae3aafaa6a3de0b
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 CMS-TYPE: 105P
 cpgsPolicy: CPGSC10-543,Y
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20260417115825epcas5p15b81597e14c7ffcee59293e181f1ae1d
+X-CMS-RootMailID: 20260417115842epcas5p1fb06d6f1663b97b1eae3aafaa6a3de0b
 References: <20260417121452.827054-1-alim.akhtar@samsung.com>
-	<CGME20260417115825epcas5p15b81597e14c7ffcee59293e181f1ae1d@epcas5p1.samsung.com>
+	<CGME20260417115842epcas5p1fb06d6f1663b97b1eae3aafaa6a3de0b@epcas5p1.samsung.com>
 X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	TAGGED_FROM(0.00)[bounces-23042-lists,linux-scsi=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-23043-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[samsung.com:email,samsung.com:dkim,samsung.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,16c00000:email,16b00000:email];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[samsung.com:email,samsung.com:dkim,samsung.com:mid,linaro.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[alim.akhtar@samsung.com,linux-scsi@vger.kernel.org];
@@ -115,37 +117,33 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	TAGGED_RCPT(0.00)[linux-scsi,dt];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[8]
-X-Rspamd-Queue-Id: F069E41B00A
+X-Rspamd-Queue-Id: E5E1541B0BF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Syscon HSI2 block has system configuration settings for
-HSI IPs, like ufs, usb etc. Add a syscon_hsi2 node entry
-so that related HSI controller can make use of the same.
+From: Sowon Na <sowon.na@samsung.com>
 
+Add samsung,exynosautov920-ufs compatible for ExynosAutov920 SoC.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Sowon Na <sowon.na@samsung.com>
 Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 ---
- arch/arm64/boot/dts/exynos/exynosautov920.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-index 0bf7c4cb9846..0eb853770732 100644
---- a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-@@ -1426,6 +1426,12 @@ cmu_hsi2: clock-controller@16b00000 {
- 				      "ethernet";
- 		};
+diff --git a/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml b/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
+index a7eb7ad85a94..710ce493f3b6 100644
+--- a/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
++++ b/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
+@@ -19,6 +19,7 @@ properties:
+       - samsung,exynos7-ufs
+       - samsung,exynosautov9-ufs
+       - samsung,exynosautov9-ufs-vh
++      - samsung,exynosautov920-ufs
+       - tesla,fsd-ufs
  
-+		syscon_hsi2: syscon@16c00000 {
-+			compatible = "samsung,exynosautov920-hsi2-sysreg",
-+				     "syscon";
-+			reg = <0x16c00000 0x800>;
-+		};
-+
- 		pinctrl_hsi2: pinctrl@16c10000 {
- 			compatible = "samsung,exynosautov920-pinctrl";
- 			reg = <0x16c10000 0x10000>;
+   reg:
 -- 
 2.34.1
 
