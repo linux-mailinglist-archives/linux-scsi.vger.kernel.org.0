@@ -1,152 +1,143 @@
-Return-Path: <linux-scsi+bounces-23157-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23180-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SOYqFXtZ52l87AEAu9opvQ
-	(envelope-from <linux-scsi+bounces-23157-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Apr 2026 13:03:23 +0200
+	id MEmnFmr452kVDgIAu9opvQ
+	(envelope-from <linux-scsi+bounces-23180-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Apr 2026 00:21:30 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D490439E25
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Apr 2026 13:03:21 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id E347644020B
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Apr 2026 00:21:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1E8F23037D66
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Apr 2026 10:57:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id ABDA93032DF5
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Apr 2026 22:20:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6C683BD64B;
-	Tue, 21 Apr 2026 10:57:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C8B5379ED6;
+	Tue, 21 Apr 2026 22:20:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vCKmixEQ"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="nykTAoje"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66CE734846D;
-	Tue, 21 Apr 2026 10:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27EFD26B2DA
+	for <linux-scsi@vger.kernel.org>; Tue, 21 Apr 2026 22:20:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776769067; cv=none; b=aQTq9ojvRYgEdZvSrLgxkhxKAbPb9Bip0v7JU+eMaVID3PY/6lMEwFH91orQeRPKVt0QwGv+IVQDDEHUY4gLFT1BPmL/3TfVnPHBwbIjKgKSc/r+CyixkGmY+zG8p2o9q9VRQHp5Ul7ADom7CwuiCBhwxwutVeaAVbkbr/hiZV8=
+	t=1776810013; cv=none; b=gY71KZY7Tc1OqFyG4CMitj62hnrxj13t9r47BiXwKKnn+0P1wvpmo6lv+EtEt3Q+IkOCYDRCJlpl1uisBMWhgQIw7xr/1/f3NtkFJmHpkoCBD1R4AbUtSg5kAq9hXwdW5jHcnN0gsMrLxQKFOC2dmXQ/XsopUQJHP32vBY1Rz2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776769067; c=relaxed/simple;
-	bh=r2Uj/8n4b/vsksJenduleFOR6xxSb9vEn+mFG++z+5Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rzUvPbyqd9Lz+hb9L44QJPHS7sv0/7+lXfWvp/pN254RYZft1XIt0k7UzVEt1IyHYeK5DjV2tMtcs/qwKCvpYL90NkThQ9s0SN4fRjLYySQo8q3Wpvbc5MBR+J5AKDYlGgbvr95pPpRdE67lYporY2zfDV5O+aDLTKotmAvbny8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vCKmixEQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E7C4C2BCB0;
-	Tue, 21 Apr 2026 10:57:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776769067;
-	bh=r2Uj/8n4b/vsksJenduleFOR6xxSb9vEn+mFG++z+5Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vCKmixEQ1DKVwZ3pPj8ADkgBYwx5DfKUQ8zxFPbtNYCqlBM9flOTBrJlfSZj9SzdZ
-	 /jzG0uJGkN0QWcNE46sKe9mgLVGMUwhqnUDLsJuvjHCiHUSYHsqDDOaccd078Av+V/
-	 bGvNJCSnEnN0WPZGehCwkW0pfCYloKT2vjpD1fvIuEDiMWyUiVow3sn/QjZ+fSpCNe
-	 ngfia/Vn2ptq1rp8J4dRqiR1iAquhyXUw7MBQ09Vkkqlnyaemux3FOawS9b8euZHEi
-	 rthcMBso0qR3fmq7tyNjvRFf7sSuQ66dtKja1uDPh4ptxataE7WuqM2yJDBO8CYcnD
-	 zM03coGkp283g==
-Date: Tue, 21 Apr 2026 16:27:33 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Shawn Guo <shengchao.guo@oss.qualcomm.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Dmitry Baryshkov <lumag@kernel.org>, Kumar Dwivedi <ram.dwivedi@oss.qualcomm.com>, 
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, Deepti Jaggi <deepti.jaggi@oss.qualcomm.com>, 
-	linux-scsi@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] scsi: ufs: dt-bindings: Add compatible for Nord UFS
- Host Controller
-Message-ID: <kpe3dgilfpv6r6jkjwljdvacdb4alq5s7oz5fgndd2bk2jn2kw@by6eufl6n5v7>
-References: <20260420100416.1252983-1-shengchao.guo@oss.qualcomm.com>
- <20260420100416.1252983-2-shengchao.guo@oss.qualcomm.com>
+	s=arc-20240116; t=1776810013; c=relaxed/simple;
+	bh=QDnzplnShSp84VnaWuFDlAriHRwc6rGWS3++dlxjNpc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=gHaDiVqpnml8GzTS0UJksQCh9kclo6h6c0Xq60otXBXXUmK/wljt/udIDNsf1dv1GZ1TQ8OsrJIefl+1qYKUAgQi0kbJ9D8pdqWztbJkWUbCesxqEURum1X2TMDCVQLkrw/wb65+xAEX2NmTms5XJmvG65vBh4NwQ3SBeXAXZuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=nykTAoje; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20260421222003epoutp04125375be05111d7546bda4695edf9a47~of0i4g2Mb2046620466epoutp04V
+	for <linux-scsi@vger.kernel.org>; Tue, 21 Apr 2026 22:20:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20260421222003epoutp04125375be05111d7546bda4695edf9a47~of0i4g2Mb2046620466epoutp04V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1776810003;
+	bh=QDnzplnShSp84VnaWuFDlAriHRwc6rGWS3++dlxjNpc=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=nykTAojerhaSlyTgLiAlONCK2MoxSntLQ383OJV8eaUgbc6RhoC7op5sYg8AUYKfE
+	 9goL08RW1Tsmab3ftoPYBCTelwUBgoK6XAv43Pk8vtoMMnwZhYToFcHNtu3SYKN7us
+	 pJIOlseE0Vc4pXuvJ2L+Ux8ut49H4zY0acrS6cco=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas2p3.samsung.com (KnoxPortal) with ESMTPS id
+	20260421222002epcas2p366680424553d03e9461b728dbf82f43f~of0iMbY5-2379823798epcas2p3A;
+	Tue, 21 Apr 2026 22:20:02 +0000 (GMT)
+Received: from epcpadp1new (unknown [182.195.40.141]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4g0cH63lncz6B9m5; Tue, 21 Apr
+	2026 22:20:02 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+	20260421110151epcas2p40628a13eb86c5c9b90626d14efc3b3ba~oWkZvLUGy0082500825epcas2p44;
+	Tue, 21 Apr 2026 11:01:51 +0000 (GMT)
+Received: from KORCO118546 (unknown [12.80.207.184]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20260421110151epsmtip2b798fd67b72782d1e07b85b8a00194ed~oWkZmlBNx2226522265epsmtip2Y;
+	Tue, 21 Apr 2026 11:01:51 +0000 (GMT)
+From: "hoyoung seo" <hy50.seo@samsung.com>
+To: <can.guo@oss.qualcomm.com>
+Cc: <James.Bottomley@HansenPartnership.com>, <adrian.hunter@intel.com>,
+	<alim.akhtar@samsung.com>, <avri.altman@wdc.com>, <beanhuo@micron.com>,
+	<bvanassche@acm.org>, <chullee@google.com>, <huobean@gmail.com>,
+	<keosung.park@samsung.com>, <linux-kernel@vger.kernel.org>,
+	<linux-scsi@vger.kernel.org>, <liu.song13@zte.com.cn>, <mani@kernel.org>,
+	<martin.petersen@oracle.com>, <peter.wang@mediatek.com>,
+	<rafael.j.wysocki@intel.com>, <ram.dwivedi@oss.qualcomm.com>,
+	<tanghuan@vivo.com>, <vamshigajjela@google.com>, <kwangwon.min@samsung.com>,
+	<kwmad.kim@samsung.com>, <cpgs@samsung.com>, <h10.kim@samsung.com>,
+	<alim.akhtar@samsung.com>
+Subject: Re: [PATCH 1/2] scsi: ufs: core: Introduce function
+ ufshcd_query_attr_qword()
+Date: Tue, 21 Apr 2026 20:01:46 +0900
+Message-ID: <1891546521.01776810002507.JavaMail.epsvc@epcpadp1new>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260420100416.1252983-2-shengchao.guo@oss.qualcomm.com>
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AdzRcWO56qlmc4MCTTyaeEevuRaU8Q==
+Content-Language: ko
+X-CMS-MailID: 20260421110151epcas2p40628a13eb86c5c9b90626d14efc3b3ba
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20260421110151epcas2p40628a13eb86c5c9b90626d14efc3b3ba
+References: <CGME20260421110151epcas2p40628a13eb86c5c9b90626d14efc3b3ba@epcas2p4.samsung.com>
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
 	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23157-lists,linux-scsi=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[14];
+	FREEMAIL_CC(0.00)[HansenPartnership.com,intel.com,samsung.com,wdc.com,micron.com,acm.org,google.com,gmail.com,vger.kernel.org,zte.com.cn,kernel.org,oracle.com,mediatek.com,oss.qualcomm.com,vivo.com];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-23180-lists,linux-scsi=lfdr.de];
+	DKIM_TRACE(0.00)[samsung.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	RCPT_COUNT_TWELVE(0.00)[25];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mani@kernel.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-scsi,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[hy50.seo@samsung.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8D490439E25
+	RCVD_COUNT_SEVEN(0.00)[8]
+X-Rspamd-Queue-Id: E347644020B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 20, 2026 at 06:04:15PM +0800, Shawn Guo wrote:
-> Document UFS Host Controller on Qualcomm Nord SoC.  Like the Eliza SoC,
-> Nord has a multi-queue command (MCQ) register range in addition to
-> the standard one, making both reg entries required.
-> 
-> Signed-off-by: Shawn Guo <shengchao.guo@oss.qualcomm.com>
+Hi,
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+How about you to add EXPORT_SYMBOL at ufshcd_query_attr_qword() function.=
+=20
+In the case of ufshcd_query_attr(), there is export_symbol so it can be use=
+d in vendor driver.
+Likewise, if export_symbol is registered in ufshcd_query_attr_qword(), it c=
+an be used in the vendor driver and the pair will be correct.
 
-- Mani
+Thanks.
 
-> ---
->  Documentation/devicetree/bindings/ufs/qcom,sm8650-ufshc.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/ufs/qcom,sm8650-ufshc.yaml b/Documentation/devicetree/bindings/ufs/qcom,sm8650-ufshc.yaml
-> index f28641c6e68f..900d93b675cd 100644
-> --- a/Documentation/devicetree/bindings/ufs/qcom,sm8650-ufshc.yaml
-> +++ b/Documentation/devicetree/bindings/ufs/qcom,sm8650-ufshc.yaml
-> @@ -17,6 +17,7 @@ select:
->          enum:
->            - qcom,eliza-ufshc
->            - qcom,kaanapali-ufshc
-> +          - qcom,nord-ufshc
->            - qcom,sm8650-ufshc
->            - qcom,sm8750-ufshc
->    required:
-> @@ -28,6 +29,7 @@ properties:
->        - enum:
->            - qcom,eliza-ufshc
->            - qcom,kaanapali-ufshc
-> +          - qcom,nord-ufshc
->            - qcom,sm8650-ufshc
->            - qcom,sm8750-ufshc
->        - const: qcom,ufshc
-> @@ -74,6 +76,7 @@ allOf:
->            contains:
->              enum:
->                - qcom,eliza-ufshc
-> +              - qcom,nord-ufshc
->      then:
->        properties:
->          reg:
-> -- 
-> 2.43.0
-> 
+SEO.
 
--- 
-மணிவண்ணன் சதாசிவம்
+
 
