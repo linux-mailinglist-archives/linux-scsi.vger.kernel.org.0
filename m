@@ -1,64 +1,64 @@
-Return-Path: <linux-scsi+bounces-23288-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23294-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YKfLIgby62nWTAAAu9opvQ
-	(envelope-from <linux-scsi+bounces-23288-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2026 00:43:18 +0200
+	id gDTXFDXy62nWTAAAu9opvQ
+	(envelope-from <linux-scsi+bounces-23294-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2026 00:44:05 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33ACF463E26
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2026 00:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C7608463E3E
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2026 00:44:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 72C043010162
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Apr 2026 22:42:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E797A302BEB3
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Apr 2026 22:43:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 889EB3FE366;
-	Fri, 24 Apr 2026 22:42:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 677F23FE665;
+	Fri, 24 Apr 2026 22:42:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="0KKHMQh+"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="slLDmQdP"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1129B2D0602;
-	Fri, 24 Apr 2026 22:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBDE3E0C6B;
+	Fri, 24 Apr 2026 22:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777070560; cv=none; b=llMr50wJg+4ViqwXnY0rrmW/WBswasYW+MqjN0Yxsw/z+GJ99/fAObgTBz92VIN7C9z3NxfmeE46blkxjhLsTJkxOoucRohGxTQvXJPXR7ThSEdsgaItB5JpprkODoeOfYGO8ojl6/pDdhw6EkummGaQ05GHGLhqtIJak0iKwF0=
+	t=1777070573; cv=none; b=DUFC3sxXqPvYTDR1FHGxby+yYAipc3rMdjtP80eUX5HwltRadUcAWoB4InL5C2+xXhhVEIQArIOFQyBTMLI41sMQ/F/WXY5W8F+FDQg7Lf00TFYb88qpBuCMBrEV4OdIpQC4ptfk+wzGppWkNlpXc11I3Exg5dSpADENTR9crg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777070560; c=relaxed/simple;
-	bh=LpO2TAzcCb5bF8OiQjQ/WRamD3ZmSUIHT9bByCKGHUI=;
+	s=arc-20240116; t=1777070573; c=relaxed/simple;
+	bh=q4wNhltj9JEZjzfGIRhfeK6S8Wv2SbnEPvxNoCaI/Ds=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZkNJCWbzusYJvZ0LzCP5fP2QCk776BsjeXwXA8oW2Qrzb5hZ/lboi7PEwLrZeDocO6P0sPFPWpX2OCzKxwqcMfWXg/eVh/yudt0fgbvbmbj3DVkDg7H7KbF9WrBZfmyOxUhR3CD51bQ4t8VgpNuFY/Wky+balF0wQihIx4I2Qh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=0KKHMQh+; arc=none smtp.client-ip=199.89.1.14
+	 MIME-Version; b=JDHtqRxrUzt6PiS/QEUR3HWuexQnEYKIyXtxaOAscW3K6uNtDJ0zGu0G+7BRbmRDUTOQjqciBKUFCUmdsmDH3Evwlvfte/EASxmb8BOMl1GttguJOKAMC0a/IedcQ0wFsWSgPJ5NnJJhbHsUJwQ4yhAjuZARRRU3PDbtXLhsd84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=slLDmQdP; arc=none smtp.client-ip=199.89.1.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4g2Sdj0Sh5z1XQmtl;
-	Fri, 24 Apr 2026 22:42:33 +0000 (UTC)
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4g2Sdr4l25z1XQmtg;
+	Fri, 24 Apr 2026 22:42:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1777070539; x=1779662540; bh=sP0lC
-	imfdvfDSqEeUm59MNd60riyN4YefaPMvPHzWYA=; b=0KKHMQh+9wl8nnzvXXX4w
-	Iu/d2Xxf+a4RSz2Ets6jyok0LR6gLYCnlcndIvhlYEpTTZf9DrvfZe40fdabqEM3
-	WU//0gxmCcW9KftV2HUPPvhcSl28JZmwvjzCvLQFRjo2eOiuij+t0a0UQQDejCFk
-	V2bjXY6Z7de2CtQvk4nAeRGi0RGRGLpx0KsZrYLAs4Qn/LuzhBoeUY8zVRisBUTt
-	dDfxRkBk3NMbWLf5xsmypTZLAv/s9KMkRrvT/6ksEit7zZCD8bF3BcUKrDwV4dDE
-	aZmassXSxEuQZT74paiWwDxl+og70rDJZIc/RiCOWXX4tbMfUX5g4s7dznNDjouV
-	g==
+	:received:received; s=mr01; t=1777070549; x=1779662550; bh=aO6dc
+	1OpgNkWLALMkrrjmVRanHopubIi6s3XO/muCf0=; b=slLDmQdPz88B8YED4TsIi
+	AqLnWzLx53TNLGqaib0XWp9BKzutEwXiOvhsc85vVuymyX5ABeRA1WqbMnQGEqRr
+	bQnb/jntOqS/SPHAPFSj3znYtT2i4i2KsbuLJsUVaRlEhZj6f11jYaASPGmiagfb
+	A87MckPrUd5c6TMbLjbGWDVLClh/xiWohtLGM6CbG9grKcwFsQu6dU2qFM8m1OQq
+	hAz83ZdIz5Q09tbDDQVrqEOnhWUKc8ZoK05b6MoVWOghKfyE+gcC4P8PzVJgYInG
+	dUWqmTkjbqJpCXzfssbabxvYuC52Wt9VYsUbK1q6Kpvrz0ht5PXtROBZsnL+bSAa
+	w==
 X-Virus-Scanned: by MailRoute
 Received: from 011.lax.mailroute.net ([127.0.0.1])
  by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id eEfDLWO7i0hg; Fri, 24 Apr 2026 22:42:19 +0000 (UTC)
+ id d_Q_LHgYOCVN; Fri, 24 Apr 2026 22:42:29 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4g2SdP3Mp6z1XLHZ6;
-	Fri, 24 Apr 2026 22:42:17 +0000 (UTC)
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4g2SdR5X73z1XLDpT;
+	Fri, 24 Apr 2026 22:42:19 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: linux-block@vger.kernel.org,
@@ -66,10 +66,12 @@ Cc: linux-block@vger.kernel.org,
 	linux-nvme@lists.infradead.org,
 	Christoph Hellwig <hch@lst.de>,
 	Nitesh Shetty <nj.shetty@samsung.com>,
-	Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH 03/12] block: Introduce blkdev_copy_offload()
-Date: Fri, 24 Apr 2026 15:41:52 -0700
-Message-ID: <20260424224201.1949243-4-bvanassche@acm.org>
+	Bart Van Assche <bvanassche@acm.org>,
+	Vincent Fu <vincent.fu@samsung.com>,
+	Anuj Gupta <anuj20.g@samsung.com>
+Subject: [PATCH 04/12] block: Add an onloaded copy implementation
+Date: Fri, 24 Apr 2026 15:41:53 -0700
+Message-ID: <20260424224201.1949243-5-bvanassche@acm.org>
 X-Mailer: git-send-email 2.54.0.rc2.544.gc7ae2d5bb8-goog
 In-Reply-To: <20260424224201.1949243-1-bvanassche@acm.org>
 References: <20260424224201.1949243-1-bvanassche@acm.org>
@@ -80,7 +82,7 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 33ACF463E26
+X-Rspamd-Queue-Id: C7608463E3E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -94,7 +96,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23288-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-23294-lists,linux-scsi=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[6];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -103,394 +105,254 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-1.000];
 	DKIM_TRACE(0.00)[acm.org:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ctx.compl:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,acm.org:email,acm.org:dkim,acm.org:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[samsung.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,acm.org:email,acm.org:dkim,acm.org:mid]
 
-Introduce blkdev_copy_offload() for performing copy offloading. This
-function implements the algorithm explained the description of the
-previous patch. If the input parameters exceed what can be supported
-with a single copy offload operation, multiple copy offload operations
-are submitted.
+From: Nitesh Shetty <nj.shetty@samsung.com>
 
+For the devices which do not support copy offloading, add a function that
+copies data by submitting READ and WRITE operations.
+
+Onloaded copying is implemented by reading from the source block device
+into memory and by writing this data to the destination block device.
+
+Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
+Signed-off-by: Vincent Fu <vincent.fu@samsung.com>
+Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- block/Makefile            |   2 +-
- block/blk-copy.c          | 355 ++++++++++++++++++++++++++++++++++++++
- include/linux/blk_types.h |  40 +++++
- include/linux/blkdev.h    |   1 +
- 4 files changed, 397 insertions(+), 1 deletion(-)
- create mode 100644 block/blk-copy.c
+ block/blk-copy.c       | 229 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/blkdev.h |   1 +
+ 2 files changed, 230 insertions(+)
 
-diff --git a/block/Makefile b/block/Makefile
-index 7dce2e44276c..d99e8d4fda7d 100644
---- a/block/Makefile
-+++ b/block/Makefile
-@@ -6,7 +6,7 @@
- obj-y		:=3D bdev.o fops.o bio.o elevator.o blk-core.o blk-sysfs.o \
- 			blk-flush.o blk-settings.o blk-ioc.o blk-map.o \
- 			blk-merge.o blk-timeout.o blk-lib.o blk-mq.o \
--			blk-mq-tag.o blk-mq-dma.o blk-stat.o \
-+			blk-mq-tag.o blk-mq-dma.o blk-stat.o blk-copy.o \
- 			blk-mq-sysfs.o blk-mq-cpumap.o blk-mq-sched.o ioctl.o \
- 			genhd.o ioprio.o badblocks.o partitions/ blk-rq-qos.o \
- 			disk-events.o blk-ia-ranges.o early-lookup.o
 diff --git a/block/blk-copy.c b/block/blk-copy.c
-new file mode 100644
-index 000000000000..8ac8879442f7
---- /dev/null
+index 8ac8879442f7..459ed8581efc 100644
+--- a/block/blk-copy.c
 +++ b/block/blk-copy.c
-@@ -0,0 +1,355 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Offloaded and onloaded data copying support.
+@@ -7,6 +7,26 @@
+ #include <linux/blk-copy.h>
+ #include <linux/blk-mq.h>
+=20
++/**
++ * Tracks the state of a single onloaded copy operation.
++ * @params: Data copy parameters.
++ * @read_work: For scheduling read work.
++ * @write_work: For scheduling write work.
++ * @buf: Data buffer.
++ * @buf_len: Length in bytes of @buf.
++ * @offset: Current copying offset. Range: [0, @len[.
++ * @chunk: Size in bytes of the chunk of data that is being copied.
 + */
-+#include <linux/bio.h>
-+#include <linux/blkdev.h>
-+#include <linux/blk-copy.h>
-+#include <linux/blk-mq.h>
++struct blkdev_copy_onload_ctx {
++	struct blk_copy_params *params;
++	struct work_struct read_work;
++	struct work_struct write_work;
++	void *buf;
++	ssize_t buf_len;
++	loff_t offset;
++	loff_t chunk;
++};
 +
-+/* End all bios in the @ctx->bios list with status @ctx->status. */
-+static void blkdev_end_bios(struct bio_copy_offload_ctx *ctx)
+ /* End all bios in the @ctx->bios list with status @ctx->status. */
+ static void blkdev_end_bios(struct bio_copy_offload_ctx *ctx)
+ {
+@@ -353,3 +373,212 @@ int blkdev_copy_offload(struct blk_copy_params *par=
+ams)
+ 	return -EIOCBQUEUED;
+ }
+ EXPORT_SYMBOL_GPL(blkdev_copy_offload);
++
++static void *blkdev_copy_alloc_buf(size_t req_size, size_t *alloc_size)
 +{
-+	struct bio *bio, *next;
++	unsigned int min_size =3D PAGE_SIZE;
++	char *buf;
 +
-+	bio =3D ctx->bios;
-+	ctx->bios =3D NULL;
-+	for (; bio; bio =3D next) {
-+		next =3D bio->bi_next;
-+		bio->bi_status =3D ctx->status;
-+		bio_endio(bio);
++	while (req_size >=3D min_size) {
++		buf =3D kmalloc(req_size, GFP_NOIO | __GFP_NOWARN);
++		if (buf) {
++			*alloc_size =3D req_size;
++			return buf;
++		}
++		req_size >>=3D 1;
 +	}
++
++	return NULL;
 +}
 +
-+/*
-+ * Called after LBA translation finished for all bios associated with co=
-py context
-+ * @ctx.
-+ */
-+static void blkdev_translation_complete(struct bio_copy_offload_ctx *ctx=
-)
++static struct bio *bio_map_buf(void *buf, unsigned int len)
 +{
-+	struct module *owner =3D NULL;
++	struct page *page;
 +	struct bio *bio;
++	static const uint16_t nr_vecs =3D 1;
 +
-+	WARN_ON_ONCE(ctx->phase !=3D BLKDEV_TRANSLATE_LBAS);
-+	ctx->phase =3D BLKDEV_COPY;
++	bio =3D bio_kmalloc(nr_vecs, GFP_NOIO);
++	if (!bio)
++		return NULL;
++	bio_init_inline(bio, /*bdev=3D*/NULL, /*max_vecs=3D*/nr_vecs, /*opf=3D*=
+/0);
 +
-+	/* Check whether all bios are associated with the same block driver. */
-+	for (bio =3D ctx->bios; bio; bio =3D bio->bi_next) {
-+		if (!owner) {
-+			owner =3D bio->bi_bdev->bd_disk->fops->owner;
-+		} else if (owner !=3D bio->bi_bdev->bd_disk->fops->owner) {
-+			ctx->status =3D BLK_STS_INVAL;
-+			break;
-+		}
++	page =3D virt_to_page(buf);
++	if (bio_add_page(bio, page, len, offset_in_page(buf)) < len) {
++		/* we don't support partial mappings */
++		bio_uninit(bio);
++		kfree(bio);
++		WARN_ON_ONCE(true);
++		return NULL;
 +	}
 +
-+	/* Remove the first bio from the bio list and submit it. */
-+	bio =3D ctx->bios;
-+	ctx->bios =3D bio->bi_next;
-+	bio->bi_next =3D NULL;
-+	if (ctx->biotail =3D=3D bio)
-+		ctx->biotail =3D NULL;
-+	if (ctx->status =3D=3D BLK_STS_OK)
-+		submit_bio(bio);
-+	else
-+		bio_endio(bio);
++	return bio;
 +}
 +
-+/* REQ_OP_COPY_* completion handler. */
-+static void blkdev_req_op_copy_done(struct bio *bio)
++static void blkdev_write_done(struct bio *bio)
 +{
-+	struct bio_copy_offload_ctx *ctx =3D bio->bi_copy_ctx;
++	struct blkdev_copy_onload_ctx *ctx =3D bio->bi_copy_ctx;
 +	struct blk_copy_params *params =3D ctx->params;
-+	blk_status_t status;
++	blk_status_t sts =3D bio->bi_status;
 +
-+	switch (ctx->phase) {
-+	case BLKDEV_TRANSLATE_LBAS:
-+		scoped_guard(spinlock_irqsave, &ctx->lock)
-+			if (!ctx->status)
-+				ctx->status =3D bio->bi_status;
-+		break;
-+	case BLKDEV_COPY:
-+		status =3D ctx->status;
-+		ctx->phase =3D BLKDEV_COPY_DONE;
-+		blkdev_end_bios(ctx);
-+		kfree(ctx);
-+		scoped_guard(spinlock_irqsave, &params->lock) {
-+			if (!params->status)
-+				params->status =3D status;
-+		}
-+		if (atomic_dec_and_test(&params->copy_ctx_count))
-+			params->end_io(params);
-+		break;
-+	case BLKDEV_COPY_DONE:
-+		break;
++	kfree(bio);
++
++	if (sts) {
++		params->status =3D sts;
++		params->end_io(params);
++		return;
 +	}
++
++	ctx->offset +=3D ctx->chunk;
++
++	schedule_work(&ctx->read_work);
 +}
 +
-+/*
-+ * Check that all LBA offsets are aligned with both the source and the d=
-estination
-+ * logical block sizes. Compare input and output length. Store the numbe=
-r of bytes
-+ * to be transferred in *@len.
-+ */
-+static int blkdev_copy_check_params(const struct blk_copy_params *params=
-,
-+				    loff_t *len)
++static sector_t blkdev_offset_to_out_pos(const struct blk_copy_params *p=
+arams,
++					 loff_t offset)
 +{
-+	const unsigned int mask =3D
-+		max(bdev_logical_block_size(params->in_bdev),
-+		    bdev_logical_block_size(params->out_bdev)) - 1;
-+	loff_t in_len =3D 0, out_len =3D 0;
-+	unsigned int i;
++	for (int i =3D 0; i < params->out_nseg; i++) {
++		loff_t rem =3D params->out_segs[i].len - offset;
 +
-+	for (i =3D 0; i < params->in_nseg; i++) {
-+		if ((params->in_segs[i].pos | params->in_segs[i].len) & mask)
-+			return -EINVAL;
-+		in_len +=3D params->in_segs[i].len;
++		if (rem > 0)
++			return params->out_segs[i].pos + offset;
++		offset -=3D params->out_segs[i].len;
 +	}
-+
-+	for (i =3D 0; i < params->out_nseg; i++) {
-+		if ((params->out_segs[i].pos | params->out_segs[i].len) & mask)
-+			return -EINVAL;
-+		out_len +=3D params->out_segs[i].len;
-+	}
-+
-+	if (in_len !=3D out_len)
-+		return -EINVAL;
-+
-+	*len =3D in_len;
-+
 +	return 0;
 +}
 +
-+/*
-+ * Calculate the number of bytes in the max_copy_src_segments input segm=
-ents
-+ * starting from input segment @in_idx.
-+ */
-+static loff_t blk_max_src_len(const struct blk_copy_params *params,
-+			      unsigned int in_idx)
++static void blkdev_write_work(struct work_struct *work)
 +{
-+	uint16_t max_src_segments =3D
-+		params->in_bdev->bd_queue->limits.max_copy_src_segments;
-+	unsigned int max_i =3D min(params->in_nseg, in_idx + max_src_segments);
-+	loff_t len =3D 0;
++	struct blkdev_copy_onload_ctx *ctx =3D
++		container_of(work, typeof(*ctx), read_work);
++	struct blk_copy_params *params =3D ctx->params;
++	struct bio *bio;
++	loff_t out_pos;
 +
-+	for (uint32_t i =3D in_idx; i < max_i; i++)
-+		len +=3D params->in_segs[i].len;
++	out_pos =3D blkdev_offset_to_out_pos(params, ctx->offset);
 +
-+	return len;
++	bio =3D bio_map_buf(ctx->buf, ctx->buf_len);
++	if (!bio) {
++		params->status =3D BLK_STS_AGAIN;
++		params->end_io(params);
++		return;
++	}
++	bio->bi_opf =3D REQ_OP_WRITE;
++	bio_set_dev(bio, params->out_bdev);
++	bio->bi_iter.bi_sector =3D out_pos >> SECTOR_SHIFT;
++	bio->bi_iter.bi_size =3D ctx->chunk;
++	bio->bi_end_io =3D blkdev_write_done;
++	bio->bi_copy_ctx =3D ctx;
++	submit_bio(bio);
 +}
 +
-+/*
-+ * Calculate the number of bytes in the max_copy_dst_segments output seg=
-ments
-+ * starting from output segment @out_idx.
-+ */
-+static loff_t blk_max_dst_len(const struct blk_copy_params *params,
-+			      unsigned int out_idx)
++static void blkdev_read_done(struct bio *bio)
 +{
-+	uint16_t max_dst_segments =3D
-+		params->out_bdev->bd_queue->limits.max_copy_dst_segments;
-+	unsigned int max_i =3D min(params->out_nseg, out_idx + max_dst_segments=
-);
-+	loff_t len =3D 0;
++	struct blkdev_copy_onload_ctx *ctx =3D bio->bi_copy_ctx;
++	struct blk_copy_params *params =3D ctx->params;
++	blk_status_t sts =3D bio->bi_status;
 +
-+	for (uint32_t i =3D out_idx; i < max_i; i++)
-+		len +=3D params->out_segs[i].len;
++	kfree(bio);
 +
-+	return len;
++	if (sts) {
++		params->status =3D sts;
++		params->end_io(params);
++		return;
++	}
++
++	schedule_work(&ctx->write_work);
 +}
 +
-+struct blkdev_copy_sync_ctx {
-+	struct completion compl;
-+	blk_status_t status;
-+};
-+
-+static void blkdev_end_copy_sync(const struct blk_copy_params *params)
++static sector_t blkdev_offset_to_in_pos(const struct blk_copy_params *pa=
+rams,
++					loff_t offset, loff_t *chunk)
 +{
-+	struct blkdev_copy_sync_ctx *ctx =3D params->private;
++	for (int i =3D 0; i < params->in_nseg; i++) {
++		loff_t rem =3D params->in_segs[i].len - offset;
 +
-+	complete(&ctx->compl);
++		if (rem > 0) {
++			if (*chunk > rem)
++				*chunk =3D rem;
++			return params->in_segs[i].pos + offset;
++		}
++		offset -=3D params->in_segs[i].len;
++	}
++	*chunk =3D 0;
++	return 0;
 +}
 +
-+static int blkdev_copy_sync(struct blk_copy_params *params)
++static void blkdev_read_work(struct work_struct *work)
 +{
-+	struct blkdev_copy_sync_ctx ctx =3D {
-+		.compl =3D COMPLETION_INITIALIZER_ONSTACK(ctx.compl),
-+	};
-+	int ret;
++	struct blkdev_copy_onload_ctx *ctx =3D
++		container_of(work, typeof(*ctx), read_work);
++	struct blk_copy_params *params =3D ctx->params;
++	loff_t offset =3D ctx->offset;
++	sector_t in_pos;
++	struct bio *bio;
 +
-+	WARN_ON_ONCE(params->end_io || params->private);
-+	params->end_io =3D blkdev_end_copy_sync;
-+	params->private =3D &ctx;
++	ctx->chunk =3D min(ctx->buf_len, params->len - offset);
++	if (ctx->chunk)
++		in_pos =3D blkdev_offset_to_in_pos(params, offset, &ctx->chunk);
++	if (ctx->chunk =3D=3D 0) {
++		params->end_io(params);
++		return;
++	}
 +
-+	ret =3D blkdev_copy_offload(params);
-+	if (ret && ret !=3D -EIOCBQUEUED)
-+		return ret;
-+
-+	wait_for_completion(&ctx.compl);
-+	return blk_status_to_errno(ctx.status);
++	bio =3D bio_map_buf(ctx->buf, ctx->buf_len);
++	if (!bio) {
++		params->status =3D BLK_STS_AGAIN;
++		params->end_io(params);
++		return;
++	}
++	bio->bi_opf =3D REQ_OP_READ;
++	bio_set_dev(bio, params->in_bdev);
++	bio->bi_iter.bi_sector =3D in_pos >> SECTOR_SHIFT;
++	bio->bi_iter.bi_size =3D ctx->chunk;
++	bio->bi_end_io =3D blkdev_read_done;
++	bio->bi_copy_ctx =3D ctx;
++	submit_bio(bio);
 +}
 +
 +/**
-+ * blkdev_copy_chunk() - submit a single copy offload operation
-+ * @params: Copy offload input parameters.
-+ * @in_idx: Index of the input segment from where to start copying.
-+ * @out_idx: Index of the output segment to where to start copying.
-+ * @in_offset: Offset in bytes from the start of input segment @in_idx.
-+ * @out_offset: Offset in bytes from the start of output segment @out_id=
-x.
-+ * @chunk: Maximum number of bytes to copy.
-+ *
-+ * Returns: the number of bytes covered by the submitted copy operation =
-or a
-+ *	negative error number.
-+ */
-+static loff_t blkdev_copy_chunk(struct blk_copy_params *params, u32 *in_=
-idx,
-+				u32 *out_idx, loff_t *in_offset,
-+				loff_t *out_offset, loff_t chunk)
-+{
-+	struct bio_copy_offload_ctx *ctx;
-+	u32 bio_count;
-+
-+	ctx =3D kzalloc_obj(*ctx);
-+	if (!ctx)
-+		return -ENOMEM;
-+
-+	spin_lock_init(&ctx->lock);
-+	ctx->params =3D params;
-+	ctx->phase =3D BLKDEV_TRANSLATE_LBAS;
-+	ctx->translation_complete =3D blkdev_translation_complete;
-+	/*
-+	 * Initialized to one to prevent that ctx->translation_complete() is
-+	 * called before bio submission has finished.
-+	 */
-+	ctx->bio_count =3D 1;
-+
-+	WARN_ON_ONCE(chunk <=3D 0);
-+	chunk =3D min(chunk, blk_max_src_len(params, *in_idx) - *in_offset);
-+	WARN_ON_ONCE(chunk <=3D 0);
-+	chunk =3D min(chunk, blk_max_dst_len(params, *out_idx) - *out_offset);
-+	WARN_ON_ONCE(chunk <=3D 0);
-+	ctx->len =3D chunk;
-+	for (loff_t bytes, remaining_in =3D chunk; remaining_in > 0;
-+	     remaining_in -=3D bytes) {
-+		struct bio *src_bio;
-+
-+		src_bio =3D bio_alloc(params->in_bdev, 0, REQ_OP_COPY_SRC,
-+				    GFP_NOIO);
-+		if (!src_bio) {
-+			if (remaining_in =3D=3D chunk)
-+				goto free_ctx;
-+			else
-+				goto enomem;
-+		}
-+		atomic_inc(&params->copy_ctx_count);
-+		scoped_guard(spinlock_irqsave, &ctx->lock)
-+			ctx->bio_count++;
-+		bytes =3D min(remaining_in, params->in_segs[*in_idx].len -
-+			    *in_offset);
-+		src_bio->bi_iter.bi_size =3D bytes;
-+		src_bio->bi_iter.bi_sector =3D (params->in_segs[*in_idx].pos +
-+					      *in_offset) >> SECTOR_SHIFT;
-+		src_bio->bi_copy_ctx =3D ctx;
-+		src_bio->bi_end_io =3D blkdev_req_op_copy_done;
-+		*in_offset +=3D bytes;
-+		if (*in_offset >=3D params->in_segs[*in_idx].len) {
-+			*in_offset -=3D params->in_segs[*in_idx].len;
-+			(*in_idx)++;
-+		}
-+		submit_bio(src_bio);
-+	}
-+	for (loff_t bytes, remaining_out =3D chunk; remaining_out;
-+	     remaining_out -=3D bytes) {
-+		struct bio *dst_bio;
-+
-+		dst_bio =3D bio_alloc(params->out_bdev, 0, REQ_OP_COPY_DST,
-+				    GFP_NOIO);
-+		if (!dst_bio)
-+			goto enomem;
-+		scoped_guard(spinlock_irqsave, &ctx->lock)
-+			ctx->bio_count++;
-+		bytes =3D min(remaining_out, params->out_segs[*out_idx].len -
-+			    *out_offset);
-+		dst_bio->bi_iter.bi_size =3D bytes;
-+		dst_bio->bi_iter.bi_sector =3D (params->out_segs[*out_idx].pos +
-+					      *out_offset) >> SECTOR_SHIFT;
-+		dst_bio->bi_copy_ctx =3D ctx;
-+		dst_bio->bi_end_io =3D blkdev_req_op_copy_done;
-+		*out_offset +=3D bytes;
-+		if (*out_offset >=3D params->out_segs[*out_idx].len) {
-+			*out_offset -=3D params->out_segs[*out_idx].len;
-+			(*out_idx)++;
-+		}
-+		submit_bio(dst_bio);
-+	}
-+
-+dec_bio_count:
-+	scoped_guard(spinlock_irqsave, &ctx->lock)
-+		bio_count =3D --ctx->bio_count;
-+	if (bio_count =3D=3D 0)
-+		ctx->translation_complete(ctx);
-+	return chunk;
-+
-+enomem:
-+	scoped_guard(spinlock_irqsave, &ctx->lock)
-+		if (!ctx->status)
-+			ctx->status =3D BLK_STS_RESOURCE;
-+	chunk =3D -ENOMEM;
-+	goto dec_bio_count;
-+
-+free_ctx:
-+	kfree(ctx);
-+	return -ENOMEM;
-+}
-+
-+/**
-+ * blkdev_copy_offload() - copy data and offload copying if possible.
-+ * @params: Source and destination block device, data ranges and complet=
-ion
-+ *	callback.
-+ *
-+ * If @params->end_io !=3D NULL, data is copied asynchronously. If @para=
-ms->end_io
-+ * =3D=3D NULL, this function only returns after data copying finished.
-+ *
++ * blkdev_copy_onload - asynchronously copy data between two block devic=
+es using
++ *	read and write operations.
++ * @params: Input and output block devices, input and output ranges and
++ *	completion callback pointer.
 + * Return: 0 upon success; -EIOCBQUEUED if the completion callback funct=
 ion will
-+ *	be called or has already been called; -EOPNOTSUPP if copy offloading =
-is
-+ *	not supported by the block device or if the source or destination
-+ *	address ranges span more than one dm device.
++ *	be called or has already been called.
 + */
-+int blkdev_copy_offload(struct blk_copy_params *params)
++int blkdev_copy_onload(struct blk_copy_params *params)
 +{
-+	loff_t in_offset =3D 0, out_offset =3D 0;
-+	u32 in_idx =3D 0, out_idx =3D 0;
-+	loff_t len, chunk, max_chunk;
++	loff_t max_hw_bytes =3D
++		min(queue_max_hw_sectors(params->in_bdev->bd_queue),
++		    queue_max_hw_sectors(params->out_bdev->bd_queue)) <<
++		SECTOR_SHIFT;
++	struct blkdev_copy_onload_ctx *ctx;
++	loff_t len;
 +	int ret;
-+
-+	might_sleep();
-+
-+	if (!params->end_io)
-+		return blkdev_copy_sync(params);
-+
-+	spin_lock_init(&params->lock);
-+
-+	if (!bdev_max_copy_sectors(params->in_bdev) ||
-+	    !bdev_max_copy_sectors(params->out_bdev))
-+		return -EOPNOTSUPP;
 +
 +	ret =3D blkdev_copy_check_params(params, &len);
 +	if (ret)
@@ -498,87 +360,39 @@ is
 +
 +	params->len =3D len;
 +
-+	max_chunk =3D (u64)min(bdev_max_copy_sectors(params->in_bdev),
-+			     bdev_max_copy_sectors(params->out_bdev))
-+		    << SECTOR_SHIFT;
++	ctx =3D kzalloc_obj(*ctx);
++	if (!ctx)
++		return -ENOMEM;
 +
-+	atomic_set(&params->copy_ctx_count, 1);
++	INIT_WORK(&ctx->read_work, blkdev_read_work);
++	INIT_WORK(&ctx->write_work, blkdev_write_work);
++	ctx->params =3D params;
 +
-+	for (loff_t offset =3D 0; offset < len; offset +=3D chunk) {
-+		chunk =3D min(len - offset, max_chunk);
-+		chunk =3D blkdev_copy_chunk(params, &in_idx, &out_idx, &in_offset,
-+					  &out_offset, chunk);
-+	}
++	ctx->buf =3D blkdev_copy_alloc_buf(min(max_hw_bytes, len), &ctx->buf_le=
+n);
++	if (!ctx->buf)
++		goto err;
 +
-+	if (atomic_dec_and_test(&params->copy_ctx_count))
-+		params->end_io(params);
++	blkdev_read_work(&ctx->read_work);
 +
 +	return -EIOCBQUEUED;
++
++err:
++	kfree(ctx);
++	return -ENOMEM;
 +}
-+EXPORT_SYMBOL_GPL(blkdev_copy_offload);
-diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
-index 4e448e810b87..27a0f92fc2cb 100644
---- a/include/linux/blk_types.h
-+++ b/include/linux/blk_types.h
-@@ -535,4 +535,44 @@ struct blk_rq_stat {
- 	u64 batch;
- };
-=20
-+/* A single input or output segment descriptor. */
-+struct blk_copy_seg {
-+	loff_t pos;
-+	loff_t len;
-+};
-+
-+/**
-+ * struct blk_copy_params - input parameters and internal parameters for=
- copy
-+ *	operations.
-+ * @in_bdev: Input block device.
-+ * @in_segs: Input LBA ranges.
-+ * @in_nseg: Number of elements in @in_segs.
-+ * @out_bdev: Output block device.
-+ * @out_segs: Output LBA ranges.
-+ * @out_nseg: Number of elements in @out_segs.
-+ * @end_io: Called after copying data finished. If %NULL, copying data h=
-appens
-+ *	synchronously instead of asynchronously.
-+ * @private: May be used by @end_io. Not used directly.
-+ * @len: Total number of bytes to copy. Set by blkdev_copy_offload() or
-+ *	blkdev_copy_onload().
-+ * @copy_ctxs: Number of in-flight copy contexts associated with copy of=
-fload
-+ *	operations.
-+ * @lock: Protects @status updates.
-+ * @status: I/O completion status.
-+ */
-+struct blk_copy_params {
-+	struct block_device *in_bdev;
-+	struct blk_copy_seg *in_segs;
-+	unsigned int in_nseg;
-+	struct block_device *out_bdev;
-+	struct blk_copy_seg *out_segs;
-+	unsigned int out_nseg;
-+	void (*end_io)(const struct blk_copy_params *params);
-+	void *private;
-+	loff_t len;
-+	atomic_t copy_ctx_count;
-+	spinlock_t lock;
-+	blk_status_t status;
-+};
-+
- #endif /* __LINUX_BLK_TYPES_H */
++EXPORT_SYMBOL_GPL(blkdev_copy_onload);
 diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 8ae64cc0546f..fea296150cda 100644
+index fea296150cda..817eeba2f207 100644
 --- a/include/linux/blkdev.h
 +++ b/include/linux/blkdev.h
-@@ -1283,6 +1283,7 @@ void __blkdev_issue_discard(struct block_device *bd=
+@@ -1284,6 +1284,7 @@ void __blkdev_issue_discard(struct block_device *bd=
 ev, sector_t sector,
- 		sector_t nr_sects, gfp_t gfp_mask, struct bio **biop);
  int blkdev_issue_secure_erase(struct block_device *bdev, sector_t sector=
 ,
  		sector_t nr_sects, gfp_t gfp);
-+int blkdev_copy_offload(struct blk_copy_params *params);
+ int blkdev_copy_offload(struct blk_copy_params *params);
++int blkdev_copy_onload(struct blk_copy_params *params);
 =20
  #define BLKDEV_ZERO_NOUNMAP	(1 << 0)  /* do not free blocks */
  #define BLKDEV_ZERO_NOFALLBACK	(1 << 1)  /* don't write explicit zeroes =
