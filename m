@@ -1,64 +1,64 @@
-Return-Path: <linux-scsi+bounces-23293-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23297-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QAD2Bfbx62nWTAAAu9opvQ
-	(envelope-from <linux-scsi+bounces-23293-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2026 00:43:02 +0200
+	id GIJTJv7x62nWTAAAu9opvQ
+	(envelope-from <linux-scsi+bounces-23297-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2026 00:43:10 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C455A463DF3
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2026 00:43:01 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EE57463E11
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2026 00:43:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 318A93006446
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Apr 2026 22:43:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1B4E73024444
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Apr 2026 22:43:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A89F437C911;
-	Fri, 24 Apr 2026 22:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B412347507;
+	Fri, 24 Apr 2026 22:43:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="mJJt0tAd"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="D9Jkjewt"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BF3B3FBED4;
-	Fri, 24 Apr 2026 22:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26AFC3FE666;
+	Fri, 24 Apr 2026 22:42:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777070571; cv=none; b=Vh+RHhA8MfWqBpu90cKG/4Nzhui1mOyvzuedN53ieGIR7YWJLwCtLHz3xRtP+Z8KgMbQBKugMBfqixBGbY8f8KuZzTeNF+IRjM6F/US+2rvz2jI8vhHB2WHHdK5g55eAtfDUZIt/ugUbSKtFzoWmIMEhvM+1bf92fcYIh1TF2/Q=
+	t=1777070584; cv=none; b=mMu1q2rSbKsryka8bCqj8TUeKtLZcAWS6CtEAtKGO8GRxmPYiV5Tkzncg+WyNDziUH4D648EMVKJuL8LbqGwmGjOPIVG8UjeMZ0yVr29Ox3n4seuHEK2Nf9c4oPNRIlh4bNNWjhohxBdG3ND7beiDmKVzJyLMOPEKYtLfWVEbOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777070571; c=relaxed/simple;
-	bh=VmHREFg0sP5iGKWhsxQ0gnkojEOXLrvU96kmREemGyM=;
+	s=arc-20240116; t=1777070584; c=relaxed/simple;
+	bh=5ovqL9xPqeVjuUQy81Uq20IpAnhVWNcmYYb40rBnUo8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=biPt9ZdNOyj/h5zCaxpYXfSTSK1q0ZYx42Vvoin8gFPtEHWyPFW/j7MI2lTW4LE1TIlAJnxwss0CAxQeZJ41pZR9NDkd1pXpdj5qWndd6EtOLkdM1xgahXAf9I1/QPOlehF/1BklMTPEybelB8BDxWTjfcZTN9OccxfSju+Dl6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=mJJt0tAd; arc=none smtp.client-ip=199.89.1.14
+	 MIME-Version; b=j82Sg6KXOv6ZODkdwM79FAKd67RdlQMmxaoPJkD41pQDPL2krshWZ+RbghKn8DcHVmo6c6LWsfvvFCJpM4OkzRC0v1sgAf3ywh/F3BzU6YsO88B8FWQtdxtcHiUeucMtvN/k+wVUXuhPa2b4wNvYIC6RjdIBrvnRu5zestaXqME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=D9Jkjewt; arc=none smtp.client-ip=199.89.1.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4g2Sdt2sj6z1XLHYm;
-	Fri, 24 Apr 2026 22:42:42 +0000 (UTC)
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4g2Sf62qVKz1XLHYm;
+	Fri, 24 Apr 2026 22:42:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1777070558; x=1779662559; bh=hn5gt
-	/kr7QDgHfqk6BJtfvqJ62o4kkrmwOKTA2D2kLY=; b=mJJt0tAd9F+e7XezCKlu+
-	cMif01CMnok1UpTVdunNApamb3sxfj5lSTzixS/6imv6K6BFtWSWD6L3OVydV10h
-	Y/QJy6zIp0IrelzGTzpXolfFjgUKEzXMzEDPUc77tlirppNFgYcP2gjGUufP5XJ9
-	CcUfmNrZ14Dmh3N7kBdVenvCJOmCHvTlbTL9hW/67TBWNYNbpCfc5ImgOgVJg+tm
-	+4wcm/I5aYg0N+JkbjByHd5CqEY12WTCYbkCdvvGApLYBBKvPHtiIvDRzEtVGXjK
-	6bt8RMxSpNaEhZiKJcL38rYWDqcx0kTAjg7OSi1kcx3XxckhOiteClSqViXO3tlZ
-	Q==
+	:received:received; s=mr01; t=1777070561; x=1779662562; bh=g39KJ
+	h8H5bvlbH1BFc1G54n+h5+QCxvi0MIftjWuRkA=; b=D9Jkjewtjunv4m7S7Myfk
+	fzRwNDP5EBTyXKOySiXsFlSyw6Yl7KkqMOCvT3E4Bu/rZYjryL2P04WKOg3KPh2v
+	kncxT/Ea2KVoglrM4q/jwjg9svVVWwniWPN0XhYW7+6aYJaoJKixeROeLgPOYloY
+	X4v8AH7Qgq2HMxpOQOclufhiUaQ6wJnVBP2Tp2BX2FSykVgv80C9MLK9UqeDgS7W
+	Ty3+5MJjz4kUakaFwwXja2wcTdHoKTqGxdRtHVGRMvHnKKeFJq/lGb2GEoSWdKh8
+	vNXepOJ1DmrRJQ+xEq6fHGYrE1qaVAjc+lWFfsEW497yDDlrzBAcPnt0uSsMg6Xj
+	g==
 X-Virus-Scanned: by MailRoute
 Received: from 011.lax.mailroute.net ([127.0.0.1])
  by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id x6VTYr4bWKdD; Fri, 24 Apr 2026 22:42:38 +0000 (UTC)
+ id cC15Geao2HOZ; Fri, 24 Apr 2026 22:42:41 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4g2Sdm63KVz1XLF2r;
-	Fri, 24 Apr 2026 22:42:36 +0000 (UTC)
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4g2Sdq0F5mz1XLHYt;
+	Fri, 24 Apr 2026 22:42:38 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: linux-block@vger.kernel.org,
@@ -66,10 +66,13 @@ Cc: linux-block@vger.kernel.org,
 	linux-nvme@lists.infradead.org,
 	Christoph Hellwig <hch@lst.de>,
 	Nitesh Shetty <nj.shetty@samsung.com>,
-	Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH 11/12] dm-linear: Enable copy offloading
-Date: Fri, 24 Apr 2026 15:42:00 -0700
-Message-ID: <20260424224201.1949243-12-bvanassche@acm.org>
+	Bart Van Assche <bvanassche@acm.org>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Anuj Gupta <anuj20.g@samsung.com>,
+	Vincent Fu <vincent.fu@samsung.com>
+Subject: [PATCH 12/12] null_blk: Add support for REQ_OP_COPY_*
+Date: Fri, 24 Apr 2026 15:42:01 -0700
+Message-ID: <20260424224201.1949243-13-bvanassche@acm.org>
 X-Mailer: git-send-email 2.54.0.rc2.544.gc7ae2d5bb8-goog
 In-Reply-To: <20260424224201.1949243-1-bvanassche@acm.org>
 References: <20260424224201.1949243-1-bvanassche@acm.org>
@@ -80,7 +83,7 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: C455A463DF3
+X-Rspamd-Queue-Id: 0EE57463E11
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -88,13 +91,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23293-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-23297-lists,linux-scsi=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[6];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -103,48 +106,265 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	NEURAL_HAM(-0.00)[-1.000];
 	DKIM_TRACE(0.00)[acm.org:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[acm.org:email,acm.org:dkim,acm.org:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[samsung.com:email,wdc.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,acm.org:email,acm.org:dkim,acm.org:mid]
 
-Set BLK_FEAT_STACKING_COPY_OFFL and max_copy_hw_sectors to enable copy
-offloading.
+From: Nitesh Shetty <nj.shetty@samsung.com>
 
+Implementation is based on existing read and write infrastructure.
+copy_max_bytes: A new configfs and module parameter is introduced, which
+can be used to set hardware/driver supported maximum copy limit.
+Only request based queue mode will support for copy offload.
+Added tracefs support to copy IO tracing.
+
+Suggested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
+Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
+Signed-off-by: Vincent Fu <vincent.fu@samsung.com>
+[ bvanassche: Split nullb_do_copy() into two functions. Added a
+  cond_resched() call inside nullb_do_copy(). ]
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/md/dm-linear.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/block/null_blk.rst  |   4 ++
+ drivers/block/null_blk/main.c     | 113 ++++++++++++++++++++++++++++++
+ drivers/block/null_blk/null_blk.h |   1 +
+ 3 files changed, 118 insertions(+)
 
-diff --git a/drivers/md/dm-linear.c b/drivers/md/dm-linear.c
-index 38c17846deb0..3de8bf5f11fb 100644
---- a/drivers/md/dm-linear.c
-+++ b/drivers/md/dm-linear.c
-@@ -119,6 +119,11 @@ static void linear_status(struct dm_target *ti, stat=
-us_type_t type,
- 	}
+diff --git a/Documentation/block/null_blk.rst b/Documentation/block/null_=
+blk.rst
+index 4dd78f24d10a..ea0616dbf7f3 100644
+--- a/Documentation/block/null_blk.rst
++++ b/Documentation/block/null_blk.rst
+@@ -149,3 +149,7 @@ zone_size=3D[MB]: Default: 256
+ zone_nr_conv=3D[nr_conv]: Default: 0
+   The number of conventional zones to create when block device is zoned.=
+  If
+   zone_nr_conv >=3D nr_zones, it will be reduced to nr_zones - 1.
++
++max_copy_bytes=3D[size in bytes]: Default: UINT_MAX
++  A module and configfs parameter which can be used to set hardware/driv=
+er
++  supported maximum copy offload limit.
+diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.=
+c
+index f8c0fd57e041..87a2f3536b50 100644
+--- a/drivers/block/null_blk/main.c
++++ b/drivers/block/null_blk/main.c
+@@ -9,6 +9,7 @@
+ #include <linux/sched.h>
+ #include <linux/fs.h>
+ #include <linux/init.h>
++#include <linux/blk-copy.h>
+ #include "null_blk.h"
+=20
+ #undef pr_fmt
+@@ -169,6 +170,10 @@ static int g_max_sectors;
+ module_param_named(max_sectors, g_max_sectors, int, 0444);
+ MODULE_PARM_DESC(max_sectors, "Maximum size of a command (in 512B sector=
+s)");
+=20
++static unsigned long g_max_copy_bytes =3D UINT_MAX;
++module_param_named(max_copy_bytes, g_max_copy_bytes, ulong, 0444);
++MODULE_PARM_DESC(max_copy_bytes, "Maximum size of a copy command (in byt=
+es)");
++
+ static unsigned int nr_devices =3D 1;
+ module_param(nr_devices, uint, 0444);
+ MODULE_PARM_DESC(nr_devices, "Number of devices to register");
+@@ -450,6 +455,7 @@ NULLB_DEVICE_ATTR(home_node, uint, NULL);
+ NULLB_DEVICE_ATTR(queue_mode, uint, NULL);
+ NULLB_DEVICE_ATTR(blocksize, uint, NULL);
+ NULLB_DEVICE_ATTR(max_sectors, uint, NULL);
++NULLB_DEVICE_ATTR(max_copy_bytes, uint, NULL);
+ NULLB_DEVICE_ATTR(irqmode, uint, NULL);
+ NULLB_DEVICE_ATTR(hw_queue_depth, uint, NULL);
+ NULLB_DEVICE_ATTR(index, uint, NULL);
+@@ -601,6 +607,7 @@ static struct configfs_attribute *nullb_device_attrs[=
+] =3D {
+ 	&nullb_device_attr_blocksize,
+ 	&nullb_device_attr_cache_size,
+ 	&nullb_device_attr_completion_nsec,
++	&nullb_device_attr_max_copy_bytes,
+ 	&nullb_device_attr_discard,
+ 	&nullb_device_attr_fua,
+ 	&nullb_device_attr_home_node,
+@@ -805,6 +812,7 @@ static struct nullb_device *null_alloc_dev(void)
+ 	dev->queue_mode =3D g_queue_mode;
+ 	dev->blocksize =3D g_bs;
+ 	dev->max_sectors =3D g_max_sectors;
++	dev->max_copy_bytes =3D g_max_copy_bytes;
+ 	dev->irqmode =3D g_irqmode;
+ 	dev->hw_queue_depth =3D g_hw_queue_depth;
+ 	dev->blocking =3D g_blocking;
+@@ -1275,6 +1283,96 @@ static blk_status_t null_transfer(struct nullb *nu=
+llb, struct page *page,
+ 	return err;
  }
 =20
-+static void linear_io_hints(struct dm_target *ti, struct queue_limits *l=
-imits)
++static ssize_t nullb_copy_sector(struct nullb *nullb, sector_t sector_in=
+,
++				 sector_t sector_out, ssize_t rem, bool is_fua)
 +{
-+	limits->features |=3D BLK_FEAT_STACKING_COPY_OFFL;
++	struct nullb_page *t_page_in, *t_page_out;
++	loff_t offset_in, offset_out;
++	void *in, *out;
++	ssize_t chunk;
++
++	chunk =3D min_t(size_t, nullb->dev->blocksize, rem);
++	offset_in =3D (sector_in & SECTOR_MASK) << SECTOR_SHIFT;
++	offset_out =3D (sector_out & SECTOR_MASK) << SECTOR_SHIFT;
++
++	guard(spinlock_irq)(&nullb->lock);
++
++	if (null_cache_active(nullb) && !is_fua)
++		null_make_cache_space(nullb, PAGE_SIZE);
++
++	t_page_in =3D null_insert_page(nullb, sector_in,
++				     !null_cache_active(nullb));
++	if (!t_page_in)
++		return -1;
++	t_page_out =3D null_insert_page(nullb, sector_out,
++				      !null_cache_active(nullb) || is_fua);
++	if (!t_page_out)
++		return -1;
++
++	in =3D kmap_local_page(t_page_in->page);
++	out =3D kmap_local_page(t_page_out->page);
++	memcpy(out + offset_out, in + offset_in, chunk);
++	kunmap_local(out);
++	kunmap_local(in);
++
++	__set_bit(sector_out & SECTOR_MASK, t_page_out->bitmap);
++
++	if (is_fua)
++		null_free_sector(nullb, sector_out, true);
++
++	return chunk;
 +}
 +
- static int linear_prepare_ioctl(struct dm_target *ti, struct block_devic=
-e **bdev,
- 				unsigned int cmd, unsigned long arg,
- 				bool *forward)
-@@ -211,6 +216,7 @@ static struct target_type linear_target =3D {
- 	.dtr    =3D linear_dtr,
- 	.map    =3D linear_map,
- 	.status =3D linear_status,
-+	.io_hints =3D linear_io_hints,
- 	.prepare_ioctl =3D linear_prepare_ioctl,
- 	.iterate_devices =3D linear_iterate_devices,
- 	.direct_access =3D linear_dax_direct_access,
++static blk_status_t nullb_do_copy(struct nullb *nullb, struct request *r=
+q)
++{
++	sector_t sector_in, sector_in_end, sector_out, sector_out_end;
++	struct bio_copy_offload_ctx *copy_ctx =3D rq->bio->bi_copy_ctx;
++	ssize_t chunk, rem =3D copy_ctx->len;
++	struct bio *src_bio, *dst_bio;
++
++	src_bio =3D blk_first_copy_bio(rq, REQ_OP_COPY_SRC);
++	dst_bio =3D blk_first_copy_bio(rq, REQ_OP_COPY_DST);
++
++	if (WARN_ON_ONCE(!src_bio || !dst_bio))
++		return BLK_STS_IOERR;
++
++	sector_in =3D src_bio->bi_iter.bi_sector;
++	sector_in_end =3D sector_in + (src_bio->bi_iter.bi_size >> SECTOR_SHIFT=
+);
++	sector_out =3D dst_bio->bi_iter.bi_sector;
++	sector_out_end =3D sector_out + (dst_bio->bi_iter.bi_size >> SECTOR_SHI=
+FT);
++
++	while (rem > 0) {
++		chunk =3D nullb_copy_sector(nullb, sector_in, sector_out, rem,
++					  rq->cmd_flags & REQ_FUA);
++		if (chunk < 0)
++			return BLK_STS_IOERR;
++		rem -=3D chunk;
++		if (!rem)
++			break;
++		sector_in +=3D chunk >> SECTOR_SHIFT;
++		if (sector_in >=3D sector_in_end) {
++			src_bio =3D blk_next_copy_bio(src_bio);
++			if (WARN_ON_ONCE(!src_bio))
++				return BLK_STS_IOERR;
++			sector_in =3D src_bio->bi_iter.bi_sector;
++			sector_in_end =3D sector_in +
++				(src_bio->bi_iter.bi_size >> SECTOR_SHIFT);
++		}
++		sector_out +=3D chunk >> SECTOR_SHIFT;
++		if (sector_out >=3D sector_out_end) {
++			dst_bio =3D blk_next_copy_bio(dst_bio);
++			if (WARN_ON_ONCE(!dst_bio))
++				return BLK_STS_IOERR;
++			sector_out =3D dst_bio->bi_iter.bi_sector;
++			sector_out_end =3D sector_out +
++				(dst_bio->bi_iter.bi_size >> SECTOR_SHIFT);
++		}
++		cond_resched();
++	}
++
++	return BLK_STS_OK;
++}
++
+ /*
+  * Transfer data for the given request. The transfer size is capped with=
+ the
+  * nr_sectors argument.
+@@ -1292,6 +1390,9 @@ static blk_status_t null_handle_data_transfer(struc=
+t nullb_cmd *cmd,
+ 	struct req_iterator iter;
+ 	struct bio_vec bvec;
+=20
++	if (op_is_copy(req_op(rq)))
++		return nullb_do_copy(nullb, rq);
++
+ 	spin_lock_irq(&nullb->lock);
+ 	rq_for_each_segment(bvec, rq, iter) {
+ 		len =3D bvec.bv_len;
+@@ -1806,6 +1907,13 @@ static void null_config_discard(struct nullb *null=
+b, struct queue_limits *lim)
+ 	lim->max_hw_discard_sectors =3D UINT_MAX >> 9;
+ }
+=20
++static void null_config_copy(struct nullb *nullb, struct queue_limits *l=
+im)
++{
++	lim->max_copy_hw_sectors =3D nullb->dev->max_copy_bytes >> SECTOR_SHIFT=
+;
++	lim->max_copy_src_segments =3D nullb->dev->max_copy_bytes ? U16_MAX : 0=
+;
++	lim->max_copy_dst_segments =3D lim->max_copy_src_segments;
++}
++
+ static const struct block_device_operations null_ops =3D {
+ 	.owner		=3D THIS_MODULE,
+ 	.report_zones	=3D null_report_zones,
+@@ -1922,6 +2030,9 @@ static int null_validate_conf(struct nullb_device *=
+dev)
+ 		return -EINVAL;
+ 	}
+=20
++	if (dev->queue_mode =3D=3D NULL_Q_BIO)
++		dev->max_copy_bytes =3D 0;
++
+ 	return 0;
+ }
+=20
+@@ -1989,6 +2100,8 @@ static int null_add_dev(struct nullb_device *dev)
+ 	if (dev->virt_boundary)
+ 		lim.virt_boundary_mask =3D PAGE_SIZE - 1;
+ 	null_config_discard(nullb, &lim);
++	null_config_copy(nullb, &lim);
++
+ 	if (dev->zoned) {
+ 		rv =3D null_init_zoned_dev(dev, &lim);
+ 		if (rv)
+diff --git a/drivers/block/null_blk/null_blk.h b/drivers/block/null_blk/n=
+ull_blk.h
+index 6c4c4bbe7dad..c15c319ed91b 100644
+--- a/drivers/block/null_blk/null_blk.h
++++ b/drivers/block/null_blk/null_blk.h
+@@ -93,6 +93,7 @@ struct nullb_device {
+ 	unsigned int queue_mode; /* block interface */
+ 	unsigned int blocksize; /* block size */
+ 	unsigned int max_sectors; /* Max sectors per command */
++	unsigned long max_copy_bytes; /* Max copy offload length in bytes */
+ 	unsigned int irqmode; /* IRQ completion handler */
+ 	unsigned int hw_queue_depth; /* queue depth */
+ 	unsigned int index; /* index of the disk, only valid with a disk */
 
