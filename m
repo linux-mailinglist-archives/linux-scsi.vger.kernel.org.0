@@ -1,64 +1,64 @@
-Return-Path: <linux-scsi+bounces-23289-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23291-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aBLuLejx62nWTAAAu9opvQ
-	(envelope-from <linux-scsi+bounces-23289-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2026 00:42:48 +0200
+	id aPqjOvHx62nWTAAAu9opvQ
+	(envelope-from <linux-scsi+bounces-23291-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2026 00:42:57 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B2B4463DBE
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2026 00:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 20B52463DE5
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2026 00:42:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 699F3300381F
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Apr 2026 22:42:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2D6FE3003BC7
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Apr 2026 22:42:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA44F3FE66C;
-	Fri, 24 Apr 2026 22:42:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F7A83FE36E;
+	Fri, 24 Apr 2026 22:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="TINU3I4H"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="pt4+D8Qj"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89E93FE67B;
-	Fri, 24 Apr 2026 22:42:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E036F3FE649;
+	Fri, 24 Apr 2026 22:42:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777070561; cv=none; b=szWRXeh7WPZEWrIcORaf+sh5aJp/thC6udTjMha7+/VguKbnT9zGbvfOE5xiqOKZGudkUDkzVy91lj69Rve/xL8ohF/kgZL0JKf3q8W45CxkGoiudSNqLJ9RsM4QcIYZ9a473yiNXhncWsxLQszTBr1+plcZJ0Wo2tTyA/jRLmk=
+	t=1777070567; cv=none; b=hgN0qKgTALd7AfowhZH/eue0ZvUCuV5/lzZ9TF6LlKzEcLCQDGGp+GQUA2eDMgaTXG+oslrlfuvqYXmWIJvvDHYqU3f5HzWgF+tZ5KmokqvskyG9SBBkFclYz5s49b5z43daCwgbreIyiOBXvNFcYT0kTEt9piBunVAi/eAnQts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777070561; c=relaxed/simple;
-	bh=FM4rLkFDFk0APqa4jfyeUq3tCBP6SY2PyF2fJYoL/rw=;
+	s=arc-20240116; t=1777070567; c=relaxed/simple;
+	bh=u7PjJsKO8KitLP+lbLsS9sfKOoKvdG3+FkA78tRgCeI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DldpbZp72y1KIu6C6acg3DFijAfNi9V/E+m2VLt5ckoGVadsebsVMMf6AWwR9LKqFIb1lzdrCiYR5aLU9eF2tRwhHx1EywcYsKE0sFZ4xJMwRsyQxIraaoUir6F5Dvmzg1dhEVIZcOYrJiaWSPIni7THosNv6qvvQ0piIVCG/jA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=TINU3I4H; arc=none smtp.client-ip=199.89.1.14
+	 MIME-Version; b=PA3j4/r0IHxhW5xnKAPFUXFYnF++tFTGvsyBcWV0vVXqPyXoaPGkJ6sCEf6tcrDrZdqU9tDaO8IbyY42Vz71WftrTIlHb24wozwu/Q8IOB2ofn5NSzQ4RxI0P/H4XkeaI6ynF7Dmq8tas+qm6vJOJ4cBjkSdTwqQ99arBxCPdWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=pt4+D8Qj; arc=none smtp.client-ip=199.89.1.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4g2Sdj72WCz1XLHZ6;
-	Fri, 24 Apr 2026 22:42:33 +0000 (UTC)
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4g2Sdl6qHkz1XQmtj;
+	Fri, 24 Apr 2026 22:42:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1777070549; x=1779662550; bh=E09dO
-	n9ADG8OwTD8WVqq6oMOalW+1VMCECVk65HZSAg=; b=TINU3I4H2sUD76hKNKY4E
-	ecoby23j1sebYr9YdLWC84QOAwSnR532s/xlgMbuKsUERD68Wc/Yde3STcBuC2aM
-	PE1dTANfXY87Pmyj/GfCobGbY5K0Ac1Y/fZlDe/Don3eNhficokWVCCKLTwd/aqU
-	R7L728Af0KBajM4ZR0ih0HJgi0MYjuWHOUI8DpFHVAVSicyzWOCQAHvj4LolV6Ic
-	90dTPIsToA33MKr8vV32lmnisq3iTweuaPBnkUYUITJrip5Ut4hUMGLJzn2kmdTx
-	GcaiNw8/nFvuEeiH2IKQgoJvUiX9uUMwh3agAMryRbQqkUuqQlA1WT7ZuisJTlad
-	A==
+	:received:received; s=mr01; t=1777070549; x=1779662550; bh=M4Sn0
+	Uz7C3eCLnaBIcGNIfl1zUDw9GPLIKPhW/M1Vxg=; b=pt4+D8Qj7X6MJ7nHuhssD
+	sYl351Aj1OMODaqbj+TntAA1Lwxb9V/Rqgcafvt3louxmvbrJWhLBKCrnNqFjN+S
+	YBySRkVQ5UqiMliEmod3wt15o7m1cA/39Qb7qqM5+9IkLh9TqXuIKqePk+q1JI8b
+	MEYE49l82YJOnS7WL0jTEN7TCfn9ubfwBHGQY+JNpaJgxKRDS4YnLx2kNZOzSplk
+	Z77yTPnGsU8NjfKygHC2qdBJYv7AU5MuIoah7A6yE/DXvnAL8VollsMS7DIyPnYw
+	t7W79i4s0gziLRp2Tgqve/iwYQ6EzBZcma5HRWskCAxktvtFQhD+G74j8gPoEoz1
+	Q==
 X-Virus-Scanned: by MailRoute
 Received: from 011.lax.mailroute.net ([127.0.0.1])
  by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id BjifY1RZlGsy; Fri, 24 Apr 2026 22:42:29 +0000 (UTC)
+ id Sy708VsVJXAT; Fri, 24 Apr 2026 22:42:29 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4g2SdV4kY2z1XLHYt;
-	Fri, 24 Apr 2026 22:42:22 +0000 (UTC)
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4g2SdX4pb7z1XLHZJ;
+	Fri, 24 Apr 2026 22:42:24 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: linux-block@vger.kernel.org,
@@ -66,10 +66,12 @@ Cc: linux-block@vger.kernel.org,
 	linux-nvme@lists.infradead.org,
 	Christoph Hellwig <hch@lst.de>,
 	Nitesh Shetty <nj.shetty@samsung.com>,
-	Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH 05/12] block: Introduce accessor functions for copy offload bios
-Date: Fri, 24 Apr 2026 15:41:54 -0700
-Message-ID: <20260424224201.1949243-6-bvanassche@acm.org>
+	Bart Van Assche <bvanassche@acm.org>,
+	Anuj Gupta <anuj20.g@samsung.com>,
+	Hannes Reinecke <hare@suse.de>
+Subject: [PATCH 06/12] fs/read_write: Generalize generic_copy_file_checks()
+Date: Fri, 24 Apr 2026 15:41:55 -0700
+Message-ID: <20260424224201.1949243-7-bvanassche@acm.org>
 X-Mailer: git-send-email 2.54.0.rc2.544.gc7ae2d5bb8-goog
 In-Reply-To: <20260424224201.1949243-1-bvanassche@acm.org>
 References: <20260424224201.1949243-1-bvanassche@acm.org>
@@ -80,7 +82,7 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 0B2B4463DBE
+X-Rspamd-Queue-Id: 20B52463DE5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -94,7 +96,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23289-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-23291-lists,linux-scsi=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[6];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -103,94 +105,62 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-1.000];
 	DKIM_TRACE(0.00)[acm.org:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,acm.org:email,acm.org:dkim,acm.org:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,samsung.com:email,suse.de:email,acm.org:email,acm.org:dkim,acm.org:mid]
 
-Make it easy for block drivers to iterate over the copy offload bios by
-providing accessor functions for the copy offloading bios.
+From: Anuj Gupta <anuj20.g@samsung.com>
 
+Prepare for adding copy_file_range() support for block devices by making
+the following changes:
+ - Change file_inode(file) into file->f_mapping->host. Although only one
+   inode is associated with regular files, two inodes are associated
+   with block devices. file->f_mapping->host is the primary block device
+   inode.
+ - Change S_ISREG() into S_ISREG() || S_ISBLK().
+ - Add an inode->i_mode & S_IFMT check that verifies that source and
+   destination have the same type (block device or regular file).
+
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
+Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
+[ bvanassche: rewrote patch description ]
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- block/blk-copy.c         | 47 ++++++++++++++++++++++++++++++++++++++++
- include/linux/blk-copy.h |  4 ++++
- 2 files changed, 51 insertions(+)
+ fs/read_write.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/block/blk-copy.c b/block/blk-copy.c
-index 459ed8581efc..f49a5f835b4a 100644
---- a/block/blk-copy.c
-+++ b/block/blk-copy.c
-@@ -7,6 +7,53 @@
- #include <linux/blk-copy.h>
- #include <linux/blk-mq.h>
+diff --git a/fs/read_write.c b/fs/read_write.c
+index 50bff7edc91f..d6fba5afff94 100644
+--- a/fs/read_write.c
++++ b/fs/read_write.c
+@@ -1484,8 +1484,8 @@ static int generic_copy_file_checks(struct file *fi=
+le_in, loff_t pos_in,
+ 				    struct file *file_out, loff_t pos_out,
+ 				    size_t *req_count, unsigned int flags)
+ {
+-	struct inode *inode_in =3D file_inode(file_in);
+-	struct inode *inode_out =3D file_inode(file_out);
++	struct inode *inode_in =3D file_in->f_mapping->host;
++	struct inode *inode_out =3D file_out->f_mapping->host;
+ 	uint64_t count =3D *req_count;
+ 	loff_t size_in;
+ 	int ret;
+@@ -1791,7 +1791,9 @@ int generic_file_rw_checks(struct file *file_in, st=
+ruct file *file_out)
+ 	/* Don't copy dirs, pipes, sockets... */
+ 	if (S_ISDIR(inode_in->i_mode) || S_ISDIR(inode_out->i_mode))
+ 		return -EISDIR;
+-	if (!S_ISREG(inode_in->i_mode) || !S_ISREG(inode_out->i_mode))
++	if (!S_ISREG(inode_in->i_mode) && !S_ISBLK(inode_in->i_mode))
++		return -EINVAL;
++	if ((inode_in->i_mode & S_IFMT) !=3D (inode_out->i_mode & S_IFMT))
+ 		return -EINVAL;
 =20
-+static struct bio *__blk_next_copy_bio(struct request *rq, struct bio *p=
-rev_bio,
-+				       enum req_op op)
-+{
-+	struct bio *bio;
-+
-+	if (prev_bio) {
-+		bio =3D prev_bio->bi_next;
-+	} else {
-+		struct bio_copy_offload_ctx *copy_ctx =3D rq->bio->bi_copy_ctx;
-+
-+		bio =3D copy_ctx->bios;
-+	}
-+
-+	for (; bio && bio_op(bio) !=3D op; bio =3D bio->bi_next)
-+		;
-+	return bio;
-+}
-+
-+struct bio *blk_first_copy_bio(struct request *rq, enum req_op op)
-+{
-+	struct bio *bio =3D rq->bio;
-+
-+	if (bio_op(bio) =3D=3D op)
-+		return bio;
-+
-+	return __blk_next_copy_bio(rq, NULL, op);
-+}
-+EXPORT_SYMBOL_GPL(blk_first_copy_bio);
-+
-+struct bio *blk_next_copy_bio(struct bio *bio)
-+{
-+	return __blk_next_copy_bio(NULL, bio, bio_op(bio));
-+}
-+EXPORT_SYMBOL_GPL(blk_next_copy_bio);
-+
-+unsigned int blk_copy_bio_count(struct request *rq, enum req_op op)
-+{
-+	unsigned int count =3D 0;
-+
-+	for (struct bio *bio =3D blk_first_copy_bio(rq, op); bio;
-+	     bio =3D blk_next_copy_bio(bio))
-+		count++;
-+
-+	return count;
-+}
-+EXPORT_SYMBOL_GPL(blk_copy_bio_count);
-+
- /**
-  * Tracks the state of a single onloaded copy operation.
-  * @params: Data copy parameters.
-diff --git a/include/linux/blk-copy.h b/include/linux/blk-copy.h
-index 5e38cfc14a71..4c8435312752 100644
---- a/include/linux/blk-copy.h
-+++ b/include/linux/blk-copy.h
-@@ -43,4 +43,8 @@ struct bio_copy_offload_ctx {
- 	void (*translation_complete)(struct bio_copy_offload_ctx *ctx);
- };
-=20
-+struct bio *blk_first_copy_bio(struct request *rq, enum req_op op);
-+struct bio *blk_next_copy_bio(struct bio *bio);
-+unsigned int blk_copy_bio_count(struct request *rq, enum req_op op);
-+
- #endif /* __LINUX_BLK_COPY_H */
+ 	if (!(file_in->f_mode & FMODE_READ) ||
 
