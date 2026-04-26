@@ -1,194 +1,106 @@
-Return-Path: <linux-scsi+bounces-23305-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23306-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mO3pK3VW7WmWiAAAu9opvQ
-	(envelope-from <linux-scsi+bounces-23305-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sun, 26 Apr 2026 02:04:05 +0200
+	id inIGGIhg7WlbigAAu9opvQ
+	(envelope-from <linux-scsi+bounces-23306-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sun, 26 Apr 2026 02:47:04 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 748CE468659
-	for <lists+linux-scsi@lfdr.de>; Sun, 26 Apr 2026 02:04:05 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 964E6468814
+	for <lists+linux-scsi@lfdr.de>; Sun, 26 Apr 2026 02:47:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 61DB43028E89
-	for <lists+linux-scsi@lfdr.de>; Sun, 26 Apr 2026 00:03:33 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CE9A83002B13
+	for <lists+linux-scsi@lfdr.de>; Sun, 26 Apr 2026 00:47:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED654450F2;
-	Sun, 26 Apr 2026 00:03:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4488F1DF736;
+	Sun, 26 Apr 2026 00:47:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l4Q/DHo+"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="rlRFL6HT"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDF342AB7;
-	Sun, 26 Apr 2026 00:03:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941841643B;
+	Sun, 26 Apr 2026 00:46:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777161812; cv=none; b=k0EFfrt1BpILUGcmZfkdptARYYv1bcrQIfbf7JCY1vaMf0jVvWNYEOaOcDrWe7FeOy5iutG48zKY8BxC5NO4hXZUnuPGHDhxMeOysvse8BlBpT19x1YR28VbPwas7aEelcRuU15tWA0tUTXsUjipsWr6UFVsNWoFrvqWkRQFluE=
+	t=1777164420; cv=none; b=rrM/2sKfMzCRLq/KmWARU+kxbQVm0sHQueG8QjjVD5HwLm1vbUivMIi/xj7E9EZb/KTc6jDEH9vU9hL3HlKlIfp0IPqX3LswOmx7TRUQeEmI/jrO4HJzPY3HGc7FAqav0i+Rcs9EnOPmLJ/LxQrD/2dr3hPE5PssA1tyNdJocNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777161812; c=relaxed/simple;
-	bh=OOwvPLGivssVQ3hYdm3DGwj3DBD07H/U6hqMioMgCh0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QS4x6jFtxNsSI7zS5tF5wwROkhAtsa8zTLpYuYfUUkgE9okSA6NMbt1lEmbwOztWc86W6nLMdjvHGmWRs4nI5ELOySC/w/3Q5s2IYvlnMSfTBkmNzFIp2++Uf0lDbkl92hiO4pF489kbmB+DKJeUkf7WpmGMO8HE+D6e8BF+9zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l4Q/DHo+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F81C2BCB5;
-	Sun, 26 Apr 2026 00:03:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777161812;
-	bh=OOwvPLGivssVQ3hYdm3DGwj3DBD07H/U6hqMioMgCh0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=l4Q/DHo+XjcoPYtaYQ2guLoLNDgCge1CtW/qo2G4TpleeAwuueoelCTETO9llJ/8L
-	 OjgTmZg8tjHxz495BqqYhRAPO6U2YprYkpVRDgVAylHDofZujJpqYlNoYv3WU562Iz
-	 Sluk2ovcrQt2XsMBBZz9Wy/qsmqy2Cyoxr1qv1gS01qXPl7N1dT8iZIY880xHg7Pcu
-	 ZfQOCoc7LtpzpXxpTc3UUQN8BmC4Af59fuIxDtlw0UrXT90m+ExhLE/9/eCrxQITwh
-	 7rqcIRMM1ZKjtXRW4NmuZBfCOEMUx8NTm/I+zhmu/A3R5xJpr9+hsDuHzwfFxKTiJB
-	 vwFxrHdItgsXQ==
-From: Sasha Levin <sashal@kernel.org>
-To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: ncr53c8xx: Drop CONFIG_ prefix from Zalon-specific compiler defines
-Date: Sat, 25 Apr 2026 20:03:30 -0400
-Message-ID: <20260426000330.56137-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1777164420; c=relaxed/simple;
+	bh=wivrWUKBaG9wBfqHbKGTh0VM6/RwGrg3NL5+VqrkrwI=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qfao/gpQJhyQbiy4FTbKAzfirEqzj2GhkArM80lzlVhkaBVFmCEPBaL3RAVZjMh+0q0LnMTpvyS+JrC66+XcSqaFkL0QCQTmEJLclwxf5wfiej14GwyAQov9ZA7bbtPK0RNvuTRrFFHKTqi4aXsX19OH3446oVd5uVlj6prkVOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=rlRFL6HT; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
+	Subject:To:From:Date:Sender:Reply-To:Cc:Content-Transfer-Encoding:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=Zy2DJrRJGdFUsSTr714o7ATNF+h3r8jGyotdyT2gNt0=; b=rlRFL6HTN6Uikbhx9EZ/OEyagX
+	wyGrCyVHAda/E5rVz1TLqfgZKhtonzmjqC2kLwejrmv2h9kN4l0sK3AXW03khsy/p6A1ZBXMUP38U
+	6nN7TnGPbKWp4NrFebCFw26IOvQNc5XZoQhsrAbhxvjZuL2JNfLnWHW/keOxGovt+vH4T1Q7p3qck
+	zzImYw1jm9AZF/7YGYcCRUMNDPtokdd28BAFrrVAt+qgbjnV4itZemlJPiCqryxDln0uBevIeaMl+
+	IWZLqCBSIukbzQ8SVDIq5Clb8tgo1WZKfxR22JmsxuhgsLkxn+qpEWiP+2OJOBQT8zJjmOIK4GDCK
+	q8N0TYLg==;
+Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1wGne7-0000000HRp9-3JPy;
+	Sun, 26 Apr 2026 00:46:51 +0000
+Date: Sun, 26 Apr 2026 01:46:51 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-nvme@lists.infradead.org,
+	bpf@vger.kernel.org, lsf-pc@lists.linux-foundation.org
+Subject: [LSF/MM/BPF] Running BOF
+Message-ID: <ae1gegHjBsgiMdXY@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 748CE468659
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Rspamd-Queue-Id: 964E6468814
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[infradead.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
+	R_DKIM_ALLOW(-0.20)[infradead.org:s=casper.20170209];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-23305-lists,linux-scsi=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[infradead.org:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-23306-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_NONE(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-scsi@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[4];
+	FROM_NEQ_ENVFROM(0.00)[willy@infradead.org,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,casper.infradead.org:mid,garmin.com:url,greatruns.com:url]
 
-kconfiglint reports:
+I'm going to go for a run each morning.  If you want to come
+with me, meet in the Esplanade Zagreb hotel lobby around 6:45am
+(this should get us back in plenty of time to get to breakfast).
+I've plotted three routes, all based on routes described in
+https://greatruns.com/location/zagreb-croatia/
 
-  X001: CONFIG_NCR53C8XX_PREFETCH referenced in Makefile but not
-        defined in any Kconfig
-  X001: CONFIG_SCSI_NCR53C8XX_NO_WORD_TRANSFERS referenced in Makefile
-        but not defined in any Kconfig
-
-The ncr53c8xx SCSI driver uses two preprocessor defines that carry the
-CONFIG_ prefix but are not defined in any Kconfig file:
-
-  -DCONFIG_NCR53C8XX_PREFETCH
-  -DCONFIG_SCSI_NCR53C8XX_NO_WORD_TRANSFERS
-
-These are hardcoded compiler flags in drivers/scsi/Makefile, passed
-only when CONFIG_SCSI_ZALON is enabled:
-
-  ncr53c8xx-flags-$(CONFIG_SCSI_ZALON) \
-      := -DCONFIG_NCR53C8XX_PREFETCH -DSCSI_NCR_BIG_ENDIAN \
-          -DCONFIG_SCSI_NCR53C8XX_NO_WORD_TRANSFERS
-
-The source files ncr53c8xx.c and ncr53c8xx.h check these defines
-with #ifdef to enable script prefetching and disable 16-bit word
-transfers respectively — both specific to the PA-RISC Zalon SCSI
-controller's big-endian bus requirements.
-
-These defines have been present since the initial git import in
-commit 1da177e4c3f4 ("Linux-2.6.12-rc2"). They predate the modern Kconfig
-convention that CONFIG_ prefixed symbols should always originate from
-Kconfig. The third define on the same line, SCSI_NCR_BIG_ENDIAN, already
-correctly omits the CONFIG_ prefix.
-
-The CONFIG_ prefix is misleading: these are not user-configurable options
-and do not appear in any Kconfig menu. They are unconditionally enabled
-for all Zalon builds. Remove the CONFIG_ prefix from both symbols —
-renaming them to NCR53C8XX_PREFETCH and SCSI_NCR53C8XX_NO_WORD_TRANSFERS
-— to match the convention used by SCSI_NCR_BIG_ENDIAN on the same line
-and to avoid confusion with actual Kconfig-managed symbols.
-
-No functional change.
-
-Assisted-by: Claude:claude-opus-4-6 kconfiglint
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/Makefile    | 4 ++--
- drivers/scsi/ncr53c8xx.c | 2 +-
- drivers/scsi/ncr53c8xx.h | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/scsi/Makefile b/drivers/scsi/Makefile
-index 16de3e41f94c4..842c254bb2269 100644
---- a/drivers/scsi/Makefile
-+++ b/drivers/scsi/Makefile
-@@ -177,8 +177,8 @@ sd_mod-$(CONFIG_BLK_DEV_ZONED) += sd_zbc.o
- 
- sr_mod-objs	:= sr.o sr_ioctl.o sr_vendor.o
- ncr53c8xx-flags-$(CONFIG_SCSI_ZALON) \
--		:= -DCONFIG_NCR53C8XX_PREFETCH -DSCSI_NCR_BIG_ENDIAN \
--			-DCONFIG_SCSI_NCR53C8XX_NO_WORD_TRANSFERS
-+		:= -DNCR53C8XX_PREFETCH -DSCSI_NCR_BIG_ENDIAN \
-+			-DSCSI_NCR53C8XX_NO_WORD_TRANSFERS
- CFLAGS_ncr53c8xx.o	:= $(ncr53c8xx-flags-y) $(ncr53c8xx-flags-m)
- zalon7xx-objs	:= zalon.o ncr53c8xx.o
- 
-diff --git a/drivers/scsi/ncr53c8xx.c b/drivers/scsi/ncr53c8xx.c
-index 4a255aafed806..5369ca3fe4fd3 100644
---- a/drivers/scsi/ncr53c8xx.c
-+++ b/drivers/scsi/ncr53c8xx.c
-@@ -1776,7 +1776,7 @@ struct ncb {
- **	return from the subroutine.
- */
- 
--#ifdef CONFIG_NCR53C8XX_PREFETCH
-+#ifdef NCR53C8XX_PREFETCH
- #define PREFETCH_FLUSH_CNT	2
- #define PREFETCH_FLUSH		SCR_CALL, PADDRH (wait_dma),
- #else
-diff --git a/drivers/scsi/ncr53c8xx.h b/drivers/scsi/ncr53c8xx.h
-index be38c902859e0..2f6865ca1b87d 100644
---- a/drivers/scsi/ncr53c8xx.h
-+++ b/drivers/scsi/ncr53c8xx.h
-@@ -397,7 +397,7 @@
- 
- #else
- 
--#ifdef CONFIG_SCSI_NCR53C8XX_NO_WORD_TRANSFERS
-+#ifdef SCSI_NCR53C8XX_NO_WORD_TRANSFERS
- /* Only 8 or 32 bit transfers allowed */
- #define INW_OFF(o)		(readb((char __iomem *)np->reg + ncr_offw(o)) << 8 | readb((char __iomem *)np->reg + ncr_offw(o) + 1))
- #else
-@@ -405,7 +405,7 @@
- #endif
- #define INL_OFF(o)		readl_raw((char __iomem *)np->reg + (o))
- 
--#ifdef CONFIG_SCSI_NCR53C8XX_NO_WORD_TRANSFERS
-+#ifdef SCSI_NCR53C8XX_NO_WORD_TRANSFERS
- /* Only 8 or 32 bit transfers allowed */
- #define OUTW_OFF(o, val)	do { writeb((char)((val) >> 8), (char __iomem *)np->reg + ncr_offw(o)); writeb((char)(val), (char __iomem *)np->reg + ncr_offw(o) + 1); } while (0)
- #else
--- 
-2.53.0
+Monday: https://connect.garmin.com/modern/course/453744315
+Tuesday: https://connect.garmin.com/modern/course/453746189
+Wednesday: https://connect.garmin.com/modern/course/453747068
 
 
