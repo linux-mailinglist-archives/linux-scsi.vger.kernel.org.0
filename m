@@ -1,154 +1,325 @@
-Return-Path: <linux-scsi+bounces-23312-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23315-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mARoBSdj7mnTtAAAu9opvQ
-	(envelope-from <linux-scsi+bounces-23312-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sun, 26 Apr 2026 21:10:31 +0200
+	id AOVfELl97ml0ugAAu9opvQ
+	(envelope-from <linux-scsi+bounces-23315-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sun, 26 Apr 2026 23:03:53 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F3CE46ADB8
-	for <lists+linux-scsi@lfdr.de>; Sun, 26 Apr 2026 21:10:30 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id B34F246B2F2
+	for <lists+linux-scsi@lfdr.de>; Sun, 26 Apr 2026 23:03:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 802AF3008613
-	for <lists+linux-scsi@lfdr.de>; Sun, 26 Apr 2026 19:09:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 51725300FB5D
+	for <lists+linux-scsi@lfdr.de>; Sun, 26 Apr 2026 21:03:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A062537DEA8;
-	Sun, 26 Apr 2026 19:09:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 727292FC89C;
+	Sun, 26 Apr 2026 21:03:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=philpem.me.uk header.i=@philpem.me.uk header.b="wXdfADVr"
+	dkim=pass (2048-bit key) header.d=philpotter-co-uk.20251104.gappssmtp.com header.i=@philpotter-co-uk.20251104.gappssmtp.com header.b="C8mhFsq8"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from nick.sneptech.io (nick.sneptech.io [178.62.38.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1997637CD22;
-	Sun, 26 Apr 2026 19:09:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.38.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8EA282F1B
+	for <linux-scsi@vger.kernel.org>; Sun, 26 Apr 2026 21:03:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777230581; cv=none; b=kF4oVumolbjEplO4J/KoKwPPAu8yCnW+vSBeyet9AjSNTlfVHcavcS0RJGCGz/qdstIcUtFneAGIm5llacx8gP5791KLoiAVK7hOhB8P/JSkTJUwB/j98krFncbs6JJKOuiPORNmWnGatC2YbyWHNR2Yu7EgQQM/hx+troPoTp8=
+	t=1777237406; cv=none; b=uVtYgfYa3OcsBzArvnKJpS9WTNieeym0jjJMg/IU+rwcVpafqKdEx5odp6aqQO8veZB461Rq6u+b3j4fVVWhj6Cc8SyVPXWlHaVi1VT8P2Lc5hqI7OwivCezztOrcWGVE4Qd6o2BMEXOcwLb0DSVhV5GnT/PesKHvzLpwEwoe30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777230581; c=relaxed/simple;
-	bh=PBwfDz5omNpfcINQQatgifpJDGZJ35fjbov7gbgVjaw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hFuB+XH6U9p9RWuEjhbbU0ltH/408i+OUTg0cJNCLNQzQP7gcnrEVRrU1uGtYeCdvwHNeYry1cLRc/YchYzQs8+1YZHuTWGlkST9GpvL53GxYCNGpquoS7PlqsGrhNJGudvfW1wPpwqqlO9qLMbxB/HvOolKV4skPfRIG4Qi7Y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=philpem.me.uk; spf=pass smtp.mailfrom=philpem.me.uk; dkim=pass (1024-bit key) header.d=philpem.me.uk header.i=@philpem.me.uk header.b=wXdfADVr; arc=none smtp.client-ip=178.62.38.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=philpem.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=philpem.me.uk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=philpem.me.uk;
-	s=mail; t=1777230569;
-	bh=PBwfDz5omNpfcINQQatgifpJDGZJ35fjbov7gbgVjaw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=wXdfADVrtOsJLbNKKq/D8I8PAOqyiVjSVCaf5veQfGh8F9CiqF1vVq7qcrgCyGWrk
-	 NDIMFv5owDwfTwqQ4R9ZrFB2Q2flUKNRdYp/5T/7w/Y9pFc961d7bnsovoukNk5H41
-	 vMu7+GbV+pwhfIpa1Uf0pWopTU/S1aTbf0oYqLEw=
-Received: from wolf.philpem.me.uk (81-187-163-148.ip4.reverse-dns.uk [81.187.163.148])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	(Authenticated sender: mailrelay_wolf@philpem.me.uk)
-	by nick.sneptech.io (Postfix) with ESMTPSA id 95B97BEFED;
-	Sun, 26 Apr 2026 19:09:29 +0000 (UTC)
-Received: from cheetah.homenet.philpem.me.uk (cheetah.homenet.philpem.me.uk [10.0.0.32])
-	by wolf.philpem.me.uk (Postfix) with ESMTPSA id 529ED5FC5A;
-	Sun, 26 Apr 2026 20:09:29 +0100 (BST)
-From: Phil Pemberton <philpem@philpem.me.uk>
-To: linux-ide@vger.kernel.org,
-	linux-scsi@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Hannes Reinecke <hare@suse.de>,
-	Phil Pemberton <philpem@philpem.me.uk>
-Subject: [PATCH v3 7/7] scsi: scsi_devinfo: extend BLIST_NO_LUN_1F to MATSHITA and NEC PD-1 variants
-Date: Sun, 26 Apr 2026 20:09:20 +0100
-Message-ID: <20260426190920.2051289-8-philpem@philpem.me.uk>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260426190920.2051289-1-philpem@philpem.me.uk>
-References: <20260426190920.2051289-1-philpem@philpem.me.uk>
+	s=arc-20240116; t=1777237406; c=relaxed/simple;
+	bh=3N0BTUK4hwMIbU4X17dhSmMuaydlpkauKb/7bBC/ImU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RkIWKh8BygiKM2rNBunWFI6rrLqxUWaRDvlOwWl67Ev5PvEeIXO2bK4yKotFxQHTpHCwmixHMetMbpcZOGnB5f0TS5zNQbzzrcXK+eGeefDRmUhdQoaroOhFajgvb20aSa+R7RnZ6VK4nOZVN8Zpcp2KR68p5CZsc5WkpkF00nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=philpotter.co.uk; spf=pass smtp.mailfrom=philpotter.co.uk; dkim=pass (2048-bit key) header.d=philpotter-co-uk.20251104.gappssmtp.com header.i=@philpotter-co-uk.20251104.gappssmtp.com header.b=C8mhFsq8; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=philpotter.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=philpotter.co.uk
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4852a9c6309so87988395e9.0
+        for <linux-scsi@vger.kernel.org>; Sun, 26 Apr 2026 14:03:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20251104.gappssmtp.com; s=20251104; t=1777237401; x=1777842201; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X9eLWtLuKgwqYCUe7plu0gxvPjwLDa7/o9IyiJWuVIU=;
+        b=C8mhFsq8CCSyRz8CjUxOmySjtmEes8hSKvBgz51aVUHmBu0CvsagzXreH8cDFDjlhh
+         qvNPblpHVfnjaNb70nmZC+Fbk+K3KDLwLNxiaQuFgGh5CadoSuXSFhmKo7yH4MzcXsbo
+         BSIy0rgLldlcWxhAUOy/MQObc3ut5n4qnBjQEwc5zEFEgyNz1O+HgGeJgC6GMCR0W0y/
+         yGXnR6c8FYZIwYgLd5TW/4rNBGbkXS9KV2qPGldRIOMneCoio7yCf1El/CfIk7lBIJtL
+         andhby5xTxhSocK2UXq/a6QbMZ51qKDm+whPG5GuO0vV94ED1lGMHZzrqVP3enNB9e3K
+         x6Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777237401; x=1777842201;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X9eLWtLuKgwqYCUe7plu0gxvPjwLDa7/o9IyiJWuVIU=;
+        b=QSFwz+jYDIBLjYlZ7unmPDoNvkJ2C8zf7GNJDsL+O2bJ9/vEQwQJvF4hrfxQBDNw6e
+         fejCAq8zQFbJMuRXawx8uROfrbIbxRVUHYVDhIB0FFLRhrIhi9tQ2WcHMocWdB+CxIQa
+         xTuPdGJpI+W2BrjV/9shU1yTcSJQacGlsEIx4VpWqArhjd26vIoGv9jDEehWu2REn4CD
+         5QMwd3VlEFlPETszS8U6dthtpzLTpH5oUEbAL8cXjd1B2bSYdjb7LJmmJdfQEqvvGRbJ
+         UIYV5Qckmq2Ajmcr+S4XR7WZRw5tMFnBIDxvQlsbB3C58AQMYrJhDngCh594GOeOj8x6
+         hCng==
+X-Forwarded-Encrypted: i=1; AFNElJ9ulINDHtq2HENtXwpaBXn0YZlBfbwTEbd24bw2etWKar/HWuih9X1DczS3pI4ZDd3hdgWqH3PLm1VI@vger.kernel.org
+X-Gm-Message-State: AOJu0YysuA4bkllEZnqb8TEF0nb4MqTOBWG2O/640DP5s6dz9/ECJaHL
+	UTCK/vWP6bVF6OeQLKuPJbBcR4BqUScAGmHLX1gk2EDrM1LgPsQB/EHmEsvgCynLgVg=
+X-Gm-Gg: AeBDievL6MgT345lATjTJFtDN2wJfE65dWmrjLEn8MGHBvuj+mXjrADO6P43WHQ0nS1
+	VJIqh3ZkdDEgyNBg/igdAmTSsq73Kwh2yEW7A6eKDau5oBVazh2yURiEu3PV0qfjwDB5CV88wmZ
+	Q7V33r4ZLpyD2kWF8JpiTS/xpFKXHMbpAzrI33xziL70tB1/N7BMTB4st7ksbUHDdhpfwt7r/LN
+	4x5ho4m6wfYvUUZ5lhE549Tw4oqUrWJ/Ogmue2CljE3doHJ16tJ2a6M6XjwTxAWOrKI1EMK824G
+	Y9/pdjzhHyFu2mLIzVjgrfQZPg6ctQhUd0AOEP2ZneMCxrt/kWnoLrD36K9XlrBeIZpeP8ubCKq
+	Li4bzeahVAte5KtM3Mq/d3WlxXKMpE6xd3OW9ZRQnZwfv2mV851nkeZ0UYrLTcnxBq00BLkE9Kq
+	7LUtjTrNTGUT+ea3jS9F7FfpbMhzYh66BlmTs27mLEo3O1Kwnj51ee5hPArYwXltlCvLSbVlCFz
+	Wh98pl/BcW0s6f+sO8A
+X-Received: by 2002:a05:600c:3213:b0:489:149a:f9e6 with SMTP id 5b1f17b1804b1-489149afa07mr257887595e9.28.1777237401017;
+        Sun, 26 Apr 2026 14:03:21 -0700 (PDT)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.1.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:df16::2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4891bb3d121sm823690925e9.14.2026.04.26.14.03.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Apr 2026 14:03:20 -0700 (PDT)
+Date: Sun, 26 Apr 2026 22:03:18 +0100
+From: Phillip Potter <phil@philpotter.co.uk>
+To: Daan De Meyer <daan.j.demeyer@gmail.com>
+Cc: phil@philpotter.co.uk, martin.petersen@oracle.com,
+	James.Bottomley@hansenpartnership.com, axboe@kernel.dk,
+	linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Daan De Meyer <daan@amutable.com>
+Subject: Re: [PATCH v2] cdrom, scsi: sr: propagate read-only status to block
+ layer via set_disk_ro()
+Message-ID: <ae59luYMh6npxD09@equinox>
+References: <20260330133403.796330-1-daan@amutable.com>
+ <20260422113206.246267-1-daan@amutable.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 5F3CE46ADB8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260422113206.246267-1-daan@amutable.com>
+X-Rspamd-Queue-Id: B34F246B2F2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[philpem.me.uk,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[philpem.me.uk:s=mail];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[philpotter-co-uk.20251104.gappssmtp.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[philpem.me.uk:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23312-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[philpem@philpem.me.uk,linux-scsi@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-23315-lists,linux-scsi=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DMARC_NA(0.00)[philpotter.co.uk];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[philpotter-co-uk.20251104.gappssmtp.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[phil@philpotter.co.uk,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,philpem.me.uk:email,philpem.me.uk:dkim,philpem.me.uk:mid]
+	RCPT_COUNT_SEVEN(0.00)[9];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[philpotter.co.uk:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
-The Panasonic LF-1095/LF-1195 PD/CD combo drive was sold under three
-OEM identities: COMPAQ "PD-1", MATSHITA "PD-1", and NEC "PD-1 ODX654P".
-All three are the same drive mechanism with the same firmware family,
-so they should share the BLIST_NO_LUN_1F quirk that was applied to the
-COMPAQ variant: PDT 0x1f / PQ 0 INQUIRY responses on non-existent LUNs
-are treated as "LUN not present" rather than as a phantom sdev.
+On Wed, Apr 22, 2026 at 11:32:06AM +0000, Daan De Meyer wrote:
+> 
+>  drivers/cdrom/cdrom.c | 73 ++++++++++++++++++++++++++++---------------
+>  drivers/scsi/sr.c     | 11 ++-----
+>  drivers/scsi/sr.h     |  1 -
+>  include/linux/cdrom.h |  1 +
+>  4 files changed, 51 insertions(+), 35 deletions(-)
+> 
+> diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+> index fc049612d6dc..62934cf4b10d 100644
+> --- a/drivers/cdrom/cdrom.c
+> +++ b/drivers/cdrom/cdrom.c
+> @@ -631,6 +631,16 @@ int register_cdrom(struct gendisk *disk, struct cdrom_device_info *cdi)
+>  
+>  	WARN_ON(!cdo->generic_packet);
+>  
+> +	/*
+> +	 * Propagate the drive's write support to the block layer so BLKROGET
+> +	 * reflects actual write capability. Drivers that use GET CONFIGURATION
+> +	 * features (CDC_MRW_W, CDC_RAM) must have called
+> +	 * cdrom_probe_write_features() before register_cdrom() so the mask is
+> +	 * complete here.
+> +	 */
+> +	set_disk_ro(disk, !CDROM_CAN(CDC_DVD_RAM | CDC_MRW_W | CDC_RAM |
+> +				     CDC_CD_RW));
+> +
+>  	cd_dbg(CD_REG_UNREG, "drive \"/dev/%s\" registered\n", cdi->name);
+>  	mutex_lock(&cdrom_mutex);
+>  	list_add(&cdi->list, &cdrom_list);
+> @@ -742,6 +752,44 @@ static int cdrom_is_random_writable(struct cdrom_device_info *cdi, int *write)
+>  	return 0;
+>  }
+>  
+> +/*
+> + * Probe write-related MMC features via GET CONFIGURATION and update
+> + * cdi->mask accordingly. Drivers that populate cdi->mask from the MODE SENSE
+> + * capabilities page (e.g. sr) should call this after those MODE SENSE bits
+> + * have been set but before register_cdrom(), so that the full set of
+> + * write-capability bits is known by the time register_cdrom() decides on the
+> + * initial read-only state of the disk.
+> + */
+> +void cdrom_probe_write_features(struct cdrom_device_info *cdi)
+> +{
+> +	int mrw, mrw_write, ram_write;
+> +
+> +	mrw = 0;
+> +	if (!cdrom_is_mrw(cdi, &mrw_write))
+> +		mrw = 1;
+> +
+> +	if (CDROM_CAN(CDC_MO_DRIVE))
+> +		ram_write = 1;
+> +	else
+> +		(void) cdrom_is_random_writable(cdi, &ram_write);
+> +
+> +	if (mrw)
+> +		cdi->mask &= ~CDC_MRW;
+> +	else
+> +		cdi->mask |= CDC_MRW;
+> +
+> +	if (mrw_write)
+> +		cdi->mask &= ~CDC_MRW_W;
+> +	else
+> +		cdi->mask |= CDC_MRW_W;
+> +
+> +	if (ram_write)
+> +		cdi->mask &= ~CDC_RAM;
+> +	else
+> +		cdi->mask |= CDC_RAM;
+> +}
+> +EXPORT_SYMBOL(cdrom_probe_write_features);
+> +
+>  static int cdrom_media_erasable(struct cdrom_device_info *cdi)
+>  {
+>  	disc_information di;
+> @@ -894,33 +942,8 @@ static int cdrom_is_dvd_rw(struct cdrom_device_info *cdi)
+>   */
+>  static int cdrom_open_write(struct cdrom_device_info *cdi)
+>  {
+> -	int mrw, mrw_write, ram_write;
+>  	int ret = 1;
+>  
+> -	mrw = 0;
+> -	if (!cdrom_is_mrw(cdi, &mrw_write))
+> -		mrw = 1;
+> -
+> -	if (CDROM_CAN(CDC_MO_DRIVE))
+> -		ram_write = 1;
+> -	else
+> -		(void) cdrom_is_random_writable(cdi, &ram_write);
+> -	
+> -	if (mrw)
+> -		cdi->mask &= ~CDC_MRW;
+> -	else
+> -		cdi->mask |= CDC_MRW;
+> -
+> -	if (mrw_write)
+> -		cdi->mask &= ~CDC_MRW_W;
+> -	else
+> -		cdi->mask |= CDC_MRW_W;
+> -
+> -	if (ram_write)
+> -		cdi->mask &= ~CDC_RAM;
+> -	else
+> -		cdi->mask |= CDC_RAM;
+> -
+>  	if (CDROM_CAN(CDC_MRW_W))
+>  		ret = cdrom_mrw_open_write(cdi);
+>  	else if (CDROM_CAN(CDC_DVD_RAM))
+> diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+> index 7adb2573f50d..c36c54ecd354 100644
+> --- a/drivers/scsi/sr.c
+> +++ b/drivers/scsi/sr.c
+> @@ -395,7 +395,7 @@ static blk_status_t sr_init_command(struct scsi_cmnd *SCpnt)
+>  
+>  	switch (req_op(rq)) {
+>  	case REQ_OP_WRITE:
+> -		if (!cd->writeable)
+> +		if (get_disk_ro(cd->disk))
+>  			goto out;
+>  		SCpnt->cmnd[0] = WRITE_10;
+>  		cd->cdi.media_written = 1;
+> @@ -681,6 +681,7 @@ static int sr_probe(struct scsi_device *sdev)
+>  	error = -ENOMEM;
+>  	if (get_capabilities(cd))
+>  		goto fail_minor;
+> +	cdrom_probe_write_features(&cd->cdi);
+>  	sr_vendor_init(cd);
+>  
+>  	set_capacity(disk, cd->capacity);
+> @@ -899,14 +900,6 @@ static int get_capabilities(struct scsi_cd *cd)
+>  	/*else    I don't think it can close its tray
+>  		cd->cdi.mask |= CDC_CLOSE_TRAY; */
+>  
+> -	/*
+> -	 * if DVD-RAM, MRW-W or CD-RW, we are randomly writable
+> -	 */
+> -	if ((cd->cdi.mask & (CDC_DVD_RAM | CDC_MRW_W | CDC_RAM | CDC_CD_RW)) !=
+> -			(CDC_DVD_RAM | CDC_MRW_W | CDC_RAM | CDC_CD_RW)) {
+> -		cd->writeable = 1;
+> -	}
+> -
+>  	kfree(buffer);
+>  	return 0;
+>  }
+> diff --git a/drivers/scsi/sr.h b/drivers/scsi/sr.h
+> index dc899277b3a4..2d92f9cb6fec 100644
+> --- a/drivers/scsi/sr.h
+> +++ b/drivers/scsi/sr.h
+> @@ -35,7 +35,6 @@ typedef struct scsi_cd {
+>  	struct scsi_device *device;
+>  	unsigned int vendor;	/* vendor code, see sr_vendor.c         */
+>  	unsigned long ms_offset;	/* for reading multisession-CD's        */
+> -	unsigned writeable : 1;
+>  	unsigned use:1;		/* is this device still supportable     */
+>  	unsigned xa_flag:1;	/* CD has XA sectors ? */
+>  	unsigned readcd_known:1;	/* drive supports READ_CD (0xbe) */
+> diff --git a/include/linux/cdrom.h b/include/linux/cdrom.h
+> index b907e6c2307d..260d7968cf72 100644
+> --- a/include/linux/cdrom.h
+> +++ b/include/linux/cdrom.h
+> @@ -108,6 +108,7 @@ int cdrom_ioctl(struct cdrom_device_info *cdi, struct block_device *bdev,
+>  extern unsigned int cdrom_check_events(struct cdrom_device_info *cdi,
+>  				       unsigned int clearing);
+>  
+> +extern void cdrom_probe_write_features(struct cdrom_device_info *cdi);
+>  extern int register_cdrom(struct gendisk *disk, struct cdrom_device_info *cdi);
+>  extern void unregister_cdrom(struct cdrom_device_info *cdi);
+>  
+> -- 
+> 2.53.0
+>
 
-This patch is offered for completeness.  It has not been tested on the
-MATSHITA or NEC variants -- the author only has access to the COMPAQ
-unit -- but the drives are functionally identical and the flag is a
-no-op on devices that do not exhibit the PDT 0x1f response.  Drop or
-hold this patch if confirmation on real hardware is preferred before
-extending the quirk.
+Hi Daan,
 
-Signed-off-by: Phil Pemberton <philpem@philpem.me.uk>
----
- drivers/scsi/scsi_devinfo.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+I've looked through the patch and it looks good to me. Looks like a
+decent change. I think in this case too, it's unlikely this historically
+broken behaviour is being relied upon (i.e. it seems unlikely to me that
+fixing it would break anything).
 
-diff --git a/drivers/scsi/scsi_devinfo.c b/drivers/scsi/scsi_devinfo.c
-index bfc2cbd43897..ab1ffa9433b7 100644
---- a/drivers/scsi/scsi_devinfo.c
-+++ b/drivers/scsi/scsi_devinfo.c
-@@ -201,7 +201,8 @@ static struct {
- 	{"LASOUND", "CDX7405", "3.10", BLIST_MAX5LUN | BLIST_SINGLELUN},
- 	{"Marvell", "Console", NULL, BLIST_SKIP_VPD_PAGES},
- 	{"Marvell", "91xx Config", "1.01", BLIST_SKIP_VPD_PAGES},
--	{"MATSHITA", "PD-1", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
-+	{"MATSHITA", "PD-1", NULL, BLIST_FORCELUN | BLIST_SINGLELUN |
-+				   BLIST_NO_LUN_1F},
- 	{"MATSHITA", "DMC-LC5", NULL, BLIST_NOT_LOCKABLE | BLIST_INQUIRY_36},
- 	{"MATSHITA", "DMC-LC40", NULL, BLIST_NOT_LOCKABLE | BLIST_INQUIRY_36},
- 	{"Medion", "Flash XL  MMC/SD", "2.6D", BLIST_FORCELUN},
-@@ -212,7 +213,8 @@ static struct {
- 	{"nCipher", "Fastness Crypto", NULL, BLIST_FORCELUN},
- 	{"NAKAMICH", "MJ-4.8S", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
- 	{"NAKAMICH", "MJ-5.16S", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
--	{"NEC", "PD-1 ODX654P", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
-+	{"NEC", "PD-1 ODX654P", NULL, BLIST_FORCELUN | BLIST_SINGLELUN |
-+				      BLIST_NO_LUN_1F},
- 	{"NEC", "iStorage", NULL, BLIST_REPORTLUN2},
- 	{"NRC", "MBR-7", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
- 	{"NRC", "MBR-7.4", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
--- 
-2.43.0
+In addition, I've build tested and booted/run some read/write tests with
+your patch which worked fine for me too.
 
+Reviewed-by: Phillip Potter <phil@philpotter.co.uk>
+
+One final question from me though, and a purely procedural one:
+The patch was submitted from your gmail address, but signed off by your
+corporate address. Are you happy for me to adjust the submission so that
+the author appears as your corporate address when sending on for
+inclusion? Let me know, thanks.
+
+Regards,
+Phil
 
