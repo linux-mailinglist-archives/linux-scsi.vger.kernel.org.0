@@ -1,483 +1,298 @@
-Return-Path: <linux-scsi+bounces-23374-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23376-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iDBjB2uT8GnnVAEAu9opvQ
-	(envelope-from <linux-scsi+bounces-23374-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2026 13:00:59 +0200
+	id 0Nv6COmd8GkRWQEAu9opvQ
+	(envelope-from <linux-scsi+bounces-23376-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2026 13:45:45 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2E5F483300
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2026 13:00:53 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A74C48420C
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2026 13:45:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4FD6E30D52AD
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2026 10:54:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F015731D3D62
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2026 11:17:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F28C427A14;
-	Tue, 28 Apr 2026 10:43:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 676BB3F65FA;
+	Tue, 28 Apr 2026 11:11:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e0L95YoZ"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="NoKNoyxw";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="o674gBQf"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146F242846D;
-	Tue, 28 Apr 2026 10:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777372998; cv=none; b=tGy8hLUO1TAMUk2zKhPTuxk/3RJr3Aj3r8/uOvMdvJW487m4ckuEc2hqjcW9UHy5DwsGu7AhyDEksI+xvnovBBjdfU9LHeXggZXuOnSHstyOqmRWqHvj1StOLGzqaq1ycEPdaxJhISWqNzCMf+Wl1emSNWLXSx8EtWYvY0S6o0Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777372998; c=relaxed/simple;
-	bh=GDqpqBZ0aaPdKXbVkb4HW156HRKwRtK+VRmGjNeJYzg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MuBTirH9b4qgP47m2xvuBRidjpSkcsCRhBNqBzE21Vzd5/O7W64XL8vzS608y35K8mxDfS7gRuMiP4QVPTAyz4bvKeVvW36yqETVFzGbhXoHn6jfQyGGpvX/Q1Jzm6ek9inbMEnL7W9cnAj5+2WKMml1I1Gwz7io3IeuSC6/hHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e0L95YoZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A43EC2BCB5;
-	Tue, 28 Apr 2026 10:43:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777372997;
-	bh=GDqpqBZ0aaPdKXbVkb4HW156HRKwRtK+VRmGjNeJYzg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=e0L95YoZzRrLvrkeqtlzegPzHlafDFGfeuq76f/su/RA14hMegTHpDLJrDtP8drPz
-	 K56ISFxXxTrJ6F/4UFwPxc1UG32xfhiQ+3uRMbsmsYJEvBZw6gAr/izu22t4ag1Il/
-	 5Dhb6qrauO5ExkVS/FQWmxHNaUMje7/Ji17W09v9dnVl4ETq7s8zciQVPW6GN85UHg
-	 TjNhMNl5Y9Uo0bT4+ZEFmzm7gLT+OWogaYMNv+ND+e8U9MHit+MckfKadtRVoLQ3rS
-	 F6a1WK6F0hIwboJ6eZtVvfbaFlMJBX7qixqBC9PW9oivBqpneP94vxjKr0utBkOTsh
-	 U3tSA9CQ8sA5A==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Justin Tee <justin.tee@broadcom.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Sasha Levin <sashal@kernel.org>,
-	james.smart@broadcom.com,
-	dick.kennedy@broadcom.com,
-	jejb@linux.ibm.com,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 7.0-6.18] scsi: lpfc: Add PCI ID support for LPe42100 series adapters
-Date: Tue, 28 Apr 2026 06:41:23 -0400
-Message-ID: <20260428104133.2858589-72-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260428104133.2858589-1-sashal@kernel.org>
-References: <20260428104133.2858589-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893153F54D9;
+	Tue, 28 Apr 2026 11:11:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777374706; cv=fail; b=Q6jeJqmkSm2TqPccpzUnSqtgdh8osWNHtIse/lS5sa8Z/SJx0Ep79ksgWpmpYRzXm5eV2zeNbz+B/1vBYMRdKMg/cxfzWJO+PJieJLqnPIYUlHs5BM/018AyNyhK+lOXuIb9RD572AsvX+7itFCqGGbVDNouxmoWyiRiDREjYlo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777374706; c=relaxed/simple;
+	bh=wo5H2QCrC5AhaNGZkNtZbhKZlwPulgeYL5x/hq2ZYj4=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=pb0ipMl4I5k+/V4ow0vrUD9MB09Dv8hBHQhM8M4uAwsLml7Y4OndcNstRygwkE1BkPUgvPKUtft+FBQhMqT5OMx4dx2NmARLAiIYqj2DfbjbttJmuML5OsmyDSOo9RIEFUqf/U2VzVIzYLCsuYvnm+xYdv14qKkoUoosCM/A4zw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=NoKNoyxw; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=o674gBQf; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63S9QQYK2128206;
+	Tue, 28 Apr 2026 11:11:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=corp-2025-04-25; bh=QROEJKQFPn04vM+d
+	QvAV7cwng6Hos/45noAvSQEDcxA=; b=NoKNoyxwS1YKPh80le4OL7AQDYqqj6S/
+	9TtRnVTjYNobq1NmF81PA7vPnSlSwkbZMK8NWIK/cdmLKm18BdGGV4M+buRKw/am
+	T4MK/kbyDKy6/cXykdQXOvI6ahfHVdMuvpF2D0dVOhfYJIHBirnqvcmpM0SasVuD
+	OywOw9sjTD1ca6uz7eNkmvCrHQQ6wGxJ6lzEAxp/m4CudN2ZHwM8Z04m1gOEDH0E
+	DxIRDPYBmnhOIxPO47OA9jRV7/3eDRwwWKegJUyFudZYNg0HyujUosnPTJ5qr9PY
+	Qge00sMbJNuxW1H+WoYY//jbubAKp2log8bq6vGs9sxviVBn/ImGiA==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4drmha7jd0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Apr 2026 11:11:23 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 63SB2jhT036886;
+	Tue, 28 Apr 2026 11:11:22 GMT
+Received: from sj2pr03cu001.outbound.protection.outlook.com (mail-westusazon11012060.outbound.protection.outlook.com [52.101.43.60])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4drm2bvem5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Apr 2026 11:11:22 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CUI7Lwrl/plMbOH5uTjTWHlNTQjvjVSPItu3QoWHtr19vPbzr3bCjLWeXqDwSdgo52devVHsypO6Kvq8TtnZuITnd/9EmlbNxH11zijzDj3vIWD/cRG5gdEvW5BpLl9/w6oX18MSozZmzzNklAAaysZq0U6wXD/VEDPcR6NEz2gGJ336qY+YfH614Zo+11oEaI4Y7IuyUo2NSEQ0usWxhnR/MIMYX0F+IGLOxjGVarVlOpbCweR5tDUJ7mcmLb+c8+3NZ+aaGlzjBr40J10cJCq6PrIvaMcAx4X3ODnQ9KxC6udCDPuMMvpz/z0KoNMC7cOJPpulQad4p/8YMReg1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QROEJKQFPn04vM+dQvAV7cwng6Hos/45noAvSQEDcxA=;
+ b=xohNNvIwBvSsbFEe4JjFoW4errf0450m6TcZAwlSGMRdRFZT9Ku0Xrr5JgHgtUNhJts+oi9SaK2piYAZNG/1CmzZ6fkRn5EPZYgBpk4mF5s/F+mGiuvYzeeYMoIzRMFrcpgIsME6nKUO1mGJvRUj0DxHubh951mwFICHNyBsk7XETaH27t2PdAuyjVWXTxdKV4Jo2r72mJ8deZ5cAArQ/I5+ZycxDWVXAUepQFIaOkO8G2RMasoMozfHDKoyH//2Mhah2pWhH2xCFwIoyFR63BLnWrSheMSPQTR7E9OgxfbsVDvVEZwQtQjoHmg6Kl/SmUdBuXRwVbU135CYfn0pEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QROEJKQFPn04vM+dQvAV7cwng6Hos/45noAvSQEDcxA=;
+ b=o674gBQf5+DfrgED72VACVk8/t2zmOWNvEkoWCDc7wg5gCQ/I6s0KuSOvRBg4xXMpGysTcl2IJxIy/B6WOjJqg+hzIj5BJQ3xVgSzZdo9vt8o0JY1Le/iIK73Ac1tJeHeCCCwQYTdEJHEGD//wiPBgnwhrYeHEuOlzCWG/JEGgk=
+Received: from PH3PPFEDB06D67A.namprd10.prod.outlook.com
+ (2603:10b6:518:1::7d6) by BLAPR10MB5073.namprd10.prod.outlook.com
+ (2603:10b6:208:307::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Tue, 28 Apr
+ 2026 11:11:17 +0000
+Received: from PH3PPFEDB06D67A.namprd10.prod.outlook.com
+ ([fe80::234c:e047:21c1:6d16]) by PH3PPFEDB06D67A.namprd10.prod.outlook.com
+ ([fe80::234c:e047:21c1:6d16%8]) with mapi id 15.20.9846.025; Tue, 28 Apr 2026
+ 11:11:16 +0000
+From: John Garry <john.g.garry@oracle.com>
+To: hch@lst.de, kbusch@kernel.org, sagi@grimberg.me, axboe@fb.com,
+        martin.petersen@oracle.com, james.bottomley@hansenpartnership.com,
+        hare@suse.com, bmarzins@redhat.com, nilay@linux.ibm.com
+Cc: jmeneghi@redhat.com, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, michael.christie@oracle.com,
+        snitzer@kernel.org, dm-devel@lists.linux.dev,
+        linux-kernel@vger.kernel.org, John Garry <john.g.garry@oracle.com>
+Subject: [PATCH v2 00/13] libmultipath: a generic multipath lib for block drivers
+Date: Tue, 28 Apr 2026 11:10:52 +0000
+Message-ID: <20260428111105.1778008-1-john.g.garry@oracle.com>
+X-Mailer: git-send-email 2.43.5
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: PH7P220CA0054.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:510:32b::11) To PH3PPFEDB06D67A.namprd10.prod.outlook.com
+ (2603:10b6:518:1::7d6)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 7.0.2
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: D2E5F483300
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH3PPFEDB06D67A:EE_|BLAPR10MB5073:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1067834f-81e8-4b17-0450-08dea516de17
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|366016|376014|1800799024|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	mhbWQcPE8QbAuK1nGgHpSBFt/woYPSSlV0zpUQ5NcwBy+TvnKQSJz+kQ4k/Br1/CJR8S9fVHOpAQoZaWl6NYQFEDBmdyvZzTTdcXO1gxsboWp3p8vv5YiiQo1a6XpQ863JcvDzNl92GsKwCdwjRAq0hrlYhwemNOJgknrc4vFpvho86i93is4vZQZ61LLASIQhbPXK8pSg+8Jloto6m0kcZEPDhEnGyEGpCpIfUYHOWyzkxCmrszJOcP8NGyvclQJXuSFm3lSR2g//ak1T17KUOJRIQXHP8mkywV75n+6jUGi1oFKZhLOqfYWqJwk1FASQIGulUFvZ57Mfi59JzwmTXHNSSyAN7xoIbeVpZ4pyQYeVMlhUehx0Q9cpPXIr1IqVLF8aiA+oe+578ksF/oA7Rr+eLJ6eGtbPs62VAZZM4eLaIX7Jqd2ze8eUQM/DwSMzvj6NUyZOSbUP/r2yfpLr5H4piTrONJzkjJN+otVGHbAlA2i2nLQyR8P7PCJFDFnF5FYoPhSdydqo7j/RGPeXqbFndkNalcexnS4aStHTXVZaJPu3v1WsDTLV4XN0qEA4Uu3h1O+O9m+iY87PCXjr0xDSOui2fieZF8p3rE5IecjstqqsoHAEq1cE8DRZ332+WJV92syCp524D6xti9fK6nS6W+hhqfO0MYKNlR/Hbye76Oi+SQOb6Xx7b9oZrPi+NI8xlNEin1SVeUnIUsBphVL/4T7gAjrd6VqNMLw/aIhImpiKZgm3a7mkvP1Xr6
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH3PPFEDB06D67A.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?OZiH+EjVQ8oDQwCb49tCAWs7M6lPC0f6hMny/1hnGBNK0vo296kC+IMvr15W?=
+ =?us-ascii?Q?64Y7WHN9GyVlwxXXJIPosSnHNMJw6zdcaUmnTCdwWYmoQ7aUnQ/kfz8opWGq?=
+ =?us-ascii?Q?uts8S6SuBHXfF96Wy2uXncxJG2Q2p8KxtZW5YQ8TX5XGbVIpqOil46xVjpsC?=
+ =?us-ascii?Q?oJCTWd4WjD2bhUxMsv5DeDv2bOvC2J+/fqGok+EP2XUUIl8OYXurbo6czVqB?=
+ =?us-ascii?Q?7EY3PR+YYEv5w/MSknboJv6vEnRqvy6bw37YqTQNH6mgzmQ5aDr44xBHwxTB?=
+ =?us-ascii?Q?WNHS5I7mLHkgXZltbDuYlMm+pJ7QFWjZld3ft/9pRkCapElJukJ658G5pkBr?=
+ =?us-ascii?Q?f+/joemLL3sprXZgxEcaQ34UyWMqGw0GD3P69szjIpDSA9Eus7upmW3h2rk5?=
+ =?us-ascii?Q?8hxzoM4PW9z9qRL/+0W3JRQqHzgIbSUUQIB94bMkbPXiBdBrO5J83HqPH2fB?=
+ =?us-ascii?Q?mFfz4xfltaf4vYYM1PM/XeYVgonsnU6Lt6HzLTk0libK0nKB0bRvsfNZ8L/E?=
+ =?us-ascii?Q?XJatdiq/6peUYTHNu5Bq7K/PPgtK/WQbGNM8lN9ShAzTrMLG3lqKjbTFiroe?=
+ =?us-ascii?Q?09QDS4DhMkzJ2mO5xKTcS4UOor+jssuCr6r96zJTirP8aVEr3KnG5WwlHF9P?=
+ =?us-ascii?Q?0Eyh0OvQvxUxgKr4aSsnUIRDdAHDtHZf5T1KVGKICmrteMQ9cntWUcLQlapU?=
+ =?us-ascii?Q?Mk351R32W6otyzFXKR8Y+ViQVaPdy1ZKxMB4nRNRCbB5ut/HYxomw+BNfBsZ?=
+ =?us-ascii?Q?CY+gTUm1e6sOnhm9lT1DCcPoSBKHve1qRgsJ0F0S2tRvtW3XEptDCnj7WE0s?=
+ =?us-ascii?Q?KQg5QOAeknKeZypMaH/i9mMgVWBq+wnak7c/p3F0vTZw3vjOYtlGEP9a1Ybs?=
+ =?us-ascii?Q?kZDsyH9S7MKLga1Mbfm5rDqc28oIKeHpHMAEviXlLy3UGUOph/cVIb83mk/A?=
+ =?us-ascii?Q?e9EXkqM4VLRTeJBhVCWjUK5P8MIajGxIoRiv9G8F6baBHZ6jK0LcsQwpQ+JP?=
+ =?us-ascii?Q?mdBDUtNM6M/eQaKFpU2HB44Vv4j/j0cQnt7PpOGbStbUZyfs8smmZkt0nhQx?=
+ =?us-ascii?Q?YdN1IVRMEK/Eu6qg2EFFqirZTEw3unyAX74fmqkGiSbqByxyYteza+pkyU4z?=
+ =?us-ascii?Q?V2aR/Uz3XiwouRAAHEVt5mKOQZUMA4g/01KG5MPBmYztc8SntDRN4IEByus4?=
+ =?us-ascii?Q?9Ry/xORyA6IhM+RaPiPQ6rzjFOp2+G+jnOMXd00H64x6YDlMPg3mpeGfP88u?=
+ =?us-ascii?Q?fdmJUcNV5daZ8buQG+CseMQ+GGsSsMgrr66crAH5+HmtoG7G/Vv1nFb3BbWn?=
+ =?us-ascii?Q?fkulfKoZBpGrbY+adx9bl2KTCsA/mUCuznIXgEI4b+ODgAMjFVoFbGSl4cE1?=
+ =?us-ascii?Q?Z40Oq7tSLEfLnX8Noz/iyYZW4BQFvqvZi3aE5o4GvYbMAtfKF9bRX/J4nLPc?=
+ =?us-ascii?Q?2Wlg+YHvWry3Ji1NtVsW02yxDxdh2KGne0a2tRWwtgLSXnPpcbE0d5GGXgD8?=
+ =?us-ascii?Q?K0EuyswWDjZmbwlpDaT14J23u/57s68MDyvU+GV1lhMgjZ7KQN/mfcCT2otq?=
+ =?us-ascii?Q?s88v+YCTgq0J7DkrHR5byjJbST6w5aGEk8tU4+Xcj4dbJ97oeOuqRs6f7jaD?=
+ =?us-ascii?Q?DQdfdndl34fQZnNrWRZkp5bbYE4JWYFcVLCywiJ1rbW+CRfN3udt7SofR4mw?=
+ =?us-ascii?Q?Td0lcYeZb3z0WSstRHv7Xbe6ViZzQwoQg4NeWSQKxj3aZ8Ae854xF8Jmih4A?=
+ =?us-ascii?Q?kvOQp16bRGBcvvofCvn/rMimtFzdvmA=3D?=
+X-Exchange-RoutingPolicyChecked:
+	guxFs5gsnRZJqSZ/WbxKYIzmObCpofvCX28TlhuU76kACzs1yDOu7rUxtm74nFfigkP+X8/Uuv0t3cUE6VgXYlt355TSW98OkgVdOwE6l2Nfu1MvaWE1WI8lBsdJ30mmnGrl2tl9Ln+q4nZL1JUFEcOMwfTDqbrrmh618HDbxFAOYW+J/OcoIuxJYjdQ5wxjcW+WxeAqOSrvyJHoEU4G/tS5OJTMuXta4pyYq2EZIQnumw8FAGz516D4SQbrmr5fZRWfOSaYw13m7J6R/ET9mzaXJKgXoRJBIYss5m9zp9b9oO0cwMRrGtljWdW2Z9k4Aw8t4E0SAgndGcND77X0lw==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	5T5i+3Z/2yHS9ElDm03vQQ576WpnD3apGsqdvH6pwl1b1U3c7oEKFrQ6kz//cJa5nzffMFTjJACOYYG8p27DyTNLiNKytBRCuDVf3agl5V8moKB61SjlVMfKD5vQGJEwEBHVdWu2NdqJS4u7zp/0RUtiRqQfNV2HEX/rp3kc67843KQFvpdnoWzVrMAS1EurYZcZKB2Q9ictGdiz7MPWz8Dsp6YyahmlAjgunBh3muzCYBOJUDsZ9HmSx1nhCn3xv72luBWnSoAVoQaFTqLs8DQMP5ciF1DAl94rJQghm89ytQ7APfIa1HI4TRJIZcs7UEfi7p/Oa6Dy6vXcYwwSyB/0RQDv3bKytij5ws918YdmLs9WONHyDzm3W4U4H2qLwfazMXafDJ4sIr2fz1v2nggY5mEH+GQZgYAZ1h7fpeBDWxdNymCAkYrt0+orzgo65MxeKMs5KOmUUekKH8mlO09ONzXJ+hVRoa2XAdOJ6kOnkUoolF4hB7G9EEN6f5myxhxSRRcGAG8dTtO9QCMp+WcO40dT6X04ryckz3kiuD28nnLbccrq+/SGP+1LYZZfHxfxLPGTbcC2MgOZ6POc3cX3l1/SuSN67SL1plW92uM=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1067834f-81e8-4b17-0450-08dea516de17
+X-MS-Exchange-CrossTenant-AuthSource: PH3PPFEDB06D67A.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2026 11:11:16.8506
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cJgN6j07OtBoVbLbStH1l6oN0VCtYuyeAV+DTumkxELK7L/82PdXxnR/cMh/U4Hj7oTngv4HnKn/KiwoSECp0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5073
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-28_02,2026-04-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ suspectscore=0 adultscore=0 mlxlogscore=992 spamscore=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 mlxscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2604200000 definitions=main-2604280100
+X-Proofpoint-GUID: ldQcGiKKj0KQ4J4zWYI0-lxxu478TQQ3
+X-Proofpoint-ORIG-GUID: ldQcGiKKj0KQ4J4zWYI0-lxxu478TQQ3
+X-Authority-Analysis: v=2.4 cv=CrOPtH4D c=1 sm=1 tr=0 ts=69f095db b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=A5OVakUREuEA:10
+ a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=x0eKOSpe3m1H3M0S9YoZ:22 a=NEAV23lmAAAA:8 a=c4o3e9GF2tz6pKNFHFEA:9 cc=ntf
+ awl=host:12310
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI4MDEwMSBTYWx0ZWRfX5S0m/0a4mKmu
+ zVUtIm4qbDXZhEDDvdOpjxGUDSkAWqd2CT6+RecBH25gmdghN4atatlQ02ixF9+iADqPwupCBq9
+ e+ILKun31kUwpULwky+lcvlrKZjN7vC3GNshoyayxD8Zwa1SP2Q4D60+d5M8R/jtYdtIs2fUUCn
+ KXRjVZ35agiOWwgnkPePQDCCiDAWwjPSgP0A8Mym423I98NgoaX3qyqSnNR9s1FW5MfRkVQYV0N
+ qVAgQcSRf3I2OhdxEO9pEcQ2/pMg1Wah0iSXZwkkR3uEyiE8b7UHfg4NgKi/re1Z/POdti/vUwM
+ sukU13ZoWt+KFTmloRCC484DMnRXmQ6SCR7HeXHRnNyF7UCXzZUXkRHYA2gU8ZqGvBlatZzeEDM
+ GvqN8+tIivFE8mJPnglFzehLJOLnSHSuBX4owN7lwNdbKGyR76tIr/k80Tygd3H3VEgygAnICN1
+ hNbQHYXp0COHu28vd2JsQlIM4rB4I7q0K0J0FOD4=
+X-Rspamd-Queue-Id: 8A74C48420C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [1.34 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
+	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-23374-lists,linux-scsi=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RSPAMD_EMAILBL_FAIL(0.00)[martin.petersen.oracle.com:query timed out,justintee8345.gmail.com:query timed out];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-scsi@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-23376-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,broadcom.com:email,oracle.com:email,msgid.link:url]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:dkim,oracle.com:mid,oracle.onmicrosoft.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[9]
 
-From: Justin Tee <justin.tee@broadcom.com>
+libmultipath: a generic multipath lib for block drivers
 
-[ Upstream commit 49b9f31e52b2125125318cb60fe9f5e7fa9c6755 ]
+This series introduces libmultipath. It is essentially a refactoring of
+NVME multipath support, so we can have a common library to also support
+native SCSI multipath.
 
-Update supported pci_device_id table to include the values for the G8 ASIC
-Device ID utilized by LPe42100 series of adapters.  The default reporting
-string will be "LPe42100".
+Much of the code is taken directly from the NVMe multipath code. However,
+NVMe specifics are removed. A template structure is provided so the driver
+may provide callbacks for driver specifics, like ANA support for NVMe.
 
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Link: https://patch.msgid.link/20260331205928.119833-10-justintee8345@gmail.com
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+Important new structures introduced include:
 
-LLM Generated explanations, may be completely bogus:
+- mpath_head
+These contain much of the multipath-specific functionality from
+nvme_ns_head, including a pointer to the gendisk structure and
+a path SRCU-based array.
 
-Now I have enough information to compile a complete analysis.
+- mpath_device
+This is the per-path structure, and contains much the same
+multipath-specific functionality in nvme_ns
 
-## Phase 1: Commit Message Forensics
+libmultipath provides functionality for path management, path selection,
+data path, and failover handling.
 
-**Step 1.1: Subject line parsing**
-Record: Subsystem `scsi: lpfc:`. Action verb "Add" (hardware
-enablement). Summary: Adds PCI device ID 0xd300 for the new LPe42100
-Fibre Channel adapter (G8 ASIC).
+Since the NVMe driver has some code in the sysfs and ioctl handling
+which iterate all multipath NSes, functions like mpath_call_for_device()
+are added to do the same per-path iteration.
 
-**Step 1.2: Tag inventory**
-Record: Tags present:
-- `Signed-off-by: Justin Tee <justin.tee@broadcom.com>` (author,
-  Broadcom developer for lpfc)
-- `Link: https://patch.msgid.link/20260331205928.119833-10-
-  justintee8345@gmail.com` (mailing list reference)
-- `Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>` (SCSI
-  subsystem maintainer)
-- No `Cc: stable`, no `Fixes:`, no `Reported-by`, no `Reviewed-by`, no
-  `Tested-by`, no syzbot, no `Link` to any bug report.
+Full series also available at
+https://github.com/johnpgarry/linux/commits/scsi-multipath-pre-7.1-upstream-v2/
 
-**Step 1.3: Body text analysis**
-Record: Short three-sentence message. No bug description. No stack
-trace. No symptom. No reproducer. Explicitly framed as hardware
-enablement: "Update supported pci_device_id table to include the values
-for the G8 ASIC Device ID utilized by LPe42100 series of adapters."
-States the model name reported will be "LPe42100".
+Differences to v1:
+- put current_path[] at end of struct mpath_head (Nilay)
+- drop struct mpath_disk and keep nvme_remove_head() (Nilay)
+- don't pass iopolicy from mpath_find_path() (Benjamin)
+- change mpath_access_state names (Nilay)
+- fix for setting mpath_device.nr_active and .numa_node (Nilay)
+- fix uninit'ed pointers in __mpath_find_path() (Nilay)
+- simplify mpath_head_template.available_path (Nilay, Benjamin)
+- use DEFINE_SIMPLE_SYSFS_GROUP_VISIBLE (Benjamin)
+- check mpath_bdev_submit_bio() -> .clone_bio() for errors (Benjamin)
+- drop struct mpath_pr_ops (Keith)
+- drop mpath_head_template.bdev_ioctl
+- drop mpath_head_template.get_unique_id
+- drop mpath_head_template.report_zones
+- drop mpath_head_template.get_access_state
+- add mpath_head_template.ioctl_{begin, finish} and drop
+mpath_head_read_unlock()
+- add mpath_device.access_state
+- add mpath_head_devices_empty()
+- make mpath_delete_device() return a bool
 
-**Step 1.4: Hidden bug fix detection**
-Record: Not a hidden fix. No "cleanup"/"improve"/"handle"/"ensure"
-wording. This is explicitly and exclusively hardware enablement — a new
-PCI ID addition.
+John Garry (13):
+  libmultipath: Add initial framework
+  libmultipath: Add basic gendisk support
+  libmultipath: Add path selection support
+  libmultipath: Add bio handling
+  libmultipath: Add support for mpath_device management
+  libmultipath: Add cdev support
+  libmultipath: Add delayed removal support
+  libmultipath: Add sysfs helpers
+  libmultipath: Add PR support
+  libmultipath: Add mpath_bdev_report_zones()
+  libmultipath: Add support for block device IOCTL
+  libmultipath: Add mpath_bdev_getgeo()
+  libmultipath: Add mpath_bdev_get_unique_id()
 
-## Phase 2: Diff Analysis
+ include/linux/multipath.h |  181 ++++++
+ lib/Kconfig               |    6 +
+ lib/Makefile              |    2 +
+ lib/multipath.c           | 1293 +++++++++++++++++++++++++++++++++++++
+ 4 files changed, 1482 insertions(+)
+ create mode 100644 include/linux/multipath.h
+ create mode 100644 lib/multipath.c
 
-**Step 2.1: Change inventory**
-Record: 3 files, 8 meaningful lines added (plus 2 copyright year bumps):
-- `drivers/scsi/lpfc/lpfc_hw.h`: +1 line (`#define
-  PCI_DEVICE_ID_LANCER_G8_FC 0xd300`)
-- `drivers/scsi/lpfc/lpfc_ids.h`: +2 lines (entry in `lpfc_id_table[]`)
-- `drivers/scsi/lpfc/lpfc_init.c`: +3 lines (new `case` in
-  `lpfc_get_hba_model_desc()` returning model string "LPe42100")
-
-Scope: single-driver, surgical addition following exact pattern of
-existing G6/G7/G7P entries.
-
-**Step 2.2: Code flow change**
-Record: Before: `lpfc_id_table[]` did not match 0x10df:0xd300 → lpfc
-driver would not bind to LPe42100 hardware. `lpfc_get_hba_model_desc()`
-would emit "Unknown" for such a device. After: lpfc binds to
-0x10df:0xd300, model string populated as "LPe42100".
-
-**Step 2.3: Bug mechanism**
-Record: Category (h) — Hardware workaround / device ID addition. No bug
-being fixed; new hardware enablement.
-
-**Step 2.4: Fix quality**
-Record: Obviously correct. Pattern-identical to the existing
-LANCER_G6_FC / LANCER_G7_FC / LANCER_G7P_FC entries. No new code paths,
-no API change, no behavioural change for any existing device.
-Essentially zero regression risk — new table entry and new switch case
-are only reached when a 0xd300 device is present in the system.
-
-## Phase 3: Git History Investigation
-
-**Step 3.1: Blame**
-Record: The `lpfc_id_table[]` and `lpfc_get_hba_model_desc()` code has
-been in the tree since the lpfc driver's early days. Neighbouring G7P
-entry was added by commit f449a3d7a1530 (James Smart, Jul 2021, "scsi:
-lpfc: Add PCI ID support for LPe37000/LPe38000 series adapters") which
-first appeared in v5.15. So the surrounding code exists in every active
-stable tree from 5.15.y through 7.0.y.
-
-**Step 3.2: Fixes tag follow-up**
-Record: No `Fixes:` tag. Not applicable — this is a hardware enablement,
-not a fix.
-
-**Step 3.3: File history / series context**
-Record: Part of the 10-patch series "Update lpfc to revision 15.0.0.0".
-Adjacent commits in the series:
-- 39d1d94166da3 — "scsi: lpfc: Introduce 128G link speed selection and
-  support" (immediately before)
-- 7f1e2c1cce1ca — "scsi: lpfc: Update lpfc version to 15.0.0.0"
-  (immediately after)
-
-The 128G commit is a feature addition (not a fix) that enables the
-highest link speed the LPe42100 supports. **However**, I verified that
-no other code in lpfc mainline references `PCI_DEVICE_ID_LANCER_G8_FC` —
-only the three sites this commit touches — so binding and operation at
-supported lower speeds does not require the 128G patch.
-
-**Step 3.4: Author context**
-Record: Justin Tee (Broadcom) is a regular lpfc contributor. SCSI
-maintainer Martin K. Petersen signed off, indicating maintainer review.
-
-**Step 3.5: Dependencies**
-Record: No strict dependency on other patches in the series. G8 ASIC
-reuses the existing LANCER_G6/G7/G7P code paths; there is no G8-specific
-behaviour anywhere else in the driver. Full 128G link speed would
-require the 128G patch, but the adapter binds, probes, and operates at
-<=64G without it.
-
-## Phase 4: Mailing List Research
-
-**Step 4.1: Original submission**
-Record: `b4 dig -c 49b9f31e52b21` located the original patch at https://
-lore.kernel.org/all/20260331205928.119833-10-justintee8345@gmail.com/.
-Part of series "[PATCH 00/10] Update lpfc to revision 15.0.0.0"
-submitted 2026-03-31.
-
-**Step 4.2: Reviewers**
-Record: `b4 dig -a` shows only v1 of the series exists (no v2/v3
-needed). Thread contains no Reviewed-by / Acked-by / Tested-by tags, no
-NAKs, no `Cc: stable` suggestion. Martin K. Petersen accepted the
-series.
-
-**Step 4.3: Bug report**
-Record: Not applicable — no bug report; new-hardware enablement.
-
-**Step 4.4: Related series patches**
-Record: The relevant companion is patch 08/10 (128G support, not a fix
-and not for stable). Patch 10/10 is a version bump. No other companion
-needed for the PCI ID to function.
-
-**Step 4.5: Stable mailing list history**
-Record: No stable list discussion about this commit (it is too recent —
-merged early April 2026, well after v7.0).
-
-## Phase 5: Code Semantic Analysis
-
-**Step 5.1–5.4: Impact surface**
-Record: Three touched sites:
-- `lpfc_id_table[]` — consumed by the PCI core for driver match; no new
-  code paths, just a new entry.
-- `PCI_DEVICE_ID_LANCER_G8_FC` macro — used only in the new switch case
-  in `lpfc_get_hba_model_desc()`.
-- `lpfc_get_hba_model_desc()` — called during probe/ioctl to format a
-  model string. Reached only when a device with the new ID is present.
-
-`grep PCI_DEVICE_ID_LANCER_G8` across origin/master returns exactly
-those three sites — no hidden dependencies.
-
-**Step 5.5: Similar patterns**
-Record: Existing LANCER_G6/G7/G7P entries are structurally identical.
-This patch is a literal template-follow-up.
-
-## Phase 6: Cross-Referencing and Stable Tree Analysis
-
-**Step 6.1: Does the buggy code exist in stable?**
-Record: There is no buggy code. The driver and surrounding structures
-(`lpfc_id_table[]`, `lpfc_get_hba_model_desc()` switch) are present in
-every active stable tree:
-- 5.15.y: confirmed `PCI_DEVICE_ID_LANCER_G7P_FC` at lpfc_ids.h:121,
-  lpfc_init.c:2608 — full context present
-- 6.1.y: confirmed at lpfc_ids.h:119, lpfc_init.c:2741
-- 6.6.y: confirmed at lpfc_ids.h:119, lpfc_init.c:2743
-- 6.12.y: confirmed at lpfc_ids.h:119, lpfc_init.c:2732
-- 5.10.y: no G7P present; driver older, backport would likely still
-  apply but requires verification
-
-**Step 6.2: Backport complications**
-Record: Expected clean apply on 5.15.y, 6.1.y, 6.6.y, 6.12.y, 6.18.y,
-6.19.y, 7.0.y. The three hunks anchor on G7P/SKYHAWK lines that are
-unchanged in all those trees. Copyright bumps may need trivial
-adjustment.
-
-**Step 6.3: Related fixes in stable**
-Record: N/A — no related fix.
-
-## Phase 7: Subsystem Context
-
-**Step 7.1: Criticality**
-Record: `drivers/scsi/lpfc` — Emulex/Broadcom enterprise Fibre Channel
-HBA driver. IMPORTANT (used in data-centre storage deployments, often
-via enterprise distros that track LTS stable trees).
-
-**Step 7.2: Activity**
-Record: Actively maintained by Broadcom with quarterly "Update lpfc to
-revision X" series, and many bug fixes are routinely backported to all
-recent stable trees.
-
-## Phase 8: Impact and Risk Assessment
-
-**Step 8.1: Affected users**
-Record: Users of LPe42100 (and compatible LPe421xx) Fibre Channel HBAs
-running a stable/LTS kernel. Without this patch, the HBA does not bind
-to the `lpfc` driver — hardware is effectively unusable on those
-kernels. Enterprise/distro users often run 6.1.y / 6.6.y / 6.12.y LTS.
-
-**Step 8.2: Trigger**
-Record: Device present → driver should bind. Without the patch: driver
-does not claim the device on stable kernels. Unprivileged trigger: N/A
-(hardware presence is the trigger).
-
-**Step 8.3: Failure mode severity**
-Record: On stable kernels lacking this patch, a correctly installed
-LPe42100 is unsupported (device is recognized by PCI subsystem but
-`lpfc` declines it). User-visible symptom: no FC connectivity. Severity
-category: hardware enablement — MEDIUM-HIGH for affected users (full
-feature loss of the purchased adapter).
-
-**Step 8.4: Risk-benefit**
-Record: Benefit — enables new hardware for stable users (distro
-customers). Risk — essentially zero: all new code paths are gated on
-matching the new PCI ID; no existing device can reach the added code. 8
-lines, trivial content, maintainer-signed.
-
-## Phase 9: Final Synthesis
-
-**Step 9.1: Evidence**
-For: (a) Small, contained, obviously correct. (b) Follows the stable
-rules' "NEW DEVICE IDs" exception verbatim. (c) Applies cleanly to all
-active stable trees. (d) Near-zero regression risk. (e) Broadcom-signed
-and maintainer-signed. (f) Strong historical precedent — smartpqi,
-iwlwifi, arcmsr, k10temp, hid wacom, etc. all regularly get new-PCI-ID
-additions into stable.
-
-Against: (a) Not a bug fix. (b) Not tagged `Cc: stable`. (c) No reviewer
-explicitly nominated for stable. (d) 128G link speed support is a
-separate (non-stable) feature patch — but the adapter remains functional
-at supported lower speeds without it.
-
-**Step 9.2: Stable checklist**
-1. Obviously correct and tested: YES (pattern-identical to 3 prior
-   entries).
-2. Fixes a real bug: NO — but falls under stable's explicit hardware-
-   enablement exception.
-3. Important issue: MEDIUM-HIGH for LPe42100 owners (no adapter
-   operation without it).
-4. Small and contained: YES (8 lines, 3 files).
-5. No new features/APIs: Adds hardware support only — no new UAPI,
-   sysfs, or module param.
-6. Can apply to stable trees: YES, clean apply expected on 5.15.y
-   through 7.0.y.
-
-**Step 9.3: Exception category**
-Record: YES — matches the "NEW DEVICE IDs" exception explicitly
-documented in the stable rules. The `lpfc` driver already exists in
-every active stable tree; only the ID and a model-string case are new.
-
-**Step 9.4: Decision**
-The commit meets the stable "new device ID for existing driver"
-exception cleanly: driver pre-exists in all active stable trees, diff is
-minimal and template-matches the G6/G7/G7P predecessors, regression risk
-for non-G8 users is zero, and affected users (data-centre LPe42100
-owners on LTS kernels) genuinely cannot use their hardware without it.
-
-## Verification
-
-- [Phase 1] Parsed commit message: confirmed no Fixes/Reported-by/Cc-
-  stable/Reviewed-by/Tested-by tags; only author SOB, Link to
-  patch.msgid.link, and maintainer SOB.
-- [Phase 2] Counted diff hunks: `git show 49b9f31e52b21` — 3 files, 8
-  meaningful lines + copyright bumps.
-- [Phase 3] `git log --oneline -- drivers/scsi/lpfc/lpfc_ids.h` —
-  confirmed f449a3d7a1530 (G7P addition, 2021) as nearest precedent.
-- [Phase 3] `git log --oneline 49b9f31e52b21~3..49b9f31e52b21` —
-  confirmed series context (128G link speed is the immediate
-  predecessor).
-- [Phase 3] `git grep PCI_DEVICE_ID_LANCER_G8 origin/master --
-  drivers/scsi/lpfc/` — exactly 3 hits, matching the 3 diff sites; no
-  hidden dependencies on other G8-specific code.
-- [Phase 3] `git merge-base HEAD 49b9f31e52b21` → 6de23f81a5e08 (Linux
-  7.0-rc1) — commit is post-7.0 (targeting 7.1 window) and not yet in
-  any stable tree.
-- [Phase 4] `b4 dig -c 49b9f31e52b21` — found thread at
-  lore.kernel.org/all/20260331205928.119833-10-justintee8345@gmail.com.
-- [Phase 4] `b4 dig -c 49b9f31e52b21 -a` — confirmed only v1 exists (no
-  v2/v3).
-- [Phase 4] Downloaded thread via `b4 dig -m`; grep for
-  "stable@|NAK|Reviewed-by|Tested-by" → none beyond maintainer SOB.
-- [Phase 6] `git grep PCI_DEVICE_ID_LANCER_G7P_FC` on
-  stable/linux-5.15.y, 6.1.y, 6.6.y, 6.12.y — all contain the anchor
-  lines the diff applies against; 5.10.y does not have G7P (pre-dates
-  it).
-- [Phase 6] Verified context around `lpfc_get_hba_model_desc()` and
-  `lpfc_id_table[]` is identical in 6.12.y to HEAD (sed -n '110,130p' on
-  stable/linux-6.12.y copy) → clean apply expected.
-- [Phase 8] Verified that full 128G operation depends on commit
-  39d1d94166da3, but basic bind/operation at ≤64G does not — confirmed
-  by absence of any other G8 reference in the driver.
-- UNVERIFIED: Did not actually run the backport against each stable
-  branch; clean-apply assertion is based on source-line comparison, not
-  `git cherry-pick` dry-runs.
-- UNVERIFIED: Did not confirm whether 5.10.y is still actively
-  maintained enough to warrant backport (LPe42100 is new enough that
-  users on very old LTS likely aren't the target).
-
-The commit is a textbook application of the stable "new device IDs to
-existing drivers" exception: small, surgical, maintainer-signed, zero
-regression risk for existing users, and enables real hardware for stable
-kernel users. The absence of `Cc: stable` is expected (this is the whole
-reason for the review). The companion 128G feature patch would be nice
-for full performance but is not required for the device to function.
-
-**YES**
-
- drivers/scsi/lpfc/lpfc_hw.h   | 3 ++-
- drivers/scsi/lpfc/lpfc_ids.h  | 4 +++-
- drivers/scsi/lpfc/lpfc_init.c | 3 +++
- 3 files changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_hw.h b/drivers/scsi/lpfc/lpfc_hw.h
-index b2e353590ebb5..6326f7353dd68 100644
---- a/drivers/scsi/lpfc/lpfc_hw.h
-+++ b/drivers/scsi/lpfc/lpfc_hw.h
-@@ -1,7 +1,7 @@
- /*******************************************************************
-  * This file is part of the Emulex Linux Device Driver for         *
-  * Fibre Channel Host Bus Adapters.                                *
-- * Copyright (C) 2017-2025 Broadcom. All Rights Reserved. The term *
-+ * Copyright (C) 2017-2026 Broadcom. All Rights Reserved. The term *
-  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
-  * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
-  * EMULEX and SLI are trademarks of Emulex.                        *
-@@ -1771,6 +1771,7 @@ struct lpfc_fdmi_reg_portattr {
- #define PCI_DEVICE_ID_LANCER_G6_FC  0xe300
- #define PCI_DEVICE_ID_LANCER_G7_FC  0xf400
- #define PCI_DEVICE_ID_LANCER_G7P_FC 0xf500
-+#define PCI_DEVICE_ID_LANCER_G8_FC  0xd300
- #define PCI_DEVICE_ID_SAT_SMB       0xf011
- #define PCI_DEVICE_ID_SAT_MID       0xf015
- #define PCI_DEVICE_ID_RFLY          0xf095
-diff --git a/drivers/scsi/lpfc/lpfc_ids.h b/drivers/scsi/lpfc/lpfc_ids.h
-index 0b1616e93cf47..a0a6e2d379b86 100644
---- a/drivers/scsi/lpfc/lpfc_ids.h
-+++ b/drivers/scsi/lpfc/lpfc_ids.h
-@@ -1,7 +1,7 @@
- /*******************************************************************
-  * This file is part of the Emulex Linux Device Driver for         *
-  * Fibre Channel Host Bus Adapters.                                *
-- * Copyright (C) 2017-2022 Broadcom. All Rights Reserved. The term *
-+ * Copyright (C) 2017-2026 Broadcom. All Rights Reserved. The term *
-  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
-  * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
-  * EMULEX and SLI are trademarks of Emulex.                        *
-@@ -118,6 +118,8 @@ const struct pci_device_id lpfc_id_table[] = {
- 		PCI_ANY_ID, PCI_ANY_ID, },
- 	{PCI_VENDOR_ID_EMULEX, PCI_DEVICE_ID_LANCER_G7P_FC,
- 		PCI_ANY_ID, PCI_ANY_ID, },
-+	{PCI_VENDOR_ID_EMULEX, PCI_DEVICE_ID_LANCER_G8_FC,
-+		PCI_ANY_ID, PCI_ANY_ID, },
- 	{PCI_VENDOR_ID_EMULEX, PCI_DEVICE_ID_SKYHAWK,
- 		PCI_ANY_ID, PCI_ANY_ID, },
- 	{PCI_VENDOR_ID_EMULEX, PCI_DEVICE_ID_SKYHAWK_VF,
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index e9d9ac7da485b..f29e4b8fd02f4 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -2752,6 +2752,9 @@ lpfc_get_hba_model_desc(struct lpfc_hba *phba, uint8_t *mdp, uint8_t *descp)
- 	case PCI_DEVICE_ID_LANCER_G7P_FC:
- 		m = (typeof(m)){"LPe38000", "PCIe", "Fibre Channel Adapter"};
- 		break;
-+	case PCI_DEVICE_ID_LANCER_G8_FC:
-+		m = (typeof(m)){"LPe42100", "PCIe", "Fibre Channel Adapter"};
-+		break;
- 	case PCI_DEVICE_ID_SKYHAWK:
- 	case PCI_DEVICE_ID_SKYHAWK_VF:
- 		oneConnect = 1;
 -- 
-2.53.0
+2.43.5
 
 
