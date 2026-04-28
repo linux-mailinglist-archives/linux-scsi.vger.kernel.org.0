@@ -1,88 +1,88 @@
-Return-Path: <linux-scsi+bounces-23400-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23398-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YJdiLayb8GmGVwEAu9opvQ
-	(envelope-from <linux-scsi+bounces-23400-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2026 13:36:12 +0200
+	id 4HdzEc2b8GmGVwEAu9opvQ
+	(envelope-from <linux-scsi+bounces-23398-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2026 13:36:45 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D9FE483EA3
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2026 13:36:11 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A307E483EE3
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2026 13:36:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2522431E0E11
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2026 11:22:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6345F322A9B9
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2026 11:22:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D78B3FE669;
-	Tue, 28 Apr 2026 11:14:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDEFE3FE37F;
+	Tue, 28 Apr 2026 11:14:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Q37QlJje";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Gh6arTgY"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="WpvlRGal";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ynlb/UN5"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354FC3FE641;
-	Tue, 28 Apr 2026 11:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B003F1672;
+	Tue, 28 Apr 2026 11:14:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777374848; cv=fail; b=kNFtg7Z0xZqKvvz9OnhFDVWYLUhjXAPy62iBNjw6NIl14lrDynIk/YNglDY+7wRonex973ZtUERGeK1ChCDGP0Yjz3+3VzhVwN4YOk29AgmBvLPyBN6zBwrZUUTim9cWgHrPAaQW7cwa695dYc0zkpIdWEJFmrWuScCnpmj4GDo=
+	t=1777374844; cv=fail; b=kq364/e22xnIWtcuUezHNLeFaL6X3KZtrzzBgKm4GSjcwa3q+ZRUTKJuCGNV92bM0xZ/3w4sTNth37tbLz3MNIRn1tNHpMIkpX7KrKrG6hJgIwC9OMiF84PFHkgJ7xauCtDJJqXpa3EKnrBB+d0yhJM0OebAdOaUWdsa2HaiCfQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777374848; c=relaxed/simple;
-	bh=TvZ6vh5BfvS/Y/X/Y1OWfzBOgV14MZkruxAs+OfRzvE=;
+	s=arc-20240116; t=1777374844; c=relaxed/simple;
+	bh=g+LudNC6jc29kPE90yjJahDHQtMOepO9qaTd6sOmAyU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nPcnzcpQ3j9WPR+fuuZfe7UBSIqX1Gi57vx7/Uar6gfQKOJEQ+GEdlL5KKszWMDdA/MEWx7gEUgjE6TkY8JphjwWNCxCacHh4u1yfMIz2NVbpl/xDo2RrvK6h5sXTQo22eg8UKq6YEagT051gssMds9vI670jdwwW9sCaFbIstQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Q37QlJje; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Gh6arTgY; arc=fail smtp.client-ip=205.220.165.32
+	 Content-Type:MIME-Version; b=V9SqajMZcF/4wI7MniutBTuX3m3g88HFGSxUwZd5MOtinzTzzC9Q0kOPSK3bbeZvZ9ys54tCcVHB1kEHxnWUkgNGsBN8UZzBFSf/4mO8E4kkO+u3PMukBDmOsjQXIu/QN8F+E688fZkfihj0A1OozFJJPWp2aXcOELoma5aOHcI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=WpvlRGal; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ynlb/UN5; arc=fail smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63SAIeI31905229;
-	Tue, 28 Apr 2026 11:13:30 GMT
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63SA7jTp1905280;
+	Tue, 28 Apr 2026 11:13:33 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=5wFOpu0X7FTsWVkHtSOcaOpDbWwzcDbaK4r43lDnoBM=; b=
-	Q37QlJje9Ds+vTrL3na0pG1y78rWGNfLSMBng79Y9+btapOhYhgn3Bzvkarr7Nc3
-	iGFVBy1QqdJobX6UrMFZ8YrRluh75XruX7qlv5MmRK+GlcHX/IXQkBJbAzAJJAQk
-	ZRZjlV9DwHpePM5VRVEbHyOU1miNmWgbVnW8QxxtwLUE3VOrfxzbd/TyB5sKkknH
-	zOSw/dlEV5JrIFd1jEXczI01LS1P1Mims29O18dMy7VlrgaAii/93VVoRvnqa8Ct
-	2UovdZcmfIT9Q7oRWSh3gtkG6qHozHRueoaCrscBIr7n/gE95CSWslBDhoaFoP9H
-	40c5ke22clqxhmVV+qSX1g==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4drng8fcr3-1
+	corp-2025-04-25; bh=xqSwWDoNXnAASUvw1dGQlUqfgqUVrMRkp2cptIht14Q=; b=
+	WpvlRGaltjic66YjPqOk7aSg/q6ln0HrLJ7eDPvPQ+steMQ3bS/7xTSAZah+W2lI
+	a/FrcBNVRkMes48QifCwU++pIxTYLkmQR0cYHWPk0NJshzQrvAKGQfNnraUVAPYk
+	+9bHsT84XPVuwmYMyDDp/lQXbjDLRji77ThgL8UaowMPr5487MszxvcmgU3cdSsJ
+	yKnXuK2aS87oDx6an1zU0weNplSTNN611GShOACFx+gM74zWNgiIPWVj2f3IhkTK
+	PhifSA/yFmT1r7DNYaVzDGW0jWna/brF2e9x2/KwhM7dM3JRk729lpJOXToPfezn
+	qhyLwyAMXVF9eg7WDCRLpg==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4drng8fcr8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 Apr 2026 11:13:29 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 63SBCmIj038793;
-	Tue, 28 Apr 2026 11:13:28 GMT
-Received: from co1pr03cu002.outbound.protection.outlook.com (mail-westus2azon11010043.outbound.protection.outlook.com [52.101.46.43])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4drm2ccjxt-2
+	Tue, 28 Apr 2026 11:13:33 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 63SBCkSE004731;
+	Tue, 28 Apr 2026 11:13:32 GMT
+Received: from byapr05cu005.outbound.protection.outlook.com (mail-westusazon11010019.outbound.protection.outlook.com [52.101.85.19])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4drm2jm3mc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 Apr 2026 11:13:28 +0000 (GMT)
+	Tue, 28 Apr 2026 11:13:31 +0000 (GMT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sfSikzveQT7AB9FdzZlzIrsKUzTZbf7RhcJrRXw1lE1cGIUkKYpsXyt7hkHJtxa+VQs24w1AlB69fRIVZcK2nb+OpqxoCNW21aJkAatf+ATbyz3JjX8MA5yZdMW2ETjMxXmsYEu8zNVGOm9ygX2UxvAYRDs6Fs4PShR6kbWXPz/cFqEQrb9IGS7cs3uE/I1/tu0KixvVzqu/jSZwlbFFBzncuh1VOuqbnTfu2rgWU/45J2iVBjtqGtvnMPR7pgEhzXNZnOnwGc4h+cpiriqVG2Ud1Se16ZZGobK8Okwd3NaO5WmBeYZdyrlO/Q6vk+Rs1QDDO5Z0bxnWsMwQvJ0X3g==
+ b=d+3Hful1viE3whDJSIh74QrZMWlDCC4tfZwihzQUNKcIqcH/fq/MpV+JE/JQFWsVkrMJdPFMnC2X6pPF7m7krviivb2sEYKGO/s/p2fz1cbe8xNAWENVMD/inDPpRfuJAubkv4NvLNbTPK5yiRoId7vfvStZ8UPc0MKdoJPTahFxYG2kyKxY2ssrwXRL5oBZ5HYXRgSaqh4XwznwkXhnta9NWkhUH53YqWITo3KWQlPJ2TI+dhvCYAcJlu6/egX18L83ICa9AYI0CFoPuwRGvHiGxGIEA9bXbH6qOKTjcemUl/Yi1NVfFFoyt4QPr8+iBqYOox7wrWSJmSnvNx+RgQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5wFOpu0X7FTsWVkHtSOcaOpDbWwzcDbaK4r43lDnoBM=;
- b=mnb2jZtCLBdaYdIGr0Aua7P/Nt9vHwtNOtdi1s8Yc81bXAlDTNkAcX3jH+ztKmsozs3VFP51/Gq6pWdRIagtMaLgDvc28+ys27LeZZK0JMHmkbtyP3CvXLxr/3hwNHANb/jnDxqLSq8iGOwCU7k42Jg3T5tk5rqJ291ks6WYirgqUD0HkntGs47rieti462Ii4rK9A1+XOgGLevDElbbgrWLtRGBKa9hREsGE5K96ZNlEYRUPGYHwS6nznG06dhK28h2MlPadSE3K0sCFZfCpjyw8eTLIM/rZv+GC73I8l12SpKmasrWoVuVoNMhwZ1fu7RnoUwQyYvW+ecmZE90aw==
+ bh=xqSwWDoNXnAASUvw1dGQlUqfgqUVrMRkp2cptIht14Q=;
+ b=xi/a9JwP1nH2fKXNhGLIgoxS/9uTIBFDHz9ufozuex7gchFs+6zPyiDad4tZNLK/fVOU/Axmv7bpEmvBsyGoDZACi/b/voK5vorOOzjUBMGsiqrJtW7iwJTo5EU0U75f3CZfYiXbcSZ7oYtm5TmlQoVQNCu1aGbm38e43amdqeN9bGEP790SFh3IqNWtWsfg1ZBOaxadw8ZhwvuTJT8IHFbAQT5b216oxLrD8AiKHmig5dMaHcBZn7XNUCtFrHazfLDK7ADcTW9YRs9idRhTehgEVuf6QUGqnIwMPNmn6/Qkt/nvFX+6dmUxCIUuhs/oM1kHzl8nSL9nYzK1mk2Eag==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5wFOpu0X7FTsWVkHtSOcaOpDbWwzcDbaK4r43lDnoBM=;
- b=Gh6arTgYjOWfp2mIjZGqmFE1bNwBu2hULyY2eD1fqwrcVIMiQW7rBcMh/11DxH3joP+MwoFNkg8YnzPOxZDgh9tS4C8P46LJd/buE6dQS0jReEztNP8sNkMDy7qWPTDR9DJ/Ly+0ATnn5X1TQ6sV0j6hcXnS538oye51N92G/HQ=
+ bh=xqSwWDoNXnAASUvw1dGQlUqfgqUVrMRkp2cptIht14Q=;
+ b=ynlb/UN525b872wd6EeynF8AdPBJt8CQeaDQctS2ZTx6lmLVoxGNv4w+Z6/eJK2nTvO1njWHIJGea1Tz+XG3cYRuUNe28rZXc5/lx66rB+Urt5QsTgsSIeJw3oJ/FJvUCcLFYzZcORfSlYqwOasmGc18hXAnPy6LyQ8LM8s8GaU=
 Received: from PH3PPFEDB06D67A.namprd10.prod.outlook.com
  (2603:10b6:518:1::7d6) by CH3PR10MB7458.namprd10.prod.outlook.com
  (2603:10b6:610:15a::17) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Tue, 28 Apr
- 2026 11:13:25 +0000
+ 2026 11:13:27 +0000
 Received: from PH3PPFEDB06D67A.namprd10.prod.outlook.com
  ([fe80::234c:e047:21c1:6d16]) by PH3PPFEDB06D67A.namprd10.prod.outlook.com
  ([fe80::234c:e047:21c1:6d16%8]) with mapi id 15.20.9846.025; Tue, 28 Apr 2026
- 11:13:24 +0000
+ 11:13:27 +0000
 From: John Garry <john.g.garry@oracle.com>
 To: hch@lst.de, kbusch@kernel.org, sagi@grimberg.me, axboe@fb.com,
         martin.petersen@oracle.com, james.bottomley@hansenpartnership.com,
@@ -91,16 +91,16 @@ Cc: jmeneghi@redhat.com, linux-nvme@lists.infradead.org,
         linux-scsi@vger.kernel.org, michael.christie@oracle.com,
         snitzer@kernel.org, dm-devel@lists.linux.dev,
         linux-kernel@vger.kernel.org, John Garry <john.g.garry@oracle.com>
-Subject: [PATCH v2 12/13] nvme-multipath: add nvme_mpath_get_nr_active()
-Date: Tue, 28 Apr 2026 11:12:55 +0000
-Message-ID: <20260428111256.1778475-13-john.g.garry@oracle.com>
+Subject: [PATCH v2 13/13] nvme-multipath: switch to use libmultipath
+Date: Tue, 28 Apr 2026 11:12:56 +0000
+Message-ID: <20260428111256.1778475-14-john.g.garry@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20260428111256.1778475-1-john.g.garry@oracle.com>
 References: <20260428111256.1778475-1-john.g.garry@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: PH7P220CA0135.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:510:327::35) To PH3PPFEDB06D67A.namprd10.prod.outlook.com
+X-ClientProxiedBy: PH8PR07CA0021.namprd07.prod.outlook.com
+ (2603:10b6:510:2cd::10) To PH3PPFEDB06D67A.namprd10.prod.outlook.com
  (2603:10b6:518:1::7d6)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -110,88 +110,88 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PH3PPFEDB06D67A:EE_|CH3PR10MB7458:EE_
-X-MS-Office365-Filtering-Correlation-Id: 28274525-2f5e-4ba7-bf54-08dea5172a50
+X-MS-Office365-Filtering-Correlation-Id: fb6f0f42-b093-436f-0c5b-08dea5172b85
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|18002099003|56012099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	sUGZ6KU74bsrxUo4gT7VOseN581ET1TdShXXOqs5qf55xao3h9bHqy96LEwgt4WBkuT7yPWvqXTSccoBVfKKQv9WyM5p39+dwmQe4gUS98bGk17NxJPaMDGnbd9m3819DkATEn4UUIthOpMUtr+9XMnYqhmP96s/um9M/xEqhT1WpE/P+vHF0EONRQPFmbq6xgJaEnQq5ZtPcVobzVVOEe27XBoktPMs241U1F8Ar2m1/g6qC85Kck0T9Bjg+QU+rCKU2S7ar4M8ZX+wF23fKJ2WTWBtheltIQ8jm/eA1sOcK0erBi6MAHj5n/NGKWoQ8un3N/p36c2L8EUzfnlNjSaF5+IhztGPXh6a9aUn+yXqlhgQb3Ij+znF0GWk+f4SDiLHUMAO7LWysLFLFbnp9qB7eamfG6LIk/N2HIV6khx1VyXBhWj9At94mE26Ot5aEHBAUmg0MhqS2vl216dSgLtUp0ZHbEb8yOYSUcGo40irAPkErC+p87sG7jATi89ZltTdnwfxmB2vbOyjovIv0d8pPjjrKObkL6aOJ/oTNElui5jgYIxBwuXYZ/K/4hgm2nbEzGYY69mKGG5GHO8I7M2Hz+8t2JrRMz1CpIsC6J/8TV9mSM0aULwAk5GTHuSZTPz+9QtMOHDV8pRAj6B/BWKAegbR5+2rubJmHqtoCDrJEvgPHwXQO6tS5zwjuryq3nLzctpAx66Ku5i8+TrHzU3YItICOT/rp4kOXluOHEo=
+	VIpp44UQ8FxudcbmyE9Xn1dwNFBy3nISISbmSaOVdDPat/nJ+b8s0z/DAFMFonenXR2vW61Pu9EcWAfcDAQXTB7mVFIlc/Gq/zWwBedrs6qRKJyAAg+8nkmjOc9jzu/SP6xcBZ1kQ0VZjPg66lJERjYUxnQcHRSfaGfRAmib4J/p8QYEy0evAhxxjS97WikffmFySz98/8s022IvEDZwUkHs6Li3li/sw1ZrvJoNzaVbwHscE3pFCyatzPVAujABgfx2sv/uOrMVhASc5fYZcx/8ZGRzXqoszOM0jxF7mrzoZA9LdMaoHJePlr7Jf+897hVhXY4duQXR+LaAVXj9usDWUMq0/tj5rSHHedE7kyjNRB7wXAbSQzXuQUeeidMotXZ9kZpSwTnWDL2FOfjgK7bZ+LiRhq7N49V5dyov+8uc+804MsXl1eYF54isoDhMEQM4jFLiSRagTep1ID4unBzxNwpjmrsb0TD2CHmaSNAKdwmTRJ4pTqc/YiddFNQn6pNvUZLK+4Q0dDI+9Uj7rAwwpqriXVR8Vbd4kFlO35UCD2DFiPQ8Ho6DK6RKTsPyjYwIJtiyKeZU6opAkwc4iu8WEF+rg/Wj5Ck7iy21m1FPujjVSJdHQYpk9Zo86NDhmLPSglN1GpW7hL0l8jyINNQJ098bUsjtS8kLCf2BO1dq+6b6Y3o35ipet6KctQn2OzDPB//S8fhIcy7Vt6s8u2ghjaNGx9YvHvsNtrOZBcs=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH3PPFEDB06D67A.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?v8OHubeF8pF2BLUcofPQ5aLcExVJN8jqwoaiuUZuGwZvzU4UNBSTkFtmQr5K?=
- =?us-ascii?Q?oOJBbDxTBQXdT2dfSzgCuYPmwnpa6bB6fnd4bdEL6Qgh5oQAaU9fxIk6DjHR?=
- =?us-ascii?Q?xXq07Ai386VhiSqD1jgKnAqCiPtUJVKkWecXtORn6SvlA9MW3YvYuLyelF6w?=
- =?us-ascii?Q?2uMrNGfft3Cz31y2oKza8LWC9j/RNW4E5MwRkfH3r0zUYSAvAiod2XyPtWhM?=
- =?us-ascii?Q?zNv/7tUogjzvVtVL9LJKt8Y1tmu1UQ4fG3ukPuPViYko+E4s+Pnsd8yZwO//?=
- =?us-ascii?Q?F6QY4H5h8aF1ZT360UIAEuxQFF71pO1QzTAdpf6UKcumd478n7RstG7nhAZa?=
- =?us-ascii?Q?pfSBa42jGg4YMe7QFfoWSmvwxJaAIelK5HGhA3rRQu38d+xSr5P3EqHna4ep?=
- =?us-ascii?Q?71iRb8SlIVDX7b9Rn7U46/hi+0b+MEPKxugyblgyiDF2k8jZeDiwQvvIIcMc?=
- =?us-ascii?Q?sk0spfEmY8iA84bD3T+o2Q/DPoCNih08dA/Czf87NpXv+K4zEBrwmyVz+e7t?=
- =?us-ascii?Q?U6Xs+EJ2BiTED0wHeS40Ador+lJAXqDEJJLmDco3T6E0uedSc6lQmfV1YdhA?=
- =?us-ascii?Q?eer8bEjeQM4wRYBLbah+sx+DZcb0UI8QV0mjS0yrtwtfkQ371ZKjDcgNTzCn?=
- =?us-ascii?Q?70ltdY/NcXIoi1LkYVmLnydtTYEwJtOjUr6Otqa08eFQbPVAHtfhzNrLdRbj?=
- =?us-ascii?Q?7eAGNoRhORFBE4wE5YTLRKCVgW9CUl6rp6KLsECCg1RuSsiLd7hVEnHEO9wv?=
- =?us-ascii?Q?TIHtypIc368GaBoJkeISWweT6z8tietRrjAiERknbuO/iYaw5hSQhGRZTzRl?=
- =?us-ascii?Q?cUm3EWZSTqvsz3l5UPLLYKZAHRX2HKbtxQEEycCr/4Eu9YTk25Guy917X+K0?=
- =?us-ascii?Q?BMFzbl6TcvVoyXNB79KLftcGQweyq1cZSDAMO0cVJB7vGCT1cUvI4eYKWj0k?=
- =?us-ascii?Q?r3yLNxCL1LxQ3bRFxyN3LziAhjVNX7D/ljQCVVqY7QtU1wzVi3MVt4dFsng4?=
- =?us-ascii?Q?DgQt4jHx6xgDwzww9yNe+NbYD4+cDWovoR4TbLCdWOW+JsY+eYq4m3+3kq10?=
- =?us-ascii?Q?lJ0LaHL/LhL9fp/OK+6QpCqM43eqmbcAcak7mXecyDSdmGd2ezbg/uz4W058?=
- =?us-ascii?Q?ZHwaL7JRoSF2Y0f/Gve0fswJR/TKe4+Ht5jIsvQMXKjDoDa6VY4LtQ/ieu6a?=
- =?us-ascii?Q?oFq4tNlvKibyoWlOfCw8DySCwCiguagqVlQypQWSUMSD+1bYOjp+7Z5GA4xs?=
- =?us-ascii?Q?K9D8r0zZZWFG8BOz/5/Mr1K1SLbAVeKIJE08d6xcpBqAk77TMhLrrD6FjQHT?=
- =?us-ascii?Q?Ovf89RTQDv4KgQBioWfIiECeF3VwjF5wFynTV6cSa72aeWvCWrAzTVfTBPDY?=
- =?us-ascii?Q?FCJhai0lzThhsiEeN8FDYBVgn1fxrAj/tm9VzMf2bGbzN4HsG5OR56/n8Y+V?=
- =?us-ascii?Q?ImpfqXAdVDxBC+SeBMgqDuEGyz5TdhAmeNgpFZwYgXnYpxp70wUyr6KD99Jl?=
- =?us-ascii?Q?jfIM0iJ5R7IKEWqgeCFRflcotITehfbJTHdBINs9ay4HfNaaGy7xvKqbpo/k?=
- =?us-ascii?Q?ts5z5mWpMsd+iJFABNZ8iW9aguurZcmuQ4TyoGbxHclKBLFSXz1QBehh1/Xk?=
- =?us-ascii?Q?21aYkz09MNFbi/lsdtXU2I3vX7L4LdSqQq1MiO3dtSLf5B+ClQL2lagmZzHn?=
- =?us-ascii?Q?0ZBa2uvWwveVriSc5jB/RryNOg/Rrwv6KTFGHit+Rhfu5h0NxpWTOWk7vaUp?=
- =?us-ascii?Q?2jUG/3JluS16rVvBPoVbAy0vsidmgC4=3D?=
+	=?us-ascii?Q?64ViN+AZCBexrUvTaSBPpiJ94paOZ6noN0RzT4kJyqhbb+cuhCaiv7YoWuLv?=
+ =?us-ascii?Q?hPnSzG0qzu4hKKSvpPN2Iw7WWXs5Ogdf9Rx8MjqqqiIh/VKqCpGBtKZlOYD2?=
+ =?us-ascii?Q?q9qYMw5WCos3YmEl9Mq29MYyoScBwrfiEzhiBwzAKm/aqxUr6CtxYa+X5LsJ?=
+ =?us-ascii?Q?y+2IBJ6k1TpPV07IMmFx6FwedjmPydugi8wUM7p9C+FFfs8lg6eJ21B/UIES?=
+ =?us-ascii?Q?TqgtbcK7JjluL/8YJbkKe5f8xvVaP/JhUr08EAA66pNV4dhHB6bdxRwQznTl?=
+ =?us-ascii?Q?oEuPsN4ldRsVc7lkP+7C/7usnl/Vui5R9Zsk5vqze/1DFzkXIPgB8y/q0DQL?=
+ =?us-ascii?Q?3b2vuDWH9ObJQeo9J0TuKCUPzRu5q1/cZoHT+10hKxDCUnDIRfczFnSx2c3e?=
+ =?us-ascii?Q?pHZcVaIlpImGgOlBqvJZsYAG05eRaCVMf2L130+/fB2vUwy/kHW1LsE6zj4+?=
+ =?us-ascii?Q?Fcd9xECbm3GBkQNKk8Jx3qZ50P/79ZFm69ltLUt+RK0Qr24mtCT6DWFSRwmB?=
+ =?us-ascii?Q?PRpsQdIDGJby3CeSFV0YMVV2Fz2+1QayXBI0E0PgQCwt3r1D2pDKpHaLN+Ey?=
+ =?us-ascii?Q?AsHPuaMgj51J+5lcokTnAtuuRZIl8O+IqRz0SfpcYOtRHO/ZM3Fwojvdhrux?=
+ =?us-ascii?Q?+v7/yAeURwZnIShvfWs9XlJH0v9OXjMB3tNYeIhD9l3NADsPrNdYj5e4BTp0?=
+ =?us-ascii?Q?/f8GLB0WKYFOqkkxWpH0z0+IwHrNjxqJK67gk3TY09WbhxIUm9+Jq58/BsBN?=
+ =?us-ascii?Q?jc8Yr1r2WiSYZG9xId1yCv5rEOPayUeaen0teE38dpUlPUXG/BPPay1ZUOVg?=
+ =?us-ascii?Q?pp+zf0vtb0CS7/r/ErhA5rJV8qxIDLjZiQiRc3cTuXtM3BZAxTLrkA9FOKX/?=
+ =?us-ascii?Q?7YNUV6lYfg+nG5dG+fozIxe4nh8Qmo99+zi6jer8FzRMwVHzPayGym9AuyIT?=
+ =?us-ascii?Q?ZskFFz6zf8ZFTgOMOKj4E2m7As/bjOVUhclWT8luLg2BQcCoB4C0A11e1r5n?=
+ =?us-ascii?Q?VyOeFPXGC6RI7tUKj1RVzv/IoU3zaPIRE1PAaczolw1DTcvyrRszL3Fiudfc?=
+ =?us-ascii?Q?l8c1WvpJq3s1I92QanS15GKiYpm5UFRrThb6jjP4u4zrFLpv69JdyB/X/21B?=
+ =?us-ascii?Q?Rb9FN8trIkvFV3t7vRTqIIKOBXKPPPcchibOao6IzwrzXwO2IwScd08ngWKC?=
+ =?us-ascii?Q?Gybr229iYNkfOVGW7IeJJ5IE1HD50DuliddJwG77WCIEwyIvzLxTVrns/gXV?=
+ =?us-ascii?Q?raxvsSgSpO/qSZa3Vg55zA/w/rAoHsqc19HmdBVQEXoIMVhyH+v+3TIh3OtU?=
+ =?us-ascii?Q?8Kueq08KSnyCMi/ZYXZ6MBxelXkRxQynodil41nVOI6dPj7x0iF+rAOHXnAz?=
+ =?us-ascii?Q?6pr7wfy8j0arl2FpHXiBWItTQcyXShkEnfIypDwVWh0h7vdhqagWfKL7CPES?=
+ =?us-ascii?Q?MV7OeExzrt/MGdWl1gRMj7wwKKHrMo72nWgajDjHaUlRy6Y9vFF54f3oiOJe?=
+ =?us-ascii?Q?Zf643qDD+3GZ4OXRLdOJ5tbqsUkWE2YC4cmIHvvp18BtZ3icLf+NIjD+pMjX?=
+ =?us-ascii?Q?9yj0dvDJ3fnM9SI6RtnBux/FjifDg13xjR/Y1QbTQcu+AE+ke7pvyHrK59cx?=
+ =?us-ascii?Q?VNXjivrPRWvmUvXIxnrNN8NaAfX6uamjes+HmqZUHIxv291bzB7QaP4rly4x?=
+ =?us-ascii?Q?B2GAgmIK4Dqq3V+u6yY+tRYU0FuUkzN/JVa7nXMzOPgEdxkrN5TeCgsmqp+2?=
+ =?us-ascii?Q?eq7UnjZrbQq1RFxGbVoYiFbdDZnBKdA=3D?=
 X-Exchange-RoutingPolicyChecked:
-	qFcmXyXMYQtO+8C697ijFr88wjx+j/Xgc0F4nhHRecTOlF/1hC29VBalPzQsC6ACZE/p17CBfw+16UsTalgBiupEDMUvAFrmeGOsdlda9WNXU8DE5Z5QsMSxwMmuC25ZGphVDHhlFst+a8C69DJqZvBDK5hJho60q1M/f1NoopZv1SqAX/ECMRHHqFNPj+GcQAmIXDpmctbGoCPHV5f1h10W7ZUOIOpWkLS0c+4tharER6LaqfadLwEghrjYaSrQMQl/Wnn6Y0AKj8HdGTrTlmnMLwcedTIdwBrfkAPVJQHAS4V6yTLGT5P5km4c7GvvvIvlP2JPzP6bB7f31A7IpQ==
+	mnaZVGxWt2fuQUKCx7UnIexKjsgvDMXvjHuwI8BI2Zr6Mt6EGqmQxPJDoyGXMCqH4MxfhvNEm8bR6sJxNc6obsQXaQT2t+ZlIrSxQqnMhtnau9cd86N9i2CG2Q3o7js8xUIjuU/dtHkbcQtmHIFOkgoVFMI4WXtubmL3MRPsSlqiUCaPX617yoUKblcaMCuEP+QQgU+KnpA/BLdgfv2bE6jX4DBG4Qtq2ayt9aY1UrciXXdMYFSH9FkOk8YYh9eKQyYaUHeZReateRww/Iw0j2xxGEwsrcpTXbXfBQG8pNfidnOabQcKTqGBM8Ni1JqhTlUfXMSxPPgIiblHt69DmQ==
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	V/Hfm2tNVFI+N413S1awWVNiRvQREV7C0YwEAiALeyGhCVCOvbTs3JiniBzWaagkefjhcnPg688cth9dDEJXD14wBdNMR58ndl6s+Gu9CmpIR04O1NJ0/d0ldZ7FnMqZNqAj1sH38vK0n9LW2hQkzF8PDPqSHu5JVJyC05O9R7+fR7xJa+x50WaCXM/XFiK46+Q/RUIHwJDKOt9Q1yibWOEBkRPwle5d8I1ghy7Zv0h+ZucPJ5VCYg8FraADRxB5WFKbA/91VRWzNjrZ9tc4XO/zK/YFMkxd008HKntcHA0lDlKP56HojDII+9T9R8UwYuQ2lArZemT7sbrubVxeGOl3GsKmeYSpyOGt92aKkl6PZM08YatIsC6q+R+qDbM6FHkNn/X4cQrZmK6pf0S9CD455qU409rVlqxEPvsYgi39zRmecJRBBF5GIifa32pZcTrNze208FiaQulYisfZC3zQmvJl2iqlrEO0kr9P1pTq+V+k7vQM8t8Z3Kwg32M64Cvi5GC/+G89TlBFVWNxM2p0qOYQ1hjdXB+/4xGqBAS3DmN0lDNO6S4JB68OML2vwo8OPf/+NWNdg2LIC/vx7Tm9oJLXHs9nuX2fqVc7Qbg=
+	JFOBcQBKJ7x4PWTnfT9CQ1jGg3SfXYTD72l2A5VSFtkudYjvs4Ovj7xOS6Ti1wYV31kyiqfTs5/Vk1qfS3OUFfQnDre/pg2XjnUqYHeJGj8xa8lBdxcqOv/BqziMX/VCCbYMobzQ4Dv4LFnt9quya6CEpdnIGOViyFrjhz9I7ckUe/7Zu2m0VHR0DW/Uz92cOYF/5jl1oEKAsgpNJAfqFJ8M77ytPnDtA9Iu0rPAUSWEYfdMoUJLEHO3kNwkjyY750U2o1jzN+XQQgAvka0mh8voKNK+4q3XFrABJMJquoyDivNRpIehPwLuY1T0sQA05xSSar/WOicL3P7dq6at4Sh/LdsFgvQcaJyogCCPc0onYHzAi74QSsFZAek1eYrjXOIUTdD8awaBEEoUsgau3/ST65sw1a99c0NxtrYm35ElEmEdjYXg1rwob1yQPYQbUn1rq+w0hPEPfe/BCLtw3+jnL1oo5oYTRCgm/ahZXkp9doHQmI/F2STTWJ3qmyXFIOvubUeYbey32WkPDB0/2fWhhTA+BmfsY0s1GuX1R2rqS3m2/WLPj5XNe3PUHZSFHQK+MjYjEs2IDEDzHVakx/UmFmoYX9iIRa2Rb37dA5M=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28274525-2f5e-4ba7-bf54-08dea5172a50
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb6f0f42-b093-436f-0c5b-08dea5172b85
 X-MS-Exchange-CrossTenant-AuthSource: PH3PPFEDB06D67A.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2026 11:13:24.8593
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2026 11:13:26.9681
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zrl6ycWyBByM3pIw2JUJI5o5NkqbEkNXnK4KKPuzKGNnJkskSy773Hp4uEuiSkoGD024gGxzG4yfpFDedYaTwQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: oLbTtPGQr9DVtY9wrhfMwmzgYvHF3XVeMt6DJqvrotA74x874HBnPmD1sPU5WKox+xrC9f7i+C/YpmkBBuO+AA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB7458
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-28_03,2026-04-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- mlxlogscore=999 bulkscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0
- spamscore=0 mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
+ mlxscore=0 mlxlogscore=999 bulkscore=0 phishscore=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.19.0-2604200000 definitions=main-2604280101
-X-Authority-Analysis: v=2.4 cv=U7uiy+ru c=1 sm=1 tr=0 ts=69f09659 b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
+X-Authority-Analysis: v=2.4 cv=U7uiy+ru c=1 sm=1 tr=0 ts=69f0965d b=1 cx=c_pps
+ a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
  a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=A5OVakUREuEA:10
  a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=EIcjfB9IiI4px24ztqRk:22 a=yPCof4ZbAAAA:8 a=hbqJSkJ9pTsutRKaO2AA:9 cc=ntf
- awl=host:13844
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI4MDEwMSBTYWx0ZWRfX+yLnWMXRpY+X
- rFGUa7WdxGt81lZDmkK25m+pFLZo5BWvuWokwNHv4w1PBrSfSQUXPRVm1xft6YJWMzfvQLhr0b5
- JQLHE5OFuwbK388otTEbM+vLYiil1NrOZtCrrjB6KnUSQTzNbdGJJaQ5IdaLTekXv2RFPCnnYhS
- 4eghX9TeRwdxnBCHyHz5Gddmj/93FKMJlS6q7JoXq3QEQ2kRyyIyD9wsuqS+Kja1FQJIOnM6JnK
- SQzskR5E7ECXpSvJtFSiiyAQu1C2e0WiTXfBAQO975Q8TmcF+/bQSMB6U8Ybw6Vp01s13I/dfAy
- RDYr0Xj0gyX4hl77DpH0g5bX9Hwakfku+3X60tw/4XdPPdtwGKl5s60x6IGNhRA4ewwlmTyvjU7
- DwjUWMnQNSxRf9n0/hg8q0OP/4yFrxGlc+uDTcMUbs2OBS17KP7O7mzhKCr+M4nYQXEo6P0m3yf
- vhcLqQmuvF/S1uVoqrPyW69RsxHTIYs8al12/W7s=
-X-Proofpoint-GUID: LxUKRfdDy8JhZBBEUPNIm2buGGpdxbRs
-X-Proofpoint-ORIG-GUID: LxUKRfdDy8JhZBBEUPNIm2buGGpdxbRs
-X-Rspamd-Queue-Id: 2D9FE483EA3
+ a=EIcjfB9IiI4px24ztqRk:22 a=yPCof4ZbAAAA:8 a=jqjUz5srVNKpEaAUXaEA:9
+ a=oiXxVkHBtBvkL9RF:21 cc=ntf awl=host:12309
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI4MDEwMSBTYWx0ZWRfX348OkRVTdcIz
+ nsgr/jKJpWuIMLkgT7SpPkmA3qpd8kkBZ1ihorijL/BrZeAGHhDCpDEOSM39wa83iTxEh/YUDt5
+ sBbfAZg8QY+Z07IFD8Bg6rirOkPmPUlddCSR/ZsFnAwAoMnG/R75D0fZRLEyEdbw+PvyJFDIy6v
+ lbbSYyEvfv+TYYYham/VwzyOyR3zQpRHuLC0ca8rW+PWpRKUxfKPiBZ8fnhLVDKnAkqdLJIm9ro
+ wlQYw//4Yduz5iVT2e6UkqnHyHAP+ZriV0Y7dHe92ClJeZSPguc1cYEYLKeO/GqIrCIRNbgAdco
+ U2QPPfxoy6V5pvHha72R7N2zImxarQIRsCE6ajF2rgT6e8K8TfjFGL1SRs2R0nzMBPtI/sEFn1H
+ mqh+FuejogKy6ZcrLEquIcCQC6MKR27xsMm4Q0ukYh6wnAoKjeE7Mwb86+c6/y094jUe0d7ynqi
+ Q3CRYBAvGONZGLxhDNCCH+PQxncBOS09RxyrGCsc=
+X-Proofpoint-GUID: A6ebyt74w0OUjpFArdrOxJIoDH_pZ0fN
+X-Proofpoint-ORIG-GUID: A6ebyt74w0OUjpFArdrOxJIoDH_pZ0fN
+X-Rspamd-Queue-Id: A307E483EE3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.34 / 15.00];
@@ -200,14 +200,14 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
 	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23400-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-23398-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
@@ -215,41 +215,1954 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,oracle.com:dkim,oracle.com:mid,oracle.onmicrosoft.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,oracle.com:dkim,oracle.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oracle.onmicrosoft.com:dkim];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_COUNT_SEVEN(0.00)[9]
 
-Add nvme_mpath_get_nr_active(), which gets the number of active requests
-per controller for an mpath_device.
+Now that much unused libmulipath-based code has been added, do the full
+switch over.
+
+The major change is that the multipath management is moved out of the
+nvme_ns_head structure and into the mpath_head structure.
+
+The check for ns->head->disk is now replaced with a
+ns->head->mpath_head->disk check, to decide whether we are really in
+multipath mode.
 
 Signed-off-by: John Garry <john.g.garry@oracle.com>
 ---
- drivers/nvme/host/multipath.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/nvme/host/core.c      |  86 ++--
+ drivers/nvme/host/ioctl.c     |  89 ----
+ drivers/nvme/host/multipath.c | 873 +++++-----------------------------
+ drivers/nvme/host/nvme.h      |  99 +---
+ drivers/nvme/host/pr.c        |  18 -
+ drivers/nvme/host/sysfs.c     |  86 +---
+ 6 files changed, 215 insertions(+), 1036 deletions(-)
 
-diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
-index 8025cf3270cdc..62e13a484ff5e 100644
---- a/drivers/nvme/host/multipath.c
-+++ b/drivers/nvme/host/multipath.c
-@@ -1446,6 +1446,11 @@ static enum mpath_iopolicy_e nvme_mpath_get_iopolicy(
- 	return mpath_read_iopolicy(&head->subsys->mpath_iopolicy);
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index bb687295c2c67..11349d2f8923d 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -409,7 +409,7 @@ static inline enum nvme_disposition nvme_decide_disposition(struct request *req)
+ 	if ((nvme_req(req)->status & NVME_SCT_SC_MASK) == NVME_SC_AUTH_REQUIRED)
+ 		return AUTHENTICATE;
+ 
+-	if (req->cmd_flags & REQ_NVME_MPATH) {
++	if (is_mpath_request(req)) {
+ 		if (nvme_is_path_error(nvme_req(req)->status) ||
+ 		    blk_queue_dying(req->q))
+ 			return FAILOVER;
+@@ -442,7 +442,7 @@ static inline void __nvme_end_req(struct request *req)
+ 	}
+ 	nvme_end_req_zoned(req);
+ 	nvme_trace_bio_complete(req);
+-	if (req->cmd_flags & REQ_NVME_MPATH)
++	if (is_mpath_request(req))
+ 		nvme_mpath_end_request(req);
  }
  
-+static int nvme_mpath_get_nr_active(struct mpath_device *mpath_device)
+@@ -674,7 +674,7 @@ static void nvme_free_ns_head(struct kref *ref)
+ 
+ 	nvme_mpath_put_disk(head);
+ 	ida_free(&head->subsys->ns_ida, head->instance);
+-	cleanup_srcu_struct(&head->srcu);
++	mpath_put_head(head->mpath_head);
+ 	nvme_put_subsystem(head->subsys);
+ 	kfree(head->plids);
+ 	kfree(head);
+@@ -767,7 +767,7 @@ blk_status_t nvme_fail_nonready_command(struct nvme_ctrl *ctrl,
+ 	    state != NVME_CTRL_DELETING &&
+ 	    state != NVME_CTRL_DEAD &&
+ 	    !test_bit(NVME_CTRL_FAILFAST_EXPIRED, &ctrl->flags) &&
+-	    !blk_noretry_request(rq) && !(rq->cmd_flags & REQ_NVME_MPATH))
++	    !blk_noretry_request(rq) && !is_mpath_request(rq))
+ 		return BLK_STS_RESOURCE;
+ 
+ 	if (!(rq->rq_flags & RQF_DONTPREP))
+@@ -2523,11 +2523,12 @@ static int nvme_update_ns_info(struct nvme_ns *ns, struct nvme_ns_info *info)
+ 
+ 	if (!ret && nvme_ns_head_multipath(ns->head)) {
+ 		struct queue_limits *ns_lim = &ns->disk->queue->limits;
++		struct gendisk *disk = ns->head->mpath_head->disk;
+ 		struct queue_limits lim;
+ 		unsigned int memflags;
+ 
+-		lim = queue_limits_start_update(ns->head->disk->queue);
+-		memflags = blk_mq_freeze_queue(ns->head->disk->queue);
++		lim = queue_limits_start_update(disk->queue);
++		memflags = blk_mq_freeze_queue(disk->queue);
+ 		/*
+ 		 * queue_limits mixes values that are the hardware limitations
+ 		 * for bio splitting with what is the device configuration.
+@@ -2548,20 +2549,20 @@ static int nvme_update_ns_info(struct nvme_ns *ns, struct nvme_ns_info *info)
+ 		lim.io_min = ns_lim->io_min;
+ 		lim.io_opt = ns_lim->io_opt;
+ 		queue_limits_stack_bdev(&lim, ns->disk->part0, 0,
+-					ns->head->disk->disk_name);
++					disk->disk_name);
+ 		if (unsupported)
+-			ns->head->disk->flags |= GENHD_FL_HIDDEN;
++			disk->flags |= GENHD_FL_HIDDEN;
+ 		else
+ 			nvme_init_integrity(ns->head, &lim, info);
+ 		lim.max_write_streams = ns_lim->max_write_streams;
+ 		lim.write_stream_granularity = ns_lim->write_stream_granularity;
+-		ret = queue_limits_commit_update(ns->head->disk->queue, &lim);
++		ret = queue_limits_commit_update(disk->queue, &lim);
+ 
+-		set_capacity_and_notify(ns->head->disk, get_capacity(ns->disk));
+-		set_disk_ro(ns->head->disk, nvme_ns_is_readonly(ns, info));
++		set_capacity_and_notify(disk, get_capacity(ns->disk));
++		set_disk_ro(disk, nvme_ns_is_readonly(ns, info));
+ 		nvme_mpath_revalidate_paths(ns->head);
+ 
+-		blk_mq_unfreeze_queue(ns->head->disk->queue, memflags);
++		blk_mq_unfreeze_queue(disk->queue, memflags);
+ 	}
+ 
+ 	return ret;
+@@ -3917,14 +3918,11 @@ static int nvme_add_ns_cdev(struct nvme_ns *ns)
+ static struct nvme_ns_head *nvme_alloc_ns_head(struct nvme_ctrl *ctrl,
+ 		struct nvme_ns_info *info)
+ {
++	struct nvme_subsystem *subsys = ctrl->subsys;
+ 	struct nvme_ns_head *head;
+ 	size_t size = sizeof(*head);
+ 	int ret = -ENOMEM;
+ 
+-#ifdef CONFIG_NVME_MULTIPATH
+-	size += num_possible_nodes() * sizeof(struct nvme_ns *);
+-#endif
+-
+ 	head = kzalloc(size, GFP_KERNEL);
+ 	if (!head)
+ 		goto out;
+@@ -3932,10 +3930,7 @@ static struct nvme_ns_head *nvme_alloc_ns_head(struct nvme_ctrl *ctrl,
+ 	if (ret < 0)
+ 		goto out_free_head;
+ 	head->instance = ret;
+-	INIT_LIST_HEAD(&head->list);
+-	ret = init_srcu_struct(&head->srcu);
+-	if (ret)
+-		goto out_ida_remove;
++
+ 	head->subsys = ctrl->subsys;
+ 	head->ns_id = info->nsid;
+ 	head->ids = info->ids;
+@@ -3948,22 +3943,32 @@ static struct nvme_ns_head *nvme_alloc_ns_head(struct nvme_ctrl *ctrl,
+ 	if (head->ids.csi) {
+ 		ret = nvme_get_effects_log(ctrl, head->ids.csi, &head->effects);
+ 		if (ret)
+-			goto out_cleanup_srcu;
++			goto out_ida_free;
+ 	} else
+ 		head->effects = ctrl->effects;
+ 
++	head->mpath_head = mpath_alloc_head();
++	if (IS_ERR(head->mpath_head))
++		goto out_ida_free;
++
++	head->mpath_head->drvdata = head;
++	head->mpath_head->drv_module = THIS_MODULE;
++	head->mpath_head->disk_groups = nvme_ns_attr_groups;
++	head->mpath_head->parent = &subsys->dev;
++
+ 	ret = nvme_mpath_alloc_disk(ctrl, head);
+ 	if (ret)
+-		goto out_cleanup_srcu;
++		goto out_mpath_head_free;
+ 
+ 	list_add_tail(&head->entry, &ctrl->subsys->nsheads);
+ 
+ 	kref_get(&ctrl->subsys->ref);
+ 
+ 	return head;
+-out_cleanup_srcu:
+-	cleanup_srcu_struct(&head->srcu);
+-out_ida_remove:
++
++out_mpath_head_free:
++	mpath_put_head(head->mpath_head);
++out_ida_free:
+ 	ida_free(&ctrl->subsys->ns_ida, head->instance);
+ out_free_head:
+ 	kfree(head);
+@@ -4002,7 +4007,7 @@ static int nvme_global_check_duplicate_ids(struct nvme_subsystem *this,
+ static int nvme_init_ns_head(struct nvme_ns *ns, struct nvme_ns_info *info)
+ {
+ 	struct nvme_ctrl *ctrl = ns->ctrl;
+-	struct nvme_ns_head *head = NULL;
++	struct nvme_ns_head *head;
+ 	int ret;
+ 
+ 	ret = nvme_global_check_duplicate_ids(ctrl->subsys, &info->ids);
+@@ -4061,7 +4066,7 @@ static int nvme_init_ns_head(struct nvme_ns *ns, struct nvme_ns_info *info)
+ 	} else {
+ 		ret = -EINVAL;
+ 		if ((!info->is_shared || !head->shared) &&
+-		    !list_empty(&head->list)) {
++		    !mpath_head_devices_empty(head->mpath_head)) {
+ 			dev_err(ctrl->device,
+ 				"Duplicate unshared namespace %d\n",
+ 				info->nsid);
+@@ -4083,14 +4088,10 @@ static int nvme_init_ns_head(struct nvme_ns *ns, struct nvme_ns_info *info)
+ 		}
+ 	}
+ 
+-	list_add_tail_rcu(&ns->siblings, &head->list);
+ 	ns->head = head;
++	nvme_add_ns(ns);
+ 	mutex_unlock(&ctrl->subsys->lock);
+ 
+-#ifdef CONFIG_NVME_MULTIPATH
+-	if (cancel_delayed_work(&head->remove_work))
+-		module_put(THIS_MODULE);
+-#endif
+ 	return 0;
+ 
+ out_put_ns_head:
+@@ -4229,18 +4230,18 @@ static void nvme_alloc_ns(struct nvme_ctrl *ctrl, struct nvme_ns_info *info)
+ 	synchronize_srcu(&ctrl->srcu);
+  out_unlink_ns:
+ 	mutex_lock(&ctrl->subsys->lock);
+-	list_del_rcu(&ns->siblings);
+-	if (list_empty(&ns->head->list)) {
++
++	if (nvme_delete_ns(ns)) {
+ 		list_del_init(&ns->head->entry);
+ 		/*
+ 		 * If multipath is not configured, we still create a namespace
+-		 * head (nshead), but head->disk is not initialized in that
++		 * head (nshead), but mpath_head->disk is not initialized in that
+ 		 * case.  As a result, only a single reference to nshead is held
+ 		 * (via kref_init()) when it is created. Therefore, ensure that
+ 		 * we do not release the reference to nshead twice if head->disk
+ 		 * is not present.
+ 		 */
+-		if (ns->head->disk)
++		if (ns->head->mpath_head->disk)
+ 			last_path = true;
+ 	}
+ 	mutex_unlock(&ctrl->subsys->lock);
+@@ -4255,6 +4256,7 @@ static void nvme_alloc_ns(struct nvme_ctrl *ctrl, struct nvme_ns_info *info)
+ 
+ static void nvme_ns_remove(struct nvme_ns *ns)
+ {
++	struct nvme_ns_head *head = ns->head;
+ 	bool last_path = false;
+ 
+ 	if (test_and_set_bit(NVME_NS_REMOVING, &ns->flags))
+@@ -4268,23 +4270,23 @@ static void nvme_ns_remove(struct nvme_ns *ns)
+ 	 * Ensure that !NVME_NS_READY is seen by other threads to prevent
+ 	 * this ns going back into current_path.
+ 	 */
+-	synchronize_srcu(&ns->head->srcu);
++	nvme_mpath_synchronize(head);
+ 
+ 	/* wait for concurrent submissions */
+ 	if (nvme_mpath_clear_current_path(ns))
+-		synchronize_srcu(&ns->head->srcu);
++		nvme_mpath_synchronize(head);
+ 
+ 	mutex_lock(&ns->ctrl->subsys->lock);
+-	list_del_rcu(&ns->siblings);
+-	if (list_empty(&ns->head->list)) {
+-		if (!nvme_mpath_queue_if_no_path(ns->head))
++	if (nvme_delete_ns(ns)) {
++
++		if (!nvme_mpath_head_queue_if_no_path(ns->head))
+ 			list_del_init(&ns->head->entry);
+ 		last_path = true;
+ 	}
+ 	mutex_unlock(&ns->ctrl->subsys->lock);
+ 
+ 	/* guarantee not available in head->list */
+-	synchronize_srcu(&ns->head->srcu);
++	nvme_mpath_synchronize(head);
+ 
+ 	if (!nvme_ns_head_multipath(ns->head))
+ 		nvme_cdev_del(&ns->cdev, &ns->cdev_device);
+diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
+index 07509a03d2ef4..3e0ea40494da6 100644
+--- a/drivers/nvme/host/ioctl.c
++++ b/drivers/nvme/host/ioctl.c
+@@ -727,95 +727,6 @@ int nvme_mpath_chr_uring_cmd(struct mpath_device *mpath_device,
+ 					issue_flags);
+ }
+ 
+-static int nvme_ns_head_ctrl_ioctl(struct nvme_ns *ns, unsigned int cmd,
+-		void __user *argp, struct nvme_ns_head *head, int srcu_idx,
+-		bool open_for_write)
+-	__releases(&head->srcu)
+-{
+-	struct nvme_ctrl *ctrl = ns->ctrl;
+-	int ret;
+-
+-	nvme_get_ctrl(ns->ctrl);
+-	srcu_read_unlock(&head->srcu, srcu_idx);
+-	ret = nvme_ctrl_ioctl(ns->ctrl, cmd, argp, open_for_write);
+-
+-	nvme_put_ctrl(ctrl);
+-	return ret;
+-}
+-
+-int nvme_ns_head_ioctl(struct block_device *bdev, blk_mode_t mode,
+-		unsigned int cmd, unsigned long arg)
+-{
+-	struct nvme_ns_head *head = bdev->bd_disk->private_data;
+-	bool open_for_write = mode & BLK_OPEN_WRITE;
+-	void __user *argp = (void __user *)arg;
+-	struct nvme_ns *ns;
+-	int srcu_idx, ret = -EWOULDBLOCK;
+-	unsigned int flags = 0;
+-
+-	if (bdev_is_partition(bdev))
+-		flags |= NVME_IOCTL_PARTITION;
+-
+-	srcu_idx = srcu_read_lock(&head->srcu);
+-	ns = nvme_find_path(head);
+-	if (!ns)
+-		goto out_unlock;
+-
+-	/*
+-	 * Handle ioctls that apply to the controller instead of the namespace
+-	 * separately and drop the ns SRCU reference early.  This avoids a
+-	 * deadlock when deleting namespaces using the passthrough interface.
+-	 */
+-	if (is_ctrl_ioctl(cmd))
+-		return nvme_ns_head_ctrl_ioctl(ns, cmd, argp, head, srcu_idx,
+-					       open_for_write);
+-
+-	ret = nvme_ns_ioctl(ns, cmd, argp, flags, open_for_write);
+-out_unlock:
+-	srcu_read_unlock(&head->srcu, srcu_idx);
+-	return ret;
+-}
+-
+-long nvme_ns_head_chr_ioctl(struct file *file, unsigned int cmd,
+-		unsigned long arg)
+-{
+-	bool open_for_write = file->f_mode & FMODE_WRITE;
+-	struct cdev *cdev = file_inode(file)->i_cdev;
+-	struct nvme_ns_head *head =
+-		container_of(cdev, struct nvme_ns_head, cdev);
+-	void __user *argp = (void __user *)arg;
+-	struct nvme_ns *ns;
+-	int srcu_idx, ret = -EWOULDBLOCK;
+-
+-	srcu_idx = srcu_read_lock(&head->srcu);
+-	ns = nvme_find_path(head);
+-	if (!ns)
+-		goto out_unlock;
+-
+-	if (is_ctrl_ioctl(cmd))
+-		return nvme_ns_head_ctrl_ioctl(ns, cmd, argp, head, srcu_idx,
+-				open_for_write);
+-
+-	ret = nvme_ns_ioctl(ns, cmd, argp, 0, open_for_write);
+-out_unlock:
+-	srcu_read_unlock(&head->srcu, srcu_idx);
+-	return ret;
+-}
+-
+-int nvme_ns_head_chr_uring_cmd(struct io_uring_cmd *ioucmd,
+-		unsigned int issue_flags)
+-{
+-	struct cdev *cdev = file_inode(ioucmd->file)->i_cdev;
+-	struct nvme_ns_head *head = container_of(cdev, struct nvme_ns_head, cdev);
+-	int srcu_idx = srcu_read_lock(&head->srcu);
+-	struct nvme_ns *ns = nvme_find_path(head);
+-	int ret = -EINVAL;
+-
+-	if (ns)
+-		ret = nvme_ns_uring_cmd(ns, ioucmd, issue_flags);
+-	srcu_read_unlock(&head->srcu, srcu_idx);
+-	return ret;
+-}
+ #endif /* CONFIG_NVME_MULTIPATH */
+ 
+ int nvme_dev_uring_cmd(struct io_uring_cmd *ioucmd, unsigned int issue_flags)
+diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
+index 62e13a484ff5e..96a3d39746867 100644
+--- a/drivers/nvme/host/multipath.c
++++ b/drivers/nvme/host/multipath.c
+@@ -65,33 +65,17 @@ module_param_cb(multipath_always_on, &multipath_always_on_ops,
+ MODULE_PARM_DESC(multipath_always_on,
+ 	"create multipath node always except for private namespace with non-unique nsid; note that this also implicitly enables native multipath support");
+ 
+-static const char *nvme_iopolicy_names[] = {
+-	[NVME_IOPOLICY_NUMA]	= "numa",
+-	[NVME_IOPOLICY_RR]	= "round-robin",
+-	[NVME_IOPOLICY_QD]      = "queue-depth",
+-};
+ 
+-static int iopolicy = NVME_IOPOLICY_NUMA;
++static int iopolicy = MPATH_IOPOLICY_NUMA;
+ 
+ static int nvme_set_iopolicy(const char *val, const struct kernel_param *kp)
+ {
+-	if (!val)
+-		return -EINVAL;
+-	if (!strncmp(val, "numa", 4))
+-		iopolicy = NVME_IOPOLICY_NUMA;
+-	else if (!strncmp(val, "round-robin", 11))
+-		iopolicy = NVME_IOPOLICY_RR;
+-	else if (!strncmp(val, "queue-depth", 11))
+-		iopolicy = NVME_IOPOLICY_QD;
+-	else
+-		return -EINVAL;
+-
+-	return 0;
++	return mpath_set_iopolicy(val, &iopolicy);
+ }
+ 
+ static int nvme_get_iopolicy(char *buf, const struct kernel_param *kp)
+ {
+-	return sprintf(buf, "%s\n", nvme_iopolicy_names[iopolicy]);
++	return mpath_get_iopolicy(buf, iopolicy);
+ }
+ 
+ module_param_call(iopolicy, nvme_set_iopolicy, nvme_get_iopolicy,
+@@ -101,7 +85,7 @@ MODULE_PARM_DESC(iopolicy,
+ 
+ void nvme_mpath_default_iopolicy(struct nvme_subsystem *subsys)
+ {
+-	subsys->iopolicy = iopolicy;
++	subsys->mpath_iopolicy.iopolicy = iopolicy;
+ }
+ 
+ void nvme_mpath_unfreeze(struct nvme_subsystem *subsys)
+@@ -110,8 +94,9 @@ void nvme_mpath_unfreeze(struct nvme_subsystem *subsys)
+ 
+ 	lockdep_assert_held(&subsys->lock);
+ 	list_for_each_entry(h, &subsys->nsheads, entry)
+-		if (h->disk)
+-			blk_mq_unfreeze_queue_nomemrestore(h->disk->queue);
++		if (h->mpath_head->disk)
++			blk_mq_unfreeze_queue_nomemrestore(
++				h->mpath_head->disk->queue);
+ }
+ 
+ void nvme_mpath_wait_freeze(struct nvme_subsystem *subsys)
+@@ -120,8 +105,8 @@ void nvme_mpath_wait_freeze(struct nvme_subsystem *subsys)
+ 
+ 	lockdep_assert_held(&subsys->lock);
+ 	list_for_each_entry(h, &subsys->nsheads, entry)
+-		if (h->disk)
+-			blk_mq_freeze_queue_wait(h->disk->queue);
++		if (h->mpath_head->disk)
++			blk_mq_freeze_queue_wait(h->mpath_head->disk->queue);
+ }
+ 
+ void nvme_mpath_start_freeze(struct nvme_subsystem *subsys)
+@@ -130,13 +115,14 @@ void nvme_mpath_start_freeze(struct nvme_subsystem *subsys)
+ 
+ 	lockdep_assert_held(&subsys->lock);
+ 	list_for_each_entry(h, &subsys->nsheads, entry)
+-		if (h->disk)
+-			blk_freeze_queue_start(h->disk->queue);
++		if (h->mpath_head->disk)
++			blk_freeze_queue_start(h->mpath_head->disk->queue);
+ }
+ 
+ void nvme_failover_req(struct request *req)
+ {
+ 	struct nvme_ns *ns = req->q->queuedata;
++	struct mpath_head *mpath_head = ns->head->mpath_head;
+ 	u16 status = nvme_req(req)->status & NVME_SCT_SC_MASK;
+ 	unsigned long flags;
+ 	struct bio *bio;
+@@ -153,23 +139,24 @@ void nvme_failover_req(struct request *req)
+ 		queue_work(nvme_wq, &ns->ctrl->ana_work);
+ 	}
+ 
+-	spin_lock_irqsave(&ns->head->requeue_lock, flags);
++
++	spin_lock_irqsave(&mpath_head->requeue_lock, flags);
+ 	for (bio = req->bio; bio; bio = bio->bi_next)
+-		bio_set_dev(bio, ns->head->disk->part0);
+-	blk_steal_bios(&ns->head->requeue_list, req);
+-	spin_unlock_irqrestore(&ns->head->requeue_lock, flags);
++		bio_set_dev(bio, mpath_head->disk->part0);
++	blk_steal_bios(&mpath_head->requeue_list, req);
++	spin_unlock_irqrestore(&mpath_head->requeue_lock, flags);
+ 
+ 	nvme_req(req)->status = 0;
+ 	nvme_end_req(req);
+-	kblockd_schedule_work(&ns->head->requeue_work);
++	mpath_schedule_requeue_work(mpath_head);
+ }
+ 
+ void nvme_mpath_start_request(struct request *rq)
+ {
+ 	struct nvme_ns *ns = rq->q->queuedata;
+-	struct gendisk *disk = ns->head->disk;
++	struct gendisk *disk = ns->head->mpath_head->disk;
+ 
+-	if ((READ_ONCE(ns->head->subsys->iopolicy) == NVME_IOPOLICY_QD) &&
++	if (mpath_qd_iopolicy(&ns->head->subsys->mpath_iopolicy) &&
+ 	    !(nvme_req(rq)->flags & NVME_MPATH_CNT_ACTIVE)) {
+ 		atomic_inc(&ns->ctrl->nr_active);
+ 		nvme_req(rq)->flags |= NVME_MPATH_CNT_ACTIVE;
+@@ -194,7 +181,7 @@ void nvme_mpath_end_request(struct request *rq)
+ 
+ 	if (!(nvme_req(rq)->flags & NVME_MPATH_IO_STATS))
+ 		return;
+-	bdev_end_io_acct(ns->head->disk->part0, req_op(rq),
++	bdev_end_io_acct(ns->head->mpath_head->disk->part0, req_op(rq),
+ 			 blk_rq_bytes(rq) >> SECTOR_SHIFT,
+ 			 nvme_req(rq)->start_time);
+ }
+@@ -207,11 +194,11 @@ void nvme_kick_requeue_lists(struct nvme_ctrl *ctrl)
+ 	srcu_idx = srcu_read_lock(&ctrl->srcu);
+ 	list_for_each_entry_srcu(ns, &ctrl->namespaces, list,
+ 				 srcu_read_lock_held(&ctrl->srcu)) {
+-		if (!ns->head->disk)
++		if (!ns->head->mpath_head->disk)
+ 			continue;
+-		kblockd_schedule_work(&ns->head->requeue_work);
++		mpath_schedule_requeue_work(ns->head->mpath_head);
+ 		if (nvme_ctrl_state(ns->ctrl) == NVME_CTRL_LIVE)
+-			disk_uevent(ns->head->disk, KOBJ_CHANGE);
++			disk_uevent(ns->head->mpath_head->disk, KOBJ_CHANGE);
+ 	}
+ 	srcu_read_unlock(&ctrl->srcu, srcu_idx);
+ }
+@@ -225,21 +212,6 @@ static const char *nvme_ana_state_names[] = {
+ 	[NVME_ANA_CHANGE]		= "change",
+ };
+ 
+-bool nvme_mpath_clear_current_path(struct nvme_ns *ns)
+-{
+-	struct nvme_ns_head *head = ns->head;
+-	bool changed = false;
+-	int node;
+-
+-	for_each_node(node) {
+-		if (ns == rcu_access_pointer(head->current_path[node])) {
+-			rcu_assign_pointer(head->current_path[node], NULL);
+-			changed = true;
+-		}
+-	}
+-	return changed;
+-}
+-
+ void nvme_mpath_clear_ctrl_paths(struct nvme_ctrl *ctrl)
+ {
+ 	struct nvme_ns *ns;
+@@ -249,29 +221,19 @@ void nvme_mpath_clear_ctrl_paths(struct nvme_ctrl *ctrl)
+ 	list_for_each_entry_srcu(ns, &ctrl->namespaces, list,
+ 				 srcu_read_lock_held(&ctrl->srcu)) {
+ 		nvme_mpath_clear_current_path(ns);
+-		kblockd_schedule_work(&ns->head->requeue_work);
++		mpath_schedule_requeue_work(ns->head->mpath_head);
+ 	}
+ 	srcu_read_unlock(&ctrl->srcu, srcu_idx);
+ }
+ 
+-void nvme_mpath_revalidate_paths(struct nvme_ns_head *head)
++static void nvme_mpath_revalidate_paths_cb(struct mpath_device *mpath_device)
+ {
+-	sector_t capacity = get_capacity(head->disk);
+-	struct nvme_ns *ns;
+-	int node;
+-	int srcu_idx;
+-
+-	srcu_idx = srcu_read_lock(&head->srcu);
+-	list_for_each_entry_srcu(ns, &head->list, siblings,
+-				 srcu_read_lock_held(&head->srcu)) {
+-		if (capacity != get_capacity(ns->disk))
+-			clear_bit(NVME_NS_READY, &ns->flags);
+-	}
+-	srcu_read_unlock(&head->srcu, srcu_idx);
++	clear_bit(NVME_NS_READY, &nvme_mpath_to_ns(mpath_device)->flags);
++}
+ 
+-	for_each_node(node)
+-		rcu_assign_pointer(head->current_path[node], NULL);
+-	kblockd_schedule_work(&head->requeue_work);
++void nvme_mpath_revalidate_paths(struct nvme_ns_head *head)
 +{
-+	return atomic_read(&nvme_mpath_to_ns(mpath_device)->ctrl->nr_active);
++	mpath_revalidate_paths(head->mpath_head, nvme_mpath_revalidate_paths_cb);
+ }
+ 
+ static bool nvme_path_is_disabled(struct nvme_ns *ns)
+@@ -296,142 +258,6 @@ static bool nvme_mpath_is_disabled(struct mpath_device *mpath_device)
+ 	return nvme_path_is_disabled(nvme_mpath_to_ns(mpath_device));
+ }
+ 
+-static struct nvme_ns *__nvme_find_path(struct nvme_ns_head *head, int node)
+-{
+-	int found_distance = INT_MAX, fallback_distance = INT_MAX, distance;
+-	struct nvme_ns *found = NULL, *fallback = NULL, *ns;
+-
+-	list_for_each_entry_srcu(ns, &head->list, siblings,
+-				 srcu_read_lock_held(&head->srcu)) {
+-		if (nvme_path_is_disabled(ns))
+-			continue;
+-
+-		if (ns->ctrl->numa_node != NUMA_NO_NODE &&
+-		    READ_ONCE(head->subsys->iopolicy) == NVME_IOPOLICY_NUMA)
+-			distance = node_distance(node, ns->ctrl->numa_node);
+-		else
+-			distance = LOCAL_DISTANCE;
+-
+-		switch (ns->ana_state) {
+-		case NVME_ANA_OPTIMIZED:
+-			if (distance < found_distance) {
+-				found_distance = distance;
+-				found = ns;
+-			}
+-			break;
+-		case NVME_ANA_NONOPTIMIZED:
+-			if (distance < fallback_distance) {
+-				fallback_distance = distance;
+-				fallback = ns;
+-			}
+-			break;
+-		default:
+-			break;
+-		}
+-	}
+-
+-	if (!found)
+-		found = fallback;
+-	if (found)
+-		rcu_assign_pointer(head->current_path[node], found);
+-	return found;
+-}
+-
+-static struct nvme_ns *nvme_next_ns(struct nvme_ns_head *head,
+-		struct nvme_ns *ns)
+-{
+-	ns = list_next_or_null_rcu(&head->list, &ns->siblings, struct nvme_ns,
+-			siblings);
+-	if (ns)
+-		return ns;
+-	return list_first_or_null_rcu(&head->list, struct nvme_ns, siblings);
+-}
+-
+-static struct nvme_ns *nvme_round_robin_path(struct nvme_ns_head *head)
+-{
+-	struct nvme_ns *ns, *found = NULL;
+-	int node = numa_node_id();
+-	struct nvme_ns *old = srcu_dereference(head->current_path[node],
+-					       &head->srcu);
+-
+-	if (unlikely(!old))
+-		return __nvme_find_path(head, node);
+-
+-	if (list_is_singular(&head->list)) {
+-		if (nvme_path_is_disabled(old))
+-			return NULL;
+-		return old;
+-	}
+-
+-	for (ns = nvme_next_ns(head, old);
+-	     ns && ns != old;
+-	     ns = nvme_next_ns(head, ns)) {
+-		if (nvme_path_is_disabled(ns))
+-			continue;
+-
+-		if (ns->ana_state == NVME_ANA_OPTIMIZED) {
+-			found = ns;
+-			goto out;
+-		}
+-		if (ns->ana_state == NVME_ANA_NONOPTIMIZED)
+-			found = ns;
+-	}
+-
+-	/*
+-	 * The loop above skips the current path for round-robin semantics.
+-	 * Fall back to the current path if either:
+-	 *  - no other optimized path found and current is optimized,
+-	 *  - no other usable path found and current is usable.
+-	 */
+-	if (!nvme_path_is_disabled(old) &&
+-	    (old->ana_state == NVME_ANA_OPTIMIZED ||
+-	     (!found && old->ana_state == NVME_ANA_NONOPTIMIZED)))
+-		return old;
+-
+-	if (!found)
+-		return NULL;
+-out:
+-	rcu_assign_pointer(head->current_path[node], found);
+-	return found;
+-}
+-
+-static struct nvme_ns *nvme_queue_depth_path(struct nvme_ns_head *head)
+-{
+-	struct nvme_ns *best_opt = NULL, *best_nonopt = NULL, *ns;
+-	unsigned int min_depth_opt = UINT_MAX, min_depth_nonopt = UINT_MAX;
+-	unsigned int depth;
+-
+-	list_for_each_entry_srcu(ns, &head->list, siblings,
+-				 srcu_read_lock_held(&head->srcu)) {
+-		if (nvme_path_is_disabled(ns))
+-			continue;
+-
+-		depth = atomic_read(&ns->ctrl->nr_active);
+-
+-		switch (ns->ana_state) {
+-		case NVME_ANA_OPTIMIZED:
+-			if (depth < min_depth_opt) {
+-				min_depth_opt = depth;
+-				best_opt = ns;
+-			}
+-			break;
+-		case NVME_ANA_NONOPTIMIZED:
+-			if (depth < min_depth_nonopt) {
+-				min_depth_nonopt = depth;
+-				best_nonopt = ns;
+-			}
+-			break;
+-		default:
+-			break;
+-		}
+-
+-		if (min_depth_opt == 0)
+-			return best_opt;
+-	}
+-
+-	return best_opt ? best_opt : best_nonopt;
+-}
+-
+ static inline bool nvme_path_is_optimized(struct nvme_ns *ns)
+ {
+ 	return nvme_ctrl_state(ns->ctrl) == NVME_CTRL_LIVE &&
+@@ -443,64 +269,6 @@ static bool nvme_mpath_is_optimized(struct mpath_device *mpath_device)
+ 	return nvme_path_is_optimized(nvme_mpath_to_ns(mpath_device));
+ }
+ 
+-static struct nvme_ns *nvme_numa_path(struct nvme_ns_head *head)
+-{
+-	int node = numa_node_id();
+-	struct nvme_ns *ns;
+-
+-	ns = srcu_dereference(head->current_path[node], &head->srcu);
+-	if (unlikely(!ns))
+-		return __nvme_find_path(head, node);
+-	if (unlikely(!nvme_path_is_optimized(ns)))
+-		return __nvme_find_path(head, node);
+-	return ns;
+-}
+-
+-inline struct nvme_ns *nvme_find_path(struct nvme_ns_head *head)
+-{
+-	switch (READ_ONCE(head->subsys->iopolicy)) {
+-	case NVME_IOPOLICY_QD:
+-		return nvme_queue_depth_path(head);
+-	case NVME_IOPOLICY_RR:
+-		return nvme_round_robin_path(head);
+-	default:
+-		return nvme_numa_path(head);
+-	}
+-}
+-
+-static bool nvme_available_path(struct nvme_ns_head *head)
+-{
+-	struct nvme_ns *ns;
+-
+-	if (!test_bit(NVME_NSHEAD_DISK_LIVE, &head->flags))
+-		return false;
+-
+-	list_for_each_entry_srcu(ns, &head->list, siblings,
+-				 srcu_read_lock_held(&head->srcu)) {
+-		if (test_bit(NVME_CTRL_FAILFAST_EXPIRED, &ns->ctrl->flags))
+-			continue;
+-		switch (nvme_ctrl_state(ns->ctrl)) {
+-		case NVME_CTRL_LIVE:
+-		case NVME_CTRL_RESETTING:
+-		case NVME_CTRL_CONNECTING:
+-			return true;
+-		default:
+-			break;
+-		}
+-	}
+-
+-	/*
+-	 * If "head->delayed_removal_secs" is configured (i.e., non-zero), do
+-	 * not immediately fail I/O. Instead, requeue the I/O for the configured
+-	 * duration, anticipating that if there's a transient link failure then
+-	 * it may recover within this time window. This parameter is exported to
+-	 * userspace via sysfs, and its default value is zero. It is internally
+-	 * mapped to NVME_NSHEAD_QUEUE_IF_NO_PATH. When delayed_removal_secs is
+-	 * non-zero, this flag is set to true. When zero, the flag is cleared.
+-	 */
+-	return nvme_mpath_queue_if_no_path(head);
+-}
+-
+ static bool nvme_mpath_available_path(struct mpath_device *mpath_device)
+ {
+ 	struct nvme_ns *ns = nvme_mpath_to_ns(mpath_device);
+@@ -520,104 +288,6 @@ static bool nvme_mpath_available_path(struct mpath_device *mpath_device)
+ 	return false;
+ }
+ 
+-static void nvme_ns_head_submit_bio(struct bio *bio)
+-{
+-	struct nvme_ns_head *head = bio->bi_bdev->bd_disk->private_data;
+-	struct device *dev = disk_to_dev(head->disk);
+-	struct nvme_ns *ns;
+-	int srcu_idx;
+-
+-	/*
+-	 * The namespace might be going away and the bio might be moved to a
+-	 * different queue via blk_steal_bios(), so we need to use the bio_split
+-	 * pool from the original queue to allocate the bvecs from.
+-	 */
+-	bio = bio_split_to_limits(bio);
+-	if (!bio)
+-		return;
+-
+-	srcu_idx = srcu_read_lock(&head->srcu);
+-	ns = nvme_find_path(head);
+-	if (likely(ns)) {
+-		bio_set_dev(bio, ns->disk->part0);
+-		bio->bi_opf |= REQ_NVME_MPATH;
+-		trace_block_bio_remap(bio, disk_devt(ns->head->disk),
+-				      bio->bi_iter.bi_sector);
+-		submit_bio_noacct(bio);
+-	} else if (nvme_available_path(head)) {
+-		dev_warn_ratelimited(dev, "no usable path - requeuing I/O\n");
+-
+-		spin_lock_irq(&head->requeue_lock);
+-		bio_list_add(&head->requeue_list, bio);
+-		spin_unlock_irq(&head->requeue_lock);
+-	} else {
+-		dev_warn_ratelimited(dev, "no available path - failing I/O\n");
+-
+-		bio_io_error(bio);
+-	}
+-
+-	srcu_read_unlock(&head->srcu, srcu_idx);
+-}
+-
+-static int nvme_ns_head_open(struct gendisk *disk, blk_mode_t mode)
+-{
+-	if (!nvme_tryget_ns_head(disk->private_data))
+-		return -ENXIO;
+-	return 0;
+-}
+-
+-static void nvme_ns_head_release(struct gendisk *disk)
+-{
+-	nvme_put_ns_head(disk->private_data);
+-}
+-
+-static int nvme_ns_head_get_unique_id(struct gendisk *disk, u8 id[16],
+-		enum blk_unique_id type)
+-{
+-	struct nvme_ns_head *head = disk->private_data;
+-	struct nvme_ns *ns;
+-	int srcu_idx, ret = -EWOULDBLOCK;
+-
+-	srcu_idx = srcu_read_lock(&head->srcu);
+-	ns = nvme_find_path(head);
+-	if (ns)
+-		ret = nvme_ns_get_unique_id(ns, id, type);
+-	srcu_read_unlock(&head->srcu, srcu_idx);
+-	return ret;
+-}
+-
+-#ifdef CONFIG_BLK_DEV_ZONED
+-static int nvme_ns_head_report_zones(struct gendisk *disk, sector_t sector,
+-		unsigned int nr_zones, struct blk_report_zones_args *args)
+-{
+-	struct nvme_ns_head *head = disk->private_data;
+-	struct nvme_ns *ns;
+-	int srcu_idx, ret = -EWOULDBLOCK;
+-
+-	srcu_idx = srcu_read_lock(&head->srcu);
+-	ns = nvme_find_path(head);
+-	if (ns)
+-		ret = nvme_ns_report_zones(ns, sector, nr_zones, args);
+-	srcu_read_unlock(&head->srcu, srcu_idx);
+-	return ret;
+-}
+-#else
+-#define nvme_ns_head_report_zones	NULL
+-#endif /* CONFIG_BLK_DEV_ZONED */
+-
+-const struct block_device_operations nvme_ns_head_ops = {
+-	.owner		= THIS_MODULE,
+-	.submit_bio	= nvme_ns_head_submit_bio,
+-	.open		= nvme_ns_head_open,
+-	.release	= nvme_ns_head_release,
+-	.ioctl		= nvme_ns_head_ioctl,
+-	.compat_ioctl	= blkdev_compat_ptr_ioctl,
+-	.getgeo		= nvme_getgeo,
+-	.get_unique_id	= nvme_ns_head_get_unique_id,
+-	.report_zones	= nvme_ns_head_report_zones,
+-	.pr_ops		= &nvme_pr_ops,
+-};
+-
+ static int nvme_mpath_add_cdev(struct mpath_head *mpath_head)
+ {
+ 	struct nvme_ns_head *head = mpath_head->drvdata;
+@@ -638,211 +308,25 @@ static void nvme_mpath_del_cdev(struct mpath_head *mpath_head)
+ 	nvme_cdev_del(&mpath_head->cdev, &mpath_head->cdev_device);
+ }
+ 
+-static inline struct nvme_ns_head *cdev_to_ns_head(struct cdev *cdev)
+-{
+-	return container_of(cdev, struct nvme_ns_head, cdev);
+-}
+-
+-static int nvme_ns_head_chr_open(struct inode *inode, struct file *file)
+-{
+-	if (!nvme_tryget_ns_head(cdev_to_ns_head(inode->i_cdev)))
+-		return -ENXIO;
+-	return 0;
+-}
+-
+-static int nvme_ns_head_chr_release(struct inode *inode, struct file *file)
+-{
+-	nvme_put_ns_head(cdev_to_ns_head(inode->i_cdev));
+-	return 0;
+-}
+-
+-static const struct file_operations nvme_ns_head_chr_fops = {
+-	.owner		= THIS_MODULE,
+-	.open		= nvme_ns_head_chr_open,
+-	.release	= nvme_ns_head_chr_release,
+-	.unlocked_ioctl	= nvme_ns_head_chr_ioctl,
+-	.compat_ioctl	= compat_ptr_ioctl,
+-	.uring_cmd	= nvme_ns_head_chr_uring_cmd,
+-	.uring_cmd_iopoll = nvme_ns_chr_uring_cmd_iopoll,
+-};
+-
+-static int nvme_add_ns_head_cdev(struct nvme_ns_head *head)
+-{
+-	int ret;
+-
+-	head->cdev_device.parent = &head->subsys->dev;
+-	ret = dev_set_name(&head->cdev_device, "ng%dn%d",
+-			   head->subsys->instance, head->instance);
+-	if (ret)
+-		return ret;
+-	ret = nvme_cdev_add(&head->cdev, &head->cdev_device,
+-			    &nvme_ns_head_chr_fops, THIS_MODULE);
+-	return ret;
+-}
+-
+-static void nvme_partition_scan_work(struct work_struct *work)
+-{
+-	struct nvme_ns_head *head =
+-		container_of(work, struct nvme_ns_head, partition_scan_work);
+-
+-	if (WARN_ON_ONCE(!test_and_clear_bit(GD_SUPPRESS_PART_SCAN,
+-					     &head->disk->state)))
+-		return;
+-
+-	mutex_lock(&head->disk->open_mutex);
+-	bdev_disk_changed(head->disk, false);
+-	mutex_unlock(&head->disk->open_mutex);
+-}
+-
+-static void nvme_requeue_work(struct work_struct *work)
+-{
+-	struct nvme_ns_head *head =
+-		container_of(work, struct nvme_ns_head, requeue_work);
+-	struct bio *bio, *next;
+-
+-	spin_lock_irq(&head->requeue_lock);
+-	next = bio_list_get(&head->requeue_list);
+-	spin_unlock_irq(&head->requeue_lock);
+-
+-	while ((bio = next) != NULL) {
+-		next = bio->bi_next;
+-		bio->bi_next = NULL;
+-
+-		submit_bio_noacct(bio);
+-	}
+-}
+-
+ static void nvme_remove_head(struct nvme_ns_head *head)
+ {
+-	if (test_and_clear_bit(NVME_NSHEAD_DISK_LIVE, &head->flags)) {
+-		/*
+-		 * requeue I/O after NVME_NSHEAD_DISK_LIVE has been cleared
+-		 * to allow multipath to fail all I/O.
+-		 */
+-		kblockd_schedule_work(&head->requeue_work);
+-
+-		nvme_cdev_del(&head->cdev, &head->cdev_device);
+-		synchronize_srcu(&head->srcu);
+-		del_gendisk(head->disk);
+-	}
++	mpath_remove_disk(head->mpath_head);
+ 	nvme_put_ns_head(head);
+ }
+ 
+-static void nvme_remove_head_work(struct work_struct *work)
++static void nvme_mpath_remove_head(struct mpath_head *mpath_head)
+ {
+-	struct nvme_ns_head *head = container_of(to_delayed_work(work),
+-			struct nvme_ns_head, remove_work);
++	struct nvme_ns_head *head = mpath_head->drvdata;
+ 	bool remove = false;
+ 
+ 	mutex_lock(&head->subsys->lock);
+-	if (list_empty(&head->list)) {
++	if (mpath_head_devices_empty(mpath_head)) {
+ 		list_del_init(&head->entry);
+ 		remove = true;
+ 	}
+ 	mutex_unlock(&head->subsys->lock);
+ 	if (remove)
+ 		nvme_remove_head(head);
+-
+-	module_put(THIS_MODULE);
+-}
+-
+-int nvme_mpath_alloc_disk(struct nvme_ctrl *ctrl, struct nvme_ns_head *head)
+-{
+-	struct queue_limits lim;
+-
+-	mutex_init(&head->lock);
+-	bio_list_init(&head->requeue_list);
+-	spin_lock_init(&head->requeue_lock);
+-	INIT_WORK(&head->requeue_work, nvme_requeue_work);
+-	INIT_WORK(&head->partition_scan_work, nvme_partition_scan_work);
+-	INIT_DELAYED_WORK(&head->remove_work, nvme_remove_head_work);
+-	head->delayed_removal_secs = 0;
+-
+-	/*
+-	 * If "multipath_always_on" is enabled, a multipath node is added
+-	 * regardless of whether the disk is single/multi ported, and whether
+-	 * the namespace is shared or private. If "multipath_always_on" is not
+-	 * enabled, a multipath node is added only if the subsystem supports
+-	 * multiple controllers and the "multipath" option is configured. In
+-	 * either case, for private namespaces, we ensure that the NSID is
+-	 * unique.
+-	 */
+-	if (!multipath_always_on) {
+-		if (!(ctrl->subsys->cmic & NVME_CTRL_CMIC_MULTI_CTRL) ||
+-				!multipath)
+-			return 0;
+-	}
+-
+-	if (!nvme_is_unique_nsid(ctrl, head))
+-		return 0;
+-
+-	blk_set_stacking_limits(&lim);
+-	lim.dma_alignment = 3;
+-	lim.features |= BLK_FEAT_IO_STAT | BLK_FEAT_NOWAIT |
+-		BLK_FEAT_POLL | BLK_FEAT_ATOMIC_WRITES;
+-	if (head->ids.csi == NVME_CSI_ZNS)
+-		lim.features |= BLK_FEAT_ZONED;
+-
+-	head->disk = blk_alloc_disk(&lim, ctrl->numa_node);
+-	if (IS_ERR(head->disk))
+-		return PTR_ERR(head->disk);
+-	head->disk->fops = &nvme_ns_head_ops;
+-	head->disk->private_data = head;
+-
+-	/*
+-	 * We need to suppress the partition scan from occuring within the
+-	 * controller's scan_work context. If a path error occurs here, the IO
+-	 * will wait until a path becomes available or all paths are torn down,
+-	 * but that action also occurs within scan_work, so it would deadlock.
+-	 * Defer the partition scan to a different context that does not block
+-	 * scan_work.
+-	 */
+-	set_bit(GD_SUPPRESS_PART_SCAN, &head->disk->state);
+-	sprintf(head->disk->disk_name, "nvme%dn%d",
+-			ctrl->subsys->instance, head->instance);
+-	nvme_tryget_ns_head(head);
+-	return 0;
+-}
+-
+-static void nvme_mpath_set_live(struct nvme_ns *ns)
+-{
+-	struct nvme_ns_head *head = ns->head;
+-	int rc;
+-
+-	if (!head->disk)
+-		return;
+-
+-	/*
+-	 * test_and_set_bit() is used because it is protecting against two nvme
+-	 * paths simultaneously calling device_add_disk() on the same namespace
+-	 * head.
+-	 */
+-	if (!test_and_set_bit(NVME_NSHEAD_DISK_LIVE, &head->flags)) {
+-		rc = device_add_disk(&head->subsys->dev, head->disk,
+-				     nvme_ns_attr_groups);
+-		if (rc) {
+-			clear_bit(NVME_NSHEAD_DISK_LIVE, &head->flags);
+-			return;
+-		}
+-		nvme_add_ns_head_cdev(head);
+-		queue_work(nvme_wq, &head->partition_scan_work);
+-	}
+-
+-	nvme_mpath_add_sysfs_link(ns->head);
+-
+-	mutex_lock(&head->lock);
+-	if (nvme_path_is_optimized(ns)) {
+-		int node, srcu_idx;
+-
+-		srcu_idx = srcu_read_lock(&head->srcu);
+-		for_each_online_node(node)
+-			__nvme_find_path(head, node);
+-		srcu_read_unlock(&head->srcu, srcu_idx);
+-	}
+-	mutex_unlock(&head->lock);
+-
+-	synchronize_srcu(&head->srcu);
+-	kblockd_schedule_work(&head->requeue_work);
+ }
+ 
+ static int nvme_parse_ana_log(struct nvme_ctrl *ctrl, void *data,
+@@ -894,14 +378,29 @@ static inline bool nvme_state_is_live(enum nvme_ana_state state)
+ 	return state == NVME_ANA_OPTIMIZED || state == NVME_ANA_NONOPTIMIZED;
+ }
+ 
++static void nvme_mpath_update_ana_state(struct nvme_ns *ns,
++				enum nvme_ana_state ana_state)
++{
++	ns->ana_state = ana_state;
++	if (ana_state == NVME_ANA_OPTIMIZED)
++		ns->mpath_device.access_state = MPATH_STATE_OPTIMIZED;
++	else if (ana_state == NVME_ANA_NONOPTIMIZED)
++		ns->mpath_device.access_state = MPATH_STATE_NONOPTIMIZED;
++	else
++		ns->mpath_device.access_state = MPATH_STATE_OTHER;
 +}
 +
- __maybe_unused
+ static void nvme_update_ns_ana_state(struct nvme_ana_group_desc *desc,
+ 		struct nvme_ns *ns)
+ {
++	struct mpath_head *mpath_head = ns->head->mpath_head;
++
+ 	ns->ana_grpid = le32_to_cpu(desc->grpid);
+-	ns->ana_state = desc->state;
++	nvme_mpath_update_ana_state(ns, desc->state);
+ 	clear_bit(NVME_NS_ANA_PENDING, &ns->flags);
++
+ 	/*
+-	 * nvme_mpath_set_live() will trigger I/O to the multipath path device
++	 * mpath_device_set_live() will trigger I/O to the multipath path device
+ 	 * and in turn to this path device.  However we cannot accept this I/O
+ 	 * if the controller is not live.  This may deadlock if called from
+ 	 * nvme_mpath_init_identify() and the ctrl will never complete
+@@ -911,16 +410,16 @@ static void nvme_update_ns_ana_state(struct nvme_ana_group_desc *desc,
+ 	 */
+ 	if (nvme_state_is_live(ns->ana_state) &&
+ 	    nvme_ctrl_state(ns->ctrl) == NVME_CTRL_LIVE)
+-		nvme_mpath_set_live(ns);
++		mpath_device_set_live(&ns->mpath_device);
+ 	else {
+ 		/*
+ 		 * Add sysfs link from multipath head gendisk node to path
+ 		 * device gendisk node.
+ 		 * If path's ana state is live (i.e. state is either optimized
+ 		 * or non-optimized) while we alloc the ns then sysfs link would
+-		 * be created from nvme_mpath_set_live(). In that case we would
++		 * be created from mpath_device_set_live(). In that case we would
+ 		 * not fallthrough this code path. However for the path's ana
+-		 * state other than live, we call nvme_mpath_set_live() only
++		 * state other than live, we call mpath_device_set_live() only
+ 		 * after ana state transitioned to the live state. But we still
+ 		 * want to create the sysfs link from head node to a path device
+ 		 * irrespctive of the path's ana state.
+@@ -928,8 +427,8 @@ static void nvme_update_ns_ana_state(struct nvme_ana_group_desc *desc,
+ 		 * is not live but still create the sysfs link to this path from
+ 		 * head node if head node of the path has already come alive.
+ 		 */
+-		if (test_bit(NVME_NSHEAD_DISK_LIVE, &ns->head->flags))
+-			nvme_mpath_add_sysfs_link(ns->head);
++		if (test_bit(MPATH_HEAD_DISK_LIVE, &mpath_head->flags))
++			mpath_add_sysfs_link(mpath_head);
+ 	}
+ }
+ 
+@@ -1056,48 +555,23 @@ static ssize_t nvme_subsys_iopolicy_show(struct device *dev,
+ 	struct nvme_subsystem *subsys =
+ 		container_of(dev, struct nvme_subsystem, dev);
+ 
+-	return sysfs_emit(buf, "%s\n",
+-			  nvme_iopolicy_names[READ_ONCE(subsys->iopolicy)]);
++	return mpath_iopolicy_show(&subsys->mpath_iopolicy, buf);
+ }
+ 
+-static void nvme_subsys_iopolicy_update(struct nvme_subsystem *subsys,
+-		int iopolicy)
++static ssize_t nvme_subsys_iopolicy_store(struct device *dev,
++		struct device_attribute *attr, const char *buf, size_t count)
+ {
++	struct nvme_subsystem *subsys =
++		container_of(dev, struct nvme_subsystem, dev);
+ 	struct nvme_ctrl *ctrl;
+-	int old_iopolicy = READ_ONCE(subsys->iopolicy);
+-
+-	if (old_iopolicy == iopolicy)
+-		return;
+ 
+-	WRITE_ONCE(subsys->iopolicy, iopolicy);
+-
+-	/* iopolicy changes clear the mpath by design */
++	if (!mpath_iopolicy_store(&subsys->mpath_iopolicy, buf, count))
++		return -EINVAL;
+ 	mutex_lock(&nvme_subsystems_lock);
+ 	list_for_each_entry(ctrl, &subsys->ctrls, subsys_entry)
+ 		nvme_mpath_clear_ctrl_paths(ctrl);
+ 	mutex_unlock(&nvme_subsystems_lock);
+-
+-	pr_notice("subsysnqn %s iopolicy changed from %s to %s\n",
+-			subsys->subnqn,
+-			nvme_iopolicy_names[old_iopolicy],
+-			nvme_iopolicy_names[iopolicy]);
+-}
+-
+-static ssize_t nvme_subsys_iopolicy_store(struct device *dev,
+-		struct device_attribute *attr, const char *buf, size_t count)
+-{
+-	struct nvme_subsystem *subsys =
+-		container_of(dev, struct nvme_subsystem, dev);
+-	int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(nvme_iopolicy_names); i++) {
+-		if (sysfs_streq(buf, nvme_iopolicy_names[i])) {
+-			nvme_subsys_iopolicy_update(subsys, i);
+-			return count;
+-		}
+-	}
+-
+-	return -EINVAL;
++	return count;
+ }
+ SUBSYS_ATTR_RW(iopolicy, S_IRUGO | S_IWUSR,
+ 		      nvme_subsys_iopolicy_show, nvme_subsys_iopolicy_store);
+@@ -1123,7 +597,7 @@ static ssize_t queue_depth_show(struct device *dev,
+ {
+ 	struct nvme_ns *ns = nvme_get_ns_from_dev(dev);
+ 
+-	if (ns->head->subsys->iopolicy != NVME_IOPOLICY_QD)
++	if (!mpath_qd_iopolicy(&ns->head->subsys->mpath_iopolicy))
+ 		return 0;
+ 
+ 	return sysfs_emit(buf, "%d\n", atomic_read(&ns->ctrl->nr_active));
+@@ -1133,69 +607,25 @@ DEVICE_ATTR_RO(queue_depth);
+ static ssize_t numa_nodes_show(struct device *dev, struct device_attribute *attr,
+ 		char *buf)
+ {
+-	int node, srcu_idx;
+-	nodemask_t numa_nodes;
+-	struct nvme_ns *current_ns;
+ 	struct nvme_ns *ns = nvme_get_ns_from_dev(dev);
+-	struct nvme_ns_head *head = ns->head;
+-
+-	if (head->subsys->iopolicy != NVME_IOPOLICY_NUMA)
+-		return 0;
+ 
+-	nodes_clear(numa_nodes);
+-
+-	srcu_idx = srcu_read_lock(&head->srcu);
+-	for_each_node(node) {
+-		current_ns = srcu_dereference(head->current_path[node],
+-				&head->srcu);
+-		if (ns == current_ns)
+-			node_set(node, numa_nodes);
+-	}
+-	srcu_read_unlock(&head->srcu, srcu_idx);
+-
+-	return sysfs_emit(buf, "%*pbl\n", nodemask_pr_args(&numa_nodes));
++	return mpath_numa_nodes_show(&ns->mpath_device,
++		&ns->head->subsys->mpath_iopolicy, buf);
+ }
+ DEVICE_ATTR_RO(numa_nodes);
+ 
+-static ssize_t delayed_removal_secs_show(struct device *dev,
++static ssize_t delayed_removal_secs_show(struct device *bd_device,
+ 		struct device_attribute *attr, char *buf)
+ {
+-	struct gendisk *disk = dev_to_disk(dev);
+-	struct nvme_ns_head *head = disk->private_data;
+-	int ret;
+-
+-	mutex_lock(&head->subsys->lock);
+-	ret = sysfs_emit(buf, "%u\n", head->delayed_removal_secs);
+-	mutex_unlock(&head->subsys->lock);
+-	return ret;
++	return mpath_delayed_removal_secs_show(
++		mpath_bd_device_to_head(bd_device), buf);
+ }
+ 
+-static ssize_t delayed_removal_secs_store(struct device *dev,
++static ssize_t delayed_removal_secs_store(struct device *bd_device,
+ 		struct device_attribute *attr, const char *buf, size_t count)
+ {
+-	struct gendisk *disk = dev_to_disk(dev);
+-	struct nvme_ns_head *head = disk->private_data;
+-	unsigned int sec;
+-	int ret;
+-
+-	ret = kstrtouint(buf, 0, &sec);
+-	if (ret < 0)
+-		return ret;
+-
+-	mutex_lock(&head->subsys->lock);
+-	head->delayed_removal_secs = sec;
+-	if (sec)
+-		set_bit(NVME_NSHEAD_QUEUE_IF_NO_PATH, &head->flags);
+-	else
+-		clear_bit(NVME_NSHEAD_QUEUE_IF_NO_PATH, &head->flags);
+-	mutex_unlock(&head->subsys->lock);
+-	/*
+-	 * Ensure that update to NVME_NSHEAD_QUEUE_IF_NO_PATH is seen
+-	 * by its reader.
+-	 */
+-	synchronize_srcu(&head->srcu);
+-
+-	return count;
++	return mpath_delayed_removal_secs_store(
++		mpath_bd_device_to_head(bd_device), buf, count);
+ }
+ 
+ DEVICE_ATTR_RW(delayed_removal_secs);
+@@ -1212,85 +642,6 @@ static int nvme_lookup_ana_group_desc(struct nvme_ctrl *ctrl,
+ 	return -ENXIO; /* just break out of the loop */
+ }
+ 
+-void nvme_mpath_add_sysfs_link(struct nvme_ns_head *head)
+-{
+-	struct device *target;
+-	int rc, srcu_idx;
+-	struct nvme_ns *ns;
+-	struct kobject *kobj;
+-
+-	/*
+-	 * Ensure head disk node is already added otherwise we may get invalid
+-	 * kobj for head disk node
+-	 */
+-	if (!test_bit(GD_ADDED, &head->disk->state))
+-		return;
+-
+-	kobj = &disk_to_dev(head->disk)->kobj;
+-
+-	/*
+-	 * loop through each ns chained through the head->list and create the
+-	 * sysfs link from head node to the ns path node
+-	 */
+-	srcu_idx = srcu_read_lock(&head->srcu);
+-
+-	list_for_each_entry_srcu(ns, &head->list, siblings,
+-				 srcu_read_lock_held(&head->srcu)) {
+-		/*
+-		 * Ensure that ns path disk node is already added otherwise we
+-		 * may get invalid kobj name for target
+-		 */
+-		if (!test_bit(GD_ADDED, &ns->disk->state))
+-			continue;
+-
+-		/*
+-		 * Avoid creating link if it already exists for the given path.
+-		 * When path ana state transitions from optimized to non-
+-		 * optimized or vice-versa, the nvme_mpath_set_live() is
+-		 * invoked which in truns call this function. Now if the sysfs
+-		 * link already exists for the given path and we attempt to re-
+-		 * create the link then sysfs code would warn about it loudly.
+-		 * So we evaluate NVME_NS_SYSFS_ATTR_LINK flag here to ensure
+-		 * that we're not creating duplicate link.
+-		 * The test_and_set_bit() is used because it is protecting
+-		 * against multiple nvme paths being simultaneously added.
+-		 */
+-		if (test_and_set_bit(NVME_NS_SYSFS_ATTR_LINK, &ns->flags))
+-			continue;
+-
+-		target = disk_to_dev(ns->disk);
+-		/*
+-		 * Create sysfs link from head gendisk kobject @kobj to the
+-		 * ns path gendisk kobject @target->kobj.
+-		 */
+-		rc = sysfs_add_link_to_group(kobj, nvme_ns_mpath_attr_group.name,
+-				&target->kobj, dev_name(target));
+-		if (unlikely(rc)) {
+-			dev_err(disk_to_dev(ns->head->disk),
+-					"failed to create link to %s\n",
+-					dev_name(target));
+-			clear_bit(NVME_NS_SYSFS_ATTR_LINK, &ns->flags);
+-		}
+-	}
+-
+-	srcu_read_unlock(&head->srcu, srcu_idx);
+-}
+-
+-void nvme_mpath_remove_sysfs_link(struct nvme_ns *ns)
+-{
+-	struct device *target;
+-	struct kobject *kobj;
+-
+-	if (!test_bit(NVME_NS_SYSFS_ATTR_LINK, &ns->flags))
+-		return;
+-
+-	target = disk_to_dev(ns->disk);
+-	kobj = &disk_to_dev(ns->head->disk)->kobj;
+-	sysfs_remove_link_from_group(kobj, nvme_ns_mpath_attr_group.name,
+-			dev_name(target));
+-	clear_bit(NVME_NS_SYSFS_ATTR_LINK, &ns->flags);
+-}
+-
+ void nvme_mpath_add_disk(struct nvme_ns *ns, __le32 anagrpid)
+ {
+ 	if (nvme_ctrl_use_ana(ns->ctrl)) {
+@@ -1312,13 +663,13 @@ void nvme_mpath_add_disk(struct nvme_ns *ns, __le32 anagrpid)
+ 			queue_work(nvme_wq, &ns->ctrl->ana_work);
+ 		}
+ 	} else {
+-		ns->ana_state = NVME_ANA_OPTIMIZED;
+-		nvme_mpath_set_live(ns);
++		nvme_mpath_update_ana_state(ns, NVME_ANA_OPTIMIZED);
++		mpath_device_set_live(&ns->mpath_device);
+ 	}
+ 
+ #ifdef CONFIG_BLK_DEV_ZONED
+-	if (blk_queue_is_zoned(ns->queue) && ns->head->disk)
+-		ns->head->disk->nr_zones = ns->disk->nr_zones;
++	if (blk_queue_is_zoned(ns->queue) && ns->head->mpath_head)
++		ns->head->mpath_head->disk->nr_zones = ns->disk->nr_zones;
+ #endif
+ }
+ 
+@@ -1326,7 +677,7 @@ void nvme_mpath_remove_disk(struct nvme_ns_head *head)
+ {
+ 	bool remove = false;
+ 
+-	if (!head->disk)
++	if (!head->mpath_head->disk)
+ 		return;
+ 
+ 	mutex_lock(&head->subsys->lock);
+@@ -1339,17 +690,10 @@ void nvme_mpath_remove_disk(struct nvme_ns_head *head)
+ 	 * head->list here. If it is no longer empty then we skip enqueuing the
+ 	 * delayed head removal work.
+ 	 */
+-	if (!list_empty(&head->list))
++	if (!mpath_head_devices_empty(head->mpath_head))
+ 		goto out;
+ 
+-	/*
+-	 * Ensure that no one could remove this module while the head
+-	 * remove work is pending.
+-	 */
+-	if (head->delayed_removal_secs && try_module_get(THIS_MODULE)) {
+-		mod_delayed_work(nvme_wq, &head->remove_work,
+-				head->delayed_removal_secs * HZ);
+-	} else {
++	if (mpath_can_remove_head(head->mpath_head)) {
+ 		list_del_init(&head->entry);
+ 		remove = true;
+ 	}
+@@ -1359,17 +703,6 @@ void nvme_mpath_remove_disk(struct nvme_ns_head *head)
+ 		nvme_remove_head(head);
+ }
+ 
+-void nvme_mpath_put_disk(struct nvme_ns_head *head)
+-{
+-	if (!head->disk)
+-		return;
+-	/* make sure all pending bios are cleaned up */
+-	kblockd_schedule_work(&head->requeue_work);
+-	flush_work(&head->requeue_work);
+-	flush_work(&head->partition_scan_work);
+-	put_disk(head->disk);
+-}
+-
+ void nvme_mpath_init_ctrl(struct nvme_ctrl *ctrl)
+ {
+ 	mutex_init(&ctrl->ana_lock);
+@@ -1451,9 +784,9 @@ static int nvme_mpath_get_nr_active(struct mpath_device *mpath_device)
+ 	return atomic_read(&nvme_mpath_to_ns(mpath_device)->ctrl->nr_active);
+ }
+ 
+-__maybe_unused
  static const struct mpath_head_template mpdt = {
  	.available_path = nvme_mpath_available_path,
-@@ -1459,4 +1464,5 @@ static const struct mpath_head_template mpdt = {
- 	.chr_uring_cmd = nvme_mpath_chr_uring_cmd,
- 	.chr_uring_cmd_iopoll = nvme_ns_chr_uring_cmd_iopoll,
++	.remove_head = nvme_mpath_remove_head,
+ 	.add_cdev = nvme_mpath_add_cdev,
+ 	.del_cdev = nvme_mpath_del_cdev,
+ 	.is_disabled = nvme_mpath_is_disabled,
+@@ -1466,3 +799,45 @@ static const struct mpath_head_template mpdt = {
  	.get_iopolicy = nvme_mpath_get_iopolicy,
-+	.get_nr_active = nvme_mpath_get_nr_active,
+ 	.get_nr_active = nvme_mpath_get_nr_active,
+ };
++
++int nvme_mpath_alloc_disk(struct nvme_ctrl *ctrl, struct nvme_ns_head *head)
++{
++	struct queue_limits lim;
++	int ret;
++
++	head->mpath_head->mpdt = &mpdt;
++
++	/*
++	 * If "multipath_always_on" is enabled, a multipath node is added
++	 * regardless of whether the disk is single/multi ported, and whether
++	 * the namespace is shared or private. If "multipath_always_on" is not
++	 * enabled, a multipath node is added only if the subsystem supports
++	 * multiple controllers and the "multipath" option is configured. In
++	 * either case, for private namespaces, we ensure that the NSID is
++	 * unique.
++	 */
++	if (!multipath_always_on) {
++		if (!(ctrl->subsys->cmic & NVME_CTRL_CMIC_MULTI_CTRL) ||
++				!multipath)
++			return 0;
++	}
++
++	if (!nvme_is_unique_nsid(ctrl, head))
++		return 0;
++
++	blk_set_stacking_limits(&lim);
++	lim.dma_alignment = 3;
++	lim.features |= BLK_FEAT_IO_STAT | BLK_FEAT_NOWAIT |
++		BLK_FEAT_POLL | BLK_FEAT_ATOMIC_WRITES;
++	if (head->ids.csi == NVME_CSI_ZNS)
++		lim.features |= BLK_FEAT_ZONED;
++
++	ret = mpath_alloc_head_disk(head->mpath_head, &lim, ctrl->numa_node);
++	if (ret)
++		return ret;
++
++	sprintf(head->mpath_head->disk->disk_name, "nvme%dn%d",
++			ctrl->subsys->instance, head->instance);
++	nvme_tryget_ns_head(head);
++	return 0;
++}
+diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+index f96ad4f890797..b687cbd906729 100644
+--- a/drivers/nvme/host/nvme.h
++++ b/drivers/nvme/host/nvme.h
+@@ -252,11 +252,6 @@ struct nvme_request {
+ 	struct nvme_ctrl	*ctrl;
+ };
+ 
+-/*
+- * Mark a bio as coming in through the mpath node.
+- */
+-#define REQ_NVME_MPATH		REQ_DRV
+-
+ enum {
+ 	NVME_REQ_CANCELLED		= (1 << 0),
+ 	NVME_REQ_USERCMD		= (1 << 1),
+@@ -474,11 +469,6 @@ static inline enum nvme_ctrl_state nvme_ctrl_state(struct nvme_ctrl *ctrl)
+ 	return READ_ONCE(ctrl->state);
+ }
+ 
+-enum nvme_iopolicy {
+-	NVME_IOPOLICY_NUMA,
+-	NVME_IOPOLICY_RR,
+-	NVME_IOPOLICY_QD,
+-};
+ 
+ struct nvme_subsystem {
+ 	int			instance;
+@@ -501,7 +491,6 @@ struct nvme_subsystem {
+ 	u16			vendor_id;
+ 	struct ida		ns_ida;
+ #ifdef CONFIG_NVME_MULTIPATH
+-	enum nvme_iopolicy	iopolicy;
+ 	struct mpath_iopolicy	mpath_iopolicy;
+ #endif
+ };
+@@ -524,8 +513,6 @@ struct nvme_ns_ids {
+  * only ever has a single entry for private namespaces.
+  */
+ struct nvme_ns_head {
+-	struct list_head	list;
+-	struct srcu_struct      srcu;
+ 	struct nvme_subsystem	*subsys;
+ 	struct nvme_ns_ids	ids;
+ 	u8			lba_shift;
+@@ -549,33 +536,15 @@ struct nvme_ns_head {
+ 
+ 	struct ratelimit_state	rs_nuse;
+ 
+-	struct cdev		cdev;
+-	struct device		cdev_device;
+-
+-	struct gendisk		*disk;
+-
+ 	u16			nr_plids;
+ 	u16			*plids;
+ 
+ 	struct mpath_head	*mpath_head;
+-#ifdef CONFIG_NVME_MULTIPATH
+-	struct bio_list		requeue_list;
+-	spinlock_t		requeue_lock;
+-	struct work_struct	requeue_work;
+-	struct work_struct	partition_scan_work;
+-	struct mutex		lock;
+-	unsigned long		flags;
+-	struct delayed_work	remove_work;
+-	unsigned int		delayed_removal_secs;
+-#define NVME_NSHEAD_DISK_LIVE		0
+-#define NVME_NSHEAD_QUEUE_IF_NO_PATH	1
+-	struct nvme_ns __rcu	*current_path[];
+-#endif
+ };
+ 
+ static inline bool nvme_ns_head_multipath(struct nvme_ns_head *head)
+ {
+-	return IS_ENABLED(CONFIG_NVME_MULTIPATH) && head->disk;
++	return IS_ENABLED(CONFIG_NVME_MULTIPATH) && head->mpath_head->disk;
+ }
+ 
+ enum nvme_ns_features {
+@@ -595,7 +564,6 @@ struct nvme_ns {
+ 	enum nvme_ana_state ana_state;
+ 	u32 ana_grpid;
+ #endif
+-	struct list_head siblings;
+ 	struct kref kref;
+ 	struct nvme_ns_head *head;
+ 
+@@ -997,34 +965,28 @@ void nvme_cdev_del(struct cdev *cdev, struct device *cdev_device);
+ int nvme_ioctl(struct block_device *bdev, blk_mode_t mode,
+ 		unsigned int cmd, unsigned long arg);
+ long nvme_ns_chr_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
+-int nvme_ns_head_ioctl(struct block_device *bdev, blk_mode_t mode,
+-		unsigned int cmd, unsigned long arg);
+-long nvme_ns_head_chr_ioctl(struct file *file, unsigned int cmd,
+-		unsigned long arg);
++
+ long nvme_dev_ioctl(struct file *file, unsigned int cmd,
+ 		unsigned long arg);
+ int nvme_ns_chr_uring_cmd_iopoll(struct io_uring_cmd *ioucmd,
+ 		struct io_comp_batch *iob, unsigned int poll_flags);
+ int nvme_ns_chr_uring_cmd(struct io_uring_cmd *ioucmd,
+ 		unsigned int issue_flags);
+-int nvme_ns_head_chr_uring_cmd(struct io_uring_cmd *ioucmd,
+-		unsigned int issue_flags);
++int nvme_mpath_chr_uring_cmd(struct mpath_device *mpath_device,
++		struct io_uring_cmd *ioucmd, unsigned int issue_flags);
+ int nvme_identify_ns(struct nvme_ctrl *ctrl, unsigned nsid,
+ 		struct nvme_id_ns **id);
+ int nvme_getgeo(struct gendisk *disk, struct hd_geometry *geo);
+ int nvme_dev_uring_cmd(struct io_uring_cmd *ioucmd, unsigned int issue_flags);
+ 
+ extern const struct attribute_group *nvme_ns_attr_groups[];
+-extern const struct attribute_group nvme_ns_mpath_attr_group;
+ extern const struct pr_ops nvme_pr_ops;
+-extern const struct block_device_operations nvme_ns_head_ops;
+ extern const struct attribute_group nvme_dev_attrs_group;
+ extern const struct attribute_group *nvme_subsys_attrs_groups[];
+ extern const struct attribute_group *nvme_dev_attr_groups[];
+ extern const struct block_device_operations nvme_bdev_ops;
+ 
+ void nvme_delete_ctrl_sync(struct nvme_ctrl *ctrl);
+-struct nvme_ns *nvme_find_path(struct nvme_ns_head *head);
+ 
+ static inline void nvme_add_ns(struct nvme_ns *ns)
+ {
+@@ -1051,35 +1013,43 @@ void nvme_mpath_default_iopolicy(struct nvme_subsystem *subsys);
+ void nvme_failover_req(struct request *req);
+ void nvme_kick_requeue_lists(struct nvme_ctrl *ctrl);
+ int nvme_mpath_alloc_disk(struct nvme_ctrl *ctrl,struct nvme_ns_head *head);
+-void nvme_mpath_add_sysfs_link(struct nvme_ns_head *ns);
+-void nvme_mpath_remove_sysfs_link(struct nvme_ns *ns);
+ void nvme_mpath_add_disk(struct nvme_ns *ns, __le32 anagrpid);
+-void nvme_mpath_put_disk(struct nvme_ns_head *head);
+ int nvme_mpath_init_identify(struct nvme_ctrl *ctrl, struct nvme_id_ctrl *id);
+ void nvme_mpath_init_ctrl(struct nvme_ctrl *ctrl);
+ void nvme_mpath_update(struct nvme_ctrl *ctrl);
+ void nvme_mpath_uninit(struct nvme_ctrl *ctrl);
+ void nvme_mpath_stop(struct nvme_ctrl *ctrl);
+-bool nvme_mpath_clear_current_path(struct nvme_ns *ns);
+ void nvme_mpath_revalidate_paths(struct nvme_ns_head *head);
+ void nvme_mpath_clear_ctrl_paths(struct nvme_ctrl *ctrl);
+ void nvme_mpath_remove_disk(struct nvme_ns_head *head);
+ void nvme_mpath_start_request(struct request *rq);
+ void nvme_mpath_end_request(struct request *rq);
+-int nvme_mpath_chr_uring_cmd(struct mpath_device *mpath_device,
+-		struct io_uring_cmd *ioucmd, unsigned int issue_flags);
+-
+ long nvme_mpath_cdev_ioctl(struct mpath_device *mpath_device, unsigned int cmd,
+ 			unsigned long arg, bool open_for_write);
+ void nvme_mpath_ioctl_begin(struct mpath_device *mpath_device,
+ 			unsigned int cmd, void **opaque);
+ void nvme_mpath_ioctl_finish(void *opaque);
+ 
++static inline void nvme_mpath_put_disk(struct nvme_ns_head *head)
++{
++	mpath_put_disk(head->mpath_head);
++}
++
++static inline void nvme_mpath_remove_sysfs_link(struct nvme_ns *ns)
++{
++	mpath_remove_sysfs_link(&ns->mpath_device);
++}
++
+ static inline void nvme_mpath_synchronize(struct nvme_ns_head *head)
+ {
+ 	mpath_synchronize(head->mpath_head);
+ }
+ 
++static inline bool nvme_mpath_clear_current_path(struct nvme_ns *ns)
++{
++	return mpath_clear_current_path(&ns->mpath_device);
++}
++
+ static inline bool nvme_mpath_head_queue_if_no_path(struct nvme_ns_head *head)
+ {
+ 	return mpath_head_queue_if_no_path(head->mpath_head);
+@@ -1089,8 +1059,9 @@ static inline void nvme_trace_bio_complete(struct request *req)
+ {
+ 	struct nvme_ns *ns = req->q->queuedata;
+ 
+-	if ((req->cmd_flags & REQ_NVME_MPATH) && req->bio)
+-		trace_block_bio_complete(ns->head->disk->queue, req->bio);
++	if (is_mpath_request(req) && req->bio)
++		trace_block_bio_complete(ns->head->mpath_head->disk->queue,
++					req->bio);
+ }
+ 
+ extern bool multipath;
+@@ -1101,16 +1072,6 @@ extern struct device_attribute dev_attr_numa_nodes;
+ extern struct device_attribute dev_attr_delayed_removal_secs;
+ extern struct device_attribute subsys_attr_iopolicy;
+ 
+-static inline bool nvme_disk_is_ns_head(struct gendisk *disk)
+-{
+-	return disk->fops == &nvme_ns_head_ops;
+-}
+-static inline bool nvme_mpath_queue_if_no_path(struct nvme_ns_head *head)
+-{
+-	if (test_bit(NVME_NSHEAD_QUEUE_IF_NO_PATH, &head->flags))
+-		return true;
+-	return false;
+-}
+ #else
+ #define multipath false
+ static inline bool nvme_ctrl_use_ana(struct nvme_ctrl *ctrl)
+@@ -1137,9 +1098,7 @@ static inline void nvme_mpath_add_disk(struct nvme_ns *ns, __le32 anagrpid)
+ static inline void nvme_mpath_put_disk(struct nvme_ns_head *head)
+ {
+ }
+-static inline void nvme_mpath_add_sysfs_link(struct nvme_ns *ns)
+-{
+-}
++
+ static inline void nvme_mpath_remove_sysfs_link(struct nvme_ns *ns)
+ {
+ }
+@@ -1197,14 +1156,6 @@ static inline void nvme_mpath_start_request(struct request *rq)
+ static inline void nvme_mpath_end_request(struct request *rq)
+ {
+ }
+-static inline bool nvme_disk_is_ns_head(struct gendisk *disk)
+-{
+-	return false;
+-}
+-static inline bool nvme_mpath_queue_if_no_path(struct nvme_ns_head *head)
+-{
+-	return false;
+-}
+ static inline bool nvme_mpath_head_queue_if_no_path(struct nvme_ns_head *head)
+ {
+ 	return false;
+@@ -1243,7 +1194,7 @@ static inline struct nvme_ns *nvme_get_ns_from_dev(struct device *dev)
+ {
+ 	struct gendisk *disk = dev_to_disk(dev);
+ 
+-	WARN_ON(nvme_disk_is_ns_head(disk));
++	WARN_ON(is_mpath_disk(disk));
+ 	return disk->private_data;
+ }
+ 
+@@ -1263,7 +1214,7 @@ static inline void nvme_hwmon_exit(struct nvme_ctrl *ctrl)
+ 
+ static inline void nvme_start_request(struct request *rq)
+ {
+-	if (rq->cmd_flags & REQ_NVME_MPATH)
++	if (is_mpath_request(rq))
+ 		nvme_mpath_start_request(rq);
+ 	blk_mq_start_request(rq);
+ }
+diff --git a/drivers/nvme/host/pr.c b/drivers/nvme/host/pr.c
+index fe7dbe2648158..65e4dc74833e9 100644
+--- a/drivers/nvme/host/pr.c
++++ b/drivers/nvme/host/pr.c
+@@ -49,22 +49,6 @@ static enum pr_type block_pr_type_from_nvme(enum nvme_pr_type type)
+ 	return 0;
+ }
+ 
+-static int nvme_send_ns_head_pr_command(struct block_device *bdev,
+-		struct nvme_command *c, void *data, unsigned int data_len)
+-{
+-	struct nvme_ns_head *head = bdev->bd_disk->private_data;
+-	int srcu_idx = srcu_read_lock(&head->srcu);
+-	struct nvme_ns *ns = nvme_find_path(head);
+-	int ret = -EWOULDBLOCK;
+-
+-	if (ns) {
+-		c->common.nsid = cpu_to_le32(ns->head->ns_id);
+-		ret = nvme_submit_sync_cmd(ns->queue, c, data, data_len);
+-	}
+-	srcu_read_unlock(&head->srcu, srcu_idx);
+-	return ret;
+-}
+-
+ static int nvme_send_ns_pr_command(struct nvme_ns *ns, struct nvme_command *c,
+ 		void *data, unsigned int data_len)
+ {
+@@ -101,8 +85,6 @@ static int __nvme_send_pr_command(struct block_device *bdev, u32 cdw10,
+ 	c.common.cdw10 = cpu_to_le32(cdw10);
+ 	c.common.cdw11 = cpu_to_le32(cdw11);
+ 
+-	if (nvme_disk_is_ns_head(bdev->bd_disk))
+-		return nvme_send_ns_head_pr_command(bdev, &c, data, data_len);
+ 	return nvme_send_ns_pr_command(bdev->bd_disk->private_data, &c,
+ 				data, data_len);
+ }
+diff --git a/drivers/nvme/host/sysfs.c b/drivers/nvme/host/sysfs.c
+index e59758616f277..39a80f000839b 100644
+--- a/drivers/nvme/host/sysfs.c
++++ b/drivers/nvme/host/sysfs.c
+@@ -64,8 +64,8 @@ static inline struct nvme_ns_head *dev_to_ns_head(struct device *dev)
+ {
+ 	struct gendisk *disk = dev_to_disk(dev);
+ 
+-	if (nvme_disk_is_ns_head(disk))
+-		return disk->private_data;
++	if (is_mpath_disk(disk))
++		return mpath_gendisk_to_head(disk)->drvdata;
+ 	return nvme_get_ns_from_dev(dev)->head;
+ }
+ 
+@@ -183,31 +183,28 @@ static ssize_t metadata_bytes_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RO(metadata_bytes);
+ 
+-static int ns_head_update_nuse(struct nvme_ns_head *head)
++static int ns_head_update_nuse_cb(struct mpath_device *mpath_device)
+ {
++	struct nvme_ns *ns = nvme_mpath_to_ns(mpath_device);
+ 	struct nvme_id_ns *id;
+-	struct nvme_ns *ns;
+-	int srcu_idx, ret = -EWOULDBLOCK;
+-
+-	/* Avoid issuing commands too often by rate limiting the update */
+-	if (!__ratelimit(&head->rs_nuse))
+-		return 0;
+-
+-	srcu_idx = srcu_read_lock(&head->srcu);
+-	ns = nvme_find_path(head);
+-	if (!ns)
+-		goto out_unlock;
++	int ret;
+ 
+-	ret = nvme_identify_ns(ns->ctrl, head->ns_id, &id);
++	ret = nvme_identify_ns(ns->ctrl, ns->head->ns_id, &id);
+ 	if (ret)
+-		goto out_unlock;
++		return ret;
+ 
+-	head->nuse = le64_to_cpu(id->nuse);
++	ns->head->nuse = le64_to_cpu(id->nuse);
+ 	kfree(id);
++	return 0;
++}
+ 
+-out_unlock:
+-	srcu_read_unlock(&head->srcu, srcu_idx);
+-	return ret;
++static int ns_head_update_nuse(struct nvme_ns_head *head)
++{
++	/* Avoid issuing commands too often by rate limiting the update */
++	if (!__ratelimit(&head->rs_nuse))
++		return 0;
++
++	return mpath_call_for_device(head->mpath_head, ns_head_update_nuse_cb);
+ }
+ 
+ static int ns_update_nuse(struct nvme_ns *ns)
+@@ -235,7 +232,7 @@ static ssize_t nuse_show(struct device *dev, struct device_attribute *attr,
+ 	struct gendisk *disk = dev_to_disk(dev);
+ 	int ret;
+ 
+-	if (nvme_disk_is_ns_head(disk))
++	if (is_mpath_disk(disk))
+ 		ret = ns_head_update_nuse(head);
+ 	else
+ 		ret = ns_update_nuse(disk->private_data);
+@@ -288,19 +285,19 @@ static umode_t nvme_ns_attrs_are_visible(struct kobject *kobj,
+ #ifdef CONFIG_NVME_MULTIPATH
+ 	if (a == &dev_attr_ana_grpid.attr || a == &dev_attr_ana_state.attr) {
+ 		/* per-path attr */
+-		if (nvme_disk_is_ns_head(dev_to_disk(dev)))
++		if (is_mpath_disk(dev_to_disk(dev)))
+ 			return 0;
+ 		if (!nvme_ctrl_use_ana(nvme_get_ns_from_dev(dev)->ctrl))
+ 			return 0;
+ 	}
+ 	if (a == &dev_attr_queue_depth.attr || a == &dev_attr_numa_nodes.attr) {
+-		if (nvme_disk_is_ns_head(dev_to_disk(dev)))
++		if (is_mpath_disk(dev_to_disk(dev)))
+ 			return 0;
+ 	}
+ 	if (a == &dev_attr_delayed_removal_secs.attr) {
+ 		struct gendisk *disk = dev_to_disk(dev);
+ 
+-		if (!nvme_disk_is_ns_head(disk))
++		if (!is_mpath_disk(disk))
+ 			return 0;
+ 	}
+ #endif
+@@ -312,49 +309,10 @@ static const struct attribute_group nvme_ns_attr_group = {
+ 	.is_visible	= nvme_ns_attrs_are_visible,
+ };
+ 
+-#ifdef CONFIG_NVME_MULTIPATH
+-/*
+- * NOTE: The dummy attribute does not appear in sysfs. It exists solely to allow
+- * control over the visibility of the multipath sysfs node. Without at least one
+- * attribute defined in nvme_ns_mpath_attrs[], the sysfs implementation does not
+- * invoke the multipath_sysfs_group_visible() method. As a result, we would not
+- * be able to control the visibility of the multipath sysfs node.
+- */
+-static struct attribute dummy_attr = {
+-	.name = "dummy",
+-};
+-
+-static struct attribute *nvme_ns_mpath_attrs[] = {
+-	&dummy_attr,
+-	NULL,
+-};
+-
+-static bool multipath_sysfs_group_visible(struct kobject *kobj)
+-{
+-	struct device *dev = container_of(kobj, struct device, kobj);
+-
+-	return nvme_disk_is_ns_head(dev_to_disk(dev));
+-}
+-
+-static bool multipath_sysfs_attr_visible(struct kobject *kobj,
+-		struct attribute *attr, int n)
+-{
+-	return false;
+-}
+-
+-DEFINE_SYSFS_GROUP_VISIBLE(multipath_sysfs)
+-
+-const struct attribute_group nvme_ns_mpath_attr_group = {
+-	.name           = "multipath",
+-	.attrs		= nvme_ns_mpath_attrs,
+-	.is_visible     = SYSFS_GROUP_VISIBLE(multipath_sysfs),
+-};
+-#endif
+-
+ const struct attribute_group *nvme_ns_attr_groups[] = {
+ 	&nvme_ns_attr_group,
+ #ifdef CONFIG_NVME_MULTIPATH
+-	&nvme_ns_mpath_attr_group,
++	&mpath_attr_group,
+ #endif
+ 	NULL,
  };
 -- 
 2.43.5
