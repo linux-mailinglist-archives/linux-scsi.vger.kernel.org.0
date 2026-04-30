@@ -1,77 +1,74 @@
-Return-Path: <linux-scsi+bounces-23524-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23522-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8NKxIYCe82lJ5QEAu9opvQ
-	(envelope-from <linux-scsi+bounces-23524-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:25:04 +0200
+	id IMOULWee82lJ5QEAu9opvQ
+	(envelope-from <linux-scsi+bounces-23522-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:24:39 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 250D04A6E35
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:25:04 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A4264A6E27
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:24:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BA741304752F
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 18:23:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CB9CE30315E1
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 18:23:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04A4647B43D;
-	Thu, 30 Apr 2026 18:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31404477E43;
+	Thu, 30 Apr 2026 18:23:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="EQTbbjPs"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="d8pd7sCY"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A47F39D6DE
-	for <linux-scsi@vger.kernel.org>; Thu, 30 Apr 2026 18:23:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E251E39D6DE
+	for <linux-scsi@vger.kernel.org>; Thu, 30 Apr 2026 18:23:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777573407; cv=none; b=mIO9fsPQ+B2WO9Jo/C8VyEGug4LtFhQyUDmqheS1MgC3ch7Z3O3lTyj9CPbt9EvesNGaI8HWRtXB+1jNMpVy75NQnRgdXRYXK9WD3p+EcKpHUojPt268opsJUGHhhs+EfxUz8iM3PYmoar6ufGEsaUa8ZfR4ADvToQCwgK9Z7z8=
+	t=1777573402; cv=none; b=iqLTz8Q7GMexNt/nBiTRZido2aLJ+NDjqZ1bZH/XbNDbFjdgfX39OXW+oVkWx2vKEAXrabc2/c3UGkvxNfvnspY8bEVpngY0EhCjiBVYAfgO4oJCD2jTUtxYiWzRl//sxgJbwnJZwsF9jyGjq6jVScK8zHVYr3dvgOIupZ/yA3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777573407; c=relaxed/simple;
-	bh=nIa/WoGJIRglcei7T+Vw1Kii6f5LnYnWAWw3lsDHShs=;
+	s=arc-20240116; t=1777573402; c=relaxed/simple;
+	bh=JGPuIyysDyaqVHQqhXHi0htNmLW6ILwWM7dGBH7g3y4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=R7iikeE9BScjci2UPsJIpI5VZxyUDJ1lvsP8ZA3sBJThiIhJ2qOq6PJmyU3hkpQq2N/3mFZ1TtZhEDs7v+5ci3BEcaG2DSSXaiZg+l9MyjqydmjIDHX9ywAUnnC9T5P0bEvQ03XxEcYp/xooeD8QaD8nsVRlXX9lm+ktw9i9Cok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=EQTbbjPs; arc=none smtp.client-ip=199.89.1.16
+	 MIME-Version:Content-Type; b=mut6/zlu7Ll2x6/2Xbd/IFtg0nQ9k3rc0xygppmM4FrG+hb1WRZlyJRLYPg1xxp/EFsi7VWIGtJelxztIJL3EklBr3T3IpoaX5VvalHKSvgQOc4ZqThbQpyd7IxCddBcNp8giuGpX2p4CdCr7H1hlVZwKI+h7q2eInOMHp++JEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=d8pd7sCY; arc=none smtp.client-ip=199.89.1.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4g62bx6frxzlfdfc;
-	Thu, 30 Apr 2026 18:23:25 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4g62br50MKzlfdfc;
+	Thu, 30 Apr 2026 18:23:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:references:in-reply-to
-	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1777573395; x=1780165396; bh=NI4Pu
-	OkEkod14lyLshx6gbiQLc0A14YvTuDBrF6GIYA=; b=EQTbbjPsavs/ttgh4Tgnn
-	NZVUZemfZsJXAp8PvQY7bvgSags9PCJNdZ1X/73T6u6FxYwPWEywACUDh8mJFebK
-	r3ipCQ190sJD/LxYvfgldhcqhaZ4LVLV+qQmT0OuyG1Hff7N+C35S9a2lUnOP6iv
-	Uxdo10tEin+m4Xt6i+tdJ4hUjphRdE2BKuVRMzNj0DMuJOFl2OgxHUUDwXrWFoGi
-	t0qRAuRWstGsVgGIzb1hG6uYAonm4tlDGenfdT+Pu5p9hyjTKYBXI/FDgL8agR95
-	rV39Uhq7nvv57zCGWJ18BeltQ0gXdYH9FOIHF4OS2v5ZIvDK+R9cpaVh3ttqeVRc
-	A==
+	content-transfer-encoding:content-type:content-type:mime-version
+	:references:in-reply-to:x-mailer:message-id:date:date:subject
+	:subject:from:from:received:received; s=mr01; t=1777573398; x=
+	1780165399; bh=JGPuIyysDyaqVHQqhXHi0htNmLW6ILwWM7dGBH7g3y4=; b=d
+	8pd7sCYijEKOK0vdZi7dBj09w5JpyYtsw5uArpybucwmp7xnBTLSWb2xUTBgw6z2
+	wos/REfchiokDlpU9tHBrQ5Wil4LVoPchzOh+qQjICdtu4hgYLTws7gan9JXuVkU
+	1kce97yxUaTnccnayZbWOGiBwLRNtBp9LKqgsQZug3FY0mR8S1NnfEmN3cvI0+Dq
+	0gFnepdze1ry5trpaYHp936YLEgCjkt+qk9rElulqgBJLTan6nVw+0zyQaKM4SVt
+	/WuxdGKaN9oR7t16N62j118WZav7ar8AsFh6Aa5SVAB5pl33Cd776dDLFhiypOdf
+	DALUT69LS/A9rgUEWFfYA==
 X-Virus-Scanned: by MailRoute
 Received: from 013.lax.mailroute.net ([127.0.0.1])
  by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 2lVMi08Bgfv0; Thu, 30 Apr 2026 18:23:15 +0000 (UTC)
+ id qP7ju42g78kM; Thu, 30 Apr 2026 18:23:18 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4g62bj3ZfWzlfvpH;
-	Thu, 30 Apr 2026 18:23:13 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4g62bm4HfLzlffts;
+	Thu, 30 Apr 2026 18:23:16 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	Marco Elver <elver@google.com>,
 	Bart Van Assche <bvanassche@acm.org>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Colin Ian King <colin.i.king@gmail.com>
-Subject: [PATCH v2 22/56] scsi: csiostor: Enable lock context analysis
-Date: Thu, 30 Apr 2026 11:19:52 -0700
-Message-ID: <20260430182130.1978347-23-bvanassche@acm.org>
+	Ram Vegesna <ram.vegesna@broadcom.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH v2 23/56] scsi: elx: Enable lock context analysis
+Date: Thu, 30 Apr 2026 11:19:53 -0700
+Message-ID: <20260430182130.1978347-24-bvanassche@acm.org>
 X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
 In-Reply-To: <20260430182130.1978347-1-bvanassche@acm.org>
 References: <20260430182130.1978347-1-bvanassche@acm.org>
@@ -81,311 +78,55 @@ List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 250D04A6E35
+X-Rspamd-Queue-Id: 5A4264A6E27
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,google.com,acm.org,HansenPartnership.com,kernel.org,gmail.com];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-23522-lists,linux-scsi=lfdr.de];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23524-lists,linux-scsi=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[acm.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	NEURAL_HAM(-0.00)[-0.994];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[acm.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
+	RCPT_COUNT_FIVE(0.00)[6];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[acm.org:email,acm.org:dkim,acm.org:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-
-Document lock context requirements with __must_hold().
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/csiostor/Makefile     |  2 ++
- drivers/scsi/csiostor/csio_hw.c    | 12 ++++++++++++
- drivers/scsi/csiostor/csio_lnode.c |  3 +++
- drivers/scsi/csiostor/csio_rnode.c |  6 ++++++
- drivers/scsi/csiostor/csio_scsi.c  |  6 ++++++
- 5 files changed, 29 insertions(+)
+ drivers/scsi/elx/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/csiostor/Makefile b/drivers/scsi/csiostor/Makef=
-ile
-index d047e22eac0d..a19031efa7c4 100644
---- a/drivers/scsi/csiostor/Makefile
-+++ b/drivers/scsi/csiostor/Makefile
-@@ -4,6 +4,8 @@
- #
- ##
+diff --git a/drivers/scsi/elx/Makefile b/drivers/scsi/elx/Makefile
+index a8537d7a2a6e..0ed508e379fb 100644
+--- a/drivers/scsi/elx/Makefile
++++ b/drivers/scsi/elx/Makefile
+@@ -4,6 +4,7 @@
+ # * =E2=80=9CBroadcom=E2=80=9D refers to Broadcom Inc. and/or its subsid=
+iaries.
+ # */
 =20
 +CONTEXT_ANALYSIS :=3D y
-+
- ccflags-y +=3D -I$(srctree)/drivers/net/ethernet/chelsio/cxgb4
 =20
- obj-$(CONFIG_SCSI_CHELSIO_FCOE) +=3D csiostor.o
-diff --git a/drivers/scsi/csiostor/csio_hw.c b/drivers/scsi/csiostor/csio=
-_hw.c
-index df9f81f29950..4b4d3c42667f 100644
---- a/drivers/scsi/csiostor/csio_hw.c
-+++ b/drivers/scsi/csiostor/csio_hw.c
-@@ -914,6 +914,7 @@ csio_hw_dev_ready(struct csio_hw *hw)
-  */
- static int
- csio_do_hello(struct csio_hw *hw, enum csio_dev_state *state)
-+	__must_hold(&hw->lock)
- {
- 	struct csio_mb	*mbp;
- 	int	rv =3D 0;
-@@ -2050,6 +2051,7 @@ csio_hw_flash_config(struct csio_hw *hw, u32 *fw_cf=
-g_param, char *path)
-  */
- static int
- csio_hw_use_fwconfig(struct csio_hw *hw, int reset, u32 *fw_cfg_param)
-+	__must_hold(&hw->lock)
- {
- 	struct csio_mb	*mbp =3D NULL;
- 	struct fw_caps_config_cmd *caps_cmd;
-@@ -2475,6 +2477,7 @@ static int csio_hw_check_fwver(struct csio_hw *hw)
-  */
- static void
- csio_hw_configure(struct csio_hw *hw)
-+	__must_hold(&hw->lock)
- {
- 	int reset =3D 1;
- 	int rv;
-@@ -2604,6 +2607,7 @@ csio_hw_configure(struct csio_hw *hw)
-  */
- static void
- csio_hw_initialize(struct csio_hw *hw)
-+	__must_hold(&hw->lock)
- {
- 	struct csio_mb	*mbp;
- 	enum fw_retval retval;
-@@ -2778,6 +2782,7 @@ csio_hw_fatal_err(struct csio_hw *hw)
-  */
- static void
- csio_hws_uninit(struct csio_hw *hw, enum csio_hw_ev evt)
-+	__must_hold(&hw->lock)
- {
- 	hw->prev_evt =3D hw->cur_evt;
- 	hw->cur_evt =3D evt;
-@@ -2803,6 +2808,7 @@ csio_hws_uninit(struct csio_hw *hw, enum csio_hw_ev=
- evt)
-  */
- static void
- csio_hws_configuring(struct csio_hw *hw, enum csio_hw_ev evt)
-+	__must_hold(&hw->lock)
- {
- 	hw->prev_evt =3D hw->cur_evt;
- 	hw->cur_evt =3D evt;
-@@ -2988,6 +2994,7 @@ csio_hws_quiescing(struct csio_hw *hw, enum csio_hw=
-_ev evt)
-  */
- static void
- csio_hws_quiesced(struct csio_hw *hw, enum csio_hw_ev evt)
-+	__must_hold(&hw->lock)
- {
- 	hw->prev_evt =3D hw->cur_evt;
- 	hw->cur_evt =3D evt;
-@@ -3013,6 +3020,7 @@ csio_hws_quiesced(struct csio_hw *hw, enum csio_hw_=
-ev evt)
-  */
- static void
- csio_hws_resetting(struct csio_hw *hw, enum csio_hw_ev evt)
-+	__must_hold(&hw->lock)
- {
- 	hw->prev_evt =3D hw->cur_evt;
- 	hw->cur_evt =3D evt;
-@@ -3074,6 +3082,7 @@ csio_hws_removing(struct csio_hw *hw, enum csio_hw_=
-ev evt)
-  */
- static void
- csio_hws_pcierr(struct csio_hw *hw, enum csio_hw_ev evt)
-+	__must_hold(&hw->lock)
- {
- 	hw->prev_evt =3D hw->cur_evt;
- 	hw->cur_evt =3D evt;
-@@ -3763,6 +3772,7 @@ csio_hw_mb_timer(struct timer_list *t)
-  */
- static void
- csio_hw_mbm_cleanup(struct csio_hw *hw)
-+	__must_hold(&hw->lock)
- {
- 	LIST_HEAD(cbfn_q);
+ obj-$(CONFIG_SCSI_EFCT) :=3D efct.o
 =20
-@@ -3883,6 +3893,7 @@ csio_free_evt(struct csio_hw *hw, struct csio_evt_m=
-sg *evt_entry)
-=20
- void
- csio_evtq_flush(struct csio_hw *hw)
-+	__must_hold(&hw->lock)
- {
- 	uint32_t count;
- 	count =3D 30;
-@@ -4142,6 +4153,7 @@ csio_mgmt_tmo_handler(struct timer_list *t)
-=20
- static void
- csio_mgmtm_cleanup(struct csio_mgmtm *mgmtm)
-+	__must_hold(&mgmtm->hw->lock)
- {
- 	struct csio_hw *hw =3D mgmtm->hw;
- 	struct csio_ioreq *io_req;
-diff --git a/drivers/scsi/csiostor/csio_lnode.c b/drivers/scsi/csiostor/c=
-sio_lnode.c
-index 78d5ecd14f65..161973957976 100644
---- a/drivers/scsi/csiostor/csio_lnode.c
-+++ b/drivers/scsi/csiostor/csio_lnode.c
-@@ -872,6 +872,7 @@ csio_ln_read_fcf_entry(struct csio_lnode *ln,
- static void
- csio_handle_link_up(struct csio_hw *hw, uint8_t portid, uint32_t fcfi,
- 		    uint32_t vnpi)
-+	__must_hold(&hw->lock)
- {
- 	struct csio_lnode *ln =3D NULL;
-=20
-@@ -1165,6 +1166,7 @@ csio_lns_uninit(struct csio_lnode *ln, enum csio_ln=
-_ev evt)
-  */
- static void
- csio_lns_online(struct csio_lnode *ln, enum csio_ln_ev evt)
-+	__must_hold(&csio_lnode_to_hw(ln)->lock)
- {
- 	struct csio_hw *hw =3D csio_lnode_to_hw(ln);
-=20
-@@ -1216,6 +1218,7 @@ csio_lns_online(struct csio_lnode *ln, enum csio_ln=
-_ev evt)
-  */
- static void
- csio_lns_ready(struct csio_lnode *ln, enum csio_ln_ev evt)
-+	__must_hold(&csio_lnode_to_hw(ln)->lock)
- {
- 	struct csio_hw *hw =3D csio_lnode_to_hw(ln);
-=20
-diff --git a/drivers/scsi/csiostor/csio_rnode.c b/drivers/scsi/csiostor/c=
-sio_rnode.c
-index 713e13adf4dc..74ef1e858cf3 100644
---- a/drivers/scsi/csiostor/csio_rnode.c
-+++ b/drivers/scsi/csiostor/csio_rnode.c
-@@ -546,6 +546,7 @@ csio_rn_verify_rparams(struct csio_lnode *ln, struct =
-csio_rnode *rn,
-=20
- static void
- __csio_reg_rnode(struct csio_rnode *rn)
-+	__must_hold(&csio_lnode_to_hw(csio_rnode_to_lnode(rn))->lock)
- {
- 	struct csio_lnode *ln =3D csio_rnode_to_lnode(rn);
- 	struct csio_hw *hw =3D csio_lnode_to_hw(ln);
-@@ -563,6 +564,7 @@ __csio_reg_rnode(struct csio_rnode *rn)
-=20
- static void
- __csio_unreg_rnode(struct csio_rnode *rn)
-+	__must_hold(&csio_lnode_to_hw(csio_rnode_to_lnode(rn))->lock)
- {
- 	struct csio_lnode *ln =3D csio_rnode_to_lnode(rn);
- 	struct csio_hw *hw =3D csio_lnode_to_hw(ln);
-@@ -602,6 +604,7 @@ __csio_unreg_rnode(struct csio_rnode *rn)
-  */
- static void
- csio_rns_uninit(struct csio_rnode *rn, enum csio_rn_ev evt)
-+	__must_hold(&csio_rnode_to_lnode(rn)->hwp->lock)
- {
- 	struct csio_lnode *ln =3D csio_rnode_to_lnode(rn);
- 	int ret =3D 0;
-@@ -642,6 +645,7 @@ csio_rns_uninit(struct csio_rnode *rn, enum csio_rn_e=
-v evt)
-  */
- static void
- csio_rns_ready(struct csio_rnode *rn, enum csio_rn_ev evt)
-+	__must_hold(&csio_rnode_to_lnode(rn)->hwp->lock)
- {
- 	struct csio_lnode *ln =3D csio_rnode_to_lnode(rn);
- 	int ret =3D 0;
-@@ -727,6 +731,7 @@ csio_rns_ready(struct csio_rnode *rn, enum csio_rn_ev=
- evt)
-  */
- static void
- csio_rns_offline(struct csio_rnode *rn, enum csio_rn_ev evt)
-+	__must_hold(&csio_rnode_to_lnode(rn)->hwp->lock)
- {
- 	struct csio_lnode *ln =3D csio_rnode_to_lnode(rn);
- 	int ret =3D 0;
-@@ -786,6 +791,7 @@ csio_rns_offline(struct csio_rnode *rn, enum csio_rn_=
-ev evt)
-  */
- static void
- csio_rns_disappeared(struct csio_rnode *rn, enum csio_rn_ev evt)
-+	__must_hold(&csio_rnode_to_lnode(rn)->hwp->lock)
- {
- 	struct csio_lnode *ln =3D csio_rnode_to_lnode(rn);
- 	int ret =3D 0;
-diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/cs=
-io_scsi.c
-index b1de615cf316..b74fed463640 100644
---- a/drivers/scsi/csiostor/csio_scsi.c
-+++ b/drivers/scsi/csiostor/csio_scsi.c
-@@ -1157,6 +1157,7 @@ csio_scsi_cmpl_handler(struct csio_hw *hw, void *wr=
-, uint32_t len,
-  */
- void
- csio_scsi_cleanup_io_q(struct csio_scsim *scm, struct list_head *q)
-+	__must_hold(&scm->hw->lock)
- {
- 	struct csio_hw *hw =3D scm->hw;
- 	struct csio_ioreq *ioreq;
-@@ -1231,6 +1232,7 @@ csio_abrt_cls(struct csio_ioreq *ioreq, struct scsi=
-_cmnd *scmnd)
-  */
- static int
- csio_scsi_abort_io_q(struct csio_scsim *scm, struct list_head *q, uint32=
-_t tmo)
-+	__must_hold(&scm->hw->lock)
- {
- 	struct csio_hw *hw =3D scm->hw;
- 	struct list_head *tmp, *next;
-@@ -1271,6 +1273,7 @@ csio_scsi_abort_io_q(struct csio_scsim *scm, struct=
- list_head *q, uint32_t tmo)
-  */
- int
- csio_scsim_cleanup_io(struct csio_scsim *scm, bool abort)
-+	__must_hold(&scm->hw->lock)
- {
- 	struct csio_hw *hw =3D scm->hw;
- 	int rv =3D 0;
-@@ -1316,6 +1319,7 @@ csio_scsim_cleanup_io(struct csio_scsim *scm, bool =
-abort)
-  */
- int
- csio_scsim_cleanup_io_lnode(struct csio_scsim *scm, struct csio_lnode *l=
-n)
-+	__must_hold(&scm->hw->lock)
- {
- 	struct csio_hw *hw =3D scm->hw;
- 	struct csio_scsi_level_data sld;
-@@ -2192,6 +2196,8 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
- 	 * completes, we gather pending I/Os after the LUN reset.
- 	 */
- 	spin_lock_irq(&hw->lock);
-+	/* Tell the compiler that scsim->hw =3D=3D hw. */
-+	__assume_ctx_lock(&scsim->hw->lock);
- 	csio_scsi_gather_active_ios(scsim, &sld, &local_q);
-=20
- 	retval =3D csio_scsi_abort_io_q(scsim, &local_q, 30000);
 
