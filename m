@@ -1,77 +1,79 @@
-Return-Path: <linux-scsi+bounces-23540-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23542-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iCHfEv+e82ly5QEAu9opvQ
-	(envelope-from <linux-scsi+bounces-23540-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:27:11 +0200
+	id IL4KFwef82ly5QEAu9opvQ
+	(envelope-from <linux-scsi+bounces-23542-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:27:19 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A76F24A6EB1
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:27:10 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3A154A6EC0
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:27:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7E308306848E
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 18:24:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 36B4330315CA
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 18:24:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66683421F06;
-	Thu, 30 Apr 2026 18:24:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95EF7421F06;
+	Thu, 30 Apr 2026 18:24:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="QZ2F8cmb"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="BwD58tfO"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0CE47A0CB
-	for <linux-scsi@vger.kernel.org>; Thu, 30 Apr 2026 18:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422CD3537FF
+	for <linux-scsi@vger.kernel.org>; Thu, 30 Apr 2026 18:24:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777573472; cv=none; b=KAmnka0WriuK5wB16mBh+fDsBJcJq8gZF3QTBgeAiIW1FjT0mymiRu03kKf1qhpDanMhIYn0GCBZ8+o1m6GcCsy7X6Nb8NnQNNtRFprll40EMhRAGWQg1J0kKckx6thZ2TJQdnGEljWvi4straF4WSn88nb10Hj76TjXmudpLlc=
+	t=1777573485; cv=none; b=JB+jZ5UT4VoEBOppLQzj5suzTL7eCVwkcDL3wPXh1lqqZhbxYuPPrcusVSckishel2ZE2LFr1P/vu1wWdT59k/p7YrsnQu2ibP8qoOezaCMc/LpqCBiVR67dV+sXVtgzPQpfMuWeWraCLOean7H/8/Hf4gip4oiMHh5w1YUqqJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777573472; c=relaxed/simple;
-	bh=HJXiUOkdQ9kMnH5DZgevRHU07bWtuzUH67337nbEBYc=;
+	s=arc-20240116; t=1777573485; c=relaxed/simple;
+	bh=rJ4tvIgM50dJNYJUZOv6Jbfn5W/lTP9ETjSf/0zN2TM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DXtzcOxeT/9/a9B6TZlZTXANgJaw5kycQTsOeZ7IWCOktVqLIYmLOGWVgrJGPrZwTmV1PNQkwT1BIlAfAdEO3w0/c3kDFQamP9qgvRVoip8QtIA9tOgMOi5IHe6L7+0+fj0gaRbL2AWjaUSzXxuBxBRBVDmd1GRT5ukx+mLd8EE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=QZ2F8cmb; arc=none smtp.client-ip=199.89.1.16
+	 MIME-Version; b=Zlzp22pJTZJ9NI9zvKH1gfoHI3cPNtj8830Fb1/Trlxtqf9c6mZkLpowEKaBYNagQLw7NnbMJOvzwgeArzPjUMXbzZYFhdaeVghB9rW3LSp7pO634ohs+rodjYc8C+9/9iw2KAaF1yr4Hki8qOXN2Bd5HlSk8/fOixIZi2j8em8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=BwD58tfO; arc=none smtp.client-ip=199.89.1.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4g62dB418Tzlfl89;
-	Thu, 30 Apr 2026 18:24:30 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4g62dR63P9zlh2fq;
+	Thu, 30 Apr 2026 18:24:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1777573466; x=1780165467; bh=ZQ37Z
-	OYKscgPlVPKWJotbgx1Eq+4p3gngLj4/iTUK20=; b=QZ2F8cmbz2/NIL6O9z+H2
-	IgqrF8cayM6Q7ONk1y5dHqWY3IBXuaxqclG+7mYRN8p1PqUH81eIrB8RCFqPkiy0
-	VxX7cIv1ttwf6FvzbLixsZ/q2Q690QyucKSDkBTvJiAjLqhTpN+SHbt422RZVYmO
-	EY8XSWB2fSidwqoXf11duutonb38jbfg8IS+57/hmrvHL7DrZh6LpvL5ldWgAfo3
-	XmaiDuiMTWrHpEJzn7bcCnrYr+NwMbXpAHg66CpQXHQX485lw0cbpmFXFvREWiK4
-	yM/wI/5VO0ReQSl2PVvVofD/7V96f7TpRBYAgRXH3bJzQmr5KJnnaDZhlS5lyN1o
-	w==
+	:received:received; s=mr01; t=1777573477; x=1780165478; bh=JzvvY
+	7sWq0sW394ARjYdYXMhHd0O8NqLKu+32rkVuiU=; b=BwD58tfONBmUQnIIDuVhN
+	99C2TwSRmornIao8Ti8QMN1KdOTl3xJH0TFFQ2LE+YlGs197sH+gB7QA5YTqmvPJ
+	Eo0ihboYJsuFT4I/T8RJyzR2amslKo11vydACYZdCEee4AJdUmXbHSd/qWAff4Ag
+	fL9lTWt4jy1D9A6soy1S+NrVpSpHlIznH/Z+aH+5xdkSVfvx3HG1v12dmMePKzpl
+	r1McjHyzWygEVf+xMGPOVM2e9nixwzJMDp3TEN984ZVCk8N3J3JVkHI5UNt+qx36
+	L6hwfDwYspjvzl9lRPlpid5RXX4xpoK+QrOLnY8VXhaVogT4xWawH6DEPojISyUv
+	g==
 X-Virus-Scanned: by MailRoute
 Received: from 013.lax.mailroute.net ([127.0.0.1])
  by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id qkwSlzJ3IrTA; Thu, 30 Apr 2026 18:24:26 +0000 (UTC)
+ id PbFwctVusSVu; Thu, 30 Apr 2026 18:24:37 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4g62d41hVtzlfdfc;
-	Thu, 30 Apr 2026 18:24:23 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4g62dG3X6RzlfvpH;
+	Thu, 30 Apr 2026 18:24:34 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	Marco Elver <elver@google.com>,
 	Bart Van Assche <bvanassche@acm.org>,
-	Sathya Prakash <sathya.prakash@broadcom.com>,
-	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-	Ranjan Kumar <ranjan.kumar@broadcom.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH v2 41/56] scsi: mpt3sas: Enable lock context analysis
-Date: Thu, 30 Apr 2026 11:20:11 -0700
-Message-ID: <20260430182130.1978347-42-bvanassche@acm.org>
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Thomas Fourier <fourier.thomas@gmail.com>,
+	Kees Cook <kees@kernel.org>
+Subject: [PATCH v2 42/56] scsi: mvsas: Enable lock context analysis
+Date: Thu, 30 Apr 2026 11:20:12 -0700
+Message-ID: <20260430182130.1978347-43-bvanassche@acm.org>
 X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
 In-Reply-To: <20260430182130.1978347-1-bvanassche@acm.org>
 References: <20260430182130.1978347-1-bvanassche@acm.org>
@@ -82,55 +84,126 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: A76F24A6EB1
+X-Rspamd-Queue-Id: C3A154A6EC0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,google.com,acm.org,HansenPartnership.com,kernel.org,gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23540-lists,linux-scsi=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[6];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-23542-lists,linux-scsi=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[acm.org:+];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	NEURAL_HAM(-0.00)[-0.994];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[acm.org:email,acm.org:dkim,acm.org:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[acm.org:email,acm.org:dkim,acm.org:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,marvell.com:email]
+
+Document locking requirements with __must_hold(). Annotate functions
+that perform conditional locking with __no_context_analysis.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/mpt3sas/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/scsi/mvsas/Makefile | 2 ++
+ drivers/scsi/mvsas/mv_sas.c | 7 +++++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/drivers/scsi/mpt3sas/Makefile b/drivers/scsi/mpt3sas/Makefil=
-e
-index e76d994dbed3..5653baeae26c 100644
---- a/drivers/scsi/mpt3sas/Makefile
-+++ b/drivers/scsi/mpt3sas/Makefile
-@@ -1,5 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- # mpt3sas makefile
-+
+diff --git a/drivers/scsi/mvsas/Makefile b/drivers/scsi/mvsas/Makefile
+index 75849258e898..7f45cca38127 100644
+--- a/drivers/scsi/mvsas/Makefile
++++ b/drivers/scsi/mvsas/Makefile
+@@ -7,6 +7,8 @@
+ # Copyright 2009-2011 Marvell. <yuxiangl@marvell.com>
+ #
+=20
 +CONTEXT_ANALYSIS :=3D y
 +
- obj-$(CONFIG_SCSI_MPT3SAS) +=3D mpt3sas.o
- mpt3sas-y +=3D  mpt3sas_base.o     \
- 		mpt3sas_config.o \
+ ccflags-$(CONFIG_SCSI_MVSAS_DEBUG) :=3D -DMV_DEBUG
+=20
+ obj-$(CONFIG_SCSI_MVSAS) +=3D mvsas.o
+diff --git a/drivers/scsi/mvsas/mv_sas.c b/drivers/scsi/mvsas/mv_sas.c
+index 359226e80eae..f63e0dc1abd2 100644
+--- a/drivers/scsi/mvsas/mv_sas.c
++++ b/drivers/scsi/mvsas/mv_sas.c
+@@ -1055,6 +1055,7 @@ void mvs_update_phyinfo(struct mvs_info *mvi, int i=
+, int get_st)
+ }
+=20
+ static void mvs_port_notify_formed(struct asd_sas_phy *sas_phy, int lock=
+)
++	__context_unsafe(conditional locking)
+ {
+ 	struct sas_ha_struct *sas_ha =3D sas_phy->ha;
+ 	struct mvs_info *mvi =3D NULL; int i =3D 0, hi;
+@@ -1153,6 +1154,7 @@ static void mvs_free_dev(struct mvs_device *mvi_dev=
+)
+ }
+=20
+ static int mvs_dev_found_notify(struct domain_device *dev, int lock)
++	__context_unsafe(conditional locking)
+ {
+ 	unsigned long flags =3D 0;
+ 	int res =3D 0;
+@@ -1517,6 +1519,7 @@ static int mvs_slot_err(struct mvs_info *mvi, struc=
+t sas_task *task,
+ }
+=20
+ int mvs_slot_complete(struct mvs_info *mvi, u32 rx_desc, u32 flags)
++	__must_hold(&mvi->lock)
+ {
+ 	u32 slot_idx =3D rx_desc & RXQ_SLOT_MASK;
+ 	struct mvs_slot_info *slot =3D &mvi->slot_info[slot_idx];
+@@ -1644,6 +1647,7 @@ int mvs_slot_complete(struct mvs_info *mvi, u32 rx_=
+desc, u32 flags)
+=20
+ void mvs_do_release_task(struct mvs_info *mvi,
+ 		int phy_no, struct domain_device *dev)
++	__must_hold(&mvi->lock)
+ {
+ 	u32 slot_idx;
+ 	struct mvs_phy *phy;
+@@ -1677,6 +1681,7 @@ void mvs_do_release_task(struct mvs_info *mvi,
+=20
+ void mvs_release_task(struct mvs_info *mvi,
+ 		      struct domain_device *dev)
++	__must_hold(&mvi->lock)
+ {
+ 	int i, phyno[WIDE_PORT_MAX_PHY], num;
+ 	num =3D mvs_find_dev_phyno(dev, phyno);
+@@ -1769,6 +1774,7 @@ static void mvs_sig_time_out(struct timer_list *t)
+ }
+=20
+ void mvs_int_port(struct mvs_info *mvi, int phy_no, u32 events)
++	__must_hold(&mvi->lock)
+ {
+ 	u32 tmp;
+ 	struct mvs_phy *phy =3D &mvi->phy[phy_no];
+@@ -1862,6 +1868,7 @@ void mvs_int_port(struct mvs_info *mvi, int phy_no,=
+ u32 events)
+ }
+=20
+ int mvs_int_rx(struct mvs_info *mvi, bool self_clear)
++	__must_hold(&mvi->lock)
+ {
+ 	u32 rx_prod_idx, rx_desc;
+ 	bool attn =3D false;
 
