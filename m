@@ -1,73 +1,74 @@
-Return-Path: <linux-scsi+bounces-23523-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23525-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CD/sMHae82lJ5QEAu9opvQ
-	(envelope-from <linux-scsi+bounces-23523-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:24:54 +0200
+	id 4GA9LIae82lJ5QEAu9opvQ
+	(envelope-from <linux-scsi+bounces-23525-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:25:10 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43C9A4A6E2E
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:24:54 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CCCF4A6E3D
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:25:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 339BD3009CCE
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 18:23:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 47E4D304FF9B
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 18:23:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C850A47B425;
-	Thu, 30 Apr 2026 18:23:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22CED477E43;
+	Thu, 30 Apr 2026 18:23:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="J32L61cF"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="o+fI2mjS"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8FA421F06
-	for <linux-scsi@vger.kernel.org>; Thu, 30 Apr 2026 18:23:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A23421F06
+	for <linux-scsi@vger.kernel.org>; Thu, 30 Apr 2026 18:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777573406; cv=none; b=AwFf8/F8ZgQ8wdFeObP/+aFkrqApIREnEEEjA9zNROH1OWUG2OvZ6GPb9JmGfR1AEOkGpltdaRYu+oFYf2OB5RT0mZbFdHNcq3hWWLWLqIdIOXjrW0wJgsU6UOaIMzU5ABzi/93VKlZWXzzckvJseS0nNCCUskCnV2lf78CksJw=
+	t=1777573408; cv=none; b=PzyhXOuqcG28ITpm3Pl7lluYAtdvf7+a1lFWfNeqcJODJuHmSP5GFAxXnm+h6qVzp73FSENFPhqpPQlzsKi+VJwoZK8+gAPAGnfaKgurJ0f7m3oGPNY4mNq5jxrBMwgByDJ8boZ+pkx6ZiVNtVkKeRnHXIkxdZPQcours2oFCm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777573406; c=relaxed/simple;
-	bh=cbcqL4QI+no/ZvQ/XpchMGVdbNtQdDoE/vHVIlB9tvg=;
+	s=arc-20240116; t=1777573408; c=relaxed/simple;
+	bh=B7a3aLhKXLGOrB+jS153LnWbyEkz/zg5oUxSiOhylcQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VSWd8nP3b63DAd2ywq+BS3MuLjqIW/3II+NmHcjly3333l7qyqknGN8Bv03cu0MO4Z768/Ba0eivfXLSpKU6ZK9qVb87N3W8kv4VQDhI2kjSMp+RRumFIc3Z6d6y7yac9B/1oKxWbCWvONd+XUHGybctMgmuPo2t7MRp+s78gN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=J32L61cF; arc=none smtp.client-ip=199.89.1.16
+	 MIME-Version; b=J41Rssvsxbb3YB8ug7hz5Kd8NbRGyMaxjcPNr1xR52EkMwNUabl+l6S2TAYlLltGWxrJhweq+TuYYhXhY8FaSNZGThRyTI9zkqKOforTsPs1/GvuykYyMRLiROU5/YWtikCPJRxrGJtRiG973d0suYU2x4Ln3TZSpFETriFsVUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=o+fI2mjS; arc=none smtp.client-ip=199.89.1.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4g62bv4gBqzlfdfN;
-	Thu, 30 Apr 2026 18:23:23 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4g62bz0WybzlfvpH;
+	Thu, 30 Apr 2026 18:23:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1777573400; x=1780165401; bh=32TSW
-	CbHjiskeo0J6OtY7X7eOhcxxx0DKaL+PCFqP+0=; b=J32L61cFLKKCJgMybNv+m
-	O46jLu/v873qE2tt/WCyTbdrhAvl9Y/uIeDdvLeLenIL170PAs1e84WiDTms/Ie9
-	iU1QHpNbL+YI8WG++++dCeI+U1rpjsILJ+qOtNICGvOhlj5q1gGGlo+Az+l5xdgM
-	JCYLCNO7+kZUc9uSdyYmdYx8Bwjk2Ileyu0TOSReEzesJdjTIGvIX+bL2coO0z6u
-	nhtuQww9ci7QKBNWjRc5q8bV4trLXgVJdo3xh3SB/tL4Dqtv2i0jRuH+nfnNZrVR
-	7XjQbZhgvtPoqknBb222NzGMquJWaNWI/ZIvtyJ/N7xEr4dr2SzivHGUuSr8mR8N
-	w==
+	:received:received; s=mr01; t=1777573404; x=1780165405; bh=B7a3a
+	LhKXLGOrB+jS153LnWbyEkz/zg5oUxSiOhylcQ=; b=o+fI2mjSsKlbvZoXsRi4+
+	jAoJprPlHGTNRQ3inLkADazVojRk926l5OLU+cYPcxHREZSNvMXHh6HAeGrQ4sjG
+	MdSiDr3bp5s7ZbjIbcGUfNs9uf7KltBBkwl/6nuZzZUmLdenCFV2upOHz3Rnhzc/
+	lHSldmk7IcgUYGp0BUdYGTCxGz4TLsiRC2qrfAIaOXcQhiGrcxdU6mxJ3MEX9klv
+	jVzXDn17mf0jT6KtFH+Mj8H93PzOHArp8wzNnwCLW5YKraL02TSpHLyEpnCCG09l
+	ewjGUgpiydN0FHHPMXDbSAZADVon+adNw/nG2tjfP0zGvRLe6ympnV4CWoO7Klk2
+	Q==
 X-Virus-Scanned: by MailRoute
 Received: from 013.lax.mailroute.net ([127.0.0.1])
  by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id LoRJ0rOCpev2; Thu, 30 Apr 2026 18:23:20 +0000 (UTC)
+ id vTEvAeRuzlJk; Thu, 30 Apr 2026 18:23:24 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4g62bp6YJdzlfdds;
-	Thu, 30 Apr 2026 18:23:18 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4g62br6d3Mzlffts;
+	Thu, 30 Apr 2026 18:23:20 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	Marco Elver <elver@google.com>,
 	Bart Van Assche <bvanassche@acm.org>,
+	Hannes Reinecke <hare@suse.de>,
 	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH v2 24/56] scsi: esas2r: Enable lock context analysis
-Date: Thu, 30 Apr 2026 11:19:54 -0700
-Message-ID: <20260430182130.1978347-25-bvanassche@acm.org>
+Subject: [PATCH v2 25/56] scsi: fcoe: Enable lock context analysis
+Date: Thu, 30 Apr 2026 11:19:55 -0700
+Message-ID: <20260430182130.1978347-26-bvanassche@acm.org>
 X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
 In-Reply-To: <20260430182130.1978347-1-bvanassche@acm.org>
 References: <20260430182130.1978347-1-bvanassche@acm.org>
@@ -78,7 +79,7 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 43C9A4A6E2E
+X-Rspamd-Queue-Id: 2CCCF4A6E3D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -87,19 +88,19 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23523-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-23525-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	DKIM_TRACE(0.00)[acm.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
@@ -112,20 +113,19 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/esas2r/Makefile | 3 +++
+ drivers/scsi/fcoe/Makefile | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/scsi/esas2r/Makefile b/drivers/scsi/esas2r/Makefile
-index 279d9cb3ca69..325fa0e634fa 100644
---- a/drivers/scsi/esas2r/Makefile
-+++ b/drivers/scsi/esas2r/Makefile
+diff --git a/drivers/scsi/fcoe/Makefile b/drivers/scsi/fcoe/Makefile
+index 1183e80a09e7..5e7121231801 100644
+--- a/drivers/scsi/fcoe/Makefile
++++ b/drivers/scsi/fcoe/Makefile
 @@ -1,4 +1,7 @@
  # SPDX-License-Identifier: GPL-2.0-only
 +
 +CONTEXT_ANALYSIS :=3D y
 +
- obj-$(CONFIG_SCSI_ESAS2R)	+=3D esas2r.o
+ obj-$(CONFIG_FCOE) +=3D fcoe.o
+ obj-$(CONFIG_LIBFCOE) +=3D libfcoe.o
 =20
- esas2r-objs :=3D esas2r_log.o esas2r_disc.o esas2r_flash.o esas2r_init.o=
- \
 
