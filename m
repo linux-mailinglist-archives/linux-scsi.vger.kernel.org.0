@@ -1,76 +1,80 @@
-Return-Path: <linux-scsi+bounces-23549-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23551-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EFRYOSKf82ly5QEAu9opvQ
-	(envelope-from <linux-scsi+bounces-23549-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:27:46 +0200
+	id 8KYRL0if82ly5QEAu9opvQ
+	(envelope-from <linux-scsi+bounces-23551-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:28:24 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4970B4A6EF4
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D27F4A6F12
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 20:28:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1B6F13092362
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 18:25:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 683D030580AF
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2026 18:25:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D56E53537FF;
-	Thu, 30 Apr 2026 18:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2862339D6DE;
+	Thu, 30 Apr 2026 18:25:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="SomkT1pL"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="Ux9nOsBI"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905FF421F06
-	for <linux-scsi@vger.kernel.org>; Thu, 30 Apr 2026 18:25:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42123FADF6
+	for <linux-scsi@vger.kernel.org>; Thu, 30 Apr 2026 18:25:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777573506; cv=none; b=BPXvXPRHzy+CFXq/aTb0FNkxsCotuHaFPSCq98z5q2L83S8ScWaq+QX2umkpGGD30NhlssZ/u/FP6/ULfwLzPc462dH9LhB+QQwnEp3o2NbPjNANZJYq/Tqz5rtyOUlZwygjx4J2FG2nFZq/LI4P/qepbBqNDrzuAEgq5PQJdd8=
+	t=1777573534; cv=none; b=XWfCx4etICHrbk3ZN/KtFZRKkecQzVW68H45YJCfTcPAM+VDKpu+ZcBGKwxCw1Aq5m+VNC8xtJOyXhCe4X6bhNxLvDn03JSHfPCg0uWlT0ccbrbvIhyHWga1jWsRVY0M+k2wyNeywJGGZQUnnisM+lzx0KzBnEqvOmcKbPPH9RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777573506; c=relaxed/simple;
-	bh=HmBE5j63TIiZAA8HKCToDjPubHizXuoaFjOzDOdflgE=;
+	s=arc-20240116; t=1777573534; c=relaxed/simple;
+	bh=b6dH2xbhsEeSxS42zXIMJs8QwUPQFAT+H6Kmq7pe/As=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=elnxaEZEpq6QXs1rYgP1bDg3sd4YE7h3yTzgQ6mGpHPuU1cKqqlogQc4RQ/urWckOGxc4ljg7tbzjpTJgVai8CQtoYSYmvPZY5lqRiSbAToQM4aJrA9Rs2/CZc4x2p4N9nV3WIc7xbOdZgIrnHQTl6F4SzEbNzw3WR1ffoXZ3MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=SomkT1pL; arc=none smtp.client-ip=199.89.1.16
+	 MIME-Version; b=k76fQCjzkJawpth7rSN+vXao1t5dF+wfGiHsLkc6B+n/BKwhbudb0YjgzD3tzxds3ygoFOMG2mrjl0M4MeR6hCa2uaKIhPKnT1o1i7L18kO4haxUQZ8TQF7IbmDF1f5eaCMJuZDIuI44/SOQ+Ba6wxGre1B8DmERZKaBUD55SgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=Ux9nOsBI; arc=none smtp.client-ip=199.89.1.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4g62ds2YVczlffvd;
-	Thu, 30 Apr 2026 18:25:05 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4g62fN36sqzlgyGq;
+	Thu, 30 Apr 2026 18:25:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:mime-version:references:in-reply-to
 	:x-mailer:message-id:date:date:subject:subject:from:from
-	:received:received; s=mr01; t=1777573501; x=1780165502; bh=cclPv
-	qFh1Z3Tx7n0tIdyY+JV7wzMs7cAqJ9hU5JiPyw=; b=SomkT1pL1n7JkDgqV7zyT
-	IHDjh8tVyGAzcXDsw/PwaPZL5zmxjBNsoznvwTiYmpbiXl//YAJmRMV417gmN0m+
-	Ss5DjlWidhRs0+ix7eWiKabJvsjd9hczOyZ1w1SJnKyCS9BmYcNktS/bZiQege6i
-	NynOmJrSBtDsiQweanK2YIDFzt3mZlwNwgRh0N+8S8hrRD2ZWUe3RQZvF9EhNYF/
-	pj8j5wNmz4m9Z75Dln8YdVkbJiOWL27Xzjier6OQELR8KRZ97wneM4zYKL4SsuqH
-	qkb7JYJzuZNNTZaIYtkSHzWNpJx7Sc1FFTwHURedWNtYrKmYkETKGG0vlXnWyYeo
+	:received:received; s=mr01; t=1777573523; x=1780165524; bh=ak5xN
+	c5em8E3/S5aMwYyt/RFCH7TOIASBbZPDtwMadk=; b=Ux9nOsBIZrhAOeFWVOVBS
+	wZVydIlIUozUQFOTqLMDQMguosA/JXAqFjM3sixGLCD5ITw7uEwPtHEJFc9rWH1R
+	zFdz+ZH663/OPrJ5siM5GydYh5sUL6L4iL210txdI/W49shn8bpJgsjDydqebnhQ
+	MbSFKaBP2PZ0/ci3+r4WJmrraXd3/YUiKhIhRnh4321c+Xvj/tqGaa8w3EaBy90K
+	ie6db8B/ZC9+DnDFdhJIYtJD1QPsN41E3OzwJgoapyFIvT4+ihBnXfIvdb/KNoc6
+	StZHe0ori2AGeZbaP1EtzJw5upuJqulLdH1O/RXPleOCICBF73oIkDVuVf1Az6Hf
 	Q==
 X-Virus-Scanned: by MailRoute
 Received: from 013.lax.mailroute.net ([127.0.0.1])
  by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id JtYrtkIVoCV7; Thu, 30 Apr 2026 18:25:01 +0000 (UTC)
+ id AnPFUYiBXcTJ; Thu, 30 Apr 2026 18:25:23 +0000 (UTC)
 Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4g62dl2jSQzm1QFR;
-	Thu, 30 Apr 2026 18:24:59 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4g62f52SmCzlfvpH;
+	Thu, 30 Apr 2026 18:25:17 +0000 (UTC)
 From: Bart Van Assche <bvanassche@acm.org>
 To: "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org,
 	Marco Elver <elver@google.com>,
 	Bart Van Assche <bvanassche@acm.org>,
-	Nilesh Javali <njavali@marvell.com>,
-	Manish Rangankar <mrangankar@marvell.com>,
-	GR-QLogic-Storage-Upstream@marvell.com,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH v2 49/56] scsi: qla4xxx: Enable lock context analysis
-Date: Thu, 30 Apr 2026 11:20:19 -0700
-Message-ID: <20260430182130.1978347-50-bvanassche@acm.org>
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Can Guo <can.guo@oss.qualcomm.com>,
+	Bean Huo <beanhuo@micron.com>,
+	Avri Altman <avri.altman@sandisk.com>,
+	Peter Wang <peter.wang@mediatek.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Ajay Neeli <ajay.neeli@amd.com>,
+	Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Subject: [PATCH v2 50/56] scsi: ufs: Enable lock context analysis
+Date: Thu, 30 Apr 2026 11:20:20 -0700
+Message-ID: <20260430182130.1978347-51-bvanassche@acm.org>
 X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
 In-Reply-To: <20260430182130.1978347-1-bvanassche@acm.org>
 References: <20260430182130.1978347-1-bvanassche@acm.org>
@@ -81,81 +85,177 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 4970B4A6EF4
+X-Rspamd-Queue-Id: 5D27F4A6F12
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23549-lists,linux-scsi=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-23551-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	DKIM_TRACE(0.00)[acm.org:+];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[acm.org:email,acm.org:dkim,acm.org:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-Annotate the functions that perform conditional locking with
-__no_context_analysis.
+Annotate functions that modify the state of a synchronization object.
+Remove the struct semaphore annotations because lock context annotations
+are not supported for semaphores.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla4xxx/Makefile | 3 +++
- drivers/scsi/qla4xxx/ql4_nx.c | 2 ++
- 2 files changed, 5 insertions(+)
+ drivers/ufs/core/Makefile      |  2 ++
+ drivers/ufs/core/ufs-debugfs.c |  8 ++++++--
+ drivers/ufs/core/ufshcd.c      | 14 ++++++++++++++
+ drivers/ufs/host/Makefile      |  2 ++
+ 4 files changed, 24 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla4xxx/Makefile b/drivers/scsi/qla4xxx/Makefil=
-e
-index 1f8a9096c744..2178d139f3ca 100644
---- a/drivers/scsi/qla4xxx/Makefile
-+++ b/drivers/scsi/qla4xxx/Makefile
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
+diff --git a/drivers/ufs/core/Makefile b/drivers/ufs/core/Makefile
+index ce7d16d2cf35..67ab9ffbdf5d 100644
+--- a/drivers/ufs/core/Makefile
++++ b/drivers/ufs/core/Makefile
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+=20
 +CONTEXT_ANALYSIS :=3D y
 +
- qla4xxx-y :=3D ql4_os.o ql4_init.o ql4_mbx.o ql4_iocb.o ql4_isr.o \
- 		ql4_nx.o ql4_nvram.o ql4_dbg.o ql4_attr.o ql4_bsg.o ql4_83xx.o
-=20
-diff --git a/drivers/scsi/qla4xxx/ql4_nx.c b/drivers/scsi/qla4xxx/ql4_nx.=
-c
-index f7340cfc990a..513e9e95c888 100644
---- a/drivers/scsi/qla4xxx/ql4_nx.c
-+++ b/drivers/scsi/qla4xxx/ql4_nx.c
-@@ -406,6 +406,7 @@ void qla4_82xx_crb_win_unlock(struct scsi_qla_host *h=
-a)
-=20
- void
- qla4_82xx_wr_32(struct scsi_qla_host *ha, ulong off, u32 data)
-+	__context_unsafe(conditional locking)
- {
- 	unsigned long flags =3D 0;
- 	int rv;
-@@ -429,6 +430,7 @@ qla4_82xx_wr_32(struct scsi_qla_host *ha, ulong off, =
-u32 data)
+ obj-$(CONFIG_SCSI_UFSHCD)		+=3D ufshcd-core.o
+ ufshcd-core-y				+=3D ufshcd.o ufs-sysfs.o ufs-mcq.o ufs-txeq.o
+ ufshcd-core-$(CONFIG_RPMB)		+=3D ufs-rpmb.o
+diff --git a/drivers/ufs/core/ufs-debugfs.c b/drivers/ufs/core/ufs-debugf=
+s.c
+index e3dd81d6fe82..814816810388 100644
+--- a/drivers/ufs/core/ufs-debugfs.c
++++ b/drivers/ufs/core/ufs-debugfs.c
+@@ -65,8 +65,10 @@ static int ee_usr_mask_get(void *data, u64 *val)
+ 	return 0;
  }
 =20
- uint32_t qla4_82xx_rd_32(struct scsi_qla_host *ha, ulong off)
-+	__context_unsafe(conditional locking)
++token_context_lock(ufs_debugfs);
++
+ static int ufs_debugfs_get_user_access(struct ufs_hba *hba)
+-__acquires(&hba->host_sem)
++	__cond_acquires(0, ufs_debugfs)
  {
- 	unsigned long flags =3D 0;
- 	int rv;
+ 	down(&hba->host_sem);
+ 	if (!ufshcd_is_user_access_allowed(hba)) {
+@@ -74,14 +76,16 @@ __acquires(&hba->host_sem)
+ 		return -EBUSY;
+ 	}
+ 	ufshcd_rpm_get_sync(hba);
++	__acquire(ufs_debugfs);
+ 	return 0;
+ }
+=20
+ static void ufs_debugfs_put_user_access(struct ufs_hba *hba)
+-__releases(&hba->host_sem)
++	__releases(ufs_debugfs)
+ {
+ 	ufshcd_rpm_put_sync(hba);
+ 	up(&hba->host_sem);
++	__release(ufs_debugfs);
+ }
+=20
+ static int ee_usr_mask_set(void *data, u64 val)
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 4805e40ed4d7..6fed3f38c010 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -1376,6 +1376,8 @@ static int ufshcd_wait_for_pending_cmds(struct ufs_=
+hba *hba,
+  * On failure, all acquired locks are released and the tagset is unquies=
+ced.
+  */
+ int ufshcd_pause_command_processing(struct ufs_hba *hba, u64 timeout_us)
++	__cond_acquires(0, &hba->host->scan_mutex)
++	__cond_acquires(0, &hba->clk_scaling_lock)
+ {
+ 	int ret =3D 0;
+=20
+@@ -1400,6 +1402,8 @@ int ufshcd_pause_command_processing(struct ufs_hba =
+*hba, u64 timeout_us)
+  * This function resumes command submissions.
+  */
+ void ufshcd_resume_command_processing(struct ufs_hba *hba)
++	__releases(&hba->clk_scaling_lock)
++	__releases(&hba->host->scan_mutex)
+ {
+ 	up_write(&hba->clk_scaling_lock);
+ 	blk_mq_unquiesce_tagset(&hba->host->tag_set);
+@@ -1469,6 +1473,9 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, u=
+32 target_gear, bool scale_up
+  * Return: 0 upon success; -EBUSY upon timeout.
+  */
+ static int ufshcd_clock_scaling_prepare(struct ufs_hba *hba, u64 timeout=
+_us)
++	__cond_acquires(0, &hba->host->scan_mutex)
++	__cond_acquires(0, &hba->wb_mutex)
++	__cond_acquires(0, &hba->clk_scaling_lock)
+ {
+ 	int ret =3D 0;
+ 	/*
+@@ -1498,6 +1505,9 @@ static int ufshcd_clock_scaling_prepare(struct ufs_=
+hba *hba, u64 timeout_us)
+ }
+=20
+ static void ufshcd_clock_scaling_unprepare(struct ufs_hba *hba, int err)
++	__releases(&hba->clk_scaling_lock)
++	__releases(&hba->wb_mutex)
++	__releases(&hba->host->scan_mutex)
+ {
+ 	up_write(&hba->clk_scaling_lock);
+ 	mutex_unlock(&hba->wb_mutex);
+@@ -3301,6 +3311,8 @@ ufshcd_dev_cmd_completion(struct ufs_hba *hba, stru=
+ct ufshcd_lrb *lrbp)
+ }
+=20
+ static void ufshcd_dev_man_lock(struct ufs_hba *hba)
++	__acquires(&hba->dev_cmd.lock)
++	__acquires_shared(&hba->clk_scaling_lock)
+ {
+ 	ufshcd_hold(hba);
+ 	mutex_lock(&hba->dev_cmd.lock);
+@@ -3308,6 +3320,8 @@ static void ufshcd_dev_man_lock(struct ufs_hba *hba=
+)
+ }
+=20
+ static void ufshcd_dev_man_unlock(struct ufs_hba *hba)
++	__releases_shared(&hba->clk_scaling_lock)
++	__releases(&hba->dev_cmd.lock)
+ {
+ 	up_read(&hba->clk_scaling_lock);
+ 	mutex_unlock(&hba->dev_cmd.lock);
+diff --git a/drivers/ufs/host/Makefile b/drivers/ufs/host/Makefile
+index 65d8bb23ab7b..7d8db67eb23c 100644
+--- a/drivers/ufs/host/Makefile
++++ b/drivers/ufs/host/Makefile
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+=20
++CONTEXT_ANALYSIS :=3D y
++
+ obj-$(CONFIG_SCSI_UFS_DWC_TC_PCI) +=3D tc-dwc-g210-pci.o ufshcd-dwc.o tc=
+-dwc-g210.o
+ obj-$(CONFIG_SCSI_UFS_DWC_TC_PLATFORM) +=3D tc-dwc-g210-pltfrm.o ufshcd-=
+dwc.o tc-dwc-g210.o
+ obj-$(CONFIG_SCSI_UFS_CDNS_PLATFORM) +=3D cdns-pltfrm.o
 
