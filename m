@@ -1,174 +1,199 @@
-Return-Path: <linux-scsi+bounces-23572-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23574-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UBhxJs3c9GmfFQIAu9opvQ
-	(envelope-from <linux-scsi+bounces-23572-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 01 May 2026 19:03:09 +0200
+	id SFFFJsDs9GkaFwIAu9opvQ
+	(envelope-from <linux-scsi+bounces-23574-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 01 May 2026 20:11:12 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 103374AE460
-	for <lists+linux-scsi@lfdr.de>; Fri, 01 May 2026 19:03:08 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB7084AEBDA
+	for <lists+linux-scsi@lfdr.de>; Fri, 01 May 2026 20:11:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D1B6F30022A4
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 May 2026 17:03:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5C749301DCFD
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 May 2026 18:10:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610BD9463;
-	Fri,  1 May 2026 17:03:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SYB3YCTl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F673F23AF;
+	Fri,  1 May 2026 18:10:55 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outbound.easymail.ca (outbound.easymail.ca [64.68.200.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A543C1400;
-	Fri,  1 May 2026 17:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA3D3D331D
+	for <linux-scsi@vger.kernel.org>; Fri,  1 May 2026 18:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.68.200.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777654984; cv=none; b=OdNmM9blqgIy4etjAdOhwRLQwj+DVof+tIayTQRZjuoU5HUN1NGnquDLgFjp23BcFDOVr2i0FG0JzJR87TlGIR3pCPb4v9sXp2FrYk36vFqX3d/ZfdaC5e0TcOVtdMX2aZvn/gSJU1QG5gXp7avlXvyOOxiux+jw2rnK3qbnwm4=
+	t=1777659053; cv=none; b=A8ns4SZVdXqEBmFyoMPDXrht2sUYeQZn0zki6tuipGaXBslMFO44jq+WtvEwmdz7qEBsElD2Il7iNgqXMd80668fcbJLzRBy1zi56jdyL5ZEf6ApbaiUjqGJQMzmWVY/rkkXM73woP7GPq4isKK2FvTWVqFRpJe3wWI8PwJu3dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777654984; c=relaxed/simple;
-	bh=8GvZWFD9xh/Bxx1Omdts7uL97aN6epJ/NSyX8QGcdw0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Miee7GkJC4rzsgfT3lq/krGZfAQID6oBtPg2s00OTnjurI8bzHmE4/pJnsU/xEidI+Eu0Jtc0/3QSccuCASAL8rq0cvgUBBa2pM2Wi5Y0swFzN/wsyPaewowgLYxILc8b8q88RZbFVOAqMCbijH1BhIGfIeL/0+znPypfl+BY+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SYB3YCTl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49821C2BCB4;
-	Fri,  1 May 2026 17:03:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777654984;
-	bh=8GvZWFD9xh/Bxx1Omdts7uL97aN6epJ/NSyX8QGcdw0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SYB3YCTlBgtZ5O7UnGDqbws87GO1iI3MRNp3qDOMBijL+cCbCV+gB8Mj2YSP4lUib
-	 364Mi+brhRGSCt7qyVfHBOFvEiYV84DTezlnJaBgcUyUbrjIuOunJncfENZPYHPqVr
-	 t44aBnaIZyc7G0KN9XHttW7IR3zkX30XumMSXveRJsAzvWk0UHaOJ3ADwpgBKBK0IW
-	 LOZe3ufkZu1vPhrRK5JzOaiKBJHdm37MRnjEMNoMc/NRwtTKrQwyPuJoAUGEN4kCFE
-	 8UgCbdWbWX0nw9CEDgxdXxWjVFwDbuF21Cm0v8nGg9iWWwDo4vyj87Ez7qURtWdDyw
-	 7qzskZBedd56Q==
-Date: Fri, 1 May 2026 18:02:58 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Can Guo <can.guo@oss.qualcomm.com>
-Cc: bvanassche@acm.org, beanhuo@micron.com, peter.wang@mediatek.com,
-	martin.petersen@oracle.com, mani@kernel.org,
-	linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Ram Kumar Dwivedi <quic_rdwivedi@quicinc.com>,
-	Zhaoming Luo <zhml@posteo.com>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: ufs: Document static TX Equalization
- settings properties
-Message-ID: <20260501-exhale-nutshell-3d80a8a2d791@spud>
-References: <20260501134418.863432-1-can.guo@oss.qualcomm.com>
- <20260501134418.863432-2-can.guo@oss.qualcomm.com>
+	s=arc-20240116; t=1777659053; c=relaxed/simple;
+	bh=f2Abgt74BhHtk3o8QmA2CzgoEb6mFaOs1o/PlHQwlig=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Dr7TT7T1TvjHnEU3RNfHVXbRQBXlnJ7VGBL5OA62dKXkpgckhLcOtkFE5r0OSzqMXRGG1ZiP7CjElNlzpLVUZFPtgDSWonra1faQXOx871fbj/JTj+YlZSkSgc4HOB3+apbBA63Xr7q8yt4jv+vm2VbuYOEungHuBZMsDNnKDvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gonehiking.org; spf=pass smtp.mailfrom=gonehiking.org; arc=none smtp.client-ip=64.68.200.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gonehiking.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gonehiking.org
+Received: from mailout.easymail.ca (pco.easydns.net [64.68.203.197])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by outbound.easymail.ca (Postfix) with ESMTPS id 35D1220AC6;
+	Fri,  1 May 2026 18:02:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+	by mailout.easymail.ca (Postfix) with ESMTP id B7B5660E3F;
+	Fri,  1 May 2026 18:01:59 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at emo07-pco.easydns.vpn
+Received: from mailout.easymail.ca ([127.0.0.1])
+	by localhost (emo07-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id S2KIV31fehnC; Fri,  1 May 2026 18:01:59 +0000 (UTC)
+Received: from mail.gonehiking.org (unknown [38.15.57.99])
+	by mailout.easymail.ca (Postfix) with ESMTPA id 334D860D3F;
+	Fri,  1 May 2026 18:01:59 +0000 (UTC)
+Received: from [192.168.1.4] (rhapsody.internal [192.168.1.4])
+	by mail.gonehiking.org (Postfix) with ESMTP id 86E707E962;
+	Fri, 01 May 2026 12:01:58 -0600 (MDT)
+Message-ID: <de1e7878-5c21-4cbd-a28d-7b2b9501c1c3@gonehiking.org>
+Date: Fri, 1 May 2026 12:01:58 -0600
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zZv6/IXBq9h6cyVd"
-Content-Disposition: inline
-In-Reply-To: <20260501134418.863432-2-can.guo@oss.qualcomm.com>
-X-Rspamd-Queue-Id: 103374AE460
+User-Agent: Mozilla Thunderbird
+Reply-To: khalid@gonehiking.org
+Subject: Re: [PATCH v2 05/56] scsi: BusLogic: Introduce a local variable
+To: Bart Van Assche <bvanassche@acm.org>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org, Marco Elver <elver@google.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+References: <20260430182130.1978347-1-bvanassche@acm.org>
+ <20260430182130.1978347-6-bvanassche@acm.org>
+From: Khalid Aziz <khalid@gonehiking.org>
+Content-Language: en-US
+Autocrypt: addr=khalid@gonehiking.org; keydata=
+ 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
+In-Reply-To: <20260430182130.1978347-6-bvanassche@acm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: EB7084AEBDA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23572-lists,linux-scsi=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	TAGGED_FROM(0.00)[bounces-23574-lists,linux-scsi=lfdr.de];
+	DMARC_NA(0.00)[gonehiking.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-scsi,dt];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,gonehiking.org:email,gonehiking.org:replyto,gonehiking.org:mid,acm.org:email];
+	RCPT_COUNT_FIVE(0.00)[5];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	HAS_REPLYTO(0.00)[khalid@gonehiking.org];
+	FROM_NEQ_ENVFROM(0.00)[khalid@gonehiking.org,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[8]
 
-
---zZv6/IXBq9h6cyVd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, May 01, 2026 at 06:44:17AM -0700, Can Guo wrote:
-> HW design team usually provides static TX Equalization settings based on
-> PCB board characteristics. These settings can be passed from the device
-> tree to configure the TX Equalization parameters (PreShoot, DeEmphasis,
-> and PreCodeEn) for Host and Device across different HS gears.
-
-I'm not familiar enough with ufs stuff to tell, but this commit message
-sounds very qcom specific, but this is being added to a common file.
-I'd like to see a lot more detail in the commit message, detailing why
-this is truly applicable across IP vendors.
-
->=20
-> Add patternProperties for txeq-settings-g[1-6] to support specifying
-> static TX Equalization settings.
->=20
-> Signed-off-by: Can Guo <can.guo@oss.qualcomm.com>
+On 4/30/26 12:19 PM, Bart Van Assche wrote:
+> Introduce a new local variable to prepare for enabling thread-safety
+> analysis. No functionality has been changed.
+> 
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 > ---
->  Documentation/devicetree/bindings/ufs/ufs-common.yaml | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/ufs/ufs-common.yaml b/Docu=
-mentation/devicetree/bindings/ufs/ufs-common.yaml
-> index ed97f5682509..bc83948fc168 100644
-> --- a/Documentation/devicetree/bindings/ufs/ufs-common.yaml
-> +++ b/Documentation/devicetree/bindings/ufs/ufs-common.yaml
-> @@ -105,6 +105,17 @@ properties:
->        Restricts the UFS controller to rate-a or rate-b for both TX and
->        RX directions.
-> =20
-> +patternProperties:
-> +  "^txeq-settings-g[1-6]$":
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 6
-> +    maxItems: 12
-> +    description: |
-> +      Static TX Equalization settings for High Speed (HS) gears.
-> +      The settings are specified as an array of tuples (PreShoot, DeEmph=
-asis, PrecodeEn).
-> +      The array must contain these tuples in the following order:
-> +      Host Lane 0, [Host Lane 1], Device Lane 0, [Device Lane 1].
-> +
->  dependencies:
->    freq-table-hz: [ clocks ]
->    operating-points-v2: [ clocks, clock-names ]
-> --=20
-> 2.34.1
->=20
+>   drivers/scsi/BusLogic.c | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
+> index 5304d2febd63..e3790ff24e56 100644
+> --- a/drivers/scsi/BusLogic.c
+> +++ b/drivers/scsi/BusLogic.c
+> @@ -2886,6 +2886,7 @@ static enum scsi_qc_status blogic_qcmd_lck(struct scsi_cmnd *command)
+>   	struct blogic_tgt_flags *tgt_flags =
+>   		&adapter->tgt_flags[command->device->id];
+>   	struct blogic_tgt_stats *tgt_stats = adapter->tgt_stats;
+> +	struct Scsi_Host *const shost = command->device->host;
+>   	unsigned char *cdb = command->cmnd;
+>   	int cdblen = command->cmd_len;
+>   	int tgt_id = command->device->id;
+> @@ -2915,9 +2916,9 @@ static enum scsi_qc_status blogic_qcmd_lck(struct scsi_cmnd *command)
+>   	 */
+>   	ccb = blogic_alloc_ccb(adapter);
+>   	if (ccb == NULL) {
+> -		spin_unlock_irq(adapter->scsi_host->host_lock);
+> +		spin_unlock_irq(shost->host_lock);
+>   		blogic_delay(1);
+> -		spin_lock_irq(adapter->scsi_host->host_lock);
+> +		spin_lock_irq(shost->host_lock);
+>   		ccb = blogic_alloc_ccb(adapter);
+>   		if (ccb == NULL) {
+>   			command->result = DID_ERROR << 16;
+> @@ -3062,10 +3063,10 @@ static enum scsi_qc_status blogic_qcmd_lck(struct scsi_cmnd *command)
+>   		   be initiated soon.
+>   		 */
+>   		if (!blogic_write_outbox(adapter, BLOGIC_MBOX_START, ccb)) {
+> -			spin_unlock_irq(adapter->scsi_host->host_lock);
+> +			spin_unlock_irq(shost->host_lock);
+>   			blogic_warn("Unable to write Outgoing Mailbox - Pausing for 1 second\n", adapter);
+>   			blogic_delay(1);
+> -			spin_lock_irq(adapter->scsi_host->host_lock);
+> +			spin_lock_irq(shost->host_lock);
+>   			if (!blogic_write_outbox(adapter, BLOGIC_MBOX_START,
+>   						ccb)) {
+>   				blogic_warn("Still unable to write Outgoing Mailbox - Host Adapter Dead?\n", adapter);
 
---zZv6/IXBq9h6cyVd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCafTcwgAKCRB4tDGHoIJi
-0vYZAP0e5vAEUy82WqTW/s+caijOyxLNxZItemHDAZwOqKIAkAD9GgJNBiixiK4Q
-fLlejc8u/KShPy6JLAz2mwFCLPvW/wU=
-=ofFG
------END PGP SIGNATURE-----
-
---zZv6/IXBq9h6cyVd--
+Acked-by: Khalid Aziz <khalid@gonehiking.org>
 
