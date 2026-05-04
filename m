@@ -1,66 +1,66 @@
-Return-Path: <linux-scsi+bounces-23586-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23587-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2G4nLVtt92nYhgIAu9opvQ
-	(envelope-from <linux-scsi+bounces-23586-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sun, 03 May 2026 17:44:27 +0200
+	id LZx6HuYE+GmopAIAu9opvQ
+	(envelope-from <linux-scsi+bounces-23587-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 04 May 2026 04:31:02 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B19D04B6496
-	for <lists+linux-scsi@lfdr.de>; Sun, 03 May 2026 17:44:26 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B24CA4B816C
+	for <lists+linux-scsi@lfdr.de>; Mon, 04 May 2026 04:31:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 96E3B3001A4D
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 May 2026 15:44:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 641A5300B12F
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 May 2026 02:30:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45C4437EFFE;
-	Sun,  3 May 2026 15:44:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C51071C8604;
+	Mon,  4 May 2026 02:30:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="Kzt2Ensa"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="Xje3m3Pk"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FA437DE92
-	for <linux-scsi@vger.kernel.org>; Sun,  3 May 2026 15:44:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28BAE10785;
+	Mon,  4 May 2026 02:30:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777823060; cv=none; b=e9yJVeMKdfM0/kR+ZGSqrbZbe8wYb+E4BBzzeK8aoTGOAzttbEVcXOvKPBGT4iOyOoNpNYEpMZSYTFfF1U9w3eNf+J4V7Tglgn0WWFySh0uSXJ7Av+9//7Ya8bOiRtXSwXKikWJWaGiZ6/mkxFjOyPo6CWzlKfBVPkaW3d/AGX4=
+	t=1777861856; cv=none; b=mOBklqMgk2YEznfEjeA0n6I3zyXqE2g0PyMjEnPcSZ5r5CWw5/UuUnicOwkZjfft1iZg9yzNUQ32r+TE+6BoxDpSwKCeshJk7S1ZE9SN7MJWjEEyGZi+9H8hBOcVRSjKpfOpR1D23j+Qs8TNNBv1dZgGxTZGdb6TJg8FBeGZdcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777823060; c=relaxed/simple;
-	bh=T8F42POAToFNBe/c6Lvjrezo0y1L+8vgzufG+w2J95k=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=SPAVWd09P/chapupK6TNM03Bb4nGhTbcPIGJ5OkdxNlQ/k608YI6a4rjlYQgnkBAHixP48x/3JmimjNRPhjrHnB2hOm9DcePdbn4x9bMp2FIcnIgi9F+pd34GsZUJyawtUu67UTRAIxwdWewXLhIL+N8+KMc8zkBEdIbSHelOho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=Kzt2Ensa; arc=none smtp.client-ip=199.89.1.16
+	s=arc-20240116; t=1777861856; c=relaxed/simple;
+	bh=nQ59hFSTNLKwIsGnos/FQe+GP54UIHtD2n43AqR22+w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b38X6aGgxy076h/gBxnTksfMxQevTeetVQAbRRhs1qkth9PdKeFID3fnX/d5S7+evtyFa0GxaXotv05woENdw8PjOGrlaaEeyQJm4S0DhBQWLFU0dEYjPEVCvCuLuWR5tLIZHLQfUBszoK1LA+O11Qjq4caQxlZMmua+B+E49jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=Xje3m3Pk; arc=none smtp.client-ip=199.89.1.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4g7pwx6Xpgzlfl5V;
-	Sun,  3 May 2026 15:44:17 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4g85Gw1LgjzlfwHS;
+	Mon,  4 May 2026 02:30:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:content-type:content-type:in-reply-to
-	:content-language:references:from:from:subject:subject
+	:from:from:content-language:references:subject:subject
 	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1777823052; x=1780415053; bh=W2WBKBFcgRQtZYEa8mP2I/LA
-	u5YF3Z3S7dU+0WBCs+s=; b=Kzt2EnsaZoOvrtjb1nPbqmcXt0efOCZN+Inq8UoB
-	TOEGOTrB9i0NxQqfdRJnWisI7yH7sxcZgEfyu4sq5wrBhb6VHOsLMIsMazNBMt6T
-	OzUlMgB9HboTs6sJkobDRpsJHOCJNzPRnanpWvWw2ePYgRRuQbEv2Cp/WLfKu5Sw
-	ygeOGaFsfOPELjXTtlVtd7xZvSx0YoQzOSs7K9O4rtaXbAwXhD+SumA80d1+E/Nw
-	8vJhYod9Bw3O00oo5/74jtHKE6Fj8V1ZHgFhS6rERyCwN+vkKtbR8ayDcSttl5JV
-	9UkLnDJIzk9G0e8gSkESLudJRrsFKOVdGSJ1HgeFhf19eg==
+	 s=mr01; t=1777861844; x=1780453845; bh=VigNCXKT0O25ajfnUdQKCKlM
+	C5Qwj9i3pq5HA09F+bU=; b=Xje3m3PkwjybofyEmE7eyo4vCBTdHKYpF9q/r2xf
+	Nvj4jrLSEmkNUwIbCPJ0XXCMP56dk7eXmYiIP3vd+4X4/fvoNFJlH5+q84Y3szYM
+	fOngvkydNhMN+jAYsgpuYcrE+JziauXrVPpn/KmV5ieHy7w/G9jA4fp6ixfcxkIM
+	se2+91Sqie3YjDppXewMQCBHhnjbkZLVk+VLuX5Wg/kVjNZkgW2KB1cPhRW2DgVr
+	+gC6C3N3Z786s/kIF+i8UiBoPpR4rabmAdXwHkBDz0BWTAHWyi8yuKBIHJ5h7lpk
+	prZ3F568c8CzUmJ3f0bfTFf+FR6Aczqp50fweKY/18Rosg==
 X-Virus-Scanned: by MailRoute
 Received: from 013.lax.mailroute.net ([127.0.0.1])
  by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 2N4tJGxxzxOd; Sun,  3 May 2026 15:44:12 +0000 (UTC)
-Received: from [10.211.8.121] (unknown [213.147.98.98])
+ id hpxg11yaNnif; Mon,  4 May 2026 02:30:44 +0000 (UTC)
+Received: from [10.211.8.56] (unknown [213.147.98.98])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4g7pwp2l1Gzlfl89;
-	Sun,  3 May 2026 15:44:09 +0000 (UTC)
-Message-ID: <b584f42f-534e-4204-9fa6-92ff93ab62ad@acm.org>
-Date: Sun, 3 May 2026 17:44:07 +0200
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4g85Gn2L8Dzlfl6R;
+	Mon,  4 May 2026 02:30:40 +0000 (UTC)
+Message-ID: <0f7918bf-adfd-4529-91da-460b914aa022@acm.org>
+Date: Mon, 4 May 2026 04:30:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -68,291 +68,60 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/6] scsi: Protect INQUIRY sysfs attributes with mutex
-From: Bart Van Assche <bvanassche@acm.org>
-To: Brian Bunker <brian@purestorage.com>
-Cc: hare@suse.de, linux-scsi@vger.kernel.org, krishna.kant@purestorage.com
-References: <cc6d3238-5574-4a0a-ba3a-2660687ec292@acm.org>
- <20260501221153.90440-1-brian@purestorage.com>
- <5de0e746-1a90-4a41-a36b-e56a4fcfeee6@acm.org>
+Subject: Re: [PATCH v5] scsi: ufs: core: call hibern8 notify when hibern8 cmd
+ failed
+To: Hongjie Fang <hongjiefang@asrmicro.com>, alim.akhtar@samsung.com,
+ avri.altman@wdc.com, James.Bottomley@HansenPartnership.com,
+ martin.petersen@oracle.com
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260502143012.2859480-1-hongjiefang@asrmicro.com>
 Content-Language: en-US
-In-Reply-To: <5de0e746-1a90-4a41-a36b-e56a4fcfeee6@acm.org>
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20260502143012.2859480-1-hongjiefang@asrmicro.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: B19D04B6496
+X-Rspamd-Queue-Id: B24CA4B816C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23586-lists,linux-scsi=lfdr.de];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[acm.org:+];
+	TAGGED_FROM(0.00)[bounces-23587-lists,linux-scsi=lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[acm.org:dkim,acm.org:mid]
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,acm.org:email,acm.org:dkim,acm.org:mid]
 
-On 5/2/26 6:37 PM, Bart Van Assche wrote:
-> Another possibility is to change sdev->vendor, sdev->model and
-> sdev->rev from pointers to fixed size strings into '\0'-terminated char
-> arrays.
+On 5/2/26 4:30 PM, Hongjie Fang wrote:
+> The vendor hibern8 notify callback always can be executed in the
+> PRE_CHANGE phase of hibern8 enter/exit. But it cannot be executed
+> in the POST_CHANGE phase if the hibern8 cmd fails.
+> 
+> When the hibern8 cmd fails, the vendor hibern8 notify callback
+> should still have the opportunity to execute.
+> 
+> Add a third enum ROLLBACK_CHANGE for the ufshcd_vops_hibern8_notify(),
+> pass the ROLLBACK_CHANGE when the hibern8 command returns a failure and
+> use the POST_CHANGE otherwise.
 
-(replying to my own email)
-
-How about the untested patch below?
-
-scsi: core: Convert inquiry information
-
-Currently the vendor, model, and revision members of struct scsi_device
-are pointers to fixed-length strings that are not NUL-terminated.
-Fixed-precision format specifiers (e.g., "%.8s") are required whenever
-they are printed and strncmp() must be used to compare these fields.
-This is error-prone.
-
-Convert these fields to fixed-size character arrays within struct
-scsi_device and remove trailing white space at initialization time.
-
-This patch fixes a bug in the qla2xxx driver. It makes the following
-code safe:
-
-                 if (state_flags & BIT_4)
-                         scmd_printk(KERN_WARNING, cp,
-                             "Unsupported device '%s' found.\n",
-                             cp->device->vendor);
-
-diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
-index 002e0660a0b8..e71b99f70076 100644
---- a/drivers/hwmon/drivetemp.c
-+++ b/drivers/hwmon/drivetemp.c
-@@ -306,7 +306,7 @@ static bool drivetemp_sct_avoid(struct 
-drivetemp_data *st)
-  	struct scsi_device *sdev = st->sdev;
-  	unsigned int ctr;
-
--	if (!sdev->model)
-+	if (!sdev->model[0])
-  		return false;
-
-  	/*
-diff --git a/drivers/scsi/advansys.c b/drivers/scsi/advansys.c
-index fcf059bf41e8..f92ad396ac9c 100644
---- a/drivers/scsi/advansys.c
-+++ b/drivers/scsi/advansys.c
-@@ -7204,7 +7204,7 @@ static void AscAsyncFix(ASC_DVC_VAR *asc_dvc, 
-struct scsi_device *sdev)
-  	if (asc_dvc->init_sdtr & tid_bits)
-  		return;
-
--	if ((type == TYPE_ROM) && (strncmp(sdev->vendor, "HP ", 3) == 0))
-+	if (type == TYPE_ROM && strcmp(sdev->vendor, "HP") == 0)
-  		asc_dvc->pci_fix_asyn_xfer_always |= tid_bits;
-
-  	asc_dvc->pci_fix_asyn_xfer |= tid_bits;
-diff --git a/drivers/scsi/ch.c b/drivers/scsi/ch.c
-index 4010fdbf813c..fb59ca035843 100644
---- a/drivers/scsi/ch.c
-+++ b/drivers/scsi/ch.c
-@@ -408,7 +408,7 @@ ch_readconfig(scsi_changer *ch)
-  				/* should not happen */
-  				VPRINTK(KERN_CONT, "Huh? device not found!\n");
-  			} else {
--				VPRINTK(KERN_CONT, "name: %8.8s %16.16s %4.4s\n",
-+				VPRINTK(KERN_CONT, "name: %8s %16s %4s\n",
-  					ch->dt[elem]->vendor,
-  					ch->dt[elem]->model,
-  					ch->dt[elem]->rev);
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index a1b116cd4723..bdec827b82a1 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -1262,7 +1262,7 @@ static void hpsa_show_dev_msg(const char *level, 
-struct ctlr_info *h,
-  	}
-
-  	dev_printk(level, &h->pdev->dev,
--			"scsi %d:%d:%d:%d: %s %s %.8s %.16s %s SSDSmartPathCap%c En%c Exp=%d\n",
-+			"scsi %d:%d:%d:%d: %s %s %s %s %s SSDSmartPathCap%c En%c Exp=%d\n",
-  			h->scsi_host->host_no, dev->bus, dev->target, dev->lun,
-  			description,
-  			scsi_device_type(dev->devtype),
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index ef22a4228b85..242bd46df3ba 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -292,9 +292,9 @@ static struct scsi_device *scsi_alloc_sdev(struct 
-scsi_target *starget,
-  	if (!sdev)
-  		goto out;
-
--	sdev->vendor = scsi_null_device_strs;
--	sdev->model = scsi_null_device_strs;
--	sdev->rev = scsi_null_device_strs;
-+	strscpy(sdev->vendor, scsi_null_device_strs);
-+	strscpy(sdev->model, scsi_null_device_strs);
-+	strscpy(sdev->rev, scsi_null_device_strs);
-  	sdev->host = shost;
-  	sdev->queue_ramp_up_period = SCSI_DEFAULT_RAMP_UP_PERIOD;
-  	sdev->id = starget->id;
-@@ -857,6 +857,21 @@ static int scsi_probe_lun(struct scsi_device *sdev, 
-unsigned char *inq_result,
-  	return 0;
-  }
-
-+static void strip_trailing_spaces(char *s)
-+{
-+	size_t size;
-+	char *end;
-+
-+	size = strlen(s);
-+	if (!size)
-+		return;
-+
-+	end = s + size - 1;
-+	while (end >= s && isspace(*end))
-+		end--;
-+	*(end + 1) = '\0';
-+}
-+
-  /**
-   * scsi_add_lun - allocate and fully initialze a scsi_device
-   * @sdev:	holds information to be stored in the new scsi_device
-@@ -905,11 +920,17 @@ static int scsi_add_lun(struct scsi_device *sdev, 
-unsigned char *inq_result,
-  	if (sdev->inquiry == NULL)
-  		return SCSI_SCAN_NO_RESPONSE;
-
--	sdev->vendor = (char *) (sdev->inquiry + 8);
--	sdev->model = (char *) (sdev->inquiry + 16);
--	sdev->rev = (char *) (sdev->inquiry + 32);
--
--	sdev->is_ata = strncmp(sdev->vendor, "ATA     ", 8) == 0;
-+	memcpy(sdev->vendor, sdev->inquiry + 8, 8);
-+	sdev->vendor[8] = 0;
-+	strip_trailing_spaces(sdev->vendor);
-+	memcpy(sdev->model, sdev->inquiry + 16, 16);
-+	sdev->model[16] = 0;
-+	strip_trailing_spaces(sdev->model);
-+	memcpy(sdev->rev, sdev->inquiry + 32, 4);
-+	sdev->rev[4] = 0;
-+	strip_trailing_spaces(sdev->rev);
-+
-+	sdev->is_ata = strcmp(sdev->vendor, "ATA") == 0;
-  	if (sdev->is_ata) {
-  		/*
-  		 * sata emulation layer device.  This is a hack to work around
-@@ -978,7 +999,7 @@ static int scsi_add_lun(struct scsi_device *sdev, 
-unsigned char *inq_result,
-  	if (inq_result[7] & 0x10)
-  		sdev->sdtr = 1;
-
--	sdev_printk(KERN_NOTICE, sdev, "%s %.8s %.16s %.4s PQ: %d "
-+	sdev_printk(KERN_NOTICE, sdev, "%s %s %s %s PQ: %d "
-  			"ANSI: %d%s\n", scsi_device_type(sdev->type),
-  			sdev->vendor, sdev->model, sdev->rev,
-  			sdev->inq_periph_qual, inq_result[2] & 0x07,
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index dfc3559e7e04..3282ad956d1f 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -648,9 +648,9 @@ static DEVICE_ATTR(field, S_IRUGO, 
-sdev_show_##field, NULL);
-   */
-  sdev_rd_attr (type, "%d\n");
-  sdev_rd_attr (scsi_level, "%d\n");
--sdev_rd_attr (vendor, "%.8s\n");
--sdev_rd_attr (model, "%.16s\n");
--sdev_rd_attr (rev, "%.4s\n");
-+sdev_rd_attr (vendor, "%s\n");
-+sdev_rd_attr (model, "%s\n");
-+sdev_rd_attr (rev, "%s\n");
-  sdev_rd_attr (cdl_supported, "%d\n");
-
-  static ssize_t
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 2b4b2a1a8e44..b6c248e69b3a 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -2507,7 +2507,7 @@ static int sg_proc_seq_show_devstrs(struct 
-seq_file *s, void *v)
-  	sdp = it ? sg_lookup_dev(it->index) : NULL;
-  	scsidp = sdp ? sdp->device : NULL;
-  	if (sdp && scsidp && (!atomic_read(&sdp->detaching)))
--		seq_printf(s, "%8.8s\t%16.16s\t%4.4s\n",
-+		seq_printf(s, "%8s\t%16s\t%4s\n",
-  			   scsidp->vendor, scsidp->model, scsidp->rev);
-  	else
-  		seq_puts(s, "<no active device>\n");
-diff --git a/drivers/target/target_core_pscsi.c 
-b/drivers/target/target_core_pscsi.c
-index 9ed2818c3028..1718d1620f24 100644
---- a/drivers/target/target_core_pscsi.c
-+++ b/drivers/target/target_core_pscsi.c
-@@ -169,14 +169,11 @@ pscsi_set_inquiry_info(struct scsi_device *sdev, 
-struct t10_wwn *wwn)
-  	 * Use sdev->inquiry data from drivers/scsi/scsi_scan.c:scsi_add_lun()
-  	 */
-  	BUILD_BUG_ON(sizeof(wwn->vendor) != INQUIRY_VENDOR_LEN + 1);
--	snprintf(wwn->vendor, sizeof(wwn->vendor),
--		 "%." __stringify(INQUIRY_VENDOR_LEN) "s", sdev->vendor);
-+	strscpy(wwn->vendor, sdev->vendor);
-  	BUILD_BUG_ON(sizeof(wwn->model) != INQUIRY_MODEL_LEN + 1);
--	snprintf(wwn->model, sizeof(wwn->model),
--		 "%." __stringify(INQUIRY_MODEL_LEN) "s", sdev->model);
-+	strscpy(wwn->model, sdev->model);
-  	BUILD_BUG_ON(sizeof(wwn->revision) != INQUIRY_REVISION_LEN + 1);
--	snprintf(wwn->revision, sizeof(wwn->revision),
--		 "%." __stringify(INQUIRY_REVISION_LEN) "s", sdev->rev);
-+	strscpy(wwn->revision, sdev->rev);
-  }
-
-  static int
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 4805e40ed4d7..70315f7fdafe 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -702,7 +702,7 @@ static void ufshcd_print_host_state(struct ufs_hba *hba)
-  	dev_err(hba->dev, "quirks=0x%x, dev. quirks=0x%x\n", hba->quirks,
-  		hba->dev_quirks);
-  	if (sdev_ufs)
--		dev_err(hba->dev, "UFS dev info: %.8s %.16s rev %.4s\n",
-+		dev_err(hba->dev, "UFS dev info: %s %s rev %s\n",
-  			sdev_ufs->vendor, sdev_ufs->model, sdev_ufs->rev);
-
-  	ufshcd_print_clk_freqs(hba);
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index 9c2a7bbe5891..cce4587b4b80 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -137,9 +137,9 @@ struct scsi_device {
-  	struct mutex inquiry_mutex;
-  	unsigned char inquiry_len;	/* valid bytes in 'inquiry' */
-  	unsigned char * inquiry;	/* INQUIRY response data */
--	const char * vendor;		/* [back_compat] point into 'inquiry' ... */
--	const char * model;		/* ... after scan; point to static string */
--	const char * rev;		/* ... "nullnullnullnull" before scan */
-+	char vendor[9];
-+	char model[17];
-+	char rev[5];
-
-  #define SCSI_DEFAULT_VPD_LEN	255	/* default SCSI VPD page size (max) */
-  	struct scsi_vpd __rcu *vpd_pg0;
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
