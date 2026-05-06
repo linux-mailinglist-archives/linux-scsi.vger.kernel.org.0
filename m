@@ -1,68 +1,71 @@
-Return-Path: <linux-scsi+bounces-23668-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23669-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IBo+BT9K+2mYYwMAu9opvQ
-	(envelope-from <linux-scsi+bounces-23668-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 06 May 2026 16:03:43 +0200
+	id GLjMOoNO+2nWYwMAu9opvQ
+	(envelope-from <linux-scsi+bounces-23669-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 06 May 2026 16:21:55 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A10B54DB9B9
-	for <lists+linux-scsi@lfdr.de>; Wed, 06 May 2026 16:03:42 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 068FC4DC0A9
+	for <lists+linux-scsi@lfdr.de>; Wed, 06 May 2026 16:21:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id EE23F3021BDF
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 May 2026 14:01:56 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 1B9A230A2E4B
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 May 2026 14:11:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16D5847F2EE;
-	Wed,  6 May 2026 14:01:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 741F848B382;
+	Wed,  6 May 2026 14:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="R+OQpwJ4"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OkMX5EJX"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6197048032D
-	for <linux-scsi@vger.kernel.org>; Wed,  6 May 2026 14:01:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD78348B370
+	for <linux-scsi@vger.kernel.org>; Wed,  6 May 2026 14:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778076107; cv=none; b=ceqOASxs3TSMUEjxiZkCLrr7bGIL9+9mYTNqDVjmiVvyaVgy+GOhe339xZwuUO9LsPJd15ce+oTY7sOzvLKG7Eit3V4Basb0GH2kZ4cCHyhpKdCEmEEetSJbQ39ON9Z/OcgnSMymzDNA7oHFAXlJ3Ux6m8hBwdKLKwaIo+lS/g0=
+	t=1778076591; cv=none; b=sOk7VvuMTG/vxW3EM4FLOYgCMo/sdRxUlGLpC3nSRQz441WgvHiA1iPWSYlxJ2tgvKHcy7jbVN2hSjKdHZ3Lpuk4ScRWub7s3/geMXDAnYBd6wFR1rFsyp47w/8L2naY4MUWSDTFTTP7pJwKDTBfTY/CwSpWwQDYZWxEBPQeDSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778076107; c=relaxed/simple;
-	bh=oHhNXz/r/KzAQ2IVnHKM2M3mD7VMZuBMs6UzCCq150E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ogNNZuB80N6SELYc+QM25QH428A88CgqhFH9JO5YYcYEf1r8GyNYRQvKUyx2m3D7LpPl5bJii5b52RwAJbxcCOIGATpsqUco+zI+1U8Jxh0uAkR3pSB+aHNn+mKFD9bw3Hl8/3FyusupHqDAI8zMijj+eNlIboM8qmV6VivNLqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=R+OQpwJ4; arc=none smtp.client-ip=185.67.36.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout01.posteo.de (Postfix) with ESMTPS id 950DD241BB7
-	for <linux-scsi@vger.kernel.org>; Wed,  6 May 2026 16:01:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.net; s=2017;
-	t=1778076103; bh=ZtL8MBADXjrJv0Grrg6L/r4ralN6zP19+joyWk9P4J0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:
-	 Content-Transfer-Encoding:From;
-	b=R+OQpwJ43T95SawK40XE0hFSBD62PeU+VUGSZuPHnQbEttniu1OWJg20NXvHXVD/d
-	 fIMeMJng8l0TNe7kQOEHW4Q8u+Wgp5EzyufASQJoFtPrzCjZQSFZoJEu/iRIXpqCSA
-	 MmC22lreNJKvtHYZXeAdpIV9Vy5uSL65rqUBZ71JkB0ULWAUefscsFEkB4ro7TOnvD
-	 I0FjB0D8Fw66sKG9C1TKXLQODqmzICwCsnXIHMJ8V39YAFGdWCipTRt9DSfagK0vZD
-	 oh2FAkP+Y/W5ZGyJQ/wq3BYOgNcaCvOWwFk9s8e8dajHaqg2U9RaPLlQsQUZB49iFL
-	 ZcTd2TEJlhT4Q==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4g9cWB4TkTz9rxG;
-	Wed,  6 May 2026 16:01:42 +0200 (CEST)
-From: Mateusz Nowicki <mateusz.nowicki@posteo.net>
-To: don.brace@microchip.com
-Cc: martin.petersen@oracle.com,
-	James.Bottomley@HansenPartnership.com,
-	storagedev@microchip.com,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Mateusz Nowicki <mateusz.nowicki@microchip.com>
-Subject: [PATCH 2/2] scsi: smartpqi: increase SIS ctrl ready resume timeout to 180s
-Date: Wed, 06 May 2026 14:01:43 +0000
-Message-ID: <ecabb7c8ab89554d362f2e15c4351e41814d073f.1778075755.git.mateusz.nowicki@posteo.net>
-In-Reply-To: <cover.1778075755.git.mateusz.nowicki@posteo.net>
-References: <cover.1778075755.git.mateusz.nowicki@posteo.net>
+	s=arc-20240116; t=1778076591; c=relaxed/simple;
+	bh=mBzjgyvTiUqoWkXYslRPk2bfkWMakb8gn6U0DIyuIzo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ebrlw967u9zQNcGPUxIomkQqe3FE3ZTkKdEWgwPR65vrgjnr8Jg/k8ubOt3J02b7tknxO9b06uj1Mp2hEDi6BTbqQjYoEOB/saOaZ14Nb12GP8gSq6JXl2OGGZ4WbxfDLrtB2sdmOEzMpLdax2wkr3lKOdK//ScGjHzxoMR3O2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OkMX5EJX; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778076588;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rB6mxx0RXB5aP3t67X3dbvwfnGYuDrJ/l+d8J4CapX8=;
+	b=OkMX5EJXeaZGNMBW4Za36HEVOKMQF+EuXKQWrw92wHxVoRFMTlXy3qFs5iQwy7iMVCxCHV
+	6cFVY+illQHikw0vzQSCUcQVKZ6vrQnkEHggLINUM54h0nTqBlQ2AUPj5cwrMDwZx/4Vqt
+	mSSOxSQyUsAXCGOmC3FgNuW/GbzjzBQ=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-563-SkVtXGVyMWWre9EkDY2I0w-1; Wed,
+ 06 May 2026 10:09:47 -0400
+X-MC-Unique: SkVtXGVyMWWre9EkDY2I0w-1
+X-Mimecast-MFC-AGG-ID: SkVtXGVyMWWre9EkDY2I0w_1778076584
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 63DB5180059C;
+	Wed,  6 May 2026 14:09:44 +0000 (UTC)
+Received: from loberman-thinkpadp16gen3.rmtusma.csb (unknown [10.2.16.24])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7E5D61800374;
+	Wed,  6 May 2026 14:09:43 +0000 (UTC)
+From: Laurence Oberman <loberman@redhat.com>
+To: linux-scsi@vger.kernel.org
+Cc: James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com,
+	loberman@redhat.com
+Subject: [PATCH v2 0/2] scsi: Replace FC-specific jammer with transport-agnostic fault injector
+Date: Wed,  6 May 2026 10:09:32 -0400
+Message-ID: <20260506140934.1005361-1-loberman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -70,68 +73,114 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: A10B54DB9B9
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Rspamd-Queue-Id: 068FC4DC0A9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[posteo.net,none];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
 	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[posteo.net:s=2017];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23668-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_FROM(0.00)[bounces-23669-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mateusz.nowicki@posteo.net,linux-scsi@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[posteo.net:+];
+	FROM_NEQ_ENVFROM(0.00)[loberman@redhat.com,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[redhat.com:+];
 	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	NEURAL_HAM(-0.00)[-1.000];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_NONE(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,posteo.net:dkim,posteo.net:mid,microchip.com:email]
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 
-After a PCIe hot reset, firmware boot can exceed the 90 second timeout
-in sis_wait_for_ctrl_ready_resume().  On HPE SR932i-p Gen10+ boot takes
-~125s, causing pqi_ctrl_init_resume() to fail with -ETIMEDOUT:
+This two-patch series replaces the FC-specific SCSI command jammer
+introduced in commit 54a5e73f4d6e ("tcm_qla2xxx Add SCSI command
+jammer/discard capability") with a transport-agnostic initiator-side
+fault injection module.
 
-    smartpqi 0000:84:00.0: PCI reset prepare
-    smartpqi 0000:84:00.0: PCI reset done - reinitializing
-    smartpqi 0000:84:00.0: controller not ready after 90 seconds
-    smartpqi 0000:84:00.0: reset recovery failed: -110
+The original implementation required LIO configured in target mode
+with a QLogic qla2xxx HBA, limiting it to FC environments only.
+tcm_qla2xxx target mode has effectively been retired, making the
+original approach no longer viable as a general-purpose test tool.
 
-Match SIS_CTRL_READY_TIMEOUT_SECS (180s) used on the cold-boot path.
+The replacement module (scsi_jammer) operates on the initiator side
+at the queuecommand level of the SCSI mid-layer. It intercepts
+commands before they reach any HBA driver by saving and replacing
+the queuecommand function pointer of the selected Scsi_Host at
+runtime. This makes it equally effective for FC, FCoE, iSCSI, SAS,
+and any other transport that presents a Scsi_Host, with no
+target-side configuration required.
 
-Signed-off-by: Mateusz Nowicki <mateusz.nowicki@microchip.com>
----
- drivers/scsi/smartpqi/smartpqi_sis.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Three injection modes simulate different fabric failure scenarios:
+  - drop:    immediate DID_NO_CONNECT (dead path / cable pull)
+  - timeout: delayed completion beyond SCSI timeout (slow drain)
+  - flap:    periodic arm/disarm (repeated RSCN events)
 
-diff --git a/drivers/scsi/smartpqi/smartpqi_sis.c b/drivers/scsi/smartpqi/smartpqi_sis.c
-index ae5a264d062d..df06302cec38 100644
---- a/drivers/scsi/smartpqi/smartpqi_sis.c
-+++ b/drivers/scsi/smartpqi/smartpqi_sis.c
-@@ -58,7 +58,7 @@
- #define SIS_CTRL_KERNEL_UP			0x80
- #define SIS_CTRL_KERNEL_PANIC			0x100
- #define SIS_CTRL_READY_TIMEOUT_SECS		180
--#define SIS_CTRL_READY_RESUME_TIMEOUT_SECS	90
-+#define SIS_CTRL_READY_RESUME_TIMEOUT_SECS	180
- #define SIS_CTRL_READY_POLL_INTERVAL_MSECS	10
- 
- enum sis_fw_triage_status {
+The flap mode is particularly useful for testing dm-multipath path
+reinstatement logic in addition to initial failover.
+
+An optional jam_tur_passthrough knob lets TEST UNIT READY commands
+pass through to the real driver while all other commands are jammed.
+This simulates the real-world slow-drain failure mode where the path
+appears alive to dm-multipath path checkers but data I/O is stalled.
+
+Safety: commands are never silently dropped; every intercepted
+command is completed via scsi_done() either immediately or from a
+workqueue timer. The initiator will not panic or be left with
+orphaned commands regardless of when the module is unloaded.
+
+This patch series was developed with the assistance of Claude AI
+(Anthropic). The design, testing, and sign-off responsibility
+remain with the author.
+
+Tested on x86_64 with Emulex lpfc FC HBA, dm-multipath,
+Linux 7.0.0+. All three injection modes and TUR passthrough
+verified against active multipath configurations.
+
+Note to reviewers: checkpatch reports 4 CHECKs on patch 2/2,
+all of which are false positives:
+  - "Alignment should match open parenthesis": checkpatch
+    miscounts tabs for enum return types; alignment is correct.
+  - "Lines should not end with a '('": common kernel pattern.
+  - "Macro argument reuse '_var'" (x2): READ_ONCE/WRITE_ONCE
+    are specifically designed to be safe with macro argument
+    reuse; this is a known false positive for these accessors.
+
+Changes since v1:
+  - Patch 2: Add jam_tur_passthrough control to pass TEST UNIT
+    READY commands through while jamming all other commands.
+    Simulates slow-drain where path appears alive to multipath
+    but data I/O is stalled.
+  - Patch 1: unchanged
+  - Fix duplicate flap_work_fn forward declaration in patch 2
+
+Laurence Oberman (2):
+  scsi: tcm_qla2xxx: Remove FC-specific SCSI command jammer
+  scsi: Add transport-agnostic initiator-side fault injector
+
+ MAINTAINERS                        |   6 +
+ drivers/scsi/Kconfig               |  22 +
+ drivers/scsi/Makefile              |   1 +
+ drivers/scsi/qla2xxx/Kconfig       |   9 -
+ drivers/scsi/qla2xxx/tcm_qla2xxx.c |  23 -
+ drivers/scsi/qla2xxx/tcm_qla2xxx.h |   1 -
+ drivers/scsi/scsi_jammer.c         | 657 +++++++++++++++++++++++++++++
+ 7 files changed, 686 insertions(+), 33 deletions(-)
+ create mode 100644 drivers/scsi/scsi_jammer.c
+
 -- 
-2.43.0
+2.54.0
 
 
