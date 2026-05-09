@@ -1,58 +1,58 @@
-Return-Path: <linux-scsi+bounces-23709-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23707-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CNgXMGnW/mkpxAAAu9opvQ
-	(envelope-from <linux-scsi+bounces-23709-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	id 0PIoM2nW/mk4xAAAu9opvQ
+	(envelope-from <linux-scsi+bounces-23707-lists+linux-scsi=lfdr.de@vger.kernel.org>)
 	for <lists+linux-scsi@lfdr.de>; Sat, 09 May 2026 08:38:33 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A68B24FE458
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C05A94FE45A
 	for <lists+linux-scsi@lfdr.de>; Sat, 09 May 2026 08:38:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 50C5E30325A8
-	for <lists+linux-scsi@lfdr.de>; Sat,  9 May 2026 06:28:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 553BD3010DBF
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 May 2026 06:28:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD85438553A;
-	Sat,  9 May 2026 06:28:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCB6F38239F;
+	Sat,  9 May 2026 06:28:26 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2125.outbound.protection.partner.outlook.cn [139.219.146.125])
+Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2111.outbound.protection.partner.outlook.cn [139.219.17.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD029384244;
-	Sat,  9 May 2026 06:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.125
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBF233F59D;
+	Sat,  9 May 2026 06:28:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.111
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778308109; cv=fail; b=njmTmZguRpr0TJCidHkmbgayUxrY76i/3Le83g34IxPCgCVKwgoGvio08tFoii3LW/3+ONEZ+h0So7FoEzRUdxi7JqaMKI7KV7t0Zwb/a8fPnRSbYzCkSchIyheJfKK9FUAbhFNWDTmnJ9YEAaJrbWHrmyn32dH0MgSDhNAxVuo=
+	t=1778308106; cv=fail; b=UqwJSDyHQInFJeP6NfBxamXHFW2FK+ft8JFD0/NJO7NVLKEtgWCQfteC6ytu/kIu28yMO/7RdihyaW6VmeZ53dLtywUWBRKeYxpBvrIx2MFKBprkPzAzWOjkzhz9EJUGU21i6CulJ2Ib570TN7PgzZ53YfIHI29wR2/LO+jEJW0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778308109; c=relaxed/simple;
-	bh=1md+k+jdnycV06xXtdR04WxvTvNMX+vKJAZTCLB4NRI=;
+	s=arc-20240116; t=1778308106; c=relaxed/simple;
+	bh=tUxwTxQgXJBtpcTpARP8lZDcgEdYlKYKR8WfJWElDoQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Y8cVWEPgEfTmC9GQ4P4JpNJxcSv/XIMV8gNcSDsru8J3qKN493ClY+tWdB6XqKUQjw2s0u3YNc6T9NZyGCbv7ktYT141hKfGwtcmIbSgChIA8ISnKK0McKBYy4oZ61mSpbLWGiqXKiuOK3iT/QyKXZb3SuGaq2UvM1xp7uO/EB8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.125
+	 Content-Type:MIME-Version; b=H13NH3ZHLgIu+djVVnHrQ4bvUfwpJJ/kh64p5jOhfkT3hudA+Hz+SpmyN5T+C2WxQM7VgumZqSMiK6QXpPvpobTqGGmeWutJND5gQ6N94YgrSBS2kyyOQTsPupSJlBv6aUFQV0PwuNJn3DkFElE13c1GjlE/XJlyoAzs1tLqWpY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=starfivetech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DDXWQZO9esqb8eHN5iPfYotm7zKUuTMsTqicd9ZmHXi1iQBo0XF9YFvVqr3zhmH2af5LCVntXIpvGW0PT9jdezYbehPBfMUZG3ChVd1Sd3/F6Lw1QZKRzjKtRPj8nobcg1qMTArfV+Vsa0YHkX6qaZILG8yu3u2YCDbXQYF16FgSq67naLEJhJsgWfNCN7fHARtyneQT6ZOLhsSB/Ud6SDC3WfYqM4MRJ30CxN2yDFSDyjITJdjYGZ2Vr6fRVVDMkmgkQeT+mFGB2EC4DeEEKYvk5lF7zBHhje61qJOT+R4VKiEflU39fGUrIEGpz9yPNDmJw3Xa6Ayiilj9ZBu8Ow==
+ b=Uh1II72/lL3uvcMiWHRKBQLveTeWvYK1NIFyl6DkGK/Y0WOMyrB6u8qBG5q7VvgxBnAU4uY87evsnerAmsAZ3eRbNwIZTE9KZY9z1SKJtfWIAPDGvzAl5E88F8XBcTaRMyn3pn9+R57O/FaNCiL2oeDB3KKa7vCIAggZtzS6Vf0s3ewONQ/6xDl+XQXHvbEex8+Mu2S5pUrpBKdH1veju1fnzvzuw9wNEjk0gYWl2W5Y4YWt4/or0G/WdN0sEohomhwEJZpwX2SkE42JE+KfVVaAWywdrPxe8nYvwejSG7t/0WoPADK3qjrqnJr7eEcsGS4yzGyV0pai3UXUtUx3Vw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W4EzxHFUTu9WVBH+v0tR9P7XybMLoPk/e0NVjTM3rnA=;
- b=NlCtHklyGMzXZVqldgJPXjRBNbA4VuOH2C5YuqrB6Lu3ryJ9eDS5stmL9ADNc+wlw9BcH3ZFep2FDx+QHB0esEv8VkNfYNM5egh+dUv5IinXL04Vxf0B+FNOcb8aYQK2rjc4CeGF5UTD6evm/BzHH35qTNur+AGIZj5Je/pg0vZ/XQzXjvdG1AkfSpo1ysdc4sHEge13KxnS3791PVEOB+4Mh7+cys2r2fi3zyyDD76leBWWMOmzAYunO2xMRgnXbgvn4eQT4g/uldaz9NESwDDNRE9wNLuzUlQ0HqnCwihUvePhjY9nOqte4UZokEzX+0jjECotSGjB6s6lzGA7Bg==
+ bh=6/amF1DATFZG0ALsRmZkVje3jjMOUAXqZjPhfR64xRI=;
+ b=LRxVo+gyT2wZsupFAccT/YikrOBAH/dKJUxemT1MZVOnxLDwVtWKMXawliHyr9LfqR8+6fO0hCWixqB+hjAOqBmgAEun9xj4FcOPjGf+4y/f0cHhVXDEBzEojkcxTM6p2eMhWDzJ0AndU0c6xUQkD/V5wyi7+wS2IjLCk0j07F2f90huDCKZIvlAlSw/qXIumGU9Tm7sa8B3twa1KdLUUe8VwEdno8TPIrXPqdEceAa1H8wJ1ZzfLA2c3WFZJvca2BaDVnBTF+Mm/VVCPnmAKfnr/jyqWkcmZUhTTbHqI1hDy5aMkiDxZEbnSPbBZMww8OjHl0c22IOKSeGjwIgF6w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=starfivetech.com; dmarc=pass action=none
  header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=starfivetech.com;
 Received: from BJXPR01MB0855.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c211:18::12) by BJXPR01MB0632.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c211:16::13) with Microsoft SMTP Server (version=TLS1_2,
+ (2406:e500:c211:18::12) by BJXPR01MB0744.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c211:1a::10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.20; Sat, 9 May
- 2026 06:28:10 +0000
+ 2026 06:28:11 +0000
 Received: from BJXPR01MB0855.CHNPR01.prod.partner.outlook.cn
  ([fe80::e2de:92aa:4c1c:a829]) by
  BJXPR01MB0855.CHNPR01.prod.partner.outlook.cn ([fe80::e2de:92aa:4c1c:a829%6])
- with mapi id 15.20.9846.025; Sat, 9 May 2026 06:28:10 +0000
+ with mapi id 15.20.9846.025; Sat, 9 May 2026 06:28:11 +0000
 From: Minda Chen <minda.chen@starfivetech.com>
 To: Alim Akhtar <alim.akhtar@samsung.com>,
 	Avri Altman <avri.altman@wdc.com>,
@@ -71,9 +71,9 @@ To: Alim Akhtar <alim.akhtar@samsung.com>,
 Cc: linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	Minda Chen <minda.chen@starfivetech.com>
-Subject: [PATCH v2 2/3] scsi: ufs: dwc: Rename amd-versal2 read/write PHY API and move to dwc common file
-Date: Sat,  9 May 2026 14:27:58 +0800
-Message-Id: <20260509062759.125472-3-minda.chen@starfivetech.com>
+Subject: [PATCH v2 3/3] scsi: ufs: starfive: Add UFS support for StarFive JHB100 SoC
+Date: Sat,  9 May 2026 14:27:59 +0800
+Message-Id: <20260509062759.125472-4-minda.chen@starfivetech.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20260509062759.125472-1-minda.chen@starfivetech.com>
 References: <20260509062759.125472-1-minda.chen@starfivetech.com>
@@ -88,59 +88,59 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BJXPR01MB0855:EE_|BJXPR01MB0632:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4c2e7665-7f14-4942-9b7b-08dead9423b8
+X-MS-TrafficTypeDiagnostic: BJXPR01MB0855:EE_|BJXPR01MB0744:EE_
+X-MS-Office365-Filtering-Correlation-Id: f9c68b00-2a9b-433c-646c-08dead94247d
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|52116014|1800799024|56012099003|22082099003|18002099003|38350700014|921020|3023799003;
+	BCL:0;ARA:13230040|7416014|52116014|376014|1800799024|366016|921020|56012099003|22082099003|18002099003|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	YLHegqDAdpzHR9y703l6sm8MFXjuRnSs22af95GXkygfTQN5VRDwwU655HAe656z5JtQVNjEKPM0lp9OecjpQCu01v19zH6H0Cm14u+0nzI/WlhCHizrmkTdOr5yLAsqMboj3mFzqPr0Tp++bB3lsP1fvNS/a1l9iaplBmvv4gXJL+Ww5/T0M8EXvp9eeNjGgxHnTNarx772I4nqgGKHFTcSI73WCf1jv3chhx0bfUZu7bKGbHbNMIxy8DApcFJA9xIr4H3OPJr9JBLSVfTnggjqMTAHPu+qjICoIOQ6/hJ0y56Gakdg73/z+VdUpBzgrcusUVbtKe1PrvLDDd2mUPbw8FvP2Ag1aXtgwrPWVQyJSrR7KzXTWgm3s2DNIa0b987CXNSCOYqwz/zSBY3DU8mFh4IzIoDQ6avi/QCp3u5zaN4V23StgPMkz23aP/u9DUZzshSlUBTAEFff7COlh0DDPWGk4ZZ3JEl/nOG18Wl+6xLEVpHCynZxvBmCjQibTSJ86X5Ok25p0zXsyhkFMLEgx0gB3Gsk4EXIK5/BPVvPFxX7Rmnbi6LJkOU3W/IaeLdOLIvOCP/XESaAO3no4w==
+	hJmwBNEcXHy7kDR3/HRA2S348NKqyuDtj0vVJQy2GSmfWgutjdwsjtcLFaN16q8emZCqVlZNbHxcimHr99wRpTIZe0oF0IDFyLPh3nl3k7dD3snwL7hp6Ryy9XQfpG9C/6P5iWmInww7bfp1TZa7gF/K0zTa1aS4v8QGIJt2lGbM/tv2Y/TRQBH/JqJY+Jy3ARZCi3xO3NNHF6HGVeZQsnpvy4iiIX/JYJiM6m10EOd2hsjho63OSvZPIcs8KB39kTC4LDE4lnxdF2N2kaJOH7/T4Yk7/sPNxS3BwuG7eqKXLCLgzH5NOPf3hEldy/OLOnf8TRBYg7+PiJ5A3fqCbm8a8bfa05UBIN21AayuxNtF5PWWzKEk0ZTPZu29CwiH331B8pf+WUvfdBjq1iMJVZbi1axcuAolQEaPNiPVzTsS3ftu4cuLU5+GkU38Yi6Vq8J9MjhCGk/IcOWqqiT4znr6tg2tgr7qGAkMGaNCnhIjP8pLIWcDSP3RdduohcAbXbYZo+UaUPX3w12QzDsGeJ+c0wyuYb8Tsu0g4aZojSJ2UPd1AsQrHzgGOCFlTB1F2hiDfjwgunWn86ixFOfGjg==
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BJXPR01MB0855.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(52116014)(1800799024)(56012099003)(22082099003)(18002099003)(38350700014)(921020)(3023799003);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BJXPR01MB0855.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(7416014)(52116014)(376014)(1800799024)(366016)(921020)(56012099003)(22082099003)(18002099003)(38350700014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?RVVKOiHTL219M/+nWdF64rOS2CoPWOoPv1asDVPoU2//psViKrnZWLlwUaAw?=
- =?us-ascii?Q?joNNPkvL6VdN1ZeWS37890QlD9aleUvEhW2+egiNWXkwxSqQiDUJ1jhGjcvn?=
- =?us-ascii?Q?+VgED92ZandyXc8j5i1fvvxTvUy+7BWTSPSjMX68VKAoebocZxrhi+g8r0Ku?=
- =?us-ascii?Q?qY9tM0cTtde0H5NXKiUv16EHOMTVyM0IENUA8tcqrL25HgZFmt/IySpw/6ie?=
- =?us-ascii?Q?T2BQjyo9RXfQ650asQdoymbff28IeknCHe9Yl8mWCJQ4hhDRvc/HiaKXcONK?=
- =?us-ascii?Q?ArCHzjwglOvl9T1CIXLTw4EB2V3XWnmn0C6yaOYfIyu8Hfv0Y0oZVELyJy4E?=
- =?us-ascii?Q?yW6Fzx6rU/8TFmdKNgPMWFSD4p879aoRYYNIDZM58nla/DHUWyB2Ej1KY0Js?=
- =?us-ascii?Q?2fXWFmXOlP41zQ1MQ5NYbEBcvRvlfMOo4+IzATMmMbGkgZ+gWc/hs//YJb1/?=
- =?us-ascii?Q?bJD+kVrRkja0oMTJAJo7IyXjIEjGn15eG0VEWatJI4ctYoaiGAPPhsVyPjPZ?=
- =?us-ascii?Q?tVlFahPnDDHBAb4zbLEvMnhDz+FSmBAIXQYlBpsfA0pYXbQIRVKQoMtdWC5S?=
- =?us-ascii?Q?ESP0/BruyB5AckcuFBw8cM5a5LhCQ1GBflqlHA9X8J+Fy9EbBtb9pC+4Jec5?=
- =?us-ascii?Q?eR/QdbVYdP+LlCZgjo1Doz6fobKZF+wyUhG/Fd31nNLRcqjWonnQZUSOSqhY?=
- =?us-ascii?Q?B1n7YIzavHG+j5X2mqfOXaL79CH8irR02szAqjO9oPDqrUZIUvUv5KKx5m+E?=
- =?us-ascii?Q?RUfnKRLeJ5qULtz+PFSvMgJjiOC5yGo+dMVT7Atxl1nc/OFVOJBL4Xsr2n2Z?=
- =?us-ascii?Q?N6ZhlPyXQaV0a76hUcW63U7ZK321ilJn9GB4zUVJdFRRPQng1NTkLK6uoose?=
- =?us-ascii?Q?LrDDd941Vpxa+ktM3LHuFQ7sngtFxwwIh2wyXBW9LCM0xGitH71ykRMZXeiZ?=
- =?us-ascii?Q?J08GsOll5OdcfRfcsLB7FPjY8cwR7gFfDiil19yv53bRrNWbzEM2J6PRl2Sv?=
- =?us-ascii?Q?vZomUTBayidf2Cf5PPC2TWqkMvOyCAY368greld2cMHTGttc5Po3h8aOQ4Vr?=
- =?us-ascii?Q?x4UhGsLyW/kQROEji0DPEdis/UCcKbA7sr8Pv4C1USUQz5W1m5h3UzyEHpoH?=
- =?us-ascii?Q?fXV4pKIMX5DuauuzjxRLVQsVRpWWm3t1yhpHzAz5IDZfYyKAfIwXiE8K0M1D?=
- =?us-ascii?Q?sSHMDcGg1/BanX0ftfkmCE4wI08RILHC4+abhA1+hD1lL3hJU/s7LvWL+NGE?=
- =?us-ascii?Q?OIzlac8EmuhH/E4X6UQ4oNOVgM+zS0r6uSlbtS9KvwdS/50MdsI/IZ7w6sVE?=
- =?us-ascii?Q?9oAuXRzI4/b4Sid1IhebCci4nB3XrhgNXa0qqjcszwn46x/NIInudESRjHFH?=
- =?us-ascii?Q?JcGIJrsD29GTa7/cCHn6HyXIqTsDrylGZuJeFBwNbh3YimlWnhZNrVIAaM1b?=
- =?us-ascii?Q?EsijMBa46aVo4OGMEgLVRaxe54DnQMzR5edr79WJ6LIY/V8mVHW8Dd11bWF2?=
- =?us-ascii?Q?0r/JbMVTKKiiJ9fmNlP4r6anWLwCBD2/46JsIBn58EL9Jyp8xrJkn4im1y+8?=
- =?us-ascii?Q?LRS9IIn4UNjHEvLI76uPzr/2vfRfKTtnv/ZPjZ4NHhlFp07bzVUkJv6hHhm/?=
- =?us-ascii?Q?HIXG5tJ7f+iZlI3hp66rm4qPPWnjZy9VXck+bJ1UhPM1USz0qBiLS67wVRKW?=
- =?us-ascii?Q?uXiN3A9XB/CvjwdVXe0b/tkFuWENNcmMgxRlU2+iovh364KQUlRno3odECAP?=
- =?us-ascii?Q?gYrfMg15LKjOX57/aTNlt2IEB+cyIoQ=3D?=
+	=?us-ascii?Q?BShD2qmNa2STdocOi/QZR+YtoHNH/xUC4scFUrVZRv4TWd5FTyPHoQjHW1/4?=
+ =?us-ascii?Q?EOV/mKUVyOjmHo+Rn+NSaHZEzOcnlh0DKebv/6kqON0AeHMFg5Z0rpiTZ7Qb?=
+ =?us-ascii?Q?lo+G6h0konVj2yNeAd2kLtyvd29XZmiCMimJAC9quKN+YEHJSMM/C4tRtyYT?=
+ =?us-ascii?Q?/5ZYpr+89Z9DmWVbzn0M1YKzf5N4OSVsc0dWD8y1UN8WDRpbLGuIvSFw3cYd?=
+ =?us-ascii?Q?ny6GLjKOvDc3lgn+og2/hKof2TRzYCDbS/ooW1DhBOwyNe0a+R3UXlhTGNEp?=
+ =?us-ascii?Q?DxNVEwb7Oby6DMJ7c0M40JPNTqzZp0LBkKFL4ZXNlJmxCUPShmNRSrb2t6Ok?=
+ =?us-ascii?Q?xCAeUZx/6TVZWE446frP689MzmBB2vTrziLAQOtwk8zBMkOCNk7iYENXdzi6?=
+ =?us-ascii?Q?azz0QYkGuPKYX8s78lRr4K/FNQC1MxeE97zIxeiPpctTxLEPfomrsFnip3BZ?=
+ =?us-ascii?Q?XcZWtzB77E8iOcV8n8FCE8clF8qEBaL2HiZQtOglWM1nOVmQ0FWw7IbxHfmZ?=
+ =?us-ascii?Q?jdr6J36sKvSFJ1yKPU2Cic7BqcGOc5BnbncNQac5BZiNO1KsI8QYwlHsx7s2?=
+ =?us-ascii?Q?kWC5slNjiQzRqu1jNYToZPUhwSbfQ0RTmu3Mzit8t+IRa98CUIN+fWERqmi1?=
+ =?us-ascii?Q?IYeUn03Tz1716VOesATd6iCWfy26RplUNWWYMG/bO+JM6j1s6ZABe04VfbWa?=
+ =?us-ascii?Q?LK73pQolzpFFLYW9xhS2sjaH2AKklKOiSnCcawZ2+X5dRwfqnDUiGKr5xmTE?=
+ =?us-ascii?Q?3Z3wC+MSRML9CTvCOhHiH4td7Ox/Scn7pSPUChPX6H1+wlZKCA1M/LVb+DB6?=
+ =?us-ascii?Q?zOvRokbRv0/mrLCw8WsqKpcIEcm8pN71Epyep6sZm2BgthC456ZbJyI+mxar?=
+ =?us-ascii?Q?BnpYSZKyeidRcEADyB0oLQRxn8dySWJuFPCSaQs7/03/G3y4Z3eKKM61lWPz?=
+ =?us-ascii?Q?eNh2aZjTF/Di6HZO/fC+2aFyfui98KNPyq9O4tm4P/RSacDnnJNpR6nSuEpx?=
+ =?us-ascii?Q?qNh7v1Gqpn+IbeYtcEqEtns0PNOL6fny7tEbBPi+GtOHszqtMUwUb1qa3Dut?=
+ =?us-ascii?Q?gznCTxFhIrAa7dQBYWQiywejn4cX5z1YgZzFBhyfM2JAgaC0uLLbeugypbQN?=
+ =?us-ascii?Q?vGfXD0n8ix2mfx/AbXEGmg9vhYfrHci5QjyzTxmW7WXfs9ThkyOh11O2g4Hs?=
+ =?us-ascii?Q?6VdJG+CIQ2CrJghHkRR9920GsOp0A0E5nXCnwagL0c0PHYClZZ43hLm2++CL?=
+ =?us-ascii?Q?qVo193NxJ6YcSFnrWW/n/6ShNgvPMcLoo7hEHBm68j0ybLS/oyq/zvdrtEgt?=
+ =?us-ascii?Q?smIH+CP5OWrcZ2XQMWIEn/HpJlIM1lhKjkjfFy5Kq27rH1eZXX908SXXr/RU?=
+ =?us-ascii?Q?aAlrqOmCL0BHzuRcllRmBR+Fn+x45O1wEprv3NVCYQ/KGPAM2X5dgOxmn2fb?=
+ =?us-ascii?Q?KQvuv/rDvB1EumiFb5koqMXBd16jimLFwjQoyHQVprJC8veGFhd8zpLc4h5d?=
+ =?us-ascii?Q?Hacc9PyaL0OPsjUmSJ419h3HPXDRjaOrSfwHPUOEeQKCRZ5I4IID7WJymwtG?=
+ =?us-ascii?Q?PFCCb1zsIZXMCjTu2jX7umQK1k+ej+33sqHFM96bSMrJ40EpZGsRp841/17J?=
+ =?us-ascii?Q?zjwHtrC6MJ40hzkPY6LQaUe/5/5qrOZoTMLfH9megdojVp0jUw8ikXpZW3r3?=
+ =?us-ascii?Q?usxkJ3yrmnFrGh5aRk+6JyzoRyNNaw9qfGj36o5wevYAteJiB36vJPlhpN1F?=
+ =?us-ascii?Q?pBe3kTFCqkSPeubxkGDgFlcNlctUNYA=3D?=
 X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c2e7665-7f14-4942-9b7b-08dead9423b8
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9c68b00-2a9b-433c-646c-08dead94247d
 X-MS-Exchange-CrossTenant-AuthSource: BJXPR01MB0855.CHNPR01.prod.partner.outlook.cn
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2026 06:28:10.0786
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2026 06:28:11.3573
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7iJiv6WrLRTcyRliOu4VXjpZ2P/X7dULsjJ6aKOB2/z/MvOs14bhTe2zdZXAMzn95oxbgkMyc/eX5g3Zk7gA/BhRBU51DPdMuX7/IxUMMcI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BJXPR01MB0632
-X-Rspamd-Queue-Id: A68B24FE458
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9yuFSeDj74YH0IKDX/8xiOYNUbDvn1oivncqwDplCYPYAEDpbXIoKS9gZMueLY7bT78R4db5c3GlipCtd+ilf33vu4GMy0fLqGPHNnhC2xE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BJXPR01MB0744
+X-Rspamd-Queue-Id: C05A94FE45A
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [5.04 / 15.00];
 	DMARC_POLICY_QUARANTINE(1.50)[starfivetech.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
@@ -148,17 +148,17 @@ X-Spamd-Result: default: False [5.04 / 15.00];
 	ARC_REJECT(1.00)[cv is fail on i=2];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	GREYLIST(0.00)[pass,meta];
+	GREYLIST(0.00)[pass,body];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-23709-lists,linux-scsi=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-23707-lists,linux-scsi=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[minda.chen@starfivetech.com,linux-scsi@vger.kernel.org];
@@ -166,275 +166,411 @@ X-Spamd-Result: default: False [5.04 / 15.00];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.635];
+	NEURAL_HAM(-0.00)[-0.621];
 	TAGGED_RCPT(0.00)[linux-scsi,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[starfivetech.com:email,starfivetech.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,gmx.de:email,starfivetech.com:email,starfivetech.com:mid]
 X-Rspamd-Action: no action
 
-AMD versal2 UFS using designware ufs mipi PHY. The read/write PHY
-register API are common functions for designware ufs PHY. For other
-vendors reuse the code, move to common ufshcd-dwc.c file.
+Add support for the UFS host controller on JHB100 SoC, built on
+the Synopsys DWC UFS controller and using UFSHCD platform driver.
+This controller requires specific configurations like
+M-PHY/RMMI/UniPro
 
 Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
 ---
- drivers/ufs/host/ufs-amd-versal2.c | 85 ++++++------------------------
- drivers/ufs/host/ufshcd-dwc.c      | 53 +++++++++++++++++++
- drivers/ufs/host/ufshcd-dwc.h      |  2 +
- 3 files changed, 72 insertions(+), 68 deletions(-)
+ MAINTAINERS                     |   1 +
+ drivers/ufs/host/Kconfig        |  13 ++
+ drivers/ufs/host/Makefile       |   1 +
+ drivers/ufs/host/ufs-starfive.c | 280 ++++++++++++++++++++++++++++++++
+ drivers/ufs/host/ufshcd-dwc.h   |  18 ++
+ 5 files changed, 313 insertions(+)
+ create mode 100644 drivers/ufs/host/ufs-starfive.c
 
-diff --git a/drivers/ufs/host/ufs-amd-versal2.c b/drivers/ufs/host/ufs-amd-versal2.c
-index 2154d6286817..2e671881e7ae 100644
---- a/drivers/ufs/host/ufs-amd-versal2.c
-+++ b/drivers/ufs/host/ufs-amd-versal2.c
-@@ -43,57 +43,6 @@ struct ufs_versal2_host {
- 	u8 ctlecompval1;
- };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5d222150e015..8021fd8a3fe0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -27482,6 +27482,7 @@ UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER STARFIVE
+ M:	Minda Chen <minda.chen@starfivetech.com>
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/ufs/starfive,jhb100-ufs.yaml
++F:	drivers/ufs/host/ufs-starfive.c
  
--static int ufs_versal2_phy_reg_write(struct ufs_hba *hba, u32 addr, u32 val)
--{
--	static struct ufshcd_dme_attr_val phy_write_attrs[] = {
--		{ UIC_ARG_MIB(CBCREGADDRLSB), 0, DME_LOCAL },
--		{ UIC_ARG_MIB(CBCREGADDRMSB), 0, DME_LOCAL },
--		{ UIC_ARG_MIB(CBCREGWRLSB), 0, DME_LOCAL },
--		{ UIC_ARG_MIB(CBCREGWRMSB), 0, DME_LOCAL },
--		{ UIC_ARG_MIB(CBCREGRDWRSEL), 1, DME_LOCAL },
--		{ UIC_ARG_MIB(VS_MPHYCFGUPDT), 1, DME_LOCAL }
--	};
--
--	phy_write_attrs[0].mib_val = (u8)addr;
--	phy_write_attrs[1].mib_val = (u8)(addr >> 8);
--	phy_write_attrs[2].mib_val = (u8)val;
--	phy_write_attrs[3].mib_val = (u8)(val >> 8);
--
--	return ufshcd_dwc_dme_set_attrs(hba, phy_write_attrs, ARRAY_SIZE(phy_write_attrs));
--}
--
--static int ufs_versal2_phy_reg_read(struct ufs_hba *hba, u32 addr, u32 *val)
--{
--	u32 mib_val;
--	int ret;
--	static struct ufshcd_dme_attr_val phy_read_attrs[] = {
--		{ UIC_ARG_MIB(CBCREGADDRLSB), 0, DME_LOCAL },
--		{ UIC_ARG_MIB(CBCREGADDRMSB), 0, DME_LOCAL },
--		{ UIC_ARG_MIB(CBCREGRDWRSEL), 0, DME_LOCAL },
--		{ UIC_ARG_MIB(VS_MPHYCFGUPDT), 1, DME_LOCAL }
--	};
--
--	phy_read_attrs[0].mib_val = (u8)addr;
--	phy_read_attrs[1].mib_val = (u8)(addr >> 8);
--
--	ret = ufshcd_dwc_dme_set_attrs(hba, phy_read_attrs, ARRAY_SIZE(phy_read_attrs));
--	if (ret)
--		return ret;
--
--	ret = ufshcd_dme_get(hba, UIC_ARG_MIB(CBCREGRDLSB), &mib_val);
--	if (ret)
--		return ret;
--
--	*val = mib_val;
--	ret = ufshcd_dme_get(hba, UIC_ARG_MIB(CBCREGRDMSB), &mib_val);
--	if (ret)
--		return ret;
--
--	*val |= (mib_val << 8);
--
--	return 0;
--}
--
- static int ufs_versal2_enable_phy(struct ufs_hba *hba)
- {
- 	u32 offset, reg;
-@@ -162,64 +111,64 @@ static int ufs_versal2_setup_phy(struct ufs_hba *hba)
- 	u32 reg;
+ UNIWILL LAPTOP DRIVER
+ M:	Armin Wolf <W_Armin@gmx.de>
+diff --git a/drivers/ufs/host/Kconfig b/drivers/ufs/host/Kconfig
+index 964ae70e7390..b742f7a2b0b6 100644
+--- a/drivers/ufs/host/Kconfig
++++ b/drivers/ufs/host/Kconfig
+@@ -168,3 +168,16 @@ config SCSI_UFS_AMD_VERSAL2
  
- 	/* Bypass RX-AFE offset calibrations (ATT/CTLE) */
--	ret = ufs_versal2_phy_reg_read(hba, FAST_FLAGS(0), &reg);
-+	ret = ufs_dwc_phy_reg_read(hba, FAST_FLAGS(0), &reg);
- 	if (ret)
- 		return ret;
- 
- 	reg |= MPHY_FAST_RX_AFE_CAL;
--	ret = ufs_versal2_phy_reg_write(hba, FAST_FLAGS(0), reg);
-+	ret = ufs_dwc_phy_reg_write(hba, FAST_FLAGS(0), reg);
- 	if (ret)
- 		return ret;
- 
--	ret = ufs_versal2_phy_reg_read(hba, FAST_FLAGS(1), &reg);
-+	ret = ufs_dwc_phy_reg_read(hba, FAST_FLAGS(1), &reg);
- 	if (ret)
- 		return ret;
- 
- 	reg |= MPHY_FAST_RX_AFE_CAL;
--	ret = ufs_versal2_phy_reg_write(hba, FAST_FLAGS(1), reg);
-+	ret = ufs_dwc_phy_reg_write(hba, FAST_FLAGS(1), reg);
- 	if (ret)
- 		return ret;
- 
- 	/* Program ATT and CTLE compensation values */
- 	if (host->attcompval0) {
--		ret = ufs_versal2_phy_reg_write(hba, RX_AFE_ATT_IDAC(0), host->attcompval0);
-+		ret = ufs_dwc_phy_reg_write(hba, RX_AFE_ATT_IDAC(0), host->attcompval0);
- 		if (ret)
- 			return ret;
- 	}
- 
- 	if (host->attcompval1) {
--		ret = ufs_versal2_phy_reg_write(hba, RX_AFE_ATT_IDAC(1), host->attcompval1);
-+		ret = ufs_dwc_phy_reg_write(hba, RX_AFE_ATT_IDAC(1), host->attcompval1);
- 		if (ret)
- 			return ret;
- 	}
- 
- 	if (host->ctlecompval0) {
--		ret = ufs_versal2_phy_reg_write(hba, RX_AFE_CTLE_IDAC(0), host->ctlecompval0);
-+		ret = ufs_dwc_phy_reg_write(hba, RX_AFE_CTLE_IDAC(0), host->ctlecompval0);
- 		if (ret)
- 			return ret;
- 	}
- 
- 	if (host->ctlecompval1) {
--		ret = ufs_versal2_phy_reg_write(hba, RX_AFE_CTLE_IDAC(1), host->ctlecompval1);
-+		ret = ufs_dwc_phy_reg_write(hba, RX_AFE_CTLE_IDAC(1), host->ctlecompval1);
- 		if (ret)
- 			return ret;
- 	}
- 
--	ret = ufs_versal2_phy_reg_read(hba, FW_CALIB_CCFG(0), &reg);
-+	ret = ufs_dwc_phy_reg_read(hba, FW_CALIB_CCFG(0), &reg);
- 	if (ret)
- 		return ret;
- 
- 	reg |= MPHY_FW_CALIB_CFG_VAL;
--	ret = ufs_versal2_phy_reg_write(hba, FW_CALIB_CCFG(0), reg);
-+	ret = ufs_dwc_phy_reg_write(hba, FW_CALIB_CCFG(0), reg);
- 	if (ret)
- 		return ret;
- 
--	ret = ufs_versal2_phy_reg_read(hba, FW_CALIB_CCFG(1), &reg);
-+	ret = ufs_dwc_phy_reg_read(hba, FW_CALIB_CCFG(1), &reg);
- 	if (ret)
- 		return ret;
- 
- 	reg |= MPHY_FW_CALIB_CFG_VAL;
--	return ufs_versal2_phy_reg_write(hba, FW_CALIB_CCFG(1), reg);
-+	return ufs_dwc_phy_reg_write(hba, FW_CALIB_CCFG(1), reg);
- }
- 
- static int ufs_versal2_phy_init(struct ufs_hba *hba)
-@@ -406,7 +355,7 @@ static int ufs_versal2_phy_ratesel(struct ufs_hba *hba, u32 activelanes, u32 rx_
- 
- 	for (lane = 0; lane < activelanes; lane++) {
- 		time_left = TIMEOUT_MICROSEC;
--		ret = ufs_versal2_phy_reg_read(hba, RX_OVRD_IN_1(lane), &reg);
-+		ret = ufs_dwc_phy_reg_read(hba, RX_OVRD_IN_1(lane), &reg);
- 		if (ret)
- 			return ret;
- 
-@@ -416,12 +365,12 @@ static int ufs_versal2_phy_ratesel(struct ufs_hba *hba, u32 activelanes, u32 rx_
- 		else
- 			reg &= ~MPHY_RX_OVRD_VAL;
- 
--		ret = ufs_versal2_phy_reg_write(hba, RX_OVRD_IN_1(lane), reg);
-+		ret = ufs_dwc_phy_reg_write(hba, RX_OVRD_IN_1(lane), reg);
- 		if (ret)
- 			return ret;
- 
- 		do {
--			ret = ufs_versal2_phy_reg_read(hba, RX_PCS_OUT(lane), &reg);
-+			ret = ufs_dwc_phy_reg_read(hba, RX_PCS_OUT(lane), &reg);
- 			if (ret)
- 				return ret;
- 
-@@ -483,12 +432,12 @@ static int ufs_versal2_pwr_change_notify(struct ufs_hba *hba, enum ufs_notify_ch
- 
- 		/* Remove rx_req override */
- 		for (lane = 0; lane < dev_req_params->lane_tx; lane++) {
--			ret = ufs_versal2_phy_reg_read(hba, RX_OVRD_IN_1(lane), &reg);
-+			ret = ufs_dwc_phy_reg_read(hba, RX_OVRD_IN_1(lane), &reg);
- 			if (ret)
- 				return ret;
- 
- 			reg &= ~MPHY_RX_OVRD_EN;
--			ret = ufs_versal2_phy_reg_write(hba, RX_OVRD_IN_1(lane), reg);
-+			ret = ufs_dwc_phy_reg_write(hba, RX_OVRD_IN_1(lane), reg);
- 			if (ret)
- 				return ret;
- 		}
-diff --git a/drivers/ufs/host/ufshcd-dwc.c b/drivers/ufs/host/ufshcd-dwc.c
-index 21b1cf912dcc..b057a78e151c 100644
---- a/drivers/ufs/host/ufshcd-dwc.c
-+++ b/drivers/ufs/host/ufshcd-dwc.c
-@@ -15,6 +15,59 @@
- #include "ufshcd-dwc.h"
- #include "ufshci-dwc.h"
- 
-+int ufs_dwc_phy_reg_write(struct ufs_hba *hba, u32 addr, u32 val)
+ 	  Select this if you have UFS controller on AMD Versal Gen 2 SoC.
+ 	  If unsure, say N.
++
++config SCSI_UFS_STARFIVE
++	tristate "Starfive UFS controller platform driver"
++	depends on OF && SCSI_UFSHCD_PLATFORM
++	depends on ARCH_STARFIVE || COMPILE_TEST
++	help
++	  This selects the StarFive specific additions to UFSHCD platform driver.
++	  UFS host on StarFive needs some vendor specific configuration before
++	  accessing the hardware which includes PHY configuration and vendor
++	  specific registers.
++
++	  Select this if you have UFS controller on StarFive chipset.
++	  If unsure, say N.
+diff --git a/drivers/ufs/host/Makefile b/drivers/ufs/host/Makefile
+index 65d8bb23ab7b..adfee2ae3b48 100644
+--- a/drivers/ufs/host/Makefile
++++ b/drivers/ufs/host/Makefile
+@@ -14,3 +14,4 @@ obj-$(CONFIG_SCSI_UFS_ROCKCHIP) += ufs-rockchip.o
+ obj-$(CONFIG_SCSI_UFS_SPRD) += ufs-sprd.o
+ obj-$(CONFIG_SCSI_UFS_TI_J721E) += ti-j721e-ufs.o
+ obj-$(CONFIG_SCSI_UFS_AMD_VERSAL2) += ufs-amd-versal2.o ufshcd-dwc.o
++obj-$(CONFIG_SCSI_UFS_STARFIVE) += ufs-starfive.o ufshcd-dwc.o
+diff --git a/drivers/ufs/host/ufs-starfive.c b/drivers/ufs/host/ufs-starfive.c
+new file mode 100644
+index 000000000000..3e91461aef75
+--- /dev/null
++++ b/drivers/ufs/host/ufs-starfive.c
+@@ -0,0 +1,280 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Starfive UFS host platform driver
++ *
++ * Copyright (C) 2026 Starfive, Inc.
++ *
++ * Authors: Minda Chen <minda.chen@starfivetech.com>
++ */
++
++#include <linux/clk.h>
++#include <linux/delay.h>
++#include <linux/kernel.h>
++#include <linux/mfd/syscon.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/reset.h>
++#include <ufs/unipro.h>
++
++#include "ufshcd-pltfrm.h"
++#include "ufshcd-dwc.h"
++#include "ufshci-dwc.h"
++
++struct ufs_starfive_host {
++	struct ufs_hba *hba;
++	struct regmap *syscon;
++	struct reset_control *core_reset;
++	struct reset_control *phy_reset;
++	struct clk *ufs_clk;
++};
++
++#define SRAM_STATUS		0x38
++#define  SRAM_EXT_LD_DONE	BIT(1)
++#define  SRAM_INIT_DONE		BIT(2)
++#define UFS_REFCLK		0x3c
++#define  REFCLK_OEN		BIT(8)
++#define  RESET_I		BIT(9)
++#define  RESET_OEN		BIT(10)
++
++#define MPHY_POLL_INTERVAL_US	100
++#define MPHY_POLL_TIMEOUT_US	10000
++
++static int ufs_starfive_phy_config(struct ufs_hba *hba, struct ufs_starfive_host *host)
 +{
-+	static struct ufshcd_dme_attr_val phy_write_attrs[] = {
-+		{ UIC_ARG_MIB(CBCREGADDRLSB), 0, DME_LOCAL },
-+		{ UIC_ARG_MIB(CBCREGADDRMSB), 0, DME_LOCAL },
-+		{ UIC_ARG_MIB(CBCREGWRLSB), 0, DME_LOCAL },
-+		{ UIC_ARG_MIB(CBCREGWRMSB), 0, DME_LOCAL },
-+		{ UIC_ARG_MIB(CBCREGRDWRSEL), 1, DME_LOCAL },
-+		{ UIC_ARG_MIB(VS_MPHYCFGUPDT), 1, DME_LOCAL }
++	static struct ufs_dwc_phy_pair_data phy_data[] = {
++		{ RAWAONLANEN_DIG_MPLLA_COARSE_TUNE, 0x51},
++		{ MPLL_SKIPCAL_COARSE_TUNE, 0x51},
++		{ RX_AFE_ATT_IDAC(0), 0x8a},
++		{ RX_AFE_ATT_IDAC(1), 0xc2},
++		{ RX_AFE_CTLE_IDAC(0), 0x8e},
++		{ RX_AFE_CTLE_IDAC(1), 0x8b},
++		{ FAST_FLAGS(0), 0x0004 },
++		{ FAST_FLAGS(1), 0x0004 },
++		{ RX_ADAPT_DFE(0), 0xa00},
++		{ RX_ADAPT_DFE(1), 0xa00},
 +	};
++	struct ufs_dwc_phy_pair_data *data;
++	int ret, i;
 +
-+	phy_write_attrs[0].mib_val = (u8)addr;
-+	phy_write_attrs[1].mib_val = (u8)(addr >> 8);
-+	phy_write_attrs[2].mib_val = (u8)val;
-+	phy_write_attrs[3].mib_val = (u8)(val >> 8);
++	for (i = 0; i < ARRAY_SIZE(phy_data); i++) {
++		data = &phy_data[i];
++		ret = ufs_dwc_phy_reg_write(hba, data->addr, data->value);
++		if (ret)
++			return ret;
++	}
 +
-+	return ufshcd_dwc_dme_set_attrs(hba, phy_write_attrs, ARRAY_SIZE(phy_write_attrs));
-+}
-+EXPORT_SYMBOL(ufs_dwc_phy_reg_write);
-+
-+int ufs_dwc_phy_reg_read(struct ufs_hba *hba, u32 addr, u32 *val)
-+{
-+	u32 mib_val;
-+	int ret;
-+	static struct ufshcd_dme_attr_val phy_read_attrs[] = {
-+		{ UIC_ARG_MIB(CBCREGADDRLSB), 0, DME_LOCAL },
-+		{ UIC_ARG_MIB(CBCREGADDRMSB), 0, DME_LOCAL },
-+		{ UIC_ARG_MIB(CBCREGRDWRSEL), 0, DME_LOCAL },
-+		{ UIC_ARG_MIB(VS_MPHYCFGUPDT), 1, DME_LOCAL }
-+	};
-+
-+	phy_read_attrs[0].mib_val = (u8)addr;
-+	phy_read_attrs[1].mib_val = (u8)(addr >> 8);
-+
-+	ret = ufshcd_dwc_dme_set_attrs(hba, phy_read_attrs, ARRAY_SIZE(phy_read_attrs));
++	ret = ufshcd_dme_set(hba, UIC_ARG_MIB(VS_MPHYDISABLE), 0);
 +	if (ret)
 +		return ret;
 +
-+	ret = ufshcd_dme_get(hba, UIC_ARG_MIB(CBCREGRDLSB), &mib_val);
++	ret = ufshcd_dme_set(hba, UIC_ARG_MIB(VS_MPHYCFGUPDT), 1);
 +	if (ret)
 +		return ret;
-+
-+	*val = mib_val;
-+	ret = ufshcd_dme_get(hba, UIC_ARG_MIB(CBCREGRDMSB), &mib_val);
-+	if (ret)
-+		return ret;
-+
-+	*val |= (mib_val << 8);
 +
 +	return 0;
 +}
-+EXPORT_SYMBOL(ufs_dwc_phy_reg_read);
 +
- int ufshcd_dwc_dme_set_attrs(struct ufs_hba *hba,
- 				const struct ufshcd_dme_attr_val *v, int n)
- {
++static int ufs_starfive_phy_init(struct ufs_hba *hba)
++{
++	struct ufs_starfive_host *host = ufshcd_get_variant(hba);
++	static struct ufshcd_dme_attr_val rmmi_config[] = {
++		{ UIC_ARG_MIB(CBRATESEL), 0x1,
++					DME_LOCAL },
++		{ UIC_ARG_MIB(CBREFCLKCTRL2), CBREFREFCLK_GATE_OVR_EN,
++					DME_LOCAL },
++		{ UIC_ARG_MIB_SEL(RXSQCONTROL, SELIND_LN0_RX), 0x01,
++					DME_LOCAL },
++		{ UIC_ARG_MIB_SEL(RXRHOLDCTRLOPT, SELIND_LN0_RX), 0x02,
++					DME_LOCAL },
++		{ UIC_ARG_MIB_SEL(RXSQCONTROL, SELIND_LN1_RX), 0x01,
++					DME_LOCAL },
++		{ UIC_ARG_MIB_SEL(RXRHOLDCTRLOPT, SELIND_LN1_RX), 0x02,
++					DME_LOCAL },
++		{ UIC_ARG_MIB(EXT_COARSE_TUNE_RATEA), 0x25,
++					DME_LOCAL },
++		{ UIC_ARG_MIB(EXT_COARSE_TUNE_RATEB), 0x51,
++					DME_LOCAL },
++		{ UIC_ARG_MIB(CBCRCTRL), 0x01, DME_LOCAL },
++		{ UIC_ARG_MIB(VS_MPHYCFGUPDT), 0x1,
++					DME_LOCAL },
++	};
++	int ret, val;
++
++	ret = ufshcd_dwc_dme_set_attrs(hba, rmmi_config,
++				       ARRAY_SIZE(rmmi_config));
++	if (ret) {
++		dev_err(hba->dev, "set rmmi config failed\n");
++		return ret;
++	}
++
++	ret = reset_control_deassert(host->phy_reset);
++	if (ret) {
++		dev_err(hba->dev, "Failed to reset phy\n");
++		return ret;
++	}
++
++	ret = regmap_read_poll_timeout(host->syscon,
++				       SRAM_STATUS, val,
++				       (val & SRAM_INIT_DONE),
++				       MPHY_POLL_INTERVAL_US,
++				       MPHY_POLL_TIMEOUT_US);
++	if (ret) {
++		dev_err(hba->dev, "wait sram init done timeout\n");
++		return ret;
++	}
++
++	regmap_update_bits(host->syscon, SRAM_STATUS,
++			   SRAM_EXT_LD_DONE, SRAM_EXT_LD_DONE);
++
++	ret = ufs_starfive_phy_config(hba, host);
++	if (ret) {
++		dev_err(hba->dev, "configure phy failed\n");
++		return ret;
++	}
++
++	return 0;
++}
++
++static int ufs_starfive_init(struct ufs_hba *hba)
++{
++	struct ufs_starfive_host *host;
++	struct device *dev = hba->dev;
++	struct platform_device *pdev;
++	int ret;
++
++	pdev = container_of(dev, struct platform_device, dev);
++	host = devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
++	if (!host)
++		return dev_err_probe(dev, -ENOMEM,
++				     "no memory for starfive ufs host\n");
++
++	host->syscon = syscon_regmap_lookup_by_phandle(dev->of_node,
++						       "starfive,syscon");
++
++	if (IS_ERR(host->syscon))
++		return dev_err_probe(dev, PTR_ERR(host->syscon), "getting the regmap failed\n");
++
++	host->core_reset = devm_reset_control_get_exclusive(hba->dev, "main");
++	if (IS_ERR(host->core_reset))
++		return dev_err_probe(dev, PTR_ERR(host->core_reset),
++				     "Failed to get core clock resets");
++
++	host->phy_reset = devm_reset_control_get_exclusive(hba->dev, "phy");
++	if (IS_ERR(host->phy_reset))
++		return dev_err_probe(dev, PTR_ERR(host->phy_reset),
++				    "Failed to get phy clk reset\n");
++
++	host->ufs_clk = devm_clk_get_enabled(&pdev->dev, "ufs");
++	if (IS_ERR(host->ufs_clk))
++		return dev_err_probe(dev, PTR_ERR(host->ufs_clk),
++				     "Failed to get ufs clock\n");
++
++	regmap_update_bits(host->syscon, UFS_REFCLK,
++			   REFCLK_OEN | RESET_OEN, 0);
++	usleep_range(2, 3);
++	regmap_update_bits(host->syscon, UFS_REFCLK, RESET_I, RESET_I);
++
++	ret = reset_control_deassert(host->core_reset);
++	if (ret)
++		return dev_err_probe(dev, ret,
++				     "Failed to reset core clock");
++
++	host->hba = hba;
++	ufshcd_set_variant(hba, host);
++	hba->caps |= UFSHCD_CAP_WB_EN;
++
++	return 0;
++}
++
++static int ufs_starfive_link_startup_notify(struct ufs_hba *hba,
++					    enum ufs_notify_change_status status)
++{
++	int ret;
++
++	if (status == PRE_CHANGE) {
++		ret = ufshcd_vops_phy_initialization(hba);
++		if (ret) {
++			dev_err(hba->dev, "Phy setup failed (%d)\n", ret);
++			return ret;
++		}
++	} else { /* POST_CHANGE */
++		return ufshcd_dwc_link_startup_notify(hba, status);
++	}
++
++	return 0;
++}
++
++static int ufs_starfive_hce_enable_notify(struct ufs_hba *hba,
++					  enum ufs_notify_change_status status)
++{
++	u32 val;
++
++	if (status != POST_CHANGE)
++		return 0;
++
++	/* Disable Gating clock. Auto hibernation quirk */
++	val = ufshcd_readl(hba, REG_BUSTHRTL);
++	val &= ~(LP_AH8_POWER_GATING_EN
++		| LP_POWER_GATING_EN
++		| CLK_GATING_EN);
++	ufshcd_writel(hba, val, REG_BUSTHRTL);
++
++	return 0;
++}
++
++static struct ufs_hba_variant_ops ufs_hba_vops = {
++	.name                   = "ufs_starfive_platform",
++	.init			= ufs_starfive_init,
++	.link_startup_notify	= ufs_starfive_link_startup_notify,
++	.phy_initialization	= ufs_starfive_phy_init,
++	.hce_enable_notify	= ufs_starfive_hce_enable_notify,
++};
++
++static int ufs_starfive_probe(struct platform_device *pdev)
++{
++	int err;
++
++	/* Perform generic probe */
++	err = ufshcd_pltfrm_init(pdev, &ufs_hba_vops);
++	if (err)
++		dev_err(&pdev->dev, "ufshcd_pltfrm_init() failed %d\n", err);
++
++	return err;
++}
++
++static void ufs_starfive_remove(struct platform_device *pdev)
++{
++	struct ufs_hba *hba =  platform_get_drvdata(pdev);
++
++	pm_runtime_get_sync(&(pdev)->dev);
++	ufshcd_remove(hba);
++}
++
++static const struct dev_pm_ops ufs_starfive_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(ufshcd_system_suspend, ufshcd_system_resume)
++	SET_RUNTIME_PM_OPS(ufshcd_runtime_suspend, ufshcd_runtime_resume, NULL)
++};
++
++static const struct of_device_id ufs_starfive_pltfm_match[] = {
++	{ .compatible = "starfive,jhb100-ufs", },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, ufs_starfive_pltfm_match);
++
++static struct platform_driver ufs_starfive_driver = {
++	.probe		= ufs_starfive_probe,
++	.remove		= ufs_starfive_remove,
++	.driver		= {
++		.name	= "ufs-starfive",
++		.pm	= &ufs_starfive_pm_ops,
++		.of_match_table	= of_match_ptr(ufs_starfive_pltfm_match),
++	},
++};
++
++module_platform_driver(ufs_starfive_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_ALIAS("platform:ufs-starfive");
++MODULE_DESCRIPTION("Starfive UFS host platform glue driver");
 diff --git a/drivers/ufs/host/ufshcd-dwc.h b/drivers/ufs/host/ufshcd-dwc.h
-index c618bb914904..8091f186a9b3 100644
+index 8091f186a9b3..71a60ede6805 100644
 --- a/drivers/ufs/host/ufshcd-dwc.h
 +++ b/drivers/ufs/host/ufshcd-dwc.h
-@@ -68,4 +68,6 @@ int ufshcd_dwc_link_startup_notify(struct ufs_hba *hba,
+@@ -12,7 +12,15 @@
+ 
+ #include <ufs/ufshcd.h>
+ 
++/* ufshcd vendor specific register */
++#define REG_BUSTHRTL		0xc0
++#define LP_AH8_POWER_GATING_EN	 BIT(17)
++#define LP_POWER_GATING_EN	 BIT(16)
++#define CLK_GATING_EN		 BIT(12)
++
+ /* RMMI Attributes */
++#define RXSQCONTROL		0x8009
++#define RXRHOLDCTRLOPT		0x8013
+ #define CBREFCLKCTRL2		0x8132
+ #define CBCRCTRL		0x811F
+ #define CBC10DIRECTCONF2	0x810E
+@@ -24,6 +32,8 @@
+ #define CBCREGRDLSB		0x811A
+ #define CBCREGRDMSB		0x811B
+ #define CBCREGRDWRSEL		0x811C
++#define EXT_COARSE_TUNE_RATEA	0x814D
++#define EXT_COARSE_TUNE_RATEB	0x814E
+ 
+ #define CBREFREFCLK_GATE_OVR_EN		BIT(7)
+ 
+@@ -32,12 +42,15 @@
+ #define MRX_FSM_STATE		0xC1
+ 
+ /* M-PHY registers */
++#define MPLL_SKIPCAL_COARSE_TUNE	0x28
+ #define RX_OVRD_IN_1(n)		(0x3006 + ((n) * 0x100))
+ #define RX_PCS_OUT(n)		(0x300F + ((n) * 0x100))
+ #define FAST_FLAGS(n)		(0x401C + ((n) * 0x100))
++#define RX_ADAPT_DFE(n)		(0x401E + ((n) * 0x100))
+ #define RX_AFE_ATT_IDAC(n)	(0x4000 + ((n) * 0x100))
+ #define RX_AFE_CTLE_IDAC(n)	(0x4001 + ((n) * 0x100))
+ #define FW_CALIB_CCFG(n)	(0x404D + ((n) * 0x100))
++#define RAWAONLANEN_DIG_MPLLA_COARSE_TUNE	0x7014
+ 
+ /* Tx/Rx FSM state */
+ enum rx_fsm_state {
+@@ -64,6 +77,11 @@ struct ufshcd_dme_attr_val {
+ 	u8 peer;
+ };
+ 
++struct ufs_dwc_phy_pair_data {
++	u32 addr;
++	u32 value;
++};
++
+ int ufshcd_dwc_link_startup_notify(struct ufs_hba *hba,
  					enum ufs_notify_change_status status);
  int ufshcd_dwc_dme_set_attrs(struct ufs_hba *hba,
- 				const struct ufshcd_dme_attr_val *v, int n);
-+int ufs_dwc_phy_reg_write(struct ufs_hba *hba, u32 addr, u32 val);
-+int ufs_dwc_phy_reg_read(struct ufs_hba *hba, u32 addr, u32 *val);
- #endif /* End of Header */
 -- 
 2.17.1
 
