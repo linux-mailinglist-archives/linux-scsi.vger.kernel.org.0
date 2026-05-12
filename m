@@ -1,66 +1,66 @@
-Return-Path: <linux-scsi+bounces-23744-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23745-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kM50Ca6HA2r46wEAu9opvQ
-	(envelope-from <linux-scsi+bounces-23744-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2026 22:03:58 +0200
+	id ALDEEv6HA2r46wEAu9opvQ
+	(envelope-from <linux-scsi+bounces-23745-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2026 22:05:18 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 822B9528EC5
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2026 22:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A10F8528F07
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2026 22:05:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BE1D93045DC1
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2026 20:03:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 27BC83047E48
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2026 20:05:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7CCF3ABDA4;
-	Tue, 12 May 2026 20:03:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C5983A9629;
+	Tue, 12 May 2026 20:05:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="gSV/AALP"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="y4VDnTpI"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A743A9623;
-	Tue, 12 May 2026 20:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD4E3A872A;
+	Tue, 12 May 2026 20:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778616232; cv=none; b=lbV2omdOLKhs+2kq5QsE8ycd6frVPsSQtrIh9lkzYQqvnMmhLNTleJIV+tV2cRsA/DeU532zTxgm+UOCXlp5w1wn4zSkmvTz0L7571Qow94BAEWcbr/of3JRJ2TuaoAFF1upRAH2WZODse6/PpJX7B/nSl+HMwdWrqHX9b9tGXs=
+	t=1778616313; cv=none; b=F5ngcCkxh/HQKZEQty1JUfuzqUpHkomGMnBeoZPaRXPyYjoa4CMUIcYu54BHy+RPTxviECRE99THa65j+DQtYo2afNVjEqXcUgjk+znyyUHV9gYaOVdOHdVcWDWASjcQ5QnSm5Zd1qymHS2T8E47SDsAw2dAmScCmGQfOxagji8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778616232; c=relaxed/simple;
-	bh=NZX5DnCOoIXZDvuD63idUoQUn01me/whw4xM3wB3370=;
+	s=arc-20240116; t=1778616313; c=relaxed/simple;
+	bh=AZU0ALXZvR8kX9UqFA4Rrpt3xx5uJ2HBs+CvGxfX2y0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qBg75R4j5bUx4YNRwRRAwNpDqklU9++oz00lV6nE9nrSfe2L8+686wiHDAjCDEehf5Oo1f86KVN9HtMrf9AEMNl1Hl8UlbHioFLjWQI3kQ7mIJ2wPLb4zh6NwxILptYEfpDNIc0e7Nfg76gclymiGAxhoScqMyv6QP9/tVV9yfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=gSV/AALP; arc=none smtp.client-ip=199.89.1.14
+	 In-Reply-To:Content-Type; b=SznKEBO/z4I7NBR5I26ILiACZS8NTJUktDzFjNQqCTYqMflPPZdycc024i7NXqTgXEgJ7DeHSyyrE2d39FZ0NxTKeQrEBPcH1x0gt7faVjc51pPkrxVvaTkHMS8ZY9zCiwgxDAOo4sfGGcHlyW9Jg7H7ANxqZ3vnHqlDEhCGkpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=y4VDnTpI; arc=none smtp.client-ip=199.89.1.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4gFSGF2Yq4z1XM5kD;
-	Tue, 12 May 2026 20:03:49 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4gFSHq07zhzlfl89;
+	Tue, 12 May 2026 20:05:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:content-type:content-type:in-reply-to
 	:from:from:content-language:references:subject:subject
 	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1778616224; x=1781208225; bh=F/BJAXVayTzFF+XZtt71lRE/
-	BiWXgEbcbp0uVwE1oWk=; b=gSV/AALP6al23rCpX0/d9Dmdz8DKue1HTr9Jrmjp
-	m3Pb8LYeSeXS2t4Z31DyO0FVLqrSa0/3wAKePMU2Y2u3T/gDa9pQgNZUnIIRlGaj
-	tEZrI1k02NsZJfhxACabo78k3lD7/YSCUi0LFWfKHMEBXMVC+bhxoZlWq1STJABB
-	8UIW1zIdmpUQvjK12eycy+acY3/IE3zgigd7HlY3+xej1LEpcDEUGOMcIilwpnPV
-	6ke2bLDQv0Dq003RAW0dXJxLmJwjF+EiSD8RAyuQFmHXkhgFghMSp4XjUq1mGpuK
-	aatuSt/w2h4Lwec12NUIHMXX21OeAnhq7W82Nl3nOEQwGA==
+	 s=mr01; t=1778616306; x=1781208307; bh=3QPl8pMWeY141ZF1RwbgGUbx
+	9yPxM3yZBIJcDTiuygk=; b=y4VDnTpIUJQ8XKktrEFb8JONSi7rf2L5SsNAeVIJ
+	NGvKB9fkoXN0QwBKGM/n4/Fn4+6BzfXM3HWmvLxBzlIdbrKsRyfSDV0jZ2MnuaJt
+	RFD4xqm3c2PHONkSkVTJgZnx9De5l+2s4MaLKmLqvlZc5SS8LgNmu+7fK1b8uXJJ
+	iLxQrMEq/cmBVG4GNlPLqal+hHCXsyJIjc89mFazT00ONwhag2dG1i9/fLio5+Dq
+	6Qi1Ab6aX/39TXzJuiS12qIXFFkR6UfO/On/8FFToBsX0zrujyeiunoRvntNu1NN
+	2D9tjgIJwM5IuxluyNpFeKkEQWo1mjS5pJB+b57NVuENlw==
 X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id FUNZUoeXEFm8; Tue, 12 May 2026 20:03:44 +0000 (UTC)
+Received: from 013.lax.mailroute.net ([127.0.0.1])
+ by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id p2PYJdvoaVCq; Tue, 12 May 2026 20:05:06 +0000 (UTC)
 Received: from [100.119.48.131] (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4gFSG50LvJz1XM5jn;
-	Tue, 12 May 2026 20:03:40 +0000 (UTC)
-Message-ID: <691169b9-9602-4443-976f-4a46d7b07e3f@acm.org>
-Date: Tue, 12 May 2026 13:03:39 -0700
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4gFSHg6zwXzlfvq4;
+	Tue, 12 May 2026 20:05:03 +0000 (UTC)
+Message-ID: <73fa5a46-bd2d-44cf-8bf5-3ce74e60e324@acm.org>
+Date: Tue, 12 May 2026 13:05:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -68,8 +68,8 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] ufs: tc-dwc-g210-pci: Simplify initialization of
- pci_device_id array
+Subject: Re: [PATCH 2/2] ufs: ufshcd-pci: Use PCI_VDEVICE and named
+ initializers for pci array
 To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig_=28The_Capable_Hub=29?=
  <u.kleine-koenig@baylibre.com>,
  "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
@@ -80,13 +80,13 @@ Cc: Adrian Hunter <adrian.hunter@intel.com>,
  Markus Schneider-Pargmann <msp@baylibre.com>, linux-scsi@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <cover.1777968942.git.u.kleine-koenig@baylibre.com>
- <ff015bf46ad395702f40c85c8359fd24957e7224.1777968942.git.u.kleine-koenig@baylibre.com>
+ <6cac1c22381f7026edad9854d70833381d14929a.1777968942.git.u.kleine-koenig@baylibre.com>
 Content-Language: en-US
 From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <ff015bf46ad395702f40c85c8359fd24957e7224.1777968942.git.u.kleine-koenig@baylibre.com>
+In-Reply-To: <6cac1c22381f7026edad9854d70833381d14929a.1777968942.git.u.kleine-koenig@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 822B9528EC5
+X-Rspamd-Queue-Id: A10F8528F07
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
@@ -97,7 +97,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	DKIM_TRACE(0.00)[acm.org:+];
-	TAGGED_FROM(0.00)[bounces-23744-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-23745-lists,linux-scsi=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
@@ -114,17 +114,15 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[11];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,acm.org:mid,acm.org:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
 On 5/5/26 1:28 AM, Uwe Kleine-K=C3=B6nig (The Capable Hub) wrote:
-> A list initializer is hard to parse for a human if they don't see or kn=
-ow
-> the order of the members of struct pci_devcie_id. So use the PCI_VDEVIC=
-E
-> macro which is much more ideomatic and skip assigning explicit zeros.
-                            ^^^^^^^^^
-                            idiomatic
+> The pci_device_id array uses a mixture of ways to initialize
+> ufshcd_pci_tbl[]. List initializers are hard to read unless you memoize=
+d
+                                                                   ^^^^^^
+                                                                memorized
 
 Otherwise this patch looks good to me.
 
