@@ -1,148 +1,201 @@
-Return-Path: <linux-scsi+bounces-23751-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23753-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UOFAM9OQA2ru7QEAu9opvQ
-	(envelope-from <linux-scsi+bounces-23751-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2026 22:42:59 +0200
+	id cGPrMfefA2pL8QEAu9opvQ
+	(envelope-from <linux-scsi+bounces-23753-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2026 23:47:35 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D1EE5297D1
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2026 22:42:59 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29E8552A8F9
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2026 23:47:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 090F5314BE75
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2026 20:30:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C8D0030A9E5D
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2026 21:47:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A553D1CCC;
-	Tue, 12 May 2026 20:27:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E960B3932D4;
+	Tue, 12 May 2026 21:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=philpem.me.uk header.i=@philpem.me.uk header.b="DYdyksEc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NzixPYyM"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from nick.sneptech.io (nick.sneptech.io [178.62.38.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 057DA3CAE83;
-	Tue, 12 May 2026 20:27:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.38.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C97E38A706
+	for <linux-scsi@vger.kernel.org>; Tue, 12 May 2026 21:47:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778617660; cv=none; b=AqLHPHTWlDTcevW3HQrYDajxnWSE6NsrTVouXzNN1u/5TEr5GZCctZOPi066LR8D2Y936aMQ9rlv5DorUthBFz6eDndo66XUByF9VIC5AZECIEVICo5UxJUk656L9FTz5YpYDo50l6ES5Eocir6JXAryERhw5+Kwz6Y62/RB6Zg=
+	t=1778622437; cv=none; b=ga+i0kcfjaegbGS8qQeMAyRtGPiSyQlMRFmdIMtlChWoIjYihiSEd3AGlxZEoTnR1bAVPXIRUV6bZgyMHT53FACLXDvBXCV7MrQnsn5JRO+DLCdb0OCMtP3w6RQCN+t6cCbjzSSUe8y6OqGqY1OKkd3eYJWHx62GjhTze8dyNuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778617660; c=relaxed/simple;
-	bh=NgI+BloTluXJ7eZWq4tfe6pWs03z++jaiAMs+De/a1I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aWWO+I1QSQQ3SZea6/qhcRvEkiPt9D/KSWYkIM6xjN4QvX9LBGud1puvyB24xZl5jj5+X6nngx1Cr2PgaLGjARVDce/d5dFtd7GAD6/7ci2gcDsILax78F34FFBL5CL55pG0K7N/DCQ/hnLWrfxkTm3WMfMxVm5cn4buQBj90Tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=philpem.me.uk; spf=pass smtp.mailfrom=philpem.me.uk; dkim=pass (1024-bit key) header.d=philpem.me.uk header.i=@philpem.me.uk header.b=DYdyksEc; arc=none smtp.client-ip=178.62.38.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=philpem.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=philpem.me.uk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=philpem.me.uk;
-	s=mail; t=1778617654;
-	bh=NgI+BloTluXJ7eZWq4tfe6pWs03z++jaiAMs+De/a1I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DYdyksEc9a5w69zRtCL3d9V0zZDh2s2pxLHHBbrWWMcaTPC91av1BuKGe+KPG5qtf
-	 jF09/Hydl4s13j/Pfg6za65yzsQ8OxmgzlKV7mSwrC1E/J70wq6t5hSSmloINNOmzd
-	 UMwk5C3HvYe20vduQOcARtHcwGRdqOZ/uZqkSU8Y=
-Received: from wolf.philpem.me.uk (81-187-163-148.ip4.reverse-dns.uk [81.187.163.148])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	(Authenticated sender: mailrelay_wolf@philpem.me.uk)
-	by nick.sneptech.io (Postfix) with ESMTPSA id 3390EBD429;
-	Tue, 12 May 2026 20:27:34 +0000 (UTC)
-Received: from cheetah.homenet.philpem.me.uk (cheetah.homenet.philpem.me.uk [10.0.0.32])
-	by wolf.philpem.me.uk (Postfix) with ESMTPSA id C8B455FC54;
-	Tue, 12 May 2026 21:27:33 +0100 (BST)
-From: Phil Pemberton <philpem@philpem.me.uk>
-To: linux-ide@vger.kernel.org,
-	linux-scsi@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Hannes Reinecke <hare@suse.de>,
-	Phil Pemberton <philpem@philpem.me.uk>
-Subject: [PATCH v5 6/6] scsi: scsi_devinfo: add COMPAQ PD-1 multi-LUN ATAPI device quirk
-Date: Tue, 12 May 2026 21:27:28 +0100
-Message-ID: <20260512202728.299414-7-philpem@philpem.me.uk>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260512202728.299414-1-philpem@philpem.me.uk>
-References: <20260512202728.299414-1-philpem@philpem.me.uk>
+	s=arc-20240116; t=1778622437; c=relaxed/simple;
+	bh=4bJpBsrbzjzbRrrgEMq91qlQchbUmC5W+AX2WUbUlKs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uevlVnraK6/zR80wKcRo0dLjf3SA/YHtt2v0VurcMTV591xacnvD4DDEIlwu0shDf+RRNkp5dp1r6LFmLUrDMCype4oQVZK2KmW15DtJzboMLr18NPT5pItbDsK4wPt3aA9QUpx0Xrw4wmvtpLmwhcdsgsTDNhG8Sswo++NbkaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NzixPYyM; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-39393ec4ed0so52677011fa.0
+        for <linux-scsi@vger.kernel.org>; Tue, 12 May 2026 14:47:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778622433; x=1779227233; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gnfb6a8oovvxOdUoN29pJtnH+KCnEaFZiRmRFK8M/fE=;
+        b=NzixPYyMyz9LCWPRtBXAcAju387YSY2ZMuvUiiUt4PAQ4//i6aLy7bYLNxK1KM+qn5
+         ObQaIHe1kBi8DKd4a01q14VqRnTfdFcLKHtBvru3zQHjNkqY52DuJe0q95EssbhOsmgc
+         1sSEhqwX7aDy5SvyXRiv/aQmqDpZq6rD1t/kAXH4ST5i7knuw/Ws2kHKxmRTZQXlllUY
+         HgR0qOJ6VQcxpuYOac+srFb7WkefytEzs5WZNzTP3wLi8RVaYOaB6ux+0nHHX5LeSL1G
+         F0bnckOJVJWnb3RoOwmVJgoSNrC23C61t0dfMjgvCe/sPapqAhrpga5C0+CaVU4yFxVM
+         usJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778622433; x=1779227233;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gnfb6a8oovvxOdUoN29pJtnH+KCnEaFZiRmRFK8M/fE=;
+        b=PygaLbSuds7MOSqPZyLn94MTQl/9omDeJ021mI/pTgc/YEVvXMr7jr4WKTPJXbERsy
+         qvVJk3gNQjZ2xPbl0kkwluf/LHh7zrLtIVkEXMfokR9+CEf09yJvrSVolOKPVUPyS97M
+         nj/4GR3V/SGJqzXCnaho/A3LjRxUz9UpTX0XQ/t07n65pnUmEWO5dfUbdh4P7KQ+OEb1
+         RQZZ2G1Onh2+QxgaGg5LxMkxWc60CCW/VZOLq2u8MWPTrxHGC8tYVSOkWuM98dGKK+F1
+         NWPu+yxbkz4AM4ahjv18WEr+f55Tj1nbuFetflICosnZbjuCGPsWCoMpu7lJ4UMTd5TX
+         B7SQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9xrTdsThhXOIdesuPXk2v6pdmkuDoODmfY4/sDW9963u9bS623z08c/YBPanmNdqotf35BJoXicypd@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzHWRfoX4e8N5C/lFXyC05oLpXvzkPtUDv9Rv3iV5fzql1fuWT
+	PlrJnyYNkkK09rJzs1U+hPOwIyUyD2Rc+ngyrD8L9FpiRaOS0DjvPa1J
+X-Gm-Gg: Acq92OGttkRdRqugVd6W00K3Txl4RYD5BnutubNwA5H6wjNHBISM6qa9VUAYekB4C5s
+	VLamHG6yDfpV2KG9AHdBfDwihumn6T7YwQH1o1HASkOQ0AiXPCvhROydlRQcPU9gBm7Rk4v7Con
+	SK0CHA3PwzWk8op16tmSD3sNx4Zt4p3G46DI1SmKkZseIOj8+hjeME4/HgdGhavYkk7oMmyk0pj
+	Sl1orvDDsQ7BBBmP85GPYPNVqaG/IqO7YdvcPdCemBI0n0bzNZiArYFD7NnFgFfI4QJm7ZbmHmL
+	B8fjsMTHO5D1aau+oCHzqr/lG4NFZd2WWducRFZZ4IeOOut/36nr7hFH7jApci9Ogoe0FJzjh6N
+	/2ni7YJJMPivb84yl8SPLtvFtEiFy1Ri1QgNPj5UE/MRaoTu+SeiHMK/DM7va3eriZFKkmXuDPA
+	hz3NW1eq0X+IdUnxzqIexgrVFfHmw=
+X-Received: by 2002:a05:651c:3243:b0:393:cb61:1808 with SMTP id 38308e7fff4ca-3944b5eb283mr2049341fa.24.1778622433104;
+        Tue, 12 May 2026 14:47:13 -0700 (PDT)
+Received: from localhost ([2001:863:361:c304:f117:a539:6ce3:fb03])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-393f6144071sm34373081fa.32.2026.05.12.14.47.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 14:47:12 -0700 (PDT)
+From: Louis Sautier <sautier.louis@gmail.com>
+To: "Martin K. Petersen" <martin.petersen@oracle.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Sathya Prakash <sathya.prakash@broadcom.com>,
+	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+	Ranjan Kumar <ranjan.kumar@broadcom.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	MPT-FusionLinux.pdl@broadcom.com,
+	linux-scsi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] scsi: mpt3sas: add hwmon support
+Date: Tue, 12 May 2026 23:47:01 +0200
+Message-ID: <20260512214703.655633-1-sautier.louis@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 7D1EE5297D1
+X-Rspamd-Queue-Id: 29E8552A8F9
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[philpem.me.uk,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[philpem.me.uk:s=mail];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[philpem.me.uk:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23751-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-23753-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[philpem@philpem.me.uk,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sautierlouis@gmail.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,philpem.me.uk:email,philpem.me.uk:mid,philpem.me.uk:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-The COMPAQ PD-1 (OEM Panasonic/Matsushita LF-1195C) is a PD/CD combo
-drive that exposes two ATAPI LUNs: LUN 0 is a CD-ROM (TYPE_ROM),
-LUN 1 is a 650 MB PD (TYPE_DISK).
+Expose the IOC and board temperature sensors of LSI / Broadcom / Avago
+SAS HBAs that bind to mpt3sas through the hwmon interface. The data
+lives in MPI IO Unit Page 7.
 
-Add it to the SCSI device list with:
-  - BLIST_FORCELUN: tells the SCSI layer to scan past LUN 0
-  - BLIST_SINGLELUN: serialises commands across the two LUNs, since
-    the drive has a single transport and cannot handle concurrent
-    operations on both
-  - BLIST_NO_LUN_1F: the drive returns PQ=0/PDT=0x1f for unpopulated
-    LUNs instead of PQ=3; this flag tells scsi_probe_and_add_lun()
-    to silently skip them
+The same fields are exposed by Broadcom's userspace tooling through
+the /dev/mpt[23]ctl ioctl path (typically root-only): IOCTemperature
+and BoardTemperature in lsiutil; ROC and Controller in storcli.
+With this driver, sensors(1) shows them unprivileged:
 
-The INQUIRY strings as reported by the device are:
-  Vendor:  "COMPAQ  " (T10 format, space-padded)
-  Product: "PD-1"
+  $ sensors mpt3sas-pci-0200
+  mpt3sas-pci-0200
+  Adapter: PCI adapter
+  IOC:          +42.0°C
 
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Phil Pemberton <philpem@philpem.me.uk>
----
- drivers/scsi/scsi_devinfo.c | 2 ++
- 1 file changed, 2 insertions(+)
+Testing
+-------
 
-diff --git a/drivers/scsi/scsi_devinfo.c b/drivers/scsi/scsi_devinfo.c
-index 68a992494b12..bfc2cbd43897 100644
---- a/drivers/scsi/scsi_devinfo.c
-+++ b/drivers/scsi/scsi_devinfo.c
-@@ -150,6 +150,8 @@ static struct {
- 	{"COMPAQ", "MSA1000", NULL, BLIST_SPARSELUN | BLIST_NOSTARTONADD},
- 	{"COMPAQ", "MSA1000 VOLUME", NULL, BLIST_SPARSELUN | BLIST_NOSTARTONADD},
- 	{"COMPAQ", "HSV110", NULL, BLIST_REPORTLUN2 | BLIST_NOSTARTONADD},
-+	{"COMPAQ", "PD-1", NULL, BLIST_FORCELUN | BLIST_SINGLELUN |
-+				 BLIST_NO_LUN_1F},
- 	{"DDN", "SAN DataDirector", "*", BLIST_SPARSELUN},
- 	{"DEC", "HSG80", NULL, BLIST_REPORTLUN2 | BLIST_NOSTARTONADD},
- 	{"DELL", "PV660F", NULL, BLIST_SPARSELUN},
+Validated across three Broadcom SAS chip generations. None of the
+cards had a board sensor present, so the testing only covers the
+IOC channel:
+
+  * LSI 9500-8i / SAS3816, SAS-3:
+    - hwmon device registers as "mpt3sas" with only temp1 (IOC) exposed
+    - IOC reading cross-references with storcli and lsiutil
+    - rmmod / modprobe cycle goes through the explicit
+      unregister/register paths cleanly
+
+  * LSI 9305-24i / SAS3224, SAS-3: same behaviour.
+
+  * LSI 9211-4i / SAS2004, SAS-2: firmware reports both
+    *TemperatureUnits = NOT_PRESENT, no hwmon device registered
+    (graceful-skip path).
+
+Sysfs reads share ioc->config_cmds.mutex with the driver's internal
+Config consumers; under 8 concurrent readers the queueing wait
+imposed on legitimate operations stayed below ~40 µs (SAS3816 /
+SAS3224).
+
+Not verified (no available hardware):
+  * Path with both IOC and board sensors present.
+  * Fahrenheit-units conversion.
+  * Sub-zero readings (signed-cast path).
+
+Louis Sautier (2):
+  scsi: mpt3sas: add IO Unit Page 7 config accessor
+  scsi: mpt3sas: add hwmon support
+
+ Documentation/hwmon/index.rst         |   1 +
+ Documentation/hwmon/mpt3sas.rst       |  57 ++++++++
+ MAINTAINERS                           |   1 +
+ drivers/scsi/mpt3sas/Kconfig          |   9 ++
+ drivers/scsi/mpt3sas/Makefile         |   2 +
+ drivers/scsi/mpt3sas/mpt3sas_base.h   |  19 +++
+ drivers/scsi/mpt3sas/mpt3sas_config.c |  36 +++++
+ drivers/scsi/mpt3sas/mpt3sas_hwmon.c  | 200 ++++++++++++++++++++++++++
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c  |   6 +
+ 9 files changed, 331 insertions(+)
+ create mode 100644 Documentation/hwmon/mpt3sas.rst
+ create mode 100644 drivers/scsi/mpt3sas/mpt3sas_hwmon.c
+
+
+base-commit: 5d6919055dec134de3c40167a490f33c74c12581
 -- 
-2.43.0
+2.54.0
 
 
