@@ -1,99 +1,98 @@
-Return-Path: <linux-scsi+bounces-23773-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23774-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mNAOOFBEBGqqGQIAu9opvQ
-	(envelope-from <linux-scsi+bounces-23773-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 11:28:48 +0200
+	id mFPVAqdIBGrNGgIAu9opvQ
+	(envelope-from <linux-scsi+bounces-23774-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 11:47:19 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78ADE530A0E
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 11:28:47 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 060E8530E8D
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 11:47:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F1E7C30143D4
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 09:28:46 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id E0A75302E8EB
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 09:33:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40CFC3314D9;
-	Wed, 13 May 2026 09:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC5243672B6;
+	Wed, 13 May 2026 09:33:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WK9PBkyt";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Ox25IcZv";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="NyzIdnGM";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="kdBfaUrI"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lAgoYuTl";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="njCJsir+";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lAgoYuTl";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="njCJsir+"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C950D36F919
-	for <linux-scsi@vger.kernel.org>; Wed, 13 May 2026 09:28:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FAA1195811
+	for <linux-scsi@vger.kernel.org>; Wed, 13 May 2026 09:33:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778664524; cv=none; b=RNa1Jc3TT0k0QvJq9EazqEIVVh9N7GV0WwDvBqOqBcr9UTEMPQvNPDUD7EdI0kNGduU8i91XSH0ehqF4xivD7hrROGEqBCIBB9pMyYOqzGhGYZU3Stc6VVqYhf4uClsbt56iSqKvHSbpE8xUCtbzzYXEZQEGztd899TmD/3TR90=
+	t=1778664804; cv=none; b=Cql/3EQ14JFWEdJkm2ziZ0Axmpw32TewBh0f0JjRJ5lM7X4Lx/RRtrgX/3krgr+aj3KNHsJGwJN6F2BPxm0Q0ZssaJZhm43ie7dN/yj2dyT1YJh81B1bwIedLn+uMoGyTy9EjTe54hfcJfLJPiFkCyMfsVXG5pf84Pc4KOcHRdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778664524; c=relaxed/simple;
-	bh=KGtgU2UypPsxwykBs5YUHCdKxx3XWW26uQVCpP6Nh8w=;
+	s=arc-20240116; t=1778664804; c=relaxed/simple;
+	bh=KCczcFCjmBVah/yS92g0+cg0d++Ut96MkboRr+1smns=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WSM8zJYkpcl+qHvVerWGnh85fz8KQrb6XiBT1xCi7Z+ilVqE8HgBjm+OphE66hDwCqvYXqx075HaM6Fc3qq4u3D89Fsfp2L3IKldldB71d/yrOSg7IuHf7N+MAWDScnDfXYz1T1D4M9GD3vc7936FrVrVjMqbwE7npDYD36WsqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WK9PBkyt; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Ox25IcZv; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=NyzIdnGM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=kdBfaUrI; arc=none smtp.client-ip=195.135.223.131
+	 In-Reply-To:Content-Type; b=kcjt5LAQpkkVBg0LA2eupZWtT2ai163fRXlG5fvmTiMd1c3FDoOlhsU4SCdvctf8aajdpG8rdBqp3nNKwf+8eJh8fMI474fKBpuVQnZJcAxF0DCalTn3Ad2riTC98nb6D2I4bfBs9SE5+uDzErV8LoFna/bki9ryNUzH9eN+6/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lAgoYuTl; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=njCJsir+; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lAgoYuTl; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=njCJsir+; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id EE5837628A;
-	Wed, 13 May 2026 09:28:40 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 5625F762A7;
+	Wed, 13 May 2026 09:33:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1778664521; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1778664801; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=dLhQ0qlAU9phYh6jhyeYrsU3J4pVkdMJrM9FXq6tfRg=;
-	b=WK9PBkytCHktvNBMQC4wNAZtgQSS2Dm3Bl0TB13PGSounMSK+wbYFnefcMp/I3kKHWR1bw
-	WDqIIB90k07W9hg4S4JvgCgUDRLvkma1zLoBYU01owOmhq1NdJVhpAj0utFhZ/ImuecHME
-	Kg1aeOBA6Q/dlw1brKl3dTfCuOxL4t8=
+	bh=5xPJgvyrjAJ3c7KyA/gZhs5GsWCx9BwOBQLFMGatGHQ=;
+	b=lAgoYuTlpPiB8XhM5yqfA03bCAWzCUUdxd/uDdXkXQCNilQM9TAp/ibul7M/AT8CFmFEJC
+	VnpAABWz9wkWSjBNuyBWhzW9vmYrtT4L/SPZ9UqV8dMVzCVah0RnzBe+PkqRP6V31LOyk/
+	ObqakOzG5KWlNfNByUeNsxjs46t8wP0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1778664521;
+	s=susede2_ed25519; t=1778664801;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=dLhQ0qlAU9phYh6jhyeYrsU3J4pVkdMJrM9FXq6tfRg=;
-	b=Ox25IcZvb3NdKtZPEWoeQbO2ChXRovVoKCvyxPG+mD2QUwf55l/bnicIFqWCfI5Kd/cY10
-	U//vwaeRxpQ4nbBw==
+	bh=5xPJgvyrjAJ3c7KyA/gZhs5GsWCx9BwOBQLFMGatGHQ=;
+	b=njCJsir+MzRHS3jciAIHbTVarCS6QxSz3+u/C9O2L8PnenBE5zmRqwXNkO7pDteRgG9peg
+	wdGgJY1fyytxF3Bg==
 Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=NyzIdnGM;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=kdBfaUrI
+	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1778664520; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1778664801; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=dLhQ0qlAU9phYh6jhyeYrsU3J4pVkdMJrM9FXq6tfRg=;
-	b=NyzIdnGM+pT5sTtl6ARd4nMnXzGOw84fwQEWYB3GrtKHVmkTwLOKGm+WCk1svUqiD1/CVC
-	ImCusufrvt0OJOLsC1ugdeV/eeS5agNFxZm9ikNDOoJNkr+eMnTDidXORjacP4/jCgkpkg
-	LhNqHhIyETNgGpK7qXaMtr/5089Ri5E=
+	bh=5xPJgvyrjAJ3c7KyA/gZhs5GsWCx9BwOBQLFMGatGHQ=;
+	b=lAgoYuTlpPiB8XhM5yqfA03bCAWzCUUdxd/uDdXkXQCNilQM9TAp/ibul7M/AT8CFmFEJC
+	VnpAABWz9wkWSjBNuyBWhzW9vmYrtT4L/SPZ9UqV8dMVzCVah0RnzBe+PkqRP6V31LOyk/
+	ObqakOzG5KWlNfNByUeNsxjs46t8wP0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1778664520;
+	s=susede2_ed25519; t=1778664801;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=dLhQ0qlAU9phYh6jhyeYrsU3J4pVkdMJrM9FXq6tfRg=;
-	b=kdBfaUrIqw7KAmWve7OrqeooWfE7Qo5PV1lNMcoHihLYDf+9wzcY40AbfVsnPQWJ8SzOmG
-	ZYfZ2jT1f7mZOYBA==
+	bh=5xPJgvyrjAJ3c7KyA/gZhs5GsWCx9BwOBQLFMGatGHQ=;
+	b=njCJsir+MzRHS3jciAIHbTVarCS6QxSz3+u/C9O2L8PnenBE5zmRqwXNkO7pDteRgG9peg
+	wdGgJY1fyytxF3Bg==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D90E5593A9;
-	Wed, 13 May 2026 09:28:40 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 421C1593A9;
+	Wed, 13 May 2026 09:33:21 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id UueENEhEBGpiaQAAD6G6ig
-	(envelope-from <hare@suse.de>); Wed, 13 May 2026 09:28:40 +0000
-Message-ID: <0e1b7f75-8500-4ac1-8e15-9c381ff955ae@suse.de>
-Date: Wed, 13 May 2026 11:28:40 +0200
+	id UD5lD2FFBGrpbQAAD6G6ig
+	(envelope-from <hare@suse.de>); Wed, 13 May 2026 09:33:21 +0000
+Message-ID: <dc50e8ba-9c5b-41e9-8549-bde33a05f64a@suse.de>
+Date: Wed, 13 May 2026 11:33:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -101,63 +100,138 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] scsi: core, target: Move three constants into
- <scsi/scsi_common.h>
+Subject: Re: [PATCH 2/2] scsi: core: Convert inquiry information
 To: Bart Van Assche <bvanassche@acm.org>,
  "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org, Brian Bunker <brian@purestorage.com>,
- Damien Le Moal <dlemoal@kernel.org>,
+ Damien Le Moal <dlemoal@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
  "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
 References: <20260512194634.58145-1-bvanassche@acm.org>
- <20260512194634.58145-2-bvanassche@acm.org>
+ <20260512194634.58145-3-bvanassche@acm.org>
 Content-Language: en-US
 From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20260512194634.58145-2-bvanassche@acm.org>
+In-Reply-To: <20260512194634.58145-3-bvanassche@acm.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -4.51
 X-Spam-Level: 
-X-Rspamd-Queue-Id: 78ADE530A0E
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Rspamd-Queue-Id: 060E8530E8D
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
 	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23773-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-23774-lists,linux-scsi=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[hare@suse.de,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid,suse.de:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,acm.org:email]
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid,suse.de:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,acm.org:email]
 X-Rspamd-Action: no action
 
 On 5/12/26 21:46, Bart Van Assche wrote:
-> Prepare for using these constants in the SCSI core.
+> Currently the vendor, model, and revision members of struct scsi_device
+> are pointers to fixed-length strings that are not NUL-terminated.
+> Fixed-precision format specifiers (e.g., "%.8s") are required whenever
+> they are printed and strncmp() must be used to compare these fields.
+> This is error-prone.
+> 
+> Convert these fields to fixed-size character arrays within struct
+> scsi_device. Remove an !sdev->model check because sdev->model is now
+> guaranteed not to be NULL.
+> 
+> This patch fixes a bug in the qla2xxx driver. It makes the following
+> code safe:
+> 
+> 		if (state_flags & BIT_4)
+> 			scmd_printk(KERN_WARNING, cp,
+> 			    "Unsupported device '%s' found.\n",
+> 			    cp->device->vendor);
 > 
 > Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 > ---
->   include/scsi/scsi_common.h        | 4 ++++
->   include/target/target_core_base.h | 5 +----
->   2 files changed, 5 insertions(+), 4 deletions(-)
+>   drivers/hwmon/drivetemp.c  |  5 +----
+>   drivers/scsi/scsi_scan.c   | 12 ++++++------
+>   include/scsi/scsi_device.h |  7 ++++---
+>   3 files changed, 11 insertions(+), 13 deletions(-)
 > 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+> diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
+> index 002e0660a0b8..efe8b229bdbe 100644
+> --- a/drivers/hwmon/drivetemp.c
+> +++ b/drivers/hwmon/drivetemp.c
+> @@ -306,13 +306,10 @@ static bool drivetemp_sct_avoid(struct drivetemp_data *st)
+>   	struct scsi_device *sdev = st->sdev;
+>   	unsigned int ctr;
+>   
+> -	if (!sdev->model)
+> -		return false;
+> -
+>   	/*
+>   	 * The "model" field contains just the raw SCSI INQUIRY response
+>   	 * "product identification" field, which has a width of 16 bytes.
+> -	 * This field is space-filled, but is NOT NULL-terminated.
+> +	 * This field is space-filled and NUL-terminated.
+>   	 */
+>   	for (ctr = 0; ctr < ARRAY_SIZE(sct_avoid_models); ctr++)
+>   		if (!strncmp(sdev->model, sct_avoid_models[ctr],
+> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+> index ef22a4228b85..6c3a5d451c1d 100644
+> --- a/drivers/scsi/scsi_scan.c
+> +++ b/drivers/scsi/scsi_scan.c
+> @@ -292,9 +292,9 @@ static struct scsi_device *scsi_alloc_sdev(struct scsi_target *starget,
+>   	if (!sdev)
+>   		goto out;
+>   
+> -	sdev->vendor = scsi_null_device_strs;
+> -	sdev->model = scsi_null_device_strs;
+> -	sdev->rev = scsi_null_device_strs;
+> +	strscpy(sdev->vendor, scsi_null_device_strs);
+> +	strscpy(sdev->model, scsi_null_device_strs);
+> +	strscpy(sdev->rev, scsi_null_device_strs);
+>   	sdev->host = shost;
+>   	sdev->queue_ramp_up_period = SCSI_DEFAULT_RAMP_UP_PERIOD;
+>   	sdev->id = starget->id;
+> @@ -905,9 +905,9 @@ static int scsi_add_lun(struct scsi_device *sdev, unsigned char *inq_result,
+>   	if (sdev->inquiry == NULL)
+>   		return SCSI_SCAN_NO_RESPONSE;
+>   
+> -	sdev->vendor = (char *) (sdev->inquiry + 8);
+> -	sdev->model = (char *) (sdev->inquiry + 16);
+> -	sdev->rev = (char *) (sdev->inquiry + 32);
+> +	strscpy(sdev->vendor, sdev->inquiry + 8);
+> +	strscpy(sdev->model, sdev->inquiry + 16);
+> +	strscpy(sdev->rev, sdev->inquiry + 32);
+>   
+>   	sdev->is_ata = strncmp(sdev->vendor, "ATA     ", 8) == 0;
+>   	if (sdev->is_ata) {
+
+
+Question is whether we shouldn't make this generic, ie treat 'inquiry'
+as a temporary blob, copy things over to fields in 'sdev', and then
+free the 'inquiry' blob again.
+There are soo many things tacked onto the standard inquiry data 
+(especially for storage array trying to mimic SCSI-2 inquiry data),
+that we're better of copying over only fields which we _know_.
+_And_ it'll save us a permanent data allocation for the scsi device...
+
+Hmm?
 
 Cheers,
 
