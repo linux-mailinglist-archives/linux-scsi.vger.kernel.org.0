@@ -1,154 +1,234 @@
-Return-Path: <linux-scsi+bounces-23761-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23763-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MNNbCjjfA2qA/gEAu9opvQ
-	(envelope-from <linux-scsi+bounces-23761-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 04:17:28 +0200
+	id GLcXMpLnA2oPAQIAu9opvQ
+	(envelope-from <linux-scsi+bounces-23763-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 04:53:06 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F3FB52C34F
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 04:17:26 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF42F52C696
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 04:53:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 784F83048AB8
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 02:17:22 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 501E630136DA
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 02:51:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8094938736E;
-	Wed, 13 May 2026 02:17:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AC14390985;
+	Wed, 13 May 2026 02:51:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="O+zTUc5G"
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="fdJ3Un6D"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED4F37DAA3;
-	Wed, 13 May 2026 02:17:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778638637; cv=none; b=IOj/Lnt8qrBCVuyDnlrUhSIN6PpsAYUcU3EO5ThJb853sIrRv+80fApTjF54DP0ZMTTTR/T2bW+0ZlL0W7cInnqdNSckq3BBtShhohkX0W75Uea4Qa80zfCOnzZvW1yuy3I+LMb0hgY8S6yNKu1XFBlMCs9DXD2TfWoSILZYIYI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778638637; c=relaxed/simple;
-	bh=y7AN/kjfIaDUjAs68wyzm8U1nSM+wxtEywdyuxi9noo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kvNs0uQTWzajF6krSBiC4PJ311o8Nef2IeSI+VbMSqhcwOUw8felhY+Nd1P6b7H5fOqXdqUYlLFeob3bQT9eGG5WPVzrWg9MSzIUl3ssTMTxPvhTYpLLNftGBwEcP72C4UdMne3HBVCge4dY7XtAOUzI9RPofCUuFTj32MF6PpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=O+zTUc5G; arc=none smtp.client-ip=113.46.200.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=0aZ6fiaSRIdI1DR6jHyD3+VcENmT7D4KK2+OhAb5Hwg=;
-	b=O+zTUc5GADoz6ZI6e2Zclokk0JOMcVwpLJzJSAxHmj30pU76p2x9c+vYqScWMYD8uhrgKU72X
-	r5EgfcDNYrJNgeRs/baJnBkxRlWHQD8NGPjwLPc4hk8OGob1dz7WfM/kc9Ewf6khX94o3aRT2gI
-	rHo/y3+K7F+1mmQaqi61T1g=
-Received: from mail.maildlp.com (unknown [172.19.162.144])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4gFcNF6Lnfz1prm1;
-	Wed, 13 May 2026 10:09:33 +0800 (CST)
-Received: from kwepemj100018.china.huawei.com (unknown [7.202.194.12])
-	by mail.maildlp.com (Postfix) with ESMTPS id 53B464056D;
-	Wed, 13 May 2026 10:17:13 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- kwepemj100018.china.huawei.com (7.202.194.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.36; Wed, 13 May 2026 10:17:12 +0800
-From: Xingui Yang <yangxingui@huawei.com>
-To: <john.g.garry@oracle.com>, <yanaijie@huawei.com>, <jejb@linux.ibm.com>,
-	<martin.petersen@oracle.com>
-CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <liyihang9@h-partners.com>, <yangxingui@huawei.com>,
-	<liuyonglong@huawei.com>, <kangfenglong@huawei.com>
-Subject: [PATCH v2 3/3] scsi: hisi_sas: add support for dev info update notification
-Date: Wed, 13 May 2026 10:16:03 +0800
-Message-ID: <20260513021603.3023329-4-yangxingui@huawei.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260513021603.3023329-1-yangxingui@huawei.com>
-References: <20260513021603.3023329-1-yangxingui@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594F038A71B
+	for <linux-scsi@vger.kernel.org>; Wed, 13 May 2026 02:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778640712; cv=pass; b=IegSZuzCzIjaXRsFJMNEIrQvBPveAMlNFvf8RvFRQYBj7K0nN1yO7xosA2JCCPtMsgi4/j+G3lmlMmgrSjiAgSDr5wr6iiyCUb0AmveHnfO1k17JkAoMFh/SUIW5LVBMNhUKFVoLYErO2GA0wu9nEfJki9D+USqknz0X30ztvnI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778640712; c=relaxed/simple;
+	bh=raam9DVb6nwGgVMeORu4BM/vz6+kYfQFafLG0g3ziek=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c6wAoI0XE/90m0Z+xmj22i+lX/JXkbLL+M162fW7ayS05aMzD6selux3Qn6mdLR1DcsrEaj62nTFNxNEiC/E2eypTJpBBRmZIYaJfNBi2Jj+xxofgYt62dnDndRtD24qN4ui0Ggwqs7NCbdUDoRr67NHWovQGnnJGswshm0cb1w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=fdJ3Un6D; arc=pass smtp.client-ip=209.85.210.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7dcd54a8d17so630951a34.0
+        for <linux-scsi@vger.kernel.org>; Tue, 12 May 2026 19:51:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778640710; cv=none;
+        d=google.com; s=arc-20240605;
+        b=NP1pTvVWRlPumIPipKmWe7UsvbjWxd0Sow7ykoFTV3EKqHLs20ryUxWHlFC/YjObPB
+         v8dhxHu6vndNv9Fi2xv6l1kmy0lIpRvLEeZs0Chf8mswNS70qY3S5HV1ZutsVd607vUK
+         CT0bBOPflqgt2I2S+m1IcHu/4RCToZBaQyNDO+Ici7WC0XdJn4+JzY+Ub87WJeQppulY
+         /Pg9HdRCxgwd/gNkECvlWPWnEk7rfZ+ShYvFbKVDVK8OR8mb4K84W40rnDaiB3fiNSja
+         dby5vRNRIm2bmXOD87cjfHkUzZBUqYrux4Csc0uEeMoHASVOv5CIqx82uwLsNOaG4FPk
+         YyKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=raam9DVb6nwGgVMeORu4BM/vz6+kYfQFafLG0g3ziek=;
+        fh=9ljPOkNtDyCjrrdSv5j1sKmAsCFelKhLAC3Zo2NHNrI=;
+        b=cfhZEuwV+gea52jbsgHY/wzQBbkQYpR/d05/3HvAsCZ/jzG/l+tDX9EHeKVFh7jPrT
+         UFDGiXWwpFALfN9XvqtfgYbcFKBdert1JqWLc9iZXmZP/IjBjJ2L1IcDfOOpFAOVLOhk
+         7ppq/rQsZOGUhPcTkwThJUwpOl4Tbx7Wp8heM3Z6/yeivizbE/I8/1z2plq19aG8iA+o
+         oVpFUGEjmSN7X4WaQMGfax9faGELdeVri2YsIKlb8XmhigRh/zDeepnLDMdGBchh1F1A
+         xSUR4mki4JQrQd+f/kpASoZyd5JQe0ix23O6TaPoJMK9gjri8xNJ230tuJoZdGTeMvME
+         wvJg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1778640710; x=1779245510; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=raam9DVb6nwGgVMeORu4BM/vz6+kYfQFafLG0g3ziek=;
+        b=fdJ3Un6DAoxZo2/gGBlIAAeQDRz3DYXwiaMfealv5cotg4CdH7ts4CYCNrulYFTGiy
+         5Y930QH7VOBLpXX9qnh3l9EpSWwgEsyCWTcNG6RL1TcmUgIyrDVYvju0UOKZoUjk+RSJ
+         6amyW51TSk8TKLQs7c307lfDR3EsSTz5vyLGjerM6ip8BDQs+hFScvM8SUkk/y4hkLY9
+         QLxYUy/8rYuaGRIjoMopOCnU5vnvsMQkUFnA9a1cTK6MmIdbAbQ4DR54sEkBkOQrnl/2
+         mAZDQBOdEj8LltC7KRJBmf6cyOCSMPo02CS/XwATAtyO/FjwbqzuoHxrLFwfAEcCOPUf
+         WudA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778640710; x=1779245510;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=raam9DVb6nwGgVMeORu4BM/vz6+kYfQFafLG0g3ziek=;
+        b=qzm5DYu+u3KPd9tRrmB4bF8M9sjbPaNmEVJwzl5pKllqOeJ7V5U3FEb9FP74KpWmp+
+         nuIlxulVpOUJNHTS6i2msdKeFnw8xe5cN4iiCBhouV0kax8ZKIzAi9SJGufScEEXf0N4
+         BOpQ3oaSAtZj/sGEGAbvGA6dKLQdS1R97LebSdTSCNamhnq37NX8x6Ltd925b6NmZja1
+         BHcdcN7O+fYPVGJXeer9jpPol0qbPtTbVQRuvCFf5uySWfSWeTKcsDPpv8mOdaQazNv5
+         FE8UlJ5OaRvFpa9N380nK+iAhRoB33w+YYCzUxQIhfmZJ3HD+36huRZC9BNa3QoKRryj
+         wUog==
+X-Forwarded-Encrypted: i=1; AFNElJ8+otqzdsE5EGXc2Tj8EmxC1exoZFRLmhAvDrUh/UDfQxUiNX6CBto5TqzdneCXHdE225xCRTDnEkpj@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCYXExGXuW4kh6UVsDAN60GZfFdwmYDkxYiDHOrdUv1cJsKZap
+	OlmOJX8v4g50jzY2K7a9JHweOa5qG5zaSIKGHaUg8hm4wMI+F1y7DTZHXNsPx1t73oTS12uGDCw
+	DjLQqT7aSNTIdlQcGCq3nqWByr7m+70DXPCF8kGmpHA==
+X-Gm-Gg: Acq92OFuIwxjgS6VfC3qsfJRCOLs2LfXJdcwHhN2U3GtVs01qyx53wRGWbuCymgZrAz
+	0O/oxXJbwVZlLFHK9XnAljx+krxumqU/OY5eJ+fWuVmtTrI49/zQRmhECLkNq6Dl2n19haNUOrm
+	l420CgH7ygjgg/I1s4os2N4oEx0hNz0p1wrZpJijeTuHHZu2l2eBk0VSh0K/JYXOQNKaojKwwBx
+	czDlbIIZENuDMrDkBDBW3umgFypkL4WfJyEx4FocU/CaP/9dVSao2MSr+K8mpyGExAvphZhRtM9
+	EJH/ZJlNT2xVh6V+Hi0=
+X-Received: by 2002:a05:6808:640f:b0:479:ffcf:52e4 with SMTP id
+ 5614622812f47-482b2d823a2mr634406b6e.8.1778640710257; Tue, 12 May 2026
+ 19:51:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemj100018.china.huawei.com (7.202.194.12)
-X-Rspamd-Queue-Id: 3F3FB52C34F
+References: <20260417015732.2692434-1-csander@purestorage.com>
+ <yq18qams3re.fsf@ca-mkp.ca.oracle.com> <CADUfDZrwzUTi2TOj6M-+FtBK6u5evMsWSBqRDwJsLb8yLbOGvw@mail.gmail.com>
+ <yq15x5lqfdx.fsf@ca-mkp.ca.oracle.com> <CADUfDZqkT4g3T6uE=hxt9J6JDMXbJt49rM7_Vgs3EBPdFeuuLw@mail.gmail.com>
+ <CADUfDZq+BZ4Xn19TXH53NndDwDwMKm3xS8wSMnMtRsF7dWSyGg@mail.gmail.com> <yq11pfgxf9s.fsf@ca-mkp.ca.oracle.com>
+In-Reply-To: <yq11pfgxf9s.fsf@ca-mkp.ca.oracle.com>
+From: Caleb Sander Mateos <csander@purestorage.com>
+Date: Tue, 12 May 2026 19:51:39 -0700
+X-Gm-Features: AVHnY4I5-V51JtkIh-Ssp6M4Sux20aXJQq6-7lAFZgFvHPFmHKstgGsa0VGqDxM
+Message-ID: <CADUfDZoYNjMCnBwoHmH0pbdiacmQ+aJd=p0KYxad2UB-UJ9-MQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] block: fix integrity offset/length conversions
+To: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
+	Chaitanya Kulkarni <kch@nvidia.com>, Anuj Gupta <anuj20.g@samsung.com>, linux-block@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org, 
+	target-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: CF42F52C696
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),quarantine];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[h-partners.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[purestorage.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[purestorage.com:s=google2022];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[yangxingui@huawei.com,linux-scsi@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-23761-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-23763-lists,linux-scsi=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[h-partners.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,huawei.com:email,huawei.com:mid,h-partners.com:dkim]
+	DKIM_TRACE(0.00)[purestorage.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[csander@purestorage.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,purestorage.com:dkim]
 X-Rspamd-Action: no action
 
-Implement the lldd_dev_info_update callback for hisi_sas driver. When
-a device's information changes (such as linkrate), clear the old ITCT
-entry and setup a new one to reflect the new settings. This ensures the
-hardware uses the correct information after events like cable reconnection
-or renegotiation.
+On Tue, May 12, 2026 at 7:16=E2=80=AFPM Martin K. Petersen
+<martin.petersen@oracle.com> wrote:
+>
+>
+> Hi Caleb!
+>
+> Sorry about the delay. Been away for a few weeks...
+>
+> >> So seems like patch 1 ("block: use integrity interval instead of
+> >> sector as seed") doesn't need a Fixes tag. Still, I'm confused why
+> >> the auto-integrity code bothers setting the seed to the sector number
+> >> in the first place if it's going to be remapped later. Why not just
+> >> leave the seed zeroed?
+>
+> It adds a bit of extra protection in the sense that it there is one more
+> parameter that can be validated. The premise of the integrity
+> infrastructure is that things in the two supplied buffers (data + PI) as
+> well as the control path (bip in the block layer case plus the SCSI or
+> NVMe command fields) all need to agree for the I/O to go through.
+>
+> It is valid to generate the PI starting with 0. But that is
+> indistinguishable from "the seed value was not initialized".
+>
+> > I would appreciate a response here. Would you be okay with patch 1 if
+> > the Fixes tags were dropped?
+>
+> I am afraid I still don't completely understand why things are broken.
 
-Signed-off-by: Xingui Yang <yangxingui@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas_main.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Nothing is broken, I just mean that the seed value stored in
+bip_iter.bi_sector is strange in that it's initialized in units of
+512-byte sectors but incremented in units of integrity intervals. As
+you point out, the remapping step makes the initial seed value
+irrelevant, but I was certainly confused by it when I printed it
+during some debugging. I can update the commit message to clarify the
+rationale for the change.
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 944ce19ae2fc..095960aef6d8 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -900,6 +900,21 @@ static int hisi_sas_dev_found(struct domain_device *device)
- 	return rc;
- }
- 
-+static void hisi_sas_dev_info_update(struct domain_device *device)
-+{
-+	struct hisi_hba *hisi_hba = dev_to_hisi_hba(device);
-+	struct hisi_sas_device *sas_dev = device->lldd_dev;
-+	struct device *dev = hisi_hba->dev;
-+
-+	if (!sas_dev)
-+		return;
-+
-+	dev_info(dev, "update itct for device %016llx\n",
-+		 SAS_ADDR(device->sas_addr));
-+	hisi_hba->hw->clear_itct(hisi_hba, sas_dev);
-+	hisi_hba->hw->setup_itct(hisi_hba, sas_dev);
-+}
-+
- int hisi_sas_sdev_configure(struct scsi_device *sdev, struct queue_limits *lim)
- {
- 	struct domain_device *dev = sdev_to_domain_dev(sdev);
-@@ -2168,6 +2183,7 @@ EXPORT_SYMBOL_GPL(hisi_sas_stt);
- static struct sas_domain_function_template hisi_sas_transport_ops = {
- 	.lldd_dev_found		= hisi_sas_dev_found,
- 	.lldd_dev_gone		= hisi_sas_dev_gone,
-+	.lldd_dev_info_update	= hisi_sas_dev_info_update,
- 	.lldd_execute_task	= hisi_sas_queue_command,
- 	.lldd_control_phy	= hisi_sas_control_phy,
- 	.lldd_abort_task	= hisi_sas_abort_task,
--- 
-2.43.0
+>
+> For writes, the meaning of the bip seed is: "This is the value you
+> should expect in the ref tag for the first integrity interval in the PI
+> buffer I prepared". With block layer autoprotect, the seed is set before
+> generating the PI and thus implicitly affects the generation.
+>
+> When the write operation subsequently reaches the bottom of the stack,
+> we will check that the first ref tag in the PI buffer matches the
+> supplied seed value. And then proceed to remap the ref tags for each
+> protection interval to the target LBA + n since that is what the storage
+> requires (ignoring the odd Type 2 interval mismatch for now).
+>
+> For reads, the meaning of the bip seed is: "This is what I expect to
+> receive in the ref tag for the first integrity interval in the PI
+> buffer". At the bottom of the stack we will receive PI from the storage
+> and that will contain ref tags matching the lower 32 bits of the LBA
+> since that is what the hardware returns. And we will then remap all
+> those ref tags starting with whichever bip seed value was requested by
+> the caller. It doesn't matter whether the requested seed value was 0,
+> 10, or 42. The ref tags are remapped to whatever the caller wants them
+> to be.
+>
+> I tend to think of the seed as a register you program with the value you
+> want. And then hardware or software remaps between what the storage
+> device's protection envelope requires and what the application (or in
+> this case the block layer) requested. With SCSI + DIX 1.1, the seed
+> literally controls a remapping register in the HBA ASIC. In NVMe we have
+> ILBRT/EILBRT.
 
+What I find confusing is that the seed value stored in
+bip_iter.bi_sector isn't what's actually passed to the SCSI/NVMe
+device. It's only used in blk_integrity_iterate() and
+__blk_reftag_remap() to generate/verify/remap the reftags in the
+integrity/PI buffer. However, (E)ILBRT field (taking NVMe as an
+example) comes from the physical block device offset rather than the
+reftag seed. See t10_pi_ref_tag(), which returns blk_rq_pos()
+converted to integrity intervals. It looks like this works because the
+remap step ensures the reftags passed in the integrity buffer match
+the physical integrity interval numbers, but this means the device is
+comparing physical integrity interval numbers rather than reftag
+seeds. My point is that if the remap step undoes the effect of the
+seed by setting all the reftags in the integrity buffer to their
+physical integrity interval, I don't see why the block integrity code
+bothers setting a seed in the first place.
+
+But it sounds like this may be a longer discussion, so I will split
+out the two fixes for 7.1 into a separate series.
+
+Thanks,
+Caleb
 
