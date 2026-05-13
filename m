@@ -1,66 +1,66 @@
-Return-Path: <linux-scsi+bounces-23792-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23793-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uHGVDizsBGr7QQIAu9opvQ
-	(envelope-from <linux-scsi+bounces-23792-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 23:25:00 +0200
+	id Q6o2NP7zBGoTQwIAu9opvQ
+	(envelope-from <linux-scsi+bounces-23793-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 23:58:22 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C00153AF6C
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 23:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 383AB53B32B
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 23:58:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0EFAE301DCDF
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 21:24:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E03B53031137
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 21:58:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DBBF3B388D;
-	Wed, 13 May 2026 21:24:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0CCE3C9885;
+	Wed, 13 May 2026 21:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="s0kFAquk"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="BAT30BIr"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
+Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DAA3AF64B
-	for <linux-scsi@vger.kernel.org>; Wed, 13 May 2026 21:24:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86DB73AC0DE
+	for <linux-scsi@vger.kernel.org>; Wed, 13 May 2026 21:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778707497; cv=none; b=Te+D3VlUpip+gp/0CmgQLo4ganP7H/d+fTBlyUVCCW68+/N7ZYAJSHkz1HhFbwRb1UTMrAPPYofsM5rhVjDcdrv2vjkFOsvMah/4sdZfa7Y+MNbGvLyFmnm6Vp0TNpJed9xdVJY7oB9pNV6+Adqx+yG8AqN/hXf6xLaQXlwczxQ=
+	t=1778709499; cv=none; b=Ve1V5B//DdjeKXwr3DazWNgI0QpdG+R4amo/e8X30MDiZfVY6vYnCA6lptv+vsSFgZQSYWb1xBiUQWYrtNYMXX24pKT0PGiceIaNPnheWlLBjCNv+FLsOBQ2Gjw24nJ2Phz1k3BPsolE1ewlBmZYJIP8fVasbTnDHGqfh3IvM+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778707497; c=relaxed/simple;
-	bh=uYGykmdEr2Lwx6NhPemKRyrHazAYZ5oqLqbU2UukICA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=prbqOenXYVHIIIV7l/w82mkkn2RZvz/1CBZa5MY8V0Z2r/BC/4tgzWzMOSMOrh86C39aQx0V7+C9yJM8UtzzCDqDM9M0pV2DqJbeQvsllzspghy0bfE/3e/fzIyjqYxu6BeGAB6G36BW8efmLBUTC4wpnrITpcCuZ/cmaxJGj20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=s0kFAquk; arc=none smtp.client-ip=199.89.1.16
+	s=arc-20240116; t=1778709499; c=relaxed/simple;
+	bh=3ZGqfX/XJm6+kW/6aoQQ6C67mHI/BjyyP1/qvEhoZ+Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=uzTrr116Qe7EOr+Sealedswzpb8RiZWL7nqlKkgiqNERFRgHtvSILYwyZrgghqYKOL3fob7nar8If3KvSGkoMHyepdQuF898MJ/oT03IQE5ZE7JAIxyqalOtndnKJRivNIxhlq1dQ1ewdWH/KTWnNp5J9/YFCuqfeqGEHsYQsH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=BAT30BIr; arc=none smtp.client-ip=199.89.1.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4gG61M2QqSzlfvq7;
-	Wed, 13 May 2026 21:24:55 +0000 (UTC)
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4gG6ls40yPz1XM6JX;
+	Wed, 13 May 2026 21:58:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:content-type:content-type:in-reply-to
 	:from:from:content-language:references:subject:subject
 	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1778707493; x=1781299494; bh=dQkQ5Btb2vP/4PzJitpMb91G
-	suPxbaIYyVPfc42LCRw=; b=s0kFAqukfLfYqRlESMbTa0s4Dke2wJ3wwYgIYwry
-	VvDC1+REg4L1/H3shLzT9Z1go7+KpkJduPij6no17wOluG6W6qZ4YgBd9sZlDkUS
-	PssFUn74vM+wr2pGa329eYiHxuna3J5aIam3VqwSVOVUI//ZO7i41px9nOH+SWXQ
-	sfExz+JPVNFv52l/XSawdpqznttulAYHZMlYlRSAopimV8zquSRe7dgik+eLO7x8
-	wrshOJRSNgawVM1GUiCsJWl5/tn6vVXgUoz8BUMTBrjNATaHFlX6AugN1HCTwuQ0
-	Kg21Z7tGFzet0KOdKz9yP/ahyY8NS6DkAzOSWXcU3Siq3Q==
+	 s=mr01; t=1778709495; x=1781301496; bh=04MNijexQ2VdxtfvFtPUEW4g
+	5OZCxL22C4joWuxWeuU=; b=BAT30BIrcBeq243PwSxmn62tWaBsz432HBY3RAO4
+	U5+sn573B7DWDgf7o8W6ErC/UBV7wETi0SOdf+IlNQssG3BGx/qtlBM1IpRYK/oJ
+	Ar6nAIuh3Klsb6snZqyxd0Wv2h5sHNdJLRwqg7xdF0hbk/LclW3duOJix4IevU+5
+	GkpdfHeDHlUfsx82EutVGBNXNRfmbJmNkwmS2qX+YQvlz8oQSU//49KvWluKywC2
+	azAktDKsvM3PdkeEnZHTC3OFlSS5T4J74xFrrCg3Hpob8OIL3FCD1bxzJnTSQkHc
+	V+/WlD009q1nZNFUFfxVSekWeRJoM3plV4GCLFdty8l+6A==
 X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 2VJdm7l1QsxA; Wed, 13 May 2026 21:24:53 +0000 (UTC)
+Received: from 011.lax.mailroute.net ([127.0.0.1])
+ by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id ZoqKnE-aDfN8; Wed, 13 May 2026 21:58:15 +0000 (UTC)
 Received: from [100.119.48.131] (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4gG61J2k0gzlfvq4;
-	Wed, 13 May 2026 21:24:52 +0000 (UTC)
-Message-ID: <e4b772a6-6e62-4921-ba46-1e3f8ef426e9@acm.org>
-Date: Wed, 13 May 2026 14:24:51 -0700
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4gG6lp2yyZz1XM6JP;
+	Wed, 13 May 2026 21:58:14 +0000 (UTC)
+Message-ID: <65a4ac0a-ea6f-4a83-958c-169d4e2a62e8@acm.org>
+Date: Wed, 13 May 2026 14:58:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -70,19 +70,16 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] scsi: core: run queues for all non-SDEV_DEL devices from
  scsi_run_host_queues
-To: David Jeffery <djeffery@redhat.com>
-Cc: linux-scsi@vger.kernel.org,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+To: David Jeffery <djeffery@redhat.com>, linux-scsi@vger.kernel.org,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
  "Martin K. Petersen" <martin.petersen@oracle.com>
 References: <20260513173552.9222-1-djeffery@redhat.com>
- <3442d2e5-de1b-4043-97cb-464feda2623f@acm.org>
- <CA+-xHTHN-fjkjc6MUdUxR5Uz-ukG_LG3V7TKtf8j5r1gE8uhrw@mail.gmail.com>
 Content-Language: en-US
 From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <CA+-xHTHN-fjkjc6MUdUxR5Uz-ukG_LG3V7TKtf8j5r1gE8uhrw@mail.gmail.com>
+In-Reply-To: <20260513173552.9222-1-djeffery@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 4C00153AF6C
+X-Rspamd-Queue-Id: 383AB53B32B
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
@@ -92,13 +89,13 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23792-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-23793-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	DKIM_TRACE(0.00)[acm.org:+];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
@@ -113,20 +110,15 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,acm.org:mid,acm.org:dkim]
 X-Rspamd-Action: no action
 
-On 5/13/26 11:20 AM, David Jeffery wrote:
-> SDEV_CANCEL is a scsi_device state while the scsi_host_in_recovery
-> macro is looking only at Scsi_Host state. An SDEV_CANCEL scsi_device
-> is unrelated to the scsi_host_in_recovery return value.
-> 
-> I will note that looking at scsi_device state in scsi_mq_requeue_cmd
-> in addition to the
-> scsi_host_in_recovery call does not fix the issue. The scsi_device can
-> be in SDEV_RUNNING state at the time of request requeue with the
-> attempted removal and transition of the scsi_device to SDEV_CANCEL
-> occurring later while error handling is still unfinished.
+On 5/13/26 10:35 AM, David Jeffery wrote:
+> +		if (sdev->sdev_state == SDEV_DEL ||
+> +		    !get_device(&sdev->sdev_gendev))
+> +			continue;
+A comment would be welcome above this statement that explains that 
+get_device() is called instead of scsi_device_get() because the latter
+skips devices that are in the state SDEV_CANCEL state.
 
-Oops, I got confused when I wrote my previous reply. Let me take another
-look at your patch.
+Thanks,
 
 Bart.
 
