@@ -1,99 +1,99 @@
-Return-Path: <linux-scsi+bounces-23778-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23779-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oFUeAKF7BGpoKgIAu9opvQ
-	(envelope-from <linux-scsi+bounces-23778-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 15:24:49 +0200
+	id +NNXExR9BGpoKgIAu9opvQ
+	(envelope-from <linux-scsi+bounces-23779-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 15:31:00 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9075A534022
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 15:24:48 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8FAF534191
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 15:30:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 107D430AF7FB
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 13:14:55 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3DF5331BBC2F
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2026 13:17:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3F8E481FA0;
-	Wed, 13 May 2026 13:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9033407567;
+	Wed, 13 May 2026 13:12:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="IwRL64nJ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="P6VZlRbe";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="IwRL64nJ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="P6VZlRbe"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="CBT7nYFD";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="xS7BT05R";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="CBT7nYFD";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="xS7BT05R"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C5F48122E
-	for <linux-scsi@vger.kernel.org>; Wed, 13 May 2026 13:11:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B374C6F17
+	for <linux-scsi@vger.kernel.org>; Wed, 13 May 2026 13:12:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778677869; cv=none; b=P6h/n7CP5gU+fjTx/Nj5IoBWnNtAMbaaJO/SYdKvdQx8xFGf6G/sOmxycPnHkYMot4aos7HkE8dkrtQxGinRDW0hmTr7Q3iVQakX8oDxoK2vHrTMpCuCrGJDdl8fWbCiPHnilx0jvCrBedvfs8XN/O+v8WUSvpHlKC4Cj+IqHiY=
+	t=1778677945; cv=none; b=bfjxEQGGjXwlZLe3WRbhLF2O346H3g6YaFcXpV2cuTDRkfIeq6fQw+hVuoyKD9rAM8A8CYaOy1xD0hyBrxRBLBJtYsNFrjGe2ohJcNbKBZ6cN+sKFdAat2Ys1oMFXz9+e2vHNuq7OGqidPBd4sL/fbZcKnGQtO9l92RO1nHGq+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778677869; c=relaxed/simple;
-	bh=iZuk2cbXdF5yNp0JjwOt/inc5AoiMon7mdNW4wnxhtg=;
+	s=arc-20240116; t=1778677945; c=relaxed/simple;
+	bh=mKslkkPNFADSA80b85jkPLf4uRMlTJwe9KeE4Lx2IeA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KVHY7oIYdlygqbZes3UmL+Hv1y5z399GAYMMuQioFC3OoFO3PUfbWtP+NSluh5ciXLDz7FNvJbhgdd5BySdhLr/9iREHRfI7tc1R+IO35q/tsOmxcKhlJ3rmPeKbf3ktsDExVg3j16Es35gWh1y/56aB14b400hLEAOlvzYmyxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=IwRL64nJ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=P6VZlRbe; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=IwRL64nJ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=P6VZlRbe; arc=none smtp.client-ip=195.135.223.131
+	 In-Reply-To:Content-Type; b=hVWTdEUQfN8jL6xSSfTIiYO15qiwvmNWofm5KhfBqKjUT+K0JE7iUgmmknrp0gQAHhD5of7mDsq7C/XvmsXSOSKbwiEdCAcyqWFTiCiYLcdNdiUDa/0g8V4i4re2wyeW2MyHfoZWm1uSvfuMeh6PBPwYQzyoM8V397M8R38fVQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=CBT7nYFD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=xS7BT05R; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=CBT7nYFD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=xS7BT05R; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 75B50765FF;
-	Wed, 13 May 2026 13:11:05 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 72DB775AD1;
+	Wed, 13 May 2026 13:12:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1778677865; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1778677942; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+A97pTnzSzL8ECfSKGfcTdH0sUYzTeYqNr7yuxxDxZg=;
-	b=IwRL64nJqMV8bQPLp0QCh0zePJoLQOyzxFEUkp4pxCFt6EgH6ejcEzgo7Pdu0zNb6xg0dj
-	sVVhx2C7YTMNWRHePU8LqIOh2ukBKe7J6vGwG8d8kmMq1qlBOUoD5uA4zW69tiQH3H4Ij/
-	d56BB5CW+zxZECBf5055NgMrBcwkHCY=
+	bh=ctFmtGzWh59JzxP4JQBACBn8erEAkWyV6YditMA6vsY=;
+	b=CBT7nYFDs0htpIPnSfcZeT+F/qdkcVXNEcXM8cZABpXUqtWhqIsqKKq18YikYXeM/YIKM/
+	34+weytkrarLC2Vz07vhegjOG8QdHkzQci7NmWvnaM8TcvJMMQA03eCNFgjnMl8A5dUZGv
+	kj6UeU9Hbi+HM5Yz3Ee0H+AJf1QTIw4=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1778677865;
+	s=susede2_ed25519; t=1778677942;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+A97pTnzSzL8ECfSKGfcTdH0sUYzTeYqNr7yuxxDxZg=;
-	b=P6VZlRbewCIwXI+jA6mum+KknGp/cBod3/lgZmbW4VnHU/9Q+eECyc6XyvBabqshENuuav
-	6+rOxDD/L9W51LCQ==
+	bh=ctFmtGzWh59JzxP4JQBACBn8erEAkWyV6YditMA6vsY=;
+	b=xS7BT05Ri8ZRGZHmaRv1MM7/lE+JFOQGtZ7Y76dnNn0pLKeRD4Lmf1o4S5O9SU0ahwZK1W
+	W+w2EmbIbjjOXECg==
 Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=IwRL64nJ;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=P6VZlRbe
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=CBT7nYFD;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=xS7BT05R
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1778677865; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1778677942; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+A97pTnzSzL8ECfSKGfcTdH0sUYzTeYqNr7yuxxDxZg=;
-	b=IwRL64nJqMV8bQPLp0QCh0zePJoLQOyzxFEUkp4pxCFt6EgH6ejcEzgo7Pdu0zNb6xg0dj
-	sVVhx2C7YTMNWRHePU8LqIOh2ukBKe7J6vGwG8d8kmMq1qlBOUoD5uA4zW69tiQH3H4Ij/
-	d56BB5CW+zxZECBf5055NgMrBcwkHCY=
+	bh=ctFmtGzWh59JzxP4JQBACBn8erEAkWyV6YditMA6vsY=;
+	b=CBT7nYFDs0htpIPnSfcZeT+F/qdkcVXNEcXM8cZABpXUqtWhqIsqKKq18YikYXeM/YIKM/
+	34+weytkrarLC2Vz07vhegjOG8QdHkzQci7NmWvnaM8TcvJMMQA03eCNFgjnMl8A5dUZGv
+	kj6UeU9Hbi+HM5Yz3Ee0H+AJf1QTIw4=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1778677865;
+	s=susede2_ed25519; t=1778677942;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+A97pTnzSzL8ECfSKGfcTdH0sUYzTeYqNr7yuxxDxZg=;
-	b=P6VZlRbewCIwXI+jA6mum+KknGp/cBod3/lgZmbW4VnHU/9Q+eECyc6XyvBabqshENuuav
-	6+rOxDD/L9W51LCQ==
+	bh=ctFmtGzWh59JzxP4JQBACBn8erEAkWyV6YditMA6vsY=;
+	b=xS7BT05Ri8ZRGZHmaRv1MM7/lE+JFOQGtZ7Y76dnNn0pLKeRD4Lmf1o4S5O9SU0ahwZK1W
+	W+w2EmbIbjjOXECg==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5E453593A9;
-	Wed, 13 May 2026 13:11:05 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 47AB8593A9;
+	Wed, 13 May 2026 13:12:22 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id sBlUFml4BGpMTAAAD6G6ig
-	(envelope-from <hare@suse.de>); Wed, 13 May 2026 13:11:05 +0000
-Message-ID: <b79bb2d1-2968-45cf-8db2-976fb499743b@suse.de>
-Date: Wed, 13 May 2026 15:11:05 +0200
+	id UJPJELZ4BGo5TQAAD6G6ig
+	(envelope-from <hare@suse.de>); Wed, 13 May 2026 13:12:22 +0000
+Message-ID: <48f1b7b5-73ca-4b58-bd59-5e786fba7031@suse.de>
+Date: Wed, 13 May 2026 15:12:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -101,8 +101,8 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/6] ata: libata-scsi: route non-zero LUN commands for
- multi-LUN ATAPI
+Subject: Re: [PATCH v5 5/6] ata: libata-scsi: probe additional LUNs for
+ multi-LUN ATAPI devices
 To: Phil Pemberton <philpem@philpem.me.uk>, linux-ide@vger.kernel.org,
  linux-scsi@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, Damien Le Moal <dlemoal@kernel.org>,
@@ -110,22 +110,22 @@ Cc: linux-kernel@vger.kernel.org, Damien Le Moal <dlemoal@kernel.org>,
  "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
  "Martin K . Petersen" <martin.petersen@oracle.com>
 References: <20260512202728.299414-1-philpem@philpem.me.uk>
- <20260512202728.299414-4-philpem@philpem.me.uk>
+ <20260512202728.299414-6-philpem@philpem.me.uk>
 Content-Language: en-US
 From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20260512202728.299414-4-philpem@philpem.me.uk>
+In-Reply-To: <20260512202728.299414-6-philpem@philpem.me.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
 X-Spam-Flag: NO
 X-Spam-Score: -4.51
-X-Rspamd-Queue-Id: 9075A534022
+X-Spam-Level: 
+X-Rspamd-Queue-Id: B8FAF534191
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
 	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -134,9 +134,9 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23778-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-23779-lists,linux-scsi=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	PRECEDENCE_BULK(0.00)[];
@@ -146,54 +146,72 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCPT_COUNT_SEVEN(0.00)[8];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,philpem.me.uk:email,suse.de:email,suse.de:mid,suse.de:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[philpem.me.uk:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,suse.de:email,suse.de:mid,suse.de:dkim]
 X-Rspamd-Action: no action
 
 On 5/12/26 22:27, Phil Pemberton wrote:
-> Two changes are required to route commands to ATAPI LUNs other than 0:
+> After LUN 0 is added for an ATAPI device, check its BLIST_FORCELUN
+> flag.  If set, bump dev->nr_luns to the host's max_lun so the LUN
+> routing in atapi_xlat() accepts the probe INQUIRYs, then call
+> scsi_scan_target() with SCAN_WILD_CARD to trigger the SCSI layer's
+> built-in sequential LUN scan for that target only.  This probes
+> LUNs 1..shost->max_lun, driven by the libata atapi_max_lun module
+> parameter.
 > 
-> 1. __ata_scsi_find_dev():  The existing code rejects any scsi_device
->     with a non-zero LUN, returning NULL and dropping the command on
->     the floor.  Hoist a non-zero LUN early-exit ahead of the original
->     channel/id checks: when scsidev->lun is non-zero, allow it through
->     only if the underlying ata_device is ATAPI class.  The original
->     LUN-0 path is left structurally unchanged.
+> Devices without BLIST_FORCELUN (the vast majority of ATAPI devices)
+> are left with only LUN 0 -- no sequential scan is triggered, so
+> single-LUN devices like the iHAS124 DVD writer are completely
+> unaffected.
 > 
-> 2. atapi_xlat():  Older ATAPI devices (SCSI-2 era) expect the LUN in
->     CDB byte 1 bits 7:5 rather than relying on transport-level LUN
->     addressing.  Encode scmd->device->lun into those bits, preserving
->     the existing command-specific bits in 4:0.  This is required by
->     both the Panasonic PD/CD combos and Nakamichi CD changers.
-> 
->     The SCSI layer caps the LUN at shost->max_lun, so a value beyond
->     the device's nr_luns should never reach this point; guard with
->     WARN_ON_ONCE() and return AC_ERR_INVALID if it does, since the
->     3-bit CDB field cannot represent it.
+> Non-responding LUNs (PQ=0/PDT=0x1f) are silently skipped by
+> scsi_probe_and_add_lun() when BLIST_NO_LUN_1F is set on the device
+> via scsi_devinfo.
 > 
 > Signed-off-by: Phil Pemberton <philpem@philpem.me.uk>
 > ---
->   drivers/ata/libata-scsi.c | 32 ++++++++++++++++++++++++++++++++
->   1 file changed, 32 insertions(+)
+>   drivers/ata/libata-scsi.c | 27 +++++++++++++++++++++++----
+>   1 file changed, 23 insertions(+), 4 deletions(-)
 > 
 > diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-> index 7c3d31dc49a1..2d714efc855f 100644
+> index 2d714efc855f..a6f5557014c7 100644
 > --- a/drivers/ata/libata-scsi.c
 > +++ b/drivers/ata/libata-scsi.c
-> @@ -2953,6 +2953,15 @@ static unsigned int atapi_xlat(struct ata_queued_cmd *qc)
->   	memset(qc->cdb, 0, dev->cdb_len);
->   	memcpy(qc->cdb, scmd->cmnd, scmd->cmd_len);
->   
-> +	/*
-> +	 * SCSI-2 CDB LUN encoding: bits 7:5 of byte 1 (3-bit field).
-> +	 * The SCSI layer caps the LUN at shost->max_lun (<= ATAPI_MAX_LUN),
-> +	 * so this should never trip; warn and reject if it does.
-> +	 */
-> +	if (WARN_ON_ONCE(scmd->device->lun >= dev->nr_luns))
-> +		return AC_ERR_INVALID;
+> @@ -26,6 +26,7 @@
+>   #include <scsi/scsi_device.h>
+>   #include <scsi/scsi_tcq.h>
+>   #include <scsi/scsi_transport.h>
+> +#include <scsi/scsi_devinfo.h>
+>   #include <linux/libata.h>
+>   #include <linux/hdreg.h>
+>   #include <linux/uaccess.h>
+> @@ -4745,12 +4746,30 @@ void ata_scsi_scan_host(struct ata_port *ap, int sync)
+>   			sdev = __scsi_add_device(ap->scsi_host, channel, id, 0,
+>   						 NULL);
+>   			if (!IS_ERR(sdev)) {
+> -				dev->sdev[0] = sdev;
+> -				ata_scsi_assign_ofnode(dev, ap);
+> +				/*
+> +				 * For multi-LUN ATAPI (BLIST_FORCELUN), bump
+> +				 * dev->nr_luns to the host max so the LUN
+> +				 * routing in atapi_xlat() accepts the probe
+> +				 * INQUIRYs to LUN > 0, then trigger the
+> +				 * sequential scan.  pdt_1f_for_no_lun, set
+> +				 * during LUN 0 configure, ensures
+> +				 * non-responding LUNs are silently skipped;
+> +				 * dev->sdev[] is populated by
+> +				 * ata_scsi_dev_config() during the scan.
+> +				 */
+> +				if (dev->class == ATA_DEV_ATAPI &&
+> +				    sdev->sdev_bflags & BLIST_FORCELUN) {
+> +					dev->nr_luns = ap->scsi_host->max_lun;
+> +					scsi_scan_target(
+> +						&ap->scsi_host->shost_gendev,
+> +						channel, id, SCAN_WILD_CARD,
+> +						SCSI_SCAN_RESCAN);
+> +				}
 
-cf my comment to the previous patch.
-I'd prefer to have 'scmd->device->host->max_lun' as the upper limit.
-And we should check the that value does not exceed ATAPI_MAX_LUN.
+Again, nr_luns is not required here.
+We only need to check that host->max_lun does not exceed ATAPI_MAX_LUN.
 
 Cheers,
 
