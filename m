@@ -1,50 +1,51 @@
-Return-Path: <linux-scsi+bounces-23829-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23831-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OLQSAVPjBmrVogIAu9opvQ
-	(envelope-from <linux-scsi+bounces-23829-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2026 11:11:47 +0200
+	id kNg1LwDkBmoJowIAu9opvQ
+	(envelope-from <linux-scsi+bounces-23831-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2026 11:14:40 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB8ED54C203
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2026 11:11:45 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D45754C2C5
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2026 11:14:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9C253308A696
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2026 08:46:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1E78C30EFF32
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2026 08:47:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D5C406286;
-	Fri, 15 May 2026 08:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B442A40DFAE;
+	Fri, 15 May 2026 08:46:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="HVj34RAo"
+	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="KQclq/y0"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4EF6402BA8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DC0401A26;
 	Fri, 15 May 2026 08:46:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778834814; cv=none; b=BNtQLP79eh2COs1nOSZFS5ZhrudczRXP6+2Ys5Ip/34Zy0Wm/nWmGTYSIFqVl9CS2cIx9DY8SjqBm5g2Jy8zGycySdHdh2krS8hIqIOzFKZo1VyScHe/IKrvSXQD9alXUjh+fwsLa9oMQ6GYcMe4dVrR/OCxnlYQ283LCFXfd/A=
+	t=1778834815; cv=none; b=F1dilraoDfNY65qBuuhVa3/Zlo3ikRLnpM5SKs31DmafnQq0OPWiRx4gquKKu8yjfDmSzVEdS261DbysQKcRKRJhcurPYUlKCXA6evGrJYpqA/d2CSQ+7A7wBeAxta2TU3KHRN5ukJ3CEiQ5fbmxU8adkNJ6wZXK1aMWD2emDI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778834814; c=relaxed/simple;
-	bh=rnnqN7HxGEw4FCS69XaeLgqlO/wqWBHpSdGC4nQz0d0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=q75IB+B1fIe0drBAp0GaIEKIxSQ+y7F1Fj1RO95z/H/8ZTqgM41/3lRZt9t1jfhZ/Gy+PHbwFq3v06b7+oM5fdjAybkNe3nkvt/P07AD4GWOt4lbS+/fOCbEtqB6PV/omV+pEnaSZ/yb48V22mXr4wiS94+ogJivR7pVrih92yA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=HVj34RAo; arc=none smtp.client-ip=113.46.200.216
+	s=arc-20240116; t=1778834815; c=relaxed/simple;
+	bh=pFCL464PkGr6K2CMWScMxBSjTBOTWZ+Sz3VuuMWvteA=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nJPFRIJvUz3Na7tbe62KtyWW+hnVPNSG/7Tep1Rb951SHZZSzxsE7EgNAzlf88aRFbgUYRivDudvBAMH1XFn0qSS7GUwAdGvNbUC2burhJx0VElF32keZ2YKhSMYjOw85MG0a+qOedOHSRD8o19nhUQ1iizTW09TnGmDWTRWgF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=KQclq/y0; arc=none smtp.client-ip=113.46.200.220
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
 dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=E84tU1m05aKSXYHci6HhqVcML8f99wx7Ym3RD299hQA=;
-	b=HVj34RAosiRgUsE1WEeqOe2jrolC+5HGw9evcf9OR6si2sCUrzyND+OtMaZsjQyx2PhgfSGJi
-	+5sIKfYyQ2+4/P5X2UGwyDk/5nxLMYsQtCxOG+TJxHU3v1XVvxVMfU1wQhK8p5HJy1CsKELDd4I
-	/FnKdHhaMsYbjhac/d0FpBQ=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4gH0wg3k5pz1T4MM;
-	Fri, 15 May 2026 16:38:59 +0800 (CST)
+	bh=74Qv1NCjAF5rAl84BwRp9SYCzV1GbEtelrHaU5num+s=;
+	b=KQclq/y01JHQBWsDz78sPqHTvxjWpxqNdA+mrpYma6bmRvImzcFuA5rTkG4WMxgr7IIrOdLUI
+	6fz6wKWjvBWL63mv1LACtlHZilSKx5fswnWkevAAmE3dfnTHxHTDBYMfjiFRTNe6hOg7VJKVdhZ
+	BSs+Iwf+HQ0vTZMiZDvQClE=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4gH0xR5yC9z12LD7;
+	Fri, 15 May 2026 16:39:39 +0800 (CST)
 Received: from kwepemj100018.china.huawei.com (unknown [7.202.194.12])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8EFF040572;
+	by mail.maildlp.com (Postfix) with ESMTPS id DFB7A40576;
 	Fri, 15 May 2026 16:46:43 +0800 (CST)
 Received: from localhost.localdomain (10.50.163.32) by
  kwepemj100018.china.huawei.com (7.202.194.12) with Microsoft SMTP Server
@@ -56,10 +57,12 @@ To: <john.g.garry@oracle.com>, <yanaijie@huawei.com>, <jejb@linux.ibm.com>,
 CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<linuxarm@huawei.com>, <liyihang9@h-partners.com>, <yangxingui@huawei.com>,
 	<liuyonglong@huawei.com>, <kangfenglong@huawei.com>
-Subject: [PATCH v3 0/2] libsas: rediscover improvements for linkrate/sas_addr changes
-Date: Fri, 15 May 2026 16:45:29 +0800
-Message-ID: <20260515084531.866259-1-yangxingui@huawei.com>
+Subject: [PATCH v3 1/2] scsi: libsas: refactor sas_ex_to_ata() using new helper sas_ex_to_dev()
+Date: Fri, 15 May 2026 16:45:30 +0800
+Message-ID: <20260515084531.866259-2-yangxingui@huawei.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260515084531.866259-1-yangxingui@huawei.com>
+References: <20260515084531.866259-1-yangxingui@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -70,7 +73,7 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
  kwepemj100018.china.huawei.com (7.202.194.12)
-X-Rspamd-Queue-Id: CB8ED54C203
+X-Rspamd-Queue-Id: 3D45754C2C5
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.34 / 15.00];
 	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),quarantine];
@@ -78,65 +81,87 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[h-partners.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[h-partners.com:+];
-	TAGGED_FROM(0.00)[bounces-23829-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[yangxingui@huawei.com,linux-scsi@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-23831-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[h-partners.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TO_DN_NONE(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	PRECEDENCE_BULK(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCPT_COUNT_SEVEN(0.00)[11];
-	MIME_TRACE(0.00)[0:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	FROM_HAS_DN(0.00)[]
+	RCVD_COUNT_FIVE(0.00)[6];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:email,huawei.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,h-partners.com:dkim]
 X-Rspamd-Action: no action
 
-When a device attached to an expander phy experiences a linkrate change
-(e.g., due to cable reconnection or negotiation), the current code in
-sas_rediscover_dev() treats it as "broadcast flutter" and takes no action
-if the SAS address and device type remain unchanged.
+The sas_ex_to_ata() function checks for an attached ATA device on an
+expander phy. Refactor it to use a new helper function sas_ex_to_dev()
+which returns any device type attached to an expander phy, improving code
+reuse and allowing other code paths to find attached devices regardless
+of type.
 
-This series is a new version based on John Garry's suggestion [1] to
-check the linkrate and mark the device as gone and rediscover when
-flutter occurs, replacing the previous v2 patch series that used lldd
-callbacks.
+No functional changes intended.
 
-The previous v2 approach added lldd_dev_info_update callback which John
-commented as "seem fragile and too specialized" [2]. This v3 series adopts
-a simpler approach that directly checks linkrate/sas_addr changes in
-sas_rediscover_dev() and triggers rediscovery using libsas's standard
-async discovery pattern.
-
-This aligns with Jason Yan's earlier work [3] which was verified to
-solve the linkrate change issue.
-
-Changes from v2:
-- Drop lldd_dev_info_update callback approach per John Garry's suggestion
-- Drop hisi_sas specific changes (no longer needed without callback)
-- Use libsas's async discovery pattern for rediscovery
-- Add sas_addr change detection alongside linkrate change
-
-[1] https://lore.kernel.org/linux-scsi/c4e4c99f-a13c-4e28-8650-48be1f96d7cf@oracle.com/
-[2] https://lore.kernel.org/linux-scsi/28bd9d5b-f597-0aae-5340-bd951b2083aa@huawei.com/
-[3] https://lore.kernel.org/linux-scsi/20190130082412.9357-6-yanaijie@huawei.com/
-
-Your Name (2):
-  scsi: libsas: refactor sas_ex_to_ata() using new helper
-    sas_ex_to_dev()
-  scsi: libsas: Add linkrate and sas_addr change detection in rediscover
-
- drivers/scsi/libsas/sas_expander.c | 44 ++++++++++++++++++++++++------
+Reviewed-by: Jason Yan <yanaijie@huawei.com>
+Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+---
+ drivers/scsi/libsas/sas_expander.c | 12 ++++++++----
  drivers/scsi/libsas/sas_internal.h |  1 +
- 2 files changed, 37 insertions(+), 8 deletions(-)
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
+index f471ab464a78..f55ae9a979cd 100644
+--- a/drivers/scsi/libsas/sas_expander.c
++++ b/drivers/scsi/libsas/sas_expander.c
+@@ -345,11 +345,9 @@ static void sas_set_ex_phy(struct domain_device *dev, int phy_id,
+ 		 SAS_ADDR(phy->attached_sas_addr), type);
+ }
+ 
+-/* check if we have an existing attached ata device on this expander phy */
+-struct domain_device *sas_ex_to_ata(struct domain_device *ex_dev, int phy_id)
++struct domain_device *sas_ex_to_dev(struct domain_device *ex_dev, int phy_id)
+ {
+ 	struct ex_phy *ex_phy = &ex_dev->ex_dev.ex_phy[phy_id];
+-	struct domain_device *dev;
+ 	struct sas_rphy *rphy;
+ 
+ 	if (!ex_phy->port)
+@@ -359,7 +357,13 @@ struct domain_device *sas_ex_to_ata(struct domain_device *ex_dev, int phy_id)
+ 	if (!rphy)
+ 		return NULL;
+ 
+-	dev = sas_find_dev_by_rphy(rphy);
++	return sas_find_dev_by_rphy(rphy);
++}
++
++/* check if we have an existing attached ata device on this expander phy */
++struct domain_device *sas_ex_to_ata(struct domain_device *ex_dev, int phy_id)
++{
++	struct domain_device *dev = sas_ex_to_dev(ex_dev, phy_id);
+ 
+ 	if (dev && dev_is_sata(dev))
+ 		return dev;
+diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
+index 7dce0f587149..350a70484bde 100644
+--- a/drivers/scsi/libsas/sas_internal.h
++++ b/drivers/scsi/libsas/sas_internal.h
+@@ -91,6 +91,7 @@ int sas_smp_get_phy_events(struct sas_phy *phy);
+ 
+ void sas_device_set_phy(struct domain_device *dev, struct sas_port *port);
+ struct domain_device *sas_find_dev_by_rphy(struct sas_rphy *rphy);
++struct domain_device *sas_ex_to_dev(struct domain_device *ex_dev, int phy_id);
+ struct domain_device *sas_ex_to_ata(struct domain_device *ex_dev, int phy_id);
+ int sas_ex_phy_discover(struct domain_device *dev, int single);
+ int sas_get_report_phy_sata(struct domain_device *dev, int phy_id,
 -- 
 2.43.0
 
