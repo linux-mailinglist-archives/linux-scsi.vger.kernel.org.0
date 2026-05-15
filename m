@@ -1,246 +1,143 @@
-Return-Path: <linux-scsi+bounces-23827-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23829-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4FLJHFXWBmpjoQIAu9opvQ
-	(envelope-from <linux-scsi+bounces-23827-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2026 10:16:21 +0200
+	id OLQSAVPjBmrVogIAu9opvQ
+	(envelope-from <linux-scsi+bounces-23829-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2026 11:11:47 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EE8954B275
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2026 10:16:19 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB8ED54C203
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2026 11:11:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0F65C30157C0
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2026 08:14:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9C253308A696
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2026 08:46:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED8A33FBEB9;
-	Fri, 15 May 2026 08:14:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D5C406286;
+	Fri, 15 May 2026 08:46:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="ZAJO0Jz+";
-	dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b="VJ0HCT3R"
+	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="HVj34RAo"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD38A3E8C61
-	for <linux-scsi@vger.kernel.org>; Fri, 15 May 2026 08:14:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=210.61.82.184
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778832849; cv=fail; b=QGh+Yyf1zfHXXZo+fatafFtfgZEj5NH4/OrFrbNW7esaFZNDT/L6r0MPFfs0APeCWLRuUgV688ozXaQiG7m8zvOkbh5tpV8Dy9TBH34Pd03RTPSQNTptxOmW9tRCR+KA/U4KaIXTsuAZVBnlgACtFNR8B/8PRhGklJ/GZa3F47w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778832849; c=relaxed/simple;
-	bh=pgIWZxoUQqHFAHKjRo2VebrVG4M5YIX32Lcd8jMoRMw=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=VZ+v3fBKSQfmk9EUSuvip1OYay0n2gvl8ENuZyardPR4/W93dmpfE6KnaE9TvpjAjMC3AySt9HtxEhBs/0jzP9PyDZVX08xB2gHHjA3d3iGs1x4DMZhVD3z3+dXCeIOn0aZwNlg2zMlJXZ6L2PhblIb5CCRAR8eKBtOK7pJBj00=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=ZAJO0Jz+; dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b=VJ0HCT3R; arc=fail smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 027a81e2503611f1a3561939bc42ff46-20260515
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=pgIWZxoUQqHFAHKjRo2VebrVG4M5YIX32Lcd8jMoRMw=;
-	b=ZAJO0Jz+RvH50WBZDItDDJu3xwEnnIHTJYGr9Ej2Z7zvsVb5f4cmqRrU8YUeLfajlsr/2mGuGl9NHFJnvX/rmnRUAJX4bFVEdh86nmNY5KdtDyEmOp5UDe2CiEW4EOh6IG1hiUMc5PWK3RBfGcPVuYt//XyaCubd08ROuvA/69g=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.14,REQID:69ae44c4-891f-4c73-84c9-9823bfa6fc66,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:9091e75,CLOUDID:a228777b-1fd6-4ee4-b486-88dbea9db487,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|110|111|836|865|888|
-	898,TC:-5,Content:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:ni
-	l,BEC:-1,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 027a81e2503611f1a3561939bc42ff46-20260515
-Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw02.mediatek.com
-	(envelope-from <peter.wang@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 704575556; Fri, 15 May 2026 16:13:52 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4EF6402BA8;
+	Fri, 15 May 2026 08:46:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778834814; cv=none; b=BNtQLP79eh2COs1nOSZFS5ZhrudczRXP6+2Ys5Ip/34Zy0Wm/nWmGTYSIFqVl9CS2cIx9DY8SjqBm5g2Jy8zGycySdHdh2krS8hIqIOzFKZo1VyScHe/IKrvSXQD9alXUjh+fwsLa9oMQ6GYcMe4dVrR/OCxnlYQ283LCFXfd/A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778834814; c=relaxed/simple;
+	bh=rnnqN7HxGEw4FCS69XaeLgqlO/wqWBHpSdGC4nQz0d0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=q75IB+B1fIe0drBAp0GaIEKIxSQ+y7F1Fj1RO95z/H/8ZTqgM41/3lRZt9t1jfhZ/Gy+PHbwFq3v06b7+oM5fdjAybkNe3nkvt/P07AD4GWOt4lbS+/fOCbEtqB6PV/omV+pEnaSZ/yb48V22mXr4wiS94+ogJivR7pVrih92yA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=HVj34RAo; arc=none smtp.client-ip=113.46.200.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
+dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=E84tU1m05aKSXYHci6HhqVcML8f99wx7Ym3RD299hQA=;
+	b=HVj34RAosiRgUsE1WEeqOe2jrolC+5HGw9evcf9OR6si2sCUrzyND+OtMaZsjQyx2PhgfSGJi
+	+5sIKfYyQ2+4/P5X2UGwyDk/5nxLMYsQtCxOG+TJxHU3v1XVvxVMfU1wQhK8p5HJy1CsKELDd4I
+	/FnKdHhaMsYbjhac/d0FpBQ=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4gH0wg3k5pz1T4MM;
+	Fri, 15 May 2026 16:38:59 +0800 (CST)
+Received: from kwepemj100018.china.huawei.com (unknown [7.202.194.12])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8EFF040572;
+	Fri, 15 May 2026 16:46:43 +0800 (CST)
+Received: from localhost.localdomain (10.50.163.32) by
+ kwepemj100018.china.huawei.com (7.202.194.12) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Fri, 15 May 2026 16:13:51 +0800
-Received: from SI4PR04CU001.outbound.protection.outlook.com (172.21.101.237)
- by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
- 15.2.2562.29 via Frontend Transport; Fri, 15 May 2026 16:13:51 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=T3CyXUfYq+nYT5yxTXv7hcHXezgtRvNxzK5BjhmF/yjFOnxKQRxu9FR14qT0IFfJ4WNZ0Xpu8P3PW7g4cjxur325WdNATbJlQhF7A7VNJ72bnepxnyQNojLxfh9ENWwbsWItqnbsvdY0CQTFsItyKRNOn8ouygFtpQ10Kty6lw77oJkJNQrVfFwxpRQb+74eH8W96YahQONqEF+24WlhHpCNyJ8pm4kyAZ1SJiOMLx1lgq4aysHrte31lD3N7aeIq0ofMWAcRilnu5/XM7x6Hx/9FtEiUM0Zf52GuqFNc6ggfyE3XRfTJIeCcXGL6sbVcDRgrZjHBa/6Vdnnjmx3Jw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pgIWZxoUQqHFAHKjRo2VebrVG4M5YIX32Lcd8jMoRMw=;
- b=QI82GAav32AFVL1QiTKrJSjhz1NfAum3r197ZWWcWcQfa5AGPVfLX9PJ5wVNpzczBYX1BjVBpf8droKDQEY2MlKBpYvaLTTrEKDPXK6s/qt8QmThbGSZLKKqZZ6f3/ajjggx08B3T9EPOT6o92bzVt7KM01avbMtLwf5VlHad/HBzmZIXzvakKaXI4l6IcoHdt5uSUd5nTKi6uF1TwPj4WcUb1AX0SbedYSJc3w8WO8RGeCyAbiHGmmFY2l5/3cuhyMwkM/crj0HyWmYPQAhGPesGRpgHyNge9H1v0I661kBYl0NX7ftrd9k6D4/Nomm8WOn3yGMpVI7/EOf093ZwA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pgIWZxoUQqHFAHKjRo2VebrVG4M5YIX32Lcd8jMoRMw=;
- b=VJ0HCT3RYxLH1Sjy452Gxx5b5GgYBWXaJ8an8Fy3eCcEvUCA9+QlMR11uxp7kUpJnRZDgwffXMdSvr2ORXUay8F9tfRcZ6yIJLV9qMOGIrdSDkj4QFp63dUi9MGWKEcpplMxcDz3Htrz5wxkPrtyyhjwmMZzWKKUgVj1JGrmjvQ=
-Received: from PSAPR03MB5605.apcprd03.prod.outlook.com (2603:1096:301:66::6)
- by KL1PR03MB7174.apcprd03.prod.outlook.com (2603:1096:820:c9::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.19; Fri, 15 May
- 2026 08:13:48 +0000
-Received: from PSAPR03MB5605.apcprd03.prod.outlook.com
- ([fe80::165:d36a:3f76:2925]) by PSAPR03MB5605.apcprd03.prod.outlook.com
- ([fe80::165:d36a:3f76:2925%6]) with mapi id 15.21.0025.012; Fri, 15 May 2026
- 08:13:47 +0000
-From: =?utf-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= <peter.wang@mediatek.com>
-To: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-	"jejb@linux.ibm.com" <jejb@linux.ibm.com>, "avri.altman@sandisk.com"
-	<avri.altman@sandisk.com>, "bvanassche@acm.org" <bvanassche@acm.org>,
-	"alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-	"martin.petersen@oracle.com" <martin.petersen@oracle.com>
-CC: "quic_asutoshd@guicinc.com" <quic_asutoshd@guicinc.com>,
-	=?utf-8?B?QWxpY2UgQ2hhbyAo6LaZ54+u5Z2HKQ==?= <Alice.Chao@mediatek.com>,
-	=?utf-8?B?RWRkaWUgSHVhbmcgKOm7g+aZuuWCkSk=?= <eddie.huang@mediatek.com>,
-	=?utf-8?B?Q0MgQ2hvdSAo5ZGo5b+X5p2wKQ==?= <cc.chou@mediatek.com>,
-	=?utf-8?B?RWQgVHNhaSAo6JSh5a6X6LuSKQ==?= <Ed.Tsai@mediatek.com>, wsd_upstream
-	<wsd_upstream@mediatek.com>, =?utf-8?B?Q2hhb3RpYW4gSmluZyAo5LqV5pyd5aSpKQ==?=
-	<Chaotian.Jing@mediatek.com>, =?utf-8?B?Q2h1bi1IdW5nIFd1ICjlt6vpp7/lro8p?=
-	<Chun-hung.Wu@mediatek.com>, =?utf-8?B?TmFvbWkgQ2h1ICjmnLHoqaDnlLAp?=
-	<Naomi.Chu@mediatek.com>, "linux-mediatek@lists.infradead.org"
-	<linux-mediatek@lists.infradead.org>,
-	=?utf-8?B?VHVuLXl1IFl1ICjmuLjmlabogb8p?= <Tun-yu.Yu@mediatek.com>,
-	"quic_cang@guicinc.com" <quic_cang@guicinc.com>,
-	=?utf-8?B?TGlnaHQgSHNpZWggKOisneaYjueHiCk=?= <Light.Hsieh@mediatek.com>
-Subject: Re: [PATCH v1] ufs: core: decouple CQE processing from spinlock
- critical section
-Thread-Topic: [PATCH v1] ufs: core: decouple CQE processing from spinlock
- critical section
-Thread-Index: AQHc44A/IHVJ0+M1ukqkaTZOlDMObrYNtNQAgAEJrYA=
-Date: Fri, 15 May 2026 08:13:47 +0000
-Message-ID: <3d359319927f808dffa0aef52b03c437f803335e.camel@mediatek.com>
-References: <20260514082906.58593-1-peter.wang@mediatek.com>
-	 <382f6d79-c877-4dc8-813b-ee91ac5489f9@acm.org>
-In-Reply-To: <382f6d79-c877-4dc8-813b-ee91ac5489f9@acm.org>
-Accept-Language: zh-TW, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PSAPR03MB5605:EE_|KL1PR03MB7174:EE_
-x-ms-office365-filtering-correlation-id: a5613cac-465a-4865-04f9-08deb259e3d3
-x-ld-processed: a7687ede-7a6b-4ef6-bace-642f677fbe31,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|22082099003|56012099003|18002099003|11063799003|4143699003|38070700021;
-x-microsoft-antispam-message-info: ctTMbZXbhP2gIT0UTb/arZJ8/BkfBYFi8N7qIX1cJLGnjOt1oKfuHv+UE2q3tu8AGl+GiVoMct3e5XL+t7SbadPiwLybZ7WEslXvTXv6+jerDO/OvVuNSzSsUwgTevruqZO2meOv0sMMxS1j2kpAnBQ9YhcXocujxOmnw6tZnGLuKEI/mVoK2jVYclWlq3NQuSN2wncnExEv/N3DJCO1Evyd2B/ogQtbHsSP1z48hM//2kUM/dqBCYT6sLGIHqTito7jp5mi94YCogVeiux8yEF7r7LZSsvMb9lThxkjmi1fBCbueF16OlzlTYJ6dxVzUA8PLMBtwp3toNzSWOygGQ+WYx9O0JsKTovgWZ0ZDhzaKwN1kwouDYR9pAoBdM6i+RPvXxnvnc3/H0NyVmjuDuAYyMdRppZA2ITqNWqNPCJU4kd6Mq1lpsr+nTuMvSXfncZLN5W7DFNJLrDtTDWoCu4ehix2crY46FQRwkXjMT6RGUqqBAp/wzfcjTw2QnYlhiLvleiwO1IxKdkVSGhQ+/2fWXFA5cI1YoEO4zbDkjfuCLTMCoM8fLZFAPKIMDwQRAbYFqvUl6RAodfJ8jUJlgO70MSskcgmSwPQmtWbBEO7apbbPeaCFBA5HWMMjc62X8ea9a8Liqc5qQOGKsPhgyWhzsMTghFZGnVL/id4X85Huamu3eHb3wJlLTGFUTAwuObZ1YeMBwUlVlx5BJHbvj3X5gBkDhPSopJQxG2eV7y0ugg4CnAw/eVGAugIez6q
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PSAPR03MB5605.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(22082099003)(56012099003)(18002099003)(11063799003)(4143699003)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RzU5aXVlZUNpZmcyWDZBWU8vck9hSWtFdUcyQjA2UG9RS28zNUx1OGtVdTNR?=
- =?utf-8?B?eUxSZjB5OXA4ME5BU2d6MUpzYllZWTd4eFRJWUtCRkszSzRpQWVuT3czbWxn?=
- =?utf-8?B?eGRMTUhOZ25vMzB0VjZTVWtaQ3dpK0ZMRFBqbVlPcTZRUGwvTy9IMGtjTEl1?=
- =?utf-8?B?bDRTOXB2UEhyUVBSdnk2SnJlbkRnWGVJRUE4cmduZ21QL0NDWWlEY1d1Q3hL?=
- =?utf-8?B?aXo5L0EvdzNpUXFZcXpOY3QwTS9yc01xZmI1N2s2blNnK1l5M3hvRVNzUENj?=
- =?utf-8?B?NThHRUl5d0o4bERoYmZnb29udFZrdHRlMFl0T0txUW8wUWdTN2k2S2ZPT0d3?=
- =?utf-8?B?M3BTUjhuYUhUZ0dXbzBaSFQrRGwwU2NVbjZSZno2OVBHZEJPZmhPOEc3YXky?=
- =?utf-8?B?Z3ROKzBtMDIvNyt3cUZnd0d1WWJNK00wZ0ZnSGx1Q3VENERWYmlVdERUejlZ?=
- =?utf-8?B?QVIrQmZ6V0ZZWDVLdUkxMHB4MkJGaXJCSzZNM25qTXVoTVYxZHpWRTB4REJ5?=
- =?utf-8?B?Q0lBVzFpNjBKdzhwdHpqRlhEUDJtVWwzYk5wdlVYNDd2Z1Fsd3B4ZDhjaTFs?=
- =?utf-8?B?MWJrRk1xMTkxeVlaVTlhQTQrMTN4ck5oOExKTU9jVTU0QzE5dXZocmlqT3g2?=
- =?utf-8?B?d1hHS2dpZTZ2UXUxbUxiT3FYSStqaWd0UzhzQ0QrRWkwcytNZVkxZjlnLzVj?=
- =?utf-8?B?QU5YU2lsOE1nR1UwUi9uZURPdnRnazluZndnSndYVjFUc3ZreUltY0RPcEda?=
- =?utf-8?B?VEU3dWZZaG5ZeFY1cUhwK2JzUU9DYWRGMkF6bzFRSzRSbm9OU0FpOWxxY0dS?=
- =?utf-8?B?Z05CNlM4ZjZJVDZ5d0grbTlHWjc2b202eHV1VTBVemcwREJJeVhBRXFQSHFh?=
- =?utf-8?B?RndQQk1FRlpSa0s1WlpuTTg5L2IyL0ZIcVpSYmhBaDR0czgvQmNpdlFVMzRy?=
- =?utf-8?B?OUxtbmlacE9URDM3WEZsSUMydWJwRVFvQ2xHQWR3eExvcFRoenQrSFpGK0Er?=
- =?utf-8?B?Z1dSYnI0NXVBTWJFV0JtSWxrZmZBY0t2Vkt1dU5xSkllMmNNQWJRaWNZWTFT?=
- =?utf-8?B?MzFQY1F5SnB5NTIvaUcyUGdMRUNNSUxSWVhXdlJRbzluRXVTcUl0eTRFUFZM?=
- =?utf-8?B?K2Rla3hkekZvK2RKWWxKWC8yam1oRHo2YzFrK3BlOVJndVRZajg3eTZNekw0?=
- =?utf-8?B?WlJMMS9zcjRKK01xdWJQcjdaS0pOaDVKemw3OXhGZzBBSUpLREFkL0lTdUNw?=
- =?utf-8?B?Um5WZXUrYlhvcVFTQmRDQ2pod3ArTkxnN3AyN3prMUxhSStabDlacU4zMFg2?=
- =?utf-8?B?dnhheUxkOEdHWnQycmQ5U1hoR1hCV2R3NFUxUGxRY1VmZWF3aEZoR1hCUEYr?=
- =?utf-8?B?Z2VoSlhnOGdvUDRDUmFHbzZEeHdYNUNpVUlmUzkxSGhrZVpCZXhBY09KMEdQ?=
- =?utf-8?B?N3J4NGk0ZkNxa2piRmI1KzdIbHUvTDdzbmV3Mmowb3Y3cWQ1bkFmZ3ZRdWE2?=
- =?utf-8?B?V0V4Tk9TbmppZXpJQ3Iyajd5TDdxcys5OVpvdlJreWk0S3hkYTFNZzIxekNM?=
- =?utf-8?B?aE1GNkJaRlZWbG96SGs2aUdJWlhsd21YanQxdHZhY2RnSlIrUHphM205aGR4?=
- =?utf-8?B?eEo5MXVQa1pJc1FIcEZadWdyOWExaGI5a2srODUzZHZFMU5RbVlsYmpQSmFU?=
- =?utf-8?B?bTZyeldWR2g1UWxaUjZEc2pjRFpGUWxGVFZCcXFGTVl3dHkxeFVjK0NMVHlq?=
- =?utf-8?B?b09nckl0bHRXUTlvaWkxdXMvL29vYm96MEpuS1NFUzZhaTAxSERWRDBqWG1Q?=
- =?utf-8?B?NzR4MlpmeStLamhSMlU4Q3FWa0tCa1ZOdlh5YnUrMGpoS3BzNUpHSVB6NXp3?=
- =?utf-8?B?T1poNExJdm51WlJPUnFjZjV2K0wxZDhmcjZpK0xaMUxJRlNOUkU2eVJiL2Iw?=
- =?utf-8?B?a2k2ZW1ydEMzYml4dWo1R3hsRVNRTVZROXJuS2N0UytWblk3Ti9pc3pYUzg5?=
- =?utf-8?B?THNZekRzVEcwZm50TTdrcWRSTUhVbmp6Lzh5M1JxZURObVc4S3M1dnRJTWUr?=
- =?utf-8?B?dWNNV21nekhMMGhkaUNxalg0UXN5eGFLOW02S0ZnUWdRRi9CemVlUWFSbHFz?=
- =?utf-8?B?YndxTE9TU2xzZGZ5YlpHSFRBSmRMWXVWSVN4RHhBdE5Vd1IyWEx1aTNkMGh1?=
- =?utf-8?B?MytoMEhVcWhWYmwySTdqa0ZMaU9TU1pHaktSUHNvMVJlb1hXbDZwUlFQMmty?=
- =?utf-8?B?dTRXektUYzU0NEFMY3lCWk5OdWV6ZmdZekVya0VHZTZud3VaVEo3RWFwMm82?=
- =?utf-8?B?clhkRFVCTks1RlpYZHJtMnNPb3plSHRZcUxaS3k2d3FDU0hyMStGOWNVYkZQ?=
- =?utf-8?Q?PceRozIJxL9lVOtA=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <35E889B6D7EB794EB44FE8F45DC9246D@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ 15.2.1544.36; Fri, 15 May 2026 16:46:43 +0800
+From: Xingui Yang <yangxingui@huawei.com>
+To: <john.g.garry@oracle.com>, <yanaijie@huawei.com>, <jejb@linux.ibm.com>,
+	<martin.petersen@oracle.com>
+CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@huawei.com>, <liyihang9@h-partners.com>, <yangxingui@huawei.com>,
+	<liuyonglong@huawei.com>, <kangfenglong@huawei.com>
+Subject: [PATCH v3 0/2] libsas: rediscover improvements for linkrate/sas_addr changes
+Date: Fri, 15 May 2026 16:45:29 +0800
+Message-ID: <20260515084531.866259-1-yangxingui@huawei.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: WgS1RB3Kd1DKGBWe2vP6F9CjZI5//V0p0FEUsrZe8m1j5MJjIC0kgGm4r1WHqArK8+JSYPYqqnapsZdToK+KSLe4NRz6UF0kkwbwAVQjB3WJlkafQUwVedah/FFr7py6/QFKqI0zs58R2KEhPSG7ZEGiSJWLaEJFdLWeOhuA3EyD4gW5/UyLS03WI9+6rTD9b42tctjp1zQdtelyEYIGkj8a4OVCKabBKzVVWRIPSSteRkxgGijMjFV14MrSTMNWdU0YJfQxzCekWxQlzq1BKXpUM0tVqpLI6ScWf9DAiTLuPSKoTg4LMn9l1PMNqwtIEVIlR9alRUOPphCNfWxBlQ==
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PSAPR03MB5605.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5613cac-465a-4865-04f9-08deb259e3d3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2026 08:13:47.6715
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: K22XIcavsXomTspNUFp8So6BNZk2PkT6yvQs0394dNrG1QqI2IDzISCFE0OhMegLgrsPksURYY1xA+PKh1bwmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB7174
-X-MTK: N
-X-Rspamd-Queue-Id: 5EE8954B275
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemj100018.china.huawei.com (7.202.194.12)
+X-Rspamd-Queue-Id: CB8ED54C203
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.06 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[mediatek.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[mediatek.com:s=dk,mediateko365.onmicrosoft.com:s=selector2-mediateko365-onmicrosoft-com];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),quarantine];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[h-partners.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-23827-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mediateko365.onmicrosoft.com:dkim];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	DKIM_TRACE(0.00)[mediatek.com:+,mediateko365.onmicrosoft.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.wang@mediatek.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[h-partners.com:+];
+	TAGGED_FROM(0.00)[bounces-23829-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[yangxingui@huawei.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TO_DN_NONE(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	MIME_TRACE(0.00)[0:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	RCVD_COUNT_SEVEN(0.00)[8]
+	FROM_HAS_DN(0.00)[]
 X-Rspamd-Action: no action
 
-T24gVGh1LCAyMDI2LTA1LTE0IGF0IDA5OjIyIC0wNzAwLCBCYXJ0IFZhbiBBc3NjaGUgd3JvdGU6
-DQo+IE9uIDUvMTQvMjYgMToyNiBBTSwgcGV0ZXIud2FuZ0BtZWRpYXRlay5jb23CoHdyb3RlOg0K
-PiA+IDQuIEluIGJvdGggdWZzaGNkX21jcV9jb21wbF9hbGxfY3Flc19sb2NrKCkgYW5kDQo+ID4g
-wqDCoMKgIHVmc2hjZF9tY3FfcG9sbF9jcWVfbG9jaygpLCBzbmFwc2hvdCB0aGUgc3RhcnRpbmcg
-Q1FFIHBvaW50ZXINCj4gPiBiZWZvcmUNCj4gPiDCoMKgwqAgYWR2YW5jaW5nIHRoZSBoZWFkIHNs
-b3QgdW5kZXIgdGhlIHNwaW5sb2NrLCB0aGVuIHByb2Nlc3MgdGhlDQo+ID4gY29sbGVjdGVkDQo+
-ID4gwqDCoMKgIENRRXMgYWZ0ZXIgcmVsZWFzaW5nIHRoZSBsb2NrIHVzaW5nIHRoZSBuZXcgaGVs
-cGVyLg0KPiANCj4gVGhpcyBjYW4ndCB3b3JrIHJlbGlhYmx5LiB1ZnNoY2RfbWNxX3BvbGxfY3Fl
-X2xvY2soKSBtYXkgYmUgY2FsbGVkDQo+IGNvbmN1cnJlbnRseSBmcm9tIGRpZmZlcmVudCBDUFUg
-Y29yZXMsIGUuZy4gZnJvbSBhIFVGUyBjb21wbGV0aW9uDQo+IGludGVycnVwdCBhbmQgZnJvbSB1
-ZnNoY2RfcG9sbCgpLiBQcm9jZXNzaW5nIENRRXMgd2l0aG91dCBob2xkaW5nDQo+IGh3cS0+Y3Ff
-bG9jayBtYXkgbGVhZCB0byBvdmVyd3JpdGluZyBvZiBDUUVzIGJlZm9yZSB0aGVzZSBoYXZlIGJl
-ZW4NCj4gcHJvY2Vzc2VkLg0KPiANCj4gVGhhbmtzLA0KPiANCj4gQmFydC4NCg0KSGkgQmFydCwN
-Cg0KVGhpcyBpcyBub3QgYW4gaXNzdWUgYmVjYXVzZSB0aGUgQ1EgaGVhZCBpcyBwcm90ZWN0ZWQg
-YnkgY3FfbG9jay4NCk9ubHkgdGhlIENRRXMgZnJvbSBoZWFkIHRvIHRhaWwgd2lsbCBiZSBwcm9j
-ZXNzZWQgYnkgdWZzaGNkX3BvbGwNCm9yIHRoZSBJU1IuIFRoZSBtYWluIGRpZmZlcmVuY2UgaXMg
-dGhhdCB0aGVzZSBDUUVzIHdpbGwgYmUgDQpwcm9jZXNzZWQgbGF0ZXIsIHdpdGhvdXQgaG9sZGlu
-ZyB0aGUgY3FfbG9jay4NCg0KVGhhbmtzDQpQZXRlcg0KDQo=
+When a device attached to an expander phy experiences a linkrate change
+(e.g., due to cable reconnection or negotiation), the current code in
+sas_rediscover_dev() treats it as "broadcast flutter" and takes no action
+if the SAS address and device type remain unchanged.
+
+This series is a new version based on John Garry's suggestion [1] to
+check the linkrate and mark the device as gone and rediscover when
+flutter occurs, replacing the previous v2 patch series that used lldd
+callbacks.
+
+The previous v2 approach added lldd_dev_info_update callback which John
+commented as "seem fragile and too specialized" [2]. This v3 series adopts
+a simpler approach that directly checks linkrate/sas_addr changes in
+sas_rediscover_dev() and triggers rediscovery using libsas's standard
+async discovery pattern.
+
+This aligns with Jason Yan's earlier work [3] which was verified to
+solve the linkrate change issue.
+
+Changes from v2:
+- Drop lldd_dev_info_update callback approach per John Garry's suggestion
+- Drop hisi_sas specific changes (no longer needed without callback)
+- Use libsas's async discovery pattern for rediscovery
+- Add sas_addr change detection alongside linkrate change
+
+[1] https://lore.kernel.org/linux-scsi/c4e4c99f-a13c-4e28-8650-48be1f96d7cf@oracle.com/
+[2] https://lore.kernel.org/linux-scsi/28bd9d5b-f597-0aae-5340-bd951b2083aa@huawei.com/
+[3] https://lore.kernel.org/linux-scsi/20190130082412.9357-6-yanaijie@huawei.com/
+
+Your Name (2):
+  scsi: libsas: refactor sas_ex_to_ata() using new helper
+    sas_ex_to_dev()
+  scsi: libsas: Add linkrate and sas_addr change detection in rediscover
+
+ drivers/scsi/libsas/sas_expander.c | 44 ++++++++++++++++++++++++------
+ drivers/scsi/libsas/sas_internal.h |  1 +
+ 2 files changed, 37 insertions(+), 8 deletions(-)
+
+-- 
+2.43.0
+
 
