@@ -1,158 +1,191 @@
-Return-Path: <linux-scsi+bounces-23899-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23901-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YH2vE/ilC2qRKQUAu9opvQ
-	(envelope-from <linux-scsi+bounces-23899-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 May 2026 01:51:20 +0200
+	id wCqaBwm0C2qyLQUAu9opvQ
+	(envelope-from <linux-scsi+bounces-23901-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 May 2026 02:51:21 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 883105752F0
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 May 2026 01:51:19 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22A78575C13
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 May 2026 02:51:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A9C8B301C13C
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 May 2026 23:51:09 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 03B6C30095CA
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 May 2026 00:51:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30B3031AA8F;
-	Mon, 18 May 2026 23:51:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38C7524A047;
+	Tue, 19 May 2026 00:51:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ciah3Nw2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UVZO8MTb"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C3A5339847
-	for <linux-scsi@vger.kernel.org>; Mon, 18 May 2026 23:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BABDA20C461
+	for <linux-scsi@vger.kernel.org>; Tue, 19 May 2026 00:51:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779148267; cv=none; b=bdaHdF4Y6MgG7EePusxCb1gE0EE609A3FeVab3wsztSg+6EueK9892tahQGQ0dBkNDxHJ65As1K6p+FsdW9zYA0pCoGCyBI52vAZJHM/0+RfywrWCJ5wXN0+fFAnahqzF5Q/ObrzD99Big3PLZFU5mdB8WPLiC0ZVnGFPygvG68=
+	t=1779151871; cv=none; b=H8TDaeKruOZMZ7yOBlHy5N2OkMaWgIRojASRowbXuNKOKjDdMssOLPDOe+yPGlpKOFwk0NkOi5yt/bkA/zjvFZr3/fIRCxBW6WwsST8WB/aq28ta+yulAbSD8TNjBj0CglmMVQwTexNOjzgttGYT4oY0xCeBAhwKkYmSAPpA15k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779148267; c=relaxed/simple;
-	bh=oHzqtxHYGtsFWWs1IIVZkaaC0dsURSMDJdI1EptB08Q=;
-	h=Message-ID:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hqxKn9hiZ5q9WW1LnNy70ifFGPqwJoL4uK/ArJnQ4fYUQ/URH0ES8jYaE4maVEx5kqjvFWKK/lnnyrJFSpIlEehfRXH5kiUWVH9BEZKiM+JVV0oaG6lgU9Zj+bgrE+M9l6bVUH6YugSeyfPlGRzTyqGply8q33AnrBVXP6DIbaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ciah3Nw2; arc=none smtp.client-ip=209.85.208.52
+	s=arc-20240116; t=1779151871; c=relaxed/simple;
+	bh=zrbqW5qZ2/PrHRg2tdBFNqFHr7UVkVZdqxEzk/0Ztn8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M+qgNj5MBvxBk3QU9njuwBYyM5UrNaBPSmQV0ze61VZpMtsOiOTSMviaTCwcEyJNyTQJtGgx+Ewi8kDw+36FXNUSFVgnp/m8WMCHt/lqGPrx+arnb0BKW3zEZcylUI68GncDiTovgdxs67n7u/pP8NS+Quup5g68kzPmsVN0BHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UVZO8MTb; arc=none smtp.client-ip=209.85.222.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6746d0b2b4aso5080727a12.3
-        for <linux-scsi@vger.kernel.org>; Mon, 18 May 2026 16:51:06 -0700 (PDT)
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-9118b952e2bso510813285a.0
+        for <linux-scsi@vger.kernel.org>; Mon, 18 May 2026 17:51:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779148264; x=1779753064; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oHzqtxHYGtsFWWs1IIVZkaaC0dsURSMDJdI1EptB08Q=;
-        b=Ciah3Nw2xdOjcg3w3zBcgShZ+S2a32iIm6TT/7UCDctORSU9A1oFXCLWRiPVu7quwL
-         DQnONi/AmCqEf6+i3vfQVAadZsVyW9ulr3FTd3S74EqkIjpUBusmdF7UgMvolLQkW8x3
-         FocarObjL7BAof4v287V0tRUiwwKcINFa8q4XgigacbMAoConEBa1vWOkqvtqW7I9lgc
-         o1vX/Yi6HtPvE0VmbAl1dgWidsAsmzUSEiyt4Q6Zo1z4fclvpclhGOvK94QOf6C5R4GV
-         KFRKKrsfff8gsFRixT5X4B9Fa5+Z5eWztsygea3fKVV2FRFIeThYkwwAqFaJFTWV6fGo
-         Ay+A==
+        d=gmail.com; s=20251104; t=1779151869; x=1779756669; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HnqrgYL3NmUNTzmNXdPdscQGE6zaGHL6C9Nt0N58KNM=;
+        b=UVZO8MTbTYLoCi+BrJ/UyYC8FzI5Ks6g8NZhO39QApCnibKcOULunCNbQljHqyRmqM
+         8eV55j0mBoCKGoOMBUi1Ck2fu0/vl5QNrJDu02E12XIGyP9Zd7CRQ2FImvo+vp+Yp1cg
+         DVP6T3ydqBOiUIbN0qs3WTgpsZgZNiYsbC5nHVbXLr5FmilfxKeiEz6TaTufupScZKDO
+         A8aG3rk4EQoMHqhcRQpckVnOj89tkjc50NrdV5W9u1O3AF/Sw5CnKu1z9txNRFj0hhwv
+         jrp/vcA9DoU1ozZlRQ1X696CuC5yoXEPpA3poicdQ8VTf5V781wrq+Nz8R4+dWvMUHcm
+         vPjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779148264; x=1779753064;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:date:message-id:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=oHzqtxHYGtsFWWs1IIVZkaaC0dsURSMDJdI1EptB08Q=;
-        b=McuJnCijDjGIFpbDn8XVju6i3z9dP8KPmaYZwipwnjAs6dIw6pwuxSzVBr9mnVuFl6
-         Tg26U8eWm9s5oRmqKuoSqw8xQtlxSXODgSj0UqfD6T5YwIRbDuSyy4nEsG3FCqlhwapv
-         Utu3T9rZKQ0UTVoPOp2CnHIBhQ9OjTO5r20atwFpkXrQUn3VMIQMgAuzsze0HLQP33c+
-         FeAOEEkfr0IKadqk6HQT9N3S98TxvS+pgA3AsIjpzo2lHErk6k/hd39zZWa9HsUyZW//
-         YhsMZLRQ7l7EWiz1ioqeJA6jJALFdAro+EtjMSmdRBhgW4ilYcxDAXWsJKOA9Ic2crrC
-         +y2A==
-X-Forwarded-Encrypted: i=1; AFNElJ+Nyc+E9ld59mnrJflq5FUeqlrnzvFoniFFa4YJR8gNB+/cMW7iobf96X3kxj2wJWESkOm7AtqF4XUW@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6B/hIih/2WyDlbuValKIjNCIiwkIBRfom0+Wm3yxGWRjOUWs6
-	zw6VNYRReg3P/mGrOBVum3noaUERXknvbI6ab5jfTbHtsQtKLrhyKFks
-X-Gm-Gg: Acq92OFU7s53Y865IvxvZt81mFrt5QfLslmZ+J2euBcdGEBT0YxoF59dqvkaRfHgUH2
-	vSnGby8PYq3/0cOrFiRWER0AcH9TXeDN2ZATSd+YKak6pPy5H7diMHgtsKRRlw3J9R76QbqBlDs
-	mslrLgQdQ9b6KV/VaZLCm/bBmV/F24LRriLS+0kqX4fbZm5TCsL3b9gh4AsihSD0lbFThyd/kmq
-	Ep/0pPdPRC4t87a7gVED0ao4k7iJDllIf1MmVQB4buK7jvRaDwt3x4xNTjJyMuT5tkQgpbtYSHc
-	LBYQhEtxbA3RZY2UUDLpCSmdou7Dv4sEl6MO3sFP7vcE5ea0+totu+USPQaf8yWVyMgESLZE05D
-	Mqee6u0RHJFEzBquWFFIsYKEPVFZmDhV1Enj05o735yVQvZJG1yv7kOqJBNO7CNW3BpAbi5fOBz
-	UvfjUfc5a8SHqjwq8Tbpgu2bCJAnTGz4F6HhtkFG4lh6RZjG7wo5AFZFEnkAcSan5JMF0idn2zv
-	FTgHRTw3ZYH6byX6lEnI5Jjak25QxezvWxSnyIIf2SPWYllf3z8+31QkQviotmD2jDTJn7KgFW4
-	OY59UQ6bBr1qQ2pdlTrBAPwO1p8M
-X-Received: by 2002:a05:6402:46d6:b0:678:b2c5:6915 with SMTP id 4fb4d7f45d1cf-683bd38be0dmr8809786a12.22.1779148264415;
-        Mon, 18 May 2026 16:51:04 -0700 (PDT)
-Received: from ahossu.localdomain (ip-217-105-56-94.ip.prioritytelecom.net. [217.105.56.94])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-68310d58c79sm5829140a12.12.2026.05.18.16.51.02
+        d=1e100.net; s=20251104; t=1779151869; x=1779756669;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HnqrgYL3NmUNTzmNXdPdscQGE6zaGHL6C9Nt0N58KNM=;
+        b=BUx7fXHLNs1nVj/2Sq/pTtXVtlpxryAC3ACQVecIqeIKNATDdQWyzRgRLy4BHDFV+w
+         SF91+KAzOTO6+tbrugsgSk89e4i5Pa+r47mE2/BygaoKWsoq6ljmRpm49gsKxG0kkt85
+         8C3C9KVO0it35Zsd+QbArVkyVCzeQbApuzhwriH1WG/fQWznr3ebsW0XOaZSzAwg1q6M
+         z9X3RH7HgkdO1zl+oWya3c6qNuPOe47RwqE1xoqZUBz08QqNZQv8UMvxUcS7/DwCW8oq
+         r8W3czuxB00B62Q69pPQkV1vtJA8BmCwNKlvIrJQ8Nc9UXDUdV9nl20b2I2mMPo/h8SG
+         cRkA==
+X-Gm-Message-State: AOJu0Yyn/3QVGpV7Tvlyxu5rpUAADQojrixlJVWN6sIkV4M/USgl+jhS
+	qPK583SzmG4PrJVMXZd9AL9gIAD6XZLG2+MotVNDBg8swbPAd+tm0BYUgSOn2966
+X-Gm-Gg: Acq92OHPFdM9tx41nu0I/kz7cKET3Am4FHbx+OKRXvtB76wEOGv4c2zsJbNwXBO0nIC
+	YpzNp2S6oSyOTimKNHEzcYQZHwmrmC6THZ6hIqeY7LwEgKU2o6RTxlm9bcJU6RvJ3iDgPvplc52
+	G9uUKl7CUukm+/WIsRPR4KN1aYBAxwQe3MnyjMs/kb1qpuvjxR1pBy2zBtZ2B3+oabarXJEcvuT
+	22y3fTNm1dPotPuVFfrfyfbT1epQy7u3MDseWxjSlTbJE5Ovx19hC5/ula8p7neGHVQqMtt9/6e
+	zafamOLy9lRTws0ycMqIfhvjdGLBmU+HNURsONd10s06GA28Qtp4oA4344/Pc8qf/BrZrPDk9Fd
+	eJ3vydlftmsxJO1AqsP+U2NB1O2VZYSoQJ0aDXbhPh20byddLcgxx2asOl3TvED2Bs8WWU8JYOX
+	etAQ9cNnk+uiVASOCK+15n3fHgVzmdM9BtFkOe/IgGwAymekKL7bfeST/yCKysRzBqnb2d0subB
+	F9oSU0iAds3Fcfi9CSBrwKMFxdkV8XnyeA=
+X-Received: by 2002:a05:622a:aa08:10b0:509:44c3:5fe7 with SMTP id d75a77b69052e-5165a1e652emr183515141cf.46.1779151868643;
+        Mon, 18 May 2026 17:51:08 -0700 (PDT)
+Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-516457da48dsm147102541cf.17.2026.05.18.17.51.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 16:51:02 -0700 (PDT)
-Message-ID: <6a0ba5e6.cd541789.157749.6e89@mx.google.com>
-Date: Mon, 18 May 2026 16:51:02 -0700 (PDT)
-From: Alexandru Hossu <hossu.alexandru@gmail.com>
-To: ddiss@suse.de
-Cc: martin.petersen@oracle.com, bvanassche@acm.org,
- target-devel@vger.kernel.org, linux-scsi@vger.kernel.org,
- stable@vger.kernel.org, hossu.alexandru@gmail.com
-Subject:
- Re: [PATCH] scsi: target: iscsi: validate CHAP_R length before base64 decode
-In-Reply-To: <20260518121811.385350-1-hossu.alexandru@gmail.com>
-References: <20260518121811.385350-1-hossu.alexandru@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Mon, 18 May 2026 17:51:08 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-scsi@vger.kernel.org
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
+	target-devel@vger.kernel.org (open list:SCSI TARGET SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] target: iblock: Use flexible array for per-CPU plugs
+Date: Mon, 18 May 2026 17:50:50 -0700
+Message-ID: <20260519005050.627926-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[oracle.com,acm.org,vger.kernel.org,gmail.com];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-23899-lists,linux-scsi=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-23901-lists,linux-scsi=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCPT_COUNT_THREE(0.00)[4];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hossualexandru@gmail.com,linux-scsi@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	FROM_NEQ_ENVFROM(0.00)[rosenp@gmail.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,mx.google.com:mid]
-X-Rspamd-Queue-Id: 883105752F0
+	TAGGED_RCPT(0.00)[linux-scsi];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 22A78575C13
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, May 19, 2026, David Disseldorp <ddiss@suse.de> wrote:
-> nit: this could be DIV_ROUND_UP(chap->digest_size * 4, 3) to match
-> base64.h BASE64_CHARS(), right?
+Store the per-CPU iblock plug array in the iblock_dev allocation
+instead of allocating it separately.
 
-Yes, equivalent and will use it in v2.
+This keeps the plug storage tied to the iblock device lifetime and
+simplifies the allocation and RCU cleanup paths.
 
-> The above check doesn't appear to catch undersize base64 CHAP responses,
-> unlike the hex path. How does that affect the handshake?
+Assisted-by: Codex:GPT-5.5
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ drivers/target/target_core_iblock.c | 11 +----------
+ drivers/target/target_core_iblock.h |  2 +-
+ 2 files changed, 2 insertions(+), 11 deletions(-)
 
-An undersize response decodes to fewer than digest_size bytes.
-chap_base64_decode() returns cp - dst, which is less than digest_size,
-so the existing != digest_size check at line 345 fires and the handshake
-fails. The result is the same as the hex path.
+diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
+index 1087d1d17c36..985197f0df26 100644
+--- a/drivers/target/target_core_iblock.c
++++ b/drivers/target/target_core_iblock.c
+@@ -59,24 +59,16 @@ static struct se_device *iblock_alloc_device(struct se_hba *hba, const char *nam
+ {
+ 	struct iblock_dev *ib_dev = NULL;
+ 
+-	ib_dev = kzalloc_obj(struct iblock_dev);
++	ib_dev = kzalloc_flex(*ib_dev, ibd_plug, nr_cpu_ids);
+ 	if (!ib_dev) {
+ 		pr_err("Unable to allocate struct iblock_dev\n");
+ 		return NULL;
+ 	}
+ 	ib_dev->ibd_exclusive = true;
+ 
+-	ib_dev->ibd_plug = kzalloc_objs(*ib_dev->ibd_plug, nr_cpu_ids);
+-	if (!ib_dev->ibd_plug)
+-		goto free_dev;
+-
+ 	pr_debug( "IBLOCK: Allocated ib_dev for %s\n", name);
+ 
+ 	return &ib_dev->dev;
+-
+-free_dev:
+-	kfree(ib_dev);
+-	return NULL;
+ }
+ 
+ static bool iblock_configure_unmap(struct se_device *dev)
+@@ -189,7 +181,6 @@ static void iblock_dev_call_rcu(struct rcu_head *p)
+ 	struct se_device *dev = container_of(p, struct se_device, rcu_head);
+ 	struct iblock_dev *ib_dev = IBLOCK_DEV(dev);
+ 
+-	kfree(ib_dev->ibd_plug);
+ 	kfree(ib_dev);
+ }
+ 
+diff --git a/drivers/target/target_core_iblock.h b/drivers/target/target_core_iblock.h
+index e2f28a69a11c..849c948368bc 100644
+--- a/drivers/target/target_core_iblock.h
++++ b/drivers/target/target_core_iblock.h
+@@ -35,7 +35,7 @@ struct iblock_dev {
+ 	struct file *ibd_bdev_file;
+ 	bool ibd_readonly;
+ 	bool ibd_exclusive;
+-	struct iblock_dev_plug *ibd_plug;
++	struct iblock_dev_plug ibd_plug[];
+ } ____cacheline_aligned;
+ 
+ #endif /* TARGET_CORE_IBLOCK_H */
+-- 
+2.54.0
 
-> Finally, don't we need a similar check for the mutual CHAP code-path?
-
-The mutual path decodes CHAP_C into initiatorchg_binhex, allocated as
-kzalloc(CHAP_CHALLENGE_STR_LEN) = kzalloc(4096). extract_param() caps
-the input at CHAP_CHALLENGE_STR_LEN characters, so at most 4095 base64
-chars reach the decoder, producing at most 3071 decoded bytes. 3071 < 4096,
-so the destination cannot overflow. The post-decode > 1024 check is a
-semantic limit on challenge size, not a safety net against overflow.
-
-v2 with DIV_ROUND_UP below.
-
-Alexandru
 
