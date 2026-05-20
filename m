@@ -1,127 +1,202 @@
-Return-Path: <linux-scsi+bounces-23944-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23946-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KL3UCcXqDWrM4gUAu9opvQ
-	(envelope-from <linux-scsi+bounces-23944-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 19:09:25 +0200
+	id KEg2McroDWrr4gUAu9opvQ
+	(envelope-from <linux-scsi+bounces-23946-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 19:00:58 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDCED592FE7
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 19:09:23 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41DE4592CD7
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 19:00:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 40F56313321A
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 16:25:30 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9AD0430CFCAA
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 16:53:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E658E36D9F5;
-	Wed, 20 May 2026 16:25:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C96136DA0A;
+	Wed, 20 May 2026 16:53:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="FwOxSY3l"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JkU4GBL/"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5584E36A37D;
-	Wed, 20 May 2026 16:25:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BDE2F0C62
+	for <linux-scsi@vger.kernel.org>; Wed, 20 May 2026 16:53:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779294317; cv=none; b=SkTNXZTxdhnHNBwsd8/g604+IAq29amVbjmjftfHk2AcbJPFRzvGNWCbFHRImL0hS97gauMY4RmKmwsu3MAy1xKNL2NvRFw2Viyt4gbh+npMku9vG1TpJ4ZGRd2jMM6DhzyWs5nP23gjg8qjJ47xOOhj1z3uPhv9S7/ISUgRdeA=
+	t=1779296013; cv=none; b=EF4tQvK/J/D3C9pqjC02z3EltKfVDoT6BBMqjM3JhjJ3h+XDESdND4pjXMHoKUjSxjHsmD9M1jmy4tDL3isJAqkhbCpd6YGLLgC1LPwi5Ffy631yvR5C2ndF8zihzi4iuqIw+PeEpnY75Qk77lynZbjXg7hchBMFeZvy6GdN3Mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779294317; c=relaxed/simple;
-	bh=Ol95jQLfrdpBQjki+prXK8uzkfnEQdpuJm1VdFo8jb4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KN07CdTupkuiG99k1VXePYnsaqYqrqXOJqmL+Snsw84+PwaHTFGShL7qfIzdTnSyXqwmja8dRZ9tekmjtK6x1EKxuyzNkQOzpAqBQZR5TM5DhXzN4oOek75EHXRJGepnznIQ6wfawIe1gZBYMpX9V4R4Nw4y9IwJYv8ankSOCy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=FwOxSY3l; arc=none smtp.client-ip=199.89.1.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4gLH2M54CVzlgyG8;
-	Wed, 20 May 2026 16:25:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1779294311; x=1781886312; bh=AvSIL1R5mmJ05UNrpWz3pGju
-	V/pjdLSvASGCbp0aaM8=; b=FwOxSY3lDGx8jPrdCT/3PISLmROvw/7GlQWyt1B5
-	t/Bf9nVEugzURnWG00MnzOcTt/Ee4HjfKDC5R8j0bu8enYnu6yn8z9sakRCBRJnL
-	rO0qx9abqcWCJpZkeqIiFrAEEuP0X1fGPtTNMmERnorSg0C1FuRYXyzS4qrYRmpr
-	nkszg+xOXP/BB+bzxMiD1M6QyyrdHPzaEE8m76SM4hqTqQWw6E3P1l34W3N3RHWj
-	0rWE4ctT1YYVoBxg0BVA0JC3xG9hOd1/i7mU0FL0jstiapFBUmsqQ5cAfSjfFkXz
-	zLqRtuUmMSbZgjm6lwCs7RmiSX5SM/BCF2DxgOkN/MvE1g==
-X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 6Y32Apy0XN7v; Wed, 20 May 2026 16:25:11 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4gLH2F3xmtzlfpMC;
-	Wed, 20 May 2026 16:25:09 +0000 (UTC)
-Message-ID: <806a798d-b2b6-489b-93e3-0fc54eaa14eb@acm.org>
-Date: Wed, 20 May 2026 09:25:07 -0700
+	s=arc-20240116; t=1779296013; c=relaxed/simple;
+	bh=OqrZM/EZQoDxpdqsw83Tctk6QvpP+RDSvRPve3kZib4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VAg0YZyyNG2lFGB5g5tGbWVgzK83OP7Ii/GIuIGpUW2EbhI/83BE194USxAyTeRvRLty8i23X00GlHNBbYLuQz3RSDPhsdDOR6+4WP8xvrvizD9LiPiGZpoBiWWHNoeRIUPGxt5AZqBjHF6xyVF7u65QXVtlOvasCBi2N8QtrLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JkU4GBL/; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-67e43a8996fso6415613a12.0
+        for <linux-scsi@vger.kernel.org>; Wed, 20 May 2026 09:53:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779296011; x=1779900811; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kKcl0f+YiSx0kT0A06n+DmaHMn0z0MjpQEGjfw2KSV8=;
+        b=JkU4GBL/LH8SDTqhqu2PMj/k2XBBu/ZymgoIeyqLDzs6PDk+Rjb8URfzCw/X4fEo4Y
+         mjzq4W6gOob6o8+/kl3IAwkel7yQDIg+Ohu+KCBSsciZ6ewBj8U9ieMmGdOyFf9DgZxT
+         uPR1MU23R1mOWxe74+LzQLz0KcAZnj7mIKtXgOfRz8R/LKaIn4nNuvFUb8JM9TZ5g3me
+         BXbRy6vnk2N7wScACVRVHEUX5jRVj5CLu1Pf2x8/QIKw+YLf3guPazizAtlQQIbKjlzR
+         aUD++Oztv4iRHkPIyckIwwwLik0fdmIOZqrFGBKPHavtt2ZKY+VnPTNa3Tkb91Oh+8Wm
+         sjPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779296011; x=1779900811;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=kKcl0f+YiSx0kT0A06n+DmaHMn0z0MjpQEGjfw2KSV8=;
+        b=cylXlQkXsa7/DOIMNkiSprIFl/oJgGQVYgMECC6zBVlCH2L2NmPoXJ8RClMWonuPcb
+         e+X5R7o2e5pnD4PIAFyOWJFqZG9Cunpr8Nnsc7bdRKU0yFvpvSOgUj/bKWb/UAn85XpV
+         4BVDm5Vi5KfYL+1OLCZ/ucBrVT7xLNp4fgdqFpYwOhM8EY9HPz9PM5vRi3cQJFlQM6G/
+         58U9kP0e5TN17MSxwheUXuiAO8tAQrL+wAA7p0ytFZDyLkU4Jrjele7G/gWrbo973Ef7
+         HgYmOwABbrl46W/yV6RaGP8pdnw5YqnRKGOa+m1SppV5uocZNccOTdLi3AoeAHoOYU1m
+         3nIg==
+X-Forwarded-Encrypted: i=1; AFNElJ+tipnCWWm6AB2zFaPtdeTt9sJLRC3aemnhPvGVR5HUd0Lxkh3IdK9WTCeru4dvDS+Tt478lAjHQSHu@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGxJr4YjPaSLIeYRWoujF02aeoE+wnRiT+LVBHWe7zZB9LTMIw
+	+FspsUWUNcaLhO4ZXvNyNim9mXKvKgWeS05Cl5VA69iUZwmXIQHFzLwa
+X-Gm-Gg: Acq92OFq/H95Lb0OBUgQPekugspK3tQlWRuO8YmWwzzm2t6XwvsnvmymW49OhPD/taZ
+	bzdF4/trT2RjjoZnBQYiShmsejQ7AKMHqlimcd1vK7ZhOLKBRBzhqdG/GxBi6bYBY6JJQ/cvChV
+	9J/9Ug3VPgcXFterJSLqBL0gbfJpMhDw7DId2iIBda4O+b3b6SmsjrGFJlUYaZ/FEYZ7BlOi3kA
+	iS002NrSBePf/+apz2N6IBxvv3tiPklMpr9dCxSgAZYjn+1K5qDzTQlqo+pYnZu3ZDWOEPP9I8c
+	W17Fp5xSuRQdVYiFbLaMfwAnJnHCwPmp7XfiNCB5nrQxFCl9Ql1ELAm+7f9CkNapHGq0bhrhAre
+	lOnXhi6oUVDCktC9UMB+Kjw7wqtvXEF+4QxZGBpzNlQ4l0Rm64ToPPodeq3uMNTDKbpUO2v4F5B
+	XrC29aANuorubKsFQQvGkx3/041vBCwS++ahD0qAeD2Hh6MpUe23f2RpSoaDDaekZk3OBahk2Im
+	6X0LqmvDssC7xs3+SgzSIf6S9gaNcXWPj3z+Unk9PPjshEnFDwyjy/N+Gw6aBhH7xIUhrXs7qcD
+	0ar6CDwwiOKSG/UHSJR/950vPjyH
+X-Received: by 2002:aa7:d14f:0:b0:674:7363:3e91 with SMTP id 4fb4d7f45d1cf-683bce9cec6mr9495273a12.12.1779296010835;
+        Wed, 20 May 2026 09:53:30 -0700 (PDT)
+Received: from ahossu.localdomain (ip-217-105-56-94.ip.prioritytelecom.net. [217.105.56.94])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6831187ecb7sm7966009a12.29.2026.05.20.09.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 May 2026 09:53:29 -0700 (PDT)
+From: Alexandru Hossu <hossu.alexandru@gmail.com>
+To: martin.petersen@oracle.com
+Cc: bvanassche@acm.org,
+	mlombard@arkamax.eu,
+	ddiss@suse.de,
+	target-devel@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	stable@vger.kernel.org,
+	hossu.alexandru@gmail.com
+Subject: [PATCH v3] scsi: target: iscsi: validate CHAP_R length before base64 decode
+Date: Wed, 20 May 2026 18:52:59 +0200
+Message-ID: <20260520165259.272808-1-hossu.alexandru@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260518121811.385350-1-hossu.alexandru@gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: st: Fix lock leak in st_ioctl()
-To: Hongling Zeng <zhongling0719@126.com>,
- Hongling Zeng <zenghongling@kylinos.cn>, Kai.Makisara@kolumbus.fi,
- James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
- djeffery@redhat.com, jmeneghi@redhat.com
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260520074016.51975-1-zenghongling@kylinos.cn>
- <6A0D6825.8050902@126.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <6A0D6825.8050902@126.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23944-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FREEMAIL_TO(0.00)[126.com,kylinos.cn,kolumbus.fi,HansenPartnership.com,oracle.com,redhat.com];
-	DKIM_TRACE(0.00)[acm.org:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_CC(0.00)[acm.org,arkamax.eu,suse.de,vger.kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-23946-lists,linux-scsi=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,acm.org:mid,acm.org:dkim]
-X-Rspamd-Queue-Id: DDCED592FE7
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hossualexandru@gmail.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 41DE4592CD7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 5/20/26 12:52 AM, Hongling Zeng wrote:
->  =C2=A0 The original code is correct. st_common_ioctl() releases &STp->=
-lock
->  =C2=A0 internally, so there is no lock leak.
-Indeed. See also the annotations in drivers/scsi/st.c in this patch=20
-series: "[PATCH 00/36] Enable lock context analysis for most SCSI drivers=
-"
-(https://lore.kernel.org/linux-scsi/20260312211636.3245119-1-bvanassche@a=
-cm.org/).
+chap_server_compute_hash() allocates client_digest as
+kzalloc(chap->digest_size) and then, for BASE64-encoded responses,
+passes chap_r directly to chap_base64_decode() without checking whether
+the input length could produce more than digest_size bytes of output.
 
-Bart.
+chap_base64_decode() writes to the destination unconditionally as long
+as there is input to consume. With MAX_RESPONSE_LENGTH set to 128 and
+the "0b" prefix stripped by extract_param(), up to 127 base64 characters
+can reach the decoder. 127 characters decode to 95 bytes. For SHA-256
+(digest_size=32) this overflows client_digest by 63 bytes; for MD5
+(digest_size=16) the overflow is 79 bytes.
+
+The length check at line 344 fires after the write has already happened.
+
+The HEX branch in the same switch statement already validates the length
+up front. Apply the same approach to the BASE64 branch: strip trailing
+base64 padding characters, then reject any input whose data length
+exceeds DIV_ROUND_UP(digest_size * 4, 3) before calling the decoder.
+
+Stripping trailing '=' before the comparison handles both padded and
+unpadded encodings. chap_base64_decode() already returns early on '=',
+so the full original string is still passed to the decoder unchanged.
+
+Fixes: 1e5733883421 ("scsi: target: iscsi: Support base64 in CHAP")
+Cc: stable@vger.kernel.org
+Signed-off-by: Alexandru Hossu <hossu.alexandru@gmail.com>
+---
+v3: strip trailing '=' before length check to handle padded encodings
+    (reported by Maurizio Lombardi)
+v2: use DIV_ROUND_UP(digest_size * 4, 3) as suggested by David Disseldorp
+
+ drivers/target/iscsi/iscsi_target_auth.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/target/iscsi/iscsi_target_auth.c b/drivers/target/iscsi/iscsi_target_auth.c
+index c46c69a..00487d0 100644
+--- a/drivers/target/iscsi/iscsi_target_auth.c
++++ b/drivers/target/iscsi/iscsi_target_auth.c
+@@ -340,13 +340,22 @@ static int chap_server_compute_hash(
+ 			goto out;
+ 		}
+ 		break;
+-	case BASE64:
++	case BASE64: {
++		size_t r_len = strlen(chap_r);
++
++		while (r_len > 0 && chap_r[r_len - 1] == '=')
++			r_len--;
++		if (r_len > DIV_ROUND_UP(chap->digest_size * 4, 3)) {
++			pr_err("Malformed CHAP_R: base64 payload too long\n");
++			goto out;
++		}
+ 		if (chap_base64_decode(client_digest, chap_r, strlen(chap_r)) !=
+ 		    chap->digest_size) {
+ 			pr_err("Malformed CHAP_R: invalid BASE64\n");
+ 			goto out;
+ 		}
+ 		break;
++	}
+ 	default:
+ 		pr_err("Could not find CHAP_R\n");
+ 		goto out;
+-- 
+2.54.0
+
 
