@@ -1,181 +1,225 @@
-Return-Path: <linux-scsi+bounces-23947-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23949-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eKpoGovyDWrA4wUAu9opvQ
-	(envelope-from <linux-scsi+bounces-23947-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 19:42:35 +0200
+	id oPIMEBQUDmot6AUAu9opvQ
+	(envelope-from <linux-scsi+bounces-23949-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 22:05:40 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C5365945E2
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 19:42:35 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37A6F5991CB
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 22:05:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 21E5A3118005
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 17:15:55 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 720B731B9537
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 18:10:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083DD3F7AA6;
-	Wed, 20 May 2026 17:15:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1954A3E95A4;
+	Wed, 20 May 2026 18:10:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="R0dBgN9n"
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="FTrJESfM";
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="YNAXapxk"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
+Received: from mta-01.yadro.com (mta-01.yadro.com [195.3.219.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E433F39F5
-	for <linux-scsi@vger.kernel.org>; Wed, 20 May 2026 17:15:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BBD33DC4DA;
+	Wed, 20 May 2026 18:10:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.3.219.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779297315; cv=none; b=lBQGWN8SsGGbVcAwvsJcVwzULveeEG5yDN0SGYtPhtHa7CFO5LY9wCR9onuOwW5vO0fXV7igIv4Wmyd8v1FY03kFBK05ac5n632JfWIkkw+11gsaSsfNX4swqrPbF1q77+8u5spYGAMnGG43WwGbeeU4ee6GxROY3n4JmpIHpsk=
+	t=1779300611; cv=none; b=WxRcS61dY4rdnVTlj06J9ZBjfmhSE/OrMm9zFmXR1ZylYvPAwH4I7bPz+2s1LolRd/9uzP6VUN51VKBMnPP/nPZas18CCBtrlQoqBbAsimGozISZWDehUEW9wn7SoCH/6ImznlI8BOsA+VID3FzjFxWyNVw3vlY8j3riNAkLCl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779297315; c=relaxed/simple;
-	bh=l/OSgj1VfN7mTsXoSlZmbguN/FLpmUwioXrN4JOCllc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hJT0dHXKeywx+zgy6RGWjAyWU0fhnMOFJo7uoeMagew9YRzhdHzxr8mJBDszabwtF0ftNcHcOS2mK+ic7fnJMXL4ii2Y0JYqDGh7IwFwNU3sYVGvrPgrNzRUkqO3xvcPHrfs2mNlix3fxmcIePEeNsKegetAF5RDGUgaCRNYaAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=R0dBgN9n; arc=none smtp.client-ip=199.89.1.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4gLJ816bRSzlffvc;
-	Wed, 20 May 2026 17:15:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:mime-version:x-mailer:message-id:date
-	:date:subject:subject:from:from:received:received; s=mr01; t=
-	1779297310; x=1781889311; bh=dD83LvsxoB+7EB6turP9jcJQZBqt5mW5E+3
-	CC1E5UCI=; b=R0dBgN9ndzGnZ8xDZJzSDowk3NOIKisF2izVTKSZ6PZ5qT06Ubs
-	9sAlLXvxo2NuXNJxe9cZKEQBToXA/WPyRkGq26xYJ230u6uCca+Juv+WXhf8No0n
-	T1D86FyUBNW8JE+62zBnxbuXVvFUubriN60RZfbWkmxK6PT5aohnrE0N5GY8GB8n
-	PfE/8uRHIz+sIj7tNiJ5Mtol7JoNGxlmzJfJoqHg6lIZprRvZ4rn4MBoZ3G6Qped
-	JIBajv+R78BZFqLO0Lo61oRuFAXYMIPDTATIZMaWUxrdoiSox1/3nhNql9igE0WE
-	pGNtn7PnDu/AE/M2t24bU3imroWZV0qPxSw==
-X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 7S9T_-c-NL_K; Wed, 20 May 2026 17:15:10 +0000 (UTC)
-Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	s=arc-20240116; t=1779300611; c=relaxed/simple;
+	bh=+ol5KnzTLKOm+9Mso/HHGBLurtVhF47wvp2VRu4qCJM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AWr4eE2XHiaYwX4OxWl4OZyNo1YocLS/ubd4YAjBzV9GCFVC7TX4aexv+gbTy4120lIdklnSFHUG+ENVS5X57Et3Owl5I0UDgcG4y0Wk8r4WjO9XYSMp9gz/4jtz4mF8oHi3RBzkp9J+YDIOnFhAWLjn45JWOmPL/OWXLzqL16g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yadro.com; spf=pass smtp.mailfrom=yadro.com; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=FTrJESfM; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=YNAXapxk; arc=none smtp.client-ip=195.3.219.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yadro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yadro.com
+Received: from mta-01.yadro.com (localhost [127.0.0.1])
+	by mta-01.yadro.com (Postfix) with ESMTP id ED2D52000F;
+	Wed, 20 May 2026 21:01:37 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-01.yadro.com ED2D52000F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-02;
+	t=1779300097; bh=uBf28UxhSA//HnIANd3fGQ48MKmoNXYDkAY6oPJ6WGE=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+	b=FTrJESfM08j/KsgKxm0VtmDgS2Cx/a/aygxg7XhPO9M8MKhXZygOtk3CcT+zJKy3D
+	 OVxvocHsTQGtTf8wNzb0cCs60RN4GxTrHYQdkcbnfhJCT0AAcYuzNMhAe2c0zIvcE8
+	 MfTCG9/jd7ISEFqza6okvOMDZEyNUgx6BuPKQLD3XMY+wq2pDtE5ne7LeK2gl0sPkQ
+	 RfyA3rsbUHWIRCGHlFZ4QIo7dWlvtAjUAyLcLBvJRglAA758p4YQb9vIhOzsCyZhFM
+	 l4WDDUKGu54FQi9byGzhErRm+liKRR1TOBSa9nufRkGQh3pBgzMuXIVLodOH9D6jAn
+	 OeVIOI96lFKLQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-03;
+	t=1779300097; bh=uBf28UxhSA//HnIANd3fGQ48MKmoNXYDkAY6oPJ6WGE=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+	b=YNAXapxkwYb2JG1hShypgus9C2LakclBg24h2pcA3lKStJ30DZFWu4aVkVqvQndTR
+	 0qBguea1AsRXmU3VkZOkhnjSrRLsUST5uc/OxVLGJEP39VulhcTBr27QT7P/apjvem
+	 RdLVQV51RDFTZO3+DrwxEh8cPSo1Dt0m5pZBU9KbMv00tm4Jkep+/rXCr4gMC8Eu7D
+	 wOsKto0JjTK8SsdytkqsmXKlBun7K9Tr9mF7b8XSxFvqOL+zb+nF10Vnetp4dSfdV3
+	 iwJo5G2orhFjResapknuZ8QZ8mdxe9+cu51Xb28JcigqkL132/T2lRZDD/Hk0Hai2O
+	 8TL0rAZvOHBDA==
+Received: from RTM-EXCH-06.corp.yadro.com (unknown [10.34.9.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4gLJ7x1Q0zzlfl7l;
-	Wed, 20 May 2026 17:15:08 +0000 (UTC)
-From: Bart Van Assche <bvanassche@acm.org>
-To: "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org,
-	Bart Van Assche <bvanassche@acm.org>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2] scsi_debug: Remove the set-but-not-used variable "sdebug_any_injecting_opt"
-Date: Wed, 20 May 2026 10:14:53 -0700
-Message-ID: <20260520171454.4035623-1-bvanassche@acm.org>
-X-Mailer: git-send-email 2.54.0.669.g59709faab0-goog
+	by mta-01.yadro.com (Postfix) with ESMTPS;
+	Wed, 20 May 2026 21:01:36 +0300 (MSK)
+Received: from yadro.com (10.34.9.247) by RTM-EXCH-06.corp.yadro.com
+ (10.34.9.206) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.35; Wed, 20 May
+ 2026 21:02:04 +0300
+Date: Wed, 20 May 2026 21:02:04 +0300
+From: Dmitry Bogdanov <d.bogdanov@yadro.com>
+To: Alexandru Hossu <hossu.alexandru@gmail.com>, Maurizio Lombardi
+	<mlombard@arkamax.eu>
+CC: Alexandru Hossu <hossu.alexandru@gmail.com>, <martin.petersen@oracle.com>,
+	<bvanassche@acm.org>, <target-devel@vger.kernel.org>,
+	<linux-scsi@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH v2] scsi: target: iscsi: validate CHAP_R length before
+ base64 decode
+Message-ID: <20260520180204.GA15940@yadro.com>
+References: <20260518121811.385350-1-hossu.alexandru@gmail.com>
+ <20260518235040.48647-1-hossu.alexandru@gmail.com>
+ <DINMKOIB4PRJ.1Y571RHF6NAQJ@arkamax.eu>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <DINMKOIB4PRJ.1Y571RHF6NAQJ@arkamax.eu>
+X-ClientProxiedBy: RTM-EXCH-05.corp.yadro.com (10.34.9.205) To
+ RTM-EXCH-06.corp.yadro.com (10.34.9.206)
+X-KSMG-AntiPhishing: NotDetected
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.1.8310, bases: 2026/05/20 17:18:00 #28193246
+X-KSMG-AntiVirus-Status: NotDetected, skipped
+X-KSMG-KATA-Status: Not Scanned
+X-KSMG-LinksScanning: NotDetected
+X-KSMG-Message-Action: skipped
+X-KSMG-Rule-ID: 5
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	DMARC_POLICY_ALLOW(-0.50)[yadro.com,reject];
+	R_DKIM_ALLOW(-0.20)[yadro.com:s=mta-02,yadro.com:s=mta-03];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[gmail.com,oracle.com,acm.org,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-23949-lists,linux-scsi=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,arkamax.eu];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-23947-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	DKIM_TRACE(0.00)[acm.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_TRACE(0.00)[yadro.com:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[d.bogdanov@yadro.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,acm.org:email,acm.org:mid,acm.org:dkim]
-X-Rspamd-Queue-Id: 2C5365945E2
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 37A6F5991CB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The static variable sdebug_any_injecting_opt is no longer read. Commit
-3a90a63d02b8 ("scsi: scsi_debug: every_nth triggered error injection")
-removed all code that reads this variable. Hence, also remove this
-variable itself. Remove SDEBUG_OPT_ALL_INJECTING because there is no
-code left that uses this constant if sdebug_any_injecting_opt is
-removed. This has been detected by building the scsi_debug driver with
-the git HEAD version of Clang and with W=3D1.
+On Wed, May 20, 2026 at 05:56:05PM +0200, Maurizio Lombardi wrote:
+> 
+> On Tue May 19, 2026 at 1:50 AM CEST, Alexandru Hossu wrote:
+> > chap_server_compute_hash() allocates client_digest as
+> > kzalloc(chap->digest_size) and then, for BASE64-encoded responses,
+> > passes chap_r directly to chap_base64_decode() without checking whether
+> > the input length could produce more than digest_size bytes of output.
+> >
+> > chap_base64_decode() writes to the destination unconditionally as long
+> > as there is input to consume. With MAX_RESPONSE_LENGTH set to 128 and
+> > the "0b" prefix stripped by extract_param(), up to 127 base64 characters
+> > can reach the decoder. 127 characters decode to 95 bytes. For SHA-256
+> > (digest_size=32) this overflows client_digest by 63 bytes; for MD5
+> > (digest_size=16) the overflow is 79 bytes.
+> >
+> > The length check at line 344 fires after the write has already happened.
+> >
+> > The HEX branch in the same switch statement already validates the length
+> > up front. Apply the same approach to the BASE64 branch: reject any input
+> > whose maximum decoded length exceeds digest_size before calling the
+> > decoder.
+> >
+> > DIV_ROUND_UP(digest_size * 4, 3) is the maximum number of base64
+> > characters that can decode to exactly digest_size bytes, matching the
+> > convention used in base64.h BASE64_CHARS().
+> >
+> > Fixes: 1e5733883421 ("scsi: target: iscsi: Support base64 in CHAP")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Alexandru Hossu <hossu.alexandru@gmail.com>
+> > ---
+> > v2: use DIV_ROUND_UP(digest_size * 4, 3) as suggested by David Disseldorp
+> >
+> >  drivers/target/iscsi/iscsi_target_auth.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/drivers/target/iscsi/iscsi_target_auth.c b/drivers/target/iscsi/iscsi_target_auth.c
+> > index c46c69a..50eeded 100644
+> > --- a/drivers/target/iscsi/iscsi_target_auth.c
+> > +++ b/drivers/target/iscsi/iscsi_target_auth.c
+> > @@ -341,6 +341,10 @@ static int chap_server_compute_hash(
+> >               }
+> >               break;
+> >       case BASE64:
+> > +             if (strlen(chap_r) > DIV_ROUND_UP(chap->digest_size * 4, 3)) {
+> > +                     pr_err("Malformed CHAP_R: base64 payload too long\n");
+> > +                     goto out;
+> > +             }
+> 
+> 
+> There is something that doesn't totally convince me about this length check.
+> Couldn't chap_r contain those Base64 padding '=' characters that
+> would make strlen(chap_r) too big to pass this check?
 
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
+Yes, the length of Base64 decoded string is not deterministic.
+Moreover, length of Base64 encoded string must be divisible by 4. Which
+is biger that 4/3 of decoded.
 
-Changes compared to v1:
- - Also remove the SDEBUG_OPT_ALL_INJECTING constant.
- - Include the name of the sdebug_any_injecting_opt variable in the
-   patch subject.
+| diggest_type            | size | size*4/3 | ROUND_UP | encoded with padding |
+| ----------------------- | ---- | -------- | -------- | -------------------- |
+| MD5_SIGNATURE_SIZE      | 16   | 21,33333 | 22       | 24                   |
+| SHA1_SIGNATURE_SIZE     | 20   | 26,66667 | 27       | 28                   |
+| SHA256_SIGNATURE_SIZE   | 32   | 42,66667 | 43       | 44                   |
+| SHA3_256_SIGNATURE_SIZE | 32   | 42,66667 | 43       | 44                   |
 
- drivers/scsi/scsi_debug.c | 11 -----------
- 1 file changed, 11 deletions(-)
+So, that formula is not correct and will break all iscsi authentication.
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 1515495fd9ea..a2f85ee1ae57 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -233,13 +233,6 @@ struct tape_block {
- #define SDEBUG_OPT_UNALIGNED_WRITE	0x20000
- #define SDEBUG_OPT_ALL_NOISE (SDEBUG_OPT_NOISE | SDEBUG_OPT_Q_NOISE | \
- 			      SDEBUG_OPT_RESET_NOISE)
--#define SDEBUG_OPT_ALL_INJECTING (SDEBUG_OPT_RECOVERED_ERR | \
--				  SDEBUG_OPT_TRANSPORT_ERR | \
--				  SDEBUG_OPT_DIF_ERR | SDEBUG_OPT_DIX_ERR | \
--				  SDEBUG_OPT_SHORT_TRANSFER | \
--				  SDEBUG_OPT_HOST_BUSY | \
--				  SDEBUG_OPT_CMD_ABORT | \
--				  SDEBUG_OPT_UNALIGNED_WRITE)
- #define SDEBUG_OPT_RECOV_DIF_DIX (SDEBUG_OPT_RECOVERED_ERR | \
- 				  SDEBUG_OPT_DIF_ERR | SDEBUG_OPT_DIX_ERR)
-=20
-@@ -955,7 +948,6 @@ static bool sdebug_removable =3D DEF_REMOVABLE;
- static bool sdebug_clustering;
- static bool sdebug_host_lock =3D DEF_HOST_LOCK;
- static bool sdebug_strict =3D DEF_STRICT;
--static bool sdebug_any_injecting_opt;
- static bool sdebug_no_rwlock;
- static bool sdebug_verbose;
- static bool have_dif_prot;
-@@ -7528,7 +7520,6 @@ static int scsi_debug_write_info(struct Scsi_Host *=
-host, char *buffer,
- 		return -EINVAL;
- 	sdebug_opts =3D opts;
- 	sdebug_verbose =3D !!(SDEBUG_OPT_NOISE & opts);
--	sdebug_any_injecting_opt =3D !!(SDEBUG_OPT_ALL_INJECTING & opts);
- 	if (sdebug_every_nth !=3D 0)
- 		tweak_cmnd_count();
- 	return length;
-@@ -7748,7 +7739,6 @@ static ssize_t opts_store(struct device_driver *ddp=
-, const char *buf,
- opts_done:
- 	sdebug_opts =3D opts;
- 	sdebug_verbose =3D !!(SDEBUG_OPT_NOISE & opts);
--	sdebug_any_injecting_opt =3D !!(SDEBUG_OPT_ALL_INJECTING & opts);
- 	tweak_cmnd_count();
- 	return count;
- }
-@@ -9659,7 +9649,6 @@ static int sdebug_driver_probe(struct device *dev)
- 		scsi_host_set_guard(hpnt, SHOST_DIX_GUARD_CRC);
-=20
- 	sdebug_verbose =3D !!(SDEBUG_OPT_NOISE & sdebug_opts);
--	sdebug_any_injecting_opt =3D !!(SDEBUG_OPT_ALL_INJECTING & sdebug_opts)=
-;
- 	if (sdebug_every_nth)	/* need stats counters for every_nth */
- 		sdebug_statistics =3D true;
- 	error =3D scsi_add_host(hpnt, &sdbg_host->dev);
+Alexandru, may be better just to change size of client_diggest variable
+to match it with chap_r like for initiatorchg and initiatorchg_binhex?
+That will not require any additional length checkings:
+
+
+--- a/drivers/target/iscsi/iscsi_target_auth.c
++++ b/drivers/target/iscsi/iscsi_target_auth.c
+@@ -273,7 +273,7 @@ static int chap_server_compute_hash(
+				goto out;
+		}
+ 
+-		client_digest = kzalloc(chap->digest_size, GFP_KERNEL);
++		client_digest = kzalloc(MAX_RESPONSE_LENGTH, GFP_KERNEL);
+		if (!client_digest) {
+                pr_err("Unable to allocate the client_digest buffer\n");
+                goto out;
+
+----
+
+
+BR,
+ Dmitry
+
 
