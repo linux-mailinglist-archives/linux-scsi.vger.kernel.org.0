@@ -1,161 +1,181 @@
-Return-Path: <linux-scsi+bounces-23945-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23947-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yBQ5IVXrDWrM4gUAu9opvQ
-	(envelope-from <linux-scsi+bounces-23945-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 19:11:49 +0200
+	id eKpoGovyDWrA4wUAu9opvQ
+	(envelope-from <linux-scsi+bounces-23947-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 19:42:35 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 465925930D5
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 19:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C5365945E2
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 19:42:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id AD64630BDAAE
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 16:53:25 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 21E5A3118005
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2026 17:15:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E37AE36C9D2;
-	Wed, 20 May 2026 16:53:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083DD3F7AA6;
+	Wed, 20 May 2026 17:15:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a88r0ebo"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="R0dBgN9n"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9BE37D101
-	for <linux-scsi@vger.kernel.org>; Wed, 20 May 2026 16:53:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E433F39F5
+	for <linux-scsi@vger.kernel.org>; Wed, 20 May 2026 17:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779296003; cv=none; b=EKKjHHKL3PqG473RUvUZxnWxcx1tgm5uoRu176eYDkRLVfWu/JdRYdr4ByemzY4Kgx4LkFkzysJOhiALSAUFJyRmF48dhtor1f4Ph4btf/+VU7d/p2NzfD3b5ndPMOlpGyOUWfESZeHs7x62QeuhqkdC+oGsYgKfrAH5TGEpT3E=
+	t=1779297315; cv=none; b=lBQGWN8SsGGbVcAwvsJcVwzULveeEG5yDN0SGYtPhtHa7CFO5LY9wCR9onuOwW5vO0fXV7igIv4Wmyd8v1FY03kFBK05ac5n632JfWIkkw+11gsaSsfNX4swqrPbF1q77+8u5spYGAMnGG43WwGbeeU4ee6GxROY3n4JmpIHpsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779296003; c=relaxed/simple;
-	bh=++VV2z8DF9nYNXw7ZGVhPSn17Ap73p9EQBATvvZQOOI=;
-	h=Message-ID:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KoeJ8Mk5BCiI1PEx1BHvG8NtnaeJ/Ucfn1dSJwvzuYxY0CGMo/bdUlss0/niaLsm491iO9BmE0d5R0cXEyTgA3djQSDFom8k+SFBiNsQ74yhR0s9zsXX8C6PAXYW5NxgSNwp6IqeZ0DqwWN2urvM2rWzReZJ3YwVeg8dGnxaINs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a88r0ebo; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-bd8d0e4e341so647076466b.0
-        for <linux-scsi@vger.kernel.org>; Wed, 20 May 2026 09:53:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779295998; x=1779900798; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uW1DWs6dLVxbMJbJA1XC7hMjjnFFtxpIrjpCj7Et85U=;
-        b=a88r0ebomWrncpMAU1k1hVlO/8O9b5BTZsgHdTR7xyt6cnrTkR2xbvXR+pTYbUcwSW
-         WFN1WCAOPyK40/TM3xPW/3X57uY4dVxOUZRtvCZZ3w00TIY8PSx34NloolnOs04SO/Jl
-         +3UokslLUEu3svnFxjxH8ldUmJLhFePs9vjR3MrcF5pq+puw+z34DCUtmePCxDI1AZ+J
-         NdyWr0IyUQl0XTFdm/2d6dId1G/eRwEJWOxf/1wb+PdCOkmqJyfIRcwkCJXU8fGHv9iI
-         KQ4dQKerFnQT+YkpQ8NqDadATMvk6U2Khz8nfwyB+Oo1cVq6hk51af1v4NEuWln5j9uM
-         QMWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779295998; x=1779900798;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:date:message-id:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=uW1DWs6dLVxbMJbJA1XC7hMjjnFFtxpIrjpCj7Et85U=;
-        b=sCHZuTLqDJjkgmchU9kFq9x9GGlNSryHwiDDNxgYP2AAkqwBBSmLOWAzGj05J2GSVj
-         MSHtqdh9kI9IOokLkRgyfgxCJhqnxYxg6rQfmtS78zusqPTwVbO8W+KLqTFOo1DuMGSo
-         hIQilAPZzYFg+E0yA58aMNIHFUBtILGEcWnJ4GCCYkiwR3G0KL5FzX8zBFDaXnZxdxKj
-         Zw9OHkG7O80FX7ETrfMMfgEwZPOOWEeNhdecjusBXu1ar6nmFzSWeygbeGE7EmBAKNbC
-         05nRpHl54mPMQiydo+/kW6z/U+wC3MEmGLpYIHy0CSem9wyG7EFdVDQNcia1S4cBJSTi
-         dXNw==
-X-Forwarded-Encrypted: i=1; AFNElJ9aQNbYg+PVJfkbeyzXriuhobrXitAZoTY3g0rnmPtXc79hG7mJHw23U/MHMHEGCfXZxHD/nRgk5N7l@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0HDuAN3OgQAjbA+Xl5EEQtrBJkk67AWoi6c1DqfdxuvbDtkq3
-	tdv1uh+f7nhLYkWtd6OlcSBSjBVRAUz/7yn/B1/w5W1Ab/undacrmJvI
-X-Gm-Gg: Acq92OEfHnGHSZNzmmS/q4GbMPg0eOqNmQjAG35ePB31q8BWBoSKM/UwOnCxtAt+Mw6
-	ndvJDAAd+FYqNDDhlcGqODPvvh+TpvrmH38UZXNwJMKG8HFA87HguKztLr7ye/+UNfp0W/VS1OC
-	iWqfENrmLwLuwguzNXqnjkMgPWyTwiqjeP61AIsQy1hlVNz96h0n2B7tToKzYgsyE1pqhfeHfHT
-	wB7eG0Ft3a1MQsy4Lvs+mDymo8s1qU4zPqEh7XqESeEd0B/CQTDE6t4LWiEK5McQyVJczOQrYbF
-	Rr88o8TCjloBpfxXB//CaYXPBtX64jFXe6u1Eu07Bei/RbLkHyPYXgA/RyPUSNbDywE9AfUdX4d
-	Xf+rnfTEQRPF+GV2taSlqkP9qzwHWf9qZh5wsvHdWGFfaKVNK3mI3I8HyK4DLCZ7NnU3VRlia7y
-	BX1n+S3n9Ojj+dmnTlNoyAMS1cXqmcIViB1OVlShXvm1NAuiVd4LWSLvCh8udMuVVhP/Ip0w/OG
-	HVAcVtCHKOWgejQLouautArEwkaIJkmfQ9356RkB1opsQ0w97HP59J1dH4od5xUNAC6WaL7k3Zn
-	8E19lW6Aao7XyCYPDRPqNvqp4gHw
-X-Received: by 2002:a17:907:d78b:b0:bd5:2c56:71a2 with SMTP id a640c23a62f3a-bd52c567250mr1328647166b.36.1779295997739;
-        Wed, 20 May 2026 09:53:17 -0700 (PDT)
-Received: from ahossu.localdomain (ip-217-105-56-94.ip.prioritytelecom.net. [217.105.56.94])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-68704a658d3sm1547636a12.17.2026.05.20.09.53.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 09:53:16 -0700 (PDT)
-Message-ID: <6a0de6fc.2d57a604.3a8602.5396@mx.google.com>
-Date: Wed, 20 May 2026 09:53:16 -0700 (PDT)
-From: Alexandru Hossu <hossu.alexandru@gmail.com>
-To: mlombard@arkamax.eu
-Cc: martin.petersen@oracle.com, bvanassche@acm.org, ddiss@suse.de,
- target-devel@vger.kernel.org, linux-scsi@vger.kernel.org,
- stable@vger.kernel.org, hossu.alexandru@gmail.com
-Subject: Re: [PATCH v2] scsi: target: iscsi: validate CHAP_R length before
- base64 decode
-In-Reply-To: <DINMKOIB4PRJ.1Y571RHF6NAQJ@arkamax.eu>
-References: <20260518121811.385350-1-hossu.alexandru@gmail.com>
- <20260518235040.48647-1-hossu.alexandru@gmail.com>
- <DINMKOIB4PRJ.1Y571RHF6NAQJ@arkamax.eu>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	s=arc-20240116; t=1779297315; c=relaxed/simple;
+	bh=l/OSgj1VfN7mTsXoSlZmbguN/FLpmUwioXrN4JOCllc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hJT0dHXKeywx+zgy6RGWjAyWU0fhnMOFJo7uoeMagew9YRzhdHzxr8mJBDszabwtF0ftNcHcOS2mK+ic7fnJMXL4ii2Y0JYqDGh7IwFwNU3sYVGvrPgrNzRUkqO3xvcPHrfs2mNlix3fxmcIePEeNsKegetAF5RDGUgaCRNYaAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=R0dBgN9n; arc=none smtp.client-ip=199.89.1.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4gLJ816bRSzlffvc;
+	Wed, 20 May 2026 17:15:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:mime-version:x-mailer:message-id:date
+	:date:subject:subject:from:from:received:received; s=mr01; t=
+	1779297310; x=1781889311; bh=dD83LvsxoB+7EB6turP9jcJQZBqt5mW5E+3
+	CC1E5UCI=; b=R0dBgN9ndzGnZ8xDZJzSDowk3NOIKisF2izVTKSZ6PZ5qT06Ubs
+	9sAlLXvxo2NuXNJxe9cZKEQBToXA/WPyRkGq26xYJ230u6uCca+Juv+WXhf8No0n
+	T1D86FyUBNW8JE+62zBnxbuXVvFUubriN60RZfbWkmxK6PT5aohnrE0N5GY8GB8n
+	PfE/8uRHIz+sIj7tNiJ5Mtol7JoNGxlmzJfJoqHg6lIZprRvZ4rn4MBoZ3G6Qped
+	JIBajv+R78BZFqLO0Lo61oRuFAXYMIPDTATIZMaWUxrdoiSox1/3nhNql9igE0WE
+	pGNtn7PnDu/AE/M2t24bU3imroWZV0qPxSw==
+X-Virus-Scanned: by MailRoute
+Received: from 013.lax.mailroute.net ([127.0.0.1])
+ by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id 7S9T_-c-NL_K; Wed, 20 May 2026 17:15:10 +0000 (UTC)
+Received: from bvanassche.mtv.corp.google.com (unknown [104.135.180.219])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4gLJ7x1Q0zzlfl7l;
+	Wed, 20 May 2026 17:15:08 +0000 (UTC)
+From: Bart Van Assche <bvanassche@acm.org>
+To: "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org,
+	Bart Van Assche <bvanassche@acm.org>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v2] scsi_debug: Remove the set-but-not-used variable "sdebug_any_injecting_opt"
+Date: Wed, 20 May 2026 10:14:53 -0700
+Message-ID: <20260520171454.4035623-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.54.0.669.g59709faab0-goog
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
+	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
 	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[oracle.com,acm.org,suse.de,vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-23945-lists,linux-scsi=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-23947-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hossualexandru@gmail.com,linux-scsi@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DKIM_TRACE(0.00)[acm.org:+];
 	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TO_DN_NONE(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arkamax.eu:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,mx.google.com:mid]
-X-Rspamd-Queue-Id: 465925930D5
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,acm.org:email,acm.org:mid,acm.org:dkim]
+X-Rspamd-Queue-Id: 2C5365945E2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, May 20, 2026, Maurizio Lombardi <mlombard@arkamax.eu> wrote:
-> There is something that doesn't totally convince me about this length check.
-> Couldn't chap_r contain those Base64 padding '=' characters that
-> would make strlen(chap_r) too big to pass this check?
+The static variable sdebug_any_injecting_opt is no longer read. Commit
+3a90a63d02b8 ("scsi: scsi_debug: every_nth triggered error injection")
+removed all code that reads this variable. Hence, also remove this
+variable itself. Remove SDEBUG_OPT_ALL_INJECTING because there is no
+code left that uses this constant if sdebug_any_injecting_opt is
+removed. This has been detected by building the scsi_debug driver with
+the git HEAD version of Clang and with W=3D1.
 
-Correct. For SHA-256, a padded encoding of the 32-byte digest is 44
-characters (43 data + one '='), but DIV_ROUND_UP(32 * 4, 3) = 43, so a
-legitimate padded response would be incorrectly rejected.
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
 
-v3 strips trailing '=' before the comparison:
+Changes compared to v1:
+ - Also remove the SDEBUG_OPT_ALL_INJECTING constant.
+ - Include the name of the sdebug_any_injecting_opt variable in the
+   patch subject.
 
-	size_t r_len = strlen(chap_r);
+ drivers/scsi/scsi_debug.c | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-	while (r_len > 0 && chap_r[r_len - 1] == '=')
-		r_len--;
-	if (r_len > DIV_ROUND_UP(chap->digest_size * 4, 3)) {
-		pr_err("Malformed CHAP_R: base64 payload too long\n");
-		goto out;
-	}
-
-chap_base64_decode() already handles '=' by returning early, so
-stripping them from the pre-check does not affect decoding.
-
-v3 below.
-
-Alexandru
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index 1515495fd9ea..a2f85ee1ae57 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -233,13 +233,6 @@ struct tape_block {
+ #define SDEBUG_OPT_UNALIGNED_WRITE	0x20000
+ #define SDEBUG_OPT_ALL_NOISE (SDEBUG_OPT_NOISE | SDEBUG_OPT_Q_NOISE | \
+ 			      SDEBUG_OPT_RESET_NOISE)
+-#define SDEBUG_OPT_ALL_INJECTING (SDEBUG_OPT_RECOVERED_ERR | \
+-				  SDEBUG_OPT_TRANSPORT_ERR | \
+-				  SDEBUG_OPT_DIF_ERR | SDEBUG_OPT_DIX_ERR | \
+-				  SDEBUG_OPT_SHORT_TRANSFER | \
+-				  SDEBUG_OPT_HOST_BUSY | \
+-				  SDEBUG_OPT_CMD_ABORT | \
+-				  SDEBUG_OPT_UNALIGNED_WRITE)
+ #define SDEBUG_OPT_RECOV_DIF_DIX (SDEBUG_OPT_RECOVERED_ERR | \
+ 				  SDEBUG_OPT_DIF_ERR | SDEBUG_OPT_DIX_ERR)
+=20
+@@ -955,7 +948,6 @@ static bool sdebug_removable =3D DEF_REMOVABLE;
+ static bool sdebug_clustering;
+ static bool sdebug_host_lock =3D DEF_HOST_LOCK;
+ static bool sdebug_strict =3D DEF_STRICT;
+-static bool sdebug_any_injecting_opt;
+ static bool sdebug_no_rwlock;
+ static bool sdebug_verbose;
+ static bool have_dif_prot;
+@@ -7528,7 +7520,6 @@ static int scsi_debug_write_info(struct Scsi_Host *=
+host, char *buffer,
+ 		return -EINVAL;
+ 	sdebug_opts =3D opts;
+ 	sdebug_verbose =3D !!(SDEBUG_OPT_NOISE & opts);
+-	sdebug_any_injecting_opt =3D !!(SDEBUG_OPT_ALL_INJECTING & opts);
+ 	if (sdebug_every_nth !=3D 0)
+ 		tweak_cmnd_count();
+ 	return length;
+@@ -7748,7 +7739,6 @@ static ssize_t opts_store(struct device_driver *ddp=
+, const char *buf,
+ opts_done:
+ 	sdebug_opts =3D opts;
+ 	sdebug_verbose =3D !!(SDEBUG_OPT_NOISE & opts);
+-	sdebug_any_injecting_opt =3D !!(SDEBUG_OPT_ALL_INJECTING & opts);
+ 	tweak_cmnd_count();
+ 	return count;
+ }
+@@ -9659,7 +9649,6 @@ static int sdebug_driver_probe(struct device *dev)
+ 		scsi_host_set_guard(hpnt, SHOST_DIX_GUARD_CRC);
+=20
+ 	sdebug_verbose =3D !!(SDEBUG_OPT_NOISE & sdebug_opts);
+-	sdebug_any_injecting_opt =3D !!(SDEBUG_OPT_ALL_INJECTING & sdebug_opts)=
+;
+ 	if (sdebug_every_nth)	/* need stats counters for every_nth */
+ 		sdebug_statistics =3D true;
+ 	error =3D scsi_add_host(hpnt, &sdbg_host->dev);
 
