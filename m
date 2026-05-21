@@ -1,255 +1,259 @@
-Return-Path: <linux-scsi+bounces-23974-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-23976-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aJEjM7pED2r/IQYAu9opvQ
-	(envelope-from <linux-scsi+bounces-23974-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 May 2026 19:45:30 +0200
+	id kNB6ARBKD2qRIwYAu9opvQ
+	(envelope-from <linux-scsi+bounces-23976-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 May 2026 20:08:16 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66BA85AA7F2
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 May 2026 19:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D23F5AACB5
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 May 2026 20:08:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 239DE3004932
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 May 2026 17:45:26 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3E9283016CD0
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 May 2026 18:06:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 312263EF0D7;
-	Thu, 21 May 2026 17:45:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A01238E8B2;
+	Thu, 21 May 2026 18:06:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eBU4r6q/"
+	dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b="RmLBBERz"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from rcdn-iport-7.cisco.com (rcdn-iport-7.cisco.com [173.37.86.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7423E316F;
-	Thu, 21 May 2026 17:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70DCA38947E;
+	Thu, 21 May 2026 18:06:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.37.86.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779385511; cv=none; b=GNtIVJx6BEryH7o0QxHw2xDcIdEmI2ln/G6C69DJQi97hjAlPZswGcYbGJtl5EcGMrNryzMlN6F7Rj+mjNXHYIE9o896G2KILf415BP86HO40TFvMVq5vnXymYB7o+nkfI9uGwsd80tIwY8xM8N8WvWLUVTtaAobtcL2X4Zd0yU=
+	t=1779386783; cv=none; b=Pbq7K7tc4VYsIbZq9OootV8sapXAgsI6VXydeuM9yRrFB8Mx/dpBceBmSpa6YLeHEPFLK9x2oYdBftcNrYx1YAFXbzKwLrfzWmrgQf0pzsu3nsA5ZoT/Q/9mXC5TWLmDmzUDgvnHQcQGilyMbizpN1sM7r/sE2oJxJdJSTW+psc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779385511; c=relaxed/simple;
-	bh=sU3q4ei5VqXFeemg2pdBcbpXy8Z2qTRY4hHBwMHyr+A=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=I5VemjC8tNPsOFG/yt8vxNVmvKftc53qZd2Mr9eCU/OJUeqHL7x0cOR3FXdtpNul2f2z4WGi3cvLXFTY3X2ILV/dU4AaKtxgstfXrS7EVosx5UKQNO2oi6ZV3MIl2DOcN4RYGpep8j2DEXNK3qHHzF9mRkQMSWi3hiqWeJ4acys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eBU4r6q/; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779385510; x=1810921510;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=sU3q4ei5VqXFeemg2pdBcbpXy8Z2qTRY4hHBwMHyr+A=;
-  b=eBU4r6q/Pfly7X1yJqCLEHmyhpQJlV2crbXifUpUKCUV7dlTkEqmae1a
-   AKceYkxuO1zsrSOCHkjdDFGmvavXdwKnO5at9Ha77MIU+4AQNzCNl91t3
-   gn/G98vXvWp3nOTNJa5kS7jQCy7kdG5BgwPqzrtr5jAam2wVSnH/ecHI4
-   GxTC6OsY/Gte2p/rlOIc+UMKrRW/k2kpLoDax7m+oSw1fpBccCyzualiP
-   Sn6OUbc5OrTCm6t/8e2kHMIcl3aWYHH6VE2JhwXCsGbyIMLanNaefDSrT
-   3Fx6S9FQEF/3FNAkW3k8tLsaFhlaDR13eozETdv3PTBgoc/MLi7Gw7BPq
+	s=arc-20240116; t=1779386783; c=relaxed/simple;
+	bh=brE8zviLRgbk88iAmkn3KqXUwvs5cR73GECkaII2rZk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nyaNDgxOg+GksL+r7HwCVnMpAj4IeQSfmSJlvhiuFG0bh1cD3vLVG7y9QXmXHBux0RsvNgMIhcKqVBYnH2EqwipW6kDAdUmKWph5PkOh3OQ9T7MOx5i9JCTxBHxerMNASipJ8JGFP1GtHei26CaiHBxz4rcilY+TiSWPEFn86vM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=RmLBBERz; arc=none smtp.client-ip=173.37.86.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=cisco.com; i=@cisco.com; l=4313; q=dns/txt;
+  s=iport01; t=1779386781; x=1780596381;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QyPt9LBX7nQQh/wgVho531p2v97mk9+evKjEyAKcC24=;
+  b=RmLBBERzwv2akRRvsC0Ikdzeep/mst3BmChfjjHEJjyTKXPMYiT2Z04/
+   zaD1pNX5j1ViALwcvlNjPctnADkMkE9rxEh18PYKgviayVA3qco/curg0
+   AMNYRC9uHlRZjpRgJhNF3fNd82Vnn5YFDWMKMqU6yCv3htkOlO/NZZITW
+   fsE0HPJcb+mvcij5qai7ohN6gBebfQ6B388f6T07UMclEZiEKV2n7Pwqc
+   zmfDmOZu3f/dZFVmsNmKDTslqXEk1PlQvo4gNTB0pbhLcutvEQd8qGX6I
+   Xp//ICeNIuavZtUh1slDN2zd9U5U0SAZl9zUFugnbqCRNd75+VgJE9pAl
    g==;
-X-CSE-ConnectionGUID: 9yrXBPapSeugoewNSa8U/g==
-X-CSE-MsgGUID: Jeaco58dQ0KT6LTcn38xnw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11793"; a="105773552"
-X-IronPort-AV: E=Sophos;i="6.24,160,1774335600"; 
-   d="scan'208";a="105773552"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 10:45:08 -0700
-X-CSE-ConnectionGUID: sVvxl8W3QX2Yx8AK13BLJw==
-X-CSE-MsgGUID: XZM0S5M8QcaTj4wM3UKoHA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,160,1774335600"; 
-   d="scan'208";a="236347421"
-Received: from hrotuna-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.244.167])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 10:44:41 -0700
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, Pengpeng Hou <pengpeng@iscas.ac.cn>, Petr
- Pavlu <petr.pavlu@suse.com>, Richard Weinberger <richard@nod.at>, Anton
- Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg
- <johannes@sipsolutions.net>, "Rafael J. Wysocki" <rafael@kernel.org>, Len
- Brown <lenb@kernel.org>, Corey Minyard <corey@minyard.net>, Gabriel Somlo
- <somlo@cmu.edu>, "Michael S. Tsirkin" <mst@redhat.com>, Joonas Lahtinen
- <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Bart Van Assche <bvanassche@acm.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, Laurent
- Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede
- <hansg@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, Bjorn
- Helgaas <bhelgaas@google.com>, Hannes Reinecke <hare@suse.de>, "James E.J.
- Bottomley" <James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
- <martin.petersen@oracle.com>, Daniel Lezcano <daniel.lezcano@kernel.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
- <jirislaby@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, Jason Wang
- <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Eugenio
- =?utf-8?Q?P=C3=A9rez?= <eperezma@redhat.com>, Jason Baron
- <jbaron@akamai.com>, Jim Cromie
- <jim.cromie@gmail.com>, Tiwei Bie <tiwei.btw@antgroup.com>, Benjamin Berg
- <benjamin.berg@intel.com>, Ilpo =?utf-8?Q?J=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>,
- "David E. Box" <david.e.box@linux.intel.com>, "Maciej W. Rozycki"
- <macro@orcam.me.uk>, Srinivas Pandruvada
- <srinivas.pandruvada@linux.intel.com>, Peter Zijlstra
- <peterz@infradead.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik
- <gor@linux.ibm.com>, Sean Christopherson <seanjc@google.com>, Paolo
- Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo
- Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>, Frank Li
- <Frank.Li@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Alexander
- Potapenko <glider@google.com>, Marco Elver <elver@google.com>, Dmitry
- Vyukov <dvyukov@google.com>, Andrew Morton <akpm@linux-foundation.org>,
- John Johansen <john.johansen@canonical.com>, Paul Moore
- <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
- <serge@hallyn.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Georgia Garcia <georgia.garcia@canonical.com>, kvm@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-modules@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-mm@kvack.org, apparmor@lists.ubuntu.com,
- linux-security-module@vger.kernel.org, linux-um@lists.infradead.org,
- linux-acpi@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
- qemu-devel@nongnu.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
- linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
- virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, netdev@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 10/11] treewide: Manually convert custom
- kernel_param_ops .get callbacks
-In-Reply-To: <20260521133326.2465264-10-kees@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park,
- 6 krs Bertel Jungin Aukio 5, 02600 Espoo, Finland
-References: <20260521133315.work.845-kees@kernel.org>
- <20260521133326.2465264-10-kees@kernel.org>
-Date: Thu, 21 May 2026 20:44:37 +0300
-Message-ID: <5cd0c8dde3687d0aea765f2f21f5e1cd8ba83028@intel.com>
+X-CSE-ConnectionGUID: Puehc78zQ1aCDD31Al2clg==
+X-CSE-MsgGUID: CXXnZltpTySxVz2sNxrs0A==
+X-IPAS-Result: =?us-ascii?q?A0ATBACkSA9q/5L/Ja1aglmEJ0MZlFqCIYEWnQiBfw8BA?=
+ =?us-ascii?q?QEPUQQBAYUGjTQCJjUIDgECBAMCAwEBAQEBAQEBAQEBCwEBBQEBAQIBBwWBD?=
+ =?us-ascii?q?hOGXIZdNgFGhFKCdAO0KIIsgQHeQYFwFYE4jVx0G4RgJxUGgUlEgRWCcoJIi?=
+ =?us-ascii?q?TUEgiJ6EoY2iGZIgR4DWSwBVRMNCgsHBYFmAzUSKhVuMh2BIz4XgQsbBwWBS?=
+ =?us-ascii?q?4E3cmqBBIRXeCMsA06BLYFrAwsYDUgRLDcUGwQ+bgeNNRkHAVc3B3QGL3gWA?=
+ =?us-ascii?q?R6TLwMRki2Ld5UXhCahWBozqmqZBaNwhVCBaQE6gVkzGggbFYMjUhkPji0Wy?=
+ =?us-ascii?q?x4nbwIHAgcOAwuTZQEB?=
+IronPort-Data: A9a23:PsZOeK8YIBJnWp9hrTf4DrUDeH+TJUtcMsCJ2f8bNWPcYEJGY0x3n
+ 2IcWmDXP//bY2L3L9BzOtnl80wBvpCHyNFqTQNrpHpEQiMRo6IpJzg2wmQcns+2BpeeJK6yx
+ 5xGMrEsFOhtEDmE4EzrauS9xZVF/fngbqLmD+LZMTxGSwZhSSMw4TpugOdRbrRA2bBVOCvT/
+ 4muyyHjEAX9gWAsbzhNs/7rRC5H5ZwehhtJ5jTSWtgT1LPuvyF9JI4SI6i3M0z5TuF8dsamR
+ /zOxa2O5WjQ+REgELuNyt4XpWVTH9Y+lSDX4pZnc/DKbipq/0Te4Y5nXBYoUnq7vh3S9zxHJ
+ HqhgrTrIeshFvWkdO3wyHC0GQkmVUFN0OevzXRSLaV/wmWeG0YAzcmCA2kOIIAY8bknE1gX/
+ Nc0BGtURxTZjOa5lefTpulE3qzPLeHxN48Z/3UlxjbDALN+ENbIQr7B4plT2zJYasJmRKmFI
+ ZFGL2AyMVKZP0Mn1lQ/UPrSmM+rj2PjcjlRq3qepLE85C7YywkZPL3FbIqOKoXRGJwO9qqej
+ kn2z2LLBg0CCM2k2QSXqGmKlvXUxQquDer+E5X9rJaGmma7ymUVThYfT0O2p+W0kGa6WtRWM
+ UtS/TAhxYAw+U6hZt38WQCo5n+Ou1gXXN84O+gz8h2MzOzM7hqUHHMJSBZGctUtsMJwTjsvv
+ neAk9rqAiRorZWPRH6d/6vSpjS3UQAXKGIEaCAETCMf7tXjqZ11hRXKJv55HbC4lMbdAzz8w
+ zmW6iM5gt07icIW0a6y+3jcnimh4JPOS2Yd4gTRQ3Lg7Q5jYoOhT5Kn5EKd7vtaKoudCF6bs
+ xAsn8mY8fBLFpqWlQSTT+gXWrKk/fCINHvbm1EHInU63y6m93jmecVb5ytzYR84dM0FYjTuJ
+ kTUvGu9+aNuAZdjVocvC6rZNijg5fGI+QjNPhwMUudzXw==
+IronPort-HdrOrdr: A9a23:ZRXoiqmZtpn8TtntCAb/I41cGEPpDfLy3DAbv31ZSRFFG/FwWf
+ rDoB19726XtN9/Yh8dcLy7UpVoIkmslqKdg7NxAV7KZmCP01dAR7sM0WKN+VDdMhy73vJB1K
+ tmbqh1AMD9ABxHl8rgiTPIdurIuOPmzImYwcHD0nxqUQZmL4tk7wt/F0KnN3cefngjOXL8f6
+ DsgPauYFGbCBMqUvg=
+X-Talos-CUID: =?us-ascii?q?9a23=3AL3e2hmo1RTYC5fsXencAbsfmUfg4f33WkyfCGha?=
+ =?us-ascii?q?xIkpFE+S8TQWb/Kwxxg=3D=3D?=
+X-Talos-MUID: 9a23:Ux++owvDlByTvPpPW82nrwFSMvVs/7ySGXsdr4dcoO+ULzcoEmLI
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.24,160,1774310400"; 
+   d="scan'208";a="483813513"
+Received: from rcdn-l-core-09.cisco.com ([173.37.255.146])
+  by rcdn-iport-7.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 21 May 2026 18:05:12 +0000
+Received: from fedora.lan?044cisco.com (unknown [10.188.18.181])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kartilak@cisco.com)
+	by rcdn-l-core-09.cisco.com (Postfix) with ESMTPSA id 6A0CA18000233;
+	Thu, 21 May 2026 18:05:10 +0000 (GMT)
+From: Karan Tilak Kumar <kartilak@cisco.com>
+To: sebaddel@cisco.com
+Cc: arulponn@cisco.com,
+	djhawar@cisco.com,
+	gcboffa@cisco.com,
+	mkai2@cisco.com,
+	satishkh@cisco.com,
+	aeasi@cisco.com,
+	jejb@linux.ibm.com,
+	martin.petersen@oracle.com,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jmeneghi@redhat.com,
+	revers@redhat.com,
+	dan.carpenter@linaro.org,
+	adakopou@redhat.com,
+	lduncan@suse.com,
+	Karan Tilak Kumar <kartilak@cisco.com>
+Subject: [PATCH 00/13] Introduce functionality for NVMe initiator
+Date: Thu, 21 May 2026 11:04:45 -0700
+Message-ID: <20260521180458.5448-1-kartilak@cisco.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: 8bit
+X-Authenticated-User: kartilak@cisco.com
+X-Outbound-Client-TLS: ANONYMOUS;unknown [10.188.18.181];TLSv1.3;TLS_AES_256_GCM_SHA384;256
+X-Outbound-SMTP-Client: 10.188.18.181, [10.188.18.181]
+X-Outbound-Node: rcdn-l-core-09.cisco.com
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[cisco.com,reject];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_DKIM_ALLOW(-0.20)[cisco.com:s=iport01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,iscas.ac.cn,suse.com,nod.at,cambridgegreys.com,sipsolutions.net,minyard.net,cmu.edu,redhat.com,linux.intel.com,intel.com,ursulin.net,gmail.com,ffwll.ch,acm.org,ziepe.ca,ideasonboard.com,google.com,suse.de,HansenPartnership.com,oracle.com,arm.com,linuxfoundation.org,rowland.harvard.edu,linux.alibaba.com,akamai.com,antgroup.com,orcam.me.uk,infradead.org,linux.ibm.com,alien8.de,zytor.com,atomlin.com,linux-foundation.org,canonical.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,googlegroups.com,kvack.org,lists.ubuntu.com,lists.infradead.org,lists.sourceforge.net,nongnu.org,lists.freedesktop.org,lists.ozlabs.org,lists.one-eyed-alien.net,lists.linux.dev];
-	TAGGED_FROM(0.00)[bounces-23974-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-23976-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jani.nikula@linux.intel.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_GT_50(0.00)[99];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	FROM_NEQ_ENVFROM(0.00)[kartilak@cisco.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:mid,intel.com:dkim,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 66BA85AA7F2
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[cisco.com:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,cisco.com:mid,cisco.com:dkim]
+X-Rspamd-Queue-Id: 9D23F5AACB5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 21 May 2026, Kees Cook <kees@kernel.org> wrote:
-> diff --git a/drivers/gpu/drm/i915/i915_mitigations.c b/drivers/gpu/drm/i915/i915_mitigations.c
-> index 6061eae84e9c..99cb38f355b6 100644
-> --- a/drivers/gpu/drm/i915/i915_mitigations.c
-> +++ b/drivers/gpu/drm/i915/i915_mitigations.c
-> @@ -95,33 +95,37 @@ static int mitigations_set(const char *val, const struct kernel_param *kp)
->  	return 0;
->  }
->  
-> -static int mitigations_get(char *buffer, const struct kernel_param *kp)
-> +static int mitigations_get(struct seq_buf *buffer,
-> +			   const struct kernel_param *kp)
->  {
->  	unsigned long local = READ_ONCE(mitigations);
-> -	int count, i;
->  	bool enable;
-> +	int i;
+Hi Martin, reviewers,
 
-I'm fine with what you have, and I can do these as a follow-up later if
-it's too much trouble, but I suggest something like this:
+This series adds functionality for NVMe initiator to the fnic driver.
 
-	const char *sep = "";
+The changes enable the fnic driver to act as an NVMe initiator over
+Fibre Channel (FC-NVMe), allowing the host to discover and communicate
+with NVMe targets using the existing fnic infrastructure. The patches
+prepare the driver for full FC-NVMe initiator operation while
+maintaining existing SCSI/FC functionality.
 
->  
-> -	if (!local)
-> -		return scnprintf(buffer, PAGE_SIZE, "%s\n", "off");
-> +	if (!local) {
-> +		seq_buf_printf(buffer, "%s\n", "off");
-> +		return 0;
-> +	}
->  
->  	if (local & BIT(BITS_PER_LONG - 1)) {
-> -		count = scnprintf(buffer, PAGE_SIZE, "%s,", "auto");
-> +		seq_buf_printf(buffer, "%s,", "auto");
+These are some of the salient patches:
 
-		seq_buf_printf(buffer, "%s%s", sep, "auto");
-		sep = ",";
+o. Make fnic debug logging usable by SCSI and NVMe initiator roles.
+o. Use fnic instance numbers for non-SCSI-facing identifiers.
+o. Decode firmware roles for FCP, NVMe, and unsupported targets.
+o. Advertise NVMe initiator service parameters during FC discovery.
+o. Add FDLS role handling for NVMe initiator discovery flows.
+o. Add the NVMe/FC transport path and port registration.
+o. Route completions, resets, and LS frames by initiator role.
+o. Add NVMe LS timeouts, statistics, and debugfs state reporting.
 
-(In the printf the sep is just for future expansion, though I don't
-expect one.)
+Even though the patches have been made into a series, some patches are
+heavier than others. But, every effort has been made to keep the
+purpose of each patch as a single-purpose, and to compile cleanly.
+All the individual patches compile cleanly. The compiler used is GCC
+14.2.
 
->  		enable = false;
->  	} else {
->  		enable = true;
-> -		count = 0;
->  	}
->  
->  	for (i = 0; i < ARRAY_SIZE(names); i++) {
->  		if ((local & BIT(i)) != enable)
->  			continue;
-> -
-> -		count += scnprintf(buffer + count, PAGE_SIZE - count,
-> -				   "%s%s,", enable ? "" : "!", names[i]);
-> +		seq_buf_printf(buffer, "%s%s,", enable ? "" : "!", names[i]);
+This patch set has been tested as a whole. Therefore, the tested-by
+fields have been added only to one patch in the set.
+I've refrained from adding tested-by to most of the patches, so as to
+not mislead the reviewer/reader.
 
-		seq_buf_printf(buffer, "%s%s%s", sep, enable ? "" : "!", names[i]);
-		sep = ",";
+A brief note on the unit tests:
 
->  	}
+o. Configure multipathing, and run link flaps on single link. IOs drop
+   briefly, but pick up as expected.
+o. Configure multipathing, and run link flaps on two links, with a 30
+   second delay in between. IOs drop briefly, but pick up as expected.
+o. Repeat the above tests with 1 queue and 64 queues.
+o. Perform tests with Netapp and Pure targets.
 
-	seq_buf_puts(buffer, "\n");
+All tests were successful.
 
->  
-> -	buffer[count - 1] = '\n';
-> -	return count;
-> +	/* Replace the trailing comma with a newline. */
-> +	if (!seq_buf_has_overflowed(buffer) && buffer->len > 0 &&
-> +	    buffer->buffer[buffer->len - 1] == ',')
-> +		buffer->buffer[buffer->len - 1] = '\n';
+This set of patches was reviewed before submitting upstream,
+and the following review comments were incorporated.
 
-Drop the above.
+Incorporate review comments from Hannes Reinecke:
 
-I.e. keep track of sep while printing to avoid removing it later.
+Decode target roles explicitly and report unsupported roles.
+Remove the empty line before the FLOGI completion else block.
+Add a short comment for the NVMe ERSP completion case.
 
-BR,
-Jani.
+Incorporate review comments from Lee Duncan:
 
-> +
-> +	return 0;
->  }
->  
->  static DEFINE_KERNEL_PARAM_OPS(ops, mitigations_set, mitigations_get);
+Replace the NVMe LS OXID switch with a direct frame-type check.
+Rename the NVMe frame helper to follow fnic function naming style.
+Convert the NVMe opcode stats helper to a switch statement.
+Share NVMe completion stats accounting and compute duration once.
+
+Thanks,
+Karan
+
+Karan Tilak Kumar (13):
+  scsi: fnic: Make debug logging protocol independent
+  scsi: fnic: Use fnic_num for non-SCSI identifiers
+  scsi: fnic: Decode firmware role configuration
+  scsi: fnic: Advertise NVMe initiator service parameters
+  scsi: fnic: Add FDLS role handling for NVMe initiators
+  scsi: fnic: Add the NVMe/FC transport path
+  scsi: fnic: Route completions and resets by initiator role
+  scsi: fnic: Handle NVMe LS frames in FDLS
+  scsi: fnic: Send NVMe LS requests through FDLS
+  scsi: fnic: Abort timed-out NVMe LS requests
+  scsi: fnic: Track NVMe transport statistics
+  scsi: fnic: Expose NVMe transport state in debugfs
+  scsi: fnic: Bump up version number
+
+ drivers/scsi/fnic/Makefile       |    1 +
+ drivers/scsi/fnic/fcpio.h        |   35 +
+ drivers/scsi/fnic/fdls_disc.c    |  953 ++++++++------
+ drivers/scsi/fnic/fdls_fc.h      |   12 +
+ drivers/scsi/fnic/fip.c          |  117 +-
+ drivers/scsi/fnic/fip.h          |    2 +-
+ drivers/scsi/fnic/fnic.h         |  104 +-
+ drivers/scsi/fnic/fnic_debugfs.c |  101 +-
+ drivers/scsi/fnic/fnic_fcs.c     |  196 +--
+ drivers/scsi/fnic/fnic_fdls.h    |   48 +-
+ drivers/scsi/fnic/fnic_io.h      |   23 +-
+ drivers/scsi/fnic/fnic_isr.c     |   28 +-
+ drivers/scsi/fnic/fnic_main.c    |  211 ++-
+ drivers/scsi/fnic/fnic_nvme.c    | 2079 ++++++++++++++++++++++++++++++
+ drivers/scsi/fnic/fnic_nvme.h    |  138 ++
+ drivers/scsi/fnic/fnic_res.c     |   31 +-
+ drivers/scsi/fnic/fnic_res.h     |   32 +-
+ drivers/scsi/fnic/fnic_scsi.c    |  249 ++--
+ drivers/scsi/fnic/fnic_stats.h   |   28 +
+ drivers/scsi/fnic/fnic_trace.c   |    5 +-
+ drivers/scsi/fnic/vnic_devcmd.h  |    2 +-
+ 21 files changed, 3617 insertions(+), 778 deletions(-)
+ create mode 100644 drivers/scsi/fnic/fnic_nvme.c
+ create mode 100644 drivers/scsi/fnic/fnic_nvme.h
 
 -- 
-Jani Nikula, Intel
+2.47.1
 
