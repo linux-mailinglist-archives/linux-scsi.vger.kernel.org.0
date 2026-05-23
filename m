@@ -1,81 +1,81 @@
-Return-Path: <linux-scsi+bounces-24038-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24040-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2D/8MfIcEWrIhQYAu9opvQ
-	(envelope-from <linux-scsi+bounces-24038-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:20:18 +0200
+	id 0IdrN5UdEWrIhQYAu9opvQ
+	(envelope-from <linux-scsi+bounces-24040-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:23:01 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF0065BCF1B
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:20:17 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52C6A5BCF9F
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:23:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0B07A30268F4
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 03:16:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DA9AC302800D
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 03:16:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 622E333E355;
-	Sat, 23 May 2026 03:16:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD2C34041C;
+	Sat, 23 May 2026 03:16:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mSECbXsp"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="UXWBXk22"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0768E33D6C7;
-	Sat, 23 May 2026 03:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE13339705
+	for <linux-scsi@vger.kernel.org>; Sat, 23 May 2026 03:16:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779506162; cv=none; b=duvu8mT+a3r/5H5cm5bm6skBHo2SMZN1TXjktV7WCvkmp7FpepkH2DaTzkYxz2ZpvHwaE6y6htlgah+ZwsCX8mr88lGZLllIEAXVE5AQ2XBwSs/PirDIOQA1AEFKpbnR7HEC4y1BUwPUSoPJ7GCBMBzMbOjcU8NIKZ//59sIOos=
+	t=1779506166; cv=none; b=POcyvzQyOhhlW1amI5RQjDScJDArcX4QDbk/WJ75MUL2OzDHPayoXgyW2M98ZdA42MhYNyxkCIKSGjtZH+uFmhZeuzM/iedrvc/+n0zFAH/n1acADzjcm9ce0vr2F3lsiKM9UG0vpE2eV8/9Vnv0n7vv7S9Ncrd0U9l7BWYHx5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779506162; c=relaxed/simple;
-	bh=IFHtXUl/rmxrhXalXLLMn7jLuME+SNZdz9lMDAh1PKk=;
+	s=arc-20240116; t=1779506166; c=relaxed/simple;
+	bh=M+cpXNVNmBECPfTHafUNTaa0ZMZsG1pGrlAIB+m3yRw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rVy85i1Ei8O9xj8QrySQ7c7eMTaFP8BwKtUhujFnYGQtLMbyJ84pgjGnj2ryrUHUvNb0inKW2l8zo6mgfLAjrCweMGGYkWDA4VNaDWduSC581jB2CGa6yj9S1YTCx0QCiynqie7MkGxN5LlNFGPXk+hOX8Fe1kb0ORmTA+QxuxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=mSECbXsp; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=CmMCA3S9zMXuF+PvBsBwb2d3RrWP2GOoHcjMTtWOqIkVgz+XRjARD/D97ZQvR0lbnsDdF1edc+WmrDCMX6F4lnTT2/ukWWjRXlimzr2Au43BKJVvzC4I0ukloyL3oRH+4LQ84Qp/oz++f59HwsXsOb5rl3q6L03ec7irC4t5GLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=UXWBXk22; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64N3BcnK1942559;
-	Sat, 23 May 2026 03:15:58 GMT
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64N39dDE925950;
+	Sat, 23 May 2026 03:15:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=1R/hnSMK+XZZmwmXUFxaesfejobLvV38R9JlnXvRZfA=; b=
-	mSECbXsp8f4sLKWaR2uSht/077PLLwG5AgV7pyClhrHF9iPe7T3GLV9GtozHjz4f
-	JwOuX7z1be28RH17EikPfZSNH/s/xwn9VCqJD2uOGUn/roetLncg3NVJYfos36ft
-	nFTfZlieMRA5wRK/HRvQsmhL+H9N1SMxeFNsASSLRozNhKKclZl5QgPx/NjnhlRH
-	uoNVuT9Bu8r11/bUrAC63yYIWBU/SvAFrcJUJVvq1C6THM0evNHz1NuRdZZ+eMtt
-	3a9fiR3XgwH0qhdJlK0tXtSMIdkT1kaqBIsBU1apwqINTbR3hxSj+evNo5XC8sUl
-	zrEbTsdU76vvnqzmrflRaQ==
+	corp-2025-04-25; bh=POcr278EiKP+KWx1bSbLFER/AODfoBN67DtJaDax6W4=; b=
+	UXWBXk22PbKBNAha/hUid5IlTt/hn3sS5oT4bqmnBBipdzLFHj74aWx4OSYa4XEh
+	aw3bB6KPPRfC2fRcEt5Y7Vqb+A24f83Uv+TB+f8SFj+q3ThrXICA2h++zkgjxpdV
+	/Epf/CNT/6gX3rYkdzNc8D3czPJ3mypbxNYKrkQCTiXGga1lhXI4jznz97m1MKsb
+	3Jmujj09xYEvPjpYNl8/fgzWoBFV01UDxoysvufZ9O/G9HMMzGtsqmAwQDJvd9iE
+	VaRMxCmdXno/EeMYnYGTfmCP9GhXAW4gLBiNtAeogIcasxixsJ54zTP61D8xHZin
+	WakuCqR6E7z19LVIl+XYXw==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4eb447g05m-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4eb2tyg72g-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Sat, 23 May 2026 03:15:58 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 64N3F6a1032352;
-	Sat, 23 May 2026 03:15:57 GMT
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 64N3F68n032371;
+	Sat, 23 May 2026 03:15:58 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4eb2p6hstm-1
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4eb2p6hstu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 23 May 2026 03:15:57 +0000 (GMT)
+	Sat, 23 May 2026 03:15:58 +0000 (GMT)
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 64N3FvRG035132;
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 64N3FvRI035132;
 	Sat, 23 May 2026 03:15:57 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4eb2p6hstd-1;
-	Sat, 23 May 2026 03:15:56 +0000 (GMT)
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4eb2p6hstd-2;
+	Sat, 23 May 2026 03:15:57 +0000 (GMT)
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Alexander Perlis <aperlis@math.lsu.edu>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nikkos Svoboda <nsvoboda@math.lsu.edu>
-Subject: Re: [PATCH] scsi: devinfo: Add BLIST_NO_RSOC for Promise VTrak E310f
-Date: Fri, 22 May 2026 23:15:47 -0400
-Message-ID: <177950426844.1557613.195450412255768361.b4-ty@oracle.com>
+To: linux-scsi@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        David Jeffery <djeffery@redhat.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH v2] scsi: core: run queues for all non-SDEV_DEL devices from scsi_run_host_queues
+Date: Fri, 22 May 2026 23:15:48 -0400
+Message-ID: <177950426842.1557613.17754359525659781441.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260512231254.27530-1-aperlis@math.lsu.edu>
-References: <20260512231254.27530-1-aperlis@math.lsu.edu>
+In-Reply-To: <20260515180941.9698-1-djeffery@redhat.com>
+References: <20260515180941.9698-1-djeffery@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -89,71 +89,71 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  definitions=2026-05-23_01,2026-05-18_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
  suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 lowpriorityscore=0
- mlxlogscore=999 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=984 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.19.0-2605130000 definitions=main-2605230029
-X-Authority-Analysis: v=2.4 cv=Ecn4hvmC c=1 sm=1 tr=0 ts=6a111bee cx=c_pps
+X-Authority-Analysis: v=2.4 cv=SoCgLvO0 c=1 sm=1 tr=0 ts=6a111bee cx=c_pps
  a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
  a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=EIcjfB9IiI4px24ztqRk:22 a=VwQbUJbxAAAA:8
- a=X2_Ych7kLY-UD9z66WAA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: 3NrsfVwSm3APNJFgJqVlaImigc-5FVZe
-X-Proofpoint-GUID: 3NrsfVwSm3APNJFgJqVlaImigc-5FVZe
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIzMDAyOCBTYWx0ZWRfX3y4VBlBegUi+
- fEtf2/tFIFdDh0/thNlZ+1xSswx6CikgKLyZcpZKoONh6xfdRq0n2iNVvXyQXClpRDUJjZXNqBN
- IAT0BCAUUKPfY+WAYUnBKr8O/OftGnn+N5skcQTlxseICno7bHT9qQDATSDocs9pqiQ1btUf5mT
- scyaJZ+zs0/X3b/sPLYufAyZTCySU0Ii8NxUrH6fI/NKHhfJzqGEUtXe4Dq6Gl4gp3zDShCJWBJ
- ELcZUVWNaImXMHmHlmzTjNs87e0OjubIjXgPYEJQGefXNRjA2r3S3Im1I6oeTf2l3V8TJMwZicX
- ZbxcCj5IG2R5gdFVm+GvVU6mALw6/5rdq99rUIlJLnLfw401mfvRmhcFHQhfUwEJpVJEAUZdC7M
- 3suzAqdKxgS6T9vHzSdo4mwKXZ6QydI+J+CrMdU3fUepB/r4KzZvsbruHdGgPqm54CgCB3ZAszi
- 1jSIPQlL2sTQhi7j5SQ==
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=RD47p0oAkeU5bO7t-o6f:22 a=VwQbUJbxAAAA:8
+ a=NUbkhC5GeSYxshbFoikA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: gfmT7zwZWJn1rVjYySPhuzMPl8E-fmvj
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIzMDAyOSBTYWx0ZWRfX4RiklgwW+rI8
+ 2ua0AIKbjiKXDLpjYy9H/Y/AENK/aXISyqSh4wAyaZ2vBcgQcrf82gfRzmfsJ94TcjGmmK92Wdl
+ po5WiwmrNMG7eWfh5t02ArGlhCPM19WTWgRzJ4GBv55uLj2hbmTZSpNJyeJP2YuFBXwebHCYvrd
+ OLwqYAKAO0YoJwZQ1pDivdL6Jdjc78N5ZvpjyQJ9IoIy72pE9VNcnGrlXkw9T7q25Vuj6Z8IuiQ
+ OjQFySyjvN6oCzM0IuikZZBCdcXVnuvFxeGpxpnuS8Y/lo2EQ41nXQTU06OE/qh911oKACYkptr
+ kRemIteqySvOAGgqDUhPGy58fttlqrPgN9vpI7qBZCxwtsJPOSYBV+GWgUOin/XVsGiX2fJZPdi
+ tSBMpZxBB+qtrk0fwgLxHExnqvVphP5egC6xkkV5MZNVKdHWueZuRORFonqX6DLwb0GnfT8zlf/
+ Et706FetGe6Us3k626Q==
+X-Proofpoint-GUID: gfmT7zwZWJn1rVjYySPhuzMPl8E-fmvj
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24038-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24040-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[oracle.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,oracle.com:mid,oracle.com:dkim];
-	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,oracle.com:mid,oracle.com:dkim];
+	RCPT_COUNT_FIVE(0.00)[5];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	PRECEDENCE_BULK(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: CF0065BCF1B
+X-Rspamd-Queue-Id: 52C6A5BCF9F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, 12 May 2026 18:12:54 -0500, Alexander Perlis wrote:
+On Fri, 15 May 2026 14:09:41 -0400, David Jeffery wrote:
 
-> The extremely slow boots reported July 2014 in
->   [Bug 79901](https://bugzilla.kernel.org/show_bug.cgi?id=79901)
-> for Promise VTrak E610f 3U 16-bay FC RAID enclosure occur also with
-> the Promise VTrak E310f 2U 12-bay FC RAID enclosure. The 2014
->   [patch](https://bugzilla.kernel.org/attachment.cgi?id=144101&action=diff)
-> added support for the BLIST_NO_RSOC flag and specified that flag for the
-> Promise VTrak E610f. This current patch simply adds the E310f to that same
-> list. (My workaround has been to include
->   scsi_mod.dev_flags=Promise:\"VTrak E310f\":0x20000040
-> among my kernel boot parameters.)
+> While a scsi host is in a recovery state, scsi_mq_requeue_cmd will not set
+> the requeue list for a requeued command to be kicked in the future. The
+> expectation is a call to scsi_run_host_queues will kick all scsi devices
+> once the recovery state is cleared.
+> 
+> However, scsi_run_host_queues uses shost_for_each_device which uses
+> scsi_device_get and so will ignore devices in a partially removed state like
+> SDEV_CANCEL. But these devices may also have requeued requests, leaving
+> their requests stuck from not being kicked and causing the removal process
+> of the device to hang.
 > 
 > [...]
 
 Applied to 7.1/scsi-fixes, thanks!
 
-[1/1] scsi: devinfo: Add BLIST_NO_RSOC for Promise VTrak E310f
-      https://git.kernel.org/mkp/scsi/c/adda8a44e1e4
+[1/1] scsi: core: run queues for all non-SDEV_DEL devices from scsi_run_host_queues
+      https://git.kernel.org/mkp/scsi/c/7205b5870227
 
 -- 
 Martin K. Petersen
