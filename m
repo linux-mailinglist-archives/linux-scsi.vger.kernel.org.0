@@ -1,86 +1,82 @@
-Return-Path: <linux-scsi+bounces-24018-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24037-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2KftAFcQEWrDgwYAu9opvQ
-	(envelope-from <linux-scsi+bounces-24018-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 04:26:31 +0200
+	id KFW8AlccEWq+hQYAu9opvQ
+	(envelope-from <linux-scsi+bounces-24037-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:17:43 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CB8F5BCACA
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 04:26:30 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F2DB5BCEA2
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:17:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 403443032039
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 02:21:58 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 0030230208D4
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 03:16:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A032F37C102;
-	Sat, 23 May 2026 02:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB44C331237;
+	Sat, 23 May 2026 03:15:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3kSZj3u"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Bs4hWhIM"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B3C330B14;
-	Sat, 23 May 2026 02:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7618D3064B5;
+	Sat, 23 May 2026 03:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779502838; cv=none; b=CpbVfIOCegpb340XaX7y/zKwht5z+jfgrhb/ibQ7iBYh7EaRrcA1Ra2f6IafRMcSafvmV1aoN15+KKx1Ll5Tyzls8mBQfGnIFwkiRUQZUs96rqHhdnzNZs5D+Ie0iee//uPZhj6G1Nogt3+TfxIyI9iSTJNU9M3xITEP1tFTqi0=
+	t=1779506158; cv=none; b=IxrQcnEEbq2ERQbgZfB4twXAJ2eY+OlqTUpNwRy3dPGD5iV2wJv4SJ30mgwTopHH7r9jn9VKH99QiFdmBwakWUTp+62boekYXGxJEpIHWk0ft0LjuSj+wci0UaY38SCG9UA+4ouhMJ+tQeV4uNMx884DmpnlLzXk9g6wJTJZNco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779502838; c=relaxed/simple;
-	bh=UmQYm34vYP2ENdkwyZNxGga4qD0x0KcDAm1qVllzKHw=;
+	s=arc-20240116; t=1779506158; c=relaxed/simple;
+	bh=6QdnE50gKD+tD0QjrDjYqrv+GzTNJTCVGiBEnMarYUg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CMTsBh58gtc/DWM9Sl0hFowDo7AwDgu5+Oac7Cfi8SLzrxqhXoNEbxufANsiCZaIvgvUkg21Qtvdne8YV69Ny+UtNvimiCOtQu46iTTstB+qDIzjC17FUKk3OzdvCxJ1zzxp5/gFM1ZS/jUQK0FAiNZJWoy0DUTzwmORTbDm5kE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3kSZj3u; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAF8B1F00ACF;
-	Sat, 23 May 2026 02:20:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779502836;
-	bh=fBqQY9ZHL/9cRLn8Occ+Ug3mEK4c+qwKMVy6BmevSGc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=S3kSZj3u8L9wzn3G0IySJ/qib8kxdjnTrF5+H9P2Q/MLQmpUIAQLBfmZMi/wX6sr7
-	 Pe+xbSNDmhnFtf5FODb38MDAfPysadCA/pIxypN2s4DPeTqhkxX8+yzrjLyraz6Ers
-	 0OXBcqilsc0/RrfpbKbvb1FLBU5BKOPg7GmHj1zLgkHhrnzRXi5mmynSRXZhTltx74
-	 KlwKmksUHzwDrSR4I+fKg9gYJTHYBrYpLUc1z+3+SSWtCaioSAZCsED5dMANX2lGtV
-	 lTFMgXzx6skzbFFILszhlSTAhgYtD2JVxO8mAH0yzkF3FHmGOg3nIfvWjM62gBG7J7
-	 ZzuboHbBnY1jQ==
-From: Bjorn Andersson <andersson@kernel.org>
-To: robin.clark@oss.qualcomm.com,
-	lumag@kernel.org,
-	abhinav.kumar@linux.dev,
-	sean@poorly.run,
-	marijn.suijten@somainline.org,
-	maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org,
-	tzimmermann@suse.de,
-	airlied@gmail.com,
-	simona@ffwll.ch,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	quic_mahap@quicinc.com,
-	konradybcio@kernel.org,
-	mani@kernel.org,
-	James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com,
-	vkoul@kernel.org,
-	kishon@kernel.org,
-	cros-qcom-dts-watchers@chromium.org,
-	Ritesh Kumar <quic_riteshk@quicinc.com>
-Cc: linux-phy@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	freedreno@lists.freedesktop.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	quic_vproddut@quicinc.com
-Subject: Re: (subset) [PATCH v4 0/2] Add edp reference clock for lemans
-Date: Fri, 22 May 2026 21:20:02 -0500
-Message-ID: <177950280338.1097700.6276233449765894719.b4-ty@kernel.org>
+	 MIME-Version:Content-Type; b=VZDa0qqtCdViZGZpg4UBYx2LleMG5da8u36/lE1pi0Byf1CQoC7YLuNLG6b1TW672WNtSFeAGGVE2GIXPNzVzipDhxzTd7Qu4nV2XI9SDY1v+N8mJJqjDOQfbjgqZ08FF0k2QLN/yLUCnMHsYmpvQOZ9K0tUfaY88RnsGXyQCYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Bs4hWhIM; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64N25WfF2306715;
+	Sat, 23 May 2026 03:15:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=ktEyyfLRRFdMxrVEwuRXgkrGd6j3WoLUViZhfjdpIzI=; b=
+	Bs4hWhIMzslsm+RWhy+hphFROIoTOhhATkMRnqvyaqITdVIvhR9bJfYiYa8UYX77
+	6GSACDcuiS3lu3uKJ8Io/MABzTlN3P76qgtOpvomfmpHvPUn2E7WtSl4Rxc7NgSc
+	dae6MCdu7wps4FaEu6vo3InaL21uX4AAyqKiWjT5pH/0n9lqGtqLfxacPqySusUv
+	UwDFXg7PWLxNAIF5UHY3ijDhHVQkiCmBzWsaSc7lIvdLAGfpryKtTfCIlouTtJj9
+	IqeJRUGHuucnmw7QdtUHdoEE7PQuj9dBy2HL275QfxpUzQdmeMuUegSCf8pmZssZ
+	mK4fg2/dtXqmVSFbAweEqA==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4eb35904mf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 23 May 2026 03:15:11 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 64N3F7ai032598;
+	Sat, 23 May 2026 03:15:10 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4eb2p6hsbw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 23 May 2026 03:15:10 +0000 (GMT)
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 64N3F9ds032824;
+	Sat, 23 May 2026 03:15:09 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4eb2p6hs6k-1;
+	Sat, 23 May 2026 03:15:09 +0000 (GMT)
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+To: avri.altman@wdc.com, bvanassche@acm.org, robh@kernel.org,
+        krzk+dt@kernel.org, Alim Akhtar <alim.akhtar@samsung.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, sowon.na@samsung.com,
+        peter.griffin@linaro.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 0/4] add ufs support for Exynosautov920 SoC
+Date: Fri, 22 May 2026 23:14:15 -0400
+Message-ID: <177913641756.1181900.3954359823694090087.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260128114853.2543416-1-quic_riteshk@quicinc.com>
-References: <20260128114853.2543416-1-quic_riteshk@quicinc.com>
+In-Reply-To: <20260417121452.827054-1-alim.akhtar@samsung.com>
+References: <CGME20260417115813epcas5p40234b872c221ce28981b17e42ca48139@epcas5p4.samsung.com> <20260417121452.827054-1-alim.akhtar@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -89,88 +85,78 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-23_01,2026-05-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 lowpriorityscore=0
+ mlxlogscore=999 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2605130000 definitions=main-2605230029
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIzMDAyOSBTYWx0ZWRfXyFX+vTF4Zt7F
+ 18aqXksxvYMFfeQCkjwTt4Mlpg/XYFyGL0L5m/TCFSryNhK1EXwpVpmsdUtH7kO9dgvokGiZHAb
+ vIrX1sEtmS9IZxBAKSkWqch24Qd2cH9iNlacmlSQ69mEjRKAX1OQuTN/9kGnplx1jDcWPPs/gBY
+ PYLV3MsxTIboJN7tARSbW0g2IT6rnLreR+/JU9+S/qyGhAlbVSNU+WmOJe3e2cu3r+tfGoiymbc
+ T0OVsm9u5nsfCCC1Lje5gUcwEM06YXO8/WzcAap3uKE2d5dBampn2l15L+RSykJxBIqvKx3COaS
+ tJvHv3rOuay09xSVKZfZolpNsDTV40rAMclpJoqaLXQjTy4opq+O/drHlGXQz0n7rprZs8/azFf
+ j6kZp37LmcMNgHBBuCQyNR7jzAnAqlu+rsXxRz5H03zrgdyn0zdrKw3SzP2Vm/H/jkAydS/00xb
+ +3tKnqom5140bel3Cwg==
+X-Proofpoint-GUID: QrLFBChcJdRLJx10MBLFfMdrcPYcSPO9
+X-Proofpoint-ORIG-GUID: QrLFBChcJdRLJx10MBLFfMdrcPYcSPO9
+X-Authority-Analysis: v=2.4 cv=TJJ1jVla c=1 sm=1 tr=0 ts=6a111bbf cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=x0eKOSpe3m1H3M0S9YoZ:22 a=VwQbUJbxAAAA:8
+ a=UCUsExACdNoqk4LCDqkA:9 a=QEXdDO2ut3YA:10
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
+	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24018-lists,linux-scsi=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-24037-lists,linux-scsi=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:mid,oracle.com:dkim,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[oss.qualcomm.com,kernel.org,linux.dev,poorly.run,somainline.org,linux.intel.com,suse.de,gmail.com,ffwll.ch,quicinc.com,HansenPartnership.com,oracle.com,chromium.org];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[oracle.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andersson@kernel.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi,dt];
-	RCPT_COUNT_TWELVE(0.00)[30];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 4CB8F5BCACA
+	RCVD_COUNT_SEVEN(0.00)[9]
+X-Rspamd-Queue-Id: 9F2DB5BCEA2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+On Fri, 17 Apr 2026 17:44:48 +0530, Alim Akhtar wrote:
 
-On Wed, 28 Jan 2026 17:18:48 +0530, Ritesh Kumar wrote:
-> On lemans chipset, edp reference clock is being voted by ufs mem phy
-> (ufs_mem_phy: phy@1d87000). But after commit 77d2fa54a945
-> ("scsi: ufs: qcom : Refactor phy_power_on/off calls") edp reference
-> clock is getting turned off, leading to below phy poweron failure on
-> lemans edp phy.
+> This series adds ufs driver support for ExynosAutov920,
+> ExynosAutov920 has the UFSHCI 3.1 compliant UFS controller.
 > 
-> [   19.830220] phy phy-aec2a00.phy.10: phy poweron failed --> -110
-> [   19.842112] mdss_0_disp_cc_mdss_dptx0_link_clk status stuck at 'off'
-> [   19.842131] WARNING: CPU: 2 PID: 371 at drivers/clk/qcom/clk-branch.c:87 clk_branch_toggle+0x174/0x18c
-> [   19.984356] Hardware name: Qualcomm QCS9100 Ride (DT)
-> [   19.989548] pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   19.996697] pc : clk_branch_toggle+0x174/0x18c
-> [   20.001267] lr : clk_branch_toggle+0x174/0x18c
-> [   20.005833] sp : ffff8000863ebbc0
-> [   20.009251] x29: ffff8000863ebbd0 x28: 0000000000000000 x27: 0000000000000000
-> [   20.016579] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000001
-> [   20.023915] x23: ffff0000c53de980 x22: 0000000000000001 x21: ffffb4b57fd8d710
-> [   20.031245] x20: ffffb4b5bb238b88 x19: 0000000000000000 x18: ffffffffffff7198
-> [   20.038584] x17: 0000000000000014 x16: ffffb4b5bb1e2330 x15: 0000000000000048
-> [   20.045926] x14: 0000000000000000 x13: ffffb4b5bd386a48 x12: 0000000000000dfb
-> [   20.053263] x11: 00000000000004a9 x10: ffffb4b5bd3e5a20 x9 : ffffb4b5bd386a48
-> [   20.060600] x8 : 00000000ffffefff x7 : ffffb4b5bd3dea48 x6 : 00000000000004a9
-> [   20.067934] x5 : ffff000eb7d38408 x4 : 40000000fffff4a9 x3 : ffff4b58fb2b7000
-> [   20.075269] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000ec4fc3480
-> [   20.082601] Call trace:
-> [   20.085127]  clk_branch_toggle+0x174/0x18c (P)
-> [   20.089705]  clk_branch2_enable+0x1c/0x28
-> [   20.093829]  clk_core_enable+0x6c/0xac
-> [   20.097687]  clk_enable+0x2c/0x4c
-> [   20.101104]  clk_bulk_enable+0x4c/0xd8
-> [   20.104964]  msm_dp_ctrl_enable_mainlink_clocks+0x184/0x24c [msm]
-> [   20.111294]  msm_dp_ctrl_on_link+0xb0/0x400 [msm]
-> [   20.116178]  msm_dp_display_process_hpd_high+0x110/0x190 [msm]
-> [   20.122209]  msm_dp_hpd_plug_handle.isra.0+0xac/0x1c4 [msm]
-> [   20.127983]  hpd_event_thread+0x320/0x5cc [msm]
-> [   20.132680]  kthread+0x12c/0x204
-> [   20.136011]  ret_from_fork+0x10/0x20
-> [   20.139699] ---[ end trace 0000000000000000 ]---
-> [   20.144489] Failed to enable clk 'ctrl_link': -16
-> [   20.149340] [drm:msm_dp_ctrl_enable_mainlink_clocks [msm]] *ERROR* Unable to start link clocks. ret=-16
+> ExynosAutov920 has a different mask of UFS sharability from ExynosAutov9,
+> so this series provide flexible parameter for the mask.
+> 
+> With this series applied, UFS is functional and basic I/O operations are
+> known to be working.
 > 
 > [...]
 
-Applied, thanks!
+Applied to 7.2/scsi-queue, thanks!
 
-[2/2] arm64: dts: qcom: lemans: Add eDP ref clock for eDP PHYs
-      commit: 4bd073e00fd79c0aead74ad64ade48c904221245
+[2/4] dt-bindings: ufs: exynos: add ExynosAutov920 compatible string
+      https://git.kernel.org/mkp/scsi/c/45c9dee6d653
+[3/4] scsi: ufs: exynos: add support for ExynosAutov920 SoC
+      https://git.kernel.org/mkp/scsi/c/50349bd5d0ab
 
-Best regards,
 -- 
-Bjorn Andersson <andersson@kernel.org>
+Martin K. Petersen
 
