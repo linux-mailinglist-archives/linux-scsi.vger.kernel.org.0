@@ -1,87 +1,80 @@
-Return-Path: <linux-scsi+bounces-24029-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24025-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oB42AeUbEWq+hQYAu9opvQ
-	(envelope-from <linux-scsi+bounces-24029-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:15:49 +0200
+	id qNIxDYEcEWrIhQYAu9opvQ
+	(envelope-from <linux-scsi+bounces-24025-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:18:25 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AE765BCE31
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:15:48 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 942295BCED2
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:18:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5CB6F300CEAD
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 03:15:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AB83D3039C9E
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 03:15:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECC5A33A014;
-	Sat, 23 May 2026 03:15:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D4A330B11;
+	Sat, 23 May 2026 03:15:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="LwwsNsY+"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="K83GpPwZ"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F3731BCAE;
-	Sat, 23 May 2026 03:15:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52ABE2E2665;
+	Sat, 23 May 2026 03:15:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779506134; cv=none; b=F4324RaI5sLvI3KUmy9HaHg7uCQFQWbv7/u2F0IduWA5bNNhVuwGSPbTDPuzkx/GYVktYUY7pPK5388NNTQvrYXIsTnWMseKJxsX/Jn6FlgGQJHCTQVos1FQxkubFaPucctT5EPWPEq749akRqemTOLk8sRCs9IerucJ4iumPak=
+	t=1779506128; cv=none; b=NRUAQ2p2tuqu60EH+a3Urpy+Z4zuyN5dW6hkXe+NEWHtO3SDBtRcJIbYyGoMcuzWzXoRZQkqgzyPMJ4QZlKbsTyZtvVFJpLhA495ZaDefNFA6oQO+89DcasV4sVv/OYzj/J4/Qc5WdmPX3RbOTcultO1xBxTlICQQpLg3Up6bSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779506134; c=relaxed/simple;
-	bh=24zXDaAOI9sTFYFMwqPvRlsMA/+q/fmDpPYA0/dD/ng=;
+	s=arc-20240116; t=1779506128; c=relaxed/simple;
+	bh=e47Korvi+VbRkfxGGIqBWxvLb23UV8sxmAh9Ny30oMU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OfpnGJDx0DBBo/EQydBVK0LqFD1CgEsR8gynMnOanL6osCYXD6KN0Bg877wjMZrUAmD46RuvHGV4s5TpV84OzG9Q1iviZtmzwaJ4D9G2MbBM2QzM2ZSdDvAW5efmR2D97761HJDDmN0zwqWfMaw4Kyy3VCa/KunrG7VVRzoItr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=LwwsNsY+; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=m0mQhVX4e/4TK0m8kBsYegl+FqLCvwz2olaHSdcXXeZlEbm24RJGwElcedwOzlT9XfEHCWNmob0UUWsQSb+xLd3ZkpOKmyGP2cI7ZtNccBoOSJnos1SmlPI79av+vXtj/6EnYzXHN9GdBIeEI56qFPZNXLEANchfJ/nUA+ou3uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=K83GpPwZ; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64N1uqGq2628687;
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64N2tTpS2818812;
 	Sat, 23 May 2026 03:15:24 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=3KEvD00FqsJFSyBIfDIR8FwU6eVGvjwN713kz2PPUvY=; b=
-	LwwsNsY+kJkxxg5eg8SGbJyf9EthYXtf1fsOTvLp46xW7B0k3w3E7R8FqnEl61dX
-	fxFDElZ508B1HT7eOF62DqWY+2CeRkm0HI7Hc7zj1KaYqPwE0Pp+GWkFxQzoYv1r
-	PthLduyC9G9/frrYbI1gwmxUUfYx4YIUQpv6DL0IPFzElT08cSyXOb/ltNNHITWL
-	8pNHp6a/1EILwkoDsNxdB0KXVwVacnE8idaDfNsczWMERGNVp6mAcZlTNUpsj4th
-	uRtdy01MlROrAHTNHy1BRZ2HpadsxPINAO6ZuDVdHbo8XZfKM1uEM9ZbQsmMI7Tk
-	bcDl7dPkNfP8uMfvwaIoXA==
+	corp-2025-04-25; bh=W2saHMTltBNVftROKzQgkXbdoWtU97jgw8jW88M5T6E=; b=
+	K83GpPwZaBsq/voTjGx3msPCP4Cxny91jQ3Mk+j5d1oBsoJjmSj5LAqVbaDzw3nq
+	NpnSsIo+X8UD/UpNqGFK4wL6Btk5GpDLVP1Xzjbk+UkZReeCw/xvkWOoMmF/9+sp
+	40h8UWNkuYbUn3m5iI1YWw0N9emp/SwkJlHC/Wg91w59GNJzLYmd6JuoWUQoLheK
+	6oiCkzy2HR08pu2tAf6WPgEM4OhvD3gowso+CXKa6xiSewFauuovcYSwbmxemPS4
+	59XltGi9mHsHVN+24s54UyuLIvsMVZ2KlMFvqrgfiYOYEzvOu3Cbhqfz9/L9U77p
+	EMv261PUnzPppFLloztu+A==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4eb314r63f-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4eb3us80d5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 23 May 2026 03:15:24 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 64N3F7ao032598;
+	Sat, 23 May 2026 03:15:23 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4eb2p6hsj3-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Sat, 23 May 2026 03:15:23 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 64N3F6IF032418;
-	Sat, 23 May 2026 03:15:22 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4eb2p6hshn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 23 May 2026 03:15:22 +0000 (GMT)
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 64N3F9eG032824;
-	Sat, 23 May 2026 03:15:22 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 64N3F9eI032824;
+	Sat, 23 May 2026 03:15:23 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4eb2p6hs6k-12;
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4eb2p6hs6k-13;
 	Sat, 23 May 2026 03:15:22 +0000 (GMT)
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>,
-        Sagar Biradar <sagar.biradar@microchip.com>
+To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Sasha Levin <sashal@kernel.org>
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>, stable@vger.kernel.org,
-        Brian King <brking@linux.vnet.ibm.com>,
-        Don Brace <don.brace@microchip.com>, Raja VS <raja.vs@microchip.com>,
-        Kumar Meiyappan <kumar.meiyappan@microchip.com>,
-        Abhinav Kuchibhotla <abhinav.kuchibhotla@microchip.com>,
-        Uday kumar Bagam <udaykumar.bagam@microchip.com>,
-        Advait Churi <advait.churi@microchip.com>
-Subject: Re: [PATCH] scsi: pm8001: reject non-fatal dump when controller is crashed
-Date: Fri, 22 May 2026 23:14:26 -0400
-Message-ID: <177913641792.1181900.12981405499868476293.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: ncr53c8xx: Drop CONFIG_ prefix from Zalon-specific compiler defines
+Date: Fri, 22 May 2026 23:14:27 -0400
+Message-ID: <177913641745.1181900.707705029889941541.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260416154650.415624-1-sagar.biradar@microchip.com>
-References: <20260416154650.415624-1-sagar.biradar@microchip.com>
+In-Reply-To: <20260426000330.56137-1-sashal@kernel.org>
+References: <20260426000330.56137-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -95,68 +88,67 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  definitions=2026-05-23_01,2026-05-18_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
  suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 lowpriorityscore=0
- mlxlogscore=843 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=837 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.19.0-2605130000 definitions=main-2605230029
-X-Proofpoint-ORIG-GUID: -PRaksQQtD4bK7C9A-9Qd9uJ17QkKlbv
-X-Authority-Analysis: v=2.4 cv=V9BNF+ni c=1 sm=1 tr=0 ts=6a111bcb cx=c_pps
+X-Authority-Analysis: v=2.4 cv=Zewt8MVA c=1 sm=1 tr=0 ts=6a111bcc cx=c_pps
  a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
  a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=o5oIOnhZENCTenyL_yNV:22 a=VwQbUJbxAAAA:8
- a=MV4thHkwdZb-0T0WulAA:9 a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIzMDAyOSBTYWx0ZWRfX5VB9J+NkmlNg
- Ql54a1q+VMmn4Jje8uy+n9GTU5/HY7OoY83hNqbCaAR30UtK1BonRfuKt578/DiZrG6oJtfdYvv
- AkX6J3mA5qSjlaKeRaNK/pnqSGSBw0e7ArLRmYfAb9N0Kl90mFZp2vtb9IeO2cqTaK4C+DbLczp
- JJoyqE2GsfNetmgrOTfNthbdwtYXynjOJ/YqxBZME253fWQXJD3V1H1nklKa1F8XgxBotBn1k2a
- zVzdi9wL5JCVCCLCgl+B3paR/bFjrUEVu5g40qsMVvypfTLqiFApkqT2sediWlm7yH70mql/r8r
- iAJdykli3EFNpCiWTZF7gy/MDi4IxZzpF+GR644RDO7UImtw7SJo1gOXmWojwSuDAky23nJ3QoY
- MuA/PDkPm5CZYOPT3Eb3LtxUbGwko30wC60+aXr/YVeTXgy8nlEPCpHf3jvIEYHKlSHB4DH2tgB
- CHe8XQHXVLpYNeNDJoA==
-X-Proofpoint-GUID: -PRaksQQtD4bK7C9A-9Qd9uJ17QkKlbv
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=3I1J8UUJPc9JN9BFgKH3:22 a=VwQbUJbxAAAA:8
+ a=3bGs5ERHum-b-X5uikgA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: 4YRRjomAEFbD0oE2y-FZNOpNt6P7Pkj7
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIzMDAyOSBTYWx0ZWRfX3FUQib0Zf2+P
+ iriXVtv+Q+0Suhm6JeDNZAkpVIUa225fuo7UYCyLzzjXFyhCATh7SfISjfptv5mXH7CHfvi/9cO
+ 5GdyJqyFwHgms/cQQ1AtuU35LrRcI+oEzg9ImjevRL8EpxwibbaFuaReKfHixmBLDdR/uRwd8gB
+ tdDPczLvv1ujcAZCJwk2de5ba9JWod5StT6es/07+CWcUnBX7ehKq6a4ypK0v+UNaQ7D2st2QIA
+ q+Pcg5ZpSUhECl9u/HAJdgyKEcaPGRwX9cgDfEJrb3MkLSfnvbsH/BZpxrQK14WkWkTFHnEp4BV
+ DLKwhdmTGJz6cffJAu5BZJJMCW19gyvaeootS3L/5W+czZmB+kqtIZ0jRKZOe7X8aVlTFhlOwgB
+ Zjscn8pmd9DiS94nJCP7DDb+IC1ifc3inKhLjXtwcDN/ifUe+13IL9NkKNZohwDi/hb2NaTbQdN
+ ae7RJgJVuyiJILAnwDA==
+X-Proofpoint-ORIG-GUID: 4YRRjomAEFbD0oE2y-FZNOpNt6P7Pkj7
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	TAGGED_FROM(0.00)[bounces-24029-lists,linux-scsi=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24025-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[oracle.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:mid,oracle.com:dkim,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo];
-	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,oracle.com:mid,oracle.com:dkim];
+	RCPT_COUNT_FIVE(0.00)[5];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	PRECEDENCE_BULK(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: 9AE765BCE31
+X-Rspamd-Queue-Id: 942295BCED2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 16 Apr 2026 15:46:50 +0000, Sagar Biradar wrote:
+On Sat, 25 Apr 2026 20:03:30 -0400, Sasha Levin wrote:
 
-> pm80xx_get_non_fatal_dump() can be called even after the controller
-> has entered a fatal error state. In that case the forensic memory
-> contents are not safe to access for a non-fatal dump request,
-> and attempting to do so can trigger a call trace.
+> kconfiglint reports:
 > 
-> Check controller_fatal_error before reading the non-fatal dump buffer
-> and return -EINVAL when the controller is already in a crashed state.
+>   X001: CONFIG_NCR53C8XX_PREFETCH referenced in Makefile but not
+>         defined in any Kconfig
+>   X001: CONFIG_SCSI_NCR53C8XX_NO_WORD_TRANSFERS referenced in Makefile
+>         but not defined in any Kconfig
 > 
 > [...]
 
 Applied to 7.2/scsi-queue, thanks!
 
-[1/1] scsi: pm8001: reject non-fatal dump when controller is crashed
-      https://git.kernel.org/mkp/scsi/c/aa3b8f56ef27
+[1/1] scsi: ncr53c8xx: Drop CONFIG_ prefix from Zalon-specific compiler defines
+      https://git.kernel.org/mkp/scsi/c/7787588db949
 
 -- 
 Martin K. Petersen
