@@ -1,84 +1,82 @@
-Return-Path: <linux-scsi+bounces-24033-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24030-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oDwNB1QdEWrIhQYAu9opvQ
-	(envelope-from <linux-scsi+bounces-24033-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:21:56 +0200
+	id +CgAB+gcEWrIhQYAu9opvQ
+	(envelope-from <linux-scsi+bounces-24030-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:20:08 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 859115BCF81
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:21:55 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 737485BCF14
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:20:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 695BD306A8B3
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 03:15:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 651093017023
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 03:15:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28203331A5B;
-	Sat, 23 May 2026 03:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D5BA32E692;
+	Sat, 23 May 2026 03:15:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="UZfyu+WD"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="j4Q/VYrT"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AEA932B107;
-	Sat, 23 May 2026 03:15:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2CF32E6B8;
+	Sat, 23 May 2026 03:15:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779506143; cv=none; b=AbkD1ajrSeuENZ3GoRpCTjVV6v37/Rc1MgsnLtslZvWjnS6K/CqOjL44uT4UrvrlCd3x89ld0xuEqmzKr+ykioS+97BrzxhYGFskyfjmf7opcA5K9tjO/Tg9FCmtX1s6AjEXP+kEnETMU7Iv6aOyS1SYveG4jr3C0MtgWEa6I7E=
+	t=1779506135; cv=none; b=Zpl4x4XoYotqz8IyVXLpwcYABOo5Y+1F3SSEdT10hx+UZksUMdfqTe7VourX0NcwZpKvl6e8toAkKSJfaAoIcmIrgzCcAd+9kLa+xzUFRkHvTAXvypY4BeVAyCLtrrhiWmHMF13Ziuq8vqqlSWRMTaNKJLzuJWK2manUZMZFL3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779506143; c=relaxed/simple;
-	bh=xdmQDaZPGAjb+WmlUPN4urm3O40ToZSm/iJMOSCKLFU=;
+	s=arc-20240116; t=1779506135; c=relaxed/simple;
+	bh=u9C4Z4dZr+w0n/DyvHPclVp15F+JVvK4VRpEKDED+so=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FqsRVcnzEYJNWZniG2sqdHdr+tiCBZORvPDTTHx2TPDfIi6v+2XdSVEY08xLJeDJpQ6fy4i0wkZYnRR10l1IE/tGdtRdaC7PzaQ2WeLxhkNXPYJQr6UwQ86Fx1iRtLKqGMJY7+g+Lwvxg96QbZpPvm3BdBcbXmpQvS0Vw+sk/dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=UZfyu+WD; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version:Content-Type; b=ukO17cZigwE5eUQbIyCpH1j++Aa6RqcfQVelCdtQF9Yd4cyIZTc2SR24WH4pWXcUPsK24kz9zjPTIu9ovLvwNflJvMhGEoVFSYzVUPRrXyc7/m3emenvuNlzYyd9uNTcZWuv32YP1aqjKEMWyCgzHvJSK80ThZmm1F9Anst93Ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=j4Q/VYrT; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64N1hU1D771423;
-	Sat, 23 May 2026 03:15:18 GMT
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64N3FKos2851105;
+	Sat, 23 May 2026 03:15:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=vR/isyuyP4vIGDp7X6qgVUcwX9FEcW2li2TtHSMdSjs=; b=
-	UZfyu+WDFaOOEvy3UiGnacnqAAutf5wBbQZaVR8fqNShStGENyCXP0HQPc/clnBL
-	vLhmOyksmCISjkV0RAzchDNTLhDsgHwM722ZJkcE1Q93VfoTk2hs5VT57hIP6X23
-	JUXabWqRYBGNe9OmrWbd9+WBy1z9G1QAJNKnR57UBL+uYB28dUYyqI0LkpUecC2P
-	NDJH4oqcPm3TlHRi097tvWiA27frissYO+s3e1RvTv2JK7lZgLoed8UAKE7NSqJm
-	B9w61/nwRA3kpobB5WduZpQo+XmZPn7L6XLY4npzIO1Ma2Pc3mz4wPeXkCtYwQ2O
-	WiUiphWjFRWMNeasdECU+A==
+	corp-2025-04-25; bh=C3U5VgtECS8JBqQIcZmV30T5avejQzNYMQ8UfH1cCyQ=; b=
+	j4Q/VYrTju+Z/cxVqee+rVvMnuNnz+omjK0PqhLoDIf3o/TO7b2xy5U64gExXPi0
+	to0EqbeeaP3LGlbk6v1nfUcTgDiBRc44rJG91piYt9zm6yqEC81dFW7KWKnI/nYz
+	mx+04Rn5Sg0nKGmRy0r6WZgGYT3YwFF/3/qXwODaYY1sag5zuzo6RTvO36GUJ71Y
+	b3d6KJlIxyiHFAfK3FQSieZmtFlOH7ffyNIeAdgjqHK0GrdkrJVU61gCe+45FIc4
+	7In5VnUA8u4ty75PSFJOCqVVNjVctu1sq3XHTLhRQfLY/d/pfxVo6hbRG+bqsbQ+
+	yOiYg/U9VtLqP2b9d7qrcQ==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4eb2tyg72b-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4eb3us80d4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 23 May 2026 03:15:19 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 64N3F6jx032335;
+	Sat, 23 May 2026 03:15:19 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4eb2p6hsfv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Sat, 23 May 2026 03:15:18 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 64N3F6O7032436;
-	Sat, 23 May 2026 03:15:17 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4eb2p6hsff-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 23 May 2026 03:15:17 +0000 (GMT)
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 64N3F9e8032824;
-	Sat, 23 May 2026 03:15:17 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 64N3F9eA032824;
+	Sat, 23 May 2026 03:15:18 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4eb2p6hs6k-8;
-	Sat, 23 May 2026 03:15:17 +0000 (GMT)
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4eb2p6hs6k-9;
+	Sat, 23 May 2026 03:15:18 +0000 (GMT)
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Marco Crivellari <marco.crivellari@suse.com>
+To: mani@kernel.org, James.Bottomley@HansenPartnership.com,
+        palash.kambar@oss.qualcomm.com
 Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Michal Hocko <mhocko@suse.com>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: Re: [RFC PATCH] scsi: scsi_transport_srp: Move long delayed work on system_dfl_long_wq
-Date: Fri, 22 May 2026 23:14:22 -0400
-Message-ID: <177913641775.1181900.3921727355907955217.b4-ty@oracle.com>
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bvanassche@acm.org,
+        shawn.lin@rock-chips.com, nitin.rawat@oss.qualcomm.com
+Subject: Re: [PATCH V7 0/2] Add post change sequence for link start notify
+Date: Fri, 22 May 2026 23:14:23 -0400
+Message-ID: <177913641794.1181900.10456858477800005065.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260507143410.337267-1-marco.crivellari@suse.com>
-References: <20260507143410.337267-1-marco.crivellari@suse.com>
+In-Reply-To: <20260423102023.3779489-1-palash.kambar@oss.qualcomm.com>
+References: <20260423102023.3779489-1-palash.kambar@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -94,67 +92,70 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
  suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 lowpriorityscore=0
  mlxlogscore=999 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.19.0-2605130000 definitions=main-2605230029
-X-Authority-Analysis: v=2.4 cv=SoCgLvO0 c=1 sm=1 tr=0 ts=6a111bc6 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=Zewt8MVA c=1 sm=1 tr=0 ts=6a111bc7 cx=c_pps
  a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
  a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=RD47p0oAkeU5bO7t-o6f:22 a=VwQbUJbxAAAA:8
- a=aYGLzZUFCA-z_BF5oZ8A:9 a=QEXdDO2ut3YA:10 a=O8hF6Hzn-FEA:10
-X-Proofpoint-ORIG-GUID: arYjaVoizl5udncvjvVwYSaq9sh9AZso
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIzMDAyOSBTYWx0ZWRfX1bpF6pWfW3si
- cK+cpE2qsRNsYl9qOWwSOaEhdNcFU1GC1rn2YVJ3D10gy4pZr34+L/Kd2Y/9DTFaPqkhfdy/bFZ
- CYU/WfsBEk17Lo84b7XZlUS11QIijjWwdmtaDkLjmZY93imrzzwmFyZ0yWznimh+kBywB4kPLcD
- VB1yWjsmHz8hRjDvkYTZYBeHj9KTjTrU1336o0nTQJ8J0PzB//ApNaiyLlrlIA7kn92GjjPYeJE
- JYNUpg7vJlVGAFFey23WiQFqKBB7esUgqwNJ4lIWgGuA6fcPN4vsl/1QE190USXF8JVrZhjVgIj
- 3rrXYli3bvfwirM3FramqvxLOd9KoL43eMeGsJcQo7cOc+FS5XdMFLi3BDe8rTQhy8cyvZwZDCL
- cbVYJGSkK8vjb1DcagQg/wTbcbATNozqo06EiLBnt71JPUx0Ddfw9+ZOhHR/UQWDwTvkLhGS9XJ
- 4qbWSMggxuRGGJQzJXA==
-X-Proofpoint-GUID: arYjaVoizl5udncvjvVwYSaq9sh9AZso
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=3I1J8UUJPc9JN9BFgKH3:22 a=VwQbUJbxAAAA:8
+ a=EUspDBNiAAAA:8 a=ntT2GETeEWiR4UES5aAA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: 5WqtKi6zLyqdHrBmtKnKVw7u9BbxnBZV
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIzMDAyOSBTYWx0ZWRfX9TIhXdTCIgQs
+ UWDCDH+qWadVJWlbq6AaAj0eK8ZdEfHJkdoa19EkLWh5HLw3pv0E80ffKiphB6Y84EzHF/BtyNC
+ 7GirDRtku/Fa0IvbYRMGKupxRNHI8lAj6oY+6HtOREakPk7YigLm/zGOru3LDrjbNMmkjrJ4+yv
+ vP2Z1AZYmLxeWzGl2hG4SuvuZ115PTchb6H7Oj4x980F8ssQ6Q+ixqzKkI+/Mfbs9C72TQIX6eR
+ 3fUghK/3+EI3RYhDTqoKSidwRdCS0fzVSfIZNLiHkRC5eeBb8H+4YtcdLshOEFdzJ0YsL5FIv8L
+ oXcYYjyuIwKKUuCz0+GXdy8ovL50fgM20UAPYLrvOQPnnQj3IY2hjhhhazhCYwD0Dt4NJHs7ulr
+ nYXfVBedZRR/nHICP1aV/F7Rtkq2/1j1zMkoyAjoUk7Q/V7v6LhVKBu57046i2eOYYvDOuEdQqV
+ vw7l2mKdlR2+zuMU0aQ==
+X-Proofpoint-ORIG-GUID: 5WqtKi6zLyqdHrBmtKnKVw7u9BbxnBZV
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[oracle.com,kernel.org,gmail.com,linutronix.de,suse.com,HansenPartnership.com];
-	URIBL_MULTI_FAIL(0.00)[sea.lore.kernel.org:server fail,oracle.com:server fail];
-	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[oracle.com:+];
-	TAGGED_FROM(0.00)[bounces-24033-lists,linux-scsi=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24030-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,oracle.com:mid,oracle.com:dkim];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: 859115BCF81
+X-Rspamd-Queue-Id: 737485BCF14
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 07 May 2026 16:34:10 +0200, Marco Crivellari wrote:
+On Thu, 23 Apr 2026 15:50:21 +0530, palash.kambar@oss.qualcomm.com wrote:
 
-> Currently the code enqueue work items using {queue|mod}_delayed_work(),
-> using system_long_wq. This workqueue should be used when long works are
-> expected and it is a per-cpu workqueue.
+> changes from V1
+> 1) Addressed Shawn Lin's comments to fix comment to connected lanes.
+> 2) Addressed Bart's comments to remove warning and trigger failure
+>    incase of lane mismatch.
 > 
-> The function(s) end up calling __queue_delayed_work(), which set a global
-> timer that could fire anywhere, enqueuing the work where the timer fired.
+> changes from V2:
+> 1) Addressed Shawn's comments to fix commit text.
+> 2) Addressed Bart's comments to remove variable initializations and
+>    indentation fix.
 > 
 > [...]
 
 Applied to 7.2/scsi-queue, thanks!
 
-[1/1] scsi: scsi_transport_srp: Move long delayed work on system_dfl_long_wq
-      https://git.kernel.org/mkp/scsi/c/1039939c52f2
+[1/2] ufs: core: Configure only active lanes during link
+      https://git.kernel.org/mkp/scsi/c/e72323f3b09f
+[2/2] ufs: ufs-qcom: Enable Auto Hibern8 clock request support
+      https://git.kernel.org/mkp/scsi/c/76417038c4d6
 
 -- 
 Martin K. Petersen
