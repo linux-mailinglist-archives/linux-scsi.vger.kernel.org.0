@@ -1,81 +1,86 @@
-Return-Path: <linux-scsi+bounces-24031-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24034-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IOakGA4dEWrIhQYAu9opvQ
-	(envelope-from <linux-scsi+bounces-24031-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:20:46 +0200
+	id kDEHI1wdEWrIhQYAu9opvQ
+	(envelope-from <linux-scsi+bounces-24034-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:22:04 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFBE75BCF3F
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D77535BCF89
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 05:22:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9EFAC3054C31
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 03:15:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A2DA8306B3B8
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2026 03:15:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33D403314D0;
-	Sat, 23 May 2026 03:15:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCA6A344023;
+	Sat, 23 May 2026 03:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="nEUmoQIj"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Q3Obp6Qp"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 611153314C5;
-	Sat, 23 May 2026 03:15:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7552733F59A;
+	Sat, 23 May 2026 03:15:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779506138; cv=none; b=DqIGJjHLS1+T3xT4D3NEW4jUN6M6EFioirtEHdtvcH/DryJTJYrzbrxa/wRjgRtIDz6mdmW59/y6kQZKHdsih8xwaMLuwuMjjjA9ddEQ7u1Dn65yrr1sLja7As1KmhQeVXNyiiyk9JcSEJvgTVSIh8EZqi9S/KsHa6QuDjX48no=
+	t=1779506144; cv=none; b=U7FiNANSc4I9yf4h/PrbwG3fu49zHGEN9S6zuAirw8Z7Dw6YZF+yawP8LIH+JMeZcIJI+oQDgV3iS/P8Dv2dpdXzrsnqpbWiR+YSEDv2sn5MtSl5oM6KKbxrPxoL+ggZXvj/ozgB/5SerWEvnDRpALs6YG+XZGcf4iGXZgl/Q9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779506138; c=relaxed/simple;
-	bh=ulQEQQ0A/MpfmAshxlTVNUaOUKKA6FA7LV/2rVnQqF0=;
+	s=arc-20240116; t=1779506144; c=relaxed/simple;
+	bh=hcMekVsbbxeaI6ObNsh6fCRAZdO4xlRE+ljg0sGvlNg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HXNkA06M7lxzDc63F8e3vujZsWuoTLvyzqX1NF36FTaO4dtHrArOGRt00c6y/FINxo0W/gRYMErVCaGb4nNOEoY3N99mAN82b/d0/+MEyU1lKaISf/jx7no2XpkVgulGfHcAWWZYoO/hWcdNjsy9h9pJpEAwkbRLnonlbqx/mk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=nEUmoQIj; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version:Content-Type; b=ICBln++4wa6UpGHAqQYJSCbQ7EfumwIpRccwhMQ7CYorNZdt2xA/88KtrOtPGHZsdPxCGqRKB/XbxaGBc+FWSffiDJkXhADeujswFB7UaG5l2kEvk0QRsRPPTQSBfrQK4o2SMBt4UQGsLv4HfJ5Oe+erm64yIAolDoNk88CwmBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Q3Obp6Qp; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64MHW0VO2622946;
-	Sat, 23 May 2026 03:15:28 GMT
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64N2tTpT2818812;
+	Sat, 23 May 2026 03:15:29 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=7wzS14WVDJQWU2EwGyZLqtbho9V99BJWNFtRuDUf3/E=; b=
-	nEUmoQIjH9nRrB8mznYLzx/nFAnifdrZWEasqo9Ufrh7RiapIxQycu/L3vyc1VeV
-	V3HeIPoC4wWx44VJnc4B7yKAoUk2bG6+doV+DBSPROPocBqrJI9yQv5GBTNs2bBA
-	HVu2xueN7775NKvgRmyVl7m6wwrKEZvmYrk8b/3Exl0TfCuaZ+zBsNS6DYxJKWXE
-	KgPVT/WZaVi9G5v8fXlcAQwkEA0iIqijTuMiHnhiy7vfg0tTOh7fdLiV+Ey1xTln
-	Wcbwd1L6qS5ZOtTXbRYkloGtfLdTX2WKozKDfN93oGaPo9p+MzPSSppqoBVpFLbd
-	GPCOHYPOX07mkGVf3K61iQ==
+	corp-2025-04-25; bh=IEFOvVQwdsvl0imTynvgbWRsOENvjqJW1Bt9iWH5qLg=; b=
+	Q3Obp6QpUK2YFvbqZm76Nl8Nz9yuRQBc+RXJKCYv6ciN6nwlxMBQ0uWO78bTAv7C
+	gOLfNYZ8MxDeF7BueP1JAgFU3EZ6qA57sCEiirX4AH6pGpYlRi1LYcPmAANRB8Fe
+	j9bKp4/ybqxKY0QZSqpwDXAXq8rKLHXTiyUqtMd7VJAXILHYkWcOVPaVb4SrDOee
+	I9ZRQ8tf9zY+nn9F33G/EhDAkyENa7+SkQhzZ2IglaGzwy0VQik8l92FH4oDK0lI
+	vxo98T1iaFWZnjXcQkG+vwhKa6HaBaY73ciQK5i1mybeBmEtbGcz2YqlWGHF2t1J
+	or5uDZ8hyulgwcemZhie8g==
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4e6h1t4e5c-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4eb3us80d8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 23 May 2026 03:15:29 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 64N3F61A032364;
+	Sat, 23 May 2026 03:15:28 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4eb2p6hsm5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Sat, 23 May 2026 03:15:28 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 64N3F5ak032306;
-	Sat, 23 May 2026 03:15:27 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4eb2p6hskn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 23 May 2026 03:15:27 +0000 (GMT)
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 64N3F9eO032824;
-	Sat, 23 May 2026 03:15:26 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 64N3F9eQ032824;
+	Sat, 23 May 2026 03:15:27 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4eb2p6hs6k-16;
-	Sat, 23 May 2026 03:15:26 +0000 (GMT)
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4eb2p6hs6k-17;
+	Sat, 23 May 2026 03:15:27 +0000 (GMT)
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Md Shofiqul Islam <shofiqtest@gmail.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, longli@microsoft.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, mhklinux@outlook.com
-Subject: Re: [PATCH v2] scsi: storvsc: Replace symbolic permissions with octal
-Date: Fri, 22 May 2026 23:14:30 -0400
-Message-ID: <177913641771.1181900.14473313849587305075.b4-ty@oracle.com>
+To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Wang <peter.wang@mediatek.com>, Bean Huo <beanhuo@micron.com>,
+        Can Guo <can.guo@oss.qualcomm.com>,
+        Archana Patni <archana.patni@intel.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] ufs: Rework pci_device_id initialization
+Date: Fri, 22 May 2026 23:14:31 -0400
+Message-ID: <177913641765.1181900.11554423938330676893.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260506004948.2172-1-shofiqtest@gmail.com>
-References: <20260506004948.2172-1-shofiqtest@gmail.com>
+In-Reply-To: <cover.1777968942.git.u.kleine-koenig@baylibre.com>
+References: <cover.1777968942.git.u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -89,23 +94,24 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  definitions=2026-05-23_01,2026-05-18_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
  suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 lowpriorityscore=0
- mlxlogscore=576 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=948 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.19.0-2605130000 definitions=main-2605230029
-X-Proofpoint-GUID: zDgM3pwFtfh8LoySytLKY4cYOfAvJte6
-X-Authority-Analysis: v=2.4 cv=d9jFDxjE c=1 sm=1 tr=0 ts=6a111bd0 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=Zewt8MVA c=1 sm=1 tr=0 ts=6a111bd1 cx=c_pps
  a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
  a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=BqU2WV_vvsyTyxaotp0D:22 a=VwQbUJbxAAAA:8
- a=UY0ZMbisSNrLhDL-TgMA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: zDgM3pwFtfh8LoySytLKY4cYOfAvJte6
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIzMDAyOSBTYWx0ZWRfX+vBmpXoouOOL
- QXQg04smDO3kpZMObMlAumwJAOZkz7FmVobzTbR6uI68FDWwKM9It1E/ayPlb7rg45Xo6bIKkTv
- LVXGmE9mxqaF+4pq9nzaSooxyCQF70T4h2bxWh+y25fzfGTpmusCtY8q5mBG6nQw3xux0r/Q3Xu
- kXOdM/yPDbeRVprUmk93qhNejDAc3DXigJCzLRoRTh5uWNcAE1A+SEonaMNnB4dZp+3aqIGvnIs
- dqa0o/tzJ76OIqCD37hh/5mO60nyn1SER1kAwYDtWOG57M4FT0OfsVrqfLjJ6NONhRvns1VO0Gm
- zxSzKeHxuCNtb4kyLnxX2vIIoB98z9BQLfC1uJNA97BudULmfoYLgTPfdqEYDmb3fqjNgU5xcuj
- seuYQHmFJKeC256Z5M/nMXITs6VI7n64TdtpG2Mz1Ewx35WwgZCBVn039+futdAu2lLsaEEiOH5
- g+TsV9XPrheOE5GVLvw==
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=3I1J8UUJPc9JN9BFgKH3:22 a=VwQbUJbxAAAA:8
+ a=IpJZQVW2AAAA:8 a=-5ljeZG2g70C0efMZmwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=IawgGOuG5U0WyFbmm1f5:22
+X-Proofpoint-GUID: qPv4FPZKfs3U2KBO2-O4dGPJrHtz18gi
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIzMDAyOSBTYWx0ZWRfXy5FAL3vKXdoZ
+ l5wTXUmZXJg6u1oNE5HB7tCqLoKsWLanRo+PZSaolmnCJvmWo3YLJ3jchoeE0b3l3qGChf7e+0r
+ yQszUAN6ZP0Lt71PGaPUvJv7K7B0zRs4Dw8KzO+QK2jW/Ayd5AnInnt9uW8fpfZoDfJoRjGqDJK
+ YzrH2GnHiPc8IApc0wRUjVo1wX8bJV47T4Njc4txs2UhNUoZkxoufZIj7MeNK8PcGx/MpYutuHk
+ IdXT4zpRuwf4v1OfL9QLj5iOEPPNNT7l+TzWGsllT7bmWtnkU08+bB54h3bTRlf27RLDxj7nkIP
+ cV6//A+t194AS7EFucLTxOZ4SyE1R/KWZIc4AHK08OqAQZPwIYRtN7NVxN7gR+PLG+36PhRL8qz
+ +RcinvcSddQvEOtjwKsyK8CfKk9Li+GPxwD3ltFjUWf+VykmfJeMIc1y9OPRTr8Aw7qnFpTX2Sp
+ wJ1dh6KC5ncT1lVnihQ==
+X-Proofpoint-ORIG-GUID: qPv4FPZKfs3U2KBO2-O4dGPJrHtz18gi
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
@@ -114,44 +120,45 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
+	URIBL_MULTI_FAIL(0.00)[sea.lore.kernel.org:server fail,oracle.com:server fail];
+	TAGGED_FROM(0.00)[bounces-24034-lists,linux-scsi=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:mid,oracle.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[oracle.com,microsoft.com,kernel.org,outlook.com];
-	TAGGED_FROM(0.00)[bounces-24031-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[vger.kernel.org,gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[oracle.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,oracle.com:mid,oracle.com:dkim];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: DFBE75BCF3F
+X-Rspamd-Queue-Id: D77535BCF89
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, 06 May 2026 03:49:48 +0300, Md Shofiqul Islam wrote:
+On Tue, 05 May 2026 10:25:43 +0200, Uwe Kleine-König (The Capable Hub) wrote:
 
-> Symbolic permissions like S_IRUGO and S_IWUSR are not preferred by
-> checkpatch. Replace with their octal equivalents:
-> 
->   - S_IRUGO|S_IWUSR -> 0644
->   - S_IRUGO         -> 0444
-> 
+> the patches in this series adapt the pci_device_id arrays of two ufs
+> drivers. These are preparing a change for making struct
+> pci_device_id::driver_data an anonymous union (similar to
+> https://lore.kernel.org/all/cover.1776579304.git.u.kleine-koenig@baylibre.com/).
+> This requires named initializers for .driver_data. But even without that
+> this is a nice cleanup making the array better readable and consistent.
 > 
 > [...]
 
 Applied to 7.2/scsi-queue, thanks!
 
-[1/1] scsi: storvsc: Replace symbolic permissions with octal
-      https://git.kernel.org/mkp/scsi/c/73322071418e
+[1/2] ufs: tc-dwc-g210-pci: Simplify initialization of pci_device_id array
+      https://git.kernel.org/mkp/scsi/c/2a18c57560f4
+[2/2] ufs: ufshcd-pci: Use PCI_VDEVICE and named initializers for pci array
+      https://git.kernel.org/mkp/scsi/c/8ef4c72dbbfd
 
 -- 
 Martin K. Petersen
