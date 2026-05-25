@@ -1,56 +1,52 @@
-Return-Path: <linux-scsi+bounces-24073-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24074-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wNIlAdjkE2rhHAcAu9opvQ
-	(envelope-from <linux-scsi+bounces-24073-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 May 2026 07:57:44 +0200
+	id IF4nAPvlE2rhHAcAu9opvQ
+	(envelope-from <linux-scsi+bounces-24074-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 May 2026 08:02:35 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F8645C61C1
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 May 2026 07:57:42 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id A889D5C623D
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 May 2026 08:02:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B35183001A7C
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 May 2026 05:57:39 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CD21330010FA
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 May 2026 06:02:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EE6135E1DB;
-	Mon, 25 May 2026 05:57:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5246F370D72;
+	Mon, 25 May 2026 06:02:23 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC18535E1DE
-	for <linux-scsi@vger.kernel.org>; Mon, 25 May 2026 05:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19753603C2;
+	Mon, 25 May 2026 06:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779688657; cv=none; b=PdafSAqmE1pksqqG12sZqh4voA8wHoHLuWwORSeaC/9n2jZfgJTmNhEzakknKFUp17roDvKUshF041oB5o40JDsx3QfpcAliqlrPY1dL7WyUmwcy6pAsqFNtR3GVUdRFvyYPfaeEEiCpu3d5odmF4OURVwrKOt3Lo+yCkDtA3Gk=
+	t=1779688943; cv=none; b=WSydp164x80Y6mHbGt/Qwj8qG5T/qWOHWVzcgQ0eb/SqdZP+1mr24151uLSNyHw/N/M82YqBJD+IR4cnLIxFQ4sMoRJQlmwr22C+nzCMlp9C2peIRC47UXwHrWiC97iPYu83s8C2rkVncgK4gcgvq4axh7Dh5hOJYX0QDE0EaZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779688657; c=relaxed/simple;
-	bh=DqaOJmKrURUeKk5FxaQDkBJ+9Kvab9nxgpLSrmIZZJY=;
+	s=arc-20240116; t=1779688943; c=relaxed/simple;
+	bh=KpS1Trw6YdoMcXx6dFdGf78wMgd8htX+8RPS0nABSM4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E2iX5Gl7WfL2Bn26LPiWV5bUdfA9GvFPdXKHpIq1cSGErscI+5jpr9UL1eITANovmbUG3OEDQzdCLPBJTyqmq+nCsKxv9GIHdnBPPGbRPy44/I9L3H6D3yjdhVKftQDuOn2WrdR9g3IqRub+7ByhIEjejrra5LR2PAJVpLseUHE=
+	 Content-Type:Content-Disposition:In-Reply-To; b=KIZgW0M8bNL+vZcm0fZCy4uZr6HGTHOSe6dTqy9zu1HZTrGSNQU7gT1x8+TwHBfaBK9ms5pqMwImORM+yhfL4AK8EhZgxPplT2uuD0PSAzvc5OWbJ6bk/RiPCwDqjEomPgU2d3XhuFpaQIb9V7BkM0bJ/lkKNxPEXEY33ErvomE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
 Received: by verein.lst.de (Postfix, from userid 2407)
-	id 3BC8B68B05; Mon, 25 May 2026 07:57:33 +0200 (CEST)
-Date: Mon, 25 May 2026 07:57:33 +0200
+	id BF52868BEB; Mon, 25 May 2026 08:02:15 +0200 (CEST)
+Date: Mon, 25 May 2026 08:02:14 +0200
 From: Christoph Hellwig <hch@lst.de>
-To: Martin Wilck <mwilck@suse.com>
-Cc: Hannes Reinecke <hare@suse.de>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Christoph Hellwig <hch@lst.de>, Don Brace <don.brace@microchip.com>,
-	ranjan.kumar@broadcom.com, linux-scsi@vger.kernel.org,
-	Lee Duncan <lduncan@suse.com>, mpi3mr-linuxdrv.pdl@broadcom.com,
-	storagedev@microchip.com,
-	Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
-	Kashyap Desai <kashyap.desai@broadcom.com>,
-	Sumit Saxena <sumit.saxena@broadcom.com>,
-	MPT-FusionLinux.pdl@broadcom.com
-Subject: Re: [PATCH v3 2/2] Revert "scsi: Fix sas_user_scan() to handle
- wildcard and multi-channel scans"
-Message-ID: <20260525055733.GB3293@lst.de>
-References: <20260513174236.430465-1-mwilck@suse.com> <20260513174236.430465-3-mwilck@suse.com> <9c6e8497-5e92-4d2b-ac87-3c941e6890a1@suse.de> <cf115b6142522889a62419c6ef9dc6b11837ccd3.camel@suse.com>
+To: "Ionut Nechita (Wind River)" <ionut.nechita@windriver.com>
+Cc: James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, hch@lst.de, dlemoal@kernel.org,
+	robin.murphy@arm.com, john.g.garry@oracle.com, axboe@kernel.dk,
+	m.szyprowski@samsung.com, ahuang12@lenovo.com,
+	ionut_n2001@yahoo.com, sunlightlinux@gmail.com
+Subject: Re: [PATCH v8 1/1] scsi: sas: skip opt_sectors when DMA reports no
+ real optimization hint
+Message-ID: <20260525060214.GA3479@lst.de>
+References: <20260519135238.373784-1-ionut.nechita@windriver.com> <20260519135238.373784-2-ionut.nechita@windriver.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -59,46 +55,56 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cf115b6142522889a62419c6ef9dc6b11837ccd3.camel@suse.com>
+In-Reply-To: <20260519135238.373784-2-ionut.nechita@windriver.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spamd-Result: default: False [-1.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	DMARC_POLICY_SOFTFAIL(0.10)[lst.de : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24074-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.997];
-	RCPT_COUNT_TWELVE(0.00)[14];
+	FREEMAIL_CC(0.00)[HansenPartnership.com,oracle.com,vger.kernel.org,lst.de,kernel.org,arm.com,kernel.dk,samsung.com,lenovo.com,yahoo.com,gmail.com];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[hch@lst.de,linux-scsi@vger.kernel.org];
-	RCVD_COUNT_THREE(0.00)[4];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,lst.de:mid];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24073-lists,linux-scsi=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.998];
+	MID_RHS_MATCH_FROM(0.00)[];
 	R_DKIM_NA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[]
-X-Rspamd-Queue-Id: 0F8645C61C1
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lst.de:mid,lst.de:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: A889D5C623D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, May 22, 2026 at 06:32:28PM +0200, Martin Wilck wrote:
-> Frankly, no. There isn't much to test. Reverting 37c4e72b0651 restores
-> the pre-6.17 state. Which means that the wildcard scan for NVMe devices
-> on mpt3sas and mpi3mr, which was implemented by that commit, will not
-> work any more. As written before, I propose the revert because this
-> commit has severe side effects for wild-card scanning on other drivers.
+On Tue, May 19, 2026 at 04:52:33PM +0300, Ionut Nechita (Wind River) wrote:
+> +static void sas_dma_setup_opt_sectors(struct Scsi_Host *shost)
+> +{
+> +	struct device *dma_dev = shost->dma_dev;
+> +	size_t opt, max;
+> +	unsigned int opt_sectors;
+> +
+> +	opt = dma_opt_mapping_size(dma_dev);
+> +	max = dma_max_mapping_size(dma_dev);
 
-And that's a good thing.  We should never have added this crap in the
-first place, and Broadcom should have never done this stupid think
-of hiding NVMe devices behind their HBA instead of just exposing it
-through a real or fake PCIe switch.
+I'm almost feeling bad for suggesting more changes, but this would read
+much cleaner by doing:
 
+	struct device *dma_dev = shost->dma_dev;
+	size_t opt = dma_opt_mapping_size(dma_dev);
+	size_t max = dma_max_mapping_size(dma_dev);
+	unsigned int opt_sectors;
+
+but otherwise this looks good:
+
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 
