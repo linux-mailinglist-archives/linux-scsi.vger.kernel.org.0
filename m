@@ -1,196 +1,162 @@
-Return-Path: <linux-scsi+bounces-24103-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24105-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2JR7F8msFWrgXgcAu9opvQ
-	(envelope-from <linux-scsi+bounces-24103-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 16:23:05 +0200
+	id mG3sNUuuFWpkXwcAu9opvQ
+	(envelope-from <linux-scsi+bounces-24105-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 16:29:31 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA93C5D7633
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 16:23:04 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FC6B5D7813
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 16:29:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 49578307702C
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 14:18:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8E7EE304F2DD
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 14:20:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C6484028C8;
-	Tue, 26 May 2026 14:18:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DCB83B9935;
+	Tue, 26 May 2026 14:20:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="ADpu5IQa"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dg0siUqC"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BFB43FF1D9
-	for <linux-scsi@vger.kernel.org>; Tue, 26 May 2026 14:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF403CAA5F
+	for <linux-scsi@vger.kernel.org>; Tue, 26 May 2026 14:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779805090; cv=none; b=Wl3mSWoriGAaQARFzafQmh7hpHjhv1mAfIuKHpcvIOnY9dDkyUNib9mD30fqHZyLzS8jPnygkw7Bi+q1bH6033SECDyrpcpfY+iCq345Sfv1nppK/GZpUnM+szStW9kC8x9mt7NUG0OGob3KxAkTzSEkEiFemqaCR/RUnJKZJic=
+	t=1779805248; cv=none; b=hUG4wfVF1dcb9AadHXRTH4G5RWeH/DtsLKVpFZYl1gJe6WBJAT1QZJ6GdZ7hLj/xCkXjzatgTfL/L0ZPlf186tTaDpTZGJlWoptRg/Hr1fLlroCF7OJQPtxU26e9wJATT1UHEk974fmgzlt10Rdzr0Z+isysYFWLVMBDt85zqBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779805090; c=relaxed/simple;
-	bh=Ix4gGdcmIUtHIAGt5LB/LnKcTd8cRB2hDL7DnBkFdMo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fS1m6fnG1aLHSiqF6MWLwGDXQcBRvJRGIRKr9bmgImmcPxiN3LHT5S+4Ey0WbRvN6KCvl9QzrX/aANoDSnNeMdfi4NAd3gk4m6EdENj0d6kFvoApPA4gUtSBTgav+6jjU4pSZucoIbwzBfWRw2tQnGDdrDHMO6Q+iGH0ZQ2lVOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=ADpu5IQa; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-49041fb8c23so34296205e9.0
-        for <linux-scsi@vger.kernel.org>; Tue, 26 May 2026 07:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1779805086; x=1780409886; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/dby4bTclHz03p3r+UXN2janGddikm0fNCaCLphFWWE=;
-        b=ADpu5IQa9D7AbE0/0xGEIumv36KE/YMDWfhciwmT7CcDwmEvxXFzJ5iR/5NIv3o4iI
-         Dr8KHtyVcS9TwIYZgZXq6hzWRcBVWadHByHcsgTGA+Me+ppuuwTsATPhng62ikBgpfd9
-         DDNgwnFrcfnmy8SsfS2kCcBZeiRc/y5BrcHTOQDtsIuufEfc8oHGPoGbTcPrcxNMmB+/
-         fnxNbnQr1O763v7wKxyfOQfaJu4n2dKbf8lcE4HYJZsWjS11AvtRkMKnf3bMAf1191q3
-         7t4bjZ/QElCcGrStHfHMA0asvjZvtzV4hyrsDBaFb9VTaxAEibAyMQhz7Z6wEdRkzZSP
-         0kig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779805086; x=1780409886;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/dby4bTclHz03p3r+UXN2janGddikm0fNCaCLphFWWE=;
-        b=lZWyMkr2funoanWYzpayFeiACXcceiUt+3rx6+onIpiiiZ7gLOZ+6CTsewhrMMaqwD
-         oeTckdydvXfxYdIvtrYPi1mJtDRjGIaIjz9lGwDeF2jJlsilR69LDo68m6IVFsUcltwo
-         ZylK4JJW+44Pl7suPVI/z0zWm4bOMg9eOcQslvJ7zSpQP4mDe7K+f7uVY34xDMsb9SGa
-         cGda69fQuXDeSrd+fSPdwNoVDltfJXwqPgjCThQ4aGBaW6PgaIZ3ZnGVJR0qwPIoe4Od
-         Y34tA1vUOI3z+o45gy4AOTGbyR9CbOkwWRU1oERGtfLtHssWWfi1n72bvJBtf/NCicfE
-         JClg==
-X-Gm-Message-State: AOJu0Yy3vpWjGMtv5/DLfGLVO7aJWIZkC3QX+AOPA+c34sQ45L4zZjbH
-	ZQmsAZGbBmn7GVd6DmvYqZAiCBXlaFy70bfq/jlqIgGsSspPbPbAq47iomkmi4MczaU=
-X-Gm-Gg: Acq92OFm6EZ4K4mauxvFm6Tfz9GdWOeKSqhCSycR5XkCOPE2z69Jo3HzK73OQse4WjA
-	p8slUQ7ODLfncxDiSHi/74Vosp4TVcZwPCslkCVB2q227Vir0OR1IFNQzfRg358C3fHveiITyi0
-	ohpCzJ3sDmftfVcCU4G8gyVnCW7Zykvew4zh/Tq1zX7XqL7nbraBYcittzWtkooO7pCsb1Q0fz1
-	vFpzCCv8VDqEh+vOCRuRwIYd3v+chv8knaOR9Nv/6f+rfuPfO2tITiSpKzhIAMdfN4iI7MJbP9+
-	Bz6QNi1FzytTG5uyzGX3/UnFqNz6IUjMy72uC7+XegTuYbnmHDjkU6X4swxIzxsnxavTkkNJC/C
-	eo27UdCcJUZkM2BtfFp/2b4R77PlhbJEGy6BZhc2z4p1EQQ7Atrh537GDOXFXmQtQzC3Cde6a9n
-	+UCsuoFN7R2tFdO9zTimq9+J9X9zqlmQmPjU1jAMVPD8nATko1Uw6Gy1/HjxI/Mh2gVAsLUhKgc
-	YIuTNZh74enleE=
-X-Received: by 2002:a05:600c:8b86:b0:490:58f4:ba2f with SMTP id 5b1f17b1804b1-49058f4bb2fmr215395865e9.23.1779805086603;
-        Tue, 26 May 2026 07:18:06 -0700 (PDT)
-Received: from localhost (p200300f65f47db04a716d2bdeddb4813.dip0.t-ipconnect.de. [2003:f6:5f47:db04:a716:d2bd:eddb:4813])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-49042ce923asm110275375e9.35.2026.05.26.07.18.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 07:18:06 -0700 (PDT)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
+	s=arc-20240116; t=1779805248; c=relaxed/simple;
+	bh=CybVNsiEnHskzI9STi/kobF3HCpPfYFWQg0zLD98WXU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GzKNyBP5RgsNw4xDYeGHIZSLjMZl0kiPGU3YfYu3F9bKnatAQrjj9oARYdVzkboh2n/1c330G9t2GrUXTpx2ffQF9New45AwLMefpMyXcqxkN/Gcp872z8fQqxRwBwUVgXFek4zZCQNveWUN6yUFNbWXv4/XSgTX//Z5+MjpyDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dg0siUqC; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1779805245;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=j+IiqDBrGPMMITWFKRVN/DNqCjtmUObz6NDovf/ZTWo=;
+	b=dg0siUqC/r+2Jv39GP3xfWfm+yJWEWhCWOhr4QCPp5iIipNN/Vs4g+ObWNGjWGndXBnSrl
+	ss57UVQwDk512fYqHeU4gM3ViMK2w48NU5KNIbvgU53t8BobZ/QsAdX2LlAPJnJd3QMneJ
+	3Vyv/9ZwL4D8uZKqxEXJD/QBKDvVn4o=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-147-lvHeRDwbNHiVJDLwnjHREw-1; Tue,
+ 26 May 2026 10:20:42 -0400
+X-MC-Unique: lvHeRDwbNHiVJDLwnjHREw-1
+X-Mimecast-MFC-AGG-ID: lvHeRDwbNHiVJDLwnjHREw_1779805241
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D6E61184544E;
+	Tue, 26 May 2026 14:19:42 +0000 (UTC)
+Received: from nprabudo-thinkpadp16vgen1.rmtin.csb (unknown [10.74.80.96])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 69FA018004A3;
+	Tue, 26 May 2026 14:19:39 +0000 (UTC)
+From: Nimal Prabudoss I <nprabudo@redhat.com>
+To: James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com
 Cc: linux-scsi@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-kernel@vger.kernel.org,
-	"Christian A. Ehrhardt" <christian.ehrhardt@codasip.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>
-Subject: [PATCH v1 7/8] scsi: zorro7xx: Make use of struct zorro_device_id::driver_data_ptr
-Date: Tue, 26 May 2026 16:17:33 +0200
-Message-ID:  <b7f3b4bfa5daabf8a3043177341b8dbb4e4d980e.1779803053.git.u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <cover.1779803053.git.u.kleine-koenig@baylibre.com>
-References: <cover.1779803053.git.u.kleine-koenig@baylibre.com>
+	jmeneghi@redhat.com,
+	nilesh.javali@marvell.com,
+	Nimal Prabudoss I <nprabudo@redhat.com>
+Subject: [PATCH] scsi: qedf: use GFP_ATOMIC to prevent vmalloc allocation panic
+Date: Tue, 26 May 2026 10:19:32 -0400
+Message-ID: <20260526141932.18372-1-nprabudo@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2055; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=Ix4gGdcmIUtHIAGt5LB/LnKcTd8cRB2hDL7DnBkFdMo=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBqFauHUarOpMGYf1Rjh0RTIsmazNAMEXK0zgF/y G7Zt03BuSeJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCahWrhwAKCRCPgPtYfRL+ Tn0DB/46adco11LpUmr3pq6WowYZpIZuSwC3qKUC6/tp8YLIb5d5Q/4eWjjHCOU5kxUfDM5i2H8 24BgnkxRLjvbGeleCWOPr7KrAty/IpYp8gSPyYKJPrQxHGwe7zbktu0xeqiChrf/RxSLf9LVkhY UY1ialBjaoHfwXc9wHIOiYvTYbOnPuob7B891AhRLa4rJ9XhVcSnOe2VZM9aBVhqvZxIzqVWPtm cox3hbRzhqUyMmLZ5N4siHl8zpV9Bg99X6DdRRMrLuYB0z71/6vCatNsJ6HS4HuSRGu9AhLz+Pp AQIWXdQO/NY1iY97vZt9WNY8BTsKMsy2kixRxd+TnN5oslcL
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24103-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[baylibre.com];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[baylibre.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24105-lists,linux-scsi=lfdr.de];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[u.kleine-koenig@baylibre.com,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[nprabudo@redhat.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:email,baylibre.com:mid,baylibre.com:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: CA93C5D7633
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 5FC6B5D7813
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Usage of .driver_data_ptr allows to drop several casts. A nice upside of
-that is that now the constness of the linked structures is kept and the
-compiler warns about zdd missing a const. So add this missing const, too.
+The qedf driver encounters an exc_invalid_op crash in get_vm_area_node
+when running under intensive I/O stress with IOMMU enabled.
 
-While touching the zorro_device_id array, drop an unneeded explicit zero
-in the list terminator.
-
-Signed-off-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
+Link: https://issues.redhat.com/browse/RHEL-75146
+Signed-off-by: Nimal Prabudoss I <nprabudo@redhat.com>
 ---
- drivers/scsi/zorro7xx.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/scsi/qedf/qedf_io.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/zorro7xx.c b/drivers/scsi/zorro7xx.c
-index 1f74586f0428..21c769dc1ecb 100644
---- a/drivers/scsi/zorro7xx.c
-+++ b/drivers/scsi/zorro7xx.c
-@@ -50,23 +50,23 @@ static struct zorro_driver_data {
- static struct zorro_device_id zorro7xx_zorro_tbl[] = {
- 	{
- 		.id = ZORRO_PROD_PHASE5_BLIZZARD_603E_PLUS,
--		.driver_data = (unsigned long)&zorro7xx_driver_data[0],
-+		.driver_data_ptr = &zorro7xx_driver_data[0],
- 	},
- 	{
- 		.id = ZORRO_PROD_MACROSYSTEMS_WARP_ENGINE_40xx,
--		.driver_data = (unsigned long)&zorro7xx_driver_data[1],
-+		.driver_data_ptr = &zorro7xx_driver_data[1],
- 	},
- 	{
- 		.id = ZORRO_PROD_CBM_A4091_1,
--		.driver_data = (unsigned long)&zorro7xx_driver_data[2],
-+		.driver_data_ptr = &zorro7xx_driver_data[2],
- 	},
- 	{
- 		.id = ZORRO_PROD_CBM_A4091_2,
--		.driver_data = (unsigned long)&zorro7xx_driver_data[2],
-+		.driver_data_ptr = &zorro7xx_driver_data[2],
- 	},
- 	{
- 		.id = ZORRO_PROD_GVP_GFORCE_040_060,
--		.driver_data = (unsigned long)&zorro7xx_driver_data[3],
-+		.driver_data_ptr = &zorro7xx_driver_data[3],
- 	},
- 	{ }
- };
-@@ -77,11 +77,11 @@ static int zorro7xx_init_one(struct zorro_dev *z,
- {
- 	struct Scsi_Host *host;
- 	struct NCR_700_Host_Parameters *hostdata;
--	struct zorro_driver_data *zdd;
-+	const struct zorro_driver_data *zdd;
- 	unsigned long board, ioaddr;
+diff --git a/drivers/scsi/qedf/qedf_io.c b/drivers/scsi/qedf/qedf_io.c
+index a120f0e37a64..6883aaf683bd 100644
+--- a/drivers/scsi/qedf/qedf_io.c
++++ b/drivers/scsi/qedf/qedf_io.c
+@@ -2059,7 +2059,7 @@ int qedf_init_mp_req(struct qedf_ioreq *io_req)
+ 		mp_req->req_len = io_req->data_xfer_len;
  
- 	board = zorro_resource_start(z);
--	zdd = (struct zorro_driver_data *)ent->driver_data;
-+	zdd = ent->driver_data_ptr;
+ 	mp_req->req_buf = dma_alloc_coherent(&qedf->pdev->dev, QEDF_PAGE_SIZE,
+-	    &mp_req->req_buf_dma, GFP_KERNEL);
++	    &mp_req->req_buf_dma, GFP_ATOMIC);
+ 	if (!mp_req->req_buf) {
+ 		QEDF_ERR(&(qedf->dbg_ctx), "Unable to alloc MP req buffer\n");
+ 		qedf_free_mp_resc(io_req);
+@@ -2067,7 +2067,7 @@ int qedf_init_mp_req(struct qedf_ioreq *io_req)
+ 	}
  
- 	if (zdd->absolute) {
- 		ioaddr = zdd->offset;
+ 	mp_req->resp_buf = dma_alloc_coherent(&qedf->pdev->dev,
+-	    QEDF_PAGE_SIZE, &mp_req->resp_buf_dma, GFP_KERNEL);
++	    QEDF_PAGE_SIZE, &mp_req->resp_buf_dma, GFP_ATOMIC);
+ 	if (!mp_req->resp_buf) {
+ 		QEDF_ERR(&(qedf->dbg_ctx), "Unable to alloc TM resp "
+ 			  "buffer\n");
+@@ -2078,7 +2078,7 @@ int qedf_init_mp_req(struct qedf_ioreq *io_req)
+ 	/* Allocate and map mp_req_bd and mp_resp_bd */
+ 	sz = sizeof(struct scsi_sge);
+ 	mp_req->mp_req_bd = dma_alloc_coherent(&qedf->pdev->dev, sz,
+-	    &mp_req->mp_req_bd_dma, GFP_KERNEL);
++	    &mp_req->mp_req_bd_dma, GFP_ATOMIC);
+ 	if (!mp_req->mp_req_bd) {
+ 		QEDF_ERR(&(qedf->dbg_ctx), "Unable to alloc MP req bd\n");
+ 		qedf_free_mp_resc(io_req);
+@@ -2086,7 +2086,7 @@ int qedf_init_mp_req(struct qedf_ioreq *io_req)
+ 	}
+ 
+ 	mp_req->mp_resp_bd = dma_alloc_coherent(&qedf->pdev->dev, sz,
+-	    &mp_req->mp_resp_bd_dma, GFP_KERNEL);
++	    &mp_req->mp_resp_bd_dma, GFP_ATOMIC);
+ 	if (!mp_req->mp_resp_bd) {
+ 		QEDF_ERR(&(qedf->dbg_ctx), "Unable to alloc MP resp bd\n");
+ 		qedf_free_mp_resc(io_req);
 -- 
-2.47.3
+2.54.0
 
 
