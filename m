@@ -1,240 +1,218 @@
-Return-Path: <linux-scsi+bounces-24090-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24092-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id JQTuOLH9FGqESAcAu9opvQ
-	(envelope-from <linux-scsi+bounces-24090-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 03:56:01 +0200
+	id gAwlF75AFWrJTwcAu9opvQ
+	(envelope-from <linux-scsi+bounces-24092-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 08:42:06 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id F36E65CF961
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 03:56:00 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F18ED5D13F2
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 08:42:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8A4A9301E98B
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 01:55:58 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 96878300BB9B
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 06:42:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2A02DF15C;
-	Tue, 26 May 2026 01:55:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 853F73B6C1E;
+	Tue, 26 May 2026 06:42:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="pwytdp9l"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="o+fmvfOV";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="dRwATpAu"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A8112D0292;
-	Tue, 26 May 2026 01:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16FFB382283
+	for <linux-scsi@vger.kernel.org>; Tue, 26 May 2026 06:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779760556; cv=none; b=b64Iqq9H9jb+FO9Mh4ZFzV5ktfYBpt2Cufvn9pDB+7qQystUj09mlo4d/A86pVbn3i8Eyf6ecvjHIFZDlhqvqCUpwO9eGJlGvGtKbzuzDMc/r1SLWJF9GF/E1jd4dId0WvNRSTWeAQ5ss1TRuHJW/ndtDvZlBfi+1KjRhbO9Ssg=
+	t=1779777723; cv=none; b=t9K3pjIEtmidr+SUhwFIHceihkiwMSejiJKkgGeEO+JEFSjoybtM+szsr3SXfOpVf7P/4f8vyhe/Ygn95JpHZYveIWBbhkO9+YAObgEa48RzILpNgVqGGrcGGFfW6HWMYHNkZHyAPdUtsb6uY8ve9gMyjxSRGfmu17kRbSOIhBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779760556; c=relaxed/simple;
-	bh=T4vcKlwy7qLyp4ZuvdYsQ+O5BMqPiwfYibNl2GT2Xm0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jQcM9oFYDhmhU1tpbsZXSoBWFMKAWM6ATorD3D2K/o1fVn5r3lZ4jKFRb4+A6VzkbcW2nTemjnWumRzh2JvwKlhIZuPlCMIcL5qqlZGCZjFsJ4lXwjSSDsprKRDy8hz9XUx9SCtBpXT+J+UDaN/IGCh0Nbui20og5wtKMgvH97U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=pwytdp9l; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=2zqnTLnUw/loyc0Q7keUARTef/j8IBwu1gIANLADZ1A=;
-	b=pwytdp9ls+LmtFIc8bnkLbJMhrMgI2ygrJaxQjzahwUpRiIK4slazOjKkSTcSKM+9ubkaq8ep
-	MliAiFqlqN9NMPpeCl+te0imLwOp7mwSHQsU+vOe8akLSy6RDoVwgTyJCg/IUBBxNhYpXVbqrMa
-	t+sIDwaxhJt5qnr1r3reZ7Y=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4gPbHB5Ws7z1T4Fv;
-	Tue, 26 May 2026 09:47:50 +0800 (CST)
-Received: from kwepemj100018.china.huawei.com (unknown [7.202.194.12])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1343840561;
-	Tue, 26 May 2026 09:55:50 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- kwepemj100018.china.huawei.com (7.202.194.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.36; Tue, 26 May 2026 09:55:49 +0800
-From: Xingui Yang <yangxingui@huawei.com>
-To: <john.g.garry@oracle.com>, <yanaijie@huawei.com>, <jejb@linux.ibm.com>,
-	<martin.petersen@oracle.com>
-CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <liyihang9@h-partners.com>, <yangxingui@huawei.com>,
-	<liuyonglong@huawei.com>, <kangfenglong@huawei.com>
-Subject: [PATCH v4 2/2] scsi: libsas: Add linkrate and sas_addr change detection in rediscover
-Date: Tue, 26 May 2026 09:54:18 +0800
-Message-ID: <20260526015418.2022398-3-yangxingui@huawei.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260526015418.2022398-1-yangxingui@huawei.com>
-References: <20260526015418.2022398-1-yangxingui@huawei.com>
+	s=arc-20240116; t=1779777723; c=relaxed/simple;
+	bh=wYYvPGKKIfxvxOfDfzhnoD6V6y+gxUFtI1B+tZxdn3Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HkdGdVfc6YSWazYYkKY4YPOB1GGXBgCYIJD3kHn9/jJnu0IE1YwSNW+CnNNmPyTETwzjX+BRzI7mbYyOerqQ1RsWZN/StSNkaMIgeM9VtXkQitF7nCQSHRYSOBsALOPCCI+7NXCI4OU8P5+7gtKKc/efXOB4YzAa2dnR48Y40a0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=o+fmvfOV; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=dRwATpAu; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64Q60w4j1764507
+	for <linux-scsi@vger.kernel.org>; Tue, 26 May 2026 06:42:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	nx7dST+rJAS+31ZmDGbjNSLJU/fJwkaTptXWG8RZ9k8=; b=o+fmvfOVsG24K0Ab
+	hTzqZYO8ng4P6kSWsC5Ge2thjXLa0yQUpOc74ZnUER3rvoC4Jw30NRpy+qv6iBWt
+	eQSJ+3EMZi7I7gabCCEqO1SnekFze9Z1gxaqMXv3mPRwBJtQOtm2Y+Knwn0YRo0F
+	GKKzayvcnJRZ7cTrPUV8q0V7DdLmn1WXjcompefnjkk6Bn0Bq5nPLH1mx1Cizfpz
+	wfR/Kx5v3AbB3vbyetJasRr1Z3hp6yEPPWR+aCeVgououlvkY7NzQv7yIF0VPXGs
+	pHDsPGGtjSVIEbSGSnBtBngPCGrFbsU/ezuJGfOYgouumbw6pGL+QigtgIMl+MRy
+	b0vivw==
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ed5vgg4uv-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-scsi@vger.kernel.org>; Tue, 26 May 2026 06:42:00 +0000 (GMT)
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-367fd7b8825so10192222a91.0
+        for <linux-scsi@vger.kernel.org>; Mon, 25 May 2026 23:42:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1779777720; x=1780382520; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nx7dST+rJAS+31ZmDGbjNSLJU/fJwkaTptXWG8RZ9k8=;
+        b=dRwATpAuZMoXxNx8ehPumjmVWOOW9C/LC6P9UwL/L1ntKuzV0c1+ukTN6rHAMo6Grx
+         KnlXiIUYTc/Lbzwk7GF3vwhmCDwDyjEEGRslqK+7QEwEI5GZh7qQGA00yUIIyjQrFgKj
+         A7XPoSrdynWfB5nT4gDjONTFmA1wqg8E0U4ackL+1D/OIE63UkJnxGWBWC5/2bqFeJxJ
+         Bcsgvq8p80suHGvdy9yk3CNGGacuXGz56TxbXodHNCJNRqFIzko8qYPkwJWcfFsUkMv5
+         ZRy8hG2esPBfSwFefQITLBjx78692s+Q80MtseEmri7+BMuu6roFc9u3vft/7xVyORnV
+         0wSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779777720; x=1780382520;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nx7dST+rJAS+31ZmDGbjNSLJU/fJwkaTptXWG8RZ9k8=;
+        b=i3GQud/GOZU1yS/9sRgFz3UbRnbXpT5oUBhLZJx3PvVIyoNH+z/1yQ84wJmsfIywt6
+         BcGwow9g5shwcP7zw6W9nU0uwBsnOqEMnYcWbRe+oV+yvqc/wvN5kllZnjHzuyyNedLZ
+         xLu1llFjewgXZHRpRxp7j/2d7LSrX+hK31iXTe3dCSS8fPAN57zcyj2+3tq9mZMt78WK
+         zrfWrsce2qEXRbIjdN+kNYd0pqckxhGcIXnT5gp86bxrWgFYNoM0RoXPouRfrfpKac9Q
+         KjizlnMjJfyb7XlYTsQoU7IUgTfXkDOtpPmRYf0kThuj9CtK9adzTTxO7omAg2PNVHm4
+         crjQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/DkzKcYuZxjlrLzpA9mfbCAYfhbdamrUmg8pdn/DDvqXkZnqak/9tTGNzpIa0LnbBTGMvLOn1tBU3B@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7Btp1svz50JPbrAJXnPb7Y5EWrHsAtzot64tIR0eA7nc+8izy
+	/bz8KBXREt2XyOdXp6bDocsjZKtB5MPCe3fV4XKXIaksWSbCyHwio53HpSBTjWBnC9dWUBM+qBW
+	QKgq2pQ3IsfUxZwx2MgIKE9Gl+sXOK4JALvpVk3MNf2SAeJnkeq1zZ3V1oBEotqt/
+X-Gm-Gg: Acq92OFabeWSjyx3BWTVIMuvb1qQGl8ZQMuIxmz+PAryRUs1Rv7qI6fSP6gMI7L9ngy
+	2P1X52IJuMbq5oDHj24Jf/nQunN44z5Tx+2tYKWCkUvG3Piww0F/On4z5OCWWWauwR6Ba03EN/t
+	hVybfIEqDwq1NXDwwkIIG3lU/kiDNbKWMn3s9X73fRqxiAs17wYyQaDt911+RhelUZ9mw2dG77/
+	cLJ5soXpbL4UPDaU0xtzMk3bZ8I4u9C8FFJjZbSCNlynAC9ImoRF1iNU2jc9oBk3fa1jDP+vus/
+	naoph4sXSomm/4x+yGF6KIWAsflfJq+NyN6waeJPfm5pIOe96FtSRlndjmANtMl1kgw1OHyIu3H
+	kGR13W2kBmxd4TFhpLF9RjIzju/EEsJpOjJRCm46ZpSxSITdCsw==
+X-Received: by 2002:a17:90b:56ce:b0:36a:cace:a4b6 with SMTP id 98e67ed59e1d1-36acacea4d5mr8607073a91.9.1779777719854;
+        Mon, 25 May 2026 23:41:59 -0700 (PDT)
+X-Received: by 2002:a17:90b:56ce:b0:36a:cace:a4b6 with SMTP id 98e67ed59e1d1-36acacea4d5mr8607044a91.9.1779777719373;
+        Mon, 25 May 2026 23:41:59 -0700 (PDT)
+Received: from [10.92.181.2] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36b0d6a612dsm810455a91.17.2026.05.25.23.41.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 May 2026 23:41:58 -0700 (PDT)
+Message-ID: <190e16f9-f467-4446-a5ee-eaf01ad55861@oss.qualcomm.com>
+Date: Tue, 26 May 2026 12:11:52 +0530
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemj100018.china.huawei.com (7.202.194.12)
-X-Spamd-Result: default: False [1.34 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),quarantine];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 3/3] phy: qcom-qmp-ufs: Add UFS PHY support on Hawi
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: vkoul@kernel.org, neil.armstrong@linaro.org, robh@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, mani@kernel.org,
+        alim.akhtar@samsung.com, bvanassche@acm.org, andersson@kernel.org,
+        abel.vesa@oss.qualcomm.com, luca.weiss@fairphone.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+References: <20260522172716.820490-1-palash.kambar@oss.qualcomm.com>
+ <20260522172716.820490-4-palash.kambar@oss.qualcomm.com>
+ <szzkygcwnrx2p54hbulzd3edhwzueaulhpyl35b762yo4enepu@zgzv6oxdocha>
+Content-Language: en-US
+From: Palash Kambar <palash.kambar@oss.qualcomm.com>
+In-Reply-To: <szzkygcwnrx2p54hbulzd3edhwzueaulhpyl35b762yo4enepu@zgzv6oxdocha>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=IrYutr/g c=1 sm=1 tr=0 ts=6a1540b8 cx=c_pps
+ a=RP+M6JBNLl+fLTcSJhASfg==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=ZpdpYltYx_vBUK5n70dp:22
+ a=EUspDBNiAAAA:8 a=ZrBsj_3XA7F7z1mTZmAA:9 a=QEXdDO2ut3YA:10
+ a=iS9zxrgQBfv6-_F4QbHw:22
+X-Proofpoint-ORIG-GUID: 13TvgllyIKhq_-jttdoha_TCwxdHJBdG
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI2MDA1NiBTYWx0ZWRfX5VBmeeQm5V87
+ tY9LkY9hp7ND5L0CIRo5WHq8mBLOi1t188L1NjKKbjE2tN6Cgu6RFq83nW6w+nJ+cu2h+DMPwrW
+ +gNMeUfdzNgs/v4J9UETM/lVqR2R4Apyt9tOk141X1VYrYZ6csQkB93C5Q4NN0uYAKtMSVP7CQ+
+ f8y7uQSYFFzl5M4JWrzdKy/k2xabSbdZWuRXbTUVVNgLlqkVf8INIzHA2a8Zk2U1KjJ0CC6hAWr
+ FZ08DBA6zWJfX19dZc6riIJImyhRb+B696jDmC3YpA9LaQeiUuwV2Lav6WcIkxK7SnM430Ixphg
+ yRuIF/AxifnxYsMiCqkdxmtgomR1LnDUHi/DtHbi/HuRWRWQGlDouEJ0Dtu5qdZtYQMSEmtg64m
+ nGn9MNTH9ntr7N9/JO9rogHNfWNVLWP39FbST9ADsq6S4Vda/kWOVR8zf3M77xWnEZzYuTEnu2Z
+ bKgzaLMSF4ztH+VjR7g==
+X-Proofpoint-GUID: 13TvgllyIKhq_-jttdoha_TCwxdHJBdG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-26_01,2026-05-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 malwarescore=0 spamscore=0 phishscore=0 priorityscore=1501
+ clxscore=1015 suspectscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605260056
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[h-partners.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[yangxingui@huawei.com,linux-scsi@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-24090-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[h-partners.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	RCVD_COUNT_FIVE(0.00)[6];
 	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,h-partners.com:dkim]
-X-Rspamd-Queue-Id: F36E65CF961
+	RCPT_COUNT_TWELVE(0.00)[17];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24092-lists,linux-scsi=lfdr.de];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[palash.kambar@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-scsi,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: F18ED5D13F2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-In sas_rediscover_dev(), when detecting a "flutter" condition (same SAS
-address and compatible device type), the code assumes the device remains
-unchanged and only handles SATA pending state recovery. However, this
-approach misses two important scenarios:
 
-First, the flutter detection only compares SAS address and device type,
-ignoring potential linkrate changes that may have already occurred.
 
-Second, after sas_ex_phy_discover() re-queries the expander phy, both
-linkrate and attached SAS address may be updated. The current code does
-not validate these changes against the existing child device.
+On 5/25/2026 2:15 PM, Dmitry Baryshkov wrote:
+> On Fri, May 22, 2026 at 10:57:16PM +0530, palash.kambar@oss.qualcomm.com wrote:
+>> From: Palash Kambar <palash.kambar@oss.qualcomm.com>
+>>
+>> Add the init sequence tables and config for the UFS QMP phy found in
+>> the Hawi SoC.
+>>
+>> Signed-off-by: Palash Kambar <palash.kambar@oss.qualcomm.com>
+>> ---
+>>  .../phy/qualcomm/phy-qcom-qmp-pcs-ufs-v7.h    |  24 +++
+>>  .../phy-qcom-qmp-qserdes-txrx-ufs-v8.h        |  37 +++++
+>>  drivers/phy/qualcomm/phy-qcom-qmp-ufs.c       | 140 ++++++++++++++++++
+>>  3 files changed, 201 insertions(+)
+>>  create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-ufs-v7.h
+>>  create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-ufs-v8.h
+>>
+>> @@ -1306,6 +1315,12 @@ static const struct regulator_bulk_data sm8750_ufsphy_vreg_l[] = {
+>>  	{ .supply = "vdda-pll", .init_load_uA = 18300 },
+>>  };
+>>  
+>> +static const struct regulator_bulk_data hawi_ufsphy_vreg_l[] = {
+>> +	{ .supply = "vdda-phy", .init_load_uA = 324000 },
+>> +	{ .supply = "vdda-pll", .init_load_uA = 27000 },
+>> +
+> 
+> Stray empty line
 
-Additionally, the replace code path (different SAS address detected)
-has a sysfs duplication issue: sas_unregister_devs_sas_addr() only marks
-the device as gone, but the actual sysfs cleanup happens later in
-sas_destruct_devices(). Calling sas_discover_new() immediately after
-unregister causes sysfs_warn_dup() errors.
-
-Introduce sas_is_flutter() to check whether it is a true flutter with
-validation for linkrate and sas_addr changes. It returns true for normal
-flutter and false when changes are detected requiring rediscovery.
-
-Introduce sas_rediscover_phy() to handle async rediscovery for both
-flutter and replace cases. When invoked:
-- Set phy_change_count and ex_change_count to -1 to force revalidation
-- Unregister the device via sas_unregister_devs_sas_addr()
-- Queue DISCE_REVALIDATE_DOMAIN event
-
-The old device sysfs is cleaned up by sas_destruct_devices() at the end
-of current revalidation work. The new event triggers discovery via
-sas_discover_new() since attached_sas_addr is cleared, avoiding the
-sysfs duplication issue.
-
-Signed-off-by: Xingui Yang <yangxingui@huawei.com>
-Suggested-by: John Garry <john.g.garry@oracle.com>
----
- drivers/scsi/libsas/sas_expander.c | 67 +++++++++++++++++++++++-------
- 1 file changed, 53 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-index f55ae9a979cd..4e8e1b339889 100644
---- a/drivers/scsi/libsas/sas_expander.c
-+++ b/drivers/scsi/libsas/sas_expander.c
-@@ -1962,6 +1962,56 @@ static bool dev_type_flutter(enum sas_device_type new, enum sas_device_type old)
- 	return false;
- }
- 
-+static void sas_rediscover_phy(struct domain_device *dev, int phy_id,
-+			       bool last)
-+{
-+	struct expander_device *ex = &dev->ex_dev;
-+	struct ex_phy *phy = &ex->ex_phy[phy_id];
-+
-+	phy->phy_change_count = -1;
-+	ex->ex_change_count = -1;
-+	sas_unregister_devs_sas_addr(dev, phy_id, last);
-+	sas_discover_event(dev->port, DISCE_REVALIDATE_DOMAIN);
-+}
-+
-+static bool sas_is_flutter(struct domain_device *dev, int phy_id,
-+			   u8 *sas_addr, enum sas_device_type type)
-+{
-+	struct expander_device *ex = &dev->ex_dev;
-+	struct ex_phy *phy = &ex->ex_phy[phy_id];
-+	struct domain_device *child_dev;
-+	char *action = "";
-+
-+	if (SAS_ADDR(sas_addr) != SAS_ADDR(phy->attached_sas_addr) ||
-+	    !dev_type_flutter(type, phy->attached_dev_type))
-+		return false;
-+
-+	child_dev = sas_ex_to_dev(dev, phy_id);
-+
-+	sas_ex_phy_discover(dev, phy_id);
-+
-+	if (child_dev && dev_is_sata(child_dev) &&
-+	    phy->attached_dev_type == SAS_SATA_PENDING) {
-+		action = ", needs recovery";
-+	} else if (child_dev && child_dev->linkrate != phy->linkrate) {
-+		pr_info("ex %016llx phy%02d linkrate changed from %d to %d\n",
-+			SAS_ADDR(dev->sas_addr), phy_id,
-+			child_dev->linkrate, phy->linkrate);
-+		return false;
-+	} else if (child_dev &&
-+		   SAS_ADDR(child_dev->sas_addr) != SAS_ADDR(phy->attached_sas_addr)) {
-+		pr_info("ex %016llx phy%02d sas_addr changed from %016llx to %016llx\n",
-+			SAS_ADDR(dev->sas_addr), phy_id,
-+			SAS_ADDR(child_dev->sas_addr),
-+			SAS_ADDR(phy->attached_sas_addr));
-+		return false;
-+	}
-+
-+	pr_debug("ex %016llx phy%02d broadcast flutter%s\n",
-+		 SAS_ADDR(dev->sas_addr), phy_id, action);
-+	return true;
-+}
-+
- static int sas_rediscover_dev(struct domain_device *dev, int phy_id,
- 			      bool last, int sibling)
- {
-@@ -2015,27 +2065,16 @@ static int sas_rediscover_dev(struct domain_device *dev, int phy_id,
- 		if (res == 0)
- 			sas_set_ex_phy(dev, phy_id, disc_resp);
- 		goto out_free_resp;
--	} else if (SAS_ADDR(sas_addr) == SAS_ADDR(phy->attached_sas_addr) &&
--		   dev_type_flutter(type, phy->attached_dev_type)) {
--		struct domain_device *ata_dev = sas_ex_to_ata(dev, phy_id);
--		char *action = "";
--
--		sas_ex_phy_discover(dev, phy_id);
-+	}
- 
--		if (ata_dev && phy->attached_dev_type == SAS_SATA_PENDING)
--			action = ", needs recovery";
--		pr_debug("ex %016llx phy%02d broadcast flutter%s\n",
--			 SAS_ADDR(dev->sas_addr), phy_id, action);
-+	if (sas_is_flutter(dev, phy_id, sas_addr, type))
- 		goto out_free_resp;
--	}
- 
- 	/* we always have to delete the old device when we went here */
- 	pr_info("ex %016llx phy%02d replace %016llx\n",
- 		SAS_ADDR(dev->sas_addr), phy_id,
- 		SAS_ADDR(phy->attached_sas_addr));
--	sas_unregister_devs_sas_addr(dev, phy_id, last);
--
--	res = sas_discover_new(dev, phy_id);
-+	sas_rediscover_phy(dev, phy_id, last);
- out_free_resp:
- 	kfree(disc_resp);
- 	return res;
--- 
-2.43.0
+Will fix and Update. Thanks.> 
+>> +};
+>> +
+>>  static const struct qmp_ufs_offsets qmp_ufs_offsets = {
+>>  	.serdes		= 0,
+>>  	.pcs		= 0xc00,
+> 
 
 
