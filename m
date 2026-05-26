@@ -1,93 +1,111 @@
-Return-Path: <linux-scsi+bounces-24101-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24104-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8KMVJB2tFWpkXwcAu9opvQ
-	(envelope-from <linux-scsi+bounces-24101-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 16:24:29 +0200
+	id oPOKNtisFWrgXgcAu9opvQ
+	(envelope-from <linux-scsi+bounces-24104-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 16:23:20 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C0FD5D76CB
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 16:24:28 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B4995D765E
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 16:23:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 04711301ED17
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 14:18:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B5384307FE2C
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 May 2026 14:18:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C227D3FF1DF;
-	Tue, 26 May 2026 14:18:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E0604028E3;
+	Tue, 26 May 2026 14:18:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="cErOLFiE"
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="Kr5CR1pu"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17A33FE660
-	for <linux-scsi@vger.kernel.org>; Tue, 26 May 2026 14:18:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20D96400E1C
+	for <linux-scsi@vger.kernel.org>; Tue, 26 May 2026 14:18:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779805083; cv=none; b=Djp2K3dCtzEI4qbUYy5/K+RwRKWWGsTU8yM6FfjaRd+bZgJ8bLoi2ZXi+QxI/AAD8N6IENxmJGHt2MtZA3ejoB1wvzqIfQnsFLaNg1awQwoMwW1fgJ+mPh+i9vuwfZ6T9S4iHwKigNLx1B6VIS+0fbc7gjfeJjyO0Rp5Mz0uuDU=
+	t=1779805090; cv=none; b=ZXwq02IJqfSpoR/uqeyaQ8bNzHyiX/GGfWst3f/fWTI2c/1sfw/EzkROcDgCDePWiv4l12bQUeo+DG/o761gr5GQKT6rf+QEN2aHGeBQ9s86mmrz/CAOw+R1N+buruVudgNtb8+O0aoFRHadcb9/lb4Fl3JdjMwa8uZp22o3bTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779805083; c=relaxed/simple;
-	bh=DUPc4hq5A75iCE9n+8UJBx44jmx2lrSpFvIMVWPYPp0=;
+	s=arc-20240116; t=1779805090; c=relaxed/simple;
+	bh=A14j4ivDNBl2yGcg6n5ndH+ByZLqjyYb/4BbZyB+vg8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ptZe8BiAkq3v6wEHUwT3gl58PWgtN4Xu7ZYpw0xSx8rT211JnCB2s0FxrlGW1apRC9OusWGKJ+cbCyz41XF84Pk5dQwDif+TQM31ookJYQKNOSmgbVoequ4WdpygHbqzsndjuADZHMXKzrPr8Zj6QeXUMwWwz6SCWax44F2GOdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=cErOLFiE; arc=none smtp.client-ip=209.85.128.47
+	 MIME-Version:Content-Type; b=V9w+74WTJ0QFVreP3G3+agtZ6qqavZWAgMoqtcJ9k8BeFxUgFtystB638XeQjJwbZQKGdLlYGpbCQvIESO0AI6ZwE1GFsw8H1BXviSkinIw0N1CpDkplRKH94thj+SRzcW+QmWdPA4k0YvGL9mOVlZiQLxofE6j8cBUiP4eJQ2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=Kr5CR1pu; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-490686877a1so14739585e9.0
-        for <linux-scsi@vger.kernel.org>; Tue, 26 May 2026 07:18:01 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4904fd4f6aeso30332615e9.2
+        for <linux-scsi@vger.kernel.org>; Tue, 26 May 2026 07:18:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1779805080; x=1780409880; darn=vger.kernel.org;
+        d=baylibre.com; s=google; t=1779805085; x=1780409885; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=owUZ+ht0GkQnt8mYcn/fY6yfRIileFWWrUTIJce2Gaw=;
-        b=cErOLFiEI+IqeOv27L4jIhN1kqCubiWv7Byjh8zc/W3umPb6+o2awySfVKqU+QqaX2
-         BZ7i5M99osrxCuHxPivXJPlMBu/nEoAmZtIRwqv2lBd8ygWjc2cggH1s7v/Mb0ygcU+d
-         +WbN3xZS/5bUDAI743DIuZV5EO7HT8EZdTLRa6/PywVSP8pT8flMiyvueR+N3QkU5PjS
-         E2YDetqnh+vtGvsUGBoB+3HLbBTUMAJ4HXGGehQDOxfEkzpC8mzepVUXJE8EMQXsexQX
-         znToGfbwc3zke24G6wrQmufpWss6GFQ7AkibsgVbwXTJieWTYKjitsa6wpsrMKwD2zQq
-         legw==
+        bh=DWA1rx79U563LTGj65VSgfxyjti8CkpfF8kpzyqUrdk=;
+        b=Kr5CR1puBNaF4clfOgdrSY811kH0XkJYaXu+tVuev20pRHeBFa6PmkgFfS7uPTR2Mj
+         fccEIsQWEhUkWS/CT8WCi3/1a7oZuBvZ0BapIIz3Tp+MeoOcr1VGd0OfwtIMkjbrk1bb
+         S51PVUaLe7Z2+cP8ML/eZy1CDRItho9DvS6wXJJhHCYPnaQRkpWofV8xMl3D+fAmy3L+
+         e8z7ETF1JDJ+fKIfD9mFwX7Xn3lnn0nDGBAeeV/ZNq4TxDc3KDbcEEeWE8PRq1sgwGN/
+         5b2esYUBdADisNNp39HkOaTwLPlCZEXJANrO0FuFsYBD8fAgQRjXET1mdfBqRTJMj+3X
+         x24A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779805080; x=1780409880;
+        d=1e100.net; s=20251104; t=1779805085; x=1780409885;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=owUZ+ht0GkQnt8mYcn/fY6yfRIileFWWrUTIJce2Gaw=;
-        b=KUf1KazEgzvypqqviAy7WmScavPmR8oo77ZXNzpuPZhz5PYmrFlIrB8OHvB1CuFy0M
-         jJjqpAVUKKSIJiFwtH6VBKrFTFy6X8onrUo3y/Vd9RAs2FtN4RgM8LV6rbMawen1TZs6
-         PpCSvxqvyQcJHujbZbhsA8w4hUEsoqon8cJdGP1BmD7RMiIMrzkMdLPR+8kLfZAUknF1
-         MWa/sntnfDZNn5JlEoXzoLEWSPQ3wXJyMjN4hGwH6m5BVan/x8IJW1elOI9XvXOm3oIA
-         kaFZCSiy4Egc8HOgqGNjflbuxle5+N8wKdAM9YUf0beXwgRjL/gyov4H3m1mnIWpo2Hr
-         yr9A==
-X-Gm-Message-State: AOJu0YzGvZBbUQ+etBW/Hltk8E0XZnklY9y/geDlCkMsfqfIZnhFQwbM
-	tJsa3Z46yplmzDSSirHqsNryBRzBJ80thKYkMxHdp33OtGT5+Sp8PPVhe+sqEcPBRUE=
-X-Gm-Gg: Acq92OGVZ5hNyCpAG11ycvwiRMGHye1/rWv2hbw0QauRH23lXGcuowvM4RSPoRb0xDl
-	WvbbKnhMewbxQkGnuDRE1DNadVmdIZXLO9tDa2nc1OlN+XKz0uFYzS260KpbS6scOwEZ44BoznB
-	vyKw9+RU8dhIWRCURID0xNIrkWcj7+/NWyRu7D2aHSLJlhmkIi+8/TG3KMG5VT+g3/pHbejRLJP
-	4h+R6oYhsj1KVNDhYGmB+HzaBtZC3uUkcVqHf+zO/+uD2JK9Yrk4IJm2Xrflgfa9ujVhHfSUh0p
-	GwjtKHbIzp89E1MfM1vRdmFLMBD3o/bydpgSPjNPr0WF2F90EIIBtAIwCmJMXz3FAPOtYIRQAR9
-	KKJzrz/5lN47sFeeeJdbvmJ2xkkbyQdHcAT1gRlAk57V6zyU0zgMB56EIg6sSFoS/B5Ojgk5QFu
-	3tD2vpdbAHOKHwADdZRK7xO3H+t/rDL+9B6vkkg5+0w3jv6IXtTD+kZtOWTqy9oK11XKA9YmdGf
-	O7qBpmzR9dMick=
-X-Received: by 2002:a05:600c:4506:b0:490:3838:1548 with SMTP id 5b1f17b1804b1-49038381676mr334172855e9.13.1779805079826;
-        Tue, 26 May 2026 07:17:59 -0700 (PDT)
+        bh=DWA1rx79U563LTGj65VSgfxyjti8CkpfF8kpzyqUrdk=;
+        b=DjWIjgyQkd6UFLqEv66H1HXA+ya8KLAoQ0VRfZIjwqq28aEzvDsRIjtcdQE5JYb+KL
+         p7j1B+8tA//m6bwPWHXud1X7EstrKaP6k0LL7yHJ2IanQgfcHjEILR+7+osbSwFWPDSw
+         I6mfWYh4TyNg9M0WPHIbu4pNhM9GEVK8E3TL41MGt8T8ZyfrSbCEMU2/FQdIMVxpy3MR
+         jqS+OxgnItlORyCfhRp6alDNb79Ni5AHbxvSAiu88WRpXHBNHtC6wksv3FONZJ6uduwp
+         jjhMpok4ldFJJ6Xty9gbYVVs3mhG/iw4ZlKvdW+iDNGLiRu8axAB3PWgFp1cw9JO3kvr
+         REKw==
+X-Forwarded-Encrypted: i=1; AFNElJ/AroBbYypH4xqofqM5S8FUGBj+P7MiPjnGBLY00xypI8dx5acIhDtGDzvYSVYGAGwtEXcgjYnwkd5H@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnKC6Ht5CSvH3aaok+GvQcJdOxRHNl47459wgxcbgPyLujiXpi
+	XcV+GVWYzdEUUPu1a+7gRzNsR0P52+XQ0BWoz+Y8IoFcSRtchy6untLFfQ4gwspaWvY=
+X-Gm-Gg: Acq92OFJRaBwGOzIV+UsIpXC/oLxOwv0ruujLoC3n9DuqhA8qdEAcGuMZnO5CLG+bgi
+	9ZQy02o1uURipi0vBv0Bm1siHzPJozZhxsmMLo0VCu1afN4DMDYmzg9HRbXgchEc3jtA/ZxqBAw
+	wbQAMcvmQ4ILzxzwefzvO2RFBmfYH+i+F+XNzYFU6oVukdITShoWHuuiXJzELPFgM6b2Mcq5zUd
+	14+EX/2BrgvHK7vin8bbIHvAtLHQr/MV3ScUiHzE/Ki4anx6U9PUW4Ddb26WTixpMYXbB52iFEf
+	LID/rglNAQz7q3dIwa+8TtxD7u2XpxqnXKYaqmMS+HUzDQQC3ehF/goP6YzFTkXW3iYGlScRf7q
+	B4NVkyo1VUKh1i0ar5i7gr44Ppq0IJWFbAAmC2Eq9zbwLg6CdOrkivxiA3BdLVTimwDwIgKrsGl
+	TpZT/kf7Fn3zobdKpGPdrUNg+WVVjpJlNxGIC/mdI49m1emDUgSpRpZhLsjYW7d27hQL13aG2KX
+	sPobt3Wy86HheVlLYHmhgj9Eg==
+X-Received: by 2002:a05:600c:4592:b0:490:6237:5213 with SMTP id 5b1f17b1804b1-4906237537cmr145220735e9.23.1779805085104;
+        Tue, 26 May 2026 07:18:05 -0700 (PDT)
 Received: from localhost (p200300f65f47db04a716d2bdeddb4813.dip0.t-ipconnect.de. [2003:f6:5f47:db04:a716:d2bd:eddb:4813])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-45eb6d6ebf0sm37095798f8f.34.2026.05.26.07.17.59
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4904561a160sm379625175e9.9.2026.05.26.07.18.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 07:17:59 -0700 (PDT)
+        Tue, 26 May 2026 07:18:04 -0700 (PDT)
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>
 To: Geert Uytterhoeven <geert@linux-m68k.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
 	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Max Staudt <max@enpas.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Helge Deller <deller@gmx.de>
+Cc: linux-m68k@lists.linux-m68k.org,
 	linux-kernel@vger.kernel.org,
 	"Christian A. Ehrhardt" <christian.ehrhardt@codasip.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>
-Subject: [PATCH v1 2/8] scsi: Use named initializer for zorro_device_id
-Date: Tue, 26 May 2026 16:17:28 +0200
-Message-ID:  <9602004a447b474b15ca1e110d6d3c277f669e20.1779803053.git.u.kleine-koenig@baylibre.com>
+	"Christian A. Ehrhardt" <lk@c--e.de>,
+	linux-ide@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org
+Subject: [PATCH v1 6/8] zorro: Simplify storing pointers in device id struct
+Date: Tue, 26 May 2026 16:17:32 +0200
+Message-ID:  <49576a7501128c93ef318566ed7faefce163f1fd.1779803053.git.u.kleine-koenig@baylibre.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <cover.1779803053.git.u.kleine-koenig@baylibre.com>
 References: <cover.1779803053.git.u.kleine-koenig@baylibre.com>
@@ -98,130 +116,77 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3342; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=DUPc4hq5A75iCE9n+8UJBx44jmx2lrSpFvIMVWPYPp0=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBqFat7M8eMhLUAoLTKpnqFEP1P/GOBJ0Ys3EJgQ NyA/2H+k2aJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCahWrewAKCRCPgPtYfRL+ TmGFB/921JeU5PH45mB8W4KFda/+9nqqIIa+qMv4InKRyccfCdXMtumJ53Km2M897qBTcAkaO8w wxxYTWmi5At320VtoBhOZ8SnJDxZxBQxNPU/TxWV6JjV4ujOcclgaSkQWvuk3piHBCpZ8iv7cWx hA6iOKyjZwwOTt49eIDAqjdRWJfd4CiIwHt/90r42LK3agVvH//OcwP+Qwtt0s6UCa0sQbBz60a SKG4s1AZheRf/9wa53odPVxu4lAUoTnd7Xtpe5++21uDsQUzROHhCUmLnyp7efw4Xds80qmyZD7 LPkx+MmY2lOOVJqsceRrywPuuqhsTGadMsHBhYLTneJJLiOf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1515; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=A14j4ivDNBl2yGcg6n5ndH+ByZLqjyYb/4BbZyB+vg8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBqFauEMCO+XO5wBiq0WLDW9CPIg9uJbXOSVo41d x54C4q2mLiJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCahWrhAAKCRCPgPtYfRL+ TjnnB/9l+SDbdriw4+P0R0QawXzQR6RNcTSEDOsG0Za0QxbkFa85XMb5sLwAO0owuw/Rowx6ky+ QMdsAXUgR3vwvQLdxYJlkEl/VA/XHq/xJJAuw+YZlvI7KLvHFN3YqbmJgo+fHO56QX05JkYBvJ2 Jk9WKvtvJ58lFHkr+5etBSYF3AixiJ+YBuoVcvjao9lM8EjUJ8SyDU/sXtdjUltWSXQmsKSN5Wa cffVeDubVIqpPQNOIDt4M8130VMFMoHEz1nySiOBmpolGD4C9tykhh7r5xGVttivy5+fc/p6kFl 64ZyNUXuXtZrf+NrGcA7ZEOvBZuObVE5B7q9XxMf4MX80c3s
 X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24101-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[linux-m68k.org,kernel.org,HansenPartnership.com,oracle.com,lunn.ch,davemloft.net,google.com,redhat.com,enpas.org,gmx.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DMARC_NA(0.00)[baylibre.com];
+	RCPT_COUNT_TWELVE(0.00)[25];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-24104-lists,linux-scsi=lfdr.de];
 	DKIM_TRACE(0.00)[baylibre.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[u.kleine-koenig@baylibre.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,baylibre.com:email,baylibre.com:mid,baylibre.com:dkim]
-X-Rspamd-Queue-Id: 9C0FD5D76CB
+	TAGGED_RCPT(0.00)[linux-scsi,netdev];
+	NEURAL_HAM(-0.00)[-0.983];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:email,baylibre.com:mid,baylibre.com:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 6B4995D765E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Using named initializers is more explicit and thus easier to parse for a
-human.
+Technically it is fine (on all current Linux architectures) to store a
+pointer in an unsigned long variable. However this needs explicit
+casting which is an easy source for type mismatches.
 
-It's also more robust to changes in the struct definition. This robustness
-is relevant for a planned change to struct zorro_device_id that replaces
-.driver_data by an anonymous union.
+By replacing the plain unsigned long .driver_data in struct
+zorro_device_id by an anonymous union, most of the casting can be
+dropped. There is still some implicit casting involved (between a void *
+and a driver specific pointer type), but that's better than the approach
+to store a pointer in an unsigned long variable as this doesn't lose the
+information that the data being pointed to is const.
 
-While touching these arrays, drop explicit zeros from the list terminator.
-
-This change doesn't introduce changes to the compiled zorro_device_id
-arrays.
+All users of struct zorro_device_id are initialized in a way that is
+compatible with the new definition, so no adaptions are needed there.
 
 Signed-off-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
 ---
- drivers/scsi/a2091.c     |  6 +++---
- drivers/scsi/gvp11.c     | 17 +++++++++--------
- drivers/scsi/zorro7xx.c  |  2 +-
- drivers/scsi/zorro_esp.c |  2 +-
- 4 files changed, 14 insertions(+), 13 deletions(-)
+ include/linux/mod_devicetable.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/a2091.c b/drivers/scsi/a2091.c
-index 204448bfd04b..f81e53b53e20 100644
---- a/drivers/scsi/a2091.c
-+++ b/drivers/scsi/a2091.c
-@@ -275,9 +275,9 @@ static void a2091_remove(struct zorro_dev *z)
- }
+diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+index 3b0c9a251a2e..2673a1bd82c4 100644
+--- a/include/linux/mod_devicetable.h
++++ b/include/linux/mod_devicetable.h
+@@ -640,7 +640,11 @@ struct mdio_device_id {
  
- static struct zorro_device_id a2091_zorro_tbl[] = {
--	{ ZORRO_PROD_CBM_A590_A2091_1 },
--	{ ZORRO_PROD_CBM_A590_A2091_2 },
--	{ 0 }
-+	{ .id = ZORRO_PROD_CBM_A590_A2091_1 },
-+	{ .id = ZORRO_PROD_CBM_A590_A2091_2 },
-+	{ }
+ struct zorro_device_id {
+ 	__u32 id;			/* Device ID or ZORRO_WILDCARD */
+-	kernel_ulong_t driver_data;	/* Data private to the driver */
++	union {
++		/* Data private to the driver */
++		kernel_ulong_t driver_data;
++		const void *driver_data_ptr;
++	};
  };
- MODULE_DEVICE_TABLE(zorro, a2091_zorro_tbl);
  
-diff --git a/drivers/scsi/gvp11.c b/drivers/scsi/gvp11.c
-index 0420bfe9bd42..79bd64e12adc 100644
---- a/drivers/scsi/gvp11.c
-+++ b/drivers/scsi/gvp11.c
-@@ -442,14 +442,15 @@ static void gvp11_remove(struct zorro_dev *z)
- 	 */
- 
- static struct zorro_device_id gvp11_zorro_tbl[] = {
--	{ ZORRO_PROD_GVP_COMBO_030_R3_SCSI,	~0x00ffffff },
--	{ ZORRO_PROD_GVP_SERIES_II,		~0x00ffffff },
--	{ ZORRO_PROD_GVP_GFORCE_030_SCSI,	~0x01ffffff },
--	{ ZORRO_PROD_GVP_A530_SCSI,		~0x01ffffff },
--	{ ZORRO_PROD_GVP_COMBO_030_R4_SCSI,	~0x01ffffff },
--	{ ZORRO_PROD_GVP_A1291,			~0x07ffffff },
--	{ ZORRO_PROD_GVP_GFORCE_040_SCSI_1,	~0x07ffffff },
--	{ 0 }
-+	/* .driver_data specifies the DMA mask */
-+	{ .id = ZORRO_PROD_GVP_COMBO_030_R3_SCSI,	.driver_data = ~0x00ffffff },
-+	{ .id = ZORRO_PROD_GVP_SERIES_II,		.driver_data = ~0x00ffffff },
-+	{ .id = ZORRO_PROD_GVP_GFORCE_030_SCSI,		.driver_data = ~0x01ffffff },
-+	{ .id = ZORRO_PROD_GVP_A530_SCSI,		.driver_data = ~0x01ffffff },
-+	{ .id = ZORRO_PROD_GVP_COMBO_030_R4_SCSI,	.driver_data = ~0x01ffffff },
-+	{ .id = ZORRO_PROD_GVP_A1291,			.driver_data = ~0x07ffffff },
-+	{ .id = ZORRO_PROD_GVP_GFORCE_040_SCSI_1,	.driver_data = ~0x07ffffff },
-+	{ }
- };
- MODULE_DEVICE_TABLE(zorro, gvp11_zorro_tbl);
- 
-diff --git a/drivers/scsi/zorro7xx.c b/drivers/scsi/zorro7xx.c
-index 6aca9897b231..1f74586f0428 100644
---- a/drivers/scsi/zorro7xx.c
-+++ b/drivers/scsi/zorro7xx.c
-@@ -68,7 +68,7 @@ static struct zorro_device_id zorro7xx_zorro_tbl[] = {
- 		.id = ZORRO_PROD_GVP_GFORCE_040_060,
- 		.driver_data = (unsigned long)&zorro7xx_driver_data[3],
- 	},
--	{ 0 }
-+	{ }
- };
- MODULE_DEVICE_TABLE(zorro, zorro7xx_zorro_tbl);
- 
-diff --git a/drivers/scsi/zorro_esp.c b/drivers/scsi/zorro_esp.c
-index 1622285c9aec..178d46140674 100644
---- a/drivers/scsi/zorro_esp.c
-+++ b/drivers/scsi/zorro_esp.c
-@@ -706,7 +706,7 @@ static const struct zorro_device_id zorro_esp_zorro_tbl[] = {
- 		.id = ZORRO_ID(PHASE5, 0x19, 0),
- 		.driver_data = ZORRO_CYBERII,
- 	},
--	{ 0 }
-+	{ }
- };
- MODULE_DEVICE_TABLE(zorro, zorro_esp_zorro_tbl);
- 
+ #define ZORRO_WILDCARD			(0xffffffff)	/* not official */
 -- 
 2.47.3
 
