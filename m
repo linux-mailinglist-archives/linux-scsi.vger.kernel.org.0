@@ -1,150 +1,230 @@
-Return-Path: <linux-scsi+bounces-24139-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24141-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QOKVAcLxFmpcxwcAu9opvQ
-	(envelope-from <linux-scsi+bounces-24139-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 May 2026 15:29:38 +0200
+	id KJcgLxkDF2qz0wcAu9opvQ
+	(envelope-from <linux-scsi+bounces-24141-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 May 2026 16:43:37 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E21D5E4F8A
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 May 2026 15:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D0E45E61AF
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 May 2026 16:43:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 606293003EF9
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 May 2026 13:19:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B71713014957
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 May 2026 14:41:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 184F63D5244;
-	Wed, 27 May 2026 13:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E720402420;
+	Wed, 27 May 2026 14:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="k/o6jUD+"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA0213438B5
-	for <linux-scsi@vger.kernel.org>; Wed, 27 May 2026 13:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FECF3EF0BD
+	for <linux-scsi@vger.kernel.org>; Wed, 27 May 2026 14:41:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779887942; cv=none; b=pi+wedzWKBmYCgyVkYNV1y3COQoDtmhxWIfTX2HKR5mL66MqQ+69v+o7MOGm6Y4jjRppodpr27r3iA9GIJxv7kpsAPZj0YxXEVznF8qgs627jqr1iRgyCtlwojzAP9IpHivJ4WbhOQqPjcuzV8Pzedf6AVXeNFX9qC3DtHUK0bc=
+	t=1779892870; cv=none; b=A/NrBdVlVJRJO5oSjGL6sArl8BGo0m263Qgn50exhJbx/Gf8u/o7qmTwzTPseH8aPfgXUAKQpIGulD6mchxaahq/cxwc57y50Bh9eNJgqrZA3TqUzPdTi+ha5fTpb090EhvLglCugPAIXByqCYmvH5HbTeLSlNc2l6NNoueKHLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779887942; c=relaxed/simple;
-	bh=c4k2FbaT4ZE5BrlqmEG2KGVxbA/hohu/6d2zR26S1jA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TY5HdtpbTQTMxdtShgTIVp3KUqQd+zuHo3Pjmlc3W/LSxYKJGl5K5/nysEy6IcNuGyRcu1rN2RkiFXioRx+cYU8I1NGI5oOM55Qq73cKTF3YxsqsCGicSAeFRMSEqUv8KDtaML8sgnio8Eh8EVnC/IWqW6fCnKwkwe+gCehm+5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-57602a2d80aso3773266e0c.2
-        for <linux-scsi@vger.kernel.org>; Wed, 27 May 2026 06:19:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779887941; x=1780492741;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=QCy1VyfY2ZbNrTfHelvIjzn2O+2cJZLSUf7eYXBf/sc=;
-        b=RH0H4Y/ZgKhJA44fqnsWrblPx4nkWapH2gXWN9030wikrBa21vHbQchdu0XJpA4LuF
-         xvnxNyzPAAC9RQcrwG38QFndJ0rSRDBF0Fy2mMrp8HZYS1Cty7oTEXC1z2hlnWeAFVZA
-         z6yQpTc8eb2A3T5Pjog2/ZjKNxZC8XnwOmgUDU7s5eDkzLBbQ8NzbeGjx6B5ckMBnIAC
-         LgdG03k3ZqB4oFdtXEI0dVsNcU/F61dvHK4Rg2hXd8meY4AhveVG1lv7i2EMVIYgx8RL
-         vyiG9f1aVB8owcrJJlfu9wZQKZI7XXb7VrN47Y7WgdujA9vCJZcNG15HEwY1TGLaa8Bc
-         a35g==
-X-Forwarded-Encrypted: i=1; AFNElJ+Z8SpMdA1Az92ME22RhvKhNvBzALhbC4uBuF8+SV2StpjcYGb/d0G5cs8XRINeQxy1CzhLUcMwmFyJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyH/ltIr6cRJWrnfqyITn3Yqk/ARF4F25MxDvhIx/un3NFbrbI8
-	Sex46T+SXfiPdFa07wLhzid1ymAf0bILgFFjOLHtt5K8xOggJoN869ZyujUUFf4Ca/U=
-X-Gm-Gg: Acq92OHDaVQF4VwQJcG5wBEXi0/L+yR7YqPQZ0KI9QMQOcJgxQ1DNg26hEqmhe79LoE
-	ebCAdmp6oDGsDLsrR5aCNTpBSxAwDCrXLly65F1k0xyEwQRTyWs1BxOkFewCmPeFKAmnXhyAOoO
-	tUHTRXqmQ2AKTlIJfhEpi9RKPm1t3B+a5RnwonkaqS+y82Q0PxIsv5HdG/a4Q82TuZsusKV05uN
-	W8tsf2YXBtiQ5CuPPrJD7MM/4fnkhsnWgRy2isTcKqNrlzAoUAdwvSCj4yf847+TvcKUfGg+vS3
-	Bh6mcWmMPscrNi8gWC6M9dnORPpr+J/mNbh2XNhdyHsZA/t5Q19FQd5zaJ9yF7HgXaLWoroK/jV
-	ADmSDCRcaInzcGz+pPH7KYBd1bHhKHUnsqrVwii7/2mMy8nWi+JUBkQ4jRlPQUGDoaTAnO6uxIU
-	UDqsh5aJm1sNkLmklRChDgUGnfRJjKUW5t9vRx22g5eMQH7cr53CpwFf4P06qPhWDgbpkCuhBFM
-	VI=
-X-Received: by 2002:a05:6122:168b:b0:575:29ef:7e13 with SMTP id 71dfb90a1353d-5865d70e96dmr10432957e0c.3.1779887940639;
-        Wed, 27 May 2026 06:19:00 -0700 (PDT)
-Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com. [209.85.221.182])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-586f791fa49sm20624457e0c.12.2026.05.27.06.18.59
-        for <linux-scsi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 May 2026 06:19:00 -0700 (PDT)
-Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-57602a2d80aso3773246e0c.2
-        for <linux-scsi@vger.kernel.org>; Wed, 27 May 2026 06:18:59 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ98dqNCvhnoTGUaROECtTb6TqTCHKP7AH3oK8HpnrduiJ1KF4bLR6RE6xloypirMz3R7dN6keMeVadW@vger.kernel.org
-X-Received: by 2002:a05:6122:3402:b0:56a:fff5:b4d6 with SMTP id
- 71dfb90a1353d-5865e2b5250mr12331762e0c.4.1779887939678; Wed, 27 May 2026
- 06:18:59 -0700 (PDT)
+	s=arc-20240116; t=1779892870; c=relaxed/simple;
+	bh=tS8NhNqCzad75BGkrz15PhBxjELyFIDoEZBp0DgvlPs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qiGHVax64JlWN/Mq/BCertvPQOqBxkqcqvRuh3Qp8O8AT8vY3J/dTrWAfmnCCJhHidvU0C0Ja0XJScfz8ioXa2DvNH+2bnvcBeFcpH0ohvDj33JoU35IziBpmUMui6J0MU6iMSJdOi3T+YcQvxX3UUr1IooqyoxsWHyT8QROWaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=k/o6jUD+; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64R8mXYe2282627;
+	Wed, 27 May 2026 14:40:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=Gk5TsPijekmJ0gZC4Xa/HKSyJude0TSyFpa
+	6kqBkgb0=; b=k/o6jUD+EiuMT/JsQsuiFTW06LnAvWyp8AoPm7VHWAxuLPsp/bm
+	+j+cThMGPDFyN2uf0LX1ToOMeEtsUtAjYeFkGlEhGrgBgWuyE3MqJj1pF/e5QCJp
+	qII466Tau3gIMUfd0ZZxJkmz1UBsAj+0Ryi4wF6CugR9tg9H04x2BsRscjUwegBW
+	YvbeXimAP6I7/GiJgaRjIIKzJ+bxP4vZp8D3Trgb1ORm2CiHSENa7dh+wcVFGLny
+	ZajxoLCuIPTkyTzgQehar3YdXVOh9XYSXjBla847Di8zcEd/pBv2c2I6NhNlQi67
+	NRUPcIziwaQNrZVsDowyaVbwnjTWkXTLJzA==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4edtvcswq8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 May 2026 14:40:58 +0000 (GMT)
+Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
+	by NALASPPMTA04.qualcomm.com (8.18.1.7/8.18.1.7) with ESMTP id 64REevMv009394;
+	Wed, 27 May 2026 14:40:57 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 4ecnabf4d3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 May 2026 14:40:57 +0000 (GMT)
+Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 64REevTF009388;
+	Wed, 27 May 2026 14:40:57 GMT
+Received: from hu-devc-lv-u22-c.qualcomm.com (hu-cang-lv.qualcomm.com [10.81.25.255])
+	by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 64REevwR009385
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 May 2026 14:40:57 +0000 (GMT)
+Received: by hu-devc-lv-u22-c.qualcomm.com (Postfix, from userid 359480)
+	id 1C616631; Wed, 27 May 2026 07:40:57 -0700 (PDT)
+From: Can Guo <can.guo@oss.qualcomm.com>
+To: bvanassche@acm.org, beanhuo@micron.com, peter.wang@mediatek.com,
+        martin.petersen@oracle.com, mani@kernel.org
+Cc: linux-scsi@vger.kernel.org, Can Guo <can.guo@oss.qualcomm.com>
+Subject: [PATCH v3 0/2] Add static TX Equalization settings support from DT
+Date: Wed, 27 May 2026 07:40:53 -0700
+Message-Id: <20260527144055.2758170-1-can.guo@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1779803053.git.u.kleine-koenig@baylibre.com> <b7f3b4bfa5daabf8a3043177341b8dbb4e4d980e.1779803053.git.u.kleine-koenig@baylibre.com>
-In-Reply-To: <b7f3b4bfa5daabf8a3043177341b8dbb4e4d980e.1779803053.git.u.kleine-koenig@baylibre.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 27 May 2026 15:18:47 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW=8CinkPvBzY1JXJcy_7BGzS=t=T739sDbbJsFoiiW2w@mail.gmail.com>
-X-Gm-Features: AVHnY4LVf2HmV7NEUt4hHqvz3XHWWTYsnrOn4NRK1knY3FTiRsXYFw6-dPyILKg
-Message-ID: <CAMuHMdW=8CinkPvBzY1JXJcy_7BGzS=t=T739sDbbJsFoiiW2w@mail.gmail.com>
-Subject: Re: [PATCH v1 7/8] scsi: zorro7xx: Make use of struct zorro_device_id::driver_data_ptr
-To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>
-Cc: "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org, 
-	"Christian A. Ehrhardt" <christian.ehrhardt@codasip.com>, "Christian A. Ehrhardt" <lk@c--e.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-1.46 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-GUID: TdXiQ4edp_HA74VB1Q_rlrxQguiuiAZa
+X-Authority-Analysis: v=2.4 cv=CY84Irrl c=1 sm=1 tr=0 ts=6a17027a cx=c_pps
+ a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
+ a=Um2Pa8k9VHT-vaBCBUpS:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=4ajky533VDcJp0aEe7MA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI3MDE0NCBTYWx0ZWRfXwh1JP/qTFkpg
+ Jlgv4CI+5PPm8BQEtGqE60/p4uY1VEVg60e8bO9oLMIl2SKLyLk2DVvLFXtPbFVb8dq3HepiL43
+ ntyzEHK8hUwhx/qkE2yorORdU4yIgRi6M+71cPwCi5yR/x2fDaT9Jj4s48o8v84eNjWLDaEYTD1
+ 6dG9O5fVUlw50Iw3EuvRu0jS85+f8GRh8pLQ1+VReoCIVwu7dOvLXtayZwgZxQeR7BqAGJZZE6T
+ 6Ic44v2DjiHypNG0iRMXaDeYhqKlkovtm/7oYTmML9ercvOskHG+yge0zPIaXvm+3lTyGzGepAE
+ P2ZAgfe3bCOfVn7JvOrikaeSFbJOPIm6NZ3P03nQWwK5gZbhvMvRZqNbGJpjFVGXEs93odS6l5A
+ 2/Lbf7oFSz9rUcwgAJsiVY2bnHj/eAv05NTVwXEWFtticbECdVSyLME6dOyZbji6FQ3pbg3Asan
+ Valt+fKGOtDKlc28CLA==
+X-Proofpoint-ORIG-GUID: TdXiQ4edp_HA74VB1Q_rlrxQguiuiAZa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-05-27_02,2026-05-26_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0 priorityscore=1501
+ impostorscore=0 spamscore=0 malwarescore=0 suspectscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605270144
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_MISSING_CHARSET(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24139-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MIME_TRACE(0.00)[0:+];
-	DMARC_NA(0.00)[linux-m68k.org];
+	TAGGED_FROM(0.00)[bounces-24141-lists,linux-scsi=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:dkim,oss.qualcomm.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-scsi@vger.kernel.org];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	NEURAL_HAM(-0.00)[-0.991];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	R_DKIM_NA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[qualcomm.com:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linux-m68k.org:email,baylibre.com:email]
-X-Rspamd-Queue-Id: 5E21D5E4F8A
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[10]
+X-Rspamd-Queue-Id: 1D0E45E61AF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, 26 May 2026 at 16:18, Uwe Kleine-K=C3=B6nig (The Capable Hub)
-<u.kleine-koenig@baylibre.com> wrote:
-> Usage of .driver_data_ptr allows to drop several casts. A nice upside of
-> that is that now the constness of the linked structures is kept and the
-> compiler warns about zdd missing a const. So add this missing const, too.
->
-> While touching the zorro_device_id array, drop an unneeded explicit zero
-> in the list terminator.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig (The Capable Hub) <u.kleine-koenig@b=
-aylibre.com>
+Hi,
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+This series adds support for board-specific static TX Equalization settings
+provided through device tree.
 
-Gr{oetje,eeting}s,
+This series is based on the earlier TX Equalization enablement work and
+persistent storage/retrieval of optimal TX Equalization settings work:
+https://lore.kernel.org/all/20260325152154.1604082-1-can.guo@oss.qualcomm.com
+https://lore.kernel.org/all/20260424151420.111675-1-can.guo@oss.qualcomm.com
 
-                        Geert
+Background
+==========
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+UFS v5.0/UFSHCI v5.0 add HS-G6 support (46.6 Gbps/lane) via UniPro v3.0
+and M-PHY v6.0. In these specs, TX Equalization is defined for all High
+Speed Gears (not only HS-G6) to compensate channel loss and improve signal
+integrity at high speed operation.
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+For HS-G6, M-PHY uses PAM4 1b1b line coding, Pre-Coding may also be
+required depending on channel characteristics.
+
+Add vendor-neutral DT properties:
+- patternProperties: txeq-preshoot-g[1-6], txeq-deemphasis-g[1-6]
+- fixed property: tx-precode-enable-g6
+
+Each property is a uint32 array of per-lane tuples:
+<Host_Lane0 Device_Lane0>, [<Host_Lane1 Device_Lane1>]
+
+Accept 2 or 4 values (x1/x2 lane configs). PreShoot and DeEmphasis values
+are 0..7. Precode enable values are 0/1 and only applicable to HS-G6.
+These patternProperties carry board-level SI characterization data used as
+static TX Equalization settings for each High Speed Gear.
+
+Relationship with Adaptive TX Equalization
+==========================================
+
+Adaptive TX Equalization remains the primary path when enabled.
+
+Static TX Equalization settings from DT are board-specific baseline values,
+but when adaptive TX Equalization is used, static settings are not final:
+- If valid settings are retrieved from qTxEQGnSettings/wTxEQGnSettingsExt,
+those retrieved settings override static DT settings.
+- If retrieval is not available/valid, TX EQTR runs and trained settings
+override static DT settings.
+
+So static DT settings are a fallback and are intended for cases where
+adaptive TX Equalization is not enabled/used.
+
+No behavior changes for platforms that do not provide these properties.
+
+What this series adds
+=====================
+
+1. dt-bindings:
+- Document `txeq-preshoot-g[1-6]`, `txeq-deemphasis-g[1-6]`,
+  and `tx-precode-enable-g6` in `ufs-common.yaml`.
+- Define per-lane tuple format:
+  <Host_Lane0 Device_Lane0>, [<Host_Lane1 Device_Lane1>].
+- Add per-property value validation ranges in schema.
+
+2. UFS core/platform integration:
+- Parse and validate per-gear DT TX EQ settings during platform init.
+- Store parsed values into per-gear TX EQ params and mark them as static.
+- Integrate static-state handling in TX EQ flow so static entries are
+  handled through the adaptive TX Equalization path and then converted to
+  normal runtime params.
+
+v2 -> v3:
+- Split the DT TX EQ binding into semantically separate properties:
+  txeq-preshoot-g*, txeq-deemphasis-g*, tx-precode-enable-g6.
+- Place tx-precode-enable-g6 in `properties` (fixed key) instead of
+  `patternProperties` to satisfy dt-schema meta-schema rules.
+- Restrict precode property to HS-G6 and document per-property ranges.
+- Update the core parser to consume split properties.
+- Drop unrelated `arch/arm64/configs/defconfig` changes from patch 2.
+
+v1 -> v2:
+- Improved the commit message of patch 1.
+
+
+Can Guo (2):
+  dt-bindings: ufs: Document static TX Equalization settings properties
+  scsi: ufs: core: Add support for static TX Equalization settings
+
+ .../devicetree/bindings/ufs/ufs-common.yaml   |  45 ++++++
+ drivers/ufs/core/ufs-txeq.c                   |   4 +-
+ drivers/ufs/host/ufshcd-pltfrm.c              | 128 ++++++++++++++++++
+ include/ufs/ufshcd.h                          |   2 +
+ 4 files changed, 178 insertions(+), 1 deletion(-)
+
+-- 
+2.34.1
 
