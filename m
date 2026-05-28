@@ -1,63 +1,63 @@
-Return-Path: <linux-scsi+bounces-24181-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24182-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kM6QLg3iF2pOUQgAu9opvQ
-	(envelope-from <linux-scsi+bounces-24181-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 May 2026 08:34:53 +0200
+	id GAxyMkPiF2pOUQgAu9opvQ
+	(envelope-from <linux-scsi+bounces-24182-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 28 May 2026 08:35:47 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F00B5ED4CA
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 May 2026 08:34:52 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 252905ED4D1
+	for <lists+linux-scsi@lfdr.de>; Thu, 28 May 2026 08:35:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AA014302A2FB
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 May 2026 06:30:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 027D9301F32A
+	for <lists+linux-scsi@lfdr.de>; Thu, 28 May 2026 06:32:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62C54331A44;
-	Thu, 28 May 2026 06:30:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6925530C150;
+	Thu, 28 May 2026 06:32:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="auL96ZJS"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gVQ9DcnK"
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36488189F20
-	for <linux-scsi@vger.kernel.org>; Thu, 28 May 2026 06:30:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD81D313E2B
+	for <linux-scsi@vger.kernel.org>; Thu, 28 May 2026 06:32:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779949820; cv=none; b=ljIlqrRzot4QpNi4JXqjsmPLWvAcGNbL7hlAK0FW2ktJ6FAJHcy8RuWbBOkZL1wb1gJ8MUG+L4cGYtK/GvzsDCCm5W3BmF3SPnjOjRJmhImh0B/h98iyCA596jM6sGQBvCq3+llTJJGyrt/nrr0YU3nFj4r1/uuty3WohOktjRc=
+	t=1779949939; cv=none; b=Bc8HddibAAUP9o7aXiY/tOVvZuWnVsRIHB9rp7VrK4jUfJldxbChtDU6GpJi1L7FalZe6Z+w/R1KKTyzJXE+ZgiQqXu+cL8/o/uxcdVxOqlX1qorvTJNiY+DS7kkJ4fgybyQ1hjJKm2JBfKc2b+YCUXjVic+OKH39uC+s9bNebo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779949820; c=relaxed/simple;
-	bh=CybVNsiEnHskzI9STi/kobF3HCpPfYFWQg0zLD98WXU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YzF4dQb4VzEWvu19LXFP+6gMr5/44Nt0vKHNjjUHR0d+WVlGKefuYVcW1f7dn6xzpfOMQbHvfXNJeWK1Or6eGuIzeG4R9rVZnuBUiT3AdcBSqj0fnX1/Y7dzVXmKEq6PmP6nEUP7PHupS4t6cqhZksNbkb8d7bNvtfwL1E5fc+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=auL96ZJS; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1779949939; c=relaxed/simple;
+	bh=wWptxQIQNdUb6dBpIYGfCmQuT1dPedNQrau8ps2k3L0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UK46P5cYttKeP2UlYd6NYbGRyekyY/vkK1y8rgKwockmA4eRJxXhXCd6fCkkxgknOVYH4q8zYcNzdywHH4Xh6o4lyq21XmLd+o4YNO92Ca4IJKY7NN5H2JD8AsGGVJ3rmf8fU5gzBNzpK5luX6qtfo64IZCkMNXrkoAyd5GBlcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gVQ9DcnK; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779949816;
+	s=mimecast20190719; t=1779949936;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=j+IiqDBrGPMMITWFKRVN/DNqCjtmUObz6NDovf/ZTWo=;
-	b=auL96ZJSolx+mWMoSzwB0ymXz6nOXug5Cof8TLL/nr5LI1wyT0itWbudTGQDJ/3pJfWJdc
-	zTdKsLmISaMO8NadHjpoVUkWZrt8rFdquaB6WY3dQ1kvbH8MkyVhm1The+ZTSXYyqg12QA
-	Y9CKybJplSj/PZfDRdZItXwNaFO7DTA=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+	bh=ACHCWkDjRTcQR10SJPEWEm+CuSjSOBecYNDBTpTcBKs=;
+	b=gVQ9DcnK4LwBZfiBzIsKPR/gyEZBqrSp+ay1BFgNz9irlF0VLkCipfLncf1ePKT5bOfKwT
+	qaF9V6nqQYRmcluK+I0ciF76zAJozlXrol4uFhcE2tCGMT0g1TGVJvy0u9wtxuFiY+pL6W
+	i4OEEZ/UjooKvaOzFdUF0K3Z+pg8RZQ=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-621-u-RxFsDhMjWF25R_21Kp4A-1; Thu,
- 28 May 2026 02:30:13 -0400
-X-MC-Unique: u-RxFsDhMjWF25R_21Kp4A-1
-X-Mimecast-MFC-AGG-ID: u-RxFsDhMjWF25R_21Kp4A_1779949812
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-665-VvsbObhZOPKjheqNiwxTXg-1; Thu,
+ 28 May 2026 02:32:12 -0400
+X-MC-Unique: VvsbObhZOPKjheqNiwxTXg-1
+X-Mimecast-MFC-AGG-ID: VvsbObhZOPKjheqNiwxTXg_1779949931
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 519BC1956096;
-	Thu, 28 May 2026 06:30:12 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9659D19560B4;
+	Thu, 28 May 2026 06:32:11 +0000 (UTC)
 Received: from nprabudo-thinkpadp16vgen1.rmtin.csb (unknown [10.74.81.42])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E58B61800465;
-	Thu, 28 May 2026 06:30:09 +0000 (UTC)
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DFAD41688;
+	Thu, 28 May 2026 06:32:08 +0000 (UTC)
 From: Nimal Prabudoss I <nprabudo@redhat.com>
 To: James.Bottomley@HansenPartnership.com,
 	martin.petersen@oracle.com
@@ -65,9 +65,9 @@ Cc: linux-scsi@vger.kernel.org,
 	jmeneghi@redhat.com,
 	nilesh.javali@marvell.com,
 	Nimal Prabudoss I <nprabudo@redhat.com>
-Subject: [PATCH] scsi: qedf: use GFP_ATOMIC to prevent vmalloc allocation panic
-Date: Thu, 28 May 2026 02:30:06 -0400
-Message-ID: <20260528063006.20783-1-nprabudo@redhat.com>
+Subject: [PATCH v2] scsi: qedf: use GFP_ATOMIC to prevent vmalloc allocation panic
+Date: Thu, 28 May 2026 02:32:04 -0400
+Message-ID: <20260528063204.21708-1-nprabudo@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -75,14 +75,14 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -90,9 +90,9 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24181-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24182-lists,linux-scsi=lfdr.de];
 	DKIM_TRACE(0.00)[redhat.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[nprabudo@redhat.com,linux-scsi@vger.kernel.org];
@@ -103,14 +103,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCPT_COUNT_FIVE(0.00)[6];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 1F00B5ED4CA
+X-Rspamd-Queue-Id: 252905ED4D1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 The qedf driver encounters an exc_invalid_op crash in get_vm_area_node
 when running under intensive I/O stress with IOMMU enabled.
 
-Link: https://issues.redhat.com/browse/RHEL-75146
 Signed-off-by: Nimal Prabudoss I <nprabudo@redhat.com>
 ---
  drivers/scsi/qedf/qedf_io.c | 8 ++++----
