@@ -1,136 +1,204 @@
-Return-Path: <linux-scsi+bounces-24201-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24206-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qLmzOqmyGGr9mAgAu9opvQ
-	(envelope-from <linux-scsi+bounces-24201-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 May 2026 23:24:57 +0200
+	id wFRhOTPpGGruoggAu9opvQ
+	(envelope-from <linux-scsi+bounces-24206-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 03:17:39 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C6E85FA5F6
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 May 2026 23:24:56 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 440155FBEB9
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 03:17:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9FE46302797B
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 May 2026 21:24:55 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8233530309C1
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 01:16:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F5D6359A91;
-	Thu, 28 May 2026 21:24:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 011EB2853E9;
+	Fri, 29 May 2026 01:16:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="mST2tiOf"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="RY8PK652"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D48B309F1D
-	for <linux-scsi@vger.kernel.org>; Thu, 28 May 2026 21:24:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AFDB1C5F1B
+	for <linux-scsi@vger.kernel.org>; Fri, 29 May 2026 01:16:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780003492; cv=none; b=EAuXfKRP5sEPlMDTnwy7lTjt7R3FVfR7Rt05CiUhyvao/AfAlfg6k7hnZTFPf9Zv+QYxYmLH6b7t9uPsSABTy1v4/eD9y0rX7I0tRwUG8DoI0ditXs3luw+AgTPyHoFgPqT0BqK/qZ6LTd5jJ9Jub+IfzPJr+TmQ74T6JOcoA7Q=
+	t=1780017390; cv=none; b=dzb4inR40G0Het6/mKDXeXv25qfUFbL0DlJK0y/KCqykRL72/uGuhCMFqtrxudvDkKVatRz5cTXuoMz0ZizBO8Xs5L0IFFOnD8w9YPoiEmQWF0oQLGZ7ixNNVbMJnjhtS+ihOrrYDTw2iiKVsQ5OJ+uG7VS4uXYzuHrJ8dK1Dv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780003492; c=relaxed/simple;
-	bh=lNHIcD9CNxqoxk+F5U0dzClf0Y/TIFmA2boxKoC17Vo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=taQmgvgOAsBpXNtxo0JPJls2FWIP8OGcZ6qlp0cG9aEji6mLniIJOQjSUItDF/qjeKoUnIb9R9htGf6d+DzJo4XyTgQV4Y3gaRgOWGzpqc/gFM8C9L7RZMmnBnjDDjFz4lILZ8voJTvYJ0IG2bp9fuwiVCB2kXPxxXpIaXhrmvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=mST2tiOf; arc=none smtp.client-ip=199.89.1.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4gRKJL6Vfqz1XM0ty;
-	Thu, 28 May 2026 21:24:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1780003487; x=1782595488; bh=lNHIcD9CNxqoxk+F5U0dzClf
-	0Y/TIFmA2boxKoC17Vo=; b=mST2tiOf8jL7aMqkGorcDi0nuvckP/xJk9vqPOq0
-	iQ/n798UY5tv7UHWDUutYAWYa/VVY6HHL9mBln70UcfwMxndg0FnR6fu4AsXbdcw
-	j+a3drS6woeBBwCWcmaumS6A9t8cQGcrawsHo9tNUV8u3jpVkazUumH0C7wluMPi
-	icM6cXAdmYf8wkt1i4wGGNO7+MxMghnwxPTFurHFhGo1Q/JFbEWXM5aiVRRghS0O
-	2YKt1Yo66WJj48jBqE+/UiL0djIlzn9aqohWW+qDRyFST/wz7MPc+LVPGVoBKL4+
-	gBaNHCRH5DS4VBrQ34Lcj01jeCWpEboURmWAAhnHOXCphg==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id z-GOQyxgSBhl; Thu, 28 May 2026 21:24:47 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4gRKJG6BF9z1XM2FS;
-	Thu, 28 May 2026 21:24:46 +0000 (UTC)
-Message-ID: <9f50fb13-b3e8-4d1c-bb4a-045a15b957e0@acm.org>
-Date: Thu, 28 May 2026 14:24:46 -0700
+	s=arc-20240116; t=1780017390; c=relaxed/simple;
+	bh=L77pmz1V3vnh4bA9TbLP5qAiczzAS690ZaZPsb4vMtI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=N7f1KzcxgcTnhlGu/+/+HJWdHt5b2MEMzb6s5JISIIBCurBx5YmKhumiydT5x9LJgIIcSp77KQ2JbysOO/Lj3Nqp4pxkD3oFdxO4WwJMnEGgwjvgdmD1KPOVr+DIeIBEWSaHyZ7gPx9rrPX5x4XK1UqTGBs6kcMrCO+p+x+GNGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=RY8PK652; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20260529010750epoutp027a381a9431373b46a178a07c32050b89~z4_m1FBcs0291802918epoutp02Z
+	for <linux-scsi@vger.kernel.org>; Fri, 29 May 2026 01:07:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20260529010750epoutp027a381a9431373b46a178a07c32050b89~z4_m1FBcs0291802918epoutp02Z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1780016870;
+	bh=bmOyx7LCKnUdi3eeyYD25VmIw0e+LrVRhm1f7vD2kMg=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=RY8PK652LxgdU9HbM2ydBSd4sG98n1XrsTmt/XVPUt6d+pGU8uDUF3q6mUzMCOZtM
+	 bqDXvh6paubFh+XSFeDoFuijr487FXl+N1G6jHaBih7C4oj1MOpCf4jhUtHoyXMhOP
+	 tJXnoYRRGJGJczNVH5Vtd4OxMLD5QT6GGqjIvKn4=
+Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
+	epcas1p1.samsung.com (KnoxPortal) with ESMTPS id
+	20260529010750epcas1p13b07e1698d96cced0f9e29ba6b425a3a~z4_mYWJSs3009830098epcas1p1N;
+	Fri, 29 May 2026 01:07:50 +0000 (GMT)
+Received: from epcas1p3.samsung.com (unknown [182.195.38.192]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4gRQFf0VxCz2SSKj; Fri, 29 May
+	2026 01:07:50 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20260529010749epcas1p2bf38209e55149f0681550c220e541e92~z4_l1uhbb1847218472epcas1p2n;
+	Fri, 29 May 2026 01:07:49 +0000 (GMT)
+Received: from cw9316lee.. (unknown [10.253.101.98]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20260529010749epsmtip2edba16e6f42d45f98c45931bf48c751f~z4_lyGJWk1235712357epsmtip2-;
+	Fri, 29 May 2026 01:07:49 +0000 (GMT)
+From: Chanwoo Lee <cw9316.lee@samsung.com>
+To: alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+	James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
+	peter.wang@mediatek.com, vamshigajjela@google.com, alok.a.tiwari@oracle.com,
+	beanhuo@micron.com, can.guo@oss.qualcomm.com, adrian.hunter@intel.com,
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Chanwoo Lee <cw9316.lee@samsung.com>
+Subject: [PATCH v2] scsi: ufs: core: Fix NULL pointer dereference in
+ scsi_cmd_priv() calls
+Date: Fri, 29 May 2026 10:07:39 +0900
+Message-ID: <20260529010739.295391-1-cw9316.lee@samsung.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] ufs: core: decouple CQE processing from spinlock
- critical section
-To: =?UTF-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= <peter.wang@mediatek.com>,
- "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-Cc: "quic_asutoshd@guicinc.com" <quic_asutoshd@guicinc.com>
-References: <20260514082906.58593-1-peter.wang@mediatek.com>
- <382f6d79-c877-4dc8-813b-ee91ac5489f9@acm.org>
- <3d359319927f808dffa0aef52b03c437f803335e.camel@mediatek.com>
- <2ed721de-0410-413a-bda1-99b5313b072d@acm.org>
- <bcbfd7a71f698f6a3dcf627d3ea76c79b9897ccf.camel@mediatek.com>
- <064b4c51-c3e8-4380-b1a2-ce996078efe8@acm.org>
- <e02140af260edd8f0391889f7c925378dc79bf10.camel@mediatek.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <e02140af260edd8f0391889f7c925378dc79bf10.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20260529010749epcas1p2bf38209e55149f0681550c220e541e92
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 101P
+cpgsPolicy: CPGSC10-711,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20260529010749epcas1p2bf38209e55149f0681550c220e541e92
+References: <CGME20260529010749epcas1p2bf38209e55149f0681550c220e541e92@epcas1p2.samsung.com>
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
+	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24201-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24206-lists,linux-scsi=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[samsung.com:email,samsung.com:mid,samsung.com:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	DKIM_TRACE(0.00)[acm.org:+];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[samsung.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[cw9316.lee@samsung.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[]
-X-Rspamd-Queue-Id: 6C6E85FA5F6
+	RCVD_COUNT_SEVEN(0.00)[8]
+X-Rspamd-Queue-Id: 440155FBEB9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 5/18/26 2:26 AM, Peter Wang (=E7=8E=8B=E4=BF=A1=E5=8F=8B) wrote:
-> On Sat, 2026-05-16 at 07:01 -0700, Bart Van Assche wrote:
->> The patch below reduces the time spent in UFS completion interrupts
->> from
->> 10 ms to 100 microseconds (100x) on my test setup. This patch needs
->> further refinement but is sufficient to show the root cause and a
->> potential solution.
->=20
-> May I ask if there is a planned schedule for applying this
-> patch after further fine-tuning?
+ufshcd_tag_to_cmd() may return NULL if no command is associated with
+the given tag. However, several callers dereference the returned cmd
+pointer via scsi_cmd_priv() without checking for NULL first, leading
+to a potential NULL pointer dereference.
 
-A patch series that reduces how much time F2FS spends in interrupt mode
-has been posted on the f2fs-devel mailing list and is also available
-here: https://github.com/bvanassche/linux/tree/f2fs-irqlat
+Fix this by adding NULL checks for cmd before calling scsi_cmd_priv()
+and moving the lrbp initialization after the NULL check.
 
-Bart.
+Signed-off-by: Chanwoo Lee <cw9316.lee@samsung.com>
+---
+Changes in v2:
+- Dropped moving scsi_cmd_priv()/scsi_cmd_to_rq() calls after NULL
+  checks in ufshcd_mcq_sq_cleanup() and ufshcd_compl_one_cqe() since
+  the derived pointers are not dereferenced before the check
+  (Bart Van Assche)
+
+ drivers/ufs/core/ufs-mcq.c |  7 ++++++-
+ drivers/ufs/core/ufshcd.c  | 13 +++++++++++--
+ 2 files changed, 17 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+index c1b1d67a1ddc..13b60a2d06db 100644
+--- a/drivers/ufs/core/ufs-mcq.c
++++ b/drivers/ufs/core/ufs-mcq.c
+@@ -637,7 +637,7 @@ static bool ufshcd_mcq_sqe_search(struct ufs_hba *hba,
+ 				  struct ufs_hw_queue *hwq, int task_tag)
+ {
+ 	struct scsi_cmnd *cmd = ufshcd_tag_to_cmd(hba, task_tag);
+-	struct ufshcd_lrb *lrbp = scsi_cmd_priv(cmd);
++	struct ufshcd_lrb *lrbp;
+ 	struct utp_transfer_req_desc *utrd;
+ 	__le64  cmd_desc_base_addr;
+ 	bool ret = false;
+@@ -647,6 +647,11 @@ static bool ufshcd_mcq_sqe_search(struct ufs_hba *hba,
+ 	if (hba->quirks & UFSHCD_QUIRK_MCQ_BROKEN_RTC)
+ 		return true;
+ 
++	if (!cmd)
++		return false;
++
++	lrbp = scsi_cmd_priv(cmd);
++
+ 	mutex_lock(&hwq->sq_mutex);
+ 
+ 	ufshcd_mcq_sq_stop(hba, hwq);
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 9e0336098e26..7481c71c71b8 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -7893,8 +7893,12 @@ static void ufshcd_set_req_abort_skip(struct ufs_hba *hba, unsigned long bitmap)
+ 
+ 	for_each_set_bit(tag, &bitmap, hba->nutrs) {
+ 		struct scsi_cmnd *cmd = ufshcd_tag_to_cmd(hba, tag);
+-		struct ufshcd_lrb *lrbp = scsi_cmd_priv(cmd);
++		struct ufshcd_lrb *lrbp;
+ 
++		if (!cmd)
++			continue;
++
++		lrbp = scsi_cmd_priv(cmd);
+ 		lrbp->req_abort_skip = true;
+ 	}
+ }
+@@ -7915,11 +7919,16 @@ static void ufshcd_set_req_abort_skip(struct ufs_hba *hba, unsigned long bitmap)
+ int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag)
+ {
+ 	struct scsi_cmnd *cmd = ufshcd_tag_to_cmd(hba, tag);
+-	struct ufshcd_lrb *lrbp = scsi_cmd_priv(cmd);
++	struct ufshcd_lrb *lrbp;
+ 	int err;
+ 	int poll_cnt;
+ 	u8 resp = 0xF;
+ 
++	if (!cmd)
++		return -EINVAL;
++
++	lrbp = scsi_cmd_priv(cmd);
++
+ 	for (poll_cnt = 100; poll_cnt; poll_cnt--) {
+ 		err = ufshcd_issue_tm_cmd(hba, lrbp->lun, tag, UFS_QUERY_TASK,
+ 					  &resp);
+-- 
+2.43.0
+
 
