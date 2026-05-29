@@ -1,204 +1,238 @@
-Return-Path: <linux-scsi+bounces-24206-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24202-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wFRhOTPpGGruoggAu9opvQ
-	(envelope-from <linux-scsi+bounces-24206-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 03:17:39 +0200
+	id YMrTONrnGGruoggAu9opvQ
+	(envelope-from <linux-scsi+bounces-24202-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 03:11:54 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 440155FBEB9
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 03:17:37 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A9D05FBE0B
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 03:11:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8233530309C1
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 01:16:33 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E615E302E918
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 01:11:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 011EB2853E9;
-	Fri, 29 May 2026 01:16:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 778DA3537C7;
+	Fri, 29 May 2026 01:11:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="RY8PK652"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nbEAfdBX";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="BRMpTHEW"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AFDB1C5F1B
-	for <linux-scsi@vger.kernel.org>; Fri, 29 May 2026 01:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D3634F255
+	for <linux-scsi@vger.kernel.org>; Fri, 29 May 2026 01:11:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780017390; cv=none; b=dzb4inR40G0Het6/mKDXeXv25qfUFbL0DlJK0y/KCqykRL72/uGuhCMFqtrxudvDkKVatRz5cTXuoMz0ZizBO8Xs5L0IFFOnD8w9YPoiEmQWF0oQLGZ7ixNNVbMJnjhtS+ihOrrYDTw2iiKVsQ5OJ+uG7VS4uXYzuHrJ8dK1Dv8=
+	t=1780017087; cv=none; b=ly4Zp61qMzZFkTKK0yehYWsc0m9R5VQdo6DSOeKwD9G/Uj2lyKbMe0H299ECbhYr1rLdPOfXx5AJfZnQmK+4ACjdWJH5dltthPNU0FzG/PCamJUEXyl7IIDegpR6OQkeaSqXMt4zGP7gqDvDw1bPUYWBDIsCl2/xOc+sbDnSI3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780017390; c=relaxed/simple;
-	bh=L77pmz1V3vnh4bA9TbLP5qAiczzAS690ZaZPsb4vMtI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 References; b=N7f1KzcxgcTnhlGu/+/+HJWdHt5b2MEMzb6s5JISIIBCurBx5YmKhumiydT5x9LJgIIcSp77KQ2JbysOO/Lj3Nqp4pxkD3oFdxO4WwJMnEGgwjvgdmD1KPOVr+DIeIBEWSaHyZ7gPx9rrPX5x4XK1UqTGBs6kcMrCO+p+x+GNGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=RY8PK652; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20260529010750epoutp027a381a9431373b46a178a07c32050b89~z4_m1FBcs0291802918epoutp02Z
-	for <linux-scsi@vger.kernel.org>; Fri, 29 May 2026 01:07:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20260529010750epoutp027a381a9431373b46a178a07c32050b89~z4_m1FBcs0291802918epoutp02Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1780016870;
-	bh=bmOyx7LCKnUdi3eeyYD25VmIw0e+LrVRhm1f7vD2kMg=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=RY8PK652LxgdU9HbM2ydBSd4sG98n1XrsTmt/XVPUt6d+pGU8uDUF3q6mUzMCOZtM
-	 bqDXvh6paubFh+XSFeDoFuijr487FXl+N1G6jHaBih7C4oj1MOpCf4jhUtHoyXMhOP
-	 tJXnoYRRGJGJczNVH5Vtd4OxMLD5QT6GGqjIvKn4=
-Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas1p1.samsung.com (KnoxPortal) with ESMTPS id
-	20260529010750epcas1p13b07e1698d96cced0f9e29ba6b425a3a~z4_mYWJSs3009830098epcas1p1N;
-	Fri, 29 May 2026 01:07:50 +0000 (GMT)
-Received: from epcas1p3.samsung.com (unknown [182.195.38.192]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4gRQFf0VxCz2SSKj; Fri, 29 May
-	2026 01:07:50 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20260529010749epcas1p2bf38209e55149f0681550c220e541e92~z4_l1uhbb1847218472epcas1p2n;
-	Fri, 29 May 2026 01:07:49 +0000 (GMT)
-Received: from cw9316lee.. (unknown [10.253.101.98]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20260529010749epsmtip2edba16e6f42d45f98c45931bf48c751f~z4_lyGJWk1235712357epsmtip2-;
-	Fri, 29 May 2026 01:07:49 +0000 (GMT)
-From: Chanwoo Lee <cw9316.lee@samsung.com>
-To: alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-	James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
-	peter.wang@mediatek.com, vamshigajjela@google.com, alok.a.tiwari@oracle.com,
-	beanhuo@micron.com, can.guo@oss.qualcomm.com, adrian.hunter@intel.com,
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Chanwoo Lee <cw9316.lee@samsung.com>
-Subject: [PATCH v2] scsi: ufs: core: Fix NULL pointer dereference in
- scsi_cmd_priv() calls
-Date: Fri, 29 May 2026 10:07:39 +0900
-Message-ID: <20260529010739.295391-1-cw9316.lee@samsung.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1780017087; c=relaxed/simple;
+	bh=mcHo8JfFEIPdyBUH3cQiAKFGy1GHwOjxXVO4i593kUI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=p68C7hgGTWmEOuHqNyglIMfFgXUfgs1+8jIR9RrcRLbgiVjGHp6Z0VgMp3boPY9C89LiwQo/NrQaOc/XJIvxgI3antJXaZYExYE1+tteh9NN5WAXVCniq9GPVvLdF9EiXvUY8DRisCFLV4UjaQGAiURHczXV057Q5fZH4oBRKbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nbEAfdBX; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=BRMpTHEW; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64SNkZch2242700
+	for <linux-scsi@vger.kernel.org>; Fri, 29 May 2026 01:11:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	J4shBszuHUw9GWZJYtSKssHaaKnXl5RvEARP037Y9X8=; b=nbEAfdBXG+a1G0FU
+	Yv66BJRaGRfwkX7Cvltzx1hWJl9lfmQn+jrPCw2oSSd7mxv5BGeoVclalPz+l4Ds
+	yIcQgUD6/YaZdEl9mIJsC8UwGjg45MKGrabLzQ/j3SXVAJQ0s4RnupRLnyimi6ac
+	ZTdBPaqmri/3+udDLFBGkeufaKuxTiEr/h2nzx9YhQL9OHynt2Wwbf/IdoXzCBVk
+	vTQ9h9Pil4hVNbd09cDYEYYlDGfVCFMukCGVaNVcCJe4W3Jszr9XdcIdsNMgYx/H
+	wMDXtmD8L1QtTcxXB7yPeR/IkROZRNZSNDKjmyMH9W0IlCZmVxm8fS32/sjaTOSo
+	1408Tg==
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4eety51hty-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-scsi@vger.kernel.org>; Fri, 29 May 2026 01:11:25 +0000 (GMT)
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-82f9f49e4beso6994099b3a.0
+        for <linux-scsi@vger.kernel.org>; Thu, 28 May 2026 18:11:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1780017084; x=1780621884; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J4shBszuHUw9GWZJYtSKssHaaKnXl5RvEARP037Y9X8=;
+        b=BRMpTHEWlG9CGt3J2yrQoO0iCcF7y+2U2aeIEp+jgEiyhkaX9OuTNSSlUMYyiy81ZP
+         ECRP/eaTPOB7tSVaTLTS2fcIGXFkFDvPTIdbjNTdwMn64useNOLW/oITtlwejIM1voC3
+         r12AK9RRHDpsSTgARfTk5Xa9S0w1GNPwvfS45jFNR1JAtenySHZhLw9m8otUz0lpdUmJ
+         3/mOPykx1xsfpYJQsGB3nEctY7y1W+Rzpl9W35vvCcxRmRvex5YxsMBJSXCg9zZT2ucp
+         7z7XqVkMaOUGhsehGZL6rQ2FJwbjXNKhb18ehOiot3Ko+YpxWgEb4mRO71TTvRl9z2km
+         BO+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780017084; x=1780621884;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J4shBszuHUw9GWZJYtSKssHaaKnXl5RvEARP037Y9X8=;
+        b=IhYWsi+EBrFxr3+k9HhUUprOiig7zHr6juCo6PjtTBcuFS2Rg29KASDNc+k3SABbT+
+         efl9+0fWAvFeQ6DkeOyW+V5rE7qlxoGrc39OJp8ZJ3bcdZL4OPhAdBB0HA32UdCrnDiv
+         WEb3O9qGutewl0YYQe2aWq79wz9zHVXqGKBM5t/0JMupNfMpRuA9H9KU40rcUoYo4c1l
+         XEzmc6XNjcHODXAR6D95FHialaTP1UyrpC4gbWuc4ZP/89dhUora7VFi1vZljh1FT+pB
+         HxZbzD1FNmPozZKWhSSvUT9hDGKYRMmWHdCbHhqaHcQjT+aI1PNjw8KWGy5kbqwUOgWr
+         cVTg==
+X-Gm-Message-State: AOJu0YzBLnVRZQGuNTqDZN6qnOqzl3iJDYq6oFFgWThjM0ZY98ISpqJa
+	qK9rG9biXTNKz23jT+sUp9nsVxXJyEpm+2byMqkIEfYVMWXHPx7xxMWxYUpvN6ErVReOdIpNL/X
+	Sx5FbWjipE8HAClD8KpLeyssNUuBxvsu0MFEdZ6VLfzYWfqfNs+w2f8Hk0u2NYpBI
+X-Gm-Gg: Acq92OEajIhseqkRP+YfhXtw52UfuBXmeVj6qBltQ2x8Gi4VS/FRAXzhbPOK1Far0jX
+	43COFEMHOxpjlcAcWFoCuvGK1eM+/z0uI2IVm4OkFZlethzuxofLTM9kcADKotpm3MwtWkL8bCJ
+	aVPbysaKQhOCa+l9SlUs2jXdhtyjuCcjZkz6x4q/N5t7Yd0qGzpYNLIntoDWw4aQ//uRC50+yOF
+	44tzdDmwSfmj3i/6rnwN3sGPwfAoFFTshpvHihKkTsoISCupZ00ZRboATmwlGTGbLEgQZy/UWlS
+	d0RTqgamQPbX1rkgSedE5XSFjoAfVUWRAlspuM0MgR6xCrRbGjy1fopxgtkYBnTPuz7qklOPzT3
+	v9EdOoI2iuHQTE0VbyR8D9NTTXPdoU6t7vdcV0C+40tETX73o6sniS6yQvKKzJN/dy72NI4aLla
+	pqpMzdIo5lhPi5gb+PyL/h4g==
+X-Received: by 2002:a05:6a00:39a5:b0:841:dcb5:e6f2 with SMTP id d2e1a72fcca58-84212ce3e93mr602235b3a.23.1780017083945;
+        Thu, 28 May 2026 18:11:23 -0700 (PDT)
+X-Received: by 2002:a05:6a00:39a5:b0:841:dcb5:e6f2 with SMTP id d2e1a72fcca58-84212ce3e93mr602201b3a.23.1780017083408;
+        Thu, 28 May 2026 18:11:23 -0700 (PDT)
+Received: from [10.133.33.247] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84214cc3575sm23322b3a.47.2026.05.28.18.11.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 May 2026 18:11:23 -0700 (PDT)
+Message-ID: <e8c740d0-99d3-4c01-87e5-f324698eac2a@oss.qualcomm.com>
+Date: Fri, 29 May 2026 09:11:18 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/2] scsi: ufs: core: Add support for static TX
+ Equalization settings
+To: Bart Van Assche <bvanassche@acm.org>, beanhuo@micron.com,
+        peter.wang@mediatek.com, martin.petersen@oracle.com, mani@kernel.org
+Cc: linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Ram Kumar Dwivedi <quic_rdwivedi@quicinc.com>,
+        Nitin Rawat <quic_nitirawa@quicinc.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20260528100614.3386423-1-can.guo@oss.qualcomm.com>
+ <20260528100614.3386423-3-can.guo@oss.qualcomm.com>
+ <312d0eca-108f-48af-a1b9-a5dcc24e70fd@acm.org>
+Content-Language: en-US
+From: Can Guo <can.guo@oss.qualcomm.com>
+In-Reply-To: <312d0eca-108f-48af-a1b9-a5dcc24e70fd@acm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20260529010749epcas1p2bf38209e55149f0681550c220e541e92
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 101P
-cpgsPolicy: CPGSC10-711,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20260529010749epcas1p2bf38209e55149f0681550c220e541e92
-References: <CGME20260529010749epcas1p2bf38209e55149f0681550c220e541e92@epcas1p2.samsung.com>
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI5MDAwOSBTYWx0ZWRfX1BNCvNhBxgVm
+ 6650tr0URIJ8LEPgmHYx8ZgnLDTQPwzyARt4igYGb2ofx8l7ZU7De1VVgFL9bcHkRs+fcrGjIuL
+ tIIJ8zEbgqiFEebRn8vEVIUS6n6RXLqh9SY45qguQij4hXy6EGHujQpMM5tepXepeasWSlzgdTF
+ H8ufYWDSTRY3bs+o9DQcvHhxs1ZjBwni2shr+TmjMZhWrBVHK6oCgcZDkcZo9BOk5F+jCzG6iOk
+ 3I5/dlhgIJzS32LAeSgdK8lEWsvOp16WruxQd+kQRREMKeObdFLB7YBuwUeLOyxqGMHUoiiPPVR
+ iX9aEVM/eh9WgBkVuBMcDbfl2AOdrPE99Q3iF2ywRzSJfT0RHlQcAxI40NMjyAdCqmZlMTwiy8d
+ uJBnNvki1EDb4HJhiVpMxfkyPwuDgZMYNzEgCF0ZN7I5BLP4Gd4R5J+Tw9drZogR149V8SgFZlS
+ QQyoCIQ5WjLSt9RbFZg==
+X-Proofpoint-GUID: I-_xjJ9c8ucDubvEFd4an9ZcWrl-Hi-g
+X-Authority-Analysis: v=2.4 cv=WaM8rUhX c=1 sm=1 tr=0 ts=6a18e7bd cx=c_pps
+ a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22
+ a=io7CIJzrRBQDuDm3A98A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=2VI0MkxyNR6bbpdq8BZq:22
+X-Proofpoint-ORIG-GUID: I-_xjJ9c8ucDubvEFd4an9ZcWrl-Hi-g
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-05-28_07,2026-05-28_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
+ adultscore=0 suspectscore=0 priorityscore=1501 malwarescore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2605290009
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[samsung.com,none];
-	R_DKIM_ALLOW(-0.20)[samsung.com:s=mail20170921];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-24206-lists,linux-scsi=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[samsung.com:email,samsung.com:mid,samsung.com:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-24202-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[samsung.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[cw9316.lee@samsung.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,oss.qualcomm.com:dkim,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,qualcomm.com:dkim];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	FROM_NEQ_ENVFROM(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[8]
-X-Rspamd-Queue-Id: 440155FBEB9
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 8A9D05FBE0B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-ufshcd_tag_to_cmd() may return NULL if no command is associated with
-the given tag. However, several callers dereference the returned cmd
-pointer via scsi_cmd_priv() without checking for NULL first, leading
-to a potential NULL pointer dereference.
 
-Fix this by adding NULL checks for cmd before calling scsi_cmd_priv()
-and moving the lrbp initialization after the NULL check.
 
-Signed-off-by: Chanwoo Lee <cw9316.lee@samsung.com>
----
-Changes in v2:
-- Dropped moving scsi_cmd_priv()/scsi_cmd_to_rq() calls after NULL
-  checks in ufshcd_mcq_sq_cleanup() and ufshcd_compl_one_cqe() since
-  the derived pointers are not dereferenced before the check
-  (Bart Van Assche)
+On 5/29/2026 12:02 AM, Bart Van Assche wrote:
+> On 5/28/26 3:06 AM, Can Guo wrote:
+>> +static void ufshcd_parse_static_tx_eq_settings(struct ufs_hba *hba)
+>> +{
+>> +    size_t sz = hba->lanes_per_direction * 2;
+>
+> Please mark constants with "const". Additionally, is "sz" a good name
+> for this variable? The code below compares "count" and "sz". I haven't
+> seen it before that a count and a size are compared with each other.
+>
+> Why "size_t" as data type? u32 should be sufficient, isn't it?
+>
+>> +    u32 lpd = hba->lanes_per_direction;
+>
+> Is this another constant?
+>
+>> +    if (!lpd || lpd > UFS_MAX_LANES)
+>> +        return;
+>
+> Should a kernel warning perhaps be issued if lpd > UFS_MAX_LANES?
+>
+>> +    for (gear = UFS_HS_G1; gear <= UFS_HS_GEAR_MAX; gear++) {
+>> +        snprintf(prop_name, MAX_PROP_SIZE, "txeq-preshoot-g%d", gear);
+>> +        count = of_property_count_u32_elems(dev->of_node, prop_name);
+>> +        if (count <= 0)
+>> +            continue;
+>
+> The body of this for-loop is long. Please consider moving the body of
+> this for-loop into a new function to reduce the indentation level of
+> the code.
+>
+>> +        for (i = 0; i < count; i++) {
+>> +            if (preshoot[i] >= TX_HS_NUM_PRESHOOT) {
+>> +                dev_err(dev, "An invalid TX EQ PreShoot (%d) 
+>> provided in %s property\n",
+>> +                    preshoot[i], prop_name);
+>> +                break;
+>> +            }
+>> +        }
+>> +
+>> +        if (i != count)
+>> +            continue;
+>
+> The traditional way in the Linux kernel for breaking out of a nested
+> loop is using a "goto" or "return" statement.
+Hi Bart,
 
- drivers/ufs/core/ufs-mcq.c |  7 ++++++-
- drivers/ufs/core/ufshcd.c  | 13 +++++++++++--
- 2 files changed, 17 insertions(+), 3 deletions(-)
+Thanks for the review, I will address them in next version.
 
-diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-index c1b1d67a1ddc..13b60a2d06db 100644
---- a/drivers/ufs/core/ufs-mcq.c
-+++ b/drivers/ufs/core/ufs-mcq.c
-@@ -637,7 +637,7 @@ static bool ufshcd_mcq_sqe_search(struct ufs_hba *hba,
- 				  struct ufs_hw_queue *hwq, int task_tag)
- {
- 	struct scsi_cmnd *cmd = ufshcd_tag_to_cmd(hba, task_tag);
--	struct ufshcd_lrb *lrbp = scsi_cmd_priv(cmd);
-+	struct ufshcd_lrb *lrbp;
- 	struct utp_transfer_req_desc *utrd;
- 	__le64  cmd_desc_base_addr;
- 	bool ret = false;
-@@ -647,6 +647,11 @@ static bool ufshcd_mcq_sqe_search(struct ufs_hba *hba,
- 	if (hba->quirks & UFSHCD_QUIRK_MCQ_BROKEN_RTC)
- 		return true;
- 
-+	if (!cmd)
-+		return false;
-+
-+	lrbp = scsi_cmd_priv(cmd);
-+
- 	mutex_lock(&hwq->sq_mutex);
- 
- 	ufshcd_mcq_sq_stop(hba, hwq);
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 9e0336098e26..7481c71c71b8 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -7893,8 +7893,12 @@ static void ufshcd_set_req_abort_skip(struct ufs_hba *hba, unsigned long bitmap)
- 
- 	for_each_set_bit(tag, &bitmap, hba->nutrs) {
- 		struct scsi_cmnd *cmd = ufshcd_tag_to_cmd(hba, tag);
--		struct ufshcd_lrb *lrbp = scsi_cmd_priv(cmd);
-+		struct ufshcd_lrb *lrbp;
- 
-+		if (!cmd)
-+			continue;
-+
-+		lrbp = scsi_cmd_priv(cmd);
- 		lrbp->req_abort_skip = true;
- 	}
- }
-@@ -7915,11 +7919,16 @@ static void ufshcd_set_req_abort_skip(struct ufs_hba *hba, unsigned long bitmap)
- int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag)
- {
- 	struct scsi_cmnd *cmd = ufshcd_tag_to_cmd(hba, tag);
--	struct ufshcd_lrb *lrbp = scsi_cmd_priv(cmd);
-+	struct ufshcd_lrb *lrbp;
- 	int err;
- 	int poll_cnt;
- 	u8 resp = 0xF;
- 
-+	if (!cmd)
-+		return -EINVAL;
-+
-+	lrbp = scsi_cmd_priv(cmd);
-+
- 	for (poll_cnt = 100; poll_cnt; poll_cnt--) {
- 		err = ufshcd_issue_tm_cmd(hba, lrbp->lun, tag, UFS_QUERY_TASK,
- 					  &resp);
--- 
-2.43.0
+Can Guo.
+>
+> Thanks,
+>
+> Bart.
 
 
