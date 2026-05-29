@@ -1,393 +1,384 @@
-Return-Path: <linux-scsi+bounces-24225-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24227-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0K3KNLN5GWr3wwgAu9opvQ
-	(envelope-from <linux-scsi+bounces-24225-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 13:34:11 +0200
+	id GNbCJn2eGWq7xwgAu9opvQ
+	(envelope-from <linux-scsi+bounces-24227-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 16:11:09 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E6C0601AC5
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 13:34:10 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39068603526
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 16:11:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 410A4301A31C
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 11:34:10 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 94F39302D0CE
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 May 2026 14:10:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29D133D3CE9;
-	Fri, 29 May 2026 11:34:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 702A03E63A8;
+	Fri, 29 May 2026 14:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="K/WAojkw"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="D6TVjJLa";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="j17+CIdZ"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706543CBE79;
-	Fri, 29 May 2026 11:34:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780054447; cv=none; b=DtxeJQRc3iMPNlI4CjTP4J+3ufF9YR3WjfnJ07oibrVSiAfBxOndvdbk3l5wuR+J5azLEWN+PohH75VPttWonMNnpP6ksNsutr/p00Nd4sYSRVZbIVl5ebLYASU7EhJEo3U+M0xLTQXPjZ02Crvzkx/xOyj9/90XIT6mt5Hs5Po=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780054447; c=relaxed/simple;
-	bh=utMJBp9kyqoJfAvISbjnGHF3QrfIZHcJ0y7Whu6D1QE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DroJ9KFNcXZjZ2yfOBH4pAuiOCtKWq/yowMVcqpqY/yyWMu4MYvt2MSI6ZGyGyyvUUPpnSMX5mq+OljBxGmzQlug9xrPr1/n9FAtZaRnFTFtIb6GoJNGIypVLcT6kBHBdIqRre+93uvc2j2A+D9I+G0UCWomNoOZuoqvkyAf2TI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=K/WAojkw; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64T6d7SR1369492;
-	Fri, 29 May 2026 11:33:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=X2kQS1AldSj
-	uaukzNNFFcx4hBSm6CK+qAe04FgyElbE=; b=K/WAojkwCUk6It/EF6wOo3fFqlC
-	JE/qsMGMTx6BV+WMybYzLKyWIelzRd4UhJxIEV3tBkN0x8ui4zObXWpJpbY0PMOD
-	ILJoyzb4U2SI3QEGCM1DLQstcgevSfWL0R1lZl9twq9AVfrVCGhCLecuBMhYecXN
-	/JV2gEigkEFn3aQLzSlwPr4e6/69VTtOSqU+AW0BiI7hUJIupxAcCv5Wd+lvK1iW
-	GZDSEhyO8xESr8epgrgM+jjffJ0Pnwana99ewCiTn+RMQgwkEuG+6ny9ZHVnIPIG
-	KZudAPknELvPTavGS9RJsZBJx6JgNh3ReK8ZEQzcVCRgi/FFxtZwJYaxP7A==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4eety5uywb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 May 2026 11:33:52 +0000 (GMT)
-Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
-	by NALASPPMTA04.qualcomm.com (8.18.1.7/8.18.1.7) with ESMTP id 64TBTuaL009884;
-	Fri, 29 May 2026 11:33:51 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 4ef1qkccgb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 May 2026 11:33:51 +0000 (GMT)
-Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 64TBXoQi017955;
-	Fri, 29 May 2026 11:33:50 GMT
-Received: from hu-devc-lv-u22-c.qualcomm.com (hu-cang-lv.qualcomm.com [10.81.25.255])
-	by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 64TBXoeH017953
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 May 2026 11:33:50 +0000 (GMT)
-Received: by hu-devc-lv-u22-c.qualcomm.com (Postfix, from userid 359480)
-	id 3FA3E62E; Fri, 29 May 2026 04:33:50 -0700 (PDT)
-From: Can Guo <can.guo@oss.qualcomm.com>
-To: bvanassche@acm.org, beanhuo@micron.com, peter.wang@mediatek.com,
-        martin.petersen@oracle.com, mani@kernel.org
-Cc: linux-scsi@vger.kernel.org, Can Guo <can.guo@oss.qualcomm.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        Ram Kumar Dwivedi <quic_rdwivedi@quicinc.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v6 2/2] scsi: ufs: core: Add support for static TX Equalization settings
-Date: Fri, 29 May 2026 04:33:38 -0700
-Message-Id: <20260529113338.984301-3-can.guo@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260529113338.984301-1-can.guo@oss.qualcomm.com>
-References: <20260529113338.984301-1-can.guo@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DA73E51FE;
+	Fri, 29 May 2026 14:09:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780063790; cv=fail; b=G4C9uML+jAx8LTgpwj9LyUCY4tFR8SdU2PkdQDmDJO+/WE6F2cw7N3lTz87cOnE4cHslC6SMfCSDwI1c+eoGEDh++9jCcX1zTlEARJ8FjEv5QH+lnv0STw4vJLasohYxkrSJmKdQ2L5GbOv5k/0jrn6pJ2x382cKr6VKf9Q/0TA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780063790; c=relaxed/simple;
+	bh=S29i8eqYkSypR3knf/+/K9frhC9YwtjF/HpNQi9OhiY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=bDy4o/Lin8uGB8hVUsFfuz6E5RbIQ5L9hChYy1yd7LKrmFoOjKRNNuSyMcdeM+zDZW2FTzFez9TBBLT0ndJUQ3FBSN/JaFvtFfRUblhA/+/x948nOQViDktVJltpK5PMWsODCGRNPCe7nxFv289T170MUrzRqOBD6KX8MB7t27s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=D6TVjJLa; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=j17+CIdZ; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64T6feIt986485;
+	Fri, 29 May 2026 14:09:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=FBvNe69VB+OvwMpbcHqeVcU7sU0hcHK3o4Y4Lw1Fnvg=; b=
+	D6TVjJLa0HkJc6FVXmIE2qp5kcUTqsYhEhoHMtlCA1uDvzwBl7Zv9mwVWVoFtl+B
+	ry6Bva+jWCm22SZeYudtHLkeWHdCY6UrTotv9TTRK13jjEsCFgv0rKAcejlfG5Tn
+	UIBANy35/H6ylgzZyuX+UVPenkE5BgqWWdgY6+dDc7wkmdFSGLGBfcNl22vL+g/S
+	MzzzBdvcCg4bedMPOn+/Z7ntc5TWJp7xL1y7D2R7b9bJTN5SWO/SHGkDfT3nzofW
+	Tlen6xbijtGEGdhxr7AeVlSjHQw2gUstGhe+6tfaASAjNGSfHlOBBCc/M99dem2R
+	ihMvylziWiILyPAawSnGqQ==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4ee7wpas76-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 29 May 2026 14:09:13 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 64TE0PHF013387;
+	Fri, 29 May 2026 14:09:12 GMT
+Received: from sa9pr02cu001.outbound.protection.outlook.com (mail-southcentralusazon11013005.outbound.protection.outlook.com [40.93.196.5])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4edjshcqsc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 29 May 2026 14:09:12 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gniIfmZ2iNowKmMNRMbnkBD1jBS4xMRsrgmtZgjUkhOv0Kr/QytHZB+B/IqOQ5bEnM3581zANoOxmw7H7fzRO8CJL8V0zgpLNFd3Ud0hsmwmbTAnvhMgf5sdOSNCXPuWiHFFm80gdvahNJPsMNNyhI0t1EOdVObfaUdoLCQsG+Zv1T5BglPha8M4s+iUIHdd6DKZTggkzWDLVpv2Y5qjzE82z0LtimJ0eP9AODknfxoSYZCUU3CbpXAv/B60f01x/sFwuIEfz3hS/x6kM55bXFyWv9s3ZbJcejc3YxH+8iDEu7oIZ0sRjTXPnztplGifylN2OdCJS1xfxOOEvEK9Xg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FBvNe69VB+OvwMpbcHqeVcU7sU0hcHK3o4Y4Lw1Fnvg=;
+ b=XBt5x3nrw82dQuLbeTGrGV1kEgyEZO1s185btI8wiVdplut62dGBWHB+1XIUDlmE27RaOujZ8c3WyfLgHGkjJq0q9qS80QTvOYHEmDK5CvTYe9/VlSq3FBOfEwzy2NuAeQHHJElLmQrMU1JkONYw4qFox3LZCXM2ueftYh55XoNMBOTN7mkaWmdb7gUL5OrwKOgb/Sx88E5KIZWH1UHRjLuXdTEH/HGv6ouqOZxrnBwG1ni9udb7a21xMnG/NSrxauhOYzpoGg5ku8lwYmu2WhrxSbqMuxMdOSgf1n9BaEplQ/wBM8enOLCLzrRhnaIQYWf1KvWHFWp94txHfIx3dQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FBvNe69VB+OvwMpbcHqeVcU7sU0hcHK3o4Y4Lw1Fnvg=;
+ b=j17+CIdZNQIlQrh4WcZ49hppkrDwPeKx0MOcwAza92QnihxDScUrtIqL6XB4LIjJtQvlYo3c1SVo/NSD44OadtWWfVc/Fncz8lhkGWVroFTk7cmNGte5w9Jzw5ceLdwSyQqd6eeVae63g3bTVtiry6/zoCxL5vbtzUvcKmmVxAA=
+Received: from DS4PPFEAFA21C69.namprd10.prod.outlook.com
+ (2603:10b6:f:fc00::d54) by SA6PR10MB8183.namprd10.prod.outlook.com
+ (2603:10b6:806:444::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.71.12; Fri, 29 May
+ 2026 14:09:07 +0000
+Received: from DS4PPFEAFA21C69.namprd10.prod.outlook.com
+ ([fe80::9da2:46fe:4d63:a74b]) by DS4PPFEAFA21C69.namprd10.prod.outlook.com
+ ([fe80::9da2:46fe:4d63:a74b%7]) with mapi id 15.21.0071.011; Fri, 29 May 2026
+ 14:09:07 +0000
+Message-ID: <cd70e2a4-91e1-4237-bdd0-7568b2dbdc9f@oracle.com>
+Date: Fri, 29 May 2026 15:09:03 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/2] scsi: libsas: Add linkrate and sas_addr change
+ detection in rediscover
+To: Xingui Yang <yangxingui@huawei.com>, yanaijie@huawei.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, liyihang9@h-partners.com, liuyonglong@huawei.com,
+        kangfenglong@huawei.com
+References: <20260526015418.2022398-1-yangxingui@huawei.com>
+ <20260526015418.2022398-3-yangxingui@huawei.com>
+Content-Language: en-US
+From: John Garry <john.g.garry@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <20260526015418.2022398-3-yangxingui@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0040.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:4a::8) To DS4PPFEAFA21C69.namprd10.prod.outlook.com
+ (2603:10b6:f:fc00::d54)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-ORIG-GUID: hvFv86qtVkcL4Aizq7aDrKjj0f5MdP1W
-X-Authority-Analysis: v=2.4 cv=TeqmcxQh c=1 sm=1 tr=0 ts=6a1979a0 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
- a=rJkE3RaqiGZ5pbrm-msn:22 a=PY6Zn8H8AAAA:8 a=EUspDBNiAAAA:8
- a=-xlrxDLzkpAifl49RugA:9 a=ySS05r0LPNlNiX1MMvNp:22
-X-Proofpoint-GUID: hvFv86qtVkcL4Aizq7aDrKjj0f5MdP1W
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI5MDExNSBTYWx0ZWRfX7Xfsy6BfleAJ
- NYMNfots76pAnesAmZzFdUwm1omE9QFQXhSFa+lktEk+lNbOPJGy0PZqurakhe2s6cXvmSDBATg
- 3YOSzp2oMYI3lvhVyD+a/FUygolR2kIaLHqolxCflYJvdGazORxd+yVa4CcTYaQJSc2bFFlX6SW
- lSdJE6pKMT3JZIS6cwGC+6zQg4eQCohdJt69J56bV00CZjjywyTftp/d8jKx3fj20gA4oKdhFzW
- 4POJ1AFAMw81RCk8VC3Wn3WSYRr1M9buyLjK6q9QjnHAhwnPKdrhMTDJNn+56NLEndkCeJe81NW
- jgPj+G8jPowFXd+iEMsK94/C0b4ZdQKRvNTLfmFp+SSaUpRnT4td7jIz+wFfvzJAb2mb5V9rymb
- GGIholWbxLpwGNyqQcY3j45VY074gIVgnMaWTTl1nfTP6CKKEp6I6pr7tQFGujU3bVSJgLPsS2u
- kue591K1ZZxk5BNQXtA==
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS4PPFEAFA21C69:EE_|SA6PR10MB8183:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0d02ec55-4862-4379-10a4-08debd8bd8d9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|366016|6133799003|4143699003|5023799004|56012099006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	kKKlDmtVvTiB9wmtjPAjTCMzdEyT4RJNGk/0pV7ZkRh34Anvc1IQ9FBm2fXv8sRSfsglMBmZgKplzyrr9QXEFoe0knhWe18cD9tXhKXkR8U4+V8CXqKlCTrrWPZHHRp9uAhJMQzKkDIyIyvio6zMgAdzNThe5cBCp5bkc1i3q3BQGnh0Ne34YB5t4MSNaSWC1XLaoO8/WDbi5T3kOUVxaXQUZIvRYomi9Dk8/o5WCTupXZsveyZl1Vd5WnBFLO5ORh4fTFhwT5i4FdWEdX6zl/qvzUKz0DOpjCcCUBt5cUP5yTbDjycYrgshF0RfEkKofeo96sVBl3jYUQcA9+Ii9FOdbyWJ6AMo4OGan/hzXAaTvfmrh5qHyaUSHj61NQHTHzAHbGmUKvGrC/QNkqtQgRd5C6K7zsCAvgGeG8aFkaMi0x9doPdWt96nj+hC77FRttDPUnH3MedKmmtXnRcpHgaUzhe2iltepMHfufQCus/DrzCXVB/zOZzepowy1w3aAycgmhVV7L4cztCg+V6VFhEyoXqVQaQqdiGvndKE/RBwxSsWuuWE3LFlTlSXFtoyJCoVwaJITN7Ff8+Nq9Gj1QOjMgXF0cpDKXAwm02yvGYcybFC8KIGUAZ62BK8nTfh2fHU0kPP7HJX924VkovAfmbmHQZr44jEjm1dnX4Q/DoVcfCP/wzIuyu24Q/aNSs1f6+fdRFIu9mTI+8MVO1Cvw==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS4PPFEAFA21C69.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(6133799003)(4143699003)(5023799004)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UFJuK2dBTmtMNzJDUEg3SlF6SUZjVktrUVE3c083Mmp3dUh6SFpwM0VHTUxU?=
+ =?utf-8?B?aWpYK2R1OFl4OU5sK0trbm5UaTlMMFAxNXdVWjc5SXVnVVArNGJUdFE3bEdq?=
+ =?utf-8?B?eXpJNDJreWpjVzlZeDUyS0lFMk9aWDlJamc3ZUp5Wmd5TXVlUnNBZFE1U1Bo?=
+ =?utf-8?B?ay9PMm5oQXgwdHpCcWFlRWc0R1Vzdm13RU1sRi9SZG5CM3U2V2kramNCWTRJ?=
+ =?utf-8?B?Snd3VlljanhEbXdWbHUydkM2RTJtVERFMWNXUUR2cDhzTnFsdHZnTnY0T1Qz?=
+ =?utf-8?B?clBrbE4yQlVwSVloUjJiVUFEeUtEblM5WlNmZFhHOEFISVluc1RZK2JBMFU5?=
+ =?utf-8?B?aFRzcGFKTXVqRzhLeitRa21RUVM3bFZlZG80REhvYzJBVVRYTWhGN3F1VFdH?=
+ =?utf-8?B?aWd4VDZNRG9SV05MdDVCRHQycEM3N2d2L1FxOS9jYXRSaGJvcW9CN1IvZFRj?=
+ =?utf-8?B?Rk1yUWVCWnh5cE1zVVhQa28yUG14ampUalBrcTZoYlcrbFJNODlMUHU0WDVV?=
+ =?utf-8?B?ODRCUEpESXBXbDRTcm1XWWV3V0dialNScHZ0eWc0YWJNUnZ3MS9aaFY0eWQ1?=
+ =?utf-8?B?alRicDQxRHkrT292QVJIekdmRzk4cDFFZndrM1l4anpVTFFnM2I1MVFqc1ZZ?=
+ =?utf-8?B?RTllb280ZitqMURpT0NTVW5DYmREWm4rcW1hZmpwdk9JRWpEUWp5ZmlvUm43?=
+ =?utf-8?B?L0s4VXZobTN2NC9mcGVOZTdYb3A0RC9uR3pJMDNKbitqQk9UcFdSc3JBTERQ?=
+ =?utf-8?B?MjZZM3JiWDVIM3UzWjhObk1kMmdNSEUyUnUzdFIzNFB3ZDhtZUtXVFNsOFhQ?=
+ =?utf-8?B?QTQ4WHhKaHExb0g0M0JXcVJWd3VDK3kxNzJYN21DL2lxaFhCaitVU3lnSDgx?=
+ =?utf-8?B?YUNEUmRwb0NuYVpoNE45b1ZwSXB0Z0l6RnlLR2psd3MzaGJuSHUzL2d3T2h0?=
+ =?utf-8?B?d2krSFI0T0xHeU5jSXFxR0ttZkxwU20vWU1UT2orS29KdjU0VEc1UjJGL0Y1?=
+ =?utf-8?B?ZGg2cm5FRm5WVWRyUC9rdjk1OUtPc3RMK1NsU1Fydkd5V2QxRUJ0U2NIOHlk?=
+ =?utf-8?B?WjN5WXNGNzk1NXk5MEYzU3doOVZ4UHUwL2dUa29UczdncjVzN1FnL1gzd1g1?=
+ =?utf-8?B?NExqcmV2Zllrb0RIMXkyTW5vSHlzeGhMaWVZMHJZUmo1dUlIVGJZQ1NFNTh3?=
+ =?utf-8?B?NjZaR3hVUWMxTGhoY0RZdXpuWHlUNjB0d3JjRlF5K0ptMlRucGVoN0pBOWQ1?=
+ =?utf-8?B?RmU0RHBUNW0zRmwzTXFBQlNnU3RIL05EQzB0bGZqYmU4TnR6YUVJdmY1ZUFT?=
+ =?utf-8?B?d0Y5V3JBQ2NETXYwOHVmd3hzdTgrbzRtQzJCNGFVaEo0dzhCeEJVZVNGNmpK?=
+ =?utf-8?B?MDdENkpFZ3NzdXdOQXVLci9JSW1xYlFyS1BZeUlodlpmMmdIaVJ2YnFock1T?=
+ =?utf-8?B?ZGlNeW9zM0NuZUZnVThOOEF2SzFyTnBJaU5ZTnJnZzRCOVp4RXN4M3I2ci9W?=
+ =?utf-8?B?TFpxOUhlcnA1VnlHWk44Z0d2RFk4SFBUSjd0RC9NL1hWUGxLZU5rZ3NhUVk3?=
+ =?utf-8?B?MW5IYmVGdG1Nd3kzbEpvRkVWZUo0Znh5OGtxMzZ2S3ZxQ243NnR6dk00OXhE?=
+ =?utf-8?B?RW5Nbyt5c2RyOHplWXh6aEl3UVEyTXp5bmZYdHM3RUcyUzhJVDhjUTJYSGE0?=
+ =?utf-8?B?OTRKSFhtZVg4aFQ2Z3pzOXlVK2svQ01IVWY1OVlyeTdXMHUwOEthMVFCZW40?=
+ =?utf-8?B?bFVpY2NBUnBOcU40K0Y0cWdIdzE4Z0JQNm9KaHVwS1FSOFRaWndYTHRPa2RY?=
+ =?utf-8?B?TnhKdHlFUnRqU3NaM01lK0YyaFl6TGlLVnZ4Sk1sSXV5d0FXZ2RIMGVrelNC?=
+ =?utf-8?B?KzB0ZFdSbXMvVlZtektNK2htUWFZc0RBVXlsaWlPSlJZamt5YlRsemJQdndX?=
+ =?utf-8?B?L3Z6NlltdFNhVFFudjJZMmxlWUN6ejJLU1J4MkFvNkJRK25lMkt6TmcvcDFE?=
+ =?utf-8?B?Um9FaW1wU1Q0OHFnVUhJNkMwSzNISUpsckIxL0diMDQ4WGFRRTBnbEs3T3dR?=
+ =?utf-8?B?eUxOUWJXaTVaZzRqZnRTRlo5dThLNnpEZndNYThXaGt2RVc4ZG8zZ2dzWnZR?=
+ =?utf-8?B?SU5CbTY3YVdkanpKbmZIdUpUV2tJRy9Ob3I1WXk1QmVwd0JMb2hVNUU1RnBY?=
+ =?utf-8?B?c2Y1ZWs2OVQwNFZYRkI4NFFnakh2Q3p4aTJBQVdPQm5JN0FsRnFIcEo3VEwy?=
+ =?utf-8?B?MDAySzQzYzB4YjQ4dUpXUkMyVkRjN0syN21TRlltTTJxdytsRW42K1J4STJP?=
+ =?utf-8?B?bDN6OXIrZUpMem1od1FjNTNISTI2bnpTOFpIdWZqd1Y2SWtNZS9kT1EzWlJR?=
+ =?utf-8?Q?c4jtv9EBz2PHWonY=3D?=
+X-Exchange-RoutingPolicyChecked:
+	MeCHjhxPAAZ03y64+B/sUfM8NoxzdzCGEbE0J0jJpcXEuL7AOtUcL4MPtMrJriJl7TrK1ZeRYi9US/HeUzu/e4IJ6dSblPF/dbctowRgr1CnNv64tXaGvvolen9bBwQ0Rrz9EIzAxX9mTTwDBUCiTrwKuzZ8dF/uBWIEu/3Qo/0WZKmqgX3zV96GrTKPu0jaR32bwXsakSbCjmkj+R426/eoDUJ6ZoDLHT5TILxYFj9VZRFb0eylYkEh/9vqzINiNkkl1VIU5M9ICS0Io4/bRWUVksOeF2OjY3lCYPsm/TMxaBeooupfUrqyk1ws9QkevqlB5u11yoWnT/YpQoMAYg==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	fm8f6YVd/t5zZurHs9jAQtfCJ5Sh8P2oUlWQOMoHNKdFDxcMBFrqFaRCxLhrWbpFQfao2a0cpkafBCeubMeqm9i9Ne11OMSaVwqrsENYmg8ynab2iqYmBGszNpfNAb2WHaGOWeI15jKBYWgtjE5O9wY8dxXd9n3VtMUVuduuBb0LdduOgLgHhrYhpJMYLiS7b549lYIzaYs9mysrvw25vGRytlY9r9Ec1K0DfdyA1jZH9P7fM1n5OfQixjr1oiNNTJ6jF9LB6Y60nFvk316xY83l3cobejFTN1CtD98KsroLXsuXAJqiAcjuQCHLaZBA/TSvczkN1K24K+OSNrW50gM4x1Ka77xgdaxBwRXBi183IYVk17XPyx4UaZyacWNkLqEXZxvfyf+yQ833fiw0tId0U4rhrBXRlt/YQVYV5R2WhvyCjaJ4V4JC6YSrdECMXDM8HWbuHgKJfACdh5fWhZxpMRZeeyDv8DCGHHTrVXGYA+ywkxu30fpyyit7QmOyZxaOv3YWNfhNRSFSUskwX0LW5tO5XQy/chwhDDWgoSWqfZ8bj5PCwqBdxyvC0E65uBM8eLkApacbWJkpILN5tJESMxKQJHN0egmfT3W6cJs=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d02ec55-4862-4379-10a4-08debd8bd8d9
+X-MS-Exchange-CrossTenant-AuthSource: DS4PPFEAFA21C69.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2026 14:09:07.1698
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DEwz9wDWZXZmyDWfPr+PzbJ5cbqc0ym69CXnq8WYwRaqHeUd5kZ2w1wErP8S6+Bt8JSQXyNqvBshVyYjEaWDYg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR10MB8183
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-05-29_03,2026-05-28_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 impostorscore=0 clxscore=1015 lowpriorityscore=0
- spamscore=0 suspectscore=0 bulkscore=0 malwarescore=0 adultscore=0
- phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605210000
- definitions=main-2605290115
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+ definitions=2026-05-29_04,2026-05-28_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ spamscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0
+ phishscore=0 mlxlogscore=999 suspectscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2605130000 definitions=main-2605290140
+X-Authority-Analysis: v=2.4 cv=PsijqQM3 c=1 sm=1 tr=0 ts=6a199e09 b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=NGcC8JguVDcA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=o5oIOnhZENCTenyL_yNV:22 a=i0EeH86SAAAA:8
+ a=yPCof4ZbAAAA:8 a=ds5yzcVYOOp9gmie_KMA:9 a=QEXdDO2ut3YA:10
+ a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12303
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI5MDE0MSBTYWx0ZWRfXxnPbJDgje2bW
+ s28iYR4YTf+Q7PotAXybFa4lgS5DeA/crclDLQ3Rflt69vPAmZ7GuIwYiwIl7Yu99PENysS8jdO
+ uDlfwXKwNUN8JyTmM2HEELwnblMpFN554h5I44iXffjzwMLH2DINAbPMCmgWAoqJ1+m6mAz2w3D
+ 7HLGqXmfv/VyAlI9SQCUVfgO45ho2uK1TnsqKFW+q+e8i0n/ruA0W/3UIKga3/AD/uHhDXcmvCP
+ FwCU0O37AvJIM9RkjLO/hrMPCdBiO1VJJHlynQKUHD2h60/NyzVjD1R3yKdDv7eLKs1YEnJbQUl
+ LvoyXVxoF1i5cVmJtRYta+cYPWodbWvDjpBc8gFrBniUVsWuO4luGmyhJL2f2hruGj04RYox3nZ
+ ofuyfFDNuyY5tXWeG56eoY92JPW57YzQUXnoBjerihrPrE5L8RVOs5jeQExEbmSv6IX7NBh1k3r
+ PKNlEpiOuwFFjhICG836SkrjIWo0orDutukaOPpo=
+X-Proofpoint-GUID: jXagy2Eo9FRqmiIl_bdKhsTHCxjgU2mc
+X-Proofpoint-ORIG-GUID: jXagy2Eo9FRqmiIl_bdKhsTHCxjgU2mc
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
+	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24225-lists,linux-scsi=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-24227-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	NEURAL_HAM(-0.00)[-1.000];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,oracle.onmicrosoft.com:dkim];
+	MIME_TRACE(0.00)[0:+];
+	HAS_ORG_HEADER(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[10]
-X-Rspamd-Queue-Id: 7E6C0601AC5
+	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	RCVD_COUNT_SEVEN(0.00)[9]
+X-Rspamd-Queue-Id: 39068603526
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Static TX Equalization settings and TX Precode enable indication from DT
-properties txeq-preshoot-g[1-6], txeq-deemphasis-g[1-6], and
-tx-precode-enable-g6 are board-specific baseline values. Values are
-provided as per-lane tuples:
+On 26/05/2026 02:54, Xingui Yang wrote:
+> In sas_rediscover_dev(), when detecting a "flutter" condition (same SAS
+> address and compatible device type), the code assumes the device remains
+> unchanged and only handles SATA pending state recovery. However, this
+> approach misses two important scenarios:
+> 
+> First, the flutter detection only compares SAS address and device type,
+> ignoring potential linkrate changes that may have already occurred.
+> 
+> Second, after sas_ex_phy_discover() re-queries the expander phy, both
+> linkrate and attached SAS address may be updated. The current code does
+> not validate these changes against the existing child device.
+> 
+> Additionally, the replace code path (different SAS address detected)
+> has a sysfs duplication issue: sas_unregister_devs_sas_addr() only marks
+> the device as gone, but the actual sysfs cleanup happens later in
+> sas_destruct_devices(). Calling sas_discover_new() immediately after
+> unregister causes sysfs_warn_dup() errors.
+> 
+> Introduce sas_is_flutter() to check whether it is a true flutter with
+> validation for linkrate and sas_addr changes. It returns true for normal
+> flutter and false when changes are detected requiring rediscovery.
+> 
+> Introduce sas_rediscover_phy() to handle async rediscovery for both
+> flutter and replace cases. When invoked:
+> - Set phy_change_count and ex_change_count to -1 to force revalidation
+> - Unregister the device via sas_unregister_devs_sas_addr()
+> - Queue DISCE_REVALIDATE_DOMAIN event
+> 
+> The old device sysfs is cleaned up by sas_destruct_devices() at the end
+> of current revalidation work. The new event triggers discovery via
+> sas_discover_new() since attached_sas_addr is cleared, avoiding the
+> sysfs duplication issue.
+> 
+> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+> Suggested-by: John Garry <john.g.garry@oracle.com>
+> ---
+>   drivers/scsi/libsas/sas_expander.c | 67 +++++++++++++++++++++++-------
+>   1 file changed, 53 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
+> index f55ae9a979cd..4e8e1b339889 100644
+> --- a/drivers/scsi/libsas/sas_expander.c
+> +++ b/drivers/scsi/libsas/sas_expander.c
+> @@ -1962,6 +1962,56 @@ static bool dev_type_flutter(enum sas_device_type new, enum sas_device_type old)
+>   	return false;
+>   }
+>   
+> +static void sas_rediscover_phy(struct domain_device *dev, int phy_id,
 
-<Host_Lane0 Device_Lane0>, [<Host_Lane1 Device_Lane1>]
+most of the expander phy symbols have _ex_phy ending
 
-Parse DT u32 properties with explicit range checks by using
-of_property_count_u32_elems()/of_property_read_u32_array().
+> +			       bool last)
+> +{
+> +	struct expander_device *ex = &dev->ex_dev;
+> +	struct ex_phy *phy = &ex->ex_phy[phy_id];
+> +
+> +	phy->phy_change_count = -1;
+> +	ex->ex_change_count = -1;
+> +	sas_unregister_devs_sas_addr(dev, phy_id, last);
+> +	sas_discover_event(dev->port, DISCE_REVALIDATE_DOMAIN);
+> +}
+> +
+> +static bool sas_is_flutter(struct domain_device *dev, int phy_id,
 
-When adaptive TX Equalization is used, these static settings are not final:
+sas_dev_is_flutter may be a better name
 
-- If valid settings are retrieved from qTxEQGnSettings/wTxEQGnSettingsExt,
-  those retrieved settings override static DT settings.
-- If retrieval is not available/valid, TX EQTR runs and trained settings
-  override static DT settings.
+> +			   u8 *sas_addr, enum sas_device_type type)
+> +{
+> +	struct expander_device *ex = &dev->ex_dev;
+> +	struct ex_phy *phy = &ex->ex_phy[phy_id];
+> +	struct domain_device *child_dev;
+> +	char *action = "";
+> +
+> +	if (SAS_ADDR(sas_addr) != SAS_ADDR(phy->attached_sas_addr) ||
+> +	    !dev_type_flutter(type, phy->attached_dev_type))
+> +		return false;
+> +
+> +	child_dev = sas_ex_to_dev(dev, phy_id);
+> +
+> +	sas_ex_phy_discover(dev, phy_id);
 
-So static DT settings are a fallback and are intended for cases where
-adaptive TX Equalization is not enabled/used. Adaptive TX Equalization
-remains the primary path when enabled.
+why not check the return code for error?
 
-No behavior changes for platforms that do not provide these properties.
+> +
+> +	if (child_dev && dev_is_sata(child_dev) &&
+> +	    phy->attached_dev_type == SAS_SATA_PENDING) {
+> +		action = ", needs recovery";
+> +	} else if (child_dev && child_dev->linkrate != phy->linkrate) {
+> +		pr_info("ex %016llx phy%02d linkrate changed from %d to %d\n",
+> +			SAS_ADDR(dev->sas_addr), phy_id,
+> +			child_dev->linkrate, phy->linkrate);
+> +		return false;
+> +	} else if (child_dev &&
 
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Signed-off-by: Can Guo <can.guo@oss.qualcomm.com>
----
- drivers/ufs/core/ufs-txeq.c      |  10 ++-
- drivers/ufs/host/ufshcd-pltfrm.c | 139 +++++++++++++++++++++++++++++++
- include/ufs/ufshcd.h             |   2 +
- 3 files changed, 150 insertions(+), 1 deletion(-)
+Can you factor out the child_dev checks for all if/else legs?
 
-diff --git a/drivers/ufs/core/ufs-txeq.c b/drivers/ufs/core/ufs-txeq.c
-index 4b264adfdf49..b645fe5f6d95 100644
---- a/drivers/ufs/core/ufs-txeq.c
-+++ b/drivers/ufs/core/ufs-txeq.c
-@@ -1297,7 +1297,13 @@ int ufshcd_config_tx_eq_settings(struct ufs_hba *hba,
- 	}
- 
- 	params = &hba->tx_eq_params[gear - 1];
--	if (!params->is_valid || force_tx_eqtr) {
-+	/*
-+	 * TX EQTR must run for the following cases:
-+	 * 1. TX EQ settings are invalid.
-+	 * 2. TX EQ settings are valid but static, i.e., populated from DT.
-+	 * 3. TX EQTR procedure is forced.
-+	 */
-+	if (!params->is_valid || params->is_static || force_tx_eqtr) {
- 		int ret;
- 
- 		ret = ufshcd_tx_eqtr(hba, params, pwr_mode);
-@@ -1310,6 +1316,7 @@ int ufshcd_config_tx_eq_settings(struct ufs_hba *hba,
- 		/* Mark TX Equalization settings as valid */
- 		params->is_valid = true;
- 		params->is_trained = true;
-+		params->is_static = false;
- 		params->is_applied = false;
- 	}
- 
-@@ -1495,6 +1502,7 @@ static void ufshcd_extract_tx_eq_settings_attrs(struct ufs_hba *hba, u8 gear)
- 	}
- 
- 	params->is_valid = true;
-+	params->is_static = false;
- }
- 
- void ufshcd_retrieve_tx_eq_settings(struct ufs_hba *hba)
-diff --git a/drivers/ufs/host/ufshcd-pltfrm.c b/drivers/ufs/host/ufshcd-pltfrm.c
-index c2dafb583cf5..fc6aa91b6210 100644
---- a/drivers/ufs/host/ufshcd-pltfrm.c
-+++ b/drivers/ufs/host/ufshcd-pltfrm.c
-@@ -210,6 +210,143 @@ static void ufshcd_init_lanes_per_dir(struct ufs_hba *hba)
- 	}
- }
- 
-+/**
-+ * ufshcd_parse_tx_eq_settings_for_gear - Parse static TX EQ DT settings for one gear
-+ * @hba: per adapter instance
-+ * @gear: target HS gear
-+ * @num_elems: expected number of elements per property
-+ *
-+ * Reads the txeq-preshoot-gN, txeq-deemphasis-gN, and (for G6)
-+ * tx-precode-enable-gN device-tree properties and, if all are valid, stores
-+ * them as static TX Equalization settings for the given gear.
-+ */
-+static void ufshcd_parse_tx_eq_settings_for_gear(struct ufs_hba *hba,
-+						 int gear, const u32 num_elems)
-+{
-+	u32 precode_en[UFS_MAX_LANES * 2] = { 0 };
-+	const u32 lpd = hba->lanes_per_direction;
-+	struct ufshcd_tx_eq_params *params;
-+	u32 deemphasis[UFS_MAX_LANES * 2];
-+	u32 preshoot[UFS_MAX_LANES * 2];
-+	struct device *dev = hba->dev;
-+	char prop_name[MAX_PROP_SIZE];
-+	int i, err, lane, count;
-+
-+	snprintf(prop_name, MAX_PROP_SIZE, "txeq-preshoot-g%d", gear);
-+	count = of_property_count_u32_elems(dev->of_node, prop_name);
-+	if (count <= 0)
-+		return;
-+
-+	if (count != num_elems) {
-+		dev_err(dev, "Property %s has invalid count (%d), expecting %u\n",
-+			prop_name, count, num_elems);
-+		return;
-+	}
-+
-+	err = of_property_read_u32_array(dev->of_node, prop_name, preshoot, num_elems);
-+	if (err) {
-+		dev_err(dev, "Failed to read %s property, %d\n", prop_name, err);
-+		return;
-+	}
-+
-+	for (i = 0; i < num_elems; i++) {
-+		if (preshoot[i] >= TX_HS_NUM_PRESHOOT) {
-+			dev_err(dev, "An invalid TX EQ PreShoot (%d) provided in %s property\n",
-+				preshoot[i], prop_name);
-+			return;
-+		}
-+	}
-+
-+	snprintf(prop_name, MAX_PROP_SIZE, "txeq-deemphasis-g%d", gear);
-+	count = of_property_count_u32_elems(dev->of_node, prop_name);
-+	if (count <= 0) {
-+		dev_err(dev, "Missing required %s property\n", prop_name);
-+		return;
-+	}
-+
-+	if (count != num_elems) {
-+		dev_err(dev, "Property %s has invalid count (%d), expecting %u\n",
-+			prop_name, count, num_elems);
-+		return;
-+	}
-+
-+	err = of_property_read_u32_array(dev->of_node, prop_name, deemphasis, num_elems);
-+	if (err) {
-+		dev_err(dev, "Failed to read %s property, %d\n", prop_name, err);
-+		return;
-+	}
-+
-+	for (i = 0; i < num_elems; i++) {
-+		if (deemphasis[i] >= TX_HS_NUM_DEEMPHASIS) {
-+			dev_err(dev, "An invalid TX EQ DeEmphasis (%d) provided in %s property\n",
-+				deemphasis[i], prop_name);
-+			return;
-+		}
-+	}
-+
-+	if (gear == UFS_HS_G6) {
-+		snprintf(prop_name, MAX_PROP_SIZE, "tx-precode-enable-g%d", gear);
-+		count = of_property_count_u32_elems(dev->of_node, prop_name);
-+		if (count > 0) {
-+			if (count != num_elems) {
-+				dev_err(dev, "Property %s has invalid count (%d), expecting %u\n",
-+					prop_name, count, num_elems);
-+				return;
-+			}
-+
-+			err = of_property_read_u32_array(dev->of_node, prop_name,
-+							 precode_en, num_elems);
-+			if (err) {
-+				dev_err(dev, "Failed to read %s property, %d\n",
-+					prop_name, err);
-+				return;
-+			}
-+
-+			for (i = 0; i < num_elems; i++) {
-+				if (precode_en[i] > 1) {
-+					dev_err(dev, "An invalid PrecodeEn (%d) provided in %s property\n",
-+						precode_en[i], prop_name);
-+					return;
-+				}
-+			}
-+		}
-+	}
-+
-+	params = &hba->tx_eq_params[gear - 1];
-+	for (lane = 0; lane < lpd; lane++) {
-+		params->host[lane].preshoot = preshoot[lane * 2];
-+		params->host[lane].deemphasis = deemphasis[lane * 2];
-+		params->host[lane].precode_en = precode_en[lane * 2];
-+
-+		params->device[lane].preshoot = preshoot[lane * 2 + 1];
-+		params->device[lane].deemphasis = deemphasis[lane * 2 + 1];
-+		params->device[lane].precode_en = precode_en[lane * 2 + 1];
-+	}
-+
-+	params->is_valid = true;
-+	params->is_static = true;
-+}
-+
-+static void ufshcd_parse_static_tx_eq_settings(struct ufs_hba *hba)
-+{
-+	const u32 lpd = hba->lanes_per_direction;
-+	const u32 num_elems = lpd * 2;
-+	int gear;
-+
-+	if (!lpd) {
-+		return;
-+	}
-+
-+	if (lpd > UFS_MAX_LANES) {
-+		dev_warn(hba->dev, "lanes_per_direction (%u) exceeds UFS_MAX_LANES (%u)\n",
-+			 lpd, UFS_MAX_LANES);
-+		return;
-+	}
-+
-+	for (gear = UFS_HS_G1; gear <= UFS_HS_GEAR_MAX; gear++)
-+		ufshcd_parse_tx_eq_settings_for_gear(hba, gear, num_elems);
-+}
-+
- /**
-  * ufshcd_parse_clock_min_max_freq  - Parse MIN and MAX clocks freq
-  * @hba: per adapter instance
-@@ -528,6 +665,8 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
- 
- 	ufshcd_init_lanes_per_dir(hba);
- 
-+	ufshcd_parse_static_tx_eq_settings(hba);
-+
- 	err = ufshcd_parse_operating_points(hba);
- 	if (err) {
- 		dev_err(dev, "%s: OPP parse failed %d\n", __func__, err);
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index f48d6416e299..c01824576472 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -359,6 +359,7 @@ struct ufshcd_tx_eqtr_record {
-  * @is_valid: True if parameter contains valid TX Equalization settings
-  * @is_applied: True if settings have been applied to UniPro of both sides
-  * @is_trained: True if parameters obtained from TX EQTR procedure
-+ * @is_static: True if settings are static
-  */
- struct ufshcd_tx_eq_params {
- 	struct ufshcd_tx_eq_settings host[UFS_MAX_LANES];
-@@ -367,6 +368,7 @@ struct ufshcd_tx_eq_params {
- 	bool is_valid;
- 	bool is_applied;
- 	bool is_trained;
-+	bool is_static;
- };
- 
- /**
--- 
-2.34.1
+> +		   SAS_ADDR(child_dev->sas_addr) != SAS_ADDR(phy->attached_sas_addr)) {
+> +		pr_info("ex %016llx phy%02d sas_addr changed from %016llx to %016llx\n",
+> +			SAS_ADDR(dev->sas_addr), phy_id,
+> +			SAS_ADDR(child_dev->sas_addr),
+> +			SAS_ADDR(phy->attached_sas_addr));
+> +		return false;
+> +	}
+> +
+> +	pr_debug("ex %016llx phy%02d broadcast flutter%s\n",
+> +		 SAS_ADDR(dev->sas_addr), phy_id, action);
+> +	return true;
+> +}
+> +
+>   static int sas_rediscover_dev(struct domain_device *dev, int phy_id,
+>   			      bool last, int sibling)
+>   {
+> @@ -2015,27 +2065,16 @@ static int sas_rediscover_dev(struct domain_device *dev, int phy_id,
+>   		if (res == 0)
+>   			sas_set_ex_phy(dev, phy_id, disc_resp);
+>   		goto out_free_resp;
+> -	} else if (SAS_ADDR(sas_addr) == SAS_ADDR(phy->attached_sas_addr) &&
+> -		   dev_type_flutter(type, phy->attached_dev_type)) {
+> -		struct domain_device *ata_dev = sas_ex_to_ata(dev, phy_id);
+> -		char *action = "";
+> -
+> -		sas_ex_phy_discover(dev, phy_id);
+> +	}
+>   
+> -		if (ata_dev && phy->attached_dev_type == SAS_SATA_PENDING)
+> -			action = ", needs recovery";
+> -		pr_debug("ex %016llx phy%02d broadcast flutter%s\n",
+> -			 SAS_ADDR(dev->sas_addr), phy_id, action);
+> +	if (sas_is_flutter(dev, phy_id, sas_addr, type))
+>   		goto out_free_resp;
+> -	}
+>   
+>   	/* we always have to delete the old device when we went here */
+>   	pr_info("ex %016llx phy%02d replace %016llx\n",
+>   		SAS_ADDR(dev->sas_addr), phy_id,
+>   		SAS_ADDR(phy->attached_sas_addr));
+> -	sas_unregister_devs_sas_addr(dev, phy_id, last);
+> -
+> -	res = sas_discover_new(dev, phy_id);
+> +	sas_rediscover_phy(dev, phy_id, last);
+>   out_free_resp:
+>   	kfree(disc_resp);
+>   	return res;
+
+Can res still hold non-zero value from earlier?
 
 
