@@ -1,268 +1,424 @@
-Return-Path: <linux-scsi+bounces-24339-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24326-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UO+FNd0UHmrugwkAu9opvQ
-	(envelope-from <linux-scsi+bounces-24339-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 01:25:17 +0200
+	id cI8OJKyUHWqmcQkAu9opvQ
+	(envelope-from <linux-scsi+bounces-24326-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 01 Jun 2026 16:18:20 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C2B7626536
-	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 01:25:16 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2738F620B00
+	for <lists+linux-scsi@lfdr.de>; Mon, 01 Jun 2026 16:18:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 83305301FD47
-	for <lists+linux-scsi@lfdr.de>; Mon,  1 Jun 2026 23:24:59 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7496E30B5B25
+	for <lists+linux-scsi@lfdr.de>; Mon,  1 Jun 2026 14:03:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700DD364029;
-	Mon,  1 Jun 2026 23:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b="geofqsOf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA5913A4F32;
+	Mon,  1 Jun 2026 14:02:42 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-m49204.qiye.163.com (mail-m49204.qiye.163.com [45.254.49.204])
+Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9909831159C
-	for <linux-scsi@vger.kernel.org>; Mon,  1 Jun 2026 23:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311EA41754;
+	Mon,  1 Jun 2026 14:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.136.29.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780356298; cv=none; b=ES1PNwE8AZlZ2aShtdcZFn2nERMWWhtDfEozburQDMEEctOTfENvGuoaLpUGCdxYeWsU7pPv8Jj5O53dJRzHuumVUo1AYEYwY5X+PmWPhDF7+uGf1g17kzcpPvdnthzyPFmDPsFPx7SaSJBOx6LBtV5OFieQ64j+qm69x7QLPcM=
+	t=1780322562; cv=none; b=uAik3n5z5BOhlpMHE66dUQzAFnubnlumSH0H1K4XFuSJZ3FIXsaxd3bsi7wpnB3EVne7jvZLNKlPjShGkMCvFhF3n9P7kRf6wm/l0sdy82O/BBRv1mDKSx0VY3rH3erBMycVL0/EQZqOY6Fj6gzV9fkQUKnQ3lIlFzyMYNpHC1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780356298; c=relaxed/simple;
-	bh=deChYCD5mReTSk78nHO1ZBTNRy1/qYgjAAUqvLzJ2r0=;
-	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TmFNgYTin/l2XjsYGJ3PXH7xICO8LbQlR9BsJ8uDuhko6mKNbWfmHtE+OlblAg+lM+JrEB3thPe48wXk9GVr3cUmlUcZ8RbSgrqVzuMD4Pc9dXPiib/33DnPsPtNYMAFI9wpCwa8klbHFKOMKZl/4w0U1PgRQpSaz8w4iW1Gvxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=geofqsOf; arc=none smtp.client-ip=45.254.49.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leap-io-kernel.com
-Received: from localhost.localdomain (unknown [222.130.22.242])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 4099a3e02;
-	Mon, 1 Jun 2026 20:07:38 +0800 (GMT+08:00)
-From: Dongdong Hao <doubled@leap-io-kernel.com>
-To: doubled@leap-io-kernel.com,
-	yjzhang@leap-io-kernel.com,
-	kezijie@leap-io-kernel.com,
-	linux-scsi@vger.kernel.org
-Subject: [PATCH 2/2] scsi: leapraid: Add driver documentation
-Date: Mon,  1 Jun 2026 20:07:35 +0800
-Message-Id: <ef1286ba30c4c20ba51a52f1514c05be83e7cc2a.1780312123.git.doubled@leap-io-kernel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1780312123.git.doubled@leap-io-kernel.com>
-References: <cover.1780312123.git.doubled@leap-io-kernel.com>
+	s=arc-20240116; t=1780322562; c=relaxed/simple;
+	bh=mmzAVlKO2xwJvSKtwzHN4Sz0Fl7+9YMXkQUntX3Nllw=;
+	h=Message-ID:Date:MIME-Version:From:To:Cc:Subject:Content-Type; b=CzvlxlG84ygTKQ3vKy0CTq4zNGw40SHHSn+B2zd5s6DmEVzkWL9Ipje1EASsyWThJWWvJz8sUtm+TBuKVfsTvnGiBbvJ1tq1k1cYADSF2t/Mv96kb05nmXytRKT5cTQ39kFKQNcetQJAFhZuQFsVXFlLMojz7GhSO2GDZ7YaDHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com; spf=fail smtp.mailfrom=proxmox.com; arc=none smtp.client-ip=94.136.29.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=proxmox.com
+Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
+	by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 9371C461E2;
+	Mon, 01 Jun 2026 15:55:21 +0200 (CEST)
+Message-ID: <d171cc76-bf25-48ce-b482-d344669dfc24@proxmox.com>
+Date: Mon, 1 Jun 2026 15:55:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9e831518bb03aekunm9d8d0e6d637b66
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaQ05OVhgdGUtJTUNIGkkaGFYVFA
-	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUlVSkhLVUlJVUlPSVlXWRYaDxIVHRRZQVlPS0hVSk
-	tISk9ITFVKS0tVSkJLS1kG
-DKIM-Signature: a=rsa-sha256;
-	b=geofqsOfV8s3R6IGPDv91q2Kd1J+WIfLUWPpgw8x2UqXpFR/2HAMGSeQj6ONEgrTUGB5Ei4NGsWDl0+ic4dhMoXlhcNGxunLFVh8n8alYUudGbtd6I2EzpHSMw9m7zHCvELS4szjGzNuRrvSGyPjtLTh5cBjKUay38A3a1NkBwumVJzY6X8VbEw5OqTMh3tV5H+HB5zcoaffFGjANPrpzlAFQBtJ80QuDN2+7JDfMplrPDPAztbPcrQL0PRMljhizJm3Qm57xAqHCpOpx2WP3t7OqO8ltRsUGuKsIAQESMhSW/c3jjM4g9ZouXMMQHfqoYnu6cWuNJz2FkRgZRSE+Q==; c=relaxed/relaxed; s=default; d=leap-io-kernel.com; v=1;
-	bh=xKw9dKNgblSPDaIpktelwecokIf1F2uhDQgRnI/A2VU=;
-	h=date:mime-version:subject:message-id:from;
-X-Spamd-Result: default: False [-0.66 / 15.00];
+User-Agent: Mozilla Thunderbird
+From: Mira Limbeck <m.limbeck@proxmox.com>
+Content-Language: en-US
+To: linux-scsi <linux-scsi@vger.kernel.org>
+Cc: kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+ shivasharan.srikanteshwara@broadcom.com,
+ "chandrakanth.patil" <chandrakanth.patil@broadcom.com>,
+ megaraidlinux.pdl@broadcom.com, linux-kernel@vger.kernel.org,
+ Friedrich Weber <f.weber@proxmox.com>, Daniel Herzig <d.herzig@proxmox.com>
+Subject: Kernel panic with megaraid_sas controller and certain NVMes
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Bm-Milter-Handled: 55990f41-d878-4baa-be0a-ee34c49e34d2
+X-Bm-Transport-Timestamp: 1780322085125
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[leap-io-kernel.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[leap-io-kernel.com:s=default];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[proxmox.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.904];
 	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	R_DKIM_NA(0.00)[];
+	DMARC_NA(0.00)[proxmox.com];
+	FROM_NEQ_ENVFROM(0.00)[m.limbeck@proxmox.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24326-lists,linux-scsi=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24339-lists,linux-scsi=lfdr.de];
-	RCPT_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[leap-io-kernel.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[doubled@leap-io-kernel.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 4C2B7626536
+	FORGED_RECIPIENTS_MAILLIST(0.00)[]
+X-Rspamd-Queue-Id: 2738F620B00
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-This patch adds the necessary documentation for the LeapRAID SCSI driver
-to the kernel's documentation tree.
+Dear megaraid_sas maintainers,
 
-Signed-off-by: Dongdong Hao <doubled@leap-io-kernel.com>
----
- Documentation/scsi/index.rst    |   1 +
- Documentation/scsi/leapraid.rst | 139 ++++++++++++++++++++++++++++++++
- 2 files changed, 140 insertions(+)
- create mode 100644 Documentation/scsi/leapraid.rst
+Some of our users encountered issues with MegaRAID controllers where
+certain NVMes(KIOXIA, Micron) lead to crashes during certain I/O patterns=
+=2E
+The crashes look similar to a previous issue with Broadcom controllers
+that use the mpt3sas driver that was recently fixed:
+Issue:
+https://lore.kernel.org/all/291f78bf-4b4a-40dd-867d-053b36c564b3@proxmox.=
+com/
+Fix: 04631f55afc5 ("scsi: mpt3sas: Limit NVMe request size to 2 MiB")
 
-diff --git a/Documentation/scsi/index.rst b/Documentation/scsi/index.rst
-index f15a0f348ae4..52970f0159ca 100644
---- a/Documentation/scsi/index.rst
-+++ b/Documentation/scsi/index.rst
-@@ -56,6 +56,7 @@ SCSI host adapter drivers
-    g_NCR5380
-    hpsa
-    hptiop
-+   leapraid
-    libsas
-    lpfc
-    megaraid
-diff --git a/Documentation/scsi/leapraid.rst b/Documentation/scsi/leapraid.rst
-new file mode 100644
-index 000000000000..e4a6a61c13f8
---- /dev/null
-+++ b/Documentation/scsi/leapraid.rst
-@@ -0,0 +1,139 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=========================
-+LeapRAID Driver for Linux
-+=========================
-+
-+Introduction
-+============
-+
-+LeapRAID is a storage RAID controller driver developed by LeapIO Tech. The
-+controller targets enterprise storage, cloud infrastructure, high performance
-+computing (HPC), and AI workloads.
-+
-+It provides high-performance storage virtualization over PCI Express Gen4
-+and supports both SAS and SATA HDDs and SSDs. It offers both Host Bus Adapter
-+and RAID modes to meet diverse deployment requirements.
-+
-+Supported devices
-+=================
-+
-+- LeapHBA-8200C
-+
-+Features
-+========
-+- PCIe Gen4 x8 host interface
-+- Support for SAS and SATA devices
-+- RAID levels: 0, 1, 10, 5, 50, 6, 60
-+- Advanced error handling and end-to-end data integrity
-+
-+LeapRAID specific host attributes
-+=================================
-+
-+::
-+
-+   /sys/class/scsi_host/host*/fw_queue_depth
-+   /sys/class/scsi_host/host*/host_sas_address
-+   /sys/class/scsi_host/host*/board_name
-+
-+The host "fw_queue_depth" read-only attribute shows the firmware queue
-+depth of the host.
-+
-+The host "host_sas_address" read-only attribute shows the SAS address
-+of the host.
-+
-+The host "board_name" read-only attribute shows the board name reported
-+by manufacturing page 0.
-+
-+LeapRAID specific disk attributes
-+=================================
-+
-+::
-+
-+   /sys/class/scsi_disk/host:bus:target:lun/device/sas_address
-+   /sys/class/scsi_disk/host:bus:target:lun/device/sas_device_handle
-+   /sys/class/scsi_disk/host:bus:target:lun/device/sas_ncq
-+
-+The disk "sas_address" read-only attribute shows the SAS address of the
-+disk.
-+
-+The read-only attribute "sas_device_handle" represents the disk's device
-+handle, which is a unique identifier maintained by the firmware.
-+
-+This attribute "sas_ncq" controls the Native Command Queuing (NCQ) feature
-+for SATA devices. A value of 0 indicates that NCQ is currently disabled or
-+not supported. Writing 1 attempts to enable NCQ on the device. If the
-+operation succeeds, the value remains 1, indicating that NCQ has been
-+successfully enabled.
-+
-+LeapRAID module parameters
-+==========================
-+
-+The following module parameters can be configured at driver load time to
-+control driver behavior and tuning options.
-+
-+1. open_pcie_trace
-+------------------
-+
-+This parameter controls whether PCIe transaction tracing is enabled in the
-+driver. When set to 1, PCIe trace collection is enabled by default, allowing
-+detailed tracing of PCIe operations for debugging and performance analysis.
-+Setting it to 0 disables the trace functionality to reduce overhead in
-+production environments.
-+
-+2. enable_mpio
-+--------------
-+
-+This parameter enables or disables multipath support for target devices.
-+When set to 1, multipath functionality is enabled (default), allowing
-+multiple paths to be established. Setting it to 0 disables multipath
-+handling.
-+
-+3. msix_disable
-+---------------
-+
-+This parameter specifies whether MSI-X interrupts should be disabled. By
-+default, 0 keeps MSI-X enabled, providing high-performance interrupt
-+handling. Setting this parameter to 1 disables MSI-X, causing the driver
-+to fall back to Legacy INTx interrupts.
-+
-+4. max_msix_vectors
-+-------------------
-+
-+This parameter sets the upper limit on the number of MSI-X interrupt
-+vectors that the driver will request during initialization. The default
-+value of -1 allows the driver to use all available vectors as provided
-+by the device. Setting a positive integer restricts the number of vectors.
-+
-+5. interrupt_mode
-+-----------------
-+
-+This parameter defines which interrupt delivery mechanism is used by the
-+driver. A value of 0 selects MSI-X mode (default), providing the highest
-+performance and scalability. A value of 1 switches to MSI mode, while 2
-+forces the driver to use legacy INTx interrupts.
-+
-+6. poll_queues
-+--------------
-+
-+This parameter specifies the number of I/O queues to be used when operating
-+in io_uring poll mode. The default value is 0.
-+
-+7. smart_poll
-+-------------
-+
-+This parameter controls the SMART polling mechanism for SATA drives. When
-+enabled (1), the driver periodically checks the health of connected SATA
-+devices, allowing early detection of potential drive failures. The default
-+value 0 disables SMART polling
-+
-+File Location
-+=============
-+The driver source is located at:
-+
-+``drivers/scsi/leapraid/``
-+
-+.. note::
-+
-+   This document is intended for kernel developers and system
-+   integrators who need to build, test, and deploy the LeapRAID driver.
--- 
-2.25.1
+In a testsystem we were able to reproduce it by passing disks through as
+JBOD and creating Ceph OSDs on top.
+Ceph I/O was required to reliably trigger the issue. We were able to trig=
+ger
+it by cloning RBD images.
+
+Hardware:
+Broadcom MegaRAID 9540-8i
+2x KIOXIA CD8-R SIE U.2
+
+Controller info:
+# storcli64 /c0 show
+Generating detailed summary of the adapter, it may take a while to comple=
+te.
+
+CLI Version =3D 007.3703.0000.0000 Jan 16, 2026
+Operating system =3D Linux 6.18.32-61832-plain
+Controller =3D 0
+Status =3D Success
+Description =3D None
+
+Product Name =3D MegaRAID 9540-8i
+Serial Number =3D SPF2101432
+SAS Address =3D  500062b224511780
+PCI Address =3D 00:81:00:00
+System Time =3D 05/22/2026 14:17:11
+Mfg. Date =3D 05/24/25
+Controller Time =3D 05/22/2026 14:17:10
+FW Package Build =3D 52.31.0-5827
+BIOS Version =3D 7.31.00.0_0x071F0000
+FW Version =3D 5.310.01-4101
+Driver Name =3D megaraid_sas
+Driver Version =3D 07.734.00.00-rc1
+Current Personality =3D RAID-Mode
+Vendor Id =3D 0x1000
+Device Id =3D 0x10E6
+SubVendor Id =3D 0x1000
+SubDevice Id =3D 0x40D5
+Host Interface =3D PCI-E
+Device Interface =3D SAS-12G
+Bus Number =3D 129
+Device Number =3D 0
+Function Number =3D 0
+Domain ID =3D 0
+Security Protocol =3D None
+JBOD Drives =3D 2
+
+JBOD LIST :
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+-------------------------------------------------------------------------=
+---------------------------
+EID:Slt DID State DG     Size Intf Med SED PI SeSz Model                 =
+                   Sp Type
+-------------------------------------------------------------------------=
+---------------------------
+14:0      1 JBOD  -  6.986 TB NVMe SSD N   N  512B KIOXIA KCD8XRUG7T68   =
+                   U  -
+14:1      0 JBOD  -  6.986 TB NVMe SSD N   N  512B KIOXIA KCD8XRUG7T68   =
+                   U  -
+-------------------------------------------------------------------------=
+---------------------------
+
+
+The kernel panic:
+May 21 14:36:13 pve-test-hba kernel: sd 1:0:1:0: [sdb] tag#630 page bound=
+ary ptr_sgl: 0x00000000ba62d13f
+May 21 14:36:13 pve-test-hba kernel: BUG: unable to handle page fault for=
+ address: ff663bcb81e7c000
+May 21 14:36:13 pve-test-hba kernel: #PF: supervisor write access in kern=
+el mode
+May 21 14:36:13 pve-test-hba kernel: #PF: error_code(0x0002) - not-presen=
+t page
+May 21 14:36:13 pve-test-hba kernel: PGD 100010067 P4D 1004d7067 PUD 1004=
+d8067 PMD 121a81067 PTE 0
+May 21 14:36:13 pve-test-hba kernel: Oops: Oops: 0002 [#1] SMP NOPTI
+May 21 14:36:13 pve-test-hba kernel: CPU: 12 UID: 64045 PID: 4903 Comm: t=
+p_osd_tp Tainted: G            E       6.18.32-61832-plain #33 PREEMPT(fu=
+ll)=20
+May 21 14:36:13 pve-test-hba kernel: Tainted: [E]=3DUNSIGNED_MODULE
+May 21 14:36:13 pve-test-hba kernel: Hardware name: [...]
+May 21 14:36:13 pve-test-hba kernel: RIP: 0010:megasas_build_and_issue_cm=
+d_fusion+0xeaa/0x1870 [megaraid_sas]
+May 21 14:36:13 pve-test-hba kernel: Code: 20 48 89 d1 48 83 e1 fc 83 e2 =
+01 48 0f 45 d9 4c 8b 73 10 44 8b 6b 18 4c 89 f9 4c 8d 79 08 45 85 fa 0f 8=
+4 fd 03 00 00 45 29 cc <4c> 89 31 48 83 c0 08 41 83 c0 01 45 29 cd 45 85 =
+e4 7f ab 44 89 c0
+May 21 14:36:13 pve-test-hba kernel: RSP: 0018:ff663bcb871078c0 EFLAGS: 0=
+0010246
+May 21 14:36:13 pve-test-hba kernel: RAX: 00000000ff90a000 RBX: ff3f858da=
+3005c40 RCX: ff663bcb81e7c000
+May 21 14:36:13 pve-test-hba kernel: RDX: ff663bcb81e7c008 RSI: ff3f858da=
+3005b08 RDI: 0000000000000000
+May 21 14:36:13 pve-test-hba kernel: RBP: ff663bcb87107990 R08: 000000000=
+0000200 R09: 0000000000001000
+May 21 14:36:13 pve-test-hba kernel: R10: 0000000000000fff R11: 000000000=
+0001000 R12: 0000000000000000
+May 21 14:36:13 pve-test-hba kernel: R13: 0000000000001000 R14: 000000008=
+ae00000 R15: ff663bcb81e7c008
+May 21 14:36:13 pve-test-hba kernel: FS:  00007672b3f866c0(0000) GS:ff3f8=
+59143379000(0000) knlGS:0000000000000000
+May 21 14:36:13 pve-test-hba kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 000=
+0000080050033
+May 21 14:36:13 pve-test-hba kernel: CR2: ff663bcb81e7c000 CR3: 000000011=
+40a400c CR4: 0000000000f71ef0
+May 21 14:36:13 pve-test-hba kernel: PKRU: 55555554
+May 21 14:36:13 pve-test-hba kernel: Call Trace:
+May 21 14:36:13 pve-test-hba kernel:  <TASK>
+May 21 14:36:13 pve-test-hba kernel:  ? scsi_alloc_sgtables+0xa3/0x3a0
+May 21 14:36:13 pve-test-hba kernel:  megasas_queue_command+0x125/0x1d0 [=
+megaraid_sas]
+May 21 14:36:13 pve-test-hba kernel:  scsi_queue_rq+0x40c/0xcc0
+May 21 14:36:13 pve-test-hba kernel:  blk_mq_dispatch_rq_list+0x124/0x750=
+
+May 21 14:36:13 pve-test-hba kernel:  ? sbitmap_get+0x73/0x180
+May 21 14:36:13 pve-test-hba kernel:  ? sbitmap_get+0x73/0x180
+May 21 14:36:13 pve-test-hba kernel:  __blk_mq_sched_dispatch_requests+0x=
+40b/0x600
+May 21 14:36:13 pve-test-hba kernel:  ? elv_attempt_insert_merge+0xa6/0x1=
+00
+May 21 14:36:13 pve-test-hba kernel:  blk_mq_sched_dispatch_requests+0x2d=
+/0x80
+May 21 14:36:13 pve-test-hba kernel:  blk_mq_run_hw_queue+0x2c3/0x330
+May 21 14:36:13 pve-test-hba kernel:  blk_mq_dispatch_list+0x141/0x460
+May 21 14:36:13 pve-test-hba kernel:  blk_mq_flush_plug_list+0x62/0x1e0
+May 21 14:36:13 pve-test-hba kernel:  __blk_flush_plug+0xdc/0x140
+May 21 14:36:13 pve-test-hba kernel:  blk_finish_plug+0x30/0x50
+May 21 14:36:13 pve-test-hba kernel:  __x64_sys_io_submit+0xd1/0x1e0
+May 21 14:36:13 pve-test-hba kernel:  ? __secure_computing+0x84/0xe0
+May 21 14:36:13 pve-test-hba kernel:  x64_sys_call+0x795/0x2350
+May 21 14:36:13 pve-test-hba kernel:  do_syscall_64+0x82/0x6a0
+May 21 14:36:13 pve-test-hba kernel:  ? count_memcg_events+0xd7/0x1a0
+May 21 14:36:13 pve-test-hba kernel:  ? handle_mm_fault+0x254/0x370
+May 21 14:36:13 pve-test-hba kernel:  ? do_user_addr_fault+0x2f8/0x830
+May 21 14:36:13 pve-test-hba kernel:  ? irqentry_exit_to_user_mode+0x2e/0=
+x320
+May 21 14:36:13 pve-test-hba kernel:  ? irqentry_exit+0x43/0x50
+May 21 14:36:13 pve-test-hba kernel:  ? exc_page_fault+0x90/0x1b0
+May 21 14:36:13 pve-test-hba kernel:  entry_SYSCALL_64_after_hwframe+0x76=
+/0x7e
+May 21 14:36:13 pve-test-hba kernel: RIP: 0033:0x7672d6f1a7b9
+May 21 14:36:13 pve-test-hba kernel: Code: ff c3 66 2e 0f 1f 84 00 00 00 =
+00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c=
+8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 27 66 0d 00 =
+f7 d8 64 89 01 48
+May 21 14:36:13 pve-test-hba kernel: RSP: 002b:00007672b3f7f958 EFLAGS: 0=
+0000246 ORIG_RAX: 00000000000000d1
+May 21 14:36:13 pve-test-hba kernel: RAX: ffffffffffffffda RBX: 00007672b=
+3f83740 RCX: 00007672d6f1a7b9
+May 21 14:36:13 pve-test-hba kernel: RDX: 00007672b3f7f990 RSI: 000000000=
+0000021 RDI: 00007672d22de000
+May 21 14:36:13 pve-test-hba kernel: RBP: 00007672d22de000 R08: 000000000=
+0000000 R09: 0000561c23ca5d80
+May 21 14:36:13 pve-test-hba kernel: R10: 00007672b3f81a3c R11: 000000000=
+0000246 R12: 0000000000000021
+May 21 14:36:13 pve-test-hba kernel: R13: 0000000000000000 R14: 00007672b=
+3f7f990 R15: 0000561c0e7de320
+May 21 14:36:13 pve-test-hba kernel:  </TASK>
+May 21 14:36:13 pve-test-hba kernel: Modules linked in: ceph(E) libceph(E=
+) netfs(E) tcp_diag(E) inet_diag(E) nf_tables(E) sunrpc(E) bonding(E) tls=
+(E) softdog(E) nfnetlink_log(E) binfmt_misc(E) ipmi_ssif(E) amd_atl(E) in=
+tel_rapl_msr(E) intel_rapl_common(E) amd64_edac(E) edac_mce_amd(E) kvm_am=
+d(E) dax_hmem(E) rndis_host(E) cxl_acpi(E) kvm(E) cdc_ether(E) cxl_port(E=
+) irqbypass(E) cxl_pmem(E) usbnet(E) input_leds(E) joydev(E) acpi_ipmi(E)=
+ ses(E) ast(E) ghash_clmulni_intel(E) cxl_core(E) enclosure(E) aesni_inte=
+l(E) i2c_algo_bit(E) mii(E) scsi_transport_sas(E) einj(E) rapl(E) ipmi_si=
+(E) ccp(E) spd5118(E) pcspkr(E) hsmp_acpi(E) k10temp(E) wmi_bmof(E) ipmi_=
+devintf(E) hsmp_common(E) ipmi_msghandler(E) mac_hid(E) sch_fq_codel(E) m=
+sr(E) vhost_net(E) vhost(E) vhost_iotlb(E) nvme_fabrics(E) tap(E) nvme_co=
+re(E) nvme_keyring(E) nvme_auth(E) hkdf(E) efi_pstore(E) nfnetlink(E) dmi=
+_sysfs(E) autofs4(E) btrfs(E) blake2b_generic(E) xor(E) hid_generic(E) us=
+bmouse(E) usbhid(E) hid(E) raid6_pq(E) dm_thin_pool(E) dm_persistent_data=
+(E) dm_bio_prison(E) dm_bufio(E)
+May 21 14:36:13 pve-test-hba kernel:  xhci_pci_renesas(E) xhci_pci(E) tg3=
+(E) xhci_hcd(E) ahci(E) megaraid_sas(E) libahci(E) i2c_piix4(E) i2c_smbus=
+(E) wmi(E) 8250_dw(E)
+May 21 14:36:13 pve-test-hba kernel: CR2: ff663bcb81e7c000
+May 21 14:36:13 pve-test-hba kernel: ---[ end trace 0000000000000000 ]---=
+
+May 21 14:36:13 pve-test-hba kernel: RIP: 0010:megasas_build_and_issue_cm=
+d_fusion+0xeaa/0x1870 [megaraid_sas]
+May 21 14:36:13 pve-test-hba kernel: Code: 20 48 89 d1 48 83 e1 fc 83 e2 =
+01 48 0f 45 d9 4c 8b 73 10 44 8b 6b 18 4c 89 f9 4c 8d 79 08 45 85 fa 0f 8=
+4 fd 03 00 00 45 29 cc <4c> 89 31 48 83 c0 08 41 83 c0 01 45 29 cd 45 85 =
+e4 7f ab 44 89 c0
+May 21 14:36:13 pve-test-hba kernel: RSP: 0018:ff663bcb871078c0 EFLAGS: 0=
+0010246
+May 21 14:36:13 pve-test-hba kernel: RAX: 00000000ff90a000 RBX: ff3f858da=
+3005c40 RCX: ff663bcb81e7c000
+May 21 14:36:13 pve-test-hba kernel: RDX: ff663bcb81e7c008 RSI: ff3f858da=
+3005b08 RDI: 0000000000000000
+May 21 14:36:13 pve-test-hba kernel: RBP: ff663bcb87107990 R08: 000000000=
+0000200 R09: 0000000000001000
+May 21 14:36:13 pve-test-hba kernel: R10: 0000000000000fff R11: 000000000=
+0001000 R12: 0000000000000000
+May 21 14:36:13 pve-test-hba kernel: R13: 0000000000001000 R14: 000000008=
+ae00000 R15: ff663bcb81e7c008
+May 21 14:36:13 pve-test-hba kernel: FS:  00007672b3f866c0(0000) GS:ff3f8=
+59143379000(0000) knlGS:0000000000000000
+May 21 14:36:13 pve-test-hba kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 000=
+0000080050033
+May 21 14:36:13 pve-test-hba kernel: CR2: ff663bcb81e7c000 CR3: 000000011=
+40a400c CR4: 0000000000f71ef0
+May 21 14:36:13 pve-test-hba kernel: PKRU: 55555554
+May 21 14:36:13 pve-test-hba kernel: note: tp_osd_tp[4903] exited with ir=
+qs disabled
+May 21 14:36:13 pve-test-hba kernel: ------------[ cut here ]------------=
+
+May 21 14:36:13 pve-test-hba kernel: WARNING: CPU: 4 PID: 4903 at kernel/=
+exit.c:905 do_exit+0x82b/0xa70
+May 21 14:36:13 pve-test-hba kernel: Modules linked in: ceph(E) libceph(E=
+) netfs(E) tcp_diag(E) inet_diag(E) nf_tables(E) sunrpc(E) bonding(E) tls=
+(E) softdog(E) nfnetlink_log(E) binfmt_misc(E) ipmi_ssif(E) amd_atl(E) in=
+tel_rapl_msr(E) intel_rapl_common(E) amd64_edac(E) edac_mce_amd(E) kvm_am=
+d(E) dax_hmem(E) rndis_host(E) cxl_acpi(E) kvm(E) cdc_ether(E) cxl_port(E=
+) irqbypass(E) cxl_pmem(E) usbnet(E) input_leds(E) joydev(E) acpi_ipmi(E)=
+ ses(E) ast(E) ghash_clmulni_intel(E) cxl_core(E) enclosure(E) aesni_inte=
+l(E) i2c_algo_bit(E) mii(E) scsi_transport_sas(E) einj(E) rapl(E) ipmi_si=
+(E) ccp(E) spd5118(E) pcspkr(E) hsmp_acpi(E) k10temp(E) wmi_bmof(E) ipmi_=
+devintf(E) hsmp_common(E) ipmi_msghandler(E) mac_hid(E) sch_fq_codel(E) m=
+sr(E) vhost_net(E) vhost(E) vhost_iotlb(E) nvme_fabrics(E) tap(E) nvme_co=
+re(E) nvme_keyring(E) nvme_auth(E) hkdf(E) efi_pstore(E) nfnetlink(E) dmi=
+_sysfs(E) autofs4(E) btrfs(E) blake2b_generic(E) xor(E) hid_generic(E) us=
+bmouse(E) usbhid(E) hid(E) raid6_pq(E) dm_thin_pool(E) dm_persistent_data=
+(E) dm_bio_prison(E) dm_bufio(E)
+May 21 14:36:13 pve-test-hba kernel:  xhci_pci_renesas(E) xhci_pci(E) tg3=
+(E) xhci_hcd(E) ahci(E) megaraid_sas(E) libahci(E) i2c_piix4(E) i2c_smbus=
+(E) wmi(E) 8250_dw(E)
+May 21 14:36:13 pve-test-hba kernel: CPU: 4 UID: 64045 PID: 4903 Comm: tp=
+_osd_tp Tainted: G      D     E       6.18.32-61832-plain #33 PREEMPT(ful=
+l)=20
+May 21 14:36:13 pve-test-hba kernel: Tainted: [D]=3DDIE, [E]=3DUNSIGNED_M=
+ODULE
+May 21 14:36:13 pve-test-hba kernel: Hardware name: [...]
+May 21 14:36:13 pve-test-hba kernel: RIP: 0010:do_exit+0x82b/0xa70
+May 21 14:36:13 pve-test-hba kernel: Code: fe ff ff 48 8b bb 10 0b 00 00 =
+31 f6 e8 ee e1 ff ff e9 e6 fd ff ff 48 89 df e8 b1 44 16 00 e9 95 f9 ff f=
+f 0f 0b e9 11 f8 ff ff <0f> 0b e9 18 f8 ff ff 48 8d 55 c0 b9 04 00 00 00 =
+31 c0 48 89 d7 f3
+May 21 14:36:13 pve-test-hba kernel: RSP: 0018:ff663bcb87107ec0 EFLAGS: 0=
+0010286
+May 21 14:36:13 pve-test-hba kernel: RAX: 0000000000000286 RBX: ff3f858d9=
+6d1b0c0 RCX: 0000000000000000
+May 21 14:36:13 pve-test-hba kernel: RDX: 000000000000270f RSI: 000000000=
+0002710 RDI: 0000000000000009
+May 21 14:36:13 pve-test-hba kernel: RBP: ff663bcb87107f10 R08: 000000000=
+0000000 R09: 0000000000000000
+May 21 14:36:13 pve-test-hba kernel: R10: 0000000000000000 R11: 000000000=
+0000000 R12: 0000000000000009
+May 21 14:36:13 pve-test-hba kernel: R13: 0000000000000001 R14: ff3f858d9=
+6d1b0c0 R15: 0000000000000000
+May 21 14:36:13 pve-test-hba kernel: FS:  00007672b3f866c0(0000) GS:ff3f8=
+59142f79000(0000) knlGS:0000000000000000
+May 21 14:36:13 pve-test-hba kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 000=
+0000080050033
+May 21 14:36:13 pve-test-hba kernel: CR2: 00007e0d41421070 CR3: 000000011=
+40a400c CR4: 0000000000f71ef0
+May 21 14:36:13 pve-test-hba kernel: PKRU: 55555554
+May 21 14:36:13 pve-test-hba kernel: Call Trace:
+May 21 14:36:13 pve-test-hba kernel:  <TASK>
+May 21 14:36:13 pve-test-hba kernel:  make_task_dead+0x93/0xa0
+May 21 14:36:13 pve-test-hba kernel:  rewind_stack_and_make_dead+0x16/0x2=
+0
+May 21 14:36:13 pve-test-hba kernel: RIP: 0033:0x7672d6f1a7b9
+May 21 14:36:13 pve-test-hba kernel: Code: ff c3 66 2e 0f 1f 84 00 00 00 =
+00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c=
+8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 27 66 0d 00 =
+f7 d8 64 89 01 48
+May 21 14:36:13 pve-test-hba kernel: RSP: 002b:00007672b3f7f958 EFLAGS: 0=
+0000246 ORIG_RAX: 00000000000000d1
+May 21 14:36:13 pve-test-hba kernel: RAX: ffffffffffffffda RBX: 00007672b=
+3f83740 RCX: 00007672d6f1a7b9
+May 21 14:36:13 pve-test-hba kernel: RDX: 00007672b3f7f990 RSI: 000000000=
+0000021 RDI: 00007672d22de000
+May 21 14:36:13 pve-test-hba kernel: RBP: 00007672d22de000 R08: 000000000=
+0000000 R09: 0000561c23ca5d80
+May 21 14:36:13 pve-test-hba kernel: R10: 00007672b3f81a3c R11: 000000000=
+0000246 R12: 0000000000000021
+May 21 14:36:13 pve-test-hba kernel: R13: 0000000000000000 R14: 00007672b=
+3f7f990 R15: 0000561c0e7de320
+May 21 14:36:13 pve-test-hba kernel:  </TASK>
+May 21 14:36:13 pve-test-hba kernel: ---[ end trace 0000000000000000 ]---=
+
+
+
+We tested multiple kernels between:
+038d61fd6422 ("Linux 6.16") tag: v6.16
+5d6919055dec ("Linux 7.1-rc3") tag: v7.1-rc3
+
+All of them were built from stable, no additional patches on top.
+
+We first see the issue with v6.17, specifically we first see the issue
+with 9b8b84879d4a ("block: Increase BLK_DEF_MAX_SECTORS_CAP"), the same
+one as for the mpt3sas issue. However, for the mpt3sas issue, it was
+discussed that this commit seems to merely uncover a preexisting issue
+in the driver [0], likely the case is similar here.
+
+Interestingly enough, we also found that our reproducer did not trigger
+a crash anymore on v7.0 (028ef9c96e96).
+git bisect identified the following as the first good commit (with which
+our reproducer doesn't trigger a crash anymore):
+12da89e8844a ("block: open code bio_add_page and fix handling of
+mismatching P2P ranges")
+
+We are not sure why it appears to fix the issue in case of our
+reproducer. Also, we are not sure if it fixes the issue generally, or
+just a specific codepath our reproducer is hitting.
+Some users report that their setups with Micron NVMes still trigger the
+issue, so probably the commit is not a complete fix. We don't have a
+test system with Micron NVMes available to test ourselves though.
+
+While looking for the root cause, we found an unapplied patch that might
+be related [1].
+
+Does anyone have an idea how to further debug this issue?
+
+
+[0]
+https://lore.kernel.org/all/7a0cfc66-3131-4b94-87f2-cbb96595ebb6@kernel.o=
+rg/
+[1]
+https://lore.kernel.org/all/GPhsSM0vkgyIrs0DIZ62qeUZX7X4RxwQXVKiuvMx-lHQV=
+SPDxpztUyQOGS0xikqvJ-Z94hMV-dW_5KN_0CX2hsfV7kTf_t0MTf6vdAAaSEc=3D@magik.n=
+et/
 
 
