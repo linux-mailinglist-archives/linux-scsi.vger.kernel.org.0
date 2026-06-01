@@ -1,55 +1,50 @@
-Return-Path: <linux-scsi+bounces-24322-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24325-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sCC1GptzHWp8bAkAu9opvQ
-	(envelope-from <linux-scsi+bounces-24322-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 01 Jun 2026 13:57:15 +0200
+	id IDLCGDqJHWrAbQkAu9opvQ
+	(envelope-from <linux-scsi+bounces-24325-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 01 Jun 2026 15:29:30 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08AAC61EB22
-	for <lists+linux-scsi@lfdr.de>; Mon, 01 Jun 2026 13:57:14 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CF366200AB
+	for <lists+linux-scsi@lfdr.de>; Mon, 01 Jun 2026 15:29:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id EC7263009CE0
-	for <lists+linux-scsi@lfdr.de>; Mon,  1 Jun 2026 11:57:13 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B16113049E25
+	for <lists+linux-scsi@lfdr.de>; Mon,  1 Jun 2026 13:23:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D9435B646;
-	Mon,  1 Jun 2026 11:57:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CC6A38655A;
+	Mon,  1 Jun 2026 13:23:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b="pOz+iEsQ"
+	dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b="jT1hpTjc"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-m49246.qiye.163.com (mail-m49246.qiye.163.com [45.254.49.246])
+Received: from mail-m1973191.qiye.163.com (mail-m1973191.qiye.163.com [220.197.31.91])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4059C1A9F85
-	for <linux-scsi@vger.kernel.org>; Mon,  1 Jun 2026 11:57:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6793A3546EA
+	for <linux-scsi@vger.kernel.org>; Mon,  1 Jun 2026 13:23:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780315030; cv=none; b=QQryCbCzGQBW0p6zmql22w+o8cT0uU3hQVyMbxCVlNeEZMsqAw8OMHOG7Zx/9j4tknmqFnNO+w2M6/OY0bUDzrXQvK04rzVqddtHtrzOpheDBPDTnmS2qVb1ZPoRfh/KoBalcmkYSCi2Oiu/3VfMBr9miSwYAYu2ZN5Cz8oS1yg=
+	t=1780320200; cv=none; b=G1MpTmE7MsMJ63SavPhqVi3Z3NU9R/5B/1ZoFEjjjUJRbdEwIEMtmF1oBgo6M25sP/URPqhom1cRo891CUB5t15Q+vHy3bb8K0rtsDKcDFXK55QIX59gNRM5eLWcd4SXS/yTvbfCyf9SHnFJJIpaZhA85YV+iviDES7zotuqYy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780315030; c=relaxed/simple;
-	bh=deChYCD5mReTSk78nHO1ZBTNRy1/qYgjAAUqvLzJ2r0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nrK6dgmPfFBPPMSxIQkrGBGZg1KdVE3ahOkE96ejchWemQMz0ZGUL8W4kqEEVpd1Jky+kb/nytGkClprftuDRdl+cMRzh8M2qUidHhXN1Zek0RT3hnZuAzc++GB46ni5jx0NYGt6n/2VGQawjkjdLadnJPVWw2kdKOT210XjqzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=pOz+iEsQ; arc=none smtp.client-ip=45.254.49.246
+	s=arc-20240116; t=1780320200; c=relaxed/simple;
+	bh=b8sikl8mGUh0lYKMnMqJbgwqFYGSZZrRtuCfgbcx3Bs=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=obeopgsuAsBmVIkOTxohCx4PRM58KdfQp2nPP26xUwB2mbyDIaff8VNQj6eBgpXHsaBpdic75lVobAgUH32Dn3cH2mbvTSQdO/wHBvFQmF+qTd/JeUOYjjsf4YKuTDtmhGcAL+yvmYZtY+NkHZNxXYfVAwIvZV/yexTNWlBgPLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=jT1hpTjc; arc=none smtp.client-ip=220.197.31.91
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leap-io-kernel.com
 Received: from localhost.localdomain (unknown [222.130.22.242])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 409944e5f;
-	Mon, 1 Jun 2026 19:51:50 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 4099a3dfe;
+	Mon, 1 Jun 2026 20:07:36 +0800 (GMT+08:00)
 From: Dongdong Hao <doubled@leap-io-kernel.com>
-To: James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com
-Cc: doubled@leap-io-kernel.com,
+To: doubled@leap-io-kernel.com,
 	yjzhang@leap-io-kernel.com,
 	kezijie@leap-io-kernel.com,
 	linux-scsi@vger.kernel.org
-Subject: [PATCH 2/2] scsi: leapraid: Add driver documentation
-Date: Mon,  1 Jun 2026 19:51:47 +0800
-Message-Id: <ef1286ba30c4c20ba51a52f1514c05be83e7cc2a.1780312123.git.doubled@leap-io-kernel.com>
+Subject: [PATCH 0/2] scsi: leapraid: Add new scsi driver
+Date: Mon,  1 Jun 2026 20:07:33 +0800
+Message-Id: <cover.1780312123.git.doubled@leap-io-kernel.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1780312123.git.doubled@leap-io-kernel.com>
-References: <cover.1780312123.git.doubled@leap-io-kernel.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -57,34 +52,34 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9e8306a33403aekunmd071acc9634e29
+X-HM-Tid: 0a9e83150f5c03aekunm9d8d0e6d637b46
 X-HM-MType: 1
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCTUpKVh1LTE5LHhgYQk4YS1YVFA
+	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCTE5OVksfQk8aT0xJTEMfTVYVFA
 	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUlVSkhLVUlJVUlPSVlXWRYaDxIVHRRZQVlPS0hVSk
 	tISk9ITFVKS0tVSkJLS1kG
 DKIM-Signature: a=rsa-sha256;
-	b=pOz+iEsQQ+wGPHvM3M/C2DlfyKr2vlVxTn4ubqKFXbvlFKw6OnpicvNakqh9AQNjPZo03u/XLjrVq8LiJkUNAP08h1weSF3Kotv+j8ry8TNVRDXd7WxC/o0tgOg0OupcXQPYwo85U49Lakst3bQ9PkaE4oxliXK1KoFVtW1A9O4E4ngVO9HVxc64hoxjxxPf3kt9yknGGGZ5FtLPgaLHu1dn06Xzr61hG0xhw2bnppuOIHaF/ETn8aOBRQStuxtPzs4QlQdcC9nfALtq7dyQ3pzhobm+Ket4sHMQE3DNnuBYDeaZ20g6JSFIhBDPTRW+K/sFgaFD4EDuVG3RGNHvnQ==; c=relaxed/relaxed; s=default; d=leap-io-kernel.com; v=1;
-	bh=xKw9dKNgblSPDaIpktelwecokIf1F2uhDQgRnI/A2VU=;
+	b=jT1hpTjc3PyhsadtiX4rTR2rWK5A4cQHu/OJJxIyd0NljYUNb5PBjngJSKvbO37xpcPECo2KsQ8hXjmB5ACcgSuk8BjGumOpDKKhPx/U79kE3k0eRoZXRLV6MD6MLnnBItw50XAoQOibXcWMmur7cKSrZEF56gb+locr+5hfEA72l3z4fVK/by/vFSaJt0ifjS7XOgu4T9wqhHOjfxw8UUtQ7804IQfIlkvKaVo3hW6lcbNNLx7eRZ9U4GcHxl2CaSllBPQDGxBP1MdjOPEJZs7VaEWYHWvfSluvTds07VF0kj1rnQ+lSFraGMPiFSiWfBgs0u5X7uvubhmugr2bBg==; c=relaxed/relaxed; s=default; d=leap-io-kernel.com; v=1;
+	bh=GayGnWova0n+aBZrxwyFw0C3bbHcinI+vkKohLa5hzw=;
 	h=date:mime-version:subject:message-id:from;
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[leap-io-kernel.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[leap-io-kernel.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24322-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24325-lists,linux-scsi=lfdr.de];
+	RCPT_COUNT_THREE(0.00)[4];
 	DKIM_TRACE(0.00)[leap-io-kernel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MIME_TRACE(0.00)[0:+];
 	FROM_NEQ_ENVFROM(0.00)[doubled@leap-io-kernel.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -92,178 +87,39 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-0.999];
 	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,leap-io-kernel.com:email,leap-io-kernel.com:mid,leap-io-kernel.com:dkim]
-X-Rspamd-Queue-Id: 08AAC61EB22
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,leap-io-kernel.com:mid,leap-io-kernel.com:dkim]
+X-Rspamd-Queue-Id: 0CF366200AB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-This patch adds the necessary documentation for the LeapRAID SCSI driver
-to the kernel's documentation tree.
+Dongdong Hao (2):
+  scsi: leapraid: Add new scsi driver
+  scsi: leapraid: Add driver documentation
 
-Signed-off-by: Dongdong Hao <doubled@leap-io-kernel.com>
----
- Documentation/scsi/index.rst    |   1 +
- Documentation/scsi/leapraid.rst | 139 ++++++++++++++++++++++++++++++++
- 2 files changed, 140 insertions(+)
+ Documentation/scsi/index.rst               |    1 +
+ Documentation/scsi/leapraid.rst            |  139 +
+ MAINTAINERS                                |    7 +
+ drivers/scsi/Kconfig                       |    1 +
+ drivers/scsi/Makefile                      |    1 +
+ drivers/scsi/leapraid/Kconfig              |   14 +
+ drivers/scsi/leapraid/Makefile             |   10 +
+ drivers/scsi/leapraid/leapraid.h           | 2071 +++++
+ drivers/scsi/leapraid/leapraid_app.c       |  705 ++
+ drivers/scsi/leapraid/leapraid_func.c      | 9053 ++++++++++++++++++++
+ drivers/scsi/leapraid/leapraid_func.h      | 1566 ++++
+ drivers/scsi/leapraid/leapraid_os.c        | 2516 ++++++
+ drivers/scsi/leapraid/leapraid_transport.c | 1387 +++
+ 13 files changed, 17471 insertions(+)
  create mode 100644 Documentation/scsi/leapraid.rst
+ create mode 100644 drivers/scsi/leapraid/Kconfig
+ create mode 100644 drivers/scsi/leapraid/Makefile
+ create mode 100644 drivers/scsi/leapraid/leapraid.h
+ create mode 100644 drivers/scsi/leapraid/leapraid_app.c
+ create mode 100644 drivers/scsi/leapraid/leapraid_func.c
+ create mode 100644 drivers/scsi/leapraid/leapraid_func.h
+ create mode 100644 drivers/scsi/leapraid/leapraid_os.c
+ create mode 100644 drivers/scsi/leapraid/leapraid_transport.c
 
-diff --git a/Documentation/scsi/index.rst b/Documentation/scsi/index.rst
-index f15a0f348ae4..52970f0159ca 100644
---- a/Documentation/scsi/index.rst
-+++ b/Documentation/scsi/index.rst
-@@ -56,6 +56,7 @@ SCSI host adapter drivers
-    g_NCR5380
-    hpsa
-    hptiop
-+   leapraid
-    libsas
-    lpfc
-    megaraid
-diff --git a/Documentation/scsi/leapraid.rst b/Documentation/scsi/leapraid.rst
-new file mode 100644
-index 000000000000..e4a6a61c13f8
---- /dev/null
-+++ b/Documentation/scsi/leapraid.rst
-@@ -0,0 +1,139 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=========================
-+LeapRAID Driver for Linux
-+=========================
-+
-+Introduction
-+============
-+
-+LeapRAID is a storage RAID controller driver developed by LeapIO Tech. The
-+controller targets enterprise storage, cloud infrastructure, high performance
-+computing (HPC), and AI workloads.
-+
-+It provides high-performance storage virtualization over PCI Express Gen4
-+and supports both SAS and SATA HDDs and SSDs. It offers both Host Bus Adapter
-+and RAID modes to meet diverse deployment requirements.
-+
-+Supported devices
-+=================
-+
-+- LeapHBA-8200C
-+
-+Features
-+========
-+- PCIe Gen4 x8 host interface
-+- Support for SAS and SATA devices
-+- RAID levels: 0, 1, 10, 5, 50, 6, 60
-+- Advanced error handling and end-to-end data integrity
-+
-+LeapRAID specific host attributes
-+=================================
-+
-+::
-+
-+   /sys/class/scsi_host/host*/fw_queue_depth
-+   /sys/class/scsi_host/host*/host_sas_address
-+   /sys/class/scsi_host/host*/board_name
-+
-+The host "fw_queue_depth" read-only attribute shows the firmware queue
-+depth of the host.
-+
-+The host "host_sas_address" read-only attribute shows the SAS address
-+of the host.
-+
-+The host "board_name" read-only attribute shows the board name reported
-+by manufacturing page 0.
-+
-+LeapRAID specific disk attributes
-+=================================
-+
-+::
-+
-+   /sys/class/scsi_disk/host:bus:target:lun/device/sas_address
-+   /sys/class/scsi_disk/host:bus:target:lun/device/sas_device_handle
-+   /sys/class/scsi_disk/host:bus:target:lun/device/sas_ncq
-+
-+The disk "sas_address" read-only attribute shows the SAS address of the
-+disk.
-+
-+The read-only attribute "sas_device_handle" represents the disk's device
-+handle, which is a unique identifier maintained by the firmware.
-+
-+This attribute "sas_ncq" controls the Native Command Queuing (NCQ) feature
-+for SATA devices. A value of 0 indicates that NCQ is currently disabled or
-+not supported. Writing 1 attempts to enable NCQ on the device. If the
-+operation succeeds, the value remains 1, indicating that NCQ has been
-+successfully enabled.
-+
-+LeapRAID module parameters
-+==========================
-+
-+The following module parameters can be configured at driver load time to
-+control driver behavior and tuning options.
-+
-+1. open_pcie_trace
-+------------------
-+
-+This parameter controls whether PCIe transaction tracing is enabled in the
-+driver. When set to 1, PCIe trace collection is enabled by default, allowing
-+detailed tracing of PCIe operations for debugging and performance analysis.
-+Setting it to 0 disables the trace functionality to reduce overhead in
-+production environments.
-+
-+2. enable_mpio
-+--------------
-+
-+This parameter enables or disables multipath support for target devices.
-+When set to 1, multipath functionality is enabled (default), allowing
-+multiple paths to be established. Setting it to 0 disables multipath
-+handling.
-+
-+3. msix_disable
-+---------------
-+
-+This parameter specifies whether MSI-X interrupts should be disabled. By
-+default, 0 keeps MSI-X enabled, providing high-performance interrupt
-+handling. Setting this parameter to 1 disables MSI-X, causing the driver
-+to fall back to Legacy INTx interrupts.
-+
-+4. max_msix_vectors
-+-------------------
-+
-+This parameter sets the upper limit on the number of MSI-X interrupt
-+vectors that the driver will request during initialization. The default
-+value of -1 allows the driver to use all available vectors as provided
-+by the device. Setting a positive integer restricts the number of vectors.
-+
-+5. interrupt_mode
-+-----------------
-+
-+This parameter defines which interrupt delivery mechanism is used by the
-+driver. A value of 0 selects MSI-X mode (default), providing the highest
-+performance and scalability. A value of 1 switches to MSI mode, while 2
-+forces the driver to use legacy INTx interrupts.
-+
-+6. poll_queues
-+--------------
-+
-+This parameter specifies the number of I/O queues to be used when operating
-+in io_uring poll mode. The default value is 0.
-+
-+7. smart_poll
-+-------------
-+
-+This parameter controls the SMART polling mechanism for SATA drives. When
-+enabled (1), the driver periodically checks the health of connected SATA
-+devices, allowing early detection of potential drive failures. The default
-+value 0 disables SMART polling
-+
-+File Location
-+=============
-+The driver source is located at:
-+
-+``drivers/scsi/leapraid/``
-+
-+.. note::
-+
-+   This document is intended for kernel developers and system
-+   integrators who need to build, test, and deploy the LeapRAID driver.
 -- 
 2.25.1
 
