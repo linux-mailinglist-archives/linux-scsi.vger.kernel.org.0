@@ -1,261 +1,267 @@
-Return-Path: <linux-scsi+bounces-24376-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24377-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 1Qz/KVTRHmq/VQAAu9opvQ
-	(envelope-from <linux-scsi+bounces-24376-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 14:49:24 +0200
+	id EgXxMN7WHmrUVgAAu9opvQ
+	(envelope-from <linux-scsi+bounces-24377-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 15:13:02 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0760962E26B
-	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 14:49:24 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCE3162E576
+	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 15:13:01 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24376-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24376-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=none;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=oYCy8oWL;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24377-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24377-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CB06230ADFE9
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jun 2026 12:42:02 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 372243060614
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jun 2026 13:05:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C0A3DA5D0;
-	Tue,  2 Jun 2026 12:42:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E08F3E5A15;
+	Tue,  2 Jun 2026 13:04:59 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from spam.asrmicro.com (asrmicro.com [210.13.118.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B026431F98D;
-	Tue,  2 Jun 2026 12:41:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5E83DC4C8
+	for <linux-scsi@vger.kernel.org>; Tue,  2 Jun 2026 13:04:57 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780404120; cv=none; b=B0hasdIkZaFygN3M4ssStxgdjGm5OP/8OS/MIyBGCa+teAha6bKb7GbdHM9zyYgfH2WyM0Uj4ilYjauYTmAbn6VaWtZMnhLlUR4oyrIZ1FLeClBh8+r2RP0tIi0t0VhWg2gaaQgEGnboiOOj+T47EHw+ru/MpE6wZ7hNorUR8FA=
+	t=1780405498; cv=none; b=Xw/ESbDWNzLepPu3tOdgbJ0D7S9Jkr63GbO/sJJggkE2iNDn3B3R8DpKar6JiHmlEEwmB9J3X1a7xw/dk37mkJ9JpiRIHKFPY/K8cUaUwa7K6PEIbwkj4vUmW1dXB/HcImuDSEGxP4yrqXQpCBtb4afSVe18K0oQhnGZzVXY7Qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780404120; c=relaxed/simple;
-	bh=dJPL1VtL29PqF9SrW1r6y7fAUBstF6yh2xQM4ny7B/A=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=apcWqXnQHBZNwGKUuWCJQO/3+6NLsaVJDcWN2Ai2G8HOCJLNq1LTx3Z95jPFHsFlQ8soSbG7oztnVV67RwC6b6t1EM9K2BrXnJFTkRllC02eyxPnnI5CiO3JXZMzegSNfTVGiApA6/UP+WIIW6Zeuyyrgu9xwcIefVg78osr+0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=asrmicro.com; spf=pass smtp.mailfrom=asrmicro.com; arc=none smtp.client-ip=210.13.118.86
-Received: from exch02.asrmicro.com (exch02.asrmicro.com [10.1.24.122])
-	by spam.asrmicro.com with ESMTPS id 652Cewih097382
-	(version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=FAIL);
-	Tue, 2 Jun 2026 20:40:58 +0800 (GMT-8)
-	(envelope-from hongjiefang@asrmicro.com)
-Received: from localhost (10.1.170.248) by exch02.asrmicro.com (10.1.24.122)
- with Microsoft SMTP Server (TLS) id 15.0.847.32; Tue, 2 Jun 2026 20:41:03
- +0800
-From: Hongjie Fang <hongjiefang@asrmicro.com>
-To: <alim.akhtar@samsung.com>, <avri.altman@wdc.com>, <bvanassche@acm.org>,
-        <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
-        <peter.wang@mediatek.com>, <beanhuo@micron.com>
-CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4] scsi: ufs: core: handle PM commands timeout before SCSI EH
-Date: Tue, 2 Jun 2026 20:41:02 +0800
-Message-ID: <20260602124103.1581617-1-hongjiefang@asrmicro.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1780405498; c=relaxed/simple;
+	bh=Lv88enNvVjptEHx4RPDpSYkoiYl4NHCAht/k1YwYRy4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CgzmWeCfhvXcKbw7ARnTK2va1j2OgZTrmafnhH1G99D3ErgQkFNVsmA4jCfMF3G31wSknCDGk8x7I+Peg+QIlGJUqxxSUHQVXInLH758wMSQdUFu6rW6updCXnR9ngkwb6dMXOlL0eWS1gC6qudZXD4zco9CPSG2w/H5BZxH6cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oYCy8oWL; arc=none smtp.client-ip=209.85.128.50
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4904fd4f6aeso95916365e9.2
+        for <linux-scsi@vger.kernel.org>; Tue, 02 Jun 2026 06:04:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780405496; x=1781010296; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H/8nMdqnIqVIuE86ZCCEmz0EQ1iXOszPXfKX9VZoGH4=;
+        b=oYCy8oWLEOXs3ZZpnQ8VOQHoNFjKZT62/QUyW3df6kxvDecqCOK07UnU98cT9bih7d
+         QifFlcWIr+EJiA3Y4YekpYVbMWMA0XqQZb9m0aNzEy+n6CZ9KNJxUBct5gbgm0d6jBJX
+         4RYm7cSM4Fa+MgP775wpjzUTJB2NacljxFREy0lFq+bJunDJIYp2ZV4sTIDkO+Vc1xr7
+         FpcRQcE1R3qM6zq5aytz97WBpu5zXpd39pgEA0GnDnl2ujkjmEdAdRZhqHjKWr+k4Lc4
+         ry5o67NwkoWSsT9Lap7TwhGHQwNn20aUpkBNKTwaaKQ1kQ2Jb1T0oTaxOfTVux7BZHHQ
+         5nZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780405496; x=1781010296;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=H/8nMdqnIqVIuE86ZCCEmz0EQ1iXOszPXfKX9VZoGH4=;
+        b=dupGOgeuKZI+4rkT0rlnETkZyS+svqAa75B92GjT+2wX41GPQA3OYLr0qehCGOkyYK
+         y9RmQsIWHyD8/jvz6bAT5kEzn8Sem+fsS7SMyD4jteR9JSvT/UIO93u2FlMfumeyfM+h
+         DSQe5ZROgCR8LxVrJ/aIFghsVuIxBnJ8anYH78ZJjVkr+mDXFJ1BHS4JvppiHjdPDiBa
+         unCsMVTjm2dCu0Eom6q63KSzPuNFcJkPa1qn/lz/pY6EzQpg5B0AwAAlvnGztu8oTh0L
+         475bA2S2MGUgYywLd4m3oauOElQGZPmuER9VtzjY8fC10phFjWoTKN9fDg3bbI3iduig
+         phJw==
+X-Forwarded-Encrypted: i=1; AFNElJ+Cb2gr0l5Vjw6fxHzDbtAIOuyZWPifOGApWmfC6amVNPlNYsL24FjyPd8MGUy//8wcRDQz65D9cmgl@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3ZoUCaxqoVHSmCCKlAXCYGmfCr6N8hL8F2N7XddLgZOYi9JeX
+	ec+Oe2A3j9jiTCX0teJzTTZbwreezmdKptSSFeAjmEryUaBFr6ppKUCq
+X-Gm-Gg: Acq92OHzj8MY66Dhc/t1+VoZ2c1Ob8xernPsNrVqMx8e0PQ8Sa8oJlQ5LcRSmirrCIF
+	C6OiNAVTYHW5kxRSUM8cEqq7RxTZzLlSdqllCbRv7u/zrPOjZHp4t1L7Oe1sebz3QP/PZmkZzuH
+	fOgRHkrKIUz2KzLctz+vo4+w0WgzKkMKuAB5XZvSRKC/Du3NzdmYkJh5W6NVE7jPkqWQZZqtE/c
+	NR50uN3mW3XnAYsgo8c5lZaJv00pmOvd+XJMn6oYCNBXSuSE4KDTB7fYJYuBNlommo23UT3Y6RD
+	J1cpkmmudY+esnEeBGTbI0ZpfGVXX303PT0i5iGsR98e1GgO1ChGJQQzuU0wQA0QqmYbj2sCWMQ
+	vdbh4Eim43s777G8a6AAtff7r4l7pgPNQF3ZelnKUUnx/3UqB+DyNmTI5vESJ1IA5ZTE5nfz0mD
+	3WxVQ9w6TQ8slAvv0hHMrRipgAblVF9Gc0Pa+1CwWJHQCqBSlXIXTsidDftnUZ1yN2mS4wrAkG3
+	jsHn0JRCw==
+X-Received: by 2002:a05:600c:8105:b0:490:b072:1be6 with SMTP id 5b1f17b1804b1-490b0721e0amr76565325e9.25.1780405495119;
+        Tue, 02 Jun 2026 06:04:55 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45ef34b834esm33184301f8f.11.2026.06.02.06.04.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Jun 2026 06:04:54 -0700 (PDT)
+Date: Tue, 2 Jun 2026 14:04:51 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+ Pengpeng Hou <pengpeng@iscas.ac.cn>, stable@vger.kernel.org, Petr Pavlu
+ <petr.pavlu@suse.com>, Richard Weinberger <richard@nod.at>, Anton Ivanov
+ <anton.ivanov@cambridgegreys.com>, Johannes Berg
+ <johannes@sipsolutions.net>, "Rafael J. Wysocki" <rafael@kernel.org>, Len
+ Brown <lenb@kernel.org>, Corey Minyard <corey@minyard.net>, Gabriel Somlo
+ <somlo@cmu.edu>, "Michael S. Tsirkin" <mst@redhat.com>, Jani Nikula
+ <jani.nikula@linux.intel.com>, Joonas Lahtinen
+ <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Bart Van Assche <bvanassche@acm.org>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, Laurent
+ Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede
+ <hansg@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, Bjorn
+ Helgaas <bhelgaas@google.com>, Hannes Reinecke <hare@suse.de>, "James E.J.
+ Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen"
+ <martin.petersen@oracle.com>, Daniel Lezcano <daniel.lezcano@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
+ <jirislaby@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, Jason Wang
+ <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Eugenio
+ =?UTF-8?B?UMOpcmV6?= <eperezma@redhat.com>, Jason Baron
+ <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>, Tiwei Bie
+ <tiwei.btw@antgroup.com>, Benjamin Berg <benjamin.berg@intel.com>, Ilpo
+ =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, "David E. Box"
+ <david.e.box@linux.intel.com>, "Maciej W. Rozycki" <macro@orcam.me.uk>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Peter Zijlstra
+ <peterz@infradead.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik
+ <gor@linux.ibm.com>, Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>, Frank Li
+ <Frank.Li@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Alexander
+ Potapenko <glider@google.com>, Marco Elver <elver@google.com>, Dmitry
+ Vyukov <dvyukov@google.com>, Andrew Morton <akpm@linux-foundation.org>,
+ John Johansen <john.johansen@canonical.com>, Paul Moore
+ <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
+ <serge@hallyn.com>, Georgia Garcia <georgia.garcia@canonical.com>,
+ kvm@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+ linux-mm@kvack.org, apparmor@lists.ubuntu.com,
+ linux-security-module@vger.kernel.org, linux-um@lists.infradead.org,
+ linux-acpi@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+ qemu-devel@nongnu.org, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+ virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, netdev@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 01/11] params: bound array element output to the
+ caller's page buffer
+Message-ID: <20260602140451.2e3e6622@pumpkin>
+In-Reply-To: <ah699hwLxIIOZ0-7@ashevche-desk.local>
+References: <20260521133315.work.845-kees@kernel.org>
+	<20260521133326.2465264-1-kees@kernel.org>
+	<ah699hwLxIIOZ0-7@ashevche-desk.local>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: exch02.asrmicro.com (10.1.24.122) To exch02.asrmicro.com
- (10.1.24.122)
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:spam.asrmicro.com 652Cewih097382
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24376-lists,linux-scsi=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-24377-lists,linux-scsi=lfdr.de];
+	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[asrmicro.com];
-	FORGED_RECIPIENTS(0.00)[m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:bvanassche@acm.org,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:peter.wang@mediatek.com,m:beanhuo@micron.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[hongjiefang@asrmicro.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[davidlaightlinux@gmail.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:andriy.shevchenko@linux.intel.com,m:kees@kernel.org,m:mcgrof@kernel.org,m:pengpeng@iscas.ac.cn,m:stable@vger.kernel.org,m:petr.pavlu@suse.com,m:richard@nod.at,m:anton.ivanov@cambridgegreys.com,m:johannes@sipsolutions.net,m:rafael@kernel.org,m:lenb@kernel.org,m:corey@minyard.net,m:somlo@cmu.edu,m:mst@redhat.com,m:jani.nikula@linux.intel.com,m:joonas.lahtinen@linux.intel.com,m:rodrigo.vivi@intel.com,m:tursulin@ursulin.net,m:airlied@gmail.com,m:simona@ffwll.ch,m:bvanassche@acm.org,m:jgg@ziepe.ca,m:leon@kernel.org,m:laurent.pinchart@ideasonboard.com,m:hansg@kernel.org,m:mchehab@kernel.org,m:bhelgaas@google.com,m:hare@suse.de,m:James.Bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:daniel.lezcano@kernel.org,m:rui.zhang@intel.com,m:lukasz.luba@arm.com,m:gregkh@linuxfoundation.org,m:jirislaby@kernel.org,m:stern@rowland.harvard.edu,m:jasowang@redhat.com,m:xuanzhuo@linux.alibaba.com,m:eperezma@redhat.com,m:jbaron@akamai.com,m:jim.cromie@gmail.com,m:tiw
+ ei.btw@antgroup.com,m:benjamin.berg@intel.com,m:ilpo.jarvinen@linux.intel.com,m:david.e.box@linux.intel.com,m:macro@orcam.me.uk,m:srinivas.pandruvada@linux.intel.com,m:peterz@infradead.org,m:hca@linux.ibm.com,m:gor@linux.ibm.com,m:seanjc@google.com,m:pbonzini@redhat.com,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:hpa@zytor.com,m:vkoul@kernel.org,m:Frank.Li@kernel.org,m:da.gomez@kernel.org,m:samitolvanen@google.com,m:atomlin@atomlin.com,m:glider@google.com,m:elver@google.com,m:dvyukov@google.com,m:akpm@linux-foundation.org,m:john.johansen@canonical.com,m:paul@paul-moore.com,m:jmorris@namei.org,m:serge@hallyn.com,m:georgia.garcia@canonical.com,m:kvm@vger.kernel.org,m:dmaengine@vger.kernel.org,m:linux-modules@vger.kernel.org,m:kasan-dev@googlegroups.com,m:linux-mm@kvack.org,m:apparmor@lists.ubuntu.com,m:linux-security-module@vger.kernel.org,m:linux-um@lists.infradead.org,m:linux-acpi@vger.kernel.org,m:openipmi-developer@lists.sou
+ rceforge.net,m:qemu-devel@nongnu.org,m:intel-gfx@lists.freedesktop.org,m:dri-devel@lists.freedesktop.org,m:linux-rdma@vger.kernel.org,m:linux-media@vger.kernel.org,m:linux-pci@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:linux-pm@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-serial@vger.kernel.org,m:linux-usb@vger.kernel.org,m:usb-storage@lists.one-eyed-alien.net,m:virtualization@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-arch@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,s:lists@lfdr.de];
+	FREEMAIL_CC(0.00)[kernel.org,iscas.ac.cn,vger.kernel.org,suse.com,nod.at,cambridgegreys.com,sipsolutions.net,minyard.net,cmu.edu,redhat.com,linux.intel.com,intel.com,ursulin.net,gmail.com,ffwll.ch,acm.org,ziepe.ca,ideasonboard.com,google.com,suse.de,hansenpartnership.com,oracle.com,arm.com,linuxfoundation.org,rowland.harvard.edu,linux.alibaba.com,akamai.com,antgroup.com,orcam.me.uk,infradead.org,linux.ibm.com,alien8.de,zytor.com,atomlin.com,linux-foundation.org,canonical.com,paul-moore.com,namei.org,hallyn.com,googlegroups.com,kvack.org,lists.ubuntu.com,lists.infradead.org,lists.sourceforge.net,nongnu.org,lists.freedesktop.org,lists.ozlabs.org,lists.one-eyed-alien.net,lists.linux.dev];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	PRECEDENCE_BULK(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	TO_DN_NONE(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[davidlaightlinux@gmail.com,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCPT_COUNT_GT_50(0.00)[100];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	R_DKIM_NA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ALIAS_RESOLVED(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	FROM_NEQ_ENVFROM(0.00)[hongjiefang@asrmicro.com,linux-scsi@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,asrmicro.com:mid,asrmicro.com:from_mime,asrmicro.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:email,pumpkin:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 0760962E26B
+X-Rspamd-Queue-Id: BCE3162E576
 
-A PM START STOP sent from the UFS well-known LU resume path can race with
-SCSI EH.
+On Tue, 2 Jun 2026 14:26:46 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-The "wl resume" task flow is:
-  __ufshcd_wl_resume()
-    ufshcd_set_dev_pwr_mode(UFS_ACTIVE_PWR_MODE)
-      ufshcd_execute_start_stop()
-        scsi_execute_cmd()
-          blk_execute_rq           <-- wait
-          scsi_check_passthrough() <-- may retry START STOP
+> On Thu, May 21, 2026 at 06:33:14AM -0700, Kees Cook wrote:
+> > 
+> > param_array_get() appends each element's string representation into the
+> > shared sysfs page buffer by passing buffer + off to the element getter.
+> > 
+> > That works for getters that only write a small bounded string, but
+> > param_get_charp() and similar helpers format against PAGE_SIZE from the
+> > pointer they receive. Once off is non-zero, an element getter can
+> > therefore write past the end of the original sysfs page buffer.
+> > 
+> > Collect each element into a temporary PAGE_SIZE buffer first and then
+> > copy only the remaining space into the caller's page buffer.  
+> 
+> ...
+> 
+> > +	elem_buf = kmalloc(PAGE_SIZE, GFP_KERNEL);  
+> 
+> get_free_page() (or how it is called)?
 
-If the first START STOP time out, SCSI EH may already recover the link and
-reset the device before scsi_execute_cmd() returns:
-  scsi_timeout()
-    scsi_eh_scmd_add()
-      scsi_error_handler()
-        scsi_unjam_host()
-          scsi_eh_ready_devs()
-            scsi_eh_host_reset()
-              ufshcd_eh_host_reset_handler()
-                if (hba->pm_op_in_progress)
-                  ufshcd_link_recovery()
-                    ufshcd_device_reset()
-                    ufshcd_host_reset_and_restore()
-          ...
-          scsi_eh_flush_done_q()   <-- wakeup "wl resume" task
-        ...                        <-- host still in SHOST_RECOVERY
-        scsi_restart_operations()
+The kmalloc() should be faster and I think has to be aligned.
+There is another patch set to replace get_free_pages() with kmalloc().
 
-A later passthrough retry can then run while the host is still in
-SHOST_RECOVERY and hit the SCMD_FAIL_IF_RECOVERING path:
-  scsi_queue_rq()
-    if (scsi_host_in_recovery(shost) &&
-        cmd->flags & SCMD_FAIL_IF_RECOVERING)
-      return BLK_STS_OFFLINE
+Although all these 'show' functions should really head to using a safer
+interface.
+Although, at the moment, it is really difficult to find the ones that
+are guaranteed to be passed a page aligned buffer.
 
-That retry completes with DID_ERROR or DID_NO_CONNECT even though EH may
-already have restored the device to an operational ACTIVE state.
+-- David
 
-Handle these PM timeouts directly from ufshcd_eh_timed_out() instead.
-After ufshcd_link_recovery(), complete the timed-out command immediately
-if it has not been completed already.
-
-For regular SCSI commands, release the SCSI command resources and finish
-it with DID_TIME_OUT so that scsi_execute_cmd() can retry if needed. For
-reserved internal device-management commands, finish the request without
-calling ufshcd_release_scsi_cmd() since those commands use different
-resource lifetime rules.
-
-The system_suspending flag is no longer needed because PM command timeout
-handling now uses pm_op_in_progress.
-
-Fixes: b8c3a7bac9b6 ("scsi: ufs: Have midlayer retry start stop errors")
-Signed-off-by: Hongjie Fang <hongjiefang@asrmicro.com>
----
-
-v4: handle PM timeouts directly from ufshcd_eh_timed_out(), no longer
-relay on the extra legacy single-doorbell force-completion path
-
-v3: ufshcd_eh_timed_out() no longer checks the UFS device WLUN or the
-START STOP opcode. It only checks whether a PM operation is in progress
-for normal SCSI command
-
-v2: handle PM SSU timeout directly from ufshcd_eh_timed_out() suggested
-by Bart Van Assche
-
- drivers/ufs/core/ufshcd.c | 30 +++++++++++++++++++++++-------
- include/ufs/ufshcd.h      |  3 ---
- 2 files changed, 23 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index c3f08957d179..b6b75f0c5c75 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -9466,22 +9466,40 @@ static enum scsi_timeout_action ufshcd_eh_timed_out(struct scsi_cmnd *scmd)
- {
- 	struct ufs_hba *hba = shost_priv(scmd->device->host);
- 
--	if (!hba->system_suspending) {
-+	if (!hba->pm_op_in_progress) {
- 		/* Activate the error handler in the SCSI core. */
- 		return SCSI_EH_NOT_HANDLED;
- 	}
- 
- 	/*
--	 * If we get here we know that no TMFs are outstanding and also that
--	 * the only pending command is a START STOP UNIT command. Handle the
--	 * timeout of that command directly to prevent a deadlock between
-+	 * Handle the timeout directly to prevent a deadlock between
- 	 * ufshcd_set_dev_pwr_mode() and ufshcd_err_handler().
- 	 */
- 	ufshcd_link_recovery(hba);
- 	dev_info(hba->dev, "%s() finished; outstanding_tasks = %#lx.\n",
- 		 __func__, hba->outstanding_tasks);
- 
--	return scsi_host_busy(hba->host) ? SCSI_EH_RESET_TIMER : SCSI_EH_DONE;
-+	/*
-+	 * ufshcd_link_recovery() may already have completed @scmd, e.g. via
-+	 * the existing MCQ force-completion path.
-+	 */
-+	if (!test_bit(SCMD_STATE_COMPLETE, &scmd->state)) {
-+		if (!hba->mcq_enabled) {
-+			unsigned long flags;
-+			struct request *rq = scsi_cmd_to_rq(scmd);
-+
-+			spin_lock_irqsave(&hba->outstanding_lock, flags);
-+			__clear_bit(rq->tag, &hba->outstanding_reqs);
-+			spin_unlock_irqrestore(&hba->outstanding_lock, flags);
-+		}
-+
-+		set_host_byte(scmd, DID_TIME_OUT);
-+		if (ufshcd_is_scsi_cmd(scmd))
-+			ufshcd_release_scsi_cmd(hba, scmd);
-+		scsi_done(scmd);
-+	}
-+
-+	return SCSI_EH_DONE;
- }
- 
- static const struct attribute_group *ufshcd_driver_groups[] = {
-@@ -10518,7 +10536,6 @@ static int ufshcd_wl_suspend(struct device *dev)
- 
- 	hba = shost_priv(sdev->host);
- 	down(&hba->host_sem);
--	hba->system_suspending = true;
- 
- 	if (pm_runtime_suspended(dev))
- 		goto out;
-@@ -10560,7 +10577,6 @@ static int ufshcd_wl_resume(struct device *dev)
- 		hba->curr_dev_pwr_mode, hba->uic_link_state);
- 	if (!ret)
- 		hba->is_sys_suspended = false;
--	hba->system_suspending = false;
- 	up(&hba->host_sem);
- 	return ret;
- }
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index cfbc75d8df83..8280a95c00c7 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1020,8 +1020,6 @@ enum ufshcd_mcq_opr {
-  * @caps: bitmask with information about UFS controller capabilities
-  * @devfreq: frequency scaling information owned by the devfreq core
-  * @clk_scaling: frequency scaling information owned by the UFS driver
-- * @system_suspending: system suspend has been started and system resume has
-- *	not yet finished.
-  * @is_sys_suspended: UFS device has been suspended because of system suspend
-  * @urgent_bkops_lvl: keeps track of urgent bkops level for device
-  * @is_urgent_bkops_lvl_checked: keeps track if the urgent bkops level for
-@@ -1197,7 +1195,6 @@ struct ufs_hba {
- 
- 	struct devfreq *devfreq;
- 	struct ufs_clk_scaling clk_scaling;
--	bool system_suspending;
- 	bool is_sys_suspended;
- 
- 	enum bkops_status urgent_bkops_lvl;
--- 
-2.25.1
+> 
+> > +	if (!elem_buf)
+> > +		return -ENOMEM;
+> > +
+> >  	for (i = off = 0; i < (arr->num ? *arr->num : arr->max); i++) {
+> > -		/* Replace \n with comma */
+> > -		if (i)
+> > -			buffer[off - 1] = ',';
+> >  		p.arg = arr->elem + arr->elemsize * i;
+> >  		check_kparam_locked(p.mod);
+> > -		ret = arr->ops->get(buffer + off, &p);
+> > +		ret = arr->ops->get(elem_buf, &p);
+> >  		if (ret < 0)
+> > -			return ret;
+> > +			goto out;
+> > +		ret = min(ret, (int)(PAGE_SIZE - 1 - off));  
+> 
+> It's usually discouraged to use castings in min/max/clamp. Can we make ret long
+> or do something different here?
+> 
+> > +		if (!ret)
+> > +			break;  
+> 
+> > +		/* Replace the previous element's trailing newline with a comma. */
+> > +		if (i)
+> > +			buffer[off - 1] = ',';  
+> 
+> Can't we do this after with help of strreplace()?
+> 
+> > +		memcpy(buffer + off, elem_buf, ret);
+> >  		off += ret;
+> > +		if (off == PAGE_SIZE - 1)
+> > +			break;
+> >  	}
+> >  	buffer[off] = '\0';
+> > -	return off;
+> > +	ret = off;
+> > +out:
+> > +	kfree(elem_buf);
+> > +	return ret;  
+> 
 
 
