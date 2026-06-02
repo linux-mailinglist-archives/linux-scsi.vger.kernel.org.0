@@ -1,236 +1,261 @@
-Return-Path: <linux-scsi+bounces-24375-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24376-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id epFJHdDNHmpKVQAAu9opvQ
-	(envelope-from <linux-scsi+bounces-24375-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 14:34:24 +0200
+	id 1Qz/KVTRHmq/VQAAu9opvQ
+	(envelope-from <linux-scsi+bounces-24376-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 14:49:24 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ED9462E0F2
-	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 14:34:23 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0760962E26B
+	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 14:49:24 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=ziepe.ca header.s=google header.b=Mjg0KMTz;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24375-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24375-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=none;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24376-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24376-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 3980D300983A
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jun 2026 12:33:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CB06230ADFE9
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jun 2026 12:42:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37D213BAD82;
-	Tue,  2 Jun 2026 12:33:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C0A3DA5D0;
+	Tue,  2 Jun 2026 12:42:00 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from spam.asrmicro.com (asrmicro.com [210.13.118.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06585314B95
-	for <linux-scsi@vger.kernel.org>; Tue,  2 Jun 2026 12:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B026431F98D;
+	Tue,  2 Jun 2026 12:41:57 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780403629; cv=none; b=FTTX8N6B5+bxyuCAztOTAmtu273WiD6fc06uMUVk51Qhwt+YuCgzxdWJ20kpT2r8idzPkps4VFGMN8ZMG2Ht4hbLUNf1DPUC6mwaCvDz4i0yiyVsnY7JX0BJYauOwMqDngXPx6hsGsvpMUOVo/5b70KLjUWklJjpJeoEQEBHGLw=
+	t=1780404120; cv=none; b=B0hasdIkZaFygN3M4ssStxgdjGm5OP/8OS/MIyBGCa+teAha6bKb7GbdHM9zyYgfH2WyM0Uj4ilYjauYTmAbn6VaWtZMnhLlUR4oyrIZ1FLeClBh8+r2RP0tIi0t0VhWg2gaaQgEGnboiOOj+T47EHw+ru/MpE6wZ7hNorUR8FA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780403629; c=relaxed/simple;
-	bh=Dt7ynl7RjMDm10IwkFbV7yaqQ3XCHkv1Jhl7dMLZbl4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WH4MJl8VhXz7pY4lZZVcsfzjkEetCUmdElbsBDhgLjvoV15Xk7aEQ3OxUwlEzSqDc5PGDNpfSm+1xrnyKCHmDDgdJVraCaPosWgB2a30XfPpIlPrZQSi7MJRHvHCsLcHypyIbzTWAll1bikWOdX74qmgsF8wNii0uZmZDCljzfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=Mjg0KMTz; arc=none smtp.client-ip=209.85.160.175
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-5174a34800fso26645771cf.3
-        for <linux-scsi@vger.kernel.org>; Tue, 02 Jun 2026 05:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1780403626; x=1781008426; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3fuMy8ZTlB4sZmM4SRNfS45Rtpr0e2y/Uhs3uZMD108=;
-        b=Mjg0KMTzNzeCi7FV4Cglipctnd4qTRNJBs44FcFTysdYrVy+WlGmP/0GDFu0J+wJ7m
-         R/AuPEohevy1QNUE+WUDGubmJcDZZnffsV7i/Zze94JkqRPhbPdy15Qk6yh0s9q2hu1/
-         bI7dm1G26H7om23e5xJModDeVrIOi0meO3NUWse+J5lk5WegiPpkj76Qz79IXx4wghAH
-         J1I3OvFvwHvZLYWvaUMDTJFwu8CeiZpFpTAa6VbXuL1p2SxsoyL2H/fX/865+UB4pvvq
-         PhJR1KIiS2V1O2Xw5dcvwmRIXL5LbfWF9nRanp+5gjV4eMn6+GEiDs6cHaCPjs+09FpH
-         tsZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780403626; x=1781008426;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3fuMy8ZTlB4sZmM4SRNfS45Rtpr0e2y/Uhs3uZMD108=;
-        b=XOh+HXXMhYvoJ8HpsT8nkPkGHCAPZShrwvl9sOiUCA3/kM31+ZafyqRGEcHIj6X81e
-         MRBdsgq6gZ0voIHpSGa38xOCu75EG8YYQd9pNqY8Dtp2oKslWFheW3ZQo8752KQc07zv
-         b6l1avZfANH4O4piyRfWudH1DPcLkkVsfZIjqXJH0FPepLE8ug8uoJ0kEBoHD3vzjPQu
-         yINSiv9pEYy22nLaQnmqRKpYRgflgIRniPanBzOoJZORlI1IBLzrVRf64YxehBK+175K
-         Eco+KKQbPrOiJPUvUWR4DbYgx2GMIGjW91BSGYiLOXEjncdvkDQVRBFS4LewbCcCQwRh
-         4FIA==
-X-Forwarded-Encrypted: i=1; AFNElJ+oqTKyk9GwR6vbrJxeeZGEXGeXE4xtvKKI/jGHaECWZm4QxSt4/pmUqWP/9EAC3dFtLe120F1Rnlzj@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ6FUJZiYU6f56UWfYfdcpIgHTkzlcVAUg/ly5mNx/2C+e3HdQ
-	DcZ1iLj7n0auHwujoZsK2uD32yXJFtLj+LaztfgyHmcryB2S8rAO0iYajHr5FQwyYsk=
-X-Gm-Gg: Acq92OFAmIezygafvQ26nxwaENOMmsFAliBI+L+QkEphqG7rbBh2JNSXKAZyHjuQ7BF
-	tDDe97wgeHqXLkSGMT+ovXkrDRvddg+3XmQHONV91dL2EkUFtlNCgabTPhPkBhMmA1KTR3WZD8c
-	nECi80CoDMIEd2gGOTfZI6XlXI3r5yo6JhegVpLBnoCWN/Y60JbV5ZkdDUjatMeFG/ds2jQgv6t
-	DTX7WqBkuv2LNGFWkufi8KlJYTRMjWBnzffAjKGQ8SyBOsLnhwcvc3fI9hmf3qrUU+HdA03j8aD
-	ceOQmIkEZfp5EqgjHgD7VA6kZordUcQUa5YB1jWnqhtlJVTdA6DLKCuz9gAg9qDu4MSbQ9XReA9
-	h17PE1sAFQ94zp8QhEdg6VqyqQkLh7Q/m4hkqEmnenDj0xVjKLUKBm0m4zt2pCscTIGl9EuMPLT
-	wl0lOmKs3fXImbH+q3leFwwr07ujxVHUZ0KqVsuIhj9/2S+r41A4XlfyZqPVn69TQWfVCYNlgRQ
-	GnWe9qU9dSQWhz+
-X-Received: by 2002:a05:622a:190a:b0:509:2527:d789 with SMTP id d75a77b69052e-5173a5c05ecmr228232631cf.6.1780403625864;
-        Tue, 02 Jun 2026 05:33:45 -0700 (PDT)
-Received: from ziepe.ca (crbknf0213w-47-54-130-67.pppoe-dynamic.high-speed.nl.bellaliant.net. [47.54.130.67])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51741d6a240sm78686221cf.18.2026.06.02.05.33.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 05:33:45 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1wUOJU-00000003m5x-3DKO;
-	Tue, 02 Jun 2026 09:33:44 -0300
-Date: Tue, 2 Jun 2026 09:33:44 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
-	Pengpeng Hou <pengpeng@iscas.ac.cn>, stable@vger.kernel.org,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Corey Minyard <corey@minyard.net>,
-	Gabriel Somlo <somlo@cmu.edu>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Leon Romanovsky <leon@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Hans de Goede <hansg@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, Hannes Reinecke <hare@suse.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
-	Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>,
-	Tiwei Bie <tiwei.btw@antgroup.com>,
-	Benjamin Berg <benjamin.berg@intel.com>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	"David E. Box" <david.e.box@linux.intel.com>,
-	"Maciej W. Rozycki" <macro@orcam.me.uk>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>,
-	Frank Li <Frank.Li@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Alexander Potapenko <glider@google.com>,
-	Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	John Johansen <john.johansen@canonical.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Georgia Garcia <georgia.garcia@canonical.com>, kvm@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-modules@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-mm@kvack.org,
-	apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-	linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
-	openipmi-developer@lists.sourceforge.net, qemu-devel@nongnu.org,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
-	virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, netdev@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 01/11] params: bound array element output to the caller's
- page buffer
-Message-ID: <20260602123344.GG2487554@ziepe.ca>
-References: <20260521133315.work.845-kees@kernel.org>
- <20260521133326.2465264-1-kees@kernel.org>
- <ah699hwLxIIOZ0-7@ashevche-desk.local>
+	s=arc-20240116; t=1780404120; c=relaxed/simple;
+	bh=dJPL1VtL29PqF9SrW1r6y7fAUBstF6yh2xQM4ny7B/A=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=apcWqXnQHBZNwGKUuWCJQO/3+6NLsaVJDcWN2Ai2G8HOCJLNq1LTx3Z95jPFHsFlQ8soSbG7oztnVV67RwC6b6t1EM9K2BrXnJFTkRllC02eyxPnnI5CiO3JXZMzegSNfTVGiApA6/UP+WIIW6Zeuyyrgu9xwcIefVg78osr+0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=asrmicro.com; spf=pass smtp.mailfrom=asrmicro.com; arc=none smtp.client-ip=210.13.118.86
+Received: from exch02.asrmicro.com (exch02.asrmicro.com [10.1.24.122])
+	by spam.asrmicro.com with ESMTPS id 652Cewih097382
+	(version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=FAIL);
+	Tue, 2 Jun 2026 20:40:58 +0800 (GMT-8)
+	(envelope-from hongjiefang@asrmicro.com)
+Received: from localhost (10.1.170.248) by exch02.asrmicro.com (10.1.24.122)
+ with Microsoft SMTP Server (TLS) id 15.0.847.32; Tue, 2 Jun 2026 20:41:03
+ +0800
+From: Hongjie Fang <hongjiefang@asrmicro.com>
+To: <alim.akhtar@samsung.com>, <avri.altman@wdc.com>, <bvanassche@acm.org>,
+        <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
+        <peter.wang@mediatek.com>, <beanhuo@micron.com>
+CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4] scsi: ufs: core: handle PM commands timeout before SCSI EH
+Date: Tue, 2 Jun 2026 20:41:02 +0800
+Message-ID: <20260602124103.1581617-1-hongjiefang@asrmicro.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ah699hwLxIIOZ0-7@ashevche-desk.local>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: exch02.asrmicro.com (10.1.24.122) To exch02.asrmicro.com
+ (10.1.24.122)
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:spam.asrmicro.com 652Cewih097382
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[ziepe.ca:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-24375-lists,linux-scsi=lfdr.de];
-	FREEMAIL_CC(0.00)[kernel.org,iscas.ac.cn,vger.kernel.org,suse.com,nod.at,cambridgegreys.com,sipsolutions.net,minyard.net,cmu.edu,redhat.com,linux.intel.com,intel.com,ursulin.net,gmail.com,ffwll.ch,acm.org,ideasonboard.com,google.com,suse.de,hansenpartnership.com,oracle.com,arm.com,linuxfoundation.org,rowland.harvard.edu,linux.alibaba.com,akamai.com,antgroup.com,orcam.me.uk,infradead.org,linux.ibm.com,alien8.de,zytor.com,atomlin.com,linux-foundation.org,canonical.com,paul-moore.com,namei.org,hallyn.com,googlegroups.com,kvack.org,lists.ubuntu.com,lists.infradead.org,lists.sourceforge.net,nongnu.org,lists.freedesktop.org,lists.ozlabs.org,lists.one-eyed-alien.net,lists.linux.dev];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:andriy.shevchenko@linux.intel.com,m:kees@kernel.org,m:mcgrof@kernel.org,m:pengpeng@iscas.ac.cn,m:stable@vger.kernel.org,m:petr.pavlu@suse.com,m:richard@nod.at,m:anton.ivanov@cambridgegreys.com,m:johannes@sipsolutions.net,m:rafael@kernel.org,m:lenb@kernel.org,m:corey@minyard.net,m:somlo@cmu.edu,m:mst@redhat.com,m:jani.nikula@linux.intel.com,m:joonas.lahtinen@linux.intel.com,m:rodrigo.vivi@intel.com,m:tursulin@ursulin.net,m:airlied@gmail.com,m:simona@ffwll.ch,m:bvanassche@acm.org,m:leon@kernel.org,m:laurent.pinchart@ideasonboard.com,m:hansg@kernel.org,m:mchehab@kernel.org,m:bhelgaas@google.com,m:hare@suse.de,m:James.Bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:daniel.lezcano@kernel.org,m:rui.zhang@intel.com,m:lukasz.luba@arm.com,m:gregkh@linuxfoundation.org,m:jirislaby@kernel.org,m:stern@rowland.harvard.edu,m:jasowang@redhat.com,m:xuanzhuo@linux.alibaba.com,m:eperezma@redhat.com,m:jbaron@akamai.com,m:jim.cromie@gmail.com,m:tiwei.btw@antgroup
- .com,m:benjamin.berg@intel.com,m:ilpo.jarvinen@linux.intel.com,m:david.e.box@linux.intel.com,m:macro@orcam.me.uk,m:srinivas.pandruvada@linux.intel.com,m:peterz@infradead.org,m:hca@linux.ibm.com,m:gor@linux.ibm.com,m:seanjc@google.com,m:pbonzini@redhat.com,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:hpa@zytor.com,m:vkoul@kernel.org,m:Frank.Li@kernel.org,m:da.gomez@kernel.org,m:samitolvanen@google.com,m:atomlin@atomlin.com,m:glider@google.com,m:elver@google.com,m:dvyukov@google.com,m:akpm@linux-foundation.org,m:john.johansen@canonical.com,m:paul@paul-moore.com,m:jmorris@namei.org,m:serge@hallyn.com,m:georgia.garcia@canonical.com,m:kvm@vger.kernel.org,m:dmaengine@vger.kernel.org,m:linux-modules@vger.kernel.org,m:kasan-dev@googlegroups.com,m:linux-mm@kvack.org,m:apparmor@lists.ubuntu.com,m:linux-security-module@vger.kernel.org,m:linux-um@lists.infradead.org,m:linux-acpi@vger.kernel.org,m:openipmi-developer@lists.sourceforge.net,m:
- qemu-devel@nongnu.org,m:intel-gfx@lists.freedesktop.org,m:dri-devel@lists.freedesktop.org,m:linux-rdma@vger.kernel.org,m:linux-media@vger.kernel.org,m:linux-pci@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:linux-pm@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-serial@vger.kernel.org,m:linux-usb@vger.kernel.org,m:usb-storage@lists.one-eyed-alien.net,m:virtualization@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-arch@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:linux-hardening@vger.kernel.org,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[ziepe.ca:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[ziepe.ca];
-	FORGED_SENDER(0.00)[jgg@ziepe.ca,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_FROM(0.00)[bounces-24376-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[asrmicro.com];
+	FORGED_RECIPIENTS(0.00)[m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:bvanassche@acm.org,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:peter.wang@mediatek.com,m:beanhuo@micron.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[hongjiefang@asrmicro.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jgg@ziepe.ca,linux-scsi@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[99];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	TO_DN_NONE(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,ziepe.ca:mid,ziepe.ca:from_mime,ziepe.ca:dkim,vger.kernel.org:from_smtp]
+	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FROM_NEQ_ENVFROM(0.00)[hongjiefang@asrmicro.com,linux-scsi@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,asrmicro.com:mid,asrmicro.com:from_mime,asrmicro.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 6ED9462E0F2
+X-Rspamd-Queue-Id: 0760962E26B
 
-On Tue, Jun 02, 2026 at 02:26:46PM +0300, Andy Shevchenko wrote:
-> On Thu, May 21, 2026 at 06:33:14AM -0700, Kees Cook wrote:
-> > 
-> > param_array_get() appends each element's string representation into the
-> > shared sysfs page buffer by passing buffer + off to the element getter.
-> > 
-> > That works for getters that only write a small bounded string, but
-> > param_get_charp() and similar helpers format against PAGE_SIZE from the
-> > pointer they receive. Once off is non-zero, an element getter can
-> > therefore write past the end of the original sysfs page buffer.
-> > 
-> > Collect each element into a temporary PAGE_SIZE buffer first and then
-> > copy only the remaining space into the caller's page buffer.
-> 
-> ...
-> 
-> > +	elem_buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
-> 
-> get_free_page() (or how it is called)?
+A PM START STOP sent from the UFS well-known LU resume path can race with
+SCSI EH.
 
-I thought modern mm guidance was to use kmalloc whenever possible and
-not use get_free_page() unless you intend to use the struct page bits?
+The "wl resume" task flow is:
+  __ufshcd_wl_resume()
+    ufshcd_set_dev_pwr_mode(UFS_ACTIVE_PWR_MODE)
+      ufshcd_execute_start_stop()
+        scsi_execute_cmd()
+          blk_execute_rq           <-- wait
+          scsi_check_passthrough() <-- may retry START STOP
 
-Jason
+If the first START STOP time out, SCSI EH may already recover the link and
+reset the device before scsi_execute_cmd() returns:
+  scsi_timeout()
+    scsi_eh_scmd_add()
+      scsi_error_handler()
+        scsi_unjam_host()
+          scsi_eh_ready_devs()
+            scsi_eh_host_reset()
+              ufshcd_eh_host_reset_handler()
+                if (hba->pm_op_in_progress)
+                  ufshcd_link_recovery()
+                    ufshcd_device_reset()
+                    ufshcd_host_reset_and_restore()
+          ...
+          scsi_eh_flush_done_q()   <-- wakeup "wl resume" task
+        ...                        <-- host still in SHOST_RECOVERY
+        scsi_restart_operations()
+
+A later passthrough retry can then run while the host is still in
+SHOST_RECOVERY and hit the SCMD_FAIL_IF_RECOVERING path:
+  scsi_queue_rq()
+    if (scsi_host_in_recovery(shost) &&
+        cmd->flags & SCMD_FAIL_IF_RECOVERING)
+      return BLK_STS_OFFLINE
+
+That retry completes with DID_ERROR or DID_NO_CONNECT even though EH may
+already have restored the device to an operational ACTIVE state.
+
+Handle these PM timeouts directly from ufshcd_eh_timed_out() instead.
+After ufshcd_link_recovery(), complete the timed-out command immediately
+if it has not been completed already.
+
+For regular SCSI commands, release the SCSI command resources and finish
+it with DID_TIME_OUT so that scsi_execute_cmd() can retry if needed. For
+reserved internal device-management commands, finish the request without
+calling ufshcd_release_scsi_cmd() since those commands use different
+resource lifetime rules.
+
+The system_suspending flag is no longer needed because PM command timeout
+handling now uses pm_op_in_progress.
+
+Fixes: b8c3a7bac9b6 ("scsi: ufs: Have midlayer retry start stop errors")
+Signed-off-by: Hongjie Fang <hongjiefang@asrmicro.com>
+---
+
+v4: handle PM timeouts directly from ufshcd_eh_timed_out(), no longer
+relay on the extra legacy single-doorbell force-completion path
+
+v3: ufshcd_eh_timed_out() no longer checks the UFS device WLUN or the
+START STOP opcode. It only checks whether a PM operation is in progress
+for normal SCSI command
+
+v2: handle PM SSU timeout directly from ufshcd_eh_timed_out() suggested
+by Bart Van Assche
+
+ drivers/ufs/core/ufshcd.c | 30 +++++++++++++++++++++++-------
+ include/ufs/ufshcd.h      |  3 ---
+ 2 files changed, 23 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index c3f08957d179..b6b75f0c5c75 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -9466,22 +9466,40 @@ static enum scsi_timeout_action ufshcd_eh_timed_out(struct scsi_cmnd *scmd)
+ {
+ 	struct ufs_hba *hba = shost_priv(scmd->device->host);
+ 
+-	if (!hba->system_suspending) {
++	if (!hba->pm_op_in_progress) {
+ 		/* Activate the error handler in the SCSI core. */
+ 		return SCSI_EH_NOT_HANDLED;
+ 	}
+ 
+ 	/*
+-	 * If we get here we know that no TMFs are outstanding and also that
+-	 * the only pending command is a START STOP UNIT command. Handle the
+-	 * timeout of that command directly to prevent a deadlock between
++	 * Handle the timeout directly to prevent a deadlock between
+ 	 * ufshcd_set_dev_pwr_mode() and ufshcd_err_handler().
+ 	 */
+ 	ufshcd_link_recovery(hba);
+ 	dev_info(hba->dev, "%s() finished; outstanding_tasks = %#lx.\n",
+ 		 __func__, hba->outstanding_tasks);
+ 
+-	return scsi_host_busy(hba->host) ? SCSI_EH_RESET_TIMER : SCSI_EH_DONE;
++	/*
++	 * ufshcd_link_recovery() may already have completed @scmd, e.g. via
++	 * the existing MCQ force-completion path.
++	 */
++	if (!test_bit(SCMD_STATE_COMPLETE, &scmd->state)) {
++		if (!hba->mcq_enabled) {
++			unsigned long flags;
++			struct request *rq = scsi_cmd_to_rq(scmd);
++
++			spin_lock_irqsave(&hba->outstanding_lock, flags);
++			__clear_bit(rq->tag, &hba->outstanding_reqs);
++			spin_unlock_irqrestore(&hba->outstanding_lock, flags);
++		}
++
++		set_host_byte(scmd, DID_TIME_OUT);
++		if (ufshcd_is_scsi_cmd(scmd))
++			ufshcd_release_scsi_cmd(hba, scmd);
++		scsi_done(scmd);
++	}
++
++	return SCSI_EH_DONE;
+ }
+ 
+ static const struct attribute_group *ufshcd_driver_groups[] = {
+@@ -10518,7 +10536,6 @@ static int ufshcd_wl_suspend(struct device *dev)
+ 
+ 	hba = shost_priv(sdev->host);
+ 	down(&hba->host_sem);
+-	hba->system_suspending = true;
+ 
+ 	if (pm_runtime_suspended(dev))
+ 		goto out;
+@@ -10560,7 +10577,6 @@ static int ufshcd_wl_resume(struct device *dev)
+ 		hba->curr_dev_pwr_mode, hba->uic_link_state);
+ 	if (!ret)
+ 		hba->is_sys_suspended = false;
+-	hba->system_suspending = false;
+ 	up(&hba->host_sem);
+ 	return ret;
+ }
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index cfbc75d8df83..8280a95c00c7 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -1020,8 +1020,6 @@ enum ufshcd_mcq_opr {
+  * @caps: bitmask with information about UFS controller capabilities
+  * @devfreq: frequency scaling information owned by the devfreq core
+  * @clk_scaling: frequency scaling information owned by the UFS driver
+- * @system_suspending: system suspend has been started and system resume has
+- *	not yet finished.
+  * @is_sys_suspended: UFS device has been suspended because of system suspend
+  * @urgent_bkops_lvl: keeps track of urgent bkops level for device
+  * @is_urgent_bkops_lvl_checked: keeps track if the urgent bkops level for
+@@ -1197,7 +1195,6 @@ struct ufs_hba {
+ 
+ 	struct devfreq *devfreq;
+ 	struct ufs_clk_scaling clk_scaling;
+-	bool system_suspending;
+ 	bool is_sys_suspended;
+ 
+ 	enum bkops_status urgent_bkops_lvl;
+-- 
+2.25.1
+
 
