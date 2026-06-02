@@ -1,146 +1,148 @@
-Return-Path: <linux-scsi+bounces-24358-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24360-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aDvUCqhpHmqGjAkAu9opvQ
-	(envelope-from <linux-scsi+bounces-24358-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 07:27:04 +0200
+	id QFAGD7aIHmr0kgkAu9opvQ
+	(envelope-from <linux-scsi+bounces-24360-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 09:39:34 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EDB562887A
-	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 07:27:03 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADF7D629CB2
+	for <lists+linux-scsi@lfdr.de>; Tue, 02 Jun 2026 09:39:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 5B98F300E916
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jun 2026 05:26:59 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 40B0D3002909
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jun 2026 07:25:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 782402D8379;
-	Tue,  2 Jun 2026 05:26:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D933403F8;
+	Tue,  2 Jun 2026 07:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b="rJeae/sw"
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from spam.asrmicro.com (asrmicro.com [210.13.118.86])
+Received: from mail-m49212.qiye.163.com (mail-m49212.qiye.163.com [45.254.49.212])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 441E62AE7A;
-	Tue,  2 Jun 2026 05:26:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.13.118.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79811DDC3F
+	for <linux-scsi@vger.kernel.org>; Tue,  2 Jun 2026 07:25:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780378015; cv=none; b=r3nBM9Y6A9rFFCOaEpMV9j84pFD2NOlerK4PNTZoubL6pyAhLNS95z3aAikQ1xy7ySd9Qe2Y5zgZLUwbPpKbXhkrfN8hddaiKRrJG+6cD2rIY9MeTvS1STp1pY3VR0nDroFWpNf3YZltP4NZi9/VKjFvho+TzFen1yvYsVIwd/g=
+	t=1780385145; cv=none; b=J1oAWDGM/gi9w+gSVtBGAXox7f7SSD/xnz31QMCayoRk8fbjuRvWxfSh1miUGbfGGFv+1sjcZg7ScxiNu68SwHyUL4lx/vHUsWyXTgUnN7QhjoLaA34L7PHIlkdtTshUASWI+QXLe4m2ObxCkoV3rf67DPlGqB+U3q4Dq78Du/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780378015; c=relaxed/simple;
-	bh=Zdymhpl8nPYHAHZYbXbh8+0tETiEwy6yteQJYTzX1RE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=IBqRT5TzNCOyK0k2YlUKTcWwCe947wpaEOYC8pEFuWVlL3Cn8E6K5qtASSPpCqEyp5bBcKQxycYc9Ix9J0lsMrqihzFo+tImSuXarcv73TarbaFq3Q/PxX6aOUUS+7JbkKll/9s6WFxLtE9TYib4E2bJfFrOPYF5H+6vVnWN5LA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=asrmicro.com; spf=pass smtp.mailfrom=asrmicro.com; arc=none smtp.client-ip=210.13.118.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=asrmicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=asrmicro.com
-Received: from exch01.asrmicro.com (exch01.asrmicro.com [10.1.24.121])
-	by spam.asrmicro.com with ESMTPS id 6525PsPf043879
-	(version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=FAIL);
-	Tue, 2 Jun 2026 13:25:54 +0800 (GMT-8)
-	(envelope-from hongjiefang@asrmicro.com)
-Received: from exch02.asrmicro.com (10.1.24.122) by exch01.asrmicro.com
- (10.1.24.121) with Microsoft SMTP Server (TLS) id 15.0.847.32; Tue, 2 Jun
- 2026 13:25:56 +0800
-Received: from exch02.asrmicro.com ([::1]) by exch02.asrmicro.com ([::1]) with
- mapi id 15.00.0847.030; Tue, 2 Jun 2026 13:25:56 +0800
-From: =?utf-8?B?RmFuZyBIb25namllKOaWuea0quadsCk=?= <hongjiefang@asrmicro.com>
-To: Bart Van Assche <bvanassche@acm.org>,
-        "alim.akhtar@samsung.com"
-	<alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "James.Bottomley@HansenPartnership.com"
-	<James.Bottomley@HansenPartnership.com>,
-        "martin.petersen@oracle.com"
-	<martin.petersen@oracle.com>,
-        "peter.wang@mediatek.com"
-	<peter.wang@mediatek.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>
-CC: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3] scsi: ufs: core: handle PM SSU timeout before SCSI EH
-Thread-Topic: [PATCH v3] scsi: ufs: core: handle PM SSU timeout before SCSI
- EH
-Thread-Index: AQHc8e30kTD4w00lK0W0zHRuj40B8rYqu1xA
-Date: Tue, 2 Jun 2026 05:25:56 +0000
-Message-ID: <09e266caba584fc488029a6bcd951777@exch02.asrmicro.com>
-References: <20260601045658.1232848-1-hongjiefang@asrmicro.com>
- <27613670-be13-4923-ae6a-f9a32f1a053b@acm.org>
-In-Reply-To: <27613670-be13-4923-ae6a-f9a32f1a053b@acm.org>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1780385145; c=relaxed/simple;
+	bh=u68bzi5Jmyh70QI0w7LAv3SQHqAfpBEKVdkKN/S/xIM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=p3xuyxPfexMeQ7rDOp2+D+MaQybBpfEoaqNGDj41Dz+FrHc/HMJCt3ClXfuO2K8imQZwuAmQ3PtngQdqMGrTPRVwkt7/b8z+slplb5Kg7HQjFCrrohXzD5gcJC/gq4ClnXLfX1wbXAiUeJKc/vq4ndimrYyb7sSNOYxe2eDCcV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=rJeae/sw; arc=none smtp.client-ip=45.254.49.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leap-io-kernel.com
+Received: from localhost.localdomain (unknown [222.130.22.242])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 40b8bc0ed;
+	Tue, 2 Jun 2026 15:10:18 +0800 (GMT+08:00)
+From: Dongdong Hao <doubled@leap-io-kernel.com>
+To: James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com
+Cc: doubled@leap-io-kernel.com,
+	yjzhang@leap-io-kernel.com,
+	kezijie@leap-io-kernel.com,
+	linux-scsi@vger.kernel.org
+Subject: [PATCH v2 0/2] scsi: Add LeapRAID driver support
+Date: Tue,  2 Jun 2026 15:10:16 +0800
+Message-Id: <cover.1780383814.git.doubled@leap-io-kernel.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:spam.asrmicro.com 6525PsPf043879
-X-Spamd-Result: default: False [-1.36 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a9e872b3d1103aekunma6f7b9307054f4
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaQxgeVkpMGU5PHxkdTUxKGVYVFA
+	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUlVSkhLVUlJVUlPSVlXWRYaDxIVHRRZQVlPS0hVSk
+	tISk9ITFVKS0tVSkJLS1kG
+DKIM-Signature: a=rsa-sha256;
+	b=rJeae/swlj/RamBZ7IVGhb0LXhc7dbPuvbtczu0KkSQXP6vJzz6iArB3GbrLex0ieCF6R9kXrCyVoTtFh0Sm8Fy3Cyx3Z3tcFP9IWUzYNIb6BcIMLUpCC5iLVNfWiwUDEBwD6gfbv4dxzlOZ8CT61B0Y7gPrM+dNzbjzaQTAaHsjE4jSZLAK8tLxOTxuUeEoYXCcAzwPslFMIImHqqceUPkVklchqg+4G6vHVdkg8G7VM00Ind7RdhLrMDAcMbVtgdld8EJt5SXs0bvMOVfnprjprEoB2pOQOTsHdGtEbdWjguR4v+s4FQV+xjlrOAO0na8QMhvjXX+29PjuiuwZfw==; c=relaxed/relaxed; s=default; d=leap-io-kernel.com; v=1;
+	bh=wrkSNmfnyL73s2Bxcn0xp3ETlehiuN+lfk7CiuS41OU=;
+	h=date:mime-version:subject:message-id:from;
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[leap-io-kernel.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[leap-io-kernel.com:s=default];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-24358-lists,linux-scsi=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DMARC_NA(0.00)[asrmicro.com];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hongjiefang@asrmicro.com,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.891];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	R_DKIM_NA(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[samsung.com:email,wdc.com:email,mediatek.com:email,hansenpartnership.com:email,oracle.com:email]
-X-Rspamd-Queue-Id: 2EDB562887A
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24360-lists,linux-scsi=lfdr.de];
+	DKIM_TRACE(0.00)[leap-io-kernel.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[doubled@leap-io-kernel.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[leap-io-kernel.com:mid,leap-io-kernel.com:dkim,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: ADF7D629CB2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-DQo+IEZyb206IEJhcnQgVmFuIEFzc2NoZSBbbWFpbHRvOmJ2YW5hc3NjaGVAYWNtLm9yZ10NCj4g
-U2VudDogVHVlc2RheSwgSnVuZSAyLCAyMDI2IDE6NDIgQU0NCj4gVG86IEZhbmcgSG9uZ2ppZSjm
-lrnmtKrmnbApIDxob25namllZmFuZ0Bhc3JtaWNyby5jb20+Ow0KPiBhbGltLmFraHRhckBzYW1z
-dW5nLmNvbTsgYXZyaS5hbHRtYW5Ad2RjLmNvbTsNCj4gSmFtZXMuQm90dG9tbGV5QEhhbnNlblBh
-cnRuZXJzaGlwLmNvbTsgbWFydGluLnBldGVyc2VuQG9yYWNsZS5jb207DQo+IHBldGVyLndhbmdA
-bWVkaWF0ZWsuY29tOyBiZWFuaHVvQG1pY3Jvbi5jb20NCj4gQ2M6IGxpbnV4LXNjc2lAdmdlci5r
-ZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBb
-UEFUQ0ggdjNdIHNjc2k6IHVmczogY29yZTogaGFuZGxlIFBNIFNTVSB0aW1lb3V0IGJlZm9yZSBT
-Q1NJDQo+IEVIDQo+IA0KPiBPbiA1LzMxLzI2IDk6NTYgUE0sIEhvbmdqaWUgRmFuZyB3cm90ZToN
-Cj4gPiBAQCAtOTQ2Niw3ICs5NDk5LDcgQEAgc3RhdGljIGVudW0gc2NzaV90aW1lb3V0X2FjdGlv
-bg0KPiB1ZnNoY2RfZWhfdGltZWRfb3V0KHN0cnVjdCBzY3NpX2NtbmQgKnNjbWQpDQo+ID4gICB7
-DQo+ID4gICAJc3RydWN0IHVmc19oYmEgKmhiYSA9IHNob3N0X3ByaXYoc2NtZC0+ZGV2aWNlLT5o
-b3N0KTsNCj4gPg0KPiA+IC0JaWYgKCFoYmEtPnN5c3RlbV9zdXNwZW5kaW5nKSB7DQo+ID4gKwlp
-ZiAoIWhiYS0+cG1fb3BfaW5fcHJvZ3Jlc3MgfHwgIXVmc2hjZF9pc19zY3NpX2NtZChzY21kKSkg
-ew0KPiA+ICAgCQkvKiBBY3RpdmF0ZSB0aGUgZXJyb3IgaGFuZGxlciBpbiB0aGUgU0NTSSBjb3Jl
-LiAqLw0KPiA+ICAgCQlyZXR1cm4gU0NTSV9FSF9OT1RfSEFORExFRDsNCj4gPiAgIAl9DQo+IA0K
-PiBJIHRoaW5rIHdlIHdhbnQgdG8gYXZvaWQgU0NTSSBlcnJvciBoYW5kbGVyIGFjdGl2YXRpb24g
-Zm9yIGFsbCBjb21tYW5kcw0KPiB0aGF0IHRpbWUgb3V0IHdoaWxlIGEgcG93ZXIgbWFuYWdlbWVu
-dCBvcGVyYXRpb24gaXMgaW4gcHJvZ3Jlc3MsDQo+IGluY2x1ZGluZyBkZXZpY2UgbWFuYWdlbWVu
-dCBjb21tYW5kcy4NCj4gDQo+IFBsZWFzZSBjb25zaWRlciBjb21wbGV0aW5nIGNvbW1hbmRzIGZy
-b20gaW5zaWRlIHRoZSB0aW1lb3V0IGhhbmRsZXINCj4gaW5zdGVhZCBvZiBhZGRpbmcgZm9yY2Vf
-Y29tcGwgc3VwcG9ydCBmb3IgdGhlIGxlZ2FjeSBzaW5nbGUgZG9vcmJlbGwNCj4gbW9kZS4gVGhl
-IHZlcnkgbGlnaHRseSB0ZXN0ZWQgcGF0Y2ggYmVsb3cgc2hvdWxkIHJlYWxpemUgdGhpcy4NCj4g
-DQoNClRoYW5rcywgdGhpcyBtYWtlcyBzZW5zZS4NCkkgd2lsbCByZXdvcmsgdGhlIHBhdGNoIGlu
-IHRoYXQgZGlyZWN0aW9uIGZvciB2NC4gSXQgd2lsbCB1c2UNCmhiYS0+cG1fb3BfaW5fcHJvZ3Jl
-c3MgZm9yIGFsbCBQTSB0aW1lb3V0IGNvbW1hbmRzIGFuZCBubyBsb25nZXINCnJlbGF5IG9uIHRo
-ZSBleHRyYSBsZWdhY3kgc2luZ2xlLWRvb3JiZWxsIGZvcmNlLWNvbXBsZXRpb24gcGF0aC4NCg0K
-Rm9yIHJlZ3VsYXIgU0NTSSBjb21tYW5kcyBpdCByZWxlYXNlcyB0aGUgU0NTSSBjb21tYW5kIHJl
-c291cmNlcyBiZWZvcmUNCnNjc2lfZG9uZSgpLiBGb3IgaW50ZXJuYWwgZGV2aWNlLW1hbmFnZW1l
-bnQgY29tbWFuZHMgaXQgb25seQ0KY29tcGxldGVzIHRoZSByZXF1ZXN0LCBzaW5jZSB0aG9zZSBj
-b21tYW5kcyBkbyBub3QgdXNlIHRoZQ0KdWZzaGNkX3JlbGVhc2Vfc2NzaV9jbWQoKSBsaWZldGlt
-ZSBydWxlcy4NCg0KDQoNCkJlc3QuDQoNCg==
+Hi,
+
+This series adds initial upstream support for the LeapIO LeapRAID PCIe
+SAS/SATA RAID controller driver.
+
+Patch 1 adds the new leapraid SCSI driver under drivers/scsi/leapraid/,
+hooks it into the SCSI build system, and adds a MAINTAINERS entry.
+
+Patch 2 adds the driver documentation under Documentation/scsi/.
+
+Changes in v2:
+- resend the series with corrected threading
+- no code changes since v1
+
+The earlier resend accidentally reused old threading information, which
+caused the series to appear incorrectly in the public archive.
+
+Thanks,
+Dongdong Hao
+
+Dongdong Hao (2):
+  scsi: leapraid: Add new SCSI driver
+  scsi: leapraid: Add driver documentation
+
+ Documentation/scsi/index.rst               |    1 +
+ Documentation/scsi/leapraid.rst            |  139 +
+ MAINTAINERS                                |    7 +
+ drivers/scsi/Kconfig                       |    1 +
+ drivers/scsi/Makefile                      |    1 +
+ drivers/scsi/leapraid/Kconfig              |   14 +
+ drivers/scsi/leapraid/Makefile             |   10 +
+ drivers/scsi/leapraid/leapraid.h           | 2071 +++++
+ drivers/scsi/leapraid/leapraid_app.c       |  705 ++
+ drivers/scsi/leapraid/leapraid_func.c      | 9053 ++++++++++++++++++++
+ drivers/scsi/leapraid/leapraid_func.h      | 1566 ++++
+ drivers/scsi/leapraid/leapraid_os.c        | 2516 ++++++
+ drivers/scsi/leapraid/leapraid_transport.c | 1387 +++
+ 13 files changed, 17471 insertions(+)
+ create mode 100644 Documentation/scsi/leapraid.rst
+ create mode 100644 drivers/scsi/leapraid/Kconfig
+ create mode 100644 drivers/scsi/leapraid/Makefile
+ create mode 100644 drivers/scsi/leapraid/leapraid.h
+ create mode 100644 drivers/scsi/leapraid/leapraid_app.c
+ create mode 100644 drivers/scsi/leapraid/leapraid_func.c
+ create mode 100644 drivers/scsi/leapraid/leapraid_func.h
+ create mode 100644 drivers/scsi/leapraid/leapraid_os.c
+ create mode 100644 drivers/scsi/leapraid/leapraid_transport.c
+
+-- 
+2.25.1
+
 
