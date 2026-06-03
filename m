@@ -1,176 +1,255 @@
-Return-Path: <linux-scsi+bounces-24421-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24422-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id CfD0NHqFIGqN4gAAu9opvQ
-	(envelope-from <linux-scsi+bounces-24421-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 03 Jun 2026 21:50:18 +0200
+	id uINKKruRIGqv5AAAu9opvQ
+	(envelope-from <linux-scsi+bounces-24422-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 03 Jun 2026 22:42:35 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D17A63AF7A
-	for <lists+linux-scsi@lfdr.de>; Wed, 03 Jun 2026 21:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C0C4763B296
+	for <lists+linux-scsi@lfdr.de>; Wed, 03 Jun 2026 22:42:34 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=acm.org header.s=mr01 header.b=aYMSECTA;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24421-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24421-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=acm.org;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b="hTzr/xmv";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24422-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24422-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C7A5D3008200
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2026 19:47:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 98E75300D841
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2026 20:42:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A699F399354;
-	Wed,  3 Jun 2026 19:47:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 214F1400DF1;
+	Wed,  3 Jun 2026 20:42:04 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA603A8F7;
-	Wed,  3 Jun 2026 19:47:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599EE3FF8AA
+	for <linux-scsi@vger.kernel.org>; Wed,  3 Jun 2026 20:42:02 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780516077; cv=none; b=dx4j7fwn6qGXbjGFrCTTrA2fMvCBlVzaV7SkUEkr1ajGAK9chcGm9i2KZaIr09hsAlh9DPoGrpiZPwGk5kRiTJZYA/h14dL1PPiOPnfK8QD4hTuQLHY5brNfbK8o4CJRgXstfiwKGlxUhmwKgjMSiDNMo4u2np7NfDCEmB/DO0w=
+	t=1780519323; cv=none; b=Zt/t6y+IwTXTIjkBhkLJ+KOLcBcR6/GJ1wOb+wocOLL/HloBeNASgm2pzU8woqbEJr0pnoEats1G11wnCXdNeeFVkYZxh01FxS9iStiVx9DHidmdsBfqgnEsw5it7ouoBIenJpZySeF13pjiV8AzBr4wOS+fxjU8miTOFLAgLGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780516077; c=relaxed/simple;
-	bh=Qxn2FagqtQMjM5iyYOECW3TPR8VLbovH5IA+qxeYiSE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aXqw22ofjqfc1t6BB069Y+e/IWtzLDkyz3cV8Jw97Fwk/lfhLjXeCMMWU7S6djeagB+OqyVOkNYjgz8pVMowFpGsIFIMRYW/jXOyeGXc4aD0F8bX+luTrhft1Xl9kBIXyqupeJZUKs7UmeHhyhzB7Rf5MbsNQJFgWVVBUVLvcfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=aYMSECTA; arc=none smtp.client-ip=199.89.1.16
-Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4gVysl3Zn2zlfgfB;
-	Wed,  3 Jun 2026 19:47:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1780516072; x=1783108073; bh=r+HhMDCyFynpzyRW81LPr/QY
-	kG8qvNQJtCSjgOT0yKs=; b=aYMSECTALJakGr80G5FCXJhS9d6P1hmqkrKyaVgQ
-	Qg8uF4sr5uTtKRIUy0u1EdH7xCPg6bvEyilq+tk54W9lhjgrKAi29CC0OqQZ4CMU
-	WIwzouuG6sAwHSJiT/Lzqo9MSqtfcarbR3sbI/ivBfGMhELYsvbk1B7En/8yXAfi
-	mcgBA/ga/zKIrfDFa1tUVmtzdMRcIpKUUOwkDlNDkI5O7CNqhZAt1wvb0a7ES7ij
-	ltKuR0BBOqa+krzMCM0SHtcDamIL66ebHVbnjxvMnb5ALfLEQdp0FxLkCfYUQduB
-	40M5uvXYTUUSZ4Qn/b8Lww2XDRyg0CA4nSi3BqH6QkEGLA==
-X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id PzBrzF9aveEd; Wed,  3 Jun 2026 19:47:52 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4gVysd4MTXzlfl6N;
-	Wed,  3 Jun 2026 19:47:49 +0000 (UTC)
-Message-ID: <0626ebdf-76a1-45dd-8fee-59dad3539ea9@acm.org>
-Date: Wed, 3 Jun 2026 12:47:48 -0700
+	s=arc-20240116; t=1780519323; c=relaxed/simple;
+	bh=6r7aiSGG3HfNEQdLKMO+qc53gHDujJmEknTqmImzIUE=;
+	h=Message-ID:Date:MIME-Version:Subject:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dkUZodkMcJeeuCuS3i1SY5JkBWAJaFC1tc3HMjcw7K4rrjwqk0Clye/o9qTMWkwOsCVOnwgU+uKtSrOYiIXww27cy6BMK0gAV6UmAvBdXwsSveD92Eql6BPMm5sK2mTB/cD1KOEXq3eOqtcwMMFDsuqduTsNn5EcVuHbvxZuGuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hTzr/xmv; arc=none smtp.client-ip=209.85.221.51
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-45ef4332d89so563912f8f.3
+        for <linux-scsi@vger.kernel.org>; Wed, 03 Jun 2026 13:42:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780519321; x=1781124121; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:subject:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=plob93CUsY59KTxyJOCCanfa9cZeC1KBx3jMt6kIIHI=;
+        b=hTzr/xmvgrH7UHe1g77AzmDLxJVvrLjHq5yedX95tC33B4JJBClixYpZfr3rLrllID
+         XyOSEQ1+8MUOVoMdLrjaVb7QlyPESsOiP4yPQU8OzS4muZvmOFg4uMnp0kAXTjXjO0e1
+         wajLhk97QCZjhDtNctP/p/iDsDvvu/5DEu1o1XstiE0ZdlRioNi4jghnZrv2TCbzEV1y
+         koBCRpH1RDDRnKZPY5MQKb3sjjuQj5npWmu/ih47iD/iDuTVfNJBrleSRb0NVY7phPMM
+         35YX1+UwAqkSVdXUl+U9CZqPnpup+2PNksZjSmjjDiaHuSo38bdJukRyFOTfPxEHdiJ6
+         lsEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780519321; x=1781124121;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:subject:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=plob93CUsY59KTxyJOCCanfa9cZeC1KBx3jMt6kIIHI=;
+        b=J9ZUtBpIRp4GpnhCAoUnAWZuX7u6v5UZ+QK3pIzXl5fHN/7GWTs754aO5Wr3F9Tuab
+         hUxVk2f9RwHDe3UvNaO+ikYTkBzCBIl7Evha4QoamJYww8umgcqUIj937JxtZ2cCKdDk
+         /Toyh7aqZXjqDdfH29EJ6mG4KYsfMlLu00YTL4rVpQ2qEkr+AHVD9V3QlO+n2TY/0Mh6
+         0NXtqtjYQ4HKNTyjhHXL0TmnMomI+/Ju4HB/y4FwUvKVIuaHHMaXjqVCSDVGtbiijqDZ
+         971GisKQyFbr4qX/mxLpyDwy9gGkgehnuY//yJ8NfOfe8y0XaQihNUaEZAgAcq8MFBjR
+         ONtg==
+X-Forwarded-Encrypted: i=1; AFNElJ+bDPMqKHR0XqxjcZyhSOb7Kc75Cl00VUIzjCxXKjj+Edy0LDcEEWug0Oo/iw0tCRqQoqVs5kky97eC@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxc663fOxz260NdBSg9m52Q9pUjQjIDhFfdKrzI7UzUVznfgo4+
+	SSYP5FwMuU6UlUQv4y5v37A8Ep/1/ZZsQlI8/G6JFsuCn/YFage9o5A=
+X-Gm-Gg: Acq92OFFbplEHz5fOIB6d0ThvEMYmr0gBBBgyaNKOTnsAkiNVphOO9+YvW/5bHwidwQ
+	oFtbNC0ZZB5rqjsE/ngG8qJWgRTdPParVeCuwPL71YafMAFKuySa0xjMiLKbBOBndSI0LRs9PUb
+	WoQAA1zmqVtQp7PkCdB/Wy8qIf3LAQbgkv3mkC1cYJbhsZJpjjYL//N0v19MtXkwZeO1gma7PP+
+	ntzi3DunjJIw+VwjVkeWoK/x1fLV2yywK8ijOWkplOZk9KhhpctSxmYal40tuHe/9huI0z4sZzf
+	upsg3815ugLd8BfbnprAthqnJCh9KoCODWgN581VRuOcwv+A0ENyc/8g09u9myDjsDQMNCW3ohW
+	cqw9e1QArkQknCxf2aD+3AP8DcPhGKRWA+dg1c+p5vsPZvHMysC3eF/1yRvQZUhGAd4+0h3+Xl/
+	A8ez1sjZXOFDoYY46YX2z5CHvLWV9zLKHBUwDZnjtBwqD7FV9OzS42f+vcmXlJymrCRiZB+nE=
+X-Received: by 2002:a05:600c:6286:b0:490:a2f4:c497 with SMTP id 5b1f17b1804b1-490b52ced77mr37377975e9.7.1780519320405;
+        Wed, 03 Jun 2026 13:42:00 -0700 (PDT)
+Received: from localhost (32.red-80-39-29.staticip.rima-tde.net. [80.39.29.32])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc39e024sm21764485e9.4.2026.06.03.13.41.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Jun 2026 13:41:58 -0700 (PDT)
+Message-ID: <4d3fda0b-36ff-4351-97b8-914c22b86c96@gmail.com>
+Date: Wed, 3 Jun 2026 22:41:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: scsi_debug: reject too-small REPORT ZONES buffers
-To: James Bottomley <James.Bottomley@HansenPartnership.com>,
- Samuel Moelius <sam.moelius@trailofbits.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
- "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>
-References: <20260603171104.18464-1-sam.moelius@trailofbits.com>
- <c01aa774677d1f6fdb0f0924ae0e2de47836d55a.camel@HansenPartnership.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <c01aa774677d1f6fdb0f0924ae0e2de47836d55a.camel@HansenPartnership.com>
+Subject: Re: [PATCH] scsi: devinfo: drop redundant entries from
+ scsi_static_device_list
+Cc: Christoph Hellwig <hch@lst.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ SCSI-ML <linux-scsi@vger.kernel.org>
+References: <20260523114034.326963-1-xose.vazquez@gmail.com>
+Content-Language: en-US, en-GB, es-ES
+From: Xose Vazquez Perez <xose.vazquez@gmail.com>
+In-Reply-To: <20260523114034.326963-1-xose.vazquez@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	MISSING_TO(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24422-lists,linux-scsi=lfdr.de];
 	TO_DN_ALL(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24421-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
+	FORGED_SENDER(0.00)[xosevazquez@gmail.com,linux-scsi@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:James.Bottomley@HansenPartnership.com,m:sam.moelius@trailofbits.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:hch@lst.de,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[acm.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_FIVE(0.00)[5];
 	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[xosevazquez@gmail.com,linux-scsi@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,acm.org:mid,acm.org:from_mime,acm.org:dkim]
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 2D17A63AF7A
+X-Rspamd-Queue-Id: C0C4763B296
 
+On 5/23/26 1:40 PM, Xose Vazquez Perez wrote:
 
-On 6/3/26 12:11 PM, James Bottomley wrote:
-> On Wed, 2026-06-03 at 17:11 +0000, Samuel Moelius wrote:
->> REPORT ZONES subtracts the response header size from the allocation
->> length before ensuring that the allocation is large enough.=C2=A0 A sh=
-ort
->> allocation can underflow and make the remaining length look huge.
->>
->> The handler can then write zone descriptors past the caller-provided
->> response buffer.
->>
->> Validate the allocation length before subtracting the header size.
->>
->> Assisted-by: Codex:gpt-5.5-cyber-preview
->> Signed-off-by: Samuel Moelius <sam.moelius@trailofbits.com>
->> ---
->>  =C2=A0drivers/scsi/scsi_debug.c | 4 ++++
->>  =C2=A01 file changed, 4 insertions(+)
->>
->> diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
->> index 1515495fd9ea..f17e59482cfc 100644
->> --- a/drivers/scsi/scsi_debug.c
->> +++ b/drivers/scsi/scsi_debug.c
->> @@ -5911,6 +5911,10 @@ static int resp_report_zones(struct scsi_cmnd
->> *scp,
->>  =C2=A0	alloc_len =3D get_unaligned_be32(cmd + 10);
->>  =C2=A0	if (alloc_len =3D=3D 0)
->>  =C2=A0		return 0;	/* not an error */
->> +	if (alloc_len < RZONES_DESC_HD) {
->> +		mk_sense_buffer(scp, ILLEGAL_REQUEST,
->> INVALID_FIELD_IN_CDB, 0);
->> +		return check_condition_result;
->=20
-> That doesn't look right.  The returned length is almost always the
-> first parameter of a SCSI command (it is in this case) and a lot of
-> users will send a buffer just big enough for the length (4 bytes in
-> this case) to get the actual length before they ask for the whole
-> thing.  If you require 64 bytes, we're going to reject perfectly legal
-> requests.
+> These entries are redundant because they are already covered by existing
+> prefix matches in the list and same flags:
+> 
+> {"NRC", "MBR-7", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
+> {"NRC", "MBR-7.4", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
+> 
+> {"DELL", "PV660F", NULL, BLIST_SPARSELUN},
+> {"DELL", "PV660F   PSEUDO", NULL, BLIST_SPARSELUN},
+> 
+> {"COMPAQ", "MSA1000", NULL, BLIST_SPARSELUN | BLIST_NOSTARTONADD},
+> {"COMPAQ", "MSA1000 VOLUME", NULL, BLIST_SPARSELUN | BLIST_NOSTARTONADD},
+> 
+> 
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
+> Cc: Martin K. Petersen <martin.petersen@oracle.com>
+> Cc: SCSI-ML <linux-scsi@vger.kernel.org>
+> Signed-off-by: Xose Vazquez Perez <xose.vazquez@gmail.com>
+> ---
+>   drivers/scsi/scsi_devinfo.c | 3 ---
+>   1 file changed, 3 deletions(-)
+> 
+> diff --git a/drivers/scsi/scsi_devinfo.c b/drivers/scsi/scsi_devinfo.c
+> index 68a992494b12..3a9b691d7e72 100644
+> --- a/drivers/scsi/scsi_devinfo.c
+> +++ b/drivers/scsi/scsi_devinfo.c
+> @@ -148,12 +148,10 @@ static struct {
+>   	{"COMPAQ", "LOGICAL VOLUME", NULL, BLIST_FORCELUN | BLIST_MAX_512}, /* Compaq RA4x00 */
+>   	{"COMPAQ", "CR3500", NULL, BLIST_FORCELUN},
+>   	{"COMPAQ", "MSA1000", NULL, BLIST_SPARSELUN | BLIST_NOSTARTONADD},
+> -	{"COMPAQ", "MSA1000 VOLUME", NULL, BLIST_SPARSELUN | BLIST_NOSTARTONADD},
+>   	{"COMPAQ", "HSV110", NULL, BLIST_REPORTLUN2 | BLIST_NOSTARTONADD},
+>   	{"DDN", "SAN DataDirector", "*", BLIST_SPARSELUN},
+>   	{"DEC", "HSG80", NULL, BLIST_REPORTLUN2 | BLIST_NOSTARTONADD},
+>   	{"DELL", "PV660F", NULL, BLIST_SPARSELUN},
+> -	{"DELL", "PV660F   PSEUDO", NULL, BLIST_SPARSELUN},
+>   	{"DELL", "PSEUDO DEVICE .", NULL, BLIST_SPARSELUN},	/* Dell PV 530F */
+>   	{"DELL", "PV530F", NULL, BLIST_SPARSELUN},
+>   	{"DELL", "PERCRAID", NULL, BLIST_FORCELUN},
+> @@ -213,7 +211,6 @@ static struct {
+>   	{"NEC", "PD-1 ODX654P", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
+>   	{"NEC", "iStorage", NULL, BLIST_REPORTLUN2},
+>   	{"NRC", "MBR-7", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
+> -	{"NRC", "MBR-7.4", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
+>   	{"PIONEER", "CD-ROM DRM-600", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
+>   	{"PIONEER", "CD-ROM DRM-602X", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
+>   	{"PIONEER", "CD-ROM DRM-604X", NULL, BLIST_FORCELUN | BLIST_SINGLELUN},
 
-Hi James,
+While reviewing this patch, Sashiko discovered an unrelated legacy bug by extension:
 
-Is my understanding of ZBC-1, ZBC-2 and ZBC-3 correct that the REPORT
-ZONES parameter data should be at least 64 bytes long? The zone
-descriptors list starts at offset 64. Bytes 0..63 form a header that
-precedes the zone descriptors.
+From: https://sashiko.dev/#/patchset/20260523114034.326963-1-xose.vazquez%40gmail.com
 
-It seems to me that the resp_report_zones() implementation is already
-based on the assumption that alloc_len >=3D 64 because of the following
-statement:
+8>==============================================================================
 
-	rep_max_zones =3D (alloc_len - 64) >> ilog2(RZONES_DESC_HD);
+commit 721e2689d447c8de8d1d7183a4deca12e9771da5
+Author: Xose Vazquez Perez <xose.vazquez@gmail.com>
+scsi: devinfo: drop redundant entries from scsi_static_device_list
 
-Thanks,
+These entries are redundant because they are already covered by existing
+prefix matches in the list and same flags.
 
-Bart.
+ > diff --git a/drivers/scsi/scsi_devinfo.c b/drivers/scsi/scsi_devinfo.c
+ > index cf8dfab9489fc..f141cd9a91418 100644
+ > --- a/drivers/scsi/scsi_devinfo.c
+ > +++ b/drivers/scsi/scsi_devinfo.c
+ > @@ -148,12 +148,10 @@ static struct {
+ >       {"COMPAQ", "LOGICAL VOLUME", NULL, BLIST_FORCELUN | BLIST_MAX_512}, /* Compaq RA4x00 */
+ >       {"COMPAQ", "CR3500", NULL, BLIST_FORCELUN},
+ >       {"COMPAQ", "MSA1000", NULL, BLIST_SPARSELUN | BLIST_NOSTARTONADD},
+ > -     {"COMPAQ", "MSA1000 VOLUME", NULL, BLIST_SPARSELUN | BLIST_NOSTARTONADD},
+
+This isn't a regression introduced by this patch, but does the handling of
+strings from scsi_static_device_list lead to an out-of-bounds read and
+kernel panic under fortify source bounds checking?
+
+When devinfo is allocated via kmalloc(), the memory is uninitialized. Struct
+fields like flags and compatible immediately follow the vendor (8 bytes) and
+model (16 bytes) string arrays in memory.
+
+When strings from this list exactly match the array length (like the 8-byte
+vendor Nakamich or the 16-byte model Array Controller further down the list),
+scsi_strcpy_devinfo() uses strncpy() which does not append a null terminator.
+
+The manual termination branch is also skipped because from_length < to_length
+is false:
+
+drivers/scsi/scsi_devinfo.c:scsi_strcpy_devinfo() {
+     ...
+     strncpy(to, from, min(to_length, from_length));
+     if (from_length < to_length) {
+         if (compatible) {
+             to[from_length] = '\0';
+         }
+     ...
+}
+
+Later, during device scanning, scsi_get_device_flags_keyed() calls
+strlen(devinfo->vendor) and strlen(devinfo->model):
+drivers/scsi/scsi_devinfo.c:scsi_get_device_flags_keyed() {
+     ...
+     if (memcmp(devinfo->vendor, vendor,
+                 min(max, strlen(devinfo->vendor))))
+     ...
+}
+
+Because the array lacks a null terminator, strlen() reads past the array
+bounds into the adjacent struct fields until it finds a zero byte.
+
+While this read doesn't cross the kmalloc slab boundary, kernels compiled
+with fortify source instrument strlen() to validate the length against
+the known array bounds. Since the null byte is located outside the array,
+strlen() returns a value greater than or equal to the array's defined size,
+causing fortify source to detect an overflow and execute fortify_panic().
+
+8>==============================================================================
 
