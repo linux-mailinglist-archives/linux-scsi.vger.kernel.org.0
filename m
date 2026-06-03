@@ -1,185 +1,237 @@
-Return-Path: <linux-scsi+bounces-24405-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24409-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id h4Z7CaDzH2qItAAAu9opvQ
-	(envelope-from <linux-scsi+bounces-24405-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 03 Jun 2026 11:28:00 +0200
+	id 5bp9CxoJIGrxuQAAu9opvQ
+	(envelope-from <linux-scsi+bounces-24409-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 03 Jun 2026 12:59:38 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B5A3636260
-	for <lists+linux-scsi@lfdr.de>; Wed, 03 Jun 2026 11:27:56 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 755BF636C6C
+	for <lists+linux-scsi@lfdr.de>; Wed, 03 Jun 2026 12:59:37 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=h-partners.com header.s=dkim header.b=Fjy8TwX1;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24405-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24405-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=fail reason="SPF not aligned (relaxed), DKIM not aligned (relaxed)" header.from=huawei.com (policy=quarantine);
+	dkim=pass header.d=ibm.com header.s=pp1 header.b=sKontEXL;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24409-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24409-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=ibm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A76E630D25EF
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2026 09:23:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4AE4B304724A
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2026 10:56:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F9D83C1418;
-	Wed,  3 Jun 2026 09:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1FE83CB919;
+	Wed,  3 Jun 2026 10:56:57 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FE2374E60;
-	Wed,  3 Jun 2026 09:22:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1AF3AB482;
+	Wed,  3 Jun 2026 10:56:56 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780478570; cv=none; b=IdpidtxWalRdNwVGe4VMdP+9nURmy70gimoEbi9e8AhoQYg+FFjralN8rTUI1G6sFBG2d/Zcd83fN/PpKqlGzvZ2bM5s1fcPJJzNimlsrH5HbQVVgGkEOgO3zx9303iM5l/Cf3OCUbf7Xisa8j3hp9s5wrf/zirE/xe+MbTuZ9c=
+	t=1780484217; cv=none; b=Rtioz1F8sh8Z4hsvasxexJigiIu+lY0q9fB6zjPhtdA7PXGadFUOdl1XK2gWAnLAaGu3LiR/4wofpeudHkswp5VukhkdDgZp1es8lm+DvoHB5AahkUFW7zY3wgvc+KNN7ue2s1GnG1tmeJCzUoJv8IIJNU2x8S2uVE4hcqQLoRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780478570; c=relaxed/simple;
-	bh=gmfYk6mNxxV/zGqvRgBDRtWIGB84zSZR9aRILYq9jig=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Uz9ygnis6PomR4ixIqJ4WVuBJLIG3zXGySp5mmJVLAsAcillVTu3UlUeUQ58EEgh5AakG5+kkFKdQ7/gmZHxNqurWiL4a2Unq+rqcWy8CYN5XziNv0ObvcAHjbVlCqZwJslEY17/79umBhqYcX7L/ZtUHJ7ZVKdP3HaiD0clIyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=Fjy8TwX1; arc=none smtp.client-ip=113.46.200.216
-dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=cxwjUCJXLnUMgMTewerXHfYRa7PwYYGmdcdm4sXds7I=;
-	b=Fjy8TwX1wT/2TOjH5i53liQmhUyFaDWjzJQ/ZLUbJq7MLv1QvAEEgVg8b5eZ1sOIJLPrwyXNP
-	3HMeEZ3QxhEEsX5whKrZ9eNrSLZjgrW8GdmjjXCLQ3w66Oj8gg+X3MI5Xh9BhQWiq2u07LBfko2
-	6vZfZgD6SZVnREMmSJxvM0c=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4gVhpw68l6z1T4Hf;
-	Wed,  3 Jun 2026 17:14:32 +0800 (CST)
-Received: from kwepemj100018.china.huawei.com (unknown [7.202.194.12])
-	by mail.maildlp.com (Postfix) with ESMTPS id E67EB40571;
-	Wed,  3 Jun 2026 17:22:43 +0800 (CST)
-Received: from [10.67.120.108] (10.67.120.108) by
- kwepemj100018.china.huawei.com (7.202.194.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.36; Wed, 3 Jun 2026 17:22:43 +0800
-Message-ID: <f1b25f6e-b83a-26ca-b817-21c8c8059eb2@huawei.com>
-Date: Wed, 3 Jun 2026 17:22:42 +0800
+	s=arc-20240116; t=1780484217; c=relaxed/simple;
+	bh=Tja5yhCofjmsVJ+sBi06G3oUE1wx2TP7zmSjMFMT0Sw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bhsi5UugDbzT9EJj7ug2IrHXlYk0ll0JzrAhRJxs5Tx2LYHeqOPhmicBCoKcm25WrePlgMTRDfs7FO5BT4fVqGVdJTbaxJqo1w+pahv/MgUMM5uUrtqFxZQY8dPlAcyds1U83DberOFz6XfTHE5UveHh74OxsVW42D++AxgsD0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=sKontEXL; arc=none smtp.client-ip=148.163.156.1
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 652JdW1b1276410;
+	Wed, 3 Jun 2026 10:56:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=itkTAH
+	ASZK2OQqLGjrU2zc88p58uCLzscZjgdkGwxXQ=; b=sKontEXLXj/EkcVZLWDnrC
+	pTOJdWMTnwKHhpb8qjyzwRQngW+Qt9fTqt17cAViGaW7mqC6Qbz5nYHN1s91rvtH
+	xKS1GvzLHg/7RdUwffQnFk8f8X4jDDPp3twqK4u2YFT1vcFkcPfExOleu53QUqf6
+	Oc0TLva+cSHR/edYbkk/kC4jR9kesRkzG0jqYcXEI0wZroSZjg0wyxbObJCzBHoH
+	JAJIy7kvovToTPX6XjbdVpeb/k/AtN8ifF6DdCH5F6KOM/Wq0P8he4FtfKKQKgv9
+	ecc2+WNeUHBhgwwAqzPZsRgOdwdfZyEmayG5LrjNugwba986sf+n+AALrPWFidNQ
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4efqm52evk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 03 Jun 2026 10:56:47 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 653AsIKK017636;
+	Wed, 3 Jun 2026 10:56:46 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4egakvywrf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 03 Jun 2026 10:56:45 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 653Aue6125625156
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 3 Jun 2026 10:56:40 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2EE7E2004E;
+	Wed,  3 Jun 2026 10:56:40 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BB1D92004B;
+	Wed,  3 Jun 2026 10:56:37 +0000 (GMT)
+Received: from [9.39.23.37] (unknown [9.39.23.37])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  3 Jun 2026 10:56:37 +0000 (GMT)
+Message-ID: <5124c4ea-743a-4047-9d5e-990a7e9907aa@linux.ibm.com>
+Date: Wed, 3 Jun 2026 16:26:36 +0530
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v5 2/2] scsi: libsas: Add linkrate and sas_addr change
- detection in rediscover
-Content-Language: en-CA
-To: John Garry <john.g.garry@oracle.com>, <yanaijie@huawei.com>,
-	<jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <liyihang9@h-partners.com>, <liuyonglong@huawei.com>,
-	<kangfenglong@huawei.com>
-References: <20260530024958.3279112-1-yangxingui@huawei.com>
- <20260530024958.3279112-3-yangxingui@huawei.com>
- <c7e88b75-6c90-46f6-bfa2-471a01a366d0@oracle.com>
-From: yangxingui <yangxingui@huawei.com>
-In-Reply-To: <c7e88b75-6c90-46f6-bfa2-471a01a366d0@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepemh500012.china.huawei.com (7.202.181.145) To
- kwepemj100018.china.huawei.com (7.202.194.12)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] [SCSI] qla2xxx: Handle the INTx not connected while
+ passing through
+To: Madhavan Srinivasan <maddy@linux.ibm.com>, njavali@marvell.com,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
+        Kyle.Mahlkuch@ibm.com
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alex.williamson@nvidia.com,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, harshpb@linux.ibm.com
+References: <177885270578.1573.14283751510936407585.stgit@linux.ibm.com>
+ <66039318-07c0-4453-a295-bc39a2a5b8ec@linux.ibm.com>
+Content-Language: en-US
+From: Shivaprasad G Bhat <sbhat@linux.ibm.com>
+In-Reply-To: <66039318-07c0-4453-a295-bc39a2a5b8ec@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MCVu_sUZo1C-csPGwBHbygqPTh7FtzWY
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjAzMDEwMiBTYWx0ZWRfX6JxFg+ZsWBxT
+ fWDNU3zOxEQ1hB5jwQhvs38CYftcsoMWSR7cQNbQkFWGitsMWmpdrKJVXkVpBROg82Kmy4Uric6
+ wT0mZx2nN3K+JvdRAq9MeUmH01lFAC/6GNlPlyrsl6tQf1jxKFW0V0GezhuPHONb6d+hsXDw+cH
+ sjkQf5OlCU10DcjCrrMi9MzRQBoaUNsmhky/ZGPkVbKMDD0WDeFs6s3Njbr686aJMS6n579l3iE
+ wy1/lY9Q7IQQRjXHEuiBiBolU3stQ9OcQvpV/cw+HLW9W2sM5GOs4XfRXg2rSVUz7bHq+cpArZO
+ xzHvnf4smAMW7uDokOXOMGV7pVjR9bYsyYvGpETlamrIa9oFZQdea4kdO25oyKZwev32LeB7VkL
+ l92n1I6LbFWpXgADM47qHWCCOPnkgCyJk6e4qM/WJDXFUhoxwtteQUH5hCRWLtpD+N+qDWNprIq
+ Zk8NSyMWE19JCCLJSkQ==
+X-Proofpoint-ORIG-GUID: MCVu_sUZo1C-csPGwBHbygqPTh7FtzWY
+X-Authority-Analysis: v=2.4 cv=Vf3H+lp9 c=1 sm=1 tr=0 ts=6a20086f cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
+ a=enu2mHtoF2I52F_0tAQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-03_04,2026-05-28_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 suspectscore=0 adultscore=0 bulkscore=0 impostorscore=0
+ phishscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1015 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2606030102
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),quarantine];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
-	R_DKIM_ALLOW(-0.20)[h-partners.com:s=dkim];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[h-partners.com:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-24405-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24409-lists,linux-scsi=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:from_mime,linux.ibm.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp];
+	FORGED_RECIPIENTS(0.00)[m:maddy@linux.ibm.com,m:njavali@marvell.com,m:GR-QLogic-Storage-Upstream@marvell.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:Kyle.Mahlkuch@ibm.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:alex.williamson@nvidia.com,m:linuxppc-dev@lists.ozlabs.org,m:harshpb@linux.ibm.com,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[ibm.com:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[sbhat@linux.ibm.com,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[yangxingui@huawei.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:john.g.garry@oracle.com,m:yanaijie@huawei.com,m:jejb@linux.ibm.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linuxarm@huawei.com,m:liyihang9@h-partners.com,m:liuyonglong@huawei.com,m:kangfenglong@huawei.com,s:lists@lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yangxingui@huawei.com,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[sbhat@linux.ibm.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp,h-partners.com:dkim,oracle.com:email,huawei.com:mid,huawei.com:from_mime,huawei.com:email]
+	RCVD_COUNT_SEVEN(0.00)[11]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 1B5A3636260
+X-Rspamd-Queue-Id: 755BF636C6C
 
-
-
-On 2026/6/3 0:30, John Garry wrote:
-> On 30/05/2026 03:49, Xingui Yang wrote:
->> In sas_rediscover_dev(), when detecting a "flutter" condition (same SAS
->> address and compatible device type), the code assumes the device remains
->> unchanged and only handles SATA pending state recovery. However, this
->> approach misses two important scenarios:
+On 6/3/26 1:42 PM, Madhavan Srinivasan wrote:
+>
+> On 5/15/26 7:15 PM, Shivaprasad G Bhat wrote:
+>> The PCI_INTERRUPT_PIN reports if the device supports the INTx.
+>> However, when the device is assigned to a guest via vfio, the
+>> PCI_INTERRUPT_PIN is set to 0(i.e none) if the line is not
+>> connected and|or the platform cannot route the interrupt.
 >>
->> First, the flutter detection only compares SAS address and device type,
->> ignoring potential linkrate changes that may have already occurred.
+>> In such cases, the guest PCI_INTERRUPT_PIN is 0 and the port
+>> number becomes -1(255, uint8_t underflow) for qla[25|27|28]xx and
+>> qla2031 devices. The flt_region_nvram is never set, and subsequently
+>> the lun detection fails. Below warnings show the NVRAM configuration
+>> failure.
 >>
->> Second, after sas_ex_phy_discover() re-queries the expander phy, both
->> linkrate and attached SAS address may be updated. The current code does
->> not validate these changes against the existing child device.
+>>   []-0073:1: Inconsistent NVRAM checksum=0xffffffc0 id=HCAM 
+>> version=0x100.
+>>   []-0074:1: Falling back to functioning (yet invalid -- WWPN) defaults.
+>>   []-0076:1: NVRAM configuration failed.
 >>
->> Additionally, the replace code path (different SAS address detected)
->> has a sysfs duplication issue: sas_unregister_devs_sas_addr() only marks
->> the device as gone, but the actual sysfs cleanup happens later in
->> sas_destruct_devices(). Calling sas_discover_new() immediately after
->> unregister causes sysfs_warn_dup() errors.
->>
->> Introduce sas_dev_is_flutter() to check whether it is a true flutter with
->> validation for linkrate and sas_addr changes. It returns true for normal
->> flutter and false when changes are detected requiring rediscovery.
->>
->> Introduce sas_rediscover_ex_phy() to handle async rediscovery for both
->> flutter and replace cases. When invoked:
->> - Set phy_change_count and ex_change_count to -1 to force revalidation
->> - Unregister the device via sas_unregister_devs_sas_addr()
->> - Queue DISCE_REVALIDATE_DOMAIN event
->>
->> The old device sysfs is cleaned up by sas_destruct_devices() at the end
->> of current revalidation work. The new event triggers discovery via
->> sas_discover_new() since attached_sas_addr is cleared, avoiding the
->> sysfs duplication issue.
->>
->> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
->> Suggested-by: John Garry <john.g.garry@oracle.com>
-> 
-> This looks ok, so:
-> 
-> Reviewed-by: John Garry <john.g.garry@oracle.com>
+>> The patch handles the case, and sets the port_no to devfn like
+>> its done everywhere else.
+>
+> Any update on this? do you have any comments/concerns that should be 
+> addressed
+>
+Hi Maddy,
 
-Hi, John
 
-Thank you for your review!
+Priya has tested this already. I have requested Kyle to help with 
+reviewing this patch.
 
-After further analysis, I found a small issue in the sas_addr change
-handling that needs a minor fix:
+Meanwhile, would request Nilesh, James or Martin to provide feedback, if 
+any.
 
-When sas_addr change is detected in sas_dev_is_flutter(), after
-sas_ex_phy_discover() updates phy->attached_sas_addr to the new address,
-subsequent sas_unregister_devs_sas_addr() cannot properly match the
-device because sas_phy_match_dev_addr() compares phy->attached_sas_addr
-with child_dev->sas_addr, which would mismatch.
-
-So I added a memcpy() to restore phy->attached_sas_addr to
-child_dev->sas_addr before returning false, ensuring proper device
-unregistration:
-
-     memcpy(phy->attached_sas_addr, child_dev->sas_addr,
-            SAS_ADDR_SIZE);
-
-This change is included in v6. Would you mind taking another
-look when you have time?
 
 Thanks,
-Xingui
-.
+
+Shivaprasad
+
+
+
+> Maddy
+>
+>> Reference: commit 2bd42b03ab6b ("vfio/pci: Virtualize zero INTx PIN 
+>> if no pdev->irq")
+>> Signed-off-by: Shivaprasad G Bhat <sbhat@linux.ibm.com>
+>> ---
+>>   drivers/scsi/qla2xxx/qla_os.c |   15 ++++++++++-----
+>>   1 file changed, 10 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/scsi/qla2xxx/qla_os.c 
+>> b/drivers/scsi/qla2xxx/qla_os.c
+>> index 72b1c28e4dae..a8d6a0a021f4 100644
+>> --- a/drivers/scsi/qla2xxx/qla_os.c
+>> +++ b/drivers/scsi/qla2xxx/qla_os.c
+>> @@ -2803,11 +2803,16 @@ qla2x00_set_isp_flags(struct qla_hw_data *ha)
+>>       else {
+>>           /* Get adapter physical port no from interrupt pin 
+>> register. */
+>>           pci_read_config_byte(ha->pdev, PCI_INTERRUPT_PIN, 
+>> &ha->port_no);
+>> -        if (IS_QLA25XX(ha) || IS_QLA2031(ha) ||
+>> -            IS_QLA27XX(ha) || IS_QLA28XX(ha))
+>> -            ha->port_no--;
+>> -        else
+>> -            ha->port_no = !(ha->port_no & 1);
+>> +        if (ha->port_no == 0) {
+>> +            /* None of INT[A|B|C|D], may be virtualized by vfio */
+>> +            ha->port_no = PCI_FUNC(ha->pdev->devfn);
+>> +        } else {
+>> +            if (IS_QLA25XX(ha) || IS_QLA2031(ha) ||
+>> +                IS_QLA27XX(ha) || IS_QLA28XX(ha))
+>> +                ha->port_no--;
+>> +            else
+>> +                ha->port_no = !(ha->port_no & 1);
+>> +        }
+>>       }
+>>         ql_dbg_pci(ql_dbg_init, ha->pdev, 0x000b,
+>>
+>>
 
