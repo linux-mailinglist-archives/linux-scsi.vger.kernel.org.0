@@ -1,138 +1,165 @@
-Return-Path: <linux-scsi+bounces-24439-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24440-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id H+9+JEqWIWq9JQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-24439-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 04 Jun 2026 17:14:18 +0200
+	id bRDhI8GcIWrjJwEAu9opvQ
+	(envelope-from <linux-scsi+bounces-24440-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 04 Jun 2026 17:41:53 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D30536414C3
-	for <lists+linux-scsi@lfdr.de>; Thu, 04 Jun 2026 17:14:17 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82B47641880
+	for <lists+linux-scsi@lfdr.de>; Thu, 04 Jun 2026 17:41:52 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=fail ("headers rsa verify failed") header.d=kolumbus.fi header.s=elisa1 header.b=C0whtHZV;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24439-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24439-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=fail reason="SPF not aligned (relaxed)" header.from=kolumbus.fi (policy=quarantine);
+	dkim=none;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24440-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24440-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AD52C302E7A6
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jun 2026 14:52:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 4A0F13105C18
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jun 2026 15:25:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E1EA2F1FD7;
-	Thu,  4 Jun 2026 14:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0AC932E6B4;
+	Thu,  4 Jun 2026 15:25:51 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from fgw22-4.mail.saunalahti.fi (fgw22-4.mail.saunalahti.fi [62.142.5.109])
+Received: from spam.asrmicro.com (asrmicro.com [210.13.118.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4914D24E4C6
-	for <linux-scsi@vger.kernel.org>; Thu,  4 Jun 2026 14:52:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C8F21FF23;
+	Thu,  4 Jun 2026 15:25:48 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780584745; cv=none; b=g0qOSZGq4vjkqj38e7MOJEMT5E2vMiK6SesOGb3Ta+sx8LJmCSJ13bl1AaER4l7X+wUyBuESPQm/oSCNkANZFw99SgaRkcpUj0AKSy7U2oS4SfIIgEOWWhGRMXXDwWUo8WTlujp6OCAkWCHT8G+26qNbWT41sp+sNhaALMwusCI=
+	t=1780586751; cv=none; b=HU1v+HLUpZfnXnR9fnN6j4bPWLRjiDdOPe2efON5vdVFBBR7fj8beS8mYdU4fb5sTHEviIpc1/eBzm1nDsX50DToEGdY6jh9U5+Ms2FHCmRi5w+ZXKpRx7HUipIuznLk2Fhls1tKA17V8E48oBwRf76jootCKm38JMn4i3PSMrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780584745; c=relaxed/simple;
-	bh=N69ZInEW9MnggYul11YXRqPBun7ZUJrTTxxCh7PtnuY=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=ZOPJ+G/fh2vnqr0BR7nQi3Tg4QvrizMxnx51QNtwGT7ugZjvDP0+Hj3bUkZC/7yE3GT3pgHr0w3/DGY2SZKpv0XT0D3CbpK4DS8iGGy7eY6BtdVwfDgteibB4RzjdizjATRHEeeIy/5srOeN7hazYKdVcOFaZWPHpySAzcv+R3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kolumbus.fi; spf=pass smtp.mailfrom=kolumbus.fi; dkim=pass (2048-bit key) header.d=kolumbus.fi header.i=@kolumbus.fi header.b=C0whtHZV; arc=none smtp.client-ip=62.142.5.109
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=kolumbus.fi; s=elisa1;
-	h=to:references:message-id:content-transfer-encoding:cc:date:in-reply-to:from:
-	 subject:mime-version:content-type:from:to:cc:reply-to:subject:date:in-reply-to:
-	 references:list-archive:list-subscribe:list-unsubscribe:content-type:
-	 content-transfer-encoding:message-id;
-	bh=rmca71mPYSJni2uXkB76ddDE8aYug8m2xcThobYjFmc=;
-	b=C0whtHZVBcr6yfqyeAb+kxZruIXSSO4ncU1zYZu2VAZnGh5cYRoLQuZ2aZH9TwYLX43vnay8p6zxF
-	 3pwvX6JV9WBshMj0NYH8wab5ZEAVkeHRegC1JF9cGNuRaWcxitaU6S6GzNHGdUepHmMWAIB09mOtx9
-	 lvpmlskiYXUiBb2eT6lEWHN4lkcBvD70kxRjpfNKW0JWs95Q8a2EkLSNbXAlMzSwKyBtEQld9BQvDJ
-	 gKf00zZxZDi3V5S3bNavxK56jUbVJVO8lg4PrDekOTPnwuid0Q/mwqstUnQAfxYjUSGo36HTp4j+jx
-	 ttCPd15dUGSX8oynJG+rkXm9zs5FtJg==
-Received: from smtpclient.apple (91-158-174-119.elisa-laajakaista.fi [91.158.174.119])
-	by fgw21.mail.saunalahti.fi (Halon) with ESMTPSA
-	id f75f473a-6024-11f1-aabd-005056bdd08f;
-	Thu, 04 Jun 2026 17:52:12 +0300 (EEST)
-Content-Type: text/plain;
-	charset=us-ascii
+	s=arc-20240116; t=1780586751; c=relaxed/simple;
+	bh=ts7kuAkVk+gEKOQycO9ZatNeu6NiW1ZvdBBSOs0KGTk=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Kma4OyE6uQFspjDLpHwFAO44w+Raagv8ABR4EUkbenOHTd/PoxDbU0Z3jsZcGC8+1fUeJwrdGMjsWtEKDMbRPv5GDk8oJio4k3F0GicjE6kTN+2hYJ6lykHvr7a5y8lRQp9AcOxMJYNwRiji7qIcDJnghJcQUMF8nWfo1b/zEK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=asrmicro.com; spf=pass smtp.mailfrom=asrmicro.com; arc=none smtp.client-ip=210.13.118.86
+Received: from exch02.asrmicro.com (exch02.asrmicro.com [10.1.24.122])
+	by spam.asrmicro.com with ESMTPS id 654FOicC005489
+	(version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=FAIL);
+	Thu, 4 Jun 2026 23:24:44 +0800 (GMT-8)
+	(envelope-from hongjiefang@asrmicro.com)
+Received: from exch02.asrmicro.com (10.1.24.122) by exch02.asrmicro.com
+ (10.1.24.122) with Microsoft SMTP Server (TLS) id 15.0.847.32; Thu, 4 Jun
+ 2026 23:24:50 +0800
+Received: from exch02.asrmicro.com ([::1]) by exch02.asrmicro.com ([::1]) with
+ mapi id 15.00.0847.030; Thu, 4 Jun 2026 23:24:50 +0800
+From: =?utf-8?B?RmFuZyBIb25namllKOaWuea0quadsCk=?= <hongjiefang@asrmicro.com>
+To: =?utf-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= <peter.wang@mediatek.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "bvanassche@acm.org"
+	<bvanassche@acm.org>,
+        "James.Bottomley@HansenPartnership.com"
+	<James.Bottomley@HansenPartnership.com>,
+        "alim.akhtar@samsung.com"
+	<alim.akhtar@samsung.com>,
+        "martin.petersen@oracle.com"
+	<martin.petersen@oracle.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>
+CC: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4] scsi: ufs: core: handle PM commands timeout before
+ SCSI EH
+Thread-Topic: [PATCH v4] scsi: ufs: core: handle PM commands timeout before
+ SCSI EH
+Thread-Index: AQHc8o1Awukd7b9NBk+4vV9CGfadLrYsZsGAgABEegCAAABAsIAAsmoAgAD1IECAACNLoA==
+Date: Thu, 4 Jun 2026 15:24:50 +0000
+Message-ID: <b1f26cb67e2249fb83982c58e2e528ac@exch02.asrmicro.com>
+References: <20260602124103.1581617-1-hongjiefang@asrmicro.com>
+	 <7404d3067b87d33bb446a1b7f4432b5ae9d98486.camel@mediatek.com>
+	 <5c2f95f00b484bca9c5df97219230acc@exch02.asrmicro.com>
+	 <27ad241130a34ece8d2645b687f6ffc7@exch02.asrmicro.com>
+ <9b00734a666a2b68a3a6dfb31ce78ffccc5c3686.camel@mediatek.com>
+ <f2a49399526f44a2a3f94c90229330ea@exch02.asrmicro.com>
+In-Reply-To: <f2a49399526f44a2a3f94c90229330ea@exch02.asrmicro.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.600.51.1.1\))
-Subject: Re: [PATCH v2] scsi: scsi_debug: fix one-partition tape setup bounds
-From: =?utf-8?B?IkthaSBNw6RraXNhcmEgKEtvbHVtYnVzKSI=?= <kai.makisara@kolumbus.fi>
-In-Reply-To: <6d2e78e6a5840f5892e7eb081657b23aa62bc50d.camel@HansenPartnership.com>
-Date: Thu, 4 Jun 2026 17:52:00 +0300
-Cc: Samuel Moelius <sam.moelius@trailofbits.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <8D712AEA-D91F-4A75-A7B3-FCF44F5823BF@kolumbus.fi>
-References: <20260603235616.124535-1-sam.moelius@trailofbits.com>
- <6d2e78e6a5840f5892e7eb081657b23aa62bc50d.camel@HansenPartnership.com>
-To: James Bottomley <James.Bottomley@HansenPartnership.com>
-X-Mailer: Apple Mail (2.3864.600.51.1.1)
+MIME-Version: 1.0
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:spam.asrmicro.com 654FOicC005489
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [1.54 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[kolumbus.fi : SPF not aligned (relaxed),quarantine];
+X-Spamd-Result: default: False [-1.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_REJECT(1.00)[kolumbus.fi:s=elisa1];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24439-lists,linux-scsi=lfdr.de];
-	TO_DN_ALL(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER(0.00)[kai.makisara@kolumbus.fi,linux-scsi@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:sam.moelius@trailofbits.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:James.Bottomley@HansenPartnership.com,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kolumbus.fi:-];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kai.makisara@kolumbus.fi,linux-scsi@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
+	DMARC_NA(0.00)[asrmicro.com];
+	TAGGED_FROM(0.00)[bounces-24440-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:peter.wang@mediatek.com,m:beanhuo@micron.com,m:bvanassche@acm.org,m:James.Bottomley@HansenPartnership.com,m:alim.akhtar@samsung.com,m:martin.petersen@oracle.com,m:avri.altman@wdc.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER(0.00)[hongjiefang@asrmicro.com,linux-scsi@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hongjiefang@asrmicro.com,linux-scsi@vger.kernel.org];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	R_DKIM_NA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,hansenpartnership.com:email,kolumbus.fi:from_mime,kolumbus.fi:mid,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D30536414C3
+X-Rspamd-Queue-Id: 82B47641880
 
-
-
-> On 4. Jun 2026, at 16.38, James Bottomley =
-<James.Bottomley@HansenPartnership.com> wrote:
->=20
-> On Wed, 2026-06-03 at 23:55 +0000, Samuel Moelius wrote:
->> The tape setup path writes partition metadata one element past the
->> allocated tape_blocks array when a one-partition configuration is
->> selected.
->>=20
->> That corrupts adjacent state during device initialization before any
->> command is issued.
->=20
-> I still don't get what the actual problem is.  For a single partition
-> tape I can't see where scsi_debug would actually do anything with
-> tape_blocks[1].  What is it that you're seeing when using scsi_debug
-> that motivates this?
->=20
-The code marks partition 1 as EOD and does not corrupt anything. The =
-tape has partitions
-until either EOD partition is encountered or TAPE_MAX_PARTITIONS is =
-reached. I would
-be very hesitant to remove this initialization.
-
-Thanks,
-Kai
-
+DQo+IA0KPiBJIGtub3csIGJ1dCB3aGF0IEkgbWVhbiBpcywgaWYgdGhpcyBjaGVjayAoIWhiYS0+
+bWNxX2VuYWJsZWQpDQo+IGFsd2F5cyBldmFsdWF0ZXMgdG8gdHJ1ZSwgdGhlbiBpdCBpcyBhIHJl
+ZHVuZGFudCBjaGVjaywgcmlnaHQ/DQo+IEkgZG9uJ3Qgc2VlIGFueSBzY2VuYXJpbyB3aGVyZSBp
+dCB3b3VsZCByZXR1cm4gZmFsc2UuDQo+IA0KDQohaGJhLT5tY3FfZW5hYmxlZCBpcyBub3QgYWx3
+YXlzIHRydWUgb25jZSBQTSBpbnRlcm5hbA0KZGV2aWNlLW1hbmFnZW1lbnQgY29tbWFuZHMgYXJl
+IGluY2x1ZGVkLiBJbiBNQ1EgbW9kZSwNCnVmc2hjZF9tY3FfZm9yY2VfY29tcGxfb25lKCkgc2tp
+cHMgcmVzZXJ2ZWQgcmVxdWVzdHMsIHNvIGFmdGVyDQp1ZnNoY2RfbGlua19yZWNvdmVyeSgpIGEg
+dGltZWQtb3V0IHJlc2VydmVkIGludGVybmFsIGNvbW1hbmQgY2FuIHN0aWxsDQpyZWFjaCB0aGlz
+IHBhdGggd2l0aCBoYmEtPm1jcV9lbmFibGVkID09IHRydWUuIA0KDQo+ID4NCj4gPiA+DQo+ID4g
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB1bnNpZ25l
+ZCBsb25nIGZsYWdzOw0KPiA+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgc3RydWN0IHJlcXVlc3QgKnJxID0NCj4gPiA+ID4gc2NzaV9jbWRfdG9fcnEo
+c2NtZCk7DQo+ID4gPiA+ICsNCj4gPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIHNwaW5fbG9ja19pcnFzYXZlKCZoYmEtPm91dHN0YW5kaW5nX2xvY2ss
+DQo+ID4gPiA+IGZsYWdzKTsNCj4gPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIF9fY2xlYXJfYml0KHJxLT50YWcsICZoYmEtDQo+ID4gPiA+ID5vdXRz
+dGFuZGluZ19yZXFzKTsNCj4gPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIHNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmhiYS0NCj4gPiA+ID4gPiBvdXRz
+dGFuZGluZ19sb2NrLCBmbGFncyk7DQo+ID4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIH0NCj4gPiA+ID4gKw0KPiA+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBz
+ZXRfaG9zdF9ieXRlKHNjbWQsIERJRF9USU1FX09VVCk7DQo+ID4gPiA+DQo+ID4gPg0KPiA+ID4g
+V2h5IGRvZXMgTUNRIG1vZGUgc2V0IERJRF9SRVFVRVVFLCB3aGlsZSBsZWdhY3kgbW9kZSBzZXRz
+DQo+ID4gPiBESURfVElNRV9PVVQ/DQo+ID4gPg0KPiA+IE5vcm1hbCBTQ1NJIFBNIGNvbW1hbmRz
+IHVzZSBESURfUkVRVUVVRSwgbWF0Y2hpbmcgdGhlIGV4aXN0aW5nDQo+ID4gTUNRIGZvcmNlLWNv
+bXBsZXRpb24gYmVoYXZpb3IuIFJlc2VydmVkIGludGVybmFsIGRldmljZS1tYW5hZ2VtZW50DQo+
+ID4gY29tbWFuZHMgY29udGludWUgdG8gdXNlIERJRF9USU1FX09VVCwgcmlnaHQgPw0KPiA+DQo+
+IA0KPiBTb3JyeSwgSSBkb24ndCBnZXQgaXQuDQo+IEkgbWVhbiwgaW4gTUNRIG1vZGUsIHRoZSB1
+ZnNoY2RfbWNxX2ZvcmNlX2NvbXBsX29uZSBmdW5jdGlvbg0KPiBoYW5kbGVzIHRoZSBzYW1lIHVu
+Y29tcGxldGVkIGNvbmRpdGlvbiwgYnV0IHdoeSBpcyB0aGUgcHJvY2Vzc2luZw0KPiBsb2dpYyBk
+aWZmZXJlbnQ/DQo+IA0KPiBpZiAoIXRlc3RfYml0KFNDTURfU1RBVEVfQ09NUExFVEUsICZjbWQt
+PnN0YXRlKSkgew0KPiAgICAgc2V0X2hvc3RfYnl0ZShjbWQsIERJRF9SRVFVRVVFKTsNCj4gICAg
+IHVmc2hjZF9yZWxlYXNlX3Njc2lfY21kKGhiYSwgY21kKTsNCj4gICAgIHNjc2lfZG9uZShjbWQp
+Ow0KDQpQbGFuIHRvIHVzZSBESURfUkVRVUVVRSBmb3Igbm9ybWFsIFNDU0kgY29tbWFuZHMsIHNp
+bmNlIHRoaXMgbWF0Y2hlcw0KdGhlIGV4aXN0aW5nIE1DUSBmb3JjZS1jb21wbGV0aW9uIGJlaGF2
+aW9yLg0KDQpGb3IgcmVzZXJ2ZWQgaW50ZXJuYWwgY29tbWFuZHMsIHRoZXNlIHJlc3VsdCBhcmUg
+cmV0dXJuZWQgZGlyZWN0bHkgdG8gdGhlDQpVRlMgY29yZSBjYWxsZXIgcmF0aGVyIHRoYW4gZ29p
+bmcgdGhyb3VnaCB0aGUgbm9ybWFsIHNjc2lfZXhlY3V0ZV9jbWQoKQ0KcmV0cnkgZmxvdy4gVGhl
+cmVmb3JlLCBJIHBsYW4gdG8gY29udGludWUgdXNpbmcgRElEX1RJTUVfT1VUIGZvciB0aG9zZQ0K
+Y29tbWFuZHMuDQoNCg0KDQpCZXN0Lg0K
 
