@@ -1,89 +1,89 @@
-Return-Path: <linux-scsi+bounces-24488-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24486-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id qTjiGCULI2oQhAEAu9opvQ
-	(envelope-from <linux-scsi+bounces-24488-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 05 Jun 2026 19:45:09 +0200
+	id 5fcPOGYMI2qDhAEAu9opvQ
+	(envelope-from <linux-scsi+bounces-24486-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 05 Jun 2026 19:50:30 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7BF364A49B
-	for <lists+linux-scsi@lfdr.de>; Fri, 05 Jun 2026 19:45:08 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EFFC64A50D
+	for <lists+linux-scsi@lfdr.de>; Fri, 05 Jun 2026 19:50:30 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=LuMo8pBH;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24488-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24488-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=dH1oBni3;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24486-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24486-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6B40B3008511
-	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jun 2026 17:45:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 454E93017003
+	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jun 2026 17:45:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27541416D19;
-	Fri,  5 Jun 2026 17:45:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05E1338398F;
+	Fri,  5 Jun 2026 17:45:04 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF3C63806B0
-	for <linux-scsi@vger.kernel.org>; Fri,  5 Jun 2026 17:44:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E05391827
+	for <linux-scsi@vger.kernel.org>; Fri,  5 Jun 2026 17:44:58 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780681506; cv=none; b=ZDhThhPZl8Fe2guch46WBwOn5OY3nyhwkcFCrZwLXhz5NnBan3E+WDFKUb1fsrcxffbBfY26DMweSGB5W5iuO2T2FfQgUD665qUXw+cWnfRHazOAYuWD2gZwsoEC7qJfZQftlfcKbPRrPTznIhzF3twaGpC56VzPbxj5VU+3v3s=
+	t=1780681503; cv=none; b=NAep4rbS46mPkRLYpHiaadTnEqRzHVVZQsdMIDh1b89bejcC6ltZvkh9uG1ruqjX+TYpyZm2osRXO8eHvu3mSRItx5GSYMGgkIbVn/Ei+XCeiGwI5KBqvWyrOKcOCHV03Wo9I96flM6vyovoGeFuDk26DqhU8ZyCcZHCZ5K7SWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780681506; c=relaxed/simple;
-	bh=XDJSA9ARqSXKjDURqUbtMPI2B17diU6ylGKvLmSJAVw=;
+	s=arc-20240116; t=1780681503; c=relaxed/simple;
+	bh=+3m0JMdiXpuvCHnm1FRh68WRusl50l4Rbyh/OO5Hrs8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MmTf+Z1d5RHlUBXuxVDxI+DSf8moNWqspZZ9bxfxwol4HxjMSqY/lTjxzkccM+5MhzIIAVVx+IpUhBzjQaU8y0fCVSn9JqVxNIUr2hjMkUyUQuW+ZmGynVMkg7P6r8lhE8841m/6i/NQaqPfXXOGGrdhkBJKOYu+KfHSnv2FjF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LuMo8pBH; arc=none smtp.client-ip=209.85.160.171
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-5174a3d9598so19542271cf.3
-        for <linux-scsi@vger.kernel.org>; Fri, 05 Jun 2026 10:44:55 -0700 (PDT)
+	 MIME-Version; b=ISRqRrU3K0mUs0RsgqS25Um6aV5PJw5yBYt8JkLpaRnj8AgHH7uuuIT/8Xd1MX3PoBBRI9LwntycBRzD3MTsROG/P8mWD0pvaEP0qFd6WSZS8HJKS9Adygz2qfMzNDOsCjUoO+2H5oJQcPWeBTtdHWCe7lP7qu7soXOnqIpIm7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dH1oBni3; arc=none smtp.client-ip=209.85.160.175
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-51776b4de37so17584291cf.1
+        for <linux-scsi@vger.kernel.org>; Fri, 05 Jun 2026 10:44:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780681495; x=1781286295; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780681497; x=1781286297; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dmCG1d3AlAtiNH3LEYA0GcaDkoTjkg6k8fP4s7NLwiE=;
-        b=LuMo8pBHkeHe96Ml2yH/A+Eij2tHU9zKBlJ1cBCp/FHrCKvZZjvTNr16nu6cbsTPmf
-         6SQ3hluSP23+dfzgTaYwuwNazxqIOCzyxQ3L3I3yHs69rO02BqrZmqMpEaECMv/L11Pt
-         YOtb/f9h9wiJUmhbXVryoGofURhtJyd1EGqlEoaGkQyU7NuOLoe7Eg3QkpP48EUPL95m
-         UHboqDdasbEwAWfX76G9W2JBV4Lem3vt+C4EfQubb6SoI2dmL0Kb35wulstbtW6yUUKo
-         GglkFOoHTSxOVSrucra7Fr29k93uTRhGT8YmYgDoadnk3AvKWnRY4HzfXE3CScxNNj18
-         r/YQ==
+        bh=4r68B/dC8VXpyqdhvL5gBI3YcpNd9ejYho5aID98pyU=;
+        b=dH1oBni31jPAjUpKZTk4Z9+3KwWLA3MiNIcLK49j4EfjOtxnaPkDNaAk4lWaXFAupF
+         vkYxGVa7oZu68rOyjlE0axsvc+ZVLnzZOznzM59pc00puP8VSyUsQYpNdBxa8iXIBpzc
+         vn+DZseBFBGGpUETL6ETW1fwy5+SoJa6fy9sii2LWBPq85rZuTq1x4CRV1jCDdz7iEH8
+         ugB+1dywZN67LCtw/KomcAIOXew18t8n1U30R6WkLNnG2vBcJtQ9i5K0kAiJlMHqTjyG
+         54QPN5UjDcih2NnStH+KY4oyQ+OXm1baMvFEYDNFUW0Bqe+7i/TFHNkG1mfSSGXdcygX
+         OjIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780681495; x=1781286295;
+        d=1e100.net; s=20251104; t=1780681497; x=1781286297;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=dmCG1d3AlAtiNH3LEYA0GcaDkoTjkg6k8fP4s7NLwiE=;
-        b=CgO4XE893DWCqPO1iIkwRzhoHY2ul4JMfOZcA7/5ygQXTcH+TVrOOaM91G01nXuASV
-         QKFlpPHf134bEIr5Hl574ArCIyBMvc+tSYWWgnH5/xSNmi1QCXUbXbAT2pM7HkQm4jpv
-         tXw+z+csbTXWiVkvV7fMKZW/j3gsT4Nw1E6U6qAHIBVSmzGoRTFHHpLqM+ebmyZryz+w
-         K+Rn2oXhEHrEkoXxzFCHpU3qFiwg7+bQt/qz6sR5E2zjFw8XZuukY0j/zLCcf7X30mao
-         cutt1pGHIXktqZWn6lfy+1DC/fI4TBlkRl/KYUEhcU0kTd3AtySS3F1cqNeh8BfmQySs
-         TCLQ==
-X-Gm-Message-State: AOJu0Yw/btizc6ucU5Ut9nRPJwE+j0TRFXGlNvNJhV0PvLOR3R/qKJ0T
-	TMMInIOVXgXi42bHWR0FHgXf6Fi/Rkhs19Hi9CC1hyRrb4td7UNmY3FIKiRGSGnc
-X-Gm-Gg: Acq92OEIzHFmCWDTdAwQZhaWjP6kgEHJiPqCwiJ/XEx8Qvy/NBzBtFqnMV33u5nAixa
-	gA1YbiDdRz/G5gGgx/K030xfoEZRxGAfkMh7LgpMpg1aAanPUNPITXvr+rjyq/2e6DVVh8GYntE
-	VX+NMqjMafPLaaa8EmvJp9uvYnRZtv7P/z8vgtdbYO3jKyncAX0gDarZPa0z5WJ5oGLLVUqLdBc
-	kh9XZwJZpdp/D4ukuPpgBm6UuBANqTSIah8G7jmlTzkK/UOzVdZAJHo3dlhNMWxY3Uh0dA+nNM8
-	4kuYMBNCOyabObXh6b0Xt7apTy1Oa2+fUzSHgu4PGcmu7gtExLyRkr76DtwdhNQZL0YRKpf8HQJ
-	FAS7wswQZiWGI1DIAii1+lvu9n0JAn8EZs5omPkkwQhipRZp/iOxPR/uUcq4xvBDvQNv2KlskWh
-	46L+NUo9pWfLlfgFwnwLpPSMCy6K3CNZ86tUJUQkULCQKfs3GYe1CqmqNhrc2aywQJogASskIBK
-	TNbyXyyxw6qLUf4jcI72mKIhT3qZ0p9HtN5f9G3antmBEbH04q0Ax0aT1xiFMHg
-X-Received: by 2002:ac8:59d6:0:b0:50b:38c1:c6a with SMTP id d75a77b69052e-517959fdda5mr66006841cf.19.1780681494607;
-        Fri, 05 Jun 2026 10:44:54 -0700 (PDT)
+        bh=4r68B/dC8VXpyqdhvL5gBI3YcpNd9ejYho5aID98pyU=;
+        b=tZKLBOhxceTfS1pABggVtOxrS1OL6MScuV8rrJPjISXPO45yIeBOxnEGUn/3EKJ/Sp
+         eVJa8nDIUIOUe29HHkAh9Y9neUEGgi5aPbrU8V4HhYs8N1OAJAcKSSY36yv3qqMhAlK6
+         7gAVMtIIrbrOm0RCuIRaQn00hQdCZMfBmzteUjbOR/ZDQrflnsGk3glYQFbtamwOcTu5
+         LEWbSa11YI7PoeuJZZ+oGBbmcwmrRCjIBsy4r914/n8D6W9KeZzP07n844byq+SzaQPU
+         f9tJpNYMl1eN6Ka+zF6BqmVgrlSuO7WDAVElNg5kgzq+d5enpz0+eyvLrsQeq/i8KWhb
+         b0cQ==
+X-Gm-Message-State: AOJu0Ywr/vI+cJUMxtOxs/vhtGpT0VfAH5qwZ9i4t0piPOBktvV6xoXh
+	9lRyaE+MM9Sb38FbuwL9rcrdTuYx27QrzlvBLaCJ0vwdyLBerjUFpZ6Vfk+07Hus
+X-Gm-Gg: Acq92OGcqw/Ds0p6QKshle8DXDb5ndj+KswCGQ0YvqMGbAR1m2O5AAJIfFBbqlhcQsD
+	+jRBXDujloHAm2dpd04bb1Sn7iG4IFI9pdTVMtlMLTsIwd8c98exxd6qH88hvxArubtkfDaDbRb
+	qCR5tiiBNdLqATOblPRJmtgCdlD6ZTaHpYABeSXdQ7j/41y2JprSRx4oQz+PiAsjhD/5UehIKYN
+	GMTa6DrGd6txbD4I4h746ErINtmoG4AfMrOSdoGmHXPfcdH/6SKBQaFmnfdfuCfF7SeHtO+8SwE
+	cyvbUbCkwkJKwJxZFgfWVOT/YmG4qMETGT7Q4WhZIRHI8gOOoPV/yw0y/e9HHB6od7/tCQnt2VG
+	IvIqbnWFOddCzi4V+PmRAnD6ypYD/YiJYu1S30/3GMrErqS8S3q6u63mfKUXQUk7I7g+NHr+5if
+	scsyuzYze4SikUaX9BvwHr5fiXxJFTHUbEg52I6hPv/QzjOgYF0uafKvn7chEmA1iHoQHUEb4t/
+	tz93Bi0Q2uQN5AnWIkNQVklFIkdn4KVyCqE59yV7OhArBXYsCgPOA==
+X-Received: by 2002:a05:622a:4a07:b0:517:8e3c:efc6 with SMTP id d75a77b69052e-51795b17f4emr66298371cf.24.1780681497049;
+        Fri, 05 Jun 2026 10:44:57 -0700 (PDT)
 Received: from dhcp-10-231-55-133.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51789407da8sm53376171cf.19.2026.06.05.10.44.53
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51789407da8sm53376171cf.19.2026.06.05.10.44.56
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 05 Jun 2026 10:44:54 -0700 (PDT)
+        Fri, 05 Jun 2026 10:44:56 -0700 (PDT)
 From: Justin Tee <justintee8345@gmail.com>
 To: linux-scsi@vger.kernel.org
 Cc: jsmart833426@gmail.com,
 	justin.tee@broadcom.com,
 	Justin Tee <justintee8345@gmail.com>
-Subject: [PATCH v2 01/14] lpfc: Fix use-after-free in lpfc_cmpl_ct_cmd_vmid
-Date: Fri,  5 Jun 2026 11:23:23 -0700
-Message-Id: <20260605182336.134919-2-justintee8345@gmail.com>
+Subject: [PATCH v2 02/14] lpfc: Early return out of lpfc_els_abort when HBA_SETUP flag is not set
+Date: Fri,  5 Jun 2026 11:23:24 -0700
+Message-Id: <20260605182336.134919-3-justintee8345@gmail.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20260605182336.134919-1-justintee8345@gmail.com>
 References: <20260605182336.134919-1-justintee8345@gmail.com>
@@ -100,14 +100,14 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[gmail.com,broadcom.com];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24488-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24486-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -124,43 +124,42 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E7BF364A49B
+X-Rspamd-Queue-Id: 6EFFC64A50D
 
-In lpfc_cmpl_ct_cmd_vmid, there is an early call to lpfc_ct_free_iocb when
-cmd is SLI_CTAS_DALLAPP_ID.  Within lpfc_ct_free_iocb the
-cmdiocb->rsp_dmabuf will be freed.  This means any ctrsp ptr dereference
-for SLI_CT_RESPONSE_FS_RJT or even ctrsp->ReasonCode and ctrsp->Explanation
-when handling a CT LS_RJT response is a use-after-free.
-
-Remove the early lpfc_ct_free_iocb call for SLI_CTAS_DALLAPP_ID.  There
-already is a free_res label that calls lpfc_ct_free_iocb so there doesn't
-need to be an early lpfc_ct_free_iocb at the start of
-lpfc_cmpl_ct_cmd_vmid.
+It is possible that a dev_loss_tmo callback fires during an hba reset.
+The ELS pring structure is cleared by the hba reset path and the
+dev_loss_tmo callback executing lpfc_els_abort could be using a stale ELS
+pring pointer.  To prevent such a condition, check if HBA_SETUP flag is set
+before proceeding to use the ELS pring pointer in lpfc_els_abort. There is
+no point to issue aborts when the sli port is not setup anyways.
 
 Signed-off-by: Justin Tee <justintee8345@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_ct.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_nportdisc.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
-index c7853e7fe071..e14170550e69 100644
---- a/drivers/scsi/lpfc/lpfc_ct.c
-+++ b/drivers/scsi/lpfc/lpfc_ct.c
-@@ -3595,8 +3595,6 @@ lpfc_cmpl_ct_cmd_vmid(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	int i;
+diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
+index 9c449055a55e..2c8d995a45bf 100644
+--- a/drivers/scsi/lpfc/lpfc_nportdisc.c
++++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
+@@ -227,6 +227,11 @@ lpfc_els_abort(struct lpfc_hba *phba, struct lpfc_nodelist *ndlp)
+ 	struct lpfc_iocbq *iocb, *next_iocb;
+ 	int retval = 0;
  
- 	cmd = be16_to_cpu(ctcmd->CommandResponse.bits.CmdRsp);
--	if (cmd == SLI_CTAS_DALLAPP_ID)
--		lpfc_ct_free_iocb(phba, cmdiocb);
++	/* Exit early to prevent race with queue teardown. */
++	if (unlikely(phba->sli_rev == LPFC_SLI_REV4 &&
++		     !test_bit(HBA_SETUP, &phba->hba_flag)))
++		return;
++
+ 	pring = lpfc_phba_elsring(phba);
  
- 	if (lpfc_els_chk_latt(vport) || get_job_ulpstatus(phba, rspiocb)) {
- 		if (cmd != SLI_CTAS_DALLAPP_ID)
+ 	/* In case of error recovery path, we might have a NULL pring here */
 -- 
 2.38.0
 
