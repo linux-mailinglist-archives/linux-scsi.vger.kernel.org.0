@@ -1,93 +1,93 @@
-Return-Path: <linux-scsi+bounces-24513-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24515-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 0CZGJURhI2pWrwEAu9opvQ
-	(envelope-from <linux-scsi+bounces-24513-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 06 Jun 2026 01:52:36 +0200
+	id tycTKnliI2obsAEAu9opvQ
+	(envelope-from <linux-scsi+bounces-24515-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 06 Jun 2026 01:57:45 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25A4964BDF5
-	for <lists+linux-scsi@lfdr.de>; Sat, 06 Jun 2026 01:52:36 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43BF864BE31
+	for <lists+linux-scsi@lfdr.de>; Sat, 06 Jun 2026 01:57:45 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=cisco.com header.s=iport01 header.b=Cwz9nwv2;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24513-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24513-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=cisco.com header.s=iport01 header.b=lcQl8nqO;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24515-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24515-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=reject) header.from=cisco.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D030E303CF10
-	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jun 2026 23:52:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 36DB830571BF
+	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jun 2026 23:53:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 109E4368299;
-	Fri,  5 Jun 2026 23:52:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FAB8368299;
+	Fri,  5 Jun 2026 23:52:58 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from rcdn-iport-5.cisco.com (rcdn-iport-5.cisco.com [173.37.86.76])
+Received: from rcdn-iport-4.cisco.com (rcdn-iport-4.cisco.com [173.37.86.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EB1E3769F3;
-	Fri,  5 Jun 2026 23:52:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE088374E60;
+	Fri,  5 Jun 2026 23:52:55 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780703541; cv=none; b=S397g714rrNIEpZ9Pqttn2P0IsQmpq/OsrUEzOH9nIDHfMdv5oVT9T/DOYA8trbY5n++Eu2KazxxUCi5hMGbyBaitlRJpolrJHog+myEI/bwGz0FHxWXTY24I2e+Sl7qfC9JmyVEoSlrvrgjTmlPb6kjOKjvQjmLO9ksHvVyqqQ=
+	t=1780703578; cv=none; b=UapSc5ddtJKdPv3czmSm5Nd3mHHlcsyIu+7/vEalxfIrpi5lX5aveoNdVLu5JdzjJfiit+eB4TQPQ8I7zZJVItqrvo2ujRClnoOnzA75DcneOjrGnt+EIHMMwMllUdKCA7vBIJfXmVMKjGh0ZLlc0zS9O5WDBIEzqxk0EEdQngE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780703541; c=relaxed/simple;
-	bh=zsLSp5gc5xG1cc5Szc1xZhIEYlteEyxA5oFT3i61UZ4=;
+	s=arc-20240116; t=1780703578; c=relaxed/simple;
+	bh=WHaVe4lxP3vzySB73pwv+/q2GF2UEAHCOQH6XlTNEPs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ovyNzYIB5HwXroO3dhZPLBfAemb8Xl/FsICSbUo31fLfSODC8P8ZknmQn92I1LwnziHBkGKITt4MhR48adq2ycphQ6T8LnCVuQpuxj4dunT6lBHpHTqaz09icSr+A4IMpo6eYfihAxswzFFmBvJE0FZ9R/7HEYyBYE0cImUDi90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=Cwz9nwv2; arc=none smtp.client-ip=173.37.86.76
+	 MIME-Version; b=pMat2XcYHlT8TbpAtjsQ4CG7ySExBUa1kiTm51WROmVj/n7FCmZh4qSaT/fwSyAr2kyu9p15+fSC+mZhFBZeecFhKPv6nHRJ3kn26oiF+WHca5LNw3L+Cy63xA3DK5OetfbCfPN3IpVeall1zQmVYd4znk9eODNkGKHZRXzhqms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=lcQl8nqO; arc=none smtp.client-ip=173.37.86.75
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=cisco.com; i=@cisco.com; l=9430; q=dns/txt;
-  s=iport01; t=1780703540; x=1781913140;
+  d=cisco.com; i=@cisco.com; l=982; q=dns/txt;
+  s=iport01; t=1780703575; x=1781913175;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=BnroEwYu5vuzrrLyOrKH6As3bvmpYULvO3pe+bTxCjI=;
-  b=Cwz9nwv229YN2pheSHWJH73/5M4Q8JhetQBpg8qeNhKsOT8yhgxz9d2+
-   e3kijhzlMCZHxODiyKKEKN6lR7xje9gC56plwYqUvH4E2nvsjzjYCLlxb
-   ZZf6pzz7zKx6iIDLXD4upzpjkTlnP//8/XHu7m7b1pl8QxHbBbqKXJgLA
-   wqKhETjZUk4CBS2OJgoweThYOjhZ+SU17LWICelx9ggcTcUh4Lbi/jUue
-   616fkcz9xZTs/4CXoAGPWjM3HD2iy8QPDNzuHe94o3CwTmzo2A8SJqGrI
-   52pMvn/Z8AF+6JR/KoGbwt/tfUPiGgtl+cEF6oCWebdQeHA+ybunACoao
-   g==;
-X-CSE-ConnectionGUID: 58DicdzIRVapt8s7O4t8Fg==
-X-CSE-MsgGUID: +MghddSbSba0ClI5p0MxTA==
-X-IPAS-Result: =?us-ascii?q?A0BDAgCrXyNq/5P/Ja1aglmCV4FSQxkwlCqCIYEWnQiBf?=
- =?us-ascii?q?g8BAQEPUQQBAYUGAo0zAiY0CQ4BAgQDAgMBAQEBAQEBAQEBAQsBAQUBAQECA?=
- =?us-ascii?q?QcFgQ4ThlyGWwIBAycLAUYQUVYZgwKCdAOze4F5M4EB3kKBZgELFAGBOI1dd?=
- =?us-ascii?q?IR7JxUGgUlEgRWCcgdvgVKCSYZsBIMukFxIgR4DWSwBVRMNCgsHBYFmAzUSK?=
+  bh=Ih4/4CQtXsRllMF+cu0QXC1vYWo60kbbCDWls6M2bSg=;
+  b=lcQl8nqOrhdZF5x+dRCZqi+ACHTUFtcp520IcmnRuQhIRdGt2EjtAYgG
+   jCCO2T65rxiAsI60WYVmS1ZHgAGNPflQfg/OdqbnELn7Z/DWnCeAfO1To
+   WqGobuU87YZk69IPZP7CE9ykXoql/m5knTdmEs3gV1njTcAEnhC2Bi/SH
+   GZrK5fKQ1wZvucwYHbMb0reB8R3PnCpdA4McarPJwfi5ikSbEQgCWx/qt
+   Pd03GjugRZnHuTaBT7dIbCUKYNkm8Yu4SalPW2Xm5NjaAOrjotoT7VTvW
+   czkQmwhdswWwOqOXaTun0deRJRmeLoMnITW8aGLKJ9JuTI0MRMcUD7qRX
+   w==;
+X-CSE-ConnectionGUID: xSwMMa4sRPKxl2htBJgiOQ==
+X-CSE-MsgGUID: 6DDpPirCRkyLxIN8CLo2Jg==
+X-IPAS-Result: =?us-ascii?q?A0BBAgCrXyNq/5P/Ja1aHgEBCxIMggULgleBUkMZMJQqo?=
+ =?us-ascii?q?D+Bfg8BAQEPUQQBAYUGAo0zAiY0CQ4BAgQDAgMBAQEBAQEBAQEBAQsBAQUBA?=
+ =?us-ascii?q?QECAQcFgQ4ThlyGWwIBAzIBRhBRVhmDAoJ0A7N7giyBAd5CgWYBCxQBgTiNX?=
+ =?us-ascii?q?XSEeycVBoFJRIR9gVKCOIEGhXcEgxwSkFxIgR4DWSwBVRMNCgsHBYFmAzUSK?=
  =?us-ascii?q?hVuMh2BIz4XgQsbBwWBSoFJaoEEhRIjHwM5gReBfIEoZ2kVMToXAwsYDUgRL?=
- =?us-ascii?q?DcUGwQ+bgeMLhcPgjAHgQ4BgTwIZBdjkmMKkB2CIYE1n1mEJqFbGjOEBJQWk?=
- =?us-ascii?q?lGZBqlAgWg8gVkzGggbFYMiUxkPji0WyEknMj0BAQcCBw4DC4FokAGBfAEB?=
-IronPort-Data: A9a23:5vuq2KOMGl09eXbvrR1UlsFynXyQoLVcMsEvi/4bfWQNrUpzhDxVy
- 2YbDGCHM/mOYmP8eNAlO4u18h4C6JHWy9MxGnM5pCpnJ55oRWUpJjg4wmPYZX76whjrFRo/h
+ =?us-ascii?q?DcUGwQ+bgeMLhcPgjeBDoExgQ+mDqEOhCahWxozqmuZBqlAgWg8gVkzGggbF?=
+ =?us-ascii?q?YMiUxkP1wwnMj0CBwIHDgMLkWiBfQEB?=
+IronPort-Data: A9a23:tqDNtaNyrW2cD9vvrR1UlsFynXyQoLVcMsEvi/4bfWQNrUpw32QOz
+ zZOXzvUaKmDZzTzeYt0aNvioUJS6JHWzYU2SXM5pCpnJ55oRWUpJjg4wmPYZX76whjrFRo/h
  ykmQoCeaphyFTmE+kvF3oHJ9RFUzbuPSqf3FNnKMyVwQR4MYCo6gHqPocZh6mJTqYb/WV/lV
  e/a+ZWFZgf7g2Msawr41orawP9RlKWq0N8nlgRWicBj5Df2i3QTBZQDEqC9R1OQapVUBOOzW
  9HYx7i/+G7Dlz91Yj9yuu+mGqGiaue60Tmm0hK6aYD76vRxjnBaPpIACRYpQRw/ZwNlMDxG4
- I4lWZSYEW/FN0BX8QgXe0Ew/ypWZcWq9FJbSJSymZT78qHIT5fj66g+IEA9MZ85wNh+GX0e7
- qM/dCxdQB/W0opawJrjIgVtrt4oIM+uOMYUvWttiGiBS/0nWpvEBa7N4Le03h9p2ZsIRqmYP
- ZdEL2MzM3wsYDUXUrsTIJE3hvupgnD8WzZZs1mS46Ew5gA/ySQtgeCyaoaEJ4DiqcN93WOXp
- m7KxG7CCBhCH9i+lCLd12KQr7qa9c/8cMdIfFGizdZqiUee7m8eEhsbUR28u/bRokyzWdh3L
+ I4lWZSYEW/FN0BX8QgXe0Ew/ypWZcWq9FJbSJSymZT78qHIT5fj6+VVE2QTNNEDwN5UEWUU9
+ eAyCj8MSSnW0opawJrjIgVtrt4oIM+uOMYUvWttiGiBS/0nWpvEBa7N4Le03h9p2ZsIRqmYP
+ ZdEL2MzM3wsYDUXUrsTIJE3hvupgnD8WzZZs1mS46Ew5gA/ySQtgeCwb4qLIYbiqcN9wGq0v
+ lrH5U/DAQA+JP25mRGh9SiOibqa9c/8cMdIfFGizdZqiUee7m8eEhsbUR28u/bRokyzWdh3L
  00S5zporKI3skesS7HVWhSivH+C+AYRR9dKCOA8wAaXw6HQ7kCSAW1sZjdNYd8hrMgrbSYn2
  l+Ag5XiAjkHmL+QRHSQ+beVhSm/NSgcMSkJYipsZREI/dT5u6kpgx7PR8olG6mw5vXxFSz2y
  DmMhDMjnLhVhskOv42//Fbak3evq4LPQwod+AraRCSm4xl/aYrjYJangXDf7PBdPMOCRUKAl
  GYLltLY7+0UC5yJ0iuXT40w8KqB/f2JNnjYxFVoBZRkrmzr8H+4docW6zZ7TKt0Dvs5lfbSS
  Be7kWtsCFV7ZRNGsYcfj1qNNvkX
-IronPort-HdrOrdr: A9a23:YYtQk6DcT7pm8H3lHelm55DYdb4zR+YMi2TDGXocdfUzSL39qy
- nAppomPHPP4gr5HUtQ+uxoW5PwJE80l6QV3WB5B97LNzUO+lHYTr2KhrGM/9SPIUDD398Y/b
- t8cqR4Fd37BUV3gILH+gWieuxQp+VviJrJuc7ui1FwUAptd6Zsqy19CgqdDwlKYTMuP+teKH
- JZjfA33wZJvh8sH72GOkU=
-X-Talos-CUID: 9a23:sSJnImCOL77hfar6E3Q32E8fFtIESEPU1GuAOBCfVXo5ZrLAHA==
-X-Talos-MUID: 9a23:cgxVrApKk3UBUDr6Ju0ez3JHO8dk75+kM0oEyb4CmpScbQlgBx7I2Q==
+IronPort-HdrOrdr: A9a23:Gg2pJanX9wjI6bh5HSbSjzMSB/vpDfLm3DAbv31ZSRFFG/FwWf
+ rDoB19726RtN9/Yh8dcLy7UpVoBEmslqKdgrNhWItKPjOGhILAFugLhrcKgQeQeREWndQz6U
+ 4PScVDIey1JURmjMr8/QmzG8stzZ266qyy7N2uqEuFNTsLV4hQqyFkFw2cDkp6ACNCBZY/Cd
+ 6gw/AvnUvHRZzSBf7LfkXsmIP41qT2qK4=
+X-Talos-CUID: 9a23:r50Ip21YxhpPW0JtspN2TLxfCvs6V1jUkGzqG2yoDTxpVJe3Rl63wfYx
+X-Talos-MUID: 9a23:HKVu9QnUaxlC1vxUlRl7dno8GOtw26W0I3oOgLEWmu/UHgh3YRWS2WE=
 X-IronPort-Anti-Spam-Filtered: true
 X-IronPort-AV: E=Sophos;i="6.24,189,1774310400"; 
-   d="scan'208";a="490724954"
+   d="scan'208";a="490578632"
 Received: from rcdn-l-core-10.cisco.com ([173.37.255.147])
-  by rcdn-iport-5.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 05 Jun 2026 23:52:19 +0000
+  by rcdn-iport-4.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 05 Jun 2026 23:52:54 +0000
 Received: from fedora.lan?044cisco.com (unknown [10.188.102.68])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kartilak@cisco.com)
-	by rcdn-l-core-10.cisco.com (Postfix) with ESMTPSA id A0BEF18000241;
-	Fri,  5 Jun 2026 23:52:17 +0000 (GMT)
+	by rcdn-l-core-10.cisco.com (Postfix) with ESMTPSA id 2DC0C18000241;
+	Fri,  5 Jun 2026 23:52:53 +0000 (GMT)
 From: Karan Tilak Kumar <kartilak@cisco.com>
 To: sebaddel@cisco.com
 Cc: arulponn@cisco.com,
@@ -106,9 +106,9 @@ Cc: arulponn@cisco.com,
 	lduncan@suse.com,
 	Karan Tilak Kumar <kartilak@cisco.com>,
 	Hannes Reinecke <hare@kernel.org>
-Subject: [PATCH v3 12/13] scsi: fnic: Expose NVMe transport state in debugfs
-Date: Fri,  5 Jun 2026 16:45:37 -0700
-Message-ID: <20260605234538.7950-13-kartilak@cisco.com>
+Subject: [PATCH v3 13/13] scsi: fnic: Bump up version number
+Date: Fri,  5 Jun 2026 16:45:38 -0700
+Message-ID: <20260605234538.7950-14-kartilak@cisco.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20260605234538.7950-1-kartilak@cisco.com>
 References: <20260605234538.7950-1-kartilak@cisco.com>
@@ -129,12 +129,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[cisco.com,reject];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[cisco.com:s=iport01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-24513-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24515-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:sebaddel@cisco.com,m:arulponn@cisco.com,m:djhawar@cisco.com,m:gcboffa@cisco.com,m:mkai2@cisco.com,m:satishkh@cisco.com,m:aeasi@cisco.com,m:jejb@linux.ibm.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:jmeneghi@redhat.com,m:revers@redhat.com,m:adakopou@redhat.com,m:lduncan@suse.com,m:kartilak@cisco.com,m:hare@kernel.org,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -143,7 +143,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
 	DKIM_TRACE(0.00)[cisco.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -155,15 +155,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,suse.com:email,cisco.com:mid,cisco.com:dkim,cisco.com:from_mime,cisco.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,cisco.com:mid,cisco.com:dkim,cisco.com:from_mime,cisco.com:email,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 25A4964BDF5
+X-Rspamd-Queue-Id: 43BF864BE31
 
-Create an NVMe debugfs directory with a per-host nvmef_info file.
-
-Report local-port and target-port identifiers for NVMe initiator
-instances, and initialize and remove the debugfs entries with the NVMe
-probe and teardown paths.
+Bump up version number to 1.9.0.0.
 
 Reviewed-by: Sesidhar Baddela <sebaddel@cisco.com>
 Reviewed-by: Arulprabhu Ponnusamy <arulponn@cisco.com>
@@ -171,279 +167,26 @@ Reviewed-by: Gian Carlo Boffa <gcboffa@cisco.com>
 Reviewed-by: Arun Easi <aeasi@cisco.com>
 Reviewed-by: Hannes Reinecke <hare@kernel.org>
 Reviewed-by: Lee Duncan <lduncan@suse.com>
+Tested-by: Karan Tilak Kumar <kartilak@cisco.com>
 Signed-off-by: Karan Tilak Kumar <kartilak@cisco.com>
 Co-developed-by: Hannes Reinecke <hare@kernel.org>
-
 ---
-Changes between v2 and v3:
-Limit nvmef_info debugfs output to the allocated buffer.
----
- drivers/scsi/fnic/fnic.h         |  5 ++
- drivers/scsi/fnic/fnic_debugfs.c | 96 ++++++++++++++++++++++++++++++++
- drivers/scsi/fnic/fnic_main.c    | 10 ++++
- drivers/scsi/fnic/fnic_nvme.c    | 30 ++++++++++
- drivers/scsi/fnic/fnic_nvme.h    |  1 +
- drivers/scsi/fnic/fnic_stats.h   |  7 +++
- 6 files changed, 149 insertions(+)
+ drivers/scsi/fnic/fnic.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/fnic/fnic.h b/drivers/scsi/fnic/fnic.h
-index 86293e112b34..951549aff521 100644
+index 951549aff521..7a46b3ce0cb3 100644
 --- a/drivers/scsi/fnic/fnic.h
 +++ b/drivers/scsi/fnic/fnic.h
-@@ -478,6 +478,8 @@ struct fnic {
- 	/*** FIP related data members  -- end ***/
+@@ -31,7 +31,7 @@
  
- 	/* NVME data members */
-+	struct dentry *fnic_nvmef_debugfs_host;
-+	struct dentry *fnic_nvmef_debugfs_file;
- 	struct sbitmap nvfnic_tag_map;
- 	struct work_struct nvme_io_cmpl_work;
- 	atomic_t nvme_io_event_queued;
-@@ -551,6 +553,9 @@ void fnic_log_q_error(struct fnic *fnic);
- void fnic_handle_link_event(struct fnic *fnic);
- int fnic_stats_debugfs_init(struct fnic *fnic);
- void fnic_stats_debugfs_remove(struct fnic *fnic);
-+int fnic_nvmef_debugfs_init(struct fnic *fnic);
-+void fnic_nvmef_debugfs_remove(struct fnic *fnic);
-+int nvfnic_get_nvmef_info(struct fnic *fnic, struct fnic_nvmef_info *info);
- int fnic_is_abts_pending(struct fnic *, struct scsi_cmnd *);
+ #define DRV_NAME		"fnic"
+ #define DRV_DESCRIPTION		"Cisco FCoE HBA Driver"
+-#define DRV_VERSION		"1.8.0.3"
++#define DRV_VERSION		"1.9.0.0"
+ #define PFX			DRV_NAME ": "
+ #define DFX                     DRV_NAME "%d: "
  
- void fnic_handle_fip_frame(struct work_struct *work);
-diff --git a/drivers/scsi/fnic/fnic_debugfs.c b/drivers/scsi/fnic/fnic_debugfs.c
-index 467fba29ea5f..690b1c6ecf01 100644
---- a/drivers/scsi/fnic/fnic_debugfs.c
-+++ b/drivers/scsi/fnic/fnic_debugfs.c
-@@ -10,10 +10,19 @@
- extern int fnic_get_debug_info(struct stats_debug_info *debug_buffer,
- 							   struct fnic *fnic);
- 
-+static int fnic_nvmef_debugfs_open(struct inode *inode,
-+			struct file *file);
-+static ssize_t fnic_nvmef_debugfs_read(struct file *file,
-+			char __user *ubuf,
-+			size_t nbytes, loff_t *pos);
-+static int fnic_nvmef_debugfs_release(struct inode *inode,
-+			struct file *file);
-+
- static struct dentry *fnic_trace_debugfs_root;
- static struct dentry *fnic_trace_debugfs_file;
- static struct dentry *fnic_trace_enable;
- static struct dentry *fnic_stats_debugfs_root;
-+static struct dentry *fnic_nvmef_debugfs_root;
- 
- static struct dentry *fnic_fc_trace_debugfs_file;
- static struct dentry *fnic_fc_rdata_trace_debugfs_file;
-@@ -46,6 +55,9 @@ int fnic_debugfs_init(void)
- 	fnic_stats_debugfs_root = debugfs_create_dir("statistics",
- 						fnic_trace_debugfs_root);
- 
-+	fnic_nvmef_debugfs_root = debugfs_create_dir("nvme_info",
-+						     fnic_trace_debugfs_root);
-+
- 	/* Allocate memory to structure */
- 	fc_trc_flag = vmalloc(sizeof(struct fc_trace_flag_type));
- 
-@@ -70,6 +82,9 @@ int fnic_debugfs_init(void)
-  */
- void fnic_debugfs_terminate(void)
- {
-+	debugfs_remove(fnic_nvmef_debugfs_root);
-+	fnic_nvmef_debugfs_root = NULL;
-+
- 	debugfs_remove(fnic_stats_debugfs_root);
- 	fnic_stats_debugfs_root = NULL;
- 
-@@ -669,6 +684,13 @@ static const struct file_operations fnic_reset_debugfs_fops = {
- 	.release = fnic_reset_stats_release,
- };
- 
-+static const struct file_operations fnic_nvmef_debugfs_fops = {
-+	.owner = THIS_MODULE,
-+	.open = fnic_nvmef_debugfs_open,
-+	.read = fnic_nvmef_debugfs_read,
-+	.release = fnic_nvmef_debugfs_release,
-+};
-+
- /*
-  * fnic_stats_init - Initialize stats struct and create stats file per fnic
-  *
-@@ -722,3 +744,77 @@ void fnic_stats_debugfs_remove(struct fnic *fnic)
- 	debugfs_remove(fnic->fnic_stats_debugfs_host);
- 	fnic->fnic_stats_debugfs_host = NULL;
- }
-+
-+int fnic_nvmef_debugfs_init(struct fnic *fnic)
-+{
-+	char name[16];
-+
-+	snprintf(name, sizeof(name), "host%d", fnic->fnic_num);
-+
-+	fnic->fnic_nvmef_debugfs_host = debugfs_create_dir(name,
-+							   fnic_nvmef_debugfs_root);
-+	fnic->fnic_nvmef_debugfs_file = debugfs_create_file("nvmef_info",
-+							    S_IFREG | 0444 |
-+							    0200,
-+							    fnic->fnic_nvmef_debugfs_host,
-+							    fnic,
-+							    &fnic_nvmef_debugfs_fops);
-+	return 0;
-+}
-+
-+static int fnic_nvmef_debugfs_open(struct inode *inode, struct file *file)
-+{
-+
-+	struct fnic *fnic = inode->i_private;
-+	struct fnic_nvmef_info *info;
-+	int buf_size = 2 * PAGE_SIZE;
-+
-+	info = kzalloc_obj(struct fnic_nvmef_info, GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	info->info_buffer = vmalloc(buf_size);
-+	if (!info->info_buffer) {
-+		kfree(info);
-+		return -ENOMEM;
-+	}
-+
-+	info->buf_size = buf_size;
-+	memset((void *)info->info_buffer, 0, buf_size);
-+	info->buffer_len = nvfnic_get_nvmef_info(fnic, info);
-+
-+	file->private_data = info;
-+
-+	return 0;
-+}
-+
-+static ssize_t fnic_nvmef_debugfs_read(struct file *file,
-+				       char __user *ubuf,
-+				       size_t nbytes, loff_t *pos)
-+{
-+	struct fnic_nvmef_info *info = file->private_data;
-+
-+	return simple_read_from_buffer(ubuf, nbytes, pos,
-+				     info->info_buffer, info->buffer_len);
-+}
-+
-+static int fnic_nvmef_debugfs_release(struct inode *inode, struct file *file)
-+{
-+	struct fnic_nvmef_info *info = file->private_data;
-+
-+	vfree(info->info_buffer);
-+	kfree(info);
-+	return 0;
-+}
-+
-+void fnic_nvmef_debugfs_remove(struct fnic *fnic)
-+{
-+	if (!fnic)
-+		return;
-+
-+	debugfs_remove(fnic->fnic_nvmef_debugfs_file);
-+	fnic->fnic_nvmef_debugfs_file = NULL;
-+
-+	debugfs_remove(fnic->fnic_nvmef_debugfs_host);
-+	fnic->fnic_nvmef_debugfs_host = NULL;
-+}
-diff --git a/drivers/scsi/fnic/fnic_main.c b/drivers/scsi/fnic/fnic_main.c
-index cd5483aac462..da5f9d53ad10 100644
---- a/drivers/scsi/fnic/fnic_main.c
-+++ b/drivers/scsi/fnic/fnic_main.c
-@@ -933,6 +933,15 @@ static int fnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		err = -EOPNOTSUPP;
- 		goto err_out_fnic_role;
- 	case VFCF_FC_NVME_INITIATOR:
-+		err = fnic_nvmef_debugfs_init(fnic);
-+		if (err) {
-+			dev_info(&fnic->pdev->dev,
-+			       "fnic(%d) Failed to initialize debugfs for nvmef\n",
-+			       fnic->fnic_num);
-+			fnic_nvmef_debugfs_remove(fnic);
-+			goto err_out_fnic_role;
-+		}
-+
- 		fnic->role = FNIC_ROLE_NVME_INITIATOR;
- 		dev_info(&fnic->pdev->dev, "fnic: %d is NVME initiator\n",
- 			fnic->fnic_num);
-@@ -1277,6 +1286,7 @@ static void fnic_remove(struct pci_dev *pdev)
- 	if ((fnic_fdmi_support == 1) && (fnic->iport.fabric.fdmi_pending > 0))
- 		timer_delete_sync(&fnic->iport.fabric.fdmi_timer);
- 
-+	fnic_nvmef_debugfs_remove(fnic);
- 	fnic_stats_debugfs_remove(fnic);
- 
- 	/*
-diff --git a/drivers/scsi/fnic/fnic_nvme.c b/drivers/scsi/fnic/fnic_nvme.c
-index 0d05822169d8..773ce6ca3fef 100644
---- a/drivers/scsi/fnic/fnic_nvme.c
-+++ b/drivers/scsi/fnic/fnic_nvme.c
-@@ -178,6 +178,36 @@ void nvfnic_release_nvme_ioreq_buf(struct fnic_iport_s *iport,
- 			     fnic->io_sgl_pool[io_req->sgl_type]);
- }
- 
-+int nvfnic_get_nvmef_info(struct fnic *fnic, struct fnic_nvmef_info *info)
-+{
-+	int len = 0;
-+	struct fnic_iport_s *iport = &fnic->iport;
-+	int buf_size = info->buf_size;
-+	struct fnic_tport_s *tport;
-+	struct fnic_tport_s *next;
-+	unsigned long flags;
-+
-+	if (buf_size <= 0)
-+		return 0;
-+
-+	len += scnprintf(info->info_buffer + len, buf_size - len,
-+			 "lport wwpn 0x%llx wwnn 0x%llx fcid 0x%06x\n",
-+			 iport->wwpn, iport->wwnn, iport->fcid);
-+
-+	spin_lock_irqsave(&fnic->fnic_lock, flags);
-+	list_for_each_entry_safe(tport, next, &iport->tport_list, links) {
-+		if (len >= buf_size - 1)
-+			break;
-+
-+		len += scnprintf(info->info_buffer + len, buf_size - len,
-+				 "tport wwpn 0x%llx wwnn 0x%llx fcid 0x%06x\n",
-+				 tport->wwpn, tport->wwnn, tport->fcid);
-+	}
-+	spin_unlock_irqrestore(&fnic->fnic_lock, flags);
-+
-+	return len;
-+}
-+
- inline int nvfnic_queue_wq_nvme_copy_desc(struct fnic *fnic,
- 					       struct vnic_wq_copy *wq,
- 					       struct fnic_io_req *io_req,
-diff --git a/drivers/scsi/fnic/fnic_nvme.h b/drivers/scsi/fnic/fnic_nvme.h
-index 837b5cdc0a6c..c40702157c03 100644
---- a/drivers/scsi/fnic/fnic_nvme.h
-+++ b/drivers/scsi/fnic/fnic_nvme.h
-@@ -132,6 +132,7 @@ void nvfnic_terminate_tport_admin_ios(struct fnic *fnic,
- 				      struct fnic_tport_s *tport);
- void nvfnic_cleanup_tport_io(struct fnic *fnic, struct fnic_tport_s *tport);
- void nvfnic_nvme_unload(struct fnic *fnic);
-+int nvfnic_get_nvmef_info(struct fnic *fnic, struct fnic_nvmef_info *info);
- void nvfnic_exch_reset(struct fnic_iport_s *iport, struct fnic_tport_s *tport);
- void nvfnic_nvme_iodone_work(struct work_struct *work);
- #else
-diff --git a/drivers/scsi/fnic/fnic_stats.h b/drivers/scsi/fnic/fnic_stats.h
-index fc81e4a7e29e..a3ddd7b55729 100644
---- a/drivers/scsi/fnic/fnic_stats.h
-+++ b/drivers/scsi/fnic/fnic_stats.h
-@@ -191,6 +191,13 @@ struct stats_debug_info {
- 	int buffer_len;
- };
- 
-+struct fnic_nvmef_info {
-+	char *info_buffer;
-+	void *i_private;
-+	int buf_size;
-+	int buffer_len;
-+};
-+
- int fnic_get_stats_data(struct stats_debug_info *, struct fnic_stats *);
- const char *fnic_role_to_str(unsigned int role);
- #endif /* _FNIC_STATS_H_ */
 -- 
 2.47.1
 
