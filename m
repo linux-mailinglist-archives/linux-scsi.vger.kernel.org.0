@@ -1,93 +1,95 @@
-Return-Path: <linux-scsi+bounces-24506-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24508-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id pNf6KXpgI2rIrgEAu9opvQ
-	(envelope-from <linux-scsi+bounces-24506-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 06 Jun 2026 01:49:14 +0200
+	id ON9yNXBgI2rBrgEAu9opvQ
+	(envelope-from <linux-scsi+bounces-24508-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 06 Jun 2026 01:49:04 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D9FB64BDBC
-	for <lists+linux-scsi@lfdr.de>; Sat, 06 Jun 2026 01:49:14 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7486164BDB6
+	for <lists+linux-scsi@lfdr.de>; Sat, 06 Jun 2026 01:49:04 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=cisco.com header.s=iport01 header.b=K2e2Ic4L;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24506-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24506-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=cisco.com header.s=iport01 header.b=WZgGHhCA;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24508-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24508-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=reject) header.from=cisco.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 209C8302926A
-	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jun 2026 23:48:20 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C27E13014756
+	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jun 2026 23:49:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C581E36F903;
-	Fri,  5 Jun 2026 23:48:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ADE6320CD9;
+	Fri,  5 Jun 2026 23:49:02 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from rcdn-iport-7.cisco.com (rcdn-iport-7.cisco.com [173.37.86.78])
+Received: from rcdn-iport-1.cisco.com (rcdn-iport-1.cisco.com [173.37.86.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E024071D5;
-	Fri,  5 Jun 2026 23:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 199E82F8EA9;
+	Fri,  5 Jun 2026 23:48:59 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780703299; cv=none; b=NvU4UOn13DF5Nu/S0Ve00u62y91LDX70Z4/e2dr6jE9wSCgn7cOamC2DUzpy0uJXJNVBOjrd7e5Dznbp7Di39FFb0TNIcu75Oblp8ARB0vCTdTar3hzjwKU35dMbbwwLkOSSlque/sQ0DwxYiLQip+7aTEUREFTqXVsW4eXnBFo=
+	t=1780703342; cv=none; b=PHDmvK2qnFBZXGFTjqKtIMFBRwKOFdHM2NfTPSbhsd4/bbjg6C1IdzFZ+09YKERgYM08SKQskLqpzn/WcTSJ5QSPzwxC0ZOD4j6QzVhrTrokZxrzOOparm18ehIyGsWQIDx3arsrbwES2N38Y54KLvBX64A/mNScQLHghkPicDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780703299; c=relaxed/simple;
-	bh=MqfsJf+1OEMmO9q7T7+jnWt5YT9gOjSmP2N52PTvYXo=;
+	s=arc-20240116; t=1780703342; c=relaxed/simple;
+	bh=hIxG7uPYX9rfmsPTxgFHVU59VZ8w+OKVPdihwzUuC/g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i2im2UhTqRe02OfkJ/EI3ObXn7olO4T6XpYGCtAvC5oRWufRtWzYR1538EZL0/BlDzn3LderF5Iez8ebGgmqI6pnjqcum2Z2vr9m73b0Rr5VS3AI1QMx0l4IvrCnaeX/La7pCwq312Wx1+gJ9kUg0ldfTHKo3/S68Jqo6oCpqBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=K2e2Ic4L; arc=none smtp.client-ip=173.37.86.78
+	 MIME-Version; b=lj6r3zTjT+9d7wl6NH6o2kpSQg3va34nipD6a9W78v+lK73tvmqTIzOvvekxXT4jWnciMtplzFm7MR/m+XexgTc8ShW9Yri05itPZy9sVpATdU+sEKqMmuUR3VAf/1leQTkPTeqp3QkzaXsCENKz61JR2mykTibzsdEzq4JW9+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=WZgGHhCA; arc=none smtp.client-ip=173.37.86.72
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=cisco.com; i=@cisco.com; l=2380; q=dns/txt;
-  s=iport01; t=1780703298; x=1781912898;
+  d=cisco.com; i=@cisco.com; l=20449; q=dns/txt;
+  s=iport01; t=1780703340; x=1781912940;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7El7txWnVBYS0oAqoczxMxdcpNQB4t7ZrPZxLFg+7Q4=;
-  b=K2e2Ic4Lrr3eBLa1wvcZFTcP2Mn7+KfMfcOq78cN+cAp7Kks4a0wIcab
-   g+CsxWt0+KbJckgTMg1nyCh0Zaqav9LeVRPw5fCDg+xCRzI0R6ILaz5OB
-   fTMpq+hhsR1VQz/s9Y+grcpXBDz5RSICq4P7YONiPw+pfCr3lqbzUcej/
-   mzvGWsfhjXJll1WS1FBpPVR2MpORLIXpbtReGGzkRB0q7P96cPxvlciV+
-   GybGVVzygNuv8hXTxZ6+OXLsnVxnWbwqs/DZqO+uZitgSMnaIz7kfP9MM
-   nU2iDt9b7GFEdpxRKfZ8tVlt4lmzT0HAmip7IGLnswDDIElOArKzLElOz
-   w==;
-X-CSE-ConnectionGUID: m89aPL93SJehadglBj6r+Q==
-X-CSE-MsgGUID: jMOeFO80S5OTqhgpq5TLUA==
-X-IPAS-Result: =?us-ascii?q?A0BCAgAtXyNq/5P/Ja1aglmCV4FSQxkwlCqgP4F+DwEBA?=
- =?us-ascii?q?Q9RBAEBhQYCjTMCJjQJDgECBAMCAwEBAQEBAQEBAQEBCwEBBQEBAQIBBwWBD?=
- =?us-ascii?q?hOGXIZbAgEDJwsBRhBRVhmDAoJ0A7QGgXkzgQHeQoFmAQsUAYE4jV10hHsnF?=
- =?us-ascii?q?QaBSUSBFYNogVKDPoV3BIMuhXyKYEiBHgNZLAFVEw0KCwcFgWYDNRIqFW4yH?=
- =?us-ascii?q?YEjPheBCxsHBYFKgUlqgQSFEiMfAzmBF4F8gShnaRUxOhcDCxgNSBEsNxQbB?=
- =?us-ascii?q?D5uB4wuFw+CN4EPgj8dk0SSLaEOhCahWxozqmuZBqNwhVCBaDyBWTMaCBsVg?=
- =?us-ascii?q?yJTGQ/WfycyPQIHAgcOAwuTZQEB?=
-IronPort-Data: A9a23:bHtWBaOyg9v9+IPvrR1UlsFynXyQoLVcMsEvi/4bfWQNrUp00DAGm
- jFJCG6BbP+MYGKjKo0gbd6zoE0EuMPdzddqQXM5pCpnJ55oRWUpJjg4wmPYZX76whjrFRo/h
- ykmQoCeaphyFTmE+kvF3oHJ9RFUzbuPSqf3FNnKMyVwQR4MYCo6gHqPocZh6mJTqYb/WV/lV
- e/a+ZWFZgf7g2Msawr41orawP9RlKWq0N8nlgRWicBj5Df2i3QTBZQDEqC9R1OQapVUBOOzW
- 9HYx7i/+G7Dlz91Yj9yuu+mGqGiaue60Tmm0hK6aYD76vRxjnBaPpIACRYpQRw/ZwNlMDxG4
- I4lWZSYEW/FN0BX8QgXe0Ew/ypWZcWq9FJbSJSymZT78qHIT5fj6/A+XUgOGdxDwcR6AWhC+
- vgyKm4XLSnW0opawJrjIgVtrt4oIM+uOMYUvWttiGiBS/0nWpvEBa7N4Le03h9p2ZsIRqmYP
- ZdEL2MzM3wsYDUXUrsTIJE3hvupgnD8WzZZs1mS46Ew5gA/ySQtgOm9aoWEIo3iqcN9nGO/q
- 0zhrzzCXzYmLdyQ0SPYzlaRr7qa9c/8cMdIfFGizdZqiUee7m8eEhsbUR28u/bRokyzWdh3L
- 00S5zporKI3skesS7HVWhSivH+C+AYRR9dKCOA8wAaXw6HQ7kCSAW1sZjdNYd8hrMgrbSYn2
- l+Ag5XiAjkHmL+QRHSQ+beVhSm/NSgcMSkJYipsZREI/dT5u6kpgx7PR8olG6mw5vXxFSz2y
- DmMhDMjnLhVhskOv42//Fbak3evq4LPQwod+AraRCSm4xl/aYrjYJangXDf7PBdPMOCRUKAl
- GYLltLY7+0UC5yJ0iuXT40w8KqB/f2JNnjYxFVoBZRkrmzr8H+4docW6zZ7TKt0Dvs5lfbSS
- Be7kWtsCFV7ZRNGsYcfj1qNNvkX
-IronPort-HdrOrdr: A9a23:lcLm5q9dRZXGcHg1blluk+ASI+orL9Y04lQ7vn2ZhyY4TiX+rb
- HLoB1173HJYVoqMk3I3OrwW5VoIkmskKKdg7NxAV7KZmCP01dAbrsSj7cKqAeOJ8SRzINg/J
- YlW7RiCdH2EFhxhdv37U2FCdo6qeP3l5xA/d2/815dCSd3dqpn8wB1TiyfEkFwWU16IKBRLu
- v72iKCzADQAUj+qa+AdwA4Y9Q=
-X-Talos-CUID: 9a23:hCq0JGGUn9XPiQv+qmJipB8dIuR0KUb/wXfZL0C8I2Q3Uv6sHAo=
-X-Talos-MUID: 9a23:CZbXwQgsKB+0yhVbI12VJMMpNuJP7oqJWBg2zLI6osmLLTUtBxOgpWHi
+  bh=FE0GT3N+SJCIbJMNWI95gFGVFtXwoLqZEjHn00zX3d4=;
+  b=WZgGHhCAkpbGh+rzDMaL2LwgmmIIAOfKjgNoMVZ2y3wOEtndbZAFl0uS
+   k8dSJcoOjqCdsdxWqEWbVO4JJxdfUrSdZ4v6cHBJwY6g7+j8Db8iqoe1a
+   BGoWl6EN+wd2SDyk1leB+9foUi23pP/iz9EiTbZdQ3cv0WqrmZLiSBEbJ
+   2BnQIqneuELq3f5ciwd6u0VWQzekzGbuhOpJROm7/ycnGHRbehRtAhUQa
+   EeNLjLygUwYgKC8EyZy6o9BP0mbNCZlRDY/oZMCdnO7n9oArp9VMx6xge
+   b4U1Tn/12Mfm43FI2e0Cel2jMQGEEZ4gDoFpLUN+AcWr36kPbyYJ6Tn6E
+   g==;
+X-CSE-ConnectionGUID: DtXiL1eZSQGI2EB/J9/uYA==
+X-CSE-MsgGUID: p816Mkx2Svyx6DkNLwAtBg==
+X-IPAS-Result: =?us-ascii?q?A0AmAACrXyNq/5P/Ja1aHQEBAQEJARIBBQUBgXwIAQsBg?=
+ =?us-ascii?q?hc/gVJDGTCMc4c3giGBFp0IFIFqDwEBAQ9RBAEBhQYCjTMCJjQJDgECBAMCA?=
+ =?us-ascii?q?wEBAQEBAQEBAQEBCwEBBQEBAQIBBwWBDhOGXIZbAgEDJwsBRhBRVhmCKliCd?=
+ =?us-ascii?q?AOze4F5M4EB3kKBZgELFAGBOAGNXHSEeycVBoFJRIEVgnIHb4FSgkkPhl0Eg?=
+ =?us-ascii?q?y6EfIEAimBIgR4DWSwBVRMNCgsHBYFmAzUSKhVuMh2BIz4XgQsbBwWBSoFJa?=
+ =?us-ascii?q?oEEhRIjHwM5gReBfIEoZ2kVMToXAwsYDUgRLDcUGwQ+bgeMLhcPgjcBSToLg?=
+ =?us-ascii?q?S1iGQEWHgs6knQKkAyCIaEOhCaOepJhGjOEBKZnmQakCIU4gWg8gVkzGggbF?=
+ =?us-ascii?q?TuCZ1MZD44tFshJJzI9AgcCBw4DC5FpgXwBAQ?=
+IronPort-Data: A9a23:O3s5wKyLAXSCyCI1/Kx6t+fGxyrEfRIJ4+MujC+fZmUNrF6WrkUEm
+ jNMWmmPbK2PMGPxKosgb9+090kOu5DVndYyGlBv/lhgHilAwSbn6Xt1DatR0we6dJCroJdPt
+ p1GAjX4BJlqCCea/VH1buSJQUBUjcmgXqD7BPPPJhd/TAplTDZJoR94kobVuKYw6TSCK13L4
+ 4+aT/H3Ygf/hWYqaj9MsspvlTs21BjMkGJA1rABTagjUG/2zxE9EJ8ZLKetGHr0KqE8NvK6X
+ evK0Iai9Wrf+Ro3Yvv9+losWhRXKlJ6FVHmZkt+A8BOsDAbzsAB+vpT2M4nVKtio27hc+adZ
+ zl6ncfYpQ8BZsUgkQmGOvVSO3kW0aZuoNcrLZUj2CCe5xWuTpfi/xlhJG0qDYw8o+tFOlhh1
+ KY1AncvP1eetsvjldpXSsE07igiBNPgMIVavjRryivUSK9+B5vCWK7No9Rf2V/chOgXQq2YP
+ JVfM2cyKk2cPHWjOX9PYH46tOShnGX+dzRbgFmUvqEwpWPUyWSd1ZCxYYKMKoXSHJU9ckCwv
+ jKfoUH6EkshKs2PlxaG1Fazr/PlknauMG4VPPjinhJwu3WTz3YeIB4bT122pb++kEHWc9BSK
+ UY8/isosLh09UauCNL6WnWQpXeeoh8aHcJdD+Ag8wyL4q3O6g2dCy4PSTspQNUqvcwxXTs3/
+ kWEk9PgGXpkt7j9YXCY+7GZojOzETIYIW8LeWkPSg5ty8PuvowplTrVQ9pjGbLzhdrwcRn0z
+ y2MpyE4r64OlsNN3KK+lXjDgjSxtt3KQxQz6wH/QG2o9EV6aZSjaoju7kLUhd5ELYCEXhyat
+ 2MFs9aR4fpIDpyXkiGJBuIXE9mUC+2tKjbQhxtrWpIm7TnooibldoFL6zY4L0BsWioZRQLUj
+ IbokVs5zPdu0LGCMsebv6rZ5xwW8JXd
+IronPort-HdrOrdr: A9a23:9aBT3qA7zZLO5WflHelm55DYdb4zR+YMi2TDGXocdfUzSL39qy
+ nAppomPHPP4gr5HUtQ+uxoW5PwJE80l6QV3WB5B97LNzUO+lHYTr2KhrGM/9SPIUDD398Y/b
+ t8cqR4Fd37BUV3gILH+gWieuxQp+VviJrJuc7ui1FwUAptd6Zsqy19CgqdDwlKYTMuP+teKH
+ JZjfA33wZJvh8sH72GOkU=
+X-Talos-CUID: 9a23:SPv9em3iW8BBU/arIQDogbxfNtwVc1mEwUXrGmCZU0tDD5/EDkKh0fYx
+X-Talos-MUID: =?us-ascii?q?9a23=3Aq3jUJQ11ryNqigm/XV+Dq6qjADUj+/T3VmUOgc8?=
+ =?us-ascii?q?9pdiUawBzHROCpSidTdpy?=
 X-IronPort-Anti-Spam-Filtered: true
 X-IronPort-AV: E=Sophos;i="6.24,189,1774310400"; 
-   d="scan'208";a="489827909"
+   d="scan'208";a="490181018"
 Received: from rcdn-l-core-10.cisco.com ([173.37.255.147])
-  by rcdn-iport-7.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 05 Jun 2026 23:47:08 +0000
+  by rcdn-iport-1.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 05 Jun 2026 23:47:46 +0000
 Received: from fedora.lan?044cisco.com (unknown [10.188.102.68])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kartilak@cisco.com)
-	by rcdn-l-core-10.cisco.com (Postfix) with ESMTPSA id 5DB7418000A5D;
-	Fri,  5 Jun 2026 23:47:07 +0000 (GMT)
+	by rcdn-l-core-10.cisco.com (Postfix) with ESMTPSA id 43E1418000887;
+	Fri,  5 Jun 2026 23:47:45 +0000 (GMT)
 From: Karan Tilak Kumar <kartilak@cisco.com>
 To: sebaddel@cisco.com
 Cc: arulponn@cisco.com,
@@ -106,9 +108,9 @@ Cc: arulponn@cisco.com,
 	lduncan@suse.com,
 	Karan Tilak Kumar <kartilak@cisco.com>,
 	Hannes Reinecke <hare@kernel.org>
-Subject: [PATCH v3 04/13] scsi: fnic: Advertise NVMe initiator service parameters
-Date: Fri,  5 Jun 2026 16:45:29 -0700
-Message-ID: <20260605234538.7950-5-kartilak@cisco.com>
+Subject: [PATCH v3 05/13] scsi: fnic: Add FDLS role handling for NVMe initiators
+Date: Fri,  5 Jun 2026 16:45:30 -0700
+Message-ID: <20260605234538.7950-6-kartilak@cisco.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20260605234538.7950-1-kartilak@cisco.com>
 References: <20260605234538.7950-1-kartilak@cisco.com>
@@ -129,12 +131,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[cisco.com,reject];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[cisco.com:s=iport01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-24506-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24508-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:sebaddel@cisco.com,m:arulponn@cisco.com,m:djhawar@cisco.com,m:gcboffa@cisco.com,m:mkai2@cisco.com,m:satishkh@cisco.com,m:aeasi@cisco.com,m:jejb@linux.ibm.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:jmeneghi@redhat.com,m:revers@redhat.com,m:adakopou@redhat.com,m:lduncan@suse.com,m:kartilak@cisco.com,m:hare@kernel.org,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -143,7 +145,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
 	DKIM_TRACE(0.00)[cisco.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -155,14 +157,17 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[cisco.com:mid,cisco.com:dkim,cisco.com:from_mime,cisco.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,cisco.com:mid,cisco.com:dkim,cisco.com:from_mime,cisco.com:email,suse.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 1D9FB64BDBC
+X-Rspamd-Queue-Id: 7486164BDB6
 
-Set FC service parameters according to the selected initiator role.
+Modify FDLS registration and discovery flows to use NVMe FC-4 type,
+features, PRLI service parameters, and FDMI attributes when the adapter
+runs as an NVMe initiator.
 
-Keep FCP retry and confirmation bits for FCP initiators, and advertise
-NVMe initiator and SLER bits for NVMe initiators.
+Limit SCSI host setup, teardown, rport reset, and FC host notifications
+to FCP initiators while keeping target-port events available to both FCP
+and NVMe roles.
 
 Reviewed-by: Sesidhar Baddela <sebaddel@cisco.com>
 Reviewed-by: Arulprabhu Ponnusamy <arulponn@cisco.com>
@@ -173,50 +178,558 @@ Reviewed-by: Lee Duncan <lduncan@suse.com>
 Signed-off-by: Karan Tilak Kumar <kartilak@cisco.com>
 Co-developed-by: Hannes Reinecke <hare@kernel.org>
 ---
- drivers/scsi/fnic/fdls_fc.h   |  3 +++
- drivers/scsi/fnic/fnic_main.c | 15 ++++++++++-----
- 2 files changed, 13 insertions(+), 5 deletions(-)
+ drivers/scsi/fnic/fcpio.h     |  23 +++++
+ drivers/scsi/fnic/fdls_disc.c | 159 +++++++++++++++++++++++-----------
+ drivers/scsi/fnic/fdls_fc.h   |   1 +
+ drivers/scsi/fnic/fnic_fcs.c  |  26 +++---
+ drivers/scsi/fnic/fnic_fdls.h |  19 ++--
+ drivers/scsi/fnic/fnic_main.c |  23 +++--
+ drivers/scsi/fnic/fnic_scsi.c |   3 +-
+ 7 files changed, 176 insertions(+), 78 deletions(-)
 
-diff --git a/drivers/scsi/fnic/fdls_fc.h b/drivers/scsi/fnic/fdls_fc.h
-index 012f43afd083..e33c829545fb 100644
---- a/drivers/scsi/fnic/fdls_fc.h
-+++ b/drivers/scsi/fnic/fdls_fc.h
-@@ -39,6 +39,9 @@
- #define FNIC_FCP_SP_CONF_CMPL   0x00000080
- #define FNIC_FCP_SP_RETRY       0x00000100
+diff --git a/drivers/scsi/fnic/fcpio.h b/drivers/scsi/fnic/fcpio.h
+index 54a0b2ba8f6f..46eb442a47cb 100644
+--- a/drivers/scsi/fnic/fcpio.h
++++ b/drivers/scsi/fnic/fcpio.h
+@@ -33,6 +33,9 @@ enum fcpio_type {
+ 	FCPIO_ICMND_CMPL,
+ 	FCPIO_ITMF,
+ 	FCPIO_ITMF_CMPL,
++	FCPIO_NVME_CMD,
++	FCPIO_NVME_ERSP_HW_CMPL,
++	FCPIO_NVME_ERSP_FW_CMPL,
  
-+#define FNIC_NVME_SP_INITIATOR   0x00000020
-+#define FNIC_NVME_SP_SLER        0x00000100
+ 	/*
+ 	 * Target request types
+@@ -179,10 +182,22 @@ fcpio_header_dec(struct fcpio_header *hdr,
+ 	*tag = hdr->tag;
+ }
+ 
++#define NVME_CMD_SZ 96
+ #define CDB_16      16
+ #define CDB_32      32
+ #define LUN_ADDRESS 8
+ 
++struct fcpio_nvme_cmnd {
++	uint8_t d_id[3];
++	u_int8_t flags;		/* command flags */
++	u_int32_t sgl_cnt;	/* scatter-gather list count */
++	u_int64_t sgl_addr;	/* scatter-gather list addr */
++	u_int16_t cmd_len;
++	u_int16_t _resvd1;	/* reserved: should be 0 */
++	u_int32_t data_len;	/* length of data expected */
++	u_int8_t nvme_cmnd[NVME_CMD_SZ];	/* NVME command */
++};
 +
- #define FNIC_FC_CONCUR_SEQS    (0xFF)
- #define FNIC_FC_RO_INFO        (0x1F)
+ /*
+  * fcpio_icmnd_16: host -> firmware request
+  *
+@@ -458,6 +473,7 @@ struct fcpio_host_req {
+ 		/*
+ 		 * Initiator host requests
+ 		 */
++		struct fcpio_nvme_cmnd              nvcmnd;
+ 		struct fcpio_icmnd_16               icmnd_16;
+ 		struct fcpio_icmnd_32               icmnd_32;
+ 		struct fcpio_itmf                   itmf;
+@@ -482,6 +498,12 @@ struct fcpio_host_req {
+ 	} u;
+ };
  
-diff --git a/drivers/scsi/fnic/fnic_main.c b/drivers/scsi/fnic/fnic_main.c
-index 3a365ea455b1..5850d51b0e8f 100644
---- a/drivers/scsi/fnic/fnic_main.c
-+++ b/drivers/scsi/fnic/fnic_main.c
-@@ -1016,11 +1016,16 @@ static int fnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	iport->max_flogi_retries = fnic->config.flogi_retries;
- 	iport->max_plogi_retries = fnic->config.plogi_retries;
- 	iport->plogi_timeout = fnic->config.plogi_timeout;
--	iport->service_params =
--		(FNIC_FCP_SP_INITIATOR | FNIC_FCP_SP_RD_XRDY_DIS |
--		 FNIC_FCP_SP_CONF_CMPL);
--	if (fnic->config.flags & VFCF_FCP_SEQ_LVL_ERR)
--		iport->service_params |= FNIC_FCP_SP_RETRY;
++struct fcpio_nvme_cmpl {
++	uint8_t resp_size;
++	uint8_t resvd[3];
++	uint8_t resp_bytes[32];
++};
++
+ /*
+  * fcpio_icmnd_cmpl: firmware -> host response
+  *
+@@ -682,6 +704,7 @@ struct fcpio_fw_req {
+ 		 * Initiator firmware responses
+ 		 */
+ 		struct fcpio_icmnd_cmpl         icmnd_cmpl;
++		struct fcpio_nvme_cmpl          nvme_cmpl;
+ 		struct fcpio_itmf_cmpl          itmf_cmpl;
+ 
+ 		/*
+diff --git a/drivers/scsi/fnic/fdls_disc.c b/drivers/scsi/fnic/fdls_disc.c
+index f665460ef62c..90bb1a39972d 100644
+--- a/drivers/scsi/fnic/fdls_disc.c
++++ b/drivers/scsi/fnic/fdls_disc.c
+@@ -13,6 +13,10 @@
+ #include <linux/utsname.h>
+ 
+ #define FC_FC4_TYPE_SCSI 0x08
++#define FNIC_NVME_FEAT_TARG (1 << 0)
++#define FNIC_NVME_FEAT_INIT (1 << 1)
++#define FNIC_NVME_FEAT_DISC (1 << 2)
++
+ #define PORT_SPEED_BIT_8 8
+ #define PORT_SPEED_BIT_9 9
+ #define PORT_SPEED_BIT_14 14
+@@ -562,6 +566,22 @@ static void fdls_init_fabric_abts_frame(uint8_t *frame,
+ 	};
+ }
+ 
++static void fdls_set_frame_type(struct fnic *fnic, uint8_t *frame_type)
++{
++	if (IS_FNIC_FCP_INITIATOR(fnic))
++		*frame_type = FC_TYPE_FCP;
++	else if (IS_FNIC_NVME_INITIATOR(fnic))
++		*frame_type = FC_TYPE_NVME;
++}
++
++static void fdls_set_feature_type(struct fnic *fnic, uint8_t *feature_type)
++{
++	if (IS_FNIC_FCP_INITIATOR(fnic))
++		*feature_type = FCP_FEAT_INIT;
++	else if (IS_FNIC_NVME_INITIATOR(fnic))
++		*feature_type = FNIC_NVME_FEAT_INIT;
++}
++
+ static void
+ fdls_send_rscn_resp(struct fnic_iport_s *iport,
+ 		    struct fc_frame_header *rscn_fchdr)
+@@ -1137,10 +1157,10 @@ static void fdls_send_gpn_ft(struct fnic_iport_s *iport, int fdls_state)
+ 		      .fh_rx_id = cpu_to_be16(FNIC_UNASSIGNED_RXID)},
+ 		.fc_std_ct_hdr = {.ct_rev = FC_CT_REV, .ct_fs_type = FC_FST_DIR,
+ 			      .ct_fs_subtype = FC_NS_SUBTYPE,
+-			      .ct_cmd = cpu_to_be16(FC_NS_GPN_FT)},
+-		.gpn_ft.fn_fc4_type = 0x08
++			      .ct_cmd = cpu_to_be16(FC_NS_GPN_FT)}
+ 	};
+ 
++	fdls_set_frame_type(fnic, &pgpn_ft->gpn_ft.fn_fc4_type);
+ 	hton24(fcid, iport->fcid);
+ 	FNIC_STD_SET_S_ID(pgpn_ft->fchdr, fcid);
+ 
+@@ -1264,11 +1284,14 @@ bool fdls_delete_tport(struct fnic_iport_s *iport, struct fnic_tport_s *tport)
+ 		tport->timer_pending = 0;
+ 	}
+ 
+-	spin_unlock_irqrestore(&fnic->fnic_lock, fnic->lock_flags);
+-	fnic_rport_exch_reset(iport->fnic, tport->fcid);
+-	spin_lock_irqsave(&fnic->fnic_lock, fnic->lock_flags);
 +	if (IS_FNIC_FCP_INITIATOR(fnic)) {
-+		iport->service_params = (FNIC_FCP_SP_INITIATOR |
-+				FNIC_FCP_SP_RD_XRDY_DIS | FNIC_FCP_SP_CONF_CMPL);
-+		if (fnic->config.flags & VFCF_FCP_SEQ_LVL_ERR)
-+			iport->service_params |= FNIC_FCP_SP_RETRY;
-+	} else if (IS_FNIC_NVME_INITIATOR(fnic)) {
-+		iport->service_params = (FNIC_NVME_SP_INITIATOR);
-+		if (fnic->config.flags & VFCF_FCP_SEQ_LVL_ERR)
-+			iport->service_params |= FNIC_NVME_SP_SLER;
++		spin_unlock_irqrestore(&fnic->fnic_lock, fnic->lock_flags);
++		fnic_rport_exch_reset(iport->fnic, tport->fcid);
++		spin_lock_irqsave(&fnic->fnic_lock, fnic->lock_flags);
 +	}
  
- 	iport->boot_time = jiffies;
- 	iport->e_d_tov = fnic->config.ed_tov;
+-	if (tport->flags & FNIC_FDLS_SCSI_REGISTERED) {
++	if ((tport->flags & FNIC_FDLS_SCSI_REGISTERED) ||
++	    (tport->flags & FNIC_FDLS_NVME_REGISTERED)) {
+ 		tport_del_evt =
+ 			kzalloc_obj(struct fnic_tport_event_s, GFP_ATOMIC);
+ 		if (!tport_del_evt) {
+@@ -1288,6 +1311,7 @@ bool fdls_delete_tport(struct fnic_iport_s *iport, struct fnic_tport_s *tport)
+ 		list_del(&tport->links);
+ 		kfree(tport);
+ 	}
++
+ 	return true;
+ }
+ 
+@@ -1404,12 +1428,16 @@ static void fdls_send_register_fc4_types(struct fnic_iport_s *iport)
+ 	}
+ 	FNIC_STD_SET_OX_ID(prft_id->fchdr, oxid);
+ 
++	if (IS_FNIC_NVME_INITIATOR(fnic))
++		prft_id->rft_id.fr_fts.ff_type_map[FC_TYPE_NVME / FC_NS_BPW] =
++			cpu_to_be32(1 << (FC_TYPE_NVME % FC_NS_BPW));
++	else if (IS_FNIC_FCP_INITIATOR(fnic))
++		prft_id->rft_id.fr_fts.ff_type_map[FC_TYPE_FCP / FC_NS_BPW] =
++			cpu_to_be32(1 << (FC_TYPE_FCP % FC_NS_BPW));
+ 
+-	prft_id->rft_id.fr_fts.ff_type_map[0] =
+-	    cpu_to_be32(1 << FC_TYPE_FCP);
++	prft_id->rft_id.fr_fts.ff_type_map[FC_TYPE_CT / FC_NS_BPW] |=
++		cpu_to_be32(1 << (FC_TYPE_CT % FC_NS_BPW));
+ 
+-	prft_id->rft_id.fr_fts.ff_type_map[1] =
+-	cpu_to_be32(1 << (FC_TYPE_CT % FC_NS_BPW));
+ 	FNIC_FCS_DBG(KERN_INFO, fnic,
+ 		     "0x%x: FDLS send RFT 0x%08x 0x%08x 0x%08x with oxid: 0x%x",
+ 		     iport->fcid, prft_id->rft_id.fr_fts.ff_type_map[0],
+@@ -1449,10 +1477,11 @@ static void fdls_send_register_fc4_features(struct fnic_iport_s *iport)
+ 		.fc_std_ct_hdr = {.ct_rev = FC_CT_REV, .ct_fs_type = FC_FST_DIR,
+ 			      .ct_fs_subtype = FC_NS_SUBTYPE,
+ 			      .ct_cmd = cpu_to_be16(FC_NS_RFF_ID)},
+-		.rff_id.fr_feat = 0x2,
+-		.rff_id.fr_type = FC_TYPE_FCP
+ 	};
+ 
++	fdls_set_frame_type(fnic, &prff_id->rff_id.fr_type);
++	fdls_set_feature_type(fnic, &prff_id->rff_id.fr_feat);
++
+ 	hton24(fcid, iport->fcid);
+ 	FNIC_STD_SET_S_ID(prff_id->fchdr, fcid);
+ 	FNIC_STD_SET_PORT_ID(prff_id->rff_id, fcid);
+@@ -1469,8 +1498,6 @@ static void fdls_send_register_fc4_features(struct fnic_iport_s *iport)
+ 	}
+ 	FNIC_STD_SET_OX_ID(prff_id->fchdr, oxid);
+ 
+-	prff_id->rff_id.fr_type = FC_TYPE_FCP;
+-
+ 	FNIC_FCS_DBG(KERN_INFO, fnic,
+ 		"0x%x: FDLS send RFF with oxid: 0x%x type 0%x feat 0%x",
+ 		iport->fcid, oxid, prff_id->rff_id.fr_type,
+@@ -1508,13 +1535,20 @@ fdls_send_tgt_prli(struct fnic_iport_s *iport, struct fnic_tport_s *tport)
+ 		.fchdr = {.fh_r_ctl = FC_RCTL_ELS_REQ, .fh_type = FC_TYPE_ELS,
+ 			  .fh_f_ctl = {FNIC_ELS_REQ_FCTL, 0, 0},
+ 			  .fh_rx_id = cpu_to_be16(FNIC_UNASSIGNED_RXID)},
+-		.els_prli = {.prli_cmd = ELS_PRLI,
+-			     .prli_spp_len = 16,
+-			     .prli_len = cpu_to_be16(0x14)},
+-		.sp = {.spp_type = 0x08, .spp_flags = 0x0020,
+-		       .spp_params = cpu_to_be32(0xA2)}
++		.els_prli = {.prli_cmd = ELS_PRLI},
++		.sp = {.spp_params = cpu_to_be32(iport->service_params)}
+ 	};
+ 
++	fdls_set_frame_type(fnic, &pprli->sp.spp_type);
++	if (IS_FNIC_FCP_INITIATOR(fnic)) {
++		pprli->els_prli.prli_spp_len = 16;
++		pprli->els_prli.prli_len = cpu_to_be16(0x14);
++		pprli->sp.spp_flags = FC_SPP_EST_IMG_PAIR;
++	} else if (IS_FNIC_NVME_INITIATOR(fnic)) {
++		pprli->els_prli.prli_spp_len = 20;
++		pprli->els_prli.prli_len = cpu_to_be16(0x18);
++	}
++
+ 	oxid = fdls_alloc_oxid(iport, FNIC_FRAME_TYPE_TGT_PRLI, &tport->active_oxid);
+ 	if (oxid == FNIC_UNASSIGNED_OXID) {
+ 		FNIC_FCS_DBG(KERN_ERR, fnic,
+@@ -2067,7 +2101,10 @@ static void fdls_fdmi_register_pa(struct fnic_iport_s *iport)
+ 	put_unaligned_be64(iport->wwnn, data);
+ 
+ 	memset(data, 0, FNIC_FDMI_FC4_LEN);
+-	data[2] = 1;
++	if (IS_FNIC_FCP_INITIATOR(fnic))
++		data[2] = 1;
++	else if (IS_FNIC_NVME_INITIATOR(fnic))
++		data[6] = 1;
+ 	fnic_fdmi_attr_set(fdmi_attr, FNIC_FDMI_TYPE_FC4_TYPES,
+ 		FNIC_FDMI_FC4_LEN, data, &attr_off_bytes);
+ 
+@@ -2096,9 +2133,11 @@ static void fdls_fdmi_register_pa(struct fnic_iport_s *iport)
+ 	FNIC_FCS_DBG(KERN_INFO, fnic,
+ 			"OS name set <%s>, off=%d", data, attr_off_bytes);
+ 
+-	sprintf(fc_host_system_hostname(fnic->host), "%s", utsname()->nodename);
+-	strscpy_pad(data, fc_host_system_hostname(fnic->host),
+-					FNIC_FDMI_HN_LEN);
++	if (IS_FNIC_FCP_INITIATOR(fnic))
++		sprintf(fc_host_system_hostname(fnic->host), "%s",
++			utsname()->nodename);
++
++	strscpy_pad(data, utsname()->nodename, FNIC_FDMI_HN_LEN);
+ 	fnic_fdmi_attr_set(fdmi_attr, FNIC_FDMI_TYPE_HOST_NAME,
+ 		FNIC_FDMI_HN_LEN, data, &attr_off_bytes);
+ 
+@@ -2796,7 +2835,8 @@ fdls_process_tgt_prli_rsp(struct fnic_iport_s *iport,
+ 		FNIC_FCS_DBG(KERN_INFO, fnic,
+ 					 "PRLI accepted from target: 0x%x", tgt_fcid);
+ 
+-		if (prli_rsp->sp.spp_type != FC_FC4_TYPE_SCSI) {
++		if (IS_FNIC_FCP_INITIATOR(fnic) &&
++		    prli_rsp->sp.spp_type != FC_FC4_TYPE_SCSI) {
+ 			FNIC_FCS_DBG(KERN_INFO, fnic,
+ 				 "mismatched target zoned with FC SCSI initiator: 0x%x",
+ 				 tgt_fcid);
+@@ -2852,14 +2892,22 @@ fdls_process_tgt_prli_rsp(struct fnic_iport_s *iport,
+ 	tport->fcp_csp = be32_to_cpu(prli_rsp->sp.spp_params);
+ 	tport->retry_counter = 0;
+ 
+-	if (tport->fcp_csp & FCP_SPPF_RETRY)
+-		tport->tgt_flags |= FNIC_FC_RP_FLAGS_RETRY;
++	if (IS_FNIC_FCP_INITIATOR(fnic)) {
++		if (tport->fcp_csp & FCP_SPPF_RETRY)
++			tport->tgt_flags |= FNIC_FC_RP_FLAGS_RETRY;
++	} else if (IS_FNIC_NVME_INITIATOR(fnic)) {
++		if (tport->fcp_csp & FNIC_NVME_SP_SLER)
++			tport->tgt_flags |= FNIC_FC_RP_FLAGS_RETRY;
++	}
+ 
+ 	/* Check if the device plays Target Mode Function */
+-	if (!(tport->fcp_csp & FCP_PRLI_FUNC_TARGET)) {
++	if ((IS_FNIC_FCP_INITIATOR(fnic) &&
++	     !(tport->fcp_csp & FCP_PRLI_FUNC_TARGET)) ||
++	    (IS_FNIC_NVME_INITIATOR(fnic) &&
++	     !(tport->fcp_csp & FCP_PRLI_FUNC_TARGET))) {
+ 		FNIC_FCS_DBG(KERN_INFO, fnic,
+-			 "Remote port(0x%x): no target support. Deleting it\n",
+-			 tgt_fcid);
++				 "Remote port(0x%x): no target support. Deleting it\n",
++				 tgt_fcid);
+ 		fdls_tgt_logout(iport, tport);
+ 		fdls_delete_tport(iport, tport);
+ 		return;
+@@ -2868,20 +2916,23 @@ fdls_process_tgt_prli_rsp(struct fnic_iport_s *iport,
+ 	fdls_set_tport_state(tport, FDLS_TGT_STATE_READY);
+ 
+ 	/* Inform the driver about new target added */
+-	tport_add_evt = kzalloc_obj(struct fnic_tport_event_s, GFP_ATOMIC);
+-	if (!tport_add_evt) {
+-		FNIC_FCS_DBG(KERN_INFO, fnic,
++	if (IS_FNIC_FCP_INITIATOR(fnic) ||
++	    IS_FNIC_NVME_INITIATOR(fnic)) {
++		tport_add_evt = kzalloc_obj(struct fnic_tport_event_s, GFP_ATOMIC);
++		if (!tport_add_evt) {
++			FNIC_FCS_DBG(KERN_INFO, fnic,
+ 				     "iport fcid: 0x%x tport event memory allocation failure: 0x%0x\n",
+ 				     iport->fcid, tport->fcid);
+-		return;
+-	}
+-	tport_add_evt->event = TGT_EV_RPORT_ADD;
+-	tport_add_evt->arg1 = (void *) tport;
++			return;
++		}
++		tport_add_evt->event = TGT_EV_RPORT_ADD;
++		tport_add_evt->arg1 = (void *)tport;
+ 		FNIC_FCS_DBG(KERN_INFO, fnic,
+ 			     "iport fcid: 0x%x add tport event fcid: 0x%x\n",
+ 			     tport->fcid, iport->fcid);
+-	list_add_tail(&tport_add_evt->links, &fnic->tport_event_list);
+-	queue_work(fnic_event_queue, &fnic->tport_work);
++		list_add_tail(&tport_add_evt->links, &fnic->tport_event_list);
++		queue_work(fnic_event_queue, &fnic->tport_work);
++	}
+ }
+ 
+ 
+@@ -3530,9 +3581,11 @@ fdls_process_flogi_rsp(struct fnic_iport_s *iport,
+ 					 "From fabric: R_A_TOV: %d E_D_TOV: %d",
+ 					 iport->r_a_tov, iport->e_d_tov);
+ 
+-		fc_host_fabric_name(iport->fnic->host) =
+-		get_unaligned_be64(&FNIC_LOGI_NODE_NAME(flogi_rsp->els));
+-		fc_host_port_id(iport->fnic->host) = iport->fcid;
++		if (IS_FNIC_FCP_INITIATOR(fnic)) {
++			fc_host_fabric_name(iport->fnic->host) =
++					get_unaligned_be64(&FNIC_LOGI_NODE_NAME(flogi_rsp->els));
++			fc_host_port_id(iport->fnic->host) = iport->fcid;
++		}
+ 
+ 		fnic_fdls_learn_fcoe_macs(iport, rx_frame, fcid);
+ 
+@@ -4622,9 +4675,11 @@ void fnic_fdls_disc_start(struct fnic_iport_s *iport)
+ {
+ 	struct fnic *fnic = iport->fnic;
+ 
+-	fc_host_fabric_name(iport->fnic->host) = 0;
+-	fc_host_post_event(iport->fnic->host, fc_get_event_number(),
+-					   FCH_EVT_LIPRESET, 0);
++	if (IS_FNIC_FCP_INITIATOR(fnic)) {
++		fc_host_fabric_name(iport->fnic->host) = 0;
++		fc_host_post_event(iport->fnic->host, fc_get_event_number(),
++						FCH_EVT_LIPRESET, 0);
++	}
+ 
+ 	if (!iport->usefip) {
+ 		if (iport->flags & FNIC_FIRST_LINK_UP) {
+@@ -5087,14 +5142,18 @@ void fnic_fdls_link_down(struct fnic_iport_s *iport)
+ 	fdls_set_state((&iport->fabric), FDLS_STATE_LINKDOWN);
+ 	iport->fabric.flags = 0;
+ 
+-	spin_unlock_irqrestore(&fnic->fnic_lock, fnic->lock_flags);
+-	fnic_fcpio_reset(iport->fnic);
+-	spin_lock_irqsave(&fnic->fnic_lock, fnic->lock_flags);
+-	list_for_each_entry_safe(tport, next, &iport->tport_list, links) {
+-		FNIC_FCS_DBG(KERN_INFO, fnic,
++	if (IS_FNIC_FCP_INITIATOR(fnic) ||
++	    IS_FNIC_NVME_INITIATOR(fnic)) {
++		spin_unlock_irqrestore(&fnic->fnic_lock, fnic->lock_flags);
++		fnic_fcpio_reset(iport->fnic);
++		spin_lock_irqsave(&fnic->fnic_lock, fnic->lock_flags);
++		list_for_each_entry_safe(tport, next, &iport->tport_list, links) {
++			FNIC_FCS_DBG(KERN_INFO, fnic,
+ 					 "removing rport: 0x%x", tport->fcid);
+-		fdls_delete_tport(iport, tport);
++			fdls_delete_tport(iport, tport);
++		}
+ 	}
++	fdls_reset_oxid_pool(iport);
+ 
+ 	if (fnic_fdmi_support == 1) {
+ 		if (iport->fabric.fdmi_pending > 0) {
+diff --git a/drivers/scsi/fnic/fdls_fc.h b/drivers/scsi/fnic/fdls_fc.h
+index e33c829545fb..a7b8b969f019 100644
+--- a/drivers/scsi/fnic/fdls_fc.h
++++ b/drivers/scsi/fnic/fdls_fc.h
+@@ -53,6 +53,7 @@
+ 
+ #define FNIC_FCP_RSP_FCTL      (0x000099)
+ #define FNIC_REQ_ABTS_FCTL     (0x000009)
++#define FNIC_NVME_LS_REQ_FCTL  (0x000029)
+ 
+ #define FNIC_FC_PH_VER_HI      (0x20)
+ #define FNIC_FC_PH_VER_LO      (0x20)
+diff --git a/drivers/scsi/fnic/fnic_fcs.c b/drivers/scsi/fnic/fnic_fcs.c
+index ca592bc3f618..a67d1085d720 100644
+--- a/drivers/scsi/fnic/fnic_fcs.c
++++ b/drivers/scsi/fnic/fnic_fcs.c
+@@ -1018,7 +1018,8 @@ void fnic_delete_fcp_tports(struct fnic *fnic)
+ 					 "removing fcp rport fcid: 0x%x", tport->fcid);
+ 		fdls_set_tport_state(tport, FDLS_TGT_STATE_OFFLINING);
+ 		fnic_del_tport_timer_sync(fnic, tport);
+-		fnic_fdls_remove_tport(&fnic->iport, tport, flags);
++		if (IS_FNIC_FCP_INITIATOR(fnic))
++			fnic_fdls_remove_tport(&fnic->iport, tport, flags);
+ 	}
+ 	spin_unlock_irqrestore(&fnic->fnic_lock, flags);
+ }
+@@ -1044,8 +1045,8 @@ void fnic_tport_event_handler(struct work_struct *work)
+ 			FNIC_FCS_DBG(KERN_INFO, fnic,
+ 						 "Add rport event");
+ 			if (tport->state == FDLS_TGT_STATE_READY) {
+-				fnic_fdls_add_tport(&fnic->iport,
+-					(struct fnic_tport_s *) cur_evt->arg1, flags);
++				if (IS_FNIC_FCP_INITIATOR(fnic))
++					fnic_fdls_add_tport(&fnic->iport, tport, flags);
+ 			} else {
+ 				FNIC_FCS_DBG(KERN_INFO, fnic,
+ 					 "Target not ready. Add rport event dropped: 0x%x",
+@@ -1056,8 +1057,8 @@ void fnic_tport_event_handler(struct work_struct *work)
+ 			FNIC_FCS_DBG(KERN_INFO, fnic,
+ 						 "Remove rport event");
+ 			if (tport->state == FDLS_TGT_STATE_OFFLINING) {
+-				fnic_fdls_remove_tport(&fnic->iport,
+-					   (struct fnic_tport_s *) cur_evt->arg1, flags);
++				if (IS_FNIC_FCP_INITIATOR(fnic))
++					fnic_fdls_remove_tport(&fnic->iport, tport, flags);
+ 			} else {
+ 				FNIC_FCS_DBG(KERN_INFO, fnic,
+ 							 "remove rport event dropped tport fcid: 0x%x",
+@@ -1110,12 +1111,15 @@ void fnic_reset_work_handler(struct work_struct *work)
+ 		spin_unlock_irqrestore(&reset_fnic_list_lock,
+ 							   reset_fnic_list_lock_flags);
+ 
+-		dev_err(&cur_fnic->pdev->dev, "fnic: <%d>: issuing a host reset\n",
+-			   cur_fnic->fnic_num);
+-		host_reset_ret_code = fnic_host_reset(cur_fnic->host);
+-		dev_err(&cur_fnic->pdev->dev,
+-		   "fnic: <%d>: returned from host reset with status: %d\n",
+-		   cur_fnic->fnic_num, host_reset_ret_code);
++		if (IS_FNIC_FCP_INITIATOR(cur_fnic)) {
++			dev_err(&cur_fnic->pdev->dev,
++				"fnic: <%d>: issuing a host reset\n",
++				cur_fnic->fnic_num);
++			host_reset_ret_code = fnic_host_reset(cur_fnic->host);
++			dev_err(&cur_fnic->pdev->dev,
++				"fnic: <%d>: returned from host reset with status: %d\n",
++				cur_fnic->fnic_num, host_reset_ret_code);
++		}
+ 
+ 		spin_lock_irqsave(&cur_fnic->fnic_lock, cur_fnic->lock_flags);
+ 		cur_fnic->pc_rscn_handling_status =
+diff --git a/drivers/scsi/fnic/fnic_fdls.h b/drivers/scsi/fnic/fnic_fdls.h
+index e2959120c4f9..ff1e3bd0e39f 100644
+--- a/drivers/scsi/fnic/fnic_fdls.h
++++ b/drivers/scsi/fnic/fnic_fdls.h
+@@ -78,14 +78,17 @@
+ #define FNIC_FDLS_FPMA_LEARNT             0x2
+ 
+ /* tport flags */
+-#define FNIC_FDLS_TPORT_IN_GPN_FT_LIST 0x1
+-#define FNIC_FDLS_TGT_ABORT_ISSUED     0x2
+-#define FNIC_FDLS_TPORT_SEND_ADISC     0x4
+-#define FNIC_FDLS_RETRY_FRAME          0x8
+-#define FNIC_FDLS_TPORT_BUSY	       0x10
+-#define FNIC_FDLS_TPORT_TERMINATING      0x20
+-#define FNIC_FDLS_TPORT_DELETED        0x40
+-#define FNIC_FDLS_SCSI_REGISTERED      0x200
++#define FNIC_FDLS_TPORT_IN_GPN_FT_LIST        0x1
++#define FNIC_FDLS_TGT_ABORT_ISSUED            0x2
++#define FNIC_FDLS_TPORT_SEND_ADISC            0x4
++#define FNIC_FDLS_RETRY_FRAME                 0x8
++#define FNIC_FDLS_TPORT_BUSY                  0x10
++#define FNIC_FDLS_TPORT_TERMINATING           0x20
++#define FNIC_FDLS_TPORT_DELETED               0x40
++#define FNIC_FDLS_NVME_REGISTERED             0x80
++#define FNIC_FDLS_NVME_TPORT_CLEANUP_PENDING  0x100
++#define FNIC_FDLS_SCSI_REGISTERED             0x200
++#define FNIC_TPORT_CAN_BE_FREED               0x400
+ 
+ /* Retry supported by rport(returned by prli service parameters) */
+ #define FDLS_FC_RP_FLAGS_RETRY 0x1
+diff --git a/drivers/scsi/fnic/fnic_main.c b/drivers/scsi/fnic/fnic_main.c
+index 5850d51b0e8f..0d7828be244d 100644
+--- a/drivers/scsi/fnic/fnic_main.c
++++ b/drivers/scsi/fnic/fnic_main.c
+@@ -1087,9 +1087,11 @@ static int fnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 
+ 	fnic_fdls_init(fnic, (fnic->config.flags & VFCF_FIP_CAPABLE));
+ 
+-	err = fnic_scsi_drv_init(fnic);
+-	if (err)
+-		goto err_out_scsi_drv_init;
++	if (IS_FNIC_FCP_INITIATOR(fnic)) {
++		err = fnic_scsi_drv_init(fnic);
++		if (err)
++			goto err_out_scsi_drv_init;
++	}
+ 
+ 	err = fnic_stats_debugfs_init(fnic);
+ 	if (err) {
+@@ -1109,7 +1111,8 @@ static int fnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ err_out_free_stats_debugfs:
+ 	fnic_stats_debugfs_remove(fnic);
+ 	fnic_free_ioreq_tables_mq(fnic);
+-	scsi_remove_host(fnic->host);
++	if (IS_FNIC_FCP_INITIATOR(fnic))
++		scsi_remove_host(fnic->host);
+ err_out_scsi_drv_init:
+ 	fnic_free_intr(fnic);
+ err_out_fnic_request_intr:
+@@ -1135,7 +1138,8 @@ static int fnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ err_out_fnic_alloc_vnic_res:
+ 	fnic_clear_intr_mode(fnic);
+ err_out_fnic_set_intr_mode:
+-	scsi_host_put(fnic->host);
++	if (IS_FNIC_FCP_INITIATOR(fnic))
++		scsi_host_put(fnic->host);
+ err_out_fnic_role:
+ err_out_scsi_host_alloc:
+ err_out_fnic_get_config:
+@@ -1184,7 +1188,8 @@ static void fnic_remove(struct pci_dev *pdev)
+ 	 */
+ 	flush_workqueue(fnic_event_queue);
+ 
+-	fnic_scsi_unload(fnic);
++	if (IS_FNIC_FCP_INITIATOR(fnic))
++		fnic_scsi_unload(fnic);
+ 
+ 	if (vnic_dev_get_intr_mode(fnic->vdev) == VNIC_DEV_INTR_MODE_MSI)
+ 		timer_delete_sync(&fnic->notify_timer);
+@@ -1228,8 +1233,10 @@ static void fnic_remove(struct pci_dev *pdev)
+ 	pci_disable_device(pdev);
+ 	pci_set_drvdata(pdev, NULL);
+ 	ida_free(&fnic_ida, fnic->fnic_num);
+-	fnic_scsi_unload_cleanup(fnic);
+-	scsi_host_put(fnic->host);
++	if (IS_FNIC_FCP_INITIATOR(fnic)) {
++		fnic_scsi_unload_cleanup(fnic);
++		scsi_host_put(fnic->host);
++	}
+ 	kfree(fnic);
+ }
+ 
+diff --git a/drivers/scsi/fnic/fnic_scsi.c b/drivers/scsi/fnic/fnic_scsi.c
+index b92260583c67..37d1e136b7b9 100644
+--- a/drivers/scsi/fnic/fnic_scsi.c
++++ b/drivers/scsi/fnic/fnic_scsi.c
+@@ -732,7 +732,8 @@ static int fnic_fcpio_fw_reset_cmpl_handler(struct fnic *fnic,
+ 	atomic64_inc(&reset_stats->fw_reset_completions);
+ 
+ 	/* Clean up all outstanding io requests */
+-	fnic_cleanup_io(fnic, SCSI_NO_TAG);
++	if (IS_FNIC_FCP_INITIATOR(fnic))
++		fnic_cleanup_io(fnic, SCSI_NO_TAG);
+ 
+ 	atomic64_set(&fnic->fnic_stats.fw_stats.active_fw_reqs, 0);
+ 	atomic64_set(&fnic->fnic_stats.io_stats.active_ios, 0);
 -- 
 2.47.1
 
