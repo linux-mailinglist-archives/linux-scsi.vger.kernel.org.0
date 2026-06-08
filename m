@@ -1,57 +1,57 @@
-Return-Path: <linux-scsi+bounces-24546-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24547-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 3RgIIkoKJ2qcqgIAu9opvQ
-	(envelope-from <linux-scsi+bounces-24546-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 08 Jun 2026 20:30:34 +0200
+	id QTYhC0gKJ2qZqgIAu9opvQ
+	(envelope-from <linux-scsi+bounces-24547-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 08 Jun 2026 20:30:32 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 823D4659B91
-	for <lists+linux-scsi@lfdr.de>; Mon, 08 Jun 2026 20:30:33 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E84C659B87
+	for <lists+linux-scsi@lfdr.de>; Mon, 08 Jun 2026 20:30:31 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20201202 header.b=tt3RAubG;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24546-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24546-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20201202 header.b=J379PECU;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24547-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24547-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0A9B830074F1
+	by tor.lore.kernel.org (Postfix) with ESMTP id 41B2230258BA
 	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jun 2026 18:30:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43B113E0C4F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45ED83E0C51;
 	Mon,  8 Jun 2026 18:30:25 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2AD32C11E6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A0D3D564B;
 	Mon,  8 Jun 2026 18:30:24 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780943425; cv=none; b=DBJF1al2yhYoHtn/VFrQ7HrN/9M+zNByDH3T4R4MFliEBa8OB9DqxkLpDIwZjVZX5TWdQdwwWpNHyiiFI+/dmlRp/mkC/yymoatbZiVc8GrbdZPAcjg/KoB5pT86NZxUcFYY79CRfYH5wqKSkIroqYkuduZ3MpapDMKBiNVf9Ns=
+	t=1780943425; cv=none; b=UICj2R54mkqnQXNxl8NLWFXIyDgYbUyVBhBJ6lZ6iCXkHRKiVN+Qihx8IX8U3nCMFHDeJ9eryTJ+7l3kjz34YwkZaEKkpZl9BaE96tXSuWXanS9BtB7Bp07h5a7RRa9mRtht3mkvtfkeP5XXlAbZua4DKIJOnsupuxaInCwckTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780943425; c=relaxed/simple;
-	bh=nZPnoI2bjNTs99OsS4ljVmW8rN9gSm70RyOdyJ/2g5c=;
+	bh=WN/uN4JdRNJqo5v7zBaxw2Rc3Vdl8fe2Ys3xy2D3LPc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jksDhY8imyUBpXeD2anDXG4IL3aF1KG0r+FI9EaAEvNC2Iap3lsZEjD6iCyv6xBvIDbh2xMGAGTHQXRkDW0/+IHJkoaNM2yCTZL/uUFKUNNd2tVVqobKs0B1Vj5ldzTzPT8GabVGHZ9QF0A+xS8AwyKLTFud2swPNW0wecwIL8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tt3RAubG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BC60CC2BCB9;
+	 In-Reply-To:To:Cc; b=YJpMvpzJOplVFUiaLGGbcHH/kO47IYXQ0Tn1h2dlayl3sdAgRM+EV5eGrpMXowFayE94xd7Y2ObXf/Fz+lGW+v9HIhQwdCXGKR0dZ3Ecq6i1G4qhXkUpwNJ1hZVeLA1DHPkC7sDKR91me03jxWHNQKaLKp2BMjZD7RErXmuM0kY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J379PECU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CAA07C4AF13;
 	Mon,  8 Jun 2026 18:30:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1780943424;
-	bh=nZPnoI2bjNTs99OsS4ljVmW8rN9gSm70RyOdyJ/2g5c=;
+	bh=WN/uN4JdRNJqo5v7zBaxw2Rc3Vdl8fe2Ys3xy2D3LPc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=tt3RAubGpy+WekPN8OTQfqZA43olbbsyRM/SZ4O+1kctjxx4JADXRoH3pmX172KX6
-	 cTVuALOzno4ITn4ECRsTkkkDxGhVxLmNjZZXivJDIXh/iFz1Dt+FC5GWEX54cnfzU+
-	 TZ22PgpU7ZqkUfeKigf39jbowZhk09UMtUt0jCwtJFKsXtLkQAtR65b2AvJdFLbevV
-	 QTP9BDyQNgKEJaUUM7SrANN7OIaCPk2Cij2lFQM2nr43PafVxku29g5aUwuqMrfXQg
-	 Pi4HAZ1aFssL+VXJ2X1e/utPBMFzB34D1u0SoL5Ls+0ACl4gVHEc7IFa3MmO2eXhtB
-	 pPrhUCBmWr18A==
+	b=J379PECUfuqCe33XlMQCTJscX9efWVmAcjxTnUBdzqbFk0O4ETRy0X0ktHBe3MPFZ
+	 HPnhx+vUFAmwhdBjacYKtkQ18jFFyaXGO62Zz9hdlsb0WC25H/Xx56tvKOoGvIiRfH
+	 BhGn4dJE8u/CdWvWQ4njJAzCdR4e8fgKca8vIMTuz2maI9mYKC7/bF4HRLK0Nbbmyu
+	 LRN4iGnRMuuzCpmaDJ//5e8rGwGN4BBIHZftUq+oS9R+UyWW8oZ0hvihxFUY5+usUS
+	 aW+VenLxoRYU6V5/7TpwZvdZ+nV9r7xaQGh7z18Jl2SylIb1pQecF50RMveM5TbZV0
+	 4cZXf379VhbPQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B41ACCD6E79;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7046CD8CAA;
 	Mon,  8 Jun 2026 18:30:24 +0000 (UTC)
 From: Dave Marquardt via B4 Relay <devnull+davemarq.linux.ibm.com@kernel.org>
-Date: Mon, 08 Jun 2026 13:30:18 -0500
-Subject: [PATCH v2 3/7] ibmvfc: make ibmvfc login to fabric
+Date: Mon, 08 Jun 2026 13:30:19 -0500
+Subject: [PATCH v2 4/7] ibmvfc: define asynchronous sub-queue
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260608-ibmvfc-fpin-support-v2-3-d41f540fba5c@linux.ibm.com>
+Message-Id: <20260608-ibmvfc-fpin-support-v2-4-d41f540fba5c@linux.ibm.com>
 References: <20260608-ibmvfc-fpin-support-v2-0-d41f540fba5c@linux.ibm.com>
 In-Reply-To: <20260608-ibmvfc-fpin-support-v2-0-d41f540fba5c@linux.ibm.com>
 To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
@@ -74,11 +74,11 @@ Cc: linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
  Greg Joyce <gjoyce@linux.ibm.com>, Kyle Mahlkuch <kmahlkuc@linux.ibm.com>, 
  Dave Marquardt <davemarq@linux.ibm.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780943423; l=5878;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780943423; l=2517;
  i=davemarq@linux.ibm.com; s=20260216; h=from:subject:message-id;
- bh=0mN8HnDhMnJNVlV5l4t+QmjOxydG3CBgcYKoM9KofFM=;
- b=WQIoqOr+bBgsgDM+aspnPNcu/zbwbGDbr9SgBohAsOGyHA0lSuvZCxeBY2dkx9mD96sZNWm+P
- vAqakpklsv3CjhTRQ8hHofw/jy0TMtstA+SmvCnNAmt6S+DP9oYX0Yr
+ bh=yA6tb5h9yHjsRv3RYlRjKBFZQlRZRIaWtxJ2hzF2GyA=;
+ b=0zrGohOtPsnfaeBPgoDs9nTfdpfFnt/2uEoXKfYHbtytnom9kUeHBoNyfjGEzkpQAB30mVgTd
+ HQfrSUFgk4/B0+KYMqQGg8fth2alskc6gW6XrA6ROFh1/+31hSzAJCM
 X-Developer-Key: i=davemarq@linux.ibm.com; a=ed25519;
  pk=vy0/nfobrje6EqZxuyw6a3ZstytG8WK2vf5Y3xtGrEg=
 X-Endpoint-Received: by B4 Relay for davemarq@linux.ibm.com/20260216 with
@@ -90,7 +90,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -103,7 +103,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FORGED_SENDER(0.00)[devnull@kernel.org,linux-scsi@vger.kernel.org];
 	FREEMAIL_TO(0.00)[HansenPartnership.com,oracle.com,linux.ibm.com,ellerman.id.au,gmail.com,kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24546-lists,linux-scsi=lfdr.de,davemarq.linux.ibm.com];
+	TAGGED_FROM(0.00)[bounces-24547-lists,linux-scsi=lfdr.de,davemarq.linux.ibm.com];
 	FROM_HAS_DN(0.00)[];
 	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
@@ -117,190 +117,93 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	HAS_REPLYTO(0.00)[davemarq@linux.ibm.com];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,linux.ibm.com:replyto,linux.ibm.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,linux.ibm.com:replyto,linux.ibm.com:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 823D4659B91
+X-Rspamd-Queue-Id: 8E84C659B87
 
 From: Dave Marquardt <davemarq@linux.ibm.com>
 
-Add support for fabric login in order to support the asynchronous
-event queue with its own interrupt as required by NPIV specification
-to support the asynchronous sub-queue and interrupt in order to
-support full and extended FPIN messages.
+Adds the asynchronous sub-queue structure, modifies the existing
+channel setup structure, adds the asynchronous sub-queue to the
+channels structure, and adds flags needed to tell VIOS to use the
+sub-queue.
 ---
- drivers/scsi/ibmvscsi/ibmvfc.c | 94 ++++++++++++++++++++++++++++++++++++++++--
- drivers/scsi/ibmvscsi/ibmvfc.h | 16 +++++++
- 2 files changed, 106 insertions(+), 4 deletions(-)
+ drivers/scsi/ibmvscsi/ibmvfc.h | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index 88386d7c9106..a18861808325 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -5244,6 +5244,86 @@ static void ibmvfc_discover_targets(struct ibmvfc_host *vhost)
- 		ibmvfc_link_down(vhost, IBMVFC_LINK_DEAD);
- }
- 
-+static void ibmvfc_fabric_login_done(struct ibmvfc_event *evt)
-+{
-+	struct ibmvfc_fabric_login *rsp = &evt->xfer_iu->fabric_login;
-+	u32 mad_status = be16_to_cpu(rsp->common.status);
-+	struct ibmvfc_host *vhost = evt->vhost;
-+	int level = IBMVFC_DEFAULT_LOG_LEVEL;
-+
-+	ENTER;
-+
-+	switch (mad_status) {
-+	case IBMVFC_MAD_SUCCESS:
-+		fc_host_port_id(vhost->host) = be64_to_cpu(rsp->nport_id);
-+		ibmvfc_free_event(evt);
-+		break;
-+
-+	case IBMVFC_MAD_FAILED:
-+		if (ibmvfc_retry_cmd(be16_to_cpu(rsp->status), be16_to_cpu(rsp->error)))
-+			level += ibmvfc_retry_host_init(vhost);
-+		else
-+			ibmvfc_link_down(vhost, IBMVFC_LINK_DEAD);
-+		ibmvfc_log(vhost, level, "Fabric Login failed: %s (%x:%x)\n",
-+			   ibmvfc_get_cmd_error(be16_to_cpu(rsp->status), be16_to_cpu(rsp->error)),
-+						be16_to_cpu(rsp->status), be16_to_cpu(rsp->error));
-+		ibmvfc_free_event(evt);
-+		LEAVE;
-+		return;
-+
-+	case IBMVFC_MAD_CRQ_ERROR:
-+		ibmvfc_retry_host_init(vhost);
-+		fallthrough;
-+
-+	case IBMVFC_MAD_DRIVER_FAILED:
-+		ibmvfc_free_event(evt);
-+		LEAVE;
-+		return;
-+
-+	default:
-+		dev_err(vhost->dev, "Invalid fabric Login response: 0x%x\n", mad_status);
-+		ibmvfc_link_down(vhost, IBMVFC_LINK_DEAD);
-+		ibmvfc_free_event(evt);
-+		LEAVE;
-+		return;
-+	}
-+
-+	ibmvfc_set_host_action(vhost, IBMVFC_HOST_ACTION_QUERY);
-+	wake_up(&vhost->work_wait_q);
-+
-+	LEAVE;
-+}
-+
-+static void ibmvfc_fabric_login(struct ibmvfc_host *vhost)
-+{
-+	struct ibmvfc_fabric_login *mad;
-+	struct ibmvfc_event *evt = ibmvfc_get_reserved_event(&vhost->crq);
-+	int level = IBMVFC_DEFAULT_LOG_LEVEL;
-+
-+	if (!evt) {
-+		ibmvfc_log(vhost, level, "Fabric Login failed: no available events\n");
-+		ibmvfc_hard_reset_host(vhost);
-+		return;
-+	}
-+
-+	ibmvfc_init_event(evt, ibmvfc_fabric_login_done, IBMVFC_MAD_FORMAT);
-+	mad = &evt->iu.fabric_login;
-+	memset(mad, 0, sizeof(*mad));
-+	if (vhost->scsi_scrqs.protocol == IBMVFC_PROTO_SCSI)
-+		mad->common.opcode = cpu_to_be32(IBMVFC_FABRIC_LOGIN);
-+	else {
-+		ibmvfc_log(vhost, level, "Fabric Login failed: unknown protocol\n");
-+		return;
-+	}
-+	mad->common.version = cpu_to_be32(1);
-+	mad->common.length = cpu_to_be16(sizeof(*mad));
-+
-+	ibmvfc_set_host_action(vhost, IBMVFC_HOST_ACTION_INIT_WAIT);
-+
-+	if (ibmvfc_send_event(evt, vhost, default_timeout))
-+		ibmvfc_link_down(vhost, IBMVFC_LINK_DOWN);
-+}
-+
- static void ibmvfc_channel_setup_done(struct ibmvfc_event *evt)
- {
- 	struct ibmvfc_host *vhost = evt->vhost;
-@@ -5290,8 +5370,12 @@ static void ibmvfc_channel_setup_done(struct ibmvfc_event *evt)
- 		return;
- 	}
- 
--	ibmvfc_set_host_action(vhost, IBMVFC_HOST_ACTION_QUERY);
--	wake_up(&vhost->work_wait_q);
-+	if (ibmvfc_check_caps(vhost, IBMVFC_SUPPORT_SCSI)) {
-+		ibmvfc_fabric_login(vhost);
-+	} else {
-+		ibmvfc_set_host_action(vhost, IBMVFC_HOST_ACTION_QUERY);
-+		wake_up(&vhost->work_wait_q);
-+	}
- }
- 
- static void ibmvfc_channel_setup(struct ibmvfc_host *vhost)
-@@ -5482,9 +5566,11 @@ static void ibmvfc_npiv_login_done(struct ibmvfc_event *evt)
- 	vhost->host->can_queue = be32_to_cpu(rsp->max_cmds) - IBMVFC_NUM_INTERNAL_REQ;
- 	vhost->host->max_sectors = npiv_max_sectors;
- 
--	if (ibmvfc_check_caps(vhost, IBMVFC_CAN_SUPPORT_CHANNELS) && vhost->do_enquiry) {
-+	if (ibmvfc_check_caps(vhost, IBMVFC_CAN_SUPPORT_CHANNELS) && vhost->do_enquiry)
- 		ibmvfc_channel_enquiry(vhost);
--	} else {
-+	else if (ibmvfc_check_caps(vhost, IBMVFC_SUPPORT_SCSI))
-+		ibmvfc_fabric_login(vhost);
-+	else {
- 		vhost->do_enquiry = 0;
- 		ibmvfc_set_host_action(vhost, IBMVFC_HOST_ACTION_QUERY);
- 		wake_up(&vhost->work_wait_q);
 diff --git a/drivers/scsi/ibmvscsi/ibmvfc.h b/drivers/scsi/ibmvscsi/ibmvfc.h
-index dd26248cac3e..c996b36d335d 100644
+index c996b36d335d..f026f30f98d3 100644
 --- a/drivers/scsi/ibmvscsi/ibmvfc.h
 +++ b/drivers/scsi/ibmvscsi/ibmvfc.h
-@@ -138,6 +138,7 @@ enum ibmvfc_mad_types {
- 	IBMVFC_CHANNEL_ENQUIRY	= 0x1000,
- 	IBMVFC_CHANNEL_SETUP	= 0x2000,
- 	IBMVFC_CONNECTION_INFO	= 0x4000,
-+	IBMVFC_FABRIC_LOGIN	= 0x8000,
- };
- 
- struct ibmvfc_mad_common {
-@@ -227,6 +228,7 @@ struct ibmvfc_npiv_login_resp {
- #define IBMVFC_MAD_VERSION_CAP		0x20
+@@ -181,6 +181,8 @@ struct ibmvfc_npiv_login {
+ #define IBMVFC_CAN_HANDLE_FPIN		0x04
+ #define IBMVFC_CAN_USE_MAD_VERSION	0x08
+ #define IBMVFC_CAN_SEND_VF_WWPN		0x10
++#define IBMVFC_YES_SCSI			0x40
++#define IBMVFC_USE_ASYNC_SUBQ		0x100
+ #define IBMVFC_CAN_USE_NOOP_CMD		0x200
+ 	__be64 node_name;
+ 	struct srp_direct_buf async;
+@@ -229,6 +231,7 @@ struct ibmvfc_npiv_login_resp {
  #define IBMVFC_HANDLE_VF_WWPN		0x40
  #define IBMVFC_CAN_SUPPORT_CHANNELS	0x80
-+#define IBMVFC_SUPPORT_SCSI		0x200
+ #define IBMVFC_SUPPORT_SCSI		0x200
++#define IBMVFC_SUPPORT_ASYNC_SUBQ	0x800
  #define IBMVFC_SUPPORT_NOOP_CMD		0x1000
  	__be32 max_cmds;
  	__be32 scsi_id_sz;
-@@ -590,6 +592,19 @@ struct ibmvfc_connection_info {
- 	__be64 reserved[16];
+@@ -563,7 +566,7 @@ struct ibmvfc_channel_setup_mad {
+ 	struct srp_direct_buf buffer;
  } __packed __aligned(8);
  
-+struct ibmvfc_fabric_login {
-+	struct ibmvfc_mad_common common;
-+	__be64 flags;
-+#define IBMVFC_STRIP_MERGE	0x1
-+#define IBMVFC_LINK_COMMANDS	0x2
-+	__be64 capabilities;
-+	__be64 nport_id;
-+	__be16 status;
-+	__be16 error;
-+	__be32 pad;
-+	__be64 reserved[16];
+-#define IBMVFC_MAX_CHANNELS	502
++#define IBMVFC_MAX_CHANNELS	501
+ 
+ struct ibmvfc_channel_setup {
+ 	__be32 flags;
+@@ -578,6 +581,7 @@ struct ibmvfc_channel_setup {
+ 	struct srp_direct_buf buffer;
+ 	__be64 reserved2[5];
+ 	__be64 channel_handles[IBMVFC_MAX_CHANNELS];
++	__be64 asyncSubqHandle;
+ } __packed __aligned(8);
+ 
+ struct ibmvfc_connection_info {
+@@ -714,6 +718,25 @@ struct ibmvfc_async_work {
+ 	struct work_struct async_work_s;
+ };
+ 
++struct ibmvfc_async_subq {
++	volatile u8 valid;
++#define IBMVFC_ASYNC_ID_IS_ASSOC_ID	0x01
++#define IBMVFC_FC_EEH			0x04
++#define IBMVFC_FC_FW_UPDATE		0x08
++#define IBMVFC_FC_FW_DUMP		0x10
++	u8 flags;
++	u8 link_state;
++	u8 fpin_status;
++	__be16 event;
++	__be16 pad;
++	volatile __be64 wwpn;
++	volatile __be64 nport_id;
++	union {
++		__be64 node_name;
++		__be64 assoc_id;
++	} id;
 +} __packed __aligned(8);
 +
- struct ibmvfc_trace_start_entry {
- 	u32 xfer_len;
- } __packed;
-@@ -715,6 +730,7 @@ union ibmvfc_iu {
- 	struct ibmvfc_channel_enquiry channel_enquiry;
- 	struct ibmvfc_channel_setup_mad channel_setup;
- 	struct ibmvfc_connection_info connection_info;
-+	struct ibmvfc_fabric_login fabric_login;
- } __packed __aligned(8);
+ union ibmvfc_iu {
+ 	struct ibmvfc_mad_common mad_common;
+ 	struct ibmvfc_npiv_login_mad npiv_login;
+@@ -853,6 +876,7 @@ struct ibmvfc_queue {
  
- enum ibmvfc_target_action {
+ struct ibmvfc_channels {
+ 	struct ibmvfc_queue *scrqs;
++	struct ibmvfc_queue *async_scrq;
+ 	enum ibmvfc_protocol protocol;
+ 	unsigned int active_queues;
+ 	unsigned int desired_queues;
 
 -- 
 2.54.0
