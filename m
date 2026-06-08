@@ -1,55 +1,55 @@
-Return-Path: <linux-scsi+bounces-24574-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24576-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 5ITXEcM6J2qOtgIAu9opvQ
-	(envelope-from <linux-scsi+bounces-24574-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 08 Jun 2026 23:57:23 +0200
+	id ZYaqAvg7J2oStwIAu9opvQ
+	(envelope-from <linux-scsi+bounces-24576-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 09 Jun 2026 00:02:32 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id D74CD65AD0B
-	for <lists+linux-scsi@lfdr.de>; Mon, 08 Jun 2026 23:57:22 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DABD65ADB3
+	for <lists+linux-scsi@lfdr.de>; Tue, 09 Jun 2026 00:02:31 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=philpem.me.uk header.s=mail header.b=JxfUmSAd;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24574-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24574-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=philpem.me.uk header.s=mail header.b=w8lFnNFZ;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24576-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24576-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=reject) header.from=philpem.me.uk;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id EACC8300C00F
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jun 2026 21:57:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8D87E30580A5
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jun 2026 21:57:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317AE3AFD0C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE50F3B14AE;
 	Mon,  8 Jun 2026 21:57:05 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from nick.sneptech.io (nick.sneptech.io [178.62.38.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BFF3AFD16;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E263B0AC4;
 	Mon,  8 Jun 2026 21:57:02 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780955824; cv=none; b=UPnjRJQWar1wQngD1+Fdxf+h8jsqbQyPehgQTpDbhtqzDqBS/kiy36VylUDQ1NQIdCtVZ3p6gr9onIfFtQhsvYWL5P1GlhHLBP5EmKE8L9xrSIt+CmZ73vGkWywt2fmhRcARiO9ithOjEWbiWP/jTmvcSSJ8OYP7kEh5gzuYrwU=
+	t=1780955825; cv=none; b=oL2U7+kYVpc6JRlZpvVE5KttrzhkpSHuwhUkeY6LrAa8AQGT7VBtJ4KA4FxMio98aYnltNNUhayU0pMr+BzMekzy5Sdkr+8KHiWS/nBAfTyuxzyDHnyGv3Yae8oKIxiU3sJ6i9+tcaGv4ITcI5HdLWSpAgb4AoN1OnhxrT2fans=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780955824; c=relaxed/simple;
-	bh=x6f8CJNbI915EJ13DABGEvOBY0TFxfB2QN6TGIZA5KE=;
+	s=arc-20240116; t=1780955825; c=relaxed/simple;
+	bh=qYv8tVeIH19cO/jH+GEV12UiE4fByjbcTz6BekvguZ4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VOeE1bYqqGEuVLGr5RIJyetUP6G/zUOGEeNc/6kNwcSN2xvV9KcCJPwcHKwrtJvJ4zgv0SPwVkCh5wpxc8O9xOkki/iQOBjoskyTO6jXwLYNkjYkGxtvAdS/oPB1FwUblgmv7Rb512QHfz8OU4rMqZJWEUJTJwy+qPeRtFZya54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=philpem.me.uk; spf=pass smtp.mailfrom=philpem.me.uk; dkim=pass (1024-bit key) header.d=philpem.me.uk header.i=@philpem.me.uk header.b=JxfUmSAd; arc=none smtp.client-ip=178.62.38.78
+	 MIME-Version; b=HP5vPlmltO8yaqCPGS4j4FwcYEr+i9T41LfbffvoriJ2BQ0J4ryFCsJqXQjsIBjxf1lKP9hkOSSaCZQybvVKt+CjCb0uNQEt+mugqqXjgIcCoNA6LGF7MXBkfXYkM2SZ3rg+BwMuspd8b9IHv8Ti/FMynfay3WxjvGbD0hDMXFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=philpem.me.uk; spf=pass smtp.mailfrom=philpem.me.uk; dkim=pass (1024-bit key) header.d=philpem.me.uk header.i=@philpem.me.uk header.b=w8lFnNFZ; arc=none smtp.client-ip=178.62.38.78
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=philpem.me.uk;
 	s=mail; t=1780954491;
-	bh=x6f8CJNbI915EJ13DABGEvOBY0TFxfB2QN6TGIZA5KE=;
+	bh=qYv8tVeIH19cO/jH+GEV12UiE4fByjbcTz6BekvguZ4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JxfUmSAdJyWchnn7m+sZfM3j1JVMxlLw+o3KSqvceKIOa34D8DNrqmELmvqKhOrgJ
-	 sbIdFYXeeXe3VB4wqH93vnKvi1hUT9DWHHU+IUNr06z2Oie8tTT9m14qZqepPqgn3n
-	 uzdJOF2fIl0Kj7cvXoO9hnYV6i9XAuQM8lIbfHPM=
+	b=w8lFnNFZfGkURrE4xQtrhUtgMeObVsVMRiVcmiaivIaFXFiNTpwJ5tF8IbgR8tEID
+	 Cmwz+ieeoaPFREKS4U0w/DfXXnCvJKtMmKYB0zq7U3uSLoZFMUh8MWo6KdTfouneXx
+	 mrtiOzCO5dFU7Fqg8rth6/kQPvOCJXyeqPRN2V60=
 Received: from wolf.philpem.me.uk (81-187-163-148.ip4.reverse-dns.uk [81.187.163.148])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
 	(Authenticated sender: mailrelay_wolf@philpem.me.uk)
-	by nick.sneptech.io (Postfix) with ESMTPSA id 30069BD6EE;
+	by nick.sneptech.io (Postfix) with ESMTPSA id 42D21BE6B5;
 	Mon,  8 Jun 2026 21:34:51 +0000 (UTC)
 Received: from cheetah.homenet.philpem.me.uk (cheetah.homenet.philpem.me.uk [10.0.0.32])
-	by wolf.philpem.me.uk (Postfix) with ESMTPSA id D793B5FC0F;
+	by wolf.philpem.me.uk (Postfix) with ESMTPSA id DEAD85FC3F;
 	Mon,  8 Jun 2026 22:34:50 +0100 (BST)
 From: Phil Pemberton <philpem@philpem.me.uk>
 To: linux-ide@vger.kernel.org,
@@ -61,9 +61,9 @@ Cc: linux-kernel@vger.kernel.org,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Hannes Reinecke <hare@suse.de>,
 	Phil Pemberton <philpem@philpem.me.uk>
-Subject: [PATCH v6 1/6] ata: libata-scsi: add atapi_max_lun module parameter
-Date: Mon,  8 Jun 2026 22:34:38 +0100
-Message-ID: <20260608213443.2296614-2-philpem@philpem.me.uk>
+Subject: [PATCH v6 2/6] ata: libata-scsi: convert dev->sdev to per-LUN array
+Date: Mon,  8 Jun 2026 22:34:39 +0100
+Message-ID: <20260608213443.2296614-3-philpem@philpem.me.uk>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260608213443.2296614-1-philpem@philpem.me.uk>
 References: <20260608213443.2296614-1-philpem@philpem.me.uk>
@@ -81,13 +81,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[philpem.me.uk,reject];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[philpem.me.uk:s=mail];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24574-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24576-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:linux-ide@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:dlemoal@kernel.org,m:cassel@kernel.org,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:hare@suse.de,m:philpem@philpem.me.uk,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[philpem@philpem.me.uk,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -104,90 +104,442 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,philpem.me.uk:dkim,philpem.me.uk:email,philpem.me.uk:mid,philpem.me.uk:from_mime,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,philpem.me.uk:dkim,philpem.me.uk:email,philpem.me.uk:mid,philpem.me.uk:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D74CD65AD0B
+X-Rspamd-Queue-Id: 8DABD65ADB3
 
-Until now libata has hard-coded shost->max_lun = 1 for every ATA host,
-so the SCSI layer never scans past LUN 0.  This blocks support for
-the small handful of multi-LUN ATAPI devices (Panasonic LF-1195C and
-COMPAQ PD-1 PD/CD combos export CD on LUN 0 and PD on LUN 1; old
-Nakamichi MJ-x.y CD changers expose one LUN per disc slot, up to 7).
+Multi-LUN ATAPI devices (PD/CD combos, CD changers) share a single
+ata_device but expose multiple scsi_devices.  The previous single
+dev->sdev pointer could only track one LUN, making all other LUNs
+invisible to code that operates on sdevs: port detach, suspend/resume,
+ACPI uevent, ZPODD, media change notification, and EH teardown.
 
-Introduce a libata module parameter, atapi_max_lun, that controls the
-upper bound of the per-host SCSI LUN scan.  Default is 1, preserving
-current behaviour exactly: out-of-the-box only LUN 0 is scanned.
-Range is clamped to 1..ATAPI_MAX_LUN (8, the SCSI-2 ceiling).
+Replace the scalar struct scsi_device *sdev with a fixed-size array
+dev->sdev[ATAPI_MAX_LUN] indexed by LUN number, where ATAPI_MAX_LUN
+is 8 (the SCSI-2 ceiling, LUN values 0..7).  Add a companion field
+dev->nr_luns recording the number of valid entries -- defaults to 1
+during ata_dev_init() and is bumped during multi-LUN probe -- so the
+common single-LUN case iterates one slot, not eight.
 
-Subsequent patches gate actual LUN>0 probing on BLIST_FORCELUN, so a
-device must both be on the SCSI device list (or carry the appropriate
-quirk) and run on a host whose atapi_max_lun has been raised before
-any extra LUNs are scanned.
+Add an inline helper ata_dev_scsi_device(dev, lun) that returns
+dev->sdev[lun] guarded by a WARN_ON_ONCE(lun >= dev->nr_luns) bounds
+check.  Use it for the hardcoded LUN-0 references in libata-acpi
+(uevent kobj), libata-zpodd (disk events, wake notify), and the
+door-lock and OF-node paths in libata-scsi.
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+Key changes per call site:
+  - ata_scsi_dev_config:  assign sdev to dev->sdev[sdev->lun]
+  - ata_scsi_sdev_destroy: clear dev->sdev[sdev->lun]; only trigger
+    ATA-level detach when LUN 0 is destroyed, since removing a higher
+    LUN should not tear down the underlying ATA device
+  - ata_port_detach:  iterate dev->nr_luns slots (high->low)
+  - ata_scsi_offline_dev:  iterate dev->nr_luns slots
+  - ata_scsi_remove_dev:  snapshot and remove all LUN slots, then
+    scsi_remove_device each one outside the lock
+  - ata_scsi_media_change_notify:  send event to all populated LUNs
+  - ata_scsi_dev_rescan:  resume and rescan each populated LUN
+  - ACPI, ZPODD, ofnode, door-lock:  use ata_dev_scsi_device(dev, 0)
+
+For single-LUN devices (the vast majority) only dev->sdev[0] is ever
+populated and dev->nr_luns stays at 1, so existing call paths see no
+change in behaviour.
+
 Signed-off-by: Phil Pemberton <philpem@philpem.me.uk>
 ---
- drivers/ata/libata-core.c | 5 +++++
- drivers/ata/libata-scsi.c | 2 +-
- drivers/ata/libata.h      | 1 +
- include/linux/libata.h    | 1 +
- 4 files changed, 8 insertions(+), 1 deletion(-)
+ drivers/ata/libata-acpi.c  |   6 +-
+ drivers/ata/libata-core.c  |  11 ++-
+ drivers/ata/libata-scsi.c  | 151 +++++++++++++++++++------------------
+ drivers/ata/libata-zpodd.c |   6 +-
+ include/linux/libata.h     |  11 ++-
+ 5 files changed, 103 insertions(+), 82 deletions(-)
 
+diff --git a/drivers/ata/libata-acpi.c b/drivers/ata/libata-acpi.c
+index 4433f626246b..8af35d0b1053 100644
+--- a/drivers/ata/libata-acpi.c
++++ b/drivers/ata/libata-acpi.c
+@@ -153,8 +153,10 @@ static void ata_acpi_uevent(struct ata_port *ap, struct ata_device *dev,
+ 	char *envp[] = { event_string, NULL };
+ 
+ 	if (dev) {
+-		if (dev->sdev)
+-			kobj = &dev->sdev->sdev_gendev.kobj;
++		struct scsi_device *sdev = ata_dev_scsi_device(dev, 0);
++
++		if (sdev)
++			kobj = &sdev->sdev_gendev.kobj;
+ 	} else
+ 		kobj = &ap->dev->kobj;
+ 
 diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index e76d15411e2a..4408b1fb48c7 100644
+index 4408b1fb48c7..1cb159d9dbc7 100644
 --- a/drivers/ata/libata-core.c
 +++ b/drivers/ata/libata-core.c
-@@ -122,6 +122,11 @@ int atapi_passthru16 = 1;
- module_param(atapi_passthru16, int, 0444);
- MODULE_PARM_DESC(atapi_passthru16, "Enable ATA_16 passthru for ATAPI devices (0=off, 1=on [default])");
+@@ -5564,6 +5564,7 @@ void ata_dev_init(struct ata_device *dev)
+ 	dev->pio_mask = UINT_MAX;
+ 	dev->mwdma_mask = UINT_MAX;
+ 	dev->udma_mask = UINT_MAX;
++	dev->nr_luns = 1;
+ }
  
-+int atapi_max_lun = 1;
-+module_param(atapi_max_lun, int, 0444);
-+MODULE_PARM_DESC(atapi_max_lun,
-+	"Maximum LUN to scan on ATAPI devices flagged BLIST_FORCELUN (1 [default] .. 7)");
+ /**
+@@ -6275,11 +6276,15 @@ static void ata_port_detach(struct ata_port *ap)
+ 	/* Remove scsi devices */
+ 	ata_for_each_link(link, ap, HOST_FIRST) {
+ 		ata_for_each_dev(dev, link, ALL) {
+-			if (dev->sdev) {
++			int lun;
 +
- int libata_fua = 0;
- module_param_named(fua, libata_fua, int, 0444);
- MODULE_PARM_DESC(fua, "FUA support (0=off [default], 1=on)");
++			for (lun = dev->nr_luns - 1; lun >= 0; lun--) {
++				if (!dev->sdev[lun])
++					continue;
+ 				spin_unlock_irqrestore(ap->lock, flags);
+-				scsi_remove_device(dev->sdev);
++				scsi_remove_device(dev->sdev[lun]);
+ 				spin_lock_irqsave(ap->lock, flags);
+-				dev->sdev = NULL;
++				dev->sdev[lun] = NULL;
+ 			}
+ 		}
+ 	}
 diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-index f44612e269a4..32c6a0e497cf 100644
+index 32c6a0e497cf..7c3d31dc49a1 100644
 --- a/drivers/ata/libata-scsi.c
 +++ b/drivers/ata/libata-scsi.c
-@@ -4627,7 +4627,7 @@ int ata_scsi_add_hosts(struct ata_host *host, const struct scsi_host_template *s
- 		shost->transportt = &ata_scsi_transportt;
- 		shost->unique_id = ap->print_id;
- 		shost->max_id = 16;
--		shost->max_lun = 1;
-+		shost->max_lun = clamp(atapi_max_lun, 1, ATAPI_MAX_LUN);
- 		shost->max_channel = 1;
- 		shost->max_cmd_len = 32;
+@@ -1131,7 +1131,7 @@ int ata_scsi_dev_config(struct scsi_device *sdev, struct queue_limits *lim,
+ 	if (dev->flags & ATA_DFLAG_TRUSTED)
+ 		sdev->security_supported = 1;
  
-diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
-index b5423b6e97de..96d804d02b99 100644
---- a/drivers/ata/libata.h
-+++ b/drivers/ata/libata.h
-@@ -33,6 +33,7 @@ enum {
- #define ATA_PORT_TYPE_NAME	"ata_port"
+-	dev->sdev = sdev;
++	dev->sdev[sdev->lun] = sdev;
+ 	return 0;
+ }
  
- extern int atapi_passthru16;
-+extern int atapi_max_lun;
- extern int libata_fua;
- extern int libata_noacpi;
- extern int libata_allow_tpm;
+@@ -1202,10 +1202,10 @@ EXPORT_SYMBOL_GPL(ata_scsi_sdev_configure);
+  *
+  *	@sdev is about to be destroyed for hot/warm unplugging.  If
+  *	this unplugging was initiated by libata as indicated by NULL
+- *	dev->sdev, this function doesn't have to do anything.
++ *	dev->sdev[], this function doesn't have to do anything.
+  *	Otherwise, SCSI layer initiated warm-unplug is in progress.
+- *	Clear dev->sdev, schedule the device for ATA detach and invoke
+- *	EH.
++ *	Clear the per-LUN slot; when the last LUN (LUN 0) is destroyed,
++ *	schedule ATA-level detach via EH.
+  *
+  *	LOCKING:
+  *	Defined by SCSI layer.  We don't really care.
+@@ -1220,11 +1220,12 @@ void ata_scsi_sdev_destroy(struct scsi_device *sdev)
+ 
+ 	spin_lock_irqsave(ap->lock, flags);
+ 	dev = __ata_scsi_find_dev(ap, sdev);
+-	if (dev && dev->sdev) {
+-		/* SCSI device already in CANCEL state, no need to offline it */
+-		dev->sdev = NULL;
+-		dev->flags |= ATA_DFLAG_DETACH;
+-		ata_port_schedule_eh(ap);
++	if (dev && dev->sdev[sdev->lun] == sdev) {
++		dev->sdev[sdev->lun] = NULL;
++		if (sdev->lun == 0) {
++			dev->flags |= ATA_DFLAG_DETACH;
++			ata_port_schedule_eh(ap);
++		}
+ 	}
+ 	spin_unlock_irqrestore(ap->lock, flags);
+ 
+@@ -2911,10 +2912,15 @@ static void atapi_qc_complete(struct ata_queued_cmd *qc)
+ 		 * avoid this infinite loop.
+ 		 *
+ 		 * This may happen before SCSI scan is complete.  Make
+-		 * sure qc->dev->sdev isn't NULL before dereferencing.
++		 * sure the LUN-0 sdev isn't NULL before dereferencing.
+ 		 */
+-		if (qc->cdb[0] == ALLOW_MEDIUM_REMOVAL && qc->dev->sdev)
+-			qc->dev->sdev->locked = 0;
++		if (qc->cdb[0] == ALLOW_MEDIUM_REMOVAL) {
++			struct scsi_device *sdev =
++				ata_dev_scsi_device(qc->dev, 0);
++
++			if (sdev)
++				sdev->locked = 0;
++		}
+ 
+ 		ata_scsi_qc_done(qc, true, SAM_STAT_CHECK_CONDITION);
+ 		return;
+@@ -4658,7 +4664,7 @@ int ata_scsi_add_hosts(struct ata_host *host, const struct scsi_host_template *s
+ #ifdef CONFIG_OF
+ static void ata_scsi_assign_ofnode(struct ata_device *dev, struct ata_port *ap)
+ {
+-	struct scsi_device *sdev = dev->sdev;
++	struct scsi_device *sdev = ata_dev_scsi_device(dev, 0);
+ 	struct device *d = ap->host->dev;
+ 	struct device_node *np = d->of_node;
+ 	struct device_node *child;
+@@ -4696,7 +4702,7 @@ void ata_scsi_scan_host(struct ata_port *ap, int sync)
+ 			struct scsi_device *sdev;
+ 			int channel = 0, id = 0;
+ 
+-			if (dev->sdev)
++			if (dev->sdev[0])
+ 				continue;
+ 
+ 			if (ata_is_host_link(link))
+@@ -4707,11 +4713,11 @@ void ata_scsi_scan_host(struct ata_port *ap, int sync)
+ 			sdev = __scsi_add_device(ap->scsi_host, channel, id, 0,
+ 						 NULL);
+ 			if (!IS_ERR(sdev)) {
+-				dev->sdev = sdev;
++				dev->sdev[0] = sdev;
+ 				ata_scsi_assign_ofnode(dev, ap);
+ 				scsi_device_put(sdev);
+ 			} else {
+-				dev->sdev = NULL;
++				dev->sdev[0] = NULL;
+ 			}
+ 		}
+ 	}
+@@ -4722,7 +4728,7 @@ void ata_scsi_scan_host(struct ata_port *ap, int sync)
+ 	 */
+ 	ata_for_each_link(link, ap, EDGE) {
+ 		ata_for_each_dev(dev, link, ENABLED) {
+-			if (!dev->sdev)
++			if (!dev->sdev[0])
+ 				goto exit_loop;
+ 		}
+ 	}
+@@ -4763,7 +4769,7 @@ void ata_scsi_scan_host(struct ata_port *ap, int sync)
+  *
+  *	This function is called from ata_eh_detach_dev() and is responsible for
+  *	taking the SCSI device attached to @dev offline.  This function is
+- *	called with host lock which protects dev->sdev against clearing.
++ *	called with host lock which protects dev->sdev[] against clearing.
+  *
+  *	LOCKING:
+  *	spin_lock_irqsave(host lock)
+@@ -4773,11 +4779,16 @@ void ata_scsi_scan_host(struct ata_port *ap, int sync)
+  */
+ bool ata_scsi_offline_dev(struct ata_device *dev)
+ {
+-	if (dev->sdev) {
+-		scsi_device_set_state(dev->sdev, SDEV_OFFLINE);
+-		return true;
++	bool found = false;
++	int lun;
++
++	for (lun = dev->nr_luns - 1; lun >= 0; lun--) {
++		if (dev->sdev[lun]) {
++			scsi_device_set_state(dev->sdev[lun], SDEV_OFFLINE);
++			found = true;
++		}
+ 	}
+-	return false;
++	return found;
+ }
+ 
+ /**
+@@ -4793,49 +4804,38 @@ bool ata_scsi_offline_dev(struct ata_device *dev)
+ static void ata_scsi_remove_dev(struct ata_device *dev)
+ {
+ 	struct ata_port *ap = dev->link->ap;
+-	struct scsi_device *sdev;
++	struct scsi_device *sdevs[ATAPI_MAX_LUN] = {};
+ 	unsigned long flags;
++	int lun;
+ 
+-	/* Alas, we need to grab scan_mutex to ensure SCSI device
+-	 * state doesn't change underneath us and thus
+-	 * scsi_device_get() always succeeds.  The mutex locking can
+-	 * be removed if there is __scsi_device_get() interface which
+-	 * increments reference counts regardless of device state.
+-	 */
+ 	mutex_lock(&ap->scsi_host->scan_mutex);
+ 	spin_lock_irqsave(ap->lock, flags);
+ 
+-	/* clearing dev->sdev is protected by host lock */
+-	sdev = dev->sdev;
+-	dev->sdev = NULL;
++	for (lun = dev->nr_luns - 1; lun >= 0; lun--) {
++		struct scsi_device *sdev = dev->sdev[lun];
++
++		dev->sdev[lun] = NULL;
++		if (!sdev)
++			continue;
+ 
+-	if (sdev) {
+-		/* If user initiated unplug races with us, sdev can go
+-		 * away underneath us after the host lock and
+-		 * scan_mutex are released.  Hold onto it.
+-		 */
+ 		if (scsi_device_get(sdev) == 0) {
+-			/* The following ensures the attached sdev is
+-			 * offline on return from ata_scsi_offline_dev()
+-			 * regardless it wins or loses the race
+-			 * against this function.
+-			 */
+ 			scsi_device_set_state(sdev, SDEV_OFFLINE);
++			sdevs[lun] = sdev;
+ 		} else {
+ 			WARN_ON(1);
+-			sdev = NULL;
+ 		}
+ 	}
+ 
+ 	spin_unlock_irqrestore(ap->lock, flags);
+ 	mutex_unlock(&ap->scsi_host->scan_mutex);
+ 
+-	if (sdev) {
++	for (lun = dev->nr_luns - 1; lun >= 0; lun--) {
++		if (!sdevs[lun])
++			continue;
+ 		ata_dev_info(dev, "detaching (SCSI %s)\n",
+-			     dev_name(&sdev->sdev_gendev));
+-
+-		scsi_remove_device(sdev);
+-		scsi_device_put(sdev);
++			     dev_name(&sdevs[lun]->sdev_gendev));
++		scsi_remove_device(sdevs[lun]);
++		scsi_device_put(sdevs[lun]);
+ 	}
+ }
+ 
+@@ -4872,9 +4872,12 @@ static void ata_scsi_handle_link_detach(struct ata_link *link)
+  */
+ void ata_scsi_media_change_notify(struct ata_device *dev)
+ {
+-	if (dev->sdev)
+-		sdev_evt_send_simple(dev->sdev, SDEV_EVT_MEDIA_CHANGE,
+-				     GFP_ATOMIC);
++	int lun;
++
++	for (lun = 0; lun < dev->nr_luns; lun++)
++		if (dev->sdev[lun])
++			sdev_evt_send_simple(dev->sdev[lun],
++					     SDEV_EVT_MEDIA_CHANGE, GFP_ATOMIC);
+ }
+ 
+ /**
+@@ -5007,37 +5010,39 @@ void ata_scsi_dev_rescan(struct work_struct *work)
+ 
+ 	ata_for_each_link(link, ap, EDGE) {
+ 		ata_for_each_dev(dev, link, ENABLED) {
+-			struct scsi_device *sdev = dev->sdev;
++			int lun;
+ 
+-			/*
+-			 * If the port was suspended before this was scheduled,
+-			 * bail out.
+-			 */
+ 			if (ap->pflags & ATA_PFLAG_SUSPENDED)
+ 				goto unlock_ap;
+ 
+-			if (!sdev)
+-				continue;
+-			if (scsi_device_get(sdev))
+-				continue;
+-
+ 			do_resume = dev->flags & ATA_DFLAG_RESUMING;
+ 
+-			spin_unlock_irqrestore(ap->lock, flags);
+-			if (do_resume) {
+-				ret = scsi_resume_device(sdev);
+-				if (ret == -EWOULDBLOCK) {
+-					scsi_device_put(sdev);
+-					goto unlock_scan;
++			for (lun = 0; lun < dev->nr_luns; lun++) {
++				struct scsi_device *sdev = dev->sdev[lun];
++
++				if (!sdev)
++					continue;
++				if (scsi_device_get(sdev))
++					continue;
++
++				spin_unlock_irqrestore(ap->lock, flags);
++				if (do_resume) {
++					ret = scsi_resume_device(sdev);
++					if (ret == -EWOULDBLOCK) {
++						scsi_device_put(sdev);
++						goto unlock_scan;
++					}
+ 				}
+-				dev->flags &= ~ATA_DFLAG_RESUMING;
++				ret = scsi_rescan_device(sdev);
++				scsi_device_put(sdev);
++				spin_lock_irqsave(ap->lock, flags);
++
++				if (ret)
++					goto unlock_ap;
+ 			}
+-			ret = scsi_rescan_device(sdev);
+-			scsi_device_put(sdev);
+-			spin_lock_irqsave(ap->lock, flags);
+ 
+-			if (ret)
+-				goto unlock_ap;
++			if (do_resume)
++				dev->flags &= ~ATA_DFLAG_RESUMING;
+ 		}
+ 	}
+ 
+diff --git a/drivers/ata/libata-zpodd.c b/drivers/ata/libata-zpodd.c
+index 414e7c63bd85..dca774d8ec05 100644
+--- a/drivers/ata/libata-zpodd.c
++++ b/drivers/ata/libata-zpodd.c
+@@ -185,7 +185,7 @@ void zpodd_enable_run_wake(struct ata_device *dev)
+ {
+ 	struct zpodd *zpodd = dev->zpodd;
+ 
+-	sdev_disable_disk_events(dev->sdev);
++	sdev_disable_disk_events(ata_dev_scsi_device(dev, 0));
+ 
+ 	zpodd->powered_off = true;
+ 	acpi_pm_set_device_wakeup(&dev->tdev, true);
+@@ -233,14 +233,14 @@ void zpodd_post_poweron(struct ata_device *dev)
+ 	zpodd->zp_sampled = false;
+ 	zpodd->zp_ready = false;
+ 
+-	sdev_enable_disk_events(dev->sdev);
++	sdev_enable_disk_events(ata_dev_scsi_device(dev, 0));
+ }
+ 
+ static void zpodd_wake_dev(acpi_handle handle, u32 event, void *context)
+ {
+ 	struct ata_device *ata_dev = context;
+ 	struct zpodd *zpodd = ata_dev->zpodd;
+-	struct device *dev = &ata_dev->sdev->sdev_gendev;
++	struct device *dev = &ata_dev_scsi_device(ata_dev, 0)->sdev_gendev;
+ 
+ 	if (event == ACPI_NOTIFY_DEVICE_WAKE && pm_runtime_suspended(dev)) {
+ 		zpodd->from_notify = true;
 diff --git a/include/linux/libata.h b/include/linux/libata.h
-index 5c085ef4eda7..3e33ee30628d 100644
+index 3e33ee30628d..5db8a2e3f051 100644
 --- a/include/linux/libata.h
 +++ b/include/linux/libata.h
-@@ -131,6 +131,7 @@ enum {
- 	ATA_SHORT_PAUSE		= 16,
+@@ -722,7 +722,8 @@ struct ata_device {
+ 	unsigned int		devno;		/* 0 or 1 */
+ 	u64			quirks;		/* List of broken features */
+ 	unsigned long		flags;		/* ATA_DFLAG_xxx */
+-	struct scsi_device	*sdev;		/* attached SCSI device */
++	struct scsi_device	*sdev[ATAPI_MAX_LUN];	/* per-LUN SCSI devices */
++	unsigned int		nr_luns;	/* valid entries in sdev[] */
+ 	void			*private_data;
+ #ifdef CONFIG_ATA_ACPI
+ 	union acpi_object	*gtf_cache;
+@@ -1715,6 +1716,14 @@ static inline unsigned int ata_dev_absent(const struct ata_device *dev)
+ 	return ata_class_absent(dev->class);
+ }
  
- 	ATAPI_MAX_DRAIN		= 16 << 10,
-+	ATAPI_MAX_LUN		= 8,	/* SCSI-2 cap (LUN values 0..7) */
- 
- 	ATA_ALL_DEVICES		= (1 << ATA_MAX_DEVICES) - 1,
- 
++static inline struct scsi_device *
++ata_dev_scsi_device(struct ata_device *dev, unsigned int lun)
++{
++	if (WARN_ON_ONCE(lun >= dev->nr_luns))
++		return NULL;
++	return dev->sdev[lun];
++}
++
+ /*
+  * link helpers
+  */
 -- 
 2.43.0
 
