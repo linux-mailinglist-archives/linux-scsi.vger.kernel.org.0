@@ -1,55 +1,55 @@
-Return-Path: <linux-scsi+bounces-24571-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24575-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Am1nMKs5J2o5tgIAu9opvQ
-	(envelope-from <linux-scsi+bounces-24571-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 08 Jun 2026 23:52:43 +0200
+	id nF1rMuA7J2oFtwIAu9opvQ
+	(envelope-from <linux-scsi+bounces-24575-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 09 Jun 2026 00:02:08 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCD1965AC73
-	for <lists+linux-scsi@lfdr.de>; Mon, 08 Jun 2026 23:52:42 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01F8C65ADA6
+	for <lists+linux-scsi@lfdr.de>; Tue, 09 Jun 2026 00:02:07 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=philpem.me.uk header.s=mail header.b=HGMOtsNb;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24571-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24571-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=philpem.me.uk header.s=mail header.b="q4Qc/diM";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24575-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24575-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=reject) header.from=philpem.me.uk;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 056D83019A3A
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jun 2026 21:52:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 600BC3021E6B
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jun 2026 21:57:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F13003AFD04;
-	Mon,  8 Jun 2026 21:52:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A2FA3AFD12;
+	Mon,  8 Jun 2026 21:57:05 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from nick.sneptech.io (nick.sneptech.io [178.62.38.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7914C3AFCEA;
-	Mon,  8 Jun 2026 21:52:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D383AFD1F;
+	Mon,  8 Jun 2026 21:57:02 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780955523; cv=none; b=Su2seWd/88EpPrAuCwDQIWrHu2aDGt06JYv8S1IH8i9f4s5TqUhvk0Jd9z94OBFJXCCYVynBT0lMuoplsSWqjzd3njybqo+AkzS7kdbq+hsdAe7bD1rjbDPSJ9+oVfVzl4jsQrRPiyqDXSvLNEIurUBS724b0tCBly2LK8PSy+E=
+	t=1780955825; cv=none; b=X5E5IxiG9F7GbVOi6ZaXtvEVlaEhCbZOQhZcLJkwg4NHzoEOwBZaQaTwKcJT/FftlOGEuT16xC1E9HkKaRCT167u1w1spBs9PW69C6VUY3SiM+nnKG+nKuexUvBpD0Hc3j/p3NCaQfSxVMkMxyY/cegPNj0EcKWf6HVMRyKGl/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780955523; c=relaxed/simple;
-	bh=TvxDQEo20GxcEfBjGwo/dMBpT4kGWwqB2G0X2IUMJE4=;
+	s=arc-20240116; t=1780955825; c=relaxed/simple;
+	bh=Qn3vwVigO0URt2j33/EaXlxCUk+kPReoOtoKacUnLik=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gkpgCxNRYyP3bzbvQBa7RZfflKOaJ/XTO+ZuK7d/hsK3hE0PZ3uKqfSvyCvaP8M1ZOx06DwVa/oYdP7GE2kF9EJ1NYLCaXFhTneUZk60KzzuQphK82Lb6VuWIx7OERW5Rro9SAj7uRVn1TxapCWV6vdfZGtM0NWSpb18O3jY9eM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=philpem.me.uk; spf=pass smtp.mailfrom=philpem.me.uk; dkim=pass (1024-bit key) header.d=philpem.me.uk header.i=@philpem.me.uk header.b=HGMOtsNb; arc=none smtp.client-ip=178.62.38.78
+	 MIME-Version; b=A106hDyB62SQ0Fkzh4v6hRCXpGVq2CG4mqcC2sFhYYKd8GP3xkPDjXD2IMrCeu5Q7CwjtiPFEUZ9+F89ZLbWS9gHoCsREvlihcmjLu80okBqBxgiBq8DWMIwc/C0tuiak1tkw5DIeR1ga8cc3IzQgKygP3QnY8K0sWKSB8bZlBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=philpem.me.uk; spf=pass smtp.mailfrom=philpem.me.uk; dkim=pass (1024-bit key) header.d=philpem.me.uk header.i=@philpem.me.uk header.b=q4Qc/diM; arc=none smtp.client-ip=178.62.38.78
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=philpem.me.uk;
 	s=mail; t=1780954491;
-	bh=TvxDQEo20GxcEfBjGwo/dMBpT4kGWwqB2G0X2IUMJE4=;
+	bh=Qn3vwVigO0URt2j33/EaXlxCUk+kPReoOtoKacUnLik=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HGMOtsNbS4j07G+N6YVpuMXnlp6DcP5TRcVltvnzamlDfh6dkxV8EE+InSL6kls8q
-	 7NjkFAAEWFEhjln0k/+eupdG7j/MaTh13O+2gtBzNiv0XkFnfKWeGeO+1xr0dOEP6Z
-	 U+z7XkO1TVNr3GG7vIDQXuYS0TXQr6mPWFnYffVk=
+	b=q4Qc/diMJSpG2jFVEV6HaJKSwQ79jFCSBbJTIc3oEiN2UDf6UClEFQ/2bABtoDLsi
+	 e0ZkLq8DmKHFNmpNuZG7pSHENYqq9nTrDFmMjWLvsQiX3zr0VGElugJjdUIlt5QkBg
+	 NFKm1LglVBvRbzquvpVGHcm1GjfUKgZpvGydTkTs=
 Received: from wolf.philpem.me.uk (81-187-163-148.ip4.reverse-dns.uk [81.187.163.148])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
 	(Authenticated sender: mailrelay_wolf@philpem.me.uk)
-	by nick.sneptech.io (Postfix) with ESMTPSA id 5A25ABE6EB;
+	by nick.sneptech.io (Postfix) with ESMTPSA id 63E8BBE6EC;
 	Mon,  8 Jun 2026 21:34:51 +0000 (UTC)
 Received: from cheetah.homenet.philpem.me.uk (cheetah.homenet.philpem.me.uk [10.0.0.32])
-	by wolf.philpem.me.uk (Postfix) with ESMTPSA id 0266B5FC4B;
+	by wolf.philpem.me.uk (Postfix) with ESMTPSA id 12F7A5FC4E;
 	Mon,  8 Jun 2026 22:34:51 +0100 (BST)
 From: Phil Pemberton <philpem@philpem.me.uk>
 To: linux-ide@vger.kernel.org,
@@ -61,9 +61,9 @@ Cc: linux-kernel@vger.kernel.org,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Hannes Reinecke <hare@suse.de>,
 	Phil Pemberton <philpem@philpem.me.uk>
-Subject: [PATCH v6 3/6] ata: libata-scsi: route non-zero LUN commands for multi-LUN ATAPI
-Date: Mon,  8 Jun 2026 22:34:40 +0100
-Message-ID: <20260608213443.2296614-4-philpem@philpem.me.uk>
+Subject: [PATCH v6 4/6] scsi: add BLIST_NO_LUN_1F blacklist flag
+Date: Mon,  8 Jun 2026 22:34:41 +0100
+Message-ID: <20260608213443.2296614-5-philpem@philpem.me.uk>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260608213443.2296614-1-philpem@philpem.me.uk>
 References: <20260608213443.2296614-1-philpem@philpem.me.uk>
@@ -81,13 +81,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[philpem.me.uk,reject];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[philpem.me.uk:s=mail];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24571-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24575-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:linux-ide@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:dlemoal@kernel.org,m:cassel@kernel.org,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:hare@suse.de,m:philpem@philpem.me.uk,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[philpem@philpem.me.uk,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -104,87 +104,69 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,philpem.me.uk:dkim,philpem.me.uk:email,philpem.me.uk:mid,philpem.me.uk:from_mime]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,philpem.me.uk:dkim,philpem.me.uk:email,philpem.me.uk:mid,philpem.me.uk:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: BCD1965AC73
+X-Rspamd-Queue-Id: 01F8C65ADA6
 
-Two changes are required to route commands to ATAPI LUNs other than 0:
+Some multi-LUN devices respond to INQUIRY on unpopulated LUNs with
+PQ=0 / PDT=0x1f instead of the standard PQ=3.  The SCSI scan layer
+normally adds such devices (PQ=0 means "connected"), producing
+spurious "No Device" entries.
 
-1. __ata_scsi_find_dev():  The existing code rejects any scsi_device
-   with a non-zero LUN, returning NULL and dropping the command on
-   the floor.  Hoist a non-zero LUN early-exit ahead of the original
-   channel/id checks: when scsidev->lun is non-zero, allow it through
-   only if the underlying ata_device is ATAPI class.  The original
-   LUN-0 path is left structurally unchanged.
+The scsi_target field pdt_1f_for_no_lun already exists to suppress
+this, but was previously only set by the USB UFI driver.
 
-2. atapi_xlat():  Older ATAPI devices (SCSI-2 era) expect the LUN in
-   CDB byte 1 bits 7:5 rather than relying on transport-level LUN
-   addressing.  Encode scmd->device->lun into those bits, preserving
-   the existing command-specific bits in 4:0.  This is required by
-   both the Panasonic PD/CD combos and Nakamichi CD changers.
-
-   The SCSI layer caps the LUN at shost->max_lun, so a value beyond
-   the device's nr_luns should never reach this point; guard with
-   WARN_ON_ONCE() and return AC_ERR_INVALID if it does, since the
-   3-bit CDB field cannot represent it.
+Add BLIST_NO_LUN_1F so the flag can be set per-device from
+scsi_devinfo, and wire it up in scsi_add_lun() to set
+starget->pdt_1f_for_no_lun from the blacklist flags.  This runs
+during LUN 0 processing, before the sequential LUN scan probes
+higher LUNs.
 
 Signed-off-by: Phil Pemberton <philpem@philpem.me.uk>
 ---
- drivers/ata/libata-scsi.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ drivers/scsi/scsi_scan.c    | 2 ++
+ include/scsi/scsi_devinfo.h | 6 +++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-index 7c3d31dc49a1..2d714efc855f 100644
---- a/drivers/ata/libata-scsi.c
-+++ b/drivers/ata/libata-scsi.c
-@@ -2953,6 +2953,15 @@ static unsigned int atapi_xlat(struct ata_queued_cmd *qc)
- 	memset(qc->cdb, 0, dev->cdb_len);
- 	memcpy(qc->cdb, scmd->cmnd, scmd->cmd_len);
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index ef22a4228b85..bfbbf9be05d2 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -1069,6 +1069,8 @@ static int scsi_add_lun(struct scsi_device *sdev, unsigned char *inq_result,
+ 	transport_configure_device(&sdev->sdev_gendev);
  
-+	/*
-+	 * SCSI-2 CDB LUN encoding: bits 7:5 of byte 1 (3-bit field).
-+	 * The SCSI layer caps the LUN at shost->max_lun (<= ATAPI_MAX_LUN),
-+	 * so this should never trip; warn and reject if it does.
-+	 */
-+	if (WARN_ON_ONCE(scmd->device->lun >= dev->nr_luns))
-+		return AC_ERR_INVALID;
-+	qc->cdb[1] = (qc->cdb[1] & 0x1f) | ((u8)scmd->device->lun << 5);
-+
- 	qc->complete_fn = atapi_qc_complete;
+ 	sdev->sdev_bflags = *bflags;
++	if (sdev->sdev_bflags & BLIST_NO_LUN_1F)
++		sdev->sdev_target->pdt_1f_for_no_lun = 1;
  
- 	qc->tf.flags |= ATA_TFLAG_ISADDR | ATA_TFLAG_DEVICE;
-@@ -3063,6 +3072,29 @@ static struct ata_device *__ata_scsi_find_dev(struct ata_port *ap,
- {
- 	int devno;
- 
-+	/*
-+	 * Non-zero LUN is only legal for ATAPI devices, since they can
-+	 * legitimately expose more than one LUN (PD/CD combos, CD changers).
-+	 * Handle that case up front so the LUN-0 path below stays unchanged.
-+	 */
-+	if (unlikely(scsidev->lun)) {
-+		struct ata_device *dev;
-+
-+		if (!sata_pmp_attached(ap)) {
-+			if (unlikely(scsidev->channel))
-+				return NULL;
-+			devno = scsidev->id;
-+		} else {
-+			if (unlikely(scsidev->id))
-+				return NULL;
-+			devno = scsidev->channel;
-+		}
-+		dev = ata_find_dev(ap, devno);
-+		if (!dev || dev->class != ATA_DEV_ATAPI)
-+			return NULL;
-+		return dev;
-+	}
-+
- 	/* skip commands not addressed to targets we simulate */
- 	if (!sata_pmp_attached(ap)) {
- 		if (unlikely(scsidev->channel || scsidev->lun))
+ 	if (scsi_device_is_pseudo_dev(sdev))
+ 		return SCSI_SCAN_LUN_PRESENT;
+diff --git a/include/scsi/scsi_devinfo.h b/include/scsi/scsi_devinfo.h
+index 1d79a3b536ce..6957b0705510 100644
+--- a/include/scsi/scsi_devinfo.h
++++ b/include/scsi/scsi_devinfo.h
+@@ -34,7 +34,8 @@
+ #define BLIST_NOSTARTONADD	((__force blist_flags_t)(1ULL << 12))
+ /* do not ask for VPD page size first on some broken targets */
+ #define BLIST_NO_VPD_SIZE	((__force blist_flags_t)(1ULL << 13))
+-#define __BLIST_UNUSED_14	((__force blist_flags_t)(1ULL << 14))
++/* PDT 0x1f with PQ 0 means no LUN present (e.g. some ATAPI multi-LUN) */
++#define BLIST_NO_LUN_1F		((__force blist_flags_t)(1ULL << 14))
+ #define __BLIST_UNUSED_15	((__force blist_flags_t)(1ULL << 15))
+ #define __BLIST_UNUSED_16	((__force blist_flags_t)(1ULL << 16))
+ /* try REPORT_LUNS even for SCSI-2 devs (if HBA supports more than 8 LUNs) */
+@@ -77,8 +78,7 @@
+ #define __BLIST_HIGH_UNUSED (~(__BLIST_LAST_USED | \
+ 			       (__force blist_flags_t) \
+ 			       ((__force __u64)__BLIST_LAST_USED - 1ULL)))
+-#define __BLIST_UNUSED_MASK (__BLIST_UNUSED_14 | \
+-			     __BLIST_UNUSED_15 | \
++#define __BLIST_UNUSED_MASK (__BLIST_UNUSED_15 | \
+ 			     __BLIST_UNUSED_16 | \
+ 			     __BLIST_UNUSED_24 | \
+ 			     __BLIST_UNUSED_27 | \
 -- 
 2.43.0
 
