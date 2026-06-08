@@ -1,74 +1,72 @@
-Return-Path: <linux-scsi+bounces-24527-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24533-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Xxb+ENCRJmp2YwIAu9opvQ
-	(envelope-from <linux-scsi+bounces-24527-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 08 Jun 2026 11:56:32 +0200
+	id 8MURMKCVJmp4ZAIAu9opvQ
+	(envelope-from <linux-scsi+bounces-24533-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 08 Jun 2026 12:12:48 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB88D654C64
-	for <lists+linux-scsi@lfdr.de>; Mon, 08 Jun 2026 11:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 54C69654E6B
+	for <lists+linux-scsi@lfdr.de>; Mon, 08 Jun 2026 12:12:48 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=runbox.com header.s=selector1 header.b="L3pZv2 C";
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24527-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24527-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=runbox.com header.s=selector1 header.b="mvwuLT I";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24533-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24533-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=fail reason="SPF not aligned (relaxed), DKIM not aligned (relaxed)" header.from=gmail.com (policy=none);
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7D3FF300B9F4
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jun 2026 09:56:04 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 2AFC8306EB08
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jun 2026 10:01:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E7263BBFBD;
-	Mon,  8 Jun 2026 09:55:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E533D8107;
+	Mon,  8 Jun 2026 09:56:00 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044D63B8948;
-	Mon,  8 Jun 2026 09:55:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 945303D3CEE;
+	Mon,  8 Jun 2026 09:55:58 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780912548; cv=none; b=a+2nZ1k4syonFyksw6ZrJP3niXXnXVW08TA8ZpUnD38APYK/pFTCiM1Os3Q8RJJ458pMtRNv3Lgmi+F11Lvy+av0Ucv7fmuq4E+s/hNeWlg8a6RWiu1HZjtN7kg3BQxC+BI2cpr4RTlBt98AI/cO06VIu+Rffpjs8eKt/G2l4Lg=
+	t=1780912560; cv=none; b=e9psGWzYUh1TBJ3tmOCT0UHUuhKEWftE9OkfBu1VEgEMJ7ieZqen4kVihY2aUOwEFQt7RaGh8uq0BO4Dzsy9nbYayQwjFEtvh0vZff4GYt4xRl4mt5DWhMPgEtnIT6cRtcUeWi6vN3aXNNIPE5EUQfSyha/T4Ob1kGiwnCfI0pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780912548; c=relaxed/simple;
-	bh=wz8XEsY3kJvOSryhfHZlc/eFu9yoBoFSN2PD5F8zRpA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iu0UrUki4hP6uVV4PGOEQhmITHzMJrxmRQuwggUeLRVc/S4d88kMN9NpClcoTeKzVx57oBLt7cYgiXGpW+RJy0G1LVrNpKHYnnIsIyCvq6TAEwJdTQ4KMo+7U4gxqV7zGWIdL5n9OytbfKCmhvxzdY1qGKkKaisR6dVTzI3007k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=L3pZv2Cz; arc=none smtp.client-ip=185.226.149.38
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	s=arc-20240116; t=1780912560; c=relaxed/simple;
+	bh=qEmHCbXS5whw2ROkO97wgg6AOjtnocJh52kBO8s8oQ8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kbNRQOOKpk9My+LS8ZXS2V+2q+YL6aROUuH9vRcba/NdJZnsNYLrZ+VS/HRgqBlb5HryvmxIltfo7LgzJA4mYbWKNScOltxs+eSzbXcUCLvnC/oFbX/LR7pUMlmqxFsHnylhSUz89+LNKCUzPAGTIfSZDOdlVX8U/AVzLGG/3Ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=mvwuLTIs; arc=none smtp.client-ip=185.226.149.38
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
 	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1wWWhm-00Br7v-Jk; Mon, 08 Jun 2026 11:55:38 +0200
+	id 1wWWi4-00BrHo-Rl; Mon, 08 Jun 2026 11:55:56 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
 	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
-	Subject:Cc:To:From; bh=g+VTKhbN/6tees8YPIaQJkfwcrtiigF1OfLz8IHB57c=; b=L3pZv2
-	CzHxv1vHmf6IMa+vsMQfgnE04LeNq2X29Qrv0UZgeN/DGAuqjIFgXPw4xhS98x8A4YNCs++sJb0n9
-	1K8X8hKDazq6eMPm69OwOogjV7FX6Fic3IRK57L0rfn41UF4BOtVsFyyRUDT0kZc5QAc8II0pX1R3
-	l+ef4mlCj4DAulp9YspOtNqrIqOL1DAiH+47MdXbztuFW8nbi+BQhZeataBKk0a9Dw+GrAvUtmdJx
-	ukp+KoE9zy2eX+9ZDT+jikMk21ep3PbuhwoeUfUOjxagH9depryO/vxbpJxcmqgO6b9hsyO5/zrXu
-	9CTJXfGgYWqf7oRH3qDZ35SK5iTA==;
+	Subject:Cc:To:From; bh=LcjyQx8Q4MzDqCmavYOYkBcOkFtvQFgyHJ3gfEG4lIg=; b=mvwuLT
+	IsAcxiU69aDWlN0NkOaXoVeVyKG2f+rAqvqXqW3r1zoeDVKRgTfbruZs98Jrq4bOj/ZuukX3l/aCv
+	7pqMP1atlhiDqmJoys5HtSpC+e9iQc/SNICQTukVMilrG08eduumRSHNy/GFF4WG+Gk3QVEgfq36J
+	h1ydLZ16zKPP+t/4fbTmt+1HSCZ0Pd4+jcVdbuIQ/icOSdoaJ7swvc+cGMS7nKbnDhU+QiolXp2Cs
+	0SjcGKC2IBK8J7RQE41aoj85BcnVK8pH88FROkU7G1tebQsq63GdLJiFG+bHQvhSLgG+eQj7BfUXk
+	YsoJSmnQxA7PA4vT4varR9c1Gq7w==;
 Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1wWWhl-0003bI-NT; Mon, 08 Jun 2026 11:55:38 +0200
+	id 1wWWi4-0000L8-GI; Mon, 08 Jun 2026 11:55:56 +0200
 Received: by submission02.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1wWWhd-00Ag6G-0r;
-	Mon, 08 Jun 2026 11:55:29 +0200
+	id 1wWWhn-00Ag6G-5P;
+	Mon, 08 Jun 2026 11:55:39 +0200
 From: david.laight.linux@gmail.com
 To: Kees Cook <kees@kernel.org>,
 	linux-hardening@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-scsi@vger.kernel.org
 Cc: Arnd Bergmann <arnd@kernel.org>,
-	GR-QLogic-Storage-Upstream@marvell.com,
 	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Manish Rangankar <mrangankar@marvell.com>,
+	Khalid Aziz <khalid@gonehiking.org>,
 	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Nilesh Javali <njavali@marvell.com>,
 	David Laight <david.laight.linux@gmail.com>
-Subject: [PATCH next] drivers/scsi/qla4xxx/ql4_mbx: Use strscpy() to copy strings into arrays
-Date: Mon,  8 Jun 2026 10:54:53 +0100
-Message-Id: <20260608095523.2606-9-david.laight.linux@gmail.com>
+Subject: [PATCH next] drivers/scsi/BusLogic: Avoid overrunning static message buffer
+Date: Mon,  8 Jun 2026 10:55:18 +0100
+Message-Id: <20260608095523.2606-34-david.laight.linux@gmail.com>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -89,14 +87,14 @@ X-Spamd-Result: default: False [0.44 / 15.00];
 	DMARC_POLICY_SOFTFAIL(0.10)[gmail.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-24527-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24533-lists,linux-scsi=lfdr.de];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER(0.00)[davidlaightlinux@gmail.com,linux-scsi@vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_CC(0.00)[kernel.org,marvell.com,HansenPartnership.com,oracle.com,gmail.com];
-	FORGED_RECIPIENTS(0.00)[m:kees@kernel.org,m:linux-hardening@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:arnd@kernel.org,m:GR-QLogic-Storage-Upstream@marvell.com,m:James.Bottomley@HansenPartnership.com,m:mrangankar@marvell.com,m:martin.petersen@oracle.com,m:njavali@marvell.com,m:david.laight.linux@gmail.com,m:davidlaightlinux@gmail.com,s:lists@lfdr.de];
+	FREEMAIL_CC(0.00)[kernel.org,HansenPartnership.com,gonehiking.org,oracle.com,gmail.com];
+	FORGED_RECIPIENTS(0.00)[m:kees@kernel.org,m:linux-hardening@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:arnd@kernel.org,m:James.Bottomley@HansenPartnership.com,m:khalid@gonehiking.org,m:martin.petersen@oracle.com,m:david.laight.linux@gmail.com,m:davidlaightlinux@gmail.com,s:lists@lfdr.de];
 	DKIM_TRACE(0.00)[runbox.com:+];
 	FROM_NO_DN(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
@@ -106,20 +104,22 @@ X-Spamd-Result: default: False [0.44 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[davidlaightlinux@gmail.com,linux-scsi@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	MID_RHS_MATCH_FROM(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[runbox.com:dkim,vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,runbox.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: DB88D654C64
+X-Rspamd-Queue-Id: 54C69654E6B
 
 From: David Laight <david.laight.linux@gmail.com>
 
-Replacing strcpy() with strscpy() ensures that overflow of the target
-buffer cannot happen.
+blogic_msg() seems to save output in a static buffer (presumably for
+diagnostic reasons).
+Discard copies that would overrun the buffer end.
+Since the length is calculated used memcpy() not strcpy() for the copy.
 
 Signed-off-by: David Laight <david.laight.linux@gmail.com>
 ---
@@ -145,31 +145,35 @@ All the patches are being sent individually to avoid very long cc lists.
 Apologies for the terse commit messages and likely unexpected tags.
 (There are about 100 patches in total.)
 
- drivers/scsi/qla4xxx/ql4_mbx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/BusLogic.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/qla4xxx/ql4_mbx.c b/drivers/scsi/qla4xxx/ql4_mbx.c
-index 7febc0baa9d6..cb0dc2908582 100644
---- a/drivers/scsi/qla4xxx/ql4_mbx.c
-+++ b/drivers/scsi/qla4xxx/ql4_mbx.c
-@@ -1370,7 +1370,7 @@ int qla4xxx_about_firmware(struct scsi_qla_host *ha)
- 	       sizeof(about_fw->fw_build_date));
- 	memcpy(ha->fw_info.fw_build_time, about_fw->fw_build_time,
- 	       sizeof(about_fw->fw_build_time));
--	strcpy((char *)ha->fw_info.fw_build_user,
-+	strscpy(ha->fw_info.fw_build_user,
- 	       skip_spaces((char *)about_fw->fw_build_user));
- 	ha->fw_info.fw_load_source = le16_to_cpu(about_fw->fw_load_source);
- 	ha->fw_info.iscsi_major = le16_to_cpu(about_fw->iscsi_major);
-@@ -1379,7 +1379,7 @@ int qla4xxx_about_firmware(struct scsi_qla_host *ha)
- 	ha->fw_info.bootload_minor = le16_to_cpu(about_fw->bootload_minor);
- 	ha->fw_info.bootload_patch = le16_to_cpu(about_fw->bootload_patch);
- 	ha->fw_info.bootload_build = le16_to_cpu(about_fw->bootload_build);
--	strcpy((char *)ha->fw_info.extended_timestamp,
-+	strscpy(ha->fw_info.extended_timestamp,
- 	       skip_spaces((char *)about_fw->extended_timestamp));
- 
- 	ha->fw_uptime_secs = le32_to_cpu(mbox_sts[5]);
+diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
+index 5304d2febd63..7e481dbfc521 100644
+--- a/drivers/scsi/BusLogic.c
++++ b/drivers/scsi/BusLogic.c
+@@ -3451,13 +3451,17 @@ static void blogic_msg(enum blogic_msglevel msglevel, char *fmt,
+ 	va_end(args);
+ 	if (msglevel == BLOGIC_ANNOUNCE_LEVEL) {
+ 		static int msglines = 0;
+-		strcpy(&adapter->msgbuf[adapter->msgbuflen], buf);
+-		adapter->msgbuflen += len;
++		if (adapter->msgbuflen + len < sizeof (adapter->msgbuf)) {
++			memcpy(&adapter->msgbuf[adapter->msgbuflen], buf, len + 1);
++			adapter->msgbuflen += len;
++		}
+ 		if (++msglines <= 2)
+ 			printk("%sscsi: %s", blogic_msglevelmap[msglevel], buf);
+ 	} else if (msglevel == BLOGIC_INFO_LEVEL) {
+-		strcpy(&adapter->msgbuf[adapter->msgbuflen], buf);
+-		adapter->msgbuflen += len;
++		if (adapter->msgbuflen + len < sizeof (adapter->msgbuf)) {
++			memcpy(&adapter->msgbuf[adapter->msgbuflen], buf, len + 1);
++			adapter->msgbuflen += len;
++		}
+ 		if (begin) {
+ 			if (buf[0] != '\n' || len > 1)
+ 				printk("%sscsi%d: %s", blogic_msglevelmap[msglevel], adapter->host_no, buf);
 -- 
 2.39.5
 
