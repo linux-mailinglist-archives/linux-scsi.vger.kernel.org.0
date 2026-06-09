@@ -1,302 +1,415 @@
-Return-Path: <linux-scsi+bounces-24610-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24605-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id oDZZLw4FKGqj7QIAu9opvQ
-	(envelope-from <linux-scsi+bounces-24610-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 09 Jun 2026 14:20:30 +0200
+	id nntjKIT+J2pV6wIAu9opvQ
+	(envelope-from <linux-scsi+bounces-24605-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 09 Jun 2026 13:52:36 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31A3565FFBB
-	for <lists+linux-scsi@lfdr.de>; Tue, 09 Jun 2026 14:20:30 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3515165FABA
+	for <lists+linux-scsi@lfdr.de>; Tue, 09 Jun 2026 13:52:36 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=oracle.com header.s=corp-2025-04-25 header.b=UxBQGFnb;
-	dkim=pass header.d=oracle.onmicrosoft.com header.s=selector2-oracle-onmicrosoft-com header.b=uJkJDgej;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24610-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24610-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=oracle.com;
-	arc=reject ("cv is fail on i=2")
+	dkim=pass header.d=broadcom.com header.s=google header.b=e2uIwMV8;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24605-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24605-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=reject) header.from=broadcom.com;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 75DE2303F26F
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Jun 2026 12:14:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D0290304A8D0
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Jun 2026 11:48:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4BCE40F8DF;
-	Tue,  9 Jun 2026 12:14:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43A393EB81D;
+	Tue,  9 Jun 2026 11:48:42 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f98.google.com (mail-oo1-f98.google.com [209.85.161.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EACB403E9D;
-	Tue,  9 Jun 2026 12:14:47 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781007289; cv=fail; b=g+TMwXIRxGzUY64jOrXa3VUeRb8I/6xtXDfdcnMJKcmQJEMwNBL7Hhsx7cppNgCX8gPBex9VlIIbxwtULTMJpOyfd58ME2F8OsQZnBO4DwRQiMinXpLuLshxxLi69HkInHjZHF+GJnEhbBQdBOmyvmOL/ppXqfHjsQ0c2nZ7hw0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781007289; c=relaxed/simple;
-	bh=G57gIkKTTKOibtJqe3HF7KbFXNaB+PWlVKJnCR73kWM=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Gb/0nVl7tjFiNx/k7lHIzVtQj7FqGvQIJBeyj3Y9omwhFMXEvW4yvZlmB/Z/eB6p6Qj0TQM5znYtzWXnCckcQFbaE7j7ptKyfuMFn0ko6gy4AhXsaKvRnLyhUhvxfyFeN6Qj/Jb7sv6IK1ulht9V4JwVcXCP1PVRgcV00Ur6XYI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=UxBQGFnb; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=uJkJDgej; arc=fail smtp.client-ip=205.220.165.32
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6590MZQ61127041;
-	Tue, 9 Jun 2026 12:14:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=mlsi+UEJaxHUqJgMep0JSRB/lUu6xndvlU55dCXUZ94=; b=
-	UxBQGFnbN/QwHCnCrdSO7cgVPJELCoRx8aP4bDRbMnEl4wEM909yyfe4zqt4Ea/Z
-	F/AT0Yr1onC5SUZC7Pdvuxso4KEX2PAK+5EAYSx7lgq0DZNgLzkxpNvfJi5rkS6V
-	2bgl32ZaikNrq7ghH5Xeju+9lCsi+Cpy+09fuN9H4xhxCYLy9x5IOEHEnpo6nKcY
-	4REN2x1fFiZBbuVL9nLNfHOLpaeMZA3Tlow+4jM33Jd3YrfjdhpgL4udCE77WMv2
-	4S+Xh+iPym9jb+6tBbTgr6lm4aMCmF7gXmb3HQtl5IHYZ03llnBZeD3//yEDK2TG
-	3Et9v0Y0me6b/3xsEgyMlQ==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4embe7m5k2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 09 Jun 2026 12:14:33 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 659C8aXW025077;
-	Tue, 9 Jun 2026 12:14:32 GMT
-Received: from ph7pr06cu001.outbound.protection.outlook.com (mail-westus3azon11010053.outbound.protection.outlook.com [52.101.201.53])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4ema0q1fsr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 09 Jun 2026 12:14:32 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bahgQQxtrFSOJTOCB0bXHt9YJQFlk2HVn5P9vFSgZYXTjmqFJ0igh+zoaNNh4IbhPzgOXL12GyyJx7Gl+RzvvzhgqMrVqkQC0RPoZeMokToM0i2ASzUb5c8sR/q2kPQSDlMBulFPvMOXDf0kbKQvo4Y8AZvGzXZhaqI5eGV/joeHQtKBF4Znwjr7dxD3GOAvcfPeoqtGeJkbhoUWvEAQE9IBieIBea7i0zfY/V+0dbidDF8+t/UUmpA3jfSo0XKs/aMZMGQmu1BJRXJX98osOiphqCBeD08lrVp/5goRR9Gba3btmtW3B3cwoey8PFB7RKRJIvYcJ9d0CmhWJoaYFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mlsi+UEJaxHUqJgMep0JSRB/lUu6xndvlU55dCXUZ94=;
- b=VUxWcH9qWL3V5URrKpwuBhIFOzjdYB2w2EVjNjujZIbywxHJ4+ZvNFYZs6/RHiKlZtKZfvavzFcSDKLGtaCPTgqz5OELOwsOrfFOxfhfHqrYdtWPhY87h9JVxDIYpgbhDH4DAVUu1PgWy7YvNHQuzACXT6Nxbe8u1TczntNHoQRLqKWYcgkwkSlCAvyqqNq9zix6jYMe1uhY7XI325S4Ke8/sVVoJfphuwB2LxqNArTywTjIyCDsewkt06qbwI0uR6kEH+l5HG4RC6370Yhr2BoEzpUfwLDDTTkuDZTicVk1Dyfwc2PNZxay5VbCdrlbx5HZjjEqwJ+CxPoHs7DaaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734373F5BD9
+	for <linux-scsi@vger.kernel.org>; Tue,  9 Jun 2026 11:48:40 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781005722; cv=none; b=S9uXAPauELe1wvA0GmCO+dIEgPahPmLcgubAePoubxmRlkSrR7MhIgbJJTTRNenEMYe1pGpTl6rp9VyodzgQvlQ2MZEVoOOGHMM2JyEZWSbdgCY1QzFmiylmb+gsUBNSWwJaO/o1RGcbXnTOiiXFV1bbBNtJpfSGQMfqcXLGO0k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781005722; c=relaxed/simple;
+	bh=uwnsk7uP8WIJoO8ttbzpXJmdi0aUvgvTHnMPSDHcaKw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JUCu73G/+f6sdz/YUhFYWkUAnLHlEvuLCXEQjRr0dXJwE7lewXSZAg4yze/ap9hBahrjTCeGAGOwuQcg2t29faAyjsMOa7ZlG4BSMq2vV6xYI9TCKecHFuuM3DPwSzQntqURhtmkUwIIYFqPuYlpm2A3kQRby7eFXLA9TlKdIEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=e2uIwMV8; arc=none smtp.client-ip=209.85.161.98
+Received: by mail-oo1-f98.google.com with SMTP id 006d021491bc7-69e402b625fso3618296eaf.1
+        for <linux-scsi@vger.kernel.org>; Tue, 09 Jun 2026 04:48:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781005719; x=1781610519;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2GtwyftxDgDxHf00TNmN+7bsJSzsnvSjUZVIyovfOvI=;
+        b=BgBG0AKTdEV7BJPDdPfsQwK7q8L8lfkGTf+HgjZUvwIfJeGMr+P73M5T1MjsG0vwki
+         c/FhWE4bdAigFOPnx0ssiDHT9QhHgFXbxYMxNEPlzXJ1CmRXTrrt7+imTE915dnZIjf0
+         bBbLLtpp6hvRJ234+i1QQ2sFXbTas61d72sHhJpvAKPcHRe9kTt2oqaOLkxOeD/+Q/8H
+         UoUZywUzwX1YWSeukvDKOHv1KyZlBn+lQo122bUzTMKNLQFQzLiQBtu+foxy7aAj96us
+         tdxcEK78lp0hpzR6ScWZct4AV5w6FmZPXLeYjg3tZwKmnxNSY+w+VHwrYMRGQmYIzf+Q
+         wtOg==
+X-Forwarded-Encrypted: i=1; AFNElJ92oGciBlAyK8IbEVGWO7ZFfAOf9VSD9IsdmeDV53IYW5BZ1Itm7RCj4MRMEGtQvjebj8Y3RE2iYSyy@vger.kernel.org
+X-Gm-Message-State: AOJu0YyO7ie2ZmiZ22Imj+xvIIV6lg3OW2ObZTOVq1RSTgMj2BSrOER/
+	DxIYGJ0D8U5uUHuvSd/3B5eZvWHNaGZsfm8YDfx4ypfSrTKS4fsoEBPFDVFzR9q0qJM2Nt1CEa/
+	smIq+2Uauk8dElKUlgPg4qaRUHMXxAubhOCa+oagR4Ba0qyIJhj6OqxypGR8VLTeFA+4NuW9sDa
+	VNj9zZC+LXDQNP/0jK6Tjs1RWjJdqnuwetkHAUcvw8DJRgBWlBJdpeBN6jR2PWjwnRM1V3zX2eW
+	NI4EkB6C2JEzEsg
+X-Gm-Gg: Acq92OGXnzK/jpUf/IA/mvuh/138Wwbu91jFhXI0VJyDhdT5VwrUcdSqjROd60cqg4M
+	ghGkDB7jHICfnZG13RayWceVOxtAqHTBMhjMfb+6YHan92Dpmgw44i6N+cJeztg7nGWYrjhrKrX
+	qDWJQpiFq0D8n2dimZNsUedn3LEXw83jdU+bU8PmaCNdvhuHMjEsGlY8vyV6eDICx7DdiGBgzm9
+	TzWhXQtH1cN/bG2m8w175+2mnear1S7PJdQ5nWDlhFPs/ZrrDm+QW7kQfsJM2rcaDBiwaDXnuXf
+	5WM4q+WJVloygOYSpvlyViNdTVCah7aFFwPG3Zjm0eM+v8ZM14gysj9LPsY2boQ4XDRm49pfn+p
+	i+8rBDa+flGw/NW4YavYkfLTn8PjZtsrygPIB7TQniBI/QeqKdwqGx2HhFwJCrvUKwxXYGV39N+
+	pulgHkd+7ldMLIxtgSmaIsNhkoNZ6RG/Z1rCbsFMXJsFCvSkusDevZQgLLDx1zxHh3VkRDDw==
+X-Received: by 2002:a05:6820:342:b0:69d:fcab:c640 with SMTP id 006d021491bc7-69e68c59187mr8009771eaf.42.1781005719227;
+        Tue, 09 Jun 2026 04:48:39 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-118.dlp.protect.broadcom.com. [144.49.247.118])
+        by smtp-relay.gmail.com with ESMTPS id 006d021491bc7-69e88077ca5sm344409eaf.26.2026.06.09.04.48.38
+        for <linux-scsi@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Jun 2026 04:48:39 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-36d98b74447so4270686a91.2
+        for <linux-scsi@vger.kernel.org>; Tue, 09 Jun 2026 04:48:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mlsi+UEJaxHUqJgMep0JSRB/lUu6xndvlU55dCXUZ94=;
- b=uJkJDgejEHF80s5FvBs5Wb9a23paeOvPI/9TYKfLpi9S0kzVuWVqhY2XUWCp60x6sDqhUDv1KlFtWPd0PoR8wYpzukddcSbnxAIShdDO1Lf+R3CTqSeu0p1tbyU7stJHoQllUM4NayI1fJBeBXjevBXC+9rPAzTTyE3kkk7kKiU=
-Received: from DS4PPFEAFA21C69.namprd10.prod.outlook.com
- (2603:10b6:f:fc00::d54) by MN7PR10MB862668.namprd10.prod.outlook.com
- (2603:10b6:208:5f7::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.12; Tue, 9 Jun 2026
- 12:14:29 +0000
-Received: from DS4PPFEAFA21C69.namprd10.prod.outlook.com
- ([fe80::9da2:46fe:4d63:a74b]) by DS4PPFEAFA21C69.namprd10.prod.outlook.com
- ([fe80::9da2:46fe:4d63:a74b%7]) with mapi id 15.21.0092.011; Tue, 9 Jun 2026
- 12:14:29 +0000
-Message-ID: <6b6ebec8-0e92-41bd-8001-0608ee6e804b@oracle.com>
-Date: Tue, 9 Jun 2026 13:14:25 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] scsi: target: copy iSCSI ISID before unmapping the PR
- OUT buffer
-To: James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Bryam Vargas <hexlabsecurity@proton.me>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: Mike Christie <michael.christie@oracle.com>,
-        Maurizio Lombardi <mlombard@redhat.com>,
-        David Disseldorp <ddiss@suse.de>, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260609005858.17504-1-hexlabsecurity@proton.me>
- <fdb07a39-cf7d-48aa-9e75-1a79dc7ad620@oracle.com>
- <239dd72a5ee388486f60eff7e6b025d130e08266.camel@HansenPartnership.com>
-Content-Language: en-US
-From: John Garry <john.g.garry@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <239dd72a5ee388486f60eff7e6b025d130e08266.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0209.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a5::8) To DS4PPFEAFA21C69.namprd10.prod.outlook.com
- (2603:10b6:f:fc00::d54)
+        d=broadcom.com; s=google; t=1781005718; x=1781610518; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2GtwyftxDgDxHf00TNmN+7bsJSzsnvSjUZVIyovfOvI=;
+        b=e2uIwMV898uSiIGBFwRmwkHCS2tymQ6pmRRxIcDZzGObmm9Z76jjduPKTt86NTUa6X
+         Q3sgiAT4XML/RSl9EVEL5STDpek+Vs9kvLFQ8qqmeO8taDtrBQehtJvXD3ZxMFL0T5dF
+         Vquzng4pDKrXKas1cg4uNKfLimmruPZCgKEZ0=
+X-Forwarded-Encrypted: i=1; AFNElJ/7RcXX63q2mduNH+L/UZ9QnXyu25nNjGlYhC4tzrk19kFxlPy7maXIMLjyEGR+H2Au9QoNh89hxhK3@vger.kernel.org
+X-Received: by 2002:a17:90b:5783:b0:36a:4074:9aa6 with SMTP id 98e67ed59e1d1-370ee82fcb9mr19842178a91.6.1781005717462;
+        Tue, 09 Jun 2026 04:48:37 -0700 (PDT)
+X-Received: by 2002:a17:90b:5783:b0:36a:4074:9aa6 with SMTP id 98e67ed59e1d1-370ee82fcb9mr19842127a91.6.1781005716916;
+        Tue, 09 Jun 2026 04:48:36 -0700 (PDT)
+Received: from sumit_ws.dhcp.broadcom.net ([192.19.234.250])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f6bf903fasm18898075a91.2.2026.06.09.04.48.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2026 04:48:36 -0700 (PDT)
+From: Sumit Saxena <sumit.saxena@broadcom.com>
+To: "Martin K . Petersen" <martin.petersen@oracle.com>,
+	Jens Axboe <axboe@kernel.dk>
+Cc: "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	linux-scsi@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	Adam Radford <aradford@gmail.com>,
+	Khalid Aziz <khalid@gonehiking.org>,
+	Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Hannes Reinecke <hare@suse.com>,
+	"Juergen E . Fischer" <fischer@norbit.de>,
+	Russell King <linux@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org,
+	Finn Thain <fthain@linux-m68k.org>,
+	Michael Schmitz <schmitzmic@gmail.com>,
+	Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+	Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+	Oliver Neukum <oliver@neukum.org>,
+	Ali Akcaagac <aliakc@web.de>,
+	Jamie Lenehan <lenehan@twibble.org>,
+	Ram Vegesna <ram.vegesna@broadcom.com>,
+	target-devel@vger.kernel.org,
+	Bradley Grove <linuxdrivers@attotech.com>,
+	Satish Kharat <satishkh@cisco.com>,
+	Sesidhar Baddela <sebaddel@cisco.com>,
+	Karan Tilak Kumar <kartilak@cisco.com>,
+	Yihang Li <liyihang9@h-partners.com>,
+	Don Brace <don.brace@microchip.com>,
+	storagedev@microchip.com,
+	HighPoint Linux Team <linux@highpoint-tech.com>,
+	Tyrel Datwyler <tyreld@linux.ibm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	linuxppc-dev@lists.ozlabs.org,
+	Brian King <brking@us.ibm.com>,
+	Lee Duncan <lduncan@suse.com>,
+	Chris Leech <cleech@redhat.com>,
+	Mike Christie <michael.christie@oracle.com>,
+	open-iscsi@googlegroups.com,
+	Justin Tee <justin.tee@broadcom.com>,
+	Paul Ely <paul.ely@broadcom.com>,
+	Kashyap Desai <kashyap.desai@broadcom.com>,
+	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+	Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
+	megaraidlinux.pdl@broadcom.com,
+	Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
+	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+	mpi3mr-linuxdrv.pdl@broadcom.com,
+	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+	Ranjan Kumar <ranjan.kumar@broadcom.com>,
+	MPT-FusionLinux.pdl@broadcom.com,
+	Daniel Palmer <daniel@thingy.jp>,
+	GOTO Masanori <gotom@debian.or.jp>,
+	YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
+	Jack Wang <jinpu.wang@cloud.ionos.com>,
+	Geoff Levand <geoff@infradead.org>,
+	Michael Reed <mdr@sgi.com>,
+	Nilesh Javali <njavali@marvell.com>,
+	GR-QLogic-Storage-Upstream@marvell.com,
+	Narsimhulu Musini <nmusini@cisco.com>,
+	"K . Y . Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>,
+	Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>,
+	linux-hyperv@vger.kernel.org,
+	"Michael S . Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	Eugenio Perez <eperezma@redhat.com>,
+	virtualization@lists.linux.dev,
+	Vishal Bhakta <vishal.bhakta@broadcom.com>,
+	bcm-kernel-feedback-list@broadcom.com,
+	Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	xen-devel@lists.xenproject.org,
+	Sumit Saxena <sumit.saxena@broadcom.com>
+Subject: [PATCH v3 0/4] scsi/block: NUMA-local scan allocations, shared-tag path cleanup, and SCSI I/O counters
+Date: Tue,  9 Jun 2026 17:47:59 +0530
+Message-ID: <20260609121806.2121755-1-sumit.saxena@broadcom.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS4PPFEAFA21C69:EE_|MN7PR10MB862668:EE_
-X-MS-Office365-Filtering-Correlation-Id: d1f00b12-9e7a-421d-5ecb-08dec620a815
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|22082099003|18002099003|6133799003|56012099006|4143699003;
-X-Microsoft-Antispam-Message-Info:
-	qGaQHpIKic40x4v7vlhSNcewjgS+CWAgk3o1YfkBU9VhngB+gHkQXe4tVZ4IDVmvdGoB0c+IAUNTHKJkgyPIoFy8BNrdCrS12w4l39JoGQhK7g70sQUAvAObpRrdLQVVxD6q0JFdLpvKsAUZEJkfAh8mPawhE5yxymuky+ev3koNbC6rR0joRqPqLeWEy+4WqchEOw3bFExg0ryUWK9FPZPLaWRgvaZoUnOzCieg/wpBFgrNKIyy9BRjYGesMV2DdqOKKryxUiuGCVcxTlXZOQQgoKXvTyAqoSgreuqALo0hWPgInWjNojl1TGdDl7ROoB1JHJrsLpVTx2EInii/ReUAw7Q34bC81J7TPpdyNmEJab53kB0BO3g+54MJ2pzz6xszb9KzJWwfwpDseSHw2EA3vNhs/Gp0CaLiM/7Hh/5ds0M+8scQhILg/ib0COLKVyja+HFxU0hqAmpKkirkg2jYICUK6WQMADUuny/7fhrBDUGspQ6p9P7srG2CT1vJjq5VePjhILeNm2AqzRk9MxcsF5SnFsx3BSiyQlDN2Cwedclx/Ttoyy5NgnjBgXnxblQzqxsKhmItuljC+rdx5jo5thD3dy/MR0PickFiVUggog6JJ4+DNF1bzFSRhXxl/3GEcshrUM1tt0QEh3QAfJJS2nqTgXFZEy6zlimrBnPSUPOAYQ4+F3CN1fEEaY8m
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS4PPFEAFA21C69.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(22082099003)(18002099003)(6133799003)(56012099006)(4143699003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TUh0VkQ0c2JENXU3Wmd3L2phL1h0TDk3R0VHWUF0NG5WK1puVEwxeitucGNL?=
- =?utf-8?B?bWtwbW1oL1B3R0JXN3F5bkJJNm9ucC9xQW05UlNQTEM3WVRxS2JtWG1YUWs4?=
- =?utf-8?B?eDMxVkVjalBBL0FzdEpOQWhod2diNVFUcXdUQmkzOUYzT1NxTGZyaDNFRjFu?=
- =?utf-8?B?dWtuNXNpMzZKSi9meGI3OEVMTDFuOVFCUDhMeWZoK243V3Y3dWVVbEh4ZnlJ?=
- =?utf-8?B?Z3Z5d2FXQzQ0M3FaUEk4WXl4OVhPM0RGQlUyZC9VYkZVOTNRVjZvSmpBK2Z3?=
- =?utf-8?B?cFBwWGdJckc3RjFHdDB5ZDlEczk3Skt2ZVBVNk1yc1pPS3pIeFBYTys0NzIx?=
- =?utf-8?B?d0ZMSURhejVYK2pOQzVVbXB2N2hPQW1ZMGtZU3FMTWE5azlwOVkyUUZsSkRz?=
- =?utf-8?B?Y0hkT1VXblFyL2Y4UWM2UDdRQWpsV3pCN0lPaFloNTFsbzBvUWNXTVMxcVFl?=
- =?utf-8?B?dkFkOE00VFZmbVB2aU9YNlZjTkZ5TjJXSEJRaGJpVGhRYXZ6WmN2TXYvQnFF?=
- =?utf-8?B?czZhbmtEcDd5cjVjVk0wbGRHYVFlNHVWYVFVaU9lZXRLNjhGWTh1U3BTOEZZ?=
- =?utf-8?B?YmI3Znd3c2JJd3oxK3hUOERkY1N1dzlYM3pmWFRDRnRNakk0Y3pKR3lCcUwx?=
- =?utf-8?B?cDRHQXB2T1ZSYWgzMzJPT2s0QTZpQUZhVCt3ajJ1ZW5tem9weWxjNURTS01o?=
- =?utf-8?B?QUlUSU1EcTZXazlhZ3hzWHUvWG81VUN2SDVRKzFJWmFnVERjU3Vmb1oyNVI1?=
- =?utf-8?B?azFkMG95ZWQ0UHdQZ3ZvMVJTUlBJTE55aE0xT3puSW1IRW9sN0VPOWVxaFhj?=
- =?utf-8?B?WitoOGhBRktQTlpNOE5yZEZhclBVT3Byd2VwUFZTTTNOdEUxNld1ZFBZNHpi?=
- =?utf-8?B?TGFhV3E3VU5ZNFdDR2I5ZEkva0FFVUpsa3h5YkkxSnpHQ296YVpHckhrYjln?=
- =?utf-8?B?SGtvK0VSajlYZTUrV25HekhqUkxGekFkYkJvYndCS0RIc1lnUy81bi91UVJB?=
- =?utf-8?B?aTkrYzFSbUg4eGdvY01PVnhtb1RuUExOMVYvMWU5VnplN0QzVzhBWWxvYUFO?=
- =?utf-8?B?aWhEM05CYmZEc0VIYWJya3NmZXNtbTNsS1ZDcE9seVpWOHE4WjltNXMwV3Fj?=
- =?utf-8?B?VkJZZXZPQyt4N1JDQlYySGpGVXBMR3MrRW8wWno2RTFTZXIvTG04eDBPSUJz?=
- =?utf-8?B?UUhtcFNueTFKUFRqWmFmNzIrSTVQWW52bEhKTml1cTlUalkwTE9RNG9TM3Y5?=
- =?utf-8?B?YUk2aTBsSWd4S1BEMUNicktTWDBKTUR4QnVXeEsrOUl2Qkh5RVVObk5qRDhY?=
- =?utf-8?B?TlZRY3JONGJ6UmJSVXNZNkdFanE1TzBSZ1htb0V1WW9wcWhGK0NKc2FTVFJ3?=
- =?utf-8?B?djV6VmFyc3EzVEtmcW00TmNLejdRbFA4bFlLU2xSUkoyYzlPbVhOMlg4N0cy?=
- =?utf-8?B?MTBpSXNyZ1JPRU16VWIyMklpSE9VTUNvamNQb25GTklESjA1aUVKdkNGNkUv?=
- =?utf-8?B?dEdhVjBrczIrdFp6dHRqU0V5RFFZMloxTUhmUU1xdXVRdFYxSGViMk5DR3dB?=
- =?utf-8?B?L1I2Si9rOVh2TUEycjdaM2craDBUUHdpR2ZEQldnZHlHNmFZV1hDVWpMaWxH?=
- =?utf-8?B?b2ttZXBaQmwxMXowS2ZQOFczby9VSWZRcldmb3RKbFpobm45VHErenA5OXNC?=
- =?utf-8?B?WElVRjRBSXBUMXh1aTZrdTJaeEhzdnExeWRhajQxc3ZheDhzODJVNlcySkRU?=
- =?utf-8?B?a1RnLytvd3hIR1lmNG9HVGN3bWgwMkVOQXJzRDgwbGgzYlVDaGRYOENpT3V3?=
- =?utf-8?B?WWg4SExycGdLaHFrSkRiNkllRXRkZFZKZHdxdnJKY0U3RTRJZDVvQ3E1RzZN?=
- =?utf-8?B?WDdMOUFHaXB1TUk3QjJiRzlaeVZRZFgrWTh2Q0VKWTVQM05oNkFadSsyNWVw?=
- =?utf-8?B?djBGUlpvZEU5RE5QZEkvVE5DZUd2NkNYL3B3MlZlWmN2RU9ZaC8zeGcxdURo?=
- =?utf-8?B?a0VDRXVyNW9xcmk3bnNNdkFlQnI4amU2WEdadFdtZmMvemFoQXpRcDV5M0No?=
- =?utf-8?B?VGJsZytTKytZUVdibkV1YUNtZmEySmtFTGVWb1JQTU1tRmdIc0pFNWdJREZx?=
- =?utf-8?B?T0NjWTZZbm5lVFlQOWtEbEh2SXhZSDUzMStjUWErL0hnRXlaN3Y4REQwdTFj?=
- =?utf-8?B?WDJ6dVNRd0VZaGZianhvS3pmSDA0bXo5S3orZG4yTDkrRnk4UXp3MWFvWDJO?=
- =?utf-8?B?UVcvTjlhMlNnUUl5RzQvam9QTzlsQk11S3ROeXRCT1p4K3NrSU5wWExqcDhO?=
- =?utf-8?B?amZQL2hZK3BqSU5RKy9tZ0tmQmlJRm9xNjhocWVHcjkzbG5pa0pxUT09?=
-X-Exchange-RoutingPolicyChecked:
-	KuZBF+oi35I4AKs1A+56a9zIuyHGV4vgKKzKakjYnSIlYnMLIaZ9yP1bIj1saAIBoy2FI6jEsMVbGdnS+UyOo5XnwZiXrJo/27YzSxdmoj8fefVvklIjTOtMgLqU7NNgvVCkAXkVX2qiRPlvdFd/flxU4RzqI3TZnt0U0BCkZ31X45qV1DeLXcCIv9QyAZlCVzJQWhdRgEFG4GruTFppF9Aa6qoxEkSk1VLZtX1CUjGnq42swVZkt6zUx0ikGKmICsgzZ5puefiPHWhcJxndIEaHTYDpZl7iADgFLuP+ilEnS4a1l2j2at8yCLiszea/RHEWLQ4Ke+jn7FjnVP0oGQ==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	oXb4Fpa4MFHwRrwkqZI9T4pUhfuHt5njmJnPRXrf5EBnSRMEQAb0oJTtwfyoskwTiiSe9WYrg3H/euGYVkyAgo4Iz5+icCOas/VLJe8u3YJYhh73asTdaSSyFJjK8ZECARaaFChh7KOohNVwFTVHSL0Bj1fYi/MSzg1am9CUdr6C44gpQho4yNAosDPbFbj4R82BRygKAAf+4axmWh3zErDGjXC/IA8CI4cES/VV1zb15L6cPYXlKkt+lv52Mf/I3axGqV0uoujlcsLBlL1Wnb+liuvXfqGkB1dFIGqvQaDc1ntmBOjaSV7yshwaRD6JROqsWakIQg1U7hHi84alXvhq73Sps5GOaAwKq3eqeX6aRhu7YZ3UVQjRfkW52JgAdjwKgFZCRgTRdgSScNy+ctu5avd8pT4rZrOjUSfzm8fStasKA6TVPf1WHJ4GViDvQAbOlXsLrm15cB4GVdY0NEVTz0zSuWJn4u/Gc6WazJ3NiN8CH8I8vP99z6W4jWq72T6KUHbOcXLz4BYXKpqFc7jPd8V4U75xDH+AalgAHrnRESMYsbtsllZKwU2rKNuhy9OwNgS0no0WVj+BYaQHSzHlE/cqqrRiHbQdkPQSEhY=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1f00b12-9e7a-421d-5ecb-08dec620a815
-X-MS-Exchange-CrossTenant-AuthSource: DS4PPFEAFA21C69.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2026 12:14:29.7223
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zDV+0DbrrF0gUaHxMdzuF77+VyNA+M+GBtCAmE+bHhXMbjkwG7GUH43zyS8Zp+umzDXKDmFbvje/f5DdPL4mYg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN7PR10MB862668
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-09_02,2026-06-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
- mlxlogscore=874 phishscore=0 spamscore=0 mlxscore=0 bulkscore=0
- malwarescore=0 adultscore=0 lowpriorityscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.19.0-2605130000 definitions=main-2606090115
-X-Proofpoint-ORIG-GUID: iZsupihxuYWoF3KtS2OSTzzJAyquQH1E
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjA5MDExNiBTYWx0ZWRfX4xllm6Xzwu2+
- mz54OATQyJBNDHGzfA1PHggUvfNPy6Ql24/O3YTZbz1v5URQ61QiLjcl9xUoYloG9NlEK2TrAFz
- N0KgzOfuCe/D86/gWRXTNLi7n2T3PkHeOiwUz6w9dixDf3oncTh49+8WQ2Rg8DqvQlc6pn7gn1T
- jtf+1MUb5YHbthkyr4PRUQzbu71fxh9SpNwNJVlCCf8A0QYcavxNR04yXkKqO/gUZYN/LpdYhn5
- AcrE42y8YGfhcIbVGReyghS6Q07nQZuj0AGGKZ1835uikzDZYOoNHtaHDZCIGuPZnY3s6AHL22k
- IESvizM7MZHOIzQNevjTgjA/GDvf6nZfSvFtEXh7MvRwvgomNwHtx9kttshUZWNhV8yav6NfX/Q
- 221P+3BY3u8rtnNPYIuawLfUna/O41YT+D8V8D5+W7JlRPz86rQY1dUMpivpmoCiTidZqNOfRD2
- tzFU4yJWVzzvFFT1ih6w6XD5loQ8kGgGQ5R5zC80=
-X-Proofpoint-GUID: iZsupihxuYWoF3KtS2OSTzzJAyquQH1E
-X-Authority-Analysis: v=2.4 cv=AufeGu9P c=1 sm=1 tr=0 ts=6a2803a9 b=1 cx=c_pps
- a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=FelO9ux0wxsA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=EIcjfB9IiI4px24ztqRk:22 a=owEh_JCckNZbef9bl5UA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=5yU3S35YU4bGjq-dph-N:22
- a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12312
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[broadcom.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[broadcom.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24610-lists,linux-scsi=lfdr.de];
+	FREEMAIL_CC(0.00)[HansenPartnership.com,vger.kernel.org,gmail.com,gonehiking.org,microsemi.com,infradead.org,suse.com,norbit.de,armlinux.org.uk,lists.infradead.org,linux-m68k.org,qlogic.com,neukum.org,web.de,twibble.org,broadcom.com,attotech.com,cisco.com,h-partners.com,microchip.com,highpoint-tech.com,linux.ibm.com,ellerman.id.au,kernel.org,lists.ozlabs.org,us.ibm.com,redhat.com,oracle.com,googlegroups.com,thingy.jp,debian.or.jp,netlab.is.tsukuba.ac.jp,cloud.ionos.com,sgi.com,marvell.com,microsoft.com,lists.linux.dev,epam.com,lists.xenproject.org];
+	TAGGED_FROM(0.00)[bounces-24605-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,broadcom.com:dkim,broadcom.com:mid,broadcom.com:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
+	FORGED_SENDER(0.00)[sumit.saxena@broadcom.com,linux-scsi@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:James.Bottomley@HansenPartnership.com,m:hexlabsecurity@proton.me,m:martin.petersen@oracle.com,m:michael.christie@oracle.com,m:mlombard@redhat.com,m:ddiss@suse.de,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	HAS_ORG_HEADER(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:axboe@kernel.dk,m:James.Bottomley@HansenPartnership.com,m:linux-scsi@vger.kernel.org,m:linux-block@vger.kernel.org,m:aradford@gmail.com,m:khalid@gonehiking.org,m:aacraid@microsemi.com,m:willy@infradead.org,m:hare@suse.com,m:fischer@norbit.de,m:linux@armlinux.org.uk,m:linux-arm-kernel@lists.infradead.org,m:fthain@linux-m68k.org,m:schmitzmic@gmail.com,m:anil.gurumurthy@qlogic.com,m:sudarsana.kalluru@qlogic.com,m:oliver@neukum.org,m:aliakc@web.de,m:lenehan@twibble.org,m:ram.vegesna@broadcom.com,m:target-devel@vger.kernel.org,m:linuxdrivers@attotech.com,m:satishkh@cisco.com,m:sebaddel@cisco.com,m:kartilak@cisco.com,m:liyihang9@h-partners.com,m:don.brace@microchip.com,m:storagedev@microchip.com,m:linux@highpoint-tech.com,m:tyreld@linux.ibm.com,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:brking@us.ibm.com,m:lduncan@suse.com,m:cleech@redhat.com,m:michael.christie
+ @oracle.com,m:open-iscsi@googlegroups.com,m:justin.tee@broadcom.com,m:paul.ely@broadcom.com,m:kashyap.desai@broadcom.com,m:shivasharan.srikanteshwara@broadcom.com,m:chandrakanth.patil@broadcom.com,m:megaraidlinux.pdl@broadcom.com,m:sathya.prakash@broadcom.com,m:sreekanth.reddy@broadcom.com,m:mpi3mr-linuxdrv.pdl@broadcom.com,m:suganath-prabu.subramani@broadcom.com,m:ranjan.kumar@broadcom.com,m:MPT-FusionLinux.pdl@broadcom.com,m:daniel@thingy.jp,m:gotom@debian.or.jp,m:yokota@netlab.is.tsukuba.ac.jp,m:jinpu.wang@cloud.ionos.com,m:geoff@infradead.org,m:mdr@sgi.com,m:njavali@marvell.com,m:GR-QLogic-Storage-Upstream@marvell.com,m:nmusini@cisco.com,m:kys@microsoft.com,m:haiyangz@microsoft.com,m:wei.liu@kernel.org,m:decui@microsoft.com,m:longli@microsoft.com,m:linux-hyperv@vger.kernel.org,m:mst@redhat.com,m:jasowang@redhat.com,m:pbonzini@redhat.com,m:stefanha@redhat.com,m:eperezma@redhat.com,m:virtualization@lists.linux.dev,m:vishal.bhakta@broadcom.com,m:bcm-kernel-feedback-list@broadcom.co
+ m,m:jgross@suse.com,m:sstabellini@kernel.org,m:oleksandr_tyshchenko@epam.com,m:xen-devel@lists.xenproject.org,m:sumit.saxena@broadcom.com,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[broadcom.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sumit.saxena@broadcom.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[81];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[9]
+	ALIAS_RESOLVED(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 31A3565FFBB
+X-Rspamd-Queue-Id: 3515165FABA
 
-On 09/06/2026 12:36, James Bottomley wrote:
-> On Tue, 2026-06-09 at 09:50 +0100, John Garry wrote:
->>> @@ -1808,9 +1809,11 @@ core_scsi3_decode_spec_i_port(
->>>     		core_scsi3_tpg_undepend_item(dest_tpg);
->>>     	}
->>>
->>> +	kfree(iport_ptr);
->>>     	return 0;
->>>     out_unmap:
->>>     	transport_kunmap_data_sg(cmd);
->>> +	kfree(iport_ptr);
->>
->> sorry for suggesting this change, but this is worse than what you had
->> originally, as we have so many paths to call kfree() [which means
->> more bugs possible]
->>
->> it's hard to make good suggestions for this target code as the
->> functions are so large and complex.
-> 
-> Given that it's allocated in a function called by the routine but never
-> actually retained by anything what about defining it as
-> 
-> chat *iport_ptr __free(kfree) = NULL;
-> 
-> ?  That way we don't need to care about freeing it in the error legs.
+This series contains three performance improvements targeting the SCSI
+and block layers on multi-socket NUMA and heavily loaded SMP systems.
 
-It's not just freed in the error legs, as 
-core_scsi3_decode_spec_i_port() calls target_parse_pr_out() in a loop
+On multi-socket NUMA systems we observed extreme I/O throughput variance
+of 50-60% between runs.  This series identifies and fixes two root causes:
+cross-node memory accesses due to NUMA-unaware allocations in the scan
+path, and false sharing between hot atomic counters in struct request_queue
+and struct scsi_device.
 
-while (tpdl > 0) {
+Performance notes:
 
-...
+Tested on a dual-socket NUMA system (2x 32-core, 256 GB/socket) with
+an mpi3mr HBA, running fio (random read, 4K, QD 64, 16 jobs, 60 s,
+direct I/O).  IOPS figures are in KIOPS (thousands of IOPS):
 
-	spin_lock(&dev->se_port_lock);
-	list_for_each_entry(tmp_lun, &dev->dev_sep_list, lun_dev_link) {
-		...
+  Configuration                    Avg KIOPS   Range (KIOPS)   Spread
+  Baseline                         6,255       4,200 - 6,700   ~37%
+  Baseline + all patches           7,350       7,000 - 7,700    ~10%
 
-		kfree(iport_ptr);
-		iport_ptr = NULL;
-		tid_found = target_parse_pr_out_transport_id(tmp_tpg,
-				ptr, &tid_len, &iport_ptr, i_str);
-		if (!tid_found)
-			continue;
+Key findings:
 
-....
+These patches combinedly reduces the observed 50-60% run-to-run variance
+to under 10%, significantly improving workload predictability and
+improves IOPs by 16-18%.
 
-	kfree(iport_ptr);
-out_unmap:
-	kfree(iport_ptr);
-out:
-	...
+No functional regressions observed.
 
-If __free(kfree) attr can still handle this sort of flow, then ok.
+Changes in v3
+-------------
+-Handled feedback from Bart Van Assche and John Garry.
+-Added a patch for shost local NUMA allocation.
+-Converted ioerr_cnt and iotmo_cnt atomic counters into per-cpu counters. 
 
-I still think that it would be simpler to keep the mapping in place for 
-longer (to avoid all of this), if possible.
+Changes in v2
+--------------
 
-Thanks,
-John
+  Patch 1 — Same functional goal as v1 patch 1: NUMA-local scsi_device /
+  scsi_target allocations in the scan path so steady-state I/O does not
+  habitually touch remote memory when the host has a fixed DMA/NUMA
+  affinity.
+
+  Patch 2 — Replaces v1’s ____cacheline_aligned_in_smp on
+  nr_active_requests_shared_tags with removal of the shared-tag fairness
+  throttling machinery (including hctx_may_queue(), blk_mq_hw_ctx.nr_active,
+  and request_queue.nr_active_requests_shared_tags and their updates).
+  This follows the earlier standalone proposal by Bart Van Assche [1],
+  rebased for the current tree; it removes the high-frequency atomic
+  accounting that motivated the v1 false-sharing workaround and, in our
+  testing, improves IOPS on the order of roughly 16–18% for the shared-tag
+  workload exercised.
+
+  Patch 3 — Replaces v1’s cache-line padding of iodone_cnt with
+  percpu_counter for both iorequest_cnt and iodone_cnt, so submission and
+  completion paths mostly update CPU-local state instead of bouncing a
+  single cache line, without inflating struct scsi_device for SMP
+  alignment.
+
+Merge / review hints
+--------------------
+
+Patch 3 touches the block layer and should have block maintainer review;
+rest of patches are SCSI-oriented.  Please route or Ack as your subsystem
+workflow requires.
+
+Bart Van Assche (1):
+  block: drop shared-tag fairness throttling
+
+James Rizzo (1):
+  scsi: scan: allocate sdev and starget on the NUMA node of the host
+    adapter
+
+Sumit Saxena (2):
+  scsi: host: allocate struct Scsi_Host on the NUMA node of the host
+    adapter
+  scsi: use percpu counters for iostat counters in struct scsi_device
+
+ block/blk-core.c                          |   2 -
+ block/blk-mq-debugfs.c                    |  22 ++++-
+ block/blk-mq-tag.c                        |   4 -
+ block/blk-mq.c                            |  17 +---
+ block/blk-mq.h                            | 100 ----------------------
+ drivers/scsi/3w-9xxx.c                    |   2 +-
+ drivers/scsi/3w-sas.c                     |   2 +-
+ drivers/scsi/3w-xxxx.c                    |   2 +-
+ drivers/scsi/53c700.c                     |   2 +-
+ drivers/scsi/BusLogic.c                   |   2 +-
+ drivers/scsi/a100u2w.c                    |   2 +-
+ drivers/scsi/a2091.c                      |   2 +-
+ drivers/scsi/a3000.c                      |   2 +-
+ drivers/scsi/aacraid/linit.c              |   2 +-
+ drivers/scsi/advansys.c                   |   6 +-
+ drivers/scsi/aha152x.c                    |   2 +-
+ drivers/scsi/aha1542.c                    |   2 +-
+ drivers/scsi/aha1740.c                    |   2 +-
+ drivers/scsi/aic7xxx/aic79xx_osm.c        |   2 +-
+ drivers/scsi/aic7xxx/aic7xxx_osm.c        |   2 +-
+ drivers/scsi/aic94xx/aic94xx_init.c       |   2 +-
+ drivers/scsi/am53c974.c                   |   2 +-
+ drivers/scsi/arcmsr/arcmsr_hba.c          |   3 +-
+ drivers/scsi/arm/acornscsi.c              |   2 +-
+ drivers/scsi/arm/arxescsi.c               |   2 +-
+ drivers/scsi/arm/cumana_1.c               |   2 +-
+ drivers/scsi/arm/cumana_2.c               |   2 +-
+ drivers/scsi/arm/eesox.c                  |   2 +-
+ drivers/scsi/arm/oak.c                    |   2 +-
+ drivers/scsi/arm/powertec.c               |   2 +-
+ drivers/scsi/atari_scsi.c                 |   2 +-
+ drivers/scsi/atp870u.c                    |   2 +-
+ drivers/scsi/bfa/bfad_im.c                |   2 +-
+ drivers/scsi/csiostor/csio_init.c         |   4 +-
+ drivers/scsi/dc395x.c                     |   2 +-
+ drivers/scsi/dmx3191d.c                   |   2 +-
+ drivers/scsi/elx/efct/efct_xport.c        |   4 +-
+ drivers/scsi/esas2r/esas2r_main.c         |   2 +-
+ drivers/scsi/fdomain.c                    |   2 +-
+ drivers/scsi/fnic/fnic_main.c             |   2 +-
+ drivers/scsi/g_NCR5380.c                  |   2 +-
+ drivers/scsi/gvp11.c                      |   2 +-
+ drivers/scsi/hisi_sas/hisi_sas_main.c     |   2 +-
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c    |   2 +-
+ drivers/scsi/hosts.c                      |   6 +-
+ drivers/scsi/hpsa.c                       |   2 +-
+ drivers/scsi/hptiop.c                     |   2 +-
+ drivers/scsi/ibmvscsi/ibmvfc.c            |   2 +-
+ drivers/scsi/ibmvscsi/ibmvscsi.c          |   2 +-
+ drivers/scsi/imm.c                        |   2 +-
+ drivers/scsi/initio.c                     |   2 +-
+ drivers/scsi/ipr.c                        |   2 +-
+ drivers/scsi/ips.c                        |   2 +-
+ drivers/scsi/isci/init.c                  |   2 +-
+ drivers/scsi/jazz_esp.c                   |   2 +-
+ drivers/scsi/libiscsi.c                   |   2 +-
+ drivers/scsi/lpfc/lpfc_init.c             |   2 +-
+ drivers/scsi/mac53c94.c                   |   2 +-
+ drivers/scsi/mac_esp.c                    |   2 +-
+ drivers/scsi/mac_scsi.c                   |   2 +-
+ drivers/scsi/megaraid.c                   |   2 +-
+ drivers/scsi/megaraid/megaraid_mbox.c     |   2 +-
+ drivers/scsi/megaraid/megaraid_sas_base.c |   2 +-
+ drivers/scsi/mesh.c                       |   2 +-
+ drivers/scsi/mpi3mr/mpi3mr_os.c           |   2 +-
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c      |   4 +-
+ drivers/scsi/mvme147.c                    |   2 +-
+ drivers/scsi/mvsas/mv_init.c              |   2 +-
+ drivers/scsi/mvumi.c                      |   2 +-
+ drivers/scsi/myrb.c                       |   2 +-
+ drivers/scsi/myrs.c                       |   2 +-
+ drivers/scsi/ncr53c8xx.c                  |   2 +-
+ drivers/scsi/nsp32.c                      |   2 +-
+ drivers/scsi/pcmcia/nsp_cs.c              |   2 +-
+ drivers/scsi/pcmcia/qlogic_stub.c         |   2 +-
+ drivers/scsi/pcmcia/sym53c500_cs.c        |   2 +-
+ drivers/scsi/pm8001/pm8001_init.c         |   2 +-
+ drivers/scsi/pmcraid.c                    |   2 +-
+ drivers/scsi/ppa.c                        |   2 +-
+ drivers/scsi/ps3rom.c                     |   2 +-
+ drivers/scsi/qla1280.c                    |   2 +-
+ drivers/scsi/qla2xxx/qla_mid.c            |   2 +-
+ drivers/scsi/qla2xxx/qla_os.c             |   2 +-
+ drivers/scsi/qlogicfas.c                  |   2 +-
+ drivers/scsi/qlogicpti.c                  |   2 +-
+ drivers/scsi/scsi_debug.c                 |   2 +-
+ drivers/scsi/scsi_error.c                 |   4 +-
+ drivers/scsi/scsi_lib.c                   |  10 +--
+ drivers/scsi/scsi_scan.c                  |  15 +++-
+ drivers/scsi/scsi_sysfs.c                 |  23 +++--
+ drivers/scsi/sd.c                         |   2 +-
+ drivers/scsi/sgiwd93.c                    |   2 +-
+ drivers/scsi/smartpqi/smartpqi_init.c     |   2 +-
+ drivers/scsi/snic/snic_main.c             |   2 +-
+ drivers/scsi/stex.c                       |   2 +-
+ drivers/scsi/storvsc_drv.c                |   2 +-
+ drivers/scsi/sun3_scsi.c                  |   2 +-
+ drivers/scsi/sun3x_esp.c                  |   2 +-
+ drivers/scsi/sun_esp.c                    |   2 +-
+ drivers/scsi/sym53c8xx_2/sym_glue.c       |   2 +-
+ drivers/scsi/virtio_scsi.c                |   2 +-
+ drivers/scsi/vmw_pvscsi.c                 |   2 +-
+ drivers/scsi/wd719x.c                     |   2 +-
+ drivers/scsi/xen-scsifront.c              |   2 +-
+ drivers/scsi/zorro_esp.c                  |   2 +-
+ include/linux/blk-mq.h                    |   6 --
+ include/linux/blkdev.h                    |   2 -
+ include/scsi/libfc.h                      |   2 +-
+ include/scsi/scsi_device.h                |   9 +-
+ include/scsi/scsi_host.h                  |   3 +-
+ 110 files changed, 168 insertions(+), 258 deletions(-)
+
+-- 
+2.43.7
+
 
