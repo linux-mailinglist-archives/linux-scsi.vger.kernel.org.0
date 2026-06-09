@@ -1,427 +1,197 @@
-Return-Path: <linux-scsi+bounces-24609-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24611-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id wD0FLSn/J2q46wIAu9opvQ
-	(envelope-from <linux-scsi+bounces-24609-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 09 Jun 2026 13:55:21 +0200
+	id 99ZmF5sHKGp47gIAu9opvQ
+	(envelope-from <linux-scsi+bounces-24611-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 09 Jun 2026 14:31:23 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 120CA65FBA0
-	for <lists+linux-scsi@lfdr.de>; Tue, 09 Jun 2026 13:55:21 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFD7A660135
+	for <lists+linux-scsi@lfdr.de>; Tue, 09 Jun 2026 14:31:22 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=broadcom.com header.s=google header.b=Cm51PGc2;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24609-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24609-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=broadcom.com;
+	dkim=pass header.d=hansenpartnership.com header.s=20151216 header.b=a1+m9NJE;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24611-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24611-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=hansenpartnership.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CAB4B3077DEE
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Jun 2026 11:50:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 073E230E9360
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Jun 2026 12:27:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99FED3FDC12;
-	Tue,  9 Jun 2026 11:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5DFE40BCDD;
+	Tue,  9 Jun 2026 12:27:41 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-vk1-f227.google.com (mail-vk1-f227.google.com [209.85.221.227])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBB740245F
-	for <linux-scsi@vger.kernel.org>; Tue,  9 Jun 2026 11:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 530A138B7BD;
+	Tue,  9 Jun 2026 12:27:40 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781005811; cv=none; b=EcnCpJXctwNhsxoQEMDo0o3P2PXmYCMggO9pNxs2GoCUeHbem9jEJOcnx7jSAPNAT/Z/r5eFsbGK66vk0QyKEDLOlf0dLl8mWjWpRhPtXUKqejqwl2a+9yPPneNO+tR1uG12n1KUstGMjq9nCZzdZiSrOx0A785qu3CmcsvA3VE=
+	t=1781008061; cv=none; b=QEXXNEuRBXoMZSsjztAvTkyIjb6bkydrc17GTqMHT3mXyuYTs0a1Zu2jmp84PNarIg0YG9gUMSuqG+zSMvLPTchscPZZk6tZ9N9aDRizPiShFP9/d0LhvjTAHAkx0NFr6EDto+A+Zqge2Y5Phs5w8Nriql4FF3PZe7R+ZsrsB40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781005811; c=relaxed/simple;
-	bh=3Kv41lKgpOl5wee6Wmx4e4vTLz9/OZ6j/+o4p0XS7OM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cF6fef4/bJ7U2YVLalSZQFSTEwFeuQ43ijetndOD/3tx1h3eaUuljwDhHbSLOT6zEQv1ik8xhkmXFM2ucfXqmhO1o2Z6LZ9ZEdlZkhH//yy0B2kSHjaXQZNcLIQXZ9DrA121JGiiI+0Hm40A/63VzWdOCbIATMujwNu3cCkMQGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Cm51PGc2; arc=none smtp.client-ip=209.85.221.227
-Received: by mail-vk1-f227.google.com with SMTP id 71dfb90a1353d-59ebf30a91dso1806505e0c.1
-        for <linux-scsi@vger.kernel.org>; Tue, 09 Jun 2026 04:50:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781005808; x=1781610608;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:dkim-signature:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fLAZlEa/gpJjIgpIJ2e9Ooy6MTW++uhKEEc/j768mlo=;
-        b=BJyInPVtsso45gJkIa8487bm8oILJtNO0NoF5FBsd4gpABrvhnPNQsUQupdKnX1p4r
-         LMfXjJwihZ5IECdA4x+YnubW+OZLva1F4UEG37c/dsbGHCAm3dz/X3X/vI3vM2ENefdQ
-         GrwjccefBKmEzkDrtEcRj/FMlo8f72HIaakbZAsux7tU6Hy46SE6QtrnBLu6pdpNxvtd
-         n/Ib/4/wGTwbbQ86T7H5rQCYaJNVHMLEXQ5lp/cNXcgN9fiJshfzDjXvJIkXAjL7EBt+
-         tNBZ2yTbOyc/PlwozuOKacSiDaDjrVQqIaRR9EX3WFHQPJG5GjqaBL9yPVOPgIUU8fqr
-         m72Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+m4tfANECKnGVKgNIWuBDIl93XeGjwrTPUNsvulQ1XEyOM92kwGj0gLHWHrwsY3g6XQn8xGGR9b5Zx@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9OsiC77CNQcKT1vmCQA6sC7bzoDeMkAhA+UFykG9ei6264AO0
-	2f+KDiO7GxvNt4vPC4xLiW/hUoPq/swkf4LPcxIwdJN5oFodT7UdqxCAeKk+ys3CSGMtvzIPuO0
-	LjTaBWfB5fU8X0APV3IXjpdfEbmRn0Oan0RI8uv9oG6+oQ2W54PaRDKXRx4hkeopavBctXeL4J+
-	JYo4B6wn33cFhvJPChv02ZTDYjSQLCnOwpYO5U/P8nTciv/Ap1OhxJz9UnkVllylQkmaWy8WXu4
-	LRs+/lyPs/K/tDy
-X-Gm-Gg: Acq92OGRu15Ihr6eRaissbaSBzqXD2xXOfMlvvCiR9jtLMTS4ChWnl0tZJ46CPpcj/g
-	jTbhZdR5eHYipcrPflmyqgTxf9LLFHFQPWvUcoJXsArJHPrghNrEXZX7RQh00xgsDJQY/2liTJU
-	J+ItIOk14v4s5A7+L4msC+6wqS6D/p0kPe1KdsQgY6aOEMwf8ayyI2Dt6IBRdirJ9qBXPEgfYtq
-	J4ojEuZ7D27qegMZOZpL5QusJyCOC82Nvdq0L9fdiUAjOYwIWK5k/G6xeJCQj8H5Vp5S+UE2gK3
-	OkfD0fAPZwRYXNzC74ljiR7F4BO+VAFf39G7d02gpvTqOIXXm3MOVc8+CeOHfYvCJegA4sNmDVE
-	bkelzS7A/eqYEKCrgXkosOFV5NCPY8KBuySYVuFT42IJG/aMN0CUkyH+OlqaujakRoyJTt+194V
-	kHZfUIdjUnlNx7tQCqEy4UmRdFs9/tv7+VzNtRobrzIPBD9oqSLGj3lMzad86DUIs0KJeglw==
-X-Received: by 2002:a05:6122:8b16:b0:575:29ef:7df8 with SMTP id 71dfb90a1353d-5ac4dcf256dmr9630058e0c.2.1781005808094;
-        Tue, 09 Jun 2026 04:50:08 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-117.dlp.protect.broadcom.com. [144.49.247.117])
-        by smtp-relay.gmail.com with ESMTPS id 71dfb90a1353d-5a6db1d4376sm1419355e0c.3.2026.06.09.04.50.06
-        for <linux-scsi@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Jun 2026 04:50:08 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-36b808bedfaso6244007a91.1
-        for <linux-scsi@vger.kernel.org>; Tue, 09 Jun 2026 04:50:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1781005806; x=1781610606; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fLAZlEa/gpJjIgpIJ2e9Ooy6MTW++uhKEEc/j768mlo=;
-        b=Cm51PGc2QdV8g1RHRzxw8t/lDGzGZYGexsMd7UFYDiUfAukSeTvOvSYr2syyiSs51w
-         BYOA7NvlwQYGDJPgr1RGpRd5zHqNNA82aDlR6HOKlvfdIIke3BboxXGU+ODnps5xgIg7
-         zR8uBfo2lrgdPJKeQEslVawVI8gyMzZFO/Kwc=
-X-Forwarded-Encrypted: i=1; AFNElJ89aCudVV6Uw/QQ/pTtjV9CuIe7mqIDOkmhFevtU6tc8wZqC4MT1N4Y/Yl8i7SPzfrsZmEHEJ4ILxeu@vger.kernel.org
-X-Received: by 2002:a17:90b:57c4:b0:36b:75:6387 with SMTP id 98e67ed59e1d1-370eea202f0mr20609542a91.8.1781005805589;
-        Tue, 09 Jun 2026 04:50:05 -0700 (PDT)
-X-Received: by 2002:a17:90b:57c4:b0:36b:75:6387 with SMTP id 98e67ed59e1d1-370eea202f0mr20609495a91.8.1781005805070;
-        Tue, 09 Jun 2026 04:50:05 -0700 (PDT)
-Received: from sumit_ws.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f6bf903fasm18898075a91.2.2026.06.09.04.49.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 04:50:03 -0700 (PDT)
-From: Sumit Saxena <sumit.saxena@broadcom.com>
-To: "Martin K . Petersen" <martin.petersen@oracle.com>,
-	Jens Axboe <axboe@kernel.dk>
-Cc: "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	linux-scsi@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	Adam Radford <aradford@gmail.com>,
-	Khalid Aziz <khalid@gonehiking.org>,
-	Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Hannes Reinecke <hare@suse.com>,
-	"Juergen E . Fischer" <fischer@norbit.de>,
-	Russell King <linux@armlinux.org.uk>,
-	linux-arm-kernel@lists.infradead.org,
-	Finn Thain <fthain@linux-m68k.org>,
-	Michael Schmitz <schmitzmic@gmail.com>,
-	Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
-	Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
-	Oliver Neukum <oliver@neukum.org>,
-	Ali Akcaagac <aliakc@web.de>,
-	Jamie Lenehan <lenehan@twibble.org>,
-	Ram Vegesna <ram.vegesna@broadcom.com>,
-	target-devel@vger.kernel.org,
-	Bradley Grove <linuxdrivers@attotech.com>,
-	Satish Kharat <satishkh@cisco.com>,
-	Sesidhar Baddela <sebaddel@cisco.com>,
-	Karan Tilak Kumar <kartilak@cisco.com>,
-	Yihang Li <liyihang9@h-partners.com>,
-	Don Brace <don.brace@microchip.com>,
-	storagedev@microchip.com,
-	HighPoint Linux Team <linux@highpoint-tech.com>,
-	Tyrel Datwyler <tyreld@linux.ibm.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <chleroy@kernel.org>,
-	linuxppc-dev@lists.ozlabs.org,
-	Brian King <brking@us.ibm.com>,
-	Lee Duncan <lduncan@suse.com>,
-	Chris Leech <cleech@redhat.com>,
-	Mike Christie <michael.christie@oracle.com>,
-	open-iscsi@googlegroups.com,
-	Justin Tee <justin.tee@broadcom.com>,
-	Paul Ely <paul.ely@broadcom.com>,
-	Kashyap Desai <kashyap.desai@broadcom.com>,
-	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-	Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
-	megaraidlinux.pdl@broadcom.com,
-	Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
-	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-	mpi3mr-linuxdrv.pdl@broadcom.com,
-	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-	Ranjan Kumar <ranjan.kumar@broadcom.com>,
-	MPT-FusionLinux.pdl@broadcom.com,
-	Daniel Palmer <daniel@thingy.jp>,
-	GOTO Masanori <gotom@debian.or.jp>,
-	YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
-	Jack Wang <jinpu.wang@cloud.ionos.com>,
-	Geoff Levand <geoff@infradead.org>,
-	Michael Reed <mdr@sgi.com>,
-	Nilesh Javali <njavali@marvell.com>,
-	GR-QLogic-Storage-Upstream@marvell.com,
-	Narsimhulu Musini <nmusini@cisco.com>,
-	"K . Y . Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>,
-	Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>,
-	linux-hyperv@vger.kernel.org,
-	"Michael S . Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	Eugenio Perez <eperezma@redhat.com>,
-	virtualization@lists.linux.dev,
-	Vishal Bhakta <vishal.bhakta@broadcom.com>,
-	bcm-kernel-feedback-list@broadcom.com,
-	Juergen Gross <jgross@suse.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	xen-devel@lists.xenproject.org,
-	Sumit Saxena <sumit.saxena@broadcom.com>,
-	John Garry <john.g.garry@oracle.com>
-Subject: [PATCH v3 4/4] scsi: use percpu counters for iostat counters in struct scsi_device
-Date: Tue,  9 Jun 2026 17:48:03 +0530
-Message-ID: <20260609121806.2121755-5-sumit.saxena@broadcom.com>
-X-Mailer: git-send-email 2.43.7
-In-Reply-To: <20260609121806.2121755-1-sumit.saxena@broadcom.com>
-References: <20260609121806.2121755-1-sumit.saxena@broadcom.com>
+	s=arc-20240116; t=1781008061; c=relaxed/simple;
+	bh=mUtvYFk4YQKqeCNVLqTqqqvpkt5EWE4RvjUnDGS9ZVg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rGBEuGKcrr4WtdarbYmGhBF+SFV5r5SW6N6Ms0+saCk2tFudGZMM70Ti5GIaJ/HLmcqQQf4oyd/1ABEpkkyQsG+0fjSj13WDY3hbTNoZpV9OvT22CCIFsLTUE/tHapYMeRdGmeIHuV8aym95JPt8vIV+bUbne4lzlXhtBZH+ukY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=a1+m9NJE; arc=none smtp.client-ip=198.37.111.173
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1781008059;
+	bh=mUtvYFk4YQKqeCNVLqTqqqvpkt5EWE4RvjUnDGS9ZVg=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=a1+m9NJE0CsrKrpSm25dLfJQDrQgOn9x6dkjGmT70NTCjfN8cPcP1MpowDkVsnqfC
+	 zPvBycUzHUQKLLD6K3dsbQ9WJgtnTo6/cVhGY6hbHWzmiIm6RIeZwMEUO//DDIqELe
+	 wVDxnZn6TkfLfHxT05e5Yh/wVmOduF8Y0C4ZXaVA=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:d341::8c71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 0DFE91C0347;
+	Tue, 09 Jun 2026 08:27:39 -0400 (EDT)
+Message-ID: <6282620112fd9db8224dbf04046dbf24267d0433.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2] scsi: target: copy iSCSI ISID before unmapping the
+ PR OUT buffer
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: John Garry <john.g.garry@oracle.com>, Bryam Vargas
+ <hexlabsecurity@proton.me>, "Martin K . Petersen"
+ <martin.petersen@oracle.com>
+Cc: Mike Christie <michael.christie@oracle.com>, Maurizio Lombardi
+	 <mlombard@redhat.com>, David Disseldorp <ddiss@suse.de>, 
+	linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Tue, 09 Jun 2026 08:27:38 -0400
+In-Reply-To: <6b6ebec8-0e92-41bd-8001-0608ee6e804b@oracle.com>
+References: <20260609005858.17504-1-hexlabsecurity@proton.me>
+	 <fdb07a39-cf7d-48aa-9e75-1a79dc7ad620@oracle.com>
+	 <239dd72a5ee388486f60eff7e6b025d130e08266.camel@HansenPartnership.com>
+	 <6b6ebec8-0e92-41bd-8001-0608ee6e804b@oracle.com>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[broadcom.com,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[broadcom.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[hansenpartnership.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[hansenpartnership.com:s=20151216];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-24609-lists,linux-scsi=lfdr.de];
-	FREEMAIL_CC(0.00)[HansenPartnership.com,vger.kernel.org,gmail.com,gonehiking.org,microsemi.com,infradead.org,suse.com,norbit.de,armlinux.org.uk,lists.infradead.org,linux-m68k.org,qlogic.com,neukum.org,web.de,twibble.org,broadcom.com,attotech.com,cisco.com,h-partners.com,microchip.com,highpoint-tech.com,linux.ibm.com,ellerman.id.au,kernel.org,lists.ozlabs.org,us.ibm.com,redhat.com,oracle.com,googlegroups.com,thingy.jp,debian.or.jp,netlab.is.tsukuba.ac.jp,cloud.ionos.com,sgi.com,marvell.com,microsoft.com,lists.linux.dev,epam.com,lists.xenproject.org];
+	TAGGED_FROM(0.00)[bounces-24611-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FORGED_SENDER(0.00)[sumit.saxena@broadcom.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER(0.00)[James.Bottomley@HansenPartnership.com,linux-scsi@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:axboe@kernel.dk,m:James.Bottomley@HansenPartnership.com,m:linux-scsi@vger.kernel.org,m:linux-block@vger.kernel.org,m:aradford@gmail.com,m:khalid@gonehiking.org,m:aacraid@microsemi.com,m:willy@infradead.org,m:hare@suse.com,m:fischer@norbit.de,m:linux@armlinux.org.uk,m:linux-arm-kernel@lists.infradead.org,m:fthain@linux-m68k.org,m:schmitzmic@gmail.com,m:anil.gurumurthy@qlogic.com,m:sudarsana.kalluru@qlogic.com,m:oliver@neukum.org,m:aliakc@web.de,m:lenehan@twibble.org,m:ram.vegesna@broadcom.com,m:target-devel@vger.kernel.org,m:linuxdrivers@attotech.com,m:satishkh@cisco.com,m:sebaddel@cisco.com,m:kartilak@cisco.com,m:liyihang9@h-partners.com,m:don.brace@microchip.com,m:storagedev@microchip.com,m:linux@highpoint-tech.com,m:tyreld@linux.ibm.com,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:brking@us.ibm.com,m:lduncan@suse.com,m:cleech@redhat.com,m:michael.christie
- @oracle.com,m:open-iscsi@googlegroups.com,m:justin.tee@broadcom.com,m:paul.ely@broadcom.com,m:kashyap.desai@broadcom.com,m:shivasharan.srikanteshwara@broadcom.com,m:chandrakanth.patil@broadcom.com,m:megaraidlinux.pdl@broadcom.com,m:sathya.prakash@broadcom.com,m:sreekanth.reddy@broadcom.com,m:mpi3mr-linuxdrv.pdl@broadcom.com,m:suganath-prabu.subramani@broadcom.com,m:ranjan.kumar@broadcom.com,m:MPT-FusionLinux.pdl@broadcom.com,m:daniel@thingy.jp,m:gotom@debian.or.jp,m:yokota@netlab.is.tsukuba.ac.jp,m:jinpu.wang@cloud.ionos.com,m:geoff@infradead.org,m:mdr@sgi.com,m:njavali@marvell.com,m:GR-QLogic-Storage-Upstream@marvell.com,m:nmusini@cisco.com,m:kys@microsoft.com,m:haiyangz@microsoft.com,m:wei.liu@kernel.org,m:decui@microsoft.com,m:longli@microsoft.com,m:linux-hyperv@vger.kernel.org,m:mst@redhat.com,m:jasowang@redhat.com,m:pbonzini@redhat.com,m:stefanha@redhat.com,m:eperezma@redhat.com,m:virtualization@lists.linux.dev,m:vishal.bhakta@broadcom.com,m:bcm-kernel-feedback-list@broadcom.co
- m,m:jgross@suse.com,m:sstabellini@kernel.org,m:oleksandr_tyshchenko@epam.com,m:xen-devel@lists.xenproject.org,m:sumit.saxena@broadcom.com,m:john.g.garry@oracle.com,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:john.g.garry@oracle.com,m:hexlabsecurity@proton.me,m:martin.petersen@oracle.com,m:michael.christie@oracle.com,m:mlombard@redhat.com,m:ddiss@suse.de,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sumit.saxena@broadcom.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[82];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,oracle.com:email,broadcom.com:dkim,broadcom.com:email,broadcom.com:mid,broadcom.com:from_mime];
-	DKIM_TRACE(0.00)[broadcom.com:+];
+	DKIM_TRACE(0.00)[hansenpartnership.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[James.Bottomley@HansenPartnership.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp,hansenpartnership.com:dkim,HansenPartnership.com:mid,HansenPartnership.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 120CA65FBA0
+X-Rspamd-Queue-Id: BFD7A660135
 
-iorequest_cnt and iodone_cnt are updated on every command dispatch and
-completion, often from different CPUs on high queue depth workloads.
-Using adjacent atomic_t fields causes cache line contention between the
-submission and completion paths.
+On Tue, 2026-06-09 at 13:14 +0100, John Garry wrote:
+> On 09/06/2026 12:36, James Bottomley wrote:
+> > On Tue, 2026-06-09 at 09:50 +0100, John Garry wrote:
+> > > > @@ -1808,9 +1809,11 @@ core_scsi3_decode_spec_i_port(
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0		core_scsi3_tpg_undepend_item(dest_tpg);
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0	}
+> > > >=20
+> > > > +	kfree(iport_ptr);
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0	return 0;
+> > > > =C2=A0=C2=A0=C2=A0 out_unmap:
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0	transport_kunmap_data_sg(cmd);
+> > > > +	kfree(iport_ptr);
+> > >=20
+> > > sorry for suggesting this change, but this is worse than what you
+> > > had
+> > > originally, as we have so many paths to call kfree() [which means
+> > > more bugs possible]
+> > >=20
+> > > it's hard to make good suggestions for this target code as the
+> > > functions are so large and complex.
+> >=20
+> > Given that it's allocated in a function called by the routine but
+> > never
+> > actually retained by anything what about defining it as
+> >=20
+> > chat *iport_ptr __free(kfree) =3D NULL;
+> >=20
+> > ?=C2=A0 That way we don't need to care about freeing it in the error
+> > legs.
+>=20
+> It's not just freed in the error legs, as=20
+> core_scsi3_decode_spec_i_port() calls target_parse_pr_out() in a loop
+>=20
+> while (tpdl > 0) {
+>=20
+> ...
+>=20
+> 	spin_lock(&dev->se_port_lock);
+> 	list_for_each_entry(tmp_lun, &dev->dev_sep_list,
+> lun_dev_link) {
+> 		...
+>=20
+> 		kfree(iport_ptr);
+> 		iport_ptr =3D NULL;
+> 		tid_found =3D
+> target_parse_pr_out_transport_id(tmp_tpg,
+> 				ptr, &tid_len, &iport_ptr, i_str);
+> 		if (!tid_found)
+> 			continue;
+>=20
+> ....
+>=20
+> 	kfree(iport_ptr);
+> out_unmap:
+> 	kfree(iport_ptr);
+> out:
+> 	...
 
-Extend the same treatment to ioerr_cnt and iotmo_cnt so all four iostat
-counters in struct scsi_device use struct percpu_counter.
+You'd simply remove those since the pointer would be kfree'd on any
+function return.
 
-Suggested-by: John Garry <john.g.garry@oracle.com>
-Signed-off-by: Sumit Saxena <sumit.saxena@broadcom.com>
----
- drivers/scsi/scsi_error.c  |  4 ++--
- drivers/scsi/scsi_lib.c    | 10 +++++-----
- drivers/scsi/scsi_scan.c   |  8 ++++++++
- drivers/scsi/scsi_sysfs.c  | 23 ++++++++++++++---------
- drivers/scsi/sd.c          |  2 +-
- include/scsi/scsi_device.h |  9 +++++----
- 6 files changed, 35 insertions(+), 21 deletions(-)
+> If __free(kfree) attr can still handle this sort of flow, then ok.
 
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index 147127fb4db9..b1aa7da2ba7c 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -349,7 +349,7 @@ enum blk_eh_timer_return scsi_timeout(struct request *req)
- 	trace_scsi_dispatch_cmd_timeout(scmd);
- 	scsi_log_completion(scmd, TIMEOUT_ERROR);
- 
--	atomic_inc(&scmd->device->iotmo_cnt);
-+	percpu_counter_inc(&scmd->device->iotmo_cnt);
- 	if (host->eh_deadline != -1 && !host->last_reset)
- 		host->last_reset = jiffies;
- 
-@@ -370,7 +370,7 @@ enum blk_eh_timer_return scsi_timeout(struct request *req)
- 	 */
- 	if (test_and_set_bit(SCMD_STATE_COMPLETE, &scmd->state))
- 		return BLK_EH_DONE;
--	atomic_inc(&scmd->device->iodone_cnt);
-+	percpu_counter_inc(&scmd->device->iodone_cnt);
- 	if (scsi_abort_command(scmd) != SUCCESS) {
- 		set_host_byte(scmd, DID_TIME_OUT);
- 		scsi_eh_scmd_add(scmd);
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 6e8c7a42603e..979fdace33ac 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1554,9 +1554,9 @@ static void scsi_complete(struct request *rq)
- 
- 	INIT_LIST_HEAD(&cmd->eh_entry);
- 
--	atomic_inc(&cmd->device->iodone_cnt);
-+	percpu_counter_inc(&cmd->device->iodone_cnt);
- 	if (cmd->result)
--		atomic_inc(&cmd->device->ioerr_cnt);
-+		percpu_counter_inc(&cmd->device->ioerr_cnt);
- 
- 	disposition = scsi_decide_disposition(cmd);
- 	if (disposition != SUCCESS && scsi_cmd_runtime_exceeced(cmd))
-@@ -1592,7 +1592,7 @@ static enum scsi_qc_status scsi_dispatch_cmd(struct scsi_cmnd *cmd)
- 	struct Scsi_Host *host = cmd->device->host;
- 	int rtn = 0;
- 
--	atomic_inc(&cmd->device->iorequest_cnt);
-+	percpu_counter_inc(&cmd->device->iorequest_cnt);
- 
- 	/* check if the device is still usable */
- 	if (unlikely(cmd->device->sdev_state == SDEV_DEL)) {
-@@ -1614,7 +1614,7 @@ static enum scsi_qc_status scsi_dispatch_cmd(struct scsi_cmnd *cmd)
- 		 */
- 		SCSI_LOG_MLQUEUE(3, scmd_printk(KERN_INFO, cmd,
- 			"queuecommand : device blocked\n"));
--		atomic_dec(&cmd->device->iorequest_cnt);
-+		percpu_counter_dec(&cmd->device->iorequest_cnt);
- 		return SCSI_MLQUEUE_DEVICE_BUSY;
- 	}
- 
-@@ -1647,7 +1647,7 @@ static enum scsi_qc_status scsi_dispatch_cmd(struct scsi_cmnd *cmd)
- 	trace_scsi_dispatch_cmd_start(cmd);
- 	rtn = host->hostt->queuecommand(host, cmd);
- 	if (rtn) {
--		atomic_dec(&cmd->device->iorequest_cnt);
-+		percpu_counter_dec(&cmd->device->iorequest_cnt);
- 		trace_scsi_dispatch_cmd_error(cmd, rtn);
- 		if (rtn != SCSI_MLQUEUE_DEVICE_BUSY &&
- 		    rtn != SCSI_MLQUEUE_TARGET_BUSY)
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 121a14d5fdb8..bc885c72f01e 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -350,6 +350,14 @@ static struct scsi_device *scsi_alloc_sdev(struct scsi_target *starget,
- 
- 	scsi_sysfs_device_initialize(sdev);
- 
-+	if (percpu_counter_init(&sdev->iorequest_cnt, 0, GFP_KERNEL) ||
-+	    percpu_counter_init(&sdev->iodone_cnt, 0, GFP_KERNEL) ||
-+	    percpu_counter_init(&sdev->ioerr_cnt, 0, GFP_KERNEL) ||
-+	    percpu_counter_init(&sdev->iotmo_cnt, 0, GFP_KERNEL)) {
-+		ret = -ENOMEM;
-+		goto out_device_destroy;
-+	}
-+
- 	if (scsi_device_is_pseudo_dev(sdev))
- 		return sdev;
- 
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index dfc3559e7e04..f652edd16497 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -516,6 +516,10 @@ static void scsi_device_dev_release(struct device *dev)
- 	if (vpd_pgb7)
- 		kfree_rcu(vpd_pgb7, rcu);
- 	kfree(sdev->inquiry);
-+	percpu_counter_destroy(&sdev->iotmo_cnt);
-+	percpu_counter_destroy(&sdev->ioerr_cnt);
-+	percpu_counter_destroy(&sdev->iodone_cnt);
-+	percpu_counter_destroy(&sdev->iorequest_cnt);
- 	kfree(sdev);
- 
- 	if (parent)
-@@ -936,26 +940,27 @@ static ssize_t
- show_iostat_counterbits(struct device *dev, struct device_attribute *attr,
- 			char *buf)
- {
--	return snprintf(buf, 20, "%d\n", (int)sizeof(atomic_t) * 8);
-+	/* iostat counters are per-CPU sums (s64).  Report width for tools. */
-+	return sysfs_emit(buf, "%zu\n", sizeof(s64) * 8);
- }
- 
- static DEVICE_ATTR(iocounterbits, S_IRUGO, show_iostat_counterbits, NULL);
- 
--#define show_sdev_iostat(field)						\
-+#define show_sdev_iostat_percpu(field)					\
- static ssize_t								\
- show_iostat_##field(struct device *dev, struct device_attribute *attr,	\
- 		    char *buf)						\
- {									\
- 	struct scsi_device *sdev = to_scsi_device(dev);			\
--	unsigned long long count = atomic_read(&sdev->field);		\
--	return snprintf(buf, 20, "0x%llx\n", count);			\
-+	unsigned long long count = percpu_counter_sum(&sdev->field);	\
-+	return sysfs_emit(buf, "0x%llx\n", count);			\
- }									\
--static DEVICE_ATTR(field, S_IRUGO, show_iostat_##field, NULL)
-+static DEVICE_ATTR(field, 0444, show_iostat_##field, NULL)
- 
--show_sdev_iostat(iorequest_cnt);
--show_sdev_iostat(iodone_cnt);
--show_sdev_iostat(ioerr_cnt);
--show_sdev_iostat(iotmo_cnt);
-+show_sdev_iostat_percpu(iorequest_cnt);
-+show_sdev_iostat_percpu(iodone_cnt);
-+show_sdev_iostat_percpu(ioerr_cnt);
-+show_sdev_iostat_percpu(iotmo_cnt);
- 
- static ssize_t
- sdev_show_modalias(struct device *dev, struct device_attribute *attr, char *buf)
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index adc3fa55ca2c..b7ce01de17b3 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -4043,7 +4043,7 @@ static int sd_probe(struct scsi_device *sdp)
- 	sdkp->index = index;
- 	sdkp->max_retries = SD_MAX_RETRIES;
- 	atomic_set(&sdkp->openers, 0);
--	atomic_set(&sdkp->device->ioerr_cnt, 0);
-+	percpu_counter_set(&sdkp->device->ioerr_cnt, 0);
- 
- 	if (!sdp->request_queue->rq_timeout) {
- 		if (sdp->type != TYPE_MOD)
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index 029f5115b2ea..4be36bf2a475 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -9,6 +9,7 @@
- #include <scsi/scsi.h>
- #include <scsi/scsi_common.h>
- #include <linux/atomic.h>
-+#include <linux/percpu_counter.h>
- #include <linux/sbitmap.h>
- 
- struct bsg_device;
-@@ -272,10 +273,10 @@ struct scsi_device {
- 	unsigned int max_device_blocked; /* what device_blocked counts down from  */
- #define SCSI_DEFAULT_DEVICE_BLOCKED	3
- 
--	atomic_t iorequest_cnt;
--	atomic_t iodone_cnt;
--	atomic_t ioerr_cnt;
--	atomic_t iotmo_cnt;
-+	struct percpu_counter iorequest_cnt;
-+	struct percpu_counter iodone_cnt;
-+	struct percpu_counter ioerr_cnt;
-+	struct percpu_counter iotmo_cnt;
- 
- 	struct device		sdev_gendev,
- 				sdev_dev;
--- 
-2.43.7
+It can, but there's nuance.  If you do an early free (or a transfer of
+ownership) you have to set the original pointer to NULL to avoid kfree
+being called on it on return.
+
+> I still think that it would be simpler to keep the mapping in place
+> for longer (to avoid all of this), if possible.
+
+I was just looking at the multiple error legs in the patched code and
+thinking it's an ideal candidate for a __free() attribute.  If there's
+a way of rearranging the code to keep it longer that you think is more
+readable, by all means do that instead.
+
+Regards,
+
+James
 
 
