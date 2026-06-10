@@ -1,129 +1,163 @@
-Return-Path: <linux-scsi+bounces-24657-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24658-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 2aKiIUWWKWq3aAMAu9opvQ
-	(envelope-from <linux-scsi+bounces-24657-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 18:52:21 +0200
+	id xavYOPaeKWoXawMAu9opvQ
+	(envelope-from <linux-scsi+bounces-24658-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 19:29:26 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D07CF66BB22
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 18:52:20 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C8E266BF41
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 19:29:26 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=acm.org header.s=mr01 header.b=thCDfpWr;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24657-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24657-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=acm.org;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=lge5Djye;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24658-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24658-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F2D96312FF50
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 16:47:04 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D820B3011C44
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 17:29:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092492FF641;
-	Wed, 10 Jun 2026 16:47:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 591A934B437;
+	Wed, 10 Jun 2026 17:29:20 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4AB2296BBA;
-	Wed, 10 Jun 2026 16:47:00 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781110022; cv=none; b=YJa2QXKVnPWowH/hbH1u2M5xLF+RJvxwlXwsHEUeWjLdHPkI4l3rs8GtXmaOL9Fwrq9eoKaWP67OnM+9yHzz9gzQrATm7fvQW5Mue6eVmiKIoACpPG/mDq4tw7kMqSnDE1VfMZf30WHDY5C3COy1nHa7EykKIa9rof0pf04sa4Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781110022; c=relaxed/simple;
-	bh=aZlhauMybcsLl8kIgbp5wNtOt4YG3oeBwviWuHyGg7I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DLPESm8eX24cvnx+cwnjl/qC20QJWme10uKVaQQYjZeriQQXyotYk5QpK6kgnQdAqu3ca3A62jj/n+kLVt7+onSeayglLN8kA2PlsuOf7CjW8WU8dvED0F/6DwGeMrFGPCtPFnxtxxPofWld2azqyk/zA41CNp/xTvNmx4N4D8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=thCDfpWr; arc=none smtp.client-ip=199.89.1.14
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4gbBWl74F5z1XLyhV;
-	Wed, 10 Jun 2026 16:46:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1781110014; x=1783702015; bh=aZlhauMybcsLl8kIgbp5wNtO
-	t4YG3oeBwviWuHyGg7I=; b=thCDfpWrWI/ywSQ9tYY8WHHnXW/IEBFUm/tBjyF/
-	49Hy4Tj0FhF5Bp3qG5huP/npVKLKBsFieGtulviHRwlb5IRbs0u1Hf7eJT6tf8Yk
-	ZnMNlwKb+PWqU3SVEzd5DylNPHO3v8bMwjxDog2cMEOGaHRAruHf6RRH9Huyd25N
-	ysE9oz/mmtf2XPIbsoybAfj4NVuven6cHOMgjVGvFoSIbgUETk9I18lByyUVM0MI
-	j8i/+QOsE+wmYum5FWC3LKzK3kgaCQSg+nAxE1gJpGumdisMi+kL41Jm2ns9FZG8
-	eM96OighqxovL8j2uBHSt7wkkzyJKyK8+6XkJ71tcpyiGg==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id ltPV2J_RGYQF; Wed, 10 Jun 2026 16:46:54 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4gbBWZ6ZBdz1XLyhT;
-	Wed, 10 Jun 2026 16:46:50 +0000 (UTC)
-Message-ID: <1f4a26be-4985-448f-955d-00e4f697224c@acm.org>
-Date: Wed, 10 Jun 2026 09:46:49 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC196348C51
+	for <linux-scsi@vger.kernel.org>; Wed, 10 Jun 2026 17:29:18 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781112559; cv=pass; b=loVRMi8M7FDpBCq0h+PFiX+af6NyJgfEAERweFuS7Ir0K+I58ZwNwGMgPZHjwOC4tIFexzRBTlykWSj89TvGSZXUbaX4wBwKT77cVgaKBdrgNr8DctU+zupBgOW8/oDrOwArTx+VEZAhVSLkBZiaBi1p0K88Le1R3Qyqvka+oUw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781112559; c=relaxed/simple;
+	bh=dZtPxZ7QvCP8QQ0yBF7ZU2Un31AenUtTLmqw2AbkwR4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SeVjpQFiyU8CoGscCi8rb5wx94/ofQUvLOoJ0p4j4L9vPRXp2XW/Y0DR7JaU7UQXIs7xcGF67oFaQEmRdJfh+c3vhDi4uHT6KCX4B2swDnxa7XZNWSE6NuATX8sxgSy0bjL7OTteuI5BWWs0nOk/SLxO5P9GiPCL7PO7ZpmxfoY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lge5Djye; arc=pass smtp.client-ip=209.85.222.173
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-91591f19716so854101285a.3
+        for <linux-scsi@vger.kernel.org>; Wed, 10 Jun 2026 10:29:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781112558; cv=none;
+        d=google.com; s=arc-20240605;
+        b=gb70qSiNlj/Rs5WKlSUZIqbpfrMuGZf4IC30No8WGy+F//rH45yICuJ4F3VkPPxiUJ
+         j7HLr/EjRNCR783B+mSPQT1xaz5xEqiUa7j0BdJxGp6tXfPoHwDB41yPetbWwhnxoAqj
+         EJKZw+ONWb8QxP/Lww9dsFKKKB+bawfnnASRNpzZUipIPbgCyI+qihzJpNaa3WUh2TJ5
+         i6nkfrPjv22cxspShcTqBSYDu0VDwqV4OJGb63ocFXhLDfr3JoVSVYW0AgYhltzXnB8E
+         P1av2nXTWPm1eZeXO3RFv2vpvJFl1JWhs5fczEZPgl5Y2vUmNKDDbD2wIiGUdF1LBatY
+         K+XQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=YvcRBNwGrBXez69ZPOl81reRTKhIzImY1y43ld3hni8=;
+        fh=UsFEpIfo2ci/QaMjGmquMwMwO0Mw6/JWjkLnYSCjhRc=;
+        b=Jd4Muz8MAstSj8/xilYiSSKcE9kTi3BJjaUsaMosEUFlH48S2oYVbYtLibO25bzxSt
+         PBQCAq3dJA6Y5NArWHSaD3yDlK1hkEbvHrAZeDzdL6wt/HIUWFGj7GdVTXn5tgXRsGa2
+         o3p7+xu/VwhwxqEXubZaUzBR3oZ268LeT/exOPGOvY8J1G4K6BWOwqcy+BnloYbMZvxt
+         HGu+QVoh4PQg1V1sK+9w34o049+bBlpB3Ho/MzVTKM1GbvK2fpZcx1rJdJ7GjHO0QHlX
+         wD5ydlbNPwg3lIFPhnHUrYGYGfTgjgp6NKoosOAzfvRDuHp4Xjdja/iRrsRAqwI/JR90
+         iFKA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781112558; x=1781717358; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YvcRBNwGrBXez69ZPOl81reRTKhIzImY1y43ld3hni8=;
+        b=lge5Djye+DBe/ykOA/LaRSmTMgG9b0L6j1M+r5mkT9PwZn1LU42MJi7K6jAzq5tHjG
+         o5WnT0IQAD1R3P3BctgGHyo5QchZl6YGJGkTforj3wqV/oC7hZjSXaL2SdkvaBaXU2iG
+         iKTNuc9JF/ERouWZsn+fU6kiDSig7L/+fSIxtR0PD4YF6ZmKU9M4ivfJ2tXXvzT9mGEH
+         hb7nm3t8qJxWL+YkEM8d6Ja6TPJu4Wt5oq1ZlFtOOwVfZNi+/U7KYEA1uk2QfsvlTjZ2
+         NfQhezC9yAEitkBl5+O97wd+BcUJZYwVpxy+6ntOuzCXH1vCxL/hsup7R4k4y+DpoROq
+         zGyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781112558; x=1781717358;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YvcRBNwGrBXez69ZPOl81reRTKhIzImY1y43ld3hni8=;
+        b=D0h5dFssXSXpck0sg1PrDIGHwB1is5M5yaSXWZDlsE0Wt5K0uN9Z+NvOqY7a/13o/w
+         OFMOqPdurSEfAshiSP9sCDcWcQHM1hWUVWo7Y826TZnwGrJwa5Vm3sH7za0yeTc2IvL9
+         IwJXI6Ir3Ng7ap6Kuw10UZsbx15Hwh8x14iQ9gZgTy6jmO9GKf14mlv/koSNvVYiEDUo
+         ijfa5/KQVuM39qmZDYPdzfz9U5laS82qt1dF2NisaGjnCAFtbP7rKuMhqBcsdT2JCgBD
+         eUTcliUwhUW13aeV9y5DKLCuFwUwTvEZnesVbbkc9xcvEN6NNLkPjE1fFxGst7YgeUk7
+         ySmw==
+X-Forwarded-Encrypted: i=1; AFNElJ8H7Sd/ACScYrE1Gkuk66lgLJdON1IITO4i0okVSRJe/NL5dQ9tjbSWiHyXNxchVJV/fHlvfxBOWTCp@vger.kernel.org
+X-Gm-Message-State: AOJu0YybqtZ709suhks0Oyj6CFaMP1JOrw6ytrQ1/kYXASlQ2hStGKps
+	RBGylDsxOg0RQmCDRP8ZfYzoMZbTIYuF+sT9KER5bZazmY7U/6pg8w3ARoah1AUMz/0qrpvvPA3
+	4SlEF0YnZihlGrnd/5XqJFx+KUItWNoFqLuHYdFI=
+X-Gm-Gg: Acq92OE+s2+H2QDpkuqQUX6FMfkN1Us4z8nyUMSR5t2hLkrSrJkIbwbAzhhu9t8gKQK
+	hm6JBVy/kw8C6MTFeREvQyqLGrMqHkHuBxL2R8o4yVCriA1/s2reRUT3JuuMO/919rvaO3sn4LQ
+	RXXoGxCPbCp54REgjs7ItQdTbh2QSpLrceNiZYd6Boz5aQ58D083WllWtd8VDpSINgKRO3c47a2
+	zWvErRF7qJyrp4c1WvRLIc+FbEbHkJrVQJlsTMX+TY1/j983ja7wYQDJJmVSMDTITjwEFNf8rSK
+	wpn1q7F1B3LeVqc3JY/9pPXCzeXn/eY04gWkfbyYtKnEwUFApXY=
+X-Received: by 2002:a05:620a:1d01:b0:915:9e84:85ee with SMTP id
+ af79cd13be357-915a9ca7655mr3990050385a.15.1781112557739; Wed, 10 Jun 2026
+ 10:29:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] ufs: mediatek: Implement get_hba_nortt callback for
- RTT capability
-To: ed.tsai@mediatek.com, alim.akhtar@samsung.com, avri.altman@wdc.com,
- James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
- linux-scsi@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, wsd_upstream@mediatek.com,
- peter.wang@mediatek.com, alice.chao@mediatek.com, naomi.chu@mediatek.com,
- chun-hung.wu@mediatek.com
-References: <20260609103856.676222-1-ed.tsai@mediatek.com>
- <20260609103856.676222-3-ed.tsai@mediatek.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260609103856.676222-3-ed.tsai@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260610114120.3748526-1-michael.bommarito@gmail.com>
+In-Reply-To: <20260610114120.3748526-1-michael.bommarito@gmail.com>
+From: Justin Tee <justintee8345@gmail.com>
+Date: Wed, 10 Jun 2026 10:27:27 -0700
+X-Gm-Features: AVVi8Cf6zx6NBJB4VzYXKUC0RH2Yw7GxC4AbEF3c7mLb_BtSx5NBpesjROBhCBM
+Message-ID: <CABPRKS_HbtV5vWx5nHT9rwJV4TGmOPj670yUuLK-Hd-r6TBF1g@mail.gmail.com>
+Subject: Re: [PATCH] scsi: lpfc: bound RPL ACC payload size to the response structure
+To: Michael Bommarito <michael.bommarito@gmail.com>
+Cc: Justin Tee <justin.tee@broadcom.com>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K . Petersen" <martin.petersen@oracle.com>, Paul Ely <paul.ely@broadcom.com>, 
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-24657-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:ed.tsai@mediatek.com,m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mediatek@lists.infradead.org,m:wsd_upstream@mediatek.com,m:peter.wang@mediatek.com,m:alice.chao@mediatek.com,m:naomi.chu@mediatek.com,m:chun-hung.wu@mediatek.com,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[acm.org:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-24658-lists,linux-scsi=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:michael.bommarito@gmail.com,m:justin.tee@broadcom.com,m:James.Bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:paul.ely@broadcom.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:stable@vger.kernel.org,m:michaelbommarito@gmail.com,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[justintee8345@gmail.com,linux-scsi@vger.kernel.org];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_NONE(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[justintee8345@gmail.com,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[acm.org:dkim,acm.org:email,acm.org:mid,acm.org:from_mime,mediatek.com:email,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,mail.gmail.com:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D07CF66BB22
+X-Rspamd-Queue-Id: 5C8E266BF41
 
-On 6/9/26 3:38 AM, ed.tsai@mediatek.com wrote:
-> Implement the get_hba_nortt callback to handle platform-specific RTT
-> capability differences:
+Hi Michael,
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Thanks for bringing this to attention.  The RPL ELS command has been
+obsoleted from Fibre Channel specifications since FC-LS-2, and there
+are current plans to remove RPL ELS handling routines from the lpfc
+driver entirely.  Therefore, the issue this patch is trying to address
+will no longer exist by the next lpfc version update.
 
+Regards,
+Justin
 
