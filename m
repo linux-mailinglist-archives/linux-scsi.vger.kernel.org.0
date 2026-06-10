@@ -1,420 +1,273 @@
-Return-Path: <linux-scsi+bounces-24634-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24636-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id oFiiEpsQKWo2PwMAu9opvQ
-	(envelope-from <linux-scsi+bounces-24634-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 09:22:03 +0200
+	id xcHoLYYjKWqARQMAu9opvQ
+	(envelope-from <linux-scsi+bounces-24636-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 10:42:46 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3075666978
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 09:22:02 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B371667567
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 10:42:46 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=qualcomm.com header.s=qcppdkim1 header.b=fUdEhk9u;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24634-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24634-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=qualcomm.com;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=oracle.com header.s=corp-2025-04-25 header.b=oXA8Yms3;
+	dkim=pass header.d=oracle.onmicrosoft.com header.s=selector2-oracle-onmicrosoft-com header.b=NVQ6nOEC;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24636-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24636-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=reject) header.from=oracle.com;
+	arc=reject ("cv is fail on i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D9A6F302336E
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 07:15:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 44C343025892
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 08:41:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E7C3257452;
-	Wed, 10 Jun 2026 07:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DA173AEB2D;
+	Wed, 10 Jun 2026 08:41:16 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24B91389104;
-	Wed, 10 Jun 2026 07:15:48 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781075751; cv=none; b=rXvr0GrbE0MOZoYOv5W2pKt/rgtWDAAG9sQxB/RognLyOzIsala47ytMncavIDO6BiKYSUhV6d/6vSnD+4mwowLxDxnhL2CeAsQ0b6Z3KMNNHgm2kvHARxgh+mjWnQw5sB4M+H5A+yu6N/gbt0RgRlX8Yk3DYR54yKmnnx2KkF0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781075751; c=relaxed/simple;
-	bh=PHcr0SQGOxR2ANEitoNgxbhhLmgyge2ePpPkE8vw5xc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XmMrz4jdbw5ovb3tKKZky9sJBld4jJVctwmxDh4qbT+Wq4gYR3vpdJdtcogRvlx+mVtxjALmXaNXrMeqhWWnLtvSR094o0CyhJTUrwmwl7IGkQG4VaBAoAcPc/KWd8hAok8lqF77I6CNusPzZkojdl1xfD1xSJCzP7n1wmeQFzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=fUdEhk9u; arc=none smtp.client-ip=205.220.168.131
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65A2ehAA2481622;
-	Wed, 10 Jun 2026 07:15:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=bZeAo1jX2j2
-	m/uBFoZJ08klhOzsIks5HW8h3fu30jJc=; b=fUdEhk9uO7bEABiIof5kY+cDHqP
-	G1aB/9sr+Ts8GwJ02ckJHJc/ovRzVh4w76sAmW56kk5aYYxhdgl84hOkVc54fzwD
-	93gLb/CI2tq9zV6EoDsPj0dTD1/NYpqEfeeL42GtxYIOXV3/tbL71bJXqzj6m23j
-	3e7DnhJ4qEIpZ0Xop8w6pzbPM6R11gYLY/w3698LbMR2YWqn+NBDJaKuvSg3CvxS
-	JyMeWkosaOaXgKQ59H80iz9fe2JD4FB0bLhewPaGeX44DnWBOZcpp1OPstaZRqhE
-	HORvLF3walfhamR76ecnrDH0K4sXq2gn0fxIgr3TtguRnwHVUXrnfK56Pbg==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4epwnes7yx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Jun 2026 07:15:37 +0000 (GMT)
-Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
-	by NALASPPMTA02.qualcomm.com (8.18.1.7/8.18.1.7) with ESMTP id 65A7Euew004018;
-	Wed, 10 Jun 2026 07:15:36 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 4epx0kjxsu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Jun 2026 07:15:36 +0000 (GMT)
-Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 65A7EtM3004012;
-	Wed, 10 Jun 2026 07:15:36 GMT
-Received: from hu-devc-lv-u22-c.qualcomm.com (hu-cang-lv.qualcomm.com [10.81.25.255])
-	by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 65A7FZTs005345
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Jun 2026 07:15:36 +0000 (GMT)
-Received: by hu-devc-lv-u22-c.qualcomm.com (Postfix, from userid 359480)
-	id DB60F619; Wed, 10 Jun 2026 00:15:35 -0700 (PDT)
-From: Can Guo <can.guo@oss.qualcomm.com>
-To: krzk@kernel.org, bvanassche@acm.org, beanhuo@micron.com,
-        peter.wang@mediatek.com, martin.petersen@oracle.com, mani@kernel.org
-Cc: linux-scsi@vger.kernel.org, Can Guo <can.guo@oss.qualcomm.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Ram Kumar Dwivedi <quic_rdwivedi@quicinc.com>,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v7 2/2] scsi: ufs: core: Add support for static TX Equalization settings
-Date: Wed, 10 Jun 2026 00:15:15 -0700
-Message-Id: <20260610071516.3763916-3-can.guo@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260610071516.3763916-1-can.guo@oss.qualcomm.com>
-References: <20260610071516.3763916-1-can.guo@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06CB738E8CA;
+	Wed, 10 Jun 2026 08:41:13 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781080875; cv=fail; b=jGeczCiU7emrpJ7MVKdREoBr3pmsxvktNLE/NNtN3DpEBPLQ0p7+2QB4rhbLUbVJ2VIVUZesAH8ds9Sc80jYXGJSS5Se4MArCKgfm614u+RbQZMExOMGKYrVOcbOYZ0shaMOiyKFRMjeosuBVCXp1NWVb2Pdg1XnNIqW0ssE03M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781080875; c=relaxed/simple;
+	bh=AzNbDCzTBD8YHyrE6mlZGNEx6HUC3cv3UVrH9ARJvWU=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Qe+H8m2pwK2Rc9tyaDlLaZOinaRyYdxqWdiUWJlLGQJJidNeRtbK33Gr+JQfhlzUZ08GIpKMQ/HV04tFL1Wfq8TFa7CqChR5Glhh7c7stcR+igWlsUoZR45svtuESlyC4J9INtSX3lcc1Qe+oy8lVDOLmnLPkaysBqLepvX+Vhg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=oXA8Yms3; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=NVQ6nOEC; arc=fail smtp.client-ip=205.220.165.32
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65A6MVew2826223;
+	Wed, 10 Jun 2026 08:40:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=wvHMLpguRPdNtRlp1TZV2ILXWNKSmk83q5NQjOD0ukw=; b=
+	oXA8Yms33qCNI0QQ9n/j+id8itmmphVeKKG7AqOPI4JaaiisEPNO5s8AmecSGOvx
+	fHjifV/+7sxUD7ApTccsUfnV6CkDHhUz6qj1QK2Ymf8GnEtEAP6y6GqEQmf4gN6H
+	PuITq8TIfzBuhoiL4UWHn95Wsra6iWv5ebZb4dorq0koy/YJ/aWVE2Xl0av1nVj7
+	9+LROqkOPPubC8WTCydXvkCY/lQUeq15nlKsM9J12sb+xkyLmG9mTDq/VtAHJtDY
+	494gTgQqDavcEtkwmSPJLqgQ1MhOqRdE1adyZ92igxKJ1qL43itTnNWkgJ7ctEN6
+	W5PCQu/X4j/l3DPJBlBblQ==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4emc3rp44g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 10 Jun 2026 08:40:55 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 65A8c5FI009246;
+	Wed, 10 Jun 2026 08:40:55 GMT
+Received: from sa9pr02cu001.outbound.protection.outlook.com (mail-southcentralusazon11013066.outbound.protection.outlook.com [40.93.196.66])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4eq4gy0a06-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 10 Jun 2026 08:40:55 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=M3qagZbHNV2klpYoU2bd+wgipIBcS/B2ZbZPQYZro3mSf3jV3v5ZDBknnaxjBlaqjpcDD1ZL/TUvoupYQ8+E+FL5HVWUZbRIXWljSHBDELhxq+K4FypAM5aVCglLb6dJ7Zg/DMnPp95fQnJq7X6OaHRyef2KkZXSngJ566SQfcTjMJBzCN2kfU1iUKlhL4SjQ5pjuMOWVxx8CYwps3eK8gCQ1Xrhq93IcTFB3sSWjOL6Y2obqaaiczePMffzMkqjG+XnpzeV1kxy/FH0P2fUc4xdPOtBydRO0IxN3/JT07CKfW0efyxUKDEe6HCLXqvk5IJGcfgo+Tuaq7IW9nW5Qw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wvHMLpguRPdNtRlp1TZV2ILXWNKSmk83q5NQjOD0ukw=;
+ b=wODeu7EdgraYz3vLirwdz+evlg4FKSZyEUiWhd9qt87L6yJYyFN8W2k/ODZU+ZfTdVDtPzXP7J9NAOjH4oW1ZTS+mW1kOAdc8LCtehQZ2u1qyAIPvS1NzThh3riVf6c4DOABr4yu+V+7t8Y3XentLlVx8+DNIMFWZkcgM1bWrdERQ35ratN+NkGUEgDkQboKtUh7jWHxVk6nJEAKzp2W37LECMB5Ei5evRQushJ12yChsCbhFVAUxeOBm8o6DZYn5mQR8+8CKgesP2idoSNDrwg1up0soTb/Aibx8/aG935f83+ts3UtLqK5JQ6WhszrLKlONQm3PKUupHMHHeoHnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wvHMLpguRPdNtRlp1TZV2ILXWNKSmk83q5NQjOD0ukw=;
+ b=NVQ6nOEC+tKPAcnlFqvPwr0VN+k5YYxv/UVzjL/RKl7e3VRofrUXEw6/p1z+m/2RGt2UKZpguQp3ulW8qO9+kJl4N7MuWGv0zhqH8abQtW74eOfRjbDXiLWnWuOVC49KJEx9XWr70g3PPPAEuxYoUNYwhlicf9ZAC2imA+BAOYQ=
+Received: from DS4PPFEAFA21C69.namprd10.prod.outlook.com
+ (2603:10b6:f:fc00::d54) by DS7PR10MB4926.namprd10.prod.outlook.com
+ (2603:10b6:5:3ac::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.11; Wed, 10 Jun
+ 2026 08:40:52 +0000
+Received: from DS4PPFEAFA21C69.namprd10.prod.outlook.com
+ ([fe80::9da2:46fe:4d63:a74b]) by DS4PPFEAFA21C69.namprd10.prod.outlook.com
+ ([fe80::9da2:46fe:4d63:a74b%7]) with mapi id 15.21.0092.011; Wed, 10 Jun 2026
+ 08:40:52 +0000
+Message-ID: <ed8449b9-e0b5-4ce5-bc03-b0fa5238ea19@oracle.com>
+Date: Wed, 10 Jun 2026 09:40:43 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] scsi: target: fix iSCSI ISID use-after-free in
+ REGISTER AND MOVE
+To: Bryam Vargas <hexlabsecurity@proton.me>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: Mike Christie <michael.christie@oracle.com>,
+        Maurizio Lombardi <mlombard@redhat.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        David Disseldorp <ddiss@suse.de>, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260610042245.35473-1-hexlabsecurity@proton.me>
+Content-Language: en-US
+From: John Garry <john.g.garry@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <20260610042245.35473-1-hexlabsecurity@proton.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DX1P273CA0013.AREP273.PROD.OUTLOOK.COM
+ (2603:1086:300:21::18) To DS4PPFEAFA21C69.namprd10.prod.outlook.com
+ (2603:10b6:f:fc00::d54)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-GUID: 2LwyB61l44uJDRoMSeYJBa4Vp0Mxw0xt
-X-Authority-Analysis: v=2.4 cv=ebYNubEH c=1 sm=1 tr=0 ts=6a290f19 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
- a=Um2Pa8k9VHT-vaBCBUpS:22 a=EUspDBNiAAAA:8 a=dHVp21D2o_8EOPIO518A:9
-X-Proofpoint-ORIG-GUID: 2LwyB61l44uJDRoMSeYJBa4Vp0Mxw0xt
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEwMDA2NyBTYWx0ZWRfXwwlUTp/bWOuQ
- PTZPmT7crubX9INS50xA6NnCGjiOEcR7KPdcpT+tNqFP/y7fbYTvPFZGvjPSgdBE1j5QaqFptAi
- oJPpkAW8x3QJ1JMJNEP6gcu2ybw/jQiPeaKhdJkcU89GYjq3E2Nsh26V0EYcAY7gnJ+QzFAdrYG
- ixOxm+4lCRL4KeykSiyR4UW/bnF0r5L3iQjHNXtQUXAZoWkXAiRGHqLLrv8SldNnMSvdwNzSVOn
- fD3+3OtxLHC3BJ93Ur/kED2vDtqRwKX9htXhf0iQ1cfYRSImM8gtQgnWV7OeLtIm4ddTU5LGehm
- oHDt8O7+wS+TZppNSfpzEW0udY92+F8aa/gwQ6zkntKkYIS93eUnXn7ii+5rYqaKpGKCCsg/lt9
- NJuXxTXn7jtJ5c9EpU8XuLSBnA7m4H6KpJCXuyrUA9CkWIrz1ahIJtHfX0bRfwjyZ5qiXji6DGf
- 80nJjqjj70G9KfgfV7g==
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS4PPFEAFA21C69:EE_|DS7PR10MB4926:EE_
+X-MS-Office365-Filtering-Correlation-Id: fec68930-49ac-4ad6-81f7-08dec6cbfaa1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|1800799024|376014|366016|22082099003|18002099003|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	54Ga/P77MjN2Q4+r7Dk22VXXNkl9wBdXo83eNlhTMDM4IFJORp3UmOTQ5KuQB/iZ5bdO5jgmA4mhcRywl4Q781eW8NFquBM99+Y8+yoPNPd1s6UuHMJVoQhhcOYvM4Ty4PU9WmY8t9TbO6xf9h4fylumOrRJ0O0ul+p1oy2LRhwcjOtZN2QvSDTL+dmonVZgUKMqAWc7/gja3/MXbTeH/K+0T+v2PV2jFzhag6tAWRXr/ic41gJUaB6Py+xMt+NSNGyrWnntYSB+6za2RUuW/+NLrtGSXKRZk2e/iCI+wGNdSISHWV8E3I3XIWZDMfJtY/DDI/9RqTYItvBArbcxVXq9Md1AxjaHdDSB3U1ZOgA+F0L4hEgYKaau1FmjFbrIQJgRviB19/hsu9Q0r+NCc7GRfquOJi3vSwwHRNjgXNRXK8IY7JMZGCZk1ctDDhGeSILMnpWJxMQGnM2PYnJOLg+4vFrLlS8P/gIBscdY6q7+hG3wt+QvyWLkZyTCORfMn6i/4NULRDQonL3Hk4YGWdHOIyTar2W7TSJYcKccJGZHZJm2+Y1De+KYlYTcgpwk9030H1J44s2siNTTlKiifQ3av+WvECTUAS5OrI01J9vPpWduco6YsTQA0jYp2BmtF+73ahRSMSO9stHbQKUih6iOynmhwxPC5cjYc7xWN1WRkuXvc+i4/Mdh4/9VVjlF
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS4PPFEAFA21C69.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(376014)(366016)(22082099003)(18002099003)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UlZ1cmx0Q1ZoNmg0bFVSaCtRNlRNSUxwNlVEb05PNC9yMHRGUS94TmZ3TWVk?=
+ =?utf-8?B?dnA4a3RKa056QWdQclFpMk85YXlyVjVKV3VHWStqR1p1bzBiR1RidlV2ZzVu?=
+ =?utf-8?B?S05XcjI3ck9vODVHR1VpMzZIMi9idGNBdFIrano1NVNXMFAwaVl0dnBGdlJq?=
+ =?utf-8?B?QXErd1hWUnp6NWg3ZmY2TnJKTEt6Y2tTdFcvcjZpUkxKUW56RmxJM01mMnN3?=
+ =?utf-8?B?eUk2Q2NXSk0rRHhmK0owRUFWcFRFZW9wQ2k3NEQ1YVlmeVhYdHdsaXYwWGpn?=
+ =?utf-8?B?MllyK3JJbldoV0grNk5mODRSYlhYdExWTFdId1JBUVJENXFDNE5SU2xaWVdU?=
+ =?utf-8?B?bXprT1p0N2RkY0tPS0tBYkovVFRnS3cza0FubGQ2aFVaNGhCblExMDhsZlFz?=
+ =?utf-8?B?TEMyS2NobUowVXZEdVdWMDdUMjFUTTM1NEJWd3I5RzZab0ZXQU94VThnMW5I?=
+ =?utf-8?B?SDRML0lBbG9OY2JTcEZrK2lPMjdqdWhYZ2NNQVdkSE9Tb1hYS3NFeVlwTEVE?=
+ =?utf-8?B?N3Q2MStvNHl6VkVybFpjeWlJMGNvb2crcjF6TVpWZUFEaHVMWFdkMGhKUkFs?=
+ =?utf-8?B?U3F2T3FpMlFTQUR1bFIzYW4xaE91aWYwVm9ISGdpMk9qMWxIbk1VOWI2NG9z?=
+ =?utf-8?B?dU1CbHJwSGRrTnpYczA2VmhBQzIyK1B4dWJ6cTg5Ti93NG9OMHlVQzRoSUU5?=
+ =?utf-8?B?OVRvZ01ucXRUakhrUTBUVW9EWW5IbWVvazZOZzRCYXZBL3dueXdBMjFnNDNo?=
+ =?utf-8?B?MHVNT2NtMkZCMVZBOGhvUEQ4VS83THRpN0kwUCt1SHdFQ2dCU29rT0V1TU9L?=
+ =?utf-8?B?WDJWa25vdXFUc1hvNDFyWklTZ3FHaFh3RnBIQ0U3S1BKVkJPcjJVRUdjcnhE?=
+ =?utf-8?B?WHBzN0krTytwYXhSNEF6L3J2c0lFajJoM28vTGpQUEJ5Yk4zOTVmcWN0NmNZ?=
+ =?utf-8?B?RjRQcWVpbWp5QWswRmV4b2pxdlRMSkZEc3g3Z0IxcDBzYk5KVnJpR2Y5bjlD?=
+ =?utf-8?B?NE5nbnlpYXQwQkZPOHBrY1dNYnR4aFFZM3ByeWhnNEJ1WE4xUStvTmIzdHcv?=
+ =?utf-8?B?NG1VbENlS3hWbFR4bXpXa2Z6d3lqbGlxSlp0bUczQ211UmwwMkgxclUvY3hP?=
+ =?utf-8?B?dkRCR0ZqRjIyYlQyaTFPZUt2THFScmlZZ0FXTkZjU1RhQW5odGJBNFNvd3NF?=
+ =?utf-8?B?RW1leGNKYzFSYUYrNUQ1S1BETUFqOEl4dFd6TnQrWlRteUU4d254eTJvNWdB?=
+ =?utf-8?B?bkVrVkZON2o0SEVMUWVvZWNvQVlmcVpyRjVGMEVWTEFSMXlVZlhpeFNxOS82?=
+ =?utf-8?B?dUh3ZGpEY1dHeWdVRjIyemUvSndVSFdrajViYXNkYTdZaUkyS3BFTTgrMkhB?=
+ =?utf-8?B?ZUMvMGV4aGZmOGt6cEp0enRmcTlBcjZHcFFHVDU2d0c1dWg1VVN4cWVqYzFw?=
+ =?utf-8?B?SnZGU3cwbUtVdEloanZFV3FTWVRSSWxMaHVOeWlIOUxiK2VqN3k5bzRKSVpS?=
+ =?utf-8?B?cktxZHRVR1NVQm43WmlyVS92cUNzVVd3T0E1dlZjckFYeEFGdUJKZWVyZXdD?=
+ =?utf-8?B?WFFBM3BRZGQ2empScHZ3UEgwT1RRTG9lck5GQlhWcEVWS0ZONTI4SXQxWFkx?=
+ =?utf-8?B?d0JTUVFITSt6MEc3eUdKM2FVUGY4YWQvYjVzVThuL204QTFZOTFDM2p1QzdV?=
+ =?utf-8?B?N0Z2QkJkdTROVkxnMVd1ZEpqb1I2NTNSRE1UekhUbHhKempHWk82MFVoNEg1?=
+ =?utf-8?B?QVh5NjJkcXg2YWExT0ZmNnNqbkZOTVdWNjlGbCtHWUNtdTMzbmZtOVhBUmhs?=
+ =?utf-8?B?NUN4cS9aUVZ4TkRiNXBzaFQ3eXZZUURqWTd2cy9Jcy9DYmFYdVdhMWRldWdT?=
+ =?utf-8?B?QXhhRUkrcE1Idk0zTVNmbk0rZUlOV0h5ZmY0YXJVZnpvWHNDTFdjalJFU1lt?=
+ =?utf-8?B?SjVCWUJsRE1aMzh5L3BFb3ZwT3RZbVVnN2wvQlRQQUs0TDNhQVZyYUJpbzhX?=
+ =?utf-8?B?OGFKYzZFUXFvdzNzbWg0ZitpdDhhZ3Qxd1F5U2pCZXBuaXZFT045NVpQVmxR?=
+ =?utf-8?B?UnNRd3ZMN1Q5dUUwa0pRajkwZjhwNUVxZk1qOWtQZXowYzU4WWRpWWIxcnBs?=
+ =?utf-8?B?MzZWdjI4L0d6NTVqanlvbDNWQ2JDSmpqR1Q4cTdzM0JuMTQ2T0lSTmZQMTZO?=
+ =?utf-8?B?aEtsbFVCdVNQUHhYbk1vR0psMlZFN3FQaW9BdjVVZ0NUOGdkZmpsWTRuWUlu?=
+ =?utf-8?B?N1hLUGkyS1k5c2VwZmJ4Nk84MGU2MGRMT3EvVzRqMkxVWE04SWYyYXNxSTRR?=
+ =?utf-8?B?bXk1ODlhVlFrZVdtRWRBZ20zTE1DdmFBdWp1aUNCOFQyaXVFd05mUT09?=
+X-Exchange-RoutingPolicyChecked:
+	CpKs6Bj+hZI429whWrqVOWXcgDtQzZi+GVH74ep3Iu9lrT7VAe40mGeS6Kkdb7GlQ7eMlbldZgha1bU2/wMKHIife8X1/1BF9FpXZMlWH3n/uGUUuPPHPvhgFBHUly9d07alimMPy5dDfxpasUiruwGFJUvKtFKtNnE04jrnbBHG6LYjIQ0tiIIlxQTyco++l83pfZSV70T82auDmihiIXlE92NTp1Wt4LBeYJ/FZq1nJzFtY31YVpxU+QqFd+VHtef5rD1GPh6eWM5fg2J9MfDe/UqTAvTEi6AhiFBp2qkkZ316jOIXJJwOdOMNjJcCh6ClCl1hVkKxukxg3bv82w==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	fLcIvd3WxABVP3ly325Kd+x/UG/WAnYyMyiqnH1BHFffrHUwo/l6roNEEtMN2AHYF6QYaCwo8TQrEoTvrikdzUBYDyigoxV/R884HUNZBqisgENQeAY3yrwSejsARi+SB22Qx86Q58yXz6dcKMzlqD4VsRinMqQGsxsG1e/2m7M49NOXCGaSZSEenkdUb9kbI9cejFjVF+23o0+Rl59DOyDD/XtUBBV/dA3tkow00m6xfN+IAzQL/jIuGAUfUsUduNIfKsLPgcgcmifUISgdCwS9+/vVhztrQPIBdLE/MCuL1qH0A4XQ7YqFls7+B+CC9T0NMSApgsr9/ydROffmqbgMDrpAvKQZXqEAsgveyaoCK9fwvGBbHFwekVGG1Vyb0DqaMeir+eiqFL1ituTIYgkLQrN2nOCQk5Bzj5tGoq2u8OHRgvsXNPoCeAegaLB2Db6eTtIj0uxB96NUJdEoFSkESwNWA84N24Cjy8ug5RLCfuScuBGjBEh6Q3ErYhdfScL2dZwbVTySq8SM59zLksb/mlnoazkFptZ13QC/kQQVdUa6dvCKiwDNgyST1Wi6skcJ/tiCbtf83Hv59hcSTqg4FGIcJsK/K1IzefyLBpo=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fec68930-49ac-4ad6-81f7-08dec6cbfaa1
+X-MS-Exchange-CrossTenant-AuthSource: DS4PPFEAFA21C69.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2026 08:40:52.3187
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YDvOgle4LHQJAJ4bezKrHMBIifB3THCjstbUaoGPEHN0Uio88I7wzWNp+J/QMoajU/QhsSCmbBQdtU4IkD/OfQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB4926
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-10_01,2026-06-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 impostorscore=0 spamscore=0 bulkscore=0 clxscore=1015
- suspectscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605210000
- definitions=main-2606100067
+ definitions=2026-06-10_02,2026-06-09_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
+ adultscore=0 mlxscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0
+ mlxlogscore=999 bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2605130000 definitions=main-2606100081
+X-Proofpoint-ORIG-GUID: SUUN7EtENSO901GH75SkQO0O0BfXpnoP
+X-Authority-Analysis: v=2.4 cv=crirVV4i c=1 sm=1 tr=0 ts=6a292317 cx=c_pps
+ a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=FelO9ux0wxsA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=7Gl3-_t3PgB9XO-mQDs3:22 a=VwQbUJbxAAAA:8
+ a=yPCof4ZbAAAA:8 a=jAkmhrGUUGZMZoV1I7gA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: SUUN7EtENSO901GH75SkQO0O0BfXpnoP
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEwMDA4MSBTYWx0ZWRfX1TUIqL7Yxc4F
+ RY7nGCxpd+QQ0e28br4XhoWsSt3Kaox02Cm1lXyZYZ9/Y9XXt+Mg3wJC3Fp7SUm2rdE6/bBgvUy
+ 0yRLkfSlrsiBZtGqAK2ilZyXkx+GgiwMXyFW3LutDw9LE5f81R1y72I4WaegL1P0gDsNOx5Nuwp
+ 8RhjJVGcQ/PLZ6VYtrirfrg1RonkevkW5EHbJmFw3RVkOvj39M5lOMp+p6lbQYoLmDGbqWWJm5f
+ jdxvmeecdEUp2Jp4bbQBkpke0egf9CK2SuXUZ415GI6EsLJTKTo+Kua9UqdaVlQuIrMhbTTw7Ho
+ 7DQguzgdYhWjk70EZMbonWHJLeU7XxPIK4N9LhMr2JHLBzhkCn88jqr+LBprLmC9qX1tbNBdmmc
+ /n2bL3+CmdYWbA18K3JRdz2mQ6QJYUMWymDl3Nnb+yjcpIUfqYkE72r7GX/j1Vs2thTy81QalpZ
+ KzjanG4wFnRZSN2Y+2Q==
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-7.16 / 15.00];
+	WHITELIST_DMARC(-7.00)[oracle.com:D:+];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	TAGGED_FROM(0.00)[bounces-24634-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24636-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,oracle.com:dkim,oracle.com:email,oracle.com:mid,oracle.com:from_mime];
+	FORGED_SENDER(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:hexlabsecurity@proton.me,m:martin.petersen@oracle.com,m:michael.christie@oracle.com,m:mlombard@redhat.com,m:James.Bottomley@HansenPartnership.com,m:ddiss@suse.de,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	HAS_ORG_HEADER(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:krzk@kernel.org,m:bvanassche@acm.org,m:beanhuo@micron.com,m:peter.wang@mediatek.com,m:martin.petersen@oracle.com,m:mani@kernel.org,m:linux-scsi@vger.kernel.org,m:can.guo@oss.qualcomm.com,m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:James.Bottomley@HansenPartnership.com,m:quic_rdwivedi@quicinc.com,m:quic_nitirawa@quicinc.com,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,qualcomm.com:dkim,qualcomm.com:email,oss.qualcomm.com:mid,oss.qualcomm.com:from_mime,vger.kernel.org:from_smtp];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	RCVD_COUNT_SEVEN(0.00)[10]
+	RCVD_COUNT_SEVEN(0.00)[9]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D3075666978
+X-Rspamd-Queue-Id: 2B371667567
 
-Parse board-specific static TX Equalization settings from DT for each HS
-gear and store them in hba->tx_eq_params.
+On 10/06/2026 05:22, Bryam Vargas wrote:
+> core_scsi3_emulate_pro_register_and_move() maps the PERSISTENT RESERVE OUT
+> parameter list with transport_kmap_data_sg() and parses the destination
+> TransportID with target_parse_pr_out_transport_id(). For an iSCSI
+> TransportID (FORMAT CODE 01b), iscsi_parse_pr_out_transport_id() returns
+> the ISID in iport_ptr as a raw pointer into that mapped buffer.
+> 
+> The function then unmaps the buffer with transport_kunmap_data_sg() before
+> dereferencing iport_ptr in strcmp(), __core_scsi3_locate_pr_reg() and
+> core_scsi3_alloc_registration(). When the parameter list spans more than
+> one page (PARAMETER LIST LENGTH > 4096), transport_kmap_data_sg() uses
+> vmap() and transport_kunmap_data_sg() does vunmap(), so the kernel virtual
+> address backing iport_ptr is torn down and every subsequent dereference is
+> a use-after-free read of the unmapped region.
+> 
+> Keep the parameter list mapped until iport_ptr is no longer needed: drop
+> the early transport_kunmap_data_sg() and unmap once on the success path,
+> right before returning. The error paths already unmap through the existing
+> "if (buf) transport_kunmap_data_sg(cmd)" at the out: label, which now runs
+> on every post-map error exit because buf is no longer cleared early. Only
+> reads of the mapping happen while spinlocks are held; the map and unmap
+> calls remain outside any lock. The sibling caller
+> core_scsi3_decode_spec_i_port() already uses the buffer before unmapping it
+> and is left unchanged.
+> 
+> Fixes: 4949314c7283 ("target: Allow control CDBs with data > 1 page")
+> Cc:stable@vger.kernel.org
+> Signed-off-by: Bryam Vargas<hexlabsecurity@proton.me>
 
-Parse txeq-preshoot-g[1-6] and txeq-deemphasis-g[1-6] as per-lane tuples:
-<Host_Lane0 Device_Lane0>, [<Host_Lane1 Device_Lane1>]
-
-For HS-G6, parse optional lane lists:
-- tx-precode-g6-host-lanes
-- tx-precode-g6-device-lanes
-
-Introduce is_static in struct ufshcd_tx_eq_params to track whether TX EQ
-values came from static DT data.
-
-When adaptive TX Equalization is used, these static settings are not final:
-
-- If valid settings are retrieved from qTxEQGnSettings/wTxEQGnSettingsExt,
-  those retrieved settings override static DT settings.
-- If retrieval is not available/valid, TX EQTR runs and trained settings
-  override static DT settings.
-
-So static DT settings are a fallback and are intended for cases where
-adaptive TX Equalization is not enabled/used. Adaptive TX Equalization
-remains the primary path when enabled.
-
-No behavior changes for platforms that do not provide these properties.
-
-Signed-off-by: Can Guo <can.guo@oss.qualcomm.com>
----
- drivers/ufs/core/ufs-txeq.c      |  10 +-
- drivers/ufs/host/ufshcd-pltfrm.c | 159 +++++++++++++++++++++++++++++++
- include/ufs/ufshcd.h             |   2 +
- 3 files changed, 170 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/ufs/core/ufs-txeq.c b/drivers/ufs/core/ufs-txeq.c
-index 4b264adfdf49..b645fe5f6d95 100644
---- a/drivers/ufs/core/ufs-txeq.c
-+++ b/drivers/ufs/core/ufs-txeq.c
-@@ -1297,7 +1297,13 @@ int ufshcd_config_tx_eq_settings(struct ufs_hba *hba,
- 	}
- 
- 	params = &hba->tx_eq_params[gear - 1];
--	if (!params->is_valid || force_tx_eqtr) {
-+	/*
-+	 * TX EQTR must run for the following cases:
-+	 * 1. TX EQ settings are invalid.
-+	 * 2. TX EQ settings are valid but static, i.e., populated from DT.
-+	 * 3. TX EQTR procedure is forced.
-+	 */
-+	if (!params->is_valid || params->is_static || force_tx_eqtr) {
- 		int ret;
- 
- 		ret = ufshcd_tx_eqtr(hba, params, pwr_mode);
-@@ -1310,6 +1316,7 @@ int ufshcd_config_tx_eq_settings(struct ufs_hba *hba,
- 		/* Mark TX Equalization settings as valid */
- 		params->is_valid = true;
- 		params->is_trained = true;
-+		params->is_static = false;
- 		params->is_applied = false;
- 	}
- 
-@@ -1495,6 +1502,7 @@ static void ufshcd_extract_tx_eq_settings_attrs(struct ufs_hba *hba, u8 gear)
- 	}
- 
- 	params->is_valid = true;
-+	params->is_static = false;
- }
- 
- void ufshcd_retrieve_tx_eq_settings(struct ufs_hba *hba)
-diff --git a/drivers/ufs/host/ufshcd-pltfrm.c b/drivers/ufs/host/ufshcd-pltfrm.c
-index c2dafb583cf5..e8b352f5b68f 100644
---- a/drivers/ufs/host/ufshcd-pltfrm.c
-+++ b/drivers/ufs/host/ufshcd-pltfrm.c
-@@ -210,6 +210,163 @@ static void ufshcd_init_lanes_per_dir(struct ufs_hba *hba)
- 	}
- }
- 
-+static int ufshcd_parse_tx_precode_lane_list(struct ufs_hba *hba,
-+					     const char *prop_name,
-+					     bool precode_en[UFS_MAX_LANES])
-+{
-+	const u32 lpd = hba->lanes_per_direction;
-+	struct device *dev = hba->dev;
-+	u32 lane_ids[UFS_MAX_LANES];
-+	int len, count, err, i;
-+	struct property *prop;
-+
-+	prop = of_find_property(dev->of_node, prop_name, &len);
-+	if (!prop || !len)
-+		return 0;
-+
-+	count = of_property_count_u32_elems(dev->of_node, prop_name);
-+	if (count < 0) {
-+		dev_err(dev, "Property %s is malformed, %d\n", prop_name, count);
-+		return count;
-+	}
-+
-+	if (count > lpd) {
-+		dev_err(dev, "Property %s has invalid count (%d), max %u\n",
-+			prop_name, count, lpd);
-+		return -EINVAL;
-+	}
-+
-+	err = of_property_read_u32_array(dev->of_node, prop_name, lane_ids, count);
-+	if (err) {
-+		dev_err(dev, "Failed to read %s property, %d\n", prop_name, err);
-+		return err;
-+	}
-+
-+	for (i = 0; i < count; i++) {
-+		if (lane_ids[i] >= lpd) {
-+			dev_err(dev, "Invalid lane index %u provided in %s property\n",
-+				lane_ids[i], prop_name);
-+			return -EINVAL;
-+		}
-+
-+		precode_en[lane_ids[i]] = true;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ufshcd_parse_tx_eq_value_array(struct ufs_hba *hba,
-+					  const char *prop_name,
-+					  const u32 max_value,
-+					  u32 values[UFS_MAX_LANES * 2])
-+{
-+	u32 num_elems = 2 * hba->lanes_per_direction;
-+	struct device *dev = hba->dev;
-+	int count, err, i;
-+
-+	count = of_property_count_u32_elems(dev->of_node, prop_name);
-+	if (count <= 0)
-+		return count ? count : -ENOENT;
-+
-+	if (count != num_elems) {
-+		dev_err(dev, "Property %s has invalid count (%d), expecting %u\n",
-+			prop_name, count, num_elems);
-+		return -EINVAL;
-+	}
-+
-+	err = of_property_read_u32_array(dev->of_node, prop_name, values, num_elems);
-+	if (err) {
-+		dev_err(dev, "Failed to read %s property, %d\n", prop_name, err);
-+		return err;
-+	}
-+
-+	for (i = 0; i < num_elems; i++) {
-+		if (values[i] >= max_value) {
-+			dev_err(dev, "Invalid TX EQ value (%u) in %s property\n",
-+				values[i], prop_name);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * ufshcd_parse_tx_eq_settings_for_gear - Parse static TX EQ DT settings for one gear
-+ * @hba: per adapter instance
-+ * @gear: target HS gear
-+ *
-+ * Reads the txeq-preshoot-gN, txeq-deemphasis-gN, and (for G6)
-+ * tx-precode-g6-host-lanes/tx-precode-g6-device-lanes device-tree properties.
-+ * If all present values are valid, stores them as static TX Equalization
-+ * settings for the given gear.
-+ */
-+static void ufshcd_parse_tx_eq_settings_for_gear(struct ufs_hba *hba, int gear)
-+{
-+	bool device_precode_en[UFS_MAX_LANES] = { false };
-+	bool host_precode_en[UFS_MAX_LANES] = { false };
-+	const u32 lpd = hba->lanes_per_direction;
-+	struct ufshcd_tx_eq_params *params;
-+	u32 deemphasis[UFS_MAX_LANES * 2];
-+	u32 preshoot[UFS_MAX_LANES * 2];
-+	char prop_name[MAX_PROP_SIZE];
-+	int err, lane;
-+
-+	snprintf(prop_name, MAX_PROP_SIZE, "txeq-preshoot-g%d", gear);
-+	err = ufshcd_parse_tx_eq_value_array(hba, prop_name, TX_HS_NUM_PRESHOOT, preshoot);
-+	if (err)
-+		return;
-+
-+	snprintf(prop_name, MAX_PROP_SIZE, "txeq-deemphasis-g%d", gear);
-+	err = ufshcd_parse_tx_eq_value_array(hba, prop_name, TX_HS_NUM_DEEMPHASIS, deemphasis);
-+	if (err)
-+		return;
-+
-+	if (gear == UFS_HS_G6) {
-+		err = ufshcd_parse_tx_precode_lane_list(hba, "tx-precode-g6-host-lanes",
-+							host_precode_en);
-+		if (err)
-+			return;
-+
-+		err = ufshcd_parse_tx_precode_lane_list(hba, "tx-precode-g6-device-lanes",
-+							device_precode_en);
-+		if (err)
-+			return;
-+	}
-+
-+	params = &hba->tx_eq_params[gear - 1];
-+	for (lane = 0; lane < lpd; lane++) {
-+		params->host[lane].preshoot = preshoot[lane * 2];
-+		params->host[lane].deemphasis = deemphasis[lane * 2];
-+		params->host[lane].precode_en = host_precode_en[lane];
-+
-+		params->device[lane].preshoot = preshoot[lane * 2 + 1];
-+		params->device[lane].deemphasis = deemphasis[lane * 2 + 1];
-+		params->device[lane].precode_en = device_precode_en[lane];
-+	}
-+
-+	params->is_valid = true;
-+	params->is_static = true;
-+}
-+
-+static void ufshcd_parse_static_tx_eq_settings(struct ufs_hba *hba)
-+{
-+	const u32 lpd = hba->lanes_per_direction;
-+	int gear;
-+
-+	if (!lpd)
-+		return;
-+
-+	if (lpd > UFS_MAX_LANES) {
-+		dev_warn(hba->dev, "lanes_per_direction (%u) exceeds UFS_MAX_LANES (%u)\n",
-+			 lpd, UFS_MAX_LANES);
-+		return;
-+	}
-+
-+	for (gear = UFS_HS_G1; gear <= UFS_HS_GEAR_MAX; gear++)
-+		ufshcd_parse_tx_eq_settings_for_gear(hba, gear);
-+}
-+
- /**
-  * ufshcd_parse_clock_min_max_freq  - Parse MIN and MAX clocks freq
-  * @hba: per adapter instance
-@@ -528,6 +685,8 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
- 
- 	ufshcd_init_lanes_per_dir(hba);
- 
-+	ufshcd_parse_static_tx_eq_settings(hba);
-+
- 	err = ufshcd_parse_operating_points(hba);
- 	if (err) {
- 		dev_err(dev, "%s: OPP parse failed %d\n", __func__, err);
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index f48d6416e299..c01824576472 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -359,6 +359,7 @@ struct ufshcd_tx_eqtr_record {
-  * @is_valid: True if parameter contains valid TX Equalization settings
-  * @is_applied: True if settings have been applied to UniPro of both sides
-  * @is_trained: True if parameters obtained from TX EQTR procedure
-+ * @is_static: True if settings are static
-  */
- struct ufshcd_tx_eq_params {
- 	struct ufshcd_tx_eq_settings host[UFS_MAX_LANES];
-@@ -367,6 +368,7 @@ struct ufshcd_tx_eq_params {
- 	bool is_valid;
- 	bool is_applied;
- 	bool is_trained;
-+	bool is_static;
- };
- 
- /**
--- 
-2.34.1
-
+FWIW:
+Reviewed-by: John Garry <john.g.garry@oracle.com>
 
