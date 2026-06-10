@@ -1,190 +1,234 @@
-Return-Path: <linux-scsi+bounces-24649-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24719-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id vm1vETp3KWoMXQMAu9opvQ
-	(envelope-from <linux-scsi+bounces-24649-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 16:39:54 +0200
+	id fv9mKfuxKmqcvAMAu9opvQ
+	(envelope-from <linux-scsi+bounces-24719-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 15:02:51 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1E7C66A4A4
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 16:39:53 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DCF567221A
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 15:02:50 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=baylibre.com header.s=google header.b=PKsZSJRp;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24649-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24649-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=none;
+	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b="K57/wpwx";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24719-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24719-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=redhat.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0ADA3305167F
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 14:37:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2A6B531E2F5A
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 12:57:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE877372680;
-	Wed, 10 Jun 2026 14:36:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97FCF36AB4D;
+	Thu, 11 Jun 2026 12:57:57 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 664FE30F7E8
-	for <linux-scsi@vger.kernel.org>; Wed, 10 Jun 2026 14:36:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0748F2DA76C
+	for <linux-scsi@vger.kernel.org>; Thu, 11 Jun 2026 12:57:55 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781102197; cv=none; b=GJ+BGbRmGYN6+3X0XjtA/141dXAgLrZMmFrKipn5EvScFtLNalchuM6vAVJFYq3zkMya/KErPADbnATzt8o1sUeJdA1nUKkH1ex8toJq+iNosnarmi1CqEEvMExZR37h6jXSlHCZ5ZfGLKRPqNaJZRqGj9+cc9LebACXWNgHcpU=
+	t=1781182677; cv=none; b=tnyXlAQZCHqyHw0ZdSJRMr9U16NhHWykxxkb/EuWz14c4EweWeWUqa+FIdWghd5fJ8vjrqcyTNaOiCIDSALdcUrUSvFtJOnlexq/hxqPnlbjds7gJPVQOv2yx02oz/WFoX+E1gTjVc7QARSI0AOzHAc1ulwBJlchizjGjLKCrs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781102197; c=relaxed/simple;
-	bh=6TvW/HzmyHDaaA9wKRoNNaNcjePQQ1Zdsv2Dq52jLls=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kqWmhOsJku3K9H5A5JOE6c2IU6STXYMvDFlwkPQ3r6FAbdgLNXhlwc6LQI5p576BZT6T/eLViRRksRmbrSWIaGkmWy5UjvVNo9AYNEicGWFSnbKk78r57Fpo1uWpgSZ226ruGb5kmC8VZwtkJRsvEJ8sOO+1oh5GR9gDxIu01SE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=PKsZSJRp; arc=none smtp.client-ip=209.85.221.44
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-45eea68dd6fso3698447f8f.2
-        for <linux-scsi@vger.kernel.org>; Wed, 10 Jun 2026 07:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1781102195; x=1781706995; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hDOKETMRFbOV/EaNxch8DdRYXkZ7LpkUfIIjCWECVFI=;
-        b=PKsZSJRpWKuTVt/Xgx0EqbYZmLHcLKRaH0Dth6ftfe0WvYdvYqPhxmd1UgKmjdyKky
-         Fw833KIfwpNVaG/qGXt54M+jXj7MUVXdSqzeLY08X0wfefGBNPy/ljSm8BI+2+MpDSCX
-         3coZA16+8qW5iy6hUzofiGBdMSR87VxlH5/lXkmxa1eALHMZd6G3Tn05VRurBcNyYnp4
-         1h5vYJOc6sjg2kvkbUNjac1SMT1mt3ue6Wf00gIOndEXT7tbpu/yLcMhOnYR7E/Y2QNG
-         vf6+l4H7R986cXeyxf0viHTzZv3LL0dy2+qa7M2MKI+hMn3W1E31AzF3Y04HLX3WCusH
-         TNEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781102195; x=1781706995;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hDOKETMRFbOV/EaNxch8DdRYXkZ7LpkUfIIjCWECVFI=;
-        b=IftoFphhFd0z9ZE9ByBa2uejvRaCXKY87BrMqtOKaxj+YqbI9XGripCMx5zFKnae3P
-         ll/Ekv7HsJDb/1ZNi1ga5A5QwUn/+uBCpAppEgatOCfK29dycv79DiwxY8s9Q6SX0p0r
-         gPP5A02F1rD9Jkl95YEJFub5GTaGc1oTKPpliFjpx+t6MJu5Qr/hXWhDFpi0Mv0kHujg
-         ua+cyC83n+m2eRtbG4oOL+OgTRgyaIkB2tbPSuMaLq9ouz9mj2iMjWUlq2cuWZ5cF4FV
-         cP7DePOJ2yPU0CGo9oAnKq+2MPVE6wySO4/kIH5plO7lY9LHcCfZBULiqwcXrq5KxZRD
-         8XXQ==
-X-Gm-Message-State: AOJu0Yy6Npl5D9O69PDBNHRzipMNVUPTW9OPE+iZT3h6ERwLPAVHAi7u
-	O5v4Lh2kXQ6g80DkOgBl1wvHigFjEPZgVOsdU7o4y0QNNfnxBrimDxKvppOUCf1V6bE=
-X-Gm-Gg: Acq92OEK2fVoaOilnv0ubMy4yami56u6qtWfu8KgrBQGc39p5L+yRszzgqZySlQmS2e
-	VUMrG/mTUwRop/COrjyaMPK5ZuAIVnrOLb5hqBbkGPau0MGJmTrebnvfXplWSn+ILf4K6YwE5d1
-	WfvB+lOcijCF/vsy/nPjRh6BhIn4L63N2q3drUmcRSZjH+Pl4kc/HbSzTZrpvs/mr/UGCUXCCKg
-	KutiRzWaVcLYAtd9873GfgFPoLqpIYKMGLkVomvSVmYISzKmxspkv6IixQ2b3vLlOZhlt2i0Gai
-	YTADB8ezdwNZySWyAN7rm7qVkXp4vRN1mmi6wrOihELzrrIjAyJ492SBFqmNVoX/Q/WWgRoAms4
-	fUr4tsCi4lmgtZXBgcYIutKyp7Ckk1d5hBTPrKlWqNIK9qAV2cW8z4/WqrTLjtjqizJ5nMJgUs6
-	6r4U35Z044kCAjup2BF6WsuMipZ85y73fuu8Q136HhVNsX2fpMgs2nAG2nGCWpGTXoh20SLDmPu
-	tBF/E2G9Y/UN1DU2n1qSiE0vA==
-X-Received: by 2002:a5d:4d0b:0:b0:44b:5398:4e85 with SMTP id ffacd0b85a97d-46030502519mr29582966f8f.22.1781102194826;
-        Wed, 10 Jun 2026 07:36:34 -0700 (PDT)
-Received: from localhost (p200300f65f47db046aec8c3a4b621e71.dip0.t-ipconnect.de. [2003:f6:5f47:db04:6aec:8c3a:4b62:1e71])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-4601f35fb24sm77388008f8f.34.2026.06.10.07.36.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 07:36:33 -0700 (PDT)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>
-To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	s=arc-20240116; t=1781182677; c=relaxed/simple;
+	bh=pMz0XopnIHTyXSKV4o5NA6+8Cj6CQUbxxVzNeeDGF4U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OHx//jZKVXI2s3dYqyEubSfg1huML3Zc/cUsC1mWDVOnPfM4NYuWJZpV6iwMoWJViMOZyUoGzDriHdAeej9MSX94AA5PiS6LFk8B4tu6voA5zCXePvXaDdUrzZ6cN/cAy4xNIGjzbuL4dJDb/nMwngdsN11L9DJaHfViTccDfVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=K57/wpwx; arc=none smtp.client-ip=170.10.129.124
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781182675;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wutI1NEOrxe0Ga9sQ5pG620uXi0d0C5Aj7NTI3FNepo=;
+	b=K57/wpwxaGIdnvZmSZ72MRcFMPsmqT+oLnncu0FEpDuzsHMOZ6zfd8bQHzKMiJTk84MDJV
+	w1rdZ3KMkc33EqYv+NxlpFeB7+n5bD7mdlrEpq19bmmYH6WRWBSsDTHvSXsfyvw61Kgbbi
+	eozNtVkDMS6T4umKuIQj18W+73fArMc=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-49-_h9LaK_xPp-Cw2A3pjQP9w-1; Thu,
+ 11 Jun 2026 08:57:51 -0400
+X-MC-Unique: _h9LaK_xPp-Cw2A3pjQP9w-1
+X-Mimecast-MFC-AGG-ID: _h9LaK_xPp-Cw2A3pjQP9w_1781182668
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1984519775EB;
+	Thu, 11 Jun 2026 12:57:48 +0000 (UTC)
+Received: from localhost (unknown [10.2.16.137])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 179B1180057F;
+	Thu, 11 Jun 2026 12:57:43 +0000 (UTC)
+Date: Wed, 10 Jun 2026 11:37:47 -0400
+From: Stefan Hajnoczi <stefanha@redhat.com>
+To: Sumit Saxena <sumit.saxena@broadcom.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+	Adam Radford <aradford@gmail.com>,
+	Khalid Aziz <khalid@gonehiking.org>,
+	Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Hannes Reinecke <hare@suse.com>,
+	"Juergen E . Fischer" <fischer@norbit.de>,
+	Russell King <linux@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org,
 	Finn Thain <fthain@linux-m68k.org>,
-	Michael Schmitz <schmitzmic@gmail.com>
-Cc: linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1] scsi: Improve style of pnp_device_id array terminator
-Date: Wed, 10 Jun 2026 16:36:28 +0200
-Message-ID:  <096aaa981c0bf1aaa8be75e675f17b1c9ca0086c.1781102092.git.u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.47.3
+	Michael Schmitz <schmitzmic@gmail.com>,
+	Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+	Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+	Oliver Neukum <oliver@neukum.org>, Ali Akcaagac <aliakc@web.de>,
+	Jamie Lenehan <lenehan@twibble.org>,
+	Ram Vegesna <ram.vegesna@broadcom.com>,
+	target-devel@vger.kernel.org,
+	Bradley Grove <linuxdrivers@attotech.com>,
+	Satish Kharat <satishkh@cisco.com>,
+	Sesidhar Baddela <sebaddel@cisco.com>,
+	Karan Tilak Kumar <kartilak@cisco.com>,
+	Yihang Li <liyihang9@h-partners.com>,
+	Don Brace <don.brace@microchip.com>, storagedev@microchip.com,
+	HighPoint Linux Team <linux@highpoint-tech.com>,
+	Tyrel Datwyler <tyreld@linux.ibm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	linuxppc-dev@lists.ozlabs.org, Brian King <brking@us.ibm.com>,
+	Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+	Mike Christie <michael.christie@oracle.com>,
+	open-iscsi@googlegroups.com, Justin Tee <justin.tee@broadcom.com>,
+	Paul Ely <paul.ely@broadcom.com>,
+	Kashyap Desai <kashyap.desai@broadcom.com>,
+	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+	Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
+	megaraidlinux.pdl@broadcom.com,
+	Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
+	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+	mpi3mr-linuxdrv.pdl@broadcom.com,
+	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+	Ranjan Kumar <ranjan.kumar@broadcom.com>,
+	MPT-FusionLinux.pdl@broadcom.com, Daniel Palmer <daniel@thingy.jp>,
+	GOTO Masanori <gotom@debian.or.jp>,
+	Jack Wang <jinpu.wang@cloud.ionos.com>,
+	Geoff Levand <geoff@infradead.org>, Michael Reed <mdr@sgi.com>,
+	Nilesh Javali <njavali@marvell.com>,
+	GR-QLogic-Storage-Upstream@marvell.com,
+	Narsimhulu Musini <nmusini@cisco.com>,
+	"K . Y . Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, linux-hyperv@vger.kernel.org,
+	"Michael S . Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Eugenio Perez <eperezma@redhat.com>, virtualization@lists.linux.dev,
+	Vishal Bhakta <vishal.bhakta@broadcom.com>,
+	bcm-kernel-feedback-list@broadcom.com,
+	Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	xen-devel@lists.xenproject.org,
+	John Garry <john.g.garry@oracle.com>
+Subject: Re: [PATCH v3 2/4] scsi: host: allocate struct Scsi_Host on the NUMA
+ node of the host adapter
+Message-ID: <20260610153747.GA121666@fedora>
+References: <20260609121806.2121755-1-sumit.saxena@broadcom.com>
+ <20260609121806.2121755-3-sumit.saxena@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1709; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=6TvW/HzmyHDaaA9wKRoNNaNcjePQQ1Zdsv2Dq52jLls=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBqKXZs6LWlqXEgYJ43bW4uQljW4ivYfy7om6ZEm 5HBy1LS9UqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCail2bAAKCRCPgPtYfRL+ TiYuB/9XcyLke0vULKKBlQUXzsLhftaLl1fBgoib5hfrAypiAW/NdqcY3GsM2ls2maVA1VDIz+7 lpse6weFy13v8JMUuwGd8W7trrROlxKKqwgTQQWFxG2aZ8QIP17zROC5CJraAyqnCcI+/Cipvib sftytuasbBRyIdndlMYYoNdqRr5+Zgpq3Gc+KtamKnPGRnh9luiiV+r/ePs1ZjP5p/Pjd0qHZAL BBVFoV4h4JDmXSss4xGweQzKqNQaPET3qIl1fFpdqhzDN57Z33+wMmU1m7MGEYG0PpnFGRdC9b7 pxeXoPvvPc2Xn6jqB0a48HrAz97SONdg/3sahDcJAkNnyOra
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="57Se20/pMUpk+P8R"
+Content-Disposition: inline
+In-Reply-To: <20260609121806.2121755-3-sumit.saxena@broadcom.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-3.76 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:fthain@linux-m68k.org,m:schmitzmic@gmail.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	DMARC_NA(0.00)[baylibre.com];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[u.kleine-koenig@baylibre.com,linux-scsi@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_TO(0.00)[HansenPartnership.com,oracle.com,linux-m68k.org,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[baylibre.com:+];
-	RCPT_COUNT_FIVE(0.00)[6];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[u.kleine-koenig@baylibre.com,linux-scsi@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-24649-lists,linux-scsi=lfdr.de];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24719-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:sumit.saxena@broadcom.com,m:mst@redhat.com,m:martin.petersen@oracle.com,m:axboe@kernel.dk,m:James.Bottomley@hansenpartnership.com,m:linux-scsi@vger.kernel.org,m:linux-block@vger.kernel.org,m:aradford@gmail.com,m:khalid@gonehiking.org,m:aacraid@microsemi.com,m:willy@infradead.org,m:hare@suse.com,m:fischer@norbit.de,m:linux@armlinux.org.uk,m:linux-arm-kernel@lists.infradead.org,m:fthain@linux-m68k.org,m:schmitzmic@gmail.com,m:anil.gurumurthy@qlogic.com,m:sudarsana.kalluru@qlogic.com,m:oliver@neukum.org,m:aliakc@web.de,m:lenehan@twibble.org,m:ram.vegesna@broadcom.com,m:target-devel@vger.kernel.org,m:linuxdrivers@attotech.com,m:satishkh@cisco.com,m:sebaddel@cisco.com,m:kartilak@cisco.com,m:liyihang9@h-partners.com,m:don.brace@microchip.com,m:storagedev@microchip.com,m:linux@highpoint-tech.com,m:tyreld@linux.ibm.com,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:brking@us.ibm.com,m:lduncan@su
+ se.com,m:cleech@redhat.com,m:michael.christie@oracle.com,m:open-iscsi@googlegroups.com,m:justin.tee@broadcom.com,m:paul.ely@broadcom.com,m:kashyap.desai@broadcom.com,m:shivasharan.srikanteshwara@broadcom.com,m:chandrakanth.patil@broadcom.com,m:megaraidlinux.pdl@broadcom.com,m:sathya.prakash@broadcom.com,m:sreekanth.reddy@broadcom.com,m:mpi3mr-linuxdrv.pdl@broadcom.com,m:suganath-prabu.subramani@broadcom.com,m:ranjan.kumar@broadcom.com,m:MPT-FusionLinux.pdl@broadcom.com,m:daniel@thingy.jp,m:gotom@debian.or.jp,m:jinpu.wang@cloud.ionos.com,m:geoff@infradead.org,m:mdr@sgi.com,m:njavali@marvell.com,m:GR-QLogic-Storage-Upstream@marvell.com,m:nmusini@cisco.com,m:kys@microsoft.com,m:haiyangz@microsoft.com,m:wei.liu@kernel.org,m:decui@microsoft.com,m:longli@microsoft.com,m:linux-hyperv@vger.kernel.org,m:jasowang@redhat.com,m:pbonzini@redhat.com,m:eperezma@redhat.com,m:virtualization@lists.linux.dev,m:vishal.bhakta@broadcom.com,m:bcm-kernel-feedback-list@broadcom.com,m:jgross@suse.com,m:sstab
+ ellini@kernel.org,m:oleksandr_tyshchenko@epam.com,m:xen-devel@lists.xenproject.org,m:john.g.garry@oracle.com,s:lists@lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FREEMAIL_CC(0.00)[oracle.com,kernel.dk,hansenpartnership.com,vger.kernel.org,gmail.com,gonehiking.org,microsemi.com,infradead.org,suse.com,norbit.de,armlinux.org.uk,lists.infradead.org,linux-m68k.org,qlogic.com,neukum.org,web.de,twibble.org,broadcom.com,attotech.com,cisco.com,h-partners.com,microchip.com,highpoint-tech.com,linux.ibm.com,ellerman.id.au,kernel.org,lists.ozlabs.org,us.ibm.com,redhat.com,googlegroups.com,thingy.jp,debian.or.jp,cloud.ionos.com,sgi.com,marvell.com,microsoft.com,lists.linux.dev,epam.com,lists.xenproject.org];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[stefanha@redhat.com,linux-scsi@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:dkim,baylibre.com:email,baylibre.com:mid,baylibre.com:from_mime,vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stefanha@redhat.com,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	RCPT_COUNT_GT_50(0.00)[81];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	TO_DN_SOME(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[fedora:mid,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D1E7C66A4A4
+X-Rspamd-Queue-Id: 6DCF567221A
 
-To match how device-id array terminators look like for other device
-types drop `.id = ""` from it and let the compiler care for zeroing the
-entry.
 
-There are no changes in the compiled drivers, only the source looks
-nicer.
+--57Se20/pMUpk+P8R
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
----
-Hello,
+On Tue, Jun 09, 2026 at 05:48:01PM +0530, Sumit Saxena wrote:
+> diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
+> index 5fdaa71f0652..88375574cb18 100644
+> --- a/drivers/scsi/virtio_scsi.c
+> +++ b/drivers/scsi/virtio_scsi.c
+> @@ -929,7 +929,7 @@ static int virtscsi_probe(struct virtio_device *vdev)
+>  	num_targets =3D virtscsi_config_get(vdev, max_target) + 1;
+> =20
+>  	shost =3D scsi_host_alloc(&virtscsi_host_template,
+> -				struct_size(vscsi, req_vqs, num_queues));
+> +				struct_size(vscsi, req_vqs, num_queues), NULL);
 
-I'm currently working on changing various *_device_id definitions.
-This patch is irrelevant for this quest and a pure style update for
-consistency reasons without further dependencies on it. I just stumbled
-over this while working on that quest.
+A virtio_device has a parent (this is the virtio transport, like
+virtio_pci) and that may have NUMA node.
 
-So if you don't like this patch, I won't insist.
+drivers/virtio/virtio.c:register_virtio_device() could call
+set_dev_node(dev, dev_to_node(dev->parent)) to propagate the NUMA node
+to the virtio_device if it is not already automatically propagated.
 
-Best regards
-Uwe
+Stefan
 
- drivers/scsi/aha1542.c   | 2 +-
- drivers/scsi/g_NCR5380.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--57Se20/pMUpk+P8R
+Content-Type: application/pgp-signature; name=signature.asc
 
-diff --git a/drivers/scsi/aha1542.c b/drivers/scsi/aha1542.c
-index fd766282d4a4..93dab19c1cb9 100644
---- a/drivers/scsi/aha1542.c
-+++ b/drivers/scsi/aha1542.c
-@@ -1083,7 +1083,7 @@ static int isa_registered;
- #ifdef CONFIG_PNP
- static const struct pnp_device_id aha1542_pnp_ids[] = {
- 	{ .id = "ADP1542" },
--	{ .id = "" }
-+	{ }
- };
- MODULE_DEVICE_TABLE(pnp, aha1542_pnp_ids);
- 
-diff --git a/drivers/scsi/g_NCR5380.c b/drivers/scsi/g_NCR5380.c
-index 270eae7ac427..41731a7304dd 100644
---- a/drivers/scsi/g_NCR5380.c
-+++ b/drivers/scsi/g_NCR5380.c
-@@ -739,7 +739,7 @@ static struct isa_driver generic_NCR5380_isa_driver = {
- #ifdef CONFIG_PNP
- static const struct pnp_device_id generic_NCR5380_pnp_ids[] = {
- 	{ .id = "DTC436e", .driver_data = BOARD_DTC3181E },
--	{ .id = "" }
-+	{ }
- };
- MODULE_DEVICE_TABLE(pnp, generic_NCR5380_pnp_ids);
- 
+-----BEGIN PGP SIGNATURE-----
 
-base-commit: 49e02880ec0a8c378e811bc9d85da188d7c6204c
--- 
-2.47.3
+iQEzBAEBCgAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmophMsACgkQnKSrs4Gr
+c8h+7Af/Yl5xc4DOlpzwRNKEPqqogmtmADQbRI91eNljCoArG1qdxcTTSKksIgWC
+5g0jjNOCwbOatljS+FxPkDgpPYoZbsIv+K4p/D6UyHLP+Dff2FQhwPaAKkOvJi6k
+9BoNOORgp8ZKrf0RrCTr2M5clKgG0GT+5WxgezSZtTh6wSoN0ksL5kwqx+8B4sWw
+irnTFz4hZhKlUsYHWWYvNhiq0ChdmzYMdxw6GFwIWrRpNcElfSmOAMBE12bJeqIi
+u2/3ah3cSSanhmuITCC+dXImHUlYtxtFRBowqsxCEtdiRFs5srPStR/WW8yyZoXe
+mhXbMPjGmQXNdAT61yT9lw+ZVx2y1w==
+=kfg0
+-----END PGP SIGNATURE-----
+
+--57Se20/pMUpk+P8R--
 
 
