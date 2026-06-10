@@ -1,185 +1,183 @@
-Return-Path: <linux-scsi+bounces-24644-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24645-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id xVJ7MipNKWptUQMAu9opvQ
-	(envelope-from <linux-scsi+bounces-24644-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 13:40:26 +0200
+	id fYKwKdFOKWpTUgMAu9opvQ
+	(envelope-from <linux-scsi+bounces-24645-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 13:47:29 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2105B668E15
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 13:40:26 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 049BA668F09
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 13:47:29 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24644-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24644-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=UI+dDQhC;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24645-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24645-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C8EFE308B97E
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 11:35:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1F8FE32EC0DA
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2026 11:41:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B64243E5ED6;
-	Wed, 10 Jun 2026 11:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4518A403AE9;
+	Wed, 10 Jun 2026 11:41:28 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from spam.asrmicro.com (asrmicro.com [210.13.118.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0278032861F;
-	Wed, 10 Jun 2026 11:34:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2F33DBD76
+	for <linux-scsi@vger.kernel.org>; Wed, 10 Jun 2026 11:41:24 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781091301; cv=none; b=U3Jpi9HfydPVmR1CiIujxihC09ahrtUTZRFegL1mwXwl2/hlLGOhrBcmTeeDVpL4ZwXmHA1b0SZ9TSWcvWyvNo3B+aPj+zIWrOat4/otdwi1vqScqkaRfFE1bhZV24kGR5pLQWjWqHH9yOcdEK18VxzamdCzegI0zh2pdgYOf04=
+	t=1781091687; cv=none; b=hDH1BHRrHhQmvzbFNVmkPpJ73H3kCs9Ki87nWiP2FZq+iS8LURczRTkyOtukvpcHtHACOAffi3YCMjg7uswh7bfZBx8Wd/PIHJ+9kI8N3J4KT/CuNrd8g+L8k6zVpTK9fvEqYfIExTqjVWslD9bd6fkjErOh2daz8tdqj1buLUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781091301; c=relaxed/simple;
-	bh=FRfwH3MIKqmKPNdllLLIaxCN3KeQ27UpXSQdkzfsalA=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ehMfHu59Gjm5/6G39Ap6KbNt/TutPs88xiVmmD2piIONc0bG4kcoHZdrwAYYdkMLUq3tDPad2NPPYK6th9x9nen+rC/AZInks69+w7JnhHl7ptRs4VnDxPQhMdRMsVoUNT3N2bahfOfsoMx1wDsq5F7pPRDjmGtmiFvW16iIKpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=asrmicro.com; spf=pass smtp.mailfrom=asrmicro.com; arc=none smtp.client-ip=210.13.118.86
-Received: from exch02.asrmicro.com (exch02.asrmicro.com [10.1.24.122])
-	by spam.asrmicro.com with ESMTPS id 65ABXfmv066567
-	(version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=FAIL);
-	Wed, 10 Jun 2026 19:33:41 +0800 (GMT-8)
-	(envelope-from hongjiefang@asrmicro.com)
-Received: from localhost (10.1.170.248) by exch02.asrmicro.com (10.1.24.122)
- with Microsoft SMTP Server (TLS) id 15.0.847.32; Wed, 10 Jun 2026 19:33:45
- +0800
-From: Hongjie Fang <hongjiefang@asrmicro.com>
-To: <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
-        <jgarzik@redhat.com>, <stern@rowland.harvard.edu>,
-        <bvanassche@acm.org>
-CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] scsi: core: pair EH runtime PM get/put
-Date: Wed, 10 Jun 2026 19:33:33 +0800
-Message-ID: <20260610113333.632859-1-hongjiefang@asrmicro.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1781091687; c=relaxed/simple;
+	bh=Kz5o+o4V/50TgyMsDM1u+PPBmb+aUdtA7Th63o/S4GM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K2i8KVZpPelPrW0I9RHJcQD7TlQb3/FScrL45lItecdTIY9b4yI72nPzdVaacamnXbHQl61tgaehNduRjsvpcTyV23BfKDOS5wN31dk/PtTgPx0SmsE4Un1gxbyroK11rKQu/vsZRAllqjjLLthkQACmNefn4YkCKTcK/cVDMgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UI+dDQhC; arc=none smtp.client-ip=209.85.219.54
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-8ce9df31840so50103216d6.1
+        for <linux-scsi@vger.kernel.org>; Wed, 10 Jun 2026 04:41:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781091683; x=1781696483; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/FNVXr9zawygTZbMFPpNLLMPEhT2gh4L5OBjQ+E7NpM=;
+        b=UI+dDQhCBkL2djbo9jRTxvJto/ZNc2U7mZRKQcUdrIyg4ikS6tuNhWNNGfqabwz+Le
+         CqOfZhKp4K6gESU/Bm6kCKNDsGx2HYmB35HvEh0P9UsIki9XhadTEQ+5WCr/JVlUgEA/
+         zPD6Y51/QbXp9WSTb2pkrHD2zmDZufE/z+X+yu9HJE4w+8KF6A51rTkj3Zmr1fNVIYQ9
+         XEM32Z0knRNdN+EfS2r3nRL4OFyFe/8w/kV5PBoYVzfXBes56cUewIWZctpM+5wyL2ht
+         QFH6UfCi9xjovuPHwiZOH2Gg8VGcC32hwDhESH6+e4KmWgSeXWHh3OeV86f4oMG3AM12
+         iMTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781091683; x=1781696483;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/FNVXr9zawygTZbMFPpNLLMPEhT2gh4L5OBjQ+E7NpM=;
+        b=jFKtHz//m5eJ+kRMNOiAUw5wl5ywURnr19fxGr7SCCC1v1d9P0/6sHWcCBsXh8fANB
+         FI0Ie7ZeYt9kQX0y9T2VOe0Ic+GooVvMv1j7YOovEEfs58lQqXTOWDNTbhuYebERGWZD
+         sRFrwR2uSB/6BWYlk7kJk93+YfGocNyyX+zCO7gwD51SWOwA2tV1DYHahpUOYwmCHzdC
+         p3k/hx3VYqEDvjAVfgh5Ua0fbbLUtdoMFd1LdVze89uG+xwGTVgOI7sVP52xEADZpSTl
+         x8MRdzCrvVXokS6M9WZ5SWXtIvDv+jN1SBXCgoS6L7vt2WH6YPUuBMR0THjuXTuHazM2
+         F8vw==
+X-Forwarded-Encrypted: i=1; AFNElJ+FKQKxBZVAD3r2CsO8izVZBg6dSzXZoIUFVY3og1GBOABA/NMUTQldAHBxcPO53JzvZPnybuFLzrFD@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5/TQlyHI0HY6J0lHSHCk/h56Kh2EYySBF9/OAIoOR8+c8EDx3
+	be1mUyH2oZq9Q1fvRJb/QmvAeqKcSOqNUobTmDLOXNNjSnTWgLX9YClv
+X-Gm-Gg: Acq92OErc60F+UQSV+0SqWiWyA2Ux/m8UxuvyrJEH6CB7eOPenFL3I9ngaLFb5+QM4h
+	ruLIYkECj3LYCvzs2Hn7/pX+v11mObmrZbuVJ3EVSfm6N/1VQbmRjfcE3GmALsC5U008KprCEjG
+	67sRHJRgUCe5dloX/sUm0btjzuxAI3RW6mwtCI9UOR8WQfHqZdyod5VXN0GhK4Db27FMuy/Q3Qp
+	jeY/cq1wANAFcCl6gqmgQFyGtBbCGqHeF1Qiwr9GGxz3GAS81hzl75BDsL+9FJN9C+VHQh9m/RC
+	lfrOrH4a/Hztuz/w5LJPO/DnaL2IyDHpxFOiQeTkp/FEAtGH6nFMJGhAtk39hpzoc5RONunnqVl
+	+4ZVf3phx/jRTYLmzzYhxZNb0O3DolZHKPVWfLzJtF6NL9vgAbYRofllStz/065k7nzb14ljpIx
+	6L/bbijwzusl1wNVOdRFdpxHmKHSbVBaeeil8q965L3ejRqjhMVKen57hxxNuOI+3WdntERNg22
+	2qM8mrxdiW/0FcyFF7oIVzDIwWp8DQ=
+X-Received: by 2002:a0c:f09c:0:b0:8cc:dfa6:3333 with SMTP id 6a1803df08f44-8cee613313amr408672466d6.32.1781091682895;
+        Wed, 10 Jun 2026 04:41:22 -0700 (PDT)
+Received: from server0 (c-68-48-65-54.hsd1.mi.comcast.net. [68.48.65.54])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ceccd9fc7dsm234124256d6.5.2026.06.10.04.41.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 04:41:21 -0700 (PDT)
+From: Michael Bommarito <michael.bommarito@gmail.com>
+To: Justin Tee <justin.tee@broadcom.com>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: Paul Ely <paul.ely@broadcom.com>,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] scsi: lpfc: bound RPL ACC payload size to the response structure
+Date: Wed, 10 Jun 2026 07:41:19 -0400
+Message-ID: <20260610114120.3748526-1-michael.bommarito@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: exch03.asrmicro.com (10.1.24.118) To exch02.asrmicro.com
- (10.1.24.122)
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:spam.asrmicro.com 65ABXfmv066567
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24644-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24645-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:jgarzik@redhat.com,m:stern@rowland.harvard.edu,m:bvanassche@acm.org,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	DMARC_NA(0.00)[asrmicro.com];
-	FORGED_SENDER(0.00)[hongjiefang@asrmicro.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:justin.tee@broadcom.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:paul.ely@broadcom.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:stable@vger.kernel.org,s:lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	PRECEDENCE_BULK(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	TO_DN_NONE(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	R_DKIM_NA(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	FROM_NEQ_ENVFROM(0.00)[hongjiefang@asrmicro.com,linux-scsi@vger.kernel.org];
+	FORGED_SENDER(0.00)[michaelbommarito@gmail.com,linux-scsi@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,asrmicro.com:email,asrmicro.com:mid,asrmicro.com:from_mime]
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michaelbommarito@gmail.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 2105B668E15
+X-Rspamd-Queue-Id: 049BA668F09
 
-shost->eh_noresume is currently consulted twice in one error handling
-iteration: once before scsi_autopm_get_host() and once again before
-scsi_autopm_put_host().
+lpfc_els_rcv_rpl() handles an unsolicited RPL (Read Port List) ELS
+request from a fabric peer. For a request with rpl->index != 0 (or
+index 0 with a small maxsize) it computes the accept payload size as
 
-That is racy when a PM-triggered error path flips shost->eh_noresume while
-the SCSI EH thread is still running.
+	cmdsize = sizeof(uint32_t) + maxsize * sizeof(uint32_t);
 
-The problem flow looks like this:
-PM path
-  ufshcd_set_dev_pwr_mode()
-    shost->eh_noresume = 1
-    ufshcd_execute_start_stop  <-- trigger EH
-    ...
-    shost->eh_noresume = 0
+into a uint16_t, where maxsize comes straight from the peer's request
+with no upper bound. lpfc_els_rsp_rpl_acc() then builds the response
+with
 
-EH path
-  scsi_error_handler()
-    if (!shost->eh_noresume)
-      scsi_autopm_get_host()  <-- skipped
-    ...
-    if (!shost->eh_noresume)
-       scsi_autopm_put_host()  <-- executed later
+	memcpy(pcmd, &rpl_rsp, cmdsize - sizeof(uint32_t));
 
-In that case one EH iteration can skip autoresume on entry and still drop
-a runtime PM reference on exit. That leaves an unmatched runtime PM put
-and can trigger a runtime PM usage count underflow.
+The RPL accept always carries exactly one RPL_RSP structure, so a
+peer-chosen maxsize makes cmdsize - sizeof(uint32_t) exceed
+sizeof(RPL_RSP): the copy reads past the on-stack RPL_RSP, placing
+adjacent kernel stack into the response sent back to the peer, and for
+a large maxsize overruns the command buffer.
 
-Fix this by calling scsi_autopm_put_host() only if the same iteration
-successfully acquired a runtime PM reference through the
-scsi_autopm_get_host().
+Bound cmdsize the same way the index == 0 branch already does, since
+the accept payload is a single RPL_RSP regardless of the requested
+maxsize.
 
-Fixes: ae0751ffc77e ("[SCSI] add flag to skip the runtime PM calls on the host")
-Signed-off-by: Hongjie Fang <hongjiefang@asrmicro.com>
+Fixes: 7bb3b137abf2 ("[SCSI] lpfc 8.1.2: Handling of ELS commands RRQ, RPS, RPL and LIRR correctly")
+Cc: stable@vger.kernel.org
+Assisted-by: Claude:claude-opus-4-8
+Signed-off-by: Michael Bommarito <michael.bommarito@gmail.com>
 ---
- drivers/scsi/scsi_error.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ drivers/scsi/lpfc/lpfc_els.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index 147127fb4db9..c78ea64641a9 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -2342,6 +2342,7 @@ static void scsi_unjam_host(struct Scsi_Host *shost)
- int scsi_error_handler(void *data)
- {
- 	struct Scsi_Host *shost = data;
-+	bool autopm_put;
- 
- 	/*
- 	 * We use TASK_INTERRUPTIBLE so that the thread is not
-@@ -2383,12 +2384,16 @@ int scsi_error_handler(void *data)
- 		 * what we need to do to get it up and online again (if we can).
- 		 * If we fail, we end up taking the thing offline.
- 		 */
--		if (!shost->eh_noresume && scsi_autopm_get_host(shost) != 0) {
--			SCSI_LOG_ERROR_RECOVERY(1,
--				shost_printk(KERN_ERR, shost,
--					     "scsi_eh_%d: unable to autoresume\n",
--					     shost->host_no));
--			continue;
-+		autopm_put = false;
-+		if (!shost->eh_noresume) {
-+			if (scsi_autopm_get_host(shost) != 0) {
-+				SCSI_LOG_ERROR_RECOVERY(1,
-+					shost_printk(KERN_ERR, shost,
-+						     "scsi_eh_%d: unable to autoresume\n",
-+						     shost->host_no));
-+				continue;
-+			}
-+			autopm_put = true;
- 		}
- 
- 		if (shost->transportt->eh_strategy_handler)
-@@ -2407,7 +2412,7 @@ int scsi_error_handler(void *data)
- 		 * which are still online.
- 		 */
- 		scsi_restart_operations(shost);
--		if (!shost->eh_noresume)
-+		if (autopm_put)
- 			scsi_autopm_put_host(shost);
+diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
+index 4e3fe89283e41..555b2e4d78fb9 100644
+--- a/drivers/scsi/lpfc/lpfc_els.c
++++ b/drivers/scsi/lpfc/lpfc_els.c
+@@ -9250,7 +9250,11 @@ lpfc_els_rcv_rpl(struct lpfc_vport *vport, struct lpfc_iocbq *cmdiocb,
+ 	     ((maxsize * sizeof(uint32_t)) >= sizeof(RPL_RSP)))) {
+ 		cmdsize = sizeof(uint32_t) + sizeof(RPL_RSP);
+ 	} else {
+-		cmdsize = sizeof(uint32_t) + maxsize * sizeof(uint32_t);
++		u64 sz = sizeof(uint32_t) + (u64)maxsize * sizeof(uint32_t);
++
++		if (sz > sizeof(uint32_t) + sizeof(RPL_RSP))
++			sz = sizeof(uint32_t) + sizeof(RPL_RSP);
++		cmdsize = sz;
  	}
- 	__set_current_state(TASK_RUNNING);
+ 	lpfc_els_rsp_rpl_acc(vport, cmdsize, cmdiocb, ndlp);
+ 
 -- 
-2.25.1
+2.53.0
 
 
