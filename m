@@ -1,64 +1,63 @@
-Return-Path: <linux-scsi+bounces-24687-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24688-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id i3uAAg5JKmpXlwMAu9opvQ
-	(envelope-from <linux-scsi+bounces-24687-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 07:35:10 +0200
+	id WxW8K1lJKmqOlwMAu9opvQ
+	(envelope-from <linux-scsi+bounces-24688-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 07:36:25 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FAD366EA3C
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 07:35:09 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED83766EA83
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 07:36:24 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=Ln2lwGn8;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24687-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24687-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=DRxQjrWA;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24688-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24688-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CBCA83049FE8
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 05:24:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DA1AD32648DE
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 05:27:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DECFB33E37C;
-	Thu, 11 Jun 2026 05:24:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09E1535AC1B;
+	Thu, 11 Jun 2026 05:26:54 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF45356758;
-	Thu, 11 Jun 2026 05:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFF093033FC;
+	Thu, 11 Jun 2026 05:26:47 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781155483; cv=none; b=MMy4qknuc3vf2o/AsNuytpujO0+q+8MbB3eKE9W4XimTmlspsqSqQzVcG18CVaZUlFSh3NESJ8C3SIwjSohQT+EzPF/JfecRyZXi34Y68Epf0MUvjZbSGnmKqRJhWAJaS5Q7rj8q1IEsnypBW4SxALM6RF7r+XK5AouDULA/R84=
+	t=1781155613; cv=none; b=tkGlFt7P+7cj7tJVr4VULby7/7PI4ibRyhX4MgSszn2Blrrq7pNkFjjWzkqCBT2ID2tIsK1ELfsdzGxQy1ITUBLckhWG8JFVyEgDCYvlO7igl52P1hwiQnSVNKzYPqGqOcsPhgMFwFzyb9vnfTgkLeFmhJ4Fjs8zSR2KMsjYmtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781155483; c=relaxed/simple;
-	bh=2HfYUlEVwvi11DexqkZ9u8rB8kDyMXVmY5S5bkIGQHQ=;
+	s=arc-20240116; t=1781155613; c=relaxed/simple;
+	bh=ekYEWjS9N64LOzaEzqlLT+Hj9id9sJVlAKHXYtt/Rug=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=D4rcCEKfFvFP5niFEIxkmTQ+z1q5LMvzna/LF+4bX5O+etcXtvlRvLwiS/tbi65LjNNichNhyP4fpLWav/PRt6jhftvPOP2IpoRx1dIYSzdc5x3OlxayoIa8SqRol0W5u6LfqZq602n8f04/RteaRJjGU+3/iapG/P4d/UyFL/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ln2lwGn8; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C7161F00893;
-	Thu, 11 Jun 2026 05:24:38 +0000 (UTC)
+	 Message-Id; b=o+uvOS4ExP6m7/otl19z4wcqswNFpLaKzja1tdoacSZDVdX4S/1cxxc7mhweWXFCKHQguIbwIdtH26QrtC1cveu4Fb8//Y49cajAs261n9MxugVJU3gkb6u4Qrl+s9HfT5OcHC6vGYy1FOc3lOkq4qQJquqEKD5YTgdWXmIGvFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DRxQjrWA; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D9411F00893;
+	Thu, 11 Jun 2026 05:26:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781155478;
-	bh=Buhkmxb3ZNMrPMUtF32QejzkZs38v+9romIh8ssMWMk=;
+	s=k20260515; t=1781155607;
+	bh=TobHS9ksDe3FfyUDcXlxzxb+i1S5VgerDw+M5X2BPyA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Ln2lwGn8ebV0wVeZZc38175s7vjKk61wJ6PsM0anQfDAdcqF4wzs+q3AUa/Z3YEdb
-	 jCDteE19K5SqF7r6BhdWxW2b4E2cATzp2hGdZkJIt21MCCBBvsbmasRnW05XbFNtFi
-	 +c31oybkunZnbFB++eAR7q5278EpUqNvchUqVkAU51ae6EJ2KJSm3iQmmp32KGELOg
-	 /TUhPob0t9IxoS5PatV60dK7RTpQP6x2mP9M9Q7Hj086qahgUBdgfVWRpPV/uXOTVK
-	 /DnhE7wnzNaEKwLcP5oEn4y/DIsORv7zW+uo3ikQ5AAxMoi936lYeclRT8a4TzGogJ
-	 s1akCT6Z+aIeA==
+	b=DRxQjrWA1vSBFElzNAW83mA91tc2HGuF6mWu+WJ3tm1Cmbo8A6nkUkixpUl/iDFCL
+	 DO0Qz9VcdO4n2W5BJUFxXghmDkU2GPMU9xRx1RbbrWKVYSPm100pQaxFjVpFJHGgLu
+	 YwHLDdTnPFOFAGcW2U/19j9D9C/5bt9SBgwowKQkTAjjSNBl3eQ1kkUxcR6bL53OgZ
+	 h8wbVu4wKYe4P0lxgIYkjHyyumG/KPO0IAwF3o0Z3eqi+DYtw89Of2ibu0L3dfvwKI
+	 YgAJnpO3z+wOSYNTL82J7k1GNmGY9+VgufMRi6EvqrOyLWYiKvtD8oGQUHadHPEmcH
+	 CqRDBAJ5FUYJA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/3] zfcp: Trace plogi and prli within open port
- response as payload
+Subject: Re: [PATCH 1/3] zfcp: Enhance fsf status read buffer tracing
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Nihar Panda" <niharp@linux.ibm.com>
-Cc: "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander Gordeev" <agordeev@linux.ibm.com>, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, "Heiko
- Carstens" <hca@linux.ibm.com>
-In-Reply-To: <20260611050550.796772-4-niharp@linux.ibm.com>
-References: <20260611050550.796772-4-niharp@linux.ibm.com>
+Cc: linux-s390@vger.kernel.org, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
+ Gordeev" <agordeev@linux.ibm.com>, "Heiko Carstens" <hca@linux.ibm.com>, linux-scsi@vger.kernel.org
+In-Reply-To: <20260611050550.796772-3-niharp@linux.ibm.com>
+References: <20260611050550.796772-3-niharp@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 05:24:37 +0000
-Message-Id: <20260611052438.0C7161F00893@smtp.kernel.org>
+Date: Thu, 11 Jun 2026 05:26:46 +0000
+Message-Id: <20260611052646.5D9411F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -71,18 +70,18 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-24687-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24688-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,smtp.kernel.org:mid,vger.kernel.org:from_smtp,lists.linux.dev:replyto];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,lists.linux.dev:replyto,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,smtp.kernel.org:mid,vger.kernel.org:from_smtp];
 	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:niharp@linux.ibm.com,m:gor@linux.ibm.com,m:agordeev@linux.ibm.com,m:linux-s390@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:hca@linux.ibm.com,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:niharp@linux.ibm.com,m:linux-s390@vger.kernel.org,m:gor@linux.ibm.com,m:agordeev@linux.ibm.com,m:hca@linux.ibm.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
@@ -96,7 +95,7 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
@@ -104,58 +103,71 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5FAD366EA3C
+X-Rspamd-Queue-Id: ED83766EA83
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Preexisting out-of-bounds read of kernel memory due to unvalidated=
- `log_start` and `log_length` fields from the FCP adapter response.
+- [High] Potential out-of-bounds read and information leak due to an unvali=
+dated hardware-provided payload length causing an integer underflow.
 --
 
-commit 9e601763da63b3c0c65512bab46a16c131e45614
-Author: Steffen Maier <maier@linux.ibm.com>
+commit 2a80a7c2006e6e0fd3b5316bfecd4d7662992064
+Author: Chinmaya Kajagar <chinmayk@linux.ibm.com>
 
-zfcp: Trace plogi and prli within open port response as payload
+zfcp: Enhance fsf status read buffer tracing
 
-This commit updates the zfcp debug trace to include PLOGI and PRLI content
-from open port responses back-to-back in the payload trace record. It also
-introduces a level argument to zfcp_dbf_pl_write() to control trace
-verbosity and avoid flooding the log.
+This commit enhances the status read buffer trace records by appending the
+remaining FSF status read buffer fields to the trace structure and extracti=
+ng
+the 3-byte source ID.
 
 > diff --git a/drivers/s390/scsi/zfcp_dbf.c b/drivers/s390/scsi/zfcp_dbf.c
-> index 89b859176b8bd..4217b74baa380 100644
+> index 71f625926ae19..89b859176b8bd 100644
 > --- a/drivers/s390/scsi/zfcp_dbf.c
 > +++ b/drivers/s390/scsi/zfcp_dbf.c
-
-[ ... ]
-
-> @@ -96,7 +101,27 @@ void zfcp_dbf_hba_fsf_res(char *tag, int level, struc=
-t zfcp_fsf_req *req)
+> @@ -220,6 +220,13 @@ void zfcp_dbf_hba_fsf_uss(char *tag, struct zfcp_fsf=
+_req *req)
+>  	rec->u.uss.lun =3D srb->fcp_lun;
+>  	memcpy(&rec->u.uss.queue_designator, &srb->queue_designator,
+>  	       sizeof(rec->u.uss.queue_designator));
+> +	rec->u.uss.length =3D srb->length;
+> +	rec->u.uss.res1 =3D srb->res1;
+> +	rec->u.uss.res2 =3D srb->res2;
+> +	rec->u.uss.class =3D srb->class;
+> +	rec->u.uss.res3 =3D srb->res3;
+> +	rec->u.uss.s_id =3D ntoh24(srb->s_id);
+> +	memcpy(&rec->u.uss.res4, &srb->res4, sizeof(rec->u.uss.res4));
 > =20
->  	rec->pl_len =3D q_head->log_length;
->  	zfcp_dbf_pl_write(dbf, (char *)q_pref + q_head->log_start,
-> -			  rec->pl_len, "fsf_res", req->req_id);
-> +			  rec->pl_len, "fsf_res", req->req_id,
-> +			  ZFCP_DBF_PAY_LEVEL);
+>  	/* status read buffer payload length */
+>  	rec->pl_len =3D (!srb->length) ? 0 : srb->length -
+>  			offsetof(struct fsf_status_read_buffer, payload);
 
 [Severity: High]
-This is a pre-existing issue, but I noticed it while looking at this
-modified call to zfcp_dbf_pl_write().
+This isn't a bug introduced by this patch, but is there a risk of an integer
+underflow here that could cause an out-of-bounds read?
 
-Are q_head->log_start and q_head->log_length validated before being used
-to compute the source pointer and length here?
+In zfcp_dbf_hba_fsf_uss(), srb->length is an unsigned 32-bit integer read
+from the hardware DMA buffer without validation. If the adapter provides a
+non-zero length that is smaller than the offset of the payload (which is 64
+bytes), the subtraction will underflow.
 
-Since these fields are retrieved from the FCP adapter's response header,
-could a malfunctioning or malicious adapter return arbitrarily large
-values? If log_start + log_length exceeds the bounds of the req->qtcb
-allocation, could this result in an out-of-bounds read of kernel memory
-when copying into the trace buffer?
+Because rec->pl_len is a 16-bit integer, the massively underflowed value ge=
+ts
+truncated. For example, a length of 32 would yield 65504. When this length =
+is
+passed to zfcp_dbf_pl_write(), it will read that many bytes from
+srb->payload.data into the trace.
 
-[ ... ]
+Since the memory backing srb is allocated as a single 4KB page, could this
+copy read tens of thousands of bytes out-of-bounds, potentially leading to a
+page fault or exposing adjacent kernel memory in the debugfs traces? It see=
+ms
+like a similar out-of-bounds read might also happen if srb->length is simply
+larger than the 4KB allocated size.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611050550.7967=
-72-1-niharp@linux.ibm.com?part=3D2
+72-1-niharp@linux.ibm.com?part=3D1
 
