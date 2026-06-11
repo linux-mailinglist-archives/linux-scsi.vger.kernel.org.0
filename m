@@ -1,173 +1,169 @@
-Return-Path: <linux-scsi+bounces-24734-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24737-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id U8H+DoVEK2q25QMAu9opvQ
-	(envelope-from <linux-scsi+bounces-24734-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 01:28:05 +0200
+	id EpBcAo1FK2oP5gMAu9opvQ
+	(envelope-from <linux-scsi+bounces-24737-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 01:32:29 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A528675CED
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 01:28:04 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5151A675D1B
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 01:32:28 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=mediatek.com header.s=dk header.b=A06wnYr4;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24734-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24734-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=mediatek.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=hk9q+YiF;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24737-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24737-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D492E32DB85B
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 23:26:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BBA09320D119
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 23:32:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ACCF3845A4;
-	Thu, 11 Jun 2026 23:26:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E304388883;
+	Thu, 11 Jun 2026 23:32:23 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704E33002C8;
-	Thu, 11 Jun 2026 23:26:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE0032938D;
+	Thu, 11 Jun 2026 23:32:22 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781220416; cv=none; b=ezZWwHPA/DMRYG7WRX1va7jKESZj9Mj4+jTt6Ss90f26rt+qFsKBfH0g01X+BF1tt+JyHafB129Hu51jv5C6SX4Tv1O8iWfCqZEBEvMFqQxAgHUjTuy3Xm+JMEFjkbis+9ro/vr1aXYgEbBOEhVCs/LkyHD8WNg8SCEOP7SO8Mc=
+	t=1781220743; cv=none; b=SSRZUBhe30CfVnxo8YYCMsk8LqFSBdF48xzR6sSX774cFSx0saZ73ckl1AvlmddgfQI23U8FNyu/YeaS0O+BJK4wBD0V9ACruyR3Fvjf+WpL3yES9yMhVwIHOLqac38L9X7LfDkS+k/7srwvrSnK5ESWnXy+UuVE9f7+yGdDFOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781220416; c=relaxed/simple;
-	bh=MICfE6cQGAmdF7kUk0Hc+xzu12IX/5p2zShir2wvd8o=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bQNw8I+UMsh+Gugtpx5CYnIPkLswIzmc5mwpWkUJKmSbCFFq7txc35Lt1exy/rq9GFlFud3QDQmV2vd/uy3Ml+3HcYqn501HWjc2SHVBZUEN/bYMVzR86X7fcnlFOxG4Ba0pTj8vnaW7FI9iw1BuYmvYyPZZ8eky3d13CHG2V0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=A06wnYr4; arc=none smtp.client-ip=60.244.123.138
-X-UUID: 05820db665ed11f1b1788b6acf885367-20260612
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=6JiKlfx/HnUOYKUCQrKJ4KldBeolNglSfivSs4IkEkE=;
-	b=A06wnYr4Ut5or/fSvpe8vHRkUAMySvhKh/14at03776+HHolRlFny6EtttmpDFFui6Ee8OFMO8OFiGmgRfA1Fii7TDy09puziaJE8MI/qUAZwLoPoZh5LW30Jlc7X4QeeZT71Ct0/7jqJEzcuNWHET0JRIAUO5r4W0h55bjSahM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.15,REQID:9e0d6456-71b4-4ea5-8ac4-191c5030efe4,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:e276073,CLOUDID:4a617254-902f-47df-afe3-f34f8d753c22,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|123|836|865|888|898,TC:-5,
-	Content:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:-1,C
-	OL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 05820db665ed11f1b1788b6acf885367-20260612
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-	(envelope-from <ed.tsai@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 504422302; Fri, 12 Jun 2026 07:26:49 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Fri, 12 Jun 2026 07:26:48 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.2562.29 via Frontend Transport; Fri, 12 Jun 2026 07:26:48 +0800
-From: <ed.tsai@mediatek.com>
-To: <alim.akhtar@samsung.com>, <avri.altman@wdc.com>, <bvanassche@acm.org>,
-	<James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
-	<linux-scsi@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <wsd_upstream@mediatek.com>,
-	<peter.wang@mediatek.com>, <alice.chao@mediatek.com>,
-	<naomi.chu@mediatek.com>, <chun-hung.wu@mediatek.com>, Ed Tsai
-	<ed.tsai@mediatek.com>
-Subject: [PATCH v2 3/3] ufs: core: Remove max_num_rtt field from ufs_hba_variant_ops
-Date: Fri, 12 Jun 2026 07:26:32 +0800
-Message-ID: <20260611232632.2324422-4-ed.tsai@mediatek.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20260611232632.2324422-1-ed.tsai@mediatek.com>
-References: <20260611232632.2324422-1-ed.tsai@mediatek.com>
+	s=arc-20240116; t=1781220743; c=relaxed/simple;
+	bh=h+KBinhNiXy2ebHi7hoVnnRYtG1vDCeiSp9x7aGY+as=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i6mzOB4sgKvTyQbk2yA1sfx3nKodFXNCb4D0SE2Tb+C5yTjtV9qSUm7cMN567UvDI+37aVVerT24Ghi3wtljZXhL7M0bc9800zzmX850XoLRRTyP/ntGTUIelpkiMIrJr32JKLtwIAKjb3JroQliSD2fFzuNIDg+purArjwTJIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hk9q+YiF; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A7D71F000E9;
+	Thu, 11 Jun 2026 23:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781220741;
+	bh=Cwe5AFKFgyX3A2tnZLz300MxtXADjcDySyH4Nf0UHNA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=hk9q+YiFl9Mj5Si0qJD9jsIV+7j5D16drEP6Oba4uNQxjUj+JALutYf3E5ITKDn8c
+	 5zrww6ciifnFBq8jh8P+lzWpgbmNVWpM4DnGTIxzlo4yHGuV8qCjJzTs98tWERlpWn
+	 F03wCsd6E8D+xkFmHewbWwcpwwn51jRfgjeQoNBAd2Ra0oLBDuTIwGHi/02qk7mSj3
+	 wafQy6Ts6LEdVKuCz52FPNiHHO6ZIU7CXfhQhHnoXyWuMnqtIJiXqmxmnMQXu3TBJi
+	 00CZXFfTxmF3fdMgDzhBt4AEMFEl+CCXZ+MCmJMlsQ5u1TnZjkMk7t5RFFXpzooeCA
+	 24at1Ijyo4QVQ==
+Message-ID: <8171d9e5-e347-403a-bc3c-79a89a8e45d3@kernel.org>
+Date: Fri, 12 Jun 2026 08:32:17 +0900
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 RESEND 1/2] scsi: mpt3sas: add IO Unit Page 7 config
+ accessor
+To: Louis Sautier <sautier.louis@gmail.com>
+Cc: Sathya Prakash <sathya.prakash@broadcom.com>,
+ Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+ Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+ Ranjan Kumar <ranjan.kumar@broadcom.com>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Guenter Roeck <linux@roeck-us.net>, MPT-FusionLinux.pdl@broadcom.com,
+ linux-scsi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260609164423.2829699-1-sautier.louis@gmail.com>
+ <20260609164423.2829699-2-sautier.louis@gmail.com>
+ <5effba66-0d42-4d42-9833-f2c0be6874ad@kernel.org>
+ <airkbg8-kDC0Gyv9@localhost>
+Content-Language: en-US
+From: Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <airkbg8-kDC0Gyv9@localhost>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-3.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[mediatek.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[mediatek.com:s=dk];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	TAGGED_FROM(0.00)[bounces-24734-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24737-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER(0.00)[ed.tsai@mediatek.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:bvanassche@acm.org,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mediatek@lists.infradead.org,m:wsd_upstream@mediatek.com,m:peter.wang@mediatek.com,m:alice.chao@mediatek.com,m:naomi.chu@mediatek.com,m:chun-hung.wu@mediatek.com,m:ed.tsai@mediatek.com,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:sautier.louis@gmail.com,m:sathya.prakash@broadcom.com,m:sreekanth.reddy@broadcom.com,m:suganath-prabu.subramani@broadcom.com,m:ranjan.kumar@broadcom.com,m:James.Bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:linux@roeck-us.net,m:MPT-FusionLinux.pdl@broadcom.com,m:linux-scsi@vger.kernel.org,m:linux-hwmon@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:sautierlouis@gmail.com,s:lists@lfdr.de];
+	HAS_ORG_HEADER(0.00)[];
+	FORGED_SENDER(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NO_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ed.tsai@mediatek.com,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[mediatek.com:+];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,mediatek.com:dkim,mediatek.com:email,mediatek.com:mid,mediatek.com:from_mime,vger.kernel.org:from_smtp]
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ALIAS_RESOLVED(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 8A528675CED
+X-Rspamd-Queue-Id: 5151A675D1B
 
-From: Ed Tsai <ed.tsai@mediatek.com>
+On 6/12/26 01:38, Louis Sautier wrote:
+> On Wed, 10 Jun 2026 08:12:05 +0800, Damien Le Moal wrote:
+>>> +int
+>>> +mpt3sas_config_get_iounit_pg7(struct MPT3SAS_ADAPTER *ioc,
+>>
+>> Please do not break the line after "int"
+> 
+> Hi and thanks for the review.
+> 
+> Sure, I can change this. Can you confirm we want to diverge from the
+> convention used by neighbouring functions such as
+> mpt3sas_config_get_iounit_pg8?
 
-Remove the max_num_rtt field from ufs_hba_variant_ops as it has been
-replaced by the get_hba_nortt() callback which provides more flexible
-platform-specific RTT capability handling.
+My comment is based on the standard kernel coding style, which we should follow.
 
-Signed-off-by: Ed Tsai <ed.tsai@mediatek.com>
----
- drivers/ufs/core/ufshcd.c | 4 +---
- include/ufs/ufshcd.h      | 1 -
- 2 files changed, 1 insertion(+), 4 deletions(-)
+> 
+>>> +	Mpi2ConfigReply_t *mpi_reply, Mpi2IOUnitPage7_t *config_page)
+>>> +{
+>>> +	Mpi2ConfigRequest_t mpi_request;
+>>> +	int r;
+>>> +
+>>> +	memset(&mpi_request, 0, sizeof(Mpi2ConfigRequest_t));
+>>> +	mpi_request.Function = MPI2_FUNCTION_CONFIG;
+>>> +	mpi_request.Action = MPI2_CONFIG_ACTION_PAGE_HEADER;
+>>> +	mpi_request.Header.PageType = MPI2_CONFIG_PAGETYPE_IO_UNIT;
+>>> +	mpi_request.Header.PageNumber = 7;
+>>> +	mpi_request.Header.PageVersion = MPI2_IOUNITPAGE7_PAGEVERSION;
+>>> +	ioc->build_zero_len_sge_mpi(ioc, &mpi_request.PageBufferSGE);
+>>> +	r = _config_request(ioc, &mpi_request, mpi_reply,
+>>> +	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
+>>
+>> 	r = _config_request(ioc, &mpi_request, mpi_reply,
+>> 			    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
+>>
+>> is a lot nicer to read.
+> 
+> Do I also align the signature like so in both the source file and the
+> header?
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 382b6041c716..00072bff9dcd 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -8557,8 +8557,6 @@ static void ufshcd_set_rtt(struct ufs_hba *hba)
- 	struct ufs_dev_info *dev_info = &hba->dev_info;
- 	u32 rtt = 0;
- 	u32 dev_rtt = 0;
--	int host_rtt_cap = hba->vops && hba->vops->max_num_rtt ?
--			   hba->vops->max_num_rtt : hba->nortt;
- 
- 	/* RTT override makes sense only for UFS-4.0 and above */
- 	if (dev_info->wspecversion < 0x400)
-@@ -8574,7 +8572,7 @@ static void ufshcd_set_rtt(struct ufs_hba *hba)
- 	if (dev_rtt != DEFAULT_MAX_NUM_RTT)
- 		return;
- 
--	rtt = min_t(int, dev_info->rtt_cap, host_rtt_cap);
-+	rtt = min_t(int, dev_info->rtt_cap, hba->nortt);
- 
- 	if (rtt == dev_rtt)
- 		return;
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 421c286481e8..5d72b7f2dc68 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -370,7 +370,6 @@ struct ufshcd_tx_eq_params {
- /**
-  * struct ufs_hba_variant_ops - variant specific callbacks
-  * @name: variant name
-- * @max_num_rtt: maximum RTT supported by the host
-  * @init: called when the driver is initialized
-  * @exit: called to cleanup everything done in init
-  * @set_dma_mask: For setting another DMA mask than indicated by the 64AS
+I think so, as in my opinion, that makes for a nicer reading.
+
+> 
+> int mpt3sas_config_get_iounit_pg7(struct MPT3SAS_ADAPTER *ioc,
+> 				  Mpi2ConfigReply_t *mpi_reply,
+> 				  Mpi2IOUnitPage7_t *config_page)
+
+
 -- 
-2.45.2
-
+Damien Le Moal
+Western Digital Research
 
