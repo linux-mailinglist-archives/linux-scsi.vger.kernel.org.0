@@ -1,66 +1,67 @@
-Return-Path: <linux-scsi+bounces-24733-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24735-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id +aZDAVdEK2qy5QMAu9opvQ
-	(envelope-from <linux-scsi+bounces-24733-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 01:27:19 +0200
+	id bp7QFqdEK2rA5QMAu9opvQ
+	(envelope-from <linux-scsi+bounces-24735-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 01:28:39 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EDAC675CE7
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 01:27:18 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4585675CF5
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 01:28:38 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=mediatek.com header.s=dk header.b=PvHma8e+;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24733-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24733-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=mediatek.com header.s=dk header.b=JGrr8xBS;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24735-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24735-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=mediatek.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1FE42321AEDB
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 23:26:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 93AE433D73D7
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 23:26:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A520537FF71;
-	Thu, 11 Jun 2026 23:26:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 458F03D25BC;
+	Thu, 11 Jun 2026 23:26:58 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44E53002C8;
-	Thu, 11 Jun 2026 23:26:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289B4369D71;
+	Thu, 11 Jun 2026 23:26:55 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781220408; cv=none; b=GC9Vqkr6sbc+HtTb15LWHHTNBF8ikLd1JQhQT+XnK/8cpl8FP5E4xuCMNW2Je5k+0gVFguKVYMp3iUHu8RPQLH33b4TgCu/VJ54lIij/tnSL0Gdsjugzy3gUDG8Ynk/tDHapwwDQFxg6Bz2sxwFZWRLICqWYGqM0t2o60qMxtFg=
+	t=1781220418; cv=none; b=ShSEJiEW41a48FNfmSq4+QpsnxwzjtpeUoAE4mZJmos1GoUumjgoA9gJlC0VK0UtQEcyFcRWq+bfH7Uplew+OPBEVACOPgJYnrGwcQt7Qgo8RsxWWseo/j86/+Y1ZffKfKnfUKqCfljn56De4Cg4HqkcjmaMw22Mn1z94UdWEFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781220408; c=relaxed/simple;
-	bh=Wyxs/tfqDW0yyA4Hherq490XeUIIaTCwn8RhOTVrCHw=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hF/U9dlEi2rkkewNRoJzk64pICxtR86Qk8nZ54DTx/4kcabi/hd/CEn69xU6DC/3x7+Dk0JD9zDqufsP8ApPn+fX7ZpmdJRI8h7RpmmGUdOPfcroOYu3m9jsemgc3p8gtc3tq7AIowPyLOgGwppJ7GrCnmuwPyX0lSyN7nlR/0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=PvHma8e+; arc=none smtp.client-ip=60.244.123.138
-X-UUID: 00b734e665ed11f1b1788b6acf885367-20260612
+	s=arc-20240116; t=1781220418; c=relaxed/simple;
+	bh=SS/uJZRsXXasD0BBkT0x8L8HcjDGIkeq8sn2Pkbk8WA=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=INCyktEFRJBYC/jzB122zKpg6wJaqjC5peYTC5UusrvgGZDnrdrGWOleafQo2pPJUnLJg3wOk6vUQ5dF5xx3C+g6wBUz+U0uNiTld0chNQyrG0Ir4eNfbJsbC3DiSMdFb32/r3NEsfEL7HDnpXeakeH1ZlG5uvf/7vBj+fjJOr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=JGrr8xBS; arc=none smtp.client-ip=210.61.82.184
+X-UUID: 02e6754265ed11f18dc8c9802ae25ab1-20260612
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Lu0ccYQsRw99cS5wqcElRVz4QHqtm7tew269NO2xzmI=;
-	b=PvHma8e+E4hIujnSbgehEMcWVGVrplr/11X2hbG8pHWW7SxxA5zTZylM/O4uzROWW0CvmSWVhclKl4xtmTBLaQYLYXe9Vxeg+s69GyDV2I8F6XrbYqWOzsCZcbnvLr1HY4S5rktZfqFHgRiD8W4KFiNvgijLIbbwgn0P+ZfZR3U=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=7lono346LLiByVxDpmcbPatLkqlMCZPQmgQ7Az+Hj/8=;
+	b=JGrr8xBSLd8m56Mka7KvuHvthyYtlmFc0GoNFvb3vE1L7xRwnzamktrLGzPfvPA8Wer2VhDYpcl7LN2M19oSXuY8Fjb1zEeb0MMmHmJ1ALu021A9F0pwrENWLYOtp2tb46vhIq+hqaX1sG2gxGFHJ3pUZhiDcdYgRunYnDlVAN4=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.15,REQID:d500d0d1-b224-45e9-b827-d02e9a5ebf43,IP:0,U
+X-CID-O-INFO: VERSION:1.3.15,REQID:71fe7083-5df3-4014-b50e-8d9ff00276e8,IP:0,U
 	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
 	release,TS:0
-X-CID-META: VersionHash:e276073,CLOUDID:0a617254-902f-47df-afe3-f34f8d753c22,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|123|836|865|888|898,TC:-5,Conten
-	t:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:-1,COL:0,O
-	SI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-META: VersionHash:e276073,CLOUDID:6601ae30-7784-4a77-a538-47ed6151d81b,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|123|836|865|888|898,TC:-5,
+	Content:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:-1,C
+	OL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 00b734e665ed11f1b1788b6acf885367-20260612
-Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw01.mediatek.com
+X-UUID: 02e6754265ed11f18dc8c9802ae25ab1-20260612
+Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw02.mediatek.com
 	(envelope-from <ed.tsai@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 389950896; Fri, 12 Jun 2026 07:26:41 +0800
+	with ESMTP id 1976430879; Fri, 12 Jun 2026 07:26:45 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Fri, 12 Jun 2026 07:26:40 +0800
+ 15.2.2562.29; Fri, 12 Jun 2026 07:26:44 +0800
 Received: from mtksitap99.mediatek.inc (10.233.130.16) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.2562.29 via Frontend Transport; Fri, 12 Jun 2026 07:26:40 +0800
+ 15.2.2562.29 via Frontend Transport; Fri, 12 Jun 2026 07:26:44 +0800
 From: <ed.tsai@mediatek.com>
 To: <alim.akhtar@samsung.com>, <avri.altman@wdc.com>, <bvanassche@acm.org>,
 	<James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
@@ -70,10 +71,12 @@ CC: <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<peter.wang@mediatek.com>, <alice.chao@mediatek.com>,
 	<naomi.chu@mediatek.com>, <chun-hung.wu@mediatek.com>, Ed Tsai
 	<ed.tsai@mediatek.com>
-Subject: [PATCH v2 0/3] ufs: Add callback for vendor-specific RTT capability
-Date: Fri, 12 Jun 2026 07:26:29 +0800
-Message-ID: <20260611232632.2324422-1-ed.tsai@mediatek.com>
+Subject: [PATCH v2 1/3] ufs: core: Add get_hba_nortt callback for vendor-specific RTT capability
+Date: Fri, 12 Jun 2026 07:26:30 +0800
+Message-ID: <20260611232632.2324422-2-ed.tsai@mediatek.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20260611232632.2324422-1-ed.tsai@mediatek.com>
+References: <20260611232632.2324422-1-ed.tsai@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -90,12 +93,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[mediatek.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[mediatek.com:s=dk];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCPT_COUNT_TWELVE(0.00)[15];
-	TAGGED_FROM(0.00)[bounces-24733-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24735-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER(0.00)[ed.tsai@mediatek.com,linux-scsi@vger.kernel.org];
 	FORGED_RECIPIENTS(0.00)[m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:bvanassche@acm.org,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mediatek@lists.infradead.org,m:wsd_upstream@mediatek.com,m:peter.wang@mediatek.com,m:alice.chao@mediatek.com,m:naomi.chu@mediatek.com,m:chun-hung.wu@mediatek.com,m:ed.tsai@mediatek.com,s:lists@lfdr.de];
@@ -113,41 +116,64 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,mediatek.com:dkim,mediatek.com:email,mediatek.com:mid,mediatek.com:from_mime]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,mediatek.com:dkim,mediatek.com:email,mediatek.com:mid,mediatek.com:from_mime,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 4EDAC675CE7
+X-Rspamd-Queue-Id: A4585675CF5
 
 From: Ed Tsai <ed.tsai@mediatek.com>
 
-The first patch adds the get_hba_nortt() callback to the UFS core layer,
-allowing vendor drivers to provide dynamic, platform-specific RTT
-capability handling.
+The number of outstanding RTTs read from host controller capability
+register is problematic on some platforms. Add a new vendor callback
+get_hba_nortt() to allow platform vendors to override the default RTT
+capability value with platform-specific handling.
 
-The second patch implements this callback in the MediaTek UFS driver,
-distinguishing between legacy platforms (which require the RTT to be
-limited to 2) and newer MT6995 B0+ platforms (which can use the value
-from the capability register directly).
+This patch keeps max_num_rtt field for bisectability and will be removed
+in a later patch once all platforms are migrated.
 
-The third patch removes the max_num_rtt field from ufs_hba_variant_ops
-as it is now replaced by the get_hba_nortt() callback.
+Signed-off-by: Ed Tsai <ed.tsai@mediatek.com>
+---
+ drivers/ufs/core/ufshcd.c | 5 ++++-
+ include/ufs/ufshcd.h      | 3 +++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-Changes in v2:
-- Keep max_num_rtt field in patch 1 to maintain bisectability
-- Split removal of max_num_rtt into a separate patch (patch 3)
-
-Ed Tsai (3):
-  ufs: core: Add get_hba_nortt callback for vendor-specific RTT
-    capability
-  ufs: mediatek: Implement get_hba_nortt callback for RTT capability
-  ufs: core: Remove max_num_rtt field from ufs_hba_variant_ops
-
- drivers/ufs/core/ufshcd.c       |  9 +++++----
- drivers/ufs/host/ufs-mediatek.c | 12 +++++++++++-
- drivers/ufs/host/ufs-mediatek.h |  4 ++--
- include/ufs/ufshcd.h            |  4 +++-
- 4 files changed, 21 insertions(+), 8 deletions(-)
-
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index c3f08957d179..382b6041c716 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -2529,7 +2529,10 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
+ 	hba->nutmrs =
+ 	((hba->capabilities & MASK_TASK_MANAGEMENT_REQUEST_SLOTS) >> 16) + 1;
+ 
+-	hba->nortt = FIELD_GET(MASK_NUMBER_OUTSTANDING_RTT, hba->capabilities) + 1;
++	if (hba->vops && hba->vops->get_hba_nortt)
++		hba->nortt = hba->vops->get_hba_nortt(hba);
++	else
++		hba->nortt = FIELD_GET(MASK_NUMBER_OUTSTANDING_RTT, hba->capabilities) + 1;
+ 
+ 	/* Read crypto capabilities */
+ 	err = ufshcd_hba_init_crypto_capabilities(hba);
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index cfbc75d8df83..421c286481e8 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -415,6 +415,8 @@ struct ufshcd_tx_eq_params {
+  * @get_rx_fom: called to get Figure of Merit (FOM) value.
+  * @tx_eqtr_notify: called before and after TX Equalization Training procedure
+  *	to allow platform vendor specific configs to take place.
++ * @get_hba_nortt: called to get maximum number of outstanding RTTs supported by
++ *	the controller.
+  */
+ struct ufs_hba_variant_ops {
+ 	const char *name;
+@@ -477,6 +479,7 @@ struct ufs_hba_variant_ops {
+ 	int	(*tx_eqtr_notify)(struct ufs_hba *hba,
+ 				  enum ufs_notify_change_status status,
+ 				  struct ufs_pa_layer_attr *pwr_mode);
++	int	(*get_hba_nortt)(struct ufs_hba *hba);
+ };
+ 
+ /* clock gating state  */
 -- 
 2.45.2
 
