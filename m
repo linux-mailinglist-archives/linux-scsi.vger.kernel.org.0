@@ -1,147 +1,224 @@
-Return-Path: <linux-scsi+bounces-24669-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24671-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id O6lAO7MQKmqQiAMAu9opvQ
-	(envelope-from <linux-scsi+bounces-24669-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 03:34:43 +0200
+	id LhheO/ggKmpBjAMAu9opvQ
+	(envelope-from <linux-scsi+bounces-24671-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 04:44:08 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94A5B66DA61
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 03:34:42 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E99B66DD9F
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 04:44:08 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=h-partners.com header.s=dkim header.b=YKTNrkQX;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24669-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24669-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=fail reason="SPF not aligned (relaxed), DKIM not aligned (relaxed)" header.from=huawei.com (policy=quarantine);
+	dkim=pass header.d=philpem.me.uk header.s=mail header.b=W4Ivqarw;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24671-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24671-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=reject) header.from=philpem.me.uk;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6CCF530B32F2
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 01:34:39 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E81F630117AD
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 02:44:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C34C1FCFFC;
-	Thu, 11 Jun 2026 01:34:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 120343126CA;
+	Thu, 11 Jun 2026 02:44:05 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from nick.sneptech.io (nick.sneptech.io [178.62.38.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD5E74C14;
-	Thu, 11 Jun 2026 01:34:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD022DC78C;
+	Thu, 11 Jun 2026 02:44:03 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781141678; cv=none; b=f4K/WyngMC8m29b0XfoASmJNIGB5icNQK5f96kCfLT8W15TxM7YwF2PVmJrxWsl5hzWLbSSplDiPs60tx8R4GzoowgcwReKVNPES7MySUrq7s7EGNRRYcmbDy7GzJKPK3kaIZFHAnnXVoHIWhD2X2FTo0bspFUgb8Y0sAVpbzvA=
+	t=1781145844; cv=none; b=u15bOtQK2nW5DXka2DNNlf5b6I7ciPxkILZEiGvBaUjHe4KYJMD8nTFWzZQqd5mnCz22ztIR4LFG7HefT6/jJ4uQ7iAylbLRAptNuJb+S+KdWeMIUnZQCAjjD8EIidQcrhR5RWCFn7nMXR/tc4aW/90hhbCEKdhchGTaaQ3Z0nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781141678; c=relaxed/simple;
-	bh=r10PDlkogS5LBwV4B2rLhiwz+xRI3htAOVIJcXTYa+4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=DZZ1W8A2iK/nq65/L2UChs0BhbeZL44d+5YP7dcXSunF8rWIoPVA3buhjFjTFMX3Xb02dO+mlTuWI57IjpotMpx5HwjfXO5Il81qxNzBKDMCd0Vm2xflTPfJQ6XqxnvqyMu6FEz331r4m7OiZIxZaiNBPEDqQlaFlg8XQ48p10M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=YKTNrkQX; arc=none smtp.client-ip=113.46.200.217
-dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=VHBRk+HjEpMLYhoU5qeYaEsvvHZ40VXCd1+Fxt6C0Hw=;
-	b=YKTNrkQXP+3oXBOkOMnQTrFK5K+y2+DD2b25eUzNNu5qhDdX2g9kHkfe8wCwOSZbN4QbV+TWc
-	FZQgzpMsbiwqkg6eYOfA2stjLlEOKmmYyCJbkYCQOIc6ey370toRT5fRNcEP1FRum6OrEnaw4OC
-	iMXIaVDqIrYe1pON0CI/WU0=
-Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4gbQ2z3zCjzcb1Y;
-	Thu, 11 Jun 2026 09:26:19 +0800 (CST)
-Received: from kwepemj100018.china.huawei.com (unknown [7.202.194.12])
-	by mail.maildlp.com (Postfix) with ESMTPS id B3FA74048F;
-	Thu, 11 Jun 2026 09:34:32 +0800 (CST)
-Received: from [10.67.120.108] (10.67.120.108) by
- kwepemj100018.china.huawei.com (7.202.194.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.36; Thu, 11 Jun 2026 09:34:32 +0800
-Message-ID: <2e082951-bdd6-564e-30a8-2ab21c9c2215@huawei.com>
-Date: Thu, 11 Jun 2026 09:34:31 +0800
+	s=arc-20240116; t=1781145844; c=relaxed/simple;
+	bh=JqTCJN8xWMwtcK4u3aAL9KRShA4ikX+VLLL8qMz6uuE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UY4vyXATDFzU7D19D7/vSqDXm2iBRR6FPgLM6WeATRnItF0JQobv7DO3DrYCcCpUjEO8d6BUX7afHVrU3VAQeb1v26ReqtRYwKX3zzEQpuvrkfmM9ZTTq51SVxV+PWIAxiXsUtMVWb3eTzMHWuUPJIUKvlCkqRrt+L0xA1W4dE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=philpem.me.uk; spf=pass smtp.mailfrom=philpem.me.uk; dkim=pass (1024-bit key) header.d=philpem.me.uk header.i=@philpem.me.uk header.b=W4Ivqarw; arc=none smtp.client-ip=178.62.38.78
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=philpem.me.uk;
+	s=mail; t=1781145841;
+	bh=JqTCJN8xWMwtcK4u3aAL9KRShA4ikX+VLLL8qMz6uuE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=W4IvqarwhHMVErHxo4ToWsX7Va4fpCz2qCC9VW0C1vHomzeMyFXtZYB2Mz3ckIOVl
+	 hwh4cUoxvh/IsZfTGdoMXc+xZdLx8VITnCSyRAxF3GsLsYjU4NhTUziW1Yv2as8isi
+	 fdBhPUIC/DLLUMFTrbmQ7g9xoX7XYQTd41oFDTDk=
+Received: from wolf.philpem.me.uk (81-187-163-148.ip4.reverse-dns.uk [81.187.163.148])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: mailrelay_wolf@philpem.me.uk)
+	by nick.sneptech.io (Postfix) with ESMTPSA id 4BED7BD70C;
+	Thu, 11 Jun 2026 02:44:01 +0000 (UTC)
+Received: from cheetah.homenet.philpem.me.uk (cheetah.homenet.philpem.me.uk [10.0.0.32])
+	by wolf.philpem.me.uk (Postfix) with ESMTPSA id 020D45FC0E;
+	Thu, 11 Jun 2026 03:44:01 +0100 (BST)
+From: Phil Pemberton <philpem@philpem.me.uk>
+To: linux-ide@vger.kernel.org,
+	linux-scsi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Hannes Reinecke <hare@suse.de>,
+	Phil Pemberton <philpem@philpem.me.uk>
+Subject: [PATCH v7 0/6] libata-scsi: multi-LUN ATAPI device support
+Date: Thu, 11 Jun 2026 03:43:50 +0100
+Message-ID: <20260611024356.2769320-1-philpem@philpem.me.uk>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v6 2/2] scsi: libsas: Add linkrate and sas_addr change
- detection in rediscover
-Content-Language: en-CA
-To: John Garry <john.g.garry@oracle.com>, <yanaijie@huawei.com>,
-	<jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <liyihang9@h-partners.com>, <liuyonglong@huawei.com>,
-	<kangfenglong@huawei.com>
-References: <20260603092124.2221524-1-yangxingui@huawei.com>
- <20260603092124.2221524-3-yangxingui@huawei.com>
- <f51b19e3-0848-4384-85d7-8fe7a7b11754@oracle.com>
-From: yangxingui <yangxingui@huawei.com>
-In-Reply-To: <f51b19e3-0848-4384-85d7-8fe7a7b11754@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepemh500016.china.huawei.com (7.202.181.150) To
- kwepemj100018.china.huawei.com (7.202.194.12)
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),quarantine];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
-	R_DKIM_ALLOW(-0.20)[h-partners.com:s=dkim];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[philpem.me.uk,reject];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
+	R_DKIM_ALLOW(-0.20)[philpem.me.uk:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[h-partners.com:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-24669-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24671-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:linux-ide@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:dlemoal@kernel.org,m:cassel@kernel.org,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:hare@suse.de,m:philpem@philpem.me.uk,s:lists@lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER(0.00)[philpem@philpem.me.uk,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[yangxingui@huawei.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:john.g.garry@oracle.com,m:yanaijie@huawei.com,m:jejb@linux.ibm.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linuxarm@huawei.com,m:liyihang9@h-partners.com,m:liuyonglong@huawei.com,m:kangfenglong@huawei.com,s:lists@lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[philpem@philpem.me.uk,linux-scsi@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yangxingui@huawei.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	ALIAS_RESOLVED(0.00)[];
+	DKIM_TRACE(0.00)[philpem.me.uk:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,huawei.com:mid,huawei.com:from_mime]
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FROM_HAS_DN(0.00)[]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 94A5B66DA61
+X-Rspamd-Queue-Id: 7E99B66DD9F
 
+Some ATAPI devices expose more than one logical unit behind a single ATA
+target: Panasonic/COMPAQ PD/CD combo drives (LUN 0 = CD-ROM, LUN 1 =
+PD), and Nakamichi CD changers (one LUN per disc slot, up to 7).
 
+libata has historically hard-coded shost->max_lun = 1, so the SCSI
+layer never scans past LUN 0 on any ATA-attached device.  This series
+lifts that restriction for ATAPI devices gated by BLIST_FORCELUN.
 
-On 2026/6/10 17:37, John Garry wrote:
-> On 03/06/2026 10:21, Xingui Yang wrote:
->> +        return false;
->> +    } else if (SAS_ADDR(child_dev->sas_addr) != 
->> SAS_ADDR(phy->attached_sas_addr)) {
->> +        pr_info("ex %016llx phy%02d sas_addr changed from %016llx to 
->> %016llx\n",
->> +            SAS_ADDR(dev->sas_addr), phy_id,
->> +            SAS_ADDR(child_dev->sas_addr),
->> +            SAS_ADDR(phy->attached_sas_addr));
->> +        memcpy(phy->attached_sas_addr, child_dev->sas_addr, 
->> SAS_ADDR_SIZE);
-> 
-> can you comment in the code why you are going this?
+Changes since v6
+================
 
-Good point. I will add a comment explaining the reason.
+Addressing review from Hannes Reinecke (v6 review) and automated
+analysis (Sashiko):
 
-sas_ex_phy_discover() has already updated phy->attached_sas_addr to the
-new address discovered from the expander. However, 
-sas_unregister_devs_sas_addr()
-matches devices by comparing child->sas_addr with phy->attached_sas_addr
-via sas_phy_match_dev_addr(). So we need to restore phy->attached_sas_addr
-to the old device's address for proper matching.
+Patch 1: MODULE_PARM_DESC clarified to describe the parameter as a
+count of LUNs (not a maximum LUN number), and the range corrected from
+"1..7" to "1..8" (eight LUN slots, values 0..7).
 
-I will update in next version.
+Patch 2:
+  - Drop the nr_luns companion field.  The ATAPI_MAX_LUN constant (8)
+    is the correct fixed bound for all iterations; nr_luns adds
+    complexity without benefit since sdev[] slots not populated are
+    always NULL.  Use ATAPI_MAX_LUN throughout (Hannes Reinecke).
+  - Fix ata_port_detach UAF window: clear dev->sdev[lun] to NULL before
+    the spin_unlock, then pass the saved pointer to scsi_remove_device()
+    (Hannes Reinecke).
+  - ata_scsi_sdev_destroy: trigger ATA-level detach only when all LUN
+    slots are NULL, not only on LUN 0 destruction.
+  - ZPODD: iterate all LUN slots in zpodd_enable_run_wake(),
+    zpodd_post_poweron(), and zpodd_wake_dev() (Hannes Reinecke).
+  - ata_scsi_dev_rescan: snapshot all LUN sdevs under the spinlock
+    before releasing it; release remaining refs on early exit paths.
 
-Thanks,
-Xingui
+Patch 3:
+  - atapi_xlat(): always clear CDB byte 1 bits 7:5 first, then set them
+    only for non-zero LUNs.  This avoids silently zeroing those bits on
+    every LUN-0 command regardless of LUN, and separates the "zero for
+    LUN 0" from the "encode LUN" paths.
+  - On WARN_ON_ONCE overflow, set scmd->result = DID_ERROR before
+    returning so the SCSI layer does not treat the aborted command as
+    a success.
 
+Patch 4:
+  - Move the BLIST_NO_LUN_1F -> pdt_1f_for_no_lun assignment from
+    scsi_add_lun() to scsi_probe_and_add_lun(), immediately before the
+    PDT=0x1f check.  scsi_add_lun() is called after that check, so the
+    v6 placement was too late to suppress LUN 0 if it returned
+    PDT=0x1f.
+
+Patch 5:
+  - Call ata_scsi_assign_ofnode() before scsi_device_put(), so the
+    reference to dev->sdev[0] is still held during the OF node
+    assignment.
+
+Patches 3/6, 4/6, and 5/6 carry Reviewed-by from Hannes Reinecke
+(unchanged from v6).
+
+Series structure
+================
+
+  1/6  ata: libata-scsi: add atapi_max_lun module parameter
+  2/6  ata: libata-scsi: convert dev->sdev to per-LUN array
+  3/6  ata: libata-scsi: route non-zero LUN commands for multi-LUN ATAPI
+  4/6  scsi: add BLIST_NO_LUN_1F blacklist flag
+  5/6  ata: libata-scsi: probe additional LUNs for multi-LUN ATAPI devices
+  6/6  scsi: scsi_devinfo: add COMPAQ PD-1 multi-LUN ATAPI device quirk
+
+Testing
+=======
+
+Tested on real hardware (Panasonic/COMPAQ LF-1195C on Intel ICH5 PATA):
+  [x] Boot with CD inserted: sr0 attaches, mount and read files
+  [x] Boot with PD inserted: sda attaches at correct capacity
+      (1298496 x 512 B = 634 MiB)
+  [x] All seven LUNs scanned (atapi_max_lun=7); LUNs 2..6 correctly
+      report PDT 0x1f and are silently skipped
+  [x] Single-LUN ATAPI CD-ROM (LITE-ON iHAS124): no regression,
+      only LUN 0 scanned
+
+Known limitations
+=================
+
+Media-change events are not propagated across LUNs of a SINGLELUN
+multi-LUN device.  The SCSI layer's UA handling is per-sdev.  On the
+PD/CD combo, swapping media and then accessing the other LUN may return
+stale capacity until a manual rescan:
+
+  echo 1 > /sys/class/scsi_device/H:0:0:1/device/rescan
+
+A follow-up patch to propagate media-change events to sibling LUNs is
+deferred to keep this series focused on the LUN-scanning core.
+
+Phil Pemberton (6):
+  ata: libata-scsi: add atapi_max_lun module parameter
+  ata: libata-scsi: convert dev->sdev to per-LUN array
+  ata: libata-scsi: route non-zero LUN commands for multi-LUN ATAPI
+  scsi: add BLIST_NO_LUN_1F blacklist flag
+  ata: libata-scsi: probe additional LUNs for multi-LUN ATAPI devices
+  scsi: scsi_devinfo: add COMPAQ PD-1 multi-LUN ATAPI device quirk
+
+ drivers/ata/libata-acpi.c   |   9 +-
+ drivers/ata/libata-core.c   |  16 ++-
+ drivers/ata/libata-scsi.c   | 226 ++++++++++++++++++++++++------------
+ drivers/ata/libata-zpodd.c  |  27 ++++-
+ drivers/ata/libata.h        |   1 +
+ drivers/scsi/scsi_devinfo.c |   2 +
+ drivers/scsi/scsi_scan.c    |   3 +
+ include/linux/libata.h      |  11 +-
+ include/scsi/scsi_devinfo.h |   6 +-
+ 9 files changed, 210 insertions(+), 91 deletions(-)
+
+base-commit: a3f75e5e6b023958c92ad03fa2e68e047b6169c4
+--
+2.43.0
 
 
