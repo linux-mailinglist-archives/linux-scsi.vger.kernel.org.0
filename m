@@ -1,154 +1,154 @@
-Return-Path: <linux-scsi+bounces-24738-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24739-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id eY3lAONFK2om5gMAu9opvQ
-	(envelope-from <linux-scsi+bounces-24738-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 01:33:55 +0200
+	id Agu6Ev9FK2oq5gMAu9opvQ
+	(envelope-from <linux-scsi+bounces-24739-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 01:34:23 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DD45675D22
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 01:33:54 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B84D675D28
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 01:34:22 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=buzdj5Wa;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24738-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24738-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=jE7VweGc;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24739-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24739-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9F64B31A08B2
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 23:33:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2919B3218180
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 23:34:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E092036A022;
-	Thu, 11 Jun 2026 23:33:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D941388891;
+	Thu, 11 Jun 2026 23:34:18 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3BF3537CD
-	for <linux-scsi@vger.kernel.org>; Thu, 11 Jun 2026 23:33:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2609B3537CD;
+	Thu, 11 Jun 2026 23:34:17 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781220831; cv=none; b=EuRGNMsnsnpIGxg1qbNZIRCYV39SG+Krlz19CVNkz8/ZdCgrfTgc6ILltKzwjWK/pbJKJ5myHqTtF8LT0iXMSJHkKq2ZyWfM34xX/1agXYsDEE5XSRTku22SbOZLDXggK9wkWTInqE3L5deDvv3AZ6Q4Wby2zD9nNU454OiSneI=
+	t=1781220858; cv=none; b=A5d6N+LfhhLFfNxrCgiG3l8zJ1SLXTpwVNlKisQ4HkTc8y1pMk3W6mhcwfGr20MQawsi7cw1WwHvoLnVd41mQYAJTZ2ONLFrqfwGzDQsak7JzsLDaq2y2+MJSTCR12hhc7bnWWuVX36Q0udQgGqzfT7fHQ9au3/EqaioF4rso6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781220831; c=relaxed/simple;
-	bh=TaZkHCtZC6QmZKhT+8voq1A9A2oAInE76juY7cwFrcM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bpI3uJpBkTE2nvXbIqyRVX6cjwXlLOlDZ+oO45V1u6p3uECNi8Yz5/0CTUZD+u5w1Le3bWfVBvlIcOuLA2iGRrDSTDhjvlkqPnPHcAkcwYwAvFrhQL1PG9GmfB0sgecuYtpIFqB9szGAS+tKKDLV3wewj+LXnGGzpbs0VV+jxt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=buzdj5Wa; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 199321F000E9;
-	Thu, 11 Jun 2026 23:33:50 +0000 (UTC)
+	s=arc-20240116; t=1781220858; c=relaxed/simple;
+	bh=K9EjqlJm5wZmDxJ9dqndu5PvBOsEi4TUXqgUnMU00oo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AynOgOVnY9xHx3yB+SJHJXZQrT66GPsuE4EnYQ4ja+urNzy18JQKG6LDSQeXUh1hC3CL1n1vObO/42EMxVD+ncDiG/D9WW7+v2JtPJY/Oz0XR6yX55uFqnk+QvqKXiEi3Relgf6QyO9BWQS/sqyZ0MsPklRH3BrUVMAcuE2jJeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jE7VweGc; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BCBD1F000E9;
+	Thu, 11 Jun 2026 23:34:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781220830;
-	bh=OX5kqvU20z8rISRHD7LEVA+MoBlYbLNTrKbcQAtLsyY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=buzdj5WahXRKfovccRVYnaFrM8+K5TGd75TQYnT8N9wt809idmgid362eUFwYa+jL
-	 WLmJcWGTNu3mLOE3gL9nqhJFV6Zwcs4Z/TAdOycXxcDZn7jNoUq+nE5hduzRDKl8RK
-	 7XREkMcnimHm8PiWOMfPp/JXz5Tdvg/l3a2SzQTjHCEglGOJ1cWBC8HJjFjbFeG3fa
-	 DhhFPT1ppEiaIdIFWOWFiOmYslRnCrQoXBs89A0CYDmP/Lp1Jac2pqWpJdAn3aFB04
-	 wMCoVaIyaIBCVQxOq6zD0hFbdt0b/Ou0gU6Ylf3ozn9di9SkCB6inGcKLEK0M9yKJE
-	 6aXdfHAGtyEnA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 3/3] ufs: core: Remove max_num_rtt field from
- ufs_hba_variant_ops
-Reply-To: sashiko-reviews@lists.linux.dev
-To: ed.tsai@mediatek.com
-Cc: linux-scsi@vger.kernel.org
-In-Reply-To: <20260611232632.2324422-4-ed.tsai@mediatek.com>
-References: <20260611232632.2324422-4-ed.tsai@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 23:33:49 +0000
-Message-Id: <20260611233350.199321F000E9@smtp.kernel.org>
+	s=k20260515; t=1781220857;
+	bh=9Bap6l9i4ZQz5pn/Hk42rWgxj93JiOlztKrjDzdgYHo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=jE7VweGcc2A1ga6JUZEIkSRB9X6pyTI0EcO6Y0xVl01ZwP6Fk7aBHatOQO5Wa4vmn
+	 hP1DaUNvo/RzTTJZHsBbNcO+/60Gr4JbJSF634L1sOaJP5wioZ7ewXUCbOPO9rtorc
+	 td5I4ZGgvyOoHbQ7rxory7liLgDYGHYGOV4iW0DCeLJc+tAUOog+OQaxIUDkt4sCnC
+	 K2RLqlTvdXVFYFTp+O8zLh3WtitNwdpCvOGOrHE1cw8WeMEGG/OlMvKHelical6fSW
+	 vSWnmwozfbYViUG+8vZzA3oTG62ZanVdx4SoH+A9s/mdlg7XQGD8ApP2sUfx0gzEc5
+	 mWxatn4h34KEg==
+Message-ID: <fdea1a8b-d631-43d8-bcf0-1c79e635782c@kernel.org>
+Date: Fri, 12 Jun 2026 08:34:13 +0900
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 RESEND 2/2] scsi: mpt3sas: add hwmon support
+To: Louis Sautier <sautier.louis@gmail.com>
+Cc: Sathya Prakash <sathya.prakash@broadcom.com>,
+ Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+ Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+ Ranjan Kumar <ranjan.kumar@broadcom.com>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Guenter Roeck <linux@roeck-us.net>, MPT-FusionLinux.pdl@broadcom.com,
+ linux-scsi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260609164423.2829699-1-sautier.louis@gmail.com>
+ <20260609164423.2829699-3-sautier.louis@gmail.com>
+ <93542109-2101-4d62-aae4-bbf058029663@kernel.org>
+ <airk3Os03wPV0rvW@localhost>
+Content-Language: en-US
+From: Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <airk3Os03wPV0rvW@localhost>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
+X-Spamd-Result: default: False [-3.66 / 15.00];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-24738-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24739-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	RCPT_COUNT_TWO(0.00)[2];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:ed.tsai@mediatek.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:sautier.louis@gmail.com,m:sathya.prakash@broadcom.com,m:sreekanth.reddy@broadcom.com,m:suganath-prabu.subramani@broadcom.com,m:ranjan.kumar@broadcom.com,m:James.Bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:linux@roeck-us.net,m:MPT-FusionLinux.pdl@broadcom.com,m:linux-scsi@vger.kernel.org,m:linux-hwmon@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:sautierlouis@gmail.com,s:lists@lfdr.de];
+	HAS_ORG_HEADER(0.00)[];
+	FORGED_SENDER(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TO_DN_NONE(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_NO_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,mediatek.com:email,vger.kernel.org:from_smtp,smtp.kernel.org:mid,sashiko.dev:url]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3DD45675D22
+X-Rspamd-Queue-Id: 9B84D675D28
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The commit message claims to remove the `max_num_rtt` field from=
- `struct ufs_hba_variant_ops`, but the patch only removes its kerneldoc com=
-ment, leaving the actual struct member behind as dead code.
---
+On 6/12/26 01:39, Louis Sautier wrote:
+> On Wed, 10 Jun 2026 08:22:22 +0800, Damien Le Moal wrote:
+>>> +config SCSI_MPT3SAS_HWMON
+>>> +	bool "LSI MPT Fusion SAS hwmon support"
+>>> +	depends on SCSI_MPT3SAS && HWMON
+>>> +	depends on !(SCSI_MPT3SAS=y && HWMON=m)
+>>> +	help
+>>> +	Say Y here to expose the IOC and board temperature sensors of
+>>> +	LSI / Broadcom SAS HBAs (such as the 9300, 9400, and 9500 series)
+>>> +	through hwmon.
+>>
+>> Why do you need this ?
+> 
+> I was following the logic used by NVME_HWMON to prevent issues with
+> SCSI_MPT3SAS=y and HWMON=m.
 
-commit 173e8bce82316be80209775ea63a6bbd458a4aa9
-Author: Ed Tsai <ed.tsai@mediatek.com>
+Ah, yes, indeed. I did not thought of this case.
 
-ufs: core: Remove max_num_rtt field from ufs_hba_variant_ops
+> 
+>>> +	struct mpt3sas_hwmon *hwmon;
+>>
+>> This should be conditionally defined with "#ifdef CONFIG_HWMON". Then you can
+>> simply drop the config entry you added.
+> 
+> If I dropped SCSI_MPT3SAS_HWMON, I would use
+> "#if IS_REACHABLE(CONFIG_HWMON)" to match what i915_hwmon.h and
+> xe_hwmon.h do and properly handle the SCSI_MPT3SAS=y and HWMON=m case.
+> What do you think?
 
-This commit aims to remove the max_num_rtt field from the
-ufs_hba_variant_ops structure. It removes its usage from ufshcd_set_rtt()
-and replaces it with hba->nortt.
+That seems appropriate. If there is a clean way to avoid adding the new config
+option, we should use that method.
 
-> diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-> index 8e24c4b8e9634..6a176ff05bfbc 100644
-> --- a/include/ufs/ufshcd.h
-> +++ b/include/ufs/ufshcd.h
-> @@ -372,7 +372,6 @@ struct ufshcd_tx_eq_params {
->  /**
->   * struct ufs_hba_variant_ops - variant specific callbacks
->   * @name: variant name
-> - * @max_num_rtt: maximum RTT supported by the host
->   * @init: called when the driver is initialized
->   * @exit: called to cleanup everything done in init
->   * @set_dma_mask: For setting another DMA mask than indicated by the 64AS
 
-[Severity: Medium]
-The commit message states the max_num_rtt field is removed from
-ufs_hba_variant_ops, but this hunk only removes its kerneldoc comment.
-
-Did this miss removing the actual max_num_rtt field further down in
-include/ufs/ufshcd.h inside struct ufs_hba_variant_ops?
-
-    const char *name;
-    int    max_num_rtt;
-    int    (*init)(struct ufs_hba *);
-
-Leaving the field behind as dead code without a kerneldoc comment might
-trigger a kerneldoc warning.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611232632.2324=
-422-1-ed.tsai@mediatek.com?part=3D3
+-- 
+Damien Le Moal
+Western Digital Research
 
