@@ -1,182 +1,183 @@
-Return-Path: <linux-scsi+bounces-24692-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24694-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id I97AEylOKmrxmgMAu9opvQ
-	(envelope-from <linux-scsi+bounces-24692-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 07:56:57 +0200
+	id 8qnTFbFSKmqinQMAu9opvQ
+	(envelope-from <linux-scsi+bounces-24694-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 08:16:17 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ECC066ED71
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 07:56:56 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA7CD66EF46
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 08:16:16 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=a6xPXFz9;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24692-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24692-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=h-partners.com header.s=dkim header.b=m4Uy4Unq;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24694-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24694-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=fail reason="SPF not aligned (relaxed), DKIM not aligned (relaxed)" header.from=huawei.com (policy=quarantine);
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DFE00323F433
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 05:52:01 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 60B86300F777
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2026 06:16:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 619352248A8;
-	Thu, 11 Jun 2026 05:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A89935F191;
+	Thu, 11 Jun 2026 06:16:05 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0702F7AC1
-	for <linux-scsi@vger.kernel.org>; Thu, 11 Jun 2026 05:51:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6E4360EC7;
+	Thu, 11 Jun 2026 06:16:00 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781157121; cv=none; b=qCS18QIW7iG0XlB3odcB0J91QkpSC/r1VXfUzUioyEl4ezHg3SOj41eO8ie4vbNAA3c/0wIDGdyUUaDmnOLXqCuBeeQjsOS6TFtVEgZ+tIK0XKrQ7z1fzks7FCcGHzWVSoJF6L/Edvk10Hnb1bVykRRU7OF4oIFDbmgAnn5uLrU=
+	t=1781158564; cv=none; b=TJmjtOQ7CK6ErLdHkrUdNhO8diXUACSlbzoCNE5e0je3PZvw1iA2CsjrwnQ8cpVJTjrNE2UnuVcfIz+HttTTpW4UwIOtV+E3NWi+ctL3RDX3vX5ZgQ0YGcaZDAqMlDpT/Ravg/rd5Kj6zOKsdmd0DBG2KX/FjNdU4Pm08rkCxJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781157121; c=relaxed/simple;
-	bh=I5S0cnt0nhp2xjHApsEXcw0S5yzhUI80VKq8zFfNBHs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=eplEmPLgDP3x9Lewz2cU3vmJez+oLc7rvsDm3A4SZemYRfohbGTyH4jp7w5nLRRwXn42HbWu3eyNfHYd3A8xKH0v+QeNDdsWvrNbU1QP01udOKeikQiOdT4t+DdOWmR464raMq2eIJ30hwS8rouGRVkiJUecZX5I7DEaHIRKG0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a6xPXFz9; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08591F00893;
-	Thu, 11 Jun 2026 05:51:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781157119;
-	bh=j4KWGthz8dn1QyyPeU4Oiv6oP8sY/pslWYrEMbe1Pns=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=a6xPXFz9KLOuhl5/vWQ+gMNfOlJrUcMGe9HBO0ZnoOd1TSxqWHjDnakeClhXgM912
-	 yxZJZ6uWIYPh05Opzs3z191jm6Ndzb2275yZk14OTf6gd/JhfXlVeZEEe+8RfF/Jcc
-	 0MEWhwNkyDo8fpwOyYFdQVWIjt8nEq7A8jam4Q7WbbQby/N4vb3ZHIPda15FChN7aP
-	 i82Q/1hqzNwHbM8uhYCyC6iqCWxauumaYycMen1IQsrsEzRpgOrvYyDWMXNSIFJEoA
-	 In9bBKE4DgwHmpW6WTcz42XmQfnH5dL8t8M4H+mHvM3lMAMRpgAK4iKqTdevmGY6Ks
-	 fBnFud6R1Lwaw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] scsi: elx: efct: fix refcount leak in
- efct_hw_io_abort()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "WenTao Liang" <vulab@iscas.ac.cn>
-Cc: linux-scsi@vger.kernel.org
-In-Reply-To: <20260611053037.63756-1-vulab@iscas.ac.cn>
-References: <20260611053037.63756-1-vulab@iscas.ac.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 05:51:58 +0000
-Message-Id: <20260611055159.A08591F00893@smtp.kernel.org>
+	s=arc-20240116; t=1781158564; c=relaxed/simple;
+	bh=Y2LGu+LRxm6aO2AbsuJTxG6xif81p/uTbrUQGn1Ovms=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MRutGfJV+/olR75Cl7MwlM5vznUnGaOp4Z6qa9iLFaOnO8BoCrUDzS1nIUQ9P3XUgCMRNPoHzW6uDQm4cOr5rezJ/dvmsv783aMcPahG8q1uO4Ax6yG8D9bhIKB9oliqm8LfmWmUAclAHEbvHR3RRGlrbMXFoF1DDmQjsr7/SRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=m4Uy4Unq; arc=none smtp.client-ip=113.46.200.227
+dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=yL/O134Y23bR+GbIpNUFroueUl48PwdpiBvFihnM3ck=;
+	b=m4Uy4UnqbAISfYuVZ4MmQPjZyha4PtGK51zleZi4hrCDKxl4Gw7qDyKJo1RO1yf2W7sSK6C4M
+	C6ocjSj52gODKb/N1BWnEGpslv9nk5uor/5OfjqakGT6W0uz+TKvOqCzcAjSV1UJPee5qwQZjhe
+	mQJ0kuo5zw3SDAfQaG4daLU=
+Received: from mail.maildlp.com (unknown [172.19.163.127])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gbXJ41ZlKznTVK;
+	Thu, 11 Jun 2026 14:08:04 +0800 (CST)
+Received: from kwepemj100018.china.huawei.com (unknown [7.202.194.12])
+	by mail.maildlp.com (Postfix) with ESMTPS id C84D5402AB;
+	Thu, 11 Jun 2026 14:15:52 +0800 (CST)
+Received: from localhost.localdomain (10.50.163.32) by
+ kwepemj100018.china.huawei.com (7.202.194.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.36; Thu, 11 Jun 2026 14:15:52 +0800
+From: Xingui Yang <yangxingui@huawei.com>
+To: <john.g.garry@oracle.com>, <yanaijie@huawei.com>, <jejb@linux.ibm.com>,
+	<martin.petersen@oracle.com>
+CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@huawei.com>, <liyihang9@h-partners.com>, <yangxingui@huawei.com>,
+	<liuyonglong@huawei.com>, <kangfenglong@huawei.com>
+Subject: [PATCH v7 0/2] libsas: rediscover improvements for linkrate/sas_addr changes
+Date: Thu, 11 Jun 2026 14:15:49 +0800
+Message-ID: <20260611061551.1171058-1-yangxingui@huawei.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemj100018.china.huawei.com (7.202.194.12)
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),quarantine];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[h-partners.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORWARDED(0.00)[lists@lfdr.de];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24692-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:vulab@iscas.ac.cn,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
-	RCPT_COUNT_TWO(0.00)[2];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TO_DN_NONE(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24694-lists,linux-scsi=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:john.g.garry@oracle.com,m:yanaijie@huawei.com,m:jejb@linux.ibm.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linuxarm@huawei.com,m:liyihang9@h-partners.com,m:yangxingui@huawei.com,m:liuyonglong@huawei.com,m:kangfenglong@huawei.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[yangxingui@huawei.com,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	ALIAS_RESOLVED(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[yangxingui@huawei.com,linux-scsi@vger.kernel.org];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[h-partners.com:+];
 	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_NO_DN(0.00)[];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:replyto,iscas.ac.cn:email,sashiko.dev:url,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,smtp.kernel.org:mid,list_entry.next:url]
+	RCPT_COUNT_SEVEN(0.00)[11];
+	ALIAS_RESOLVED(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[h-partners.com:dkim,vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,huawei.com:mid,huawei.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 8ECC066ED71
+X-Rspamd-Queue-Id: EA7CD66EF46
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+When a device attached to an expander phy experiences a linkrate change
+(e.g., due to cable reconnection or negotiation), the current code in
+sas_rediscover_dev() treats it as "broadcast flutter" and takes no action
+if the SAS address and device type remain unchanged.
 
-Pre-existing issues:
-- [High] Hardware aborts for active IOs are silently dropped due to an inco=
-rrect check for list membership.
---
+This series is based on John Garry's suggestion [1] to check the linkrate
+and mark the device as gone and rediscover when flutter occurs, replacing
+the previous v2 patch series that used lldd callbacks.
 
-commit 33508d96614625ca6aabac77bfd4b3f88a0202b5
-Author: WenTao Liang <vulab@iscas.ac.cn>
+The previous v2 approach added lldd_dev_info_update callback which John
+commented as "seem fragile and too specialized" [2]. This series adopts
+a simpler approach that directly checks linkrate/sas_addr changes in
+sas_rediscover_dev() and triggers rediscovery using libsas's standard
+async discovery pattern.
 
-scsi: elx: efct: fix refcount leak in efct_hw_io_abort()
+This aligns with Jason Yan's earlier work [3] which was verified to
+solve the linkrate change issue.
 
-This commit fixes a reference count and flag leak when
-efct_hw_reqtag_alloc() fails in efct_hw_io_abort(). It adds the missing
-kref_put() and resets the abort_in_progress flag to prevent blocking
-future recovery attempts.
+Additionally, per the discussion in v3 [4], the existing replace code
+path also suffers from the same sysfs duplication issue: 
+sas_unregister_devs_sas_addr() only marks the device as gone, but the
+actual sysfs cleanup happens later in sas_destruct_devices(). Calling
+sas_discover_new() immediately after unregister causes sysfs_warn_dup()
+errors. This series also optimizes the replace path to use the async
+pattern, ensuring proper ordering for both flutter and replace cases.
 
-> diff --git a/drivers/scsi/elx/efct/efct_hw.c b/drivers/scsi/elx/efct/efct=
-_hw.c
-> index 1838032f64862..b79c6a7ea7912 100644
-> --- a/drivers/scsi/elx/efct/efct_hw.c
-> +++ b/drivers/scsi/elx/efct/efct_hw.c
-> @@ -1997,6 +1997,8 @@ efct_hw_io_abort(struct efct_hw *hw, struct efct_hw=
-_io *io_to_abort,
->  	wqcb =3D efct_hw_reqtag_alloc(hw, efct_hw_wq_process_abort, io_to_abort=
-);
->  	if (!wqcb) {
->  		efc_log_err(hw->os, "can't allocate request tag\n");
-> +		io_to_abort->abort_in_progress =3D false;
-> +		kref_put(&io_to_abort->ref, io_to_abort->release);
->  		return -ENOSPC;
->  	}
-> =20
+Changes from v6:
+- Add comment for restoring phy->attached_sas_addr to child_dev->sas_addr
+- Optimize the conditional structure in sas_dev_is_flutter()
 
-[Severity: High]
-This is a pre-existing issue, but does the list membership check later in
-efct_hw_io_abort() reliably determine if an IO is on the pending list?
+Changes from v5:
+- In sas_addr change handling, restore phy->attached_sas_addr to
+  child_dev->sas_addr before returning false, ensuring
+  sas_unregister_devs_sas_addr() can properly match the device via
+  sas_phy_match_dev_addr() for correct device unregistration
 
-When WQEs are dispatched to hardware, they are removed from the pending list
-using list_del_init(). This leaves the next and prev pointers pointing to t=
-he
-list entry itself, meaning they are non-NULL.
+Changes from v4:
+- Rename sas_rediscover_phy to sas_rediscover_ex_phy for consistency
+  with expander phy symbol naming convention
+- Rename sas_is_flutter to sas_dev_is_flutter per John's suggestion
+- Check return value of sas_ex_phy_discover() for errors
+- Factor out child_dev checks to improve code clarity
 
-Since io->wqe is not zeroed when the IO object is freed and recycled, any
-recycled IO or already-dispatched IO will have a non-NULL list_entry.next
-when it is evaluated here:
+Changes from v3:
+- Also optimize the replace code path to use async discovery pattern
+- Introduce sas_is_flutter() and sas_rediscover_phy() helpers
+  to encapsulate the flutter handling logic and avoid function bloat
+- Fix replace code path sysfs duplication issue
 
-	if (io_to_abort->wq) {
-		spin_lock_irqsave(&io_to_abort->wq->queue->lock, flags);
-		if (io_to_abort->wqe.list_entry.next) {
-			io_to_abort->wqe.abort_wqe_submit_needed =3D true;
-			spin_unlock_irqrestore(&io_to_abort->wq->queue->lock,
-					       flags);
-			return 0;
-		}
+Changes from v2:
+- Drop lldd_dev_info_update callback approach per John Garry's suggestion
+- Drop hisi_sas specific changes (no longer needed without callback)
+- Use libsas's async discovery pattern for rediscovery
+- Add sas_addr change detection alongside linkrate change
 
-Could this cause the check to evaluate to true for IOs that are no longer on
-the list, flagging them for a software abort and returning 0 without
-submitting an actual ABORT WQE to the hardware?
+Changes from v1:
+- Split into three patches
 
-Since the WQE is no longer on the pending list, the pending abort would nev=
-er
-be dispatched, leaving the abort_in_progress flag set forever.
+[1] https://lore.kernel.org/linux-scsi/c4e4c99f-a13c-4e28-8650-48be1f96d7cf@oracle.com/
+[2] https://lore.kernel.org/linux-scsi/28bd9d5b-f597-0aae-5340-bd951b2083aa@huawei.com/
+[3] https://lore.kernel.org/linux-scsi/20190130082412.9357-6-yanaijie@huawei.com/
+[4] https://lore.kernel.org/linux-scsi/b99cd59f-b986-432e-aaf1-3b757e1c4c34@oracle.com/
 
-If the hardware later completes the original IO, the completion handler mig=
-ht
-see abort_in_progress =3D=3D true and ignore the completion. Could this seq=
-uence
-permanently leak the IO object and its associated XRI tags?
+Xingui Yang (2):
+  scsi: libsas: refactor sas_ex_to_ata() using new helper
+    sas_ex_to_dev()
+  scsi: libsas: Add linkrate and sas_addr change detection in rediscover
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611053037.6375=
-6-1-vulab@iscas.ac.cn?part=3D1
+ drivers/scsi/libsas/sas_expander.c | 94 ++++++++++++++++++++++++------
+ drivers/scsi/libsas/sas_internal.h |  1 +
+ 2 files changed, 77 insertions(+), 18 deletions(-)
+
+-- 
+2.43.0
+
 
