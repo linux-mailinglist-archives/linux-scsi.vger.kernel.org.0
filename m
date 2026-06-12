@@ -1,74 +1,74 @@
-Return-Path: <linux-scsi+bounces-24790-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24791-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id W2TGB+jXK2rGGAQAu9opvQ
-	(envelope-from <linux-scsi+bounces-24790-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 11:56:56 +0200
+	id 5u/rAyTZK2pfGQQAu9opvQ
+	(envelope-from <linux-scsi+bounces-24791-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 12:02:12 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B11DA6787C9
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 11:56:55 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53E966788FE
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 12:02:11 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=UfgOd63d;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24790-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24790-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=JbNqhtb3;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24791-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24791-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=marvell.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id F1061304AB3E
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 09:56:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 123B331573E0
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 09:56:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9979B3546F5;
-	Fri, 12 Jun 2026 09:56:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 897F1369996;
+	Fri, 12 Jun 2026 09:56:36 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583C1320393
-	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 09:56:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D89303A04
+	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 09:56:35 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781258192; cv=none; b=V0UW+JAF/51oQfUK59GpywPX1qSlniCiC/CxN3nDOypBqGodHpB0zT/E37Tchog1PGnjP0+h6I0ylPUEVBfEqxyHwYIg4/im0BbGL22tmlr1kZdu1xh04gX4HS+NEv2yPftb2GXrj9sh69RGPscSSF+cXPQ0zfEP4eVcnV3Hhds=
+	t=1781258196; cv=none; b=f9wPUyt4Dm6A0DuQQJaXtvomsNtxdoaPCYCbcTplQaa+Yx19bo4Z4sGh1sNFnOGbXQ/c8HD1WIQu24KLym/NHxXAFjvWwOEnnChI7q6HFcMQ0LHlfvHwa1V8JMadk6jWISflobNUOE11lGIDhc1zIrpoGuMrFFMWfYPOYoyVrzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781258192; c=relaxed/simple;
-	bh=23eM6diTFe/99n68Q9Lw/5Inw9Dxl+cm/vnvfpAPFuE=;
+	s=arc-20240116; t=1781258196; c=relaxed/simple;
+	bh=IcrTIsjVT+559NRowOQsYCNbz1Ywq+cm0sJrRVvX0fU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PgaUOMXxeAFeMVlyLNmOMgYop6pCmcKPT3mCmpwub1ixKf/popYGoD3JFEO9ILGT4wjSpfa91fYxMzJSo3AWMcVb5AhPfcoMzKKAu9gGFC4Iofz99K0WPS6pk22WfnevfXZl+uBJ6wSRqaRlhSSZiD112sAd+KKnMGlFDLMllH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=UfgOd63d; arc=none smtp.client-ip=67.231.148.174
+	 MIME-Version:Content-Type; b=sdya7juJyWL4xSx1egYIrEaAL2osSD3Cuds7OLwNt+FCFZBC7sl55GUSvK98HU7kCPDLC6QmN1FRBNUvYVfrZoHMJR1f/5rLe8j80Z2lPVm+d+0L8T+Fmzkv5QIuGpLOsAK7QHRdkigQfS08vPMUuFxybiBLJw7o1W8E70kwCNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=JbNqhtb3; arc=none smtp.client-ip=67.231.148.174
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65C3AOD6071008;
-	Fri, 12 Jun 2026 02:56:28 -0700
+	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65C3AtnN071606;
+	Fri, 12 Jun 2026 02:56:31 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=a
-	+FBeIXtgDGfm0Lpx4Ieu2+9Qtu3ycmnIXePUPvaQOI=; b=UfgOd63dCnKQzkkT6
-	BBsaVj9Hx5DJBXMPHT09vu8+bOjhVLRXZxZxTwnYr7r/upOCt3xcpdhv0QQOwpaa
-	Ir7Cv42Lq06GMTxMfYyIwportpf1gtjUqAuWIL31QkEXGCzOWtpokqn/HOvc5SIt
-	0pbRfX6J6zEAnszXIX0ZfmUr5XlhM6sRt0xkcSVwBBUn+PfAJhtMqdtIsf3jiRhE
-	gHkHvdzsn2EnknXRQqhls1a3800YbuKb5QsMnihl5h0XhnHHSq9jOQ2xA+y/wNKG
-	j0KlZw5KqtHbxBpl82X53R2tylSylfpo6uyWwAZmvgF9ixUbovPzLyUVFJ2gKcDz
-	Dbpvw==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4eqe5vxrr2-1
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=Q
+	ahW+vYDIanK7iwmkdVovEAw20aW4wf6zrASOuP938E=; b=JbNqhtb3gQ/wyU++A
+	NvKaxDKUReFoH8cLztqZivcSbaveKpYRACqGTcPK9TK0kxKpWCL7cdYQ0fvP9tJP
+	h+QyhvYUnaw6g3nECXcEvRJHAEZYfpE87zOb1nAZsfBcWmafh81+WwVSLtsdnDUx
+	AGxfgRgR18Vk48hjTYUPWS81KOM6yWDKXOrGxwSF/A1jy8B85NCiK1YwGHdnC9x9
+	l5VC6fztUc4A7FzYIlY4VRXS7Q4uJlZSXxfRi+RLklRGoNJrxQgyqEjzQ/URyAah
+	p0MNfGiZ/X48tf5Bx9rrKWcLZzlfj5cDYoBcDzbVUIe/Vvs5KevcXQczzQNElTJp
+	aIa1Q==
+Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4eqe5vxrr8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Jun 2026 02:56:27 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+	Fri, 12 Jun 2026 02:56:31 -0700 (PDT)
+Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
+ DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Fri, 12 Jun 2026 02:56:27 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Fri, 12 Jun 2026 02:56:27 -0700
+ 15.2.1544.25; Fri, 12 Jun 2026 02:56:30 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
+ (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Fri, 12 Jun 2026 02:56:30 -0700
 Received: from stgdev-a5u16.punelab.marvell.com (stgdev-a5u16.punelab.marvell.com [10.31.33.164])
-	by maili.marvell.com (Postfix) with ESMTP id C16303F7040;
-	Fri, 12 Jun 2026 02:56:24 -0700 (PDT)
+	by maili.marvell.com (Postfix) with ESMTP id CC6AD3F7040;
+	Fri, 12 Jun 2026 02:56:27 -0700 (PDT)
 From: Nilesh Javali <njavali@marvell.com>
 To: <martin.petersen@oracle.com>
 CC: <linux-scsi@vger.kernel.org>, <GR-FC-Storage-Upstream@marvell.com>,
         <agurumurthy@marvell.com>, <emilne@redhat.com>, <jmeneghi@redhat.com>,
         <hare@suse.com>
-Subject: [PATCH v2 48/60] scsi: qla2xxx: Use 64-bit FPM word counters for 29xx host stats
-Date: Fri, 12 Jun 2026 15:23:21 +0530
-Message-ID: <20260612095333.1666592-49-njavali@marvell.com>
+Subject: [PATCH v2 49/60] scsi: qla2xxx: Add 64G/128G port speed setting support
+Date: Fri, 12 Jun 2026 15:23:22 +0530
+Message-ID: <20260612095333.1666592-50-njavali@marvell.com>
 X-Mailer: git-send-email 2.23.1
 In-Reply-To: <20260612095333.1666592-1-njavali@marvell.com>
 References: <20260612095333.1666592-1-njavali@marvell.com>
@@ -80,24 +80,24 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjEyMDA5MCBTYWx0ZWRfX1AyhbQMfS/Kf
- hdF+pLXPKe1g/CffvSLsDzu99pJHLepBOSG9i2e1+/noy4/n7hM9wKL6h/DVUWRkJI0TlKk4arl
- VLtcFoabkwgW/jTnhhxwh3ANuQbyTM8=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEyMDA5MCBTYWx0ZWRfX6S7cCuVN485K
- 20tEgQ8cdUVDGbyq6xz2LEoM1roM56gymq52ei0qqDn+ISwXQZdD5LSVeRdia8wbgQlO0Np0ktp
- ajN5NmM+oIPlsCtGLrT4pbApFUTNdUTzPTV7ReCBsvT6p/gWAKlADpbcpAZqDvve+zn7Za5ZiPa
- Ufnr1h0KDxfXtaMIJvR0nF94vHQ4sWMBbLM6sl/H6+81hTcRrejSI0XCzwdQVZJjaweph6XdXkG
- hB7qWq6wjenp2dR4Jdsl1L4KyfBzRee0V6VCnDZmN2Xy0awIwEGrFgNZbgw4mZa58wMJYqS9+co
- yrA07ThDIjfFd51Mgq0rEWk7cdA5B6EGT4gdzY4Qag25kMOYvBh74r6ZaIY9bUF9nYrAz4ECpeR
- Qxub12jr/7dR0a1+sUeEH/hRUMxEQ2PcHS8oYDULqvM+CydYI4SYjXq+vRhZQVxPz4Q9ZsgPpNy
- ESMVeezcwifo3s6jBGA==
-X-Authority-Analysis: v=2.4 cv=UPDt2ify c=1 sm=1 tr=0 ts=6a2bd7cc cx=c_pps
- a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjEyMDA5MCBTYWx0ZWRfX2MXGgUl++6kV
+ cwqe/Gyrk/vfCh4Ng9/ctlLitw9ySmLjISu2R58k8VSnUEXQe84gAdCxz2kChbNtWesNxA6VUwf
+ ly4D/BKSboexR9IK6QgW+JpFnr8En7Q=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEyMDA5MCBTYWx0ZWRfX0loJ77wuWysC
+ HcpnSa8He5Vw+P0DDVtVlwMXk2AWdxMa2RkbLM1g6zntMHIH92f9r8ZRS8DQDYSmw7jNF85CPE4
+ 9kW5LoszhxIx7eBLd5nBmotgHQ/PYRWyAMEKAH0Zut3aY/a67/MNTC+5g9E3SfG7G6StfO8wFJl
+ XbRnFsNYmixfEf8/QMnvutU/P7fRCPQbyj3yG1cIG8PDFV7ayKXWLl84sQXmErfXXjKoCpaS0u/
+ 6TZcqKuml7BhldpFCdV7Zm5bliGWkIwAJox63xJtO2+2vyCZv46dhKi4SJvsqZEnQKqXCSlB5+e
+ H889ds5qGnhCjbRq9IHQXr92CgbY0rH2Es1QUdA96aeGtZmzX+r2C8hIcy87WyPEnw6pp22KUc4
+ zUQStoLI/MJZvJOigaQVovq8d1QpHhWQD3/hpK/2SUrxDPy7+dY/GewPoWMbCkRDZsz0Ufchb2T
+ S00jtkGm4IZ+fQvFFdw==
+X-Authority-Analysis: v=2.4 cv=UPDt2ify c=1 sm=1 tr=0 ts=6a2bd7cf cx=c_pps
+ a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
  a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=l0iWHRpgs5sLHlkKQ1IR:22
- a=EAYMVhzMl8SCOHhVQcBL:22 a=M5GUcnROAAAA:8 a=iV06YDqDG_NXW1ljYX4A:9
+ a=EAYMVhzMl8SCOHhVQcBL:22 a=M5GUcnROAAAA:8 a=7PhB5BXe-91c5wGr4VEA:9
  a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-ORIG-GUID: W4Ci-EyRZDzzmvSIuP0cg4AzT8dKA8OX
-X-Proofpoint-GUID: W4Ci-EyRZDzzmvSIuP0cg4AzT8dKA8OX
+X-Proofpoint-ORIG-GUID: LbNmSkmSYSu0sNojwlBaZ0lcCZenMVnL
+X-Proofpoint-GUID: LbNmSkmSYSu0sNojwlBaZ0lcCZenMVnL
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
  definitions=2026-06-12_01,2026-06-11_01,2025-10-01_01
@@ -108,12 +108,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[marvell.com,quarantine];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[marvell.com:s=pfpt0220];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24790-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24791-lists,linux-scsi=lfdr.de];
 	FROM_NEQ_ENVFROM(0.00)[njavali@marvell.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:GR-FC-Storage-Upstream@marvell.com,m:agurumurthy@marvell.com,m:emilne@redhat.com,m:jmeneghi@redhat.com,m:hare@suse.com,s:lists@lfdr.de];
@@ -123,10 +123,10 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[marvell.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	ALIAS_RESOLVED(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,marvell.com:dkim,marvell.com:email,marvell.com:mid,marvell.com:from_mime,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[marvell.com:dkim,marvell.com:email,marvell.com:mid,marvell.com:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp];
 	TO_DN_NONE(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -134,36 +134,64 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[8]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B11DA6787C9
+X-Rspamd-Queue-Id: 53E966788FE
 
-29xx provides the 64-bit FPM transmit/receive word counters in the link
-statistics block, like 83xx/27xx/28xx.  qla2x00_get_fc_host_stats()
-only consumed those counters for the older families and fell back to the
-software approximation (input/output bytes >> 2) on 29xx, reporting less
-accurate rx_words/tx_words.
+The port speed setting paths topped out at 32G: qla2x00_port_speed_store()
+only mapped sysfs inputs up to 32 (and their no-loss-of-sync forms up to
+320), and qla2x00_set_data_rate() only accepted PORT_SPEED_AUTO/4/8/16/32
+in its switch.  A user request for 64G or 128G therefore hit the default
+arm and was silently downgraded to auto-negotiation.
 
-Add IS_QLA29XX() to the high-speed branch so 29xx reports the hardware
-word counters.
+Map the 64 and 128 sysfs inputs (and their /10 no-loss-of-sync forms 640
+and 1280) to PORT_SPEED_64GB and PORT_SPEED_128GB, and accept those
+values in qla2x00_set_data_rate().  The firmware validates the requested
+rate against the adapter's actual capability.
 
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_attr.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_attr.c | 8 +++++++-
+ drivers/scsi/qla2xxx/qla_mbx.c  | 2 ++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/qla2xxx/qla_attr.c b/drivers/scsi/qla2xxx/qla_attr.c
-index fd3c8c207535..308b85e04f26 100644
+index 308b85e04f26..4c1812c4b420 100644
 --- a/drivers/scsi/qla2xxx/qla_attr.c
 +++ b/drivers/scsi/qla2xxx/qla_attr.c
-@@ -2990,7 +2990,8 @@ qla2x00_get_fc_host_stats(struct Scsi_Host *shost)
- 		p->error_frames =
- 		    le32_to_cpu(stats->dropped_frames) +
- 		    le32_to_cpu(stats->discarded_frames);
--		if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
-+		if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha) ||
-+		    IS_QLA29XX(ha)) {
- 			p->rx_words = le64_to_cpu(stats->fpm_recv_word_cnt);
- 			p->tx_words = le64_to_cpu(stats->fpm_xmit_word_cnt);
- 		} else {
+@@ -1835,7 +1835,7 @@ qla2x00_port_speed_store(struct device *dev, struct device_attribute *attr,
+ 		return rval;
+ 	speed = type;
+ 	if (type == 40 || type == 80 || type == 160 ||
+-	    type == 320) {
++	    type == 320 || type == 640 || type == 1280) {
+ 		ql_dbg(ql_dbg_user, vha, 0x70d9,
+ 		    "Setting will be affected after a loss of sync\n");
+ 		type = type/10;
+@@ -1860,6 +1860,12 @@ qla2x00_port_speed_store(struct device *dev, struct device_attribute *attr,
+ 	case 32:
+ 		ha->set_data_rate = PORT_SPEED_32GB;
+ 		break;
++	case 64:
++		ha->set_data_rate = PORT_SPEED_64GB;
++		break;
++	case 128:
++		ha->set_data_rate = PORT_SPEED_128GB;
++		break;
+ 	default:
+ 		ql_log(ql_log_warn, vha, 0x1199,
+ 		    "Unrecognized speed setting:%lx. Setting Autoneg\n",
+diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
+index 7c0cc3e9c738..5a5d33e8ee7f 100644
+--- a/drivers/scsi/qla2xxx/qla_mbx.c
++++ b/drivers/scsi/qla2xxx/qla_mbx.c
+@@ -5728,6 +5728,8 @@ qla2x00_set_data_rate(scsi_qla_host_t *vha, uint16_t mode)
+ 	case PORT_SPEED_8GB:
+ 	case PORT_SPEED_16GB:
+ 	case PORT_SPEED_32GB:
++	case PORT_SPEED_64GB:
++	case PORT_SPEED_128GB:
+ 		val = ha->set_data_rate;
+ 		break;
+ 	default:
 -- 
 2.47.3
 
