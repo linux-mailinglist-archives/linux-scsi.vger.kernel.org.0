@@ -1,62 +1,63 @@
-Return-Path: <linux-scsi+bounces-24898-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24899-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id jFF3JpwhLGrFLwQAu9opvQ
-	(envelope-from <linux-scsi+bounces-24898-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 17:11:24 +0200
+	id 7D1MJswiLGoeMAQAu9opvQ
+	(envelope-from <linux-scsi+bounces-24899-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 17:16:28 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB08167A6C6
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 17:11:23 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB25967A73D
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 17:16:27 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=bsnpoHqE;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24898-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24898-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=XbVNFxM9;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24899-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24899-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D0EE831C0111
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 15:10:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1D110319FAC9
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 15:12:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C15D33F399;
-	Fri, 12 Jun 2026 15:10:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C009368D7F;
+	Fri, 12 Jun 2026 15:12:52 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58858282F06
-	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 15:10:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B35C349CC4
+	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 15:12:51 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781277049; cv=none; b=gtjgKAR3IwzrLeOOzfvIcnzkir4+hkFq5Zrs5uo4Brj36wAtwT7zQPnE6O5d09ugevNzPzRVWFjmx3/crOD0lNStwRnp5Nl/ngONlwemYqy0ebpil1nuf22vr1NyFEVGXXNw+KSWae40eh5KMDH0w4LqdCyqYMjTGJolQCB7dBk=
+	t=1781277172; cv=none; b=uJFWwrwhGmNzaPK3ONTxwteMy8eIq7HUMnp6Djt/59/CIinfF5Kl+GxgsRBa7Yv7jIIoD5BJF4BvEJYUw2Sa7IXAkTfu+9O0CO6sqR/PrH2P4eq9j7aFxuiizXlo1ivpx5URZf2WAi85XSYUdziD5CrBE7Ey5cHhFXrr9AXqeRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781277049; c=relaxed/simple;
-	bh=Sq9Ero/LS3ur/yy/ddGuBp5N+tV7cLwHkF0mBkzPrgI=;
+	s=arc-20240116; t=1781277172; c=relaxed/simple;
+	bh=+geGvRCVLZvqNriqMGbTwygp/mmAmrYaYNnIhxAjnbU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=biqNJBM0TQRVmIiJJauJUJFqZji9Q4taxFH1G8YVx34CV09lItUGloJIJrSJ+YDpP6tgNV/S9Qh1MK420TmQjDgD9prrHOKod3Gc0Hu0mNJLnSeO2AUeGoxWrLSr3xZLN3CMkj+nPNPwIty8rOjccASsdOU9oLh663kwlnQch1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bsnpoHqE; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAF8E1F000E9;
-	Fri, 12 Jun 2026 15:10:47 +0000 (UTC)
+	 Message-Id; b=oZALEADxQUE7g8+iMK/K/0kjyxS05jNn7YJDEfgJKzxI3kFp8JEy4lLvp7LX96e1YYs11SOJkwNIpX8AtG+wBCI///+OnFN8+5OOiZX8mVBcTT1zzVCWqPgX9u5lhXziKT1sN8GwF8ApTUePBwCPHLGvn6UQ9UcHwBI3am2DB14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XbVNFxM9; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88CC1F00A3A;
+	Fri, 12 Jun 2026 15:12:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781277048;
-	bh=pK2hdSWHNKRW1IYuKJCPg+FDoxVytPtUbD47XdAOeyM=;
+	s=k20260515; t=1781277171;
+	bh=9ng9/EcIzcgnUEXpVZwJ33I1cxrkdSCjxaG5UxRV9qA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=bsnpoHqEQbf1Ae1WMQ0N8G+nT5o4hRJItApyvNl18gDQBH7hTjc/+TlFdRco+e6yd
-	 PJ0DCKKiEK1JPzNrEMb5eRbItiEd9vdpkhsIjmswCfSB/gkgxNUA+Ps+dvSRcvllBO
-	 ohcUrk1MmYlioGHtBI2Etswsbtr6/ADGbch3NGfLxHMd25dxFzmoPyvx7tHhY25IES
-	 CuzIA5y0DQIYsW576gQ02zUOjxPSrbNMX8ki+gfPrDf/bxMCFC9OCP5iGoIPoVq5mN
-	 2WjCsvFIAiLXiULLyzNfcmxMt+0nfVC2YoqU+lAGzKdDYxchjMf9bYulovAibtTAdt
-	 /jil3wZakq5mg==
+	b=XbVNFxM9UQmWpVrj5Aks5ujGkxuL7sdhfYa6oqduZtb8mWTJA48R0kmdFbiCZ+PBs
+	 fqKBirIkcPhHo9lhze0ugh0GIp504T6inPCP5S2IhgI/Z/HgPnQ7GOhe3gY4iEh5S7
+	 usc0FnolnETxj02hS1sy9YJtaUQQn32IAtTEnYRktsbHhBdWStPaauqa63/wiCZits
+	 lIjzb0F+UXtNmguteihEba6H0IyEQEUBySqJWY0+Kkip+qkXqMQ0/HPqRz21psHA93
+	 M0MqeiZcDpM0r2kcwaj2oblbIJGhXJtDaxbvwFjRIRGM5/FbyAOO6J/vAVIzMpk+CO
+	 zH4F/7TZ1M/pQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3] ufs: sysfs: Add WB partial flush mode support
+Subject: Re: [PATCH v2 37/60] scsi: qla2xxx: Enhance ABTS processing for
+ 29xx series
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Daniel Lee" <chullee@google.com>
+To: "Nilesh Javali" <njavali@marvell.com>
 Cc: linux-scsi@vger.kernel.org
-In-Reply-To: <20260612150136.2263477-1-chullee@google.com>
-References: <20260612150136.2263477-1-chullee@google.com>
+In-Reply-To: <20260612095333.1666592-38-njavali@marvell.com>
+References: <20260612095333.1666592-38-njavali@marvell.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 12 Jun 2026 15:10:47 +0000
-Message-Id: <20260612151047.CAF8E1F000E9@smtp.kernel.org>
+Date: Fri, 12 Jun 2026 15:12:50 +0000
+Message-Id: <20260612151250.C88CC1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -69,16 +70,16 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24898-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24899-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:chullee@google.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:njavali@marvell.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
 	RCPT_COUNT_TWO(0.00)[2];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -96,109 +97,91 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_NO_DN(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,smtp.kernel.org:mid,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,sashiko.dev:url,lists.linux.dev:replyto,smtp.kernel.org:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: EB08167A6C6
+X-Rspamd-Queue-Id: EB25967A73D
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Unhandled pm_runtime_get_sync error leads to potential hardware ac=
-cess on suspended device
+- [High] Releasing and reusing the `rsp_pkt` DMA buffer immediately after a=
+ hardware timeout can lead to a use-after-free and memory corruption by the=
+ device.
 --
 
-commit 75ac0206b35904f19c6179a4c935e644238e4421
-Author: Daniel Lee <chullee@google.com>
-Subject: ufs: sysfs: Add WB partial flush mode support
+commit 95311a058967d0d565bd44ef588d75babbb03f6f
+Author: Nilesh Javali <njavali@marvell.com>
 
-This commit adds sysfs entries for JEDEC UFS 4.1 Extended WriteBooster
-attributes and flags to support FIFO and Pinned partial flush modes.
-It introduces UFS_ATTRIBUTE_RW and UFS_FLAG_RW macros to support
-writable attributes and flags.
+scsi: qla2xxx: Enhance ABTS processing for 29xx series
 
-> diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
-> index d9dc4cc3452ee..fbf7404d6d78a 100644
-> --- a/drivers/ufs/core/ufs-sysfs.c
-> +++ b/drivers/ufs/core/ufs-sysfs.c
+This commit introduces extended ABTS entry structures to properly
+handle the 128-byte IOCB format for the 29xx series adapters. It also
+adds type-generic macros to reduce code duplication in the ABTS
+processing path.
+
+> diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_is=
+r.c
+> index 5b5ccf2075353..284d874392fd5 100644
+> --- a/drivers/scsi/qla2xxx/qla_isr.c
+> +++ b/drivers/scsi/qla2xxx/qla_isr.c
 [ ... ]
-> @@ -1527,41 +1533,94 @@ static const struct attribute_group ufs_sysfs_str=
-ing_descriptors_group =3D {
+> @@ -140,60 +212,27 @@ qla24xx_process_abts(struct scsi_qla_host *vha, str=
+uct purex_item *pkt)
+>  	}
 > =20
->  static inline bool ufshcd_is_wb_flags(enum flag_idn idn)
->  {
-> -	return idn >=3D QUERY_FLAG_IDN_WB_EN &&
-> -		idn <=3D QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8;
-> +	return (idn >=3D QUERY_FLAG_IDN_WB_EN &&
-> +		idn <=3D QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8) ||
-> +	       idn =3D=3D QUERY_FLAG_IDN_WB_UNPIN_EN;
-> +}
+>  	/* send ABTS response */
+> -	abts_rsp =3D rsp_pkt;
+> -	memset(abts_rsp, 0, sizeof(*abts_rsp));
+[ ... ]
+> -	rval =3D qla2x00_issue_iocb(vha, abts_rsp, dma, 0);
+> -	if (rval) {
+[ ... ]
+> +	if (IS_QLA29XX(ha)) {
+> +		struct abts_entry_24xx_ext *rsp_ext =3D rsp_pkt;
 > +
-> +static ssize_t ufs_sysfs_flag_show(struct device *dev,
-> +	struct device_attribute *attr, char *buf, enum flag_idn idn)
-> +{
-> +	struct ufs_hba *hba =3D dev_get_drvdata(dev);
-> +	u8 index =3D 0;
-> +	bool flag;
-> +	int ret;
+> +		QLA_BUILD_ABTS_BA_ACC(rsp_ext, abts_ext,
+> +		    abts_ext->sof_type, fctl);
+> +		QLA_LOG_ISSUE_ABTS_RSP(vha, rsp_ext, dma, rval);
+>  	} else {
+> -		ql_dbg(ql_dbg_init, vha, 0x028ea,
+> -		    "%s: done.\n", __func__);
+> +		struct abts_entry_24xx *abts_rsp =3D rsp_pkt;
 > +
-> +	down(&hba->host_sem);
-> +	if (!ufshcd_is_user_access_allowed(hba)) {
-> +		up(&hba->host_sem);
-> +		return -EBUSY;
-> +	}
-> +	if (ufshcd_is_wb_flags(idn))
-> +		index =3D ufshcd_wb_get_query_index(hba);
-> +	ufshcd_rpm_get_sync(hba);
-> +	ret =3D ufshcd_query_flag(hba, UPIU_QUERY_OPCODE_READ_FLAG,
-> +		idn, index, &flag);
-> +	ufshcd_rpm_put_sync(hba);
+> +		QLA_BUILD_ABTS_BA_ACC(abts_rsp, abts,
+> +		    abts->sof_type & 0xf0, fctl);
+> +		QLA_LOG_ISSUE_ABTS_RSP(vha, abts_rsp, dma, rval);
+>  	}
+> =20
+>  	dma_free_coherent(&ha->pdev->dev, rsp_sz, rsp_pkt, dma);
+>  }
 
 [Severity: High]
-This isn't a bug introduced by this patch, but this newly refactored functi=
-on
-ignores the return value of ufshcd_rpm_get_sync(). If the device W-LUN and
-underlying HBA fail to resume from runtime suspend (returning a negative er=
-ror
-code), does it make sense to blindly proceed to call ufshcd_query_flag()?
+This is a pre-existing issue, but could this code lead to a use-after-free
+and memory corruption?
 
-Writing to or accessing MMIO registers of an unclocked or unpowered UFS
-controller can trigger a synchronous external abort or PCI master abort.
+Earlier in qla24xx_process_abts(), qla2x00_issue_iocb() is called to send an
+ELS response using the same rsp_pkt buffer:
 
-[ ... ]
-> @@ -1804,6 +1916,71 @@ UFS_ATTRIBUTE(wb_avail_buf, _AVAIL_WB_BUFF_SIZE);
->  UFS_ATTRIBUTE(wb_life_time_est, _WB_BUFF_LIFE_TIME_EST);
->  UFS_ATTRIBUTE(wb_cur_buf, _CURR_WB_BUFF_SIZE);
-> =20
-> +static ssize_t wb_partial_flush_mode_show(struct device *dev,
-> +				 struct device_attribute *attr, char *buf)
-> +{
-[ ... ]
-> +	down(&hba->host_sem);
-> +	if (!ufshcd_is_user_access_allowed(hba)) {
-> +		up(&hba->host_sem);
-> +		return -EBUSY;
-> +	}
-> +	ufshcd_rpm_get_sync(hba);
-> +	ret =3D ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,
-> +		QUERY_ATTR_IDN_WB_PFM, ufshcd_wb_get_query_index(hba), 0, &value);
-> +	ufshcd_rpm_put_sync(hba);
-> +	up(&hba->host_sem);
+    rval =3D qla2x00_issue_iocb(vha, rsp_pkt, dma, 0);
+    if (rval) {
+        ql_log(ql_log_warn, vha, 0x0288,
+            "%s: iocb failed to execute -> %x\n", __func__, rval);
+    } else if ...
 
-[Severity: High]
-This is a pre-existing issue in the older sysfs macros that has been propag=
-ated
-here to the newly created functions. Should we check the return value of
-ufshcd_rpm_get_sync() here as well? The same pattern is present in
-wb_partial_flush_mode_store(), ufs_sysfs_attr_show(), ufs_sysfs_attr_store(=
-),
-and ufs_sysfs_flag_store().
+If the command times out, qla2x00_issue_iocb() returns a non-zero rval, but
+execution continues. The code then reuses rsp_pkt to send an ABTS response
+and unconditionally frees it via dma_free_coherent() right after.
+
+If the firmware is still holding the physical DMA address and completes the
+delayed command later, wouldn't it perform a DMA write to the freed physical
+address?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260612150136.2263=
-477-1-chullee@google.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260612095333.1666=
+592-1-njavali@marvell.com?part=3D37
 
