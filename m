@@ -1,74 +1,74 @@
-Return-Path: <linux-scsi+bounces-24795-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24796-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id oWeVH/DXK2rHGAQAu9opvQ
-	(envelope-from <linux-scsi+bounces-24795-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 11:57:04 +0200
+	id sjyPJUPZK2psGQQAu9opvQ
+	(envelope-from <linux-scsi+bounces-24796-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 12:02:43 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22E0A6787CC
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 11:57:04 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 076B5678921
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 12:02:43 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=Mcbyt7iN;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24795-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24795-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=eZhZEBA9;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24796-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24796-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=marvell.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 19AA4303B519
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 09:56:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AF770342FDBE
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 09:56:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4A153546F5;
-	Fri, 12 Jun 2026 09:56:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E3F3546F5;
+	Fri, 12 Jun 2026 09:56:52 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD7436655C
-	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 09:56:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09AA3624B7
+	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 09:56:50 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781258208; cv=none; b=diWT3QiH7L7Xt42tDg7OIEV4Hh/TplCyfxkZ37DsVeY8UlT6jmzWAOthi8jAPvPrE7PUl0CFTNNisWr3AG28DMfxHjtkybNSHsUuelY08v5tE2xPS55Q4OZ0ae5E7ycQV1htJD51Ufk7odye3reZjijPERYK4d5M/alAq8TKY1A=
+	t=1781258212; cv=none; b=FsXMw58vM9j82sYjUEnV4PxnJ8pWbbOYUueCdd5BkRpUczVmzDMkyWXleaVfDWH7GjWaQVpeWlf5EdiaI429rLgL+7Tbn2Rnzh4y0JAu7DE3PxLziyBmflZ1hFXUIMg5OzaBpPmoS2QQaGvWEtBOnY44kxsoUT6Hm6ES89EZuOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781258208; c=relaxed/simple;
-	bh=SPp9lcmCW2vfMIieA2igL9Ud6a2h3vHb8+xC2HyZrts=;
+	s=arc-20240116; t=1781258212; c=relaxed/simple;
+	bh=0fMVZChatSiMjoOEeEGOciT2xN5dXwAKaQmsNp9TAEU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AulBYVBvNJkpUnuE3Z7CyaAWdX7A6RlpgPDqm8Uklayf/D/ga88G/kOAmGBCyclRi3eJTTq0bik3MA5YuCVbxHhMaX1KC028gTyW04PKiPydIKsE8pePTjTaBef+EJHaE5rSMJPbb1VHCKEBwCiWDqnrgEomNnNyUODw+4+156E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=Mcbyt7iN; arc=none smtp.client-ip=67.231.156.173
-Received: from pps.filterd (m0431383.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65C39sG93783292;
-	Fri, 12 Jun 2026 02:56:44 -0700
+	 MIME-Version:Content-Type; b=CcFkr1ksFhIeyacJy93EdwbUD0U0MA+EK9o3EPgn9L1Hmn+oa7ODN0GXfNxLQFZ1bzfaK1ao7JaNc9c49wfxE2kl1E6+w4RtTZY+7dy4/FznYImWo1xqrtuqOLgyd4hBpy+Z47/eAYeNaORtyr3PCLta7nFwaCYGiv/LUvaJuqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=eZhZEBA9; arc=none smtp.client-ip=67.231.148.174
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65C3AtnP071606;
+	Fri, 12 Jun 2026 02:56:47 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=K
-	wzpy3MC1U5BMxdQlOpJcQJXTDf8PtQ8wkgyHFbkZP4=; b=Mcbyt7iN/dSZcuXS2
-	dbv/WExiJKawFe+Ry9ALp9GPWTmbU77NTi1qmOo62Wf+g8M0eUau3fadliLylHtr
-	QMoC4fwDofpoL7u41f8u08pgvV9g/peFDwyHa8ODAa7ntylGxevpcuy8uscKq7TV
-	GSIDwuNiwWyLkhhknET3bdZQF8bshnHJjJeWEPcVnwwHo7PMYqeZdcbaXMjpFZ14
-	TYOq3JXjqz84noJN4RrUrwuqnJTamfj+NorKvbwMDqSJtpEHfb4IBKbGgIXDlz6/
-	97tNfBd11uqjmi5jbi7gqFw6AQxaDJUTynpjIlyBa2cHsCbPcRu0xFKooDAV9F8j
-	im2Kw==
-Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4er6r2hjma-1
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=F
+	j8kDL+ktkIZdvhCE4SXXiBvPJJscsF8/4hA+JpfL8Q=; b=eZhZEBA9g+skL/pt5
+	NzIhfac+BdYOy8mCynPZ2s4UFsn8b8D4UEYkNaExzAAn+GHL41t19S9OwOoYxZ40
+	sSwTG9FCxdA1p8Mz7A7kV6dY4I8mpBQxjELOemjYmaZ254GpGTOD7/SehPYARm6D
+	e0Imo0jUlHZm6xGpf9nlOjTDwEvU6QPjZFOybqDRWH+RfSqte/vvx1+BglJxWOHB
+	MCl7P/73MQmAOtUrLOBtCs4AmRR1/zu4XVeQnARCldZzYNmlPs9aLDtPlqPLwkya
+	9aWP31AD/pFMGi6zJFPzrN8jTgDRrlbOvYP9mTL40AHJHzBzDdLs+23oJla9tsl7
+	FNRAA==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4eqe5vxrrk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Jun 2026 02:56:44 -0700 (PDT)
-Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
- DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
+	Fri, 12 Jun 2026 02:56:47 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Fri, 12 Jun 2026 02:56:43 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
- (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Fri, 12 Jun 2026 02:56:43 -0700
+ 15.2.1544.25; Fri, 12 Jun 2026 02:56:46 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Fri, 12 Jun 2026 02:56:46 -0700
 Received: from stgdev-a5u16.punelab.marvell.com (stgdev-a5u16.punelab.marvell.com [10.31.33.164])
-	by maili.marvell.com (Postfix) with ESMTP id 08E0F3F7040;
-	Fri, 12 Jun 2026 02:56:40 -0700 (PDT)
+	by maili.marvell.com (Postfix) with ESMTP id 085B93F704D;
+	Fri, 12 Jun 2026 02:56:43 -0700 (PDT)
 From: Nilesh Javali <njavali@marvell.com>
 To: <martin.petersen@oracle.com>
 CC: <linux-scsi@vger.kernel.org>, <GR-FC-Storage-Upstream@marvell.com>,
         <agurumurthy@marvell.com>, <emilne@redhat.com>, <jmeneghi@redhat.com>,
         <hare@suse.com>
-Subject: [PATCH v2 53/60] scsi: qla2xxx: Bound VP index against VP_CTRL IOCB bitmap size
-Date: Fri, 12 Jun 2026 15:23:26 +0530
-Message-ID: <20260612095333.1666592-54-njavali@marvell.com>
+Subject: [PATCH v2 54/60] scsi: qla2xxx: Check entry_status in qla24xx_modify_vp_config()
+Date: Fri, 12 Jun 2026 15:23:27 +0530
+Message-ID: <20260612095333.1666592-55-njavali@marvell.com>
 X-Mailer: git-send-email 2.23.1
 In-Reply-To: <20260612095333.1666592-1-njavali@marvell.com>
 References: <20260612095333.1666592-1-njavali@marvell.com>
@@ -80,24 +80,24 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEyMDA5MCBTYWx0ZWRfX5Zr0CkyQZ8pJ
- RYIzLA0s5FS4gD3RHEVX6g/dNmcZe1o/kAaYZhTTij0btCgE7inj7kUBxoDVq6kfDFVBKXfyayg
- 2fp7GJkNyjo5jHs1C7A5uF6aLZWs7O083oBFRsunD0IVc6KBprgcQmspVwAnunZLSOyKbZh3DTm
- R2eZWYTLp5WxfmfMheGJvG7C3KxDSPWpN2h0b9cM81XO3gBhg0tHPWf3IbBudfuQs4HJRCye9lJ
- aXiT/fSYO1RB7yiBpw6wqs35dV+Y+60QXU9V3zuH/XKkloubYy1ugYB1g7TyAa2g0yS9fg6ULnK
- 1kk5AjtCGdfu+1or1Iwf2h2cXeYPgHpHZmcWGpPOvP1V5HFv8AFRCLeSEWP62yyrbW2NWgSbdTY
- WUTFVszCXTgS1GZh1i4dBw0LE/V5GZ6HieQkaVwXldL6YgSNiVzQPmfd/TqES3ZNaOt8b2eamuj
- lO3SErN/ES3p42E5XMQ==
-X-Authority-Analysis: v=2.4 cv=GoByPE1C c=1 sm=1 tr=0 ts=6a2bd7dc cx=c_pps
- a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjEyMDA5MCBTYWx0ZWRfXxZbNSsGSjPm4
+ 0j1z7vevT5GfMGKv4HP48anoDPDMwH8RcfLfU/ep/Mj6JuCE9sxdJe/+1k6k9NCSWwrhjl5lFmW
+ 7pG7VTmUnADtJL0HeaFAIvrZWN6gHzg=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEyMDA5MCBTYWx0ZWRfX8yC8vxrC3w0W
+ XC8trC5x5bpr6HCO1jiH8Xzj9T+2r3RfhyDd2gN6+y6x5NhaysN1279cRRldXNxSD0LZSypkFYd
+ 4uUVCXF98jsEDKtJ0KWj9lWzeaFYxft77TpW3O32ty6KilBn0G36SK58LNp53NefH7tokPCq5pg
+ tyVO3vghXTKkxgGcwlb25ZQ585/0V65Pvr5/4s3jzVNG1x/N9H4ZefVbMTcLYs4WNqHxYmpZ9XR
+ zbyw4SOkY8WCMcsiWMsOR8r8Dz9B2ol2HJfipAN/Wy1RKQ6R/v0Cp8vzBR82KDgbSIpUS9eh73G
+ FbJsR4pLj1ow1l/HNynzE1PzfzclH9u5dxH5iesHP+OV6Kw6WiqUsPFPn6mW/5imF2ootb2jsMr
+ 9W6tEi0KgI3i6r5GABb4DXf+qe3G8xUiIH2ZvHgOG+KLY4v56EdRH7kJF9qH+wQdYUcczomFoxT
+ 20v4emh/jfNZCcagitA==
+X-Authority-Analysis: v=2.4 cv=UPDt2ify c=1 sm=1 tr=0 ts=6a2bd7df cx=c_pps
+ a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
  a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=l0iWHRpgs5sLHlkKQ1IR:22
- a=qit2iCtTFQkLgVSMPQTB:22 a=VwQbUJbxAAAA:8 a=M5GUcnROAAAA:8
- a=LmotS8iUCfLPSoeuQIgA:9 a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjEyMDA5MCBTYWx0ZWRfXzdi96XoNuHe8
- N84/2MyR4N9rjuYJKyMp9GUMbWNlVltvGO2jVP3qUix37MX1r0rC0lDxoP9t39WsgzNyIbC3v67
- lA060fxRT0szFBoGKJoEy3Z33E8cQcM=
-X-Proofpoint-GUID: 0Jm61w0Uvw5jHl0JV1tdgmZRUBkdR8ch
-X-Proofpoint-ORIG-GUID: 0Jm61w0Uvw5jHl0JV1tdgmZRUBkdR8ch
+ a=EAYMVhzMl8SCOHhVQcBL:22 a=VwQbUJbxAAAA:8 a=M5GUcnROAAAA:8
+ a=45oI07BRoqxegsLmdCIA:9 a=OBjm3rFKGHvpk9ecZwUJ:22
+X-Proofpoint-ORIG-GUID: y3bdsno5QYMYf7rL38DAJBvNrG6o9dzq
+X-Proofpoint-GUID: y3bdsno5QYMYf7rL38DAJBvNrG6o9dzq
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
  definitions=2026-06-12_01,2026-06-11_01,2025-10-01_01
@@ -108,12 +108,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[marvell.com,quarantine];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[marvell.com:s=pfpt0220];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24795-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24796-lists,linux-scsi=lfdr.de];
 	FROM_NEQ_ENVFROM(0.00)[njavali@marvell.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:GR-FC-Storage-Upstream@marvell.com,m:agurumurthy@marvell.com,m:emilne@redhat.com,m:jmeneghi@redhat.com,m:hare@suse.com,s:lists@lfdr.de];
@@ -123,10 +123,10 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[marvell.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	ALIAS_RESOLVED(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,marvell.com:dkim,marvell.com:email,marvell.com:mid,marvell.com:from_mime,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[marvell.com:dkim,marvell.com:email,marvell.com:mid,marvell.com:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp];
 	TO_DN_NONE(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -134,70 +134,50 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[8]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 22E0A6787CC
+X-Rspamd-Queue-Id: 076B5678921
 
-The VP control IOCB selects its target virtual port by setting one bit
-in vp_idx_map, a fixed 16-byte (128-bit) array in both
-vp_ctrl_entry_24xx and vp_ctrl_entry_24xx_ext. qla25xx_ctrlvp_iocb()
-computes map = (vp_index - 1) / 8 and writes vce->vp_idx_map[map]
-without checking that map stays within the array.
+The Modify VP Config completion handler labelled its first error branch
+"error status" but tested vpmod->comp_status instead of
+vpmod->entry_status. Because CS_COMPLETE is 0, the following
+"comp_status != CS_COMPLETE" branch duplicated that test and was dead
+code, and entry_status was never examined at all.
 
-max_npiv_vports is taken from firmware and only sanitized to a
-MIN_MULTI_ID_FABRIC-aligned boundary, so it can legitimately be 191 or
-255, and qla24xx_control_vp() only rejects vp_index >= max_npiv_vports.
-A vp_index above 128 therefore yields map >= 16 and an out-of-bounds
-write of up to 16 bytes past vp_idx_map, corrupting the trailing IOCB
-fields (or the adjacent request-ring slot on the 64-byte layout).
+When firmware rejects the IOCB early it sets entry_status while leaving
+comp_status zero. As the IOCB is allocated with dma_pool_zalloc(), both
+comp_status branches evaluate false and the handler falls through to the
+success path, calling fc_vport_set_state(FC_VPORT_INITIALIZING) for a
+configuration the firmware never accepted. This can leave the virtual
+port enabled on top of an invalid config and surface later as login
+timeouts or follow-on firmware errors.
 
-Reject a vp_index that cannot be represented in the IOCB bitmap in
-qla24xx_control_vp(), and add a defensive ARRAY_SIZE() guard in
-qla25xx_ctrlvp_iocb() before the write. Adapters that report the usual
-63 or 127 NPIV vports are unaffected.
+Test entry_status in the first branch, matching qla_ctrlvp_completed()
+and the login/logout/abort/reset IOCB handlers; the comp_status branch
+then becomes the live completion-status check.
 
-Fixes: 2853192e154b ("scsi: qla2xxx: Use IOCB path to submit Control VP MBX command")
+Fixes: 2c3dfe3f6ad8 ("[SCSI] qla2xxx: add support for NPIV")
 Cc: stable@vger.kernel.org
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_iocb.c | 6 ++++++
- drivers/scsi/qla2xxx/qla_mid.c  | 8 ++++++++
- 2 files changed, 14 insertions(+)
+ drivers/scsi/qla2xxx/qla_mbx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
-index a103be30fddb..8b5a13823b3d 100644
---- a/drivers/scsi/qla2xxx/qla_iocb.c
-+++ b/drivers/scsi/qla2xxx/qla_iocb.c
-@@ -4068,6 +4068,12 @@ qla25xx_ctrlvp_iocb(srb_t *sp, void *pkt)
- 	vce->entry_count = 1;
- 	vce->command = cpu_to_le16(sp->u.iocb_cmd.u.ctrlvp.cmd);
- 	vce->vp_count = cpu_to_le16(1);
-+	if (map >= ARRAY_SIZE(vce->vp_idx_map)) {
-+		ql_log(ql_log_warn, sp->vha, 0x307c,
-+		       "ctrlvp: vp_index %u exceeds vp_idx_map capacity\n",
-+		       sp->u.iocb_cmd.u.ctrlvp.vp_index);
-+		return;
-+	}
- 	vce->vp_idx_map[map] |= 1 << pos;
- }
- 
-diff --git a/drivers/scsi/qla2xxx/qla_mid.c b/drivers/scsi/qla2xxx/qla_mid.c
-index 7072af5b4217..b7d9c1a53f3c 100644
---- a/drivers/scsi/qla2xxx/qla_mid.c
-+++ b/drivers/scsi/qla2xxx/qla_mid.c
-@@ -987,6 +987,14 @@ int qla24xx_control_vp(scsi_qla_host_t *vha, int cmd)
- 	if (vp_index == 0 || vp_index >= ha->max_npiv_vports)
- 		return QLA_PARAMETER_ERROR;
- 
-+	/*
-+	 * The VP_CTRL IOCB selects the target VP through a fixed 128-bit
-+	 * (16-byte) vp_idx_map bitmap, so vp_index must fit within it even
-+	 * if firmware advertises more NPIV vports.
-+	 */
-+	if (vp_index > sizeof_field(struct vp_ctrl_entry_24xx, vp_idx_map) * 8)
-+		return QLA_PARAMETER_ERROR;
-+
- 	/* ref: INIT */
- 	sp = qla2x00_get_sp(base_vha, NULL, GFP_KERNEL);
- 	if (!sp)
+diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
+index d661662aed26..8a001b489fc0 100644
+--- a/drivers/scsi/qla2xxx/qla_mbx.c
++++ b/drivers/scsi/qla2xxx/qla_mbx.c
+@@ -4409,10 +4409,10 @@ qla24xx_modify_vp_config(scsi_qla_host_t *vha)
+ 	if (rval != QLA_SUCCESS) {
+ 		ql_dbg(ql_dbg_mbx, vha, 0x10bd,
+ 		    "Failed to issue VP config IOCB (%x).\n", rval);
+-	} else if (vpmod->comp_status != 0) {
++	} else if (vpmod->entry_status != 0) {
+ 		ql_dbg(ql_dbg_mbx, vha, 0x10be,
+ 		    "Failed to complete IOCB -- error status (%x).\n",
+-		    vpmod->comp_status);
++		    vpmod->entry_status);
+ 		rval = QLA_FUNCTION_FAILED;
+ 	} else if (vpmod->comp_status != cpu_to_le16(CS_COMPLETE)) {
+ 		ql_dbg(ql_dbg_mbx, vha, 0x10bf,
 -- 
 2.47.3
 
