@@ -1,74 +1,74 @@
-Return-Path: <linux-scsi+bounces-24761-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24763-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id j6B5JbHYK2oYGQQAu9opvQ
-	(envelope-from <linux-scsi+bounces-24761-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 12:00:17 +0200
+	id d54lB33XK2qSGAQAu9opvQ
+	(envelope-from <linux-scsi+bounces-24763-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 11:55:09 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B914678860
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 12:00:17 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB607678764
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 11:55:08 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=QgjT8I9p;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24761-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24761-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=a4N3t21I;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24763-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24763-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=marvell.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 22E6A34A37A2
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 09:55:00 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 21F3A302D0E2
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 09:55:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED99E379C23;
-	Fri, 12 Jun 2026 09:54:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCFE4379C23;
+	Fri, 12 Jun 2026 09:55:07 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD413630AE
-	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 09:54:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1AB364EB6
+	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 09:55:06 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781258099; cv=none; b=UAZL4tDu0KUaM67u43ud7QFOpDqs10a4pRAZShFoF7kDJPU1lNYrvKtSehFE2E6ordYtjJtUu3x2awsWN+7smL/Rff0EdIHOmSyyKCt68z4dFLHKGbe7wOVE9IR+JwTXt+2IPb4oSXvwO3h6jMLcMMF+GfIylWdk9MFR199oe24=
+	t=1781258107; cv=none; b=Cdyd0o2zZ7JQO2sckLkW3jZp+J1NXBxwC14YpPZmkIdVcGbY/kJjZ3DKEmzzZszY59YyB0XyUH9iaaQVQ2u3+PpdBJHcf8fU2tEum1kSnv/lywNz47/fmIBkxnJa2dhfetEbZyqL+JEJuEYmAUeK7JHUuFCqIpp5+/FicKh6r7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781258099; c=relaxed/simple;
-	bh=KVOiO4Iw+FC4v8A1ofJaxFPTotrq0i7CQYWw83419T0=;
+	s=arc-20240116; t=1781258107; c=relaxed/simple;
+	bh=E1afuDc2WmIAqSihZt+sSp5GPv1hqDAH++3Ot3WIJh4=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YlgbeXyocDddhi5RTuP1DX0fFg7+prPWJtrB9bAgeoXH8UZRJ6cKXH8yOo9ZOo+tI8QLV8qCnGKbuB0l8cI6bqEyUEZyW0rovtUGFlEdAIxqO8rE5Q22p16UP80lrlMv1yrgXcLzecUEKvpZhZhHPTzqTDghFNfKhn/KBsJ46vA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=QgjT8I9p; arc=none smtp.client-ip=67.231.156.173
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65C5FcO0273724;
-	Fri, 12 Jun 2026 02:54:56 -0700
+	 MIME-Version:Content-Type; b=fHXTBXtMqwnUN5pKM2s5IDSOpwjjcbWUXLchZhEUfv7kBDCk4AWycOi+2Mk4CmUnwkGbBYpvd7/jBK6SxiC2Kmz890ZB9UgiDeH+EWRmp1UbJTd2qrgEssyhAVjjbz+DXHihcPYlrT0+cxmUJHzB4f9cRncMNguU+QFOesvtDfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=a4N3t21I; arc=none smtp.client-ip=67.231.148.174
+Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65C38rYe3678283;
+	Fri, 12 Jun 2026 02:54:59 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=H
-	Jk3jIYv/gmGnYknWVAmFJEguyt0zmqX3uJupGI6KtE=; b=QgjT8I9pC5xLqGjYL
-	w9z/EDSV1TSszJkDnwGFzUN+OcMeazNf6IRnM9Ai2+tuvLWrKkWfrB1NpC8ZfzVB
-	IfjUUqHtsGIbiI3STpagI8BAC/1wtz/gMa+MoW2c4a0lC9DWeIkKCdeLeuEly9Ae
-	wunoE/do+daMR30nBeya1SUawmvdu7MjmSEPJRFMy539jtw03iVNKqLquEBlxJpz
-	H+Loi2gyi6AMoQpLTqopKhfiiJrMpZ6FTBpAtB5xhd4Y9uMtANt4u/4xP73QXoza
-	SRmQvBC6dg3fAz8q0cE1kSrAulhtZMat/U1FVWnElS7f2V6SRSQBJpbbMWpdi5DT
-	rsdCQ==
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=S
+	W9OKWEjEiDdsQhe4zsZaeSzHTarKHe53/YgcA3zWq4=; b=a4N3t21Ixb5eYcohX
+	ojd6lXur1n7FQ+CZ+uixdC18fQRlaVUsi6pICWy/bAW+paZle+iJDQ/UE2+Upug1
+	6Gta7EAc/Vbm6KfdBbtbjkchlLSn5vTM40Gx3joF6W4E3pFhqbDkCRy2B77hGXGO
+	x8SN0fvrTEprwCKR7qe/IzIbf81iU04HZdayH0NqgE94G12cquQQfo8xnFSMlKU8
+	796j3MPg19OqN7AUXkoGBDJPzIAW3pEXDGmWP7MEltHmAejELIJfd3Cgbinz3TyH
+	ztkLT3MKIB0DKnqgWJF25fmqrq8AYlaCyNPgZkp4d2psTMQexeADfGZRLCvHveqy
+	W+T1w==
 Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4eqe5r6ru1-1
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4er9qn92hp-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Jun 2026 02:54:55 -0700 (PDT)
+	Fri, 12 Jun 2026 02:54:59 -0700 (PDT)
 Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
  DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Fri, 12 Jun 2026 02:54:54 -0700
+ 15.2.1544.25; Fri, 12 Jun 2026 02:54:57 -0700
 Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
  (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Fri, 12 Jun 2026 02:54:54 -0700
+ Transport; Fri, 12 Jun 2026 02:54:57 -0700
 Received: from stgdev-a5u16.punelab.marvell.com (stgdev-a5u16.punelab.marvell.com [10.31.33.164])
-	by maili.marvell.com (Postfix) with ESMTP id B60373F7040;
-	Fri, 12 Jun 2026 02:54:52 -0700 (PDT)
+	by maili.marvell.com (Postfix) with ESMTP id B573E3F7040;
+	Fri, 12 Jun 2026 02:54:55 -0700 (PDT)
 From: Nilesh Javali <njavali@marvell.com>
 To: <martin.petersen@oracle.com>
 CC: <linux-scsi@vger.kernel.org>, <GR-FC-Storage-Upstream@marvell.com>,
         <agurumurthy@marvell.com>, <emilne@redhat.com>, <jmeneghi@redhat.com>,
         <hare@suse.com>
-Subject: [PATCH v2 19/60] scsi: qla2xxx: Enable init_firmware mailbox for 29xx
-Date: Fri, 12 Jun 2026 15:22:52 +0530
-Message-ID: <20260612095333.1666592-20-njavali@marvell.com>
+Subject: [PATCH v2 20/60] scsi: qla2xxx: Enable get_firmware_state for 29xx
+Date: Fri, 12 Jun 2026 15:22:53 +0530
+Message-ID: <20260612095333.1666592-21-njavali@marvell.com>
 X-Mailer: git-send-email 2.23.1
 In-Reply-To: <20260612095333.1666592-1-njavali@marvell.com>
 References: <20260612095333.1666592-1-njavali@marvell.com>
@@ -80,24 +80,24 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjEyMDA4OSBTYWx0ZWRfX749VeDN3Ipom
- g/LprQsRGZXPYJa2j4qaUzJro+8D+2jqdULx5yXMJOmlMQefvodMuKeCVtAGPceTrzzzPAXv0rK
- upd5Cf8p/FfykhUCX1WI/ZMTpeRohro=
-X-Authority-Analysis: v=2.4 cv=O6gJeh9W c=1 sm=1 tr=0 ts=6a2bd76f cx=c_pps
+X-Proofpoint-ORIG-GUID: b6bcaXHX2Aoo2JPXMGi2jZEdbp8YjQOi
+X-Authority-Analysis: v=2.4 cv=Y9HIdBeN c=1 sm=1 tr=0 ts=6a2bd773 cx=c_pps
  a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
  a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=l0iWHRpgs5sLHlkKQ1IR:22
- a=QXcCYyLzdtTjyudCfB6f:22 a=M5GUcnROAAAA:8 a=D95N2Pj2omZygidu6DcA:9
+ a=TtqV-g6YmW1Jfm2GSLaY:22 a=M5GUcnROAAAA:8 a=jXld2Aqxrx9nTAx2xuoA:9
  a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-GUID: R81hl1b7eRVUgrKKFu6GVvgn5YgNgq-T
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEyMDA4OSBTYWx0ZWRfX1hhmmvRPnR+M
- oYgU6O1iunN9Q939K2TWcDm2aKJm9eMX20s58bSqB2v2WOXRDljFA5i/J0rAK2go6b4Mu3eotXu
- TRLFuVf/26FrFHum/qel1hCs502uoQwUWiuKudQzFaKJ9gdvLPWisb3/8rskZX2DVjJISd4zxbm
- kNTtyqcurqIjqzURRnNsLAPOGRkgrhXsi86/QJ1a4sGKupqqo08aRtxAPBtRBTYrGPG/Z/sn07t
- +n6PPGkeldDTw09RGTqxggyxvqEpXNHCx+DLyIgZxlIFNtf8SlhNNJS02R5vglQwNborrpoqtFt
- n0mCn9jpETOD5cJncRpbdOQGTmojCQwKDh6xrsRZ1+wJKRc8ewyhYmiZ6c5nSZDKA1d52noBTeL
- Cf4z4rR6dZudmWSsNS1gw/2Yaxu15s245WmscGUfjYI4moeODmoolREd4+qkGzVt0zS5WM2rHpT
- Kuqk49V0FesHQamKKAw==
-X-Proofpoint-ORIG-GUID: R81hl1b7eRVUgrKKFu6GVvgn5YgNgq-T
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjEyMDA4OSBTYWx0ZWRfX3Mut/j9Yho9W
+ ay+o6ugldTF0mqAMwsu1Qobz4Ng0D5Na1RkN7Crb27EG7i6Avo8EXQS7Jn9hIbh+z844W4nI0Bl
+ /GJaCvo2cw9ucvPldlpmKF6Rsjy8/4c=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEyMDA4OSBTYWx0ZWRfX98vqaDFSdJTY
+ akTIBKXRpYe8Er7Q4iiQLCbM/RRf/hp+44RJSeiEsoBiowyukzNC4t7/91uwUI682dqaztspxNe
+ kYFmb4rhCapf+wE15VwivIOGE+Z93ObZRKJooZQvlfGXuWVGYAWoVPx+RGN6SJfCuSq11dCw02g
+ OyQZ+w3A2PMsXt2thIjnJ/O8lKHG7hUKXmZUQlU/zCSNfRVlBWKoI9WrjQ4GXX2EtSFHWXCkkoz
+ TgFo+OWjSrVyGjYlZbZBkZd8HzMOQBp2KY+BVu240VjOlm/qnhH5FjRzeywm0tx4lkT9DDSmH/g
+ mE4DIwDFL3184QLReB5S1/6E7za6eLBGc6FyRFxK1aJ8eU4P5xBZpBK4jGR612ttIvdFSDR2nrF
+ drjUL+W0xfZ4GtTS+7Uh8jH4aEPMu8Q2fK8v6OzXqgyZMf6n4WuXfz14TjqwxSnXn4uIAui1VDa
+ so87pynuDV8RU4IE4tg==
+X-Proofpoint-GUID: b6bcaXHX2Aoo2JPXMGi2jZEdbp8YjQOi
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
  definitions=2026-06-12_01,2026-06-11_01,2025-10-01_01
@@ -108,12 +108,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[marvell.com,quarantine];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[marvell.com:s=pfpt0220];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24761-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24763-lists,linux-scsi=lfdr.de];
 	FROM_NEQ_ENVFROM(0.00)[njavali@marvell.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:GR-FC-Storage-Upstream@marvell.com,m:agurumurthy@marvell.com,m:emilne@redhat.com,m:jmeneghi@redhat.com,m:hare@suse.com,s:lists@lfdr.de];
@@ -123,10 +123,10 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[marvell.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	ALIAS_RESOLVED(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,marvell.com:dkim,marvell.com:email,marvell.com:mid,marvell.com:from_mime];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp,marvell.com:dkim,marvell.com:email,marvell.com:mid,marvell.com:from_mime];
 	TO_DN_NONE(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -134,39 +134,62 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[8]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 2B914678860
+X-Rspamd-Queue-Id: AB607678764
 
-The init_firmware mailbox command needs 29xx adapter support for reading
-back SFP information via mb3 and for validating SFP status on successful
-firmware initialization. Add IS_QLA29XX() checks alongside the existing
-27xx/28xx checks.
+Enable get_firmware_state mailbox command for 29xx adapters by adding
+IS_QLA29XX() checks alongside existing IS_QLA27XX/IS_QLA28XX checks.
+This ensures MBX_12 (MPI state) is properly set up and reported for
+29xx adapters.
 
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_mbx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_attr.c | 2 +-
+ drivers/scsi/qla2xxx/qla_mbx.c  | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/scsi/qla2xxx/qla_attr.c b/drivers/scsi/qla2xxx/qla_attr.c
+index 742becc0dadf..ee6bf8302991 100644
+--- a/drivers/scsi/qla2xxx/qla_attr.c
++++ b/drivers/scsi/qla2xxx/qla_attr.c
+@@ -2436,7 +2436,7 @@ qla2x00_mpi_fw_state_show(struct device *dev, struct device_attribute *attr,
+ 	u16 mpi_state;
+ 	struct qla_hw_data *ha = vha->hw;
+ 
+-	if (!(IS_QLA27XX(ha) || IS_QLA28XX(ha)))
++	if (!(IS_QLA27XX(ha) || IS_QLA28XX(ha) || IS_QLA29XX(ha)))
+ 		return scnprintf(buf, PAGE_SIZE,
+ 				"MPI state reporting is not supported for this HBA.\n");
+ 
 diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index 3fc08120fdf1..9c78aa66e12b 100644
+index 9c78aa66e12b..a91ac59dd9c0 100644
 --- a/drivers/scsi/qla2xxx/qla_mbx.c
 +++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -1968,7 +1968,7 @@ qla2x00_init_firmware(scsi_qla_host_t *vha, uint16_t size)
+@@ -2283,7 +2283,7 @@ qla2x00_get_firmware_state(scsi_qla_host_t *vha, uint16_t *states)
+ 	else
+ 		mcp->in_mb = MBX_1|MBX_0;
  
- 	/* 1 and 2 should normally be captured. */
- 	mcp->in_mb = MBX_2|MBX_1|MBX_0;
--	if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha))
-+	if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha) || IS_QLA29XX(ha))
- 		/* mb3 is additional info about the installed SFP. */
- 		mcp->in_mb  |= MBX_3;
- 	mcp->buf_size = size;
-@@ -1992,7 +1992,7 @@ qla2x00_init_firmware(scsi_qla_host_t *vha, uint16_t size)
- 			    0x0104d, ha->ex_init_cb, sizeof(*ha->ex_init_cb));
- 		}
+-	if (IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
++	if (IS_QLA27XX(ha) || IS_QLA28XX(ha) || IS_QLA29XX(ha)) {
+ 		mcp->mb[12] = 0;
+ 		mcp->out_mb |= MBX_12;
+ 		mcp->in_mb |= MBX_12;
+@@ -2301,7 +2301,7 @@ qla2x00_get_firmware_state(scsi_qla_host_t *vha, uint16_t *states)
+ 		states[3] = mcp->mb[4];
+ 		states[4] = mcp->mb[5];
+ 		states[5] = mcp->mb[6];  /* DPORT status */
+-		if (IS_QLA27XX(ha) || IS_QLA28XX(ha))
++		if (IS_QLA27XX(ha) || IS_QLA28XX(ha) || IS_QLA29XX(ha))
+ 			states[11] = mcp->mb[12]; /* MPI state. */
+ 	}
+ 
+@@ -2309,7 +2309,7 @@ qla2x00_get_firmware_state(scsi_qla_host_t *vha, uint16_t *states)
+ 		/*EMPTY*/
+ 		ql_dbg(ql_dbg_mbx, vha, 0x1055, "Failed=%x.\n", rval);
  	} else {
 -		if (IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
 +		if (IS_QLA27XX(ha) || IS_QLA28XX(ha) || IS_QLA29XX(ha)) {
  			if (mcp->mb[2] == 6 || mcp->mb[3] == 2)
- 				ql_dbg(ql_dbg_mbx, vha, 0x119d,
+ 				ql_dbg(ql_dbg_mbx, vha, 0x119e,
  				    "Invalid SFP/Validation Failed\n");
 -- 
 2.47.3
