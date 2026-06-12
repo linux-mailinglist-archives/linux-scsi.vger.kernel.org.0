@@ -1,179 +1,197 @@
-Return-Path: <linux-scsi+bounces-24802-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24803-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id m91jNSLYK2rlGAQAu9opvQ
-	(envelope-from <linux-scsi+bounces-24802-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 11:57:54 +0200
+	id jOwcNnjbK2odGgQAu9opvQ
+	(envelope-from <linux-scsi+bounces-24803-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 12:12:08 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B0A26787FB
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 11:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 916846789E8
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 12:12:07 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=BF85CyDK;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24802-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24802-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=marvell.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=D5DQzmVY;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24803-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24803-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 64DD5301B522
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 09:57:11 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8A1783001CEB
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 10:12:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C08C3380FF2;
-	Fri, 12 Jun 2026 09:57:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5588D369203;
+	Fri, 12 Jun 2026 10:12:01 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775AB303A04
-	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 09:57:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD9332860F
+	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 10:11:59 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781258229; cv=none; b=FpSXAMG7Bk9ZMHxQYUh3syroTTVkE9umKB1zTqRUpnDe2oCCfCZfhKZexA/HTctJ2BIsjLcwhBHXb9ZqIlFtLk0UZ8KzV+F8nHjzJAR0S0nMm/tsFZ8BSh6OU0NTP+z4jhfuB7xwxr4parSou4HX0hwvQkikZG/LiKbombXOVh4=
+	t=1781259121; cv=none; b=elnh5TlOGOuAYxdEt1muSU1H0LzlhzPwlDuTFIVWVbp3AmWzZjmDoNvAgVyxbcItpGv8ziKIhpkLyKCSv16EvCpNE9IhqagtyUg0qyYvrNBjxDxV/X+b58Rz0wStjlqxfFkZvvyyjWVWzH6uHR1w12RuV1nLT0H7Rz8/DAeM6VQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781258229; c=relaxed/simple;
-	bh=WMKQQ5ijGzwYiM5y0GA6MOm6G9aiCBnrREmkH3R3l34=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qfGclTRytNgUc6Msw0/2yuc1NsAbcao/Qn1g5a3MYo3IB8rqBDlmWf+x9BxG8ZWdY3L+eTUpGjg3l1MoE4TJivnd1PoFqbjncAAtPwOip/9uZmC24ao6RdqL/Jqw9Kc1AlCNldZyM3/KAnG+IOgvTIuG7GlR2HyE8fuGxU1QIZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=BF85CyDK; arc=none smtp.client-ip=67.231.148.174
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65C3Atna071606;
-	Fri, 12 Jun 2026 02:57:05 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=U
-	T99P8ceNBbLzWOynN0lrBrLW3sc6tyo9WwRKHhgX5A=; b=BF85CyDKFzNaIhXtg
-	KekIYmkELq7FLpuuESrse1aDdILxGFfyTA0bIDxbLfOmLJK+DFO6liTx5jwqjw3j
-	UNxIzUGQRD97SAonDF7bF0q9YBkysJV85mSUzin7hpzFe1HNyzLuzU3GjGq5/wbA
-	WQfuLTMd+ooJy+KslNktTooYGJ4rSoGoDgkoDtWy0ZJ2Cv+Dhh1PWbaCoGcDUkVw
-	ctSrQ0gqOT4uY/zM2R7k+E1QJTMnhTTTimUoMiZUAemX3EaOFCS2WMZZ+CnSGjTF
-	RTB9ce9B9GYOwoJddkfAKbNRRY/QukAB+ffQZpaL6TSzVyu2plK4llrvrlSNxAAX
-	uGkeA==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4eqe5vxru0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Jun 2026 02:57:05 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Fri, 12 Jun 2026 02:57:04 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Fri, 12 Jun 2026 02:57:04 -0700
-Received: from stgdev-a5u16.punelab.marvell.com (stgdev-a5u16.punelab.marvell.com [10.31.33.164])
-	by maili.marvell.com (Postfix) with ESMTP id 188A83F7040;
-	Fri, 12 Jun 2026 02:57:01 -0700 (PDT)
-From: Nilesh Javali <njavali@marvell.com>
-To: <martin.petersen@oracle.com>
-CC: <linux-scsi@vger.kernel.org>, <GR-FC-Storage-Upstream@marvell.com>,
-        <agurumurthy@marvell.com>, <emilne@redhat.com>, <jmeneghi@redhat.com>,
-        <hare@suse.com>
-Subject: [PATCH v2 60/60] scsi: qla2xxx: Bound image count in qla2x00_update_fru_versions()
-Date: Fri, 12 Jun 2026 15:23:33 +0530
-Message-ID: <20260612095333.1666592-61-njavali@marvell.com>
-X-Mailer: git-send-email 2.23.1
-In-Reply-To: <20260612095333.1666592-1-njavali@marvell.com>
-References: <20260612095333.1666592-1-njavali@marvell.com>
+	s=arc-20240116; t=1781259121; c=relaxed/simple;
+	bh=M8EO0aQNjF0IC33rZk0u/2GZouFz5ArAvkUVnJMMa9Y=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=sy48EKNRRWloESN9amhcytIIqhYgL2iKEP9EIvJFmyAqcX1+TAu1eXeKDvb/+bXXShoVVuF88cSDscJGzU6ijJbIUYJm2LwsA1P6ppaw0MKY8JE4Q0OEutf35EQN/xDqsUKW3qhnyB1VpGBGIYij9RWpjq3GZOtTdN1K0I1WWlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D5DQzmVY; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82BE31F000E9;
+	Fri, 12 Jun 2026 10:11:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781259119;
+	bh=n0eMIJNRSqRk8OceouO6DTPe8OeG4nLgQIczoxGtUyk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=D5DQzmVYrE+6n7zaOibU4X75VI2FHHslcz6Kz11qwd3eQ9jwoeQnik5PJDjEHneMQ
+	 mFypJKNjdnGQw90VADrBG2o/VkR2TiEzOJUQjMK/obb23KaJulr6Gn6lmUmaupVd0E
+	 2lLp6vjXPAcl3QT7bmaMAQ5jHk+0RGj95kA6iCa1KSlA7yseFxAkwRznbcqOteC0Yf
+	 pdLedfFHPIFRHhbGjmXKdGEBVioIXfh5oQl8MlgH+dVKmg7qUM8kZLEJG+3wtua7Ro
+	 j1FIx8MVWcSCkRvfVZcoNItWIDqfhgbv5Y9miaboRiGA7ZVv9/mE3CuiO2319HigU+
+	 ojzBXmXw+oq3Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 07/60] scsi: qla2xxx: Add flash block read/write BSG
+ support for 29xx
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Nilesh Javali" <njavali@marvell.com>
+Cc: linux-scsi@vger.kernel.org
+In-Reply-To: <20260612095333.1666592-8-njavali@marvell.com>
+References: <20260612095333.1666592-8-njavali@marvell.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 12 Jun 2026 10:11:58 +0000
+Message-Id: <20260612101159.82BE31F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjEyMDA5MCBTYWx0ZWRfX2i7tjVRMh7Qf
- g3g6q695/lbigabmJBy92SrI9dNsd7HIn3FrfrvhJkp5LzFAqNPvQdh9w1FbX7mgufYp4nxhqX1
- XLYBau89TyScpss3hIgppJez+TUMMBQ=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEyMDA5MCBTYWx0ZWRfX0c8tiatd3QHI
- unzRKYAuQyGeR28drWs9MjPOvthYbExSUZb0H9m1qIn8aCpWiUConAKN5PzFV0J+E14B7pegw1B
- tNvIO6DYpCC6HomVcKneLpr4xKM5Q1KR4AnuwkacNs5kcNETT3ypBRQFOrRo37Is1F4oZcloEPR
- WxFiwrY3oXgqJmkz/RiU7W+hCKAPDww/1oUbV2aotrl3N8BA1eDrmN8psI0w7urn8RFQyKhYJob
- Fe77ckZ5lIW8o0P/VLTHjdV4xftlDnEivSKUlEQcTE9rapXH+fenCZ7D9rMEosZ3HSH1sasxfD1
- Tvgy9CZbkMXtiSrVq0yTqay608p4YKDjDiPEwEPUzDTOiJHsagnT+b1vQZZMPMyx5zoADjPRQ6+
- 0gOyBiDL+b7dcBsXpLOC54+j7d6VlV7mUdkPgkbQqDZQAedvi19D/lltVfgmSLO1qbjI8/CSvhf
- Hnk98fNyVO20ndPTaSQ==
-X-Authority-Analysis: v=2.4 cv=UPDt2ify c=1 sm=1 tr=0 ts=6a2bd7f1 cx=c_pps
- a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
- a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=l0iWHRpgs5sLHlkKQ1IR:22
- a=EAYMVhzMl8SCOHhVQcBL:22 a=VwQbUJbxAAAA:8 a=M5GUcnROAAAA:8
- a=494MX3Unkl1U6TuN3o0A:9 a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-ORIG-GUID: L18Ah0r-5hlYPE0EOGoG7I_rxXKknQgL
-X-Proofpoint-GUID: L18Ah0r-5hlYPE0EOGoG7I_rxXKknQgL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-12_01,2026-06-11_01,2025-10-01_01
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[marvell.com,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[marvell.com:s=pfpt0220];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24802-lists,linux-scsi=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[njavali@marvell.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:GR-FC-Storage-Upstream@marvell.com,m:agurumurthy@marvell.com,m:emilne@redhat.com,m:jmeneghi@redhat.com,m:hare@suse.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[njavali@marvell.com,linux-scsi@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[marvell.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	ALIAS_RESOLVED(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,marvell.com:dkim,marvell.com:email,marvell.com:mid,marvell.com:from_mime,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo];
-	TO_DN_NONE(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24803-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:njavali@marvell.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	RCPT_COUNT_TWO(0.00)[2];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
+	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[8]
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[marvell.com:email,vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,smtp.kernel.org:mid,sashiko.dev:url,lists.linux.dev:replyto]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 0B0A26787FB
+X-Rspamd-Queue-Id: 916846789E8
 
-qla2x00_update_fru_versions() copies the user-supplied BSG request into
-a fixed 256-byte stack buffer (bsg[DMA_POOL_SIZE]) and then iterates
-list->count times over the qla_image_version array embedded in that
-buffer, advancing the image pointer each iteration. count is taken
-directly from user input with no upper bound, while only
-(DMA_POOL_SIZE - sizeof(list->count)) / sizeof(struct qla_image_version)
-= 6 entries actually fit. A larger count walks the image pointer off the
-end of the stack buffer, reading adjacent kernel stack memory and
-sending it to the device via qla2x00_write_sfp().
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Silent truncation of the 32-bit `region` parameter to 16 bits in=
+ BSG flash read/write handlers.
+--
 
-Reject requests whose declared count does not fit in the buffer.
+commit 42123b5c17ee809c301462b168b534861a97e40d
+Author: Manish Rangankar <mrangankar@marvell.com>
 
-Fixes: 697a4bc69159 ("[SCSI] qla2xxx: Provide method for updating I2C attached VPD.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
----
- drivers/scsi/qla2xxx/qla_bsg.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+scsi: qla2xxx: Add flash block read/write BSG support for 29xx
 
-diff --git a/drivers/scsi/qla2xxx/qla_bsg.c b/drivers/scsi/qla2xxx/qla_bsg.c
-index 22be6c822dda..bcca4ef3c23e 100644
---- a/drivers/scsi/qla2xxx/qla_bsg.c
-+++ b/drivers/scsi/qla2xxx/qla_bsg.c
-@@ -1929,6 +1929,13 @@ qla2x00_update_fru_versions(struct bsg_job *bsg_job)
- 
- 	image = list->version;
- 	count = list->count;
-+
-+	if (struct_size(list, version, count) > sizeof(bsg)) {
-+		bsg_reply->reply_data.vendor_reply.vendor_rsp[0] =
-+		    EXT_STATUS_INVALID_PARAM;
-+		goto dealloc;
-+	}
-+
- 	while (count--) {
- 		memcpy(sfp, &image->field_info, sizeof(image->field_info));
- 		rval = qla2x00_write_sfp(vha, sfp_dma, sfp,
--- 
-2.47.3
+Introduce QL_VND_READ_FLASH_BLOCK and QL_VND_WRITE_FLASH_BLOCK
+BSG vendor commands so that userspace tools can perform flash
+block-level operations on 29xx adapters via the isp_ops interface.
 
+> diff --git a/drivers/scsi/qla2xxx/qla_bsg.c b/drivers/scsi/qla2xxx/qla_bs=
+g.c
+> index 5e910b5ca670d..0baf486e8fb89 100644
+> --- a/drivers/scsi/qla2xxx/qla_bsg.c
+> +++ b/drivers/scsi/qla2xxx/qla_bsg.c
+[ ... ]
+> +static int qla29xx_bsg_flash_block_read(struct bsg_job *bsg_job)
+> +{
+[ ... ]
+> +	buf =3D ha->isp_ops->read_optrom_region(vha, brcmd->region, opts,
+> +				ha->optrom_buffer, ha->optrom_region_start,
+> +				ha->optrom_region_size);
+
+[Severity: Medium]
+Does this code silently truncate brcmd->region?=20
+
+The qla_block_rw structure defines region as a uint32_t, but the
+read_optrom_region() function pointer takes a uint16_t for the reg_code
+parameter.
+
+If userspace passes a region ID greater than 0xFFFF, this will silently
+truncate the ID instead of returning -EINVAL. Could this lead to accidental
+firmware corruption if an invalid region ID wraps around to a valid one?
+
+[ ... ]
+> +static int qla29xx_bsg_flash_block_write(struct bsg_job *bsg_job)
+> +{
+[ ... ]
+> +	rval =3D ha->isp_ops->write_optrom_region(vha, bwcmd->region, opts,
+> +				ha->optrom_buffer, ha->optrom_region_start,
+> +				ha->optrom_region_size);
+
+[Severity: Medium]
+Similarly, does this silently truncate bwcmd->region from uint32_t to
+uint16_t when passing it to write_optrom_region()?
+
+> diff --git a/drivers/scsi/qla2xxx/qla_bsg.h b/drivers/scsi/qla2xxx/qla_bs=
+g.h
+> index a920c8e482bc6..ca0d83986b57f 100644
+> --- a/drivers/scsi/qla2xxx/qla_bsg.h
+> +++ b/drivers/scsi/qla2xxx/qla_bsg.h
+[ ... ]
+> +struct qla_block_rw {
+> +	uint32_t region;
+> +	uint32_t rw_length;
+> +	uint32_t options;
+> +	uint32_t region_offset;
+> +	uint32_t chunk_length;
+> +	uint8_t  reserved[44];
+> +} __packed;
+
+> diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_de=
+f.h
+> index 1ec7ee578e0c3..719b6a1f9123a 100644
+> --- a/drivers/scsi/qla2xxx/qla_def.h
+> +++ b/drivers/scsi/qla2xxx/qla_def.h
+> @@ -3534,6 +3534,13 @@ struct isp_operations {
+>  	int (*write_optrom)(struct scsi_qla_host *, void *, uint32_t,
+>  		uint32_t);
+> =20
+> +	void *(*read_optrom_region)(struct scsi_qla_host *vha,
+> +		uint16_t reg_code, uint16_t opts, void *buf,
+> +		uint32_t offset, uint32_t length);
+> +	int (*write_optrom_region)(struct scsi_qla_host *vha,
+> +		uint16_t reg_code, uint16_t opts, void *buf,
+> +		uint32_t offset, uint32_t length);
+> +
+
+The function pointers use uint16_t for reg_code, but the caller above
+provides a uint32_t.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260612095333.1666=
+592-1-njavali@marvell.com?part=3D7
 
