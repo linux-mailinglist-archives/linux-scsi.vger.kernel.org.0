@@ -1,172 +1,189 @@
-Return-Path: <linux-scsi+bounces-24856-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24857-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ZCNBJlnvK2obIAQAu9opvQ
-	(envelope-from <linux-scsi+bounces-24856-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 13:36:57 +0200
+	id /v/sB9HvK2pUIAQAu9opvQ
+	(envelope-from <linux-scsi+bounces-24857-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 13:38:57 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DD38678FFC
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 13:36:57 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EAE6679038
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 13:38:56 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=suse.com header.s=google header.b="Uza/huYa";
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24856-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24856-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=suse.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=WBIlvelP;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24857-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24857-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 14E923078393
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 11:36:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C04C031BDFEB
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 11:38:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACE21359A90;
-	Fri, 12 Jun 2026 11:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A705359A90;
+	Fri, 12 Jun 2026 11:38:24 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229C31096F
-	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 11:36:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2639337BBD
+	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 11:38:22 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781264212; cv=none; b=UDKgdPyAmhAE+vx8cOV/FAnasNq01ULRYI/HvuDLLxD5FxuIMUc+ALyGY0IqHBgIQ2I0v+x/o+aV/h33byWRd2QBVe9o44q1ZWZd6yUKsJNlnK71uEjVe3Dv+5PppNEIxKBYEftniZe1Jl0ep2NhvEeZegn2DCgfvNHAs+WAGCk=
+	t=1781264304; cv=none; b=tnJulLoN+2X/z1ej9zW/CxH0biNTzwh7N4ITMN6kA/Go8iweYFPc3UNiflR3Thw0Wvel8qMldPm5KRe819s/0rBmAlwjAU199t1nve+EHoUbXbYkqMZV8BYG0vIK80afM7w5d7F//1rC7hprzfSbaGK/cMOPivyMoa5uDPDFeqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781264212; c=relaxed/simple;
-	bh=z+D6p2an1veaVRwTkYOz08QW/CwvqlFjIwnWciLS3qQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PrJjyyouiFdrlBiUor7dOD6tCxoztQFlsrT+cr30zfq0rnqDbkSJDXC/OmR6HtW3QEraT2/YArVw8PR2Bcm25LPi185MP3zz1cGbEHOQUDP1DQmdsHC4ko4HGMPi675gvd8Up541kEEhtnbi0qnSv/46k5UpuNrkc8O1Mfhr+7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Uza/huYa; arc=none smtp.client-ip=209.85.128.53
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-490c1915793so7192115e9.2
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 04:36:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1781264207; x=1781869007; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZDxDKhuxXGqr+OSinvwhbnpKYCwVePF5suf1RLLViFg=;
-        b=Uza/huYabTkGKxwreVY7UG2NfpdS/9iSQJ/fzvJgdy0cm1BjWuyhGPsUaD9p5+i4i5
-         vb1zolxVtd14sHVidDhv8Z2lRIvWvq88Gushy2Z78Mjt3kqbcKyPh1sMaZYHmfMjAW5G
-         j+Xri1ClfFbVG62f0B/s0SCYrdfC5Kd0+MAjR8lysd3HJ9pF+2Zmqrj1kmFp/2y4eIIm
-         DGrsNRRdXQyChMt0JIX8heRoWscmPPlb6hW6C4CuMEdOVevS4RWVWetKOTbTpbj+ebCp
-         utjIWCOe1jowhmNIYDh2WV3dCFFBt29UODIhttyqMZdLEx93GLh63BnxYajz/v2z6mLH
-         yumQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781264207; x=1781869007;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZDxDKhuxXGqr+OSinvwhbnpKYCwVePF5suf1RLLViFg=;
-        b=QOM7WK1GHS/5bx0ljaZZ2l7jZjUMPjZujpG/8NIjct5srtQZdgt2S7S1VCrpNFE6AU
-         ZJ8g+Ir56zlmoL546DCncuwUnnRP6y8SI6omxKmcNr96FCFb81glR3bDcGfGh5GcQl/l
-         tzngndI7LKp6Tdg1njMvPCod9Ux6x0gotcMasSgKJNoVIRA2ceKn0ZrG5W2LYHIazDoa
-         Q6I27qkudYIoBevrkNJcUeVl9quYB5NQ4z1PxlJ7bXOaYZYXENwwRH/A559J7Da9GaIu
-         BXJ3SDBKXNde5LUcZ8x5ZEJMBAKcap94nObU2DtbRTkRNs3OHeTcDZhNWjO6841cisqY
-         X5Wg==
-X-Gm-Message-State: AOJu0Yy0tAW6P5RPuPwQ66Ih5LP5Y6AjJSeCBenfYW1Pqfwe2evzf22x
-	7OWuIxsU2uZW96XuRStpm7RcniWV2TcTIjMcACun+sIGTtxTWKB4uzbthBXULLzuw4c=
-X-Gm-Gg: Acq92OEXdRcdgOLzb8Y6P/XGkRd36uovUCrPoOZmJFv54ZBj7tQn9YNjVZ1EZ3kzJhX
-	fBF9BSs5A4BYWwMV2qzJuRT3PDPEP4OH/TwSA6LVeiueDEXwIPdfqBt9MjjBctgX8lTfBLTcFEh
-	dxPe9vVuABmgLludF6pEvAjpCH2z3aUU9raVMIXsUyYsOrjmedBBTOdXHuCPGioUHTHzS8rfyZ9
-	gZ/lSUOAhbwpY3R25O/3CSN1qlA91uK5Bq1nnYmK2R6Nqchafv4dat0CjT/yUE85NepUQrow6Jl
-	t7achAf+nOfFyE3ZnDJm5oxZyQWTmwzElwuoMyjCzAlMbh/UnBkJO88NtFh1lTYr8SrED1rHcfZ
-	dktCX33vT3hyaiv2vuVMS+EQga84GzSMCxjoL9BHdnulpBipZ4oEYaiqTxD+5FqQE/h2dHrnGYk
-	XX13rtwtGqkJy018SObTTJCBgilwLpPTrXCyVH6mvufW4cIwLF43S37eao
-X-Received: by 2002:a05:600d:644a:10b0:490:44eb:c1d9 with SMTP id 5b1f17b1804b1-490ec50a39bmr22341955e9.28.1781264207167;
-        Fri, 12 Jun 2026 04:36:47 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:a101:3:ce70:3e6f:3b9c:9125? ([2a01:4a0:2e:ffff:ffff:ffff:ffff:ffff])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f263923sm5134612f8f.2.2026.06.12.04.36.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jun 2026 04:36:46 -0700 (PDT)
-Message-ID: <b9b5b0de-fe39-4aca-8be7-eebf36cd9103@suse.com>
-Date: Fri, 12 Jun 2026 13:36:46 +0200
+	s=arc-20240116; t=1781264304; c=relaxed/simple;
+	bh=PH24FsN7BBA1uX5Za7MgC2pnJPgwt71j22Mz3abYEuc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=XjlyHXuOI1dnkNNMj7IoG8RK43y2qBjVFbo+8O7sczR7aipOW3tWUPeNAs43fmx79FkgKCcw9EnsmIlSt5zK+1pt11EZCNtB/NSm2i83yh3ERoG1JVy2lm1dbtNWm2BZ0R6DpZNs1irvgL8xRbRFJNu95wBhXs+J38k86bogFTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WBIlvelP; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EC281F00A3A;
+	Fri, 12 Jun 2026 11:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781264302;
+	bh=JNETbx2z6zKNVxmLWeXIKtrF0gledZPLHUnmHVhjSZI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=WBIlvelPOgh+Fes1w6b4u7MaiSi3Dt3McQduvk4Yw/yySjdn53O+zwP+AbjoP3Gps
+	 /lXXG0PQiPEabeU+QJEEbuhc3sX9a8KJa1grlAQ6uys2Fh9pGGoFwHz/hTvT263AMX
+	 TEzu0LtPxmnR+a+hjUZi7wRk3chVIup6LomIjN7s2ro1L+RBlOOWfvXnXP7Ejc0okY
+	 kMMPZRBhjF+U0uKuE+UwmB4B3oIn/q5iObLYgKHsyBh8Fs+j6gB8HZ0ZLmexLsM6jz
+	 20+TgxGggM6wdxsFadYVy1/5KvvQ0FiwBkQLg7whEKaZSAB+haz/7O7zOL+MCg1dOb
+	 +hHYPKEhQb4BA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 59/60] scsi: qla2xxx: Fix BSG job leak on validate
+ flash image error path
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Nilesh Javali" <njavali@marvell.com>
+Cc: linux-scsi@vger.kernel.org
+In-Reply-To: <20260612095333.1666592-60-njavali@marvell.com>
+References: <20260612095333.1666592-60-njavali@marvell.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 12 Jun 2026 11:38:21 +0000
+Message-Id: <20260612113822.3EC281F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 27/60] scsi: qla2xxx: Refactor marker IOCB handling for
- 29xx series
-To: Nilesh Javali <njavali@marvell.com>, martin.petersen@oracle.com
-Cc: linux-scsi@vger.kernel.org, GR-FC-Storage-Upstream@marvell.com,
- agurumurthy@marvell.com, emilne@redhat.com, jmeneghi@redhat.com
-References: <20260612095333.1666592-1-njavali@marvell.com>
- <20260612095333.1666592-28-njavali@marvell.com>
-Content-Language: en-US
-From: Hannes Reinecke <hare@suse.com>
-In-Reply-To: <20260612095333.1666592-28-njavali@marvell.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[suse.com:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-24856-lists,linux-scsi=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24857-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:njavali@marvell.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	RCPT_COUNT_TWO(0.00)[2];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[hare@suse.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:njavali@marvell.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:GR-FC-Storage-Upstream@marvell.com,m:agurumurthy@marvell.com,m:emilne@redhat.com,m:jmeneghi@redhat.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hare@suse.com,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp,marvell.com:email,suse.com:dkim,suse.com:email,suse.com:mid,suse.com:from_mime]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[marvell.com:email,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,smtp.kernel.org:mid,sashiko.dev:url,lists.linux.dev:replyto]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 0DD38678FFC
+X-Rspamd-Queue-Id: 6EAE6679038
 
-On 6/12/26 11:53, Nilesh Javali wrote:
-> Rework __qla2x00_marker() and qla_marker_iocb() for QLA29XX extended
-> marker IOCB (128-byte) support.  The extended layout (mrk_entry_24xx_ext)
-> overlays mrk_entry_24xx through 'lun', so the common header fields
-> (entry_type, modifier, nport_handle, lun, handle) are written through a
-> single struct mrk_entry_24xx pointer; only vp_index, which differs in
-> width (u8 in 24xx vs __le16 in the ext layout), needs a stride-aware
-> IS_QLA29XX() branch.
-> 
->   - Allocate the IOCB once via __qla2x00_alloc_iocbs() and cast to
->     struct mrk_entry_24xx, eliminating duplicated alloc/error paths.
->   - Branch only on vp_index assignment where layout diverges.
->   - Update qla_marker_iocb_entry() in qla_isr.c to accept void *pkt
->     so it handles both 64-byte and 128-byte marker completions.
->   - Add BUILD_BUG_ON size checks for mrk_entry_ext_t (128) and
->     struct mrk_entry_24xx_ext (128).
-> 
-> Signed-off-by: Nilesh Javali <njavali@marvell.com>
-> ---
->   drivers/scsi/qla2xxx/qla_def.h  |  2 +-
->   drivers/scsi/qla2xxx/qla_iocb.c | 84 ++++++++++++++++-----------------
->   drivers/scsi/qla2xxx/qla_isr.c  |  7 +--
->   drivers/scsi/qla2xxx/qla_os.c   |  1 +
->   4 files changed, 48 insertions(+), 46 deletions(-)
-> 
-Why do you need to refactor code which you just have submitted?
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Please merge with patch #12.
+Pre-existing issues:
+- [High] Missing bounds check on `job->request_len` leads to out-of-bounds =
+heap reads of the BSG request payload.
+--
 
-Cheers,
+commit 39e37aaaa21d29987eb2a2358ad4f2e41418684a
+Author: Nilesh Javali <njavali@marvell.com>
 
-Hannes
--- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.com                               +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+scsi: qla2xxx: Fix BSG job leak on validate flash image error path
+
+This commit fixes a BSG job leak in the validate flash image error path.
+By calling bsg_job_done() unconditionally, it ensures the transport
+completes the job and frees resources even if the validation fails.
+
+> diff --git a/drivers/scsi/qla2xxx/qla_bsg.c b/drivers/scsi/qla2xxx/qla_bs=
+g.c
+> --- a/drivers/scsi/qla2xxx/qla_bsg.c
+> +++ b/drivers/scsi/qla2xxx/qla_bsg.c
+> @@ -3734,9 +3734,8 @@ static int qla28xx_validate_flash_image(struct bsg_=
+job *bsg_job)
+
+[Severity: High]
+This is a pre-existing issue, but does this BSG job handling path lack
+sufficient bounds checking on job->request_len?
+
+The BSG infrastructure allocates job->request using memdup_user() with the
+exact user-supplied length. In fc_bsg_host_dispatch(), the transport only
+verifies that request_len >=3D sizeof(uint32_t) before inspecting the msgco=
+de.
+
+When dispatching a vendor command, it appears to read out of bounds if the
+request is too small:
+
+drivers/scsi/scsi_transport_fc.c:fc_bsg_host_dispatch() {
+    ...
+    if ((shost->hostt->vendor_id =3D=3D 0L) ||
+        (bsg_request->rqst_data.h_vendor.vendor_id !=3D
+            shost->hostt->vendor_id)) {
+    ...
+}
+
+If the access accidentally matches the host's vendor_id, the driver then
+reads further without validating the length:
+
+drivers/scsi/qla2xxx/qla_bsg.c:qla2x00_process_vendor_specific() {
+    ...
+    switch (bsg_request->rqst_data.h_vendor.vendor_cmd[0]) {
+    ...
+}
+
+This validation path then continues to read the command index directly
+from the request without length validation:
+
+drivers/scsi/qla2xxx/qla_bsg.c:qla28xx_do_validate_flash_image() {
+    ...
+    img_idx =3D bsg_request->rqst_data.h_vendor.vendor_cmd[1];
+    ...
+}
+
+Can an attacker with the sys_rawio capability submit a malformed request
+that triggers out-of-bounds heap reads across these functions, potentially
+causing a panic or leaking uninitialized data?
+
+>  	bsg_reply->result =3D DID_OK << 16;
+>  	bsg_reply->reply_payload_rcv_len =3D 0;
+>  	bsg_job->reply_len =3D sizeof(struct fc_bsg_reply);
+> -	if (!rval)
+> -		bsg_job_done(bsg_job, bsg_reply->result,
+> -			     bsg_reply->reply_payload_rcv_len);
+> +	bsg_job_done(bsg_job, bsg_reply->result,
+> +		     bsg_reply->reply_payload_rcv_len);
+> =20
+>  	return QLA_SUCCESS;
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260612095333.1666=
+592-1-njavali@marvell.com?part=3D59
 
