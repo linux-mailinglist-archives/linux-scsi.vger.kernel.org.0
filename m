@@ -1,74 +1,74 @@
-Return-Path: <linux-scsi+bounces-24759-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24760-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id rrZJBXTXK2qPGAQAu9opvQ
-	(envelope-from <linux-scsi+bounces-24759-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 11:55:00 +0200
+	id ZehjAKvYK2oSGQQAu9opvQ
+	(envelope-from <linux-scsi+bounces-24760-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 12:00:11 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10BD867875F
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 11:54:59 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E8E167885D
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 12:00:10 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=E6Ba9rTM;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24759-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24759-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=YfIBut7C;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24760-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24760-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=marvell.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 26CD33003BD8
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 09:54:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BD8D7339FE97
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2026 09:54:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 374AF3630AE;
-	Fri, 12 Jun 2026 09:54:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8427235836B;
+	Fri, 12 Jun 2026 09:54:58 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973AC258CE5
-	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 09:54:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33575258CE5
+	for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2026 09:54:57 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781258094; cv=none; b=D8Kg19Ovv4Fnd1no+RR05wfLpwCVd6J1oRoCngK7n4p+g19metPiOlrtEDs57ql5FbVwXcZ9rLy53if8Zgj3U1+Hl8TfnPxbUY9MZCTsLJx1gHVEuIXoLILXkYh5cdYrQ00mMAB8ei6FO8p26z/OeS5cweh8Iw7qEqgu8ynKRAA=
+	t=1781258098; cv=none; b=sIxRfNtZfQF6Gs1819iMfLKulDqIWBQpx9EB0tVi8NlyWsO5ryt0Rp2pWKFUFLYcDXRk0XsVo8jdE1GKHHBqGEVqRp526rj0OWsvnOnAPSONLkv10wg8i4vRCaiodoHJX6aAaP96L6X7hBPgG7MmgdABypnQBNt8nmps4fwfGII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781258094; c=relaxed/simple;
-	bh=6VwsUTLj+Cy3Xxj8T8EPMt0Y3tGfBt95z325mpJsqtk=;
+	s=arc-20240116; t=1781258098; c=relaxed/simple;
+	bh=WComlSeMueb97wvB9SpseDxTOvbXPmPXkYQpcZlboRk=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=THxRhUiivqQnpShuqTB5MlN8iSR9kHemy378WUYtgPGevHjzg3Pu5/JwzyJh9g2kNCs/QAaCVBlngTFJKCHw5armMazprmbcNhB1sX5riwA/eoiZOIdvXNi9G/Px52E3ak7TDxH8bHlBO8H5tNYDZY095ZrsWuaF+dhnRj57Tk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=E6Ba9rTM; arc=none smtp.client-ip=67.231.156.173
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65C5FcNx273724;
-	Fri, 12 Jun 2026 02:54:50 -0700
+	 MIME-Version:Content-Type; b=PlzR+r4frJP+8pob2Nynhb/R9pCCVCfNwRU3Y+pq8zpxxXqSu/UVcp+rGBiBnjICA7YyHaNyonq3ANimqFzFt1K+hyKGSObpNZOLajpJdOKSyc98/T6Vhr0uKhwuth3RyZjJ7AfXaDhxCVdUVa/LLdjpCWxyodyU0QLMXcf4KQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=YfIBut7C; arc=none smtp.client-ip=67.231.148.174
+Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65C399xu3678829;
+	Fri, 12 Jun 2026 02:54:54 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=Y
-	QGCHqvWYvH4qWqyDYqOet5EFGftdpe0u1yGs6Sg2iY=; b=E6Ba9rTMPEtN7kOW4
-	Sg6s0wxaUjsDWMg70Ehi7hwZzRwcXt3hiqxe/G/OrAg8IBKhJwAYTYqYQdiZSG1d
-	eGggef2VJxWDOwU0y8u7/CQihrIlPi9o2uBaTGXiaaecp3rlS/M3S1/TXS2hpWfZ
-	07NEnLZZnMv0U6Aur5KP24O+DWa9mVrlAr8kIyJQVsp7MJ6GHdeZPkcYjyhsuZi5
-	Ii28ij62AAVTmiBN0r6cqR6Made7ELnYY6wvBl8GjMRC1lIW4xThV1BkSwLc7Hzv
-	0hE5NR8O4haNaCxZUTJxttHsJMjvUoaynFfOynhS/W4Urrto5VjWzn574qe204Ad
-	Y+j/w==
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=w
+	t59MR3E2w/T6L1fuIqoAmKjj4Tqmx5uUlzL0WpfDeM=; b=YfIBut7CfSP3a861I
+	tTWzGnYWqjGeA77qk7gigd/DNhJEGXzg7/cwIPWrS16o1xcTRCLGB6zPhiwwJMrv
+	eJVXIp73aMG39hqgdmbX53bRXuWfyf/IiHBndTHas27cC7equZ0S6A2PAByra89p
+	F5In6WoXxF9WEBiQfOrR+b+bhfDpQyX6hPn3Uln/1wJLmqtAH7gDaBCxDbKyZ15K
+	MYSm6WwQhrgerymHJteQdR8EfI+wZWUG4VzC/N09hYF3j+UTldLmPB/rtTBjxoCN
+	l8xA/1l5MqGxs9Fz11DFfKo9wtEeyj7h6yIey0Y4aNjHctx4Vdewu3ye7qMn8E97
+	6OOAg==
 Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4eqe5r6rtu-1
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4er9qn92hc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Jun 2026 02:54:49 -0700 (PDT)
+	Fri, 12 Jun 2026 02:54:53 -0700 (PDT)
 Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
  DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Fri, 12 Jun 2026 02:54:48 -0700
+ 15.2.1544.25; Fri, 12 Jun 2026 02:54:51 -0700
 Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
  (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Fri, 12 Jun 2026 02:54:48 -0700
+ Transport; Fri, 12 Jun 2026 02:54:51 -0700
 Received: from stgdev-a5u16.punelab.marvell.com (stgdev-a5u16.punelab.marvell.com [10.31.33.164])
-	by maili.marvell.com (Postfix) with ESMTP id A5AAF3F7040;
-	Fri, 12 Jun 2026 02:54:45 -0700 (PDT)
+	by maili.marvell.com (Postfix) with ESMTP id A5C153F7040;
+	Fri, 12 Jun 2026 02:54:49 -0700 (PDT)
 From: Nilesh Javali <njavali@marvell.com>
 To: <martin.petersen@oracle.com>
 CC: <linux-scsi@vger.kernel.org>, <GR-FC-Storage-Upstream@marvell.com>,
         <agurumurthy@marvell.com>, <emilne@redhat.com>, <jmeneghi@redhat.com>,
         <hare@suse.com>
-Subject: [PATCH v2 17/60] scsi: qla2xxx: Extend execute_fw mailbox to include 29xx
-Date: Fri, 12 Jun 2026 15:22:50 +0530
-Message-ID: <20260612095333.1666592-18-njavali@marvell.com>
+Subject: [PATCH v2 18/60] scsi: qla2xxx: Enable get_adapter_id mailbox for 29xx
+Date: Fri, 12 Jun 2026 15:22:51 +0530
+Message-ID: <20260612095333.1666592-19-njavali@marvell.com>
 X-Mailer: git-send-email 2.23.1
 In-Reply-To: <20260612095333.1666592-1-njavali@marvell.com>
 References: <20260612095333.1666592-1-njavali@marvell.com>
@@ -80,24 +80,24 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjEyMDA4OSBTYWx0ZWRfX5eYoXrRWgDNX
- llJSVxSXWGco4gYbficsFHyybABEBc/3vqN7NfJrkNrtUy5n0OtI0SuSmma0WGUViqwwP823Gqa
- j90MLOhO76xaN/6AF/SyFCIgd8AcwH8=
-X-Authority-Analysis: v=2.4 cv=O6gJeh9W c=1 sm=1 tr=0 ts=6a2bd76a cx=c_pps
+X-Proofpoint-ORIG-GUID: -GV2Na-Dcz5hIe9ZhoHNZvKYvV8dUEq1
+X-Authority-Analysis: v=2.4 cv=Y9HIdBeN c=1 sm=1 tr=0 ts=6a2bd76d cx=c_pps
  a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
  a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=l0iWHRpgs5sLHlkKQ1IR:22
- a=QXcCYyLzdtTjyudCfB6f:22 a=M5GUcnROAAAA:8 a=WWqGWK72s1XPCDKfqbsA:9
+ a=TtqV-g6YmW1Jfm2GSLaY:22 a=M5GUcnROAAAA:8 a=wkAKt5TnZquKlXEkUFUA:9
  a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-GUID: QjXbpWNezrSMb_1-v1GkvJGi0bgy7X2t
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEyMDA4OSBTYWx0ZWRfX24ydKA0Yi5yn
- rHoBiIx40rB2Gzi2uUndPEBDrET1BXFGYPiTQuuwms41sOgjSaV0QX1SVdn9yuq3g2p8lG5dUxP
- x4moHK33MFPP6xBxyvpGs26DRsjcEQSw11o2rXtLRFs62/fgTt8E8Zvtd94hlIzmL6y3UVojKDB
- Apj3lRlOCJD+4j5EJCwY1cP87t8UF7T5J8ZRZrXZhc0VmGFVNGCdTWB17jpvO+tTp/oFlv6r7Az
- Ioel9CErGvgrlpr9pK5bGsff55NpTAYKsGV8VkOPeeMgFy3hNqMM3q4IygQ0ND54JNcQOQLj/xl
- ph91U974QcYX6lkOF57zyviwU9o3Pd/D9qK2gVZF2qj3PJvnYb5FgDbJMi06vaInr385bYpIhKp
- 3Hqh5HKc4O4Sl2uz9kUdAC6OdEDFfaKPqikooUOj4tb7N4h5DrTA2FPXt8XKhsxN9HQeho0lyFO
- v/qzXSDVCe4Pjiu9VMQ==
-X-Proofpoint-ORIG-GUID: QjXbpWNezrSMb_1-v1GkvJGi0bgy7X2t
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjEyMDA4OSBTYWx0ZWRfXyMt7+vdwhWH3
+ 1DHvlnmEUkJRIbvpa4B7mbYRY2Rz/YRsbWM4Et6QuIglNcy+yC23Ko0hg6wjjYuAsYHnRbNSr5E
+ oDSb2yMLqClN0zUZPmT1+i5NV4Dxwdg=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEyMDA4OSBTYWx0ZWRfX47sihDeAuZaA
+ l+IeQgLz+O0ZrGhMFD0SVCIztYJHJf9k+Rd7jXUZO2MAC0rAeYEmQHkQqDL6Zh5s0QPI/jk8Hhh
+ Efh/vNvH1XGYQ2pq8uAPOUJvh/DWODOuhpdSuWHhM/zcYSoC6/7XMOC/27cKXnRnNW1WI0gP9Qz
+ ZrVDbnSbKJnoLAzmtDbRTLU5rlSbk9qNXamUdFZlXVrK0p/Zi2lUEDaxZk+vow13UWQRs1uLMcd
+ ZNXpJgxiH7E813I3N61NN0NkEW9PfiM9mesSkECpSy/SzhUMIBczKE75t95ynWkkKhsEqsK4qL1
+ guIQAjK9wdcIOK+qx4KZWQvYa+9+z+bS6CQTRf4gMv4jvWu7qeWKAPLeOdAXnazsz5+AtpOTdMB
+ vlTbnpHedjTVCSKlnUV/PTGZPKEGTckHAs8CfiLTlKzOXVqVQktvXJqOYjeYM/40RaN9NNQd6wg
+ ofFmDhPCrDd9IxRQIpw==
+X-Proofpoint-GUID: -GV2Na-Dcz5hIe9ZhoHNZvKYvV8dUEq1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
  definitions=2026-06-12_01,2026-06-11_01,2025-10-01_01
@@ -108,12 +108,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[marvell.com,quarantine];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[marvell.com:s=pfpt0220];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-24759-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24760-lists,linux-scsi=lfdr.de];
 	FROM_NEQ_ENVFROM(0.00)[njavali@marvell.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:GR-FC-Storage-Upstream@marvell.com,m:agurumurthy@marvell.com,m:emilne@redhat.com,m:jmeneghi@redhat.com,m:hare@suse.com,s:lists@lfdr.de];
@@ -123,10 +123,10 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[marvell.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	ALIAS_RESOLVED(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,vger.kernel.org:from_smtp,marvell.com:dkim,marvell.com:email,marvell.com:mid,marvell.com:from_mime];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,marvell.com:dkim,marvell.com:email,marvell.com:mid,marvell.com:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
 	TO_DN_NONE(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -134,211 +134,40 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[8]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 10BD867875F
+X-Rspamd-Queue-Id: 4E8E167885D
 
-Add IS_QLA29XX() to the BPM capability macros and to the
-execute-firmware mailbox command so that NVMe enable, minimum
-speed negotiation, 128 Gbps speed reporting, EDIF hardware
-detection, and FW-semaphore retry logic all apply to 29xx
-adapters.
+Add IS_QLA29XX() alongside the existing 27xx/28xx checks in
+qla2x00_get_adapter_id() so that the additional mailbox
+registers (buffer-to-buffer credit, SCM/EDC status) are read
+on 29xx adapters.
 
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_attr.c | 12 ++++++++++--
- drivers/scsi/qla2xxx/qla_def.h  |  5 +++--
- drivers/scsi/qla2xxx/qla_gs.c   | 14 +++++++++++---
- drivers/scsi/qla2xxx/qla_mbx.c  | 23 +++++++++++++----------
- 4 files changed, 37 insertions(+), 17 deletions(-)
+ drivers/scsi/qla2xxx/qla_mbx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_attr.c b/drivers/scsi/qla2xxx/qla_attr.c
-index 3bf7123fe057..742becc0dadf 100644
---- a/drivers/scsi/qla2xxx/qla_attr.c
-+++ b/drivers/scsi/qla2xxx/qla_attr.c
-@@ -1784,10 +1784,11 @@ qla2x00_min_supported_speed_show(struct device *dev,
- 	scsi_qla_host_t *vha = shost_priv(class_to_shost(dev));
- 	struct qla_hw_data *ha = vha->hw;
- 
--	if (!IS_QLA27XX(ha) && !IS_QLA28XX(ha))
-+	if (!IS_QLA27XX(ha) && !IS_QLA28XX(ha) && !IS_QLA29XX(ha))
- 		return scnprintf(buf, PAGE_SIZE, "\n");
- 
- 	return scnprintf(buf, PAGE_SIZE, "%s\n",
-+	    ha->min_supported_speed == 7 ? "128Gps" :
- 	    ha->min_supported_speed == 6 ? "64Gps" :
- 	    ha->min_supported_speed == 5 ? "32Gps" :
- 	    ha->min_supported_speed == 4 ? "16Gps" :
-@@ -1803,10 +1804,11 @@ qla2x00_max_supported_speed_show(struct device *dev,
- 	scsi_qla_host_t *vha = shost_priv(class_to_shost(dev));
- 	struct qla_hw_data *ha = vha->hw;
- 
--	if (!IS_QLA27XX(ha) && !IS_QLA28XX(ha))
-+	if (!IS_QLA27XX(ha) && !IS_QLA28XX(ha) && !IS_QLA29XX(ha))
- 		return scnprintf(buf, PAGE_SIZE, "\n");
- 
- 	return scnprintf(buf, PAGE_SIZE, "%s\n",
-+	    ha->max_supported_speed  == 3 ? "128Gps" :
- 	    ha->max_supported_speed  == 2 ? "64Gps" :
- 	    ha->max_supported_speed  == 1 ? "32Gps" :
- 	    ha->max_supported_speed  == 0 ? "16Gps" : "unknown");
-@@ -1887,6 +1889,7 @@ static const struct {
- 	{ PORT_SPEED_16GB, "16" },
- 	{ PORT_SPEED_32GB, "32" },
- 	{ PORT_SPEED_64GB, "64" },
-+	{ PORT_SPEED_128GB, "128" },
- 	{ PORT_SPEED_10GB, "10" },
- };
- 
-@@ -2668,6 +2671,9 @@ qla2x00_get_host_speed(struct Scsi_Host *shost)
- 	case PORT_SPEED_64GB:
- 		speed = FC_PORTSPEED_64GBIT;
- 		break;
-+	case PORT_SPEED_128GB:
-+		speed = FC_PORTSPEED_128GBIT;
-+		break;
- 	default:
- 		speed = FC_PORTSPEED_UNKNOWN;
- 		break;
-@@ -3429,6 +3435,8 @@ qla2x00_get_host_supported_speeds(scsi_qla_host_t *vha, uint speeds)
- {
- 	uint supported_speeds = FC_PORTSPEED_UNKNOWN;
- 
-+	if (speeds & FDMI_PORT_SPEED_128GB)
-+		supported_speeds |= FC_PORTSPEED_128GBIT;
- 	if (speeds & FDMI_PORT_SPEED_64GB)
- 		supported_speeds |= FC_PORTSPEED_64GBIT;
- 	if (speeds & FDMI_PORT_SPEED_32GB)
-diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index 2b57782b3cd3..e93766e81480 100644
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -4333,6 +4333,7 @@ struct qla_hw_data {
- #define PORT_SPEED_16GB 0x05
- #define PORT_SPEED_32GB 0x06
- #define PORT_SPEED_64GB 0x07
-+#define PORT_SPEED_128GB 0x08
- #define PORT_SPEED_10GB	0x13
- 	uint16_t	link_data_rate;         /* F/W operating speed */
- 	uint16_t	set_data_rate;		/* Set by user */
-@@ -5581,9 +5582,9 @@ struct sff_8247_a0 {
- /* BPM -- Buffer Plus Management support. */
- #define IS_BPM_CAPABLE(ha) \
- 	(IS_QLA25XX(ha) || IS_QLA81XX(ha) || IS_QLA83XX(ha) || \
--	 IS_QLA27XX(ha) || IS_QLA28XX(ha))
-+	 IS_QLA27XX(ha) || IS_QLA28XX(ha) || IS_QLA29XX(ha))
- #define IS_BPM_RANGE_CAPABLE(ha) \
--	(IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha))
-+	(IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha) || IS_QLA29XX(ha))
- #define IS_BPM_ENABLED(vha) \
- 	(ql2xautodetectsfp && !vha->vp_idx && IS_BPM_CAPABLE(vha->hw))
- 
-diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
-index 880cd73feaca..b69a001fd4da 100644
---- a/drivers/scsi/qla2xxx/qla_gs.c
-+++ b/drivers/scsi/qla2xxx/qla_gs.c
-@@ -1508,12 +1508,18 @@ qla25xx_fdmi_port_speed_capability(struct qla_hw_data *ha)
- 
- 	if (IS_CNA_CAPABLE(ha))
- 		return FDMI_PORT_SPEED_10GB;
--	if (IS_QLA28XX(ha) || IS_QLA27XX(ha)) {
--		if (ha->max_supported_speed == 2) {
-+	if (IS_QLA28XX(ha) || IS_QLA27XX(ha) || IS_QLA29XX(ha)) {
-+		if (ha->max_supported_speed == 3) {
-+			if (ha->min_supported_speed <= 7)
-+				speeds |= FDMI_PORT_SPEED_128GB;
-+		}
-+		if (ha->max_supported_speed == 3 ||
-+		    ha->max_supported_speed == 2) {
- 			if (ha->min_supported_speed <= 6)
- 				speeds |= FDMI_PORT_SPEED_64GB;
- 		}
--		if (ha->max_supported_speed == 2 ||
-+		if (ha->max_supported_speed == 3 ||
-+		    ha->max_supported_speed == 2 ||
- 		    ha->max_supported_speed == 1) {
- 			if (ha->min_supported_speed <= 5)
- 				speeds |= FDMI_PORT_SPEED_32GB;
-@@ -1577,6 +1583,8 @@ qla25xx_fdmi_port_speed_currently(struct qla_hw_data *ha)
- 		return FDMI_PORT_SPEED_32GB;
- 	case PORT_SPEED_64GB:
- 		return FDMI_PORT_SPEED_64GB;
-+	case PORT_SPEED_128GB:
-+		return FDMI_PORT_SPEED_128GB;
- 	default:
- 		return FDMI_PORT_SPEED_UNKNOWN;
- 	}
 diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index 0feb98b83293..52d70b61654c 100644
+index 52d70b61654c..3fc08120fdf1 100644
 --- a/drivers/scsi/qla2xxx/qla_mbx.c
 +++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -699,6 +699,7 @@ qla2x00_execute_fw(scsi_qla_host_t *vha, uint32_t risc_addr)
- {
- 	int rval;
- 	struct qla_hw_data *ha = vha->hw;
-+	struct nvram_81xx *nv = ha->nvram;
- 	mbx_cmd_t mc;
- 	mbx_cmd_t *mcp = &mc;
- 	u8 semaphore = 0;
-@@ -727,14 +728,13 @@ qla2x00_execute_fw(scsi_qla_host_t *vha, uint32_t risc_addr)
- 				    ha->lr_distance << LR_DIST_FW_POS;
+@@ -1772,7 +1772,7 @@ qla2x00_get_adapter_id(scsi_qla_host_t *vha, uint16_t *id, uint8_t *al_pa,
+ 		mcp->in_mb |= MBX_13|MBX_12|MBX_11|MBX_10;
+ 	if (IS_FWI2_CAPABLE(vha->hw))
+ 		mcp->in_mb |= MBX_19|MBX_18|MBX_17|MBX_16;
+-	if (IS_QLA27XX(vha->hw) || IS_QLA28XX(vha->hw))
++	if (IS_QLA27XX(vha->hw) || IS_QLA28XX(vha->hw) || IS_QLA29XX(vha->hw))
+ 		mcp->in_mb |= MBX_15|MBX_21|MBX_22|MBX_23;
+ 
+ 	mcp->tov = MBX_TOV_SECONDS;
+@@ -1827,7 +1827,7 @@ qla2x00_get_adapter_id(scsi_qla_host_t *vha, uint16_t *id, uint8_t *al_pa,
+ 			}
  		}
  
--		if (ql2xnvmeenable && (IS_QLA27XX(ha) || IS_QLA28XX(ha)))
-+		if (ql2xnvmeenable && (IS_QLA27XX(ha) || IS_QLA28XX(ha) || IS_QLA29XX(ha)))
- 			mcp->mb[4] |= NVME_ENABLE_FLAG;
- 
--		if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
--			struct nvram_81xx *nv = ha->nvram;
-+		if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha) || IS_QLA29XX(ha)) {
- 			/* set minimum speed if specified in nvram */
- 			if (nv->min_supported_speed >= 2 &&
--			    nv->min_supported_speed <= 5) {
-+			    nv->min_supported_speed <= 7) {
- 				mcp->mb[4] |= BIT_4;
- 				mcp->mb[11] |= nv->min_supported_speed & 0xF;
- 				mcp->out_mb |= MBX_11;
-@@ -772,7 +772,7 @@ qla2x00_execute_fw(scsi_qla_host_t *vha, uint32_t risc_addr)
- 	rval = qla2x00_mailbox_command(vha, mcp);
- 
- 	if (rval != QLA_SUCCESS) {
--		if (IS_QLA28XX(ha) && rval == QLA_COMMAND_ERROR &&
-+		if ((IS_QLA28XX(ha) || IS_QLA29XX(ha)) && rval == QLA_COMMAND_ERROR &&
- 		    mcp->mb[1] == 0x27 && retry) {
- 			semaphore = 1;
- 			retry--;
-@@ -800,17 +800,20 @@ qla2x00_execute_fw(scsi_qla_host_t *vha, uint32_t risc_addr)
- 	ql_dbg(ql_dbg_mbx, vha, 0x119a,
- 	    "fw_ability_mask=%x.\n", ha->fw_ability_mask);
- 	ql_dbg(ql_dbg_mbx, vha, 0x1027, "exchanges=%x.\n", mcp->mb[1]);
--	if (IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
--		ha->max_supported_speed = mcp->mb[2] & (BIT_0|BIT_1);
-+
-+	if (IS_QLA27XX(ha) || IS_QLA28XX(ha) || IS_QLA29XX(ha)) {
-+		ha->max_supported_speed = mcp->mb[2] & (BIT_0|BIT_1|BIT_2|BIT_3);
- 		ql_dbg(ql_dbg_mbx, vha, 0x119b, "max_supported_speed=%s.\n",
- 		    ha->max_supported_speed == 0 ? "16Gps" :
- 		    ha->max_supported_speed == 1 ? "32Gps" :
--		    ha->max_supported_speed == 2 ? "64Gps" : "unknown");
-+		    ha->max_supported_speed == 2 ? "64Gps" :
-+		    ha->max_supported_speed == 3 ? "128Gps" : "unknown");
- 		if (vha->min_supported_speed) {
- 			ha->min_supported_speed = mcp->mb[5] &
--			    (BIT_0 | BIT_1 | BIT_2);
-+			    (BIT_0 | BIT_1 | BIT_2 | BIT_3);
- 			ql_dbg(ql_dbg_mbx, vha, 0x119c,
- 			    "min_supported_speed=%s.\n",
-+			    ha->min_supported_speed == 7 ? "128Gps" :
- 			    ha->min_supported_speed == 6 ? "64Gps" :
- 			    ha->min_supported_speed == 5 ? "32Gps" :
- 			    ha->min_supported_speed == 4 ? "16Gps" :
-@@ -819,7 +822,7 @@ qla2x00_execute_fw(scsi_qla_host_t *vha, uint32_t risc_addr)
- 		}
- 	}
- 
--	if (IS_QLA28XX(ha) && (mcp->mb[5] & EDIF_HW_SUPPORT)) {
-+	if ((IS_QLA28XX(ha) || IS_QLA29XX(ha)) && (mcp->mb[5] & EDIF_HW_SUPPORT)) {
- 		ha->flags.edif_hw = 1;
- 		ql_log(ql_log_info, vha, 0xffff,
- 		    "%s: edif HW\n", __func__);
+-		if (IS_QLA27XX(vha->hw) || IS_QLA28XX(vha->hw)) {
++		if (IS_QLA27XX(vha->hw) || IS_QLA28XX(vha->hw) || IS_QLA29XX(vha->hw)) {
+ 			vha->bbcr = mcp->mb[15];
+ 			if (mcp->mb[7] & SCM_EDC_ACC_RECEIVED) {
+ 				ql_log(ql_log_info, vha, 0x11a4,
 -- 
 2.47.3
 
