@@ -1,184 +1,160 @@
-Return-Path: <linux-scsi+bounces-24937-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24939-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id GWrmBbiUL2o/CwUAu9opvQ
-	(envelope-from <linux-scsi+bounces-24937-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2026 07:59:20 +0200
+	id CYrYNpaeL2qnDQUAu9opvQ
+	(envelope-from <linux-scsi+bounces-24939-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2026 08:41:26 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64CFA6839E2
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2026 07:59:19 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3854E683E62
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2026 08:41:26 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=mediatek.com header.s=dk header.b="LFhT/c4Y";
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24937-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24937-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=mediatek.com;
+	dkim=pass header.d=huawei.com header.s=dkim header.b=Kp28UWhD;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24939-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24939-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=huawei.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8EEB230182B9
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2026 05:58:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 09FC2302AD36
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2026 06:39:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C81C327E049;
-	Mon, 15 Jun 2026 05:58:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B53353B2D24;
+	Mon, 15 Jun 2026 06:39:56 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB5F1A6816;
-	Mon, 15 Jun 2026 05:58:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3800837EFE7;
+	Mon, 15 Jun 2026 06:39:53 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781503116; cv=none; b=e6ZaJPyFFJYOBoXK3PIHieTe2xECzjCtK/e5ymxq8+Td2Z0jbr0zzjtj0cLEe3GEzyq7CrAHiFlBlUVc+0YAXwrlrqKq08zHjOGvTn+2o4htqsU1xKZxgCPZG0Pct7acfPfqIVl9f9dWvdZ0Admp/1txTraE1WJzrbiRuNPpK5I=
+	t=1781505596; cv=none; b=DYB1cjW/faVEhLWBW9e2ljWAF0v8E66Isf9Z/FwUF/XrDLHZwBNSetYcisVmb4sdgyKw8BUj2mnozXx4gR85S34hxdc2VSNMs65qW6A08yH6rF0HAYbuF3P1nMOW6nqfvDjLjdvhSYT6mVD4V14/S/BUCQrCi/+adFBiWrQ29Gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781503116; c=relaxed/simple;
-	bh=J/UslbAuHeOYa/H9By8DgocG8kJjWZycHNyKixn98o4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=P0Pt1reeu3JGMOIBYAmdpq0nBMxuC5D0lNYHdR9DYEfvYBOi8ezqarbJHTkT+MJ+JTzTVv2VQ3xurMPhliAFZdGzGmxph8FqjGbsvQ2CKzxXSxhKU/DcB151BZuB6W/pkiYQOWex7Z81qu3FR95pJfHt4Uh9DrLmiJjMTiQkkQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=LFhT/c4Y; arc=none smtp.client-ip=60.244.123.138
-X-UUID: 3a8ea43a687f11f1b1788b6acf885367-20260615
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Z74uBbdsQ/fARR0kh8p3nPXksCzC/EQS2Nq9vJKqgb8=;
-	b=LFhT/c4Y8KJoNb6RJPT6SECWW4TZAbSK5UwOvKtvNz8vdBrDBqxBrDnnm1w9vxXDk2sEsWWTvDTGSRhXJNpBeEJlPHkc7fa65q9ezQVYKN2jnCjzeNKxYGjd8DjfJemrw17sHg8zde+rWtPMSQXqS3HxXaFRgDcNxxXZ0RXVk4w=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.15,REQID:6d0a5ca5-ef9d-4e08-9823-f8b5e8d6ab8e,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:e276073,CLOUDID:f8d2f3e0-ecbd-446c-abfe-8b1546a39ee8,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|123|836|865|888|898,TC:-5,
-	Content:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:-1,C
-	OL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 3a8ea43a687f11f1b1788b6acf885367-20260615
-Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw01.mediatek.com
-	(envelope-from <ed.tsai@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1154769253; Mon, 15 Jun 2026 13:58:27 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
+	s=arc-20240116; t=1781505596; c=relaxed/simple;
+	bh=LHjT5Vx45M/3GZPUIa2Rs7oC/bDLodd7rgnVJBygwc0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=DiIpSZYxc7sWzyUsKMfRNtjqBPkf6q0qn/Pf8WOWMrOUo15LAyWg8vmpbzBfXWy6+EROwXApULB74D9SZXr62tbdtDChA+OZoL44vtiWnFDZkyRRawqq6n5a/S6VDYkXxbGoBv5kyQoxsnJ72bDFSdJW7TfeVn0ljPkySrRLIlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Kp28UWhD; arc=none smtp.client-ip=113.46.200.223
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=K52ZEk0yalvKezo+LKQizzr77iPgMILxLtqWdjpyYig=;
+	b=Kp28UWhDXGCYGkXCsKi+WG63wlygEx9QTUflDUpZh1IcbAhyg3eqfdVBdn+1/iFyW4BnIcSal
+	ZtTPWnVKVZQnRdluXFz7F3Jq/BRPp2DTSBxdnKlJemJyxTY+Xgs2p+Kxe//KkOMkSNfcgc6PkX1
+	P1lria1oM2gbokHdMCXJUOo=
+Received: from mail.maildlp.com (unknown [172.19.162.92])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4gf0dg3LBCzmVD6;
+	Mon, 15 Jun 2026 14:31:51 +0800 (CST)
+Received: from dggpemf500002.china.huawei.com (unknown [7.185.36.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id EB2C440565;
+	Mon, 15 Jun 2026 14:39:49 +0800 (CST)
+Received: from [10.174.179.11] (10.174.179.11) by
+ dggpemf500002.china.huawei.com (7.185.36.57) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Mon, 15 Jun 2026 13:58:26 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.2562.29 via Frontend Transport; Mon, 15 Jun 2026 13:58:26 +0800
-From: <ed.tsai@mediatek.com>
-To: <alim.akhtar@samsung.com>, <avri.altman@wdc.com>, <bvanassche@acm.org>,
-	<James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
-	<linux-scsi@vger.kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <wsd_upstream@mediatek.com>,
-	<peter.wang@mediatek.com>, <alice.chao@mediatek.com>,
-	<naomi.chu@mediatek.com>, <chun-hung.wu@mediatek.com>, Ed Tsai
-	<ed.tsai@mediatek.com>
-Subject: [PATCH v3 3/3] ufs: core: Remove max_num_rtt field from ufs_hba_variant_ops
-Date: Mon, 15 Jun 2026 13:57:17 +0800
-Message-ID: <20260615055802.105479-4-ed.tsai@mediatek.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20260615055802.105479-1-ed.tsai@mediatek.com>
-References: <20260615055802.105479-1-ed.tsai@mediatek.com>
+ 15.2.1544.11; Mon, 15 Jun 2026 14:39:48 +0800
+Message-ID: <8c37dc76-bcf6-4146-b3bd-977bb34ad4c4@huawei.com>
+Date: Mon, 15 Jun 2026 14:39:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 2/2] scsi: libsas: Add linkrate and sas_addr change
+ detection in rediscover
+To: Xingui Yang <yangxingui@huawei.com>, <john.g.garry@oracle.com>,
+	<jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@huawei.com>, <liyihang9@h-partners.com>, <liuyonglong@huawei.com>,
+	<kangfenglong@huawei.com>
+References: <20260611061551.1171058-1-yangxingui@huawei.com>
+ <20260611061551.1171058-3-yangxingui@huawei.com>
+From: Jason Yan <yanaijie@huawei.com>
+In-Reply-To: <20260611061551.1171058-3-yangxingui@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ dggpemf500002.china.huawei.com (7.185.36.57)
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-9.16 / 15.00];
+	WHITELIST_DMARC(-7.00)[huawei.com:D:+];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[mediatek.com,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[mediatek.com:s=dk];
+	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:bvanassche@acm.org,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:matthias.bgg@gmail.com,m:angelogioacchino.delregno@collabora.com,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mediatek@lists.infradead.org,m:wsd_upstream@mediatek.com,m:peter.wang@mediatek.com,m:alice.chao@mediatek.com,m:naomi.chu@mediatek.com,m:chun-hung.wu@mediatek.com,m:ed.tsai@mediatek.com,m:matthiasbgg@gmail.com,s:lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-24937-lists,linux-scsi=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	FORWARDED(0.00)[lists@lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER(0.00)[ed.tsai@mediatek.com,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[samsung.com,wdc.com,acm.org,HansenPartnership.com,oracle.com,vger.kernel.org,gmail.com,collabora.com];
+	DKIM_TRACE(0.00)[huawei.com:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[yanaijie@huawei.com,linux-scsi@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-24939-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:yangxingui@huawei.com,m:john.g.garry@oracle.com,m:jejb@linux.ibm.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linuxarm@huawei.com,m:liyihang9@h-partners.com,m:liuyonglong@huawei.com,m:kangfenglong@huawei.com,s:lists@lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ed.tsai@mediatek.com,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[mediatek.com:+];
+	FROM_NEQ_ENVFROM(0.00)[yanaijie@huawei.com,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FROM_NO_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 64CFA6839E2
+X-Rspamd-Queue-Id: 3854E683E62
 
-From: Ed Tsai <ed.tsai@mediatek.com>
+在 2026/6/11 14:15, Xingui Yang 写道:
+> In sas_rediscover_dev(), when detecting a "flutter" condition (same SAS
+> address and compatible device type), the code assumes the device remains
+> unchanged and only handles SATA pending state recovery. However, this
+> approach misses two important scenarios:
+> 
+> First, the flutter detection only compares SAS address and device type,
+> ignoring potential linkrate changes that may have already occurred.
+> 
+> Second, after sas_ex_phy_discover() re-queries the expander phy, both
+> linkrate and attached SAS address may be updated. The current code does
+> not validate these changes against the existing child device.
+> 
+> Additionally, the replace code path (different SAS address detected)
+> has a sysfs duplication issue: sas_unregister_devs_sas_addr() only marks
+> the device as gone, but the actual sysfs cleanup happens later in
+> sas_destruct_devices(). Calling sas_discover_new() immediately after
+> unregister causes sysfs_warn_dup() errors.
+> 
+> Introduce sas_dev_is_flutter() to check whether it is a true flutter with
+> validation for linkrate and sas_addr changes. It returns true for normal
+> flutter and false when changes are detected requiring rediscovery.
+> 
+> When sas_addr change is detected, restore phy->attached_sas_addr to
+> child_dev->sas_addr so that sas_unregister_devs_sas_addr() can properly
+> match and unregister the device via sas_phy_match_dev_addr().
+> 
+> Introduce sas_rediscover_ex_phy() to handle async rediscovery for both
+> flutter and replace cases. When invoked:
+> - Set phy_change_count and ex_change_count to -1 to force revalidation
+> - Unregister the device via sas_unregister_devs_sas_addr()
+> - Queue DISCE_REVALIDATE_DOMAIN event
+> 
+> The old device sysfs is cleaned up by sas_destruct_devices() at the end
+> of current revalidation work. The new event triggers discovery via
+> sas_discover_new() since attached_sas_addr is cleared, avoiding the
+> sysfs duplication issue.
+> 
+> Signed-off-by: Xingui Yang<yangxingui@huawei.com>
+> Suggested-by: John Garry<john.g.garry@oracle.com>
+> ---
+>   drivers/scsi/libsas/sas_expander.c | 82 +++++++++++++++++++++++++-----
+>   1 file changed, 68 insertions(+), 14 deletions(-)
 
-Remove the max_num_rtt field from ufs_hba_variant_ops as it has been
-replaced by the get_hba_nortt() callback which provides more flexible
-platform-specific RTT capability handling.
+Reviewed-by: Jason Yan <yanaijie@huawei.com>
 
-Signed-off-by: Ed Tsai <ed.tsai@mediatek.com>
----
- drivers/ufs/core/ufshcd.c | 4 +---
- include/ufs/ufshcd.h      | 2 --
- 2 files changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 382b6041c716..00072bff9dcd 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -8557,8 +8557,6 @@ static void ufshcd_set_rtt(struct ufs_hba *hba)
- 	struct ufs_dev_info *dev_info = &hba->dev_info;
- 	u32 rtt = 0;
- 	u32 dev_rtt = 0;
--	int host_rtt_cap = hba->vops && hba->vops->max_num_rtt ?
--			   hba->vops->max_num_rtt : hba->nortt;
- 
- 	/* RTT override makes sense only for UFS-4.0 and above */
- 	if (dev_info->wspecversion < 0x400)
-@@ -8574,7 +8572,7 @@ static void ufshcd_set_rtt(struct ufs_hba *hba)
- 	if (dev_rtt != DEFAULT_MAX_NUM_RTT)
- 		return;
- 
--	rtt = min_t(int, dev_info->rtt_cap, host_rtt_cap);
-+	rtt = min_t(int, dev_info->rtt_cap, hba->nortt);
- 
- 	if (rtt == dev_rtt)
- 		return;
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 421c286481e8..13d0d7798294 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -370,7 +370,6 @@ struct ufshcd_tx_eq_params {
- /**
-  * struct ufs_hba_variant_ops - variant specific callbacks
-  * @name: variant name
-- * @max_num_rtt: maximum RTT supported by the host
-  * @init: called when the driver is initialized
-  * @exit: called to cleanup everything done in init
-  * @set_dma_mask: For setting another DMA mask than indicated by the 64AS
-@@ -420,7 +419,6 @@ struct ufshcd_tx_eq_params {
-  */
- struct ufs_hba_variant_ops {
- 	const char *name;
--	int	max_num_rtt;
- 	int	(*init)(struct ufs_hba *);
- 	void    (*exit)(struct ufs_hba *);
- 	u32	(*get_ufs_hci_version)(struct ufs_hba *);
--- 
-2.45.2
-
+Thanks,
+祝一切顺利
 
