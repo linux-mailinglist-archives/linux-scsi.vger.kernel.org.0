@@ -1,85 +1,81 @@
-Return-Path: <linux-scsi+bounces-24989-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-24987-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 6v3tLFm1MGrxWQUAu9opvQ
-	(envelope-from <linux-scsi+bounces-24989-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 04:30:49 +0200
+	id 2FuKDsy0MGrdWQUAu9opvQ
+	(envelope-from <linux-scsi+bounces-24987-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 04:28:28 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5111768B7C7
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 04:30:49 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AB1268B787
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 04:28:27 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=oracle.com header.s=corp-2025-04-25 header.b=ka1vVPCT;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24989-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24989-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=oracle.com header.s=corp-2025-04-25 header.b=lRmlseob;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-24987-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-24987-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=reject) header.from=oracle.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 965AB31D16F0
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 02:26:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C8F303145D98
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 02:26:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0990B3C13FC;
-	Tue, 16 Jun 2026 02:26:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902223C13FC;
+	Tue, 16 Jun 2026 02:26:27 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3423BFE5B;
-	Tue, 16 Jun 2026 02:26:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2216E3C0A01;
+	Tue, 16 Jun 2026 02:26:25 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781576796; cv=none; b=Ud0lV2esv6A2U3QleMYt3gPStievmKZ3zQn2gsLnHfJXxRZdajgCqUjZ7M5mBFE6qxnSsz8ogsZA6y81pN5M0WHZVWU7t0i3UAzcomeGaA/+iZPy/mCQ7KdaEYp4k0rtIxYGtJWF2WJXrrKevdwwUpThmRgQ7rYXtyOm5X97bKc=
+	t=1781576787; cv=none; b=aDscRRiCe5hF+YM21QPwBubj7t/T0APoHc6WW5RZplUgK1iz6q9Wd1dlH/7T1bH+7gG3Sj6O3PoDgZw9hare0spm4kmN9wscgYNPood6oku2FwjP2hra3a+xkpXQES1eV1CM4RQjR3boYV6kAr1dRPlzJK/st2hyAdJ8xHAfKyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781576796; c=relaxed/simple;
-	bh=ATo86HR1stCHsr3n7RinhHnOzmXNCQLcpelYiZzE5hU=;
+	s=arc-20240116; t=1781576787; c=relaxed/simple;
+	bh=AdeC3NSqcSaWNzTZm5Hk3h06vLes04C9fZl7cFo9SXM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tGOsnCac4+TyBDShE5RxJf56h2KtrDm7dqngVTa1UXdGaaK2pcXCmPh3cNf9W9sLyrpWUSzjJtuf3DZk6MxTrYmBe4BmZifbUSrggZOqyJsHXrZIuNPhV6JsTGYZkniKkUYLGMcB34MsCPuSu/pXqXELwzkC+9Yp0t5ZvkodPTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ka1vVPCT; arc=none smtp.client-ip=205.220.165.32
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65FJrWLg1304448;
+	 MIME-Version:Content-Type; b=YenLXPh1XOerOW0K44w1aDcZ3Ma2+MnWJ3k/iaduEDSw4bJiiqKMM1psuwfRKfaJfAIwIRyDYttZ90JwYYR15OcVUAoCcacVpD/JUC/b6l2YX2gXAwACfzmj0CaxN/3nRwtqp8TNnEh6BhujGb+d3Oya0lSMeiM6whZXjFP0sNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=lRmlseob; arc=none smtp.client-ip=205.220.177.32
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65FJib4R1304555;
 	Tue, 16 Jun 2026 02:26:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=DCIToSqAAuUxIjig/P634q/DCSLKGB/gFfwbWdPS+6w=; b=
-	ka1vVPCTeEbWQ5K73cczjxsN64J0fvZL7l0NKJ/cU+0Nm0Lq44ozeVTjjxTdhddV
-	kBftqaFx7P8lioOmrCpAlbGNXPOmAu1EqxoHIZn2Dhr/qBm+6V/g9HrHHw1k7bx0
-	tzRG9P7ZFHtb8Qw/p7gBzf3ctgpOvio8C8m87WK+J0u6wc/wNEPRUKiJJHEWMM4b
-	TcNPp72jxXtj+5nLr1Dzv8n1tWhQHKDE3uTx/1fREnU2DNBxGfTxedH7qvgruNw2
-	OlbTz5Ygs22Bt/6eA0v6wn603fYQoYbNzES7lvfMfkE95GfyeCyIG7GCQ9SzQY//
-	VhZNTFN8CiGMB3+3w2F9Zw==
+	corp-2025-04-25; bh=Xg8+3R8p2hiuv+Dgb3+kZxBgodYHsjzf265lTa0VWKs=; b=
+	lRmlseobkN2RdOKdct7niCPz4VeFNaotJNpIgGjZAMTKUQ91G3T/3jPUXo5WzFbj
+	b7uNbUrOVK03lb7Y3Ot+FgBDU88K9JxLxEPFF0uzveQnQPeonc307cV2RLtCJOVK
+	42yJAxfCXtkekjllEsJSmHJcxszOFQyfloCVVPzfgA9kMexiLqju6gSWKCPzuJXO
+	pzxd86o+fa60NA5zkHP2BfhTBZz5PgW7PLFlsbUF+GW3tXghssIql+xNGHlzIkeA
+	zGIh7krAwAXtmrrZXakjsV1SpedqPsc9Iso0FxstPy2G93aKy7MPLFkOSUYpZjrO
+	o2yqMBOscRFUf/QZ3C3R9Q==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4es1q7kn8g-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4es1hxkjsv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 16 Jun 2026 02:26:18 +0000 (GMT)
+	Tue, 16 Jun 2026 02:26:17 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 65G2NZtA016521;
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 65G2NZq8016523;
 	Tue, 16 Jun 2026 02:26:17 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4erwnpnym2-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4erwnpnym8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 16 Jun 2026 02:26:16 +0000 (GMT)
+	Tue, 16 Jun 2026 02:26:17 +0000 (GMT)
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 65G2QE2H023822;
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 65G2QE2J023822;
 	Tue, 16 Jun 2026 02:26:16 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4erwnpnyjt-4;
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4erwnpnyjt-5;
 	Tue, 16 Jun 2026 02:26:16 +0000 (GMT)
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: vkoul@kernel.org, neil.armstrong@linaro.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, mani@kernel.org,
-        alim.akhtar@samsung.com, bvanassche@acm.org, andersson@kernel.org,
-        dmitry.baryshkov@oss.qualcomm.com, abel.vesa@oss.qualcomm.com,
-        luca.weiss@fairphone.com, palash.kambar@oss.qualcomm.com
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, nitin.rawat@oss.qualcomm.com
-Subject: Re: (subset) [PATCH v3 0/3] Add Hawi UFS PHY and Controller support
-Date: Mon, 15 Jun 2026 22:26:08 -0400
-Message-ID: <178157184615.1899010.4839070160759447766.b4-ty@oracle.com>
+To: James.Bottomley@HansenPartnership.com, bvanassche@acm.org,
+        adrian.hunter@intel.com, archana.patni@intel.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rajeshkumar Sambandham <Rajeshkumar.Sambandham@amd.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH v2] scsi: ufs: ufs-pci: Add AMD device ID support
+Date: Mon, 15 Jun 2026 22:26:09 -0400
+Message-ID: <178157184621.1899010.9908520099901744844.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260526090956.2340262-1-palash.kambar@oss.qualcomm.com>
-References: <20260526090956.2340262-1-palash.kambar@oss.qualcomm.com>
+In-Reply-To: <20260602095931.2869516-1-Rajeshkumar.Sambandham@amd.com>
+References: <20260602095931.2869516-1-Rajeshkumar.Sambandham@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -93,81 +89,72 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  definitions=2026-06-16_01,2026-06-15_04,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
  lowpriorityscore=0 phishscore=0 mlxscore=0 suspectscore=0 spamscore=0
- mlxlogscore=934 malwarescore=0 adultscore=0 classifier=spam adjust=0
+ mlxlogscore=841 malwarescore=0 adultscore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.19.0-2606040000 definitions=main-2606160021
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE2MDAyMSBTYWx0ZWRfX60L7k1Q6QzuS
- aKbskshzOiKcHLrQdm/6Fkt9t1GYhd2iHDTsntTsiFpYqz0DCoJuY2f463dTIEEkIaWQgfUQDyY
- f8NRlH/hf5IGudFl3OvfN6ErNW6Qd1bnQEGYnc9gHPTJV+RyTi5s
-X-Authority-Analysis: v=2.4 cv=e+A2j6p/ c=1 sm=1 tr=0 ts=6a30b44a b=1 cx=c_pps
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE2MDAyMSBTYWx0ZWRfX88WAvnF9EDlm
+ vjzjUGCDCvqyeoJqZ/DUk8NaC/m0OyC8I6pu7Pc3OGre5nnfhRLuZYF3CQUDWExMYuTmPPIptAu
+ cWcBDp5pbYZLn+533ZvQsOjosBcqTSufnSEpJr8sAakIh1zOXZO9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE2MDAyMSBTYWx0ZWRfXwOZf/tUh5EVZ
+ 5ye4juIpTmquM/G5GamLkK9KNvaQSUgRpDATguRy3HJf1GjIp6i4amPF5f3f9MkB1+BwujkJarm
+ ZufZtTnu9gO/al6QzFTaT/SBl54pUNH4WTiLXb7nn7PhXQ1vJ3gqWprGmpblLw9+/tzrT7TbPRb
+ tVaF2WnCIn6AG0RCkhRf9yJRH62pFdcmwPkRdEfA3c6KHzCZa6xOldTnOTxoVoeGciifiaZvRP/
+ i8gXxM3OfbqLd4lJZoWnacs71ccIYYNpDsrfhbX6M4OxOAa3acaw5+Nr+b7JgwsrBCW0ldmAG86
+ /7tpAUc82Pq3kpAFofjm12qCFDWkH1DFJukLguEXn2oZ9emETXDfcdlB8MRMv+SMsJ6rrJFBq42
+ 0VdO/UNOH4X3DHHURUNFTRZvuR1iE/EHa2spzF3gRt99qJW0J2DcUtVEbARwFB8Csi/0mLqupHT
+ kEN50HRXjYx7qBE3XwFGPxhiFAYietgnlRs7HwJM=
+X-Authority-Analysis: v=2.4 cv=I6pVgtgg c=1 sm=1 tr=0 ts=6a30b449 b=1 cx=c_pps
  a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
  a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=7Gl3-_t3PgB9XO-mQDs3:22 a=VwQbUJbxAAAA:8
- a=EUspDBNiAAAA:8 a=3cHhxUsnBYRNvqWN0XQA:9 a=QEXdDO2ut3YA:10
- a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13723
-X-Proofpoint-ORIG-GUID: rQ2UVnJdIHqp6t8-CSMC5uIiauQd4Dai
-X-Proofpoint-GUID: rQ2UVnJdIHqp6t8-CSMC5uIiauQd4Dai
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE2MDAyMSBTYWx0ZWRfX3jZYsiqQcEL+
- UOM+W3lW+fKfYsp4wiBCXIyHjP4doLef3uiu7jfE5/vK/FDdSq1stVcUjC1hIfPnvqAGNNIzWLq
- 6Byu3qgqBGvh3WYdpmd/Z7KCuR+G15D1pt4eQj0qDSjnWBuin7D8PPpno7Tdxq/l/fOpEuoF4+h
- c9TJJzB7oG1KvEreXFercvqFAqba8N4w6+N2PEvOGAOVC2YWK/iQUhzy6Ob+/oppp72uaXI1t7k
- /dXuOuIUVQ530wVY8A+vyLLtSO5+nnmyt1yzB2vBz7reRNX32fmOSlBfqH15oT5J+Ce52dzQ+iY
- EcYn+MZast46BsN4mDIbt9I8uoQX879L1sQHHgXJc1UYyWeKUjjHm8xfoJNT/v5EMDdeGQpduj+
- JGfLJLMsVk5NeTXQTuadi7pe1RF+w2ME38cFMG41BR4sbxcUU0De6AfuWsqwmdu5n98mcUgCCHi
- 4TKowiQIlRxBoQAEocbl6GA70dRvpjpxP2qWY9eY=
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=x4eqshVgHu-cdnggieHk:22 a=VwQbUJbxAAAA:8
+ a=RiK9E27ONQb4QlSBX54A:9 a=QEXdDO2ut3YA:10 a=5yU3S35YU4bGjq-dph-N:22
+ a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13723
+X-Proofpoint-GUID: 0MTLYB9FnovH1orp0zWJxpQu-ahuEg1y
+X-Proofpoint-ORIG-GUID: 0MTLYB9FnovH1orp0zWJxpQu-ahuEg1y
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-7.66 / 15.00];
+X-Spamd-Result: default: False [-9.16 / 15.00];
 	WHITELIST_DMARC(-7.00)[oracle.com:D:+];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	TAGGED_FROM(0.00)[bounces-24989-lists,linux-scsi=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
-	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-24987-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:vkoul@kernel.org,m:neil.armstrong@linaro.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:mani@kernel.org,m:alim.akhtar@samsung.com,m:bvanassche@acm.org,m:andersson@kernel.org,m:dmitry.baryshkov@oss.qualcomm.com,m:abel.vesa@oss.qualcomm.com,m:luca.weiss@fairphone.com,m:palash.kambar@oss.qualcomm.com,m:martin.petersen@oracle.com,m:linux-arm-msm@vger.kernel.org,m:linux-phy@lists.infradead.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:nitin.rawat@oss.qualcomm.com,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:dkim,oracle.com:mid,oracle.com:from_mime,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS(0.00)[m:James.Bottomley@HansenPartnership.com,m:bvanassche@acm.org,m:adrian.hunter@intel.com,m:archana.patni@intel.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:Rajeshkumar.Sambandham@amd.com,m:martin.petersen@oracle.com,s:lists@lfdr.de];
+	DKIM_TRACE(0.00)[oracle.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,oracle.com:dkim,oracle.com:mid,oracle.com:from_mime];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[martin.petersen@oracle.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[oracle.com:+];
-	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi,dt];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[9]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5111768B7C7
+X-Rspamd-Queue-Id: 8AB1268B787
 
-On Tue, 26 May 2026 14:39:53 +0530, palash.kambar@oss.qualcomm.com wrote:
+On Tue, 02 Jun 2026 15:29:31 +0530, Rajeshkumar Sambandham wrote:
 
-> This series introduces devicetree binding documentation and PHY
-> initialization support required to enable UFS on this platform.
+> Add PCI device ID 0x1022:0x1B29 for AMD UFS controllers.
 > 
-> 1. Devicetree binding documentation for the QMP UFS PHY
->      used on Qualcomm Hawi.
->   2. Devicetree binding documentation for the UFS controller
->      instance present on the Hawi platform.
->   3. Initialization sequence tables and configuration required
->      for the QMP UFS PHY on Hawi SoC.
 > 
-> [...]
 
 Applied to 7.2/scsi-queue, thanks!
 
-[2/3] scsi: ufs: qcom: dt-bindings: Document the Hawi UFS controller
-      https://git.kernel.org/mkp/scsi/c/63977ab3c6a0
+[1/1] scsi: ufs: ufs-pci: Add AMD device ID support
+      https://git.kernel.org/mkp/scsi/c/9d87e0db00e9
 
 -- 
 Martin K. Petersen
