@@ -1,65 +1,65 @@
-Return-Path: <linux-scsi+bounces-25023-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25024-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 6fPZFftqMWphiwUAu9opvQ
-	(envelope-from <linux-scsi+bounces-25023-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 17:25:47 +0200
+	id SbZTEDhrMWpviwUAu9opvQ
+	(envelope-from <linux-scsi+bounces-25024-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 17:26:48 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7680F691042
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 17:25:46 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 791E4691074
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 17:26:47 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=Qh5CXhqK;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25023-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25023-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=Pibgs00x;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25024-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25024-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=redhat.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 3550D303362E
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 15:23:13 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2D1A6303E66F
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 15:23:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8383D449EC2;
-	Tue, 16 Jun 2026 15:22:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C968744BC82;
+	Tue, 16 Jun 2026 15:23:03 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC02C283FE5
-	for <linux-scsi@vger.kernel.org>; Tue, 16 Jun 2026 15:22:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D19244BC9F
+	for <linux-scsi@vger.kernel.org>; Tue, 16 Jun 2026 15:23:02 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781623379; cv=none; b=cyRrBMsPWh2wD/BqbNyyniEfnXAgijcScnF+tM9ZXEVhuOfF3y2Vm+QFub8aQH++BhJPHHzwnRBLXfALTIaeP1oLMi+EGg1jAXd8uRgu1L6O8iqGaRgxOm55yZFwiMEa1JRoiJwr0ou1fBKYVklde5HDq6j0NGsnxs0eSPXI1dA=
+	t=1781623383; cv=none; b=IiHj85kg/l7BwHydshr9/uX+5Ro2/7qnP+mitew66xem9AhniNG8Mx9VydrAj4ilpAsBwVXv2jkiJqZ7EdVis2cs6fP0VATWSK7dxz8mSqrFR7Uy5EAdXf324sOaC4ZlS7215E+j4DEvr6XuHBzyxY/A1R8M78jWyfu8hdBaEDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781623379; c=relaxed/simple;
-	bh=lwZCpl+q9I9el6qYVtu9OgWk/8Rm7vN45DZH8S8MBgw=;
+	s=arc-20240116; t=1781623383; c=relaxed/simple;
+	bh=H6l9jSxep5Tj21LcsQI7ISrs1RkC5kc/k/VOiGh3Fng=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M4wr0ARaFKNGe5/UXr400w4HqSQcwK3LNc2JDjO1LvIOUcY2Ewxi/4qani63w9bidZ1zT6cSaUU/YdNLtI3qQxTZxaGx94YgC6W2QuME0JXf3f/J7J9MEzyi7q1ol8OQ+gUuuyGb5c0hrrOccUY/qz3Z8lNTZpvKh4HF+nnuaUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qh5CXhqK; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=lOXZ2RHWDfx9NHkWb70e4yH+KG8te74BUD6HTgyIBHI9Vl0AcM83Pv2G52uMx80Sa1H6ho86YU+pfjr1gOypS1TqikcgSsydnYKGGsl32759SOhVIWaOD0wK316+R8AdjnXisT2GtbPSKVSEKgdyNyCUrqrL25OhwUStsW/1N2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Pibgs00x; arc=none smtp.client-ip=170.10.129.124
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781623377;
+	s=mimecast20190719; t=1781623381;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=0FSpVVDso32KQePcWS3Cq/14rZsUfEwQH2nRl5z2o2g=;
-	b=Qh5CXhqKcEwD6i0wvyY8aGxgt5KxJdIDhXxDgY7J8cGd1MLLvLb9HomYWMSQ2azldRSBW2
-	yUkgHyKCK1YjfFcjkGI7070/EdONYQXQWxKOqBWwZk+p2wQroqJuwkLPZ2cHC8EIDOmQrn
-	uC/Wty8RynKVP3M9THHu4B1D4Pn2y44=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+	bh=f+nFPAVBpWgUR1X36PZ/lmagU7XjSBga3RsLirYRi04=;
+	b=Pibgs00x7S59+hRN3LdS7I1a/DM3PR/+yx2npLfAeGQ8XxvfT1kAS7duPjCnU5kMg1JrF4
+	wiSTaasE9ypGFuATTZA8lMpfgvxOh3RHycjERkR7UtcTgBnx/tbFYJ0ZVBxfx2oeHnUFSv
+	K/WEDi2EduQkRILOkrs7/Bb/3+8q72g=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-212-dIWzkDt9PoCP5MXnx_G8Og-1; Tue,
- 16 Jun 2026 11:22:52 -0400
-X-MC-Unique: dIWzkDt9PoCP5MXnx_G8Og-1
-X-Mimecast-MFC-AGG-ID: dIWzkDt9PoCP5MXnx_G8Og_1781623369
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-19-LXOKewUwNc27lSsmHkhvhw-1; Tue,
+ 16 Jun 2026 11:22:58 -0400
+X-MC-Unique: LXOKewUwNc27lSsmHkhvhw-1
+X-Mimecast-MFC-AGG-ID: LXOKewUwNc27lSsmHkhvhw_1781623375
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4DE30195607E;
-	Tue, 16 Jun 2026 15:22:49 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 54B6719560BF;
+	Tue, 16 Jun 2026 15:22:55 +0000 (UTC)
 Received: from fedora-work.redhat.com (unknown [10.22.80.179])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CB5B41800674;
-	Tue, 16 Jun 2026 15:22:43 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A7AF618005B6;
+	Tue, 16 Jun 2026 15:22:49 +0000 (UTC)
 From: David Jeffery <djeffery@redhat.com>
 To: driver-core@lists.linux.dev,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -82,11 +82,10 @@ Cc: linux-kernel@vger.kernel.org,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	John Garry <john.g.garry@oracle.com>,
 	kexec@lists.infradead.org,
-	David Jeffery <djeffery@redhat.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>
-Subject: [PATCH 1/5] driver core: separate function to shutdown one device
-Date: Tue, 16 Jun 2026 11:22:15 -0400
-Message-ID: <20260616152219.6268-2-djeffery@redhat.com>
+	David Jeffery <djeffery@redhat.com>
+Subject: [PATCH 2/5] driver core: do not always lock parent in shutdown
+Date: Tue, 16 Jun 2026 11:22:16 -0400
+Message-ID: <20260616152219.6268-3-djeffery@redhat.com>
 In-Reply-To: <20260616152219.6268-1-djeffery@redhat.com>
 References: <20260616152219.6268-1-djeffery@redhat.com>
 Precedence: bulk
@@ -105,18 +104,18 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25023-lists,linux-scsi=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[23];
-	FREEMAIL_CC(0.00)[vger.kernel.org,google.com,redhat.com,gmail.com,acm.org,kernel.org,oracle.com,lists.infradead.org,soleen.com];
+	TAGGED_FROM(0.00)[bounces-25024-lists,linux-scsi=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	FREEMAIL_CC(0.00)[vger.kernel.org,google.com,redhat.com,gmail.com,acm.org,kernel.org,oracle.com,lists.infradead.org];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:driver-core@lists.linux.dev,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dakr@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-pci@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:tarunsahu@google.com,m:tatashin@google.com,m:mclapinski@google.com,m:jordanrichards@google.com,m:emilne@redhat.com,m:jmeneghi@redhat.com,m:mlombard@redhat.com,m:stuart.w.hayes@gmail.com,m:loberman@redhat.com,m:bvanassche@acm.org,m:helgaas@kernel.org,m:martin.petersen@oracle.com,m:john.g.garry@oracle.com,m:kexec@lists.infradead.org,m:djeffery@redhat.com,m:pasha.tatashin@soleen.com,m:stuartwhayes@gmail.com,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:driver-core@lists.linux.dev,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dakr@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-pci@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:tarunsahu@google.com,m:tatashin@google.com,m:mclapinski@google.com,m:jordanrichards@google.com,m:emilne@redhat.com,m:jmeneghi@redhat.com,m:mlombard@redhat.com,m:stuart.w.hayes@gmail.com,m:loberman@redhat.com,m:bvanassche@acm.org,m:helgaas@kernel.org,m:martin.petersen@oracle.com,m:john.g.garry@oracle.com,m:kexec@lists.infradead.org,m:djeffery@redhat.com,m:stuartwhayes@gmail.com,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[djeffery@redhat.com,linux-scsi@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
@@ -129,126 +128,98 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,vger.kernel.org:from_smtp,soleen.com:email,oracle.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 7680F691042
+X-Rspamd-Queue-Id: 791E4691074
 
-Make a separate function for the part of device_shutdown() that does the
-shutown for a single device.  This is in preparation for making device
-shutdown asynchronous.
+Don't lock a parent device unless it is needed in device_shutdown. This
+is in preparation for making device shutdown asynchronous, when it will
+be needed to allow children of a common parent to shut down
+simultaneously.
+
+And only acquire a reference to the parent device if the parent is to be
+locked.
 
 Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
 Signed-off-by: David Jeffery <djeffery@redhat.com>
 Tested-by: Laurence Oberman <loberman@redhat.com>
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
-Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 ---
- drivers/base/core.c | 71 +++++++++++++++++++++++++--------------------
- 1 file changed, 39 insertions(+), 32 deletions(-)
+ drivers/base/core.c | 42 ++++++++++++++++++++++++++----------------
+ 1 file changed, 26 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 4d026682944f..74c693cd19cf 100644
+index 74c693cd19cf..3b3d983b1747 100644
 --- a/drivers/base/core.c
 +++ b/drivers/base/core.c
-@@ -4865,12 +4865,48 @@ int device_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
+@@ -4865,14 +4865,10 @@ int device_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
  	return error;
  }
  
+-static void shutdown_one_device(struct device *dev)
++static void __shutdown_one_device(struct device *dev)
+ {
+-	struct device *parent = dev->parent;
+-
+-	/* hold lock to avoid race with probe/release */
+-	if (parent)
+-		device_lock(parent);
+-	device_lock(dev);
++	if (dev->p->dead)
++		return;
+ 
+ 	/* Don't allow any more runtime suspends */
+ 	pm_runtime_get_noresume(dev);
+@@ -4892,12 +4888,32 @@ static void shutdown_one_device(struct device *dev)
+ 			dev_info(dev, "shutdown\n");
+ 		dev->driver->shutdown(dev);
+ 	}
++}
+ 
+-	device_unlock(dev);
+-	if (parent)
 +static void shutdown_one_device(struct device *dev)
 +{
-+	struct device *parent = dev->parent;
++	struct device *parent;
 +
-+	/* hold lock to avoid race with probe/release */
-+	if (parent)
-+		device_lock(parent);
 +	device_lock(dev);
 +
-+	/* Don't allow any more runtime suspends */
-+	pm_runtime_get_noresume(dev);
-+	pm_runtime_barrier(dev);
++	/* use parent lock if needed to avoid race with probe/release */
++	if (dev->bus && dev->bus->need_parent_lock && !dev->p->dead &&
++	    (parent = get_device(dev->parent))) {
++		/* the parent lock needs to be acquired first, so re-lock */
++		device_unlock(dev);
 +
-+	if (dev->class && dev->class->shutdown_pre) {
-+		if (initcall_debug)
-+			dev_info(dev, "shutdown_pre\n");
-+		dev->class->shutdown_pre(dev);
++		device_lock(parent);
++		device_lock(dev);
++
++		__shutdown_one_device(dev);
++		device_unlock(dev);
+ 		device_unlock(parent);
++		put_device(parent);
++	} else {
++		__shutdown_one_device(dev);
++		device_unlock(dev);
 +	}
-+	if (dev->bus && dev->bus->shutdown) {
-+		if (initcall_debug)
-+			dev_info(dev, "shutdown\n");
-+		dev->bus->shutdown(dev);
-+	} else if (dev->driver && dev->driver->shutdown) {
-+		if (initcall_debug)
-+			dev_info(dev, "shutdown\n");
-+		dev->driver->shutdown(dev);
-+	}
-+
-+	device_unlock(dev);
-+	if (parent)
-+		device_unlock(parent);
-+
-+	put_device(parent);
-+	put_device(dev);
-+}
-+
- /**
-  * device_shutdown - call ->shutdown() on each device to shutdown.
-  */
- void device_shutdown(void)
- {
--	struct device *dev, *parent;
-+	struct device *dev;
  
- 	wait_for_device_probe();
- 	device_block_probing();
-@@ -4892,7 +4928,7 @@ void device_shutdown(void)
- 		 * prevent it from being freed because parent's
- 		 * lock is to be held
- 		 */
--		parent = get_device(dev->parent);
-+		get_device(dev->parent);
+-	put_device(parent);
+ 	put_device(dev);
+ }
+ 
+@@ -4923,12 +4939,6 @@ void device_shutdown(void)
+ 		dev = list_entry(devices_kset->list.prev, struct device,
+ 				kobj.entry);
+ 
+-		/*
+-		 * hold reference count of device's parent to
+-		 * prevent it from being freed because parent's
+-		 * lock is to be held
+-		 */
+-		get_device(dev->parent);
  		get_device(dev);
  		/*
  		 * Make sure the device is off the kset list, in the
-@@ -4901,36 +4937,7 @@ void device_shutdown(void)
- 		list_del_init(&dev->kobj.entry);
- 		spin_unlock(&devices_kset->list_lock);
- 
--		/* hold lock to avoid race with probe/release */
--		if (parent)
--			device_lock(parent);
--		device_lock(dev);
--
--		/* Don't allow any more runtime suspends */
--		pm_runtime_get_noresume(dev);
--		pm_runtime_barrier(dev);
--
--		if (dev->class && dev->class->shutdown_pre) {
--			if (initcall_debug)
--				dev_info(dev, "shutdown_pre\n");
--			dev->class->shutdown_pre(dev);
--		}
--		if (dev->bus && dev->bus->shutdown) {
--			if (initcall_debug)
--				dev_info(dev, "shutdown\n");
--			dev->bus->shutdown(dev);
--		} else if (dev->driver && dev->driver->shutdown) {
--			if (initcall_debug)
--				dev_info(dev, "shutdown\n");
--			dev->driver->shutdown(dev);
--		}
--
--		device_unlock(dev);
--		if (parent)
--			device_unlock(parent);
--
--		put_device(dev);
--		put_device(parent);
-+		shutdown_one_device(dev);
- 
- 		spin_lock(&devices_kset->list_lock);
- 	}
 -- 
 2.54.0
 
