@@ -1,155 +1,257 @@
-Return-Path: <linux-scsi+bounces-25018-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25019-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 8Ql+LUpUMWqigwUAu9opvQ
-	(envelope-from <linux-scsi+bounces-25018-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 15:48:58 +0200
+	id 7u5jEQZXMWqNhAUAu9opvQ
+	(envelope-from <linux-scsi+bounces-25019-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 16:00:38 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34918690172
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 15:48:58 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2672C6902C6
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 16:00:33 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=acm.org header.s=mr01 header.b=Zyi5ABER;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25018-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25018-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=acm.org;
+	dkim=pass header.d=seu.edu.cn header.s=default header.b=P0PHglwU;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25019-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25019-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=seu.edu.cn;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 681B230C5F34
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 13:45:05 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 93CFF302BA61
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2026 14:00:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 021E53382C3;
-	Tue, 16 Jun 2026 13:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DDBE309EE7;
+	Tue, 16 Jun 2026 14:00:31 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from mail-m49198.qiye.163.com (mail-m49198.qiye.163.com [45.254.49.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D9532D0FC
-	for <linux-scsi@vger.kernel.org>; Tue, 16 Jun 2026 13:44:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7A11DB551;
+	Tue, 16 Jun 2026 14:00:27 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781617499; cv=none; b=fZd7k+VuQ1U6Zf0iOELvH5eT9zC++piVPWCHllfhoEe6iBzaiVwx0uEnx+Uh6dvdCeNtKP/qzWPKyEGerQ83lGgLU7hWgpmB1Knx+Eq0ETKdXsdunNf6HtvTIhcjuXXWz97oGyMRje9iszVR/NFZaO2lUszoFnmW/WaBgW/mY7w=
+	t=1781618431; cv=none; b=sIHzZ48FHksvbKj8MgdYEoWHEm8/ne6/53XSyeYOJe+wZ4N1c2mrFEW8KU8NXMCkk16HIvIuD7v4WK5x48dKv0T8nGPLaLY+0miaRQHGc1318Ni+9S6RpBZUJpBTYxvRD199ufN2q3kxEHxw1hBxXZtrZh5Zo7GlGCkK+afxYmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781617499; c=relaxed/simple;
-	bh=dTzICpsGPS7NuOsXSCG3bMHbYDCMwogEE6Q9J9dqPqQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jOPJGlezN+EdhkQIRrXAtLttzgJjEaIVcSlT5OJkfRddPt5r70Ikn5zj0XuB2dbvIq3OrM7raXLrUoRIeGSoual21tjHcyWfPv9w496vnR2a3n5TZw534gc8s76gQFG3JH88kWBCzL5tlEp5X8ZmS7Qj3t3101+9RMn3ocde3bI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=Zyi5ABER; arc=none smtp.client-ip=199.89.1.14
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4gfpBr4HQsz1XM6JB;
-	Tue, 16 Jun 2026 13:44:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1781617488; x=1784209489; bh=KsnuTHhErHwm/T60sIuMjO3h
-	vTONldrIFAIYObbJKKs=; b=Zyi5ABERcHllXvCQJ7mGXVA+5zv4hVAQoI4nBh02
-	j/hE5453DtxxthOSLCH2zMNzD7L/sces5hkO7zD8QrA7UkX0J7VsG3OY9LPmIBev
-	s+Kacv3fxHhNZEntBBSyUGdpfwKj5fH/B/AwnfYXcjdAhcCcZVvI4c9aiKXjuZKn
-	6hgvmYPAR0NJuSrSr5YoHIIxHtOS7YvdRIUIfMWGTQd3tVCVYZj5Kzkmw2pm4MsT
-	RI0Epo993uQXyarZMTNNRv69pyOJnFys/7UN+aliC0DhFY8gA/925baAVwTqrh/1
-	3IvyWffq+GDs23YN30iuARtr/JBlhVGo0tVLosxzKaEViA==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id CZDxJfF2cITc; Tue, 16 Jun 2026 13:44:48 +0000 (UTC)
-Received: from [192.168.51.14] (c-73-231-117-72.hsd1.ca.comcast.net [73.231.117.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4gfpBk08khz1XM31H;
-	Tue, 16 Jun 2026 13:44:45 +0000 (UTC)
-Message-ID: <f690a0c4-0351-4769-ac56-9b59e5cf9c5d@acm.org>
-Date: Tue, 16 Jun 2026 06:44:40 -0700
+	s=arc-20240116; t=1781618431; c=relaxed/simple;
+	bh=nU9M73fnlkh2+IH/zueqB+yQ6xnQrHefJplTzS2NNFU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SHWKl+gfXPVfhU77qh78rfkaWnaXbOAc/Ze2wfTxO1GOneVfq0E0tc+ZfeNTfnOLzqW/eymUWDCYfCannCYYbP28/ywL146wgrbwNFP8YFk8lKrLg4bvrJgeJ2tulxEXRsFdTN0AThRGw833U19jll6dF/iDlSVsrj3QYb9YRb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=P0PHglwU; arc=none smtp.client-ip=45.254.49.198
+Received: from DESKTOP-SUEFNF9.taila7e912.ts.net (unknown [221.228.238.82])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 429ab339c;
+	Tue, 16 Jun 2026 21:55:15 +0800 (GMT+08:00)
+From: Dawei Feng <dawei.feng@seu.edu.cn>
+To: skashyap@marvell.com
+Cc: jhasan@marvell.com,
+	GR-QLogic-Storage-Upstream@marvell.com,
+	James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Dawei Feng <dawei.feng@seu.edu.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH] scsi: qedf: Fix memory leak in __qedf_probe()
+Date: Tue, 16 Jun 2026 21:55:13 +0800
+Message-Id: <20260616135513.3982797-1-dawei.feng@seu.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 2/2] scsi: ufs: core: Add support for static TX
- Equalization settings
-To: Can Guo <can.guo@oss.qualcomm.com>, krzk@kernel.org, beanhuo@micron.com,
- peter.wang@mediatek.com, martin.petersen@oracle.com, mani@kernel.org
-Cc: linux-scsi@vger.kernel.org
-References: <20260616113348.1168248-1-can.guo@oss.qualcomm.com>
- <20260616113348.1168248-3-can.guo@oss.qualcomm.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260616113348.1168248-3-can.guo@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a9ed0b702a303a2kunm1a66c1da4541c
+X-HM-MType: 10
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaGR0eVhgdGEhKGkJOSE9CHlYeHw
+	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUpVSUlDVUlIQ1VDSVlXWRYaDxIVHRRZQVlPS0hVSktJSE
+	5DQ1VKS0tVS1kG
+DKIM-Signature: a=rsa-sha256;
+	b=P0PHglwU/1VtB+giZMX0FfoNdYl9KHOQ9nlTSq0UtcJUnUbE5Da4GlqIpAIBSMHGoffYbPXXE0Z96xQIwg1y2+PwWwVy/QLgvIUVJm7O23Q+G2betwiBNd3z+btASfJo2Cr+R5YfFKoCmAEOCKDTtY54xNok1L1rbB96h3Js26A=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
+	bh=9GUWO6PErWNuWiRX8JvxhH2YvUQvw5ImBQBFeCCs5XQ=;
+	h=date:mime-version:subject:message-id:from;
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
-	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[seu.edu.cn,none];
+	R_DKIM_ALLOW(-0.20)[seu.edu.cn:s=default];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25018-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:can.guo@oss.qualcomm.com,m:krzk@kernel.org,m:beanhuo@micron.com,m:peter.wang@mediatek.com,m:martin.petersen@oracle.com,m:mani@kernel.org,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25019-lists,linux-scsi=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[acm.org:+];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_SENDER(0.00)[dawei.feng@seu.edu.cn,linux-scsi@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:skashyap@marvell.com,m:jhasan@marvell.com,m:GR-QLogic-Storage-Upstream@marvell.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:dawei.feng@seu.edu.cn,m:stable@vger.kernel.org,s:lists@lfdr.de];
+	DKIM_TRACE(0.00)[seu.edu.cn:+];
+	RSPAMD_EMAILBL_FAIL(0.00)[stable.vger.kernel.org:query timed out];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dawei.feng@seu.edu.cn,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,acm.org:dkim,acm.org:email,acm.org:mid,acm.org:from_mime]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,seu.edu.cn:dkim,seu.edu.cn:email,seu.edu.cn:mid,seu.edu.cn:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 34918690172
+X-Rspamd-Queue-Id: 2672C6902C6
 
-On 6/16/26 4:33 AM, Can Guo wrote:
-> Parse board-specific static TX Equalization settings from Device Tree for
-> each HS gear and store them in hba->tx_eq_params.
-> 
-> Parse txeq-preshoot-g[1-6] and txeq-deemphasis-g[1-6] as per-lane tuples:
-> <Host_Lane0 Device_Lane0>, [<Host_Lane1 Device_Lane1>].
-> 
-> For HS-G6, parse optional tx-precode-enable-g6 using the same per-lane
-> Host/Device tuple format. If provided, it must contain values for all
-> active lanes, and each value must be 0 or 1.
-> 
-> Introduce from_dt in struct ufshcd_tx_eq_params to track whether TX EQ
-> values came from static Device Tree data.
-> 
-> When adaptive TX Equalization is used, these static settings are not final:
-> - If valid settings are retrieved from qTxEQGnSettings/wTxEQGnSettingsExt,
->    those retrieved settings override static Device Tree settings.
-> - If retrieval is not available/valid, TX EQTR runs and trained settings
->    override static Device Tree settings.
-> 
-> So static Device Tree settings are a fallback for cases where adaptive TX
-> Equalization is not enabled or not used. Adaptive TX Equalization remains
-> the primary path when enabled.
-> 
-> No behavior changes for platforms that do not provide these properties.
+qedf_set_fcoe_pf_param() allocates PF queue state for the firmware FCoE
+parameters. If qedf_alloc_global_queues() fails after partial allocation,
+the existing unwind leaves p_cpuq and global_queues allocated. If later
+__qedf_probe() steps fail after PF parameter setup succeeds, the same PF
+queue state is also left behind.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Route those paths through qedf_free_fcoe_pf_param() and clear the freed
+PF queue pointers so the helper-internal and probe-level unwinds can share
+the same cleanup safely.
 
-In the future, please wait at least 24 hours before posting a new
-version of a patch series. For this patch series it has happened that a
-new version was posted before I had the chance to comment on a previous
-version.
+The bug was first flagged by an experimental analysis tool we are
+developing for kernel memory-management bugs while analyzing
+v6.13-rc1. The tool is still under development and is not yet publicly
+available. Manual inspection confirms that the bug is still present in
+v7.1-rc7.
 
-Thanks,
+An x86_64 allyesconfig build showed no new warnings. As we do not have a
+QLogic FastLinQ FCoE adapter to test with, no runtime testing was able to
+be performed.
 
-Bart.
+Fixes: 61d8658b4a43 ("scsi: qedf: Add QLogic FastLinQ offload FCoE driver framework.")
+Cc: stable@vger.kernel.org
+Signed-off-by: Dawei Feng <dawei.feng@seu.edu.cn>
+---
+ drivers/scsi/qedf/qedf_main.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
+index da429b3a4283..3a41c0210336 100644
+--- a/drivers/scsi/qedf/qedf_main.c
++++ b/drivers/scsi/qedf/qedf_main.c
+@@ -32,6 +32,7 @@ static void qedf_shutdown(struct pci_dev *pdev);
+ static void qedf_schedule_recovery_handler(void *dev);
+ static void qedf_recovery_handler(struct work_struct *work);
+ static int qedf_suspend(struct pci_dev *pdev, pm_message_t state);
++static void qedf_free_fcoe_pf_param(struct qedf_ctx *qedf);
+ 
+ /*
+  * Driver module parameters.
+@@ -2927,15 +2928,18 @@ static void qedf_free_bdq(struct qedf_ctx *qedf)
+ 	if (qedf->bdq_pbl_list)
+ 		dma_free_coherent(&qedf->pdev->dev, QEDF_PAGE_SIZE,
+ 		    qedf->bdq_pbl_list, qedf->bdq_pbl_list_dma);
++	qedf->bdq_pbl_list = NULL;
+ 
+ 	if (qedf->bdq_pbl)
+ 		dma_free_coherent(&qedf->pdev->dev, qedf->bdq_pbl_mem_size,
+ 		    qedf->bdq_pbl, qedf->bdq_pbl_dma);
++	qedf->bdq_pbl = NULL;
+ 
+ 	for (i = 0; i < QEDF_BDQ_SIZE; i++) {
+ 		if (qedf->bdq[i].buf_addr) {
+ 			dma_free_coherent(&qedf->pdev->dev, QEDF_BDQ_BUF_SIZE,
+ 			    qedf->bdq[i].buf_addr, qedf->bdq[i].buf_dma);
++			qedf->bdq[i].buf_addr = NULL;
+ 		}
+ 	}
+ }
+@@ -2945,6 +2949,9 @@ static void qedf_free_global_queues(struct qedf_ctx *qedf)
+ 	int i;
+ 	struct global_queue **gl = qedf->global_queues;
+ 
++	if (!gl)
++		return;
++
+ 	for (i = 0; i < qedf->num_queues; i++) {
+ 		if (!gl[i])
+ 			continue;
+@@ -2957,6 +2964,7 @@ static void qedf_free_global_queues(struct qedf_ctx *qedf)
+ 			    gl[i]->cq_pbl, gl[i]->cq_pbl_dma);
+ 
+ 		kfree(gl[i]);
++		gl[i] = NULL;
+ 	}
+ 
+ 	qedf_free_bdq(qedf);
+@@ -3201,6 +3209,7 @@ static int qedf_set_fcoe_pf_param(struct qedf_ctx *qedf)
+ 	if (rval) {
+ 		QEDF_ERR(&(qedf->dbg_ctx), "Global queue allocation "
+ 			  "failed.\n");
++		qedf_free_fcoe_pf_param(qedf);
+ 		return 1;
+ 	}
+ 
+@@ -3264,11 +3273,14 @@ static void qedf_free_fcoe_pf_param(struct qedf_ctx *qedf)
+ 		size = qedf->num_queues * sizeof(struct qedf_glbl_q_params);
+ 		dma_free_coherent(&qedf->pdev->dev, size, qedf->p_cpuq,
+ 		    qedf->hw_p_cpuq);
++		qedf->p_cpuq = NULL;
++		qedf->hw_p_cpuq = 0;
+ 	}
+ 
+ 	qedf_free_global_queues(qedf);
+ 
+ 	kfree(qedf->global_queues);
++	qedf->global_queues = NULL;
+ }
+ 
+ /*
+@@ -3443,7 +3455,7 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
+ 	rc = qed_ops->fill_dev_info(qedf->cdev, &qedf->dev_info);
+ 	if (rc) {
+ 		QEDF_ERR(&qedf->dbg_ctx, "Failed to fill dev info.\n");
+-		goto err2;
++		goto err2_free_pf;
+ 	}
+ 
+ 	if (mode != QEDF_MODE_RECOVERY) {
+@@ -3452,7 +3464,7 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
+ 			QEDF_ERR(&qedf->dbg_ctx, "Cannot register devlink\n");
+ 			rc = PTR_ERR(qedf->devlink);
+ 			qedf->devlink = NULL;
+-			goto err2;
++			goto err2_free_pf;
+ 		}
+ 	}
+ 
+@@ -3469,7 +3481,7 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
+ 	if (rc) {
+ 
+ 		QEDF_ERR(&(qedf->dbg_ctx), "Cannot start slowpath.\n");
+-		goto err2;
++		goto err2_free_pf;
+ 	}
+ 
+ 	/* Start the Slowpath-process */
+@@ -3483,7 +3495,7 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
+ 	rc = qed_ops->common->slowpath_start(qedf->cdev, &slowpath_params);
+ 	if (rc) {
+ 		QEDF_ERR(&(qedf->dbg_ctx), "Cannot start slowpath.\n");
+-		goto err2;
++		goto err2_free_pf;
+ 	}
+ 
+ 	/*
+@@ -3713,10 +3725,11 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
+ err5:
+ 	qed_ops->stop(qedf->cdev);
+ err4:
+-	qedf_free_fcoe_pf_param(qedf);
+ 	qedf_sync_free_irqs(qedf);
+ err3:
+ 	qed_ops->common->slowpath_stop(qedf->cdev);
++err2_free_pf:
++	qedf_free_fcoe_pf_param(qedf);
+ err2:
+ 	qed_ops->common->remove(qedf->cdev);
+ err1:
+-- 
+2.34.1
+
 
