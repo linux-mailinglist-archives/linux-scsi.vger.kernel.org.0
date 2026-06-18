@@ -1,192 +1,144 @@
-Return-Path: <linux-scsi+bounces-25061-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25062-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id /4XXALOjM2o5EgYAu9opvQ
-	(envelope-from <linux-scsi+bounces-25061-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2026 09:52:19 +0200
+	id DQ6lERCzM2rSFAYAu9opvQ
+	(envelope-from <linux-scsi+bounces-25062-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2026 10:57:52 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CD1E69E392
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2026 09:52:18 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B125C69EA64
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2026 10:57:50 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linaro.org header.s=google header.b=EGArLdik;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25061-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25061-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=linaro.org;
+	dkim=pass header.d=leap-io-kernel.com header.s=default header.b=kVLExkhs;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25062-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25062-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=leap-io-kernel.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 636B53060183
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2026 07:52:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9EFC1307AFCF
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2026 08:52:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABFC03BBFCF;
-	Thu, 18 Jun 2026 07:52:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1830C3B19AA;
+	Thu, 18 Jun 2026 08:52:45 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m49208.qiye.163.com (mail-m49208.qiye.163.com [45.254.49.208])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E54A1990A7
-	for <linux-scsi@vger.kernel.org>; Thu, 18 Jun 2026 07:52:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F54343881
+	for <linux-scsi@vger.kernel.org>; Thu, 18 Jun 2026 08:52:40 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781769135; cv=none; b=Y5LEdnDVYlb6mYc6F8Gu5ga6o+nVlr0oU+Mn8lB+Oi67fyLDoUDyPGcbG7WN/Yh1RH8Dka6J52NuKlm409K82X9fCk2PeDNelFAgtieqsJ/kwVJoPV0ttiaOxyolAjAXGKG305X+kyXizcd9V3ujkHuL/CfNhkkvzprqNJrwCXs=
+	t=1781772764; cv=none; b=fHcpK8fb815N1OGm8goMui1HqHlNx0sKnkODRIomgG3Txl1mPuAe6BMIy/kWGJugLNgqVAdSw7jV99GhwwbpMdV5AVgcYHZ9gglny5PyIqCmR5HhgCSpQ/XPN3CCwE7oSfcGDzyV0Rspl6gRnR2xyjnnIg0Sds9GKT3lJeXdO0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781769135; c=relaxed/simple;
-	bh=4nd8d8nXCrp4fh2CK3XF+QRzlDUQQz2xhK4xlv4TeuM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZkXMOBkMQO9rFzsThxyZS3rPhLoiGg4yxnC/6s8SJDnouVVnCBvAuQX9bm+04pVmCjeaMUmN/zWEU5oVS3hcGNx3FeibvYziejXvfpBR+HpZYkPqa7Kl5veIdG9/nK/dRM27CrFeO8nDWHqIPW6CyF0mGOs6KcIw4gzI+WGqBe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EGArLdik; arc=none smtp.client-ip=209.85.221.49
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-46019b190b6so489247f8f.3
-        for <linux-scsi@vger.kernel.org>; Thu, 18 Jun 2026 00:52:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1781769132; x=1782373932; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CerN24WvGNda5X/5X5+yXtaiL5Y+BUa+4egFlH3ETKw=;
-        b=EGArLdikmYJurLRfO0+xta0cHdUr8xhtDY5B8laXTbJfiAqJNK/tvLrFNSfU6Tqccu
-         AeqDN8Xy0NI4KI25H5e1ks9tJiEpS0BBUYNUChkRc9XftJCUG3mx1qoq+Url2PMlLvog
-         phX11WLmTPCR69bCFONJfumzGsiIuONACf5PHrMGtCY3usObjTcR6sgYdk6lbcGZHhLW
-         MHpwl3g6FiTxQHamfWJB1JaYCHasAH4iqi2P2iHasShikcwhSNQLrJYgKe/TzNLmeyvk
-         r9pJMLnS7hVllJIfaFUMzAQbG72pcHSksLDwkHB0WBVbmbxbYJWB+AJgBoZ1ywbVSoRG
-         vOfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781769132; x=1782373932;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CerN24WvGNda5X/5X5+yXtaiL5Y+BUa+4egFlH3ETKw=;
-        b=pOzvVfen9P7+ebEQQlnTEMcbMcKcIotA6M0PzrOhTAfyShPdqohY/JwskVD7Zi9dbL
-         VCKW9zFugmwbvNJ6pUn1e0VfeLnkI01zNSnSZ8Vt/ZpHUqwK151vMu3S5hn/nZEhVuEz
-         fIQSdkOcicRKbtXD4zDqzIDg20UdTCfC9HvY2i4HaISjiMW0whwWlQYKI6bFx/PtDJc+
-         EpVu6d7Zw1KP9/DKf7dUpkGwlR0U1AkKqnWj5YTSQpdMJ9Nu5bXUt0YL8TuGxDxJel9W
-         TyFrwyc4jk32o6A9GopMGleDgETwK+zNTbh25EOpc+k8gGCYFMmolZQZxCMeNInQ9+9f
-         fp+g==
-X-Gm-Message-State: AOJu0YzhzLHiGeBQHCAA3oPy03j5/t1M9/HAUGcZjWxHJe0qACsELeWV
-	WpBSLpjybygMVfzXVd2ccXEOZqGCJjutYcZaMdXfKhBErTOaylOoPyPjgpE6iG7QD1I=
-X-Gm-Gg: AfdE7cn0ltsfqxW4iLdrdLSkH7l379BFQEobw9mPuI9tn6f7pCdJx98LvhGSiRtbC4c
-	BCgeP2DDkvh363Tnb4emLWzsjfI3dqIyRdh2yA8ugDm/Oy2gVq/CLFbT0Iq6q/Z1hpDNvMa1G9D
-	/f/vN+GxbY9tt6tL+sO3Rml4Di3NvPwLjujU8d/JlJYDhigYjk72fPiUnIMb0u23Jh22/oHrzVa
-	r0QGMUChSExO1mXTH53dRWCfZxOfitLlBeloesoEeLh4CfaNFTEfA5pg3ZK8dxG6czoIMotgMcf
-	w964zqfSueOjd+IgexExpwGlArIMzXqugXZAgWT4Sc0i7bTdsbqyhOthI6wXgtmzD6b6jNmUdx2
-	AaJfJgMLPDDBhGimFtiT6W92BC/NjbpeRy4AwS1GspCa0RoKz0PtSBfGVUJL4ZCBMOxW3kqvc6D
-	l8sl8anoongAcjS6LVJ6+4TfQEBec6x4+5CfjV3tO+ZowF
-X-Received: by 2002:adf:e00c:0:20b0:461:a16c:a6c1 with SMTP id ffacd0b85a97d-463ae06c414mr2695255f8f.36.1781769131829;
-        Thu, 18 Jun 2026 00:52:11 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:106d:1080:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f2c5266sm66635071f8f.29.2026.06.18.00.52.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2026 00:52:11 -0700 (PDT)
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Thu, 18 Jun 2026 09:52:09 +0200
-Subject: [PATCH] ufs: switch WriteBooster missing free space message as
- warn_once
+	s=arc-20240116; t=1781772764; c=relaxed/simple;
+	bh=pssY519DKTBGVNaa97dXXik4Vmc2GTVAy35jwA6R+qM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Wd8Qw3Est3kMRteiVrUvemPC+N9yEJu0IvyzeKTsLfqiWrpFzCOZeJ5ZsfRG2aBU80yUnMayryQWhvff5EBeRpLaouZ+8TBnU86weNYzzuLr3V6pn/urTIgUMtcptu5yyztHdaBUZSaiGTAQA4g+vwwjHPo3uM+PIe+QwDauFMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=kVLExkhs; arc=none smtp.client-ip=45.254.49.208
+Received: from localhost.localdomain (unknown [222.130.22.242])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 42e501431;
+	Thu, 18 Jun 2026 16:37:13 +0800 (GMT+08:00)
+From: Dongdong Hao <doubled@leap-io-kernel.com>
+To: James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com
+Cc: dlemoal@kernel.org,
+	doubled@leap-io-kernel.com,
+	yjzhang@leap-io-kernel.com,
+	kezijie@leap-io-kernel.com,
+	qtian@leap-io-kernel.com,
+	jzzhang@leap-io-kernel.com,
+	baikefan@leap-io-kernel.com,
+	linux-scsi@vger.kernel.org
+Subject: [PATCH v3 0/2] scsi: Add LeapRAID driver support
+Date: Thu, 18 Jun 2026 16:37:11 +0800
+Message-Id: <cover.1781767278.git.doubled@leap-io-kernel.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260618-topic-ufs-wb-empty-warn-v1-1-ec744a153e0e@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAKijM2oC/yXMQQ6CMBBA0auQWTtJW0mjXsW4gHGqY2JpOgU0h
- LtTdPkW/y+gnIUVLs0CmSdRGWKFPTRAzy4+GOVeDc44b7w9YRmSEI5Bce6R36l8ce5yxJasded
- A5th6qHXKHOTzO19vf+vYv5jKvoN13QBTKSo5ewAAAA==
-X-Change-ID: 20260618-topic-ufs-wb-empty-warn-4c1129fc0346
-To: Alim Akhtar <alim.akhtar@samsung.com>, 
- Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1554;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=4nd8d8nXCrp4fh2CK3XF+QRzlDUQQz2xhK4xlv4TeuM=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBqM6OqZl4/mfvPgk8oiUiIA3n3yXXFhAfiS+liVTQ1
- 33X3QUmJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCajOjqgAKCRB33NvayMhJ0ZCtEA
- CVqRtgDLve72XhON5m4/MTku35ceBMWz2jHaFRAjN1l6rj32UL1NVfSfh/UMEhBxZ3zwqe6h/6okz4
- 00AeBk5WikLnpmP0JxeOHXMfaQrjcMniuwT8aVJW/zJAj9y8IY+LV3MzO6F/4tII+5U93UKebbQv25
- 7mTBsEosNI0JEHIL+1ia3mj7SopHsjnELbpNmZm+U8BpAnSEHuHz82orN4RWZ2lhN6WgVaf75ii0HV
- RStBfNXHX6DAjQPCgAsCyVLRg2NBhglTcK6yd/qQsoJqXgs2X4eVVUjrdI4J0RI37DpbTO5knCcq3c
- Jcpr3Rim6k5afnXbwxsudGGbFRapyEVZi7WbyP3dFPgpcTlad3JRFKMhqdbhmMvX59HdeTO1AS4GuO
- SSNBg3jqldHNJeQdlb6+hzGNIiB2PneAoldFe0H0uMSCRmC2/tQGE6jutCm5DjiIhtM+lujJacCU3t
- LgYnkD1PVd2C7lGjFzuCDtYyZ0BXJ2GAOPXgE2ZhUKGaxtl4KO07ZgyvF4LGEd2Ag7Qvjq/7PGBUET
- gAvvedSoqIoHNVYg7GnQ1aTZ5QXVSARDZE6Rh5DWd8MxO/BBshyGwLr4MNaO/+nQeO8EotkB+0SxUi
- TCchoPSCO6s1hiHIFhoeqLSv2tET4jVVixG4YFHJEEW+foIJUkfO5NQ9rEaQ==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a9ed9e091c603aekunmd3a9a65045f47e
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCTEkZVk5NHh0fGBlMTUhMQ1YVFA
+	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUlVSkhLVUlJVUlPSVlXWRYaDxIVHRRZQVlPS0hVSk
+	tJT09PSFVKS0tVSkJLS1kG
+DKIM-Signature: a=rsa-sha256;
+	b=kVLExkhsxiqA9T7xihxa4waUXE6K1ZPlgihQtsTZMyTTnysFGn03uneeu2spfHbKSPa371ZHMyOKUWS/yttwp2bd9V2I4Hhm0Ppj+Fq/5RO1+5BKTC+I2HGOG1Yu40faoQJ59zNSOz4+sne6xsp+L1XjPEf6XbEicdUrxblh/DVKmTIaJwobHjlxGWu1jkysTVbWWXvsHV1OdKTl64Ymx2NsAsahW46NenmFwxNcDbhUsFXi81gfBrDQV4dS/AOCkZQojukHcTV6TKL2OThCX1sfm47svANWRqpO9/qkI03XIt5JMsezIvXKmOKmk227dUEF39jJq5VyaZnN4oXtuQ==; c=relaxed/relaxed; s=default; d=leap-io-kernel.com; v=1;
+	bh=lPeFLCGWpgs78ThG2T60KCzueYjr47trXOmmAGQMAYg=;
+	h=date:mime-version:subject:message-id:from;
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[leap-io-kernel.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[leap-io-kernel.com:s=default];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-25061-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[neil.armstrong@linaro.org,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:bvanassche@acm.org,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:neil.armstrong@linaro.org,s:lists@lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25062-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:dlemoal@kernel.org,m:doubled@leap-io-kernel.com,m:yjzhang@leap-io-kernel.com,m:kezijie@leap-io-kernel.com,m:qtian@leap-io-kernel.com,m:jzzhang@leap-io-kernel.com,m:baikefan@leap-io-kernel.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER(0.00)[doubled@leap-io-kernel.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[doubled@leap-io-kernel.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[neil.armstrong@linaro.org,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_NONE(0.00)[];
+	DKIM_TRACE(0.00)[leap-io-kernel.com:+];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:dkim,linaro.org:email,linaro.org:mid,linaro.org:from_mime,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,leap-io-kernel.com:dkim,leap-io-kernel.com:mid,leap-io-kernel.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 6CD1E69E392
+X-Rspamd-Queue-Id: B125C69EA64
 
-Once the UFS WriteBooster fails to allocate memory, the situation
-will stay until fstrim or equivalent is ran.
+This series adds the LeapRAID driver and its documentation.
 
-Mark is as a warning since it impacts the performance but only
-print it once for the lifetime of the kernel since it's not fatal.
+Changes in v3:
+ - Simplify bool return, drop redundant assignment and noisy logs
+ - Fix byte alignment issues for fw_event mask and pd_hdls on ARM64
+ - Added Reviewed-by tags from Damien for both patches.
 
-Otherwise it will be printed each time the device is resumed:
-[   31.666880] ufshcd-qcom 1d84000.ufshc: dCurWBBuf: 0 WB disabled until free-space is available
-[   52.655594] ufshcd-qcom 1d84000.ufshc: dCurWBBuf: 0 WB disabled until free-space is available
-[   62.890469] ufshcd-qcom 1d84000.ufshc: dCurWBBuf: 0 WB disabled until free-space is available
-...
+Dongdong Hao (2):
+  scsi: leapraid: Add new SCSI driver
+  scsi: leapraid: Add driver documentation
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/ufs/core/ufshcd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/scsi/index.rst               |    1 +
+ Documentation/scsi/leapraid.rst            |  139 +
+ MAINTAINERS                                |    7 +
+ drivers/scsi/Kconfig                       |    1 +
+ drivers/scsi/Makefile                      |    1 +
+ drivers/scsi/leapraid/Kconfig              |   14 +
+ drivers/scsi/leapraid/Makefile             |   10 +
+ drivers/scsi/leapraid/leapraid.h           | 2050 +++++
+ drivers/scsi/leapraid/leapraid_app.c       |  699 ++
+ drivers/scsi/leapraid/leapraid_func.c      | 8980 ++++++++++++++++++++
+ drivers/scsi/leapraid/leapraid_func.h      | 1558 ++++
+ drivers/scsi/leapraid/leapraid_os.c        | 2516 ++++++
+ drivers/scsi/leapraid/leapraid_transport.c | 1387 +++
+ 13 files changed, 17363 insertions(+)
+ create mode 100644 Documentation/scsi/leapraid.rst
+ create mode 100644 drivers/scsi/leapraid/Kconfig
+ create mode 100644 drivers/scsi/leapraid/Makefile
+ create mode 100644 drivers/scsi/leapraid/leapraid.h
+ create mode 100644 drivers/scsi/leapraid/leapraid_app.c
+ create mode 100644 drivers/scsi/leapraid/leapraid_func.c
+ create mode 100644 drivers/scsi/leapraid/leapraid_func.h
+ create mode 100644 drivers/scsi/leapraid/leapraid_os.c
+ create mode 100644 drivers/scsi/leapraid/leapraid_transport.c
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index c3f08957d179..579bf604e6f0 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -6367,8 +6367,8 @@ static bool ufshcd_wb_curr_buff_threshold_check(struct ufs_hba *hba,
- 	}
- 
- 	if (!cur_buf) {
--		dev_info(hba->dev, "dCurWBBuf: %d WB disabled until free-space is available\n",
--			 cur_buf);
-+		dev_warn_once(hba->dev, "dCurWBBuf: %d WB disabled until free-space is available\n",
-+			      cur_buf);
- 		return false;
- 	}
- 	/* Let it continue to flush when available buffer exceeds threshold */
-
----
-base-commit: 8cd9520d35a6c38db6567e97dd93b1f11f185dc6
-change-id: 20260618-topic-ufs-wb-empty-warn-4c1129fc0346
-
-Best regards,
---  
-Neil Armstrong <neil.armstrong@linaro.org>
+-- 
+2.25.1
 
 
