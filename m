@@ -1,280 +1,159 @@
-Return-Path: <linux-scsi+bounces-25070-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25064-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id aTuPAGLwM2q7JQYAu9opvQ
-	(envelope-from <linux-scsi+bounces-25070-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2026 15:19:30 +0200
+	id M4p3HNLZM2roHAYAu9opvQ
+	(envelope-from <linux-scsi+bounces-25064-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2026 13:43:14 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 683B06A06C6
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2026 15:19:29 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C30E769FCC2
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2026 13:43:13 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=leap-io-kernel.com header.s=default header.b=aAqL5vao;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25070-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25070-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=leap-io-kernel.com;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=YF+6r2c0;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=wkuuCbYV;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=YF+6r2c0;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=wkuuCbYV;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25064-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25064-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=suse.de;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8BCA3310A928
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2026 13:13:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C6BF0303D717
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2026 11:42:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38662391E58;
-	Thu, 18 Jun 2026 13:13:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67DAC3ECBE5;
+	Thu, 18 Jun 2026 11:42:36 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-m49208.qiye.163.com (mail-m49208.qiye.163.com [45.254.49.208])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE943F99E9
-	for <linux-scsi@vger.kernel.org>; Thu, 18 Jun 2026 13:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5DC581724
+	for <linux-scsi@vger.kernel.org>; Thu, 18 Jun 2026 11:42:34 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781788412; cv=none; b=VAOYl6whz9B+c1KrL2jPnS8Dt0GsijFbRJC03bwiMeqPWWy8rIU+VJUczzaN1eu8S7R7Zm7n+ewjbKpqupQoBmPGQM9s04YucKFrHSYBnXRn+6AGDVDLX6fcnEaPzAAIjK7a+DMc8xatPgM2cHuaMYolYfBTisiJETi57RufWmI=
+	t=1781782956; cv=none; b=B4rtZ6hz1nSfYEWQLBiQwR4DhbmDr7KJ87sbrvY8n4VMnvfQSYmRm82QQ/FLLRCpNKkiIdcJH1EEPgNcQYqfEF2ihvfPzj0KssDEhLugOIT63Fwt6QFDNVKue3JkM+tAOOdhsJwCfhDLgNqGzhiqliNIm2TAZ6qwL4NFykVRgQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781788412; c=relaxed/simple;
-	bh=sJ8NURg6XOJaa63ahlOUPEEV0sfqRWqvruMb0Hb9pe4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mwMOt4s3KG1iFRTI5pyB0oRyJ+16p7Ewqh7YmgOBfhOFEsyXHxL/8x15E6D+Or/hWOUAwoJURUl5S0AQgwy5Q9Kg/jaUU8gtjKGRtGdohG1mYq/IBYuUbrod0Q3lgb+Mz+on4PFPYUN7J/USUIuo3UcfbnR54zoYRxCFIGJ3UFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=aAqL5vao; arc=none smtp.client-ip=45.254.49.208
-Received: from localhost.localdomain (unknown [222.130.22.242])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 42e50143f;
-	Thu, 18 Jun 2026 16:37:16 +0800 (GMT+08:00)
-From: Dongdong Hao <doubled@leap-io-kernel.com>
-To: James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com
-Cc: dlemoal@kernel.org,
-	doubled@leap-io-kernel.com,
-	yjzhang@leap-io-kernel.com,
-	kezijie@leap-io-kernel.com,
-	qtian@leap-io-kernel.com,
-	jzzhang@leap-io-kernel.com,
-	baikefan@leap-io-kernel.com,
-	linux-scsi@vger.kernel.org
-Subject: [PATCH v3 2/2] scsi: leapraid: Add driver documentation
-Date: Thu, 18 Jun 2026 16:37:13 +0800
-Message-Id: <bab9637bf1646c6d0c5d82c22328f120e02cc4c6.1781767278.git.doubled@leap-io-kernel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1781767278.git.doubled@leap-io-kernel.com>
-References: <cover.1781767278.git.doubled@leap-io-kernel.com>
+	s=arc-20240116; t=1781782956; c=relaxed/simple;
+	bh=D7IQRydJHUvZ3DTmr4MgiGdFfu7BJekEGZHty957g/I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MU/pnVwW0P9ewp4lfyw6N0DrBdQyXspPRO0NHn/TTebGJ8xQLDVcdwJeo5zBSu1zlGPKC8Tezd4wN+b+1c48I8ORSkD9WU6koe4PuTEZJ2DeT6B+n/aYY34QpG+hA3Flf6D2JXouS06JAuH831CI6/nwvrp4s2YsvRLxGZWJOQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=YF+6r2c0; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=wkuuCbYV; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=YF+6r2c0; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=wkuuCbYV; arc=none smtp.client-ip=195.135.223.130
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 320946C265;
+	Thu, 18 Jun 2026 11:42:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1781782953; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=D7IQRydJHUvZ3DTmr4MgiGdFfu7BJekEGZHty957g/I=;
+	b=YF+6r2c0cQcwx/QqOLvhZvuA0Abw8NcbZouRIQQHK9uZNf/AQT1nVR5gSN3PfBYLvIj2ye
+	jnouWFUZPp6ZqS9ZJluc/fVp9tL2DBGl5uxbJOZn0MEVz+lveHBS4BszNWdsf6/3r7AyoH
+	P/8o+cD+ktq6lw6H0k6mWtdFX5QASxE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1781782953;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=D7IQRydJHUvZ3DTmr4MgiGdFfu7BJekEGZHty957g/I=;
+	b=wkuuCbYVi7AzPu+0dN5nnUQVqOwKg4e6O9uH+H9XkEcMp4y7pXneyQptB1ufCpB5b0zIwk
+	mmDbUrFrdNDmjtDw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1781782953; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=D7IQRydJHUvZ3DTmr4MgiGdFfu7BJekEGZHty957g/I=;
+	b=YF+6r2c0cQcwx/QqOLvhZvuA0Abw8NcbZouRIQQHK9uZNf/AQT1nVR5gSN3PfBYLvIj2ye
+	jnouWFUZPp6ZqS9ZJluc/fVp9tL2DBGl5uxbJOZn0MEVz+lveHBS4BszNWdsf6/3r7AyoH
+	P/8o+cD+ktq6lw6H0k6mWtdFX5QASxE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1781782953;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=D7IQRydJHUvZ3DTmr4MgiGdFfu7BJekEGZHty957g/I=;
+	b=wkuuCbYVi7AzPu+0dN5nnUQVqOwKg4e6O9uH+H9XkEcMp4y7pXneyQptB1ufCpB5b0zIwk
+	mmDbUrFrdNDmjtDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1F06D779A8;
+	Thu, 18 Jun 2026 11:42:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id UojrBanZM2rqcgAAD6G6ig
+	(envelope-from <dwagner@suse.de>); Thu, 18 Jun 2026 11:42:33 +0000
+Date: Thu, 18 Jun 2026 13:42:24 +0200
+From: Daniel Wagner <dwagner@suse.de>
+To: Justin Tee <justintee8345@gmail.com>
+Cc: Kyle Mahlkuch <kmahlkuc@linux.ibm.com>, linux-scsi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, paul.ely@broadcom.com, thinhtr@linux.ibm.com, 
+	Justin Tee <justin.tee@broadcom.com>, James Smart <james.smart@broadcom.com>
+Subject: Re: [PATCH 1/3] scsi: lpfc: Fix race conditions in ELS retry handling
+Message-ID: <3cf79f92-a492-45f4-838b-dcbef0a44147@flourine.local>
+References: <1c8a764c-fce1-4ce1-b797-47ac328cf3f2@linux.ibm.com>
+ <CABPRKS_Ek4JHDs9pBg2nium+AjHhM_JQ8su1=vrcOg+xME7PjQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9ed9e09ce803aekunmd3a9a65045f4b2
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkZGU5DVhpKTk9CQ0lLGUsdH1YVFA
-	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUlVSkhLVUlJVUlPSVlXWRYaDxIVHRRZQVlPS0hVSk
-	tJT09PSFVKS0tVSkJLS1kG
-DKIM-Signature: a=rsa-sha256;
-	b=aAqL5vao2h6xLYYTGZGMbVGbQku+dYDPVWE0vYHnQonM9iETIlY7i2miep4H7sPBq/nh8ycc2b9HKayCWz2bHDgsn0a+ueyFfbs0GIQ7WOQ3MzelggVLqv0S/P54RhrQOyDFX5TK25vngdh5May3LNCV0TGhi41wO8aWEGlo6oBEdmDOOqfbP/ipGUmd/z9qJ/SZubgX1LVJ9vfgerKreA+I2qxE2aDe7BIxqkDUHAUFqLHqnneRR391jlfjvUgHD4tITXd19kbSC37lee+THWCc0qJQyyCnV5pc7rKM0ARro6t7+hS3N6tEEKzRucxXlTCdeMMHZx4oZBvrfMDJWA==; c=relaxed/relaxed; s=default; d=leap-io-kernel.com; v=1;
-	bh=aARmVfQHIWR9+2E2caeqYx4SjemaowsMrnFwmAblFt4=;
-	h=date:mime-version:subject:message-id:from;
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABPRKS_Ek4JHDs9pBg2nium+AjHhM_JQ8su1=vrcOg+xME7PjQ@mail.gmail.com>
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Spam-Score: -4.30
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[leap-io-kernel.com,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[leap-io-kernel.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25064-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25070-lists,linux-scsi=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:dlemoal@kernel.org,m:doubled@leap-io-kernel.com,m:yjzhang@leap-io-kernel.com,m:kezijie@leap-io-kernel.com,m:qtian@leap-io-kernel.com,m:jzzhang@leap-io-kernel.com,m:baikefan@leap-io-kernel.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER(0.00)[doubled@leap-io-kernel.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:justintee8345@gmail.com,m:kmahlkuc@linux.ibm.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:paul.ely@broadcom.com,m:thinhtr@linux.ibm.com,m:justin.tee@broadcom.com,m:james.smart@broadcom.com,s:lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[doubled@leap-io-kernel.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	ALIAS_RESOLVED(0.00)[];
-	TO_DN_NONE(0.00)[];
-	DKIM_TRACE(0.00)[leap-io-kernel.com:+];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[suse.de:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[dwagner@suse.de,linux-scsi@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dwagner@suse.de,linux-scsi@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp,leap-io-kernel.com:dkim,leap-io-kernel.com:email,leap-io-kernel.com:mid,leap-io-kernel.com:from_mime]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,suse.de:dkim,suse.de:from_mime,flourine.local:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 683B06A06C6
+X-Rspamd-Queue-Id: C30E769FCC2
 
-This patch adds the necessary documentation for the LeapRAID SCSI driver
-to the kernel's documentation tree.
+Hi Justin,
 
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-Signed-off-by: Dongdong Hao <doubled@leap-io-kernel.com>
----
- Documentation/scsi/index.rst    |   1 +
- Documentation/scsi/leapraid.rst | 139 ++++++++++++++++++++++++++++++++
- 2 files changed, 140 insertions(+)
- create mode 100644 Documentation/scsi/leapraid.rst
+On Mon, Apr 13, 2026 at 09:28:38AM -0700, Justin Tee wrote:
+> Broadcom is currently reviewing this patch set and will report back.
 
-diff --git a/Documentation/scsi/index.rst b/Documentation/scsi/index.rst
-index f15a0f348ae4..52970f0159ca 100644
---- a/Documentation/scsi/index.rst
-+++ b/Documentation/scsi/index.rst
-@@ -56,6 +56,7 @@ SCSI host adapter drivers
-    g_NCR5380
-    hpsa
-    hptiop
-+   leapraid
-    libsas
-    lpfc
-    megaraid
-diff --git a/Documentation/scsi/leapraid.rst b/Documentation/scsi/leapraid.rst
-new file mode 100644
-index 000000000000..e4a6a61c13f8
---- /dev/null
-+++ b/Documentation/scsi/leapraid.rst
-@@ -0,0 +1,139 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=========================
-+LeapRAID Driver for Linux
-+=========================
-+
-+Introduction
-+============
-+
-+LeapRAID is a storage RAID controller driver developed by LeapIO Tech. The
-+controller targets enterprise storage, cloud infrastructure, high performance
-+computing (HPC), and AI workloads.
-+
-+It provides high-performance storage virtualization over PCI Express Gen4
-+and supports both SAS and SATA HDDs and SSDs. It offers both Host Bus Adapter
-+and RAID modes to meet diverse deployment requirements.
-+
-+Supported devices
-+=================
-+
-+- LeapHBA-8200C
-+
-+Features
-+========
-+- PCIe Gen4 x8 host interface
-+- Support for SAS and SATA devices
-+- RAID levels: 0, 1, 10, 5, 50, 6, 60
-+- Advanced error handling and end-to-end data integrity
-+
-+LeapRAID specific host attributes
-+=================================
-+
-+::
-+
-+   /sys/class/scsi_host/host*/fw_queue_depth
-+   /sys/class/scsi_host/host*/host_sas_address
-+   /sys/class/scsi_host/host*/board_name
-+
-+The host "fw_queue_depth" read-only attribute shows the firmware queue
-+depth of the host.
-+
-+The host "host_sas_address" read-only attribute shows the SAS address
-+of the host.
-+
-+The host "board_name" read-only attribute shows the board name reported
-+by manufacturing page 0.
-+
-+LeapRAID specific disk attributes
-+=================================
-+
-+::
-+
-+   /sys/class/scsi_disk/host:bus:target:lun/device/sas_address
-+   /sys/class/scsi_disk/host:bus:target:lun/device/sas_device_handle
-+   /sys/class/scsi_disk/host:bus:target:lun/device/sas_ncq
-+
-+The disk "sas_address" read-only attribute shows the SAS address of the
-+disk.
-+
-+The read-only attribute "sas_device_handle" represents the disk's device
-+handle, which is a unique identifier maintained by the firmware.
-+
-+This attribute "sas_ncq" controls the Native Command Queuing (NCQ) feature
-+for SATA devices. A value of 0 indicates that NCQ is currently disabled or
-+not supported. Writing 1 attempts to enable NCQ on the device. If the
-+operation succeeds, the value remains 1, indicating that NCQ has been
-+successfully enabled.
-+
-+LeapRAID module parameters
-+==========================
-+
-+The following module parameters can be configured at driver load time to
-+control driver behavior and tuning options.
-+
-+1. open_pcie_trace
-+------------------
-+
-+This parameter controls whether PCIe transaction tracing is enabled in the
-+driver. When set to 1, PCIe trace collection is enabled by default, allowing
-+detailed tracing of PCIe operations for debugging and performance analysis.
-+Setting it to 0 disables the trace functionality to reduce overhead in
-+production environments.
-+
-+2. enable_mpio
-+--------------
-+
-+This parameter enables or disables multipath support for target devices.
-+When set to 1, multipath functionality is enabled (default), allowing
-+multiple paths to be established. Setting it to 0 disables multipath
-+handling.
-+
-+3. msix_disable
-+---------------
-+
-+This parameter specifies whether MSI-X interrupts should be disabled. By
-+default, 0 keeps MSI-X enabled, providing high-performance interrupt
-+handling. Setting this parameter to 1 disables MSI-X, causing the driver
-+to fall back to Legacy INTx interrupts.
-+
-+4. max_msix_vectors
-+-------------------
-+
-+This parameter sets the upper limit on the number of MSI-X interrupt
-+vectors that the driver will request during initialization. The default
-+value of -1 allows the driver to use all available vectors as provided
-+by the device. Setting a positive integer restricts the number of vectors.
-+
-+5. interrupt_mode
-+-----------------
-+
-+This parameter defines which interrupt delivery mechanism is used by the
-+driver. A value of 0 selects MSI-X mode (default), providing the highest
-+performance and scalability. A value of 1 switches to MSI mode, while 2
-+forces the driver to use legacy INTx interrupts.
-+
-+6. poll_queues
-+--------------
-+
-+This parameter specifies the number of I/O queues to be used when operating
-+in io_uring poll mode. The default value is 0.
-+
-+7. smart_poll
-+-------------
-+
-+This parameter controls the SMART polling mechanism for SATA drives. When
-+enabled (1), the driver periodically checks the health of connected SATA
-+devices, allowing early detection of potential drive failures. The default
-+value 0 disables SMART polling
-+
-+File Location
-+=============
-+The driver source is located at:
-+
-+``drivers/scsi/leapraid/``
-+
-+.. note::
-+
-+   This document is intended for kernel developers and system
-+   integrators who need to build, test, and deploy the LeapRAID driver.
--- 
-2.25.1
+Any updates here? We just started to see crashes in our QA which
+show the same backtrace. I am going to ship these patches to our QA to
+see if it addresses the issue we are seeing. But it would be great to
+get this reviewed too.
+
+Thanks,
+Daniel
 
 
