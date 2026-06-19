@@ -1,173 +1,135 @@
-Return-Path: <linux-scsi+bounces-25091-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25092-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id cRBUDmzbNGq8igYAu9opvQ
-	(envelope-from <linux-scsi+bounces-25091-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jun 2026 08:02:20 +0200
+	id 6ImAOl+ONWqhzgYAu9opvQ
+	(envelope-from <linux-scsi+bounces-25092-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jun 2026 20:45:51 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F6B76A4082
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jun 2026 08:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A4D96A76C2
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jun 2026 20:45:51 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=yWRtBJto;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=24eIJs2e;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=yWRtBJto;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=24eIJs2e;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25091-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25091-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=suse.de;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=LUvuJba0;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25092-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25092-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4CA4E30557C8
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jun 2026 06:01:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D793C3041794
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jun 2026 18:45:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F403469FC;
-	Fri, 19 Jun 2026 06:01:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6013E19CCF7;
+	Fri, 19 Jun 2026 18:45:49 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5021E4AF
-	for <linux-scsi@vger.kernel.org>; Fri, 19 Jun 2026 06:01:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A0D21A238F
+	for <linux-scsi@vger.kernel.org>; Fri, 19 Jun 2026 18:45:48 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781848903; cv=none; b=kQ9VHZCzWf3V6wVaQyLiIN7Ov/G8kjI4QBLl0UO9tZyFQMwXw4XNjlwhO+RIct0DmRz/2l+MvzXFqyxrHQj8J+EJEoa4AOvsykpEP5ga4LKQK70EfbGNlejC1Dsnh7qOr/qmaaxzd4ECKKNvWSKKs/c2l/EOyc9Ztc9gApqSzbY=
+	t=1781894749; cv=none; b=my2ZCRKzS4druqN/cwrrXJHn2hXIWhB6lsuFODqC7wslW2cPj0TGefV5KdNFxUz+JnI6PR0rh23WxSm1Tdnepn4+WSOIOHKvG0uVQ9qa7o3WN64RO91H4txwHx3HfJggMuWwV80/Y5+/RFuv2Od+H/MBos3F3/QqBBWYhIx5cWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781848903; c=relaxed/simple;
-	bh=bSev8Ho6wXz1oDAR97voFjVx3LTRc7AQTSi4KYorbnU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lvQkUXoIpVJwLPsQe8m7IHMAxxIedxbEbmc4fi9mVf3DxWfGhoFCNPpefVNapunEZFvNhHqTHtQnQrGBwwp+Hp8qJr69GodnJnWLcujHKw1nD05igRnhPtbVubu909ZwN07ewUOw6jnigY0RZnfdtUbtGstkgm36Q4pvFgLBmIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yWRtBJto; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=24eIJs2e; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yWRtBJto; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=24eIJs2e; arc=none smtp.client-ip=195.135.223.131
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 65DFC76099;
-	Fri, 19 Jun 2026 06:01:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1781848900; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AlkgWw1+S3GWQ34axZ/hy1O9oQlycY9Q7+uBSMBu15w=;
-	b=yWRtBJtonD1py4w2LQaEgzwN4h8Q5+TC4UR857KTMAiIPhzNeEZF+gpjFxYKamsgvkwdOf
-	+TI0qGKwErfpY3RPeYQfLX9TqJdXCtptFS3SFKgJNsE8cRXTWcrUFpB4jwEp6jD+6xSPrs
-	fqewVa0ghymSy/bnrItRuP7Tiw4cJXk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1781848900;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AlkgWw1+S3GWQ34axZ/hy1O9oQlycY9Q7+uBSMBu15w=;
-	b=24eIJs2egWsX1TDAY0cAMpZoRg5M3S7o7o8yfizUFd76NH5i+WRRAdpwjg57eEgZGf9WTz
-	4RBkcP8vwbUwG2DQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1781848900; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AlkgWw1+S3GWQ34axZ/hy1O9oQlycY9Q7+uBSMBu15w=;
-	b=yWRtBJtonD1py4w2LQaEgzwN4h8Q5+TC4UR857KTMAiIPhzNeEZF+gpjFxYKamsgvkwdOf
-	+TI0qGKwErfpY3RPeYQfLX9TqJdXCtptFS3SFKgJNsE8cRXTWcrUFpB4jwEp6jD+6xSPrs
-	fqewVa0ghymSy/bnrItRuP7Tiw4cJXk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1781848900;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AlkgWw1+S3GWQ34axZ/hy1O9oQlycY9Q7+uBSMBu15w=;
-	b=24eIJs2egWsX1TDAY0cAMpZoRg5M3S7o7o8yfizUFd76NH5i+WRRAdpwjg57eEgZGf9WTz
-	4RBkcP8vwbUwG2DQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 32A1D779A8;
-	Fri, 19 Jun 2026 06:01:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id KvbfCkTbNGqqFwAAD6G6ig
-	(envelope-from <hare@suse.de>); Fri, 19 Jun 2026 06:01:40 +0000
-Message-ID: <0adf2cae-d9a3-4ac1-b794-d850c77bf67b@suse.de>
-Date: Fri, 19 Jun 2026 08:01:39 +0200
+	s=arc-20240116; t=1781894749; c=relaxed/simple;
+	bh=FBa36oetGM98CKDff4iQR1LHwkI39+FDS5gJw9MMV/g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=khYPMPyB/PE8cIT9jkMRfIJeJ6EwTkuvCP8u0GpNdsV4P2wt6ZrqDZXnBa4naP99vjOFKYIT1CjhKY+2N9tCHZTdLn8xztGnt6VDiuQlgMEz8DXbW7jSfOK9S2cGU9DuYieQtte9Nc2u3E5k9JfNMsC3EPKebSOp/cLHdjuZ1sM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LUvuJba0; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71C901F000E9;
+	Fri, 19 Jun 2026 18:45:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781894747;
+	bh=FBa36oetGM98CKDff4iQR1LHwkI39+FDS5gJw9MMV/g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=LUvuJba0n1qxs8+Uo/JYny0hhls3tq1Y9GEi5Y5BlP96op/MYpnRgKOndu6FYHi9p
+	 ABMyNUidg9ZUeKtxwIyX+ypGg9a2ESByu1BxCI3ItMixPtxnBeZJw3otEoeBlOymHP
+	 nJKbT094QZpe5NIyzMtWXEyONLLlnBtUTrzKJ8BQHpMkpdmXLKGCZpmNwJtnTNcbTr
+	 CT91PJ9TI6MdWbzC/y0vlzzi4L8L9691gtQt/qCaleyMtpsb0d28E+HQj6DfUgTyUd
+	 JXEVI5zHj3vXY5ToHQF+HxE9OIfv6m7j2rL5m7zspSuDE+COyN+MQ53P5T7R1goQjQ
+	 dok0tsokqXqdQ==
+Date: Fri, 19 Jun 2026 12:45:45 -0600
+From: Keith Busch <kbusch@kernel.org>
+To: Hannes Reinecke <hare@suse.de>
+Cc: Maurizio Lombardi <mlombard@arkamax.eu>,
+	John Meneghini <jmeneghi@redhat.com>,
+	Maurizio Lombardi <mlombard@redhat.com>, hch@lst.de,
+	chaitanyak@nvidia.com, bvanassche@acm.org,
+	linux-scsi@vger.kernel.org, linux-nvme@lists.infradead.org,
+	James.Bottomley@hansenpartnership.com, emilne@redhat.com,
+	bgurney@redhat.com
+Subject: Re: [PATCH V3 0/3] Ensure ordered namespace registration during
+ async scan
+Message-ID: <ajWOWdD0P5ri9bWY@kbusch-mbp>
+References: <20260225161203.76168-1-mlombard@redhat.com>
+ <aZ9sjbZ3CEW_1rW1@kbusch-mbp>
+ <DGOQMFJJ6K5P.3KLF45WQT2SAS@arkamax.eu>
+ <e43b914c-2ca5-455e-b0fe-3ce2eb0c64bd@redhat.com>
+ <aaCNtpPzP9TIDNjE@kbusch-mbp>
+ <869034b1-c7e8-4e35-b153-43fd787a8edd@suse.de>
+ <aaXE4s3AT45UIAN8@kbusch-mbp>
+ <DJBICZU143X2.3S261SDT21N0V@arkamax.eu>
+ <ajRpWLqaEyA6cwkJ@kbusch-mbp>
+ <531aa19b-a9ae-44f7-82ce-3714621ceee8@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 5/5] scsi: core: Handle reprobe for existing devices
- during SCSI scan
-To: Brian Bunker <brian@purestorage.com>, linux-scsi@vger.kernel.org
-Cc: James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
- bvanassche@acm.org, krishna.kant@purestorage.com
-References: <20260618233508.97960-1-brian@purestorage.com>
- <20260618233508.97960-6-brian@purestorage.com>
-Content-Language: en-US
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20260618233508.97960-6-brian@purestorage.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <531aa19b-a9ae-44f7-82ce-3714621ceee8@suse.de>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-4.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25091-lists,linux-scsi=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:brian@purestorage.com,m:linux-scsi@vger.kernel.org,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:bvanassche@acm.org,m:krishna.kant@purestorage.com,s:lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[hare@suse.de,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[suse.de:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:hare@suse.de,m:mlombard@arkamax.eu,m:jmeneghi@redhat.com,m:mlombard@redhat.com,m:hch@lst.de,m:chaitanyak@nvidia.com,m:bvanassche@acm.org,m:linux-scsi@vger.kernel.org,m:linux-nvme@lists.infradead.org,m:James.Bottomley@hansenpartnership.com,m:emilne@redhat.com,m:bgurney@redhat.com,s:lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FORGED_SENDER(0.00)[kbusch@kernel.org,linux-scsi@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25092-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hare@suse.de,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kbusch@kernel.org,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,suse.de:dkim,suse.de:email,suse.de:mid,suse.de:from_mime]
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,kbusch-mbp:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 4F6B76A4082
+X-Rspamd-Queue-Id: 2A4D96A76C2
 
-On 6/19/26 01:35, Brian Bunker wrote:
-> Complement scsi_rescan_device() reprobe by handling the scan path.
-> Update INQUIRY data and reprobe existing devices when standard INQUIRY
-> data changed.
-> 
-> Co-developed-by: Krishna Kant <krishna.kant@purestorage.com>
-> Signed-off-by: Krishna Kant <krishna.kant@purestorage.com>
-> Signed-off-by: Brian Bunker <brian@purestorage.com>
-> ---
->   drivers/scsi/scsi_scan.c | 91 ++++++++++++++++++++++++++++++++++++----
->   1 file changed, 83 insertions(+), 8 deletions(-)
-> 
-Reviewed-by: Hannes Reinecke <hare@kernel.org>
+On Fri, Jun 19, 2026 at 07:59:43AM +0200, Hannes Reinecke wrote:
+> The problem here is namespace lifetime. The ns_ida is only ever released
+> at the very last step, so the 'number' of the namespace will only be freed
+> once all references to the namespace are dropped.
+> So if you were trying to keep the namespace number ordered you would
+> have to delay the creation of the namespace until that point, and you
+> would induce a serialization between deletion and creation.
 
-Cheers,
+Under the proposed scheme, there is no ns_ida. You just use the NSID of
+the namespace, and that's it. You have to ensure that del_gendisk
+completed on all heads and paths that was using it prior to bringing up
+the next one, but that's not really a problem.
 
-Hannes
--- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.de                                +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+The problem I recall has something to do with the nsid not being a
+consistent value when migrating a namespace to another array or
+something like that. Not that we currently have proper support for such
+a thing...
 
