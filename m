@@ -1,207 +1,291 @@
-Return-Path: <linux-scsi+bounces-25095-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25097-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 6PLdOIxJNmqp9AYAu9opvQ
-	(envelope-from <linux-scsi+bounces-25095-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 20 Jun 2026 10:04:28 +0200
+	id KxEyConsN2q/VgcAu9opvQ
+	(envelope-from <linux-scsi+bounces-25097-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sun, 21 Jun 2026 15:52:09 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55B0D6A88A6
-	for <lists+linux-scsi@lfdr.de>; Sat, 20 Jun 2026 10:04:28 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19A626AAFC8
+	for <lists+linux-scsi@lfdr.de>; Sun, 21 Jun 2026 15:52:08 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=qualcomm.com header.s=qcppdkim1 header.b=ZLJUzMf3;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25095-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25095-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=qualcomm.com;
+	dkim=none;
+	dmarc=fail reason="SPF not aligned (relaxed), No valid DKIM" header.from=hansenpartnership.com (policy=quarantine);
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25097-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25097-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 31502302DF67
-	for <lists+linux-scsi@lfdr.de>; Sat, 20 Jun 2026 08:04:04 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 1B89A30028D8
+	for <lists+linux-scsi@lfdr.de>; Sun, 21 Jun 2026 13:52:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FA71E573;
-	Sat, 20 Jun 2026 08:04:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8EDD368968;
+	Sun, 21 Jun 2026 13:52:01 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B931A3166;
-	Sat, 20 Jun 2026 08:04:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBD7367280;
+	Sun, 21 Jun 2026 13:51:59 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781942643; cv=none; b=Y8s67HgQ/zLFfS8kzpOAGLcUzPnqsq5DGWbyM77oGUasxBdIgHG6JAaEjmYl8R38LFeiMITGaso/0/2dds/03ALWE0GLWt1HqWMjPglWejMZhDytjB77YklYrFZUfQ+0zveYwycKRmgcBPE3uvZCgpMz7STURVUFW0cFabliKXE=
+	t=1782049921; cv=none; b=L27dXp+B+Ert1BowR6wMwKAxlspDLyYyk4xntpRZpwzFqFJhxsxSaaE4DLqzxeXlHIst/5p/FMNatCYbjgkuKeO8rRBGtJjrsq+hza3106RF64xUKrZkDZ7aiIOSna9wf6vpg8lQKOWpIJwQUun7kxe/QHBRR8PPhOTW7A4k1oU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781942643; c=relaxed/simple;
-	bh=56ugeAM+ygx6RwrquE4Gog8b9/6bRnJt/77t+trZcUU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sU5J6e8/vTTR5out4By1lxOsvuLyCWEYQxDUOHDPVdaKAu8GmaR+wi4HZNut/IzrbTcHO7jPy7Akt30jmEeHpZZsksbLUdTj/vqjHuolbZTk50NVI1Zyvwe5M5iHH1rJTE5LX0+X0pFmuqbhXOeRer9LCo3k8wszgm6Er3aEMp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZLJUzMf3; arc=none smtp.client-ip=205.220.180.131
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65K3Q64i2624029;
-	Sat, 20 Jun 2026 08:03:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=sOwTTE55txL
-	zBjxXsArfhzeS23qcTuea09i2PLihOds=; b=ZLJUzMf3Dopi6u6QrrcdonN/ZXS
-	SPKP9EKHN22QLxv8yDjRL8lTAFIuE19zxVerB5TljdFIt7OVQHcvqXEbESlD8kcQ
-	GooeJQmey+Ct6yqU5/Ktqi+GAdFPIuDYiWEtwJHXTQDOTcDf5p8KBY5eOFctmeUU
-	sqF9yR6Tb9hb5GORtiZa6JHFtVWTdflz2mHSqCo85dLTfTURb7BCCBakSYmte3dB
-	GazRnAjzicfPVtRscmqiT/mUL8HgYcJhGa3rN0OHrjadD/7UuwYkp+k/YM5IP5YT
-	qvhvXzgc62Z8GZoXVjEw7KYWGS9YVNUEgWPuiIlJmDJR1qKPf8dtu0Cg5KA==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ewjxu8fbc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 20 Jun 2026 08:03:49 +0000 (GMT)
-Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
-	by NALASPPMTA02.qualcomm.com (8.18.1.7/8.18.1.7) with ESMTP id 65K83mZ3015942;
-	Sat, 20 Jun 2026 08:03:48 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 4ewkxj15yg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 20 Jun 2026 08:03:48 +0000 (GMT)
-Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 65K83mCw015934;
-	Sat, 20 Jun 2026 08:03:48 GMT
-Received: from hu-devc-lv-u22-c.qualcomm.com (hu-cang-lv.qualcomm.com [10.81.25.255])
-	by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 65K83mBP015933
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 20 Jun 2026 08:03:48 +0000 (GMT)
-Received: by hu-devc-lv-u22-c.qualcomm.com (Postfix, from userid 359480)
-	id 188E9644; Sat, 20 Jun 2026 01:03:48 -0700 (PDT)
-From: Can Guo <can.guo@oss.qualcomm.com>
-To: bvanassche@acm.org, beanhuo@micron.com, peter.wang@mediatek.com,
-        martin.petersen@oracle.com, mani@kernel.org
-Cc: linux-scsi@vger.kernel.org, Can Guo <can.guo@oss.qualcomm.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/3] scsi: ufs: core: Always run tx_eqtr POST_CHANGE notify
-Date: Sat, 20 Jun 2026 01:03:22 -0700
-Message-Id: <20260620080322.3765210-4-can.guo@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260620080322.3765210-1-can.guo@oss.qualcomm.com>
-References: <20260620080322.3765210-1-can.guo@oss.qualcomm.com>
+	s=arc-20240116; t=1782049921; c=relaxed/simple;
+	bh=Pa4kNPPQDGkB7iGi4VZYqnxdfjjVlCzZwlyu46Q89nY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=m7tL5uOJTsXvcSj5c18aHHQyHn2mKuGKpRmygsY9KYSBQzwQ1igTEHBvfr46ANI0TmQQZB/5EAnSmgq3O86nf8mC21ylwMerD3kPqpLXBXaQK86XQxsYphAD4ielBtRUQs9/vgGrD5/JRpmiQVUhfegBt4JCgzrGiurWlXc9Ng4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; arc=none smtp.client-ip=198.37.111.173
+Received: from lingrow.int.hansenpartnership.com (unknown [153.66.160.227])
+	by lamorak.hansenpartnership.com (Postfix) with ESMTP id E053F1C03B2;
+	Sun, 21 Jun 2026 09:51:57 -0400 (EDT)
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-scsi <linux-scsi@vger.kernel.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] SCSI updates for the 7.1+ merge window
+Date: Sun, 21 Jun 2026 09:51:25 -0400
+Message-ID: <20260621135133.12271-1-James.Bottomley@HansenPartnership.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIwMDA3NyBTYWx0ZWRfX3NgTYzxcK0yg
- JXc1KMP6YxGzw1B0GxAopDq045YvfSXrmT9wu4la9MOi3NvJKbE+uNsR02GFCoLbXbrTKEeJ1hz
- 8jvj0Ya982kXmoKjXvLkeNJhCDaJl+g=
-X-Authority-Analysis: v=2.4 cv=G/ws1dk5 c=1 sm=1 tr=0 ts=6a364965 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
- a=gowsoOTTUOVcmtlkKump:22 a=EUspDBNiAAAA:8 a=BjR8uUe7zAXe8M9JyJQA:9
-X-Proofpoint-ORIG-GUID: vXsgk1PAJbr-UAQ2-w04FhvuTJ6lhXJ0
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIwMDA3NyBTYWx0ZWRfXztAONMjmyaml
- M2pdHICJ4Dl0McfpFktbywrkgc/IZuOaRckiUIlCib2nj7ySUYNpuHeMv14bBdw/XnUjYa3Uzvr
- CAtwPIH3JyRvFK7i/3L5YdVk8IiAlbr54KWByKTiWCvGeOnAjcxMJQqR2hLTepgtN42uusg6Uy7
- JBrQTVc6LRxeutiZ9J+KO3gFYOXAfpjcNre6rUbNE9N1CnC6xvc8g7FXfhjtBDrC3FNWcrmcM09
- MR4vKyHOb/8pcNfW8lC4wywgm0fl7q0slBshXhY1N9/YlnNUujjR0jN2oo5TArX4VXuUfJobtYd
- zXeN/WcBDSS86CpNP+vWVM/hwJ4HXgrg17BfW1MkZjNnCDJb33GTyEbUaehdlZApLTWaZaYbvKJ
- replYIqa4YtvZWbAXjkzuJlxxEKNPLooUSRSYvwUwxDYgYivniy7G9ZTm6YIAlL9Q0Kc5maZEE1
- AswpwX8mdprAw/M2BUg==
-X-Proofpoint-GUID: vXsgk1PAJbr-UAQ2-w04FhvuTJ6lhXJ0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-20_01,2026-06-18_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 adultscore=0 bulkscore=0 phishscore=0 impostorscore=0
- spamscore=0 lowpriorityscore=0 suspectscore=0 clxscore=1015 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606200077
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [1.04 / 15.00];
+	DMARC_POLICY_QUARANTINE(1.50)[hansenpartnership.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25097-lists,linux-scsi=lfdr.de];
+	TO_DN_ALL(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25095-lists,linux-scsi=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:bvanassche@acm.org,m:beanhuo@micron.com,m:peter.wang@mediatek.com,m:martin.petersen@oracle.com,m:mani@kernel.org,m:linux-scsi@vger.kernel.org,m:can.guo@oss.qualcomm.com,m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:James.Bottomley@HansenPartnership.com,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:akpm@linux-foundation.org,m:torvalds@linux-foundation.org,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[James.Bottomley@HansenPartnership.com,linux-scsi@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	ALIAS_RESOLVED(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,oss.qualcomm.com:from_mime,qualcomm.com:dkim,qualcomm.com:email,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
-	DKIM_TRACE(0.00)[qualcomm.com:+];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[James.Bottomley@HansenPartnership.com,linux-scsi@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
+	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[10]
+	R_DKIM_NA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,HansenPartnership.com:mid,HansenPartnership.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 55B0D6A88A6
+X-Rspamd-Queue-Id: 19A626AAFC8
 
-ufshcd_tx_eqtr() skips POST_CHANGE notify when __ufshcd_tx_eqtr()
-fails. That can leave variant cleanup incomplete when PRE_CHANGE saved
-temporary state that POST_CHANGE is expected to restore.
+The following changes since commit 85db7391310b1304d2dc8ae3b0b12105a9567147:
 
-Always call POST_CHANGE once PRE_CHANGE has succeeded. Keep the TX EQTR
-result as the primary return value, and only propagate POST_CHANGE
-failure when TX EQTR itself succeeded.
+  scsi: target: iscsi: Validate CHAP_R length before base64 decode (2026-05-22 23:06:00 -0400)
 
-Log PRE_CHANGE and POST_CHANGE notify failures to make variant callback
-failures visible in TX EQTR error paths.
+are available in the Git repository at:
 
-Signed-off-by: Can Guo <can.guo@oss.qualcomm.com>
----
- drivers/ufs/core/ufs-txeq.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+  https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git/ tags/scsi-misc
 
-diff --git a/drivers/ufs/core/ufs-txeq.c b/drivers/ufs/core/ufs-txeq.c
-index 23a12e221d31..c39a623b4fe1 100644
---- a/drivers/ufs/core/ufs-txeq.c
-+++ b/drivers/ufs/core/ufs-txeq.c
-@@ -1224,6 +1224,7 @@ static int ufshcd_tx_eqtr(struct ufs_hba *hba,
- {
- 	struct ufs_pa_layer_attr old_pwr_info;
- 	unsigned int noio_flag;
-+	int notify_ret;
- 	int ret;
- 
- 	/*
-@@ -1253,14 +1254,19 @@ static int ufshcd_tx_eqtr(struct ufs_hba *hba,
- 	}
- 
- 	ret = ufshcd_vops_tx_eqtr_notify(hba, PRE_CHANGE, pwr_mode);
--	if (ret)
-+	if (ret) {
-+		dev_err(hba->dev, "TX EQTR PRE_CHANGE notify failed: %d\n", ret);
- 		goto out;
-+	}
- 
- 	ret = __ufshcd_tx_eqtr(hba, params, pwr_mode);
--	if (ret)
--		goto out;
- 
--	ret = ufshcd_vops_tx_eqtr_notify(hba, POST_CHANGE, pwr_mode);
-+	notify_ret = ufshcd_vops_tx_eqtr_notify(hba, POST_CHANGE, pwr_mode);
-+	if (notify_ret)
-+		dev_err(hba->dev, "TX EQTR POST_CHANGE notify failed: %d\n", notify_ret);
-+
-+	if (!ret)
-+		ret = notify_ret;
- 
- out:
- 	if (ret)
--- 
-2.34.1
+for you to fetch changes up to 4f87e9068bf3aaf45f226261d5efd50bec42c12c:
 
+  Merge branch 7.1/scsi-fixes into 7.2/scsi-staging (2026-06-15 21:01:30 -0400)
+
+----------------------------------------------------------------
+
+Only ufs driver updates this time, apart from which this is just an
+assortment of bug fixes and AI assisted changes.  The biggest other
+change is the reversion of the sas_user_scan patch which supported a
+mpi3mr NVME behaviour but caused major issues for other sas
+controllers. The next biggest is the removal of target reset in
+tcm_loop.c.
+
+----------------------------------------------------------------
+Arnd Bergmann (3):
+      scsi: advansys: Drop ISA_DMA_API remnants
+      scsi: megaraid_mbox: Reduce stack usage in megaraid_cmm_register()
+      scsi: megaraid_mbox: Avoid double kfree()
+
+Bart Van Assche (8):
+      scsi: scsi_debug: Remove unused variable sdebug_any_injecting_opt
+      scsi: ufs: core: Inline two functions related to UIC commands
+      scsi: ufs: core: Complain if UIC argument 2 is invalid
+      scsi: ufs: core: Optimize ufshcd_add_uic_command_trace()
+      scsi: core: target: Add INQUIRY-related constants to scsi_common.h
+      scsi: core: Use the INQUIRY-related constants
+      scsi: core: Convert INQUIRY information
+      scsi: mailmap: Update Avri Altman's email address
+
+Can Guo (4):
+      scsi: ufs: core: Introduce function ufshcd_query_attr_qword()
+      scsi: ufs: core: Add support to retrieve and store TX Equalization settings
+      scsi: ufs: core: Add a quirk for extended TX EQTR Adapt L0L1L2L3 length
+      scsi: ufs: ufs-qcom: Use quirk EXTENDED_TX_EQTR_ADAPT_LENGTH_L0L1L2L3
+
+Chanwoo Lee (4):
+      scsi: ufs: core: Fix NULL pointer dereference in scsi_cmd_priv() calls
+      scsi: ufs: Fix wrong value printed in unexpected UPIU response case
+      scsi: ufs: Remove unnecessary return in void vops wrappers
+      scsi: ufs: Remove redundant vops NULL check and trivial wrapper
+
+Daejun Park (1):
+      scsi: ufs: core: Skip link param validation when lanes_per_direction is unset
+
+Dan Carpenter (1):
+      scsi: pm8001: Fix error code in non_fatal_log_show()
+
+David Disseldorp (2):
+      scsi: target: Fix hexadecimal CHAP_I handling
+      scsi: target: Use constant-time crypto_memneq() for CHAP digests
+
+Deepti Jaggi (1):
+      scsi: ufs: dt-bindings: Add compatible for SA8797P UFS Host Controller
+
+Evgenii Burenchev (1):
+      scsi: snic: vnic_dev: Remove dead store in vnic_dev_discover_res()
+
+Hongjie Fang (1):
+      scsi: ufs: core: Handle PM commands timeout before SCSI EH
+
+Ionut Nechita (1):
+      scsi: sas: Skip opt_sectors when DMA reports no real optimization hint
+
+Krzysztof Kozlowski (1):
+      scsi: ufs: qcom: Unify user-visible "Qualcomm" name
+
+Kumar Meiyappan (2):
+      scsi: pm8001: Reject firmware update in fatal error state
+      scsi: pm8001: Reject non-fatal dump when controller is crashed
+
+Marco Crivellari (1):
+      scsi: scsi_transport_srp: Move long delayed work to system_dfl_long_wq
+
+Martin K. Petersen (2):
+      Merge patch series "scsi: ufs: Add persistent TX Equalization settings support"
+      Merge branch 7.1/scsi-fixes into 7.2/scsi-staging
+
+Martin Wilck (2):
+      scsi: smartpqi: Use shost_to_hba() in pqi_scan_finished()
+      scsi: Revert "scsi: Fix sas_user_scan() to handle wildcard and multi-channel scans"
+
+Md Shofiqul Islam (2):
+      scsi: core: scsi_scan: Fix typo in comment
+      scsi: storvsc: Replace symbolic permissions with octal
+
+Mike Christie (1):
+      scsi: target: Remove tcm_loop target reset handling
+
+Palash Kambar (3):
+      scsi: ufs: core: Configure only active lanes during link
+      scsi: ufs: ufs-qcom: Enable Auto Hibern8 clock request support
+      scsi: ufs: qcom: dt-bindings: Document the Hawi UFS controller
+
+Piotr Zarycki (1):
+      scsi: isci: Remove unused macro scu_get_command_request_logical_port()
+
+Rajeshkumar Sambandham (1):
+      scsi: ufs: ufs-pci: Add AMD device ID support
+
+Rosen Penev (1):
+      scsi: lpfc: Turn lpfc_queue q_pgs into a flexible array
+
+Samuel Moelius (1):
+      scsi: scsi_debug: Fix one-partition tape setup bounds
+
+Sasha Levin (1):
+      scsi: ncr53c8xx: Drop CONFIG_ prefix from Zalon-specific compiler defines
+
+Shawn Guo (1):
+      scsi: ufs: dt-bindings: Add compatible for Nord UFS Host Controller
+
+Sowon Na (2):
+      scsi: ufs: exynos: dt-bindings: Add ExynosAutov920 compatible string
+      scsi: ufs: exynos: Add support for ExynosAutov920 SoC
+
+Thorsten Blum (1):
+      scsi: scsi_ioctl: Use strnlen() in scsi_ioctl_get_pci()
+
+Uwe Kleine-König (The Capable Hub) (3):
+      scsi: ufs: tc-dwc-g210-pci: Simplify initialization of pci_device_id array
+      scsi: ufs: ufshcd-pci: Use PCI_VDEVICE and named initializers for pci array
+      scsi: mvsas: Don't emit __LINE__ in debug messages
+
+Wang Yan (1):
+      scsi: libiscsi: Fix spelling and format errors
+
+Wang Zihan (1):
+      scsi: st: Fix typo in documentation
+
+William Theesfeld (1):
+      scsi: lpfc: Fix spelling mistakes in comments
+
+Xose Vazquez Perez (1):
+      scsi: devinfo: Broaden Promise VTrak E310/E610 identification
+
+Yihang Li (1):
+      scsi: hisi_sas: Add slave_destroy interface for v3 hw
+
+ .mailmap                                           |   1 +
+ .../bindings/ufs/qcom,sa8255p-ufshc.yaml           |   6 +-
+ .../devicetree/bindings/ufs/qcom,sm8650-ufshc.yaml |   5 +
+ .../bindings/ufs/samsung,exynos-ufs.yaml           |   1 +
+ Documentation/scsi/st.rst                          |   2 +-
+ drivers/hwmon/drivetemp.c                          |   5 +-
+ drivers/scsi/Kconfig                               |   1 -
+ drivers/scsi/Makefile                              |   4 +-
+ drivers/scsi/advansys.c                            |   1 -
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c             |  12 +-
+ drivers/scsi/isci/scu_task_context.h               |   2 -
+ drivers/scsi/libiscsi.c                            |   4 +-
+ drivers/scsi/lpfc/lpfc_attr.c                      |  10 +-
+ drivers/scsi/lpfc/lpfc_bsg.c                       |   6 +-
+ drivers/scsi/lpfc/lpfc_els.c                       |   2 +-
+ drivers/scsi/lpfc/lpfc_hbadisc.c                   |  12 +-
+ drivers/scsi/lpfc/lpfc_hw4.h                       |   2 +-
+ drivers/scsi/lpfc/lpfc_init.c                      |  12 +-
+ drivers/scsi/lpfc/lpfc_scsi.c                      |  12 +-
+ drivers/scsi/lpfc/lpfc_sli.c                       |  25 +-
+ drivers/scsi/lpfc/lpfc_sli4.h                      |   5 +-
+ drivers/scsi/megaraid/megaraid_mbox.c              |  26 +-
+ drivers/scsi/megaraid/megaraid_mm.c                |  32 +--
+ drivers/scsi/mvsas/mv_sas.h                        |   6 +-
+ drivers/scsi/ncr53c8xx.c                           |   2 +-
+ drivers/scsi/ncr53c8xx.h                           |   4 +-
+ drivers/scsi/pm8001/pm8001_ctl.c                   |  13 +-
+ drivers/scsi/pm8001/pm80xx_hwi.c                   |   7 +
+ drivers/scsi/scsi_debug.c                          |  13 +-
+ drivers/scsi/scsi_devinfo.c                        |   4 +-
+ drivers/scsi/scsi_ioctl.c                          |  11 +-
+ drivers/scsi/scsi_scan.c                           |  37 ++-
+ drivers/scsi/scsi_transport_sas.c                  | 101 ++++---
+ drivers/scsi/scsi_transport_srp.c                  |  10 +-
+ drivers/scsi/smartpqi/smartpqi_init.c              |   2 +-
+ drivers/scsi/snic/vnic_dev.c                       |   1 -
+ drivers/scsi/storvsc_drv.c                         |   8 +-
+ drivers/target/iscsi/iscsi_target_auth.c           |   9 +-
+ drivers/target/loopback/tcm_loop.c                 |  64 -----
+ drivers/ufs/core/ufs-mcq.c                         |   7 +-
+ drivers/ufs/core/ufs-sysfs.c                       |  30 ++-
+ drivers/ufs/core/ufs-txeq.c                        | 295 +++++++++++++++++++-
+ drivers/ufs/core/ufshcd-priv.h                     |  11 +-
+ drivers/ufs/core/ufshcd.c                          | 296 ++++++++++++---------
+ drivers/ufs/host/Kconfig                           |   2 +-
+ drivers/ufs/host/tc-dwc-g210-pci.c                 |   4 +-
+ drivers/ufs/host/ufs-exynos.c                      | 110 ++++++++
+ drivers/ufs/host/ufs-qcom.c                        |  13 +
+ drivers/ufs/host/ufs-qcom.h                        |  11 +
+ drivers/ufs/host/ufshcd-pci.c                      |  30 +--
+ include/scsi/scsi_common.h                         |   8 +
+ include/scsi/scsi_device.h                         |   7 +-
+ include/target/target_core_base.h                  |   5 +-
+ include/ufs/ufs.h                                  |   2 +
+ include/ufs/ufshcd.h                               |  12 +-
+ 55 files changed, 899 insertions(+), 424 deletions(-)
 
