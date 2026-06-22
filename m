@@ -1,280 +1,238 @@
-Return-Path: <linux-scsi+bounces-25104-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25102-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 71XcH77qOGo5kAcAu9opvQ
-	(envelope-from <linux-scsi+bounces-25104-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 09:56:46 +0200
+	id Yf42N4/qOGozkAcAu9opvQ
+	(envelope-from <linux-scsi+bounces-25102-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 09:55:59 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E09AF6AD72A
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 09:56:45 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C24B6AD713
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 09:55:59 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=leap-io-kernel.com header.s=default header.b=osgLaP0U;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25104-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25104-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=leap-io-kernel.com;
+	dkim=pass header.d=qualcomm.com header.s=qcppdkim1 header.b=DTK3NrPs;
+	dkim=pass header.d=oss.qualcomm.com header.s=google header.b=OpYXtYiN;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25102-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25102-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=reject) header.from=qualcomm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5BDB130082A7
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 07:56:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E1793303132A
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 07:55:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC45D382F2F;
-	Mon, 22 Jun 2026 07:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C0D4383319;
+	Mon, 22 Jun 2026 07:55:08 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-m15591.qiye.163.com (mail-m15591.qiye.163.com [101.71.155.91])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A22370D52
-	for <linux-scsi@vger.kernel.org>; Mon, 22 Jun 2026 07:56:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95344382385
+	for <linux-scsi@vger.kernel.org>; Mon, 22 Jun 2026 07:55:06 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782114999; cv=none; b=RdiDVWvphI3oPai9ZHkgbpjBNSl/ACe/Wl/YDNirVpxJmNAHjUovkbC3aWYIqVNhfqu6wkkGCXCRoaBaGvEYwnwSZywXa5GO0FZFikVQ6T7bRLNNXey2Hqz4ksD/66TxZhzDSa6tDvcZtCVgJbn+SeLCjVQlZS4xBGIaqCl2muA=
+	t=1782114908; cv=none; b=pIc3FL2nMzVETdKoSteNdwJ76EbpD0lybFB/Yj19NDRshiGADstb/9T82UbHRUC+YpbnpD8CKQvptLT3E5FOS71FfRxzxcM2UNfnTtna/7g+VjudobGZef8w1dCpJSYvOwXXK5wjPQiZl2kifatpZI45GqfibSnGgPToIxBJoek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782114999; c=relaxed/simple;
-	bh=ZXJHE4sJRng0rENR93vBPKHp6oAmyDncHSo6Jyket3c=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uo38MPU2A1hpLhRaApRnuEpOYTtfgWULb2XesPmS3nNWPnxcpGPE7RHRw70n4CMQM2Tc/Gtstt0npFz4acvzj5U6ytDytXzAx4nQDnqSqW4kIH/P/iN+Bux8PEFNfubXPQ+3bvJbvu2IxMfI68NB+N+RrieRrNLVyWGHCEJpRHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=osgLaP0U; arc=none smtp.client-ip=101.71.155.91
-Received: from localhost.localdomain (unknown [222.130.22.242])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 433ea5be5;
-	Mon, 22 Jun 2026 15:51:18 +0800 (GMT+08:00)
-From: Dongdong Hao <doubled@leap-io-kernel.com>
-To: James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com
-Cc: dlemoal@kernel.org,
-	doubled@leap-io-kernel.com,
-	yjzhang@leap-io-kernel.com,
-	kezijie@leap-io-kernel.com,
-	qtian@leap-io-kernel.com,
-	jzzhang@leap-io-kernel.com,
-	baikefan@leap-io-kernel.com,
-	linux-scsi@vger.kernel.org
-Subject: [PATCH v4 2/2] scsi: leapraid: Add driver documentation
-Date: Mon, 22 Jun 2026 15:51:15 +0800
-Message-Id: <56c38936ac64a3d37f04c85956008ea7c220fe8e.1782110784.git.doubled@leap-io-kernel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1782110784.git.doubled@leap-io-kernel.com>
-References: <cover.1782110784.git.doubled@leap-io-kernel.com>
+	s=arc-20240116; t=1782114908; c=relaxed/simple;
+	bh=yRjr1OV5OKfKAH/cr8wF12EEhzDEPZf3H/BmclMEchk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ijzAJFpal0b0cThY8JvIHu/j2DGoC6svQnEfs2Yyj9BEytzG+Zby38YhGuM0byuXKc+auY+zuhWksxiCys++dyWmUznNGNT6qajH2T2+8brC7m48E5bm/j0AfgPGxnpvCaVBDosHMJ+Csilx0/bXIzO6QXLQVqnY8frYlKJ4C0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=DTK3NrPs; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=OpYXtYiN; arc=none smtp.client-ip=205.220.168.131
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65M59Wqx3880864
+	for <linux-scsi@vger.kernel.org>; Mon, 22 Jun 2026 07:55:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=Kzka4gFUSWQP9V9X78+Xixa7
+	EVscxDMrc20o4519Zg8=; b=DTK3NrPsL/O1WJFj5C3rSQPeiRtPUNOqxt0+bGr+
+	NWYWjROGhsHrCgHjAtKsUdqB1fAX06hOmcE77a8RDebKOTZGH7R+KURfuvgAmKWY
+	B5tBE+HwAndgx35sHuO5Gu3nz+df6xu2njRM+zbjGP8FqgNgSQ4wGHpoU0DQU+oq
+	sIQ57SJpMq75I20qbz8+c1L/pugSxydOSwLQ4UecdiuGT4kd30oxkUDNmwniZeua
+	0f3QDzzuib1ZcX7NG4VAobkUE70OKNAv5Svt0OFBUeeWUv25Xg63rz3Lg67WbsYz
+	ETHny6yPthz9qFGX4ZVWYE7cMCkwYjD+tZYfrqM4YHe55w==
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ewgjedkhx-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-scsi@vger.kernel.org>; Mon, 22 Jun 2026 07:55:05 +0000 (GMT)
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-37c9127e316so3047581a91.1
+        for <linux-scsi@vger.kernel.org>; Mon, 22 Jun 2026 00:55:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1782114905; x=1782719705; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kzka4gFUSWQP9V9X78+Xixa7EVscxDMrc20o4519Zg8=;
+        b=OpYXtYiN/Pz7Xf3CWQtOjJKeD3OAo0o8a20XqF+QsKsTI7Uh/ZkLdpIoJlF1Hy4FRa
+         wJF+dY39P5mMvX4G+SlXlRNc5cWLDALmJyoyAuIuWHk4Ew4TT1WJ40Cc7I/KOtMus87u
+         ZjPR55/XRyQAQLlU4FeOnRQymJxq8T75Qnr74i60SslTYoc+Z4KwqBHK+s814ksrc9q+
+         ZEAS5wqTA7DqZQvxRa+2/Klj2/Jv+11P9pPgAbqdNUJWBVzq6x4aWREAIrMQClWPu0m0
+         dyShJfbx7ThSBp2SJkgFhgz4jUwo9X8bNoMiaZSM8g0wVbSXFNe0z+Pnhmai72ZCUGuW
+         hQvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782114905; x=1782719705;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Kzka4gFUSWQP9V9X78+Xixa7EVscxDMrc20o4519Zg8=;
+        b=IP7HBFNLJ/Fo7qiykTNlL1k62OR5KV4S03RsfpmSjRViofCqcPLEeuhcHYzCQzr0YU
+         kusnsbM1V3gnZ8aFwcSyWqNl3oALql8jKGB2mmfIrLHJ8vUEVylCOS5aqpxvtnnPHVff
+         Dadpo0TSLRlfwd3J+Lz4uDjyCxaFsBbaW6sEnZXKGhZmcwZVl4AcfWVp1RNKc0K86f+V
+         AZEdw/Z5n1WMDmFz0il4kIfVnNSYmy/AMK+weQOfrgUUFNktlRysA36+lQEhA/i4TyY8
+         ZLK+yAKBUuclq33LoBj2HCzbnwPCBuMMUKV/HIfLY3K/iHjk0INGeryXcGQqNeMQhniH
+         g7Ig==
+X-Forwarded-Encrypted: i=1; AHgh+RrGo/yi9Rn2CHRjaqfi1e0Hr1lm92F59slrectkSpA9qZJ7kIQiOyShnrgNza/vBDBprVsZwflYH0gD@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfQWLWLvNQlKcYogFfp/DKxpUKHsmpCq88njKw7f1rLGXBC+b+
+	QU6DOBh3QtlFNrPvLlXzfRUVfIr+ELegdUJxZIPcXiKB/fWXQ0PDeXvQMZ/0w1z/IyUxcu5jqKZ
+	lyW81pYad3TfBLfKMp3zDLfXPLPN2Wlh4MJquzqNXKXVzWaqfKWXcIIMgSYElE0ZG
+X-Gm-Gg: AfdE7cmVnn0zzzWP2GhlvkW+bP+3MXmZk05b01Ku4Jwjf2Nx+xZmh/G95QxnAr0pvRi
+	yo2IiWlUbc5WHrX3ljlsXwoctzCNCi6vUwTRgfiSrAAhLRJPfkoqIlLXGhTVJnZgT4BRGu8U8Zl
+	/BlUmnP1ZkaJpBpgbAsTy7lQ2PoH3DRUr1Zf2EaffcwMityYkfPTZYmmPvom3Hk60XHlbk4wBcf
+	wTLMsB97OesgLAeVUpv+sBZjrsGPYr19o56AN8g1w+wV0F3fJbjw5c1Tf/YptBIbzEM+A43s2de
+	wLaRZLJ1gTdO7AfZp8cuYjBlPIEnR5zR9dCg38cnpjyu+kLv/M71k+BVuMJaOW/nqbjmjE5IypO
+	0F791y0D8TWvnFQP0JGR/+11UZ9WqoubS08wytRjCxT1nwxpz
+X-Received: by 2002:a17:90b:48ca:b0:37d:83d3:4ce6 with SMTP id 98e67ed59e1d1-37d83d35e9emr4822214a91.10.1782114904763;
+        Mon, 22 Jun 2026 00:55:04 -0700 (PDT)
+X-Received: by 2002:a17:90b:48ca:b0:37d:83d3:4ce6 with SMTP id 98e67ed59e1d1-37d83d35e9emr4822187a91.10.1782114904341;
+        Mon, 22 Jun 2026 00:55:04 -0700 (PDT)
+Received: from hu-arakshit-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d15de53ffsm9489656a91.12.2026.06.22.00.54.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jun 2026 00:55:03 -0700 (PDT)
+Date: Mon, 22 Jun 2026 13:24:56 +0530
+From: Abhinaba Rakshit <abhinaba.rakshit@oss.qualcomm.com>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Adrian Hunter <adrian.hunter@intel.com>, Ulf Hansson <ulfh@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neeraj Soni <neeraj.soni@oss.qualcomm.com>,
+        Harshal Dev <harshal.dev@oss.qualcomm.com>,
+        Kuldeep Singh <kuldeep.singh@oss.qualcomm.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v11 3/6] mmc: sdhci-msm: Set ICE clk to TURBO at sdhci
+ ICE init
+Message-ID: <ajjqUE8TTBXhpVPN@hu-arakshit-hyd.qualcomm.com>
+References: <20260609-enable-ice-clock-scaling-v11-0-1cebc8b3275b@oss.qualcomm.com>
+ <20260609-enable-ice-clock-scaling-v11-3-1cebc8b3275b@oss.qualcomm.com>
+ <06999033-1c2f-4203-bdcc-d8e94ed281b7@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9eee4ff6ef03aekunm2c2703fa8228c1
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDT0MeVk8YHRoaHktOSR8dGVYVFA
-	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUlVSkhLVUlJVUlPSVlXWRYaDxIVHRRZQVlPS0hVSk
-	tJT09PSFVKS0tVSkJLS1kG
-DKIM-Signature: a=rsa-sha256;
-	b=osgLaP0UiMom9bHwSrBdxVOEcp4cv4H8rJo+UVLLqhTaPaGHeKDSwNvHLWNxlU8HtGr4pMWvsXafuOb7I0hR3Oqltg5U3b5ISsm1MYfQRdG53Xv2XPGbQrYAQrieD/ks1vCcwmZ+ASbU3PNxTD8PER13/uOpZ5ckKwM0Xzd6/L8xmSy1tDm2QCVzkbSUAuqQTutsRsqh6A8exdBwutNFqto51G/NvfehzjLmwtLJbD64SZYqHYo4coJPjX0jsWKZFAHYul6TINY241xEcx+IwxCHWRWGsC3D0LjQsoHYMk0n1iPWVNmmUtQAADzLkrh+j9Vb7gtzYVHzIDtPxr6PnQ==; c=relaxed/relaxed; s=default; d=leap-io-kernel.com; v=1;
-	bh=+5OlSxaSWly/Vyk7/T6VAmU1Sogqr75kRi23IIFi8BQ=;
-	h=date:mime-version:subject:message-id:from;
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <06999033-1c2f-4203-bdcc-d8e94ed281b7@oss.qualcomm.com>
+X-Proofpoint-ORIG-GUID: --Kv2XDPTB07dIOXn6BUSCueK-4lWXwh
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIyMDA3NiBTYWx0ZWRfX5PzI2E8AhYk2
+ REavMgbkTVm1kDTGNa5QRogAA8orj5W7AcYc5Tu7TI6GDL84ZjCW/v0XQxztLLMgx+uYcs07yCt
+ QfsP3vmLZAYao5xTC0hVNzZ7U++jyoI=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIyMDA3NiBTYWx0ZWRfXwFXTFYxfLo3H
+ 9KELXrQxwNuZA8wUkShYHwSRj1IG2U/64Ksj8c8Y9oMh3ueQJ7TyTdOEG5Dk0OUFaktqkEDDf28
+ Z36oJRJId9apQNuu5RzCIa0VKmGB2pbU+QxVoLXeN/WwGiMSZI2aEH7A3QG062FUBSqXKoxg3EK
+ xpOb3Co9EWg8lV37VcaC9QKkoAbFXGkC5DjovQoUGzJm9BBNCg4a8l9HkW71pU9pf3E4KsXfSBR
+ nzABlEzp4elwkhjA7+lghhpBnycaNTRuelfqVkaKJeuC/AVjJZleMq3P7GCd+lF3E/W9zvlQlZU
+ K4x/1ZC/tjAPPH2HKrfLkbcJwPEIYkXvGXHz+W/9SP2yqf7UF/TcjmjePDqIeIxFdsAaK7yXKbo
+ NkLC5A/aX2wNyR2ZGHvlGUD0gvzZ6trhh2fh1DZEAIWBrY1OcqV5c4mCWnAi7UOXjviJpKnsq9b
+ +B+ffZl/8MvdqTK7I5w==
+X-Proofpoint-GUID: --Kv2XDPTB07dIOXn6BUSCueK-4lWXwh
+X-Authority-Analysis: v=2.4 cv=TO51jVla c=1 sm=1 tr=0 ts=6a38ea59 cx=c_pps
+ a=vVfyC5vLCtgYJKYeQD43oA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=kj9zAlcOel0A:10 a=FelO9ux0wxsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
+ a=EUspDBNiAAAA:8 a=QyXUC8HyAAAA:8 a=ciROkYvXyXDSqN8Q_VUA:9 a=CjuIK1q_8ugA:10
+ a=rl5im9kqc5Lf4LNbBjHf:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-22_01,2026-06-18_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 suspectscore=0 malwarescore=0 clxscore=1015 phishscore=0
+ spamscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606220076
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[leap-io-kernel.com,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[leap-io-kernel.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25102-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25104-lists,linux-scsi=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS(0.00)[m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:dlemoal@kernel.org,m:doubled@leap-io-kernel.com,m:yjzhang@leap-io-kernel.com,m:kezijie@leap-io-kernel.com,m:qtian@leap-io-kernel.com,m:jzzhang@leap-io-kernel.com,m:baikefan@leap-io-kernel.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[doubled@leap-io-kernel.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[doubled@leap-io-kernel.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	ALIAS_RESOLVED(0.00)[];
-	TO_DN_NONE(0.00)[];
-	DKIM_TRACE(0.00)[leap-io-kernel.com:+];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,hu-arakshit-hyd.qualcomm.com:mid,oss.qualcomm.com:dkim,oss.qualcomm.com:from_mime,intel.com:email,vger.kernel.org:from_smtp,qualcomm.com:dkim,qualcomm.com:email];
+	FORGED_SENDER(0.00)[abhinaba.rakshit@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	FORGED_RECIPIENTS(0.00)[m:konrad.dybcio@oss.qualcomm.com,m:andersson@kernel.org,m:konradybcio@kernel.org,m:mani@kernel.org,m:James.Bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:adrian.hunter@intel.com,m:ulfh@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:neeraj.soni@oss.qualcomm.com,m:harshal.dev@oss.qualcomm.com,m:kuldeep.singh@oss.qualcomm.com,m:linux-arm-msm@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:linux-mmc@vger.kernel.org,m:devicetree@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[leap-io-kernel.com:dkim,leap-io-kernel.com:email,leap-io-kernel.com:mid,leap-io-kernel.com:from_mime,vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[abhinaba.rakshit@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi,dt];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E09AF6AD72A
+X-Rspamd-Queue-Id: 3C24B6AD713
 
-This patch adds the necessary documentation for the LeapRAID SCSI driver
-to the kernel's documentation tree.
+On Thu, Jun 18, 2026 at 02:59:02PM +0200, Konrad Dybcio wrote:
+> On 6/8/26 11:47 PM, Abhinaba Rakshit wrote:
+> > MMC controller lacks a clock scaling mechanism, unlike the UFS
+> > controller. By default, the MMC controller is set to TURBO mode
+> > during probe, but the ICE clock remains at XO frequency,
+> > leading to read/write performance degradation on eMMC.
+> > 
+> > To address this, set the ICE clock to TURBO during sdhci_msm_ice_init
+> > to align it with the controller clock. This ensures consistent
+> > performance and avoids mismatches between the controller
+> > and ICE clock frequencies.
+> > 
+> > For platforms where ICE is represented as a separate device,
+> > use the OPP framework to vote for TURBO mode, maintaining
+> > proper voltage and power domain constraints.
+> > 
+> > Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> > Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+> > Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+> > Signed-off-by: Abhinaba Rakshit <abhinaba.rakshit@oss.qualcomm.com>
+> > ---
+> >  drivers/mmc/host/sdhci-msm.c | 24 ++++++++++++++++++++++++
+> >  1 file changed, 24 insertions(+)
+> > 
+> > diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+> > index 0882ce74e0c9bdddd98341a67b97bcef74078e0c..b655bcb5b90c0677bbe3dc6140de488038fe5ee8 100644
+> > --- a/drivers/mmc/host/sdhci-msm.c
+> > +++ b/drivers/mmc/host/sdhci-msm.c
+> > @@ -1901,6 +1901,8 @@ static void sdhci_msm_set_clock(struct sdhci_host *host, unsigned int clock)
+> >  #ifdef CONFIG_MMC_CRYPTO
+> >  
+> >  static const struct blk_crypto_ll_ops sdhci_msm_crypto_ops; /* forward decl */
+> > +static int sdhci_msm_ice_scale_clk(struct sdhci_msm_host *msm_host, unsigned long target_freq,
+> > +				   bool round_ceil); /* forward decl */
+> 
+> Can the definition simply be moved upwards?
 
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-Signed-off-by: Dongdong Hao <doubled@leap-io-kernel.com>
----
- Documentation/scsi/index.rst    |   1 +
- Documentation/scsi/leapraid.rst | 139 ++++++++++++++++++++++++++++++++
- 2 files changed, 140 insertions(+)
- create mode 100644 Documentation/scsi/leapraid.rst
+Yes, we can do that.
+I used a forward declaration because it appeared that sdhci_msm_ice_init()
+was intentionally kept as the first ICE-related function in the file.
+If that is not a requirement, I'm fine to move sdhci_msm_ice_scale_clk()
+above and remove the forward declaration.
 
-diff --git a/Documentation/scsi/index.rst b/Documentation/scsi/index.rst
-index f15a0f348ae4..52970f0159ca 100644
---- a/Documentation/scsi/index.rst
-+++ b/Documentation/scsi/index.rst
-@@ -56,6 +56,7 @@ SCSI host adapter drivers
-    g_NCR5380
-    hpsa
-    hptiop
-+   leapraid
-    libsas
-    lpfc
-    megaraid
-diff --git a/Documentation/scsi/leapraid.rst b/Documentation/scsi/leapraid.rst
-new file mode 100644
-index 000000000000..4067f07e6428
---- /dev/null
-+++ b/Documentation/scsi/leapraid.rst
-@@ -0,0 +1,139 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=========================
-+LeapRAID Driver for Linux
-+=========================
-+
-+Introduction
-+============
-+
-+LeapRAID is a storage RAID controller driver developed by LeapIO Tech Inc. The
-+controller targets enterprise storage, cloud infrastructure, high performance
-+computing (HPC), and AI workloads.
-+
-+It provides high-performance storage virtualization over PCI Express Gen4
-+and supports both SAS and SATA HDDs and SSDs. It offers both Host Bus Adapter
-+and RAID modes to meet diverse deployment requirements.
-+
-+Supported devices
-+=================
-+
-+- LeapHBA-8200C
-+
-+Features
-+========
-+- PCIe Gen4 x8 host interface
-+- Support for SAS and SATA devices
-+- RAID levels: 0, 1, 10, 5, 50, 6, 60
-+- Advanced error handling and end-to-end data integrity
-+
-+LeapRAID specific host attributes
-+=================================
-+
-+::
-+
-+   /sys/class/scsi_host/host*/fw_queue_depth
-+   /sys/class/scsi_host/host*/host_sas_address
-+   /sys/class/scsi_host/host*/board_name
-+
-+The host "fw_queue_depth" read-only attribute shows the firmware queue
-+depth of the host.
-+
-+The host "host_sas_address" read-only attribute shows the SAS address
-+of the host.
-+
-+The host "board_name" read-only attribute shows the board name reported
-+by manufacturing page 0.
-+
-+LeapRAID specific disk attributes
-+=================================
-+
-+::
-+
-+   /sys/class/scsi_disk/host:bus:target:lun/device/sas_address
-+   /sys/class/scsi_disk/host:bus:target:lun/device/sas_device_handle
-+   /sys/class/scsi_disk/host:bus:target:lun/device/sas_ncq
-+
-+The disk "sas_address" read-only attribute shows the SAS address of the
-+disk.
-+
-+The read-only attribute "sas_device_handle" represents the disk's device
-+handle, which is a unique identifier maintained by the firmware.
-+
-+This attribute "sas_ncq" controls the Native Command Queuing (NCQ) feature
-+for SATA devices. A value of 0 indicates that NCQ is currently disabled or
-+not supported. Writing 1 attempts to enable NCQ on the device. If the
-+operation succeeds, the value remains 1, indicating that NCQ has been
-+successfully enabled.
-+
-+LeapRAID module parameters
-+==========================
-+
-+The following module parameters can be configured at driver load time to
-+control driver behavior and tuning options.
-+
-+1. open_pcie_trace
-+------------------
-+
-+This parameter controls whether PCIe transaction tracing is enabled in the
-+driver. When set to 1, PCIe trace collection is enabled by default, allowing
-+detailed tracing of PCIe operations for debugging and performance analysis.
-+Setting it to 0 disables the trace functionality to reduce overhead in
-+production environments.
-+
-+2. enable_mp
-+------------
-+
-+This parameter enables or disables multipath support for target devices.
-+When set to 1, multipath functionality is enabled (default), allowing
-+multiple paths to be established. Setting it to 0 disables multipath
-+handling.
-+
-+3. msix_disable
-+---------------
-+
-+This parameter specifies whether MSI-X interrupts should be disabled. By
-+default, 0 keeps MSI-X enabled, providing high-performance interrupt
-+handling. Setting this parameter to 1 disables MSI-X, causing the driver
-+to fall back to legacy INTx interrupts.
-+
-+4. max_msix_vectors
-+-------------------
-+
-+This parameter sets the upper limit on the number of MSI-X interrupt
-+vectors that the driver will request during initialization. The default
-+value of -1 allows the driver to use all available vectors as provided
-+by the device. Setting a positive integer restricts the number of vectors.
-+
-+5. interrupt_mode
-+-----------------
-+
-+This parameter defines which interrupt delivery mechanism is used by the
-+driver. A value of 0 selects MSI-X mode (default), providing the highest
-+performance and scalability. A value of 1 switches to MSI mode, while 2
-+forces the driver to use legacy INTx interrupts.
-+
-+6. poll_queues
-+--------------
-+
-+This parameter specifies the number of I/O queues to be used when operating
-+in io_uring poll mode. The default value is 0.
-+
-+7. smart_poll
-+-------------
-+
-+This parameter controls the SMART polling mechanism for SATA drives. When
-+enabled (1), the driver periodically checks the health of connected SATA
-+devices, allowing early detection of potential drive failures. The default
-+value is 0, which disables SMART polling.
-+
-+File Location
-+=============
-+The driver source is located at:
-+
-+``drivers/scsi/leapraid/``
-+
-+.. note::
-+
-+   This document is intended for kernel developers and system
-+   integrators who need to build, test, and deploy the LeapRAID driver.
--- 
-2.25.1
-
+Abhinaba Rakshit 
 
