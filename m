@@ -1,238 +1,140 @@
-Return-Path: <linux-scsi+bounces-25102-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25105-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Yf42N4/qOGozkAcAu9opvQ
-	(envelope-from <linux-scsi+bounces-25102-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 09:55:59 +0200
+	id h8ecN3/rOGpRkAcAu9opvQ
+	(envelope-from <linux-scsi+bounces-25105-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 09:59:59 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C24B6AD713
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 09:55:59 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0DCB6AD776
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 09:59:58 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=qualcomm.com header.s=qcppdkim1 header.b=DTK3NrPs;
-	dkim=pass header.d=oss.qualcomm.com header.s=google header.b=OpYXtYiN;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25102-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25102-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=qualcomm.com;
+	dkim=pass header.d=163.com header.s=s110527 header.b=eMhbPW4A;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25105-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25105-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=163.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E1793303132A
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 07:55:08 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D787A3006513
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 07:59:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C0D4383319;
-	Mon, 22 Jun 2026 07:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD4B0383328;
+	Mon, 22 Jun 2026 07:59:56 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95344382385
-	for <linux-scsi@vger.kernel.org>; Mon, 22 Jun 2026 07:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3537B361675;
+	Mon, 22 Jun 2026 07:59:44 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782114908; cv=none; b=pIc3FL2nMzVETdKoSteNdwJ76EbpD0lybFB/Yj19NDRshiGADstb/9T82UbHRUC+YpbnpD8CKQvptLT3E5FOS71FfRxzxcM2UNfnTtna/7g+VjudobGZef8w1dCpJSYvOwXXK5wjPQiZl2kifatpZI45GqfibSnGgPToIxBJoek=
+	t=1782115196; cv=none; b=CrQzYctDzrVNcOkWXjFrmgydp7+Yo4Id4eqDtQefs4D5vXDf0x7GVUILGwvWlUkEx94njY9Q+7PEb7Du61AN5rjw2mAAGpkRcI46Hr+h71EkF+sqvDeU82LT0NevtCsvh2d2quabQfU2oe/P6CbWlAPdvD6HYoaoas3Zy8pa0TE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782114908; c=relaxed/simple;
-	bh=yRjr1OV5OKfKAH/cr8wF12EEhzDEPZf3H/BmclMEchk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ijzAJFpal0b0cThY8JvIHu/j2DGoC6svQnEfs2Yyj9BEytzG+Zby38YhGuM0byuXKc+auY+zuhWksxiCys++dyWmUznNGNT6qajH2T2+8brC7m48E5bm/j0AfgPGxnpvCaVBDosHMJ+Csilx0/bXIzO6QXLQVqnY8frYlKJ4C0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=DTK3NrPs; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=OpYXtYiN; arc=none smtp.client-ip=205.220.168.131
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65M59Wqx3880864
-	for <linux-scsi@vger.kernel.org>; Mon, 22 Jun 2026 07:55:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=Kzka4gFUSWQP9V9X78+Xixa7
-	EVscxDMrc20o4519Zg8=; b=DTK3NrPsL/O1WJFj5C3rSQPeiRtPUNOqxt0+bGr+
-	NWYWjROGhsHrCgHjAtKsUdqB1fAX06hOmcE77a8RDebKOTZGH7R+KURfuvgAmKWY
-	B5tBE+HwAndgx35sHuO5Gu3nz+df6xu2njRM+zbjGP8FqgNgSQ4wGHpoU0DQU+oq
-	sIQ57SJpMq75I20qbz8+c1L/pugSxydOSwLQ4UecdiuGT4kd30oxkUDNmwniZeua
-	0f3QDzzuib1ZcX7NG4VAobkUE70OKNAv5Svt0OFBUeeWUv25Xg63rz3Lg67WbsYz
-	ETHny6yPthz9qFGX4ZVWYE7cMCkwYjD+tZYfrqM4YHe55w==
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ewgjedkhx-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-scsi@vger.kernel.org>; Mon, 22 Jun 2026 07:55:05 +0000 (GMT)
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-37c9127e316so3047581a91.1
-        for <linux-scsi@vger.kernel.org>; Mon, 22 Jun 2026 00:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1782114905; x=1782719705; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kzka4gFUSWQP9V9X78+Xixa7EVscxDMrc20o4519Zg8=;
-        b=OpYXtYiN/Pz7Xf3CWQtOjJKeD3OAo0o8a20XqF+QsKsTI7Uh/ZkLdpIoJlF1Hy4FRa
-         wJF+dY39P5mMvX4G+SlXlRNc5cWLDALmJyoyAuIuWHk4Ew4TT1WJ40Cc7I/KOtMus87u
-         ZjPR55/XRyQAQLlU4FeOnRQymJxq8T75Qnr74i60SslTYoc+Z4KwqBHK+s814ksrc9q+
-         ZEAS5wqTA7DqZQvxRa+2/Klj2/Jv+11P9pPgAbqdNUJWBVzq6x4aWREAIrMQClWPu0m0
-         dyShJfbx7ThSBp2SJkgFhgz4jUwo9X8bNoMiaZSM8g0wVbSXFNe0z+Pnhmai72ZCUGuW
-         hQvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782114905; x=1782719705;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kzka4gFUSWQP9V9X78+Xixa7EVscxDMrc20o4519Zg8=;
-        b=IP7HBFNLJ/Fo7qiykTNlL1k62OR5KV4S03RsfpmSjRViofCqcPLEeuhcHYzCQzr0YU
-         kusnsbM1V3gnZ8aFwcSyWqNl3oALql8jKGB2mmfIrLHJ8vUEVylCOS5aqpxvtnnPHVff
-         Dadpo0TSLRlfwd3J+Lz4uDjyCxaFsBbaW6sEnZXKGhZmcwZVl4AcfWVp1RNKc0K86f+V
-         AZEdw/Z5n1WMDmFz0il4kIfVnNSYmy/AMK+weQOfrgUUFNktlRysA36+lQEhA/i4TyY8
-         ZLK+yAKBUuclq33LoBj2HCzbnwPCBuMMUKV/HIfLY3K/iHjk0INGeryXcGQqNeMQhniH
-         g7Ig==
-X-Forwarded-Encrypted: i=1; AHgh+RrGo/yi9Rn2CHRjaqfi1e0Hr1lm92F59slrectkSpA9qZJ7kIQiOyShnrgNza/vBDBprVsZwflYH0gD@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfQWLWLvNQlKcYogFfp/DKxpUKHsmpCq88njKw7f1rLGXBC+b+
-	QU6DOBh3QtlFNrPvLlXzfRUVfIr+ELegdUJxZIPcXiKB/fWXQ0PDeXvQMZ/0w1z/IyUxcu5jqKZ
-	lyW81pYad3TfBLfKMp3zDLfXPLPN2Wlh4MJquzqNXKXVzWaqfKWXcIIMgSYElE0ZG
-X-Gm-Gg: AfdE7cmVnn0zzzWP2GhlvkW+bP+3MXmZk05b01Ku4Jwjf2Nx+xZmh/G95QxnAr0pvRi
-	yo2IiWlUbc5WHrX3ljlsXwoctzCNCi6vUwTRgfiSrAAhLRJPfkoqIlLXGhTVJnZgT4BRGu8U8Zl
-	/BlUmnP1ZkaJpBpgbAsTy7lQ2PoH3DRUr1Zf2EaffcwMityYkfPTZYmmPvom3Hk60XHlbk4wBcf
-	wTLMsB97OesgLAeVUpv+sBZjrsGPYr19o56AN8g1w+wV0F3fJbjw5c1Tf/YptBIbzEM+A43s2de
-	wLaRZLJ1gTdO7AfZp8cuYjBlPIEnR5zR9dCg38cnpjyu+kLv/M71k+BVuMJaOW/nqbjmjE5IypO
-	0F791y0D8TWvnFQP0JGR/+11UZ9WqoubS08wytRjCxT1nwxpz
-X-Received: by 2002:a17:90b:48ca:b0:37d:83d3:4ce6 with SMTP id 98e67ed59e1d1-37d83d35e9emr4822214a91.10.1782114904763;
-        Mon, 22 Jun 2026 00:55:04 -0700 (PDT)
-X-Received: by 2002:a17:90b:48ca:b0:37d:83d3:4ce6 with SMTP id 98e67ed59e1d1-37d83d35e9emr4822187a91.10.1782114904341;
-        Mon, 22 Jun 2026 00:55:04 -0700 (PDT)
-Received: from hu-arakshit-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d15de53ffsm9489656a91.12.2026.06.22.00.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2026 00:55:03 -0700 (PDT)
-Date: Mon, 22 Jun 2026 13:24:56 +0530
-From: Abhinaba Rakshit <abhinaba.rakshit@oss.qualcomm.com>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Adrian Hunter <adrian.hunter@intel.com>, Ulf Hansson <ulfh@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neeraj Soni <neeraj.soni@oss.qualcomm.com>,
-        Harshal Dev <harshal.dev@oss.qualcomm.com>,
-        Kuldeep Singh <kuldeep.singh@oss.qualcomm.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v11 3/6] mmc: sdhci-msm: Set ICE clk to TURBO at sdhci
- ICE init
-Message-ID: <ajjqUE8TTBXhpVPN@hu-arakshit-hyd.qualcomm.com>
-References: <20260609-enable-ice-clock-scaling-v11-0-1cebc8b3275b@oss.qualcomm.com>
- <20260609-enable-ice-clock-scaling-v11-3-1cebc8b3275b@oss.qualcomm.com>
- <06999033-1c2f-4203-bdcc-d8e94ed281b7@oss.qualcomm.com>
+	s=arc-20240116; t=1782115196; c=relaxed/simple;
+	bh=qyBaaWnYRbK7XCAbAJbWuep5cFL9E/JUZL/x+Cq/CYo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=g8J1oS0Lt7aJz/4Dirv89V0Dlu5GRzMGmOUAZG4WFCqKsjQbxD33IwskofsNqpsT6dxDkK+N3E7pHtFzkbPZTkC7POGgmL900stt4PEqpuFWHCvU3ksrkjPzdmUaws2b/dzh7xn1haQJTIu3eJ7KxgaVc2MYegQK0a77eFlurBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=eMhbPW4A; arc=none smtp.client-ip=220.197.31.4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=ws
+	C9plxLC49dLoH7qzqis/G3QGv01+Xrfj7bJMYdBtE=; b=eMhbPW4A+xpCxezzUb
+	p6ljtzbsufNBos05mhI+GMooS5VAAhvcSSUFadlUkiBynfiv0VnjrpK7Tn6kTPLv
+	qx0P0ckt66X/RXdHE0KCxW2oVGZf6ELA9RcA39pefdqSvQsVuieig0BgCD/HvbQR
+	19BfYNXvrMbSdPiCnBucelB5E=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wDnNwU16zhqBIo_FA--.7653S2;
+	Mon, 22 Jun 2026 15:58:47 +0800 (CST)
+From: Haoxiang Li <haoxiang_li2024@163.com>
+To: ram.vegesna@broadcom.com,
+	James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com,
+	dwagner@suse.de,
+	jsmart2021@gmail.com,
+	hare@suse.de
+Cc: linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Haoxiang Li <haoxiang_li2024@163.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] scsi: elx: efct: Fix IO leak on unsupported additional CDB
+Date: Mon, 22 Jun 2026 15:58:44 +0800
+Message-Id: <20260622075844.832871-1-haoxiang_li2024@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <06999033-1c2f-4203-bdcc-d8e94ed281b7@oss.qualcomm.com>
-X-Proofpoint-ORIG-GUID: --Kv2XDPTB07dIOXn6BUSCueK-4lWXwh
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIyMDA3NiBTYWx0ZWRfX5PzI2E8AhYk2
- REavMgbkTVm1kDTGNa5QRogAA8orj5W7AcYc5Tu7TI6GDL84ZjCW/v0XQxztLLMgx+uYcs07yCt
- QfsP3vmLZAYao5xTC0hVNzZ7U++jyoI=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIyMDA3NiBTYWx0ZWRfXwFXTFYxfLo3H
- 9KELXrQxwNuZA8wUkShYHwSRj1IG2U/64Ksj8c8Y9oMh3ueQJ7TyTdOEG5Dk0OUFaktqkEDDf28
- Z36oJRJId9apQNuu5RzCIa0VKmGB2pbU+QxVoLXeN/WwGiMSZI2aEH7A3QG062FUBSqXKoxg3EK
- xpOb3Co9EWg8lV37VcaC9QKkoAbFXGkC5DjovQoUGzJm9BBNCg4a8l9HkW71pU9pf3E4KsXfSBR
- nzABlEzp4elwkhjA7+lghhpBnycaNTRuelfqVkaKJeuC/AVjJZleMq3P7GCd+lF3E/W9zvlQlZU
- K4x/1ZC/tjAPPH2HKrfLkbcJwPEIYkXvGXHz+W/9SP2yqf7UF/TcjmjePDqIeIxFdsAaK7yXKbo
- NkLC5A/aX2wNyR2ZGHvlGUD0gvzZ6trhh2fh1DZEAIWBrY1OcqV5c4mCWnAi7UOXjviJpKnsq9b
- +B+ffZl/8MvdqTK7I5w==
-X-Proofpoint-GUID: --Kv2XDPTB07dIOXn6BUSCueK-4lWXwh
-X-Authority-Analysis: v=2.4 cv=TO51jVla c=1 sm=1 tr=0 ts=6a38ea59 cx=c_pps
- a=vVfyC5vLCtgYJKYeQD43oA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=kj9zAlcOel0A:10 a=FelO9ux0wxsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
- a=EUspDBNiAAAA:8 a=QyXUC8HyAAAA:8 a=ciROkYvXyXDSqN8Q_VUA:9 a=CjuIK1q_8ugA:10
- a=rl5im9kqc5Lf4LNbBjHf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-22_01,2026-06-18_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 malwarescore=0 clxscore=1015 phishscore=0
- spamscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606220076
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDnNwU16zhqBIo_FA--.7653S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GF17ZF4fur4rtr18tr4xJFb_yoWDCrg_ur
+	4rXryfZrnYkF1kGF4rtF4fZayaka1Duwn7ZF1Fg34Fgr47ZrWUCw1DArZag3yUJrZ2yFZ5
+	Ww17ZFWUCr17ujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRRPfHUUUUUU==
+X-CM-SenderInfo: xkdr5xpdqjszblsqjki6rwjhhfrp/xtbC7hewH2o46zdBawAA3y
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[163.com,none];
+	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25102-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25105-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,hu-arakshit-hyd.qualcomm.com:mid,oss.qualcomm.com:dkim,oss.qualcomm.com:from_mime,intel.com:email,vger.kernel.org:from_smtp,qualcomm.com:dkim,qualcomm.com:email];
-	FORGED_SENDER(0.00)[abhinaba.rakshit@oss.qualcomm.com,linux-scsi@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	FORGED_RECIPIENTS(0.00)[m:konrad.dybcio@oss.qualcomm.com,m:andersson@kernel.org,m:konradybcio@kernel.org,m:mani@kernel.org,m:James.Bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:adrian.hunter@intel.com,m:ulfh@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:neeraj.soni@oss.qualcomm.com,m:harshal.dev@oss.qualcomm.com,m:kuldeep.singh@oss.qualcomm.com,m:linux-arm-msm@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:linux-mmc@vger.kernel.org,m:devicetree@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:ram.vegesna@broadcom.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:dwagner@suse.de,m:jsmart2021@gmail.com,m:hare@suse.de,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:haoxiang_li2024@163.com,m:stable@vger.kernel.org,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[broadcom.com,HansenPartnership.com,oracle.com,suse.de,gmail.com];
+	FORGED_SENDER(0.00)[haoxiang_li2024@163.com,linux-scsi@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,163.com];
+	DKIM_TRACE(0.00)[163.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[abhinaba.rakshit@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[haoxiang_li2024@163.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[163.com];
 	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi,dt];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3C24B6AD713
+X-Rspamd-Queue-Id: D0DCB6AD776
 
-On Thu, Jun 18, 2026 at 02:59:02PM +0200, Konrad Dybcio wrote:
-> On 6/8/26 11:47 PM, Abhinaba Rakshit wrote:
-> > MMC controller lacks a clock scaling mechanism, unlike the UFS
-> > controller. By default, the MMC controller is set to TURBO mode
-> > during probe, but the ICE clock remains at XO frequency,
-> > leading to read/write performance degradation on eMMC.
-> > 
-> > To address this, set the ICE clock to TURBO during sdhci_msm_ice_init
-> > to align it with the controller clock. This ensures consistent
-> > performance and avoids mismatches between the controller
-> > and ICE clock frequencies.
-> > 
-> > For platforms where ICE is represented as a separate device,
-> > use the OPP framework to vote for TURBO mode, maintaining
-> > proper voltage and power domain constraints.
-> > 
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> > Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-> > Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
-> > Signed-off-by: Abhinaba Rakshit <abhinaba.rakshit@oss.qualcomm.com>
-> > ---
-> >  drivers/mmc/host/sdhci-msm.c | 24 ++++++++++++++++++++++++
-> >  1 file changed, 24 insertions(+)
-> > 
-> > diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
-> > index 0882ce74e0c9bdddd98341a67b97bcef74078e0c..b655bcb5b90c0677bbe3dc6140de488038fe5ee8 100644
-> > --- a/drivers/mmc/host/sdhci-msm.c
-> > +++ b/drivers/mmc/host/sdhci-msm.c
-> > @@ -1901,6 +1901,8 @@ static void sdhci_msm_set_clock(struct sdhci_host *host, unsigned int clock)
-> >  #ifdef CONFIG_MMC_CRYPTO
-> >  
-> >  static const struct blk_crypto_ll_ops sdhci_msm_crypto_ops; /* forward decl */
-> > +static int sdhci_msm_ice_scale_clk(struct sdhci_msm_host *msm_host, unsigned long target_freq,
-> > +				   bool round_ceil); /* forward decl */
-> 
-> Can the definition simply be moved upwards?
+efct_dispatch_fcp_cmd() allocates an efct_io before dispatching an
+unsolicited FCP command. If the command has an unsupported additional
+CDB, the function returns -EIO before handing the IO to the SCSI layer.
 
-Yes, we can do that.
-I used a forward declaration because it appeared that sdhci_msm_ice_init()
-was intentionally kept as the first ICE-related function in the file.
-If that is not a requirement, I'm fine to move sdhci_msm_ice_scale_clk()
-above and remove the forward declaration.
+Free the allocated IO before returning from this error path.
 
-Abhinaba Rakshit 
+Fixes: f45ae6aac0a0 ("scsi: elx: efct: Unsolicited FC frame processing routines")
+Cc: stable@vger.kernel.org
+Signed-off-by: Haoxiang Li <haoxiang_li2024@163.com>
+---
+ drivers/scsi/elx/efct/efct_unsol.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/scsi/elx/efct/efct_unsol.c b/drivers/scsi/elx/efct/efct_unsol.c
+index e6addab66a60..6a871a59c909 100644
+--- a/drivers/scsi/elx/efct/efct_unsol.c
++++ b/drivers/scsi/elx/efct/efct_unsol.c
+@@ -385,6 +385,7 @@ efct_dispatch_fcp_cmd(struct efct_node *node, struct efc_hw_sequence *seq)
+ 
+ 		if (cmnd->fc_flags & FCP_CFL_LEN_MASK) {
+ 			efc_log_err(efct, "Additional CDB not supported\n");
++			efct_scsi_io_free(io);
+ 			return -EIO;
+ 		}
+ 		/*
+-- 
+2.25.1
+
 
