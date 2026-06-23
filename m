@@ -1,146 +1,161 @@
-Return-Path: <linux-scsi+bounces-25195-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25196-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id dUL+NzRaOmpb6wcAu9opvQ
-	(envelope-from <linux-scsi+bounces-25195-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 12:04:36 +0200
+	id ps2PBfpeOmp77QcAu9opvQ
+	(envelope-from <linux-scsi+bounces-25196-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 12:24:58 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E22B6B60D7
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 12:04:36 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64EAB6B6408
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 12:24:57 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=163.com header.s=s110527 header.b=FRzQ9Inj;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25195-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25195-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=none;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=SOxk6CBZ;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25196-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25196-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CE2E7301AD3C
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 10:03:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 918B430696DC
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 10:19:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B49C34B183;
-	Tue, 23 Jun 2026 10:03:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B073370D65;
+	Tue, 23 Jun 2026 10:19:02 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453512D7DEF
-	for <linux-scsi@vger.kernel.org>; Tue, 23 Jun 2026 10:03:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB91376A08
+	for <linux-scsi@vger.kernel.org>; Tue, 23 Jun 2026 10:19:00 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782209021; cv=none; b=XMhwQVFiO17AmLcNP1eO61/TD4P2a23zXnsm1LOf8nguPsLqJpN1UUA1lKnHnJAOl2LEiCA6jZISpTjoDFYAE1qTWXer5eEAGm7E1k1tdmyBMMe5Vr7FkmmoC5LrxHVOWyzZSm6302nOpyYNx/7UuQsvflObEJ0LG0MO2re4Sn0=
+	t=1782209941; cv=none; b=RWYY3z3CFyKgmTMPGj6fFMiCuYtnRtWgpQP60TS1ddJ/B0YIrLSU2EHcSNm6WxO6w3cpEjES5Zr/BuxTeI5+qyBWhKI10g8pgbZrKUU2qOEks2lWIyv+Wj1H9bV/1hZwFFwOGe+hYdF+VHjOVHvRZiH8wgYGZORQJLIUa2a5boQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782209021; c=relaxed/simple;
-	bh=pMeHfgv+kz/+HfL9i/pP+LnrGc9VyuR2KxLmr+vbmHc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nioB+533lCQ0AbiAxwf+yEnvHkPijoZGbp8BdOlQGTOFu5orsYEu3/Xn4l22MtiwLxgXKb2AWtTKyR4ExTa7TpFkaSTNxXnANj+XrB7CZpSrqCVfChgmFusBl5rxgeb5++YwDUcz9J486Rwa2qQFZVCJUWWefPdO39yrqXSW6qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=FRzQ9Inj; arc=none smtp.client-ip=220.197.31.5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=3j
-	KOTMABXwMrmQIBuOq/DbHBILHPTZDPbU6d7YCQg2E=; b=FRzQ9InjWt9eCA3nSC
-	NYWrYB9V7lmo+Q75M0U5isUVMEplV56bX4sPzelX64vDwcNfpY2mzG85t6eP2y4g
-	PB/5qc7SEs0EV5WU8MfJhAZJzbaybcStsbqRBTe5aKsYxwM0PEwHrlN4yDUptmhF
-	IzNpx5qnEvVHs7JLTI183hSq4=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wAntXCaWTpqUiV6FA--.20165S6;
-	Tue, 23 Jun 2026 18:02:08 +0800 (CST)
-From: Yang Xiuwei <yangxiuwei@kylinos.cn>
-To: martin.petersen@oracle.com,
-	James.Bottomley@HansenPartnership.com
-Cc: hare@suse.de,
-	tom.leiming@gmail.com,
-	p.raghav@samsung.com,
-	dlemoal@kernel.org,
-	sw.prabhu6@gmail.com,
-	linux-scsi@vger.kernel.org,
-	Yang Xiuwei <yangxiuwei@kylinos.cn>
-Subject: [PATCH v1 4/4] scsi: sd: fix sd_done() sense handling condition
-Date: Tue, 23 Jun 2026 18:01:59 +0800
-Message-Id: <20260623100159.4018066-5-yangxiuwei@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260623100159.4018066-1-yangxiuwei@kylinos.cn>
+	s=arc-20240116; t=1782209941; c=relaxed/simple;
+	bh=PfeOpXFjD/d7vkPDgAUWki8pDoPz5Hfq/+AzE9jbRBM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Z3HgQubIJUz8fNt0Fj0Fug6ohPgv3xHZuD+XndMmTMoFwUlqGLHe2vFcxeWmxfmJYci5FsIwnYP+CAdtRGaDEsZ9c3waNHMrPrqEKY8ZENzULxMqjrpaZxNEro22yeOi5xrvBJqrwiL7xFkM8V6zQNYljZEmWxX8veZB0ypDk4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SOxk6CBZ; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E81F1F000E9;
+	Tue, 23 Jun 2026 10:19:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782209940;
+	bh=2YwVkTqsDN486sba4btZkJy0w3uUQZaaoPRy0yIsexM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=SOxk6CBZYMy4yh2QCK+2+eTHevcF1lsEb0r7cDkR5sLhRWOocCiCdvDyBgsQK3sww
+	 QHc7ozzlXQ65uWsv3iDKNJzul93bDoOKuCKUtpTPhinhw2zG/dPKsGO+xdFe8wqJ4F
+	 V0FE3RzOUxvlRycM8KQ2U6ewlyJpkkSZSqnuX3UZ/shJAAbAEMcjk8VrESqoarTBmh
+	 iqFz3ZoDTsjv5AFWY6H17BHw8/xMG51JQuSovTcrwSN+GsuHwiL2qPvzZ7e5wOFtvN
+	 NOe8gvXKefQmJ4QHLCXOZUIC1huuifTq/5sCcvqTapLSBFrsEtdwBA2jcOCm6UUjcR
+	 4q/JyC2eM7j6g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v1 4/4] scsi: sd: fix sd_done() sense handling condition
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yang Xiuwei" <yangxiuwei@kylinos.cn>
+Cc: linux-scsi@vger.kernel.org
+In-Reply-To: <20260623100159.4018066-5-yangxiuwei@kylinos.cn>
 References: <20260623100159.4018066-1-yangxiuwei@kylinos.cn>
+ <20260623100159.4018066-5-yangxiuwei@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 23 Jun 2026 10:18:59 +0000
+Message-Id: <20260623101900.5E81F1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAntXCaWTpqUiV6FA--.20165S6
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKFWkGF1rAw4DtrWUZw13urg_yoWkGFc_uF
-	4FgrsrWr1Y9rsxur1IkF13Zasava15Wrn5u3sYvryayry8W3sFgFyUZF9xAF48Wr4jkFy5
-	tw4Dtr13Cr1kGjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbiID3UUUUU==
-Sender: yangxiuwei2025@163.com
-X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6QCnOGo6WaAnBQAA39
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [1.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25195-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:James.Bottomley@HansenPartnership.com,m:hare@suse.de,m:tom.leiming@gmail.com,m:p.raghav@samsung.com,m:dlemoal@kernel.org,m:sw.prabhu6@gmail.com,m:linux-scsi@vger.kernel.org,m:yangxiuwei@kylinos.cn,m:tomleiming@gmail.com,m:swprabhu6@gmail.com,s:lists@lfdr.de];
-	DMARC_NA(0.00)[kylinos.cn];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[suse.de,gmail.com,samsung.com,kernel.org,vger.kernel.org,kylinos.cn];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25196-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:yangxiuwei@kylinos.cn,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	RCPT_COUNT_TWO(0.00)[2];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yangxiuwei@kylinos.cn,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[163.com:+];
-	ALIAS_RESOLVED(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[kylinos.cn:email,kylinos.cn:mid,kylinos.cn:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,lists.linux.dev:replyto,smtp.kernel.org:mid,kylinos.cn:email,sashiko.dev:url,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 7E22B6B60D7
+X-Rspamd-Queue-Id: 64EAB6B6408
 
-Commit 464a00c9e0ad ("scsi: core: Kill DRIVER_SENSE") replaced
-driver_byte(result) != DRIVER_SENSE with
-!scsi_status_is_check_condition(result) but kept the old OR-shaped
-gate.  That lets CHECK CONDITION with invalid or deferred sense enter
-the sense_key switch with an uninitialized or stale sshdr.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] The patch introduces a logic regression by unconditionally bypassi=
+ng valid sense data processing for any SCSI status other than SAM_STAT_CHEC=
+K_CONDITION.
+--
 
-Only handle sshdr when CHECK CONDITION is indicated and the sense
-data is valid and not deferred.
+commit 6e9e6fa97257d1c3c528406c9719d2273c7f5a65
+Author: Yang Xiuwei <yangxiuwei@kylinos.cn>
 
-Fixes: 464a00c9e0ad ("scsi: core: Kill DRIVER_SENSE")
-Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
----
- drivers/scsi/sd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+scsi: sd: fix sd_done() sense handling condition
 
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 6f05e7683df6..110ea4d793f3 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -2419,8 +2419,8 @@ static int sd_done(struct scsi_cmnd *SCpnt)
- 	}
- 	sdkp->medium_access_timed_out = 0;
- 
--	if (!scsi_status_is_check_condition(result) &&
--	    (!sense_valid || sense_deferred))
-+	if (!scsi_status_is_check_condition(result) ||
-+	    !sense_valid || sense_deferred)
- 		goto out;
- 
- 	switch (sshdr.sense_key) {
--- 
-2.25.1
+This commit modifies the conditional in sd_done() to avoid entering the
+sense_key switch with an uninitialized or stale sshdr when a CHECK CONDITION
+occurs with invalid or deferred sense data. It replaces the previous logic
+with an OR condition.
 
+> diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+> --- a/drivers/scsi/sd.c
+> +++ b/drivers/scsi/sd.c
+> @@ -2419,8 +2419,8 @@ static int sd_done(struct scsi_cmnd *SCpnt)
+>  	}
+>  	sdkp->medium_access_timed_out =3D 0;
+> =20
+> -	if (!scsi_status_is_check_condition(result) &&
+> -	    (!sense_valid || sense_deferred))
+> +	if (!scsi_status_is_check_condition(result) ||
+> +	    !sense_valid || sense_deferred)
+
+[Severity: High]
+Does this logic change inadvertently bypass valid sense data processing for
+any SCSI status other than SAM_STAT_CHECK_CONDITION?
+
+For example, if a low-level driver completes an I/O with
+SAM_STAT_COMMAND_TERMINATED alongside valid sense data like RECOVERED_ERROR,
+!scsi_status_is_check_condition(result) will evaluate to true.
+
+This would cause the code to immediately jump to the 'out' label, skipping
+the sense key switch block. Because good_bytes is initialized to 0 for any
+non-zero result, the command will incorrectly fail instead of being handled
+as fully or partially completed.
+
+Would it be better to solely check if (!sense_valid || sense_deferred) to
+ensure sshdr is initialized without discarding valid sense data on other
+statuses?
+
+>  		goto out;
+> =20
+>  	switch (sshdr.sense_key) {
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623100159.4018=
+066-1-yangxiuwei@kylinos.cn?part=3D4
 
