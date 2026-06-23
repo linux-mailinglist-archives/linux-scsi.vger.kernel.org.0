@@ -1,172 +1,189 @@
-Return-Path: <linux-scsi+bounces-25184-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25185-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Uli4OJ4rOmoB3QcAu9opvQ
-	(envelope-from <linux-scsi+bounces-25184-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 08:45:50 +0200
+	id CfksA3k8OmoG4gcAu9opvQ
+	(envelope-from <linux-scsi+bounces-25185-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 09:57:45 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CC156B49FD
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 08:45:50 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C9166B508A
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 09:57:44 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=hiriFdP5;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25184-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25184-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=none;
+	dmarc=none;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25185-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25185-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C660B301981D
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 06:45:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 78F1F304ED53
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 07:55:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D541730ACF2;
-	Tue, 23 Jun 2026 06:45:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECA453C5DC5;
+	Tue, 23 Jun 2026 07:55:10 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from spam.asrmicro.com (asrmicro.com [210.13.118.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CBE1DA57;
-	Tue, 23 Jun 2026 06:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B1B36A342;
+	Tue, 23 Jun 2026 07:55:06 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782197143; cv=none; b=UFmQHMRIiNgiSGvWQq3FcB50COZdai5a8F9Bp5NxRYybtiwmfA967pPhB2XmlKGIV2bUR1sJz5OHdWs3Uaruz1OQYeiXiqpG8UUtCp37qYCXvDmu98mWD72F/1o9igRRw95s0SaDuSXnWWn0mL+0QHXvFYjXizwAJsIT/aOFiQU=
+	t=1782201310; cv=none; b=BZMcfj9VExYkRIKttOIDk1eEDtQtUg4FoO9vSyGTKLj1cK5qxjQYCjXlje/hNMFp6IoOpkB97T5CBPHl1D7COHw+P8pNEb/lxJFwG7g4sG/SDFNV+rZYNF2u26jKomyBGuBopSh4EkjiXFDk81UYA4BSvhvabIYVh3fpjDb6OoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782197143; c=relaxed/simple;
-	bh=cx4lcSQCH1SQOC5NyMWZyBbALhu4wCrhziOel62QF68=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RmThSdI/2TSgKGqpXIsuA7Tgys3mozuqmBIgCzllaefRzAWiDUYGaA7Gq1Rlb15h1t8Fdc4DzBYpK1cPrMbUTgelHmf+bzWstvIu2kuDdzp7B7r1gIdkGE7TyBX31wdK5GjTvl8D/uPBTusfd2K2xY1q4l7M2epLcwky190nRY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hiriFdP5; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F20641F000E9;
-	Tue, 23 Jun 2026 06:45:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782197142;
-	bh=UFnD8PCeihUYtE6Qu/iYrMyPqsWAAgq7VlluAslLLI8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=hiriFdP5Rc6DfzB/guIUAIT0HYs4i2uxpvckTyXb40lUQLgxROXT4/CnckP9sKeW0
-	 5/i75sYKo0o7YjlFeoS5sdpvA/F9Z+pkbLLiDgJoQFyB5iPuf49aWwkWaCtRGhHJ4f
-	 VIze7fDGLOY6jR0siRG8pU9mH+fANN0MCexJqT5R5sBcyGkHlmfAtnGglLaTEUCUw1
-	 Oi+ARluSIyaTteG8urptD0V2zVIf/GlRGIky+r3BM2O+hxd98flZ0mo5X9k1hfiV7A
-	 vO2h0+b7ifLT6imNOX4Ja4EjrnqJn//nviXRpigXsmveT4N1+TPtcHfXjowtnLpcwj
-	 BOOR+9PSxnyzQ==
-Date: Tue, 23 Jun 2026 08:45:33 +0200
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Can Guo <can.guo@oss.qualcomm.com>
-Cc: bvanassche@acm.org, beanhuo@micron.com, peter.wang@mediatek.com, 
-	martin.petersen@oracle.com, linux-scsi@vger.kernel.org, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] scsi: ufs: core: Always run tx_eqtr POST_CHANGE
- notify
-Message-ID: <la3brhtgvj6xa7yrzidxhsjjypun2nk64dy6bbf5akmqq4i5lz@sfdmdjhfxgkh>
-References: <20260620080322.3765210-1-can.guo@oss.qualcomm.com>
- <20260620080322.3765210-4-can.guo@oss.qualcomm.com>
+	s=arc-20240116; t=1782201310; c=relaxed/simple;
+	bh=FRfwH3MIKqmKPNdllLLIaxCN3KeQ27UpXSQdkzfsalA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UDnPBlvT/o0UOOkYVpS/uBdk3EEGebkTJUvH6aO8lFAI6d+7Ug+Wzr5R6hbq9ZV0xegdlIfjWFCMfAX+JvDJtYMrEckBczOYLrpynqoKfOvSCdNA5On7meouN4KlwC5QBG+zv3Aeo5n4QMMgYAY+4oP4+eSQU0f74DrAreNEjyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=asrmicro.com; spf=pass smtp.mailfrom=asrmicro.com; arc=none smtp.client-ip=210.13.118.86
+Received: from spam.asrmicro.com (localhost [127.0.0.2] (may be forged))
+	by spam.asrmicro.com with ESMTP id 65N7iwf4071682;
+	Tue, 23 Jun 2026 15:44:58 +0800 (GMT-8)
+	(envelope-from hongjiefang@asrmicro.com)
+Received: from exch02.asrmicro.com (exch02.asrmicro.com [10.1.24.122])
+	by spam.asrmicro.com with ESMTPS id 65N7i6XV071536
+	(version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=FAIL);
+	Tue, 23 Jun 2026 15:44:06 +0800 (GMT-8)
+	(envelope-from hongjiefang@asrmicro.com)
+Received: from localhost (10.1.170.248) by exch02.asrmicro.com (10.1.24.122)
+ with Microsoft SMTP Server (TLS) id 15.0.847.32; Tue, 23 Jun 2026 15:44:09
+ +0800
+From: Hongjie Fang <hongjiefang@asrmicro.com>
+To: <James.Bottomley@HansenPartnership.com>, <martin.petersen@oracle.com>,
+        <jgarzik@redhat.com>, <stern@rowland.harvard.edu>,
+        <bvanassche@acm.org>
+CC: <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1] scsi: core: pair EH runtime PM get and put
+Date: Tue, 23 Jun 2026 15:44:08 +0800
+Message-ID: <20260623074408.1639663-1-hongjiefang@asrmicro.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260620080322.3765210-4-can.guo@oss.qualcomm.com>
+Content-Type: text/plain
+X-ClientProxiedBy: exch02.asrmicro.com (10.1.24.122) To exch02.asrmicro.com
+ (10.1.24.122)
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:spam.asrmicro.com 65N7iwf4071682
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-4.66 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:can.guo@oss.qualcomm.com,m:bvanassche@acm.org,m:beanhuo@micron.com,m:peter.wang@mediatek.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:James.Bottomley@hansenpartnership.com,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[mani@kernel.org,linux-scsi@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-25184-lists,linux-scsi=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25185-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[asrmicro.com];
+	FORGED_RECIPIENTS(0.00)[m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:jgarzik@redhat.com,m:stern@rowland.harvard.edu,m:bvanassche@acm.org,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[hongjiefang@asrmicro.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mani@kernel.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	TO_DN_SOME(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	TO_DN_NONE(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,qualcomm.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	FROM_NEQ_ENVFROM(0.00)[hongjiefang@asrmicro.com,linux-scsi@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 4CC156B49FD
+X-Rspamd-Queue-Id: 5C9166B508A
 
-On Sat, Jun 20, 2026 at 01:03:22AM -0700, Can Guo wrote:
-> ufshcd_tx_eqtr() skips POST_CHANGE notify when __ufshcd_tx_eqtr()
-> fails. That can leave variant cleanup incomplete when PRE_CHANGE saved
-> temporary state that POST_CHANGE is expected to restore.
-> 
-> Always call POST_CHANGE once PRE_CHANGE has succeeded. Keep the TX EQTR
-> result as the primary return value, and only propagate POST_CHANGE
-> failure when TX EQTR itself succeeded.
-> 
-> Log PRE_CHANGE and POST_CHANGE notify failures to make variant callback
-> failures visible in TX EQTR error paths.
-> 
-> Signed-off-by: Can Guo <can.guo@oss.qualcomm.com>
+shost->eh_noresume is currently consulted twice in one error handling
+iteration: once before scsi_autopm_get_host() and once again before
+scsi_autopm_put_host().
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+That is racy when a PM-triggered error path flips shost->eh_noresume while
+the SCSI EH thread is still running.
 
-- Mani
+The problem flow looks like this:
+PM path
+  ufshcd_set_dev_pwr_mode()
+    shost->eh_noresume = 1
+    ufshcd_execute_start_stop  <-- trigger EH
+    ...
+    shost->eh_noresume = 0
 
-> ---
->  drivers/ufs/core/ufs-txeq.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/ufs/core/ufs-txeq.c b/drivers/ufs/core/ufs-txeq.c
-> index 23a12e221d31..c39a623b4fe1 100644
-> --- a/drivers/ufs/core/ufs-txeq.c
-> +++ b/drivers/ufs/core/ufs-txeq.c
-> @@ -1224,6 +1224,7 @@ static int ufshcd_tx_eqtr(struct ufs_hba *hba,
->  {
->  	struct ufs_pa_layer_attr old_pwr_info;
->  	unsigned int noio_flag;
-> +	int notify_ret;
->  	int ret;
->  
->  	/*
-> @@ -1253,14 +1254,19 @@ static int ufshcd_tx_eqtr(struct ufs_hba *hba,
->  	}
->  
->  	ret = ufshcd_vops_tx_eqtr_notify(hba, PRE_CHANGE, pwr_mode);
-> -	if (ret)
-> +	if (ret) {
-> +		dev_err(hba->dev, "TX EQTR PRE_CHANGE notify failed: %d\n", ret);
->  		goto out;
-> +	}
->  
->  	ret = __ufshcd_tx_eqtr(hba, params, pwr_mode);
-> -	if (ret)
-> -		goto out;
->  
-> -	ret = ufshcd_vops_tx_eqtr_notify(hba, POST_CHANGE, pwr_mode);
-> +	notify_ret = ufshcd_vops_tx_eqtr_notify(hba, POST_CHANGE, pwr_mode);
-> +	if (notify_ret)
-> +		dev_err(hba->dev, "TX EQTR POST_CHANGE notify failed: %d\n", notify_ret);
-> +
-> +	if (!ret)
-> +		ret = notify_ret;
->  
->  out:
->  	if (ret)
-> -- 
-> 2.34.1
-> 
+EH path
+  scsi_error_handler()
+    if (!shost->eh_noresume)
+      scsi_autopm_get_host()  <-- skipped
+    ...
+    if (!shost->eh_noresume)
+       scsi_autopm_put_host()  <-- executed later
 
+In that case one EH iteration can skip autoresume on entry and still drop
+a runtime PM reference on exit. That leaves an unmatched runtime PM put
+and can trigger a runtime PM usage count underflow.
+
+Fix this by calling scsi_autopm_put_host() only if the same iteration
+successfully acquired a runtime PM reference through the
+scsi_autopm_get_host().
+
+Fixes: ae0751ffc77e ("[SCSI] add flag to skip the runtime PM calls on the host")
+Signed-off-by: Hongjie Fang <hongjiefang@asrmicro.com>
+---
+ drivers/scsi/scsi_error.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+index 147127fb4db9..c78ea64641a9 100644
+--- a/drivers/scsi/scsi_error.c
++++ b/drivers/scsi/scsi_error.c
+@@ -2342,6 +2342,7 @@ static void scsi_unjam_host(struct Scsi_Host *shost)
+ int scsi_error_handler(void *data)
+ {
+ 	struct Scsi_Host *shost = data;
++	bool autopm_put;
+ 
+ 	/*
+ 	 * We use TASK_INTERRUPTIBLE so that the thread is not
+@@ -2383,12 +2384,16 @@ int scsi_error_handler(void *data)
+ 		 * what we need to do to get it up and online again (if we can).
+ 		 * If we fail, we end up taking the thing offline.
+ 		 */
+-		if (!shost->eh_noresume && scsi_autopm_get_host(shost) != 0) {
+-			SCSI_LOG_ERROR_RECOVERY(1,
+-				shost_printk(KERN_ERR, shost,
+-					     "scsi_eh_%d: unable to autoresume\n",
+-					     shost->host_no));
+-			continue;
++		autopm_put = false;
++		if (!shost->eh_noresume) {
++			if (scsi_autopm_get_host(shost) != 0) {
++				SCSI_LOG_ERROR_RECOVERY(1,
++					shost_printk(KERN_ERR, shost,
++						     "scsi_eh_%d: unable to autoresume\n",
++						     shost->host_no));
++				continue;
++			}
++			autopm_put = true;
+ 		}
+ 
+ 		if (shost->transportt->eh_strategy_handler)
+@@ -2407,7 +2412,7 @@ int scsi_error_handler(void *data)
+ 		 * which are still online.
+ 		 */
+ 		scsi_restart_operations(shost);
+-		if (!shost->eh_noresume)
++		if (autopm_put)
+ 			scsi_autopm_put_host(shost);
+ 	}
+ 	__set_current_state(TASK_RUNNING);
 -- 
-மணிவண்ணன் சதாசிவம்
+2.25.1
+
 
