@@ -1,239 +1,243 @@
-Return-Path: <linux-scsi+bounces-25120-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25124-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id BBPlK3l+OWr9uQcAu9opvQ
-	(envelope-from <linux-scsi+bounces-25120-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 20:27:05 +0200
+	id 4lD6HCDjOWqcygcAu9opvQ
+	(envelope-from <linux-scsi+bounces-25124-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:36:32 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21AE76B1C94
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 20:27:05 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B9EB6B3426
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:36:32 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=microchip.com header.s=selector1 header.b=UQevV+Nf;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25120-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25120-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=microchip.com;
-	arc=reject ("cv is fail on i=2")
+	dkim=pass header.d=ibm.com header.s=pp1 header.b="elkLZR/1";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25124-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25124-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=ibm.com;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 87C213030F57
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2026 18:26:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3FE77306BCD6
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 01:31:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A60BD344DA2;
-	Mon, 22 Jun 2026 18:26:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CDE93859F0;
+	Tue, 23 Jun 2026 01:30:52 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010016.outbound.protection.outlook.com [52.101.61.16])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40A7344D8C;
-	Mon, 22 Jun 2026 18:26:46 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782152808; cv=fail; b=d4XgZURjs13SGQBlqf5LLPzSaV2RpIxEBuY143M8Y5dfGVSMXm/of5+FZmD568YguclKXZnlokunPoU/kZZnknRr2QpMw+19nuvbucVbH3BhMEVIM03qvo03oa11pFRhNC0iX66WCjSxFE3EOxfOQHwYpQm/QqroZQTfArstmGQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782152808; c=relaxed/simple;
-	bh=zYlhF8ENYkTw9kFPKkUFeG/X3ft3TYkN2hS/1hKkWoA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=CGNi0WdX0gtg3x06l/yOVLmUcCL46w3pnosXgMzVQfrqqRCrWZPmHEOwUU6er/5GE9BxIXcy+nihH69K6r1jwgaE7tuen7GciDZYl08MUDbDyrY5kxBcDvf9p6QPGSKhWCkjj5C4YcaULgT1Sd3UuKY+hmGLBcGYCGHokkK0+oE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=UQevV+Nf; arc=fail smtp.client-ip=52.101.61.16
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lfFiC/BjJHMNrGTL916ma0i+UT0qJOnSPJnBiu+ibpJKsC+EB30bL2vohLUhTwgHtV/4fz6gvqmCphfOuWDgIRAGRQOxgKmZTdk5xnd0A/yRocP9GpTrRKJhaEe5TBsg4qc26DXBgGUK/R4EN85cuSUiTS/DNIhKiHvU0ckpJzpCWzwTO4a1j9SR/lUBtsoSqsvIp9Tf4JQPAW+mVcAWpfkyopzN6Pgo8wIsjBFgGdxcr+SqHuPez2ItoF+EWeUmLwM42mIOs0msnSud4mZ8pEMmiDuRtDiUbyle8zWOnAGSZvIB6L/Kd1bc8FbGJwTdumAWu7OC/VqpYyOvMVIjUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zYlhF8ENYkTw9kFPKkUFeG/X3ft3TYkN2hS/1hKkWoA=;
- b=q3JMbDrchXesq92i/EkrCNVhQZAvQY8jNUcjvVNVru3/n33UJ6+vzOVnZsYHAudLv9yCE5TG8xFtZk6y2c6gO9iibsIM5Wle94+/thJSt0KFiZpD/F7ImgZeGPa1cZco3RGktdnklBPZ4Kigj7qAoGf4QsGlNK3Rz8DSIZaTmonSTiMT2CtF1DnuPwuQnbH+ZjBMTFTjFYztIMu94rVQBogOrFhnfvlF9xehYbx6UokWaC8JJJ9f+lVG9QqTimw50wa2T/cuODfdp8Gs9UutKx/qYcFch3YMnHMkEx378JYo1XWF8nhqr09A78XWZ+e73yKFCMtHGux8LTcbCT+EAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microchip.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zYlhF8ENYkTw9kFPKkUFeG/X3ft3TYkN2hS/1hKkWoA=;
- b=UQevV+Nf2vROd1UW5gRnymc5It5sbAJacC2tq4pqtCTTLyoMQYxcoNgaPfZpYWItwPPcE54FXnq1OpBKsXNtNnEZtvdGo1XkgvfkY8UbumtZ+bkLxG99avRNyhu9UpKuSLhcY7Qk98/Wy4rNtk7oY6c1psM9r7+Ru2T0Wn+eBgKXrYj725TbMQioaplzMy0Uo+bOjhR40BzNFg3fZ1dOiXEic5wdsdX13ujzztzx5BkSypYoPFb5Lgq6+3/wyLV8GoI7Pz33Ac+Gp2LqyZ9a72nKYntMNwI+7v0JWf3gAcH/XFiT8T10XztsqWMjdfPBNcjBA1Xn1+VITK/c6D8MkA==
-Received: from SJ2PR11MB8369.namprd11.prod.outlook.com (2603:10b6:a03:53d::16)
- by DS0PR11MB7215.namprd11.prod.outlook.com (2603:10b6:8:13a::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.139.20; Mon, 22 Jun
- 2026 18:26:43 +0000
-Received: from SJ2PR11MB8369.namprd11.prod.outlook.com
- ([fe80::6777:e753:dd60:983b]) by SJ2PR11MB8369.namprd11.prod.outlook.com
- ([fe80::6777:e753:dd60:983b%4]) with mapi id 15.21.0139.018; Mon, 22 Jun 2026
- 18:26:42 +0000
-From: <Don.Brace@microchip.com>
-To: <haoxiang_li2024@163.com>, <James.Bottomley@HansenPartnership.com>,
-	<martin.petersen@oracle.com>, <david.carroll@microsemi.com>,
-	<justin.lindley@microsemi.com>, <scott.teel@microsemi.com>
-CC: <storagedev@microchip.com>, <linux-scsi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: Re: [PATCH] scsi: hpsa: fix DMA mapping leak on IOACCEL2 reset path
-Thread-Topic: [PATCH] scsi: hpsa: fix DMA mapping leak on IOACCEL2 reset path
-Thread-Index: AQHdAmBjE9j71K4IqkGWSUInwrj2jbZK4SsR
-Date: Mon, 22 Jun 2026 18:26:42 +0000
-Message-ID:
- <SJ2PR11MB8369CC3A2E487829E96057BAE1EF2@SJ2PR11MB8369.namprd11.prod.outlook.com>
-References: <20260622160028.1240496-1-haoxiang_li2024@163.com>
-In-Reply-To: <20260622160028.1240496-1-haoxiang_li2024@163.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ2PR11MB8369:EE_|DS0PR11MB7215:EE_
-x-ms-office365-filtering-correlation-id: bebc2d13-c5a1-4767-5b30-08ded08bcf28
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|23010399003|366016|376014|56012099006|11063799006|18002099003|22082099003|38070700021;
-x-microsoft-antispam-message-info:
- FRuo4napftk7k1A592WkWFGUMBuRFLS1xsyQ2H1EvWC6gBzOqV/kueL6JIHSZsKTS2+KavsaltnGRWGrY3jAwEI+rgLm7uF9eVl69ikHyzqzt6wXILHYM2hGoI9fI3JEjHsubWCt/VKh8uMns2LH2ndWrGOemGOR3tQ7hKzDg+LIXDh9amf0/ha9Bh7Naznrfl+SLZA+KzOPVjc+VgFe/+qI5Cwg2vGjwqcFgD9YLtru/wi0atBl+y9i5mliwD471ly6H6gpmyg7uPWL29zV5CDBARvSGyLoHPRDheTlHIHvXcbBclVF96/WA2qNLjHtNxC5y3EyYTvwXfcvlGt/hNFWC4/Z67lFbgtAiyqc6UMFjyK5107qmTGTZUTfUyAjSMtOEZsgHjj6dPRraGtaHDw6dSiXYdI7Y2PkIhTsyOx6NDRCqPGY/KV0sJnDRm6vXf/6tpzHvqwMF8DJxEQZLAstG3DmQE+eL3l6YDONgj9PUpG5xpNzoZnR05jtE28DXRKStRg8Ig/PENTZ41/QcJQUQj5mxCC315Ig5ebvP+BhkEf4sb2+vbWivjsNSknH3QxfgHln9xnnmYXo2lHyk/b7rTjaqA0ClJQ7Hho5Zu6a82qyFEG0jMEzq9yC+iJoVJ6Z+WmV+i7Wfk+admmV3twRqX2P9LgwY2fWnszuV0LioMmQQmbEqSo7fK1plg6+NnhbkFfcVKNBuiNIwtIiO/IXMmuD8JmZzRxni7n0ag0=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB8369.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(366016)(376014)(56012099006)(11063799006)(18002099003)(22082099003)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?RiOSVo/Q3QM2Y/XVZ7o1x6z9GBEXa8Zy/WMeBKVDpW4u/ur47nn3JNvhJK?=
- =?iso-8859-1?Q?DOwsDkMQES4NteaR0T794KAkEd2NGtDZo6r3ijGdD+S0tooOxcAD87OD6n?=
- =?iso-8859-1?Q?eJUlilQPgH8DxnQhE439oYO5RjHBpuBkPI/lYV6xjt7FdVyXmklUWfx65C?=
- =?iso-8859-1?Q?94CCRXO7ZjDnYeyAw0PCsGsHzInq563Zor/NkXRNBGkZZa8z93+F5Dw1wG?=
- =?iso-8859-1?Q?Y8LXgPJcbknO/SyFBJY/xWZ0rFz+jnS976u+4fFUdkGrcHTNhR6PpKb7dK?=
- =?iso-8859-1?Q?ga2rxH279H5etV5icg3DCAWMm4BttCz6jN95nS/PAdYMa0s2mj9gWHoOUo?=
- =?iso-8859-1?Q?qsbL+RFg9WZAftVErJ7Eo/rJF99HOvacy2FT9DxyyYNa3RWWt/rdKymHXe?=
- =?iso-8859-1?Q?qz+/CfCQSTz4n0ciABQX6bQzXyOAeMr1TkEI8w6Bh4CYwAhPxBh7FyK3Fh?=
- =?iso-8859-1?Q?K9lJSg9ILP0eL057rc6dk/wrkyMOnY7t4MERBHxPqANgq8I9tZ/uskb6hk?=
- =?iso-8859-1?Q?a+UR06bWBPw2YK0FhjFwy+nJWA2X6jQAaLAzIWQRG3O512VOUZAcvZ8Quv?=
- =?iso-8859-1?Q?ZHlv6C86bkk966ECxzIqelv0NFEo3Wa0YUuAD63svRzf0mLXlfXDQbLNTk?=
- =?iso-8859-1?Q?ztYC430mXIkyqcQdC8sq5cWVLp0xv5YJ2KUWKh4dbSy/gvIVeHwFmA7uMO?=
- =?iso-8859-1?Q?EwE34J4/npf3xlS52uFm/tyA2nud46b/0GIjwVM741979QPEpAxMS8tUVt?=
- =?iso-8859-1?Q?P6qtTfFi2Y3QgHkQvGCei+ZJqv3MlivJ4Xj3YXwABCMRdNKjOaa9rbDhMY?=
- =?iso-8859-1?Q?RliE1CsacS6O/G3bRqz6IkbKtChWtoi0WaWDqDgYWZvd7Wy9fTO2yQQF8K?=
- =?iso-8859-1?Q?TxPJtKrZv9XMQaFiYbBzSmQHRdErGqsP0bWfRZW/H2RVrC+uPh3Xh198Zb?=
- =?iso-8859-1?Q?Oq+6grBldCBZRO8izhCcwzEXLZFYn0h3NLQ2shQOKE0zerl+cHckTLMiVH?=
- =?iso-8859-1?Q?pchMngk/u/KxBiWob3whZnv8gPaCL7TjravjKrm+1bwBMDzX1C3E7Y27iL?=
- =?iso-8859-1?Q?G1AOchvYbvp/AqWTrMawv2VwFkZqi8OekROO0iPKAQ5mR1Pob5XrSdRNLY?=
- =?iso-8859-1?Q?HA/XmN77SQs5/+TYID4SJf8chhBCiVJ4/PG/kwTrIEm4M1+K9jLbONmqEp?=
- =?iso-8859-1?Q?px1cltJjbbfCIaRfL734fzjrZS/4lUN5ZHqF3IGZflU/rTkmfcj2xrI8cs?=
- =?iso-8859-1?Q?yRLNqTDY4eSsDNXD0ueVwIpZ+8B/BDzI/3QkHcoD8sY/XzqZBZDA6FW4Fg?=
- =?iso-8859-1?Q?KnI8UdW/bP8HjA1ynMvwqpkkec0vSs0F/cOcHOytOH1AbsTiry0k0uBiyO?=
- =?iso-8859-1?Q?aGgOYmbuIMvIMWBrpfarEbnNl0NOwQhI7dH+KuEHp+RMw9ZC6BhajB39Ij?=
- =?iso-8859-1?Q?aAiYLg1IfelPWDnEvEsMIjhnklcOOBeEIm2KtSalQTO+qHjcyFFETGC4C6?=
- =?iso-8859-1?Q?9BVWh+TOF4MjbljD3RfynctjfavgXBKBqb/OBG95h5DNlW6/PbeWh0bOHd?=
- =?iso-8859-1?Q?xaVSQ5KVOX7Pl9Pj6D9/YoszgTgiA8AU0X8TQCRgNLdh51XKxkWQmy268p?=
- =?iso-8859-1?Q?6dOrh7yFRqtk/zNVYygTb1cLhJZwRYCJ+r9YYq6eRjykFyOBkn927FMGiB?=
- =?iso-8859-1?Q?BxvGaxtOWRydhut5oyAnMzn1HGNI0pRU3ry6fpKAojyibOjWh7blK38KgW?=
- =?iso-8859-1?Q?h4gD5xU9vb5nshLFx9ZIyGshDwA7ZmJn+q91o1JACLb62Zikvx5CbpuJ+J?=
- =?iso-8859-1?Q?OqbPkBORPg=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3F1375F83;
+	Tue, 23 Jun 2026 01:30:50 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782178252; cv=none; b=ZG1TO4NJ9k5EFmJB84QzaqfmBwZ1JlJqy3lx1lQmcd+XpUWl/9BX17mWYQYQ17zpLTqsdueOLir41UDKrAZ0sXaATRFDC+DU9NEtl9Uwli8glTzL8pObPFVGLg/H4eBeyepst1KZ2TJwZQgZ7FEuiLaRFGi8q8mY2urrSFNHRyg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782178252; c=relaxed/simple;
+	bh=f+s0I2GwSpI7/zd1U0H96oPFFWt5MVUjG57CwKoWh8s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a6aSCVz39zmKecal/P9Y6biW9r/NlT7jl9J7p7uOZv+bholIV+fJIp/h68GRgima3GHpnxC280HPgzHBvLcJXDlvwyn5XrPychk+Jkz7MiPAW8X3SNVDnqsGHMk+iC0ZulF8ITpVFMv5MSwtzj4f6up5bSAdp5j4JbTkckHAwsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=elkLZR/1; arc=none smtp.client-ip=148.163.156.1
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65N0mY3n551122;
+	Tue, 23 Jun 2026 01:30:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=fghvTa+mDQe7lrkWzHwDkmMybVS+EPvFqMdA2olPD
+	DQ=; b=elkLZR/1k9Tww0P17E2du0i1Q3s8LujAUng8/3ZG+JMF5rZNj7Kpn2Ow0
+	ZiHgi248Hinf2IEzeo9DKn99wk39OrK4Qtsbbt47jKI+jRpjD989Ht+TnJ5wsqF0
+	Z9x7iZFIhcM1oXuk+IhD3JlKJJCloXnTricrkky5kdp3Nrib44LX3xDRTxzNmTuh
+	OF9RPMMQwX12pdIwcVm6uVhKqtGzpTXnPZdeU9GFmF/kGQkDXGWjpeZFsHsRTLRZ
+	RqysbndyIF7wQFUSQ+ZDCyOESaHkzFEZvgisflSvQ2IpGYwNskxJz0o0IEP0pD8A
+	XI6IgQ/MBkwd2EeYPMzYhXt46ZzMw==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ewjhqm1rt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Jun 2026 01:30:40 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65N1Jf2L018367;
+	Tue, 23 Jun 2026 01:30:40 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ex7vygn2s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Jun 2026 01:30:40 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65N1Uc5m40305342
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 23 Jun 2026 01:30:38 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 37A8758052;
+	Tue, 23 Jun 2026 01:30:38 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 978D658056;
+	Tue, 23 Jun 2026 01:30:37 +0000 (GMT)
+Received: from li-4c4c4544-0054-3910-8039-c3c04f423534.ibm.com.com (unknown [9.61.188.206])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 23 Jun 2026 01:30:37 +0000 (GMT)
+From: Tyrel Datwyler <tyreld@linux.ibm.com>
+To: james.bottomley@hansenpartnership.com, martin.petersen@oracle.com
+Cc: linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, brking@linux.ibm.com,
+        davemarq@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
+Subject: [PATCH 00/29] ibmvfc: Add NVMe-FC support
+Date: Mon, 22 Jun 2026 18:30:06 -0700
+Message-ID: <20260623013035.3436640-1-tyreld@linux.ibm.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: microchip.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB8369.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bebc2d13-c5a1-4767-5b30-08ded08bcf28
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jun 2026 18:26:42.7565
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EsCJWZ9YPUvm9gR2ZomgKoY4qI88zoXGvcC7z2JXHwsXARxfVpND7hxlH9pQONSBwsOhcFcC2MdwSoVM+Ze2Pw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7215
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=I4VVgtgg c=1 sm=1 tr=0 ts=6a39e1c0 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=uAbxVGIbfxUO_5tXvNgY:22 a=N94uNd9e9YkJgE3VtxQA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX5JOGC5SzOjqI
+ dRughRgfpxhfDge6mKar2JhCow9RJDPBstMIJU8a3F6RD+8yihODdElfz4s+MM+NgM4zfE+1h7y
+ h2eB8Hw/d0Z5z1ta2nlPsLeHZBwuXjOy9TGYu7qJm5LcU9yozHrGDb+eEnbQRFz0Bi2/lq7AFC9
+ QutQevb0zGLo9lQ/ujsu7vEIp6sCSD8zzwZ60JEJQ7AZjMgpF/YD05SxHRX3FvNEUP2pmrlUydI
+ KQ/TSFOYM4TOk2F1uUsDyBehWyVIdZFmfr9B7+gXXD1Jq3TsmxINM0i9KwNupJrVk2w+H3fDw6f
+ yFLp4FCTouMaNGrPm5OuJttKye0Z9OmJ5B43ma4gHvxVhahwxhSoQmX+dMSzQB4axhkqL0T4lFM
+ zFedPl4MvAiq8Vio9C3PDZQ1GIn1hiAjfpLpf3Q7iU35msJJiECfeWkkS00TT7Xe8fzH9bgqOgP
+ zoeeL3sbbULOZPpDQPA==
+X-Proofpoint-GUID: qultZKOEUbE9dECoVlMUR0INbbiSe649
+X-Proofpoint-ORIG-GUID: qultZKOEUbE9dECoVlMUR0INbbiSe649
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX3S6HzEy9BFjJ
+ tLDUxhUnlwQQacuc68MEZEYv3RTtUq5WYD93Sswc16j+yFg+zsDZJEC5Zw4zpkShwt576h5ihhp
+ 2zyxZNnlmfRDCvZ4Lo1yaFePw9AygDE=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-23_01,2026-06-22_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 impostorscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 priorityscore=1501
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2606230008
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[microchip.com,reject];
-	R_DKIM_ALLOW(-0.20)[microchip.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25120-lists,linux-scsi=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[Don.Brace@microchip.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:haoxiang_li2024@163.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:david.carroll@microsemi.com,m:justin.lindley@microsemi.com,m:scott.teel@microsemi.com,m:storagedev@microchip.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:stable@vger.kernel.org,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
-	DKIM_TRACE(0.00)[microchip.com:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[163.com,HansenPartnership.com,oracle.com,microsemi.com];
-	FORGED_SENDER(0.00)[Don.Brace@microchip.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NO_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TO_DN_NONE(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25124-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:james.bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-kernel@vger.kernel.org,m:brking@linux.ibm.com,m:davemarq@linux.ibm.com,m:tyreld@linux.ibm.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[tyreld@linux.ibm.com,linux-scsi@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[tyreld@linux.ibm.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	ALIAS_RESOLVED(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,linux.ibm.com:mid,linux.ibm.com:from_mime];
+	DKIM_TRACE(0.00)[ibm.com:+];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,microsemi.com:email,hansenpartnership.com:email,microchip.com:dkim,microchip.com:email,microchip.com:from_mime,vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[11]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 21AE76B1C94
+X-Rspamd-Queue-Id: 0B9EB6B3426
 
-________________________________________=0A=
-From:=A0Haoxiang Li <haoxiang_li2024@163.com>=0A=
-Sent:=A0Monday, June 22, 2026 11:00 AM=0A=
-To:=A0James.Bottomley@HansenPartnership.com <James.Bottomley@HansenPartners=
-hip.com>; martin.petersen@oracle.com <martin.petersen@oracle.com>; david.ca=
-rroll@microsemi.com <david.carroll@microsemi.com>; justin.lindley@microsemi=
-.com <justin.lindley@microsemi.com>; scott.teel@microsemi.com <scott.teel@m=
-icrosemi.com>=0A=
-Cc:=A0storagedev <storagedev@microchip.com>; linux-scsi@vger.kernel.org <li=
-nux-scsi@vger.kernel.org>; linux-kernel@vger.kernel.org <linux-kernel@vger.=
-kernel.org>; Haoxiang Li <haoxiang_li2024@163.com>; stable@vger.kernel.org =
-<stable@vger.kernel.org>=0A=
-Subject:=A0[PATCH] scsi: hpsa: fix DMA mapping leak on IOACCEL2 reset path=
-=0A=
-=A0=0A=
-EXTERNAL EMAIL: Do not click links or open attachments unless you know the =
-content is safe=0A=
-=0A=
-If phys_disk->in_reset is set, the function returns directly without=0A=
-undoing the resources acquired for the command. Add the missing error=0A=
-cleanup by unmapping the IOACCEL2 SG chain block when needed, unmapping=0A=
-the SCSI command, and dropping the outstanding IOACCEL command count=0A=
-before returning.=0A=
-=0A=
-Fixes: c5dfd106414f ("scsi: hpsa: correct device resets")=0A=
-Cc: stable@vger.kernel.org=0A=
-Signed-off-by: Haoxiang Li <haoxiang_li2024@163.com>=0A=
-=0A=
-Acked-by: Don Brace <don.brace@microchip.com=0A=
-Thanks for your patch. Can fix potential performance issues with devices un=
-dergoing resets.=0A=
-What about another patch for when call to hpsa_map_ioaccel2_sg_chain_block(=
-) fails?=0A=
-=0A=
-=0A=
----=0A=
-=A0drivers/scsi/hpsa.c | 4 ++++=0A=
-=A01 file changed, 4 insertions(+)=0A=
-=0A=
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c=0A=
-index a1b116cd4723..8edad1830abe 100644=0A=
---- a/drivers/scsi/hpsa.c=0A=
-+++ b/drivers/scsi/hpsa.c=0A=
-@@ -5017,6 +5017,10 @@ static int hpsa_scsi_ioaccel2_queue_command(struct c=
-tlr_info *h,=0A=
-=0A=
-=A0=A0=A0=A0=A0=A0=A0 if (phys_disk->in_reset) {=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 cmd->result =3D DID_RESET << =
-16;=0A=
-+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 atomic_dec(&phys_disk->ioaccel_=
-cmds_out);=0A=
-+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 scsi_dma_unmap(cmd);=0A=
-+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 if (use_sg > h->ioaccel_maxsg)=
-=0A=
-+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 hpsa_un=
-map_ioaccel2_sg_chain_block(h, cp);=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return -1;=0A=
-=A0=A0=A0=A0=A0=A0=A0 }=0A=
-=0A=
---=0A=
-2.25.1=0A=
+This patch series adds NVMe-FC protocol support to the ibmvfc driver,
+enabling IBM POWER virtual Fibre Channel adapters to handle both SCSI
+and NVMe storage traffic through a unified driver architecture.
+
+The implementation leverages the existing multi-queue infrastructure
+and extends the driver's protocol handling to support NVMe-FC alongside
+traditional SCSI FCP. Key architectural changes include:
+
+- Refactoring the driver into protocol-agnostic core (ibmvfc-core.c)
+  and protocol-specific modules (ibmvfc-nvme.c for NVMe-FC)
+- Extending the target discovery and management state machine to handle
+  NVMe/FC targets with appropriate protocol-specific login sequences
+- Implementing the nvme-fc LLDD (Low-Level Device Driver) callbacks for
+  queue management, command submission, and abort handling
+- Adding support for NVMe-FC specific MAD (Management Adapter Data)
+  operations including target discovery, port login, process login,
+  and implicit logout/move login
+- Implementing NVMe FCP and Link Services (LS) command submission and
+  abort paths using the existing sub-CRQ infrastructure
+
+The series is organized to introduce changes incrementally:
+
+Patches 1-8: Infrastructure and refactoring
+- Move target lists to protocol-specific channel groups
+- Split NVMe support into separate source file
+- Add protocol interface definitions and helper functions
+- Initialize NVMe channel configuration
+
+Patches 9-16: NVMe/FC MAD operations and target management
+- Implement discovery, port login, process login, query target
+- Add target allocation based on protocol
+- Update state machine for NVMe/FC target processing
+- Handle NVMe/FC target deletion
+
+Patches 17-20: Local and remote port registration
+- Implement nvme-fc local port registration after fabric login
+- Process NVMe/FC rports in work thread
+- Extend debug visibility for NVMe components
+
+Patches 21-26: LLDD callback implementation
+- Implement queue mapping callbacks
+- Add LS and FCP command submission paths
+- Implement NVMe FCP and LS abort handling
+
+Patches 27-29: Error handling and debugging
+- Fail NVMe requests during transport reset
+
+
+Tyrel Datwyler (29):
+  ibmvfc: move target list from host to protocol specific channel groups
+  ibmvfc: add NVMe/FC protocol interface definitions
+  ibmvfc: split NVMe support into separate source file and add transport
+    stubs
+  ibmvfc: initialize NVMe channel configuration during driver probe
+  ibmvfc: alloc/dealloc sub-queues for nvme channels
+  ibmvfc: add logic for protocol specific fabric logins
+  ibmvfc: add wrapper to get vhost associated with a channel struct
+  ibmvfc: add helper for creating protocol specific discovery event
+  ibmvfc: add helper to check NVMe/FC support with active channels
+  ibmvfc: allocate and free NVMe channel group discover buffer
+  ibmvfc: send NVMe target discovery MAD
+  ibmvfc: add NVMe/FC Implicit Logout and Move Login support
+  ibmvfc: add NVMe/FC Port Login support
+  ibmvfc: add NVMe/FC Process Login support
+  ibmvfc: add NVMe/FC Query Target support
+  ibmvfc: allocate targets based on protocol
+  ibmvfc: delete NVMe/FC targets as well as SCSI
+  ibmvfc: update state machine to process NVMe/FC targets
+  ibmvfc: implement NVMe/FC stubs for local/remote port registration
+  ibmvfc: register local nvme fc port after fabric login
+  ibmvfc: process NVMe/FC rports in work thread
+  ibmvfc: extend ibmvfc_debug visibility to ibmvfc-nvme.h
+  ibmvfc: declare global function definitions
+  ibmvfc: implement LLDD callbacks for mapping nvme-fc queues
+  ibmvfc: implement nvme-fc LS submission transport callback
+  ibmvfc: implement nvme-fc IO command submission callback
+  ibmvfc: implement nvme-fc LS abort handling callback
+  ibmvfc: implement nvme-fc FCP abort callback
+  ibmvfc: fail nvme-fc fcp-io and ls requests during transport reset
+
+ drivers/scsi/ibmvscsi/Makefile                |   2 +
+ .../scsi/ibmvscsi/{ibmvfc.c => ibmvfc-core.c} | 709 ++++++++++++++----
+ drivers/scsi/ibmvscsi/ibmvfc-nvme.c           | 565 ++++++++++++++
+ drivers/scsi/ibmvscsi/ibmvfc-nvme.h           |  48 ++
+ drivers/scsi/ibmvscsi/ibmvfc.h                | 209 +++++-
+ 5 files changed, 1360 insertions(+), 173 deletions(-)
+ rename drivers/scsi/ibmvscsi/{ibmvfc.c => ibmvfc-core.c} (89%)
+ create mode 100644 drivers/scsi/ibmvscsi/ibmvfc-nvme.c
+ create mode 100644 drivers/scsi/ibmvscsi/ibmvfc-nvme.h
+
+-- 
+2.54.0
+
 
