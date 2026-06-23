@@ -1,83 +1,83 @@
-Return-Path: <linux-scsi+bounces-25127-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25123-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id MCtzKiDiOWpcygcAu9opvQ
-	(envelope-from <linux-scsi+bounces-25127-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:32:16 +0200
+	id xNNZEATiOWpTygcAu9opvQ
+	(envelope-from <linux-scsi+bounces-25123-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:31:48 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C6536B3364
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:32:16 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83DD46B3342
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:31:47 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=ibm.com header.s=pp1 header.b=W5rA46oN;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25127-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25127-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=ibm.com header.s=pp1 header.b=Y6RyKP4S;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25123-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25123-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=ibm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1D05430365A2
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 01:31:31 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A7FAE301E441
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 01:30:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 087F338735D;
-	Tue, 23 Jun 2026 01:30:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C8A640D59E;
+	Tue, 23 Jun 2026 01:30:52 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F8F386566;
-	Tue, 23 Jun 2026 01:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF3F374A1E;
+	Tue, 23 Jun 2026 01:30:50 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782178256; cv=none; b=ASL+Fe9Z35ehfwW/3fSj0/JfjLUbWolSyCloGPQjCHTeqRJ+0weJazDU/qvF9ngvJHfft1CXsrQebSFHi/VUEu+I9ShGEPRhHMO+Qp2J2fhdG6UzyeRvZZ3HVLLlbUSxtOZVgNr+e8XVpSfX4FhJsl+o91UHWFFMlE0jdqQjCmo=
+	t=1782178252; cv=none; b=epu0fGKLoktGiNH1M9glxGuoIfwUW3OvQCQs6yA5925c8Wb8Dk0+n7wEJpqdS7yXfvzrMcZZgwMmrMbV0hJJVNxs5WIYlyQ6beOGsmJa7ziDsUuLmBOzAFXGzfcaJQfhm7HpS7bV3CI9zfF+qDE6DQzrOdq67tSSFvU+DhtYOfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782178256; c=relaxed/simple;
-	bh=yr18dWNNAE5p3acYad8NVRjCHbxRkno7tzyygfiucFI=;
+	s=arc-20240116; t=1782178252; c=relaxed/simple;
+	bh=Ju4krXW/VIos3oN+qLVFD690ZZAEj7DHosyXYVoCqUQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HYk5zpsktq9pWRS2/3CX1V0kXtFbST6I+B/1N/XuYxJh5ZAvDoNy1xjO9ovR8jO0QezMqS/FrNGQ4I4JmqSY+tvFImY+iHJtvuXy7Apcan+0BOcCnhiDePsFytm9c5Snm5U63tcKBTrWEMfhOhr1J2fgeDGY3pafBF4qABrr4eI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=W5rA46oN; arc=none smtp.client-ip=148.163.158.5
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65N0nCqY310031;
-	Tue, 23 Jun 2026 01:30:43 GMT
+	 MIME-Version; b=b9DjmK+yk7i0tIrSfMR/3OC9Ps394o4x2m3aDV9+NHE31gBWet7THjwns8yanLWn1QDR4sb3CUUuqlXN2zXvWG3ndBtU/Vvq085c05Ekmuei7LBastipKLhL/ut3uDEh3Anoa/FtctalF4eDcMJkCoYSIfvgnMNSVa80iCrRDiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Y6RyKP4S; arc=none smtp.client-ip=148.163.158.5
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65N0o1e9285650;
+	Tue, 23 Jun 2026 01:30:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=/u+OvQ2JmOaOrT5iE
-	tXk6TzfZkOHp+xJTmRWkM4cjA0=; b=W5rA46oNfgqOFtpQb0MLdqMmoMQDRz6xp
-	XkdK7Gcy591QYavawcuF4SbLPQDi25uPoZ2WsXhd7bo3ikL+sQsr8voKZoVDpsK6
-	X2dm3rIy3DwIgQKuherWd1aaj0ErU0GT0av39YOJWkmyZitQOmUCsSD3S0uzjAVO
-	HMLKlNPXSEBAnvZ6CvDOSZUv5aX/OhpZvznDrE9TfKuQ8EQ0kIJTvSJ3mMZtrshc
-	aLrl2SVolzT9omZi7Mybp9nRCJaGnAgzzMBkrZkQqov0hdVO7LGZtyrZyh4bhTZa
-	OzvXarhA/YHgr/kqefIxpMRQsW8IosEZ3gZE17jFLKF3Hvv3PGRBQ==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ewg9hmbu9-1
+	:mime-version:references:subject:to; s=pp1; bh=6lLsqN/UhBrZOIi5s
+	Cv/yHBP4d0V1W51fQgXiym8rIs=; b=Y6RyKP4SnYU9vRWyjaaB0t9VC8tFdA/TK
+	zpeLHpGDn/tdR7CAaZL2x5ktMiD1glmZ/ROHB92Weuuc4ty01cG0USxp0ok0yZxo
+	6KvMWJNz22LWdhJpIM59W4W5sUhS4frSczj0Ehep8OMbn63WXJanU066GOr0ukr9
+	QwlXrBCd0SzAbmcHrZRod2PcVaSXtMtu5pHayQYFOW6ye2d8Q+CvoF2xQ7eVNZwU
+	fpsYQVwPSDMpjc52anlxDM7YqJ+xZS/LxxuG0b41rRmOqZzkfSeaTEhVtTk2/dbt
+	eq+3B4HC9LuVTzC0+uG/EFiFdwlL0L7CsnXmovdovChZXBRl3aUww==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ewjgskyrg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 23 Jun 2026 01:30:43 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65N1JoJV018411;
-	Tue, 23 Jun 2026 01:30:42 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ex7vygn2y-1
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65N1K2rI026922;
+	Tue, 23 Jun 2026 01:30:43 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ex7dg0qvs-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 23 Jun 2026 01:30:42 +0000 (GMT)
 Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65N1UeYT19530246
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65N1UfL17602716
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 23 Jun 2026 01:30:40 GMT
+	Tue, 23 Jun 2026 01:30:41 GMT
 Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4BBC358066;
+	by IMSVA (Postfix) with ESMTP id 02AFE58066;
+	Tue, 23 Jun 2026 01:30:41 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 70C905806B;
 	Tue, 23 Jun 2026 01:30:40 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B903B58065;
-	Tue, 23 Jun 2026 01:30:39 +0000 (GMT)
 Received: from li-4c4c4544-0054-3910-8039-c3c04f423534.ibm.com.com (unknown [9.61.188.206])
 	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 23 Jun 2026 01:30:39 +0000 (GMT)
+	Tue, 23 Jun 2026 01:30:40 +0000 (GMT)
 From: Tyrel Datwyler <tyreld@linux.ibm.com>
 To: james.bottomley@hansenpartnership.com, martin.petersen@oracle.com
 Cc: linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org, brking@linux.ibm.com,
         davemarq@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH 03/29] ibmvfc: split NVMe support into separate source file and add transport stubs
-Date: Mon, 22 Jun 2026 18:30:09 -0700
-Message-ID: <20260623013035.3436640-4-tyreld@linux.ibm.com>
+Subject: [PATCH 04/29] ibmvfc: initialize NVMe channel configuration during driver probe
+Date: Mon, 22 Jun 2026 18:30:10 -0700
+Message-ID: <20260623013035.3436640-5-tyreld@linux.ibm.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260623013035.3436640-1-tyreld@linux.ibm.com>
 References: <20260623013035.3436640-1-tyreld@linux.ibm.com>
@@ -89,29 +89,29 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tfqL26JnJOEX3eeLtQoc5wdIJA3HnMGn
-X-Proofpoint-GUID: tfqL26JnJOEX3eeLtQoc5wdIJA3HnMGn
-X-Authority-Analysis: v=2.4 cv=Y4XIdBeN c=1 sm=1 tr=0 ts=6a39e1c3 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX6P8L1ulkeoP7
+ velCXDDOqDRAY9iXCdYuDO21LpPIY3F8DfgJlmZd86+ejZg4UpR8wbZZBYAUT3w2QJX+esVOlP+
+ eIJ7gf9ItcYUSBgByoDkUJ1eAhV6akVT6yd1UPt+DbtjQCLbl7PJHoPQmSvY4yAh3RyhTik3QAv
+ Hx9jry1vUhr0FdDDcw9mXouc39jm8inSJuRKrnstA7iOET7/shEWzRl7FjaszWaw23qiuwEJrLM
+ uFJdaygfUn50dUCj2Zm9u/QAr9TGGV34JDI7Mwzz7DYxp9if1cZXGienmF5qFXtltU1paVmZi6S
+ Sz0+behFb0xi14wFvaqBxn7KSCkBLJv19FHXSBQPrpjIOtCNtFTGgQNWElXu7crZ4KYGeNKEkT0
+ h6Wl+x7jJNiNYC3jWcDRummkH+WdV795+R0RrpdClywG+2hbJJ8ksmC+Iy7DNnxGT6N8rb++Uht
+ r4jnCxBBlQ37RFSjEXw==
+X-Proofpoint-GUID: pR16KDs9nFBGHhI9m1N6vOGE3amfYPCH
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX6JaOKD7Osj5Z
+ WphsJCT790lPVqk3awklhPYji+1IBmx41292pqq2Rr+tw1ycxRc/ibTwbxE9QwSD1XyWN6faRSw
+ T5aFiFlq/9HDaisjqcEEK9PQx9KWEm8=
+X-Authority-Analysis: v=2.4 cv=I/lVgtgg c=1 sm=1 tr=0 ts=6a39e1c3 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
  a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8 a=JOin0LfSZetdA_WGo5gA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX8Ewd/pUu6BzD
- I8l/cM2JvbvBbmo8M3iiC78ERRv4U2Fv/AZm156t1kNpuXR+ex7vTQZbPOOdbCOvOhKZEsdMNWy
- ggGq8ZCLhqvipMj2Laf8sAJ1fi/X924guTWG3jREF/UbTEiupLffxWXb0Yar63zLJqkR1zBrFMR
- XN3dnZWfKpGf/rx84hoZxuwHee4Ppvbx1llKMziqaT281N9UDvay5SWnueI+9YIBsaiISMB+EmX
- vB+6TNaL90ucZBPDAaEiG85TffpW/Dq0XCD0fV4jWBEtf144/x0/d5noTrA/wjzbVEgsrRFF348
- 7mbNEjYYJrzYS5LuE5QjwBbguxIi+vfXrEQ+LamaakJSWh/NNGkpUCw8loMoEOxgMl3xIO6S2TC
- rgKa+RUlQ3tSXpgKec0pogbxxMpA2zMwD8QKM+ffH79GgO32T48jTvFiC0dJOlC+kfDC8xf8Uf/
- Re3sbCbi7HxXrOycYbQ==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX1kvf1CMfef+X
- GkqfB6JhJcGdhgiufsW3VpctbV4U98NZZHzlayePv9JO7+Mdm4sHpsbw/q+5TQRT6qDM/1i35t9
- CyBkbNA+opHM7m+4kwe/ix8Vpzk8QNo=
+ a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8 a=8nQLSy0VjsAO8uj2oxoA:9
+X-Proofpoint-ORIG-GUID: pR16KDs9nFBGHhI9m1N6vOGE3amfYPCH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
  definitions=2026-06-23_01,2026-06-22_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0 spamscore=0
- clxscore=1015 suspectscore=0 impostorscore=0 phishscore=0 bulkscore=0
+ lowpriorityscore=0 spamscore=0 phishscore=0 clxscore=1015 priorityscore=1501
+ adultscore=0 impostorscore=0 bulkscore=0 suspectscore=0 malwarescore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606230008
 X-Rspamd-Action: no action
@@ -121,13 +121,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25127-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25123-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:james.bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-kernel@vger.kernel.org,m:brking@linux.ibm.com,m:davemarq@linux.ibm.com,m:tyreld@linux.ibm.com,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[tyreld@linux.ibm.com,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -139,275 +139,77 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[8];
 	ALIAS_RESOLVED(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,linux.ibm.com:mid,linux.ibm.com:from_mime,vger.kernel.org:from_smtp];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,vger.kernel.org:from_smtp];
 	DKIM_TRACE(0.00)[ibm.com:+];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	RCVD_COUNT_SEVEN(0.00)[11]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 4C6536B3364
+X-Rspamd-Queue-Id: 83DD46B3342
 
-Rename ibmvfc.c to ibmvfc-core.c as first step in decoupling each
-protocol from the core driver logic. Add ibmvfc-nvme.[ch] files, and
-register an nvme_fc_port_template with empty callback stubs.
+Initialize the host's NVMe channel-group state during probe.
 
-Add empty registration functions definitions for local and remote ports.
+Set up the NVMe channel list head, desired queue count, maximum queue
+count, protocol identifier, and enablement state alongside the existing
+SCSI channel-group initialization in ibmvfc_probe().
 
-No functional NVMe/FC support is added yet.
+This prepares the driver with a NVMe/FC channel group that can will be
+used by later patches for NVMe queue allocation, discovery buffers,
+target management, and IO submission.
 
 Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
 ---
- drivers/scsi/ibmvscsi/Makefile                |  2 +
- .../scsi/ibmvscsi/{ibmvfc.c => ibmvfc-core.c} | 19 +++-
- drivers/scsi/ibmvscsi/ibmvfc-nvme.c           | 87 +++++++++++++++++++
- drivers/scsi/ibmvscsi/ibmvfc-nvme.h           | 32 +++++++
- drivers/scsi/ibmvscsi/ibmvfc.h                | 10 ++-
- 5 files changed, 146 insertions(+), 4 deletions(-)
- rename drivers/scsi/ibmvscsi/{ibmvfc.c => ibmvfc-core.c} (99%)
- create mode 100644 drivers/scsi/ibmvscsi/ibmvfc-nvme.c
- create mode 100644 drivers/scsi/ibmvscsi/ibmvfc-nvme.h
+ drivers/scsi/ibmvscsi/ibmvfc-core.c | 8 +++++++-
+ drivers/scsi/ibmvscsi/ibmvfc.h      | 1 +
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ibmvscsi/Makefile b/drivers/scsi/ibmvscsi/Makefile
-index 5eb1cb1a0028..9408c7f4cdee 100644
---- a/drivers/scsi/ibmvscsi/Makefile
-+++ b/drivers/scsi/ibmvscsi/Makefile
-@@ -1,3 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+ibmvfc-objs := ibmvfc-core.o ibmvfc-nvme.o
-+
- obj-$(CONFIG_SCSI_IBMVSCSI)	+= ibmvscsi.o
- obj-$(CONFIG_SCSI_IBMVFC)	+= ibmvfc.o
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc-core.c
-similarity index 99%
-rename from drivers/scsi/ibmvscsi/ibmvfc.c
-rename to drivers/scsi/ibmvscsi/ibmvfc-core.c
-index 912901436442..4e45d23221d6 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
+diff --git a/drivers/scsi/ibmvscsi/ibmvfc-core.c b/drivers/scsi/ibmvscsi/ibmvfc-core.c
+index 4e45d23221d6..5732ccf2ac1c 100644
+--- a/drivers/scsi/ibmvscsi/ibmvfc-core.c
 +++ b/drivers/scsi/ibmvscsi/ibmvfc-core.c
-@@ -1,10 +1,11 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+
- /*
-  * ibmvfc.c -- driver for IBM Power Virtual Fibre Channel Adapter
-  *
-  * Written By: Brian King <brking@linux.vnet.ibm.com>, IBM Corporation
-  *
-- * Copyright (C) IBM Corporation, 2008
-+ * Copyright (C) IBM Corporation, 2008-2026
-  */
+@@ -6337,7 +6337,8 @@ static int ibmvfc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
+ 	struct device *dev = &vdev->dev;
+ 	int rc = -ENOMEM;
+ 	unsigned int online_cpus = num_online_cpus();
+-	unsigned int max_scsi_queues = min((unsigned int)IBMVFC_MAX_SCSI_QUEUES, online_cpus);
++	unsigned int max_scsi_queues = min_t(unsigned int, IBMVFC_MAX_SCSI_QUEUES, online_cpus);
++	unsigned int max_nvme_queues = min_t(unsigned int, IBMVFC_MAX_NVME_QUEUES, online_cpus);
  
- #include <linux/module.h>
-@@ -46,6 +47,9 @@ static unsigned int cls3_error = IBMVFC_CLS3_ERROR;
- static unsigned int mq_enabled = IBMVFC_MQ;
- static unsigned int nr_scsi_hw_queues = IBMVFC_SCSI_HW_QUEUES;
- static unsigned int nr_scsi_channels = IBMVFC_SCSI_CHANNELS;
-+static unsigned int nvme_enabled = IBMVFC_NVME;
-+static unsigned int nr_nvme_hw_queues = IBMVFC_NVME_HW_QUEUES;
-+static unsigned int nr_nvme_channels = IBMVFC_NVME_CHANNELS;
- static unsigned int mig_channels_only = IBMVFC_MIG_NO_SUB_TO_CRQ;
- static unsigned int mig_no_less_channels = IBMVFC_MIG_NO_N_TO_M;
+ 	ENTER;
+ 	shost = scsi_host_alloc(&driver_template, sizeof(*vhost));
+@@ -6357,6 +6358,7 @@ static int ibmvfc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
  
-@@ -74,6 +78,16 @@ module_param_named(mig_no_less_channels, mig_no_less_channels, uint, S_IRUGO);
- MODULE_PARM_DESC(mig_no_less_channels, "Prevent migration to system with less channels. "
- 		 "[Default=" __stringify(IBMVFC_MIG_NO_N_TO_M) "]");
+ 	vhost = shost_priv(shost);
+ 	INIT_LIST_HEAD(&vhost->scsi_scrqs.targets);
++	INIT_LIST_HEAD(&vhost->nvme_scrqs.targets);
+ 	INIT_LIST_HEAD(&vhost->purge);
+ 	sprintf(vhost->name, IBMVFC_NAME);
+ 	vhost->host = shost;
+@@ -6371,6 +6373,10 @@ static int ibmvfc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
+ 	vhost->scsi_scrqs.protocol = IBMVFC_PROTO_SCSI;
+ 	vhost->using_channels = 0;
+ 	vhost->do_enquiry = 1;
++	vhost->nvme_enabled = mq_enabled ? nvme_enabled : 0;
++	vhost->nvme_scrqs.desired_queues = min(max_nvme_queues, nr_nvme_channels);
++	vhost->nvme_scrqs.max_queues = max_nvme_queues;
++	vhost->nvme_scrqs.protocol = IBMVFC_PROTO_NVME;
+ 	vhost->scan_timeout = 0;
  
-+module_param_named(nvme, nvme_enabled, uint, S_IRUGO);
-+MODULE_PARM_DESC(nvme, "Enable NVMe over FC support. "
-+		 "[Default=" __stringify(IBMVFC_NVME) "]");
-+module_param_named(nvme_host_queues, nr_nvme_hw_queues, uint, S_IRUGO);
-+MODULE_PARM_DESC(nvme_host_queues, "Number of NVMeoF Host submission queues. "
-+		 "[Default=" __stringify(IBMVFC_NVME_HW_QUEUES) "]");
-+module_param_named(nvme_hw_channels, nr_nvme_channels, uint, S_IRUGO);
-+MODULE_PARM_DESC(nvme_hw_channels, "Number of hw NVMeoF channels to request. "
-+		 "[Default=" __stringify(IBMVFC_NVME_CHANNELS) "]");
-+
- module_param_named(init_timeout, init_timeout, uint, S_IRUGO | S_IWUSR);
- MODULE_PARM_DESC(init_timeout, "Initialization timeout in seconds. "
- 		 "[Default=" __stringify(IBMVFC_INIT_TIMEOUT) "]");
-@@ -468,6 +482,7 @@ static const struct {
- 	{ IBMVFC_FABRIC_BUSY, "fabric busy" },
- 	{ IBMVFC_PORT_BUSY, "port busy" },
- 	{ IBMVFC_BASIC_REJECT, "basic reject" },
-+	{ IBMVFC_FC4_LS_REJECT, "fc4 ls reject" },
- };
- 
- static const char *unknown_fc_type = "unknown fc type";
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc-nvme.c b/drivers/scsi/ibmvscsi/ibmvfc-nvme.c
-new file mode 100644
-index 000000000000..4a66cde8a8d2
---- /dev/null
-+++ b/drivers/scsi/ibmvscsi/ibmvfc-nvme.c
-@@ -0,0 +1,87 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+
-+/*
-+ * ibmvfc-nvme.c -- IBM Power Virtual Fibre Channel NVMeoF HBA driver
-+ *
-+ * Written By: Tyrel Datwyler <tyreld@linux.ibm.com>, IBM Corporation
-+ *
-+ * Copyright (C) IBM Corporation, 2026
-+ */
-+
-+#include <scsi/scsi_transport_fc.h>
-+
-+#include "ibmvfc-nvme.h"
-+
-+static void ibmvfc_nvme_localport_delete(struct nvme_fc_local_port *lport)
-+{
-+}
-+
-+static void ibmvfc_nvme_remoteport_delete(struct nvme_fc_remote_port *rport)
-+{
-+}
-+
-+static int ibmvfc_nvme_ls_req(struct nvme_fc_local_port *lport,
-+			      struct nvme_fc_remote_port *rport,
-+			      struct nvmefc_ls_req *ls_req)
-+{
-+	return 0;
-+}
-+
-+static void ibmvfc_nvme_ls_abort(struct nvme_fc_local_port *lport,
-+				struct nvme_fc_remote_port *rport,
-+				struct nvmefc_ls_req *ls_abort)
-+{
-+}
-+
-+static int ibmvfc_nvme_fcp_io(struct nvme_fc_local_port *lport,
-+			      struct nvme_fc_remote_port *rport,
-+			      void *hw_queue_handle,
-+			      struct nvmefc_fcp_req *fcp_req)
-+{
-+	return 0;
-+}
-+
-+static void ibmvfc_nvme_fcp_abort(struct nvme_fc_local_port *lport,
-+				  struct nvme_fc_remote_port *rport,
-+				  void *hw_queue_handle,
-+				  struct nvmefc_fcp_req *abort_req)
-+{
-+}
-+
-+static struct nvme_fc_port_template ibmvfc_nvme_fc_transport = {
-+	.localport_delete	= ibmvfc_nvme_localport_delete,
-+	.remoteport_delete	= ibmvfc_nvme_remoteport_delete,
-+	.create_queue		= NULL,
-+	.delete_queue		= NULL,
-+	.ls_req			= ibmvfc_nvme_ls_req,
-+	.ls_abort		= ibmvfc_nvme_ls_abort,
-+	.fcp_io			= ibmvfc_nvme_fcp_io,
-+	.fcp_abort		= ibmvfc_nvme_fcp_abort,
-+	.map_queues		= NULL,
-+	.max_hw_queues		= IBMVFC_NVME_HW_QUEUES,
-+	.max_sgl_segments	= 1024,
-+	.max_dif_sgl_segments	= 64,
-+	.dma_boundary		= 0xFFFFFFFF,
-+	.local_priv_sz		= sizeof(struct ibmvfc_host *),
-+	.remote_priv_sz		= sizeof(struct ibmvfc_target *),
-+	.lsrqst_priv_sz		= sizeof(struct ibmvfc_event *),
-+	.fcprqst_priv_sz	= sizeof(struct ibmvfc_event *),
-+};
-+
-+int ibmvfc_nvme_register_remoteport(struct ibmvfc_target *tgt)
-+{
-+	return 0;
-+}
-+
-+void ibmvfc_nvme_unregister_remoteport(struct ibmvfc_target *tgt)
-+{
-+}
-+
-+int ibmvfc_nvme_register(struct ibmvfc_host *vhost)
-+{
-+	return 0;
-+}
-+
-+void ibmvfc_nvme_unregister(struct ibmvfc_host *vhost)
-+{
-+}
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc-nvme.h b/drivers/scsi/ibmvscsi/ibmvfc-nvme.h
-new file mode 100644
-index 000000000000..97e267871df2
---- /dev/null
-+++ b/drivers/scsi/ibmvscsi/ibmvfc-nvme.h
-@@ -0,0 +1,32 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+
-+/*
-+ * ibmvfc-nvme.h -- IBM Power Virtual Fibre Channel NVMeoF HBA driver
-+ *
-+ * Written By: Tyrel Datwyler <tyreld@linux.ibm.com>, IBM Corporation
-+ *
-+ * Copyright (C) IBM Corporation, 2026
-+ */
-+
-+#ifndef _IBMVFC_NVME_H
-+#define _IBMVFC_NVME_H
-+
-+#include <uapi/scsi/fc/fc_fs.h>
-+#include <uapi/scsi/fc/fc_els.h>
-+#include <linux/nvme-fc-driver.h>
-+
-+#include "ibmvfc.h"
-+
-+#define IBMVFC_NVME		0
-+#define IBMVFC_NVME_HW_QUEUES	8
-+#define IBMVFC_MAX_NVME_QUEUES	16
-+#define IBMVFC_NVME_CHANNELS	8
-+
-+struct ibmvfc_host;
-+struct ibmvfc_target;
-+
-+int ibmvfc_nvme_register_remoteport(struct ibmvfc_target *tgt);
-+void ibmvfc_nvme_unregister_remoteport(struct ibmvfc_target *tgt);
-+int ibmvfc_nvme_register(struct ibmvfc_host *vhost);
-+void ibmvfc_nvme_unregister(struct ibmvfc_host *vhost);
-+#endif
+ 	strcpy(vhost->partition_name, "UNKNOWN");
 diff --git a/drivers/scsi/ibmvscsi/ibmvfc.h b/drivers/scsi/ibmvscsi/ibmvfc.h
-index f8a2bf92da41..f137b61ce422 100644
+index f137b61ce422..01c49d81b135 100644
 --- a/drivers/scsi/ibmvscsi/ibmvfc.h
 +++ b/drivers/scsi/ibmvscsi/ibmvfc.h
-@@ -1,22 +1,27 @@
- /* SPDX-License-Identifier: GPL-2.0-or-later */
-+
- /*
-  * ibmvfc.h -- driver for IBM Power Virtual Fibre Channel Adapter
-  *
-  * Written By: Brian King <brking@linux.vnet.ibm.com>, IBM Corporation
-  *
-- * Copyright (C) IBM Corporation, 2008
-+ * Copyright (C) IBM Corporation, 2008-2026
-  */
- 
- #ifndef _IBMVFC_H
- #define _IBMVFC_H
- 
-+#include <linux/interrupt.h>
- #include <linux/list.h>
- #include <linux/types.h>
-+#include <scsi/scsi_device.h>
- #include <scsi/viosrp.h>
- #include <linux/nvme.h>
- #include <linux/nvme-fc.h>
- 
--#define IBMVFC_NAME	"ibmvfc"
-+#include "ibmvfc-nvme.h"
-+
-+#define IBMVFC_NAME			"ibmvfc"
- #define IBMVFC_DRIVER_VERSION		"1.0.11"
- #define IBMVFC_DRIVER_DATE		"(April 12, 2013)"
- 
-@@ -984,6 +989,7 @@ struct ibmvfc_host {
- 	unsigned int mq_enabled:1;
- 	unsigned int using_channels:1;
- 	unsigned int do_enquiry:1;
-+	unsigned int nvme_enabled:1;
- 	unsigned int aborting_passthru:1;
- 	unsigned int scan_complete:1;
- 	int scan_timeout;
+@@ -970,6 +970,7 @@ struct ibmvfc_host {
+ 	struct ibmvfc_queue crq;
+ 	struct ibmvfc_queue async_crq;
+ 	struct ibmvfc_channels scsi_scrqs;
++	struct ibmvfc_channels nvme_scrqs;
+ 	struct ibmvfc_npiv_login login_info;
+ 	union ibmvfc_npiv_login_data *login_buf;
+ 	dma_addr_t login_buf_dma;
 -- 
 2.54.0
 
