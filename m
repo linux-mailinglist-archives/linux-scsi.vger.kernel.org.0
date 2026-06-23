@@ -1,83 +1,83 @@
-Return-Path: <linux-scsi+bounces-25123-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25126-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id xNNZEATiOWpTygcAu9opvQ
-	(envelope-from <linux-scsi+bounces-25123-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:31:48 +0200
+	id rBZAOg7iOWpXygcAu9opvQ
+	(envelope-from <linux-scsi+bounces-25126-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:31:58 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83DD46B3342
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:31:47 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BA4F6B3353
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:31:58 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=ibm.com header.s=pp1 header.b=Y6RyKP4S;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25123-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25123-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=ibm.com header.s=pp1 header.b=neHP3imE;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25126-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25126-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=ibm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id A7FAE301E441
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 01:30:59 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 93429303DD15
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 01:31:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C8A640D59E;
-	Tue, 23 Jun 2026 01:30:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 449F2368D6B;
+	Tue, 23 Jun 2026 01:30:56 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF3F374A1E;
-	Tue, 23 Jun 2026 01:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B668038654F;
+	Tue, 23 Jun 2026 01:30:54 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782178252; cv=none; b=epu0fGKLoktGiNH1M9glxGuoIfwUW3OvQCQs6yA5925c8Wb8Dk0+n7wEJpqdS7yXfvzrMcZZgwMmrMbV0hJJVNxs5WIYlyQ6beOGsmJa7ziDsUuLmBOzAFXGzfcaJQfhm7HpS7bV3CI9zfF+qDE6DQzrOdq67tSSFvU+DhtYOfU=
+	t=1782178256; cv=none; b=NRCPFOJvYW3SIK3cE04+sbRST21aRYGaglfo4VMRQxWXnIT61V9Y2peW8qwWiYDFQ9HcP5AfTGU314raGFv1cuK5jxaYeVdCXPzitP9krcDFdNMwTIguetqyqvc+CJIomThAseVgm0KRj0X2o7evQnuPesgJxP03133fQptLlro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782178252; c=relaxed/simple;
-	bh=Ju4krXW/VIos3oN+qLVFD690ZZAEj7DHosyXYVoCqUQ=;
+	s=arc-20240116; t=1782178256; c=relaxed/simple;
+	bh=2SGKgSheeK9aRHaBOvQTGaTFjHGClYMceZbZT/DPh64=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b9DjmK+yk7i0tIrSfMR/3OC9Ps394o4x2m3aDV9+NHE31gBWet7THjwns8yanLWn1QDR4sb3CUUuqlXN2zXvWG3ndBtU/Vvq085c05Ekmuei7LBastipKLhL/ut3uDEh3Anoa/FtctalF4eDcMJkCoYSIfvgnMNSVa80iCrRDiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Y6RyKP4S; arc=none smtp.client-ip=148.163.158.5
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65N0o1e9285650;
+	 MIME-Version; b=e2lcTD15BasrNTST46rNShukto1z5grjie+dvFtx0jFmEl3KLzOCjK2Mc5z/p1L/vgUa54KuPtSJ1iXT4ORn4oLMFEk4zlZasXC+kes6FiTDfHyE3/PDqXvUXF0JjNoSxS2rqD8EMhIhCLCdapanaSSYzJLjUvDhLbaCxif4K1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=neHP3imE; arc=none smtp.client-ip=148.163.156.1
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65N0mWiM352267;
 	Tue, 23 Jun 2026 01:30:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=6lLsqN/UhBrZOIi5s
-	Cv/yHBP4d0V1W51fQgXiym8rIs=; b=Y6RyKP4SnYU9vRWyjaaB0t9VC8tFdA/TK
-	zpeLHpGDn/tdR7CAaZL2x5ktMiD1glmZ/ROHB92Weuuc4ty01cG0USxp0ok0yZxo
-	6KvMWJNz22LWdhJpIM59W4W5sUhS4frSczj0Ehep8OMbn63WXJanU066GOr0ukr9
-	QwlXrBCd0SzAbmcHrZRod2PcVaSXtMtu5pHayQYFOW6ye2d8Q+CvoF2xQ7eVNZwU
-	fpsYQVwPSDMpjc52anlxDM7YqJ+xZS/LxxuG0b41rRmOqZzkfSeaTEhVtTk2/dbt
-	eq+3B4HC9LuVTzC0+uG/EFiFdwlL0L7CsnXmovdovChZXBRl3aUww==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ewjgskyrg-1
+	:mime-version:references:subject:to; s=pp1; bh=dWdOR6SjPiKPB+qlr
+	wnAppjU67YuTiYgrIDiwzd6Ne8=; b=neHP3imEDe4YWM02IkrexbxWPOJCjeF8n
+	d5z53jX4LUP832IZCCNg6hpWGjVlx+Pd3muwJHOitiJ5y80WXkxhKt4DUN/Ze1xp
+	tNWbScHPtMCtbbLmzHd5QK6dKEwMZMbSmGH1kZvgKRfIGKNVIfg1yV1b9unM7YMY
+	Yop99H64SmaRCcy0kHYCSMObQn1/iBoLJ9Pb99RHRMwj7wpguqn+VrmSvRr7+poO
+	3fFXytBQMpKuzpo0LSKPw7YPpqpkx7VxUhrOU2fQ8FEeMLcI3K139ixNr2AdGs3W
+	POTllp5nvmMAmI4zu7eydh6eK5KFDNzTf2YOtMo2BkuenfddNxQHQ==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ewjk4c37s-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 23 Jun 2026 01:30:43 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65N1K2rI026922;
+	Tue, 23 Jun 2026 01:30:44 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65N1JgeB018382;
 	Tue, 23 Jun 2026 01:30:43 GMT
 Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ex7dg0qvs-1
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ex7vygn31-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 23 Jun 2026 01:30:42 +0000 (GMT)
+	Tue, 23 Jun 2026 01:30:43 +0000 (GMT)
 Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65N1UfL17602716
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65N1UfNQ21758650
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 23 Jun 2026 01:30:41 GMT
+	Tue, 23 Jun 2026 01:30:42 GMT
 Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 02AFE58066;
+	by IMSVA (Postfix) with ESMTP id D702D58052;
 	Tue, 23 Jun 2026 01:30:41 +0000 (GMT)
 Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 70C905806B;
-	Tue, 23 Jun 2026 01:30:40 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 28ED658065;
+	Tue, 23 Jun 2026 01:30:41 +0000 (GMT)
 Received: from li-4c4c4544-0054-3910-8039-c3c04f423534.ibm.com.com (unknown [9.61.188.206])
 	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 23 Jun 2026 01:30:40 +0000 (GMT)
+	Tue, 23 Jun 2026 01:30:41 +0000 (GMT)
 From: Tyrel Datwyler <tyreld@linux.ibm.com>
 To: james.bottomley@hansenpartnership.com, martin.petersen@oracle.com
 Cc: linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org, brking@linux.ibm.com,
         davemarq@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH 04/29] ibmvfc: initialize NVMe channel configuration during driver probe
-Date: Mon, 22 Jun 2026 18:30:10 -0700
-Message-ID: <20260623013035.3436640-5-tyreld@linux.ibm.com>
+Subject: [PATCH 05/29] ibmvfc: alloc/dealloc sub-queues for nvme channels
+Date: Mon, 22 Jun 2026 18:30:11 -0700
+Message-ID: <20260623013035.3436640-6-tyreld@linux.ibm.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260623013035.3436640-1-tyreld@linux.ibm.com>
 References: <20260623013035.3436640-1-tyreld@linux.ibm.com>
@@ -89,29 +89,29 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX6P8L1ulkeoP7
- velCXDDOqDRAY9iXCdYuDO21LpPIY3F8DfgJlmZd86+ejZg4UpR8wbZZBYAUT3w2QJX+esVOlP+
- eIJ7gf9ItcYUSBgByoDkUJ1eAhV6akVT6yd1UPt+DbtjQCLbl7PJHoPQmSvY4yAh3RyhTik3QAv
- Hx9jry1vUhr0FdDDcw9mXouc39jm8inSJuRKrnstA7iOET7/shEWzRl7FjaszWaw23qiuwEJrLM
- uFJdaygfUn50dUCj2Zm9u/QAr9TGGV34JDI7Mwzz7DYxp9if1cZXGienmF5qFXtltU1paVmZi6S
- Sz0+behFb0xi14wFvaqBxn7KSCkBLJv19FHXSBQPrpjIOtCNtFTGgQNWElXu7crZ4KYGeNKEkT0
- h6Wl+x7jJNiNYC3jWcDRummkH+WdV795+R0RrpdClywG+2hbJJ8ksmC+Iy7DNnxGT6N8rb++Uht
- r4jnCxBBlQ37RFSjEXw==
-X-Proofpoint-GUID: pR16KDs9nFBGHhI9m1N6vOGE3amfYPCH
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX6JaOKD7Osj5Z
- WphsJCT790lPVqk3awklhPYji+1IBmx41292pqq2Rr+tw1ycxRc/ibTwbxE9QwSD1XyWN6faRSw
- T5aFiFlq/9HDaisjqcEEK9PQx9KWEm8=
-X-Authority-Analysis: v=2.4 cv=I/lVgtgg c=1 sm=1 tr=0 ts=6a39e1c3 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX0uWul0rJFfhn
+ KD23ja/DMc4PQFVW3ZLQ6puNOoVW+9pfiD0p6s3EAiXPvB6CkdQZv0vjZI59XdWEMfcSP+LN0Yh
+ zSSd8iCllg1bj+azCC6uSwjrOi//jlg=
+X-Proofpoint-ORIG-GUID: e2xB8DCaSys9fmVdozT0A2izOYWS6uAt
+X-Authority-Analysis: v=2.4 cv=Oph/DS/t c=1 sm=1 tr=0 ts=6a39e1c4 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
  a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8 a=8nQLSy0VjsAO8uj2oxoA:9
-X-Proofpoint-ORIG-GUID: pR16KDs9nFBGHhI9m1N6vOGE3amfYPCH
+ a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8 a=7MaZqFay8etFDbkFh6wA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX+9I2iCIth+/C
+ 507VxPc92Q6C2cfSZtiIPqUFxrINpXg4LfwgNS49YpUAzSUwNcwmr18JUo2HZzHvfK4E40zs2ef
+ Dn/83lyDEOVPvLkk1j2RBRlhrV3kevQtFS5tj9MoRbZZyJN7IkCJgJYbstCUUuI5W1KB+hNZIxq
+ uRO8ylY+hHYbWo/g35gCPP0Dtx0M2K6YFhei5yyJVAYzPhPkdcICYWfW5Wf4l3tQ3sH+foM1riU
+ 1/8CsloRtDK/aKkYwlOWiwFRQJ3/jph1TNV/jrPBUC6QfWCKtvDr3tbbIf7MuNyHHWxhRQMYhdX
+ vtxQY9uwR9YxIXwvAFBF8vvDpzOxebZutQXo2lX+R7V1E8aiuWXX1ACzWoqeXo+i3TslX6qLIpy
+ y8YIVq97mvCtxqX55BT8v5mzEn1Q7KUKgyq6RKasdpVKQLhGvYJy5wrsgnPEMrcBB1jjTahVspS
+ hTtzrULwEehLHhq1lYA==
+X-Proofpoint-GUID: e2xB8DCaSys9fmVdozT0A2izOYWS6uAt
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
  definitions=2026-06-23_01,2026-06-22_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 spamscore=0 phishscore=0 clxscore=1015 priorityscore=1501
- adultscore=0 impostorscore=0 bulkscore=0 suspectscore=0 malwarescore=0
+ phishscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 priorityscore=1501
+ clxscore=1015 impostorscore=0 malwarescore=0 adultscore=0 suspectscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606230008
 X-Rspamd-Action: no action
@@ -121,13 +121,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25123-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25126-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:james.bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-kernel@vger.kernel.org,m:brking@linux.ibm.com,m:davemarq@linux.ibm.com,m:tyreld@linux.ibm.com,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[tyreld@linux.ibm.com,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -139,77 +139,94 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[8];
 	ALIAS_RESOLVED(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,vger.kernel.org:from_smtp];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,linux.ibm.com:mid,linux.ibm.com:from_mime,vger.kernel.org:from_smtp];
 	DKIM_TRACE(0.00)[ibm.com:+];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	RCVD_COUNT_SEVEN(0.00)[11]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 83DD46B3342
+X-Rspamd-Queue-Id: 9BA4F6B3353
 
-Initialize the host's NVMe channel-group state during probe.
+Allocate, register, deregister, and release NVMe subordinate CRQs
+alongside the existing SCSI sub-CRQs.
 
-Set up the NVMe channel list head, desired queue count, maximum queue
-count, protocol identifier, and enablement state alongside the existing
-SCSI channel-group initialization in ibmvfc_probe().
+Update the CRQ reset and re-enable paths to tear down and recreate NVMe
+sub-queues, extend sub-CRQ initialization to allocate NVMe channels when
+enabled, and release NVMe channel resources during adapter teardown.
 
-This prepares the driver with a NVMe/FC channel group that can will be
-used by later patches for NVMe queue allocation, discovery buffers,
-target management, and IO submission.
+This keeps the NVMe queue lifecycle aligned with the existing SCSI queue
+lifecycle so both protocols are reset consistently across probe, remove,
+and connection recovery.
 
 Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
 ---
- drivers/scsi/ibmvscsi/ibmvfc-core.c | 8 +++++++-
- drivers/scsi/ibmvscsi/ibmvfc.h      | 1 +
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ drivers/scsi/ibmvscsi/ibmvfc-core.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/ibmvscsi/ibmvfc-core.c b/drivers/scsi/ibmvscsi/ibmvfc-core.c
-index 4e45d23221d6..5732ccf2ac1c 100644
+index 5732ccf2ac1c..6f5e8b3cbfc8 100644
 --- a/drivers/scsi/ibmvscsi/ibmvfc-core.c
 +++ b/drivers/scsi/ibmvscsi/ibmvfc-core.c
-@@ -6337,7 +6337,8 @@ static int ibmvfc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
- 	struct device *dev = &vdev->dev;
- 	int rc = -ENOMEM;
- 	unsigned int online_cpus = num_online_cpus();
--	unsigned int max_scsi_queues = min((unsigned int)IBMVFC_MAX_SCSI_QUEUES, online_cpus);
-+	unsigned int max_scsi_queues = min_t(unsigned int, IBMVFC_MAX_SCSI_QUEUES, online_cpus);
-+	unsigned int max_nvme_queues = min_t(unsigned int, IBMVFC_MAX_NVME_QUEUES, online_cpus);
+@@ -945,6 +945,7 @@ static int ibmvfc_reenable_crq_queue(struct ibmvfc_host *vhost)
+ 	unsigned long flags;
  
- 	ENTER;
- 	shost = scsi_host_alloc(&driver_template, sizeof(*vhost));
-@@ -6357,6 +6358,7 @@ static int ibmvfc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
+ 	ibmvfc_dereg_sub_crqs(vhost, &vhost->scsi_scrqs);
++	ibmvfc_dereg_sub_crqs(vhost, &vhost->nvme_scrqs);
  
- 	vhost = shost_priv(shost);
- 	INIT_LIST_HEAD(&vhost->scsi_scrqs.targets);
-+	INIT_LIST_HEAD(&vhost->nvme_scrqs.targets);
- 	INIT_LIST_HEAD(&vhost->purge);
- 	sprintf(vhost->name, IBMVFC_NAME);
- 	vhost->host = shost;
-@@ -6371,6 +6373,10 @@ static int ibmvfc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
- 	vhost->scsi_scrqs.protocol = IBMVFC_PROTO_SCSI;
- 	vhost->using_channels = 0;
- 	vhost->do_enquiry = 1;
-+	vhost->nvme_enabled = mq_enabled ? nvme_enabled : 0;
-+	vhost->nvme_scrqs.desired_queues = min(max_nvme_queues, nr_nvme_channels);
-+	vhost->nvme_scrqs.max_queues = max_nvme_queues;
-+	vhost->nvme_scrqs.protocol = IBMVFC_PROTO_NVME;
- 	vhost->scan_timeout = 0;
+ 	/* Re-enable the CRQ */
+ 	do {
+@@ -964,6 +965,7 @@ static int ibmvfc_reenable_crq_queue(struct ibmvfc_host *vhost)
+ 	spin_unlock_irqrestore(vhost->host->host_lock, flags);
  
- 	strcpy(vhost->partition_name, "UNKNOWN");
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.h b/drivers/scsi/ibmvscsi/ibmvfc.h
-index f137b61ce422..01c49d81b135 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.h
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.h
-@@ -970,6 +970,7 @@ struct ibmvfc_host {
- 	struct ibmvfc_queue crq;
- 	struct ibmvfc_queue async_crq;
- 	struct ibmvfc_channels scsi_scrqs;
-+	struct ibmvfc_channels nvme_scrqs;
- 	struct ibmvfc_npiv_login login_info;
- 	union ibmvfc_npiv_login_data *login_buf;
- 	dma_addr_t login_buf_dma;
+ 	ibmvfc_reg_sub_crqs(vhost, &vhost->scsi_scrqs);
++	ibmvfc_reg_sub_crqs(vhost, &vhost->nvme_scrqs);
+ 
+ 	return rc;
+ }
+@@ -983,6 +985,7 @@ static int ibmvfc_reset_crq(struct ibmvfc_host *vhost)
+ 	struct ibmvfc_queue *crq = &vhost->crq;
+ 
+ 	ibmvfc_dereg_sub_crqs(vhost, &vhost->scsi_scrqs);
++	ibmvfc_dereg_sub_crqs(vhost, &vhost->nvme_scrqs);
+ 
+ 	/* Close the CRQ */
+ 	do {
+@@ -1016,6 +1019,7 @@ static int ibmvfc_reset_crq(struct ibmvfc_host *vhost)
+ 	spin_unlock_irqrestore(vhost->host->host_lock, flags);
+ 
+ 	ibmvfc_reg_sub_crqs(vhost, &vhost->scsi_scrqs);
++	ibmvfc_reg_sub_crqs(vhost, &vhost->nvme_scrqs);
+ 
+ 	return rc;
+ }
+@@ -6109,6 +6113,13 @@ static void ibmvfc_init_sub_crqs(struct ibmvfc_host *vhost)
+ 
+ 	ibmvfc_reg_sub_crqs(vhost, &vhost->scsi_scrqs);
+ 
++	if (vhost->nvme_enabled) {
++		if (ibmvfc_alloc_channels(vhost, &vhost->nvme_scrqs))
++			vhost->nvme_enabled = 0;
++		else
++			ibmvfc_reg_sub_crqs(vhost, &vhost->nvme_scrqs);
++	}
++
+ 	LEAVE;
+ }
+ 
+@@ -6137,8 +6148,10 @@ static void ibmvfc_release_sub_crqs(struct ibmvfc_host *vhost)
+ 		return;
+ 
+ 	ibmvfc_dereg_sub_crqs(vhost, &vhost->scsi_scrqs);
+-
+ 	ibmvfc_release_channels(vhost, &vhost->scsi_scrqs);
++
++	ibmvfc_dereg_sub_crqs(vhost, &vhost->nvme_scrqs);
++	ibmvfc_release_channels(vhost, &vhost->nvme_scrqs);
+ 	LEAVE;
+ }
+ 
 -- 
 2.54.0
 
