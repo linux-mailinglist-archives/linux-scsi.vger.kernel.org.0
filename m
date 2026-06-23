@@ -1,190 +1,277 @@
-Return-Path: <linux-scsi+bounces-25203-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25204-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id +vFiM216Omqr9wcAu9opvQ
-	(envelope-from <linux-scsi+bounces-25203-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 14:22:05 +0200
+	id aXZzB2CFOmq7+wcAu9opvQ
+	(envelope-from <linux-scsi+bounces-25204-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 15:08:48 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AEA96B7092
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 14:22:05 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F5A86B752E
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 15:08:47 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=KhFTRDHh;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25203-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25203-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=qualcomm.com header.s=qcppdkim1 header.b=nWGiDuI7;
+	dkim=pass header.d=oss.qualcomm.com header.s=google header.b=S2OWOIb5;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25204-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25204-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=reject) header.from=qualcomm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 345063041A0F
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 12:18:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 82058303B4D1
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 13:08:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2A803D45CF;
-	Tue, 23 Jun 2026 12:18:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 261132D3725;
+	Tue, 23 Jun 2026 13:08:44 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D6C3CF962
-	for <linux-scsi@vger.kernel.org>; Tue, 23 Jun 2026 12:18:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63749242D89
+	for <linux-scsi@vger.kernel.org>; Tue, 23 Jun 2026 13:08:39 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782217121; cv=none; b=DHGObkPsuk2kaB6lXluMi92UrjsULXHJR6KWR1Osn7jft9quYpohEpyGjmP9ErJZ+3akehqIDmMavOKJtnkzsyt/63j4wMSnQh9mRt7zKsoDgOxk0BUao70ek6kjPVBXdxWdnvCQiMfUM8Hxw1OmJJ2yO1O4n9eh0itZngHVgOs=
+	t=1782220123; cv=none; b=HH/3xUwiEJ5ck0QXgK2HWSLAxTq/KIgArpnIN83X2ESTo1FRdQaAu5kYAhJcvlpyy+eO3RhW9SPAU5/Cmaxuc95dZzr6j0lgIRPN52zo+LAL4sdIWbT/Xo/TCyuqZPSf9slDDZC2iTlXvAc2OTi36yyQCzgdWidTzeBORHjlAR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782217121; c=relaxed/simple;
-	bh=mImXQ1+6+lsVgc/M++SPUP4s6R7iuhG3GaN+BgJF4pw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=lKRrcuwsiE0QzVuJvSM4Y+Brdy+KHF20l45HP5RrMWjpkRzl+gQCP1A2bTdZihDArPAyrbX//TLq1fwsi4G4DMa86CRTqatytT18qjdPhZn1y4ZMW6Dji7n7KKxmG6bagXSxthmEk6KaR6k76WdbPNKXHNldFscI548nlB78vao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KhFTRDHh; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 300121F000E9;
-	Tue, 23 Jun 2026 12:18:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782217120;
-	bh=cX+H8RQowmdU6XU1xJKeZPLxeb49tCJu0cH5KvOEm/o=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KhFTRDHhKC4U3D56xIFf31eib3jEQDUAuzqCIaq62ooJRFi9BatohmCxTtmmXw58R
-	 1V7EfTJJ3VIL7UjqZwf6+CE8RZlBGblFQwcGDireWMIbrNfFIYUzdoj8OwQ9TCqnPv
-	 OxNKXkydkQ8wq++nbTR7XfeQxuCte8u//xlL4c9AxVI0/vuWDEG6RR7BvAUfF+l1bV
-	 LB/PqC6xYr9v4S1QqBWwV5FhxLs7K5xiB/k93U48t/+Q9g/1YxRow0M8nOxka80MHw
-	 kESGrmKHFFadf6MgTbE54e69cpalLDWlBW2LzZkgOTyhDwyK8VpyC+j8JXt8sIok2F
-	 9nvEGmlguA5Mw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] scsi: ufs: core: Fix UFS RPMB device teardown order
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ao Sun" <ao.sun@transsion.com>
-Cc: linux-scsi@vger.kernel.org
-In-Reply-To: <20260623120440.13883-1-ao.sun@transsion.com>
-References: <20260623120440.13883-1-ao.sun@transsion.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 23 Jun 2026 12:18:39 +0000
-Message-Id: <20260623121840.300121F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1782220123; c=relaxed/simple;
+	bh=dX3M0lxFvDhCVyZaJikvZU/6GknByqMsbJzElYPQrBo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hFMNR/KsOpyTvEqFoUpzWKOHj9XzPBxmZ0d0UeJdhz/FE0a7Y99Z41v0JpreMmG8Lt++UADX0tHci3puON5aSAz202R+ddz/y9mZVEkN3i8gnZIrO5BMBCXijBY8IV7j4QRauPfTJD7onAhb3qXUH12rOYNm1aniZ45zpxZMfMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nWGiDuI7; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=S2OWOIb5; arc=none smtp.client-ip=205.220.180.131
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65NBZN1S4017407
+	for <linux-scsi@vger.kernel.org>; Tue, 23 Jun 2026 13:08:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	kq3/D/BC/RvOm7IrhRgaq8LAkg0fMyEGRtGKjug4xjU=; b=nWGiDuI7hd3h1Nh2
+	sxaEBVJy8ctBKiiuBV9D5MC0Io66Xnz2xV7kbS8yEW/t8cgvqt5+p1au4bDfBuNa
+	O2IoDpUk5DiZXOc+9Dk5WvRdfX3jf8hHpSfbNqbCPkYvmJCekvjrYCERCgVfTius
+	ZV4ulqiLMPXyDFWS923F/IBLHvTQkPkcSEZGYYWs05jPejAlAAZHFzTGhykPVgmS
+	kRUVwhITGmJia/1Lb4lSmqDC9zLq6WlkdXlewUtzW0M4hZU3WeLfep44bbeYCqlu
+	KsBQfv1TlNK2oRQISW3MQHXjf4aCWnuBC6eLmxbTqG9QJVNA6NV9jb6bRWM6+FpS
+	idZ39Q==
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4eygkjjcxd-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-scsi@vger.kernel.org>; Tue, 23 Jun 2026 13:08:38 +0000 (GMT)
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8423f3e4728so3611285b3a.2
+        for <linux-scsi@vger.kernel.org>; Tue, 23 Jun 2026 06:08:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1782220117; x=1782824917; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kq3/D/BC/RvOm7IrhRgaq8LAkg0fMyEGRtGKjug4xjU=;
+        b=S2OWOIb5VQqJ8RhOLmiYZgzSFKmIP61wYOvHK/vdQ63RFYuq6bZ4iK/7qOsEJoWcsG
+         ZQyQ2SdmZUAy7md/Q0FwirFOovy/2HEsOLfUL+pIFnNYJ24ZoFsVqwJo3w87vgj4XHdN
+         azafZjakBY9lkkyKk8zH0dUJDgtgaJ38BRaQ7KOCAgTYtgZewyVHaHCE1gJ3rkPB3Kw0
+         bLhhI4wstYo3KI1tfJcXn1sCGzjEOcP+LzOWXipLi9rXD/u1HSQLzf2QVIVVwG+ZV/37
+         P0WTefh18apwn0Bq2sJqJiQOhcw271+s0gswQqX+eXQBRrAd9+vpVdbcKuVZ24Biz3Nt
+         uZOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782220117; x=1782824917;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kq3/D/BC/RvOm7IrhRgaq8LAkg0fMyEGRtGKjug4xjU=;
+        b=JMkw18jGorC0xttStLlOCM38DYIQDLagN8pD6ByVXhOeZbxWqQhSw3zIKca30wpI8a
+         KRNjiNj64AetmYon/20PGeuntmB5RbzSVyt6igyFwXHI/NQqeWfC4EC2g96lyKlz3f/o
+         HrIQ0ViW9TThXyZa8oYkAoZiKK287YOWPmTpu9hQx8O1ZMzt1xUK26eCKoZijYeT5D1F
+         D8Dk0/RI9fDQoGjaPPR6r7D+MMb29QyOIb6PT51sMLtvksW9Dtj7smsHsXrqUq0d5G2y
+         acNi8wx2GEcVdU91xfE/hYV9kUFphJM/Iukp539V/Wmyy2UNBSJzngkecbF+6kR4kZs1
+         F02A==
+X-Gm-Message-State: AOJu0YxQwoo0Ya31evFpUp8Tri+M+EZVW5eLED4BvbRuWYaE82SgSIql
+	za8M5JfTMnTD4LgFajrc8i9lqBMS5NzoaXVsCqmAiB04JTvdKaKvqDnIz+qLXupnMI3QLh4fOSy
+	XKVr7hpTZVKI+o7s0LesZEKQcU4joHM7/Hulpa4pnsgZGhnrDa6nG/Fmu+89p5duBX7rRyJZf
+X-Gm-Gg: AfdE7cnY1vE7rt4JpA6sMxwx5zhkmfavEySQaT7lY0EkQ7/lP14pJILoXWum9sR9b9+
+	jyd4blz9nELhVFmAejPRm6kCusekeUwAbHKHM0exRE8uLRE+FASBojGt18uxHhSb5l1Wih99Ea0
+	G7OPJaCnEV4X0i4XjjsImcR+nqh4aLC99Nkwi+/Tb0F0sp0fA5bc83ooiNym4velLMR+ARiiRiF
+	pKQ/Cu8ipyKolU5cgLlGRdwE3yrA0KGiC7U7T6FVksw4rWSPt7PiKG9wwFlQPQggdE/jaN32S5p
+	xilCU08ccjqecYIGD3k/QZVv+ZLvKXsECmX1wgpEOBRgrxHB9cy6H8NklZqap5X59LEWcO1X6hf
+	JyRbDrDkM3f3S9wH6N/uBUFONX4Rr8jdkOWekCThJs3qgn6C0vITElxXTLp4FTSGg67Rkh/olDl
+	N4
+X-Received: by 2002:a05:6a00:950b:b0:82f:9985:d4a1 with SMTP id d2e1a72fcca58-845952fa1a0mr3520950b3a.24.1782220117022;
+        Tue, 23 Jun 2026 06:08:37 -0700 (PDT)
+X-Received: by 2002:a05:6a00:950b:b0:82f:9985:d4a1 with SMTP id d2e1a72fcca58-845952fa1a0mr3520921b3a.24.1782220116574;
+        Tue, 23 Jun 2026 06:08:36 -0700 (PDT)
+Received: from [10.133.33.180] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84564e745cfsm10655846b3a.31.2026.06.23.06.08.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jun 2026 06:08:36 -0700 (PDT)
+Message-ID: <96c0d9d2-d902-4e07-9854-2ca5ddcc5eaa@oss.qualcomm.com>
+Date: Tue, 23 Jun 2026 21:08:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] scsi: ufs: core: Tolerate RX_FOM read failures in TX
+ EQTR
+To: =?UTF-8?B?UGV0ZXIgV2FuZyAo546L5L+h5Y+LKQ==?= <peter.wang@mediatek.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "mani@kernel.org"
+ <mani@kernel.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
+Cc: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "James.Bottomley@HansenPartnership.com"
+ <James.Bottomley@HansenPartnership.com>
+References: <20260620080322.3765210-1-can.guo@oss.qualcomm.com>
+ <20260620080322.3765210-3-can.guo@oss.qualcomm.com>
+ <bd4c01727a6a3f0b4d1cb716caa35662fae7d41a.camel@mediatek.com>
+Content-Language: en-US
+From: Can Guo <can.guo@oss.qualcomm.com>
+In-Reply-To: <bd4c01727a6a3f0b4d1cb716caa35662fae7d41a.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIzMDEwNyBTYWx0ZWRfXzN7jPvXK94R2
+ BT3DwgBCebF//Al6koRQc1AQUMcyd8kqu6UKoiuSWthmo1QoU1s70RhsB1ze1EsbtJRolChGVQ0
+ aWF8UGZrubN5ksIWNoFEae+HEDqAUXWRK9SY9vlRL35mMTKALVdhJF4IiZfNHADIAVHDYYyIegX
+ RqYQ2jeDcPuMVBqEKbNwi85tKGO8GxLkYowTVaF5i+f7ueJy7S55yQ0oczvDRqTsmD7oZVtskoa
+ 2NmmF6f0uB3/G3EB7AdBv3mx4urwC4/NJ2LCQV7DQ6mTIrFfA6nWLAc4VtDusElJM2m5d4OSijG
+ /d1joXJx1ZDqyWvjhrTifdEYZeP8jHxcWTiI55NFE3YWmzO8NnRUUhcXXl241a6QeNvWAfBApP4
+ ame1eBfYhsRRkiTbOMaVTUf+ump/lgJymU2QIzFRLyBVF3wo/oHFTTTcqBYeCaSJ0JL9G41Rv8a
+ LaMEhDveQkkmGRy3jAQ==
+X-Proofpoint-GUID: cuxlSIefY_N6ThLAv_h4yQzKXhoh-5Yk
+X-Authority-Analysis: v=2.4 cv=SoKgLvO0 c=1 sm=1 tr=0 ts=6a3a8556 cx=c_pps
+ a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
+ a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22
+ a=Muby7z2g3K1BkzpCY48A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=2VI0MkxyNR6bbpdq8BZq:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIzMDEwNyBTYWx0ZWRfX6hQ08AJcVlDA
+ ZokiXou/Ep7+YTvDvkIxzQJ6R+5lyFv3CSh4OJkROufyqpWOQzKRcxLl9pooWphlrIDnd2Z7Lu0
+ ZQt3u5Feoi2LrT6/u4zZ2iVmkasHYgg=
+X-Proofpoint-ORIG-GUID: cuxlSIefY_N6ThLAv_h4yQzKXhoh-5Yk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-23_03,2026-06-23_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 suspectscore=0 spamscore=0 malwarescore=0
+ priorityscore=1501 bulkscore=0 clxscore=1015 adultscore=0 phishscore=0
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2606230107
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORWARDED(0.00)[lists@lfdr.de];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25203-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25204-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:ao.sun@transsion.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
-	RCPT_COUNT_TWO(0.00)[2];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:peter.wang@mediatek.com,m:beanhuo@micron.com,m:mani@kernel.org,m:bvanassche@acm.org,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:James.Bottomley@HansenPartnership.com,s:lists@lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,qualcomm.com:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,oss.qualcomm.com:dkim,oss.qualcomm.com:mid,oss.qualcomm.com:from_mime];
+	FORGED_SENDER(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_NO_DN(0.00)[];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,transsion.com:email,lists.linux.dev:replyto]
+	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3AEA96B7092
+X-Rspamd-Queue-Id: 7F5A86B752E
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
 
-Pre-existing issues:
-- [High] Allocating a structure embedding a `struct device` via `devm_kzall=
-oc()` creates a fundamental lifetime mismatch. The patch exacerbates this b=
-y adding `devm_kfree()` to the `release` callback, triggering a fatal Use-A=
-fter-Free if the device release is delayed.
-- [High] If `ufs_rpmb_probe()` exits early, `hba->rpmbs` is never initializ=
-ed, leading to a guaranteed NULL-pointer dereference in `ufs_rpmb_remove()`=
- during driver teardown.
---
 
-commit 79815281175f9750b2f8b1eccd86223bc783c72a
-Author: Ao Sun <ao.sun@transsion.com>
+On 6/23/2026 5:05 PM, Peter Wang (王信友) wrote:
+>
+> On Sat, 2026-06-20 at 01:03 -0700, Can Guo wrote:
+> > @@ -494,22 +496,30 @@ static int ufshcd_get_rx_fom(struct ufs_hba
+> > *hba,
+> > 
+> >         /* Get FOM of host's TX lanes from device's RX_FOM. */
+> >         for (lane = 0; lane < pwr_mode->lane_tx; lane++) {
+> > +               h_iter->fom[lane] = 0;
+> >                 ret = ufshcd_dme_peer_get(hba,
+> > UIC_ARG_MIB_SEL(RX_FOM,
+> >                                          
+> > UIC_ARG_MPHY_RX_GEN_SEL_INDEX(lane)),
+> >                                           &fom);
+> > -               if (ret)
+> > -                       return ret;
+> > +               if (ret) {
+> > +                       dev_dbg(hba->dev, "Failed to get FOM for Host
+> > TX Lane %d: %d\n",
+> > +                               lane, ret);
+> > +                       continue;
+> > +               }
+> > 
+>
+> Hi Can,
+>
+> I suggest setting h_iter->fom[lane] = 0 when an error occurs,
+> as this approach is clearer and improves code efficiency,
+> for example:
+> if (ret) {
+>      h_iter->fom[lane] = 0;
+>      ...
+>      continue;
+> }
+Thanks for suggestion, and I like it, let me adopt in next version.
 
-scsi: ufs: core: Fix UFS RPMB device teardown order
+Thanks,
+Can Guo.
+>
+>
+> >                 h_iter->fom[lane] = (u8)fom;
+> >         }
+> > 
+> >         /* Get FOM of device's TX lanes from host's RX_FOM. */
+> >         for (lane = 0; lane < pwr_mode->lane_rx; lane++) {
+> > +               d_iter->fom[lane] = 0;
+> >                 ret = ufshcd_dme_get(hba, UIC_ARG_MIB_SEL(RX_FOM,
+> >                                     
+> > UIC_ARG_MPHY_RX_GEN_SEL_INDEX(lane)),
+> >                                      &fom);
+> > -               if (ret)
+> > -                       return ret;
+> > +               if (ret) {
+> > +                       dev_dbg(hba->dev, "Failed to get FOM for
+> > Device TX Lane %d: %d\n",
+> > +                               lane, ret);
+> > +                       continue;
+> > +               }
+> > 
+>
+> The same applies as above.
+>
+> Thanks
+> Peter
+>
+> ************* MEDIATEK Confidentiality Notice
+>   ********************
+> The information contained in this e-mail message (including any
+> attachments) may be confidential, proprietary, privileged, or otherwise
+> exempt from disclosure under applicable laws. It is intended to be
+> conveyed only to the designated recipient(s). Any use, dissemination,
+> distribution, printing, retaining or copying of this e-mail (including its
+> attachments) by unintended recipient(s) is strictly prohibited and may
+> be unlawful. If you are not an intended recipient of this e-mail, or believe
+>   
+> that you have received this e-mail in error, please notify the sender
+> immediately (by replying to this e-mail), delete any and all copies of
+> this e-mail (including any attachments) from your system, and do not
+> disclose the content of this e-mail to any other person. Thank you!
 
-This commit modifies the teardown order of the UFS RPMB device by
-unregistering the child RPMB device ahead of the parent device in the
-remove path. It also moves the memory deallocation for the ufs_rpmb
-structure to the parent release callback.
-
-Link: https://lore.kernel.org/all/20260618064142.8C30E1F000E9@smtp.kernel.o=
-rg/
-
-> diff --git a/drivers/ufs/core/ufs-rpmb.c b/drivers/ufs/core/ufs-rpmb.c
-> index ffad049872b9a..dcb7e521284f1 100644
-> --- a/drivers/ufs/core/ufs-rpmb.c
-> +++ b/drivers/ufs/core/ufs-rpmb.c
-> @@ -128,7 +128,7 @@ static void ufs_rpmb_device_release(struct device *de=
-v)
->  {
->  	struct ufs_rpmb_dev *ufs_rpmb =3D dev_get_drvdata(dev);
-> =20
-> -	rpmb_dev_unregister(ufs_rpmb->rdev);
-> +	devm_kfree(ufs_rpmb->hba->dev, ufs_rpmb);
-
-[Severity: High]
-This is a pre-existing issue, but does allocating a structure embedding a
-struct device via devm_kzalloc() create a lifetime mismatch?
-
-This patch exacerbates the issue by adding devm_kfree() to the release
-callback. If a user holds a sysfs attribute open during driver unbind,
-devres will automatically free ufs_rpmb. Later, when the sysfs file is
-closed and the final kobject reference is dropped, ufs_rpmb_device_release()
-executes and dereferences the already-freed ufs_rpmb pointer to read
-ufs_rpmb->hba->dev, leading to a use-after-free.
-
->  }
-
-[ ... ]
-
-> @@ -244,6 +245,7 @@ void ufs_rpmb_remove(struct ufs_hba *hba)
->  		/* Remove from list first */
->  		list_del(&ufs_rpmb->node);
->  		/* Unregister device */
-> +		rpmb_dev_unregister(ufs_rpmb->rdev);
->  		device_unregister(&ufs_rpmb->dev);
->  	}
-
-[Severity: High]
-This isn't a bug introduced by this patch, but if ufs_rpmb_probe() exits
-early before calling INIT_LIST_HEAD(&hba->rpmbs), won't hba->rpmbs remain
-zero-initialized?
-
-If the driver is unbound later, ufs_rpmb_remove() is called on that
-zero-initialized list:
-
-drivers/ufs/core/ufs-rpmb.c:ufs_rpmb_remove() {
-        if (list_empty(&hba->rpmbs))
-                return;
-
-        list_for_each_entry_safe(ufs_rpmb, tmp, &hba->rpmbs, node) {
-...
-
-Since head->next is NULL on a zero-initialized list, list_empty()
-evaluates to false. This means list_for_each_entry_safe() will dereference
-NULL->next during initialization, causing an immediate kernel panic.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623120440.1388=
-3-1-ao.sun@transsion.com?part=3D1
 
