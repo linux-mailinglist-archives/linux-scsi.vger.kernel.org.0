@@ -1,83 +1,83 @@
-Return-Path: <linux-scsi+bounces-25136-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25140-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 0ZqXJzPjOWqfygcAu9opvQ
-	(envelope-from <linux-scsi+bounces-25136-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:36:51 +0200
+	id 4w/fKLXjOWq9ygcAu9opvQ
+	(envelope-from <linux-scsi+bounces-25140-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:39:01 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3D626B3433
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:36:50 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3093D6B3459
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:39:01 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=ibm.com header.s=pp1 header.b=SOMXIM+W;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25136-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25136-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=ibm.com header.s=pp1 header.b="IaTvE2d/";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25140-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25140-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=ibm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id A5A843058C52
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 01:32:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 550C5311258F
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 01:33:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F003038AC96;
-	Tue, 23 Jun 2026 01:31:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C6B438CFE5;
+	Tue, 23 Jun 2026 01:31:08 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6333770B;
-	Tue, 23 Jun 2026 01:31:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD2438BF8D;
+	Tue, 23 Jun 2026 01:31:05 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782178264; cv=none; b=mwVUsq+whSzF12AFd+wRwjx4nBG456Y2m2qYCissW1VYUt07AqCReDbRx817tEZoeVfLESrx/BGjkioyd+36D5sdgJ+NQQM5uH6Sq1NzBkLnX08pvh6xh6bDIIHnAN1BMbjdxeAcyI3NjGXaZ2LKPN8j6jZx0kcukWiw5rg+i4o=
+	t=1782178267; cv=none; b=Q3MkcCDxFNf4XVIwvqxwZoug5fwVPvmAzfV5ha2X2dr/pZ4KC2WrnREo0BhQEBO6RxKjeozUKUf9TYlPofECO+iH7b2vnoxM//fob0RmYzJrMLIKkCaW1s7MnvdxfZNaHRLycirp9YMvlPVr7nLh9LK+tIGAiOnj6NbTg6J7bkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782178264; c=relaxed/simple;
-	bh=YZyLsd1nYSr/Z129rWIyQmUeqzkAL33FR3Ijlz7LXe8=;
+	s=arc-20240116; t=1782178267; c=relaxed/simple;
+	bh=zfNo0n+C/iuCZR0n4TJu59dUquCle4jhtz3KRqrv6no=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YqkMCt83t8SRqxSNo+ywHK/OxWXu4YJKoh6+VWWbgcd3e2wWT9Q+XMJomi2UmGSfoTfI5f52BsQnEohaU7PYqk1rFbPUBDb8vrSBP74N2+EFHwuX99JGutCUF8XykcXyXnqhVPTiOOJdBMxtRdub+emmE4uSAFFoPDby4Y+lBYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SOMXIM+W; arc=none smtp.client-ip=148.163.156.1
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65N0mJjw408203;
-	Tue, 23 Jun 2026 01:30:53 GMT
+	 MIME-Version; b=LhTu2D3adb1uBLcWnETLEXC9LU4ZvOFOKm8UcwrJf45IBwbsyyfDjJxcDtg7bFBjaSwiFbZW9i2BDOk8FY1xZnLGI8bEk3kCMVkX7SUTrULqxeV521sm4pr645cSma9jRBTAvouKN9JKxwVBwhjPR/GlHbhs/tWknwD6XlFQjLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=IaTvE2d/; arc=none smtp.client-ip=148.163.158.5
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65N0nvvU348179;
+	Tue, 23 Jun 2026 01:30:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=k5VScfDahLgVssQxx
-	4kWeRs6DRZCnWyWqlq8ZWEPG0E=; b=SOMXIM+WP0d8ET3GxK1nrDTNXJzTBg0Nb
-	TeoWOV5FJ0Y/iAA31wOvN2yCAMm2u/gHGCQcDixfZbL3f7vakgcZyrsyGkKGCw9n
-	sM668oqvd9o5MICkRLmcsPbVVo87e3hmczBm1H/nNrSfJZGO4U1thCpllCjcki0o
-	5VMdywpb+ZuseBmUFN9gls2W5A+BI6UE/fg/wKzLdDExcH2Vj2ivO69kt8gy8yBC
-	2jJDrGz7Cl/Tzo9wQKVIguu7nrJGA/Z5XaPcVDxrUCvclvS3fiwXo9TxJvVn0JlX
-	mMZxihoT3lwRuv4pbHX90EMJMIdKGBWt+xwBt6tCPX2XJrPLatINg==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ewjc3c4r1-1
+	:mime-version:references:subject:to; s=pp1; bh=F/IuTa2oLvliPlBdB
+	iKh1cn8/0kCUId2UQAFrDdWN6o=; b=IaTvE2d/Ul44p6flWOGNDO2ZSa0EiZUei
+	1zlhlr5zEbbB1UhOqFQKkyBga4Y1V8NB6jtBKhWAKG7bSWW6m03epe2NDqZtEFgP
+	xWVcxhDTyD3f/h4KKZgjyhJFZqMUHZPDcMidMzUnM0Hzpq7K6RleMExOE47EiGI/
+	ePRHPGgVzR498DJ6p/FpYCnKXt1uEuEnUy5gjZnwaY4vWE0AnlQx4xhI4G+5wIuU
+	C+SSwlM7QdRW7wW/Hp3OAUlF7yEPuziuV7BEXzyfd5dyvhcYvs3nKxgTp+BWOvKg
+	5ibAXZY1NqcrN/zdbj5CphvgQYK1N2PNxL+aWSmIM5CTkdakZIdLw==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ewh9gc43e-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 23 Jun 2026 01:30:52 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65N1Jl6T005253;
-	Tue, 23 Jun 2026 01:30:51 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ex5jw92jk-1
+	Tue, 23 Jun 2026 01:30:53 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65N1Jdhw026295;
+	Tue, 23 Jun 2026 01:30:53 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ex7dg0qwd-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 23 Jun 2026 01:30:51 +0000 (GMT)
+	Tue, 23 Jun 2026 01:30:53 +0000 (GMT)
 Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65N1Uobe13632230
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65N1Up1I27853318
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 23 Jun 2026 01:30:50 GMT
+	Tue, 23 Jun 2026 01:30:51 GMT
 Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 795D758052;
+	by IMSVA (Postfix) with ESMTP id 2DFB45805A;
+	Tue, 23 Jun 2026 01:30:51 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 938E058056;
 	Tue, 23 Jun 2026 01:30:50 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DBFA058056;
-	Tue, 23 Jun 2026 01:30:49 +0000 (GMT)
 Received: from li-4c4c4544-0054-3910-8039-c3c04f423534.ibm.com.com (unknown [9.61.188.206])
 	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 23 Jun 2026 01:30:49 +0000 (GMT)
+	Tue, 23 Jun 2026 01:30:50 +0000 (GMT)
 From: Tyrel Datwyler <tyreld@linux.ibm.com>
 To: james.bottomley@hansenpartnership.com, martin.petersen@oracle.com
 Cc: linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org, brking@linux.ibm.com,
         davemarq@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH 17/29] ibmvfc: delete NVMe/FC targets as well as SCSI
-Date: Mon, 22 Jun 2026 18:30:23 -0700
-Message-ID: <20260623013035.3436640-18-tyreld@linux.ibm.com>
+Subject: [PATCH 18/29] ibmvfc: update state machine to process NVMe/FC targets
+Date: Mon, 22 Jun 2026 18:30:24 -0700
+Message-ID: <20260623013035.3436640-19-tyreld@linux.ibm.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260623013035.3436640-1-tyreld@linux.ibm.com>
 References: <20260623013035.3436640-1-tyreld@linux.ibm.com>
@@ -89,29 +89,29 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=X4Ni7mTe c=1 sm=1 tr=0 ts=6a39e1cc cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+X-Proofpoint-GUID: 8OdxX9v3bP7sdRhyNLX3gcNlbK43O-dj
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX7kTGj5GCroMO
+ tICFUgP9dUuRGkRvKmSWzhAkcGkG6mEkcLiBplfC1oKyTkZVKD2GGBM+Fuxtb/sVYZmQgKrzBo5
+ jOfnQI/DDCQgyJ0QllW48QwPHwPXXzE=
+X-Authority-Analysis: v=2.4 cv=c62bhx9l c=1 sm=1 tr=0 ts=6a39e1cd cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
  a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8 a=FlIHKPD9N9UiteZsW-UA:9
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX/Yheg/g3k+PK
- hxXZVIl9zh2Vj1IYgKLV450kFePt7lflLvSi6mvXDpCJ03CdFFaxwZ0WU4TPrXZwHSCMVeJLtIt
- K/tT4tX3FJqpix0agw7B0x0ueTyO7pU=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX4VPlBsp6Vfwa
- ZuH7XY92TVA1Ksf7uLQ53aL2YfNzbI07+HZl2bSHAAXisfkbZi0pUcNWVl9EDVYbV3f+LAy4xOv
- pGoT1NvnscsKrZyRIQUPOET7XiPA4DP/9BmwY3XXroSSMsJoi+fQ7wFj9KdUNgp5T/5LqeOeOBb
- ed2UkUhQrDUaRXuIOhsTbelLbnOD7IySp9neYF8cJbDUN5iZaGLdolISADZ1DxfZEa1CWQ+2AIr
- EGJ8CiT7fac7umq6KFYdS0DHNaF9kiQ9BYje8GZhDY10S5d7UQLe8khDsVMu04w1Doy+qMbaAcZ
- NIgUotXu1wKvPFYZRvPnG02wJe9d3+0rQdnP+5REYWUZWYvieoR4bPS0szkfmSkFZujmx65kOea
- P3Bf5PaZnqMBtBIdzQk7tFWrYzsVhX6IRF2GfZe7X0j2kt3IBZqsuMIXnDLhrkNiIG71u1VA7cw
- F2ZZz/8uw/LRKpWGJwg==
-X-Proofpoint-ORIG-GUID: ps9VWZinrFgTeGJrujdo8Y5y1-c6AQA3
-X-Proofpoint-GUID: ps9VWZinrFgTeGJrujdo8Y5y1-c6AQA3
+ a=V8glGbnc2Ofi9Qvn3v5h:22 a=VnNF1IyMAAAA:8 a=-uFVuYJf3eyC8FhR5LMA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfXyPYiUY13piOC
+ HLsNKtpoPSm2MkohuOsAsISh0l/i1hmylMyINwSaEkHf75rKKhpl9g3VwxwbSrrA7yzB0yGpk9Y
+ MpFmriBJBv1c3Uy0gU2yqzd/FZPN5+BHUNociVEBBsP/8VFPL7pMo4U1qwydzFyrDJHioKHqALI
+ Br5E6jzJ6XaL5be8sWwP+SuA7IeMN+9fLlykK2p51If1nTdgqrGZl+5wCTM6FlvmnJwPHICfuj3
+ c61UMiFpij/JfJqsiBMnTPl3b0hji6Bi6AYkNabrAf4KaUXOzrtpQYXXl3t1llzcnAXH1/u8y8k
+ eoE7cZF84XbVWJxk+zxGuQyDmTAXnhJw4TKldY1qSSBQ5E994y1y+UpA6OQOcZHlnFPbcPPv1KU
+ AZXjmC0BgqP0/J2JPhAwCx3U68CLtRgeTEghIE1SSDyBjOjNpBM/o8ChY26bpZP6pkLIaxup+d/
+ 4PQJ1yAlThmMlUWQbbw==
+X-Proofpoint-ORIG-GUID: 8OdxX9v3bP7sdRhyNLX3gcNlbK43O-dj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
  definitions=2026-06-23_01,2026-06-22_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 bulkscore=0 suspectscore=0 spamscore=0 priorityscore=1501
- impostorscore=0 malwarescore=0 clxscore=1015 adultscore=0 lowpriorityscore=0
+ lowpriorityscore=0 impostorscore=0 adultscore=0 clxscore=1015 suspectscore=0
+ priorityscore=1501 phishscore=0 spamscore=0 bulkscore=0 malwarescore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606230008
 X-Rspamd-Action: no action
@@ -121,13 +121,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25136-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25140-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:james.bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-kernel@vger.kernel.org,m:brking@linux.ibm.com,m:davemarq@linux.ibm.com,m:tyreld@linux.ibm.com,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[tyreld@linux.ibm.com,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -139,76 +139,141 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[8];
 	ALIAS_RESOLVED(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,linux.ibm.com:mid,linux.ibm.com:from_mime];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,linux.ibm.com:mid,linux.ibm.com:from_mime];
 	DKIM_TRACE(0.00)[ibm.com:+];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_COUNT_SEVEN(0.00)[11]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B3D626B3433
+X-Rspamd-Queue-Id: 3093D6B3459
 
-Extend target deletion paths to process NVMe targets as well as SCSI
-targets.
+Update the host work loop and target state-machine helpers to process
+NVMe targets in addition to SCSI targets.
 
-Update link-down, and host reinitialization flows to walk both the SCSI
-and NVMe target lists when marking targets for deletion. This ensures
-that protocol-specific target state stays consistent across adapter
-resets and fabric events.
+Check both protocol-specific target lists when determining whether there
+is initialization or logout work pending, and extend the query, target
+init, and target delete phases to dispatch work for NVMe targets using
+the same common state-machine callbacks.
 
-Rename ibmvfc_relogin to ibmvfc_scsi_relogin as it acts on a scsi
-command.
+This allows the existing discovery and login state machine to drive
+NVMe/FC targets through query, login, and deletion without duplicating
+the control flow.
 
 Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
 ---
- drivers/scsi/ibmvscsi/ibmvfc-core.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/scsi/ibmvscsi/ibmvfc-core.c | 42 +++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
 diff --git a/drivers/scsi/ibmvscsi/ibmvfc-core.c b/drivers/scsi/ibmvscsi/ibmvfc-core.c
-index 4b95e4344947..13e513bfd0a8 100644
+index 13e513bfd0a8..9a6a885aa57e 100644
 --- a/drivers/scsi/ibmvscsi/ibmvfc-core.c
 +++ b/drivers/scsi/ibmvscsi/ibmvfc-core.c
-@@ -714,6 +714,8 @@ static void ibmvfc_link_down(struct ibmvfc_host *vhost,
- 	scsi_block_requests(vhost->host);
- 	list_for_each_entry(tgt, &vhost->scsi_scrqs.targets, queue)
- 		ibmvfc_del_tgt(tgt);
-+	list_for_each_entry(tgt, &vhost->nvme_scrqs.targets, queue)
-+		ibmvfc_del_tgt(tgt);
- 	ibmvfc_set_host_state(vhost, state);
- 	ibmvfc_set_host_action(vhost, IBMVFC_HOST_ACTION_TGT_DEL);
- 	vhost->events_to_log |= IBMVFC_AE_LINKDOWN;
-@@ -751,6 +753,12 @@ static void ibmvfc_init_host(struct ibmvfc_host *vhost)
- 			else
- 				ibmvfc_del_tgt(tgt);
+@@ -5692,6 +5692,11 @@ static int ibmvfc_dev_init_to_do(struct ibmvfc_host *vhost)
+ 		    tgt->action == IBMVFC_TGT_ACTION_INIT_WAIT)
+ 			return 1;
+ 	}
++	list_for_each_entry(tgt, &vhost->nvme_scrqs.targets, queue) {
++		if (tgt->action == IBMVFC_TGT_ACTION_INIT ||
++		    tgt->action == IBMVFC_TGT_ACTION_INIT_WAIT)
++			return 1;
++	}
+ 
+ 	return 0;
+ }
+@@ -5712,6 +5717,11 @@ static int ibmvfc_dev_logo_to_do(struct ibmvfc_host *vhost)
+ 		    tgt->action == IBMVFC_TGT_ACTION_LOGOUT_RPORT_WAIT)
+ 			return 1;
+ 	}
++	list_for_each_entry(tgt, &vhost->nvme_scrqs.targets, queue) {
++		if (tgt->action == IBMVFC_TGT_ACTION_LOGOUT_RPORT ||
++		    tgt->action == IBMVFC_TGT_ACTION_LOGOUT_RPORT_WAIT)
++			return 1;
++	}
+ 	return 0;
+ }
+ 
+@@ -5740,9 +5750,15 @@ static int __ibmvfc_work_to_do(struct ibmvfc_host *vhost)
+ 		list_for_each_entry(tgt, &vhost->scsi_scrqs.targets, queue)
+ 			if (tgt->action == IBMVFC_TGT_ACTION_INIT)
+ 				return 1;
++		list_for_each_entry(tgt, &vhost->nvme_scrqs.targets, queue)
++			if (tgt->action == IBMVFC_TGT_ACTION_INIT)
++				return 1;
+ 		list_for_each_entry(tgt, &vhost->scsi_scrqs.targets, queue)
+ 			if (tgt->action == IBMVFC_TGT_ACTION_INIT_WAIT)
+ 				return 0;
++		list_for_each_entry(tgt, &vhost->nvme_scrqs.targets, queue)
++			if (tgt->action == IBMVFC_TGT_ACTION_INIT_WAIT)
++				return 0;
+ 		return 1;
+ 	case IBMVFC_HOST_ACTION_TGT_DEL:
+ 	case IBMVFC_HOST_ACTION_TGT_DEL_FAILED:
+@@ -5751,9 +5767,15 @@ static int __ibmvfc_work_to_do(struct ibmvfc_host *vhost)
+ 		list_for_each_entry(tgt, &vhost->scsi_scrqs.targets, queue)
+ 			if (tgt->action == IBMVFC_TGT_ACTION_LOGOUT_RPORT)
+ 				return 1;
++		list_for_each_entry(tgt, &vhost->nvme_scrqs.targets, queue)
++			if (tgt->action == IBMVFC_TGT_ACTION_LOGOUT_RPORT)
++				return 1;
+ 		list_for_each_entry(tgt, &vhost->scsi_scrqs.targets, queue)
+ 			if (tgt->action == IBMVFC_TGT_ACTION_LOGOUT_RPORT_WAIT)
+ 				return 0;
++		list_for_each_entry(tgt, &vhost->nvme_scrqs.targets, queue)
++			if (tgt->action == IBMVFC_TGT_ACTION_LOGOUT_RPORT_WAIT)
++				return 0;
+ 		return 1;
+ 	case IBMVFC_HOST_ACTION_LOGO:
+ 	case IBMVFC_HOST_ACTION_INIT:
+@@ -5941,6 +5963,8 @@ static void ibmvfc_do_work(struct ibmvfc_host *vhost)
+ 	case IBMVFC_HOST_ACTION_QUERY:
+ 		list_for_each_entry(tgt, &vhost->scsi_scrqs.targets, queue)
+ 			ibmvfc_init_tgt(tgt, ibmvfc_tgt_query_target);
++		list_for_each_entry(tgt, &vhost->nvme_scrqs.targets, queue)
++			ibmvfc_init_tgt(tgt, ibmvfc_tgt_query_target);
+ 		ibmvfc_set_host_action(vhost, IBMVFC_HOST_ACTION_QUERY_TGTS);
+ 		break;
+ 	case IBMVFC_HOST_ACTION_QUERY_TGTS:
+@@ -5950,6 +5974,12 @@ static void ibmvfc_do_work(struct ibmvfc_host *vhost)
+ 				break;
+ 			}
  		}
 +		list_for_each_entry(tgt, &vhost->nvme_scrqs.targets, queue) {
-+			if (vhost->client_migrated)
-+				tgt->need_login = 1;
-+			else
-+				ibmvfc_del_tgt(tgt);
++			if (tgt->action == IBMVFC_TGT_ACTION_INIT) {
++				tgt->job_step(tgt);
++				break;
++			}
 +		}
  
- 		scsi_block_requests(vhost->host);
- 		ibmvfc_set_host_action(vhost, IBMVFC_HOST_ACTION_INIT);
-@@ -1868,7 +1876,7 @@ static void ibmvfc_log_error(struct ibmvfc_event *evt)
-  * @sdev:	scsi device struct
-  *
-  **/
--static void ibmvfc_relogin(struct scsi_device *sdev)
-+static void ibmvfc_scsi_relogin(struct scsi_device *sdev)
- {
- 	struct ibmvfc_host *vhost = shost_priv(sdev->host);
- 	struct fc_rport *rport = starget_to_rport(scsi_target(sdev));
-@@ -1920,7 +1928,7 @@ static void ibmvfc_scsi_done(struct ibmvfc_event *evt)
- 				memcpy(cmnd->sense_buffer, rsp->data.sense + rsp_len, sense_len);
- 			if ((be16_to_cpu(vfc_cmd->status) & IBMVFC_VIOS_FAILURE) &&
- 			    (be16_to_cpu(vfc_cmd->error) == IBMVFC_PLOGI_REQUIRED))
--				ibmvfc_relogin(cmnd->device);
-+				ibmvfc_scsi_relogin(cmnd->device);
+ 		if (!ibmvfc_dev_init_to_do(vhost))
+ 			ibmvfc_set_host_action(vhost, IBMVFC_HOST_ACTION_TGT_DEL);
+@@ -5962,6 +5992,12 @@ static void ibmvfc_do_work(struct ibmvfc_host *vhost)
+ 				break;
+ 			}
+ 		}
++		list_for_each_entry(tgt, &vhost->nvme_scrqs.targets, queue) {
++			if (tgt->action == IBMVFC_TGT_ACTION_LOGOUT_RPORT) {
++				tgt->job_step(tgt);
++				break;
++			}
++		}
  
- 			if (!cmnd->result && (!scsi_get_resid(cmnd) || (rsp->flags & FCP_RESID_OVER)))
- 				cmnd->result = (DID_ERROR << 16);
+ 		if (ibmvfc_dev_logo_to_do(vhost)) {
+ 			spin_unlock_irqrestore(vhost->host->host_lock, flags);
+@@ -6049,6 +6085,12 @@ static void ibmvfc_do_work(struct ibmvfc_host *vhost)
+ 				break;
+ 			}
+ 		}
++		list_for_each_entry(tgt, &vhost->nvme_scrqs.targets, queue) {
++			if (tgt->action == IBMVFC_TGT_ACTION_INIT) {
++				tgt->job_step(tgt);
++				break;
++			}
++		}
+ 
+ 		if (!ibmvfc_dev_init_to_do(vhost))
+ 			ibmvfc_set_host_action(vhost, IBMVFC_HOST_ACTION_TGT_DEL_FAILED);
 -- 
 2.54.0
 
