@@ -1,83 +1,83 @@
-Return-Path: <linux-scsi+bounces-25149-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25146-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 9vw6F7DkOWr+ygcAu9opvQ
-	(envelope-from <linux-scsi+bounces-25149-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:43:12 +0200
+	id UmgeOUDkOWroygcAu9opvQ
+	(envelope-from <linux-scsi+bounces-25146-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:41:20 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5D006B3512
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:43:11 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0BC26B34C4
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 03:41:19 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=ibm.com header.s=pp1 header.b=dIOfSV8t;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25149-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25149-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=ibm.com header.s=pp1 header.b=GhRApJA5;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25146-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25146-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=ibm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4C4E530CAACF
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 01:34:20 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 7D98B3086A05
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2026 01:33:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 768BF394493;
-	Tue, 23 Jun 2026 01:31:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93D53391E73;
+	Tue, 23 Jun 2026 01:31:12 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 380B1391842;
-	Tue, 23 Jun 2026 01:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C8D390995;
+	Tue, 23 Jun 2026 01:31:10 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782178274; cv=none; b=pSUWEhnxr/uSs94jeWyBnF4rnaONjDjyHsdjMYBbswnXyWk8wgEW772oVvntATXHwTKk4XtnrF/wJJb71X3U5n/1SRoXxCiC+A6Mvh1nGBo3nFdeNSelQpStHwNvp/qLqHSH6mBMr/KO97M+Vv+JraP3UZqKkj3xAGDLHa3XpQg=
+	t=1782178272; cv=none; b=hpZl+uvHca85pTsJ6NGSWnAuXhvTRFjFOVWutrCFYPmacQ964CuXlXfG5IWhFYGLFFtXKFe2GrswqmYg8EvDsgbA0dtEwec5BEYT3lmOJ0FqQikrrWgyR1ma1OpO0yJcmHQPdUyiTfNPDBRCez98Mi2KNUhmmsMQqeyfC4Y32dM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782178274; c=relaxed/simple;
-	bh=1TZHLP6tr2EBywbQY5hyeBGAMXai8v2siJwj4LePqe0=;
+	s=arc-20240116; t=1782178272; c=relaxed/simple;
+	bh=MTifirXaknGdhmIM2QGL4w54CIKB1JiNvoSn2LfBvQI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YpYdqA9A3DwXExhZGLNomHfd8dDbjPuoIY7rzug+yYVlTVaRvexI7umaKDdBPK+/2xyumx9omqgkRzH/bKVRYXbrxg61BPzz8Qg+gFMVaiOeNhUBp5KsYw3tM+2sE0X1UHz8ts8s2jvfpXLxC18+SehN1R7e/C6lckk/RGFjBiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=dIOfSV8t; arc=none smtp.client-ip=148.163.158.5
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65N0o30H285734;
+	 MIME-Version; b=iRN2wD0gAj3OcgFge8yBxDtOS/d7E5WafRdfjsgUfUXUywclQ9Bp41DQbkODiPDPFqUSgB39boOcz4XOsmSYF/rBmdDU1mp1VnByFh7NnTJzYCzCWrlRyUlduXc6q9kstM5yO4v3c1iAjVGd/ZGMkYKtHef3rYNgYgIFqsfhhSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GhRApJA5; arc=none smtp.client-ip=148.163.158.5
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65N0nX7a347285;
 	Tue, 23 Jun 2026 01:30:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=jj1dzoLpt+UOL2v1g
-	sCTt2MMirqrKF3G1CjTwNrIf70=; b=dIOfSV8teW6LSFfJizYIo2PBDQCnyhVmP
-	ZAdur7V3MZo4o+fQUZFn65fkWQfn+CT7xs4aMUF15wH8gvnSebNV1Lg08zpk381n
-	MdD85bEDvHwGco3e4LY1w6xb8yPH8AJ5oOFJte4Em3Y7W+/iewc/VASEMdT7UOSL
-	5jroIU5ifVnWkzGkh7QtVV7+zfBQ2hMebzhYUZaM/FUXjWkWOBTqWEQUJiYpH79s
-	f54tAMPjouJmuO5IIHod4pu42ZN95hyUea6Z+nyEgER38eHo6SSURk4XV9UHLjGd
-	auzNwMM69PaKWMnweOHJPDv/CiURlsSOqsugm8T+yILw9FYon1V9A==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ewjgskysb-1
+	:mime-version:references:subject:to; s=pp1; bh=Xtj8B06Ht9tln3wD0
+	y8g1aljCFfOZpHymwG2yWYKQBw=; b=GhRApJA5k2G1OGKJbr6BfNAScCHFcHxqO
+	hghEruDhZCOlrwQSTCVpfGcansDbW/8C8vPbWN4vQQBwmtuDPaMY8n0qVHC9TMUq
+	HZ3kVy7tY3u2376WHQEj+UTt6z+kyu2eLH+K1ZyFTBW6+o6GKy1oWYw5ySs70VME
+	J6qu0XjBnA4wcwI+LyQoT696r4B+tP2jYRvTir9nCixpaWZoHXYAYp4Q8R3TTm2C
+	w86qMTKPn/m7XE1cB7vQRE/xIb/XMZiSCfEWC/tpfPpOxOAHm2vtTbG+jy4n9LTs
+	IcBIXWqxtbrxRlaCk/VzFN9RCoAWvg16A6V3NYlewPZ24y+onx2cQ==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ewh9gc43t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Jun 2026 01:30:59 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65N1JslV005273;
+	Tue, 23 Jun 2026 01:30:59 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ex5jw92k1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 23 Jun 2026 01:30:58 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65N1K2rN026922;
-	Tue, 23 Jun 2026 01:30:58 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ex7dg0qws-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 23 Jun 2026 01:30:57 +0000 (GMT)
 Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65N1UvlP41746726
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65N1UvhF22217318
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 23 Jun 2026 01:30:57 GMT
 Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 034F058052;
+	by IMSVA (Postfix) with ESMTP id B401E5805A;
 	Tue, 23 Jun 2026 01:30:57 +0000 (GMT)
 Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 652C75805A;
-	Tue, 23 Jun 2026 01:30:56 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 1E24958056;
+	Tue, 23 Jun 2026 01:30:57 +0000 (GMT)
 Received: from li-4c4c4544-0054-3910-8039-c3c04f423534.ibm.com.com (unknown [9.61.188.206])
 	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 23 Jun 2026 01:30:56 +0000 (GMT)
+	Tue, 23 Jun 2026 01:30:57 +0000 (GMT)
 From: Tyrel Datwyler <tyreld@linux.ibm.com>
 To: james.bottomley@hansenpartnership.com, martin.petersen@oracle.com
 Cc: linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org, brking@linux.ibm.com,
         davemarq@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH 26/29] ibmvfc: implement nvme-fc IO command submission callback
-Date: Mon, 22 Jun 2026 18:30:32 -0700
-Message-ID: <20260623013035.3436640-27-tyreld@linux.ibm.com>
+Subject: [PATCH 27/29] ibmvfc: implement nvme-fc LS abort handling callback
+Date: Mon, 22 Jun 2026 18:30:33 -0700
+Message-ID: <20260623013035.3436640-28-tyreld@linux.ibm.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260623013035.3436640-1-tyreld@linux.ibm.com>
 References: <20260623013035.3436640-1-tyreld@linux.ibm.com>
@@ -89,29 +89,29 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX0hRWVyk4e0uu
- 4dDWBk2IBZRCujyBfv0tLuaEc6klctY2PpsEIIRiIa4sTvmGaUMYYDFYO5sAtl+L4SWNg14qIZC
- WmaGHT6G5Bz1QyNiepWdD/sjUv8uagIm3zaBSfg5rirHg7jAIjXPYCpU4b8dSZ9VG0hszBfawDT
- 5MwDqXiEjzgUnm+sXyrk8eyKeUWfTUm9zAVhfcyjaShYKUOWn+beTog7QWNlOsEKFoyxXtfWf/G
- n6UpnVBiSECyW+N23wsnv0wx3nXmFIec8IlyX7QgrHQJM+5Tq9umyaZxCaY/95blw8SpR1GQZPH
- cXSMRTERuHogM6rUvyGwNZh71lc82Quzpfa0qXDRVfuKxjJQNmZmX+MCjSldzm03cUiFYOicYpf
- /tzUFFlzm28zqkeVv17K/BRQvAVhjKbYZxU5FaAwm8JbcEYiPE7oDcPX9tZOZsQvpxr4ZRulIZq
- GcFaxaUJNZwSCT2k8mA==
-X-Proofpoint-GUID: wNeRsj9amWO9cwnoRFyDsw79wlCTMchD
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX0qYYLLy91/pL
- BdRhz6vN5tHDV+3+1l0pXH59Bq/O0Q7cnuEFNS6lWUvXIGx+sh8VtxdarnvlGjkUJbCzvPbsfFW
- eyQJtkVoC0dhlb95IZN+dSNV8mOXEUE=
-X-Authority-Analysis: v=2.4 cv=I/lVgtgg c=1 sm=1 tr=0 ts=6a39e1d2 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+X-Proofpoint-GUID: 32_ZTHBjjOlqyS_NGuxpNaaRqD25dzY3
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX6bagq0GRrDT9
+ iXe/zaH7zSZgg3VXgcXLi9/JaP2klwzE6BWr76GBLxRfsXmbqbvlbdlMpYS/cpQEOdEEXfuYG9Z
+ kLw0Iox+H/8e52GawCQmxat5NUOTePM=
+X-Authority-Analysis: v=2.4 cv=c62bhx9l c=1 sm=1 tr=0 ts=6a39e1d3 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
  a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8 a=m0QgfwBejkhnWor617sA:9
-X-Proofpoint-ORIG-GUID: wNeRsj9amWO9cwnoRFyDsw79wlCTMchD
+ a=V8glGbnc2Ofi9Qvn3v5h:22 a=VnNF1IyMAAAA:8 a=i_vXdmPKhaR3-41kbpgA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIzMDAwOCBTYWx0ZWRfX0sPFhAI++n08
+ sE5TJTgmIBKfykHSloLpq4nFGVdILbn0n+fV0T1qfv0TbOK7tOHJDm3+wG2BkbyUseFlvaoYmPs
+ qOFiaNeQY/ae8fSwMklF69uNzVgqv7OgfbxDozg6veepbMlwMdL74A6MzEMthSptkrIu8T05yZV
+ 0J0XYKBJ+dB0qKR9BuIA7WdXhT6jjwMs971x2FNVdIlX6X78OK+qEeUNHG0YTn4yrceXxzMwjoy
+ T3WGoGWCPEUAE5gV4bAiTfMkPy23m+20bh79Nczy9kyNIGcAZUXL+pQBIVGAEzGUtC0QnZd/8q4
+ 01HKDHHoWA728O3pdGkjymKjiE4SiQm5XWXDpZqgQtz/si2i4ljjNquUon0ia8XW6/5Yiq0psTC
+ UZweX8hJoO0/QTFTjN67MRTdkUT+Lbd3CUHLe3fbUqFt0wMcwderV7OVXJI/BntBT06wwcce9W+
+ 1Gr5F33btOkjVIIwcqQ==
+X-Proofpoint-ORIG-GUID: 32_ZTHBjjOlqyS_NGuxpNaaRqD25dzY3
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
  definitions=2026-06-23_01,2026-06-22_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 spamscore=0 phishscore=0 clxscore=1015 priorityscore=1501
- adultscore=0 impostorscore=0 bulkscore=0 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 impostorscore=0 adultscore=0 clxscore=1015 suspectscore=0
+ priorityscore=1501 phishscore=0 spamscore=0 bulkscore=0 malwarescore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606230008
 X-Rspamd-Action: no action
@@ -121,13 +121,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25149-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25146-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:james.bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-kernel@vger.kernel.org,m:brking@linux.ibm.com,m:davemarq@linux.ibm.com,m:tyreld@linux.ibm.com,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[tyreld@linux.ibm.com,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -139,221 +139,114 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[8];
 	ALIAS_RESOLVED(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linux.ibm.com:mid,linux.ibm.com:from_mime];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,linux.ibm.com:mid,linux.ibm.com:from_mime];
 	DKIM_TRACE(0.00)[ibm.com:+];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	RCVD_COUNT_SEVEN(0.00)[11]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: A5D006B3512
+X-Rspamd-Queue-Id: E0BC26B34C4
 
-Add helpers to initialize an ibmvfc command from an nvmefc_fcp_req,
-map request scatterlists into either an inline descriptor or an external
-DMA pool list, and submit the request on the selected NVMe hardware
-queue. On completion, translate ibmvfc status into the NVMe-FC response
-format, including transferred length and CQE handling for no-DMA
-responses.
+Implement the NVMe FC-LS abort callback by issuing an ibmvfc cancel MAD
+to the VIOS for the outstanding link-service request.
 
-Also store the NVMe request pointer in struct ibmvfc_event so the
-completion path can finish the original request.
+Use the saved event pointer from the original FC-LS request to identify
+the command to cancel, submit the cancel operation, and complete the
+abort request based on the returned status.
 
 Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
 ---
- drivers/scsi/ibmvscsi/ibmvfc-core.c |   2 +-
- drivers/scsi/ibmvscsi/ibmvfc-nvme.c | 140 +++++++++++++++++++++++++++-
- drivers/scsi/ibmvscsi/ibmvfc.h      |   1 +
- 3 files changed, 141 insertions(+), 2 deletions(-)
+ drivers/scsi/ibmvscsi/ibmvfc-nvme.c | 64 +++++++++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc-core.c b/drivers/scsi/ibmvscsi/ibmvfc-core.c
-index 177d341ce7bc..a7183493cf96 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc-core.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc-core.c
-@@ -1539,7 +1539,7 @@ static void ibmvfc_set_login_info(struct ibmvfc_host *vhost)
- 
- 	login_info->ostype = cpu_to_be32(IBMVFC_OS_LINUX);
- 	login_info->max_dma_len = cpu_to_be64(max_sectors << 9);
--	login_info->max_payload = cpu_to_be32(sizeof(struct ibmvfc_fcp_cmd_iu));
-+	login_info->max_payload = cpu_to_be32(sizeof(struct nvme_fc_cmd_iu));
- 	login_info->max_response = cpu_to_be32(sizeof(struct ibmvfc_fcp_rsp));
- 	login_info->partition_num = cpu_to_be32(vhost->partition_number);
- 	login_info->vfc_frame_version = cpu_to_be32(1);
 diff --git a/drivers/scsi/ibmvscsi/ibmvfc-nvme.c b/drivers/scsi/ibmvscsi/ibmvfc-nvme.c
-index 506135c1a34e..bff469d0b47d 100644
+index bff469d0b47d..18e8657abc44 100644
 --- a/drivers/scsi/ibmvscsi/ibmvfc-nvme.c
 +++ b/drivers/scsi/ibmvscsi/ibmvfc-nvme.c
-@@ -8,6 +8,7 @@
-  * Copyright (C) IBM Corporation, 2026
-  */
- 
-+#include <linux/dmapool.h>
- #include <scsi/scsi_transport_fc.h>
+@@ -13,6 +13,8 @@
  
  #include "ibmvfc-nvme.h"
-@@ -164,12 +165,149 @@ static void ibmvfc_nvme_ls_abort(struct nvme_fc_local_port *lport,
+ 
++static unsigned int default_timeout = IBMVFC_DEFAULT_TIMEOUT;
++
+ static void ibmvfc_nvme_localport_delete(struct nvme_fc_local_port *lport)
  {
+ 	struct ibmvfc_host *vhost = lport->private;
+@@ -159,10 +161,72 @@ static int ibmvfc_nvme_ls_req(struct nvme_fc_local_port *lport,
+ 	return 0;
  }
  
-+static void ibmvfc_nvme_done(struct ibmvfc_event *evt)
++static void ibmvfc_sync_nvme_completion(struct ibmvfc_event *evt)
 +{
-+	struct ibmvfc_cmd *vfc_cmd = &evt->xfer_iu->cmd;
-+	struct nvmefc_fcp_req *fcp_req = evt->fcp_req;
-+	struct nvme_fc_ersp_iu *ersp = (struct nvme_fc_ersp_iu *)fcp_req->rspaddr;
-+	struct nvme_completion *cqe = &ersp->cqe;
-+	struct nvme_command *sqe = &((struct nvme_fc_cmd_iu *)fcp_req->cmdaddr)->sqe;
++	/* copy the response back */
++	if (evt->sync_iu)
++		*evt->sync_iu = *evt->xfer_iu;
 +
-+	ibmvfc_dbg(evt->vhost, "fc_done: (%x:%x)\n", be16_to_cpu(vfc_cmd->status),
-+		   be16_to_cpu(vfc_cmd->error));
-+	ibmvfc_dbg(evt->vhost, "fc_done: cmdlen: %d, rsplen %d, payload_len %d\n",
-+		   fcp_req->cmdlen, fcp_req->rsplen, fcp_req->payload_length);
-+
-+	fcp_req->status = 0;
-+	if (!vfc_cmd->status) {
-+		fcp_req->rcv_rsplen = NVME_FC_SIZEOF_ZEROS_RSP;
-+		fcp_req->transferred_length = fcp_req->payload_length;
-+	} else if (be16_to_cpu(vfc_cmd->status) & IBMVFC_FC_NVME_STATUS) {
-+		fcp_req->rcv_rsplen = sizeof(struct nvme_fc_ersp_iu);
-+		fcp_req->transferred_length = be32_to_cpu(ersp->xfrd_len);
-+		if (be16_to_cpu(vfc_cmd->error) & IBMVFC_NVMS_VALID_NODMA_CQE)
-+			cqe->command_id = sqe->common.command_id;
-+	} else {
-+		fcp_req->rcv_rsplen = 0;
-+		fcp_req->transferred_length = 0;
-+		fcp_req->status = NVME_SC_INTERNAL;
-+	}
-+
-+	fcp_req->done(fcp_req);
-+	ibmvfc_free_event(evt);
++	complete(&evt->comp);
 +}
 +
-+static struct ibmvfc_cmd *ibmvfc_nvme_init_vfc_cmd(struct ibmvfc_event *evt,
-+						   struct nvme_fc_remote_port *rport,
-+						   struct nvmefc_fcp_req *fcp_req)
++static void ibmvfc_init_ls_abort(struct ibmvfc_event *evt, struct nvmefc_ls_req *ls_abort)
 +{
-+	struct ibmvfc_target *tgt = rport->private;
-+	struct ibmvfc_cmd *vfc_cmd = &evt->iu.cmd;
-+
-+	memset(vfc_cmd, 0, sizeof(*vfc_cmd));
-+
-+	vfc_cmd->resp.va = cpu_to_be64(fcp_req->rspdma);
-+	vfc_cmd->resp.len = cpu_to_be32(fcp_req->rsplen);
-+	vfc_cmd->frame_type = cpu_to_be32(IBMVFC_NVME_FCP_TYPE);
-+	vfc_cmd->flags |= cpu_to_be16(IBMVFC_NVMEOF_PROTOCOL);
-+	vfc_cmd->payload_len = cpu_to_be32(fcp_req->cmdlen);
-+	vfc_cmd->resp_len = cpu_to_be32(fcp_req->rsplen);
-+	vfc_cmd->cancel_key = cpu_to_be32((u64)evt);
-+	vfc_cmd->target_wwpn = cpu_to_be64(rport->port_name);
-+	vfc_cmd->tgt_scsi_id = cpu_to_be64(rport->port_id);
-+	vfc_cmd->assoc_id = cpu_to_be64(tgt->assoc_id);
-+
-+	memcpy(&vfc_cmd->v3nvme.iu, fcp_req->cmdaddr, fcp_req->cmdlen);
-+
-+	return vfc_cmd;
-+}
-+
-+static void ibmvfc_nvme_map_sg_list(struct nvmefc_fcp_req *fcp_req,
-+				    struct srp_direct_buf *md)
-+{
-+	int i;
-+	struct scatterlist *sg;
-+
-+	for_each_sg(fcp_req->first_sgl, sg, fcp_req->sg_cnt, i) {
-+		md[i].va = cpu_to_be64(sg_dma_address(sg));
-+		md[i].len = cpu_to_be32(sg_dma_len(sg));
-+		md[i].key = 0;
-+	}
-+}
-+
-+static int ibmvfc_nvme_map_sg_data(struct nvmefc_fcp_req *fcp_req,
-+				    struct ibmvfc_event *evt,
-+				    struct ibmvfc_cmd *vfc_cmd)
-+{
-+	struct srp_direct_buf *data = &vfc_cmd->ioba;
++	struct ibmvfc_tmf *tmf;
++	struct ibmvfc_event *abt_evt = ls_abort->private;
++	struct ibmvfc_target *tgt = abt_evt->tgt;
 +	struct ibmvfc_host *vhost = evt->vhost;
 +
-+	if (!fcp_req->sg_cnt) {
-+		vfc_cmd->flags |= cpu_to_be16(IBMVFC_NO_MEM_DESC);
-+		return 0;
-+	}
++	tmf = &evt->iu.tmf;
++	memset(tmf, 0, sizeof(*tmf));
++	tmf->common.version = cpu_to_be32(2);
++	tmf->target_wwpn = cpu_to_be64(tgt->wwpn);
++	tmf->common.opcode = cpu_to_be32(IBMVFC_NVMF_TMF_MAD);
++	tmf->common.length = cpu_to_be16(sizeof(*tmf));
++	if (vhost->state != IBMVFC_ACTIVE)
++		if (!ibmvfc_check_caps(vhost, IBMVFC_CAN_SUPPRESS_ABTS))
++			tmf->flags = cpu_to_be32(IBMVFC_TMF_SUPPRESS_ABTS);
++	tmf->cancel_key = cpu_to_be32((u64)abt_evt);
++	tmf->my_cancel_key = cpu_to_be32((u64)evt);
++	tmf->assoc_id = cpu_to_be64(tgt->assoc_id);
 +
-+	if (fcp_req->io_dir == NVMEFC_FCP_WRITE)
-+		vfc_cmd->flags |= cpu_to_be16(IBMVFC_WRITE);
-+	else
-+		vfc_cmd->flags |= cpu_to_be16(IBMVFC_READ);
-+
-+	if (fcp_req->sg_cnt == 1) {
-+		ibmvfc_nvme_map_sg_list(fcp_req, data);
-+		return 0;
-+	}
-+
-+	vfc_cmd->flags |= cpu_to_be16(IBMVFC_SCATTERLIST);
-+
-+	if (!evt->ext_list) {
-+		evt->ext_list = dma_pool_alloc(vhost->sg_pool, GFP_ATOMIC,
-+					       &evt->ext_list_token);
-+
-+		if (!evt->ext_list)
-+			return -ENOMEM;
-+	}
-+
-+	ibmvfc_nvme_map_sg_list(fcp_req, evt->ext_list);
-+
-+	data->va = cpu_to_be64(evt->ext_list_token);
-+	data->len = cpu_to_be32(fcp_req->sg_cnt * sizeof(struct srp_direct_buf));
-+	data->key = 0;
-+	return 0;
++	init_completion(&evt->comp);
 +}
 +
- static int ibmvfc_nvme_fcp_io(struct nvme_fc_local_port *lport,
- 			      struct nvme_fc_remote_port *rport,
- 			      void *hw_queue_handle,
- 			      struct nvmefc_fcp_req *fcp_req)
+ static void ibmvfc_nvme_ls_abort(struct nvme_fc_local_port *lport,
+ 				struct nvme_fc_remote_port *rport,
+ 				struct nvmefc_ls_req *ls_abort)
  {
--	return 0;
 +	struct ibmvfc_host *vhost = lport->private;
-+	struct ibmvfc_nvme_qhandle *qhandle = hw_queue_handle;
-+	struct ibmvfc_cmd *vfc_cmd;
++	struct ibmvfc_target *tgt = rport->private;
 +	struct ibmvfc_event *evt;
-+	int rc;
++	union ibmvfc_iu rsp;
++	unsigned long flags;
++	u16 status;
 +
-+	ibmvfc_dbg(vhost, "nvme_fcp_io\n");
-+	evt = ibmvfc_get_event(qhandle->queue);
-+	if (!evt)
-+		return -EBUSY;
++	evt = ibmvfc_get_event(&vhost->crq);
++	if (!vhost->logged_in || !evt)
++		return;
 +
-+	evt->hwq = qhandle->index;
-+	ibmvfc_dbg(vhost, "vfc-nvme-mq-%d\n", evt->hwq);
++	spin_lock_irqsave(vhost->host->host_lock, flags);
++	kref_get(&tgt->kref);
++	ibmvfc_init_event(evt, ibmvfc_sync_nvme_completion, IBMVFC_MAD_FORMAT);
++	ibmvfc_init_ls_abort(evt, ls_abort);
++	evt->sync_iu = &rsp;
 +
-+	ibmvfc_init_event(evt, ibmvfc_nvme_done, IBMVFC_CMD_FORMAT);
-+	evt->fcp_req = fcp_req;
-+	fcp_req->private = evt;
++	if (ibmvfc_send_event(evt, vhost, default_timeout))
++		goto out;
 +
-+	vfc_cmd = ibmvfc_nvme_init_vfc_cmd(evt, rport, fcp_req);
++	spin_unlock_irqrestore(vhost->host->host_lock, flags);
 +
-+	vfc_cmd->correlation = cpu_to_be64((u64)evt);
-+
-+	if (likely(!(rc = ibmvfc_nvme_map_sg_data(fcp_req, evt, vfc_cmd))))
-+		return ibmvfc_send_event(evt, vhost, 0);
-+
++	wait_for_completion(&evt->comp);
++	status = be16_to_cpu(rsp.mad_common.status);
++	spin_lock_irqsave(vhost->host->host_lock, flags);
 +	ibmvfc_free_event(evt);
-+
-+	return rc;
++out:
++	spin_unlock_irqrestore(vhost->host->host_lock, flags);
++	ibmvfc_dbg(vhost, "ls_abort: cancel failed with rc=%x\n", status);
++	kref_put(&tgt->kref, ibmvfc_release_tgt);
  }
  
- static void ibmvfc_nvme_fcp_abort(struct nvme_fc_local_port *lport,
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.h b/drivers/scsi/ibmvscsi/ibmvfc.h
-index 9f6705e604fd..ca80ceffe53a 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.h
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.h
-@@ -853,6 +853,7 @@ struct ibmvfc_event {
- 	struct ibmvfc_target *tgt;
- 	struct scsi_cmnd *cmnd;
- 	struct nvmefc_ls_req *ls_req;
-+	struct nvmefc_fcp_req *fcp_req;
- 	atomic_t free;
- 	atomic_t active;
- 	union ibmvfc_iu *xfer_iu;
+ static void ibmvfc_nvme_done(struct ibmvfc_event *evt)
 -- 
 2.54.0
 
