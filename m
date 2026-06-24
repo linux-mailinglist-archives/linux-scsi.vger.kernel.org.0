@@ -1,134 +1,128 @@
-Return-Path: <linux-scsi+bounces-25251-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25252-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id RBD0L5kwPGqTlAgAu9opvQ
-	(envelope-from <linux-scsi+bounces-25251-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 21:31:37 +0200
+	id AFsZNWk0PGoAlQgAu9opvQ
+	(envelope-from <linux-scsi+bounces-25252-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 21:47:53 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3954D6C10E7
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 21:31:37 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72BC06C1179
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 21:47:53 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=PBdkb8vU;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25251-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25251-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=gmail.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=cuudjp5Y;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25252-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25252-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 42272301BA48
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 19:31:36 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E0CA430117A2
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 19:47:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E1B0381B06;
-	Wed, 24 Jun 2026 19:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB363350D74;
+	Wed, 24 Jun 2026 19:47:51 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123E9319617
-	for <linux-scsi@vger.kernel.org>; Wed, 24 Jun 2026 19:31:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7463328FA
+	for <linux-scsi@vger.kernel.org>; Wed, 24 Jun 2026 19:47:50 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782329495; cv=none; b=EoSTZK7hmeJblmJPvDsHEthjodvi4qy6KznqApG2bBTXDUQOH8M4dNU5zkyf8TwMaPpMFc6wK/maHQ2TZ0o5RzPr6JnMK+9+D4sWzapDgx9fOBtt456z61i2u65eDXmCJPhQs/1k3I1TRRiA80Qv6T7eKHYNXZbdpq7DQo/QB54=
+	t=1782330471; cv=none; b=LRR0BFEhbf0qnDh/4OypW/mtg5aDijQnsHjfJzxpZaGDS0nwc7QWRphoIdeSS3ljiieL7aXziupdkzxi1i6oBpYsVAOzlQspysSDPov+lmVOluqt9SC0NubWap+i26eVMGTt104I5plAFdFp9V1JrFmtXVP7mimRRkJMJPPJwvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782329495; c=relaxed/simple;
-	bh=ob09ATNmS0jCTssGQEIKkb1JS2ZAXCYLh/fWfUDCvFY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=alrkE0njqUM1nPaJLVzzXfgWU8Aq6QHFXJnAE5+ujNVdX4pZaVk7KDBBSNVE1IP1elapwbl1fLFQC7ykZx3F4e3a62FwWqOt9n3a5DvFNbvQ7FfxizTuzokesMmuQdZJpKJRyQoAJSfVW6tBl/Sssw6GMEQ26s1HSPtP//JpYdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PBdkb8vU; arc=none smtp.client-ip=209.85.128.50
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4926046fbc5so2631525e9.0
-        for <linux-scsi@vger.kernel.org>; Wed, 24 Jun 2026 12:31:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782329491; x=1782934291; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zM0Rsyc81+omKNrgWAtmEWugLcKMCzyY/I4DvgqfYRc=;
-        b=PBdkb8vUaOD1ltPufmzRzX3jRJzlI7DyBvjhDeYHKJDGI38hpMzV2IDqJRUUJ4zv3e
-         zIgo8e4bn+8+PCni/94MKa1tBJjLJr7N/+CJshWFL3/OuC2gzwgJjpzsMOJWeb7ma6aj
-         S/VabluV0GnlqYNMJX9ptvs3RQjmBJtwLxYbCUeN8Jb1s6VvITOgQDN11oonFBMfZ17o
-         qcP3MHMDlUM+fMdGJQYxpZDROffvK3IqH7SVE5HCk7FhL8GaLQoplWX45nUJkimfvYTr
-         KZZSsenvpO6n5zUVSBMAhl+CBvseRIeLqoaGswnLO17+jsqfcjw/RhpVhgr4Y1XF5OtI
-         4jJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782329491; x=1782934291;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zM0Rsyc81+omKNrgWAtmEWugLcKMCzyY/I4DvgqfYRc=;
-        b=ohGQw9B3pE9c5M+2r+cO2hz+c9VYnfD8PjwXLA6dfUY/+IepgkBmHisDO+TONNXYK0
-         W4Wj69A10fwGTRtIrZEqouNRHRZCafS1WcXlI0FcmpbahgVQyrH55EwwP3mBjy/By2mc
-         6Mm7fhlRNi2lO/MAGf7z3KDCeZBwwsmM3J0+VyM/uo3QfEJ8UXianH29YKr2GoHI3l5t
-         KJDCFCxfZmGYYXFf7yd0BqW4BlqmgTX7i/hlFBUUbP8jOIR/BOIpN2d2f4yJQUMj6w40
-         t36gz/PI78Y9man9ufFLhcexuwFYZ4MxFYHnKcdudhSNHDa59/6dV6Llszk2xonMIcN2
-         RjUA==
-X-Gm-Message-State: AOJu0YwarhsMlquQcoMgav5LJyWk1M5+2Pldc9e28fivfon9aG0RovxD
-	PLCaiATYvMwrM/20R2yOOWBN2LVqLdUp0U56lfqWvMyVAka78thAy5pI
-X-Gm-Gg: AfdE7ck8NFcp8FYTovA7zFhzeLcaP9uGrcP+mQnBB3ekUmeD9jACmQAYOB/n0FNpumv
-	yPWV7e1OQ13yzkELwgfolSPSlge/KQjtw6d1YRxcwmbjMluyjJiWZDpt2eDlRtUvb7WDPspyyIw
-	tqKFBD3Cx17JFPn9SF3GeFDAB05RPc66g5rpRwiCXBJfrzj3z/X42U/3oFHK/DGwtVaYNmMpxjY
-	8OyF5U7vfhPCTEcbY8Q4jY1lK56cK8N7VWhZrlA6aMnuWwoVhoZAB/x3dYTidzO3NVUWP+Oi3vy
-	0VmV1fkt/gedN3bh2/zitErtje3BCAtxf347CHqNKub4RZ7hc60lpr1LTLoud6+3tBGhHk1PBUJ
-	VU0Pd3wgJZgxlEk6Ma5JqOTHWBmQwfH4vJnWQrKyUv6ncw0JGEvRFcJivCsmQBYXeJQW3sBVGE7
-	mjwZTNAGj9vgYXRsHrgDZo9KbsKw==
-X-Received: by 2002:a05:600c:5843:b0:490:af63:2cb1 with SMTP id 5b1f17b1804b1-492632a3556mr18392175e9.7.1782329491450;
-        Wed, 24 Jun 2026 12:31:31 -0700 (PDT)
-Received: from Dev-Null-MSI ([2a0d:3344:52ac:a808:98a4:4381:be45:536f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4926497c890sm2967355e9.0.2026.06.24.12.31.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 12:31:31 -0700 (PDT)
-From: Yousef Alhouseen <alhouseenyousef@gmail.com>
-To: Adam Radford <aradford@gmail.com>,
-	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yousef Alhouseen <alhouseenyousef@gmail.com>
-Subject: [PATCH] scsi: 3w-xxxx: validate AEN ioctl buffer length
-Date: Wed, 24 Jun 2026 21:31:21 +0200
-Message-ID: <20260624193121.5895-1-alhouseenyousef@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	s=arc-20240116; t=1782330471; c=relaxed/simple;
+	bh=KPFQHRyeF81xC7iwPFVGFvgOHHXThTUbATkJA/EsYXE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Bn+NKwsMRtR5vQsmrdkTIXhrGX+hZHYIxkscmhy5dE/IMmTmy0fdBgFCf7d4p8t8zJYEp1nVezJ5Ar2+29ZXqv4aJZ1xiWuEJys9nuk8g1o57HahFmO5xxNA//T4Gw7iwY4ojuiTKWMc1fVD2tm91Q4yhzkBfi9pePsxLpC602E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cuudjp5Y; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 209D41F000E9;
+	Wed, 24 Jun 2026 19:47:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782330470;
+	bh=iHKO44IRWvt4TdJ33aqxiLQ9SAhSxQiSfYh/WLxjs7I=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=cuudjp5Y9wlmeH3dXoya+zl9O4zgdPtX738FIJ/0KudHQsFBn2FRFsAV4vVK2z36j
+	 Cnen5W66M+yjWwLrzKjLtPn3foT9/E4OA4OCg1yRk9HUTnOqKYQ003NELsAFZYUGOl
+	 /ms3DNdwcULXVr4Hyp/YFEHuwxn1plwyyAd0v1AvGC17/r0Uok+EpJxYK6MEuccFHF
+	 VHnTHq67DvtKF0jsNO2YSmB8ywGWKZdMT+uP+o/PSCwr6Bm113ATlBkpYYHvAq65q3
+	 I8gLhq5iPgq9V9/1ejagprrwrPE98LOgIMWDhNRoblDZY6m8iy7bfy3HLzHI+VsX4S
+	 6BOml0BROczbQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] scsi: 3w-xxxx: validate AEN ioctl buffer length
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yousef Alhouseen" <alhouseenyousef@gmail.com>
+Cc: linux-scsi@vger.kernel.org
+In-Reply-To: <20260624193121.5895-1-alhouseenyousef@gmail.com>
+References: <20260624193121.5895-1-alhouseenyousef@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 24 Jun 2026 19:47:49 +0000
+Message-Id: <20260624194750.209D41F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-25251-lists,linux-scsi=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:aradford@gmail.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:alhouseenyousef@gmail.com,s:lists@lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com,HansenPartnership.com,oracle.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER(0.00)[alhouseenyousef@gmail.com,linux-scsi@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25252-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:alhouseenyousef@gmail.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alhouseenyousef@gmail.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	ALIAS_RESOLVED(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[smtp.kernel.org:mid,vger.kernel.org:from_smtp,lists.linux.dev:replyto,sashiko.dev:url,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3954D6C10E7
+X-Rspamd-Queue-Id: 72BC06C1179
+
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+
+Pre-existing issues:
+- [Critical] Arbitrary physical memory read/write via unvalidated scatter-g=
+ather lists in TW_CMD_PACKET_WITH_DATA ioctl.
+- [High] Out-of-bounds slab writes in 3w-9xxx.c when processing ioctls with=
+ small data buffers.
+- [High] Use-after-free on tw_dev due to missing Scsi_Host reference holdin=
+g in character device open.
+- [High] DMA use-after-free when hardware reset fails during ioctl command =
+timeout.
+--
+
+commit 3b17020e8e124fad25e2ae1bcd6bfc20e4d712ff
+Author: Yousef Alhouseen <alhouseenyousef@gmail.com>
+
+scsi: 3w-xxxx: validate AEN ioctl buffer length
 
 TW_OP_AEN_LISTEN copies a fixed AEN code into the ioctl data buffer, but
 the coherent ioctl allocation is sized from the user supplied buffer
@@ -138,34 +132,115 @@ past the allocated ioctl buffer.
 Reject AEN listen requests whose data buffer is too small for the code
 returned by the driver.
 
-Signed-off-by: Yousef Alhouseen <alhouseenyousef@gmail.com>
----
- drivers/scsi/3w-xxxx.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+> diff --git a/drivers/scsi/3w-xxxx.c b/drivers/scsi/3w-xxxx.c
+> index c68678fa72c1e..147a47e6b3e55 100644
+> --- a/drivers/scsi/3w-xxxx.c
+> +++ b/drivers/scsi/3w-xxxx.c
+> @@ -908,6 +908,12 @@ static long tw_chrdev_ioctl(struct file *file, unsig=
+ned int cmd, unsigned long a
+>  		goto out;
+>  	}
+> =20
+> +	if (cmd =3D=3D TW_OP_AEN_LISTEN &&
+> +	    data_buffer_length < sizeof(tw_aen_code)) {
+> +		retval =3D -EINVAL;
+> +		goto out;
+> +	}
+> +
 
-diff --git a/drivers/scsi/3w-xxxx.c b/drivers/scsi/3w-xxxx.c
-index c68678fa7..147a47e6b 100644
---- a/drivers/scsi/3w-xxxx.c
-+++ b/drivers/scsi/3w-xxxx.c
-@@ -908,6 +908,12 @@ static long tw_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long a
- 		goto out;
- 	}
- 
-+	if (cmd == TW_OP_AEN_LISTEN &&
-+	    data_buffer_length < sizeof(tw_aen_code)) {
-+		retval = -EINVAL;
-+		goto out;
-+	}
-+
- 	/* Hardware can only do multiple of 512 byte transfers */
- 	data_buffer_length_adjusted = (data_buffer_length + 511) & ~511;
- 
-@@ -2427,4 +2433,3 @@ static void __exit tw_exit(void)
- 
- module_init(tw_init);
- module_exit(tw_exit);
--
--- 
-2.54.0
+[Severity: High]
+This isn't a bug introduced by this patch, but does the sibling driver
+3w-9xxx.c suffer from the exact same out-of-bounds write that this commit
+fixes?
 
+In twa_chrdev_ioctl(), if the user provides a buffer length smaller than the
+structure size, the fixed-size copy might overwrite the allocated buffer:
+
+drivers/scsi/3w-9xxx.c:twa_chrdev_ioctl() {
+    ...
+    tw_compat_info =3D (TW_Compatibility_Info *)tw_ioctl->data_buffer;
+    memcpy(tw_compat_info, &tw_dev->tw_compat_info,
+           sizeof(TW_Compatibility_Info));
+    ...
+}
+
+
+[Severity: High]
+This is a pre-existing issue, but I noticed a potential use-after-free race
+condition regarding the scsi_host reference.
+
+In tw_chrdev_open(), we don't pin the Scsi_Host via scsi_host_get(). If the
+device is concurrently hot-removed, tw_remove() frees the host data while
+the file descriptor remains open.
+
+Could a subsequent ioctl call dereference the freed tw_dev pointer here?
+
+tw_chrdev_ioctl() {
+    ...
+    if (mutex_lock_interruptible(&tw_dev->ioctl_lock)) {
+    ...
+}
+
+>  	/* Hardware can only do multiple of 512 byte transfers */
+>  	data_buffer_length_adjusted =3D (data_buffer_length + 511) & ~511;
+
+[Severity: Critical]
+This is a pre-existing issue, but is there a risk of arbitrary physical
+memory access when handling TW_CMD_PACKET_WITH_DATA?
+
+Later in tw_chrdev_ioctl(), the switch statement only overwrites sgl[0] for
+specific opcode offsets:
+
+tw_chrdev_ioctl() {
+    ...
+    switch (TW_SGL_OUT(tw_ioctl->firmware_command.opcode__sgloffset)) {
+    case 2:
+        tw_ioctl->firmware_command.byte8.param.sgl[0].address =3D
+            dma_handle + sizeof(TW_New_Ioctl);
+        ...
+    }
+   =20
+    memcpy(tw_dev->command_packet_virtual_address[request_id],=20
+           &(tw_ioctl->firmware_command), sizeof(TW_Command));
+    ...
+}
+
+If a user with CAP_SYS_ADMIN provides an unhandled offset or additional SGL
+entries (sgl[1..61]), it seems those unvalidated physical addresses are
+copied into the command packet and passed directly to the hardware. Could
+this be used to bypass kernel lockdown limits?
+
+
+[Severity: High]
+This is a pre-existing issue, but I have a question about the error handling
+if a hardware command times out.
+
+If the hardware fails to reset, we jump to out2:
+
+tw_chrdev_ioctl() {
+    ...
+    if (tw_dev->chrdev_request_id !=3D TW_IOCTL_CHRDEV_FREE) {
+        retval =3D -EIO;
+        if (tw_reset_device_extension(tw_dev)) {
+            printk(KERN_WARNING "...");
+        }
+        goto out2;
+    }
+    ...
+}
+
+At out2, the DMA buffer is freed:
+
+out2:
+    dma_free_coherent(&tw_dev->tw_pci_dev->dev,=20
+                      data_buffer_length_adjusted + sizeof(TW_New_Ioctl),=20
+                      cpu_addr, dma_handle);
+
+If the hardware is still active because the reset failed, could it continue
+processing the stalled command and write into these freed physical memory
+pages?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260624193121.5895=
+-1-alhouseenyousef@gmail.com?part=3D1
 
