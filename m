@@ -1,94 +1,93 @@
-Return-Path: <linux-scsi+bounces-25209-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25211-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id XnF7DL9gO2r2WwgAu9opvQ
-	(envelope-from <linux-scsi+bounces-25209-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 06:44:47 +0200
+	id OtU3HutgO2oAXAgAu9opvQ
+	(envelope-from <linux-scsi+bounces-25211-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 06:45:31 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63E466BB467
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 06:44:46 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF9446BB478
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 06:45:30 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=cisco.com header.s=iport01 header.b=j7KH251n;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25209-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25209-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=cisco.com header.s=iport01 header.b=EDt8UaoI;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25211-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25211-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=reject) header.from=cisco.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DEE76302BDC9
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 04:44:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5203B302C17D
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 04:44:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C10231F980;
-	Wed, 24 Jun 2026 04:44:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16BC3380FFA;
+	Wed, 24 Jun 2026 04:44:55 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from rcdn-iport-6.cisco.com (rcdn-iport-6.cisco.com [173.37.86.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE5635BDDB;
-	Wed, 24 Jun 2026 04:44:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBF735BDDB;
+	Wed, 24 Jun 2026 04:44:53 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782276281; cv=none; b=IYo2RwvJoTqC8s3Zie4rmOA/L56uSx1ANoVBtwiERcV6bEAr1Ag4ggQdjW2RxuOBvLSwv7z9urPNTtE6kt+vzPRDygvdoDD0ZxwbHcab57fxlzWsI8Y95gW+Do+XGW+9b/N/Nm86OuEQGfwvZuiOTitleldD5fKQlo8tjMqewzU=
+	t=1782276294; cv=none; b=sj0lfkxXn8AX8UExxNv50w0fXMD9UWyUHD+cQxTG/SVCj9FT1m4lm+5TGclruktiFEcmo6O7SgF7Ks22BW0PhVGcrLnN4mxq3tYxzuMlQOWdKY6e/oYE7nBqkFAdE8RsFMI1vBs6i8TgJU9K7Kf1uthlq1z6kjPcHQBwASoTMoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782276281; c=relaxed/simple;
-	bh=ZCNcv4P7AkVPotlXpvPK5iNoL4fsncxpnHstGG2BLQo=;
+	s=arc-20240116; t=1782276294; c=relaxed/simple;
+	bh=/hRIvyA8TdhzBG+AM9Z0f15OUrLJ2fSrqhgIQ7MRK88=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PUpRVai8a9oGsHsSmAmZI/DF883AMBnWQpw2zPz6rKcx4wZm/lCC0ATx47MyP5QfTa4j9x/He+nBWVP+RqTYQk9qE2g3RO+a3i/+ZJA+JOsttSz9dlDXjb06Q9S+XFsbfrnvqxYCO9zRlMG8xu6hgET08rceL/d1Xk5AaqvkiZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=j7KH251n; arc=none smtp.client-ip=173.37.86.77
+	 MIME-Version; b=N7uBdPWLb8PnStFHyAI44Arb7SKJQyEG0J+zMw3WHlzJMesghcg3q2S+1gG5BjB7/3EBcheGirwQ4AroKi38S4mRnFFFuX8VzG8S3KXcqRr5w4flyX7ysw3a7q3JxY6GmBT/MIhjW/LXiw6HUyo0LjVx6YlEFLt/zJYBTzBpXng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=EDt8UaoI; arc=none smtp.client-ip=173.37.86.77
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=cisco.com; i=@cisco.com; l=2821; q=dns/txt;
-  s=iport01; t=1782276279; x=1783485879;
+  d=cisco.com; i=@cisco.com; l=5258; q=dns/txt;
+  s=iport01; t=1782276293; x=1783485893;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=sLADWQIE9KTz+/SzYGCIkSHf9EF3QcETYxY+2sa7yfs=;
-  b=j7KH251n3iwtAdyo4f4tORo0aih/ilodjDvbaTlBKJZMjj8OqSBVjjTQ
-   qQ4Eg/GpuSgk9BK0L1111oECVRCXudCUbIBvACjUgejw9GeCb7Q/sgERi
-   m3geQragMrLyxkOSbloMC1U4MfTrg201TIqH4OC4rHg03GwGy1dsPox57
-   f0UbTzoFnpZaGBAFE6NlJuavYMGGH8Yl/EoQ9MLO3ggDuErIiyDNM6bvT
-   y8qFPiT13hR6CzR+6oJG6mczl/gBk38SvLUXbB+AixAeFH50fu/3eCpaK
-   sx9B7oMF2vSaFJtcQ5hi9f72coOyDb1uepi24bwR14VgYDzQqCVPFS3zo
-   g==;
-X-CSE-ConnectionGUID: rJ0NzyX7RqWvkqh/1xr2Kw==
-X-CSE-MsgGUID: eE5KiUyXSOmO9crNhwgKbA==
-X-IPAS-Result: =?us-ascii?q?A0BCAgDmXjtq/4//Ja1aglmCV4FSQxkwlCqgP4F+DwEBA?=
- =?us-ascii?q?Q9RBAEBhQYCjUoCJjQJDgECBAMCAwEBAQEBAQEBAQEBCwEBBQEBAQIBBwWBD?=
- =?us-ascii?q?hOGXIZbAgEDJwsBRhBRVhmDAoJ0A7I5gXkzgQHeQ4FmAQsUAYE4jV50hHwnF?=
- =?us-ascii?q?QaBSUSBFYNpgVKDPoV4BIMcEpECSIEeA1ksAVUTDQoLBwWBZgM1EioVbjIdg?=
- =?us-ascii?q?SM+F4EMGwcFgR2BboEEhQIjHwM5f4E/gSRkZhUwNYEBAREfCoE1AwsYDUgRL?=
- =?us-ascii?q?DcUGwQ+bgeMXRcPgj2BD4EwZyiTT5AegiGhD4QnoVsaM6psLphaqUKBaDyBW?=
- =?us-ascii?q?TMaCBsVgyJTGQ+OLRbSOicyPQEBBwIHDgMLgWiRfQEB?=
-IronPort-Data: A9a23:PSFB7Kod1DrDyU3ZmwJ3zHpJQtleBmLpZBIvgKrLsJaIsI4StFCzt
- garIBnVOPeINzGneookbIW09h4Bu5Tcy4NmHgE5+X9hQ3wQp+PIVI+TRqvS04x+DSFioGZPt
- Zh2hgzodZhsJpPkjk7zdOCn9j8kif3gqoPUUIbsIjp2SRJvVBAvgBdin/9RqoNziLBVOSvV0
- T/Ji5OZYgPNNwJcaDpOtfrd8kg35pwehRtB1rAATaET1LPhvyF94KI3fcmZM3b+S49IKe+2L
- 86r5K255G7Q4yA2AdqjlLvhGmVSKlIFFVHT4pb+c/HKbilq/kTe4I5iXBYvQRs/ZwGyojxE4
- I4lWapc5useFvakdOw1C3G0GszlVEFM0OevzXOX6aR/w6BaGpfh660GMa04AWEX0vxVWUdc5
- MxHEikycBOah6Xv0KjhafY506zPLOGzVG8ekmtrwTecCbMtRorOBv2Uo9RZxzw3wMtJGJ4yZ
- eJANmEpN0uGOUASfA5LU/rSn8/w7pX7Wz5Rsk6UoaM0y2PS1wd2lrPqNbI5f/TWFJQOxx7B/
- DiuE2LRDzxHF92i2Aq+1XeL1+TVuyPkV6EYPejtnhJtqBjJroAJMzUWXEG2ifq0kEizX5RYM
- UN80igjr6Ia8E2tU8m7Xhe95nWDu3Y0XtNKD+w8rhmA1qfO+AufLm8eRzVFZZots8pebTUm3
- 1yOh9T0LSZivL2cVTSW8bL8hTG3NC4YIm8DTTUJQQsM/5/op4RbpgjCUNt5C4avg9H1EC22y
- DePxAA6i6gVhscN/76m5l2BiDWpzrDNTwgo9kDUU3ij4wdReoGofcqr5ELd4PIGK5yWJnGFv
- X4Zi42F5/sPJY+CmTbLQ+gXGrytofGfP1XhbUVHBZIt8XGpvnWkZ40VuG84L0ZyOcFCcjjsC
- KPOhT5sCFZoFCPCRcdKj0iZUqzGEYCI+QzZa83p
-IronPort-HdrOrdr: A9a23:/RcNXaDNtQXqOyXlHelm55DYdb4zR+YMi2TDGXocdfUzSL39qy
- nAppomPHPP4gr5HUtQ+uxoW5PwJE80l6QV3WB5B97LNzUO+lHYTr2KhrGM/9SPIUDD398Y/b
- t8cqR4Fd37BUV3gILH+gWieuxQp+VviJrJuc7ui1FwUAptd6Zsqy19CgqdDwlKYTMuP+teKH
- JZjfA33wZJvh8sH72GOkU=
-X-Talos-CUID: 9a23:gVzxU2/wNkCOIR1n6CaVv1Q2QuY3Y02C9m7vPUyhCSEwWKfPakDFrQ==
-X-Talos-MUID: =?us-ascii?q?9a23=3AMQp+Gw0Wq3vhyAieJvgNL1M8XzUj7onzK0EwgKU?=
- =?us-ascii?q?9nMyjZCdqHTeCgxe9a9py?=
+  bh=CVros7qsSuQxgK8aLaeIsg2UmLnwQrwomotDYMMxcek=;
+  b=EDt8UaoIj1oywPKKPoOPdi3Eggb36DX+kwiJ8PGTJHb+tY+tw0T/2Nm+
+   A2HJclbYtJKNaKGfOcDB3BUqDUO/ryabrneT2iqRTWjQrxgs5xDOGy1Hd
+   JriSB63eHPOyQPxTKRCibdPoWXyQDwBzCJD6rI8QaiOHVle8Um8cUF4s7
+   HqgJ0Vgxk8XxdNghtWnnnTb/Z8QAqyVvmAs4Nv9AKXAxVKNPMM02PjLXx
+   Q+XsCAdraYtfoi0gfmXAYbCVPLyhBuV1p1SdrT/3xNcXCSlXxL+4KiGe7
+   JbQSy7aUdJgq5wb7uW4GTxldu3QX0jeiolCHRzJ5HiA0AaMYrDoX4FHkE
+   A==;
+X-CSE-ConnectionGUID: F3Ka9gu5QXaULRbBhjFuyQ==
+X-CSE-MsgGUID: 05P0nNh1SvG6wwBEJ1wjLw==
+X-IPAS-Result: =?us-ascii?q?A0BCAgDmXjtq/4//Ja1aglmCV4FSQxkwlCqDN50IgX4PA?=
+ =?us-ascii?q?QEBD1EEAQGFBgKNSgImNAkOAQIEAwIDAQEBAQEBAQEBAQELAQEFAQEBAgEHB?=
+ =?us-ascii?q?YEOE4ZchlsCAQMnCwFGEFFWGYMCgnQDsjmBeTOBAd5DgWYBCxQBgTiNXnSEf?=
+ =?us-ascii?q?CcVBoFJRIEVgnN2gVKCSYZtBIMuhX6LBEiBHgNZLAFVEw0KCwcFgWYDNRIqF?=
+ =?us-ascii?q?W4yHYEjPheBDBsHBYEdgW6BBIUCIx8DOX+BP4EkZGYVMDWBAQERHwqBNQMLG?=
+ =?us-ascii?q?A1IESw3FBsEPm4HjF0XD4I2B4EPgj4Bk0+SP6EPhCehWxozqmyZCKNyhVCBa?=
+ =?us-ascii?q?DyBWTMaCBsVgyJTGQ/gfScyPQIHAgcOAwuGSYsggXwBAQ?=
+IronPort-Data: A9a23:dKew9qvNou90hv5BvSfq70d5UOfnVKdfMUV32f8akzHdYApBsoF/q
+ tZmKWqAb6uIa2Ome99wboS/8hlTuJSAzNVmGgZvpS49Ey0RgMeUXt7xwmUckM+xwmwvaGo9s
+ q3yv/GZdJhcokf0/0nrav666yEgiclkf5KkYMbcICd9WAR4fykojBNnioYRj5Vh6TSDK1vlV
+ eja/YuFZDdJ5xYuajhKs/zZ80s11BjPkGpwUmIWNKgjUGD2zxH5PLpHTYmtIn3xRJVjH+LSb
+ 47r0LGj82rFyAwmA9Wjn6yTWhVirmn6ZFXmZtJ+AsBOszAazsAA+v9T2Mk0NS+7vw60c+VZk
+ 72hg3AfpTABZcUgkMxFO/VR/roX0aduoNcrKlDn2SCfItGvn3bEm51T4E8K0YIw1L1UCDBB6
+ KEhGDkwSiqJreK07q+qc7w57igjBJGD0II3oHpsy3TdSP0hW52GG/uM7t5D1zB2jcdLdRrcT
+ 5NGMnw0M1KaPkAJYwtMYH49tL/Aan3XcDRCtFORrKkf6GnIxws327/oWDbQUoDbFJ4MxhzE+
+ woq+UyhXylCMvqfkAGb3SyzmcXiv3rkWqYNQejQGvlCxQf7KnYoIB0fT1aTovSjjEO6HdVFJ
+ CQ8+Ccsp4A29Uq2Xp/8VRj+q3mB1jYZUsBMEut88AyRx7DP7gCxAXINRTpMLtchsaceTDAj1
+ ViRmM7BHzFjsLSJD3ma89+8rza/PyUaLW4qfyIITQIZpdLkpekblB/RQ8x4OLS4gt38BXf7x
+ DXihCwymrMYhMgjzLig8BbMhDfEjpzISBMlowbaRGSo6itna4O/IY+l817W6bBHNonxZl2Au
+ mUU3tOV9+EmE56AjmqOTf8LEbXv4OyKWAAwmnZ1FJUnsjDo8Hm5cMUIvnd1JVxiNYAPfjqBj
+ FLvhD69LaR7ZBOCBZKbqarrYyj25cAMzejYa80=
+IronPort-HdrOrdr: A9a23:vwO5D6vIREZuTyUCF/rkN1mR7skDvNV00zEX/kB9WHVpmwKj+/
+ xG+85rsSMc5wx+ZJhNo7q90ey7MBDhHP1OkOws1NWZPTUO0VHAROpfBMnZsl/d8kbFmdK1u5
+ 0MT4FOTPXtEFl3itv76gGkH9tl/MOK68mT9IDjJg9WLT1CWuVH8xpzDBqdHwldQQlLAod8Kb
+ +nj/A3wQZJvR8sH7yG7r5vZZm7m+H2
+X-Talos-CUID: 9a23:iWb032+UBU3OIPxyZxSVv2BPOcl0fWCA9UfZHmuCA0xpSpOIWGbFrQ==
+X-Talos-MUID: 9a23:TamDlgiRPnR8njXT1YARUMMpbJpQu6KICBk2j7pYpNauGA4pJDW5k2Hi
 X-IronPort-Anti-Spam-Filtered: true
 X-IronPort-AV: E=Sophos;i="6.24,221,1774310400"; 
-   d="scan'208";a="499310122"
+   d="scan'208";a="499310245"
 Received: from rcdn-l-core-06.cisco.com ([173.37.255.143])
-  by rcdn-iport-6.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 24 Jun 2026 04:44:33 +0000
+  by rcdn-iport-6.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 24 Jun 2026 04:44:52 +0000
 Received: from fedora.lan?044cisco.com (unknown [10.188.122.232])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kartilak@cisco.com)
-	by rcdn-l-core-06.cisco.com (Postfix) with ESMTPSA id B913C180003A1;
-	Wed, 24 Jun 2026 04:44:31 +0000 (GMT)
+	by rcdn-l-core-06.cisco.com (Postfix) with ESMTPSA id C8CC2180003A1;
+	Wed, 24 Jun 2026 04:44:50 +0000 (GMT)
 From: Karan Tilak Kumar <kartilak@cisco.com>
 To: sebaddel@cisco.com
 Cc: arulponn@cisco.com,
@@ -107,9 +106,9 @@ Cc: arulponn@cisco.com,
 	lduncan@suse.com,
 	Karan Tilak Kumar <kartilak@cisco.com>,
 	Hannes Reinecke <hare@kernel.org>
-Subject: [PATCH v5 02/13] scsi: fnic: Use fnic_num for non-SCSI identifiers
-Date: Tue, 23 Jun 2026 21:43:23 -0700
-Message-ID: <20260624044334.3079-3-kartilak@cisco.com>
+Subject: [PATCH v5 03/13] scsi: fnic: Decode firmware role configuration
+Date: Tue, 23 Jun 2026 21:43:24 -0700
+Message-ID: <20260624044334.3079-4-kartilak@cisco.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20260624044334.3079-1-kartilak@cisco.com>
 References: <20260624044334.3079-1-kartilak@cisco.com>
@@ -132,11 +131,11 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[cisco.com,reject];
 	R_DKIM_ALLOW(-0.20)[cisco.com:s=iport01];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25209-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25211-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	FORGED_RECIPIENTS(0.00)[m:sebaddel@cisco.com,m:arulponn@cisco.com,m:djhawar@cisco.com,m:gcboffa@cisco.com,m:mkai2@cisco.com,m:satishkh@cisco.com,m:aeasi@cisco.com,m:jejb@linux.ibm.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:jmeneghi@redhat.com,m:revers@redhat.com,m:adakopou@redhat.com,m:lduncan@suse.com,m:kartilak@cisco.com,m:hare@kernel.org,s:lists@lfdr.de];
@@ -144,7 +143,7 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER(0.00)[kartilak@cisco.com,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -159,75 +158,161 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,suse.com:email,cisco.com:dkim,cisco.com:email,cisco.com:mid,cisco.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 63E466BB467
+X-Rspamd-Queue-Id: CF9446BB478
 
-Use SCSI host numbers only for FCP initiator paths.
+Add FNIC_ROLE_CONFIG_MASK and use it to decode firmware role bits
+when reading vNIC configuration and probing the PCI device.
 
-Name NVMe-facing FDMI and debugfs entries with fnic_num, and record
-trace events with the driver instance number.
+Accept FCP and NVMe initiator roles, report FC target and FC-NVMe target
+roles explicitly as unsupported, and keep truly undefined role settings
+on the existing FC initiator default path.
+
+Log the configured role flags and expose role names for trace output.
 
 Reviewed-by: Sesidhar Baddela <sebaddel@cisco.com>
 Reviewed-by: Arulprabhu Ponnusamy <arulponn@cisco.com>
 Reviewed-by: Gian Carlo Boffa <gcboffa@cisco.com>
 Reviewed-by: Arun Easi <aeasi@cisco.com>
-Reviewed-by: Hannes Reinecke <hare@kernel.org>
 Reviewed-by: Lee Duncan <lduncan@suse.com>
 Signed-off-by: Karan Tilak Kumar <kartilak@cisco.com>
 Co-developed-by: Hannes Reinecke <hare@kernel.org>
 ---
- drivers/scsi/fnic/fdls_disc.c    | 8 ++++++--
- drivers/scsi/fnic/fnic_debugfs.c | 5 ++++-
- drivers/scsi/fnic/fnic_scsi.c    | 2 +-
- 3 files changed, 11 insertions(+), 4 deletions(-)
+Incorporate review comments from Hannes:
+	Decode target roles explicitly and report unsupported roles.
 
-diff --git a/drivers/scsi/fnic/fdls_disc.c b/drivers/scsi/fnic/fdls_disc.c
-index 5880ca28a0ad..f665460ef62c 100644
---- a/drivers/scsi/fnic/fdls_disc.c
-+++ b/drivers/scsi/fnic/fdls_disc.c
-@@ -2083,8 +2083,12 @@ static void fdls_fdmi_register_pa(struct fnic_iport_s *iport)
- 	fnic_fdmi_attr_set(fdmi_attr, FNIC_FDMI_TYPE_MAX_FRAME_SIZE,
- 		FNIC_FDMI_MFS_LEN, data, &attr_off_bytes);
+Changes between v3 and v4:
+Incorporate review comments from Sashiko:
+	Keep role strings private and const
+---
+ drivers/scsi/fnic/fnic.h       |  1 +
+ drivers/scsi/fnic/fnic_main.c  | 23 +++++++++++++++++++++--
+ drivers/scsi/fnic/fnic_res.c   | 29 +++++++++++++++++++++++++++--
+ drivers/scsi/fnic/fnic_trace.c |  3 ++-
+ 4 files changed, 51 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/scsi/fnic/fnic.h b/drivers/scsi/fnic/fnic.h
+index ad152fb4c15f..54ee52c453ba 100644
+--- a/drivers/scsi/fnic/fnic.h
++++ b/drivers/scsi/fnic/fnic.h
+@@ -43,6 +43,7 @@
+ #define FNIC_DFLT_QUEUE_DEPTH	256
+ #define	FNIC_STATS_RATE_LIMIT	4 /* limit rate at which stats are pulled up */
+ #define LUN0_DELAY_TIME			9
++#define FNIC_ROLE_CONFIG_MASK   (0xFF0)
  
--	snprintf(tmp_data, FNIC_FDMI_OS_NAME_LEN - 1, "host%d",
--		 fnic->host->host_no);
-+	if (IS_FNIC_FCP_INITIATOR(fnic))
-+		snprintf(tmp_data, FNIC_FDMI_OS_NAME_LEN - 1, "host%d",
-+			fnic->host->host_no);
-+	else if (IS_FNIC_NVME_INITIATOR(fnic))
-+		snprintf(tmp_data, FNIC_FDMI_OS_NAME_LEN - 1, "nvfnic%d",
+ /*
+  * Tag bits used for special requests.
+diff --git a/drivers/scsi/fnic/fnic_main.c b/drivers/scsi/fnic/fnic_main.c
+index 7c7f9ea5267b..3a365ea455b1 100644
+--- a/drivers/scsi/fnic/fnic_main.c
++++ b/drivers/scsi/fnic/fnic_main.c
+@@ -844,7 +844,7 @@ static int fnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 		goto err_out_fnic_get_config;
+ 	}
+ 
+-	switch (fnic->config.flags & 0xff0) {
++	switch (fnic->config.flags & FNIC_ROLE_CONFIG_MASK) {
+ 	case VFCF_FC_INITIATOR:
+ 		{
+ 			host =
+@@ -863,8 +863,27 @@ static int fnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 					fnic->fnic_num);
+ 		}
+ 		break;
++	case VFCF_FC_TARGET:
++		dev_info(&fnic->pdev->dev,
++			 "fnic: %d is scsi target\n",
++			 fnic->fnic_num);
++		err = -EOPNOTSUPP;
++		goto err_out_fnic_role;
++	case VFCF_FC_NVME_INITIATOR:
++		fnic->role = FNIC_ROLE_NVME_INITIATOR;
++		dev_info(&fnic->pdev->dev, "fnic: %d is NVME initiator\n",
 +			fnic->fnic_num);
- 	strscpy_pad(data, tmp_data, FNIC_FDMI_OS_NAME_LEN);
- 	fnic_fdmi_attr_set(fdmi_attr, FNIC_FDMI_TYPE_OS_NAME,
- 		FNIC_FDMI_OS_NAME_LEN, data, &attr_off_bytes);
-diff --git a/drivers/scsi/fnic/fnic_debugfs.c b/drivers/scsi/fnic/fnic_debugfs.c
-index ba86964fb45e..467fba29ea5f 100644
---- a/drivers/scsi/fnic/fnic_debugfs.c
-+++ b/drivers/scsi/fnic/fnic_debugfs.c
-@@ -681,7 +681,10 @@ int fnic_stats_debugfs_init(struct fnic *fnic)
++		break;
++	case VFCF_FC_NVME_TARGET:
++		dev_info(&fnic->pdev->dev,
++			 "fnic: %d is NVME target\n",
++			 fnic->fnic_num);
++		err = -EOPNOTSUPP;
++		goto err_out_fnic_role;
+ 	default:
+-		dev_info(&fnic->pdev->dev, "fnic: %d has no role defined\n", fnic->fnic_num);
++		dev_info(&fnic->pdev->dev,
++			"fnic: %d has no role defined (0x%x)\n",
++			fnic->fnic_num, fnic->config.flags & FNIC_ROLE_CONFIG_MASK);
+ 		err = -EINVAL;
+ 		goto err_out_fnic_role;
+ 	}
+diff --git a/drivers/scsi/fnic/fnic_res.c b/drivers/scsi/fnic/fnic_res.c
+index 9801e5fbb0dd..18353fbb5f98 100644
+--- a/drivers/scsi/fnic/fnic_res.c
++++ b/drivers/scsi/fnic/fnic_res.c
+@@ -22,6 +22,7 @@
+ int fnic_get_vnic_config(struct fnic *fnic)
  {
- 	char name[16];
+ 	struct vnic_fc_config *c = &fnic->config;
++	u32 role;
+ 	int err;
  
--	snprintf(name, sizeof(name), "host%d", fnic->host->host_no);
-+	if (IS_FNIC_FCP_INITIATOR(fnic))
-+		snprintf(name, sizeof(name), "host%d", fnic->host->host_no);
-+	else if (IS_FNIC_NVME_INITIATOR(fnic))
-+		snprintf(name, sizeof(name), "nvfnic%d", fnic->fnic_num);
+ #define GET_CONFIG(m) \
+@@ -58,9 +59,31 @@ int fnic_get_vnic_config(struct fnic *fnic)
+ 	GET_CONFIG(intr_mode);
+ 	GET_CONFIG(wq_copy_count);
  
- 	fnic->fnic_stats_debugfs_host = debugfs_create_dir(name,
- 						fnic_stats_debugfs_root);
-diff --git a/drivers/scsi/fnic/fnic_scsi.c b/drivers/scsi/fnic/fnic_scsi.c
-index 0759540f6675..b92260583c67 100644
---- a/drivers/scsi/fnic/fnic_scsi.c
-+++ b/drivers/scsi/fnic/fnic_scsi.c
-@@ -894,7 +894,7 @@ static inline void fnic_fcpio_ack_handler(struct fnic *fnic,
+-	if ((c->flags & (VFCF_FC_INITIATOR)) == 0) {
+-		dev_info(&fnic->pdev->dev, "vNIC role not defined (def role: FC Init)\n");
++	role = c->flags & FNIC_ROLE_CONFIG_MASK;
++	switch (role) {
++	case 0:
++		dev_info(&fnic->pdev->dev,
++			 "vNIC role not defined (def role: FC Init)\n");
+ 		c->flags |= VFCF_FC_INITIATOR;
++		break;
++	case VFCF_FC_INITIATOR:
++	case VFCF_FC_NVME_INITIATOR:
++		break;
++	case VFCF_FC_TARGET:
++		dev_info(&fnic->pdev->dev,
++			 "vNIC role is FC Target (unsupported)\n");
++		break;
++	case VFCF_FC_NVME_TARGET:
++		dev_info(&fnic->pdev->dev,
++			 "vNIC role is FC-NVMe Target (unsupported)\n");
++		break;
++	default:
++		dev_info(&fnic->pdev->dev,
++			 "vNIC role not supported (0x%x), defaulting to FC Init\n",
++			 role);
++		c->flags &= ~FNIC_ROLE_CONFIG_MASK;
++		c->flags |= VFCF_FC_INITIATOR;
++		break;
+ 	}
  
- 	spin_unlock_irqrestore(&fnic->wq_copy_lock[wq_index], flags);
- 	FNIC_TRACE(fnic_fcpio_ack_handler,
--		  fnic->host->host_no, 0, 0, ox_id_tag[2], ox_id_tag[3],
-+		  fnic->fnic_num, 0, 0, ox_id_tag[2], ox_id_tag[3],
- 		  ox_id_tag[4], ox_id_tag[5]);
+ 	c->wq_enet_desc_count =
+@@ -163,6 +186,8 @@ int fnic_get_vnic_config(struct fnic *fnic)
+ 		     c->port_down_io_retries, c->port_down_timeout);
+ 	dev_info(&fnic->pdev->dev, "fNIC wq_copy_count: %d\n", c->wq_copy_count);
+ 	dev_info(&fnic->pdev->dev, "fNIC intr mode: %d\n", c->intr_mode);
++	dev_info(&fnic->pdev->dev, "fNIC role flags: 0x%x\n",
++			(c->flags & FNIC_ROLE_CONFIG_MASK));
+ 
+ 	return 0;
  }
+diff --git a/drivers/scsi/fnic/fnic_trace.c b/drivers/scsi/fnic/fnic_trace.c
+index 4ed57ea1f854..a3f583703664 100644
+--- a/drivers/scsi/fnic/fnic_trace.c
++++ b/drivers/scsi/fnic/fnic_trace.c
+@@ -31,7 +31,8 @@ int fnic_fc_trace_cleared = 1;
+ static DEFINE_SPINLOCK(fnic_fc_trace_lock);
  
+ static const char * const fnic_role_str[] = {
+-	[FNIC_ROLE_FCP_INITIATOR] = "FCP_Initiator",
++	[FNIC_ROLE_FCP_INITIATOR]  = "FCP_Initiator",
++	[FNIC_ROLE_NVME_INITIATOR] = "NVMeF_Initiator",
+ };
+ 
+ const char *fnic_role_to_str(unsigned int role)
 -- 
 2.47.1
 
