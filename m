@@ -1,122 +1,312 @@
-Return-Path: <linux-scsi+bounces-25208-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25212-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id nGaHGixaO2qFWggAu9opvQ
-	(envelope-from <linux-scsi+bounces-25208-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 06:16:44 +0200
+	id 7RXELf5gO2oCXAgAu9opvQ
+	(envelope-from <linux-scsi+bounces-25212-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 06:45:50 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A6306BB381
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 06:16:43 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14D986BB482
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 06:45:50 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=163.com header.s=s110527 header.b="Z zPTJxS";
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25208-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25208-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=163.com;
+	dkim=pass header.d=cisco.com header.s=iport01 header.b=Mp29ZotY;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25212-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25212-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=reject) header.from=cisco.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 960EA3035B61
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 04:16:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 38D5E309F538
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 04:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1306930C161;
-	Wed, 24 Jun 2026 04:16:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEAFA3812C7;
+	Wed, 24 Jun 2026 04:44:56 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+Received: from rcdn-iport-8.cisco.com (rcdn-iport-8.cisco.com [173.37.86.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE6A30C144
-	for <linux-scsi@vger.kernel.org>; Wed, 24 Jun 2026 04:16:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5010380FC7;
+	Wed, 24 Jun 2026 04:44:54 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782274599; cv=none; b=Y92CtW7elmDcAuOaXM+UkCr0WgSl6L3a6AN4UH5T1xt8C4iqy4eLJhBo43EJkDiQzCX9+wke81Y7LKtGPbrHxciQ7PNwpe/ZBXmKAQaC7OqIr1niqFOXhKv7pTcO2wr7Ws2vlBnQbMSvq/QSVh8FZ96/K45JIhqLDCeZAOHD+jY=
+	t=1782276296; cv=none; b=LLGRlJdfqCuToPZPX4ZEXgJegtS4hKbSMpbmq1ahasA52v1XNASRXxzdsvJLsHb1iVMePDcMtvwt3Pe8KQ48pSPIphn2tgzFU+bdoTvyrV3pLsf1X1utl2XF0nkivvMPbyWlt3E2vyuwSkEcKmSt5BxiGHdPbKpQJyaAX5HUe2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782274599; c=relaxed/simple;
-	bh=Lc26KowJlK3e/jAywrrZ3UUhy70I+NCKhEk/sENq78o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=iZOg7UXCociP2nAsz45K5fVX4AtlQ67mtfOmG+eHAGpqJaxtTdnDjNmVCGtYXDA2qVogioZqfWuWKDD+0LsZpbITfGmTI7vDxd/bHu8OY7wtMBhepZZ/7eUi+uiKFy5ifP64+BY1J1Ft23/52lg/RIP39roJjUDGEXb3sTo+htM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ZzPTJxSA; arc=none smtp.client-ip=117.135.210.5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=Lc26KowJlK3e/jAywrrZ3UUhy70I+NCKhEk/sENq78o=; b=Z
-	zPTJxSAphWRAL6kiPi1iU+WGv3LgO0vRJOzZDAF7fEGUJLkeQf1h4ZjvmIMeb2hw
-	7+meo6FFHy3b/DXgjc7cWoOJzBnH8Fcl7Rz6R2cOookA6jJgrIGtBBVpheKdhR9x
-	pyuBXuBSvgTUNjNKMzIXOKpsUrok4iO+ZoOkqptoN0=
-Received: from haoxiang_li2024$163.com ( [36.112.3.223] ) by
- ajax-webmail-wmsvr-40-108 (Coremail) ; Wed, 24 Jun 2026 12:16:20 +0800
- (CST)
-Date: Wed, 24 Jun 2026 12:16:20 +0800 (CST)
-From: haoxiang_li2024  <haoxiang_li2024@163.com>
-To: "Daniel Wagner" <dwagner@suse.de>
-Cc: sashiko-reviews@lists.linux.dev, linux-scsi@vger.kernel.org
-Subject: Re:Re: [PATCH] scsi: elx: efct: Fix IO leak on unsupported
- additional CDB
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260403(27802f6d) Copyright (c) 2002-2026 www.mailtech.cn 163com
-In-Reply-To: <947fd1e6-cbf0-4b2e-a0c7-9d4bda439ff2@flourine.local>
-References: <20260622075844.832871-1-haoxiang_li2024@163.com>
- <20260622081220.9D0B71F000E9@smtp.kernel.org>
- <947fd1e6-cbf0-4b2e-a0c7-9d4bda439ff2@flourine.local>
-X-NTES-SC: AL_Qu2TAP6cu00j5iKZYukfmUwSj+s8WsO0vf4i245fO5B+jCLpyzEDYXpkLHTOzeC2LxuSuwqcbydQy+9XTK1GRYsko+89fU4V09dpWRxhCieCeg==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	s=arc-20240116; t=1782276296; c=relaxed/simple;
+	bh=5icdoDaXY2x193jPlSYRll36w0SzJq2oN3/c8GsfbEQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T1hooC1nDrr92itQnWMkpZrRRzRBBjQSGZP88b/0yxoV18zzOd/eTbZSHHwbJ8jtA44gfdUfFmXEkoMY+SaZBNFzfpUtim08TN9W5ktm9ZiFHsRO4RG0LIPDT3Rg2JjtiAIcEthjB/L5NXgllvGydV7NE16D/9lagrLyB019za4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=Mp29ZotY; arc=none smtp.client-ip=173.37.86.79
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=cisco.com; i=@cisco.com; l=6269; q=dns/txt;
+  s=iport01; t=1782276294; x=1783485894;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=K7grOhFHQvso1DWUA3H9SEKR6TuymodY5EtcBEh6ThY=;
+  b=Mp29ZotYAbXCDF98oyrGtJU9aZRaG+VhhGCwmu64CrOmYrq7Um8rWJVN
+   zbxP4lwpCojUnxIC3Wf+TDlN6ZYGVv9NUNYMnGqmB+hph0RbVOtY7MphZ
+   J02eMPcXGMk3nLXDDyD7n0zXYUAAHUPVHhMB2fhjkFAGmVk+hK5VacRYi
+   N/4XFoecvBa3AqKXGtn7XQc/ZANiABBN/OTW4hq+ht54NxzvphxHysg+x
+   pmBYDGs9XRgQXE8GflVrWT899Aue2tKIJgX2jCrC58TOIi0WvynCjgi0W
+   bxRquy7Ec0tam4whNrGn7xt98qoVAchWwOCoTQOx3oWgvVZVNkUqJWGrF
+   w==;
+X-CSE-ConnectionGUID: 9Xk8cxhRS5mZtLmFFj+0RQ==
+X-CSE-MsgGUID: fH2w/jYWSMGA1fvZgSp5qw==
+X-IPAS-Result: =?us-ascii?q?A0A5AADmXjtq/4//Ja1aHQEBAQEJARIBBQUBgXwIAQsBh?=
+ =?us-ascii?q?ChDGY0jhzeCIYEWkDeMURSBag8BAQEPUQQBAYUGjUwCJjQJDgECBAMCAwEBA?=
+ =?us-ascii?q?QEBAQEBAQEBCwEBBQEBAQIBBwWBDhOGXIZdNgFGhFKCdAOyOYIsgQHeQ4FyF?=
+ =?us-ascii?q?YE4AY1ddBuEYScVBoFJRIEVgnOCSIJJD4ZeBIIiehKCSIEEgU9jiwRIgR4DW?=
+ =?us-ascii?q?SwBVRMNCgsHBYFmAzUSKhVuMh2BIz4XgQwbBwWBHYFugQSFAiMfAzl/gT+BJ?=
+ =?us-ascii?q?GRmFTA1gQEBER8KgTUDCxgNSBEsNxQbBD5uB45OUhkHARVCLAsHDB0dLgQCL?=
+ =?us-ascii?q?3gWAR6TCx0HAxGSLYE1ikOVF4QnoVsaM6psmQijchgPhSmBaDyBWTMaCBsVg?=
+ =?us-ascii?q?yNSGQ+OLRbSOidvAgcCBw4DC5FpASYHgU4BAQ?=
+IronPort-Data: A9a23:HDKxE6vcugsX0sQbLc5Nesi94efnVLBfMUV32f8akzHdYApBsoF/q
+ tZmKTqFa66IMTD0Ld5zb4q18xkFsMXQmIJiSlFu+yBhESsWgMeUXt7xwmUckM+xwmwvaGo9s
+ q3yv/GZdJhcokf0/0nrav666yEgiclkf5KkYMbcICd9WAR4fykojBNnioYRj5Vh6TSDK1vlV
+ eja/YuFZDdJ5xYuajhKs/zZ80s11BjPkGpwUmIWNKgjUGD2zxH5PLpHTYmtIn3xRJVjH+LSb
+ 47r0LGj82rFyAwmA9Wjn6yTWhVirmn6ZFXmZtJ+AsBOszAazsAA+v9T2Mk0NS+7vw60c+VZk
+ 72hg3AfpTABZcUgkMxFO/VR/roX0aduoNcrKlDn2SCfItGvn3bEm51T4E8K0YIwq9Z0UWpe9
+ cYjdTU/cjSGqcy0g+qBc7w57igjBJGD0II3oHpsy3TdSP0hW52GG/uM7t5D1zB2jcdLdRrcT
+ 5NGMnw0M1KaPkAJYwtMYH49tL/Aan3XcDRCtFORrKkf6GnIxws327/oWDbQUoDbHZUMzhbA9
+ goq+Uz3IksFc96u9gGg3Vv1iPH9khjjBZsNQejQGvlCxQf7KnYoIB8bV1GTpfi/l174Wthab
+ UcT/0IGqKEo6E2tCMHwQxCiu3OClhkGUtFUHqsx7wTl4qPY6gWeHm8ZZiRMZNwvqIk9QjlC/
+ l2MktXkCjxumKeYRXKU6vGfqjbaETIYM2IYfgceQAcF6sWlq4Y25jrLQstlG6ezpsboAjy2y
+ DePxAA6hrMOnYsI2r+98FTvnT2hvN7KQxQz6wGRWXiqhit9ZYi4d8mz4kPaxehPIZzfTVSbu
+ nUA3c+E44gz4YqljieBRqAJWbqu/fvAaGOail90FJ5n/DOok5K+Qb1tDPhFDB8BGq45lfXBO
+ ic/ZSs5CEdvAUaX
+IronPort-HdrOrdr: A9a23:b7ieAanpkRjpN3vLnrpaQtcncjfpDfLy3DAbv31ZSRFFG/FwWf
+ rDoB19726XtN9/Yh8dcLy7UpVoIkmslqKdg7NxAV7KZmCP01dAR7sM0WKN+VDdMhy73vJB1K
+ tmbqh1AMD9ABxHl8rgiTPIdurIuOPmzImYwcHD0nxqUQZmL4tk7wt/F0KnN3cefngjOXL8f6
+ DsgPauYFGbCBMqUvg=
+X-Talos-CUID: =?us-ascii?q?9a23=3AjU7m/GgzIE7Fd4+vext4PulbcTJuI03enHzAI3W?=
+ =?us-ascii?q?DVGNbVJmQZ3GSu/teqp87?=
+X-Talos-MUID: =?us-ascii?q?9a23=3AABSmtgzQUh9J4ry8UfKju0G4WTOaqKqOUl9Kk6Q?=
+ =?us-ascii?q?5gOyrHHV+JQWStyzqW5Byfw=3D=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.24,221,1774310400"; 
+   d="scan'208";a="490818808"
+Received: from rcdn-l-core-06.cisco.com ([173.37.255.143])
+  by rcdn-iport-8.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 24 Jun 2026 04:43:46 +0000
+Received: from fedora.lan?044cisco.com (unknown [10.188.122.232])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kartilak@cisco.com)
+	by rcdn-l-core-06.cisco.com (Postfix) with ESMTPSA id D7021180003A1;
+	Wed, 24 Jun 2026 04:43:44 +0000 (GMT)
+From: Karan Tilak Kumar <kartilak@cisco.com>
+To: sebaddel@cisco.com
+Cc: arulponn@cisco.com,
+	djhawar@cisco.com,
+	gcboffa@cisco.com,
+	mkai2@cisco.com,
+	satishkh@cisco.com,
+	aeasi@cisco.com,
+	jejb@linux.ibm.com,
+	martin.petersen@oracle.com,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jmeneghi@redhat.com,
+	revers@redhat.com,
+	adakopou@redhat.com,
+	lduncan@suse.com,
+	Karan Tilak Kumar <kartilak@cisco.com>
+Subject: [PATCH v5 00/13] Introduce functionality for NVMe initiator
+Date: Tue, 23 Jun 2026 21:43:21 -0700
+Message-ID: <20260624044334.3079-1-kartilak@cisco.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <59cce810.3e4f.19ef7d7df07.Coremail.haoxiang_li2024@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:bCgvCgDX3wIUWjtqbqgPAA--.1208W
-X-CM-SenderInfo: xkdr5xpdqjszblsqjki6rwjhhfrp/xtbC7RQFc2o7WhSnFAAA3j
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Transfer-Encoding: 8bit
+X-Authenticated-User: kartilak@cisco.com
+X-Outbound-Client-TLS: ANONYMOUS;unknown [10.188.122.232];TLSv1.3;TLS_AES_256_GCM_SHA384;256
+X-Outbound-SMTP-Client: 10.188.122.232, [10.188.122.232]
+X-Outbound-Node: rcdn-l-core-06.cisco.com
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.06 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	MIME_BASE64_TEXT_BOGUS(1.00)[];
+X-Spamd-Result: default: False [-3.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[cisco.com:d:+,kernel.org:s:+];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[163.com,none];
-	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[cisco.com,reject];
+	R_DKIM_ALLOW(-0.20)[cisco.com:s=iport01];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
-	MIME_BASE64_TEXT(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:dwagner@suse.de,m:sashiko-reviews@lists.linux.dev,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER(0.00)[haoxiang_li2024@163.com,linux-scsi@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25212-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	FORGED_RECIPIENTS(0.00)[m:sebaddel@cisco.com,m:arulponn@cisco.com,m:djhawar@cisco.com,m:gcboffa@cisco.com,m:mkai2@cisco.com,m:satishkh@cisco.com,m:aeasi@cisco.com,m:jejb@linux.ibm.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:jmeneghi@redhat.com,m:revers@redhat.com,m:adakopou@redhat.com,m:lduncan@suse.com,m:kartilak@cisco.com,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-25208-lists,linux-scsi=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	HAS_X_PRIO_THREE(0.00)[3];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[haoxiang_li2024@163.com,linux-scsi@vger.kernel.org];
+	FORGED_SENDER(0.00)[kartilak@cisco.com,linux-scsi@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kartilak@cisco.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[cisco.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FREEMAIL_FROM(0.00)[163.com];
+	TO_DN_SOME(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DKIM_TRACE(0.00)[163.com:+];
-	RCPT_COUNT_THREE(0.00)[3];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,cisco.com:dkim,cisco.com:mid,cisco.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 8A6306BB381
+X-Rspamd-Queue-Id: 14D986BB482
 
-CgpBdCAyMDI2LTA2LTIyIDE2OjQzOjA0LCAiRGFuaWVsIFdhZ25lciIgPGR3YWduZXJAc3VzZS5k
-ZT4gd3JvdGU6Cj5JbmRlZWQsIHRoZSBjYWxsc2l0ZSBuZWVkcyB0byBoYW5kbGUgdGhlIGVycm9y
-IGNvZGUgcmV0dXJuIGJ5Cj5lZmN0X2Rpc3BhdGNoX2ZjcF9jbWQgYW5kIG5vdCBqdXN0IGJsaW5k
-bHkgZW5xdWV1ZSB0aGUgaW8uCgpBZ3JlZWQuIFRoYXQgaXMgYSBzZXBhcmF0ZSBwcmUtZXhpc3Rp
-bmcgaXNzdWU6IGVmY3RfZGlzcGF0Y2hfZnJhbWUoKQpzaG91bGQgaGFuZGxlIHRoZSByZXR1cm4g
-dmFsdWUgZnJvbSBlZmN0X2Rpc3BhdGNoX2ZjcF9jbWQoKSwgYmVjYXVzZQp0aGUgU0VORF9GUkFN
-RSBwYXRoIG1heSBjb25zdW1lIHNlcSBhbmQgZnJlZSBpdCBhc3luY2hyb25vdXNseS4KCiBUaGlz
-IHBhdGNoIGZpeGVzIGEgZGlmZmVyZW50IHBhdGgsIHdoZXJlIHVuc3VwcG9ydGVkIGFkZGl0aW9u
-YWwgQ0RCCiByZXR1cm5zIGFmdGVyIGVmY3RfaW8gYWxsb2NhdGlvbiBhbmQgYmVmb3JlIHRoZSBJ
-TyBpcyBoYW5kZWQgb2ZmLiBJIGNhbgogc2VuZCBhIHNlcGFyYXRlIGZvbGxvdy11cCBwYXRjaCBm
-b3IgdGhlIHNlcXVlbmNlIG93bmVyc2hpcCBpc3N1ZS4KClRoYW5rcywKSGFveGlhbmcK
+Hi Martin, reviewers,
+
+This series adds functionality for NVMe initiator to the fnic driver.
+
+The changes enable the fnic driver to act as an NVMe initiator over
+Fibre Channel (FC-NVMe), allowing the host to discover and communicate
+with NVMe targets using the existing fnic infrastructure. The patches
+prepare the driver for full FC-NVMe initiator operation while
+maintaining existing SCSI/FC functionality.
+
+These are some of the salient patches:
+
+o. Make fnic debug logging usable by SCSI and NVMe initiator roles.
+o. Use fnic instance numbers for non-SCSI-facing identifiers.
+o. Decode firmware roles for FCP, NVMe, and unsupported targets.
+o. Advertise NVMe initiator service parameters during FC discovery.
+o. Add FDLS role handling for NVMe initiator discovery flows.
+o. Add the NVMe/FC transport path and port registration.
+o. Route completions, resets, and LS frames by initiator role.
+o. Add NVMe LS timeouts, statistics, and debugfs state reporting.
+
+Even though the patches have been made into a series, some patches are
+heavier than others. But, every effort has been made to keep the
+purpose of each patch as a single-purpose, and to compile cleanly.
+All the individual patches compile cleanly. The compiler used is GCC
+14.2.
+
+This patch set has been tested as a whole. Therefore, the tested-by
+fields have been added only to one patch in the set.
+I've refrained from adding tested-by to most of the patches, so as to
+not mislead the reviewer/reader.
+
+A brief note on the unit tests:
+
+o. Configure multipathing, and run link flaps on single link. IOs drop
+   briefly, but pick up as expected.
+o. Configure multipathing, and run link flaps on two links, with a 30
+   second delay in between. IOs drop briefly, but pick up as expected.
+o. Repeat the above tests with 1 queue and 64 queues.
+o. Perform tests with Netapp and Pure targets.
+
+All tests were successful.
+
+This set of patches was reviewed before submitting upstream,
+and the following review comments were incorporated.
+
+Incorporate review comments from Hannes Reinecke:
+
+Decode target roles explicitly and report unsupported roles.
+Remove the empty line before the FLOGI completion else block.
+Add a short comment for the NVMe ERSP completion case.
+
+Incorporate review comments from Lee Duncan:
+
+Replace the NVMe LS OXID switch with a direct frame-type check.
+Rename the NVMe frame helper to follow fnic function naming style.
+Convert the NVMe opcode stats helper to a switch statement.
+Share NVMe completion stats accounting and compute duration once.
+
+Changes between v1 and v2:
+	Incorporate review comments from Marco Crivellari:
+		Explicitly use WQ_PERCPU for the fnic completion workqueue.
+
+Changes between v2 and v3:
+	Fix issues reported by kernel bot.
+	Add the active OXID to the tport timeout debug print.
+	Guard NVMe I/O and LS request debug logs when tport is NULL.
+	Validate ERSP response length before copying the response.
+	Validate LS response frame and payload lengths before copying.
+	Limit nvmef_info debugfs output to the allocated buffer.
+
+Changes between v3 and v4:
+	Incorporate review comments from Sashiko:
+		Keep role strings private and const.
+		Clear NVMe SGL DMA address on map failure.
+		Drop fnic lock around NVMe tport registration.
+		Unlink unregistered NVMe tports before freeing them.
+		Clear NVMe unload completion pointer on exit.
+		Take fnic lock before NVMe tport cleanup tag lookup.
+		Clear NVMe tport delete completion pointer on unregister failure.
+		Arm NVMe LS request timer before exposing the request.
+		Free LS ABTS frame when send fails.
+		Reuse NVMe LS request cleanup for abort failure.
+		Decrement NVMe completion wait queue counter when draining completions.
+		Preserve jiffies wrap when computing NVMe abort stats.
+
+Changes between v4 and v5:
+	Incorporate review comments from Sashiko:
+		Set NVMe wait timestamp before queueing completions
+		Use async timer delete for NVMe LS responses
+		Complete failed NVMe ITMF aborts
+		Track NVMe SGL DMA mapping state
+		Detach NVMe LS cleanup before callbacks
+		Defer NVMe table frees until cleanup
+		Lock NVMe tport IO termination lookup
+		Count NVMe ERSP completions as firmware completions
+		Gate NVMe completions by initiator role
+		Check cleaned buffers before dereferencing them
+		Drain OXID reclaim state on reset
+		Avoid NVMe LS request send races
+		Arm NVMe LS abort timer after send succeeds
+		Clean up NVMe debugfs on probe errors
+	Clarify that FC-NVMe PRLI must not set Establish Image Pair.
+
+Thanks,
+Karan
+
+Karan Tilak Kumar (13):
+  scsi: fnic: Make debug logging protocol independent
+  scsi: fnic: Use fnic_num for non-SCSI identifiers
+  scsi: fnic: Decode firmware role configuration
+  scsi: fnic: Advertise NVMe initiator service parameters
+  scsi: fnic: Add FDLS role handling for NVMe initiators
+  scsi: fnic: Add the NVMe/FC transport path
+  scsi: fnic: Route completions and resets by initiator role
+  scsi: fnic: Handle NVMe LS frames in FDLS
+  scsi: fnic: Send NVMe LS requests through FDLS
+  scsi: fnic: Abort timed-out NVMe LS requests
+  scsi: fnic: Track NVMe transport statistics
+  scsi: fnic: Expose NVMe transport state in debugfs
+  scsi: fnic: Bump up version number
+
+ drivers/scsi/fnic/Makefile       |    1 +
+ drivers/scsi/fnic/fcpio.h        |   35 +
+ drivers/scsi/fnic/fdls_disc.c    |  969 +++++++------
+ drivers/scsi/fnic/fdls_fc.h      |    7 +
+ drivers/scsi/fnic/fip.c          |  117 +-
+ drivers/scsi/fnic/fip.h          |    2 +-
+ drivers/scsi/fnic/fnic.h         |  104 +-
+ drivers/scsi/fnic/fnic_debugfs.c |   99 +-
+ drivers/scsi/fnic/fnic_fcs.c     |  199 +--
+ drivers/scsi/fnic/fnic_fdls.h    |   48 +-
+ drivers/scsi/fnic/fnic_io.h      |   24 +-
+ drivers/scsi/fnic/fnic_isr.c     |   28 +-
+ drivers/scsi/fnic/fnic_main.c    |  211 ++-
+ drivers/scsi/fnic/fnic_nvme.c    | 2202 ++++++++++++++++++++++++++++++
+ drivers/scsi/fnic/fnic_nvme.h    |  209 +++
+ drivers/scsi/fnic/fnic_res.c     |   31 +-
+ drivers/scsi/fnic/fnic_res.h     |   32 +-
+ drivers/scsi/fnic/fnic_scsi.c    |  251 ++--
+ drivers/scsi/fnic/fnic_stats.h   |   28 +
+ drivers/scsi/fnic/fnic_trace.c   |    3 +-
+ drivers/scsi/fnic/vnic_devcmd.h  |    2 +-
+ 21 files changed, 3824 insertions(+), 778 deletions(-)
+ create mode 100644 drivers/scsi/fnic/fnic_nvme.c
+ create mode 100644 drivers/scsi/fnic/fnic_nvme.h
+
+-- 
+2.47.1
+
 
