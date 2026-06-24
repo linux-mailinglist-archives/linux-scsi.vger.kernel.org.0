@@ -1,169 +1,204 @@
-Return-Path: <linux-scsi+bounces-25244-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25245-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 1RZXEcnxO2oQgAgAu9opvQ
-	(envelope-from <linux-scsi+bounces-25244-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 17:03:37 +0200
+	id EPF6DtP2O2r2gggAu9opvQ
+	(envelope-from <linux-scsi+bounces-25245-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 17:25:07 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB1C76BF6E9
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 17:03:34 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ABE86BF9F2
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 17:25:06 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=seu.edu.cn header.s=default header.b=ZqS0GRUL;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25244-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25244-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=seu.edu.cn;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=iH+TRYBI;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25245-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25245-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 875313115581
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 14:58:57 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 823E33006992
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2026 15:11:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 772AA3D6CB4;
-	Wed, 24 Jun 2026 14:58:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA243D9052;
+	Wed, 24 Jun 2026 15:11:56 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EBB03C13FE;
-	Wed, 24 Jun 2026 14:58:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A653B9DB6
+	for <linux-scsi@vger.kernel.org>; Wed, 24 Jun 2026 15:11:55 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782313130; cv=none; b=dHd8bJuJkugzz1liZnnUVxsbiWHyLU8ksTiLZCmvSxIeqMhOCA2lj91Lx9LHB2IxEmFlPDfsx5oF4z9NPY+gjNzQMg7CjqIsTVKa6hbhSsVSWipiLhRtvFHQBdoiK4Ld5E8XFJzOAe5DFVztyxS1sJajIEH2JBrIs/ExavyUzUo=
+	t=1782313916; cv=none; b=B9azgkijr+3RXb6rbf3shZ2sHMGnDccYxz38bYuYxBreFSpoVfYUl09x/zrNzGk9qTceIcEpddJf7OExw+C2fsXnroIWXbhMPHIYAM9rayEvY6MR4BZPwyJhFo9vnX1e83D+iNtzT0eigniXPDA7NsTQ/8gy0JgvEqKYG6Q64Sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782313130; c=relaxed/simple;
-	bh=8Tc6huJUSCtySfVnNDBygzECJCIFnhSKm6Ch+74QnVQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fJixxy+Cas4YrL7ROJQFi3sMzVmntFubh4zKzn20yPTmNxWJjLYyhW6EwIzxuvrJ42vk6dRAhdWbOSq5n3VlaowVfuzACJztppHyEEewQ2vReCNSLqBEHarfouchxMe6HhLjxZd0yWgKmSGL61AfOQbtMWGVGzqPHRkKN8tNTjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=ZqS0GRUL; arc=none smtp.client-ip=101.71.155.101
-Received: from PC-202605011814.localdomain (unknown [58.241.16.34])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 439d317cd;
-	Wed, 24 Jun 2026 22:53:33 +0800 (GMT+08:00)
-From: Runyu Xiao <runyu.xiao@seu.edu.cn>
-To: martin.petersen@oracle.com
-Cc: linux-scsi@vger.kernel.org,
-	target-devel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	runyu.xiao@seu.edu.cn,
-	jianhao.xu@seu.edu.cn
-Subject: [PATCH] scsi: target: tcm_fc: annotate session hash traversals
-Date: Wed, 24 Jun 2026 22:53:20 +0800
-Message-Id: <20260624145320.3429431-1-runyu.xiao@seu.edu.cn>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1782313916; c=relaxed/simple;
+	bh=rdOwH9L0YQd2AnnVp1t330ND0dmSo6/AgSVnNptXJAU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=fvdutg5njpQMEFRcX1xp/K+2aymWEclxhu4BJIt6CZU7C92pxrQK2SEfg2DafUBlKXx6OEbDdRF2YK9N2d/wTapnst8rV0hIyZ/mIUFymIJSoEc1R9SNY0so8c1rxEr3OlgmLsrGsGJwc7h/ewy4WVwZdUCiATGAne4ga8C+xx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iH+TRYBI; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 180C41F000E9;
+	Wed, 24 Jun 2026 15:11:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782313915;
+	bh=oeWkysiGfbwJ+Z3nU08D2pg8MHwiKuHCwDnLzMmjp+Y=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=iH+TRYBIU8b8sdOm1fNGMfP9PcHo1SISHvUzB69HFcU5+flgpzwq7rluoTmpaiKkO
+	 KDnWfyF23OO8hvUn594nUZWTFeLxDdE2qPc5GkCXVInX19k5zPcrEIZNTeVxFlDuxo
+	 rFBH4HbLt603ZyCerCawnYDGRclcUW6JFnOU25wgd9z0Em7AtRlrLR0vcCjYoiFJs9
+	 ZniHOgXTkmyUzG2n5idn3T73TzzhHnQFb6bjFdqUEaSFUULMqEQH7lJD9jxluYK7v0
+	 vDgz9V6PyszqGkT7/H/igV3Chm5QJ8oPHy9LGyHlB46jrvZbUrTgA0rXgczY1gWS2F
+	 DCGraQjwLQpxw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] scsi: target: tcm_fc: annotate session hash traversals
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Runyu Xiao" <runyu.xiao@seu.edu.cn>
+Cc: linux-scsi@vger.kernel.org
+In-Reply-To: <20260624145320.3429431-1-runyu.xiao@seu.edu.cn>
+References: <20260624145320.3429431-1-runyu.xiao@seu.edu.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 24 Jun 2026 15:11:54 +0000
+Message-Id: <20260624151155.180C41F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9efa1f427a03a1kunmacfe67d13b40d
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCTR0YVklCHh8ZSkgaHU8dGVYeHw
-	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlOQ1VJT0pVSk1VSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
-	xVSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=ZqS0GRULzPIjrlr9kSO7TLkUWNCxrAlOLawPs2c5x4CyGHSCXNysh0ygVOTzZU/qE/PFFvRQQ+XBC7dHtdbmQGj+BSM+OAH7A53bEtWlBoCX4EypP+GDnbbaXJtXsE4jKln2+oId1RyQPkArALqU7B/uJZiNFDyf8w7zpo5Fi6g=; c=relaxed/relaxed; s=default; d=seu.edu.cn; v=1;
-	bh=462cfg789ed4htZjavkN1M7ugdYF5RDMVCcSrltJa1g=;
-	h=date:mime-version:subject:message-id:from;
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[seu.edu.cn,none];
-	R_DKIM_ALLOW(-0.20)[seu.edu.cn:s=default];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-25244-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER(0.00)[runyu.xiao@seu.edu.cn,linux-scsi@vger.kernel.org];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:runyu.xiao@seu.edu.cn,m:jianhao.xu@seu.edu.cn,s:lists@lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25245-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:runyu.xiao@seu.edu.cn,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	RCPT_COUNT_TWO(0.00)[2];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[runyu.xiao@seu.edu.cn,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[seu.edu.cn:+];
-	TO_DN_NONE(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,seu.edu.cn:dkim,seu.edu.cn:email,seu.edu.cn:mid,seu.edu.cn:from_mime]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,lists.linux.dev:replyto,sashiko.dev:url,seu.edu.cn:email,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: DB1C76BF6E9
+X-Rspamd-Queue-Id: 2ABE86BF9F2
 
-The TCM FC session hash is updated with RCU hlist primitives. Several
-writer-side helpers traverse the hash with hlist_for_each_entry_rcu()
-while the file-level comments state that the caller holds ft_lport_lock:
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-ft_sess_create()
-ft_sess_delete()
-ft_sess_delete_all()
+Pre-existing issues:
+- [Critical] Unsafe RCU list traversal in `ft_sess_delete_all` causing Iter=
+ator Use-After-Free.
+- [Critical] `ft_sess_get` uses `kref_get` instead of `kref_get_unless_zero=
+` during RCU list traversal, causing refcount corruption.
+--
 
-Other tcm_fc paths already use lockdep_is_held(&ft_lport_lock) when
-dereferencing RCU-protected local-port state. Pass the same lockdep
-condition to these session hash iterators so CONFIG_PROVE_RCU_LIST can
-distinguish the ft_lport_lock-protected writer paths from ordinary RCU
-readers.
+commit 3175abadc099d1a62c16806e23dfcc68463481a8
+Author: Runyu Xiao <runyu.xiao@seu.edu.cn>
 
-This was found by our static analysis tool and then manually reviewed
-against the current tree. In the reviewed CONFIG_PROVE_RCU_LIST triage
-runs, the session hash walkers produced the expected "RCU-list traversed
-in non-reader section!!" warning with stacks matching ft_sess_create()/
-ft_prli_locked(), ft_sess_delete()/ft_prlo(), and ft_sess_delete_all()/
-ft_lport_del(). The change is limited to documenting the existing
-protection contract.
+scsi: target: tcm_fc: annotate session hash traversals
 
-This is a lockdep annotation cleanup and does not change the session
-hash lifetime model.
+This commit adds lockdep condition annotations to several RCU hlist
+traversals in the TCM FC session hash to document the writer-side
+protection under ft_lport_lock.
 
-Signed-off-by: Runyu Xiao <runyu.xiao@seu.edu.cn>
----
- drivers/target/tcm_fc/tfc_sess.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+> diff --git a/drivers/target/tcm_fc/tfc_sess.c b/drivers/target/tcm_fc/tfc=
+_sess.c
+> index 797be06ab71b8..84a6f29a1b5f8 100644
+> --- a/drivers/target/tcm_fc/tfc_sess.c
+> +++ b/drivers/target/tcm_fc/tfc_sess.c
 
-diff --git a/drivers/target/tcm_fc/tfc_sess.c b/drivers/target/tcm_fc/tfc_sess.c
-index 797be06ab71b..84a6f29a1b5f 100644
---- a/drivers/target/tcm_fc/tfc_sess.c
-+++ b/drivers/target/tcm_fc/tfc_sess.c
-@@ -215,7 +215,8 @@ static struct ft_sess *ft_sess_create(struct ft_tport *tport, u32 port_id,
- 	ft_format_wwn(&initiatorname[0], TRANSPORT_IQN_LEN, rdata->ids.port_name);
- 
- 	head = &tport->hash[ft_sess_hash(port_id)];
--	hlist_for_each_entry_rcu(sess, head, hash)
-+	hlist_for_each_entry_rcu(sess, head, hash,
-+				 lockdep_is_held(&ft_lport_lock))
- 		if (sess->port_id == port_id)
- 			return sess;
- 
-@@ -264,7 +265,8 @@ static struct ft_sess *ft_sess_delete(struct ft_tport *tport, u32 port_id)
- 	struct ft_sess *sess;
- 
- 	head = &tport->hash[ft_sess_hash(port_id)];
--	hlist_for_each_entry_rcu(sess, head, hash) {
-+	hlist_for_each_entry_rcu(sess, head, hash,
-+				 lockdep_is_held(&ft_lport_lock)) {
- 		if (sess->port_id == port_id) {
- 			ft_sess_unhash(sess);
- 			return sess;
-@@ -291,7 +293,8 @@ static void ft_sess_delete_all(struct ft_tport *tport)
- 
- 	for (head = tport->hash;
- 	     head < &tport->hash[FT_SESS_HASH_SIZE]; head++) {
--		hlist_for_each_entry_rcu(sess, head, hash) {
-+		hlist_for_each_entry_rcu(sess, head, hash,
-+					 lockdep_is_held(&ft_lport_lock)) {
- 			ft_sess_unhash(sess);
- 			ft_close_sess(sess);	/* release from table */
- 		}
--- 
-2.34.1
+[ ... ]
 
+> @@ -291,7 +293,8 @@ static void ft_sess_delete_all(struct ft_tport *tport)
+> =20
+>  	for (head =3D tport->hash;
+>  	     head < &tport->hash[FT_SESS_HASH_SIZE]; head++) {
+> -		hlist_for_each_entry_rcu(sess, head, hash) {
+> +		hlist_for_each_entry_rcu(sess, head, hash,
+> +					 lockdep_is_held(&ft_lport_lock)) {
+>  			ft_sess_unhash(sess);
+>  			ft_close_sess(sess);	/* release from table */
+>  		}
+
+[Severity: Critical]
+This isn't a bug introduced by this patch, but is it safe to use the standa=
+rd
+hlist_for_each_entry_rcu macro here while the elements are being destroyed?
+
+During ft_sess_delete_all(), the code unlinks the session and calls
+ft_close_sess(). This drops the final reference and queues the object for R=
+CU
+freeing.=20
+
+Because the iteration does not hold rcu_read_lock(), the thread can be
+preempted after ft_close_sess() returns. If the RCU grace period expires
+during this preemption, the session object is freed.
+
+When the thread resumes, the iterator macro will evaluate the next pointer
+using the freed object, resulting in a use-after-free:
+
+    rcu_dereference_raw(hlist_next_rcu(&(sess)->hash))
+   =20
+Should this use a safe iteration mechanism such as a while loop checking
+!hlist_empty(head) instead?
+
+
+While looking at the session hash logic, I noticed another pre-existing
+issue in the reader path:
+
+drivers/target/tcm_fc/tfc_sess.c:ft_sess_get() {
+        ...
+        hlist_for_each_entry_rcu(sess, head, hash) {
+                if (sess->port_id =3D=3D port_id) {
+                        kref_get(&sess->kref);
+                        rcu_read_unlock();
+                        return sess;
+                }
+        }
+        ...
+}
+
+[Severity: Critical]
+This is a pre-existing issue, but does this kref_get() risk reviving a
+session that has already dropped its reference count to zero?
+
+If a remote port sends a data frame concurrently with a process logout
+request, the reader thread in ft_sess_get() could find the target session
+but get preempted before executing kref_get().
+
+Concurrently, the writer thread handling the logout in ft_sess_delete()
+removes the session from the list and drops the final kref to 0, queuing
+it for freeing.
+
+When the reader thread resumes, it unconditionally increments the zero-ref
+kref, resulting in accessing an object queued for destruction.
+
+Does the reader need to use kref_get_unless_zero() here and handle the
+failure case appropriately?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260624145320.3429=
+431-1-runyu.xiao@seu.edu.cn?part=3D1
 
