@@ -1,89 +1,93 @@
-Return-Path: <linux-scsi+bounces-25270-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25272-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id kR9lI9kcPWqzxAgAu9opvQ
-	(envelope-from <linux-scsi+bounces-25270-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 Jun 2026 14:19:37 +0200
+	id ldl7IQs0PWrHywgAu9opvQ
+	(envelope-from <linux-scsi+bounces-25272-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 Jun 2026 15:58:35 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 856056C57EC
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 Jun 2026 14:19:36 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 287316C651F
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 Jun 2026 15:58:35 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=qualcomm.com header.s=qcppdkim1 header.b=PPNhxlrE;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25270-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25270-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=qualcomm.com;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=GwYE8hDw;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25272-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25272-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C08A93069CAB
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 Jun 2026 12:14:50 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D157B303F476
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 Jun 2026 13:58:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 058053E1D0D;
-	Thu, 25 Jun 2026 12:14:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC55E349CD6;
+	Thu, 25 Jun 2026 13:58:15 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760503E1717;
-	Thu, 25 Jun 2026 12:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61ABE2E7394
+	for <linux-scsi@vger.kernel.org>; Thu, 25 Jun 2026 13:58:10 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782389639; cv=none; b=u/UdJMA5xpH7MZ1BbyvEwS/GeKgYjRhyQJrP1BtG81qjIzXaswW8n25m8N+GV6EK7NdcvbbTe9Zk/rYkTkG56BL/v23zXarel/hJkanvY5qhlvHonf3Kyr8qP5RHx06hdprMzCtQ/eZr+wsUPrm2AFXGukYND3303zg0A/e0zc4=
+	t=1782395895; cv=none; b=aFUpNiQJFqzCjG3j0iW3g2Z0SOA4RGZ72NnwrpyQHCm3LQPPSVF9P+RrT/MOypqM3jwGA2XSQ/OuOxnJoF3o/uo9dQSaSbLS/IUryYYh2ibuZ+3VUqkEFvNx++TNzoRwnbtTkNkSygVKcV8l8eqBPB9CE4gkgKfvldUNEvaSerk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782389639; c=relaxed/simple;
-	bh=EvrFV3sYukzgTKr8ISMfzgsLQy1unrn1laH8MU7YbEc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=udFtldgUL3IwTAIQRWFAxVJza/c9aTyi8dmCM7Q6G4fVE/o0AtXg9Ph19yecFx4CnuhJracfjiXhVIPlzmv2YhFY2XfElpsYzLc5cRa+tUPK5ft7rpqOqm+N4gya2cvBqRY3Ku/oau4I6XmmCCn92E9OlCBiMK1NdMhFBMxsTgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=PPNhxlrE; arc=none smtp.client-ip=205.220.168.131
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65P9jtb21454443;
-	Thu, 25 Jun 2026 12:13:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=/2grjPa8C/D
-	I3fEdbeP8ERixOvnEQG+uGQWOmpFg8YA=; b=PPNhxlrEBBr+X/wjzrYQlQqF++o
-	ONCK5rmpgekR1NEDpELxEtdaBodqTeYxOzcqEPsXdsbpOSoC4zxONt4EBDhMCylm
-	vAjdsQXmHmYM9qiXuI1aZtK8LjcoG4blYJh1mOittmgiunsu6fdgxZX/6AKtYO9w
-	YfnITxdmYVARxgGPWEY1u3YOK7jR213G76eLe/0Ol2xhPAygI2smiKymjBJPAUFC
-	ysmMYqleZOeif2os5HKAapJudNBSnNfLRqq9gZXzxhslKT7CuJ4SGYEagIToCo6m
-	v1kyesQvqrRyeHi+Mwc9Rl2g2OMAzCw+3lRXqxR1Ma9hhHDt1JAWtKRyWWQ==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4f0mjbuj46-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Jun 2026 12:13:33 +0000 (GMT)
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-	by NALASPPMTA03.qualcomm.com (8.18.1.7/8.18.1.7) with ESMTP id 65PCDPGD006774;
-	Thu, 25 Jun 2026 12:13:31 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 4f0q1qxr9p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Jun 2026 12:13:31 +0000 (GMT)
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 65PCCe2t006178;
-	Thu, 25 Jun 2026 12:13:31 GMT
-Received: from hu-devc-lv-u22-c.qualcomm.com (hu-cang-lv.qualcomm.com [10.81.25.255])
-	by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 65PCDUFp007258
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Jun 2026 12:13:31 +0000 (GMT)
-Received: by hu-devc-lv-u22-c.qualcomm.com (Postfix, from userid 359480)
-	id 8F510620; Thu, 25 Jun 2026 05:13:31 -0700 (PDT)
-From: Can Guo <can.guo@oss.qualcomm.com>
-To: bvanassche@acm.org, beanhuo@micron.com, peter.wang@mediatek.com,
-        martin.petersen@oracle.com, mani@kernel.org
-Cc: linux-scsi@vger.kernel.org, Can Guo <can.guo@oss.qualcomm.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC support:Keyword:mediatek),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support:Keyword:mediatek)
-Subject: [PATCH v2 3/3] scsi: ufs: core: Always run tx_eqtr POST_CHANGE notify
-Date: Thu, 25 Jun 2026 05:13:05 -0700
-Message-Id: <20260625121306.1655467-4-can.guo@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260625121306.1655467-1-can.guo@oss.qualcomm.com>
-References: <20260625121306.1655467-1-can.guo@oss.qualcomm.com>
+	s=arc-20240116; t=1782395895; c=relaxed/simple;
+	bh=aaow2J8uneh9+RZAcv4jv4/p3n3Ld70tT5UQwQPt7BE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lZ9jqrNhCZ+fwh8bsvMs8nKahlpp9VAyfKz79VZ6sOizg0ZHqque30MKOU1rTitmPd8iK3CWpAaHl0Hu/8xDFE6ci8hX5lxBvzIrUYb5/i0H1yviFPqhZ74uoWiO6C7zdEYg0ewU5PhvYdlCAWTW+SE8VH2sBNjP7oinPWpl7bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GwYE8hDw; arc=none smtp.client-ip=209.85.128.178
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-7ff05e5d009so20405967b3.1
+        for <linux-scsi@vger.kernel.org>; Thu, 25 Jun 2026 06:58:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782395889; x=1783000689; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vSaCjeuPGGEPfBrbRqFxRbNFqwRfD6aY4yIXoAa5R08=;
+        b=GwYE8hDwYBqzpj9qMl9b6G/fAzg84HKaWezNpBl96NegvS0AfK3Z7saR6Mdbfmjhun
+         bP4N+2yF6W5IQsWgaZ1bruLUc0bqsWzqigNjmmQHD10UQDflL7XT5y6Lgh2GYNGsNNIB
+         TlOQZC2T3/daONWFH6fRY+lSRg0zIVWEH2sfljUPRYW8TDJIFwyoPxeO+Cu9pmOK1l04
+         JqTLsQ8v3WbvxAEx2Tl+6DpK1YAPB0ahS/oRQ++ARI2tZdC5oTNaakozIWrgQd3P8BKe
+         YNDxCLCqGXYGZQwuVJI5YpTM7Hi6z8wBZkr1FiiPPH38OoQIiQ4/vJXUQ37Aq0/uKial
+         8hcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782395889; x=1783000689;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=vSaCjeuPGGEPfBrbRqFxRbNFqwRfD6aY4yIXoAa5R08=;
+        b=b8lDXn1K/GcMiidxeZlqMTJ3derYBaFWOiEg2Os/+BJkaaqrthoZOnTGcpJLRPbVF4
+         DpsWzS4xr4B7JBdYYxFNCaEJJ59IIDrjDtMqXs9KZ1AJQLAQGxTuuzA2bLNRXA4EX/bV
+         f8N12tUaICHqxpnnwXGRdwwlUqDTniN8+3Gnt1AMa/yQIY2pmRfGtkdtKHlJ2I+rIn43
+         eGexKO/XDDI4ZXj/4mODC00SoH0jd70xMOWrWGIyOJD+zTT/WaMTTq1NZo2CwSGjYWpd
+         aHa1I8BqNUf6AdaxjqyEOqOwqd1GX3dKZrRWVzrAsh5nGb5nBF9KoFBuOpSa0ScW81xi
+         uizA==
+X-Gm-Message-State: AOJu0Yya67epF9anNIPhyQ27bHd+vMkS4UNBVyIEntDzuZBsveBos8qg
+	G+sskvZC+x2AEbYX4sD/1QvDeq14naEPJ5FhkyEj4NPLgLBc09DFFsOM
+X-Gm-Gg: AfdE7clvA0EKicR5HsA9klBhCCq5fGbFtol2I1noR7DjrIlLy3w6vD1Te7u1Zn+0o8X
+	OzFuqMa3n965woxnYomwYUHxWI9qWfQGTDVc7Yo5V7z4BLORZ1kYoIncobd+cMeofyvCqFTMTIE
+	bY5OddDOCmSo8xBzwP/UXe/g7wr5U/8lc00Hx2XkVYQp9Z1OlrU8Wa/TelgZutg3FGgMy4YfAnB
+	FJKv9IdKNv2NCqePpyjBdSOIUvxDz4QlXotj+aGOv6/pOqTXHD4lAui+Ho5J3Hn4BMIm42v0WPx
+	VNGm/usAH+YjsvQM2wgWcyt+AYUQa/LNB49UOshuwXhTO/7XPEs2yzux3PGQ56eEbvqilRg5U2f
+	Q0qMR1rxgGItAmQxIcAYRkZcvptHBuOV58K36w1KJOxfXSHmhd2mVyfXq6pF8O4kOIXaxWMkz9C
+	AkYRjopUYt2KRvu8Qobk/2PTmkMw==
+X-Received: by 2002:a05:690c:6204:b0:809:4f29:fa98 with SMTP id 00721157ae682-80a6b4a3534mr26298727b3.45.1782395889364;
+        Thu, 25 Jun 2026 06:58:09 -0700 (PDT)
+Received: from Dev-Null-MSI ([2a0d:3344:52ac:a808:98a4:4381:be45:536f])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8025ffc47fbsm72140707b3.33.2026.06.25.06.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jun 2026 06:58:08 -0700 (PDT)
+From: Yousef Alhouseen <alhouseenyousef@gmail.com>
+To: Adam Radford <aradford@gmail.com>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yousef Alhouseen <alhouseenyousef@gmail.com>
+Subject: [PATCH v2 1/2] scsi: 3w-9xxx: sanitize passthrough SGLs
+Date: Thu, 25 Jun 2026 15:57:45 +0200
+Message-ID: <20260625135746.1639-1-alhouseenyousef@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260625085842.4522-1-alhouseenyousef@gmail.com>
+References: <20260625085842.4522-1-alhouseenyousef@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -91,127 +95,184 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjI1MDEwNSBTYWx0ZWRfX4S3NFRn6q6ki
- 7SYDLjKI89XfV5/y5Qh7Pg082Tl7MiRiwafAOAMPnepF/n3nuuoyi/g0xg8yideqgdwuSfL0DDU
- 1eFmQ1M48gJNQ11A9Pg2bO9Hcm/h/Ec=
-X-Proofpoint-ORIG-GUID: nUVVHNl8dXIiyXCxfxD-bxCLmAs-kTUD
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjI1MDEwNSBTYWx0ZWRfX0i2Fu42f+Ymf
- Py+Iqw0jfiWA6gJAwImvtPiqbQPH4A3z1AJZM+ZZFLzsJVsloyaX6RhPKGU/+Lnb/EqenffSBzu
- BGR858pdSTw583emlGF1SSpuHCPLnbWGbKEBsZKfQMEpCupUNoh+qdWJwRrOObeZqCmkkxnu3D7
- N7FINcOpH13dVl80XBQY5lSEQ/MKJtXXuTY20EC20obvqqq0D1egdIo3VOhpSmRquEoxGZjQM57
- B4MWCvGx9dqLW1mUt7IBr6yb/cE0Fx86kUlE0Ip+BCHt9FQnu22cflO5susNP4IkmZ8Dke1a+kG
- c3QpKFIk+1oogbMF4/X10KENTWLp4rAHCWG5NQZANvYomDfUbOSCgnCSTBVDV7p20qn6ErOH+w+
- 4JvJht+1pfzyMcoHqQFs6eQrgw4uQ6OLS1zKY7saGUPm25l3mo9DMjbMNqly4t6ibOmDpndziVX
- AD5C96z5KD2P92kBN4Q==
-X-Proofpoint-GUID: nUVVHNl8dXIiyXCxfxD-bxCLmAs-kTUD
-X-Authority-Analysis: v=2.4 cv=TcSmcxQh c=1 sm=1 tr=0 ts=6a3d1b6d cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
- a=YMgV9FUhrdKAYTUUvYB2:22 a=VwQbUJbxAAAA:8 a=mpaa-ttXAAAA:8 a=EUspDBNiAAAA:8
- a=k4jP4d6HZhLhPJ4VD8wA:9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-25_01,2026-06-24_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 adultscore=0 impostorscore=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 clxscore=1015 spamscore=0
- bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2606250105
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25270-lists,linux-scsi=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FREEMAIL_CC(0.00)[vger.kernel.org,oss.qualcomm.com,samsung.com,wdc.com,HansenPartnership.com,gmail.com,collabora.com,lists.infradead.org];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-25272-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:aradford@gmail.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:alhouseenyousef@gmail.com,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com,HansenPartnership.com,oracle.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:bvanassche@acm.org,m:beanhuo@micron.com,m:peter.wang@mediatek.com,m:martin.petersen@oracle.com,m:mani@kernel.org,m:linux-scsi@vger.kernel.org,m:can.guo@oss.qualcomm.com,m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:James.Bottomley@HansenPartnership.com,m:matthias.bgg@gmail.com,m:angelogioacchino.delregno@collabora.com,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mediatek@lists.infradead.org,m:matthiasbgg@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER(0.00)[alhouseenyousef@gmail.com,linux-scsi@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[can.guo@oss.qualcomm.com,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[alhouseenyousef@gmail.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,oss.qualcomm.com:from_mime,vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,mediatek.com:email,qualcomm.com:dkim,qualcomm.com:email];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	ALIAS_RESOLVED(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	RCVD_COUNT_SEVEN(0.00)[10]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 856056C57EC
+X-Rspamd-Queue-Id: 287316C651F
 
-ufshcd_tx_eqtr() skips POST_CHANGE notify when __ufshcd_tx_eqtr()
-fails. That can leave variant cleanup incomplete when PRE_CHANGE saved
-temporary state that POST_CHANGE is expected to restore.
+TW_IOCTL_FIRMWARE_PASS_THROUGH copies a full command packet from userspace
+and then overwrites the first SGL entry. The SGL location and command
+size remain user-controlled for legacy commands, and any additional
+firmware-visible SGL entries can survive in the packet.
 
-Always call POST_CHANGE once PRE_CHANGE has succeeded. Keep the TX EQTR
-result as the primary return value, and only propagate POST_CHANGE
-failure when TX EQTR itself succeeded.
+Validate the legacy SGL placement before writing it, force the command
+size to describe only the single driver-owned data buffer, and clear the
+SGL arrays before filling entry zero. Also zero the DMA bounce buffer
+before copying the user request so short device writes cannot expose
+stale coherent memory on copyout.
 
-Log PRE_CHANGE and POST_CHANGE notify failures to make variant callback
-failures visible in TX EQTR error paths.
+Since a successful SGL setup leaves retval at zero, reset retval to the
+copyout error before the final copy_to_user() so a failed copyout cannot
+be reported as success.
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-Reviewed-by: Peter Wang <peter.wang@mediatek.com>
-Signed-off-by: Can Guo <can.guo@oss.qualcomm.com>
+Signed-off-by: Yousef Alhouseen <alhouseenyousef@gmail.com>
 ---
- drivers/ufs/core/ufs-txeq.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+Changes in v2:
+- Preserve -EFAULT if the final copy_to_user() fails after successful SGL
+  setup.
 
-diff --git a/drivers/ufs/core/ufs-txeq.c b/drivers/ufs/core/ufs-txeq.c
-index e1302ea9f27e..7f908ea97ec3 100644
---- a/drivers/ufs/core/ufs-txeq.c
-+++ b/drivers/ufs/core/ufs-txeq.c
-@@ -1223,6 +1223,7 @@ static int ufshcd_tx_eqtr(struct ufs_hba *hba,
- {
- 	struct ufs_pa_layer_attr old_pwr_info;
- 	unsigned int noio_flag;
-+	int notify_ret;
- 	int ret;
- 
- 	/*
-@@ -1252,14 +1253,19 @@ static int ufshcd_tx_eqtr(struct ufs_hba *hba,
+ drivers/scsi/3w-9xxx.c | 55 ++++++++++++++++++++++++++++++++----------
+ 1 file changed, 42 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/scsi/3w-9xxx.c b/drivers/scsi/3w-9xxx.c
+index a125801e3..1e48d6280 100644
+--- a/drivers/scsi/3w-9xxx.c
++++ b/drivers/scsi/3w-9xxx.c
+@@ -137,7 +137,9 @@ static int twa_initconnection(TW_Device_Extension *tw_dev, int message_credits,
+ 			      unsigned short *fw_on_ctlr_branch,
+ 			      unsigned short *fw_on_ctlr_build,
+ 			      u32 *init_connect_result);
+-static void twa_load_sgl(TW_Device_Extension *tw_dev, TW_Command_Full *full_command_packet, int request_id, dma_addr_t dma_handle, int length);
++static int twa_load_sgl(TW_Device_Extension *tw_dev,
++			TW_Command_Full *full_command_packet, int request_id,
++			dma_addr_t dma_handle, int length);
+ static int twa_poll_response(TW_Device_Extension *tw_dev, int request_id, int seconds);
+ static int twa_poll_status_gone(TW_Device_Extension *tw_dev, u32 flag, int seconds);
+ static int twa_post_command_packet(TW_Device_Extension *tw_dev, int request_id, char internal);
+@@ -707,6 +709,8 @@ static long twa_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long
  	}
  
- 	ret = ufshcd_vops_tx_eqtr_notify(hba, PRE_CHANGE, pwr_mode);
--	if (ret)
-+	if (ret) {
-+		dev_err(hba->dev, "TX EQTR PRE_CHANGE notify failed: %d\n", ret);
- 		goto out;
-+	}
+ 	tw_ioctl = (TW_Ioctl_Buf_Apache *)cpu_addr;
++	memset(tw_ioctl, 0, sizeof(TW_Ioctl_Buf_Apache) +
++	       data_buffer_length_adjusted);
  
- 	ret = __ufshcd_tx_eqtr(hba, params, pwr_mode);
--	if (ret)
--		goto out;
+ 	/* Now copy down the entire ioctl */
+ 	if (copy_from_user(tw_ioctl, argp, sizeof(TW_Ioctl_Buf_Apache) + driver_command.buffer_length))
+@@ -727,7 +731,14 @@ static long twa_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long
+ 		full_command_packet = &tw_ioctl->firmware_command;
  
--	ret = ufshcd_vops_tx_eqtr_notify(hba, POST_CHANGE, pwr_mode);
-+	notify_ret = ufshcd_vops_tx_eqtr_notify(hba, POST_CHANGE, pwr_mode);
-+	if (notify_ret)
-+		dev_err(hba->dev, "TX EQTR POST_CHANGE notify failed: %d\n", notify_ret);
+ 		/* Load request id and sglist for both command types */
+-		twa_load_sgl(tw_dev, full_command_packet, request_id, dma_handle, data_buffer_length_adjusted);
++		retval = twa_load_sgl(tw_dev, full_command_packet, request_id,
++				      dma_handle, data_buffer_length_adjusted);
++		if (retval) {
++			tw_dev->chrdev_request_id = TW_IOCTL_CHRDEV_FREE;
++			twa_free_request_id(tw_dev, request_id);
++			spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
++			goto out3;
++		}
+ 
+ 		memcpy(tw_dev->command_packet_virt[request_id], &(tw_ioctl->firmware_command), sizeof(TW_Command_Full));
+ 
+@@ -891,6 +902,7 @@ static long twa_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long
+ 	}
+ 
+ 	/* Now copy the entire response to userspace */
++	retval = TW_IOCTL_ERROR_OS_EFAULT;
+ 	if (copy_to_user(argp, tw_ioctl, sizeof(TW_Ioctl_Buf_Apache) + driver_command.buffer_length) == 0)
+ 		retval = 0;
+ out3:
+@@ -1398,11 +1410,14 @@ static irqreturn_t twa_interrupt(int irq, void *dev_instance)
+ } /* End twa_interrupt() */
+ 
+ /* This function will load the request id and various sgls for ioctls */
+-static void twa_load_sgl(TW_Device_Extension *tw_dev, TW_Command_Full *full_command_packet, int request_id, dma_addr_t dma_handle, int length)
++static int twa_load_sgl(TW_Device_Extension *tw_dev,
++			TW_Command_Full *full_command_packet, int request_id,
++			dma_addr_t dma_handle, int length)
+ {
+ 	TW_Command *oldcommand;
+ 	TW_Command_Apache *newcommand;
+ 	TW_SG_Entry *sgl;
++	unsigned int sgl_offset, sgl_words, max_words;
+ 	unsigned int pae = 0;
+ 
+ 	if ((sizeof(long) < 8) && (sizeof(dma_addr_t) > 4))
+@@ -1412,6 +1427,8 @@ static void twa_load_sgl(TW_Device_Extension *tw_dev, TW_Command_Full *full_comm
+ 		newcommand = &full_command_packet->command.newcommand;
+ 		newcommand->request_id__lunl =
+ 			TW_REQ_LUN_IN(TW_LUN_OUT(newcommand->request_id__lunl), request_id);
++		newcommand->sgl_offset = 16;
++		memset(newcommand->sg_list, 0, sizeof(newcommand->sg_list));
+ 		if (length) {
+ 			newcommand->sg_list[0].address = TW_CPU_TO_SGL(dma_handle + sizeof(TW_Ioctl_Buf_Apache));
+ 			newcommand->sg_list[0].length = cpu_to_le32(length);
+@@ -1421,19 +1438,31 @@ static void twa_load_sgl(TW_Device_Extension *tw_dev, TW_Command_Full *full_comm
+ 	} else {
+ 		oldcommand = &full_command_packet->command.oldcommand;
+ 		oldcommand->request_id = request_id;
++		sgl_offset = TW_SGL_OUT(oldcommand->opcode__sgloffset);
++		if (!sgl_offset)
++			return length ? -EINVAL : 0;
 +
-+	if (!ret)
-+		ret = notify_ret;
++		sgl_words = sizeof(*sgl) / sizeof(u32);
++		max_words = sizeof(*oldcommand) / sizeof(u32);
++
++		if (tw_dev->tw_pci_dev->device == PCI_DEVICE_ID_3WARE_9690SA) {
++			if (oldcommand->size < sgl_words - pae)
++				return -EINVAL;
++			if (oldcommand->size - sgl_words + pae != sgl_offset)
++				return -EINVAL;
++		}
  
- out:
- 	if (ret)
+-		if (TW_SGL_OUT(oldcommand->opcode__sgloffset)) {
+-			/* Load the sg list */
+-			if (tw_dev->tw_pci_dev->device == PCI_DEVICE_ID_3WARE_9690SA)
+-				sgl = (TW_SG_Entry *)((u32 *)oldcommand+oldcommand->size - (sizeof(TW_SG_Entry)/4) + pae);
+-			else
+-				sgl = (TW_SG_Entry *)((u32 *)oldcommand+TW_SGL_OUT(oldcommand->opcode__sgloffset));
+-			sgl->address = TW_CPU_TO_SGL(dma_handle + sizeof(TW_Ioctl_Buf_Apache));
+-			sgl->length = cpu_to_le32(length);
++		if (sgl_offset > max_words || sgl_words > max_words - sgl_offset)
++			return -EINVAL;
+ 
+-			oldcommand->size += pae;
+-		}
++		sgl = (TW_SG_Entry *)((u32 *)oldcommand + sgl_offset);
++		memset(sgl, 0, sizeof(*oldcommand) - sgl_offset * sizeof(u32));
++		sgl->address = TW_CPU_TO_SGL(dma_handle + sizeof(TW_Ioctl_Buf_Apache));
++		sgl->length = cpu_to_le32(length);
++		oldcommand->size = sgl_offset + sgl_words;
+ 	}
++
++	return 0;
+ } /* End twa_load_sgl() */
+ 
+ /* This function will poll for a response interrupt of a request */
 -- 
-2.34.1
-
+2.54.0
 
