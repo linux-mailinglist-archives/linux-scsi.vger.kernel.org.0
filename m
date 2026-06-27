@@ -1,329 +1,175 @@
-Return-Path: <linux-scsi+bounces-25311-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25314-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id cAJ0KwpjP2pHSgkAu9opvQ
-	(envelope-from <linux-scsi+bounces-25311-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 07:43:38 +0200
+	id ljA0LshlP2oOSwkAu9opvQ
+	(envelope-from <linux-scsi+bounces-25314-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 07:55:20 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 342736D134A
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 07:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 228426D13CC
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 07:55:20 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=purestorage.com header.s=google2022 header.b=BnQsM+BL;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25311-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25311-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=purestorage.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=KV1TV8yY;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25314-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25314-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B6A513046CF7
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 05:43:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2989D301D316
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 05:55:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E37B038C42E;
-	Sat, 27 Jun 2026 05:42:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ED89317144;
+	Sat, 27 Jun 2026 05:55:18 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-pl1-f231.google.com (mail-pl1-f231.google.com [209.85.214.231])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7C8379EFC
-	for <linux-scsi@vger.kernel.org>; Sat, 27 Jun 2026 05:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7F913AA2D
+	for <linux-scsi@vger.kernel.org>; Sat, 27 Jun 2026 05:55:17 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782538970; cv=none; b=eltTCKYkqEhU+bQSMNTAuhSwcTt4XDmnD/gptTleUTPOSl99jg7L5nq6nsqaAXLcvbk8F7Z3xKZcmX1u9ar4AxG2+s1dRvzw4KhGFntN4LvdTBoYzd9nyyAkXL/KoOOlfR/e0iLr+rwJWwjVsoRNH8gIIj8Zi77NW50wQnrOz0k=
+	t=1782539718; cv=none; b=u/TI8RzP+HLn0bGrT0eJNKKg+xLRkkMk9Vv4Fuhfh05YaDXeCWFGswHJbXYgFN6qggI4vZgHF3GmNmbEf8bLGjRi7VAceq74H6KSZf5KD2q/1XdSPKmBLSXphZTPi0bB0g8VLmmCMybN40oU3VwfrOX9EDDh5bVs02lDNuTHZ8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782538970; c=relaxed/simple;
-	bh=ptYPEAcabOb1qGUWNpAdVjwbbM/+AqTacpnF9OjHyL8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y4wB9jCUrdjbZSiTs6ysaKLJBfbMCBMP5Wp6s9xcDfst3JuRFz1q0rGBfepue7W5f2s+ufQD9jAldwZnO6x9GoKSxNAMv7GFl3z+A3NrNKe0n8WVz9XtQ1/uUhnsmQuRGFQymEb7ZAeo+6yAMe1wQ8OwoWPxang+cv4qTOBvgKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=BnQsM+BL; arc=none smtp.client-ip=209.85.214.231
-Received: by mail-pl1-f231.google.com with SMTP id d9443c01a7336-2c988e16bb3so1552335ad.0
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Jun 2026 22:42:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1782538968; x=1783143768; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=N3Kd40H6AivwA7mMDVuUj/O3ZPQ2Ju439VOfkOedNRs=;
-        b=BnQsM+BLRuzgHCcOEp9IYAiqY9eahGWO7F8e/R2vZGdA2b8FBGsRYfFPq6x4t7RHhz
-         MMX+Nb1fejeLCWsuEiG+M8AyP8SM6LJbFstOKC3xZbzMW5jYov6yeSOeHVOwZTBqFct+
-         SCWjhcaLEEdqv5BG6MsiTo621YQ+6my14qwo7tr0+9FWytNyoOEuHkKOLXNTIgJSeE1S
-         DuLqft4MZ/EWqBgQLWUZI/Q6KBTcP9WCoQZMl6K0ygJ1/acHo0850XtebaN00pEoFMrF
-         DLo0rhKN/xxX9WbKzTP29IWKOAa99iVIh2RFnCEmd6jCMUyBCQQVWxG0YQqoVssciDWA
-         Zp5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782538968; x=1783143768;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=N3Kd40H6AivwA7mMDVuUj/O3ZPQ2Ju439VOfkOedNRs=;
-        b=gZezrVvMSp+jIdpCKDsfP+6SkJkgpBiiQdIK2UvXp7JIRgcdtGbyvha9pPPYX+Ldh2
-         r7FvFkqZVRqebr1gGG77/VGAcPa7p1b5HFT+FEfrAOxnibyS+6LiEMoxJ60Z3yBMO6Su
-         45Ur/HyZ8U6v90zICmXsUMH0yenLUZqmNdqZAOdtcID+qdzJn/SMfui6ptiUB6k5B/q6
-         ZrijamEt+loeETWbw5QDDlJdQ8zRMhQt/l6RId+Ota/R+1DqACk4Qx8xsNWCCHpPuOAM
-         b5HP36t9JMKcvhFA/lxNF0LnwSvhnS33iH4abqiFqbuTR51WwPELswFRWQDrdys99e9g
-         POOQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqxWYwLj+2bq+hvqqe/XnN2ph2h9RsTJL3RqOX1YtupbwQF+fauWVzbH0Mfj+1gt24VwEg3kTmWy433@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfD9IgMYwHZdEBnYEDWyOqzFcjJmU57lM/u4XhjQH9BkIIcYMX
-	FU/B33A1cpoaFkv+lksaAr56g8/e1/Qp7GZ/ezLiMRJ/syF8RKNLd0XaMx5UvRKiBKl30DdEeLB
-	iE756/Z2Ls66BeRRTj23oWJK2fxlnXvHaxynaqZ9PGrx2HSXp9hNU
-X-Gm-Gg: AfdE7cnLnp/gv91vXedd4gC4X3sbIx+wgI4H0DaplirmKVF3hM5j6REMnCDL7yxvx36
-	NoRgG+ncYwfR5PWTB24iN0kfPYSyfC5PCfyuUm0J6IpfdU6U28luXGcBoofohXMK8R3eBxcf08N
-	K2kGiiVZGEV8LF9yOLMG1iXw/NXUmzuN/Zx1gwX5RDMayoqRj2pmKYYZeDvsQ8vUjVpc2GcxZ7C
-	iDpmj5HiCDEehVoo9yJcLxms6jvbMMH2palWNSCuuqE2dY1GsZmnowctF14ArDT4fMODvt67DmQ
-	cTuRhQkqd0bqbgGnOBWuMby98SBQNVus4PB5w/LUnxuipPjjCMD7Swl7zWzeVY2v9lcOvohi0nz
-	2vE0pxeHBiXFepMrp/OVJ/I/3PML7
-X-Received: by 2002:a17:90b:224d:b0:368:e6dc:eee2 with SMTP id 98e67ed59e1d1-37dfa1c9f92mr5376226a91.3.1782538967787;
-        Fri, 26 Jun 2026 22:42:47 -0700 (PDT)
-Received: from c7-smtp-2026.dev.purestorage.com ([2620:125:9017:12:36:3:6:0])
-        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-37fb5672f6asm134113a91.0.2026.06.26.22.42.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2026 22:42:47 -0700 (PDT)
-X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.12.104])
-	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id 26AE0402B6;
-	Fri, 26 Jun 2026 23:42:47 -0600 (MDT)
-Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 24285E40712; Fri, 26 Jun 2026 23:42:47 -0600 (MDT)
-From: Caleb Sander Mateos <csander@purestorage.com>
-To: Jens Axboe <axboe@kernel.dk>,
-	Christoph Hellwig <hch@lst.de>,
-	Sagi Grimberg <sagi@grimberg.me>,
-	Chaitanya Kulkarni <kch@nvidia.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Anuj Gupta <anuj20.g@samsung.com>,
-	linux-block@vger.kernel.org,
-	linux-nvme@lists.infradead.org,
-	linux-scsi@vger.kernel.org,
-	target-devel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Caleb Sander Mateos <csander@purestorage.com>,
-	Christoph Hellwig <hch@infradead.org>
-Subject: [PATCH v4 5/5] blk-integrity: avoid sector_t in bip_{get,set}_seed()
-Date: Fri, 26 Jun 2026 23:42:20 -0600
-Message-ID: <20260627054220.2174166-6-csander@purestorage.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260627054220.2174166-1-csander@purestorage.com>
+	s=arc-20240116; t=1782539718; c=relaxed/simple;
+	bh=51wnL9Oc7n6HgU42OQPc+cVez3/v3vs9oj+VIZ9fy8g=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=DQ6vq2PADXPJw+ciDIXv2SrCLJbVoQfvvqwXHzc9J9Nk43aHlE3Oa17uw4qGz9mBbL9f17mkmfVF60CJudhAL5g4r5HWzxoDQ6ooeRsMX+NFE2xgFrBR8WXQcBRHuqSwhvbDopxnvX7WjDyMwIZn6m4DOsR1iORSuNTjV/pLZnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KV1TV8yY; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D92931F000E9;
+	Sat, 27 Jun 2026 05:55:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782539717;
+	bh=2SiBj7RG+opXbHe2Rrj7BXmZ5dbZq+LGsWZ6ysQsMgo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=KV1TV8yYRyyyGZnKxfH1Yay8FBVg8wLcUgs4xSOypBdhDB50ZVqw5L/DqyZwvUhpB
+	 AdzQ7/ONmFjTM2TvEXh+HBmOchaQvcdKL8ygJWZbDf1uXPH3+p1ZchfcwnOQvLl3+x
+	 ayOZdByKJfsuO/ebKQQvSojJi+YWuGH6I8kHsbpYuBFOxkaRNbD+gtHxBWWcXi26Ga
+	 VptcKnLJQkHNybSRRFcDFx1QGBZYkE7dLG9Nmu4Z02tfzno7JktfD2fKcS7gt+oVa/
+	 G17mZtPMinkYw4TJ8TdT9ue/DfM4Fk1QuQ8K6tsnAfVbpWOa+jQX+P3/Hsvx/NLiXR
+	 BO0/P9tGuDWjA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4 3/5] bio-integrity-fs: use integrity interval instead
+ of sector as seed
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Caleb Sander Mateos" <csander@purestorage.com>
+Cc: linux-scsi@vger.kernel.org
+In-Reply-To: <20260627054220.2174166-4-csander@purestorage.com>
 References: <20260627054220.2174166-1-csander@purestorage.com>
+ <20260627054220.2174166-4-csander@purestorage.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 27 Jun 2026 05:55:16 +0000
+Message-Id: <20260627055516.D92931F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[purestorage.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[purestorage.com:s=google2022];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	TAGGED_FROM(0.00)[bounces-25311-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[csander@purestorage.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:axboe@kernel.dk,m:hch@lst.de,m:sagi@grimberg.me,m:kch@nvidia.com,m:martin.petersen@oracle.com,m:anuj20.g@samsung.com,m:linux-block@vger.kernel.org,m:linux-nvme@lists.infradead.org,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:csander@purestorage.com,m:hch@infradead.org,s:lists@lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25314-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:csander@purestorage.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
+	RCPT_COUNT_TWO(0.00)[2];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[csander@purestorage.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[purestorage.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[infradead.org:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp,purestorage.com:dkim,purestorage.com:email,purestorage.com:mid,purestorage.com:from_mime];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp,purestorage.com:email,smtp.kernel.org:mid,sashiko.dev:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 342736D134A
+X-Rspamd-Queue-Id: 228426D13CC
 
-bip_set_seed() and bip_get_seed() take/return a sector_t value that's
-actually an integrity interval number. This is confusing, so pass
-struct bio instead to bip_set_seed() and convert the bio's device
-address to integrity intervals.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Open-code the access to bip->bip_iter.bi_sector in the one caller of
-bip_set_seed() that doesn't use the bio device address for the seed.
-Open-code bip_get_seed() in its one caller.
+Pre-existing issues:
+- [High] Unconditional dereference of `bip` and `bi` in `fs_bio_integrity_v=
+erify` and `fs_bio_integrity_free` causing a kernel panic.
+--
 
-Add a comment to struct bvec_iter's bi_sector field explaining its
-alternate use for bip_iter.
+commit 1da3b7d905f7d5c0c600e7d3a5fbf3cb0dc853c7
+Author: Caleb Sander Mateos <csander@purestorage.com>
 
-Suggested-by: Christoph Hellwig <hch@infradead.org>
-Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
----
- block/bio-integrity.c               |  5 ++---
- block/t10-pi.c                      |  2 +-
- drivers/nvme/target/io-cmd-bdev.c   |  3 +--
- drivers/target/target_core_iblock.c |  3 +--
- include/linux/bio-integrity.h       | 11 -----------
- include/linux/blk-integrity.h       | 13 +++++++++++++
- include/linux/bvec.h                |  1 +
- 7 files changed, 19 insertions(+), 19 deletions(-)
+bio-integrity-fs: use integrity interval instead of sector as seed
+   =20
+bip_iter.bi_sector is meant to be in units of integrity intervals rather
+than 512-byte sectors. bio_integrity_verify() doesn't actually use it
+currently (it uses the passed in struct bvec_iter's bi_sector instead).
+But let's set it to the expected value for consistency.
 
-diff --git a/block/bio-integrity.c b/block/bio-integrity.c
-index d20f9002c7c9..7e5fb9b44848 100644
---- a/block/bio-integrity.c
-+++ b/block/bio-integrity.c
-@@ -102,13 +102,12 @@ void bio_integrity_free_buf(struct bio_integrity_payload *bip)
- 
- void bio_integrity_setup_default(struct bio *bio)
- {
- 	struct blk_integrity *bi = blk_get_integrity(bio->bi_bdev->bd_disk);
- 	struct bio_integrity_payload *bip = bio_integrity(bio);
--	u64 seed = bio->bi_iter.bi_sector >> (bi->interval_exp - SECTOR_SHIFT);
- 
--	bip_set_seed(bip, seed);
-+	bip_set_seed(bio);
- 
- 	if (bi->csum_type) {
- 		bip->bip_flags |= BIP_CHECK_GUARD;
- 		if (bi->csum_type == BLK_INTEGRITY_CSUM_IP)
- 			bip->bip_flags |= BIP_IP_CHECKSUM;
-@@ -488,11 +487,11 @@ int bio_integrity_map_iter(struct bio *bio, struct uio_meta *meta)
- 
- 	it.count = integrity_bytes;
- 	ret = bio_integrity_map_user(bio, &it);
- 	if (!ret) {
- 		bio_uio_meta_to_bip(bio, meta);
--		bip_set_seed(bio_integrity(bio), meta->seed);
-+		bio_integrity(bio)->bip_iter.bi_sector = meta->seed;
- 		iov_iter_advance(&meta->iter, integrity_bytes);
- 		meta->seed += bio_integrity_intervals(bi, bio_sectors(bio));
- 	}
- 	return ret;
- }
-diff --git a/block/t10-pi.c b/block/t10-pi.c
-index 787950dec50a..71367fd082bd 100644
---- a/block/t10-pi.c
-+++ b/block/t10-pi.c
-@@ -510,11 +510,11 @@ static void blk_reftag_remap_prepare(struct blk_integrity *bi,
- static void __blk_reftag_remap(struct bio *bio, struct blk_integrity *bi,
- 			       unsigned *intervals, u64 *ref, bool prep)
- {
- 	struct bio_integrity_payload *bip = bio_integrity(bio);
- 	struct bvec_iter iter = bip->bip_iter;
--	u64 virt = bip_get_seed(bip);
-+	u64 virt = bip->bip_iter.bi_sector;
- 	union pi_tuple *ptuple;
- 	union pi_tuple tuple;
- 
- 	if (prep && bip->bip_flags & BIP_MAPPED_INTEGRITY) {
- 		*ref += bio->bi_iter.bi_size >> bi->interval_exp;
-diff --git a/drivers/nvme/target/io-cmd-bdev.c b/drivers/nvme/target/io-cmd-bdev.c
-index f2d9e8901df4..65fce51b024a 100644
---- a/drivers/nvme/target/io-cmd-bdev.c
-+++ b/drivers/nvme/target/io-cmd-bdev.c
-@@ -218,12 +218,11 @@ static int nvmet_bdev_alloc_bip(struct nvmet_req *req, struct bio *bio,
- 		pr_err("Unable to allocate bio_integrity_payload\n");
- 		return PTR_ERR(bip);
- 	}
- 
- 	/* virtual start sector must be in integrity interval units */
--	bip_set_seed(bip, bio->bi_iter.bi_sector >>
--		     (bi->interval_exp - SECTOR_SHIFT));
-+	bip_set_seed(bio);
- 
- 	resid = bio_integrity_bytes(bi, bio_sectors(bio));
- 	while (resid > 0 && sg_miter_next(miter)) {
- 		len = min_t(size_t, miter->length, resid);
- 		rc = bio_integrity_add_page(bio, miter->page, len,
-diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
-index 1087d1d17c36..1aeb5be529a8 100644
---- a/drivers/target/target_core_iblock.c
-+++ b/drivers/target/target_core_iblock.c
-@@ -706,12 +706,11 @@ iblock_alloc_bip(struct se_cmd *cmd, struct bio *bio,
- 		pr_err("Unable to allocate bio_integrity_payload\n");
- 		return PTR_ERR(bip);
- 	}
- 
- 	/* virtual start sector must be in integrity interval units */
--	bip_set_seed(bip, bio->bi_iter.bi_sector >>
--				  (bi->interval_exp - SECTOR_SHIFT));
-+	bip_set_seed(bio);
- 
- 	pr_debug("IBLOCK BIP Size: %u Sector: %llu\n", bip->bip_iter.bi_size,
- 		 (unsigned long long)bip->bip_iter.bi_sector);
- 
- 	resid = bio_integrity_bytes(bi, bio_sectors(bio));
-diff --git a/include/linux/bio-integrity.h b/include/linux/bio-integrity.h
-index c3dda32fd803..992cb1622c2c 100644
---- a/include/linux/bio-integrity.h
-+++ b/include/linux/bio-integrity.h
-@@ -56,21 +56,10 @@ static inline bool bio_integrity_flagged(struct bio *bio, enum bip_flags flag)
- 		return bip->bip_flags & flag;
- 
- 	return false;
- }
- 
--static inline sector_t bip_get_seed(struct bio_integrity_payload *bip)
--{
--	return bip->bip_iter.bi_sector;
--}
--
--static inline void bip_set_seed(struct bio_integrity_payload *bip,
--				sector_t seed)
--{
--	bip->bip_iter.bi_sector = seed;
--}
--
- void bio_integrity_init(struct bio *bio, struct bio_integrity_payload *bip,
- 		struct bio_vec *bvecs, unsigned int nr_vecs);
- struct bio_integrity_payload *bio_integrity_alloc(struct bio *bio, gfp_t gfp,
- 		unsigned int nr);
- int bio_integrity_add_page(struct bio *bio, struct page *page, unsigned int len,
-diff --git a/include/linux/blk-integrity.h b/include/linux/blk-integrity.h
-index 825d777c078b..c82b2f6fe194 100644
---- a/include/linux/blk-integrity.h
-+++ b/include/linux/blk-integrity.h
-@@ -85,10 +85,23 @@ static inline unsigned int bio_integrity_bytes(struct blk_integrity *bi,
- 					       unsigned int sectors)
- {
- 	return bio_integrity_intervals(bi, sectors) * bi->metadata_size;
- }
- 
-+/**
-+ * bip_set_seed - Set bip reference tag seed from bio device address
-+ * @bio:	struct bio whose integrity payload's ref tag seed to initialize
-+ */
-+static inline void bip_set_seed(struct bio *bio)
-+{
-+	struct blk_integrity *bi = blk_get_integrity(bio->bi_bdev->bd_disk);
-+	struct bio_integrity_payload *bip = bio_integrity(bio);
-+
-+	bip->bip_iter.bi_sector =
-+		bio_integrity_intervals(bi, bio->bi_iter.bi_sector);
-+}
-+
- static inline bool blk_integrity_rq(const struct request *rq)
- {
- 	return rq->cmd_flags & REQ_INTEGRITY;
- }
- 
-diff --git a/include/linux/bvec.h b/include/linux/bvec.h
-index 92837e2743f1..22bded380bbf 100644
---- a/include/linux/bvec.h
-+++ b/include/linux/bvec.h
-@@ -91,10 +91,11 @@ static inline struct folio *bvec_folio(const struct bio_vec *bv)
- 
- struct bvec_iter {
- 	/*
- 	 * Current device address in 512 byte sectors. Only updated by the bio
- 	 * iter wrappers and not the bvec iterator helpers themselves.
-+	 * For bip_iter, this is overloaded to represent the integrity interval.
- 	 */
- 	sector_t		bi_sector;
- 
- 	/*
- 	 * Remaining size in bytes.
--- 
-2.54.0
+> diff --git a/block/bio-integrity-fs.c b/block/bio-integrity-fs.c
+> index 9c5fe5fa8f0da..770eacb2220ff 100644
+> --- a/block/bio-integrity-fs.c
+> +++ b/block/bio-integrity-fs.c
+> @@ -67,7 +67,7 @@ int fs_bio_integrity_verify(struct bio *bio, sector_t s=
+ector, unsigned int size)
+>  	 * bio.  Requires the submitter to remember the sector and the size.
+>  	 */
+>  	memset(&bip->bip_iter, 0, sizeof(bip->bip_iter));
+> -	bip->bip_iter.bi_sector =3D sector;
+> +	bip->bip_iter.bi_sector =3D bio_integrity_intervals(bi, sector);
 
+[Severity: High]
+This is a pre-existing issue, but can this unconditionally dereference bip
+and bi?
+
+Looking at iomap_bio_read_folio_range_sync() in fs/iomap/bio.c, it calls
+fs_bio_integrity_verify() and fs_bio_integrity_free() without validating if
+the integrity payload was actually allocated:
+
+fs/iomap/bio.c:iomap_bio_read_folio_range_sync() {
+    ...
+    if (!error)
+        error =3D fs_bio_integrity_verify(&bio, sector, len);
+    fs_bio_integrity_free(&bio);
+    ...
+}
+
+If fs_bio_integrity_alloc() returns 0 without actually allocating a
+bio_integrity_payload, bio_integrity(bio) will be NULL. This can happen if
+the device's integrity profile is unregistered concurrently, or if the
+operation doesn't require integrity checks.
+
+When that happens, fs_bio_integrity_verify() would dereference a NULL bip
+during the memset(&bip->bip_iter, 0, ...) call, and a NULL bi at the call to
+bio_integrity_intervals(bi, sector). Similarly, fs_bio_integrity_free() wou=
+ld
+subsequently dereference bip on the same path.
+
+Could we add a check for a valid bip and bi before these accesses?
+
+>  	bip->bip_iter.bi_size =3D bio_integrity_bytes(bi, size >> SECTOR_SHIFT);
+>  	return blk_status_to_errno(bio_integrity_verify(bio, &data_iter));
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260627054220.2174=
+166-1-csander@purestorage.com?part=3D3
 
