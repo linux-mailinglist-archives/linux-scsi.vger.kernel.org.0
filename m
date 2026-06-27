@@ -1,191 +1,193 @@
-Return-Path: <linux-scsi+bounces-25307-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25310-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id YutrOAP5PmpsNwkAu9opvQ
-	(envelope-from <linux-scsi+bounces-25307-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 00:11:15 +0200
+	id S8/QGONiP2o5SgkAu9opvQ
+	(envelope-from <linux-scsi+bounces-25310-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 07:42:59 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D96936D068A
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 00:11:14 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D07A6D1328
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 07:42:59 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=jWkHjZCo;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25307-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25307-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=purestorage.com header.s=google2022 header.b=CWCUvefa;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25310-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25310-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=purestorage.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0DD563006932
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jun 2026 22:11:12 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id A23903014761
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 05:42:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF1A53C1989;
-	Fri, 26 Jun 2026 22:11:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 884E438B122;
+	Sat, 27 Jun 2026 05:42:50 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f231.google.com (mail-pl1-f231.google.com [209.85.214.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79873AEF50;
-	Fri, 26 Jun 2026 22:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BD51991CB
+	for <linux-scsi@vger.kernel.org>; Sat, 27 Jun 2026 05:42:47 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782511870; cv=none; b=sleeoDHi+QDVC7s16khrrbG2IM6uuuOw2tG48w1FlPn4TZKK+qi0MTxT6Xu/Vo66J290DyfbZYp5RCJ4SfvTb9gKt3qPDGuJWCJkUvW7Igu/Hvg7WRYKIWW7LSZIv074jXZTMuN+qbVUMfab0X1/Yp0lXBBnFN+aww4BWwwwaRU=
+	t=1782538970; cv=none; b=EL1u9nOTT2cG3U3j7vamkUjvfhu1ywPqrB6sz4bjphMBetohA+uwsg8zSpgYZBpmLVpLLdz3W4FFko4fGZV2sFKj+jbFKloqa7MGHTKyrQdGL48XySwuiHW+SHV99kf+QAmCyq73Txor+IXIBXczhDuucjgAMT/0+jqpn2S8Kaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782511870; c=relaxed/simple;
-	bh=7M/FugBfskShcz+XtHCrsu3r0ANsIj70ukxI+uLXXks=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kE1vVrnutyKfqJ+SdYusVavrZxcnz82/JkuQbhfMDHYvpD/Kkc9hrTslLVpPeyQCcQumsu5BXKun7X826qsCvVf5+zHWDWXQeOUMRrIrOW6SHD7usO3AfbWRCyivEEw88ImWVuIoMV08Ccab3G2BvNbz6rFMM/ZumOFW0jGufHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jWkHjZCo; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2FE31F000E9;
-	Fri, 26 Jun 2026 22:11:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782511869;
-	bh=L6FmC3VN1d8NuvhVjp6d49+V8pA1Iapf0CWeIDyTr6s=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=jWkHjZCocYCauAXjfcwIQo7efn4kBoRbdRtZvggAODys47vLNUoGfpOpIG5A4H01C
-	 Lcalsshmgv8+j8Iq9ZWuGBSFcIG1kRayTRK1OboKrpiaCUAoaUl2cpl3ug5m9e6FUk
-	 L16SfxWl1m4Epk/PWTD/otGnkqcRw35D8Mm4dY9cr0U9OaDMyzlRiyS+6v3t9hzPdu
-	 kXYiyG8Z1Opq9d2QkTHQgaVEYdvz+31ex3lws8sSQV+oWEbNvWFaFx/rpLtq/O/UWf
-	 WoPVqXq0/g3AfzBuycltfBoDXWerH+5I6bdxBShYV+E8yG6drkvlqqcR+WU1zbQCp2
-	 SVCiqe999tVuw==
-Message-ID: <218133be-eca7-44ac-a9f6-81283c55185d@kernel.org>
-Date: Sat, 27 Jun 2026 07:11:06 +0900
+	s=arc-20240116; t=1782538970; c=relaxed/simple;
+	bh=ibHZUitqlYEsZVyxLJ8fClmaaZMHceqKSYFgEU/W9Qw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=r6mzMqjcco3iL1oW6cSOCPysKPO4YZZ/PI7H+1aAYKxWzJk8OKJX8fRq/DVuS8CXAv+6cNtfZgtyiDZZo/Hy/YN0lCXzGiXqOnRU/ty79B5GvHln0M7c2ZzcUgJ4VN/D5S0Y+pjeI2Kxh/Sf8EXymUChMF26SEG7MhKY8vJFr/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=CWCUvefa; arc=none smtp.client-ip=209.85.214.231
+Received: by mail-pl1-f231.google.com with SMTP id d9443c01a7336-2c996117854so2063485ad.3
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Jun 2026 22:42:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1782538967; x=1783143767; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=LBI2TZBBdvnIGwxDwxfcA0X2DAXeqtxaRyAM5YR83X8=;
+        b=CWCUvefaDDQch/+W35Qc+2rLWEJHBY9EPbsKXfHAsoZBU+Y/jlJPlY1axXuRB0uZNo
+         NgmRAQ4S1Vaoi1w1KsL3hhe0LDWfMvcb9uk46rKBuJeMZPL6eveSY05tVaGmTA5liGpA
+         +wDfqNs3pdsdjA2cK/EHSfKkJ6S1cYoVa7q/QsWvlaNsKbBki4h+fiOl5LKy+4LvEHZe
+         hIdyZOoTIkhqKWkxd9ZK63LgQA06dr/xondc4LzkUvtIXuO0MI5yRXSISHWXf/uwfEHq
+         sSUHiuRvZkN2W//7VOX+q7FMBwHjSBXydMp9fydZfhGvuQqrHVOj1Eo1P2g5PHsiU+o5
+         U6sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782538967; x=1783143767;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=LBI2TZBBdvnIGwxDwxfcA0X2DAXeqtxaRyAM5YR83X8=;
+        b=Trqn/UZcIE0GhGhGBwPHjDaskFOlyRViH7wmIe8e7uMM5Vim09ML/2HEUNLXjHxctg
+         KUIZh0BuV/0YBz9TrhSzUdtDhE3MJh7p9xX06Tx+0e0Tlo9/Jc+RZ6Uj1DHclHVLiBzO
+         fmDxF/fH4OrTrovkLxDSXcKe4ttf4ht5/NOiy+eTQODNo6FU569f6fKRLG8nlWRqSQbG
+         CjKs12Q8QTaj40iAJMYRdiUO185ZxW5Woz/zmI1ZBLPFvADZH6cRrLp19viirJY5w2We
+         k+jWpYQmNaX9ZuG/rthpjbqkvRMwUfUERZ12gcn9MZbHPgcChrB/VleJ5ErzjmbMSZSZ
+         srNg==
+X-Forwarded-Encrypted: i=1; AHgh+RqZ7jJnS0LWMDR4+ZlJNcq7De7czO51ca9tLf7bQHtxEDZeJ6CUFQHFbRS2gWKT4evo8fbZWbL+HMTH@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAvWu2oBpaNw+TTFAKivTo8gRGRfVk4YcbFdlfB0kxVy48r29l
+	ZLyOHxaJ/dYLq+qvos8kZE6F9d7B6ELmjazUoT1Vs5n7GftnvF5Fe2ZJlaYA9cIm70jcvT45Qf7
+	be3qrNkk6yp9zdSJ78GEovG9AuIrhYxAxPyvrZ7X1wrsiX2sgCaEY
+X-Gm-Gg: AfdE7ck4OJreRn7Xo0DQ8/MvVK9NdaHbGAVjai2O4YWixHrNd5rm7DZC8EHxnWpraku
+	n6OtqWnW82rkUjFdEhll0axuBNrVIipHBmZUVfeXfJDN87wfzFWcXC84N6bE+L1KhWH5/LIl8Y9
+	NHgeJ7l1nEIaiTBoHpONIoh3th0WiSNn3N/GZ8fHy760dZ8t4LCAZbYRSP8ZH7nIOoNYoGOUk0P
+	WF4uAocKSXhRy5HANx0Mcc4dpzjIZ6u0oNDjqL3PyfzXaLV/pI8A7+dElWqavdFJn0rNtdxvn4H
+	KZhm08fgEnSw4PQ77cqhvoyC1U/spc+5bfbjxzSOk3sfF7V7R1UuHcaZOK4OGQaMtEeppt32mqt
+	TDhQ88lhpob9aFsRUVEQE2lk6+F/e
+X-Received: by 2002:a17:90b:5207:b0:364:be8f:1d86 with SMTP id 98e67ed59e1d1-37dfa223d7dmr4789320a91.8.1782538966692;
+        Fri, 26 Jun 2026 22:42:46 -0700 (PDT)
+Received: from c7-smtp-2026.dev.purestorage.com ([2620:125:9017:12:36:3:6:0])
+        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-37fb11c60c1sm166693a91.3.2026.06.26.22.42.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jun 2026 22:42:46 -0700 (PDT)
+X-Relaying-Domain: purestorage.com
+Received: from dev-csander.dev.purestorage.com (bond0.slc5-n17m28-k8s.dev.purestorage.com [IPv6:2620:125:9025:20::a31:41f])
+	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id 0809840146;
+	Fri, 26 Jun 2026 23:42:46 -0600 (MDT)
+Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
+	id F351FE40712; Fri, 26 Jun 2026 23:42:45 -0600 (MDT)
+From: Caleb Sander Mateos <csander@purestorage.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	Chaitanya Kulkarni <kch@nvidia.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Anuj Gupta <anuj20.g@samsung.com>,
+	linux-block@vger.kernel.org,
+	linux-nvme@lists.infradead.org,
+	linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Caleb Sander Mateos <csander@purestorage.com>
+Subject: [PATCH v4 0/5] block: use integrity interval instead of sector as seed
+Date: Fri, 26 Jun 2026 23:42:15 -0600
+Message-ID: <20260627054220.2174166-1-csander@purestorage.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: libsas: Handle expander discovery allocation
- failures
-To: Haoxiang Li <haoxiang_li2024@163.com>, john.g.garry@oracle.com,
- yanaijie@huawei.com, James.Bottomley@HansenPartnership.com,
- martin.petersen@oracle.com, cassel@kernel.org, kees@kernel.org
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260623112909.2172701-1-haoxiang_li2024@163.com>
-Content-Language: en-US
-From: Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20260623112909.2172701-1-haoxiang_li2024@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-5.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[purestorage.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[purestorage.com:s=google2022];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:haoxiang_li2024@163.com,m:john.g.garry@oracle.com,m:yanaijie@huawei.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:cassel@kernel.org,m:kees@kernel.org,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-25310-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[163.com,oracle.com,huawei.com,HansenPartnership.com,kernel.org];
-	TAGGED_FROM(0.00)[bounces-25307-lists,linux-scsi=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	HAS_ORG_HEADER(0.00)[];
-	FORGED_SENDER(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[csander@purestorage.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:axboe@kernel.dk,m:hch@lst.de,m:sagi@grimberg.me,m:kch@nvidia.com,m:martin.petersen@oracle.com,m:anuj20.g@samsung.com,m:linux-block@vger.kernel.org,m:linux-nvme@lists.infradead.org,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:csander@purestorage.com,s:lists@lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[csander@purestorage.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[purestorage.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp,purestorage.com:dkim,purestorage.com:mid,purestorage.com:from_mime];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	ALIAS_RESOLVED(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D96936D068A
+X-Rspamd-Queue-Id: 3D07A6D1328
 
-On 6/23/26 20:29, Haoxiang Li wrote:
-> sas_ex_discover_expander() allocates a domain device and SAS port before
-> allocating the expander rphy, but it does not check all allocation and
-> registration failures. In particular, sas_expander_alloc() can return
-> NULL and the returned rphy is dereferenced unconditionally.
-> 
-> Add error handling for sas_port_alloc(), sas_port_add(), and
-> sas_expander_alloc(), and unwind the resources allocated on each path.
-> Use sas_port_free() before a port has been added and sas_port_delete()
-> after it has been added.
-> 
-> Free the child device directly on these early failures because child->rphy
-> has not been initialized yet, and sas_put_device() would dereference it.
-> 
-> Signed-off-by: Haoxiang Li <haoxiang_li2024@163.com>
+The block integrity layer currently sets the integrity seed (initial
+reference tag) in units of 512-byte sectors. However, Type 1 and Type 2
+ref tags are actually in units of integrity intervals. On devices with
+integrity interval size > 512 bytes, ref tags are seeded incorrectly.
 
-Looks OK. A couple of nits below.
+Ref tag "remapping" in blk_integrity_{prepare,complete}() covers up this
+ref tag seed discrepancy by offsetting all ref tags in each bio to
+convert to/from the absolute integrity interval numbers. But
+REQ_OP_ZONE_APPEND operations don't have their ref tags remapped, so the
+ref tags using units of sectors will be stored to the device. As future
+optimizations, the ref tag remapping could be avoided entirely on NVMe
+and some SCSI devices by passing the ref tag seed instead of the
+absolute integrity interval as the expected initial ref tag.
 
-> ---
->  drivers/scsi/libsas/sas_expander.c | 24 +++++++++++++++++++++---
->  1 file changed, 21 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-> index f471ab464a78..56c04c4ae818 100644
-> --- a/drivers/scsi/libsas/sas_expander.c
-> +++ b/drivers/scsi/libsas/sas_expander.c
-> @@ -909,9 +909,11 @@ static struct domain_device *sas_ex_discover_expander(
->  		return NULL;
->  
->  	phy->port = sas_port_alloc(&parent->rphy->dev, phy_id);
-> -	/* FIXME: better error handling */
-> -	BUG_ON(sas_port_add(phy->port) != 0);
-> -
-> +	if (!phy->port)
-> +		goto out_free_child;
+So avoid relying on remapping to convert between the ref tag seed in
+units of sectors and stored ref tags in units of integrity intervals.
+Initialize the ref tag seed as the integrity interval, not sector.
 
-For readability, a blank line would be nice here.
+The subsequent commits clean up the integrity ref tag seed code a bit.
 
-> +	res = sas_port_add(phy->port);
-> +	if (res)
-> +		goto out_free_port;
->  
->  	switch (phy->attached_dev_type) {
->  	case SAS_EDGE_EXPANDER_DEVICE:
-> @@ -926,6 +928,9 @@ static struct domain_device *sas_ex_discover_expander(
->  		rphy = NULL;	/* shut gcc up */
->  		BUG();
+v4:
+- Drop patch already applied
 
-can we drop this BUG() too so that instead of crashing we properly error unwind?
+v3: https://lore.kernel.org/linux-block/20260417015732.2692434-1-csander@purestorage.com/T/
+- Drop bi and bip arguments to bip_set_seed() (Christoph)
 
->  	}
-> +	if (!rphy)
-> +		goto out_delete_port;
-> +
->  	port = parent->port;
->  	child->rphy = rphy;
->  	get_device(&rphy->dev);
-> @@ -963,6 +968,19 @@ static struct domain_device *sas_ex_discover_expander(
->  	}
->  	list_add_tail(&child->siblings, &parent->ex_dev.children);
->  	return child;
-> +
-> +out_delete_port:
-> +	sas_port_delete(phy->port);
-> +	phy->port = NULL;
-> +	kfree(child);
-> +	return NULL;
-> +
-> +out_free_port:
-> +	sas_port_free(phy->port);
-> +	phy->port = NULL;
-> +out_free_child:
-> +	kfree(child);
-> +	return NULL;
->  }
->  
->  static int sas_ex_discover_dev(struct domain_device *dev, int phy_id)
+v2:
+- Reorder fixes before refactoring commits
+- Use u64, SECTOR_SHIFT (Christoph)
+- Don't take sector_t in bip_set_seed() (Christoph)
 
+Caleb Sander Mateos (5):
+  block: use integrity interval instead of sector as seed
+  blk-integrity: take u64 in bio_integrity_intervals()
+  bio-integrity-fs: use integrity interval instead of sector as seed
+  t10-pi: use bio_integrity_intervals() helper
+  blk-integrity: avoid sector_t in bip_{get,set}_seed()
+
+ block/bio-integrity-fs.c            |  2 +-
+ block/bio-integrity.c               |  4 ++--
+ block/t10-pi.c                      |  7 ++++---
+ drivers/nvme/target/io-cmd-bdev.c   |  3 +--
+ drivers/target/target_core_iblock.c |  3 +--
+ include/linux/bio-integrity.h       | 11 -----------
+ include/linux/blk-integrity.h       | 27 ++++++++++++++++++++-------
+ include/linux/bvec.h                |  1 +
+ 8 files changed, 30 insertions(+), 28 deletions(-)
 
 -- 
-Damien Le Moal
-Western Digital Research
+2.54.0
+
 
