@@ -1,87 +1,87 @@
-Return-Path: <linux-scsi+bounces-25312-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25308-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ikIlHitjP2pXSgkAu9opvQ
-	(envelope-from <linux-scsi+bounces-25312-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 07:44:11 +0200
+	id jGN6Ft9iP2ovSgkAu9opvQ
+	(envelope-from <linux-scsi+bounces-25308-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 07:42:55 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD02C6D1365
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 07:44:10 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB4FD6D131F
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 07:42:54 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=purestorage.com header.s=google2022 header.b=IrZ8LMpA;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25312-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25312-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=purestorage.com header.s=google2022 header.b=KHBEvlsj;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25308-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25308-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=purestorage.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 48D6B30651B5
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 05:43:07 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5846B3013443
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2026 05:42:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4BEE38F626;
-	Sat, 27 Jun 2026 05:42:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D764181ACD;
+	Sat, 27 Jun 2026 05:42:49 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wr1-f104.google.com (mail-wr1-f104.google.com [209.85.221.104])
+Received: from mail-pj1-f100.google.com (mail-pj1-f100.google.com [209.85.216.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C123876B3
-	for <linux-scsi@vger.kernel.org>; Sat, 27 Jun 2026 05:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625E83749FF
+	for <linux-scsi@vger.kernel.org>; Sat, 27 Jun 2026 05:42:48 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782538971; cv=none; b=PEfjaZEAXlQTzsSfBvHvlleKRabK6tKdli2Z4J/fffsUM9zq+f+N7kBrQnjXHIPbZqPKvXveZPaeS1dp8GqAWDs6fSB8s0EHK+7XJspC/hwOb3uj1duZSVpuFj0ZSd50fKIs8So8cMZEnDDHTu55r8r3hxdyHI88LvB0ZREPVyk=
+	t=1782538969; cv=none; b=DGE9feu2QLQqij7bHrwEFYdDpVNU7CEopNQShXlHs6LVNQ78j1TtYOpT+OfDmuVihEMw12dmxPV4rJcXpMAHzzViVHX+QjZWGoE9EbdqLau9/Z8NUYHPsUmb2x8UFUYZJFWiDlN16GnuBstxygOnmmtezMaLu80AXnciKLFRA1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782538971; c=relaxed/simple;
-	bh=3m0aj9nfgTpMPyTKR0ZRW5BNaB7D8LtbyalSkO5JWfo=;
+	s=arc-20240116; t=1782538969; c=relaxed/simple;
+	bh=9h7ZEz78Y6ScMBC88C8RHAAfRQ3ckL8zd/zOxP8SyRY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cXBDdQ+qFBEuEC3UvVfwwNREGQnj6AINTD7eSSQ0dtx4Rxy9D1NHjF9J/KPdGA18+monXJvOkNLZCEaGn8kR5Vfm4tOTfuHi3ikzpQej1R28REnWoVgHVDvQBhN4EifQ+RkmfNAhuUr977w80QOmdv78drkbvRxv+BrvYqPtcWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=IrZ8LMpA; arc=none smtp.client-ip=209.85.221.104
-Received: by mail-wr1-f104.google.com with SMTP id ffacd0b85a97d-46cb4a98168so134356f8f.2
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Jun 2026 22:42:49 -0700 (PDT)
+	 MIME-Version; b=B3jJqrMp7evBgL157yn2TY/KPnORUgc4hd78U1Wmojz0V5rD/plcNLtoJyy307eAbgTyjlWdvGoik57XJH1LvZIFhbQEvmeSSQdUoZf1AMrnVxMYI2P2nb7cJPTjdmkm1T2GW1nGJRi6ZhUgAAEuH91Ctb61mLIp6EOg1A7QNpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=KHBEvlsj; arc=none smtp.client-ip=209.85.216.100
+Received: by mail-pj1-f100.google.com with SMTP id 98e67ed59e1d1-37c9d82cd8bso130295a91.1
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Jun 2026 22:42:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=purestorage.com; s=google2022; t=1782538968; x=1783143768; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=TdMp+kUDXzcCHRaLfP/G+q/ZKBuIsQ8XItHm4El4CqI=;
-        b=IrZ8LMpAFf2rtrlm4o1mva2y7IIHa82m7d3kd1p3482zXtCHojgrAA0dfJoktVB8h2
-         zh0qwsoUoMs5a7bSGT+yv0kgcxUGK99JWgrHpjPDdoSLAfqWYLHtYv3Zh2kUya5aKlaM
-         Bw6diaYQU0iuPmGQxRm7bDC66vT6Ye2LOFyeoYb01P2GzrjcmqVeMOqIu8sTOd2oKNb+
-         akYGUbqwpjgE23drOmDhCxjR4fNHfoXpRpkk0JVPDSkhSK/UvwZ8fBd88NqJS4DF6zmP
-         pBkkwBKJOTxL03EzDef1AbRPrfT9e1vN3aF1hEYgjOSO7Sawr3bmO12SbaFoFDiBBQpK
-         m0kg==
+        bh=hJetzVCmipfxkIYaKGKmSSwqDl0tCRIuzU++fp89zak=;
+        b=KHBEvlsj0AlvZ3tbCDrQwsZVc7TatkU9GOkSwpfGbO6ZlT7v47ERnBptLAwtNjVMkC
+         FloXWLYQ5bZYXN4gT0GojAmmpnsCSj1JoagXyfDPT3NWx7yq5Yp+T7UARxJqe/PL5ZqK
+         5cQEjxpvCo5ny9jhyMTfTGmLyUQwsgEeL7w8EYXIIYRt/FA0E2K1n46ZcqGqoqBJXZRI
+         PebI0CRJQ0f7JXr7s2ZF9lUnsQkhhY+x2gmBaJ/HcQf0Z1CO54ldWHHxzeJs0SrQ5Ype
+         LHXchCqaeS2w+gCrrYDXFmfDK+IeAjBKVUnJtPm0fJ3qD3LTgFSiEjIVJhYvJWDnAP/g
+         esXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20251104; t=1782538968; x=1783143768;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TdMp+kUDXzcCHRaLfP/G+q/ZKBuIsQ8XItHm4El4CqI=;
-        b=U5zSpfvTuI0WLvdhBKWL+YXLcBFJjUVW1L9XNxbQBzjRFqE19BQmd9+kZ6L4vTQelV
-         AHzLFX07QCBODcoSUVLOPgUqOy+SgTVtio01sgf7KbpM0Y9HdjUh9xMBTTkpHA/KCOzx
-         bM5IVCqJndvFnnmITWNKuQkQ3a3yDNLQPqB54aSZbiiYnJSl1M2FoJLdGn5xt7xuNs1p
-         49LHlFufdf10v/S+uWtd1Y0OZCG/+Ef+8NR0rVJ5kvIZaZ5+wpW0OmGAymCSmZEAizT4
-         BLTqPj6/nrR2Pcuebmh9YxL07rX0TPWzID9yl7+nP0uY/KyMKcqpMeDmvO4XyaBjTxeL
-         3JFA==
-X-Forwarded-Encrypted: i=1; AFNElJ+u2svnT1N801+QCTXqqGBh2Ip+kNO1alQRw+b0QC7lgUwfgmfrOeAyxHFPyGGA6eM0ab+y6F5TbD+2@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5uEZDe8v9IhdWocRT81kWWvGOrRJUV/iVR/Y6NxfVP5LRbMFD
-	9SjDewg76Ytl9BhzFtpjZm40nf8hsSrJnzOKtqBzjTQslBXRvLMnvxa+BuAbR9n76N1fnVEXOXN
-	q8/y0lddcXv6h11m79ANzcx+GIr8VsYdvzGeO
-X-Gm-Gg: AfdE7ckUHIK3/gCJbeprfQ/tIAsoVRKbhrHQDetqCSaTKlQzKhLaA2+KHBd93CZo7eg
-	nwSJCUNURfiC9gWOp4DjzcSo5wzhwGhvGuMC2yfVoo+UzX6yNLJhLyFfMB2OtxCPurJ/bVB5P8E
-	qe5ofsz07ur+DKhoVj25voN7UXLBw0fVGmW2CwP7Mtj67Mt3JL4rESYsNvuabGzA3Hpy9LKTcOC
-	02sBSkdken0dBKwvAhUDZcnpiAPIZeqANROmso20AbtjZeUHx6Aw27nXrpRmTMDNntYh1vnhsDZ
-	d88zUESaJ72pH5HXzldvpxEBGcgsh083ZYWl9RvnjbF6feNhPTpqbE7cCgy/R2eEnFdHxxQxoRW
-	R0pJM8ZC7a7DMwgEoLF7MXNGVcezF2w7jZ4v6Vs53YK0=
-X-Received: by 2002:a05:600c:c043:b0:492:4708:d73d with SMTP id 5b1f17b1804b1-4926686b471mr48451735e9.1.1782538968091;
-        Fri, 26 Jun 2026 22:42:48 -0700 (PDT)
-Received: from c7-smtp-2026.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id 5b1f17b1804b1-4926902d9b4sm2356335e9.14.2026.06.26.22.42.47
+        bh=hJetzVCmipfxkIYaKGKmSSwqDl0tCRIuzU++fp89zak=;
+        b=REyMvfERvwjwZRYnAtsyb/8H621UovwK800X/QfGvTaYqXoYMVs3spAdv0gxPwHXjR
+         UZ1XsslY80nQXFRvDwpJnYFDo+OyscQGHq7DZnurrw0Dqqp5Y41syb2pwvjOQLg49aIF
+         Kxt9wRflwpg1pEzDwSzIYhhltc/ds4OnUTykNMs/O5+mcYgbrdt+lWRKvHzyqFrTmQEh
+         5ROWW3yysWc7GDHLsqzUiGjA7xVbL5ySr4d9tu7anMXNZ6Mb4ggPFV4uWiakq7q06nW2
+         rhoVQ0ovZLj6YhwTxo+H5W+xiDqF+wJAJCYxGP5pdzvEP9/G06LJQmFVHXL//IuurJf3
+         KS4w==
+X-Forwarded-Encrypted: i=1; AHgh+RrdsvamvyAj/hbO6ghnXrJWB+4xK5CpxemDnI8lYm9GWWW8clxdPFDSwW7j7vPOf3SEk0XAiISKbssP@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4fthy+Z9jKEqUtRy9Ij32Wy77ako+YmfFjfiPPX6qJZI1q8MJ
+	sLzJKTVY/GEKBqBG2O2QZsGtRjE23+cmcUo9a0D3eF4hq+BMsDxfbiIvCqoxW1Ofd/0l/wvOoXM
+	nX5tO1/pdp5tFsy3gp/sUwE+tQegMyUK8L5jVfvHj4LhvsL4BzFae
+X-Gm-Gg: AfdE7ck7rXwxskP2t3Wv66yGiJ2/5cTNlSWGioEgNkeXz9/5mBzmWskvsOHYRN24esq
+	mhZK2N/Thutwj+mq2EdqRxi70izjROSSa6ZuzZyN9IxBJkZR5Au+33hiAkmHv7oWmdTZKMDTcny
+	/pSjYqFAYZc9c58oHJKh4QEyDQuFaie8Visi9ZuYjBMvC31O+UcQ8yIvQIZrDyxgaUDursrlRFS
+	dVSRu5+2FwG+Zg6WPzPGWgn96pPnNHndzWu102UsFhbtef3Y8Aq669Ds1hx8PVwNnF1rg4iwsD4
+	c9qVELpxkRaL7OhHOkMOIc2bPFkUGRBQSLNkDj7VJUr+vgd0Zp7zM6sedSuriQp7PN+muxTiTfF
+	5Jp8xAWaTA8x99eaZsjVJv/lV4SUP
+X-Received: by 2002:a17:90b:53c3:b0:36b:9231:9718 with SMTP id 98e67ed59e1d1-37dfa2c9951mr5148619a91.6.1782538967568;
+        Fri, 26 Jun 2026 22:42:47 -0700 (PDT)
+Received: from c7-smtp-2026.dev.purestorage.com ([2620:125:9017:12:36:3:6:0])
+        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-37df39562besm848289a91.1.2026.06.26.22.42.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2026 22:42:48 -0700 (PDT)
+        Fri, 26 Jun 2026 22:42:47 -0700 (PDT)
 X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (bond0.slc5-n17m28-k8s.dev.purestorage.com [IPv6:2620:125:9025:20::a31:41f])
-	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id B2CB8402B4;
+Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.12.104])
+	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id E8FAD402B5;
 	Fri, 26 Jun 2026 23:42:46 -0600 (MDT)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id B0913E40712; Fri, 26 Jun 2026 23:42:46 -0600 (MDT)
+	id E6AE6E40712; Fri, 26 Jun 2026 23:42:46 -0600 (MDT)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	Christoph Hellwig <hch@lst.de>,
@@ -95,9 +95,9 @@ Cc: Anuj Gupta <anuj20.g@samsung.com>,
 	target-devel@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v4 3/5] bio-integrity-fs: use integrity interval instead of sector as seed
-Date: Fri, 26 Jun 2026 23:42:18 -0600
-Message-ID: <20260627054220.2174166-4-csander@purestorage.com>
+Subject: [PATCH v4 4/5] t10-pi: use bio_integrity_intervals() helper
+Date: Fri, 26 Jun 2026 23:42:19 -0600
+Message-ID: <20260627054220.2174166-5-csander@purestorage.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260627054220.2174166-1-csander@purestorage.com>
 References: <20260627054220.2174166-1-csander@purestorage.com>
@@ -115,63 +115,61 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[purestorage.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[purestorage.com:s=google2022];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCPT_COUNT_TWELVE(0.00)[12];
-	TAGGED_FROM(0.00)[bounces-25312-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25308-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER(0.00)[csander@purestorage.com,linux-scsi@vger.kernel.org];
 	FORGED_RECIPIENTS(0.00)[m:axboe@kernel.dk,m:hch@lst.de,m:sagi@grimberg.me,m:kch@nvidia.com,m:martin.petersen@oracle.com,m:anuj20.g@samsung.com,m:linux-block@vger.kernel.org,m:linux-nvme@lists.infradead.org,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:csander@purestorage.com,s:lists@lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[csander@purestorage.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[purestorage.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,lst.de:email,purestorage.com:dkim,purestorage.com:email,purestorage.com:mid,purestorage.com:from_mime,samsung.com:email,vger.kernel.org:from_smtp];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,purestorage.com:dkim,purestorage.com:email,purestorage.com:mid,purestorage.com:from_mime,samsung.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: DD02C6D1365
+X-Rspamd-Queue-Id: EB4FD6D131F
 
-bip_iter.bi_sector is meant to be in units of integrity intervals rather
-than 512-byte sectors. bio_integrity_verify() doesn't actually use it
-currently (it uses the passed in struct bvec_iter's bi_sector instead).
-But let's set it to the expected value for consistency.
+Use bio_integrity_intervals() to convert blk_rq_pos(rq) to integrity
+intervals to reduce code duplication.
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 Reviewed-by: Anuj Gupta <anuj20.g@samsung.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- block/bio-integrity-fs.c | 2 +-
+ block/t10-pi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/block/bio-integrity-fs.c b/block/bio-integrity-fs.c
-index 9c5fe5fa8f0d..770eacb2220f 100644
---- a/block/bio-integrity-fs.c
-+++ b/block/bio-integrity-fs.c
-@@ -65,11 +65,11 @@ int fs_bio_integrity_verify(struct bio *bio, sector_t sector, unsigned int size)
- 	 *
- 	 * This is for use in the submitter after the driver is done with the
- 	 * bio.  Requires the submitter to remember the sector and the size.
- 	 */
- 	memset(&bip->bip_iter, 0, sizeof(bip->bip_iter));
--	bip->bip_iter.bi_sector = sector;
-+	bip->bip_iter.bi_sector = bio_integrity_intervals(bi, sector);
- 	bip->bip_iter.bi_size = bio_integrity_bytes(bi, size >> SECTOR_SHIFT);
- 	return blk_status_to_errno(bio_integrity_verify(bio, &data_iter));
- }
+diff --git a/block/t10-pi.c b/block/t10-pi.c
+index e58d5eb6cefb..787950dec50a 100644
+--- a/block/t10-pi.c
++++ b/block/t10-pi.c
+@@ -541,11 +541,11 @@ static void __blk_reftag_remap(struct bio *bio, struct blk_integrity *bi,
  
- static int __init fs_bio_integrity_init(void)
+ static void blk_integrity_remap(struct request *rq, unsigned int nr_bytes,
+ 				bool prep)
+ {
+ 	struct blk_integrity *bi = &rq->q->limits.integrity;
+-	u64 ref = blk_rq_pos(rq) >> (bi->interval_exp - SECTOR_SHIFT);
++	u64 ref = bio_integrity_intervals(bi, blk_rq_pos(rq));
+ 	unsigned intervals = nr_bytes >> bi->interval_exp;
+ 	struct bio *bio;
+ 
+ 	if (!(bi->flags & BLK_INTEGRITY_REF_TAG))
+ 		return;
 -- 
 2.54.0
 
