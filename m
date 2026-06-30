@@ -1,197 +1,162 @@
-Return-Path: <linux-scsi+bounces-25349-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25351-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id dcIcNQ6bQ2q7dAoAu9opvQ
-	(envelope-from <linux-scsi+bounces-25349-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 12:31:42 +0200
+	id fB40IiWhQ2r9dgoAu9opvQ
+	(envelope-from <linux-scsi+bounces-25351-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 12:57:41 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 526246E2E3D
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 12:31:42 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44E916E332F
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 12:57:41 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=bootlin.com header.s=dkim header.b=A5lRI0nm;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25349-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25349-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=bootlin.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=fJgceCav;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25351-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25351-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E7D5630B7EB1
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 10:28:27 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 19838306DE4B
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 10:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C06A3EF65D;
-	Tue, 30 Jun 2026 10:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF0FB3CAE7F;
+	Tue, 30 Jun 2026 10:54:24 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2EFD3E9C06;
-	Tue, 30 Jun 2026 10:28:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC3FA38C41B;
+	Tue, 30 Jun 2026 10:54:23 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782815306; cv=none; b=hbSUzlTol04hqGZfDIm8UWXptV6JnX+w0A3E12FuKB9dLSfyWRd8lAHq3AAcSj5BXtCFBNo/MMRChUJFAbQxaGQF0sJT9fBhWj1YTCzhB2sUImq1Ba9DKifrJwe6JX4ORneC3fKbuOdPfsKII+NwqX7ovn+jTP4PTUyMBJIwbEU=
+	t=1782816864; cv=none; b=pgAtvysTs4OpBZiwfDv4xAptjcumgkj9ZzIhWWOJ+w5OGHDmZTPGdYk9xmViO9CtkxbTQp7qI8gz+KQ+paJpbjcXqX4WcDG5iun23e9cyGCE9/Ls2/xMMjTEVMVavo6oLblxVrLkDi8RmCBWDVlroOQnSHQKjE3iLnNS2lqeeps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782815306; c=relaxed/simple;
-	bh=iAQY6TCrDj8LfUpuZjFjTTB1GWYcGsCqzNYYlW2+uJs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=lhVjjmoLxKvPYoNT0q50jxlax9I2ppu31sM2+jMsAxyx2DXfabqXvRH4JhjLqRKp7k7WqFHhPIaopvg4t0ArAeWP4j2ugEit2ZZ3bdM1PYDY/ykBvZWJiQ/+euNdma+vT9XtjYTNWPXGcXL88YbslbSR0xQ6wRRA3HI4eKVg9m0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=A5lRI0nm; arc=none smtp.client-ip=185.246.84.56
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id ADC421A0C75;
-	Tue, 30 Jun 2026 10:28:23 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 7AC176025A;
-	Tue, 30 Jun 2026 10:28:23 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5D3C1106F1D96;
-	Tue, 30 Jun 2026 12:28:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1782815302; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=+45Kh3Satp3HBEK6If/oF4JoJaoBdx7zAqswznQZd8E=;
-	b=A5lRI0nmyKuAE7DExkUqwE3nvY8dreV4gtcQPOB0GX52Cj+7BpicSwuwNtlHwCRNZ9KnH4
-	JV3sNbXy6IiTZXvoyl+h+64ra9dtRJps61BbP4ADeCteWmLtvWPzxdyrF9/bImWU5Qan0t
-	zsk22dgw27mXa9URexNbfMuMCBr86TlrhX26gDbVyVbfY2NOgcKbCrIE64i3an4C046AAD
-	kFvkgF4G9TKP+tJ2DUzfrG/afQCVNxVONsGPeMh5W74SOTgWMXnxN7E/J3wJwoJEL8VK4I
-	VZDN+xWCWJ3qtue/K3BoRq6c+pH+SARBEnjlbpHeChQ4oIcvovKtfkeOYxwkYQ==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH] scsi: ufs: core: Avoid sleeping in hard interrupt
- context when PREEMP_RT is enabled.
-In-Reply-To: <20260630102343.728131F000E9@smtp.kernel.org>
-References: <20260630-ufshcd-spinlock-sleep-fix-v1-1-339b05a1c6f4@bootlin.com>
- <20260630102343.728131F000E9@smtp.kernel.org>
-Date: Tue, 30 Jun 2026 12:28:21 +0200
-Message-ID: <878q7wb9ve.fsf@BLaptop.bootlin.com>
+	s=arc-20240116; t=1782816864; c=relaxed/simple;
+	bh=h/gEhfrUJha1kZVU8awchaudZMXL+KTCgzMarIdQPmc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HIWfOElikMgJ8xw56Ye22ojIwzKpL7FwoyPZEk/PN2PRQkxz9J3z1ro/wEl1SaMFLUAhfhqNzHNgQLdMLvmnIUNbmwajdn+sh2md07/TNu9lXok9oUBIF21TDcrIv0qEuGNd51g4Y24aaTMcP7cLGI8SZ3UX4hXrfnwaFfv+jQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fJgceCav; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2563F1F000E9;
+	Tue, 30 Jun 2026 10:54:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782816863;
+	bh=FnV8WNv2U/2NeCf/652mdSlf9RYHKUxm9hACRNRtpLQ=;
+	h=From:Subject:Date:To:Cc;
+	b=fJgceCavbNPcF66SdZ9l13sifefI0sGJa2R/z+GKzBrF6OvGDYZL9bxpDhALEYZfg
+	 B+OQ9FyUviVgK11A9a03ctqjcK1DF0Zkcw8ZPHNR++4Gn83wGnDEYjJVjgMwN0K0jm
+	 krV3K2OueN3a6Hvez+zmYWyAPzsRP9jxD+m9prbSRIIbyghVlpOmvsJ6uq+JpWTa8T
+	 KdvIxZ1KHQRxye+1mO5tSoXGtsqWbl7ZVCJVHsbyyCPLsSUY3eCYmeNEUH60ZADbNU
+	 VhftXGA08ItqiRlKnf37DEIAlMF+a4DKeh5D+AFXfXhJO6Cp79/Y0qO4UarPwEcDJq
+	 ZffD7riVNrXkQ==
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Subject: [PATCH 0/4] scsi: replace __get_free_pages() with kmalloc()
+Date: Tue, 30 Jun 2026 13:54:17 +0300
+Message-Id: <20260630-b4-scsi-v1-0-494fb37ebe7b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFmgQ2oC/yWM0QrCMAxFf2Xk2WA76lB/RXxo2sxFsEqiMhj79
+ 7X6eC7n3AWMVdjg3C2g/BWTZ6ngdx2kKZYbo+TK0Lt+cIP3SAEtmWB25JjC8XQYA1T7pTzK/Hu
+ 6XP9sH7pzere8GRSNkTSWNLWJwl7zI8K6bqAOpNyFAAAA
+X-Change-ID: 20260611-b4-scsi-d0b0eb4895f4
+To: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Brian King <brking@us.ibm.com>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ Matthew Wilcox <willy@infradead.org>, Mike Rapoport <rppt@kernel.org>, 
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+ linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+X-Mailer: b4 0.15.2
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-5.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25349-lists,linux-scsi=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25351-lists,linux-scsi=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	DKIM_TRACE(0.00)[bootlin.com:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:sashiko-reviews@lists.linux.dev,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-rt-devel@lists.linux.dev,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[gregory.clement@bootlin.com,linux-scsi@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MISSING_XM_UA(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregory.clement@bootlin.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	TO_DN_NONE(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FORGED_SENDER(0.00)[rppt@kernel.org,linux-scsi@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:brking@us.ibm.com,m:James.Bottomley@HansenPartnership.com,m:willy@infradead.org,m:rppt@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-mm@kvack.org,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rppt@kernel.org,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,bootlin.com:dkim,bootlin.com:email,bootlin.com:url,bootlin.com:from_mime,BLaptop.bootlin.com:mid]
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 526246E2E3D
+X-Rspamd-Queue-Id: 44E916E332F
 
-Hello,
+This is a (small) part of larger work of replacing page allocator calls
+with kmalloc.
 
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
-> - [Low] The static function `ufshcd_intr` becomes unused when `CONFIG_PRE=
-EMPT_RT` is enabled, causing a compiler warning.
-> - [Low] Typo in the newly added source code comment.
+My initial intention a few month ago was to remove ugly casts [1], but then
+willy pointed out that Linus objected to something like this [2] and it
+looks like more than a decade old technical debt.
 
-Both of Sachiko's comments are valid. I am addressing these issues in
-the next version.
+Largely, anything that doesn't need struct page (or a memdesc in the
+future) should just use kmalloc() or kvmalloc() to allocate memory.
+kmalloc() guarantees alignment, physical contiguity and working
+virt_to_phys() and beside nicer API that returns void * on alloc and
+doesn't require to know the allocation size on free, kmalloc() provides
+better debugging capabilities than page allocator.
 
-Gregory
+Another thing is that touching these allocation sites gives the reviewers
+opportunity to see if a PAGE_SIZE buffer is actually needed or maybe
+another size is appropriate.
 
-> --
->
-> commit 6afdc0b243918ce89eb55cea6349f608516d9d03
-> Author: Gregory CLEMENT <gregory.clement@bootlin.com>
->
-> scsi: ufs: core: Avoid sleeping in hard interrupt context when PREEMP_RT =
-is enabled.
->
-> This commit addresses a sleeping-in-hard-irq context bug under PREEMPT_RT=
-.=20
-> It mitigates the issue by bypassing the hard IRQ handler and directly=20
-> registering the threaded interrupt handler when PREEMPT_RT is enabled.
->
->> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
->> index d3044a3089b53..6d82658a1a66b 100644
->> --- a/drivers/ufs/core/ufshcd.c
->> +++ b/drivers/ufs/core/ufshcd.c
->> @@ -11235,9 +11235,17 @@ int ufshcd_init(struct ufs_hba *hba, void __iom=
-em *mmio_base, unsigned int irq)
->>  	 */
->>  	ufshcd_readl(hba, REG_INTERRUPT_ENABLE);
->>=20=20
->> -	/* IRQ registration */
->> +	/* IRQ registration
->> +	 * In the case of PREMMP_RT, directly use the threaded
->
-> [Severity: Low]
-> This isn't a bug, but there is a typo in this comment ("PREMMP_RT" instead
-> of "PREEMPT_RT"). The commit subject also has a small typo ("PREEMP_RT").
->
->> +	 * interrupt to avoid using a spinlock (which could sleep)
->> +	 * in the hard IRQ handler.
->> +	 */
->> +#ifdef CONFIG_PREEMPT_RT
->> +	err =3D devm_request_irq(dev, irq, ufshcd_threaded_intr, IRQF_SHARED, =
-UFSHCD, hba);
->> +#else
->>  	err =3D devm_request_threaded_irq(dev, irq, ufshcd_intr, ufshcd_thread=
-ed_intr,
->>  					IRQF_ONESHOT | IRQF_SHARED, UFSHCD, hba);
->> +#endif
->
-> [Severity: Low]
-> Will this cause a compiler warning for an unused function when building w=
-ith
-> CONFIG_PREEMPT_RT=3Dy?=20
->
-> Because the reference to ufshcd_intr() is compiled out in the #else block=
-,=20
-> but its static definition remains unconditionally compiled earlier in the=
-=20
-> file:
->
-> static irqreturn_t ufshcd_intr(int irq, void *__hba)
-> {
->     ...
-> }
->
-> Could this break builds that have CONFIG_WERROR=3Dy enabled due to the=20
-> -Wunused-function warning?
->
->>  	if (err) {
->>  		dev_err(hba->dev, "request irq failed\n");
->>  		goto out_disable;
->
-> --=20
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630-ufshcd-s=
-pinlock-sleep-fix-v1-1-339b05a1c6f4@bootlin.com?part=3D1
+For larger allocations that don't need physically contiguous memory
+kvmalloc() can be a better option that __get_free_pages() because under
+memory pressure it's is easier to allocate several order-0 pages than a
+physically contiguous chunk with the same number of pages.
 
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+And last, but not least, removing needless calls to page allocator should
+help with memdesc (aka project folio) conversion. There will be way less
+places to audit to see if the user was actually using struct page.
+
+Also in git:
+https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git gfp-to-kmalloc/scsi
+
+[1] https://lore.kernel.org/all/20251018093002.3660549-1-rppt@kernel.org/
+[2] https://lore.kernel.org/all/CA+55aFwp4iy4rtX2gE2WjBGFL=NxMVnoFeHqYa2j1dYOMMGqxg@mail.gmail.com/ 
+
+---
+Mike Rapoport (Microsoft) (4):
+      scsi: target: file: use kmalloc() to allocate temporary protection buffer
+      scsi: proc: use kmalloc() in proc writers
+      scsi: ipr: use kmalloc() to allocate IPR dump buffer memory
+      scsi: sym53c8xx_2: replace __get_free_pages() with kmalloc()
+
+ drivers/scsi/ipr.c                  | 4 ++--
+ drivers/scsi/scsi_devinfo.c         | 4 ++--
+ drivers/scsi/scsi_proc.c            | 9 +++++----
+ drivers/scsi/sym53c8xx_2/sym_hipd.h | 4 ++--
+ drivers/target/target_core_file.c   | 4 ++--
+ 5 files changed, 13 insertions(+), 12 deletions(-)
+---
+base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
+change-id: 20260611-b4-scsi-d0b0eb4895f4
+
+Best regards,
+--  
+Sincerely yours,
+Mike.
+
 
