@@ -1,51 +1,51 @@
-Return-Path: <linux-scsi+bounces-25376-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25377-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id useYLiIkRGpzpQoAu9opvQ
-	(envelope-from <linux-scsi+bounces-25376-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 22:16:34 +0200
+	id tli5CIgnRGrspgoAu9opvQ
+	(envelope-from <linux-scsi+bounces-25377-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 22:31:04 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFFCC6E7C0F
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 22:16:33 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A7616E7D64
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 22:31:03 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=oiAy+pYg;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25376-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25376-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=WwWjwHhL;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25377-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25377-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id AD788300D7AD
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 20:16:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2810730CDF4C
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 20:26:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 682753890E5;
-	Tue, 30 Jun 2026 20:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A66E477E23;
+	Tue, 30 Jun 2026 20:25:59 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69EC7326D65;
-	Tue, 30 Jun 2026 20:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFC71DDC37;
+	Tue, 30 Jun 2026 20:25:57 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782850589; cv=none; b=OG8pMT1pVHQ575ToIGfsgSMxsOU0Ejxmk9TDN1w14wom3PY3z9aBZCKmfE61iuazE0Fio+nB3Gev1wCfMiFw+M7YcMOpSORZA3ruotjJOvmKVcZnW0lAdAnkDwL0ONTnjz2Lr8Yy+qw3U+IumooNle9LlpEHkvgqxqhkxnwiwPQ=
+	t=1782851159; cv=none; b=ZoUP2iJnAk3aZ2LbqFZXlTBd41TZEtzpZ3MuAPnJKnxhvAY7qAkh5cuQiVaEiVdnYplx5+OSfRg6pakAPly3/INgNo5i3u5IXowdDBJQFZTOLOliOLLZkpYcvbQ1PwoEXNmq5byWXuozVgnfB3ftVIpRfmRx3U8frHwNBLTu3Ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782850589; c=relaxed/simple;
-	bh=fijCEL+ZCol4zwQKy1swij4Vs9reYyMa+XiDwC8T8cY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=Dfii/7dRS53da+z+fRIfvHEl/09OfpFfB3u7jUkzkISrXa0c9+WRLa1nlXHKkJkOjw7VU/Qlk8B1ibno7I/onhz10oX+waYhabwUIjL+QmEx0Kkx9RzcD+acuzWQ+wAO1QF0W1QVfyjip33pedBV9IuqmruEMlosLUkrnXpc27A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oiAy+pYg; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D28241F000E9;
-	Tue, 30 Jun 2026 20:16:22 +0000 (UTC)
+	s=arc-20240116; t=1782851159; c=relaxed/simple;
+	bh=fn0Si16fB/Py5zOnzWA6qcKRxBuEt44wN4T059GbeHQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=gSQ74B2M92EC5oP1wJGzQ9qOQssikos9rbHKDcIpIjkqO8vqXbREa2eX4jUQ1fKoYzjdRWx77k0cfr4CL4IOc0aKeuRbH4ltVRay/ET/nqj3D84biRRGqBgSzJFCRO/ZZ95IDlPazai3V9zYY/gJYERRusLsZSLA22R21N2AWec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WwWjwHhL; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96F5F1F000E9;
+	Tue, 30 Jun 2026 20:25:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782850588;
-	bh=Yiv0rscKmYbfa3JPkJvPHxwZQJrcYMfeu4v/Uuk4gTs=;
-	h=Date:Cc:To:From:Subject:References:In-Reply-To;
-	b=oiAy+pYgiWtbABVQgDNJ9zh/RWJV4Dpiib0GLjYg7X4KM068jy5XYF8zpLtWAxBKK
-	 iruoUfyzsqD3q/CtZey+yqbO67OddPNCLU0CrwjMWGHHzaxwAgBj1p83t6IITtfiy4
-	 cjx9m0DPOC9vPoGaHyOCp5C5ENrGiU+WEIxYt21AqrEKK+N7ZcaCF7j6TUKAL1IvSw
-	 nWzhrSSNM+mbr5VFmRN2jwhvM5+40nxMCP1OzLlm6vJZ8OEquLxaD1QLS3hyEbkzDx
-	 ILlNLpxQz6DOrspMAR0o4fZrEb+7HhflqaktgtjxnC+za6658ckFpIhc7Ezq3LA3fL
-	 G0XH8BE+nxTzg==
+	s=k20260515; t=1782851157;
+	bh=trroYMM3IfwYoctVWKL+QncsfIKLFxQDxzxhPjX3+k8=;
+	h=Date:From:Subject:Cc:To:References:In-Reply-To;
+	b=WwWjwHhL5J1M5x0eOeaEA8FJbRmsSukIX3hRDzcwMjbXAoK8ynCtWlT69RpYJ8Aqh
+	 zBE3qudaQ8zjX9cKd/afMNqMWvQF2TUW6q1VfJvBQEsEbK0orAFb5mLR16S4Zi0ga2
+	 AGDXke17+/TQBYa8h7LQ2+rRQMKffkAT5BT6DELy50uq5fmdSTDoojik90A9F0Shbj
+	 yPX+H1Ex2xFtwwqqj8FPVFZPuFejPE86TnQShkt4nUaYUW85pXW6wHRFmVElHv57gw
+	 N+GHTe3PhM/UcXtzhys1ouHvJGV1ptNDzDObepeX5t9j/FJaNr/NKu2DW62TKi7kie
+	 L5KwaT3b4t01g==
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -54,8 +54,11 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 30 Jun 2026 22:16:21 +0200
-Message-Id: <DJMNSA8JSD9Z.3JGVBN740JATW@kernel.org>
+Date: Tue, 30 Jun 2026 22:25:51 +0200
+Message-Id: <DJMNZJZYZGAW.2VLN3VNNOH03L@kernel.org>
+From: "Danilo Krummrich" <dakr@kernel.org>
+Subject: Re: [PATCH v2 7/7] pci: fix UAF when probe runs concurrent to dyn
+ ID removal
 Cc: "Bjorn Helgaas" <bhelgaas@google.com>, "Zhenzhong Duan"
  <zhenzhong.duan@gmail.com>, "Greg Kroah-Hartman"
  <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -71,13 +74,12 @@ Cc: "Bjorn Helgaas" <bhelgaas@google.com>, "Zhenzhong Duan"
  Abeni" <pabeni@redhat.com>, <linux-pci@vger.kernel.org>,
  <driver-core@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
  <linux-ide@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
- <industrypack-devel@lists.sourceforge.net>, <netdev@vger.kernel.org>
+ <industrypack-devel@lists.sourceforge.net>, <netdev@vger.kernel.org>,
+ "Sashiko" <sashiko-bot@kernel.org>
 To: "Gary Guo" <gary@garyguo.net>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH v2 6/7] pci: fix dyn_id add TOCTOU
 References: <20260630-pci_id_fix-v2-0-b834a98c0af2@garyguo.net>
- <20260630-pci_id_fix-v2-6-b834a98c0af2@garyguo.net>
-In-Reply-To: <20260630-pci_id_fix-v2-6-b834a98c0af2@garyguo.net>
+ <20260630-pci_id_fix-v2-7-b834a98c0af2@garyguo.net>
+In-Reply-To: <20260630-pci_id_fix-v2-7-b834a98c0af2@garyguo.net>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-3.16 / 15.00];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
@@ -86,17 +88,17 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	MV_CASE(0.50)[];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25376-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25377-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER(0.00)[dakr@kernel.org,linux-scsi@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[27];
-	FORGED_RECIPIENTS(0.00)[m:bhelgaas@google.com,m:zhenzhong.duan@gmail.com,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dlemoal@kernel.org,m:cassel@kernel.org,m:gotom@debian.or.jp,m:yokota@netlab.is.tsukuba.ac.jp,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:vaibhavgupta40@gmail.com,m:jens.taprogge@taprogge.org,m:idosch@nvidia.com,m:petrm@nvidia.com,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:linux-pci@vger.kernel.org,m:driver-core@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-ide@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:industrypack-devel@lists.sourceforge.net,m:netdev@vger.kernel.org,m:gary@garyguo.net,m:zhenzhongduan@gmail.com,m:andrew@lunn.ch,s:lists@lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	FORGED_RECIPIENTS(0.00)[m:bhelgaas@google.com,m:zhenzhong.duan@gmail.com,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dlemoal@kernel.org,m:cassel@kernel.org,m:gotom@debian.or.jp,m:yokota@netlab.is.tsukuba.ac.jp,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:vaibhavgupta40@gmail.com,m:jens.taprogge@taprogge.org,m:idosch@nvidia.com,m:petrm@nvidia.com,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:linux-pci@vger.kernel.org,m:driver-core@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-ide@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:industrypack-devel@lists.sourceforge.net,m:netdev@vger.kernel.org,m:sashiko-bot@kernel.org,m:gary@garyguo.net,m:zhenzhongduan@gmail.com,m:andrew@lunn.ch,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
@@ -112,46 +114,48 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-scsi,netdev];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: AFFCC6E7C0F
+X-Rspamd-Queue-Id: 1A7616E7D64
 
 On Tue Jun 30, 2026 at 1:09 PM CEST, Gary Guo wrote:
-> +static int do_pci_add_dynid(struct pci_driver *drv, const struct pci_dev=
-ice_id *id, bool check_dup)
-> +{
-> +	struct pci_dynid *dynid, *existing_dynid;
-> +
-> +	dynid =3D kzalloc_obj(*dynid);
-> +	if (!dynid)
-> +		return -ENOMEM;
-> +
-> +	dynid->id =3D *id;
-> +
+> -static const struct pci_device_id *pci_match_device(struct pci_driver *d=
+rv,
+> -						    struct pci_dev *dev)
+> +static bool pci_match_device(struct pci_driver *drv,
+> +			     struct pci_dev *dev,
+> +			     struct pci_device_id *id)
+>  {
+>  	struct pci_dynid *dynid;
+>  	const struct pci_device_id *found_id =3D NULL;
+> @@ -196,30 +198,33 @@ static const struct pci_device_id *pci_match_device=
+(struct pci_driver *drv,
+>  	/* When driver_override is set, only bind to the matching driver */
+>  	ret =3D device_match_driver_override(&dev->dev, &drv->driver);
+>  	if (ret =3D=3D 0)
+> -		return NULL;
+> +		return false;
+> =20
+>  	dev_id =3D pci_id_from_device(dev);
+>  	/* Look at the dynamic ids first, before the static ones */
+> -	spin_lock(&drv->dynids.lock);
+> -	list_for_each_entry(dynid, &drv->dynids.list, node) {
+> -		if (pci_match_one_id(&dynid->id, &dev_id)) {
+> -			found_id =3D &dynid->id;
+> -			break;
 > +	{
 > +		guard(spinlock)(&drv->dynids.lock);
-> +		if (check_dup) {
-> +			list_for_each_entry(existing_dynid, &drv->dynids.list, node) {
-> +				if (pci_match_one_id(&existing_dynid->id, id)) {
-> +					kfree(dynid);
-> +					return -EEXIST;
-> +				}
+> +		list_for_each_entry(dynid, &drv->dynids.list, node) {
+> +			if (pci_match_one_id(&dynid->id, &dev_id)) {
+> +				*id =3D dynid->id;
+> +				return true;
 > +			}
-> +		}
-> +		list_add_tail(&dynid->node, &drv->dynids.list);
-> +	}
+>  		}
+>  	}
 
-This should use scoped_guard(spinlock, &drv->dynids.lock) instead.
-
->  static const struct pci_device_id *do_pci_match_id(const struct pci_devi=
-ce_id *ids,
-> -						   const struct pci_device_id *dev_id)
-> +						   const struct pci_device_id *dev_id,
-> +						   bool match_override_only)
-
-Maybe something along the lines of include_override_only? At a quick glance
-match_override_only could be read as "match override-only entries exclusive=
-ly".
+Should be scoped_guard(spinlock, &drv->dynids.lock). It also looks like dyn=
+id
+could be moved into the scoped_guard().
 
