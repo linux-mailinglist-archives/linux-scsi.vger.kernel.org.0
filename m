@@ -1,153 +1,298 @@
-Return-Path: <linux-scsi+bounces-25355-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25359-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id DpiRMQmjQ2oieAoAu9opvQ
-	(envelope-from <linux-scsi+bounces-25355-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 13:05:45 +0200
+	id N+drE1asQ2oYewoAu9opvQ
+	(envelope-from <linux-scsi+bounces-25359-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 13:45:26 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FE896E3546
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 13:05:45 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E5B66E3C5A
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 13:45:25 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b="kIXozC/6";
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25355-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25355-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=garyguo.net header.s=selector1 header.b=nimkejgQ;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25359-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25359-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=garyguo.net;
+	arc=reject ("cv is fail on i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EDCFD3189604
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 10:56:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3600F315986F
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 11:10:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66360409117;
-	Tue, 30 Jun 2026 10:54:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D8DA404BF3;
+	Tue, 30 Jun 2026 11:09:36 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from CWXP265CU010.outbound.protection.outlook.com (mail-ukwestazon11022092.outbound.protection.outlook.com [52.101.101.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E0940801E;
-	Tue, 30 Jun 2026 10:54:33 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782816875; cv=none; b=jWv5ss777e6OwFI58tpvRbB3s0310+Qxvosw3b15LeDLWToW5Gz8S+jlq5kjguzc/Bx540KsKNrVLhdkTbd/yfVbkutR/K0VTilKNJN1N3U7qn/seoO/lH2O0TjyDP77tWyKzur81YW+LfamRhMFhUxShlhbi1D5y3nB8WzvFD0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782816875; c=relaxed/simple;
-	bh=RiadHkM/ciJz4LJtIKzl0wSOiOE8945XvTKOQOOKBS8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DWmh/nDBw4jnNAiwakgDI5C7gy/AMUdm5W0UskYfRUHsiy40ed8sfUrx++r4e0qswn+EFqrjCB6CoLFt6nAixkeBccEtdHjEbcobkqAAMyP4boVmu6eJONltu/JzuMqbX6ngwJ8B24SRnJAggAX+yr4N+PIFxnFwmwM9d5ViFZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kIXozC/6; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A02C11F000E9;
-	Tue, 30 Jun 2026 10:54:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782816873;
-	bh=o4zrAKFV36+my9sEQud+nD9Mpl7nfKTgVOKBUepgezI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=kIXozC/6GRZNoThE7wVrh+Th54Zlbfibcc5IpHidsZAcdx7VFXo3pEpijZTNqJJL8
-	 HAhXH+MpFe2aWX2fs3Mge3pm2kiSI6dFCqrZoMw+XtUUfI37m1TXWiOEnt5IRtmY/A
-	 Bd/VEHNDnpWqP9c6Xv/NbkbxXROjlqdEY3kv402EamAMjLngoZkbypvmzYrid801B0
-	 EII5nPXACbGjLE5yEoQY9s8e5HVZNNUU94tEnD+M6yBoZ7qdf/nH5rMadn4DbQhCF4
-	 M63R5M04lGhRaCDs/mYyHSAmzzOOqyxif1n63zUmKYFZiXJ9/eQ5Xf+I7pmCLPw3jW
-	 quPIeT1kCcHTw==
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Date: Tue, 30 Jun 2026 13:54:21 +0300
-Subject: [PATCH 4/4] scsi: sym53c8xx_2: replace __get_free_pages() with
- kmalloc()
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49413F9A1A;
+	Tue, 30 Jun 2026 11:09:33 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782817776; cv=fail; b=sqOOezvU+UoCPzGfTfJ6UE5TaESs+UDylrDROozjU+ZooIYTU6faYX7Fzp4arIfUo5aUsFz37ZtLADdGe0csKfE1FJvZkZUnUz3Hzt+q9w3HauTZUSFqrI49pnDQVtGO3DZjzToPNqL71MADsUe5ejyklJ++q3pKm+xUbqrd3Ss=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782817776; c=relaxed/simple;
+	bh=zT8CR1hu18sGi5f9+9wkDL8BzV1/sK8mE83mrlSqGJw=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=Z6RYtfQO1jk9eIt+NpyVvyuorVWs32RbkxRiQTuG1Li0UomKZDFEcBMw/ljaIGp3gVCuzqVpO4uh84j2j9RvsDX8rdSsD36T7yvj8Ze7HZ+sDAdDkTPbjSqZQl2O8WZkUGrz/Mk2VqclbLR5Foyt0NFNIdgeS8fZWAuNnX4TKhM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=nimkejgQ; arc=fail smtp.client-ip=52.101.101.92
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GlcQPn17G/qv+q/8HvuhuqtdV7HTODLng26BgtSZh3GhLQOWvBgSIW6WrgG4bXScqE9nBL13lADhLwtgiEhVCTIsCnQrZW2WP1DIuq8ojdIvILHdmcTscKEpX1TAQwuw5iS+vYyhlfENfs4VuNP/GwpH4nXcKGrC4dvayF1tMv29lb4VC/5iJXELIc/KrR347+Hebht+Y4SqtqniuYXyDn3p+I0iZdob3rzoWChjhkG8Mr1ttWzh4boUAZbjo0aqJ8pHBFhFoXvDgj6QSa3DBBiJv2wZHKVq4snjLNSUjlLLCs3bBUoN9gmtKVtwynkx+8+bO82Tp61hAjvNG2yYSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BSYPIBBvbhQ1YIoGfEmexoBK4XfmyCD7yKFk9G1YL/8=;
+ b=usrfv99BODLXCDJCsl1CeM7xSZZ59SDSdWoxZ6NshKAWLxTjl7oq696vE5PHrvpORB6VXKSji9a7MpH2YUPeRWiwimglrjPPXTB4rptsFRTnPVw+xTGCYVwE5QlkXJ38WzliajHVCXiGz8lIhN2QFRmLq3C1XPi3xCjJI5FmhE7/a1z3fvyWBiF0851mAc7rVJ0DvlJZXWjhzULBP8mBxoE2qpItkoqWJfgQX4a9tP2GnvOzklx+45nJ7vdTjYwV7BypWcQgfoEoG0/PubLVjFE71Jq3p8GQvQJ8kMhwP84A5rLYbptaKlTqjYgq/8j82j5y+HvNHYSSfqgkiJEY4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BSYPIBBvbhQ1YIoGfEmexoBK4XfmyCD7yKFk9G1YL/8=;
+ b=nimkejgQcsjYf30lBlOP0HjFQq7XgfX6JvbamuLdkavsplRiVbxzuDTCue+Ce+UAQaRf+yZ9XnMew9kCUypPYePk4CU1+o/0wHu4JoZ+d7nnSpCzGebWR9EQNdlMHbRThq+/3RPs2GbxmIto8uPKLUY5KONldEEl7b0l3exR26A=
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
+ by CW1P265MB7689.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:219::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.8; Tue, 30 Jun
+ 2026 11:09:23 +0000
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.21.0159.018; Tue, 30 Jun 2026
+ 11:09:23 +0000
+From: Gary Guo <gary@garyguo.net>
+Subject: [PATCH v2 0/7] pci: fix UAF and TOCTOU related to dynamic ID
+Date: Tue, 30 Jun 2026 12:09:00 +0100
+Message-Id: <20260630-pci_id_fix-v2-0-b834a98c0af2@garyguo.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMyjQ2oC/22NQQ6DIBREr2L+ujSAFW1XvUdjDOJXfxdiAE2N4
+ e5Fu+3yTWbe7ODREXp4ZDs4XMmTnRLISwZm1NOAjLrEILlUXEnFZkMNdU1PH1blqNFwXqryBmk
+ wO0zxKXvVP/ZL+0YTDsPRGMkH67bzbRVH7694FYwznRem4nkv2nvxHLTbhsVeJwxQxxi/YX7bW
+ bgAAAA=
+X-Change-ID: 20260626-pci_id_fix-83eaec007674
+To: Bjorn Helgaas <bhelgaas@google.com>, 
+ Zhenzhong Duan <zhenzhong.duan@gmail.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+ Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
+ GOTO Masanori <gotom@debian.or.jp>, 
+ YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ Vaibhav Gupta <vaibhavgupta40@gmail.com>, 
+ Jens Taprogge <jens.taprogge@taprogge.org>, 
+ Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: linux-pci@vger.kernel.org, driver-core@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org, 
+ linux-scsi@vger.kernel.org, industrypack-devel@lists.sourceforge.net, 
+ netdev@vger.kernel.org, Gary Guo <gary@garyguo.net>, 
+ Sashiko <sashiko-bot@kernel.org>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782817763; l=2995;
+ i=gary@garyguo.net; s=20221204; h=from:subject:message-id;
+ bh=zT8CR1hu18sGi5f9+9wkDL8BzV1/sK8mE83mrlSqGJw=;
+ b=dAL3MZAHGdq/f1A/Dc23e+hpW7HjiDscNeb1WUmBG8M0zwhxEmtW2JcB1Sxda8l9dM4iS5kFZ
+ gXJhrcBh+apDxEs35LdGkfVA7RpAZjzwYT5L+LNlkyJoV121PGaoRjF
+X-Developer-Key: i=gary@garyguo.net; a=ed25519;
+ pk=vB3uIX95SM4eVrIqo1DWNWKDKD2xzB+yLLLr0yOPYMo=
+X-ClientProxiedBy: LO4P123CA0142.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:193::21) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:488::16)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260630-b4-scsi-v1-4-494fb37ebe7b@kernel.org>
-References: <20260630-b4-scsi-v1-0-494fb37ebe7b@kernel.org>
-In-Reply-To: <20260630-b4-scsi-v1-0-494fb37ebe7b@kernel.org>
-To: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Brian King <brking@us.ibm.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- Matthew Wilcox <willy@infradead.org>, Mike Rapoport <rppt@kernel.org>, 
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
- linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-X-Mailer: b4 0.15.2
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|CW1P265MB7689:EE_
+X-MS-Office365-Filtering-Correlation-Id: ad4e9196-c1f9-41a8-161a-08ded6980aa2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|10070799003|376014|7416014|23010399003|18002099003|5023799004|56012099006|6133799003|921020|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	7SMa+fTXpfOFdZ6s7LkS7UxByOX0tObGy59wMJZvQTmdqGlp27HNMD+U0dS+7uqjYhUHqVfXOPfHL+PGotEAAWvhLnxsupcRhJpo8Ka27y7bfLLmYO0CPplRJQ5FA/nYpL8Vy3HbYxEa+PQX0iEZEcz/u9Ad5unoTuJLnPaDbDhlKTCgQcQk3T2Wmp6fnv6u9++23M98Z/fJdFP9XZbE09fE7jFxfROJPQ0xsl9U1XEPXn+XZsXLZmvLolOjwJb2rEcSYZhRG23HAzd+QOk70MjsEZtyRKSLl95xA2rbD+tryBTaFIvER3Tfk+YEF7jPiHnxrpghY/jRgAcxPrRKaNvGm9eu0C0LHAYEP8cItvNhiIPP6M6dOQWTtLoXS/6UAKt2+MT8koo4qRlgPZw32pmgssGqa9+zVN+KMmOmmj2m5+BqFmIjVvCDZTdugKsEmOykboJPWZhqkQk4tXCIYw9WpdtonSAB4hDPlfxyTy6J25nSSX+jh0Xv6jgS3t7epWpM8nQwUzaOWJzBErPmrl7w+sIinUwlMBTEG/IljHxANhG8w6HgY3wIeXFAO1RupQXfnS7mboTUrC7iYlsVp7oU8DxDx+C2rpfXoi/9HZ7TW75cZ2WWuLQgdPAGSMJ6Moe+J1iNn5B2tsmWlnFSPjk0+20qmxHRRcoBWV4aYuQ=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(10070799003)(376014)(7416014)(23010399003)(18002099003)(5023799004)(56012099006)(6133799003)(921020)(3023799007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UXd0WWFPcWJHSEQzU3FMY29BaDM5a1g3SGFVTUVPSzhPQjY5VzA4Ti9BVXpx?=
+ =?utf-8?B?RFE1VmdISlR1Nkd6MXVyVHJFdFZmOHpuSE1Ba2RJd25rd0RwSHVqRmRjUHNz?=
+ =?utf-8?B?Wmt6RjZUTTZqYk9CVkdUZU5JYXdZNGVVL2ZiTit3b3BBYXp0Zi83YWx5MUht?=
+ =?utf-8?B?d1NXM1FqazBrY1Y2Ull5UVIwQ05rMlpvT2hBWUROc1FoZDQyNHU2NUJmU2Vx?=
+ =?utf-8?B?S1h1WU8remd6ZFh2VVN2cFNhdUZzNzZiN1U5MnQxV083NnY4S3FqRHc3LzBx?=
+ =?utf-8?B?N2lFc25ubDlORVZJWUJmNlMyeXk3NzlTSFdUUUorSEo5RG0razdNQjFENlVS?=
+ =?utf-8?B?dUxmdndIZjA0UmZFWllPd3c5dVVLOG5UdE5ZZGZTaEptUklUbTRxeHBxYmRZ?=
+ =?utf-8?B?MUp6aHhCcjV4M2grcmpaYVd1bnVSTzQzSUt4Uzg3Y1plTmVSVnJjS21RNWhm?=
+ =?utf-8?B?Zmh2cmhKNnBaekJNKzNoT2lLb3gvTkIwVzhLYlRlNmI1SFBDWFBlQ2ZacCtl?=
+ =?utf-8?B?eFp5OHBaQ1hHT0h6NGFwb1VnK3VydzRSalBaRGpHMGl0WFJMK1I5THE0bGM1?=
+ =?utf-8?B?NzZ6K2FaaG9RRUN5RWtKY0g4cHA1ekJCcjYzSnhGQVEzM2pzYm5NdG5SVkw1?=
+ =?utf-8?B?L2lZZFVWWFN0TloxZW5rRmY1V0M1aG0xbldZK2s5eTRZMG9sdTVVNmx6cE9r?=
+ =?utf-8?B?Vks2RGJlSjJRTGhJMEhkZ3hPUXJxMDJCc2Y1eUZsbk1vbDlEUERKRXd0WUdI?=
+ =?utf-8?B?MjBFQ3NoMjlYTlpBUGNkdkg3YURhODdvTU5VR24yYzBLeklCMTF3T0RjaFJa?=
+ =?utf-8?B?YmVEekhlWkFHOHpIbjNrL2xWNURoaUhNRVczZkRMZGsvSUhCaWs2eXQ4eDJO?=
+ =?utf-8?B?aWdjUjFuTXRFc1AyVzkwNWlsUmxRSFlwSEtOQlNidEkwcjdtUE54RU9uOXV4?=
+ =?utf-8?B?TGpndXlMa1RPd2tuSE9wSGJySkowM3NvekJSeXkzK3ZXY3RuZjI0aGM5Tnpr?=
+ =?utf-8?B?VlBKMUZoVjRNYUgzd0hFVEpCOUhrQk56L1VpOFZzbTBNdWhJbEpzVFpqSU51?=
+ =?utf-8?B?RnUyeUsrTzR0TWhqR24vUXIxWkx6b2RNVHJyc2xFVVhQbWJ0bVhOUXBtSWQ4?=
+ =?utf-8?B?djBEcDVGRXZFMzRrdFFmdmlEMk9LbkJVRExqMTdtcjZEOXRKS0RRcjJkbHpk?=
+ =?utf-8?B?ODZ3MmQzWVJTUTdwUVBDNTZ2R3U1bFRuQjVnU1BBYndadGZhMGlvcDIzQUFu?=
+ =?utf-8?B?ekZ3QnBFSDlMZzRBNmpoV3d0NU1vVXBudEV5UDZWc3RZenREYlNNd3RwWTVm?=
+ =?utf-8?B?VVhQUU4zbDFVSUplQ1JnZk5ad05vUG4xTjFDTjVNVS9admorYmF2Q0xNUHhn?=
+ =?utf-8?B?SHAxUWhUTFRYTm9Hc1V3M1pQQWJtc0pLWGZXSEltMTlGRFI5MFlNQW1OSDB0?=
+ =?utf-8?B?WEd2VHNjd2k5T0V3cDBMTEt0dGg5cWxWM2Q5VTN3UVNoSk5mR1cvWUJHRlN4?=
+ =?utf-8?B?NWliOXN0TTZDcjZQUGhRZzAyVWw5WWZFVklWT3FVeFdJUXNvbS9vVzdJVjRW?=
+ =?utf-8?B?Q3VrRDZZMFlKMkp3dEhldkdMd0RYRERCSEN2TG02WXNLZXBjRjl3cXY5MzJB?=
+ =?utf-8?B?NlFqRHl1b01UdEYvZmlmZmRRaEx4OU41L2VYYjBhOXJVeVlRTk5xam82YmRl?=
+ =?utf-8?B?NGxMZHBTMjJyQXNvQUVJaGhOSG5DZ0hiOXA3ZFpQN01iTS9Wa0RhcWdPZFFa?=
+ =?utf-8?B?dEwrZm1Sa1pLSkM4RVpsVGRqZEllU0RXSDlJdnFzYW5GcUpBRFFjVElZVFZZ?=
+ =?utf-8?B?eVN5ajVscGxlbUE1a1BoSWRGSDRZWENGMkl3R29QZFFTMm1MMDlFZm5ua1Zt?=
+ =?utf-8?B?RFhnTjJRTytJYkVNMHpTR0tzdHFONFdneVlWZ3dXWjVSclFrbGp1MHVCTG1P?=
+ =?utf-8?B?YlpHcDhMOWFCWmxEV3k5ZUNnZVRwYk1KY1RUSUd6Rkhmejg4RWF2OHpQSTZX?=
+ =?utf-8?B?bEwwSFg0NUF0WEtVQk9VSTVCUURYblZqcmJJUnVYY05pMWx0TkxtR2RMZEg0?=
+ =?utf-8?B?a2FDTlVYcVppT2k2WUgzd2l6eGp5d3dZeUU4cU9WQmJSRzdFay9JcDJSeTNh?=
+ =?utf-8?B?YlBSekNsb2xTcW1laUlWRDYxRy9MQ3FwbE52Q1lUUUIxYzZBTnRZTjhRMUpG?=
+ =?utf-8?B?N0FJUkhZTG9Mc1ZDSmUrc3lpNG5sM2ZsRVB1Zmc3ZUVrMHRqaUdyVGtudFNt?=
+ =?utf-8?B?UzVod1N2OVpiQ05zQmJNZkQ3MXk5TmRFa1ZScWVsaFdkWXRSUDJlY3NNRUxv?=
+ =?utf-8?B?RERiU1IxcDRsZWI4ekYzYkhkNE1wbFduVldCWDE3ZXBkVlhTNEpCZz09?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad4e9196-c1f9-41a8-161a-08ded6980aa2
+X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2026 11:09:23.5629
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DP3ZlZgnMbqi0CrRn+o1NeTgleT429F+nzcVvt4E+D4tGEIO2cYyvtvUMyCqFDtmxzZbEEA4EpfbcCrFDHsEmw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CW1P265MB7689
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-5.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[garyguo.net,none];
+	R_DKIM_ALLOW(-0.20)[garyguo.net:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25355-lists,linux-scsi=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:brking@us.ibm.com,m:James.Bottomley@HansenPartnership.com,m:willy@infradead.org,m:rppt@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-mm@kvack.org,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,s:lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[rppt@kernel.org,linux-scsi@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[29];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25359-lists,linux-scsi=lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_TO(0.00)[google.com,gmail.com,linuxfoundation.org,kernel.org,debian.or.jp,netlab.is.tsukuba.ac.jp,HansenPartnership.com,oracle.com,taprogge.org,nvidia.com,lunn.ch,davemloft.net,redhat.com];
+	FORGED_RECIPIENTS(0.00)[m:bhelgaas@google.com,m:zhenzhong.duan@gmail.com,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dakr@kernel.org,m:dlemoal@kernel.org,m:cassel@kernel.org,m:gotom@debian.or.jp,m:yokota@netlab.is.tsukuba.ac.jp,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:vaibhavgupta40@gmail.com,m:jens.taprogge@taprogge.org,m:idosch@nvidia.com,m:petrm@nvidia.com,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:linux-pci@vger.kernel.org,m:driver-core@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-ide@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:industrypack-devel@lists.sourceforge.net,m:netdev@vger.kernel.org,m:gary@garyguo.net,m:sashiko-bot@kernel.org,m:zhenzhongduan@gmail.com,m:andrew@lunn.ch,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[gary@garyguo.net,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rppt@kernel.org,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[garyguo.net:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gary@garyguo.net,linux-scsi@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-scsi,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[garyguo.net:dkim,garyguo.net:email,garyguo.net:mid,garyguo.net:from_mime,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 2FE896E3546
+X-Rspamd-Queue-Id: 7E5B66E3C5A
 
-sym53c8xx_2 driver has an internal memory allocator for small
-allocations of the driver structures. The backing memory for that
-allocator is allocated with __get_free_pages().
+While working on improving the Rust abstractions [1], Sashiko reported that
+an existing UAF issue related to dynamic ID, which I find to be genuine.
+When taking a look at the code I also find a TOCTOU issue where the
+existence check of dynamic ID happens in a separate critical section as the
+actual insertion. This series fix both issues.
 
-This memory can be allocated with kmalloc() as there's nothing special
-about it to go directly to the page allocator.
+There are two exported functions "pci_match_id" and "pci_add_dynid" which I
+have to tweak to implement this cleanly; I created separate "do_xxx"
+functions to keep the existing APIs because they all have multiple users.
 
-kmalloc() provides a better API that does not require ugly casts and
-kfree() does not need to know the size of the freed object.
+There're a few existing users which stores their pci_device_id argument in
+probe callback. This is a bad pattern because nothing except driver_data
+inside pci_device_id is what they want. Actual ID information can be
+retrieved from pci_dev instead. I've used the following coccinelle script
+to find the cases where the argument is stored and converted them to stop
+storing pci_device_id.
 
-Performance difference between kmalloc() and __get_free_pages() is not
-measurable as both allocators take an object/page from a per-CPU list for
-fast path allocations.
+@store@
+identifier fn;
+identifier id;
+expression E;
+parameter list[n] ps;
+@@
+  fn(ps, struct pci_device_id *id, ...)
+  {
+    ...
+*   E = id
+    ...
+  }
 
-For the slow path the performance is anyway determined by the amount of
-reclaim involved rather than by what allocator is used.
+@cast@
+identifier fn;
+identifier id;
+parameter list[n] ps;
+@@
+  fn(ps, struct pci_device_id *id, ...)
+  {
+    ...
+*   (void *)id
+    ...
+  }
 
-Replace use of __get_free_pages() with kmalloc() and free_pages() with
-kfree().
+@in_struct@
+identifier s, fld;
+@@
+  struct s {
+    ...
+*   struct pci_device_id *fld;
+    ...
+  };
 
-Link: https://lore.kernel.org/all/635405e4-9423-4a25-a6e7-e03c8ea0bcbe@redhat.com
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Link: https://lore.kernel.org/all/20260618-id_info-v1-0-96af1e559ef9@garyguo.net/ [1]
+Link: https://lore.kernel.org/all/20260619170503.518F61F00A3A@smtp.kernel.org/ [2]
+
 ---
- drivers/scsi/sym53c8xx_2/sym_hipd.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes in v2:
+- Fix users which store pci_device_id.
+- Clarify in probe documentation about the lifetime of pci_device_id
+  parameter.
+- Dynamic ID conflict check now ignores override_only. (Sashiko)
+- Link to v1: https://patch.msgid.link/20260626-pci_id_fix-v1-0-a35c803f1b95@garyguo.net
 
-diff --git a/drivers/scsi/sym53c8xx_2/sym_hipd.h b/drivers/scsi/sym53c8xx_2/sym_hipd.h
-index 9231a2899064..aa365e8ba66f 100644
---- a/drivers/scsi/sym53c8xx_2/sym_hipd.h
-+++ b/drivers/scsi/sym53c8xx_2/sym_hipd.h
-@@ -1110,9 +1110,9 @@ sym_build_sge(struct sym_hcb *np, struct sym_tblmove *data, u64 badd, int len)
-  */
- 
- #define sym_get_mem_cluster()	\
--	(void *) __get_free_pages(GFP_ATOMIC, SYM_MEM_PAGE_ORDER)
-+	kmalloc(PAGE_SIZE << SYM_MEM_PAGE_ORDER, GFP_ATOMIC)
- #define sym_free_mem_cluster(p)	\
--	free_pages((unsigned long)p, SYM_MEM_PAGE_ORDER)
-+	kfree(p)
- 
- /*
-  *  Link between free memory chunks of a given size.
+---
+Gary Guo (7):
+      ata: don't keep pci_device_id
+      nsp32: don't keep pci_device_id
+      ipack: tpci200: don't keep pci_device_id
+      mlxsw: don't keep pci_device_id
+      pci: make pci_match_one_device match on ID instead of device
+      pci: fix dyn_id add TOCTOU
+      pci: fix UAF when probe runs concurrent to dyn ID removal
 
--- 
-2.53.0
+ drivers/ata/ata_generic.c                 |   6 +-
+ drivers/ipack/carriers/tpci200.c          |   1 -
+ drivers/ipack/carriers/tpci200.h          |   1 -
+ drivers/net/ethernet/mellanox/mlxsw/pci.c |  11 +-
+ drivers/pci/pci-driver.c                  | 219 ++++++++++++++++--------------
+ drivers/pci/pci.h                         |  36 +++--
+ drivers/pci/search.c                      |   6 +-
+ drivers/scsi/nsp32.c                      |   8 +-
+ drivers/scsi/nsp32.h                      |   8 +-
+ include/linux/pci.h                       |   1 +
+ 10 files changed, 166 insertions(+), 131 deletions(-)
+---
+base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
+change-id: 20260626-pci_id_fix-83eaec007674
+
+Best regards,
+--  
+Gary Guo <gary@garyguo.net>
 
 
