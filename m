@@ -1,347 +1,123 @@
-Return-Path: <linux-scsi+bounces-25386-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25387-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id rY5iAB1JRGrorwoAu9opvQ
-	(envelope-from <linux-scsi+bounces-25386-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 00:54:21 +0200
+	id 1+P4FhBLRGqVsAoAu9opvQ
+	(envelope-from <linux-scsi+bounces-25387-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 01:02:40 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 490BB6E8845
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 00:54:20 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCE7F6E88FC
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 01:02:39 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=fail reason="SPF not aligned (relaxed), No valid DKIM" header.from=goodmis.org (policy=none);
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25386-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25386-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=djl45S7D;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25387-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25387-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0A331301CCDA
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 22:54:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 009E73079A01
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 22:57:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 803A7328610;
-	Tue, 30 Jun 2026 22:54:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA74533374F;
+	Tue, 30 Jun 2026 22:56:50 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84B521CC51;
-	Tue, 30 Jun 2026 22:54:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B591433D6DD;
+	Tue, 30 Jun 2026 22:56:49 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782860058; cv=none; b=lacB41iNVErIAfBf5Y4PyN/AmBFEbKXA5CStKTgfmBNwAPor3Q6UfKsK9tbLS31qB27gRgupRgQ9RWK5KhJ4NU2fVS3JbV19SFGcVIecgpFXRVlBAB2rcoFtuAaCCzAA8bipjQ1IL/PBgc2B8ew5NyZ82mw553OvHn98cqNTRBI=
+	t=1782860210; cv=none; b=uW1J9IKZQVNH/XDTqO9S9D1emHbHyoc1qNvsgxHnKQkyNpEbONSc7g5k/uYiuaBhe12mAIsmBVq22zMbrvpkyi2Y9/GZPXr3NU4ZVVJxpRdgfPh1mzAqH5mn/ujyFP/8kCZTgEg1gDiKaCHmxsGomYhNHyvA1OMZumrSIunU1xA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782860058; c=relaxed/simple;
-	bh=nhlcyi1k7YzAyd/xWaJ5uTbVXJnw5xY8e5w54w70ZFo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=gOAzZDgGFHgJ1yLlATnQnOj8UnqQEidfqaLU4VvzYseamui8XYx/sJkQjEweO47zH5WXQe2hxPVxzut5JNbZhM/GVRejLxAc1TrtwW1Ai0ChgdpwgTUNKtax3BP5AV8w3TN8ow0tzwXjsOHWHAK8Ywh4hlisAFEYI1fiG8BOrhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
-Received: from omf09.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay02.hostedemail.com (Postfix) with ESMTP id 113B3120162;
-	Tue, 30 Jun 2026 22:54:15 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf09.hostedemail.com (Postfix) with ESMTPA id DED782002A;
-	Tue, 30 Jun 2026 22:54:12 +0000 (UTC)
-Date: Tue, 30 Jun 2026 18:54:12 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, linux-scsi@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Alim Akhtar <alim.akhtar@samsung.com>,
- Avri Altman <avri.altman@sandisk.com>, Bart Van Assche
- <bvanassche@acm.org>, James Bottomley
- <James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
- <martin.petersen@oracle.com>, Peter Wang <peter.wang@mediatek.com>
-Subject: [PATCH] ufs: core: tracing: Do not dereference pointers in
- TP_printk()
-Message-ID: <20260630185412.283c26c5@gandalf.local.home>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1782860210; c=relaxed/simple;
+	bh=zvqcF5f1eGfn1w41feSdZPPmP/1sfTctKQJg9SN7/EA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=B9UPLA8b4/bienoPG1UXClnrEq7YG2C0Po3C1E31s2lLcSkK030PRg6YZ0Y5/Af5LNkxXe8P8DkL4mPrQN/JYN4Tpvk2NTMVhP3GU3eRQ09n9xL3VOsRpRQtrsQdLePmLxge0wSulV9hfMaJfXDlzMiFpHqWgOlsfwaWvPS2YOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=djl45S7D; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAEC51F000E9;
+	Tue, 30 Jun 2026 22:56:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782860209;
+	bh=zvqcF5f1eGfn1w41feSdZPPmP/1sfTctKQJg9SN7/EA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=djl45S7DzjjR5q20+a3zvTS8GRExdAGTJ9jQ2mi9hHgahK8cgBGPBIJ5bOVEUhTMK
+	 h4M4jga/ZhCKUkVWsDQ7ELwAMzeE1JH4/pEcTid9OZbRzm/hSDOSBFxDD1kUpwb0P8
+	 kfwLrknmL2SUsy/UA2oqZmVIC7ilv1GsI8xdUhRDfkZZl+PZiFQgKshYG8YkQ2Reiy
+	 UjVYlGSgQXDS1aXwdD7bZG9pKPi6tdwbmQAwpYIiL2AvFqHhCSoX/K/TUC4mXGnIri
+	 5qrjtaqTvUN945jpd+R+AXn5a5WozbZTSdlt0Ytu+tftTUpLTsik0LGBiH4lI807XY
+	 9wIxa+CwaasVA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v5 1/2] scsi: mpt3sas: add IO Unit Page 7 config
+ accessor
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Louis Sautier" <sautier.louis@gmail.com>
+Cc: linux-scsi@vger.kernel.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <20260630224922.2543096-2-sautier.louis@gmail.com>
+References: <20260630224922.2543096-1-sautier.louis@gmail.com>
+ <20260630224922.2543096-2-sautier.louis@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 30 Jun 2026 22:56:48 +0000
+Message-Id: <20260630225648.CAEC51F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: zyoctfi5yj8exifgdjdtjiiw1wczoq6j
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+/+8B81wbQCWuGTQCWx56jW2aMWhJFYVs=
-X-HE-Tag: 1782860052-267712
-X-HE-Meta: U2FsdGVkX18AW2wwblH81KAt+nO6TJT2J8pHS7l5BvS1ulH5YBqRoldA4T+uXifN5GuGBFqpoovRap3np6xN8WbjDEKanTUk+OdkBnYPoABp1AIqsndUrAIers5WMBoMB19hOdVQ92a6KV5k0cIWFWyTN/Pb20yp05Yzhx0tYmQW1VwSky6fj1iRjYDmpQqAyRgXthxpSNrs+58d7sLixy3C9YaVO2+AcbzGDafXgLbbcRLfO3HlS7mTrZzW/MH8Jey/H+JJVgddoheIWNHToEwayYOd0HRZoYAPcchQy0e+5rs51ZP9yELOrkNni1Iq8UKTxzFouk85siNaYfSIu+HFm6Cu7Y+XCkN2isvG/3Eub1wlYH37YODlScAzSO+081hrK6YfJ0WDIubjxrBdNA==
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-1.36 / 15.00];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[goodmis.org : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25386-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:linux-kernel@vger.kernel.org,m:linux-trace-kernel@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:mhiramat@kernel.org,m:mathieu.desnoyers@efficios.com,m:alim.akhtar@samsung.com,m:avri.altman@sandisk.com,m:bvanassche@acm.org,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:peter.wang@mediatek.com,s:lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[rostedt@goodmis.org,linux-scsi@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rostedt@goodmis.org,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	R_DKIM_NA(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25387-lists,linux-scsi=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:sautier.louis@gmail.com,m:linux-scsi@vger.kernel.org,m:linux-hwmon@vger.kernel.org,m:sautierlouis@gmail.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,gandalf.local.home:mid,goodmis.org:from_mime,goodmis.org:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_THREE(0.00)[3];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,smtp.kernel.org:mid,lists.linux.dev:replyto,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 490BB6E8845
+X-Rspamd-Queue-Id: DCE7F6E88FC
 
-From: Steven Rostedt <rostedt@goodmis.org>
+> Add mpt3sas_config_get_iounit_pg7(), mirroring the existing iounit
+> page accessors. Used by the hwmon driver added in the following patch
+> to read the IOC and board temperatures.
+>=20
+> Assisted-by: Claude:claude-opus-4-7
+> Signed-off-by: Louis Sautier <sautier.louis@gmail.com>
 
-The trace events in drivers/ufs/core/ufs_trace.h were converted to take a
-pointer to the hba structure as an argument for the tracepoint and then in
-TP_printk() the printing of the dev_name from the ring buffer was
-converted to using the dev dereferenced pointer from the hba saved
-pointer.
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-This is not allowed as the TP_printk() is executed at the time the trace
-event is read from /sys/kernel/tracing/trace file. That can happen
-literally, seconds, minutes, hours, weeks, days, or even months later!
-There is no guarantee that the hba pointer will still exist by the time it
-is dereferenced when the "trace" file is read.
-
-Instead, save the device name from the hba pointer at the time the
-tracepoint is called and place it into the ring buffer event. Then the
-TP_printk() can read the name directly from the ring buffer and remove the
-possibility that it will read a freed pointer and crash the kernel.
-
-This was detected when testing the trace event code that looks for
-TP_printk() parameters doing illegal derferences[1]
-
-[1] https://lore.kernel.org/all/20260630184836.74d477b6@gandalf.local.home/
-
-Cc: stable@vger.kernel.org
-Fixes: 583e518e71003 ("scsi: ufs: core: Add hba parameter to trace events")
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
----
- drivers/ufs/core/ufs_trace.h | 36 +++++++++++++++++++++++++++---------
- 1 file changed, 27 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/ufs/core/ufs_trace.h b/drivers/ufs/core/ufs_trace.h
-index 309ae51b4906..377a3c54b9f5 100644
---- a/drivers/ufs/core/ufs_trace.h
-+++ b/drivers/ufs/core/ufs_trace.h
-@@ -89,16 +89,18 @@ TRACE_EVENT(ufshcd_clk_gating,
- 
- 	TP_STRUCT__entry(
- 		__field(struct ufs_hba *, hba)
-+		__string(dev_name, dev_name(hba->dev))
- 		__field(int, state)
- 	),
- 
- 	TP_fast_assign(
-+		__assign_str(dev_name);
- 		__entry->hba = hba;
- 		__entry->state = state;
- 	),
- 
- 	TP_printk("%s: gating state changed to %s",
--		dev_name(__entry->hba->dev),
-+		__get_str(dev_name),
- 		__print_symbolic(__entry->state, UFSCHD_CLK_GATING_STATES))
- );
- 
-@@ -111,6 +113,7 @@ TRACE_EVENT(ufshcd_clk_scaling,
- 
- 	TP_STRUCT__entry(
- 		__field(struct ufs_hba *, hba)
-+		__string(dev_name, dev_name(hba->dev))
- 		__string(state, state)
- 		__string(clk, clk)
- 		__field(u32, prev_state)
-@@ -119,6 +122,7 @@ TRACE_EVENT(ufshcd_clk_scaling,
- 
- 	TP_fast_assign(
- 		__entry->hba = hba;
-+		__assign_str(dev_name);
- 		__assign_str(state);
- 		__assign_str(clk);
- 		__entry->prev_state = prev_state;
-@@ -126,7 +130,7 @@ TRACE_EVENT(ufshcd_clk_scaling,
- 	),
- 
- 	TP_printk("%s: %s %s from %u to %u Hz",
--		dev_name(__entry->hba->dev), __get_str(state), __get_str(clk),
-+		__get_str(dev_name), __get_str(state), __get_str(clk),
- 		__entry->prev_state, __entry->curr_state)
- );
- 
-@@ -138,16 +142,18 @@ TRACE_EVENT(ufshcd_auto_bkops_state,
- 
- 	TP_STRUCT__entry(
- 		__field(struct ufs_hba *, hba)
-+		__string(dev_name, dev_name(hba->dev))
- 		__string(state, state)
- 	),
- 
- 	TP_fast_assign(
- 		__entry->hba = hba;
-+		__assign_str(dev_name);
- 		__assign_str(state);
- 	),
- 
- 	TP_printk("%s: auto bkops - %s",
--		dev_name(__entry->hba->dev), __get_str(state))
-+		__get_str(dev_name), __get_str(state))
- );
- 
- DECLARE_EVENT_CLASS(ufshcd_profiling_template,
-@@ -158,6 +164,7 @@ DECLARE_EVENT_CLASS(ufshcd_profiling_template,
- 
- 	TP_STRUCT__entry(
- 		__field(struct ufs_hba *, hba)
-+		__string(dev_name, dev_name(hba->dev))
- 		__string(profile_info, profile_info)
- 		__field(s64, time_us)
- 		__field(int, err)
-@@ -165,13 +172,14 @@ DECLARE_EVENT_CLASS(ufshcd_profiling_template,
- 
- 	TP_fast_assign(
- 		__entry->hba = hba;
-+		__assign_str(dev_name);
- 		__assign_str(profile_info);
- 		__entry->time_us = time_us;
- 		__entry->err = err;
- 	),
- 
- 	TP_printk("%s: %s: took %lld usecs, err %d",
--		dev_name(__entry->hba->dev), __get_str(profile_info),
-+		__get_str(dev_name), __get_str(profile_info),
- 		__entry->time_us, __entry->err)
- );
- 
-@@ -200,6 +208,7 @@ DECLARE_EVENT_CLASS(ufshcd_template,
- 		__field(s64, usecs)
- 		__field(int, err)
- 		__field(struct ufs_hba *, hba)
-+		__string(dev_name, dev_name(hba->dev))
- 		__field(int, dev_state)
- 		__field(int, link_state)
- 	),
-@@ -208,13 +217,14 @@ DECLARE_EVENT_CLASS(ufshcd_template,
- 		__entry->usecs = usecs;
- 		__entry->err = err;
- 		__entry->hba = hba;
-+		__assign_str(dev_name);
- 		__entry->dev_state = dev_state;
- 		__entry->link_state = link_state;
- 	),
- 
- 	TP_printk(
- 		"%s: took %lld usecs, dev_state: %s, link_state: %s, err %d",
--		dev_name(__entry->hba->dev),
-+		__get_str(dev_name),
- 		__entry->usecs,
- 		__print_symbolic(__entry->dev_state, UFS_PWR_MODES),
- 		__print_symbolic(__entry->link_state, UFS_LINK_STATES),
-@@ -279,6 +289,7 @@ TRACE_EVENT(ufshcd_command,
- 	TP_STRUCT__entry(
- 		__field(struct scsi_device *, sdev)
- 		__field(struct ufs_hba *, hba)
-+		__string(dev_name, dev_name(&sdev->sdev_dev))
- 		__field(enum ufs_trace_str_t, str_t)
- 		__field(unsigned int, tag)
- 		__field(u32, doorbell)
-@@ -291,6 +302,7 @@ TRACE_EVENT(ufshcd_command,
- 	),
- 
- 	TP_fast_assign(
-+		__assign_str(dev_name);
- 		__entry->sdev = sdev;
- 		__entry->hba = hba;
- 		__entry->str_t = str_t;
-@@ -307,7 +319,7 @@ TRACE_EVENT(ufshcd_command,
- 	TP_printk(
- 		"%s: %s: tag: %u, DB: 0x%x, size: %d, IS: %u, LBA: %llu, opcode: 0x%x (%s), group_id: 0x%x, hwq_id: %d",
- 		show_ufs_cmd_trace_str(__entry->str_t),
--		dev_name(&__entry->sdev->sdev_dev), __entry->tag,
-+		__get_str(dev_name), __entry->tag,
- 		__entry->doorbell, __entry->transfer_len, __entry->intr,
- 		__entry->lba, (u32)__entry->opcode, str_opcode(__entry->opcode),
- 		(u32)__entry->group_id, __entry->hwq_id
-@@ -322,6 +334,7 @@ TRACE_EVENT(ufshcd_uic_command,
- 
- 	TP_STRUCT__entry(
- 		__field(struct ufs_hba *, hba)
-+		__string(dev_name, dev_name(hba->dev))
- 		__field(enum ufs_trace_str_t, str_t)
- 		__field(u32, cmd)
- 		__field(u32, arg1)
-@@ -331,6 +344,7 @@ TRACE_EVENT(ufshcd_uic_command,
- 
- 	TP_fast_assign(
- 		__entry->hba = hba;
-+		__assign_str(dev_name);
- 		__entry->str_t = str_t;
- 		__entry->cmd = cmd;
- 		__entry->arg1 = arg1;
-@@ -340,7 +354,7 @@ TRACE_EVENT(ufshcd_uic_command,
- 
- 	TP_printk(
- 		"%s: %s: cmd: 0x%x, arg1: 0x%x, arg2: 0x%x, arg3: 0x%x",
--		show_ufs_cmd_trace_str(__entry->str_t), dev_name(__entry->hba->dev),
-+		show_ufs_cmd_trace_str(__entry->str_t), __get_str(dev_name),
- 		__entry->cmd, __entry->arg1, __entry->arg2, __entry->arg3
- 	)
- );
-@@ -353,6 +367,7 @@ TRACE_EVENT(ufshcd_upiu,
- 
- 	TP_STRUCT__entry(
- 		__field(struct ufs_hba *, hba)
-+		__string(dev_name, dev_name(hba->dev))
- 		__field(enum ufs_trace_str_t, str_t)
- 		__array(unsigned char, hdr, 12)
- 		__array(unsigned char, tsf, 16)
-@@ -361,6 +376,7 @@ TRACE_EVENT(ufshcd_upiu,
- 
- 	TP_fast_assign(
- 		__entry->hba = hba;
-+		__assign_str(dev_name);
- 		__entry->str_t = str_t;
- 		memcpy(__entry->hdr, hdr, sizeof(__entry->hdr));
- 		memcpy(__entry->tsf, tsf, sizeof(__entry->tsf));
-@@ -369,7 +385,7 @@ TRACE_EVENT(ufshcd_upiu,
- 
- 	TP_printk(
- 		"%s: %s: HDR:%s, %s:%s",
--		show_ufs_cmd_trace_str(__entry->str_t), dev_name(__entry->hba->dev),
-+		show_ufs_cmd_trace_str(__entry->str_t), __get_str(dev_name),
- 		__print_hex(__entry->hdr, sizeof(__entry->hdr)),
- 		show_ufs_cmd_trace_tsf(__entry->tsf_t),
- 		__print_hex(__entry->tsf, sizeof(__entry->tsf))
-@@ -384,16 +400,18 @@ TRACE_EVENT(ufshcd_exception_event,
- 
- 	TP_STRUCT__entry(
- 		__field(struct ufs_hba *, hba)
-+		__string(dev_name, dev_name(hba->dev))
- 		__field(u16, status)
- 	),
- 
- 	TP_fast_assign(
- 		__entry->hba = hba;
-+		__assign_str(dev_name);
- 		__entry->status = status;
- 	),
- 
- 	TP_printk("%s: status 0x%x",
--		dev_name(__entry->hba->dev), __entry->status
-+		__get_str(dev_name), __entry->status
- 	)
- );
- 
--- 
-2.53.0
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630224922.2543=
+096-1-sautier.louis@gmail.com?part=3D1
 
 
