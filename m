@@ -1,209 +1,201 @@
-Return-Path: <linux-scsi+bounces-25340-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25341-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 5RRSMcQNQ2qwOQoAu9opvQ
-	(envelope-from <linux-scsi+bounces-25340-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 02:28:52 +0200
+	id a0aJMgwaQ2qtQQoAu9opvQ
+	(envelope-from <linux-scsi+bounces-25341-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 03:21:16 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E98256DF61F
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 02:28:51 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20EF46DF921
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 03:21:16 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=aj7Qxosz;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25340-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25340-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=knBvwv6t;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25341-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25341-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id EE90B3007A6E
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 00:28:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CFC8E302D5C8
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 01:21:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA8651CEADB;
-	Tue, 30 Jun 2026 00:28:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C781D24E4B5;
+	Tue, 30 Jun 2026 01:21:13 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853C51A680B;
-	Tue, 30 Jun 2026 00:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D2426A1A7
+	for <linux-scsi@vger.kernel.org>; Tue, 30 Jun 2026 01:21:04 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782779325; cv=none; b=K2m0DkHk/dbQmVJp4kEJJYhbnscGuHxHM6jECEUJLvB6k7G0OLXLiU0ZnjL4t13h0EKnJnaOt1RNuQgcdWwiH5eoEv7m4SitVxmKxrvxe6b/2Gxft1HR1Cq6TuYM8rkym8EdEh9Bbrr1YQOyoxYyy/Fc0mRlSivJqrEpOBersD8=
+	t=1782782472; cv=none; b=AXfN6K20DerM2ojnz+2kyrYYQoBvpiXzm1SSYjguBToyBqYBp/6Ptdn8HE1vdRuybuZpMr86O9TMxeTJn8tOzXPX3U5uyEpdvNGfMxcYnFzGk3JHKSx1fHKSWN8LTPw4RjTBG3dFLmqA9JMytL4QFUsKj4u/bxPRo/H5rkaJ9vE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782779325; c=relaxed/simple;
-	bh=ZMg/mS8tkWw8h4PnD9M5rARbFeAX0C4TWCT6vE4FnkU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Tw4S5vAv1q2tiCEs4OPzTZLmrhGB8jHfAHlrut2EHaBqw1AecYpyS1YqyzqHoQWbgDt5pQoz2d+/mQ030isLFw9rhUrarGYBAJHwc+HG0FJMDI69NBIORN/7OMg2Cexodibnnpnj8AKZeP2Yx3an0WEMIwq23Cyc2A6+02L3SeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aj7Qxosz; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 625331F000E9;
-	Tue, 30 Jun 2026 00:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782779324;
-	bh=G4c9d/ZeWqAo4q8XZC72a4jWehIL7JgJc+9LYV1tUVk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=aj7Qxoszw7X67y3Iim0NApX36vaFP7D/mgEw/mFa455xZ/SEX2E2q6ye7GHfAxsxm
-	 BEWjA61zRVeRtru5Oannc9U3vGBImmA4E6rtG0Jfta+L18Ti/tKsNWGfu3OorUfNqo
-	 H8/eDQEMFzx0RMMASIwjjxsKIVp2/dk+PXXKo1NEtUDz1bcM52O+3+vc5dIKrxhKq3
-	 /L6QsjzQOXh1pAjCvqfTnHNLfZN0Osl/YvnLI2Q2aSN0Nm5F8rMgMg3IKGqiUboNyV
-	 YkaBDrhSO6nGtxvUKT8KtF1qBcJ2yb+ztpfGAbLYZPn5x2qSv2PHW0HSCXBCVPqR89
-	 Vcgq0NbvfTHnA==
-Message-ID: <aeb83cdb-616e-49b8-a791-3748dae60133@kernel.org>
-Date: Tue, 30 Jun 2026 09:28:40 +0900
+	s=arc-20240116; t=1782782472; c=relaxed/simple;
+	bh=NcHqpszERXjT6L6QRCE5wtLwJT4Wa3f3AWZ6iw/lRs8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LQK+bpPfdj6zMqeKF+mJea5rOAPlxUf5JYl5Pkq5splOX8n8zL1kBQmXCUWy+6Hcv1BuO6JUy7Qt+/ajqXSGtXzAxymIzWJewGdW3Y47ZJBtqTJF5gyqDB7Ve6NSy1eV1GV2Thg/m6cWH/eWVWAWshgb8qMRUvoRhGKT8FTL3RI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=knBvwv6t; arc=none smtp.client-ip=209.85.215.169
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c85d4b4245aso2321203a12.1
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2026 18:21:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782782463; x=1783387263; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WLMD0egzUCNwTlRP4H9rot2jquTKrKUwDtaYpTqbx2Q=;
+        b=knBvwv6t6gpDSIkRVagkBaMb4sL127quTTaNfXA9w/KDSYq1Sy3vSDVn9ah8lD+d7G
+         hwuk+DEaokclsExt3veXJEBNxfxxXhXzg7QqN8qr4S3esXWHRjwO8QKDtwl6/7ML6Lbu
+         9YGupVnnTU0dUnM7ZxSszPDCvNh3yDV60AYDZcQlOv1xHJzFcj33CoKvH7fMNMLYCbkF
+         9GV4co6il5n+8ZZ+8tFprnOUCxFRH6O5MTTXZdECLVewiTec2MtPdlETiWB05dtyOaZf
+         bpW3YHAw3T871Qw9EyPaHovXwP9ZCZZ7gIofcUktvobpbRPPV40myf/HiVj5S7vAOHu4
+         QRlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782782463; x=1783387263;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WLMD0egzUCNwTlRP4H9rot2jquTKrKUwDtaYpTqbx2Q=;
+        b=sp576LxMtQtGNQz/DViAQBuKjCMuUKv6aNP4Tso6PQnZVjt+vy0PJyClnV5Qa/k6Zc
+         rrMm82+4Jq13knkWcdztg+rxAMutzYu39OZX6x0NziRn+JrdO9xfwoTSukgW6yQKNc4O
+         fJCqNQAKuEPxHwJ1tb+CXEfmNOo0smi9t+cdfZbFRjM6sC1TTQmYD+daNKB98oBw6WiN
+         T6HCyrMF11gueQnvU4OSRwMECAgFwAE7OhBygMdWap9LHj/EYQErgoCwdIs3vgvZraNJ
+         XWyGZmSv+35m4Zm+/ZFaGMcKZJuRVide+jz7J58SxD9SMXOcyU8vaIJmvOQNyqXi7z+f
+         MDnQ==
+X-Gm-Message-State: AOJu0YxY37DgOOIEiVrI5tRwNT+BkWJBgNEezovXdP32/TplXru4MCZ8
+	SdXpwMgL6+c7p0M6XNCRNfu3ncbEIDwVdQJ5SZcLoMmVnCF/+1j25YVKFQOW9NXk
+X-Gm-Gg: AfdE7cnu/YQ3x83txooZ309kLnozUP3KKGMFnNig9x/pvhuK4A6wjIxSNW57xezDPXz
+	r3ze0HxNJtNpbdzNk0g9bBJYg7085eR+qu6ucY2LJKor2DKyAPjRX0acfRaz57WDWxC1OQ9+VAb
+	mqL51qwzju27bOCgGh/EIFUug3gHSPwLOYedsi7eACiiOBIRMpKmnbBSEfLpKRVKioRftba6Ew8
+	Zg1yeGemqm5V+VnPgrs7TvP+IyKDMAn1eM+wsIjSM/XDJDv/UqHWBZOLeSWBk5YIezhGcRm1UJ3
+	QOS8vUrwOehY1e7XEgLugcnWHNRpoX2SUXqegtvf3Gv2ouzcPwSjo5ibzAMcokazQMPoq+6lgvN
+	rgetArLk5Tdc5HunMewQxup1rGjdQp69s2jPwMRgNzQiGvS5zbstjevoZ7lrUORSgbdGmZehlre
+	/HQN8zAwLvGohQrYNWNgYGZ6hK+oUsA0H4wDaZuBBcrtM9MalkNr5zHe6nh6ctmsk44emgdbkmk
+	SnUP1rbjA==
+X-Received: by 2002:a05:6a00:ad89:b0:847:9aa8:d3bb with SMTP id d2e1a72fcca58-8479eed1d30mr1294340b3a.12.1782782463469;
+        Mon, 29 Jun 2026 18:21:03 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8000:7a86::e34])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8479ff8c7b5sm689184b3a.11.2026.06.29.18.21.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2026 18:21:02 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-scsi@vger.kernel.org
+Cc: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-kernel@vger.kernel.org (open list),
+	linux-hardening@vger.kernel.org (open list:KERNEL HARDENING (not covered by other areas):Keyword:\b__counted_by(_le|_be|_ptr)?\b)
+Subject: [PATCH] scsi: st: use kzalloc_array
+Date: Mon, 29 Jun 2026 18:21:01 -0700
+Message-ID: <20260630012101.1461335-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] scsi: mpt3sas: add hwmon support
-To: Louis Sautier <sautier.louis@gmail.com>,
- Sathya Prakash <sathya.prakash@broadcom.com>,
- Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
- Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
- Ranjan Kumar <ranjan.kumar@broadcom.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, MPT-FusionLinux.pdl@broadcom.com,
- linux-scsi@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260613023833.3163507-1-sautier.louis@gmail.com>
- <20260613023833.3163507-3-sautier.louis@gmail.com>
-Content-Language: en-US
-From: Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20260613023833.3163507-3-sautier.louis@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.66 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25340-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com,broadcom.com,HansenPartnership.com,oracle.com];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:sautier.louis@gmail.com,m:sathya.prakash@broadcom.com,m:sreekanth.reddy@broadcom.com,m:suganath-prabu.subramani@broadcom.com,m:ranjan.kumar@broadcom.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:linux@roeck-us.net,m:MPT-FusionLinux.pdl@broadcom.com,m:linux-scsi@vger.kernel.org,m:linux-hwmon@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:sautierlouis@gmail.com,s:lists@lfdr.de];
-	HAS_ORG_HEADER(0.00)[];
-	FORGED_SENDER(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25341-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:linux-scsi@vger.kernel.org,m:Kai.Makisara@kolumbus.fi,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:kees@kernel.org,m:gustavoars@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-hardening@vger.kernel.org,s:lists@lfdr.de];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	TO_DN_SOME(0.00)[];
+	FORGED_SENDER(0.00)[rosenp@gmail.com,linux-scsi@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[rosenp@gmail.com,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	ALIAS_RESOLVED(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E98256DF61F
+X-Rspamd-Queue-Id: 20EF46DF921
 
-On 6/13/26 11:38, Louis Sautier wrote:
-> Expose the IOC and board temperature sensors of LSI / Broadcom SAS
-> HBAs through hwmon. Readings come from MPI IO Unit Page 7 via the
-> accessor added in the preceding patch.
-> 
-> The same fields are exposed by Broadcom's userspace tooling
-> through the /dev/mpt[23]ctl ioctl path (typically root-only):
-> IOCTemperature and BoardTemperature in lsiutil; ROC and Controller
-> in storcli. With this driver, sensors(1) shows them unprivileged:
-> 
->   $ sensors mpt3sas-pci-0200
->   mpt3sas-pci-0200
->   Adapter: PCI adapter
->   IOC:          +42.0°C
-> 
-> Each channel is gated independently by its *TemperatureUnits field
-> through is_visible(); cards that populate only one sensor expose
-> only one input file, and cards that populate neither do not register
-> an hwmon device.
-> 
-> The hwmon code is gated directly on CONFIG_HWMON. IS_REACHABLE() is
-> used rather than IS_ENABLED() so that SCSI_MPT3SAS=y with HWMON=m
-> still builds; in that configuration, the sensors are not exposed
-> (same pattern as i915 and xe).
-> 
-> Assisted-by: Claude:claude-opus-4-7
-> Signed-off-by: Louis Sautier <sautier.louis@gmail.com>
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ drivers/scsi/st.c | 12 +++---------
+ drivers/scsi/st.h |  3 ++-
+ 2 files changed, 5 insertions(+), 10 deletions(-)
 
-Looks OK to me, modulo a couple of nits below.
-With these addressed, feel free to add:
-
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-
-> +int mpt3sas_hwmon_register(struct MPT3SAS_ADAPTER *ioc)
-> +{
-> +	struct device *parent = &ioc->pdev->dev;
-> +	struct mpt3sas_hwmon *h;
-> +	struct device *hwdev;
-> +	Mpi2ConfigReply_t mpi_reply;
-> +	Mpi2IOUnitPage7_t page;
-> +	int r;
-> +
-> +	h = kzalloc_obj(*h);
-> +	if (!h)
-> +		return -ENOMEM;
-> +
-> +	h->ioc = ioc;
-
-maybe move this below together with the h->ioc_present initialization ?
-There seem to be no point for this line to be alone here.
-
-> +
-> +	r = mpt3sas_config_get_iounit_pg7(ioc, &mpi_reply, &page);
-> +	if (r) {
-> +		kfree(h);
-> +		return r;
-> +	}
-
-You should test for the page being present first and then allocate h if it is.
-That would be cleaner/simpler.
-
-> +
-> +	h->ioc_present = page.IOCTemperatureUnits != MPI2_IOUNITPAGE7_IOC_TEMP_NOT_PRESENT;
-> +	h->board_present = page.BoardTemperatureUnits != MPI2_IOUNITPAGE7_BOARD_TEMP_NOT_PRESENT;
-> +
-> +	/*
-> +	 * A page where both *TemperatureUnits are NOT_PRESENT covers
-> +	 * two cases: cards that genuinely lack sensors, and firmware
-> +	 * errors that left the page zero-filled (the accessor mirrors
-> +	 * _config_request() behaviour). Either way: skip registration.
-> +	 */
-> +	if (!h->ioc_present && !h->board_present) {
-> +		kfree(h);
-> +		return 0;
-> +	}
-> +
-> +	hwdev = hwmon_device_register_with_info(parent, "mpt3sas", h,
-> +						&mpt3sas_hwmon_chip_info,
-> +						NULL);
-> +	if (IS_ERR(hwdev)) {
-> +		kfree(h);
-> +		return PTR_ERR(hwdev);
-> +	}
-> +
-> +	h->hwmon_dev = hwdev;
-> +	ioc->hwmon = h;
-> +	return 0;
-> +}
-
-
+diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
+index f1c3c4946637..31ae189b18e7 100644
+--- a/drivers/scsi/st.c
++++ b/drivers/scsi/st.c
+@@ -149,7 +149,7 @@ static struct st_dev_parm {
+    mode counts */
+ static const char *st_formats[] = {
+ 	"",  "r", "k", "s", "l", "t", "o", "u",
+-	"m", "v", "p", "x", "a", "y", "q", "z"}; 
++	"m", "v", "p", "x", "a", "y", "q", "z"};
+ 
+ /* The default definitions have been moved to st_options.h */
+ 
+@@ -3973,21 +3973,15 @@ static struct st_buffer *new_tape_buffer(int max_sg)
+ {
+ 	struct st_buffer *tb;
+ 
+-	tb = kzalloc_obj(struct st_buffer);
++	tb = kzalloc_flex(*tb, reserved_pages, max_sg);
+ 	if (!tb) {
+ 		printk(KERN_NOTICE "st: Can't allocate new tape buffer.\n");
+ 		return NULL;
+ 	}
+-	tb->frp_segs = 0;
+ 	tb->use_sg = max_sg;
++	tb->frp_segs = 0;
+ 	tb->buffer_size = 0;
+ 
+-	tb->reserved_pages = kzalloc_objs(struct page *, max_sg);
+-	if (!tb->reserved_pages) {
+-		kfree(tb);
+-		return NULL;
+-	}
+-
+ 	return tb;
+ }
+ 
+diff --git a/drivers/scsi/st.h b/drivers/scsi/st.h
+index 0d7c4b8c2c8a..759f4c43d563 100644
+--- a/drivers/scsi/st.h
++++ b/drivers/scsi/st.h
+@@ -45,7 +45,6 @@ struct st_buffer {
+ 	int syscall_result;
+ 	struct st_request *last_SRpnt;
+ 	struct st_cmdstatus cmdstat;
+-	struct page **reserved_pages;
+ 	int reserved_page_order;
+ 	struct page **mapped_pages;
+ 	struct rq_map_data map_data;
+@@ -53,6 +52,8 @@ struct st_buffer {
+ 	unsigned short use_sg;	/* zero or max number of s/g segments for this adapter */
+ 	unsigned short sg_segs;		/* number of segments in s/g list */
+ 	unsigned short frp_segs;	/* number of buffer segments */
++
++	struct page *reserved_pages[] __counted_by(use_sg);
+ };
+ 
+ /* The tape mode definition */
 -- 
-Damien Le Moal
-Western Digital Research
+2.54.0
+
 
