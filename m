@@ -1,178 +1,132 @@
-Return-Path: <linux-scsi+bounces-25414-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25416-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id rn0eKin5RGpM4QoAu9opvQ
-	(envelope-from <linux-scsi+bounces-25414-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 13:25:29 +0200
+	id XgcKEnH9RGqD4goAu9opvQ
+	(envelope-from <linux-scsi+bounces-25416-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 13:43:45 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id A51A66ECC8A
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 13:25:28 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBC0F6ECED6
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 13:43:44 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=ctC0KpN8;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25414-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25414-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=none;
+	dmarc=fail reason="SPF not aligned (relaxed), No valid DKIM" header.from=lst.de (policy=none);
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25416-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25416-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 5F45030B49D5
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2026 11:11:31 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3A8A6301067C
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2026 11:43:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5508543E9C3;
-	Wed,  1 Jul 2026 11:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BC9A47F2F7;
+	Wed,  1 Jul 2026 11:43:41 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D423B6BE3;
-	Wed,  1 Jul 2026 11:10:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAB747F2F0
+	for <linux-scsi@vger.kernel.org>; Wed,  1 Jul 2026 11:43:38 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782904254; cv=none; b=YU2QnEDoa5lPB2afti17MGuQyJA1921iskZpxO9nd97lFy/IYkzWyq9W0qICBvRky2+e32S8kl78eMRh1YLsy7UlQwAdCeAmWPPz0RF36ye18HZ1bv4mlxxiL4kqGcHBIYpxxT/xfSLI1GZxvri2apgRmRUVNcOdbXy8t8Kil5Y=
+	t=1782906221; cv=none; b=DQ3ySZee7blWlUFn/Kre6UECykJ+ryltmYZxMw64n7IAr4x93OA9wSK+VyxNPa0x6FHc6sZ/gAulAK4jJid8ZfJq8/Ir4qQa4/z7Csp6MA+l3kNv9gDwNsiu+tiX+w0fa4o+wyfVqiS52wJPynKbf2WdLUMPK0aBjNUCtxNs6js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782904254; c=relaxed/simple;
-	bh=/JszStEefe+59OzMpCh3/UdR9ik2m4NjOqjsHGz0OrQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=MUYWAOWgOqCJpXN8UGTG++gIRZWCpEJTGKIrurmIi89Qu9wUJU0+WAs3Mjmv0M+SwFpoigXSeSTRifJal7e3SVa3uZ2A0zSyU2/OpLHTHBA+tZdDtBU18n5b0r8irPOdnW2XHf9+pULORRzfjH8Y7b/xfXC6L9Wdvpkj4wxPAZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ctC0KpN8; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E04E1F00A3A;
-	Wed,  1 Jul 2026 11:10:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782904252;
-	bh=+QFqAxv8syvMpFMYuAM1dG2hrLQEDLrQnncPdAO3mjY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ctC0KpN84JxpWcpZNzDaaso8ut2K24+TNpvnNl1nvgRC4QMXQ7Kxvv/OiBfDJgB2x
-	 VYOQeNYM1NXKeJUNVtGKkpiEtBLykrx2J/FHb2pOKgySuRr6SQSJ7PsnzK04IVX1Vg
-	 GtUMq0CD80R/FDKmTi0L8mv7+sxUp5BQ0BCuvw7o9GVqi1y4HiuAZcmVmlKdepYph3
-	 xUKap+r0eGkcYxm0dC9qEtPG/UnLlujXcoJKUKlBV3SIXmswk3u/TUOVP7dTcxNj2p
-	 zuwJp6ohg+eP3kHzN4RkZsaXhfoBwEpaDD6m5LZE2HXmO/dljOCUEebRiMqMx/6qNT
-	 8UbKiHKP2R8Hg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 7/7] pci: fix UAF when probe runs concurrent to dyn
- ID removal
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Gary Guo" <gary@garyguo.net>
-Cc: linux-scsi@vger.kernel.org, dlemoal@kernel.org, cassel@kernel.org, linux-ide@vger.kernel.org, linux-pci@vger.kernel.org
-In-Reply-To: <20260630-pci_id_fix-v2-7-b834a98c0af2@garyguo.net>
-References: <20260630-pci_id_fix-v2-0-b834a98c0af2@garyguo.net>
- <20260630-pci_id_fix-v2-7-b834a98c0af2@garyguo.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 01 Jul 2026 11:10:51 +0000
-Message-Id: <20260701111052.3E04E1F00A3A@smtp.kernel.org>
+	s=arc-20240116; t=1782906221; c=relaxed/simple;
+	bh=vOkaF3KQVviYyUGRvSbbWPkWhyXuJod98w4hXS2qzx0=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GeULF2SkaJmwnzyHE2FeWjT5mSpZTIxVFucw1DTq95iKpFQ8iy2SEBywIxQANYEPURMY+EaYzJ+A6Rd9AN1O75vD429bT0ZY9zHiWvgXhg4AeZoP8cykP4iNI7Of39CNcSQv8gPDC63VTVAW3HcKH8cs1FDMnOW+uV9zpqa7Nxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 371E768BFE; Wed,  1 Jul 2026 13:43:36 +0200 (CEST)
+Date: Wed, 1 Jul 2026 13:43:36 +0200
+From: Christoph Hellwig <hch@lst.de>
+To: linux-scsi@vger.kernel.org
+Subject: [ANNOUNCE] Alpine Linux Persistence and Storage Summit 2026
+Message-ID: <20260701114336.GC17996@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
+X-Spamd-Result: default: False [-1.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[lst.de : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25414-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25416-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[garyguo.net:email,lists.linux.dev:replyto,vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,sashiko.dev:url,smtp.kernel.org:mid];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:gary@garyguo.net,m:linux-scsi@vger.kernel.org,m:dlemoal@kernel.org,m:cassel@kernel.org,m:linux-ide@vger.kernel.org,m:linux-pci@vger.kernel.org,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[hch@lst.de,linux-scsi@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_NO_DN(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hch@lst.de,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lst.de:mid,lst.de:from_mime,vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,lizumer-huette.at:url,alpss.at:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: A51A66ECC8A
+X-Rspamd-Queue-Id: CBC0F6ECED6
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] The `id` parameter passed to PCI driver probe functions is now a p=
-ointer to a stack-allocated variable, breaking drivers that rely on pointer=
- arithmetic to calculate indices or that cache the pointer.
---
+We proudly announce the 9th Alpine Linux Persistence and Storage Summit
+(ALPSS), which will be held September 28th to October 1st at the
+Lizumerhuette (https://www.lizumer-huette.at/) in Austria.
 
-commit 0cf7c75b08e81435f8eec9e2453a6dda8624a99b
-Author: Gary Guo <gary@garyguo.net>
-Subject: pci: fix UAF when probe runs concurrent to dyn ID removal
+The goal of this conference is to discuss the hot topics in Linux storage
+and file systems, such as persistent memory, NVMe, zoned storage, and I/O
+scheduling in a cool and relaxed setting with spectacular views in the
+Austrian alps.
 
-This commit modifies the PCI matching logic to copy the matched device ID
-instead of returning a pointer to it. This ensures dynamic IDs are safely
-handled without requiring the lock to be held during probe.
+We plan to have a small selection of short and to the point talks with
+lots of room for discussion in small groups, as well as ample downtime
+to enjoy the surroundings.
 
-Link: https://lore.kernel.org/all/20260619170503.518F61F00A3A@smtp.kernel.o=
-rg/
+Attendance is free except for the accommodation and food at the lodge
+but the number of seats is strictly limited.  Cost for accommodation and
+half board is between 73 and 92 EUR depending on the room category,
+with additional discounts for members of an alpine society.
 
-> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> --- a/drivers/pci/pci-driver.c
-> +++ b/drivers/pci/pci-driver.c
+To attend please request an invitation by mailing your favorite topic(s)
+to:
 
-[ ... ]
+	alpss-pc@penguingang.at
 
-> @@ -465,15 +470,14 @@ void pci_probe_flush_workqueue(void)
->   */
->  static int __pci_device_probe(struct pci_driver *drv, struct pci_dev *pc=
-i_dev)
->  {
-> -	const struct pci_device_id *id;
-> +	struct pci_device_id id;
->  	int error =3D 0;
-> =20
->  	if (drv->probe) {
->  		error =3D -ENODEV;
-> =20
-> -		id =3D pci_match_device(drv, pci_dev);
-> -		if (id)
-> -			error =3D pci_call_probe(drv, pci_dev, id);
-> +		if (pci_match_device(drv, pci_dev, &id))
-> +			error =3D pci_call_probe(drv, pci_dev, &id);
+If you are interested in giving a short and crisp talk please send an
+abstract to the same address.  Attendance requests that propose a talk
+will be prioritized.
 
-[Severity: High]
-Does passing a pointer to the stack-allocated id variable here break drivers
-that rely on the pointer belonging to their static id_table?
+We will start sending out invites on August 1st, and plan to publish
+the official schedule in the beginning of September.
 
-Some drivers compute an array index using pointer arithmetic against the
-provided id pointer. For example, in drivers/char/agp/amd-k7-agp.c:
+The Lizumerhuette is an Alpine Society lodge in a high alpine environment.
+A hike of approximately 2 hours is required to the lodge, and no other
+accommodations are available within walking distance.
 
-agp_amdk7_probe() {
-    ...
-    j =3D ent - agp_amdk7_pci_table;
-    dev_info(&pdev->dev, "AMD %s chipset\n",
-             amd_agp_device_ids[j].chipset_name);
-    ...
-}
+Reservations for the lodge are handled as part of the ALPSS registration
+and do NOT use the usual lodge reservation system.  Please let us know if
+your require vegetarian, vegan or gluten free food or have any other
+dietary restriction.
 
-Since the pointer now points to the stack frame in __pci_device_probe()
-rather than the static table, won't this pointer subtraction yield a
-wildly out-of-bounds index and cause a memory read fault during device
-probing?
+Check our website at https://www.alpss.at/ for more details.
 
->  	}
->  	return error;
->  }
+Thank you on behalf of the program committee:
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630-pci_id_fix=
--v2-0-b834a98c0af2@garyguo.net?part=3D7
+    Christoph Hellwig
+    Johannes Thumshirn
+    Richard Weinberger
 
