@@ -1,188 +1,189 @@
-Return-Path: <linux-scsi+bounces-25437-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25438-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id xDr9ORhURWpN+goAu9opvQ
-	(envelope-from <linux-scsi+bounces-25437-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 19:53:28 +0200
+	id e2jUKhtdRWoL/AoAu9opvQ
+	(envelope-from <linux-scsi+bounces-25438-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 20:31:55 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44E1B6F0721
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 19:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 121776F09E1
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 20:31:55 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=bFFb8ThG;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25437-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25437-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=gmail.com;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=Q5phPdva;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=v3LeSbuA;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=Q5phPdva;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=v3LeSbuA;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25438-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25438-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=suse.de;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 53100302BE2F
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2026 17:52:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D3209302630D
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2026 18:31:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 095784BCAD1;
-	Wed,  1 Jul 2026 17:52:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94D933ADB2;
+	Wed,  1 Jul 2026 18:31:53 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A6B837DAAD
-	for <linux-scsi@vger.kernel.org>; Wed,  1 Jul 2026 17:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37099330D35
+	for <linux-scsi@vger.kernel.org>; Wed,  1 Jul 2026 18:31:51 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782928341; cv=none; b=tILsCMMdmeS3OOwc2wNYCcMd1N1DIQrspcr9ESvSk77LG38wO/6RXjrbGRdknLk0XIvqKsL3WePOLhHSRIBaUfRgceb0dOIkmE9nvHoI53agkGeS2vPdYImJuEuPAFrx/4OXvevTOsf6my7UCfnnGvbHfJMj1Qf0pxMgXGY3Kq0=
+	t=1782930713; cv=none; b=leFq9B46R+W821QgEmw7pw5VPtNQTfqiHWr+BrvGaxx4hkbfjyU5FWBRuw/2bp3K344OOIKnUiQUnIBIrVwbWhXJbNxMdONwIN2dvgXe59fkPBwZ0BU0nCJ8DwR8mCDkBwkIZZpn7NNqyDnft8j0sHsVau0QkvSO8V5fSYfQ2cI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782928341; c=relaxed/simple;
-	bh=7kOXFPaAdPhx1Hpa4JOCw3FAkmd6IMhexw2XDa6LJu8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f86yXhMrunahtpZ6xcqciZ4g2tKez74bqkquT6dBAi8i/7v2i8+OIvPAtUT7VGwP628lO9nO6D2xLXSawCHMkDbjuSH1EyThaz/gzYJcxZzCLkI5WkS9TVtUJJz4B6dfo7uWo+WA+QueaHibronNUZskkbwbHM82UhHIi1VHAsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bFFb8ThG; arc=none smtp.client-ip=209.85.215.178
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c96d2bebca3so425065a12.3
-        for <linux-scsi@vger.kernel.org>; Wed, 01 Jul 2026 10:52:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782928339; x=1783533139; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xHvBh2uVHpZT329He2kyX45xyPSNwiWA2SzGOyBHv5I=;
-        b=bFFb8ThG6U78QM6PXggTQJ3pItglWYFgNjMmDbfSBunqF/iaLE+s1vHY0ZhIiGEB/V
-         kRSj/L95dodahgC5oqfe+Yotn7D+Cp1nzRtfkLrhWGF770FH0K1y+bXsGkuugQC2D0pQ
-         DBJPhUWP8uuLPqWQfWZq4GCbUf8JWoPBDg3cVGXHogNbB2UYD1gFaIy/w1UwyEP860Nz
-         RF+JaRaGp+yOADrm40w/d/0OaqCgsYVYBEQMzEteP55eGx7NCw9M4N7cCjNJ4QGOLoQs
-         WGuaEwlXkbbTt69QOe/EYeFnbuCwUtbJpzv/C2BpLbWtQc1vf9Vazae4XrL1ZAfKYAz4
-         hRaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782928339; x=1783533139;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xHvBh2uVHpZT329He2kyX45xyPSNwiWA2SzGOyBHv5I=;
-        b=nWhkFFFCY3prJr5/sp4ZrZlNx1xJMSYFfOe4zZjva4Ra4R0gbzAHTuFwVOZqZ5M4Qi
-         vkcyIyoMOrkDT0KNrwqXhxflN/K+uMxa8UNlUfSaZFJ9hz+UI+vg3CEBNuqd1sCM4Cf/
-         V4ZAmrIyPDk7LWJYV0UZfZE6Tuavf16YAV7D39EUl8txhxSHXcokgfc7TnrefbA+O1YL
-         SL24bedNtVMMkc026Dt2nbabmai88IhOomzij6P6s9+tI3CTWgErD5egageV6Un/cO7Q
-         uJIdUzbNdvgd623nVCn/0A3dGKgHqHDCJMezmWu6CK5TJR5nhrUDHzMo9irYpOQzLCnh
-         OkfQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8Bnd75JM5hyYkIlVLg8kjI+U0clGhEAFQPhVQCK7ZrzPoGrPPHOZhm8WAderoWjBMMFspC8yu0hdp4@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx82O82qYpQyjIfpq4qZq9cBWNYkkVwl2juopzb2pAaAzvwkUI7
-	Ev5qQH23p/CCJQG+DdS3z/u+c82vFXF0HnOP533fD4OII4nv6LKBovjP4oCRxEizcw==
-X-Gm-Gg: AfdE7clDbaN4pOls6obTwDE7zYVgHeOHYPGG5IbFaKeEoGMH/WpLMlx4xzmKebvZy7C
-	RfWEXfnFFLZ8F8WKF04JX6tQ/faZaRfzYacDGAyA836p4kEW53qpAP+c4vP4xF/IhhJ3UBS3nyV
-	YJYfEiM9Cad12IxeMRL75+kJBM5mXpjVjls15+Bali4/trS/q84vTeMmK9m9oOAB8ga6vue1AGv
-	eTj8iI0/Ib9IjbY9/slOO68EVmx47XZb1/435J/W1fYbIbEVC+AuVbhpnbXVG4ke+HU2Z0pZDQT
-	oWbptiNnYzfMQi1vmhc9wyVHdzlwTQxP1H0ltjVdPI/1pvN1qc6QojX0lQp9H0Bo/M0m4ZQ07UO
-	RWyhIZAGLVp9ax424/OPf0LYbK2QnyBkijb0XSW9shV1UWePQP0GZ5vAw4r+z69KmYIoze4Je6o
-	Vzsv8W
-X-Received: by 2002:a05:6a20:938b:b0:3bd:3a53:c147 with SMTP id adf61e73a8af0-3bfed51d83dmr2947873637.45.1782928339527;
-        Wed, 01 Jul 2026 10:52:19 -0700 (PDT)
-Received: from devubuntu.. ([2402:e280:3e9d:20a:ff04:9039:171a:2c52])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30f0bb7fe46sm57058eec.14.2026.07.01.10.52.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2026 10:52:17 -0700 (PDT)
-From: Animesh Rai <animeshrai853@gmail.com>
-To: James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com
-Cc: alim.akhtar@samsung.com,
-	avri.altman@sandisk.com,
-	bvanassche@acm.org,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Animesh Rai <animeshrai853@gmail.com>
-Subject: [PATCH] scsi: ufs: ufshcd: use str_enabled_disabled() for Write Booster messages
-Date: Wed,  1 Jul 2026 23:21:52 +0530
-Message-ID: <20260701175152.7446-1-animeshrai853@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1782930713; c=relaxed/simple;
+	bh=I73QlQZ6etcC/ViEpSvUp6ckys3J8IQRQDqUtgE2hwQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hIQoP0pC9/2X4s+H50EnZEEHO6onCUtOOv7QZmi8z7SW4gBvGTqlkJeV4q9wMYExrR9k79jJlss2qcJktJeAD+jbuABUzUwtfWW03aP3Q4tWU1VphOodIWYELzQYhfYa0B45dH4mJiYPl0XmadjW+Wvac+SMOa4Rk0TID7k4Xw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Q5phPdva; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=v3LeSbuA; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Q5phPdva; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=v3LeSbuA; arc=none smtp.client-ip=195.135.223.131
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 60F0E7598B;
+	Wed,  1 Jul 2026 18:31:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1782930709; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+jvuKD9/ufkG7smd9/XxhKa2emtCEznJyOQ+7FmXR40=;
+	b=Q5phPdvaZ65YgcA+6aJWcH4nVd3EMgfVLxmJJ9zKZudlOHnuw1OeePkN7nZcXRyhJW8AfC
+	omYeFQzLJuc35AgvqciJx2IUii3SaphxNWFbF0oQnRG28MObc/OH5/yzDVgGwwivLBwKtk
+	um6AsPQ1Ksv/LVSIqfD9jcvK61O+N/c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1782930709;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+jvuKD9/ufkG7smd9/XxhKa2emtCEznJyOQ+7FmXR40=;
+	b=v3LeSbuArnIqsmM/iXYO8sdahlnEa8IERUQvcPndtg9qeuhNHSB23OUMM6pmkXVAR9uh76
+	oisNHwe+gZ8elTAQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1782930709; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+jvuKD9/ufkG7smd9/XxhKa2emtCEznJyOQ+7FmXR40=;
+	b=Q5phPdvaZ65YgcA+6aJWcH4nVd3EMgfVLxmJJ9zKZudlOHnuw1OeePkN7nZcXRyhJW8AfC
+	omYeFQzLJuc35AgvqciJx2IUii3SaphxNWFbF0oQnRG28MObc/OH5/yzDVgGwwivLBwKtk
+	um6AsPQ1Ksv/LVSIqfD9jcvK61O+N/c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1782930709;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+jvuKD9/ufkG7smd9/XxhKa2emtCEznJyOQ+7FmXR40=;
+	b=v3LeSbuArnIqsmM/iXYO8sdahlnEa8IERUQvcPndtg9qeuhNHSB23OUMM6pmkXVAR9uh76
+	oisNHwe+gZ8elTAQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 36E93779AD;
+	Wed,  1 Jul 2026 18:31:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id HJHlCxVdRWrmMQAAD6G6ig
+	(envelope-from <ddiss@suse.de>); Wed, 01 Jul 2026 18:31:49 +0000
+Date: Thu, 2 Jul 2026 04:31:26 +1000
+From: David Disseldorp <ddiss@suse.de>
+To: John Garry <john.g.garry@oracle.com>
+Cc: target-devel@vger.kernel.org, linux-scsi@vger.kernel.org, "Martin K.
+ Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH 0/2] scsi: target: fix CHAP_N handling
+Message-ID: <20260702043126.37fe9855.ddiss@suse.de>
+In-Reply-To: <8a1ba462-50ac-45b2-9d38-4a2671f7a1f9@oracle.com>
+References: <20260602115840.26490-1-ddiss@suse.de>
+	<d8126fb0-85ac-4b1f-b6e0-b4e206ec90c3@oracle.com>
+	<20260603091924.0892d415.ddiss@suse.de>
+	<8a1ba462-50ac-45b2-9d38-4a2671f7a1f9@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Spam-Score: -3.51
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25437-lists,linux-scsi=lfdr.de];
-	FREEMAIL_CC(0.00)[samsung.com,sandisk.com,acm.org,vger.kernel.org,gmail.com];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER(0.00)[animeshrai853@gmail.com,linux-scsi@vger.kernel.org];
-	FORWARDED(0.00)[lists@lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:alim.akhtar@samsung.com,m:avri.altman@sandisk.com,m:bvanassche@acm.org,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:animeshrai853@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25438-lists,linux-scsi=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER(0.00)[ddiss@suse.de,linux-scsi@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:john.g.garry@oracle.com,m:target-devel@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:martin.petersen@oracle.com,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[animeshrai853@gmail.com,linux-scsi@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FROM_NEQ_ENVFROM(0.00)[ddiss@suse.de,linux-scsi@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
 	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	FROM_HAS_DN(0.00)[]
+	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	REDIRECTOR_URL(0.00)[urldefense.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid,suse.de:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,oracle.com:email,urldefense.com:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 44E1B6F0721
+X-Rspamd-Queue-Id: 121776F09E1
 
-Replace open-coded ternary expressions of the form
-  enable ? "enabled" : "disabled"
-with the str_enabled_disabled() helper from <linux/string_choices.h>.
+Bumping this, as I still think it's worth addressing...
 
-This reduces code duplication and allows the linker to deduplicate the
-constant strings across the kernel image.
+On Wed, 3 Jun 2026 09:24:19 +0100, John Garry wrote:
 
-Signed-off-by: Animesh Rai <animeshrai853@gmail.com>
----
- drivers/ufs/core/ufshcd.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+> On 03/06/2026 00:19, David Disseldorp wrote:
+> > On Tue, 2 Jun 2026 17:42:57 +0100, John Garry wrote:
+> >   
+> >> On 02/06/2026 12:43, David Disseldorp wrote:  
+> >>> The sashiko bot pointed out issues with CHAP_N handling recently, when
+> >>> reviewing a patch for a separate issue:
+> >>> https://urldefense.com/v3/__https://sashiko.dev/*/patchset/20260521151121.808477-1-hossu.alexandru*40gmail.com__;IyU!!ACWV5N9M2RV99hQ!MNesZJ3IsH9Mv0iZxHUcVmbC_3uwDkJgMhAX8i1TelyqqZD_dAq1cwIy6RtYI8D3boJh5iFeGhtTvfTX$
+> >>>     Since extract_param() unconditionally strips '0x' or '0b' prefixes and
+> >>>     alters the returned type, wouldn't a valid user with a name like '0xalice' or
+> >>>     '0bob' have their username mutated to 'alice' or 'ob'?  
+> >>
+> >> is there a real world case or vulnerability being fixed here?  
+> > 
+> > No vulnerability -  the "real world case" is as above: CHAP
+> > authentication currently fails if the CHAP username begins with 0x, 0b
+> > or the upper case variants. The bug is trivial to reproduce.
+> >   
+> Understood.
+> 
+> To me, this is a fix for a problem which does not exist. And even if the 
+> spec says it's possible, it does not mean that we need to support it. If 
+> 0x prefix is part of the username, I think that problems should be expected.
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index d3044a3089b5..e9cbed514a5c 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -26,6 +26,7 @@
- #include <linux/sched/clock.h>
- #include <linux/sizes.h>
- #include <linux/iopoll.h>
-+#include <linux/string_choices.h>
- #include <scsi/scsi_cmnd.h>
- #include <scsi/scsi_dbg.h>
- #include <scsi/scsi_driver.h>
-@@ -6339,7 +6340,7 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
- 
- 	hba->dev_info.wb_enabled = enable;
- 	dev_dbg(hba->dev, "%s: Write Booster %s\n",
--			__func__, enable ? "enabled" : "disabled");
-+			__func__, str_enabled_disabled(enable));
- 
- 	return ret;
- }
-@@ -6357,7 +6358,7 @@ static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
- 		return;
- 	}
- 	dev_dbg(hba->dev, "%s: WB-Buf Flush during H8 %s\n",
--			__func__, enable ? "enabled" : "disabled");
-+			__func__, str_enabled_disabled(enable));
- }
- 
- int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable)
-@@ -6377,7 +6378,7 @@ int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable)
- 
- 	hba->dev_info.wb_buf_flush_enabled = enable;
- 	dev_dbg(hba->dev, "%s: WB-Buf Flush %s\n",
--			__func__, enable ? "enabled" : "disabled");
-+			__func__, str_enabled_disabled(enable));
- 
- 	return ret;
- }
--- 
-2.43.0
+IMO it's a real problem, e.g.: 'I changed my username from "bob" to
+"0bob" and now I can't access my data.'
 
+> Anyway, the code itself looks ok, so:
+> 
+> Reviewed-by: John Garry <john.g.garry@oracle.com>
+> 
+> But the maintainer can make the judgement to take this obviously.
+
+Thanks for the review.
 
