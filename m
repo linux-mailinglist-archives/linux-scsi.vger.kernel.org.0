@@ -1,203 +1,138 @@
-Return-Path: <linux-scsi+bounces-25428-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25424-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id eiVcEHgcRWq77AoAu9opvQ
-	(envelope-from <linux-scsi+bounces-25428-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 15:56:08 +0200
+	id nuC8IeMbRWqa7AoAu9opvQ
+	(envelope-from <linux-scsi+bounces-25424-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 15:53:39 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5760E6EE6A9
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 15:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EBD416EE643
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 15:53:38 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=Yi8ihczg;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25428-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25428-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=redhat.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=nWWc9DcK;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25424-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25424-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C22EF30D6EA0
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2026 13:51:21 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C3FC83098ABF
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2026 13:50:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4F1A2C21DD;
-	Wed,  1 Jul 2026 13:51:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 101D927380A;
+	Wed,  1 Jul 2026 13:50:47 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861082798EA
-	for <linux-scsi@vger.kernel.org>; Wed,  1 Jul 2026 13:51:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0A5284662;
+	Wed,  1 Jul 2026 13:50:45 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782913864; cv=none; b=ZJHn7eUXSwltVVYKhY3YSdE5rY2MCrdqNsw4HvCeaUqyWNUnJQtancZDVGkkYiR7XUn+7uQGSzH30Rub8MGmlFO3Jd6cRdyNL+BPkml2yZY/D3qT05Aj/cPBQjEjmZe2W4Lb47igNaJLlvn+GYpZprifrnwb19E7186FEYI6SSs=
+	t=1782913847; cv=none; b=hzijQMk6u1PP9942463MMyKRLYSBrYl6Rm9q1xAV/DjlbHN8FeKWNmNJcsSqIOXbXC3PnGYu92aAnnvZywZqFw7/tFIysgRwJAHEgpsyWKKNnynCqFBe0HEowPNWbj2DR1rX+hPQ8IN/KkUTWBAC9a9E1jXGg8Zz3WOk1GvFw9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782913864; c=relaxed/simple;
-	bh=csykStPKL2vxh5U9zFjBn7rXw/Awp9+Rlx3O/TPqDCw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bKZJFxd8wVIuW+2l8lMr0AY6mZRshjZFtrdoc4BBEES3JYaLGKDSJES084XgPLqIve0B6Pa7kPKWngedPvwOYmNFMDAbfledzNihrOubaO84ViVgp3qPDJ3GviJjcoYmUgmBZMZVCJThuRZkxCkRnrjnSl5X2Mx9IzjzWhG0I24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yi8ihczg; arc=none smtp.client-ip=170.10.129.124
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782913862;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qMS+SWEyDEjE+jxgzivY9c5ZtMduep7fGow2UpH8XlU=;
-	b=Yi8ihczgqA9vUZmrvUN5q7lLn6QFWhqcyGJFDC7+k6m/rK3DC9UPJctRqF+MlKTMUnK3RJ
-	7FKm1Wt37TKexGBpAhUmWASLcf2VXtbSwtIKN9/NLNRnamLbiZncH05O1VhI+F5lmqO9gq
-	CBIC1bhp8es/8IVuuiVQnYUjlV90sVY=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-613-OHBdTk1TMbyV3VxhD3iYmQ-1; Wed,
- 01 Jul 2026 09:50:58 -0400
-X-MC-Unique: OHBdTk1TMbyV3VxhD3iYmQ-1
-X-Mimecast-MFC-AGG-ID: OHBdTk1TMbyV3VxhD3iYmQ_1782913855
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D0F82184B0AF;
-	Wed,  1 Jul 2026 13:50:54 +0000 (UTC)
-Received: from djeffery-thinkpadp1gen3.rmtusga.csb (unknown [10.22.81.69])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C07F918007D2;
-	Wed,  1 Jul 2026 13:50:50 +0000 (UTC)
-From: David Jeffery <djeffery@redhat.com>
-To: driver-core@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	Tarun Sahu <tarunsahu@google.com>,
-	Pasha Tatashin <tatashin@google.com>,
-	=?UTF-8?q?Micha=C5=82=20C=C5=82api=C5=84ski?= <mclapinski@google.com>,
-	Jordan Richards <jordanrichards@google.com>,
-	Ewan Milne <emilne@redhat.com>,
-	John Meneghini <jmeneghi@redhat.com>,
-	"Lombardi, Maurizio" <mlombard@redhat.com>,
-	Stuart Hayes <stuart.w.hayes@gmail.com>,
-	Laurence Oberman <loberman@redhat.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	John Garry <john.g.garry@oracle.com>,
-	kexec@lists.infradead.org,
-	David Jeffery <djeffery@redhat.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>
-Subject: [PATCH 5/5] scsi: Enable async shutdown support
-Date: Wed,  1 Jul 2026 09:50:15 -0400
-Message-ID: <20260701135015.81937-6-djeffery@redhat.com>
-In-Reply-To: <20260701135015.81937-1-djeffery@redhat.com>
-References: <20260701135015.81937-1-djeffery@redhat.com>
+	s=arc-20240116; t=1782913847; c=relaxed/simple;
+	bh=TlqeOZh9bWT6AIgGajdGMaW5iesYgy8BaTb2Gi9XdvY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DuD+SZ8FmLiUzlz9tTJWQ4CJd12yTiFaOIPlSLVGSJRN06IbuZsI0nDStHQb/PiyGM0kpl+s/Y+qMPccjyA7+92XCcnUJL3c6d1WDHWNBoEI8iZ7JWMFeFrf2dK3eW96P87yE/42PDHOBTbWElqZRcivNnG5bSheavMyv8Ms32U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nWWc9DcK; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E291F000E9;
+	Wed,  1 Jul 2026 13:50:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782913845;
+	bh=ie8R7oVh0jgJpbjerp22bW6nCIKQRE3693vV7WPgBXA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=nWWc9DcKOfk9brqgIj8O56He2iH5VsBU3XE+1yCaLLVN+LUcuTKToV/2wwChCwT6S
+	 NlxpFP7sq9JeVsc51fuD5bejBNcUsvdPbU481DWQZtb46PqEVF9yAeRTsLBp8rpBHQ
+	 yaWaqdLYGOQ0JAh+5D9PFOvpuNFEPwDMelKnt00yu61YbFuhKyazGbcPsPrFwiPp2x
+	 2HyADEiPSDGo4fppXAQRFo8JA/ZI7p/0NFBNIJwFTk21S0USj2Dx3X06T6eEvvmY4e
+	 TucbpRuXzf2K/OSioOp/8nmSPxsojrfbx900L1GLuBEcMfNLwIdlXV3HG+f5RpWJjg
+	 Mxl+PGg+RUZHw==
+Date: Wed, 1 Jul 2026 16:50:40 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: John Garry <john.g.garry@oracle.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
+	Brian King <brking@us.ibm.com>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org
+Subject: Re: [PATCH 2/4] scsi: proc: use kmalloc() in proc writers
+Message-ID: <akUbMCOyt2NHNWCM@kernel.org>
+References: <20260630-b4-scsi-v1-0-494fb37ebe7b@kernel.org>
+ <20260630-b4-scsi-v1-2-494fb37ebe7b@kernel.org>
+ <9d23ada8-8b43-4ab8-beeb-b51c99ea0eba@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9d23ada8-8b43-4ab8-beeb-b51c99ea0eba@oracle.com>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-5.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25428-lists,linux-scsi=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[23];
-	FREEMAIL_CC(0.00)[vger.kernel.org,google.com,redhat.com,gmail.com,acm.org,kernel.org,oracle.com,lists.infradead.org,soleen.com];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25424-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:john.g.garry@oracle.com,m:martin.petersen@oracle.com,m:brking@us.ibm.com,m:James.Bottomley@hansenpartnership.com,m:willy@infradead.org,m:linux-kernel@vger.kernel.org,m:linux-mm@kvack.org,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,s:lists@lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER(0.00)[rppt@kernel.org,linux-scsi@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:driver-core@lists.linux.dev,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dakr@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-pci@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:tarunsahu@google.com,m:tatashin@google.com,m:mclapinski@google.com,m:jordanrichards@google.com,m:emilne@redhat.com,m:jmeneghi@redhat.com,m:mlombard@redhat.com,m:stuart.w.hayes@gmail.com,m:loberman@redhat.com,m:bvanassche@acm.org,m:helgaas@kernel.org,m:martin.petersen@oracle.com,m:john.g.garry@oracle.com,m:kexec@lists.infradead.org,m:djeffery@redhat.com,m:pasha.tatashin@soleen.com,m:stuartwhayes@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[djeffery@redhat.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[djeffery@redhat.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rppt@kernel.org,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,soleen.com:email,vger.kernel.org:from_smtp,oracle.com:email]
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,oracle.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5760E6EE6A9
+X-Rspamd-Queue-Id: EBD416EE643
 
-Like scsi's async suspend support, allow scsi devices to be shut down
-asynchronously to reduce system shutdown time.
+On Wed, Jul 01, 2026 at 11:52:21AM +0100, John Garry wrote:
+> On 30/06/2026 11:54, Mike Rapoport (Microsoft) wrote:
+> >   	if (!buf || length>PAGE_SIZE)
+> >   		return -EINVAL;
+> > -	if (!(buffer = (char *) __get_free_page(GFP_KERNEL)))
+> > +	if (!(buffer = kmalloc(PAGE_SIZE, GFP_KERNEL)))
+> >   		return -ENOMEM;
+> 
+> It would have been nice to use standard coding style checks for allocation
+> failures, i.e.
+> 
+> 	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
+> 	if (!buffer)
+> 		return -ENOMEM;
 
-Signed-off-by: David Jeffery <djeffery@redhat.com>
-Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
-Tested-by: Laurence Oberman <loberman@redhat.com>
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
-Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: John Garry <john.g.garry@oracle.com>
----
- drivers/scsi/hosts.c      | 2 ++
- drivers/scsi/scsi_sysfs.c | 3 +++
- 2 files changed, 5 insertions(+)
+Sure.
+ 
+> >   	if (copy_from_user(buffer, buf
+> 
+> 
+> Regardless of that:
+> 
+> Reviewed-by: John Garry <john.g.garry@oracle.com>
 
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index e047747d4ecf..bf691acc7a67 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -273,6 +273,7 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
- 	pm_runtime_set_active(&shost->shost_gendev);
- 	pm_runtime_enable(&shost->shost_gendev);
- 	device_enable_async_suspend(&shost->shost_gendev);
-+	dev_set_async_shutdown(&shost->shost_gendev);
- 
- 	error = device_add(&shost->shost_gendev);
- 	if (error)
-@@ -282,6 +283,7 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
- 	get_device(shost->shost_gendev.parent);
- 
- 	device_enable_async_suspend(&shost->shost_dev);
-+	dev_set_async_shutdown(&shost->shost_dev);
- 
- 	get_device(&shost->shost_gendev);
- 	error = device_add(&shost->shost_dev);
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index dfc3559e7e04..8fd317aef37b 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -1386,6 +1386,7 @@ static int scsi_target_add(struct scsi_target *starget)
- 	pm_runtime_set_active(&starget->dev);
- 	pm_runtime_enable(&starget->dev);
- 	device_enable_async_suspend(&starget->dev);
-+	dev_set_async_shutdown(&starget->dev);
- 
- 	return 0;
- }
-@@ -1412,6 +1413,7 @@ int scsi_sysfs_add_sdev(struct scsi_device *sdev)
- 	transport_configure_device(&starget->dev);
- 
- 	device_enable_async_suspend(&sdev->sdev_gendev);
-+	dev_set_async_shutdown(&sdev->sdev_gendev);
- 	scsi_autopm_get_target(starget);
- 	pm_runtime_set_active(&sdev->sdev_gendev);
- 	if (!sdev->rpm_autosuspend)
-@@ -1431,6 +1433,7 @@ int scsi_sysfs_add_sdev(struct scsi_device *sdev)
- 	}
- 
- 	device_enable_async_suspend(&sdev->sdev_dev);
-+	dev_set_async_shutdown(&sdev->sdev_dev);
- 	error = device_add(&sdev->sdev_dev);
- 	if (error) {
- 		sdev_printk(KERN_INFO, sdev,
+Thanks!
+
 -- 
-2.54.0
-
+Sincerely yours,
+Mike.
 
