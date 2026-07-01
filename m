@@ -1,142 +1,228 @@
-Return-Path: <linux-scsi+bounces-25388-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25390-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id xAEkAHRLRGqysAoAu9opvQ
-	(envelope-from <linux-scsi+bounces-25388-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 01:04:20 +0200
+	id RbZSK0SSRGpaxAoAu9opvQ
+	(envelope-from <linux-scsi+bounces-25390-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 06:06:28 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C0AC6E8918
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 01:04:19 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4DF16E99E9
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 06:06:27 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=WtpuTHuH;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25388-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25388-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=chromium.org header.s=google header.b=LJqpIWCx;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25390-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25390-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=chromium.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 666153031AF3
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2026 22:59:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4B8BA30E9DE0
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2026 04:04:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA90532AAA7;
-	Tue, 30 Jun 2026 22:59:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECB55374E5A;
+	Wed,  1 Jul 2026 04:04:00 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15C4331ECF;
-	Tue, 30 Jun 2026 22:59:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4649638D40C
+	for <linux-scsi@vger.kernel.org>; Wed,  1 Jul 2026 04:03:54 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782860347; cv=none; b=avapqDruAqAn2gXhRG+zzbyxetIrW6KYAMYq3uTrJ2xmqMbXVg3+jLIqXVMWmedjttscVetSDT4RmH5QWT0C7aa8HhMHszJgQ0JJlImdfBsjlXeXqf24t10H+7ovKViIONn3yuSzpcCpYuL7A5pvKXZHnEElv+913mwhtnXrIzQ=
+	t=1782878640; cv=none; b=YN8XpOfX/x9NVhE8kcY21o6N4WY5tfeDGHts2l7qu/hx7U6+4PhCnrwpWxt6YRwnnZxy3NxRnjeUZGUJ6cmgU8oUgjtNYBlelffDecd9nN2L23Wk/8JBw6PxU95lit6nmt4hJSdvsF8sE5WArvGej55gc5qPQNSSDcgI6UzerQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782860347; c=relaxed/simple;
-	bh=RamHX0E8wtNsTHcEO/bUX4s5m2cuQqWXNUOO5Jx+0m4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gv4LV8+CxYhTHANL8IivxEfTtVblAQzLOvrogpBHg1TCzXoEC8gHswiyiYPlTyi/s2QHUZGlvUzgkd0MaH0r0cRDFLzGnvxGmbaEuEx3mOepkZ85JAyd2usBes+XzMP3a5dEnVIEj3GNS1atPP+tbRQn7qqPMWekrMpoSh7x6IU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WtpuTHuH; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 715A51F000E9;
-	Tue, 30 Jun 2026 22:59:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782860346;
-	bh=T6wnLUkshLOnOFu8Td4Y9f1tyliE5SHa8xUgdAu8ppc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WtpuTHuHk3NR89ILhf3Q/PnSdaILQHb9cQ4OlgJgMVfGLzfS+Vt/rvGDDuzbHCZ9b
-	 H8c+TpyRGS0SG/6jA1US07kywtIJAhflV+J+8yRR5NR5gWqQwD6Z/cdcK1zwHa0xAw
-	 pbXPbqC3zoYr+oWrZH/oqrnSkluZxFQvxW9zyIgy9PUNcfP4YfnDGT/zsIIxoP7i7b
-	 RjMONGPNtk/4RZ64nqlDv3PkFl30mdTFRfmSgt6ShP9YUgctNSxQbYe3W4WjVvfzd+
-	 CQdyg03rbziNAomSfMYR6NXVdFUqXvehpSxpirf0D7pARPHeyD3nou6+TK29ODaLME
-	 esU763llW75xQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 2/2] scsi: mpt3sas: add hwmon support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Louis Sautier" <sautier.louis@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-scsi@vger.kernel.org
-In-Reply-To: <20260630224922.2543096-3-sautier.louis@gmail.com>
-References: <20260630224922.2543096-1-sautier.louis@gmail.com>
- <20260630224922.2543096-3-sautier.louis@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 30 Jun 2026 22:59:03 +0000
-Message-Id: <20260630225904.715A51F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1782878640; c=relaxed/simple;
+	bh=p5NgUKZ2hv+769HgwMAjnNfNVsr0gFeP4zwmzFI1fxE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QN/MIAJRtPdu3xoVGBNVFhrYsslqE8B/qZgo+dT87Il5ILZWSk5kUMjwrwIFJbjzjjuBu66vmQK2wSf8yTTdwwjVkFYhw+zv0+05Uap1gCvZ1FUmyxSsjbsxdHDRxYAYrkCLHb9kmNDARMoj5G3hJwhayo8IE5s3qud02fwEbCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LJqpIWCx; arc=none smtp.client-ip=209.85.214.171
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2c9dbd00f1dso1115705ad.3
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Jun 2026 21:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1782878633; x=1783483433; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=b+K/6nqTz+KsszBu+0AY+5reuM2Ql/csxHaZ7h5OS08=;
+        b=LJqpIWCxzoAYKbblN5NG6MiaME1e5FBkthIfNxI4HsVuK4CC9SM23OWHkAYYA2ZZQ2
+         kYHW/v8Ok54JfH5HdJsH4i8ci0gkFPNRhPUIPNrMPZGeGo7iKsBKubTgAmYcH8ZmNZUi
+         peVy3uKaX0/smSqmTBDEFyVYlkSn/OJIr2A3Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782878633; x=1783483433;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b+K/6nqTz+KsszBu+0AY+5reuM2Ql/csxHaZ7h5OS08=;
+        b=bYifdD58wnV2EBQ4aHmq0EjcJ2UH1YoEX+Pde/NKxH/6cd5T0V4T9qOlWzqJ71Do7O
+         4YzvFCg+KhAVxN653JouqUvRfLbehSAj3MJro8B2pzejY03URPJqMrmGfnH0pA+vkfXD
+         N+FyIdJfXvHZv72n+DSV8mMRCGW8JO3OZ+61Oht7ae247Pix3nVJuxJ1VgQGyGV0hlFq
+         NEL+h3C1YroAsY+Tqre1sDKHeb0PRJeklAk5gsID+lPhLRwhKr0ss4PLoAN6EC0cL725
+         N8agz8/LTXGC2HPkUFzNHOXjCPd4aTG743IsVi/NJwkDlSGKhp8BHNo37W9/8Bw18Xnc
+         ESMA==
+X-Forwarded-Encrypted: i=1; AHgh+RqpQHCZGqz79yWiyFCBW9xdJ3t6Jtn2E28RxHYy2sn065arwzpxDv2poFPbAg0vi3I9UAiLzkENWSgD@vger.kernel.org
+X-Gm-Message-State: AOJu0YyP1tAreF5Yl64dSThbp2M2ZOdcvW9zX3UqnQmPdbpFkpBtZjfh
+	nTwuk9JVEVfKpkpRkkHM9oITsDS1DZzuiwfZHxoFwEMtqQ4ANCED9oMeV/Smv6X7zA==
+X-Gm-Gg: AfdE7clAXhqMGQnkQg10W0ef5YS42WZ7GDtMFBrbnfGRnxjSfXAplr8kcNOerhIyYYd
+	Iw3lKkMOvUhvssYVd8hdrVkq3RB54IG/3jojxTVEq+Wg9aP56FLIqY0ynkpwByQ8b5rvYE1Up+S
+	omOZZs9yx2iUBM8fH1sRTCfQprbMCd+IH3TdwTN4CFOSDoicY5v1KHLtfH5vd1/OcsB9JhxJEX1
+	rJvgCehLc/VZ3DVLIagWSnJb5bVZxuDRFF4l+l+7vC9vHZgdxR8w2Q8Ye/J30olWQ2MQHRuvMj8
+	zy+ZhbGTB4DuRj0ymv0iMj+nPF7tw/3tSG1Hr8EoHzccJ4f6QY2vQd96cXqL34D31gcPefPZEa3
+	Qwjn7m+aX1INhE0+EU4ybejSRKCtlX6Ddk38dBkXcVcQgdbnLocSTk7NJYxJ8oIpumSU7xWVvU5
+	QDzDdvNMwqD48aSjdk1aDRS7TFZpM2ike4yCvEb1XByFtjkNmwYr0Cmx4f/rNb3L64wM9/eb7W2
+	1A=
+X-Received: by 2002:a17:903:291:b0:2c1:f262:4962 with SMTP id d9443c01a7336-2ca7e6da0c0mr963905ad.20.1782878632576;
+        Tue, 30 Jun 2026 21:03:52 -0700 (PDT)
+Received: from tigerii.tok.corp.google.com ([2a00:79e0:2031:6:1379:da2f:9be6:bff2])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca382bb30dsm23927835ad.68.2026.06.30.21.03.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2026 21:03:52 -0700 (PDT)
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Oliver Neukum <oneukum@suse.com>,
+	Alan Stern <stern@rowland.harvard.edu>
+Cc: linux-usb@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org,
+	Tomasz Figa <tfiga@chromium.org>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [RFC PATCH] usb: storage: uas: limit consecutive device resets in error handling
+Date: Wed,  1 Jul 2026 13:03:21 +0900
+Message-ID: <20260701040335.810297-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.55.0.795.g602f6c329a-goog
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25388-lists,linux-scsi=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:sautier.louis@gmail.com,m:linux-hwmon@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:sautierlouis@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_NO_DN(0.00)[];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_THREE(0.00)[3];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25390-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:oneukum@suse.com,m:stern@rowland.harvard.edu,m:linux-usb@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:usb-storage@lists.one-eyed-alien.net,m:linux-kernel@vger.kernel.org,m:tfiga@chromium.org,m:senozhatsky@chromium.org,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[senozhatsky@chromium.org,linux-scsi@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[senozhatsky@chromium.org,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	ALIAS_RESOLVED(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[chromium.org:+];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,smtp.kernel.org:mid,lists.linux.dev:replyto,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3C0AC6E8918
+X-Rspamd-Queue-Id: D4DF16E99E9
 
-> Expose the IOC and board temperature sensors of LSI / Broadcom SAS
-> HBAs through hwmon. Readings come from MPI IO Unit Page 7 via the
-> accessor added in the preceding patch.
->=20
-> The same fields are exposed by Broadcom's userspace tooling
-> through the /dev/mpt[23]ctl ioctl path (typically root-only):
-> IOCTemperature and BoardTemperature in lsiutil; ROC and Controller
-> in storcli. With this driver, sensors(1) shows them unprivileged:
->=20
->   $ sensors mpt3sas-pci-0200
->   mpt3sas-pci-0200
->   Adapter: PCI adapter
->   IOC:          +42.0=C2=B0C
->=20
-> Each channel is gated independently by its *TemperatureUnits field
-> through is_visible(); cards that populate only one sensor expose
-> only one input file, and cards that populate neither do not register
-> an hwmon device.
->=20
-> The hwmon code is gated directly on CONFIG_HWMON. IS_REACHABLE() is
-> used rather than IS_ENABLED() so that SCSI_MPT3SAS=3Dy with HWMON=3Dm
-> still builds; in that configuration, the sensors are not exposed
-> (same pattern as i915 and xe).
->=20
-> Assisted-by: Claude:claude-opus-4-7
-> Signed-off-by: Louis Sautier <sautier.louis@gmail.com>
+When a UAS storage device experiences persistent wire or hardware IO
+failures, commands time out and the SCSI error handler thread invokes
+uas_eh_device_reset_handler().  If usb_reset_device() succeeds at the
+USB hub level but the underlying drive remains unresponsive, the reset
+handler returns SUCCESS. SCSI EH then requeues pending commands with
+DID_RESET (ACTION_RETRY), causing them to time out again 30 seconds
+later in an infinite loop.  This blocks block layer queues indefinitely:
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+[..]
+ sd 0:0:0:0: [sda] tag#4 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD
+ sd 0:0:0:0: [sda] tag#4 CDB: Write(10) 2a 00 00 d3 98 08 00 04 00 00
+ sd 0:0:0:0: [sda] tag#0 uas_eh_abort_handler 0 uas-tag 2 inflight: CMD OUT
+ sd 0:0:0:0: [sda] tag#0 CDB: Write(10) 2a 00 00 d3 9c 08 00 04 00 00
+ scsi host0: uas_eh_device_reset_handler start
+ usb 2-1.3: reset SuperSpeed Plus Gen 2x1 USB device number 4 using xhci_hcd
+ scsi host0: uas_eh_device_reset_handler success
+ sd 0:0:0:0: [sda] tag#3 uas_eh_abort_handler 0 uas-tag 3 inflight: CMD IN
+ sd 0:0:0:0: [sda] tag#3 CDB: Read(10) 28 00 00 00 00 00 00 00 20 00
+ scsi host0: uas_eh_device_reset_handler start
+ sd 0:0:0:0: [sda] tag#1 uas_zap_pending 0 uas-tag 1 inflight: CMD
+ sd 0:0:0:0: [sda] tag#1 CDB: Write(10) 2a 00 00 d3 98 08 00 04 00 00
+ sd 0:0:0:0: [sda] tag#2 uas_zap_pending 0 uas-tag 2 inflight: CMD
+ sd 0:0:0:0: [sda] tag#2 CDB: Write(10) 2a 00 00 d3 9c 08 00 04 00 00
+ usb 2-1.3: reset SuperSpeed Plus Gen 2x1 USB device number 4 using xhci_hcd
+ scsi host0: uas_eh_device_reset_handler success
+[..]
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630224922.2543=
-096-1-sautier.louis@gmail.com?part=3D2
+Introduce a runtime-configurable module parameter 'reset_limit' (default
+3) and track consecutive resets in devinfo->reset_cnt.  When a productive
+block layer command completes successfully (SUBMITTED_BY_BLOCK_LAYER),
+reset the counter to zero.  If consecutive resets exceed reset_limit,
+abort the loop by completing pending commands with DID_NO_CONNECT and
+returning FAILED.  This allows SCSI EH to offline the unresponsive
+device.
+
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ drivers/usb/storage/uas.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index 265162981269..a63c66c8bbad 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -32,6 +32,10 @@
+ 
+ #define MAX_CMNDS 256
+ 
++static int uas_reset_limit = 3;
++module_param_named(reset_limit, uas_reset_limit, int, 0644);
++MODULE_PARM_DESC(reset_limit, "Maximum number of consecutive device resets during error handling before failing");
++
+ struct uas_dev_info {
+ 	struct usb_interface *intf;
+ 	struct usb_device *udev;
+@@ -40,6 +44,7 @@ struct uas_dev_info {
+ 	struct usb_anchor data_urbs;
+ 	u64 flags;
+ 	int qdepth, resetting;
++	int reset_cnt;
+ 	unsigned cmd_pipe, status_pipe, data_in_pipe, data_out_pipe;
+ 	unsigned use_streams:1;
+ 	unsigned shutdown:1;
+@@ -255,6 +260,8 @@ static int uas_try_complete(struct scsi_cmnd *cmnd, const char *caller)
+ 		return -EBUSY;
+ 	devinfo->cmnd[cmdinfo->uas_tag - 1] = NULL;
+ 	uas_free_unsubmitted_urbs(cmnd);
++	if (cmnd->result == 0 && cmnd->submitter == SUBMITTED_BY_BLOCK_LAYER)
++		devinfo->reset_cnt = 0;
+ 	scsi_done(cmnd);
+ 	return 0;
+ }
+@@ -796,6 +803,21 @@ static int uas_eh_host_reset_handler(struct scsi_cmnd *cmnd)
+ 	usb_kill_anchored_urbs(&devinfo->cmd_urbs);
+ 	usb_kill_anchored_urbs(&devinfo->sense_urbs);
+ 	usb_kill_anchored_urbs(&devinfo->data_urbs);
++
++	spin_lock_irqsave(&devinfo->lock, flags);
++	if (uas_reset_limit > 0 && devinfo->reset_cnt >= uas_reset_limit) {
++		devinfo->resetting = 0;
++		spin_unlock_irqrestore(&devinfo->lock, flags);
++		uas_zap_pending(devinfo, DID_NO_CONNECT);
++		usb_unlock_device(udev);
++		shost_printk(KERN_ERR, sdev->host,
++			     "%s FAILED reset limit %d exceeded\n",
++			     __func__, uas_reset_limit);
++		return FAILED;
++	}
++	devinfo->reset_cnt++;
++	spin_unlock_irqrestore(&devinfo->lock, flags);
++
+ 	uas_zap_pending(devinfo, DID_RESET);
+ 
+ 	err = usb_reset_device(udev);
+-- 
+2.55.0.795.g602f6c329a-goog
 
 
