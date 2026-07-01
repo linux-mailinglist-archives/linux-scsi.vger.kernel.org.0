@@ -1,141 +1,166 @@
-Return-Path: <linux-scsi+bounces-25393-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25394-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id YrA1KHanRGrvyQoAu9opvQ
-	(envelope-from <linux-scsi+bounces-25393-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 07:36:54 +0200
+	id O8JAIc+nRGoRygoAu9opvQ
+	(envelope-from <linux-scsi+bounces-25394-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 07:38:23 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3DB66E9DC9
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 07:36:53 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF0866E9E10
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 07:38:22 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25393-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25393-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=linuxfoundation.org header.s=korg header.b=mOKhgblf;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25394-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25394-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=linuxfoundation.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 23F1330078E0
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2026 05:36:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A340F300C020
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2026 05:38:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9913E36B04E;
-	Wed,  1 Jul 2026 05:36:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C08A4379C21;
+	Wed,  1 Jul 2026 05:38:12 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B97367B6C;
-	Wed,  1 Jul 2026 05:36:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 894BE3769F5;
+	Wed,  1 Jul 2026 05:38:11 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782884196; cv=none; b=aznkJ7OSCT7B9UC6i0C0rSgjp3E2kB7uWuOR+BDvn9mqg74fgXnI8WehyEihcZrKWk6tArr4+nKSKlbm20/SOcMkZ2ikLB4la4Yo9zhg5h2lmP/K/hGcBi025NOi+M0twYaeMZxAAcq3eACYq5zd4XilDQw2UviMjx91xYyDAFA=
+	t=1782884292; cv=none; b=HiaOYWWQqW2HTBrkbyTbd1Z/Ko39F+KEQcOftkTrNOCLMl+nq+6ayubvD1gG/V83K5eA3CONgrx6Rz/2MHxO5gWiorlX9tPgvV1V6CvMxKeUA1IwokrEwzz5Vyhtjbo3xQ9WFfweZO2BqJ7rJTzT+BoMhcdUN2bQH0bLZ7LGymM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782884196; c=relaxed/simple;
-	bh=O8KZ/89uBb4t5wM6zxP1pL8sEHjrzoPb28RohCb36Us=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=osuALYg8zjL50qBLAwHfSgpsZYcSJNnyOfTQCilh1Zrg2t3eXJZgFHGg0Y3bqSyTjT2ZKu3jyCXxY3V228KD2iMvQVXxVirJ7VTdcdELsuYJ64FgKh07m+RSr5LfAe/w47+4ui6j+fDQ6o6YKReLd+mtUyxhFyh3ZuhhPFLUdF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Received: from localhost.localdomain (unknown [111.196.245.140])
-	by APP-03 (Coremail) with SMTP id rQCowABngNdbp0Rqjc+HFg--.52043S2;
-	Wed, 01 Jul 2026 13:36:28 +0800 (CST)
-From: Pengpeng Hou <pengpeng@iscas.ac.cn>
-To: Don Brace <don.brace@microchip.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Pengpeng Hou <pengpeng@iscas.ac.cn>,
-	storagedev@microchip.com,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: hpsa: clamp physical LUN count in fallback report
-Date: Wed,  1 Jul 2026 13:36:26 +0800
-Message-ID: <20260701053626.44118-1-pengpeng@iscas.ac.cn>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1782884292; c=relaxed/simple;
+	bh=t/54wodLlY7zP0o7pRRAS+rsThTFYzQVaWiOWvz5/pU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bLdXY/+nQtOCTlDkD6J2Sh9K9J05s9SMuiggH446010OY9weGAoRqQ4x5IogFdCwcIAnPj4nC8EU9cOkxUcOwy2o7/vre2I9poB+OR/Lg/Xn2mgMhQh1uAr/oLu5JyrXIveYFtLIGSyIND7Izoz4q9KEGuMgXJP2hh8w+8IPdos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=mOKhgblf; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE7F31F000E9;
+	Wed,  1 Jul 2026 05:38:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1782884291;
+	bh=mLb29AuIKiC5pol896XGHQcGodvYsdE59KxrfLut2YM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=mOKhgblfAfgEs+8A2xJmTi8sat/eIyerDVnlgVxBqv7C54ykqzp5zo+QB9CrTFOQj
+	 dYu7jHqM9Wvikr9W0V1Up+BRV2xRBdJuKWIdgkVdZGSxFeLTEpAJJJbYvQYGKrRpYO
+	 GVo74+JnTUfIU7PxQfAdBLUod8usNb5f98eh5hYI=
+Date: Wed, 1 Jul 2026 07:38:07 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Oliver Neukum <oneukum@suse.com>,
+	Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+	linux-scsi@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>
+Subject: Re: [RFC PATCH] usb: storage: uas: limit consecutive device resets
+ in error handling
+Message-ID: <2026070157-stench-shabby-2519@gregkh>
+References: <20260701040335.810297-1-senozhatsky@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowABngNdbp0Rqjc+HFg--.52043S2
-X-Coremail-Antispam: 1UD129KBjvJXoWrZrWfJr4fAr4rWw15Wr15urg_yoW8JF1fpF
-	Z5Ga42yF92yryfKrsrW3yv934Yqa4rJryUGa1Uu345uas8GryxWFWUWry0qFyrCrsYg3yD
-	tF1kta4xWFW5WFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AKxVWU
-	AVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQo7NUUU
-	UU=
-X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260701040335.810297-1-senozhatsky@chromium.org>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-25394-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25393-lists,linux-scsi=lfdr.de];
-	DMARC_NA(0.00)[iscas.ac.cn];
-	FORGED_RECIPIENTS(0.00)[m:don.brace@microchip.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:pengpeng@iscas.ac.cn,m:storagedev@microchip.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[pengpeng@iscas.ac.cn,linux-scsi@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER(0.00)[gregkh@linuxfoundation.org,linux-scsi@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:senozhatsky@chromium.org,m:oneukum@suse.com,m:stern@rowland.harvard.edu,m:linux-usb@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:usb-storage@lists.one-eyed-alien.net,m:linux-kernel@vger.kernel.org,m:tfiga@chromium.org,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pengpeng@iscas.ac.cn,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	R_DKIM_NA(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,iscas.ac.cn:email,iscas.ac.cn:mid,iscas.ac.cn:from_mime]
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linuxfoundation.org:dkim,linuxfoundation.org:from_mime,gregkh:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E3DB66E9DC9
+X-Rspamd-Queue-Id: DF0866E9E10
 
-When REPORT PHYS EXTENDED is not supported,
-hpsa_scsi_do_report_phys_luns() falls back to REPORT LUNS and converts
-each 8-byte LUN entry into the extended report buffer. The number of
-entries comes from the device-provided LUNListLength field, but the loop
-did not clamp it to either the source ReportLUNdata array or the
-destination ReportExtendedLUNdata array.
+On Wed, Jul 01, 2026 at 01:03:21PM +0900, Sergey Senozhatsky wrote:
+> When a UAS storage device experiences persistent wire or hardware IO
+> failures, commands time out and the SCSI error handler thread invokes
+> uas_eh_device_reset_handler().  If usb_reset_device() succeeds at the
+> USB hub level but the underlying drive remains unresponsive, the reset
+> handler returns SUCCESS. SCSI EH then requeues pending commands with
+> DID_RESET (ACTION_RETRY), causing them to time out again 30 seconds
+> later in an infinite loop.  This blocks block layer queues indefinitely:
+> 
+> [..]
+>  sd 0:0:0:0: [sda] tag#4 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD
+>  sd 0:0:0:0: [sda] tag#4 CDB: Write(10) 2a 00 00 d3 98 08 00 04 00 00
+>  sd 0:0:0:0: [sda] tag#0 uas_eh_abort_handler 0 uas-tag 2 inflight: CMD OUT
+>  sd 0:0:0:0: [sda] tag#0 CDB: Write(10) 2a 00 00 d3 9c 08 00 04 00 00
+>  scsi host0: uas_eh_device_reset_handler start
+>  usb 2-1.3: reset SuperSpeed Plus Gen 2x1 USB device number 4 using xhci_hcd
+>  scsi host0: uas_eh_device_reset_handler success
+>  sd 0:0:0:0: [sda] tag#3 uas_eh_abort_handler 0 uas-tag 3 inflight: CMD IN
+>  sd 0:0:0:0: [sda] tag#3 CDB: Read(10) 28 00 00 00 00 00 00 00 20 00
+>  scsi host0: uas_eh_device_reset_handler start
+>  sd 0:0:0:0: [sda] tag#1 uas_zap_pending 0 uas-tag 1 inflight: CMD
+>  sd 0:0:0:0: [sda] tag#1 CDB: Write(10) 2a 00 00 d3 98 08 00 04 00 00
+>  sd 0:0:0:0: [sda] tag#2 uas_zap_pending 0 uas-tag 2 inflight: CMD
+>  sd 0:0:0:0: [sda] tag#2 CDB: Write(10) 2a 00 00 d3 9c 08 00 04 00 00
+>  usb 2-1.3: reset SuperSpeed Plus Gen 2x1 USB device number 4 using xhci_hcd
+>  scsi host0: uas_eh_device_reset_handler success
+> [..]
+> 
+> Introduce a runtime-configurable module parameter 'reset_limit' (default
+> 3) and track consecutive resets in devinfo->reset_cnt.  When a productive
+> block layer command completes successfully (SUBMITTED_BY_BLOCK_LAYER),
+> reset the counter to zero.  If consecutive resets exceed reset_limit,
+> abort the loop by completing pending commands with DID_NO_CONNECT and
+> returning FAILED.  This allows SCSI EH to offline the unresponsive
+> device.
+> 
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> ---
+>  drivers/usb/storage/uas.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+> index 265162981269..a63c66c8bbad 100644
+> --- a/drivers/usb/storage/uas.c
+> +++ b/drivers/usb/storage/uas.c
+> @@ -32,6 +32,10 @@
+>  
+>  #define MAX_CMNDS 256
+>  
+> +static int uas_reset_limit = 3;
+> +module_param_named(reset_limit, uas_reset_limit, int, 0644);
+> +MODULE_PARM_DESC(reset_limit, "Maximum number of consecutive device resets during error handling before failing");
 
-Clamp the converted count to both arrays and update the output
-LUNListLength to match the entries that were actually copied.
+This is not the 1990's, we do not add module parameters for issues that
+should be properly solved either automatically, or on a per-device
+basis.
 
-Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
----
- drivers/scsi/hpsa.c |    4 ++++
- 1 file changed, 4 insertions(+)
+There's no way that ChromeOs wants to attempt to track this module
+parameter as a bootline config option, right?
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index a1b116cd..a7115efd 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -3797,6 +3797,10 @@ static inline int hpsa_scsi_do_report_phys_luns(struct ctlr_info *h,
- 		/* Copy ReportLUNdata header */
- 		memcpy(buf, lbuf, 8);
- 		nphys = be32_to_cpu(*((__be32 *)lbuf->LUNListLength)) / 8;
-+		nphys = min_t(u32, nphys, ARRAY_SIZE(lbuf->LUN));
-+		nphys = min_t(u32, nphys, ARRAY_SIZE(buf->LUN));
-+		put_unaligned_be32(nphys * sizeof(buf->LUN[0]),
-+				   buf->LUNListLength);
- 		for (i = 0; i < nphys; i++)
- 			memcpy(buf->LUN[i].lunid, lbuf->LUN[i], 8);
- 	}
+thanks,
 
+greg k-h
 
