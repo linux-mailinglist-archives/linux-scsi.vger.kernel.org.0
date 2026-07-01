@@ -1,105 +1,110 @@
-Return-Path: <linux-scsi+bounces-25443-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25441-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id pqdLJVWCRWptBQsAu9opvQ
-	(envelope-from <linux-scsi+bounces-25443-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 23:10:45 +0200
+	id 38lSBwJ+RWphBAsAu9opvQ
+	(envelope-from <linux-scsi+bounces-25441-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 22:52:18 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 912906F1C29
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 23:10:44 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 874496F19F3
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 22:52:17 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=iokpp.de header.s=strato-dkim-0002 header.b=LjtQwGDR;
-	dkim=pass header.d=iokpp.de header.s=strato-dkim-0003 header.b=ZmLepnAd;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25443-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25443-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=iokpp.de header.s=strato-dkim-0002 header.b=sIai4biI;
+	dkim=pass header.d=iokpp.de header.s=strato-dkim-0003 header.b=tHf9G+j3;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25441-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25441-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=reject) header.from=iokpp.de;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BDFB43007AC0
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2026 21:10:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7754F300E5F4
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2026 20:52:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9935039BFEF;
-	Wed,  1 Jul 2026 21:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7A22366816;
+	Wed,  1 Jul 2026 20:52:15 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.171])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2357A431E6A;
-	Wed,  1 Jul 2026 21:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6C4224AF2;
+	Wed,  1 Jul 2026 20:52:12 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782940240; cv=pass; b=AMac+iUa7kqsi8NwGnfknEUdtfymsNuYPdv/wS2YamYQttq7pCGtliaE9TY0n1k+NjzDH+DOo3wCFeDFPCzvgcVyQvLSg1dKIPc03BpIbN86BIvIeyd01u2BMDwHa+C6ZttzIErGYimox9L+f20/9H0/HbcgabDJfd2dqmhm7dc=
+	t=1782939134; cv=pass; b=lT8FM1EqXXVPsYwL/ji3jVkYrAomzq6xdLOi1k3FQoJ/EeU7xfuQ+ZuJbo+Np+6MIyW5CJpJp0c/q5UXF9edNdTrAAih0N5vr7kv0PZ0uQIIvl5Pn1DwYm3fez9rlqKbsS1oVkY2GEw3J72RRMJ8cWL/Jkk9S1oALb943qTZYXM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782940240; c=relaxed/simple;
-	bh=aiqXOTKHE3sZXOf1PSFhI8bzhXJkNQ2W3yiSNHwOFKM=;
+	s=arc-20240116; t=1782939134; c=relaxed/simple;
+	bh=0OI9r+oDLNMoCCNp+jvgl6P08jRKSfU7E7aeuxBZlOQ=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PrLSUYQRo/bfEV2JMiXAiswobCxC9zLLHJYpKs7vcn2oEOngoEj5SeZ4+1TGOGdqypvvE4Y3zgiJtH+GzmWcmvR1MEfbkqUTrwfUwPaaaARm5kvnnWz/RlT+U2zF/Z8z7Eyle68wPHib6ibgFgC8pdYV44qw3qxOpG8U8Kd8qWE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=LjtQwGDR; dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=ZmLepnAd; arc=pass smtp.client-ip=81.169.146.171
-ARC-Seal: i=1; a=rsa-sha256; t=1782938795; cv=none;
+	 Content-Type:MIME-Version; b=Htfdxpbf14dL3f6g1uni5FI+jScDBY8D36Zl4vZclQP1e4SH6CtiM/3+jwljaNjClDRDZ9WfH9Ke/W4LR6iiTUSDJFr6TtkITgZLiTGVegc+JnjsuTmKJBZY6oCs3+l7n++H00Chud0xPOY4EsWmyL/jtNZl9pxfRt5i97D3J08=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=sIai4biI; dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=tHf9G+j3; arc=pass smtp.client-ip=81.169.146.170
+ARC-Seal: i=1; a=rsa-sha256; t=1782938946; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=tivsDa/Nh69RRBdS4bgwUkW0PcagsGcUxFeoBBTOvseA3v++Mk8c8R3sDwIxzRpwwF
-    QKXcqYQGG9VxE2z9xmFxrtvpm623GT8QoRj61SAJutgmB8odrWwpDsK0vCi2gY8/2pI7
-    21PgbYsTVB55sPzx163yp72HAokpOppJo4oIdfuZKxmvgXY62V99tFZNUYppDq9Cu/l4
-    4HDlAWowX+rilasP4jJqJapOYNmukO2/r2p5YkZI6yyhxi0P2J6LxVpVVCJfA2l61TZo
-    cGYHKug10Zmxg4lPRwZ/WVd3CEsa/zA6d2me6rc2lg4bL2RAcRS23B1bc9dFFiSqI2JA
-    uqJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1782938795;
+    b=OwFN0gPD+BiuM4H6omziC9HWaxRyCyapRT2uKi9EFb7YL7zfTa4siBw6pjiqE/E2UW
+    /9Jnw079GPsGR2Dd0YfwoAv4V86rwJw+vRzkK3k86qBWC/iJeM8/pun8FvFuuxXYTkbW
+    PTsmffApLXWk+ZD1L3mhWM9OCPcFEKMciwrK/L8ZTSPJkJ3nrrik496TGRewLL3LtX+8
+    WHeaPZZ6DojK0KUhJKp6ENyszQrAm6cLORJrJW/5+DV1g8e+nKCPiyqHwB7n9aPWN0Et
+    tnh0hK9lNOAIvjZzdRKLgnjFDAvj8JAK1k7gblXsCoRPi4Z4kVa/o5Yh3H2QDM1ezBR4
+    zOjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1782938946;
     s=strato-dkim-0002; d=strato.com;
     h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=aiqXOTKHE3sZXOf1PSFhI8bzhXJkNQ2W3yiSNHwOFKM=;
-    b=eY+RdFFElV/hHR+sEIrpduta2PFbBUMEsLD1K48P5lJ58H3GHWC6QNgUnsWf/TjK97
-    Z7jJC0wg/gJYtcnrnbpXJCSh0Uh8EztnrQOIPctAULN1fPj1poaFJUv/0Wp16Xq9nfSp
-    EhhcuN7/IMX0coOJ0X+jFwtpuWHaWn9qtdtYE/lYO1PnPnVIGzR34q52kFBIkvUjtdNp
-    nsZI9eqKK9SfAevI1UtDJo4LMx+4Gr3SPrW106C4gmF/bsQzL4D5+g1tQdujn95ztYce
-    xrWIVc1LygFzPO5Fu3UVP5VOsammXJn35JkLnv/elXEkykz9EGaICnJ46mLxp3h/ts/Z
-    uEpg==
+    bh=0OI9r+oDLNMoCCNp+jvgl6P08jRKSfU7E7aeuxBZlOQ=;
+    b=HdxzqBaRCHSC8u3tKtwPAL0ctTU1/AVWXlIBgGV9h+RnuRUZZDw/0k/X13tuf7EtDY
+    /Rr0wzdZRFpxUPYxdJgil1Y/3ClsS6LlJ6PmKuDUgvMrB8i8reRXpDcaMXw0+ly+22OE
+    1z2jnL+pxkFmGAgv4MT+LndKUh+W7oM5N9ycbcFIJaPyd5+PmuMQL+AouE3iYufMuG1j
+    MMXXTtlMx/SCqovv7WM1qLePnBNzGl94rhiauUFZqQOf1lNhO5S2diJDUHBMiumWpbVj
+    zRzuKo5ehy+6cppXJP7zQEfW3lykUpmKRdroa+/fakg1hfh2/nt0b1bRw4T+B+0gd+DR
+    RO0g==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1782938795;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1782938946;
     s=strato-dkim-0002; d=iokpp.de;
     h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=aiqXOTKHE3sZXOf1PSFhI8bzhXJkNQ2W3yiSNHwOFKM=;
-    b=LjtQwGDRF0/DfkAfsPwln41D9qmHIZKNRs/6H+kEe0N8Mh+c7YGnTR6NnaPsDTQnzF
-    xFUwbeKXTuVWybSiHmllDS796pa3nRXC0qa+gx2UDfOEeKmIXNRMtxOwKzQhUdlet4JZ
-    3erAZcT53RMY2xzjuOGXMzkJ3pmbyEVqAqZ9g7DevXnYZ2KVsscmcWbCemwSnCNbhXV0
-    vipPJevXNrvpj4RqQU5EdbRlLPvreUUvtUyTpFNp1npyCe5qzArHBBdkncXHAzkseOY2
-    EbC++YVsDIX/3NYI9Ze6osz+zRcy2JLQfC7c8uoQVRwoHa0qGh4HV2c22qjcTHqTQkCB
-    AC3A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1782938795;
+    bh=0OI9r+oDLNMoCCNp+jvgl6P08jRKSfU7E7aeuxBZlOQ=;
+    b=sIai4biILPLJ3qx6cnpm9RRIVP5MADxN2cHXM5kK9ofXpRkcri9XD/IddbgDCMEYFY
+    Nucj8fnxifKV2l8OECinbLlPVfMjK/xFKoIW1HlMEF5tZswCxIp+OKC+35xggA8qbeBM
+    cbi1mA75/rXPK/M/Wl/rymRoVdkw1CXAwC0u1e+JkIFKYqk05yYtZCPv3glH/hYV6SUk
+    SolA0aRAaaj83QrkXMLAVjSbwYTZHAh121nyyWTwuKVeJAjBLgILocbkGh704GCeCeLc
+    l+heDDEZnDcCIRLD5i0MB0N58Qsz0tt4E/j3gZDU3yF3GnkvNBzrjIPzA80ua6BzzZyH
+    z2EQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1782938946;
     s=strato-dkim-0003; d=iokpp.de;
     h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=aiqXOTKHE3sZXOf1PSFhI8bzhXJkNQ2W3yiSNHwOFKM=;
-    b=ZmLepnAdlbTNm4wzdUaSnrmSwPQ0ZsuO1dFcA5CkkCSENJqjV0gFWc29oTlmltlTZ5
-    1ufTpDQlzVDN3d2xhUAg==
+    bh=0OI9r+oDLNMoCCNp+jvgl6P08jRKSfU7E7aeuxBZlOQ=;
+    b=tHf9G+j3iVW3fB/gSnpgkz62pZdUbJLh5lze5IV0e5jjCcfBXOSjuB23+y5f7nDk6j
+    UBBbT+xn4e5QQR33KQBA==
 X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSe9tgBDSDt0V0zNriHg+YfT0rGWUpI6weUrZX7j5d8vw1ZwljKUZAZetExYucA=="
 Received: from p200300c5871477310ac0be5030e43536.dip0.t-ipconnect.de
     by smtp.strato.de (RZmta 55.5.6 AUTH)
-    with ESMTPSA id z4d388261KkZVQ1
+    with ESMTPSA id z4d388261Kn5VQK
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Wed, 1 Jul 2026 22:46:35 +0200 (CEST)
-Message-ID: <9dcf8995008d9e8f617b416bcefb60ef9b63aedc.camel@iokpp.de>
-Subject: Re: [PATCH v2 2/3] scsi: ufs: core: Tolerate RX_FOM read failures
- in TX EQTR
+    Wed, 1 Jul 2026 22:49:05 +0200 (CEST)
+Message-ID: <3362cec069bd3437c378f356c3e1333d3428070e.camel@iokpp.de>
+Subject: Re: [PATCH v2 3/3] scsi: ufs: core: Always run tx_eqtr POST_CHANGE
+ notify
 From: Bean Huo <beanhuo@iokpp.de>
 To: Can Guo <can.guo@oss.qualcomm.com>, bvanassche@acm.org,
  beanhuo@micron.com,  peter.wang@mediatek.com, martin.petersen@oracle.com,
  mani@kernel.org
 Cc: linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>, Avri
  Altman <avri.altman@wdc.com>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>,  open list
- <linux-kernel@vger.kernel.org>
-Date: Wed, 01 Jul 2026 22:46:34 +0200
-In-Reply-To: <20260625121306.1655467-3-can.guo@oss.qualcomm.com>
+ <James.Bottomley@HansenPartnership.com>,  Matthias Brugger
+ <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+ <angelogioacchino.delregno@collabora.com>,  open list
+ <linux-kernel@vger.kernel.org>, "moderated list:ARM/Mediatek SoC
+ support:Keyword:mediatek" <linux-arm-kernel@lists.infradead.org>,
+ "moderated list:ARM/Mediatek SoC support:Keyword:mediatek"
+ <linux-mediatek@lists.infradead.org>
+Date: Wed, 01 Jul 2026 22:49:05 +0200
+In-Reply-To: <20260625121306.1655467-4-can.guo@oss.qualcomm.com>
 References: <20260625121306.1655467-1-can.guo@oss.qualcomm.com>
-	 <20260625121306.1655467-3-can.guo@oss.qualcomm.com>
+	 <20260625121306.1655467-4-can.guo@oss.qualcomm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.44.4-0ubuntu2.1 
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -108,106 +113,58 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.06 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[iokpp.de,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[iokpp.de:s=strato-dkim-0002,iokpp.de:s=strato-dkim-0003];
 	MAILLIST(-0.15)[generic];
-	MIME_BASE64_TEXT(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25443-lists,linux-scsi=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25441-lists,linux-scsi=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER(0.00)[beanhuo@iokpp.de,linux-scsi@vger.kernel.org];
+	FREEMAIL_CC(0.00)[vger.kernel.org,samsung.com,wdc.com,HansenPartnership.com,gmail.com,collabora.com,lists.infradead.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:can.guo@oss.qualcomm.com,m:bvanassche@acm.org,m:beanhuo@micron.com,m:peter.wang@mediatek.com,m:martin.petersen@oracle.com,m:mani@kernel.org,m:linux-scsi@vger.kernel.org,m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:James.Bottomley@HansenPartnership.com,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:can.guo@oss.qualcomm.com,m:bvanassche@acm.org,m:beanhuo@micron.com,m:peter.wang@mediatek.com,m:martin.petersen@oracle.com,m:mani@kernel.org,m:linux-scsi@vger.kernel.org,m:alim.akhtar@samsung.com,m:avri.altman@wdc.com,m:James.Bottomley@HansenPartnership.com,m:matthias.bgg@gmail.com,m:angelogioacchino.delregno@collabora.com,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mediatek@lists.infradead.org,m:matthiasbgg@gmail.com,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[beanhuo@iokpp.de,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[iokpp.de:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[beanhuo@iokpp.de,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[iokpp.de:+];
 	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RWL_MAILSPIKE_POSSIBLE(0.00)[104.64.211.4:from];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,vger.kernel.org:from_smtp]
+	TO_DN_SOME(0.00)[]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 912906F1C29
+X-Rspamd-Queue-Id: 874496F19F3
 
-T24gVGh1LCAyMDI2LTA2LTI1IGF0IDA1OjEzIC0wNzAwLCBDYW4gR3VvIHdyb3RlOgo+IHVmc2hj
-ZF9nZXRfcnhfZm9tKCkgYWJvcnRlZCBUWCBFUVRSIHdoZW4gYSBwZXItbGFuZSBSWF9GT00gRE1F
-IHJlYWQgZmFpbGVkLgo+IFRoYXQgbWFrZXMgdGhlIHdob2xlIHRyYWluaW5nIGZsb3cgZnJhZ2ls
-ZSBldmVuIHRob3VnaCB0aGVzZSByZWFkcyBjYW4gYmUKPiB0cmVhdGVkIGFzIGJlc3QgZWZmb3J0
-Lgo+IAo+IEtlZXAgVFggRVFUUiBydW5uaW5nIGJ5IGxvZ2dpbmcgUlhfRk9NIHJlYWQgZmFpbHVy
-ZXMgYW5kIGNvbnRpbnVpbmcuCj4gTWFrZSBmYWlsZWQgbGFuZXMgZGV0ZXJtaW5pc3RpYyBieSBp
-bml0aWFsaXppbmcgZWFjaCBsYW5lIEZPTSB0byAwIGJlZm9yZQo+IHJlYWRpbmcgYW5kIG9ubHkg
-dXBkYXRpbmcgaXQgd2hlbiB0aGUgRE1FIHJlYWQgc3VjY2VlZHMuIFRoaXMgYXZvaWRzCj4gcHJv
-cGFnYXRpbmcgc3RhbGUgb3IgdW5pbml0aWFsaXplZCB2YWx1ZXMgaW50byBFUVRSIGV2YWx1YXRp
-b24uCj4gCj4gQWxzbyB1cGRhdGUgdGhlIGtlcm5lbGRvYyByZXR1cm4gZGVzY3JpcHRpb24gdG8g
-bWF0Y2ggYmVoYXZpb3I6IFJYX0ZPTQo+IERNRSByZWFkIGZhaWx1cmVzIGFyZSBoYW5kbGVkIGFz
-IHdhcm5pbmdzLCB3aGlsZSBnZXRfcnhfZm9tKCkgdm9wcwo+IGZhaWx1cmVzIGFyZSBzdGlsbCBw
-cm9wYWdhdGVkIHRvIHRoZSBjYWxsZXIuCj4gCj4gU2lnbmVkLW9mZi1ieTogQ2FuIEd1byA8Y2Fu
-Lmd1b0Bvc3MucXVhbGNvbW0uY29tPgo+IC0tLQo+IMKgZHJpdmVycy91ZnMvY29yZS91ZnMtdHhl
-cS5jIHwgMTkgKysrKysrKysrKysrKystLS0tLQo+IMKgMSBmaWxlIGNoYW5nZWQsIDE0IGluc2Vy
-dGlvbnMoKyksIDUgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdWZzL2Nv
-cmUvdWZzLXR4ZXEuYyBiL2RyaXZlcnMvdWZzL2NvcmUvdWZzLXR4ZXEuYwo+IGluZGV4IDlkY2Ew
-Y2QzNDRiOC4uZTEzMDJlYTlmMjdlIDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvdWZzL2NvcmUvdWZz
-LXR4ZXEuYwo+ICsrKyBiL2RyaXZlcnMvdWZzL2NvcmUvdWZzLXR4ZXEuYwo+IEBAIC00ODIsNyAr
-NDgyLDggQEAgc3RhdGljIHZvaWQgdWZzaGNkX2V2YWx1YXRlX3R4X2VxdHJfZm9tKHN0cnVjdCB1
-ZnNfaGJhCj4gKmhiYSwKPiDCoCAqIEBoX2l0ZXI6IGhvc3QgVFggRVFUUiBpdGVyYXRvciBkYXRh
-IHN0cnVjdHVyZQo+IMKgICogQGRfaXRlcjogZGV2aWNlIFRYIEVRVFIgaXRlcmF0b3IgZGF0YSBz
-dHJ1Y3R1cmUKPiDCoCAqCj4gLSAqIFJldHVybnMgMCBvbiBzdWNjZXNzLCBuZWdhdGl2ZSBlcnJv
-ciBjb2RlIG90aGVyd2lzZQo+ICsgKiBSZXR1cm5zIDAgb24gc3VjY2VzcywgbmVnYXRpdmUgZXJy
-b3IgY29kZSBpZiBnZXRfcnhfZm9tIHZvcHMgZmFpbHMuCj4gKyAqIFJYX0ZPTSBETUUgZ2V0IGZh
-aWx1cmVzIGFyZSBsb2dnZWQgYW5kIHRyZWF0ZWQgYXMgMCBGT00gZm9yIHRoYXQgbGFuZS4KPiDC
-oCAqLwo+IMKgc3RhdGljIGludCB1ZnNoY2RfZ2V0X3J4X2ZvbShzdHJ1Y3QgdWZzX2hiYSAqaGJh
-LAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIHN0cnVjdCB1ZnNfcGFfbGF5ZXJfYXR0ciAqcHdyX21vZGUsCj4gQEAgLTQ5Nyw4ICs0OTgs
-MTIgQEAgc3RhdGljIGludCB1ZnNoY2RfZ2V0X3J4X2ZvbShzdHJ1Y3QgdWZzX2hiYSAqaGJhLAo+
-IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0ID0gdWZzaGNkX2RtZV9wZWVyX2dl
-dChoYmEsIFVJQ19BUkdfTUlCX1NFTChSWF9GT00sCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oAo+IFVJQ19BUkdfTVBIWV9SWF9HRU5fU0VMX0lOREVYKGxhbmUpKSwKPiDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgICZmb20pOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAo
-cmV0KQo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0
-dXJuIHJldDsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCkgewo+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaF9pdGVyLT5mb21b
-bGFuZV0gPSAwOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgZGV2X2RiZyhoYmEtPmRldiwgIkZhaWxlZCB0byBnZXQgRk9NIGZvciBIb3N0IFRYIExhbmUK
-PiAlZDogJWRcbiIsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGxhbmUsIHJldCk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb250aW51ZTsKPiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgfQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBoX2l0
-ZXItPmZvbVtsYW5lXSA9ICh1OClmb207Cj4gwqDCoMKgwqDCoMKgwqDCoH0KPiBAQCAtNTA4LDgg
-KzUxMywxMiBAQCBzdGF0aWMgaW50IHVmc2hjZF9nZXRfcnhfZm9tKHN0cnVjdCB1ZnNfaGJhICpo
-YmEsCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSB1ZnNoY2RfZG1lX2dl
-dChoYmEsIFVJQ19BUkdfTUlCX1NFTChSWF9GT00sCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFVJQ19BUkdf
-TVBIWV9SWF9HRU5fU0VMX0lOREVYKGxhbmUpKSwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgJmZvbSk7Cj4g
-LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmIChyZXQpCj4gLcKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gcmV0Owo+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAocmV0KSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkX2l0ZXItPmZvbVtsYW5lXSA9IDA7Cj4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkZXZfZGJnKGhiYS0+ZGV2LCAi
-RmFpbGVkIHRvIGdldCBGT00gZm9yIERldmljZSBUWAo+IExhbmUgJWQ6ICVkXG4iLAo+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCBsYW5lLCByZXQpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgY29udGludWU7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH0KCgpMb2dp
-YyBpcyBjb3JyZWN0LCBvbmx5IG9uZSBuaXQ6IGRldl9kYmcoKSBpcyBzaWxlbnQgaW4gcHJvZHVj
-dGlvbiwgZGV2X3dhcm4gb3IKZGV2X3dhcm5fcmF0ZWxpbWl0ZWQgd291bGQgbWF0Y2ggdGhlIHN0
-YXRlZCAid2FybmluZ3MiIGluIHRoZSBjb21taXQgbWVzc2FnZQppbnRlbnRlZC4KCgpSZXZpZXdl
-ZC1ieTogQmVhbiBIdW8gPGJlYW5odW9AbWljcm9uLmNvbT4KCg==
+On Thu, 2026-06-25 at 05:13 -0700, Can Guo wrote:
+> ufshcd_tx_eqtr() skips POST_CHANGE notify when __ufshcd_tx_eqtr()
+> fails. That can leave variant cleanup incomplete when PRE_CHANGE saved
+> temporary state that POST_CHANGE is expected to restore.
+>=20
+> Always call POST_CHANGE once PRE_CHANGE has succeeded. Keep the TX EQTR
+> result as the primary return value, and only propagate POST_CHANGE
+> failure when TX EQTR itself succeeded.
+>=20
+> Log PRE_CHANGE and POST_CHANGE notify failures to make variant callback
+> failures visible in TX EQTR error paths.
+>=20
+> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> Reviewed-by: Peter Wang <peter.wang@mediatek.com>
+> Signed-off-by: Can Guo <can.guo@oss.qualcomm.com>
 
+Loods good to me!
+
+Reviewed-by: Bean Huo <beanhuo@micron.com>
 
