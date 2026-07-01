@@ -1,64 +1,63 @@
-Return-Path: <linux-scsi+bounces-25429-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25431-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id CqJ2CocdRWr+7AoAu9opvQ
-	(envelope-from <linux-scsi+bounces-25429-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 16:00:39 +0200
+	id 2m3dCdUfRWqz7QoAu9opvQ
+	(envelope-from <linux-scsi+bounces-25431-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 16:10:29 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B70926EE757
-	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 16:00:37 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C9406EE89D
+	for <lists+linux-scsi@lfdr.de>; Wed, 01 Jul 2026 16:10:28 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=cEBX8Nmm;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25429-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25429-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=RcUSmEim;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25431-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25431-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id F3F27300F5CB
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2026 13:58:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 850D2310BE3E
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2026 14:02:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D24A29DB6E;
-	Wed,  1 Jul 2026 13:58:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12E4F272E53;
+	Wed,  1 Jul 2026 14:02:28 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D98B27B353;
-	Wed,  1 Jul 2026 13:58:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4A0265623;
+	Wed,  1 Jul 2026 14:02:27 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782914334; cv=none; b=pp+f5k4lNWt0yxIkC6w2c3HF0vpNHNzLRncB3PocbqVA6IXuLGERT2pgYy4PzSbAD4UzAZ8yO1h5rm2RdapUCQMfCMGt9ahOaODquFx2iaEt2beUFCGBt8lfpFtb58IWrZWoo615ke3sVy0eS/VxnQ8e5OAf9wAjZdRHu6SpS/M=
+	t=1782914548; cv=none; b=k2Vj7aGaimF7QjhZT8Ep7XjE5TnmwkaFT6Kz2bjKDyOtrH1LQ0hFoaDrFEw99yOX6iF5Twp8aPakiU9cr0eScHgrIAQrFjUJhWYdi97y+NGpr+0qkiq93+epRUILM7bG5TwwfhAO8dD9IOWIbXRZ6xRQfvMjoKN5/2u5xRM+wJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782914334; c=relaxed/simple;
-	bh=RjZ/ZIZ+K+wowVDaDuR8b9Ow9kYVVHeMdBCpq21cESI=;
+	s=arc-20240116; t=1782914548; c=relaxed/simple;
+	bh=hw3WIU8r3/MPRJqog1RGlkc+Yu6ZICwmiTyPOo+EXgo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qv1hBf8Ne0AMW3WoI4zkBjkNpLZo/BIiZlCp4sxYs3ux/uO3A1nXeBqdjtNn91YBzxXCBp9Oo4LLlj0hE0DESt4UiG1kQdRjYdHwuc9BeQUBvAhy7CQVPc88gP7zKMJg/w4EclqHxMRc7vasCamCrcO/Ic7yB1rl5SQdtJR+pfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cEBX8Nmm; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 145FC1F00A3A;
-	Wed,  1 Jul 2026 13:58:53 +0000 (UTC)
+	 Message-Id; b=UEerHgtja1Oylk/rfPeo8PcaSiSv6YveTXKq/LII/vidbGHqa8hcKKh3xwCdU5G9R+BgVCNtq3fMJ+DNrK2k7NySSAGs0qQkbvnzjx+BJdEpkoPwouv05AmBEvIYocm97VtrAMoRdxjx+bgw+j7vVjP6m4DoJ6J2sfU06g2oPWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RcUSmEim; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B24F51F000E9;
+	Wed,  1 Jul 2026 14:02:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782914333;
-	bh=M3VWoTmM8jK72GbVHspsaZufdJJVK1r2KEIFBDu4FLA=;
+	s=k20260515; t=1782914547;
+	bh=hw3WIU8r3/MPRJqog1RGlkc+Yu6ZICwmiTyPOo+EXgo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cEBX8NmmoZzbQj9qx5kdB4hf6FozrEwXQbN6H0WqBZ+uPmgolertSmviK5x8hVBUQ
-	 6Aqw5GA+/iiDzra1U42t7ufhgMJJ0G7PRvo56Eb05NFMK4rWT2vJJjxtGTP0lucREM
-	 7l4XxkhyERwsaH/s/nTdpN+grhhNSiwtRe8n5BnjcUv7kqyt4/x30UHEheG/e6AK/X
-	 XwwL3Te2kUy5x2oomlFeix7IzwP7u/6m0g10OX4ElWEYfgzpDOZLRMhYm6FEqx8EaW
-	 i63i9jtuy012Zsv2XmTB4eFVeOSeFFLdnk5f2VRGvy9owF8j5ySrZhE+VOc2rm0pzo
-	 j1WZ3lhUFtLaA==
+	b=RcUSmEimC9KQJnSP2PRbsm3vMS27obZINWWANMQA/WDX30SlTP2w7mgt1tF+wsH6u
+	 rGL3IQjLFMyCss8sOpYqdp8s6XfbfV/zyOQZDEwuefns8Sv8xP+xqJbdbc/YacuMXK
+	 563MP0dCPCu1wUwqS8hTV91k2NPaxUHReDCTEZJqe7vg59dsznQCqq7aQzVsXnaC/1
+	 zcK7wHZoT4KZ6fMgeA/JhfXGulUsJWJVNdt+d5dXVBQ1sxvUYhF4p3zCAPLDFDTQLr
+	 jJMjl6fN5EkKHB0CdZ+it1rb1lHY3j15nKSQYwwcgVk6u5Xv7PnOz8+oS/N2e7F8Ri
+	 rq9eknZ9W/sPA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/5] driver core: separate function to shutdown one
- device
+Subject: Re: [PATCH 2/5] driver core: do not always lock parent in shutdown
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "David Jeffery" <djeffery@redhat.com>
-Cc: linux-scsi@vger.kernel.org, linux-pci@vger.kernel.org
-In-Reply-To: <20260701135015.81937-2-djeffery@redhat.com>
+Cc: linux-pci@vger.kernel.org, linux-scsi@vger.kernel.org
+In-Reply-To: <20260701135015.81937-3-djeffery@redhat.com>
 References: <20260701135015.81937-1-djeffery@redhat.com>
- <20260701135015.81937-2-djeffery@redhat.com>
+ <20260701135015.81937-3-djeffery@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 01 Jul 2026 13:58:52 +0000
-Message-Id: <20260701135853.145FC1F00A3A@smtp.kernel.org>
+Date: Wed, 01 Jul 2026 14:02:26 +0000
+Message-Id: <20260701140226.B24F51F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -71,7 +70,7 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -79,9 +78,9 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25429-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25431-lists,linux-scsi=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS(0.00)[m:djeffery@redhat.com,m:linux-scsi@vger.kernel.org,m:linux-pci@vger.kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:djeffery@redhat.com,m:linux-pci@vger.kernel.org,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -98,17 +97,21 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_NO_DN(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCPT_COUNT_THREE(0.00)[3];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[smtp.kernel.org:mid,lists.linux.dev:replyto,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,smtp.kernel.org:mid,lists.linux.dev:replyto,vger.kernel.org:from_smtp,sashiko.dev:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B70926EE757
+X-Rspamd-Queue-Id: 8C9406EE89D
 
-> Make a separate function for the part of device_shutdown() that does the
-> shutown for a single device.  This is in preparation for making device
-> shutdown asynchronous.
+> Don't lock a parent device unless it is needed in device_shutdown. This
+> is in preparation for making device shutdown asynchronous, when it will
+> be needed to allow children of a common parent to shut down
+> simultaneously.
+>=20
+> And only acquire a reference to the parent device if the parent is to be
+> locked.
 >=20
 > Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
 > Signed-off-by: David Jeffery <djeffery@redhat.com>
@@ -117,6 +120,6 @@ Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260701135015.8193=
-7-1-djeffery@redhat.com?part=3D1
+7-1-djeffery@redhat.com?part=3D2
 
 
