@@ -1,63 +1,63 @@
-Return-Path: <linux-scsi+bounces-25564-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25566-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id /e23EYacR2rucAAAu9opvQ
-	(envelope-from <linux-scsi+bounces-25564-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 13:27:02 +0200
+	id H2vNAvadR2pzcQAAu9opvQ
+	(envelope-from <linux-scsi+bounces-25566-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 13:33:10 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A09A5701D54
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 13:27:01 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 310A8701E3F
+	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 13:33:09 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=Ktkaww7a;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=BFss7JPQ;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25564-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25564-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25566-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25566-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2B57C3024A1A
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2026 11:24:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 11BDA305581D
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2026 11:26:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB16F3C4B93;
-	Fri,  3 Jul 2026 11:24:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 028F03B42F3;
+	Fri,  3 Jul 2026 11:26:17 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4C23C4B9A
-	for <linux-scsi@vger.kernel.org>; Fri,  3 Jul 2026 11:24:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB4C3C4552
+	for <linux-scsi@vger.kernel.org>; Fri,  3 Jul 2026 11:26:06 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783077865; cv=none; b=dHjkgCz5VoVg+iaw3krMS8hNc3/ncTymMQi8Wxa5O9V1VVxcd+kF052GZbS8oeC974WdweIoWJ9leG1XyywLjHxMToY78Mnrm6/AHE96q5DTQmmC1pb0Y/CkHtxONQnrjEYnunigLfHzC8YcJKbS5n/ry+AcH4HzobnG3bI+HIw=
+	t=1783077975; cv=none; b=qU8ljK87aBM0ZPcjNXD7qgRmScX4gGBcEqpk4PyqIF5A8YGRbnfrczqPaArofi82XSH+KHqqp1sVc1G0Aql+QIgdPvfhIW4rrQSVJ+4xSN21gGFS7C7mfn4eZsDMibvzOW/vt5yK32wzaQu3ntFLQT7hdTV47cFe3Tl+M7xOzH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783077865; c=relaxed/simple;
-	bh=gE/eeyAVSjk2jv7S9O1Qhw7JqAdIMY6Wre4NtOHXCis=;
+	s=arc-20240116; t=1783077975; c=relaxed/simple;
+	bh=abyZE+fP4YShSnVhfntIZHJjpAz55CZK3vk3nt2QMto=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Z+VxdFPF5C/tpoIGJVwUVtv+bWybNRLV8obdG8PetReZXjcQBTKhdUAT0bMAfh9ygmbBfGrzHUUMH3XFLwoa4nIwU/e8/myr42vRl/QncHj21z3pSF+jkK31hh+tFGzVb0fMggQjoO0TzGfRPX9rb3A3ZhscdLVyo6PSTbCAC/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ktkaww7a; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EA6C1F00A3A;
-	Fri,  3 Jul 2026 11:24:13 +0000 (UTC)
+	 Message-Id; b=F/L1FMXMH+p9XuzdpxgyRh4VgTla5f+WVyBQNFkNMArBs1HKAHqI1DbWDTVtfwV63JDmoeZrDJHm3PLD9yIWHPekUki6hXkBd8d+kSqbPmv8KlOlzyTE5svzzubffJ22L7gNz7b9NUVHSZabSTFvq76jNXvtgSMW0K+g+iK0stE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BFss7JPQ; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 525E51F000E9;
+	Fri,  3 Jul 2026 11:26:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783077853;
-	bh=05gaHz7kPxULeJSGTbbta0VzMza3djvUptkenFJgUhE=;
+	s=k20260515; t=1783077963;
+	bh=LnxbWnFw0KTYGleESATOsnFsWZwQD+SSRkUdv/e4Q8U=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Ktkaww7agO8R2AsbfwxryFAii8UyZ/ha4JhjzUHJMETTuSbePodlBQ1z6R4qmuobF
-	 GZHBiOpOktgMMZ/7w4nJcDZWRSno4viDG8IfaqdprlSKk78Xwq7VYLoGAV68KMQDAf
-	 3kkR1VoIOFgwwNUorirGUR3RzfDDVFNsT5I+c87XSzOwxgNPMnZ4F9nG5OhhS9hvyg
-	 X/SLi8eNHbO6w2PTlzdo9abNnDwQMWX4JmKeyK49X7oXzyw8MOOxHnMIu1zbuUpk8C
-	 NqLugu4eHJh9zUMOAlHZVR0tjhnQFlVJIlIh+9NIJNVt/Y5HsdqCeb+p3SK7TuGCF/
-	 4+I0V7VPIt4dw==
+	b=BFss7JPQXw4q6E++6TJIe4aZs8xaaDuKMd8e/vFJK7yZPdswfs7RP7TCOwlcIiDl/
+	 ekiCKV7MJ6BhP1ic4qA+Fp3WLP3WkrXrd//y0dVijNTOTiwFFzXsExVMAtVrZLJJeW
+	 /U6CV4BiijtmOkSTTgY2KwSizE/ynilKmBiAAwUST0h/AOUNLVj2Z4pEpgLFqg5sjJ
+	 S+oku9AWq0neHW9IgNozNdj4M9yD0jX5obV5jOLgpIxoTXKhOgj8nc02xputnh8uWe
+	 pGVSkAWKls4hrJsec/9vYpzC4qUqjeD1ZEUmkE+aiqOC22jahjgKq3eaxvPtWHeHT1
+	 l7kBBI+kchE8A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 08/10] nvme-multipath: add nvme_{add,delete}_ns()
+Subject: Re: [PATCH v3 05/17] scsi-multipath: clone each bio
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "John Garry" <john.g.garry@oracle.com>
 Cc: linux-scsi@vger.kernel.org
-In-Reply-To: <20260703103204.3724406-9-john.g.garry@oracle.com>
-References: <20260703103204.3724406-1-john.g.garry@oracle.com>
- <20260703103204.3724406-9-john.g.garry@oracle.com>
+In-Reply-To: <20260703103402.3725011-6-john.g.garry@oracle.com>
+References: <20260703103402.3725011-1-john.g.garry@oracle.com>
+ <20260703103402.3725011-6-john.g.garry@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 03 Jul 2026 11:24:13 +0000
-Message-Id: <20260703112413.9EA6C1F00A3A@smtp.kernel.org>
+Date: Fri, 03 Jul 2026 11:26:02 +0000
+Message-Id: <20260703112603.525E51F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -70,14 +70,14 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25564-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25566-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:john.g.garry@oracle.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
 	RCPT_COUNT_TWO(0.00)[2];
@@ -97,66 +97,85 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_NO_DN(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,sashiko.dev:url,smtp.kernel.org:mid,lists.linux.dev:replyto,vger.kernel.org:from_smtp,oracle.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,smtp.kernel.org:mid,oracle.com:email,sashiko.dev:url,vger.kernel.org:from_smtp,lists.linux.dev:replyto]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: A09A5701D54
+X-Rspamd-Queue-Id: 310A8701E3F
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Low] The function `nvme_add_ns()` unconditionally accesses `ns->ctrl->nr=
-_active`, which is conditionally compiled, causing a build failure when `CO=
-NFIG_NVME_MULTIPATH` is disabled.
-- [Low] The patch introduces calls to undeclared functions (`mpath_add_devi=
-ce`, `mpath_delete_device`), causing a hard compilation failure.
+- [High] Destroying the bio pool before draining inflight IOs during teardo=
+wn leads to memory corruption.
+- [High] Manual cleanup on the dev_set_name() error path after put_device()=
+ causes deterministic double-free and use-after-free vulnerabilities.
 --
 
-commit 6769aa1dce3bd34edd5c71bc4aa5c9950e9c148a
+commit 31da3ef05c72ae055a7ebbed278c14967c624ea3
 Author: John Garry <john.g.garry@oracle.com>
 
-nvme-multipath: add nvme_{add,delete}_ns()
+scsi-multipath: clone each bio
 
-This commit adds wrapper functions to call into the mpath_add_device and
-mpath_delete_device APIs. The per-NS gendisk pointer is utilized as the
-mpath_device disk pointer for libmultipath references.
+For failover handling, we will take the approach to resubmit each
+bio. Unlike NVMe, for SCSI there is no guarantee that any bio submitted
+is either all or none completed. As such, for failover handling clone
+and submit each bio.
 
-> diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
-> --- a/drivers/nvme/host/nvme.h
-> +++ b/drivers/nvme/host/nvme.h
+> diff --git a/drivers/scsi/scsi_multipath.c b/drivers/scsi/scsi_multipath.c
+> index 6159803d4cbb8..ca4ab720c19af 100644
+> --- a/drivers/scsi/scsi_multipath.c
+> +++ b/drivers/scsi/scsi_multipath.c
+> @@ -96,6 +96,7 @@ static void scsi_mpath_head_release(struct device *dev)
+>  		container_of(dev, struct scsi_mpath_head, dev);
+>  	struct mpath_head *mpath_head =3D &scsi_mpath_head->mpath_head;
+> =20
+> +	bioset_exit(&scsi_mpath_head->bio_pool);
+
+[Severity: High]
+Does destroying the bio pool here before draining inflight IOs lead to memo=
+ry
+corruption?
+
+If a device is removed, the final reference to the scsi_mpath_head might be
+dropped before the underlying request queue is frozen. Because the queue is
+not yet drained, inflight cloned bios can still complete after the pool is
+destroyed. When they do, scsi_mpath_clone_end_io() calls bio_put(), which
+will attempt to return the clone to this destroyed bio_pool, causing a
+use-after-free.
+
+>  	ida_free(&scsi_multipath_dev_ida, scsi_mpath_head->index);
+>  	mpath_head_uninit(mpath_head);
 
 [ ... ]
 
-> @@ -1041,6 +1041,18 @@ extern const struct block_device_operations nvme_b=
-dev_ops;
-> =20
->  void nvme_delete_ctrl_sync(struct nvme_ctrl *ctrl);
->  struct nvme_ns *nvme_find_path(struct nvme_ns_head *head);
-> +
-> +static inline void nvme_add_ns(struct nvme_ns *ns)
-> +{
-> +	mpath_add_device(&ns->mpath_device, &ns->head->mpath_head,
-> +		ns->disk, ns->ctrl->numa_node, &ns->ctrl->nr_active);
+> @@ -270,6 +300,8 @@ static struct scsi_mpath_head *scsi_mpath_alloc_head(=
+void)
+>  	ida_free(&scsi_multipath_dev_ida, scsi_mpath_head->index);
+>  out_put_head:
+>  	mpath_put_head(&scsi_mpath_head->mpath_head);
+> +out_bioset_exit:
+> +	bioset_exit(&scsi_mpath_head->bio_pool);
+>  out_free:
+>  	kfree(scsi_mpath_head);
 
-[Severity: Low]
-Will this cause a build failure when CONFIG_NVME_MULTIPATH is disabled?
-Looking at struct nvme_ctrl, the nr_active field is conditionally compiled,
-but nvme_add_ns accesses it unconditionally.
+[Severity: High]
+Can this error cleanup path cause a double-free vulnerability?
 
-Also, are mpath_add_device and mpath_delete_device declared in a header
-that is included here? It appears these functions might be undeclared,
-which would result in implicit declaration errors during the build.
+If dev_set_name() fails earlier in scsi_mpath_alloc_head(), the code will
+call put_device() which drops the kobject reference count and synchronously
+invokes scsi_mpath_head_release().
 
-> +}
-> +
-> +static inline bool nvme_delete_ns(struct nvme_ns *ns)
-> +{
-> +	return mpath_delete_device(&ns->mpath_device);
-> +}
+scsi_mpath_head_release() completely tears down and frees the scsi_mpath_he=
+ad
+structure, but the error path then continues through these manual cleanup
+steps, executing bioset_exit() and kfree() on the already freed pointer.
+
+>  	return NULL;
+>  }
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260703103204.3724=
-406-1-john.g.garry@oracle.com?part=3D8
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260703103402.3725=
+011-1-john.g.garry@oracle.com?part=3D5
 
