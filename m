@@ -1,240 +1,310 @@
-Return-Path: <linux-scsi+bounces-25503-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25505-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id mCGbDrR4R2o7YwAAu9opvQ
-	(envelope-from <linux-scsi+bounces-25503-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 10:54:12 +0200
+	id 8gIHB6ePR2rrbAAAu9opvQ
+	(envelope-from <linux-scsi+bounces-25505-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 12:32:07 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE3FA700502
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 10:54:11 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A85A07013CA
+	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 12:32:06 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=suse.com header.s=google header.b=Tb4Op9JW;
-	dmarc=pass (policy=quarantine) header.from=suse.com;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25503-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25503-lists+linux-scsi=lfdr.de@vger.kernel.org";
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=oracle.com header.s=corp-2025-04-25 header.b="KneBUK/H";
+	dkim=pass header.d=oracle.onmicrosoft.com header.s=selector2-oracle-onmicrosoft-com header.b=n9ZNuNwn;
+	dmarc=pass (policy=reject) header.from=oracle.com;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25505-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25505-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	arc=reject ("cv is fail on i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4AF9D317D534
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2026 08:36:01 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id BAF43303A03F
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2026 10:31:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30AAC33D6C0;
-	Fri,  3 Jul 2026 08:36:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8D73BE620;
+	Fri,  3 Jul 2026 10:31:10 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4253264EF
-	for <linux-scsi@vger.kernel.org>; Fri,  3 Jul 2026 08:35:58 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783067760; cv=none; b=NEKsOvTSTaCcG1kzwFqrpS0o2yxhWrJTzf0K4qR7mZ90DZRmJ0DytHJy+X8c5B0UO9ZEuNDU6DiPXwYnBcaz86F+evPE5VhfvZCVbjx2jayCr0rCxZalolhbDJ1dyiJuEUM5ypAt32NWciazyzhVkhFECovuOZV+w60rPkGxZvw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783067760; c=relaxed/simple;
-	bh=eQxnoDMMeS8zqLXEAn5onMUP1uws6doz7zxSRSRHohU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R094xB9UVKehY5J3il4i2GujHuVyIimjx5yRy2idj1/CQe7gzGa9vVwamo41KH3INJ1X+SkN4Ur5FS1sago4xBausvB3MeGj/fjm/OQrPX3Zuref68Eali9CnP6PTkaMG9fdgRz34ZN+tKfNGtcKcvB0F2Am7qmFJbb6xURhZws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Tb4Op9JW; arc=none smtp.client-ip=209.85.128.47
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-493bb510ce4so2024535e9.1
-        for <linux-scsi@vger.kernel.org>; Fri, 03 Jul 2026 01:35:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F393BE16A;
+	Fri,  3 Jul 2026 10:31:09 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783074670; cv=fail; b=bNChwtiedIwc656QxnnE4Hhxp8uzBwVnlmlaf9EYWuLjV90WWOQTs16yNtE+gXH1zjJM5PgpTEkRTANbcFjMnlkN2aP5w0xmp1FahCbqVL0nnUJKnaj0Rt7z1vYqN0c0HXl9VYJX3DsI8p9p1n5YNfQsdLXvT03nw6slmBLHdXQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783074670; c=relaxed/simple;
+	bh=6iPjciV901FtnsyIc36eWsfGBDx/qXum071Wte+yNN0=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=f5ZLEJsRVxajtou/OzvWKrNF/+KmmU5aoWGpQUGprgmnATJpLdb3YOHOyloREoZnrM1+7gBvC5QQY/6TWcimzEgLJ3Vkvl6wl7gQrAiki3L6tKX70UBAWQ6W782KpWW0mIKydbjCifcvvxl4gr0tCm8kPdlOI04lQwZKAwP+DUo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=KneBUK/H; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=n9ZNuNwn; arc=fail smtp.client-ip=205.220.177.32
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6638tfwu3088786;
+	Fri, 3 Jul 2026 10:30:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=corp-2025-04-25; bh=pr5721v2QR/qbTJa
+	wpsKPXHu5ICu/aGDbFv0JLG0ncE=; b=KneBUK/Hx/NqsmbcPNCl2na9xOYJyYxQ
+	n1vbGqHKC8/N57yNXrZi6lEBCdnFpBSCBqc9rjcTnQj2s/KkGVfy7utUzYycgVUN
+	eDr/esuWu5rX3ujJQV0KacWKZr4poOWdyN7xx+etkUof4XjB9Yl7DWqYFO34tI/7
+	kuDOUD7vkTznfAqPC1jZtbpLVBATywiTW4kFxGahOhgTaDBzUdVJNwlE44tddWHf
+	K6gi8ggUpxFR92bQfPv1c/djvlGGXlWGEASQtxytxWOBzoUacedrU1zNautreHvT
+	GVJeIFr/FNux/bWyQnhQWkiv6QJvwJ7XpcY7xnm3iKf/5MiPVPDh9g==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4f26p4af06-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 03 Jul 2026 10:30:42 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 663AS74K033798;
+	Fri, 3 Jul 2026 10:30:41 GMT
+Received: from sn4pr2101cu001.outbound.protection.outlook.com (mail-southcentralusazon11012021.outbound.protection.outlook.com [40.93.195.21])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4f24yhyq9x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 03 Jul 2026 10:30:40 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YwwI25pW7iWz7Z7gPgGflNJ3VcFvRF/ZIin2sv1/LoLYoBnQ3ds6BXtOhkF+omBTFlZ+hoGuf5t5E6BJ1orr+P1I5FW5bLTqd7KuaV2D+aNkq9/x4cSChOFfvZ1PVvNaqyKQskz9gM2tYfaZoGiLi2j0n5K/9B01Y8/XAdyHHtQgV2luvs5Xtb+QOpPiM5B5SHszW3gBoGS6GFyYnZ6DHhosQvunLeYrZ0JVHqJVcJlZbnan6mZg8/pNXXeLIHz6h2yvodM4CatV1ZmZL0ulhQPdxcjFz9723m4KKWy65eb4ZsYsafqCE7HfuoUyYe/IT+hqP2tgRDv2htG9Cevx8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pr5721v2QR/qbTJawpsKPXHu5ICu/aGDbFv0JLG0ncE=;
+ b=KMgtDKSEj7CxA31V4GXwPOCzPkZDF9hNDm2f9fHCvOuILBsfE8eqNmRF2SL7HNTq1S4meWYexGA3YgjEpatr1f9YkAk4Q1Mm+QNenH093oNbSD7NEjsU+K+kR3jQN1IlxWwvIHeK+DdTfepFqH22Q7YGpOGFws7zOepLP2e8dRRw0ymfrFjydE7shJbPX43qYyrr6cEyeb08K3971TyLDDdGUNE/Xyi0mXav4UpvCd/ryMQdeMa23/DblCt6dlHW1k4FAAvqxIg/xAXpJR8P6mP6pWdoubhyGs6q75ae+9gECs9f7VMU6FCK0JzQenHO5FJgN9kopiB13fW2QSBreQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783067757; x=1783672557; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7WAbGtIrI1EcfzFik+M+qn8x7M7ZtMBRYdePiOvKmF8=;
-        b=Tb4Op9JW37Lmr2DG4vEYzeEJG3hjor3+Yon/W712PqmIVFYj9N5pOVpBXYMsKO31ZZ
-         TBhAzp2TMKKJMDQ1lR1VhchL6+rmevTkG68vaJY6fpeagCiEsx33iz+Z7ZTcEAJTdxNT
-         zE9J5yU1q/rIL47vOxpGLrBz+aYbMWzHt1pKRsl2OoI/DNbUyajo/Y/CHGjNOFKplZRF
-         2FrJqQoeVRRqSI6lyw/jV+LkW4C5AawbIAFewP9GsU8N34FJqEQK+lXxoHbW7AVttYrK
-         e95S+f4IygosXRL5MbXeDymMSVlpWCroP/3+U6gergXPhpI4xkv7X+B+8g2ZuZDLwsBP
-         d9YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783067757; x=1783672557;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7WAbGtIrI1EcfzFik+M+qn8x7M7ZtMBRYdePiOvKmF8=;
-        b=TMy9nrCIFLxmGXEDGtAtJKcEcYLME//nfWAllcYz43aI477YIjAy1Ea3GZh47Ttcht
-         H6P8pachu3w2CmKBS9FgiRxImE08e6KbOQ0a3G7JiVCbWWyMnMSMwjC6Yxo3zVgFzlmy
-         FXFqbmE8R/JEV4h5Ww9QfpXdacis2anxPLzbtg7qDWF5jMKfCvKmUImxay1cJJj1G3kN
-         KpFdg59cAsUFmOhQfMg8O4aTLEifFMrkGTykGJpeh5jODVAnzRlYf4u+YE3dn0jnZyt7
-         SA0THqYcnGLWMXcGeoIS8fb68KvJH3mDGARhEGA8wI6owCVeY0vyAoGu6gIlRj6gZ09M
-         AhBg==
-X-Forwarded-Encrypted: i=1; AFNElJ95NzmLIAdB5ZkI0HMDTTlCd/L2J56GgdvpQB32i5VW40J0N9Nmj4IFLRLmnJgovOvaw6o5BqKiwQEm@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkF/m7lWfWxsvGnQgeHLixKdDYXBD/jQ0kXns3Io2Ba1ZJmEUd
-	fvGGRLq/T7Hm13kSWxmLpQIand4zVeCgxBB19eyvCEAbpDBvfGHCB4gWgECB/1fO6uk=
-X-Gm-Gg: AfdE7ckyFAx4JQutWKRgu/YD7wIUyUrutBQvSY+qaT4Ge/7w8XqdIOY0CYUENe0RcEd
-	IzauwyQxUloNCo/pHMlegiNlyNJKVG06ckp2pCEaEZHR5OcT4ZxPyOyyOJ75jOfa3fMthBeNvdi
-	lvoy6svQ2IQRonpcmDhBq895PWwAA9yhP9g3aYS+W3W7za2L6lHdlsHpH0jTqV2jIyhc+Q3OHCl
-	GO5jEh2yEathJI/n5bObxYdXoTcIy2DkswLZltTMt87sxka+hHQjKorJzrdlzdCB6nHZgzYNbow
-	aO9LQ3J0wjlcdfh4J9pSDz92gC8OqAKjIcsn0MMXZQsQ9BCX+O31dpANG6ibw3Yh0InfWjc7+kx
-	nBWGF9NAJYE20vRLwjUI4DdPFCy4QKbViDNSY8ISgzTwh6hB63fNuD1rWq6aVfR8nl/Y+dSc5No
-	Atomqo92l0neKhfTpN/zAWP8lxuocxCsWTeOCMIdG3n/4wH9AIOFln67njBw==
-X-Received: by 2002:a05:600c:8590:b0:492:4363:e7eb with SMTP id 5b1f17b1804b1-493c2ba4f75mr109823175e9.32.1783067756702;
-        Fri, 03 Jul 2026 01:35:56 -0700 (PDT)
-Received: from [192.168.178.47] (aftr-62-216-205-241.dynamic.mnet-online.de. [62.216.205.241])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493ccd9d620sm33431275e9.1.2026.07.03.01.35.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jul 2026 01:35:56 -0700 (PDT)
-Message-ID: <5b03b1d4-c094-437c-8934-64b94bd37138@suse.com>
-Date: Fri, 3 Jul 2026 10:35:55 +0200
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pr5721v2QR/qbTJawpsKPXHu5ICu/aGDbFv0JLG0ncE=;
+ b=n9ZNuNwnto+VdbiAUVet0WdLvGRmBiTQKRO+Q+oJdJb8KyNoOGc33Bzzb0jypUDchZv85bd/WGrPSLRjQKmZxfVbnu+VLfdKzbM5UUjb94itgB0xJaLfCIHV19x1HkPQ+Y54fMqXGMUDPbA2ui0tnUbYH825fruO3PEb63bmtUQ=
+Received: from DM4PR10MB6229.namprd10.prod.outlook.com (2603:10b6:8:8c::12) by
+ PH7PR10MB7781.namprd10.prod.outlook.com (2603:10b6:510:304::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.10; Fri, 3 Jul
+ 2026 10:30:36 +0000
+Received: from DM4PR10MB6229.namprd10.prod.outlook.com
+ ([fe80::867:63e7:13fa:fa7d]) by DM4PR10MB6229.namprd10.prod.outlook.com
+ ([fe80::867:63e7:13fa:fa7d%6]) with mapi id 15.21.0181.008; Fri, 3 Jul 2026
+ 10:30:35 +0000
+From: John Garry <john.g.garry@oracle.com>
+To: hch@lst.de, kbusch@kernel.org, sagi@grimberg.me, axboe@fb.com,
+        martin.petersen@oracle.com, james.bottomley@hansenpartnership.com,
+        hare@suse.com
+Cc: jmeneghi@redhat.com, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, michael.christie@oracle.com,
+        snitzer@kernel.org, bmarzins@redhat.com, dm-devel@lists.linux.dev,
+        linux-kernel@vger.kernel.org, nilay@linux.ibm.com,
+        john.garry@linux.dev, John Garry <john.g.garry@oracle.com>
+Subject: [PATCH v3 00/13] libmultipath: a generic multipath lib for block drivers
+Date: Fri,  3 Jul 2026 10:29:05 +0000
+Message-ID: <20260703102918.3723667-1-john.g.garry@oracle.com>
+X-Mailer: git-send-email 2.43.7
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: PH0PR07CA0015.namprd07.prod.outlook.com
+ (2603:10b6:510:5::20) To DM4PR10MB6229.namprd10.prod.outlook.com
+ (2603:10b6:8:8c::12)
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] scsi: ipr: use kmalloc() to allocate IPR dump buffer
- memory
-To: Mike Rapoport <rppt@kernel.org>, Brian King <brking@linux.vnet.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
- Brian King <brking@us.ibm.com>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-scsi@vger.kernel.org,
- target-devel@vger.kernel.org, wenxiong@linux.ibm.com
-References: <20260630-b4-scsi-v1-0-494fb37ebe7b@kernel.org>
- <20260630-b4-scsi-v1-3-494fb37ebe7b@kernel.org>
- <7c8f0e70-f49c-4614-af95-002fb2be11ba@suse.com> <akTjQVQQNdeO9M28@kernel.org>
- <d92f22b9-9a4d-42f2-ba67-0371f85fedd3@linux.vnet.ibm.com>
- <akYLdBME5kgyi8Rw@kernel.org> <akdpddKBt7gV6po5@kernel.org>
-Content-Language: en-US
-From: Hannes Reinecke <hare@suse.com>
-In-Reply-To: <akdpddKBt7gV6po5@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR10MB6229:EE_|PH7PR10MB7781:EE_
+X-MS-Office365-Filtering-Correlation-Id: 220e7391-50c4-45fc-a5c8-08ded8ee1e37
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|1800799024|376014|23010399003|366016|6133799003|18002099003|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	kd9yU/9xNQO5gEUunseUSrZXmiQxAz+/aau846Oh57UJZV8TEr6p+K3y3dtnj2QKaSQP8lIJMkMPROxrOUw0ME+9sbhHIvar/fh0qW8OuerXBbQFhm00NSkHLGTea/QY70r8gLJqk9x1SWdloGEuJsgXHECR/NDdX7knpQahJFSi4+hhgM/3E49erRbGkxPsTMd74Y4Gx0aDDQCbR13EEW7BDnUt11gtntlfxjpv3FvYZcRQQ+1xpQuhjX7XhrPUWD4Vkm3z3WYd/hR8+sr8GpImBgc/2pVae3L3SpgJSOI2r+MspIwxdzSqztLPKAWS2Gv6J8jQ+WThhdghpduLBCBwUSCdLq87B7vxeF02mb0+vTdu1JyOw4e6dCnBss6yBqiwsKlUgKUIyLP8tVHd/jeiu9UtrhYuj2zwsq09u+b68XzDQWmxykccnET7rUigbck1AOSriO/mUyG0Tc1L5DI4qiWiMi2tu4WiWbNPgmij7ul6Rqel8IxWzRMPrEvhjT/ON/PYc9NBtIktQbAj1Q/H82RGn6K6YzajB64VKIeuZ+z9lkHl3O1LyehnjvfzrV/vblDGs/A+AnFyT2QE+AUx5O/XCOQMKWFp+B0lVlPBEFFbwl8e3xdaJy7zMziedr284umKRC8PRwWQmD7H5JtajmwkOhHVkZd47sJvX28=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB6229.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(23010399003)(366016)(6133799003)(18002099003)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?ooAFWcPEv0CmIROUrxBhymHnzfJ72iwN3in2BATZtI0FAgk7fchQUOfTWdRM?=
+ =?us-ascii?Q?7kyvZMOhI2ExpdQEnHOs9jYtu5AhhJcFOXX3xjdrNK2kzbaz5dsORnKjlhkH?=
+ =?us-ascii?Q?u/yfYCq8BRrOppYztTjjjRsK8S6grGqTIBU4YaqEpqTHneqq0fcIPT4CiIYK?=
+ =?us-ascii?Q?QiF8RoZkiFZOk8TRPRViZoDAxlqY499MtcZzR4DvIWHg0lHGpgBstNvbHLnz?=
+ =?us-ascii?Q?SV6O+0BSuIbUiyVpVrYFlJzoxiuP6ZCSCdwyLsTOMhk6uVf0rgne2ou2zp5u?=
+ =?us-ascii?Q?MW7WTfxpMKDNE61A+ENdRTR5V6XxCdPweXgVFBSb4kSsYLceBNv4nIokmSlz?=
+ =?us-ascii?Q?rubMwPNIs8HscPrzfGt0pOgzfPJeRZEPPqKSAkCsuigIMMQLn0SOX1G7g31x?=
+ =?us-ascii?Q?XPLFFEJPfe67LMv07mJ5cIYp659FUtLnQT/ZBx6k7GCXjt6J8no+vT3YSKHv?=
+ =?us-ascii?Q?/QSutgQiuvJ1S7g4aKV34b5fKbvLh6SjxI4bXzsCSZn2JdvuLA56rMVR6qfm?=
+ =?us-ascii?Q?rANStw4oNeRPKpFCl06GZngfx5f6CuCnCBZumuvFSoZ976MEc+Qjy0HVwpXL?=
+ =?us-ascii?Q?GVXlwLc43tWD8jqdG9PUfhQOliNDPbDb/yvrWnlZdE1ujFxJUXbrXr8QDLzm?=
+ =?us-ascii?Q?N+JlceDT5/3eRrAWxWjC4WS6RU/+Vo7BuTwL5nvG8lTqhNSltvGgV7HyQkCc?=
+ =?us-ascii?Q?pxilZ0LqFC5G7KO/70TqRq8mXOfiZWlnmkM/112mVeNpsmiZkWYKf9D5i/im?=
+ =?us-ascii?Q?A/jBQu+eWgUZfsayecR5baH2uNJ7eYl9eBV2Y+zCUmMiTep/AmQFKKr+hBjh?=
+ =?us-ascii?Q?9N7A2JiKuKZVRJOM7ot5nd+KwFsBFDEzqaXDaKsybUvWC9uoQDarfjUj5YIs?=
+ =?us-ascii?Q?PR1yf1z6ENCN1Gn7o3VphyPC3JrWfd6U4SczUJePkp/35HOzWdUbhP6z9s+M?=
+ =?us-ascii?Q?hP7vFNKnM2oZYD4ro2v3wWhRjW907HeElVwi72c99h5BfptgM6afat3c2hPV?=
+ =?us-ascii?Q?FP/fLjTYhEhsahCRDPEw8Sgdcazxm66EGkj4agDBEP5hrkYUsxq5e9IuXwYk?=
+ =?us-ascii?Q?nbZRqEnYLmKlqJlcvJGDa6pNNjpe8voXvlI5ja7QpVkZKdpW3+gSfAb4gvpc?=
+ =?us-ascii?Q?UtSmxCjI1vN/lc21+DvAn+bFChdU6+ym4eeAMo6DYQWBWUW+tzXP5CxRbWR7?=
+ =?us-ascii?Q?vqkCNSmrzDN4+cZT5iMywVuCsC/xsu6eWgRVHdplvaVb9DuusbmDWRAICAN+?=
+ =?us-ascii?Q?M/QqdRVqvJJAHXcAiY5H68bK8Ld9bwe8S5CoHtLZEz9421M0AHhWb0F1JBYO?=
+ =?us-ascii?Q?7pmIzcMLW0+RwRo6211Qs1Q46vmRvyGmVp0xoNv+3HIDfZKcMrOUTO8sB7EP?=
+ =?us-ascii?Q?fuv5PPa64d4grATDJk45ZlWS27SZoW9YMkGZZwqOssuYocjuiqw9VueJvUXD?=
+ =?us-ascii?Q?jrDpjq1i8+msXUUlkw7s/ha8s0SblXRvcxIMWPc0WbNtcq1nZF/Wr1cBbraB?=
+ =?us-ascii?Q?ALDOumInMD/9djQhLSKnO8WF+FrD2oaG31sHxDiVUwwAcI3BPdwNt6eDTLG+?=
+ =?us-ascii?Q?7qizmwOcEkeargQYxVSvqgkImZBT0ms37wJc2nl5XCESVKCSqjTDVzJ3mQIe?=
+ =?us-ascii?Q?bA6b75BF/039i8esFBLIknbRh/YAhuXYOGHU4njHHN3RD4X0Lx8hW/yZbaRl?=
+ =?us-ascii?Q?n4K+OX0WVMqsUIteemF5mvoh6ErCRTKKDDCVcqyDjjU82OIvDre+m2nMUvSj?=
+ =?us-ascii?Q?IFmu/q+10GNTeAEeDfQjfYVTheqN178=3D?=
+X-Exchange-RoutingPolicyChecked:
+	N4uEZ6fWjVAiokQ9iWqrWfj1d54KOpnTvZIr57tfQ8yAQYnB84uBT46RoUyJK1oFMfeneekkyj3T9La5iE7sNHFtGlaOHhE4mKB2pEScXXe8D6/8ANYkDvXnjBX3L2JkBGfXbblW3fOK5exT8LLFMYQ89kcUmvDprP9FRtH29FCSQoZ6MB9gAuZCDRkQc3fC5XzH3IFQDN/Che6qhqPyI5omIeaEz4I2poGKRItmQETOuMX6BZzpIuvGpnt3rdsOTvKyQ/zdvJEqqcD5VzPaijFmN8HhSO6/4F8En13tXfBjb8L4eqZyTQHG1vY5MgRk19gY8jOlk5OKI3X5MKj0fw==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	K+0qvCjTpyCTtxM9OiEhAhF/9lf6E3FG77FZWXsYz9mvh8y3VJW0AdK3ZIqR/ySLkuu2s4giwDPTmbTfdwJIfqKmfnuiLk/aVOeHOIbqEX3Oq3BWd32wHVo2CXR9FkZDPlLKlwjcetB1eE6S9tsWX0EM9VEf8XCMsB16IRomvCaVdpVMJrlDJuWLmGP+HTDDYsSrj8yhd8F+9ii1HDmGOKuPbOWgzgrQ1kT/mjrtNe2ExwkRsRnJ1+hdumjewqPsqiCnNb/lCPdq5rvz90B8qmxwWGGgvFURsZHqLtYG7kFo0XxHQT7u+A+9mr5GA6t5TfB7xsI0O7LU4VvL3yRP9USiPWhiT3WdCag9BOl/t7FKAk95qD3zXx8p93zwIoASKz7+rYNhPzEwmxq17zqEguH5PRh5BFjM6Z3Cc3mgBkAs/GDoZJUVcFWrBokJimoHTlh5nry6p0QtGKA8jAtdhDj7r1A4l65+hZ/pl9CyxLFHwe+lk0tUQkdiam6rRPabvfZyW3skn7q58b+2YZK7dYb7y2ZJEbT8VjwEyS9wc52SB7Ol8UHTJsqHPlUNWgqMpEQWIYIIWlADzvCzw6s9TxBHpnujKj2Ia8t3NySiRak=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 220e7391-50c4-45fc-a5c8-08ded8ee1e37
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB6229.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2026 10:30:35.7721
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hMdWV2Z1SHid9oDvbRT9JbxwPREkbQD8i/yHa+d4gEyd/8NuRmoFgRDNdznOP4K7E/WdtIb54MnSuEHbdbLK0g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB7781
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-07-03_02,2026-06-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ spamscore=0 adultscore=0 suspectscore=0 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=916 bulkscore=0 malwarescore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2606160000 definitions=main-2607030101
+X-Proofpoint-ORIG-GUID: eLljIDyc3-T0xSutAlgGdUO_Y9a00Ixu
+X-Proofpoint-GUID: eLljIDyc3-T0xSutAlgGdUO_Y9a00Ixu
+X-Authority-Analysis: v=2.4 cv=DK6/JSNb c=1 sm=1 tr=0 ts=6a478f52 cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=RAioF0-LDSMA:10
+ a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=3I1J8UUJPc9JN9BFgKH3:22 a=NEAV23lmAAAA:8 a=mzwNoLC9IZnmwtnRvgQA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzAzMDEwMSBTYWx0ZWRfX2FZRXVrkNqNp
+ +OYDH5eKqDE9JG4qtP8jzWswuRNzrRaMqqNxIVzbCsa6wKEpNckmXL5OmKmB6ep0gWtvBFXnlMY
+ 5pu01PbiiU1geeFfi2SZHoTynJ2d2ZauETnVMmHz4rsl4rhvNchgaC/qvupLAYFNL4rswlk1FUg
+ 8SUDi6Ro7pYPFNA1IxuxCjvSKGezjH8YIaO54rzup6bPKUqGHLqiGZjwr9xI6shZwl5mpGX6BF3
+ PKdZ5pN46xVet/HN4n4qgxlcDj4HqXxAW3YdSix5IqnnpF10hmfPI+1fa4NMaJlXQesC9Xt7How
+ uRxHU5K5EfHb/D4YcPrf6HwM11qyAs7Yj7MvEhAmcROWmrDlCeGUdiL9qHOUMRF0ynmRQBJt0Xt
+ dW5hw2H2bBclweXPCxowkVEGVwjOz/kTXmprAgBEbIqzFONtqq8DWJWdbwKNsKmkuPM2LG4SxzN
+ c3/3h6x33lGgD36rXrg==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzAzMDEwMSBTYWx0ZWRfX/AJ1qZauPY/w
+ q1iXehQsHiS9cXzp15l3gTEO9cD6g1cglQZg30csUmrAmJlJG9LCVMpfc1dI94ky1EEaVTSpkl2
+ SHttEi/QeE37ls65mBCBAIPHBK0gVbPNCrJ7Rn3F0jObsBD034s6
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+X-Spamd-Result: default: False [-5.66 / 15.00];
+	WHITELIST_DMARC(-7.00)[oracle.com:D:+];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[suse.com:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-25503-lists,linux-scsi=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	TAGGED_FROM(0.00)[bounces-25505-lists,linux-scsi=lfdr.de];
+	FORGED_SENDER(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[hare@suse.com,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:rppt@kernel.org,m:brking@linux.vnet.ibm.com,m:martin.petersen@oracle.com,m:brking@us.ibm.com,m:James.Bottomley@hansenpartnership.com,m:willy@infradead.org,m:linux-kernel@vger.kernel.org,m:linux-mm@kvack.org,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,m:wenxiong@linux.ibm.com,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:hch@lst.de,m:kbusch@kernel.org,m:sagi@grimberg.me,m:axboe@fb.com,m:martin.petersen@oracle.com,m:james.bottomley@hansenpartnership.com,m:hare@suse.com,m:jmeneghi@redhat.com,m:linux-nvme@lists.infradead.org,m:linux-scsi@vger.kernel.org,m:michael.christie@oracle.com,m:snitzer@kernel.org,m:bmarzins@redhat.com,m:dm-devel@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:nilay@linux.ibm.com,m:john.garry@linux.dev,m:john.g.garry@oracle.com,s:lists@lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hare@suse.com,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[john.g.garry@oracle.com,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp,oracle.onmicrosoft.com:dkim];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:from_mime,suse.com:email,suse.com:mid,suse.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	RCVD_COUNT_SEVEN(0.00)[9]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: CE3FA700502
+X-Rspamd-Queue-Id: A85A07013CA
 
-On 7/3/26 9:49 AM, Mike Rapoport wrote:
-> On Thu, Jul 02, 2026 at 09:55:56AM +0300, Mike Rapoport wrote:
->> On Wed, Jul 01, 2026 at 04:03:48PM -0500, Brian King wrote:
->>> On 7/1/26 4:52 AM, Mike Rapoport wrote:
->>>> On Wed, Jul 01, 2026 at 09:03:06AM +0200, Hannes Reinecke wrote:
->>>>> On 6/30/26 12:54 PM, Mike Rapoport (Microsoft) wrote:
->>>>>> IPR dump machinery allocates memory to save adapter's crash dump using
->>>>>> __get_free_page().
->>>>>>
->>>>>> This memory can be allocated with kmalloc() as there's nothing special
->>>>>> about it to go directly to the page allocator.
->>>>>>
->>>>>> kmalloc() provides a better API that does not require ugly casts and
->>>>>> kfree() does not need to know the size of the freed object.
->>>>>>
->>>>>> Replace use of __get_free_page() with kmalloc().
->>>>>>
->>>>>> Link: https://lore.kernel.org/all/635405e4-9423-4a25-a6e7-e03c8ea0bcbe@redhat.com
->>>>>> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
->>>>>> ---
->>>>>>    drivers/scsi/ipr.c | 4 ++--
->>>>>>    1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
->>>>>> index d207e5e81afe..5a212bfdeec2 100644
->>>>>> --- a/drivers/scsi/ipr.c
->>>>>> +++ b/drivers/scsi/ipr.c
->>>>>> @@ -2893,7 +2893,7 @@ static int ipr_sdt_copy(struct ipr_ioa_cfg *ioa_cfg,
->>>>>>    	       (ioa_dump->hdr.len + bytes_copied) < max_dump_size) {
->>>>>>    		if (ioa_dump->page_offset >= PAGE_SIZE ||
->>>>>>    		    ioa_dump->page_offset == 0) {
->>>>>> -			page = (__be32 *)__get_free_page(GFP_ATOMIC);
->>>>>> +			page = kmalloc(PAGE_SIZE, GFP_ATOMIC);
->>>>>>    			if (!page) {
->>>>>>    				ipr_trace;
->>>>>> @@ -3226,7 +3226,7 @@ static void ipr_release_dump(struct kref *kref)
->>>>>>    	spin_unlock_irqrestore(ioa_cfg->host->host_lock, lock_flags);
->>>>>>    	for (i = 0; i < dump->ioa_dump.next_page_index; i++)
->>>>>> -		free_page((unsigned long) dump->ioa_dump.ioa_data[i]);
->>>>>> +		kfree(dump->ioa_dump.ioa_data[i]);
->>>>>>    	vfree(dump->ioa_dump.ioa_data);
->>>>>>    	kfree(dump);
->>>>>>
->>>>>
->>>>> I _think_ we can replace this with kvmalloc, and allocate the entire
->>>>> dump buffer in one go. Once switched to kmalloc() it's kinda pointless
->>>>> to allocate separate page-sized buffers here.
->>>>
->>>> kmalloc() performance is on par with __get_free_page(), but kvmalloc()
->>>> would be slower if it falls back to vmalloc().
->>>>
->>>> I'm not familiar with the driver to say if this could be an issue here.
->>>
->>> This code only runs when the adapter has hit a fatal error, so should be
->>> extremely rare. The memory is getting allocated while the storage adapter
->>> is in a failed state, so anything running on the system at the time could
->>> be stalled until recovery is completed. This memory is allocated and should
->>> be freed soon after the adapter recovers. In order for this code to
->>> run, the iprdump daemon must be running, which will then read out the dump
->>> after the adapter is recovered, and write it to disk, after which time, the
->>> ipr driver will free the kernel memory.
->>
->> Thanks for the explanation!
->>
->> So the allocation is not on the hot path and it seems to me that
->> performance differences between kmalloc() and slower vmalloc() won't move a
->> needle relatively to the entire dump procedure.
-> 
-> I looked more closely at the code. Currently the dump continues as long as
-> it can allocate memory and even if memory for the entire buffer is not
-> available there still will be some data in the dump.
-> 
-> With a single allocation that may be as large as 80M
-> (IPR_FMT3_MAX_IOA_DUMP_SIZE), an allocation failure would mean no data
-> would be dumped at all.
-> 
-> I think the current model is better than using a single kvmalloc()
-> allocation for the entire buffer.
-> 
-> I'm going to send v2 that keeps kmalloc() and only changes GFP_ATOMIC to
-> GFP_NOIO if there are no objections.
-> 
+This series introduces libmultipath. It is essentially a refactoring of
+NVME multipath support, so we can have a common library to also support
+native SCSI multipath.
 
-Fair point.
+Much of the code is taken directly from the NVMe multipath code. However,
+NVMe specifics are removed. A template structure is provided so the driver
+may provide callbacks for driver specifics, like ANA support for NVMe.
 
-You can add:
+Important new structures introduced include:
 
-Reviewed-by: Hannes Reinecke <hare@kernel.org>
+- mpath_head
+These contain much of the multipath-specific functionality from
+nvme_ns_head, including a pointer to the gendisk structure and
+a path SRCU-based array.
 
-Cheers,
+- mpath_device
+This is the per-path structure, and contains much the same
+multipath-specific functionality in nvme_ns
 
-Hannes
+libmultipath provides functionality for path management, path selection,
+data path, and failover handling.
+
+Since the NVMe driver has some code in the sysfs and ioctl handling
+which iterate all multipath NSes, functions like mpath_call_for_device()
+are added to do the same per-path iteration.
+
+Full series also available at:
+https://github.com/johnpgarry/linux/tree/scsi-multipath-v7.2-v3
+
+Differences to v2:
+- Make mpath_head embeddable in driver head structure (Sagi)
+- remove get_nr_active and get_iopolicy driver callbacks
+- rebase
+
+Differences to v1:
+- put current_path[] at end of struct mpath_head (Nilay)
+- drop struct mpath_disk and keep nvme_remove_head() (Nilay)
+- don't pass iopolicy from mpath_find_path() (Benjamin)
+- change mpath_access_state names (Nilay)
+- fix for setting mpath_device.nr_active and .numa_node (Nilay)
+- fix uninit'ed pointers in __mpath_find_path() (Nilay)
+- simplify mpath_head_template.available_path (Nilay, Benjamin)
+- use DEFINE_SIMPLE_SYSFS_GROUP_VISIBLE (Benjamin)
+- check mpath_bdev_submit_bio() -> .clone_bio() for errors (Benjamin)
+- drop struct mpath_pr_ops (Keith)
+- drop mpath_head_template.bdev_ioctl
+- drop mpath_head_template.get_unique_id
+- drop mpath_head_template.report_zones
+- drop mpath_head_template.get_access_state
+- add mpath_head_template.ioctl_{begin, finish} and drop
+mpath_head_read_unlock()
+- add mpath_device.access_state
+- add mpath_head_devices_empty()
+- make mpath_delete_device() return a bool
+
+John Garry (13):
+  libmultipath: Add initial framework
+  libmultipath: Add basic gendisk support
+  libmultipath: Add path selection support
+  libmultipath: Add bio handling
+  libmultipath: Add support for mpath_device management
+  libmultipath: Add delayed removal support
+  libmultipath: Add cdev support
+  libmultipath: Add sysfs helpers
+  libmultipath: Add PR support
+  libmultipath: Add mpath_bdev_report_zones()
+  libmultipath: Add support for block device IOCTL
+  libmultipath: Add mpath_bdev_getgeo()
+  libmultipath: Add mpath_bdev_get_unique_id()
+
+ include/linux/multipath.h |  182 +++++
+ lib/Kconfig               |    6 +
+ lib/Makefile              |    2 +
+ lib/multipath.c           | 1318 +++++++++++++++++++++++++++++++++++++
+ 4 files changed, 1508 insertions(+)
+ create mode 100644 include/linux/multipath.h
+ create mode 100644 lib/multipath.c
+
 -- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.com                               +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+2.43.7
+
 
