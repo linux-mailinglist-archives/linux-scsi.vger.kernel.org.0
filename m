@@ -1,186 +1,198 @@
-Return-Path: <linux-scsi+bounces-25501-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25502-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id wJyiNRpNR2r9VgAAu9opvQ
-	(envelope-from <linux-scsi+bounces-25501-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 07:48:10 +0200
+	id DbekOdBsR2plYAAAu9opvQ
+	(envelope-from <linux-scsi+bounces-25502-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 10:03:28 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E0896FED20
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 07:48:10 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA7636FFD96
+	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 10:03:27 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=gAd5Bt9b;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=KGndhYQa;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25501-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25501-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25502-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25502-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 33046301F89F
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2026 05:47:57 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 178273084D69
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2026 07:50:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 580763644C9;
-	Fri,  3 Jul 2026 05:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8841A433E90;
+	Fri,  3 Jul 2026 07:49:18 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0EC6366074
-	for <linux-scsi@vger.kernel.org>; Fri,  3 Jul 2026 05:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4927936D9E9;
+	Fri,  3 Jul 2026 07:49:17 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783057647; cv=none; b=KFBLyzbSGnvpVUitW01oDlnL8/HR80enjN4bdKhaYnQVOs4qOXL5i6Wr9ekOG6MW05W4ZbW4y12KUwJjdLaTnNviJj9/WWYA75cH0d0U3P4L0xJnuCC4FbNJ9bNYU9rUhFf2OWRSCpdM68VpyqDjgVjW5wm3331Rl4nUno3FINc=
+	t=1783064958; cv=none; b=TdNRjB3DsH8B50x7ijacJ6Ay57XYQvT1EYlm1tnO+JDBVV1M7o1mgMpuc/TYH4VRygX2sUVr6+RnP1tBI7GRQQaDlOKpNTPj3iCfJcpnBQYT4sgaoYs7/FD6eHA9yt1E+7aFJ0OwCd1OetaUv/WoDRpXMMbWmV8q/GrjOMcZo64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783057647; c=relaxed/simple;
-	bh=suTfpO1/V4rv7+69STacTD+deUIPH7hZ+v9Mzcr8eQg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Pt+yfv3DUFiwrKjXoB/uvVF92LyxhiYSbEmv5411Vam+IF6GLPIqpGGUBXYF2isdoouR+5aS8LTh/73Er779tZRTrnhNpPfNpsJHrEY3wKOFla/iiShszqU20fki+JH6s6CQBaeb4H2DkiHeQa9GYRHck/IWRKX3X/k1y5KeLpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gAd5Bt9b; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6FA01F000E9;
-	Fri,  3 Jul 2026 05:47:17 +0000 (UTC)
+	s=arc-20240116; t=1783064958; c=relaxed/simple;
+	bh=kVPXDPzXW/Ltl+aT6WHG2pxjCTzzdNh7Q2gCVmhy5gc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DBF/PX8mdjaEPbgJU/PYd45WZl4JzscVD0b/lBTKai//2KsKjqctD3efmCqIyuYK4G6DiKvtMMbB/eWYIyymwoVdALtSL9gHULfcIzRZ8pAmoPBaZO9RNm1ncayIuPuHQwERxomU2LTkfac6v93ML5bt9EztEDCOQEH6gyt8wxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KGndhYQa; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E4B51F000E9;
+	Fri,  3 Jul 2026 07:49:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783057638;
-	bh=Yezqf+2ORO+MdR2KDKc1SeMGrlcmFV0UGrSJfyNV+fU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gAd5Bt9bkLgGe9pb/pBSpIb6vN2QjeKDcqxuMQL2aobtefGDHEO9+BY/PVSM4ITlK
-	 oUEyG7X0oHyyny4KVee0oHk5gaeR9HOcKQ1WjHR0PIUUyGMcRS7qdIYc2hT0KXPnyS
-	 0H2X8KdIOHHSurFXh/IeP3qZ54R4AgYMDs68pKjSZuKFfldGYmyd87TsoKuK9X7lKp
-	 qeQuQrZk91FhBxC2tEQdzV5x9p46DzwUhCieiXmocgCWi8rd3tqefN7njQ1kVcEZZj
-	 kN8Fuxuc5/DfT545NeOPF7fgpZ6Ihoy+v3w9/gdmn+YOiivmKjSG/erQ9t9Ak0lOW9
-	 FJ1qgEN4asYog==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1] scsi: be2iscsi: Fix MSI-X IRQ unwind on request
- failure
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yuho Choi" <dbgh9129@gmail.com>
-Cc: linux-scsi@vger.kernel.org
-In-Reply-To: <20260703053055.141337-1-dbgh9129@gmail.com>
-References: <20260703053055.141337-1-dbgh9129@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 03 Jul 2026 05:47:16 +0000
-Message-Id: <20260703054717.A6FA01F000E9@smtp.kernel.org>
+	s=k20260515; t=1783064956;
+	bh=CIkFMzoXDcnD9nBYqCI1NBbFTtaOgztPoTY9RG1HHBE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=KGndhYQaN4X8CaaQEmB0znlSGwQ/HhvM9w2Fh8Y3LCqMZLD34jkaonGoVr8naz/8R
+	 8odk1aZvEVWkWOdMsKSj8HQE6EsO+iC9Ocw4h2DuiQSpU596U9wAJIeK3SBQTqGHY0
+	 A+oQ2LOV+CRewhiM6DXQOxpws8ac4znk5faLJAy/WTGvC5Vt8tsBVYpPleIlf2aB4w
+	 TQBLEVQr5O48u1+B+12LUe1qWExBY45ujKtKsPWIkYCDOTX5NeWCg2AXZ4LC6JUNhR
+	 1sn5tUPOClaeL94RZuGO9B31uOuAAtYbhXFvQtvfAGjoF/4U+INVCRYLR+hi8fdAer
+	 Tth7J2zspZEFQ==
+Date: Fri, 3 Jul 2026 10:49:09 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Brian King <brking@linux.vnet.ibm.com>
+Cc: Hannes Reinecke <hare@suse.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Brian King <brking@us.ibm.com>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org, wenxiong@linux.ibm.com
+Subject: Re: [PATCH 3/4] scsi: ipr: use kmalloc() to allocate IPR dump buffer
+ memory
+Message-ID: <akdpddKBt7gV6po5@kernel.org>
+References: <20260630-b4-scsi-v1-0-494fb37ebe7b@kernel.org>
+ <20260630-b4-scsi-v1-3-494fb37ebe7b@kernel.org>
+ <7c8f0e70-f49c-4614-af95-002fb2be11ba@suse.com>
+ <akTjQVQQNdeO9M28@kernel.org>
+ <d92f22b9-9a4d-42f2-ba67-0371f85fedd3@linux.vnet.ibm.com>
+ <akYLdBME5kgyi8Rw@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <akYLdBME5kgyi8Rw@kernel.org>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
+X-Spamd-Result: default: False [-5.16 / 15.00];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORWARDED(0.00)[lists@lfdr.de];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25501-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:dbgh9129@gmail.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-25502-lists,linux-scsi=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER(0.00)[rppt@kernel.org,linux-scsi@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:brking@linux.vnet.ibm.com,m:hare@suse.com,m:martin.petersen@oracle.com,m:brking@us.ibm.com,m:James.Bottomley@hansenpartnership.com,m:willy@infradead.org,m:linux-kernel@vger.kernel.org,m:linux-mm@kvack.org,m:linux-scsi@vger.kernel.org,m:target-devel@vger.kernel.org,m:wenxiong@linux.ibm.com,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWO(0.00)[2];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_NO_DN(0.00)[];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[rppt@kernel.org,linux-scsi@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[smtp.kernel.org:mid,sashiko.dev:url,lists.linux.dev:replyto,vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	RCPT_COUNT_SEVEN(0.00)[11];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 6E0896FED20
+X-Rspamd-Queue-Id: DA7636FFD96
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Thu, Jul 02, 2026 at 09:55:56AM +0300, Mike Rapoport wrote:
+> On Wed, Jul 01, 2026 at 04:03:48PM -0500, Brian King wrote:
+> > On 7/1/26 4:52 AM, Mike Rapoport wrote:
+> > > On Wed, Jul 01, 2026 at 09:03:06AM +0200, Hannes Reinecke wrote:
+> > >> On 6/30/26 12:54 PM, Mike Rapoport (Microsoft) wrote:
+> > >>> IPR dump machinery allocates memory to save adapter's crash dump using
+> > >>> __get_free_page().
+> > >>>
+> > >>> This memory can be allocated with kmalloc() as there's nothing special
+> > >>> about it to go directly to the page allocator.
+> > >>>
+> > >>> kmalloc() provides a better API that does not require ugly casts and
+> > >>> kfree() does not need to know the size of the freed object.
+> > >>>
+> > >>> Replace use of __get_free_page() with kmalloc().
+> > >>>
+> > >>> Link: https://lore.kernel.org/all/635405e4-9423-4a25-a6e7-e03c8ea0bcbe@redhat.com
+> > >>> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > >>> ---
+> > >>>   drivers/scsi/ipr.c | 4 ++--
+> > >>>   1 file changed, 2 insertions(+), 2 deletions(-)
+> > >>>
+> > >>> diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
+> > >>> index d207e5e81afe..5a212bfdeec2 100644
+> > >>> --- a/drivers/scsi/ipr.c
+> > >>> +++ b/drivers/scsi/ipr.c
+> > >>> @@ -2893,7 +2893,7 @@ static int ipr_sdt_copy(struct ipr_ioa_cfg *ioa_cfg,
+> > >>>   	       (ioa_dump->hdr.len + bytes_copied) < max_dump_size) {
+> > >>>   		if (ioa_dump->page_offset >= PAGE_SIZE ||
+> > >>>   		    ioa_dump->page_offset == 0) {
+> > >>> -			page = (__be32 *)__get_free_page(GFP_ATOMIC);
+> > >>> +			page = kmalloc(PAGE_SIZE, GFP_ATOMIC);
+> > >>>   			if (!page) {
+> > >>>   				ipr_trace;
+> > >>> @@ -3226,7 +3226,7 @@ static void ipr_release_dump(struct kref *kref)
+> > >>>   	spin_unlock_irqrestore(ioa_cfg->host->host_lock, lock_flags);
+> > >>>   	for (i = 0; i < dump->ioa_dump.next_page_index; i++)
+> > >>> -		free_page((unsigned long) dump->ioa_dump.ioa_data[i]);
+> > >>> +		kfree(dump->ioa_dump.ioa_data[i]);
+> > >>>   	vfree(dump->ioa_dump.ioa_data);
+> > >>>   	kfree(dump);
+> > >>>
+> > >>
+> > >> I _think_ we can replace this with kvmalloc, and allocate the entire
+> > >> dump buffer in one go. Once switched to kmalloc() it's kinda pointless
+> > >> to allocate separate page-sized buffers here.
+> > > 
+> > > kmalloc() performance is on par with __get_free_page(), but kvmalloc()
+> > > would be slower if it falls back to vmalloc(). 
+> > > 
+> > > I'm not familiar with the driver to say if this could be an issue here.
+> > 
+> > This code only runs when the adapter has hit a fatal error, so should be
+> > extremely rare. The memory is getting allocated while the storage adapter
+> > is in a failed state, so anything running on the system at the time could
+> > be stalled until recovery is completed. This memory is allocated and should
+> > be freed soon after the adapter recovers. In order for this code to
+> > run, the iprdump daemon must be running, which will then read out the dump
+> > after the adapter is recovered, and write it to disk, after which time, the
+> > ipr driver will free the kernel memory.
+> 
+> Thanks for the explanation!
+> 
+> So the allocation is not on the hot path and it seems to me that
+> performance differences between kmalloc() and slower vmalloc() won't move a
+> needle relatively to the entire dump procedure.
 
-Pre-existing issues:
-- [High] Erroneous error handling of pci_alloc_irq_vectors_affinity() in be=
-2iscsi_enable_msix() restricts MSI-X to 1 CPU on success, and causes a buff=
-er overflow on failure.
---
+I looked more closely at the code. Currently the dump continues as long as
+it can allocate memory and even if memory for the entire buffer is not
+available there still will be some data in the dump.
 
-commit 770fa6df2516c59abfdd643e359fed37ffae37ec
-Author: Yuho Choi <dbgh9129@gmail.com>
+With a single allocation that may be as large as 80M
+(IPR_FMT3_MAX_IOA_DUMP_SIZE), an allocation failure would mean no data
+would be dumped at all.
 
-scsi: be2iscsi: Fix MSI-X IRQ unwind on request failure
+I think the current model is better than using a single kvmalloc()
+allocation for the entire buffer.
 
-This commit fixes the MSI-X IRQ unwind loop in beiscsi_init_irqs() when a
-later request_irq() fails. It changes the vector index passed to
-pci_irq_vector() from the failing index i to the current unwind index j to
-correctly free the registered IRQs.
+I'm going to send v2 that keeps kmalloc() and only changes GFP_ATOMIC to
+GFP_NOIO if there are no objections.
 
-> diff --git a/drivers/scsi/be2iscsi/be_main.c b/drivers/scsi/be2iscsi/be_m=
-ain.c
-> index fd18d4d3d219b..9833ab06b299a 100644
-> --- a/drivers/scsi/be2iscsi/be_main.c
-> +++ b/drivers/scsi/be2iscsi/be_main.c
-> @@ -878,7 +878,7 @@ static int beiscsi_init_irqs(struct beiscsi_hba *phba)
->  	return 0;
->  free_msix_irqs:
->  	for (j =3D i - 1; j >=3D 0; j--) {
-> -		free_irq(pci_irq_vector(pcidev, i), &phwi_context->be_eq[j]);
-> +		free_irq(pci_irq_vector(pcidev, j), &phwi_context->be_eq[j]);
-
-[Severity: High]
-This is a pre-existing issue, but since this unwinding code depends on i
-which iterates up to phba->num_cpus, can this loop result in a buffer
-overflow?
-
-Looking at be2iscsi_enable_msix(), it appears the error handling logic is
-inverted when calling pci_alloc_irq_vectors_affinity():
-
-drivers/scsi/be2iscsi/be_main.c:be2iscsi_enable_msix() {
-    ...
-		if (pci_alloc_irq_vectors_affinity(phba->pcidev, 2, nvec,
-				PCI_IRQ_MSIX | PCI_IRQ_AFFINITY, &desc) < 0) {
-			phba->num_cpus =3D nvec - 1;
-			return;
-		}
-	}
-
-	phba->num_cpus =3D 1;
-    ...
-}
-
-On failure (< 0), it sets phba->num_cpus =3D nvec - 1, where nvec can be up
-to 2048, which could lead to out-of-bounds array accesses in functions
-iterating over num_cpus. For instance, in beiscsi_dev_probe():
-
-drivers/scsi/be2iscsi/be_main.c:beiscsi_dev_probe() {
-    ...
-	for (i =3D 0; i < phba->num_cpus; i++) {
-		pbe_eq =3D &phwi_context->be_eq[i];
-		irq_poll_init(&pbe_eq->iopoll, be_iopoll_budget, be_iopoll);
-	}
-    ...
-}
-
-This loop writes into phwi_context->be_eq[i], which has a static size of
-MAX_CPUS (64). Should be2iscsi_enable_msix() handle the return value
-differently to prevent this overflow on failure, and to avoid hardcoding
-phba->num_cpus =3D 1 on success?
-
->  		kfree(phba->msi_name[j]);
->  	}
->  	return ret;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260703053055.1413=
-37-1-dbgh9129@gmail.com?part=3D1
+-- 
+Sincerely yours,
+Mike.
 
