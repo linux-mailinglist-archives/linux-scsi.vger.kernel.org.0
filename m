@@ -1,217 +1,131 @@
-Return-Path: <linux-scsi+bounces-25588-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25589-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id SHbrFIAvSGrGnQAAu9opvQ
-	(envelope-from <linux-scsi+bounces-25588-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 23:54:08 +0200
+	id 3lklCcw1SGohnwAAu9opvQ
+	(envelope-from <linux-scsi+bounces-25589-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Sat, 04 Jul 2026 00:21:00 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96B20705FA8
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 23:54:07 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42A0770608D
+	for <lists+linux-scsi@lfdr.de>; Sat, 04 Jul 2026 00:20:59 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=BxMTWVk6;
-	dmarc=pass (policy=none) header.from=gmail.com;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25588-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25588-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=linux.dev header.s=key1 header.b=CkvbjOX1;
+	dmarc=pass (policy=none) header.from=linux.dev;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25589-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25589-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1DE223031816
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2026 21:53:53 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8D9FD301AC1D
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2026 22:20:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ECE6344DA2;
-	Fri,  3 Jul 2026 21:53:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CE822D23A6;
+	Fri,  3 Jul 2026 22:20:57 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40626433E99
-	for <linux-scsi@vger.kernel.org>; Fri,  3 Jul 2026 21:53:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDBF41F94F
+	for <linux-scsi@vger.kernel.org>; Fri,  3 Jul 2026 22:20:54 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783115632; cv=none; b=YTyBKtpYeg6RaEZvFfOsg12i8Ti2lbBTGkkSYSPO2KedRn0LlzQ2UWy9zZmMIzFfO64evgr1vFsUp97QY9O2CjrxhiCSwX6XnTzyyPPS/8r3y9R8Ycn6+s8t7+EcgJjgoti3LEF8BD3heNzCUitTdfOCa6Wib/ZkEgyOMN0xq3U=
+	t=1783117257; cv=none; b=DavhPqiIatHRg1VhGiuAEa2bcSQmI5Zg12uv66XZc73BE9w723LEs8wGC6Jqs5572BRyTMzhOeyAwlJR0IygK1f91z/dz1SsYnvpJHpLnYC0C3P9Pj7dSg6S2+5tVhh8GobxeXSQ+/xJxT7AvlDEFw/oydHokUrBiT21Uxw30ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783115632; c=relaxed/simple;
-	bh=72Sz3QddkifQrNxXKx0x9wIQF0n9ZEE7JMJkeBTc52k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gkpaEahMATkbOEhxK8kMpNv9gKunZOwzqEFJO3but2QG0Tx1dUcwO5Xq1TfU67U7EKr9vwx0WmFz66bX8BuKhl0l3tMAPDxg2D27D7ll8Iengli9a+L6n0ZcoxoNz3RfVVDuq27wBBpyUS/wc/RV461IkYs+A/rzx2tnV2R3LQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BxMTWVk6; arc=none smtp.client-ip=209.85.216.52
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-37e0fb87b75so1090323a91.3
-        for <linux-scsi@vger.kernel.org>; Fri, 03 Jul 2026 14:53:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783115629; x=1783720429; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rRYClkwdsvHfRU5ObCiwGORJlzT5RqIkavkZCGUIPck=;
-        b=BxMTWVk6s9GdIIGTlJOgdxIVZ+nzO1fuyyTxdYHJuA0eBrsSkbuV81J5EsZ+7aNnYz
-         yQ1IIahf3wa+jOU+2otpLcX4qOyceLFU5tBOicLcMTbEVtUEaiomadZalHw11ltweez5
-         BGgfOIYWANeO01Zkb4RGcvhPlVXlaENFyhcdfa/7sscvs68sbsl5jP8C8ux9vmv23Z17
-         eb4vgwvxmhMZ9T5l2d//AMy6TWSvaZzW6EyZ45CtiUPObQKOexWMIYd6GFSXvkEUxN8K
-         jIUySMpe4tB1kot1vT4KglCdkQJLkLcPoMnCR72igiA5lg4VN35lRi1Ts59MVBQ01TBB
-         z7+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783115629; x=1783720429;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rRYClkwdsvHfRU5ObCiwGORJlzT5RqIkavkZCGUIPck=;
-        b=S8y+uhw+gcln9wvhazmnt/D+nHySbPOyXk69oyFCag9GweMJ6GhgwTZPHoUvdM4uOO
-         uSxzvi2e1pFQfLElDurfrwqoTEW5SDwe5/meNNdYfi1JkLNkTmJ+HU6+iqxbQ+vCBIIq
-         l+gn1qcFpMNIpTAuDmBi8nHaa0LIpcVkrOb9yqILooEa/VzWzrgp00hlYIyLTu67P12B
-         Cc1i5rhdOQVFYWmliud6gwaY16HVBkNYzYc/xLUGNZaEv+wDSxQPbTCvGEKV9kM/WJKQ
-         OWGcaNr6NYxQa0Ow+iFu9pjmWeYwAl/R6gtTPJa0xedNTBY9sRCWxQUGx66yoVSskSr1
-         Zz/w==
-X-Gm-Message-State: AOJu0YwPnqE/yZlF6UfZrQRWAHLzcluLOqu1xrRKbX8r8TqVXFPMR1yo
-	RfxJaxDYMC0/YIF0I35eYxrAE28FB38XGDpHnbjWkHibMJV1vsXNk/okWhfh7w==
-X-Gm-Gg: AfdE7cnThKjMsqm86pFX5cPVjOTvEamvAsWy+qxx03Ob5SvrF7VaBkcjpaoJO3/OSOC
-	IyCpRBTd+TxA/r6w/qrnBZGAlvUD1CWFrcxD/91TDKw/H35czHzGccm28IC2WEo9qIovPVL6jTa
-	ScVdnJ9FaG4M+J7HaxqMPJXjFDxSSborvv5iFD/TEqMBzkjM679BufwAenAZX4PmFmxGhRPyr30
-	4Nj4lpfZEy8/OnHSxLGtfqXS1fgL0hfq90T1aPc9zyXV/8yR6hxLY91DWt72bTkBIrtzVVr1Hxk
-	K3gFx/kCdk5Ke0qbKJZQFPF3jHFgt6069Uv+s/+5Mz2OL26eRc5axdav4ljL525FGXshlpGjp9C
-	LRrQYgDIeCtD124CdJTZMNxPogywogCtH3pEhYoGSGPf+LkpsI5gwFF2QbCBYQ379Ir9hF7L9cM
-	yEElWOIVDSIgV0ec66zv5gpxMXB0VKzvAOjhKOHuZz1hELhewTLeHyMRmT/aR5YYHqY2rEy53ZL
-	eRUO0zwMg==
-X-Received: by 2002:a17:903:2f81:b0:2c9:b8e5:5741 with SMTP id d9443c01a7336-2cbb9ee1c39mr7826865ad.35.1783115629443;
-        Fri, 03 Jul 2026 14:53:49 -0700 (PDT)
-Received: from ryzen.lan ([2601:644:8000:7a86::e34])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad776577esm14738535ad.39.2026.07.03.14.53.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jul 2026 14:53:47 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-scsi@vger.kernel.org
-Cc: =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	s=arc-20240116; t=1783117257; c=relaxed/simple;
+	bh=MJ/qh6D/zsDdIiDOfu7SIoCeBVXlf6R7b31cT1FIGdU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tg1h1uBUsf7IAyxOyIj5HGRZP0LmQMBxe0HkSG5l1AjtlbKcZBuK8nk2cwhUfNd686TcAKitjiWX7eZg8dvcDjQGM6wYmlIbLoOPuCtq+ZxIUfJCmvozMiIWqBXrHfCHhZT+bcWE+SQ/4Y+GCStcgILuoqxSOqgBctXW9yZvAFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CkvbjOX1; arc=none smtp.client-ip=91.218.175.182
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783117252;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=QjnNbXk3O9fzPLCQ/L/wqjlAhAAiHBN/Uo3FaUo9PAw=;
+	b=CkvbjOX1sOTozz6Ylnw+lGOAkwiJ8PB8TV0AynpCM9N8t/NX8VviA1uuBmVFObmGtnzrLf
+	vWEE8kzna7mY/MV8jMU/JmuoaLiJgGPlM+M7WaDTGHl4BgWOTyCoxXBxF7wQPX6sXRJrNu
+	Rzo1JusEe4VFzMNfy1u6Oobh+5GOcvI=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
 	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-hardening@vger.kernel.org (open list:KERNEL HARDENING (not covered by other areas):Keyword:\b__counted_by(_le|_be|_ptr)?\b)
-Subject: [PATCHv2] scsi: st: use kzalloc_array()
-Date: Fri,  3 Jul 2026 14:53:45 -0700
-Message-ID: <20260703215345.253901-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	Kees Cook <kees@kernel.org>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: csiostor: Use str_plural() in csio_mem_intr_handler()
+Date: Sat,  4 Jul 2026 00:17:29 +0200
+Message-ID: <20260703221731.180534-3-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1104; i=thorsten.blum@linux.dev; h=from:subject; bh=MJ/qh6D/zsDdIiDOfu7SIoCeBVXlf6R7b31cT1FIGdU=; b=owGbwMvMwCUWt7pQ4caZUj3G02pJDFkeJr8rqmzPP7KZo/XbcMaXfE6t/ZaGL92uHvnqMUe73 cNa7d7BjlIWBjEuBlkxRZYHs37M8C2tqdxkErETZg4rE8gQBi5OAZjI9IWMDN+POR/ln3GxNVsi 8at5QMkbk0u2p69EP1xUvO9EkuzRJj1GhlMGAgHvpxX3sz2MvRMb+ihuku7dVWrJEvdv9V2c2Bd RxgIA
+X-Developer-Key: i=thorsten.blum@linux.dev; a=openpgp; fpr=1D60735E8AEF3BE473B69D84733678FD8DFEEAD4
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25588-lists,linux-scsi=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:linux-scsi@vger.kernel.org,m:Kai.Makisara@kolumbus.fi,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:kees@kernel.org,m:gustavoars@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-hardening@vger.kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER(0.00)[rosenp@gmail.com,linux-scsi@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25589-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:kees@kernel.org,m:thorsten.blum@linux.dev,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[3];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[rosenp@gmail.com,linux-scsi@vger.kernel.org];
+	FORGED_SENDER(0.00)[thorsten.blum@linux.dev,linux-scsi@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[thorsten.blum@linux.dev,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[linux.dev:+];
 	ALIAS_RESOLVED(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp]
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp,linux.dev:from_mime,linux.dev:email,linux.dev:mid,linux.dev:dkim]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 96B20705FA8
+X-Rspamd-Queue-Id: 42A0770608D
 
-Merge allocations to simpily memory management with kzalloc_array(). No
-need to kfree separately.
+Replace the manual ternary "s" pluralization with str_plural() to
+simplify the code. This also corrects the "0 errors" case.
 
-Add __counted_by for extra runtime analysis. Move counting variable
-assignment after allocation as kzalloc_flex() does this with newer
-compilers.
-
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
 ---
- v2: remove the kfree and add a description.
- drivers/scsi/st.c | 13 +++----------
- drivers/scsi/st.h |  3 ++-
- 2 files changed, 5 insertions(+), 11 deletions(-)
+ drivers/scsi/csiostor/csio_hw.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
-index f1c3c4946637..55238f23f743 100644
---- a/drivers/scsi/st.c
-+++ b/drivers/scsi/st.c
-@@ -149,7 +149,7 @@ static struct st_dev_parm {
-    mode counts */
- static const char *st_formats[] = {
- 	"",  "r", "k", "s", "l", "t", "o", "u",
--	"m", "v", "p", "x", "a", "y", "q", "z"};
-+	"m", "v", "p", "x", "a", "y", "q", "z"};
-
- /* The default definitions have been moved to st_options.h */
-
-@@ -3973,21 +3973,15 @@ static struct st_buffer *new_tape_buffer(int max_sg)
- {
- 	struct st_buffer *tb;
-
--	tb = kzalloc_obj(struct st_buffer);
-+	tb = kzalloc_flex(*tb, reserved_pages, max_sg);
- 	if (!tb) {
- 		printk(KERN_NOTICE "st: Can't allocate new tape buffer.\n");
- 		return NULL;
+diff --git a/drivers/scsi/csiostor/csio_hw.c b/drivers/scsi/csiostor/csio_hw.c
+index df9f81f29950..44def5f92b68 100644
+--- a/drivers/scsi/csiostor/csio_hw.c
++++ b/drivers/scsi/csiostor/csio_hw.c
+@@ -38,6 +38,7 @@
+ #include <linux/stddef.h>
+ #include <linux/delay.h>
+ #include <linux/string.h>
++#include <linux/string_choices.h>
+ #include <linux/compiler.h>
+ #include <linux/jiffies.h>
+ #include <linux/kernel.h>
+@@ -3490,7 +3491,7 @@ static void csio_mem_intr_handler(struct csio_hw *hw, int idx)
+ 
+ 		csio_wr_reg32(hw, ECC_CECNT_V(ECC_CECNT_M), cnt_addr);
+ 		csio_warn(hw, "%u %s correctable ECC data error%s\n",
+-			    cnt, name[idx], cnt > 1 ? "s" : "");
++			  cnt, name[idx], str_plural(cnt));
  	}
--	tb->frp_segs = 0;
- 	tb->use_sg = max_sg;
-+	tb->frp_segs = 0;
- 	tb->buffer_size = 0;
-
--	tb->reserved_pages = kzalloc_objs(struct page *, max_sg);
--	if (!tb->reserved_pages) {
--		kfree(tb);
--		return NULL;
--	}
--
- 	return tb;
- }
-
-@@ -4533,7 +4527,6 @@ static void scsi_tape_release(struct kref *kref)
-
- 	if (tpnt->buffer) {
- 		normalize_buffer(tpnt->buffer);
--		kfree(tpnt->buffer->reserved_pages);
- 		kfree(tpnt->buffer);
- 	}
-
-diff --git a/drivers/scsi/st.h b/drivers/scsi/st.h
-index 0d7c4b8c2c8a..759f4c43d563 100644
---- a/drivers/scsi/st.h
-+++ b/drivers/scsi/st.h
-@@ -45,7 +45,6 @@ struct st_buffer {
- 	int syscall_result;
- 	struct st_request *last_SRpnt;
- 	struct st_cmdstatus cmdstat;
--	struct page **reserved_pages;
- 	int reserved_page_order;
- 	struct page **mapped_pages;
- 	struct rq_map_data map_data;
-@@ -53,6 +52,8 @@ struct st_buffer {
- 	unsigned short use_sg;	/* zero or max number of s/g segments for this adapter */
- 	unsigned short sg_segs;		/* number of segments in s/g list */
- 	unsigned short frp_segs;	/* number of buffer segments */
-+
-+	struct page *reserved_pages[] __counted_by(use_sg);
- };
-
- /* The tape mode definition */
---
-2.55.0
-
+ 	if (v & ECC_UE_INT_CAUSE_F)
+ 		csio_fatal(hw, "%s uncorrectable ECC data error\n", name[idx]);
 
