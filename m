@@ -1,63 +1,64 @@
-Return-Path: <linux-scsi+bounces-25571-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25572-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ApOvFyuiR2qbcgAAu9opvQ
-	(envelope-from <linux-scsi+bounces-25571-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 13:51:07 +0200
+	id kaUnJaikR2o6cwAAu9opvQ
+	(envelope-from <linux-scsi+bounces-25572-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 14:01:44 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A54F37020A0
-	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 13:51:06 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9A43702211
+	for <lists+linux-scsi@lfdr.de>; Fri, 03 Jul 2026 14:01:38 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=HhcXdh6W;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=Cx4N0yIB;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25571-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25571-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25572-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25572-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 92464303F2A2
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2026 11:42:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id E02A730008B8
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2026 11:49:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DEB43CAE80;
-	Fri,  3 Jul 2026 11:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D68D63CA49D;
+	Fri,  3 Jul 2026 11:49:19 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A60B3C9EF8
-	for <linux-scsi@vger.kernel.org>; Fri,  3 Jul 2026 11:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFEA356754
+	for <linux-scsi@vger.kernel.org>; Fri,  3 Jul 2026 11:49:18 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783078973; cv=none; b=Wk+5Mzt8vA7GYmmoC6LP1D5K/34xii4zid3IdbLGt/04P+dae6a4fOWqrJqbe0V1RinfI8EdMETCM7hUpNoyRb9RnOBeLgOikqPDr3Fii7ndKHysNgRuM0naAP/DVG1CXTtCUyFKIUHIHpZsvYqG5comY/7BEJrSCykIwupLEA4=
+	t=1783079359; cv=none; b=c43kYlgkEq+EFvgERzWcQyt35JW69kUXso0BhPwJOWZMSNkFaGPC4m/YTZlxXCPoR0cyCwTNAr5gFErTwW8cEjTJvyhZfmrbIes2f/8Efrc5kor1TV2cMqzQe159qlu3PRcjYcPFLt06K3t9rbk6HRcLv0+eBXg7qLng6Ja9TnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783078973; c=relaxed/simple;
-	bh=4U+U0su/wcO97FWGnmxSXaoRQ+9qRlnf+7R7W4BYzM0=;
+	s=arc-20240116; t=1783079359; c=relaxed/simple;
+	bh=eEyMd6BYx7e4BJAcv7d4hV5+3UfKbW9vpjD5+vr9OXs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=OCXMD3XZlRyjzZDwPugF04Ijn/MVLYJBt79my3xq2dtmxwiOUyn58Ps2zLyOQpJzEWX1ckWr3Q/ws9IvyXmLIaPtB1oiHthSmVpcxz8WatWMbKXrAOT/1dRk+8H/fyWpk18BYS3USOey+t53IeYAgsM1Y0gQI1c8r+tmCpMBlcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HhcXdh6W; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C6D51F000E9;
-	Fri,  3 Jul 2026 11:42:52 +0000 (UTC)
+	 Message-Id; b=RRfNiwGbwibB87+8WGvrxNcTv4vhV5vPpMnJNknlLz0crm6CMpykW1QGyJb/XtTHA4f9JEQ9EquZT8ZhtnyUePL7uMRMNFF+QYcykpWP9OkpBVXcjWYfN2s1J8z1FuSMJe2Q/4GeOAqHLMHkpAMxkLyZDSwVaUXv+GPMmM4eBMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cx4N0yIB; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CC661F000E9;
+	Fri,  3 Jul 2026 11:49:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783078972;
-	bh=sW21BP8CVllydjAsRHcZlrzmExDZHtdXNVKF5LfFfqU=;
+	s=k20260515; t=1783079358;
+	bh=N6kTjP5I6J30DRyl/Xz/dZKcBLnlJ/jtJFnhj62GgcY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HhcXdh6WCPnil1uOw9Vgw6lyIMe+eli5Ut50S6oQP/p3ru1qNsleChpy6nvxot7Ju
-	 JNp2DwMYMnj8NAbw/xgMgv2Fhc6hGPi+N1vS5QQ3Ai2d93deKUuX4Wck47bVmtwhGe
-	 /GWsMjrUJuwuJSKSrh6A//hVzcVKzqkMaR3H9ujpSrlSZZ+USphMzEn8UfhZgPcBXb
-	 uw3k3lUjQTDT6WGlabCxBK8mGfR4jQnRAZqMvaUjioNBsJNMZpW/vv/OF1/oaHaUBc
-	 gqMJqXZRTyJHsMEYw9kuv3u+HktwDIW5LoKnNZuBjQtKtg9aynOTaGYzgwOjlvkC7O
-	 UxXXkbqis779Q==
+	b=Cx4N0yIBGa2xlQfokRalM6k+8SFWDrbPkdk2Buc/VtnHI/0AEOc0Y8fwAoqqPOWkz
+	 oJLk8HmJPwTOsRNJpsI7rSUqmAySDSPVvNmC5QifiqrRpoGc86FtXG0SpQU/ndlAC4
+	 aNgibZsO+NQbsEaJF999T+RmG+frzXb1hVlXX6st01c0o26OORoNwy0d5Yk0P1DR4M
+	 NtTvvPf1tW5D80iMn3wx4RUVcjB0QqvSVkkUcy2ASfjvzDk44roPtEBYz49tR2Gl4k
+	 NmSmei32CMVVcal5zWHZUe+r7aj3ing8FctVkVo9ONoJe2qKJ9YA+BA+3Eyqhwgyoz
+	 HamOSS07OEk7g==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 10/10] nvme-multipath: switch to use libmultipath
+Subject: Re: [PATCH v3 08/17] scsi-multipath: provide callbacks for path
+ state
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "John Garry" <john.g.garry@oracle.com>
 Cc: linux-scsi@vger.kernel.org
-In-Reply-To: <20260703103204.3724406-11-john.g.garry@oracle.com>
-References: <20260703103204.3724406-1-john.g.garry@oracle.com>
- <20260703103204.3724406-11-john.g.garry@oracle.com>
+In-Reply-To: <20260703103402.3725011-9-john.g.garry@oracle.com>
+References: <20260703103402.3725011-1-john.g.garry@oracle.com>
+ <20260703103402.3725011-9-john.g.garry@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 03 Jul 2026 11:42:51 +0000
-Message-Id: <20260703114252.0C6D51F000E9@smtp.kernel.org>
+Date: Fri, 03 Jul 2026 11:49:17 +0000
+Message-Id: <20260703114918.1CC661F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -70,21 +71,22 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25571-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25572-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:john.g.garry@oracle.com,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
-	RCPT_COUNT_TWO(0.00)[2];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
 	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
 	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
@@ -97,206 +99,120 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_NO_DN(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RSPAMD_EMAILBL_FAIL(0.00)[sashiko-reviews.lists.linux.dev:query timed out,sashiko-bot@kernel.org:query timed out];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,smtp.kernel.org:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,sashiko.dev:url,vger.kernel.org:from_smtp,lists.linux.dev:replyto]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,smtp.kernel.org:mid,lists.linux.dev:replyto,vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,sashiko.dev:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: A54F37020A0
+X-Rspamd-Queue-Id: D9A43702211
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Critical] Diagnostic sysfs attribute functions incorrectly cast the head=
- disk's `private_data` to `struct nvme_ns_head *`, leading to out-of-bounds=
- reads and writes.
-- [High] Unconditional clearing of NVME_NS_READY for all paths during reval=
-idation.
-- [High] Silent removal of BLK_FEAT_PCI_P2PDMA disables P2P DMA on multipat=
-h devices.
-- [High] Incorrect teardown function `mpath_put_head` used in `nvme_alloc_n=
-s_head` error path instead of `mpath_head_uninit`.
+- [High] `scsi_mpath_is_disabled` and `scsi_mpath_is_optimized` fail to mas=
+k out the `SCSI_ACCESS_STATE_PREFERRED` flag from `sdev->access_state`.
+- [High] `scsi_mpath_available_path()` incorrectly treats `SDEV_CREATED_BLO=
+CK` as an available path.
 --
 
-commit 7fcfa1e0451b9e00996c66fccb6e7ea67da8b9ea
+commit 71967b8cc1b7e6dc50c814782c317913564b9ee9
 Author: John Garry <john.g.garry@oracle.com>
 
-    nvme-multipath: switch to use libmultipath
+scsi-multipath: provide callbacks for path state
 
-    Now that much unused libmulipath-based code has been added, do the full
-    switch over. The major change is that the multipath management is moved
-    out of the nvme_ns_head structure and into the mpath_head structure.
+This patch provides callbacks for path states in SCSI multipath, including
+scsi_mpath_is_disabled, scsi_mpath_is_optimized, and
+scsi_mpath_available_path. These rely on the SCSI device's sdev_state and
+access_state to determine path availability.
 
-> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-> index 453c1f0b2dd09..476a0cd2452ce 100644
-> --- a/drivers/nvme/host/core.c
-> +++ b/drivers/nvme/host/core.c
-[ ... ]
-> @@ -3998,22 +3992,32 @@ static struct nvme_ns_head *nvme_alloc_ns_head(st=
-ruct nvme_ctrl *ctrl,
->  	if (head->ids.csi) {
->  		ret =3D nvme_get_effects_log(ctrl, head->ids.csi, &head->effects);
->  		if (ret)
-> -			goto out_cleanup_srcu;
-> +			goto out_ida_free;
->  	} else
->  		head->effects =3D ctrl->effects;
-> =20
-> +	ret =3D mpath_head_init(&head->mpath_head);
-> +	if (ret)
-> +		goto out_ida_free;
-> +
-> +	head->mpath_head.drv_module =3D THIS_MODULE;
-> +	head->mpath_head.disk_groups =3D nvme_ns_attr_groups;
-> +	head->mpath_head.parent =3D &subsys->dev;
-> +	head->mpath_head.iopolicy =3D &head->subsys->mpath_iopolicy;
-> =20
->  	ret =3D nvme_mpath_alloc_disk(ctrl, head);
->  	if (ret)
-> -		goto out_cleanup_srcu;
-> +		goto out_mpath_head_free;
-> =20
->  	list_add_tail(&head->entry, &ctrl->subsys->nsheads);
-> =20
->  	kref_get(&ctrl->subsys->ref);
-> =20
->  	return head;
-> -out_cleanup_srcu:
-> -	cleanup_srcu_struct(&head->srcu);
-> -out_ida_remove:
-> +
-> +out_mpath_head_free:
-> +	mpath_put_head(&head->mpath_head);
-> +out_ida_free:
->  	ida_free(&ctrl->subsys->ns_ida, head->instance);
->  out_free_head:
->  	kfree(head);
-
-[Severity: High]
-Can this error path lead to a NULL pointer dereference or double-free?
-
-If mpath_put_head() triggers mpdt->remove_head(), it might call
-list_del_init(&head->entry) on a list that hasn't been added yet (as
-list_add_tail() is called later). Should this use mpath_head_uninit() inste=
-ad
-to properly clean up the SRCU struct without prematurely freeing resources?
-
-> diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
-> index b27b45c59c883..f4cf2dc2c1e43 100644
-> --- a/drivers/nvme/host/multipath.c
-> +++ b/drivers/nvme/host/multipath.c
-[ ... ]
-> -void nvme_mpath_revalidate_paths(struct nvme_ns_head *head)
-> +static void nvme_mpath_revalidate_paths_cb(struct mpath_device *mpath_de=
-vice)
->  {
-> -	sector_t capacity =3D get_capacity(head->disk);
-> -	struct nvme_ns *ns;
-> -	int node;
-> -	int srcu_idx;
-> -
-> -	srcu_idx =3D srcu_read_lock(&head->srcu);
-> -	list_for_each_entry_srcu(ns, &head->list, siblings,
-> -				 srcu_read_lock_held(&head->srcu)) {
-> -		if (capacity !=3D get_capacity(ns->disk))
-> -			clear_bit(NVME_NS_READY, &ns->flags);
-> -	}
-> -	srcu_read_unlock(&head->srcu, srcu_idx);
-> +	clear_bit(NVME_NS_READY, &nvme_mpath_to_ns(mpath_device)->flags);
-> +}
-
-[Severity: High]
-Is it correct to unconditionally clear NVME_NS_READY here?
-
-In the previous implementation, nvme_mpath_revalidate_paths() checked if the
-capacity of each path matched the head (capacity !=3D get_capacity(ns->disk=
-))
-before clearing the flag. Does this unconditionally disable healthy paths
-during capacity revalidation?
+> diff --git a/drivers/scsi/scsi_multipath.c b/drivers/scsi/scsi_multipath.c
+> index f22e3677cf2ad..d8ea9ffe8942c 100644
+> --- a/drivers/scsi/scsi_multipath.c
+> +++ b/drivers/scsi/scsi_multipath.c
+> @@ -301,7 +301,53 @@ static struct bio *scsi_mpath_clone_bio(struct bio *=
+bio)
 
 [ ... ]
-> @@ -1253,24 +661,26 @@ static ssize_t io_requeue_no_usable_path_count_sho=
-w(struct device *dev,
->  {
->  	struct gendisk *disk =3D dev_to_disk(dev);
->  	struct nvme_ns_head *head =3D disk->private_data;
-> +	struct mpath_head *mpath_head =3D &head->mpath_head;
-> +	unsigned long val =3D
-> +		atomic_long_read(&mpath_head->requeue_no_usable_path_cnt);
-> =20
-> -	return sysfs_emit(buf, "%lu\n",
-> -		    atomic_long_read(&head->io_requeue_no_usable_path_count));
-> +	return sysfs_emit(buf, "%lu\n", val);
->  }
 
-[Severity: Critical]
-For multipath disks, does disk->private_data now point to struct mpath_head
-instead of struct nvme_ns_head?
-
-If so, casting it to struct nvme_ns_head * and evaluating &head->mpath_head
-will compute an address past the end of the allocated object. Could this le=
-ad
-to out-of-bounds reads and writes when reading or writing these sysfs
-attributes?=20
-
-This also appears to affect io_requeue_no_usable_path_count_store(),
-io_fail_no_available_path_count_show(), and=20
-io_fail_no_available_path_count_store() below.
-
-[ ... ]
-> +int nvme_mpath_alloc_disk(struct nvme_ctrl *ctrl, struct nvme_ns_head *h=
-ead)
+> +static bool scsi_mpath_is_disabled(struct mpath_device *mpath_device)
 > +{
-> +	struct queue_limits lim;
-> +	int ret;
+> +	struct scsi_mpath_device *scsi_mpath_dev =3D
+> +				to_scsi_mpath_device(mpath_device);
+> +	struct scsi_device *sdev =3D scsi_mpath_dev->sdev;
+> +	unsigned char access_state =3D READ_ONCE(sdev->access_state);
 > +
-> +	head->mpath_head.mpdt =3D &mpdt;
+> +	if (sdev->sdev_state !=3D SDEV_RUNNING)
+> +		return true;
 > +
-> +	/*
-> +	 * If "multipath_always_on" is enabled, a multipath node is added
-> +	 * regardless of whether the disk is single/multi ported, and whether
-> +	 * the namespace is shared or private. If "multipath_always_on" is not
-> +	 * enabled, a multipath node is added only if the subsystem supports
-> +	 * multiple controllers and the "multipath" option is configured. In
-> +	 * either case, for private namespaces, we ensure that the NSID is
-> +	 * unique.
-> +	 */
-> +	if (!multipath_always_on) {
-> +		if (!(ctrl->subsys->cmic & NVME_CTRL_CMIC_MULTI_CTRL) ||
-> +				!multipath)
-> +			return 0;
-> +	}
-> +
-> +	if (!nvme_is_unique_nsid(ctrl, head))
-> +		return 0;
-> +
-> +	blk_set_stacking_limits(&lim);
-> +	lim.dma_alignment =3D 3;
-> +	lim.features |=3D BLK_FEAT_IO_STAT | BLK_FEAT_NOWAIT |
-> +		BLK_FEAT_POLL | BLK_FEAT_ATOMIC_WRITES;
+> +	if (access_state =3D=3D SCSI_ACCESS_STATE_OPTIMAL ||
+> +	    access_state =3D=3D SCSI_ACCESS_STATE_ACTIVE)
 
 [Severity: High]
-Should BLK_FEAT_PCI_P2PDMA be included in the features bitmask here?
+Does this comparison correctly handle ALUA preferred paths?
 
-Previously, it was added unconditionally to the multipath head's queue limi=
-ts.
-Will its removal cause the block layer to reject PCI Peer-to-Peer DMA bios
-submitted to the multipath node?
+If a device handler sets sdev->access_state to include the preferred bit
+(SCSI_ACCESS_STATE_OPTIMAL | SCSI_ACCESS_STATE_PREFERRED), this raw byte
+comparison will fail. This would cause the multipath layer to incorrectly
+classify valid, optimal preferred paths as disabled, potentially discarding
+them from I/O consideration.
 
-> +	if (head->ids.csi =3D=3D NVME_CSI_ZNS)
-> +		lim.features |=3D BLK_FEAT_ZONED;
+Should this mask the access_state with SCSI_ACCESS_STATE_MASK before
+comparing?
+
+> +		return false;
 > +
-> +	ret =3D mpath_alloc_head_disk(&head->mpath_head, &lim, ctrl->numa_node);
-> +	if (ret)
-> +		return ret;
+> +	return true;
+> +}
 > +
-> +	sprintf(head->mpath_head.disk->disk_name, "nvme%dn%d",
-> +			ctrl->subsys->instance, head->instance);
-> +	nvme_tryget_ns_head(head);
-> +	return 0;
+> +static bool scsi_mpath_is_optimized(struct mpath_device *mpath_device)
+> +{
+> +	struct scsi_mpath_device *scsi_mpath_dev =3D
+> +				to_scsi_mpath_device(mpath_device);
+> +	struct scsi_device *sdev =3D scsi_mpath_dev->sdev;
+> +
+> +	if (sdev->sdev_state !=3D SDEV_RUNNING)
+> +		return false;
+> +
+> +	return READ_ONCE(sdev->access_state) =3D=3D SCSI_ACCESS_STATE_OPTIMAL;
+
+[Severity: High]
+Similar to the check in scsi_mpath_is_disabled(), will this strict equality
+check misclassify optimal paths that also have the
+SCSI_ACCESS_STATE_PREFERRED flag set?
+
+> +}
+> +
+> +static bool scsi_mpath_available_path(struct mpath_device *mpath_device)
+> +{
+> +	struct scsi_mpath_device *scsi_mpath_dev =3D
+> +				to_scsi_mpath_device(mpath_device);
+> +	struct scsi_device *sdev =3D scsi_mpath_dev->sdev;
+> +	enum scsi_device_state sdev_state =3D sdev->sdev_state;
+> +
+> +	if (sdev_state =3D=3D SDEV_RUNNING || sdev_state =3D=3D SDEV_QUIESCE ||
+> +	    sdev_state =3D=3D SDEV_BLOCK || sdev_state =3D=3D SDEV_CREATED_BLOC=
+K)
+
+[Severity: High]
+Is it intended to route user I/O to a device in the SDEV_CREATED_BLOCK stat=
+e?
+
+Devices in SDEV_CREATED and SDEV_CREATED_BLOCK are newly created, not fully
+initialized, and generally only accept internal commands. If a newly created
+device is temporarily blocked, this function returns true and routes user I=
+/O
+to it, which could lead to I/O rejection or indefinite blocking.
+
+Furthermore, when the device unblocks and returns to SDEV_CREATED, this
+function would suddenly return false. Should SDEV_CREATED_BLOCK be excluded
+from the available paths list?
+
+> +		return true;
+> +
+> +	return false;
 > +}
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260703103204.3724=
-406-1-john.g.garry@oracle.com?part=3D10
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260703103402.3725=
+011-1-john.g.garry@oracle.com?part=3D8
 
