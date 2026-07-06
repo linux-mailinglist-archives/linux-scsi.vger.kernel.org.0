@@ -1,96 +1,96 @@
-Return-Path: <linux-scsi+bounces-25632-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25633-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id t0m5AoFtS2r2RAEAu9opvQ
-	(envelope-from <linux-scsi+bounces-25632-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 10:55:29 +0200
+	id JgqqICp3S2qWRwEAu9opvQ
+	(envelope-from <linux-scsi+bounces-25633-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 11:36:42 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C14770E56E
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 10:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F137170EAAE
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 11:36:41 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=bpsH5h3O;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=JPNqH09F;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=bpsH5h3O;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=JPNqH09F;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=yL5xPdMn;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=U0fnq1HS;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=yL5xPdMn;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=U0fnq1HS;
 	dmarc=pass (policy=none) header.from=suse.de;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25632-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25632-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25633-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25633-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8123730315D5
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 08:29:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3D0F531F7300
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 08:45:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E0F83AA507;
-	Mon,  6 Jul 2026 08:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1567C414DDC;
+	Mon,  6 Jul 2026 08:44:33 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852ED3C8C55
-	for <linux-scsi@vger.kernel.org>; Mon,  6 Jul 2026 08:29:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4130E414DD6
+	for <linux-scsi@vger.kernel.org>; Mon,  6 Jul 2026 08:44:27 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783326559; cv=none; b=hRQi8MRhJmElQCHp3HC3WjFhpgCD0fRP2qM1Q8t/6R+SHNHFvzjozDvpJuXxTnTmnIERtbMVBQFdkJFHGNKa2kS+UCFmFIym7uWJUlfl4AvcIth3KUwBjdNx7gRKssBWOZH8QDOpaAUXg9ah9evlqSPklr+Y8/BjiQn+kfCNlgE=
+	t=1783327471; cv=none; b=qV92DPcvczpJVY98lgj7E1BmzwUT1+MMsZJq4KdXMzI8qzTDJRFokZlcC8dgGYzF/BShBvXjWxsbdPXm1aCHfysEAyqbxEUeR94HfcAC1o/iTJADQUfUi24rEJter2Xsr2+yz24bXIUloxKPg9Gn6CJUQVDJqzIEhkPHNVDm7Jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783326559; c=relaxed/simple;
-	bh=2awkX1q7mp1CcX+3BhdFibP3lIlnAwl0b66ajyixOJQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=r5fm1q79MjBK8DtKMw1UnXVJIfr6rxY5/ZgDR4Z/ebVC3RHThfp6WedeLiC8beFTJwMDeSYwO7dhcMffdSKJC4W0w52ggdq2UX+fHP/zHCZp/W7qw9VYfY60PrLfC5FmJJ7bczT9Jyf8gqwYTVZvRU7hFnkjJkWaRaOWnPbaDWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=bpsH5h3O; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=JPNqH09F; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=bpsH5h3O; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=JPNqH09F; arc=none smtp.client-ip=195.135.223.130
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	s=arc-20240116; t=1783327471; c=relaxed/simple;
+	bh=BaO6mqPUkSFIN0r/wtlqQ9rz0Yagj3qfnHAyL3eYiOQ=;
+	h=Message-ID:Date:MIME-Version:To:References:From:Subject:
+	 In-Reply-To:Content-Type; b=cS4aTVbB13/A05vAl5RdNR5lcE24ljxDhNDD3UWHSeGoMo3m8Apys+EnfgLoZbGO1v4CYvo7sv/XNYm7Z6XAk8MfW2n5D1Oz5XCahe1mm0ex5cEk7HMPbkqkSc85238680jcxBZ6Brp1UeDWE/zXcQfoHI5jZImwL3nYeEoIApc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yL5xPdMn; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=U0fnq1HS; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yL5xPdMn; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=U0fnq1HS; arc=none smtp.client-ip=195.135.223.131
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id CF2E475723;
-	Mon,  6 Jul 2026 08:29:08 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id CAE7975CF1;
+	Mon,  6 Jul 2026 08:44:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1783326548; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	t=1783327463; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3eoihf6cWzRNoQU8n9m1EV4Fk8Q4D4WWmlUI54uAyro=;
-	b=bpsH5h3OCNRRaxrEilvY+Jmycn8bEe/26AUb5OxIjDZXLpNZQQv/WRUEn4KuUY7SjM/XYv
-	w+8uUjIbW1838h61JnwX65pP4VeIa1m3G3UjwVhcjPXIRaPTDYz2V9u7W9uXVUzfDZ71BJ
-	xw8uvAtSc8E7bbKl8g+liQKXHmx7+yU=
+	bh=VgRuKyjg3WAUXwrGy6jyYLcdYvik+gV9Qkk6E/9noMU=;
+	b=yL5xPdMnwsdHbj8jgUb/khliU2sC5JTsrMfU+ep04pOGgMJwwX1Ij7c9K9ASRwvas1T65m
+	jK1G1XLF1IWmjavhPVtiFHggf2WHnEdf1qVcfoLDrqT9SFyB4wOwBxS4fHs3GnPP/FRD8s
+	V40H/1/24prdKcJKGEITpVxw34pI81Y=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1783326548;
+	s=susede2_ed25519; t=1783327463;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3eoihf6cWzRNoQU8n9m1EV4Fk8Q4D4WWmlUI54uAyro=;
-	b=JPNqH09FoJLqNQSFFjeSd7LJxfKZQRIHIOmOyoEibWcMjnOQcAAxP7S2sefwNHmPqtzSw8
-	tJZ6gArjlH5F0sDA==
+	bh=VgRuKyjg3WAUXwrGy6jyYLcdYvik+gV9Qkk6E/9noMU=;
+	b=U0fnq1HSYiYe3Rdq9jPJyCSrrUyomVsMBWz5WBRBDzbRDRGKfcUnhKIYqIEUGl4kVvHT/j
+	2vzXLWeARfLCB7CQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1783326548; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	t=1783327463; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3eoihf6cWzRNoQU8n9m1EV4Fk8Q4D4WWmlUI54uAyro=;
-	b=bpsH5h3OCNRRaxrEilvY+Jmycn8bEe/26AUb5OxIjDZXLpNZQQv/WRUEn4KuUY7SjM/XYv
-	w+8uUjIbW1838h61JnwX65pP4VeIa1m3G3UjwVhcjPXIRaPTDYz2V9u7W9uXVUzfDZ71BJ
-	xw8uvAtSc8E7bbKl8g+liQKXHmx7+yU=
+	bh=VgRuKyjg3WAUXwrGy6jyYLcdYvik+gV9Qkk6E/9noMU=;
+	b=yL5xPdMnwsdHbj8jgUb/khliU2sC5JTsrMfU+ep04pOGgMJwwX1Ij7c9K9ASRwvas1T65m
+	jK1G1XLF1IWmjavhPVtiFHggf2WHnEdf1qVcfoLDrqT9SFyB4wOwBxS4fHs3GnPP/FRD8s
+	V40H/1/24prdKcJKGEITpVxw34pI81Y=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1783326548;
+	s=susede2_ed25519; t=1783327463;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3eoihf6cWzRNoQU8n9m1EV4Fk8Q4D4WWmlUI54uAyro=;
-	b=JPNqH09FoJLqNQSFFjeSd7LJxfKZQRIHIOmOyoEibWcMjnOQcAAxP7S2sefwNHmPqtzSw8
-	tJZ6gArjlH5F0sDA==
+	bh=VgRuKyjg3WAUXwrGy6jyYLcdYvik+gV9Qkk6E/9noMU=;
+	b=U0fnq1HSYiYe3Rdq9jPJyCSrrUyomVsMBWz5WBRBDzbRDRGKfcUnhKIYqIEUGl4kVvHT/j
+	2vzXLWeARfLCB7CQ==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BD81D779AA;
-	Mon,  6 Jul 2026 08:29:08 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AFD1D779AA;
+	Mon,  6 Jul 2026 08:44:23 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id c8LELVRnS2rlLQAAD6G6ig
-	(envelope-from <hare@suse.de>); Mon, 06 Jul 2026 08:29:08 +0000
-Message-ID: <b7971067-1025-48ca-8ba4-d76714c283d5@suse.de>
-Date: Mon, 6 Jul 2026 10:29:08 +0200
+	id 1wd5KudqS2ocPAAAD6G6ig
+	(envelope-from <hare@suse.de>); Mon, 06 Jul 2026 08:44:23 +0000
+Message-ID: <78b0142a-23a6-4959-8535-fef18d62bb46@suse.de>
+Date: Mon, 6 Jul 2026 10:44:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -98,8 +98,6 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/9] scsi: scsi_debug: move ASC and ASCQ definitions to
- scsi_proto.h
 To: Damien Le Moal <dlemoal@kernel.org>, linux-ide@vger.kernel.org,
  Niklas Cassel <cassel@kernel.org>, linux-scsi@vger.kernel.org,
  "Martin K . Petersen" <martin.petersen@oracle.com>
@@ -107,22 +105,24 @@ References: <20260706065610.3559692-1-dlemoal@kernel.org>
  <20260706065610.3559692-2-dlemoal@kernel.org>
 Content-Language: en-US
 From: Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH v1 1/9] scsi: scsi_debug: move ASC and ASCQ definitions to
+ scsi_proto.h
 In-Reply-To: <20260706065610.3559692-2-dlemoal@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Flag: NO
 X-Spam-Level: 
-X-Spam-Score: -4.51
+X-Spam-Score: -4.30
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25632-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25633-lists,linux-scsi=lfdr.de];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
@@ -146,7 +146,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.de:from_mime,suse.de:email,suse.de:mid,suse.de:dkim,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5C14770E56E
+X-Rspamd-Queue-Id: F137170EAAE
 
 On 7/6/26 8:56 AM, Damien Le Moal wrote:
 > The scsi_debug driver internally defines lots of SCSI additional sense
@@ -281,9 +281,17 @@ On 7/6/26 8:56 AM, Damien Le Moal wrote:
 >    *  DEVICE TYPES
 >    *  Please keep them in 0x%02x format for $MODALIAS to work
 
-While at it, would you mind converting the raw asc/ascq numbers
-in drivers/scsi/scsi_lib.c to use these definitions?
-That will make the code in there _so much_ more readable ...
+Weelll ... _technically_ the ASC/ASCQ codes have to be evaluated
+together, and the individual definitions only make sense for a
+combination of ASC/ASCQ codes.
+EG SPC-5 defines the ASC/ASCQ 0x20/0x00 as 'Invalid command opcode',
+but with this we would deocde it as 'INVALID_OPCODE'/'POWER_ON_RESET_ASCQ',
+but 'POWER ON RESET OCCURRED' is ASC/ASCQ 0x29/0x00.
+So if we were to define ASCQ codes we would need to define the
+ASCQ codes for each ASC to avoid these issues.
+
+Makes me wonder if we shouldn't introduce u16 for sense code
+handling ...
 
 Cheers,
 
