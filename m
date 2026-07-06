@@ -1,168 +1,123 @@
-Return-Path: <linux-scsi+bounces-25634-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25635-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id zO4SMcBvS2qLRQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-25634-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 11:05:04 +0200
+	id bmSDFvqOS2r/VQEAu9opvQ
+	(envelope-from <linux-scsi+bounces-25635-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 13:18:18 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFB1770E6A1
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 11:05:03 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5922C70FBE5
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 13:18:17 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=uniontech.com header.s=onoh2408 header.b=VjqRBOwr;
-	dmarc=pass (policy=none) header.from=uniontech.com;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25634-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25634-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=I9gnGgEC;
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25635-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25635-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B922B3306FF5
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 08:47:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3ECE63394978
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 09:11:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41E1F414DC4;
-	Mon,  6 Jul 2026 08:45:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAAA541F7E2;
+	Mon,  6 Jul 2026 08:55:46 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188F2412288;
-	Mon,  6 Jul 2026 08:45:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1E7407576;
+	Mon,  6 Jul 2026 08:55:38 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783327536; cv=none; b=ilcL8qQpjbk748lv4sMSmv6YmHEpVCIpPh+HTzY+xS9rLn5N5p1PVnC2mkzizi3iq4N6DcC7w3xGPENaEhMCx1c2TiLd3AouphX09skgvJTfprbIrYHsyiNxTAo+J4qM72rNFSLQ9WlnxInzm/phvuRUmc6eOhTzuCSKHTIuNpo=
+	t=1783328143; cv=none; b=bTxqCRQiiNX1PIgkiLsPDXn+YGk4kwmyuUANTXKGXIDrPosZ3ob0m6jLT77Q543JYWoIMp05YTr3xV3OIWL4WzxE3lPmiguNQQdPOxFTRkizSQUEHXanCDpyGMiswjjceraI1lSQ9kuFPGRl3RGAq8IcMJSnduQwAZ6UvUd47Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783327536; c=relaxed/simple;
-	bh=ZZGxb1O94Bi6i3u79KpRqEdMJ5ixMe/mZSNVwTgUZaY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=txejrXkdGqit5gqKPlRXsO/FnPNkI0eTtnyqylYKEQKz4RlE24ey+o0W3SbCq+kYk19BHezxSsWjATea/T7lGVgL1q+GDGXsr6PpZRR2Psl8JdtvEAkcjSR5sisGPU3keYOKZ7W/UaOPxn65cs0RkqUUBTlFJq5VXseMhwaQdW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=VjqRBOwr; arc=none smtp.client-ip=18.132.163.193
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1783327492;
-	bh=l+s69glwv95Mx97n8AVCpWCkd7pwUNeM5WaxeDqmDnc=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=VjqRBOwrhdxkjqHNwgIUHQ6Nk3HzQrbF/2/09ZpX0INHHWgfjYOFA7yHmS8hmDv0l
-	 s5CwgxwXgDvUcDZEANg2w+Gk62WyG+ZgxjXr9hsgHQljcEs2PkA51IPcVhGerNnWoJ
-	 tYVgsZ+FL+YlfgjMC2/tZP6cnrYmiiZ3lUqJ9/A8=
-X-QQ-mid: esmtpsz10t1783327487tddb38e16
-X-QQ-Originating-IP: 30tTuWHCMXPKrGKfAuAxO044LO4WKwK3uMoE0XRnRh8=
-Received: from PEN202512010004 ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 06 Jul 2026 16:44:45 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 10804215150923445021
-EX-QQ-RecipientCnt: 6
-From: raoxu <raoxu@uniontech.com>
-To: dgilbert@interlog.com
-Cc: James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	raoxu@uniontech.com
-Subject: [PATCH] scsi: sg: report request-table problems when any status is set
-Date: Mon,  6 Jul 2026 16:44:43 +0800
-Message-ID: <26BF67F369E2123E+20260706084443.805598-1-raoxu@uniontech.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1783328143; c=relaxed/simple;
+	bh=4AsiANEPQQNn16+DkjnvaEFha/mXnJm8flL8tWtxPys=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=sykOJA+hpP6CNg0ESsdCBb/EIdc1H9hBOFr6iohoUzIVbhp6/JDSnbf4mM8GquXImvjwZruvQ+ZLhGMFjLmLkoOtmtuR5i25GQ8Na7hzS0JwvAl1xcBewXZOb8lsyoEu/h0obYjqD0agirtyeuZce/gUZc/zLd4/dl5SYEn/FeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I9gnGgEC; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E7CD1F00A3A;
+	Mon,  6 Jul 2026 08:55:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783328133;
+	bh=xUWLi5662FKqa6Hfl+915YdSn0wbC+NLoKBB+bv4hKU=;
+	h=Date:Subject:To:References:From:In-Reply-To;
+	b=I9gnGgEC3Qm66+NnVo0tfd5r5M8OGgFdfbMHIBEsVebXaq+dGlZprr4H1OalpmWIG
+	 wuwHaUAecQBkUslxifKVsE6ziGcdNcmQTgJ1zBw/sOX+6Xo3b/dQdxCyJTYUpE2y7W
+	 T8IoiJHmP1JG7rS/ildvDPf+FObvkM+9/VJdUZCbFMFok3jRJ9TkaTVv8j5ZAYOKp5
+	 7QzLYsrEvhuqnAqFcKBo/cAgTQBlOVpQQUsETji4B4k2DwRNYAJIKwoqREfVMdAJJE
+	 xAfe/cCuFYLQMeils4dFfGTl1/v8LMMhkbDWIBCxFWGXnb5yaxedFU/7Vz9DzKWO1M
+	 Jxv9TtcsmBvuA==
+Message-ID: <e92d2139-d8df-40c3-8350-68b9e37b8197@kernel.org>
+Date: Mon, 6 Jul 2026 17:55:22 +0900
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: Nv1Zs1ssfOILY9YUMo1gwW1HVrQtbo4gAUuQawGkDUEV4zNPHzbRaWov
-	+AB8HvN2m8tgPmKCHR65KyOD0YUhdQjPuTz6X+UrQdxcXqzItTBRv3raUcgOq+tSzeiU7DW
-	sgdj01tf5LdvCi9bYE7VVc+NaBrS9YaSRGn8PALTp6BIbjdhJ6x3OKCIcP6lmnlTMt2xgNz
-	+LgQm5pxAJsKtt8IJR8KBW9UCkd58B/0QtN4dXIPwFky4qDyeGn7PMGfY60+NMIVlwK7aH0
-	2r57BOyfkdlJfoGeN90hD9RPxhwu7gNBBD3uNZ5EMZzF5RlvB+7j0F7ToxUmfxJUd4fsKj2
-	SXe02d/yj9UWz+flKVwXw6UZVXlXl+SV6PJ64WJnYvTeEBUS4LHkYbtN+fIBL8aGn4Yn+ZH
-	XFjvHE6aAZV5y48h1p4pWj0N5vFajO/dmp7KEO8o0Az/5DCQXUnXI5xHU9Ktp28vmA4Iip3
-	7rQO1AhTvPLcIk2gT9TkTSZzQCPumMRsASthpnPls1TlXx/9juQQOoy67ti0ZKkST1j0siW
-	Yi9/LknNvnmczP3Sqsueu49ANXKxrSSgr1QCgJu+sOffKjE7X6cazh6pma/fpg1UI/PQG3Q
-	aKdznH57aMIVexa17Yttw1bVLq5q21aJ3oK4krRL0DQGfyi2XoiWh1jCa80e94ZC1DzK+UC
-	5H07luj55KLzvjR+EyBjD663QX+k9xRbDckMG64E9+bsRCG6TICj5mxR3D26sKu3f/8Chp7
-	D3ftv3gFcSXZobRiiY0wEgB4s2zqFS/TLKzmyZt7DTac8PyOzqrnhewHkvuX4DV2pwq1xIu
-	lYvc13Njgzg3jSenTbno2fQQJPeSPhv0V2meF5pPnjU5QsEA25zBlKqGM0SD+r/Ifu/WY1y
-	wvRPurS/+qpxmtR+MHY3cx/XysbhzsHd+YCtov4Zq5jFlgcdqJsWYx3eqMXx8NrLaOH2p2f
-	t//uZe4IpOHH0QYoyJxrNssfVoGjEt9I8yr4L7xCLqtzbRBGpAEuAT+YOMYfo131jz3aLCa
-	3HJP11WMXW8cXTWjxkLLyivSFawQ8uxqwSuT6ObdpEDifDYPsSqQlEG5mDqpHw+G/OuHJqx
-	w==
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
-X-QQ-RECHKSPAM: 0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/9] scsi: scsi_debug: move ASC and ASCQ definitions to
+ scsi_proto.h
+To: Hannes Reinecke <hare@suse.de>, linux-ide@vger.kernel.org,
+ Niklas Cassel <cassel@kernel.org>, linux-scsi@vger.kernel.org,
+ "Martin K . Petersen" <martin.petersen@oracle.com>
+References: <20260706065610.3559692-1-dlemoal@kernel.org>
+ <20260706065610.3559692-2-dlemoal@kernel.org>
+ <b7971067-1025-48ca-8ba4-d76714c283d5@suse.de>
+From: Damien Le Moal <dlemoal@kernel.org>
+Content-Language: en-US
+Organization: Western Digital Research
+In-Reply-To: <b7971067-1025-48ca-8ba4-d76714c283d5@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-5.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
-	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-25634-lists,linux-scsi=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:hare@suse.de,m:linux-ide@vger.kernel.org,m:cassel@kernel.org,m:linux-scsi@vger.kernel.org,m:martin.petersen@oracle.com,s:lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER(0.00)[raoxu@uniontech.com,linux-scsi@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS(0.00)[m:dgilbert@interlog.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:raoxu@uniontech.com,s:lists@lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	HAS_ORG_HEADER(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-25635-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-scsi@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[uniontech.com:+];
-	TO_DN_NONE(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: AFB1770E6A1
+X-Rspamd-Queue-Id: 5922C70FBE5
 
-From: Xu Rao <raoxu@uniontech.com>
+On 7/6/26 5:29 PM, Hannes Reinecke wrote:
+> While at it, would you mind converting the raw asc/ascq numbers
+> in drivers/scsi/scsi_lib.c to use these definitions?
+> That will make the code in there _so much_ more readable ...
 
-SG_GET_REQUEST_TABLE reports per-request diagnostic state through
-sg_req_info::problem. The field is meant to indicate whether there is
-an error to report for a completed request.
+100% agree. And not just scsi_lib, but also sd.c, libata, etc. We have so many
+places where ASC/ASCQ are hardcoded/hard to understand, that this will be a
+great cleanup.
 
-sg_fill_request_table() currently combines masked_status, host_status
-and driver_status with bitwise AND. This only reports a problem when all
-three status fields are non-zero at the same time. A normal target check
-condition, for example, has masked_status set while host_status and
-driver_status may both be zero, so the request is incorrectly reported
-as clean.
+BUT, that's too much for this series. I was planning such cleanup as a follow-up.
 
-Use the same condition as sg_new_read(), which sets SG_INFO_CHECK when
-any of the three status fields is non-zero.
-
-Signed-off-by: Xu Rao <raoxu@uniontech.com>
----
- drivers/scsi/sg.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 74cd4e8a61c2..5408f002e6c0 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -863,10 +863,9 @@ sg_fill_request_table(Sg_fd *sfp, sg_req_info_t *rinfo)
- 		if (val >= SG_MAX_QUEUE)
- 			break;
- 		rinfo[val].req_state = srp->done + 1;
--		rinfo[val].problem =
--			srp->header.masked_status &
--			srp->header.host_status &
--			srp->header.driver_status;
-+		rinfo[val].problem = srp->header.masked_status ||
-+					     srp->header.host_status ||
-+					     srp->header.driver_status;
- 		if (srp->done)
- 			rinfo[val].duration =
- 				srp->header.duration;
---
-2.50.1
-
+-- 
+Damien Le Moal
+Western Digital Research
 
