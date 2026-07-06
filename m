@@ -1,181 +1,296 @@
-Return-Path: <linux-scsi+bounces-25631-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25632-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id pfvBGtdjS2p6QgEAu9opvQ
-	(envelope-from <linux-scsi+bounces-25631-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 10:14:15 +0200
+	id t0m5AoFtS2r2RAEAu9opvQ
+	(envelope-from <linux-scsi+bounces-25632-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 10:55:29 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE0D670DFAB
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 10:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C14770E56E
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 10:55:28 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=KIvkUdqn;
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25631-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25631-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=bpsH5h3O;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=JPNqH09F;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=bpsH5h3O;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=JPNqH09F;
+	dmarc=pass (policy=none) header.from=suse.de;
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25632-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25632-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5237A3066209
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 07:42:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8123730315D5
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 08:29:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 950A63DEACB;
-	Mon,  6 Jul 2026 07:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E0F83AA507;
+	Mon,  6 Jul 2026 08:29:24 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A72397B15
-	for <linux-scsi@vger.kernel.org>; Mon,  6 Jul 2026 07:42:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852ED3C8C55
+	for <linux-scsi@vger.kernel.org>; Mon,  6 Jul 2026 08:29:13 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783323773; cv=none; b=GqWt1oRSdMUVC7J3BJ40+58v5f5G7HCx+TZrMh1T9DFkgU0QhsUGadNGMdWr4SlgWQrQXjqHIQdNgr4K5wLF0DwuHPA86RpxQhtFZNSxCZd5hcKf/9E/1lGiRZoynlQjOEIh4EwBhoZDSYEHuFJWDkR5aPX6AexIiLtjtbF8tFM=
+	t=1783326559; cv=none; b=hRQi8MRhJmElQCHp3HC3WjFhpgCD0fRP2qM1Q8t/6R+SHNHFvzjozDvpJuXxTnTmnIERtbMVBQFdkJFHGNKa2kS+UCFmFIym7uWJUlfl4AvcIth3KUwBjdNx7gRKssBWOZH8QDOpaAUXg9ah9evlqSPklr+Y8/BjiQn+kfCNlgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783323773; c=relaxed/simple;
-	bh=niwAlge9L5fgkqo6euxhAO8hLThDkKjRjbkIzPS9bJ0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gOj/dje2pK6wKvipGXbc/WX+uku4WkdN7ORlaR9G6nycbdciiudV9nbUTHRRzOT3h02ACQVrLdsukqCcZpwhkb3ytWne5aD0bY464yM5BbEbjejeoLB25vKg1s+qWMfnvbmo5u1UJE985UagKP9pBNkEQXfEb/au/7zmhF4Elrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KIvkUdqn; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C77281F000E9;
-	Mon,  6 Jul 2026 07:42:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783323765;
-	bh=E0D2WIrkCZ6obwEn3v9eageniG4GwRsYNM5l90qPzAA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KIvkUdqnENI14evSzLaBdh0r5pN7X3ycCkuOLUrR3hrm0o5HNwSqiU91LKLdKC29Y
-	 AbyImfx+URHxde/q8RVq129YMJ0H/M40zQoNq2pzAoJR/QMwgOFLLTz5fW8cKs8LcA
-	 Ju2IRaJ5kkys27501VqiH7OCrEcZwEmyfVoT9ZXrsr8LcZRxVkkCpzTcezYIGeJX7T
-	 1YiTUqkvZuD6aLBbWgCZoRrvvTu9JMYbQRr6LEnVOnH1Twd0urRn2bWwncEWquWWYj
-	 u5h89xBaNR3eeCmhJUwDjvpt8PNym2q1y1/0Sf2oRpCiUnUo1BlDDTiUi9/902d1GD
-	 apyfH4lTAbWAA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] scsi: ses: unregister the enclosure before freeing its
- device state
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Bryam Vargas" <hexlabsecurity@proton.me>
-Cc: linux-scsi@vger.kernel.org
-In-Reply-To: <20260706-b4-disp-cf600574-v1-1-be4f324ff44c@proton.me>
-References: <20260706-b4-disp-cf600574-v1-1-be4f324ff44c@proton.me>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 06 Jul 2026 07:42:44 +0000
-Message-Id: <20260706074244.C77281F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1783326559; c=relaxed/simple;
+	bh=2awkX1q7mp1CcX+3BhdFibP3lIlnAwl0b66ajyixOJQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=r5fm1q79MjBK8DtKMw1UnXVJIfr6rxY5/ZgDR4Z/ebVC3RHThfp6WedeLiC8beFTJwMDeSYwO7dhcMffdSKJC4W0w52ggdq2UX+fHP/zHCZp/W7qw9VYfY60PrLfC5FmJJ7bczT9Jyf8gqwYTVZvRU7hFnkjJkWaRaOWnPbaDWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=bpsH5h3O; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=JPNqH09F; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=bpsH5h3O; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=JPNqH09F; arc=none smtp.client-ip=195.135.223.130
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id CF2E475723;
+	Mon,  6 Jul 2026 08:29:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1783326548; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3eoihf6cWzRNoQU8n9m1EV4Fk8Q4D4WWmlUI54uAyro=;
+	b=bpsH5h3OCNRRaxrEilvY+Jmycn8bEe/26AUb5OxIjDZXLpNZQQv/WRUEn4KuUY7SjM/XYv
+	w+8uUjIbW1838h61JnwX65pP4VeIa1m3G3UjwVhcjPXIRaPTDYz2V9u7W9uXVUzfDZ71BJ
+	xw8uvAtSc8E7bbKl8g+liQKXHmx7+yU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1783326548;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3eoihf6cWzRNoQU8n9m1EV4Fk8Q4D4WWmlUI54uAyro=;
+	b=JPNqH09FoJLqNQSFFjeSd7LJxfKZQRIHIOmOyoEibWcMjnOQcAAxP7S2sefwNHmPqtzSw8
+	tJZ6gArjlH5F0sDA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1783326548; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3eoihf6cWzRNoQU8n9m1EV4Fk8Q4D4WWmlUI54uAyro=;
+	b=bpsH5h3OCNRRaxrEilvY+Jmycn8bEe/26AUb5OxIjDZXLpNZQQv/WRUEn4KuUY7SjM/XYv
+	w+8uUjIbW1838h61JnwX65pP4VeIa1m3G3UjwVhcjPXIRaPTDYz2V9u7W9uXVUzfDZ71BJ
+	xw8uvAtSc8E7bbKl8g+liQKXHmx7+yU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1783326548;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3eoihf6cWzRNoQU8n9m1EV4Fk8Q4D4WWmlUI54uAyro=;
+	b=JPNqH09FoJLqNQSFFjeSd7LJxfKZQRIHIOmOyoEibWcMjnOQcAAxP7S2sefwNHmPqtzSw8
+	tJZ6gArjlH5F0sDA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BD81D779AA;
+	Mon,  6 Jul 2026 08:29:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id c8LELVRnS2rlLQAAD6G6ig
+	(envelope-from <hare@suse.de>); Mon, 06 Jul 2026 08:29:08 +0000
+Message-ID: <b7971067-1025-48ca-8ba4-d76714c283d5@suse.de>
+Date: Mon, 6 Jul 2026 10:29:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/9] scsi: scsi_debug: move ASC and ASCQ definitions to
+ scsi_proto.h
+To: Damien Le Moal <dlemoal@kernel.org>, linux-ide@vger.kernel.org,
+ Niklas Cassel <cassel@kernel.org>, linux-scsi@vger.kernel.org,
+ "Martin K . Petersen" <martin.petersen@oracle.com>
+References: <20260706065610.3559692-1-dlemoal@kernel.org>
+ <20260706065610.3559692-2-dlemoal@kernel.org>
+Content-Language: en-US
+From: Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20260706065610.3559692-2-dlemoal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Spam-Score: -4.51
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORWARDED(0.00)[lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25632-lists,linux-scsi=lfdr.de];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25631-lists,linux-scsi=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:hexlabsecurity@proton.me,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
-	RCPT_COUNT_TWO(0.00)[2];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:dlemoal@kernel.org,m:linux-ide@vger.kernel.org,m:cassel@kernel.org,m:linux-scsi@vger.kernel.org,m:martin.petersen@oracle.com,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-scsi@vger.kernel.org];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_NO_DN(0.00)[];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_SENDER(0.00)[hare@suse.de,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[suse.de:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hare@suse.de,linux-scsi@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,sashiko.dev:url,lists.linux.dev:replyto,proton.me:email,smtp.kernel.org:mid]
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.de:from_mime,suse.de:email,suse.de:mid,suse.de:dkim,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: AE0D670DFAB
+X-Rspamd-Queue-Id: 5C14770E56E
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On 7/6/26 8:56 AM, Damien Le Moal wrote:
+> The scsi_debug driver internally defines lots of SCSI additional sense
+> codes (ASC) and additional sense code qualifiers (ASCQ). Move these
+> definitions to include/scsi/scsi_proto.h so that they can be reused
+> elsewhere in the SCSI and ATA code. This also makes the scsi_debug.c file
+> a little smaller.
+> 
+> Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
+> ---
+>   drivers/scsi/scsi_debug.c | 46 -----------------------------------
+>   include/scsi/scsi_proto.h | 51 +++++++++++++++++++++++++++++++++++++++
+>   2 files changed, 51 insertions(+), 46 deletions(-)
+> 
+> diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+> index 9d1c9c41d0f9..4a95e6bae38b 100644
+> --- a/drivers/scsi/scsi_debug.c
+> +++ b/drivers/scsi/scsi_debug.c
+> @@ -67,52 +67,6 @@ static const char *sdebug_version_date = "20210520";
+>   
+>   #define MY_NAME "scsi_debug"
+>   
+> -/* Additional Sense Code (ASC) */
+> -#define NO_ADDITIONAL_SENSE 0x0
+> -#define OVERLAP_ATOMIC_COMMAND_ASC 0x0
+> -#define OVERLAP_ATOMIC_COMMAND_ASCQ 0x23
+> -#define FILEMARK_DETECTED_ASCQ 0x1
+> -#define EOP_EOM_DETECTED_ASCQ 0x2
+> -#define BEGINNING_OF_P_M_DETECTED_ASCQ 0x4
+> -#define EOD_DETECTED_ASCQ 0x5
+> -#define LOGICAL_UNIT_NOT_READY 0x4
+> -#define LOGICAL_UNIT_COMMUNICATION_FAILURE 0x8
+> -#define UNRECOVERED_READ_ERR 0x11
+> -#define PARAMETER_LIST_LENGTH_ERR 0x1a
+> -#define INVALID_OPCODE 0x20
+> -#define LBA_OUT_OF_RANGE 0x21
+> -#define INVALID_FIELD_IN_CDB 0x24
+> -#define INVALID_FIELD_IN_PARAM_LIST 0x26
+> -#define WRITE_PROTECTED 0x27
+> -#define UA_READY_ASC 0x28
+> -#define UA_RESET_ASC 0x29
+> -#define UA_CHANGED_ASC 0x2a
+> -#define TOO_MANY_IN_PARTITION_ASC 0x3b
+> -#define TARGET_CHANGED_ASC 0x3f
+> -#define LUNS_CHANGED_ASCQ 0x0e
+> -#define INSUFF_RES_ASC 0x55
+> -#define INSUFF_RES_ASCQ 0x3
+> -#define POWER_ON_RESET_ASCQ 0x0
+> -#define POWER_ON_OCCURRED_ASCQ 0x1
+> -#define BUS_RESET_ASCQ 0x2	/* scsi bus reset occurred */
+> -#define MODE_CHANGED_ASCQ 0x1	/* mode parameters changed */
+> -#define CAPACITY_CHANGED_ASCQ 0x9
+> -#define SAVING_PARAMS_UNSUP 0x39
+> -#define TRANSPORT_PROBLEM 0x4b
+> -#define THRESHOLD_EXCEEDED 0x5d
+> -#define LOW_POWER_COND_ON 0x5e
+> -#define MISCOMPARE_VERIFY_ASC 0x1d
+> -#define MICROCODE_CHANGED_ASCQ 0x1	/* with TARGET_CHANGED_ASC */
+> -#define MICROCODE_CHANGED_WO_RESET_ASCQ 0x16
+> -#define WRITE_ERROR_ASC 0xc
+> -#define UNALIGNED_WRITE_ASCQ 0x4
+> -#define WRITE_BOUNDARY_ASCQ 0x5
+> -#define READ_INVDATA_ASCQ 0x6
+> -#define READ_BOUNDARY_ASCQ 0x7
+> -#define ATTEMPT_ACCESS_GAP 0x9
+> -#define INSUFF_ZONE_ASCQ 0xe
+> -/* see drivers/scsi/sense_codes.h */
+> -
+>   /* Additional Sense Code Qualifier (ASCQ) */
+>   #define ACK_NAK_TO 0x3
+>   
+> diff --git a/include/scsi/scsi_proto.h b/include/scsi/scsi_proto.h
+> index f64385cde5b9..965cde7ebc5b 100644
+> --- a/include/scsi/scsi_proto.h
+> +++ b/include/scsi/scsi_proto.h
+> @@ -233,6 +233,57 @@ enum sam_status {
+>   #define MISCOMPARE          0x0e
+>   #define COMPLETED	    0x0f
+>   
+> +/*
+> + * Additional Sense Codes (ASC).
+> + */
+> +#define NO_ADDITIONAL_SENSE		0x00
+> +#define OVERLAP_ATOMIC_COMMAND_ASC	0x00
+> +#define LOGICAL_UNIT_NOT_READY		0x04
+> +#define LOGICAL_UNIT_COMMUNICATION_FAILURE 0x8
+> +#define WRITE_ERROR_ASC			0x0c
+> +#define UNRECOVERED_READ_ERR		0x11
+> +#define PARAMETER_LIST_LENGTH_ERR	0x1a
+> +#define MISCOMPARE_VERIFY_ASC		0x1d
+> +#define INVALID_OPCODE			0x20
+> +#define LBA_OUT_OF_RANGE		0x21
+> +#define INVALID_FIELD_IN_CDB		0x24
+> +#define INVALID_FIELD_IN_PARAM_LIST	0x26
+> +#define WRITE_PROTECTED			0x27
+> +#define UA_READY_ASC			0x28
+> +#define UA_RESET_ASC			0x29
+> +#define UA_CHANGED_ASC			0x2a
+> +#define TOO_MANY_IN_PARTITION_ASC	0x3b
+> +#define TARGET_CHANGED_ASC		0x3f
+> +#define SAVING_PARAMS_UNSUP		0x39
+> +#define TRANSPORT_PROBLEM		0x4b
+> +#define INSUFF_RES_ASC			0x55
+> +#define LOW_POWER_COND_ON		0x5e
+> +#define THRESHOLD_EXCEEDED		0x5d
+> +
+> +/*
+> + * Additional Sense Code Qualifiers (ASCQ).
+> + */
+> +#define POWER_ON_RESET_ASCQ		0x00
+> +#define MODE_CHANGED_ASCQ		0x01	/* mode parameters changed */
+> +#define FILEMARK_DETECTED_ASCQ		0x01
+> +#define POWER_ON_OCCURRED_ASCQ		0x01
+> +#define MICROCODE_CHANGED_ASCQ		0x01	/* with TARGET_CHANGED_ASC */
+> +#define BUS_RESET_ASCQ			0x02	/* scsi bus reset occurred */
+> +#define EOP_EOM_DETECTED_ASCQ		0x02
+> +#define INSUFF_RES_ASCQ			0x03
+> +#define BEGINNING_OF_P_M_DETECTED_ASCQ	0x04
+> +#define UNALIGNED_WRITE_ASCQ		0x04
+> +#define EOD_DETECTED_ASCQ		0x05
+> +#define WRITE_BOUNDARY_ASCQ		0x05
+> +#define READ_INVDATA_ASCQ		0x06
+> +#define READ_BOUNDARY_ASCQ		0x07
+> +#define CAPACITY_CHANGED_ASCQ		0x09
+> +#define ATTEMPT_ACCESS_GAP		0x09
+> +#define LUNS_CHANGED_ASCQ		0x0e
+> +#define INSUFF_ZONE_ASCQ		0x0e
+> +#define MICROCODE_CHANGED_WO_RESET_ASCQ 0x16
+> +#define OVERLAP_ATOMIC_COMMAND_ASCQ	0x23
+> +
+>   /*
+>    *  DEVICE TYPES
+>    *  Please keep them in 0x%02x format for $MODALIAS to work
 
-Pre-existing issues:
-- [High] The enclosure device is published to sysfs and the global list bef=
-ore its private data pointers are initialized, allowing concurrent accesses=
- to trigger a NULL pointer dereference.
---
+While at it, would you mind converting the raw asc/ascq numbers
+in drivers/scsi/scsi_lib.c to use these definitions?
+That will make the code in there _so much_ more readable ...
 
-commit c0db7f74419376e5dfdb039e9a143c3b6a8d01bf
-Author: Bryam Vargas <hexlabsecurity@proton.me>
+Cheers,
 
-scsi: ses: unregister the enclosure before freeing its device state
-
-ses_intf_remove_enclosure() frees ses_dev and the page1/page2/page10
-buffers it owns before calling enclosure_unregister(). This leaves the
-component sysfs attributes live over freed memory, meaning a concurrent
-read or write could trigger a use-after-free. This patch reorders the
-teardown to unregister first, then free.
-
-Fixes: 9927c68864e9 ("[SCSI] ses: add new Enclosure ULD")
-Closes: https://sashiko.dev/#/patchset/20260706-b4-disp-29a05ca3-v1-1-49591=
-f469f60@proton.me?part=3D1
-Cc: stable@vger.kernel.org
-
-> diff --git a/drivers/scsi/ses.c b/drivers/scsi/ses.c
-> index 4c348645b04ee..a3039a3ede56c 100644
-> --- a/drivers/scsi/ses.c
-> +++ b/drivers/scsi/ses.c
-> @@ -869,18 +870,24 @@ static void ses_intf_remove_enclosure(struct scsi_d=
-evice *sdev)
->  		return;
-> =20
->  	ses_dev =3D edev->scratch;
-> -	edev->scratch =3D NULL;
-
-[Severity: High]
-This is a pre-existing issue, but since we are looking at sysfs race
-conditions involving edev->scratch, could a similar race occur during
-initialization in ses_intf_add()?
-
-When ses_intf_add() registers the enclosure:
-
-drivers/scsi/ses.c:ses_intf_add() {
-	edev =3D enclosure_register(cdev->parent, dev_name(&sdev->sdev_gendev),
-				  components, &ses_enclosure_callbacks);
-	if (IS_ERR(edev)) {
-		err =3D PTR_ERR(edev);
-		goto err_free;
-	}
-
-	kfree(hdr_buf);
-
-	edev->scratch =3D ses_dev;
-	...
-}
-
-The enclosure_register() call makes the device visible to userspace and
-could trigger a read of the id sysfs attribute before edev->scratch is
-assigned.
-
-If that happens, would the id_show callback lead to a NULL pointer
-dereference here?
-
-drivers/scsi/ses.c:ses_show_id() {
-	struct ses_device *ses_dev =3D edev->scratch;
-	unsigned long long id =3D get_unaligned_be64(ses_dev->page1+8+4);
-	...
-}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706-b4-disp-cf=
-600574-v1-1-be4f324ff44c@proton.me?part=3D1
+Hannes
+-- 
+Dr. Hannes Reinecke                  Kernel Storage Architect
+hare@suse.de                                +49 911 74053 688
+SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
+HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
 
