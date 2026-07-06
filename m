@@ -1,59 +1,59 @@
-Return-Path: <linux-scsi+bounces-25625-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25626-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id yGfeAk5fS2o7QQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-25625-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 09:54:54 +0200
+	id iwWNLlRfS2o8QQEAu9opvQ
+	(envelope-from <linux-scsi+bounces-25626-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 09:55:00 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9966B70DCFC
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 09:54:53 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76A0770DCFF
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 09:55:00 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=fmRcoJ7U;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b="gy6Ls1b/";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25625-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25625-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25626-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25626-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B0F91307C2A5
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 07:12:04 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7136A327FDB9
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 07:12:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BBD73EBF20;
-	Mon,  6 Jul 2026 06:56:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4774E48BD44;
+	Mon,  6 Jul 2026 06:56:40 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2DF13D953E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182EF3E5574;
 	Mon,  6 Jul 2026 06:56:30 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783320995; cv=none; b=Qdxx8qh527PG3/ufTx95G6nDs/AvH2xRen4RVnGHXZEBenn4qIaMwZLdvrJKLH0MR4XAtkHO2JSZTFyGJEcLvuCwgeC1C1ooyGcys/XeohCpgudiFlXLmQHoVpsRwPNMRV581N8cxwgmydfrzVaN+DIf1HLFmZ5QfWTSmGvvR3A=
+	t=1783320996; cv=none; b=A63hdgQ3neXpejkutFAmqC/FzFCNr3y3hybG0i0Cognn9rvW+/n1kE3k4MiK+qtE7q4C59+ia2qzwqSsHd4pG7WtiXsgfFDTarNVRaYz5ZQKiMoldExG0gzlb4ns+x9P/wArSOCuPnYMxTAFsYwxEH7YhYqubqQjDhuvKpalaxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783320995; c=relaxed/simple;
-	bh=i4K0a52HSytzVmP11kyFwZdC1zCLilHnY9LSscnrYL8=;
+	s=arc-20240116; t=1783320996; c=relaxed/simple;
+	bh=0sij9p+Ol8+SAtyaBsjQe8GegRNJOuzNhDlRIAjGmUg=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uPj1YqXmwnZO1yTzo60qNmInpn+iKHU+jRHRAc9gVHxLBXEy/omcnLoEluhbtvVpetkoQMukrzaSgQcsVMHZeQs0qx4V7yg2tUK91BEAwkn3glr1rl3OIKj9mAJjdfhmzRDAP23cWRMsB2X3R1TtGuEzpIuFparIZt+9ckDXVUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fmRcoJ7U; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 167651F00AC4;
-	Mon,  6 Jul 2026 06:56:24 +0000 (UTC)
+	 MIME-Version; b=G8wR4apZbuvdOLI7J+9OkfIqdaj1WAaHAyhR6Vio1rla/85Kkp4LD2pNl6O7KCbO4cyic1bshr9D2CPV8hncM20Y/bh7k5xaC/a29m3JWY8CBsfRSoHpeDmJRvRszSIQa5us60/eAR0reGOF+BXyw/IHRMp2DWc1treS1dIJ3YU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gy6Ls1b/; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC09B1F00ACA;
+	Mon,  6 Jul 2026 06:56:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783320985;
-	bh=NERLpsh4pSWFYMKjF92Z0Bmn0mF76bSS4Pc+u0XW5UU=;
+	s=k20260515; t=1783320986;
+	bh=UikuqFT6V9dcjZ08vSqVthYDrnVILGXUcRj40KuYVoI=;
 	h=From:To:Subject:Date:In-Reply-To:References;
-	b=fmRcoJ7UFYQdwkVNqtEV7kgiRswTh6IQT/evxzDZxxk5G0sVw8plaxDNCsnFiWwzx
-	 WSJs4whwM1KaeERGa/nzcL1o4LcPkvxiWcwvzEnoyaiVCU62Ma24eGUu2UcqnK9sGF
-	 lzTxqX5ihWbYr8uQcZLUTgakvjnyl7jasNMWYTzTonX15cPOXIQEX2InoHDy1fkNu9
-	 0vbdh7n8KNHL6R/x8wGp7C9ls8CbM4PAE3Wk/60dNlZatuK3tlUR4zBfjXnaeCXQYW
-	 eEYs04IIB+U7lohncvYiBvSL5iSxj4yLBhB4mUvM3ov5Ns2W1dW4ExSoHxEy9gT3p8
-	 WScaJb282ek6g==
+	b=gy6Ls1b/1E7NchvdVRyWJLCOf4skdOBOdSNeX7Mew69FR+6ZuE1lGd7InXkbC6c6C
+	 nYh7u+Gd1HTHBsFwdKwjC4pZI6mXPMk9nqVFw/72h0Jq49iVE+0azqtenPU3JcjSfg
+	 6XKmpW9ap0p0//D93bHS1gANoDTp9l2ChltJfFhURSFwXSgZzy3ULKFcHasv/98Jeb
+	 ot5byQDWDoIRCXAsRbZchsnPEbxZkVfnT2sXidswocfuD0X9lGOI1wGxGHy5e1ZfGw
+	 8lt+7qjgLG3yZgW3ONN5fGQllLQY3S8dB+bLkqynkut3uf4iDUK53OesZPdJYKzJj6
+	 q7nvqRXrwMfaQ==
 From: Damien Le Moal <dlemoal@kernel.org>
 To: linux-ide@vger.kernel.org,
 	Niklas Cassel <cassel@kernel.org>,
 	linux-scsi@vger.kernel.org,
 	"Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH v1 5/9] ata: libata-core: detect support for depopulation capabilities
-Date: Mon,  6 Jul 2026 15:56:06 +0900
-Message-ID: <20260706065610.3559692-6-dlemoal@kernel.org>
+Subject: [PATCH v1 6/9] ata: libata-scsi: add support for the GET PHYSICAL ELEMENT STATUS command
+Date: Mon,  6 Jul 2026 15:56:07 +0900
+Message-ID: <20260706065610.3559692-7-dlemoal@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260706065610.3559692-1-dlemoal@kernel.org>
 References: <20260706065610.3559692-1-dlemoal@kernel.org>
@@ -71,13 +71,13 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_RECIPIENTS(0.00)[m:linux-ide@vger.kernel.org,m:cassel@kernel.org,m:linux-scsi@vger.kernel.org,m:martin.petersen@oracle.com,s:lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-25625-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25626-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
@@ -95,201 +95,223 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 9966B70DCFC
+X-Rspamd-Queue-Id: 76A0770DCFF
 
-Introduce the device flags ATA_DFLAG_DEPOP to indicate support by a device
-for the basic commands of the storage element depopulation feature set,
-that is, the GET PHYSICAL ELEMENT STATUS and REMOVE ELEMENT AND TRUNCATE
-commands. The device flag ATA_DFLAG_DEPOP_RESTORE flag is introduced to
-indicate support for the RESTORE ELEMENTS AND REBUILD command. Both flags
-are obtained from the command support bits of the qword at bytes 152 to
-159 of the supported capabilities log page.
+Define the translation for the GET PHYSICAL ELEMENT STATUS command
+(SERVICE ACTION IN command with service action
+SAI_GET_PHYSICAL_ELEMENT_STATUS) into the ATA command
+ATA_CMD_GET_PHYS_ELEMENT_STATUS with the new function
+ata_scsi_get_phys_element_status_xlat(). The reply of this function also
+needs translation from little endian to big endian. This is done with the
+completion callback ata_scsi_get_phys_element_status_complete().
 
-For ZAC devices, the device flag ATA_DFLAG_DEPOP_MODIFY is introduced to
-indicate support for the REMOVE ELEMENT AND MODIFY ZONES command. This
-support is indicated by the REMOVE ELEMENT AND MODIFY ZONES SUPPORTED bit
-in the qword at byte 8 to 15 of the zoned device information log page.
-
-The function ata_dev_config_depop() is introduced to set these flags
-based on the content of the supported capabilities log and zoned device
-information log. As per the ACS specifications, NCQ autosense support is
-also mandatory if these flags are set.
+The array of supported commands ata_supported_cmds is modified to add a
+new entry for this command. ata_scsi_cmd_is_supported() is also modified
+to correctly handle this new entry depending on the target device flag
+ATA_DFLAG_DEPOP being set.
 
 Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
 ---
- drivers/ata/libata-core.c | 73 +++++++++++++++++++++++++++++++++++++--
- include/linux/libata.h    | 45 +++++++++++++-----------
- 2 files changed, 96 insertions(+), 22 deletions(-)
+ drivers/ata/libata-scsi.c | 141 ++++++++++++++++++++++++++++++++++++++
+ include/linux/ata.h       |   1 +
+ 2 files changed, 142 insertions(+)
 
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index 5121faf9738e..d893c916df0b 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -2705,6 +2705,71 @@ static void ata_dev_config_cdl(struct ata_device *dev)
- 	ata_dev_cleanup_cdl_resources(dev);
+diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+index f5c838ca0ce9..8723faa96c48 100644
+--- a/drivers/ata/libata-scsi.c
++++ b/drivers/ata/libata-scsi.c
+@@ -3724,6 +3724,11 @@ static const struct ata_scsi_cmd ata_supported_cmds[] = {
+ 		.sa_valid = true,
+ 		.sa = SAI_READ_CAPACITY_16
+ 	},
++	{
++		.op = SERVICE_ACTION_IN_16,	.cdb_len = 16,
++		.sa_valid = true,
++		.sa = SAI_GET_PHYSICAL_ELEMENT_STATUS
++	},
+ 	{	.op = REPORT_LUNS,		.cdb_len = 12	},
+ 	{	.op = ATA_12,			.cdb_len = 12	},
+ 	{	.op = SECURITY_PROTOCOL_IN,	.cdb_len = 12	},
+@@ -3804,6 +3809,14 @@ static bool ata_scsi_cmd_is_supported(struct ata_device *dev, u8 op, u16 sa,
+ 	case ZBC_IN:
+ 	case ZBC_OUT:
+ 		return ata_dev_is_zoned(dev);
++	case SERVICE_ACTION_IN_16:
++		switch (sa) {
++		case SAI_GET_PHYSICAL_ELEMENT_STATUS:
++			return dev->flags & ATA_DFLAG_DEPOP;
++		default:
++			return true;
++		}
++		break;
+ 	case SECURITY_PROTOCOL_IN:
+ 	case SECURITY_PROTOCOL_OUT:
+ 		return dev->flags & ATA_DFLAG_TRUSTED;
+@@ -4575,6 +4588,126 @@ static unsigned int ata_scsi_security_inout_xlat(struct ata_queued_cmd *qc)
+ 	return 0;
  }
  
-+static void ata_dev_config_depop(struct ata_device *dev)
++/*
++ * Convert T-13 little-endian field representation of GET PHYSICAL ELEMENT
++ * STATUS DMA command reply into T-10 big-endian field representation.
++ */
++static void ata_scsi_get_phys_element_status_complete(struct ata_queued_cmd *qc)
 +{
-+	unsigned int err_mask;
-+	u64 val;
++	struct scsi_cmnd *scmd = qc->scsicmd;
++	struct sg_mapping_iter miter;
++	unsigned int bytes = 0;
 +
-+	/* Ignore old drives. */
-+	if (ata_id_major_version(dev->id) < 11)
-+		goto not_supported;
++	lockdep_assert_held(qc->ap->lock);
 +
-+	/* NCQ Autosense is required. */
-+	if (!ata_identify_page_supported(dev, ATA_LOG_SUPPORTED_CAPABILITIES) ||
-+	    !ata_id_has_ncq_autosense(dev->id))
-+		goto not_supported;
++	sg_miter_start(&miter, scsi_sglist(scmd), scsi_sg_count(scmd),
++		       SG_MITER_TO_SG | SG_MITER_ATOMIC);
 +
-+	err_mask = ata_read_log_page(dev, ATA_LOG_IDENTIFY_DEVICE,
-+				     ATA_LOG_SUPPORTED_CAPABILITIES,
-+				     dev->sector_buf, 1);
-+	if (err_mask)
-+		goto not_supported;
++	while (sg_miter_next(&miter)) {
++		unsigned int offset = 0;
 +
-+	/* Check depopulation capabilities bits. */
-+	val = get_unaligned_le64(&dev->sector_buf[152]);
-+	if (!(val & BIT_ULL(63)))
-+		goto not_supported;
++		if (bytes == 0) {
++			u32 num_desc, num_desc_returned, id;
++			u16 max_depop, cur_depop;
++			char *hdr;
 +
-+	/*
-+	 * Support for at least the GET PHYSICAL ELEMENT STATUS and
-+	 * REMOVE ELEMENT AND TRUNCATE commands is mandated.
-+	 */
-+	if (!(val & BIT_ULL(0)) || !(val & BIT_ULL(1)))
-+		goto not_supported;
++			/* Swizzle the header */
++			hdr = miter.addr;
++			num_desc = get_unaligned_le32(&hdr[0]);
++			num_desc_returned = get_unaligned_le32(&hdr[4]);
++			id = get_unaligned_le32(&hdr[8]);
++			max_depop = get_unaligned_le16(&hdr[12]);
++			cur_depop = get_unaligned_le16(&hdr[14]);
 +
-+	dev->flags |= ATA_DFLAG_DEPOP;
++			put_unaligned_be32(num_desc, &hdr[0]);
++			put_unaligned_be32(num_desc_returned, &hdr[4]);
++			put_unaligned_be32(id, &hdr[8]);
++			put_unaligned_be16(max_depop, &hdr[12]);
++			put_unaligned_be16(cur_depop, &hdr[14]);
 +
-+	/* Check if RESTORE ELEMENTS AND REBUILD is supported. */
-+	if (val & BIT_ULL(2))
-+		dev->flags |= ATA_DFLAG_DEPOP_RESTORE;
++			offset += 32;
++			bytes += 32;
++		}
 +
-+	/*
-+	 * For ZAC devices, check if REMOVE ELEMENT AND MODIFY ZONES is
-+	 * supported.
-+	 */
-+	if (dev->class != ATA_DEV_ZAC)
-+		return;
++		/* Swizzle the descriptors. */
++		while (offset < miter.length) {
++			char *desc;
++			u32 id;
++			u8 type;
 +
-+	err_mask = ata_read_log_page(dev, ATA_LOG_IDENTIFY_DEVICE,
-+				     ATA_LOG_ZONED_INFORMATION,
-+				     dev->sector_buf, 1);
-+	if (err_mask)
-+		return;
++			desc = miter.addr + offset;
++			id = get_unaligned_le32(&desc[4]);
++			put_unaligned_be32(id, &desc[4]);
 +
-+	val = get_unaligned_le64(&dev->sector_buf[8]);
-+	if (!(val & BIT_ULL(63)))
-+		return;
++			type = desc[14];
++			if (type == SCSI_PHYS_ELEM_TYPE_ALL_ACCESS_STORAGE) {
++				u64 capacity = get_unaligned_le64(&desc[16]);
 +
-+	if (val & BIT_ULL(1))
-+		dev->flags |= ATA_DFLAG_DEPOP_MODIFY;
++				put_unaligned_be64(capacity, &desc[16]);
++			} else {
++				u64 num_zones;
 +
-+	return;
++				id = get_unaligned_le32(&desc[16]);
++				num_zones = get_unaligned_le64(&desc[24]);
 +
-+not_supported:
-+	dev->flags &= ~(ATA_DFLAG_DEPOP | ATA_DFLAG_DEPOP_RESTORE |
-+			ATA_DFLAG_DEPOP_MODIFY);
++				put_unaligned_be32(id, &desc[16]);
++				put_unaligned_be64(num_zones, &desc[24]);
++			}
++
++			offset += 32;
++			bytes += 32;
++		}
++	}
++	sg_miter_stop(&miter);
++
++	ata_scsi_qc_complete(qc);
 +}
 +
- static int ata_dev_config_lba(struct ata_device *dev)
- {
- 	const u16 *id = dev->id;
-@@ -2942,7 +3007,7 @@ static void ata_dev_print_features(struct ata_device *dev)
- 		return;
- 
- 	ata_dev_info(dev,
--		     "Features:%s%s%s%s%s%s%s%s%s%s\n",
-+		     "Features:%s%s%s%s%s%s%s%s%s%s%s%s%s\n",
- 		     dev->flags & ATA_DFLAG_FUA ? " FUA" : "",
- 		     dev->flags & ATA_DFLAG_TRUSTED ? " Trust" : "",
- 		     dev->flags & ATA_DFLAG_DA ? " Dev-Attention" : "",
-@@ -2952,7 +3017,10 @@ static void ata_dev_print_features(struct ata_device *dev)
- 		     dev->flags & ATA_DFLAG_NCQ_SEND_RECV ? " NCQ-sndrcv" : "",
- 		     dev->flags & ATA_DFLAG_NCQ_PRIO ? " NCQ-prio" : "",
- 		     dev->flags & ATA_DFLAG_CDL ? " CDL" : "",
--		     dev->cpr_log ? " CPR" : "");
-+		     dev->cpr_log ? " CPR" : "",
-+		     dev->flags & ATA_DFLAG_DEPOP ? " Depop" : "",
-+		     dev->flags & ATA_DFLAG_DEPOP_RESTORE ? " Depop-Restore" : "",
-+		     dev->flags & ATA_DFLAG_DEPOP_MODIFY ? " Depop-Modify" : "");
- }
- 
++static unsigned int
++ata_scsi_get_phys_element_status_xlat(struct ata_queued_cmd *qc)
++{
++	struct scsi_cmnd *scmd = qc->scsicmd;
++	const u8 *cdb = scmd->cmnd;
++	struct ata_device *dev = qc->dev;
++	struct ata_taskfile *tf = &qc->tf;
++	u32 starting_element, len;
++
++	/* ATA_CMD_GET_PHYS_ELEMENT_STATUS is a DMA command. */
++	if (!(dev->flags & ATA_DFLAG_DEPOP) || !ata_dma_enabled(dev)) {
++		ata_scsi_set_sense(dev, scmd, ILLEGAL_REQUEST, 0x20, 0x0);
++		return 1;
++	}
++
++	len = get_unaligned_be32(&cdb[10]) / ATA_SECT_SIZE;
++	if (!len || len > U16_MAX) {
++		ata_scsi_set_invalid_field(dev, scmd, 10, 0);
++		return 1;
++	}
++
++	tf->protocol = ATA_PROT_DMA;
++	tf->command = ATA_CMD_GET_PHYS_ELEMENT_STATUS;
++	tf->hob_feature = cdb[14];
++	tf->hob_nsect = (len >> 8) & 0xff;
++	tf->nsect = len & 0xff;
++
++	starting_element = get_unaligned_be32(&cdb[6]);
++	if (starting_element) {
++		tf->hob_lbal = (starting_element >> 24) & 0xff;
++		tf->lbah = (starting_element >> 16) & 0xff;
++		tf->lbam = (starting_element >> 8) & 0xff;
++		tf->lbal = starting_element & 0xff;
++	}
++	tf->device = ATA_LBA;
++	tf->flags |= ATA_TFLAG_ISADDR | ATA_TFLAG_DEVICE | ATA_TFLAG_LBA48;
++
++	ata_qc_set_pc_nbytes(qc);
++
++	qc->flags |= ATA_QCFLAG_RESULT_TF;
++	qc->complete_fn = ata_scsi_get_phys_element_status_complete;
++
++	return 0;
++}
++
  /**
-@@ -3115,6 +3183,7 @@ int ata_dev_configure(struct ata_device *dev)
- 		ata_dev_config_trusted(dev);
- 		ata_dev_config_cpr(dev);
- 		ata_dev_config_cdl(dev);
-+		ata_dev_config_depop(dev);
- 		dev->cdb_len = 32;
- 
- 		if (print_info)
-diff --git a/include/linux/libata.h b/include/linux/libata.h
-index 736ba8a6a77b..3703ef433bd4 100644
---- a/include/linux/libata.h
-+++ b/include/linux/libata.h
-@@ -139,30 +139,35 @@ enum {
- 	ATA_DFLAG_NCQ_SEND_RECV = (1UL << 11), /* device supports NCQ SEND and RECV */
- 	ATA_DFLAG_NCQ_PRIO	= (1UL << 12), /* device supports NCQ priority */
- 	ATA_DFLAG_CDL		= (1UL << 13), /* supports cmd duration limits */
--	ATA_DFLAG_CFG_MASK	= (1UL << 14) - 1,
--
--	ATA_DFLAG_PIO		= (1UL << 14), /* device limited to PIO mode */
--	ATA_DFLAG_NCQ_OFF	= (1UL << 15), /* device limited to non-NCQ mode */
--	ATA_DFLAG_SLEEPING	= (1UL << 16), /* device is sleeping */
--	ATA_DFLAG_DUBIOUS_XFER	= (1UL << 17), /* data transfer not verified */
--	ATA_DFLAG_NO_UNLOAD	= (1UL << 18), /* device doesn't support unload */
--	ATA_DFLAG_UNLOCK_HPA	= (1UL << 19), /* unlock HPA */
--	ATA_DFLAG_INIT_MASK	= (1UL << 20) - 1,
--
--	ATA_DFLAG_NCQ_PRIO_ENABLED = (1UL << 20), /* Priority cmds sent to dev */
--	ATA_DFLAG_CDL_ENABLED	= (1UL << 21), /* cmd duration limits is enabled */
--	ATA_DFLAG_RESUMING	= (1UL << 22),  /* Device is resuming */
--	ATA_DFLAG_DETACH	= (1UL << 24),
--	ATA_DFLAG_DETACHED	= (1UL << 25),
--	ATA_DFLAG_DA		= (1UL << 26), /* device supports Device Attention */
--	ATA_DFLAG_DEVSLP	= (1UL << 27), /* device supports Device Sleep */
--	ATA_DFLAG_ACPI_DISABLED = (1UL << 28), /* ACPI for the device is disabled */
--	ATA_DFLAG_D_SENSE	= (1UL << 29), /* Descriptor sense requested */
-+	ATA_DFLAG_DEPOP		= (1UL << 14), /* supports depopulation capability */
-+	ATA_DFLAG_DEPOP_RESTORE	= (1UL << 15), /* supports depopulation restoration */
-+	ATA_DFLAG_DEPOP_MODIFY	= (1UL << 16), /* supports zoned depopulation */
-+	ATA_DFLAG_CFG_MASK	= (1UL << 17) - 1,
+  *	ata_scsi_var_len_cdb_xlat - SATL variable length CDB to Handler
+  *	@qc: Command to be translated
+@@ -4618,6 +4751,8 @@ static unsigned int ata_scsi_var_len_cdb_xlat(struct ata_queued_cmd *qc)
+ static inline ata_xlat_func_t ata_get_xlat_func(struct ata_device *dev,
+ 						u8 *cdb)
+ {
++	u8 sa;
 +
-+	ATA_DFLAG_PIO		= (1UL << 17), /* device limited to PIO mode */
-+	ATA_DFLAG_NCQ_OFF	= (1UL << 18), /* device limited to non-NCQ mode */
-+	ATA_DFLAG_SLEEPING	= (1UL << 19), /* device is sleeping */
-+	ATA_DFLAG_DUBIOUS_XFER	= (1UL << 20), /* data transfer not verified */
-+	ATA_DFLAG_NO_UNLOAD	= (1UL << 21), /* device doesn't support unload */
-+	ATA_DFLAG_UNLOCK_HPA	= (1UL << 22), /* unlock HPA */
-+	ATA_DFLAG_INIT_MASK	= (1UL << 23) - 1,
+ 	switch (cdb[0]) {
+ 	case READ_6:
+ 	case READ_10:
+@@ -4652,6 +4787,12 @@ static inline ata_xlat_func_t ata_get_xlat_func(struct ata_device *dev,
+ 	case MODE_SELECT_10:
+ 		return ata_scsi_mode_select_xlat;
+ 
++	case SERVICE_ACTION_IN_16:
++		sa = cdb[1] & 0x1f;
++		if (sa == SAI_GET_PHYSICAL_ELEMENT_STATUS)
++			return ata_scsi_get_phys_element_status_xlat;
++		break;
 +
-+	ATA_DFLAG_NCQ_PRIO_ENABLED = (1UL << 23), /* Priority cmds sent to dev */
-+	ATA_DFLAG_CDL_ENABLED	= (1UL << 24), /* cmd duration limits is enabled */
-+	ATA_DFLAG_RESUMING	= (1UL << 25),  /* Device is resuming */
-+	ATA_DFLAG_DETACH	= (1UL << 26),
-+	ATA_DFLAG_DETACHED	= (1UL << 27),
-+	ATA_DFLAG_DA		= (1UL << 28), /* device supports Device Attention */
-+	ATA_DFLAG_DEVSLP	= (1UL << 29), /* device supports Device Sleep */
-+	ATA_DFLAG_ACPI_DISABLED = (1UL << 30), /* ACPI for the device is disabled */
-+	ATA_DFLAG_D_SENSE	= (1UL << 31), /* Descriptor sense requested */
+ 	case ZBC_IN:
+ 		return ata_scsi_zbc_in_xlat;
  
- 	ATA_DFLAG_FEATURES_MASK	= (ATA_DFLAG_TRUSTED | ATA_DFLAG_DA |	\
- 				   ATA_DFLAG_DEVSLP | ATA_DFLAG_NCQ_SEND_RECV | \
- 				   ATA_DFLAG_NCQ_PRIO | ATA_DFLAG_FUA | \
--				   ATA_DFLAG_CDL)
-+				   ATA_DFLAG_CDL | ATA_DFLAG_DEPOP | \
-+				   ATA_DFLAG_DEPOP_RESTORE |
-+				   ATA_DFLAG_DEPOP_MODIFY)
- };
+diff --git a/include/linux/ata.h b/include/linux/ata.h
+index ac5616a9668b..8b726d9bdda3 100644
+--- a/include/linux/ata.h
++++ b/include/linux/ata.h
+@@ -289,6 +289,7 @@ enum {
+ 	ATA_CMD_SANITIZE_DEVICE = 0xB4,
+ 	ATA_CMD_ZAC_MGMT_IN	= 0x4A,
+ 	ATA_CMD_ZAC_MGMT_OUT	= 0x9F,
++	ATA_CMD_GET_PHYS_ELEMENT_STATUS = 0x12,
  
- enum {
+ 	/* marked obsolete in the ATA/ATAPI-7 spec */
+ 	ATA_CMD_RESTORE		= 0x10,
 -- 
 2.54.0
 
