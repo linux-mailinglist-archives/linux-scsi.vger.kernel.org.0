@@ -1,71 +1,71 @@
-Return-Path: <linux-scsi+bounces-25680-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25678-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id tnTnOhD+S2oIeQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-25680-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 21:12:16 +0200
+	id 6cz9GSzrS2pzcwEAu9opvQ
+	(envelope-from <linux-scsi+bounces-25678-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 19:51:40 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EF5B714D68
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 21:12:16 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CB9A71419D
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 19:51:39 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=meta.com header.s=s2048-2025-q2 header.b=fCuzD7nI;
+	dkim=pass header.d=meta.com header.s=s2048-2025-q2 header.b=UdCST2s8;
 	dmarc=pass (policy=reject) header.from=meta.com;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25680-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25680-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25678-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25678-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 135783621574
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 17:35:17 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 16C3830547C0
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 17:35:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44C543B38BF;
-	Mon,  6 Jul 2026 17:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36DC53B7B6E;
+	Mon,  6 Jul 2026 17:35:08 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B84F3AEF4C
-	for <linux-scsi@vger.kernel.org>; Mon,  6 Jul 2026 17:35:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E30B338939
+	for <linux-scsi@vger.kernel.org>; Mon,  6 Jul 2026 17:35:06 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783359316; cv=none; b=Gwqex3b4kWLODDUWSt4NTHYvOagdtyyxaJGx1xUJSY5zcgW1sS+yyYIl8K82tXbeKlYbK3w0xMsZu1ag6NgG4vjOgyKLuiyth9U3Zz2Z6Pbxmd6gE7P02nIxz1fZ2M3isjjBOiRENDslznJ0X219vc8u8qAaTIAfWSZCNH87fXg=
+	t=1783359308; cv=none; b=hq0vpm5HbIj7PvCzz4b/9ZZ0zDnwUPvsUzSfSNL1tAoa2Z+FeaXR7h0WTdrQVJkgleqeMnHmN3lj6fTQoSewEYwyJJtUXfu3qTAtJuBHJZ3iG2ScrCh1osaGcFQkq/SQABh5ZDslgdrkHd9aDsjtbdhxjhLgFpUXhJ6+rRAN1wE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783359316; c=relaxed/simple;
-	bh=BqPdyTPD9g4eA7Vw/b+ozX6+6/rApC5MI3SnAIeszwQ=;
+	s=arc-20240116; t=1783359308; c=relaxed/simple;
+	bh=76hbu4KwsAZnDsGi2evSegGlHNCl/1Aww0TJyqjoGQU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qJ7bwcJxAYUZLzfjnY2XOqptAtmxa+rOpqVrSUJpYWhBtCeBOgKu31QPCZODjt5BGifEad529o8tILEGgm6eByTSaq7wL8wvIOB9hbwWhIUO2UMRZfTHct2NonJgZiIq8ggpsnqBkq8Y9qG4yfWn3UveeWkLHQy+7JYSLET3jY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=fCuzD7nI; arc=none smtp.client-ip=67.231.145.42
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 666GjHPS1857558
-	for <linux-scsi@vger.kernel.org>; Mon, 6 Jul 2026 10:35:14 -0700
+	 MIME-Version:Content-Type; b=PmDZO6lPVQQGVqGZIV/hqFzao6NOXrq6cFGqyuxo+hB4Zn54t7QhOqX1t3g1WG2ocy3zGOus9KNXqsGh0Vm0EeQoIyoludlxKfpitU6NkUp7COimMgiiakPc7mllFcWxKo45toFPnGxH8381bnGppgejrR1rpnxNImVQodjQ2No=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=UdCST2s8; arc=none smtp.client-ip=67.231.153.30
+Received: from pps.filterd (m0528004.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 666GjVgA2473025
+	for <linux-scsi@vger.kernel.org>; Mon, 6 Jul 2026 10:35:05 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
-	 bh=HlvS8n/owgoTgAFmeU7a1nOT8euROTEsxbhMc6rA8+8=; b=fCuzD7nICqkx
-	+EEtdSoaQtXJpcsYbEsrDX998l+i2iYL9yssYQHE35GCtZ09XHioN5vc6JWoXd7M
-	FSeanWAtW4vkVGnqNOVUh9WjZtjs+SqqNKcH/2e0rSv46/S2wmkHfamKZkbzxQdT
-	gCxJUo/s6edB60BRw8B3ZpM4K/JUeTn8iHektNepotvsgwwHNOW63d8OHYaLP8Ut
-	1daA7KlAiLa630WGr3OnZe7tnjO3x3HVq5/41ChZbweRsR4eCREZB8PHeCZGW1Fl
-	C469HMyDwiffTRWWcOJjPQRn3KfRn3/bbjCI6SZpRQ2vf56SeX37PsPuB/GJReO9
-	zj9EOqKoLg==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4f6wg1m9b4-5
+	 bh=YG+ql68/FQcHBQPY55Ko3WXo3Pu3duhLFt+gmW13Q9I=; b=UdCST2s8aOdB
+	M6RoD/fUnnSy2l7cPcwFZIOj2yY//6rx1UwHtM2CxUWoo4Cjb86LwJdah/BZe8LF
+	PaXqspnP8ZOffGMsEPwExzXooRNcd0N8Wsy8kU9kjqguJ8urYZ3P6Gi6Id2Cnzm2
+	ANdZyU83DPEIvD8CcjYClQjOs8bvMQo/a1Uf1SJ3SsnRdumqwZ/Cn+efXgzYf4sy
+	Qi197HLoSOGINT1/mQzxa7joS3mWsw/m1tThUIBXFFr0QPcTRmPYuEQo2l62VpME
+	RhWUvo6mdsfTzQeiTmTOBvIsThmD8z+Lm3tFcvTw0BBYX6jBLbyZCeL/6T21IVeX
+	0K/nbC0mpg==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4f7ktefmsv-5
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-scsi@vger.kernel.org>; Mon, 06 Jul 2026 10:35:13 -0700 (PDT)
-Received: from twshared1653.04.snb2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
+	for <linux-scsi@vger.kernel.org>; Mon, 06 Jul 2026 10:35:05 -0700 (PDT)
+Received: from twshared13926.03.snb2.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.41; Mon, 6 Jul 2026 17:35:11 +0000
+ 15.2.2562.41; Mon, 6 Jul 2026 17:35:02 +0000
 Received: by devbig197.nha3.facebook.com (Postfix, from userid 544533)
-	id 035F5249DC6D4; Mon,  6 Jul 2026 10:34:54 -0700 (PDT)
+	id 2203B249DC6D6; Mon,  6 Jul 2026 10:34:55 -0700 (PDT)
 From: Keith Busch <kbusch@meta.com>
 To: <linux-block@vger.kernel.org>
 CC: <linux-scsi@vger.kernel.org>, <axboe@kernel.dk>, <hch@lst.de>,
         <bvanassche@acm.org>, <sumit.saxena@broadcom.com>,
         Keith Busch
 	<kbusch@kernel.org>
-Subject: [RFC PATCH 1/6] lib/sbitmap: add ranged allocation, bounded wakeup relay, and ranged weight
-Date: Mon, 6 Jul 2026 10:34:33 -0700
-Message-ID: <20260706173438.3537347-2-kbusch@meta.com>
+Subject: [RFC PATCH 2/6] blk-mq: replace shared-tag fairness counter with allocation windows
+Date: Mon, 6 Jul 2026 10:34:34 -0700
+Message-ID: <20260706173438.3537347-3-kbusch@meta.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260706173438.3537347-1-kbusch@meta.com>
 References: <20260706173438.3537347-1-kbusch@meta.com>
@@ -78,23 +78,24 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: ogaAu_okehAkX-yRUTA9i73a0x_9Wx-R
-X-Proofpoint-ORIG-GUID: ogaAu_okehAkX-yRUTA9i73a0x_9Wx-R
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA2MDE3NyBTYWx0ZWRfXzp+hBtXn1Tfo
- yZETQ7mk6xBs6/0DBswhqG89X8SHqNH+qqbsHvEdOC5bJmwdExvkU/Eo0MwrUJNZxYFYZiUml5m
- dJdGOBlt5XHgQqafucw880KcY3a5KKAMqatJcrY3QUr35ZTSCKaH2iWgdyPete/bAkiTfeZ6mGA
- onqErgUNJi2b9MR6yILuJnmK0RxSzW/da2WLcHuXY/OQMytiKMEu9R9WzF4fJRJhFqe/0S6WCFb
- fIPvNu0UcY8N3vA7RF25CM8maAC+jyCHrWs2OSprcDrFy2kGJAhL/UPJtZWDq048isETNWLsmI1
- E6fqRibdBgsLgdEd87ceiPS9jr4JhHZb8Orn+f/hck70B0DMqvso7o9fuH+AajbMbjNLFQKiZu0
- SeC0fdfXUBN0iDc00TrRncg2AICH3IC5i5VhYTxVZTyyCo3A/AWZW6SSgXuHsojkjlsrx83i3m8
- Tvs/Zd4jGdCfRbUnb9w==
-X-Authority-Analysis: v=2.4 cv=EpfiaycA c=1 sm=1 tr=0 ts=6a4be751 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+X-Authority-Analysis: v=2.4 cv=UdJhjqSN c=1 sm=1 tr=0 ts=6a4be749 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
  a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
- a=8elwO82fXORLTBIkMd32:22 a=VwQbUJbxAAAA:8 a=-vEB9NHOSM2DkkWZcV4A:9
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA2MDE3NyBTYWx0ZWRfX/XeY1Rhdsc+j
- 9KwLZm1WdeTwRwM8QyhVG/0EEq/rfc+YAZyNnhnt4IY7nty2iVQGnF0k2A/Ow+oayBu+7yxn4u7
- sj9SdbZqOQK1XNhO62VkmZPComwidrI=
+ a=GbPsI2Ihf5RTnMjR_gZv:22 a=VwQbUJbxAAAA:8 a=N54-gffFAAAA:8 a=Q-fNiiVtAAAA:8
+ a=PQCEMSzTs29JRXNAliYA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA2MDE3NyBTYWx0ZWRfXxlpmB8QzFRtN
+ GeGFhp7z6BG4WyiJ4QG9qRbMmc6O5nX9jd7gUxyUKOqwImjpGELjoPs9S2AaJPYvgQa7rjxGEsu
+ FbyoKPcUZiHI1hGYygVoCteniefznZQkjOK3Mq0TZE8eOvMuq+/B9CVm5Ot+8WNe//qFvQrHXJ0
+ tAYIlUOBFV4GMw0/Vv4kYQ1yFkichFBkPSBhbAWwuMJ6Yl9vj4bSzZYIBbcp4WI3J9vamwjmKLo
+ O2Wn7XXmL0Ra3ST5ujI7u8XK+/tdTZnlt/AVoxrZSXroZmU4tOek7T8TSTtPytFR3FRnAqxAnPY
+ Vmk6BA4Motgwd1P4BNPBv6S/i464xEMTc0Qhbh/as5/P9P+cAcHzK1oMcpsbN9zCUg5MDP0sjXO
+ 7jNi1lv1y75wMkN/XzdKO1Kfwpq0P32rCvDnGqTw7WKe/DVrRj3FlaIdlw2mn9aJ8To20ALT5tB
+ 2vz63a/0TtSFFNzrf8w==
+X-Proofpoint-GUID: LZXrmUYiTzgGyltkZNIQ5Cvj2ywc-k65
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA2MDE3NyBTYWx0ZWRfX7ybp8EyNnI82
+ h7DVoV4XANEPjjmxZDPxr3yyffG83BUuZ90ciSX3nNUPNOOzvKUKH3uxStnh+t8NM+ruc8Gy4kI
+ kzkYIjWDGxRMghfvaarRs7RI7i4prHQ=
+X-Proofpoint-ORIG-GUID: LZXrmUYiTzgGyltkZNIQ5Cvj2ywc-k65
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-07-06_02,2026-07-06_02,2025-10-01_01
@@ -106,11 +107,11 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[meta.com,reject];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[meta.com:s=s2048-2025-q2];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25680-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25678-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:linux-block@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:axboe@kernel.dk,m:hch@lst.de,m:bvanassche@acm.org,m:sumit.saxena@broadcom.com,m:kbusch@kernel.org,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -118,417 +119,554 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
 	DKIM_TRACE(0.00)[meta.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[kbusch@meta.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[meta.com:from_mime,meta.com:dkim,meta.com:mid,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,meta.com:from_mime,meta.com:dkim,meta.com:mid];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5EF5B714D68
+X-Rspamd-Queue-Id: 6CB9A71419D
 
 From: Keith Busch <kbusch@kernel.org>
 
-Add some helpers that let a caller carve a shared bitmap into per-user
-windows.
+The per-request atomic active counter that hctx_may_queue() checks on
+every shared-tag allocation is costly under contention. Instead, confine
+each active queue to a slice of the shared bitmap and allocate from
+that, so one busy queue cannot starve the others. This removes per-IO
+atomic on the hot path. Fairness becomes structural to the sbitmap
+allocation range, so the counter and hctx_may_queue are removed.
 
-  * sbitmap_queue_get_range() allocates a free bit only within requested =
-range.
-  * sbitmap_queue_wake_up_relay() hands a wakeup to another waiter when t=
-he
-    woken one cannot use the freed bit (it fell outside that waiter's win=
-dow).
-  * sbitmap_weight_range() counts set (and not cleared) bits in a sub-ran=
-ge.
-
-No callers yet. The intention is for blk-mq users for shared tag
-fairness without requiring per-io atomic accounting operations.
-
+Link: https://lore.kernel.org/linux-block/20240529213921.3166462-1-bvanas=
+sche@acm.org/
+Link: https://lore.kernel.org/linux-block/20260609121806.2121755-1-sumit.=
+saxena@broadcom.com/
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
- include/linux/sbitmap.h |  53 +++++++++++
- lib/sbitmap.c           | 200 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 253 insertions(+)
+ block/blk-core.c       |   2 +-
+ block/blk-mq-debugfs.c |   2 +-
+ block/blk-mq-tag.c     | 113 +++++++++++++++++++++++++++++++++++++++--
+ block/blk-mq.c         |  21 ++------
+ block/blk-mq.h         | 102 +------------------------------------
+ include/linux/blk-mq.h |  15 ++++--
+ include/linux/blkdev.h |   6 ++-
+ 7 files changed, 135 insertions(+), 126 deletions(-)
 
-diff --git a/include/linux/sbitmap.h b/include/linux/sbitmap.h
-index cc7ad189caa5c..9fceda5d9de51 100644
---- a/include/linux/sbitmap.h
-+++ b/include/linux/sbitmap.h
-@@ -86,6 +86,7 @@ struct sbitmap {
+diff --git a/block/blk-core.c b/block/blk-core.c
+index 365641266c9e8..7e719b90d8a66 100644
+--- a/block/blk-core.c
++++ b/block/blk-core.c
+@@ -464,7 +464,7 @@ struct request_queue *blk_alloc_queue(struct queue_li=
+mits *lim, int node_id)
 =20
- #define SBQ_WAIT_QUEUES 8
- #define SBQ_WAKE_BATCH 8
-+#define SBQ_RELAY_BUDGET SBQ_WAKE_BATCH
+ 	q->node =3D node_id;
 =20
- /**
-  * struct sbq_wait_state - Wait queue in a &struct sbitmap_queue.
-@@ -149,6 +150,14 @@ struct sbitmap_queue {
- 	 * @wakeup_cnt: Number of thread wake ups issued.
- 	 */
- 	atomic_t wakeup_cnt;
-+
-+	/**
-+	 * @relay_credits: Remaining range-relay wakeups allowed before the nex=
-t
-+	 * genuine completion. Refilled by sbitmap_queue_wake_up() and consumed
-+	 * by sbitmap_queue_wake_up_relay(); bounds the relay chain so it canno=
-t
-+	 * cycle when no waiter can use a freed bit.
-+	 */
-+	atomic_t relay_credits;
- };
+-	atomic_set(&q->nr_active_requests_shared_tags, 0);
++	q->tag_win_slot =3D -1;
 =20
- /**
-@@ -375,6 +384,18 @@ void sbitmap_show(struct sbitmap *sb, struct seq_fil=
-e *m);
-  */
- unsigned int sbitmap_weight(const struct sbitmap *sb);
+ 	timer_setup(&q->timeout, blk_rq_timed_out_timer, 0);
+ 	INIT_WORK(&q->timeout_work, blk_timeout_work);
+diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c
+index 6754d8f9449c1..4b47a3322ff72 100644
+--- a/block/blk-mq-debugfs.c
++++ b/block/blk-mq-debugfs.c
+@@ -480,7 +480,7 @@ static int hctx_active_show(void *data, struct seq_fi=
+le *m)
+ {
+ 	struct blk_mq_hw_ctx *hctx =3D data;
 =20
-+/**
-+ * sbitmap_weight_range() - Return how many set and not cleared bits in =
-a
-+ * sub-range of a &struct sbitmap.
-+ * @sb: Bitmap to check.
-+ * @off: First bit of the range.
-+ * @len: Number of bits in the range.
-+ *
-+ * Return: How many bits in [@off, @off + @len) are set and not cleared.
-+ */
-+unsigned int sbitmap_weight_range(const struct sbitmap *sb, unsigned int=
- off,
-+				  unsigned int len);
-+
- /**
-  * sbitmap_bitmap_show() - Write a hex dump of a &struct sbitmap to a &s=
-truct
-  * seq_file.
-@@ -472,6 +493,22 @@ unsigned long __sbitmap_queue_get_batch(struct sbitm=
-ap_queue *sbq, int nr_tags,
- int sbitmap_queue_get_shallow(struct sbitmap_queue *sbq,
- 			      unsigned int shallow_depth);
+-	seq_printf(m, "%d\n", __blk_mq_active_requests(hctx));
++	seq_printf(m, "%u\n", blk_mq_hctx_active(hctx));
+ 	return 0;
+ }
 =20
-+/**
-+ * sbitmap_queue_get_range() - Try to allocate a free bit from a restric=
-ted
-+ * range of a &struct sbitmap_queue, with preemption already disabled.
-+ * @sbq: Bitmap queue to allocate from.
-+ * @min: First bit (inclusive) the caller is allowed to allocate.
-+ * @max: Last bit (exclusive) the caller is allowed to allocate.
-+ *
-+ * Allocation is confined to the [@min, @max) window. This lets several =
-users
-+ * share one bitmap while each is bounded to its own (possibly overlappi=
-ng)
-+ * window, providing fairness without a separate per-user accounting cou=
-nter.
-+ *
-+ * Return: Non-negative allocated bit number if successful, -1 otherwise=
-.
-+ */
-+int sbitmap_queue_get_range(struct sbitmap_queue *sbq, unsigned int min,
-+			    unsigned int max);
-+
- /**
-  * sbitmap_queue_get() - Try to allocate a free bit from a &struct
-  * sbitmap_queue.
-@@ -575,6 +612,22 @@ void sbitmap_queue_wake_all(struct sbitmap_queue *sb=
-q);
-  */
- void sbitmap_queue_wake_up(struct sbitmap_queue *sbq, int nr);
-=20
-+/**
-+ * sbitmap_queue_wake_up_relay() - Relay a wakeup to the next waiter.
-+ * @sbq: Bitmap queue to wake up.
-+ * @cur: The relaying waiter's own wait queue, skipped so it does not wa=
-ke
-+ *       itself (it is about to sleep again); may be NULL.
-+ *
-+ * Wake a single waiter on the next active wait queue without touching t=
-he
-+ * wake_batch accounting. Intended for range-limited allocation: a waite=
-r that
-+ * was woken but could not use the freed bit (it fell outside the waiter=
-'s
-+ * allowed range) calls this to pass the wakeup along to another waiter =
-that
-+ * may be able to use it. The relay is bounded by a credit budget refill=
-ed
-+ * only by genuine completions, so it cannot cycle indefinitely.
-+ */
-+void sbitmap_queue_wake_up_relay(struct sbitmap_queue *sbq,
-+				 struct sbq_wait_state *cur);
-+
- /**
-  * sbitmap_queue_show() - Dump &struct sbitmap_queue information to a &s=
-truct
-  * seq_file.
-diff --git a/lib/sbitmap.c b/lib/sbitmap.c
-index 4d188d05db153..3264085b4d533 100644
---- a/lib/sbitmap.c
-+++ b/lib/sbitmap.c
-@@ -338,6 +338,130 @@ static int sbitmap_get_shallow(struct sbitmap *sb, =
-unsigned long shallow_depth)
- 	return nr;
+diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
+index 35deee5bbc739..0dd497225c74a 100644
+--- a/block/blk-mq-tag.c
++++ b/block/blk-mq-tag.c
+@@ -33,6 +33,18 @@ static void blk_mq_update_wake_batch(struct blk_mq_tag=
+s *tags,
+ 			users);
  }
 =20
 +/*
-+ * Find and set a free bit in the [low, high) sub-range of a single word=
-.
-+ * Wraps back to @low once so a free bit below @hint is still found.
-+ */
-+static int __sbitmap_get_word_range(unsigned long *word, unsigned int lo=
-w,
-+				    unsigned int high, unsigned int hint)
-+{
-+	bool wrap;
-+	int nr;
-+
-+	if (hint < low || hint >=3D high)
-+		hint =3D low;
-+	/* don't wrap if already starting from the bottom of the range */
-+	wrap =3D hint > low;
-+
-+	while (1) {
-+		nr =3D find_next_zero_bit(word, high, hint);
-+		if (unlikely(nr >=3D high)) {
-+			if (wrap) {
-+				hint =3D low;
-+				wrap =3D false;
-+				continue;
-+			}
-+			return -1;
-+		}
-+		if (!test_and_set_bit_lock(nr, word))
-+			break;
-+		hint =3D nr + 1;
-+		if (hint >=3D high) {
-+			if (!wrap)
-+				return -1;
-+			hint =3D low;
-+			wrap =3D false;
-+		}
-+	}
-+
-+	return nr;
-+}
-+
-+static int sbitmap_find_bit_in_word_range(struct sbitmap_word *map,
-+					  unsigned int low, unsigned int high,
-+					  unsigned int hint)
-+{
-+	int nr;
-+
-+	do {
-+		nr =3D __sbitmap_get_word_range(&map->word, low, high, hint);
-+		if (nr !=3D -1)
-+			break;
-+		if (!sbitmap_deferred_clear(map, high, low, false))
-+			break;
-+	} while (1);
-+
-+	return nr;
-+}
-+
-+/*
-+ * Allocate a bit restricted to the [min, max) range of the bitmap. Used=
- to
-+ * carve the shared depth into (possibly overlapping) per-user windows w=
-ithout
-+ * a separate accounting counter: a user simply cannot allocate outside =
-its
-+ * window.
-+ */
-+static int __sbitmap_get_range(struct sbitmap *sb, unsigned int min,
-+			       unsigned int max, unsigned int hint)
-+{
-+	unsigned int min_index, max_index, index;
-+	unsigned int nwords, i;
-+	int nr =3D -1;
-+
-+	if (max > sb->depth)
-+		max =3D sb->depth;
-+	if (min >=3D max)
-+		return -1;
-+
-+	min_index =3D SB_NR_TO_INDEX(sb, min);
-+	max_index =3D SB_NR_TO_INDEX(sb, max - 1);
-+	nwords =3D max_index - min_index + 1;
-+
-+	if (hint < min || hint >=3D max)
-+		hint =3D min;
-+	index =3D SB_NR_TO_INDEX(sb, hint);
-+
-+	for (i =3D 0; i < nwords; i++) {
-+		unsigned int word_base =3D index << sb->shift;
-+		unsigned int word_depth =3D __map_depth(sb, index);
-+		unsigned int low, high, h;
-+
-+		low =3D (index =3D=3D min_index) ? SB_NR_TO_BIT(sb, min) : 0;
-+		high =3D (index =3D=3D max_index) ? SB_NR_TO_BIT(sb, max - 1) + 1 :
-+					      word_depth;
-+		h =3D (hint >=3D word_base && hint < word_base + word_depth) ?
-+			SB_NR_TO_BIT(sb, hint) : low;
-+
-+		nr =3D sbitmap_find_bit_in_word_range(&sb->map[index], low,
-+						    high, h);
-+		if (nr !=3D -1) {
-+			nr +=3D word_base;
-+			break;
-+		}
-+
-+		if (++index > max_index)
-+			index =3D min_index;
-+	}
-+
-+	return nr;
-+}
-+
-+static int sbitmap_get_range(struct sbitmap *sb, unsigned int min,
-+			     unsigned int max)
-+{
-+	int nr;
-+	unsigned int hint, depth;
-+
-+	if (WARN_ON_ONCE(unlikely(!sb->alloc_hint)))
-+		return -1;
-+
-+	depth =3D READ_ONCE(sb->depth);
-+	hint =3D update_alloc_hint_before_get(sb, depth);
-+	nr =3D __sbitmap_get_range(sb, min, max, hint);
-+	update_alloc_hint_after_get(sb, depth, hint, nr);
-+
-+	return nr;
-+}
-+
- bool sbitmap_any_bit_set(const struct sbitmap *sb)
- {
- 	unsigned int i;
-@@ -377,6 +501,38 @@ unsigned int sbitmap_weight(const struct sbitmap *sb=
-)
- }
- EXPORT_SYMBOL_GPL(sbitmap_weight);
-=20
-+unsigned int sbitmap_weight_range(const struct sbitmap *sb, unsigned int=
- off,
-+				  unsigned int len)
-+{
-+	unsigned int weight =3D 0;
-+	unsigned int end =3D off + len;
-+	unsigned int index;
-+
-+	if (end > sb->depth)
-+		end =3D sb->depth;
-+
-+	for (index =3D SB_NR_TO_INDEX(sb, off); index < sb->map_nr; index++) {
-+		const struct sbitmap_word *word =3D &sb->map[index];
-+		unsigned int base =3D index << sb->shift;
-+		unsigned int wbits =3D __map_depth(sb, index);
-+		unsigned int lo, hi;
-+		unsigned long val;
-+
-+		if (base >=3D end)
-+			break;
-+		val =3D READ_ONCE(word->word) & ~READ_ONCE(word->cleared);
-+		lo =3D (off > base) ? off - base : 0;
-+		hi =3D (end - base < wbits) ? end - base : wbits;
-+		if (lo)
-+			val &=3D ~((1UL << lo) - 1);
-+		if (hi < BITS_PER_LONG)
-+			val &=3D (1UL << hi) - 1;
-+		weight +=3D hweight_long(val);
-+	}
-+	return weight;
-+}
-+EXPORT_SYMBOL_GPL(sbitmap_weight_range);
-+
- void sbitmap_show(struct sbitmap *sb, struct seq_file *m)
- {
- 	seq_printf(m, "depth=3D%u\n", sb->depth);
-@@ -462,6 +618,7 @@ int sbitmap_queue_init_node(struct sbitmap_queue *sbq=
-, unsigned int depth,
- 	atomic_set(&sbq->ws_active, 0);
- 	atomic_set(&sbq->completion_cnt, 0);
- 	atomic_set(&sbq->wakeup_cnt, 0);
-+	atomic_set(&sbq->relay_credits, 0);
-=20
- 	sbq->ws =3D kzalloc_node(SBQ_WAIT_QUEUES * sizeof(*sbq->ws), flags, nod=
++ * Where this queue's fairness allocation-window slot is stored. HCTX_SH=
+ARED
++ * tag sets divide one global bitmap among request_queues (slot per queu=
 e);
- 	if (!sbq->ws) {
-@@ -573,6 +730,13 @@ int sbitmap_queue_get_shallow(struct sbitmap_queue *=
-sbq,
- }
- EXPORT_SYMBOL_GPL(sbitmap_queue_get_shallow);
-=20
-+int sbitmap_queue_get_range(struct sbitmap_queue *sbq, unsigned int min,
-+			    unsigned int max)
-+{
-+	return sbitmap_get_range(&sbq->sb, min, max);
-+}
-+EXPORT_SYMBOL_GPL(sbitmap_queue_get_range);
-+
- void sbitmap_queue_min_shallow_depth(struct sbitmap_queue *sbq,
- 				     unsigned int min_shallow_depth)
- {
-@@ -629,10 +793,46 @@ void sbitmap_queue_wake_up(struct sbitmap_queue *sb=
-q, int nr)
- 	} while (!atomic_try_cmpxchg(&sbq->wakeup_cnt,
- 				     &wakeups, wakeups + wake_batch));
-=20
-+	atomic_set(&sbq->relay_credits, SBQ_RELAY_BUDGET);
- 	__sbitmap_queue_wake_up(sbq, wake_batch);
- }
- EXPORT_SYMBOL_GPL(sbitmap_queue_wake_up);
-=20
-+/*
-+ * Wake a single waiter on the next active wait queue, bypassing the
-+ * wake_batch accounting (no bit was freed). This "relays" a wakeup that=
- the
-+ * current waiter consumed but could not use - e.g. the freed bit fell o=
-utside
-+ * its allowed allocation range - so a waiter that *can* use a free bit =
-gets a
-+ * chance to run. Relaying continues, one hop per failed waiter, until a=
- usable
-+ * waiter is found or the chain credits drain.
++ * QUEUE_SHARED tag sets divide each per-hw-queue bitmap among the hctxs
++ * sharing it (slot per hctx).
 + */
-+void sbitmap_queue_wake_up_relay(struct sbitmap_queue *sbq,
-+				 struct sbq_wait_state *cur)
++static int *blk_mq_tag_win_slot(struct blk_mq_hw_ctx *hctx)
 +{
-+	int wake_index, i;
++	return blk_mq_is_shared_tags(hctx->flags) ?
++		&hctx->queue->tag_win_slot : &hctx->tag_win_slot;
++}
 +
-+	if (!atomic_read(&sbq->ws_active))
-+		return;
+ /*
+  * If a previously inactive queue goes active, bump the active user coun=
+t.
+  * We need to do this before try to allocate driver tag, then even if fa=
+il
+@@ -65,6 +77,15 @@ void __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
+ 	users =3D tags->active_queues + 1;
+ 	WRITE_ONCE(tags->active_queues, users);
+ 	blk_mq_update_wake_batch(tags, users);
++	if (tags->active_slots) {
++		unsigned int nbits =3D tags->bitmap_tags.sb.depth;
++		unsigned int slot =3D find_first_zero_bit(tags->active_slots, nbits);
 +
-+	if (atomic_dec_if_positive(&sbq->relay_credits) < 0)
-+		return;
-+
-+	wake_index =3D atomic_read(&sbq->wake_index);
-+	for (i =3D 0; i < SBQ_WAIT_QUEUES; i++) {
-+		struct sbq_wait_state *ws =3D &sbq->ws[wake_index];
-+
-+		wake_index =3D sbq_index_inc(wake_index);
-+		if (ws !=3D cur && waitqueue_active(&ws->wait)) {
-+			wake_up_nr(&ws->wait, 1);
-+			break;
++		if (slot < nbits) {
++			set_bit(slot, tags->active_slots);
++			WRITE_ONCE(*blk_mq_tag_win_slot(hctx), slot);
 +		}
 +	}
+ 	spin_unlock_irqrestore(&tags->lock, flags);
+ }
+=20
+@@ -102,17 +123,82 @@ void __blk_mq_tag_idle(struct blk_mq_hw_ctx *hctx)
+ 	users =3D tags->active_queues - 1;
+ 	WRITE_ONCE(tags->active_queues, users);
+ 	blk_mq_update_wake_batch(tags, users);
++	if (tags->active_slots) {
++		int *slotp =3D blk_mq_tag_win_slot(hctx);
++		int slot =3D READ_ONCE(*slotp);
 +
-+	if (wake_index !=3D atomic_read(&sbq->wake_index))
-+		atomic_set(&sbq->wake_index, wake_index);
++		if (slot >=3D 0) {
++			clear_bit(slot, tags->active_slots);
++			WRITE_ONCE(*slotp, -1);
++		}
++	}
+ 	spin_unlock_irq(&tags->lock);
+=20
+ 	blk_mq_tag_wakeup_all(tags, false);
+ }
+=20
++static inline bool blk_mq_tag_is_windowed(struct blk_mq_alloc_data *data=
+)
++{
++	return !data->q->elevator &&
++	       !(data->flags & BLK_MQ_REQ_RESERVED) &&
++	       (data->hctx->flags & BLK_MQ_F_TAG_QUEUE_SHARED);
 +}
-+EXPORT_SYMBOL_GPL(sbitmap_queue_wake_up_relay);
 +
- static inline void sbitmap_update_cpu_hint(struct sbitmap *sb, int cpu, =
-int tag)
++static bool blk_mq_tag_active_window(struct blk_mq_hw_ctx *hctx,
++				     unsigned int depth, unsigned int *min,
++				     unsigned int *max)
++{
++	unsigned int users =3D READ_ONCE(hctx->tags->active_queues);
++	int slot =3D READ_ONCE(*blk_mq_tag_win_slot(hctx));
++	unsigned int p, rem, pos;
++
++	if (users <=3D 1 || slot < 0 || depth <=3D 1)
++		return false;
++
++	p =3D depth / users;
++	if (!p)
++		return false;
++
++	/*
++	 * Slots are allocated from a bitmap and freed out of order, so a slot
++	 * index can exceed the active-user count once lower slots are freed.
++	 * Convert it to a position based on how many active slots precede it.
++	 */
++	pos =3D bitmap_weight(hctx->tags->active_slots, slot);
++	rem =3D depth - p * users;
++	*min =3D pos * p;
++	*max =3D pos * p + p + rem;
++	if (*max > depth)
++		*max =3D depth;
++
++	return true;
++}
++
++int blk_mq_get_tag_window(struct blk_mq_hw_ctx *hctx, struct sbitmap_que=
+ue *bt)
++{
++	unsigned int min, max;
++
++	if (blk_mq_tag_active_window(hctx, bt->sb.depth, &min, &max))
++		return sbitmap_queue_get_range(bt, min, max);
++	return __sbitmap_queue_get(bt);
++
++}
++
++unsigned int blk_mq_hctx_active(struct blk_mq_hw_ctx *hctx)
++{
++	struct sbitmap *sb =3D &hctx->tags->bitmap_tags.sb;
++	unsigned int min, max;
++
++	if (!blk_mq_tag_active_window(hctx, sb->depth, &min, &max))
++		return sbitmap_weight(sb);
++	return sbitmap_weight_range(sb, min, max - min);
++}
++
+ static int __blk_mq_get_tag(struct blk_mq_alloc_data *data,
+ 			    struct sbitmap_queue *bt)
  {
- 	if (likely(!sb->round_robin && tag < sb->depth))
+-	if (!data->q->elevator && !(data->flags & BLK_MQ_REQ_RESERVED) &&
+-			!hctx_may_queue(data->hctx, bt))
+-		return BLK_MQ_NO_TAG;
++	if (blk_mq_tag_is_windowed(data))
++		return blk_mq_get_tag_window(data->hctx, bt);
+=20
+ 	if (data->shallow_depth)
+ 		return sbitmap_queue_get_shallow(bt, data->shallow_depth);
+@@ -142,6 +228,7 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data =
+*data)
+ 	struct sbq_wait_state *ws;
+ 	DEFINE_SBQ_WAIT(wait);
+ 	unsigned int tag_offset;
++	bool slept =3D false;
+ 	int tag;
+=20
+ 	if (data->flags & BLK_MQ_REQ_RESERVED) {
+@@ -193,8 +280,17 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data=
+ *data)
+ 		if (tag !=3D BLK_MQ_NO_TAG)
+ 			break;
+=20
++		/*
++		 * We were previously woken but still cannot allocate within our
++		 * window: the freed bit belonged to another queue's window.
++		 * Relay the wakeup so a waiter that can use it gets to run.
++		 */
++		if (slept && blk_mq_tag_is_windowed(data))
++			sbitmap_queue_wake_up_relay(bt, ws);
++
+ 		bt_prev =3D bt;
+ 		io_schedule();
++		slept =3D true;
+=20
+ 		sbitmap_finish_wait(bt, ws, &wait);
+=20
+@@ -574,8 +670,14 @@ struct blk_mq_tags *blk_mq_init_tags(unsigned int to=
+tal_tags,
+ 	spin_lock_init(&tags->lock);
+ 	INIT_LIST_HEAD(&tags->page_list);
+=20
++	if (depth) {
++		tags->active_slots =3D bitmap_zalloc(depth, GFP_KERNEL);
++		if (!tags->active_slots)
++			goto out_free_tags;
++	}
++
+ 	if (bt_alloc(&tags->bitmap_tags, depth, round_robin, node))
+-		goto out_free_tags;
++		goto out_free_slots;
+ 	if (bt_alloc(&tags->breserved_tags, reserved_tags, round_robin, node))
+ 		goto out_free_bitmap_tags;
+=20
+@@ -583,6 +685,8 @@ struct blk_mq_tags *blk_mq_init_tags(unsigned int tot=
+al_tags,
+=20
+ out_free_bitmap_tags:
+ 	sbitmap_queue_free(&tags->bitmap_tags);
++out_free_slots:
++	bitmap_free(tags->active_slots);
+ out_free_tags:
+ 	kfree(tags);
+ 	return NULL;
+@@ -611,6 +715,7 @@ void blk_mq_free_tags(struct blk_mq_tag_set *set, str=
+uct blk_mq_tags *tags)
+ {
+ 	sbitmap_queue_free(&tags->bitmap_tags);
+ 	sbitmap_queue_free(&tags->breserved_tags);
++	bitmap_free(tags->active_slots);
+=20
+ 	/* if tags pages is not allocated yet, free tags directly */
+ 	if (list_empty(&tags->page_list)) {
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 2c850330a32bc..56ab6ac5ec696 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -489,8 +489,6 @@ __blk_mq_alloc_requests_batch(struct blk_mq_alloc_dat=
+a *data)
+ 		}
+ 	} while (data->nr_tags > nr);
+=20
+-	if (!(data->rq_flags & RQF_SCHED_TAGS))
+-		blk_mq_add_active_requests(data->hctx, nr);
+ 	/* caller already holds a reference, add for remainder */
+ 	percpu_ref_get_many(&data->q->q_usage_counter, nr - 1);
+ 	data->nr_tags -=3D nr;
+@@ -587,8 +585,6 @@ static struct request *__blk_mq_alloc_requests(struct=
+ blk_mq_alloc_data *data)
+ 		goto retry;
+ 	}
+=20
+-	if (!(data->rq_flags & RQF_SCHED_TAGS))
+-		blk_mq_inc_active_requests(data->hctx);
+ 	rq =3D blk_mq_rq_ctx_init(data, blk_mq_tags_from_data(data), tag);
+ 	blk_mq_rq_time_init(rq, alloc_time_ns);
+ 	return rq;
+@@ -763,8 +759,6 @@ struct request *blk_mq_alloc_request_hctx(struct requ=
+est_queue *q,
+ 	tag =3D blk_mq_get_tag(&data);
+ 	if (tag =3D=3D BLK_MQ_NO_TAG)
+ 		goto out_queue_exit;
+-	if (!(data.rq_flags & RQF_SCHED_TAGS))
+-		blk_mq_inc_active_requests(data.hctx);
+ 	rq =3D blk_mq_rq_ctx_init(&data, blk_mq_tags_from_data(&data), tag);
+ 	blk_mq_rq_time_init(rq, alloc_time_ns);
+ 	rq->__data_len =3D 0;
+@@ -807,10 +801,8 @@ static void __blk_mq_free_request(struct request *rq=
+)
+ 	blk_pm_mark_last_busy(rq);
+ 	rq->mq_hctx =3D NULL;
+=20
+-	if (rq->tag !=3D BLK_MQ_NO_TAG) {
+-		blk_mq_dec_active_requests(hctx);
++	if (rq->tag !=3D BLK_MQ_NO_TAG)
+ 		blk_mq_put_tag(hctx->tags, ctx, rq->tag);
+-	}
+ 	if (sched_tag !=3D BLK_MQ_NO_TAG)
+ 		blk_mq_put_tag(hctx->sched_tags, ctx, sched_tag);
+ 	blk_mq_sched_restart(hctx);
+@@ -1157,8 +1149,6 @@ static inline void blk_mq_flush_tag_batch(struct bl=
+k_mq_hw_ctx *hctx,
+ {
+ 	struct request_queue *q =3D hctx->queue;
+=20
+-	blk_mq_sub_active_requests(hctx, nr_tags);
+-
+ 	blk_mq_put_tags(hctx->tags, tag_array, nr_tags);
+ 	percpu_ref_put_many(&q->q_usage_counter, nr_tags);
+ }
+@@ -1844,17 +1834,16 @@ bool __blk_mq_alloc_driver_tag(struct request *rq=
+)
+ 	if (blk_mq_tag_is_reserved(rq->mq_hctx->sched_tags, rq->internal_tag)) =
+{
+ 		bt =3D &rq->mq_hctx->tags->breserved_tags;
+ 		tag_offset =3D 0;
++		tag =3D __sbitmap_queue_get(bt);
+ 	} else {
+-		if (!hctx_may_queue(rq->mq_hctx, bt))
+-			return false;
++		/* Fairness on the shared driver tags via the allocation window. */
++		tag =3D blk_mq_get_tag_window(rq->mq_hctx, bt);
+ 	}
+=20
+-	tag =3D __sbitmap_queue_get(bt);
+ 	if (tag =3D=3D BLK_MQ_NO_TAG)
+ 		return false;
+=20
+ 	rq->tag =3D tag + tag_offset;
+-	blk_mq_inc_active_requests(rq->mq_hctx);
+ 	return true;
+ }
+=20
+@@ -4028,7 +4017,7 @@ blk_mq_alloc_hctx(struct request_queue *q, struct b=
+lk_mq_tag_set *set,
+ 	if (!zalloc_cpumask_var_node(&hctx->cpumask, gfp, node))
+ 		goto free_hctx;
+=20
+-	atomic_set(&hctx->nr_active, 0);
++	hctx->tag_win_slot =3D -1;
+ 	if (node =3D=3D NUMA_NO_NODE)
+ 		node =3D set->numa_node;
+ 	hctx->numa_node =3D node;
+diff --git a/block/blk-mq.h b/block/blk-mq.h
+index aa15d31aaae9b..920bef5e7ce6e 100644
+--- a/block/blk-mq.h
++++ b/block/blk-mq.h
+@@ -205,6 +205,8 @@ static inline struct sbq_wait_state *bt_wait_ptr(stru=
+ct sbitmap_queue *bt,
+=20
+ void __blk_mq_tag_busy(struct blk_mq_hw_ctx *);
+ void __blk_mq_tag_idle(struct blk_mq_hw_ctx *);
++unsigned int blk_mq_hctx_active(struct blk_mq_hw_ctx *hctx);
++int blk_mq_get_tag_window(struct blk_mq_hw_ctx *hctx, struct sbitmap_que=
+ue *bt);
+=20
+ static inline void blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
+ {
+@@ -291,70 +293,9 @@ static inline int blk_mq_get_rq_budget_token(struct =
+request *rq)
+ 	return -1;
+ }
+=20
+-static inline void __blk_mq_add_active_requests(struct blk_mq_hw_ctx *hc=
+tx,
+-						int val)
+-{
+-	if (blk_mq_is_shared_tags(hctx->flags))
+-		atomic_add(val, &hctx->queue->nr_active_requests_shared_tags);
+-	else
+-		atomic_add(val, &hctx->nr_active);
+-}
+-
+-static inline void __blk_mq_inc_active_requests(struct blk_mq_hw_ctx *hc=
+tx)
+-{
+-	__blk_mq_add_active_requests(hctx, 1);
+-}
+-
+-static inline void __blk_mq_sub_active_requests(struct blk_mq_hw_ctx *hc=
+tx,
+-		int val)
+-{
+-	if (blk_mq_is_shared_tags(hctx->flags))
+-		atomic_sub(val, &hctx->queue->nr_active_requests_shared_tags);
+-	else
+-		atomic_sub(val, &hctx->nr_active);
+-}
+-
+-static inline void __blk_mq_dec_active_requests(struct blk_mq_hw_ctx *hc=
+tx)
+-{
+-	__blk_mq_sub_active_requests(hctx, 1);
+-}
+-
+-static inline void blk_mq_add_active_requests(struct blk_mq_hw_ctx *hctx=
+,
+-					      int val)
+-{
+-	if (hctx->flags & BLK_MQ_F_TAG_QUEUE_SHARED)
+-		__blk_mq_add_active_requests(hctx, val);
+-}
+-
+-static inline void blk_mq_inc_active_requests(struct blk_mq_hw_ctx *hctx=
+)
+-{
+-	if (hctx->flags & BLK_MQ_F_TAG_QUEUE_SHARED)
+-		__blk_mq_inc_active_requests(hctx);
+-}
+-
+-static inline void blk_mq_sub_active_requests(struct blk_mq_hw_ctx *hctx=
+,
+-					      int val)
+-{
+-	if (hctx->flags & BLK_MQ_F_TAG_QUEUE_SHARED)
+-		__blk_mq_sub_active_requests(hctx, val);
+-}
+-
+-static inline void blk_mq_dec_active_requests(struct blk_mq_hw_ctx *hctx=
+)
+-{
+-	if (hctx->flags & BLK_MQ_F_TAG_QUEUE_SHARED)
+-		__blk_mq_dec_active_requests(hctx);
+-}
+-
+-static inline int __blk_mq_active_requests(struct blk_mq_hw_ctx *hctx)
+-{
+-	if (blk_mq_is_shared_tags(hctx->flags))
+-		return atomic_read(&hctx->queue->nr_active_requests_shared_tags);
+-	return atomic_read(&hctx->nr_active);
+-}
+ static inline void __blk_mq_put_driver_tag(struct blk_mq_hw_ctx *hctx,
+ 					   struct request *rq)
+ {
+-	blk_mq_dec_active_requests(hctx);
+ 	blk_mq_put_tag(hctx->tags, rq->mq_ctx, rq->tag);
+ 	rq->tag =3D BLK_MQ_NO_TAG;
+ }
+@@ -396,45 +337,6 @@ static inline void blk_mq_free_requests(struct list_=
+head *list)
+ 	}
+ }
+=20
+-/*
+- * For shared tag users, we track the number of currently active users
+- * and attempt to provide a fair share of the tag depth for each of them=
+.
+- */
+-static inline bool hctx_may_queue(struct blk_mq_hw_ctx *hctx,
+-				  struct sbitmap_queue *bt)
+-{
+-	unsigned int depth, users;
+-
+-	if (!hctx || !(hctx->flags & BLK_MQ_F_TAG_QUEUE_SHARED))
+-		return true;
+-
+-	/*
+-	 * Don't try dividing an ant
+-	 */
+-	if (bt->sb.depth =3D=3D 1)
+-		return true;
+-
+-	if (blk_mq_is_shared_tags(hctx->flags)) {
+-		struct request_queue *q =3D hctx->queue;
+-
+-		if (!test_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags))
+-			return true;
+-	} else {
+-		if (!test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
+-			return true;
+-	}
+-
+-	users =3D READ_ONCE(hctx->tags->active_queues);
+-	if (!users)
+-		return true;
+-
+-	/*
+-	 * Allow at least some tags
+-	 */
+-	depth =3D max((bt->sb.depth + users - 1) / users, 4U);
+-	return __blk_mq_active_requests(hctx) < depth;
+-}
+-
+ /* run the code block in @dispatch_ops with rcu/srcu read lock held */
+ #define __blk_mq_run_dispatch_ops(q, check_sleep, dispatch_ops)	\
+ do {								\
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index af878597afb8c..22cc09d5ef320 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -433,10 +433,12 @@ struct blk_mq_hw_ctx {
+ 	unsigned int		queue_num;
+=20
+ 	/**
+-	 * @nr_active: Number of active requests. Only used when a tag set is
+-	 * shared across request queues.
++	 * @tag_win_slot: Assigned fairness allocation-window slot within this
++	 * hctx's tags, or -1 if none. Used for non-HCTX_SHARED shared tag sets
++	 * (the per-hctx analogue of request_queue.tag_win_slot). Protected by
++	 * the tags->lock.
+ 	 */
+-	atomic_t		nr_active;
++	int			tag_win_slot;
+=20
+ 	/** @cpuhp_online: List to store request if CPU is going to die */
+ 	struct hlist_node	cpuhp_online;
+@@ -776,6 +778,13 @@ struct blk_mq_tags {
+ 	unsigned int nr_reserved_tags;
+ 	unsigned int active_queues;
+=20
++	/*
++	 * Bitmap of assigned per-queue fairness window slots, @nr_tags -
++	 * @nr_reserved_tags bits wide (windowing is moot once active users
++	 * exceed that). Protected by @lock.
++	 */
++	unsigned long *active_slots;
++
+ 	struct sbitmap_queue bitmap_tags;
+ 	struct sbitmap_queue breserved_tags;
+=20
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index 9213a5716f95a..86b16bd8b9c17 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -573,7 +573,11 @@ struct request_queue {
+ 	struct timer_list	timeout;
+ 	struct work_struct	timeout_work;
+=20
+-	atomic_t		nr_active_requests_shared_tags;
++	/*
++	 * Assigned allocation-window slot for shared (HCTX_SHARED) tag-set
++	 * fairness, or -1 if none. Protected by the shared tags->lock.
++	 */
++	int			tag_win_slot;
+=20
+ 	struct blk_mq_tags	*sched_shared_tags;
+=20
 --=20
 2.52.0
 
