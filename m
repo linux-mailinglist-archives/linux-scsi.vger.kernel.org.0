@@ -1,53 +1,53 @@
-Return-Path: <linux-scsi+bounces-25635-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25636-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id bmSDFvqOS2r/VQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-25635-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 13:18:18 +0200
+	id QkGdDpt2S2pzRwEAu9opvQ
+	(envelope-from <linux-scsi+bounces-25636-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 11:34:19 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5922C70FBE5
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 13:18:17 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 902B470EA54
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 11:34:18 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=I9gnGgEC;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=FzGTWbLT;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25635-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25635-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25636-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25636-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3ECE63394978
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 09:11:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3A0913082074
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 09:17:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAAA541F7E2;
-	Mon,  6 Jul 2026 08:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69B48430CF4;
+	Mon,  6 Jul 2026 09:01:10 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1E7407576;
-	Mon,  6 Jul 2026 08:55:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627753B27D8;
+	Mon,  6 Jul 2026 09:01:02 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783328143; cv=none; b=bTxqCRQiiNX1PIgkiLsPDXn+YGk4kwmyuUANTXKGXIDrPosZ3ob0m6jLT77Q543JYWoIMp05YTr3xV3OIWL4WzxE3lPmiguNQQdPOxFTRkizSQUEHXanCDpyGMiswjjceraI1lSQ9kuFPGRl3RGAq8IcMJSnduQwAZ6UvUd47Ds=
+	t=1783328468; cv=none; b=hwsqlVZcJu0tmq5eDVuPpa5Yyc23YoflUuxzhr70eRiDeVrM2QztUTb/k/OPgcb9Kv+QHV7EcZidBp5sLc83mREAdyG8pdVTpM+bOO3tQFc0HdQDBAWECHAPuIN3e59yUA/uWn0hTM6k2DKSOC1Bk7HXrXOMVDamFHT0DunVm2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783328143; c=relaxed/simple;
-	bh=4AsiANEPQQNn16+DkjnvaEFha/mXnJm8flL8tWtxPys=;
+	s=arc-20240116; t=1783328468; c=relaxed/simple;
+	bh=Y+LvtnbFS7Pk8rMTIi6bBfp9mbHm4Uhyusiwi5v+XCg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=sykOJA+hpP6CNg0ESsdCBb/EIdc1H9hBOFr6iohoUzIVbhp6/JDSnbf4mM8GquXImvjwZruvQ+ZLhGMFjLmLkoOtmtuR5i25GQ8Na7hzS0JwvAl1xcBewXZOb8lsyoEu/h0obYjqD0agirtyeuZce/gUZc/zLd4/dl5SYEn/FeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I9gnGgEC; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E7CD1F00A3A;
-	Mon,  6 Jul 2026 08:55:33 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=TnTxvwtvybETXEDYkJ9BaLyLe/dxdBcMFbQ5Zr8y4tQh13C2IFgu4U8bDILkKCtmX8VYYz/DdK8PBsu9d8FDA4wXJIn3QPEldOOwdUlJILpINWvnZSGAIRvD201sZ5YdYj2rFIki3fxDQUJC1IfNDHv/wuIXnYsdcAY4K4TQgDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FzGTWbLT; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C9C41F00A3A;
+	Mon,  6 Jul 2026 09:00:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783328133;
-	bh=xUWLi5662FKqa6Hfl+915YdSn0wbC+NLoKBB+bv4hKU=;
+	s=k20260515; t=1783328456;
+	bh=3fHynrpnm/i0ACjcT4Z/n2urCPV7odE64YZ7oCtLtRg=;
 	h=Date:Subject:To:References:From:In-Reply-To;
-	b=I9gnGgEC3Qm66+NnVo0tfd5r5M8OGgFdfbMHIBEsVebXaq+dGlZprr4H1OalpmWIG
-	 wuwHaUAecQBkUslxifKVsE6ziGcdNcmQTgJ1zBw/sOX+6Xo3b/dQdxCyJTYUpE2y7W
-	 T8IoiJHmP1JG7rS/ildvDPf+FObvkM+9/VJdUZCbFMFok3jRJ9TkaTVv8j5ZAYOKp5
-	 7QzLYsrEvhuqnAqFcKBo/cAgTQBlOVpQQUsETji4B4k2DwRNYAJIKwoqREfVMdAJJE
-	 xAfe/cCuFYLQMeils4dFfGTl1/v8LMMhkbDWIBCxFWGXnb5yaxedFU/7Vz9DzKWO1M
-	 Jxv9TtcsmBvuA==
-Message-ID: <e92d2139-d8df-40c3-8350-68b9e37b8197@kernel.org>
-Date: Mon, 6 Jul 2026 17:55:22 +0900
+	b=FzGTWbLTzr/WvlX+6Me+CfuAk9B81b8QLqJOQ0qnfE6AWdtbWxq/YWZOIiwmraUMN
+	 4Uo/xwZ5DVmWtfGZWJX1Z1PkRe6uDbflrGZEpWEDloJw2aZs0kSuj1raS9qkkDWkkt
+	 UjNO0AF3otjkbWsmRYngK6AiEv691y13bFQ7zMHH4ZE1m3rzXJ9BnUGM0akmzf9d0u
+	 zTEkaet4KR0OAea7YJ6eQ0UUUr0a0U8fMmBJAsPDjTlgF9y7GEMYPXSAoNZSLH2K0p
+	 D4GLcjDXLYM3mnS43XFU7iwNFmLwij67RkyHrDvlQGRnF7TdkEF2s6sUtdN3+kLJXZ
+	 Q7yWMrKIzhCqA==
+Message-ID: <cfc34288-244e-417a-9586-36fc2b2642c3@kernel.org>
+Date: Mon, 6 Jul 2026 18:00:45 +0900
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -62,11 +62,11 @@ To: Hannes Reinecke <hare@suse.de>, linux-ide@vger.kernel.org,
  "Martin K . Petersen" <martin.petersen@oracle.com>
 References: <20260706065610.3559692-1-dlemoal@kernel.org>
  <20260706065610.3559692-2-dlemoal@kernel.org>
- <b7971067-1025-48ca-8ba4-d76714c283d5@suse.de>
+ <78b0142a-23a6-4959-8535-fef18d62bb46@suse.de>
 From: Damien Le Moal <dlemoal@kernel.org>
 Content-Language: en-US
 Organization: Western Digital Research
-In-Reply-To: <b7971067-1025-48ca-8ba4-d76714c283d5@suse.de>
+In-Reply-To: <78b0142a-23a6-4959-8535-fef18d62bb46@suse.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
@@ -75,7 +75,7 @@ X-Spamd-Result: default: False [-5.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -89,7 +89,7 @@ X-Spamd-Result: default: False [-5.16 / 15.00];
 	HAS_ORG_HEADER(0.00)[];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-25635-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25636-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -100,22 +100,39 @@ X-Spamd-Result: default: False [-5.16 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5922C70FBE5
+X-Rspamd-Queue-Id: 902B470EA54
 
-On 7/6/26 5:29 PM, Hannes Reinecke wrote:
-> While at it, would you mind converting the raw asc/ascq numbers
-> in drivers/scsi/scsi_lib.c to use these definitions?
-> That will make the code in there _so much_ more readable ...
+On 7/6/26 5:44 PM, Hannes Reinecke wrote:
+> Weelll ... _technically_ the ASC/ASCQ codes have to be evaluated
+> together, and the individual definitions only make sense for a
+> combination of ASC/ASCQ codes.
 
-100% agree. And not just scsi_lib, but also sd.c, libata, etc. We have so many
-places where ASC/ASCQ are hardcoded/hard to understand, that this will be a
-great cleanup.
+Yes, I am well aware.
 
-BUT, that's too much for this series. I was planning such cleanup as a follow-up.
+> EG SPC-5 defines the ASC/ASCQ 0x20/0x00 as 'Invalid command opcode',
+> but with this we would deocde it as 'INVALID_OPCODE'/'POWER_ON_RESET_ASCQ',
+> but 'POWER ON RESET OCCURRED' is ASC/ASCQ 0x29/0x00.
+> So if we were to define ASCQ codes we would need to define the
+> ASCQ codes for each ASC to avoid these issues.
+
+Yes, this is messy. But re-check the specs. There are plenty of places that say
+"with additional sense code XXX" without actually specifying the exact
+combination of ASC/ASCQ as they are defined on the T10 site
+(https://www.t10.org/lists/asc-num.htm).
+
+> Makes me wonder if we shouldn't introduce u16 for sense code
+> handling ...
+
+Maybe, but that will be more work as we have many functions and code that
+handle asc and ascq separatly. Which I kind of like.
+
+The main benefit of having the macros and using them is code readability: the
+values used/tested for ASC & ASCQ become self explanatory, making it far easier
+to match code and specs.
 
 -- 
 Damien Le Moal
