@@ -1,126 +1,145 @@
-Return-Path: <linux-scsi+bounces-25619-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25620-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 2CddBU1iS2oNQgEAu9opvQ
-	(envelope-from <linux-scsi+bounces-25619-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 10:07:41 +0200
+	id AwliJYhjS2pgQgEAu9opvQ
+	(envelope-from <linux-scsi+bounces-25620-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 10:12:56 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C7BA70DE92
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 10:07:40 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB51770DF6F
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 10:12:55 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=FridrF+2;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=Rq2mKXsd;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25619-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25619-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25620-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25620-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 954FF33ABC82
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 07:02:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3A1713213BA6
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 07:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA47C4252A6;
-	Mon,  6 Jul 2026 06:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 702B44C9574;
+	Mon,  6 Jul 2026 06:56:30 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461043EB0FE;
-	Mon,  6 Jul 2026 06:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85019481648;
+	Mon,  6 Jul 2026 06:56:24 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783320235; cv=none; b=B/dEM0yXoYAtMFkA3+iSCWukwaQru26Bo3bdWXL5g8956QRUauBJEnA2ZWuk/tR5STH+92Pm+gUtyK8hjaglGMdnjpD7AxqhF18hF+cigGVJsGJuKblAQTkuMf9KSMYACEjuf8B/ZkK/BkF1ytWO4mK8fcQ1jmLdJsNWMEZOTiQ=
+	t=1783320988; cv=none; b=FiWSrQL89Chin/kXyMl4l/2/hsU5t2k3Pw3W7gxruSlG0mI7BodsM+2TI0w+t72UvfYpUjfTWyyQyFamQ7uky6gtO5uAWIYcOfehx9y78/uwD1rRnS4Tlb4R/YelJS22u1tWWRiIxIZHMnERGcFux8qNX1bfhozDr45L5JYHHFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783320235; c=relaxed/simple;
-	bh=+M1cAc0OUzlIoNcUnqrbzKbXqjVKjITMqA9/Swf4wSg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kzz94i0sNua6tB096H/8wc1Eet7h9T/yR9HOOiuUuzYE6o2Z1dzhekRLDEWdNvTz8MBhqggiZDdxbm1JoRYAoIx+W68TDYoO1ifEOXIUtgwMRu8Bl5TCHtSJQveOQWo9ApLcw7gEzp3oALajXzOb/UDm8vRhe4y+vbbzUMsTEF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FridrF+2; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D601F00A3D;
-	Mon,  6 Jul 2026 06:43:47 +0000 (UTC)
+	s=arc-20240116; t=1783320988; c=relaxed/simple;
+	bh=r6PABZt7ILwhpo+ZIZ26JMI2EtSIjYao7FKvKAliuqM=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=QCKseZDsliVLkwKZ/mcWZXDXceRg6ffDVlnZGuUX60+va6wjswhKDAuFixemcav79r6VRQPqiAx1DP25vNvEk/Z7G/edyRGY5PhgrsKL8MeRJoE4GPPuNmywQNpoGrQgpzdRYC1WU0uZAetD9VWsFg6kN0y43WfLT6BS2dy29d4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rq2mKXsd; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65A031F000E9;
+	Mon,  6 Jul 2026 06:56:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783320229;
-	bh=TumID3UOwbKJByG8LTYX/LOPxNfTfe26ymFWKPV79a0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=FridrF+2y1DJUyj5T8Posaa1JEK8RacQbjRY4e9lh2GoBuJMH4wcXADxHwbSslNCe
-	 5J6oaSMFkF5bRDn7dgNO8rWnth5l+KNLUO8LO0tI7eUQ8M8UonhUKp+zl13iNCyKG+
-	 ig4z+WJ0D+8sM74K+YRWahcdIqcosv70+k6c4NJyb+z8nGrjaksfSYC5rBii8LvBmd
-	 tGrhlAii0sgaXQO76r3VtbUwFOzR/ChxzqzrCC6OTbpGJbd47uC3zJAAdduA9QT/J3
-	 A6dsYz8qyuZEMmPlXb+5q0KEOh1w6hyF+CPx/tfJPDsrjNxIKP6Nl39PCNJ6AaSDMy
-	 BZBGomyAkSTBw==
-Date: Mon, 6 Jul 2026 08:43:44 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Nitin Rawat <nitin.rawat@oss.qualcomm.com>
-Cc: krzk+dt@kernel.org, robh@kernel.org, andersson@kernel.org, 
-	mani@kernel.org, alim.akhtar@samsung.com, bvanassche@acm.org, avri.altman@wdc.com, 
-	conor+dt@kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH V1] scsi: ufs: dt-bindings: Document the Maili UFS
- Controller
-Message-ID: <20260706-curious-festive-ringtail-dd8fe4@quoll>
-References: <20260630220536.3803984-1-nitin.rawat@oss.qualcomm.com>
+	s=k20260515; t=1783320981;
+	bh=zTdCcxi6QeqNZVUmL/kMNNdgXQn+3026HQntWeXcHwA=;
+	h=From:To:Subject:Date;
+	b=Rq2mKXsdBYAt2c7MsuhLTKYv+LHnD1kJCgPEZwGmZyKJw0e2WUsLmdx4+I5LcBr9d
+	 o6ReiWycs6F5ayv7bYkO+mFzDWQXcXbLRh5PnvhuDkZcRcDrwLsqmTjVicSf6nU8M4
+	 yaWRsvqQRcrE573YyFe8gtvqE4lp40VvihSI1FFyTeoV7rBz3xJaKVo1OqMKBTioEF
+	 diTUWHg7BSCm9AEArJWutw7DXxPDbs66iPgkarJ2+APrS7vRvI8IikCKLq6+o6L8/a
+	 LN1BPlHCHdLvUJUCweE7fOctkreJhZIdsZmJ0X6aA04C2XZKB/qS3ItMCNM1jfvPJ/
+	 mlWEUPiCZX4Fw==
+From: Damien Le Moal <dlemoal@kernel.org>
+To: linux-ide@vger.kernel.org,
+	Niklas Cassel <cassel@kernel.org>,
+	linux-scsi@vger.kernel.org,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH v1 0/9] ATA support for storage element management commands
+Date: Mon,  6 Jul 2026 15:56:01 +0900
+Message-ID: <20260706065610.3559692-1-dlemoal@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
 List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260630220536.3803984-1-nitin.rawat@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
+X-Spamd-Result: default: False [-3.66 / 15.00];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[krzk@kernel.org,linux-scsi@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	FORGED_RECIPIENTS(0.00)[m:nitin.rawat@oss.qualcomm.com,m:krzk+dt@kernel.org,m:robh@kernel.org,m:andersson@kernel.org,m:mani@kernel.org,m:alim.akhtar@samsung.com,m:bvanassche@acm.org,m:avri.altman@wdc.com,m:conor+dt@kernel.org,m:linux-arm-msm@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-25619-lists,linux-scsi=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_FROM(0.00)[bounces-25620-lists,linux-scsi=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-scsi@vger.kernel.org];
+	FORWARDED(0.00)[lists@lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:linux-ide@vger.kernel.org,m:cassel@kernel.org,m:linux-scsi@vger.kernel.org,m:martin.petersen@oracle.com,s:lists@lfdr.de];
+	RCPT_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ALIAS_RESOLVED(0.00)[];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi,dt];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,vger.kernel.org:from_smtp,quoll:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 6C7BA70DE92
+X-Rspamd-Queue-Id: DB51770DF6F
 
-On Wed, Jul 01, 2026 at 03:35:36AM +0530, Nitin Rawat wrote:
-> Document the UFS Controller on Maili SoC.
-> 
-> Signed-off-by: Nitin Rawat <nitin.rawat@oss.qualcomm.com>
-> ---
->  Documentation/devicetree/bindings/ufs/qcom,sm8650-ufshc.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+This patch series adds support to libata for translating all storage
+element management commands:
+ - GET PHYSICAL ELEMENT STATUS
+ - REMOVE ELEMENT AND TRUNCATE
+ - RESTORE ELEMENTS AND REBUILD
+ - REMOVE ELEMENT AND MODIFY ZONES
 
-Why is MMIO address space size flexible here?
+The first 2 patches add definitions to scsi_proto.h related to the
+depopulation feature. The remaining patches modify libata to detect
+support for this feature and add command translation support.
 
-A few previous Maili bindings had the same problem - your Claude vibe
-coding just looks at one piece and you do not review but trust that LLM.
+Martin,
 
-So again the same comments as other Maili bindings.
+I have more patches for sd and scsi_debug (depop emulation) that depend on
+patch 1 & 2. So I am not sure how we should handle this series. Maybe we
+should create a "depop" topic branch in the scsi or libata tree ? I am
+open to suggestions.
 
-Best regards,
-Krzysztof
+Damien Le Moal (9):
+  scsi: scsi_debug: move ASC and ASCQ definitions to scsi_proto.h
+  scsi: define depopulation capabilities related service actions
+  ata: libata: improve the definition of device flags
+  ata: libata-scsi: improve ata_get_xlat_func
+  ata: libata-core: detect support for depopulation capabilities
+  ata: libata-scsi: add support for the GET PHYSICAL ELEMENT STATUS
+    command
+  ata: libata-scsi: add support for the REMOVE ELEMENT AND TRUNCATE
+    command
+  ata: libata-scsi: add support for the RESTORE ELEMENTS AND REBUILD
+    command
+  ata: libata-scsi: add support for the REMOVE ELEMENT AND MODIFY ZONES
+    command
+
+ drivers/ata/libata-core.c |  73 +++++++++-
+ drivers/ata/libata-scsi.c | 300 +++++++++++++++++++++++++++++++++++++-
+ drivers/scsi/scsi_debug.c |  46 ------
+ include/linux/ata.h       |   4 +
+ include/linux/libata.h    |  90 +++++++-----
+ include/scsi/scsi_proto.h |  74 ++++++++++
+ 6 files changed, 493 insertions(+), 94 deletions(-)
+
+-- 
+2.54.0
 
 
