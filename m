@@ -1,96 +1,96 @@
-Return-Path: <linux-scsi+bounces-25640-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25641-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id kS1yEPu4S2rcZAEAu9opvQ
-	(envelope-from <linux-scsi+bounces-25640-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 16:17:31 +0200
+	id OeGxJo6nS2r1XwEAu9opvQ
+	(envelope-from <linux-scsi+bounces-25641-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 15:03:10 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81194711D82
-	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 16:17:30 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DDEF710F9E
+	for <lists+linux-scsi@lfdr.de>; Mon, 06 Jul 2026 15:03:10 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=uhhaIbwL;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=K2cG4tuK;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=uhhaIbwL;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=K2cG4tuK;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=AzFFqyuc;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=ionMduO7;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=AzFFqyuc;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=ionMduO7;
 	dmarc=pass (policy=none) header.from=suse.de;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25640-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25640-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25641-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25641-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9B48132DE0FA
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 12:43:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EA272359E2AB
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jul 2026 12:55:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C47342F6EE;
-	Mon,  6 Jul 2026 12:43:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D72E434E2F;
+	Mon,  6 Jul 2026 12:47:27 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D6542A177
-	for <linux-scsi@vger.kernel.org>; Mon,  6 Jul 2026 12:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A828641A76E
+	for <linux-scsi@vger.kernel.org>; Mon,  6 Jul 2026 12:47:25 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783341833; cv=none; b=ZXF6PT6aGfoleWADS/WVy2xg20HrqTbRhxVFoHllPWAejKvkVWNKUYwcDnmnpQlYpK9u86YRwS76WTX6YvWz6ia7Oa6q+6mmJvE55EPd+FdfEYUh2/GEYX90IJsUGWmzHVkagxf4TZxJZeKLd+J6hCnJDUGex25bQYFGDGGVQds=
+	t=1783342047; cv=none; b=u0mpRA7GPaD3Cco3SdtLUVaZ/E8ABsEKE1zcYyQ+MSHbDOHZAqBxd0tAlRRjxlEAERJoxBz+ML60S1pVrhIXhVIhuDvPLUMivwqbfdz8o70k8rWREVU90uHlcB0Z1vaFTWpp37+sAmR0HEnDpuq+M0ZoKsZoB38OIA6VqM9vdmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783341833; c=relaxed/simple;
-	bh=4dRnxd4jeDD3ww6VvDzHOmfymloyOPbsCbAT6fIlM7g=;
+	s=arc-20240116; t=1783342047; c=relaxed/simple;
+	bh=ficT0LPjT9S3lFo1u8HKnacwCeQGgrNbcBkxGjDsWOc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZB9XAQAXzl4xj9Q9NJYJloCiKneCvnOB04c6wLBw/2pQMtQYRysyNdYzOkrZJGWTsaL5TpgJ1pjKv0MZjBN2J1liiI1orByQSdAjPOPtbu0KqfQlVjtKTvMH1elvlqcN4gkAuQpZ0QyezvOsIRCWF++quON4ER5Rydpgn+lV43I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uhhaIbwL; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=K2cG4tuK; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uhhaIbwL; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=K2cG4tuK; arc=none smtp.client-ip=195.135.223.131
+	 In-Reply-To:Content-Type; b=Ck9sp8AoXVxd1JPeWTyTys0LZkI4SfzkgJPi64jpNqAETHQWs0wO1L1tbZ+ICAIoNOKmn6XVmRV4D1Y3brB/adt3dm05liC8ZJwfmZzDYQxsiegMXxCLLyyaQY4LaQoSirpjDAgldo4w3ICQaKx+GtY3GyAEjrv5hdR+bd19o98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=AzFFqyuc; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ionMduO7; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=AzFFqyuc; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ionMduO7; arc=none smtp.client-ip=195.135.223.131
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 9A3F375AC8;
-	Mon,  6 Jul 2026 12:43:47 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id CF23D758FF;
+	Mon,  6 Jul 2026 12:47:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1783341827; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1783342043; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xuOCh5xk5j7gs/BbNHCpcfq5L+maGDDMedXqu5VV020=;
-	b=uhhaIbwLUIJ5epv+ElwPEEIWtVzuKEBl4ILrBx75Tqwe3Z+9KdcZB7sdyKUd06sxH6PSyI
-	t1J/bRe+ARwUViqAr3Z91PALQHVwc2Opr4L/5cwTSjBdEpNb4xBZSM5aRJBEz6lt2F/eDS
-	JZGHl+rQWU1/plZl9zQqBMDCwrsUPwQ=
+	bh=KpMbaZo8Z9BuQb6i2Np0IL9ow4Z/6I+hQRZsrNnCO7I=;
+	b=AzFFqyuc81mP+NoZW5o0so6Snjjf0psxa+BNN2bI0QbXovS8WH6CLNdfkDHZFgGDGYES9M
+	zdPTmwcm6s/CZK8UXyeFirmNf8VdtoWPu1vKlLYBUrbRGxGOFft5W86FqJqAHwvW+Anx2T
+	r2kRsvcmrbxFarTqMxKwfXWf6t13Uio=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1783341827;
+	s=susede2_ed25519; t=1783342043;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xuOCh5xk5j7gs/BbNHCpcfq5L+maGDDMedXqu5VV020=;
-	b=K2cG4tuKJzliKc9HNdUNq8/wlxXFz0j10BtipbPjXhFhx4kTGjDbsW+D130vXZ2xRcPrRj
-	jxGwVIwxx0nDewAg==
+	bh=KpMbaZo8Z9BuQb6i2Np0IL9ow4Z/6I+hQRZsrNnCO7I=;
+	b=ionMduO7G9tJoa5b31iy4Cy+zbGcssbxLjnTlZNkvzUHor07edIxFlCRiptN/Dhj1ygADH
+	dQ6HAhT59gp9BUCg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1783341827; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1783342043; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xuOCh5xk5j7gs/BbNHCpcfq5L+maGDDMedXqu5VV020=;
-	b=uhhaIbwLUIJ5epv+ElwPEEIWtVzuKEBl4ILrBx75Tqwe3Z+9KdcZB7sdyKUd06sxH6PSyI
-	t1J/bRe+ARwUViqAr3Z91PALQHVwc2Opr4L/5cwTSjBdEpNb4xBZSM5aRJBEz6lt2F/eDS
-	JZGHl+rQWU1/plZl9zQqBMDCwrsUPwQ=
+	bh=KpMbaZo8Z9BuQb6i2Np0IL9ow4Z/6I+hQRZsrNnCO7I=;
+	b=AzFFqyuc81mP+NoZW5o0so6Snjjf0psxa+BNN2bI0QbXovS8WH6CLNdfkDHZFgGDGYES9M
+	zdPTmwcm6s/CZK8UXyeFirmNf8VdtoWPu1vKlLYBUrbRGxGOFft5W86FqJqAHwvW+Anx2T
+	r2kRsvcmrbxFarTqMxKwfXWf6t13Uio=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1783341827;
+	s=susede2_ed25519; t=1783342043;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xuOCh5xk5j7gs/BbNHCpcfq5L+maGDDMedXqu5VV020=;
-	b=K2cG4tuKJzliKc9HNdUNq8/wlxXFz0j10BtipbPjXhFhx4kTGjDbsW+D130vXZ2xRcPrRj
-	jxGwVIwxx0nDewAg==
+	bh=KpMbaZo8Z9BuQb6i2Np0IL9ow4Z/6I+hQRZsrNnCO7I=;
+	b=ionMduO7G9tJoa5b31iy4Cy+zbGcssbxLjnTlZNkvzUHor07edIxFlCRiptN/Dhj1ygADH
+	dQ6HAhT59gp9BUCg==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7CCAA779AA;
-	Mon,  6 Jul 2026 12:43:47 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A9D2B779AA;
+	Mon,  6 Jul 2026 12:47:23 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id hJqGHQOjS2oCIQAAD6G6ig
-	(envelope-from <hare@suse.de>); Mon, 06 Jul 2026 12:43:47 +0000
-Message-ID: <fcc1a340-0bc2-4dc2-a116-2ebc932b1e90@suse.de>
-Date: Mon, 6 Jul 2026 14:43:47 +0200
+	id CadLKNujS2paJAAAD6G6ig
+	(envelope-from <hare@suse.de>); Mon, 06 Jul 2026 12:47:23 +0000
+Message-ID: <6645eae1-a0e2-433f-a99f-cbf5ff511961@suse.de>
+Date: Mon, 6 Jul 2026 14:47:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -98,14 +98,15 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] scsi: fc_transport: Fix TOCTOU races and workqueue
+Subject: Re: [PATCH 3/3] scsi: fc_transport: vport and rport cleanup
+ synchronization
 To: Kyle Mahlkuch <kmahlkuc@linux.ibm.com>, linux-scsi@vger.kernel.org,
  linux-kernel@vger.kernel.org, paul.ely@broadcom.com
 Cc: thinhtr@linux.ibm.com
-References: <f4f4e9a7-e3bd-4cc5-a3df-829b981ae836@linux.ibm.com>
+References: <e16406ec-d4d6-4783-b79c-5c00263c133c@linux.ibm.com>
 Content-Language: en-US
 From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <f4f4e9a7-e3bd-4cc5-a3df-829b981ae836@linux.ibm.com>
+In-Reply-To: <e16406ec-d4d6-4783-b79c-5c00263c133c@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Flag: NO
@@ -115,12 +116,12 @@ X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25640-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25641-lists,linux-scsi=lfdr.de];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
@@ -136,78 +137,186 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[hare@suse.de,linux-scsi@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,suse.de:from_mime,suse.de:email,suse.de:mid,suse.de:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.de:from_mime,suse.de:email,suse.de:mid,suse.de:dkim]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 81194711D82
+X-Rspamd-Queue-Id: 0DDEF710F9E
 
 On 4/9/26 5:12 PM, Kyle Mahlkuch wrote:
-> Fix the TOCTOU races in workqueue access, use READ_ONCE() in
-> fc_queue_work(), fc_flush_work(), fc_queue_devloss_work(), and
-> fc_flush_devloss().
+> Imporve synchronization and cleanup logic in the fc_remove_host() and
+> fc_rport_final_delete() to prevent use-after-free conditions during
+> host removal
 > 
-> The workqueue destruction in fc_remove_host() uses WRITE_ONCE() to set
-> the pointer to NULL to prevents new work, flushing the work queued
-> before NULL, then safely destroying it.
+> Vport cleanup:
+>    - Mark all vports with FC_VPORT_DELETING under lock
+>    - Cancel all vport work synchronously before removing from the list
+>    - Synchronous deletion with fc_vport_terminate()
+> 
+> Rport cleanup, applied to rports and rport_binding
+>    - Mark all rport with FC_PORTSTATE_DELETED under lock
+>    - Cancel all timers and work synchronously before removing from the list
+>    - Call fc_rport_final_delete() synchronously instead of queuing
+> 
+> fc_rport_final_delete():
+>    - Calling cancel_delayed_work_sync() for any outstanding delayed work
+>    - Clear FC_RPORT_DEVLOSS_PENDING under lock
+>    - Flushing all pending work completes before destruction
 > 
 > Signed-off-by: Thinh Tran <thinhtr@linux.ibm.com>
 > Signed-off-by: Kyle Mahlkuch <kmahlkuc@linux.ibm.com>
 > ---
->   drivers/scsi/scsi_transport_fc.c | 36 ++++++++++++++++++++++----------
->   1 file changed, 25 insertions(+), 11 deletions(-)
+>   drivers/scsi/scsi_transport_fc.c | 85 ++++++++++++++++++++++++--------
+>   1 file changed, 64 insertions(+), 21 deletions(-)
 > 
 > diff --git a/drivers/scsi/scsi_transport_fc.c b/drivers/scsi/ 
 > scsi_transport_fc.c
-> index 3a821afee9bc..123b22b52640 100644
+> index 123b22b52640..0adb9330befc 100644
 > --- a/drivers/scsi/scsi_transport_fc.c
 > +++ b/drivers/scsi/scsi_transport_fc.c
-> @@ -2774,16 +2774,18 @@ EXPORT_SYMBOL(fc_release_transport);
->   static int
->   fc_queue_work(struct Scsi_Host *shost, struct work_struct *work)
->   {
-> -    if (unlikely(!fc_host_work_q(shost))) {
-> +    struct workqueue_struct *wq = READ_ONCE(fc_host_work_q(shost));
-> +
-> +    if (unlikely(!wq)) {
->           printk(KERN_ERR
->               "ERROR: FC host '%s' attempted to queue work, "
->               "when no workqueue created.\n", shost->hostt->name);
->           dump_stack();
+> @@ -39,6 +39,7 @@ static void fc_li_stats_update(u16 event_type,
+>   static void fc_delivery_stats_update(u32 reason_code,
+>                        struct fc_fpin_stats *stats);
+>   static void fc_cn_stats_update(u16 event_type, struct fc_fpin_stats 
+> *stats);
+> +static void fc_rport_final_delete(struct work_struct *work);
+> 
+>   /*
+>    * Module Parameters
+> @@ -2883,31 +2884,71 @@ fc_remove_host(struct Scsi_Host *shost)
+>       struct fc_host_attrs *fc_host = shost_to_fc_host(shost);
+>       unsigned long flags;
+> 
+> -    spin_lock_irqsave(shost->host_lock, flags);
 > -
->           return -EINVAL;
+>       /* Remove any vports */
+> +    /* Mark FC_VPORT_DELETING for now */
+> +    spin_lock_irqsave(shost->host_lock, flags);
+>       list_for_each_entry_safe(vport, next_vport, &fc_host->vports, 
+> peers) {
+>           vport->flags |= FC_VPORT_DELETING;
+> -        fc_queue_work(shost, &vport->vport_delete_work);
+> +    }
+> +    spin_unlock_irqrestore(shost->host_lock, flags);
+> +
+> +    /*
+> +     * remove all vport works synchronously BEFORE removing from list.
+> +     * This prevents use-after-free when timers fire.
+> +     */
+> +    list_for_each_entry_safe(vport, next_vport, &fc_host->vports, peers) {
+> +        /* Cancel any pending work/timers */
+> +        cancel_work_sync(&vport->vport_delete_work);
+> +        /* Now safe to do synchronous deletion */
+> +        fc_vport_terminate(vport);
 >       }
 > 
-> -    return queue_work(fc_host_work_q(shost), work);
-> +    /* Use local copy to prevent TOCTOU race */
-> +    return queue_work(wq, work);
->   }
+>       /* Remove any remote ports */
+> +    /* Mark rports and rport_bindings with FC_PORTSTATE_DELETED for now */
+> +    spin_lock_irqsave(shost->host_lock, flags);
+>       list_for_each_entry_safe(rport, next_rport,
+>               &fc_host->rports, peers) {
+> -        list_del(&rport->peers);
+>           rport->port_state = FC_PORTSTATE_DELETED;
+> -        fc_queue_work(shost, &rport->rport_delete_work);
+>       }
 > 
-This is wrong. The only way when this will become an issue is
-if someone calls fc_queue_work() after the queue has been deleted,
-ie when the Scsi Host is in the process of being shutdown.
-
-And I would argue that it's a programming error if some driver would
-scheduled workqueue elements at that time; the driver should know that
-the host is about to be terminated, and should not try to schedule
-anything here.
-
-Seeing that every driver is using this sequence:
-
-fc_remove_host()
-scsi_remove_host()
-
-and scsi_remove_host() is setting the 'SHOST_CANCEL' state
-it would be far better to set the 'SHOST_CANCEL' state first and
-then call fc_remove_host().
-Then we can have an easy check in fc_queue_work() to disallow any
-new elements when the host state is SHOST_CANCEL (or SHOST_DELETE).
-
-I'll send a patch.
+>       list_for_each_entry_safe(rport, next_rport,
+>               &fc_host->rport_bindings, peers) {
+> -        list_del(&rport->peers);
+>           rport->port_state = FC_PORTSTATE_DELETED;
+> -        fc_queue_work(shost, &rport->rport_delete_work);
+>       }
+> -
+>       spin_unlock_irqrestore(shost->host_lock, flags);
+> 
+> +    list_for_each_entry_safe(rport, next_rport,
+> +            &fc_host->rports, peers) {
+> +        /* Cancel ALL timers and work before removing from list */
+> +        cancel_delayed_work_sync(&rport->fail_io_work);
+> +        cancel_delayed_work_sync(&rport->dev_loss_work);
+> +        cancel_work_sync(&rport->scan_work);
+> +        cancel_work_sync(&rport->stgt_delete_work);
+> +
+> +        spin_lock_irqsave(shost->host_lock, flags);
+> +        list_del(&rport->peers);
+> +        spin_unlock_irqrestore(shost->host_lock, flags);
+> +
+> +        /* Now safe to do final deletion synchronously */
+> +        fc_rport_final_delete(&rport->rport_delete_work);
+> +    }
+> +
+> +    list_for_each_entry_safe(rport, next_rport,
+> +            &fc_host->rport_bindings, peers) {
+> +        /* Cancel ALL timers and work before removing from list */
+> +        cancel_delayed_work_sync(&rport->fail_io_work);
+> +        cancel_delayed_work_sync(&rport->dev_loss_work);
+> +        cancel_work_sync(&rport->scan_work);
+> +        cancel_work_sync(&rport->stgt_delete_work);
+> +
+> +        spin_lock_irqsave(shost->host_lock, flags);
+> +        list_del(&rport->peers);
+> +        spin_unlock_irqrestore(shost->host_lock, flags);
+> +
+> +        /* Now safe to do final deletion synchronously */
+> +        fc_rport_final_delete(&rport->rport_delete_work);
+> +    }
+> +
+>       /* flush all scan work items */
+>       scsi_flush_work(shost);
+> 
+> @@ -2983,21 +3024,22 @@ fc_rport_final_delete(struct work_struct *work)
+>           scsi_flush_work(shost);
+> 
+>       /*
+> -     * Cancel any outstanding timers. These should really exist
+> -     * only when rmmod'ing the LLDD and we're asking for
+> -     * immediate termination of the rports
+> +     * Cancel any outstanding delayed work synchronously.
+> +     * This must be done BEFORE taking spinlock and BEFORE
+> +     * any state changes, as cancel_delayed_work_sync() can sleep.
+> +     *
+> +     * These timers should only exist when rmmod'ing the LLDD
+> +     * and we're asking for immediate termination of rports.
+> +     */
+> +    cancel_delayed_work_sync(&rport->fail_io_work);
+> +    cancel_delayed_work_sync(&rport->dev_loss_work);
+> +    cancel_work_sync(&rport->scan_work);
+> +    /*
+> +     * Now safe to clear the flag under spinlock since all
+> +     * async work has been cancelled.
+>        */
+>       spin_lock_irqsave(shost->host_lock, flags);
+> -    if (rport->flags & FC_RPORT_DEVLOSS_PENDING) {
+> -        spin_unlock_irqrestore(shost->host_lock, flags);
+> -        if (!cancel_delayed_work(&rport->fail_io_work))
+> -            fc_flush_devloss(shost, rport);
+> -        if (!cancel_delayed_work(&rport->dev_loss_work))
+> -            fc_flush_devloss(shost, rport);
+> -        cancel_work_sync(&rport->scan_work);
+> -        spin_lock_irqsave(shost->host_lock, flags);
+> -        rport->flags &= ~FC_RPORT_DEVLOSS_PENDING;
+> -    }
+> +    rport->flags &= ~FC_RPORT_DEVLOSS_PENDING;
+>       spin_unlock_irqrestore(shost->host_lock, flags);
+> 
+>       /* Delete SCSI target and sdevs */
+> @@ -3027,6 +3069,7 @@ fc_rport_final_delete(struct work_struct *work)
+>       if (rport->devloss_work_q) {
+>           work_q = rport->devloss_work_q;
+>           rport->devloss_work_q = NULL;
+> +        flush_workqueue(work_q);
+>           destroy_workqueue(work_q);
+>       }
+> 
+Similar remarks to the previous patch.
+If we set 'SHOST_CANCEL' after we scheduled all these
+elements and before calling scsi_flush_work() we can
+inhibit further calls to fc_queue_work() and we won't
+need this.
 
 Cheers,
 
