@@ -1,66 +1,66 @@
-Return-Path: <linux-scsi+bounces-25875-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25876-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Suv9DH4yTWrLwQEAu9opvQ
-	(envelope-from <linux-scsi+bounces-25875-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 19:08:14 +0200
+	id GItAK+EyTWrkwQEAu9opvQ
+	(envelope-from <linux-scsi+bounces-25876-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 19:09:53 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D1BA71E1DE
-	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 19:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E54A71E223
+	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 19:09:53 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=acm.org header.s=mr01 header.b="NQEq/IvL";
+	dkim=pass header.d=acm.org header.s=mr01 header.b=NxQc4YhH;
 	dmarc=pass (policy=reject) header.from=acm.org;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25875-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25875-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25876-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25876-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 873513031829
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2026 17:03:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2B8C030BD8DC
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2026 17:05:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC9A41D4C1;
-	Tue,  7 Jul 2026 17:03:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9537434E3F;
+	Tue,  7 Jul 2026 17:05:42 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77955375ADF;
-	Tue,  7 Jul 2026 17:03:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC8241D4E7;
+	Tue,  7 Jul 2026 17:05:41 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783443793; cv=none; b=XAgf4TOXhJW8um5rgFlysl75eWPn0XQIjTD48F77AFsEp+hKSGlrPEz+iPiO41uTA1QgpxuTl982P8m5ku/NUQGrDXeJjgj2dCbEAWlk/wmawVvmUwwPce6ohLiadnTNBEkxu/07q+pPAJcMdgIw67sg+SF3sZkLxjYgxUT2nnU=
+	t=1783443942; cv=none; b=RtrNgRwEAW/FiW1WRDdryLz9CDQhHeCUd03dypkVt8Ltu3SzDPoLbNTDzaEN85AoYEAMrjSb/70vEbyjIPNfGf8t9Wbn6ETYHWTCOrbDJU9KnzGgsBkeLz3qVhmtEKP/0bpDgWY7PhcjgOYfx0mKm8byoe+AiAK86i6/DKpCMZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783443793; c=relaxed/simple;
-	bh=Pbs2C6A7I1NCHdDRv8bI/OT0Oe24i5iyzFuCCSb6d8o=;
+	s=arc-20240116; t=1783443942; c=relaxed/simple;
+	bh=d332qBq04WD1sRchjoRDKLTOSHajl7HeBLRHQJBz8jE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Iq5rM+udNRY0A+cRlJOG0NA1w2VX/KKUJFGNsPsC0MZh2mUKFHzX/dsrmCnhfvkj88djgRgvQh7vHGH+17a8SF7keJXaDLw2S6qewBdSzh1KUV2lAAXGWWCmMm5PtnMMmRzPx8tnZwRmxqpjcM+2iUO7mF8unK1bV7qowoARqh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=NQEq/IvL; arc=none smtp.client-ip=199.89.1.16
+	 In-Reply-To:Content-Type; b=D4meMsokr/PE8BoZijF/Hfd0FlOhqRwB1Ic4/kh4x2+dYtqw1cndgqhTefBZ2a/i9BpXL1Bw8YCnm7o4BbZCobFsVKTwjjsjaDJ2/Nbpmi6lH6ozTCUIM0Vk8N2P5sOaK+dwNBroY1j3XKEFx0DnEfb0SztJmoD0bgIcOq2zDIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=NxQc4YhH; arc=none smtp.client-ip=199.89.1.16
 Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4gvnc00h0Xzlfl5d;
-	Tue,  7 Jul 2026 17:03:12 +0000 (UTC)
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4gvnfs0cRrzlfdfc;
+	Tue,  7 Jul 2026 17:05:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:content-type:content-type:in-reply-to
 	:from:from:content-language:references:subject:subject
 	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1783443788; x=1786035789; bh=fVKyVlK3NGblRWmZxYmQOop4
-	Kttaef5EopO+szduHLU=; b=NQEq/IvL51F6COxXMNUIiEopWCoK02GQOGRAf1I1
-	zXrJOh7MgVMPvL9vgO5nl+Wz2RfyHsx846ymGAa5sHBpvJ/1GvfkpauRe7eSm0OQ
-	kcv+8TdOf/LGIF3Q8vZUt+NgYB4YDFUH1iY5m6TUr4sXaGmElz90+6gfkE75P7Lq
-	x/MPp4u2eXHonmInq1ozNn0P6SUizRnU25/547Rn/jBMMQ+Vk0iF7sTfThJqnW+q
-	HmRyP0IynE7IPPYMfmCZfMQTBReTsvFX8xrwJ+9zPkhqy8tz8dznVLxK0a7pQLWe
-	+VhVKXNHtAUpzyFiJ6420IVKfwKUDOgFqbOR2M24sn8wLA==
+	 s=mr01; t=1783443937; x=1786035938; bh=6Bwsi57HcmkEQKr+5HfdxeTI
+	5zyxyfuPidkZy/XE8uM=; b=NxQc4YhHCxHEyedflmy0r99xwkIXHp1fsvhTdym0
+	DFvVOFIZNE97suKgDESLkfPowfX9aG6bCKW3OyXOK7ULgy0Vej4Bw5PoffPDQOK3
+	cwDoRPuNbokzpP6b948alUCw7B/IZLS9DH6Sa0je8Z97+JNR425UiO3JFH0844tE
+	CIVCfg60Noue9cg+5LBVvfQKdhyHHOuYTJx8/z+BsnVHJmgnz/QLxvZE/ITcElGW
+	gp2In/q3mi8iboYmJpQv5tnKJZXH+Rp32zWNL7bFa2m7ilZnBAsHT+9hoWWtu3bd
+	JpAlql3Fsii3KKErxiVu399HEKEql0ZaNOHa2CNfnJ1b/g==
 X-Virus-Scanned: by MailRoute
 Received: from 013.lax.mailroute.net ([127.0.0.1])
  by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id QdDwKIRwCTBH; Tue,  7 Jul 2026 17:03:08 +0000 (UTC)
+ id fPS3BN8YRRSU; Tue,  7 Jul 2026 17:05:37 +0000 (UTC)
 Received: from [100.119.48.131] (unknown [104.135.180.219])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4gvnbt53w0zlh2ry;
-	Tue,  7 Jul 2026 17:03:06 +0000 (UTC)
-Message-ID: <0b8c93ca-1160-4052-a297-f6772969c111@acm.org>
-Date: Tue, 7 Jul 2026 10:03:05 -0700
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4gvnfk4k3Qzlgqw4;
+	Tue,  7 Jul 2026 17:05:34 +0000 (UTC)
+Message-ID: <71349dae-11ae-4014-90f5-ccd68779d687@acm.org>
+Date: Tue, 7 Jul 2026 10:05:33 -0700
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -68,68 +68,71 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] scsi: sg: report request-table problems when any
- status is set
-To: raoxu <raoxu@uniontech.com>, dgilbert@interlog.com
-Cc: James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
- linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <54B60C19F7DB8889+20260707030845.970018-1-raoxu@uniontech.com>
+Subject: Re: [PATCHv3] scsi: st: use kzalloc_array()
+To: Rosen Penev <rosenp@gmail.com>, linux-scsi@vger.kernel.org
+Cc: =?UTF-8?Q?Kai_M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ open "list:KERNEL" HARDENING "(not" covered by other
+ "areas):Keyword:b__counted_by(_le|_be|_ptr)?b"
+ <linux-hardening@vger.kernel.org>
+References: <20260706233029.814601-1-rosenp@gmail.com>
 Content-Language: en-US
 From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <54B60C19F7DB8889+20260707030845.970018-1-raoxu@uniontech.com>
+In-Reply-To: <20260706233029.814601-1-rosenp@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[acm.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25875-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-25876-lists,linux-scsi=lfdr.de];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:raoxu@uniontech.com,m:dgilbert@interlog.com,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:stable@vger.kernel.org,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[acm.org:+];
+	FORGED_RECIPIENTS(0.00)[m:rosenp@gmail.com,m:linux-scsi@vger.kernel.org,m:Kai.Makisara@kolumbus.fi,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:kees@kernel.org,m:gustavoars@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-hardening@vger.kernel.org,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[acm.org:+];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-scsi@vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-scsi];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,acm.org:from_mime,acm.org:email,acm.org:mid,acm.org:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,acm.org:from_mime,acm.org:dkim,acm.org:mid,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 7D1BA71E1DE
+X-Rspamd-Queue-Id: 0E54A71E223
 
-On 7/6/26 8:08 PM, raoxu wrote:
-> SG_GET_REQUEST_TABLE reports per-request diagnostic state through
-> sg_req_info::problem. The field is meant to indicate whether there is
-> an error to report for a completed request.
-> 
-> sg_fill_request_table() currently combines masked_status, host_status
-> and driver_status with bitwise AND. This only reports a problem when all
-> three status fields are non-zero at the same time. A normal target check
-> condition, for example, has masked_status set while host_status and
-> driver_status may both be zero, so the request is incorrectly reported
-> as clean.
-> 
-> Use the same condition as sg_new_read(), which sets SG_INFO_CHECK when
-> any of the three status fields is non-zero.
+On 7/6/26 4:30 PM, Rosen Penev wrote:
+>   static const char *st_formats[] = {
+>   	"",  "r", "k", "s", "l", "t", "o", "u",
+> -	"m", "v", "p", "x", "a", "y", "q", "z"};
+> +	"m", "v", "p", "x", "a", "y", "q", "z"};
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+The above change removes trailing whitespace. Please either
+leave this change out or describe it in the patch description.
+
+Otherwise this patch looks good to me.
+
+Thanks,
+
+Bart.
 
