@@ -1,53 +1,53 @@
-Return-Path: <linux-scsi+bounces-25687-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25688-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id hr0fHo1STGp3jAEAu9opvQ
-	(envelope-from <linux-scsi+bounces-25687-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 03:12:45 +0200
+	id fdAkNAtVTGr2jAEAu9opvQ
+	(envelope-from <linux-scsi+bounces-25688-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 03:23:23 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 013C17168A7
-	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 03:12:44 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BA947168E6
+	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 03:23:23 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b="aqV/Etli";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=iAIb1MBW;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25687-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25687-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25688-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25688-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 28A11300E000
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2026 01:12:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C5C0B301C3DF
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2026 01:23:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6A032F7F0C;
-	Tue,  7 Jul 2026 01:12:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB4712F8E95;
+	Tue,  7 Jul 2026 01:23:20 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1CE18FDDE;
-	Tue,  7 Jul 2026 01:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC3A2D47F1;
+	Tue,  7 Jul 2026 01:23:19 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783386761; cv=none; b=S3l2gbMSvlZjhSorIC5QQQ4YRUKKXTLTj9T+JXQ1Y246mH2hyf9XGNfl8+LCn4eynVqh6RF11gzuydixqsySHgjiUGKuB1dgAo/E3SsfTkuclimIP3GO/UfiCiJf/NSiW2GA8HiMqiDlj0nA6dHpyIAChTARc4cccCg/N+iO04k=
+	t=1783387400; cv=none; b=EvVipYGJYjSkbhqc0r0iQJjIvokcuvWrFntmskjOaMYtOIzKMwSy8mykMmDpqcGBqU3EOnFCzjDhUnlDOlUwkxMgXemwAf9GD7CyOE4K+/MgOAPqQIaOfewLcI6k904pPFMkk6ZAR2wkxc6h2r4JpLCV+woRae7ULSr6LQ9CKCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783386761; c=relaxed/simple;
-	bh=Oa58u2MEFM17e6mdrEnFTSH0F2mIknYamCu58oZtmWE=;
+	s=arc-20240116; t=1783387400; c=relaxed/simple;
+	bh=6OMU10E/7vvxhppU9sNySMI9MeMIZci+A44dIaZ2U4A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JVt8F44b5lYAvGYex1JNw5BMakuI7e5rDxFmpieJ0nPxagrOP8SGaeaDPDcuNlhgWu96X1Gn4LXUuTOi01Dc7PgQGvoFd4B2Z1mmP+TZ+3NEGKnL9jgWDCpVVpXWnPbZeoYemXt12T74jRtQzpdyrqy27sqIbrxzf7f9Cet8Suc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aqV/Etli; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82BB71F000E9;
-	Tue,  7 Jul 2026 01:12:36 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=pOV4SBbn8hL8MN+bP4LwwzZW4eRTeMrn2/t+ysbQ3ek/AgELycoVS6CYpl7CwRfqTtW3jUQ+Bsqswfs/vOo9R6b5dzBdZRZ7nhaJ3SBgwkUowgaEOJ7DiBOR1I4sN5KWgerOGeQlA5MNNK8sClu31NEyIHNJOb+g8ytbmVmQxnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iAIb1MBW; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E06871F000E9;
+	Tue,  7 Jul 2026 01:23:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783386760;
-	bh=Bpr94blKxteo8hypXiKiHMmG4NpkfXoLHUxXUd6dXlE=;
+	s=k20260515; t=1783387399;
+	bh=X+XhWenkPmatoMI1cmD2xxx7/I9YArI3ESeanbuJX5I=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=aqV/EtlifybphsGTzPN4XSgCiBcycrTeTLlWNLVUrKOrd09ebjJiXqQ0Cmjv2hygY
-	 6g4hqp4xh5cumNqeNUmmRJa0ZWUkraM+OAK1+9cZSEjECKmtIDOXt+7/aq2eUHmiND
-	 6QZJnGmOlaJ82h/7L8lLDDrT+J6h86c00nbiHrhwdQFlD9joO+tW7amMONpy/FUiBY
-	 3p/wOqNIS9XBnud3q9ZptwP7wDH4S4YIt01VfDJdWuNXL50hchTL7d17v8JemjVgEa
-	 imy618oWv77Eqtu/Ke81Pcg2XDYrPhz4go4uBzfqxcNJYXwDAFusW0siencRO1Qo7u
-	 m+3dp0r6bKQ8w==
-Message-ID: <7368b556-b874-4d90-87de-44d7f0d3dc31@kernel.org>
-Date: Tue, 7 Jul 2026 10:12:34 +0900
+	b=iAIb1MBWomZNcQGe4+pmCJdLQHvpvJh9FXfTVYDDZi49Gn2mYt3OWG4wc93e/BnNU
+	 DbuW7INr5fjmBPz/JpIDMvo4M1r02ofM10VRMFVO1TNsIwxAlJs8UHm7hgboht77Ym
+	 dUXKKLLOuRAmFbIrndMsp8+LMNoeSIeZYLngy+BGoUCqSDmRqP4Lh8CibRSgssCX3/
+	 ovp874UwWFR16CELv0dZoDZAh2nmsmUqMr3WImD45TQntG1YTBZ4riGeTAnd/bMkBy
+	 uQi8kbU8hHtSCTJgw2VTyQG3LPg/S6QEqVII4BOSaM0tt8JQHEwesihTbLMAh/ErhA
+	 wtNXfAkHseW5w==
+Message-ID: <777f958b-de91-417a-ae1b-47e96204713e@kernel.org>
+Date: Tue, 7 Jul 2026 10:23:16 +0900
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -55,89 +55,74 @@ List-Subscribe: <mailto:linux-scsi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/9] ata: don't store pci_device_id
-To: Gary Guo <gary@garyguo.net>, Bjorn Helgaas <bhelgaas@google.com>,
- Zhenzhong Duan <zhenzhong.duan@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- Niklas Cassel <cassel@kernel.org>, GOTO Masanori <gotom@debian.or.jp>,
- YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
+Subject: Re: [PATCHv3] scsi: st: use kzalloc_array()
+To: Rosen Penev <rosenp@gmail.com>, linux-scsi@vger.kernel.org
+Cc: =?UTF-8?Q?Kai_M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
  "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
  "Martin K. Petersen" <martin.petersen@oracle.com>,
- Vaibhav Gupta <vaibhavgupta40@gmail.com>,
- Jens Taprogge <jens.taprogge@taprogge.org>, Ido Schimmel
- <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- David Airlie <airlied@redhat.com>
-Cc: linux-pci@vger.kernel.org, driver-core@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
- linux-scsi@vger.kernel.org, industrypack-devel@lists.sourceforge.net,
- netdev@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20260706-pci_id_fix-v3-0-2d48fc025acc@garyguo.net>
- <20260706-pci_id_fix-v3-1-2d48fc025acc@garyguo.net>
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ open "list:KERNEL" HARDENING "(not" covered by other
+ "areas):Keyword:b__counted_by(_le|_be|_ptr)?b"
+ <linux-hardening@vger.kernel.org>
+References: <20260706233029.814601-1-rosenp@gmail.com>
 Content-Language: en-US
 From: Damien Le Moal <dlemoal@kernel.org>
 Organization: Western Digital Research
-In-Reply-To: <20260706-pci_id_fix-v3-1-2d48fc025acc@garyguo.net>
+In-Reply-To: <20260706233029.814601-1-rosenp@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.66 / 15.00];
+X-Spamd-Result: default: False [-5.16 / 15.00];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-25687-lists,linux-scsi=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:rosenp@gmail.com,m:linux-scsi@vger.kernel.org,m:Kai.Makisara@kolumbus.fi,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:kees@kernel.org,m:gustavoars@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-hardening@vger.kernel.org,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-25688-lists,linux-scsi=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[garyguo.net,google.com,gmail.com,linuxfoundation.org,kernel.org,debian.or.jp,netlab.is.tsukuba.ac.jp,HansenPartnership.com,oracle.com,taprogge.org,nvidia.com,lunn.ch,davemloft.net,redhat.com];
-	RCPT_COUNT_TWELVE(0.00)[29];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:gary@garyguo.net,m:bhelgaas@google.com,m:zhenzhong.duan@gmail.com,m:gregkh@linuxfoundation.org,m:rafael@kernel.org,m:dakr@kernel.org,m:cassel@kernel.org,m:gotom@debian.or.jp,m:yokota@netlab.is.tsukuba.ac.jp,m:James.Bottomley@HansenPartnership.com,m:martin.petersen@oracle.com,m:vaibhavgupta40@gmail.com,m:jens.taprogge@taprogge.org,m:idosch@nvidia.com,m:petrm@nvidia.com,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:airlied@redhat.com,m:linux-pci@vger.kernel.org,m:driver-core@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-ide@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:industrypack-devel@lists.sourceforge.net,m:netdev@vger.kernel.org,m:dri-devel@lists.freedesktop.org,m:zhenzhongduan@gmail.com,m:andrew@lunn.ch,s:lists@lfdr.de];
 	HAS_ORG_HEADER(0.00)[];
 	FORGED_SENDER(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dlemoal@kernel.org,linux-scsi@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	TAGGED_RCPT(0.00)[linux-scsi];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-scsi,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 013C17168A7
+X-Rspamd-Queue-Id: 0BA947168E6
 
-On 7/6/26 23:11, Gary Guo wrote:
-> pci_device_id is not guaranteed to live longer than probe due to presence
-> of dynamic ID. All information apart from driver_data can be easily
-> retrieved from pci_dev, so just store driver_data.
+On 7/7/26 08:30, Rosen Penev wrote:
+> Merge allocations to simplify memory management with kzalloc_array(). No
+> need to kfree separately.
 > 
-> Reviewed-by: Danilo Krummrich <dakr@kernel.org>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
+> Add __counted_by for extra runtime analysis. Move counting variable
+> assignment after allocation as kzalloc_flex() does this with newer
+> compilers.
+> 
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
 
-Looks good, but please change the commit title to:
+You forgot to add my review tag. So here it is again.
 
-ata: ata_generic: don't store pci_device_id
-
-With that,
-
-Acked-by: Damien Le Moal <dlemoal@kernel.org>
-
+Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
 
 -- 
 Damien Le Moal
