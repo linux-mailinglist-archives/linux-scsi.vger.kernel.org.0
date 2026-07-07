@@ -1,64 +1,64 @@
-Return-Path: <linux-scsi+bounces-25694-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25695-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id G0jfAT9yTGrVkgEAu9opvQ
-	(envelope-from <linux-scsi+bounces-25694-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 05:27:59 +0200
+	id txrhJ/tyTGoBkwEAu9opvQ
+	(envelope-from <linux-scsi+bounces-25695-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 05:31:07 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63C0171714A
-	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 05:27:58 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B1C8717187
+	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 05:31:07 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=AE0u+Aoq;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=TUYwtWsN;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25694-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25694-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25695-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25695-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7AA353049505
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2026 03:26:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5360930104AA
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2026 03:31:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5781E33D503;
-	Tue,  7 Jul 2026 03:26:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25CE314A60F;
+	Tue,  7 Jul 2026 03:31:00 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3AA535E922
-	for <linux-scsi@vger.kernel.org>; Tue,  7 Jul 2026 03:26:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E386842086A
+	for <linux-scsi@vger.kernel.org>; Tue,  7 Jul 2026 03:30:58 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783394766; cv=none; b=u2n+1N3eKLeXclkhDcCG3so/o3MSeql77s4gzcgzBu/gwJ6j6lIf9HBSgnWRVPYTQKU7DX6dlZ3MdYuiIlRl2+4nXnmqWHxcy/Y/oCOF5P+OBQnOwu7GIhsMegnVKuUAdiWcm/yJYt4DbxHp8kpzSbuMqNemclWd9oRgsCctn9Q=
+	t=1783395060; cv=none; b=NLd4YmSAEpRq6kzJrcDe+fqDkmHdUE9BXqYCKOlm9azred+Odc4+Cwtx/IXQabB0WBNE4OKCE3rAq/SM4j8zwYiA8p+/+o5sA1iO29HVixNPflOxxOBeSgheoc71keJYTMWyN2eP5goB8tycjxbJE7QCfyIbaJYcAgJQH6467Xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783394766; c=relaxed/simple;
-	bh=2EnhCEJUljRle4WEFfxr684BfApUAtZulyY6WUcZAQQ=;
+	s=arc-20240116; t=1783395060; c=relaxed/simple;
+	bh=sSzu4MaQSbxHZ47pA6WF3bM4irBMsFnCh4u3WlfGTh8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YM4l72+CRh9ovCUq6TTdPg9ZC0ys+SgCGXUQtaHS91pfmHMWZlT10p4Iso4nErozJTIoCi9/ypn8QO9VLWgxervH0sEccCYSyhpofgi6fHyWjk0oPW3+OvckMdZZB6aZaaCg1iozzaU7nORFX3ELfqnAYP7I3pQOTclLDsIdxqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AE0u+Aoq; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E021F000E9;
-	Tue,  7 Jul 2026 03:26:04 +0000 (UTC)
+	 Message-Id; b=Xm9X6CeiaUN1T6T3J0fnYEh7wvRLOih3bK4PX4YyoIzFjn4TtKtb2QP99RPakE6rVif/iURzr5ggla7UhnixHtZ8RxFRSKGWjRSXt5A3NI2GtK9/wINe6PF3Syizl2cOBvWZbQWVvi4rEPPPr97VT9/Lyg0LtzZqNgwTvspfOF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TUYwtWsN; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8D2D1F000E9;
+	Tue,  7 Jul 2026 03:30:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783394764;
-	bh=XliL94f02dnmoGNIa/MqVhTiTeepc/96BM5t7o9hIZs=;
+	s=k20260515; t=1783395058;
+	bh=Ye674k9K7yv14oG4q105ChA+30gh+cWjsFhQa+clgTM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AE0u+AoqpXj1THY5tRI8GdMehIHsyJC1MNoH3JPoDYq3t79899oRIBgBuNjtfPi0V
-	 O0XAyxMMNFkr0jzbW2hgangs/KuOCO+HCH/9qfoqPynP4YuEpECHcTMfTJCFZG3iIT
-	 LsaBnrAtouj3Upxd/1skyKFP3mKeNfPKbw6qx3IpdzIHRG0RcIgvyvmo4e63jwYSNl
-	 cV7kTdR42a/tBsfybPWFGRUZ960JMkfJR4wPmE2HVmX6jDZNAOXbF0pxjHZpdQoGk/
-	 5zsN85bzqGBSKgyx9P2u9TZEuBTN/nQonSdIb67SRke2KEsP0OLh9IQKUpmMEX3Bs7
-	 jqPC8SRnueGug==
+	b=TUYwtWsNCtubA1ojNiYlU37A60krad61H2Rif3aIeFV5+LHLaPRK9E3zWpmgyVSis
+	 q6nQzJ5VVi55xlFPfM2jJr4bz76ChfZIUHRGNbcKQz8LfQNIg8bV0JxJAW2Plo1SfE
+	 vBGV+bXS5lQ4JV7ZoJSK5w17tjMG7SgIf4vO1WjbiBu6UrVUo5pp4gBO3EM8HzU4GQ
+	 w3RVd4rRKO2Pjj+2hOvdTxpBo4NCpZqYDCO6dZCPxRkX1wLTc3/44WN8lO21mi3Nm/
+	 bhWd0JtdaHpSM1iXKP5K+0e6CHHKkN6AYLm2wf8ZNhNwU6lvaQa1gLzwd2cO6fSPvf
+	 /c1B4ec8jVdzA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/3] scsi: sd: fix special_vec mempool leak when
- scsi_alloc_sgtables() fails
+Subject: Re: [PATCH v2 1/3] scsi: sd: fix error handling in sd_probe() after
+ large pool creation failure
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yang Xiuwei" <yangxiuwei@kylinos.cn>
 Cc: linux-scsi@vger.kernel.org
-In-Reply-To: <20260707030333.22245-3-yangxiuwei@kylinos.cn>
+In-Reply-To: <20260707030333.22245-2-yangxiuwei@kylinos.cn>
 References: <20260707030333.22245-1-yangxiuwei@kylinos.cn>
- <20260707030333.22245-3-yangxiuwei@kylinos.cn>
+ <20260707030333.22245-2-yangxiuwei@kylinos.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 07 Jul 2026 03:26:03 +0000
-Message-Id: <20260707032604.40E021F000E9@smtp.kernel.org>
+Date: Tue, 07 Jul 2026 03:30:58 +0000
+Message-Id: <20260707033058.A8D2D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -71,14 +71,14 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25694-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25695-lists,linux-scsi=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:yangxiuwei@kylinos.cn,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
 	RCPT_COUNT_TWO(0.00)[2];
@@ -98,82 +98,70 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_NO_DN(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,kylinos.cn:email,vger.kernel.org:from_smtp,sashiko.dev:url,lists.linux.dev:replyto,smtp.kernel.org:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[smtp.kernel.org:mid,lists.linux.dev:replyto,kylinos.cn:email,vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,sashiko.dev:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 63C0171714A
+X-Rspamd-Queue-Id: 3B1C8717187
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] The special payload page can be freed into the wrong mempool if th=
-e device sector size changes while the command is in flight.
+- [Critical] Calling device_unregister() before put_disk() in the error pat=
+h creates a use-after-free vulnerability during SCSI Error Handling.
 --
 
---- Patch [2]: [PATCH v2 2/3] scsi: sd: fix special_vec mempool leak when s=
-csi_alloc_sgtables() fails ---
-commit 39421d4b78837e533a8958996d1edabedfa78d22
+--- Patch [1]: [PATCH v2 1/3] scsi: sd: fix error handling in sd_probe() af=
+ter large pool creation failure ---
+commit f2e6ec332a4785be7451dad3afaf04d9cb43c90c
 Author: Yang Xiuwei <yangxiuwei@kylinos.cn>
+scsi: sd: fix error handling in sd_probe() after large pool creation failure
 
-scsi: sd: fix special_vec mempool leak when scsi_alloc_sgtables() fails
-
-This commit fixes a mempool leak when scsi_alloc_sgtables() fails in
-sd_setup_unmap_cmnd() or sd_setup_write_same{10,16}_cmnd(). It ensures
-sd_uninit_command() is called on error, clearing RQF_SPECIAL_PAYLOAD
-and freeing the payload page.
+This commit modifies the error handling path in sd_probe() when
+sd_large_pool_create() fails. It replaces a goto with direct calls to
+device_unregister() and put_disk() to prevent leaking sysfs entries and
+freeing an already registered device.
 
 > diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-> index d18693d390b2f..8fed1cda9ac8c 100644
+> index 599e75f333343..d18693d390b2f 100644
 > --- a/drivers/scsi/sd.c
 > +++ b/drivers/scsi/sd.c
-> @@ -958,6 +958,21 @@ static unsigned char sd_setup_protect_cmnd(struct sc=
-si_cmnd *scmd,
->  	return protect;
->  }
-> =20
-> +static void sd_uninit_command(struct scsi_cmnd *cmd)
-> +{
-> +	struct request *rq =3D scsi_cmd_to_rq(cmd);
-> +	struct scsi_device *sdp =3D cmd->device;
-> +
-> +	if (!(rq->rq_flags & RQF_SPECIAL_PAYLOAD))
-> +		return;
-> +
-> +	if (sdp->sector_size > PAGE_SIZE)
-> +		mempool_free(rq->special_vec.bv_page, sd_large_page_pool);
-> +	else
-> +		mempool_free(rq->special_vec.bv_page, sd_page_pool);
+> @@ -4089,7 +4089,9 @@ static int sd_probe(struct scsi_device *sdp)
+>  	if (sdp->sector_size > PAGE_SIZE) {
+>  		if (sd_large_pool_create()) {
+>  			error =3D -ENOMEM;
+> -			goto out_free_index;
+> +			device_unregister(&sdkp->disk_dev);
+> +			put_disk(gd);
 
-[Severity: High]
-This isn't a bug introduced by this patch, but can this free the page to the
-wrong mempool if the device sector size changes while the command is in fli=
-ght?
+[Severity: Critical]
+Does this ordering create a use-after-free window?
 
-sd_set_special_bvec() allocates the page based on the sector size at the ti=
-me
-of submission:
+By calling device_unregister() before put_disk(), the sdkp structure is
+synchronously freed, but the request queue disk pointer remains set until
+put_disk() runs.
 
-    if (sector_size > PAGE_SIZE)
-        page =3D mempool_alloc(sd_large_page_pool, GFP_ATOMIC);
-    else
-        page =3D mempool_alloc(sd_page_pool, GFP_ATOMIC);
+If an asynchronous SCSI command times out precisely in this window, could
+the SCSI error handler dereference the freed pointer?
 
-If sd_read_capacity() updates sdp->sector_size dynamically during a concurr=
-ent
-rescan before the request queue is frozen, this cleanup path might read the
-updated sector size. This could result in freeing an order-0 page into the
-large page pool or vice versa, causing memory corruption upon subsequent
-allocations from the pool.
+drivers/scsi/sd.c:sd_eh_reset() {
+        struct scsi_disk *sdkp =3D scsi_disk(scsi_cmd_to_rq(scmd)->q->disk);
 
-> +	rq->rq_flags &=3D ~RQF_SPECIAL_PAYLOAD;
-> +}
-> +
+        /* New SCSI EH run, reset gate variable */
+        sdkp->ignore_medium_access_errors =3D false;
+        ...
+}
+
+Would it be safer to call put_disk() before device_unregister() to clear
+the queue disk pointer and prevent this concurrent access?
+
+> +			goto out;
+>  		}
+>  	}
+>
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707030333.2224=
-5-1-yangxiuwei@kylinos.cn?part=3D2
+5-1-yangxiuwei@kylinos.cn?part=3D1
 
