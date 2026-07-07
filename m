@@ -1,73 +1,77 @@
-Return-Path: <linux-scsi+bounces-25696-lists+linux-scsi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-scsi+bounces-25699-lists+linux-scsi=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 1frKN8iUTGohmgEAu9opvQ
-	(envelope-from <linux-scsi+bounces-25696-lists+linux-scsi=lfdr.de@vger.kernel.org>)
-	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 07:55:20 +0200
+	id obKEKtSUTGosmgEAu9opvQ
+	(envelope-from <linux-scsi+bounces-25699-lists+linux-scsi=lfdr.de@vger.kernel.org>)
+	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 07:55:32 +0200
 X-Original-To: lists+linux-scsi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AE7E7179DE
-	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 07:55:20 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2558C7179EB
+	for <lists+linux-scsi@lfdr.de>; Tue, 07 Jul 2026 07:55:32 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=F1wwwC77;
+	dkim=pass header.d=marvell.com header.s=pfpt0220 header.b=dl3obiqm;
 	dmarc=pass (policy=quarantine) header.from=marvell.com;
-	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25696-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25696-lists+linux-scsi=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-scsi+bounces-25699-lists+linux-scsi=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-scsi+bounces-25699-lists+linux-scsi=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D473B3018085
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2026 05:55:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A1EFA3029776
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2026 05:55:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 727C05474E;
-	Tue,  7 Jul 2026 05:55:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B31905474E;
+	Tue,  7 Jul 2026 05:55:14 +0000 (UTC)
 X-Original-To: linux-scsi@vger.kernel.org
 Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DBFA3101CE
-	for <linux-scsi@vger.kernel.org>; Tue,  7 Jul 2026 05:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BCE03101CE
+	for <linux-scsi@vger.kernel.org>; Tue,  7 Jul 2026 05:55:11 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783403711; cv=none; b=PYEfRiAXm2zmXQIIfXVG1DZbJDozZqIHSMhpOuaCOBQfnMP/ecQsUrSpyMU6O1P6xSpGztQqCcMPYmWk0csA4NXKTw3NmZoz+fJ6jiUa56xQbHLG5i7bzQbssf1FQb0h+OUVYLXXKnZwrYDBT2IIv6A/4adtQkjLInwCh7pnqPo=
+	t=1783403714; cv=none; b=Ak4n3OgaBfDtP2buqZS+utvRQyyfPc9oVgVTijReTU8zPww4/0JwYMl5iGuAWndSSnnaemHxysZSRGkWZfpuGc1Jv8j0xMpRTaBIJu8woJQQcIOkJWO28TU8WzkJLr5NjrS7VaxgVT8tOyQYmLPVDc4fCeFiN9fTvcHIr/qjoKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783403711; c=relaxed/simple;
-	bh=wgtg3ft5CU2ho3r4qmFCBxyOm5/lxrZHSuMUvErU8Io=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=i5AK/Krx0afViG5zzBoRo/ZG/LyjQmX9v+/gDPVSAK2W3lmLzRlwFWo0ZacXvUQfVK0RrLk4/pOpkc9p5wL/z2wgcMIIEBkOaoMba8JaKaGt4oIkIwW3CryqKBamgMFpzRnv8RiRyUrYgua+tM3j+vJiJ2hogWFCCrw6j/GquXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=F1wwwC77; arc=none smtp.client-ip=67.231.156.173
-Received: from pps.filterd (m0431383.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66748KRt873305;
-	Mon, 6 Jul 2026 22:55:00 -0700
+	s=arc-20240116; t=1783403714; c=relaxed/simple;
+	bh=wUwCdTLqeTveXQ2sZB3F5+Tl9KjJSLF9ddr2wS1DUVA=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pOnIkI/3aQlzqeeyXb0drKFpClfPWEKT33ZheR+aAJRxtdPrGU7Lpkkre2V0dypGA4fZDxNJnXaoY3Fx8Ke39Oh/THQLpV6EK1UdxyiGvwy4EXk6MnP/HM1bbg0RApIR9UdBfllWF5TJWa8f+2i2wn4F4GlLJqeYCE7CAC+B0T0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=dl3obiqm; arc=none smtp.client-ip=67.231.156.173
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66748Zlm1656002;
+	Mon, 6 Jul 2026 22:55:03 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pfpt0220; bh=i17JruIGLa6BNts1khxJWH1
-	sb5iTgTI7oqIXtq07rlg=; b=F1wwwC77HOScLEW7SU4HRsBxWqDWJJcV0jpM+CM
-	FSiK7adbD7eXshCpd062TlJWCl3o0YzZpaZaxHPXVhaOPaOTsJMx2RAdI3hrcQl6
-	nYpUK5ERxWWNH4NmqZ9rMLAxQvqSv46MXarX332o3lMIuPm6XenGA882zDcTqvZI
-	ezP5q0xNYhqoWMX7xWPPqZcEU6OLKpiwYQMfTXmeTG8dFvDlSn8FpMXrjobzOtlJ
-	11GvXdiaBWbZBPu7vn0ULqu3u+N/XFQlvGj0+oXHxfbj+cy7jGsGpJ/4Z9IfmJ5g
-	CSXYI3Txel8V8L8oyyNxZQLKF1Vu3gM1lN60sqqvo4FFN5g==
-Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4f8f9wa9xx-1
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=g
+	LXtos2qZsv6py2/WGKHX12163VwODweXZBNyU+5CWo=; b=dl3obiqmLXs0TY13y
+	DOnG3Ac8hZOg/2sVgaU8WY2k1rIt6EFK6gZ+TWPr5K4OQGqhEXQzVlWkqsWue0SW
+	IX3b+q5h/nD10AjL2fFzH8SRluGj+HJVO3/gQx0+5xi4tNvdCIMVcvj0WjDoCz+8
+	sbsp5pUClWeSl+GUyqbLeNMB4bwUpbu8qXCHgPcgFjMSpc3EG4+9+Wqy6lKdJDRk
+	r3l93WVCCfA+k+WMkAiYqJfqQsMeYb2UFzLhzCByYXHf64a24++6UQGPwgVbjEgr
+	eaREA8CFH39fwK4xFt5Nb8cXyxMj0j5TIAG/bRFT3pbpA0NB3ulvI+yVdWojHoqJ
+	LfosQ==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4f71phqdqw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Jul 2026 22:55:00 -0700 (PDT)
-Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
- DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
+	Mon, 06 Jul 2026 22:55:03 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Mon, 6 Jul 2026 22:54:59 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
- (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Mon, 6 Jul 2026 22:54:59 -0700
+ 15.2.1544.25; Mon, 6 Jul 2026 22:55:01 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Mon, 6 Jul 2026 22:55:01 -0700
 Received: from stgdev-a5u16.punelab.marvell.com (stgdev-a5u16.punelab.marvell.com [10.31.33.164])
-	by maili.marvell.com (Postfix) with ESMTP id 9F42D3F7066;
-	Mon,  6 Jul 2026 22:54:56 -0700 (PDT)
+	by maili.marvell.com (Postfix) with ESMTP id 7D9903F7066;
+	Mon,  6 Jul 2026 22:54:59 -0700 (PDT)
 From: Nilesh Javali <njavali@marvell.com>
 To: <martin.petersen@oracle.com>
 CC: <linux-scsi@vger.kernel.org>, <GR-FC-Storage-Upstream@marvell.com>,
         <agurumurthy@marvell.com>, <emilne@redhat.com>, <jmeneghi@redhat.com>,
         <hare@suse.com>
-Subject: [PATCH v3 00/88] scsi: qla2xxx: Add QLA29xx series adapter support
-Date: Tue, 7 Jul 2026 11:23:07 +0530
-Message-ID: <20260707055435.2680300-1-njavali@marvell.com>
+Subject: [PATCH v3 01/88] scsi: qla2xxx: Add 29xx series PCI device ID support
+Date: Tue, 7 Jul 2026 11:23:08 +0530
+Message-ID: <20260707055435.2680300-2-njavali@marvell.com>
 X-Mailer: git-send-email 2.23.1
+In-Reply-To: <20260707055435.2680300-1-njavali@marvell.com>
+References: <20260707055435.2680300-1-njavali@marvell.com>
 Precedence: bulk
 X-Mailing-List: linux-scsi@vger.kernel.org
 List-Id: <linux-scsi.vger.kernel.org>
@@ -76,23 +80,24 @@ List-Unsubscribe: <mailto:linux-scsi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: JGd03WzEFTmlcoc2oLRw-qZipaGE0uWG
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA3MDA1MyBTYWx0ZWRfX6hAQoVaIPpEx
- bIwDnRpTPtB6yvKyrMbb7h4ffaHI17e0/qVETSLRM1r3/QN0hg8HseNR/yy7YrI8eUTKrxgO3WS
- 3GZt0RUL3HaeKRduKh8OcfTFfJRsj/+hVe7Xh0VdHI3+9czxI/Bs9XbDKGi08EG6JvT//sCKuIi
- KxhZp7ePuLA5bAxQE3YsE3pFd6kUqDDgmZ9BdJ/5QyLOG29cvj4tC0oxa6rw4E0hLSiyrpmutWS
- WhbDbb0eTPHPuJgLA3up4f+ILVKdV39qmaa0eU4UYApmQ7wNKrb2whoL4bEiSmhj9/wXJDBWmFD
- 6g69RWIuE71btKUo+6VCC6litz9KaSPdohvTt/GlG97Odc3TtxKCBoRXdcPwwPCRdPwrEzyt5eF
- u9r21hrzJEEUYEBUKwI/oXhow/FErPvo0cA/iPYHfiM+Q09UQGgYNeoEpN0D3guLwEDyz9ZtjAR
- psDyN7zCWG+/ve+4Gug==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA3MDA1MyBTYWx0ZWRfX2Hp7YGVdfKla
- DY9g/9kT4T1CZBtJunzyjVorYxhzwqNM9B0cOUD3xcSnwO9nvee9VrzC5jIIA0kViw3Pcimwwxz
- n2PLOU0f58UN7jaXdFKyMAlwDGlU/QU=
-X-Proofpoint-GUID: JGd03WzEFTmlcoc2oLRw-qZipaGE0uWG
-X-Authority-Analysis: v=2.4 cv=SY/HsPRu c=1 sm=1 tr=0 ts=6a4c94b4 cx=c_pps
- a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
+X-Proofpoint-GUID: 5DUS4zncAhwSRKQttKcn04FFgGrIRvBO
+X-Authority-Analysis: v=2.4 cv=Hf4kiCE8 c=1 sm=1 tr=0 ts=6a4c94b7 cx=c_pps
+ a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
  a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=l0iWHRpgs5sLHlkKQ1IR:22
- a=qit2iCtTFQkLgVSMPQTB:22 a=VwQbUJbxAAAA:8 a=CktCOgVc0EmJJti9HRsA:9
+ a=QXcCYyLzdtTjyudCfB6f:22 a=M5GUcnROAAAA:8 a=VwQbUJbxAAAA:8
+ a=9Ko3Zm86dqrhGpwkZ8sA:9 a=OBjm3rFKGHvpk9ecZwUJ:22
+X-Proofpoint-ORIG-GUID: 5DUS4zncAhwSRKQttKcn04FFgGrIRvBO
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA3MDA1MyBTYWx0ZWRfXxfgMZYX8o4IG
+ oqmhUdwDoeFQt40WhmYn0aT2505Mqc2tA9Q9S8FYsh9rOzZFsh24ZjI7kn8XMNyhmREZax82eva
+ nAdyUE6XggUy5D27Ls2b9BPELBhBIyk=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA3MDA1MyBTYWx0ZWRfX++KWuUlgr+JD
+ u7rQepOyfZ2uE664yCG4jppM1HGvDRXdTy42iQmWjDZaPa/hoALLCkGVOUtBC6Hwfx+F/GdJgTI
+ oSzHFtp1O2a2R+1FOepzDDudlQq+ZLyRDH584jgYjvzpTR0vQkTWhc5/cEOxQF43/9vevXuCOGG
+ 46qgzg9eG9guUgNbhxqN1iocAVuOL6tgdFLCT6Rl6Hv3Ue9BZ2ACHQ+HRxpnyPOWaw5aCavIfgQ
+ F9pRGTMQ4PZXJImN7jONB5hBSHadKq4wm3zTaxoMre9xL5caocfgp7QHAKT3sSUhgvqoTb2u0mz
+ B+aVJHVuo2VSeHP7t22V4YkK73UOuvf+QoNViR3vJ1n+f3uCXROqC1UCAaCf/2Ge8ktauLNzD+K
+ /q7cBl0iIvBgXOBxu1+CrhTS2bi1/1O+x7TiuVWNH5V1QUVURTmULWOtgZaKaObypBYHKq/6UGa
+ cUGqHGzgTxcNCB8PZTA==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-07-07_01,2026-07-06_02,2025-10-01_01
@@ -103,12 +108,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[marvell.com,quarantine];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[marvell.com:s=pfpt0220];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-25696-lists,linux-scsi=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-25699-lists,linux-scsi=lfdr.de];
 	FROM_NEQ_ENVFROM(0.00)[njavali@marvell.com,linux-scsi@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:martin.petersen@oracle.com,m:linux-scsi@vger.kernel.org,m:GR-FC-Storage-Upstream@marvell.com,m:agurumurthy@marvell.com,m:emilne@redhat.com,m:jmeneghi@redhat.com,m:hare@suse.com,s:lists@lfdr.de];
@@ -118,10 +123,10 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[marvell.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	ALIAS_RESOLVED(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,marvell.com:from_mime,marvell.com:dkim,marvell.com:mid];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,marvell.com:from_mime,marvell.com:email,marvell.com:mid,marvell.com:dkim];
 	TO_DN_NONE(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -129,250 +134,330 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[8]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3AE7E7179DE
+X-Rspamd-Queue-Id: 2558C7179EB
 
-Add support for the QLA29xx generation of Marvell QLogic
-Fibre Channel HBAs (ISP2091/ISP2291/ISP2099/ISP2299).
-The 29xx family shares much of its architecture with the
-existing 27xx/28xx adapters but introduces 128-byte request
-and response ring entries (up from 64 bytes), requiring
-extended IOCB definitions and updated ring management
-throughout the driver.
+From: Manish Rangankar <mrangankar@marvell.com>
 
-The key hardware change is the wider IOCB format: every
-request and response queue entry is now 128 bytes.
-This propagates into every code path that builds, submits,
-or processes IOCBs -- command submission, status completion,
-marker, CT pass-through, ELS, logio, task management,
-abort, ABTS, VP control, and NVMe.
+The QLA29xx is a new generation FC HBA that shares much of its
+architecture with the 27xx/28xx family.  Register the new PCI
+device IDs, wire up IS_QLA29XX() capability checks in the probe
+and ISP-flags paths, and extend speed-capability logic so the
+driver correctly recognises and initialises 29xx adapters.
 
-The series is organised as follows:
+Signed-off-by: Manish Rangankar <mrangankar@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Reviewed-by: Hannes Reinecke <hare@kernel.org>
+---
+ drivers/scsi/qla2xxx/qla_def.h  | 33 +++++++++++----
+ drivers/scsi/qla2xxx/qla_init.c |  2 +-
+ drivers/scsi/qla2xxx/qla_isr.c  |  5 ++-
+ drivers/scsi/qla2xxx/qla_os.c   | 74 ++++++++++++++++++++++++++-------
+ 4 files changed, 88 insertions(+), 26 deletions(-)
 
-Patches 01-08: Foundation and flash/firmware infrastructure
-  PCI device ID registration, ISP-flags wiring, flash read/write
-  interface, NVRAM configuration, queue initialisation, FC operational
-  firmware load, removal of a redundant VPD flash read in the sysfs
-  read path, and BSG passthrough (flash block I/O, MPI firmware
-  load/dump).
-
-Patches 09-11: 128-byte IOCB infrastructure
-  New qla_fw29.h header with extended structure definitions, status
-  continuation and marker IOCBs, and IO-path updates that select the
-  correct IOCB size via the entry-size helpers.
-
-Patches 12-24: Sysfs, mailbox commands, and core enablement
-  Sysfs attribute gating for unsupported 29xx features, mailbox command
-  enablement (get_fw_version, execute_fw, get_adapter_id,
-  init_firmware, get_firmware_state, serdes, ELS, echo_test,
-  data rate), shutdown path, ring-slot helpers, and memory allocation
-  updates.
-
-Patches 25-39: Response-path IOCB handling and final wiring
-  Status continuation, status entry, CT pass-through, PUREX, ELS,
-  logio, task management, abort, ABTS, VP control/config/report-ID,
-  LS4 pass-through, and BSG feature gating adjustments.
-
-Patches 40-55: bug fixes uncovered during review of the earlier
-  postings -- queue teardown NULL dma_free and bitmap locking,
-  endianness/bitfield cleanups, 64-bit FPM word counters, 64G/128G
-  port speed setting and reporting, an edif NULL deref, Name Server
-  logout detection on FWI2 adapters, VP index bounds, NVMe abort and
-  LS-reject locking, a dport diagnostics info leak, a BSG job leak,
-  and an unbounded FRU image count.
-
-Patches 56-87: additional robustness and bug fixes found during
-  continued review -- MSI-X derived queue-count clamping, firmware
-  dump data-capture improvement, flash-version read serialisation,
-  use-after-free fixes (qpair work on teardown, cs84xx on host
-  teardown, FCE trace during firmware dump), firmware-state and
-  mailbox hygiene, FCE trace enable parsing, QLAFX00 ring-slot init,
-  error-path pointer clearing, response-queue over-consumption,
-  soft-lockup polling and OOB sense-data guards, response-IRQ
-  quiescing and completion-path SRB validation, NPIV vport count
-  clamping and report-ID-acquisition locking/refcount fixes, NVMe
-  abort/LS-reject/unsolicited-context correctness and locking, a
-  coherent DMA buffer for D_Port diagnostics, and BSG passthrough
-  hardening (zero-initialised stack buffers, request_len validation,
-  SFP DMA zeroing, and I2C length bounds).
-
-Patch 88: bump the driver version to 12.00.00.2607b1.
-
-The series applies on top of the scsi tree's 7.1/scsi-queue branch.
-
-Changes in v3:
-  - Folded several standalone helper and refactor commits into the
-    feature commits they support, so every 29xx enablement commit is
-    self-contained and bisectable: the entry-size helper conversion,
-    the marker IOCB refactor, the NVMe IOCB build-path unification,
-    the NVMe ring-advance conversion, and the duplicate flash-memo
-    block removal are no longer separate patches.
-  - Reworked flash-version handling: dropped the standalone
-    get_flash_version patch in favour of removing the redundant VPD
-    flash read in the sysfs read path.
-  - Added a large batch of additional robustness and bug fixes
-    uncovered during continued review (patches 56-87), covering the
-    completion/response path, NPIV and report-ID acquisition, NVMe
-    unsolicited-context handling, and BSG passthrough hardening.
-  - Bumped the driver version to 12.00.00.2607b1.
-  - Added Reviewed-by: Hannes Reinecke <hare@kernel.org> to the
-    reviewed 29xx enablement patches (patches 01-55).
-
-Changes in v2:
-  - Folded the standalone fix-ups posted in v1 into the feature commits
-    they corrected, so the 29xx enablement commits are now individually
-    correct and bisectable (no "fix the previous patch" commits in the
-    middle of the series).
-  - Corrected several Fixes: tags to reference the actual introducing
-    commits after the above reorganisation.
-  - Widened the ELS vp_index path to 16 bits to match the 29xx 9-bit
-    hardware field, folded into the ELS enablement commit.
-
-Thanks,
-Nilesh
-
-Anil Gurumurthy (3):
-  scsi: qla2xxx: Add 128-byte IOCB definitions for 29xx
-  scsi: qla2xxx: Add extended status continuation and marker IOCBs
-  scsi: qla2xxx: Update IO path to use 128-byte IOCBs for 29xx
-
-Manish Rangankar (10):
-  scsi: qla2xxx: Add 29xx series PCI device ID support
-  scsi: qla2xxx: Add flash read/write interface for 29xx
-  scsi: qla2xxx: Add NVRAM config support for 29xx adapters
-  scsi: qla2xxx: Add 29xx support in queue initialisation path
-  scsi: qla2xxx: Add FC operational firmware load for 29xx
-  scsi: qla2xxx: Remove redundant VPD flash read in sysfs read path
-  scsi: qla2xxx: Add flash block read/write BSG support for 29xx
-  scsi: qla2xxx: Add BSG MPI firmware load/dump for 29xx
-  scsi: qla2xxx: Add LS4 pass-through IOCB handling for 29xx series
-  scsi: qla2xxx: Adjust feature gating in BSG paths for 29xx support
-
-Nilesh Javali (74):
-  scsi: qla2xxx: Skip image-set-valid attribute for 29xx
-  scsi: qla2xxx: Skip unsupported sysfs attributes for 29xx
-  scsi: qla2xxx: Enable get_fw_version mailbox for 29xx
-  scsi: qla2xxx: Extend execute_fw mailbox to include 29xx
-  scsi: qla2xxx: Enable get_adapter_id mailbox for 29xx
-  scsi: qla2xxx: Enable init_firmware mailbox for 29xx
-  scsi: qla2xxx: Enable get_firmware_state for 29xx
-  scsi: qla2xxx: Enable serdes, resource count and FCE trace for 29xx
-  scsi: qla2xxx: Enable set_els_cmds and echo_test for 29xx
-  scsi: qla2xxx: Add support for QLA29XX in data rate functions
-  scsi: qla2xxx: Enable qla2x00_shutdown for 29xx
-  scsi: qla2xxx: Use ring-slot helpers in __qla2x00_alloc_iocbs
-  scsi: qla2xxx: Add support for QLA29XX in memory allocation
-  scsi: qla2xxx: Handle sts_cont_entry_ext_t for 29xx adapters
-  scsi: qla2xxx: Update handling of status entries for 29xx series
-  scsi: qla2xxx: Enhance ct_entry_24xx_ext iocb handling for 29xx series
-  scsi: qla2xxx: Enhance purex_entry handling for 29xx series
-  scsi: qla2xxx: Update handling of ELS IOCBs for 29xx series
-  scsi: qla2xxx: Add size check for ELS status entry layout on 29xx
-  scsi: qla2xxx: Add 29xx extended logio IOCB support
-  scsi: qla2xxx: Enhance task management IOCB handling for 29xx series
-  scsi: qla2xxx: Add abort command handling for 29xx series
-  scsi: qla2xxx: Enhance ABTS processing for 29xx series
-  scsi: qla2xxx: Update VP control IOCB handling for 29xx series
-  scsi: qla2xxx: Add build-time size check for VP config IOCB layout
-  scsi: qla2xxx: Add size check for extended VP report ID entry
-  scsi: qla2xxx: Fix queue teardown NULL dma_free and bitmap locking
-  scsi: qla2xxx: Replace __le16 bitfields with scalar and accessors
-  scsi: qla2xxx: Fix endianness annotations in vp_rpt_id_entry
-    structures
-  scsi: qla2xxx: Use 64-bit FPM word counters for 29xx host stats
-  scsi: qla2xxx: Add 64G/128G port speed setting support
-  scsi: qla2xxx: Fix 64G link speed reporting in get_data_rate
-  scsi: qla2xxx: edif: Fix NULL pointer deref in RX SA delete check
-  scsi: qla2xxx: Fix Name Server logout detection on FWI2 adapters
-  scsi: qla2xxx: Bound VP index against VP_CTRL IOCB bitmap size
-  scsi: qla2xxx: Check entry_status in qla24xx_modify_vp_config()
-  scsi: qla2xxx: Hold vport reference in qla24xx_report_id_acquisition()
-  scsi: qla2xxx: Initialize NVMe abort_work once at submission
-  scsi: qla2xxx: Hold qpair lock when sending NVMe LS reject
-  scsi: qla2xxx: Zero dport diagnostics buffer to avoid info leak
-  scsi: qla2xxx: Fix BSG job leak on validate flash image error path
-  scsi: qla2xxx: Bound image count in qla2x00_update_fru_versions()
-  scsi: qla2xxx: Clamp MSI-X derived queue counts to avoid truncation
-  scsi: qla2xxx: Serialize flash version read in reset handler
-  scsi: qla2xxx: Fix use-after-free of qpair work on queue teardown
-  scsi: qla2xxx: Clarify MPI optrom address/length units
-  scsi: qla2xxx: Fix cs84xx use-after-free on host teardown
-  scsi: qla2xxx: Don't query firmware state while chip is down
-  scsi: qla2xxx: Zero mailbox struct in qla2x00_get_firmware_state()
-  scsi: qla2xxx: Fix FCE trace enable parsing in debugfs
-  scsi: qla2xxx: Fix FCE trace use-after-free during firmware dump
-  scsi: qla2xxx: Use memset_io() to clear QLAFX00 request ring slot
-  scsi: qla2xxx: Null out freed pointers in qla2x00_mem_alloc() error
-    path
-  scsi: qla2xxx: Fix response queue over-consumption in
-    __qla_consume_iocb()
-  scsi: qla2xxx: Fix soft lockup polling continuation IOCB signature
-  scsi: qla2xxx: Bound rsp_info_len to avoid OOB sense-data read
-  scsi: qla2xxx: Avoid req_q_map double-read in qla2x00_error_entry()
-  scsi: qla2xxx: Quiesce response IRQ before freeing request queue
-  scsi: qla2xxx: Reject non-SCSI SRB on status IOCB fast path
-  scsi: qla2xxx: Clamp max_npiv_vports to VP_CTRL bitmap capacity
-  scsi: qla2xxx: Avoid double completion in async IOCB timeout
-  scsi: qla2xxx: Skip vport under deletion in report ID acquisition
-  scsi: qla2xxx: Drop vport reference under lock in report ID
-    acquisition
-  scsi: qla2xxx: Hold vport_slock for host map update in report ID
-    acquisition
-  scsi: qla2xxx: Fix NVMe abort reference leak on repeated abort
-  scsi: qla2xxx: Skip NVMe LS reject IOCB when FW not started
-  scsi: qla2xxx: Unlink NVMe unsol ctx before freeing on LS reject error
-  scsi: qla2xxx: Serialize NVMe unsol ctx list with a per-fcport lock
-  scsi: qla2xxx: Use coherent DMA buffer for D_Port diagnostics
-  scsi: qla2xxx: Zero-init bsg stack buffers to avoid info leak
-  scsi: qla2xxx: Validate BSG request_len before reading vendor_cmd[]
-  scsi: qla2xxx: Zero SFP DMA buffer in FRU/I2C bsg handlers
-  scsi: qla2xxx: Bound i2c->length in I2C bsg handlers
-  scsi: qla2xxx: Update version to 12.00.00.2607b1
-
-Quinn Tran (1):
-  scsi: qla2xxx: Improve firmware dump data capture
-
- drivers/scsi/qla2xxx/qla_attr.c    |   63 +-
- drivers/scsi/qla2xxx/qla_bsg.c     |  608 +++++++++++--
- drivers/scsi/qla2xxx/qla_bsg.h     |   34 +
- drivers/scsi/qla2xxx/qla_dbg.c     |   37 +-
- drivers/scsi/qla2xxx/qla_def.h     |  145 +++-
- drivers/scsi/qla2xxx/qla_dfs.c     |    8 +-
- drivers/scsi/qla2xxx/qla_edif.c    |  101 ++-
- drivers/scsi/qla2xxx/qla_fw.h      |  144 ++-
- drivers/scsi/qla2xxx/qla_fw29.h    |  830 ++++++++++++++++++
- drivers/scsi/qla2xxx/qla_gbl.h     |   40 +-
- drivers/scsi/qla2xxx/qla_gs.c      |  176 +++-
- drivers/scsi/qla2xxx/qla_init.c    |  919 +++++++++++++++++---
- drivers/scsi/qla2xxx/qla_inline.h  |  295 ++++++-
- drivers/scsi/qla2xxx/qla_iocb.c    | 1303 ++++++++++++++++++++++------
- drivers/scsi/qla2xxx/qla_isr.c     |  755 ++++++++++------
- drivers/scsi/qla2xxx/qla_mbx.c     |  499 ++++++++---
- drivers/scsi/qla2xxx/qla_mid.c     |   78 +-
- drivers/scsi/qla2xxx/qla_nvme.c    |  315 +++++--
- drivers/scsi/qla2xxx/qla_nvme.h    |    4 +-
- drivers/scsi/qla2xxx/qla_nx.c      |    2 +-
- drivers/scsi/qla2xxx/qla_os.c      |  310 +++++--
- drivers/scsi/qla2xxx/qla_sup.c     |  784 ++++++++++++++++-
- drivers/scsi/qla2xxx/qla_target.c  |   34 +-
- drivers/scsi/qla2xxx/qla_tmpl.c    |   48 +-
- drivers/scsi/qla2xxx/qla_version.h |   10 +-
- 25 files changed, 6388 insertions(+), 1154 deletions(-)
- create mode 100644 drivers/scsi/qla2xxx/qla_fw29.h
-
-
-base-commit: 1801c8284d34d7927f1a158226e427c195936746
-prerequisite-patch-id: 9cdf671a5c422facf4cee5626701f9135d076122
-prerequisite-patch-id: 807b23211a696e9f032ae85b037aafeb08501768
-prerequisite-patch-id: 1145e5762d000b371299b981054a7baabbbede6e
-prerequisite-patch-id: ad6f2e8fdf93cc1341470516aee8ccdee0d99cfb
-prerequisite-patch-id: 6df17c866b242df13f50eba6cd81f26d4dc0656c
-prerequisite-patch-id: 05d09642756af9c90cd8568d63496c676ace66f0
-prerequisite-patch-id: 85252984f56a31690f027b735594caf003738e27
-prerequisite-patch-id: 86b571d585d2dd9f783220df2bb1baeab0c7dc2b
-prerequisite-patch-id: 44f65619d39d4e5f1dd56a898ee6156238a6b3b7
-prerequisite-patch-id: 412cfca3d3695325b90a70a56f998e26d34cf5bd
-prerequisite-patch-id: 368f0039bdb590ec70f83327ed6c82028342367f
-prerequisite-patch-id: 0af9e8e1b40955fb0f513f973db167ff469dd45f
+diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
+index 5593ad7fad27..6337a056b149 100644
+--- a/drivers/scsi/qla2xxx/qla_def.h
++++ b/drivers/scsi/qla2xxx/qla_def.h
+@@ -3528,7 +3528,6 @@ struct isp_operations {
+ #define QLA_MIDX_DEFAULT	0
+ #define QLA_MIDX_RSP_Q		1
+ #define QLA_PCI_MSIX_CONTROL	0xa2
+-#define QLA_83XX_PCI_MSIX_CONTROL	0x92
+ 
+ struct scsi_qla_host;
+ 
+@@ -4287,6 +4286,10 @@ struct qla_hw_data {
+ #define PCI_DEVICE_ID_QLOGIC_ISP2089	0x2089
+ #define PCI_DEVICE_ID_QLOGIC_ISP2281	0x2281
+ #define PCI_DEVICE_ID_QLOGIC_ISP2289	0x2289
++#define PCI_DEVICE_ID_QLOGIC_ISP2099	0x2099
++#define PCI_DEVICE_ID_QLOGIC_ISP2299	0x2299
++#define PCI_DEVICE_ID_QLOGIC_ISP2091	0x2091
++#define PCI_DEVICE_ID_QLOGIC_ISP2291	0x2291
+ 
+ 	uint32_t	isp_type;
+ #define DT_ISP2100                      BIT_0
+@@ -4316,7 +4319,11 @@ struct qla_hw_data {
+ #define DT_ISP2089			BIT_24
+ #define DT_ISP2281			BIT_25
+ #define DT_ISP2289			BIT_26
+-#define DT_ISP_LAST			(DT_ISP2289 << 1)
++#define DT_ISP2299			BIT_27
++#define DT_ISP2099			BIT_28
++#define DT_ISP2091			BIT_29
++#define DT_ISP2291			BIT_30
++#define DT_ISP_LAST			((uint32_t)DT_ISP2291 << 1)
+ 
+ 	uint32_t	device_type;
+ #define DT_T10_PI                       BIT_25
+@@ -4353,6 +4360,10 @@ struct qla_hw_data {
+ #define IS_QLA2261(ha)	(DT_MASK(ha) & DT_ISP2261)
+ #define IS_QLA2081(ha)	(DT_MASK(ha) & DT_ISP2081)
+ #define IS_QLA2281(ha)	(DT_MASK(ha) & DT_ISP2281)
++#define IS_QLA2299(ha)	(DT_MASK(ha) & DT_ISP2299)
++#define IS_QLA2099(ha)	(DT_MASK(ha) & DT_ISP2099)
++#define IS_QLA2091(ha)	(DT_MASK(ha) & DT_ISP2091)
++#define IS_QLA2291(ha)	(DT_MASK(ha) & DT_ISP2291)
+ 
+ #define IS_QLA23XX(ha)  (IS_QLA2300(ha) || IS_QLA2312(ha) || IS_QLA2322(ha) || \
+ 			IS_QLA6312(ha) || IS_QLA6322(ha))
+@@ -4363,6 +4374,9 @@ struct qla_hw_data {
+ #define IS_QLA84XX(ha)  (IS_QLA8432(ha))
+ #define IS_QLA27XX(ha)  (IS_QLA2071(ha) || IS_QLA2271(ha) || IS_QLA2261(ha))
+ #define IS_QLA28XX(ha)	(IS_QLA2081(ha) || IS_QLA2281(ha))
++#define IS_QLA29XX(ha)	(IS_QLA2099(ha) || IS_QLA2299(ha) || \
++			 IS_QLA2091(ha) || IS_QLA2291(ha))
++
+ #define IS_QLA24XX_TYPE(ha)     (IS_QLA24XX(ha) || IS_QLA54XX(ha) || \
+ 				IS_QLA84XX(ha))
+ #define IS_CNA_CAPABLE(ha)	(IS_QLA81XX(ha) || IS_QLA82XX(ha) || \
+@@ -4372,9 +4386,10 @@ struct qla_hw_data {
+ 				IS_QLA25XX(ha) || IS_QLA81XX(ha) || \
+ 				IS_QLA82XX(ha) || IS_QLA83XX(ha) || \
+ 				IS_QLA8044(ha) || IS_QLA27XX(ha) || \
+-				IS_QLA28XX(ha))
++				IS_QLA28XX(ha) || IS_QLA29XX(ha))
+ #define IS_MSIX_NACK_CAPABLE(ha) (IS_QLA81XX(ha) || IS_QLA83XX(ha) || \
+-				IS_QLA27XX(ha) || IS_QLA28XX(ha))
++				IS_QLA27XX(ha) || IS_QLA28XX(ha) || \
++				IS_QLA29XX(ha))
+ #define IS_NOPOLLING_TYPE(ha)	(IS_QLA81XX(ha) && (ha)->flags.msix_enabled)
+ #define IS_FAC_REQUIRED(ha)	(IS_QLA81XX(ha) || IS_QLA83XX(ha) || \
+ 				IS_QLA27XX(ha) || IS_QLA28XX(ha))
+@@ -4390,9 +4405,9 @@ struct qla_hw_data {
+ #define HAS_EXTENDED_IDS(ha)    ((ha)->device_type & DT_EXTENDED_IDS)
+ #define IS_CT6_SUPPORTED(ha)	((ha)->device_type & DT_CT6_SUPPORTED)
+ #define IS_MQUE_CAPABLE(ha)	(IS_QLA83XX(ha) || IS_QLA27XX(ha) || \
+-				 IS_QLA28XX(ha))
++				 IS_QLA28XX(ha) || IS_QLA29XX(ha))
+ #define IS_BIDI_CAPABLE(ha) \
+-    (IS_QLA25XX(ha) || IS_QLA2031(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha))
++    (IS_QLA25XX(ha) || IS_QLA2031(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha) || IS_QLA29XX(ha))
+ /* Bit 21 of fw_attributes decides the MCTP capabilities */
+ #define IS_MCTP_CAPABLE(ha)	(IS_QLA2031(ha) && \
+ 				((ha)->fw_attributes_ext[0] & BIT_0))
+@@ -4408,12 +4423,12 @@ struct qla_hw_data {
+ 	(QLA_NVME_IOS(_sp) && QLA_ABTS_FW_ENABLED(_sp->fcport->vha->hw))
+ 
+ #define IS_PI_UNINIT_CAPABLE(ha)	(IS_QLA83XX(ha) || IS_QLA27XX(ha) || \
+-					 IS_QLA28XX(ha))
++					 IS_QLA28XX(ha) || IS_QLA29XX(ha))
+ #define IS_PI_IPGUARD_CAPABLE(ha)	(IS_QLA83XX(ha) || IS_QLA27XX(ha) || \
+-					 IS_QLA28XX(ha))
++					 IS_QLA28XX(ha) || IS_QLA29XX(ha))
+ #define IS_PI_DIFB_DIX0_CAPABLE(ha)	(0)
+ #define IS_PI_SPLIT_DET_CAPABLE_HBA(ha)	(IS_QLA83XX(ha) || IS_QLA27XX(ha) || \
+-					IS_QLA28XX(ha))
++					IS_QLA28XX(ha) || IS_QLA29XX(ha))
+ #define IS_PI_SPLIT_DET_CAPABLE(ha)	(IS_PI_SPLIT_DET_CAPABLE_HBA(ha) && \
+     (((ha)->fw_attributes_h << 16 | (ha)->fw_attributes) & BIT_22))
+ #define IS_ATIO_MSIX_CAPABLE(ha) (IS_QLA83XX(ha) || IS_QLA27XX(ha) || \
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index e746c9274cde..e23e7ac48ae2 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -2773,7 +2773,7 @@ qla2x00_initialize_adapter(scsi_qla_host_t *vha)
+ 	ha->isp_ops->reset_chip(vha);
+ 
+ 	/* Check for secure flash support */
+-	if (IS_QLA28XX(ha)) {
++	if (IS_QLA28XX(ha) || IS_QLA29XX(ha)) {
+ 		if (rd_reg_word(&reg->mailbox12) & BIT_0)
+ 			ha->flags.secure_adapter = 1;
+ 		ql_log(ql_log_info, vha, 0xffff, "Secure Adapter: %s\n",
+diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
+index 33776330956c..c47c38e099ff 100644
+--- a/drivers/scsi/qla2xxx/qla_isr.c
++++ b/drivers/scsi/qla2xxx/qla_isr.c
+@@ -4663,7 +4663,8 @@ qla2x00_request_irqs(struct qla_hw_data *ha, struct rsp_que *rsp)
+ 	/* If possible, enable MSI-X. */
+ 	if (ql2xenablemsix == 0 || (!IS_QLA2432(ha) && !IS_QLA2532(ha) &&
+ 	    !IS_QLA8432(ha) && !IS_CNA_CAPABLE(ha) && !IS_QLA2031(ha) &&
+-	    !IS_QLAFX00(ha) && !IS_QLA27XX(ha) && !IS_QLA28XX(ha)))
++	    !IS_QLAFX00(ha) && !IS_QLA27XX(ha) && !IS_QLA28XX(ha) &&
++	    !IS_QLA29XX(ha)))
+ 		goto skip_msi;
+ 
+ 	if (ql2xenablemsix == 2)
+@@ -4702,7 +4703,7 @@ qla2x00_request_irqs(struct qla_hw_data *ha, struct rsp_que *rsp)
+ 
+ 	if (!IS_QLA24XX(ha) && !IS_QLA2532(ha) && !IS_QLA8432(ha) &&
+ 	    !IS_QLA8001(ha) && !IS_P3P_TYPE(ha) && !IS_QLAFX00(ha) &&
+-	    !IS_QLA27XX(ha) && !IS_QLA28XX(ha))
++	    !IS_QLA27XX(ha) && !IS_QLA28XX(ha) && !IS_QLA29XX(ha))
+ 		goto skip_msi;
+ 
+ 	ret = pci_alloc_irq_vectors(ha->pdev, 1, 1, PCI_IRQ_MSI);
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 72b1c28e4dae..c91d2b8bd08e 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -429,7 +429,8 @@ static void qla_init_base_qpair(struct scsi_qla_host *vha, struct req_que *req,
+ 	qla_cpu_update(rsp->qpair, raw_smp_processor_id());
+ 	ha->base_qpair->pdev = ha->pdev;
+ 
+-	if (IS_QLA27XX(ha) || IS_QLA83XX(ha) || IS_QLA28XX(ha))
++	if (IS_QLA27XX(ha) || IS_QLA83XX(ha) || IS_QLA28XX(ha) ||
++	    IS_QLA29XX(ha))
+ 		ha->base_qpair->reqq_start_iocbs = qla_83xx_start_iocbs;
+ }
+ 
+@@ -2153,8 +2154,6 @@ qla2x00_iospace_config(struct qla_hw_data *ha)
+ static int
+ qla83xx_iospace_config(struct qla_hw_data *ha)
+ {
+-	uint16_t msix;
+-
+ 	if (pci_request_selected_regions(ha->pdev, ha->bars,
+ 	    QLA2XXX_DRIVER_NAME)) {
+ 		ql_log_pci(ql_log_fatal, ha->pdev, 0x0117,
+@@ -2203,10 +2202,18 @@ qla83xx_iospace_config(struct qla_hw_data *ha)
+ 	ha->msixbase = ioremap(pci_resource_start(ha->pdev, 2),
+ 			pci_resource_len(ha->pdev, 2));
+ 	if (ha->msixbase) {
++		int msix_cnt;
++
+ 		/* Read MSIX vector size of the board */
+-		pci_read_config_word(ha->pdev,
+-		    QLA_83XX_PCI_MSIX_CONTROL, &msix);
+-		ha->msix_count = (msix & PCI_MSIX_FLAGS_QSIZE)  + 1;
++		msix_cnt = pci_msix_vec_count(ha->pdev);
++		if (msix_cnt <= 0) {
++			ql_log_pci(ql_log_warn, ha->pdev, 0x0120,
++				   "Failed to read MSI-X count (%d), falling back to base vectors.\n",
++				   msix_cnt);
++			goto mqiobase_exit;
++		}
++		ha->msix_count = msix_cnt;
++
+ 		/*
+ 		 * By default, driver uses at least two msix vectors
+ 		 * (default & rspq)
+@@ -2796,6 +2803,20 @@ qla2x00_set_isp_flags(struct qla_hw_data *ha)
+ 		ha->device_type |= DT_T10_PI;
+ 		ha->fw_srisc_address = RISC_START_ADDRESS_2400;
+ 		break;
++	case PCI_DEVICE_ID_QLOGIC_ISP2099:
++	case PCI_DEVICE_ID_QLOGIC_ISP2299:
++	case PCI_DEVICE_ID_QLOGIC_ISP2091:
++	case PCI_DEVICE_ID_QLOGIC_ISP2291:
++		ha->isp_type |= DT_ISP2299;
++		ha->isp_type |= DT_ISP2099;
++		ha->isp_type |= DT_ISP2091;
++		ha->isp_type |= DT_ISP2291;
++		ha->device_type |= DT_ZIO_SUPPORTED;
++		ha->device_type |= DT_FWI2;
++		ha->device_type |= DT_IIDMA;
++		ha->device_type |= DT_T10_PI;
++		ha->fw_srisc_address = RISC_START_ADDRESS_2400;
++		break;
+ 	}
+ 
+ 	if (IS_QLA82XX(ha))
+@@ -2803,8 +2824,8 @@ qla2x00_set_isp_flags(struct qla_hw_data *ha)
+ 	else {
+ 		/* Get adapter physical port no from interrupt pin register. */
+ 		pci_read_config_byte(ha->pdev, PCI_INTERRUPT_PIN, &ha->port_no);
+-		if (IS_QLA25XX(ha) || IS_QLA2031(ha) ||
+-		    IS_QLA27XX(ha) || IS_QLA28XX(ha))
++		if (IS_QLA25XX(ha) || IS_QLA2031(ha) || IS_QLA27XX(ha) ||
++		    IS_QLA28XX(ha) || IS_QLA29XX(ha))
+ 			ha->port_no--;
+ 		else
+ 			ha->port_no = !(ha->port_no & 1);
+@@ -2936,7 +2957,11 @@ qla2x00_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	    pdev->device == PCI_DEVICE_ID_QLOGIC_ISP2081 ||
+ 	    pdev->device == PCI_DEVICE_ID_QLOGIC_ISP2281 ||
+ 	    pdev->device == PCI_DEVICE_ID_QLOGIC_ISP2089 ||
+-	    pdev->device == PCI_DEVICE_ID_QLOGIC_ISP2289) {
++	    pdev->device == PCI_DEVICE_ID_QLOGIC_ISP2289 ||
++	    pdev->device == PCI_DEVICE_ID_QLOGIC_ISP2099 ||
++	    pdev->device == PCI_DEVICE_ID_QLOGIC_ISP2299 ||
++	    pdev->device == PCI_DEVICE_ID_QLOGIC_ISP2091 ||
++	    pdev->device == PCI_DEVICE_ID_QLOGIC_ISP2291) {
+ 		bars = pci_select_bars(pdev, IORESOURCE_MEM);
+ 		mem_only = 1;
+ 		ql_dbg_pci(ql_dbg_init, pdev, 0x0007,
+@@ -2998,7 +3023,8 @@ qla2x00_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 
+ 	/* Set EEH reset type to fundamental if required by hba */
+ 	if (IS_QLA24XX(ha) || IS_QLA25XX(ha) || IS_QLA81XX(ha) ||
+-	    IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha))
++	    IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha) ||
++	    IS_QLA29XX(ha))
+ 		pdev->needs_freset = 1;
+ 
+ 	ha->prev_topology = 0;
+@@ -3195,6 +3221,22 @@ qla2x00_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		ha->flash_data_off = FARX_ACCESS_FLASH_DATA_28XX;
+ 		ha->nvram_conf_off = ~0;
+ 		ha->nvram_data_off = ~0;
++	} else if (IS_QLA29XX(ha)) {
++		ha->portnum = PCI_FUNC(ha->pdev->devfn);
++		ha->max_fibre_devices = MAX_FIBRE_DEVICES_2400;
++		ha->mbx_count = MAILBOX_REGISTER_COUNT;
++		req_length = REQUEST_ENTRY_CNT_83XX;
++		rsp_length = RESPONSE_ENTRY_CNT_83XX;
++		ha->max_loop_id = SNS_LAST_LOOP_ID_2300;
++		ha->init_cb_size = sizeof(struct mid_init_cb_81xx);
++		ha->gid_list_info_size = 8;
++		ha->optrom_size = OPTROM_SIZE_28XX;
++		ha->nvram_npiv_size = QLA_MAX_VPORTS_QLA25XX;
++		ha->isp_ops = &qla27xx_isp_ops;
++		ha->flash_conf_off = ~0;
++		ha->flash_data_off = ~0;
++		ha->nvram_conf_off = ~0;
++		ha->nvram_data_off = ~0;
+ 	}
+ 
+ 	ql_dbg_pci(ql_dbg_init, pdev, 0x001e,
+@@ -3373,7 +3415,7 @@ qla2x00_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	rsp->rsp_q_in = &ha->iobase->isp24.rsp_q_in;
+ 	rsp->rsp_q_out = &ha->iobase->isp24.rsp_q_out;
+ 	if (ha->mqenable || IS_QLA83XX(ha) || IS_QLA27XX(ha) ||
+-	    IS_QLA28XX(ha)) {
++	    IS_QLA28XX(ha) || IS_QLA29XX(ha)) {
+ 		req->req_q_in = &ha->mqiobase->isp25mq.req_q_in;
+ 		req->req_q_out = &ha->mqiobase->isp25mq.req_q_out;
+ 		rsp->rsp_q_in = &ha->mqiobase->isp25mq.rsp_q_in;
+@@ -3898,7 +3940,7 @@ qla2x00_remove_one(struct pci_dev *pdev)
+ 		return;
+ 
+ 	if (IS_QLA25XX(ha) || IS_QLA2031(ha) || IS_QLA27XX(ha) ||
+-	    IS_QLA28XX(ha)) {
++	    IS_QLA28XX(ha) || IS_QLA29XX(ha)) {
+ 		if (ha->flags.fw_started)
+ 			qla2x00_abort_isp_cleanup(base_vha);
+ 	} else if (!IS_QLAFX00(ha)) {
+@@ -4387,7 +4429,7 @@ qla2x00_mem_alloc(struct qla_hw_data *ha, uint16_t req_len, uint16_t rsp_len,
+ 
+ 	/* Get consistent memory allocated for EX-INIT-CB. */
+ 	if (IS_CNA_CAPABLE(ha) || IS_QLA2031(ha) || IS_QLA27XX(ha) ||
+-	    IS_QLA28XX(ha)) {
++	    IS_QLA28XX(ha) || IS_QLA29XX(ha)) {
+ 		ha->ex_init_cb = dma_pool_alloc(ha->s_dma_pool, GFP_KERNEL,
+ 		    &ha->ex_init_cb_dma);
+ 		if (!ha->ex_init_cb)
+@@ -4397,7 +4439,7 @@ qla2x00_mem_alloc(struct qla_hw_data *ha, uint16_t req_len, uint16_t rsp_len,
+ 	}
+ 
+ 	/* Get consistent memory allocated for Special Features-CB. */
+-	if (IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
++	if (IS_QLA27XX(ha) || IS_QLA28XX(ha) || IS_QLA29XX(ha)) {
+ 		ha->sf_init_cb = dma_pool_zalloc(ha->s_dma_pool, GFP_KERNEL,
+ 						&ha->sf_init_cb_dma);
+ 		if (!ha->sf_init_cb)
+@@ -8155,6 +8197,10 @@ static const struct pci_device_id qla2xxx_pci_tbl[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_QLOGIC, PCI_DEVICE_ID_QLOGIC_ISP2281) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_QLOGIC, PCI_DEVICE_ID_QLOGIC_ISP2089) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_QLOGIC, PCI_DEVICE_ID_QLOGIC_ISP2289) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_QLOGIC, PCI_DEVICE_ID_QLOGIC_ISP2099) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_QLOGIC, PCI_DEVICE_ID_QLOGIC_ISP2299) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_QLOGIC, PCI_DEVICE_ID_QLOGIC_ISP2091) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_QLOGIC, PCI_DEVICE_ID_QLOGIC_ISP2291) },
+ 	{ 0 },
+ };
+ MODULE_DEVICE_TABLE(pci, qla2xxx_pci_tbl);
 -- 
 2.47.3
 
